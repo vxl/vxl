@@ -200,7 +200,7 @@ bool vil_nitf_file_format::read_header_data()
   message_header_ = new vil_nitf_message_header_v20();
   StatusCode status = message_header_->Read(io_stream_);
 
-  image_subheader_vector_.clear() ;
+  image_subheader_vector_.clear();
 
   if (status == STATUS_GOOD)
   {
@@ -209,13 +209,13 @@ bool vil_nitf_file_format::read_header_data()
     }
     vil_streampos save_pos = io_stream_->tell();
 
-    // CAST BELOW IS OK.  CURRENT POSITION IF FILE WILL ALWAYS BE > 0.
-    if (message_header_->GetHeaderLength() != static_cast<unsigned long> (save_pos)) {
+    // CAST BELOW IS OK.  CURRENT POSITION IN FILE WILL ALWAYS BE > 0.
+    if (message_header_->GetHeaderLength() != static_cast<unsigned long>(save_pos)) {
       vcl_cerr << method_name << "WARNING: "
                << "after reading message header, file position = "
                << save_pos << " is not equal to message header length = "
                << message_header_->GetHeaderLength()
-               << vcl_endl ;
+               << vcl_endl;
     }
 
     // FOR NOW, JUST READ FIRST IMAGE SUBHEADER.  MAL 20oct2003
@@ -564,7 +564,7 @@ vil_image_view_base_sptr vil_nitf_image::get_copy_view(
 
              << method_name << "pixel_format    = " << pixel_format() << vcl_endl
              << method_name << "bytes_per_pixel = " << bytes_per_pixel << vcl_endl
-             << method_name << "total_bytes = " << total_bytes << vcl_endl ;
+             << method_name << "total_bytes = " << total_bytes << vcl_endl;
   }
   if (debug_level > 1) {
     vcl_cout << method_name << "origin = (" << i0 << ", " << j0 << ")\n"
@@ -711,11 +711,11 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
 
   // ALWAYS CHECK IMAGE OFFSET FOR NOW.
   if (debug_level > -1) {
-    check_image_data_offset (vcl_cout, method_name) ;
+    check_image_data_offset (vcl_cout, method_name);
   }
 
   if (debug_level > 0) {
-      vcl_cout << "\n" << method_name
+      vcl_cout << '\n' << method_name
                << "i0 = " << i0
                << "  j0 = " << j0
                << "  ni = " << ni
@@ -756,12 +756,12 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
 
   calculated_pixels = get_num_blocks_y() * get_block_size_y();
   diff = calculated_pixels - nj;  // NEED TO CHECK THIS.
-  unsigned long last_image_col_num = 0 ;
+  unsigned long last_image_col_num = 0;
   if (ni < get_block_size_x()) {
-      last_image_col_num = i0 + ni - 1 ;
+    last_image_col_num = i0 + ni - 1;
   }
   else {
-      last_image_col_num = (max_block_x * get_block_size_x()) - 1 ;
+    last_image_col_num = (max_block_x * get_block_size_x()) - 1;
   }
   unsigned long last_image_row_num = (max_block_y * get_block_size_x()) - 1;
   unsigned long display_pixels = (max_block_x - start_block_x) * get_block_size_x();
@@ -773,15 +773,15 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
       vcl_cout << method_name << "start_block_x = " << start_block_x
                << "  max_block_x = " << max_block_x 
                << "  start_block_row_offset = " << start_block_row_offset
-               << vcl_endl ;
+               << vcl_endl;
       vcl_cout << method_name << "  start_block_x_offset = " << start_block_x_offset
-               << "  expected last X pixel = " << last_image_col_num << vcl_endl ;
+               << "  expected last X pixel = " << last_image_col_num << vcl_endl;
       vcl_cout << method_name << "start_block_y = " << start_block_y
-               << "  max_block_y = " << max_block_y << vcl_endl ;
-      vcl_cout << "expected last Y pixel = " << last_image_row_num << vcl_endl ;
+               << "  max_block_y = " << max_block_y << vcl_endl;
+      vcl_cout << "expected last Y pixel = " << last_image_row_num << vcl_endl;
 
-      vcl_cout << method_name << "display pixels = " << display_pixels << " rows"
-               << " by " << display_pixels << " columns" << vcl_endl ;
+      vcl_cout << method_name << "display pixels = " << display_pixels
+               << " rows by " << display_pixels << " columns" << vcl_endl;
   }
 
   vcl_clock_t start = vcl_clock();
@@ -792,7 +792,7 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
   // OUTER LOOP - ITERATE OVER BLOCKS IN Y (== J == BLOCK ROW) DIMENSION.
   for (unsigned int block_row = start_block_y; block_row < max_block_y; ++block_row)
   {
-    unsigned int block_col ;  // DEFINE OUT HERE SO WE CAN DISPLAY AT END OF EACH BLOCK ROW
+    unsigned int block_col;   // DEFINE OUT HERE SO WE CAN DISPLAY AT END OF EACH BLOCK ROW
                               // DO NOT INITIALIZE BECAUSE VALUE IS REASSIGNED BEFORE
                               // INITIAL VALUE IS EVER USED.  SOME COMPILERS COMPLAIN ABOUT THIS.
 
@@ -818,11 +818,11 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
       if (bytes_read < bytes_per_block) {
         vcl_cerr << method_name
                  << "WARNING: number of bytes read = " << bytes_read
-                 << " less than requested = " << bytes_per_block << '\n'
-                 << "image_block column = " << image_block_col
+                 << ", less than requested = " << bytes_per_block
+                 << "\nimage_block column = " << image_block_col
                  << "  block row = " << block_row
-                 << "  block column = " << block_col << '\n'
-                 << "image_data_offset = " << get_image_data_offset()
+                 << "  block column = " << block_col
+                 << "\nimage_data_offset = " << get_image_data_offset()
                  << "  block_offset = " << block_offset
                  << vcl_endl;
         continue;
@@ -965,7 +965,7 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
     vcl_clock_t finish = vcl_clock();
 
     vcl_cout << "finish reading input = " << finish << vcl_endl;
-    vcl_string msg_str = "read image bytes" ;
+    vcl_string msg_str = "read image bytes";
     display_elapsed_time(start, finish, msg_str);
 
     vcl_cout << method_name << "start_block_x = " << start_block_x
@@ -1101,7 +1101,7 @@ bool vil_nitf_image::construct_pyramid_images(
     bool write_success = vil_save(*save_view, out_file_name.c_str(), "png");
 
     vcl_clock_t finish = vcl_clock();
-    vcl_string msg_str = "save 2-byte PNG file" ;
+    vcl_string msg_str = "save 2-byte PNG file";
     display_elapsed_time(start, finish, msg_str);
 
     vcl_cout << "Saved image as 2-byte PNG to file <" << out_file_name
@@ -1443,7 +1443,7 @@ int vil_nitf_image::check_image_data_offset (vcl_ostream& out, vcl_string caller
   // so file position should be equal to sum of length of these two headers.
 
   unsigned header_length_sum = message_header_->GetHeaderLength()
-    + message_header_->get_image_header_length() ;
+    + message_header_->get_image_header_length();
 
   // For now, assume file position is correct, because someone might have
   // mucked with the header.  Do put out warning message.
@@ -1452,9 +1452,9 @@ int vil_nitf_image::check_image_data_offset (vcl_ostream& out, vcl_string caller
 
   if (diff != 0)
   {
-    out << method_name ;
+    out << method_name;
     if (caller.length() > 0) {
-      out << " from " << caller << ": " ;
+      out << " from " << caller << ": ";
     }
     out << "WARNING:\n"
         << "  file position and calculated offset differ by "
@@ -1465,13 +1465,13 @@ int vil_nitf_image::check_image_data_offset (vcl_ostream& out, vcl_string caller
         << "  image header length   = "
         << message_header_->get_image_header_length() << '\n'
         << "  total header length   = " << header_length_sum
-        << vcl_endl ;
+        << vcl_endl;
   }
   else {
     if (debug_level > 1) {
-        out << method_name ;
+        out << method_name;
         if (caller.length() > 0) {
-          out << " from " << caller << ": " ;
+          out << " from " << caller << ": ";
         }
         out << "file position and calculated header offset agree = "
             << get_image_data_offset() << vcl_endl;
@@ -1926,7 +1926,11 @@ void vil_nitf_image::display_block_attributes(vcl_string caller)
 {
   static vcl_string method_name = "vil_nitf_image::display_block_attributes: ";
 
-  vcl_cout << method_name << "num blocks X = " << get_num_blocks_x()
+  vcl_cout << method_name;
+  if (caller.length() > 0) {
+    vcl_cout << "from " << caller << ":\n";
+  }
+  vcl_cout << "  num blocks X = " << get_num_blocks_x()
            << "  block size X = " << get_block_size_x() << vcl_endl
            << "  num blocks Y = " << get_num_blocks_y()
            << "  block size Y = " << get_block_size_y() << vcl_endl
