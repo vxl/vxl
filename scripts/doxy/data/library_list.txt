@@ -30,4 +30,20 @@ oxl mvl mvl_ build
 oxl osl osl_ build
 oxl vgui vgui_ build
 
+package: gel GE Libraries
+# Need to check dependency order
+gel gbl gbl_   build
+gel geml geml_ build
+gel gevd gevd_ build
+gel gkll gkll_ build
+gel gmvl gmvl_ build
+gel gst gst_ build
+gel gtrl gtrl_ build
+gel vace vace_ build
+gel vdgl vdgl_ build
+gel vgel vgel_ build
+gel vmal vmal_ build
+gel vsol vsol_ build
+gel vsrl vsrl_ build
+gel vtol vtol_ build
 
