@@ -202,7 +202,7 @@ inline char* new_strdup(const char* str)
 int nitf_strcasecmp( const char* s1, const char* s2 );
 
 //: Copy n characters from y to x, but delete x first and recreate with exactly right length.
-inline void nitf_strncpy (char * x, const char * y, int n) 
+inline void nitf_strncpy (char *& x, const char * y, int n) 
 {
     delete[] x ;
     x = new char[n+1] ;

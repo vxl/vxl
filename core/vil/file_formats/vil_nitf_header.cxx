@@ -38,6 +38,7 @@
 //====================================================================
 
 vil_nitf_header::vil_nitf_header(unsigned long len)
+  : reference_count_( 0 )
 {
     data_length_ = len > 0 ? len : 0;
     ID = DT = TITLE = 0;

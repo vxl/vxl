@@ -109,7 +109,10 @@ StatusCode vil_nitf_image_subheader_v20::Read(vil_stream* file)
              << "file position = " << curr_pos << vcl_endl;
   }
 
-  char buffer[6];  // Max size of any numeric field is 5.
+  //char buffer[6];  // Max size of any numeric field is 5.
+  // No, it's not. There is a buffer overflow somewhere. We haven't
+  // tracked it down. -- Amitha Perera & Marc Laymon
+  char buffer[2048];
 
   bool error = false;
   bool done  = false;
@@ -910,7 +913,10 @@ StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
 
   int curpos = file->tell();
 
-  char buffer[6];                     // Max size of any numeric field is 5.
+  //char buffer[6];  // Max size of any numeric field is 5.
+  // No, it's not. There is a buffer overflow somewhere. We haven't
+  // tracked it down. -- Amitha Perera & Marc Laymon
+  char buffer[2048];
 
   // MPP 4/15/2001  Moved from RPC_present code -- need to support
   // independent RPC/ICHIPB/I2MAPD and PIAIMC extensions.

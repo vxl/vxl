@@ -119,12 +119,13 @@ vil_image_resource_sptr vil_nitf_file_format::make_input_image(vil_stream* is)
   // FOR NOW, is_nitf_file_format JUST CHECKS FOR v2.0
   // TBD: ADD CODE TO CHECK FOR BOTH V2.0 AND V2.1 -- MAL 26sep2003
 
-  if (is_nitf_file_format(is))
-  {
-    //  READ IN HEADERS HERE RATHER THAN IN vil_nitf_image TO ALLOW POSSIBLITY
-    //  OF MULTIPLE IMAGES IN FUTURE.
-    read_header_data();
+  if (! is_nitf_file_format(is)) {
+    return 0;
   }
+    
+  //  READ IN HEADERS HERE RATHER THAN IN vil_nitf_image TO ALLOW POSSIBLITY
+  //  OF MULTIPLE IMAGES IN FUTURE.
+  read_header_data();
 
   //  FOR NOW, JUST RETURN FIRST IMAGE FROM FILE.
   if (message_header_->NUMI > 0)
