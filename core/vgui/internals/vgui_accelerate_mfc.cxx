@@ -3,6 +3,8 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
+#include <vbl/vbl_printf.h>
+
 #include <vgui/impl/mfc/stdafx.h>
 #include "vgui_accelerate_mfc.h"
 #include <vgui/vgui_projection_inspector.h>
@@ -11,6 +13,7 @@
 
 extern CDC *vgui_mfc_adaptor_global_dc;
 
+static bool debug = false;
 
 // -- Used to overcome switching to GL_BACK when
 // acceleration is on. Note that there is nothing wrong with glDrawBuffer(GL_BACK)
@@ -20,8 +23,7 @@ extern CDC *vgui_mfc_adaptor_global_dc;
 #undef glDrawBuffer
 void mb_glDrawBufferWrapper(GLuint buffer)
 {
-  if(buffer == GL_BACK && (vgui_accelerate::vgui_mfc_acceleration ||
-                           vgui_accelerate::vgui_mfc_ogl_acceleration))
+  if(buffer == GL_BACK && vgui_accelerate::vgui_mfc_acceleration)
     return;
   glDrawBuffer(buffer);
 }
@@ -30,14 +32,14 @@ void mb_glDrawBufferWrapper(GLuint buffer)
 
 vgui_accelerate_mfc::vgui_accelerate_mfc()
 {
-  //  vcl_cerr << "Initializing Windows/MFC acceleration..." << vcl_endl;
+  if (debug) vcl_cerr << "Initializing Windows/MFC acceleration..." << vcl_endl;
   BytesPerPixel = 0;
 }
 
 
 vgui_accelerate_mfc::~vgui_accelerate_mfc()
 {
-  //  vcl_cerr << "vgui_accelerate_mfc::~vgui_accelerate_mfc()" << vcl_endl;
+  if (debug) vcl_cerr << "vgui_accelerate_mfc::~vgui_accelerate_mfc()" << vcl_endl;
 }
 
 bool vgui_accelerate_mfc::vgui_glClear(GLbitfield mask)
@@ -46,38 +48,194 @@ bool vgui_accelerate_mfc::vgui_glClear(GLbitfield mask)
   return true;
 }
 
+
+/* http://www.lesher.ws/vidfmt.c :  Check video display format */
+
+struct vidfmt {
+  int bpp;
+  int gl_format;
+  int gl_type;
+
+  vidfmt();
+};
+
+vidfmt::vidfmt()
+{
+  // Try enumdisplaysettings
+  {
+    DEVMODE devmode;
+    EnumDisplaySettings(0, ENUM_CURRENT_SETTINGS, &devmode);
+    if (debug) vcl_cerr << "DEVMODE bpp = " << devmode.dmBitsPerPel << vcl_endl;
+  }
+
+    /* Allocate enough space for a DIB header plus palette (for
+     * 8-bit modes) or bitfields (for 16- and 32-bit modes)
+     */
+    const int dib_size = sizeof(BITMAPINFOHEADER) + 256 * sizeof (RGBQUAD);
+    unsigned char buf[dib_size];
+    LPBITMAPINFOHEADER dib_hdr = (LPBITMAPINFOHEADER) buf;
+    memset(dib_hdr, 0, dib_size);
+    dib_hdr->biSize = sizeof(BITMAPINFOHEADER);
+    
+    /* Get a device-dependent bitmap that's compatible with the
+       screen.
+     */
+    HDC hdc = AfxGetApp()->GetMainWnd()->GetDC()->GetSafeHdc();
+    HBITMAP hbm = CreateCompatibleBitmap( hdc, 1, 1 );
+
+    /* Convert the DDB to a DIB.  We need to call GetDIBits twice:  
+     * the first call just fills in the BITMAPINFOHEADER; the 
+     * second fills in the bitfields or palette.
+     */
+    GetDIBits(hdc, hbm, 0, 1, NULL, (LPBITMAPINFO) dib_hdr, DIB_RGB_COLORS);
+    GetDIBits(hdc, hbm, 0, 1, NULL, (LPBITMAPINFO) dib_hdr, DIB_RGB_COLORS);
+    DeleteObject(hbm);
+    ReleaseDC(NULL, hdc);
+
+    bpp = dib_hdr->biBitCount;
+    if (debug) vbl_printf(vcl_cerr, "Current video mode is %lu-bit; ", dib_hdr->biBitCount);
+
+    if (BI_BITFIELDS == dib_hdr->biCompression)
+    {
+        DWORD * fields = (DWORD*) ((char*)dib_hdr + dib_hdr->biSize);
+        if (debug) printf("masks [%08x %08x %08x] ", fields[0], fields[1], fields[2]);
+        switch (fields[0])
+        {
+        case 0xf800:
+          gl_type = GL_UNSIGNED_SHORT_5_6_5;
+          gl_format = GL_RGB;
+            if (debug) printf("    (565 BGR pixel alignment)");
+            break;
+        case 0x7c00:
+          gl_type = GL_UNSIGNED_SHORT_5_5_5_1;
+          gl_format = GL_RGB;
+            if (debug) printf("    (555 BGR pixel alignment)");
+            break;
+        case 0xff0000:
+          gl_type = GL_UNSIGNED_BYTE;
+          gl_format = GL_BGR;
+            if (debug) printf("    (888 BGR pixel alignment)");
+            break;
+        case 0x0000ff:
+          gl_type = GL_UNSIGNED_BYTE;
+          gl_format = GL_RGB;
+            if (debug) printf("    (888 RGB pixel alignment)");
+            break;
+        default:
+            vbl_printf(vcl_cerr, "vgui_accelerate_mfc:    (Unknown pixel alignment %x:%x:%x)\n", 
+                fields[0], fields[1], fields[2] );
+        }
+    }
+
+    if (debug) printf("\n");
+
+    // awf: OK, the above doesn't work on my win2k laptop.
+    // write an rgb into a bitmap and have a gander...
+    if (bpp == 16) {
+
+      // Make a bitmap in screen format
+      CBitmap bitmap;
+      bitmap.CreateCompatibleBitmap(vgui_mfc_adaptor_global_dc, 1, 1);
+      
+      // Make a bitmap in 24-bit RGB format
+      BITMAPINFO binfo;
+      memset(&binfo, 0, sizeof binfo);
+      binfo.bmiHeader.biSize = sizeof binfo.bmiHeader;
+      binfo.bmiHeader.biWidth = 1;
+      binfo.bmiHeader.biHeight = 1;
+      binfo.bmiHeader.biPlanes = 1;
+      binfo.bmiHeader.biBitCount = 24;
+      binfo.bmiHeader.biCompression = BI_RGB;
+      binfo.bmiHeader.biSizeImage = 0;
+      binfo.bmiHeader.biClrUsed   = 0;
+     
+      // Make a red pixel
+      unsigned char rgb[3];
+      rgb[2] = 0xff;
+      rgb[1] = 0x00;
+      rgb[0] = 0x00;
+
+      // Write the pixel to the screen-format bitmap.
+      // SetDIBPixels will do the conversion for us..
+      SetDIBits(vgui_mfc_adaptor_global_dc->GetSafeHdc(), bitmap, 0, 1, &rgb, &binfo, DIB_RGB_COLORS);
+
+      // Retrieve the pixel (now 16bit)
+      unsigned char opx[2];
+      bitmap.GetBitmapBits(2,opx);
+      unsigned int redmask = opx[1] * 256 + opx[0];
+      if (debug) vbl_printf(vcl_cerr, "redmask = %04x\n", redmask);
+              
+      switch (redmask) {
+      case 0xf800:
+        gl_type = GL_UNSIGNED_SHORT_5_6_5;
+        gl_format = GL_RGB;
+        if (debug) printf("    (565 BGR pixel alignment)");
+        break;
+      case 0x7c00:
+        gl_type = GL_UNSIGNED_SHORT_5_5_5_1;
+        gl_format = GL_RGB;
+        if (debug) printf("    (555 BGR pixel alignment)");
+        break;
+      default:
+        vbl_printf(vcl_cerr, "vgui_accelerate_mfc:    (Unknown redmask %02x)\n", redmask);
+      }
+    }
+    if (debug) vcl_cerr << vcl_endl;
+    /*
+      for(int component = 0; component < 3; ++component) {
+        unsigned char rgb[3 * width];
+        memset(rgb, 0, sizeof rgb);
+        for (int p = 0; p < width; ++p)
+          rgb[p*3 + component] = 0xff;
+
+        SetDIBits(vgui_mfc_adaptor_global_dc->GetSafeHdc(), bitmap, 0, 1, &rgb, &binfo, DIB_RGB_COLORS);
+
+        unsigned char opx[256];
+        memset(opx, 0, sizeof opx);
+
+        BITMAP b;
+        memset(&b, 0, sizeof b);
+        b.bmBits = opx;
+        bitmap.GetBitmap(&b);
+        vbl_printf(vcl_cerr, "BITMAP: w %d, h %d, bytesperline %d, bitsPixel %d, bits %p\n",
+          b.bmWidth, b.bmHeight, b.bmWidthBytes, b.bmBitsPixel, b.bmBits);
+ 
+        bitmap.GetBitmap(&b);
+        bitmap.GetBitmapBits(width*b.bmBitsPixel,opx);
+        vbl_printf(vcl_cerr, "opx ");
+        for(int p = 0; p < width; ++p)
+          vbl_printf(vcl_cerr, "%02x %02x | ", (int)opx[2*p + 1], (int)opx[2*p + 0]);
+        vbl_printf(vcl_cerr, "\n");
+      */  
+}
+
+
 bool vgui_accelerate_mfc::vgui_choose_cache_format( GLenum* format, GLenum* type)
 {
-  static int bits_per_pixel;
-  static int ncolors;
-  static int bytes_per_pixel= -1;
+  if (!vgui_mfc_acceleration)
+    return vgui_accelerate::vgui_choose_cache_format(format, type);
+
+  // We are accelerated, have a gander at the display and see if we
+  // can say anything about it.
+  static int bits_per_pixel = -1;
   static GLenum g_format;
   static GLenum g_type;
-  if (bytes_per_pixel == -1) {
-    HDC hdc = AfxGetApp()->GetMainWnd()->GetDC()->GetSafeHdc();
-    bits_per_pixel = GetDeviceCaps(hdc,BITSPIXEL);
-    ncolors = GetDeviceCaps(hdc,NUMCOLORS);
-    bytes_per_pixel = bits_per_pixel/8;
-    vcl_cerr << "vgui_accelerate_mfc: bits = " << bits_per_pixel << ", ncolors = " << ncolors << vcl_endl;
+  if (bits_per_pixel == -1) {
+
+    vidfmt vf;
+
+    bits_per_pixel = vf.bpp;
    
-    // Make a bitmap from the screen, and examine it to determine
-    // screen format.
-    CBitmap mfcbitmap;
-    CDC mem_dc;
-    mem_dc.CreateCompatibleDC(vgui_mfc_adaptor_global_dc);
-    mfcbitmap.CreateCompatibleBitmap(vgui_mfc_adaptor_global_dc, 1, 1);
-    BITMAP bitmap;
-    assert(mfcbitmap.GetBitmap(&bitmap));
-    
     if (bits_per_pixel == 16) {
-      g_format = GL_RGB;
-      g_type = GL_UNSIGNED_SHORT_5_5_5_1;
+      g_format = vf.gl_format;
+      g_type = vf.gl_type;
     } else if (bits_per_pixel == 24) {
-      g_format = GL_BGR;
-      g_type = GL_UNSIGNED_BYTE;
+      g_format = vf.gl_format;
+      g_type = vf.gl_type;
     } else {
       g_format = GL_RGB;
       g_type = GL_UNSIGNED_BYTE;
+      vcl_cerr << "[vgui_accelerate_mfc: disabling acceleration]";
       vgui_mfc_acceleration = false;
     }
   }
@@ -132,7 +290,7 @@ bool vgui_accelerate_mfc::vgui_glDrawPixels( GLsizei width, GLsizei height, GLen
       bits_per_pixel = GetDeviceCaps(hdc,BITSPIXEL);
       ncolors = GetDeviceCaps(hdc,NUMCOLORS);
       bytes_per_pixel = bits_per_pixel/8;
-      vcl_cerr << "vgui_accelerate_mfc: bits = " << bits_per_pixel << ", ncolors = " << ncolors << vcl_endl;
+      if (debug) vcl_cerr << "vgui_accelerate_mfc: bits = " << bits_per_pixel << ", ncolors = " << ncolors << vcl_endl;
     }
     CBitmap bitmap;
     CDC mem_dc;
@@ -221,7 +379,6 @@ bool vgui_accelerate_mfc::vgui_glDrawPixels( GLsizei width, GLsizei height, GLen
     //glDrawPixels(width, height, format, type, pixels);
     //vgui_mfc_adaptor_global_dc->Rectangle(x,y,x + width_crop*scaleX, y + height_crop*scaleY);
 
-    if (1)
     vgui_mfc_adaptor_global_dc->StretchBlt(x,y,width_crop*scaleX,height_crop*scaleY,// dest
 		       &mem_dc, // src
 		       x_crop+unpack_skip_pixels,y_crop+unpack_skip_rows,width_crop,height_crop, // src

@@ -151,14 +151,6 @@ void vgui::init(int &argc, char **argv)
       vgui_accelerate::vgui_no_acceleration = true;
       vgui_remove_arg(i, argc, argv);
     }
-    else if (strcmp(argv[i],"--with-mfc-ogl-accel") == 0) {
-      vgui_accelerate::vgui_mfc_ogl_acceleration = true;
-      vgui_remove_arg(i, argc, argv);
-    }
-    else if (strcmp(argv[i],"--with-no-mfc-ogl-accel") == 0) {
-      vgui_accelerate::vgui_mfc_ogl_acceleration = false;
-      vgui_remove_arg(i, argc, argv);
-    }
     else if (strcmp(argv[i],"--with-mfc-accel") == 0) {
       vgui_accelerate::vgui_mfc_acceleration = true;
       vgui_remove_arg(i, argc, argv);
