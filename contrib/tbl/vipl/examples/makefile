@@ -39,6 +39,7 @@ MINI_PROG_SOURCES += example_erode_disk.cxx
 MINI_PROG_SOURCES += example2_threshold.cxx
 MINI_PROG_SOURCES += example_x_gradient.cxx
 MINI_PROG_SOURCES += example_histogram.cxx
+MINI_PROG_SOURCES += example_histogram2.cxx
 
 IULIBS += -lvnl                    # for B.
 IULIBS += -lvbl                    # for C.
