@@ -3,7 +3,7 @@
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h> // vcl_abort()
 
-const int MAX_ITS = 100;
+const int MAX_ITS = 200;
 const double EPS = 3.0e-7;
 const double FPMIN = 1.0e-30;
 
