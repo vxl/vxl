@@ -71,6 +71,14 @@ VCL_DEFINE_SPECIALIZATION
 inline vxl_int_32 vil2_convert_cast_pixel<double, vxl_int_32>::operator () (double v) const
 { return (vxl_int_32)(v+0.5); }
 
+VCL_DEFINE_SPECIALIZATION
+inline vil_rgb<vxl_byte> vil2_convert_cast_pixel<float, vil_rgb<vxl_byte> >::operator () (float v) const
+{ return vil_rgb<vxl_byte>((vxl_byte)(v+0.5)); }
+
+VCL_DEFINE_SPECIALIZATION
+inline vil_rgb<vxl_byte> vil2_convert_cast_pixel<double, vil_rgb<vxl_byte> >::operator () (double v) const
+{ return vil_rgb<vxl_byte>((vxl_byte)(v+0.5)); }
+
 
 //: Cast one pixel type to another (with rounding).
 // There must be a cast operator from inP to outP
