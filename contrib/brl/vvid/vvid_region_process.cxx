@@ -1,6 +1,5 @@
 #include <vcl_iostream.h>
 #include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb.h>
 #include <vcl_vector.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
 #include <vdgl/vdgl_intensity_face.h>
@@ -10,7 +9,6 @@
 vvid_region_process::vvid_region_process(sdet_detector_params & dp)
   : sdet_detector_params(dp)
 {
-  
 }
 
 vvid_region_process::~vvid_region_process()
@@ -23,7 +21,7 @@ bool vvid_region_process::execute()
     {
       vcl_cout << "In vvid_region_process::execute() - not exactly one"
                << " input image \n";
-    return false;
+      return false;
     }
   topo_objs_.clear();
   //assume the input images are grey scale (should really check)
@@ -34,8 +32,8 @@ bool vvid_region_process::execute()
   rp.set_image(img);
   rp.extract_regions();
   vcl_vector<vdgl_intensity_face_sptr>& regions = rp.get_regions();
-  for(vcl_vector<vdgl_intensity_face_sptr>::iterator fit = regions.begin();
-      fit != regions.end(); fit++)
+  for (vcl_vector<vdgl_intensity_face_sptr>::iterator fit = regions.begin();
+       fit != regions.end(); fit++)
     topo_objs_.push_back((*fit)->cast_to_topology_object());
   output_image_ = 0;
   return true;
