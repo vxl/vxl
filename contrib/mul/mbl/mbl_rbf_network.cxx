@@ -69,10 +69,10 @@ void mbl_rbf_network::build(const vnl_vector<double>* x, int n, double s)
   for (int i=0;i<n;++i)
     D(i,i)=0.0;
 
-  for (int i=1;i<n;++i)
-    for (int j=i+1;j<=n;++j)
+  for (int i=0;i<n-1;++i)
+    for (int j=i+1;j<n;++j)
     {
-      double d2 = distSqr(x_[i-1],x_[j-1]);
+      double d2 = distSqr(x_[i],x_[j]);
       D_data[i][j] = d2;
       D_data[j][i] = d2;
       d2_stats.obs(d2);
@@ -86,8 +86,8 @@ void mbl_rbf_network::build(const vnl_vector<double>* x, int n, double s)
     s2_ = s*s;
 
   // Apply rbf() to elements of D
-  for (int i=1;i<=n;++i)
-    for (int j=1;j<=n;++j)
+  for (int i=0;i<n;++i)
+    for (int j=0;j<n;++j)
       D_data[i][j] = rbf(D_data[i][j]/s2_);
 
   // W_ is the inverse of D
