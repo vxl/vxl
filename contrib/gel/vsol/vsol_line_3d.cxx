@@ -7,7 +7,6 @@
 // External declarations for implementation
 //*****************************************************************************
 #include <vcl_cassert.h>
-#include <vnl/vnl_math.h>
 #include <vsol/vsol_point_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 
@@ -20,19 +19,18 @@
 //---------------------------------------------------------------------------
 vsol_line_3d::vsol_line_3d(const vgl_vector_3d<double> &new_direction,
                            const vsol_point_3d_sptr &new_middle)
+: p0_(new vsol_point_3d(*(new_middle->plus_vector(-new_direction/2)))),
+  p1_(new vsol_point_3d(*(new_middle->plus_vector(new_direction/2))))
 {
-  p0_=new vsol_point_3d(*(new_middle->plus_vector(-new_direction/2)));
-  p1_=new vsol_point_3d(*(new_middle->plus_vector(new_direction/2)));
 }
 
 //---------------------------------------------------------------------------
-//: Constructor
+//: Constructor from two vgl_point_3d (end points)
 //---------------------------------------------------------------------------
 vsol_line_3d::vsol_line_3d(const vsol_point_3d_sptr &new_p0,
                            const vsol_point_3d_sptr &new_p1)
+: p0_(new_p0), p1_(new_p1)
 {
-  p0_=new_p0;
-  p1_=new_p1;
 }
 
 //---------------------------------------------------------------------------
@@ -40,9 +38,8 @@ vsol_line_3d::vsol_line_3d(const vsol_point_3d_sptr &new_p0,
 // Description: no duplication of the points
 //---------------------------------------------------------------------------
 vsol_line_3d::vsol_line_3d(const vsol_line_3d &other)
+: p0_(other.p0_), p1_(other.p1_)
 {
-  p0_=other.p0_;
-  p1_=other.p1_;
 }
 
 //---------------------------------------------------------------------------
@@ -54,7 +51,7 @@ vsol_line_3d::~vsol_line_3d()
 
 //---------------------------------------------------------------------------
 //: Clone `this': creation of a new object and initialization
-// See Prototype pattern
+//  See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_sptr vsol_line_3d::clone(void) const
 {
@@ -74,7 +71,7 @@ vsol_point_3d_sptr vsol_line_3d::middle(void) const
 }
 
 //---------------------------------------------------------------------------
-//: direction of the straight line segment. Has to be deleted manually
+//: direction of the straight line segment.
 //---------------------------------------------------------------------------
 vgl_vector_3d<double> vsol_line_3d::direction(void) const
 {
@@ -122,7 +119,7 @@ bool vsol_line_3d::operator==(const vsol_spatial_object_3d& obj) const
   return
    obj.spatial_type() == vsol_spatial_object_3d::CURVE &&
    ((vsol_curve_3d const&)obj).curve_type() == vsol_curve_3d::LINE
-  ? *this == (vsol_line_3d const&) (vsol_curve_3d const&) obj
+  ? operator== ((vsol_line_3d const&)(vsol_curve_3d const&)obj)
   : false;
 }
 
@@ -225,33 +222,20 @@ void vsol_line_3d::set_length(const double new_length)
 //---------------------------------------------------------------------------
 bool vsol_line_3d::in(const vsol_point_3d_sptr &p) const
 {
-  bool result;
-  double dot_product;
-  double ax;
-  double ay;
-  double az;
-  double bx;
-  double by;
-  double bz;
   // `p' belongs to the straight line
-  ax=p1_->x()-p0_->x();
-  ay=p1_->y()-p0_->y();
-  az=p1_->z()-p0_->z();
-  bx=p->x()-p0_->x();
-  by=p->y()-p0_->y();
-  bz=p->z()-p0_->z();
+  double ax=p1_->x()-p0_->x();
+  double ay=p1_->y()-p0_->y();
+  double az=p1_->z()-p0_->z();
+  double bx=p->x()-p0_->x();
+  double by=p->y()-p0_->y();
+  double bz=p->z()-p0_->z();
 
-  result=(ay*bz-az*by==0)&&(az*bx-ax*bz==0)&&(ax*by-ay*bx==0);
+  bool result = ay*bz==az*by && az*bx==ax*bz && ax*by==ay*bx;
   if (result) // `p' belongs to the segment
-    {
-      dot_product=(p->x()-p0_->x())*(p1_->x()-p0_->x())
-        +(p->y()-p0_->y())*(p1_->y()-p0_->y())
-        +(p->z()-p0_->z())*(p1_->z()-p0_->z());
-      result=(dot_product>=0)&&
-        (dot_product<(vnl_math_sqr(p1_->x()-p0_->x())
-                      +vnl_math_sqr(p1_->y()-p0_->y())
-                      +vnl_math_sqr(p1_->z()-p0_->z())));
-    }
+  {
+    double dot_product=bx*ax+by*ay+bz*az;
+    result= dot_product>=0 && dot_product<ax*ax+ay*ay+az*az;
+  }
   return result;
 }
 
