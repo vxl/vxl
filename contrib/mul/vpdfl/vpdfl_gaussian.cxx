@@ -31,7 +31,7 @@
 #include <vpdfl/vpdfl_prob_chi2.h>
 
 //=======================================================================
-static bool inline almostEqualsOne(double value);
+static inline bool almostEqualsOne(double value);
 static bool columnsAreUnitNorm(const vnl_matrix<double>& vecs);
 #if 0
 static bool vectorHasDescendingOrder(const vnl_vector<double>& v);
@@ -148,7 +148,7 @@ void vpdfl_gaussian::set(const vnl_vector<double>& mean,
 
 
 //=======================================================================
-static bool inline almostEqualsOne(double value)
+static bool almostEqualsOne(double value)
 {
   const double upper = 1 + 1e-06;
   const double lower = 1 - 1e-06;
