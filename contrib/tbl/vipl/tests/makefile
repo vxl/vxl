@@ -6,9 +6,9 @@ include ${IUEROOT}/vxl/vnl/algo/config.mk
 USE_IMPLICIT_TEMPLATES := 1
 
 TESTMAIN := test_driver.cxx
-TESTS += test_threshold.cxx
-TESTS += test_erode_disk.cxx
-TESTS += test_gaussian_convolution.cxx
+TESTS += vipl_test_threshold.cxx
+TESTS += vipl_test_erode_disk.cxx
+TESTS += vipl_test_gaussian_convolution.cxx
 
 IULIBS += -lvipl -lmil -lmbl -lvil -lvnl-algo -lvnl-io -lvnl -lvgl-io -lvgl -lvsl -ltestlib
 
