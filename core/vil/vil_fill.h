@@ -1,11 +1,10 @@
-// This is mul/vil2/vil2_fill.txx
-#ifndef vil2_fill_txx_
-#define vil2_fill_txx_
+// This is mul/vil2/vil2_fill.h
+#ifndef vil2_fill_h_
+#define vil2_fill_h_
 //:
 // \file
 // \brief Various functions for manipulating image views
 // \author Tim Cootes - Manchester
-
 
 #include <vcl_cassert.h>
 #include <vil2/vil2_image_view.h>
@@ -76,4 +75,4 @@ void vil2_fill_col(vil2_image_view<T>& view, unsigned i, T value)
 }
 
 
-#endif // vil2_fill_txx_
+#endif // vil2_fill_h_

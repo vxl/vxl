@@ -1,4 +1,4 @@
-// This is mul/mbl/tests/test_read_props.cxx
+// This is vxl/vul/tests/test_string.cxx
 #include <vcl_iostream.h>
 #include <testlib/testlib_test.h>
 #include <vul/vul_string.h>

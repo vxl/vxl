@@ -1,9 +1,7 @@
-// This is oxl/vgui/examples/kym/dialog-example.cxx
+// This is oxl/ogui/examples/kym/dialog-example.cxx
 
 //:
 // \file
-// dialog-example.cxx
-//
 // This example makes a dialog box and attaches it to a menu item.
 
 #include <vbl/vbl_bool_ostream.h>

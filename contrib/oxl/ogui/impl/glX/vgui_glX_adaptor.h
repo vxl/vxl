@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/glX/vgui_glX_adaptor.h
+// This is oxl/ogui/impl/glX/vgui_glX_adaptor.h
 #ifndef vgui_glX_adaptor_h_
 #define vgui_glX_adaptor_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -6,8 +6,6 @@
 #endif
 //:
 // \file
-// \brief Undocumented class FIXME
-//
 // \author
 //              Philip C. Pritchett, 11 Sep 99
 //              Robotics Research Group, University of Oxford

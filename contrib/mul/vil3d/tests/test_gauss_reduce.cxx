@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_image_view.cxx
+// This is mul/vil3d/tests/test_gauss_reduce.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vil3d/vil3d_image_view.h>

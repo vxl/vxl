@@ -1,10 +1,9 @@
-// This is mul/vil2/vil2_convert.cxx
+// This is mul/vil2/vil2_convert.h
 #ifndef vil2_convert_h_
 #define vil2_convert_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Some standard conversion functions.

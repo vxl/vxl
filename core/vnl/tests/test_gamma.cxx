@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_image_view.cxx
+// This is vxl/vnl/tests/test_gamma.cxx
 #include <vnl/vnl_gamma.h>
 #include <testlib/testlib_test.h>
 

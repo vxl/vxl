@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_gaussian_pyramid_builder_2d.cxx
+// This is mul/vimt/tests/test_gaussian_pyramid_builder_2d.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
@@ -53,9 +53,9 @@ void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder_2d<vxl
 
 void test_gaussian_pyramid_builder_2d_a()
 {
-  vcl_cout << "\n\n************************************************\n"
+  vcl_cout << "\n\n*************************************************\n"
            << " Testing vimt_gaussian_pyramid_builder_2d (byte)\n"
-           << "************************************************\n";
+           << "*************************************************\n";
 
   vimt_gaussian_pyramid_builder_2d<vxl_byte> builder;
   builder.set_filter_width(3);

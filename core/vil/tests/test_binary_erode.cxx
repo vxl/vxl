@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_sample_grid_bilin.cxx
+// This is mul/vil2/tests/test_binary_erode.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -20,9 +20,9 @@ inline void print_binary_image(const vil2_image_view<bool>& im)
 
 void test_binary_erode_byte()
 {
-  vcl_cout << "********************************\n"
-           << " Testing vil2_binary_dilate\n"
-           << "********************************\n";
+  vcl_cout << "***************************\n"
+           << " Testing vil2_binary_erode\n"
+           << "***************************\n";
 
   vil2_image_view<bool> image0;
   image0.set_size(10,10);

@@ -1,4 +1,4 @@
-// This is vxl/vil2/file_formats/vil2_bmp_file_header.h
+// This is mul/vil2/file_formats/vil2_bmp_file_header.h
 #ifndef vil2_bmp_file_header_h_
 #define vil2_bmp_file_header_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

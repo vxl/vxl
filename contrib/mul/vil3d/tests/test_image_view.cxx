@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_image_view.cxx
+// This is mul/vil3d/tests/test_image_view.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcl_functional.h>
@@ -156,9 +156,9 @@ void test_image_view_int()
 
 
 #if 0
-  vcl_cout << "***********************************\n"
+  vcl_cout << "************************************\n"
            << " Testing vil3d_image_view functions\n"
-           << "***********************************\n";
+           << "************************************\n";
 
   image2.fill(0);
   image_win = vil2_crop(image2,2,1,1,2);

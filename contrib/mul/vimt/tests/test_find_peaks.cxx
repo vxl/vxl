@@ -1,4 +1,4 @@
-// This is mul/vimy/tests/test_find_peaks.cxx
+// This is mul/vimt/tests/test_find_peaks.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_vector.h>
 #include <vxl_config.h> // for vxl_byte

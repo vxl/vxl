@@ -1,4 +1,4 @@
-// This is oxl/vgui/examples/geoff/vgui_testbed/vgui_point_selector.cxx
+// This is oxl/ogui/examples/geoff/vgui_testbed/vgui_point_selector.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

@@ -1,7 +1,6 @@
-// This is ./mul/vil2/vil2_property.h
+// This is mul/vil2/vil2_property.h
 #ifndef vil2_property_h_
 #define vil2_property_h_
-
 //:
 // \file
 //

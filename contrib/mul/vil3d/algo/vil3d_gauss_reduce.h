@@ -1,13 +1,13 @@
-// This is mul/vil3d/vil3d_gauss_reduce.h
+// This is mul/vil3d/algo/vil3d_gauss_reduce.h
 #ifndef vil3d_gauss_reduce_h_
 #define vil3d_gauss_reduce_h_
 //:
-//  \file
-//  \brief Functions to smooth and sub-sample 3D images in one direction
-//  \author Tim Cootes
+// \file
+// \brief Functions to smooth and sub-sample 3D images in one direction
 //  These are not templated because
-//  a) Each type tends to need a slightly different implementation
-//  b) Let's not have too manj templates.
+//  - Each type tends to need a slightly different implementation
+//  - Let's not have too many templates.
+// \author Tim Cootes
 
 #include <vil2/algo/vil2_gauss_reduce.h>
 

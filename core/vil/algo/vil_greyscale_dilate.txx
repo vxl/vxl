@@ -1,10 +1,10 @@
-// This is mul/vil2/algo/vil2_grayscale_dilate.txx
+// This is mul/vil2/algo/vil2_greyscale_dilate.txx
 #ifndef vil2_greyscale_dilate_txx_
 #define vil2_greyscale_dilate_txx_
 //:
-//  \file
-//  \brief Perform greyscale dilation on images
-//  \author Tim Cootes
+// \file
+// \brief Perform greyscale dilation on images
+// \author Tim Cootes
 
 #include "vil2_greyscale_dilate.h"
 #include <vcl_cassert.h>

@@ -1,4 +1,4 @@
-// This is oxl/vgui/examples/geoff/vgui_testbed/vgui_point_selector.h
+// This is oxl/ogui/examples/geoff/vgui_testbed/vgui_point_selector.h
 #ifndef example_point_selector_h_
 #define example_point_selector_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

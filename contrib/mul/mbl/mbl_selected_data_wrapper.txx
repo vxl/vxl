@@ -1,4 +1,4 @@
-// This is ./mul/mbl/mbl_selected_data_wrapper.txx 
+// This is mul/mbl/mbl_selected_data_wrapper.txx
 #ifndef mbl_selected_data_wrapper_txx_
 #define mbl_selected_data_wrapper_txx_
 //:
@@ -36,7 +36,7 @@ mbl_selected_data_wrapper<T>::mbl_selected_data_wrapper(
 
 template<class T>
 void mbl_selected_data_wrapper<T>::set(const mbl_data_wrapper<T>& data,
-  const vcl_vector<unsigned> &selection)
+                                       const vcl_vector<unsigned> &selection)
 {
   delete data_;
   data_ = data.clone();
@@ -54,7 +54,7 @@ mbl_selected_data_wrapper<T>::~mbl_selected_data_wrapper()
 //: Copy operator
 template<class T>
 mbl_selected_data_wrapper<T>& mbl_selected_data_wrapper<T>::operator=(
-  const mbl_selected_data_wrapper<T>& b)
+                                       const mbl_selected_data_wrapper<T>& b)
 {
   if (this==&b) return *this;
 

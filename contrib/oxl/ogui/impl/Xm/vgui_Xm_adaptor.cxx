@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/Xm/vgui_Xm_adaptor.cxx
+// This is oxl/ogui/impl/Xm/vgui_Xm_adaptor.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

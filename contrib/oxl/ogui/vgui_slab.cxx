@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_slab.cxx
+// This is oxl/ogui/vgui_slab.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

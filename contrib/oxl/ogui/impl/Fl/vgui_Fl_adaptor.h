@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/Fl/vgui_Fl_adaptor.h
+// This is oxl/ogui/impl/Fl/vgui_Fl_adaptor.h
 #ifndef vgui_Fl_adaptor_h_
 #define vgui_Fl_adaptor_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

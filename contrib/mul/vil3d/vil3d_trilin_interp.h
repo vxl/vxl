@@ -1,10 +1,10 @@
-// This is mul/vil3d/vil3d_trilin_interp_3d.h
-#ifndef vil3d_trilin_interp_3d_h_
-#define vil3d_trilin_interp_3d_h_
+// This is mul/vil3d/vil3d_trilin_interp.h
+#ifndef vil3d_trilin_interp_h_
+#define vil3d_trilin_interp_h_
 //:
-//  \file
-//  \brief Trilinear interpolation functions for 3D images
-//  \author Tim Cootes
+// \file
+// \brief Trilinear interpolation functions for 3D images
+// \author Tim Cootes
 
 #include <vcl_cassert.h>
 
@@ -13,8 +13,8 @@
 //  No bound checks are done.
 template<class T>
 inline double vil3d_trilin_interp_raw(double x, double y, double z,
-                                     const T* data,
-                                     int xstep, int ystep, int zstep)
+                                      const T* data,
+                                      int xstep, int ystep, int zstep)
 {
   int p1x,p1y,p1z;
   double normx,normy,normz;
@@ -71,12 +71,12 @@ inline double vil3d_trilin_interp_assert(double x, double y, double z, const T* 
                      unsigned nx, unsigned ny, unsigned nz,
                      int xstep, int ystep, int zstep)
 {
-  assert (x>=0);
-  assert (y>=0);
-  assert (z>=0);
-  assert (x<nx-1);
-  assert (y<ny-1);
-  assert (z<nz-1);
+  assert(x>=0);
+  assert(y>=0);
+  assert(z>=0);
+  assert(x<nx-1);
+  assert(y<ny-1);
+  assert(z<nz-1);
   return vil3d_trilin_interp_raw(x,y,z,data,xstep,ystep,zstep);
 }
 
@@ -98,4 +98,4 @@ inline double vil3d_trilin_interp_safe_extend(double x, double y, double z, cons
   return vil3d_trilin_interp_raw(x,y,z,data,xstep,ystep,zstep);
 }
 
-#endif // vil3d_trilin_interp_3d_h_
+#endif // vil3d_trilin_interp_h_

@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_sample_profile_bilin.cxx
+// This is mul/vimt/tests/test_sample_profile_bilin.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte

@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/Fl/vgui_Fl_window.h
+// This is oxl/ogui/impl/Fl/vgui_Fl_window.h
 #ifndef vgui_Fl_window_h_
 #define vgui_Fl_window_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is oxl/vgui/examples/fsm/display-images.cxx
+// This is oxl/ogui/examples/fsm/display-images.cxx
 
 //:
 // \file

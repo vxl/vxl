@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_event_loop.cxx
+// This is oxl/ogui/vgui_event_loop.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

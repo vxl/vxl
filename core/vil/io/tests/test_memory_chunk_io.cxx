@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_memory_chunk.cxx
+// This is mul/vil2/io/tests/test_memory_chunk_io.cxx
 #include <vil2/vil2_memory_chunk.h>
 #include <vil2/io/vil2_io_memory_chunk.h>
 #include <vil2/io/vil2_io_smart_ptr.h>
