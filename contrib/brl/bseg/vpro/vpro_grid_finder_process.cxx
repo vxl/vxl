@@ -8,6 +8,7 @@
 #include <sdet/sdet_grid_finder.h>
 #include <vpro/vpro_edge_process.h>
 #include <vpro/vpro_line_fit_process.h>
+#include <vsol/vsol_curve_2d.h>
 
 vpro_grid_finder_process::vpro_grid_finder_process(sdet_detector_params& dp,
                                                    sdet_fit_lines_params& flp,
