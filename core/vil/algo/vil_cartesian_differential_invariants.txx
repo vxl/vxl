@@ -131,8 +131,8 @@ void vil_cartesian_differential_invariants_3(
       // cdi(8,:,:)=(Lxxx.*Lx.*Lx.*Lx)+(Lyyy.*Ly.*Ly.*Ly)+(3.*Lxxy.*Lx.*Lx.*Ly)+(3.*Lxyy.*Lx.*Ly.*Ly);
       dest(j,i,7)= (Lxxx(i,j)*Lx(i,j)*Lx(i,j)*Lx(i,j))
                   +(Lyyy(i,j)*Ly(i,j)*Ly(i,j)*Ly(i,j))
-                  +(3.0*(i,j)*Lxxy(i,j)*Lx(i,j)*Lx(i,j)*Ly(i,j))
-                  +(3.0*(i,j)*Lxyy(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j));
+                  +(3.0*Lxxy(i,j)*Lx(i,j)*Lx(i,j)*Ly(i,j))
+                  +(3.0*Lxyy(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j));
     }
   }
 }
