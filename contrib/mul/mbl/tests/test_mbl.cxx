@@ -4,6 +4,7 @@
 #undef TESTMAIN
 #define TESTMAIN(x)
 
+#include <mbl/tests/test_selected_data_wrapper.cxx>
 #include <mbl/tests/test_stochastic_data_collector.cxx>
 #include <mbl/tests/test_k_means.cxx>
 #include <mbl/tests/test_mz_random.cxx>
@@ -22,6 +23,7 @@
 
 void run_test_mbl()
 {
+  test_selected_data_wrapper();
   test_priority_bounded_queue();
   test_stochastic_data_collector();
   test_k_means();

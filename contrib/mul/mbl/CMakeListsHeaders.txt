@@ -3,6 +3,7 @@ SOURCE_FILES(mbl_sources
   mbl_cloneable_ptr.h
   mbl_data_array_ptr_wrapper.h
   mbl_data_array_wrapper.h
+  mbl_selected_data_wrapper.h
   mbl_data_collector.h
   mbl_data_collector_base.h
   mbl_data_collector_list.h
@@ -27,6 +28,7 @@ SOURCE_FILES(mbl_sources
   mbl_lru_cache.h
   mbl_stl.h
 
+  mbl_selected_data_wrapper.txx
   mbl_data_array_ptr_wrapper.txx
   mbl_data_array_wrapper.txx
   mbl_data_collector.txx
