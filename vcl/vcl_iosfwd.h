@@ -8,10 +8,14 @@
 #include <vcl/vcl_compiler.h>
 
 #if !VCL_USE_NATIVE_STL
+# if defined(VCL_WIN32)
+#  include <iostream.h>
+# else
 class istream;
 class ostream;
 class ifstream;
 class ofstream;
+# endif
 
 #elif defined(VCL_GCC_EGCS)
 # include <iosfwd>
