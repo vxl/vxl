@@ -18,6 +18,7 @@
 #include <vnl/vnl_tag.h>
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>
+#include <vcl_cstdlib.h>
 
 export template <class T> class vnl_vector;
 export template <class T> class vnl_matrix;
@@ -132,10 +133,34 @@ public:
   //  Note: ptr[i] must be valid for i=0..size()-1
   void set (T const *ptr) { copy_in(ptr); }
 
+  //: Return reference to the element at specified index.
+  // There are assert style boundary checks - use NDEBUG to turn them off.
+  T       & operator() (unsigned int i)
+  {
+#ifndef NDEBUG
+    if (i >= size())
+    {
+      vcl_cerr << "ERROR: vnl_vector::operator() called with index " <<i<<".\n";
+      vcl_cerr << "Valid range is 0.."<<size()-1<<vcl_endl;
+      vcl_abort();
+    }
+#endif;
+    return data[i];
+  }
   //: Return reference to the element at specified index. No range checking.
-  T       & operator() (unsigned int i) { return data[i]; }
-  //: Return reference to the element at specified index. No range checking.
-  T const & operator() (unsigned int i) const { return data[i]; }
+  // There are assert style boundary checks - use NDEBUG to turn them off.
+  T const & operator() (unsigned int i) const
+  {
+#ifndef NDEBUG
+    if (i >= size())
+    {
+      vcl_cerr << "ERROR: vnl_vector::operator() called with index " <<i<<".\n";
+      vcl_cerr << "Valid range is 0.."<<size()-1<<vcl_endl;
+      vcl_abort();
+    }
+#endif;
+    return data[i];
+  }
 
   //: Return reference to the element at specified index. No range checking.
   T       & operator[] (unsigned int i) { return data[i]; }

@@ -18,6 +18,8 @@
 #include <vnl/vnl_tag.h>
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>
+#include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
 
 export template <class T> class vnl_vector;
 export template <class T> class vnl_matrix;
@@ -156,7 +158,8 @@ public:
   unsigned rows ()    const { return num_rows; }
 
   //: Return number of columns
-  unsigned columns () const { return num_cols; }
+   // A synonym for cols()
+ unsigned columns () const { return num_cols; }
 
   //: Return number of columns
   // A synonym for columns()
@@ -182,12 +185,34 @@ public:
   T const * operator[] (unsigned r) const { return data[r]; }
 
   //: Access an element for reading or writing
-  // no boundary checks here. meant to be fast.
-  T       & operator() (unsigned r, unsigned c) { return this->data[r][c]; }
+  // There are assert style boundary checks - use NDEBUG to turn them off.
+  T       & operator() (unsigned r, unsigned c)
+  {
+#ifndef NDEBUG
+    if (r >= rows() || c>=cols())
+    {
+      vcl_cerr << "ERROR: vnl_vector::operator() called with (r,c) = (" <<r<<','<<c<<").\n";
+      vcl_cerr << "Valid range is (0.."<<rows()-1<<', '<<cols()-1<<")." << vcl_endl;
+      vcl_abort();
+    }
+#endif;
+    return this->data[r][c];
+  }
 
   //: Access an element for reading
-  // no boundary checks here. meant to be fast.
-  T const & operator() (unsigned r, unsigned c) const { return this->data[r][c]; }
+  // There are assert style boundary checks - use NDEBUG to turn them off.
+  T const & operator() (unsigned r, unsigned c) const
+  {
+#ifndef NDEBUG
+    if (r >= rows() || c>=cols())
+    {
+      vcl_cerr << "ERROR: vnl_vector::operator() called with (r,c) = (" <<r<<','<<c<<").\n";
+      vcl_cerr << "Valid range is (0.."<<rows()-1<<', '<<cols()-1<<")." << vcl_endl;
+      vcl_abort();
+    }
+#endif;
+    return this->data[r][c];
+  }
 
 
 // Filling and copying------------------------------------------------
