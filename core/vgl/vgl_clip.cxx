@@ -36,51 +36,50 @@ bool vgl_clip_lineseg_to_line(double &x1, double &y1,
   }
 }
 
-bool vgl_clip_line_to_box(double a, double b, double c, // coefficients.
-                          double x1,double y1,  // bounding
-                          double x2,double y2,  // box.
+bool vgl_clip_line_to_box(double a, double b, double c, // line coefficients.
+                          double x1, double y1,  // bounding
+                          double x2, double y2,  // box.
                           double &bx, double &by,  // start and
                           double &ex, double &ey)  // end points.
 {
-  if (x1>x2)
-    vcl_swap(x1,x2);
-  if (y1>y2)
-    vcl_swap(y1,y2);
+  if (x1>x2) vcl_swap(x1,x2);
+  if (y1>y2) vcl_swap(y1,y2);
+  // now x1 <= x2 and y1 <= y2
 
-  // I guess this is not really necessary.
-  double r = vcl_sqrt(a*a + b*b);
-  if (r == 0)
-    return false;
-  a /= r;
-  b /= r;
-  c /= r;
+  if (a == 0 && b == 0) return false; // then ax+by+c=0 is the line at infinity
 
-  if (vcl_abs(a) > vcl_abs(b)) {
-    // more vertical than horizontal
-    bx = -(b*y1+c)/a;
-    by = y1;
-    ex = -(b*y2+c)/a;
-    ey = y2;
+  bool b_set = false, // has the point (bx,by) been set to a valid point?
+       e_set = false; // has the point (ex,ey) been set to a valid point?
 
-    if (!vgl_clip_lineseg_to_line(bx,by, ex,ey, double(+1),double(0),-x1))
-      return false;
-    if (!vgl_clip_lineseg_to_line(bx,by, ex,ey, double(-1),double(0), x2))
-      return false;
-  }
-  else {
-    // more horizontal than vertical
-    bx = x1;
-    by = -(a*x1+c)/b;
-    ex = x2;
-    ey = -(a*x2+c)/b;
+  if (a != 0) // line is not horizontal
+  {
+    // Intersection point with the line y=y1:
+    by = y1; bx = -(b*y1+c)/a;
+    // Intersection point with the line y=y2:
+    ey = y2; ex = -(b*y2+c)/a;
 
-    if (!vgl_clip_lineseg_to_line(bx,by, ex,ey, double(0),double(+1),-y1))
-      return false;
-    if (!vgl_clip_lineseg_to_line(bx,by, ex,ey, double(0),double(-1), y2))
-      return false;
+    b_set  =  bx >= x1 && bx <= x2; // does this intersection point
+    e_set  =  ex >= x1 && ex <= x2; // lie on the bounding box?
   }
 
-  return true;
+  if (b_set && e_set) return true;
+  if (b_set) { vcl_swap(bx,ex); vcl_swap(by,ey); vcl_swap(b_set,e_set); }
+  // now b_set is false
+
+  if (b != 0) // line is not vertical
+  {
+    // Intersection point with the line x=x1:
+    bx = x1; by = -(a*x1+c)/b;
+    b_set  =  by >= y1 && by <= y2;
+    if (b_set && e_set) return true;
+    if (b_set) { vcl_swap(bx,ex); vcl_swap(by,ey); vcl_swap(b_set,e_set); }
+
+    // Intersection point with the line x=x2:
+    bx = x2; by = -(a*x2+c)/b;
+    b_set  =  by >= y1 && ey <= y2;
+  }
+
+  return b_set && e_set;
 }
 
 

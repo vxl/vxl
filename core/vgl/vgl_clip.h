@@ -11,6 +11,7 @@
 // Modifications
 // 29 Apr 2002: Amitha Perera: added a polygon clipper (a wrap around for
 //                Alan Murt's Generic Polygon Clipper)
+// 12 Oct 2002: Peter Vanroose: vgl_clip_line_to_box completely re-implemented
 // \endverbatim
 
 #include <vgl/vgl_box_2d.h>
@@ -18,7 +19,7 @@
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_polygon.h>
 
-//: Type of "clip" operations.
+//: Type of polygon "clip" operations.
 enum vgl_clip_type
 {
   vgl_clip_type_intersect,
