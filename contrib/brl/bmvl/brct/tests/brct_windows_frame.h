@@ -19,7 +19,6 @@
 #include <bgui/bgui_picker_tableau.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
-#include <vgl/vgl_point_3d.h>
 #include <vgui/vgui_soview2D.h>
 #include <bmvl/brct/kalman_filter.h>
 #include <vil1/vil1_image.h>
