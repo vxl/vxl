@@ -27,7 +27,7 @@ VoxmapPoints::VoxmapPoints( int d, vnl_double_3 c, double s)
 }
 
 
-vnl_double_3 *VoxmapPoints::GetCentre( int x, int y, int z, int d) const
+vnl_double_3 VoxmapPoints::GetCentre( int x, int y, int z, int d) const
 {
   if( d!= depth)
     return GetCorner( x*2,y*2,z*2,1,1,1,d+1);
@@ -35,9 +35,9 @@ vnl_double_3 *VoxmapPoints::GetCentre( int x, int y, int z, int d) const
   if( centres.fullp(x,y,z))
     return centres(x,y,z);
 
-  vnl_double_3 *np= new vnl_double_3( centre[0]-size/2+size/nocentres*(x+0.5),
-                                      centre[1]-size/2+size/nocentres*(y+0.5),
-                                      centre[2]-size/2+size/nocentres*(z+0.5));
+  vnl_double_3 np( centre[0]-size/2+size/nocentres*(x+0.5),
+                   centre[1]-size/2+size/nocentres*(y+0.5),
+                   centre[2]-size/2+size/nocentres*(z+0.5));
 
   centres.put(x,y,z,np);
 
@@ -45,7 +45,7 @@ vnl_double_3 *VoxmapPoints::GetCentre( int x, int y, int z, int d) const
 }
 
 
-vnl_double_3 *VoxmapPoints::GetCorner( int x, int y, int z, int dx, int dy, int dz, int d) const
+vnl_double_3 VoxmapPoints::GetCorner( int x, int y, int z, int dx, int dy, int dz, int d) const
 {
   int dd= 1<<(depth-d);
 
@@ -56,9 +56,9 @@ vnl_double_3 *VoxmapPoints::GetCorner( int x, int y, int z, int dx, int dy, int 
   if( corners.fullp(ix,iy,iz))
     return cornerpoints[corners(ix,iy,iz)];
 
-  vnl_double_3 *np= new vnl_double_3( centre[0]-size/2+(ix)*size/(nocorners-1),
-                                      centre[1]-size/2+(iy)*size/(nocorners-1),
-                                      centre[2]-size/2+(iz)*size/(nocorners-1));
+  vnl_double_3 np( centre[0]-size/2+(ix)*size/(nocorners-1),
+                   centre[1]-size/2+(iy)*size/(nocorners-1),
+                   centre[2]-size/2+(iz)*size/(nocorners-1));
 
   corners.put(ix,iy,iz,cornerpoints.size());
   cornerpoints.push_back( np);
@@ -78,9 +78,9 @@ int VoxmapPoints::GetCornerIndex( int x, int y, int z, int dx, int dy, int dz, i
   if( corners.fullp(ix,iy,iz))
     return corners(ix,iy,iz);
 
-  vnl_double_3 *np= new vnl_double_3( centre[0]-size/2+(ix)*size/(nocorners-1),
-                                      centre[1]-size/2+(iy)*size/(nocorners-1),
-                                      centre[2]-size/2+(iz)*size/(nocorners-1));
+  vnl_double_3 np( centre[0]-size/2+(ix)*size/(nocorners-1),
+                   centre[1]-size/2+(iy)*size/(nocorners-1),
+                   centre[2]-size/2+(iz)*size/(nocorners-1));
 
   corners.put(ix,iy,iz,cornerpoints.size());
   cornerpoints.push_back( np);

@@ -31,8 +31,8 @@ public:
 
   // Data Control--------------------------------------------------------------
 
-  vnl_double_3 *GetCentre( int x, int y, int z, int d) const;
-  vnl_double_3 *GetCorner( int x, int y, int z, int dx, int dy, int dz, int d) const;
+  vnl_double_3 GetCentre( int x, int y, int z, int d) const;
+  vnl_double_3 GetCorner( int x, int y, int z, int dx, int dy, int dz, int d) const;
   int GetCornerIndex( int x, int y, int z, int dx, int dy, int dz, int d) const;
 
 protected:
@@ -47,9 +47,9 @@ protected:
 
 private:
 
-  mutable vcl_vector<vnl_double_3 *> cornerpoints;
+  mutable vcl_vector<vnl_double_3> cornerpoints;
   mutable vbl_sparse_array_3d<int> corners;
-  mutable vbl_sparse_array_3d<vnl_double_3 *> centres;
+  mutable vbl_sparse_array_3d<vnl_double_3> centres;
 };
 
 #endif // VoxmapPoints_h_
