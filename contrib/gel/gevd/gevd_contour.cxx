@@ -16,6 +16,9 @@
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <gevd/gevd_pixel.h>
+#ifdef DEBUG
+# include <vul/vul_timer.h>
+#endif
 
 const int INVALID = -1;
 
