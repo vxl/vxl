@@ -222,6 +222,9 @@ SOURCE=.\Templates/vil1_memory_image_of+vil1_rgb+uchar--.cxx
 SOURCE=.\Templates/vil1_memory_image_of+vil1_rgb+vxl_uint_16--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil1_memory_image_of+vil1_rgba+float--.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil1_ncc+float.float.double-.cxx
 # End Source File
 # Begin Source File
