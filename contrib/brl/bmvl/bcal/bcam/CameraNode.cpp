@@ -20,11 +20,3 @@ CameraNode::~CameraNode()
     delete pCam_;
 }
 
-#if 0 // removed
-int CameraNode::addNeighbour(CameraNode *p)
-{
-  neighbours_.push_back(p);
-  return 0;
-}
-#endif // 0
-
