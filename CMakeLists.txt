@@ -23,7 +23,7 @@ IF(WARN_DEPRECATED)
 ENDIF(WARN_DEPRECATED)
 
 
-SUBDIRS(vcl v3p vxl oxl gel mul)
+SUBDIRS(vcl v3p vxl oxl gel mul tbl conversions)
 
 # For out of place builds, the configure generated headers are in the
 # binary directory
