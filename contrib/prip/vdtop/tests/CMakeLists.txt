@@ -2,10 +2,14 @@
 
 LINK_LIBRARIES(vdtop)
 
-#ADD_EXECUTABLE( vdtop_precompute vdtop_precompute.cxx)
-ADD_EXECUTABLE( vdtop_kernel_test vdtop_kernel_test.cxx)
-ADD_EXECUTABLE( vdtop_well_composed_kernel_test vdtop_well_composed_kernel_test.cxx)
+#ADD_EXECUTABLE(vdtop_precompute vdtop_precompute.cxx)
+ADD_EXECUTABLE(vdtop_kernel_test vdtop_kernel_test.cxx)
+ADD_EXECUTABLE(vdtop_well_composed_kernel_test vdtop_well_composed_kernel_test.cxx)
+ADD_EXECUTABLE(vdtop_veinerization_test vdtop_veinerization_test.cxx)
 
-ADD_EXECUTABLE( vdtop_veinerization_test vdtop_veinerization_test.cxx)
+#ADD_TEST(vdtop_precompute vdtop_precompute)
+ADD_TEST(vdtop_kernel_test vdtop_kernel_test)
+ADD_TEST(vdtop_well_composed_kernel_test vdtop_well_composed_kernel_test)
+ADD_TEST(vdtop_veinerization_test vdtop_veinerization_test)
 
-ADD_EXECUTABLE( vdtop_test_include test_include.cxx )
+ADD_EXECUTABLE(vdtop_test_include test_include.cxx)
