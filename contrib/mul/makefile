@@ -13,7 +13,7 @@ SUBDIRS += mil mil3d
 SUBDIRS += clsfy
 
 # New vil
-SUBDIRS += vil2 vimt vil3d
+SUBDIRS += vil2 vimt vil3d vimt3d
 
 ################################
 include ${IUEROOT}/config/top.mk
