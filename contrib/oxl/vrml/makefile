@@ -5,7 +5,7 @@ USES += core contrib/oxl
 LIBRARY := vrml
 VERSION := 1.0
 
-IMMEDIATE_LIBS += -lvbl
+IMMEDIATE_LIBS += -lvul
 
 SOURCES += vrml_out.cxx
 
