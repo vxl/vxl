@@ -20,6 +20,9 @@
 // uniformly enough across the given distribution then the routine will
 // not exit, rather keep searching for the requested number of subsamples.
 
+// Fixed => RESCALE ALL THE POINTS TO FIT -1,1(x) -1,1(y)
+// IT IS SUPPOSED THAT THE CENTER OF THE POINTS IS (0,0)
+
 vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> index, int buckets, int samples)
 {
   double row_size = 2.0;
@@ -28,32 +31,71 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
   double row_div = row_size/buckets;
   double col_div = col_size/buckets;
   int no_buckets = buckets*buckets;
-  if(buckets < 1) {
+  if (buckets < 1) {
     vcl_cout << "Warning Monte Carlo sampling will not work." << vcl_endl
              << "Not enough buckets: need 1, have " << buckets << "." << vcl_endl;
   }
-  if(index.size() < samples) {
+  if (index.size() < samples) {
     vcl_cout << "Warning Monte Carlo sampling will not work." << vcl_endl
              << "Not enough points to choose from: need " << samples
              << ", have " << index.size() << "." << vcl_endl;
   }
+
+  //
+  //  RESCALE AND CENTER THE POINTS
+  //
+  //  Store the modified points in the new list "points_rescale"
+  //  for use in the test condition only
+  //
+
+  double max_x = -1e31, max_y = -1e31, min_x = 1e31, min_y = 1e31;
+
+  for (int i=0;i<index.size();i++)
+  {
+    if ( points[i].get_x() > max_x )
+      max_x = points[i].get_x();
+
+    if ( points[i].get_y() > max_y )
+      max_y = points[i].get_y();
+
+    if ( points[i].get_x() < min_x )
+      min_x = points[i].get_x();
+
+    if ( points[i].get_y() < min_y )
+      min_y = points[i].get_y();
+  }
+
+  double center_x = ( max_x - min_x ) * 0.5;
+  double center_y = ( max_y - min_y ) * 0.5;
+
+  vcl_vector<vnl_double_2> points_rescale;
+  for (int i=0;i<index.size();i++)
+  {
+    vnl_double_2 v = points[i].get_double2(); // non-homogeneous representation
+    double x = -1.0 + ( v[0] - min_x ) / center_x;
+    double y = -1.0 + ( v[1] - min_y ) / center_y;
+    points_rescale.push_back( vnl_double_2( x, y ) );
+  }
+
+  // ********************* //
+
   int i = 0;
-  while(i < samples) {
+  while (i < samples) {
     int random;
-    if(buckets > 1) {
+    if (buckets > 1) {
       random  = (int)((float)(no_buckets - 1)*rand()/(RAND_MAX+1.0));
     } else {
       random  = 1;
     }
 
     int row_num;
-    if(buckets > 1) {
+    if (buckets > 1) {
       row_num = random/buckets;
     } else {
       row_num = 0;
     }
     int col_num;
-    if(buckets > 1) {
+    if (buckets > 1) {
       col_num = random - row_num*buckets;
     } else {
       col_num = 0;
@@ -71,28 +113,37 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
     vcl_vector<int> list;
 
     // Select from the first list
-    for(int j = 0; j < index.size(); j++) {
+    for (int j = 0; j < index.size(); j++) {
+      double x = points_rescale[j][0], y = points_rescale[j][1];
+      if (y >= row_check_lower && y < row_check_upper &&
+          x >= col_check_lower && x < col_check_upper) {
+        list.push_back(index[j]);
+      }
+    }
+#if 0 // was:
+    for (int j = 0; j < index.size(); j++) {
       double x = points[j].get_x(), y = points[j].get_y(), w = points[j].get_w();
       if (w < 0) { x *= -1; y *= -1; w *= -1; }
-      if(y >= row_check_lower*w && y < row_check_upper*w &&
-         x >= col_check_lower*w && x < col_check_upper*w)
+      if (y >= row_check_lower*w && y < row_check_upper*w &&
+          x >= col_check_lower*w && x < col_check_upper*w)
         list.push_back(index[j]);
     }
+#endif //********************************************
 
     int list_size = list.size();
     bool not_picked = true;
-    if(list_size != 0) {
+    if (list_size != 0) {
       int counter = 0;
       bool fail;
-      while(not_picked && counter < list_size*4) {
+      while (not_picked && counter < list_size*4) {
         int pick = (int)((float)(list_size - 1)*rand()/(RAND_MAX+1.0));
         int picked = list[pick];
         fail = false;
-        for(int k = 0; k < i; k++) {
-          if(picked == out_points[k])
+        for (int k = 0; k < i; k++) {
+          if (picked == out_points[k])
             fail = true;
         }
-        if(!fail) {
+        if (!fail) {
           out_points[i] = picked;
           not_picked = false;
           i++;
@@ -127,8 +178,8 @@ vcl_vector<HomgPoint2D> Taubins_MLE(HomgPoint2D x1, HomgPoint2D x2, FMatrix *F)
   // Find the Moore-Penrose Psuedo Inverse for the Jacobian matrix
   vnl_svd<double> svd(J, 1e-8);
   vnl_diag_matrix<double> diag = svd.W;
-  for(int i = 0; i < diag.size(); i++) {
-    if(diag(i, i) != 0.0)
+  for (int i = 0; i < diag.size(); i++) {
+    if (diag(i, i) != 0.0)
       diag(i, i) = 1 / diag(i, i);
   }
   vnl_matrix<double> psuedo = svd.U * diag * svd.V.transpose();
