@@ -30,8 +30,8 @@ static int adaptor_count = 0;
 //: Constructor - create a default adaptor.
 vgui_adaptor::vgui_adaptor()
   : nested_popups(false)
-  , use_double_buffering(true)
   , default_items(true)
+  , use_double_buffering(true)
   , the_tableau(0)
 {
   ++adaptor_count;
