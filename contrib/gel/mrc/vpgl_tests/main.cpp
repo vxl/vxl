@@ -1,20 +1,29 @@
-#include "vpgl_tests.h"
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vcl_vector.h>
-#include <vcsl/vcsl_spatial.h>
-#include <vcsl/vcsl_unit.h>
-#include <vbl/vbl_ref_count.h>
-#include <vcsl/vcsl_graph.h>
-#include <vcsl/vcsl_axis.h>
-#include <vcsl/vcsl_spatial.h>
-#include <vcsl/vcsl_dimension.h>
-#include <vcsl/vcsl_meter.h>
-#include <vcsl/vcsl_length.h>
-#include <vbl/vbl_smart_ptr.txx>
-#include <vnl/vnl_math.h>
 #include <vcl_cstdlib.h>
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
+#include <vcl_string.h>
+#include <vcl_cassert.h>
+#include <vcl_vector.h>
+#include <vcl_utility.h>
+#include <vul/vul_arg.h>
+#include <vbl/vbl_ref_count.h>
+#include <vnl/vnl_math.h>
+#include <vnl/vnl_c_vector.h>
+#include <vnl/vnl_vector.h>
+
+#include <vpgl/vpgl_basic_camera.h>
+#include <vpgl/vpgl_matrix_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
+
+#include <vcsl/vcsl_spatial.h>
+#include <vcsl/vcsl_unit.h>
+#include <vcsl/vcsl_graph.h>
+#include <vcsl/vcsl_axis.h>
+#include <vcsl/vcsl_dimension.h>
+#include <vcsl/vcsl_meter.h>
+#include <vcsl/vcsl_length.h>
+
+#include <vbl/vbl_smart_ptr.txx>
 //VBL_SMART_PTR_INSTANTIATE(matrix_param);
 VBL_SMART_PTR_INSTANTIATE(vpgl_matrix_camera);
 VBL_SMART_PTR_INSTANTIATE(vcsl_axis);
