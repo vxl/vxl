@@ -9,7 +9,7 @@
 #include <bnl/algo/bnl_legendre_polynomial.h>
 
 
-int test_legendre_polynomial(int argc, char *argv[])
+static int test_legendre_polynomial()
 {
   for(int i = 0; i< 8; i++){
     vcl_cout << " p"<< i <<" = ";
@@ -18,4 +18,9 @@ int test_legendre_polynomial(int argc, char *argv[])
     vcl_cout << '\n';
   }
   return 0;
+}
+
+int main()
+{
+  return test_legendre_polynomial();
 }
