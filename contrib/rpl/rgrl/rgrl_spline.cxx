@@ -14,8 +14,8 @@ static double g( int a1, int a2, int m );
 static double g_prime( int a1, int a2, int m );
 static double g_double_prime( int a1, int a2, int m );
 
-//: calculate the uniform cubic B-spline basis functions $B_i(u)$,
-// where $u \in [0,1]$ is a local parameter and
+//: calculate the uniform cubic B-spline basis functions $B_i(u)$
+// Here $u \in [0,1]$ is a local parameter and
 // \f[B_0(u) = (1-u)^3 / 6\f],
 // \f[B_1(u) = (3u^3 - 6u^2 +4) / 6\f],
 // \f[B_2(u) = (-3u^3 + 3u^2 +3u + 1) / 6\f],
@@ -41,7 +41,7 @@ rgrl_spline( vnl_vector< unsigned > const& m, vnl_vector< double > const& c )
   unsigned int n = 1;
   for (unsigned i=0; i<m.size(); ++i)
     n *= (m_[i]+3);
-  assert( c.size() == n );
+  assert ( c.size() == n );
 }
 
 void
@@ -51,7 +51,7 @@ set_control_points( vnl_vector<double> const& c )
   unsigned n = 1;
   for (unsigned i=0; i < m_.size(); ++i)
     n *= (m_[i]+3);
-  assert( n == c.size() );
+  assert ( c.size() == n );
   c_ = c;
 }
 
@@ -65,10 +65,10 @@ double
 rgrl_spline::
 f_x( vnl_vector<double> const& point ) const
 {
-  assert( point.size() == m_.size() );
+  assert ( point.size() == m_.size() );
 
   for ( unsigned i=0; i<m_.size(); ++i ) {
-    // assert( point[i] >= 0 && point[i] <= m_[i] );
+    // assert ( point[i] >= 0 && point[i] <= m_[i] );
     // check if it's in the valid region
     if ( point[i] < 0 || point[i] > m_[i] ) // was: ( point[i] < -3 || point[i] >= m_[i]+3 )
       // if it's out of the support region of control points, don't need
@@ -77,7 +77,7 @@ f_x( vnl_vector<double> const& point ) const
   }
 
   // to decrease memory allocation
-  // make gr as static
+  // make gr static
   static vnl_vector< double > gr;
   basis_response( point, gr );
 
@@ -89,11 +89,11 @@ vnl_vector< double >
 rgrl_spline::
 jacobian( vnl_vector< double > const& point ) const
 {
-  assert( point.size() == m_.size() );
+  assert ( point.size() == m_.size() );
 
   // check if it's in the valid region
   for ( unsigned i=0; i<m_.size(); ++i ) {
-    // assert( point[i] >= 0 && point[i] <= m_[i] );
+    // assert ( point[i] >= 0 && point[i] <= m_[i] );
     if ( point[i] < 0 || point[i] > m_[i] )
       return vnl_vector< double >(m_.size(), 0.0);
   }
@@ -162,6 +162,8 @@ jacobian( vnl_vector< double > const& point ) const
       br( 0, b ) = b1_prime;
     }
   }
+  else
+    assert ( !"dim should be 1, 2 or 3" );
 
   // ---Gehua
   // Instead of matrix multiplication, another way is to move it
@@ -237,6 +239,8 @@ basis_response_helper( vnl_vector<double> const& point, vnl_vector<double>& br, 
       br[b] = b1;
     }
   }
+  else
+    assert ( !"dim should be 1, 2 or 3" );
 }
 
 double
@@ -274,24 +278,27 @@ element_2d_thin_plate(unsigned i, unsigned j) const
   if ( vnl_math_abs( a2 - b2 ) > 3 )
     return 0;
 
-//    double gx = g( delta_[0], a1, b1, m_[0] ) * delta_[0];
-//    double gx_prime = g_prime( delta_[0], a1, b1, m_[0] ) * delta_[0];
-//    double gx_double_prime = g_double_prime( delta_[0], a1, b1, m_[0] ) * delta_[0];
+#if 0
+  double gx = g( delta_[0], a1, b1, m_[0] ) * delta_[0];
+  double gx_prime = g_prime( delta_[0], a1, b1, m_[0] ) * delta_[0];
+  double gx_double_prime = g_double_prime( delta_[0], a1, b1, m_[0] ) * delta_[0];
+
+  double gy = g( delta_[0], a2, b2, m_[1] ) * delta_[1];
+  double gy_prime = g_prime( delta_[0], a2, b2, m_[1] ) * delta_[1];
+  double gy_double_prime = g_double_prime( delta_[0], a2, b2, m_[1] ) * delta_[1];
+#else
   double gx = g( a1, b1, m_[0] );
   double gx_prime = g_prime( a1, b1, m_[0] );
   double gx_double_prime = g_double_prime( a1, b1, m_[0] );
 
-//    double gy = g( delta_[0], a2, b2, m_[1] ) * delta_[1];
-//    double gy_prime = g_prime( delta_[0], a2, b2, m_[1] ) * delta_[1];
-//    double gy_double_prime = g_double_prime( delta_[0], a2, b2, m_[1] ) * delta_[1];
   double gy = g( a2, b2, m_[1] );
   double gy_prime = g_prime( a2, b2, m_[1] );
   double gy_double_prime = g_double_prime( a2, b2, m_[1] );
+#endif // 0
 
-  return
-    ( gx_double_prime * gy +
-      gx * gy_double_prime +
-      2 * gx_prime * gy_prime );
+  return gx_double_prime * gy +
+         gx * gy_double_prime +
+         2 * gx_prime * gy_prime;
 }
 
 double
@@ -316,34 +323,38 @@ element_3d_thin_plate(unsigned i, unsigned j) const
   if ( vnl_math_abs( a3 - b3 ) > 3 )
     return 0;
 
-//    double gx = g( delta_[0], a1, b1, m_[0] ) * delta_[0];
-//    double gx_prime = g_prime( delta_[0], a1, b1, m_[0] ) * delta_[0];
-//    double gx_double_prime = g_double_prime( delta_[0], a1, b1, m_[0] ) * delta_[0];
+#if 0
+  double gx = g( delta_[0], a1, b1, m_[0] ) * delta_[0];
+  double gx_prime = g_prime( delta_[0], a1, b1, m_[0] ) * delta_[0];
+  double gx_double_prime = g_double_prime( delta_[0], a1, b1, m_[0] ) * delta_[0];
+
+  double gy = g( delta_[0], a2, b2, m_[1] ) * delta_[1];
+  double gy_prime = g_prime( delta_[0], a2, b2, m_[1] ) * delta_[1];
+  double gy_double_prime = g_double_prime( delta_[0], a2, b2, m_[1] ) * delta_[1];
+
+  double gz = g( delta_[0], a3, b3, m_[2] ) * delta_[2];
+  double gz_prime = g_prime( delta_[0], a3, b3, m_[2] ) * delta_[2];
+  double gz_double_prime = g_double_prime( delta_[0], a3, b3, m_[2] ) * delta_[2];
+#else
   double gx = g( a1, b1, m_[0] );
   double gx_prime = g_prime( a1, b1, m_[0] );
   double gx_double_prime = g_double_prime( a1, b1, m_[0] );
 
-//    double gy = g( delta_[0], a2, b2, m_[1] ) * delta_[1];
-//    double gy_prime = g_prime( delta_[0], a2, b2, m_[1] ) * delta_[1];
-//    double gy_double_prime = g_double_prime( delta_[0], a2, b2, m_[1] ) * delta_[1];
   double gy = g( a2, b2, m_[1] );
   double gy_prime = g_prime( a2, b2, m_[1] );
   double gy_double_prime = g_double_prime( a2, b2, m_[1] );
 
-//    double gz = g( delta_[0], a3, b3, m_[2] ) * delta_[2];
-//    double gz_prime = g_prime( delta_[0], a3, b3, m_[2] ) * delta_[2];
-//    double gz_double_prime = g_double_prime( delta_[0], a3, b3, m_[2] ) * delta_[2];
   double gz = g( a3, b3, m_[2] );
   double gz_prime = g_prime( a3, b3, m_[2] );
   double gz_double_prime = g_double_prime( a3, b3, m_[2] );
+#endif // 0
 
-  return
-    ( gx_double_prime * gy * gz +
-      gx * gy_double_prime * gz +
-      gx * gy * gz_double_prime +
-      2 * gx_prime * gy_prime * gz +
-      2 * gx_prime * gy * gz_prime +
-      2 * gx * gy_prime * gz_prime ) ;
+  return gx_double_prime * gy * gz +
+         gx * gy_double_prime * gz +
+         gx * gy * gz_double_prime +
+         2 * gx_prime * gy_prime * gz +
+         2 * gx_prime * gy * gz_prime +
+         2 * gx * gy_prime * gz_prime;
 }
 
 void
@@ -379,20 +390,20 @@ thin_plate_regularization(vnl_matrix<double>& regularization) const
 double
 bspline_basis_function( int i, double u )
 {
-  assert( u <= 1.0 && u >= 0.0 );
-  assert( i <= 3 && i >= 0 );
+  assert ( u <= 1.0 && u >= 0.0 );
+  assert ( i <= 3 && i >= 0 );
   double b = 0;
+  double s = 1 - u;
 
   switch (i) {
-   case 0: {
-    double s = 1 - u;
+   case 0:
     b = s*s*s / 6;
-    break; }
+    break;
    case 1:
-    b = ( 3*u*u*u - 6*u*u + 4 ) / 6;
+    b = ( 4 - 3 * u * u * (s+1) ) / 6;
     break;
    case 2:
-    b = ( -3*u*u*u + 3*u*u + 3*u + 1 ) / 6;
+    b = ( 3 * u * (u*s+1) + 1 ) / 6;
     break;
    case 3:
     b = u*u*u / 6;
@@ -406,20 +417,20 @@ bspline_basis_function( int i, double u )
 double
 bspline_basis_prime_function( int i, double u )
 {
-  assert( u <= 1 && u >= 0 );
-  assert( i <= 3 && i >= 0 );
+  assert ( u <= 1 && u >= 0 );
+  assert ( i <= 3 && i >= 0 );
   double b = 0;
+  double s = 1 - u;
 
   switch (i) {
-   case 0: {
-    double s = 1 - u;
-    b = -s*s / 2;
-    break; }
+   case 0:
+    b = - s*s / 2;
+    break;
    case 1:
-    b = ( 3*u*u - 4*u ) / 2;
+    b = - u * (3*s+1) / 2;
     break;
    case 2:
-    b = ( -3*u*u + 2*u + 1 ) / 2;
+    b = s * (3*u+1) / 2;
     break;
    case 3:
     b = u*u / 2;
@@ -444,8 +455,8 @@ g( int a1, int a2, int m ) // was: g( double u, int a1, int a2, int m )
     max_a = a1;
   }
 
-  assert( min_a >= -1 );
-  assert( max_a <= m+1 );
+  assert ( min_a >= -1 );
+  assert ( max_a <= m+1 );
   int diff_a = vnl_math_abs( a1 - a2 );
 
   double ans = 0;
@@ -513,8 +524,8 @@ g_prime( int a1, int a2, int m ) // was: g_prime(double u, int a1, int a2, int m
 {
   int min_a = (a1 < a2) ? a1 : a2;
   int max_a = (a1 < a2) ? a2 : a1;
-  assert( min_a >= -1 );
-  assert( max_a <= m+1 );
+  assert ( min_a >= -1 );
+  assert ( max_a <= m+1 );
   int diff_a = vnl_math_abs( a1 - a2 );
 
   double ans = 0;
@@ -581,8 +592,8 @@ g_double_prime( int a1, int a2, int m ) // was: g_double_prime( double u, int a1
 {
   int min_a = (a1 < a2) ? a1 : a2;
   int max_a = (a1 < a2) ? a2 : a1;
-  assert( min_a >= -1 );
-  assert( max_a <= m+1 );
+  assert ( min_a >= -1 );
+  assert ( max_a <= m+1 );
   int diff_a = vnl_math_abs( a1 - a2 );
 
   double ans = 0;
@@ -660,7 +671,6 @@ rgrl_spline::
 refinement( vnl_vector< unsigned > const& m ) const
 {
   const unsigned dim = m_.size();
-//  vnl_vector< unsigned > m = m_ * 2;
   rgrl_spline_sptr refined_spline = new rgrl_spline( m );
   vnl_vector< double > w( refined_spline->num_of_control_points() );
 
@@ -817,6 +827,8 @@ refinement( vnl_vector< unsigned > const& m ) const
     }
 #endif // 0
   }
+  else
+    assert ( !"dim should be 1, 2 or 3" );
 
   vcl_cout << "rgrl_spline.cxx: refinement set_control_points: " << w << vcl_endl;
   refined_spline->set_control_points( w );
@@ -863,7 +875,7 @@ bool
 rgrl_spline::
 is_support( vnl_vector< double > const& pt, unsigned index )
 {
-  assert( pt.size() == m_.size() );
+  assert ( pt.size() == m_.size() );
   const unsigned dim = pt.size();
 
   for ( unsigned i=0; i<m_.size(); ++i )
