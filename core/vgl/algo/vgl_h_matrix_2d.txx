@@ -76,7 +76,7 @@ vgl_h_matrix_2d<T>::operator()(vgl_homg_point_2d<T> const& p) const
 {
   vnl_vector_fixed<T, 3> v(p.x(), p.y(), p.w());
   vnl_vector_fixed<T,3> v2 = t12_matrix_ * v;
-  return vgl_homg_point_2d<T>(v2.x(), v2.y(), v2.z());
+  return vgl_homg_point_2d<T>(v2[0], v2[1], v2[2]);
 }
 
 template <class T>
@@ -85,7 +85,7 @@ vgl_h_matrix_2d<T>::preimage(vgl_homg_line_2d<T> const& l) const
 {
   vnl_vector_fixed<T,3> v(l.a(), l.b(), l.c());
   vnl_vector_fixed<T,3> v2 = t12_matrix_.transpose() * v;
-  return vgl_homg_line_2d<T>(v2.x(), v2.y(), v2.z());
+  return vgl_homg_line_2d<T>(v2[0], v2[1], v2[2]);
 }
 
 template <class T>
@@ -94,7 +94,7 @@ vgl_h_matrix_2d<T>::correlation(vgl_homg_point_2d<T> const& p) const
 {
   vnl_vector_fixed<T, 3> v(p.x(), p.y(), p.w());
   vnl_vector_fixed<T,3> v2 = t12_matrix_ * v;
-  return vgl_homg_line_2d<T>(v2.x(), v2.y(), v2.z());
+  return vgl_homg_line_2d<T>(v2[0], v2[1], v2[2]);
 }
 
 template <class T>
@@ -103,7 +103,7 @@ vgl_h_matrix_2d<T>::correlation(vgl_homg_line_2d<T> const& l) const
 {
   vnl_vector_fixed<T,3> v(l.a(), l.b(), l.c());
   vnl_vector_fixed<T,3> v2 = t12_matrix_ * v;
-  return vgl_homg_point_2d<T>(v2.x(), v2.y(), v2.z());
+  return vgl_homg_point_2d<T>(v2[0], v2[1], v2[2]);
 }
 
 template <class T>
@@ -124,7 +124,7 @@ vgl_h_matrix_2d<T>::preimage(vgl_homg_point_2d<T> const& p) const
 {
   vnl_vector_fixed<T,3> v(p.x(), p.y(), p.w());
   vnl_vector_fixed<T,3> v2 = vnl_inverse(t12_matrix_) * v;
-  return vgl_homg_point_2d<T>(v2.x(), v2.y(), v2.z());
+  return vgl_homg_point_2d<T>(v2[0], v2[1], v2[2]);
 }
 
 template <class T>
@@ -133,7 +133,7 @@ vgl_h_matrix_2d<T>::operator()(vgl_homg_line_2d<T> const& l) const
 {
   vnl_vector_fixed<T,3> v(l.a(), l.b(), l.c());
   vnl_vector_fixed<T,3> v2 = vnl_inverse(t12_matrix_).transpose() * v;
-  return vgl_homg_line_2d<T>(v2.x(), v2.y(), v2.z());
+  return vgl_homg_line_2d<T>(v2[0], v2[1], v2[2]);
 }
 
 //-----------------------------------------------------------------------------
@@ -252,17 +252,16 @@ projective_basis(vcl_vector<vgl_homg_point_2d<T> > const & four_points)
   point_matrix.set_column(3, p3);
 
     if (! point_matrix.is_finite() || point_matrix.has_nans()) {
-      vcl_cerr << "set from projective basis: given matrix has infinite"
-               << " or NaN values\n";
+      vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
+               << " given matrix has infinite or NaN values\n";
       this->set_identity();
       return false;
     }
     vnl_svd<T> svd1(point_matrix, 1e-8);
     if (svd1.rank() < 3)
       {
-        vcl_cerr << "set_from_projective basis:"
-                 << " At least three out of the four points"
-                 << " are nearly collinear\n";
+        vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
+                 << " At least three out of the four points are nearly collinear\n";
         this->set_identity();
         return false;
       }
@@ -281,7 +280,7 @@ projective_basis(vcl_vector<vgl_homg_point_2d<T> > const & four_points)
   back_matrix.set_column(2, scales_vector[2] * p2);
 
   if (! back_matrix.is_finite() || back_matrix.has_nans()) {
-    vcl_cerr << "set from projective basis"
+    vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
              <<" back matrix has infinite or NaN values\n";
     this->set_identity();
     return false;
