@@ -1,8 +1,8 @@
+//:
+// \file
 #include <vcl_iostream.h> //cout
-#include <vcl_string.h>
 #include <dom/DOM_Element.hpp>
 #include <vsol/vsol_point_2d.h>
-#include <vsol/vsol_spatial_object_2d.h>
 #include <bxml/bxml_vsol_point_2d_input_converter.h>
 
 
@@ -33,12 +33,11 @@ bool bxml_vsol_point_2d_input_converter::extract_from_dom(DOM_Node& node) {
   new_or_ref = check_tag(node);
 
   if (new_or_ref == 0) {
-    vcl_cout << "bxml_vsol_point_2d_input_converter:: Error, bad tag" 
-             << vcl_endl;
+    vcl_cout << "bxml_vsol_point_2d_input_converter:: Error, bad tag\n";
     return false;
   }
   else if (new_or_ref == 2) {
-    return (extract_ref_object_atrs(node));
+    return extract_ref_object_atrs(node);
   }
   else {
     extract_object_atrs(node);
@@ -46,13 +45,14 @@ bool bxml_vsol_point_2d_input_converter::extract_from_dom(DOM_Node& node) {
 
   return true;
 }
+
 //:
 // Construct the object if it is not already in the object table
-// It will be in the object table if it has already been constructed 
+// It will be in the object table if it has already been constructed
 // and the current occurence is just a ref in the xml file.
 // WARNING!!
-// There is an issue with the use of the generic pointer, since we 
-// have no way to reference count the pointer. We might be able to 
+// There is an issue with the use of the generic pointer, since we
+// have no way to reference count the pointer. We might be able to
 // deal with the problem in the destructor of the generic pointer
 bxml_generic_ptr bxml_vsol_point_2d_input_converter::construct_object()
 {
@@ -63,7 +63,7 @@ bxml_generic_ptr bxml_vsol_point_2d_input_converter::construct_object()
      obj_table_[id_] = gp;
      p->ref();//Keep the point alive until it is used
     }
-    
+
     return gp;
   }
   else {
