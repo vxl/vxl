@@ -8,7 +8,7 @@
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vnl/vnl_gamma.h> // for vnl_erf()
+#include <vnl/vnl_erf.h>
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
@@ -67,9 +67,9 @@ void vil_gauss_reduce(const float* src_im,
         const float* s = s_row + sxs2;
         for (unsigned x=0;x<ni2;++x)
         {
-            *d = 0.05f*(s[-sxs2] + s[sxs2])
-                +0.25f*(s[-s_x_step]+ s[s_x_step])
-                +0.40f*s[0];
+            *d =  0.05f*(s[-sxs2] + s[sxs2])
+                + 0.25f*(s[-s_x_step]+ s[s_x_step])
+                + 0.40f*s[0];
 
             d += d_x_step;
             s += sxs2;
@@ -105,9 +105,9 @@ void vil_gauss_reduce(const int* src_im,
         for (unsigned x=0;x<ni2;++x)
         {
             // The 0.5 offset in the following ensures rounding
-            *d = int(0.5 +0.05*s[-sxs2] +0.25*s[-s_x_step]
-                         +0.05*s[ sxs2] +0.25*s[ s_x_step]
-                         +0.4 *s[0]);
+            *d = int(0.5 + 0.05*s[-sxs2] + 0.25*s[-s_x_step]
+                         + 0.05*s[ sxs2] + 0.25*s[ s_x_step]
+                         + 0.4 *s[0]);
 
             d += d_x_step;
             s += sxs2;
@@ -126,9 +126,9 @@ void vil_gauss_reduce(const int* src_im,
 //
 //  Note, 131 filter only an approximation
 void vil_gauss_reduce_2_3(const float* src_im,
-                       unsigned src_ni, unsigned src_nj,
-                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
-                       float* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+                          unsigned src_ni, unsigned src_nj,
+                          vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                          float* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
   float* d_row = dest_im;
   const float* s_row = src_im;
@@ -166,9 +166,9 @@ void vil_gauss_reduce_2_3(const float* src_im,
 //
 //  Note, 131 filter only an approximation
 void vil_gauss_reduce_2_3(const vxl_byte* src_im,
-                       unsigned src_ni, unsigned src_nj,
-                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
-                       vxl_byte* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+                          unsigned src_ni, unsigned src_nj,
+                          vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                          vxl_byte* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
   vxl_byte* d_row = dest_im;
   const vxl_byte* s_row = src_im;
@@ -178,22 +178,24 @@ void vil_gauss_reduce_2_3(const vxl_byte* src_im,
   for (unsigned y=0;y<src_nj;++y)
   {
     // Set first elements of row
-    d_row[0]        = vxl_byte(0.5f+0.75f*s_row[0] + 0.25f*s_row[s_x_step]);
-    d_row[d_x_step] = vxl_byte(0.5f+0.5f*s_row[s_x_step] + 0.5f*s_row[sxs2]);
+    // The 0.5 offset in the following ensures rounding
+    d_row[0]        = vxl_byte(0.5f + 0.75f*s_row[0] + 0.25f*s_row[s_x_step]);
+    d_row[d_x_step] = vxl_byte(0.5f + 0.5f*s_row[s_x_step] + 0.5f*s_row[sxs2]);
     vxl_byte * d = d_row + 2*d_x_step;
     const vxl_byte* s = s_row + sxs3;
     for (unsigned x=1;x<d_ni2;++x)
     {
-      *d = vxl_byte(0.5f+0.2f*(s[-s_x_step] + s[s_x_step])+0.6f*s[0]);
+      *d = vxl_byte(0.5f + 0.2f*(s[-s_x_step] + s[s_x_step]) + 0.6f*s[0]);
       d += d_x_step;
-      *d = vxl_byte(0.5f+0.5f*(s[s_x_step] + s[sxs2]));
+      *d = vxl_byte(0.5f + 0.5f*(s[s_x_step]  + s[sxs2]));
       d += d_x_step;
       s += sxs3;
     }
     // Set last elements of row
-    if (src_ni%3==1) *d=vxl_byte(0.5f+0.75f*s[-s_x_step] + 0.25f*s[0]);
-    else
-    if (src_ni%3==2) *d=vxl_byte(0.5f+0.2f*(s[-s_x_step] + s[s_x_step])+0.6f*s[0]);
+    if (src_ni%3==1)
+      *d = vxl_byte(0.5f + 0.75f*s[-s_x_step] + 0.25f*s[0]);
+    else if (src_ni%3==2)
+      *d = vxl_byte(0.5f + 0.2f*(s[-s_x_step] + s[s_x_step]) + 0.6f*s[0]);
 
     d_row += d_y_step;
     s_row += s_y_step;
@@ -207,9 +209,9 @@ void vil_gauss_reduce_2_3(const vxl_byte* src_im,
 //
 //  Note, 131 filter only an approximation
 void vil_gauss_reduce_2_3(const int* src_im,
-                       unsigned src_ni, unsigned src_nj,
-                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
-                       int* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+                          unsigned src_ni, unsigned src_nj,
+                          vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                          int* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
   int* d_row = dest_im;
   const int* s_row = src_im;
@@ -219,22 +221,24 @@ void vil_gauss_reduce_2_3(const int* src_im,
   for (unsigned y=0;y<src_nj;++y)
   {
     // Set first elements of row
-    d_row[0]        = int(0.5f+0.75f*s_row[0] + 0.25f*s_row[s_x_step]);
-    d_row[d_x_step] = int(0.5f+0.5f*s_row[s_x_step] + 0.5f*s_row[sxs2]);
+    // The 0.5 offset in the following ensures rounding
+    d_row[0]        = int(0.5f + 0.75f*s_row[0] + 0.25f*s_row[s_x_step]);
+    d_row[d_x_step] = int(0.5f + 0.5f*s_row[s_x_step] + 0.5f*s_row[sxs2]);
     int * d = d_row + 2*d_x_step;
     const int* s = s_row + sxs3;
     for (unsigned x=1;x<d_ni2;++x)
     {
-      *d = int(0.5f+0.2f*(s[-s_x_step] + s[s_x_step])+0.6f*s[0]);
+      *d = int(0.5f + 0.2f*(s[-s_x_step] + s[s_x_step]) + 0.6f*s[0]);
       d += d_x_step;
-      *d = int(0.5f+0.5f*(s[s_x_step] + s[sxs2]));
+      *d = int(0.5f + 0.5f*(s[s_x_step]  + s[sxs2]));
       d += d_x_step;
       s += sxs3;
     }
     // Set last elements of row
-    if (src_ni%3==1) *d=int(0.5f+0.75f*s[-s_x_step] + 0.25f*s[0]);
-    else
-    if (src_ni%3==2) *d=int(0.5f+0.2f*(s[-s_x_step] + s[s_x_step])+0.6f*s[0]);
+    if (src_ni%3==1)
+      *d = int(0.5f + 0.75f*s[-s_x_step] + 0.25f*s[0]);
+    else if (src_ni%3==2)
+      *d = int(0.5f + 0.2f*(s[-s_x_step] + s[s_x_step]) + 0.6f*s[0]);
 
     d_row += d_y_step;
     s_row += s_y_step;

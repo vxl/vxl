@@ -6,7 +6,7 @@
 // \author Ian Scott
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
-#include <vnl/vnl_gamma.h> // for vnl_erf()
+#include <vnl/vnl_erf.h>
 
 vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double sigma)
 {
