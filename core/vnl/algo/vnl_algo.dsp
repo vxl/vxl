@@ -405,6 +405,10 @@ SOURCE=.\Templates\vnl_fft_prime_factors+float-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates\vnl_orthogonal_complement+vcl_complex+float--.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates\vnl_orthogonal_complement+vcl_complex+long_double--.cxx
 # End Source File
 # Begin Source File
