@@ -9,16 +9,16 @@
 
 #include <vul/vul_file.h>
 
-
-
 // Modifications:
-// Ian Scott 09/06/2003 Add filename general globbing support
+//  Ian Scott 09/06/2003 Add filename general globbing support
 
 
 // Declare pimpl, reset, and iteration routines
 // for each OS
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
+
 #include <io.h>
+
 struct vul_file_iterator_data
 {
   vcl_string original;
@@ -74,9 +74,12 @@ struct vul_file_iterator_data
       _findclose(handle);
   }
 };
-#else
+
+#else // !defined(VCL_WIN32) || defined(__CYGWIN__)
+
 #include <dirent.h>
 #include <vul/vul_reg_exp.h>
+
 struct vul_file_iterator_data
 {
   vcl_string original_dirname_;
@@ -86,7 +89,7 @@ struct vul_file_iterator_data
   vcl_string found_;
   char const* name_;
   vul_reg_exp reg_exp_;
-  
+
   vul_file_iterator_data(char const* glob) {
     original_dirname_ = vul_file::dirname(glob) + "/";
 
@@ -100,7 +103,7 @@ struct vul_file_iterator_data
         prev_slash = true;
       else if (prev_slash)
       {
-        prev_slash == false;
+        prev_slash = false;
         re.push_back('\\');
         re.push_back(*i);
       }
@@ -127,10 +130,9 @@ struct vul_file_iterator_data
     reg_exp_.compile(re.c_str());
 
     dir_handle_ = opendir(original_dirname_.c_str());
-    
+
     // Strip unnecessary ./
     if (original_dirname_ == "./") original_dirname_.clear();
-
 
     next();
   }
@@ -141,7 +143,6 @@ struct vul_file_iterator_data
     name_ = found_.c_str();
     // no need to remember filename, it's in data.name
   }
-
 
   void next() {
     assert(dir_handle_ != 0);
@@ -155,7 +156,6 @@ struct vul_file_iterator_data
       }
     } while ( ! reg_exp_.find(de_->d_name) );
     mkname();
-
   }
 
   // should be constish, and ret 0 when nuffink
@@ -176,7 +176,7 @@ struct vul_file_iterator_data
   }
 };
 
-#endif
+#endif // !defined(VCL_WIN32) || defined(__CYGWIN__)
 
 // -----------------------------------------------------------------------------
 vul_file_iterator::vul_file_iterator()
