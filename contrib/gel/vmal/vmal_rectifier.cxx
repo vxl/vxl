@@ -15,6 +15,12 @@
 
 vmal_rectifier::vmal_rectifier()
 {
+  lines0_p_=NULL;
+  lines0_q_=NULL;
+  lines1_p_=NULL;
+  lines1_q_=NULL;
+  points0_=NULL;
+  points1_=NULL;
 }
 
 vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
@@ -22,6 +28,13 @@ vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
                                int ima_height, int ima_width) :
   is_f_compute_(false)
 {
+  lines0_p_=NULL;
+  lines0_q_=NULL;
+  lines1_p_=NULL;
+  lines1_q_=NULL;
+  points0_=NULL;
+  points1_=NULL;
+
   if ((mvd_vertex->get_nb_views()>1) && (mvd_edge->get_nb_views()>1))
   {
     // Prescale the points
@@ -47,14 +60,52 @@ vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
   }
 }
 
+// Constructor for dealing with just matched points
+
+vmal_rectifier::vmal_rectifier(vcl_vector< vnl_vector<double> >* pts0,
+                               vcl_vector< vnl_vector<double> >* pts1,
+                               int ima_height, int ima_width) :
+  is_f_compute_(false)
+{
+  lines0_p_=NULL;
+  lines0_q_=NULL;
+  lines1_p_=NULL;
+  lines1_q_=NULL;
+  points0_=NULL;
+  points1_=NULL;
+
+  height_=ima_height;
+  width_=ima_width;
+  numpoints_ = pts0->size();
+
+  // put the points in the proper buffers...
+  points0_ = new vnl_double_3[numpoints_];
+  points1_ = new vnl_double_3[numpoints_];
+  vcl_vector< vnl_vector<double> >::iterator vit0 = pts0->begin();
+  vcl_vector< vnl_vector<double> >::iterator vit1 = pts1->begin();
+  for (int i=0; i<numpoints_; i++) {
+    points0_[i][0] = (*vit0).x();
+    points0_[i][1] = (*vit0).y();
+    points0_[i][2] = 1;
+    points1_[i][0] = (*vit1).x();
+    points1_[i][1] = (*vit1).y();
+    points1_[i][2] = 1;
+    vit0++;
+    vit1++;
+  }
+  
+}
+
+
+
 vmal_rectifier::~vmal_rectifier()
 {
-  delete [] points0_;
-  delete [] points1_;
-  delete [] lines0_p_;
-  delete [] lines0_q_;
-  delete [] lines1_p_;
-  delete [] lines1_q_;
+  if (points0_!=NULL) delete [] points0_;
+  if (points1_!=NULL) delete [] points1_;
+  if (lines0_p_!=NULL) delete [] lines0_p_;
+  if (lines0_q_!=NULL) delete [] lines0_q_;
+  if (lines1_p_!=NULL) delete [] lines1_p_;
+  if (lines1_q_!=NULL) delete [] lines1_q_;
 }
 
 void vmal_rectifier::rectification_matrix(vnl_double_3x3& H0,
@@ -306,7 +357,7 @@ vnl_double_3x3 vmal_rectifier::matching_transform (
    // Computes a transform compatible with H1.  It is assumed that
    // H1 maps the epipole p2 to infinity (1, 0, 0)
    vnl_double_3x3 S, M;
-  factor_Q_matrix_SR (Q, M, S);
+   factor_Q_matrix_SR (Q, M, S);
 
    // Compute the matching transform
    vnl_double_3x3 H0 = H1 * M;

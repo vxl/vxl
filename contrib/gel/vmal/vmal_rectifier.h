@@ -43,6 +43,10 @@ class vmal_rectifier
                  vmal_multi_view_data_edge_sptr mvd_edge,
                  int ima_height, int ima_width);
 
+  vmal_rectifier(vcl_vector< vnl_vector<double> >* pts0,
+                 vcl_vector< vnl_vector<double> >* pts1,
+                 int ima_height, int ima_width);                 
+
   ~vmal_rectifier();
 
   void rectification_matrix(vnl_double_3x3& H0,
