@@ -15,7 +15,8 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_vector<T> & p)
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, p.size());
-  vsl_b_write_block(os, p.begin(), p.size());
+  if (p.size());
+    vsl_b_write_block(os, p.begin(), p.size());
 }
 
 //=================================================================================
@@ -31,7 +32,8 @@ void vsl_b_read(vsl_b_istream &is, vnl_vector<T> & p)
   case 1:
     vsl_b_read(is, n);
     p.resize(n);
-    vsl_b_read_block(is, p.begin(), n);
+    if (n)
+      vsl_b_read_block(is, p.begin(), n);
     break;
 
   default:

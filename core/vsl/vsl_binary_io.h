@@ -117,7 +117,7 @@ class vsl_b_ofstream: public vsl_b_ostream
 public:
   //: Create this adaptor from a file.
   // The adapter will delete the internal stream automatically on destruction.
-  vsl_b_ofstream(vcl_string &filename,
+  vsl_b_ofstream(const vcl_string &filename,
     vcl_ios_openmode mode = vcl_ios_out | vcl_ios_trunc):
     vsl_b_ostream(new vcl_ofstream(filename.c_str(),
       mode | vcl_ios_binary)) {}
@@ -219,7 +219,7 @@ class vsl_b_ifstream: public vsl_b_istream
 public:
   //: Create this adaptor from a file.
   // The adapter will delete the stream automatically on destruction.
-  vsl_b_ifstream(vcl_string &filename, vcl_ios_openmode mode = vcl_ios_in):
+  vsl_b_ifstream(const vcl_string &filename, vcl_ios_openmode mode = vcl_ios_in):
     vsl_b_istream(new vcl_ifstream(filename.c_str(),
     mode | vcl_ios_binary)) {}
 

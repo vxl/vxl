@@ -30,7 +30,8 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T>& v)
   vsl_b_write(s, version_no);
   unsigned n = v.size();
   vsl_b_write(s,n);
-  vsl_b_write_block(s, &v[0], n);
+  if (n)
+    vsl_b_write_block(s, &v[0], n);
 }
 
 //====================================================================================
