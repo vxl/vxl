@@ -9,7 +9,7 @@
 
 struct lb3_1_ {
     integer mp, lp;
-    doublereal gtol, stpmin, stpmax;
+    doublereal gtol, stpmin, stpmax, stpawf;
 };
 
 #define lb3_1 (*(struct lb3_1_ *) &lb3_)
@@ -18,8 +18,8 @@ struct lb3_1_ {
 
 struct {
     integer e_1[2];
-    doublereal e_2[3];
-    } lb3_ = { 6, 6, .9, 1e-20, 1e20 };
+    doublereal e_2[4];
+    } lb3_ = { 6, 6, .9, 1e-20, 1e20, 1. };
 
 
 /* Table of constant values */
@@ -290,6 +290,7 @@ t*/
  */
 /*    reference: */
 
+/* awf added stpawf */
 
 /*    MP  is an INTEGER variable with default value 6. It is used as the 
 */
@@ -540,7 +541,8 @@ L100:
 /*     ---------------------------------------------------- */
 L165:
     nfev = 0;
-    stp = one;
+/* awf changed initial step from ONE to be parametrized. */
+    stp = lb3_1.stpawf;
     if (iter == 1) {
 	stp = stp1;
     }

@@ -185,7 +185,8 @@ C
 C     The subroutine contains one common area, which the user may wish to
 C    reference:
 C
-         COMMON /LB3/MP,LP,GTOL,STPMIN,STPMAX
+c awf added stpawf
+         COMMON /LB3/MP,LP,GTOL,STPMIN,STPMAX,stpawf
 C
 C    MP  is an INTEGER variable with default value 6. It is used as the
 C        unit number for the printing of the monitoring information
@@ -228,7 +229,7 @@ C
 C     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 C
       DOUBLE PRECISION GTOL,ONE,ZERO,GNORM,DDOT,STP1,FTOL,STPMIN,
-     .                 STPMAX,STP,YS,YY,SQ,YR,BETA,XNORM
+     .                 STPMAX,stpawf,STP,YS,YY,SQ,YR,BETA,XNORM
       INTEGER MP,LP,ITER,NFUN,POINT,ISPT,IYPT,MAXFEV,INFO,
      .        BOUND,NPT,CP,I,NFEV,INMC,IYCN,ISCN
       LOGICAL FINISH
@@ -240,7 +241,8 @@ C     DATA
 C   ----------------------------------------------------------
 C
 C      BLOCK DATA LB3
-      DATA MP,LP,GTOL,STPMIN,STPMAX/6,6,9.0D-01,1.0D-20,1.0D+20/
+      DATA MP,LP,GTOL,STPMIN,STPMAX,stpawf
+     $     /6,6,9.0D-01,1.0D-20,1.0D+20,1.0D+00/
 
 
       DATA ONE,ZERO/1.0D+0,0.0D+0/
@@ -370,7 +372,8 @@ C     OBTAIN THE ONE-DIMENSIONAL MINIMIZER OF THE FUNCTION
 C     BY USING THE LINE SEARCH ROUTINE MCSRCH
 C     ----------------------------------------------------
  165  NFEV=0
-      STP=ONE
+C awf changed initial step from ONE to be parametrized.
+      STP = stpawf
       IF (ITER.EQ.1) STP=STP1
       DO 170 I=1,N
  170  W(I)=G(I)
@@ -556,9 +559,9 @@ C     **************************
 C
       SUBROUTINE MCSRCH(N,X,F,G,S,STP,FTOL,XTOL,MAXFEV,INFO,NFEV,WA)
       INTEGER N,MAXFEV,INFO,NFEV
-      DOUBLE PRECISION F,STP,FTOL,GTOL,XTOL,STPMIN,STPMAX
+      DOUBLE PRECISION F,STP,FTOL,GTOL,XTOL,STPMIN,STPMAX,stpawf
       DOUBLE PRECISION X(N),G(N),S(N),WA(N)
-      COMMON /LB3/MP,LP,GTOL,STPMIN,STPMAX
+      COMMON /LB3/MP,LP,GTOL,STPMIN,STPMAX,stpawf
       SAVE
 C
 C                     SUBROUTINE MCSRCH
