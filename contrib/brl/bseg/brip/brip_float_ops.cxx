@@ -148,6 +148,7 @@ brip_float_ops::gaussian(vil1_memory_image_of<float> const & input, float sigma)
   vil1_memory_image_of<float> output(vil1_smooth_gaussian(input, sigma));
   return output;
 }
+
 //-------------------------------------------------------------------
 // Determine if the center of a (2n+1)x(2n+1) neighborhood is a local maximum
 //
@@ -166,6 +167,7 @@ local_maximum(vbl_array_2d<float> const & neighborhood,
   value = center;
   return true;
 }
+
 //-------------------------------------------------------------------
 // Interpolate the sub-pixel position of a neighborhood using a
 // second order expansion on a 3x3 sub-neighborhood. Return the
@@ -753,7 +755,7 @@ brip_float_ops::convert_to_float(vil1_memory_image_of<vil1_rgb<unsigned char> > 
 static void rgb_to_ihs(vil1_rgb<unsigned char> const & rgb,
                        float& i, float& h, float& s)
 {
-  // Reference: figure 13.36, page 595 of Foley & van Dam 
+  // Reference: figure 13.36, page 595 of Foley & van Dam
   float r = rgb.R(), g = rgb.G(), b = rgb.B();
   i = rgb.grey();
   float maxval;
@@ -767,54 +769,54 @@ static void rgb_to_ihs(vil1_rgb<unsigned char> const & rgb,
   float la = (maxval + minval) / 2.0;
   // Achromatic case, intensity is grey or near black or white
   if (maxval == minval||i<20||i>235)
-    {
-      s = -1.0;
-      h = 0.0;	
-    }
+  {
+    s = -1.0;
+    h = 0.0;
+  }
   else//the chromatic case
+  {
+    // Calculate the saturation.
+    if (la <= 127)
     {
-      // Calculate the saturation.
-      if (la <= 127)
-        {
-          s = (255.0*(maxval - minval))/(maxval + minval);
-        }
-      else
-        {
-          s = (255.0*(maxval - minval)) / (512 - maxval - minval);
-          if(s<0)
-            s=0;
-          if(s>255)
-            s=255;
-        }
+      s = (255.0*(maxval - minval))/(maxval + minval);
+    }
+    else
+    {
+      s = (255.0*(maxval - minval)) / (512 - maxval - minval);
+      if (s<0)
+        s=0;
+      if (s>255)
+        s=255;
+    }
 
-      // Calculate the hue. 
-      delta = maxval - minval;
-      if (r == maxval)
-        {
-          // The resulting color is between yellow and magenta. 
-          h = (60*(g - b))/ delta;
-        }
-      else if (g == maxval) 
-        {
-          // The resulting color is between cyan and yellow.
-          h = 120.0 + (60*(b - r))/delta;
-        }
-      else
-        {
-          // The resulting color is between magenta and cyan.
-          h = 240.0 + (60*(r - g))/delta;
-        }
-      // Be sure 0.0 <= hue <= 360.0 
-      if(h < 0.0)
-        h += 360;
-      if(h > 360.0)
-        h -= 360.0;
-    }	
+    // Calculate the hue.
+    delta = maxval - minval;
+    if (r == maxval)
+    {
+      // The resulting color is between yellow and magenta.
+      h = (60*(g - b))/ delta;
+    }
+    else if (g == maxval)
+    {
+      // The resulting color is between cyan and yellow.
+      h = 120.0 + (60*(b - r))/delta;
+    }
+    else
+    {
+      // The resulting color is between magenta and cyan.
+      h = 240.0 + (60*(r - g))/delta;
+    }
+    // Be sure 0.0 <= hue <= 360.0
+    if (h < 0.0)
+      h += 360;
+    if (h > 360.0)
+      h -= 360.0;
+  }
 }
 
 
 void brip_float_ops::
-convert_to_IHS(vil1_memory_image_of<vil1_rgb<unsigned char> >const& image, 
+convert_to_IHS(vil1_memory_image_of<vil1_rgb<unsigned char> >const& image,
                vil1_memory_image_of<float>& I,
                vil1_memory_image_of<float>& H,
                vil1_memory_image_of<float>& S)
@@ -823,93 +825,94 @@ convert_to_IHS(vil1_memory_image_of<vil1_rgb<unsigned char> >const& image,
   I.resize(w,h);
   H.resize(w,h);
   S.resize(w,h);
-  for(int r = 0; r < h; r++)
-    for(int c = 0; c < w; c++)
-      {
-        float in, hue, sat;
-        rgb_to_ihs(image(c,r), in, hue, sat);
-        I(c,r) = in;
-        H(c,r) = hue;
-        S(c,r) = sat;
-      }
+  for (int r = 0; r < h; r++)
+    for (int c = 0; c < w; c++)
+    {
+      float in, hue, sat;
+      rgb_to_ihs(image(c,r), in, hue, sat);
+      I(c,r) = in;
+      H(c,r) = hue;
+      S(c,r) = sat;
+    }
 }
+
 #if 0
 void brip_float_ops::
-display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
-                       vil1_memory_image_of<float> const& H,
-                       vil1_memory_image_of<float> const& S,
-                       vil1_memory_image_of<vil1_rgb<unsigned char> >& image)
+  display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
+                     vil1_memory_image_of<float> const& H,
+                     vil1_memory_image_of<float> const& S,
+                     vil1_memory_image_of<vil1_rgb<unsigned char> >& image)
 {
   int w = I.width(), h = I.height();
   image.resize(w,h);
   float s = 255.0f/360.0f;
-  for(int r = 0; r < h; r++)
-    for(int c = 0; c < w; c++)
-      {
-        float in, hue, sat;
-        in = I(c,r);
-        hue = H(c,r); 
-        sat = S(c,r);
-        if(in<0)
-          in = 0;
-        if(sat<0)
-          sat = 0;
-        if(hue<0)
-          hue = 0;
-        if(in>255)
-          in = 255;
-        hue *=s;
-        if(hue>255)
-          hue = 255;
-        if(sat>255)
-          sat = 255;
-        unsigned char vi = (unsigned char)in, vh = (unsigned char)hue, 
-          vs = (unsigned char)sat;
-        vil1_rgb<unsigned char> v(vi, vh, vs);
-        image(c,r)=v;
-      }
+  for (int r = 0; r < h; r++)
+    for (int c = 0; c < w; c++)
+    {
+      float in, hue, sat;
+      in = I(c,r);
+      hue = H(c,r);
+      sat = S(c,r);
+      if (in<0)
+        in = 0;
+      if (sat<0)
+        sat = 0;
+      if (hue<0)
+        hue = 0;
+      if (in>255)
+        in = 255;
+      hue *=s;
+      if (hue>255)
+        hue = 255;
+      if (sat>255)
+        sat = 255;
+      unsigned char vi = (unsigned char)in, vh = (unsigned char)hue,
+        vs = (unsigned char)sat;
+      vil1_rgb<unsigned char> v(vi, vh, vs);
+      image(c,r)=v;
+    }
 }
 #endif
 
 //: map so that intensity is proportional to saturation and hue is color
 void brip_float_ops::
 display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
-                       vil1_memory_image_of<float> const& H,
-                       vil1_memory_image_of<float> const& S,
-                       vil1_memory_image_of<vil1_rgb<unsigned char> >& image)
+                   vil1_memory_image_of<float> const& H,
+                   vil1_memory_image_of<float> const& S,
+                   vil1_memory_image_of<vil1_rgb<unsigned char> >& image)
 {
   int w = I.width(), h = I.height();
   image.resize(w,h);
 
-  float deg_to_rad = vnl_math::pi/180.0f; 
-  for(int r = 0; r < h; r++)
-    for(int c = 0; c < w; c++)
+  float deg_to_rad = vnl_math::pi/180.0f;
+  for (int r = 0; r < h; r++)
+    for (int c = 0; c < w; c++)
+    {
+      float hue, sat;
+      hue = H(c,r);
+      sat = 2.0*S(c,r);
+      if (sat<0)
+        sat = 0;
+      if (sat>255)
+        sat = 255;
+      float ang = deg_to_rad*hue;
+      float cs = vcl_cos(ang), si = vcl_fabs(vcl_sin(ang));
+      float red,green,blue;
+      green = si*sat;
+      if (cs>=0)
       {
-        float hue, sat;
-        hue = H(c,r); 
-        sat = 2.0*S(c,r);
-        if(sat<0)
-          sat = 0;
-        if(sat>255)
-          sat = 255;
-        float ang = deg_to_rad*hue;
-        float cs = vcl_cos(ang), si = vcl_fabs(vcl_sin(ang));
-        float red,green,blue;
-        green = si*sat;
-        if(cs>=0)
-          {
-            red = cs*sat;
-            blue = 0;
-          }
-        else
-          {
-            red = 0;
-            blue = sat*(-cs);
-          }
-        unsigned char rc = (unsigned char)red,
-          gc = (unsigned char)green, bc = (unsigned char)blue;
-        image(c,r)= vil1_rgb<unsigned char>(rc, gc, bc);
+        red = cs*sat;
+        blue = 0;
       }
+      else
+      {
+        red = 0;
+        blue = sat*(-cs);
+      }
+      unsigned char rc = (unsigned char)red,
+        gc = (unsigned char)green, bc = (unsigned char)blue;
+      image(c,r)= vil1_rgb<unsigned char>(rc, gc, bc);
+    }
 }
 
 vil1_memory_image_of<float>
@@ -933,6 +936,7 @@ brip_float_ops::convert_to_float(vil1_image const & image)
   }
   return fimg;
 }
+
 //-----------------------------------------------------------------
 // : convert a vil1_rgb<unsigned char> image to an unsigned_char image.
 vil1_memory_image_of<unsigned char>
@@ -1297,6 +1301,7 @@ fourier_transform(vil1_memory_image_of<float> const & input,
 
   return true;
 }
+
 bool brip_float_ops::
 inverse_fourier_transform(vil1_memory_image_of<float> const& mag,
                           vil1_memory_image_of<float> const& phase,
@@ -1367,6 +1372,7 @@ resize_to_power_of_two(vil1_memory_image_of<float> const & input,
 
   return true;
 }
+
 //
 //: block a periodic signal by suppressing two Gaussian lobes in the frequency domain.
 //  The lobes are on the line defined by dir_fx and dir_fy through the
@@ -1441,6 +1447,7 @@ spatial_frequency_filter(vil1_memory_image_of<float> const & input,
   brip_float_ops::resize(pow_two_filt, input.width(), input.height(), output);
   return true;
 }
+
 //----------------------------------------------------------------------
 //: Bi-linear interpolation on the neigborhood below.
 //      xr
@@ -1448,22 +1455,22 @@ spatial_frequency_filter(vil1_memory_image_of<float> const & input,
 //      x  x
 //
 double brip_float_ops::
- bilinear_interpolation(vil1_memory_image_of<float> const & input,
+  bilinear_interpolation(vil1_memory_image_of<float> const & input,
                          const double x, const double y)
 {
   //check bounds
   int w = input.width(), h = input.height();
   //the pixel containing the interpolated point
   int xr = (int)(x+0.5), yr = (int)(y+0.5);
-  if(xr<0||xr>w-2)
+  if (xr<0||xr>w-2)
     return 0;
-  if(yr<0||yr>h-2)
+  if (yr<0||yr>h-2)
     return 0;
   double int00 = input(xr, yr), int10 = input(xr+1,yr);
   double int01 = input(xr, yr+1), int11 = input(xr+1,yr+1);
-  
+
   double s00 = (1-x+xr)*(1-y+yr)*int00,   s10 = (x-xr)*(1-y+yr)*int10;
   double s01 = (1-x+xr)*(y-yr)*int01, s11 = (x-xr)*(y-yr)*int11;
-  return (s00+s01+s10+s11);
+  return s00+s01+s10+s11;
 }
 
