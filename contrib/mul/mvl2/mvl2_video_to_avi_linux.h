@@ -1,29 +1,27 @@
 #ifndef mvl2_video_to_avi_linux_h_
 #define mvl2_video_to_avi_linux_h_
-
 //:
 // \file
 // \brief A class for writing videos
 // \author Franck Bettinger
 
-#include "mvl2/mvl2_video_writer.h"
+#include "mvl2_video_writer.h"
 
-#include <avifile.h>
-#include <videoencoder.h>
-#include <infotypes.h>
-#include <except.h>
-#include <version.h>
-#include <avm_default.h>
-#include <avm_fourcc.h>
+#include <avifile/avifile.h>
+#include <avifile/videoencoder.h>
+#include <avifile/infotypes.h>
+#include <avifile/except.h>
+#include <avifile/version.h>
+#include <avifile/avm_default.h>
+#include <avifile/avm_fourcc.h>
 
-#include "vimt/vimt_transform_2d.h"
-
+#include <vimt/vimt_transform_2d.h>
 
 //: A class for writing videos
+
 class mvl2_video_to_avi: public mvl2_video_writer
 {
-
-public:
+ public:
 
     //: Dflt ctor
   mvl2_video_to_avi();
@@ -36,7 +34,7 @@ public:
  
     //: Initialize the file (format can be Grey, RGB, or more complex)
   bool  open( int width, int height, 
-      vcl_string format, vcl_string file_name);
+              vcl_string format, vcl_string file_name);
  
     //: Tidy up and close the file
   void  close();
@@ -68,7 +66,7 @@ public:
     //: Create a copy on the heap and return base class pointer
   mvl2_video_writer* clone() const;
  
-protected:
+ protected:
 
   long fourcc_;
   bool bgr_;
@@ -77,7 +75,6 @@ protected:
 
   IAviVideoWriteStream* moviestream_;
   IAviWriteFile* moviefile_;
- 
 };
  
 #endif // mvl2_video_to_avi_linux_h_

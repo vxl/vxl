@@ -5,16 +5,16 @@
 # provides native AVI support, and so doesn't need this library.
 
 # This module defines
-# AVIFILE_INCLUDE_DIR, where to find avifile.h , etc.
+# AVIFILE_INCLUDE_DIR, where to find avifile/avifile.h , etc.
 # AVIFILE_LIBRARIES, the libraries to link against to use AVIFILE
 # AVIFILE_DEFINITIONS, definitions to use when compiling code that uses AVIFILE.
 # AVIFILE_FOUND, If false, don't try to use AVIFILE.
 
 IF (UNIX)
 
-  FIND_PATH(AVIFILE_INCLUDE_DIR avifile.h
+  FIND_PATH(AVIFILE_INCLUDE_DIR avifile/avifile.h
     /usr/local/avifile/include
-    /usr/local/include/avifile
+    /usr/local/include
     /usr/include
   )
 
@@ -36,5 +36,4 @@ IF(AVIFILE_INCLUDE_DIR)
 
   ENDIF(AVIFILE_AVIPLAY_LIBRARY)
 ENDIF(AVIFILE_INCLUDE_DIR)
-
 

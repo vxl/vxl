@@ -7,13 +7,13 @@
 
 #include <vcl_string.h>
 
-#include <avifile.h>
-#include <videodecoder.h>
-#include <infotypes.h>
-#include <except.h>
-#include <version.h>
-#include <avm_default.h>
-#include <avm_fourcc.h>
+#include <avifile/avifile.h>
+#include <avifile/videodecoder.h>
+#include <avifile/infotypes.h>
+#include <avifile/except.h>
+#include <avifile/version.h>
+#include <avifile/avm_default.h>
+#include <avifile/avm_fourcc.h>
 
 #include <vimt/vimt_image_2d_of.h>
 #include <mvl2/mvl2_video_reader.h>
