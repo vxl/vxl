@@ -53,11 +53,12 @@ brip_float_ops::difference(vil_memory_image_of<float> const & image_1,
 {
   int w1 = image_1.width(), h1 = image_1.height();
   int w2 = image_2.width(), h2 = image_2.height();
+  vil_memory_image_of<float> temp(w1, h1);
   if(w1!=w2||h1!=h2)
     {
       vcl_cout << "In brip_float_ops::difference(..) - images are not"
                << " the same dimensions\n";
-      return 0;
+      return temp;
     }
   vil_memory_image_of<float> out;
   out.resize(w1, h1);
