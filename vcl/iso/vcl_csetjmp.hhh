@@ -1,9 +1,0 @@
-#ifndef vcl_iso_csetjmp_h_
-#define vcl_iso_csetjmp_h_
-
-#include <csetjmp>
-
-@jmp_buf
-@longjmp
-
-#endif
