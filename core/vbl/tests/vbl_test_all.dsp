@@ -96,7 +96,16 @@ SOURCE=.\vbl_test_classes.cxx
 SOURCE=.\vbl_test_array_x.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vbl_test_all.cxx
+SOURCE=.\vbl_test_bounding_box.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_test_triple.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_test_quadruple.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_test_qsort.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vbl_test_array.cxx
