@@ -66,6 +66,12 @@ private:   // internal classes and constants
   //: Image of indicies into the vertex node list
   typedef vil_image_view< unsigned > index_image_type;
 
+public:
+  // These types are implementation details, and should be private to
+  // the class. However, there are some issues with creating smart
+  // pointers to private classes. Until I have it figured out, I'm
+  // making them public. -- Amitha Perera
+
   // Defined in the .cxx file
   struct edgel_chain;
 
@@ -74,17 +80,11 @@ private:   // internal classes and constants
   // Defined in the .cxx file
   class region_type;
 
-public:
   // internal typedef. Needs to be public for implementation reasons.
 
   typedef vbl_smart_ptr< region_type > region_type_sptr;
 
 private:
-
-  // The smart pointer classes need access to the internal classes so
-  // that we can have smart pointers to the internal classes.
-  friend class vbl_smart_ptr< edgel_chain >;
-  friend class vbl_smart_ptr< region_type >;
 
   //: A node in the graph of vertices.
   //
