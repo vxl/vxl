@@ -43,6 +43,15 @@ SOURCES += vepl_histogram.cxx
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+ifeq "$(TJ_GCC30)" "1"
+# gcc 3.0 needs too much virtual memory with -O2
+FLAGS_vepl_threshold.cxx += -O1
+FLAGS_vepl_dyadic.cxx += -O1
+FLAGS_vepl_erode_disk.cxx += -O1
+FLAGS_vepl_moment.cxx += -O1
+FLAGS_vepl_histogram.cxx += -O1
+endif
+
 # No need to compile the files in Templates when implicitly instantiating:
 ifeq ($(USE_IMPLICIT_TEMPLATES),1)
   TEMPLATE_SOURCES :=
