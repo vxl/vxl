@@ -215,26 +215,6 @@ SOURCE=.\Templates/vnl_determinant+vcl_complex+long_double--.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vnl_fft1d+double-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vnl_fft1d+float-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vnl_fft2d+double-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vnl_fft2d+float-.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\Templates/vnl_fft_1d+double-.cxx
 
 # End Source File
@@ -421,11 +401,6 @@ SOURCE=.\vnl_discrete_diff.cxx
 # Begin Source File
 
 SOURCE=.\vnl_fft.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_fftxd_prime_factors.cxx
 
 # End Source File
 # Begin Source File

@@ -464,6 +464,359 @@ SOURCE=.\vcsl_utm.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vcsl_angle.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_angle_unit.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_axis.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_cartesian.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_cartesian_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_cartesian_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_composition.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_coordinate_system.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_cylindrical.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_cylindrical_to_cartesian_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_degree.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_dimension.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_displacement.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_geocentric.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_geodetic.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_geographic.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_graph.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_lambertian.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_length.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_length_unit.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_matrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_meter.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_perspective.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_polar.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_radian.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_rotation.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_scale.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_spatial.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_spatial_transformation.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_spherical.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_spheroid.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_translation.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_unit.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_utm.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_angle_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_angle_unit_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_axis_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_cartesian_2d_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_cartesian_3d_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_cartesian_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_composition_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_coordinate_system_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_cylindrical_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_cylindrical_to_cartesian_3d_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_degree_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_dimension_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_displacement_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_geocentric_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_geodetic_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_geographic_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_graph_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_lambertian_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_length_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_length_unit_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_matrix_param.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_matrix_param_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_matrix_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_meter_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_perspective_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_polar_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_radian_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_rotation_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_scale_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_spatial_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_spatial_transformation_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_spherical_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_spheroid_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_translation_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_unit_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_utm_sptr.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

@@ -239,6 +239,154 @@ SOURCE=.\vsl_test.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vsl_binary_explicit_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_binary_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_binary_loader.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_binary_loader.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_binary_loader_base.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_clipon_binary_loader.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_clipon_binary_loader.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_complex_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_complex_io.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_deque_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_deque_io.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_indent.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_list_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_list_io.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_map_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_map_io.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_pair_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_pair_io.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_set_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_set_io.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_stack_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_stack_io.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_string_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_string_io.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_test.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_vector_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_vector_io.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_fwd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_quick_file.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

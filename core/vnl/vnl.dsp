@@ -1184,6 +1184,539 @@ SOURCE=.\vnl_unary_function.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vnl_alloc.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_block.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_c_vector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_c_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_complex.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_complex_ops.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_complex_ops.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_complex_traits.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_copy.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_cost_function.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_cross_product_matrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_det.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_det.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_diag_matrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_diag_matrix.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_double_2.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_double_2x3.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_double_3.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_double_3x2.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_double_4.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_error.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_fastops.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_file_matrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_file_matrix.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_file_vector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_file_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_float_2.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_float_3.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_float_4.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_fortran_copy.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_fortran_copy.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_identity_3x3.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_int_2.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_int_3.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_int_4.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_int_matrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_least_squares_cost_function.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_least_squares_function.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_linear_operators_3.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_linear_system.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_math.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matlab_filewrite.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matlab_header.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matlab_print.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matlab_print.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matlab_print2.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matlab_print_format.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matlab_print_scalar.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matlab_read.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matlab_write.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matops.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matrix.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matrix_exp.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matrix_exp.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matrix_fixed.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matrix_fixed.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matrix_fixed_ref.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matrix_fixed_ref.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_nonlinear_minimizer.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_numeric_limits.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_numeric_traits.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_quaternion.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_quaternion.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_rational.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_real_npolynomial.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_real_polynomial.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_rotation_matrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_sample.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_scalar_join_iterator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_scalar_join_iterator.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_sparse_matrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_sparse_matrix.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_sparse_matrix_linear_system.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_sym_matrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_sym_matrix.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_test.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_trace.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_transpose.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_unary_function.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_vector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_vector_fixed.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_vector_fixed.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_vector_fixed_ref.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_vector_fixed_ref.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_vector_ref.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_vector_ref.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_T_n.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_binary.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_complexify.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_config.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_double_2x2.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_double_3x3.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_double_3x4.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_double_4x3.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_double_4x4.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_fwd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_identity.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_imag.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matlab_file_write.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matrix_ref.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_operators.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_real.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_tag.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_vector_dereference.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

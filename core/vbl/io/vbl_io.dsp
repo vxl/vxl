@@ -169,6 +169,114 @@ SOURCE=.\Templates/vbl_io_sparse_array+int.vcl_pair+uint.uint--.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vbl_io_array_1d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_array_1d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_array_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_array_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_array_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_array_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_bounding_box.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_bounding_box.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_quadruple.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_quadruple.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_smart_ptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_smart_ptr.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_sparse_array.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_sparse_array.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_sparse_array_1d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_sparse_array_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_sparse_array_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_sparse_array_base.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_sparse_array_base.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_triple.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_triple.txx
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

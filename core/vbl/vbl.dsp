@@ -304,6 +304,213 @@ SOURCE=.\vbl_test.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vbl_array_1d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_array_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_array_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_big_sparse_array_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_bounding_box.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_protection_traits.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_quadruple.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_shared_pointer.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_smart_ptr.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_sort.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_sparse_array_1d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_sparse_array_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_sparse_array_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_sparse_array_base.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_triple.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_basic_optional.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_basic_relation_type.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_basic_relation_where.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_basic_tuple.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_bit_array_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_bit_array_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_bool_ostream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_fwd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_qsort.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_ref_count.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_test.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_array_1d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_array_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_array_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_big_sparse_array_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_bounding_box.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_protection_traits.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_quadruple.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_shared_pointer.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_smart_ptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_sort.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_sparse_array_1d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_sparse_array_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_sparse_array_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_sparse_array_base.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_triple.h
+
+# End Source File
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

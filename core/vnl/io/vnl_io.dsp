@@ -269,6 +269,89 @@ SOURCE=.\vnl_io_real_polynomial.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vnl_io_diag_matrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_diag_matrix.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_matrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_matrix.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_nonlinear_minimizer.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_rational.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_real_npolynomial.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_real_polynomial.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_sparse_matrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_sparse_matrix.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_vector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_matrix_fixed.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_sym_matrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_sym_matrix.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_vector_fixed.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

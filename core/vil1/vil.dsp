@@ -664,6 +664,464 @@ SOURCE=.\vil_warp.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\file_formats/vil_bmp.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_bmp_core_header.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_bmp_file_header.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_bmp_info_header.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_gen.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_gif.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_iris.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_jpeg.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_jpeg_compressor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_jpeg_decompressor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_jpeg_destination_mgr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_jpeg_source_mgr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_mit.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_png.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_pnm.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_tiff.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_viff.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_16bit.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_32bit.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_block_cache_image_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_byte_swap.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_clamp.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_clamp_image.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_clamp_image_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_colour_space.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_convolve.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_convolve.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_convolve_1d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_convolve_1d_x.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_convolve_1d_y.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_convolve_simple.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_convolve_simple.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_copy.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_crop.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_crop_image_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_file_format.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_file_image.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_flip_components.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_flip_components_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_flipud.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_flipud_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_image.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_image_as.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_image_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_image_proxy.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_interpolate.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_interpolate.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_load.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_memory_image.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_memory_image_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_memory_image_of.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_memory_image_of.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_memory_image_of_format.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_memory_image_window.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_ncc.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_ncc.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_new.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_pixel.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_pyramid.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_resample.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_resample_image.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_resample_image.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_resample_image_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_rgb.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_rgb.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_rgb_byte.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_rgba.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_rgba.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_save.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_scale_intensities.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_scale_intensities_image.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_scale_intensities_image_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_skip.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_skip_image_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_smooth.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_ssd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_ssd.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_stream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_stream_core.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_stream_fstream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_stream_section.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_stream_url.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_test.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_warp.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_warp.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_viffheader.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_byte.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_fwd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_ip_traits.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_jpeglib.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_property.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

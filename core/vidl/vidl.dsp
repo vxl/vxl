@@ -179,6 +179,84 @@ SOURCE=.\vidl_test.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vidl_avicodec.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_clip.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_frame.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_frame_as_image.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_image_list_codec.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_movie.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_avicodec_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_clip_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_codec.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_codec_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_frame_as_image_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_frame_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_image_list_codec_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_movie_sptr.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

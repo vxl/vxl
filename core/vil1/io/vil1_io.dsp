@@ -214,6 +214,64 @@ SOURCE=.\vil_io_memory_image_impl.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vil_io_image.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_io_image_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_io_memory_image.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_io_memory_image_format.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_io_memory_image_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_io_memory_image_of.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_io_memory_image_of.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_io_rgb.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_io_rgb.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_io_rgba.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_io_rgba.txx
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

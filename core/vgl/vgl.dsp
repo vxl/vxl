@@ -479,6 +479,259 @@ SOURCE=.\vgl_ellipse_scan_iterator.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vgl_1d_basis.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_1d_basis.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_box_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_box_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_box_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_box_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_clip.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_conic.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_conic.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_distance.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_ellipse_scan_iterator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_line_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_line_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_line_3d_2_points.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_line_3d_2_points.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_plane_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_plane_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_point_1d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_point_1d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_point_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_point_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_point_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_point_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_line_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_line_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_line_segment_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_line_segment_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_line_segment_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_line_segment_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_lineseg_test.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_plane_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_plane_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_point_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_point_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_point_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_point_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_polygon.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_polygon_scan_iterator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_polygon_test.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_region_scan_iterator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_test.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_triangle_scan_iterator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_triangle_test.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_vector_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_vector_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_vector_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_vector_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_window_scan_iterator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_fwd.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

@@ -204,6 +204,134 @@ SOURCE=.\vul_url.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vul_arg.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_awk.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_expand_path.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_file.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_file_iterator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_get_timestamp.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_printf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_psfile.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_redirector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_reg_exp.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_root_dir.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_sequence_filename_map.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_sprintf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_string.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_test.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_timer.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_timestamp.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_tmpnam.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_trace.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_url.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_user_info.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_canonical_path.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_deprecated.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_fwd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_whereami.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

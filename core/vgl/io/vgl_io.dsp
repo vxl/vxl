@@ -274,6 +274,164 @@ SOURCE=.\vgl_io_polygon.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vgl_io_box_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_box_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_box_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_box_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_conic.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_conic.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_line_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_line_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_line_3d_2_points.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_line_3d_2_points.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_plane_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_plane_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_point_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_point_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_point_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_point_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_line_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_line_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_line_segment_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_line_segment_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_line_segment_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_line_segment_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_point_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_point_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_point_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_point_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_polygon.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_vector_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_vector_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_vector_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_vector_3d.txx
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
