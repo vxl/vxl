@@ -14,7 +14,7 @@
 //
 // \verbatim
 //  Modifications:
-//    17-Sep-2002 K.Y.McGaul - Converted to doxygen style documenation.
+//   17-Sep-2002 K.Y.McGaul - Converted to doxygen style documentation.
 // \endverbatim
 //-----------------------------------------------------------------------------
 
