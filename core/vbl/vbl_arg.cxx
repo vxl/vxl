@@ -97,7 +97,7 @@ vbl_arg_base::vbl_arg_base(char const* option, char const*helpstring):
 //--------------------------------------------------------------------------------
 
 // -- Construct an empty vbl_arg_info_list.
-vbl_arg_info_list::vbl_arg_info_list(autonomy autonomy__):
+vbl_arg_info_list::vbl_arg_info_list(vbl_arg_info_list::autonomy autonomy__):
   nargs(0),
   args(new vbl_arg_base*[100]),
   help("-?"), // default help operator!
