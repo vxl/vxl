@@ -58,9 +58,11 @@ void vsl_b_read(vsl_b_istream &is, vgl_box_2d<T> & p)
 template<class T>
 void vsl_print_summary(vcl_ostream& os,const vgl_box_2d<T> & p)
 {
-  os<<"2d Box with opposite corners at (" <<p.min_x() << "," <<
-    p.min_y();
-  os<<") and (" << p.max_x() << "," << p.max_y() << ")";
+  if (p.is_empty())
+    os<<"Empty 2d box"<<vcl_endl;
+  else
+    os<<"2d box with opposite corners at (" <<p.min_x() << "," << p.min_y()
+      <<") and (" << p.max_x() << "," << p.max_y() << ")";
 }
 
 #define VGL_IO_BOX_2D_INSTANTIATE(T) \

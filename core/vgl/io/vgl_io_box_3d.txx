@@ -57,10 +57,12 @@ void vsl_b_read(vsl_b_istream &is, vgl_box_3d<T> & p)
 template<class T>
 void vsl_print_summary(vcl_ostream& os,const vgl_box_3d<T> & p)
 {
-  os<<"3d Box with opposite corners at (" <<p.min_x() << "," <<
-    p.min_y() << "," << p.min_z() <<")" <<vcl_endl;
-  os<<"and (" << p.max_x() << "," << p.max_y() << ","
-    << p.max_z() << ")" <<vcl_endl;
+  if (p.is_empty())
+    os<<"Empty 3d box"<<vcl_endl;
+  else
+    os<<"3d box with opposite corners at ("
+      <<p.min_x() << "," << p.min_y() << "," << p.min_z() <<") and ("
+      <<p.max_x() << "," << p.max_y() << "," << p.max_z() <<")\n";
 }
 
 #define VGL_IO_BOX_3D_INSTANTIATE(T) \
