@@ -57,7 +57,7 @@ vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::operator=(const vnl_sparse_matrix<T>
 //------------------------------------------------------------
 //: Multiply this*rhs, another sparse matrix.
 template <class T>
-void vnl_sparse_matrix<T>::mult(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matrix<T>& result) const
+void vnl_sparse_matrix<T>::mult(vnl_sparse_matrix<T> const& rhs, vnl_sparse_matrix<T>& result) const
 {
   assert(rhs.rows() == columns());
   unsigned int result_rows = rows();
@@ -222,7 +222,7 @@ void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
 //------------------------------------------------------------
 //: Multiply this*rhs, a vector.
 template <class T>
-void vnl_sparse_matrix<T>::mult(const vnl_vector<T>& rhs, vnl_vector<T>& result) const
+void vnl_sparse_matrix<T>::mult(vnl_vector<T> const& rhs, vnl_vector<T>& result) const
 {
   assert(rhs.size() == columns());
 

@@ -18,7 +18,7 @@
 
 // This is replacing a member template...
 template <class T>
-T vnl_real_polynomial_evaluate(const double *a, int n, const T& x)
+T vnl_real_polynomial_evaluate(double const *a, int n, T const& x)
 {
   --n;
   T acc = a[n];
@@ -39,9 +39,9 @@ T vnl_real_polynomial_evaluate(const double *a, int n, const T& x)
 
 //: Instantiate templates before use
 template double vnl_real_polynomial_evaluate SELECT(double )
-      (const double*,int,const double &);
+      (double const*,int,double const&);
 template vcl_complex<double> vnl_real_polynomial_evaluate SELECT(vcl_complex<double>)
-      (const double*,int,const vcl_complex<double>&);
+      (double const*,int,vcl_complex<double> const&);
 
 //: Evaluate polynomial at value x
 double vnl_real_polynomial::evaluate(double x) const
@@ -51,7 +51,7 @@ double vnl_real_polynomial::evaluate(double x) const
 
 
 //: Evaluate polynomial at complex value x
-vcl_complex<double> vnl_real_polynomial::evaluate(const vcl_complex<double>& x) const
+vcl_complex<double> vnl_real_polynomial::evaluate(vcl_complex<double> const& x) const
 {
   return vnl_real_polynomial_evaluate SELECT(vcl_complex<double>)
      (coeffs_.data_block(), coeffs_.size(), x);
@@ -65,7 +65,7 @@ double vnl_real_polynomial::devaluate(double /*x*/) const
 
 
 //: Evaluate derivative at complex value x. Not implemented.
-vcl_complex<double> vnl_real_polynomial::devaluate(const vcl_complex<double>& /*x*/) const
+vcl_complex<double> vnl_real_polynomial::devaluate(vcl_complex<double> const& /*x*/) const
 {
   return HUGE_VAL;
 }
