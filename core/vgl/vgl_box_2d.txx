@@ -6,6 +6,7 @@
 
 #include "vgl_box_2d.h"
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_line_2d.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
@@ -339,6 +340,188 @@ bool vgl_box_2d<Type>::contains(vgl_box_2d<Type> const& b) const
   return
     contains(b.min_x(), b.min_y()) &&
     contains(b.max_x(), b.max_y());
+}
+
+//: compute the intersection of the an infinite line with *this box
+//  p0 and p1 are the intersection points
+static bool vgl_near_zero(double x){return vcl_fabs(x)<1e-08;}
+static bool vgl_near_eq(double x, double y){return vgl_near_zero(x-y);}
+
+template <class Type>
+bool vgl_box_2d<Type>::intersect(vgl_line_2d<Type>& line,
+                                 vgl_point_2d<Type>& p0,
+                                 vgl_point_2d<Type>& p1)
+{
+  double a = line.a(), b = line.b(), c = line.c();
+  double xmin=this->min_x(), xmax=this->max_x();
+  double ymin=this->min_y(), ymax=this->max_y();
+
+ //Run through the cases
+  //
+  if(vgl_near_zero(a))// The line is y = -c/b
+    {
+      float y0 = -c/b;
+      // The box edge is collinear with line?
+      if(vgl_near_eq(ymin,y0))
+	{
+	  p0.set(xmin, ymin);
+	  p1.set(xmax, ymin);
+	  return true;
+	}
+      if(vgl_near_eq(ymax,y0))
+	{
+	  p0.set(xmin, ymax);
+	  p1.set(xmax, ymax);
+	  return true;
+	}
+      
+      if((ymin > y0)||(y0 > ymax)) // The line does not intersect the box
+          return false;
+      else  // The line does intersect
+	{
+	  p0.set(xmin, y0);
+	  p1.set(xmax, y0);
+	  return true;
+	}
+    }
+
+  if(vgl_near_zero(b))// The line is x = -c/a
+    {
+      float x0 = -c/a;
+      // The box edge is collinar with l?
+      if(vgl_near_eq(xmin,x0))
+	{
+	  p0.set(xmin, ymin);
+	  p1.set(xmin, ymax);
+	  return true;
+	}
+      if(vgl_near_eq(xmax,x0))
+	{
+	  p0.set(xmax, ymin);
+	  p1.set(xmax, ymax);
+	  return true;
+	}
+      
+      if((xmin > x0)||(x0 > xmax)) // The line does not intersect the box
+	return false;
+      else  // The line does intersect
+	{
+	  p0.set(x0, ymin);
+	  p1.set(x0, ymax);
+	  return true;
+	}
+    }
+
+  // The normal case with no degeneracies
+
+  // There are six possible intersection combinations
+  //  	        		
+//                C01 /    CY     \ C11
+//                   /     |       \ 
+//       ymax  -----/------|--------\-----     	
+//            |    /       |         \    |
+//            |   /        |          \   |
+//            |  /         |           \  | \ 
+//            | /      	   |            \ |  \_ Bounding Box
+//            |/           |             \|      	
+//            /            |              \ 
+//           /|            |              |\ 
+//           ---------------------------------- CX
+//          \ |            |              /
+//           \|            |             /|
+//            \            |            / |
+//            |\           |           /  |
+//            | \          |          /   |
+//            |  \         |         /    |
+//       xmin  ---\--------|--------/-----   xmax
+//       ymin      \       |       /
+//              C00 \             / C10	
+
+
+  // Intersection with x = xmin
+  float y_xmin_int = -(c + a*xmin)/b;
+  bool inside_xmin = (y_xmin_int >= ymin)&&(y_xmin_int <= ymax);
+
+  // Intersection with x = xmax
+  float y_xmax_int = -(c + a*xmax)/b;
+  bool inside_xmax = (y_xmax_int >= ymin)&&(y_xmax_int <= ymax);
+
+  // Intersection with y = ymin
+  float x_ymin_int = -(c + b*ymin)/a;
+  bool inside_ymin = (x_ymin_int >= xmin)&&(x_ymin_int <= xmax);
+
+  // Intersection with y = ymax		
+  float x_ymax_int = -(c + b*ymax)/a;	
+  bool inside_ymax = (x_ymax_int >= xmin)&&(x_ymax_int <= xmax);
+
+  // Case CX
+  if((inside_xmin&&inside_xmax)&&
+     (!vgl_near_eq(y_xmin_int,ymin)||!vgl_near_eq(y_xmax_int,ymax)))
+    {
+      p0.set(xmin, y_xmin_int);
+      p1.set(xmax, y_xmax_int);
+      return true;
+    }
+
+  // Case CY
+  if((inside_ymin&&inside_ymax)&&
+     (!vgl_near_eq(x_ymin_int,xmin)||!vgl_near_eq(x_ymax_int,xmax)))
+    {
+      p0.set(x_ymin_int, ymin);
+      p1.set(x_ymax_int, ymax);
+      return true;
+    }
+
+  // Case C00
+  if((inside_xmin&&inside_ymin)&&
+     (!inside_xmax||!inside_ymax))
+    {
+      p0.set(xmin, y_xmin_int);
+      p1.set(x_ymin_int, ymin);
+      return true;
+    }
+
+  // Case C01
+  if((inside_xmin&&inside_ymax)&&
+     (!inside_xmax||!inside_ymin))
+    {
+      p0.set(xmin, y_xmin_int);
+      p1.set(x_ymax_int, ymax);
+      return true;
+    }
+
+  // Case C10
+  if((inside_ymin&&inside_xmax)&&
+     (!inside_xmin||!inside_ymax))
+    {
+      p0.set(x_ymin_int, ymin);
+      p1.set(xmax, y_xmax_int);
+      return true;
+    }
+
+  // Case C11
+  if((inside_ymax&&inside_xmax)&&
+     (!inside_xmin||!inside_ymin))
+    {
+      p0.set(x_ymax_int, ymax);
+      p1.set(xmax, y_xmax_int);
+      return true;
+    }
+  //Exactly p0ssing through diagonal of BB
+  if(inside_xmin&&inside_xmax&&inside_ymin&&inside_ymax)
+    if(a>0) // 45 degrees
+      {
+      p0.set(xmin, ymin);
+      p1.set(xmax, ymax);
+      return true;
+      }
+    else // 135 degrees
+      {
+        p0.set(xmin, ymax);
+        p1.set(xmax, ymin);
+        return true;
+      }
+  return false;
 }
 
 //: Make the box empty

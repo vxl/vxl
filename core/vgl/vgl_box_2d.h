@@ -177,6 +177,10 @@ class vgl_box_2d
     return x >= min_x() && x <= max_x() && y >= min_y() && y <= max_y();
   }
 
+  //: Return true if line intersects box. If so, compute intersection points.
+  bool intersect(vgl_line_2d<Type>& line,
+                 vgl_point_2d<Type>& p0, vgl_point_2d<Type>& p1); 
+                 
   //: Make the box empty
   void empty();
 
