@@ -3,6 +3,7 @@
 
 #include <mil/mil_image_pyramid.h>
 #include <mil/mil_image.h>
+#include <vcl_cstdlib.h> // for abort()
 
 //------------------------------------------------------------------------
 //: Convert an image pyramid into a flat image containing each layer.
@@ -38,8 +39,9 @@ template <class T> void mil_image_pyramid_flatten(T& out, const mil_image_pyrami
   else 
   {
     vcl_cerr << "ERROR: mil_image flatten(const mil_image_pyramid &)\n"
-      "Don't know how to deal with image type " << in(0).is_a() <<vcl_endl;
-    abort();
+             << "Don't know how to deal with image type " << in(0).is_a()
+             << vcl_endl;
+    vcl_abort();
   }
 }
 
