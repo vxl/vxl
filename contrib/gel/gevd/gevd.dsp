@@ -9,7 +9,7 @@
 # already been used, so do not edit here...
 
 # variables to REPLACE
-# 
+#
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/gel" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
 #  == override in output directory
@@ -20,16 +20,16 @@
 CFG=gevd - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "gevd.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "gevd.mak" CFG="gevd - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "gevd - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "gevd - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
@@ -89,7 +89,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -99,170 +99,101 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\gevd_step.cxx
-
 # End Source File
 # Begin Source File
-
-SOURCE=.\gevd_status_mixin.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\gevd_param_mixin.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_noise.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_memory_mixin.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_float_operators.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_detector_params.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_detector.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_contour.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_bufferxy.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_clean_edgels.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_edgel_regions.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_region_edge.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_region_proc.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_region_proc_params.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\gevd_bufferxy.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_contour.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_detector.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_detector_params.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_float_operators.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_memory_mixin.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_noise.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_param_mixin.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_status_mixin.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_step.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_pixel.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_xpixel.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_clean_edgels.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_edgel_regions.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_region_edge.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_region_proc.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gevd_region_proc_params.h
-
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
