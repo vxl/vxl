@@ -24,6 +24,10 @@ SET(vtol_sources
 
 AUX_SOURCE_DIRECTORY(Templates vtol_sources)
 
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET_SOURCE_FILES_PROPERTIES(vtol_two_chain.cxx COMPILE_FLAGS -O1)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 ADD_LIBRARY(vtol ${vtol_sources})
 TARGET_LINK_LIBRARIES(vtol vdgl vsol vbl vul vcl)
 

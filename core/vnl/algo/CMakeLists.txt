@@ -57,6 +57,11 @@ IF(NETLIB_FOUND)
 
   AUX_SOURCE_DIRECTORY(Templates vnl_algo_sources)
 
+  IF(CMAKE_COMPILER_IS_GNUCXX)
+    SET_SOURCE_FILES_PROPERTIES(Templates/vnl_determinant+vcl_complex+long_double--.cxx COMPILE_FLAGS -O0)
+    SET_SOURCE_FILES_PROPERTIES(Templates/vnl_svd+vcl_complex+long_double--.cxx COMPILE_FLAGS -O0)
+  ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
   ADD_LIBRARY( vnl_algo ${vnl_algo_sources})
   TARGET_LINK_LIBRARIES( vnl_algo ${NETLIB_LIBRARIES} vnl )
 

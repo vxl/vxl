@@ -19,6 +19,10 @@ ADD_EXECUTABLE(vsl_test_all
   test_string_io.cxx
   test_vector_io.cxx
 )
+ 
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET_SOURCE_FILES_PROPERTIES(test_map_io.cxx COMPILE_FLAGS -O0)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_TEST(vsl_test_indent                vsl_test_all test_indent)
 ADD_TEST(vsl_test_binary_io             vsl_test_all test_binary_io)

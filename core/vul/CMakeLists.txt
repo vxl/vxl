@@ -28,6 +28,10 @@ SET(vul_sources
 
 AUX_SOURCE_DIRECTORY(Templates vul_sources)
 
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET_SOURCE_FILES_PROPERTIES(vul_sequence_filename_map.cxx COMPILE_FLAGS -O0)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 ADD_LIBRARY(vul ${vul_sources})
 
 IF (NOT UNIX)

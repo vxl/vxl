@@ -1,47 +1,8 @@
 # vxl/vil/CMakeLists.txt
 
+SET( vil_sources
+  vil_fwd.h
 
-# vil_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
-#
-INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
-INCLUDE(${MODULE_PATH}/FindPNG.cmake)
-INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
-
-# Put something in the vil_sources variable so we can just append to it
-SET( vil_sources  vil_fwd.h )
-
-IF(PNG_FOUND)
-  INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})
-  ADD_DEFINITIONS( ${PNG_DEFINITIONS}  -DHAS_PNG )
-  SET( vil_sources ${vil_sources}
-    file_formats/vil_png.cxx file_formats/vil_png.h
-  )
-ENDIF(PNG_FOUND)
-
-IF(JPEG_FOUND)
-  INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_DIR} )
-  ADD_DEFINITIONS( ${JPEG_DEFINITIONS} -DHAS_JPEG )
-  SET( vil_sources ${vil_sources}
-    vil_jpeglib.h
-    file_formats/vil_jpeg.cxx file_formats/vil_jpeg.h
-    file_formats/vil_jpeg_source_mgr.cxx file_formats/vil_jpeg_source_mgr.h
-    file_formats/vil_jpeg_decompressor.cxx file_formats/vil_jpeg_decompressor.h
-    file_formats/vil_jpeg_destination_mgr.cxx file_formats/vil_jpeg_destination_mgr.h
-    file_formats/vil_jpeg_compressor.cxx file_formats/vil_jpeg_compressor.h
-  )
-ENDIF(JPEG_FOUND)
-
-IF(TIFF_FOUND)
-  INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} )
-  ADD_DEFINITIONS( ${TIFF_DEFINITIONS} -DHAS_TIFF )
-  SET( vil_sources ${vil_sources}
-    file_formats/vil_tiff.cxx file_formats/vil_tiff.h
-  )
-ENDIF(TIFF_FOUND)
-
-
-
-SET( vil_sources  ${vil_sources}
   # basic things
   vil_pixel.cxx vil_pixel.h
   vil_image_impl.cxx vil_image_impl.h
@@ -136,8 +97,45 @@ SET( vil_sources  ${vil_sources}
   vil_ip_traits.h
 )
 
+# vil_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
+INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
+INCLUDE(${MODULE_PATH}/FindPNG.cmake)
+INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+
+IF(PNG_FOUND)
+  INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})
+  ADD_DEFINITIONS( ${PNG_DEFINITIONS}  -DHAS_PNG )
+  SET( vil_sources ${vil_sources}
+    file_formats/vil_png.cxx file_formats/vil_png.h
+  )
+ENDIF(PNG_FOUND)
+
+IF(JPEG_FOUND)
+  INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_DIR} )
+  ADD_DEFINITIONS( ${JPEG_DEFINITIONS} -DHAS_JPEG )
+  SET( vil_sources ${vil_sources}
+    vil_jpeglib.h
+    file_formats/vil_jpeg.cxx file_formats/vil_jpeg.h
+    file_formats/vil_jpeg_source_mgr.cxx file_formats/vil_jpeg_source_mgr.h
+    file_formats/vil_jpeg_decompressor.cxx file_formats/vil_jpeg_decompressor.h
+    file_formats/vil_jpeg_destination_mgr.cxx file_formats/vil_jpeg_destination_mgr.h
+    file_formats/vil_jpeg_compressor.cxx file_formats/vil_jpeg_compressor.h
+  )
+ENDIF(JPEG_FOUND)
+
+IF(TIFF_FOUND)
+  INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} )
+  ADD_DEFINITIONS( ${TIFF_DEFINITIONS} -DHAS_TIFF )
+  SET( vil_sources ${vil_sources}
+    file_formats/vil_tiff.cxx file_formats/vil_tiff.h
+  )
+ENDIF(TIFF_FOUND)
 
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
+
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET_SOURCE_FILES_PROPERTIES(vil_image_as.cxx COMPILE_FLAGS -O0)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(vil ${vil_sources})
 

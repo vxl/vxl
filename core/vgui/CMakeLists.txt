@@ -205,7 +205,6 @@ ENDIF (MFC_FOUND)
 # TOOLKIT IMPLEMENTATIONS
 ######################################################################
 
-
 ##################################################
 # glut
 ##################################################
@@ -249,7 +248,6 @@ IF (GLUT_FOUND)
 
 ENDIF (GLUT_FOUND)
 
-
 ##################################################
 # Qt
 ##################################################
@@ -285,16 +283,18 @@ IF (QT_WRAP_CPP)
 
     SET( vgui_sources ${vgui_sources} ${vgui_qt_sources} ${vgui_qt_moc_files} )
 
+    IF(CMAKE_COMPILER_IS_GNUCXX)
+      SET_SOURCE_FILES_PROPERTIES(impl/qt/vgui_qt_adaptor_mocced.cxx COMPILE_FLAGS -O0)
+    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
   ENDIF(VGUI_USE_QT)
 
 ENDIF (QT_WRAP_CPP)
 ENDIF (QT_FOUND)
 
-
 ##################################################
 # MFC
 ##################################################
-
 
 IF (MFC_FOUND)
 
@@ -370,9 +370,7 @@ SET( vgui_sources ${vgui_sources}
   vgui_register_all.cxx
 )
 
-
 ADD_LIBRARY(vgui ${vgui_sources})
-
 
 
 # Dependencies created by the toolkit implementations

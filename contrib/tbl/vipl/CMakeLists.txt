@@ -55,6 +55,14 @@ AUX_SOURCE_DIRECTORY(vipl_with_vbl_array_2d/Templates vipl_sources)
 AUX_SOURCE_DIRECTORY(vipl_with_vnl_matrix/Templates vipl_sources)
 AUX_SOURCE_DIRECTORY(vipl_with_section/Templates vipl_sources)
 AUX_SOURCE_DIRECTORY(vipl_with_mil/Templates vipl_sources)
+
+IF(CMAKE_COMPILER_IS_GNUCXX)
+ SET_SOURCE_FILES_PROPERTIES(
+  vipl_with_section/Templates/vipl_filter_2d+section+vil_rgb+uchar-.2-.section+vil_rgb+uchar-.2-.vil_rgb+uchar-.vil_rgb+uchar--.cxx
+  COMPILE_FLAGS -O1
+ )
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 # and for the latter, we need mul:
 INCLUDE_DIRECTORIES(${MUL_INCLUDE_DIR})
 

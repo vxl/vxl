@@ -20,6 +20,11 @@ ADD_EXECUTABLE( vnl_io_test_driver
   test_vector_fixed_io.cxx
   test_vector_io.cxx
 )
+
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET_SOURCE_FILES_PROPERTIES(test_vnl_io.cxx COMPILE_FLAGS -O0)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 TARGET_LINK_LIBRARIES( vnl_io_test_driver vnl_io vsl testlib )
 
 ADD_TEST( vnl_test_include                  vnl_io_test_driver test_include                 )

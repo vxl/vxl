@@ -31,6 +31,10 @@ IF (JPEG_FOUND)
    SGIMovieFilePrivates.cxx SGIMovieFilePrivates.h
    SGIMovieFileWrite.cxx    SGIMovieFileWrite.h
   )
+
+  IF(CMAKE_COMPILER_IS_GNUCXX)
+    SET_SOURCE_FILES_PROPERTIES(SGIMovieFile.cxx COMPILE_FLAGS -O1)
+  ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF (JPEG_FOUND)
 
 INCLUDE(${MODULE_PATH}/NewCMake/FindMPEG2.cmake)

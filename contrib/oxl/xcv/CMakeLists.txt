@@ -27,9 +27,10 @@ SET(xcv_sources
 
 AUX_SOURCE_DIRECTORY(Templates xcv_sources)
 
-IF (CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES( xcv_geometry.cxx COMPILE_FLAGS "-ftemplate-depth-50" )
-ENDIF (CMAKE_COMPILER_IS_GNUCXX)
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET_SOURCE_FILES_PROPERTIES(xcv_geometry.cxx COMPILE_FLAGS -O0 -ftemplate-depth-100)
+  SET_SOURCE_FILES_PROPERTIES(xcv_multiview.cxx COMPILE_FLAGS -O0)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_EXECUTABLE(xcv ${xcv_sources})
 TARGET_LINK_LIBRARIES(xcv osl mvl vgui vgl vil vnl_algo vnl vul vbl vpl vcl)

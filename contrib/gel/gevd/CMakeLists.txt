@@ -21,6 +21,10 @@ SET(gevd_sources
  gevd_region_proc_params.cxx gevd_region_proc_params.h
 )
 
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET_SOURCE_FILES_PROPERTIES(gevd_contour.cxx COMPILE_FLAGS -O0)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 ADD_LIBRARY(gevd ${gevd_sources})
 TARGET_LINK_LIBRARIES(gevd vtol vdgl vil vnl vbl)
 

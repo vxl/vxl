@@ -23,3 +23,8 @@ ADD_EXECUTABLE(vepl2_example_erode_disk       example_erode_disk.cxx)
 ADD_EXECUTABLE(vepl2_example2_threshold       example2_threshold.cxx)
 ADD_EXECUTABLE(vepl2_example_x_gradient       example_x_gradient.cxx)
 ADD_EXECUTABLE(vepl2_example_histogram        example_histogram.cxx)
+
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET_SOURCE_FILES_PROPERTIES(example_convert.cxx COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(example_std_dev.cxx COMPILE_FLAGS -O0)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
