@@ -993,7 +993,7 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
              << " != bytes read = " << total_read_count << vcl_endl;
   }
 
-  delete block_buffer ;
+  delete [] block_buffer ;
 
 #if (defined DEBUG) && DEBUG
   const unsigned int DEFAULT_PIXELS_TO_DISPLAY = 8;
