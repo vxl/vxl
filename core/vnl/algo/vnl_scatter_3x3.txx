@@ -7,7 +7,8 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_scatter_3x3.h"
-#include <vnl/vnl_math.h>
+#include <vcl/vcl_iostream.h>
+#include <vnl/algo/vnl_symmetric_eigensystem.h>
 
 template <class T>
 vnl_scatter_3x3<T>::vnl_scatter_3x3()
@@ -22,7 +23,7 @@ void vnl_scatter_3x3<T>::add_outer_product(const vnl_vector_fixed<T,3> & v)
 {
   vnl_scatter_3x3<T> & S = *this;
   for(int i = 0; i < 3; ++i) {
-    S(i,i) +=  vnl_math_sqr(v[i]);
+    S(i,i) +=  v[i]*v[i];
     for(int j = i+1; j < 3; ++j) {
       T value = v[i]*v[j];
       S(i,j) += value;
@@ -54,6 +55,18 @@ void vnl_scatter_3x3<T>::force_symmetric()
       S(i,j) = S(j,i) = vbar;
     }
   symmetricp = true;
+}
+
+template <class T>
+void vnl_scatter_3x3<T>::compute_eigensystem()
+{
+  vnl_scatter_3x3<T> &S = *this;
+  if (symmetricp)
+    vnl_symmetric_eigensystem<T>::compute(S, V_, D);
+  else
+    cerr << "Unsymmetric scatter not handled now\n";
+ 
+  eigenvectors_currentp = true;
 }
   
 //--------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #ifndef vnl_sample_h_
 #define vnl_sample_h_
 #ifdef __GNUC__
-#pragma interface
+#pragma interface "vnl_sample"
 #endif
 /*
   fsm@robots.ox.ac.uk

@@ -14,7 +14,7 @@
 // .LIBRARY     vnl
 // .HEADER	Numerics Package
 // .INCLUDE     vnl/vnl_scatter_3x3.h
-// .FILE        vnl_scatter_3x3.txx
+// .FILE        vnl/vnl_scatter_3x3.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
 //
@@ -49,9 +49,28 @@ public:
   
   // -- Replace S with $(S+S^\top)/2$.
   void force_symmetric();
-  
+ 
+  // -- Compute the eigensystem of S.
+  void compute_eigensystem();
+ 
+  // -- Return the eigenvector corresponding to the smallest eigenvalue.
+  vnl_vector_fixed<T,3> minimum_eigenvector() {
+    if (!eigenvectors_currentp) compute_eigensystem();
+    return vnl_vector_fixed<T,3>(V_(0,0), V_(1,0), V_(2,0));
+  }
+ 
+  // -- Return the column matrix of eigenvectors, sorted in increasing order
+  // of eigenvalue.
+  vnl_matrix_fixed<T,3,3>& V() {
+    if (!eigenvectors_currentp) compute_eigensystem();
+    return V_;
+  }
+ 
 protected:  
   bool symmetricp;
+  bool eigenvectors_currentp;
+  vnl_matrix_fixed<T,3,3> V_;
+  vnl_vector_fixed<T,3> D;
 };
 
 

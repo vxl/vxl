@@ -210,3 +210,4 @@ template bool vnl_matlab_read_or_die(istream &, vnl_vector<T> &, char const *); 
 template bool vnl_matlab_read_or_die(istream &, vnl_matrix<T> &, char const *); 
 
 inst(double);
+inst(float);
