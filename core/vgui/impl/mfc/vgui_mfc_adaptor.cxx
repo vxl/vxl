@@ -1,4 +1,5 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_adaptor.cxx
+// This is oxl/vgui/impl/mfc/vgui_mfc_adaptor.cxx
+#include "vgui_mfc_adaptor.h"
 
 //:
 // \file
@@ -9,9 +10,6 @@
 //   Modifications:
 //     06-AUG-2002 K.Y.McGaul - Changed key returned by CTRL events.
 // \endverbatim
-
-
-#include "vgui_mfc_adaptor.h"
 
 #include <vcl_cmath.h>
 #include <vcl_cstring.h>
@@ -341,7 +339,7 @@ void vgui_mfc_adaptor::service_redraws()
 {
   if (redraw_posted)
   {
-    if (double_buffered)  // kym - changed from if(!double_buffered) - why change the buffer otherwise?
+    if (double_buffered)  // kym - changed from if (!double_buffered) - why change the buffer otherwise?
       glDrawBuffer(GL_BACK);
     dispatch_to_tableau(vgui_event(vgui_DRAW));
     if (!double_buffered)
@@ -440,7 +438,7 @@ int mfc_key(UINT nChar, UINT nFlags)
 {
   if (nFlags & 256) {
     // Extended code
-    switch (nChar) 
+    switch (nChar)
     {
     case VK_NEXT: return vgui_PAGE_DOWN;
     case VK_PRIOR: return vgui_PAGE_UP;
@@ -450,8 +448,8 @@ int mfc_key(UINT nChar, UINT nFlags)
     case VK_DOWN: return vgui_CURSOR_DOWN;
     default: return vgui_key(0);
     };
-  } 
-  else 
+  }
+  else
   {
     unsigned short buf[1024];
     unsigned char lpKeyState[256];

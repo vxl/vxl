@@ -1,5 +1,6 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_adaptor.h
-
+// This is oxl/vgui/impl/mfc/vgui_mfc_adaptor.h
+#ifndef AFX_VGUI_MFC_ADAPTOR_H__6BE405F7_0910_4C83_A175_5E8FBDCE88A5__INCLUDED_
+#define AFX_VGUI_MFC_ADAPTOR_H__6BE405F7_0910_4C83_A175_5E8FBDCE88A5__INCLUDED_
 //:
 // \file
 // \author RRG, Oxford University
@@ -22,8 +23,6 @@
 //                             don't call setup_adaptor it is assumed to be the main window.
 // \endverbatim
 
-#ifndef AFX_VGUI_MFC_ADAPTOR_H__6BE405F7_0910_4C83_A175_5E8FBDCE88A5__INCLUDED_
-#define AFX_VGUI_MFC_ADAPTOR_H__6BE405F7_0910_4C83_A175_5E8FBDCE88A5__INCLUDED_
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
@@ -47,7 +46,7 @@ public:
   vgui_mfc_adaptor();           // protected constructor used by dynamic creation
   DECLARE_DYNCREATE(vgui_mfc_adaptor)
 
-// Attributes 
+// Attributes
 public:
   //: Device context for this adaptor.
   CDC* m_pDC;
