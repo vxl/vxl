@@ -4,7 +4,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vbl/vbl_test.h>
+#include <vul/vul_test.h>
 #include <vul/io/vul_io_user_info.h>
 #include <vsl/vsl_binary_io.h>
 
