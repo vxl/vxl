@@ -143,6 +143,30 @@ SOURCE=.\sdet_grid_finder.cxx
 # Begin Source File
 SOURCE=.\sdet_grid_finder_params.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+sdet_region-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_map+sdet_region_sptr,vcl_vector+sdet_region_sptr-~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_vector+sdet_region_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_region.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_vehicle_finder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_vehicle_finder_params.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_watershed_region_proc.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_watershed_region_proc_params.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -193,6 +217,24 @@ SOURCE=.\sdet_grid_finder.h
 # End Source File
 # Begin Source File
 SOURCE=.\sdet_grid_finder_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_region.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_region_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_vehicle_finder.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_vehicle_finder_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_watershed_region_proc.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_watershed_region_proc_params.h
 # End Source File
 # End Group
 # End Target
