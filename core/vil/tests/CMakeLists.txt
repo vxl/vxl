@@ -1,4 +1,4 @@
-# ./vxl/vil/tests/CMakeLists.txt
+# This is mul/vil2/tests/CMakeLists.txt
 
 ADD_EXECUTABLE( vil2_test_driver
   test_driver.cxx
