@@ -38,7 +38,8 @@
 #include "vil_nitf_version_v20.h"
 #include "vil_nitf_header_v20.h"
 
-char const * HEADER_VERSION_STR = "NITF02.00";
+char const * const HEADER_VERSION_STR = "NITF02.00";
+static int debug_level = 0 ;
 
 vil_nitf_message_header_v20::vil_nitf_message_header_v20()
 {
@@ -91,8 +92,10 @@ StatusCode vil_nitf_message_header_v20::Read(vil_stream* file)
 
     int curpos = file->tell();
 
-    vcl_cout << "\n#### enter " << method_name
-             << "currpos = " << curpos << vcl_endl;
+    if (debug_level > 1) {
+      vcl_cout << "\n#### enter " << method_name
+	       << "currpos = " << curpos << vcl_endl;
+    }
 
     char buffer[16];
 
@@ -356,15 +359,19 @@ StatusCode vil_nitf_message_header_v20::Read(vil_stream* file)
 
     StatusCode status_code = (error ? STATUS_BAD : STATUS_GOOD);
 
-    vcl_cout << "\n#### exit " << method_name
-             << "status code = " << status_code
-             << "  file position = " << file->tell()
-             << vcl_endl;
-    if (error_details.length() > 0) {
-      vcl_cout << " error details = <" << error_details << ">\n";
+    if (debug_level > 1) {
+      vcl_cout << "\n#### exit " << method_name
+	       << "status code = " << status_code
+	       << "  file position = " << file->tell()
+	       << vcl_endl;
+
+      if (error_details.length() > 0) {
+	vcl_cout << " error details = <" << error_details << ">\n";
+      }
     }
 
     return status_code;
+
 }  // end method Read
 
 //: Read image information.  Does NOT actually read image bytes.
@@ -425,8 +432,11 @@ bool vil_nitf_message_header_v20::read_extended_header_data(vil_stream* file)
     unsigned read_count = 0;
 
     vil_streampos start_pos = file->tell();
-    vcl_cout << "\n#### enter " << method_name
-             << "file position = " << start_pos << vcl_endl;
+
+    if (debug_level > 1) {
+      vcl_cout << "\n#### enter " << method_name
+	       << "file position = " << start_pos << vcl_endl;
+    }
 
     char buffer[16];
 
@@ -434,8 +444,11 @@ bool vil_nitf_message_header_v20::read_extended_header_data(vil_stream* file)
     {
         success = false;
     }
-    vcl_cout << method_name << "UDHDL = " << UDHDL
-             << " (user defined header data length).\n";
+
+    if (debug_level > 1) {
+      vcl_cout << method_name << "UDHDL = " << UDHDL
+	       << " (user defined header data length).\n";
+    }
 
     delete UDHD;
     UDHD = 0;
@@ -461,8 +474,10 @@ bool vil_nitf_message_header_v20::read_extended_header_data(vil_stream* file)
           read_count += 5;
           XHD->XHDL = tmp;
 
-          vcl_cout << method_name << "XHD->XHDL = " << XHD->XHDL
-                   << "  read_count = " << read_count << vcl_endl;
+	  if (debug_level > 1) {
+	    vcl_cout << method_name << "XHD->XHDL = " << XHD->XHDL
+		     << "  read_count = " << read_count << vcl_endl;
+	  }
 
           if (XHD->Read(file) != STATUS_GOOD) {
               success = false;
@@ -476,15 +491,17 @@ bool vil_nitf_message_header_v20::read_extended_header_data(vil_stream* file)
         }
     }
 
-    vcl_cout << "\n#### exit " << method_name
-             << "success = " << success
-             << "  file position = " << file->tell() << vcl_endl;
+    if (debug_level > 1) {
+      vcl_cout << "\n#### exit " << method_name
+	       << "success = " << success
+	       << "  file position = " << file->tell() << vcl_endl;
 
-    unsigned pos_diff = file->tell() - start_pos;
-    vcl_cout << "    read_count = " << read_count
-             << "    position diff = " << pos_diff << vcl_endl;
+      unsigned pos_diff = file->tell() - start_pos;
+      vcl_cout << "    read_count = " << read_count
+	       << "    position diff = " << pos_diff << vcl_endl;
+    }
 
-    return success;
+    return success ;
 }
 
 StatusCode vil_nitf_message_header_v20::Write(vil_stream* file)
