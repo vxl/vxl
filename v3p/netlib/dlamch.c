@@ -8,7 +8,6 @@ doublereal dlamch_(char *cmach)
        Courant Institute, Argonne National Lab, and Rice University
        October 31, 1992
 
-
     Purpose
     =======
 
@@ -45,8 +44,7 @@ doublereal dlamch_(char *cmach)
 
    =====================================================================
 */
-/* >>Start of File<<
-       Initialized data */
+    /* Initialized data */
     static logical first = TRUE_;
     /* System generated locals */
     integer i__1;
@@ -65,8 +63,6 @@ doublereal dlamch_(char *cmach)
             doublereal *, integer *, doublereal *, integer *, doublereal *);
     static integer it;
     static doublereal rnd, eps;
-
-
 
     if (first) {
         first = FALSE_;
@@ -122,16 +118,12 @@ doublereal dlamch_(char *cmach)
 
 } /* dlamch_ */
 
-#include "f2c.h"
-
-/* Subroutine */ void dlamc1_(integer *beta, integer *t, logical *rnd, logical
-        *ieee1)
+/* Subroutine */ void dlamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
        Courant Institute, Argonne National Lab, and Rice University
        October 31, 1992
-
 
     Purpose
     =======
@@ -184,16 +176,14 @@ doublereal dlamch_(char *cmach)
     static integer lbeta;
     static doublereal savec;
     extern doublereal dlamc3_(doublereal *, doublereal *);
+    extern doublereal dlamc33_(doublereal *, doublereal *);
     static logical lieee1;
     static doublereal t1, t2;
     static integer lt;
-    static doublereal one, qtr;
-
-
+    static doublereal one = 1., qtr;
 
     if (first) {
         first = FALSE_;
-        one = 1.;
 
 /*        LBETA,  LIEEE1,  LT and  LRND  are the  local values  of  BETA,
           IEEE1, T and RND.
@@ -207,14 +197,12 @@ doublereal dlamch_(char *cmach)
 
              fl( a + 1.0 ) = a. */
 
-        a = 1.;
-        c = 1.;
+        a = c = one;
 
         while (c == one) {
             a *= 2;
             c = dlamc3_(&a, &one);
-            d__1 = -a;
-            c = dlamc3_(&c, &d__1);
+            c = dlamc33_(&c, &a);
         }
 
 /*        Now compute  b = 2.0**m  with the smallest positive integer m
@@ -222,13 +210,12 @@ doublereal dlamch_(char *cmach)
 
              fl( a + b ) .gt. a. */
 
-        b = 1.;
-        c = dlamc3_(&a, &b);
+        b = one;
 
-        while (c == a) {
+        do {
             b *= 2;
             c = dlamc3_(&a, &b);
-        }
+        } while (c == a);
 
 /*        Now compute the base.  a and c  are neighbouring floating point
           numbers  in the  interval  ( beta**t, beta**( t + 1 ) )  and so
@@ -237,8 +224,7 @@ doublereal dlamch_(char *cmach)
 
         qtr = one / 4;
         savec = c;
-        d__1 = -a;
-        c = dlamc3_(&c, &d__1);
+        c = dlamc33_(&c, &a);
         lbeta = (integer) (c + qtr);
 
 /*        Now determine whether rounding or chopping occurs,  by adding a
@@ -282,15 +268,13 @@ doublereal dlamch_(char *cmach)
              fl( beta**t + 1.0 ) = 1.0. */
 
         lt = 0;
-        a = 1.;
-        c = 1.;
+        a = c = one;
 
         while (c == one) {
             ++lt;
             a *= lbeta;
             c = dlamc3_(&a, &one);
-            d__1 = -a;
-            c = dlamc3_(&c, &d__1);
+            c = dlamc33_(&c, &a);
         }
     }
 
@@ -301,8 +285,6 @@ doublereal dlamch_(char *cmach)
     return;
 
 } /* dlamc1_ */
-
-#include "f2c.h"
 
 /* Subroutine */ void dlamc2_(integer *beta, integer *t, logical *rnd,
         doublereal *eps, integer *emin, doublereal *rmin, integer *emax,
@@ -372,7 +354,6 @@ doublereal dlamch_(char *cmach)
 */
     /* Table of constant values */
     static integer c__1 = 1;
-
     /* Initialized data */
     static logical first = TRUE_;
     static logical iwarn = FALSE_;
@@ -383,29 +364,26 @@ doublereal dlamch_(char *cmach)
     double pow_di(doublereal *, integer *);
     /* Local variables */
     static logical ieee;
-    static doublereal half;
+    static doublereal half = 0.5;
     static logical lrnd;
-    static doublereal leps, zero, a, b, c;
+    static doublereal leps, zero = 0., a, b, c;
     static integer i, lbeta;
     static doublereal rbase;
     static integer lemin, lemax, gnmin;
     static doublereal small;
     static integer gpmin;
     static doublereal third, lrmin, lrmax, sixth;
-    extern /* Subroutine */ void dlamc1_(integer *, integer *, logical *,
-            logical *);
+    extern /* Subroutine */ void dlamc1_(integer *, integer *, logical *, logical *);
     extern doublereal dlamc3_(doublereal *, doublereal *);
+    extern doublereal dlamc33_(doublereal *, doublereal *);
     static logical lieee1;
-    extern /* Subroutine */ void dlamc4_(integer *, doublereal *, integer *),
-            dlamc5_(integer *, integer *, integer *, logical *, integer *,
-            doublereal *);
+    extern /* Subroutine */ void dlamc4_(integer *, doublereal *, integer *);
+    extern /* Subroutine */ void dlamc5_(integer *, integer *, integer *, logical *, integer *, doublereal *);
     static integer lt, ngnmin, ngpmin;
-    static doublereal one;
+    static doublereal one = 1.;
 
     if (first) {
         first = FALSE_;
-        zero = 0.;
-        one = 1.;
 
 /*        LBETA, LT, LRND, LEPS, LEMIN and LRMIN  are the local values of
           BETA, T, RND, EPS, EMIN and RMIN.
@@ -429,30 +407,25 @@ doublereal dlamch_(char *cmach)
 /*        Try some tricks to see whether or not this is the correct  EPS. */
 
         b = 2. / 3;
-        half = one / 2;
-        d__1 = -half;
-        sixth = dlamc3_(&b, &d__1);
+        sixth = dlamc33_(&b, &half);
         third = dlamc3_(&sixth, &sixth);
-        d__1 = -half;
-        b = dlamc3_(&third, &d__1);
+        b = dlamc33_(&third, &half);
         b = dlamc3_(&b, &sixth);
         b = abs(b);
         if (b < leps) {
             b = leps;
         }
 
-        leps = 1.;
+        leps = one;
 
         while (leps > b && b > zero) {
             leps = b;
             d__1 = half * leps;
             d__2 = 32. * (leps * leps);
             c = dlamc3_(&d__1, &d__2);
-            d__1 = -c;
-            c = dlamc3_(&half, &d__1);
+            c = dlamc33_(&half, &c);
             b = dlamc3_(&half, &c);
-            d__1 = -b;
-            c = dlamc3_(&half, &d__1);
+            c = dlamc33_(&half, &b);
             b = dlamc3_(&half, &c);
         }
 
@@ -549,7 +522,7 @@ doublereal dlamch_(char *cmach)
           RMIN as BASE**( EMIN - 1 ),  but some machines underflow during
           this computation. */
 
-        lrmin = 1.;
+        lrmin = one;
         for (i = 1; i <= 1-lemin; ++i) {
             d__1 = lrmin * rbase;
             lrmin = dlamc3_(&d__1, &zero);
@@ -571,8 +544,6 @@ doublereal dlamch_(char *cmach)
 
 } /* dlamc2_ */
 
-#include "f2c.h"
-
 doublereal dlamc3_(doublereal *a, doublereal *b)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
@@ -580,14 +551,11 @@ doublereal dlamc3_(doublereal *a, doublereal *b)
        Courant Institute, Argonne National Lab, and Rice University
        October 31, 1992
 
-
     Purpose
     =======
 
     DLAMC3  is intended to force  A  and  B  to be stored prior to doing
-
     the addition of  A  and  B ,  for use in situations where optimizers
-
     might hold one of these in a register.
 
     Arguments
@@ -598,19 +566,28 @@ doublereal dlamc3_(doublereal *a, doublereal *b)
 
    =====================================================================
 */
-/* >>Start of File<<
-       System generated locals */
-    doublereal ret_val;
-
-
-
-    ret_val = *a + *b;
-
-    return ret_val;
+    return *a + *b;
 
 } /* dlamc3_ */
 
-#include "f2c.h"
+doublereal dlamc33_(doublereal *a, doublereal *b)
+{
+/*  Purpose
+    =======
+
+    As DLAMC3, but subtract A and B instead of adding them.
+
+    Arguments
+    =========
+
+    A, B    (input) DOUBLE PRECISION
+            The values A and B.
+
+   =====================================================================
+*/
+    return *a - *b;
+
+} /* dlamc33_ */
 
 /* Subroutine */ void dlamc4_(integer *emin, doublereal *start, integer *base)
 {
@@ -618,7 +595,6 @@ doublereal dlamc3_(doublereal *a, doublereal *b)
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
        Courant Institute, Argonne National Lab, and Rice University
        October 31, 1992
-
 
     Purpose
     =======
@@ -630,7 +606,6 @@ doublereal dlamc3_(doublereal *a, doublereal *b)
 
     EMIN    (output) EMIN
             The minimum exponent before (gradual) underflow, computed by
-
             setting A = START and dividing by BASE until the previous A
             can not be recovered.
 
@@ -645,23 +620,18 @@ doublereal dlamc3_(doublereal *a, doublereal *b)
     /* System generated locals */
     doublereal d__1;
     /* Local variables */
-    static doublereal zero, a;
+    static doublereal zero = 0., a;
     static integer i;
     static doublereal rbase, b1, b2, c1, c2, d1, d2;
     extern doublereal dlamc3_(doublereal *, doublereal *);
-    static doublereal one;
+    static doublereal one = 1.;
 
     a = *start;
-    one = 1.;
     rbase = one / *base;
-    zero = 0.;
     *emin = 1;
     d__1 = a * rbase;
     b1 = dlamc3_(&d__1, &zero);
-    c1 = a;
-    c2 = a;
-    d1 = a;
-    d2 = a;
+    c1 = c2 = d1 = d2 = a;
     while (c1 == a && c2 == a && d1 == a && d2 == a) {
         --(*emin);
         a = b1;
@@ -684,8 +654,6 @@ doublereal dlamc3_(doublereal *a, doublereal *b)
     }
 
 } /* dlamc4_ */
-
-#include "f2c.h"
 
 /* Subroutine */ void dlamc5_(integer *beta, integer *p, integer *emin,
         logical *ieee, integer *emax, doublereal *rmax)
@@ -730,16 +698,9 @@ doublereal dlamc3_(doublereal *a, doublereal *b)
             The largest machine floating-point number.
 
    =====================================================================
-
-
-
-       First compute LEXP and UEXP, two powers of 2 that bound
-       abs(EMIN). We then assume that EMAX + abs(EMIN) will sum
-       approximately to the bound that is closest to abs(EMIN).
-       (EMAX is the exponent of the required number RMAX). */
+*/
     /* Table of constant values */
     static doublereal c_b5 = 0.;
-
     /* System generated locals */
     doublereal d__1;
     /* Local variables */
@@ -752,16 +713,18 @@ doublereal dlamc3_(doublereal *a, doublereal *b)
     static doublereal recbas;
     static integer exbits, expsum, try__;
 
-
+    /* First compute LEXP and UEXP, two powers of 2 that bound
+       abs(EMIN). We then assume that EMAX + abs(EMIN) will sum
+       approximately to the bound that is closest to abs(EMIN).
+       (EMAX is the exponent of the required number RMAX). */
 
     lexp = 1;
     exbits = 1;
-L10:
     try__ = lexp << 1;
-    if (try__ <= -(*emin)) {
+    while (try__ <= -(*emin)) {
         lexp = try__;
+        try__ = lexp << 1;
         ++exbits;
-        goto L10;
     }
     if (lexp == -(*emin)) {
         uexp = lexp;
@@ -793,18 +756,13 @@ L10:
 
 /*        Either there are an odd number of bits used to store a
           floating-point number, which is unlikely, or some bits are
-
           not used in the representation of numbers, which is possible,
           (e.g. Cray machines) or the mantissa has an implicit bit,
           (e.g. IEEE machines, Dec Vax machines), which is perhaps the
-
           most likely. We have to assume the last alternative.
           If this is true, then we need to reduce EMAX by one because
-
-          there must be some way of representing zero in an implicit-b
-it
+          there must be some way of representing zero in an implicit-bit
           system. On machines like Cray, we are reducing EMAX by one
-
           unnecessarily. */
 
         --(*emax);
@@ -813,7 +771,6 @@ it
     if (*ieee) {
 
 /*        Assume we are on an IEEE machine which reserves one exponent
-
           for infinity and NaN. */
 
         --(*emax);
