@@ -273,7 +273,7 @@ void kalman_filter::prediction()
   // TODO
 }
 
-vnl_double_3x4 kalman_filter::get_projective_matrix()
+vnl_double_3x4 kalman_filter::get_projective_matrix(vnl_vector_fixed<double,6>& v )
 {
   vnl_double_3x4 M_ex;
 
@@ -285,7 +285,7 @@ vnl_double_3x4 kalman_filter::get_projective_matrix()
     M_ex[i][i] = 1;
 
   for (int i=0; i<3; i++)
-    M_ex[i][3] = X_pred_[i];
+    M_ex[i][3] = v[i];
 
   return M_in_*M_ex;
 }
@@ -347,13 +347,13 @@ void kalman_filter::inc()
   //
   X_pred_ = A_*X_;
 
+  vnl_double_3x4 P = get_projective_matrix(X_pred_);
+
   // adjustion
   vnl_matrix<double> & cur_measures = observes_[cur_pos_];
 
   for (int i=0; i<num_points_; i++)
   {
-    vnl_double_3x4 P = get_projective_matrix();
-
     vnl_double_3 X;
 
     for (int j=0; j<3; j++)
@@ -376,9 +376,10 @@ void kalman_filter::inc()
   cur_pos_ = (cur_pos_+1) % queue_size_;
 
   // store the history
-  motions_[cur_pos_] = get_projective_matrix();
   X_ = X_pred_;
 
+  motions_[cur_pos_] = get_projective_matrix(X_);
+  
   if (memory_size_ < queue_size_)
     memory_size_++;
 

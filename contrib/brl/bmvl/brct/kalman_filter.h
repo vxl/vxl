@@ -54,7 +54,7 @@ class kalman_filter
   void set_H_matrix(vnl_double_3x4 &P, vnl_double_3 &X);
 
   //: computer projective matrix from predicted position
-  vnl_double_3x4 get_projective_matrix();
+  vnl_double_3x4 get_projective_matrix(vnl_vector_fixed<double,6> &v);
 
   void init_covariant_matrix();
   void init_cam_intrinsic();
