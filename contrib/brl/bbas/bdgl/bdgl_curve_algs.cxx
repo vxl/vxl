@@ -225,14 +225,15 @@ bool bdgl_curve_algs::intersect_line(vdgl_digital_curve_sptr const& dc,
   return intersection;
 }
 
-//:
-//Advance along a line and generate continguous pixels on a straight
+//: generate contiguous pixels on a straight line.
+// Advance along a line and generate contiguous pixels on a straight
 // line defined by (xs, ys) : (xe, ye).  The samples are generated
 // as values of (x, y).
 // The routine is called in a loop that generates the points, e.g.,
-//
+// \code
 //   while (line_gen(xs, ys, xe, ye, init, done, x, y))
 //   { ...
+// \endcode
 // The routine needs two internal state variables, init and done.
 // init should be set to true
 // done should be set to false
