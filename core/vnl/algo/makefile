@@ -15,6 +15,7 @@ SOURCES += vnl_complex_eigensystem.cxx
 SOURCES += vnl_symmetric_eigensystem.cxx
 SOURCES += vnl_generalized_eigensystem.cxx
 SOURCES += vnl_sparse_symmetric_eigensystem.cxx
+SOURCES += vnl_generalized_schur.cxx
 #SOURCES += $(wildcard vnl_jordan_normal_form.cxx)
 
 # optimization
