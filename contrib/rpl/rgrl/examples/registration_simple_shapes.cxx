@@ -31,7 +31,8 @@
 
 #include <vnl/vnl_random.h>
 
-#include "test_util.h"
+#include <testlib/testlib_test.h>
+void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
 typedef vcl_vector< rgrl_feature_sptr >         feature_vector;
 typedef vnl_vector_fixed<double,2>              vector_2d;
@@ -163,7 +164,8 @@ generate_data(feature_vector& feature_set)
 int
 main()
 {
-  prepare_testing();
+  // Don't allow Visual Studio to open critical error dialog boxes
+  testlib_enter_stealth_mode();
 
   // Set up the feature sets
   //
@@ -230,7 +232,7 @@ main()
 
   // Perform testing
   //
-  test_macro( "Registration of simple shapes" , reg.final_status()->error(), 1 );
+  testlib_test_start( "Registration of simple shapes" );
+  testlib_test_assert_near("", reg.final_status()->error(), 0.0, 1.0 );
+  return testlib_test_summary();
 }
-
-

@@ -48,7 +48,8 @@
 #include <rgrl/rgrl_mask.h>
 #include <rgrl/rgrl_converge_status.h>
 
-#include "test_util.h"
+#include <testlib/testlib_test.h>
+void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
 typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
 typedef vnl_vector_fixed<double,3>       vector_3d;
@@ -121,7 +122,8 @@ main( int argc, char* argv[] )
     return 1;
   }
 
-  prepare_testing();
+  // Don't allow Visual Studio to open critical error dialog boxes
+  testlib_enter_stealth_mode();
 
   // Read in the features from the external files.
   //
@@ -243,5 +245,7 @@ main( int argc, char* argv[] )
 
   // Perform testing
   //
-  test_macro( "Registration of range data", reg.final_status()->error(), 1.0e-004 );
+  testlib_test_start( "Registration of range data" );
+  testlib_test_assert_near("", reg.final_status()->error(), 0.0, 1e-4 );
+  return testlib_test_summary();
 }

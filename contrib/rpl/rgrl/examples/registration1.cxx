@@ -18,7 +18,7 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <testlib/testlib_test.h>
-#include "test_util.h"
+void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
 // BeginCodeSnippet
 #include <rgrl/rgrl_feature_based_registration.h>
@@ -103,7 +103,8 @@ main( int argc, char* argv[] )
     return 1;
   }
 
-  prepare_testing();
+  // Don't allow Visual Studio to open critical error dialog boxes
+  testlib_enter_stealth_mode();
 
   typedef vcl_vector< rgrl_feature_sptr >         feature_vector;
   typedef vnl_vector_fixed<double,2>              vector_2d;
@@ -247,7 +248,6 @@ main( int argc, char* argv[] )
 
   rgrl_feature_based_registration reg( data, conv_test );
 
-
   // EndCodeSnippet
 
   // BeginLatex
@@ -308,5 +308,7 @@ main( int argc, char* argv[] )
 
   // Perform testing
   //
-  test_macro( "Registration for introduction" , reg.final_status()->error(), 1e-2 );
+  testlib_test_start( "Registration for introduction" );
+  testlib_test_assert_near("", reg.final_status()->error(), 0.0, 1e-2 );
+  return testlib_test_summary();
 }

@@ -42,14 +42,14 @@
 #include <rgrl/rgrl_mask.h>
 #include <rgrl/rgrl_cast.h>
 
-#include "test_util.h"
+#include <testlib/testlib_test.h>
+void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
 // vnl_vector_fixed is a fixed-length, stack storage
 // vector. vnl_vector_fixed defines most of the operators defined by
 // vnl_vector, and does so efficiently.
 typedef vnl_vector_fixed<double,2>              vector_2d;
 typedef vcl_vector< rgrl_feature_sptr >         feature_vector;
-
 
 // using command/observer pattern
 class command_iteration_update: public rgrl_command
@@ -154,7 +154,8 @@ add_outliers( feature_vector& feature_set )
 int
 main()
 {
-  prepare_testing();
+  // Don't allow Visual Studio to open critical error dialog boxes
+  testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
   // Generate the feature points
   //
@@ -397,11 +398,9 @@ main()
             <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
   }
 
-
   // Perform testing
   //
-  test_macro( "Registration of simple shapes with outliers" ,
-              reg.final_status()->error(), 1 );
+  testlib_test_start( "Registration of simple shapes with outliers" );
+  testlib_test_assert_near("", reg.final_status()->error(), 0.0, 1.0 );
+  return testlib_test_summary();
 }
-
-

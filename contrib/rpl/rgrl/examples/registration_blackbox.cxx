@@ -60,7 +60,8 @@
 #include <rgrl/rgrl_mask.h>
 #include <rgrl/rgrl_converge_status.h>
 
-#include "test_util.h"
+#include <testlib/testlib_test.h>
+void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
 // vnl_vector_fixed is a fixed-length, stack storage
 // vector. vnl_vector_fixed defines most of the operators defined by
@@ -246,7 +247,8 @@ add_outliers( feature_vector& feature_points )
 int
 main()
 {
-  prepare_testing();
+  // Don't allow Visual Studio to open critical error dialog boxes
+  testlib_enter_stealth_mode();
 
   // Generate the feature points
   //
@@ -372,8 +374,7 @@ main()
 
   // Perform testing
   //
-  test_macro( "black-box Registration of simple shapes" ,
-              reg.final_status()->error(), 1 );
+  testlib_test_start( "black-box Registration of simple shapes" );
+  testlib_test_assert_near("", reg.final_status()->error(), 0.0, 1.0 );
+  return testlib_test_summary();
 }
-
-

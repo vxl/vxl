@@ -69,7 +69,7 @@ main( int argc, char* argv[] )
   if ( argc < 3 ) {
     vcl_cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
-             << " InputFeatureFile OutputFeatureFile";
+             << " InputFeatureFile OutputFeatureFile\n";
     return 1;
   }
   const char*  in_filename=   argv[1];

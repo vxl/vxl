@@ -73,7 +73,8 @@
 #include <rgrl/rgrl_event.h>
 #include <rgrl/rgrl_command.h>
 
-#include "test_util.h"
+#include <testlib/testlib_test.h>
+void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
 typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
 typedef vnl_vector_fixed<double,2>       vector_2d;
@@ -134,11 +135,12 @@ main( int argc, char* argv[] )
   if ( argc < 5 ) {
     vcl_cerr << "Missing Parameters " << vcl_endl
              << "Usage: " << argv[0]
-          << " FixedImageFeatureFileHighRes FixedImageFeatureFileLowRes MovingImageFeatureFileHighRes MovingImageFeatureFileLowRes";
+          << " FixedImageFeatureFileHighRes FixedImageFeatureFileLowRes MovingImageFeatureFileHighRes MovingImageFeatureFileLowRes\n";
     return 1;
   }
 
-  prepare_testing();
+  // Don't allow Visual Studio to open critical error dialog boxes
+  testlib_enter_stealth_mode();
 
   //read in the feature files
   //
@@ -280,5 +282,7 @@ main( int argc, char* argv[] )
 
   // Perform testing
   //
-  test_macro( "Registration with multi-resolution", reg.final_status()->error(), 1);
+  testlib_test_start( "Registration with multi-resolution" );
+  testlib_test_assert_near("", reg.final_status()->error(), 0.0, 1.0 );
+  return testlib_test_summary();
 }

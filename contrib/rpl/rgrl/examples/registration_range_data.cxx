@@ -51,11 +51,11 @@
 #include <rgrl/rgrl_event.h>
 #include <rgrl/rgrl_command.h>
 
-#include "test_util.h"
+#include <testlib/testlib_test.h>
+void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
 typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
 typedef vnl_vector_fixed<double,3>       vector_3d;
-
 
 void
 read_feature_file( const char* filename,
@@ -160,7 +160,8 @@ main( int argc, char* argv[] )
     return 1;
   }
 
-  prepare_testing();
+  // Don't allow Visual Studio to open critical error dialog boxes
+  testlib_enter_stealth_mode();
 
   // BeginLatex
   //
@@ -177,7 +178,6 @@ main( int argc, char* argv[] )
   read_feature_file( moving_file_name, moving_feature_points, 50 );
   read_feature_file( fixed_file_name, fixed_feature_points, 1 );
 
-
   const unsigned int dimension = 3;
   rgrl_feature_set_sptr moving_feature_set;
   rgrl_feature_set_sptr fixed_feature_set;
@@ -186,7 +186,6 @@ main( int argc, char* argv[] )
     new rgrl_feature_set_location<dimension>(moving_feature_points, !use_bins);
   fixed_feature_set =
     new rgrl_feature_set_location<dimension>(fixed_feature_points, !use_bins);
-
 
   // Transformation estimator
   //
@@ -293,5 +292,7 @@ main( int argc, char* argv[] )
 
   // Perform testing
   //
-  test_macro( "Registration of range data", reg.final_status()->error(), 1.0e-004 );
+  testlib_test_start( "Registration of range data" );
+  testlib_test_assert_near("", reg.final_status()->error(), 0.0, 1e-4 );
+  return testlib_test_summary();
 }

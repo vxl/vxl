@@ -73,7 +73,8 @@
 #include <rgrl/rgrl_event.h>
 #include <rgrl/rgrl_command.h>
 
-#include "test_util.h"
+#include <testlib/testlib_test.h>
+void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
 typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
 typedef vnl_vector_fixed<double,2>       vector_2d;
@@ -149,7 +150,8 @@ main( int argc, char* argv[] )
     return 1;
   }
 
-  prepare_testing();
+  // Don't allow Visual Studio to open critical error dialog boxes
+  testlib_enter_stealth_mode();
 
   // First, read in the features from the external files.
   //
@@ -359,6 +361,7 @@ main( int argc, char* argv[] )
 
   // Perform testing
   //
-  test_macro( "Registration with landmarks only",
-              reg.final_status()->error(), 1.1 );
+  testlib_test_start( "Registration with landmarks only" );
+  testlib_test_assert_near("", reg.final_status()->error(), 0.0, 1.1 );
+  return testlib_test_summary();
 }

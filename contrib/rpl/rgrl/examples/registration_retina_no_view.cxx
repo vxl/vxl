@@ -94,7 +94,8 @@
 #include <rgrl/rgrl_converge_status.h>
 #include <rgrl/rgrl_data_manager.h>
 
-#include "test_util.h"
+#include <testlib/testlib_test.h>
+void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
 typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
 typedef vnl_vector_fixed<double,2>       vector_2d;
@@ -214,14 +215,15 @@ read_landmark_file( const char* filename,
 int
 main( int argc, char* argv[] )
 {
-  if ( argc < 5 ) {
+  if ( argc < 6 ) {
     vcl_cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " FixedImageTraceFile FixedImageLandmarkFile MovingImageTraceFile MovingImageLandmarkFile MaskImage\n";
     return 1;
   }
 
-  prepare_testing();
+  // Don't allow Visual Studio to open critical error dialog boxes
+  testlib_enter_stealth_mode();
 
   // Prepare feature sets
   //
@@ -239,7 +241,6 @@ main( int argc, char* argv[] )
   read_feature_file( fixed_trace_file_name, fixed_set );
   read_landmark_file( moving_landmark_file_name, moving_landmark_set );
   read_landmark_file( fixed_landmark_file_name, fixed_landmark_set );
-
 
   const unsigned int dimension = 2;
   rgrl_feature_set_sptr moving_feature_set;
@@ -357,6 +358,7 @@ main( int argc, char* argv[] )
 
   // Perform testing
   //
-  test_macro( "Registration using invariant indexing on retinal images" ,
-              reg.final_status()->error(), 3 );
+  testlib_test_start( "Registration using invariant indexing on retinal images" );
+  testlib_test_assert_near("", reg.final_status()->error(), 0.0, 3.0 );
+  return testlib_test_summary();
 }
