@@ -7,6 +7,7 @@ fmk_libdeps += pkg_vxl:pkg_vcl
 
 fmk_libdeps += lib_vpl:lib_vcl
 fmk_libdeps += lib_vbl:lib_vcl
+fmk_libdeps += lib_vul:lib_vcl
 fmk_libdeps += lib_vtl:lib_vcl
 fmk_libdeps += lib_vgl:lib_vcl
 
@@ -25,4 +26,4 @@ fmk_libdeps += lib_vnl:lib_vcl
 fmk_libdeps += lib_vnl-algo:lib_vnl,lib_netlib
 fmk_libdeps += lib_netlib:lib_fmkc,lib_fmkm
 
-fmk_libdeps += lib_vpl,lib_vbl,lib_vtl,lib_vgl,lib_vil,lib_vnl:pkg_vxl
+fmk_libdeps += lib_vpl,lib_vbl,lib_vul,lib_vgl,lib_vil,lib_vnl:pkg_vxl

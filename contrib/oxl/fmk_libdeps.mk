@@ -2,7 +2,7 @@
 # fsm@robots.ox.ac.uk
 #
 
-fmk_libdeps += lib_osl:lib_vil,lib_vbl,lib_vnl-algo,pkg_oxl
+fmk_libdeps += lib_osl:lib_vil,lib_vul,lib_vnl-algo,lib_vbl,pkg_oxl
 
 fmk_libdeps += lib_mvox:lib_mvl
 fmk_libdeps += lib_oxp:lib_vbl,lib_vil,lib_vnl-algo
@@ -12,7 +12,7 @@ fmk_libdeps += lib_vrml:lib_vgl,lib_vnl,lib_vbl
 fmk_libdeps += lib_mvox,lib_oxp,lib_mvl,lib_vrml:pkg_oxl
 
 fmk_libdeps += lib_vgui:pkg_oxl
-fmk_libdeps += lib_vgui:lib_vpl,lib_vbl,lib_vnl-algo,lib_vil,lib_vgl
+fmk_libdeps += lib_vgui:lib_vpl,lib_vul,lib_vbl,lib_vnl-algo,lib_vil,lib_vgl
 fmk_libdeps += lib_vgui:lib_glut
 # needed for vgui_texture_hacks.cxx:
 fmk_libdeps += lib_vgui:lib_dl
