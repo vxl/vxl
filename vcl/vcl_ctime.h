@@ -3,21 +3,19 @@
 /*
   fsm@robots.ox.ac.uk
 */
-
+  
 #include "vcl_compiler.h"
 
 // Purpose: provide access to the <time.h> standard C header.
 
-#if !VCL_CXX_HAS_HEADER_CTIME
+#if !VCL_CXX_HAS_HEADER_CTIME || defined(VCL_METRO_WERKS)
 # include <time.h>
 # define vcl_generic_ctime_STD /* */
 # include "generic/vcl_ctime.h"
+#elif defined(VCL_VC)
+# include "win32/vcl_ctime.h"
 #else
-# if defined(VCL_VC)
-#  include "win32/vcl_ctime.h"
-# else
-#  include "iso/vcl_ctime.h"
-# endif
+# include "iso/vcl_ctime.h"
 #endif
 
 // ??

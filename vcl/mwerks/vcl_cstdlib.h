@@ -9,6 +9,6 @@
 #undef  vcl_abs
 #define vcl_abs vcl_abs
 inline int vcl_abs(int x) { return ::abs(x); }
-inline long vcl_abs(long x) { return ::abs(x); }
+inline long vcl_abs(long x) { return (x >= 0) ? x : -x; } // no "long ::abs(long)"
 
 #endif

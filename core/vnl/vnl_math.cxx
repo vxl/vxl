@@ -126,7 +126,8 @@ bool vnl_math_isnan(long double x) {
 // Plausible theory : 'finite' is a preprocessor macro, defined in terms of a
 // macro called 'isinf'.
 #if defined(isinf)
-# ifdef __GNUC__
+# if defined(__GNUC__) || defined(VCL_METRO_WERKS)
+// I dont know if MW accepts #warning. Comment out the #undef if not.
 #  warning macro isinf is defined
 #  undef isinf
 # else

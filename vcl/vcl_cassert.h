@@ -30,6 +30,12 @@ extern void vcl_cassert_failure(char const *, int, char const *);
 # define assert(x) do { if (!(x)) vcl_cassert_failure(__FILE__, __LINE__, #x); } while (false)
 #endif
 
+#ifdef VCL_METRO_WERKS
+// for some reason, MW's <cassert> doesn't have it's own printf() and abort() declarations.
+# include <vcl_cstdio.h>
+# include <vcl_cstdlib.h>
+#endif
+
 #else
 #if !VCL_CXX_HAS_HEADER_CASSERT
 # include <assert.h>
