@@ -1,4 +1,4 @@
-// This is brl/bseg/sdet/tests/brct_test_synthetic_data.cxx
+// This is brl/bmvl/brct/tests/brct_test_synthetic_data.cxx
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
