@@ -505,7 +505,7 @@ VDS void print_value(vcl_ostream  &s, vul_arg<int> const &argmt)
 { s << argmt(); }
 VDS int parse(vul_arg<int>* argmt, char ** argv) {
   char* endptr = 0;
-  double v = strtod(argv[0], &endptr);
+  double v = vcl_strtod(argv[0], &endptr);
   if (*endptr != '\0') {
     // There is junk after the number, or no number was found
     vcl_cerr << "vul_arg_parse: WARNING: Attempt to parse " << *argv << " as int\n";
@@ -526,7 +526,7 @@ VDS void print_value(vcl_ostream &s, vul_arg<unsigned> const &argmt)
 { s << argmt(); }
 VDS int parse(vul_arg<unsigned>* argmt, char ** argv) {
   char* endptr = 0;
-  double v = strtod(argv[0], &endptr);
+  double v = vcl_strtod(argv[0], &endptr);
   if (*endptr != '\0') {
     // There is junk after the number, or no number was found
     vcl_cerr << "vul_arg_parse: WARNING: Attempt to parse " << *argv << " as int\n";
@@ -547,7 +547,7 @@ VDS void print_value(vcl_ostream &s, vul_arg<float> const &argmt)
 { s << argmt(); }
 VDS int parse(vul_arg<float>* argmt, char ** argv) {
   char* endptr = 0;
-  argmt->value_ = (float)strtod(argv[0], &endptr);
+  argmt->value_ = (float)vcl_strtod(argv[0], &endptr);
   if (*endptr == '\0')
     return 1;
   // There is junk after the number, or no number was found
@@ -562,7 +562,7 @@ VDS void print_value(vcl_ostream &s, vul_arg<double> const &argmt)
 { s << argmt(); }
 VDS int parse(vul_arg<double>* argmt, char ** argv) {
   char* endptr = 0;
-  argmt->value_ = strtod(argv[0], &endptr);
+  argmt->value_ = vcl_strtod(argv[0], &endptr);
   if (*endptr == '\0')
     return 1;
   // There is junk after the number, or no number was found
@@ -664,7 +664,7 @@ VDS int parse(vul_arg<vcl_vector<double> >* argmt, char ** argv) {
   argmt->value_.clear();
   while (argv[0]) {
     char* endptr = 0;
-    double tmp = strtod(argv[0], &endptr);
+    double tmp = vcl_strtod(argv[0], &endptr);
     //argmt->value_
     if (*endptr == '\0') {
       argmt->value_.push_back(tmp);
