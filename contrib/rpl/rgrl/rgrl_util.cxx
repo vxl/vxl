@@ -615,6 +615,8 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
   unsigned int iteration = 0;
   unsigned int max_iterations = 25;
   bool failed = false;
+  vnl_vector<double> scaling;
+  bool ret_success;
 
   //  Basic loop:
   //  1. Calculate new estimate
@@ -642,6 +644,13 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
       return failed;
     }
 
+    // Step 1.5 Update scaling factors in transformation
+    ret_success = rgrl_util_geometric_scaling_factors( match_sets, scaling );
+    if( ret_success ) 
+      new_estimate->set_scaling_factors( scaling );
+    else 
+      vcl_cout << "WARNING in " << __FILE__ << __LINE__ << "cannot compute scaling factors!!!" << vcl_endl;
+    
     //  Step 2.  Map matches and calculate weights
     //
     for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {

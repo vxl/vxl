@@ -88,6 +88,9 @@ transform( rgrl_transformation const& xform ) const
         prod_scale *= scaling[i];
       result->scale_ = vcl_exp( vcl_log(prod_scale) / double(dim) ) * this->scale_;
     }
+  } else if( this-> scale_ ) {
+    WarningMacro( "This feature has non-zero scale value, but transformation has no scaling factors." 
+                  << "The scale of transformed features is NOT set. " );
   }
 
   return result_sptr;
@@ -102,7 +105,7 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
   assert( pt_ptr );
  
   double scale_wgt = 1;
-  if( this->scale_ ) {
+  if( this->scale_ && pt_ptr->scale_ ) {
     if( this->scale_ >= pt_ptr->scale_ )
       scale_wgt = pt_ptr->scale_ / this->scale_;
     else
