@@ -34,14 +34,14 @@ public:
   //: Constructor
   mbl_file_data_collector(vcl_string& path);
 
-/*
+#if 0
   // Copy constructor
   mbl_file_data_collector(const mbl_data_collector_base& c);
 
   // Copy operator
   mbl_file_data_collector<T>& 
       operator=( const mbl_data_collector_base& c);
-*/
+#endif
 
   //: Destructor
   virtual ~mbl_file_data_collector();

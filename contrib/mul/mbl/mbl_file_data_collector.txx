@@ -17,7 +17,7 @@
 
 template<class T>
 mbl_file_data_collector<T>::mbl_file_data_collector(vcl_string& path)
-:  wrapper_(0), bfs_(path)
+: bfs_(path), wrapper_(0)
 {
 
   path_ = path; 
@@ -34,10 +34,9 @@ mbl_file_data_collector<T>::mbl_file_data_collector(vcl_string& path)
 }
 
 
-/*
-
-CAN'T make copy constructor because have to intialize binary file stream
-some how. DON'T know how to do that!
+#if 0
+//CAN'T make copy constructor because have to intialize binary file stream
+//some how. DON'T know how to do that!
 
 //: Copy constructor
 template<class T>
@@ -66,7 +65,7 @@ mbl_file_data_collector<T>& mbl_file_data_collector<T>::
   return *this;
 
 }
-*/
+#endif
 
 
 //=======================================================================
