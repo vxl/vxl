@@ -327,6 +327,12 @@ bool vul_http_exists(char const *url)
   {
     vcl_cerr << __FILE__ ": failed to connect to host" << vcl_endl;
     //perror(__FILE__);
+#ifdef VCL_WIN32
+    closesocket(tcp_socket);
+#else
+    close(tcp_socket);
+#endif
+
     return false;
   }
 
