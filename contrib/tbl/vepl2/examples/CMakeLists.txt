@@ -1,16 +1,11 @@
 #   DESCRIPTION:
 #
 #   This is the vepl2/examples directory, containing examples programs for the
-# vepl2 (image processing) library.
+# vepl2 ("easy" image processing with vil2) library.  - PVr.
 #
-# This should make it clear how to use the filter classes with any 2D storage
-# class of your choice.  Examples using those filter classes, templated on
-# either vil_image, vnl_matrix<T>, section<T,2> or vbl_array_2d<T> are in this
-# directory.  - PVr.
-#
-#   DEPENDENCIES:  vepl2 vipl vil
+#   DEPENDENCIES:  vepl2 vipl vil2
 
-LINK_LIBRARIES( vepl2 )
+LINK_LIBRARIES( vepl2 vil2 )
 
 ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
 
