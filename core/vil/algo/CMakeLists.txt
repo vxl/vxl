@@ -5,6 +5,7 @@ SET( vil2_algo_sources
   vil2_gauss_reduce.cxx vil2_gauss_reduce.h vil2_gauss_reduce.txx
   vil2_structuring_element.cxx vil2_structuring_element.h
   vil2_binary_dilate.cxx vil2_binary_dilate.h
+  vil2_binary_erode.cxx vil2_binary_erode.h
                         vil2_convolve_1d.h
                         vil2_convolve_2d.h
                         vil2_exp_filter_1d.h
