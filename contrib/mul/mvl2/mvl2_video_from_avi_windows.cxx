@@ -5,6 +5,8 @@
 
 #include "mvl2_video_from_avi_windows.h"
 #include <vil2/vil2_flip.h>
+#include <vil2/vil2_convert.h>
+#include <vcl_cstdlib.h>
 
 mvl2_video_from_avi::mvl2_video_from_avi()
 {
@@ -70,10 +72,12 @@ int mvl2_video_from_avi::next_frame()
 
 bool mvl2_video_from_avi::get_frame(vil2_image_view<vxl_byte>& image)
 {
+  //nb doesn't allow you to load in colour videos as grey scale
+  //only loads videos according to number of planes in each frame!
   if (!is_initialized_) return false;
   BITMAPINFO bmp_info;
   BITMAPINFO* img;
-  bool use_colour;
+  bool colour_vid;
 
   getVideoFormat(bmp_info);
   PGETFRAME g_frame=AVIStreamGetFrameOpen(ppavi_,NULL);
@@ -87,23 +91,39 @@ bool mvl2_video_from_avi::get_frame(vil2_image_view<vxl_byte>& image)
   int bplanes= bmp_info.bmiHeader.biBitCount/8;
 
   if (bplanes==1)
-    use_colour=false;
+    colour_vid=false;
   else
-    use_colour=true;
-
+    colour_vid=true;
+  
   int ystep=(nx*(bpp/8) + 3)& -4;
   int xstep=bpp/8;
 
-  unsigned char* data=(unsigned char*)(img_data)+img->bmiHeader.biSize+img->bmiHeader.biClrUsed*sizeof(RGBQUAD);
+  unsigned char* data=(unsigned char*)(img_data)+img->
+    bmiHeader.biSize+img->bmiHeader.biClrUsed*sizeof(RGBQUAD);
   vil2_image_view<vxl_byte> temp_img;
-  if (use_colour)
+  if (colour_vid)
     temp_img.set_to_memory(data+2,nx,ny,bplanes,xstep,ystep,-1);
   else
     temp_img.set_to_memory(data,nx,ny,bplanes,xstep,ystep,0);
-
+  
+  
   vil2_image_view<vxl_byte> image_tmp_;
   image_tmp_=vil2_flip_ud(temp_img);
-  image.deep_copy(image_tmp_);
+  
+  if ( colour_vid == use_colour_ )
+  {
+    image.deep_copy(image_tmp_);
+  }
+  else if ( colour_vid && !use_colour_ )
+  {
+    vil2_convert_planes_to_grey( image_tmp_, image ); 
+  }
+  else
+  {
+    vcl_cout<<"ERROR: mvl2_video_from_avi_windows.cxx "<<vcl_endl;
+    vcl_cout<<"Requested colour video, but only grey scale available "<<vcl_endl;
+    vcl_abort();
+  }
 
   AVIStreamGetFrameClose(g_frame);
   return true;
