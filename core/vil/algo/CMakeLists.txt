@@ -24,11 +24,13 @@ SET( vil_algo_sources
                                vil_exp_grad_filter_1d.h
                                vil_exp_filter_2d.h
                                vil_suppress_non_max.h
-  vil_line_filter.txx         vil_line_filter.h
-  vil_threshold.txx           vil_threshold.h
+  vil_line_filter.txx          vil_line_filter.h
+  vil_threshold.txx            vil_threshold.h
                                vil_grid_merge.h
                                vil_find_4con_boundary.h
-  vil_fft.txx                 vil_fft.h
+  vil_fft.txx                  vil_fft.h
+  vil_histogram.cxx            vil_histogram.h
+  vil_histogram_equalise.cxx   vil_histogram_equalise.h
 )
 
 

@@ -37,6 +37,8 @@ DECLARE( test_algo_find_4con_boundary );
 DECLARE( test_algo_fft );
 DECLARE( test_suppress_non_max );
 DECLARE( test_rotate_image );
+DECLARE( test_algo_histogram );
+DECLARE( test_algo_histogram_equalise );
 
 void
 register_tests()
@@ -78,6 +80,8 @@ register_tests()
   REGISTER( test_algo_fft );
   REGISTER( test_suppress_non_max );
   REGISTER( test_rotate_image );
+  REGISTER( test_algo_histogram );
+  REGISTER( test_algo_histogram_equalise );
 }
 
 DEFINE_MAIN;
