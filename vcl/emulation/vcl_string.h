@@ -690,6 +690,7 @@ struct vcl_string : public vcl_basic_string <char, vcl_char_traits <char> > {
   vcl_string (const super& str, size_type pos, size_type n = npos): super(str,pos,n) {}
   vcl_string (const char* s, size_type n): super(s,n) {}
   vcl_string (const char* s): super(s) {}
+  vcl_string (const char* s, const char* t): super(s,t) {}
   vcl_string (size_type n, char c): super(n,c) {}
 #if 0
   template<class InputIterator>
