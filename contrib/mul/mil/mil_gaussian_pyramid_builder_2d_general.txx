@@ -12,7 +12,6 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_indent.h>
-#include <vgl/vgl_box_2d.h>
 #include <mil/mil_bilin_interp_2d.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_image_pyramid.h>
