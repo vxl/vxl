@@ -231,7 +231,7 @@ void* vgui_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr, unsigned 
 //: Changes the modality of the dialog.  True makes the dialog modal
 // (i.e. the dialog 'grabs' all events), this is the default.
 // False makes the dialog non-modal.
-void vgui_dialog_impl::modal(const bool)
+void vgui_dialog_impl::modal(bool)
 {
   vcl_cerr << "No function defined to change dialog modality, by default dialogs are modal\n";
 }

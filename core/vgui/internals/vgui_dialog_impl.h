@@ -126,7 +126,7 @@ class vgui_dialog_impl
   //  True makes the dialog modal (i.e. the dialog 'grabs' all events) and
   //  this is the default.  WARNING: It is dangerous to make a dialog that
   //  changes data non-modal, only messages should be non-modal.
-  virtual void modal(const bool);
+  virtual void modal(bool);
 
   //: Set the text on the cancel button.
   virtual void set_cancel_button(const char* msg) { cancel_button_text_ = msg ? msg : ""; }
