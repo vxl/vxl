@@ -45,6 +45,9 @@ Package=<4>
     Project_Dep_Name vidl
     End Project Dependency
     Begin Project Dependency
+    Project_Dep_Name vidl_vil1
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name vcsl
     End Project Dependency
     Begin Project Dependency
@@ -1062,7 +1065,40 @@ Package=<4>
 
 ###############################################################################
 
+Project: "vidl_vil1"=.\vidl_vil1\vidl_vil1.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil1
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "vil"=.\vil\vil.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name jpeg
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vil1"=.\vil1\vil1.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1128,7 +1164,7 @@ Package=<4>
     Project_Dep_Name vil
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vidl
+    Project_Dep_Name vidl_vil1
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vsol
@@ -1308,7 +1344,7 @@ Package=<4>
     Project_Dep_Name vil
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vidl
+    Project_Dep_Name vidl_vil1
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vgui
@@ -1485,6 +1521,9 @@ Package=<4>
     Project_Dep_Name vidl
     End Project Dependency
     Begin Project Dependency
+    Project_Dep_Name vidl_vil1
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name vpl
     End Project Dependency
     Begin Project Dependency
@@ -1536,7 +1575,7 @@ Package=<4>
     Project_Dep_Name vgui_mfc
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vidl
+    Project_Dep_Name vidl_vil1
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vil
