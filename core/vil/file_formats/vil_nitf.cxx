@@ -273,7 +273,7 @@ vil_nitf_image::vil_nitf_image(vil_stream* is,
   vcl_cout << method_name << "before check_image_data_offset size = ("
            << ni_ << ", " << nj_ << ")\n";
 
-  check_image_data_offset();
+  check_image_data_offset(vcl_cout, "constructor");
 
 }  // end constructor
 
@@ -531,12 +531,14 @@ vil_image_view_base_sptr vil_nitf_image::get_copy_view(
 
   assert(image_subheader_ != static_cast<vil_nitf_image_subheader_sptr>(0));
 
-  vcl_cout << method_name
-           << "i0 = " << i0
-           << "  j0 = " << j0
-           << "  ni = " << ni
-           << "  nj = "  << nj
-           << vcl_endl;
+  if (debug_level > 0) {
+      vcl_cout << method_name
+               << "i0 = " << i0
+               << "  j0 = " << j0
+               << "  ni = " << ni
+               << "  nj = "  << nj
+               << vcl_endl;
+  }
 
   // vil_pixel_format_sizeof_components should give # of bytes per pixel.
   unsigned bytes_per_pixel = vil_pixel_format_sizeof_components(this->pixel_format());
@@ -546,25 +548,29 @@ vil_image_view_base_sptr vil_nitf_image::get_copy_view(
     total_bytes = ni * nj * bytes_per_pixel;
   }
   else {
-    vcl_cout << method_name << "Reading entire image - use image size from header.\n";
+    if (debug_level > 1) {
+      vcl_cout << method_name << "Reading entire image - use image size from header.\n";
+    }
   }
 
-  vcl_cout << method_name << "image size get_image_length = "
-           << get_image_length() << vcl_endl
-           << method_name << "image size from get_image_data_length(0) = "
-           << message_header_->get_image_data_length(0) << vcl_endl
+  if (debug_level > 1) {
+      vcl_cout << method_name << "image size get_image_length = "
+	       << get_image_length() << vcl_endl
+	       << method_name << "image size from get_image_data_length(0) = "
+	       << message_header_->get_image_data_length(0) << vcl_endl
 
-           << method_name << "bits_per_pixel = " << get_bits_per_pixel() << vcl_endl
-           << method_name << "bits_per_component = " << get_bits_per_component() << vcl_endl
+	       << method_name << "bits_per_pixel = " << get_bits_per_pixel() << vcl_endl
+	       << method_name << "bits_per_component = " << get_bits_per_component() << vcl_endl
 
-           << method_name << "pixel_format    = " << pixel_format() << vcl_endl
-           << method_name << "bytes_per_pixel = " << bytes_per_pixel << vcl_endl
-           << method_name << "total_bytes = " << total_bytes << vcl_endl
+	       << method_name << "pixel_format    = " << pixel_format() << vcl_endl
+	       << method_name << "bytes_per_pixel = " << bytes_per_pixel << vcl_endl
+	       << method_name << "total_bytes = " << total_bytes << vcl_endl
 
-           << method_name << "origin = (" << i0 << ", " << j0 << ")\n"
-           << method_name << "size = (" << ni << ", " << nj << ", "
-           << this->nplanes() << ")\n"
-           << method_name << "block_size_x = " << get_block_size_x() << vcl_endl;
+	       << method_name << "origin = (" << i0 << ", " << j0 << ")\n"
+	       << method_name << "size = (" << ni << ", " << nj << ", "
+	       << this->nplanes() << ")\n"
+	       << method_name << "block_size_x = " << get_block_size_x() << vcl_endl;
+  }
 
   if (image_subheader_->NBANDS == 1) {
     image_view = get_single_band_view(i0, ni, j0, nj);
@@ -633,6 +639,7 @@ vil_image_view_base_sptr vil_nitf_image::get_single_band_view(
   }  // end switch pixel_format
 
   return image_view;
+
 }  // end method get_single_band_view
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -694,10 +701,17 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
     total_bytes = ni * nj * bytes_per_pixel;
   }
   else {
-    vcl_cout << method_name << "Reading entire image - use image size from header.\n";
+    if (debug_level > 1) {
+      vcl_cout << method_name << "Reading entire image - use image size from header.\n";
+    }
   }
 
   buffer = new vil_memory_chunk(total_bytes, pixel_format());
+
+  // ALWAYS CHECK IMAGE OFFSET FOR NOW.
+  if (debug_level > -1) { 
+    check_image_data_offset (vcl_cout, method_name) ;
+  }
 
   if (debug_level > 0) {
       vcl_cout << method_name
@@ -787,14 +801,17 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
       ++read_count;
       ++blocks_read;
 
-      if (bytes_read != bytes_per_block)
+      if (bytes_read < bytes_per_block)
       {
         vcl_cerr << method_name
-                 << "WARNING: image_block column = " << image_block_col
+                 << "WARNING: number of bytes read = " << bytes_read
+                 << " less than requested = " << bytes_per_block << "\n"
+                 << "image_block column = " << image_block_col
                  << "  block row = " << block_row
-                 << "  block column = " << block_col
-                 << " - number of bytes read = " << bytes_read
-                 << " less than requested = " << bytes_per_read << vcl_endl;
+                 << "  block column = " << block_col << "\n"
+		 << "image_data_offset = " << get_image_data_offset()
+		 << "  block_offset = " << block_offset 
+		 << vcl_endl;
         continue;
       }
       if (reverse_bytes()) {
@@ -922,33 +939,35 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
     }
   }  // end for block_row < max_block_x
 
-  vcl_cout << "##### " << method_name << "finish read loops\n";
+  if (debug_level > 1) {
+      vcl_cout << "##### " << method_name << "finish read loops\n";
 
-  vcl_clock_t finish = vcl_clock();
+      vcl_clock_t finish = vcl_clock();
 
-  vcl_cout << "finish reading input = " << finish << vcl_endl;
-  display_elapsed_time(start, finish, "read image bytes");
+      vcl_cout << "finish reading input = " << finish << vcl_endl;
+      display_elapsed_time(start, finish, "read image bytes");
 
-  vcl_cout << method_name << "start_block_x = " << start_block_x
-           << "  max_block_x = " << max_block_x << vcl_endl
-           << method_name << "start_block_y = " << start_block_y
-           << "  max_block_y = " << max_block_y << vcl_endl
-           << "blocks_read = " << blocks_read << vcl_endl;
-  unsigned long expected_read_count = blocks_read * get_block_size_y();
-  vcl_cout << "buffers read = " << read_count
-           << "  expected value = " << expected_read_count << vcl_endl
-           << method_name << "total bytes read = " << total_read_count << vcl_endl
-           << method_name << "last_image_row_num = " << last_image_row_num << vcl_endl
-           << method_name << "buffer->size = " << buffer->size() << vcl_endl
-           << "last_image_offset = " << last_image_offset
-           << "  last within_row_offset = " << within_row_offset << vcl_endl;
-  diff = buffer->size() - last_image_offset;
-  vcl_cout << method_name << "buffer end - last_image_offset = " << diff
-           << vcl_endl;
+      vcl_cout << method_name << "start_block_x = " << start_block_x
+	       << "  max_block_x = " << max_block_x << vcl_endl
+	       << method_name << "start_block_y = " << start_block_y
+	       << "  max_block_y = " << max_block_y << vcl_endl
+	       << "blocks_read = " << blocks_read << vcl_endl;
+      unsigned long expected_read_count = blocks_read * get_block_size_y();
+      vcl_cout << "buffers read = " << read_count
+	       << "  expected value = " << expected_read_count << vcl_endl
+	       << method_name << "total bytes read = " << total_read_count << vcl_endl
+	       << method_name << "last_image_row_num = " << last_image_row_num << vcl_endl
+	       << method_name << "buffer->size = " << buffer->size() << vcl_endl
+	       << "last_image_offset = " << last_image_offset
+	       << "  last within_row_offset = " << within_row_offset << vcl_endl;
+      diff = buffer->size() - last_image_offset;
+      vcl_cout << method_name << "buffer end - last_image_offset = " << diff
+	       << vcl_endl;
+  }
 
   if (total_read_count != total_bytes) {
     vcl_cerr << method_name << "WARNING: image size = " << total_bytes
-             << " bytes read = " << total_read_count << vcl_endl;
+             << " != bytes read = " << total_read_count << vcl_endl;
   }
 
 #if DEBUG
@@ -1132,17 +1151,22 @@ void  vil_nitf_image::calculate_max_block(
   max_block_pixels = block_size;
 
   max_block = (j0 + nj) / block_size;
-  vcl_cout << method_name << "initial value of max_block = "
-           << max_block << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << method_name << "initial value of max_block = "
+             << max_block << vcl_endl;
+  }
 
   if ((j0 + nj) % block_size != 0)
   {
     max_block_pixels = (j0 + nj) - (max_block * block_size);
     ++max_block;
 
-    vcl_cout << method_name << "rightmost pixel not on block boundary\n"
-             << "  set max block = " << max_block
-             << ", offset for max block = " << max_block_pixels << vcl_endl;
+    if (debug_level > 1) {
+      vcl_cout << method_name << "rightmost pixel not on block boundary\n"
+               << "  set max block = " << max_block
+               << ", offset for max block = " << max_block_pixels << vcl_endl;
+    }
   }
 }  // end calculate_max_block
 
@@ -1388,7 +1412,7 @@ InterleaveType vil_nitf_image::get_interleave_type() const
 // \return calculated length - current file position.
 //
 ///////////////////////////////////////////////////////////////
-int vil_nitf_image::check_image_data_offset() const
+int vil_nitf_image::check_image_data_offset (vcl_ostream& out, vcl_string caller) const
 {
   static vcl_string method_name = "vil_nitf_image::check_image_data_offset: ";
 
@@ -1405,21 +1429,28 @@ int vil_nitf_image::check_image_data_offset() const
 
   if (diff != 0)
   {
-    vcl_cout << method_name << "WARNING:\n"
+    out << method_name ;
+    if (caller.length() > 0) {
+      out << " from " << caller << ": " ;
+    }
+    out << "WARNING:\n"
              << "  file position and calculated offset differ by "
              << diff << " bytes.\n"
-             << "  Using current file position.\n"
+             << "  Using current file position = " << get_image_data_offset() << ".\n"
              << "  message header length = "
-             << message_header_->GetHeaderLength() << vcl_endl
+             << message_header_->GetHeaderLength() << "\n"
              << "  image header length   = "
-             << message_header_->get_image_header_length() << vcl_endl
-             << "  sum           = " << header_length_sum << vcl_endl
-             << "  file_position = " << get_image_data_offset() << vcl_endl;
+             << message_header_->get_image_header_length() << "\n"
+             << "  total header length   = " << header_length_sum 
+	     << vcl_endl ;
   }
   else {
-    vcl_cout << method_name
-             << "file position and calculated header offset agree = "
-             << get_image_data_offset() << vcl_endl;
+    out << method_name ;
+    if (caller.length() > 0) {
+      out << " from " << caller << ": " ;
+    }
+    out << "file position and calculated header offset agree = "
+	<< get_image_data_offset() << vcl_endl;
   }
 
   return diff;
