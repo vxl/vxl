@@ -23,7 +23,7 @@ vil_image vepl_x_gradient(vil_image const& image, double scale, double shift)
     typedef unsigned char ubyte;
     vil_memory_image_of<vil_rgb<ubyte> > mem(image); // load in memory to pass to filter
     vil_memory_image_of<vil_rgb<ubyte> > out(image);
-    vipl_x_gradient<vil_image,vil_image,vil_rgb<ubyte> ,vil_rgb<ubyte> ,vipl_trivial_pixeliter> op(scale, shift);
+    vipl_x_gradient<vil_image,vil_image,vil_rgb<ubyte> ,vil_rgb<ubyte> ,vipl_trivial_pixeliter> op(scale, vil_rgb<ubyte>(shift) );
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
