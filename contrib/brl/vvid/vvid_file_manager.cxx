@@ -299,7 +299,7 @@ void vvid_file_manager::display_topology()
 
 void vvid_file_manager::display_bargraph(vcl_vector<float> const& data)
 {
-  if(!bargraph_)
+  if (!bargraph_)
     return;
   bargraph_->update(data);
 }
@@ -323,7 +323,7 @@ void vvid_file_manager::load_video_file()
   load_video_dlg.checkbox("Cache Frames ", cache_frames_);
   if (!load_video_dlg.ask())
     return;
-  
+
   my_movie_ = vidl_vil1_io::load_movie(image_filename.c_str());
   if (!my_movie_) {
     vgui_error_dialog("Failed to load movie file");
@@ -452,11 +452,11 @@ void vvid_file_manager::un_cached_play()
           display_image();
         else if (video_process_->get_output_type()==vpro_video_process::TOPOLOGY)
           display_topology();
-        if(video_process_->graph_flag())
-          {
-            vcl_vector<float> const& data = video_process_->graph();
-            this->display_bargraph(data);
-          }
+        if (video_process_->graph_flag())
+        {
+          vcl_vector<float> const& data = video_process_->graph();
+          this->display_bargraph(data);
+        }
       }
     }
     grid_->post_redraw();
@@ -481,7 +481,7 @@ void vvid_file_manager::play_video()
   easy0_->clear_all();
   frame_trail_.clear();
   //return the display to the first frame after the play is finished
-  
+
   if (cache_frames_)
   {
     this->cached_play();
@@ -492,7 +492,6 @@ void vvid_file_manager::play_video()
     this->un_cached_play();
     if (!my_movie_)
       return;
-	
 
     if (video_process_&&video_process_->get_output_image())
       itab1_->set_image(video_process_->get_output_image());
@@ -500,13 +499,12 @@ void vvid_file_manager::play_video()
 #if 0
       itab1_->set_image(my_movie_->get_image(0));
 #endif
-	{
-		vil1_image null;
-		itab1_->set_image(null);
-	}
+    {
+      vil1_image null;
+      itab1_->set_image(null);
+    }
   }
   this->post_redraw();
-
 }
 
 //Player control functions
@@ -804,8 +802,8 @@ void vvid_file_manager::compute_info_tracking()
     strk_info_tracker_process* vitp = new strk_info_tracker_process(tp);
     video_process_ = vitp;
     video_process_->add_input_topology_object(to);
-    if(tp.use_background_)
-      if(!background_model_)
+    if (tp.use_background_)
+      if (!background_model_)
         vcl_cout << "In vvid_file_manager::compute_info_tracking() -"
                  << " no background model\n";
       else
@@ -816,13 +814,13 @@ void vvid_file_manager::compute_info_tracking()
     if (output_hist)
       if (!vitp->set_hist_output_file(hist_file))
         return;
-    if(display_hist)
-      {
-        vgui_easy2D_tableau_sptr easy;
-        easy.vertical_cast(easy1_);
-        bargraph_ = new bgui_bargraph_clipon_tableau(easy);
-        bargraph_->set_color_vector(vitp->color_index());
-      }
+    if (display_hist)
+    {
+      vgui_easy2D_tableau_sptr easy;
+      easy.vertical_cast(easy1_);
+      bargraph_ = new bgui_bargraph_clipon_tableau(easy);
+      bargraph_->set_color_vector(vitp->color_index());
+    }
   }
 }
 
@@ -847,7 +845,7 @@ void vvid_file_manager::save_display(int /* frame */)
 void vvid_file_manager::display_poly_track()
 {
   start_frame_ = 0;
-  if(my_movie_)
+  if (my_movie_)
     end_frame_ = my_movie_->length()-1;
   else
     end_frame_=0;
@@ -1101,7 +1099,7 @@ void vvid_file_manager::display_ihs()
 {
   video_process_  = new vpro_ihs_process();
 }
-  
+
 void vvid_file_manager::create_background_model()
 {
   vcl_cout << "Make the background model polygon ...\n";
@@ -1119,19 +1117,19 @@ void vvid_file_manager::create_background_model()
 
 void vvid_file_manager::save_frame()
 {
-  vil1_image img = itab0_->get_image(); 
-  if(!img)
-    {
-      vcl_cout << "In vvid_file_manager::save_frame() - no image\n";
-      return;
-    }
+  vil1_image img = itab0_->get_image();
+  if (!img)
+  {
+    vcl_cout << "In vvid_file_manager::save_frame() - no image\n";
+    return;
+  }
   vgui_dialog file_dialog("Frame Image File");
   static vcl_string image_file;
   static vcl_string ext = "tif";
   file_dialog.file("Track File:", ext, image_file);
   if (!file_dialog.ask())
     return;
-  if(!vil1_save(img, image_file.c_str()))
+  if (!vil1_save(img, image_file.c_str()))
     vcl_cout << "In vvid_file_manager::save_frame() - save failed\n";
 }
 
@@ -1146,7 +1144,7 @@ void vvid_file_manager::save_half_res()
   vpro_half_res_process* hrp = new vpro_half_res_process(video_file);
   video_process_ = hrp;
   this->play_video();
-}  
+}
 
 void vvid_file_manager::create_c_and_g_tracking_face()
 {
@@ -1187,11 +1185,11 @@ void vvid_file_manager::create_c_and_g_tracking_face()
   vsol_polygon_2d_sptr poly = bsol_algs::poly_from_box(box);
   easy0_->add_vsol_polygon_2d(poly);
   //Get the tracking face
-  if(!vf.detect_vehicle())
-    {
-      vcl_cout << "Vehicle Detection Failed\n";
-      return;
-    }
+  if (!vf.detect_vehicle())
+  {
+    vcl_cout << "Vehicle Detection Failed\n";
+    return;
+  }
   vtol_face_2d_sptr f = vf.vehicle_track_face();
   easy0_->set_temp(f->cast_to_topology_object());
   easy0_->add_face(f);
@@ -1211,19 +1209,20 @@ void vvid_file_manager::display_tracked_hist_data()
   unsigned int n_int_bins, n_grad_dir_bins, n_color_bins;
   float diameter, aspect_ratio;
   vnl_matrix<float> hist_data;
-  if(!strk_io::read_histogram_data(hist_instr, start_frame, n_frames,
-                                   n_pixels, diameter, aspect_ratio,
-                                   n_int_bins, n_grad_dir_bins, n_color_bins,
-                                   hist_data))
+  if (!strk_io::read_histogram_data(hist_instr, start_frame, n_frames,
+                                    n_pixels, diameter, aspect_ratio,
+                                    n_int_bins, n_grad_dir_bins, n_color_bins,
+                                    hist_data))
     return;
-  vil1_memory_image_of<float> temp = 
+  vil1_memory_image_of<float> temp =
     brip_vil1_float_ops::convert_to_float(hist_data);
-  vil1_memory_image_of<unsigned char> image = 
+  vil1_memory_image_of<unsigned char> image =
     brip_vil1_float_ops::convert_to_byte(temp);
   easy1_->get_image_tableau()->set_image(image);
   easy1_->post_redraw();
   vgui::run_till_idle();
 }
+
 // capture histogram data from a prestored track
 void vvid_file_manager::capture_feature_data()
 {
