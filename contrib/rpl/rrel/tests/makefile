@@ -1,5 +1,6 @@
 USES = vxl rpl mul
 include ${IUEROOT}/vxl/vnl/algo/config.mk
+include ${IUEROOT}/vxl/vul/config.mk
 
 TESTS += test_homography2d_est.cxx
 TESTS += test_irls.cxx
