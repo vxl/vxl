@@ -21,4 +21,8 @@ template<> vcl_string mil_image_2d_of<float>::is_a() const
 template<> vcl_string mil_image_2d_of<char>::is_a() const
 {  return vcl_string("mil_image_2d_of<char>"); }
 
+// Specialise the is_a() for short
+template<> vcl_string mil_image_2d_of<short>::is_a() const
+{  return vcl_string("mil_image_2d_of<short>"); }
+
 
