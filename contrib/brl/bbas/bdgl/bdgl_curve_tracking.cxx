@@ -234,7 +234,6 @@ void bdgl_curve_tracking :: write_tracks(bdgl_tracker_curve_sptr curve,
     {
       vcl_ofstream f(fname.c_str());
       double max_length=0;
-      int max_curve_no;
       f<<"# CONTOUR_EDGE_MAP : canny+van-ducks\n";
       f<<"# .cem files\n";
       f<<"# Format :\n";
@@ -269,7 +268,6 @@ void bdgl_curve_tracking :: write_tracks(bdgl_tracker_curve_sptr curve,
 void bdgl_curve_tracking :: level_order_traversal(bdgl_tracker_curve_sptr curve,vcl_list<bdgl_tracker_curve_sptr> & tr)
 {
   int front=0;
-  int rear=0;
   tr.clear();
   vcl_list<bdgl_tracker_curve_sptr> q;
   if (!curve)
