@@ -33,7 +33,7 @@ int main(int argc, char**argv)
     vcl_cout << "FMatrixComputeLinear:\nF = " << f << vcl_endl;
 
     double d = 0;
-    for(int i = 0; i < points1.size(); ++i)
+    for(unsigned int i = 0; i < points1.size(); ++i)
       d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }
@@ -48,7 +48,7 @@ int main(int argc, char**argv)
     vcl_cout << "FMatrixCompute7Point:\nF = " << f << vcl_endl;
 
     double d = 0;
-    for(int i = 0; i < points1.size(); ++i)
+    for(unsigned int i = 0; i < points1.size(); ++i)
       d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }
@@ -61,7 +61,7 @@ int main(int argc, char**argv)
     vcl_cout << "FMatrixComputeMLESAC with rank truncation:\nF = " << f << vcl_endl;
 
     double d = 0;
-    for(int i = 0; i < points1.size(); ++i)
+    for(unsigned int i = 0; i < points1.size(); ++i)
       d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }
@@ -74,7 +74,7 @@ int main(int argc, char**argv)
     vcl_cout << "FMatrixComputeRANSAC with rank truncation:\nF = " << f << vcl_endl;
 
     double d = 0;
-    for(int i = 0; i < points1.size(); ++i)
+    for(unsigned int i = 0; i < points1.size(); ++i)
       d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }
@@ -87,7 +87,7 @@ int main(int argc, char**argv)
     vcl_cout << "FMatrixComputeLMedSq with rank truncation:\nF = " << f << vcl_endl;
 
     double d = 0;
-    for(int i = 0; i < points1.size(); ++i)
+    for(unsigned int i = 0; i < points1.size(); ++i)
       d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }

@@ -20,7 +20,7 @@ double FMatrixComputeLMedSq::calculate_term(vcl_vector<double>& residuals, vcl_v
   double M = median(residuals);
   double thresh = inthresh_;
   thresh *= M;
-  for(int i = 0; i < residuals.size(); i++) {
+  for(unsigned int i = 0; i < residuals.size(); i++) {
     if(residuals[i] < thresh) {
       inlier_list[i] = true;
       count++;

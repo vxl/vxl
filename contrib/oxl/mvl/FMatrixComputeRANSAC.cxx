@@ -18,7 +18,7 @@ FMatrixComputeRANSAC::~FMatrixComputeRANSAC() {}
 
 double FMatrixComputeRANSAC::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count) {
   count = 0;
-  for(int i = 0; i < residuals.size(); i++) {
+  for(unsigned int i = 0; i < residuals.size(); i++) {
     if(residuals[i] < inthresh_) {
       inlier_list[i] = true;
       count++;
