@@ -1,3 +1,4 @@
+#include <bseg/strk/strk_io.h>
 #include <bseg/strk/strk_art_info_model_sptr.h>
 #include <bseg/strk/strk_tracking_face_2d_sptr.h>
 
@@ -15,6 +16,7 @@
 
 #include <bseg/strk/strk_art_model_display_process.h>
 #include <bseg/strk/strk_corr_tracker_process.h>
+#include <bseg/strk/strk_feature_capture_process.h>
 #include <bseg/strk/strk_info_model_tracker_process.h>
 #include <bseg/strk/strk_info_tracker_process.h>
 #include <bseg/strk/strk_track_display_process.h>
