@@ -95,8 +95,9 @@
 //                         buffer, angle, to cache between edgel detection phases.
 //-----------------------------------------------------------------------------
 
-
+#include <vcl_iostream.h>
 class gevd_bufferxy;
+
 
 class gevd_step
 {
@@ -127,6 +128,9 @@ public:
   static float NoiseResponseToFilter(const float noiseSigma,
                                      const float smoothSigma,
                                      const float filterFactor);
+
+  friend vcl_ostream& operator << (vcl_ostream& os, const gevd_step& st);
+  friend vcl_ostream& operator << (vcl_ostream& os, gevd_step& st);
 
 protected:
   float smoothSigma;                   // spatial smoothing

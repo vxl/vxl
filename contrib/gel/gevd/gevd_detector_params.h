@@ -96,10 +96,6 @@
 //  bool borderp:               If true, insert virtual contours at the border
 //                              to close regions. Nominally false.
 //
-//  float depth:                In the case of range images set the third coor-
-//                              dinate of edgel locations is set to the image depth.
-//                              For intensity images this parameter is the default
-//                              constant depth value.  Nominally 0.0.
 //
 // .SECTION Author:
 //             Joseph L. Mundy - November 1997
@@ -115,15 +111,17 @@ class gevd_detector_params : public gevd_param_mixin
 {
   public :
 
-  gevd_detector_params(float smooth_sigma = 1.0, float noise_w = 0.5,
-                 float noise_m = 1, bool automatic_t = true,
-                 int aggressive_jc = -1, int minl = 6,
-                 float maxgp = 2.23606, float minjmp = 1.0,
-                 float contour_f = 1.0, float junction_f = 1.5,
-                 bool recover_j = true, bool equal_spacing=true,
-                 bool follow_b = true,  float default_d = 0,
-                 float ang = 10, float sep = 1, int min_corner_len = 5,
-                 int cyc = 2, int ndim = 2);
+  gevd_detector_params(float smooth_sigma = 1.0, float noise_w = -0.5,
+                       float noise_m = 2, bool automatic_t = false,
+                       int aggressive_jc = 1, int minl = 4,
+                       float maxgp = 4, float minjmp = 0.1,
+                       float contour_f = 2.0, float junction_f = 1.0,
+                       bool recover_j = true, bool equal_spacing=true,
+                       bool follow_b = true,  
+                       bool peaks_only=false,
+                       bool valleys_only=false,
+                       float ang = 10, float sep = 1, int min_corner_len = 5,
+                       int cyc = 2, int ndim = 2);
 
   gevd_detector_params(const gevd_detector_params& old_params);
   ~gevd_detector_params(){};
@@ -131,6 +129,12 @@ class gevd_detector_params : public gevd_param_mixin
   bool SanityCheck();
   void Describe(ParamModifier& mod);
 
+  void set_noise_weight(float noise_weight);
+  void set_noise_multiplier(float noise_multiplier);
+  void set_automatic_threshold(bool automatic_threshold);
+  void set_aggressive_junction_closure(int aggressive_junction_closure);
+  void set_close_borders(bool close_borders);
+  
 protected:
   void InitParams(float smooth_sigma, float noise_w,
                   float noise_m, bool automatic_t,
@@ -138,7 +142,9 @@ protected:
                   float maxgp, float minjmp,
                   float contour_f, float junction_f,
                   bool recover_j, bool equal_spacing,
-                  bool follow_b,  float default_d,
+                  bool follow_b,  
+                  bool peaks_only,
+                  bool valleys_only,
                   float ang = 10, float sep = 1, int min_corner_len = 5,
                   int cyc = 2, int ndim = 2);
 
@@ -160,7 +166,11 @@ public:
   float maxGap;   // Bridge small gaps up to max_gap across.
   bool spacingp;  // equalize spacing?
   bool borderp;   // insert virtual border for closure?
-  float depth;    // default depth of edgel point coordinates
+  //
+  // Fold detection parameters
+  //
+  bool peaks_only; //Only return peaks, d^2I/dn^2 < 0, n is normal dir to ridge
+  bool valleys_only; //Only return valeys, d^2I/dn^2 > 0
   //
   // Parameters for corner detection on edgel chains
   //

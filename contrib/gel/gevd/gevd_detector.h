@@ -94,10 +94,6 @@
 //  bool borderp:               If true, insert virtual contours at the border
 //                              to close regions. Nominally false.
 //
-//  float depth:                In the case of range images set the third coor-
-//                              dinate of edgel locations is set to the image depth.
-//                              For intensity images this parameter is the default
-//                              constant depth value.  Nominally 0.0.
 //
 // .SECTION Author:
 //             Jane S. Liu - 3/27/95
@@ -116,15 +112,11 @@
 class gevd_bufferxy;
 
 #include <vcl_vector.h>
+#include <vcl_iostream.h>
+#include <vil/vil_image.h>
 
-// #undef Image
-class vil_image;
-class vtol_vertex_2d;
-class vtol_edge_2d;
-// class vcl_vector<vtol_edge_2d *>;
-// class IUPointGroup;
-//#include <cool/decls.h>
-
+#include <vtol/vtol_vertex_2d.h>
+#include <vtol/vtol_edge_2d.h>
 #include "gevd/gevd_detector_params.h"
 
 class gevd_detector : public gevd_detector_params
@@ -134,7 +126,7 @@ public:
   // be the most important in controlling performance - JLM
   //
   gevd_detector(gevd_detector_params& params);
-  gevd_detector(vil_image, float smoothSigma = 1.0, float noiseSigma = -0.5,
+  gevd_detector(vil_image, float smoothSigma = 1.0, float noiseSigma =2.0,
            float contourFactor = 1.0, float junctionFactor = 1.5,
            int minLength = 6, float maxGap = 2.23606, float minJump=1.0);
   ~gevd_detector();
@@ -142,21 +134,21 @@ public:
   // External interfaces
   //Step contour detection - various return formats
 
-  void DoContourDetector(vcl_vector<vtol_edge_2d *>*);
+  void DoContourDetector(vcl_vector<vtol_edge_2d_sptr >*);
 
   // New versions using the parameter block
 
   vcl_vector<vtol_edge_2d *>  DoContourDetector(vil_image image);
-  void  DoContourDetector(vil_image image, vcl_vector<vtol_edge_2d *>& edgels);
+  void  DoContourDetector(vil_image image, vcl_vector<vtol_edge_2d_sptr >& edgels);
 
   //Fold contour detection
-  void DoFoldContourDetector(vil_image image, vcl_vector<vtol_edge_2d *>& edgels);
+  void DoFoldContourDetector(vil_image image, vcl_vector<vtol_edge_2d_sptr >& edgels);
 
   //Corner detection using curvature on edgel chains
   //GEOFF  void  DoCornerDetector(vil_image image, IUPointGroup& corners);
 
   //Corner detection using curvature on edgel chains
-  void  DoBreakCorners(vcl_vector<vtol_edge_2d *>& in_edgels, vcl_vector<vtol_edge_2d *>& out_edgels);
+  void  DoBreakCorners(vcl_vector<vtol_edge_2d_sptr >& in_edgels, vcl_vector<vtol_edge_2d_sptr >& out_edgels);
 
   // internal interfaces
   bool DoContour();
@@ -172,9 +164,12 @@ public:
 
   gevd_bufferxy* GetBufferFromImage();
 
-  vcl_vector<vtol_vertex_2d*> *GetVertices() {return vertices;}
-  vcl_vector<vtol_edge_2d*> *GetEdges() {return edges;}
+  vcl_vector<vtol_vertex_2d_sptr> *GetVertices() {return vertices;}
+  vcl_vector<vtol_edge_2d_sptr> *GetEdges() {return edges;}
   void SetImage(vil_image img) {image = img;}
+
+  void print(vcl_ostream &strm=vcl_cout) const;
+
 
 protected:
   void UnProtectLists();
@@ -188,8 +183,8 @@ protected:
   gevd_bufferxy *edgel,                      // output from DoStep
     *direction, *locationx, *locationy, *grad_mag, *angle; // detect step/fold
   int *junctionx, *junctiony, njunction; // junctions found
-  vcl_vector<vtol_vertex_2d*>* vertices; // network of linked edges/vertices
-  vcl_vector<vtol_edge_2d*>* edges;
+  vcl_vector<vtol_vertex_2d_sptr >* vertices; // network of linked edges/vertices
+  vcl_vector<vtol_edge_2d_sptr >* edges;
 
   float filterFactor;     // factor in convolution filter
   float hysteresisFactor; // hysteresis factor

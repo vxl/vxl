@@ -107,19 +107,10 @@
 //  Joe Mundy       (1999) Modified ::InsertBorder to use ROI bounds
 //-----------------------------------------------------------------------------
 
-//#include <cool/decls.h>
-//#include <Basics/bufferxy.h> // for inline accessors
-//#include <Detection/dll.h>
-
 #include <vcl_vector.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
-
-#include "gevd_bufferxy.h"
-
-
-//class Vertex;
-//class vtol_edge_2d;
+#include <gevd/gevd_bufferxy.h>
 
 class gevd_contour
 {
@@ -132,39 +123,33 @@ public:
   bool FindNetwork(gevd_bufferxy& edgels, // link pixels into network
                    const int njunction, // junctions detected previously
                    const int* junctionx, const int* junctiony,
-                   vcl_vector<vtol_edge_2d *>*& edges,
-                   vcl_vector<vtol_vertex_2d *>*& vertices);
-  void SubPixelAccuracy(vcl_vector<vtol_edge_2d *>& edges, // insert subpixel
-                        vcl_vector<vtol_vertex_2d *>& vertices, // accuracy
+                   vcl_vector<vtol_edge_2d_sptr>*& edges,
+                   vcl_vector<vtol_vertex_2d_sptr >*& vertices);
+  void SubPixelAccuracy(vcl_vector<vtol_edge_2d_sptr>& edges, // insert subpixel
+                        vcl_vector<vtol_vertex_2d_sptr >& vertices, // accuracy
                         const gevd_bufferxy& locationx, // along normal to
                         const gevd_bufferxy& locationy); // contour only
-  void InsertBorder(vcl_vector<vtol_edge_2d *>& edges, // border location = 3
-                    vcl_vector<vtol_vertex_2d *>& vertices); // virtual chain/junction
+  void InsertBorder(vcl_vector<vtol_edge_2d_sptr>& edges, // border location = 3
+                    vcl_vector<vtol_vertex_2d_sptr >& vertices); // virtual chain/junction
 
-  static void EqualizeSpacing(vcl_vector<vtol_edge_2d *>& chains); // uniform spacing
-  static void SetDepth(vcl_vector<vtol_edge_2d *>& edges,
-                       vcl_vector<vtol_vertex_2d *>& vertices,
-                       float depth=0); // default for 2D edges/vertices
-  static void InterpolateDepth(vcl_vector<vtol_edge_2d *>& edges, // insert depth z
-                               vcl_vector<vtol_vertex_2d *>& vertices, // by interp
-                               const gevd_bufferxy& image); // from original image
-  static void Translate(vcl_vector<vtol_edge_2d *>& edges, // translate loc to center
-                        vcl_vector<vtol_vertex_2d *>& vertices, // instead of upper-left
+  static void EqualizeSpacing(vcl_vector<vtol_edge_2d_sptr>& chains); // uniform spacing
+  static void Translate(vcl_vector<vtol_edge_2d_sptr>& edges, // translate loc to center
+                        vcl_vector<vtol_vertex_2d_sptr >& vertices, // instead of upper-left
                         const float tx=0.5, const float ty = 0.5,
                         const float tz = 0);
-  static void ClearNetwork(vcl_vector<vtol_edge_2d *>*& edges, // remove network of edges
-                           vcl_vector<vtol_vertex_2d *>*& vertices); // and vertices
-  static gevd_bufferxy* CreateEdgeMap(vcl_vector<vtol_edge_2d *>&,
+  static void ClearNetwork(vcl_vector<vtol_edge_2d_sptr>*& edges, // remove network of edges
+                           vcl_vector<vtol_vertex_2d_sptr >*& vertices); // and vertices
+  static gevd_bufferxy* CreateEdgeMap(vcl_vector<vtol_edge_2d_sptr>&,
                                  const int sizex, const int sizey);
-  int CheckInvariants(vcl_vector<vtol_edge_2d *>& edges, // return number of errors
-                      vcl_vector<vtol_vertex_2d *>& vertices);
+  int CheckInvariants(vcl_vector<vtol_edge_2d_sptr>& edges, // return number of errors
+                      vcl_vector<vtol_vertex_2d_sptr >& vertices);
 
   static void MaskEdgels(const gevd_bufferxy& mask, // byte mask image
                          gevd_bufferxy& edgels, // edge elements AND with mask
                          int& njunction, // vertices AND with mask
                          int* junctionx, int* junctiony);
   static void SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle,
-                           vcl_vector<vtol_edge_2d *>& edges);
+                           vcl_vector<vtol_edge_2d_sptr>& edges);
 
 #if 0 // commented out
   static int ClosedRegions(vcl_vector<vtol_edge_2d*>& edges, // remove dangling/bridge
@@ -173,20 +158,20 @@ public:
   static int ClockWiseOrder(vtol_edge_2d* const& dc1, vtol_edge_2d* const& dc2);
 #endif
 
-  static int LengthCmp(vtol_edge_2d * const& dc1, vtol_edge_2d * const& dc2); // pixel length
-  static vcl_vector<vtol_edge_2d *>* CreateLookupTable(vcl_vector<vtol_edge_2d *>&);
-  static void LookupTableInsert(vcl_vector<vtol_edge_2d *>& set, vtol_edge_2d * elmt);
-  static void LookupTableReplace(vcl_vector<vtol_edge_2d *>& set,
-                                 vtol_edge_2d * deleted, vtol_edge_2d * inserted);
-  static void LookupTableRemove(vcl_vector<vtol_edge_2d *>& set, vtol_edge_2d * elmt);
-  static void LookupTableCompress(vcl_vector<vtol_edge_2d *>& set);
+  static int LengthCmp(vtol_edge_2d_sptr const& dc1, vtol_edge_2d_sptr const& dc2); // pixel length
+  static vcl_vector<vtol_edge_2d_sptr>* CreateLookupTable(vcl_vector<vtol_edge_2d_sptr>&);
+  static void LookupTableInsert(vcl_vector<vtol_edge_2d_sptr>& set, vtol_edge_2d_sptr elmt);
+  static void LookupTableReplace(vcl_vector<vtol_edge_2d_sptr>& set,
+                                 vtol_edge_2d_sptr deleted, vtol_edge_2d_sptr inserted);
+  static void LookupTableRemove(vcl_vector<vtol_edge_2d_sptr>& set, vtol_edge_2d_sptr elmt);
+  static void LookupTableCompress(vcl_vector<vtol_edge_2d_sptr>& set);
 
-  static vcl_vector<vtol_vertex_2d *>* CreateLookupTable(vcl_vector<vtol_vertex_2d *>&);
-  static void LookupTableInsert(vcl_vector<vtol_vertex_2d *>& set, vtol_vertex_2d * elmt);
-  static void LookupTableReplace(vcl_vector<vtol_vertex_2d *>& set,
-                                 vtol_vertex_2d * deleted, vtol_vertex_2d * inserted);
-  static void LookupTableRemove(vcl_vector<vtol_vertex_2d *>& set, vtol_vertex_2d * elmt);
-  static void LookupTableCompress(vcl_vector<vtol_vertex_2d *>& set);
+  static vcl_vector<vtol_vertex_2d_sptr >* CreateLookupTable(vcl_vector<vtol_vertex_2d_sptr >&);
+  static void LookupTableInsert(vcl_vector<vtol_vertex_2d_sptr >& set, vtol_vertex_2d_sptr  elmt);
+  static void LookupTableReplace(vcl_vector<vtol_vertex_2d_sptr >& set,
+                                 vtol_vertex_2d_sptr  deleted, vtol_vertex_2d_sptr  inserted);
+  static void LookupTableRemove(vcl_vector<vtol_vertex_2d_sptr >& set, vtol_vertex_2d_sptr  elmt);
+  static void LookupTableCompress(vcl_vector<vtol_vertex_2d_sptr >& set);
 
   static void BeSilent() {talkative = false;}
   static void BeTalkative() {talkative = true;}
@@ -201,10 +186,10 @@ protected:
   int FindChains(gevd_bufferxy& edgels, // link pixels into chains
                  const int njunction, // junctions detected
                  const int* junctionx, const int* junctiony,
-                 vcl_vector<vtol_edge_2d *>& edges);
+                 vcl_vector<vtol_edge_2d_sptr>& edges);
   int FindJunctions(gevd_bufferxy& edgels, // merge end/end and end/contour
-                    vcl_vector<vtol_edge_2d *>& edges, // replace these global lists
-                    vcl_vector<vtol_vertex_2d *>& vertices);
+                    vcl_vector<vtol_edge_2d_sptr>& edges, // replace these global lists
+                    vcl_vector<vtol_vertex_2d_sptr >& vertices);
 
   static bool talkative; // output comentaries or not
 };
@@ -225,17 +210,16 @@ edgePtr(const gevd_bufferxy& edgeMap, int x, int y)
   return (*((vtol_edge_2d *const *) edgeMap.GetElementAddr(x,y)));
 }
 
-
 inline vtol_vertex_2d *&
 vertexPtr(gevd_bufferxy& vertexMap, int x, int y)
 {
-  return (*((vtol_vertex_2d **) vertexMap.GetElementAddr(x,y)));
+  return (*((vtol_vertex_2d **)vertexMap.GetElementAddr(x,y)));
 }
 
 inline vtol_vertex_2d *
 vertexPtr(const gevd_bufferxy& vertexMap, int x, int y)
 {
-  return (*((vtol_vertex_2d *const *) vertexMap.GetElementAddr(x,y)));
+  return (* ((vtol_vertex_2d *const *)vertexMap.GetElementAddr(x,y)));
 }
 
 #endif

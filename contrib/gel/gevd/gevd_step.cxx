@@ -30,26 +30,13 @@
 //
 // ---------------------------------------------------------------------------
 // <end copyright notice>
-//#include <Detection/Step.h>
-//#include <Detection/Noise.h>
-//#include <ImageProcessing/gevd_float_operators.h>
-//#include <ImageProcessing/pixel.h>
-
-//:
-// \file
-
 #include <vcl_vector.h>
 #include <vnl/vnl_math.h>
-
+#include <vul/vul_timer.h>
 #include "gevd_step.h"
 #include "gevd_noise.h"
 #include "gevd_float_operators.h"
 #include "gevd_pixel.h"
-
-//#include <cool/Array.h>
-//#include <cool/Timer.h>
-//#include <iostream.h>
-//#include <math.h>
 
 // Use 8 directions, with 45 degree angle in between them.
 // The array DIS gives the i-component of the directions
@@ -114,8 +101,8 @@ const int FRAME = 4; // 3 for NMS and extension, 4 for contour
 // boundary at junctions is 1/2 the value along contours.
 //
 gevd_step::gevd_step(float smooth_sigma, // width of filter dG
-           float noise_sigma,   // sensor/texture intensity noise -[0 1]
-           float contour_factor, float junction_factor)
+                     float noise_sigma,   // sensor/texture intensity noise -[0 1]
+                     float contour_factor, float junction_factor)
   :smoothSigma(smooth_sigma), noiseSigma(noise_sigma),
    contourFactor(contour_factor), junctionFactor(junction_factor),
    filterFactor(2)              // factor from gevd_float_operators::Gradient
@@ -131,10 +118,12 @@ gevd_step::gevd_step(float smooth_sigma, // width of filter dG
              << noiseSigma << ". Reset to -1." << vcl_endl;
     noiseSigma = -1;
   }
+
+  //vcl_cout << "Init Step " << vcl_endl << *this << vcl_endl;
 }
 
-//: Free space allocated for detecting step profiles.  Does nothing.
 
+//: Free space allocated for detecting step profiles.  Does nothing.
 gevd_step::~gevd_step() {}
 
 //: Detect step profiles with Canny edge detector.
@@ -152,20 +141,23 @@ gevd_step::~gevd_step() {}
 // Return true if no exception.
 // J. Canny, A Computational Approach to Edge Detection,
 // IEEE Trans on PAMI, vol 8, no 6, Nov 1986.
-
 bool
 gevd_step::DetectEdgels(const gevd_bufferxy& image,
                    gevd_bufferxy*& contour, gevd_bufferxy*& direction,
                    gevd_bufferxy*& locationx, gevd_bufferxy*& locationy,
                    gevd_bufferxy*& grad_mag, gevd_bufferxy*& angle)
 {
-  vcl_cout << "*** Detect step profiles with first-derivative of Gaussian"
-           << vcl_endl;
+
+  //vcl_cout << "*** Detect step profiles with first-derivative of Gaussian"
+  //         << *this
+  //         << vcl_endl;
   if (image.GetBitsPixel() != bits_per_float) {
     vcl_cerr << "gevd_step::DetectEdgels requires float image" << vcl_endl;
     return false;
   }
 
+  // -tpk @@ missing check if the requested buffer size is too small to contain the convolution operations
+  
   // 1. Smooth image to regularize data, before taking derivatives
   gevd_bufferxy* smooth = NULL;      // Gaussian smoothed image
   // use float to avoid overflow/truncation
@@ -199,7 +191,7 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
     int nedgel = 0;             // all edgels in ROI at center of image
     float* edgels = gevd_noise::EdgelsInCenteredROI(*slope, *dirx, *diry,
                                                nedgel);
-    if (edgels) {
+    if ((edgels) && (nedgel > 0 )) {
       gevd_noise noise(edgels, nedgel); // histogram of weak edgels only
       delete [] edgels;
       float sensorNoise, textureNoise;
@@ -215,7 +207,7 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
       vcl_cout << "Not enough edge elements to estimate noise" << vcl_endl;
       noiseSigma = 1;
     }
-    vcl_cout << "Set noise sigma = " << noiseSigma << vcl_endl;
+    //vcl_cout << "Set noise sigma = " << noiseSigma << vcl_endl;
   }
 
   // 4. Find contour pixels as local maxima along slope direction
@@ -250,7 +242,7 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
   return true;
 }
 
-// // Return -/+ PI/2, to encode the existence of an end point
+//: Return -/+ PI/2, to encode the existence of an end point
 // on the left/right side of the current contour point i,j.
 // Note, in TargetJr, images have a left-handed (i,j) coordinate frame,
 // i.e., i increases left to right and j increases downward in the image.
@@ -304,15 +296,15 @@ LeftXorRightEnd(const gevd_bufferxy& contour,
   for (int n = 0; n < 3; ++n) { // 3 neighbors
     int theta = ndir + RDS[n];
     if (floatPixel(contour, i+DIS[theta], j+DJS[theta])) {
-      rightp = true;            // found neighbor on right side
+    rightp = true;            // found neighbor on right side
       break;
     }
   }
   return (leftp? 0: -HALFPI) + (rightp? 0: HALFPI); // increment from dir
 }
 
-// // Find best step extension from end point, which has largest
-// local maximum slope. Search all 3x3=9 neighboring locations/orientations
+//: Find best step extension from end point, which has largest local maximum slope. 
+// Search all 3x3=9 neighboring locations/orientations
 // in the direction of the contour.  If the best gradient along the contour
 // extension is below the threshold, then return 0, otherwise
 // return the location, direction and strength of the extension pixel.
@@ -370,8 +362,7 @@ BestStepExtension(const gevd_bufferxy& smooth,
 }
 
 
-//:
-// Find junctions by searching for extensions of contours from
+//: Find junctions by searching for extensions of contours from
 // their dangling end points. Non maximum suppression insures that
 // contours have width < 2, and so we can find the left/right neighbors,
 // and deduce end points. By using a minimally smoothed image,
@@ -387,7 +378,7 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
                        gevd_bufferxy& locationx, gevd_bufferxy& locationy,
                        int*& junctionx, int*& junctiony)
 {
-  //  CoolTimer t;
+  vul_timer t;
   if (image.GetBitsPixel() != bits_per_float) {
     vcl_cerr << "gevd_step::RecoverJunction requires float image" << vcl_endl;
     return false;
@@ -397,6 +388,8 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
   const int xmax = image.GetSizeX()-rmax-1; // fill step direction
   const int ymax = image.GetSizeY()-rmax-1;
 
+  //vcl_cout << "RecoverJunctions: rmax, kmax, xmax, ymax:" << rmax << " " << kmax << " " << xmax << " " << ymax << " " << vcl_endl;
+  
   // 1. Find end points of dangling contours
   //const int length0 = xmax/kmax*ymax/kmax/4;// 25% size
   //const float growth = 2;     // growth ratio of the arrays
@@ -420,8 +413,8 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
         yloc.push_back(y);
       }
   const int length = ndir.size();
-//   vcl_cout << "% end pts = "     // trace allocated size
-//            << length*100 / float((xmax/kmax)*(ymax/kmax)) << endl;
+  //vcl_cout << "% end pats = "     // trace allocated size
+  //          << length*100 / float((xmax/kmax)*(ymax/kmax)) << vcl_endl;
   if (!length) return 0;        // no end points exist
 
   // 2. Extend from end points until they touch other contours
@@ -467,8 +460,8 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
         } else                  // no further extension found
           ndir[i] = 0;
       }
-//     vcl_cout << "Touch " << ntouch << " contours." << vcl_endl;
-//     vcl_cout << "Will extend " << nextension << " contours." << vcl_endl;
+    //vcl_cout << "Touch " << ntouch << " contours." << vcl_endl;
+    // vcl_cout << "Will extend " << nextension << " contours." << vcl_endl;
     njunction += ntouch;
     if (!nextension) break;     // all either junction or termination
   }
@@ -485,33 +478,30 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
       junctiony[j] = yloc[i];
       j++;
     }
-#if 0
-  vcl_cout << "Find " << length << " end points, and "
+  /*vcl_cout << "Find " << length << " end points, and "
            << njunction << " junctions." << vcl_endl
            << "Recover " << 100.0*njunction/length
            << "% end points as junctions > "
            << threshold << ", in "
            << t.real() << " msecs." << vcl_endl;
-#endif
+  */
   return njunction;
 }
 
-//:
-// Return the standard deviation of raw noise, in the original image,
+
+//: Return the standard deviation of raw noise, in the original image,
 // either estimated or given by the user. If the noise has not been
 // estimated, return 0.
-
 float
 gevd_step::NoiseSigma() const
 {
   return (noiseSigma <= 0)? 0: noiseSigma;
 }
 
-//:
-// Compute response of white noise through the filter dG, or
+
+//: Compute response of white noise through the filter dG, or
 // second-derivative of the Gaussian. Using a threshold of 3 times
 // this noise response would eliminate 99% of the noise edges.
-
 float
 gevd_step::NoiseResponse() const
 {
@@ -519,8 +509,8 @@ gevd_step::NoiseResponse() const
                                smoothSigma, filterFactor);
 }
 
-//:
-// Return threshold for detecting contour or junction,
+
+//: Return threshold for detecting contour or junction,
 // which is response of white gaussian noise, noise_sigma,
 // to step edge detector, i.e. first-order derivative of Gaussian,
 // smooth_sigma.
@@ -528,7 +518,6 @@ gevd_step::NoiseResponse() const
 // in a region of constant intensity, and no texture patterns.
 // Use short_factor*noise_sigma and smooth_sigma/2, when detecting
 // junctions, to account for multiple responses to step edge detector.
-
 float
 gevd_step::NoiseThreshold(bool shortp) const
 {
@@ -539,11 +528,11 @@ gevd_step::NoiseThreshold(bool shortp) const
                                 smooth, filterFactor));
 }
 
-//:
-// Compute response of white noise through the filter dG, or
+
+
+//: Compute response of white noise through the filter dG, or
 // first-derivative of the Gaussian. Using a threshold of 3 times
 // this noise response would eliminate 99% of the noise edges.
-
 float
 gevd_step::NoiseResponseToFilter(const float noiseSigma,
                             const float smoothSigma,
@@ -553,4 +542,30 @@ gevd_step::NoiseResponseToFilter(const float noiseSigma,
           vcl_pow(smoothSigma, 1.5f) * // size of filter dG
           (0.5 / vcl_pow(vnl_math::pi, 0.25)) *
           filterFactor);        // multiplication factor
+}
+
+
+//: Output a snapshot of current control parameters
+vcl_ostream& operator<< (vcl_ostream& os, const gevd_step& st)
+{
+  os << "Step: " << vcl_endl <<
+    "   smoothSigma " << st.smoothSigma << vcl_endl <<
+    "   noiseSigma " << st.noiseSigma << vcl_endl <<
+    "   contourFactor " << st.contourFactor << vcl_endl <<
+    "   junctionFactor " << st.junctionFactor << vcl_endl <<
+    "   filterFactor " << st.filterFactor << vcl_endl;
+    return os;
+}
+
+
+//: Output a snapshot of current control parameters
+vcl_ostream& operator<< (vcl_ostream& os, gevd_step& st)
+{
+  os << "Step: " << vcl_endl <<
+    "   smoothSigma " << st.smoothSigma << vcl_endl <<
+    "   noiseSigma " << st.noiseSigma << vcl_endl <<
+    "   contourFactor " << st.contourFactor << vcl_endl <<
+    "   junctionFactor " << st.junctionFactor << vcl_endl <<
+    "   filterFactor " << st.filterFactor << vcl_endl;
+    return os;
 }
