@@ -127,6 +127,11 @@ public:
   //: Save this table's data to specified text stream.
   void write(vcl_ostream& os) const;
 
+  //: Create a new table of subset of columns defined by headers
+  // \retval new_table a subtable 
+  // \param headers subset of column headers
+  // \return true if all columns in headers existed in "this" and were copied
+  bool subtable(mbl_table &new_table,  const vcl_vector<vcl_string> &headers) const;
 
   //: Is another table identical to this one?
   // \note The normal behaviour of this function is to return false as soon

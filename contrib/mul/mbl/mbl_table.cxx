@@ -63,8 +63,10 @@ unsigned mbl_table::num_cols() const
 //========================================================================
 unsigned mbl_table::num_rows() const
 {
-  // Assume all columns are the same as the first
-  return columns_[0].size();
+    int nrows=0;
+    // If there are at least 1 column, assume all columns are the same as the first
+    if (columns_.size()>0) nrows=columns_[0].size();
+    return nrows;
 }
 
 
@@ -223,11 +225,11 @@ bool mbl_table::append_column(const vcl_string& header,
   if (header_to_column_index_.find(header) == header_to_column_index_.end())
   {
     // Check that the length of the new column matches the existing columns
-    if (num_rows()==column.size())
+    if (num_rows()==0 || num_rows()==column.size())
     {
       column_headers_.push_back(header);
       columns_.push_back(column);
-      header_to_column_index_[header] = columns_.size();
+      header_to_column_index_[header] = columns_.size()-1;
       return true;
     }
     else
@@ -407,6 +409,35 @@ void mbl_table::write(vcl_ostream& os) const
     }
     os << vcl_endl;
   }
+}
+//========================================================================
+//: Create a new table with as subset of columnsdefined by headers
+//========================================================================
+bool mbl_table::subtable(mbl_table &new_table,  const vcl_vector<vcl_string> &headers) const
+{
+    bool ret = true;
+
+    new_table = mbl_table();
+
+
+    // Write column headers row 
+    for (unsigned c=0; c<headers.size(); ++c)
+    {
+        // get the column for the header if available
+        vcl_map<vcl_string, unsigned>::const_iterator iter =
+            header_to_column_index_.find(headers[c]);
+
+        if (iter != header_to_column_index_.end())
+        {
+            new_table.append_column(headers[c],columns_[iter->second]);
+        }
+        else
+        {
+            ret=false;
+        }
+    }
+
+    return ret;
 }
 
 
