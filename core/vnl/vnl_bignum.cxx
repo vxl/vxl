@@ -467,15 +467,41 @@ vnl_bignum vnl_bignum::operator- () const
 
 vnl_bignum& vnl_bignum::operator++ ()
 {
-  return *this = *this + 1L;
+  if (this->is_infinity()) return *this;
+  if (this->count==0)
+  {
+    this->resize(1);
+    this->data[0] = 1;
+    this->sign = +1;
+    return *this;
+  }
+  
+  if (this->sign > 0) increment(*this);
+  else decrement(*this);
+
+  return *this;
 }
+
+
 
 
 //: Prefix decrement. Decrements a vnl_bignum by 1, and returns it.
 
 vnl_bignum& vnl_bignum::operator-- ()
 {
-  return *this = *this - 1L;
+  if (this->is_infinity()) return *this;
+  if (this->count==0)
+  {
+    this->resize(1);
+    this->data[0] = 1;
+    this->sign = -1;
+    return *this;
+  }
+  
+  if (this->sign < 0) increment(*this);
+  else decrement(*this);
+
+  return *this;
 }
 
 //: Adds two vnl_bignums, and returns new sum.
@@ -924,6 +950,25 @@ void add (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& sum)
   }
 }
 
+//: Add 1 to bnum (unsigned, non-infinite)
+void increment (vnl_bignum& bnum)
+{
+  Counter i = 0;
+  unsigned long carry = 1;
+  while (i < bnum.count && carry) {             // increment, element by element.
+    unsigned long temp = (unsigned long)bnum.data[i] + carry;
+    carry = temp/0x10000L;
+    bnum.data[i] = (Data)temp;
+    ++i;
+  }
+  if (carry)
+  {
+    bnum.resize(bnum.count+1);
+    bnum.data[bnum.count-1] = 1;
+  }
+}
+
+
 
 //: subtract bmin from bmax (unsigned, non-infinite), result in diff
 
@@ -946,6 +991,24 @@ void subtract (const vnl_bignum& bmax, const vnl_bignum& bmin, vnl_bignum& diff)
   }
   diff.trim();                                  // Done. Now trim excess data
 }
+
+
+
+//: Subtract 1 to bnum (unsigned, non-infinite, non-zero)
+void decrement (vnl_bignum& bnum)
+{
+  Counter i = 0;
+  unsigned long borrow = 1;
+  while (i < bnum.count && borrow) {             // decrement, element by element.
+    unsigned long temp = (unsigned long)bnum.data[i] + 0x10000L - borrow;
+    borrow = (temp/0x10000L == 0);         // Did we have to borrow?
+    bnum.data[i] = (Data)temp;                  // Reduce modulo radix and save
+    ++i;
+  }
+  bnum.trim();                                  // Done. Now trim excess data
+  if (bnum.count==0) bnum.sign=+1;                   // Re-establish sign invariant
+}
+
 
 
 //: compare absolute values of two vnl_bignums

@@ -60,6 +60,7 @@
 // Modifications
 //  Peter Vanroose, 24 January 2002: ported to vnl from COOL
 //  Peter Vanroose, 7 September 2002: added "Infinity" (incl. all arithmetic)
+//  Ian Scott, 23 March 2004: made ++ and -- much more efficient.
 // \endverbatim
 
 #include <vcl_iostream.h>
@@ -80,6 +81,8 @@ unsigned short multiply_subtract(vnl_bignum&, const vnl_bignum&, unsigned short,
 void divide(const vnl_bignum&, const vnl_bignum&, vnl_bignum&, vnl_bignum&);
 vnl_bignum left_shift(const vnl_bignum& b1, int l);
 vnl_bignum right_shift(const vnl_bignum& b1, int l);
+void decrement (vnl_bignum& bnum);
+void increment (vnl_bignum& bnum);
 
 //: formatted output
 // \relates vnl_bignum
@@ -231,6 +234,8 @@ class vnl_bignum
   friend int magnitude_cmp(const vnl_bignum&, const vnl_bignum&);
   friend void add(const vnl_bignum&, const vnl_bignum&, vnl_bignum&);
   friend void subtract(const vnl_bignum&, const vnl_bignum&, vnl_bignum&);
+  friend void increment (vnl_bignum& bnum);
+  friend void decrement (vnl_bignum& bnum);
   friend void multiply_aux(const vnl_bignum&, unsigned short, vnl_bignum&, unsigned short);
   friend unsigned short normalize(const vnl_bignum&, const vnl_bignum&, vnl_bignum&, vnl_bignum&);
   friend void divide_aux(const vnl_bignum&, unsigned short, vnl_bignum&, unsigned short&);

@@ -521,6 +521,76 @@ static void run_addition_subtraction_tests() {
   TEST("b3.dump()", 1, 1);
 }
 
+
+static void run_increment_tests()
+{
+  vcl_cout << "increment special cases:\n";
+  vnl_bignum b1;
+  TEST("b1     ==  0", b1, 0);
+  ++b1;
+  TEST("++b1   ==  1", b1, 1);
+  ++b1;
+  TEST("++b1   ==  2", b1, 2);
+  --b1;
+  TEST("--b1   ==  1", b1, 1);
+  --b1;
+  TEST("--b1   ==  0", b1, 0);
+  --b1;
+  TEST("--b1   == -1", b1, -1);
+  --b1;
+  TEST("--b1   == -2", b1, -2);
+  ++b1;
+  TEST("++b1   == -1", b1, -1);
+  ++b1;
+  TEST("++b1   ==  0", b1, 0);
+
+  vnl_bignum b2("Infinity");
+  TEST("b2     ==  infinity", b2.is_plus_infinity(), true);
+  ++b2;
+  TEST("++b2   ==  infinity", b2.is_plus_infinity(), true);
+  --b2;
+  TEST("--b2   ==  infinity", b2.is_plus_infinity(), true);
+
+  vnl_bignum b3("-Infinity");
+  TEST("b3     ==  -infinity", b3.is_minus_infinity(), true);
+  ++b3;
+  TEST("++b3   ==  -infinity", b3.is_minus_infinity(), true);
+  --b3;
+  TEST("--b3   ==  -infinity", b3.is_minus_infinity(), true);
+
+  vnl_bignum b4("65534");
+  TEST("b4     ==  65534", b4, 65534);
+  ++b4;
+  TEST("++b4   ==  65535", b4, 65535);
+  ++b4;
+  TEST("++b4   ==  65536", b4, 65536);
+  ++b4;
+  TEST("++b4   ==  65537", b4, 65537);
+  --b4;
+  TEST("--b4   ==  65536", b4, 65536);
+  --b4;
+  TEST("--b4   ==  65535", b4, 65535);
+  --b4;
+  TEST("--b4   ==  65534", b4, 65534);
+
+
+  vnl_bignum b5("-65534");
+  TEST("b5     ==  -65534", b5, -65534);
+  --b5;
+  TEST("--b5   ==  -65535", b5, -65535);
+  --b5;
+  TEST("--b5   ==  -65536", b5, -65536);
+  --b5;
+  TEST("--b5   ==  -65537", b5, -65537);
+  ++b5;
+  TEST("++b5   ==  -65536", b5, -65536);
+  ++b5;
+  TEST("++b5   ==  -65535", b5, -65535);
+  ++b5;
+  TEST("++b5   ==  -65534", b5, -65534);
+}
+
+
 static void run_multiplication_tests() {
   vcl_cout << "\nStarting multiplication tests:\n";
 
@@ -668,6 +738,7 @@ void test_bignum() {
   run_conversion_operator_tests();
   run_assignment_tests();
   run_addition_subtraction_tests();
+  run_increment_tests();
   run_multiplication_tests();
   run_division_tests();
   run_multiplication_division_tests();
