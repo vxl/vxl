@@ -6,8 +6,6 @@ VERSION := 1.0
 
 IMMEDIATE_LIBS += -lvnl-algo -lvnl -lvbl
 
-SUBDIRS = examples # tests
-
 # 0. stuff written in C++
 
 SOURCES += mvl_five_point_camera_pencil.cxx
@@ -118,9 +116,17 @@ SOURCES += HMatrix2DEuclideanCompute.cxx
 SOURCES += PMatrixCompute.cxx
 SOURCES += PMatrixComputeLinear.cxx
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS = examples # tests
+endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
 
 ifeq "HP-UX" "$(findstring HP-UX,$(OS))"
 pic = $(PIC)
