@@ -29,6 +29,8 @@ execute(const rgrl_object* caller, const rgrl_event & event )
              << "         This iteration observer only works with rgrl_feature_based_registrion engine.\n";
     return;
   }
+  vcl_cerr << "WARNING: rgrl_debug_feature_iteration_print::execute(): event "
+           << event.name() << " is not used\n";
 
   // current stage
   vcl_cout <<"Current stage = " << reg_engine->current_stage() << vcl_endl;
@@ -37,10 +39,10 @@ execute(const rgrl_object* caller, const rgrl_event & event )
   // current transformation
   const rgrl_transformation_sptr& trans_sptr = reg_engine->current_transformation();
   if ( !trans_sptr ) {
-    vcl_cout << "Current transformation is invalid! " << vcl_endl;
+    vcl_cout << "Current transformation is invalid!\n";
     return;
   } else {
-    vcl_cout << "Current transformation = " << vcl_endl;
+    vcl_cout << "Current transformation =\n";
     trans_sptr->write( vcl_cout );
     vcl_cout << vcl_endl;
   }
@@ -68,6 +70,8 @@ execute(const rgrl_object* caller, const rgrl_event & event )
              << "         This iteration observer only works with rgrl_feature_based_registrion engine.\n";
     return;
   }
+  vcl_cerr << "WARNING: rgrl_debug_feature_iteration_save_matches::execute(): event "
+           << event.name() << " is not used\n";
 
   // current stage
   const int stage = reg_engine->current_stage();
@@ -83,10 +87,10 @@ execute(const rgrl_object* caller, const rgrl_event & event )
   vcl_string xform_name = path_ + '/' + file_prefix_ + '_' + stage_buffer + '_' + iter_buffer + ".xform";
   const rgrl_transformation_sptr& trans_sptr = reg_engine->current_transformation();
   if ( !trans_sptr )  {
-    vcl_cout << "Current transformation is invalid! " << vcl_endl;
+    vcl_cout << "Current transformation is invalid!\n";
     return;
   } else {
-    vcl_cout << "Trying to store transformation to " << xform_name << " ........" << vcl_endl;
+    vcl_cout << "Trying to store transformation to " << xform_name << " ........\n";
     vcl_ofstream ofs( xform_name.c_str() );
     if ( !ofs ) {
       vcl_cerr << "ERROR: Cannot open file to write: " << xform_name << vcl_endl;
@@ -103,7 +107,7 @@ execute(const rgrl_object* caller, const rgrl_event & event )
 
   // compose file name for storing matches
   vcl_string matches_name = path_ + '/' + file_prefix_ + '_' + stage_buffer + '_' + iter_buffer + ".matches";
-  vcl_cout << "Trying to store matches to " << matches_name << " ........" << vcl_endl;
+  vcl_cout << "Trying to store matches to " << matches_name << " ........\n";
   vcl_ofstream mofs( matches_name.c_str() );
   if ( !mofs ) {
     vcl_cerr << "ERROR: Cannot open file to write: " << matches_name << vcl_endl;
