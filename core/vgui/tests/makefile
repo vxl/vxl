@@ -1,5 +1,6 @@
 USES += vxl oxl
 TRY_X11 := 1
+TRY_OPENGL := 1
 
 ###############################################
 include ${IUELOCALROOT}/oxl/vgui/easy-client.mk
