@@ -53,7 +53,7 @@ static int ccw(double **P, int i, int j, int k)
 #define CMPM(c,A,B) \
   v = (*(double*const*)A)[c] - (*(double*const*)B)[c];\
   if (v>0) return 1;\
-  if (v<0) return -1;
+  if (v<0) return -1
 
 static int cmpl(const void *a, const void *b)
 {
@@ -62,6 +62,7 @@ static int cmpl(const void *a, const void *b)
   CMPM(1,b,a);
   return 0;
 }
+#undef CMPM
 
 static int cmph(const void *a, const void *b) {return cmpl(b,a);}
 
@@ -116,11 +117,14 @@ void vgl_convex_hull_2d<T>::compute_hull()
 
   //convert back to vgl_points
   vcl_vector<vgl_point_2d<double> > temp;
-  for (int i = 0; i<=n_hull; i++)
+  for (int i = 0; i<n_hull; i++)
   {
     vgl_point_2d<T> p((T)P[i][0], (T)P[i][1]);
     temp.push_back(p);
   }
+  // Do not add last point if it is identical to the first one - PVr
+  if (P[0][0] != P[n_hull][0] || P[0][1] != P[n_hull][1])
+    temp.push_back(vgl_point_2d<T>((T)P[n_hull][0], (T)P[n_hull][1]));
 
   //construct the hull polygon
   hull_ = vgl_polygon<T>(temp);
@@ -142,8 +146,8 @@ vgl_polygon<T> vgl_convex_hull_2d<T>::hull()
 //----------------------------------------------------------------------------
 #undef VGL_CONVEX_HULL_2D_INSTANTIATE
 #define VGL_CONVEX_HULL_2D_INSTANTIATE(T) \
-/* template vcl_ostream& operator<<(vcl_ostream& s, vgl_convex_hull_2d<T >const& h); \
-   template vcl_istream& operator>>(vcl_istream& s, vgl_convex_hull_2d<T >& h); */ \
+/* template vcl_ostream& operator<<(vcl_ostream& s, vgl_convex_hull_2d<T >const& h); */ \
+/* template vcl_istream& operator>>(vcl_istream& s, vgl_convex_hull_2d<T >& h); */ \
 template class vgl_convex_hull_2d<T >
 
 #endif // vgl_convex_hull_2d_txx_
