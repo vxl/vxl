@@ -125,6 +125,9 @@ SOURCES += PMatrixComputeLinear.cxx
 
 SOURCES += ComputeGRIC.cxx
 SOURCES += Probability.cxx
+SOURCES += FileNameGeneratorBase.cxx
+SOURCES += FileNameGenerator.cxx
+SOURCES += RawPMatrixStore.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
