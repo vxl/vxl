@@ -155,7 +155,7 @@ void TripleMatchSet::clear_matches()
   _match23->clear();
 }
 
-// -----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 //: Select(1 = i1).2, meaning take the 2nd component of the tuples
 // in which the first component equals i1.  Complexity O(1).
 int TripleMatchSet::get_match_12(int i1) const

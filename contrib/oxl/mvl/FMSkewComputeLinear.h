@@ -8,8 +8,9 @@
 // .HEADER  MultiView Package
 // .INCLUDE mvl/FMSkewComputeLinear.h
 // .FILE    FMSkewComputeLinear.cxx
-//
-// .SECTION Description
+
+//:
+// \file
 //
 //    FMSkewComputeLinear is a subclass of FMatrixCompute, and implements
 //    the linear least squares algorithm for estimation of
@@ -42,6 +43,7 @@ public:
   FMSkewComputeLinear(bool precondition = true);
 
   // Computations--------------------------------------------------------------
+
   //: Compute a fundamental matrix for arrays of HomgPoint2D.
   // Return false if the calculation fails or there are fewer than eight point
   // matches in the list.

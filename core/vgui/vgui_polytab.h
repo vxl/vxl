@@ -4,8 +4,9 @@
 // .NAME vgui_polytab
 // .INCLUDE vgui/vgui_polytab.h
 // .FILE vgui_polytab.cxx
-//
-// .SECTION Description
+
+//:
+// \file
 // Class polytab_base is a tableau which renders its children into sub-rectangles
 // of its given viewport. The subrectangles are given as relative coordinates
 // on [0,1]x[0,1], with (0,0) being the lower left corner and (1,1) the upper
@@ -63,6 +64,7 @@ public:
   void erase(iterator );
 
   // "handle interface"
+
   //: add new subtableau. returns handle to child.
   int add(vgui_tableau_sptr const&, float x, float y, float w, float h);
   //: remove subtableau, referred to by handle.

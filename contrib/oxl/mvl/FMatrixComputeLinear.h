@@ -9,8 +9,9 @@
 // .INCLUDE mvl/FMatrixComputeLinear.h
 // .FILE    FMatrixComputeLinear.cxx
 // .EXAMPLE examples/exampleFMatrixCompute.cxx
-//
-// .SECTION Description
+
+//:
+// \file
 //    FMatrixComputeLinear is a subclass of FMatrixCompute, and implements
 //    the ``8-point'' or linear least squares algorithm for estimation of
 //    the fundamental matrix.
@@ -43,6 +44,7 @@ public:
   FMatrixComputeLinear(bool precondition = true, bool rank2_truncate = true);
 
   // Computations--------------------------------------------------------------
+
 //: Compute a fundamental matrix for a set of point matches.
 //
 // Return false if the calculation fails or there are fewer than eight point

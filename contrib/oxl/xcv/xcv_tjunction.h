@@ -1,11 +1,8 @@
 #ifndef xcv_tjunction_h_
 #define xcv_tjunction_h_
-//
 // This is xcv/xcv_tjunction.h
-// 
-//: Events sent to this tableau are passed on to both its child tableau
-//  and to the xcv_mview_manager registered in the constructor.
-//
+
+//:
 // \file
 // \author  K.Y.McGaul
 // \verbatim
@@ -18,6 +15,10 @@
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_slot.h>
 #include "xcv_mview_manager.h"
+
+//:
+//  Events sent to this tableau are passed on to both its child tableau
+//  and to the xcv_mview_manager registered in the constructor.
 
 class xcv_tjunction : public vgui_tableau
 {
