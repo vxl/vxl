@@ -35,7 +35,7 @@ bool vpro_harris_corner_process::execute()
   if (!N)
     return false;
   for (int i = 0; i<N; i++)
-    output_spat_objs_.push_back(points[i]->cast_to_spatial_object_2d());
+    output_spat_objs_.push_back(points[i]->cast_to_spatial_object());
 
   output_topo_objs_.clear();
   output_image_ = 0;

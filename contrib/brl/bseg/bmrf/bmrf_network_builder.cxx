@@ -261,7 +261,7 @@ bool bmrf_network_builder::compute_segments()
        eit != edges_.end(); eit++)
   {
     vsol_curve_2d_sptr c = (*eit)->curve();
-    vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+    vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
     if (!dc)
       continue;
     //:see if the curve is inside the epipolar wedge

@@ -69,7 +69,7 @@ bool vpro_grid_finder_process::execute()
   for (vcl_vector<vsol_spatial_object_2d_sptr>::iterator sit = sos.begin();
        sit!=sos.end(); sit++)
   {
-    vsol_line_2d_sptr l = (*sit)->cast_to_curve()->cast_to_line_2d();
+    vsol_line_2d_sptr l = (*sit)->cast_to_curve()->cast_to_line();
     if (!l)
       continue;
     lines.push_back(l);

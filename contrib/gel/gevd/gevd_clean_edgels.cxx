@@ -115,13 +115,13 @@ void gevd_clean_edgels::detect_similar_edges(vcl_vector<vtol_edge_2d_sptr >& com
        e1it != common_edges.end(); ++e1it)
   {
     vtol_edge_2d_sptr e1 = (*e1it);
-    vdgl_digital_curve_sptr dc1 = e1->curve()->cast_to_digital_curve();
+    vdgl_digital_curve_sptr dc1 = e1->curve()->cast_to_vdgl_digital_curve();
     if (!dc1) continue;
     vcl_vector<vtol_edge_2d_sptr >::iterator e2it = e1it;
     for (e2it++; e2it != common_edges.end(); ++e2it)
     {
       vtol_edge_2d_sptr e2 = (*e2it);
-      vdgl_digital_curve_sptr dc2 = e2->curve()->cast_to_digital_curve();
+      vdgl_digital_curve_sptr dc2 = e2->curve()->cast_to_vdgl_digital_curve();
       if (near_equal(dc1, dc2, tolerance))
         temp.push_back(e2);
     }
@@ -216,7 +216,7 @@ void gevd_clean_edgels::remove_connected_edges(vtol_vertex_2d* v, vcl_vector<vto
 //  jump span - JLM Sept. 99
 bool gevd_clean_edgels::closest_vertex(vtol_edge_2d_sptr e, vsol_point_2d_sptr p, float radius, vtol_vertex_2d_sptr& v)
 {
-  vdgl_digital_curve_sptr dc = e->curve()->cast_to_digital_curve();
+  vdgl_digital_curve_sptr dc = e->curve()->cast_to_vdgl_digital_curve();
   if (!dc) { v = NULL; return false; }
   vsol_point_2d_sptr sp = new vsol_point_2d(*p);
   vsol_point_2d_sptr pc = dc->get_interpolator()->closest_point_on_curve( sp );
@@ -258,7 +258,7 @@ bool gevd_clean_edgels::split_edge(vtol_edge_2d_sptr e, vtol_vertex_2d_sptr new_
     vcl_cout << "In gevd_clean_edgels::split_edge(..) null edge or vertex\n";
     return false;
   }
-  vdgl_digital_curve_sptr dc = e->curve()->cast_to_digital_curve();
+  vdgl_digital_curve_sptr dc = e->curve()->cast_to_vdgl_digital_curve();
   if (!dc)
   {
     vcl_cout << "In gevd_clean_edgels::split_edge(..) no digital curve\n";
@@ -361,7 +361,7 @@ void gevd_clean_edgels::JumpGaps()
     // Find edges within the given radius
     for (eit = out_edgels_->begin(); eit != out_edgels_->end(); ++eit)
     {
-      vdgl_digital_curve_sptr dc = (*eit)->curve()->cast_to_digital_curve();
+      vdgl_digital_curve_sptr dc = (*eit)->curve()->cast_to_vdgl_digital_curve();
       if (dc && radius > dc->get_interpolator()->distance_curve_to_point(p))
         near_edges.push_back( *eit );
     }
@@ -461,7 +461,7 @@ void gevd_clean_edgels::DeleteShortEdges()
       N_close++;
       //If so, then check if all edgels in the EdgelChain are
       // too close, i.e, within 2 pixels of both vertices
-      vdgl_digital_curve_sptr dc = e->curve()->cast_to_digital_curve();
+      vdgl_digital_curve_sptr dc = e->curve()->cast_to_vdgl_digital_curve();
       vdgl_edgel_chain_sptr chain = dc->get_interpolator()->get_edgel_chain();
       int n_edgels = chain->size();
       bool all_close = true;
@@ -604,7 +604,7 @@ void gevd_clean_edgels::FixDefficientEdgels()
   {
     bool fix_it = false;
     vtol_edge_2d_sptr e = (vtol_edge_2d_sptr )(*egit);
-    vdgl_digital_curve_sptr dc = e->curve()->cast_to_digital_curve();
+    vdgl_digital_curve_sptr dc = e->curve()->cast_to_vdgl_digital_curve();
     fix_it = fix_it || !dc;
     int n_edgels = dc->get_interpolator()->get_edgel_chain()->size();
     fix_it = fix_it || n_edgels<=2;
@@ -643,7 +643,7 @@ void gevd_clean_edgels::RemoveJaggies()
     vtol_vertex_2d* v2 = (vtol_vertex_2d*)e->v2().ptr();
     double x1 = v1->x(), y1 = v1->y();
     double x2 = v2->x(), y2 = v2->y();
-    vdgl_digital_curve_sptr dc = e->curve()->cast_to_digital_curve();
+    vdgl_digital_curve_sptr dc = e->curve()->cast_to_vdgl_digital_curve();
     vdgl_edgel_chain_sptr chain = dc->get_interpolator()->get_edgel_chain();
     int n_edgels = chain->size();
     int n1 = n_edgels-1;
@@ -690,7 +690,7 @@ void gevd_clean_edgels::RemoveLoops()
     vtol_vertex_2d* v2 = (vtol_vertex_2d*)e->v2().ptr();
     if (*v1==*v2)//We have a loop
     {
-      vdgl_digital_curve_sptr c = e->curve()->cast_to_digital_curve();
+      vdgl_digital_curve_sptr c = e->curve()->cast_to_vdgl_digital_curve();
       double len = c->length();
       if (verbose) vcl_cout << "In Remove Loops: "<< v1 << " L = " << len << vcl_endl;
       if (len<min_loop_length)
