@@ -113,7 +113,7 @@ vcross(const float *v1, const float *v2, float *cross)
 float
 vlength(const float *v)
 {
-    return (float)sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+    return sqrtf(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 }
 
 void
@@ -220,9 +220,9 @@ tb_project_to_sphere(float r, float x, float y)
 {
     float d, t, z;
 
-    d = (float)sqrt(x*x + y*y);
+    d = sqrtf(x*x + y*y);
     if (d < r * 0.70710678118654752440) {    /* Inside sphere */
-        z = (float)sqrt(r*r - d*d);
+        z = sqrtf(r*r - d*d);
     } else {           /* On hyperbola */
         t = r / 1.41421356237309504880f;
         z = t*t / d;
@@ -290,7 +290,7 @@ normalize_quat(float q[4])
     int i;
     float mag;
 
-    mag = (float)sqrt(q[0]*q[0] + q[1]*q[1] + q[2]*q[2] + q[3]*q[3]);
+    mag = sqrtf(q[0]*q[0] + q[1]*q[1] + q[2]*q[2] + q[3]*q[3]);
     for (i = 0; i < 4; i++) q[i] /= mag;
 }
 
