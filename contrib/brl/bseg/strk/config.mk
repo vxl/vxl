@@ -2,6 +2,7 @@ IULIBS += -lstrk
 USES += contrib/gel
 include ${IUEROOT}/contrib/brl/bseg/sdet/config.mk
 include ${IUEROOT}/contrib/brl/bseg/brip/config.mk
+include ${IUEROOT}/contrib/brl/bseg/vpro/config.mk
 include ${IUEROOT}/contrib/brl/bbas/bdgl/config.mk
 include ${IUEROOT}/contrib/brl/bbas/bsol/config.mk
 include ${IUEROOT}/contrib/brl/bbas/btol/config.mk
