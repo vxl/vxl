@@ -64,7 +64,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
 
   for (int i=0;i<n_planes;++i)
     gauss_reduce(dest_im.plane(i),dest_im.ystep(),
-          src_im.plane(i),src_nx,src_ny,dest_nx,dest_ny,ystep);
+                 src_im.plane(i),src_nx,src_ny,dest_nx,dest_ny,ystep);
 #if 0
   vsl_indent_inc(vcl_cout);
   vcl_cout << vsl_indent() << "Work image B\n";
@@ -139,14 +139,18 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
     const T* src_col1  = src_col3 - 2;
     const T* src_col4  = src_col3 + 1;
     const T* src_col5  = src_col3 + 2;
-    int nx2 = src_nx-2;
     int x;
+    for (x=0;x<src_nx;++x)
+      if (src_col3[x] > 0 && src_col3[x] < 1e-32) // only makes sense for T == float, of course
+        vcl_cout << "This should not happen - pyramid image plane to be smoothed is probably not initialised\n"
+                 << " x=" << x << ", y=" << y << "\n";
+    int nx2 = src_nx-2;
     for (x=2;x<nx2;x++)
       worka_row[x] = l_round(  filt2_ * src_col1[x]
-                       + filt1_ * src_col2[x]
-                       + filt0_ * src_col3[x]
-                       + filt1_ * src_col4[x]
-                       + filt2_ * src_col5[x], (T)0);
+                             + filt1_ * src_col2[x]
+                             + filt0_ * src_col3[x]
+                             + filt1_ * src_col4[x]
+                             + filt2_ * src_col5[x], (T)0);
 
     // Now deal with edge effects :
     worka_row[0] = l_round( filt_edge0_ * src_col3[0]
