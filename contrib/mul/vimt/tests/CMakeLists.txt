@@ -8,6 +8,7 @@ ADD_EXECUTABLE( vimt_test_all
   test_sample_grid_bilin.cxx
   test_transform_2d.cxx
   test_gaussian_pyramid_builder_2d.cxx
+  test_dog_pyramid_builder_2d.cxx
   test_scale_pyramid_builder_2d.cxx
   test_gaussian_pyramid_builder_2d_general.cxx
   test_find_peaks.cxx
@@ -21,6 +22,7 @@ ADD_TEST( vimt_test_sample_profile_bilin         vimt_test_all test_sample_profi
 ADD_TEST( vimt_test_sample_grid_bilin            vimt_test_all test_sample_grid_bilin )
 ADD_TEST( vimt_test_transform_2d                 vimt_test_all test_transform_2d )
 ADD_TEST( vimt_test_gaussian_pyramid_builder_2d  vimt_test_all test_gaussian_pyramid_builder_2d )
+ADD_TEST( vimt_test_dog_pyramid_builder_2d  vimt_test_all test_dog_pyramid_builder_2d )
 ADD_TEST( vimt_test_scale_pyramid_builder_2d     vimt_test_all test_scale_pyramid_builder_2d )
 ADD_TEST( vimt_test_gaussian_pyramid_builder_2d_general  vimt_test_all test_gaussian_pyramid_builder_2d_general )
 ADD_TEST( vimt_test_find_peaks                   vimt_test_all test_find_peaks )
