@@ -180,6 +180,7 @@ template vcl_ostream &vnl_matlab_print(vcl_ostream &, T const* const*, unsigned,
 template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_diag_matrix<T > const&, char const *, vnl_matlab_print_format); \
 template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_matrix<T > const&, char const*, vnl_matlab_print_format); \
 template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_vector<T > const&, char const*, vnl_matlab_print_format); \
+template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_matrix_ref<T > const&, char const*, vnl_matlab_print_format); \
 template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_matrix_fixed<T,2,2> const&, char const*, vnl_matlab_print_format); \
 template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_matrix_fixed<T,2,3> const&, char const*, vnl_matlab_print_format); \
 template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_matrix_fixed<T,3,2> const&, char const*, vnl_matlab_print_format); \
