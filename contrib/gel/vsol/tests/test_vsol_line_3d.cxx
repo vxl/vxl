@@ -38,8 +38,9 @@ int main(int argc,
   vcl_cout<<"Constructor from direction and middle point"<<vcl_endl;
   vnl_vector_fixed<double,3> *v=new vnl_vector_fixed<double,3>();
   (*v)[0]=10;
-  (*v)[1]=-5;
-  (*v)[2]=2;
+  (*v)[1]=-2;
+  (*v)[2]=11;
+  // choose the above numbers to obtain a "round" length: 15.
 
   vsol_line_3d_sptr c=new vsol_line_3d(*v,p);
 
@@ -48,12 +49,12 @@ int main(int argc,
   vcl_cout<<"direction()"<<vcl_endl;
   assert(*(c->direction())==*v);
 
-  vcl_cout<<"length()"<<vcl_endl;
-  vcl_cout<<c->length()<<vcl_endl;
+  vcl_cout<<"length() = "<<c->length()<<vcl_endl;
+  assert(c->length()==15);
 
   vcl_cout<<"set_length()"<<vcl_endl;
-  c->set_length(100);
-  assert(c->length()==100);
+  c->set_length(90);
+  assert(c->length()==90); // this could fail because of rounding errors
   // set_length() doesn't change the middle point
   assert(*(c->middle())==*p);
 
