@@ -21,7 +21,7 @@
 //_________________________________________________________________________
 
 
-char *vidl_vil1_image_list_codec::default_initialization_image_type_ = "tiff";
+vcl_string vidl_vil1_image_list_codec::default_initialization_image_type_ = "tiff";
 
 //------------------------------------------------------------------------
 // CONSTRUCTOR(S) AND DESTRUCTOR
@@ -106,7 +106,7 @@ int vidl_vil1_image_list_codec::put_section(int /*position*/, void* /*ib*/, int 
 
 //: Load from a file name.
 // fname should contain "%d", which will be replaced with 0, 1, 2, etc. in turn.
-vidl_vil1_codec_sptr vidl_vil1_image_list_codec::load(const char* fname, char mode)
+vidl_vil1_codec_sptr vidl_vil1_image_list_codec::load(vcl_string const& fname, char mode)
 {
   // will try and load as many images as possible starting with
   //   index 0 and stopping when we run out of images
@@ -114,7 +114,7 @@ vidl_vil1_codec_sptr vidl_vil1_image_list_codec::load(const char* fname, char mo
 
   for (int i=0; true; i++)
   {
-    vil1_image img = vil1_load(vul_sprintf(fname, i).c_str());
+    vil1_image img = vil1_load(vul_sprintf(fname.c_str(), i).c_str());
 
     if (img)
       images_.push_back(img);
@@ -187,15 +187,15 @@ vidl_vil1_codec_sptr vidl_vil1_image_list_codec::load(const vcl_vector<vcl_strin
 // Not so well implemented for this codec.
 // This could check if the filename is a valid image type
 // by probing all the image types.
-bool vidl_vil1_image_list_codec::probe(const char*  /*fname*/)
+bool vidl_vil1_image_list_codec::probe(vcl_string const&  /*fname*/)
 {
   return false;
 }
 
 //: Save the given video as a set of images of the default set type.
-bool vidl_vil1_image_list_codec::save(vidl_vil1_movie* movie, const char* fname)
+bool vidl_vil1_image_list_codec::save(vidl_vil1_movie* movie, vcl_string const& fname)
 {
-  if (!default_image_type_)
+  if (default_image_type_ == "")
   {
     vcl_cerr << "No default image type defined to save the video as a list of images.\n";
     return false;
@@ -207,16 +207,15 @@ bool vidl_vil1_image_list_codec::save(vidl_vil1_movie* movie, const char* fname)
 //: Save the given video as a set of images of the type given.
 bool vidl_vil1_image_list_codec::save(
         vidl_vil1_movie* movie,
-        const char* fname,
-        const char* type
+        vcl_string const& fname,
+        vcl_string const& type
         )
 {
   // The value to be returned
   bool ret = true;
 
   // Create the extension for filenames
-  vcl_string extension = vcl_string(type);
-  extension = extension.substr(0, extension.size()-5); // To get rid of "Image" vcl_string
+  vcl_string extension = type.substr(0, type.size()-5); // To get rid of "Image" string
 
   for (vidl_vil1_movie::frame_iterator pframe = movie->begin();
        pframe <= movie->last();
@@ -226,11 +225,11 @@ bool vidl_vil1_image_list_codec::save(
     vil1_image image = pframe->get_image();
 
     // Create a name for the current image to be saved
-    vcl_string currentname = vul_sprintf("%s%05d.%s", fname,
+    vcl_string currentname = vul_sprintf("%s%05d.%s", fname.c_str(),
                                          pframe.current_frame_number(),
                                          extension.c_str());
 
-    if (! vil1_save(image, currentname.c_str(), type))
+    if (! vil1_save(image, currentname.c_str(), type.c_str()))
       ret = false;
   }
 

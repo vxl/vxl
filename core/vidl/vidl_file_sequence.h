@@ -17,16 +17,16 @@ class vidl_file_sequence
   typedef unsigned long offset_t;
  public:
   vidl_file_sequence() {}
-  vidl_file_sequence(char const* fmt);
+  vidl_file_sequence(vcl_string const& fmt);
   ~vidl_file_sequence() { close(); }
 
-  bool open(char const* fmt);
+  bool open(vcl_string const& fmt);
   void close();
 
   bool seek(offset_t to);
   offset_t tell() const;
   offset_t read(void*, offset_t);
-  bool ok() { return current_file_index != -1; }
+  bool ok() const { return current_file_index != -1; }
 
  private:
   int current_file_index;

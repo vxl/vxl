@@ -15,6 +15,7 @@
 #include <vul/vul_file.h>
 
 #include <vcl_iostream.h>
+#include <vcl_cstring.h> // for memcpy()
 #include <vcl_cassert.h>
 
 //: Constructor
@@ -38,11 +39,11 @@ vidl_avicodec::~vidl_avicodec()
 //-----------------------------------------------------------------------------
 //: Probe the file fname, open it as an AVI file. If it works, return true, false otherwise.
 
-bool vidl_avicodec::probe(const char* fname)
+bool vidl_avicodec::probe(vcl_string const& fname)
 {
   IAviReadFile* avi_file;
   IAviReadStream* avi_stream;
-  avi_file = CreateIAviReadFile(fname);
+  avi_file = CreateIAviReadFile(fname.c_str());
   if ( avi_file && avi_file->VideoStreamCount()!=0){
     avi_stream = avi_file->GetStream(0,AviStream::Video);
     if ( avi_stream ){
@@ -61,7 +62,7 @@ bool vidl_avicodec::probe(const char* fname)
 //  into the cloned codec. The cloned codec is the one that is returned
 //  by this function.
 vidl_codec_sptr
-vidl_avicodec::load(const char* fname, char mode)
+vidl_avicodec::load(vcl_string const& fname, char mode)
 {
   vidl_avicodec *cloned_avi_codec = new vidl_avicodec;
 
@@ -75,11 +76,11 @@ vidl_avicodec::load(const char* fname, char mode)
 
 
 bool
-vidl_avicodec::load_avi(const char* fname, char mode )
+vidl_avicodec::load_avi(vcl_string const& fname, char mode )
 {
   current_frame_=-1;
 
-  moviefile_ = CreateIAviReadFile(fname);
+  moviefile_ = CreateIAviReadFile(fname.c_str());
   if ( !moviefile_ ) return false;
 
   if ( moviefile_->VideoStreamCount() == 0 ){
@@ -102,7 +103,7 @@ vidl_avicodec::load_avi(const char* fname, char mode )
   this->set_number_frames(moviestream_->GetLength());
   this->set_format('L');
   this->set_image_class('C');
-  this->set_name(vul_file::basename(fname).c_str());
+  this->set_name(vul_file::basename(fname));
   this->set_description(fname);
 
   //frame_rate_=(double)moviestream_->GetLength()/moviestream_->GetLengthTime();

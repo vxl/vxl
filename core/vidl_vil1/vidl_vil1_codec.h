@@ -11,7 +11,7 @@
 //   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
 // \endverbatim
 
-#include <vcl_cstring.h>
+#include <vcl_string.h>
 #include <vidl_vil1/vidl_vil1_codec_sptr.h>
 #include <vbl/vbl_ref_count.h>
 
@@ -42,9 +42,8 @@ class vidl_vil1_codec :  public vbl_ref_count
   // Data Control--------------------------------------------------------------
 
   inline void set_number_frames(int n = 0) { numberframes = n; }
-  inline void set_name(const char* n = "") { delete[] name;name=new char[vcl_strlen(n)+1];vcl_strcpy(name,n); }
-  inline void set_description(const char* d = "")
-  { delete[] description;description=new char[vcl_strlen(d)+1];vcl_strcpy(description,d); }
+  inline void set_name(vcl_string n = "") { name = n; }
+  inline void set_description(vcl_string d = "") { description = d; }
   inline void set_format(char f = '\0') { format = f; }
   inline void set_image_class(char t = 'M') { Class = t; }
   inline void set_bits_pixel(int d = 0) { B = d; }
@@ -56,8 +55,8 @@ class vidl_vil1_codec :  public vbl_ref_count
   // Data Access---------------------------------------------------------------
 
   inline int length() const { return numberframes; }
-  inline const char* get_name() const  { return (name)?name:""; }
-  inline const char* get_description() const { return (description)?description:""; }
+  inline vcl_string get_name() const  { return name; }
+  inline vcl_string get_description() const { return description; }
 
   inline char get_image_class()const { return Class; }
   inline char get_format() const     { return format; }
@@ -80,18 +79,18 @@ class vidl_vil1_codec :  public vbl_ref_count
                           int xs,
                           int ys) = 0;
 
-  virtual const char* type() = 0;
+  virtual vcl_string type() const = 0;
 
   // IO
 
   //: Try to load fname, and if successful, return the codec that did it
-  virtual vidl_vil1_codec_sptr load(const char* fname, char mode = 'r' ) = 0;
+  virtual vidl_vil1_codec_sptr load(vcl_string const& fname, char mode = 'r' ) = 0;
 
   //: Take a vidl_vil1_movie, and save in the format of this codec.
-  virtual bool save(vidl_vil1_movie* movie, const char* fname) = 0;
+  virtual bool save(vidl_vil1_movie* movie, vcl_string const& fname) = 0;
 
   //: Return true if fname looks like something we can read.
-  virtual bool probe(const char* fname) = 0;
+  virtual bool probe(vcl_string const& fname) = 0;
 
   //: Perform any operations required to close down the codec.
   // This will typically be called just before program exit.
@@ -99,11 +98,11 @@ class vidl_vil1_codec :  public vbl_ref_count
 
  private:
 
-  inline void clear_strings() { name = description = date_time = NULL; }
+  inline void clear_strings() { name = description = date_time = ""; }
 
-  char*      name;             //!< Video Name
-  char*      description;      //!< Video Descriptor
-  char*      date_time;        //!< Date/Time Stamp
+  vcl_string name;             //!< Video Name
+  vcl_string description;      //!< Video Descriptor
+  vcl_string date_time;        //!< Date/Time Stamp
   char       format;           //!< Video format
   char       Class;            //!< Video class
   int        B;                //!< Pixel Precision

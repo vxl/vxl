@@ -16,6 +16,7 @@
 #include <vcl_list.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vcl_cstring.h>
 #ifdef HAS_MPEG2
 # include <vidl_vil1/vidl_vil1_mpegcodec.h>
 void (* vidl_vil1_io::load_mpegcodec_callback)(vidl_vil1_codec*) = 0;
@@ -24,8 +25,8 @@ void (* vidl_vil1_io::load_mpegcodec_callback)(vidl_vil1_codec*) = 0;
 vcl_list<vidl_vil1_codec_sptr> vidl_vil1_io::supported_types_;
 
 static bool looks_like_a_file_list(char const* fname);
-static vidl_vil1_clip_sptr load_from_file_list(char const* fname);
-static vidl_vil1_clip_sptr load_from_directory(char const* fname)
+static vidl_vil1_clip_sptr load_from_file_list(vcl_string const& fname);
+static vidl_vil1_clip_sptr load_from_directory(vcl_string const& fname)
 {
   vcl_list<vcl_string> filenames;
 
@@ -47,7 +48,7 @@ static vidl_vil1_clip_sptr load_from_directory(char const* fname)
 //: Load a movie, takes a file name and return the created movie.
 // A starting frame, ending frame and increment number are optionals
 vidl_vil1_movie_sptr vidl_vil1_io::load_movie(
-        const char* fname,
+        vcl_string const& fname,
         int start,
         int end,
         int increment,
@@ -110,7 +111,7 @@ vidl_vil1_movie_sptr  vidl_vil1_io::load_movie(
 //: Load a clip, takes a file name and return the created clip.
 // A starting frame, ending frame and increment number are optionals
 vidl_vil1_clip_sptr  vidl_vil1_io::load_clip(
-        const char* fname,
+        vcl_string const& fname,
         int start,
         int end,
         int increment,
@@ -118,17 +119,13 @@ vidl_vil1_clip_sptr  vidl_vil1_io::load_clip(
         )
 {
   // make sure that fname is sane
-  if (!fname ||
-      (vcl_strlen(fname) == 0))
-    {
-      return 0;
-    }
+  if (fname == "") { return 0; }
 
   // test if fname is a directory
   if (vul_file::is_directory(fname))
     return load_from_directory(fname);
     //    return load_from_directory(fname);
-  else if (looks_like_a_file_list(fname))
+  else if (looks_like_a_file_list(fname.c_str()))
     return load_from_file_list(fname);
 
   // The file is not a directory,
@@ -257,17 +254,16 @@ vidl_vil1_clip_sptr  vidl_vil1_io::load_images(
 }
 
 //: Save a video into a file "fname" as type "type"
-bool vidl_vil1_io::save(vidl_vil1_movie* movie, const char* fname, const char* type)
+bool vidl_vil1_io::save(vidl_vil1_movie* movie, vcl_string const& fname, vcl_string const& type)
 {
   // Go along the vcl_list of supported videoCODECs,
   // find the one of the type asked if it does exist.
   vcl_list<vidl_vil1_codec_sptr>::iterator i = supported_types_.begin();
 
-  while ((i != supported_types_.end()) && (vcl_strcmp((*i)->type(), type)))
+  while ((i != supported_types_.end()) && (*i)->type() != type)
   {
 #ifdef DEBUG
-    const char* debug = (*i)->type();
-    vcl_cout << "debug : " << debug << " type : " << type << vcl_endl;
+    vcl_cout << "debug : " << (*i)->type() << " type : " << type << vcl_endl;
 #endif
     ++i;
   }
@@ -286,7 +282,7 @@ bool vidl_vil1_io::save(vidl_vil1_movie* movie, const char* fname, const char* t
 }
 
 // This function should be removed and integrated in save()
-bool vidl_vil1_io::save_images(vidl_vil1_movie* movie, const char* fname,  const char* type)
+bool vidl_vil1_io::save_images(vidl_vil1_movie* movie, vcl_string const& fname,  vcl_string const& type)
 {
   vidl_vil1_image_list_codec codec;
 
@@ -300,7 +296,7 @@ vcl_list<vcl_string> vidl_vil1_io::supported_types()
   // Create the vcl_list with type() for all the codecs
   vcl_list<vcl_string> ret;
   for (vcl_list<vidl_vil1_codec_sptr>::iterator i=supported_types_.begin(); i!=supported_types_.end(); ++i)
-    ret.push_back((*i)->type());
+    ret.push_back((*i)->type().c_str());
 
   // Return the vcl_list of type supported codecs
   return ret;
@@ -331,7 +327,7 @@ static bool looks_like_a_file_list(char const* fname)
   return false;
 }
 
-static vidl_vil1_clip_sptr load_from_file_list(char const* fname)
+static vidl_vil1_clip_sptr load_from_file_list(vcl_string const& fname)
 {
   // Declare the vcl_list of image filenames
   vcl_list<vcl_string> filenames;

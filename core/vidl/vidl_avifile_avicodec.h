@@ -33,17 +33,17 @@ class vidl_avicodec : public vidl_codec
                         int x0, int y0 );
 
   //-----------------------------------------------------
-  virtual bool probe(const char* fname);
-  virtual vidl_codec_sptr load(const char* fname, char mode = 'r' );
-  virtual bool save(vidl_movie* movie, const char* fname) { return false; }
-  virtual  const char* type() {return "AVI";}
-  virtual vidl_avicodec* castto_vidl_avicodec(){return this;}
+  virtual bool probe(vcl_string const& fname);
+  virtual vidl_codec_sptr load(vcl_string const& fname, char mode = 'r' );
+  virtual bool save(vidl_movie* movie, vcl_string const& fname) { return false; }
+  virtual vcl_string type() const { return "AVI"; }
+  virtual vidl_avicodec* castto_vidl_avicodec() { return this; }
 
  protected:
   int seek(int frame_num) const;
   int next_frame() const;
 
-  bool load_avi(const char* fname, char mode);
+  bool load_avi(vcl_string const& fname, char mode);
 
  private:
 

@@ -37,13 +37,12 @@ class vidl_io
   //-------------------------------------------------------
   VIDL_DLL_DATA static void (* load_mpegcodec_callback)( vidl_codec*);
 
-
   //---------------------------------------------------------
   //   LoadMovie
   //---------------------------------------------------------
 
   static vidl_movie_sptr load_movie(
-        const char* fname,
+        vcl_string const& fname,
         int start, int end,
         int increment,
         char mode = 'r'
@@ -66,7 +65,7 @@ class vidl_io
         );
 
   static vidl_movie_sptr load_movie(
-        const char* fname,
+        vcl_string const& fname,
         char mode = 'r'
         ) { return load_movie(fname, 0, 0, 1, mode); }
 
@@ -85,7 +84,7 @@ class vidl_io
   //---------------------------------------------------------
 
   static vidl_clip_sptr load_clip(
-        const char* fname,
+        vcl_string const& fname,
         int start,
         int end,
         int increment,
@@ -107,7 +106,7 @@ class vidl_io
         );
 
   static vidl_clip_sptr load_clip(
-        const char* fname,
+        vcl_string const& fname,
         char mode = 'r'
         ) { return load_clip(fname, 0, 0, 1, mode); }
 
@@ -123,11 +122,9 @@ class vidl_io
 
   //---------------------------------------------------------
 
-  static bool save(
-        vidl_movie_sptr movie,
-        const char* fname,
-        const char* type
-        );
+  static bool save(vidl_movie_sptr movie,
+                   vcl_string const& fname,
+                   vcl_string const& type);
 
   // returns vcl_string names  for supported types
   static vcl_list<vcl_string> supported_types();
@@ -135,12 +132,12 @@ class vidl_io
   // This is no longer used by the new vidl approach of loading all
   // available codecs. This function is present simply to prevent code
   // breakage, and will eventually be removed.
-  static void register_codec( vidl_codec* ) { };
+  static void register_codec( vidl_codec* ) {}
 
   // This is no longer used by the new vidl approach of loading all
   // available codecs. This function is present simply to prevent code
   // breakage, and will eventually be removed.
-  static void close() { };
+  static void close() {}
 
  public:
 
@@ -171,7 +168,7 @@ class vidl_io
         char mode = 'r'
         )
         {
-        return load_images(fnames, 0, 0, 1, mode);
+          return load_images(fnames, 0, 0, 1, mode);
         }
 
   static vidl_clip_sptr load_images(
@@ -179,14 +176,12 @@ class vidl_io
         char mode = 'r'
         )
         {
-        return load_images(fnames, 0, 0, 1, mode);
+          return load_images(fnames, 0, 0, 1, mode);
         }
 
-  static bool save_images(
-        vidl_movie_sptr movie,
-        const char* fname,
-        const char* type
-        );
+  static bool save_images(vidl_movie_sptr movie,
+                          vcl_string const& fname,
+                          vcl_string const& type);
 };
 
 #endif // vidl_io_h

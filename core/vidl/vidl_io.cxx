@@ -22,9 +22,10 @@ void (* vidl_io::load_mpegcodec_callback)(vidl_codec*) = 0;
 #endif
 
 
-static bool looks_like_a_file_list(char const* fname);
-static vidl_clip_sptr load_from_file_list(char const* fname);
-static vidl_clip_sptr load_from_directory(char const* fname)
+static bool looks_like_a_file_list(const char* fname);
+static vidl_clip_sptr load_from_file_list(vcl_string const& fname);
+
+static vidl_clip_sptr load_from_directory(vcl_string const& fname)
 {
   vcl_list<vcl_string> filenames;
 
@@ -47,7 +48,7 @@ static vidl_clip_sptr load_from_directory(char const* fname)
 //: Load a movie, takes a file name and return the created movie.
 // A starting frame, ending frame and increment number are optionals
 vidl_movie_sptr vidl_io::load_movie(
-        const char* fname,
+        vcl_string const& fname,
         int start,
         int end,
         int increment,
@@ -110,7 +111,7 @@ vidl_movie_sptr  vidl_io::load_movie(
 //: Load a clip, takes a file name and return the created clip.
 // A starting frame, ending frame and increment number are optionals
 vidl_clip_sptr  vidl_io::load_clip(
-        const char* fname,
+        vcl_string const& fname,
         int start,
         int end,
         int increment,
@@ -118,17 +119,13 @@ vidl_clip_sptr  vidl_io::load_clip(
        )
 {
   // make sure that fname is sane
-  if (!fname ||
-      (vcl_strlen(fname) == 0))
-    {
-      return 0;
-    }
+  if (fname == "") { return 0; }
 
   // test if fname is a directory
   if (vul_file::is_directory(fname))
     return load_from_directory(fname);
     //    return load_from_directory(fname);
-  else if (looks_like_a_file_list(fname))
+  else if (looks_like_a_file_list(fname.c_str()))
     return load_from_file_list(fname);
 
   // The file is not a directory,
@@ -251,16 +248,15 @@ vidl_clip_sptr  vidl_io::load_images(
 }
 
 //: Save a video into a file "fname" as type "type"
-bool vidl_io::save(vidl_movie_sptr movie, const char* fname, const char* type)
+bool vidl_io::save(vidl_movie_sptr movie, vcl_string const& fname, vcl_string const& type)
 {
   // Go along the vcl_list of supported videoCODECs,
   // find the one of the type asked if it does exist.
   vidl_codec_sptr* i = vidl_codec::all_codecs();
-  while ((*i) && (vcl_strcmp((*i)->type(), type)))
+  while ((*i) && (*i)->type() != type)
   {
 #ifdef DEBUG
-    const char* debug = (*i)->type();
-    vcl_cout << "debug : " << debug << " type : " << type << vcl_endl;
+    vcl_cout << "debug : " << (*i)->type() << " type : " << type << vcl_endl;
 #endif
     ++i;
   }
@@ -275,7 +271,7 @@ bool vidl_io::save(vidl_movie_sptr movie, const char* fname, const char* type)
 }
 
 // This function should be removed and integrated in save()
-bool vidl_io::save_images(vidl_movie_sptr movie, const char* fname,  const char* type)
+bool vidl_io::save_images(vidl_movie_sptr movie, vcl_string const& fname,  vcl_string const& type)
 {
   vidl_image_list_codec codec;
 
@@ -289,14 +285,14 @@ vcl_list<vcl_string> vidl_io::supported_types()
   // Create the vcl_list with type() for all the codecs
   vcl_list<vcl_string> ret;
   for (vidl_codec_sptr* i = vidl_codec::all_codecs(); *i; ++i)
-    ret.push_back((*i)->type());
+    ret.push_back((*i)->type().c_str());
 
   // Return the vcl_list of type supported codecs
   return ret;
 }
 
 
-static bool looks_like_a_file_list(char const* fname)
+static bool looks_like_a_file_list(const char* fname)
 {
   while (*fname) {
     if (*fname == '%' || *fname == '#')
@@ -306,7 +302,7 @@ static bool looks_like_a_file_list(char const* fname)
   return false;
 }
 
-static vidl_clip_sptr load_from_file_list(char const* fname)
+static vidl_clip_sptr load_from_file_list(vcl_string const& fname)
 {
   // Declare the vcl_list of image filenames
   vcl_list<vcl_string> filenames;

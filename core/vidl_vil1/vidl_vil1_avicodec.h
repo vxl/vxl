@@ -42,10 +42,10 @@ class vidl_vil1_avicodec : public vidl_vil1_codec
   virtual int    put_section(int position, void* ib, int x0, int y0, int xs, int ys);
 
   //-----------------------------------------------------
-  virtual bool probe(const char* fname);
-  virtual vidl_vil1_codec_sptr load(const char* fname, char mode = 'r' );
-  virtual bool save(vidl_vil1_movie* movie, const char* fname);
-  virtual  const char* type() {return "AVI";}
+  virtual bool probe(vcl_string const& fname);
+  virtual vidl_vil1_codec_sptr load(vcl_string const& fname, char mode = 'r' );
+  virtual bool save(vidl_vil1_movie* movie, vcl_string const& fname);
+  virtual vcl_string type() const { return "AVI"; }
   virtual vidl_vil1_avicodec* castto_vidl_vil1_avicodec(){return this;}
 
   // Set of encoders that this class knows how to configure by itself,

@@ -11,7 +11,6 @@
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_cstring.h>
 #include <vidl_vil1/vidl_vil1_image_list_codec_sptr.h>
 #include <vidl_vil1/vidl_vil1_codec.h>
 #include <vil1/vil1_image.h>
@@ -39,23 +38,23 @@ class vidl_vil1_image_list_codec :  public vidl_vil1_codec
   virtual bool get_section(int position, void* ib, int x0, int y0, int w, int h) const;
   virtual int put_section(int position, void* ib, int x0, int y0, int w, int h);
   // IO
-  virtual vidl_vil1_codec_sptr load(const char* fname, char mode = 'r' );
+  virtual vidl_vil1_codec_sptr load(vcl_string const& fname, char mode = 'r' );
   virtual vidl_vil1_codec_sptr load(const vcl_list<vcl_string> &fnames, char mode = 'r');
   virtual vidl_vil1_codec_sptr load(const vcl_vector<vcl_string> &fnames, char mode = 'r');
-  virtual bool save(vidl_vil1_movie* movie, const char* fname);
-  virtual bool save(vidl_vil1_movie* movie, const char* fname, const char* type);
-  virtual bool probe(const char* fname);
+  virtual bool save(vidl_vil1_movie* movie, vcl_string const& fname);
+  virtual bool save(vidl_vil1_movie* movie, vcl_string const& fname, vcl_string const& type);
+  virtual bool probe(vcl_string const& fname);
 
-  virtual const char* type() {return "ImageList";}
+  virtual vcl_string type() const {return "ImageList";}
 
   // Specific to vidl_vil1_image_list_codec
-  static void set_default_image_type(const char* type)
-  { vcl_strcpy(default_initialization_image_type_,type); }
+  static void set_default_image_type(vcl_string const& type)
+  { default_initialization_image_type_=type; }
 
-  virtual void set_image_type(const char* type)
-  { vcl_strcpy(default_image_type_,type); }
+  virtual void set_image_type(vcl_string const& type)
+  { default_image_type_=type; }
 
-  virtual const char* get_image_type() const {return default_image_type_;}
+  virtual vcl_string get_image_type() const {return default_image_type_;}
   vcl_vector<vil1_image> get_images() const {return images_;}
 
   // Register image loaders
@@ -68,8 +67,8 @@ class vidl_vil1_image_list_codec :  public vidl_vil1_codec
   vcl_vector<vil1_image> images_;
 
  private:
-  char* default_image_type_;
-  static char* default_initialization_image_type_;
+  vcl_string default_image_type_;
+  static vcl_string default_initialization_image_type_;
 };
 
 #endif // vidl_vil1_image_list_codec_h

@@ -11,11 +11,11 @@
 #include <vcl_fstream.h>
 #include <vul/vul_awk.h>
 
-bool vidl_vob_frame_index::load(char const* filename)
+bool vidl_vob_frame_index::load(vcl_string const& filename)
 {
   vcl_vector<vidl_vob_frame_index_entry> tmp;
 
-  vcl_ifstream f(filename, vcl_ios_binary);
+  vcl_ifstream f(filename.c_str(), vcl_ios_binary);
   if (!f.good())
   {
     vcl_cerr << "vidl_vob_frame_index: Cannot read IDX file ["<< filename <<"]\n";

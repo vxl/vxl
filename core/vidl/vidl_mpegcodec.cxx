@@ -234,17 +234,15 @@ vidl_mpegcodec::set_grey_scale(bool grey)
 //like height, width, number of frames, bits per pixel, etc. however,
 //i don't have the time right now to write such a header. hopefully it
 //will be done someday.
-vidl_codec_sptr vidl_mpegcodec::load(const char* fname, char  /*mode*/)
+vidl_codec_sptr vidl_mpegcodec::load(vcl_string const& fname, char  /*mode*/)
 {
-  vcl_string filename(fname);
-
   //just running probe here just to be safe,
   //though the client is supposed to run this anyway before
   //using this method.
   if (this->probe(fname))
   {
     decoder_ = new vidl_mpegcodec_helper(vo_vil_im_open,
-                                         filename,
+                                         fname,
                                          buffers_);
     return this;
   }
@@ -329,7 +327,7 @@ vidl_mpegcodec::get_view( int position,
 }
 
 bool
-vidl_mpegcodec::probe(const char* fname)
+vidl_mpegcodec::probe(vcl_string const& fname)
 {
   vcl_string exten = vul_file::extension(fname);
   bool isthere = vul_file::exists(fname) && (exten == ".mpeg" ||
@@ -337,7 +335,6 @@ vidl_mpegcodec::probe(const char* fname)
                                              exten == ".mpg"  ||
                                              exten == ".mp2"  ||
                                              exten == ".mp1");
-
   return isthere;
 }
 

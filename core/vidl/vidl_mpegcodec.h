@@ -42,7 +42,7 @@ class vidl_mpegcodec : public vidl_codec
   ~vidl_mpegcodec();
 
   //Casting methods overridden here...
-  vidl_mpegcodec* castto_vidl_mpegcodec(){return this;}
+  vidl_mpegcodec* castto_vidl_mpegcodec() { return this; }
 
   //-----------------------------------------------------
   //pure virtual methods
@@ -54,12 +54,12 @@ class vidl_mpegcodec : public vidl_codec
 
   bool put_view( int /*frame_position*/,
                  const vil_image_view_base & /*im*/,
-                 int /*x0*/, int /*y0*/ ) {return 0;}
+                 int /*x0*/, int /*y0*/ ) { return false; }
 
-  virtual bool probe(const char* fname);
-  virtual vidl_codec_sptr load(const char* fname, char mode = 'r' );
-  bool save(vidl_movie*  /*movie*/, const char*  /*fname*/){return true;}
-  virtual const char* type() {return "MPEG";}
+  virtual bool probe(vcl_string const& fname);
+  virtual vidl_codec_sptr load(vcl_string const& fname, char mode = 'r' );
+  bool save(vidl_movie* /*movie*/, vcl_string const& /*fname*/) { return true; }
+  virtual vcl_string type() const { return "MPEG"; }
 
   //-----------------------------------------------
   //initialization methods.

@@ -1,7 +1,7 @@
 // This is core/vidl_vil1/vidl_vil1_mpegcodec.cxx
 #include "vidl_vil1_mpegcodec.h"
 #include <vidl_vil1/vidl_vil1_yuv_2_rgb.h>
-#include <vcl_string.h>
+#include <vcl_cstring.h> // for memcpy()
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for vcl_strtol()
@@ -234,17 +234,15 @@ vidl_vil1_mpegcodec::set_grey_scale(bool grey)
 //like height, width, number of frames, bits per pixel, etc. however,
 //i don't have the time right now to write such a header. hopefully it
 //will be done someday.
-vidl_vil1_codec_sptr vidl_vil1_mpegcodec::load(const char* fname, char  /*mode*/)
+vidl_vil1_codec_sptr vidl_vil1_mpegcodec::load(vcl_string const& fname, char  /*mode*/)
 {
-  vcl_string filename(fname);
-
   //just running probe here just to be safe,
   //though the client is supposed to run this anyway before
   //using this method.
   if (this->probe(fname))
   {
     decoder_ = new vidl_vil1_mpegcodec_helper(vo_vil_im_open,
-                                              filename,
+                                              fname,
                                               buffers_);
     return this;
   }
@@ -326,7 +324,7 @@ vidl_vil1_mpegcodec::get_section(int position,
 }
 
 bool
-vidl_vil1_mpegcodec::probe(const char* fname)
+vidl_vil1_mpegcodec::probe(vcl_string const& fname)
 {
   vcl_string exten = vul_file::extension(fname);
   bool isthere = vul_file::exists(fname) && (exten == ".mpeg" ||

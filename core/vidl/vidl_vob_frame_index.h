@@ -9,6 +9,7 @@
 //
 //
 #include <vcl_vector.h>
+#include <vcl_string.h>
 
 struct vidl_vob_frame_index_entry {
   int lba;
@@ -19,7 +20,7 @@ struct vidl_vob_frame_index
 {
   vcl_vector<vidl_vob_frame_index_entry> l;
 
-  bool load(char const* filename);
+  bool load(vcl_string const& filename);
   int frame_to_lba_of_prev_I_frame(int frame_number, int* f_actual = 0);
 };
 
