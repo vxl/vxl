@@ -5,7 +5,6 @@
 
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <testlib/testlib_root_dir.h>
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_save.h>
 #include <vil2/vil2_image_view.h>
@@ -14,13 +13,27 @@
 
 int main(int argc, char** argv)
 {
-  vcl_string filename = testlib_root_dir() + "/vxl/vil/tests/file_read_data/ff_grey8bit_raw.pgm";
-  vcl_cout<<"Load " << filename << " into an image data object.\n";
+  if (argc < 2)
+  {
+    vcl_cerr << "Specify an image filename" <<vcl_endl;
+    return 3;
+  }
+  
+  vcl_cout<<"Load " << argv[1] << " into an image data object" << vcl_endl;
 
 
   // This is how we quickly load an image view.
 
-  vil2_image_view<vxl_byte> b_im = vil2_load(filename.c_str());
+  vil2_image_view<vxl_byte> b_im = vil2_load(argv[1]);
+
+  if (!b_im)
+  {
+    vcl_cerr << "Couldn't load " << argv[1] <<vcl_endl;
+    return 3;
+  }
+
+  
+  
 
   vil2_print_all(vcl_cout, b_im);
 

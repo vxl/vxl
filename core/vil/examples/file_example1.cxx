@@ -4,7 +4,6 @@
 // \author Ian Scott
 
 #include <vcl_iostream.h>
-#include <testlib/testlib_root_dir.h>
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_crop.h>
 #include <vil2/vil2_image_view.h>
@@ -13,14 +12,24 @@
 
 int main(int argc, char** argv)
 {
-  vcl_string filename = testlib_root_dir() + "/vxl/vil/tests/file_read_data/ff_rgb8bit_raw.ppm";
-  vcl_cout<<"Load " << filename << " into an image data object" << vcl_endl;
+  if (argc < 2)
+  {
+    vcl_cerr << "Specify an image filename" <<vcl_endl;
+    return 3;
+  }
+  
+  vcl_cout<<"Load " << argv[1] << " into an image data object" << vcl_endl;
 
 
   // This is how we initialise an image data object.
 
-  vil2_image_resource_sptr data = vil2_load_image_resource(filename.c_str());
+  vil2_image_resource_sptr data = vil2_load_image_resource(argv[1]);
 
+  if (!data)
+  {
+    vcl_cerr << "Couldn't load " << argv[1] <<vcl_endl;
+    return 3;
+  }
 
   // This is how we get some image pixels from it.
 

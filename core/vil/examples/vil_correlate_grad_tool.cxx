@@ -5,7 +5,6 @@
 
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <testlib/testlib_root_dir.h>
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_save.h>
 #include <vil2/vil2_image_view.h>
