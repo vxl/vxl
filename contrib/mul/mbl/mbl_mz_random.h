@@ -10,7 +10,6 @@
 // \brief A superior random number generator
 
 #include<vcl_cassert.h>
-// #include<stddef.h>
 
 
 const int mbl_mz_array_size = 37;

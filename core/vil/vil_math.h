@@ -87,7 +87,7 @@ inline sumT vil2_math_ssd(const vil2_image_view<imT>& imA, const vil2_image_view
 // \relates vil2_image_view
 template<class aT, class sumT>
 inline void vil2_math_mean_over_planes(const vil2_image_view<aT>& src,
-                              vil2_image_view<sumT>& dest)
+                                       vil2_image_view<sumT>& dest)
 {
   dest.resize(src.ni(), src.nj(), 1);
   for (unsigned j=0;j<src.nj();++j)

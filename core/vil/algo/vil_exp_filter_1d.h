@@ -50,8 +50,8 @@ inline void vil2_exp_filter_1d(const srcT* src, int sstep,
 // \relates vil2_image_view
 template <class srcT, class destT, class accumT>
 inline void vil2_exp_filter_1d(const vil2_image_view<srcT>& src_im,
-                                    vil2_image_view<destT>& dest_im,
-                                    double k, accumT ac)
+                               vil2_image_view<destT>& dest_im,
+                               double k, accumT ac)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -66,7 +66,7 @@ inline void vil2_exp_filter_1d(const vil2_image_view<srcT>& src_im,
     const destT* dest_row = dest_im.top_left_ptr()+p*dest_im.pstep();
 
     for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
-      vil2_exp_filter_1d(src_row,s_istep, dest_row,d_istep,   ni, ac);
+      vil2_exp_filter_1d(src_row,s_istep, dest_row,d_istep, ni, ac);
   }
 }
 
