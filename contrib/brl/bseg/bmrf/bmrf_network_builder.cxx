@@ -726,13 +726,13 @@ time_neighbors(bmrf_node_sptr const& node,
   double s_min = node->epi_seg()->min_s(), s_max = node->epi_seg()->max_s();
   //scan the frame for s bounds
   //the upper bound passes zero velocity
-  //the lower bound is extended by the maximum velocity range, s_range_.
+  //the lower bound is extended by the maximum velocity/depth range, gamma_max_.
   vcl_vector<bmrf_node_sptr> temp;
   int frame = node->frame_num();
   for (bmrf_network::seg_node_map::const_iterator nit = network_->begin(frame-1);
        nit != network_->end(frame-1); ++nit)
     if ((nit->first->min_s() <= s_max) &&
-        (nit->first->max_s() > (s_min - s_range_)))
+        (nit->first->max_s() > (s_min/(1.0+gamma_max_))))
       temp.push_back(nit->second);
 
   //filter out nodes that do not lie within the alpha range of the node

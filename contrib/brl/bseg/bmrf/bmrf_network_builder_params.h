@@ -24,7 +24,7 @@ class bmrf_network_builder_params : public gevd_param_mixin
                               const int elv_max =450,
                               const int Ns = 10,
                               const float alpha_range = 0.1,
-                              const float s_range = 20
+                              const float gamma_max = 0.030
                               );
 
  bmrf_network_builder_params(const bmrf_network_builder_params& old_params);
@@ -41,7 +41,7 @@ class bmrf_network_builder_params : public gevd_param_mixin
                   int elv_max,
                   int Ns,
                   float alpha_range,
-                  float s_range
+                  float gamma_max_
                  );
  public:
   //
@@ -54,7 +54,7 @@ class bmrf_network_builder_params : public gevd_param_mixin
   int elv_max_; // maximum row position of the epipolar space
   int Ns_;   // number of intensity samples in s of an unbounded region
   float alpha_range_;   //range in alpha for time neighbors [0, 1].
-  float  s_range_;  // range in s for time neighbors (pixels)
+  float  gamma_max_;  // maximum gamma (velocity/depth) for time neighbors
 };
 
 #endif // bmrf_network_builder_params_h_
