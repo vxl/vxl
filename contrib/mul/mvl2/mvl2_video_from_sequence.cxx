@@ -141,8 +141,7 @@ bool mvl2_video_from_sequence::get_frame(vil_image_view<vxl_byte>& image)
   }
   else
   {
-    image.deep_copy(vil_convert_to_grey_using_rgb_weighting(
-        image_view_sptr,(vxl_byte)0));
+    image.deep_copy(vil_convert_to_grey_using_rgb_weighting(image_view_sptr));
   }
   height_=image.ni();
   width_=image.nj();
