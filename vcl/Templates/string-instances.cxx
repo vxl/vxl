@@ -21,7 +21,7 @@ template bs &bs::replace(size_t, size_t, size_t, char);
 
 
 
-#if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3) && !defined(VCL_GCC_27)
+#if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3) && !defined(VCL_EGCS) && !defined(VCL_GCC_27)
 void vcl_string_instance_tickler(ostream &os, char *a, char const *b)
 {
   char ch;
@@ -43,7 +43,9 @@ template bs &bs::replace(size_t, size_t, bs const &, size_t, size_t);
 template bs &bs::replace(size_t, size_t, char const *, size_t);
 template bs &bs::replace(size_t, size_t, size_t, char);
 # undef bs
-template class __default_alloc_template<false, 0>;
+// this is defined in libstdc++ for egcs. it causes multiply
+// defined symbols on static builds. -- fsm
+//template class __default_alloc_template<false, 0>;
 # define bs basic_string<char, string_char_traits<char>, __default_alloc_template<false, 0> >
 template bs &bs::replace(char *, char *, char *, char *);
 template bs &bs::replace(char *, char *, char const *, char const *);
