@@ -19,6 +19,7 @@
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image.h>
+#include <vil/vil_property.h>
 
 //: the file probe, as a C function.
 bool vil_jpeg_file_probe(vil_stream *vs) {
@@ -73,6 +74,17 @@ vil_jpeg_generic_image::vil_jpeg_generic_image(vil_stream *s)
   , stream(s)
 {
   stream->ref();
+}
+
+bool vil_jpeg_generic_image::get_property(char const *tag, void *prop) const
+{
+  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+    return prop ? (*(bool*)prop) = true : true;
+
+  if (0==vcl_strcmp(tag, vil_property_left_first))
+    return prop ? (*(bool*)prop) = true : true;
+
+  return false;
 }
 
 vil_jpeg_generic_image::vil_jpeg_generic_image(vil_stream *s,

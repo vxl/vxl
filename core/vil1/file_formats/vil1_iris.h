@@ -12,6 +12,7 @@
 //  Modifications
 //  17-Feb-2000 JS - Initial version, copied from IrisRGBImage.C
 //     Jul-2000 Peter Vanroose - bug fixed in write_header() by adding extra argument to constructor to pass imagename_ member
+//  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
 //\endverbatim
 
 #include <vil/vil_file_format.h>
@@ -73,6 +74,7 @@ public:
   //virtual bool get_section_byte(void* buf, int plane, int x0, int y0, int width, int height) const;
 
   char const* file_format() const;
+  bool get_property(char const *tag, void *prop = 0) const;
 
 //protected:
   vil_stream* is_;

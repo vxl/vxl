@@ -12,6 +12,7 @@ char const* vil_viff_format_tag = "viff";
 #include <vil/vil_stream.h>
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
+#include <vil/vil_property.h>
 
 extern "C" vil_viff_xvimage *vil_viff_createimage
 (long col_size, long row_size, long data_storage_type, long num_of_images,
@@ -64,6 +65,17 @@ vil_viff_generic_image::vil_viff_generic_image(vil_stream* is)
 {
   is_->ref();
   read_header();
+}
+
+bool vil_viff_generic_image::get_property(char const *tag, void *prop) const
+{
+  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+    return prop ? (*(bool*)prop) = true : true;
+
+  if (0==vcl_strcmp(tag, vil_property_left_first))
+    return prop ? (*(bool*)prop) = true : true;
+
+  return false;
 }
 
 char const* vil_viff_generic_image::file_format() const

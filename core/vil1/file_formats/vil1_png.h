@@ -8,6 +8,11 @@
 // \file
 // \author   awf@robots.ox.ac.uk
 // \date 17 Feb 00
+//
+//\verbatim
+//  Modifications
+//  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
+//\endverbatim
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_impl.h>
@@ -72,6 +77,7 @@ public:
   //virtual bool get_section_byte(void* buf, int x0, int y0, int width, int height) const;
 
   char const* file_format() const;
+  bool get_property(char const *tag, void *prop = 0) const;
   vil_image get_plane(int ) const;
 };
 

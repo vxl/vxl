@@ -18,7 +18,7 @@
 #include <vil/vil_stream.h>
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
-
+#include <vil/vil_property.h>
 
 static short get_short(vil_stream* file, int location = -1); // default -1 means: read at current position
 static unsigned short get_ushort(vil_stream* file, int location = -1);
@@ -90,6 +90,17 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, char* imagename):
   vcl_strncpy(imagename_, imagename, 80);
 }
 
+bool vil_iris_generic_image::get_property(char const *tag, void *prop) const
+{
+  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+    return prop ? (*(bool*)prop) = true : true;
+
+  if (0==vcl_strcmp(tag, vil_property_left_first))
+    return prop ? (*(bool*)prop) = true : true;
+
+  return false;
+}
+
 char const* vil_iris_generic_image::file_format() const
 {
   return vil_iris_format_tag;
@@ -104,6 +115,7 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, int planes,
   is_(is)
 {
   is_->ref();
+
   if (bits_per_component == 8 ||
       bits_per_component == 16)
   {

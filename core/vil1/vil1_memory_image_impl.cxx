@@ -11,6 +11,7 @@
 #include <vcl_iostream.h>
 
 #include <vil/vil_image.h>
+#include <vil/vil_property.h>
 
 vil_memory_image_impl::vil_memory_image_impl(int planes, int w, int h,
                                              vil_memory_image_format
@@ -204,8 +205,14 @@ vil_image vil_memory_image_impl::get_plane(int plane) const
 bool vil_memory_image_impl::get_property(char const *tag,
                                          void *property_value) const
 {
-  if (0==vcl_strcmp(tag, "memory"))
-    return true;
+  if (0==vcl_strcmp(tag, vil_property_memory))
+    return property_value ? (*(bool*)property_value) = true : true;
+
+  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+    return property_value ? (*(bool*)property_value) = true : true;
+
+  if (0==vcl_strcmp(tag, vil_property_left_first))
+    return property_value ? (*(bool*)property_value) = true : true;
 
   return false;
 }

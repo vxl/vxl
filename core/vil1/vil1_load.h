@@ -9,11 +9,23 @@
 // \file
 // \brief read an image from a file
 //
-// vil_load*() returns a vil_image which will "read an image from a file". In practice
+// vil_load() returns a vil_image which will "read an image from a file". In practice
 // it may or may not read the image on creation, but a disk read will take place at
 // some point before get_section() returns.
 //
+// vil_load() ensures image semantics with regard to vertical orientation:
+// the first image row is always the top pixel row of the image.
+// The disk-stored file could have a different convention, in which case
+// row swapping is performed.
+//
+// To avoid this possible row swapping, use the vil_load_raw() functions.
+//
 // \author awf@robots.ox.ac.uk
+//
+// \verbatim
+//  Modifications
+//     011002 Peter Vanroose - vil_load now respects top-is-first; vil_load_raw not
+//\endverbatim
 
 #include <vcl_iosfwd.h>
 #include <vil/vil_fwd.h>

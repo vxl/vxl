@@ -13,6 +13,7 @@
 
 #include <vil/vil_stream.h>
 #include <vil/vil_16bit.h>
+#include <vil/vil_property.h>
 
 bool vil_gif_probe(vil_stream *s)
 {
@@ -46,10 +47,22 @@ vil_image_impl *vil_gif_file_format::make_input_image(vil_stream *s)
     return new vil_gif_loader_saver(s);
 }
 
+bool vil_gif_loader_saver::get_property(char const *tag, void *prop) const
+{
+  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+    return prop ? (*(bool*)prop) = true : true;
+
+  if (0==vcl_strcmp(tag, vil_property_left_first))
+    return prop ? (*(bool*)prop) = true : true;
+
+  return false;
+}
+
 vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_)
 {
   s->ref();
   assert(vil_gif_probe(s));
+
   s->seek(6);
 
   // read screen descriptor

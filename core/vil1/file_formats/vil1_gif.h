@@ -11,6 +11,11 @@
 //
 // This is an ad hoc hack. If you write a better one, you are most
 // welcome to replace mine with yours.
+//
+//\verbatim
+//  Modifications
+//  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
+//\endverbatim
 
 class vil_stream;
 #include <vcl_vector.h>
@@ -75,6 +80,7 @@ struct vil_gif_loader_saver : public vil_image_impl
   bool put_section(int, void const *, int, int, int, int) { return false; }
 
   char const *file_format() const;
+  bool get_property(char const *tag, void *prop = 0) const;
 
 private:
   vil_stream *s;

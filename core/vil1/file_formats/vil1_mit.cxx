@@ -17,6 +17,7 @@
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
 #include <vil/vil_16bit.h>
+#include <vil/vil_property.h>
 
 static char const* vil_mit_format_tag = "mit";
 
@@ -110,6 +111,17 @@ vil_mit_generic_image::vil_mit_generic_image(vil_stream* is):
 {
   is_->ref();
   read_header();
+}
+
+bool vil_mit_generic_image::get_property(char const *tag, void *prop) const
+{
+  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+    return prop ? (*(bool*)prop) = true : true;
+
+  if (0==vcl_strcmp(tag, vil_property_left_first))
+    return prop ? (*(bool*)prop) = true : true;
+
+  return false;
 }
 
 char const* vil_mit_generic_image::file_format() const

@@ -12,6 +12,7 @@
 //\verbatim
 //  Modifications
 // 27 May 2000 fsm@robots.ox.ac.uk Numerous endianness and structure-packing bugs fixed.
+//  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
 //\endverbatim
 
 #include <vcl_iosfwd.h>
@@ -76,6 +77,7 @@ public:
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
 
   char const* file_format() const;
+  bool get_property(char const *tag, void *prop = 0) const;
 
 private:
   vil_stream* is_;

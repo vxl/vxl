@@ -1,15 +1,7 @@
 // This is vxl/vil/vil_save.cxx
-
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// vil_save
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 16 Feb 00
-//
-//-----------------------------------------------------------------------------
 
 #include "vil_save.h"
 
@@ -20,26 +12,44 @@
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image.h>
 #include <vil/vil_copy.h>
+#include <vil/vil_property.h> // for vil_property_top_row_first
+#include <vil/vil_flipud.h>
 
 #include <vil/vil_rgb.h>
 #include <vil/vil_memory_image_of.h>
 
 //: Send vil_image to disk.
-bool vil_save(vil_image const& i, char const* filename, char const* file_format)
+bool vil_save(vil_image i, char const* filename, char const* file_format)
 {
   vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
-  return vil_save(i, os, file_format);
+  vil_image out = vil_new(os, i.width(), i.height(), i, file_format);
+  if (!out) {
+    vcl_cerr << "vil_save: Cannot save to type [" << file_format << "]\n";
+    return false;
+  }
+  bool top_first;
+  if (out.get_property(vil_property_top_row_first, &top_first) && !top_first)
+    i = vil_flipud(i);
+  vil_copy(i, out);
+  return true;
+}
+
+//: Send vil_image to disk; preserve byte order.
+bool vil_save_raw(vil_image const& i, char const* filename, char const* file_format)
+{
+  vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
+  return vil_save_raw(i, os, file_format);
 }
 
 //: Send vil_image_impl to output stream.
 // The possible file_formats are defined by the subclasses of vil_file_format
 // in vil_file_format.cxx
-bool vil_save(vil_image const& i, vil_stream* os, char const* file_format)
+bool vil_save_raw(vil_image const& i, vil_stream* os, char const* file_format)
 {
   vil_image out = vil_new(os, i.width(), i.height(), i, file_format);
 
   if (!out) {
-    vcl_cerr << "vil_save: Cannot save to type [" << file_format << "]\n";
+    vcl_cerr << "vil_save_raw: Cannot save to type [" << file_format << "]\n";
     return false;
   }
 

@@ -12,6 +12,7 @@
 #include <vil/vil_stream.h>
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
+#include <vil/vil_property.h>
 
 #include <tiffio.h>
 
@@ -220,6 +221,62 @@ vil_tiff_generic_image::vil_tiff_generic_image(vil_stream* is):
   p(new vil_tiff_structures(is))
 {
   read_header();
+}
+
+bool vil_tiff_generic_image::get_property(char const *tag, void *prop) const
+{
+  unsigned short orientation;
+  TIFFGetField(p->tif, TIFFTAG_ORIENTATION, &orientation);
+  bool topdown = (orientation==ORIENTATION_TOPLEFT || 
+                  orientation==ORIENTATION_TOPRIGHT ||
+                  orientation==ORIENTATION_LEFTTOP ||
+                  orientation==ORIENTATION_RIGHTTOP);
+  bool leftright=(orientation==ORIENTATION_TOPLEFT || 
+                  orientation==ORIENTATION_BOTLEFT ||
+                  orientation==ORIENTATION_LEFTTOP ||
+                  orientation==ORIENTATION_LEFTBOT);
+
+  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+    return prop ? (*(bool*)prop) = topdown, true : true;
+
+  if (0==vcl_strcmp(tag, vil_property_left_first))
+    return prop ? (*(bool*)prop) = leftright, true : true;
+
+  return false;
+}
+
+bool vil_tiff_generic_image::set_property(char const *tag, void *prop) const
+{
+  bool topdown; get_property(vil_property_top_row_first, topdown);
+  bool leftright; get_property(vil_property_left_first, leftright);
+  bool newprop = prop ? (*(bool*)prop) : true; // default is to set the property
+
+  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+  {
+    if (topdown == newprop) // no change necessary
+      return true;
+    unsigned short orientation =
+      ( topdown &&  leftright) ? ORIENTATION_TOPLEFT :
+      (!topdown &&  leftright) ? ORIENTATION_BOTLEFT :
+      ( topdown && !leftright) ? ORIENTATION_TOPRIGHT :
+                                 ORIENTATION_BOTRIGHT;
+    TIFFSetField(p->tif, TIFFTAG_ORIENTATION, orientation);
+  }
+
+  else if (0==vcl_strcmp(tag, vil_property_left_first))
+  {
+    if (leftright == newprop) // no change necessary
+      return true;
+    unsigned short orientation =
+      ( topdown &&  leftright) ? ORIENTATION_TOPLEFT :
+      (!topdown &&  leftright) ? ORIENTATION_BOTLEFT :
+      ( topdown && !leftright) ? ORIENTATION_TOPRIGHT :
+                                 ORIENTATION_BOTRIGHT;
+    TIFFSetField(p->tif, TIFFTAG_ORIENTATION, orientation);
+  }
+
+  else
+    return false;
 }
 
 vil_tiff_generic_image::vil_tiff_generic_image(vil_stream* is, int planes,

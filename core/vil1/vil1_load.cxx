@@ -15,6 +15,8 @@
 #include <vil/vil_stream_core.h>
 #include <vil/vil_stream_url.h>
 #include <vil/vil_image.h>
+#include <vil/vil_property.h> // for vil_property_top_row_first
+#include <vil/vil_flipud.h>
 
 vil_image vil_load_raw(vil_stream *is)
 {
@@ -100,7 +102,9 @@ vil_image vil_load_raw(char const* filename)
 
 vil_image vil_load(char const* filename)
 {
-  return vil_load_raw(filename);
-//  bool flipud;
-//  if (i.get_property("flipud", &flipud) && flipud)    i = vil_flipud(i);
+  vil_image i = vil_load_raw(filename);
+  bool top_first;
+  if (i.get_property(vil_property_top_row_first, &top_first) && !top_first)
+    i = vil_flipud(i);
+  return i;
 }

@@ -53,9 +53,9 @@
 //   image.get_section(bif, 0, 0, 256, 256);
 //   int a[3];
 //   char const *tag[] = {
-//     "vil_propery_r_packing",
-//     "vil_propery_g_packing",
-//     "vil_propery_b_packing"
+//     "vil_property_r_packing",
+//     "vil_property_g_packing",
+//     "vil_property_b_packing"
 //   };
 //   for (int p=0; p<3; ++p) {
 //     image.get_property(, a);
@@ -75,5 +75,14 @@
 // - "+1" if the preferred direction is increasing.
 //
 // \author  fsm@robots.ox.ac.uk
+
+//: Indicate whether this is an in-memory image or an on-disk image
+#define vil_property_memory "memory"
+
+//: Indicate whether the first image row is the top or the bottom of the image
+#define vil_property_top_row_first "top_row_first"
+
+//: Indicate whether the first pixel in an image row is at left or at right
+#define vil_property_left_first "left_first"
 
 #endif // vil_property_h_

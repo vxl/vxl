@@ -8,6 +8,11 @@
 // \file
 // \author    awf@robots.ox.ac.uk
 // \date 16 Feb 00
+//
+//\verbatim
+//  Modifications
+//  3 October 2001 Peter Vanroose - Implemented get_property and set_property
+//\endverbatim
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_impl.h>
@@ -70,6 +75,8 @@ public:
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
 
   char const* file_format() const;
+  bool get_property(char const *tag, void *prop = 0) const;
+  bool set_property(char const *tag, void const *prop = 0) const;
 
   vil_image get_plane(int ) const;
 };

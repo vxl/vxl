@@ -9,10 +9,13 @@
 // \file
 // \author    fsm@robots.ox.ac.uk
 // \date 17 Feb 2000
+//
+// Adapted from geoff's code in ImageClasses/JPEGImage.*
+//
 // \verbatim
 //  Modifications:
-// Adapted from geoff's code in ImageClasses/JPEGImage.*
-// \endverbatim
+//  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
+//\endverbatim
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_impl.h>
@@ -58,6 +61,7 @@ class vil_jpeg_generic_image : public vil_image_impl {
   int bits_per_component() const;
   vil_component_format component_format() const;
   char const *file_format() const; // returns "jpeg"
+  bool get_property(char const *tag, void *prop = 0) const;
   vil_image get_plane(int ) const;
   bool get_section(void       *buf, int x0, int y0, int w, int h) const;
   bool put_section(void const *buf, int x0, int y0, int w, int h);

@@ -13,6 +13,7 @@
 #include <vil/vil_stream.h>
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
+#include <vil/vil_property.h>
 
 #include <png.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
@@ -251,6 +252,17 @@ vil_png_generic_image::vil_png_generic_image(vil_stream* is):
 {
   vs_->ref();
   read_header();
+}
+
+bool vil_png_generic_image::get_property(char const *tag, void *prop) const
+{
+  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+    return prop ? (*(bool*)prop) = true : true;
+
+  if (0==vcl_strcmp(tag, vil_property_left_first))
+    return prop ? (*(bool*)prop) = true : true;
+
+  return false;
 }
 
 vil_png_generic_image::vil_png_generic_image(vil_stream* is, int planes,

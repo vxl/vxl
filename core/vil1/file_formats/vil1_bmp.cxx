@@ -10,6 +10,7 @@
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image.h>
+#include <vil/vil_property.h>
 
 #define where (vcl_cerr << __FILE__ ":" << __LINE__ << " : ")
 
@@ -61,6 +62,17 @@ vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is)
 {
   is_->ref();
   read_header();
+}
+
+bool vil_bmp_generic_image::get_property(char const *tag, void *prop) const
+{
+  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+    return prop ? (*(bool*)prop) = false, true : true;
+
+  if (0==vcl_strcmp(tag, vil_property_left_first))
+    return prop ? (*(bool*)prop) = true : true;
+
+  return false;
 }
 
 vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is,

@@ -12,6 +12,7 @@
 //\verbatim
 //  Modifications
 //     000216 AWF Initial version.
+//     011002 Peter Vanroose - vil_save now respects top-is-first; vil_save_raw not
 //\endverbatim
 
 #include <vcl_string.h>
@@ -22,10 +23,13 @@ class vil_stream;
 bool vil_save(vil_image const&, char const* filename);
 
 //: Send vil_image to disk, given filename
-bool vil_save(vil_image const&, char const* filename, char const* file_format);
+bool vil_save(vil_image, char const* filename, char const* file_format);
+
+//: Send vil_image to disk, given filename; preserve byte order
+bool vil_save_raw(vil_image const&, char const* filename, char const* file_format);
 
 //: Send vil_image to outstream
-bool vil_save(vil_image const &, vil_stream* outstream, char const* file_format = "pnm");
+bool vil_save_raw(vil_image const &, vil_stream* outstream, char const* file_format = "pnm");
 
 //: Save raw unsigned chars, deducing format from filename
 void vil_save_gray(unsigned char const* p, int w, int h, vcl_string const& fn);

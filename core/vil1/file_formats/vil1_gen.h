@@ -10,16 +10,17 @@
 // \author awf@robots.ox.ac.uk 16 Feb 00
 // \verbatim
 // Modifications
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
-// \endverbatim
+// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
+//\endverbatim
 
 #include <vcl_string.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_impl.h>
 
 //: Loader for synthetically gend images
-//  vil_load("gen:640x480:gray,128");
-//  vil_load("gen:640x480:rgb,255,255,255");
+// - vil_load("gen:640x480:gray,128");
+// - vil_load("gen:640x480:rgb,255,255,255");
 class vil_gen_file_format : public vil_file_format {
 public:
   virtual char const* tag() const;
@@ -77,6 +78,7 @@ public:
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
 
   char const* file_format() const;
+  bool get_property(char const *tag, void *prop = 0) const;
   vil_image get_plane(int ) const;
 };
 

@@ -13,6 +13,7 @@
 #include <vil/vil_stream.h>
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
+#include <vil/vil_property.h>
 
 char const* vil_gen_format_tag = "gen";
 
@@ -135,6 +136,17 @@ void vil_gen_generic_image::init(vcl_string const& s)
   } else {
     vcl_abort();
   }
+}
+
+bool vil_gen_generic_image::get_property(char const *tag, void *prop) const
+{
+  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+    return prop ? (*(bool*)prop) = true : true;
+
+  if (0==vcl_strcmp(tag, vil_property_left_first))
+    return prop ? (*(bool*)prop) = true : true;
+
+  return false;
 }
 
 bool vil_gen_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
