@@ -59,8 +59,7 @@
 // \author Brendan McCane
 //----------------------------------------------------------------------
 
-KalmanFilter::KalmanFilter
-(
+KalmanFilter::KalmanFilter(
   unsigned int ns, unsigned int nm, unsigned int nc,
   const vnl_matrix<double> &Ai,
   const vnl_matrix<double> &Hi,
@@ -69,7 +68,7 @@ KalmanFilter::KalmanFilter
   const vnl_matrix<double> &x_initial,
   const vnl_matrix<double> &Pi
   ):
-  // initiallise all the matrices etc
+  // initialise all the matrices etc
   num_signal_dimensions(ns), num_measurement_dimensions(nm),
   num_control_dimensions(nc), A(Ai), H(Hi), B(Bi), 
   x(x_initial), x_pred(x_initial), z(z_initial), 
@@ -141,8 +140,7 @@ KalmanFilter::KalmanFilter
 // \status under development
 // \author Brendan McCane
 //----------------------------------------------------------------------
-KalmanFilter::KalmanFilter
-(
+KalmanFilter::KalmanFilter(
   unsigned int ns, unsigned int nm, 
   const vnl_matrix<double> &Ai,
   const vnl_matrix<double> &Hi,
@@ -352,7 +350,7 @@ vnl_matrix<double> KalmanFilter::update_predict
 //----------------------------------------------------------------------
 //: output operator
 //
-// \param KalmanFilter &kf: the Kalman filter to output
+// \param kf   the Kalman filter to output
 //
 // \status under development
 // \author Brendan McCane

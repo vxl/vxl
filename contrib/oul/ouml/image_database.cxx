@@ -1,5 +1,5 @@
 //-*-c++-*--------------------------------------------------------------
-/** \file image_database.cc
+/** \file
  *
  * An image database. Basically maintains a list of labels and
  * associated images. And allows for saving and loading a database. 
@@ -71,10 +71,9 @@ void ImageDatabase::clear()
  * the extension of a valid image file type (eg "ppm", "pgm", "png",
  * etc).
  *
- * \param const char *name: the name of the database file (a directory
- * called name.d is also created).
+ * \param name  the name of the database file (a directory called name.d is also created).
  *
- * \param const char *imagetype: a valid file extension type (eg "ppm");
+ * \param imagetype  a valid file extension type (eg "ppm");
  *
  * \author Brendan McCane 
  */
@@ -88,7 +87,8 @@ bool ImageDatabase::save(const char *name, const char *imagetype)
   int err;
 
   err = vpl_mkdir( dirname, 0755 );
-  if( err != 0 && err != EEXIST ) {
+  if (err != 0 && err != EEXIST)
+  {
     vcl_cerr << "can't open directory " << dirname << vcl_endl;
     return false;
   }
@@ -105,8 +105,7 @@ bool ImageDatabase::save(const char *name, const char *imagetype)
   for (iterator i=begin(); i!=end(); i++)
   {
     char filename[200];
-    vcl_sprintf(filename, "%s/%s_%03d.%s", dirname, (*i).first, index++, 
-                imagetype);
+    vcl_sprintf(filename, "%s/%s_%03d.%s", dirname, (*i).first, index++, imagetype);
     vil_save(*((*i).second), filename);
 
     vcl_printf("db: %s %s\n", (*i).first, filename);
@@ -122,8 +121,7 @@ bool ImageDatabase::save(const char *name, const char *imagetype)
  *
  * Load a database from file. 
  *
- * \param const char *name: the name of the database file (a directory
- * called name.d should also exist).
+ * \param name  the name of the database file (a directory called name.d should also exist).
  *
  * \author Brendan McCane 
  */
