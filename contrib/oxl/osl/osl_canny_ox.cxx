@@ -48,7 +48,8 @@ osl_canny_ox::osl_canny_ox(osl_canny_ox_params const &params)
 
 //-----------------------------------------------------------------------------
 
-osl_canny_ox::~osl_canny_ox() {
+osl_canny_ox::~osl_canny_ox()
+{
   osl_canny_base_free_raw_image(smooth_);
   osl_canny_base_free_raw_image(dx_);
   osl_canny_base_free_raw_image(dy_);
@@ -71,7 +72,8 @@ osl_canny_ox::~osl_canny_ox() {
 
 //-----------------------------------------------------------------------------
 
-void osl_canny_ox::detect_edges(vil1_image const &image_in, vcl_list<osl_edge*> *edges) {
+void osl_canny_ox::detect_edges(vil1_image const &image_in, vcl_list<osl_edge*> *edges)
+{
   assert(edges!=0);
 
   // Get the image size
@@ -184,8 +186,8 @@ void osl_canny_ox::detect_edges(vil1_image const &image_in, vcl_list<osl_edge*> 
   // Set image border to border_valueOX_ (default = 0) so follow can't overrun
   Set_image_borderOX(thin_, border_size_OX_, border_value_OX_);
 
-  if (junction_option_OX_) {
-
+  if (junction_option_OX_)
+  {
     // Locate junctions in the edge image
     if (verbose) vcl_cerr << "locating junctions in the edge image - ";
     Find_junctionsOX();
@@ -209,7 +211,8 @@ void osl_canny_ox::detect_edges(vil1_image const &image_in, vcl_list<osl_edge*> 
 // Also initialises x_ and y_: the pixel locations of the edgels. These
 // are needed later in filling the image thin_ with the edgels after
 // hysteresis.
-osl_edgel_chain *osl_canny_ox::Get_NMS_edgelsOX(int n_edgels_NMS, int *x_, int *y_) {
+osl_edgel_chain *osl_canny_ox::Get_NMS_edgelsOX(int n_edgels_NMS, int *x_, int *y_)
+{
   // the number of edges must be given in advance!
   osl_edgel_chain *edgels_NMS = new osl_edgel_chain(n_edgels_NMS);
 
@@ -356,18 +359,17 @@ void osl_canny_ox::Link_edgelsOX(vcl_vector<unsigned> const &col,
   // Rewritten and inline-documented by Peter Vanroose, 30 Dec. 1999.
 {
   for (unsigned int i=0; i<ysize_; ++i) {// for each image row
-    for (unsigned j=rows[i]; j<rows[i+1]; ++j) {// for each edgel in this row
-      // what are these for?
-      bool e=false;
-      bool w=false;
-      bool s=false;
+    for (unsigned j=rows[i]; j<rows[i+1]; ++j) // for each edgel in this row
+    {
+      bool e=false; // set to true if next edgel is (horiz) neighbour
+      bool s=false; // set to true if edgels are (vertical) neighbours
 
       // First link horizontal, direct neighbours:
 
       if (j+1<rows[i+1] && col[j]+1==col[j+1])  {  // next edgel is (horiz) neighbour
         Add_linkOX(j, j+1, links); e=true; }
 
-      w=(j>rows[i] && col[j]==col[j-1]+1);// previous edgel was (horiz) neighbour
+      bool w=(j>rows[i] && col[j]==col[j-1]+1);// previous edgel was (horiz) neighbour
 
       // Don't go on (except for distance 2 neighbour) if there is certainly
       // no vertical neighbour edgel:
@@ -545,14 +547,16 @@ osl_edge *osl_canny_ox::NO_FollowerOX(osl_edgel_chain *edgels_Hysteresis)
 //
 //: Returns the first osl_Vertex* in l which matches (i.e. compares equal to) v.
 // returns 0 if none found.
-osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, osl_Vertex const &v) {
+osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, osl_Vertex const &v)
+{
   for (vcl_list<osl_Vertex*>::const_iterator i=l->begin(); i!=l->end(); ++i)
     if (v == *(*i))
       return *i;
   return 0;
 }
 
-osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, float x, float y) {
+osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, float x, float y)
+{
   for (vcl_list<osl_Vertex*>::const_iterator i=l->begin(); i!=l->end(); ++i)
     if ((*i)->x == x && (*i)->y == y)
       return *i;
@@ -566,7 +570,8 @@ osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, float x, float y) {
 // Go through every point in the image and for every one which is above a
 // threshold:   follow from the point, in one direction and then the other.
 //
-void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges) {
+void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges)
+{
   if (junction_option_OX_)
     chain_no_ = 10;    // Must be set to a number >= 1
 
@@ -838,7 +843,8 @@ void osl_canny_ox::Final_followOX(int x,
 //-----------------------------------------------------------------------------
 
 #if 0
-void Set_intsOX(int& int1, int& int2, int val1, int val2) {
+void Set_intsOX(int& int1, int& int2, int val1, int val2)
+{
   int1 = val1;
   int2 = val2;
 }
@@ -927,7 +933,8 @@ void osl_canny_ox::Scale_imageOX(float **image, float scale)
 //
 //: Set size of pixels around image (border) to value, so follow can't overrun.
 //
-void osl_canny_ox::Set_image_borderOX(float **image, int border_size, float value) {
+void osl_canny_ox::Set_image_borderOX(float **image, int border_size, float value)
+{
   assert(border_size >= 0);
   assert((unsigned int)border_size <= xsize_);
   assert((unsigned int)border_size <= ysize_);
@@ -945,8 +952,8 @@ void osl_canny_ox::Set_image_borderOX(float **image, int border_size, float valu
 //
 //: Searches for the junctions in the image.
 //
-void osl_canny_ox::Find_junctionsOX() {
-
+void osl_canny_ox::Find_junctionsOX()
+{
   // Reset the junction variables
   xjunc_->clear();     yjunc_->clear();
   osl_canny_base_fill_raw_image(junction_, xsize_, ysize_, 0);
@@ -977,8 +984,8 @@ void osl_canny_ox::Find_junctionsOX() {
 //
 //: Locate junction clusters using the following method of hysteresis.
 //
-void osl_canny_ox::Find_junction_clustersOX() {
-
+void osl_canny_ox::Find_junction_clustersOX()
+{
   vcl_list<int> xvertices,yvertices,xjunc,yjunc;
 
   // Find a junction and follow
