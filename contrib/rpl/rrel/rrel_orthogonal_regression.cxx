@@ -1,6 +1,7 @@
 #include <rrel/rrel_orthogonal_regression.h>
 
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 
@@ -77,7 +78,7 @@ rrel_orthogonal_regression::fit_from_minimal_set( const vcl_vector<int>& point_i
   }
   else {
     params = svd.nullvector();
-    return true;
+    params /= sqrt( 1 - vnl_math_sqr( params[ params.size()-1 ] ) );
   }
 }
 
