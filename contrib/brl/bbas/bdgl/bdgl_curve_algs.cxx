@@ -20,6 +20,8 @@
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 
 const double bdgl_curve_algs::tol = 1e-16;
+const double bdgl_curve_algs::max_edgel_sep = 2.0; // the maximum seperation
+                                                   // of edgels (in pixels)
 const double bdgl_curve_algs::synthetic = 0;//Indicates synthetic edgel
                                             //default constructor is -1
 
@@ -204,6 +206,104 @@ static bool intersect_crossing(vnl_double_3& line_coefs,
   return vcl_fabs(inter[2]) >= bdgl_curve_algs::tol;
 }
 
+
+//: Recursive helper function for intersect_line_fast
+static bool intersect_line_helper(vdgl_edgel_chain const& ec,
+                                  vnl_double_3& lv,
+                                  double dist1, double dist2,
+                                  int index1, int index2,
+                                  vcl_vector<vgl_point_2d<double> >& pts)
+{
+  int di = (index2 - index1);
+  if (di<1){
+    vcl_cout << "In bdgl_curve_algs::intersect_line_helper"
+             << " - invalid curve segment\n";
+    return false;
+  }
+
+  if (vcl_fabs(dist2)<bdgl_curve_algs::tol || dist1*dist2<0.0){
+    // base case: compute the intersection
+    if (di==1){
+      // the first and last edgels
+      vdgl_edgel const& e1 = ec[index1];
+      vdgl_edgel const& e2 = ec[index2];
+      vnl_double_3 p1(e1.get_x(), e1.get_y(), 1.0);
+      vnl_double_3 p2(e2.get_x(), e2.get_y(), 1.0);
+      
+      vnl_double_3 inter;
+      if (intersect_crossing(lv, p1, p2, inter)){
+        vgl_point_2d<double> p(inter[0]/inter[2], inter[1]/inter[2]);
+        pts.push_back(p);
+        return true;
+      }
+      return false;
+    }
+  }
+  else{
+    if (di==1) return false;
+    if ((di*bdgl_curve_algs::max_edgel_sep)<vcl_fabs(dist1+dist2)) return false;
+  }
+
+  int mid_index = index1 + di/2;
+  vnl_double_3 mid_point(ec[mid_index].get_x(), ec[mid_index].get_y(), 1.0);
+  double mid_dist = dot_product(mid_point, lv);
+  bool i1 = intersect_line_helper(ec, lv, dist1, mid_dist, index1, mid_index, pts);
+  bool i2 = intersect_line_helper(ec, lv, mid_dist, dist2, mid_index, index2, pts);
+  return i1 || i2;
+}
+
+//-------------------------------------------------------------
+//: intersect an infinite line with the digital curve.
+//  If there is no intersection return false. Note that the line
+//  can intersect multiple times. All the intersections are returned.
+//  
+//  This implementation uses a recursive helper function
+bool bdgl_curve_algs::intersect_line_fast(vdgl_digital_curve_sptr const& dc,
+                                          vgl_line_2d<double> & line,
+                                          vcl_vector<vgl_point_2d<double> >& pts)
+{
+  if (!dc)
+  {
+    vcl_cout << "In bdgl_curve_algs::intersect_line_fast - null curve\n";
+    return false;
+  }
+  vdgl_interpolator_sptr interp = dc->get_interpolator();
+  vdgl_edgel_chain_sptr  ec = interp->get_edgel_chain();
+
+  // normalized the line so that the algebraic distance between
+  // lv and (x,y,1) is the geometric distance
+  line.normalize();
+  vnl_double_3 lv(line.a(), line.b(), line.c());
+
+  // the first and last edgels
+  vdgl_edgel const& e1 = (*ec)[0];
+  vdgl_edgel const& e2 = (*ec)[ec->size()-1];
+
+  vnl_double_3 p1(e1.get_x(), e1.get_y(), 1.0);
+  vnl_double_3 p2(e2.get_x(), e2.get_y(), 1.0);
+
+  double dist1 = dot_product(p1, lv);
+  double dist2 = dot_product(p2, lv);
+  
+  bool intersection = false;
+  // This case (the first edgel is on the line)
+  // is not covered by the recursion
+  if (vcl_fabs(dist1)<bdgl_curve_algs::tol){
+    vdgl_edgel const& e = (*ec)[1];
+    vnl_double_3 p(e.get_x(), e.get_y(), 1.0);
+    vnl_double_3 inter;
+    if (intersect_crossing(lv, p1, p, inter)){
+      vgl_point_2d<double> p(inter[0]/inter[2], inter[1]/inter[2]);
+      pts.push_back(p);
+      intersection = true;
+    }
+  }
+
+  return intersect_line_helper(*ec, lv, dist1, dist2, 0, ec->size()-1, pts) ||
+         intersection;
+}
+
+
 //-------------------------------------------------------------
 //: intersect an infinite line with the digital curve.
 //  If there is no intersection return false. Note that the line
@@ -276,6 +376,110 @@ static double interpolate_parameter(const double t0, const double t1,
   double dt = t1-t0;
   return t0 + r*dt;
 }
+
+
+
+//: Recursive helper function for intersect_line_fast
+static bool intersect_line_helper(vdgl_edgel_chain const& ec,
+                                  vnl_double_3& lv,
+                                  double dist1, double dist2,
+                                  int index1, int index2,
+                                  vcl_vector<double>& indices)
+{
+  int di = (index2 - index1);
+  if (di<1){
+    vcl_cout << "In bdgl_curve_algs::intersect_line_helper"
+             << " - invalid curve segment\n";
+    return false;
+  }
+
+  if (vcl_fabs(dist2)<bdgl_curve_algs::tol || dist1*dist2<0.0){
+    // base case: compute the intersection
+    if (di==1){
+      // the first and last edgels
+      vdgl_edgel const& e1 = ec[index1];
+      vdgl_edgel const& e2 = ec[index2];
+      vnl_double_3 p1(e1.get_x(), e1.get_y(), 1.0);
+      vnl_double_3 p2(e2.get_x(), e2.get_y(), 1.0);
+      
+      vnl_double_3 inter;
+      if (intersect_crossing(lv, p1, p2, inter)){
+        double param_step = 1.0/(ec.size()-1);
+        double ti = interpolate_parameter(index1*param_step, index2*param_step, 
+                                          p1, p2, inter);
+        indices.push_back(ti);
+        return true;
+      }
+      return false;
+    }
+  }
+  else{
+    if (di==1) return false;
+    if ((di*bdgl_curve_algs::max_edgel_sep)<vcl_fabs(dist1+dist2)) return false;
+  }
+
+  int mid_index = index1 + di/2;
+  vnl_double_3 mid_point(ec[mid_index].get_x(), ec[mid_index].get_y(), 1.0);
+  double mid_dist = dot_product(mid_point, lv);
+
+  bool i1 = intersect_line_helper(ec, lv, dist1, mid_dist, index1, mid_index, indices);
+  bool i2 = intersect_line_helper(ec, lv, mid_dist, dist2, mid_index, index2, indices);
+  return i1 || i2;    
+}
+
+//-------------------------------------------------------------
+//: intersect an infinite line with the digital curve.
+//  If there is no intersection return false. Note that the line
+//  can intersect multiple times. The curve parameter indices at
+//  the intersection points are returned
+//  
+//  This implementation uses a recursive helper function
+bool bdgl_curve_algs::intersect_line_fast(vdgl_digital_curve_sptr const& dc,
+                                          vgl_line_2d<double> & line,
+                                          vcl_vector<double>& indices)
+{
+  if (!dc)
+  {
+    vcl_cout << "In bdgl_curve_algs::intersect_line_fast - null curve\n";
+    return false;
+  }
+  vdgl_interpolator_sptr interp = dc->get_interpolator();
+  vdgl_edgel_chain_sptr  ec = interp->get_edgel_chain();
+
+  // normalized the line so that the algebraic distance between
+  // lv and (x,y,1) is the geometric distance
+  line.normalize();
+  vnl_double_3 lv(line.a(), line.b(), line.c());
+
+  // the first and last edgels
+  vdgl_edgel const& e1 = (*ec)[0];
+  vdgl_edgel const& e2 = (*ec)[ec->size()-1];
+
+  vnl_double_3 p1(e1.get_x(), e1.get_y(), 1.0);
+  vnl_double_3 p2(e2.get_x(), e2.get_y(), 1.0);
+
+  double dist1 = dot_product(p1, lv);
+  double dist2 = dot_product(p2, lv);
+  
+  bool intersection = false;
+  // This case (the first edgel is on the line)
+  // is not covered by the recursion
+  if (vcl_fabs(dist1)<bdgl_curve_algs::tol){
+    vdgl_edgel const& e = (*ec)[1];
+    vnl_double_3 p(e.get_x(), e.get_y(), 1.0);
+    vnl_double_3 inter;
+    if (intersect_crossing(lv, p1, p, inter)){
+      double param_step = 1.0/(ec->size()-1);
+      double ti = interpolate_parameter(0.0, param_step, p1, p, inter);
+      indices.push_back(ti);
+      intersection = true;
+    }
+  }
+
+  return intersect_line_helper(*ec, lv, dist1, dist2, 0, ec->size()-1, indices) ||
+         intersection;
+}
+
 
 //-------------------------------------------------------------
 //: intersect an infinite line with the digital curve.

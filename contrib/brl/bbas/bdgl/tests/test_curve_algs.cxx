@@ -33,6 +33,12 @@ static void test_curve_algs()
   TEST("Num Intersection points = 1", pts.size(), 1);
   TEST_NEAR("Intersection point = (1,2.1) (x)", pts[0].x(), 1.0, 1e-9);
   TEST_NEAR("Intersection point = (1,2.1) (y)", pts[0].y(), 2.1, 1e-9);
+  // test fast curve intersection
+  pts.clear();
+  good = bdgl_curve_algs::intersect_line_fast(dc, l, pts);
+  TEST("(fast) Num Intersection points = 1", pts.size(), 1);
+  TEST_NEAR("(fast) Intersection point = (1,2.1) (x)", pts[0].x(), 1.0, 1e-9);
+  TEST_NEAR("(fast) Intersection point = (1,2.1) (y)", pts[0].y(), 2.1, 1e-9);
   //construct a  curve that will have two intersections
 
   vdgl_edgel_chain_sptr ec1 = new vdgl_edgel_chain();
@@ -49,6 +55,13 @@ static void test_curve_algs()
   pts.clear();
   good = bdgl_curve_algs::intersect_line(dc1, l, pts);
   TEST("Num Intersection points = 2", pts.size(), 2);
+  if (good)
+    vcl_cout << " p[0] " << pts[0] << " p[1] " << pts[1] << '\n';
+  // test fast curve intersection
+  pts.clear();
+  good = bdgl_curve_algs::intersect_line_fast(dc1, l, pts);
+  TEST("(fast) Num Intersection points = 2", pts.size(), 2);
+  vcl_cout << "points size: "<<pts.size() << vcl_endl;
   if (good)
     vcl_cout << " p[0] " << pts[0] << " p[1] " << pts[1] << '\n';
   //test closest point

@@ -22,6 +22,7 @@ class bdgl_curve_algs
 {
  public:
   static BTOL_DLL_DATA const double tol;
+  static BTOL_DLL_DATA const double max_edgel_sep;
   static BTOL_DLL_DATA const double synthetic;
   ~bdgl_curve_algs();
 
@@ -50,6 +51,18 @@ class bdgl_curve_algs
 
   //:Reverses the edgel chain
   static vdgl_digital_curve_sptr reverse(vdgl_digital_curve_sptr const& dc);
+
+  //:Intersect the curve with an infinite line, return the index values
+  // This is a recursive implementation for faster computation
+  static bool intersect_line_fast(vdgl_digital_curve_sptr const& dc,
+                                  vgl_line_2d<double> & line,
+                                  vcl_vector<double>& indices);
+
+  //:Intersect the curve with an infinite line, return the points
+  // This is a recursive implementation for faster computation
+  static bool intersect_line_fast(vdgl_digital_curve_sptr const& dc,
+                                  vgl_line_2d<double> & line,
+                                  vcl_vector<vgl_point_2d<double> >& pts);
 
   //:Intersect the curve with an infinite line, return the index values
   static bool intersect_line(vdgl_digital_curve_sptr const& dc,
