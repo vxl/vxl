@@ -293,7 +293,7 @@ bool vgui_tview_tableau::handle(const vgui_event& e) {
 
   if (e.type == vgui_DRAW) {
 
-    // explicitly clearing colour as we dont want colour of
+    // explicitly clearing colour as we do not want colour of
     // any tableaux this might be embedded within
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
