@@ -32,7 +32,8 @@ vpdfl_mixture::vpdfl_mixture()
 {
 }
 
-vpdfl_mixture::vpdfl_mixture(const vpdfl_mixture& m)
+vpdfl_mixture::vpdfl_mixture(const vpdfl_mixture& m):
+  vpdfl_pdf_base()
 {
   *this = m;
 }

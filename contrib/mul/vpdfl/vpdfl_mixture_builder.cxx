@@ -48,7 +48,8 @@ vpdfl_mixture_builder::vpdfl_mixture_builder()
 
 //=======================================================================
 
-vpdfl_mixture_builder::vpdfl_mixture_builder(const vpdfl_mixture_builder& b)
+vpdfl_mixture_builder::vpdfl_mixture_builder(const vpdfl_mixture_builder& b):
+  vpdfl_builder_base()
 {
   init();
   *this = b;

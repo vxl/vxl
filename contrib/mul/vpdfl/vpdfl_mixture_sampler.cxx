@@ -33,7 +33,8 @@ vpdfl_mixture_sampler::vpdfl_mixture_sampler():
   init();
 }
 
-vpdfl_mixture_sampler::vpdfl_mixture_sampler(const vpdfl_mixture_sampler& m)
+vpdfl_mixture_sampler::vpdfl_mixture_sampler(const vpdfl_mixture_sampler& m):
+  vpdfl_sampler_base()
 {
   init();
   *this = m;
