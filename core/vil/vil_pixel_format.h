@@ -92,44 +92,45 @@ typedef void* vil_pixel_format_invalid_type;
 template <vil_pixel_format pix_type>
 struct vil_pixel_format_type_of {
   typedef vil_pixel_format_invalid_type type;
+  typedef vil_pixel_format_invalid_type component_type;
 };
 
 
 //: Get the vil_pixel_format value for a given type.
-#define vil_pixel_format_macro(T,V)\
+#define vil_pixel_format_macro(T,C,V)\
 VCL_DEFINE_SPECIALIZATION inline vil_pixel_format vil_pixel_format_of(T /*dummy*/) { return V; }\
-VCL_DEFINE_SPECIALIZATION struct vil_pixel_format_type_of<V> { typedef T type; };
+VCL_DEFINE_SPECIALIZATION struct vil_pixel_format_type_of<V> { typedef T type; typedef C component_type; }
 
-vil_pixel_format_macro(vxl_uint_32, VIL_PIXEL_FORMAT_UINT_32)
-vil_pixel_format_macro(vxl_int_32,  VIL_PIXEL_FORMAT_INT_32)
-vil_pixel_format_macro(vxl_uint_16, VIL_PIXEL_FORMAT_UINT_16)
-vil_pixel_format_macro(vxl_int_16,  VIL_PIXEL_FORMAT_INT_16)
-vil_pixel_format_macro(vxl_byte,    VIL_PIXEL_FORMAT_BYTE)
-vil_pixel_format_macro(vxl_sbyte,   VIL_PIXEL_FORMAT_SBYTE)
-vil_pixel_format_macro(float,       VIL_PIXEL_FORMAT_FLOAT)
-vil_pixel_format_macro(double,      VIL_PIXEL_FORMAT_DOUBLE)
-vil_pixel_format_macro(bool,        VIL_PIXEL_FORMAT_BOOL)
+vil_pixel_format_macro(vxl_uint_32, vxl_uint_32, VIL_PIXEL_FORMAT_UINT_32);
+vil_pixel_format_macro(vxl_int_32,  vxl_int_32,  VIL_PIXEL_FORMAT_INT_32);
+vil_pixel_format_macro(vxl_uint_16, vxl_uint_16, VIL_PIXEL_FORMAT_UINT_16);
+vil_pixel_format_macro(vxl_int_16,  vxl_int_16,  VIL_PIXEL_FORMAT_INT_16);
+vil_pixel_format_macro(vxl_byte,    vxl_byte,    VIL_PIXEL_FORMAT_BYTE);
+vil_pixel_format_macro(vxl_sbyte,   vxl_sbyte,   VIL_PIXEL_FORMAT_SBYTE);
+vil_pixel_format_macro(float,       float,       VIL_PIXEL_FORMAT_FLOAT);
+vil_pixel_format_macro(double,      double,      VIL_PIXEL_FORMAT_DOUBLE);
+vil_pixel_format_macro(bool,        bool,        VIL_PIXEL_FORMAT_BOOL);
 
-vil_pixel_format_macro(vil_rgb<vxl_uint_32>, VIL_PIXEL_FORMAT_RGB_UINT_32)
-vil_pixel_format_macro(vil_rgb<vxl_int_32>,  VIL_PIXEL_FORMAT_RGB_INT_32)
-vil_pixel_format_macro(vil_rgb<vxl_uint_16>, VIL_PIXEL_FORMAT_RGB_UINT_16)
-vil_pixel_format_macro(vil_rgb<vxl_int_16>,  VIL_PIXEL_FORMAT_RGB_INT_16)
-vil_pixel_format_macro(vil_rgb<vxl_byte>,    VIL_PIXEL_FORMAT_RGB_BYTE)
-vil_pixel_format_macro(vil_rgb<vxl_sbyte>,   VIL_PIXEL_FORMAT_RGB_SBYTE)
-vil_pixel_format_macro(vil_rgb<float>,       VIL_PIXEL_FORMAT_RGB_FLOAT)
-vil_pixel_format_macro(vil_rgb<double>,      VIL_PIXEL_FORMAT_RGB_DOUBLE)
+vil_pixel_format_macro(vil_rgb<vxl_uint_32>, vxl_uint_32, VIL_PIXEL_FORMAT_RGB_UINT_32);
+vil_pixel_format_macro(vil_rgb<vxl_int_32>,  vxl_int_32,  VIL_PIXEL_FORMAT_RGB_INT_32);
+vil_pixel_format_macro(vil_rgb<vxl_uint_16>, vxl_uint_16, VIL_PIXEL_FORMAT_RGB_UINT_16);
+vil_pixel_format_macro(vil_rgb<vxl_int_16>,  vxl_int_16,  VIL_PIXEL_FORMAT_RGB_INT_16);
+vil_pixel_format_macro(vil_rgb<vxl_byte>,    vxl_byte,    VIL_PIXEL_FORMAT_RGB_BYTE);
+vil_pixel_format_macro(vil_rgb<vxl_sbyte>,   vxl_sbyte,   VIL_PIXEL_FORMAT_RGB_SBYTE);
+vil_pixel_format_macro(vil_rgb<float>,       float,       VIL_PIXEL_FORMAT_RGB_FLOAT);
+vil_pixel_format_macro(vil_rgb<double>,      double,      VIL_PIXEL_FORMAT_RGB_DOUBLE);
 
-vil_pixel_format_macro(vil_rgba<vxl_uint_32>, VIL_PIXEL_FORMAT_RGBA_UINT_32)
-vil_pixel_format_macro(vil_rgba<vxl_int_32>,  VIL_PIXEL_FORMAT_RGBA_INT_32)
-vil_pixel_format_macro(vil_rgba<vxl_uint_16>, VIL_PIXEL_FORMAT_RGBA_UINT_16)
-vil_pixel_format_macro(vil_rgba<vxl_int_16>,  VIL_PIXEL_FORMAT_RGBA_INT_16)
-vil_pixel_format_macro(vil_rgba<vxl_byte>,    VIL_PIXEL_FORMAT_RGBA_BYTE)
-vil_pixel_format_macro(vil_rgba<vxl_sbyte>,   VIL_PIXEL_FORMAT_RGBA_SBYTE)
-vil_pixel_format_macro(vil_rgba<float>,       VIL_PIXEL_FORMAT_RGBA_FLOAT)
-vil_pixel_format_macro(vil_rgba<double>,      VIL_PIXEL_FORMAT_RGBA_DOUBLE)
+vil_pixel_format_macro(vil_rgba<vxl_uint_32>, vxl_uint_32, VIL_PIXEL_FORMAT_RGBA_UINT_32);
+vil_pixel_format_macro(vil_rgba<vxl_int_32>,  vxl_int_32,  VIL_PIXEL_FORMAT_RGBA_INT_32);
+vil_pixel_format_macro(vil_rgba<vxl_uint_16>, vxl_uint_16, VIL_PIXEL_FORMAT_RGBA_UINT_16);
+vil_pixel_format_macro(vil_rgba<vxl_int_16>,  vxl_int_16,  VIL_PIXEL_FORMAT_RGBA_INT_16);
+vil_pixel_format_macro(vil_rgba<vxl_byte>,    vxl_byte,    VIL_PIXEL_FORMAT_RGBA_BYTE);
+vil_pixel_format_macro(vil_rgba<vxl_sbyte>,   vxl_sbyte,   VIL_PIXEL_FORMAT_RGBA_SBYTE);
+vil_pixel_format_macro(vil_rgba<float>,       float,       VIL_PIXEL_FORMAT_RGBA_FLOAT);
+vil_pixel_format_macro(vil_rgba<double>,      double,      VIL_PIXEL_FORMAT_RGBA_DOUBLE);
 
-vil_pixel_format_macro(vcl_complex<float>,   VIL_PIXEL_FORMAT_COMPLEX_FLOAT)
-vil_pixel_format_macro(vcl_complex<double>,  VIL_PIXEL_FORMAT_COMPLEX_DOUBLE)
+vil_pixel_format_macro(vcl_complex<float>, vcl_complex<float>, VIL_PIXEL_FORMAT_COMPLEX_FLOAT);
+vil_pixel_format_macro(vcl_complex<double>,vcl_complex<double>,VIL_PIXEL_FORMAT_COMPLEX_DOUBLE);
 
 #undef vil_pixel_format_macro
 
