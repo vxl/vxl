@@ -18,6 +18,13 @@
 // Constructors/Destructor---------------------------------------------------
 
 template <class Type>
+vgl_box_2d<Type>::vgl_box_2d()
+{
+  min_pos_[0]=min_pos_[1]=(Type)1;
+  max_pos_[0]=max_pos_[1]=(Type)0; // empty box
+}
+
+template <class Type>
 vgl_box_2d<Type>::vgl_box_2d(const Type min_position[2],
                              const Type max_position[2] )
 {
@@ -81,13 +88,13 @@ Type vgl_box_2d<Type>::centroid_y() const
 template <class Type>
 Type vgl_box_2d<Type>::width() const
 {
-  return (max_pos_[0] - min_pos_[0]);
+  return (max_pos_[0] > min_pos_[0]) ? max_pos_[0] - min_pos_[0] : 0;
 }
 
 template <class Type>
 Type vgl_box_2d<Type>::height() const
 {
-  return (max_pos_[1] - min_pos_[1]);
+  return (max_pos_[1] > min_pos_[1]) ? max_pos_[1] - min_pos_[1] : 0;
 }
 
 template <class Type>
@@ -103,7 +110,7 @@ vgl_point_2d<Type> vgl_box_2d<Type>::max_point() const
 }
 
 template <class Type>
-vgl_point_2d<Type> vgl_box_2d<Type>::centroid_point() const
+vgl_point_2d<Type> vgl_box_2d<Type>::centroid() const
 {
   return vgl_point_2d<Type>(centroid_x(),centroid_y());
 }
@@ -141,7 +148,7 @@ void vgl_box_2d<Type>::set_height(Type height)
 }
 
 template <class Type>
-void vgl_box_2d<Type>::setmin_position(Type min_position[2])
+void vgl_box_2d<Type>::setmin_position(Type const min_position[2])
 {
   min_pos_[0]=min_position[0];
   min_pos_[1]=min_position[1];
@@ -154,7 +161,7 @@ void vgl_box_2d<Type>::setmin_position(Type min_position[2])
 }
 
 template <class Type>
-void vgl_box_2d<Type>::setmax_position(Type max_position[2])
+void vgl_box_2d<Type>::setmax_position(Type const max_position[2])
 {
   max_pos_[0]=max_position[0];
   max_pos_[1]=max_position[1];
@@ -167,10 +174,10 @@ void vgl_box_2d<Type>::setmax_position(Type max_position[2])
 }
 
 template <class Type>
-void vgl_box_2d<Type>::set_min_point(vgl_point_2d<Type>& min_point)
+void vgl_box_2d<Type>::set_min_point(vgl_point_2d<Type> const& min_pt)
 {
-  min_pos_[0]=min_point.x();
-  min_pos_[1]=min_point.y();
+  min_pos_[0]=min_pt.x();
+  min_pos_[1]=min_pt.y();
   if(max_pos_[0] < min_pos_[0]){
     max_pos_[0]=min_pos_[0];
   }
@@ -181,10 +188,10 @@ void vgl_box_2d<Type>::set_min_point(vgl_point_2d<Type>& min_point)
 
 
 template <class Type>
-void vgl_box_2d<Type>::set_max_point(vgl_point_2d<Type>& max_point)
+void vgl_box_2d<Type>::set_max_point(vgl_point_2d<Type> const& max_pt)
 {
-  max_pos_[0]=max_point.x();
-  max_pos_[1]=max_point.y();
+  max_pos_[0]=max_pt.x();
+  max_pos_[1]=max_pt.y();
   if(max_pos_[0] < min_pos_[0]){
     min_pos_[0]=max_pos_[0];
   }
@@ -194,14 +201,14 @@ void vgl_box_2d<Type>::set_max_point(vgl_point_2d<Type>& max_point)
 }
 
 template <class Type>
-void vgl_box_2d<Type>::set_centroid(Type centroid[2])
+void vgl_box_2d<Type>::set_centroid(Type const centroid[2])
 {
   set_centroid_x(centroid[0]);
   set_centroid_y(centroid[1]);
 }
 
 template <class Type>
-void vgl_box_2d<Type>::set_centroid(vgl_point_2d<Type>& centroid)
+void vgl_box_2d<Type>::set_centroid(vgl_point_2d<Type> const& centroid)
 {
   set_centroid_x(centroid.x());
   set_centroid_y(centroid.y());
@@ -210,11 +217,14 @@ void vgl_box_2d<Type>::set_centroid(vgl_point_2d<Type>& centroid)
 template <class Type>
 vcl_ostream& vgl_box_2d<Type>::print(vcl_ostream& s) const
 {
-  return s << "<vgl_box_2d "
-       << min_pos_[0] << "," << min_pos_[1]
-           << " to "
-       << max_pos_[0] << "," << max_pos_[1]
-       << ">";
+  if (is_empty())
+    return s << "<vgl_box_2d (empty)>";
+  else
+    return s << "<vgl_box_2d "
+             << min_pos_[0] << "," << min_pos_[1]
+             << " to "
+             << max_pos_[0] << "," << max_pos_[1]
+             << ">";
 }
 
 template <class Type>
@@ -242,15 +252,42 @@ vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
   if (x1 > x0 && y1 > y0)
     return vgl_box_2d<Type> (x0, x1, y0, y1);
   else
-    return vgl_box_2d<Type> (0,0,0,0);
+    return vgl_box_2d<Type> (1,0,1,0);
+}
 
-#if 0 // capes - replaced this wrong code
-  return vgl_box_2d<Type>(vcl_max(a.get_min_x(), b.get_min_x()),
-              vcl_min(a.get_max_x(), b.get_max_x()),
-              vcl_max(a.get_min_y(), b.get_min_y()),
-              vcl_min(a.get_max_y(), b.get_max_y())
-              );
-#endif
+//: Add a point to this box, by possibly enlarging the box
+// so that the point just falls within the box.
+// Adding a point to an empty box makes it a size zero box only containing p.
+template <class Type>
+void vgl_box_2d<Type>::add(vgl_point_2d<Type> const& p)
+{
+  if (is_empty())
+  {
+    min_pos_[0] = max_pos_[0] = p.x();
+    min_pos_[1] = max_pos_[1] = p.y();
+  }
+  else
+  {
+    if (p.x() > max_pos_[0]) max_pos_[0] = p.x();
+    if (p.x() < min_pos_[0]) min_pos_[0] = p.x();
+    if (p.y() > max_pos_[1]) max_pos_[1] = p.y();
+    if (p.y() < min_pos_[1]) min_pos_[1] = p.y();
+  }
+}
+
+//: Return true iff the point p is inside this box
+template <class Type>
+bool vgl_box_2d<Type>::contains(vgl_point_2d<Type> const& p) const
+{
+    return contains(p.x(), p.y());
+}
+
+//: Make the box empty
+template <class Type>
+void vgl_box_2d<Type>::empty()
+{
+  min_pos_[0]=min_pos_[1]=(Type)1;
+  max_pos_[0]=max_pos_[1]=(Type)0;
 }
 
 //: Print to stream
@@ -264,62 +301,6 @@ template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_box_2d<Type>& p) {
   return p.read(is);
 }
-
-
-// ---START DEPRECATED BLOCK---
-
-
-template <class Type>
-Type vgl_box_2d<Type>::get_centroid_x() const
-{
-  VXL_DEPRECATED("vgl_box_2d<T>::get_centroid_x()");
-  return centroid_x();
-}
-
-template <class Type>
-Type vgl_box_2d<Type>::get_centroid_y() const
-{
-  VXL_DEPRECATED("vgl_box_2d<T>::get_centroid_y()");
-  return centroid_y();
-}
-
-template <class Type>
-Type vgl_box_2d<Type>::get_width() const
-{
-  VXL_DEPRECATED("vgl_box_2d<T>::get_width()");
-  return width();
-}
-
-template <class Type>
-Type vgl_box_2d<Type>::get_height() const
-{
-  VXL_DEPRECATED("vgl_box_2d<T>::get_height()");
-  return height();
-}
-
-template <class Type>
-vgl_point_2d<Type> vgl_box_2d<Type>::get_min_point() const
-{
-  VXL_DEPRECATED("vgl_box_2d<T>::get_min_point()");
-  return min_point();
-}
-
-template <class Type>
-vgl_point_2d<Type> vgl_box_2d<Type>::get_max_point() const
-{
-  VXL_DEPRECATED("vgl_box_2d<T>::get_max_point()");
-  return max_point();
-}
-
-template <class Type>
-vgl_point_2d<Type> vgl_box_2d<Type>::get_centroid_point() const
-{
-  VXL_DEPRECATED("vgl_box_2d<T>::get_centroid_point()");
-  return centroid_point();
-}
-
-// ---END DEPRECATED BLOCK---
-
 
 #undef VGL_BOX_2D_INSTANTIATE
 #define VGL_BOX_2D_INSTANTIATE(Type) \
