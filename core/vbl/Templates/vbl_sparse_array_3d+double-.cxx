@@ -1,6 +1,7 @@
 #include <vbl/vbl_sparse_array_3d.txx>
 VBL_SPARSE_ARRAY_3D_INSTANTIATE(double);
 
+#if 0
 int main()
 {
   vbl_sparse_array_3d<double> x;
@@ -16,3 +17,4 @@ int main()
   vcl_cout << x;
   return 1;
 }
+#endif
