@@ -35,15 +35,15 @@ vil1_memory_image::vil1_memory_image()
 }
 
 vil1_memory_image::vil1_memory_image(int planes, int w, int h,
-                                   vil1_memory_image_format const& format)
+                                     vil1_memory_image_format const& format)
   : vil1_image(new vil1_memory_image_impl(planes, w, h, format))
 {
   cache_from_impl;
 }
 
 vil1_memory_image::vil1_memory_image(int planes, int w, int h,
-                                   int components, int bits_per_component,
-                                   vil1_component_format component_format)
+                                     int components, int bits_per_component,
+                                     vil1_component_format component_format)
   : vil1_image(new vil1_memory_image_impl(planes, w, h, components, bits_per_component, component_format))
 {
   cache_from_impl;
@@ -56,8 +56,8 @@ vil1_memory_image::vil1_memory_image(int planes, int w, int h, vil1_pixel_format
 }
 
 vil1_memory_image::vil1_memory_image(int w, int h,
-                                   int components, int bits_per_component,
-                                   vil1_component_format component_format)
+                                     int components, int bits_per_component,
+                                     vil1_component_format component_format)
   : vil1_image(new vil1_memory_image_impl(1, w, h, components, bits_per_component, component_format))
 {
   cache_from_impl;
@@ -74,16 +74,26 @@ vil1_memory_image::vil1_memory_image(int w,int h, vil1_pixel_format_t pixel_form
 vil1_image make_memory_image(vil1_image const * thatp)
 {
   vil1_image const& that = *thatp;
-  //noblather vcl_cerr << thatp << " ptr " << that.impl() << "  ";
   if (that.get_property("memory"))
     return that;
-  //vcl_cerr << "copying " << that.impl() << endl;
+  assert(that.planes() > 0);
+  assert(that.width() >= 0);
+  assert(that.height() >= 0);
+  assert(that.components() > 0);
+  assert(that.bits_per_component() > 0);
+#ifdef DEBUG
+  vcl_cout << "copying " << that.impl() << " to a "
+           << that.planes() << 'x' << that.width() << 'x' <<that.height()
+           << 'x' << that.components() << " memory image, "
+           << that.bits_per_component() << " bpc, component format "
+           << that.component_format() << '\n' << vcl_flush;
+#endif
   vil1_memory_image mem(that.planes(),
-                       that.width(),
-                       that.height(),
-                       that.components(),
-                       that.bits_per_component(),
-                       that.component_format());
+                        that.width(),
+                        that.height(),
+                        that.components(),
+                        that.bits_per_component(),
+                        that.component_format());
   that.get_section(mem.get_buffer(), 0, 0, that.width(), that.height());
   return mem;
 }
@@ -137,37 +147,37 @@ void vil1_memory_image::assert_size(int width, int height) const
 // Added by Brendan McCane for creating images with already allocated
 // memory. Useful for use with framegrabbers.
 vil1_memory_image::vil1_memory_image(void *buf, int planes, int w, int h,
-                                   vil1_memory_image_format const& format)
+                                     vil1_memory_image_format const& format)
   : vil1_image(new vil1_memory_image_impl(buf, planes, w, h, format))
 {
   cache_from_impl;
 }
 
 vil1_memory_image::vil1_memory_image(void *buf, int planes, int w, int h,
-                                   int components, int bits_per_component,
-                                   vil1_component_format component_format)
+                                     int components, int bits_per_component,
+                                     vil1_component_format component_format)
   : vil1_image(new vil1_memory_image_impl(buf, planes, w, h, components, bits_per_component, component_format))
 {
   cache_from_impl;
 }
 
 vil1_memory_image::vil1_memory_image(void *buf, int planes, int w, int h,
-                                   vil1_pixel_format_t pixel_format)
+                                     vil1_pixel_format_t pixel_format)
   : vil1_image(new vil1_memory_image_impl(buf, planes, w, h, pixel_format))
 {
   cache_from_impl;
 }
 
 vil1_memory_image::vil1_memory_image(void *buf, int w, int h,
-                                   int components, int bits_per_component,
-                                   vil1_component_format component_format)
+                                     int components, int bits_per_component,
+                                     vil1_component_format component_format)
   : vil1_image(new vil1_memory_image_impl(buf, 1, w, h, components, bits_per_component, component_format))
 {
   cache_from_impl;
 }
 
 vil1_memory_image::vil1_memory_image(void *buf, int w, int h,
-                                   vil1_pixel_format_t pixel_format)
+                                     vil1_pixel_format_t pixel_format)
   : vil1_image(new vil1_memory_image_impl(buf, 1, w, h, pixel_format))
 {
   cache_from_impl;

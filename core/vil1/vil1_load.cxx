@@ -16,23 +16,29 @@
 
 vil1_image vil1_load_raw(vil1_stream *is)
 {
+#ifdef DEBUG
+  vcl_cout << __FILE__ " : trying" << vcl_flush;
+#endif
   for (vil1_file_format** p = vil1_file_format::all(); *p; ++p) {
-#if 0 // debugging
-    vcl_cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
+#ifdef DEBUG
+    vcl_cout << " \'" << (*p)->tag() << "\'" << vcl_flush;
 #endif
     is->seek(0);
     vil1_image i = (*p)->make_input_image(is);
-    if (i)
+    if (i && i.width()>=0 && i.height()>=0 && i.planes()>0 && i.components()>0 && i.bits_per_component()>0)
+    {
+#ifdef DEBUG
+      vcl_cout << ": succeeded\n" << vcl_flush;
+#endif
       return i;
+    }
   }
 
   // failed.
   vcl_cerr << __FILE__ ": Tried";
   for (vil1_file_format** p = vil1_file_format::all(); *p; ++p)
-    // 'flush' in case of segfault next time through loop. Else, we
-    // will not see those printed tags still in the stream buffer.
     vcl_cerr << " \'" << (*p)->tag() << "\'" << vcl_flush;
-  vcl_cerr << vcl_endl;
+  vcl_cerr << ": none succeeded\n";
 
   return 0;
 }
