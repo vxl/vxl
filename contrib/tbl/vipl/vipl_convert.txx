@@ -5,8 +5,8 @@
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_convert <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
-  const ImgIn &in = in_data();
-  ImgOut &out = out_data();
+  const ImgIn &in = in_data(0);
+  ImgOut &out = out_data(0);
   DataOut nil_obj = DataOut();
 
   int startx = start(X_Axis());
