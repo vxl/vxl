@@ -23,7 +23,7 @@
 
 #include <vcl/vcl_cstdlib.h>
 
-#include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
+#include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_double_2x2.h>
 #include <vnl/vnl_double_4x4.h>
 #include <vnl/vnl_double_4.h>
@@ -78,9 +78,13 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
 
   // Compute eig(A) to translate and rotate the quadric
   vnl_symmetric_eigensystem<double>  eig(A_);
+
+  //cerr << vnl_svd<double>(F_);
+  //MATLABPRINT(F_);
+  //MATLABPRINT(eig.D);
   
   // If all eigs are 0, had an affine F
-  _affine_F = eig.D(3,3) < 1e-10;
+  _affine_F = eig.D(3,3) < 1e-6;
   if (_affine_F) {
     ///cerr << "FManifoldProject: Affine F = " << F_ << endl;
     double s = 1.0 / b.magnitude();
@@ -155,7 +159,7 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
     out2->set(p[2], p[3], 1.0);
 
     double EPIDIST = dot_product(out2->get_vector(), F_*out1->get_vector());
-    if (EPIDIST > 1e-7) {
+    if (EPIDIST > 1e-4) {
       cerr << "FManifoldProject: Affine F: EPIDIST = " << EPIDIST << endl;
       cerr << "FManifoldProject: Affine F: p = " << (dot_product(p,n) + d) << endl;
 
@@ -164,7 +168,7 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
       cerr << "t = " << n << " " << d << endl;
       cerr << "F_ = " << F_ << endl;
       cerr << "FManifoldProject: Affine F: E = " << (EPI1 - EPI2) << endl;
-      abort();
+      //abort();
     }
     
     return distance * distance;

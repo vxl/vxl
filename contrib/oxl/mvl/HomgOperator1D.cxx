@@ -3,7 +3,6 @@
 #endif
 
 #include "HomgOperator1D.h"
-
 #include <vcl/vcl_cmath.h>
 #include <vcl/vcl_iostream.h>
 
@@ -61,7 +60,7 @@ double HomgOperator1D::dot(const Homg1D& a, const Homg1D& b)
 void HomgOperator1D::unitize(Homg1D* a)
 {
   double x = a->get_x(), w = a->get_w();
-  double norm = sqrt (x*x + w*w);
+  double norm = vcl_sqrt (x*x + w*w);
   if (norm == 0.0) {
     cerr << "HomgOperator1D::unitize() -- Zero length vector\n";
     return;

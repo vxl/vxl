@@ -48,7 +48,6 @@ public:
       y=(z+x[0])/(x[1]*z+1+x[2]);
       cout << z << ' ' << y << '[' << z2[i] << ']' << endl;
     }
-    cout.flags(f);
   }
   
   //	the matrix is	[ 1.0    x[0] ]
