@@ -45,5 +45,13 @@ main()
     vcl_cout << "Style appears to be correct for line 2" << vcl_endl;
   }
 
+  vcl_cout << "Try to retrieve style 3" << vcl_endl;
+  if( line3->get_style()->rgba[0] != 0.0f ) {
+    vcl_cout << "ERROR: Red != 0.0 (is "<<line3->get_style()->rgba[0]<<")" << vcl_endl;
+    return 1;
+  } else {
+    vcl_cout << "Style appears to be correct for line 3" << vcl_endl;
+  }
+
   return 0;
 }
