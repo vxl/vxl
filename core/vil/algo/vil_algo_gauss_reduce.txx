@@ -13,7 +13,7 @@
 template<class T>
 void vil2_algo_gauss_reduce(vil2_image_view<T>& dest_im,
                             const vil2_image_view<T>& src_im,
-														vil2_image_view<T>& work_im)
+                            vil2_image_view<T>& work_im)
 {
   int nx = src_im.nx();
   int ny = src_im.ny();
