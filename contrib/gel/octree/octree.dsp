@@ -135,12 +135,6 @@ SOURCE=.\ConvexHull.cxx
 # Begin Source File
 SOURCE=.\BaseCube.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_sparse_array_3dXvnl_double_2-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_sparse_array_3dXvnl_double_3-.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
