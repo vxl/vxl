@@ -15,14 +15,14 @@ ADD_EXECUTABLE( vbl_io_test_all
   golden_test_vbl_io.cxx
 )
 
-ADD_TEST(vbl_test_smart_ptr_io    vbl_io_test_all test_smart_ptr_io)
-ADD_TEST(vbl_test_bounding_box_io vbl_io_test_all test_bounding_box_io)
-ADD_TEST(vbl_test_array_1d_io     vbl_io_test_all test_array_1d_io)
-ADD_TEST(vbl_test_array_2d_io     vbl_io_test_all test_array_2d_io)
-ADD_TEST(vbl_test_array_3d_io     vbl_io_test_all test_array_3d_io)
-ADD_TEST(vbl_test_sparse_array_io vbl_io_test_all test_sparse_array_io)
-ADD_TEST(vbl_test_triple_io       vbl_io_test_all test_triple_io)
-ADD_TEST(vbl_golden_test_vbl_io   vbl_io_test_all golden_test_vbl_io)
+ADD_TEST(vbl_io_test_smart_ptr_io    vbl_io_test_all test_smart_ptr_io)
+ADD_TEST(vbl_io_test_bounding_box_io vbl_io_test_all test_bounding_box_io)
+ADD_TEST(vbl_io_test_array_1d_io     vbl_io_test_all test_array_1d_io)
+ADD_TEST(vbl_io_test_array_2d_io     vbl_io_test_all test_array_2d_io)
+ADD_TEST(vbl_io_test_array_3d_io     vbl_io_test_all test_array_3d_io)
+ADD_TEST(vbl_io_test_sparse_array_io vbl_io_test_all test_sparse_array_io)
+ADD_TEST(vbl_io_test_triple_io       vbl_io_test_all test_triple_io)
+ADD_TEST(vbl_io_golden_test_vbl_io   vbl_io_test_all golden_test_vbl_io)
 
 ADD_EXECUTABLE( vbl_io_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vbl_io_test_include vbl_io )
