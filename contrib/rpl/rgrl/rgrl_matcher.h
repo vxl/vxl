@@ -64,27 +64,24 @@ class rgrl_matcher
   rgrl_type_macro( rgrl_matcher, rgrl_object );
 
  protected:
-  
+
   //: this struct is used in invert_matches
   struct flip_node{
     rgrl_feature_sptr from_, to_;
     double            sig_wgt_;
 
     // less than operator
-    bool operator<( flip_node const& right ); 
-
+    bool operator<( flip_node const& other ) const;
   };
-  
+
   typedef vcl_vector<flip_node>::const_iterator nodes_vec_iterator;
-  
-  virtual 
+
+  virtual
   void
-  add_one_flipped_match( rgrl_match_set_sptr& inv_set, 
-                         rgrl_view const& current_view, 
-                         nodes_vec_iterator const& begin_iter, 
+  add_one_flipped_match( rgrl_match_set_sptr& inv_set,
+                         rgrl_view const& current_view,
+                         nodes_vec_iterator const& begin_iter,
                          nodes_vec_iterator const& end_iter );
-  
-  
 };
 
 #endif
