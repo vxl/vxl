@@ -57,6 +57,19 @@ SOURCE_FILES( vnl_sources
 
 AUX_SOURCE_DIRECTORY(Templates vnl_sources)
 
+# VNL_ALLOC is a fast but currently thread-unsafe allocator
+# used in vnl_vectors. The default is to use it but to  
+# use the slower, thread-safe allocation, in your 
+# CMakeListsLocal.txt file add the following lines 
+# SET(VNL_C_VECTOR_USE_VNL_ALLOC_DEFINED 1)
+# ADD_DEFINITIONS(-DVNL_C_VECTOR_USE_VNL_ALLOC=0)
+
+IF(NOT VNL_C_VECTOR_USE_VNL_ALLOC_DEFINED)
+  ADD_DEFINITIONS(-DVNL_C_VECTOR_USE_VNL_ALLOC=1)
+ENDIF(NOT VNL_C_VECTOR_USE_VNL_ALLOC_DEFINED)
+
+
+
 IF (WIN32)
   IF (NOT CYGWIN)
     INCLUDE(${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsHeaders.txt)

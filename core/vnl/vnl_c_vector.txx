@@ -287,7 +287,6 @@ void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out)
 //---------------------------------------------------------------------------
 
 // this should not be changed at run-time anyway.
-#define vnl_c_vector_use_vnl_alloc 1
 
 #include <vnl/vnl_alloc.h>
 //#include <vcl_iostream.h>
@@ -298,7 +297,7 @@ inline void* vnl_c_vector_alloc(int n, int size)
   //#if vnl_c_vector_use_win32_native_alloc
   // native was:  return (T**)std::allocator<T*>().allocate(n, 0);
   // on windows, it just calls malloc, so is useless....
-#if vnl_c_vector_use_vnl_alloc
+#if VNL_C_VECTOR_USE_VNL_ALLOC
   return vnl_alloc::allocate((n == 0) ? 8 : (n * size));
 #else
   return new char[n * size];
@@ -309,7 +308,7 @@ inline void vnl_c_vector_dealloc(void* v, int n, int size)
 {
   //vcl_cerr << "\ncall to vnl_c_vector_dealloc(" << v << ", " << n
   //         << ", " << size << ")\n";
-#if vnl_c_vector_use_vnl_alloc
+#if VNL_C_VECTOR_USE_VNL_ALLOC
   if (v)
     vnl_alloc::deallocate(v, (n == 0) ? 8 : (n * size));
 #else
@@ -317,7 +316,6 @@ inline void vnl_c_vector_dealloc(void* v, int n, int size)
 #endif
 }
 
-#undef vnl_c_vector_use_vnl_alloc
 
 template<class T>
 T** vnl_c_vector<T>::allocate_Tptr(int n)
