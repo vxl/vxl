@@ -153,7 +153,21 @@ void cmu_1394_camera::update_settings()
       C1394Camera::m_controlAutoExposure.TurnOn(true);
       C1394Camera::m_controlShutter.TurnOn(false);
     }
-  if (!auto_gain_)
+  if (!autowhitebalance_)
+   {
+      C1394Camera::m_controlWhiteBalance.SetAutoMode(false);
+      C1394Camera::SetWhiteBalance(whitebalanceU_, whitebalanceV_);
+   }
+  else
+  {
+    C1394Camera::m_controlWhiteBalance.SetAutoMode(true);
+  }
+  if (onepushWBbalance_)
+    {
+        C1394Camera::m_controlWhiteBalance.SetAutoMode(false);      
+        C1394Camera::m_controlWhiteBalance.SetOnePush();
+    }
+   if (!auto_gain_)
     {
       C1394Camera::m_controlGain.SetAutoMode(false);
       C1394Camera::m_controlGain.TurnOn(true);
@@ -167,6 +181,9 @@ void cmu_1394_camera::update_settings()
     C1394Camera::SetAutoExposure(exposure_);
   if (!auto_gain_)
     C1394Camera::SetGain(gain_);
+
+
+
 }
 
 //-----------------------------------------------------------------
@@ -217,6 +234,8 @@ void cmu_1394_camera::init_control()
   max_brightness_ = C1394Camera::m_controlBrightness.m_max;
   brightness_ = min_brightness_;
 
+  min_WB_=C1394Camera::m_controlWhiteBalance.m_min;
+  max_WB_=C1394Camera::m_controlWhiteBalance.m_max;
   //Auto exposure
   auto_exposure_control_ = C1394Camera::m_controlAutoExposure.m_present;
   min_exposure_ = C1394Camera::m_controlAutoExposure.m_min;

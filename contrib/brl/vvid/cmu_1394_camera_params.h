@@ -37,7 +37,13 @@ class cmu_1394_camera_params
                          int min_sharpness=0, int max_sharpness = 128,
                          int exposure=128,
                          int min_exposure=0,int max_exposure = 255,
-                         bool capture = true, bool rgb = true);
+                         bool capture = true, bool rgb = true,
+                         bool autowhitebalance=true,
+                         int whitebalanceU=127,
+                         int whitebalanceV=127,
+                         bool onepushWBbalance=false,
+                         int min_WB=0,
+                         int max_WB=255);
   cmu_1394_camera_params(const cmu_1394_camera_params& cp);
   ~cmu_1394_camera_params();
   void set_params(const cmu_1394_camera_params& cp);
@@ -77,6 +83,16 @@ class cmu_1394_camera_params
   int sharpness_;
   int min_sharpness_;
   int max_sharpness_;
+
+  //: White balance params
+  bool autowhitebalance_;
+  int  whitebalanceU_;
+  int  whitebalanceV_;
+  bool onepushWBbalance_;
+  int min_WB_;
+  int max_WB_;
+
+
 
   //:capture vs acquisition (multiple frame buffering vs single frame)
   bool capture_;

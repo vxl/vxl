@@ -169,6 +169,11 @@ void vvid_live_video_manager::set_camera_params()
   cam_dlg.field("Maximum Frame Rate", max_frame_rate);
   cam_dlg.checkbox("image capture(acquisition) ", cp_.capture_);
   cam_dlg.checkbox("RGB(monochrome) ", cp_.rgb_);
+  cam_dlg.checkbox("Auto White Balance",cp_.autowhitebalance_);
+  cam_dlg.field("White Balance U",cp_.whitebalanceU_);
+  cam_dlg.field("White Balance V",cp_.whitebalanceV_);
+  cam_dlg.checkbox(" One push WhiteBalance",cp_.onepushWBbalance_);
+
   if (!cam_dlg.ask())
     return;
 

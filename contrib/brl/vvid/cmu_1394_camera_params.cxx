@@ -29,14 +29,21 @@ cmu_1394_camera_params::cmu_1394_camera_params(int video_format,
                                                int min_exposure,
                                                int max_exposure,
                                                bool capture,
-                                               bool rgb)
-{
-  video_format_ = video_format;
-  video_mode_ = video_mode;
-  frame_rate_ = frame_rate;
-  auto_exposure_ = auto_exposure;
-  auto_gain_ = auto_gain;
+                                               bool rgb,
+                                               bool autowhitebalance,
+                                               int whitebalanceU,
+                                               int whitebalanceV,
+                                               bool onepushWBbalance,
+                                               int min_WB,
+                                               int max_WB)
+ 
+{ 
 
+ video_format_ = video_format;   
+ video_mode_ = video_mode;       
+ frame_rate_ = frame_rate;
+ auto_exposure_ = auto_exposure;
+ auto_gain_ = auto_gain;
   manual_shutter_control_ = manual_shutter_control;
   shutter_ = shutter;
   min_shutter_ = min_shutter;
@@ -56,6 +63,12 @@ cmu_1394_camera_params::cmu_1394_camera_params(int video_format,
   max_exposure_ = max_exposure;
   capture_ = capture;
   rgb_ = rgb;
+  autowhitebalance_=autowhitebalance;
+  whitebalanceU_=whitebalanceU;
+  whitebalanceV_=whitebalanceV;
+  onepushWBbalance_=onepushWBbalance;
+  min_WB_=min_WB;
+  max_WB_=max_WB;
 }
 
 void cmu_1394_camera_params::set_params(const cmu_1394_camera_params& cp)
@@ -84,6 +97,12 @@ void cmu_1394_camera_params::set_params(const cmu_1394_camera_params& cp)
   max_exposure_ = cp.max_exposure_;
   capture_ = cp.capture_;
   rgb_ = cp.rgb_;
+  autowhitebalance_=cp.autowhitebalance_;
+  whitebalanceU_=cp.whitebalanceU_;
+  whitebalanceV_=cp.whitebalanceV_;
+  onepushWBbalance_=cp.onepushWBbalance_;
+  min_WB_=cp.min_WB_;
+  max_WB_=cp.max_WB_;
 }
 
 cmu_1394_camera_params::cmu_1394_camera_params(const cmu_1394_camera_params& cp)
@@ -230,5 +249,7 @@ vcl_ostream& operator<<(vcl_ostream& os, const cmu_1394_camera_params& cp)
      << "\nexposure: " << cp.min_exposure_ << " < " << cp.exposure_
      <<          " < " << cp.max_exposure_
      << "\ncapture: " << cp.capture_
-     << "\nrgb: " << cp.rgb_ << vcl_endl;
+     << "\nrgb: " << cp.rgb_ 
+     << "\nWB U "<<cp.min_WB_<<"<"<<cp.whitebalanceU_<<">"<<cp.max_WB_
+     << "\nWB V "<<cp.min_WB_<<"<"<<cp.whitebalanceV_<<">"<<cp.max_WB_<<vcl_endl;
 }
