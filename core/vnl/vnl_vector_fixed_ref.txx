@@ -122,6 +122,6 @@ vnl_vector_fixed_ref_const<T,n>::print( vcl_ostream& s ) const
 
 #define VNL_VECTOR_FIXED_REF_INSTANTIATE(T,n) \
 template class vnl_vector_fixed_ref<T, n >; \
-template class vnl_vector_fixed_ref_const<T, n >;
+template class vnl_vector_fixed_ref_const<T, n >
 
 #endif // vnl_vector_fixed_ref_txx_
