@@ -261,6 +261,9 @@ inline void vil2_math_image_sum(const vil2_image_view<aT>& imA,
 }
 
 //: Compute pixel-wise product of two images (im_prod(i,j) = imA(i,j)*imB(i,j)
+//  If images have the same number of planes,
+//  then im_prod(i,j,p) = imA(i,j,p)*imB(i,j,p).
+//  If imB only has one plane, then im_prod(i,j,p) = imA(i,j,p)*imB(i,j,0).
 // \relates vil2_image_view
 template<class aT, class bT, class sumT>
 inline void vil2_math_image_product(const vil2_image_view<aT>& imA,
@@ -268,13 +271,18 @@ inline void vil2_math_image_product(const vil2_image_view<aT>& imA,
                          vil2_image_view<sumT>& im_product)
 {
   unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
-  assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
+  assert(imB.ni()==ni && imB.nj()==nj);
+  assert(imB.nplanes()==1 || imB.nplanes()==np);
   im_product.set_size(ni,nj,np);
 
   vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
   vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
   vcl_ptrdiff_t istepP=im_product.istep(),jstepP=im_product.jstep(),
                 pstepP = im_product.planestep();
+
+  // For one plane case, arrange that im_prod(i,j,p) = imA(i,j,p)*imB(i,j,0)
+  if (imB.nplanes()==1) pstepB=0;
+
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   sumT* planeP     = im_product.top_left_ptr();
@@ -295,7 +303,12 @@ inline void vil2_math_image_product(const vil2_image_view<aT>& imA,
 }
 
 //: Compute pixel-wise ratio of two images : im_ratio(i,j) = imA(i,j)/imB(i,j)
-//  Pixels cast to type sumT before calculation.  If imB(i,j)==0, im_ration(i,j)=0
+//  Pixels cast to type sumT before calculation.  
+//  If imB(i,j,p)==0, im_ration(i,j,p)=0
+//
+//  If images have the same number of planes,
+//  then im_ratio(i,j,p) = imA(i,j,p)/imB(i,j,p).
+//  If imB only has one plane, then im_ratio(i,j,p) = imA(i,j,p)/imB(i,j,0).
 // \relates vil2_image_view
 template<class aT, class bT, class sumT>
 inline void vil2_math_image_ratio(const vil2_image_view<aT>& imA,
@@ -303,13 +316,19 @@ inline void vil2_math_image_ratio(const vil2_image_view<aT>& imA,
                          vil2_image_view<sumT>& im_ratio)
 {
   unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
-  assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
+  assert(imB.ni()==ni && imB.nj()==nj);
+  assert(imB.ni()==ni && imB.nj()==nj);
+  assert(imB.nplanes()==1 || imB.nplanes()==np);
   im_ratio.set_size(ni,nj,np);
 
   vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
   vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
   vcl_ptrdiff_t istepR=im_ratio.istep(),jstepR=im_ratio.jstep(),
                 pstepR = im_ratio.planestep();
+
+  // For one plane case, arrange that im_ratio(i,j,p) = imA(i,j,p)/imB(i,j,0)
+  if (imB.nplanes()==1) pstepB=0;
+
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   sumT* planeR     = im_ratio.top_left_ptr();
