@@ -8,8 +8,8 @@ INCLUDE(${MODULE_PATH}/FindPNG.cmake)
 INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
 
 IF(PNG_FOUND)
-  INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR} -DHAS_PNG)
-  ADD_DEFINITIONS( ${PNG_DEFINITIONS} )
+  INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})
+  ADD_DEFINITIONS( ${PNG_DEFINITIONS}  -DHAS_PNG)
   SET( vil_sources ${vil_sources}
     file_formats/vil_png.cxx file_formats/vil_png.h
   )
