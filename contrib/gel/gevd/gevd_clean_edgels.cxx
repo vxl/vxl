@@ -5,8 +5,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>   // for vcl_abs(int)
 #include <vcl_vector.h>
-#include <vcl_algorithm.h> // for vcl_max()
-#include <vcl_cmath.h>     // for vcl_sqrt()
+#include <vcl_algorithm.h> // for vcl_find()
 #include <vul/vul_timer.h>
 #include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
@@ -214,14 +213,14 @@ bool gevd_clean_edgels::closest_vertex(vtol_edge_2d_sptr e, vsol_point_2d_sptr p
   if (!dc){ v = NULL; return false;}
   vsol_point_2d_sptr sp = new vsol_point_2d ( *p );
   vsol_point_2d_sptr pc = dc->get_interpolator()->closest_point_on_curve( sp );
-  float span = vcl_sqrt(p->distance ( pc ));
+  float span_sq = p->distance ( pc );
 
   vtol_vertex_2d_sptr v1 = e->v1()->cast_to_vertex_2d(), v2 = e->v2()->cast_to_vertex_2d();
-  float d1 = vcl_sqrt(v1->point()->distance ( p ));
-  float d2 = vcl_sqrt(v2->point()->distance ( p ));
+  float d1 = v1->point()->distance ( p );
+  float d2 = v2->point()->distance ( p );
   if (d1<d2)
     {
-      if (d1<=span)
+      if (d1<=span_sq)
         {
           v = v1;
           return true;
@@ -229,7 +228,7 @@ bool gevd_clean_edgels::closest_vertex(vtol_edge_2d_sptr e, vsol_point_2d_sptr p
     }
   else
     {
-    if (d2<=span)
+    if (d2<=span_sq)
       {
         v = v2;
         return true;
@@ -353,8 +352,7 @@ void gevd_clean_edgels::JumpGaps()
     for ( eit = out_edgels_->begin(); eit != out_edgels_->end(); ++eit )
       {
       vdgl_digital_curve_sptr dc = (*eit)->curve()->cast_to_digital_curve();
-      float d = dc->get_interpolator()->distance_curve_to_point ( p );
-      if ( d < radius )
+      if ( dc && radius > dc->get_interpolator()->distance_curve_to_point ( p ) )
         near_edges.push_back( *eit );
       }
 
@@ -442,8 +440,8 @@ void gevd_clean_edgels::DeleteShortEdges()
       vtol_edge_2d_sptr e = (vtol_edge_2d_sptr )(*egit);
       vtol_vertex_2d* v1 = (vtol_vertex_2d*)e->v1().ptr();
       vtol_vertex_2d* v2 = (vtol_vertex_2d*)e->v2().ptr();
-      float fx1 = v1->x(), fy1 = v1->y();
-      float fx2 = v2->x(), fy2 = v2->y();
+      double fx1 = v1->x(), fy1 = v1->y();
+      double fx2 = v2->x(), fy2 = v2->y();
       int x1 = int(fx1), y1 = int(fy1);
       int x2 = int(fx2), y2 = int(fy2);
       //First, are the vertices too close?
@@ -472,8 +470,8 @@ void gevd_clean_edgels::DeleteShortEdges()
             // e->unlink_all_inferiors_twoway(e);
             // e->unlink_all_inferiors();
             // v1->merge_references(v2);
-            v1->set_x((fx1+fx2)/2.0);//This could cause missing edgels
-            v1->set_y((fy1+fy2)/2.0);
+            v1->set_x((fx1+fx2)/2);//This could cause missing edgels
+            v1->set_y((fy1+fy2)/2);
             this->remove_similar_edges(v1, deleted_edges);
             //We remove e last since it may already
             //have been removed by remove_similar_edges
@@ -623,18 +621,18 @@ void gevd_clean_edgels::RemoveJaggies()
       vtol_edge_2d_sptr e = (vtol_edge_2d_sptr )(*egit);
       vtol_vertex_2d* v1 = (vtol_vertex_2d*)e->v1().ptr();
       vtol_vertex_2d* v2 = (vtol_vertex_2d*)e->v2().ptr();
-      float x1 = v1->x(), y1 = v1->y();
-      float x2 = v2->x(), y2 = v2->y();
+      double x1 = v1->x(), y1 = v1->y();
+      double x2 = v2->x(), y2 = v2->y();
       vdgl_digital_curve_sptr dc = e->curve()->cast_to_digital_curve();
       vdgl_edgel_chain_sptr chain = dc->get_interpolator()->get_edgel_chain();
       int n_edgels = chain->size();
       int n1 = n_edgels-1;
-      float xo = chain->edgel(0).x(), yo = chain->edgel(0).y();
+      double xo = chain->edgel(0).x(), yo = chain->edgel(0).y();
       // dc->GetX(0), yo = dc->GetY(0);
       // float xn = dc->GetX(n1), yn = dc->GetY(n1);
-      float xn = chain->edgel(n1).x(), yn = chain->edgel(n1).y();
-      float d1o = vcl_sqrt((x1-xo)*(x1-xo) + (y1-yo)*(y1-yo));
-      float d1n = vcl_sqrt((x1-xn)*(x1-xn) + (y1-yn)*(y1-yn));
+      double xn = chain->edgel(n1).x(), yn = chain->edgel(n1).y();
+      double d1o = (x1-xo)*(x1-xo) + (y1-yo)*(y1-yo);
+      double d1n = (x1-xn)*(x1-xn) + (y1-yn)*(y1-yn);
       if (d1o<d1n)//The expected case
         {
         // dc->SetX(x1, 0); dc->SetY(y1, 0);
@@ -672,7 +670,7 @@ void gevd_clean_edgels::RemoveLoops()
       if (*v1==*v2)//We have a loop
         {
           vdgl_digital_curve_sptr c = e->curve()->cast_to_digital_curve();
-          float len = c->length();
+          double len = c->length();
           if (verbose) vcl_cout << "In Remove Loops: "<< v1 << " L = " << len << vcl_endl;
           if (len<min_loop_length)
             {
