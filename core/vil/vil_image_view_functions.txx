@@ -165,15 +165,6 @@ void vil2_fill_col(vil2_image_view<T>& view, unsigned i, T value)
 }
 
 
-//: How to print value in vil2_print_all(image_view)
-template<class T>
-void vil2_print_value(vcl_ostream& os, const T& value)
-{
-  os.width(3);
-  os<<value;
-}
-
-
 //: print all image data to os in a grid (rounds output to int)
 template<class T>
 void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view)
@@ -201,8 +192,7 @@ void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view)
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_FOR_SCALARS(T) \
 template vil2_image_view<T > vil2_view_as_planes(const vil2_image_view<vil_rgb<T > >&); \
 template vil2_image_view<vil_rgb<T > > vil2_view_as_rgb(const vil2_image_view<T >& plane_view); \
-template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T >& view); \
-template void vil2_print_value(vcl_ostream& os, const T& value)
+template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T >& view)
 
 // For everything else
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE(T) \
