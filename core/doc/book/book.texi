@@ -49,6 +49,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 * vul::
 * vnl::
 * vil::
+* vgui::
 * vidl::
 * vgl::
 * vsl::
@@ -124,6 +125,15 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @cindex Images
 
 @include chapter_vil.texi
+
+@comment ------------------------------------------------------------------
+@node    vgui
+@comment node-name, next,    previous, up
+@chapter vgui: Graphical User Interface
+@cindex vgui
+@cindex Graphics
+
+@include chapter_vgui.texi
 
 @comment ------------------------------------------------------------------
 @node    vgl
