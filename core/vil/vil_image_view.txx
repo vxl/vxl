@@ -9,8 +9,10 @@
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vcl_ostream.h>
+#include <vil/vil_rgb.h>
 #include <vil2/vil2_smart_ptr.h>
 #include <vil2/vil2_pixel_format.h>
+#include <vil2/vil2_image_view_functions.h>
 
 //=======================================================================
 
@@ -139,14 +141,24 @@ const vil2_image_view<T> & vil2_image_view<T>::operator= (const vil2_image_view_
     ptr_=that.ptr_;
     return *this;
   }
+
 #ifdef VIL2_TO_BE_FIXED
   if (this is a scalar pixel type and rhs is a compound pixel of the
       same type)
   {
     vil2_image_view<T> that = vil2_view_as_planes(
-      static_cast<const vil2_image_view<vil2_pixel_traits<T>::component_type>&>(rhs);
+      (const vil2_image_view<vil_rgb<T> &)(rhs));
     this->operator=(that);
     return *this
+  }
+
+  if (this is an rgb pixel type and rhs is a this pixel of the
+      same component type)
+ {
+    vil2_image_view<T> that = vil2_view_as_rgb(
+      static_cast<const vil2_image_view<vil_rgb<T> >&>(rhs));
+    this->operator=(that);
+    return *this;
   }
 #endif
 
