@@ -127,11 +127,11 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
     // This loop will exit with a goto step_five or step_six.
     while ( true )
     {
-      unsigned i, j; // row and column of the uncovered zero, if any.
+      unsigned i; // row and column of the uncovered zero, if any.
       bool uncovered_zero_found = false;
       for ( i = 0; i < N; ++i ) {
         if ( ! R_cov[i] ) {
-          for ( j = 0; j < N; ++j ) {
+          for ( unsigned j = 0; j < N; ++j ) {
             if ( cost(i,j) == 0.0 && ! C_cov[j] ) {
               M(i,j) = 2; // prime it
               uncovered_zero_found = true;
