@@ -16,9 +16,9 @@
 typedef unsigned char ubyte;
 
 #define ALL_TESTS(x,m,p) \
-  ONE_TEST(x,p,byte_img,byte_ori,mil_image_2d_of<ubyte>,ubyte,58939,m+"_byte"); \
-  ONE_TEST(x,p,shrt_img,shrt_ori,mil_image_2d_of<short>,short,1595,m+"_short"); \
-  ONE_TEST(x,p,flot_img,flot_ori,mil_image_2d_of<float>,float,13.4489,m+"_float")
+  ONE_TEST(x,p,byte_img,byte_ori,mil_image_2d_of<ubyte>,ubyte,10705,m+"_byte"); \
+  ONE_TEST(x,p,shrt_img,shrt_ori,mil_image_2d_of<short>,short,385,m+"_short"); \
+  ONE_TEST(x,p,flot_img,flot_ori,mil_image_2d_of<float>,float,2.19553,m+"_float")
 
 int vipl_test_gaussian_convolution() {
   mil_image_2d_of<ubyte> byte_img = Create_mil8bitImage(32,32),  byte_ori = Create_mil8bitImage(32,32);
@@ -29,7 +29,8 @@ int vipl_test_gaussian_convolution() {
   mil_image_2d_of<float> flot_out(32, 32);
 
   vcl_string m = "vipl_gaussian_convolution";
-  ALL_TESTS(vipl_gaussian_convolution,m,5);
+  ALL_TESTS(vipl_gaussian_convolution,m,1.0);
+
   return 0;
 }
 
