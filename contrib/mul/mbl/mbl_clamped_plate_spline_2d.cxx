@@ -8,7 +8,7 @@
 #include <vsl/vsl_indent.h>
 #include <mbl/mbl_matxvec.h>
 #include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
+#include <vcl_cassert.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vgl/io/vgl_io_point_2d.h>
@@ -180,7 +180,6 @@ void mbl_clamped_plate_spline_2d::set_source_pts(const vcl_vector<vgl_point_2d<d
 {
   assert(all_in_unit_circle(source_pts));
 
-  unsigned int n=source_pts.size();
   src_pts_ = source_pts;
 
   vnl_matrix<double> L;
