@@ -3,7 +3,6 @@
 // \brief Example of using vil2_convolve_1d with a vil2_image_view<T> to smooth an image with a Gaussian.
 // \author Ian Scott, David Serby
 
-
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vil2/vil2_image_view.h>
@@ -28,16 +27,15 @@ int main( int argc, char* argv[] )
     return 2;
   }
 
-
   // create an output image and a temporary image of the same size as the
   // input image
   vil2_image_view<vxl_byte> imageOut( imageIn.ni(), imageIn.nj() );
   vil2_image_view<float> tmp( imageIn.ni(), imageIn.nj() );
 
   // create a normalized Gaussian kernel with standard deviation sigma=2.0
-  vcl_cout << "Creating kernel..." << vcl_endl;
-  float sigma = 2.0;
-  float scaleFactor = 1.0 / ( 2.0 * sigma * sigma );
+  vcl_cout << "Creating kernel...\n";
+  float sigma = 2.f;
+  float scaleFactor = 1.f / ( 2.f * sigma * sigma );
   const int halfSupport = 1;
 
   // build kernel
@@ -56,20 +54,20 @@ int main( int argc, char* argv[] )
   }
 
   // convolution of the input image in y-direction
-  vcl_cout << "Convolving in y-direction..." << vcl_endl;
+  vcl_cout << "Convolving in y-direction...\n";
   vil2_convolve_1d( vil2_transpose( imageIn ), tmp,
-                 &kernel[halfSupport], -halfSupport, halfSupport,
-                 float(),
-                 vil2_convolve_constant_extend,
-                 vil2_convolve_constant_extend );
+                    &kernel[halfSupport], -halfSupport, halfSupport,
+                    float(),
+                    vil2_convolve_constant_extend,
+                    vil2_convolve_constant_extend );
 
   // convolution of the input image in x-direction
-  vcl_cout << "Convolving in x-direction..." << vcl_endl;
+  vcl_cout << "Convolving in x-direction...\n";
   vil2_convolve_1d( vil2_transpose( tmp ), imageOut,
-                 &kernel[1], -halfSupport, halfSupport,
-                 float(),
-                 vil2_convolve_constant_extend,
-                 vil2_convolve_constant_extend );
+                    &kernel[1], -halfSupport, halfSupport,
+                    float(),
+                    vil2_convolve_constant_extend,
+                    vil2_convolve_constant_extend );
 
   vil2_save(imageOut, outputFilename);
   return 0;
