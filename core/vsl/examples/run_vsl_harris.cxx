@@ -16,7 +16,15 @@ int main(int argc,char **argv) {
   vbl_arg<bool>       pab    ("-pab"  ,"emulate pab harris"  ,false);
   vbl_arg_parse(argc,argv);
   
+  if (infile() == "") {
+    cout << "input image file: ";
+    cin >> infile().c_str();
+  }
   assert(infile()  != "");
+  if (outfile() == "") {
+    cout << "output image file: ";
+    cin >> outfile().c_str();
+  }
   assert(outfile() != "");
 
   // load image
