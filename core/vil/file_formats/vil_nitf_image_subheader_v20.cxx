@@ -1841,9 +1841,9 @@ StatusCode vil_nitf_image_subheader_v20::extract_stdid_extension()
 
     // define some variables relevant for the tag.
     // this will allow us to do dynamic tag parsing.
-    int acq_date, mission, pass, op_num, start_seg, repro_num;
-    int replay_regen, blank_fill, start_col, start_row, end_seg=2;
-    int end_col, end_row, country, wac, loc, res1, res2;
+    int acq_date=0, mission=1, pass=2, op_num=3, start_seg=2, repro_num=2;
+    int replay_regen=3, blank_fill=1, start_col=0, start_row=5, end_seg=2;
+    int end_col=0, end_row=5, country=2, wac=4, loc=11, res1=5, res2=7;
 
   // now populate the variables based on the tag_type.
     switch (tag_type) {
