@@ -28,3 +28,8 @@ void camera_node::set_beat(vcl_vector<double> const& new_beat)
   // clear motion vector:
   //camera_node::set_motion(vcl_vector<vcsl_spatial_transformation_sptr>());
 }
+
+vcl_ostream& operator<<(vcl_ostream& s, camera_node const& camera)
+{
+  return s << "camera: "<< camera.get_id()<<"\n intrinsic is"<<camera.get_intrinsic();
+}

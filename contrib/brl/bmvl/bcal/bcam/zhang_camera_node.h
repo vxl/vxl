@@ -15,7 +15,6 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-
 #include "camera_node.h"
 #include <vcl_vector.h>
 #include <vgl/vgl_homg_point_2d.h>

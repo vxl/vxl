@@ -243,7 +243,14 @@ class camera_graph
         for(int i=0; i<num_vertice_; i++){
           vcl_cerr<<"vertex id is: "<<vertice_[i]->id_<<"\t v is: "<< \
             vertice_[i]->v_ <<"\t s is: "<<vertice_[i]->s_<<"\n";
+
+          int num_neighbours = edges_[i]->size();
+          for(int j=0; j< num_neighbours; j++){
+            (*edges_[i])[j]->e_->print();
+          }
         }
+
+        //print edge
       }
       
      

@@ -63,3 +63,12 @@ void euclidean_transformation::set_transformations(vcl_vector<vgl_h_matrix_3d<do
 {
   trans_ = trans; 
 }
+
+
+void euclidean_transformation::print()
+{
+  int size = trans_.size();
+  for(int i=0; i<size; i++){
+    vcl_cerr << "\n the "<<i<<"-th transformation is: \n"<< trans_[i];
+  }
+}

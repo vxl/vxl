@@ -29,7 +29,11 @@ class euclidean_transformation : public vcsl_spatial_transformation
   virtual bool is_invertible(double time) const; // for abstract interface
   virtual void set_beat(vcl_vector<double> const& new_beat);
 
+  // for debugging
+  void print();
+
  protected:
+   // print information
   int remove();
 };
 

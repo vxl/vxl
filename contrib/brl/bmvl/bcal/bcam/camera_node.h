@@ -11,6 +11,7 @@
 #endif // _MSC_VER > 1000
 
 #include <vcl_vector.h>
+#include <vcl_iostream.h>
 #include <vcsl/vcsl_spatial.h>
 #include "camera.h"
 
@@ -24,10 +25,12 @@ public:
   virtual ~camera_node();
 public:
   virtual void set_beat(vcl_vector<double> const & new_beat);
-  vnl_double_3x3 get_intrinsic() { return pCam_->getIntrisicMatrix();}
-  void set_intrinsic(vnl_double_3x3 k) { pCam_->setIntrisicMatrix(k);}
-  int get_id() { return pCam_->getID();}
+  vnl_double_3x3 get_intrinsic() const { return pCam_->getIntrisicMatrix();} 
+  void set_intrinsic(vnl_double_3x3 k)  { pCam_->setIntrisicMatrix(k);}
+  int get_id() const { return pCam_->getID();} 
   int num_views() { return nViews_;}
 };
+
+vcl_ostream& operator<<(vcl_ostream& s, camera_node const& camera);
 
 #endif // AFX_CAMERANODE_H__72E24F49_51C3_4792_A5E8_A670182B472F__INCLUDED_
