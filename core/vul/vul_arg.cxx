@@ -584,7 +584,7 @@ template class vul_arg<char*>;
 //: char const *
 VDS void settype(vul_arg<char const *> &argmt) { argmt.type_ = "string"; }
 VDS void print_value(vcl_ostream &s, vul_arg<char const *> const &argmt)
-{ s << '\'' << argmt() << '\''; }
+{ s << '\'' << (argmt()?argmt():"(null)") << '\''; }
 VDS int parse(vul_arg<char const *>* argmt, char ** argv) {
   argmt->value_ = argv[0]; // argv is valid till the end of the program so
   return 1;                // it's ok to just grab the pointer.
