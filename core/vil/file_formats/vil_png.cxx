@@ -95,20 +95,22 @@ static void user_flush_data(png_structp /*png_ptr*/)
   // urk.  how to flush?
 }
 
-struct vil_jmpbuf_wrapper {
+struct vil_jmpbuf_wrapper
+{
   jmp_buf jmpbuf;
 };
 static vil_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
 static bool jmpbuf_ok = false;
 
 // Must be  a macro - setjmp needs its stack frame to live
-#define png_setjmp_on(ACTION) do {\
- jmpbuf_ok = true;\
- if (setjmp (pngtopnm_jmpbuf_struct.jmpbuf) != 0) {\
-    problem("png_setjmp_on");\
-    ACTION;\
- }\
-} while (0);
+#define png_setjmp_on(ACTION) \
+  do {\
+    jmpbuf_ok = true;\
+    if (setjmp (pngtopnm_jmpbuf_struct.jmpbuf) != 0) {\
+      problem("png_setjmp_on");\
+      ACTION;\
+    }\
+  } while (false);
 #define png_setjmp_off() (jmpbuf_ok = false)
 
 // this function, aside from the extra step of retrieving the "error
@@ -140,7 +142,8 @@ static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
   longjmp(jmpbuf_ptr->jmpbuf, 1);
 }
 
-struct vil_png_structures {
+struct vil_png_structures
+{
   bool reading_;
   png_struct *png_ptr;
   png_info *info_ptr;
@@ -148,7 +151,8 @@ struct vil_png_structures {
   int channels;
   bool ok;
 
-  vil_png_structures(bool reading) {
+  vil_png_structures(bool reading)
+  {
     reading_ = reading;
     png_ptr = 0;
     info_ptr = 0;
@@ -180,7 +184,8 @@ struct vil_png_structures {
     png_setjmp_off();
   }
 
-  bool alloc_image() {
+  bool alloc_image()
+  {
     rows = new png_byte* [info_ptr->height];
     if (rows == 0)
       return ok = problem("couldn't allocate space for image");
@@ -213,7 +218,8 @@ struct vil_png_structures {
     return true;
   }
 
-  png_byte** get_rows() {
+  png_byte** get_rows()
+  {
     if (reading_) {
       if (!rows) {
         if (alloc_image()) {
@@ -230,7 +236,8 @@ struct vil_png_structures {
     return rows;
   }
 
-  ~vil_png_structures() {
+  ~vil_png_structures()
+  {
     png_setjmp_on(goto del);
     if (reading_) {
       // Reading - just delete
@@ -245,7 +252,7 @@ struct vil_png_structures {
     }
     png_setjmp_off();
 
-  del:
+   del:
     if (rows) {
       delete [] rows[0];
       delete [] rows;
@@ -256,8 +263,8 @@ struct vil_png_structures {
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil_png_image::vil_png_image(vil_stream* is):
-  vs_(is),
+vil_png_image::vil_png_image(vil_stream* is)
+: vs_(is),
   p_(new vil_png_structures(true))
 {
   vs_->ref();
@@ -280,8 +287,8 @@ vil_png_image::vil_png_image(vil_stream *s,
                              unsigned nx,
                              unsigned ny,
                              unsigned nplanes,
-                             enum vil_pixel_format format):
-  vs_(s),
+                             enum vil_pixel_format format)
+: vs_(s),
   width_(nx),
   height_(ny),
   components_(nplanes),
@@ -461,7 +468,6 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
   else return 0;
 }
 
-
 bool vil_png_image::put_view(const vil_image_view_base &view,
                              unsigned x0, unsigned y0)
 {
@@ -533,7 +539,7 @@ bool vil_png_image::put_view(const vil_image_view_base &view,
           *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*6+4]) = view2(x,y,2);
         }
     }
-    else 
+    else
     {
       assert(nplanes() == 4);
       for (unsigned y = 0; y < view.nj(); ++y)

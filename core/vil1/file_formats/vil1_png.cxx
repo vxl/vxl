@@ -90,20 +90,22 @@ static void user_flush_data(png_structp /*png_ptr*/)
 #endif
 }
 
-struct vil1_jmpbuf_wrapper {
+struct vil1_jmpbuf_wrapper
+{
   jmp_buf jmpbuf;
 };
 static vil1_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
 static bool jmpbuf_ok = false;
 
 // Must be  a macro - setjmp needs its stack frame to live
-#define png_setjmp_on(ACTION) do {\
- jmpbuf_ok = true;\
- if (setjmp (pngtopnm_jmpbuf_struct.jmpbuf) != 0) {\
-    problem("png_setjmp_on");\
-    ACTION;\
- }\
-} while (0);
+#define png_setjmp_on(ACTION) \
+  do {\
+    jmpbuf_ok = true;\
+    if (setjmp (pngtopnm_jmpbuf_struct.jmpbuf) != 0) {\
+      problem("png_setjmp_on");\
+      ACTION;\
+    }\
+  } while (false);
 #define png_setjmp_off() (jmpbuf_ok = false)
 
 // this function, aside from the extra step of retrieving the "error
@@ -135,7 +137,8 @@ static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
   longjmp(jmpbuf_ptr->jmpbuf, 1);
 }
 
-struct vil1_png_structures {
+struct vil1_png_structures
+{
   bool reading_;
   png_struct *png_ptr;
   png_info *info_ptr;
@@ -143,7 +146,8 @@ struct vil1_png_structures {
   int channels;
   bool ok;
 
-  vil1_png_structures(bool reading) {
+  vil1_png_structures(bool reading)
+  {
     reading_ = reading;
     png_ptr = 0;
     info_ptr = 0;
@@ -175,7 +179,8 @@ struct vil1_png_structures {
     png_setjmp_off();
   }
 
-  bool alloc_image() {
+  bool alloc_image()
+  {
     rows = new png_byte* [info_ptr->height];
     if (rows == 0)
       return ok = problem("couldn't allocate space for image");
@@ -208,7 +213,8 @@ struct vil1_png_structures {
     return true;
   }
 
-  png_byte** get_rows() {
+  png_byte** get_rows()
+  {
     if (reading_) {
       if (!rows) {
         if (alloc_image()) {
@@ -225,7 +231,8 @@ struct vil1_png_structures {
     return rows;
   }
 
-  ~vil1_png_structures() {
+  ~vil1_png_structures()
+  {
     png_setjmp_on(goto del);
     if (reading_) {
       // Reading - just delete
@@ -240,7 +247,7 @@ struct vil1_png_structures {
     }
     png_setjmp_off();
 
-  del:
+   del:
     if (rows) {
       delete [] rows[0];
       delete [] rows;
@@ -251,8 +258,8 @@ struct vil1_png_structures {
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil1_png_generic_image::vil1_png_generic_image(vil1_stream* is):
-  vs_(is),
+vil1_png_generic_image::vil1_png_generic_image(vil1_stream* is)
+: vs_(is),
   p(new vil1_png_structures(true))
 {
   vs_->ref();
@@ -275,8 +282,8 @@ vil1_png_generic_image::vil1_png_generic_image(vil1_stream* is, int /*planes*/,
                                                int height,
                                                int components,
                                                int bits_per_component,
-                                               vil1_component_format /*format*/):
-  vs_(is),
+                                               vil1_component_format /*format*/)
+: vs_(is),
   width_(width),
   height_(height),
   components_(components),

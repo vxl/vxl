@@ -52,28 +52,28 @@ void testlib_test_assert_equal(const vcl_string& msg, long expr, long target);
 do { \
   testlib_test_begin(s); \
   testlib_test_perform((p)==(v)); \
-} while (0)
+} while (false)
 
 //: TEST function, s is message, test to see if p==v for integral values
 #define TEST_EQUAL(s,p,v) \
 do { \
   testlib_test_begin(s); \
   testlib_test_assert_equal("",p,v); \
-} while (0)
+} while (false)
 
 //: TEST function, s is message, test to see if p is close to v, tolerance t
 #define TEST_NEAR(s,p,v,t) \
 do { \
   testlib_test_begin(s); \
   testlib_test_assert_near("",p,v,t); \
-} while (0)
+} while (false)
 
 //: TEST function, s is message, test to see if p is far from v, tolerance t
 #define TEST_FAR(s,p,v,t) \
 do { \
   testlib_test_begin(s); \
   testlib_test_assert_far("",p,v,t); \
-} while (0)
+} while (false)
 
 //: run x, s is message, then test to see if p==v
 #define TEST_RUN(s,x,p,v) \
@@ -81,7 +81,7 @@ do { \
   testlib_test_begin(s); \
   x; \
   testlib_test_perform((p)==(v)); \
-} while (0)
+} while (false)
 
 //: Summarise test
 #define SUMMARY() return testlib_test_summary()

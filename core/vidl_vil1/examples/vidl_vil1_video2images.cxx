@@ -32,14 +32,14 @@
 #define CHECK_BASE(t,e,m) \
 do { \
   if ( ! (t) ) { \
-      if (e) vcl_cout << "error: "; \
-      else   vcl_cout << "warning: "; \
-      vcl_cout << m << vcl_endl; \
-      vcl_cout << "use option -help for help\n"; \
-      vcl_cout.flush(); \
-      if (e) vcl_exit(1); \
+    if (e) vcl_cout << "error: "; \
+    else   vcl_cout << "warning: "; \
+    vcl_cout << m << vcl_endl; \
+    vcl_cout << "use option -help for help\n"; \
+    vcl_cout.flush(); \
+    if (e) vcl_exit(1); \
   } \
-} while (0)
+} while (false)
 
 #define CHECKE(t,m0) CHECK_BASE(t,1,m0)
 #define CHECKE2(t,m0,m1) CHECK_BASE(t,1,m0<<m1)
@@ -52,7 +52,7 @@ inline void
 print_help_exit (const char * help_text[])
 {
   for (const char ** l = help_text; 0 != *l; l++)
-      vcl_cout << *l << vcl_endl;
+    vcl_cout << *l << vcl_endl;
   vcl_exit(0);
 }
 
@@ -175,7 +175,7 @@ main (int argc, char **argv)
 
   vul_arg_parse( argc, argv);
 
-  if (argc > 1) vcl_exit (1);
+  if (argc > 1) vcl_exit(1);
   if (help()) print_help_exit (help_text);
 
   CHECKE( ivfn(), "specify input video file with option -i" );
@@ -239,4 +239,4 @@ main (int argc, char **argv)
   }
 
   return 0;
-} 
+}
