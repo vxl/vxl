@@ -13,13 +13,20 @@
 //
 // \verbatim
 //  Modifications
-//   - none
+//   12 Aug 2003 - Amitha Perera. Add some more documentation
 // \endverbatim
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 
-// a class to hold the line 2d_regression data and actual fitting code.
+//: A class to hold the line 2d_regression data and actual fitting code.
+//
+// In addition to fitting a line to a set of points (orthogonal
+// regression), it is designed to help with incremental fitting. You
+// can inexpensively add and remove points. This class does not store
+// the points; it merely stores enough aggregate information to
+// estimate the line parameters.
+//
 template <class T>
 class vgl_line_2d_regression
 {
@@ -28,41 +35,56 @@ class vgl_line_2d_regression
   vgl_line_2d<T> line_;//!< the fitted line
   T Sx_, Sy_, Sxx_, Sxy_, Syy_;//!< partial sums
   double squared_error_;//!< an estimate of the squared error
- public:
+public:
   vgl_line_2d_regression();
   ~vgl_line_2d_regression(){};
 
+  //: The number of points added.
   inline unsigned int get_n_pts() { return npts_; }
 
   //: Add a point to the 2d_regression
   void increment_partial_sums(const T x, const T y);
 
   //: Remove a point from the 2d_regression
-  //  This should be a previously added point, although this cannot be verified.
+  //
+  //  This should be a previously added point, although this cannot be
+  //  verified.
   void decrement_partial_sums(const T x, const T y);
 
   //: Clear 2d_regression sums
+  //
+  //  This will reset the object to the freshly constructed state of having
+  //  zero points.
   void clear();
 
-  //: get fitting error for a given line
+  //: Get fitting error for a given line
   double get_rms_error(const T a, const T b, const T c);
 
-  //: get fitting error for current fitted line
+  //: Get fitting error for current fitted line
   double get_rms_error();
 
-  //: initialize estimated fitting error
+  //: Initialize estimated fitting error
   void init_rms_error_est();
 
-  //: get estimated fitting error if the point (x, y) were added to the fit
+  //: Get estimated fitting error if the point (x, y) were added to the fit
+  //
+  //  You must call init_rms_error_est() to initialize the running
+  //  totals before the first use of this function.
+  //
+  //  If \a increment is true, the running totals are updated as if
+  //  the point \a p was added to the point set. It does not update
+  //  the point set, however, so the point will not affect subsequent
+  //  line estimation.
+  //
   double get_rms_error_est(vgl_point_2d<T> const& p, bool increment=true);
 
-  //: get the fitted line
+  //: Get the fitted line
   vgl_line_2d<T> get_line() { return line_; }
 
-  //: fit a line to the current point set
+  //: Fit a line to the current point set
   bool fit();
 
-  //: fit a line to the current point set
+  //: Fit a line to the current point set constrained to pass through (x,y).
   bool fit_constrained(T x, T y);
 };
 

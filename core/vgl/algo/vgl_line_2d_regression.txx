@@ -70,7 +70,7 @@ bool vgl_line_2d_regression<T>::fit()
   M(0, 0) = Sxx_-Sx_*Sx_/npts_;
   M(0, 1) = M(1, 0) = Sxy_-Sx_*Sy_/npts_;
   M(1, 1) = Syy_-Sy_*Sy_/npts_;
-//vcl_cout << "M \n" << M << '\n';
+
   vnl_symmetric_eigensystem<T> sym(M);
   T a = sym.V(0,0);
   T b = sym.V(1,0);
