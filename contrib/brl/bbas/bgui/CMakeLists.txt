@@ -29,8 +29,8 @@ AUX_SOURCE_DIRECTORY(Templates bgui_sources)
 
  TARGET_LINK_LIBRARIES(bgui bsta bmrf vdgl vtol vsol vgui vgl_algo vgl vil_algo vil vil1 vnl vcl)
 
-ENDIF(HAS_VGUI)
+ IF(BUILD_TESTING)
+   SUBDIRS(tests)
+ ENDIF(BUILD_TESTING)
 
-IF(BUILD_TESTING)
-  SUBDIRS(tests)
-ENDIF(BUILD_TESTING)
+ENDIF(HAS_VGUI)
