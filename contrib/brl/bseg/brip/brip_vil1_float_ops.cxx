@@ -1653,7 +1653,7 @@ brip_vil1_float_ops::rotate(vil1_memory_image_of<float> const & input,
 
 bool brip_vil1_float_ops::chip(vil1_memory_image_of<float> const & input,
                                vsol_box_2d_sptr const& roi,
-                               vil1_memory_image_of<float> chip)
+                               vil1_memory_image_of<float> chp)
 {
   if (!input||!roi)
     return false;
@@ -1673,7 +1673,7 @@ bool brip_vil1_float_ops::chip(vil1_memory_image_of<float> const & input,
     return false;
   for (int y = y_min; y<y_max; y++)
     for (int x =x_min; x<x_max; x++)
-      chip(x-x_min, y-y_min) = input(x, y);
+      chp(x-x_min, y-y_min) = input(x, y);
   return true;
 }
 
@@ -1844,8 +1844,7 @@ static bool cross_correlate_row(int radius,
   //the general case
   double si1=dSI1[s-1], si2=dSI2[s-1], si1i1=dSI1I1[s-1],
     si2i2=dSI2I2[s-1], si1i2=dSI1I2[s-1];
-  float cor = cross_corr(area, si1, si2, si1i1, si2i2, si1i2, intensity_thresh);
-  cc[radius]= cor;
+  cc[radius]= cross_corr(area, si1, si2, si1i1, si2i2, si1i2, intensity_thresh);
   //the remaining columns
   for (int c = radius+1; c+radius<w; c++)
   {
@@ -1854,8 +1853,7 @@ static bool cross_correlate_row(int radius,
     si1i1=dSI1I1[c+radius]-dSI1I1[c-radius-1];
     si2i2=dSI2I2[c+radius]-dSI2I2[c-radius-1];
     si1i2=dSI1I2[c+radius]-dSI1I2[c-radius-1];
-    float cor = cross_corr(area, si1, si2, si1i1, si2i2, si1i2, intensity_thresh);
-    cc[c] =cor;
+    cc[c] = cross_corr(area, si1, si2, si1i1, si2i2, si1i2, intensity_thresh);
   }
 
   return true;
