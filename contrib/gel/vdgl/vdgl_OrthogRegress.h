@@ -9,7 +9,6 @@
 // \author fsm@robots.ox.ac.uk
 
 #include <vcl_cmath.h>
-#include <vsl/vsl_hacks.h>
 #include <vdgl/vdgl_ortho_regress.h>
 
 class vdgl_OrthogRegress : public vdgl_ortho_regress {
