@@ -54,7 +54,7 @@ public:
 
   //: Set number of samples to be stored.
   // This is the nuber of vectors that can be actually retrieved.
-  mbl_stochastic_data_collector(unsigned n);
+  explicit mbl_stochastic_data_collector(unsigned n);
 
   //: Destructor
   virtual ~mbl_stochastic_data_collector();

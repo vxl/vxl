@@ -14,7 +14,7 @@
 template <class T>
 mbl_stochastic_data_collector<T>::
 mbl_stochastic_data_collector()
-: samples_(1000), nPresented_(0)
+: samples_(0), nPresented_(0), rand(9667566)
 {
 }
 
@@ -23,7 +23,7 @@ mbl_stochastic_data_collector()
 template <class T>
 mbl_stochastic_data_collector<T>::
 mbl_stochastic_data_collector(unsigned n):
-samples_(n), nPresented_(0)
+samples_(n), nPresented_(0), rand(9667566)
 {
 }
 
