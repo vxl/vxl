@@ -66,7 +66,7 @@ void bgui_vtol2D_tableau::init()
 //:
 // Provide roaming highlighting for soviews in the tableau.
 // As the mouse moves the soview closest to the mouse is
-// changed to the highlighed style.
+// changed to the highlighted style.
 // vgui_displaylist2D_tableau::motion(..) has a mechanism for
 // highlighting the nearest object but it doesn't work.
 
@@ -370,8 +370,7 @@ vtol_edge_2d_sptr bgui_vtol2D_tableau::get_mapped_edge(const int id)
   vtol_topology_object_sptr to = obj_map_[id];
   if (!to)
     {
-      vcl_cout << "In bgui_vtol2D_tableau::get_mapped_edge(..) -"
-               << " null map entry\n";
+      vcl_cout << "In bgui_vtol2D_tableau::get_mapped_edge(..) - null map entry\n";
       return 0;
     }
   return to->cast_to_edge()->cast_to_edge_2d();
