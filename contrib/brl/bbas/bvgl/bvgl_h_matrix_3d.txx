@@ -1,4 +1,3 @@
-//--*-c++-*----
 // This is brl/bbas/bvgl/bvgl_h_matrix_3d.txx
 #ifndef bvgl_h_matrix_3d_txx_
 #define bvgl_h_matrix_3d_txx_
@@ -10,6 +9,7 @@
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_inverse.h>
+#include <vnl/vnl_transpose.h>
 #include <vnl/vnl_vector_fixed.h>
 
 //--------------------------------------------------------------
@@ -107,7 +107,7 @@ bvgl_h_matrix_3d<T>::preimage(vgl_homg_plane_3d<T> const& p)
 {
   vnl_vector_fixed<T, 4> v;
   v[0]=p.a();  v[1]=p.b();   v[2]=p.c();   v[3]=p.d();
-  vnl_vector_fixed<T,4> v2 = t12_matrix_.transpose() * v;
+  vnl_vector_fixed<T,4> v2 = vnl_transpose(t12_matrix_) * v;
   return vgl_homg_plane_3d<T>(v2[0], v2[1], v2[2], v2[3]);
 }
 
@@ -120,8 +120,8 @@ bvgl_h_matrix_3d<T>::preimage(vgl_homg_point_3d<T> const& x) const
 {
   vnl_vector_fixed<T, 4> v;
   v[0]=x.x();  v[1]=x.y();   v[2]=x.z();   v[3]=x.w();
-  vnl_vector_fixed<T,4> v2 = vnl_inverse(t12_matrix_) * v;
-  return vgl_homg_point_3d<T>(v2[0], v2[1], v2[2], v2[3]);
+  v = vnl_inverse(t12_matrix_) * v;
+  return vgl_homg_point_3d<T>(v[0], v[1], v[2], v[3]);
 }
 
 //-----------------------------------------------------------------------------
@@ -133,8 +133,8 @@ bvgl_h_matrix_3d<T>::operator()(vgl_homg_plane_3d<T> const& p) const
 {
   vnl_vector_fixed<T, 4> v;
   v[0]=p.a();  v[1]=p.b();   v[2]=p.c();   v[3]=p.d();
-  vnl_vector_fixed<T,4> v2 = vnl_inverse(t12_matrix_).transpose() * v;
-  return vgl_homg_plane_3d<T>(v2[0], v2[1], v2[2], v2[3]);
+  v = vnl_inverse_transpose(t12_matrix_) * v;
+  return vgl_homg_plane_3d<T>(v[0], v[1], v[2], v[3]);
 }
 
 //-----------------------------------------------------------------------------

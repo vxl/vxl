@@ -205,9 +205,7 @@ projective_basis(vcl_vector<vgl_homg_point_1d<T> > const& points)
   back_matrix.set_column(0, p0);
   back_matrix.set_column(1, p1);
 
-  vnl_svd<T> svd(back_matrix);
-
-  vnl_vector_fixed<T, 2> scales_vector = svd.solve(p2);
+  vnl_vector_fixed<T, 2> scales_vector = vnl_inverse(back_matrix) * p2;
 
   back_matrix.set_column(0, scales_vector[0] * p0);
   back_matrix.set_column(1, scales_vector[1] * p1);

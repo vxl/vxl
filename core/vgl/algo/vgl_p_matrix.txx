@@ -4,7 +4,7 @@
 //:
 // \file
 
-#include <vgl/algo/vgl_p_matrix.h>
+#include "vgl_p_matrix.h"
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -237,8 +237,7 @@ vgl_h_matrix_3d<T> vgl_p_matrix<T>::get_canonical_H() const
   vnl_matrix_fixed<T,3,3> A;
   vnl_vector_fixed<T,3> a;
   this->get(&A, &a);
-  vnl_svd<double> svd(A);
-  return vgl_h_matrix_3d<T>(svd.inverse(), -svd.solve(a));
+  return vgl_h_matrix_3d<T>(vnl_inverse(A), -vnl_inverse(A)*a);
 }
 
 template <class T>

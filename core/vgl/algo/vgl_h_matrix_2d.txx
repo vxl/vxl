@@ -6,6 +6,7 @@
 
 #include "vgl_h_matrix_2d.h"
 #include <vnl/vnl_inverse.h>
+#include <vnl/vnl_transpose.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_fstream.h>
@@ -84,7 +85,7 @@ vgl_homg_line_2d<T>
 vgl_h_matrix_2d<T>::preimage(vgl_homg_line_2d<T> const& l) const
 {
   vnl_vector_fixed<T,3> v(l.a(), l.b(), l.c());
-  vnl_vector_fixed<T,3> v2 = t12_matrix_.transpose() * v;
+  vnl_vector_fixed<T,3> v2 = vnl_transpose(t12_matrix_) * v;
   return vgl_homg_line_2d<T>(v2[0], v2[1], v2[2]);
 }
 
@@ -111,10 +112,10 @@ vgl_conic<T> vgl_h_matrix_2d<T>::operator() (vgl_conic<T> const& C) const
 {
   T a=C.a(), b=C.b()/2, c = C.c(), d = C.d()/2, e = C.e()/2, f = C.f();
   vnl_matrix_fixed<T, 3, 3> M, Mp;
-  M.put(0,0,a);  M.put(0,1,b); M.put(0,2,d);
-  M.put(1,0,b);  M.put(1,1,c); M.put(1,2,e);
-  M.put(2,0,d);  M.put(2,1,e); M.put(2,2,f);
-  Mp = t12_matrix_.transpose()*M*t12_matrix_;
+  M(0,0) = a;  M(0,1) = b;  M(0,2) = d;
+  M(1,0) = b;  M(1,1) = c;  M(1,2) = e;
+  M(2,0) = d;  M(2,1) = e;  M(2,2) = f;
+  Mp = vnl_transpose(t12_matrix_)*M*t12_matrix_;
   return   vgl_conic<T>(Mp(0,0),(Mp(0,1)+Mp(1,0)),Mp(1,1),(Mp(0,2)+Mp(2,0)),
                         (Mp(1,2)+Mp(2,1)), Mp(2,2));
 }
@@ -124,8 +125,8 @@ vgl_homg_point_2d<T>
 vgl_h_matrix_2d<T>::preimage(vgl_homg_point_2d<T> const& p) const
 {
   vnl_vector_fixed<T,3> v(p.x(), p.y(), p.w());
-  vnl_vector_fixed<T,3> v2 = vnl_inverse(t12_matrix_) * v;
-  return vgl_homg_point_2d<T>(v2[0], v2[1], v2[2]);
+  v = vnl_inverse(t12_matrix_) * v;
+  return vgl_homg_point_2d<T>(v[0], v[1], v[2]);
 }
 
 template <class T>
@@ -133,8 +134,8 @@ vgl_homg_line_2d<T>
 vgl_h_matrix_2d<T>::operator()(vgl_homg_line_2d<T> const& l) const
 {
   vnl_vector_fixed<T,3> v(l.a(), l.b(), l.c());
-  vnl_vector_fixed<T,3> v2 = vnl_inverse(t12_matrix_).transpose() * v;
-  return vgl_homg_line_2d<T>(v2[0], v2[1], v2[2]);
+  v = vnl_inverse_transpose(t12_matrix_) * v;
+  return vgl_homg_line_2d<T>(v[0], v[1], v[2]);
 }
 
 //-----------------------------------------------------------------------------
@@ -257,9 +258,7 @@ projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& points)
   back_matrix.set_column(1, p1);
   back_matrix.set_column(2, p2);
 
-  vnl_svd<T> svd(back_matrix);
-
-  vnl_vector_fixed<T, 3> scales_vector = svd.solve(p3);
+  vnl_vector_fixed<T, 3> scales_vector = vnl_inverse(back_matrix) * p3;
 
   back_matrix.set_column(0, scales_vector[0] * p0);
   back_matrix.set_column(1, scales_vector[1] * p1);
