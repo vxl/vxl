@@ -1,4 +1,5 @@
 #include "QvSpotLight.h"
+#include "Qv_pi.h" // for QV_PI_4
 
 QV_NODE_SOURCE(QvSpotLight);
 

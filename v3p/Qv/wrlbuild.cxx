@@ -52,6 +52,7 @@ enum Binding { goofyBinding };  // cfront confused about QvMaterialBinding/QvNor
 #include "QvUnknownNode.h"
 #include "QvDebugError.h"
 #include "QvState.h"
+#include "Qv_pi.h" // for QV_ONE_OVER_PI
 
 #include "vecutil.h"
 
@@ -65,7 +66,7 @@ static int camswindex;
 
 
 // convert radians to degrees
-#define DEGREES(R)  ( (R) * (180 / QV_PI) )
+#define DEGREES(R) ( (R) * 180 * (float)QV_ONE_OVER_PI )
 
 // special names (info nodes)
 #define BACKGROUND_INFO "BackgroundColor"
@@ -455,21 +456,22 @@ void QvTexture2::build (QvState*)
 void QvTexture2Transform::build (QvState*)
 {
   // does not transform geometry, therefore may be considered a "property"
-  //const point2D* trans = (const point2D*) translation.value;
-  // conceptually trans is a vector2D, but ge3d only defines point2D
-  //vector3D scale;
-  //init3D (scale, scaleFactor.value[0], scaleFactor.value[1], 1.0);
-  //const point2D* centr = (const point2D*) center.value;
+#if 0 // commented out
+  const point2D* trans = (const point2D*) translation.value;
+   conceptually trans is a vector2D, but ge3d only defines point2D
+  vector3D scale;
+  init3D (scale, scaleFactor.value[0], scaleFactor.value[1], 1.0);
+  const point2D* centr = (const point2D*) center.value;
 
-  // read transformations bottom to top (see also QvTransform::build)
-  //ge3dPushIdentity ();
-  //ge3d_translate (trans->x + centr->x, trans->y + centr->y, 0.0);
-  //ge3d_rotate_axis ('z', DEGREES (rotation.value));
-  //ge3dScale ((const float*) &scale);
-  //ge3d_translate (- centr->x, - centr->y, 0.0);
-  //ge3d_get_and_pop_matrix (mat_);
-  // no need to set up transformation here or to calculate its inverse
-
+   read transformations bottom to top (see also QvTransform::build)
+  ge3dPushIdentity ();
+  ge3d_translate (trans->x + centr->x, trans->y + centr->y, 0.0);
+  ge3d_rotate_axis ('z', DEGREES (rotation.value));
+  ge3dScale ((const float*) &scale);
+  ge3d_translate (- centr->x, - centr->y, 0.0);
+  ge3d_get_and_pop_matrix (mat_);
+   no need to set up transformation here or to calculate its inverse
+#endif
 } // QvTexture2Transform
 
 
@@ -532,12 +534,12 @@ void QvOrthographicCamera::build (QvState*)
   rotangle_ = orientation.angle;  // radians
   rotaxis_ = (const vector3D*) orientation.axis;
   height_ = height.value;
-// vcl_cerr << "orthographic camera: position " << *pos_ << ", rotangle " << rotangle_ << ", rotaxis " << *rotaxis_
-// << ", height " << height_ << vcl_endl;
+// vcl_cerr << "orthographic camera: position " << *pos_ << ", rotangle " << rotangle_
+//          << ", rotaxis " << *rotaxis_ << ", height " << height_ << vcl_endl;
 
   camswitch_ = camswitch;
   camswindex_ = camswindex;
-#if 0
+#if 0 // commented out
   if (!registered_)
     {
       //vrmlscene_->hasCamera (this, objName->getString ());  // objName non nil
@@ -572,12 +574,12 @@ void QvPerspectiveCamera::build (QvState*)
   rotangle_ = orientation.angle;  // radians
   rotaxis_ = (const vector3D*) orientation.axis;
   yangle_ = heightAngle.value;  // radians
-// vcl_cerr << "perspective camera: position " << *pos_ << ", rotangle " << rotangle_ << ", rotaxis " << *rotaxis_
-// << ", heightangle " << yangle_ << vcl_endl;
+// vcl_cerr << "perspective camera: position " << *pos_ << ", rotangle " << rotangle_
+// << ", rotaxis " << *rotaxis_ << ", heightangle " << yangle_ << vcl_endl;
 
   camswitch_ = camswitch;
   camswindex_ = camswindex;
-#if 0
+#if 0 // commented out
   if (!registered_)
   { vrmlscene_->hasCamera (this, objName->getString ());  // objName non nil
     registered_ = 1;
@@ -609,7 +611,7 @@ void QvPerspectiveCamera::build (QvState*)
 void QvTransform::build (QvState*)
 {
   //  vcl_cerr << "QvTransform ignored";
-#if 0
+#if 0 // commented out
   const vector3D* tran1 = (const vector3D*) translation.value;
   const vector3D* tran2 = (const vector3D*) center.value;
   const vector3D* rot1 = (const vector3D*) rotation.axis;
@@ -635,7 +637,7 @@ void QvTransform::build (QvState*)
 
 // vcl_cerr << "inverse transformation matrix: " << vcl_endl;
 // for (int i = 0;  i < 4;  i++)
-// printf ("%13f %12f %12f %12f\n", invmat_ [i][0], invmat_ [i][1], invmat_ [i][2], invmat_ [i][3]);
+//   printf ("%13f %12f %12f %12f\n", invmat_ [i][0], invmat_ [i][1], invmat_ [i][2], invmat_ [i][3]);
 
   copymatrix (invmat_, invtranspmat3D_);
   transposematrix (invtranspmat3D_);
@@ -645,9 +647,7 @@ void QvTransform::build (QvState*)
 
 void QvRotation::build (QvState*)
 {
-#if 1
-  // vcl_cerr << "QvRotation ignored\n";
-#else
+#if 0 // commented out
   const vector3D* axis = (const vector3D*) rotation.axis;
   float angle = rotation.angle;  // rad
 
@@ -656,6 +656,8 @@ void QvRotation::build (QvState*)
   ge3d_get_and_pop_matrix (mat_);
 
   ge3dMultMatrix ((const float (*)[4]) mat_);  // set up transformation (as in draw)
+#else
+  vcl_cerr << "QvRotation not implemented\n";
 #endif
 
   // rotations produce orthogonal matrices, so the inverse is simply
@@ -688,9 +690,11 @@ void QvMatrixTransform::build (QvState*)
 
 void QvTranslation::build (QvState*)
 {
-  //vcl_cerr << "QvTranslation ignored\n";
-  //trans_ = (const vector3D*) translation.value;
-  //ge3dTranslate (trans_);  // set up transformation (as in draw)
+#if 0 // commented out
+  vcl_cerr << "QvTranslation ignored\n";
+  trans_ = (const vector3D*) translation.value;
+  ge3dTranslate (trans_);  // set up transformation (as in draw)
+#endif
 }
 
 
@@ -716,7 +720,7 @@ void QvScale::build (QvState*)
 void QvAsciiText::build (QvState*)
 {
   // might turn '\n' into multiple lines (or give at least a warning)
-#if 0
+#if 0 // commented out
   int family = VRMLScene::fnt_serif;  // default: serif font
 
   QvElement* attr = state->getTopElement (QvState::FontStyleIndex);
@@ -827,16 +831,15 @@ void QvAsciiText::build (QvState*)
   if (size_)
     ge3d_pop_matrix ();
 #endif
-
 } // QvAsciiText
 
 
 void QvCube::build (QvState*)
 {
   // object coordinates
-  omax_.x = vcl_fabs (width.value / 2.0);
-  omax_.y = vcl_fabs (height.value / 2.0);
-  omax_.z = vcl_fabs (depth.value / 2.0);
+  omax_.x = (float)vcl_fabs (width.value / 2.0);
+  omax_.y = (float)vcl_fabs (height.value / 2.0);
+  omax_.z = (float)vcl_fabs (depth.value / 2.0);
   omin_.x = -omax_.x;
   omin_.y = -omax_.y;
   omin_.z = -omax_.z;
@@ -850,9 +853,7 @@ void QvCube::build (QvState*)
 
 void QvCone::build (QvState*)
 {
-#if 1
-  //  vcl_cerr << "Cone no implemented\n";
-#else
+#if 0
   int pts = parts.value;
   parts_ = 0;
   if (pts & QvCone::SIDES) parts_ |= cyl_sides;
@@ -878,15 +879,15 @@ void QvCone::build (QvState*)
   hasextent_ = 1;
 
   vrmlscene_->increaseNumPrimitives ();
+#else
+  vcl_cerr << "QvCone no implemented\n";
 #endif
 } // QvCone
 
 
 void QvCylinder::build (QvState*)
 {
-#if 1
-  vcl_cerr << "not implemented\n";
-#else
+#if 0
   int pts = parts.value;
   parts_ = 0;
   if (pts & QvCylinder::SIDES)
@@ -917,15 +918,15 @@ void QvCylinder::build (QvState*)
   hasextent_ = 1;
 
   vrmlscene_->increaseNumPrimitives ();
+#else
+  vcl_cerr << "QvCylinder not implemented\n";
 #endif
 } // QvCylinder
 
 
 void QvSphere::build (QvState*)
 {
-#if 1
-  vcl_cerr << "not implemented\n";
-#else
+#if 0
   float r = radius.value;
   omin_.x = omin_.y = omin_.z = -r;
   omax_.x = omax_.y = omax_.z = r;
@@ -934,6 +935,8 @@ void QvSphere::build (QvState*)
   hasextent_ = 1;
 
   vrmlscene_->increaseNumPrimitives ();
+#else
+  vcl_cerr << "QvSphere not implemented\n";
 #endif
 } // QvSphere
 
@@ -1328,7 +1331,7 @@ void QvWWWInline::build (QvState* state)
     // DEBUGNL ("WWWInline bounding box size: " << *bsize << ", center: " << *bcenter);
 
     // object coordinates
-    pol3D (*bcenter, -0.5, *bsize, omin_);  // omin_ = bcenter - bsize/2
+    pol3D (*bcenter, -0.5f, *bsize, omin_);  // omin_ = bcenter - bsize/2
     add3D (omin_, *bsize, omax_);  // omax_ = min + bsize
 
     computeBoundingbox (omin_, omax_, wmin_, wmax_);
@@ -1349,9 +1352,7 @@ void QvWWWInline::build (QvState* state)
 
 void QvInfo::build (QvState*)
 {
-#if 1
-  vcl_cerr << "not implemented\n";
-#else
+#if 0
   const char* name = objName->getString ();  // objName non nil
   if (!name || !*name)  // unnamed info
     return;
@@ -1388,6 +1389,8 @@ void QvInfo::build (QvState*)
 
   handled_ = 1;
 
+#else
+  vcl_cerr << "QvInfo not implemented\n";
 #endif
 } // QvInfo
 
