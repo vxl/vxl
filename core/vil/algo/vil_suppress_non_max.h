@@ -1,14 +1,14 @@
-// This is vil2/algo/vil2_suppress_non_max.h
+// This is core/vil2/algo/vil2_suppress_non_max.h
 #ifndef vil2_suppress_non_max_h_
 #define vil2_suppress_non_max_h_
 //:
-//  \file
-//  \brief Suppress all non-maximal points in image
-//  \author Tim Cootes
-
+// \file
+// \brief Suppress all non-maximal points in image
+// \author Tim Cootes
 
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_fill.h>
+#include <vcl_cassert.h>
 
 //: True if pixel at *im is strictly above 8 neighbours
 template <class T>
@@ -73,5 +73,4 @@ inline void vil2_suppress_non_max_3x3(const vil2_image_view<T>& src_im,
   vil2_fill_col(dest_im,ni-1,non_max_value);
 }
 
-#endif
-
+#endif // vil2_suppress_non_max_h_
