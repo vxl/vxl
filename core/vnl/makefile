@@ -84,6 +84,7 @@ MANPAGE_SOURCES += vnl_imag.h
 MANPAGE_SOURCES += vnl_matlab_file_write.h
 MANPAGE_SOURCES += vnl_matrix_ref.h
 MANPAGE_SOURCES += vnl_operators.h
+MANPAGE_SOURCES += vnl_random.h
 MANPAGE_SOURCES += vnl_real.h
 MANPAGE_SOURCES += vnl_tag.h
 MANPAGE_SOURCES += vnl_vector_dereference.h
