@@ -9,12 +9,6 @@
 //   which means that it can be used with any image class (IUE or not,
 //   TargetJr or not, vil or not) of any pixel data type.
 //
-//   Gaussian filtering is an operation that replaces a pixel with the
-//   average value of its surrounding pixels, in a certain neighbourhood,
-//   according to a Gaussian distribution (with given sigma= std deviation).
-//   (The window is cut when `cutoff' (default: 0.01) of the probability mass
-//   lies out of the window.)
-//
 //   Note that DataIn values must allow addition and multiplication with floats;
 //   and that the result be expressible as DataOut, possibly after rounding.
 //   Probably only float and double make sense as DataOut (?)
@@ -33,7 +27,13 @@
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-//: gaussian smoothing
+//: Gaussian smoothing
+//
+//   Gaussian filtering is an operation that replaces a pixel with the
+//   average value of its surrounding pixels, in a certain neighbourhood,
+//   according to a Gaussian distribution (with given sigma= std deviation).
+//   (The window is cut when `cutoff' (default: 0.01) of the probability mass
+//   lies out of the window.)
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_gaussian_convolution : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr> {
 
