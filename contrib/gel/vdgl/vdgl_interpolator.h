@@ -34,31 +34,31 @@ class vdgl_interpolator : public vul_timestamp,
   vdgl_interpolator( vdgl_edgel_chain_sptr chain) : chain_(chain) {};
 
   // Operators----------------------------------------------------------------
-
-  // interpolation 0th degree
+  //: order of interpolation 1=linear, 2 = quadratic, 3 = cubic, ..etc.
+  virtual short order() const = 0;
+  //: interpolation 0th degree
   virtual double get_x(double index)= 0;
   virtual double get_y(double index)= 0;
 
 
-  // interpolation 1st degree
+  //: interpolation 1st degree
   virtual double get_grad(double index) = 0;
   virtual double get_theta(double index)= 0;
   virtual double get_tangent_angle(double index)= 0;
 
-  // interpolation 2nd degree
+  //: interpolation 2nd degree
   virtual double get_curvature(double index)= 0;
 
-  // integral
+  //: integral
   virtual double get_length()= 0;
 
-  // bounding box
+  //: bounding box
   virtual double get_min_x()= 0;
   virtual double get_max_x()= 0;
   virtual double get_min_y()= 0;
   virtual double get_max_y()= 0;
 
-  // find closest point on the curve to the input point
-  // virtual vgl_point_2d<double> closest_point_on_curve2 ( vsol_point_2d_sptr p ) = 0;
+  //: find closest point on the curve to the input point
   virtual vsol_point_2d_sptr closest_point_on_curve ( vsol_point_2d_sptr p ) = 0;
   virtual double distance_curve_to_point ( vsol_point_2d_sptr p );
 

@@ -18,7 +18,7 @@ SET(vdgl_sources
 AUX_SOURCE_DIRECTORY(Templates vdgl_sources)
 
 ADD_LIBRARY(vdgl ${vdgl_sources})
-TARGET_LINK_LIBRARIES(vdgl vsol vnl_algo vnl vgl vbl vul vcl)
+TARGET_LINK_LIBRARIES(vdgl vsol vnl_algo vnl vgl vbl_io vbl vsl vul vcl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

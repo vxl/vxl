@@ -8,7 +8,7 @@
 // \file
 // \brief Represents a linear 2D interpolator for a vdgl_edgel_chain
 // \author Geoff Cross
-
+#include <vsl/vsl_binary_io.h>
 #include <vdgl/vdgl_interpolator.h>
 
 class vdgl_interpolator_linear : public vdgl_interpolator
@@ -21,6 +21,8 @@ class vdgl_interpolator_linear : public vdgl_interpolator
   ~vdgl_interpolator_linear();
 
   // Operators----------------------------------------------------------------
+  //: order of interpolation 1=linear, 2 = quadratic, 3 = cubic, ..etc. 
+  virtual short order() const {return 1;}
 
   //: interpolation 0th degree
   double get_x(double index);

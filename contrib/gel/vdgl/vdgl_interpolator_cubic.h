@@ -29,6 +29,8 @@ class vdgl_interpolator_cubic : public vdgl_interpolator
   ~vdgl_interpolator_cubic();
 
   // Operators----------------------------------------------------------------
+  //: order of interpolation 1=linear, 2 = quadratic, 3 = cubic, ..etc. 
+  virtual short order() const {return 3;}
 
   //: interpolation 0th degree
   double get_x(double index);
@@ -51,6 +53,7 @@ class vdgl_interpolator_cubic : public vdgl_interpolator
   double get_min_y();
   double get_max_y();
 
+  virtual vsol_point_2d_sptr closest_point_on_curve ( vsol_point_2d_sptr p );
   // INTERNALS-----------------------------------------------------------------
  protected:
   // Data Members--------------------------------------------------------------

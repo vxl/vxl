@@ -195,3 +195,115 @@ bool vdgl_edgel_chain::line_gen(double xs, double ys, double xe, double ye,
   vcl_cout << "in vdgl_edgel_chain::line_gen(..) - shouldn't happen\n";
   return false;
 }
+
+bool operator==( const vdgl_edgel_chain &ec1, const vdgl_edgel_chain &ec2)
+{
+  int size1 = ec1.size(), size2 = ec2.size();
+  if(size1 != size2)
+    return false;
+  for(int i = 0; i<size1; i++)
+    if(!(ec1[i] == ec2[i]))
+      return false;
+  return true;
+}
+
+bool operator!=( const vdgl_edgel_chain &ec1, const vdgl_edgel_chain &ec2)
+{
+  return !(ec1==ec2);
+}
+
+//----------------------------------------------------------------
+// ================   Binary I/O Methods ========================
+//----------------------------------------------------------------
+
+//: Binary save self to stream.
+void vdgl_edgel_chain::b_write(vsl_b_ostream &os) const
+{
+  vsl_b_write(os, version());
+  vsl_b_write(os, es_.size());
+  for(unsigned int i = 0; i<es_.size(); i++)
+    {
+        vsl_b_write(os, es_[i].get_x());
+        vsl_b_write(os, es_[i].get_y());
+        vsl_b_write(os, es_[i].get_grad());
+        vsl_b_write(os, es_[i].get_theta());
+    }
+}
+//: Binary load self from stream (not typically used)
+void vdgl_edgel_chain::b_read(vsl_b_istream &is)
+{
+  if(!is)
+    return;
+  short ver;
+  vsl_b_read(is, ver);
+  switch(ver)
+  {
+  case 1:
+    {
+      int size =0; 
+      vsl_b_read(is, size);
+      for(int i = 0; i<size; i++)
+        {
+          double x=0, y=0, grad=-1, theta=0;
+          vsl_b_read(is, x);
+          vsl_b_read(is, y);
+          vsl_b_read(is, grad);
+          vsl_b_read(is, theta);
+          vdgl_edgel e(x, y, grad, theta);
+          this->add_edgel(e);
+        }
+    }
+  }
+}
+//: Return IO version number;
+short vdgl_edgel_chain::version() const
+{
+  return 1;
+}
+
+//: Print an ascii summary to the stream
+void vdgl_edgel_chain::print_summary(vcl_ostream &os) const
+{
+  os << *this;
+}
+
+  //: Return a platform independent string identifying the class
+vcl_string vdgl_edgel_chain::is_a() const
+{
+  return vcl_string("vdgl_edgel_chain");
+}
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+bool vdgl_edgel_chain::is_class(const vcl_string& cls) const
+{
+  return cls==vdgl_edgel_chain::is_a();
+}
+
+//: Binary save vdgl_edgel_chain* to stream.
+void
+vsl_b_write(vsl_b_ostream &os, const vdgl_edgel_chain* e)
+{
+  if (!e){
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    e->b_write(os);
+  }
+}
+
+//: Binary load vdgl_edgel_chain* from stream.
+void
+vsl_b_read(vsl_b_istream &is, vdgl_edgel_chain* &ec)
+{
+  delete ec;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr) {
+    ec = new vdgl_edgel_chain();
+    ec->b_read(is);
+  }
+  else
+    ec = 0;
+}
+

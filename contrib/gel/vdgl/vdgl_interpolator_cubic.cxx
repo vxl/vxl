@@ -11,7 +11,9 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_inverse.h>
+#include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 
@@ -316,4 +318,29 @@ void vdgl_interpolator_cubic::recompute_bbox()
     if (chain_->edgel(i).get_y()< minycache_) minycache_= chain_->edgel(i).get_y();
     if (chain_->edgel(i).get_y()> maxycache_) maxycache_= chain_->edgel(i).get_y();
   }
+}
+
+vsol_point_2d_sptr vdgl_interpolator_cubic::
+closest_point_on_curve ( vsol_point_2d_sptr p )
+{
+  int n = chain_->size();
+  if(!n)
+    return 0;
+  double px = p->x(), py = p->y(), dmin = vnl_numeric_traits<double>::maxval;
+  int imin = 0;
+  for(int i = 0; i<n; i++)
+    {
+      double x = (*chain_)[i].x(), y = (*chain_)[i].y();
+      double d = vcl_sqrt((x-px)*(x-px) + (y-py)*(y-py));
+      if(d<dmin)
+        {
+          dmin = d;
+          imin = i;
+        }
+    }
+  //This is approximate.  Should really differentiate the cubic expression
+  //on the interval around imin.
+  px = this->get_x(imin);
+  py = this->get_y(imin);
+  return new vsol_point_2d(px, py);
 }

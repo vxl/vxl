@@ -12,13 +12,14 @@
 // \verbatim
 //  Modifications:
 //   10-Apr-2002 Peter Vanroose - Added & implemented split(), extract_subchain()
+//   17-May-2004 Joseph Mundy - Added digital I/O
 // \endverbatim
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
-
+#include <vsl/vsl_binary_io.h>
 #include "vdgl_edgel_chain_sptr.h"
 #include <vdgl/vdgl_edgel.h>
 
@@ -49,7 +50,8 @@ class vdgl_edgel_chain : public vul_timestamp,
               vdgl_edgel_chain_sptr &ec1, vdgl_edgel_chain_sptr &ec2);
 
   friend vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel_chain& p);
-
+  friend bool operator==( const vdgl_edgel_chain &ec1, const vdgl_edgel_chain &ec2);
+  friend bool operator!=( const vdgl_edgel_chain &ec1, const vdgl_edgel_chain &ec2);
   // Data Access---------------------------------------------------------------
 
   unsigned int size() const { return es_.size(); }
@@ -60,6 +62,27 @@ class vdgl_edgel_chain : public vul_timestamp,
 
   //: should call this if one of the edgels is likely to have changed
   void notify_change();
+
+  // ==== Binary IO methods ======
+
+  //: Binary save self to stream.
+  void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  void b_read(vsl_b_istream &is);
+
+  //: Return IO version number;
+  short version() const;
+
+  //: Print an ascii summary to the stream
+  void print_summary(vcl_ostream &os) const;
+
+  //: Return a platform independent string identifying the class
+  vcl_string is_a() const;
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  bool is_class(const vcl_string& cls) const;
+
 
   // INTERNALS-----------------------------------------------------------------
  protected:
@@ -75,6 +98,15 @@ class vdgl_edgel_chain : public vul_timestamp,
   vcl_vector<vdgl_edgel> es_;
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel_chain& p);
+//: Stream operator
+vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel_chain& e);
+
+//: Binary save vdgl_edgel_chain* to stream.
+void vsl_b_write(vsl_b_ostream &os, const vdgl_edgel_chain* e);
+
+//: Binary load vdgl_edgel_chain* from stream.
+void vsl_b_read(vsl_b_istream &is, vdgl_edgel_chain* &e);
+
+
 
 #endif // vdgl_edgel_chain_h
