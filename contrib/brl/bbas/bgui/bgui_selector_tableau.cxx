@@ -304,7 +304,8 @@ void bgui_selector_tableau::active_to_top()
   vcl_vector<vcl_string>::iterator itr;
   itr = vcl_find(render_order_.begin(), render_order_.end(), active_child_);
   while (itr != render_order_.end() && itr+1 != render_order_.end()) {
-    *itr = *(++itr);
+    *itr = *(itr+1);
+    ++itr;
   }
   *(itr) = active_child_;
 }
@@ -316,7 +317,8 @@ void bgui_selector_tableau::active_to_bottom()
   vcl_vector<vcl_string>::iterator itr;
   itr = vcl_find(render_order_.begin(), render_order_.end(), active_child_);
   while (itr != render_order_.end() && itr != render_order_.begin()) {
-    *itr = *(--itr);
+    *itr = *(itr-1);
+    --itr;
   }
   *(itr) = active_child_;
 }
