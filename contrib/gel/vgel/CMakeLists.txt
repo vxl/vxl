@@ -3,12 +3,15 @@
 SET(vgel_sources
  vgel_kl.cxx              vgel_kl.h
  vgel_kl_params.cxx       vgel_kl_params.h
-IF(BUILD_OXL)
- vgel_multi_view_data.txx vgel_multi_view_data.h
- vgel_multi_view_data_vertex_sptr.h
-ENDIF(BUILD_OXL)
 )
 AUX_SOURCE_DIRECTORY(Templates vgel_sources)
+
+IF(BUILD_OXL)
+SET(vgel_sources ${vgel_sources}
+ vgel_multi_view_data.txx vgel_multi_view_data.h
+ vgel_multi_view_data_vertex_sptr.h
+)
+ENDIF(BUILD_OXL)
 
 ADD_LIBRARY(vgel ${vgel_sources})
 

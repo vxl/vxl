@@ -10,15 +10,18 @@ SET(vmal_sources
  vmal_refine_lines.cxx      vmal_refine_lines.h
  vmal_track_lines.cxx       vmal_track_lines.h
  vmal_convert_vtol.cxx      vmal_convert_vtol.h
+)
+AUX_SOURCE_DIRECTORY(Templates vmal_sources)
+
 IF(BUILD_OXL)
+SET(vmal_sources ${vmal_sources}
  vmal_convert_osl.cxx       vmal_convert_osl.h
  vmal_rectifier.cxx         vmal_rectifier.h
  vmal_multi_view_data.cxx   vmal_multi_view_data.h
  vmal_multi_view_data_edge_sptr.h
  vmal_multi_view_data_vertex_sptr.h
-ENDIF(BUILD_OXL)
 )
-AUX_SOURCE_DIRECTORY(Templates vmal_sources)
+ENDIF(BUILD_OXL)
 
 ADD_LIBRARY(vmal ${vmal_sources})
 
