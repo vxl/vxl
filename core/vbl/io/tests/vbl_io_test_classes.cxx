@@ -2,6 +2,9 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vbl/io/tests/vbl_io_test_classes.h>
 
+//:
+// \file
+// \brief Contains some stuff for testing smart ptr IO
 
 #include <vbl/vbl_smart_ptr.txx>
 VBL_SMART_PTR_INSTANTIATE(impl)

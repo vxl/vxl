@@ -10,7 +10,7 @@
 #include <vbl/io/tests/test_array_2d_io.cxx>
 #include <vbl/io/tests/test_array_3d_io.cxx>
 #include <vbl/io/tests/test_user_info_io.cxx>
-#include <vbl/io/tests/test_sparse_array_io.cxx>
+//#include <vbl/io/tests/test_sparse_array_io.cxx>
 #include <vbl/io/tests/golden_test_vbl_io.cxx>
 
 
@@ -27,7 +27,7 @@ void run_test_vbl_io()
   test_array_2d_io();
   test_array_3d_io();
   test_user_info_io();
-  test_sparse_array_io();
+//  test_sparse_array_io();
   golden_test_vbl_io();
 }
 

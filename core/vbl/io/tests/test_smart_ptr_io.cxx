@@ -3,7 +3,7 @@
 #include <vcl_utility.h>
 
 #include <vbl/vbl_test.h>
-#include <vbl/io/tests/vbl_io_test_classes.cxx>
+#include <vbl/io/tests/vbl_io_test_classes.h>
 
 
 
