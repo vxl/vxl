@@ -10,7 +10,7 @@
 #include <vimt/vimt_image_2d_of.h>
 
 //: Convolve kernel with src_im, keeping track of transformations
-//: Convolve kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
+// Convolve kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
 // On exit dest_im(i,j) = sum src(i+x,j)*kernel(x)  (x=k_lo..k_hi)
 // \param kernel should point to tap 0.
 // dest_im resized to size of src_im.
