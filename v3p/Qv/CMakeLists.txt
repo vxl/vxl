@@ -13,6 +13,8 @@ SOURCE_FILES( Qv_sources
   QvVrmlFile
 )
 
+INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vcl )
+
 AUX_SOURCE_DIRECTORY( Templates Qv_sources )
 
 IF(BUILD_TESTING)
