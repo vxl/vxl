@@ -79,7 +79,7 @@ static void test_v3i()
     // Start with one pixel size
     vimt3d_transform_3d tr4;
     tr4.set_zoom_only(2.0, -5.0, -5.0, -5.0);
-    TEST("set_voxel_size()", ir4->set_voxel_size(0.001, 0.002, 0.003), true);
+    TEST("set_voxel_size()", ir4->set_voxel_size(0.001f, 0.002f, 0.003f), true);
     // Save image as ir4 is destroyed.
     
   }

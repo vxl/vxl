@@ -201,9 +201,9 @@ bool vimt3d_vil3d_v3i_image::get_property(char const *key, void * value) const
     //Assume no rotation or shearing.
 
     float* array =  static_cast<float*>(value);
-    array[0] = p111.x();
-    array[1] = p111.y();
-    array[2] = p111.z();
+    array[0] = (float) p111.x();
+    array[1] = (float) p111.y();
+    array[2] = (float) p111.z();
     return true;
   }
 
