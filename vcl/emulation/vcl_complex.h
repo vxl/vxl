@@ -85,8 +85,8 @@ template <class FLOAT>
 inline vcl_complex<FLOAT>&
 vcl_complex<FLOAT>::operator /= (const vcl_complex<FLOAT>& y)
 {
-  FLOAT ar = (FLOAT) fabs (y.real());
-  FLOAT ai = (FLOAT) fabs (y.imag());
+  FLOAT ar = (FLOAT) vcl_abs (y.real());
+  FLOAT ai = (FLOAT) vcl_abs (y.imag());
   FLOAT nr, ni;
   FLOAT t, d;
   if (ar <= ai)
@@ -321,8 +321,8 @@ vcl_sinh (const vcl_complex<FLOAT>& x)
 template <class FLOAT> inline vcl_complex<FLOAT>
 operator / (const vcl_complex<FLOAT>& x, const vcl_complex<FLOAT>& y)
 {
-  FLOAT ar = fabs (y.real());
-  FLOAT ai = fabs (y.imag());
+  FLOAT ar = vcl_abs (y.real());
+  FLOAT ai = vcl_abs (y.imag());
   FLOAT nr, ni;
   FLOAT t, d;
   if (ar <= ai)
@@ -345,8 +345,8 @@ operator / (const vcl_complex<FLOAT>& x, const vcl_complex<FLOAT>& y)
 template <class FLOAT> inline vcl_complex<FLOAT>
 operator / (FLOAT x, const vcl_complex<FLOAT>& y)
 {
-  FLOAT ar = fabs (y.real());
-  FLOAT ai = fabs (y.imag());
+  FLOAT ar = vcl_abs (y.real());
+  FLOAT ai = vcl_abs (y.imag());
   FLOAT nr, ni;
   FLOAT t, d;
   if (ar <= ai)
