@@ -470,7 +470,7 @@ brip_float_ops::harris(vil1_memory_image_of<float> const & IxIx,
       {
         double xx = IxIx(x,y), xy = IxIy(x,y), yy = IyIy(x,y);
         double det = xx*yy-xy*xy, trace = xx+yy;
-        output(x,y) = (float)(det - scale*trace)*norm;
+        output(x,y) = (float)(det - scale*trace*trace)*norm;
       }
   return output;
 }
