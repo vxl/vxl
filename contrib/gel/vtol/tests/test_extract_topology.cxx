@@ -20,7 +20,8 @@ typedef vtol_extract_topology< TEST_LABEL_TYPE >::label_image_type label_image_t
 class test_vtol_extract_topology
 {
  public:
-  static void test_image_1();
+  static void test_image_1a();
+  static void test_image_1b();
 };
 
 // since the pixel type and the label type are now
@@ -41,17 +42,23 @@ image_to_label(const image_type& img)
 }
 
 static image_type
-image_1()
+image_1a()
 {
   static vxl_byte image_data[] =
-#if 0
-     { 1, 1, 1, 2, 1, 1,
+    { 1, 1, 1, 2, 1, 1,
       1, 0, 0, 0, 0, 1,
       1, 2, 2, 0, 0, 1,
       1, 1, 0, 2, 2, 1,
       1, 0, 3, 2, 1, 1,
       3, 2, 1, 3, 3, 3 };
-#endif
+
+  return image_type( image_data, 6, 6, 1, 1, 6, 0 );
+}
+
+static image_type
+image_1b()
+{
+  static vxl_byte image_data[] =
     { 0, 0, 0, 0, 0, 0,
       0, 0, 0, 2, 2, 0,
       0, 0, 0, 2, 2, 0,
@@ -123,13 +130,28 @@ image_5()
 }
 
 
+static image_type
+image_6()
+{
+  static vxl_byte image_data[] =
+    { 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 2, 2, 0,
+      0, 0, 1, 0, 0, 0,
+      0, 1, 1, 0, 0, 0,
+      0, 1, 1, 0, 0, 0,
+      0, 0, 0, 0, 0, 0 };
+
+  return image_type( image_data, 6, 6, 1, 1, 6, 0 );
+}
+
+
 void
 test_vtol_extract_topology::
-test_image_1()
+test_image_1a()
 {
-  vcl_cout << "\n\nTesting image 1\n";
+  vcl_cout << "\n\nTesting image 1a\n";
 
-  label_image_type img = image_to_label( image_1() );
+  label_image_type img( image_to_label( image_1a() ) );
 
   // edge directions
   const unsigned R = 1;
@@ -142,12 +164,70 @@ test_image_1()
   const unsigned RD = R | D;
   const unsigned RU = R | U;
   const unsigned UD = U | D;
-#if 0
   const unsigned LUD = L | U | D;
   const unsigned RUD = R | U | D;
   const unsigned LRD = L | R | D;
   const unsigned LRU = L | R | U;
-#endif
+  const unsigned LRUD = L | R | U | D;
+  static unsigned edges[7][7] =
+    { { RD, LR, LR, LRD, LRD, LR, LD },
+      { UD, RD, LR, LRU, LRU, LD, UD },
+      { UD, RUD, LR, LD, 0, UD, UD },
+      { UD, RU, LRD, LRUD, LR, LUD, UD },
+      { UD, RD, LRUD, LUD, RD, LU, UD },
+      { RUD, LRUD, LRUD, LRUD, LRU, LR, LUD },
+      { RU, LRU, LRU, LRU, LR, LR, LU } };
+
+  testlib_test_begin( "Constructing extract object" );
+  vtol_extract_topology<TEST_LABEL_TYPE> te( img );
+  testlib_test_perform( true );
+
+  testlib_test_begin( "Testing (internal) is_edge()" );
+  bool good = true;
+  for ( unsigned i = 0; i < 7; ++i ) {
+    for ( unsigned j = 0; j < 7; ++j ) {
+      for ( unsigned dir = 0; dir < 4; ++dir ) {
+        unsigned d = 1 << dir;
+        if ( (edges[j][i] & d) != 0 ) {
+          if ( ! te.is_edge( i, j, dir ) ) {
+            good = false;
+            vcl_cout << "["<<edges[j][i]<<"] ("<<i<<","<<j<<", d="<<dir<<")  should be a boundary edge\n";
+          }
+        } else {
+          if ( te.is_edge( i, j, dir ) ) {
+            good = false;
+            vcl_cout << "["<<edges[j][i]<<"] ("<<i<<","<<j<<", d="<<dir<<")  should not be a boundary edge\n";
+          }
+        }
+      }
+    }
+  }
+  testlib_test_perform( good );
+
+  TEST_EQUAL( "Vertex count", te.vertices().size(), 19 );
+  TEST_EQUAL( "Face count", te.faces().size(), 13 );
+}
+
+
+void
+test_vtol_extract_topology::
+test_image_1b()
+{
+  vcl_cout << "\n\nTesting image 1b\n";
+
+  label_image_type img = image_to_label( image_1b() );
+
+  // edge directions
+  const unsigned R = 1;
+  const unsigned D = 2;
+  const unsigned L = 4;
+  const unsigned U = 8;
+  const unsigned LD = L | D; 
+  const unsigned LR = L | R;
+  const unsigned LU = L | U;
+  const unsigned RD = R | D;
+  const unsigned RU = R | U;
+  const unsigned UD = U | D;
   const unsigned LRUD = L | R | U | D;
 
   static unsigned edges[7][7] =
@@ -158,15 +238,6 @@ test_image_1()
       { UD, UD, 0,  UD,  0,  0, UD },
       { UD, RU, LR, LU,  0,  0, UD },
       { RU, LR, LR, LR, LR, LR, LU }
-#if 0
-     ,{ UD, RD, LR, LRU, LRU, LD, UD }
-     ,{ UD, RUD, LR, LD, 0, UD, UD }
-     ,{ UD, RU, LRD, LRUD, LR, LUD, UD }
-     ,{ UD, RD, LRUD, LUD, RD, LU, UD }
-     ,{ RUD, LRUD, LRUD, LRUD, LRU, LR, LUD }
-
-     ,{ RU, LRU, LRU, LRU, LR, LR, LU }
-#endif
     };
   testlib_test_begin( "Constructing extract object" );
   vtol_extract_topology< TEST_LABEL_TYPE > te( img );
@@ -194,7 +265,7 @@ test_image_1()
   testlib_test_perform( good );
 
   TEST_EQUAL( "Vertex count", te.vertices().size(), 5 );
-  TEST_EQUAL( "Face count", te.faces().size(), 4 );
+  TEST_EQUAL( "Face count", te.faces().size(), 3 );
 }
 
 
@@ -244,6 +315,21 @@ test_image_4()
   testlib_test_perform( true );
 
   TEST_EQUAL( "Face count", te.faces().size(), 4 );
+}
+
+
+static void
+test_image_6()
+{
+  vcl_cout << "\n\nTesting image 6\n";
+
+  label_image_type img( image_to_label(image_6()) );
+
+  testlib_test_begin( "Constructing extract object" );
+  vtol_extract_topology< TEST_LABEL_TYPE > te( img );
+  testlib_test_perform( true );
+
+  TEST_EQUAL( "Face count", te.faces().size(), 3 );
 }
 
 
@@ -392,12 +478,14 @@ test_digital_region()
 static void
 test_extract_topology()
 {
-  test_vtol_extract_topology::test_image_1();
+  test_vtol_extract_topology::test_image_1a();
+  test_vtol_extract_topology::test_image_1b();
   test_image_2();
   test_image_3();
   test_image_4();
   test_smoothing();
   test_digital_region();
+  test_image_6();
 }
 
 

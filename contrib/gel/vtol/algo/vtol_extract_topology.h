@@ -254,7 +254,7 @@ class vtol_extract_topology
       while ( itr != children.end() ) {
         if ( contains( new_region, (*itr)->region ) ) {
           new_node->children.push_back( *itr );
-          this->children.erase( itr );
+          itr = this->children.erase( itr );
         } else {
           ++itr;
         }

@@ -397,6 +397,15 @@ trace_edge_chain( unsigned i, unsigned j, unsigned dir )
   chain->add_edgel( vdgl_edgel( i-0.5, j-0.5, -1, dir*90 ) );
   move( dir, i, j );
 
+  // If we have a complete cycle (i.e. start==end), we have to step
+  // back one because vtol doesn't like edges with the same start and
+  // end. When we step back, we need to keep track of the direction
+  // from which we came to that point. We'll only ever need to step
+  // back once, so it is sufficient to keep the current direction
+  // (direction of the last step) in dir) and the previous direction
+  // in prev_dir.
+  unsigned prev_dir = -1u;
+
   while ( vertex_index( i, j ) == vertex_node::null_index )
   {
     set_vertex_index( i, j, vertex_node::done_index );
@@ -407,6 +416,7 @@ trace_edge_chain( unsigned i, unsigned j, unsigned dir )
     // exactly one, since this is not a vertex.
     //
     DBG( unsigned count = 0 );
+    prev_dir = dir;
     dir = (dir+3) % 4; // same as dir = dir - 1
     while ( ! is_edge( i, j, dir ) ) {
       dir = (dir+1) % 4;
@@ -417,15 +427,11 @@ trace_edge_chain( unsigned i, unsigned j, unsigned dir )
     move( dir, i, j );
 
     // The same non-junction vertex should not appear on multiple
-    // traces.
+    // traces. (The "reverse trace" is will be done below by just
+    // reversing the start and end.)
     //
     assert( vertex_index( i, j ) != vertex_node::done_index );
   }
-
-  // End vertex
-  chain->add_edgel( vdgl_edgel( i-0.5, j-0.5 ) );
-
-  chain = smooth_chain( chain, params_.num_for_smooth );
 
   unsigned end_index = vertex_index( i, j );
 
@@ -437,7 +443,14 @@ trace_edge_chain( unsigned i, unsigned j, unsigned dir )
     set_vertex_index( i, j, node_list_.size() );
     node_list_.push_back( vertex_node( i, j ) );
     end_index = vertex_index( i, j );
+    dir = prev_dir; // the direction we came from to the new end point.
+    // The new end point is already in the edgel chain; no need to add again.
+  } else {
+    // Add the end vertex
+    chain->add_edgel( vdgl_edgel( i-0.5, j-0.5 ) );
   }
+
+  chain = smooth_chain( chain, params_.num_for_smooth );
 
   vertex_node& start_node = node( start_index );
   vertex_node& end_node   = node( end_index );
@@ -681,8 +694,8 @@ void
 vtol_extract_topology< LABEL_TYPE >::
 collect_regions( region_collection& region_list ) const
 {
-  // Use to need marks about which nodes (vertices) and directions
-  // have been processed.
+  // Use put marks about which nodes (vertices) and directions have
+  // been processed.
   //
   vcl_vector< unsigned > markers( node_list_.size(), 0 );
 
