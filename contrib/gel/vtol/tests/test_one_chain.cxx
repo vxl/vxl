@@ -153,6 +153,8 @@ int main(int, char **)
   Assert(*oc1 == *oc1_clone);
   
   Assert(!(*oc1 == *och1)); 
+
+  Assert(oc1->topology_type()==vtol_topology_object::ONECHAIN);
   
   vcl_cerr << "Finished testing one chain" << endl;
   return 0;
