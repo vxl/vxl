@@ -17,13 +17,16 @@
 #include <vgui/vgui_viewer2D.h>
 #include <vgui/vgui_tview.h>
 
+vgui_tview_launcher::vgui_tview_launcher()
+  : c_graph(vgui_key('G')) { }
+
 vcl_string vgui_tview_launcher::type_name() const {
   return "vgui_tview_launcher";
 }
 
 bool vgui_tview_launcher::handle(const vgui_event& e) {
 
-  if (e.type == vgui_KEY_PRESS && e.key == 'G') {
+  if (c_graph(e)) {
     go(e.origin);
     return true;
   }

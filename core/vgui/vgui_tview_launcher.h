@@ -27,9 +27,11 @@
 
 #include "vgui_tview_launcher_sptr.h"
 #include <vgui/vgui_tableau.h>
+#include <vgui/vgui_event_condition.h>
 
 class vgui_tview_launcher : public vgui_tableau {
 public:
+  vgui_tview_launcher();
   bool handle(const vgui_event&);
 
   vcl_string type_name() const;
@@ -37,7 +39,9 @@ public:
   void get_popup(const vgui_popup_params&, vgui_menu& menu);
 
   void go(vgui_adaptor*);
-
+  
+  vgui_event_condition c_graph;
+  
 protected:
   ~vgui_tview_launcher() { }
 };
