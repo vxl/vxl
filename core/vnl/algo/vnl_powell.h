@@ -25,7 +25,7 @@ class vnl_powell : public vnl_nonlinear_minimizer
   vnl_powell(vnl_cost_function* functor);
 
   //: Run minimization, place result in x.
-  void minimize(vnl_vector<double>& x);
+  ReturnCodes minimize(vnl_vector<double>& x);
 
   //: Set tolerance on line search parameter step
   //  Default value is 0.0001

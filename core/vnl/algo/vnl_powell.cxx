@@ -74,7 +74,8 @@ void vnl_powell::set_initial_step(double step)
   initial_step_ = step;
 }
 
-void vnl_powell::minimize(vnl_vector<double>& p)
+vnl_nonlinear_minimizer::ReturnCodes
+vnl_powell::minimize(vnl_vector<double>& p)
   //double p[], double **xi, int n
 {
  // verbose_ = true;
@@ -159,4 +160,5 @@ void vnl_powell::minimize(vnl_vector<double>& p)
     }
     report_iter();
   }
+  return FAILED_TOO_MANY_ITERATIONS;
 }
