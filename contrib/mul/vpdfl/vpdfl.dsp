@@ -258,6 +258,11 @@ SOURCE=.\vpdfl_kernel_pdf_builder.cxx
 SOURCE=.\vpdfl_resample.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_add_all_binary_loaders.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -379,6 +384,11 @@ SOURCE=.\vpdfl_all.h
 # Begin Source File
 
 SOURCE=.\vpdfl_sampler_base.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_add_all_binary_loaders.h
 
 # End Source File
 # End Group
