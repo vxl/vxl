@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vsl/vsl_test.h>
+#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_stack_io.h>
 
@@ -53,4 +53,4 @@ void test_stack_io()
   vcl_cout << vcl_endl;
 }
 
-TESTMAIN(test_stack_io);
+TESTLIB_DEFINE_MAIN(test_stack_io);

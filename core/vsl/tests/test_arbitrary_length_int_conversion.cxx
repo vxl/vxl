@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vsl/vsl_test.h>
+#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_explicit_io.h>
 #include <vcl_ctime.h>
 
@@ -269,4 +269,4 @@ void test_arbitrary_length_int_conversion()
 }
 
 
-TESTMAIN(test_arbitrary_length_int_conversion);
+TESTLIB_DEFINE_MAIN(test_arbitrary_length_int_conversion);

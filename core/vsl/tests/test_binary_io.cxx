@@ -4,7 +4,7 @@
 #include <vcl_cstring.h>
 #include <testlib/testlib_root_dir.h>
 
-#include <vsl/vsl_test.h>
+#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 
 
@@ -218,4 +218,4 @@ void test_binary_io()
     vcl_string(c_string_out) == vcl_string(c_string_in2), true);
 }
 
-TESTMAIN(test_binary_io);
+TESTLIB_DEFINE_MAIN(test_binary_io);

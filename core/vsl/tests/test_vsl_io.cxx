@@ -1,11 +1,10 @@
-// First define testmain
-#include <vsl/vsl_test.h>
+#include <testlib/testlib_test.h>
 
 // Test forward declarations.
 #include <vsl/vsl_fwd.h>
 
-#undef TESTMAIN
-#define TESTMAIN(x)
+#undef TESTLIB_DEFINE_MAIN
+#define TESTLIB_DEFINE_MAIN(x)
 #include "test_polymorphic_io.cxx" // should come first
 #include "test_arbitrary_length_int_conversion.cxx"
 #include "test_binary_io.cxx"
@@ -20,9 +19,9 @@
 #include "test_stack_io.cxx"
 #include "test_indent.cxx"
 
-#undef TESTMAIN
-#define TESTMAIN(x) int main()\
-{ vsl_test_start(#x); x(); return vsl_test_summary(); }
+#undef TESTLIB_DEFINE_MAIN
+#define TESTLIB_DEFINE_MAIN(x) int main()\
+{ testlib_test_start(#x); x(); return testlib_test_summary(); }
 
 void run_test_vsl_io()
 {
@@ -41,4 +40,4 @@ void run_test_vsl_io()
   test_indent();
 }
 
-TESTMAIN(run_test_vsl_io);
+TESTLIB_DEFINE_MAIN(run_test_vsl_io);

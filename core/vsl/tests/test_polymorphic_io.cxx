@@ -8,7 +8,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vsl/vsl_test.h>
+#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_binary_loader.txx>
@@ -185,7 +185,7 @@ void test_polymorphic_io()
   delete b2_in;
 }
 
-TESTMAIN(test_polymorphic_io);
+TESTLIB_DEFINE_MAIN(test_polymorphic_io);
 
 // Explicitly instantiate loader
 VSL_BINARY_LOADER_WITH_SPECIALIZATION_INSTANTIATE(test_base_class);

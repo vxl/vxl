@@ -2,7 +2,6 @@
 
 SET(vsl_sources
   vsl_fwd.h
-  vsl_test.cxx vsl_test.h
 
   vsl_binary_io.cxx vsl_binary_io.h
   vsl_binary_explicit_io.h

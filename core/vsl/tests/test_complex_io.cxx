@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vsl/vsl_test.h>
+#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_complex_io.h>
 
@@ -36,4 +36,4 @@ void test_complex_io()
   vcl_cout << vcl_endl;
 }
 
-TESTMAIN(test_complex_io);
+TESTLIB_DEFINE_MAIN(test_complex_io);

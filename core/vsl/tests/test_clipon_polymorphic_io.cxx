@@ -7,7 +7,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vsl/vsl_test.h>
+#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_clipon_binary_loader.h>
 #include <vsl/vsl_clipon_binary_loader.txx>
@@ -227,7 +227,7 @@ void test_clipon_polymorphic_io()
   delete b2_in;
 }
 
-TESTMAIN(test_clipon_polymorphic_io);
+TESTLIB_DEFINE_MAIN(test_clipon_polymorphic_io);
 
 // Explicitly instantiate loader
 VSL_CLIPON_BINARY_LOADER_INSTANTIATE(test2_base_class, test2_base_class_io);

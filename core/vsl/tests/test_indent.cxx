@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vsl/vsl_test.h>
+#include <testlib/testlib_test.h>
 #include <vsl/vsl_indent.h>
 
 static void test_indent1(int t)
@@ -44,4 +44,4 @@ void test_indent()
   vcl_cout<<vsl_indent()<<"Indent Cleared\n";
 }
 
-TESTMAIN(test_indent);
+TESTLIB_DEFINE_MAIN(test_indent);

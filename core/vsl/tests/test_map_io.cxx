@@ -3,7 +3,7 @@
 #include <vcl_utility.h>
 #include <vcl_string.h>
 
-#include <vsl/vsl_test.h>
+#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_map_io.h>
 
@@ -64,4 +64,4 @@ void test_map_io()
   vcl_cout << vcl_endl;
 }
 
-TESTMAIN(test_map_io);
+TESTLIB_DEFINE_MAIN(test_map_io);

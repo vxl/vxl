@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vsl/vsl_test.h>
+#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_string_io.h>
 
@@ -31,4 +31,4 @@ void test_string_io()
     outstring == instring, true);
 }
 
-TESTMAIN(test_string_io);
+TESTLIB_DEFINE_MAIN(test_string_io);

@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vsl/vsl_test.h>
+#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_list_io.h>
 
@@ -45,4 +45,4 @@ void test_list_io()
   vcl_cout << vcl_endl;
 }
 
-TESTMAIN(test_list_io);
+TESTLIB_DEFINE_MAIN(test_list_io);
