@@ -59,7 +59,7 @@ foreach $f (@FILES)
                $f !~ m/\bintroduction_doxy\.txt$/ &&
                $f !~ m/_mocced\.cxx$/ &&
                $f !~ m/\bv3p\/(netlib|[jm]peg2?|tiff|png|zlib|Qv)\// &&
-               $f !~ m/vil\/file_formats\/vil_viff(header|_support)/ &&
+               $f !~ m/vil1?\/file_formats\/vil1?_viff(header|_support)/ &&
                $f !~ m/\bvgui\/internals\/trackball/ &&
                $f !~ m/\bcore\/vgl\/internals\/gpc.h$/ &&
                $f !~ m/\bcore\/vidl\/vidl_mpegcodec_helper.cxx$/ &&
@@ -95,6 +95,10 @@ foreach $f (@FILES)
     print "$f\t\# has lines of more than 132 characters\n";
     $printed = 1;
   }
+  print "$f\t\# has vcl_endl following a string: replace with \\n\"\n"
+    if ($printed && $file =~ m/\"\s*\<\<\s*vcl_endl\b/);
+  print "$f\t\# consider joining consecutive \"\<\<\" output lines\n"
+    if ($printed && $file =~ m/(\S+)\s*\<\<[^;]+\;\s*\1\s*\<\</);
 
 # 4. Consecutive comment blocks, separated by blank lines
   if ($file =~ m!\n\s*//:.*\n( *// .*\n)*\s*\n\s*// !)
@@ -160,14 +164,14 @@ foreach $f (@FILES)
           $f !~ m/\/v.l\/io\/tests\/golden_test_v.l_io\.cxx$/ &&
           $j !~ m/^(stdlib|varargs|sys\/types|stdio|windows|GL\/glu?t?)\.h$/);
     $jj = $j; $i = $j;
-    next unless ($i =~ s/^(vnl|vil|vsl|vul|vpl|vgl|vbl|vtol|vsol|vipl\/vipl_with_[a-z_]+|vipl|vepl|mbl|mil)\/(algo\/|io\/|internals\/|filter\/|section\/|vrml\/|impl\/(X|glut|gtk|mfc)\/|)(.*)\.h/$4/ || $i =~ s/^(v[cx]l_[a-z]+)\.h$/$1/);
+    next unless ($i =~ s/^(vnl|vil[12]?|vsl|vul|vpl|vgl|vbl|vtol|vsol|vipl\/vipl_with_[a-z_]+|vipl|vepl|mbl|mil)\/(algo\/|io\/|internals\/|filter\/|section\/|vrml\/|impl\/(X|glut|gtk|mfc)\/|)(.*)\.h/$4/ || $i =~ s/^(v[cx]l_[a-z]+)\.h$/$1/);
     next if ($j eq "vcl_compiler.h" || $j eq "vcl_new.h");
     next if ($j eq "vcl_cstdio.h" && $f =~ m/\/StdAfx\.h$/);
     next if ($j eq "vcl_cmath.h" && $f =~ m/\bvcl\/vcl_cfloat\.h$/);
     next if ($j eq "vcl_cstdlib.h" && $f =~ m/\bvcl\/emulation\/vcl_algobase\.h$/);
     next if ($j eq "vcl_ctime.h" && $f =~ m/\bvcl\/emulation\/vcl_alloc\.h$/);
     next if ($j eq "vcl_algorithm.h" && $f =~ m/\bvcl\/gcc-295\/vcl_deque\.txx$/);
-    next if ($i =~ m/^(vnl|vil|vsl|vul|vpl|vgl|vbl)_fwd$/ || $i =~ m/^vgui_glu?x?t?$/ || $i eq "StdAfx");
+    next if ($i =~ m/^(vnl|vil[12]?|vsl|vul|vpl|vgl|vbl)_fwd$/ || $i =~ m/^vgui_glu?x?t?$/ || $i eq "StdAfx");
     next if ($i =~ m/^(v.l)_io_/ && $f =~ m/\/$1\/io\//);
     next if ($i =~ m/^accessors\/vipl_accessors_/ && $f =~ m/\/v[ie]pl\//);
     next if ($f =~ m/vbl\/io\/vbl_io_sparse_array_[123]d\.h$/ && $i =~ m/^vbl_sparse_array_[123]d$/);
@@ -188,8 +192,8 @@ foreach $f (@FILES)
     elsif ($j eq "vcl_csetjmp.h") { $i="(setjmp|vcl_(jmp_buf|longjmp))"; }
     elsif ($j eq "vcl_csignal.h") { $i="vcl_(sig_atomic_t|raise|signal)"; }
     elsif ($j eq "vcl_cstdarg.h") { $i="(vcl_|)va_list"; }
-    elsif ($j eq "vcl_cstddef.h") { next if ($f =~ m/\b(core\/vil|mul\/vil2)(\/file_formats)?\/vil2?_jpeglib\.h$/); $i="vcl_(ptrdiff_t|size_t)"; }
-    elsif ($j eq "vcl_cstdio.h") { next if ($f =~ m/\b(vcl\/vcl_cassert|core\/vil\/vil_jpeglib|mul\/vil2\/file_formats\/vil2_jpeglib)\.h$/); $i="vcl_(FILE|fpos_t|fopen|fclose|feof|ferror|fflush|fgetc|fgetpos|fgets|fwrite|fread|fseek|ftell|perror|clearerr|rename|fputc|fputs|freopen|fsetpos|getc|getchar|gets|putc|putchar|puts|remove|rewind|setbuf|setvbuf|tmpfile|tmpnam|ungetc|printf|sprintf|fprintf|vprintf|vsprintf|vfprintf|scanf|sscanf|fscanf|vscanf|vsscanf|vfscanf)"; }
+    elsif ($j eq "vcl_cstddef.h") { next if ($f =~ m/\bcore\/vil[12]?(\/file_formats)?\/vil[12]?_jpeglib\.h$/); $i="vcl_(ptrdiff_t|size_t)"; }
+    elsif ($j eq "vcl_cstdio.h") { next if ($f =~ m/\b(vcl\/vcl_cassert|core\/vil[12]?(\/file_formats)?\/vil[12]?_jpeglib)\.h$/); $i="vcl_(FILE|fpos_t|fopen|fclose|feof|ferror|fflush|fgetc|fgetpos|fgets|fwrite|fread|fseek|ftell|perror|clearerr|rename|fputc|fputs|freopen|fsetpos|getc|getchar|gets|putc|putchar|puts|remove|rewind|setbuf|setvbuf|tmpfile|tmpnam|ungetc|printf|sprintf|fprintf|vprintf|vsprintf|vfprintf|scanf|sscanf|fscanf|vscanf|vsscanf|vfscanf)"; }
     elsif ($j eq "vcl_cstdlib.h") { next if ($f =~ m/\bvcl\/vcl_cassert\.h$/); $i="(vcl_(abs|div|labs|ldiv|srand|rand|atexit|getenv|system|exit|abort|qsort|calloc|malloc|free|realloc|atol|atof|atoi|mblen|mbstowcs|mbtowc|strtod|strtol|strtoul|wctomb|wcstombs)|[sd]rand48)"; }
     elsif ($j eq "vcl_cstring.h") { $i="vcl_(memchr|memcmp|memcpy|memmove|memset|strcat|strchr|strcmp|strcoll|strcpy|strcspn|strerror|strlen|strncat|strncmp|strncpy|strpbrk|strrchr|strspn|strstr|strtok|strxfrm)"; }
     elsif ($j eq "vcl_ctime.h") { $i="vcl_(clock_t|time_t|tm|asctime|clock|difftime|localtime|strftime|ctime|gmtime|mktime|time)"; }
@@ -243,8 +247,8 @@ foreach $f (@FILES)
     elsif ($j eq "vgl/vgl_clip.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vgl/vgl_distance.h") { $i="$i(2)?(|[a-z_]+)"; }
     elsif ($j eq "vgl/vgl_triangle_test.h") { $i="$i(|_[a-z_]+)"; }
-    elsif ($j eq "vgl/algo/vgl_homg_operators_2d.h") { $i="$i|vnl_double_3x3[^\000]*vgl_homg_point_2d"; }
-    elsif ($j eq "vgl/algo/vgl_homg_operators_3d.h") { $i="$i|vnl_double_4x4[^\000]*vgl_homg_point_3d"; }
+    elsif ($j eq "vgl/algo/vgl_homg_operators_2d.h") { $i="($i|vnl_double_3x3[^\000]*vgl_homg_point_2d|cond_matrix . x)"; }
+    elsif ($j eq "vgl/algo/vgl_homg_operators_3d.h") { $i="($i|vnl_double_4x4[^\000]*vgl_homg_point_3d)"; }
     elsif ($j eq "vgui/vgui_adaptor.h") { $i="(vgui|get)_(adaptor|event)"; }
     elsif ($j eq "vgui/vgui_color_text.h") { $i="(text_to_color|(red|green|blue)_value)"; }
     elsif ($j eq "vgui/vgui_command.h") { $i="($i(|_[a-z_]+)|VGUI_COMMAND_SIMPLE_INSTANTIATE)"; }
@@ -258,20 +262,39 @@ foreach $f (@FILES)
     elsif ($j eq "vgui/vgui_tag.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vgui/vgui_tableau_sptr.h") { $i="($i(|_t)|get_tableau)"; }
     elsif ($j eq "vgui/internals/vgui_simple_field.h") { $i="vgui_(simple|bool|int|long|float|double)_field"; }
-    elsif ($j eq "vil/vil_16bit.h") { $i="($i)_(read|write)_(big|little)_endian"; }
-    elsif ($j eq "vil/vil_32bit.h") { $i="($i)_(read|write)_(big|little)_endian"; }
+    elsif ($j =~ m/vil[12]?\/vil[12]?_(stream_)?\d+bit\.h$/) { $i="($i)(|_(read|write)_(big|little)_endian)"; }
+    elsif ($j =~ m/vil2?\/vil2?_bilin_interp\.h$/) { $i="($i)(|_safe|_unsafe|_raw|_safe_extend)"; }
     elsif ($j eq "vil/vil_clamp.h") { $i="$i(|_pixel)"; }
-    elsif ($j eq "vil/vil_convolve.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vil/vil_colour_space.h") { $i="($i)_(RGB|HSV)_to_(YIQ|HSV|RGB)"; }
+    elsif ($j =~ m/vil2?\/vil2?_convert\.h$/) { $i="($i)_((cast|round)(_pixel)?|(rgb|planes)_to_grey|stretch_range|to_[a-z_]+)"; }
+    elsif ($j eq "vil/vil_convolve.h") { $i="$i(|_[a-z_]+)"; }
+    elsif ($j =~ m/vil2?\/algo\/vil2?_convolve_1d.h$/) { $i="vil2\?_convolve_(1d|edge_1d|boundary_option)"; }
+    elsif ($j =~ m/vil2?\/vil2?_copy\.h$/) { $i="($i)(|_deep|_to_window|_reformat)"; }
+    elsif ($j =~ m/vil2?\/algo\/vil2?_exp_grad_filter_1d.h$/) { $i="vil2\?_exp_grad_filter_(1d|i|j)"; }
+    elsif ($j =~ m/vil2?\/vil2?_fill\.h$/) { $i="($i)_(line|row|col)"; }
+    elsif ($j =~ m/vil2?\/vil2?_flip\.h$/) { $i="($i)_(ud|lr)"; }
+    elsif ($j =~ m/vil2?\/algo\/vil2?_gauss_filter\.h$/) { $i="($i)_(5tap(_params)?)"; }
+    elsif ($j =~ m/vil2?\/algo\/vil2?_gauss_reduce\.h$/) { $i="$i(|_params|_general|_121)"; }
+    elsif ($j =~ m/vil2?\/vil2?_load\.h$/) { $i="$i(|_image_resource)"; }
+    elsif ($j =~ m/vil2?\/vil2?_image_view\.h$/) { $i="$i(|_deep_equality)"; }
+    elsif ($j =~ m/vil2?\/vil2?_image_view_base\.h$/) { $i="$i(|_sptr)"; }
+    elsif ($j =~ m/vil2?\/vil2?_math\.h$/) { $i="($i)_([a-z_]+)"; }
+    elsif ($j =~ m/vil2\/vil2_new\.h$/) { $i="($i)_image_(resource|view_j_i_plane|view_plane_i_j)"; }
+    elsif ($j =~ m/vil2?\/vil2?_(image_resource|memory_chunk)\.h$/) { $i="$i(|_sptr)"; }
     elsif ($j eq "vil/vil_image_as.h") { $i="$i(_[a-z16_]+)?"; }
     elsif ($j eq "vil/vil_interpolate.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vil/vil_warp.h") { $i="$i(|_mapping|_interpolation_type|_output_driven)"; }
-    elsif ($j eq "vil/vil_jpeglib.h") { $i="jpeg_[a-z_]+"; }
+    elsif ($j =~ m/vil[12]?\/(file_formats\/|)vil[12]?_jpeglib\.h$/) { $i="jpeg[12]?_[a-z_]+"; }
     elsif ($j eq "vil/vil_memory_image.h") { $i="$i(|_format)"; }
-    elsif ($j eq "vil/vil_pixel.h") { $i="($i)_format(|_t)"; }
-    elsif ($j eq "vil/vil_property.h") { $i="$i(|_[a-z_]+)"; }
+    elsif ($j =~ m/vil[12]?\/vil[12]?_pixel\.h$/) { $i="($i)_format(|_t|_component_format)"; }
+    elsif ($j =~ m/vil[12]?\/vil[12]?_pixel_format\.h$/) { $i="($i(|_of|_component_format|_sizeof_components|_num_components)|VIL2?_PIXEL_FORMAT_\\S+)"; }
+    elsif ($j =~ m/vil2?\/vil2?_print\.h$/) { $i="($i)(|_value|_all)"; }
+    elsif ($j =~ m/vil[12]?\/vil[12]?_property\.h$/) { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vil/vil_smooth.h") { $i="($i)_(gaussian|byte_separable_symmetric)"; }
-    elsif ($j =~ m/vil\/file_formats\/(.*).h/) { $i="$1_file_format"; }
+    elsif ($j =~ m/vil2?\/vil2?_transform\.h$/) { $i="($i)2?"; }
+    elsif ($j =~ m/vil2?\/vil2?_view_as\.h$/) { $i="($i)(|_planes|_rgb)"; }
+    elsif ($j =~ m/vil2?\/vil2?_vil1\.h$/) { $i="($i)_(to_|from_)?image_(resource|view)"; }
+    elsif ($j =~ m/vil[12]?\/file_formats\/(.*)\.h$/) { $i="$1_file_format"; }
     elsif ($j eq "vipl/filter/vipl_filter_abs.h") { $i="($i|FILTER_IMPTR_(INC|DEC)_REFCOUNT)"; }
     elsif ($j =~ m/vipl\/vipl_with_vbl_array_2d\/accessors\/vipl_accessors_(vbl_array_2d)\.h/) { $i="$1"; }
     elsif ($j eq "vnl/algo/vnl_algo_fwd.h") { $i="vnl_(svd|qr|matrix_inverse|symmetric_eigensystem|cholesky|complex_eigensystem|conjugate_gradient|cpoly_roots|lbfgs|levenberg_marquardt)"; }
@@ -294,13 +317,12 @@ foreach $f (@FILES)
     elsif ($j eq "vnl/vnl_sample.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vnl/vnl_tag.h") { $i="($i)_[a-z]+"; }
     elsif ($j eq "vpl/vpl.h") { $i="($i)_[a-z]+"; }
-    elsif ($f =~ m/\btests\/(v.l_io_test_all|test_(includes|headers))\.cxx$/) { $i=""; }
     elsif ($j eq "vsl/vsl_binary_io.h") { $i="vsl_b_(read|write|[io]f?stream)"; }
     elsif ($j eq "vsl/vsl_binary_loader.h") { next if ($f =~ m/\/Templates\/\S+\~-\.cxx$/); $i="($i|vsl_b_(read|write))"; }
     elsif ($j eq "vsl/vsl_binary_explicit_io.h") { $i="vsl_(convert_[a-z_]+|swap_bytes|swap_bytes_to_buffer|b_(read|write)_[a-z_]+)"; }
     elsif ($j eq "vsl/vsl_complex_io.h") { $i="(VNL_IO_[A-Z]+_INSTANTIATE.vcl_complex|vsl_b_(read|write))"; }
     elsif ($j eq "vsl/vsl_indent.h") { $i="$i(|_inc|_dec|_set_tab|_tab|_clear)"; }
-    elsif ($j =~ m/(vsl\/vsl_[a-z]+_io|v[bginu]l\/io\/v[bginu]l_io_[a-z123_]+).h/) { $i="vsl_(b_(read|write)|print_summary)"; }
+    elsif ($j =~ m/(vsl\/vsl_[a-z]+_io|v[bginu]l[12]?\/io\/v[bginu]l[12]?_io_[a-z123_]+).h/) { $i="vsl_(b_(read|write)|print_summary)"; }
     elsif ($j eq "vtol/vtol_vertex_2d.h") { $i="$i|cast_to_vertex_2d\(\)"; }
     elsif ($j eq "vtol/vtol_edge_2d.h") { $i="$i|cast_to_edge_2d\(\)"; }
     elsif ($j eq "vtol/vtol_face_2d.h") { $i="$i|cast_to_face_2d\(\)"; }
@@ -318,7 +340,7 @@ foreach $f (@FILES)
     next if ($j eq "vsol/vsol_point_2d.h" && $f =~ m!Templates/vbl_smart_ptr\+vtol_edge_2d-\.cxx$!);
     next if ($j eq "vsol/vsol_region_2d.h" && $f =~ m!Templates/vbl_smart_ptr\+vtol_face_2d-\.cxx$!);
     print "$f\t\# should not have #include <$j>\n"
-      unless ($fl =~ m/$j\>[^\003]*\b$i\b/ || $f =~ m/\/$ii\./ || $f =~ m/vcl\/tests\/test_headers\.cxx$/);
+      unless ($fl =~ m/$j\>[^\003]*\b$i\b/ || $f =~ m/\/$ii\./ || $f =~ m/\btests\/test_include\.cxx$/);
   }
   print "$f\t\# should have #include <vcl_cassert.h>\n" if (! $found_cassert && $file =~ m/\n\s*assert\s*\(/);
  #  if ($j eq "vcl_algorithm.h") { $i="vcl_(adjacent_find|and|binary|binary_search|copy|copy_|count|count_if|equal|equal_range|fill|fill_n|find|find_end|find_first_of|find_if|for_each|generate|generate_n|generators_|heap|includes|inplace_merge|iter_swap|lexicographical_compare|lower_bound|make_heap|max|min|max_element|merge|merge_|min_element|mismatch|next_permutation|nth_element|partial_sort|partial_sort_copy|partition|partitions_|pop_heap|prev_permutation|push_heap|random_shuffle|remove|remove_copy|remove_copy_if|remove_if|replace|replace_copy|replace_copy_if|replace_if|reverse|reverse_copy|rotate|rotate_copy|search|search_n|set_difference|set_intersection|set_symmetric_difference|set_union|sort|sort_|sort_heap|stable_sort|swap|swap_|swap_ranges|transform|unique|unique_copy|upper_bound)"; }
@@ -369,6 +391,23 @@ foreach $f (@FILES)
  #  if ($j eq "vcl_utility.h") { $i="vcl_(pair|make_pair)"; }
  #  if ($j eq "vcl_valarray.h") { $i="vcl_(valarray|slice|slice_array|gslice|gslice_array|mask_array|indirect_array|abs|acos|asin|atan|atan2|cos|cosh|exp|log|log10|pow|sin|sinh|sqrt|tan|tanh)"; }
  #  if ($j eq "vcl_vector.h") { $i="vcl_(vector|swap)"; }
+
+  print "$f\t\# suspicious $1\n"
+    if ($f !~ m/\bvcl\/\S*vcl_\S+\.(h|txx)$/ &&
+        $file =~ m/(\#\s*include\s*\"([^\"]*)\/[^\"]*\")/ &&
+        $2 ne "internals" && $2 ne ".." && $2 ne "../accessors" && $2 ne "os_unix" && $2 ne "vc70");
+  if ($cpp_file && $f !~ m/\bvcl\/\S*vcl_\S+\.(h|txx)$/ &&
+      $file =~ m/\#\s*include\s*\<(assert|ctype|errno|float|iso646|limits|locale|math|setjmp|signal|stdarg|stddef|stdio|stdlib|string|time|wchar|wctype)\.h\>/) {
+    $t=$1;
+    print "$f\t\# replace #include <$t.h> with #include <vcl_c$t.h>\n"
+      unless (($f =~ m/\bcore\/vnl\/vnl_math\.cxx$/ && $t eq "math") ||
+              ($f =~ m/\bcore\/vnl\/vnl_sample\.cxx$/ && $t eq "stdlib") ||
+              ($f =~ m/\bcore\/vpl\/os_unix\/vpl\.cxx$/ && $t eq "stdlib") ||
+              ($f =~ m/\bcore\/vul\/vul_redirector\.cxx$/ && $t eq "stddef") ||
+              ($f =~ m/\bcore\/vul\/vul_temp_filename\.cxx$/ && $t eq "stdio"));
+  }
+  print "$f\t\# local $2 should come before global $1\n"
+    if ($file =~ m/(\#\s*include\s*\<[^\>]*\>).*(\#\s*include\s*\"[^\"]*\")/);
 
 # 6. //: inside a comment block, or \file not after //:
   if ($file =~ m!\n\s*//[^:].*\n *// *\\file\b! ||
@@ -581,7 +620,7 @@ foreach $f (@FILES)
         "$f.$wd" !~ m/\bvnl\/(vnl_rational\.h|tests\/test_rational\.cxx)\.(ceil|floor)$/ &&
         "$f.$wd" !~ m/\bvnl\/vnl_numeric_limits\.h\.(min|max)$/ &&
         "$f.$wd" !~ m/\bvnl\/vnl_finite\.h\.(exp|log|pow)$/ &&
-        "$f.$wd" !~ m/\bvil\/vil_rgb\.(h|txx)\.(min|max)$/ &&
+        "$f.$wd" !~ m/\bvil1?\/vil1?_rgb\.(h|txx)\.(min|max)$/ &&
         "$f.$wd" !~ m/\bvbl\/vbl_bounding_box\.(h|txx)\.(min|max)$/ &&
         "$f.$wd" !~ m/\bgel\/vgel\/kl\/base\.h\.(min|max)$/ &&
         "$f.$wd" !~ m/\bmul\/mbl\/mbl_stats_1d\.h\.(min|max)$/ &&
@@ -748,6 +787,10 @@ foreach $f (@FILES)
     print "$f\t\# incorrect indentation in line following: $line\n"
       unless ($pre eq $post);
   }
+  print "$f\t\# $1 not preceded by space\n"
+    if ($printed && $file =~ m/\n(public|private|protected)\s*\:/);
+  print "$f\t\# $1 preceded by more than one space\n"
+    if ($printed && $file =~ m/  (public|private|protected)\s*\:/);
   print "$f\t\# $1 not followed by space\n"
     if ($printed && $file =~ m/\b(for|if|while)\(/);
   print "$f\t\# return value in brackets\n"
