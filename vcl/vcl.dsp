@@ -1388,67 +1388,12 @@ SOURCE=.\vcl_vector.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32-vc60/vcl_algorithm.txx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\win32-vc60/vcl_complex.h
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32-vc60/vcl_complex.txx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\win32-vc60/vcl_deque.txx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\win32-vc60/vcl_functional.txx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\win32-vc60/vcl_iterator.txx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\win32-vc60/vcl_list.txx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\win32-vc60/vcl_map.txx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\win32-vc60/vcl_set.txx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\win32-vc60/vcl_string.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\win32-vc60/vcl_string.txx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\win32-vc60/vcl_utility.txx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\win32-vc60/vcl_vector.txx
 
 # End Source File
 # Begin Source File
@@ -1518,11 +1463,6 @@ SOURCE=.\emulation/vcl_stack.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\emulation/vcl_stlconf.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\emulation/vcl_stlfwd.h
 
 # End Source File
@@ -1534,6 +1474,56 @@ SOURCE=.\emulation/vcl_tempbuf.h
 # Begin Source File
 
 SOURCE=.\emulation/vcl_tree.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_stlconf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/gcc-272-stlconf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/gcc-2800-stlconf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/gcc-281-stlconf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/gcc-295-stlconf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/sgi-CC-stlconf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/sun-CC4.1-stlconf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/sun-CC5.0-stlconf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/win32-vc50-stlconf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/stlcomp.h
 
 # End Source File
 # Begin Source File
@@ -2028,6 +2018,21 @@ SOURCE=.\iso/vcl_valarray.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\mwerks/vcl_cmath.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mwerks/vcl_complex.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mwerks/vcl_cstdlib.h
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\sgi/vcl_cmath.h
 
 # End Source File
@@ -2298,12 +2303,12 @@ SOURCE=.\win32-vc60/vcl_cmath.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32-vc60/vcl_complex_fwd.h
+SOURCE=.\win32-vc70/vcl_cmath.h
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32-vc60/vcl_cstdio.h
+SOURCE=.\win32-vc60/vcl_complex_fwd.h
 
 # End Source File
 # Begin Source File
@@ -2313,12 +2318,7 @@ SOURCE=.\win32-vc60/vcl_cstdlib.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32-vc60/vcl_cstring.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\win32-vc60/vcl_ctime.h
+SOURCE=.\win32-vc70/vcl_cstdlib.h
 
 # End Source File
 # Begin Source File
