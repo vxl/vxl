@@ -100,6 +100,7 @@ double vcsl_spatial_transformation::lsi(double v0,
                                         int index,
                                         double time) const
 {
+  assert(index>=0 && (unsigned)index+1<beat_.size());
   double t0=beat_[index];
   double t1=beat_[index+1];
 
@@ -116,6 +117,7 @@ vcsl_spatial_transformation::lvi(const vnl_vector<double> &v0,
                                  double time) const
 {
   int size=v0.size();
+  assert(index>=0 && (unsigned)index+1<beat_.size());
   double t0=beat_[index];
   double t1=beat_[index+1];
 
@@ -141,6 +143,7 @@ vcsl_spatial_transformation::lmi(const vnl_matrix<double> &m0,
 {
   int rows=m0.rows();
   int cols=m0.cols();
+  assert(index>=0 && (unsigned)index+1<beat_.size());
   double t0=beat_[index];
   double t1=beat_[index+1];
 
@@ -165,6 +168,7 @@ vcsl_spatial_transformation::lqi(const vnl_quaternion<double> &v0,
                                  int index,
                                  double time) const
 {
+  assert(index>=0 && (unsigned)index+1<beat_.size());
   double t0=beat_[index];
   double t1=beat_[index+1];
   double t=(time-t0)/(t1-t0);
