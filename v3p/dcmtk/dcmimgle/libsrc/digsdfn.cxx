@@ -22,9 +22,9 @@
  *  Purpose: DicomGSDFunction (Source)
  *
  *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:11 $
+ *  Update Date:      $Date: 2004/01/20 14:38:26 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -321,7 +321,7 @@ int DiGSDFunction::calculateGSDF()
             ln2 = ln * ln;
             ln3 = ln2 * ln;
             ln4 = ln3 * ln;
-            GSDFValue[i] = pow(10, (a + c*ln + e*ln2 + g*ln3 + m*ln4) / (1 + b*ln + d*ln2 + f*ln3 + h*ln4 + k*(ln4*ln)));
+            GSDFValue[i] = pow(10.0, (a + c*ln + e*ln2 + g*ln3 + m*ln4) / (1 + b*ln + d*ln2 + f*ln3 + h*ln4 + k*(ln4*ln)));
         }
         return 1;
     }
@@ -400,7 +400,11 @@ double DiGSDFunction::getJNDIndex(const double lum)
 /*
  *
  * CVS/RCS Log:
- * Log: digsdfn.cc
+ * Log: digsdfn.cxx
+ * Revision 1.1  2004/01/14 04:01:11  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.21  2002/11/27 14:08:11  meichel
  * Adapted module dcmimgle to use of new header file ofstdinc.h
  *

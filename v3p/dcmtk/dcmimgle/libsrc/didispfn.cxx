@@ -22,9 +22,9 @@
  *  Purpose: DicomDisplayFunction (Source)
  *
  *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:11 $
+ *  Update Date:      $Date: 2004/01/20 14:38:26 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -640,11 +640,11 @@ double *DiDisplayFunction::convertODtoLumTable(const double *od_tab,
             if (useAmb)
             {
                 for (i = 0; i < count; i++)
-                    lum_tab[i] = AmbientLight + Illumination * pow(10, -od_tab[i]);
+                    lum_tab[i] = AmbientLight + Illumination * pow(10.0, -od_tab[i]);
             } else {
                 /* ambient light is added later */
                 for (i = 0; i < count; i++)
-                    lum_tab[i] = Illumination * pow(10, -od_tab[i]);
+                    lum_tab[i] = Illumination * pow(10.0, -od_tab[i]);
             }
         }
     }
@@ -665,14 +665,18 @@ double DiDisplayFunction::convertODtoLum(const double value,
                                          const double illum)
 {
     /* formula from DICOM PS3.14: L = La + L0 * 10^-D */
-    return (value >= 0) && (ambient >= 0) && (illum >= 0) ? ambient + illum * pow(10, -value) : -1 /*invalid*/;
+    return (value >= 0) && (ambient >= 0) && (illum >= 0) ? ambient + illum * pow(10.0, -value) : -1 /*invalid*/;
 }
 
 
 /*
  *
  * CVS/RCS Log:
- * Log: didispfn.cc
+ * Log: didispfn.cxx
+ * Revision 1.1  2004/01/14 04:01:11  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.35  2002/11/27 14:08:11  meichel
  * Adapted module dcmimgle to use of new header file ofstdinc.h
  *

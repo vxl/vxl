@@ -22,9 +22,9 @@
  *  Purpose: DicomMonochromeImage (Source)
  *
  *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:11 $
+ *  Update Date:      $Date: 2004/01/20 14:38:26 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -1871,15 +1871,15 @@ int DiMonoImage::createLinODPresentationLut(const unsigned long count, const int
             const double la = (double)Reflection;
             const double dmin = (double)MinDensity / 100;
             const double dmax = (double)MaxDensity / 100;
-            const double lmin = la + l0 * pow(10, -dmax);
-            const double lmax = la + l0 * pow(10, -dmin);
+            const double lmin = la + l0 * pow(10.0, -dmax);
+            const double lmax = la + l0 * pow(10.0, -dmin);
             const double jmin = DiGSDFunction::getJNDIndex(lmin);
             const double jmax = DiGSDFunction::getJNDIndex(lmax);
             const double factor = (double)DicomImageClass::maxval(bits) / (jmax - jmin);
             const double density = (dmax - dmin) / (double)(count - 1);
             Uint16 *p = data;
             for (unsigned long i = 0; i < count; i++)
-                *(p++) = (Uint16)((DiGSDFunction::getJNDIndex(la + l0 * pow(10, -(dmin + (double)i * density))) - jmin) * factor);
+                *(p++) = (Uint16)((DiGSDFunction::getJNDIndex(la + l0 * pow(10.0, -(dmin + (double)i * density))) - jmin) * factor);
             PresLutData = new DiLookupTable(data, count, bits);
             return (PresLutData != NULL) && (PresLutData->isValid());
         }
@@ -2089,7 +2089,11 @@ int DiMonoImage::writeBMP(FILE *stream,
 /*
  *
  * CVS/RCS Log:
- * Log: dimoimg.cc
+ * Log: dimoimg.cxx
+ * Revision 1.1  2004/01/14 04:01:11  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.52  2002/12/10 19:00:26  joergr
  * Fixed bug that caused createAWTBitmap() to return always empty pixel data.
  *
