@@ -124,10 +124,12 @@ bool mil_byte_image_2d_io::loadImage(const vcl_string& path,
 //: Attempt to save image to named file
 // \param filetype  String defining what format to save in
 // \return true if successful
-bool mil_byte_image_2d_io::saveImage(const vcl_string& path,
-              const vcl_string& filetype) const
+bool mil_byte_image_2d_io::saveImage(const mil_image& image,
+	                     const vcl_string& path,
+                         const vcl_string& filetype) const
 {
-  return saveTheImage(image_,path,filetype);
+  assert(image.is_a()=="mil_image_2d_of<vil_byte>");
+  return saveTheImage((const mil_image_2d_of<vil_byte>&) image,path,filetype);
 }
 
 
