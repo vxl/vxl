@@ -1,4 +1,4 @@
-// This is contrib/gel/vifa/vifa_group_pgram_params.h
+// This is gel/vifa/vifa_group_pgram_params.h
 #ifndef VIFA_GROUP_PGRAM_PARAMS_H
 #define VIFA_GROUP_PGRAM_PARAMS_H
 
@@ -25,44 +25,44 @@
 
 //: Container holding parameters for grouping polygons
 class vifa_group_pgram_params : public gevd_param_mixin,
-								public vul_timestamp,
-								public vbl_ref_count
+                                public vul_timestamp,
+                                public vbl_ref_count
 {
-public:
-	//: Granularity in the angle bins.
-	float	_angle_increment;
+ public:
+  //: Granularity in the angle bins.
+  float  _angle_increment;
 
-	//: Radius of maxiumu suppression kernel.
-	int		_max_suppress_radius;
+  //: Radius of maximum suppression kernel.
+  int    _max_suppress_radius;
 
-	//: Relative length of sorter side of parallelogram.
-	float	_length_ratio;
+  //: Relative length of sorter side of parallelogram.
+  float  _length_ratio;
 
-public:
-	//: Default constructor.
-	vifa_group_pgram_params(float	angle_increment = 5.0, 
-							int		max_suppress_radius = 2,
-							float	length_ratio = .1
-						   );
+ public:
+  //: Default constructor.
+  vifa_group_pgram_params(float  angle_increment = 5.0,
+                          int    max_suppress_radius = 2,
+                          float  length_ratio = .1
+                         );
 
-	//: Copy constructor.
-	vifa_group_pgram_params(const vifa_group_pgram_params&	old_params);
+  //: Copy constructor.
+  vifa_group_pgram_params(const vifa_group_pgram_params&  old_params);
 
-	//: Check that parameters are within acceptable bounds.
-	bool	SanityCheck();
+  //: Check that parameters are within acceptable bounds.
+  bool  SanityCheck();
 
-	//: Output contents
-	void	print_info(void);
+  //: Output contents
+  void  print_info(void);
 
-protected:
-	//: Assign internal parameter blocks.
-	void	init_params(float	angle_increment,
-						int		max_supress_radius,
-						float	length_ratio
-					   );
+ protected:
+  //: Assign internal parameter blocks.
+  void  init_params(float  angle_increment,
+                    int    max_supress_radius,
+                    float  length_ratio
+                   );
 };
 
-typedef vbl_smart_ptr<vifa_group_pgram_params>	vifa_group_pgram_params_sptr;
+typedef vbl_smart_ptr<vifa_group_pgram_params>  vifa_group_pgram_params_sptr;
 
 
-#endif	// VIFA_GROUP_PGRAM_PARAMS_H
+#endif  // VIFA_GROUP_PGRAM_PARAMS_H

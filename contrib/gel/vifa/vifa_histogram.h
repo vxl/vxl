@@ -1,4 +1,4 @@
-// This is vifa/vifa_histogram.h
+// This is gel/vifa/vifa_histogram.h
 #ifndef VIFA_HISTOGRAM_H
 #define VIFA_HISTOGRAM_H
 
@@ -27,18 +27,17 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vul/vul_timestamp.h>
-#include <vnl/vnl_vector.h>
 
 class vifa_histogram : public vul_timestamp,
-					   public vbl_ref_count
+                       public vbl_ref_count
 {
   enum histogram_type{HISTOGRAM=0, CONTRAST_HIST, NUM_TYPES};
-protected:
+ protected:
   char* delimiter;  // text delimeter for writing out histograms.
   float* vals;      // histogram of x array (value = midpoint of the buckets.
   float* counts;    // histogram of y array; counts[i] is the # of pixels
                     // with value within range of bucket i.
-  int num;          // Number of indicies.
+  int num;          // Number of indices.
   float delta;      // Width of the bins
   float vmax, vmin; // Max & Min plots on the histogram.
   float mean;       // Mean value of the distribution
@@ -46,7 +45,7 @@ protected:
 
   virtual int GetIndex(float i);
 
-public:
+ public:
   // Constructors
   vifa_histogram();
   vifa_histogram(int, float, float);
@@ -80,49 +79,49 @@ public:
   float GetStandardDev();
   float GetMedian();
   int GetValIndex(float val);
-  
+
   float* GetVals()
   {
     stats_consistent = 0; // Values might change.
-    return vals; 
+    return vals;
   }
 
   float* GetCounts()
-  { 
+  {
     stats_consistent = 0; // Counts might change.
-    return counts; 
+    return counts;
   }
-  
+
   int GetRes()
   { return num; }
 
   float GetBucketSize() { return delta; }
-  
+
   float* GetMinValAddr()
   { return vals+GetIndex(GetMinVal());  }
-  
+
   float* GetMinCountAddr()
   { return counts+GetIndex(GetMinVal());  }
-  
+
   // Other usefule functions
   char* GetDelimiter() {return delimiter;}
   void SetDelimiter(char* d) {delimiter = d;}
   float ComputeArea(float low, float high);// bounded area
   float ComputeArea();//total area
-  
+
   //Find bounds that clip off a given percent of the area
   float LowClipVal(float clip_fraction);
   float HighClipVal(float clip_fraction);
-  
+
   void Print();
   void Dump(char *);
   int  WritePlot(const char* fname);
 
-private:
+ private:
   int stats_consistent;  // A 2 bit state flag  Mean = 1 | StandDev = 2
 };
 
-typedef vbl_smart_ptr<vifa_histogram>	vifa_histogram_sptr;
+typedef vbl_smart_ptr<vifa_histogram> vifa_histogram_sptr;
 
 
-#endif	// VIFA_HISTOGRAM_H
+#endif // VIFA_HISTOGRAM_H
