@@ -48,13 +48,13 @@ void bgui_vtol2D_tableau::init()
   //define default soview styles
   //these can be overridden by later set_*_syle commands prior to drawing.
   //
-   this->set_vertex_style(1.0f, 0.0f, 0.0f, 3.0f);
-   this->set_edge_style(0.0f, 1.0f, 0.0f, 3.0f);
-   this->set_edge_group_style(0.0f, 1.0f, 0.0f, 3.0f);
-   this->set_face_style(0.0f, 1.0f, 0.0f, 3.0f);
+  this->set_vertex_style(1.0f, 0.0f, 0.0f, 3.0f);
+  this->set_edge_style(0.0f, 1.0f, 0.0f, 3.0f);
+  this->set_edge_group_style(0.0f, 1.0f, 0.0f, 3.0f);
+  this->set_face_style(0.0f, 1.0f, 0.0f, 3.0f);
 
-	//call the init() function of bgui_vsol2D_tableau
-	bgui_vsol2D_tableau::init();
+  //call the init() function of bgui_vsol2D_tableau
+  bgui_vsol2D_tableau::init();
 }
 
 //display topological objects
@@ -242,14 +242,14 @@ void bgui_vtol2D_tableau::set_vtol_topology_object_style(vtol_topology_object_sp
                                                          const float line_width,
                                                          const float point_radius)
 {
-  if (tos->cast_to_vertex()) {
+  if (tos->cast_to_vertex())
     set_vertex_style(r,g,b, point_radius);
-  } else if (tos->cast_to_edge()) {
+  else if (tos->cast_to_edge()) {
     set_edge_style(r,g,b, line_width);
     set_edge_group_style(r,g,b, line_width);
-  } else if (tos->cast_to_face()) {
-    set_face_style(r,g,b, line_width);
   }
+  else if (tos->cast_to_face())
+    set_face_style(r,g,b, line_width);
 }
 
 void bgui_vtol2D_tableau::set_vertex_style(const float r, const float g,
