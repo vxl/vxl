@@ -53,8 +53,8 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   int stopy = stop(Y_Axis());
 
 
-  int sizex = stopx-startx;
-  int sizey = stopy-starty;
+  int sizex = stopx-startx+1;
+  int sizey = stopy-starty+1;
 
   double* tempbuf = new double[sizex*sizey];
 
