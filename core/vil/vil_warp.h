@@ -15,6 +15,7 @@
 // \endverbatim
 
 #include <vil/vil_fwd.h>
+#include <vcl_cassert.h>
 
 //: Warp an image under a 2D map.
 // The size of the output map and the mapper defines the region of
@@ -22,23 +23,25 @@
 // \param mapper, is the inverse of the mapping from the input image's
 // co-ordinate frame to the output image's frame.
 // i.e. out() = in(mapper(x,y)). It should be a functor with a signature
-// \verbatim
-// void mapper(double x_in, double y_in, double* x_out, double* y_out);
-// \endverbatim
+// \code
+//    void mapper(double x_in, double y_in, double* x_out, double* y_out);
+// \endcode
 // \param interp, is an interpolator, with a signature similar to
-// S vil_bilin_interp_safe(const vil_image_view<T> &, double, double, unsigned)
-// \par
+// \code
+//   S vil_bilin_interp_safe(const vil_image_view<T>&, double, double, unsigned)
+// \endcode
+//
 // Note that if you want to store a warp with an image to create a registered image,
-// the vimt library (in contrib\mul\vimt) provides efficient registered images
+// the vimt library (in contrib/mul/vimt) provides efficient registered images
 // with transforms upto projective.
 template <class sType, class dType, class MapFunctor, class InterpFunctor>
-void vil_warp(const vil_image_view<sType> &in,
-              vil_image_view<dType>&out,
+void vil_warp(const vil_image_view<sType>& in,
+              vil_image_view<dType>& out,
               MapFunctor mapper,
               InterpFunctor interp)
 {
-  unsigned out_w = out.ni();
-  unsigned out_h = out.nj();
+  unsigned const out_w = out.ni();
+  unsigned const out_h = out.nj();
 
   assert(out.nplanes() == in.nplanes());
 
