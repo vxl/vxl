@@ -1,16 +1,12 @@
-//
-// This is contrib/mul/vil3d/vil3d_resample_simple.h
-//
+// This is mul/vil3d/vil3d_resample_simple.h
 #ifndef vil3d_resample_simple_h_
 #define vil3d_resample_simple_h_
-
 //:
 // \file
 // \brief Resample a 3D image by an integer factor in each dimension
 // \author Kevin de Souza
 
 #include <vil3d/vil3d_image_view.h>
-
 
 //: Resample a 3D image by an integer factor in each dimension.
 //  dst_image resized by factors dx, dy, dz.
@@ -22,6 +18,5 @@ void vil3d_resample_simple(const vil3d_image_view<T>& src_image,
                            const unsigned dx, 
                            const unsigned dy, 
                            const unsigned dz);
-
 
 #endif // vil3d_resample_simple_h_
