@@ -40,66 +40,11 @@ struct vul_file_iterator_data
   vcl_string original_dirname_;
 
   handle_type find_first(const char* dirname, struct _finddata_t* data)
-    {
+  {
     return _findfirst(const_cast<char*>(dirname), data);
-    }
-  
-  vul_file_iterator_data(char const* glob) {
-    original_dirname_ = vul_file::dirname(glob);
-    handle_ = find_first((original_dirname_ + "\\*").c_str(), &data_);
-
-
-
-    vcl_string baseglob = vul_file::basename(glob);
-    vcl_string::iterator i = baseglob.begin();
-    bool prev_slash=false, in_sqr_brackets=false;
-    vcl_string re; //assemble the Regexp string
-    while (i != baseglob.end())
-    {
-      if (*i=='\\' && !prev_slash)
-        prev_slash = true;
-      else if (prev_slash)
-      {
-        prev_slash = false;
-        re.append(1,('\\'));
-        re.append(1,*i);
-      }
-      else if (*i=='[' && !in_sqr_brackets)
-      {
-        in_sqr_brackets = true;
-        re.append(1,'[');
-      }
-      else if (*i==']' && in_sqr_brackets)
-      {
-        in_sqr_brackets = false;
-        re.append(1,']');
-      }
-      else if (*i=='?' && !in_sqr_brackets)
-        re.append(1,'.');
-      else if (*i=='*' && !in_sqr_brackets)
-        re.append(".*");
-      else
-        re.append(vul_reg_exp::protect(*i));
-
-      ++i;
-    }
-
-    reg_exp_.compile(re.c_str());
-
-
-    if (handle_ != -1L)
-    {
-      while ( ! reg_exp_.find(data_.name) )
-      {
-        if (_findnext(handle_, &data_) != 0) {
-          _findclose(handle_);
-          handle_ = -1L;
-          return;
-        }
-      } 
-      mkname();
-    }
   }
+
+  vul_file_iterator_data(char const* glob);
 
   void mkname() {
     // Remember full path
@@ -141,6 +86,62 @@ struct vul_file_iterator_data
   }
 };
 
+vul_file_iterator_data::vul_file_iterator_data(char const* glob)
+{
+  original_dirname_ = vul_file::dirname(glob);
+  handle_ = find_first((original_dirname_ + "\\*").c_str(), &data_);
+
+  vcl_string baseglob = vul_file::basename(glob);
+  vcl_string::iterator i = baseglob.begin();
+  bool prev_slash=false, in_sqr_brackets=false;
+  vcl_string re; //assemble the Regexp string
+  while (i != baseglob.end())
+  {
+    if (*i=='\\' && !prev_slash)
+      prev_slash = true;
+    else if (prev_slash)
+    {
+      prev_slash = false;
+      re.append(1,('\\'));
+      re.append(1,*i);
+    }
+    else if (*i=='[' && !in_sqr_brackets)
+    {
+      in_sqr_brackets = true;
+      re.append(1,'[');
+    }
+    else if (*i==']' && in_sqr_brackets)
+    {
+      in_sqr_brackets = false;
+      re.append(1,']');
+    }
+    else if (*i=='?' && !in_sqr_brackets)
+      re.append(1,'.');
+    else if (*i=='*' && !in_sqr_brackets)
+      re.append(".*");
+    else
+      re.append(vul_reg_exp::protect(*i));
+
+    ++i;
+  }
+
+  reg_exp_.compile(re.c_str());
+
+
+  if (handle_ != -1L)
+  {
+    while ( ! reg_exp_.find(data_.name) )
+    {
+      if (_findnext(handle_, &data_) != 0) {
+        _findclose(handle_);
+        handle_ = -1L;
+        return;
+      }
+    }
+    mkname();
+  }
+}
+
 #else // !defined(VCL_WIN32) || defined(__CYGWIN__)
 
 #include <dirent.h>
@@ -154,49 +155,7 @@ struct vul_file_iterator_data
   char const* name_;
   vul_reg_exp reg_exp_;
 
-  vul_file_iterator_data(char const* glob) {
-    original_dirname_ = vul_file::dirname(glob) + "/";
-
-    vcl_string baseglob = vul_file::basename(glob);
-    vcl_string::iterator i = baseglob.begin();
-    bool prev_slash=false, in_sqr_brackets=false;
-    vcl_string re; //assemble the Regexp string
-    while (i != baseglob.end())
-    {
-      if (*i=='\\' && !prev_slash)
-        prev_slash = true;
-      else if (prev_slash)
-      {
-        prev_slash = false;
-        re += '\\';
-        re += *i;
-      }
-      else if (*i=='[' && !in_sqr_brackets)
-      {
-        in_sqr_brackets = true;
-        re += '[';
-      }
-      else if (*i==']' && in_sqr_brackets)
-      {
-        in_sqr_brackets = false;
-        re += ']';
-      }
-      else if (*i=='?' && !in_sqr_brackets)
-        re += '.';
-      else if (*i=='*' && !in_sqr_brackets)
-        re += ".*";
-      else
-        re += vul_reg_exp::protect(*i);
-
-      ++i;
-    }
-
-    reg_exp_.compile(re.c_str());
-
-    dir_handle_ = opendir(original_dirname_.c_str());
-
-    next();
-  }
+  vul_file_iterator_data(char const* glob);
 
   void mkname() {
     // Remember full path
@@ -236,6 +195,51 @@ struct vul_file_iterator_data
       closedir(dir_handle_);
   }
 };
+
+vul_file_iterator_data::vul_file_iterator_data(char const* glob)
+{
+  original_dirname_ = vul_file::dirname(glob) + "/";
+
+  vcl_string baseglob = vul_file::basename(glob);
+  vcl_string::iterator i = baseglob.begin();
+  bool prev_slash=false, in_sqr_brackets=false;
+  vcl_string re; //assemble the Regexp string
+  while (i != baseglob.end())
+  {
+    if (*i=='\\' && !prev_slash)
+      prev_slash = true;
+    else if (prev_slash)
+    {
+      prev_slash = false;
+      re += '\\';
+      re += *i;
+    }
+    else if (*i=='[' && !in_sqr_brackets)
+    {
+      in_sqr_brackets = true;
+      re += '[';
+    }
+    else if (*i==']' && in_sqr_brackets)
+    {
+      in_sqr_brackets = false;
+      re += ']';
+    }
+    else if (*i=='?' && !in_sqr_brackets)
+      re += '.';
+    else if (*i=='*' && !in_sqr_brackets)
+      re += ".*";
+    else
+      re += vul_reg_exp::protect(*i);
+
+    ++i;
+  }
+
+  reg_exp_.compile(re.c_str());
+
+  dir_handle_ = opendir(original_dirname_.c_str());
+
+  next();
+}
 
 #endif // !defined(VCL_WIN32) || defined(__CYGWIN__)
 
