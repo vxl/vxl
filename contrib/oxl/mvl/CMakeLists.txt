@@ -90,6 +90,9 @@ SOURCE_FILES( mvl_sources
   HMatrix2DComputeMLESAC.cxx
   HMatrix2DComputeRobust.cxx
   Probability.cxx
+  FileNameGeneratorBase.cxx
+  FileNameGenerator.cxx
+  RawPMatrixStore.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates mvl_sources)

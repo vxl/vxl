@@ -20,6 +20,8 @@ SOURCE_FILES( mvl_sources
   FMatrixComputeRobust.h
   FMatrixPlanar.h
   FMatrixSkew.h
+  FileNameGeneratorBase.h
+  FileNameGenerator.h
   HMatrix1D.h
   HMatrix1DCompute.h
   HMatrix1DCompute3Point.h
@@ -84,6 +86,7 @@ SOURCE_FILES( mvl_sources
   Probability.h
   ProjStructure.h
   ProjectiveBasis2D.h
+  RawPMatrixStore.h
   SimilarityMetric.h
   TriTensor.h
   TriTensorCompute.h
