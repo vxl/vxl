@@ -27,7 +27,7 @@ MANPAGE_SOURCES += vdgl_edgel_chain_sptr.h
 MANPAGE_SOURCES += vdgl_interpolator_sptr.h
 MANPAGE_SOURCES += vdgl_digital_region_sptr.h
 
-# These two are compiled in vtol:
+# Deprecated -- to be removed soon
 MANPAGE_SOURCES += vdgl_intensity_face.h
 MANPAGE_SOURCES += vdgl_intensity_face_sptr.h
 

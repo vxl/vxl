@@ -30,7 +30,7 @@ SOURCES += vtol_vertex_2d.cxx
 SOURCES += vtol_topology_io.cxx
 SOURCES += vtol_cycle_processor.cxx
 
-SOURCES += ../vdgl/vdgl_intensity_face.cxx
+SOURCES += vtol_intensity_face.cxx
 
 MANPAGE_SOURCES += vtol_block_sptr.h
 MANPAGE_SOURCES += vtol_chain_sptr.h
@@ -39,6 +39,7 @@ MANPAGE_SOURCES += vtol_edge_2d_sptr.h
 MANPAGE_SOURCES += vtol_edge_sptr.h
 MANPAGE_SOURCES += vtol_face_2d_sptr.h
 MANPAGE_SOURCES += vtol_face_sptr.h
+MANPAGE_SOURCES += vtol_intensity_face_sptr.h
 MANPAGE_SOURCES += vtol_macros.h
 MANPAGE_SOURCES += vtol_one_chain_sptr.h
 MANPAGE_SOURCES += vtol_topology_cache_sptr.h
@@ -47,12 +48,12 @@ MANPAGE_SOURCES += vtol_two_chain_sptr.h
 MANPAGE_SOURCES += vtol_vertex_2d_sptr.h
 MANPAGE_SOURCES += vtol_vertex_sptr.h
 MANPAGE_SOURCES += vtol_zero_chain_sptr.h
-MANPAGE_SOURCES += ../vdgl/vdgl_intensity_face_sptr.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+SUBDIRS += algo
 ifndef NOTEST
 SUBDIRS += tests
 SUBDIRS += examples
