@@ -15,7 +15,7 @@
 //#include <vidl/vidl_frame.h>
 #include <vpro/vpro_video_process.h>
 #include <vpro/vpro_video_process_sptr.h>
-#include <vidl/vidl_movie.h>
+#include <vidl_vil1/vidl_vil1_movie.h>
 #include <vvid/vvid_frame_trail.h>
 #include <vul/vul_arg.h>
 #include <vidl_vil1/vidl_vil1_io.h>
