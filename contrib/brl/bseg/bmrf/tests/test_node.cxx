@@ -76,6 +76,15 @@ void test_node()
 
   // remove the temporary file
   vpl_unlink ("test_node_io.tmp");
+
+//----------------------------------------------------------------------------------------
+// Tests on data loaded from a file
+//----------------------------------------------------------------------------------------
+
+  TEST("Testing purge()",
+       node_in_1->purge() && // remove arcs to nodes that were not loaded
+       !node_in_1->purge(), // The first purge should catch all bad arcs
+       true);
 }
 
 
