@@ -1,7 +1,8 @@
 // This is mul/vimt/vimt_gaussian_pyramid_builder_2d.txx
 #ifndef vimt_gaussian_pyramid_builder_2d_txx_
 #define vimt_gaussian_pyramid_builder_2d_txx_
-//: \file
+//:
+//  \file
 //  \brief Class to build gaussian pyramids of vimt_image_2d_of<T>
 //  \author Tim Cootes
 
@@ -94,8 +95,8 @@ void vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce(const vimt_image_2d_of<T>
       vil2_gauss_reduce(src_im.image(),dest_im.image(),work_im_.image());
       break;
     default:
-      vcl_cerr<<"vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce() ";
-      vcl_cerr<<"Cannot cope with filter width of "<<filter_width_<<vcl_endl;
+      vcl_cerr<<"vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce() "
+              <<"cannot cope with filter width of "<<filter_width_<<'\n';
       vcl_abort();
   }
 

@@ -1,7 +1,7 @@
 #ifndef mil_sample_profile_2d_h_
 #define mil_sample_profile_2d_h_
-
-//: \file
+//:
+//  \file
 //  \brief Profile sampling functions for 2D images
 //  \author Tim Cootes
 

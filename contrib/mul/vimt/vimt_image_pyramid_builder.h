@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \brief Base class for objects which build image pyramids.
 //  \author Tim Cootes
 

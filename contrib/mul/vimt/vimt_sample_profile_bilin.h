@@ -1,7 +1,7 @@
 #ifndef vimt_sample_profile_bilin_h_
 #define vimt_sample_profile_bilin_h_
-
-//: \file
+//:
+//  \file
 //  \brief Profile sampling functions for 2D images
 //  \author Tim Cootes
 

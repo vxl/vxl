@@ -1,7 +1,8 @@
 // This is mul/mil/mil_image_data.txx
 #ifndef mil_image_data_txx_
 #define mil_image_data_txx_
-//: \file
+//:
+//  \file
 //  \brief Ref. counted block of data on the heap
 //  \author Tim Cootes
 

@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \brief Class to load and save images from named files
 //  \author Tim Cootes
 

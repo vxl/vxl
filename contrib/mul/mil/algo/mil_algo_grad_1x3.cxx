@@ -1,4 +1,5 @@
-//: \file
+//:
+//  \file
 //  \brief Apply gradient operator to 2D planes of data
 //  \author Ian Scott
 

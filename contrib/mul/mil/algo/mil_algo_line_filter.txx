@@ -1,7 +1,8 @@
 // This is mul/mil/algo/mil_algo_line_filter.txx
 #ifndef mil_algo_line_filter_txx_
 #define mil_algo_line_filter_txx_
-//: \file
+//:
+//  \file
 //  \brief Find line-like structures in a 2D image
 //  \author Tim Cootes
 

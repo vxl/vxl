@@ -1,7 +1,7 @@
 #ifndef mil_image_2d_h_
 #define mil_image_2d_h_
-
-//: \file
+//:
+//  \file
 //  \brief A base class for arbitrary 2D images
 //  \author Tim Cootes
 
@@ -13,7 +13,6 @@ class mil_transform_2d;
 //  The valid region is [0,nx()-1][0,ny()-1]
 //  world2im() gives transformation from world to image co-ordinates
 class mil_image_2d : public mil_image {
-private:
     //: Resize current planes to [0..nx-1][0..ny-1]
     //  Provided because we can't overload virtual functions
     virtual void resize2(int nx, int ny) = 0;
@@ -22,7 +21,7 @@ private:
     //  Provided because we can't overload virtual functions
     virtual void resize3(int nx, int ny, int n_planes) = 0;
 
-public:
+ public:
     //: Dflt ctor
     mil_image_2d() {};
 
@@ -53,7 +52,7 @@ public:
 
     //: Does the name of the class match the argument?
     virtual bool is_class(vcl_string const& s) const
-    { return (s=="mil_image_2d"); }
+    { return s=="mil_image_2d"; }
 };
 
 #endif // mil_image_2d_h_

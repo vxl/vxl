@@ -1,7 +1,7 @@
 #ifndef vil2_sample_grid_bilin_h_
 #define vil2_sample_grid_bilin_h_
-
-//: \file
+//:
+//  \file
 //  \brief Grid sampling function for 2D images
 //  \author Tim Cootes
 

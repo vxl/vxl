@@ -1,6 +1,7 @@
 // This is mul/mil/mil_image_data.cxx
 #include "mil_image_data.h"
-//: \file
+//:
+//  \file
 //  \brief Specialisations of is_a() function
 //  \author Tim Cootes
 

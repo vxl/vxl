@@ -1,6 +1,7 @@
 // This is mul/mil/mil_gaussian_pyramid_builder_2d.cxx
 #include "mil_gaussian_pyramid_builder_2d.h"
-//: \file
+//:
+//  \file
 //  \brief Specialisations of is_a() function
 //  \author Tim Cootes
 

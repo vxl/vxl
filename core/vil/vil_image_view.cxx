@@ -1,6 +1,7 @@
 // This is mul/vil2/vil2_image_view.cxx
 #include "vil2_image_view.h"
-//: \file
+//:
+//  \file
 //  \brief Specialisations of is_a() function
 //  \author Ian Scott
 

@@ -1,7 +1,8 @@
 // This is mul/mil3d/mil3d_sample_grid_3d.h
 #ifndef mil3d_sample_grid_3d_h_
 #define mil3d_sample_grid_3d_h_
-//: \file
+//:
+//  \file
 //  \brief Profile sampling functions for 3D images
 //  \author Graham Vincent (to fit in with mil 2d framework by Tim Cootes et al)
 

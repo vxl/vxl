@@ -1,7 +1,7 @@
 #ifndef mil_algo_brighten_image_2d_h_
 #define mil_algo_brighten_image_2d_h_
-
-//: \file
+//:
+//  \file
 //  \brief Functions to change the brightness and contrast of images.
 //  \author Ian Scott
 

@@ -1,7 +1,7 @@
 #ifndef mil_convert_vil_h_
 #define mil_convert_vil_h_
-
-//: \file
+//:
+//  \file
 //  \brief Some functions to convert between mil and vil images
 //  \author dac
 

@@ -1,4 +1,5 @@
-//: \file
+//:
+//  \file
 //  \brief Ref. counted block of data on the heap
 //  \author Tim Cootes
 

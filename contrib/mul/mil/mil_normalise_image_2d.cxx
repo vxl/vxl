@@ -1,6 +1,7 @@
 // This is mul/mil/mil_normalise_image_2d.cxx
 #include "mil_normalise_image_2d.h"
-//: \file
+//:
+//  \file
 //  \brief Functions to normalise 2d float plane images
 //  \author Tim Cootes
 
@@ -46,7 +47,7 @@ void mil_var_norm_image_2d(mil_image_2d_of<float>& dest,
     int np=nx*ny;
     mean(i)= sum/np;
     std(i) = vcl_sqrt ( sqr_sum/np - mean(i)*mean(i) );
-    //vcl_cout<<"std("<<i<<")= "<<std(i)<<vcl_endl;
+    //vcl_cout<<"std("<<i<<")= "<<std(i)<<'\n';
   }
 
 
@@ -77,7 +78,7 @@ void mil_var_norm_image_2d(mil_image_2d_of<float>& dest,
   }
   dest.setWorld2im(src.world2im());
 
-  //vcl_cout<<"dest= "<<vcl_endl;
+  //vcl_cout<<"dest=\n";
   //dest.print_messy_all(vcl_cout);
 }
 

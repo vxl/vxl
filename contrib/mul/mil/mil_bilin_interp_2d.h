@@ -1,7 +1,8 @@
 // This is mul/mil/mil_bilin_interp_2d.h
 #ifndef mil_bilin_interp_2d_h_
 #define mil_bilin_interp_2d_h_
-//: \file
+//:
+//  \file
 //  \brief Bilinear interpolation functions for 2D images
 //  \author Tim Cootes
 

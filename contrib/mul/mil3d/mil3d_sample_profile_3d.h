@@ -1,7 +1,8 @@
 // This is mul/mil3d/mil3d_sample_profile_3d.h
 #ifndef mil3d_sample_profile_3d_h_
 #define mil3d_sample_profile_3d_h_
-//: \file
+//:
+//  \file
 //  \brief Profile sampling functions for 2D images
 //  \author Tim Cootes
 

@@ -1,7 +1,7 @@
 #ifndef vimt_image_2d_h_
 #define vimt_image_2d_h_
-
-//: \file
+//:
+//  \file
 //  \brief A base class for arbitrary 2D images+transform
 //  \author Tim Cootes
 
@@ -14,12 +14,12 @@ class mil_transform_2d;
 //: A base class for arbitrary 2D images
 //  world2im() gives transformation from world to image co-ordinates
 class vimt_image_2d : public vimt_image {
-protected:
+ protected:
   vimt_transform_2d world2im_;
 
   vimt_image_2d(const vimt_transform_2d& w2i) : world2im_(w2i) {};
 
-public:
+ public:
   //: Dflt ctor
   vimt_image_2d() {};
 

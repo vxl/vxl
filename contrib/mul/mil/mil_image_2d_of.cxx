@@ -1,6 +1,7 @@
 // This is mul/mil/mil_image_2d_of.cxx
 #include "mil_image_2d_of.h"
-//: \file
+//:
+//  \file
 //  \brief Specialisations of is_a() function
 //  \author Tim Cootes
 
@@ -25,5 +26,4 @@ template<> vcl_string mil_image_2d_of<char>::is_a() const
 // Specialise the is_a() for short
 template<> vcl_string mil_image_2d_of<short>::is_a() const
 {  return vcl_string("mil_image_2d_of<short>"); }
-
 

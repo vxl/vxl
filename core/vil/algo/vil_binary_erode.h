@@ -1,6 +1,7 @@
 #ifndef vil2_binary_erode_h_
 #define vil2_binary_erode_h_
-//: \file
+//:
+//  \file
 //  \brief Perform binary erosion on images
 //  \author Tim Cootes
 
@@ -19,8 +20,7 @@ inline bool vil2_binary_erode(const bool* im, const int* offset, unsigned n)
 // \relates vil2_image_view
 // \relates vil2_structuring_element
 void vil2_binary_erode(const vil2_image_view<bool>& src_image,
-                        vil2_image_view<bool>& dest_image,
-                        const vil2_structuring_element& element);
+                       vil2_image_view<bool>& dest_image,
+                       const vil2_structuring_element& element);
 
-
-#endif
+#endif // vil2_binary_erode_h_

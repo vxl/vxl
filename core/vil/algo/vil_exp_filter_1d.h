@@ -1,7 +1,7 @@
 #ifndef vil2_exp_filter_1d_h_
 #define vil2_exp_filter_1d_h_
-
-//: \file
+//:
+//  \file
 //  \brief Apply exponential filter
 //  \author Tim Cootes
 
@@ -13,8 +13,8 @@
 //  Uses fast recursive implementation.
 template <class srcT, class destT, class accumT>
 inline void vil2_exp_filter_1d(const srcT* src, int sstep,
-                                    destT* dest, int dstep,
-                                    int n, double k, accumT)
+                               destT* dest, int dstep,
+                               int n, double k, accumT)
 {
   const srcT* s = src;
   const srcT* src_end = src + n*sstep;
@@ -65,10 +65,9 @@ inline void vil2_exp_filter_1d(const vil2_image_view<srcT>& src_im,
     const srcT*  src_row  = src_im.top_left_ptr()+p*src_im.pstep();
     const destT* dest_row = dest_im.top_left_ptr()+p*dest_im.pstep();
 
-  for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+    for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
       vil2_exp_filter_1d(src_row,s_istep, dest_row,d_istep,   ni, ac);
   }
 }
 
-#endif
-
+#endif // vil2_exp_filter_1d_h_

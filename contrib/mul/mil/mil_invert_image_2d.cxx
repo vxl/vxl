@@ -1,6 +1,7 @@
 // This is mul/mil/mil_invert_image_2d.cxx
 #include "mil_invert_image_2d.h"
-//: \file
+//:
+//  \file
 //  \brief Function to invert 2d float plane images (black->white, white->black)
 //  \author dac
 

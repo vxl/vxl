@@ -1,5 +1,6 @@
 #include "mil_algo_exp_filter_1d.h"
-//: \file
+//:
+//  \file
 //  \brief Apply exponential filter to 1D data (eg one row of an image)
 //  \author Tim Cootes
 

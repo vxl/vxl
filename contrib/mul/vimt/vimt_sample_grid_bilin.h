@@ -1,7 +1,7 @@
 #ifndef vimt_sample_grid_bilin_h_
 #define vimt_sample_grid_bilin_h_
-
-//: \file
+//:
+//  \file
 //  \brief Grid sampling functions for 2D images
 //  \author Tim Cootes
 
@@ -17,10 +17,10 @@
 // \relates vimt_image_2d_of
 template <class imType, class vecType>
 void vimt_sample_grid_bilin(vnl_vector<vecType>& vec,
-                               const vimt_image_2d_of<imType>& image,
-                               const vgl_point_2d<double>& p,
-                               const vgl_vector_2d<double>& u,
-                               const vgl_vector_2d<double>& v,
-                               int n1, int n2);
+                            const vimt_image_2d_of<imType>& image,
+                            const vgl_point_2d<double>& p,
+                            const vgl_vector_2d<double>& u,
+                            const vgl_vector_2d<double>& v,
+                            int n1, int n2);
 
 #endif // vimt_sample_grid_bilin_h_

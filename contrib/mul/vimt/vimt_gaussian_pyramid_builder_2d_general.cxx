@@ -1,6 +1,7 @@
 // This is mul/vimt/vimt_gaussian_pyramid_builder_2d_general.cxx
 #include "vimt_gaussian_pyramid_builder_2d_general.h"
-//: \file
+//:
+//  \file
 //  \brief Specialisations of is_a() function
 //  \author Tim Cootes
 

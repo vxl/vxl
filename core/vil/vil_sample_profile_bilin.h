@@ -1,7 +1,8 @@
 #ifndef vil2_sample_profile_bilin_h_
 #define vil2_sample_profile_bilin_h_
 
-//: \file
+//:
+//  \file
 //  \brief Profile sampling functions for 2D images
 //  \author Tim Cootes
 

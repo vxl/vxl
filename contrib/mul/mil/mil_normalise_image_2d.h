@@ -1,7 +1,7 @@
 #ifndef mil_normalise_image_2d_h_
 #define mil_normalise_image_2d_h_
-
-//: \file
+//:
+//  \file
 //  \brief Functions to convert images from one type to another
 //  \author Tim Cootes
 

@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \brief Apply exponential filter to a 2D image
 //  \author Tim Cootes
 

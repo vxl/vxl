@@ -1,7 +1,8 @@
 // This is mul/mil/mil_sample_grid_2d.h
 #ifndef mil_sample_grid_2d_h_
 #define mil_sample_grid_2d_h_
-//: \file
+//:
+//  \file
 //  \brief Profile sampling functions for 2D images
 //  \author Tim Cootes
 
