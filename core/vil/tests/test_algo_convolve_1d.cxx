@@ -2,8 +2,9 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <testlib/testlib_test.h>
-#include <vil2/algo/vil2_algo_convolve_1d.h>
 #include <vil2/vil2_new.h>
+#include <vil2/vil2_crop.h>
+#include <vil2/algo/vil2_algo_convolve_1d.h>
 #include <vsl/vsl_vector_io.h>
 
 void test_algo_convolve_1d_double()
@@ -137,14 +138,14 @@ void test_algo_convolve_1d_double()
   
   // check they are equal in various regions..
   TEST("convolved resource.get_view() == convolved view.window() top-left corner",
-    vil2_deep_equality(vil2_window(v_out,0,4,0,4),
-    vil2_image_view<vxl_byte>(conv->get_view(0,4,0,4))), true);
+    vil2_deep_equality(vil2_crop(v_out,0,4,0,4),
+      vil2_image_view<vxl_byte>(conv->get_view(0,4,0,4))), true);
   TEST("convolved resource.get_view() == convolved view.window() centre",
-    vil2_deep_equality(vil2_window(v_out,3,4,3,4),
-    vil2_image_view<vxl_byte>(conv->get_view(3,4,3,4))), true);
+    vil2_deep_equality(vil2_crop(v_out,3,4,3,4),
+      vil2_image_view<vxl_byte>(conv->get_view(3,4,3,4))), true);
   TEST("convolved resource.get_view() == convolved view.window() bottom-right corner",
-    vil2_deep_equality(vil2_window(v_out,n-4,4,n-4,4),
-    vil2_image_view<vxl_byte>(conv->get_view(n-4,4,n-4,4))), true);
+    vil2_deep_equality(vil2_crop(v_out,n-4,4,n-4,4),
+      vil2_image_view<vxl_byte>(conv->get_view(n-4,4,n-4,4))), true);
 
 
 }

@@ -5,8 +5,10 @@
 
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_view_functions.h>
+#include <vil2/vil2_crop.h>
 #include <vil2/vil2_transpose.h>
 #include <vil2/vil2_flip.h>
+#include <vil2/vil2_plane.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_iostream.h>
 
@@ -28,7 +30,7 @@ int main(int argc, char** argv)
 
 
   vcl_cout<<"\nView central square of image\n";
-  vil2_image_view<vxl_byte> win1 = vil2_window(image,2,4,2,4);
+  vil2_image_view<vxl_byte> win1 = vil2_crop(image,2,4,2,4);
   vil2_print_all(vcl_cout,win1);
 
   vcl_cout<<vcl_endl;

@@ -9,8 +9,26 @@
 // \author Ian Scott.
 
 #include <vil2/vil2_image_resource.h>
+#include <vil2/vil2_image_view.h>
+
+
+//: Create a view which is a cropped version of src.
+// Doesn't modify underlying data. O(1).
+// \relates vil2_image_view
+// \return an ni x nj window of im with offset (x0,y0)
+template<class T>
+inline vil2_image_view<T> vil2_crop(const vil2_image_view<T> &im, unsigned i0,
+                             unsigned ni, unsigned j0, unsigned nj)
+{
+  assert(i0<im.ni()); assert(i0+ni<=im.ni());
+  assert(j0<im.nj()); assert(j0+nj<=im.nj());
+  return vil2_image_view<T>(im.memory_chunk(), im.top_left_ptr()+ i0*im.istep() + j0*im.jstep(),
+    ni, nj, im.nplanes(), im.istep(), im.jstep(), im.planestep());
+}
+
 
 //: Crop to a region of src.
+// \relates vil2_image_resource
 vil2_image_resource_sptr vil2_crop(const vil2_image_resource_sptr &src, unsigned i0,
                                unsigned ni, unsigned j0, unsigned nj);
 

@@ -282,7 +282,7 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
       case F : \
         vil2_algo_convolve_1d(static_cast<vil2_image_view<T >&>(*vs),dest, \
           kernel_, klo_, khi_, accumT(), start_option_, end_option_); \
-        return new vil2_image_view<destT>(vil2_window(dest, lboundary, ni, 0, nj));
+        return new vil2_image_view<destT>(vil2_crop(dest, lboundary, ni, 0, nj));
 
       macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
       macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )

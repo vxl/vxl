@@ -11,9 +11,11 @@
 #include <vil2/vil2_image_view_base.h>
 
 //: Send vil_image to disk, deducing format from filename
+// \relates vil2_image_view
 bool vil2_save(const vil2_image_view_base &, char const* filename);
 
 //: Send vil_image to disk, given filename
+// \relates vil2_image_view
 bool vil2_save(const vil2_image_view_base &, char const* filename, char const* file_format);
 
 

@@ -13,9 +13,10 @@
 
 
 //: Create a view which appears as the transpose of this view.
-//  i.e transpose(i,j,p) = view(j,i,p)
+//  i.e transpose(i,j,p) = view(j,i,p). O(1).
+// \relates vil2_image_view
 template<class T>
-vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& v)
+inline vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& v)
 {
   // Create view with i and j switched
   return vil2_image_view<T>(v.memory_chunk(),v.top_left_ptr(),
@@ -25,7 +26,8 @@ vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& v)
 
 
 
-//: transpose an image resource between two values.
+//: Transpose an image.
+// \relates vil2_image_resource
 vil2_image_resource_sptr vil2_transpose(const vil2_image_resource_sptr &src);
 
 

@@ -36,6 +36,7 @@
 #include <vil2/vil2_image_resource.h>
 
 //: Load an image data object from a file, possibly performing expected conversions.
+// \relates vil2_image_resource
 vil2_image_resource_sptr vil2_load_image_resource(char const* filename);
 
 //: Load raw from stream.
@@ -46,6 +47,7 @@ vil2_image_resource_sptr vil2_load_image_resource_raw(vil_stream *);
 vil2_image_resource_sptr vil2_load_image_resource_raw(char const*);
 
 //: Convenience function for loading an image into an image view.
+// \relates vil2_image_view
 vil2_image_view_base_sptr vil2_load(const char *);
 
 #endif // vil2_load_h_

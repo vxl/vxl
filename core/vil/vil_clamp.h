@@ -14,7 +14,7 @@
 
 
 template <class T>
-void vil2_clamp(vil2_image_view<T >&src, vil2_image_view<T >&dest, T lo, T hi)
+inline void vil2_clamp(vil2_image_view<T >&src, vil2_image_view<T >&dest, T lo, T hi)
 {
   assert (hi >= lo);
   assert (src.nplanes() == dest.nplanes() &&
@@ -30,15 +30,18 @@ void vil2_clamp(vil2_image_view<T >&src, vil2_image_view<T >&dest, T lo, T hi)
 }
 
 
-//: clamp an image resource between two values.
+//: Clamp an image resource between two values.
+// \relates vil2_image_resource
 vil2_image_resource_sptr vil2_clamp(const vil2_image_resource_sptr &src, double low, double hi);
 
 
 //: A generic_image adaptor that behaves like a clampped version of its input
+// For implementation use only - use vil2_clamp() to create one.
 class vil2_clamp_image_resource : public vil2_image_resource
 {
- public:
   vil2_clamp_image_resource(vil2_image_resource_sptr const&, double low, double high);
+  friend vil2_image_resource_sptr vil2_clamp(const vil2_image_resource_sptr &src, double low, double hi);
+ public:
 
   virtual unsigned nplanes() const { return src_->nplanes(); }
   virtual unsigned ni() const { return src_->ni(); }

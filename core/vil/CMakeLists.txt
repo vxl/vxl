@@ -20,6 +20,7 @@ SET( vil2_sources
   vil2_clamp.cxx vil2_clamp.h
   vil2_transpose.cxx  vil2_transpose.h
   vil2_flip.cxx  vil2_flip.h
+  vil2_plane.cxx vil2_plane.h
   vil2_math.h
   vil2_load.cxx  vil2_load.h
   vil2_save.cxx  vil2_save.h

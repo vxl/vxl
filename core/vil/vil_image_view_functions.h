@@ -10,19 +10,6 @@
 #include <vil/vil_rgb.h>
 
 
-//: Return an ni x nj window of im with offset (x0,y0)
-//  O(1).
-// \relates vil2_image_view
-template<class T>
-vil2_image_view<T> vil2_window(const vil2_image_view<T> &im, unsigned i0,
-                               unsigned ni, unsigned j0, unsigned nj);
-
-//: Return a view of im's plane p.
-//  O(1).
-// \relates vil2_image_view
-template<class T>
-vil2_image_view<T> vil2_plane(const vil2_image_view<T> &im, unsigned p);
-
 //: True if the actual images are identical.
 // $\bigwedge_{i,j,p} {\textstyle src}(i,j,p) == {\textstyle dest}(i,j,p)$
 // The data may be formatted differently in each memory chunk. O(n).

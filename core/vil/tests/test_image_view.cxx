@@ -4,6 +4,7 @@
 #include <testlib/testlib_test.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_view_functions.h>
+#include <vil2/vil2_crop.h>
 #include <vil2/vil2_copy.h>
 
 bool Equal(const vil2_image_view<vxl_byte>& im0,
@@ -114,7 +115,7 @@ void test_image_view_byte()
   vcl_cout << "***********************************\n";
 
   image2.fill(0);
-  image_win = vil2_window(image2,2,1,1,2);
+  image_win = vil2_crop(image2,2,1,1,2);
   image5.resize(1,2);
   image5(0,0) = vil_rgb<vxl_byte>(25,35,45);
   image5(0,1) = vil_rgb<vxl_byte>(25,35,45);

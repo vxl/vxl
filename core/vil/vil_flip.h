@@ -17,7 +17,7 @@
 //  O(1).
 // \relates vil2_image_view
 template<class T>
-vil2_image_view<T> vil2_flip_lr(const vil2_image_view<T>& v)
+inline vil2_image_view<T> vil2_flip_lr(const vil2_image_view<T>& v)
 {
   return vil2_image_view<T>(v.memory_chunk(),
                             v.top_left_ptr()+(v.ni()-1)*v.istep(),
@@ -30,7 +30,7 @@ vil2_image_view<T> vil2_flip_lr(const vil2_image_view<T>& v)
 //  O(1).
 // \relates vil2_image_view
 template<class T>
-vil2_image_view<T> vil2_flip_ud(const vil2_image_view<T>& v)
+inline vil2_image_view<T> vil2_flip_ud(const vil2_image_view<T>& v)
 {
   return vil2_image_view<T>(v.memory_chunk(),
                             v.top_left_ptr()+(v.nj()-1)*v.jstep(),
@@ -40,6 +40,7 @@ vil2_image_view<T> vil2_flip_ud(const vil2_image_view<T>& v)
 
 
 //: Flip an image resource left to right.
+// \relates vil2_image_resource
 vil2_image_resource_sptr vil2_flip_lr(const vil2_image_resource_sptr &src);
 
 
@@ -86,6 +87,7 @@ class vil2_flip_lr_image_resource : public vil2_image_resource
 
 
 //: Flip an image resource left to right.
+// \relates vil2_image_resource
 vil2_image_resource_sptr vil2_flip_ud(const vil2_image_resource_sptr &src);
 
 
