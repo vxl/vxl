@@ -69,13 +69,11 @@ ifeq ($(USE_IMPLICIT_TEMPLATES),1)
 endif
 
 # These three libraries are only needed for template instantiation:
-ifneq ($(USE_IMPLICIT_TEMPLATES),1)
 ifneq (,$(wildcard $(IUEROOT)/Image/ImageProcessingBasics/section.h))
 SUBDIRS += vipl_with_section
 endif
 SUBDIRS += vipl_with_vnl_matrix
 SUBDIRS += vipl_with_vbl_array_2d
-endif
 
 ifndef NOTEST
 SUBDIRS += examples
