@@ -288,6 +288,7 @@ rgrl_trans_homography2d::
 map_loc( vnl_vector<double> const& from,
          vnl_vector<double>      & to ) const
 {
+  to.set_size(2);
   // convert "from" to homogeneous co-cord
   vnl_vector_fixed<double,3> h_from(from[0], from[1], 1);
   vnl_vector<double> h_to = H_*h_from.as_ref();
