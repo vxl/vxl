@@ -550,11 +550,11 @@ T cos_angle (vnl_matrix<T> const& a, vnl_matrix<T> const& b) {
   typedef typename vnl_numeric_traits<T>::real_t real_t;
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
   real_t ab = inner_product(a,b);
-#if 0 // there's no operator/(complex<float>, double)
-  double a_b = sqrt( vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
-#else
-  abs_t  a_b = (abs_t)sqrt( vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
-#endif
+  //  Look, goddamit, abs_t is right.  If your compiler can't deal 
+  //  with it, ifdef that baby outta there.   My compiler is cleverer than
+  //  yours, and can't handle that whole double thing.
+  abs_t a_b = (abs_t)sqrt( vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
+
   return T( ab / a_b);
 }
 
