@@ -271,7 +271,7 @@ foreach $dir (@DIRS)
     }
     @tmpl_list = split /\s+/, $names{$name};
     push @test_files, @tmpl_list unless ($testmain);
-    push @test_files, "$tstname.cxx" if ($testmain);
+    push @test_files, "$tstname.cxx" if ($testmain && "$tstname" ne "");
   }
   while ($cmakefile =~ s/\bSUBDIRS\s*\(\s*([^()]+)\)//) {
     @tmpl_list = split /\s+/, "$1";
