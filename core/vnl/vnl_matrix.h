@@ -200,12 +200,14 @@ public:
   typedef typename vnl_c_vector<T>::abs_t abs_t;
   
   abs_t array_one_norm() const { return vnl_c_vector<T>::one_norm(begin(), size()); }
+  abs_t array_two_norm() const { return vnl_c_vector<T>::two_norm(begin(), size()); }
   abs_t array_inf_norm() const { return vnl_c_vector<T>::inf_norm(begin(), size()); }
   
   abs_t absolute_value_sum() const { return array_one_norm(); }
   abs_t absolute_value_max() const { return array_inf_norm(); }
   
   abs_t operator_one_norm() const;
+  //abs_t operator_two_norm() const;
   abs_t operator_inf_norm() const;
   
   abs_t frobenius_norm() const { return vnl_c_vector<T>::two_norm(begin(), size()); }
