@@ -11,10 +11,6 @@
 //  \author Andrew W. Fitzgibbon, Oxford RRG, 31 Aug 96
 
 //
-
-//
-
-//
 //     Modifications:
 //     280697 AWF Changed return type of f from double to void, as it wasn't used, and
 //                people were going to extra trouble to compute it.
@@ -38,7 +34,6 @@
 //    computation.  For the moment it's non-const, but we'll see...
 class vnl_least_squares_function {
 public:
-// Constants-----------------------------------------------------------------
   enum  UseGradient {
     no_gradient,
     use_gradient
@@ -53,10 +48,10 @@ public:
 
   virtual ~vnl_least_squares_function();
 
-  // Operations----------------------------------------------------------------
-  void throw_failure(); // the virtuals may call this to signal a failure.
-  void clear_failure(); //
-
+  // the virtuals may call this to signal a failure.
+  void throw_failure();
+  void clear_failure();
+  
   // Computations--------------------------------------------------------------
 
 //: The main function.  Given the parameter vector x, compute the vector
