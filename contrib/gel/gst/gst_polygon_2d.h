@@ -25,8 +25,8 @@ class gst_polygon_2d : public vbl_ref_count
 
   // getters and setters
   unsigned int size() const { return edges_.size(); }
-  gst_edge_2d_sptr operator[](unsigned int i) const { return i<size() ? edges_[i] : 0; }
-  void add(gst_edge_2d_sptr edge) { edges_.push_back( edge); }
+  gst_edge_2d_sptr operator[](unsigned int i) const { return i<size() ? edges_[i] : (gst_edge_2d_sptr)0; }
+  void add(gst_edge_2d_sptr edge) { edges_.push_back(edge); }
 
   //: check closure of edges
   //   returns false if the edges are not closed or
