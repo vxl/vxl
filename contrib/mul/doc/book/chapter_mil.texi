@@ -137,7 +137,7 @@ It can probably be tweaked to go even faster, but at the expense of readability.
 The default copy operator takes a SHALLOW copy of an image.
 However, as long as the image isn't a view of some external data (see below)
 the actual data is stored in a mil_image_data<T> object, to which a
-mbl_smart_ptr is retained.  Thus the data will hang around as long as
+vbl_smart_ptr is retained.  Thus the data will hang around as long as
 something is looking at it.
 
 Thus the following will work efficiently
@@ -179,8 +179,8 @@ image.
 
 Note that if we save the two images to the same file with vsl_b_write(), then load them
 with vsl_b_read(), this relationship will be retained.  That's due to
-the awesome power of the serialisation in the binary IO code, and the
-use of mbl_smart_ptr (thanks to Ian Scott for that).
+the use of vbl_smart_ptr, and the awesome power of the serialisation in the binary IO code
+(thanks to Ian Scott for that.)
 
 @subsection Sampling along profiles
 
