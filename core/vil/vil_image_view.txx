@@ -546,8 +546,8 @@ const vil_image_view<T> & vil_image_view<T>::operator= (const vil_image_view_bas
 template<class T>
 void vil_image_view<T>::set_size(unsigned n_i, unsigned n_j)
 {
-  if( nplanes_ > 0 )
-	set_size(n_i, n_j, nplanes_);
+  if ( nplanes_ > 0 )
+    set_size(n_i, n_j, nplanes_);
   else
     set_size(n_i, n_j, 1);
 }
