@@ -121,6 +121,4 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
-#include <vcl_iostream.h>
-
 int test_include_main(int, char*[]) { return 0; }
