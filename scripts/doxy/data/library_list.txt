@@ -3,11 +3,12 @@
 # Package Library Prefix [build/ignore]
 #  - If the last field is "ignore" the library will not be built,
 #    but will be considered when building a list of dependencies.
+#    (Provided for testing, and to allow a single library to be built alone)
 # Each library is assumed to depend on those preceding it (for the
 # purpose of building links between libraries in the html).
 
-# package: vcl STL library
-# . vcl vcl_
+package: vcl Cross platform STL library
+. vcl vcl_ build
 
 package: vxl Core Vision Libraries
 vxl vsl vsl_ build
