@@ -152,7 +152,9 @@ extern	void TIFFUnmapFileContents();
 #define	lseek	mpw_lseek
 extern long mpw_lseek(int, long, int);
 #else
+#if !defined(__hpux__)
 extern	long lseek();
+#endif
 #endif
 
 /*
