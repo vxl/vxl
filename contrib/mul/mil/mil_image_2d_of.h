@@ -53,6 +53,9 @@ public:
 		//  Creates an empty one plane image.
 	mil_image_2d_of();
 
+	    //: Create a n_plane plane image of nx x ny pixels
+    mil_image_2d_of(int nx, int ny, int n_planes=1);
+
 		//: Destructor
 	virtual ~mil_image_2d_of();
 	

@@ -18,7 +18,7 @@
 // Dflt ctor
 //=======================================================================
 
-template<class T> 
+template<class T>
 mil_image_2d_of<T>::mil_image_2d_of()
 	: data_(0),nx_(0),ny_(0),xstep_(1),ystep_(0)
 {
@@ -26,6 +26,14 @@ mil_image_2d_of<T>::mil_image_2d_of()
 	planes_[0] = 0;
 
 	format_ = vcl_string("GreyByte");
+}
+
+template<class T>
+mil_image_2d_of<T>::mil_image_2d_of(int nx, int ny, int n_planes)
+	: data_(0),nx_(0),ny_(0),xstep_(1),ystep_(0)
+{
+	setNPlanes(n_planes);
+	resize(nx,ny);
 }
 
 //: Perform deep copy of this into image
