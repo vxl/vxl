@@ -1,26 +1,373 @@
-VXL is designed to work with any build system. However, we do have
-a @emph{default} build system - CMake. CMake is a cross platform tool
+VXL is designed to work with any build system. However, we do have a
+@emph{default} build system - CMake. CMake is a cross platform tool
 which takes its control files (@samp{CMakeLists.txt}) and produces
-makefiles for Unix systems and
-dsp files for users of Microsoft's Developer Studio. You can find out more
-about CMake from
-@uref{http://public.kitware.com/CMake/index.html, Kitware's
-website}.
+makefiles for Unix systems and dsp files for users of Microsoft's
+Developer Studio. You can find out more about CMake from
+@uref{http://public.kitware.com/CMake/index.html, Kitware's website}.
 
 We use a standard version of CMake, although several things may
 not be obvious from the CMake documentation.
 @itemize
 @item Building of the test programs, the mul, tbl, gel, or oxl modules, is
 under the control of options that can be set in the CMakeSetup GUI.
-@item Each library contains a file @samp{CMakeListsLink.txt} which can
+@item (deprecated with CMake 1.4) Each library contains a file @samp{CMakeListsLink.txt} which can
 be included by the @samp{CMakeLists.txt} file for an executable that uses that
 library. This makes linking in multiple libraries relatively easy. Each
 library's @samp{CMakeListsLink.txt} file also includes the
 @samp{CMakeListsLink.txt} file for libraries that it depends upon.
-@item When including @samp{CMakeListsLink.txt} files, you should be careful
+@item (deprecated with CMake 1.4) When including @samp{CMakeListsLink.txt} files, you should be careful
 only to include those that are necessary to get it to link. This will
 help reduce the size of the makefile or dsp file that CMake produces.
 @end itemize
+
+@section CMake 1.4
+
+@quotation
+I'm adding this new information in its own section for now.  I want to
+make sure I'm using @command{texinfo} in a satisfactory way before I
+alter other parts of the documentation.  -Fred Wheeler
+@end quotation
+
+This section describes the new style of @file{CMakeLists.txt} files
+that take advantage of new CMake 1.4 features.  The new CMake 1.4
+features make the @file{CMakeLists.txt} configuration files
+considerably more simple.
+
+@subsection Overview
+
+VXL uses the CMake configuration system to generate Makefiles and MSVS
+Project files.  Actually, there are other build systems as well, but
+most users use CMake.  This section shows by example how to construct
+the necessary CMakeLists.txt configuration files for VXL.  The intent
+here is to show how to write these configuration files and to give
+detailed reasons for the various methods used in these files in VXL.
+This section should be used in conjunction with the CMake User's
+Manual (@uref{http://www.cmake.org}).
+
+Examples given below are for simple applications and libraries.
+Guidelines for the top level VXL @file{CMakeLists.txt} file and
+intermediate @file{CMakeLists.txt} files (which include many
+@code{SUBDIRS} commands) are not given here.
+
+There are many good examples of @file{CMakeLists.txt} files in the VXL
+source, but they are often in a state of flux.  The intention is for
+this document to show how the @file{CMakeLists.txt} files should be
+constructed and to be verbose about the reasons, and to also be a
+style guide for these files.
+
+CMake is available from @uref{http://www.cmake.org} where you'll find
+pre-compiled versions and instructions for getting the source code
+from an anonymous CVS server.  VXL is designed to be configured by the
+latest released version of CMake.  From CVS, you can use the tag
+@code{LatestRelease}.  Cmake documentation can be found at
+@uref{http://www.cmake.org/HTML/Documentation.html}.
+
+@subsection History
+
+VXL used to have @file{CMakeListsLink.txt} files to handle library
+dependencies.  The library dependency problem is now dealt with by
+CMake (version 1.4) and the use of @file{CMakeListsLink.txt} files is
+deprecated.
+
+In the past, VXL used @file{CMakeListsHeaders.txt} files that were only
+included for Win32 builds, but this is no longer needed and is
+deprecated.  The reason for having a @file{CMakeListsHeaders.txt} file
+was that older versions of CMake did not like having .h or .txx files
+in a build rule (except with MSVS), but this has been fixed now (CMake
+versions 1.2 and later).  It is better to have everything in a single
+file, since that makes the whole system more manageable.
+
+New VXL source code directories for executables and libraries
+will need a @file{CMakeLists.txt} file, but not a
+@file{CMakeListsLink.txt} and not a @file{CMakeListsHeaders.txt} file.
+
+@subsection Example 1: An application that uses VXL libraries
+
+A single, complete @file{CMakeLists.txt} file follows, for a fictional
+application named foobar.  The file is mostly comments, which are
+prefixed by '#' in CMake.
+
+@example
+
+# This sample CMakeLists.txt file will configure an application named
+# foobar that is built from foo.cxx, bar.cxx and some header files.
+
+# The ADD_EXECUTABLE configures a new executable.  The first argument
+# to ADD_EXECUTABLE is the name of the executable file (without the
+# possible .exe suffix) that you want to generate.  The rest of the
+# arguments, up to the closing ")", are file names, where spaces,
+# comments and newlines may be used at will.
+
+# Always give the filename suffix for source files in the
+# ADD_EXECUTABLE and ADD_LIBRARY commands.  CMake will try to guess
+# the suffix if none is given, but this can cause problems when object
+# files, or other files with the same name but different suffix, are
+# present in the source directory.
+
+# In addition to the C/C++ source files, all header files are included
+# in the ADD_EXECUTABLE command so that they become part of the
+# project in MS Visual Studio.  List all header files for this
+# application, but not headers from other libraries you are using.
+# The reason for this is that users of a GUI build system like MSVS
+# will then see every editable source file in the file list, so that
+# they can click on it and possibly edit the file.
+
+# Every source file (except for template instantiation files residing
+# in Templates subdirectories) should be present in exactly one build
+# rule, i.e., in either an ADD_EXECUTABLE or an ADD_LIBRARY rule in
+# exactly one CMakeLists.txt file (normally the one in the same
+# directory, but sometimes it could be the CMakeLists.txt file of the
+# parent directory, cf. vxl/vil/file_formats).  Template instantiation
+# files residing in Templates subdirectories are not included
+# specifically in any CMakeLists.txt file, but are included via the
+# AUX_SOURCE_DIRECTORY CMake command (used example 2, below).
+
+# Finally, we get to an actual CMake command.
+
+ADD_EXECUTABLE( foobar
+  defines.h
+  foo.cxx foo.h
+  bar.cxx bar.h
+)
+
+# If this executable is using libraries other than vcl and those in
+# core-VXL, then an INCLUDE_DIRECTORIES is needed so that include
+# files will be found (vcl and vxl are automatically included via the
+# top level VXL CMakeLists.txt file).  This line is needed to include
+# files from the gel section.
+
+INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/gel )
+
+# For INCLUDE_DIRECTORIES, the preferred practice is to specify a
+# directory one level below ${allvxl_SOURCE_DIR} as an include
+# directory, and then the further qualify include files in the source
+# code with commands like "#include <vsol/vsol_box_2d.h>".  Do not do
+# the following.
+
+# NO # INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/gel/vsol )
+
+# Indicate which VXL libraries foobar depends on with the
+# TARGET_LINK_LIBRARIES command.  Include each library that is
+# directly used by this application.  Do not include libraries that
+# are subsequently used by the libraries that are directly used.
+# CMake will automatically handle the tree of dependencies so the link
+# with have all required libraries.
+
+# The libraries can be listed in any order.  However, if library "A"
+# depends on library "B", then it is best to list library "A" before
+# library "B".  Doing so helps reduce the number of duplicate library
+# listings in the link command.
+
+TARGET_LINK_LIBRARIES( foobar vnl_algo vul vil vcl )
+
+# Before CMake 1.4, LINK_LIBRARIES commands were used to add
+# libraries.  The LINK_LIBRARIES command should no longer be used in
+# VXL in ordinary circumstances.
+
+@end example
+
+@subsection Example 2: A library that uses VXL libraries
+
+@example
+
+# This CMakeLists.txt file will configure a library named vfbl that is
+# built from vfbl_foo.cxx, vfbl_bar.cxx, possibly vfbl_zip.cxx
+# (optional, used if zlib is available) and several header files.
+
+# This fictional vfbl library can optionally use zlib.  We will find
+# out whether zlib is available by including this module file, and use
+# it if it is.
+
+INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
+
+# For this library the list of source files will be built up with
+# SOURCE_FILES commands.  The SOURCE_FILES command can be used with
+# both ADD_EXECUTABLE and ADD_LIBRARY.  This is necessary when certain
+# sources are conditionally included, as we see here, and preferred
+# for long source file lists.
+
+# The SOURCE_FILES commands for a source list variable must come
+# before the ADD_LIBRARY or ADD_EXECUTABLE command that uses them if
+# the source list variable will be referenced like "${vfbl_sources}"
+# as opposed to simply "vfbl_sources".  The ability to use
+# ${vfbl_sources} to reference source lists is new in CMake 1.4, and
+# is now preferred.
+
+SOURCE_FILES( vfbl_sources
+  vfbl_defines.h
+  vfbl_foo.cxx vfbl_foo.h
+  vfbl_bar.cxx vfbl_bar.h
+  vfbl_baz.txx vfbl_baz.h
+)
+
+# Include the source file vfbl_zip.cxx when building the library only
+# if ZLIB is available.
+
+IF( HAS_ZLIB )
+  SOURCE_FILES( foobar_sources vfbl_zip.cxx )
+ENDIF( HAS_ZLIB )
+
+# The ADD_LIBRARY command configures a new library.  The first
+# argument is again the target name, i.e., the name of the library to
+# be created, but without any possible suffix such as ".lib", ".dll",
+# ".a" or ".so" and without the possible prefix "lib" (used in Unix).
+# The other arguments are either file names, or (as here) a variable
+# holding a list of files, specified before the ADD_LIBRARY command
+# with one or more SOURCE_FILES commands.
+
+ADD_LIBRARY( vfbl ${vfbl_sources} )
+
+# In general, include FindXXX.cmake to determine whether package XXX
+# is available.  In this example, XXX is ZLIB.  VXL has its own
+# specialized version of many of the FindXXX.cmake Module files that
+# come with CMake.  These VXL versions of the Module files do not
+# actually add include paths or link libraries.  Instead, the variable
+# HAS_XXX is set to "yes" if the package is available and "no" if it
+# is not.  If the package is available, XXX_INCLUDE_PATH and
+# XXX_LIBRARIES variables are set, and you must use them in
+# INCLUDE_DIRECTORIES and TARGET_LINK_LIBRARIES commands as shown
+# below.
+
+# Most FindXXX.cmake files set the C/C++ preprocessor macro HAS_XXX,
+# which is true if and only if the package can be used.  Note that
+# this is in addition to the CMake variable with the same name, which
+# is always set.
+
+IF( HAS_ZLIB )
+  INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_PATH} )
+  TARGET_LINK_LIBRARIES( vfbl ${ZLIB_LIBRARIES} )
+ENDIF( HAS_ZLIB )
+
+# Use AUX_SOURCE_DIRECTORY when there are .cxx files in a Templates
+# directory that instantiate templates in .txx files.  This command
+# causes each file in the subdirectory Templates to be added to a list
+# of source files, in this case the list is "foobar_sources".
+
+AUX_SOURCE_DIRECTORY( Templates foobar_sources )
+
+# Just as in example 1, use the TARGET_LINK_LIBRARIES command to
+# specify each library that is directly used by this library.  CMake
+# will remember that vfbl needs these libraries.  When an application
+# links with vfbl, CMake will automatically make sure it is linked
+# with each of these libraries.
+
+TARGET_LINK_LIBRARIES( vfbl vnl_algo vul vil vcl )
+
+# The LINK_LIBRARIES command should not be used when configuring a
+# library.  This would not propogate library dependencies to
+# applications that use this library.
+
+# Tests go in the tests subdirectory.  Whether the tests are built
+# depends on BUILD_TESTING.
+
+IF( BUILD_TESTING )
+  SUBDIRS( tests )
+ENDIF( BUILD_TESTING )
+
+# Same goes for examples.
+
+IF( BUILD_EXAMPLES )
+  SUBDIRS( examples )
+ENDIF( BUILD_EXAMPLES )
+
+@end example
+
+@subsection CMake Variables and Preprocessor Macros
+
+Listed below are CMake variables commonly used in VXL CMake files and
+associated preprocessor macros.  The CMake variable are prefixed by
+``CMake:'' and the equivalent (usually identically named) C/C++
+preprocessor macros (for @code{#ifdef}, etc.) are prefixed by
+``Preprocessor:''.  The means by which each variable is set is given in
+parenthesis.
+
+To determine the compiler being used at compile time, use macros
+defined in @file{vcl/vcl_compiler.h}.  The @file{FindXXX.cmake} files
+are in @file{$VXLSRC/config.cmake/Modules/}.
+
+@table @asis
+@item  @bullet{} CMake: @code{WIN32} (defined by CMake, not in a file)
+@itemx @bullet{} Preprocessor: @code{VCL_WIN32} (vcl_compiler.h, included by each vcl_*.h file)
+The Windows API is available.  Keep in mind that @code{WIN32} is
+defined under Cygwin, so it does not imply use of MSVC++.  Make sure
+you don't really want @code{HAS_MFC}, or @code{VCL_VC60}.
+
+@item  @bullet{} CMake: @code{UNIX} (defined by CMake, not in a file)
+@itemx @bullet{} Preprocessor: system dependent
+Some kind of Unix API is present.  The CMake variable @code{UNIX} is also is
+defined under Cygwin.
+
+@item  @bullet{} CMake: @code{CYGWIN} (defined by CMake, not in a file)
+@itemx @bullet{} Preprocessor: @code{__CYGWIN__} (gcc under Cygwin)
+The Cygwin API is present.
+
+@item  @bullet{} CMake: @code{BORLAND} (defined by CMake, not in a file)
+@itemx @bullet{} Preprocessor: [???]
+The Borland C++ compiler is being used.
+
+@item  @bullet{} CMake: @code{SOLARIS} (VXL top level CMakeLists.txt file)
+@itemx @bullet{} Preprocessor: [???]
+The OS is Solaris.  This variable is not set automatically by CMake,
+but it is used in VXL.  If you are compiling in Solaris you should
+set it.  When CMake 1.4 is in use, @code{SOLARIS} will be automatically set
+in the top level @file{CMakeLists.txt} file.
+
+@item  @bullet{} CMake: @code{MODULE_PATH} (VXL top level @file{CMakeLists.txt} file)
+@itemx @bullet{} Preprocessor: (none)
+Directory holding the VXL versions of the @file{FindXXX.cmake} files.
+
+@item  @bullet{} CMake: @code{HAS_MFC} (VXL top level CMakeLists.txt file)
+@itemx @bullet{} Preprocessor: @code{HAS_MFC} (VXL top level CMakeLists.txt file)
+Microsoft Foundation Classes are available.
+
+@item  @bullet{} CMake: @code{HAS_GLUT} (Module file @file{FindGLUT.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_GLUT} (Module file @file{FindGLUT.cmake})
+The GLUT library is available.
+
+@item  @bullet{} CMake: @code{HAS_GTK} (Module file @file{FindGTK.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_GTK} (Module file @file{FindGTK.cmake})
+The GTK library is available.
+
+@item  @bullet{} CMake: @code{HAS_JPEG} (Module file @file{FindJPEG.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_JPEG} (Module file @file{FindJPEG.cmake})
+The JPEG library is available.
+
+@item  @bullet{} CMake: @code{HAS_MPEG} (Module file @file{FindMPEG.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_MPEG} (Module file @file{FindMPEG.cmake})
+The MPEG library is available.
+
+@item  @bullet{} CMake: @code{HAS_NETLIB} (Module file @file{FindNetlib.cmake})
+@itemx @bullet{} Preprocessor: none (could easily be added if needed)
+The NetLib library is available.
+
+@item  @bullet{} CMake: @code{HAS_OPENGL} (Module file @file{FindOpenGL.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_OPENGL} (Module file @file{FindOpenGL.cmake})
+The OpenGL library is available.
+
+@item  @bullet{} CMake: @code{HAS_PNG} (Module file @file{FindPNG.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_PNG} (Module file @file{FindPNG.cmake})
+The PNG library is available.
+
+@item  @bullet{} CMake: @code{HAS_QT} (Module file @file{FindQt.cmake})
+@itemx @bullet{} Preprocessor: none (could easily be added if needed)
+The Qt library is available.
+
+@item  @bullet{} CMake: @code{HAS_QV} (Module file @file{FindQv.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_QV} (Module file @file{FindQv.cmake})
+The Qv library is available.
+
+@item  @bullet{} CMake: @code{HAS_TIFF} (Module file @file{FindTIFF.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_TIFF} (Module file @file{FindTIFF.cmake})
+The TIFF library is available.
+
+@item  @bullet{} CMake: @code{HAS_X11} (Module file @file{FindX11.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_X11} (Module file @file{FindX11.cmake})
+The X11 library is available.
+
+@item  @bullet{} CMake: @code{HAS_ZLIB} (Module file @file{FindZLIB.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_ZLIB} (Module file @file{FindZLIB.cmake})
+The ZLIB library is available.
+@end table
 
 @section Other Build Systems
 
