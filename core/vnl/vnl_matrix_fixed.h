@@ -25,6 +25,7 @@
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_matrix_fixed_ref.h>
+#include <vnl/vnl_vector_fixed.h>
 
 //: Fixed size matrix
 //  A subclass of vnl_matrix_fixed_ref,
@@ -84,10 +85,10 @@ public:
 
 #ifndef VCL_SUNPRO_CC
 
- //: Multiply two conformant vnl_matrix_fixed (M x N) times (N x O)
- template <class T, int M, int N, int O>
- vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b)
- {
+//: Multiply two conformant vnl_matrix_fixed (M x N) times (N x O)
+template <class T, int M, int N, int O>
+vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b)
+{
   vnl_matrix_fixed<T, M, O> out;
   for(int i = 0; i < M; ++i)
     for(int j = 0; j < O; ++j) {
@@ -97,7 +98,21 @@ public:
       out(i,j) = accum;
     }
   return out;
- }
+}
+
+//: Multiply  conformant vnl_matrix_fixed (M x N) and vector_fixed (N)
+template <class T, int M, int N>
+vnl_vector_fixed<T, M> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_vector_fixed<T, N>& b)
+{
+  vnl_vector_fixed<T, M> out;
+  for(int i = 0; i < M; ++i) {
+    T accum = a(i,0) * b(0);
+    for(int k = 1; k < N; ++k)
+      accum += a(i,k) * b(k);
+    out(i) = accum;
+  }
+  return out;
+}
 #endif
 
 #define VNL_MATRIX_FIXED_PAIR_INSTANTIATE(T, M, N, O) \
