@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 
   vimt_image_2d_of<vxl_byte> image_;
 
-  for (unsigned int i=0;i<vid_input_->length();i++)
+  for (int i=0;i<vid_input_->length();i++)
     {
     vid_input_->next_frame();
     vid_input_->get_frame(image_);
