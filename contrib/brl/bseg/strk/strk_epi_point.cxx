@@ -1,7 +1,8 @@
-//---*-c++-*--
-#include <strk/strk_epi_point.h>
+//:
+// \file
+#include "strk_epi_point.h"
 
-//:constructors
+// constructors
 strk_epi_point::strk_epi_point(vgl_point_2d<double> &p,
                                const double alpha,
                                const double s,
@@ -42,12 +43,12 @@ strk_epi_point::strk_epi_point()
   grad_ang_ = 0;
   tan_ang_ = 0;
 }
-  
-vcl_ostream&  operator<<(vcl_ostream& s, strk_epi_point const& ep)
+
+vcl_ostream& operator<<(vcl_ostream& s, strk_epi_point const& ep)
 {
-  s << "(" << (int)ep.x() << " " << (int)ep.y() << ")[" << ep.alpha()
-    << " " << ep.s() << " "  << ep.grad_mag() << " " << ep.grad_ang() << " " 
-    << ep.tan_ang() << "\n"; 
+  s << '(' << (int)ep.x() << ' ' << (int)ep.y() << ")[" << ep.alpha()
+    << ' ' << ep.s() << ' '  << ep.grad_mag() << ' ' << ep.grad_ang() << ' '
+    << ep.tan_ang() << '\n';
 
   return s;
 }
