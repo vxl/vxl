@@ -2,9 +2,9 @@
 #ifndef vimt_find_peaks_h_
 #define vimt_find_peaks_h_
 //:
-//  \file
-//  \brief Find peaks in image
-//  \author Tim Cootes, VP (Sept03)
+// \file
+// \brief Find peaks in image
+// \author Tim Cootes, VP (Sept03)
 
 #include <vimt/vimt_image_2d_of.h>
 
@@ -29,8 +29,8 @@ template <class T>
 inline bool vimt_is_peak(const T* im, unsigned radius, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
 {
   T v = *im;
-  for(unsigned i=-radius; i<radius+1; i++)
-    for(unsigned j=-radius; j<radius+1; j++)
+  for (unsigned i=-radius; i<radius+1; i++)
+    for (unsigned j=-radius; j<radius+1; j++)
       if (v<im[i_step*i+j_step*j]) return false;      // One of the 
   return true;
 }
@@ -86,10 +86,10 @@ inline void vimt_find_image_peaks_3x3(vcl_vector<vgl_point_2d<unsigned> >& peaks
 // \param clear_list: If true (the default) then empty list before adding new examples
 template <class T>
 inline void vimt_find_image_peaks(vcl_vector<vgl_point_2d<unsigned> >& peaks,
-                                      vcl_vector<T>& peak_value,
-                                      const vil_image_view<T>& image,
-                                      unsigned radius=1,
-                                      unsigned plane=0, bool clear_list=true)
+                                  vcl_vector<T>& peak_value,
+                                  const vil_image_view<T>& image,
+                                  unsigned radius=1,
+                                  unsigned plane=0, bool clear_list=true)
 {
   if (clear_list) { peaks.resize(0); peak_value.resize(0); }
   unsigned ni=image.ni(),nj=image.nj();
@@ -114,10 +114,10 @@ inline void vimt_find_image_peaks(vcl_vector<vgl_point_2d<unsigned> >& peaks,
 // \param clear_list: If true (the default) then empty list before adding new examples
 template <class T>
 inline void vimt_find_image_peaks(vcl_vector<vgl_point_2d<unsigned> >& peaks,
-                                      vcl_vector<T>& peak_value,
-                                      const vil_image_view<T>& image,
-                                      T thresh, unsigned radius=1,
-                                      unsigned plane=0, bool clear_list=true)
+                                  vcl_vector<T>& peak_value,
+                                  const vil_image_view<T>& image,
+                                  T thresh, unsigned radius=1,
+                                  unsigned plane=0, bool clear_list=true)
 {
   if (clear_list) { peaks.resize(0); peak_value.resize(0); }
   unsigned ni=image.ni(),nj=image.nj();
