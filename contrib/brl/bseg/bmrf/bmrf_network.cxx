@@ -19,7 +19,7 @@ bmrf_network::add_node(const bmrf_node_sptr& node)
 {
   if(!node.ptr()) return false;
   if(!node->epi_seg().ptr()) return false;
-  if(nodes_.find(node->epi_seg().ptr()) == nodes_.end()) return false;
+  if(nodes_.find(node->epi_seg().ptr()) != nodes_.end()) return false;
 
   nodes_[node->epi_seg().ptr()] = node;
   return true;
@@ -38,6 +38,27 @@ bmrf_network::delete_node(const bmrf_node_sptr& node)
   node->strip();
   nodes_.erase(itr);
   return true;
+}
+
+
+//: Remove all arcs to NULL nodes and node not found in this network
+bool
+bmrf_network::purge()
+{
+  bool retval = false;
+  node_map::const_iterator n_itr = nodes_.begin();
+  for(; n_itr != nodes_.end(); ++n_itr){
+    bmrf_node_sptr curr_node = n_itr->second;
+    retval = curr_node->purge() || retval; // remove the NULL arcs
+    bmrf_node::arc_iterator a_itr = curr_node->begin();
+    for(; a_itr != curr_node->end(); ++a_itr){
+      if(nodes_.find((*a_itr)->to->epi_seg().ptr()) == nodes_.end()){
+        curr_node->remove_neighbor((*a_itr)->to);
+        retval = true;
+      }
+    }
+  }
+  return retval;
 }
   
 
@@ -116,6 +137,10 @@ bmrf_network::b_read( vsl_b_istream& is )
         nodes_[node->epi_seg().ptr()] = node;
       }
     }
+    if(this->purge())
+      vcl_cerr << "I/O WARNING: bmrf_network::b_read(vsl_b_istream&)\n"
+               << "             It is likely that the network object is corrupt.\n"
+               << "             Invalid arcs have been purged.\n";
     break;
 
   default:
@@ -148,7 +173,7 @@ void
 bmrf_network::depth_iterator::next_node()
 {
   if (curr_node_.ptr() == NULL) return;
-  bmrf_node::neighbor_iterator itr = curr_node_->begin();
+  bmrf_node::arc_iterator itr = curr_node_->begin();
   for(; itr != curr_node_->end(); ++itr){
     eval_queue_.push_front((*itr)->to);
   }
@@ -169,7 +194,7 @@ void
 bmrf_network::breadth_iterator::next_node()
 {
   if (curr_node_.ptr() == NULL) return;
-  bmrf_node::neighbor_iterator itr = curr_node_->begin();
+  bmrf_node::arc_iterator itr = curr_node_->begin();
   for(; itr != curr_node_->end(); ++itr){
     eval_queue_.push_back((*itr)->to);
   }
@@ -185,4 +210,37 @@ bmrf_network::breadth_iterator::next_node()
 }
 
 
+//-----------------------------------------------------------------------------------------
+// External functions
+//-----------------------------------------------------------------------------------------
+
+
+//: Binary save bmrf_network to stream.
+void
+vsl_b_write(vsl_b_ostream &os, const bmrf_network* n)
+{
+  if (n==0){
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    n->b_write(os);
+  }
+}
+
+
+//: Binary load bmrf_network from stream.
+void
+vsl_b_read(vsl_b_istream &is, bmrf_network* &n)
+{
+  delete n;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr){
+    n = new bmrf_network();
+    n->b_read(is);
+  }
+  else
+    n = 0;
+}
 

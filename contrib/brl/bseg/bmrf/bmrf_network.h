@@ -36,15 +36,20 @@ public:
   ~bmrf_network(){}
 
   //: Adds a new to the network
-  // \returns true if the node was added
-  // \returns false if the node could not be added
+  // \retval true if the node was added
+  // \retval false if the node could not be added
   // \note every node in the network must have a unique epi_segment
   bool add_node(const bmrf_node_sptr& node);
 
   //: Deletes a node in the network
-  // \returns true if the node was deleted
-  // \returns false if the node was not found in the network
+  // \retval true if the node was deleted
+  // \retval false if the node was not found in the network
   bool delete_node(const bmrf_node_sptr& node);
+
+  //: Remove all arcs to NULL nodes and node not found in this network
+  // \retval true if any arcs have been purged
+  // \retval false if all arcs were found to be valid
+  bool purge();
     
   //: Look up the node corresponding to an epi-segment
   // Returns a null smart pointer if no node exists
@@ -145,5 +150,13 @@ public:
   breadth_iterator breadth_end()   { return breadth_iterator(this, NULL); }
 
 };
+
+
+//: Binary save bmrf_network* to stream.
+void vsl_b_write(vsl_b_ostream &os, const bmrf_network* n);
+
+//: Binary load bmrf_network* from stream.
+void vsl_b_read(vsl_b_istream &is, bmrf_network* &n);
+
 
 #endif // bmrf_network_h_
