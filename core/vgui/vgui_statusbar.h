@@ -8,10 +8,7 @@
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   21 Nov 99
-// \brief  vgui_statusbar is a class that Phil hasnt documented properly. FIXME
-//
-//  Contains classes: vgui_statusbar
-
+// \brief  contains class vgui_statusbar
 
 class vgui_statusbar
 {

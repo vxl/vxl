@@ -8,10 +8,7 @@
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   21 Jan 00
-// \brief
-//
-//  Contains classes:  vgui_popup_params
-//
+// \brief contains class vgui_popup_params
 
 class vgui_popup_params
 {
