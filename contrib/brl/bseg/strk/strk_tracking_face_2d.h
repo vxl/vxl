@@ -1,4 +1,4 @@
-// This is brl/bseg/sdet/strk_tracking_face_2d.h
+// This is brl/bseg/strk/strk_tracking_face_2d.h
 #ifndef strk_tracking_face_2d_h_
 #define strk_tracking_face_2d_h_
 //:
@@ -6,12 +6,12 @@
 // \brief a face for tracking with mutual information
 //
 // \verbatim
-// The shape and intensity data for this class are maintained by the 
+// The shape and intensity data for this class are maintained by the
 // vtol_intensity_face member.  Additional gradient information is maintained
 // in order to support the formation of a gradient direction histogram.
 // Local histogram structs are defined to collect the intensity and gradient
 // statistics of the face.
-// 
+//
 //
 // \author
 //    Joseph L. Mundy - October 29, 2003
@@ -34,7 +34,7 @@ struct strk_histf
   void upcount(const double x);
   double p(const int bin);
   void print();
-  private:
+ private:
   void compute_area();
   bool area_valid_;
   double area_;
@@ -52,7 +52,7 @@ struct strk_joint_histf
   void upcount(const double a, const double b);
   double p(const int a, const int b);
   void print();
-  private:
+ private:
   void compute_volume();
   bool volume_valid_;
   int nbins_;
@@ -69,7 +69,7 @@ struct strk_double_histf
   void upcount(const double dir, const double mag);
   double p(const int bin);
   void print();
-  private:
+ private:
   void compute_area();
   bool area_valid_;
   double area_;
@@ -86,7 +86,7 @@ struct strk_double_joint_histf
                const double b, const double mag_b);
   double p(const int a, const int b);
   void print();
-  private:
+ private:
   void compute_volume();
   bool volume_valid_;
   int nbins_;
@@ -99,7 +99,7 @@ struct strk_double_joint_histf
 //
 class strk_tracking_face_2d : public vbl_ref_count
 {
- public:  
+ public:
   strk_tracking_face_2d(vtol_face_2d_sptr const& face,
                         vil1_memory_image_of<float> const& image);
 
@@ -143,11 +143,10 @@ class strk_tracking_face_2d : public vbl_ref_count
   float X() const { return intf_->X(); }
   float Y() const { return intf_->Y(); }
   unsigned short I() const {return intf_->I();}
-  
-  //:transformation
-  void transform(const double tx, const double ty, 
-                 const double theta, const double scale);
 
+  //:transformation
+  void transform(const double tx, const double ty,
+                 const double theta, const double scale);
 
  private:
   //:local functions
@@ -159,23 +158,23 @@ class strk_tracking_face_2d : public vbl_ref_count
                     vil1_memory_image_of<float> const& Iy);
 
   void init(vtol_face_2d_sptr const& face, vil1_memory_image_of<float> const& image,
-          vil1_memory_image_of<float> const& Ix,
-          vil1_memory_image_of<float> const& Iy);
-  double 
+            vil1_memory_image_of<float> const& Ix,
+            vil1_memory_image_of<float> const& Iy);
+  float
     compute_intensity_mutual_information(vil1_memory_image_of<float> const& image);
 
-  double 
+  float
     compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
                                         vil1_memory_image_of<float> const& Iy);
-  
+
   //:members
   vtol_intensity_face_sptr intf_;
   bool gradient_info_;
   float intensity_mi_;
   float gradient_dir_mi_;
   float total_info_;
-  float* Ix_; 
-  float* Iy_; 
+  float* Ix_;
+  float* Iy_;
   int intensity_hist_bins_;
   int gradient_dir_hist_bins_;
   double model_intensity_entropy_;

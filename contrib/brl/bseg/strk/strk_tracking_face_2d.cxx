@@ -531,14 +531,14 @@ void strk_tracking_face_2d::transform(const double tx, const double ty,
   }
 }
 
-double strk_tracking_face_2d::
+float strk_tracking_face_2d::
 compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
 {
   if (!intf_)
     return 0;
 
   int width = image.width(), height = image.height();
-  double mi = 0;
+  float mi = 0;
   strk_histf image_hist;
   strk_joint_histf joint_hist;
   int npix = intf_->Npix();
@@ -570,17 +570,17 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
 #endif
   //compute the mutual information
   int nbins = image_hist.nbins();
-  double enti = 0, jent=0;
+  float enti = 0, jent=0;
   for (int i = 0; i<nbins; i++)
   {
-    double pi = image_hist.p(i);
+    float pi = image_hist.p(i);
     if (pi)
-      enti -= pi*vcl_log(pi);
+      enti -= pi*(float)vcl_log(pi);
     for (int m = 0; m<nbins; m++)
     {
-      double jp = joint_hist.p(m,i);
+      float jp = joint_hist.p(m,i);
       if (jp)
-        jent -= jp*vcl_log(jp);
+        jent -= jp*(float)vcl_log(jp);
     }
   }
   enti /= vcl_log(2.0);
@@ -593,14 +593,14 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
   return mi;
 }
 
-double strk_tracking_face_2d::
+float strk_tracking_face_2d::
 compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
                                     vil1_memory_image_of<float> const& Iy)
 {
   if (!intf_||!Ix||!Iy)
     return 0;
   int width = Ix.width(), height = Iy.height();
-  double mi = 0;
+  float mi = 0;
   strk_double_histf image_dir_hist;
   strk_double_joint_histf joint_dir_hist;
 
@@ -643,17 +643,17 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
 #endif
 
   int nbins = image_dir_hist.nbins();
-  double enti = 0, jent=0;
+  float enti = 0, jent=0;
   for (int i = 0; i<nbins; i++)
   {
-    double pi = image_dir_hist.p(i);
+    float pi = image_dir_hist.p(i);
     if (pi)
-      enti -= pi*vcl_log(pi);
+      enti -= pi*(float)vcl_log(pi);
     for (int m = 0; m<nbins; m++)
     {
-      double jp = joint_dir_hist.p(m,i);
+      float jp = joint_dir_hist.p(m,i);
       if (jp)
-        jent -= jp*vcl_log(jp);
+        jent -= jp*(float)vcl_log(jp);
     }
   }
   enti /= vcl_log(2.0);
