@@ -1,35 +1,6 @@
 // This is core/vcsl/vcsl_displacement.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 #include "vcsl_displacement.h"
 #include <vcl_cassert.h>
-
-//***************************************************************************
-// Status report
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-// Is `this' correctly set ?
-//---------------------------------------------------------------------------
-bool vcsl_displacement::is_valid(void) const
-{
-  return
-       ((beat_.size()==0)&&(interpolator_.size()==0)&&(point_.size()==1)&&
-        (axis_.size()==1)&&(angle_.size()==1)
-        )
-       ||
-       (
-        (beat_.size()==interpolator_.size()+1)
-        &&(beat_.size()==point_.size())
-        &&(beat_.size()==axis_.size())
-        &&(beat_.size()==angle_.size())
-        );
-}
-
-//***************************************************************************
-// Transformation parameters
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Set the point for a static displacement
@@ -39,18 +10,6 @@ void vcsl_displacement::set_static_point(vnl_vector<double> const& new_point)
   point_.clear(); point_.push_back(new_point);
   vcsl_spatial_transformation::set_static();
 }
-
-//---------------------------------------------------------------------------
-// Set the variation of the point of the axis along the time
-//---------------------------------------------------------------------------
-void vcsl_displacement::set_point(list_of_vectors const& new_point)
-{
-  point_=new_point;
-}
-
-//***************************************************************************
-// Basic operations
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Image of `v' by `this'
@@ -135,7 +94,7 @@ vnl_vector<double> vcsl_displacement::inverse(const vnl_vector<double> &v,
 //---------------------------------------------------------------------------
 vnl_vector<double> vcsl_displacement::vector_value(double time) const
 {
-  if (beat_.size()==0) // static
+  if (this->duration()==0) // static
     return point_[0];
   else
   {
