@@ -69,6 +69,7 @@ class kalman_filter
  private:
    //: position and confidence of feature samples
   vcl_vector<vnl_double_3> Xl_;
+  vcl_vector<vnl_double_3> curve_3d_;
   vcl_vector<double> prob_;
 
   vcl_vector<vnl_matrix<double> > observes_;

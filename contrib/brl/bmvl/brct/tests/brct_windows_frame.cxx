@@ -219,6 +219,7 @@ void brct_windows_frame::show_predicted_curve()
   }
   
   add_predicted_curve2d(curve);
+  //add_curve2d(curve);
   this->post_redraw();
 }
 

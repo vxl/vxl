@@ -207,7 +207,7 @@ void kalman_filter::init_state_vector()
 
 
   num_points_ = pts_3d.size();
-
+  
   // get observes
   vnl_matrix<double> t0(2, num_points_);
   vnl_matrix<double> t1(2, num_points_);
@@ -221,31 +221,19 @@ void kalman_filter::init_state_vector()
   observes_[0] = t0;
   observes_[1] = t1;
 
-  //get local coordinates
-  double xc=0, yc=0, zc=0;
-  for (int i=0; i<num_points_; i++) {
-    xc += pts_3d[i].x();
-    yc += pts_3d[i].y();
-    zc += pts_3d[i].z();
-  }
-
-  xc /= num_points_;
-  yc /= num_points_;
-  zc /= num_points_;
-
-  Xl_.resize(num_points_);
+  curve_3d_.resize(num_points_);
   prob_.resize(num_points_);
-
   for (int i=0; i<num_points_; i++) {
-    Xl_[i][0] = pts_3d[i].x() - xc;
-    Xl_[i][1] = pts_3d[i].y() - yc;
-    Xl_[i][2] = pts_3d[i].z() - zc;
+    curve_3d_[i][0] = pts_3d[i].x();
+    curve_3d_[i][1] = pts_3d[i].y();
+    curve_3d_[i][2] = pts_3d[i].z();
+
     prob_[i] = 1.0/num_points_;
   }
 
-  X_[0] = xc;
-  X_[1] = yc;
-  X_[2] = zc;
+  X_[0] = T[0];
+  X_[1] = T[1];
+  X_[2] = T[2];
 }
 
 
@@ -639,9 +627,22 @@ vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
   vcl_vector<vgl_point_3d<double> > pts;
   pts.resize(num_points_);
 
-  for (int i=0; i<num_points_; i++) {
-    pts[i].set(Xl_[i][0], Xl_[i][1], Xl_[i][2]);
+  double xc=0, yc=0, zc=0;
+
+  for(int i=0; i<num_points_; i++){
+    xc += curve_3d_[i][0];
+    yc += curve_3d_[i][1];
+    zc += curve_3d_[i][2];
   }
+
+  xc /= num_points_;
+  yc /= num_points_;
+  zc /= num_points_;
+
+  for (int i=0; i<num_points_; i++) {
+    pts[i].set(curve_3d_[i][0]-xc, curve_3d_[i][1]-yc, curve_3d_[i][2]-zc);
+  }
+
   return pts;
 }
 
@@ -692,7 +693,15 @@ vnl_matrix<double> kalman_filter::get_predicted_curve()
   camCenter[2] = Xpred[2];
   
   vnl_double_3x4 P = get_projective_matrix(camCenter);
-  update_observes(P, cur_pos_+1);
 
-  return observes_[cur_pos_+1];
+  vnl_matrix<double> t(2, num_points_);
+  for (int i=0; i<num_points_; i++){
+   vgl_point_3d<double> X(curve_3d_[i][0], curve_3d_[i][1], curve_3d_[i][2]);
+   vgl_point_2d<double> x = brct_algos::projection_3d_point(X, P);
+
+   t[0][i] = x.x();
+   t[1][i] = x.y();
+  }
+
+  return t;
 }
