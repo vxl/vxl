@@ -1,11 +1,11 @@
 #ifdef __GNUC__
-#pragma implementation 
+#pragma implementation
 #endif
 #include "vul_url.h"
 
 //:
 // \file
-// \author Ian Scott 
+// \author Ian Scott
 // Based on vil_stream_url by fsm
 
 #include <vcl_cstdio.h>  // sprintf()
@@ -27,8 +27,11 @@
 #  include <fp.h>           // htons() [ on e.g. DEC alpha, htons is in machine/endian.h]
 # endif
 # define SOCKET int
+
 #elif defined (VCL_WIN32)
+
 # include <winsock2.h>
+
 #endif
 
 
@@ -40,7 +43,6 @@ static int called_WSAStartup = 0;
 //: only call this method with a correctly formatted http URL
 vcl_istream * vul_http_open(char const *url)
 {
-
   // split URL into auth, host, path and port number.
   vcl_string host;
   vcl_string path;
@@ -52,8 +54,6 @@ vcl_istream * vul_http_open(char const *url)
   while (*p && *p!='/')
     ++ p;
   host = vcl_string(url+7, p);
-
-
 
 
   if (*p)
@@ -79,7 +79,7 @@ vcl_istream * vul_http_open(char const *url)
 
 
   // so far so good.
-#if 0
+#ifdef DEBUG
   vcl_cerr << "auth = \'" << auth << "\'" << vcl_endl
            << "host = \'" << host << "\'" << vcl_endl
            << "path = \'" << path << "\'" << vcl_endl
@@ -92,9 +92,9 @@ vcl_istream * vul_http_open(char const *url)
     WORD wVersionRequested;
     WSADATA wsaData;
     int err;
- 
+
     wVersionRequested = MAKEWORD( 2, 2 );
- 
+
     err = WSAStartup( wVersionRequested, &wsaData );
   }
 #endif
@@ -110,7 +110,7 @@ vcl_istream * vul_http_open(char const *url)
 # endif
 #else
   if (tcp_socket < 0) {
-#endif 
+#endif
     vcl_cerr << __FILE__ ": failed to create socket." << vcl_endl;
     return 0;
   }
@@ -151,7 +151,7 @@ vcl_istream * vul_http_open(char const *url)
   if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0) {
 #else
   if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0) {
-#endif 
+#endif
     vcl_cerr << __FILE__ ": error sending HTTP request" << vcl_endl;
     return 0;
   }
@@ -171,7 +171,7 @@ vcl_istream * vul_http_open(char const *url)
     while ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0) {
 #else
     while ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0) {
-#endif 
+#endif
       contents.append(buffer, n);
       //vcl_cerr << n << " bytes" << vcl_endl;
     }
@@ -182,17 +182,15 @@ vcl_istream * vul_http_open(char const *url)
   closesocket(tcp_socket);
 #else
   close(tcp_socket);
-#endif 
+#endif
 
   return new vcl_istringstream(contents);
 }
 
 
-
 //: only call this method with a correctly formatted http URL
 bool vul_http_exists(char const *url)
 {
-
   // split URL into auth, host, path and port number.
   vcl_string host;
   vcl_string path;
@@ -204,8 +202,6 @@ bool vul_http_exists(char const *url)
   while (*p && *p!='/')
     ++ p;
   host = vcl_string(url+7, p);
-
-
 
 
   if (*p)
@@ -231,7 +227,7 @@ bool vul_http_exists(char const *url)
 
 
   // so far so good.
-#if 0
+#ifdef DEBUG
   vcl_cerr << "auth = \'" << auth << "\'" << vcl_endl
            << "host = \'" << host << "\'" << vcl_endl
            << "path = \'" << path << "\'" << vcl_endl
@@ -244,9 +240,9 @@ bool vul_http_exists(char const *url)
     WORD wVersionRequested;
     WSADATA wsaData;
     int err;
- 
+
     wVersionRequested = MAKEWORD( 2, 2 );
- 
+
     err = WSAStartup( wVersionRequested, &wsaData );
   }
 #endif
@@ -263,7 +259,7 @@ bool vul_http_exists(char const *url)
 # endif
 #else
   if (tcp_socket < 0) {
-#endif 
+#endif
     vcl_cerr << __FILE__ ": failed to create socket." << vcl_endl;
     return false;
   }
@@ -304,14 +300,14 @@ bool vul_http_exists(char const *url)
   if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0) {
 #else
   if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0) {
-#endif 
+#endif
     vcl_cerr << __FILE__ ": error sending HTTP request" << vcl_endl;
 
 #ifdef VCL_WIN32
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
-#endif 
+#endif
     return false;
   }
 
@@ -330,7 +326,7 @@ bool vul_http_exists(char const *url)
     if ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0) {
 #else
     if ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0) {
-#endif 
+#endif
       contents.append(buffer, n);
       //vcl_cerr << n << " bytes" << vcl_endl;
     }
@@ -340,19 +336,17 @@ bool vul_http_exists(char const *url)
       closesocket(tcp_socket);
 #else
       close(tcp_socket);
-#endif 
+#endif
       return false;
     }
-
   }
-
 
   // close connection to server.
 #ifdef VCL_WIN32
   closesocket(tcp_socket);
 #else
   close(tcp_socket);
-#endif 
+#endif
   vcl_string::size_type  n;
   if ( ((n = contents.find("<HTML>")) != contents.npos)
     && (contents.find("404 Not Found",n) != contents.npos) )
@@ -362,8 +356,6 @@ bool vul_http_exists(char const *url)
 
   return true;
 }
-
-
 
 
 vcl_istream * vul_url::open(const char * url)
@@ -394,7 +386,6 @@ vcl_istream * vul_url::open(const char * url)
 }
 
 
-
 //: Does that URL exist
 bool vul_url::exists(const char * url)
 {
@@ -403,13 +394,13 @@ bool vul_url::exists(const char * url)
     return false;
   unsigned l = vcl_strlen(url);
 
+  // check for filenames beginning "file:".
   if (l > 7 && vcl_strncmp(url, "file://", 7) == 0)
     return vul_file::exists(url+7);
 
   // maybe it's an http URL?
   if (l > 7 && vcl_strncmp(url, "http://", 7) == 0)
     return vul_http_exists(url);
-
 
   // maybe it's an ftp URL?
   if (l > 6 && vcl_strncmp(url, "ftp://", 6) == 0)
@@ -419,8 +410,8 @@ bool vul_url::exists(const char * url)
     return false;
   }
 
+  // try an ordinary filename
   return vul_file::exists(url);
-
 }
 
 //: Is that a URL
@@ -445,7 +436,6 @@ bool vul_url::is_url(const char * url)
     return true;
   }
 
-  // try an ordinary filename
   return false;
 }
 
@@ -455,7 +445,7 @@ bool vul_url::is_file(const char * fn)
 {
   return
     (vul_url::is_url(fn) && vul_url::exists(fn)) ||
-    (! vul_url::is_url(fn) && 
-      (vul_file::exists(fn)       
-		   && !vul_file::is_directory(fn) ));
+    (! vul_url::is_url(fn) &&
+     vul_file::exists(fn) &&
+     ! vul_file::is_directory(fn) );
 }
