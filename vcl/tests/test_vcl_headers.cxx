@@ -50,4 +50,6 @@
 //gcc2.95 #include <vcl_limits.h>
 #include <vcl_strstream.h>   // deprecated
 
+#include <vcl_complex_fwd.h>
+
 int main(int, char **) { return 0; }
