@@ -6,6 +6,6 @@
 
 
 #ifdef _MSC_VER
-static char * dummy = "dummy";
+char * vil3d_io_dummy = "dummy";
 #endif
 
