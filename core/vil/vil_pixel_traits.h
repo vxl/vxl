@@ -6,7 +6,6 @@
 // \author Ian Scott.
 
 #include <vil/vil_rgb.h>
-#include <vxl_config.h>
 
 template <class T>
 class vil2_pixel_traits

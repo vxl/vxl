@@ -6,11 +6,9 @@
 // \brief Various functions for manipulating image views
 // \author Tim Cootes - Manchester
 
-#include <vil2/vil2_image_view_functions.h>
-#include <vcl_cassert.h>
-#include <vxl_config.h>
+#include "vil2_image_view_functions.h"
 #include <vil/vil_rgb.h>
-
+#include <vcl_cassert.h>
 
 //: True if the actual images are identical.
 // $\bigwedge_{i,j,p} {\textstyle src}(i,j,p) == {\textstyle dest}(i,j,p)$
@@ -48,7 +46,6 @@ vil2_image_view<T> vil2_plane(const vil2_image_view<T> &im, unsigned p)
   return vil2_image_view<T>(im.memory_chunk(),im.top_left_ptr()+p*im.planestep(),im.ni(),im.nj(),1,
     im.istep(),im.jstep(),im.planestep());
 }
-
 
 
 //: Return a 3-plane view of an RGB image
@@ -249,4 +246,4 @@ template void vil2_fill_line(T * data, unsigned n, int step, T value); \
 template void vil2_fill_row(vil2_image_view<T >& view, unsigned j, T value); \
 template void vil2_fill_col(vil2_image_view<T >& view, unsigned i, T value)
 
-#endif
+#endif // vil2_image_view_functions_txx_
