@@ -36,7 +36,7 @@ vil_image vil_image_as(vil_image const &, vil_rgb<unsigned char>* dummy);
 // the R, G and B values to obtain the resulting grey value.
 
 template<class T>
-vil_image vil_image_as(vil_image const & i);
+vil_image vil_image_as(vil_image const & i, T* dummy);
 
 //: \brief Converts to a greyscale image with integer (32bit) pixels. \sa{vil_image_as}
 vil_image vil_image_as_int(vil_image const & i);
