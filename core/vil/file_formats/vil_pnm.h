@@ -16,7 +16,7 @@
 // 20 Sep 2002  Ian Scott  - Coverted to vil2.
 //\endverbatim
 
-#include <vil2/vil2_image_data.h>
+#include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_file_format.h>
 
 class vil2_image_view_base;
@@ -27,8 +27,8 @@ class vil2_pnm_file_format : public vil2_file_format
 {
  public:
   virtual char const* tag() const;
-  virtual vil2_image_data_sptr make_input_image(vil_stream* vs);
-  virtual vil2_image_data_sptr make_output_image(vil_stream* vs,
+  virtual vil2_image_resource_sptr make_input_image(vil_stream* vs);
+  virtual vil2_image_resource_sptr make_output_image(vil_stream* vs,
                                                  unsigned nx,
                                                  unsigned ny,
                                                  unsigned nplanes,
@@ -57,7 +57,7 @@ class vil2_ppm_file_format : public vil2_pnm_file_format
 };
 
 //: Generic image implementation for PNM files
-class vil2_pnm_image : public vil2_image_data
+class vil2_pnm_image : public vil2_image_resource
 {
   vil_stream* vs_;
   int magic_;

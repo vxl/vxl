@@ -15,7 +15,7 @@
 * The core class is vil2_image_view<T> which gives a view of an image in memory.
 * The only way to get at the pixel data in an image is through a vil2_image_view<T>.
 *
-* Large images (in files) can be accessed through the vil2_image_data class, but
+* Large images (in files) can be accessed through the vil2_image_resource class, but
 * one can only get at the data by asking for a view of it, which loads the
 * requested section into memory and creates a suitable vil2_image_view<T>.
 *
@@ -153,15 +153,15 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_value_range(minv,maxv,view) : Gets range of values in view
 *
 * \section image_src Image sources
-* The vil2_image_data class is an abstract base class for image data, views of which can be
+* The vil2_image_resource class is an abstract base class for image data, views of which can be
 * obtained (or changed) with the get_view()/put_view() functions.
 * The types of derived classes are
 * - vil2_filetype_image: Representing an image in a file
 * - vil2_memory_image: Representing an image in memory (essentially a wrapper around a view)
-* - vil2_filter_image_data: Representing a filtered (e.g. cropped) version of an image in a file.
+* - vil2_filter_image_resource: Representing a filtered (e.g. cropped) version of an image in a file.
 *
-* Most instances of vil2_image_data objects will be through smart pointers. So expect to see
-* lots of references to vil2_image_data_sptr types. vil2_image_data objects in most cases
+* Most instances of vil2_image_resource objects will be through smart pointers. So expect to see
+* lots of references to vil2_image_resource_sptr types. vil2_image_resource objects in most cases
 * only deal with scalar-type pixels. Of course once you get a view of real image data in memory, you
 * can easily convert a multi-planar view into a multi-component view.
 *

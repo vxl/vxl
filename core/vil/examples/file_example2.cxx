@@ -19,14 +19,14 @@ int main(int argc, char** argv)
 
   // This is how we initialise an image data object.
 
-  vil2_image_data_sptr data = vil2_load_image_data(filename.c_str());
+  vil2_image_resource_sptr data = vil2_load_image_resource(filename.c_str());
 
   vcl_cout<<"Crop the image by 1 pixel around all sides." << vcl_endl;
 
 
   // We can apply some operation to it.
 
-  vil2_image_data_sptr cropped_data = vil2_crop(data, 1, data->ni()-2, 1, data->nj()-2);
+  vil2_image_resource_sptr cropped_data = vil2_crop(data, 1, data->ni()-2, 1, data->nj()-2);
 
 
   // An then get the image pixels from it.

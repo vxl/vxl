@@ -7,7 +7,7 @@
 //
 // There is no class or function called vil2_property.
 //
-// The image class vil2_image_data has the method :
+// The image class vil2_image_resource has the method :
 // \code
 //   bool get_property(char const *tag, void *property_value = 0) const;
 // \endcode

@@ -10,7 +10,7 @@
 // \author awf
 
 #include <vil/vil_fwd.h> // for vil_stream
-#include <vil2/vil2_image_data.h>
+#include <vil2/vil2_image_resource.h>
 
 //: Base class for image formats.
 //  There is one derived class for each handled file format in the
@@ -26,16 +26,16 @@ class vil2_file_format
 
   //: Attempt to make a generic_image which will read from vil2_stream vs.
   // Reads enough of vs to determine if it's this format, and if not, returns 0.
-  // If it is, returns a subclass of vil2_image_data on which get_section may
+  // If it is, returns a subclass of vil2_image_resource on which get_section may
   // be applied.
-  virtual vil2_image_data_sptr make_input_image(vil_stream* vs) = 0;
+  virtual vil2_image_resource_sptr make_input_image(vil_stream* vs) = 0;
 
   //: Make a "generic_image" on which put_section may be applied.
   // The stream vs is assumed to be open for writing, as an image header may be
   // written to it immediately.
   // The width/height etc are explicitly specified, so that file_format implementors
   // know what they need to do...
-  virtual vil2_image_data_sptr make_output_image(vil_stream* vs,
+  virtual vil2_image_resource_sptr make_output_image(vil_stream* vs,
                                                  unsigned nx,
                                                  unsigned ny,
                                                  unsigned nplanes,

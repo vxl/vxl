@@ -6,7 +6,7 @@ SET( vil2_sources
   vil2_memory_chunk.cxx    vil2_memory_chunk.h
   vil2_image_view_base.cxx vil2_image_view_base.h
   vil2_image_view.cxx      vil2_image_view.h      vil2_image_view.txx
-  vil2_image_data.cxx      vil2_image_data.h
+  vil2_image_resource.cxx  vil2_image_resource.h
 
   vil2_file_format.cxx vil2_file_format.h
   vil2_memory_image.cxx vil2_memory_image.h

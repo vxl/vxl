@@ -12,7 +12,7 @@
 #include <vcl_cstring.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_view_functions.h>
-#include <vil2/vil2_image_data.h>
+#include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_property.h>
 
 //: Available options for boundary behavior
@@ -239,11 +239,11 @@ inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
 
 //: A resource adaptor that behaves like a algo_convolve_1d'ed version of its input
 template <class kernelT, class accumT, class destT>
-class vil2_algo_convolve_1d_resource : public vil2_image_data
+class vil2_algo_convolve_1d_resource : public vil2_image_resource
 {
   //: Construct a convolve filter.
   // You can't create one of these directly, use vil2_algo_convolve_1d instead
-  vil2_algo_convolve_1d_resource(const vil2_image_data_sptr& src,
+  vil2_algo_convolve_1d_resource(const vil2_image_resource_sptr& src,
                                   const kernelT* kernel, int k_lo, int k_hi,
                                   vil2_convolve_boundary_option start_option,
                                   vil2_convolve_boundary_option end_option):
@@ -253,7 +253,7 @@ class vil2_algo_convolve_1d_resource : public vil2_image_data
       assert (start_option != vil2_convolve_periodic_extend ||
         end_option != vil2_convolve_periodic_extend);}
 
-  friend vil2_image_data_sptr vil2_algo_convolve_1d( const vil2_image_data_sptr& src_im, const destT dt, const kernelT* kernel,
+  friend vil2_image_resource_sptr vil2_algo_convolve_1d( const vil2_image_resource_sptr& src_im, const destT dt, const kernelT* kernel,
     int k_lo, int k_hi, const accumT ac,
     vil2_convolve_boundary_option start_option,
     vil2_convolve_boundary_option end_option);
@@ -315,21 +315,21 @@ class vil2_algo_convolve_1d_resource : public vil2_image_data
   //: Return true if the name of the class matches the argument
   virtual bool is_class(vcl_string const&s) const
   {
-    return s==vil2_algo_convolve_1d_resource::is_a() || vil2_image_data::is_class(s);
+    return s==vil2_algo_convolve_1d_resource::is_a() || vil2_image_resource::is_class(s);
   }
 
  protected:
-  vil2_image_data_sptr src_;
+  vil2_image_resource_sptr src_;
   const kernelT* kernel_;
   int klo_, khi_;
   vil2_convolve_boundary_option start_option_, end_option_;
 };
 
-//: Create an image_data object which convolve kernel[x] x in [k_lo,k_hi] with srcT
+//: Create an image_resource object which convolve kernel[x] x in [k_lo,k_hi] with srcT
 // \param kernel should point to tap 0.
 template <class destT, class kernelT, class accumT>
-inline vil2_image_data_sptr vil2_algo_convolve_1d<kernelT, accumT, destT>(
-  const vil2_image_data_sptr& src_im,
+inline vil2_image_resource_sptr vil2_algo_convolve_1d<kernelT, accumT, destT>(
+  const vil2_image_resource_sptr& src_im,
   const destT dt,
   const kernelT* kernel, int k_lo, int k_hi,
   const accumT ac,

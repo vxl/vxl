@@ -8,12 +8,12 @@
 // \file
 // \author Ian Scott
 
-#include <vil2/vil2_image_data.h>
+#include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_view_base.h>
 
 //: Generic image implementation for PNM files
 // You can't create one of these yourself - use vil2_new() instead.
-class vil2_memory_image : public vil2_image_data
+class vil2_memory_image : public vil2_image_resource
 {
   //: Management of the memory image is devolved to an internal image_view.
   vil2_image_view_base* view_;
@@ -28,7 +28,7 @@ class vil2_memory_image : public vil2_image_data
                     unsigned nplanes,
                     vil2_pixel_format format);
 
-  friend vil2_image_data_sptr vil2_new_image_data(
+  friend vil2_image_resource_sptr vil2_new_image_resource(
     unsigned ni, unsigned nj, unsigned nplanes,
     vil2_pixel_format format);
 

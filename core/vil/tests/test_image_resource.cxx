@@ -1,5 +1,5 @@
-// This is mul/vil2/tests/test_image_data.cxx
-#include <vil2/vil2_image_data.h>
+// This is mul/vil2/tests/test_image_resource.cxx
+#include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_view_functions.h>
 #include <vil2/vil2_new.h>
 #include <vil2/vil2_crop.h>
@@ -7,16 +7,16 @@
 #include <testlib/testlib_test.h>
 
 
-void test_image_data_1()
+void test_image_resource_1()
 {
   vcl_cout << "*********************************\n";
-  vcl_cout << " Testing vil2_image_data objects\n";
+  vcl_cout << " Testing vil2_image_resource objects\n";
   vcl_cout << "*********************************\n";
 
-  vil2_image_data_sptr mem = vil2_new_image_data(10,8,1,VIL2_PIXEL_FORMAT_FLOAT);
+  vil2_image_resource_sptr mem = vil2_new_image_resource(10,8,1,VIL2_PIXEL_FORMAT_FLOAT);
 //  vil2_memory_image mem(10,8,1,VIL2_PIXEL_FORMAT_FLOAT);
 
-  TEST("vil2_new_image_data", mem, true);
+  TEST("vil2_new_image_resource", mem, true);
 
   vil2_image_view<float> view1 = mem->get_view(0, mem->ni(), 0, mem->nj());
   TEST("vil2_memory_image::get_view()", view1 && view1.ni()==10 && view1.nj()==8
@@ -26,9 +26,9 @@ void test_image_data_1()
 
   TEST("vil2_memory_image::put_view()", mem->put_view(view1,0,0), true);
 
-  vil2_image_data_sptr crop = vil2_crop(mem, 2, 6, 2, 4);
+  vil2_image_resource_sptr crop = vil2_crop(mem, 2, 6, 2, 4);
 
-  TEST("vil2_crop(image_data)", crop, true);
+  TEST("vil2_crop(image_resource)", crop, true);
 
   vil2_image_view<float> view2 = crop->get_copy_view(0, crop->ni(), 0, crop->nj());
   TEST("vil2_memory_image::get_copy_view()",
@@ -154,10 +154,10 @@ void test_image_data_1()
 #endif
 }
 
-MAIN( test_image_data )
+MAIN( test_image_resource )
 {
-  START( "vil2_image_data" );
-  test_image_data_1();
+  START( "vil2_image_resource" );
+  test_image_resource_1();
 
   SUMMARY();
 }

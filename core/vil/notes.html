@@ -62,7 +62,7 @@
 <p>Do these not indicate that trying to have a single image type (or hierarchy) is incorrect? 
 Does the single <code>vil_image</code> hierarchy actually give you anything?</p>
 <p>vil2 merges all the assumptions on the left in <code>vil2_image_view&lt;T&gt;</code>, 
-and those on the right in <code>vil2_image_data</code></p>
+and those on the right in <code>vil2_image_resource</code></p>
 <h2>Background</h2>
 <p>Before ISBE, Manchester adopted VXL we used an image type which provided</p>
 <ol>
@@ -86,18 +86,18 @@ this proposal.</p>
 <p>We want a single "normal" and "easy" image class that we can point new users at.
 This should also be the default class for doing actual pixel manipulation.</p>
 <p>We want to keep the type proliferation down. So we enforce the following idea
-<code>vil2_image_data_sptr </code>is used when you don't know an image's pixel type,
+<code>vil2_image_resource_sptr </code>is used when you don't know an image's pixel type,
 and you can't immediately access the pixels. <code>vil2_image_view&lt;T&gt;</code> is used when you know the type,
 you know the structure and you can immediately access the pixels. By keeping this
 division clean we can avoid type proliferation. There are limited exceptional cases. One is
 when you absolutely must have a function that works on a view without knowing its pixel type - e.g.
-<code>vil2_image_data::get_view()</code> which returns a <code>vil_image_view_base_sptr</code>.
+<code>vil2_image_resource::get_view()</code> which returns a <code>vil_image_view_base_sptr</code>.
 This means that all functions that actually work with pixels should
 take a concrete <code>vil_image_view&lt;T&gt;</code>. Anyone who wants to write super-duper 
 size-no-problem image processing code, should write functions that take 
-<code>vil2_image_data_sptr</code>. However they will do the actual pixel processing with a 
+<code>vil2_image_resource_sptr</code>. However they will do the actual pixel processing with a 
 <code>vil2_image_view&lt;T&gt;</code>. To get the functional style, most operations on a
-<code>vil2_image_data</code>, should be on a <code>vil2_image_data_sptr</code>.</p>
+<code>vil2_image_resource</code>, should be on a <code>vil2_image_resource_sptr</code>.</p>
 <h2>Design decisions:</h2>
 <h4>vil_image_view&lt;T&gt;::resize should be virtual and in the base class</h4>
 <p>It is 
@@ -136,27 +136,27 @@ The former is probably more natural, however, the latter allows us to use
 default argument plane=0, which is very useful for keeping interface clutter 
 down. Decision at Providence meeting.</p>
 <h4>Use <code>vil2_image_view_base_sptr </code>in preference to <code>vil2_image_view_base *</code>.</h4>
-<p>Main uses of this are in <code>vil2_load(..) </code>and <code>vil2_image_data::get_view(..)</code>. This avoids 
-likely source of memory leaks. However, most code in vil2 should operate on <code>vil2_image_data&lt;T&gt;</code>.
+<p>Main uses of this are in <code>vil2_load(..) </code>and <code>vil2_image_resource::get_view(..)</code>. This avoids 
+likely source of memory leaks. However, most code in vil2 should operate on <code>vil2_image_resource&lt;T&gt;</code>.
 Decision at Providence meeting.</p>
-<h4><code>vil2_image_view&lt;T&gt;</code> should not be derived from <code>vil_image_data</code></h4>
+<h4><code>vil2_image_view&lt;T&gt;</code> should not be derived from <code>vil2_image_resource</code></h4>
 <p>As explained above these are actually two different types. Efficient access 
 to ni, nj for <code>vil_image_view&lt;T&gt;</code> whilst matching interface for
-<code>vil_image_data </code>would require a lot of complexity. Decision confirmed at Providence 
+<code>vil2_image_resource </code>would require a lot of complexity. Decision confirmed at Providence 
 meeting.</p>
-<h4>There should  be no general <code>vil2_image_data::set_properties(..)</code>?</h4>
+<h4>There should  be no general <code>vil2_image_resource::set_properties(..)</code>?</h4>
 <p>Its existence would imply the ability to set arbitrary properties. You can always have a
 specialist <code>set_obscure_tiff_property(..) </code>as a member function of 
 <code>vil2_tiff_file_image</code>. Decision by IMS and AWF. There will be a
-<code>vil2_image_data::get_properties(..)</code> with all properties documented 
-in <code>vil/vil_properties.h</code>. This allows for partially shared 
+<code>vil2_image_resource::get_properties(..)</code> with all properties documented 
+in <code>vil2/vil2_properties.h</code>. This allows for partially shared 
 properties such as bits per component or physical pixel height
 </p>
-<h4><code>vil2_image_data::get_view(..)</code>, etc. will not allow you to specify planes.</h4>
+<h4><code>vil2_image_resource::get_view(..)</code>, etc. will not allow you to specify planes.</h4>
 <p>It is easy to split off individual planes later. Although plane 
 specifications could give 
 you a memory advantage -  a factor of 3 is not big enough to be useful 
-for v. large images. Not having planes specifications can make programming <code>vil2_file_image_data::get_view(..)</code>, 
+for v. large images. Not having planes specifications can make programming <code>vil2_file_image_resource::get_view(..)</code>, 
 etc. a lot easier and potentially faster.
 Decision at Providence meeting.</p>
 <h4>Index and size types should be <code>unsigned int</code>.</h4>
@@ -168,10 +168,10 @@ errors by <code>assert</code>&nbsp;<code>(i != (unsigned)(-1))</code>. Decision 
 meeting.</p>
 <h4>Use function overloading and normal filename prefix for functions on <code>
 vil2_image_view&lt;T&gt;</code>, and functions on 
-<code>vil2_image_data</code> objects.</h4>
+<code>vil2_image_resource</code> objects.</h4>
 <p>Where function overloading doesn't discriminate (e.g. <code>
-vil2_load(&quot;filename&quot;)</code> ) then use <code>vil2_load_image_data(&quot;filename&quot;)</code> 
-for <code>vil2_image_data </code>objects. Decision IMS and TFC</p>
+vil2_load(&quot;filename&quot;)</code> ) then use <code>vil2_load_image_resource(&quot;filename&quot;)</code> 
+for <code>vil2_image_resource </code>objects. Decision IMS and TFC</p>
 <h4>vil2_image_view&lt;T&gt;::resize(ni, nj) will make no changes if size is same. It 
 will detach from original underlying data and create new data if different.</h4>
 <p>This has some odd effects. If you have multiple views to the same data then 
@@ -193,17 +193,17 @@ names. So this should not include doing conversions such as byte to float
 conversion. These conversions should be done by separately named functions. 
 Decision at Providence meeting.</p>
 <h4>All pixel types should be explicit about type length (e.g. <code>vxl_uint_16</code>)</h4>
-<p>Alternative is to have <code>vil2_image_data::get_view()</code> automatically 
+<p>Alternative is to have <code>vil2_image_resource::get_view()</code> automatically 
 pick the best standard type for that platform (e.g. short) The problem with this 
 becomes clear on 64 bit platforms. What types should 16bit or 32bit data get 
 loaded into (The same platform can't define short as both.). Decision at 
 Providence meeting. Question - do the float types need to be specific or can 
 we assume IEEE standard lengths?&nbsp; </p>
-<h4>All operations will default to scalar pixels and multiple planes. <code>vil2_image_data</code>
+<h4>All operations will default to scalar pixels and multiple planes. <code>vil2_image_resource</code>
 hierarchy will mostly work only with scalar pixels.</h4>
 <p>Nothing prevents you from using <code>vil_rgb </code>pixels, and we will 
 provide appropriate support. However planes are more general than components, 
-and <code>vil2_image_data </code>hierarchy can be simpler if it only thinks 
+and <code>vil2_image_resource </code>hierarchy can be simpler if it only thinks 
 about scalar pixels. In particular it may not be feasible to consider every
 possible compound pixel type in a <code>switch()</code> statement, but it is
 feasible to consider every possible scalar pixel type. Decision confirmed at Providence meeting.</p>
@@ -222,6 +222,14 @@ first parameters.</h4>
 &amp;dest_i, vil2_image_view&lt;T&gt; &amp;dest_j);</code></p>
 <p>This is different from the operator=(..) style, but is more common in other 
 function libraries. Decision at Providence meeting.</p>
+<h4>Best names are <code>vil2_image_view, vil2_image_resource</code></h4>
+<p>A beginner will expect to 
+see the word image in the main image type. However it aids understanding to be
+reminded that this is a view so <code>vil2_image_view</code>. <code>vil2_image_resource</code>
+was originally <code>vil2_image_data</code>. However that was thought to be
+confusing and might get confused with the <code>vil2_memory_chunk</code> class.
+So <code>vil2_image_resource</code>. Decision at Providence meeting and by vote
+on vxl-maintainers.</p>
 <h2>Remaining questions</h2>
 <p>Don't do early optimisation? A good compiler will optimise sequential pixel 
 access using vil2_image_view&lt;T&gt;::operator(i,j,p) to efficient pointer stepping. 
@@ -237,17 +245,12 @@ There was concern at the meeting about confusing the optimiser.</p>
 <p>Pointers to data are often passed in as const, but may have the const removed.
 This is because it is rather complicated to keep track of whether the data is going to be
 changed or not.  Just try to be sensible, OK?</p>
-<p>Best names for <code>vil2_image_view, vil2_image_data, vimt_reg_image</code>?<br>
-Views at Providence meeting were divided. given the names of the libraries, 
-the word &quot;image&quot; is redundant in each type. However a beginner will expect to 
-see the word image in an image type. We could rename <code>vil2_image_view</code> 
-as <code>vil2_image</code>, however the &quot;view&quot; emphasises its nature.</p>
 <p>Equals is defined as <code>vil2_image_view&lt;T&gt;::operator=(const 
 vil2_image_view_base &amp;)</code> has an operator= from its own base class. Is this sensible?
 It allows for the simple conversion from the abstract base class which many functions will return
 to a concrete class with a useful interface. Should there also be a <code>
 vil2_image_view&lt;T&gt;::operator=(const vil2_image_view_base_sptr &amp;)</code></p>
-<p>Should <code>vil_load</code> and <code>vil_image_data::get_view(..)</code> 
+<p>Should <code>vil_load</code> and <code>vil2_image_resource::get_view(..)</code> 
 return <code>vil2_image_view_base *</code> or <code>vil2_image_view_sptr</code>? 
 Both appear to work.</p>
 <p>There is now no way to get a bit-compressed pbm file into memory efficiently. Is this a problem?
@@ -289,7 +292,7 @@ and a TIFF file loader.</p>
 <ol>
   <li>Go through existing examples and VXL book and see if there are any idioms we have missed. - Done TFC 
   </li>
-  <li>Add <code>vil_crop </code>style filter example for <code>vil2_image_data</code>. - Done IMS</li>
+  <li>Add <code>vil_crop </code>style filter example for <code>vil2_image_resource</code>. - Done IMS</li>
   <li>Decide where to put world to image transforms and write it - Half done TFC</li>
   <li>Write <code>vil2_save </code>- done IMS </li>
   <li>Write <code>vil2_memory_image</code> - half done IMS </li>
@@ -299,7 +302,7 @@ and a TIFF file loader.</p>
   <li>Add a <code>set_view(..) </code>function to fill someone's existing view with data
   (which will probably be useful for implementing <code>vil_clamp </code>style filters)</li>
   <li>Convert rest of file loaders</li>
-  <li>Convert rest of <code>vil2_image_data</code> filters</li>
+  <li>Convert rest of <code>vil2_image_resource</code> filters</li>
   <li>Add a vil3d library.</li>
 </ol>
 <h2>Notes</h2>

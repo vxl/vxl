@@ -12,7 +12,7 @@
 // You can then cast, or assign it to the appropriate type. You must not forget to
 // delete the created view.
 //
-// vil2_load_image_data() returns a smart pointer to vil2_image_data which
+// vil2_load_image_resource() returns a smart pointer to vil2_image_resource which
 // will "read an image from a file". In practice
 // it may or may not read the image on creation, but a disk read will take place at
 // some point before get_view() returns.
@@ -33,17 +33,17 @@
 //\endverbatim
 
 #include <vil/vil_fwd.h>
-#include <vil2/vil2_image_data.h>
+#include <vil2/vil2_image_resource.h>
 
 //: Load an image data object from a file, possibly performing expected conversions.
-vil2_image_data_sptr vil2_load_image_data(char const* filename);
+vil2_image_resource_sptr vil2_load_image_resource(char const* filename);
 
 //: Load raw from stream.
-vil2_image_data_sptr vil2_load_image_data_raw(vil_stream *);
+vil2_image_resource_sptr vil2_load_image_resource_raw(vil_stream *);
 
 //: Load raw from a filename.
 // A convience function.
-vil2_image_data_sptr vil2_load_image_data_raw(char const*);
+vil2_image_resource_sptr vil2_load_image_resource_raw(char const*);
 
 //: Convenience function for loading an image into an image view.
 vil2_image_view_base_sptr vil2_load(const char *);

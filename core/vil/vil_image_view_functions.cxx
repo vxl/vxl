@@ -5,7 +5,6 @@
 // \brief Various functions for manipulating image views
 // \author Tim Cootes and Ian Scott - Manchester
 
-#include <vil2/vil2_image_data.h>
 #include <vil/vil_rgb.h>
 #include <vxl_config.h> // for vxl_uint_32 etc.
 

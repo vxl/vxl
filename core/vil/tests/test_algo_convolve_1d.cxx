@@ -117,9 +117,9 @@ void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
 
-  vcl_cout << "\n\nvil2_algo_convolve_1d(vil2_image_data_sptr&,...)" << vcl_endl;
+  vcl_cout << "\n\nvil2_algo_convolve_1d(vil2_image_resource_sptr&,...)" << vcl_endl;
 
-  vil2_image_data_sptr mem = vil2_new_image_data(n,n,1,VIL2_PIXEL_FORMAT_BYTE);
+  vil2_image_resource_sptr mem = vil2_new_image_resource(n,n,1,VIL2_PIXEL_FORMAT_BYTE);
   vil2_image_view<vxl_byte> v(n,n,1), v_out(n,n,1);
   for (unsigned j=0; j<n; ++j)
     for (unsigned i=0; i<n; ++i)
@@ -127,8 +127,8 @@ void test_algo_convolve_1d_double()
   
   TEST ("memory image.put_view()", mem->put_view(v,0,0), true);
 
-  // set up a convolved image_data object
-  vil2_image_data_sptr conv = vil2_algo_convolve_1d(mem, vxl_byte(), &kernel[1],-1,1, int(),
+  // set up a convolved image_resource object
+  vil2_image_resource_sptr conv = vil2_algo_convolve_1d(mem, vxl_byte(), &kernel[1],-1,1, int(),
     vil2_convolve_constant_extend, vil2_convolve_zero_extend);
 
   //set up a convolved view.

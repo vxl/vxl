@@ -1,6 +1,6 @@
-// This is mul/vil2/vil2_image_data.h
-#ifndef vil2_image_data_h_
-#define vil2_image_data_h_
+// This is mul/vil2/vil2_image_resource.h
+#ifndef vil2_image_resource_h_
+#define vil2_image_resource_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -21,18 +21,18 @@ class vil2_image_view_base;
 
 //:
 // Abstract representation of an image source or image destination.
-// Most references to vil2_image_data objects should usually be done
-// through smart pointers - vil2_image_data_sptr;
+// Most references to vil2_image_resource objects should usually be done
+// through smart pointers - vil2_image_resource_sptr;
 //
 // All image data is presumed to be in planes, not components. This
 // does not say whether the data is stored on disk or in memory
 // as RGBRGBRGB.. or RRR..GGG..BBB.., just that the interface will
 // always tell you that it has a multi-plane single-component view.
-class vil2_image_data
+class vil2_image_resource
 {
  public:
-  vil2_image_data();
-  virtual ~vil2_image_data();
+  vil2_image_resource();
+  virtual ~vil2_image_resource();
 
   //: Dimensions:  Planes x ni x nj.
   // This concept is treated as a synonym to components.
@@ -98,9 +98,9 @@ class vil2_image_data
   virtual bool is_class(vcl_string const&) const;
 
  private:
-  // You probably should not use a vil2_image_data in a vbl_smart_ptr, so the
+  // You probably should not use a vil2_image_resource in a vbl_smart_ptr, so the
   // ref functions are private
-  friend class vil2_smart_ptr<vil2_image_data>;
+  friend class vil2_smart_ptr<vil2_image_resource>;
   void ref() { ++reference_count_; }
   void unref() {
     assert(reference_count_>0);
@@ -108,6 +108,6 @@ class vil2_image_data
   int reference_count_;
 };
 
-typedef vil2_smart_ptr<vil2_image_data> vil2_image_data_sptr;
+typedef vil2_smart_ptr<vil2_image_resource> vil2_image_resource_sptr;
 
-#endif // vil2_image_data_h_
+#endif // vil2_image_resource_h_

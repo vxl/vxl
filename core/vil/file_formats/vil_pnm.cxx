@@ -18,7 +18,7 @@
 
 #include <vil/vil_stream.h>
 #include <vil2/vil2_property.h>
-#include <vil2/vil2_image_data.h>
+#include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_memory_chunk.h>
 
@@ -38,7 +38,7 @@ static inline bool isws(int c)
   return c == ' ' || c == '\t' || c == 10 || c == 13;
 }
 
-vil2_image_data_sptr vil2_pnm_file_format::make_input_image(vil_stream* vs)
+vil2_image_resource_sptr vil2_pnm_file_format::make_input_image(vil_stream* vs)
 {
   // Attempt to read header
   unsigned char buf[3];
@@ -52,7 +52,7 @@ vil2_image_data_sptr vil2_pnm_file_format::make_input_image(vil_stream* vs)
   return new vil2_pnm_image(vs);
 }
 
-vil2_image_data_sptr vil2_pnm_file_format::make_output_image(vil_stream* vs,
+vil2_image_resource_sptr vil2_pnm_file_format::make_output_image(vil_stream* vs,
                                                              unsigned nx,
                                                              unsigned ny,
                                                              unsigned nplanes,
@@ -485,7 +485,7 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
   else
   {
     vcl_cerr << "ERROR: " << __FILE__ << ":\n Do not support putting "
-             << view.is_a() << " views into pnm image_data objects\n";
+             << view.is_a() << " views into pnm image_resource objects\n";
     return false;
   }
 

@@ -14,7 +14,7 @@
 #include <vil/vil_open.h>
 #include <vil2/vil2_new.h>
 #include <vil2/vil2_pixel_format.h>
-#include <vil2/vil2_image_data.h>
+#include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_view_functions.h>
 
 
@@ -26,7 +26,7 @@ bool vil2_save(const vil2_image_view_base &im, char const* filename, char const*
     vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
     return false;
   }
-  vil2_image_data_sptr out = vil2_new_image_data(os, im.ni(), im.nj(),
+  vil2_image_resource_sptr out = vil2_new_image_resource(os, im.ni(), im.nj(),
     im.nplanes() * vil2_pixel_format_num_components(im.pixel_format()),
     im.pixel_format(), file_format);
   if (!out) {

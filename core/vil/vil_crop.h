@@ -8,18 +8,18 @@
 // \file
 // \author Ian Scott.
 
-#include <vil2/vil2_image_data.h>
+#include <vil2/vil2_image_resource.h>
 
 //: Crop to a region of src.
-vil2_image_data_sptr vil2_crop(const vil2_image_data_sptr &src, unsigned i0,
+vil2_image_resource_sptr vil2_crop(const vil2_image_resource_sptr &src, unsigned i0,
                                unsigned ni, unsigned j0, unsigned nj);
 
 
 //: A generic_image adaptor that behaves like a cropped version of its input
-class vil2_crop_image_data : public vil2_image_data
+class vil2_crop_image_resource : public vil2_image_resource
 {
  public:
-  vil2_crop_image_data(vil2_image_data_sptr const&, unsigned i0, unsigned ni,
+  vil2_crop_image_resource(vil2_image_resource_sptr const&, unsigned i0, unsigned ni,
                        unsigned j0, unsigned nj);
 
   virtual unsigned nplanes() const { return gi_->nplanes(); }
@@ -60,7 +60,7 @@ class vil2_crop_image_data : public vil2_image_data
   virtual bool is_class(vcl_string const&) const;
 
  protected:
-  vil2_image_data_sptr gi_;
+  vil2_image_resource_sptr gi_;
   int i0_;
   int ni_;
   int j0_;

@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_image_data.cxx
+// This is mul/vil2/vil2_image_resource.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -9,40 +9,40 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vil2_image_data.h"
+#include "vil2_image_resource.h"
 #include <vil2/vil2_image_view_base.h>
 
 //--------------------------------------------------------------------------------
 
 //: the reference count starts at 0.
-vil2_image_data::vil2_image_data() : reference_count_(0) { }
+vil2_image_resource::vil2_image_resource() : reference_count_(0) { }
 
-vil2_image_data::~vil2_image_data() { }
+vil2_image_resource::~vil2_image_resource() { }
 
 
-bool vil2_image_data::get_property(char const *, void *) const
+bool vil2_image_resource::get_property(char const *, void *) const
 {
   return false;
 }
 
 
 //: Return the name of the class;
-vcl_string vil2_image_data::is_a() const
+vcl_string vil2_image_resource::is_a() const
 {
-  static const vcl_string class_name_="vil2_image_data";
+  static const vcl_string class_name_="vil2_image_resource";
   return class_name_;
 }
 
 //: Return true if the name of the class matches the argument
-bool vil2_image_data::is_class(vcl_string const& s) const
+bool vil2_image_resource::is_class(vcl_string const& s) const
 {
-  return s==vil2_image_data::is_a();
+  return s==vil2_image_resource::is_a();
 }
 
 
 //: Check that a view will fit into the data at the given offset.
 // This includes checking that the pixel type is scalar.
-bool vil2_image_data::view_fits(const vil2_image_view_base& im, unsigned i0, unsigned j0)
+bool vil2_image_resource::view_fits(const vil2_image_view_base& im, unsigned i0, unsigned j0)
 {
   return (i0 + im.ni() <= ni() && j0 + im.nj() <= nj() &&
     im.nplanes() == nplanes() &&

@@ -19,7 +19,7 @@
 
 #include <vil2/vil2_file_format.h>
 #include <vil/vil_stream_fstream.h>
-#include <vil2/vil2_image_data.h>
+#include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_memory_image.h>
 
 
@@ -27,21 +27,21 @@
 // a temporary file on disk if the sizes are large.
 
 //: Make a new image of given format.
-vil2_image_data_sptr vil2_new_image_data(unsigned ni, unsigned nj, unsigned nplanes,
+vil2_image_resource_sptr vil2_new_image_resource(unsigned ni, unsigned nj, unsigned nplanes,
                                          vil2_pixel_format format)
 {
   return new vil2_memory_image(ni, nj, nplanes, format);
 }
 
 //: Make a new image, similar format to the prototype.
-vil2_image_data_sptr vil2_new_image_data(unsigned ni, unsigned nj, vil2_image_data_sptr const& prototype)
+vil2_image_resource_sptr vil2_new_image_resource(unsigned ni, unsigned nj, vil2_image_resource_sptr const& prototype)
 {
-  return vil2_new_image_data(ni, nj, prototype->nplanes(),
+  return vil2_new_image_resource(ni, nj, prototype->nplanes(),
                              prototype->pixel_format()); 
 }
 
 
-vil2_image_data_sptr vil2_new_image_data(vil_stream* os,
+vil2_image_resource_sptr vil2_new_image_resource(vil_stream* os,
                                          unsigned ni,
                                          unsigned nj,
                                          unsigned nplanes,
@@ -51,7 +51,7 @@ vil2_image_data_sptr vil2_new_image_data(vil_stream* os,
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
 
-  vil2_image_data_sptr outimage = 0;
+  vil2_image_resource_sptr outimage = 0;
   for (vil2_file_format** p = vil2_file_format::all(); *p; ++p) {
     vil2_file_format* fmt = *p;
     if (vcl_strcmp(fmt->tag(), file_format) == 0) {
@@ -68,12 +68,12 @@ vil2_image_data_sptr vil2_new_image_data(vil_stream* os,
 }
 
 //: Make a new vil2_image_impl, writing to stream "os", size ni x nj, copying pixel format etc from "prototype".
-vil2_image_data_sptr vil2_new_image_data(vil_stream* os,
+vil2_image_resource_sptr vil2_new_image_resource(vil_stream* os,
                                          unsigned ni, unsigned nj,
-                                         vil2_image_data_sptr const& prototype,
+                                         vil2_image_resource_sptr const& prototype,
                                          char const* file_format)
 {
-  return vil2_new_image_data(os,
+  return vil2_new_image_resource(os,
                              prototype->nplanes(),
                              ni, nj,
                              prototype->pixel_format(),
@@ -81,13 +81,13 @@ vil2_image_data_sptr vil2_new_image_data(vil_stream* os,
 }
 
 //: Make a new vil2_image_impl, writing to file "filename", size "w" x "h", copying pixel format etc from "prototype".
-vil2_image_data_sptr vil2_new_image_data(char const* filename,
+vil2_image_resource_sptr vil2_new_image_resource(char const* filename,
                                          unsigned ni, unsigned nj,
-                                         vil2_image_data_sptr const& prototype,
+                                         vil2_image_resource_sptr const& prototype,
                                          char const* file_format)
 {
   vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
-  return vil2_new_image_data(os,
+  return vil2_new_image_resource(os,
                              ni, nj,
                              prototype->nplanes(),
                              prototype->pixel_format(),
