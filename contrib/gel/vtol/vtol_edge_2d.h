@@ -42,24 +42,20 @@
 
 #include <vtol/vtol_edge_2d_ref.h>
 
-#include <vtol/vtol_topology_object_2d.h>
+#include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
-#include <vtol/vtol_zero_chain_2d.h>
+#include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vsol/vsol_curve_2d_ref.h>
+#include <vtol/vtol_edge.h>
 
 //: \brief topological edge
 
 class vtol_edge_2d
-  : public vtol_topology_object_2d
+  : public vtol_edge
 {
 private:
   vsol_curve_2d_ref _curve;
-
-  // Keeping vertex pointers inside of edge
-  // for convenience...for now.
-  vtol_vertex_2d_ref _v1;
-  vtol_vertex_2d_ref _v2;
 
 public:
   //***************************************************************************
@@ -88,12 +84,12 @@ public:
   //---------------------------------------------------------------------------
   //: Constructor from a zero-chain.
   //---------------------------------------------------------------------------
-  explicit vtol_edge_2d(vtol_zero_chain_2d &new_zero_chain);
+  explicit vtol_edge_2d(vtol_zero_chain &new_zero_chain);
 
   //---------------------------------------------------------------------------
   //: Constructor from an array of zero-chains.
   //---------------------------------------------------------------------------
-  explicit vtol_edge_2d(zero_chain_list_2d &new_zero_chains);
+  explicit vtol_edge_2d(zero_chain_list &new_zero_chains);
 
   explicit vtol_edge_2d(vsol_curve_2d &);
   explicit vtol_edge_2d(vtol_vertex_2d &,
@@ -113,12 +109,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_ref clone(void) const;
-
-  //---------------------------------------------------------------------------
-  //: Return the topology type
-  //---------------------------------------------------------------------------
-  virtual vtol_topology_object_2d_type topology_type(void) const { return EDGE; } 
+  virtual vsol_spatial_object_3d_ref clone(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the curve associated to `this'
@@ -130,51 +121,9 @@ public:
   //---------------------------------------------------------------------------
   virtual void set_curve(vsol_curve_2d &new_curve);
 
-  //---------------------------------------------------------------------------
-  //: Return the first endpoint
-  //---------------------------------------------------------------------------
-  virtual vtol_vertex_2d_ref v1(void) const { return _v1; }
-
-  //---------------------------------------------------------------------------
-  //: Return the second endpoint
-  //---------------------------------------------------------------------------
-  virtual vtol_vertex_2d_ref v2(void) const { return _v2; }
-
-  //---------------------------------------------------------------------------
-  //: Return the first zero-chain of `this'
-  //---------------------------------------------------------------------------
-  virtual vtol_zero_chain_2d_ref zero_chain(void) const;
-
-  //---------------------------------------------------------------------------
-  //: Set the first endpoint.
-  //---------------------------------------------------------------------------
-  virtual void set_v1(vtol_vertex_2d *new_v1);
-
-  //---------------------------------------------------------------------------
-  //: Set the last endpoint
-  //---------------------------------------------------------------------------
-  virtual void set_v2(vtol_vertex_2d *new_v2);
-
-  //---------------------------------------------------------------------------
-  // Task: Determine the endpoints of an edge from its inferiors
-  //---------------------------------------------------------------------------
-  virtual void set_vertices_from_zero_chains(void);
-
-  //---------------------------------------------------------------------------
-  //: Set the first and last endpoints
-  //: REQUIRE: vertex_of_edge(new_v1) and vertex_of_edge(new_v2)
-  //---------------------------------------------------------------------------
-  virtual void set_end_points(vtol_vertex_2d &new_v1,
-                              vtol_vertex_2d &new_v2);
-
-  virtual void replace_end_point(vtol_vertex_2d &,
-                                 vtol_vertex_2d &);
  
   virtual bool operator==(const vtol_edge_2d &other) const;
-  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
-
-  virtual void add_edge_loop(vtol_one_chain_2d &);
-  virtual void remove_edge_loop(vtol_one_chain_2d &);
+  bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_2d
 
   //***************************************************************************
   // Replaces dynamic_cast<T>
@@ -183,64 +132,21 @@ public:
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_edge_2d *cast_to_edge(void) const;
+  virtual const vtol_edge_2d *cast_to_edge_2d(void) const;
   
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_edge_2d *cast_to_edge(void);
-
-  //***************************************************************************
-  // Status report
-  //***************************************************************************
-
-  //---------------------------------------------------------------------------
-  //: Is `inferior' type valid for `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool
-  valid_inferior_type(const vtol_topology_object_2d &inferior) const;
-
-  //---------------------------------------------------------------------------
-  //: Is `superior' type valid for `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool
-  valid_superior_type(const vtol_topology_object_2d &superior) const;
-
-  //:
-  // Inferior/Superior Accessor Methods
-
-  // : Warning - should not be used by clients
-  virtual vcl_vector<vtol_vertex_2d*> *compute_vertices(void);
-  virtual vcl_vector<vtol_edge_2d*> *compute_edges(void);
-  virtual vcl_vector<vtol_zero_chain_2d*> *compute_zero_chains(void);
-  virtual vcl_vector<vtol_one_chain_2d*> *compute_one_chains(void);
-  virtual vcl_vector<vtol_face_2d*> *compute_faces(void);
-  virtual vcl_vector<vtol_two_chain_2d*> *compute_two_chains(void);
-  virtual vcl_vector<vtol_block_2d*> *compute_blocks(void);
-
-  //:
-  // get a list of endpoints
-  virtual vertex_list_2d *endpoints(void);
-
-  //:
-  // Utility Functions
- 
-  virtual bool share_vertex_with(vtol_edge_2d &other);
-
-  virtual bool add_vertex(vtol_vertex_2d &);
-  virtual bool remove_vertex(vtol_vertex_2d &);
-
-  virtual bool is_endpoint(const vtol_vertex_2d &) const;
-  virtual bool is_endpoint1(const vtol_vertex_2d &) const;
-  virtual bool is_endpoint2(const vtol_vertex_2d &) const;
-
-  virtual vtol_vertex_2d_ref other_endpoint(const vtol_vertex_2d &) const;
-
- 
-  virtual void compute_bounding_box(void); // A local implementation
+  virtual vtol_edge_2d *cast_to_edge_2d(void);
+   
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;
   virtual void describe(vcl_ostream &strm=vcl_cout,
                         int blanking=0) const;
+
+  // comparison of geometry
+
+  virtual bool compare_geometry(const vtol_edge &other) const;
+
 };
 #endif
