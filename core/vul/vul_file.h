@@ -87,6 +87,9 @@ struct vul_file {
 inline bool vul_file_exists(char const *f) { return vul_file::exists(f); }
 inline bool vul_file_exists(vcl_string  f) { return vul_file::exists(f); }
 
+inline bool vul_file_is_directory(char const *f) { return vul_file::is_directory(f); }
+inline bool vul_file_is_directory(vcl_string  f) { return vul_file::is_directory(f); }
+
 inline int vul_file_size(char const *f) { return vul_file::size(f); }
 inline int vul_file_size(vcl_string  f) { return vul_file::size(f); }
 
