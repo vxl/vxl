@@ -85,20 +85,18 @@ struct vgui_satellite_t : vgui_tableau
   object *p;
   method  m;
   data    d;
+vcl_string n;
 
-  vgui_satellite_t(object *p_, method m_, data const &d_)
-    : p(p_), m(m_), d(d_) { }
+  vgui_satellite_t(object *p_, method m_, data const &d_, vcl_string const &n_ = "")
+    : p(p_), m(m_), d(d_), n(n_) { }
 
   bool handle(vgui_event const &e) { return (p && m) && (p->*m)(e, d); }
 
-  vcl_string type_name() const {
-    return
-      vcl_string("vgui_satellite_t[") + (p ? p->type_name() : vcl_string("null")) + vcl_string("]");
-  }
-  
+  vcl_string type_name() const { return vcl_string("vgui_satellite_t[") + n + vcl_string("]"); }
+
   vgui_menu a_menu;
   void add_popup(vgui_menu &m) { m.include(a_menu); }
-  
+
 protected:
   ~vgui_satellite_t() { p = 0; m = 0; }
 };
@@ -111,16 +109,14 @@ struct vgui_satellite : vgui_tableau
 
   object *p;
   method  m;
+  vcl_string n;
 
-  vgui_satellite(object *p_, method m_)
-    : p(p_), m(m_) { }
+  vgui_satellite(object *p_, method m_, vcl_string const &n_ = "")
+    : p(p_), m(m_), n(n_) { }
 
   bool handle(vgui_event const &e) { return (p && m) && (p->*m)(e); }
 
-  vcl_string type_name() const {
-    return
-      vcl_string("vgui_satellite[") + (p ? p->type_name() : vcl_string("null")) + vcl_string("]");
-  }
+  vcl_string type_name() const { return vcl_string("vgui_satellite[") + n + vcl_string("]"); }
 
 protected:
   ~vgui_satellite() { p = 0; m = 0; }
@@ -138,7 +134,7 @@ struct vgui_satellite_t_new : vgui_tableau_sptr_t<vgui_satellite_t<object, data>
   typedef vgui_satellite_t<object, data> impl;
   typedef vgui_tableau_sptr_t<impl quirk(vgui_tableau_sptr)> base;
   typedef impl::method method;
-  vgui_satellite_t_new(object *p, method m, data const &d) : base(new impl(p, m, d)) { }
+  vgui_satellite_t_new(object *p, method m, data const &d, vcl_string const &n = "") : base(new impl(p, m, d, n)) { }
 };
 
 template <class object>
@@ -148,7 +144,7 @@ struct vgui_satellite_new : vgui_tableau_sptr_t<vgui_satellite<object> quirk(vgu
   typedef vgui_satellite<object> impl;
   typedef vgui_tableau_sptr_t<impl quirk(vgui_tableau_sptr)> base;
   typedef impl::method method;
-  vgui_satellite_new(object *p, method m) : base(new impl(p, m)) { }
+  vgui_satellite_new(object *p, method m, vcl_string const &n = "") : base(new impl(p, m, n)) { }
 };
 #undef quirk
 
