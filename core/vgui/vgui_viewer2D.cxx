@@ -403,6 +403,7 @@ bool vgui_viewer2D::mouse_up(int /*x*/, int /*y*/,  vgui_button button, vgui_mod
 }
 
 bool vgui_viewer2D::help() {
+#if 0
   vcl_cerr << vcl_endl;
   vcl_cerr << "-- vgui_viewer2D ----------" << vcl_endl;
   vcl_cerr << "|     mouse               |"  << vcl_endl;
@@ -420,6 +421,7 @@ bool vgui_viewer2D::help() {
   vcl_cerr << "| `d'          sweep zoom |"  << vcl_endl;
   vcl_cerr << "--------------------------" << vcl_endl;
   vcl_cerr << vcl_endl;
+#endif
   return false;
 }
 
