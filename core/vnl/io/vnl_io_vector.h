@@ -22,7 +22,7 @@ class vsl_b_istream;
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, const vnl_vector<T> & v);
 
-//: Binary load vnl_sparse_matrix from stream.
+//: Binary load vnl_vector from stream.
 template <class T>
 void vsl_b_read(vsl_b_istream & is, vnl_vector<T> & v);
 
