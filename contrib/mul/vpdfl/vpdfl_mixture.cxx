@@ -223,6 +223,8 @@ void vpdfl_mixture::b_write(vsl_b_ostream& bfs) const
 
 void vpdfl_mixture::b_read(vsl_b_istream& bfs)
 {
+  if (!bfs) return;
+
   vcl_string name;
   vsl_b_read(bfs,name);
   if (name != is_a())
