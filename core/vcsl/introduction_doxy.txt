@@ -1,3 +1,59 @@
 // The following text is included in the main documentation page by doxygen
-/*! \mainpage vcsl : Spatial Co-ordinate Systems and Manipulation
+/*! \mainpage vcsl : Spatial Coordinate Systems and Manipulation
+
+* The core coordinate system library vcsl is intended to provide standard
+* 2D and 3D coordinate systems (cartesian, polar, geographic, ...) together
+* with units to specify their dimensions (meter, degree, radian) and also
+* a set of transformations between coordinate systems: translation, scale,
+* rotation, perspective, ..., and any combination of these.
+*
+* Each coordinate system has a list of reference axes, 2 for the 2D systems
+* and 3 for the 3D systems.  They specify the main directions of the coordinate
+* system in space.  E.g., the 3 axes for the cylindrical coordinate system
+* are a length axis and two angle axes.
+*
+* A spatial transformation can be static or dynamic; for a dynamic
+* transformation, a list of static transformations is given at specified
+* time instances, together with an interpolation mechanism for intermediate
+* time instants.
+*
+* There is also a connected graph class where nodes are coordinate systems and
+* arrows are transformations.
+*
+* The class hierarchy is as follows:
+* \verbatim
+*   vcsl_axis
+*   vcsl_coordinate_system
+*     vcsl_cartesian
+*     vcsl_spatial
+*       vcsl_cartesian_2d
+*       vcsl_cartesian_3d
+*       vcsl_cylindrical
+*       vcsl_geographic (uses vcsl_spheroid)
+*         vcsl_geocentric
+*         vcsl_geodetic
+*         vcsl_lambertian
+*         vcsl_utm
+*       vcsl_polar
+*       vcsl_spherical
+*   vcsl_dimension
+*     vcsl_angle
+*     vcsl_length
+*   vcsl_unit
+*     vcsl_angle_unit
+*       vcsl_degree
+*       vcsl_radian
+*     vcsl_length_unit
+*       vcsl_meter
+*   vcsl_spatial_transformation
+*     vcsl_composition
+*     vcsl_cylindrical_to_cartesian_3d
+*     vcsl_matrix (uses vcsl_matrix_param)
+*     vcsl_perspective
+*     vcsl_rotation
+*       vcsl_displacement
+*     vcsl_scale
+*     vcsl_translation
+*   vcsl_graph
+* \endverbatim
 */
