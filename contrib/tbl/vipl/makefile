@@ -15,7 +15,7 @@
 # filter classes with any 2D storage class of your choice.
 #
 
-USES += vxl tbl
+USES += vxl tbl mul
 
 LIBRARY := vipl
 VERSION := 1.0
@@ -89,6 +89,7 @@ else
     AUX_SOURCE_DIRECTORY += vipl_with_vbl_array_2d/Templates
     AUX_SOURCE_DIRECTORY += vipl_with_vnl_matrix/Templates
     AUX_SOURCE_DIRECTORY += vipl_with_section/Templates
+    AUX_SOURCE_DIRECTORY += vipl_with_mil/Templates
   endif
 endif
 
