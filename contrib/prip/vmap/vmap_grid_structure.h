@@ -8,11 +8,11 @@
 // \date 06/05/2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include "vmap_2_map.h"
-#include "vmap_2_tmap.h"
+#include "vmap_types.h" // for vmap_face_index etc.
 
 //: A vmap_grid_structure is a map with a vmap_grid_structure structure.
 class vmap_grid_structure

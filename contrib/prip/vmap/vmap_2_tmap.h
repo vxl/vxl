@@ -14,7 +14,8 @@
 
 #include <vcl_iosfwd.h>
 #include "vmap_2_map.h"
-#include "vmap_2_tmap_elts.h"
+#include "vmap_types.h"       // for vmap_face_index etc.
+#include "vmap_2_tmap_elts.h" // for vmap_2_tmap_dart etc.
 
 //: Enables to explicitly manipulate darts, but also vertices, edges, faces of a topological partition.
 template <class V=vmap_2_tmap_vertex, class E=vmap_2_tmap_edge, class F=vmap_2_tmap_face, class D=vmap_2_tmap_dart>

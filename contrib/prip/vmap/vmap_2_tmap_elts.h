@@ -8,10 +8,12 @@
 // \date 06/05/2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include "vmap_2_map.h"
+#include "vmap_types.h" // for vmap_face_index etc.
+#include "vmap_2_map.h" // for vmap_2_map_dart
 
 class vmap_2_tmap_vertex ;
 class vmap_2_tmap_edge ;
@@ -22,12 +24,7 @@ template <class V, class E, class F>
 class vmap_2_tmap_tuple
 {
  public:
-  vmap_2_tmap_tuple()
-  {
-    edge_=NULL ;
-    vertex_=NULL ;
-    face_=NULL ;
-  }
+  vmap_2_tmap_tuple() : edge_(0), vertex_(0), face_(0) {}
 
   //: Associated edge.
   const E & edge() const
@@ -104,7 +101,7 @@ class vmap_2_tmap_tuple
   //:
   bool valid() const
   {
-    return edge_!=NULL && vertex_!=NULL && face_ != NULL ;
+    return edge_!=0 && vertex_!=0 && face_!=0 ;
   }
 
  protected :
