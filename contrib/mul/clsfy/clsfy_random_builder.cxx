@@ -46,8 +46,7 @@ vcl_string clsfy_random_builder::is_a() const
 
 bool clsfy_random_builder::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "clsfy_random_builder";
-  return s == s_ || clsfy_builder_base::is_class(s);
+  return s == clsfy_random_builder::is_a() || clsfy_builder_base::is_class(s);
 }
 
 //=======================================================================

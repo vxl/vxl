@@ -110,8 +110,7 @@ vcl_string clsfy_k_nearest_neighbour::is_a() const
 
 bool clsfy_k_nearest_neighbour::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "clsfy_k_nearest_neighbour";
-  return s == s_ || clsfy_classifier_base::is_class(s);
+  return s == clsfy_k_nearest_neighbour::is_a() || clsfy_classifier_base::is_class(s);
 }
 
 //=======================================================================

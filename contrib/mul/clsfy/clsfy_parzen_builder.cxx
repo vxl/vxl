@@ -47,8 +47,7 @@ vcl_string clsfy_parzen_builder::is_a() const
 
 bool clsfy_parzen_builder::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "clsfy_parzen_builder";
-  return s == s_ || clsfy_builder_base::is_class(s);
+  return s == clsfy_parzen_builder::is_a() || clsfy_builder_base::is_class(s);
 }
 
 //=======================================================================

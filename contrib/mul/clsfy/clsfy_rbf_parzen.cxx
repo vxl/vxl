@@ -165,8 +165,7 @@ vcl_string clsfy_rbf_parzen::is_a() const
 
 bool clsfy_rbf_parzen::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "clsfy_rbf_parzen";
-  return s == s_ || clsfy_classifier_base::is_class(s);
+  return s == clsfy_rbf_parzen::is_a() || clsfy_classifier_base::is_class(s);
 }
 
 //=======================================================================

@@ -79,8 +79,7 @@ vcl_string clsfy_binary_pdf_classifier::is_a() const
 
 bool clsfy_binary_pdf_classifier::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "clsfy_binary_pdf_classifier";
-  return s == s_ || clsfy_classifier_base::is_class(s);
+  return s == clsfy_binary_pdf_classifier::is_a() || clsfy_classifier_base::is_class(s);
 }
 
 //=======================================================================

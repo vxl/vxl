@@ -194,8 +194,7 @@ vcl_string clsfy_simple_adaboost::is_a() const
 
 bool clsfy_simple_adaboost::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "clsfy_simple_adaboost";
-  return s == s_ || clsfy_classifier_base::is_class(s);
+  return s == clsfy_simple_adaboost::is_a() || clsfy_classifier_base::is_class(s);
 }
 
 //=======================================================================

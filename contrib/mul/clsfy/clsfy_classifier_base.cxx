@@ -89,8 +89,7 @@ vcl_string clsfy_classifier_base::is_a() const
 
 bool clsfy_classifier_base::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "clsfy_classifier_base";
-  return s == s_;
+  return s == clsfy_classifier_base::is_a();
 }
 
 //=======================================================================

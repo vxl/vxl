@@ -149,7 +149,7 @@ vcl_string clsfy_rbf_svm::is_a() const
 
 bool clsfy_rbf_svm::is_class(vcl_string const& s) const
 {
-  return s == is_a() || clsfy_classifier_base::is_class(s);
+  return s == clsfy_rbf_svm::is_a() || clsfy_classifier_base::is_class(s);
 }
 
 //=======================================================================
