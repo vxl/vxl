@@ -1,3 +1,4 @@
+// This is vxl/vnl/tests/test_numeric_traits.cxx
 #include <vnl/vnl_numeric_traits.h>
 #include <testlib/testlib_test.h>
 #include <vcl_complex.h>
@@ -13,18 +14,18 @@ static
 void test_static_const_definition()
 {
 #define ONE_ZERO( Type ) \
-  if(true){\
+  do {\
     check_pointer( &vnl_numeric_traits< Type >::zero );\
     check_pointer( &vnl_numeric_traits< Type >::one );\
     check_pointer( &vnl_numeric_traits< const Type >::zero );\
     check_pointer( &vnl_numeric_traits< const Type >::one );\
-  }else
+  } while (false)
 #define ALL( Type ) \
   ONE_ZERO( Type ); \
-  if(true){\
+  do {\
     check_pointer( &vnl_numeric_traits< Type >::maxval );\
     check_pointer( &vnl_numeric_traits< const Type >::maxval );\
-  }else
+  } while (false)
 
   ALL(bool);
   ALL(char);
@@ -142,14 +143,23 @@ void test_numeric_traits()
 
   // Verify that there is nothing larger than these maxval values:
   ++cm;  TEST("vnl_numeric_traits<char>::maxval must be the largest possible", cm<=0, true);
+  if (cm > 0) vcl_cout << cm << " is larger\n";
   ++scm; TEST("vnl_numeric_traits<signed char>::maxval must be the largest possible", scm<0, true);
+  if (scm > 0) vcl_cout << scm << " is larger\n";
   ++ucm; TEST("vnl_numeric_traits<unsigned char>::maxval must be the largest possible", ucm==0, true);
+  if (ucm > 0) vcl_cout << ucm << " is larger\n";
   ++sm;  TEST("vnl_numeric_traits<short>::maxval must be the largest possible", sm<0, true);
+  if (sm > 0) vcl_cout << sm << " is larger\n";
   ++usm; TEST("vnl_numeric_traits<unsigned short>::maxval must be the largest possible", usm==0, true);
+  if (usm > 0) vcl_cout << usm << " is larger\n";
   ++im;  TEST("vnl_numeric_traits<int>::maxval must be the largest possible", im<0, true);
+  if (im > 0) vcl_cout << im << " is larger\n";
   ++uim; TEST("vnl_numeric_traits<unsigned int>::maxval must be the largest possible", uim==0, true);
+  if (uim > 0) vcl_cout << uim << " is larger\n";
   ++lm;  TEST("vnl_numeric_traits<long>::maxval must be the largest possible", lm<0, true);
+  if (lm > 0) vcl_cout << lm << " is larger\n";
   ++ulm; TEST("vnl_numeric_traits<unsigned long>::maxval must be the largest possible", ulm==0, true);
+  if (ulm > 0) vcl_cout << ulm << " is larger\n";
 
   unsigned char* x = (unsigned char*)(&fm);
   int nr_of_ones = 0;
