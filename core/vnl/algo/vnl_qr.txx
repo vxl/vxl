@@ -17,6 +17,7 @@
 #include <vnl/algo/vnl_netlib.h> // dqrdc_(), dqrsl_()
 
 // use C++ overloading to call the right linpack routine from the template code :
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro(p, T) \
 inline void vnl_linpack_qrdc(vnl_netlib_qrdc_proto(T)) \
 { p##qrdc_(vnl_netlib_qrdc_params); } \
@@ -27,6 +28,7 @@ macro(d, double);
 macro(c, vcl_complex<float>);
 macro(z, vcl_complex<double>);
 #undef macro
+#endif
 
 template <class T>
 vnl_qr<T>::vnl_qr(vnl_matrix<T> const& M):
@@ -119,8 +121,9 @@ vnl_matrix<T> const& vnl_qr<T>::Q() const
         sq += vnl_math_squared_magnitude(v[j]);
       }
       if (verbose) vnl_matlab_print(vcl_cerr, v, "v");
-
-#define c vnl_complex_traits<T>::conjugate
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+# define c vnl_complex_traits<T>::conjugate
+#endif
       // Premultiply emerging Q by house(v), noting that v[0..k-1] == 0.
       // Q_new = (1 - (2/v'*v) v v')Q
       // or Q -= (2/v'*v) v (v'Q)
