@@ -79,7 +79,7 @@ class mil_byte_image_2d_io : public mil_image_io
   // \param filetype  String defining what format to save in.
   // \return true if successful
   virtual bool saveImage(const mil_image& image,
-	                     const vcl_string& filepath,
+                         const vcl_string& filepath,
                          const vcl_string& filetype) const;
 
   //: Attempt to load image from named filepath

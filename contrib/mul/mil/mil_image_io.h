@@ -46,7 +46,7 @@ class mil_image_io
     // \param filetype  String defining what format to save in (valid options depend on derived class)
     // \return true if successful
     virtual bool saveImage(const mil_image& image,
-	                       const vcl_string& path,
+                           const vcl_string& path,
                            const vcl_string& filetype) const =0;
 
     //: Version number for I/O
