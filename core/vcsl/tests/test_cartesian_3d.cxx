@@ -7,20 +7,16 @@
 // Version |Date      | Author                   |Comment
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2000/06/28| François BERTEL          |Creation
+// 1.1     |2002/11/13| Peter Vanroose           |converted to use TESTMAIN
 //*****************************************************************************
 
-//:
-// \file
-
+#include <testlib/testlib_test.h>
 #include <vcsl/vcsl_cartesian_3d.h>
 
-//-----------------------------------------------------------------------------
-//: Entry point of the test program
-//-----------------------------------------------------------------------------
-int main(int argc,
-         char *argv[])
+static void test_cartesian_3d()
 {
   vcsl_cartesian_3d_sptr c=new vcsl_cartesian_3d;
-
-  return c?0:1;
+  TEST("test_cartesian_3d_sptr", bool(c), true);
 }
+
+TESTMAIN(test_cartesian_3d);

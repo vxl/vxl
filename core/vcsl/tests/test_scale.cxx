@@ -8,22 +8,16 @@
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2000/07/19| François BERTEL          |Creation
 // 1.1     |2002/01/22| Peter Vanroose           |Avoid new/delete if possible
+// 1.2     |2002/11/13| Peter Vanroose           |converted to use TESTMAIN
 //*****************************************************************************
 
-//:
-// \file
-
+#include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
 #include <vcsl/vcsl_cartesian_3d.h>
 #include <vcsl/vcsl_scale.h>
 #include <vcsl/vcsl_graph.h>
 
-//-----------------------------------------------------------------------------
-//: Entry point of the test program
-//-----------------------------------------------------------------------------
-int main(int argc,
-         char *argv[])
+static void test_scale()
 {
   vcl_cout<<"Creation of graph..."<< vcl_flush;
   vcsl_graph_sptr graph=new vcsl_graph();
@@ -31,24 +25,24 @@ int main(int argc,
 
   vcl_cout<<"Creation of csa..."<< vcl_flush;
   vcsl_spatial_sptr csa=new vcsl_cartesian_3d();
-  assert(csa.ptr()!=0);
   vcl_cout<<"done"<<vcl_endl;
+  TEST("vcsl_cartesian_3d as vcsl_spatial_sptr", bool(csa), true);
   vcl_cout<<"Adding csa to graph..."<< vcl_flush;
   csa->set_graph(graph);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of cs0..."<< vcl_flush;
   vcsl_spatial_sptr cs0=new vcsl_cartesian_3d();
-  assert(cs0.ptr()!=0);
   vcl_cout<<"done"<<vcl_endl;
+  TEST("vcsl_cartesian_3d as vcsl_spatial_sptr", bool(cs0), true);
   vcl_cout<<"Adding cs0 to graph..."<< vcl_flush;
   cs0->set_graph(graph);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of cs1..."<< vcl_flush;
   vcsl_spatial_sptr cs1=new vcsl_cartesian_3d();
-  assert(cs1.ptr()!=0);
   vcl_cout<<"done"<<vcl_endl;
+  TEST("vcsl_cartesian_3d as vcsl_spatial_sptr", bool(cs1), true);
   vcl_cout<<"Adding cs1 to graph..."<< vcl_flush;
   cs1->set_graph(graph);
   vcl_cout<<"done"<<vcl_endl;
@@ -81,8 +75,8 @@ int main(int argc,
 
   vcl_cout<<"Creation of scale..."<< vcl_flush;
   vcsl_scale_sptr scale=new vcsl_scale;
-  assert(scale.ptr()!=0);
   vcl_cout<<"done"<<vcl_endl;
+  TEST("vcsl_scale_sptr", bool(scale), true);
 
   vcl_vector<double>& tr0_beat=beat;
 
@@ -90,9 +84,7 @@ int main(int argc,
   scale->set_beat(tr0_beat);
   vcl_cout<<"done"<<vcl_endl;
 
-  vcl_cout<<"Test set_beat() and beat() of vcsl_transformation..."<< vcl_flush;
-  assert(scale->beat()==tr0_beat);
-  vcl_cout<<"passed"<<vcl_endl;
+  TEST("set_beat() and beat() of vcsl_transformation", scale->beat(), tr0_beat);
 
   vcl_cout<<"Creation of scale_values..."<< vcl_flush;
   vcl_vector<double> scale_values;
@@ -108,10 +100,7 @@ int main(int argc,
   scale->set_scale(scale_values);
   vcl_cout<<"done"<<vcl_endl;
 
-  vcl_cout<<"Test set_scale() and scale() of vcsl_scale...";
-  vcl_cout<< vcl_flush;
-  assert(scale->scale()==scale_values);
-  vcl_cout<<"passed"<<vcl_endl;
+  TEST("set_scale() and scale() of vcsl_scale", scale->scale(), scale_values);
 
   vcl_cout<<"Creation of scale_interpolators..."<< vcl_flush;
   vcl_vector<vcsl_interpolator> scale_interpolators;
@@ -125,10 +114,7 @@ int main(int argc,
   scale->set_interpolators(scale_interpolators);
   vcl_cout<<"done"<<vcl_endl;
 
-  vcl_cout<<"Test set_interpolators() and interpolators() of ";
-  vcl_cout<<"vcsl_scale..."<< vcl_flush;
-  assert(scale->interpolators()==scale_interpolators);
-  vcl_cout<<"passed"<<vcl_endl;
+  TEST("set_interpolators() and interpolators() of vcsl_scale", scale->interpolators(), scale_interpolators);
 
   vcl_cout<<"Creation of motion..."<< vcl_flush;
   vcl_vector<vcsl_spatial_transformation_sptr> motion;
@@ -165,6 +151,6 @@ int main(int argc,
   q=cs0->from_local_to_cs(p,csa,1);
   vcl_cout<<"done"<<vcl_endl;
   vcl_cout<<q.get(0)<<' '<<q.get(1)<<' '<<q.get(2)<<vcl_endl;
-
-  return 0;
 }
+
+TESTMAIN(test_scale);

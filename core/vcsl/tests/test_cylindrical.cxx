@@ -7,20 +7,16 @@
 // Version |Date      | Author                   |Comment
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2000/06/29| François BERTEL          |Creation
+// 1.1     |2002/11/13| Peter Vanroose           |converted to use TESTMAIN
 //*****************************************************************************
 
-//:
-// \file
-
+#include <testlib/testlib_test.h>
 #include <vcsl/vcsl_cylindrical.h>
 
-//-----------------------------------------------------------------------------
-//: Entry point of the test program
-//-----------------------------------------------------------------------------
-int main(int argc,
-         char *argv[])
+static void test_cylindrical()
 {
   vcsl_cylindrical_sptr p=new vcsl_cylindrical;
-
-  return p?0:1;
+  TEST("test_cylindrical_sptr", bool(p), true);
 }
+
+TESTMAIN(test_cylindrical);

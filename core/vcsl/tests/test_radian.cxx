@@ -7,20 +7,16 @@
 // Version |Date      | Author                   |Comment
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2000/06/28| François BERTEL          |Creation
+// 1.1     |2002/11/13| Peter Vanroose           |converted to use TESTMAIN
 //*****************************************************************************
 
-//:
-// \file
-
+#include <testlib/testlib_test.h>
 #include <vcsl/vcsl_radian.h>
 
-//-----------------------------------------------------------------------------
-//: Entry point of the test program
-//-----------------------------------------------------------------------------
-int main(int argc,
-         char *argv[])
+static void test_radian()
 {
   vcsl_radian_sptr r=vcsl_radian::instance();
-
-  return r?0:1;
+  TEST("test_radian_sptr", bool(r), true);
 }
+
+TESTMAIN(test_radian);

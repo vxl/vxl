@@ -9,11 +9,10 @@
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2000/07/31| François BERTEL          |Creation
 // 1.1     |2002/01/22| Peter Vanroose           |Avoid new/delete if possible
+// 1.2     |2002/11/13| Peter Vanroose           |converted to use TESTMAIN
 //*****************************************************************************
 
-//:
-// \file
-
+#include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcsl/vcsl_cartesian_3d.h>
 #include <vcsl/vcsl_scale.h>
@@ -22,7 +21,7 @@
 static void test1(void);
 
 //-----------------------------------------------------------------------------
-//:
+//
 //       graph: csa<------cs1<-------cs2
 //              ^     scale1     scale2
 //              |------cs3
@@ -170,12 +169,9 @@ static void test1(void)
   vcl_cout<<"q(cs1->cs3)="<<q.get(0)<<' '<<q.get(1)<<' '<<q.get(2)<<vcl_endl;
 }
 
-//-----------------------------------------------------------------------------
-//: Entry point of the test program
-//-----------------------------------------------------------------------------
-int main(int argc,
-         char *argv[])
+static void test_transformation_graph()
 {
   test1();
-  return 0;
 }
+
+TESTMAIN(test_transformation_graph);

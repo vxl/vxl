@@ -8,21 +8,16 @@
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2000/08/05| François BERTEL          |Creation
 // 1.1     |2002/01/22| Peter Vanroose           |Avoid new/delete if possible
+// 1.2     |2002/11/13| Peter Vanroose           |converted to use TESTMAIN
 //*****************************************************************************
 
-//:
-// \file
-
+#include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcsl/vcsl_cartesian_3d.h>
 #include <vcsl/vcsl_displacement.h>
 #include <vcsl/vcsl_graph.h>
 
-//-----------------------------------------------------------------------------
-//: Entry point of the test program
-//-----------------------------------------------------------------------------
-int main(int argc,
-         char *argv[])
+static void test_displacement()
 {
   vcsl_graph_sptr graph=new vcsl_graph;
   vcsl_spatial_sptr csa=new vcsl_cartesian_3d; csa->set_graph(graph);
@@ -100,6 +95,6 @@ int main(int argc,
   vcl_cout<<"-----> t=1"<<vcl_endl;
   q=cs0->from_local_to_cs(p,csa,1);
   vcl_cout<<"q(cs0->csa)="<<q.get(0)<<' '<<q.get(1)<<' '<<q.get(2)<<vcl_endl;
-
-  return 0;
 }
+
+TESTMAIN(test_displacement);
