@@ -11,7 +11,7 @@ double f(float *x)
 int b3p_test_integral(int argc, char * argv[])
 #endif
   
-int main(int argc, char* argv[])
+int main()
 {
   
   float a = 0;
