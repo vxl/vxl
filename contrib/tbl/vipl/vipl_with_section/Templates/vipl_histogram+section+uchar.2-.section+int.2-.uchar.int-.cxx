@@ -1,7 +1,6 @@
 // for vipl_histogram<...> instantiations:
-#include <../Image/ImageProcessingBasics/section.h>
+#include "../vipl_filterable_section_container_generator_section.txx"
 #include "../accessors/vipl_accessors_section.h"
 #include <vipl/vipl_histogram.txx>
-#include <vcl_compiler.h> // for definition of VCL_DFL_TMPL_ARG
 
-template class vipl_histogram<section<unsigned char,2>,section<int,2>,unsigned char,int VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)>;
+template class vipl_histogram<section<unsigned char,2>,section<int,2>,unsigned char,int, vipl_trivial_pixeliter>;
