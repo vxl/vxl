@@ -45,7 +45,7 @@ public:
 
   void resize(int width, int height);
   void resize(int planes, int width, int height);
-  void* get_buffer() { return rows0_[0]; }
+  inline void* get_buffer() { return rows0_[0]; }
 
   vil_memory_image(void *buf, int planes, int w, int h, vil_memory_image_format const&);
   vil_memory_image(void *buf, int planes, int w, int h, int components, int bits_per_component, vil_component_format);

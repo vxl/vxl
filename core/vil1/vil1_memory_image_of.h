@@ -49,14 +49,14 @@ public:
 
   // iterators
   typedef T *iterator;
-  iterator begin() { return get_buffer(); }
-  iterator end  () { return get_buffer() + rows()*cols(); }
+  inline iterator begin() { return get_buffer(); }
+  inline iterator end  () { return get_buffer() + rows()*cols(); }
 
   typedef T const *const_iterator;
-  const_iterator begin() const { return get_buffer(); }
-  const_iterator end  () const { return get_buffer() + rows()*cols(); }
+  inline const_iterator begin() const { return get_buffer(); }
+  inline const_iterator end  () const { return get_buffer() + rows()*cols(); }
 
-  unsigned size() const { return rows() * cols(); }
+  inline unsigned size() const { return rows() * cols(); }
 
   //: Empty image.
   vil_memory_image_of();
@@ -83,7 +83,7 @@ public:
   //  vil_memory_image_of(int sizex, int sizey, T const& value);
 
   //: Clearly, this will deallocate the memory buffer
-  ~vil_memory_image_of() {}
+  inline ~vil_memory_image_of() {}
 
   //: This method hides the operator= in the base class.
   vil_memory_image_of<T>& operator=(vil_memory_image_of<T> const &);
@@ -106,31 +106,31 @@ public:
   // Data Access---------------------------------------------------------------
 
   //: Return read/write reference to pixel at (x,y)
-  T&           operator () (int x, int y) { return ((T**)rows0_)[y][x]; }
-  T const&     operator () (int x, int y) const { return ((T const* const*)rows0_)[y][x]; }
+  inline T&           operator () (int x, int y) { return ((T**)rows0_)[y][x]; }
+  inline T const&     operator () (int x, int y) const { return ((T const* const*)rows0_)[y][x]; }
 
   //: Return pointer to raster y.
-  T*           operator [] (int y) { return ((T**)rows0_)[y]; }
-  T const*     operator [] (int y) const { return ((T const* const*)rows0_)[y]; }
+  inline T*           operator [] (int y) { return ((T**)rows0_)[y]; }
+  inline T const*     operator [] (int y) const { return ((T const* const*)rows0_)[y]; }
 
   //: Return pointer to array of rasters. aka known as data_array() for matrices.
-  T*        const* row_array() { return (T**)rows0_; }
-  T const*  const* row_array() const { return (T**)rows0_; }
+  inline T*        const* row_array() { return (T**)rows0_; }
+  inline T const*  const* row_array() const { return (T**)rows0_; }
 
   //: Return pointer to the memory buffer.
-  T*       get_buffer() { return (T*)rows0_[0]; }
-  T const* get_buffer() const { return (T*)rows0_[0]; }
+  inline T*       get_buffer() { return (T*)rows0_[0]; }
+  inline T const* get_buffer() const { return (T*)rows0_[0]; }
 
   //: Return true if (x,y) is a valid index into this buffer
-  bool in_range(int x, int y) const { return (0 <= x) && (0 <= y) && (x < width_) && (y < height_); }
+  inline bool in_range(int x, int y) const { return (0 <= x) && (0 <= y) && (x < width_) && (y < height_); }
 
   //: Return true if (x+/-w,y+/-h) are valid indices into this buffer
-  bool in_range_window(int x, int y, int w) const {
+  inline bool in_range_window(int x, int y, int w) const {
     return (w <= x) && (w <= y) && (x + w < width_) && (y + w < height_);
   }
 
   //: Return true if the region of size w,h starting at x,y is valid in this buffer.
-  bool in_range(int x, int y, unsigned w, unsigned h) const {
+  inline bool in_range(int x, int y, unsigned w, unsigned h) const {
     return (0<=x && x+int(w)<=width_) && (0<=y && y+int(h)<=height_);
   }
 
