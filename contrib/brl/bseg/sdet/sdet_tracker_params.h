@@ -42,12 +42,12 @@ class sdet_tracker_params : public gevd_param_mixin
   //
   // Parameter blocks and parameters
   //
-  int n_samples_;          // number of samples generated per iteration
-  float search_radius_;    // window size for generating samples
-  float angle_range_;      // angle range for generating samples
-  float scale_range_;      // scale range for generating samples
-  int sigma_;       // smoothing kernel radius for estimating gradient
-  bool gradient_info_; // Combine gradient and intensity info
+  int n_samples_;       // number of samples generated per iteration
+  float search_radius_; // window size for generating samples
+  float angle_range_;   // angle range for generating samples
+  float scale_range_;   // scale range for generating samples
+  float sigma_;         // Gaussian smoothing kernel stddev for estimating gradient
+  bool gradient_info_;  // Combine gradient and intensity info
 };
 
 #endif // sdet_tracker_params_h_
