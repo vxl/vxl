@@ -5,6 +5,7 @@
 // \file
 
 #include "vgl_homg_operators_1d.h"
+#include <vgl/vgl_homg.h> // for infinity
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
@@ -25,10 +26,10 @@
 // points). The most reliable answer will be obtained when the coordinate with
 // the largest spacing is used, i.e., the one with smallest slope.
 template <class T>
-double vgl_homg_operators_1d<T>::cross_ratio(const vgl_homg_1d<T>& a,
-                                             const vgl_homg_1d<T>& b,
-                                             const vgl_homg_1d<T>& c,
-                                             const vgl_homg_1d<T>& d)
+double vgl_homg_operators_1d<T>::cross_ratio(const vgl_homg_point_1d<T>& a,
+                                             const vgl_homg_point_1d<T>& b,
+                                             const vgl_homg_point_1d<T>& c,
+                                             const vgl_homg_point_1d<T>& d)
 {
   T x1 = a.x(), w1 = a.w();
   T x2 = b.x(), w2 = b.w();
@@ -37,14 +38,14 @@ double vgl_homg_operators_1d<T>::cross_ratio(const vgl_homg_1d<T>& a,
   T n = (x1*w3-x3*w1)*(x2*w4-x4*w2);
   T m = (x1*w4-x4*w1)*(x2*w3-x3*w2);
   if (n == 0 && m == 0)
-    vcl_cerr << "cross_ratio not defined: three of the given points coincide" << vcl_endl;
+    vcl_cerr << "cross_ratio not defined: three of the given points coincide\n";
   return n/m;
 }
 
 //-----------------------------------------------------------------------------
-//: Cross product of two vgl_homg_1ds
+//: Cross product of two vgl_homg_point_1ds
 template <class T>
-T vgl_homg_operators_1d<T>::cross(const vgl_homg_1d<T>& a, const vgl_homg_1d<T>& b)
+T vgl_homg_operators_1d<T>::cross(const vgl_homg_point_1d<T>& a, const vgl_homg_point_1d<T>& b)
 {
   T x1 = a.x(), w1 = a.w();
   T x2 = b.x(), w2 = b.w();
@@ -52,9 +53,9 @@ T vgl_homg_operators_1d<T>::cross(const vgl_homg_1d<T>& a, const vgl_homg_1d<T>&
 }
 
 //-----------------------------------------------------------------------------
-//: Dot product of two vgl_homg_1ds
+//: Dot product of two vgl_homg_point_1ds
 template <class T>
-T vgl_homg_operators_1d<T>::dot(const vgl_homg_1d<T>& a, const vgl_homg_1d<T>& b)
+T vgl_homg_operators_1d<T>::dot(const vgl_homg_point_1d<T>& a, const vgl_homg_point_1d<T>& b)
 {
   T x1 = a.x(), w1 = a.w();
   T x2 = b.x(), w2 = b.w();
@@ -62,9 +63,9 @@ T vgl_homg_operators_1d<T>::dot(const vgl_homg_1d<T>& a, const vgl_homg_1d<T>& b
 }
 
 //-----------------------------------------------------------------------------
-//: Normalize vgl_homg_1d to unit magnitude
+//: Normalize vgl_homg_point_1d to unit magnitude
 template <class T>
-void vgl_homg_operators_1d<T>::unitize(vgl_homg_1d<T>& a)
+void vgl_homg_operators_1d<T>::unitize(vgl_homg_point_1d<T>& a)
 {
   double norm = vcl_sqrt (a.x()*a.x() + a.w()*a.w());
   if (norm == 0.0) {
@@ -126,17 +127,17 @@ T vgl_homg_operators_1d<T>::conjugate(T x1, T x2, T x3, double cr)
 }
 
 template <class T>
-vgl_homg_1d<T> vgl_homg_operators_1d<T>::conjugate(const vgl_homg_1d<T>& a,
-                                                   const vgl_homg_1d<T>& b,
-                                                   const vgl_homg_1d<T>& c,
-                                                   double cr)
+vgl_homg_point_1d<T> vgl_homg_operators_1d<T>::conjugate(const vgl_homg_point_1d<T>& a,
+                                                         const vgl_homg_point_1d<T>& b,
+                                                         const vgl_homg_point_1d<T>& c,
+                                                         double cr)
 // Default for cr is -1.
 {
   T x1 = a.x(), w1 = a.w();
   T x2 = b.x(), w2 = b.w();
   T x3 = c.x(), w3 = c.w();
   T k = x1*w3 - x3*w1, m = x2*w3 - x3*w2;
-  return vgl_homg_1d<T>(T(x2*k-cr*x1*m), T(k*w2-cr*m*w1));
+  return vgl_homg_point_1d<T>(T(x2*k-cr*x1*m), T(k*w2-cr*m*w1));
   // could be (0,0) !!  not checked.
 }
 

@@ -67,9 +67,9 @@ static void test_homg_point_1d()
   vcl_cout << "cross(p1,p2) = " << r << '\n';
   TEST("cross", r, -6);
 
-  vgl_homg_1d<float> cj = vgl_homg_operators_1d<float>::conjugate(p1,p2,p3);
+  vgl_homg_point_1d<float> cj = vgl_homg_operators_1d<float>::conjugate(p1,p2,p3);
   vcl_cout << "conjugate(p1,p2,p3) = " << cj << '\n';
-  TEST("conjugate", cj, vgl_homg_1d<float>(23.0f,7.0f));
+  TEST("conjugate", cj, vgl_homg_point_1d<float>(23.0f,7.0f));
 
   r = vgl_homg_operators_1d<float>::distance(p1,p2);
   vcl_cout << "distance(p1,p2) = " << r << '\n';

@@ -14,24 +14,24 @@
 #pragma interface
 #endif
 
-#include <vgl/vgl_homg_1d.h>
 #include <vgl/vgl_homg_point_1d.h>
 
+//: 1D homogeneous functions
 template <class T>
 class vgl_homg_operators_1d
 {
  public:
-  static double cross_ratio(const vgl_homg_1d<T>& a, const vgl_homg_1d<T>& b,
-                            const vgl_homg_1d<T>& c, const vgl_homg_1d<T>& d);
+  static double cross_ratio(const vgl_homg_point_1d<T>& a, const vgl_homg_point_1d<T>& b,
+                            const vgl_homg_point_1d<T>& c, const vgl_homg_point_1d<T>& d);
   static T conjugate(T x1, T x2, T x3, double cr = -1);
-  static vgl_homg_1d<T> conjugate(const vgl_homg_1d<T>& a,
-                                  const vgl_homg_1d<T>& b,
-                                  const vgl_homg_1d<T>& c,
-                                  double cr = -1);
+  static vgl_homg_point_1d<T> conjugate(const vgl_homg_point_1d<T>& a,
+                                        const vgl_homg_point_1d<T>& b,
+                                        const vgl_homg_point_1d<T>& c,
+                                        double cr = -1);
 
-  static T dot(const vgl_homg_1d<T>& a, const vgl_homg_1d<T>& b);
-  static T cross(const vgl_homg_1d<T>& a, const vgl_homg_1d<T>& b);
-  static void unitize(vgl_homg_1d<T>& a);
+  static T dot(const vgl_homg_point_1d<T>& a, const vgl_homg_point_1d<T>& b);
+  static T cross(const vgl_homg_point_1d<T>& a, const vgl_homg_point_1d<T>& b);
+  static void unitize(vgl_homg_point_1d<T>& a);
 
   static T distance(const vgl_homg_point_1d<T>& point1, const vgl_homg_point_1d<T>& point2);
   static T distance_squared(const vgl_homg_point_1d<T>& point1, const vgl_homg_point_1d<T>& point2);
