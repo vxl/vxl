@@ -32,26 +32,11 @@
 // classes of the singletion, viz:
 //     vsl_binary_loader::instance().append(my_object)
 // The BaseClass MUST implement is_a(),is_class(),clone(),b_write() and
-// b_read() virtual functions.  The b_write function MUST save is_a()
-// as a string "is<<vcl_string(is_a());" first.
+// b_read() virtual functions.
 //
-// To indicate a null pointer (0), save the string "VSL_NULL_PTR"
-// to the stream.
+// vsl_binary_loader.h also provides the function templates for loading
+// and saving by base class pointer
 //
-// For instance:
-// \verbatim
-// inline void vsl_b_write(vsl_b_ostream& os, const base_class* base_ptr)
-// {
-//   if (base_ptr!=0)
-//   {
-//      vsl_b_write(os,base_ptr->is_a());
-//      vsl_b_write(os,*base_ptr);
-//   }
-//   else vsl_b_write(os,string("VSL_NULL_PTR"));
-// }
-// \endverbatim
-//
-// See the Example section below.
 // All loader singletons can be deleted using vsl_delete_all_loaders()
 template<class BaseClass>
 class vsl_binary_loader : public vsl_binary_loader_base {
