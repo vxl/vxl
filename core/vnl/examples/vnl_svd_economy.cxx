@@ -10,7 +10,7 @@ int main ()
 {
   {
     vnl_matrix<double> M( 10, 4 );
-    for (int i=0 ; i < M.size(); ++i) {
+    for (unsigned int i=0 ; i < M.size(); ++i) {
       M.data_block()[i] = vnl_sample_uniform(-1,1);
     }
 
@@ -34,7 +34,7 @@ int main ()
 
   {
     vnl_matrix<double> N( 2000, 12 );
-    for (int i=0 ; i < N.size(); ++i) {
+    for (unsigned int i=0 ; i < N.size(); ++i) {
       N.data_block()[i] = vnl_sample_uniform(-1,1);
     }
 
