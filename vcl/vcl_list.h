@@ -6,9 +6,9 @@
 #if !VCL_USE_NATIVE_STL
 # include "emulation/vcl_list.h"
 
-#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
-# include <list.h>
-# define vcl_list list
+//#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
+//# include <list.h>
+//# define vcl_list list
 
 #else
 # include "iso/vcl_list.h"

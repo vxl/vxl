@@ -7,10 +7,10 @@
 #if !VCL_USE_NATIVE_STL
 # include "emulation/vcl_vector.h"
 
-// -------------------- gcc with old library
-#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
-# include <vector.h>
-# define vcl_vector vector
+//// -------------------- gcc with old library
+//#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
+//# include <vector.h>
+//# define vcl_vector vector
 
 // -------------------- sunpro 5.0
 #elif defined(VCL_SUNPRO_CC_50)
