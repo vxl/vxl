@@ -68,7 +68,6 @@ static void test_intersection()
 
     testlib_test_begin("intersection with null polygon 1");
     vgl_polygon<float> result = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
-	unsigned ns = result.num_sheets(), nv = result.num_vertices(); 
     testlib_test_perform( result.num_sheets() == 0 &&
                           result.num_vertices() == 0);
 #if 0  //This test is identical to the previous.  Why?
