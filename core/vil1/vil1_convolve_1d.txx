@@ -1,13 +1,11 @@
+// This is vxl/vil/vil_convolve_1d.txx
 #ifndef vil_convolve_1d_txx_
 #define vil_convolve_1d_txx_
-// This is vxl/vil/vil_convolve_1d.txx
 
 /*
   fsm@robots.ox.ac.uk
 */
 #include "vil_convolve.h"
-#include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // abort()
 
 // Macros to get origin-relative values in signals.
 #define value1d(sig, k)    ( (sig).array[(sig).origin + (k)] )
@@ -24,18 +22,18 @@
 #undef VIL_CONVOLVE_1D_INSTANTIATE
 #define VIL_CONVOLVE_1D_INSTANTIATE(I1, I2, AC, O) \
 template \
-void vil_convolve_1d_x(vil_convolve_signal_1d<I1 const> const &, \
-                       vil_convolve_signal_2d<I2 const> const &, \
+void vil_convolve_1d_x(vil_convolve_signal_1d<const I1 > const &, \
+                       vil_convolve_signal_2d<const I2 > const &, \
                        AC *, \
-                       vil_convolve_signal_2d<O> const &, \
+                       vil_convolve_signal_2d<O > const &, \
                        vil_convolve_boundary_option, \
                        vil_convolve_boundary_option); \
 template \
-void vil_convolve_1d_y(vil_convolve_signal_1d<I1 const> const &, \
-                       vil_convolve_signal_2d<I2 const> const &, \
+void vil_convolve_1d_y(vil_convolve_signal_1d<const I1 > const &, \
+                       vil_convolve_signal_2d<const I2 > const &, \
                        AC *, \
-                       vil_convolve_signal_2d<O> const &, \
+                       vil_convolve_signal_2d<O > const &, \
                        vil_convolve_boundary_option, \
-                       vil_convolve_boundary_option);
+                       vil_convolve_boundary_option)
 
-#endif
+#endif // vil_convolve_1d_txx_
