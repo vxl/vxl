@@ -5,6 +5,13 @@
 #include <vil2/algo/vil2_structuring_element.h>
 
 //: Define elements { (p_i[k],p_j[k]) }
+vil2_structuring_element::vil2_structuring_element(const vcl_vector<int>& p_i,
+                                                  const vcl_vector<int>& p_j)
+{
+  set(p_i,p_j);
+}
+
+//: Define elements { (p_i[k],p_j[k]) }
 void vil2_structuring_element::set(const vcl_vector<int>& p_i,const vcl_vector<int>& p_j)
 {
   assert(p_i.size()==p_j.size());
@@ -23,6 +30,20 @@ void vil2_structuring_element::set(const vcl_vector<int>& p_i,const vcl_vector<i
 	else if (p_j[k]>max_j_) max_j_=p_j[k];
   }
 }
+
+//: Set to disk of radius r
+//  Select pixels in disk s.t. x^x+y^y<=r^r
+void vil2_structuring_element::set_to_disk(double r)
+{
+  vcl_vector<int> px,py;
+  double r2 = r*r;
+  int r0 = int(r+1);
+  for (int j=-r0;j<=r0;++j)
+    for (int i=-r0;i<=r0;++i)
+	  if (i*i+j*j<r2) { px.push_back(i); py.push_back(j); }
+  set(px,py);
+}
+
 
 //: Write details to stream
 vcl_ostream& operator<<(vcl_ostream& os, const vil2_structuring_element& element)

@@ -35,9 +35,7 @@ void test_binary_dilate_byte()
   px[0]=-1;py[0]=0;
   px[1]= 0;py[1]=0;
   px[2]= 1;py[2]=0;
-  vil2_structuring_element element_i,element_j;
-  element_i.set(px,py);
-  element_j.set(py,px);
+  vil2_structuring_element element_i(px,py),element_j(py,px);
   vcl_cout<<"Structuring element: "<<element_i<<vcl_endl;
 
   vil2_image_view<vxl_byte> image1;
@@ -63,6 +61,17 @@ void test_binary_dilate_byte()
   TEST("image2(5,9)",image2(5,9),0);
   TEST("image2(2,0)",image2(2,0),1);
   TEST("image2(2,1)",image2(2,1),1);
+
+  vil2_structuring_element disk;
+  disk.set_to_disk(4);
+  vcl_cout<<"Structuring element: "<<disk<<vcl_endl;
+  vil2_image_view<vxl_byte> image3;
+  image0.fill(0); image0(5,5)=1;
+  vil2_binary_dilate(image0,image3,disk);
+  vcl_cout<<"Result of dilation with disk"<<vcl_endl;
+  print_binary_image(image3);
+
+
 
 }
 

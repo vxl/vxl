@@ -30,7 +30,14 @@ public:
     : min_i_(0),max_i_(-1),min_j_(0),max_j_(-1) {}
 
 	//: Define elements { (p_i[k],p_j[k]) }
+  vil2_structuring_element(const vcl_vector<int>& p_i,const vcl_vector<int>& p_j);
+
+	//: Define elements { (p_i[k],p_j[k]) }
   void set(const vcl_vector<int>& p_i,const vcl_vector<int>& p_j);
+
+    //: Set to disk of radius r
+	//  Select pixels in disk s.t. x^x+y^y<=r^r
+  void set_to_disk(double r);
 
   //: i position of elements (i,j)
   const vcl_vector<int>& p_i() const { return p_i_; }
