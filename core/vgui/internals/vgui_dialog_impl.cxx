@@ -15,6 +15,7 @@
 #include <vgui/internals/vgui_simple_field.h>
 #include <vgui/internals/vgui_string_field.h>
 #include <vgui/internals/vgui_file_field.h>
+#include <vgui/vgui_tableau_sptr.h>
 
 vgui_dialog_impl::vgui_dialog_impl(const char* n)
   : name(n)

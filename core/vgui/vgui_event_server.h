@@ -21,6 +21,7 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_tableau.h>
+#include <vgui/vgui_tableau_sptr.h>
 class vgui_event_server_interpose_tableau;
 
 //: Procedural event grabbing from a tableau

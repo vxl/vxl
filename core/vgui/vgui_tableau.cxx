@@ -26,6 +26,7 @@
 #include <vgui/vgui_parent_child_link.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_popup_params.h>
+#include <vgui/vgui_tableau_sptr.h>
 
 // static data
 //------------

@@ -12,6 +12,7 @@
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_tableau.h>
+#include <vgui/vgui_tableau_sptr.h>
 #include <vgui/vgui_macro.h>
 
 // For efficiency (e.g. when posting redraws), the parents of a tableau

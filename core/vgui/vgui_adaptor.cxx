@@ -18,6 +18,7 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_tableau.h>
+#include <vgui/vgui_tableau_sptr.h>
 #include <vgui/vgui_popup_params.h>
 #include <vgui/internals/vgui_adaptor_tableau.h>
 
