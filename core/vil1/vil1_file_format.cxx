@@ -16,7 +16,8 @@ vil_file_format::~vil_file_format()
 #define HAS_MIT  1
 #define HAS_BMP  1
 #define HAS_GIF  0
-#define HAS_JPEG 1
+// This will be defined "outside" if there really is a JPEG library
+// #define HAS_JPEG 1
 #define HAS_GEN  1
 
 #if HAS_PNM
