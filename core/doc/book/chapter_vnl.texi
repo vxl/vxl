@@ -541,7 +541,7 @@ test case, the ``notorious'' Rosenbrock function:
 The graph of @math{f} is plotted in Figure 2.
 
 @figure
-@image{images/rosenbrock,,1in}
+@image{rosenbrock,,1in}
 @caption{2}
 The Rosenbrock ``banana'' function, used as an optimization test
 case.  Optimization starts on one side of the valley, and must find the
