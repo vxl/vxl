@@ -18,7 +18,7 @@ class vgui_adaptor;
 // of the tableau graph under each adaptor.  (Top means
 // it has no parents and every tableau under the adaptor
 // is a child of one of these).  Its main purpose
-// is to catch messsages "up" the tableau hierarchy
+// is to catch messages "up" the tableau hierarchy
 // like "post_redraw", and pass them on to the
 // adaptor.
 class vgui_adaptor_tableau : private vgui_tableau
