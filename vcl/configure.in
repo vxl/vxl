@@ -349,9 +349,17 @@ vcl_config_headers.h~:vcl_config_headers.h.in
 
 # only touch files that actually change.
 for f in "vcl_config_manual.h" "vcl_config_compiler.h" "vcl_config_headers.h"; do
-  inclgrd=`echo $f | sed -e 's/\.h$/_h_/'`
-  os=`pwd|sed -e 's/.*\///' -e 's/[.+-]/_/g`
-  perl -pi -e s/$inclgrd/${inclgrd}${os}_/; ${f}~
+# This hangs on my machine (fsm).
+# In any case, the inclusion guard should not be derived
+# from the pwd. This configure script is for vcl only; it
+# is not subordinate to the peculiarities of the current
+# or future IUE/TargetJr/VXL build system.
+# In addition, we can't assume that everyone has perl in
+# his or her path.
+  #inclgrd=`echo $f | sed -e 's/\.h$/_h_/'`
+  #os=`pwd|sed -e 's/.*\///' -e 's/[.+-]/_/g'`
+  #perl -pi -e s/$inclgrd/${inclgrd}${os}_/; ${f}~
+
   if test -f $f; then
     if diff ${f} ${f}~ 2>&1 >/dev/null ; then
       echo "no change to ${f}"
