@@ -46,13 +46,6 @@ class EigenFace
     LabelDist(char *str, double d):label(str), dist(d){}
     bool operator<(const LabelDist &x) const {return dist>x.dist;}
   };
-  struct ltstr
-  {
-    bool operator()(const char* s1, const char* s2) const
-    {
-      return strcasecmp(s1, s2) < 0;
-    }
-  };
 
   EigenFace(): image_size(0), average_training_image(NULL){}
   ~EigenFace();
