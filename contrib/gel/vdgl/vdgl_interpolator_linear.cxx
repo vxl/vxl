@@ -4,10 +4,10 @@
 #endif
 
 #include "vdgl_interpolator_linear.h"
-#include <vnl/vnl_math.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vsol/vsol_point_2d.h>
+#include <vnl/vnl_numeric_traits.h>
 #include <vcl_cassert.h>
 
 
@@ -90,7 +90,7 @@ double vdgl_interpolator_linear::get_curvature( const double index)
   int a= int( index); // round down
 
   if ( a == index ) // if exactly at an edgel, curvature is undefined
-    return vnl_math::maxdouble;
+    return vnl_numeric_traits<double>::maxval;
   else
     return 0; // curvature of straight line segments is always zero
 }

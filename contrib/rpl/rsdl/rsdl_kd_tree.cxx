@@ -5,6 +5,7 @@
 #include <vcl_utility.h>
 
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_numeric_traits.h>
 
 #include <rsdl/rsdl_dist.h>
 #include <rsdl/rsdl_kd_tree.h>
@@ -34,8 +35,8 @@ rsdl_kd_tree::rsdl_kd_tree( const vcl_vector< rsdl_point >& points,
   // 1a. initialize the cartesian upper and lower limits
   if ( Nc_ > 0 ) {
     for ( unsigned int i=0; i<Nc_; ++i ) {
-      low.cartesian(i)  = -vnl_math::maxdouble;
-      high.cartesian(i) =  vnl_math::maxdouble;
+      low.cartesian(i)  = -vnl_numeric_traits<double>::maxval;
+      high.cartesian(i) =  vnl_numeric_traits<double>::maxval;
     }
   }
 
