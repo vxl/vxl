@@ -105,7 +105,7 @@ class vgui_soview2D_lineseg : public vgui_soview2D
     x0(x0_), y0(y0_), x1(x1_), y1(y1_) {}
 
   //: Constructor - create a 2D line segment same as the given 2D line segment.
-  vgui_soview2D_lineseg( vgui_soview2D_lineseg &l_) : x0(l_.x0), y0(l_.y0), x1(l_.x1), y1(l_.y1) {}
+  vgui_soview2D_lineseg( vgui_soview2D_lineseg &l_) : vgui_soview2D(), x0(l_.x0), y0(l_.y0), x1(l_.x1), y1(l_.y1) {}
 
   //: Render this 2D line segment on the display.
   virtual void draw() const;

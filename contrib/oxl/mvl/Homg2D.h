@@ -16,8 +16,8 @@
 //
 // \verbatim
 //  Modifications
-//    210297 AWF Switched to fixed-length vectors for speed.
-//    110397 Peter Vanroose - added operator==
+//   210297 AWF Switched to fixed-length vectors for speed.
+//   110397 Peter Vanroose - added operator==
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -36,7 +36,7 @@ class Homg2D : public vnl_double_3, public Homg
   Homg2D() {}
 
   //: Copy constructor
-  Homg2D(const Homg2D& that) { *this = that; }
+  Homg2D(const Homg2D& that) : vnl_double_3(*this) {}
 
   //: Construct a Homg2D from three doubles.
   Homg2D(double px, double py, double pw) { set(px,py,pw); }
