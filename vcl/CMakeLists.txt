@@ -13,7 +13,7 @@ SET( vcl_sources
   vcl_deprecated.cxx     vcl_deprecated.h
 
   vcl_where_root_dir.h.in
-  vcl_config_compiler.h.in
+  vcl_config_compiler.h.in vcl_config_compiler_cmake.h.in
   vcl_config_headers.h.in
   vcl_config_manual.h.in
 
@@ -215,6 +215,7 @@ SET( vcl_sources
   emulation/vcl_tree.h
 
   emulation/vcl_stlconf.h
+  emulation/egcs-stlconf.h
   emulation/gcc-272-stlconf.h
   emulation/gcc-2800-stlconf.h
   emulation/gcc-281-stlconf.h
@@ -305,6 +306,9 @@ SET( vcl_sources
   win32-vc70/vcl_cstdlib.h
 
   borland55/vcl_cfloat.h
+  borland55/vcl_cmath.h
+  borland55/vcl_complex.h
+  borland55/vcl_cstdlib.h
   borland56/vcl_complex.h
 
   mwerks/vcl_cmath.h
