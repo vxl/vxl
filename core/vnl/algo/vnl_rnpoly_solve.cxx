@@ -518,12 +518,12 @@ static int trace (int len, vnl_rnpoly_solve_cmplx x[M], int ideg[M],
     }else
       eps = epsilonB;
 #ifdef DEBUG
-    printf ("t=%.15f\n",t); fflush(stdout);
+    vcl_printf ("t=%.15f\n",t); fflush(stdout);
 #endif
 
     if (t>=.99999) {                    // Path converged
 #ifdef DEBUG
-      printf ("path converged\n");
+      vcl_printf ("path converged\n");
 #endif
       factor = (1.0-oldt)/(t-oldt);
       for (j=len-1;j>=0;j--) x[j] = oldx[j] + (x[j]-oldx[j]) * factor;
@@ -631,13 +631,13 @@ static int Perform_Distributed_Task(int points,vnl_rnpoly_solve_cmplx sols[LEN][
       for (i=points-1;i>=0;i--) {
         sols[NumSols][i] = x[i];
 #ifdef DEBUG
-        fprintf(F,"<%f  %f>",x[points-i-1].R,x[points-i-1].C);
+        vcl_fprintf(F,"<%f  %f>",x[points-i-1].R,x[points-i-1].C);
 #endif
       }
       ++NumSols;
 #ifdef DEBUG
-      fprintf(F,"\n");
-      fflush(F);
+      vcl_fprintf(F,"\n");
+      vcl_fflush(F);
 #endif
     }
 #ifdef DEBUG

@@ -34,5 +34,5 @@ QvElement::~QvElement()
 void
 QvElement::print()
 {
-  printf("\t\tElement of type %s\n", nodeTypeNames[type]);
+  vcl_printf("\t\tElement of type %s\n", nodeTypeNames[type]);
 }

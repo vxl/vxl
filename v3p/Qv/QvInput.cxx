@@ -29,7 +29,7 @@ QvInput::isASCIIHeader(const char *string)
         if (!vcl_strncmp(ASCIIHeader[i].string, string,vcl_strlen(ASCIIHeader[i].string)))
             return ASCIIHeader[i].version;
     }
-    fprintf(stderr, "Qv: NOT ASCII\n");
+    vcl_fprintf(stderr, "Qv: NOT ASCII\n");
     return FALSE;
 }
 
@@ -166,7 +166,7 @@ QvInput::read(QvString &s)
 
     } while (bytesLeft == 0);
 
-    fprintf(stderr, "QV read[%s]\n", s.getString());
+    vcl_fprintf(stderr, "QV read[%s]\n", s.getString());
 
     return TRUE;
 }
@@ -452,10 +452,10 @@ QvInput::readReal(double& d)
     // may try something like this to speed up things:
 //     if (backBufIndex < 0)  // backbuf empty
 //     {
-//       return (fscanf (fp, "%lf", &d) == 1);  // EOF considered as failure
+//       return (vcl_fscanf (fp, "%lf", &d) == 1);  // EOF considered as failure
 //     }
 //     // else
-//     // fprintf (stderr, "reading real from backbuffer ");
+//     // vcl_fprintf (vcl_stderr, "reading real from backbuffer ");
 
 /* end hard hat area */
 

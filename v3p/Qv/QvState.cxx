@@ -73,14 +73,14 @@ QvState::popElement(StackIndex stackIndex)
 void
 QvState::print()
 {
-    printf("Traversal state:\n");
+    vcl_printf("Traversal state:\n");
 
     for (int i = 0; i < NumStacks; i++) {
 
-        printf("\tStack [%2d] (%s):\n", i, stackNames[i]);
+        vcl_printf("\tStack [%2d] (%s):\n", i, stackNames[i]);
 
         if (stacks[i] == NULL)
-            printf("\t\tNULL\n");
+            vcl_printf("\t\tNULL\n");
 
         else
             for (QvElement *elt = stacks[i]; elt != NULL; elt = elt->next)

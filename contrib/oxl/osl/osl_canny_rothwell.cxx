@@ -72,7 +72,7 @@ osl_canny_rothwell::~osl_canny_rothwell() {
 
 void osl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<osl_edge*> *edges, bool adaptive)
 {
-  assert(edges);
+  assert(edges!=0);
 
   _xsize  = image.height();
   _ysize  = image.width();
@@ -735,7 +735,7 @@ void osl_canny_rothwell::Adaptive_Canny(vil_image const &image) {
           }
         }
       }
-    if (verbose) fprintf(stderr,"\b\b\b%3d", 10*((++count)*10/_xdang->size()));
+    if (verbose) vcl_fprintf(stderr,"\b\b\b%3ld", 10*((++count)*10/_xdang->size()));
   }
   if (verbose)   vcl_cerr << vcl_endl;
 

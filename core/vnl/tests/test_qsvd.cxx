@@ -21,20 +21,20 @@ void test_qsvd() {
   sggsvd_("U", "V", "Q", &m, &n, &p, &k, &l, AA, &n, BB, &n, Alpha, Beta,
           U, &n, V, &n, Q, &n, Work, Iwork, &info);
 
-  printf("k = %d, l = %d, return = %d\n", k, l, info);
+  vcl_printf("k = %d, l = %d, return = %d\n", k, l, info);
   vnl_test_assert("(k,l) must be (0,3)", k==0 && l==3);
   vnl_test_assert("sggsvd should return 0", info==0);
 
-  printf("U = %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n",
-         U[0], U[3], U[6], U[1], U[4], U[7], U[2], U[5], U[8]);
-  printf("V = %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n",
-         V[0], V[3], V[6], V[1], V[4], V[7], V[2], V[5], V[8]);
-  printf("Q = %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n",
-         Q[0], Q[3], Q[6], Q[1], Q[4], Q[7], Q[2], Q[5], Q[8]);
-  printf("D1 = diag(%12g %12g %12g)\n", Alpha[0], Alpha[1], Alpha[2]);
-  printf("D2 = diag(%12g %12g %12g)\n", Beta[0], Beta[1], Beta[2]);
-  printf("R = %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n",
-         AA[0], AA[3], AA[6], AA[1], AA[4], AA[7], AA[2], AA[5], AA[8]);
+  vcl_printf("U = %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n",
+             U[0], U[3], U[6], U[1], U[4], U[7], U[2], U[5], U[8]);
+  vcl_printf("V = %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n",
+             V[0], V[3], V[6], V[1], V[4], V[7], V[2], V[5], V[8]);
+  vcl_printf("Q = %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n",
+             Q[0], Q[3], Q[6], Q[1], Q[4], Q[7], Q[2], Q[5], Q[8]);
+  vcl_printf("D1 = diag(%12g %12g %12g)\n", Alpha[0], Alpha[1], Alpha[2]);
+  vcl_printf("D2 = diag(%12g %12g %12g)\n", Beta[0], Beta[1], Beta[2]);
+  vcl_printf("R = %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n",
+             AA[0], AA[3], AA[6], AA[1], AA[4], AA[7], AA[2], AA[5], AA[8]);
 
   vnl_test_assert("D1 must be (0.6,0.8,0.6)",
                   vnl_math_abs(Alpha[0]-0.6)<1e-6 &&
