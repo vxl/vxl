@@ -60,10 +60,10 @@ segv_segmentation_manager *segv_segmentation_manager::instance_ = 0;
 segv_segmentation_manager *segv_segmentation_manager::instance()
 {
   if (!instance_)
-    {
-      instance_ = new segv_segmentation_manager();
-      instance_->init();
-    }
+  {
+    instance_ = new segv_segmentation_manager();
+    instance_->init();
+  }
   return segv_segmentation_manager::instance_;
 }
 
@@ -109,11 +109,7 @@ void segv_segmentation_manager::load_image()
   vil1_image temp = vil1_load(image_filename.c_str());
 
   if (greyscale)
-    {
-      vil1_memory_image_of<unsigned char> temp1 =
-      brip_float_ops::convert_to_grey(temp);
-      img_ = temp1;
-    }
+    img_ = brip_float_ops::convert_to_grey(temp);
   else
     img_ = temp;
 
@@ -143,31 +139,29 @@ segv_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
   this->clear_display();
   vgui_image_tableau_sptr itab = t2D_->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
-      return;
-    }
+  {
+    vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
+    return;
+  }
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
+  {
+    t2D_->add_edge(*eit);
+    //optionally display the edge vertices
+    if (verts)
     {
-      t2D_->add_edge(*eit);
-      //optionally display the edge vertices
-      if (verts)
-        {
-          if ((*eit)->v1())
-            {
-              vtol_vertex_2d_sptr v1 =
-                (vtol_vertex_2d*)(*eit)->v1()->cast_to_vertex_2d();
-              t2D_->add_vertex(v1);
-            }
-          if ((*eit)->v2())
-            {
-              vtol_vertex_2d_sptr v2 =
-                (vtol_vertex_2d*)(*eit)->v2()->cast_to_vertex_2d();
-              t2D_->add_vertex(v2);
-            }
-        }
+      if ((*eit)->v1())
+      {
+        vtol_vertex_2d_sptr v1 = (*eit)->v1()->cast_to_vertex_2d();
+        t2D_->add_vertex(v1);
+      }
+      if ((*eit)->v2())
+      {
+        vtol_vertex_2d_sptr v2 = (*eit)->v2()->cast_to_vertex_2d();
+        t2D_->add_vertex(v2);
+      }
     }
+  }
   t2D_->post_redraw();
 }
 //-----------------------------------------------------------------------------
@@ -181,15 +175,15 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines)
   //this->clear_display();
   vgui_image_tableau_sptr itab = t2D_->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
-      return;
-    }
+  {
+    vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
+    return;
+  }
   for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
        lit != lines.end(); lit++)
-    {
-      t2D_->add_vsol_line_2d(*lit);
-    }
+  {
+    t2D_->add_vsol_line_2d(*lit);
+  }
 
   t2D_->post_redraw();
 }
@@ -205,16 +199,15 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
   //this->clear_display();
   vgui_image_tableau_sptr itab = t2D_->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
-      return;
-    }
+  {
+    vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
+    return;
+  }
   for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
        lit != lines.end(); lit++)
-    {
-
-      t2D_->add_vsol_line_2d(*lit,r,g,b,width);
-    }
+  {
+    t2D_->add_vsol_line_2d(*lit,r,g,b,width);
+  }
 
   t2D_->post_redraw();
 }
@@ -230,15 +223,15 @@ draw_points(vcl_vector<vsol_point_2d_sptr> const& points, float r, float g, floa
   //this->clear_display();
   vgui_image_tableau_sptr itab = t2D_->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
-      return;
-    }
+  {
+    vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
+    return;
+  }
   for (vcl_vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
        pit != points.end(); pit++)
-    {
-      t2D_->add_vsol_point_2d(*pit,r,g,b,radius);
-    }
+  {
+    t2D_->add_vsol_point_2d(*pit,r,g,b,radius);
+  }
 
   t2D_->post_redraw();
 }
@@ -248,31 +241,31 @@ void segv_segmentation_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr
 {
   for (vcl_vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
        rit != regions.end(); rit++)
+  {
+    vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
+    t2D_->add_face(f);
+    if (verts)
     {
-      vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
-      t2D_->add_face(f);
-      if (verts)
-        {
-          vcl_vector<vtol_vertex_sptr>* vts = f->vertices();
-          for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts->begin();
-               vit != vts->end(); vit++)
-            {
-              vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
-              t2D_->add_vertex(v);
-            }
-          delete vts;
-        }
+      vcl_vector<vtol_vertex_sptr>* vts = f->vertices();
+      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts->begin();
+           vit != vts->end(); vit++)
+      {
+        vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
+        t2D_->add_vertex(v);
+      }
+      delete vts;
     }
+  }
   t2D_->post_redraw();
 }
 
 void segv_segmentation_manager::original_image()
 {
   if (img_)
-    {
-      t2D_->get_image_tableau()->set_image(img_);
-      t2D_->post_redraw();
-    }
+  {
+    t2D_->get_image_tableau()->set_image(img_);
+    t2D_->post_redraw();
+  }
 }
 
 void segv_segmentation_manager::roi()
@@ -290,7 +283,7 @@ void segv_segmentation_manager::roi()
     int w = int(x1 - x0);
     int h = int(y1 - y0);
     vil1_image cropped = vil1_crop(img_,int(x0),int(y0),w,h);
-    vcl_cout << "cropped x=" <<x0<<" y=" <<y0<< " w=" <<w<<" h=" <<h<< "\n";
+    vcl_cout << "cropped x=" <<x0<<" y=" <<y0<< " w=" <<w<<" h=" <<h<< '\n';
     if (cropped)
     {
       img_ = cropped;
@@ -308,10 +301,10 @@ void segv_segmentation_manager::roi()
 void segv_segmentation_manager::gaussian()
 {
   if (!img_)
-    {
-      vcl_cout << "In segv_segmentation_manager::gaussian() - no image\n";
-      return;
-    }
+  {
+    vcl_cout << "In segv_segmentation_manager::gaussian() - no image\n";
+    return;
+  }
   static float sigma = 1.0;
   vgui_dialog gauss_dialog("Gaussian Smooth");
   gauss_dialog.field("Gaussian sigma", sigma);
@@ -354,10 +347,10 @@ void segv_segmentation_manager::convolution()
 void segv_segmentation_manager::downsample()
 {
   if (!img_)
-    {
-      vcl_cout << "In segv_segmentation_manager::downsample) - no image\n";
-      return;
-    }
+  {
+    vcl_cout << "In segv_segmentation_manager::downsample) - no image\n";
+    return;
+  }
   static float filter_factor = 0.36f;
   vgui_dialog downsample_dialog("Downsample");
   downsample_dialog.field("Bert-Adelson Factor", filter_factor);
@@ -376,10 +369,10 @@ void segv_segmentation_manager::downsample()
 void segv_segmentation_manager::harris_measure()
 {
   if (!img_)
-    {
-      vcl_cout << "In segv_segmentation_manager::harris_measure) - no image\n";
-      return;
-    }
+  {
+    vcl_cout << "In segv_segmentation_manager::harris_measure) - no image\n";
+    return;
+  }
   static sdet_harris_detector_params hdp;
   vgui_dialog harris_dialog("harris");
   harris_dialog.field("sigma", hdp.sigma_);
@@ -405,10 +398,10 @@ void segv_segmentation_manager::harris_measure()
 void segv_segmentation_manager::beaudet_measure()
 {
   if (!img_)
-    {
-      vcl_cout <<"In segv_segmentation_manager::beaudet_measure) - no image\n";
-      return;
-    }
+  {
+    vcl_cout <<"In segv_segmentation_manager::beaudet_measure) - no image\n";
+    return;
+  }
   static float sigma = 1.0f;
   //static float scale_factor = 0.04f;
   //static int n = 2;
@@ -491,34 +484,34 @@ void segv_segmentation_manager::regions()
   rp.set_image(img_);
   rp.extract_regions();
   if (debug)
-    {
-      vil1_image ed_img = rp.get_edge_image();
-      vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
-      if (!itab)
-        {
-          vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
-          return;
-        }
-      itab->set_image(ed_img);
-      itab->post_redraw();
-    }
+  {
+    vil1_image ed_img = rp.get_edge_image();
+    vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
+    if (!itab)
+      {
+        vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
+        return;
+      }
+    itab->set_image(ed_img);
+    itab->post_redraw();
+  }
   if (!debug)
-    {
-      vcl_vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
-      this->draw_regions(regions, true);
-    }
+  {
+    vcl_vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
+    this->draw_regions(regions, true);
+  }
   if (residual)
+  {
+    vil1_image res_img = rp.get_residual_image();
+    vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
+    if (!itab)
     {
-      vil1_image res_img = rp.get_residual_image();
-      vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
-      if (!itab)
-        {
-          vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
-          return;
-        }
-      itab->set_image(res_img);
-      itab->post_redraw();
+      vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
+      return;
     }
+    itab->set_image(res_img);
+    itab->post_redraw();
+  }
 }
 
 // Test calculated camera parameter matrices (K and M) by reading from a file.
@@ -547,112 +540,111 @@ void segv_segmentation_manager::test_camera_parms()
     return;
 
   if (show_calculated_points)
+  {
+    // read K
+    vnl_matrix_fixed<double,3,3> K;
+    vcl_ifstream parms_instream(camera_parms_filename.c_str());
+
+    double k_values[9];
+    for (int i=0; i < 9; i++)
     {
-      // read K
-      vnl_matrix_fixed<double,3,3> K;
-      vcl_ifstream parms_instream(camera_parms_filename.c_str());
-
-      double k_values[9];
-      for (int i=0; i < 9; i++)
-      {
-        parms_instream >> k_values[i];
-        //vcl_cout << "k_values["<<i<<"] = "<<k_values[i] << "\n";
-      }
-      K.put(0,0,k_values[0]); K.put(0,1,k_values[1]); K.put(0,2,k_values[2]);
-      K.put(1,0,k_values[3]); K.put(1,1,k_values[4]); K.put(1,2,k_values[5]);
-      K.put(2,0,k_values[6]); K.put(2,1,k_values[7]); K.put(2,2,k_values[8]);
-
-      vcl_cout << "K =\n" << K << "\n";
-
-      // read number of views
-      int n_views = 0;
-      parms_instream >> n_views;
-
-      // read M
-      vnl_matrix_fixed<double,3,4> M;
-
-      double m_values[12];
-      double dummy;
-      for (int v = 1; v <= view_num; v++)
-      {
-        if (v > n_views)
-          {
-            vcl_cout << "error: view number > n_views\n";
-            break;
-          }
-        for (int i=0; i < 12; i++)
-          {
-            parms_instream >> m_values[i];
-            //vcl_cout << "m_values["<<i<<"] = "<<m_values[i] << "\n";
-          }
-        // read 4th row, should just be [0 0 0 1]
-        for (int i=0; i < 4; i++)
-          {
-            parms_instream >> dummy;
-          }
-
-      }
-      parms_instream.close();
-
-      M.put(0,0,m_values[0]); M.put(0,1,m_values[1]); M.put(0,2,m_values[2]);  M.put(0,3,m_values[3]);
-      M.put(1,0,m_values[4]); M.put(1,1,m_values[5]); M.put(1,2,m_values[6]);  M.put(1,3,m_values[7]);
-      M.put(2,0,m_values[8]); M.put(2,1,m_values[9]); M.put(2,2,m_values[10]); M.put(2,3,m_values[11]);
-
-      vcl_cout << "M =\n" << M << "\n";
-
-      //transform the grid points to the image
-      sdet_grid_finder_params gfp;
-      sdet_grid_finder gf(gfp);
-      vcl_vector<vsol_point_2d_sptr> calculated_points;
-      gf.transform_grid_points(K,M,calculated_points);
-
-      // draw points on image
-      this->draw_points(calculated_points,1.0f,0.0f,0.0f,5);
+      parms_instream >> k_values[i];
+      //vcl_cout << "k_values["<<i<<"] = "<<k_values[i] << '\n';
     }
+    K.put(0,0,k_values[0]); K.put(0,1,k_values[1]); K.put(0,2,k_values[2]);
+    K.put(1,0,k_values[3]); K.put(1,1,k_values[4]); K.put(1,2,k_values[5]);
+    K.put(2,0,k_values[6]); K.put(2,1,k_values[7]); K.put(2,2,k_values[8]);
+
+    vcl_cout << "K =\n" << K << '\n';
+
+    // read number of views
+    int n_views = 0;
+    parms_instream >> n_views;
+
+    // read M
+    vnl_matrix_fixed<double,3,4> M;
+
+    double m_values[12];
+    double dummy;
+    for (int v = 1; v <= view_num; v++)
+    {
+      if (v > n_views)
+      {
+        vcl_cout << "error: view number > n_views\n";
+        break;
+      }
+      for (int i=0; i < 12; i++)
+      {
+        parms_instream >> m_values[i];
+        //vcl_cout << "m_values["<<i<<"] = "<<m_values[i] << '\n';
+      }
+      // read 4th row, should just be [0 0 0 1]
+      for (int i=0; i < 4; i++)
+      {
+        parms_instream >> dummy;
+      }
+    }
+    parms_instream.close();
+
+    M.put(0,0,m_values[0]); M.put(0,1,m_values[1]); M.put(0,2,m_values[2]);  M.put(0,3,m_values[3]);
+    M.put(1,0,m_values[4]); M.put(1,1,m_values[5]); M.put(1,2,m_values[6]);  M.put(1,3,m_values[7]);
+    M.put(2,0,m_values[8]); M.put(2,1,m_values[9]); M.put(2,2,m_values[10]); M.put(2,3,m_values[11]);
+
+    vcl_cout << "M =\n" << M << '\n';
+
+    //transform the grid points to the image
+    sdet_grid_finder_params gfp;
+    sdet_grid_finder gf(gfp);
+    vcl_vector<vsol_point_2d_sptr> calculated_points;
+    gf.transform_grid_points(K,M,calculated_points);
+
+    // draw points on image
+    this->draw_points(calculated_points,1.0f,0.0f,0.0f,5);
+  }
   if (show_input_points)
+  {
+    vcl_vector<vsol_point_2d_sptr> input_points;
+    vcl_ifstream points_instream(input_points_filename.c_str());
+    int n_points = 0;
+    // read number of points
+    points_instream >> n_points;
+    // read grid points, discard
+    double dummy;
+    double* points_x = new double[n_points];
+    double* points_y = new double[n_points];
+    for (int i = 0; i < n_points; i++)
     {
-      vcl_vector<vsol_point_2d_sptr> input_points;
-      vcl_ifstream points_instream(input_points_filename.c_str());
-      int n_points = 0;
-      // read number of points
-      points_instream >> n_points;
-      // read grid points, discard
-      double dummy;
-      double* points_x = new double[n_points];
-      double* points_y = new double[n_points];
-      for (int i = 0; i < n_points; i++)
-      {
-        points_instream >> dummy; //x
-        points_instream >> dummy; //y
-      }
-
-      // read number of views
-      int n_views = 0;
-      points_instream >> n_views;
-
-      // read grid points for view number
-      for (int v = 1; v <= view_num; v++)
-      {
-        if (v > n_views)
-        {
-          vcl_cout << "error: view number > n_views\n";
-          break;
-        }
-        for (int i = 0; i < n_points; i++)
-        {
-          points_instream >> points_x[i];
-          points_instream >> points_y[i];
-        }
-      }
-      for (int i = 0; i < n_points; i++)
-      {
-        vsol_point_2d_sptr point = new vsol_point_2d(points_x[i],points_y[i]);
-        input_points.push_back(point);
-      }
-      this->draw_points(input_points,0.0f,1.0f,0.0f,4);
-      delete[] points_x;
-      delete[] points_y;
+      points_instream >> dummy; //x
+      points_instream >> dummy; //y
     }
+
+    // read number of views
+    int n_views = 0;
+    points_instream >> n_views;
+
+    // read grid points for view number
+    for (int v = 1; v <= view_num; v++)
+    {
+      if (v > n_views)
+      {
+        vcl_cout << "error: view number > n_views\n";
+        break;
+      }
+      for (int i = 0; i < n_points; i++)
+      {
+        points_instream >> points_x[i];
+        points_instream >> points_y[i];
+      }
+    }
+    for (int i = 0; i < n_points; i++)
+    {
+      vsol_point_2d_sptr point = new vsol_point_2d(points_x[i],points_y[i]);
+      input_points.push_back(point);
+    }
+    this->draw_points(input_points,0.0f,1.0f,0.0f,4);
+    delete[] points_x;
+    delete[] points_y;
+  }
 
   return;
 }
@@ -702,68 +694,68 @@ void segv_segmentation_manager::fit_lines()
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   if (!edges)
-    {
-      vcl_cout << "No edges to fit lines\n";
-      return;
-    }
+  {
+    vcl_cout << "No edges to fit lines\n";
+    return;
+  }
   sdet_fit_lines fl(flp);
   fl.set_edges(*edges);
   fl.fit_lines();
   vcl_vector<vsol_line_2d_sptr> lines = fl.get_line_segs();
   if (detect_grid)
+  {
+    sdet_grid_finder gf(gfp);
+    if (!gf.set_lines(img_.width(), img_.height(), lines))
     {
-      sdet_grid_finder gf(gfp);
-      if (!gf.set_lines(img_.width(), img_.height(), lines))
-        {
-          vcl_cout << "Less than two dominant groups\n";
-          return;
-        }
-      vcl_vector<vsol_line_2d_sptr> mapped_lines;
-      vcl_vector<vsol_line_2d_sptr> mapped_grid_lines;
-      if (manual_pt_selection)
+      vcl_cout << "Less than two dominant groups\n";
+      return;
+    }
+    vcl_vector<vsol_line_2d_sptr> mapped_lines;
+    vcl_vector<vsol_line_2d_sptr> mapped_grid_lines;
+    if (manual_pt_selection)
+    {
+      vsol_point_2d_sptr corners[4];
+      vcl_cout << "Select the four corners of the grid, starting with "
+               << "the upper left and moving clockwise.\n";
+      for (int p=0; p<4; p++)
       {
-        vsol_point_2d_sptr corners[4];
-        vcl_cout << "Select the four corners of the grid, starting with "
-                 << "the upper left and moving clockwise.\n";
-        for (int p=0; p<4; p++)
-        {
-          float x=0, y=0;
-          picktab_->pick_point(&x,&y);
-          vcl_cout << "corner "<< p <<" (x=" << x << ", y=" << y <<")\n";
-          corners[p] = new vsol_point_2d(x,y);
-        }
-        gf.compute_manual_homography(corners[0],corners[1],
-                                     corners[2],corners[3]);
-        if (!gfp.debug_state_)
-          //gf.get_mapped_lines(mapped_lines);
-          gf.get_backprojected_grid(mapped_lines);
-        else
-          gf.get_debug_lines(mapped_lines);
-
-        this->draw_lines(mapped_lines);
-        return;
+        float x=0, y=0;
+        picktab_->pick_point(&x,&y);
+        vcl_cout << "corner "<< p <<" (x=" << x << ", y=" << y <<")\n";
+        corners[p] = new vsol_point_2d(x,y);
       }
-
-      gf.compute_homography();
-      // double-check grid match
-      if (!gf.check_grid_match(img_))
-      {
-        /* for now just display message - if this was a video process
-         * we would want to disregard this homography and move on */
-        vcl_cout << "warning: grid match failed double-check\n";
-      }
+      gf.compute_manual_homography(corners[0],corners[1],
+                                   corners[2],corners[3]);
       if (!gfp.debug_state_)
         //gf.get_mapped_lines(mapped_lines);
         gf.get_backprojected_grid(mapped_lines);
       else
-      {
         gf.get_debug_lines(mapped_lines);
-        gf.get_debug_grid_lines(mapped_grid_lines);
-        this->draw_lines(mapped_grid_lines,1.0f,0.0f,0.0f,1);
-      }
+
       this->draw_lines(mapped_lines);
       return;
     }
+
+    gf.compute_homography();
+    // double-check grid match
+    if (!gf.check_grid_match(img_))
+    {
+      // for now just display message - if this was a video process
+      // we would want to disregard this homography and move on
+      vcl_cout << "warning: grid match failed double-check\n";
+    }
+    if (!gfp.debug_state_)
+      //gf.get_mapped_lines(mapped_lines);
+      gf.get_backprojected_grid(mapped_lines);
+    else
+    {
+      gf.get_debug_lines(mapped_lines);
+      gf.get_debug_grid_lines(mapped_grid_lines);
+      this->draw_lines(mapped_grid_lines,1.0f,0.0f,0.0f,1);
+    }
+    this->draw_lines(mapped_lines);
+    return;
+  }
   this->draw_lines(lines);
 }
 
@@ -837,10 +829,10 @@ void segv_segmentation_manager::test_face()
   t2D_->set_foreground(1.0, 0.0, 0.0);
   for (int x = 0; x<sx; x+=20)
     for (int y = 0; y<sy; y+=20)
-      {
-        vtol_vertex_2d_sptr v = new vtol_vertex_2d(x, y);
-        t2D_->add_vertex(v);
-      }
+    {
+      vtol_vertex_2d_sptr v = new vtol_vertex_2d(x, y);
+      t2D_->add_vertex(v);
+    }
 }
 
 void segv_segmentation_manager::test_digital_lines()
