@@ -7,6 +7,7 @@
 
 #include <vil/vil_image_view.h>
 #include <vxl_config.h>
+#include <vil/algo/vil_sobel_3x3.h>
 
 //: Compute orientation (in radians) and gradient magnitude at each pixel
 //  Images assumed to be single plane
