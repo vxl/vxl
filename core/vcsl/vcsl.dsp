@@ -84,285 +84,285 @@ LIB32=link.exe -lib
 # Name "vcsl - Win32 Debug"
 # Begin Group "Source Files"
 
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;txx"
 # Begin Source File
 
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_angle.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_angle_unit.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_axis.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_cartesian.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_cartesian_2d.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_cartesian_3d.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_composition.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_coordinate_system.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_cylindrical.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_cylindrical_to_cartesian_3d.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_degree.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_dimension.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_displacement.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_geocentric.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_geodetic.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_geographic.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_graph.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_lambertian.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_length.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_length_unit.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_meter.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_perspective.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_polar.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_radian.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_rotation.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_scale.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_spatial.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_spatial_transformation.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_spherical.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_spheroid.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_translation.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_unit.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vbl_smart_ptr+vcsl_utm.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vcl_vector+vcsl_axis_sptr.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vcl_vector+vcsl_interpolator.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vcl_vector+vcsl_spatial_sptr.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\Templates\vcl_vector+vcsl_spatial_transformation_sptr.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_angle.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_angle_unit.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_axis.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_cartesian.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_cartesian_2d.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_cartesian_3d.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_composition.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_coordinate_system.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_cylindrical.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_cylindrical_to_cartesian_3d.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_degree.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_dimension.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_displacement.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_geocentric.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_geodetic.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_geographic.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_graph.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_lambertian.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_length.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_length_unit.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_meter.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_perspective.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_polar.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_radian.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_rotation.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_scale.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_spatial.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_spatial_transformation.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_spherical.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_spheroid.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_translation.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_unit.cxx
-# Begin Source File
-
 # End Source File
+
+# Begin Source File
 SOURCE=.\vcsl_utm.cxx
 # End Source File
 # End Group
