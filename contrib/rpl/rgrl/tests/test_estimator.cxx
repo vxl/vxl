@@ -843,6 +843,7 @@ test_similarity_pt_to_pt()
 
       for ( unsigned int i=0; i < 100; ++i ) {
         ms.remap_from_features( *curr );
+        ms.udpate_geometric_error( curr );
         trans = rgrl_est_similarity3d().estimate( ms, *curr );
         curr = trans;
       }
