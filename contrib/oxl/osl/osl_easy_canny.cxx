@@ -33,7 +33,7 @@ void osl_easy_canny(int which_canny,
   case 0: {
     osl_canny_ox_params params;
     if (sigma)
-      params.sigma = sigma;
+      params.sigma = (float)sigma;
     osl_canny_ox filter(params);
     filter.detect_edges(image, edges);
   } break;
@@ -41,7 +41,7 @@ void osl_easy_canny(int which_canny,
   case 1: {
     osl_canny_rothwell_params params;
     if (sigma)
-      params.sigma = sigma;
+      params.sigma = (float)sigma;
     osl_canny_rothwell filter(params);
     filter.detect_edges(image, edges);
   } break;
@@ -49,7 +49,7 @@ void osl_easy_canny(int which_canny,
   case 2: {
     osl_edge_detector_params params;
     if (sigma)
-      params.sigma_ = sigma;
+      params.sigma_ = (float)sigma;
     osl_edge_detector filter(params);
     filter.detect_edges(image, edges);
   } break;
