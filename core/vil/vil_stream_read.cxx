@@ -55,6 +55,8 @@ vxl_uint_32 vil_stream_read_little_endian_uint_32(vil_stream *s)
 
 
 // The following function should be moved to relevant places in vil soon
+// This static function is only needed if it will be used below
+#if VXL_LITTLE_ENDIAN
 static void swap16(char *a, unsigned n)
 {
   char c;
@@ -63,8 +65,11 @@ static void swap16(char *a, unsigned n)
     c = a[i]; a[i] = a[i+1]; a[i+1] = c;
   }
 }
+#endif
 
 // The following function should be moved to relevant places in vil soon
+// This static function is only needed if it will be used below
+#if VXL_LITTLE_ENDIAN
 static void swap32(char *a, unsigned n)
 {
   char c;
@@ -78,6 +83,7 @@ static void swap32(char *a, unsigned n)
     a[i+2] = c;
   }
 }
+#endif
 
 // The following function should be moved to relevant places in vil soon
 float vil_stream_read_big_endian_float(vil_stream* is)
@@ -101,4 +107,3 @@ void vil_stream_read_big_endian_int_16(vil_stream* is,
   swap16((char*)data,n);
 #endif
 }
-
