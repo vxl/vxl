@@ -864,6 +864,9 @@ SOURCE=.\vnl_identity_3x3.h
 SOURCE=.\vnl_int_2.h
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_int_2x2.h
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_int_3.h
 # End Source File
 # Begin Source File
