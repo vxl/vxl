@@ -90,17 +90,6 @@ Copyright: (C) 1997-1999, Advanced Interfaces Group,
 
 #define NOT_RMAX(v, i, n)   (v[PREV_INDEX(i, n)].vertex.y > v[i].vertex.y)
 
-#define VERTEX(e,p,s,x,y)  {add_vertex(&((e)->outp[(p)]->v[(s)]), x, y); \
-                            (e)->outp[(p)]->active++;}
-
-#define P_EDGE(d,e,p,i,j)  {(d)= (e); \
-                            do {(d)= (d)->prev;} while (!(d)->outp[(p)]); \
-                            (i)= (d)->bot.x + (d)->dx * ((j)-(d)->bot.y);}
-
-#define N_EDGE(d,e,p,i,j)  {(d)= (e); \
-                            do {(d)= (d)->next;} while (!(d)->outp[(p)]); \
-                            (i)= (d)->bot.x + (d)->dx * ((j)-(d)->bot.y);}
-
 #define MALLOC(p, b, s)    {if ((b) > 0) { \
                             p= malloc(b); if (!(p)) { \
                             fprintf(stderr, "gpc malloc failure: %s\n", s); \
@@ -878,21 +867,6 @@ static void add_local_min(polygon_node **p, edge_node *edge,
 }
 
 
-static void add_vertex(vertex_node **t, double x, double y)
-{
-  if (!(*t))
-  {
-    MALLOC(*t, sizeof(vertex_node), "tristrip vertex creation");
-    (*t)->x= x;
-    (*t)->y= y;
-    (*t)->next= NULL;
-  }
-  else
-    /* Head further down the list */
-    add_vertex(&((*t)->next), x, y);
-}
-
-
 static bbox *create_contour_bboxes(gpc_polygon *p)
 {
   bbox *box;
@@ -1627,6 +1601,32 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
 }
 
 #if 0 /* These functions are not used in vgl_clip */
+
+#define VERTEX(e,p,s,x,y)  {add_vertex(&((e)->outp[(p)]->v[(s)]), x, y); \
+                            (e)->outp[(p)]->active++;}
+
+#define P_EDGE(d,e,p,i,j)  {(d)= (e); \
+                            do {(d)= (d)->prev;} while (!(d)->outp[(p)]); \
+                            (i)= (d)->bot.x + (d)->dx * ((j)-(d)->bot.y);}
+
+#define N_EDGE(d,e,p,i,j)  {(d)= (e); \
+                            do {(d)= (d)->next;} while (!(d)->outp[(p)]); \
+                            (i)= (d)->bot.x + (d)->dx * ((j)-(d)->bot.y);}
+
+static void add_vertex(vertex_node **t, double x, double y)
+{
+  if (!(*t))
+  {
+    MALLOC(*t, sizeof(vertex_node), "tristrip vertex creation");
+    (*t)->x= x;
+    (*t)->y= y;
+    (*t)->next= NULL;
+  }
+  else
+    /* Head further down the list */
+    add_vertex(&((*t)->next), x, y);
+}
+
 
 void gpc_read_polygon(FILE *fp, int read_hole_flags, gpc_polygon *p)
 {
