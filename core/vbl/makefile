@@ -18,6 +18,8 @@ SOURCES += vbl_test.cxx
 MANPAGE_SOURCES += vbl_array_1d.txx
 MANPAGE_SOURCES += vbl_array_2d.txx
 MANPAGE_SOURCES += vbl_array_3d.txx
+SOURCES += vbl_bit_array_2d.cxx
+SOURCES += vbl_bit_array_3d.cxx
 #MANPAGE_SOURCES += vbl_binary.txx # deprecated
 MANPAGE_SOURCES += vbl_bounding_box.txx
 #MANPAGE_SOURCES += vbl_basic_relation.txx # FIXME - vcl_hash_map does not exist
@@ -34,7 +36,6 @@ MANPAGE_SOURCES += vbl_sparse_array_1d.txx
 MANPAGE_SOURCES += vbl_sparse_array_2d.txx
 MANPAGE_SOURCES += vbl_sparse_array_3d.txx
 MANPAGE_SOURCES += vbl_big_sparse_array_3d.txx
-SOURCES += vbl_bit_array_3d.cxx
 
 # debugging
 
