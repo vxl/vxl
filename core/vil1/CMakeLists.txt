@@ -28,8 +28,6 @@ SOURCE_FILES( vil_sources
   # classes derived from vil_image
   vil_file_image.cxx
   vil_memory_image.cxx
-  #vil_memory_image_of.cxx
-  #vil_memory_image_of_format.cxx
   vil_image_proxy.cxx
 
   # image adaptors
@@ -70,26 +68,14 @@ SOURCE_FILES( vil_sources
   vil_skip.cxx
   vil_resample.cxx
   vil_warp.cxx
-  #vil_warp.cxx
   vil_flipud.cxx
   vil_flip_components.cxx
-  #vil_convolve.cxx
-  #vil_convolve_simple.cxx
-  #vil_convolve_1d.cxx
-  #vil_convolve_1d_x.cxx
-  #vil_convolve_1d_y.cxx
   vil_smooth.cxx
   vil_clamp.cxx
   vil_scale_intensities.cxx
-  #vil_interpolate.cxx
-  #vil_resample_image.cxx
-  #vil_ncc.cxx
-  #vil_ssd.cxx
 
   # Stuff
   vil_pyramid.cxx
-  #vil_rgb.cxx
-  #vil_rgba.cxx
   vil_rgb_byte.cxx
   vil_colour_space.cxx
   vil_memory_image_window.cxx
