@@ -91,9 +91,11 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
         double const wgt = ti.cumulative_weight();
         from_pt = fi.from_feature()->location();
-        from_centre += from_pt * wgt;
+        from_pt *= wgt;
+        from_centre += from_pt;
         to_pt = ti.to_feature()->location();
-        to_centre   += to_pt * wgt;
+        to_pt *= wgt;
+        to_centre   += to_pt;
         sum_wgt += wgt;
       }
     }
