@@ -56,7 +56,7 @@ void brip_float_ops::half_resolution_1d(const float* input, int width,
   int n = 0;
   for (; n<5; n++)
     w[n]=input[n];
-  output[0]=k0*w[0]+ 2.0*(k1*w[1] + k2*w[2]);//reflect at boundary
+  output[0]=k0*w[0]+ 2.0f*(k1*w[1] + k2*w[2]);//reflect at boundary
   for (int x = 1; x<width; x++)
   {
     output[x]=k0*w[2]+ k1*(w[1]+w[3]) + k2*(w[0]+w[4]);
@@ -82,7 +82,7 @@ brip_float_ops::half_resolution(vil1_memory_image_of<float> const & input,
                                 float filter_coef)
 {
   vul_timer t;
-  float k0 = filter_coef, k1 = 0.25*filter_coef, k2 = 0.5*(0.5f-filter_coef);
+  float k0 = filter_coef, k1 = 0.25f*filter_coef, k2 = 0.5f*(0.5f-filter_coef);
   int w = input.width(), h = input.height();
   int half_w =(w+1)/2, half_h = (h+1)/2;
   vil1_memory_image_of<float> output;
@@ -757,23 +757,22 @@ brip_float_ops::convert_to_float(vil1_image const & image)
 vil1_memory_image_of<unsigned char>
  brip_float_ops::convert_to_grey(vil1_image const& image)
 {
-  if (!image)
-    return vil1_memory_image_of<unsigned char>(image);
-  //cast away const; apparently freebsd is a bit finnicky
-  vil1_image img = (vil1_image)image; // const_cast
-  //Check if the image is a float
-  if (image.components()==1 &&
-      image.component_format()==VIL1_COMPONENT_FORMAT_IEEE_FLOAT)
-     return brip_float_ops::convert_to_byte(vil1_memory_image_of<float>(img));
+  if(!image)
+    return vil1_memory_image_of<unsigned char>();
 
-  //Here we assume that the image is either unsigned char or unsigned short
+  //Check if the image is a float
+  if(image.components()==1 &&
+     image.component_format()==VIL1_COMPONENT_FORMAT_IEEE_FLOAT)
+	 return brip_float_ops::convert_to_byte(vil1_memory_image_of<float>(image));
+
+  //Here we assume that the image is an unsigned char 
   //In this case we should just return it.
-  if (image.components()!=3)
-    return vil1_memory_image_of<unsigned char>(img);
+  if(image.components()!=3)
+    return vil1_memory_image_of<unsigned char>(image);
 
   // the image is color so we should convert it to greyscale
   // Here we assume the color elements are unsigned char.
-  vil1_memory_image_of<vil1_rgb<unsigned char> > color_image(img);
+  vil1_memory_image_of<vil1_rgb<unsigned char> > color_image(image);
   int width = color_image.width(), height = color_image.height();
   // the output image
   vil1_memory_image_of<unsigned char> grey_image;
