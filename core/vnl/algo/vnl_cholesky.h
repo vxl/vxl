@@ -85,10 +85,10 @@ protected:
   vnl_vector<double> nullvector_;
   
 private:
-  // Helpers-------------------------------------------------------------------
   
-  // Thatcher's children, privatised...
+  // Copy constructor - privatised to avoid it being used
   vnl_cholesky(vnl_cholesky const & that);
+  // Assignment operator - privatised to avoid it being used
   vnl_cholesky& operator=(vnl_cholesky const & that);
 };
 
