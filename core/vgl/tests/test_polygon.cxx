@@ -16,14 +16,21 @@ static void test_simple_polygon()
   p.push_back( 5.0, 1.0 );
   p.print(vcl_cout);
 
-  TEST("inside",      p.contains( 2.5,  0.3 ), true );
+  TEST("inside (1)",  p.contains( 0.0,  0.0 ), true );
+  TEST("inside (2)",  p.contains( 5.0,  0.0 ), true );
+  TEST("inside (3)",  p.contains( 5.0,  1.0 ), true );
+  TEST("inside (4)",  p.contains( 2.5,  0.0 ), true );
+  TEST("inside (5)",  p.contains( 2.5,  0.3 ), true );
+  TEST("inside (6)",  p.contains( 2.5,  0.5 ), true );
+  TEST("inside (7)",  p.contains( 5.0,  0.5 ), true );
   TEST("outside (1)", p.contains( 2.5,  0.6 ), false );
   TEST("outside (2)", p.contains( 5.1,  0.1 ), false );
   TEST("outside (3)", p.contains( 5.1,  0.0 ), false );
-  TEST("outside (4)", p.contains( 2.0, -1.0 ), false );
-  TEST("outside (5)", p.contains(-2.5, -0.5 ), false );
+  TEST("outside (4)", p.contains( 5.0,  1.1 ), false );
+  TEST("outside (5)", p.contains( 5.0, -0.1 ), false );
+  TEST("outside (6)", p.contains( 2.0, -1.0 ), false );
+  TEST("outside (7)", p.contains(-2.5, -0.5 ), false );
 }
-
 
 static void test_disjoint_polygon()
 {
@@ -45,12 +52,12 @@ static void test_disjoint_polygon()
   TEST("inside poly1",p.contains(  2.5f,  0.3f ), true );
   TEST("inside poly2",p.contains( 12.5f, 10.3f ), true );
   TEST("outside (1)", p.contains(  2.5f,  0.6f ), false );
-  TEST("outside (2)", p.contains(  5.1f,  0.1f ), false );
+  TEST("outside (2)", p.contains(  5.0f,  1.1f ), false );
   TEST("outside (3)", p.contains(  5.1f,  0.0f ), false );
   TEST("outside (4)", p.contains(  2.0f, -1.0f ), false );
   TEST("outside (5)", p.contains( -2.5f, -0.5f ), false );
   TEST("oustide (6)", p.contains( 12.5f, 10.6f ), false );
-  TEST("outside (7)", p.contains( 15.1f, 10.0f ), false );
+  TEST("outside (7)", p.contains( 15.0f,  9.0f ), false );
 }
 
 static void test_holey_polygon()
@@ -71,12 +78,12 @@ static void test_holey_polygon()
   p.print(vcl_cout);
 
   TEST("inside",      p.contains( 2.5,  0.3 ), true );
-  TEST("oustide (1)", p.contains( 2.5,  0.6 ), false );
-  TEST("outside (2)", p.contains( 5.1,  0.1 ), false );
+  TEST("outside (1)", p.contains( 2.5,  0.6 ), false );
+  TEST("outside (2)", p.contains( 5.0,  1.1 ), false );
   TEST("outside (3)", p.contains( 5.1,  0.0 ), false );
   TEST("outside (4)", p.contains( 2.0, -1.0 ), false );
   TEST("outside (5)", p.contains(-2.5, -0.5 ), false );
-  TEST("oustide (6)", p.contains( 3.9,  0.4 ), false );
+  TEST("outside (6)", p.contains( 3.9,  0.4 ), false );
 }
 
 static void test_polygon()
