@@ -85,33 +85,31 @@ vtol_two_chain::vtol_two_chain(face_list const& faces,
 vtol_two_chain::vtol_two_chain(vtol_two_chain_sptr const& other)
 {
   // make a copy of the vertices
-  vertex_list *verts=other->vertices();
-  int vlen=verts->size();
+  vertex_list verts; other->vertices(verts);
+  int vlen=verts.size();
   topology_list newverts(vlen);
 
   int i=0;
-  for (vertex_list::iterator vi=verts->begin();vi!=verts->end();++vi,++i)
+  for (vertex_list::iterator vi=verts.begin();vi!=verts.end();++vi,++i)
   {
     vtol_vertex_sptr v = *vi;
     newverts[i] = v->clone()->cast_to_topology_object();
     v->set_id(i);
   }
-  delete verts;
 
   // make a copy of the edges
-  edge_list *edges=other->edges();
-  int elen=edges->size();
+  edge_list edges; other->edges(edges);
+  int elen=edges.size();
   topology_list newedges(elen);
 
   int j=0;
-  for (edge_list::iterator ei=edges->begin();ei!= edges->end();++ei,++j)
+  for (edge_list::iterator ei=edges.begin();ei!= edges.end();++ei,++j)
   {
     vtol_edge_sptr e = *ei;
     newedges[j] = newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(
                   newverts[e->v2()->get_id()]->cast_to_vertex())->cast_to_topology_object();
     e->set_id(j);
   }
-  delete edges;
 
   vcl_vector<signed char> &dirs=other->directions_;
   topology_list &infs=other->inferiors_;
@@ -441,8 +439,7 @@ vtol_two_chain::outside_boundary_compute_vertices()
 
 vcl_vector<vtol_vertex *> *vtol_two_chain::compute_vertices()
 {
-  vcl_vector<vtol_vertex *> *verts;
-  verts=outside_boundary_compute_vertices();
+  vcl_vector<vtol_vertex *> *verts = outside_boundary_compute_vertices();
 
   // Set current position to the end
   // verts->set_position(verts->size()-1); - not sure what is supposed to happen here

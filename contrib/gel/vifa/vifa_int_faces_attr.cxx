@@ -176,9 +176,9 @@ GetEdges()
   // Get edges from all faces, remove duplicates
   for (iface_iterator f = faces_.begin(); f != faces_.end(); ++f)
   {
-    edge_list*      fedges = (*f)->edges();
+    edge_list fedges; (*f)->edges(fedges);
     edge_2d_iterator  edges_pos_;
-    for (edge_iterator ei = fedges->begin(); ei != fedges->end(); ei++)
+    for (edge_iterator ei = fedges.begin(); ei != fedges.end(); ei++)
     {
       vtol_edge_2d*  e_ptr = (*ei)->cast_to_edge_2d();
 
@@ -191,8 +191,6 @@ GetEdges()
           edges_.push_back(e);
       }
     }
-
-    delete fedges;
   }
 
   return edges_;
@@ -543,9 +541,9 @@ GetPerimeterEdges()
   int  edge_index = 0;
   for (iface_iterator f = faces_.begin(); f != faces_.end(); ++f)
   {
-    edge_list* edges = (*f)->edges();
+    edge_list edges; (*f)->edges(edges);
 
-    for (edge_iterator ei = edges->begin(); ei != edges->end(); ei++)
+    for (edge_iterator ei = edges.begin(); ei != edges.end(); ei++)
     {
       vtol_edge_sptr  e = *ei;
       int        e_id = e->get_id();
@@ -565,23 +563,17 @@ GetPerimeterEdges()
 
       edge_count.insert(vcl_pair<int, int>(e_id, count));
     }
-
-    // MPP 6/13/2002
-    // Plugged memory leak
-    delete edges;
   }
 
-  // int total_count = 0;
   int  unique_count = 0;
   for (iface_iterator f = faces_.begin(); f != faces_.end(); ++f)
   {
-    edge_list*  edges = (*f)->edges();
-    for (edge_iterator ei = edges->begin(); ei != edges->end(); ei++)
+    edge_list edges; (*f)->edges(edges);
+    for (edge_iterator ei = edges.begin(); ei != edges.end(); ei++)
     {
       vtol_edge_sptr  e = *ei;
       int        count;
 
-      // total_count++;
       edge_count_pos = edge_count.find(e->get_id());
       if (edge_count_pos == edge_count.end())
       {
@@ -597,13 +589,7 @@ GetPerimeterEdges()
         p_edges->push_back(e);
       }
     }
-
-    // MPP 6/13/2002
-    // Plugged memory leak
-    delete edges;
   }
-
-//  vcl_cout << total_count << " edges; " << unique_count << " unique\n";
 
   return p_edges;
 }

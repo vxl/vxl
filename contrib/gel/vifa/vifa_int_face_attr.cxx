@@ -71,18 +71,12 @@ GetEdges()
     return edges_;
   }
 
-  edge_list*  fedges = face_->edges();
-  if (fedges)
+  edge_list  fedges; face_->edges(fedges);
+  for (edge_iterator eli = fedges.begin(); eli != fedges.end(); eli++)
   {
-    for (edge_iterator eli = fedges->begin(); eli != fedges->end(); eli++)
-    {
-      vtol_edge_2d_sptr  e = (*eli)->cast_to_edge_2d();
-
-      if (e)
-        edges_.push_back(e);
-    }
-
-    delete fedges;
+    vtol_edge_2d_sptr  e = (*eli)->cast_to_edge_2d();
+    if (e)
+      edges_.push_back(e);
   }
 
   return edges_;
@@ -190,29 +184,20 @@ WeightedPerimeterLength()
   {
     // Block-copied from intensity face rather than undergo the pain
     // of adding a "weighted" boolean parameter
-    edge_list*  edges = face_->edges();
+    edge_list edges; face_->edges(edges);
     double p = 0.0;
     double intensity_sum = 1.0;
 
-    if (edges)
+    for (edge_iterator eit = edges.begin(); eit != edges.end(); eit++)
     {
-      for (edge_iterator eit = edges->begin(); eit != edges->end(); eit++)
+      vtol_edge_2d_sptr  e = (*eit)->cast_to_edge_2d();
+      if (e)
       {
-        vtol_edge_2d_sptr  e = (*eit)->cast_to_edge_2d();
-
-        if (e)
-        {
-          // Leave at default of 1.0 if no adjacent face
-          double  int_grad =
-            get_contrast_across_edge(e->cast_to_edge(), 1.0);
-
-          p += e->curve()->length() * int_grad;
-          intensity_sum += int_grad;
-        }
+        // Leave at default of 1.0 if no adjacent face
+        double  int_grad = get_contrast_across_edge(e->cast_to_edge(), 1.0);
+        p += e->curve()->length() * int_grad;
+        intensity_sum += int_grad;
       }
-
-      // Clean up returned edge list
-      delete edges;
     }
 
     weighted_peri_length_ = float(p / intensity_sum);

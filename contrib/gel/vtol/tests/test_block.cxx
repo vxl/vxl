@@ -86,9 +86,8 @@ static void test_block()
   TEST("vtol_block inequality", *b2 == *b1, false);
   TEST("vtol_block::get_boundary_cycle()", *(b2->get_boundary_cycle()), *tc2);
 
-  vertex_list *verts = b2->vertices();
-  TEST("vtol_block::vertices()", verts->size(), 8);
-  delete verts;
+  vertex_list verts; b2->vertices(verts);
+  TEST("vtol_block::vertices()", verts.size(), 8);
 
   vtol_block_sptr b2_copy = new vtol_block(b2);
   TEST("vtol_block deep copy (pseudo copy constructor)", *b2, *b2_copy);

@@ -55,101 +55,87 @@ void vtol_topology_io::write(vcl_list<vtol_topology_object_sptr> &topo_objects,
   {
     // *** get the vertices
 
-    vertex_list *vl = (*ti)->vertices();
+    vertex_list vl; (*ti)->vertices(vl);
 
     // copy vl into vertices
 
     vertex_list::iterator vi;
-    for (vi=vl->begin();vi!=vl->end();vi++)
+    for (vi=vl.begin();vi!=vl.end();vi++)
     {
       vertices.push_back((*vi)->cast_to_vertex());
     }
 
-    delete vl;
-
     // *** get the zero chains
 
-    zero_chain_list *zcl = (*ti)->zero_chains();
+    zero_chain_list zcl; (*ti)->zero_chains(zcl);
 
     // copy zcl into the zero_chains
 
     zero_chain_list::iterator zci;
-    for (zci=zcl->begin();zci!=zcl->end();zci++)
+    for (zci=zcl.begin();zci!=zcl.end();zci++)
     {
       zero_chains.push_back((*zci)->cast_to_zero_chain());
     }
 
-    delete zcl;
-
     // *** get the edges
 
-    edge_list *el = (*ti)->edges();
+    edge_list el; (*ti)->edges(el);
 
-    // copy zcl into the zero_chains
+    // copy el into the edges
 
     edge_list::iterator ei;
-    for (ei=el->begin();ei!=el->end();ei++)
+    for (ei=el.begin();ei!=el.end();ei++)
     {
       edges.push_back((*ei)->cast_to_edge());
     }
 
-    delete el;
-
     // *** get the one chains
 
-    one_chain_list *ocl = (*ti)->one_chains();
+    one_chain_list ocl; (*ti)->one_chains(ocl);
 
     // copy ocl into the one_chains
 
     one_chain_list::iterator oci;
-    for (oci=ocl->begin();oci!=ocl->end();oci++)
+    for (oci=ocl.begin();oci!=ocl.end();oci++)
     {
       one_chains.push_back((*oci)->cast_to_one_chain());
     }
 
-    delete ocl;
-
     // *** get the faces
 
-    face_list *fl = (*ti)->faces();
+    face_list fl; (*ti)->faces(fl);
 
     // copy fl into the faces
 
     face_list::iterator fi;
-    for (fi=fl->begin();fi!=fl->end();fi++)
+    for (fi=fl.begin();fi!=fl.end();fi++)
     {
       faces.push_back((*fi)->cast_to_face());
     }
 
-    delete fl;
-
     // *** get the two chains
 
-    two_chain_list *tcl = (*ti)->two_chains();
+    two_chain_list tcl; (*ti)->two_chains(tcl);
 
     // copy tcl into the two_chains
 
     two_chain_list::iterator tci;
-    for (tci=tcl->begin();tci!=tcl->end();tci++)
+    for (tci=tcl.begin();tci!=tcl.end();tci++)
     {
       two_chains.push_back((*tci)->cast_to_two_chain());
     }
 
-    delete tcl;
-
     // *** get the blocks
 
-    block_list *bl = (*ti)->blocks();
+    block_list bl; (*ti)->blocks(bl);
 
     // copy bl into the blocks
 
     block_list::iterator bi;
-    for (bi=bl->begin();bi!=bl->end();bi++)
+    for (bi=bl.begin();bi!=bl.end();bi++)
     {
       blocks.push_back((*bi)->cast_to_block());
     }
-
-    delete bl;
   }
 
   // ******* get rid of duplicates *********

@@ -432,9 +432,8 @@ DetectJunction(vtol_vertex_2d& end, int& index,
   // 0. Must be an end point of a dangling 1-chain
   if (end.numsup() > 1)         // avoid junction and 1-cycle
     return false;
-  vcl_vector<vtol_edge_sptr>* edges = end.edges();
-  weaker = (*edges)[0]->cast_to_edge_2d();      // dangling edge must be a weaker contour
-  delete edges;
+  vcl_vector<vtol_edge_sptr> edges; end.edges(edges);
+  weaker = edges[0]->cast_to_edge_2d();      // dangling edge must be a weaker contour
   vdgl_digital_curve_sptr dc = weaker->curve()->cast_to_vdgl_digital_curve();
 
   const int len = dc->get_interpolator()->get_edgel_chain()->size();
@@ -821,14 +820,12 @@ int
 NumConnectedRays(vtol_vertex_2d& v)
 {
   int nray = 0;
-  vcl_vector<vtol_edge_sptr>* segs = v.edges();
-  for (unsigned int i=0; i< segs->size(); i++)
+  vcl_vector<vtol_edge_sptr> segs; v.edges(segs);
+  for (unsigned int i=0; i< segs.size(); i++)
   {
-    if ((*segs)[i]->v1()->cast_to_vertex_2d() == &v) nray++; // 1 for 1-chain
-    if ((*segs)[i]->v2()->cast_to_vertex_2d() == &v) nray++; // 2 for 1-cycle
+    if (segs[i]->v1()->cast_to_vertex_2d() == &v) nray++; // 1 for 1-chain
+    if (segs[i]->v2()->cast_to_vertex_2d() == &v) nray++; // 2 for 1-cycle
   }
-
-  delete segs;
   return nray;
 }
 
@@ -861,14 +858,12 @@ DetectTouch(const vtol_vertex_2d& end, const int maxSpiral,
 vtol_edge_2d_sptr
 DanglingEdge(vtol_vertex_2d& v)
 {
-  vcl_vector<vtol_edge_sptr>* segs = v.edges();
-  vtol_edge_sptr e = NULL;
+  vcl_vector<vtol_edge_sptr> segs; v.edges(segs);
 
-  if (segs->size()==1)
-    e = (*segs)[0];
-
-  delete segs;
-  return e->cast_to_edge_2d();
+  if (segs.size()==1)
+    return segs[0]->cast_to_edge_2d();
+  else
+    return 0;
 }
 
 
@@ -896,12 +891,9 @@ MergeEndPtTouchingEndPt(vtol_vertex_2d& end1, vtol_vertex_2d& end2,
                          vbl_array_2d<vtol_edge_2d_sptr>& edgeMap, vbl_array_2d<vtol_vertex_2d_sptr>& vertexMap)
 {
   // 1. Retrieve the dangling edges/chains
-  vcl_vector<vtol_edge_sptr>* edges = end1.edges();
-  vtol_edge_2d_sptr edge1 = (*edges)[0]->cast_to_edge_2d();        // dangling edges
-  delete edges;
-  edges = end2.edges();
-  vtol_edge_2d_sptr edge2 = (*edges)[0]->cast_to_edge_2d();
-  delete edges;
+  vcl_vector<vtol_edge_sptr> edges;
+  end1.edges(edges); vtol_edge_2d_sptr edge1 = edges[0]->cast_to_edge_2d();        // dangling edges
+  end2.edges(edges); vtol_edge_2d_sptr edge2 = edges[0]->cast_to_edge_2d();
 
   // 2. Create merged edge/chain
   vdgl_digital_curve_sptr dc1 = edge1->curve()->cast_to_vdgl_digital_curve();
@@ -986,9 +978,8 @@ void
 MergeEndPtTouchingJunction(vtol_vertex_2d &endpt, vtol_vertex_2d& junction,
                            vbl_array_2d<vtol_edge_2d_sptr>& edgeMap, vbl_array_2d<vtol_vertex_2d_sptr>&vertexMap)
 {
-  vcl_vector<vtol_edge_sptr>* edges = endpt.edges();
-  vtol_edge_2d_sptr edge = (*edges)[0]->cast_to_edge_2d(); // dangling edge terminating at end pt
-  delete edges;
+  vcl_vector<vtol_edge_sptr> edges; endpt.edges(edges);
+  vtol_edge_2d_sptr edge = edges[0]->cast_to_edge_2d(); // dangling edge terminating at end pt
   int px = int(endpt.x()), py = int(endpt.y());
   vertexMap.put(px, py, NULL); // erase old location
   edgeMap.put( px, py, edge);
@@ -2036,10 +2027,10 @@ gevd_contour::CheckInvariants(vcl_vector<vtol_edge_2d_sptr>& edges,
     }
   }
   for (unsigned int i=0; i< vertices.size(); i++) {
-    vcl_vector<vtol_edge_sptr>* es = vertices[i]->edges();
-    for (unsigned int j=0; j< es->size(); j++)
-      if ((*es)[j]->get_id() != unmark) {
-        vcl_cout << (*es)[j] << ": e is not in edge list\n";
+    vcl_vector<vtol_edge_sptr> es; vertices[i]->edges(es);
+    for (unsigned int j=0; j< es.size(); j++)
+      if (es[j]->get_id() != unmark) {
+        vcl_cout << es[j] << ": e is not in edge list\n";
         nerror++;
       }
   }

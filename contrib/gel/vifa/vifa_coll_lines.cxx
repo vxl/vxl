@@ -68,36 +68,30 @@ face_list* vifa_coll_lines::get_contributor_faces(void)
   for (edge_2d_iterator e = contributors_.begin();
       e != contributors_.end(); ++e)
   {
-    face_list*  faces = (*e)->faces();
+    face_list faces; (*e)->faces(faces);
 
-    if (faces)
+    for (face_iterator f_it = faces.begin(); f_it != faces.end(); ++f_it)
     {
-      for (face_iterator f_it = faces->begin();
-           f_it != faces->end(); ++f_it)
+      vtol_face_sptr  nbr_face = *f_it;
+      bool      add_me = true;
+
+      // Make sure the contributor face is 2-D
+      if (nbr_face->cast_to_face_2d())
       {
-        vtol_face_sptr  nbr_face = *f_it;
-        bool      add_me = true;
-
-        // Make sure the contributor face is 2-D
-        if (nbr_face->cast_to_face_2d())
+        for (face_iterator f = ret->begin(); f != ret->end(); ++f)
         {
-          for (face_iterator f = ret->begin(); f != ret->end(); ++f)
+          if (**f == *nbr_face)
           {
-            if (**f == *nbr_face)
-            {
-              add_me = false;
-              break;
-            }
-          }
-
-          if (add_me)
-          {
-            ret->push_back(nbr_face);
+            add_me = false;
+            break;
           }
         }
-      }
 
-      delete faces;
+        if (add_me)
+        {
+          ret->push_back(nbr_face);
+        }
+      }
     }
   }
 

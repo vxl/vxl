@@ -17,21 +17,21 @@
 vtol_face_2d::vtol_face_2d(vtol_face_2d_sptr const& other)
   : surface_(0)
 {
-  edge_list *edgs=other->edges();
-  vertex_list *verts=other->vertices();
+  edge_list edgs;    other->edges(edgs);
+  vertex_list verts; other->vertices(verts);
 
-  topology_list newedges(edgs->size());
-  topology_list newverts(verts->size());
+  topology_list newedges(edgs.size());
+  topology_list newverts(verts.size());
 
   int i=0;
-  for (vertex_list::iterator vi=verts->begin();vi!=verts->end();++vi,++i)
+  for (vertex_list::iterator vi=verts.begin();vi!=verts.end();++vi,++i)
   {
     vtol_vertex_sptr v=(*vi);
     newverts[i]=v->clone()->cast_to_topology_object();
     v->set_id(i);
   }
   int j=0;
-  for (edge_list::iterator ei=edgs->begin();ei!= edgs->end();++ei,++j)
+  for (edge_list::iterator ei=edgs.begin();ei!= edgs.end();++ei,++j)
   {
     vtol_edge_sptr e=(*ei);
 
@@ -55,8 +55,6 @@ vtol_face_2d::vtol_face_2d(vtol_face_2d_sptr const& other)
   topology_list::const_iterator ii;
   for (ii=other->inferiors()->begin();ii!= other->inferiors()->end();++ii)
     link_inferior((*ii)->cast_to_one_chain()->copy_with_arrays(newverts,newedges));
-  delete edgs;
-  delete verts;
   set_surface(0);
   if (other->surface_)
     set_surface(other->surface_->clone()->cast_to_region());

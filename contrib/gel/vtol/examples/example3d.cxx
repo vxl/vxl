@@ -145,9 +145,8 @@ class example_face_3d : public vtol_face
     }
     link_inferior(new vtol_one_chain(elist,dirs,true));
   }
-  virtual vsol_spatial_object_2d* clone() const {vertex_list* vl=(const_cast<T*>(this))->vertices();
-                                                     T* f=new T(*vl);delete vl;return f;}
-  
+  virtual vsol_spatial_object_2d* clone() const {vertex_list vl; this->vertices(vl); return new T(vl); }
+
   vcl_string is_a() const { return vcl_string("example_face_3d"); }
   bool operator==(T const&) const { return false; }
   bool operator==(F const&) const { return false; }
@@ -219,61 +218,63 @@ int main()
   vcl_cout<<"Block b1 created\n";
   b1->describe(vcl_cout, 8);
 
-  vcl_cout <<"Accessors: vertices(), zero_chains() ... blocks()\n\n"
+  vcl_cout <<"Accessors: vertices(), zero_chains() ... blocks()\n\n";
+  vertex_list vl;
+  zero_chain_list zcl;
+  edge_list el;
+  one_chain_list ocl;
+  face_list fl;
+  two_chain_list tcl;
+  block_list bl;
 
-           <<"Sizes of superiors: vertex expects       1 3 3 2 2 1 1 - gets  ";
-  vertex_list *vl=v1->vertices(); vcl_cout << vl->size() << ' ';
-  zero_chain_list *zcl=v1->zero_chains(); vcl_cout << zcl->size() << ' ';
-  edge_list *el=v1->edges(); vcl_cout << el->size() << ' ';
-  one_chain_list *ocl=v1->one_chains(); vcl_cout << ocl->size() << ' ';
-  face_list *fl=v1->faces(); vcl_cout << fl->size() << ' ';
-  two_chain_list *tcl=v1->two_chains(); vcl_cout << tcl->size() << ' ';
-  block_list *bl=v1->blocks(); vcl_cout << bl->size() << '\n';
-  delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
+  vcl_cout <<"Sizes of superiors: vertex expects       1 3 3 2 2 1 1 - gets  ";
+  v1->vertices(vl); vcl_cout << vl.size() << ' ';
+  v1->zero_chains(zcl); vcl_cout << zcl.size() << ' ';
+  v1->edges(el); vcl_cout << el.size() << ' ';
+  v1->one_chains(ocl); vcl_cout << ocl.size() << ' ';
+  v1->faces(fl); vcl_cout << fl.size() << ' ';
+  v1->two_chains(tcl); vcl_cout << tcl.size() << ' ';
+  v1->blocks(bl); vcl_cout << bl.size() << '\n';
 
   vtol_edge_sptr ed=v1->new_edge(v2);
   vtol_zero_chain_sptr zc=ed->zero_chain();
   vcl_cout <<"                    zero_chain expects   2 1 1 1 1 1 1 - gets  ";
-  vl=zc->vertices(); vcl_cout << vl->size() << ' ';
-  zcl=zc->zero_chains(); vcl_cout << zcl->size() << ' ';
-  el=zc->edges(); vcl_cout << el->size() << ' ';
-  ocl=zc->one_chains(); vcl_cout << ocl->size() << ' ';
-  fl=zc->faces(); vcl_cout << fl->size() << ' ';
-  tcl=zc->two_chains(); vcl_cout << tcl->size() << ' ';
-  bl=zc->blocks(); vcl_cout << bl->size() << '\n';
-  delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
+  zc->vertices(vl); vcl_cout << vl.size() << ' ';
+  zc->zero_chains(zcl); vcl_cout << zcl.size() << ' ';
+  zc->edges(el); vcl_cout << el.size() << ' ';
+  zc->one_chains(ocl); vcl_cout << ocl.size() << ' ';
+  zc->faces(fl); vcl_cout << fl.size() << ' ';
+  zc->two_chains(tcl); vcl_cout << tcl.size() << ' ';
+  zc->blocks(bl); vcl_cout << bl.size() << '\n';
 
   vtol_edge_sptr ed13= v1->new_edge(v3);
   vcl_cout <<"                    edge expects         2 2 1 2 2 1 1 - gets  ";
-  vl=ed13->vertices(); vcl_cout << vl->size() << ' ';
-  zcl=ed13->zero_chains(); vcl_cout << zcl->size() << ' ';
-  el=ed13->edges(); vcl_cout << el->size() << ' ';
-  ocl=ed13->one_chains(); vcl_cout << ocl->size() << ' ';
-  fl=ed13->faces(); vcl_cout << fl->size() << ' ';
-  tcl=ed13->two_chains(); vcl_cout << tcl->size() << ' ';
-  bl=ed13->blocks(); vcl_cout << bl->size() << '\n';
-  delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
+  ed13->vertices(vl); vcl_cout << vl.size() << ' ';
+  ed13->zero_chains(zcl); vcl_cout << zcl.size() << ' ';
+  ed13->edges(el); vcl_cout << el.size() << ' ';
+  ed13->one_chains(ocl); vcl_cout << ocl.size() << ' ';
+  ed13->faces(fl); vcl_cout << fl.size() << ' ';
+  ed13->two_chains(tcl); vcl_cout << tcl.size() << ' ';
+  ed13->blocks(bl); vcl_cout << bl.size() << '\n';
 
   vtol_one_chain_sptr oc1=f1->get_one_chain(0);
   vcl_cout <<"                    one_chain expects    3 6 3 1 1 1 1 - gets  ";
-  vl=oc1->vertices(); vcl_cout << vl->size() << ' ';
-  zcl=oc1->zero_chains(); vcl_cout << zcl->size() << ' ';
-  el=oc1->edges(); vcl_cout << el->size() << ' ';
-  ocl=oc1->one_chains(); vcl_cout << ocl->size() << ' ';
-  fl=oc1->faces(); vcl_cout << fl->size() << ' ';
-  tcl=oc1->two_chains(); vcl_cout << tcl->size() << ' ';
-  bl=oc1->blocks(); vcl_cout << bl->size() << '\n';
-  delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
+  oc1->vertices(vl); vcl_cout << vl.size() << ' ';
+  oc1->zero_chains(zcl); vcl_cout << zcl.size() << ' ';
+  oc1->edges(el); vcl_cout << el.size() << ' ';
+  oc1->one_chains(ocl); vcl_cout << ocl.size() << ' ';
+  oc1->faces(fl); vcl_cout << fl.size() << ' ';
+  oc1->two_chains(tcl); vcl_cout << tcl.size() << ' ';
+  oc1->blocks(bl); vcl_cout << bl.size() << '\n';
 
   vcl_cout <<"                    face expects         3 6 3 1 1 1 1 - gets  ";
-  vl=f1->vertices(); vcl_cout << vl->size() << ' ';
-  zcl=f1->zero_chains(); vcl_cout << zcl->size() << ' ';
-  el=f1->edges(); vcl_cout << el->size() << ' ';
-  ocl=f1->one_chains(); vcl_cout << ocl->size() << ' ';
-  fl=f1->faces(); vcl_cout << fl->size() << ' ';
-  tcl=f1->two_chains(); vcl_cout << tcl->size() << ' ';
-  bl=f1->blocks(); vcl_cout << bl->size() << '\n';
-  delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
+  f1->vertices(vl); vcl_cout << vl.size() << ' ';
+  f1->zero_chains(zcl); vcl_cout << zcl.size() << ' ';
+  f1->edges(el); vcl_cout << el.size() << ' ';
+  f1->one_chains(ocl); vcl_cout << ocl.size() << ' ';
+  f1->faces(fl); vcl_cout << fl.size() << ' ';
+  f1->two_chains(tcl); vcl_cout << tcl.size() << ' ';
+  f1->blocks(bl); vcl_cout << bl.size() << '\n';
 
   return 0;
 }

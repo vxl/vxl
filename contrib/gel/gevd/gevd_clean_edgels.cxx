@@ -142,11 +142,11 @@ void gevd_clean_edgels::detect_similar_edges(vcl_vector<vtol_edge_2d_sptr >& com
 void gevd_clean_edgels::remove_similar_edges(vtol_vertex_2d*& v1, vcl_vector<vtol_edge_2d_sptr >& deleted_edges)
 {
   float tol = 3.0f;
-  vcl_vector<vtol_edge_sptr>* v1_edges = v1->edges();
+  vcl_vector<vtol_edge_sptr> v1_edges; v1->edges(v1_edges);
   vcl_vector<vtol_vertex_2d_sptr> opposite_v1_verts;
   //Find all the vertics wes opposite from v1
-  for (vcl_vector<vtol_edge_sptr>::iterator eit = v1_edges->begin();
-       eit != v1_edges->end(); ++eit)
+  for (vcl_vector<vtol_edge_sptr>::iterator eit = v1_edges.begin();
+       eit != v1_edges.end(); ++eit)
   {
     vtol_vertex_2d_sptr v11 = (*eit)->v1()->cast_to_vertex_2d(),
                         v12 = (*eit)->v2()->cast_to_vertex_2d();
@@ -175,10 +175,10 @@ bool gevd_clean_edgels::edge_exists(vtol_vertex_2d_sptr v1, vtol_vertex_2d_sptr 
   bool found = false;
   intersection.clear();
 
-  vcl_vector<vtol_edge_sptr>* edges = v1->edges();
+  vcl_vector<vtol_edge_sptr> edges; v1->edges(edges);
 
-  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges->begin();
-       eit != edges->end(); ++eit)
+  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
+       eit != edges.end(); ++eit)
   {
     vtol_edge_2d* e = (*eit)->cast_to_edge_2d();
     if (!e) continue;
@@ -189,7 +189,6 @@ bool gevd_clean_edgels::edge_exists(vtol_vertex_2d_sptr v1, vtol_vertex_2d_sptr 
       found = true;
     }
   }
-  delete edges;
   return found;
 }
 
@@ -535,10 +534,10 @@ void gevd_clean_edgels::RemoveBridges()
          vit != verts.end(); ++vit)
     {
       vtol_vertex_2d* v = *vit;
-      vcl_vector<vtol_edge_sptr>* edges = v->edges();
-      if (edges->size()==1)
+      vcl_vector<vtol_edge_sptr> edges; v->edges(edges);
+      if (edges.size()==1)
       {
-        vtol_edge_sptr e = (*edges)[0];
+        vtol_edge_sptr e = edges[0];
         if (e->v1()!=e->v2())
           v_one.push_back(v);
       }
@@ -553,17 +552,15 @@ void gevd_clean_edgels::RemoveBridges()
     for (vcl_vector<vtol_vertex_2d*>::iterator v1 = v_one.begin();
          v1 != v_one.end(); ++v1)
     {
-      vcl_vector<vtol_edge_sptr>* v_edges = (*v1)->edges();
-      int order = v_edges->size();
+      vcl_vector<vtol_edge_sptr> v_edges; (*v1)->edges(v_edges);
+      int order = v_edges.size();
       if (order<1 )
       {
         //We can leave isolated vertices in v_one
         //but they will go away on the next sweep
-        delete v_edges;
         continue;
       }
-      vtol_edge_sptr ep = (*v_edges)[0];
-      delete v_edges;
+      vtol_edge_sptr ep = v_edges[0];
       if (!ep)
       {
         vcl_cout << "In gevd_clean_edgels::RemoveBridges() - null edge\n";

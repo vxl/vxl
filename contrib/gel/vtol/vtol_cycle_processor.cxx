@@ -240,8 +240,8 @@ static void v_edges(vtol_vertex_sptr v, vcl_vector<vtol_edge_2d_sptr>& b_edges,
                     bool force, vcl_vector<vtol_edge_2d_sptr>& edges_at_vertex)
 {
   edges_at_vertex.clear();
-  edge_list *edges = v->edges();
-  for (edge_list::iterator eit = edges->begin(); eit != edges->end(); ++eit)
+  edge_list edges; v->edges(edges);
+  for (edge_list::iterator eit = edges.begin(); eit != edges.end(); ++eit)
   {
     vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();
     if (vcl_find(b_edges.begin(), b_edges.end(),e) != b_edges.end())
@@ -254,7 +254,6 @@ static void v_edges(vtol_vertex_sptr v, vcl_vector<vtol_edge_2d_sptr>& b_edges,
         edges_at_vertex.push_back(e);
     }
   }
-  delete edges;
 }
 
 inline static double flip_y(double ang)
@@ -780,10 +779,9 @@ void vtol_cycle_processor::compute_cycles()
           {
             vcl_cout << "cycle " << cycle << "[cw(" << cw(cycle)
                      << "), ccw(" << ccw(cycle) << ")]\n";
-            vcl_vector<vtol_edge_sptr>* c_edges = cycle->edges();
+            vcl_vector<vtol_edge_sptr> c_edges; cycle->edges(c_edges);
             vcl_cout << "cycle edges\n";
-            print_edges(*c_edges);
-            delete c_edges;
+            print_edges(c_edges);
           }
         }
         if (is_cycle)
@@ -1184,10 +1182,10 @@ bool vtol_cycle_processor::connect_paths(vcl_vector<vtol_edge_2d_sptr>& edges,
       continue;
     bool found_edge = false;
     //find edges attached to each bad vert
-    vcl_vector<vtol_edge_sptr>* vedges = (*vit)->edges();
+    vcl_vector<vtol_edge_sptr> vedges; (*vit)->edges(vedges);
     //scan through vedges to find a connecting edge
-    for (vcl_vector<vtol_edge_sptr>::iterator eit = vedges->begin();
-         eit != vedges->end()&&!found_edge; ++eit)
+    for (vcl_vector<vtol_edge_sptr>::iterator eit = vedges.begin();
+         eit != vedges.end()&&!found_edge; ++eit)
     {
       vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();
       vtol_vertex_sptr v = (*eit)->other_endpoint(*(*vit));
@@ -1219,7 +1217,6 @@ bool vtol_cycle_processor::connect_paths(vcl_vector<vtol_edge_2d_sptr>& edges,
       repaired_verts.push_back(*vit);
       repaired_verts.push_back(v);//should also be in bad_verts
     }
-    delete vedges;
     paths_connected =
       paths_connected&&(*vit)->get_user_flag(flag2);
   }

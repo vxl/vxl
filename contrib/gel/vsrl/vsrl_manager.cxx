@@ -529,11 +529,11 @@ void vsrl_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
        rit != regions.end(); rit++)
   {
     vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
-    edge_list* edges = f->edges();
+    edge_list edges; f->edges(edges);
 
     vgui_soview2D_group* vsovg = new vgui_soview2D_group();
 
-    for (edge_list::iterator eit = edges->begin(); eit != edges->end(); eit++)
+    for (edge_list::iterator eit = edges.begin(); eit != edges.end(); eit++)
     {
       vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();
 
@@ -573,14 +573,13 @@ void vsrl_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
 
     if (verts)
     {
-      vcl_vector<vtol_vertex_sptr>* vts = f->vertices();
-      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts->begin();
-           vit != vts->end(); vit++)
+      vertex_list vts; f->vertices(vts);
+      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts.begin();
+           vit != vts.end(); vit++)
       {
         vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
         e2d0_->add_point(v->x(),v->y());
       }
-      delete vts;
     }
   }
 }

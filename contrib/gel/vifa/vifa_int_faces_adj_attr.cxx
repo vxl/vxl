@@ -276,31 +276,26 @@ Collinearity()
   float    u_len = 0.0f;
   float    w_len = 0.0f;
   float    coll = 0.0f;
-  edge_list*  edges = seed_->edges();
+  edge_list edges; seed_->edges(edges);
 
-  if (edges)
+  for (edge_iterator  ei = edges.begin(); ei != edges.end(); ei++)
   {
-    for (edge_iterator  ei = edges->begin(); ei != edges->end(); ei++)
+    vtol_edge_2d*  e = (*ei)->cast_to_edge_2d();
+
+    if (e)
     {
-      vtol_edge_2d*  e = (*ei)->cast_to_edge_2d();
+      vifa_coll_lines_sptr  clr = get_line_along_edge(e);
 
-      if (e)
+      if (clr)
       {
-        vifa_coll_lines_sptr  clr = get_line_along_edge(e);
-
-        if (clr)
-        {
-          u_len += float(e->curve()->length());
-          w_len += float(clr->spanning_length());
-        }
+        u_len += float(e->curve()->length());
+        w_len += float(clr->spanning_length());
       }
     }
-
-    delete edges;
-
-    if (u_len > 0.0f)
-      coll = w_len / u_len;
   }
+
+  if (u_len > 0.0f)
+    coll = w_len / u_len;
 
   return coll;
 }
@@ -439,27 +434,20 @@ get_adjacent_faces(vtol_intensity_face_sptr&  known_face)
 
   if (known_face.ptr())
   {
-    edge_list*  edges = known_face->edges();
+    edge_list edges; known_face->edges(edges);
+    faces = new iface_list;
 
-    if (edges)
+    for (edge_iterator ei = edges.begin(); ei != edges.end(); ei++)
     {
-      faces = new iface_list;
-
-      for (edge_iterator ei = edges->begin(); ei != edges->end(); ei++)
+      vtol_edge_2d* e = (*ei)->cast_to_edge_2d();
+      if (e)
       {
-        vtol_edge_2d* e = (*ei)->cast_to_edge_2d();
+        vtol_intensity_face_sptr  other_f =
+          this->get_adjacent_face_at_edge(known_face, e);
 
-        if (e)
-        {
-          vtol_intensity_face_sptr  other_f =
-            this->get_adjacent_face_at_edge(known_face, e);
-
-          if (other_f.ptr())
-            this->add_unique_face(*faces, other_f, 0);
-        }
+        if (other_f.ptr())
+          this->add_unique_face(*faces, other_f, 0);
       }
-
-      delete edges;
     }
   }
 
