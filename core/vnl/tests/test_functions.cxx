@@ -99,7 +99,7 @@ int test_functions()
 
   // rand() is not always a good random number generator,
   // so use the following congruential random number generator - PVr
-  static unsigned long sample_seed = vcl_time(0);
+  static unsigned long sample_seed = (unsigned long)vcl_time(0);
 
   double hist1[20];
   for (int i=0; i<20; i++)

@@ -30,7 +30,7 @@ void vnl_sample_reseed()
 # if VXL_STDLIB_HAS_DRAND48
   srand48( vcl_time(0) );
 # else
-  vnl_sample_seed = vcl_time(0);
+  vnl_sample_seed = (unsigned long)vcl_time(0);
 # endif
 }
 

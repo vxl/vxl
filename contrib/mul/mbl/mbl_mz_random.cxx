@@ -68,7 +68,7 @@ mbl_mz_random::~mbl_mz_random()
 
 void mbl_mz_random::reseed()
 {
-  reseed(vcl_time(NULL));
+  reseed((unsigned long)vcl_time(NULL));
 }
 
 void mbl_mz_random::reseed(unsigned long seed)

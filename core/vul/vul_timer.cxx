@@ -128,7 +128,7 @@ long vul_timer::real()
  // Win32 section
  struct _timeb real;
  _ftime(&real);
- s = real.time - data->real0.time;
+ s = long(real.time - data->real0.time);
  long ms = real.millitm - data->real0.millitm;
 
  if (ms < 0) {
