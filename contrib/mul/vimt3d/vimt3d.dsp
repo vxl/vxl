@@ -138,6 +138,9 @@ SOURCE=.\vimt3d_gaussian_pyramid_builder_3d.cxx
 SOURCE=.\vimt3d_transform_3d.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vimt3d_load.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vimt3d_image_3d.cxx
 # End Source File
 # End Group
@@ -171,6 +174,9 @@ SOURCE=.\vimt3d_transform_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vimt3d_trilin_interp.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt3d_load.h
 # End Source File
 # Begin Source File
 SOURCE=.\vimt3d_slice.h
