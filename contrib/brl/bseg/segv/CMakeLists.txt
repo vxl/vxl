@@ -1,11 +1,10 @@
 # segmentation view library
-# brl/segv/CMakeLists.txt
+# brl/bseg/segv/CMakeLists.txt
 
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/brip )
 
 # determines if vgui is built and opengl is available
 INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
