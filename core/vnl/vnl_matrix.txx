@@ -689,9 +689,9 @@ vnl_matrix<T>& vnl_matrix<T>::update (vnl_matrix<T> const& m,
 template<class T>
 vnl_matrix<T> vnl_matrix<T>::extract (unsigned rowz, unsigned colz,
                                       unsigned top, unsigned left) const{
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   unsigned int bottom = top + rowz;
   unsigned int right = left + colz;
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if ((this->num_rows < bottom) || (this->num_cols < right))
     vnl_error_matrix_dimension ("extract",
                                 this->num_rows, this->num_cols, bottom, right);
@@ -1147,8 +1147,8 @@ template <class T>
 void vnl_matrix<T>::assert_size_internal(unsigned rs,unsigned cs) const
 {
   if (this->rows()!=rs || this->cols()!=cs) {
-    vcl_cerr << __FILE__ "vnl_matrix : has size " << this->rows() << 'x' << this->cols()
-             << ". Should be " << rs << 'x' << cs << vcl_endl;
+    vcl_cerr << __FILE__ ": size is " << this->rows() << 'x' << this->cols()
+             << ". should be " << rs << 'x' << cs << vcl_endl;
     vcl_abort();
   }
 }
@@ -1159,7 +1159,7 @@ template <class T>
 bool vnl_matrix<T>::read_ascii(vcl_istream& s)
 {
   if (!s.good()) {
-    vcl_cerr << "vnl_matrix<T>::read_ascii: Called with bad stream\n";
+    vcl_cerr << __FILE__ ": vnl_matrix<T>::read_ascii: Called with bad stream\n";
     return false;
   }
 
@@ -1177,7 +1177,7 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
 
   vcl_vector<T> first_row_vals;
   if (debug)
-    vcl_cerr << "vnl_matrix<T>::read_ascii: Determining file dimensions: ";
+    vcl_cerr << __FILE__ ": vnl_matrix<T>::read_ascii: Determining file dimensions: ";
 
   int c = ' ';
   for (;;) {
