@@ -25,100 +25,6 @@ mbl_data_collector<T>::~mbl_data_collector()
 {
 }
 
-//=======================================================================
-// Method: version_no
-//=======================================================================
-
-template<class T>
-short mbl_data_collector<T>::version_no() const
-{
-  return 1;
-}
-
-//=======================================================================
-// Method: vsl_add_to_binary_loader
-//=======================================================================
-
-template<class T>
-void vsl_add_to_binary_loader(const mbl_data_collector<T>& b)
-{
-  vsl_binary_loader<mbl_data_collector<T> >::instance().add(b);
-}
-
-//=======================================================================
-// Method: is_a
-//=======================================================================
-
-template<class T>
-vcl_string mbl_data_collector<T>::is_a() const
-{
-  return vcl_string("mbl_data_collector<T>");
-}
-
-//=======================================================================
-// Associated function: operator<<
-//=======================================================================
-
-template<class T>
-void vsl_b_write(vsl_b_ostream& bfs, const mbl_data_collector<T>* b)
-{
-  if (b)
-  {
-    vsl_b_write(bfs,b->is_a());
-    b->b_write(bfs);
-  }
-  else
-  vsl_b_write(bfs,vcl_string("VSL_NULL_PTR"));
-}
-
-//=======================================================================
-// Associated function: operator<<
-//=======================================================================
-
-template<class T>
-void vsl_b_write(vsl_b_ostream& bfs, const mbl_data_collector<T>& b)
-{
-  b.b_write(bfs);
-}
-
-//=======================================================================
-// Associated function: operator>>
-//=======================================================================
-
-template<class T>
-void vsl_b_read(vsl_b_istream& bfs, mbl_data_collector<T>& b)
-{
-  b.b_read(bfs);
-}
-
-//=======================================================================
-// Associated function: operator<<
-//=======================================================================
-
-template<class T>
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_data_collector<T>& b)
-{
-  os << b.is_a() << ": ";
-  vsl_inc_indent(os);
-  b.print_summary(os);
-  vsl_dec_indent(os);
-  return os;
-}
-
-//=======================================================================
-// Associated function: operator<<
-//=======================================================================
-
-template<class T>
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_data_collector<T>* b)
-{
-  if (b)
-  return os << *b;
-  else
-  return os << "No mbl_data_collector<T> defined.";
-}
-
-//=======================================================================
 
 //: Copy all the data from a mbl_data_wrapper<T> into a mbl_data_collector<T>
 template<class T>
@@ -175,15 +81,9 @@ unsigned long MergeAllData(mbl_data_collector<T> &dest,
 }
 
 #define MBL_DATA_COLLECTOR_INSTANTIATE(T) \
-/* template class mbl_data_wrapper<T >; */ \
-template void vsl_add_to_binary_loader(const mbl_data_collector<T >& b); \
-template void vsl_b_write(vsl_b_ostream& bfs, const mbl_data_collector<T >& b); \
-template void vsl_b_write(vsl_b_ostream& bfs, const mbl_data_collector<T >* b); \
-template void vsl_b_read(vsl_b_istream& bfs, mbl_data_collector<T >& b); \
-template vcl_ostream& operator<<(vcl_ostream& os,const mbl_data_collector<T >& b); \
-template vcl_ostream& operator<<(vcl_ostream& os,const mbl_data_collector<T >* b); \
-template unsigned long CopyAllData(mbl_data_collector<T > &dest,\
-                                   mbl_data_wrapper<T > &src); \
+template class mbl_data_wrapper< T >; \
+template unsigned long CopyAllData(mbl_data_collector<T > &dest, \
+                                    mbl_data_wrapper<T > &src);\
 template unsigned long MergeAllData(mbl_data_collector<T > &dest,\
                                     mbl_data_wrapper<T > &src1,\
                                     mbl_data_wrapper<T > &src2)

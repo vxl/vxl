@@ -11,6 +11,7 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
+#include<mbl/mbl_data_collector_base.h>
 #include<mbl/mbl_data_wrapper.h>
 
 //: Templated base class for objects which collect sets of data.
@@ -19,7 +20,7 @@
 //  They can return a mbl_data_wrapper<T> object to iterate through
 //  the saved examples.
 template<class T>
-class mbl_data_collector {
+class mbl_data_collector : public mbl_data_collector_base {
 public:
   //: Dflt ctor
   mbl_data_collector();
@@ -38,60 +39,7 @@ public:
 
   //: Return object describing stored data
   virtual mbl_data_wrapper<T >& vectorData() = 0;
-
-  //: Version number for I/O
-  short version_no() const;
-
-  //: Name of the class
-  virtual vcl_string is_a() const = 0;
-
-  //: Create a copy on the heap and return base class pointer
-  virtual mbl_data_collector* clone() const = 0;
-
-  //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const = 0;
-
-  //: Save class to binary file stream
-  //!in: bfs: Target binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const = 0;
-
-  //: Load class from binary file stream
-  //!out: bfs: Target binary file stream
-  virtual void b_read(vsl_b_istream& bfs) = 0;
 };
-
-//: Allows derived class to be loaded by base-class pointer
-//  A loader object exists which is invoked by calls
-//  of the form "vsl_b_read(bfs,base_ptr);".  This loads derived class
-//  objects from the disk, places them on the heap and
-//  returns a base class pointer.
-//  In order to work the loader object requires
-//  an instance of each derived class that might be
-//  found.  This function gives the model class to
-//  the appropriate loader.
-template<class T>
-void vsl_add_to_binary_loader(const mbl_data_collector<T>& b);
-
-//: Binary file stream output operator for class reference
-template<class T>
-void vsl_b_write(vsl_b_ostream& bfs, const mbl_data_collector<T>& b);
-
-//: Binary file stream output operator for pointer to class
-template<class T>
-void vsl_b_write(vsl_b_ostream& bfs, const mbl_data_collector<T>* b);
-
-//: Binary file stream input operator for class reference
-template<class T>
-void vsl_b_read(vsl_b_istream& bfs, mbl_data_collector<T>& b);
-
-//: Stream output operator for class reference
-template<class T>
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_data_collector<T>& b);
-
-//: Stream output operator for class pointer
-template<class T>
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_data_collector<T>* b);
-
 
 //: Copy all the data from a mbl_data_wrapper<vnl_vector<double> > into a mbl_data_collector
 // This function will change the position of the iterator in the mbl_data_wrapper<vnl_vector<double> >,
