@@ -16,16 +16,16 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/VISICS
 // \date   15 nov. 1997
 //
-//\verbatim
-//  Modifications:
-//    250198 AWF Templated.
-//    250198 AWF Modified to make POD struct until gcc inlines when debugging.
-//    160298 PCP Removed underscore from public members.
-//    290798 AWF Member templates for fancy compilers
-//    220598 PVr moved instantiations files to Templates subdirectory.
-//    050598 PVr added several operators ( + += - -= (T) ).
-//    140898 David Capel added clamping functions to ensure 0-255 range on bytes and vil1_rgb<byte>
-//    090600 David Capel made clamping functions inline and removed all that partial specialization nonsense from the .txx file.
+// \verbatim
+//  Modifications
+//   250198 AWF Templated.
+//   250198 AWF Modified to make POD struct until gcc inlines when debugging.
+//   160298 PCP Removed underscore from public members.
+//   220598 PVr moved instantiations files to Templates subdirectory.
+//   050598 PVr added several operators ( + += - -= (T) ).
+//   290798 AWF Member templates for fancy compilers
+//   140898 David Capel added clamping functions to ensure 0-255 range on bytes and vil1_rgb<byte>
+//   090600 David Capel made clamping functions inline and removed all that partial specialization nonsense from the .txx file.
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //\endverbatim
 

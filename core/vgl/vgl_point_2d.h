@@ -10,9 +10,9 @@
 // \author Don Hamilton, Peter Tu
 //
 // \verbatim
-// Modifications :
-//  2 July 2001 Peter Vanroose implemented constructor from homg point
-// 29 June 2001 Peter Vanroose moved arithmetic operators to new vgl_vector_2d
+//  Modifications
+//   29 June 2001 Peter Vanroose moved arithmetic operators to new vgl_vector_2d
+//    2 July 2001 Peter Vanroose implemented constructor from homg point
 // \endverbatim
 
 #include <vcl_iosfwd.h>
