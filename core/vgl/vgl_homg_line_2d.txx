@@ -80,9 +80,9 @@ void vgl_homg_line_2d<Type>::normalize()
   double an= (double)a()/den;
   double bn= (double)b()/den;
   double cn= (double)c()/den;
-  //standardize so that a is positive unless a is too small, then
+  //standardize so that a is positive unless a is smaller than b, then
   //standardize the sign of b
-  if (vcl_fabs(an)>0.1)
+  if (vcl_fabs(an)>vcl_fabs(bn))
     if (an>0)
       {
         a_ = (Type)an;
