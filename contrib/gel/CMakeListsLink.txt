@@ -1,0 +1,12 @@
+
+LINK_LIBRARIES(gbl gmvl gst vsol vtol vdgl vsrl)
+
+LINK_DIRECTORIES(
+${allvxl_BINARY_DIR}/gel/gbl
+${allvxl_BINARY_DIR}/gel/gmvl
+${allvxl_BINARY_DIR}/gel/gst
+${allvxl_BINARY_DIR}/gel/vsol
+${allvxl_BINARY_DIR}/gel/vtol
+${allvxl_BINARY_DIR}/gel/vdgl
+${allvxl_BINARY_DIR}/gel/vsrl
+)
