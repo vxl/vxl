@@ -298,12 +298,16 @@ bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_mo
 
     double dx = (beginx - x) / width;
     double dy = (beginy - y) / height;
-
-    double scalefactor = vcl_pow(5, dy);
+ 
+    // changed to vcl_pow(5,dy) to vcl_pow(5.0,dy)
+    // the first version is ambiguous when overloads exist for vcl_pow
+    double scalefactor = vcl_pow(5.0, dy);
     if (!lock_dolly)
       this->token.scale = lastpos.scale * scalefactor;
 
-    double zoomfactor = vcl_pow(5,dx);
+    // changed to vcl_pow(5,dy) to vcl_pow(5.0,dy)
+    // the first version is ambiguous when overloads exist for vcl_pow
+    double zoomfactor = vcl_pow(5.0,dx);
     if (!lock_zoom) {
       this->token.fov = lastpos.fov * zoomfactor;
       vgui::out << "viewer3D : fov " << this->token.fov << vcl_endl;
