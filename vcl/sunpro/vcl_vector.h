@@ -26,10 +26,17 @@ struct vcl_vector_sunpro_50 : public std::vector<T, std::allocator<T> >
   explicit vcl_vector_sunpro_50(base const &that) : base(that) { }
   
   bool operator==(vcl_vector_sunpro_50<T> const &that) const
-  { return base::operator==(that); }
-
+  {
+    if (base::size() != that.base::size())
+      return false;
+    for (int i=0; i<base::size(); ++i)
+      if ( !( (*this)[i] == that[i] ) )
+        return false;
+    return true;
+  }
+  
   bool operator!=(vcl_vector_sunpro_50<T> const &that) const
-  { return base::operator!=(that); }
+  { return operator!=(that); }
 };
 
 #undef  vcl_vector
