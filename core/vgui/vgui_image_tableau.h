@@ -35,7 +35,7 @@ class vgui_image_tableau
   vgui_image_renderer* renderer_;
   vgui_vil_image_renderer* vil_renderer_;
 
-public:
+ public:
   //: Returns the type of this tableau ('vgui_image_tableau').
   vcl_string type_name() const;
 
@@ -47,7 +47,7 @@ public:
   //: Set the filename of the loaded image
   //  It could be used to identify a specific image
   void set_file_name( const vcl_string & fn ) { name_ = fn; }
-  
+
   //: Returns a nice version of the name, including details of the image file.
   vcl_string pretty_name() const;
 
@@ -99,7 +99,7 @@ public:
   //  this tableau.
   virtual bool handle( vgui_event const& e );
 
-protected:
+ protected:
   friend struct vgui_image_tableau_new;
 
   //: Constructor - don't use this, use vgui_image_tableau_new.
@@ -119,7 +119,7 @@ protected:
   //  the given file. File loaded as a vil1_image.
   vgui_image_tableau( char const* filename );
 
-protected:
+ protected:
   //: Destructor - called by vgui_image_tableau_sptr.
   virtual ~vgui_image_tableau();
 };

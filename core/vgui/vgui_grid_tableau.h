@@ -131,7 +131,7 @@ class vgui_grid_tableau : public vgui_poly_tableau
 
   //: Gets the positions and times of selection of the selected tableaux.
   int get_selected_positions(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos,
-    vcl_vector<int>* times);
+                             vcl_vector<int>* times);
 
   //: Select a certain tableau
   void set_selected(int r, int c, bool onoff = true);

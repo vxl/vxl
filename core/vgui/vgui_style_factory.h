@@ -50,7 +50,7 @@ class vgui_style_factory
 
   //: Change the style of the given soview.
   static void change_style(vgui_soview* so, vgui_style* st_new,
-    vgui_style* st_old);
+                           vgui_style* st_old);
 
   //: Remove a style association.
   //
@@ -77,7 +77,7 @@ class vgui_style_factory
   static vgui_DLLDATA vgui_style_factory* instance_;
 
   vgui_style* get_style_impl(float r, float g, float b, float point_size,
-    float line_width);
+                             float line_width);
   void get_styles_impl(vcl_vector<vgui_style*>& styles_copy);
   void get_soviews_impl(vgui_style*, vcl_vector<vgui_soview*>& soviews);
   void change_style_impl(vgui_soview* so, vgui_style* st_new, vgui_style* st_old);

@@ -43,7 +43,7 @@ class vil_image_view_base;
 //
 class vgui_section_buffer
 {
-public:
+ public:
   //: Create a \a w by \a h buffer
   //
   // The buffer will be used to hold the GL pixels from (x,y) to
@@ -96,7 +96,7 @@ public:
   unsigned width () const { return w_; }
   unsigned height() const { return h_; }
 
-private:
+ private:
   // fsm: I want these to be GLenums as gcc 2.95 will not implicitly
   // cast ints to enums. Please don't make them ints.
   GLenum format_;

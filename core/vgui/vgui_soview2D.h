@@ -369,7 +369,7 @@ class vgui_soview2D_polygon : public vgui_soview2D
 //
 class vgui_soview2D_image : public vgui_soview2D
 {
-public:
+ public:
   //: Create the sprite from a vil1_image.
   //
   // If format and type are not specified, the "best" one will be
@@ -420,7 +420,7 @@ public:
   //: Translate this 2D image by the given x and y distances.
   void translate(float x, float y);
 
-private:
+ private:
   //: Coordinates of the upper lefthand corner of the image
   float x_, y_;
 

@@ -171,7 +171,7 @@ struct vgui_satellite_tableau_t_new : public vgui_tableau_sptr_t<vgui_satellite_
   typedef vgui_tableau_sptr_t<impl quirk(vgui_tableau_sptr)> base;
   typedef typename impl::method method;
   vgui_satellite_tableau_t_new(object *p, method m, data const &d,
-    vcl_string const &n = "") : base(new impl(p, m, d, n)) { }
+                               vcl_string const&n=""):base(new impl(p,m,d,n)) {}
 };
 
 //----------------------------------------------------------------------------

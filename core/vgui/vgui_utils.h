@@ -16,8 +16,9 @@
 #include <vcl_vector.h>
 
 //: Useful static functions for vgui.
-class vgui_utils {
-public:
+class vgui_utils
+{
+ public:
   //: Dump the OpenGL area to the given image filename.
   static void dump_colour_buffer(char const *file);
 
@@ -41,7 +42,7 @@ public:
   //: Returns the number of bits per pixel.
   static int bits_per_pixel(GLenum format, GLenum type);
 
-private:
+ private:
   static void do_copy();
 };
 

@@ -13,14 +13,14 @@
 //  Contains classes: vgui_easy2D_tableau  vgui_easy2D_tableau_new
 //
 // \verbatim
-// Modifications
-//    24-SEP-1999  P.Pritchett - Initial version.
-//    20-JUL-2000  Marko Bacic - Provided support for printing linestrips
-//    25-APR-2002  domi at vision.ee.ethz.ch - make print_psfile work without
-//                                             image tableau
-//    26-APR-2002  K.Y.McGaul - Added some doxygen-style documentation.
-//    01-OCT-2002  K.Y.McGaul - Moved vgui_easy2D to vgui_easy2D_tableau.
-//                            - Added functions clear, remove, get_all.
+//  Modifications
+//   24-SEP-1999  P.Pritchett - Initial version.
+//   20-JUL-2000  Marko Bacic - Provided support for printing linestrips
+//   25-APR-2002  domi at vision.ee.ethz.ch - make print_psfile work without
+//                                            image tableau
+//   26-APR-2002  K.Y.McGaul - Added some doxygen-style documentation.
+//   01-OCT-2002  K.Y.McGaul - Moved vgui_easy2D to vgui_easy2D_tableau.
+//                           - Added functions clear, remove, get_all.
 // \endverbatim
 
 #include <vgui/vgui_displaylist2D_tableau.h>
@@ -123,7 +123,7 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
 
   //: Add an ellipse with a given center, width, height, and angle
   vgui_soview2D_ellipse* add_ellipse(float x, float y, float w,
-    float h, float phi);
+                                     float h, float phi);
 
   //: Add a point with the given projective coordinates.
   vgui_soview2D_point* add_point_3dv(double const p[3]);
@@ -140,11 +140,11 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
 
   //: Add a linestrip with the given n vertices to the display.
   vgui_soview2D_linestrip* add_linestrip(unsigned n, float const *x,
-    float const *y);
+                                         float const *y);
 
   //: Add  polygon with the given n vertices to the display.
   vgui_soview2D_polygon* add_polygon(unsigned n, float const *x,
-    float const *y);
+                                     float const *y);
 
   //: Remove the given soview from the display.
   void remove(vgui_soview* vso) { vgui_displaybase_tableau::remove(vso); }

@@ -32,7 +32,7 @@ class vgui_section_buffer;
 class vgui_image_renderer
 {
   vil1_image the_image;
-  
+
   vgui_section_buffer *buffer;
 
  public:
