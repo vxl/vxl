@@ -1,101 +1,98 @@
-#
 # ./vxl/vil/CMakeLists.txt
-#
 
 ADD_LIBRARY(vil vil_sources)
 
 SOURCE_FILES( vil_sources
 
-# basic things
-vil_pixel
-vil_image_impl
-vil_image
-vil_stream
-vil_file_format
-vil_byte_swap
-vil_16bit
-vil_32bit
-vil_test
+  # basic things
+  vil_pixel.cxx
+  vil_image_impl.cxx
+  vil_image.cxx
+  vil_stream.cxx
+  vil_file_format.cxx
+  vil_byte_swap.cxx
+  vil_16bit.cxx
+  vil_32bit.cxx
+  vil_test.cxx
 
-# various vil_stream classes
-# from a file
-vil_stream_fstream
-# in-core vil_stream
-vil_stream_core
-# present a section of a vil_stream
-vil_stream_section
-# load image from URL
-vil_stream_url
+  # various vil_stream classes
+  # from a file
+  vil_stream_fstream.cxx
+  # in-core vil_stream
+  vil_stream_core.cxx
+  # present a section of a vil_stream
+  vil_stream_section.cxx
+  # load image from URL
+  vil_stream_url.cxx
 
-# classes derived from vil_image
-vil_file_image
-vil_memory_image
-#vil_memory_image_of
-#vil_memory_image_of_format
-vil_image_proxy
+  # classes derived from vil_image
+  vil_file_image.cxx
+  vil_memory_image.cxx
+  #vil_memory_image_of.cxx
+  #vil_memory_image_of_format.cxx
+  vil_image_proxy.cxx
 
-# image adaptors
-vil_memory_image_impl
-vil_crop_image_impl
-vil_skip_image_impl
-vil_resample_image_impl
-vil_flipud_impl
-vil_flip_components_impl
-vil_block_cache_image_impl
-vil_clamp_image_impl
-# Helper specializations for vil_clamp_image_impl
-vil_clamp_image
-vil_scale_intensities_image_impl
-# Helper specializations for vil_scale_intensities_image_impl
-vil_scale_intensities_image
+  # image adaptors
+  vil_memory_image_impl.cxx
+  vil_crop_image_impl.cxx
+  vil_skip_image_impl.cxx
+  vil_resample_image_impl.cxx
+  vil_flipud_impl.cxx
+  vil_flip_components_impl.cxx
+  vil_block_cache_image_impl.cxx
+  vil_clamp_image_impl.cxx
+  # Helper specializations for vil_clamp_image_impl
+  vil_clamp_image.cxx
+  vil_scale_intensities_image_impl.cxx
+  # Helper specializations for vil_scale_intensities_image_impl
+  vil_scale_intensities_image.cxx
 
-# file format readers/writers (see below for conditional ones)
-file_formats/vil_gen
-file_formats/vil_pnm
-file_formats/vil_viff
-file_formats/vil_viff_support
-file_formats/vil_iris
-file_formats/vil_mit
-file_formats/vil_bmp_file_header
-file_formats/vil_bmp_core_header
-file_formats/vil_bmp_info_header
-file_formats/vil_bmp
-file_formats/vil_gif
+  # file format readers/writers (see below for conditional ones)
+  file_formats/vil_gen.cxx
+  file_formats/vil_pnm.cxx
+  file_formats/vil_viff.cxx
+  file_formats/vil_viff_support.c
+  file_formats/vil_iris.cxx
+  file_formats/vil_mit.cxx
+  file_formats/vil_bmp_file_header.cxx
+  file_formats/vil_bmp_core_header.cxx
+  file_formats/vil_bmp_info_header.cxx
+  file_formats/vil_bmp.cxx
+  file_formats/vil_gif.cxx
 
-# Operations
-vil_image_as
-vil_new
-vil_load
-vil_save
-vil_copy
-vil_crop
-vil_skip
-vil_resample
-vil_warp
-#vil_warp
-vil_flipud
-vil_flip_components
-#vil_convolve
-#vil_convolve_simple
-#vil_convolve_1d
-#vil_convolve_1d_x
-#vil_convolve_1d_y
-vil_smooth
-vil_clamp
-vil_scale_intensities
-#vil_interpolate
-#vil_resample_image
-#vil_ncc
-#vil_ssd
+  # Operations
+  vil_image_as.cxx
+  vil_new.cxx
+  vil_load.cxx
+  vil_save.cxx
+  vil_copy.cxx
+  vil_crop.cxx
+  vil_skip.cxx
+  vil_resample.cxx
+  vil_warp.cxx
+  #vil_warp.cxx
+  vil_flipud.cxx
+  vil_flip_components.cxx
+  #vil_convolve.cxx
+  #vil_convolve_simple.cxx
+  #vil_convolve_1d.cxx
+  #vil_convolve_1d_x.cxx
+  #vil_convolve_1d_y.cxx
+  vil_smooth.cxx
+  vil_clamp.cxx
+  vil_scale_intensities.cxx
+  #vil_interpolate.cxx
+  #vil_resample_image.cxx
+  #vil_ncc.cxx
+  #vil_ssd.cxx
 
-# Stuff
-vil_pyramid
-#vil_rgb
-#vil_rgba
-vil_rgb_byte
-vil_colour_space
-vil_memory_image_window
-
+  # Stuff
+  vil_pyramid.cxx
+  #vil_rgb.cxx
+  #vil_rgba.cxx
+  vil_rgb_byte.cxx
+  vil_colour_space.cxx
+  vil_memory_image_window.cxx
 )
 
 # vil_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
@@ -106,26 +103,33 @@ INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindTIFF.cmake)
 
 IF(HAS_PNG)
   SOURCE_FILES( vil_sources
-    file_formats/vil_png
+    file_formats/vil_png.cxx
   )
 ENDIF(HAS_PNG)
 
 IF(HAS_JPEG)
   SOURCE_FILES( vil_sources
-    file_formats/vil_jpeg 
-    file_formats/vil_jpeg_source_mgr
-    file_formats/vil_jpeg_decompressor
-    file_formats/vil_jpeg_destination_mgr
-    file_formats/vil_jpeg_compressor )
+    file_formats/vil_jpeg.cxx
+    file_formats/vil_jpeg_source_mgr.cxx
+    file_formats/vil_jpeg_decompressor.cxx
+    file_formats/vil_jpeg_destination_mgr.cxx
+    file_formats/vil_jpeg_compressor.cxx
+  )
 ENDIF(HAS_JPEG)
 
 IF(HAS_TIFF)
   SOURCE_FILES( vil_sources
-    file_formats/vil_tiff
+    file_formats/vil_tiff.cxx
   )
 ENDIF(HAS_TIFF)
 
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
+
+IF (WIN32)
+  IF (NOT CYGWIN)
+    INCLUDE(${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsHeaders.txt)
+  ENDIF (NOT CYGWIN)
+ENDIF(WIN32)
 
 #SUBDIRS(algo)
 SUBDIRS(io)

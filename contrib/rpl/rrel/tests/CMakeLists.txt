@@ -8,7 +8,7 @@ AUX_SOURCE_DIRECTORY( Templates rrel_tests_sources )
 
 IF (WIN32)
   IF (NOT CYGWIN)
-    INCLUDE(CMakeListsHeaders.txt)
+    INCLUDE(${allvxl_SOURCE_DIR}/rpl/rrel/tests/CMakeListsHeaders.txt)
   ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
 

@@ -1,0 +1,14 @@
+SOURCE_FILES( gevd_sources
+  gevd_bufferxy.h
+  gevd_contour.h
+  gevd_detector.h
+  gevd_detector_params.h
+  gevd_float_operators.h
+  gevd_memory_mixin.h
+  gevd_noise.h
+  gevd_param_mixin.h
+  gevd_pixel.h
+  gevd_status_mixin.h
+  gevd_step.h
+  gevd_xpixel.h
+)

@@ -1,25 +1,23 @@
-#
 # ./vcl/CMakeLists.txt
-#
-#   geoff.cross@crd.ge.com
-#
 
 # Set up vcl_where_root_dir.h to have a macro set to $VCL_SOURCE_ROOT_DIR
 CONFIGURE_FILE(
       ${allvxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in
-      ${allvxl_BINARY_DIR}/vcl/vcl_where_root_dir.h ESCAPE_QUOTES)
+      ${allvxl_BINARY_DIR}/vcl/vcl_where_root_dir.h ESCAPE_QUOTES
+)
 
+ADD_LIBRARY(vcl vcl_sources)
 
 SOURCE_FILES( vcl_sources
-vcl_cmath
-vcl_cassert
-vcl_cstdlib
-vcl_deprecated
-emulation/vcl_string_instances
-emulation/vcl_straits
-emulation/vcl_rbtree_instances
-emulation/vcl_hashtable
-emulation/vcl_alloc
+  vcl_cmath.cxx
+  vcl_cassert.cxx
+  vcl_cstdlib.cxx
+  vcl_deprecated.cxx
+  emulation/vcl_string_instances.cxx
+  emulation/vcl_straits.cxx
+  emulation/vcl_rbtree_instances.cxx
+  emulation/vcl_hashtable.cxx
+  emulation/vcl_alloc.cxx
 )
 
 IF(WIN32)
@@ -29,8 +27,11 @@ ENDIF(WIN32)
 
 AUX_SOURCE_DIRECTORY(Templates vcl_sources)
 
-ADD_LIBRARY(vcl vcl_sources)
-
+IF (WIN32)
+  IF (NOT CYGWIN)
+    INCLUDE(${allvxl_SOURCE_DIR}/vcl/CMakeListsHeaders.txt)
+  ENDIF (NOT CYGWIN)
+ENDIF(WIN32)
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)

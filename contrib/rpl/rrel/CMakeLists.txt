@@ -1,36 +1,45 @@
+# ./rpl/rrel/CMakeLists.txt
+
 ADD_LIBRARY( rrel rrel_sources )
 
 SOURCE_FILES( rrel_sources
-  rrel_mlesac_obj
-  rrel_ransac_obj
-  rrel_lms_obj
-  rrel_lts_obj
-  rrel_muset_obj
-  rrel_m_est_obj
-  rrel_tukey_obj
-  rrel_cauchy_obj
-  rrel_trunc_quad_obj
+  rrel_mlesac_obj.cxx
+  rrel_ransac_obj.cxx
+  rrel_lms_obj.cxx
+  rrel_lts_obj.cxx
+  rrel_muset_obj.cxx
+  rrel_m_est_obj.cxx
+  rrel_tukey_obj.cxx
+  rrel_cauchy_obj.cxx
+  rrel_trunc_quad_obj.cxx
 
-  rrel_misc
-  rrel_muse_table
+  rrel_misc.cxx
+  rrel_muse_table.cxx
 
-  rrel_estimation_problem
-  rrel_linear_regression
-  rrel_orthogonal_regression
-  rrel_homography2d_est
+  rrel_estimation_problem.cxx
+  rrel_linear_regression.cxx
+  rrel_orthogonal_regression.cxx
+  rrel_homography2d_est.cxx
 
-  rrel_irls
-  rrel_ran_sam_search
+  rrel_irls.cxx
+  rrel_ran_sam_search.cxx
 )
+
+AUX_SOURCE_DIRECTORY( Templates rrel_sources )
+
+IF (WIN32)
+  IF (NOT CYGWIN)
+    INCLUDE(${allvxl_SOURCE_DIR}/rpl/rrel/CMakeListsHeaders.txt)
+  ENDIF (NOT CYGWIN)
+ENDIF(WIN32)
 
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/mul )
 
-AUX_SOURCE_DIRECTORY( Templates rrel_sources )
-
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )
 ENDIF( BUILD_EXAMPLES )
+
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )

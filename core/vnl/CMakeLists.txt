@@ -1,65 +1,67 @@
-#
 # vxl/vnl/CMakeLists.txt
-#
-#   geoff.cross@crd.ge.com
-#
 
 ADD_LIBRARY(vnl vnl_sources)
 
 SOURCE_FILES( vnl_sources
-vnl_alloc
-vnl_block
-vnl_math
-vnl_copy
-vnl_complex
-vnl_error
-vnl_test
-vnl_matlab_print
-vnl_matlab_print_format
-vnl_matlab_print_scalar
-vnl_matlab_print2
-vnl_matlab_header
-vnl_matlab_write
-vnl_matlab_read
-vnl_matlab_filewrite
-vnl_matops
-vnl_real_polynomial
-vnl_real_npolynomial
+  vnl_alloc.cxx
+  vnl_block.cxx
+  vnl_math.cxx
+  vnl_copy.cxx
+  vnl_complex.cxx
+  vnl_error.cxx
+  vnl_test.cxx
+  vnl_matlab_print.cxx
+  vnl_matlab_print_format.cxx
+  vnl_matlab_print_scalar.cxx
+  vnl_matlab_print2.cxx
+  vnl_matlab_header.cxx
+  vnl_matlab_write.cxx
+  vnl_matlab_read.cxx
+  vnl_matlab_filewrite.cxx
+  vnl_matops.cxx
+  vnl_real_polynomial.cxx
+  vnl_real_npolynomial.cxx
 #vnl_binary # deprecated: use vsl instead
-vnl_fastops
-vnl_linear_operators_3
-vnl_numeric_limits
-vnl_numeric_traits
-vnl_complex_traits
-vnl_int_matrix
-vnl_int_2
-vnl_int_3
-vnl_int_4
-vnl_float_2
-vnl_float_3
-vnl_float_4
-vnl_double_2
-vnl_double_3
-vnl_double_4
-vnl_double_2x3
-vnl_double_3x2
-vnl_cost_function
-vnl_least_squares_function
-vnl_least_squares_cost_function
-vnl_nonlinear_minimizer
-vnl_linear_system
-vnl_sparse_matrix_linear_system
-vnl_rotation_matrix
-vnl_cross_product_matrix
-vnl_identity_3x3
-vnl_trace
-vnl_sample
-vnl_unary_function
-vnl_transpose
-vnl_rational
+  vnl_fastops.cxx
+  vnl_linear_operators_3.cxx
+  vnl_numeric_limits.cxx
+  vnl_numeric_traits.cxx
+  vnl_complex_traits.cxx
+  vnl_int_matrix.cxx
+  vnl_int_2.cxx
+  vnl_int_3.cxx
+  vnl_int_4.cxx
+  vnl_float_2.cxx
+  vnl_float_3.cxx
+  vnl_float_4.cxx
+  vnl_double_2.cxx
+  vnl_double_3.cxx
+  vnl_double_4.cxx
+  vnl_double_2x3.cxx
+  vnl_double_3x2.cxx
+  vnl_cost_function.cxx
+  vnl_least_squares_function.cxx
+  vnl_least_squares_cost_function.cxx
+  vnl_nonlinear_minimizer.cxx
+  vnl_linear_system.cxx
+  vnl_sparse_matrix_linear_system.cxx
+  vnl_rotation_matrix.cxx
+  vnl_cross_product_matrix.cxx
+  vnl_identity_3x3.cxx
+  vnl_trace.cxx
+  vnl_sample.cxx
+  vnl_unary_function.cxx
+  vnl_transpose.cxx
+  vnl_rational.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vnl_sources)
+
+IF (WIN32)
+  IF (NOT CYGWIN)
+    INCLUDE(${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsHeaders.txt)
+  ENDIF (NOT CYGWIN)
+ENDIF(WIN32)
 
 SUBDIRS(algo)
 SUBDIRS(io)
@@ -67,6 +69,7 @@ SUBDIRS(io)
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )
 ENDIF( BUILD_EXAMPLES )
+
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )

@@ -1,0 +1,4 @@
+SOURCE_FILES( geml_sources
+  geml_matcher.h
+  geml_matcher_correlation.h
+)

@@ -1,30 +1,32 @@
-#
 # ./oxl/vgui/impl/glut/CMakeLists.txt
-#
-#   perera@cs.rpi.edu
-#
 
 ADD_LIBRARY(vgui_glut vgui_glut_sources)
 
 SOURCE_FILES(vgui_glut_sources
-vgui_glut_adaptor
-vgui_glut_tag
-vgui_glut_popup_impl
-vgui_glut_window
-vgui_glut
-vgui_glut_slab
+  vgui_glut_adaptor.cxx
+  vgui_glut_tag.cxx
+  vgui_glut_popup_impl.cxx
+  vgui_glut_window.cxx
+  vgui_glut.cxx
+  vgui_glut_slab.cxx
 )
 
 INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindX11.cmake )
 
 IF(HAS_X11)
   SOURCE_FILES(vgui_glut_sources
-    menu_hack_X11
+    menu_hack_X11.cxx
   )
 ELSE(HAS_X11)
   SOURCE_FILES(vgui_glut_sources
-    menu_hack_none
+    menu_hack_none.cxx
   )
 ENDIF(HAS_X11)
 
 AUX_SOURCE_DIRECTORY(Templates vgui_glut_sources)
+
+IF (WIN32)
+  IF (NOT CYGWIN)
+    INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/impl/glut/CMakeListsHeaders.txt)
+  ENDIF (NOT CYGWIN)
+ENDIF(WIN32)

@@ -1,35 +1,39 @@
-# oxl/xcv/CMakeLists.txt
+# ./oxl/xcv/CMakeLists.txt
 
 ADD_EXECUTABLE( xcv xcv_sources )
 
-# This is needed for xcv_geomery.cxx
+# This is needed for xcv_geometry.cxx
 IF(CMAKE_COMPILER_IS_GNUCXX)
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftemplate-depth-50")
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftemplate-depth-50")
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 SOURCE_FILES( xcv_sources
-  xcv_image_tableau
-  xcv_file
-  xcv_display
-  xcv_processing
-  xcv_geometry
-  xcv_segmentation
-  xcv_multiview
-  xcv_twoview_manager
-  xcv_threeview_manager
-  xcv_tjunction
+  xcv_image_tableau.cxx
+  xcv_file.cxx
+  xcv_display.cxx
+  xcv_processing.cxx
+  xcv_geometry.cxx
+  xcv_segmentation.cxx
+  xcv_multiview.cxx
+  xcv_twoview_manager.cxx
+  xcv_threeview_manager.cxx
+  xcv_tjunction.cxx
 
-  xcv
+  xcv.cxx
 
-  xcv_multiview_create_multiview_menu
-  xcv_picker_tableau
-  xcv_axes_tableau
-  xcv_axes_limits
+  xcv_multiview_create_multiview_menu.cxx
+  xcv_picker_tableau.cxx
+  xcv_axes_tableau.cxx
+  xcv_axes_limits.cxx
 )
 
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
-
 AUX_SOURCE_DIRECTORY( Templates xcv_sources )
+
+IF (WIN32)
+  IF (NOT CYGWIN)
+    INCLUDE(${allvxl_SOURCE_DIR}/oxl/xcv/CMakeListsHeaders.txt)
+  ENDIF (NOT CYGWIN)
+ENDIF(WIN32)
 
 INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake )
 

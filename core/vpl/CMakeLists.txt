@@ -1,14 +1,16 @@
-#
 # ./vxl/vpl/CMakeLists.txt
-#
-#   geoff.cross@crd.ge.com
-#
 
 ADD_LIBRARY(vpl vpl_sources)
 
 SOURCE_FILES( vpl_sources
-  vpl
+  vpl.cxx
 )
+
+IF (WIN32)
+  IF (NOT CYGWIN)
+    INCLUDE(${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsHeaders.txt)
+  ENDIF (NOT CYGWIN)
+ENDIF(WIN32)
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)

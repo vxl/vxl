@@ -1,38 +1,40 @@
+# ./v3p/tiff/CMakeLists.txt
+
 ADD_LIBRARY( tiff tiff_sources )
 
 SOURCE_FILES( tiff_sources
-tif_aux
-tif_close
-tif_codec
-tif_compress
-tif_dir
-tif_dirinfo
-tif_dirread
-tif_dirwrite
-tif_dumpmode
-tif_error
-tif_fax3
-tif_fax3sm
-tif_flush
-tif_getimage
-tif_jpeg
-tif_luv
-tif_lzw
-tif_next
-tif_open
-tif_packbits
-tif_pixarlog
-tif_predict
-tif_print
-tif_read
-tif_strip
-tif_swab
-tif_thunder
-tif_tile
-tif_version
-tif_warning
-tif_write
-tif_zip
+  tif_aux.c
+  tif_close.c
+  tif_codec.c
+  tif_compress.c
+  tif_dir.c
+  tif_dirinfo.c
+  tif_dirread.c
+  tif_dirwrite.c
+  tif_dumpmode.c
+  tif_error.c
+  tif_fax3.c
+  tif_fax3sm.c
+  tif_flush.c
+  tif_getimage.c
+  tif_jpeg.c
+  tif_luv.c
+  tif_lzw.c
+  tif_next.c
+  tif_open.c
+  tif_packbits.c
+  tif_pixarlog.c
+  tif_predict.c
+  tif_print.c
+  tif_read.c
+  tif_strip.c
+  tif_swab.c
+  tif_thunder.c
+  tif_tile.c
+  tif_version.c
+  tif_warning.c
+  tif_write.c
+  tif_zip.c
 )
 
 IF(WIN32)
@@ -45,4 +47,10 @@ ELSE(WIN32)
   SOURCE_FILES( tiff_sources
     tif_unix
   )
+ENDIF(WIN32)
+
+IF (WIN32)
+  IF (NOT CYGWIN)
+    INCLUDE(${allvxl_SOURCE_DIR}/v3p/tiff/CMakeListsHeaders.txt)
+  ENDIF (NOT CYGWIN)
 ENDIF(WIN32)

@@ -1,0 +1,5 @@
+SOURCE_FILES( png_sources
+  png.h
+  pngasmrd.h
+  pngconf.h
+)

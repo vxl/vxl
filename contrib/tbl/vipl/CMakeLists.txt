@@ -1,5 +1,4 @@
 # ./tbl/vipl/CMakeLists.txt
-#
 
 ADD_LIBRARY(vipl vipl_sources)
 
@@ -12,9 +11,16 @@ AUX_SOURCE_DIRECTORY(vipl_with_vbl_array_2d/Templates vipl_sources)
 AUX_SOURCE_DIRECTORY(vipl_with_vnl_matrix/Templates vipl_sources)
 AUX_SOURCE_DIRECTORY(vipl_with_section/Templates vipl_sources)
 
+IF (WIN32)
+  IF (NOT CYGWIN)
+    INCLUDE(${allvxl_SOURCE_DIR}/tbl/vipl/CMakeListsHeaders.txt)
+  ENDIF (NOT CYGWIN)
+ENDIF(WIN32)
+
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )
 ENDIF( BUILD_EXAMPLES )
+
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )

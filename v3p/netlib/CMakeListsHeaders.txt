@@ -1,0 +1,4 @@
+SOURCE_FILES( netlib_sources
+  f2c.h
+  netlib.h
+)
