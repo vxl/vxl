@@ -724,10 +724,10 @@ T cos_angle (vnl_matrix<T> const& a, vnl_matrix<T> const& b) {
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
   typedef typename vnl_numeric_traits<abs_t>::real_t abs_r;
 
-  real_t ab = inner_product(a,b);
+  T ab = inner_product(a,b);
   abs_t a_b = (abs_t)vcl_sqrt( (abs_r)vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
 
-  return T( ab / (real_t)a_b);
+  return T( ab / a_b);
 }
 
 //: Returns new matrix whose elements are the products m1[ij]*m2[ij].
