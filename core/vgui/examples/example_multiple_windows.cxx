@@ -18,7 +18,7 @@
 #include <vgui/vgui_text_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_viewer2D.h>
+#include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_menu.h>
@@ -31,7 +31,7 @@ int window_count = 0;
 
 // Global viewer2D tableau (wrapping an image_tableau) which
 // will appear in every window.
-vgui_viewer2D_sptr global_viewer_tab;
+vgui_viewer2D_tableau_sptr global_viewer_tab;
 
 // Make a test tableau which catches the vgui_DESTROY event.
 
@@ -106,7 +106,7 @@ int main (int argc, char** argv) {
   vil_image img = vil_load(argv[1]);
 
   vgui_image_tableau_new img_tab(img);
-  global_viewer_tab = vgui_viewer2D_new(img_tab);
+  global_viewer_tab = vgui_viewer2D_tableau_new(img_tab);
 
   vgui_text_tableau_new text_tab;
   text_tab->add(100,100,vul_sprintf("%i",window_count));
