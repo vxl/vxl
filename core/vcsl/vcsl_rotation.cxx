@@ -1,32 +1,6 @@
 // This is core/vcsl/vcsl_rotation.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
-//:
-// \file
-
 #include "vcsl_rotation.h"
 #include <vcl_cassert.h>
-
-//***************************************************************************
-// Status report
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-// Is `this' correctly set ?
-//---------------------------------------------------------------------------
-bool vcsl_rotation::is_valid(void) const
-{
-  return
-       ((beat_.size()==0)&&(interpolator_.size()==0)&&
-        (axis_.size()==1)&&(angle_.size()==1)
-        )
-       ||
-       ((beat_.size()==interpolator_.size()+1)
-        &&(beat_.size()==axis_.size())
-        &&(beat_.size()==angle_.size())
-       );
-}
 
 //---------------------------------------------------------------------------
 // Are `new_axis' a list of unit axes ?
@@ -43,10 +17,6 @@ bool vcsl_rotation::are_unit_axes(list_of_vectors const& new_axis) const
 
   return result;
 }
-
-//***************************************************************************
-// Transformation parameters
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Set the parameters of a static 2D rotation
@@ -71,14 +41,6 @@ void vcsl_rotation::set_static(double new_angle,
 }
 
 //---------------------------------------------------------------------------
-//: Set the angle variation along the time in radians
-//---------------------------------------------------------------------------
-void vcsl_rotation::set_angle(list_of_scalars const& new_angle)
-{
-  angle_=new_angle;
-}
-
-//---------------------------------------------------------------------------
 // Set the direction vector variation along the time
 // REQUIRE: are_unit_axes(new_axis)
 //---------------------------------------------------------------------------
@@ -89,10 +51,6 @@ void vcsl_rotation::set_axis(list_of_vectors const& new_axis)
 
   axis_=new_axis;
 }
-
-//***************************************************************************
-// Basic operations
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Image of `v' by `this'
@@ -172,7 +130,7 @@ vnl_quaternion<double> vcsl_rotation::quaternion(double time) const
 {
   vnl_quaternion<double> result;
 
-  if (beat_.size()==0) // static
+  if (this->duration()==0) // static
   {
     if (mode_2d_)
     {
