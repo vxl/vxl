@@ -54,7 +54,7 @@ unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
     else initialise_from_clusters = true;
   }
   else
-    p_partition = new vcl_vector<unsigned>(data.size(), 0);
+    p_partition = new vcl_vector<unsigned>(data.size(), 0u);
 
 
 // Calculate initial centres
@@ -215,7 +215,7 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
     else initialise_from_clusters = true;
   }
   else
-    p_partition = new vcl_vector<unsigned>(data.size(), 0);
+    p_partition = new vcl_vector<unsigned>(data.size(), 0u);
 
   const vnl_vector<double>  vcl_vector_double_dims_0(dims, 0.0);
 
