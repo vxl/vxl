@@ -1,4 +1,5 @@
 # ./vxl/vnl/algo/CMakeListsLink.txt
+INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
 
 LINK_LIBRARIES( vnl_algo )
 
