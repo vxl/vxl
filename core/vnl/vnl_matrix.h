@@ -297,7 +297,7 @@ class vnl_matrix
   //: Set the elements of the i'th column to value
   void set_column(unsigned i, T value );
 
-  //: Set j-th colum to v
+  //: Set j-th column to v
   void set_column(unsigned j, vnl_vector<T> const& v);
 
   //: Set columns to those in M, starting at starting_column
@@ -385,10 +385,10 @@ class vnl_matrix
 
   abs_t operator_inf_norm() const;
 
-  //: Return frobenius norm of matrix (sqrt of sum of squares of its elements)
+  //: Return Frobenius norm of matrix (sqrt of sum of squares of its elements)
   abs_t frobenius_norm() const { return vnl_c_vector<T>::two_norm(begin(), size()); }
 
-  //: Return frobenius norm of matrix (sqrt of sum of squares of its elements)
+  //: Return Frobenius norm of matrix (sqrt of sum of squares of its elements)
   abs_t fro_norm() const { return frobenius_norm(); }
 
   //: Return RMS of all elements
@@ -434,7 +434,7 @@ class vnl_matrix
     assert_size_internal(rows, cols);
 #endif
   }
-  //: abort if matrix containins any INFs or NANs
+  //: abort if matrix contains any INFs or NANs.
   // This function does or tests nothing if NDEBUG is defined
   void assert_finite() const
   {
