@@ -10,6 +10,7 @@ SET(rrel_sources
  rrel_tukey_obj.cxx             rrel_tukey_obj.h
  rrel_cauchy_obj.cxx            rrel_cauchy_obj.h
  rrel_trunc_quad_obj.cxx        rrel_trunc_quad_obj.h
+ rrel_kernel_density_obj.cxx    rrel_kernel_density_obj.h
 
  rrel_misc.cxx                  rrel_misc.h
  rrel_muse_table.cxx            rrel_muse_table.h
