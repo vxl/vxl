@@ -5,8 +5,7 @@
 // \file
 // \author Ian Scott.
 
-
-
+#include <vil/vil_byte.h>
 
 //: Describes the type of the concrete data.
 enum vil2_pixel_format {
@@ -78,5 +77,7 @@ vcl_ostream & operator << (vcl_ostream &os, vil2_pixel_format f)
     case VIL2_PIXEL_FORMAT_RGB_SIGNED_CHAR:    os << "VIL2_PIXEL_FORMAT=vil_rgb<signed char>";
     default:  os << "VIL2_PIXEL_FORMAT_INVALID";
   }
+  return os;
 }
+
 #endif // vil2_pixel_format
