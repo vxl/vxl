@@ -143,7 +143,7 @@ double HomgOperator2D::distance(const HomgLineSeg2D& ls, const HomgLineSeg2D& ll
   double dist2 = ls.get_point2().get_x()/ls.get_point2().get_w() * lll.get_x() +
     ls.get_point2().get_y()/ls.get_point2().get_w() * lll.get_y() +  lll.get_w();
 
-  //  vcl_cout << "dist 1 is " <<dist1 << " dist 2 is " <<dist2 << vcl_endl;
+  //  vcl_cerr << "dist 1 is " <<dist1 << " dist 2 is " <<dist2 << vcl_endl;
 
   double dist = (vcl_fabs(dist1) + vcl_fabs(dist2))/2;
 
@@ -395,7 +395,7 @@ static vnl_vector<double> most_orthogonal_vector_svd(const vcl_vector<HomgLine2D
     D.set_row(i, lines[i].get_vector());
 
   vnl_svd<double> svd(D);
-  vcl_cout << "[movrank " << svd.W() << "]";
+  vcl_cerr << "[movrank " << svd.W() << "]";
 
   return svd.nullvector();
 }

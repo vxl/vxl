@@ -103,7 +103,7 @@ SimilarityMetric::~SimilarityMetric()
 //: One line printout
 void SimilarityMetric::print(char* msg) const
 {
-  vcl_cout<<msg<<": SimilarityMetric ("<<centre_x_<<","<<centre_y_<<", "<<inv_scale_<<")\n";
+  vcl_cerr<<msg<<": SimilarityMetric ("<<centre_x_<<","<<centre_y_<<", "<<inv_scale_<<")\n";
 }
 
 //: One line printout

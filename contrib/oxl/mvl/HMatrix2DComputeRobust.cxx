@@ -74,7 +74,7 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
 //  HMatrix2D* H_temp = new HMatrix2D();
 
     if (!Computor.compute(four1_homg, four2_homg, &Hs))
-      vcl_cout << "HMatrix2DCompute4Point - failure!\n";
+      vcl_cerr << "HMatrix2DCompute4Point - failure!\n";
 
     // De-condition H
 //    H_temp = new HMatrix2D(metric.homg_to_image_H(*H_temp_homg, metric, metric));
@@ -93,14 +93,14 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
       inlier_list = list;
       residualsH = residuals;
       count = temp_count;
-      vcl_cout << "Minimum so far... : " << Ds << vcl_endl;
-      vcl_cout << "Inliers : " << count << vcl_endl;
-      vcl_cout << "HMatrix2D : " << Hs.get_matrix() << vcl_endl;
+      vcl_cerr << "Minimum so far... : " << Ds << vcl_endl;
+      vcl_cerr << "Inliers : " << count << vcl_endl;
+      vcl_cerr << "HMatrix2D : " << Hs.get_matrix() << vcl_endl;
     }
   }
-  vcl_cout << "Final Figures...\n";
-  vcl_cout << "Ds : " << Ds << vcl_endl;
-  vcl_cout << "HMatrix2D : " << Hs << vcl_endl;
+  vcl_cerr << "Final Figures...\n";
+  vcl_cerr << "Ds : " << Ds << vcl_endl;
+  vcl_cerr << "HMatrix2D : " << Hs << vcl_endl;
   H->set(Hs.get_matrix());
 
   int inlier_count = count;
@@ -110,9 +110,9 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
   inlier_count = matches.compute_match_count();
   inliers_ = inlier_list;
   residuals_ = residualsH;
-  vcl_cout << "Residuals Variance : " << std_in << vcl_endl;
-  vcl_cout << "Inlier -\n";
-  vcl_cout << "         " << inlier_count << vcl_endl;
+  vcl_cerr << "Residuals Variance : " << std_in << vcl_endl;
+  vcl_cerr << "Inlier -\n";
+  vcl_cerr << "         " << inlier_count << vcl_endl;
 
   return true;
 }

@@ -61,7 +61,7 @@ FMPlanarNonLinFun::FMPlanarNonLinFun(const ImageMetric* image_metric1,
 bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
 {
   // fm_fmatrix_nagmin
-  vcl_cout << "FMPlanarNonLinFun: matches = "<<_data_size<<", using "<<FMPlanarNonLinFun_nparams<<" parameters \n";
+  vcl_cerr << "FMPlanarNonLinFun: matches = "<<_data_size<<", using "<<FMPlanarNonLinFun_nparams<<" parameters \n";
 
   /* transform F to well-conditioned frame. */
   const vnl_matrix<double>& post = _denorm_matrix_inv;
@@ -76,7 +76,7 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
   if (!lm.minimize(f_params))
        return false;
 
-  vcl_cout<<"FMPlanarNonLinFun: minimisation start error "
+  vcl_cerr<<"FMPlanarNonLinFun: minimisation start error "
       << lm.get_start_error() / vcl_sqrt(double(_data_size))
       <<" end error "
       << lm.get_end_error() / vcl_sqrt(double(_data_size))
@@ -86,7 +86,7 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
 
   F->set(_denorm_matrix.transpose() * norm_F.get_matrix() * _denorm_matrix);
 
-  vcl_cout << "fm_fmatrix_nagmin: accepted " << _data_size << '/' << _data_size
+  vcl_cerr << "fm_fmatrix_nagmin: accepted " << _data_size << '/' << _data_size
        << " rms point-epipolar error " << lm.get_end_error() / vcl_sqrt(double(_data_size))
        << vcl_endl;;
 
@@ -114,7 +114,7 @@ void FMPlanarNonLinFun::f(const vnl_vector<double>& f_params, vnl_vector<double>
 
           fx[i] = vcl_sqrt((r1 + r2) / 2.0);
      }
-     // vcl_cout << "Err = " << vcl_sqrt (distance_squared / (_data_size * 2)) << vcl_endl;
+     // vcl_cerr << "Err = " << vcl_sqrt (distance_squared / (_data_size * 2)) << vcl_endl;
 
 //   return vcl_sqrt (distance_squared / (_data_size * 2)); // void function cannot return
 }

@@ -35,7 +35,7 @@ bool FMPlanarComputeNonLinear::compute_planar(vcl_vector<HomgPoint2D>& points1,
                                               vcl_vector<HomgPoint2D>& points2,
                                               FMatrixPlanar* F)
 {
-  vcl_cout << "FMPlanarComputeNonLinear: Fitting planar-motion F matrix [e1]_x [l]_x [e2]_x\n";
+  vcl_cerr << "FMPlanarComputeNonLinear: Fitting planar-motion F matrix [e1]_x [l]_x [e2]_x\n";
   FMPlanarNonLinFun computor(_image_metric1, _image_metric2, _outlier_distance_squared, points1, points2);
   return computor.compute(F);
 }

@@ -58,7 +58,7 @@ void TripleMatchSet::set_from_pairwise_matches(const PairMatchSet& matches12,
     if (matchp(i3))
       add_match(p12.get_i1(), p12.get_i2(), i3);
   }
-  vcl_cout << "TripleMatchSet: " << count() << " triplet matches." << vcl_endl;
+  vcl_cerr << "TripleMatchSet: " << count() << " triplet matches." << vcl_endl;
 }
 
 //: Write as three ascii columns.
@@ -264,7 +264,7 @@ void TripleMatchSet::clear_nontriplets()
         accept[i2] = true;
     }
   }
-  vcl_cout << "TripleMatchSet::clear_nontriplets() -- Cleared i2 " << cleared_count << vcl_endl;
+  vcl_cerr << "TripleMatchSet::clear_nontriplets() -- Cleared i2 " << cleared_count << vcl_endl;
 
   for (int i2 = 0; i2 < _match23->size(); i2++)
     if (!accept[i2]) {
@@ -272,7 +272,7 @@ void TripleMatchSet::clear_nontriplets()
       ++cleared_count;
     }
 
-  vcl_cout << "TripleMatchSet::clear_nontriplets() -- Cleared i3 " << cleared_count << vcl_endl;
+  vcl_cerr << "TripleMatchSet::clear_nontriplets() -- Cleared i3 " << cleared_count << vcl_endl;
 }
 
 bool TripleMatchSet::delete_match(int i1, int i2, int i3)

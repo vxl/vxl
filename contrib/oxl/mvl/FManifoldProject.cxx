@@ -220,11 +220,11 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
       if (0 && EPIDIST > 1e-12) {
         // This can happen in reasonable circumstances -- notably when one
         // epipole is at infinity.
-        vcl_cout << "FManifoldProject: A root has epidist = " << vcl_sqrt(EPIDIST) << vcl_endl;
-        vcl_cout << "  coeffs: " << _coeffs << vcl_endl;
-        vcl_cout << "  root = " << lambda << vcl_endl;
-        vcl_cout << "  poly residual = " << poly.evaluate(lambda) << vcl_endl;
-        vcl_cout << "  rational poly residual = " << RATPOLY_RESIDUAL << vcl_endl;
+        vcl_cerr << "FManifoldProject: A root has epidist = " << vcl_sqrt(EPIDIST) << vcl_endl;
+        vcl_cerr << "  coeffs: " << _coeffs << vcl_endl;
+        vcl_cerr << "  root = " << lambda << vcl_endl;
+        vcl_cerr << "  poly residual = " << poly.evaluate(lambda) << vcl_endl;
+        vcl_cerr << "  rational poly residual = " << RATPOLY_RESIDUAL << vcl_endl;
         ++ errs;
         break;
       }

@@ -34,11 +34,11 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
   double col_div = col_size/buckets;
   int no_buckets = buckets*buckets;
   if (buckets < 1) {
-    vcl_cout << "Warning Monte Carlo sampling will not work." << vcl_endl
+    vcl_cerr << "Warning Monte Carlo sampling will not work." << vcl_endl
              << "Not enough buckets: need 1, have " << buckets << "." << vcl_endl;
   }
   if (index.size() < (unsigned int)samples) {
-    vcl_cout << "Warning Monte Carlo sampling will not work." << vcl_endl
+    vcl_cerr << "Warning Monte Carlo sampling will not work." << vcl_endl
              << "Not enough points to choose from: need " << samples
              << ", have " << index.size() << "." << vcl_endl;
   }
@@ -151,7 +151,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
           i++;
         } else {
           counter++;
-          //vcl_cout << "Failed" << vcl_endl;
+          //vcl_cerr << "Failed" << vcl_endl;
         }
       }
     }
@@ -197,20 +197,20 @@ double Sampsons_MLE(HomgPoint2D x1, HomgPoint2D x2, FMatrix *F)
   double rX, rY, rX_dash, rY_dash, GRADr, r, dist;
   vnl_matrix<double> temp(3, 3);
   temp = (vnl_matrix<double>)F->get_matrix();
-  vcl_cout << x2.get_x() << vcl_endl;
+  vcl_cerr << x2.get_x() << vcl_endl;
   rX = temp.get(0, 0)*x2.get_x() + temp.get(1, 0)*x2.get_y() + temp.get(2, 0);
   rY = F->get(0, 1)*x2.get_x() + F->get(1, 1)*x2.get_y() + F->get(2, 1);
   rX_dash = F->get(0, 0)*x1.get_x() + F->get(0, 1)*x1.get_y() + F->get(0, 2);
   rY_dash = F->get(1, 0)*x1.get_x() + F->get(1, 1)*x1.get_y() + F->get(1, 2);
-  vcl_cout << "Points : " << rX << " " << rY << " " << rX_dash << " " << rY_dash << vcl_endl;
+  vcl_cerr << "Points : " << rX << " " << rY << " " << rX_dash << " " << rY_dash << vcl_endl;
   GRADr = vnl_math_sqr(rX*rX + rY*rY + rX_dash*rX_dash + rY_dash*rY_dash);
-  vcl_cout << "1 : " << " " << GRADr << vcl_endl;
+  vcl_cerr << "1 : " << " " << GRADr << vcl_endl;
   // This is an annoying interface
   HomgPoint2D *x1p = new HomgPoint2D(x1.get_x(), x1.get_y(), 1.0);
   HomgPoint2D *x2p = new HomgPoint2D(x2.get_x(), x2.get_y(), 1.0);
-  vcl_cout << "2" << vcl_endl;
+  vcl_cerr << "2" << vcl_endl;
   r = F->image1_epipolar_distance_squared(x1p, x2p);
-  vcl_cout << "r " << r << vcl_endl;
+  vcl_cerr << "r " << r << vcl_endl;
   dist = r/GRADr;
   return dist;
 }

@@ -224,14 +224,14 @@ main()
   mm.add_match(3,5);
   mm.add_match(3,2);
 
-  vcl_cout << "All matches, sorted:\n";
+  vcl_cerr << "All matches, sorted:\n";
   for (PairMatchMulti::match_iterator p(mm); !p.done(); p.next())
-    vcl_cout << p.get_i1() << " " << p.get_i2() << vcl_endl;
+    vcl_cerr << p.get_i1() << " " << p.get_i2() << vcl_endl;
 
   for (int target = 1; target <= 7; ++target) {
-    vcl_cout << "Matches for " << target << vcl_endl;
+    vcl_cerr << "Matches for " << target << vcl_endl;
     for (PairMatchMulti::match_iterator p = mm.get_match_12(target); !p.done(); p.next())
-      vcl_cout << p.get_i1() << " " << p.get_i2() << vcl_endl;
+      vcl_cerr << p.get_i1() << " " << p.get_i2() << vcl_endl;
   }
 }
 #endif

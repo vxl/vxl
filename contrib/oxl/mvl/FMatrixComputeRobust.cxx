@@ -76,7 +76,7 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
     // Compute F
     vcl_vector<FMatrix*> F_temp;
     if (!Computor.compute(seven1, seven2, F_temp))
-      vcl_cout << "Seven point failure\n";
+      vcl_cerr << "Seven point failure\n";
 
     for (unsigned int k = 0; k < F_temp.size(); k++) {
       int temp_count = 0;
@@ -93,8 +93,8 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
       }
     }
   }
-  vcl_cout << "Final Figures...\n";
-  vcl_cout << "Ds : " << Ds << vcl_endl;
+  vcl_cerr << "Final Figures...\n";
+  vcl_cerr << "Ds : " << Ds << vcl_endl;
   vnl_matrix<double> sample = Fs.get_matrix();
   HomgPoint2D one, two;
   Fs.get_epipoles(&one, &two);
@@ -102,12 +102,12 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
   vnl_double_2 t = two.get_double2();
   HomgPoint2D c1(o[0], o[1], 1.0);
   HomgPoint2D c2(t[0], t[1], 1.0);
-  vcl_cout << "Epipole 1 : " << c1 << " Epipole 2 : " << c2 << vcl_endl;
-  vcl_cout << vcl_endl;
+  vcl_cerr << "Epipole 1 : " << c1 << " Epipole 2 : " << c2 << vcl_endl;
+  vcl_cerr << vcl_endl;
   epipole1_ = c1;
   epipole2_ = c2;
   sample /= sample.get(2, 2);
-  vcl_cout << "FMatrix : " << sample << vcl_endl;
+  vcl_cerr << "FMatrix : " << sample << vcl_endl;
   F->set(Fs.get_matrix());
 
   int inlier_count = count;
@@ -126,15 +126,15 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
 #if 0
   for (int z=0, k=0; z < inlier_list.size(); z++)
     if (inlier_list[z] == true) {
-      vcl_cout << "residualsF[" << z << "] : " << residualsF[z] << vcl_endl;
-      vcl_cout << k++ << vcl_endl;
+      vcl_cerr << "residualsF[" << z << "] : " << residualsF[z] << vcl_endl;
+      vcl_cerr << k++ << vcl_endl;
     }
 #endif
   inliers_ = inlier_list;
   residuals_ = residualsF;
-  vcl_cout << "Inlier -\n";
-  vcl_cout << "         std : " << std_in << vcl_endl;
-  vcl_cout << "         " << inlier_count << "/" << data_size_ << vcl_endl;
+  vcl_cerr << "Inlier -\n";
+  vcl_cerr << "         std : " << std_in << vcl_endl;
+  vcl_cerr << "         " << inlier_count << "/" << data_size_ << vcl_endl;
   return true;
 }
 
@@ -145,7 +145,7 @@ bool FMatrixComputeRobust::compute (vcl_vector<HomgPoint2D>& p1,
                                     vcl_vector<HomgPoint2D>& p2,
                                     FMatrix* F) {
   if (p1.size() != p2.size())
-    vcl_cout << "Point vectors are not of equal length\n";
+    vcl_cerr << "Point vectors are not of equal length\n";
   int count = p1.size();
   HomgInterestPointSet const* points1 = new HomgInterestPointSet(p1,0);
   HomgInterestPointSet const* points2 = new HomgInterestPointSet(p2,0);

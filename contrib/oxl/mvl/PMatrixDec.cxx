@@ -18,7 +18,7 @@ PMatrixDec::PMatrixDec(const vnl_matrix<double>& p_matrix)
   : PMatrix(p_matrix), _j_matrix(3,3), _d_matrix(4,4)
 {
   if (!((p_matrix.rows() == 3) && (p_matrix.columns() == 4)))
-    vcl_cout << "PMatrixDec WARNING: Incorrect size of matrix" << vcl_endl;
+    vcl_cerr << "PMatrixDec WARNING: Incorrect size of matrix" << vcl_endl;
   Init();
 }
 
@@ -50,7 +50,7 @@ void PMatrixDec::Init()
     a_u = a_u-u0*u0;
     a_v = a_v-v0*v0;
     if ((a_u <= 0.0) || (a_v <= 0.0))
-      vcl_cout << "PMatrixDec WARNING: Incorrect projection matrix" << vcl_endl;
+      vcl_cerr << "PMatrixDec WARNING: Incorrect projection matrix" << vcl_endl;
     else
     {
       a_u = vcl_sqrt(a_u);
@@ -116,21 +116,21 @@ void PMatrixDec::Test()
   matrix1(0,2)= 552.506; matrix1(1,2)= 194.806; matrix1(2,2)= 0.960472;
   matrix1(0,3)= -596.353;matrix1(1,3)= 92.4159; matrix1(2,3)= 0.228363;
 
-  vcl_cout << "Correct Matrix: " << vcl_endl;
-  vcl_cout << matrix1 << vcl_endl;
+  vcl_cerr << "Correct Matrix: " << vcl_endl;
+  vcl_cerr << matrix1 << vcl_endl;
   PMatrixDec pmat1(matrix1);
-  vcl_cout << pmat1;
+  vcl_cerr << pmat1;
   vnl_matrix<double> J(3,4);
   J.update(pmat1.IntrinsicParameters(), 0, 0); // Copy columns 0,1 and 2
   J(0,3) = 0.0; // Last column = 0
   J(1,3) = 0.0;
   J(2,3) = 0.0;
-  vcl_cout << "P = [J O_3]*D = [" << vcl_endl
+  vcl_cerr << "P = [J O_3]*D = [" << vcl_endl
        << J * pmat1.ExtrinsicParameters() << "]" << vcl_endl;
-  vcl_cout << "AlphaU=" << pmat1.GetAlphaU() << vcl_endl;
-  vcl_cout << "AlphaV=" << pmat1.GetAlphaV() << vcl_endl;
-  vcl_cout << "U0=" << pmat1.GetU0() << vcl_endl;
-  vcl_cout << "V0=" << pmat1.GetV0() << vcl_endl;
+  vcl_cerr << "AlphaU=" << pmat1.GetAlphaU() << vcl_endl;
+  vcl_cerr << "AlphaV=" << pmat1.GetAlphaV() << vcl_endl;
+  vcl_cerr << "U0=" << pmat1.GetU0() << vcl_endl;
+  vcl_cerr << "V0=" << pmat1.GetV0() << vcl_endl;
 
   vnl_matrix<double> matrix2(4, 4);
   int i,j;
@@ -138,18 +138,18 @@ void PMatrixDec::Test()
     for (i=0; i<4; i++)
       matrix2(i,j)= 1.0;
 
-  vcl_cout << "Another Incorrect Matrix: " << vcl_endl;
-  vcl_cout << matrix2 << vcl_endl;
+  vcl_cerr << "Another Incorrect Matrix: " << vcl_endl;
+  vcl_cerr << matrix2 << vcl_endl;
   PMatrixDec pmat2(matrix2);
-  vcl_cout << pmat2;
+  vcl_cerr << pmat2;
 
   vnl_matrix<double> matrix3(2, 2);
   for (j=0; j<2; j++)
     for (i=0; i<2; i++)
       matrix3(i,j)= 2.0;
 
-  vcl_cout << "Incorrect Matrix: " << vcl_endl;
-  vcl_cout << matrix3 << vcl_endl;
+  vcl_cerr << "Incorrect Matrix: " << vcl_endl;
+  vcl_cerr << matrix3 << vcl_endl;
   PMatrixDec pmat3(matrix3);
-  vcl_cout << pmat3;
+  vcl_cerr << pmat3;
 }

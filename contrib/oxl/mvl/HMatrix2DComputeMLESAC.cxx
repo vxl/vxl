@@ -35,8 +35,8 @@ double HMatrix2DComputeMLESAC::calculate_residual(HomgPoint2D& one, HomgPoint2D&
   double const* t = mat.data_block();
   vnl_double_2 p1 = one.get_double2();
   vnl_double_2 p2 = two.get_double2();
-  vcl_cout << H->transform_to_plane2(one).get_double2() << " : " << two.get_double2() << " : " << r[0] << vcl_endl;
-  vcl_cout << H->transform_to_plane1(two).get_double2() << " : " << one.get_double2() << " : " << r[1] << vcl_endl;
+  vcl_cerr << H->transform_to_plane2(one).get_double2() << " : " << two.get_double2() << " : " << r[0] << vcl_endl;
+  vcl_cerr << H->transform_to_plane1(two).get_double2() << " : " << one.get_double2() << " : " << r[1] << vcl_endl;
   if(r[0] < 100.0 && r[1] < 100.0) {
     double t11 = t[0] - t[6]*p2[0];
     double t12 = t[1] - t[7]*p2[0];
@@ -66,6 +66,6 @@ double HMatrix2DComputeMLESAC::calculate_residual(HomgPoint2D& one, HomgPoint2D&
   } else
     return 1e+6;
 #endif
-//vcl_cout << "r[0] : " << r[0] << " r[1] : " << r[1] << vcl_endl;
+//vcl_cerr << "r[0] : " << r[0] << " r[1] : " << r[1] << vcl_endl;
   return r[0] + r[1];
 }

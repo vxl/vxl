@@ -39,7 +39,7 @@ bool RawPMatrixStore::Load(int image_index)
   pmatrix_[image_index]= new PMatrix;
   pmatrix_[image_index]->read_ascii(fin);
 
-  vcl_cout << "Read PMatrix [" << filename << "]" << vcl_endl;
+  vcl_cerr << "Read PMatrix [" << filename << "]" << vcl_endl;
 
   return true;
 }
