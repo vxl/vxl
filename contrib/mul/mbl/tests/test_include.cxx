@@ -16,6 +16,7 @@
 #include <mbl/mbl_gamma.h>
 #include <mbl/mbl_histogram.h>
 #include <mbl/mbl_index_sort.h>
+#include <mbl/mbl_jarque_bera.h>
 #include <mbl/mbl_k_means.h>
 #include <mbl/mbl_lda.h>
 #include <mbl/mbl_lru_cache.h>
