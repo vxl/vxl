@@ -1,32 +1,39 @@
-#include <bmvl/bcal/bcam/ZhangCameraNode.h>
-#include <bmvl/bcal/bcam/ZhangLinearCalibrate.h>
-#include <bmvl/bcal/bcam/CalibratePlane.h>
-#include <bmvl/bcal/bcam/CameraGraph.h>
-#include <vcsl/vcsl_matrix.h>
+#include <bmvl/bcal/bcam/zhang_camera_node.h>
+#include <bmvl/bcal/bcam/zhang_linear_calibrate.h>
+#include <bmvl/bcal/bcam/calibrate_plane.h>
+#include <bmvl/bcal/bcam/camera_graph.h>
+#include <bmvl/bcal/bcam/euclidean_transformation.h> 
 
 int main()
 {
-  CameraGraph cg;
 
-  // add a calibration object into the graph
-  vcsl_spatial_sptr caliPlane = new CalibratePlane;
-  ((CalibratePlane*)caliPlane.ptr())->readData("Model.txt");
-  cg.addSource(caliPlane);
+  camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation> cg;
+  
+  // initialize the template plane
+  cg.getSource()->readData("Model.txt");
 
-  // add a camera into a graph
-  int nViews = 7, iCamID = 0;
-  vcsl_spatial_sptr cam = new ZhangCameraNode(iCamID, nViews);
-  vcsl_spatial_transformation_sptr trans = new vcsl_matrix;
-  ((ZhangCameraNode*)cam.ptr())->readData("data1.txt" , 0);
-  ((ZhangCameraNode*)cam.ptr())->readData("data2.txt" , 1);
-  ((ZhangCameraNode*)cam.ptr())->readData("data3.txt" , 2);
-  ((ZhangCameraNode*)cam.ptr())->readData("data4.txt" , 3);
-  ((ZhangCameraNode*)cam.ptr())->readData("data5.txt" , 4);
+  // add a camera with 5 views into a graph
+  int camID = cg.addVertex();
 
-  cg.addVertex(cam, trans);
+  // create time beats. 
+  vcl_vector<double> t_beats(5);
+  t_beats[0] = 0;
+  t_beats[1] = 1;
+  t_beats[2] = 2;
+  t_beats[3] = 3;
+  t_beats[4] = 4;
+  cg.get_vertex(camID)->set_beat(t_beats);
+
+  cg.get_vertex(camID)->readData("data1.txt" , 0);
+  cg.get_vertex(camID)->readData("data2.txt" , 1);
+  cg.get_vertex(camID)->readData("data3.txt" , 2);
+  cg.get_vertex(camID)->readData("data4.txt" , 3);
+  cg.get_vertex(camID)->readData("data5.txt" , 4);
 
   // do the calibration
-  ZhangLinearCalibrate lc;
+  zhang_linear_calibrate lc;
+  lc.setCameraGraph(&cg);
+  lc.calibrate();
 
   return 0;
 }
