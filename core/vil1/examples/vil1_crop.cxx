@@ -2,13 +2,12 @@
 
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_cstring.h>
+#include <vcl/vcl_cstdlib.h> // for atoi()
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vil/vil_crop.h>
-
-#include <stdlib.h> // atoi
 
 int main(int argc, char ** argv)
 {
