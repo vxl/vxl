@@ -1,10 +1,10 @@
 This directory is for compilers that are ISO. Thus
 if your compiler is compliant you can do
 
-(in vcl/vcl_blah.h)
+(in vcl_blah.h)
 
 #ifdef VCL_MY_COMPILER
-# include <vcl/iso/vcl_blah.h>
+# include "iso/vcl_blah.h"
 #elif ... other compilers
 ...
 #endif

@@ -1,9 +1,9 @@
-#include <vcl/vcl_compiler.h>
+#include <vcl_compiler.h>
 #if !VCL_USE_NATIVE_STL
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_string.h>
-#include <vcl/vcl_string.txx>
+#include <vcl_iostream.h>
+#include <vcl_string.h>
+#include <vcl_string.txx>
 
 // We only want the instances to see this
 #ifdef __SUNPRO_CC

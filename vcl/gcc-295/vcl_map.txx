@@ -1,7 +1,7 @@
 #ifndef vcl_gcc_295_map_txx_
 #define vcl_gcc_295_map_txx_
 
-#include <vcl/vcl_map.h>
+#include <vcl_map.h>
 
 // The rb tree used by the map<> class appears to be
 //   template <class _Key,

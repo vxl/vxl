@@ -56,18 +56,18 @@
 // vcl_hash_set, vcl_hash_map, vcl_hash_multiset, and vcl_hash_multimap.
 
 
-#include <vcl/vcl_cstdlib.h>
+#include <vcl_cstdlib.h>
 
-#include <vcl/vcl_iostream.h>
-//#include <vcl/vcl_alloc.h>
+#include <vcl_iostream.h>
+//#include <vcl_alloc.h>
 #include "vcl_alloc.h"
-#include <vcl/vcl_algorithm.h>
-#include <vcl/vcl_iterator.h>
-#include <vcl/vcl_functional.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_algorithm.h>
+#include <vcl_iterator.h>
+#include <vcl_functional.h>
+#include <vcl_vector.h>
 #include "vcl_pair.h"
-#include <vcl/vcl_exception.h>
-#include <vcl/vcl_memory.h>
+#include <vcl_exception.h>
+#include <vcl_memory.h>
 
 #if defined ( __STL_USE_ABBREVS )
 # define vcl_hashtable_iterator         vcl_hTIt

@@ -1,8 +1,7 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vcl/vcl_compiler.h>
-#include <vcl/vcl_functional.h>
+#include <vcl_functional.h>
 
 // --- Unary templates ---
 // Templates with one type mentioned, no requirements on type

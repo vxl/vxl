@@ -1,9 +1,9 @@
 #ifndef vcl_cmath_h_
 #define vcl_cmath_h_
 // .NAME vcl_cmath
-// .INCLUDE vcl/vcl_cmath.h
+// .INCLUDE vcl_cmath.h
 // .FILE vcl_cmath.cxx
-
+// .SECTION Description
 // [26.5.6] In addition to the signatures from the C header
 // <math.h>, the C++ header <cmath> adds certain overloaded
 // forms of the usual double-precision functions.
@@ -34,18 +34,18 @@
 //  T tan(T );
 //  T tanh(T );
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 
 #if defined(VCL_GCC)
-# include <vcl/gcc/vcl_cmath.h>
+# include "gcc/vcl_cmath.h"
 #elif defined(VCL_SGI_CC)
-# include <vcl/sgi/vcl_cmath.h>
+# include "sgi/vcl_cmath.h"
 #elif defined(VCL_VC)
-# include <vcl/win32/vcl_cmath.h>
+# include "win32/vcl_cmath.h"
 #elif defined(VCL_SUNPRO_CC)
-# include <vcl/sunpro/vcl_cmath.h>
+# include "sunpro/vcl_cmath.h"
 #else
-# include <vcl/iso/vcl_cmath.h>
+# include "iso/vcl_cmath.h"
 #endif
 
 #endif // vcl_cmath_h_

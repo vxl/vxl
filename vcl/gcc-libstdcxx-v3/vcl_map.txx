@@ -1,7 +1,7 @@
 #ifndef vcl_gcc_libstdcxx_v3_map_txx_
 #define vcl_gcc_libstdcxx_v3_map_txx_
 
-#include <vcl/vcl_map.h>
+#include <vcl_map.h>
 
 // Macro to instantiate a vcl_map.
 #undef VCL_MAP_INSTANTIATE

@@ -1,7 +1,7 @@
 #ifndef vcl_egcs_map_txx_
 #define vcl_egcs_map_txx_
 
-#include <vcl/vcl_map.h>
+#include <vcl_map.h>
 
 // Macro to instantiate the underlying rb_tree and its member templates.
 //template class rb_tree<Key, pair<Key const, T>, select1st<pair<Key const, T> >, Comp, __default_alloc_template<true, 0> >

@@ -3,7 +3,6 @@ include ${IUEROOT}/config/top-params.mk
 #######################################
 
 USES += vxl
-IMMEDIATE_LIBS := -lvcl
 
 LIBRARY := vbl
 VERSION := 1.0

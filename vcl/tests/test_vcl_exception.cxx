@@ -2,9 +2,9 @@
 #define abort my_abort
 void my_abort();
 
-#include <vcl/vcl_exception.h>
+#include <vcl_exception.h>
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 void my_abort()
 {

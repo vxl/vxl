@@ -9,7 +9,7 @@
 // in future standards.
 
 // this is to get the vcl_ios_* macros.
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 // include compiler header.
 #if defined(VCL_GCC_WITH_LIBSTDCXX_V2) || defined(VCL_SGI_CC_720)
@@ -20,7 +20,7 @@
 
 #elif defined(__GNUC__) && (__GNUC__ <= 2) && (__GNUC_MINOR__ >= 97)
 # include <sstream>
-# include <vcl/vcl_string.h>
+# include <vcl_string.h>
 struct vcl_istrstream : std::stringstream
 {
   typedef std::stringstream base;
@@ -34,7 +34,7 @@ struct vcl_ostrstream : std::stringstream
 };
 
 #else // -------------------- ISO
-# include <vcl/iso/vcl_strstream.h>
+# include "iso/vcl_strstream.h"
 #endif
 
 #endif // vcl_strstream_h_

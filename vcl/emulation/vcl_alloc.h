@@ -29,7 +29,7 @@
 #include "vcl_stlconf.h"
 
 // .NAME vcl_alloc
-// .INCLUDE vcl/emulation/vcl_alloc.h
+// .INCLUDE emulation/vcl_alloc.h
 // .FILE emulation/vcl_alloc.cxx
 //
 // .SECTION Description
@@ -47,11 +47,11 @@
 #   define __ALLOC vcl_alloc
 #endif
 
-#include <vcl/vcl_cstddef.h>
-#include <vcl/vcl_cstdlib.h>
-//#include <vcl/emulation/vcl_string.h>
-#include <vcl/vcl_cstring.h>
-#include <vcl/vcl_cassert.h>
+#include <vcl_cstddef.h>
+#include <vcl_cstdlib.h>
+//#include "vcl_string.h"
+#include <vcl_cstring.h>
+#include <vcl_cassert.h>
 
 #ifndef __RESTRICT
 #  define __RESTRICT
@@ -62,11 +62,11 @@
 #  define _NOTHREADS
 #endif
 
-#include <vcl/emulation/vcl_bool.h>
+#include "vcl_bool.h"
 
 #if !defined ( __STL_NO_EXCEPTIONS )
 # if defined (__STL_BAD_ALLOC_DEFINED)
-#   include <vcl/vcl_new.h>
+#   include <vcl_new.h>
 # else
     struct bad_alloc {};
 # endif
@@ -642,7 +642,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
 
 #   ifdef __STL_SGI_THREADS
 #    include <mutex.h>
-#    include <vcl/vcl_ctime.h>
+#    include <vcl_ctime.h>
     // Somewhat generic lock implementations.  We need only test-and-set
     // and some way to sleep.  These should work with both SGI pthreads
     // and sproc threads.  They may be useful on other systems.
@@ -810,7 +810,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
 # endif /* ! __STL_USE_NEWALLOC */
 
 # if defined ( __STL_USE_DEFALLOC )
-#  include <vcl/emulation/vcl_defalloc.h>
+#  include "vcl_defalloc.h"
 # endif
 
 #endif // vcl_emulation_alloc_h

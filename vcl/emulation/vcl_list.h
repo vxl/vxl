@@ -52,11 +52,11 @@
 #ifndef vcl_emulation_list_h
 #define vcl_emulation_list_h
 
-#include <vcl/vcl_new.h>
-#include <vcl/vcl_cstddef.h>
-#include <vcl/emulation/vcl_algobase.h>
-#include <vcl/emulation/vcl_iterator.h>
-#include <vcl/emulation/vcl_alloc.h>
+#include <vcl_new.h>
+#include <vcl_cstddef.h>
+#include "vcl_algobase.h"
+#include "vcl_iterator.h"
+#include "vcl_alloc.h"
 
 # if defined ( __STL_USE_ABBREVS )
 #  define __list_iterator         vcl_LIt
@@ -575,7 +575,7 @@ void vcl_list<T, Alloc>::sort() {
     while (!empty()) {
 	carry.splice(carry.begin(), *this, begin());
 	int i = 0;
-	while(i < fill && !counter[i].empty()) {
+	while (i < fill && !counter[i].empty()) {
 	    counter[i].merge(carry);
 	    carry.swap(counter[i++]);
 	}
@@ -646,9 +646,5 @@ inline bool operator<(const __list__<T, Alloc>& x, const __list__<T, Alloc>& y) 
 template <class T, class Alloc>
 inline void vcl_swap(__list__<T,Alloc>& a, __list__<T,Alloc>& b) { a.swap(b); }
 # endif
-
-//KYM: moved to vcl/vcl_list.h
-//#define VCL_LIST_INSTANTIATE \
-//extern "please include vcl/emulation/vcl_list.txx instead"
 
 #endif // vcl_emulation_list_h

@@ -1,3 +1,2 @@
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_vector.txx>
+#include <vcl_vector.txx>
 VCL_VECTOR_INSTANTIATE(char*);

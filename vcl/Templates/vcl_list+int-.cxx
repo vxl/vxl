@@ -1,8 +1,8 @@
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_iterator.h>
+#include <vcl_iostream.h>
+#include <vcl_iterator.h>
 
-#include <vcl/vcl_list.txx>
-#include <vcl/vcl_algorithm.txx>
+#include <vcl_list.txx>
+#include <vcl_algorithm.txx>
 
 VCL_LIST_INSTANTIATE(int);
 

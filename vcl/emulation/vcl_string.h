@@ -33,14 +33,11 @@
 #pragma interface
 #endif
 
-#include <vcl/vcl_cstddef.h>   // For ptrdiff_t
+#include <vcl_cstddef.h>   // For ptrdiff_t
+#include <vcl_iosfwd.h> 
 
 #include "vcl_stlconf.h"
-
-#include <vcl/vcl_compiler.h>
-#include <vcl/vcl_iosfwd.h> 
-
-#include <vcl/emulation/vcl_straits.h>
+#include "vcl_straits.h"
 
 #if _G_USE_EXCEPTIONS
 
@@ -52,7 +49,7 @@
 
 #else
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 #define OUTOFRANGE(cond) assert (!(cond))
 #define LENGTHERROR(cond) assert (!(cond))
 

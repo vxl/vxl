@@ -1,5 +1,5 @@
-# standard C/C++
-SUBDIRS += vcl
+# standard C/C++ is now in $IUEROOT/vcl
+#SUBDIRS += vcl
 
 # POSIX layer
 SUBDIRS += vpl

@@ -4,8 +4,8 @@
   fsm@robots.ox.ac.uk
 */
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 
-#include <vcl/iso/vcl_numeric.h>
+#include "iso/vcl_numeric.h"
 
 #endif // vcl_numeric_h_

@@ -40,9 +40,8 @@
  *
  */
 
-#include <vcl/vcl_compiler.h> // needed for VCL_DFL_TMPL_PARAM_STLDECL
-#include <vcl/vcl_cstddef.h>
-#include <vcl/emulation/vcl_bool.h>
+#include <vcl_cstddef.h>
+#include "vcl_bool.h"
 
 #if 0
 // fsm: these function templates are non-standard, or rather, the

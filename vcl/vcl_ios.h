@@ -7,9 +7,9 @@
   fsm@robots.ox.ac.uk
 */
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 
 // FIXME
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #endif // vcl_ios_h_

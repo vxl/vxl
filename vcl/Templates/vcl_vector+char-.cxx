@@ -9,10 +9,10 @@
 // On the other hand, sunpro 5.0 thinks that 'char' and 'signed char'
 // are the same, so we mustn't compile the file for sunpro 5.0 (????)
 
-#include <vcl/vcl_compiler.h>
+#include <vcl_compiler.h>
 #if defined(VCL_GCC_295) || defined(VCL_EGCS) || defined(VCL_GCC_27) || defined(VCL_SUNPRO_CC)
 
-#include <vcl/vcl_vector.txx>
+#include <vcl_vector.txx>
 VCL_VECTOR_INSTANTIATE(char);
 
 #endif

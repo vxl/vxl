@@ -6,12 +6,12 @@
 #pragma interface
 #endif
 // .NAME vcl_typeinfo
-// .INCLUDE vcl/vcl_typeinfo.h
+// .INCLUDE vcl_typeinfo.h
 // .SECTION Description
 //    Provide a uniform interface to the variously supported
 //    RTTI's
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 
 // avoid cpp warning due to these macros being already defined.
 #undef VCL_HAS_DYNAMIC_CAST
@@ -28,7 +28,7 @@
 #ifdef VCL_EGCS
 //hackorama to get round dodgy 1.1.1 stdexcept.h
 //# ifdef __STDEXCEPT__
-//#  error "sorry, include IUE_typeinfo.h earlier in your file"
+//#  error "sorry, include vcl_typeinfo.h earlier in your file"
 //# endif
 //# define exception iue_scl_exception
 //struct iue_scl_exception { virtual ~iue_scl_exception() = 0; };

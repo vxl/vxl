@@ -1,4 +1,4 @@
-#include <vcl/vcl_vector.txx>
+#include <vcl_vector.txx>
 
 // The sunpro CC compiler does not have an operator>>(signed char) only
 // char, and it tries to use vnl_matrix>> or vnl_vector>> instead??

@@ -1,13 +1,13 @@
-#include <vcl/vcl_complex_fwd.h>
+#include <vcl_complex_fwd.h>
 vcl_complex<double> doublify(vcl_complex<float> const &);
   
 
-#include <vcl/vcl_complex.h>
+#include <vcl_complex.h>
 vcl_complex<double> doublify(vcl_complex<float> const &z) {
   return vcl_complex<double>(z.real(), z.imag());
 }
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 int main()
 {

@@ -1,9 +1,6 @@
 USES = vxl
 
-IULIBS += -lvcsl
-IULIBS += -lvbl
-IULIBS += -lvnl
-IULIBS += -lvcl
+IULIBS += -lvcsl -lvbl -lvnl
 
 MINI_PROG_SOURCES += example1.cxx
 

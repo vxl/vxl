@@ -4,7 +4,7 @@
   fsm@robots.ox.ac.uk
 */
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 // NB. we allow both 'blah' and 'vcl_blah' to mean 'std::blah'.
 
 #undef vcl_setw
@@ -14,7 +14,7 @@
 # define vcl_setw     ::setw
 
 #else
-# include <vcl/iso/vcl_iomanip.h>
+# include "iso/vcl_iomanip.h"
 #endif
 
 #endif // vcl_iomanip_h_

@@ -1,13 +1,13 @@
 header names
 ------------
 There's a list of ISO headers in headers.iso; each ISO header <blah> becomes
-<vcl/vcl_blah.h> and there should not be any other headers here. Exceptions are:
+<vcl_blah.h> and there should not be any other headers here. Exceptions are:
 
 vcl_compiler.h
   Every other header file in this directory should include this file.
   That's a requirement and it's service which clients can rely on; thus
-  if you include <vcl/vcl_iostream.h> you *don't* need to include 
-  <vcl/vcl_compiler.h> even if you need the macros defined in there.
+  if you include <vcl_iostream.h> you *don't* need to include 
+  <vcl_compiler.h> even if you need the macros defined in there.
 
 vcl_complex_fwd.h
   In ISO C++, the complex template class can be forward declared with
@@ -33,7 +33,7 @@ vcl_stlfwd.h
 
 vcl_deprecated.h
   Including this causes a preprocessor or compiler warning to be emitted. So
-  include <vcl/vcl_deprecated.h> in header files that are to be deprecated.
+  include <vcl_deprecated.h> in header files that are to be deprecated.
 
 
 tests directory

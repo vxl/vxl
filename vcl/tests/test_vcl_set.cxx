@@ -1,7 +1,6 @@
-
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_functional.h>
-#include <vcl/vcl_set.h>
+#include <vcl_iostream.h>
+#include <vcl_functional.h>
+#include <vcl_set.h>
 
 int main()
 {
@@ -10,7 +9,7 @@ int main()
   
   s.insert(1);
 
-  for(myset::iterator p = s.begin(); p != s.end(); ++p)
+  for (myset::iterator p = s.begin(); p != s.end(); ++p)
     vcl_cout << *p << vcl_endl;
   return 0;
 }

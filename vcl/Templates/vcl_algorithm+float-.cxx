@@ -1,4 +1,4 @@
-#include <vcl/vcl_algorithm.txx>
+#include <vcl_algorithm.txx>
 
 VCL_SWAP_INSTANTIATE(float);
 

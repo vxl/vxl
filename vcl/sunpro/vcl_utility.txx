@@ -4,7 +4,7 @@
   fsm@robots.ox.ac.uk
 */
 
-#include <vcl/vcl_utility.h>
+#include <vcl_utility.h>
 
 #define VCL_PAIR_INSTANTIATE(T1, T2) \
 template class vcl_pair<T1, T2 >;

@@ -1,12 +1,11 @@
-
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_compiler.h>
+#include <vcl_iostream.h>
 
 int main()
 {
-  for(int i = 0; i < 2; ++i)
-    vcl_cerr << i << vcl_endl;
-  for(int i = 0; i < 2; ++i);
+  for (int i = 0; i < 2; ++i)
+    vcl_cout << i << vcl_endl;
+  for (int i = 0; i < 2; ++i)
+    ;
 
   return 0;
 }

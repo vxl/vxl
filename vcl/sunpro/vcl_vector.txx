@@ -1,8 +1,8 @@
 #ifndef vcl_sunpro_vector_txx_
 #define vcl_sunpro_vector_txx_
 
-#include <vcl/vcl_utility.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_utility.h>
+#include <vcl_vector.h>
 
 #define VCL_VECTOR_STLINST_uninitialized_copy(Inp, Fwd, Size) \
 template Fwd std::copy(Inp, Inp, Fwd);\

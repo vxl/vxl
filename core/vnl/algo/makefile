@@ -1,7 +1,7 @@
 USES := vxl
 LIBRARY := vnl-algo
 VERSION := 1.0
-IMMEDIATE_LIBS := -lvnl -lvcl -lnetlib
+IMMEDIATE_LIBS := -lvnl -lnetlib
 DEFINES += -DBUILDING_VNL_ALGO_DLL
 
 # matrix decompositions

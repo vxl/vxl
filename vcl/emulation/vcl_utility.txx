@@ -1,7 +1,7 @@
 #ifndef vcl_emulation_utility_txx_
 #define vcl_emulation_utility_txx_
 
-#include <vcl/vcl_utility.h>
+#include <vcl_utility.h>
 #include "vcl_pair.h"
 #include "vcl_algorithm.txx"
 

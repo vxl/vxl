@@ -1,7 +1,7 @@
 #ifndef vcl_complex_h_
 #define vcl_complex_h_
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 
 // File: vcl_complex.h
 // 
@@ -21,11 +21,11 @@
 //
 // If you just want to forward declare the vcl complex types, use 
 // vcl_complex_fwd.h instead.
-#include <vcl/vcl_complex_fwd.h>
+#include <vcl_complex_fwd.h>
 
 // ---------- all emulation
 #if !VCL_USE_NATIVE_COMPLEX 
-# include <vcl/emulation/vcl_complex.h>
+# include "emulation/vcl_complex.h"
 # define vcl_complex_STD /*std::*/::
 
 // ---------- egcs
@@ -41,7 +41,7 @@
 #  define vcl_complex_STD /*std::*/::
 # else
 // new library (broken complex)
-#  include <vcl/emulation/vcl_complex.h>
+#  include "emulation/vcl_complex.h"
 #  define vcl_complex_STD /*std::*/::
 // paradoxically, v3 needs 'abs' and 'sqrt' here because it 
 // wants to use the emulation vcl_complex<>.
@@ -55,17 +55,17 @@
 
 // ---------- native WIN32
 #elif defined(VCL_WIN32)
-# include <vcl/win32/vcl_complex.h>
+# include "win32/vcl_complex.h"
 # define vcl_complex_STD std::
 
 // ---------- SunPro compiler
 #elif defined(VCL_SUNPRO_CC)
-# include <vcl/sunpro/vcl_complex.h>
+# include "sunpro/vcl_complex.h"
 # define vcl_complex_STD std::
 
 // ---------- ISO
 #else
-# include <vcl/iso/vcl_complex.h>
+# include "iso/vcl_complex.h"
 #endif
 
 #ifdef vcl_complex_STD

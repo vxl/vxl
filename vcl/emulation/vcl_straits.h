@@ -30,7 +30,7 @@
 
 #include "vcl_stlconf.h"
 // .NAME vcl_straits
-// .INCLUDE vcl/emulation/vcl_straits.h
+// .INCLUDE emulation/vcl_straits.h
 // .FILE emulation/vcl_straits.cxx
 //
 
@@ -39,11 +39,9 @@
 #pragma interface
 #endif
 
-#include <vcl/vcl_cctype.h>
-#include <vcl/vcl_cstring.h>
-
-#include <vcl/vcl_iosfwd.h>
-#include <vcl/vcl_compiler.h>
+#include <vcl_cctype.h>
+#include <vcl_cstring.h>
+#include <vcl_iosfwd.h>
 
 // Make shorter name for basic_string if STL is using short names
 # if defined ( __STL_USE_ABBREVS )

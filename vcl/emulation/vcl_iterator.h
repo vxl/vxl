@@ -40,11 +40,9 @@
 #ifndef vcl_emulation_iterator_h
 #define vcl_emulation_iterator_h
 
-#include <vcl/vcl_cstddef.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cstddef.h>
+#include <vcl_iostream.h>
 #include "vcl_functional.h"
-
-#include <vcl/vcl_compiler.h>	// for configuration macros
 
 #if defined ( __STL_USE_ABBREVS )
 // ugliness is intentional - to reduce conflicts

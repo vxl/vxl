@@ -1,7 +1,7 @@
 #ifndef vcl_egcs_algorithm_txx_
 #define vcl_egcs_algorithm_txx_
 
-#include <vcl/vcl_algorithm.h>
+#include <vcl_algorithm.h>
 
 #define VCL_COPY_INSTANTIATE(Inp, Out) \
 template Out std::copy(Inp, Inp, Out)

@@ -51,11 +51,11 @@
  *
  */
 
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_climits.h>
-#include <vcl/emulation/vcl_algobase.h>
-#include <vcl/emulation/vcl_heap.h>
-#include <vcl/emulation/vcl_tempbuf.h>
+#include <vcl_cstdlib.h>
+#include <vcl_climits.h>
+#include "vcl_algobase.h"
+#include "vcl_heap.h"
+#include "vcl_tempbuf.h"
 
 template <class T>
 inline const T& __median(const T& a, const T& b, const T& c) {
@@ -122,7 +122,7 @@ ForwardIterator vcl_adjacent_find(ForwardIterator first, ForwardIterator last) {
     __stl_debug_check(__check_range(first, last));
     if (first == last) return last;
     ForwardIterator next = first;
-    while(++next != last) {
+    while (++next != last) {
         if (*first == *next) return first;
         first = next;
     }
@@ -136,7 +136,7 @@ ForwardIterator vcl_adjacent_find(ForwardIterator first, ForwardIterator last,
     __stl_debug_check(__check_range(first, last));
     if (first == last) return last;
     ForwardIterator next = first;
-    while(++next != last) {
+    while (++next != last) {
         if (binary_pred(*first, *next)) return first;
         first = next;
     }
@@ -2252,7 +2252,7 @@ bool includes(InputIterator1 first1, InputIterator1 last1,
     while (first1 != last1 && first2 != last2)
         if (*first2 < *first1)
             return false;
-        else if(*first1 < *first2) 
+        else if (*first1 < *first2) 
             ++first1;
         else
             ++first1, ++first2;
@@ -2269,7 +2269,7 @@ bool includes(InputIterator1 first1, InputIterator1 last1,
     while (first1 != last1 && first2 != last2)
         if (comp(*first2, *first1))
             return false;
-        else if(comp(*first1, *first2)) 
+        else if (comp(*first1, *first2)) 
             ++first1;
         else
             ++first1, ++first2;
@@ -2519,7 +2519,7 @@ bool next_permutation(BidirectionalIterator first,
     i = last;
     --i;
 
-    for(;;) {
+    for (;;) {
         BidirectionalIterator ii = i;
         if (*--i < *ii) {
             BidirectionalIterator j = last;
@@ -2547,7 +2547,7 @@ bool next_permutation(BidirectionalIterator first, BidirectionalIterator last,
     i = last;
     --i;
 
-    for(;;) {
+    for (;;) {
         BidirectionalIterator ii = i ; 
         if (comp(*--i, *ii)) {
             BidirectionalIterator j = last;
@@ -2575,7 +2575,7 @@ bool prev_permutation(BidirectionalIterator first,
     i = last;
     --i;
 
-    for(;;) {
+    for (;;) {
         BidirectionalIterator ii = i; 
         if (*ii < *--i) {
             BidirectionalIterator j = last;
@@ -2603,7 +2603,7 @@ bool prev_permutation(BidirectionalIterator first, BidirectionalIterator last,
     i = last;
     --i;
 
-    for(;;) {
+    for (;;) {
         BidirectionalIterator ii = i;
         if (comp(*ii, *--i)) {
             BidirectionalIterator j = last;

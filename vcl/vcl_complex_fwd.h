@@ -15,11 +15,11 @@
 // Note: the standard complex class is just std::complex<T>, so
 // on an ISO compiler, no forward declaration header is needed.
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 
 // ---------- emulation
 #if !VCL_USE_NATIVE_COMPLEX
-# include <vcl/emulation/vcl_complex_fwd.h>
+# include "emulation/vcl_complex_fwd.h"
 
 // ---------- egcs
 #elif defined(VCL_EGCS)
@@ -34,16 +34,16 @@ template <class T> class complex;
 #  define vcl_complex complex
 # else
 // new library (broken)
-#  include <vcl/emulation/vcl_complex_fwd.h>
+#  include "emulation/vcl_complex_fwd.h"
 # endif
 
 // ---------- native WIN32
 #elif defined(VCL_WIN32)
-# include <vcl/win32/vcl_complex_fwd.h>
+# include "win32/vcl_complex_fwd.h"
 
 // ---------- SunPro compiler
 #elif defined(VCL_SUNPRO_CC)
-# include <vcl/sunpro/vcl_complex_fwd.h>
+# include "sunpro/vcl_complex_fwd.h"
 
 // ---------- ISO
 #else

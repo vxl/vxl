@@ -1,7 +1,7 @@
 USES += vxl
 USE_NETLIB := 1
 
-IULIBS := -lvbl -lvnl-algo -lnetlib -lvnl -lvcl
+IULIBS := -lvnl-algo -lvbl -lvnl -lnetlib
 
 MINI_PROG_SOURCES += time_fastops.cxx
 MINI_PROG_SOURCES += vnl_amoeba.cxx

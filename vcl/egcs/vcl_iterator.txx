@@ -4,7 +4,7 @@
   fsm@robots.ox.ac.uk
 */
 
-#include <vcl/vcl_iterator.h>
+#include <vcl_iterator.h>
 
 #define INSTANTIATE_TAGS(I, TAG)\
 VCL_INSTANTIATE_INLINE(TAG iterator_category(I const &))

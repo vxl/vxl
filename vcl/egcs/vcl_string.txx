@@ -4,7 +4,7 @@
   fsm@robots.ox.ac.uk
 */
 
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 
 #undef VCL_BASIC_STRING_INSTANTIATE
 

@@ -4,7 +4,7 @@
   fsm@robots.ox.ac.uk
 */
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 
 #if defined(VCL_GCC)
 # warning "deprecated"

@@ -1,9 +1,7 @@
 #ifndef vcl_egcs_set_txx_
 #define vcl_egcs_set_txx_
 
-#include <vcl/vcl_set.h>
-#include <vcl/vcl_compiler.h>
-
+#include <vcl_set.h>
 
 #define VCL_SET_INSTANTIATE_ITERATOR(InputIterator, Distance)\
 template void distance (InputIterator , InputIterator , Distance& ) 

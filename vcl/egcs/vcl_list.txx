@@ -1,7 +1,7 @@
 #ifndef vcl_egcs_list_txx_
 #define vcl_egcs_list_txx_
 
-#include <vcl/vcl_list.h>
+#include <vcl_list.h>
 
 // MT: Member template
 

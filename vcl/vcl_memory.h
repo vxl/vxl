@@ -8,7 +8,7 @@
 // ?
 
 #else
-# include <vcl/iso/vcl_memory.h>
+# include "iso/vcl_memory.h"
 #endif
 
 #endif // vcl_memory_h_

@@ -1,7 +1,6 @@
 LIBRARY := Qv
 
-USES := vxl # actually only vxl/vcl
-USE_STDC++ := 0
+USE_STDC++ := 0 # for using vcl
 
 SOURCES += vecutil.cxx
 SOURCES += QvLib.cxx

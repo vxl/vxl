@@ -1,3 +1,3 @@
-#include <vcl/vcl_list.txx>
+#include <vcl_list.txx>
 
 VCL_LIST_INSTANTIATE(unsigned);

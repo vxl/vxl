@@ -52,16 +52,16 @@
 #ifndef vcl_emulation_algobase_h
 #define vcl_emulation_algobase_h
 
-//#include <vcl/emulation/vcl_string.h>
-#include <vcl/vcl_cstring.h>
-#include <vcl/vcl_climits.h>
-#include <vcl/emulation/vcl_functional.h>
-#include <vcl/emulation/vcl_pair.h>
-#include <vcl/emulation/vcl_iterator.h>
-#include <vcl/vcl_new.h>
+//#include "vcl_string.h"
+#include <vcl_cstring.h>
+#include <vcl_climits.h>
+#include "vcl_functional.h"
+#include "vcl_pair.h"
+#include "vcl_iterator.h"
+#include <vcl_new.h>
 
 # if defined ( __BORLANDC__ ) && defined ( __NO_NAMESPACES )
-#  include <vcl/vcl_cstdlib.h>
+#  include <vcl_cstdlib.h>
 # endif
 
 template <class T>

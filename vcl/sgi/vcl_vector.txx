@@ -1,9 +1,8 @@
 #ifndef vcl_sgi_vector_txx_
 #define vcl_sgi_vector_txx_
 
-//#include <vcl/vcl_pair.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_compiler.h>
+#include <vcl_vector.h>
+// #include <vcl_compiler.h> // not necessary since the current file should only be included through ../vcl_vector.txx
 
 #define VCL_VECTOR_STLINST_uninitialized_copy(Inp, Fwd, Size) \
 template Fwd std::copy(Inp, Inp, Fwd);\

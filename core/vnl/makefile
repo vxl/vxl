@@ -8,7 +8,6 @@ include ${IUEROOT}/config/top-params.mk
 USES := vxl
 LIBRARY := vnl
 VERSION := 1.0
-IMMEDIATE_LIBS := -lvcl
 DEFINES += -DBUILDING_VNL_DLL
 
 # template sources

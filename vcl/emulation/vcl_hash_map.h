@@ -38,11 +38,10 @@
 #ifndef vcl_emulation_hash_map_h
 #define vcl_emulation_hash_map_h
 
-#include <vcl/vcl_compiler.h>
-#include <vcl/emulation/vcl_hashtable.h>
-//#include <vcl/vcl_alloc.h>
+#include <vcl_functional.h>
+//#include <vcl_alloc.h>
+#include "vcl_hashtable.h"
 #include "vcl_alloc.h"
-#include <vcl/vcl_functional.h>
 
 #ifdef __FULL_NAME
 # define VCL_FULL_NAME(x) __FULL_NAME(x)
@@ -398,6 +397,6 @@ inline bool operator==(const vcl_hash_multimap<Key, T, HashFcn,EqualKey>& hm1,
 # endif /* VCL_STL_DEFAULT_TYPE_PARAM */
 
 #define VCL_HASH_MAP_INSTANTIATE \
-extern "please include vcl/emulation/vcl_hash_map.txx instead"
+extern "please include emulation/vcl_hash_map.txx instead"
 
 #endif // vcl_emulation_hash_map_h

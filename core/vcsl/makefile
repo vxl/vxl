@@ -59,7 +59,7 @@ SOURCES += vcsl_cylindrical_to_cartesian_3d.cxx
 
 SOURCES += vcsl_perspective.cxx
 
-IMMEDIATE_LIBS += -lvbl -lvcl
+IMMEDIATE_LIBS += -lvbl
 
 ###############################################################################
 include ${IUEROOT}/config/top-params.mk

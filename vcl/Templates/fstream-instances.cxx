@@ -1,4 +1,4 @@
-#include <vcl/vcl_fstream.h>
+#include <vcl_fstream.h>
 
 #ifdef GNU_LIBSTDCXX_V3 
 using std::basic_ofstream;

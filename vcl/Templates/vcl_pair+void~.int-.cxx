@@ -1,3 +1,3 @@
-#include <vcl/vcl_utility.txx>
+#include <vcl_utility.txx>
 
 VCL_PAIR_INSTANTIATE(void*, int);

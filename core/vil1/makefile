@@ -4,8 +4,6 @@ include ${IUEROOT}/config/top-params.mk
 
 USES += vxl
 
-IMMEDIATE_LIBS := -lvcl
-
 LIBRARY := vil
 VERSION := 1.0
 

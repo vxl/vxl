@@ -1,7 +1,7 @@
 #ifndef vcl_sgi_cmath_h_
 #define vcl_sgi_cmath_h_
 
-#include <vcl/vcl_compiler.h>
+// #include <vcl_compiler.h> // not needed, as this file should be included through ../vcl_cmath.h
 
 #undef vcl_cmath_std
 
@@ -12,7 +12,7 @@
 # include <math.h> // e.g. SGI CC 7.30
 # define vcl_cmath_std
 #else // iso
-# include <vcl/iso/vcl_cmath.h>
+# include "../iso/vcl_cmath.h"
 # define vcl_cmath_std
 #endif
 

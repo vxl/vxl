@@ -8,8 +8,7 @@
 xall::
 	( cd ./iso && $(MAKE) ) || true
 
-USES := vxl
-
+VCL := 1
 LIBRARY := vcl
 VERSION := 1.0
 

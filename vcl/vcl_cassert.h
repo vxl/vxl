@@ -1,11 +1,7 @@
 #ifndef vcl_cassert_h_
 #define vcl_cassert_h_
-// .NAME vcl_cassert
-// .INCLUDE vcl/vcl_cassert.h
-// .FILE vcl_cassert.cxx
-// @author fsm@robots.ox.ac.uk
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 
 #include <assert.h>
 

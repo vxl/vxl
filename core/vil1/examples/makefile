@@ -5,7 +5,7 @@ TRY_JPEG := 1
 TRY_PNG  := 1
 
 # Examples may use vbl....
-IULIBS = -lvil -lvbl -lvpl -lvcl
+IULIBS = -lvil -lvbl -lvpl
 
 MINI_PROG_SOURCES += vil_convolve_1d.cxx
 MINI_PROG_SOURCES += vil_convolve.cxx

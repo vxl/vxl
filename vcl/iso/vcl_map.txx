@@ -1,7 +1,7 @@
 #ifndef vcl_iso_map_txx_
 #define vcl_iso_map_txx_
 
-#include <vcl/vcl_map.h>
+#include <vcl_map.h>
 
 #undef VCL_MAP_INSTANTIATE
 #define VCL_MAP_INSTANTIATE(Key, Value, Comp) /* */

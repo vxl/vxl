@@ -32,7 +32,7 @@
 #ifndef vcl_emulation_heap_h
 #define vcl_emulation_heap_h
 
-#include <vcl/emulation/vcl_bool.h>
+#include "vcl_bool.h"
 
 template <class RandomAccessIterator, class Distance, class T>
 IUEi_STL_INLINE

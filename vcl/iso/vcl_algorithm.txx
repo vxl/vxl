@@ -1,7 +1,7 @@
 #ifndef vcl_iso_algorithm_txx_
 #define vcl_iso_algorithm_txx_
 
-#include <vcl/vcl_algorithm.h>
+#include <vcl_algorithm.h>
 
 #define VCL_SWAP_INSTANTIATE(T) /* */
 #define VCL_FIND_INSTANTIATE(I, T) /* */

@@ -348,7 +348,7 @@ compare (const charT* s, size_t pos, size_t n) const
   return (length () - pos) - n;
 }
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 template <class charT, class traits>
 istream &

@@ -1,7 +1,7 @@
-#include <vcl/vcl_algorithm.txx>
+#include <vcl_algorithm.txx>
 
 #ifdef GNU_LIBSTDCXX_V3
-# include <vcl/vcl_vector.h>
+# include <vcl_vector.h>
 VCL_SORT_INSTANTIATE(vcl_vector<double>::iterator, double);
 VCL_SORT_INSTANTIATE(vcl_vector<double*>::iterator, double*);
 #endif

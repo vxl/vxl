@@ -27,12 +27,12 @@
 #ifndef vcl_emulation_defalloc_h
 #define vcl_emulation_defalloc_h
 
-#include <vcl/vcl_new.h>
-#include <vcl/vcl_cstddef.h>
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_climits.h>
-#include <vcl/emulation/vcl_alloc.h>
-#include <vcl/emulation/vcl_algobase.h>
+#include <vcl_new.h>
+#include <vcl_cstddef.h>
+#include <vcl_cstdlib.h>
+#include <vcl_climits.h>
+#include "vcl_alloc.h"
+#include "vcl_algobase.h"
 
 // This file is obsolete; provided only for backward compatibility
 // with code that use vcl_allocator<T>

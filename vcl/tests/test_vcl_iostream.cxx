@@ -1,13 +1,13 @@
 // include all the streams headers and <string>, to 
 // ensure they are compatible.
-#include <vcl/vcl_string.h> // C++ specific includes first
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_fstream.h>
-#include <vcl/vcl_strstream.h>
+#include <vcl_string.h> // C++ specific includes first
+#include <vcl_iostream.h>
+#include <vcl_fstream.h>
+#include <vcl_strstream.h>
 
-int main(int, char **) 
+int main() 
 {
-  vcl_cerr << vcl_string("hello, vcl") << vcl_endl
+  vcl_cout << vcl_string("hello, vcl") << vcl_endl
        << vcl_hex << 0x1000 << vcl_endl
        << vcl_dec <<   1000 << vcl_endl
        << vcl_endl;

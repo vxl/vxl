@@ -52,9 +52,9 @@
 #ifndef vcl_emulation_deque_h
 #define vcl_emulation_deque_h
 
-#include <vcl/vcl_cstddef.h>
-#include <vcl/emulation/vcl_algobase.h>
-#include <vcl/emulation/vcl_alloc.h>
+#include <vcl_cstddef.h>
+#include "vcl_algobase.h"
+#include "vcl_alloc.h"
 
 # if defined ( __STL_USE_ABBREVS )
 #  define __deque_iterator         vcl_dQIt
@@ -865,11 +865,11 @@ void vcl_deque<T, Alloc>::erase(iterator first, iterator last) {
   difference_type n = last - first;
   if (end() - last > first - begin()) {
     vcl_copy_backward(begin(), first, last);
-    while(n-- > 0) pop_front();
+    while (n-- > 0) pop_front();
   }
   else {
     vcl_copy(last, end(), first);
-    while(n-- > 0) pop_back();
+    while (n-- > 0) pop_back();
   }
 }
 
@@ -935,9 +935,5 @@ bool operator<(const __deque__<T, Alloc>& x, const __deque__<T, Alloc>& y) {
 template <class T, class Alloc>
 inline void vcl_swap(__deque__<T,Alloc>& a, __deque__<T,Alloc>& b) { a.swap(b); }
 # endif
-
-// KYM: moved to vcl/vcl_deque.h
-//#define VCL_DEQUE_INSTANTIATE \
-//extern "please include vcl/emulation/vcl_deque.txx instead"
 
 #endif // vcl_emulation_deque_h

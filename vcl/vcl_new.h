@@ -4,11 +4,11 @@
   fsm@robots.ox.ac.uk
 */
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 
 // -------------------- emulation
 #if !VCL_USE_NATIVE_STL
-# include <vcl/emulation/vcl_new.h>
+# include "emulation/vcl_new.h"
 
 // -------------------- gcc with old library
 #elif (defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)) || defined(VCL_SGI_CC_720)

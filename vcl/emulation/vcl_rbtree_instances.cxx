@@ -1,4 +1,4 @@
-#include <vcl/vcl_compiler.h>
+#include <vcl_compiler.h>
 #if !VCL_USE_NATIVE_STL
 
 #ifdef __GNUC__

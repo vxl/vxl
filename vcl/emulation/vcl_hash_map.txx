@@ -1,6 +1,6 @@
 // -*- c++ -*-
-#include <vcl/vcl_compiler.h>
-#include <vcl/vcl_hash_map.h>
+#include <vcl_compiler.h>
+#include "vcl_hash_map.h"
 #include "vcl_hash.txx"
 #include "vcl_pair.txx"
 #include "vcl_functional.txx"

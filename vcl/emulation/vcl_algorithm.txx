@@ -1,8 +1,7 @@
 #ifndef vcl_emulation_algorithm_txx_
 #define vcl_emulation_algorithm_txx_
 
-#include <vcl/vcl_compiler.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_algorithm.h>
 
 #undef VCL_SWAP_INSTANTIATE
 #define VCL_SWAP_INSTANTIATE(T) \

@@ -39,7 +39,7 @@
 #ifndef vcl_emulation_multimap_h
 #define vcl_emulation_multimap_h
 
-#include <vcl/emulation/vcl_tree.h>
+#include "vcl_tree.h"
 
 __BEGIN_STL_FULL_NAMESPACE
 #define vcl_multimap __WORKAROUND_RENAME(vcl_multimap)
@@ -231,9 +231,5 @@ inline bool operator<(const vcl_multimap<Key, T, Compare>& x,
 }
 #  endif
 # endif /*  __STL_DEFAULT_TYPE_PARAM */
-
-// This is defined in vcl/vcl_multimap.h
-//#define VCL_MULTIMAP_INSTANTIATE \
-//extern "please include vcl/emulation/vcl_multimap.txx instead"
 
 #endif // vcl_emulation_multimap_h

@@ -1,7 +1,7 @@
 #ifndef vcl_exception_h_
 #define vcl_exception_h_
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 
 #if !defined(VCL_HAS_EXCEPTIONS)
 #if defined(VCL_WIN32) || defined(__EXCEPTIONS) || _COMPILER_VERSION == 721
@@ -25,7 +25,7 @@
 #else
 //
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 struct vcl_throw_handler {
   vcl_throw_handler(int line, char const* file) {
     cerr << file << ":" << line << ": EXCEPTION: ";
@@ -36,7 +36,7 @@ struct vcl_throw_handler {
 
 # define vcl_throw        vcl_throw_handler(__LINE__,__FILE__).s() << 
 # define vcl_try          if (0/* setjmp(buf) */) { /* handle longjmp */ } else
-# define vcl_catch(x)     for( x = 0; false; )
+# define vcl_catch(x)     for ( x = 0; false; )
 # define vcl_catch_all    if (1) /* nothing */ ; else
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef vcl_sunpro_map_txx_
 #define vcl_sunpro_map_txx_
 
-#include <vcl/vcl_map.h>
+#include <vcl_map.h>
 
 // the business
 #define VCL_MAP_INSTANTIATE_internal(tag, Key, T, Comp)\

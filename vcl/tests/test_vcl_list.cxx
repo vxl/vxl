@@ -1,6 +1,6 @@
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_list.h>
+#include <vcl_iostream.h>
+#include <vcl_list.h>
 
 int main()
 {
@@ -10,7 +10,7 @@ int main()
   m.push_back(1);
   m.push_back(2);
 
-  for(container::iterator p = m.begin(); p != m.end(); ++p)
+  for (container::iterator p = m.begin(); p != m.end(); ++p)
     vcl_cout << (*p) << vcl_endl;
 
 

@@ -1,13 +1,13 @@
 #ifndef vcl_sunpro_cmath_h_
 #define vcl_sunpro_cmath_h_
 
-#include <vcl/vcl_compiler.h>
+// #include <vcl_compiler.h> // not needed, as this file should be included through ../vcl_cmath.h
 
 // 1. include system header
 #if defined(VCL_CXX_HAS_HEADER_CMATH) && !VCL_CXX_HAS_HEADER_CMATH
 # include <math.h> // e.g. SGI CC 7.30
 #else // iso
-# include <vcl/iso/vcl_cmath.h>
+# include "../iso/vcl_cmath.h"
 #endif
 
 // 1.5 fix system header.

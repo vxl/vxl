@@ -2,7 +2,7 @@
 #define vcl_iostream_h_
 
 // .NAME vcl_iostream
-// .INCLUDE vcl/vcl_iostream.h
+// .INCLUDE vcl_iostream.h
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // .SECTION Description
@@ -26,7 +26,7 @@
 //
 
 // Include this to ensure the two are consistent.
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 // Notes to maintainers.
 //   The purpose of this file is to repair broken iostream
@@ -65,7 +65,7 @@
 # define vcl_cerr         cerr
 
 #else // -------------------- ISO
-# include <vcl/iso/vcl_iostream.h>
+# include "iso/vcl_iostream.h"
 #endif
 
 // -------------------- miscellaneous fixes which can go at the end:

@@ -1,5 +1,5 @@
 // .NAME vcl_complex - definition and instantiations macro for complex<TYPE>
-// .INCLUDE vcl/vcl_complex.h
+// .INCLUDE vcl_complex.h
 // .FILE vcl_complex.txx
 //
 // .SECTION Modifications
@@ -9,9 +9,8 @@
 #define vcl_emulation_complex_h
 #define VCL_COMPLEX_AVAILABLE
 
-#include <vcl/vcl_compiler.h>
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cmath.h>
+#include <vcl_iostream.h>
 
 // The Sunpro 4.2 compiler has a bug that it will not instantiate
 // inline friend functions with global linkage, so we remove

@@ -4,11 +4,11 @@
   fsm@robots.ox.ac.uk
 */
 
-#include <vcl/vcl_compiler.h>
+#include <vcl_compiler.h>
 
 #include <new.h>
 
 // for vcl_destroy() and vcl_construct() :
-#include <vcl/emulation/vcl_algobase.h>
+#include "vcl_algobase.h"
 
 #endif // vcl_emulation_new_h_

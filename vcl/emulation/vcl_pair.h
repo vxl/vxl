@@ -39,7 +39,7 @@
 #ifndef vcl_emulation_pair_h
 #define vcl_emulation_pair_h
 
-#include <vcl/emulation/vcl_bool.h>
+#include "vcl_bool.h"
 
 #undef struct
 template <class T1, class T2>

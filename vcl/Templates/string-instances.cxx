@@ -1,5 +1,5 @@
-#include <vcl/vcl_string.txx>
-#include <vcl/vcl_iostream.h>
+#include <vcl_string.txx>
+#include <vcl_iostream.h>
 
 VCL_BASIC_STRING_INSTANTIATE(char, vcl_char_traits<char> );
 

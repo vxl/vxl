@@ -1,18 +1,18 @@
 #ifndef vcl_stlfwd_h_
 #define vcl_stlfwd_h_
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 
 #if !VCL_USE_NATIVE_STL
-# include <vcl/emulation/vcl_stlfwd.h>
+# include "emulation/vcl_stlfwd.h"
 #else
-# include <vcl/vcl_memory.h>
-# include <vcl/vcl_vector.h>
-# include <vcl/vcl_list.h>
-# include <vcl/vcl_map.h>
-# include <vcl/vcl_set.h>
-# include <vcl/vcl_queue.h>
-# include <vcl/vcl_deque.h>
+# include <vcl_memory.h>
+# include <vcl_vector.h>
+# include <vcl_list.h>
+# include <vcl_map.h>
+# include <vcl_set.h>
+# include <vcl_queue.h>
+# include <vcl_deque.h>
 #endif
 
 #endif // vcl_stlfwd_h_

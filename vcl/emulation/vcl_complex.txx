@@ -7,9 +7,10 @@
 // Created: MOT
 //
 //-----------------------------------------------------------------------------
-#include <vcl/vcl_compiler.h>
 
-// This assumes that emulation/complex.cxx is included implies emulation/complex.h included
+// #include <vcl_compiler.h> // not necessary since the current file should only be included through ../vcl_complex.txx
+
+// Including emulation/complex.txx implies emulation/complex.h is included
 #include "vcl_complex.h"
 
 #ifdef __SUNPRO_CC

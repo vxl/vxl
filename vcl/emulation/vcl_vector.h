@@ -52,10 +52,10 @@
 #ifndef vcl_emulation_vector_h
 #define vcl_emulation_vector_h
 
-#include <vcl/vcl_new.h>
-#include <vcl/vcl_cstddef.h>
-#include <vcl/emulation/vcl_algobase.h>
-#include <vcl/emulation/vcl_alloc.h>
+#include <vcl_new.h>
+#include <vcl_cstddef.h>
+#include "vcl_algobase.h"
+#include "vcl_alloc.h"
 
 template <class T, class Alloc>
 class __vector_base  

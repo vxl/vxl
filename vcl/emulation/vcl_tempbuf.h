@@ -49,10 +49,10 @@
  *
  */
 
-#include <vcl/vcl_climits.h>
-#include <vcl/vcl_cstddef.h>
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/emulation/vcl_pair.h>
+#include <vcl_climits.h>
+#include <vcl_cstddef.h>
+#include <vcl_cstdlib.h>
+#include "vcl_pair.h"
 
 template <class T>
 vcl_pair<T*, ptrdiff_t> get_temporary_buffer(ptrdiff_t len, T*) {

@@ -4,7 +4,7 @@
   Peter.Vanroose@esat.kuleuven.ac.be
 */
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 #include <float.h>
 /* This should define C-style numeric floating point macros */
 

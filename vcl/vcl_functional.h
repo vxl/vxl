@@ -1,11 +1,11 @@
 #ifndef vcl_functional_h_
 #define vcl_functional_h_
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 
 // -------------------- all emulation
 #if !VCL_USE_NATIVE_STL
-# include <vcl/emulation/vcl_functional.h>
+# include "emulation/vcl_functional.h"
 # undef vcl_functional_h_STD
 
 // -------------------- gcc with non-standard library
@@ -15,7 +15,7 @@
 
 // -------------------- iso
 #else
-# include <vcl/iso/vcl_functional.h>
+# include "iso/vcl_functional.h"
 #endif
 
 // Now #define vcl_blah to std::blah (except for emulation) :

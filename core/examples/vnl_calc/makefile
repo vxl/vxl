@@ -1,7 +1,7 @@
 USES = vxl
 
 # Examples may use vbl....
-IULIBS = -lvbl -lvnl-algo -lvnl -lnetlib -lvcl
+IULIBS = -lvnl-algo -lvbl -lvnl -lnetlib
 
 MINI_PROG_SOURCES += vnl_calc.cxx
 #MINI_PROG_SOURCES += time_fastops.cxx

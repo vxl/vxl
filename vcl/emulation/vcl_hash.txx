@@ -1,4 +1,4 @@
-#include <vcl/vcl_compiler.h>
+#include <vcl_compiler.h>
 #include "vcl_algorithm.txx"
 #include "vcl_iterator.txx"
 #include "vcl_vector.txx"

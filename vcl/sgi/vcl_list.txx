@@ -1,7 +1,7 @@
 #ifndef vcl_sgi_list_txx_
 #define vcl_sgi_list_txx_
 
-#include <vcl/vcl_list.h>
+#include <vcl_list.h>
 
 #define VCL_LIST_INSTANTIATE_ITERATOR(Inp, Fwd, Diff) \
 template Fwd std::copy(Inp, Inp, Fwd);\

@@ -1,6 +1,4 @@
-#include <vcl/vcl_compiler.h>
-
-#define vcl_long_double VCL_long_double // FIXIT
+#include <vcl_compiler.h> // for vcl_long_double
 
 vcl_long_double function(vcl_long_double a)
 {
@@ -8,7 +6,7 @@ vcl_long_double function(vcl_long_double a)
   return b;
 }
 
-int main(int, char **)
+int main()
 {
   vcl_long_double a = 2.0;
   vcl_long_double b = function(a);

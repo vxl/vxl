@@ -1,7 +1,7 @@
 #ifndef vcl_sys_time_h_
 #define vcl_sys_time_h_
 
-#include <vcl/vcl_compiler.h>
+#include <vcl_compiler.h>
 
 #if defined(VCL_WIN32)
 # include <sys/timeb.h>

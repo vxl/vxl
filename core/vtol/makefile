@@ -5,7 +5,7 @@
 #   DEPENDENCIES:  libvcl libvbl libvsol
 
 USES += vxl
-IMMEDIATE_LIBS += -lvsol -lvbl -lvcl
+IMMEDIATE_LIBS += -lvsol -lvbl
 
 LIBRARY := vtol
 VERSION := 1.0
@@ -43,7 +43,7 @@ include ${IUEROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
-no_makefile_SUBDIRS += tests
+#SUBDIRS += tests
 SUBDIRS += examples
 endif
 

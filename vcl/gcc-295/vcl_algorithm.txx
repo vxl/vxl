@@ -1,7 +1,7 @@
 #ifndef vcl_gcc_295_algorithm_txx_
 #define vcl_gcc_295_algorithm_txx_
 
-#include <vcl/vcl_algorithm.h>
+#include <vcl_algorithm.h>
 
 #define VCL_SWAP_INSTANTIATE(T)\
 VCL_INSTANTIATE_INLINE(void swap(T&, T&))

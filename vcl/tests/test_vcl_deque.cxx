@@ -1,5 +1,5 @@
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_deque.h>
+#include <vcl_iostream.h>
+#include <vcl_deque.h>
 
 int main()
 {
@@ -10,7 +10,7 @@ int main()
   dq.push_back(3);
   dq.push_front(1);
 
-  for(mydeque::iterator p = dq.begin(); p != dq.end(); ++p)
+  for (mydeque::iterator p = dq.begin(); p != dq.end(); ++p)
     vcl_cout << *p << vcl_endl;
 
   return 0;  

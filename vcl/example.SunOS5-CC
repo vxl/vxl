@@ -2,4 +2,4 @@
 #setenv CXX 'CC'
 setenv CXXFLAGS '-instances=explicit -template=wholeclass -Kpic -g -verbose=no%template'
 setenv TXXFLAGS '-instances=explicit -template=wholeclass -Kpic -g -verbose=no%template'
-$IUEROOT/vxl/vcl/configure --cache-file=/dev/null
+$IUEROOT/vcl/configure --cache-file=/dev/null

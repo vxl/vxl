@@ -1,4 +1,4 @@
-#include <vcl/vcl_compiler.h>
+#include <vcl_compiler.h>
 #if !VCL_USE_NATIVE_STL
 
 #define __PUT_STATIC_DATA_MEMBERS_HERE
@@ -25,7 +25,7 @@ template class __alloc<true, 0>;
 #endif
 #endif
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 void vcl_alloc_throw_bad_alloc(char const *FILE, int LINE)
 {
   cerr << FILE << ":" << LINE << " : out of memory" << endl;

@@ -24,8 +24,8 @@
 // try to avoid breaking the shared builds by removing instantiations
 // it needs. With gcc, using #pragma weak may be an option.
 
-#include <vcl/vcl_iostream.h> 
-#include <vcl/vcl_complex.txx> 
+#include <vcl_iostream.h> 
+#include <vcl_complex.txx> 
 
 // macro to implement an operator>>, for compilers that need it.
 # define implement_rsh(T) \

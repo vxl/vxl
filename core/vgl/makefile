@@ -4,8 +4,6 @@ include ${IUEROOT}/config/top-params.mk
 
 USES := vxl
 
-IMMEDIATE_LIBS := -lvcl
-
 LIBRARY := vgl
 VERSION := 1.0
 

@@ -4,8 +4,8 @@
 // and it does not seem to need it, as it shouldn't since we don't
 // want a bvec here!  
 #define __SGI_STL_BVECTOR_H
-#include <vcl/vcl_algorithm.txx>
-#include <vcl/vcl_vector.txx>
+#include <vcl_algorithm.txx>
+#include <vcl_vector.txx>
 
 VCL_VECTOR_INSTANTIATE(unsigned int);
 

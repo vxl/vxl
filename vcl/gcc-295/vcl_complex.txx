@@ -1,7 +1,7 @@
 #ifndef vcl_gcc295_complex_txx_
 #define vcl_gcc295_complex_txx_
   
-#include <vcl/vcl_complex.h>
+#include <vcl_complex.h>
 
 #include <std/complext.cc> 
 

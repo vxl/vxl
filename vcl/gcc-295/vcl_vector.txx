@@ -1,7 +1,7 @@
 #ifndef vcl_gcc295_vector_txx_
 #define vcl_gcc295_vector_txx_
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 #define VCL_VECTOR_STLINST_uninitialized_copy(Inp, Fwd, Size) \
 template Fwd __uninitialized_copy_aux(Inp, Inp, Fwd, __false_type);\

@@ -4,7 +4,7 @@
   Peter.Vanroose@esat.kuleuven.ac.be
 */
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 #include <setjmp.h>
 /* This should define C-style stack unwinding */
 

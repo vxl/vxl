@@ -10,7 +10,7 @@ MINI_PROG_SOURCES += vbl_test_sprintf.cxx
 MINI_PROG_SOURCES += vbl_test_smart_ptr.cxx
 #MINI_PROG_SOURCES += vbl_test_basic_relation.cxx # FIXME
 
-IULIBS := -lvbl-test -lvbl -lvcl
+IULIBS := -lvbl-test -lvbl
 
 ################################
 include ${IUEROOT}/config/top.mk

@@ -12,17 +12,17 @@
 //      operator>=      ... !(x <  y)
 // For ISO compilers, these live in namespace std::rel_op.
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 
 #if !VCL_USE_NATIVE_STL
-# include <vcl/emulation/vcl_rel_ops.h>
+# include "emulation/vcl_rel_ops.h"
 
 #elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
 // this header is wrong. v2 of the GNU library is wrong wrong wrong.
-# include <vcl/vcl_functional.h>
+# include <vcl_functional.h>
 
 #else // -------------------- ISO
-# include <vcl/vcl_utility.h>
+# include <vcl_utility.h>
 using std::rel_ops::operator!=;
 using std::rel_ops::operator> ;
 using std::rel_ops::operator<=;

@@ -1,8 +1,8 @@
 #ifndef vcl_egcs_vector_txx_
 #define vcl_egcs_vector_txx_
 
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_algorithm.txx>
+#include <vcl_vector.h>
+#include <vcl_algorithm.txx>
 
 #define VCL_VECTOR_STLINST_uninitialized_copy(Inp, Fwd, Size) \
 template Fwd __uninitialized_copy_aux(Inp, Inp, Fwd, __false_type);\

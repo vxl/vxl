@@ -1,7 +1,7 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vcl/vcl_new.h>
+#include <vcl_new.h>
 
 struct X 
 {
@@ -10,7 +10,7 @@ struct X
   ~X() { delete [] p; }
 };
 
-int main(int, char **) 
+int main() 
 {
   X my_x;
   

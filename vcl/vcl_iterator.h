@@ -1,7 +1,7 @@
 #ifndef vcl_iterator_h_
 #define vcl_iterator_h_
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 
 // This file should aim to provide at least the following :
 //
@@ -27,7 +27,7 @@
 
 // ---------- emulation
 #if !VCL_USE_NATIVE_STL
-# include <vcl/emulation/vcl_iterator.h>
+# include "emulation/vcl_iterator.h"
 # define vcl_iterator forward_iterator
 
 
@@ -55,7 +55,7 @@
 
 // ---------- ISO
 #else
-# include <vcl/iso/vcl_iterator.h>
+# include "iso/vcl_iterator.h"
 // SUNPRO 5 has no reverse_bidirectional_iterator
 // vc has no raw_storage_iterator
 // using std::raw_storage_iterator;

@@ -5,7 +5,7 @@
 // ANSI standard iostream forward decls.
 // You can't write "class ostream" and expect it to work
 
-#include <vcl/vcl_compiler.h>
+#include "vcl_compiler.h"
 
 #if !VCL_USE_NATIVE_STL
 # if defined(VCL_WIN32)
@@ -48,7 +48,7 @@ class ofstream;
 # define vcl_iosfwd_USE 
 
 #else // -------------------- iso
-# include <vcl/iso/vcl_iosfwd.h>
+# include "iso/vcl_iosfwd.h"
 #endif
 
 #ifdef vcl_iosfwd_STD

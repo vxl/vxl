@@ -9,7 +9,7 @@
 
 USES := vxl
 
-IULIBS += -lvcsl -lvcl -lvbl -lvnl
+IULIBS += -lvcsl -lvbl -lvnl
 
 TESTS += test_meter.cxx
 TESTS += test_radian.cxx

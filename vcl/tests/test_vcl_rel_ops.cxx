@@ -1,19 +1,19 @@
 /*
   fsm@robots.ox.ac.uk
 */
-struct X
+struct Y
 {
   int x;
-  X(int x_) : x(x_) { }
-  bool operator==(X const &that) const { return x == that.x; }
-  bool operator< (X const &that) const { return x <  that.x; }
+  Y(int x_) : x(x_) { }
+  bool operator==(Y const &that) const { return x == that.x; }
+  bool operator< (Y const &that) const { return x <  that.x; }
 };
 
-#include <vcl/vcl_rel_ops.h>
+#include <vcl_rel_ops.h>
 
 int function()
 {
-  X x(2), y(3);
+  Y x(2), y(3);
   if (x == y) return 1;
   if (x != y) return 2;
   if (x <  y) return 3;
@@ -23,10 +23,10 @@ int function()
   return 0;
 }
 
-int main(int, char **)
+int main()
 {
   function();
   return 0;
 }
 
-VCL_REL_OPS_INSTANTIATE(X);
+VCL_REL_OPS_INSTANTIATE(Y);
