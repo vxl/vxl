@@ -23,6 +23,15 @@ IF(JPEG_FOUND)
   )
 ENDIF(JPEG_FOUND)
 
+INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+IF(TIFF_FOUND)
+  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
+  ADD_DEFINITIONS( ${TIFF_DEFINITIONS} -DHAS_TIFF )
+  SET( vil2_sources ${vil2_sources}
+    file_formats/vil2_tiff.cxx file_formats/vil2_tiff.h
+  )
+ENDIF(TIFF_FOUND)
+
 SET( vil2_sources ${vil2_sources}
 
   # basic things
