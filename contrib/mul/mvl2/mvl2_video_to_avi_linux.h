@@ -7,13 +7,13 @@
 
 #include "mvl2_video_writer.h"
 
-#include <avifile/avifile.h>
-#include <avifile/videoencoder.h>
-#include <avifile/infotypes.h>
-#include <avifile/except.h>
-#include <avifile/version.h>
-#include <avifile/avm_default.h>
-#include <avifile/avm_fourcc.h>
+#include <avifile.h>
+#include <videoencoder.h>
+#include <infotypes.h>
+#include <except.h>
+#include <version.h>
+#include <avm_default.h>
+#include <avm_fourcc.h>
 
 //: A class for writing videos
 
