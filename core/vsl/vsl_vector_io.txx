@@ -22,7 +22,7 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T>& v)
   vsl_b_write(s, version_no);
   unsigned n = v.size();
   vsl_b_write(s,n);
-  vsl_b_write_block(s, v.begin(), n);
+  vsl_b_write_block(s, &v[0]/*.begin()*/, n);
 }
 
 //====================================================================================
@@ -38,7 +38,7 @@ void vsl_b_read(vsl_b_istream& s, vcl_vector<T>& v)
   case 1:
     vsl_b_read(s,n);
     v.resize(n);
-    vsl_b_read_block(s, v.begin(), n);
+    vsl_b_read_block(s, &v[0]/*.begin()*/, n);
     break;
   default:
     vcl_cerr << "vsl_b_read(s, vcl_vector<T>&) Unknown version number "<< ver << vcl_endl;
