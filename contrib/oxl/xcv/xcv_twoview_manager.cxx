@@ -63,12 +63,15 @@ void xcv_twoview_manager::set_tableau(vgui_tableau_sptr const& tab, unsigned tab
            << "] to tableau pointer: " << tab << vcl_endl;
 #endif
   tabs[tab_nb] = tab;
-  rubberbands[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("vgui_rubberbander_tableau")));
+  rubberbands[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, 
+    vcl_string("vgui_rubberband_tableau")));
   if (! rubberbands[tab_nb])
     vgui_macro_warning << "Unable to find rubberbander for tableau1\n";
-  easys[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("vgui_easy2D_tableau")));
+  easys[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, 
+    vcl_string("vgui_easy2D_tableau")));
   if (!easys[tab_nb]) {
-    vgui_macro_warning << "Unable to find easy2D for tableau no. " << tab_nb << " \"" << tab << "\"\n";
+    vgui_macro_warning << "Unable to find easy2D for tableau no. " << tab_nb 
+      << " \"" << tab << "\"\n";
     vgui_text_graph(vcl_cerr);
   }
 }

@@ -94,7 +94,8 @@ xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos
 #if 0 // fsm changed. it was probably broken as a result of the easy2D changes.
     vgui_tableau_sptr old = rubbers[j];
 #else
-    vgui_tableau_sptr old = vgui_find_above_by_type_name(rubbers[j], "vgui_composite");
+    vgui_tableau_sptr old = vgui_find_above_by_type_name(rubbers[j], 
+      "vgui_composite_tableau");
 #endif
     vgui_parent_child_link::replace_child_everywhere(old, tee);
     tee->set_child(old);
