@@ -4,6 +4,7 @@
 // \brief Functions to select a pdf or form of pdf for given data.
 
 #include <vcl_cassert.h>
+#include <vnl/vnl_vector.h>
 #include <pdf1d/pdf1d_select_pdf.h>
 
 //: Use the comparitor to decide which pdf the data is most like
