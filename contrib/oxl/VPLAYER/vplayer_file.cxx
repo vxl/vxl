@@ -58,10 +58,10 @@ void vplayer_file::load_video_sequence()
   tableaux_.clear();
   while (pframe!=my_movie->last())
   {
-    tableaux_.push_back(vgui_easy2D_new(vgui_image_tableau_new(pframe->get_image())));
+    tableaux_.push_back(vgui_easy2D_tableau_new(vgui_image_tableau_new(pframe->get_image())));
     ++pframe;
   }
-  tableaux_.push_back(vgui_easy2D_new(vgui_image_tableau_new(pframe->get_image())));
+  tableaux_.push_back(vgui_easy2D_tableau_new(vgui_image_tableau_new(pframe->get_image())));
   pframe = my_movie->first();
   vgui_rubberband_tableau_sptr r = get_rubberbander_at(col,row);
   r->init(new vgui_rubberband_easy2D_client(tableaux_.front()));
@@ -90,10 +90,10 @@ void vplayer_file::load_video_file()
   tableaux_.clear();
   while (pframe!=my_movie->last())
   {
-    tableaux_.push_back(vgui_easy2D_new(vgui_image_tableau_new(pframe->get_image())));
+    tableaux_.push_back(vgui_easy2D_tableau_new(vgui_image_tableau_new(pframe->get_image())));
     ++pframe;
   }
-  tableaux_.push_back(vgui_easy2D_new(vgui_image_tableau_new(pframe->get_image())));
+  tableaux_.push_back(vgui_easy2D_tableau_new(vgui_image_tableau_new(pframe->get_image())));
   pframe = my_movie->first();
   vgui_rubberband_tableau_sptr r = get_rubberbander_at(col,row);
   r->init(new vgui_rubberband_easy2D_client(tableaux_.front()));
