@@ -1,4 +1,4 @@
-# oxl/vgui/CMakeLists.txt
+# core/vgui/CMakeLists.txt
 
 # Default the dashboard builds to "YES" so that
 # we have some clients that try to compile vgui
@@ -30,7 +30,7 @@ IF (OPENGL_FOUND)
   # implementations
   INCLUDE(${CMAKE_ROOT}/Modules/FindQt.cmake)
   INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
-  INCLUDE(${MODULE_PATH}/NewCMake/FindGTK2.cmake)
+  INCLUDE(${VXL_CMAKE_DIR}/Modules/FindGTK2.cmake)
   INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
 
   ADD_DEFINITIONS( -DHAS_OPENGL)
