@@ -47,5 +47,5 @@ void vgui_rasterpos2f(float x, float y) {
 bool vgui_rasterpos_valid() {
   GLboolean params;
   glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &params);
-  return params;
+  return (bool)params;
 }
