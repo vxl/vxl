@@ -45,8 +45,11 @@ class strk_epi_seg :  public vbl_ref_count
   virtual ~strk_epi_seg() {}
 
   //: accessors  
-  void add_int_sample(const double alpha, 
-                      const double left_int, const double right_int);
+  void add_int_sample(const double alpha,
+                      const double left_ds,
+                      const double left_int, 
+                      const double right_ds,
+                      const double right_int);
 
 
   void set_min_index(int index){min_index_ = index;}
@@ -84,7 +87,9 @@ class strk_epi_seg :  public vbl_ref_count
   //: interpolated values
   double s(double alpha);
   double tan_ang(double alpha);
+  double left_ds(double alpha);
   double left_int(double alpha);
+  double right_ds(double alpha);
   double right_int(double alpha);
 
   //: utility methods
@@ -127,7 +132,9 @@ class strk_epi_seg :  public vbl_ref_count
   //:points are in original digital curve order but also monotonic in alpha
   vcl_vector<strk_epi_point_sptr> seg_;
   vcl_vector<double> int_alpha_;//the alphas for intensity samples
+  vcl_vector<double> left_ds_;
   vcl_vector<double> left_int_; // left intensity average
+  vcl_vector<double> right_ds_;
   vcl_vector<double> right_int_;// right intensity average
   double avg_left_int_;
   double avg_right_int_;

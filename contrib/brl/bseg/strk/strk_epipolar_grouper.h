@@ -51,6 +51,7 @@ class strk_epipolar_grouper : public strk_epipolar_grouper_params
   bool group();
   //: debug methods
   void brute_force_match();
+  vil1_memory_image_of<unsigned char> epi_region_image();
  protected:
   //protected methods
   float scan_interval(float xs, float ys, float xe, float ye, int& npix);
@@ -74,9 +75,11 @@ class strk_epipolar_grouper : public strk_epipolar_grouper_params
                     double& u, double& v);
   double scan_interval(const double a, const double sl, const double s);
   double scan_left(double a, double s, 
-                   vcl_vector<strk_epi_seg_sptr> const& left_cand);
+                   vcl_vector<strk_epi_seg_sptr> const& left_cand,
+                   double& ds);
   double scan_right(double a,double s,
-                    vcl_vector<strk_epi_seg_sptr> const& right_cand);
+                    vcl_vector<strk_epi_seg_sptr> const& right_cand,
+                    double& ds);
 
   bool fill_intensity_values(strk_epi_seg_sptr& seg);
   bool set_intensity_info();

@@ -6,6 +6,7 @@
 #include <vcl_algorithm.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>
+#include <vgl/vgl_line_2d.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polyline_2d.h>
@@ -378,9 +379,9 @@ intensity_candidates(strk_epi_seg_sptr const& seg,
     return false;
   vcl_vector<strk_epi_seg_sptr>& min_segs = min_epi_segs_[frame_];
   vcl_vector<strk_epi_seg_sptr>& max_segs = max_epi_segs_[frame_];
-  int n = min_epi_segs_.size();
-  if (!n)//same set as max_epi_segs_, different order
-    return false;
+  int n = min_segs.size();//same set as max_segs_, different order
+  if(n<2)
+    return false;//can't get bounds with only one seg
   vcl_vector<strk_epi_seg_sptr> left_temp, right_temp;
   double a_min = seg->min_alpha(), a_max = seg->max_alpha();
   double s_min = seg->min_s(), s_max = seg->max_s();
@@ -392,6 +393,7 @@ intensity_candidates(strk_epi_seg_sptr const& seg,
     return false;
   if (max_index<0||max_index>=n)
     return false;
+
   //scan the sorted arrays for suitable candidates
   //scan the min index to the left
   bool some_candidates = false;
@@ -399,7 +401,7 @@ intensity_candidates(strk_epi_seg_sptr const& seg,
   for (int im = min_index-1&&found_something; im>=0; im--)
   {
     if (min_segs[im]->min_s()< s_max-r)
-    {
+      {
       left_temp.push_back(min_segs[im]);
       continue;
     }
@@ -560,32 +562,40 @@ double strk_epipolar_grouper::scan_interval(const double a, const double sl,
     return 0;
   int n_samples = 0;
   double sum = 0;
-  for (double si = sl; si<=s; si+=ds(si), n_samples++)
-  {
-    double u, v;
-    if (!image_coords(a, si, u, v))
-      continue;
-    sum += brip_float_ops::bilinear_interpolation(image_, u, v);
-  }
-  if (!n_samples)
+  for(double si = sl; si<=s; si+=ds(si), n_samples++)
+    {
+      double u, v;
+      if(!image_coords(a, si, u, v))
+        continue;
+	  int ui = (int)(u+0.5), vi = (int)(v+0.5);
+      sum+=image_(ui, vi);
+#if 0
+      sum += brip_float_ops::bilinear_interpolation(image_, u+0.5, v+0.5);//JLM
+#endif
+    }
+  if(!n_samples)
     return 0;
   return sum/n_samples;
 }
 
 //scan along the epipolar line to the left
 double strk_epipolar_grouper::
-scan_left(double a, double s, vcl_vector<strk_epi_seg_sptr> const& left_cand)
+scan_left(double a, double s, vcl_vector<strk_epi_seg_sptr> const& left_cand,
+          double& ds)
 {
   double sl = this->find_left_s(a, s, left_cand);
-  return  scan_interval(a, sl, s);
+  ds = s-sl;
+  return  scan_interval(a, sl, s); 
 }
 
 //scan along the epipolar line to the right
 double strk_epipolar_grouper::
-scan_right(double a,double s, vcl_vector<strk_epi_seg_sptr> const& right_cand)
+scan_right(double a,double s, vcl_vector<strk_epi_seg_sptr> const& right_cand, 
+           double& ds)
 {
   double sr = this->find_right_s(a, s, right_cand);
-  return  scan_interval(a, s, sr);
+  ds = sr-s;
+  return  scan_interval(a, s, sr); 
 }
 
 //==================================================================
@@ -595,19 +605,20 @@ scan_right(double a,double s, vcl_vector<strk_epi_seg_sptr> const& right_cand)
 //==================================================================
 bool strk_epipolar_grouper::fill_intensity_values(strk_epi_seg_sptr& seg)
 {
+  vcl_cout << "\n\nStarting new Seg\n";
   //the potential bounding segments
   vcl_vector<strk_epi_seg_sptr> left_cand, right_cand;
   this->intensity_candidates(seg, left_cand, right_cand);
   //scan the segment
   double min_a = seg->min_alpha(), max_a = seg->max_alpha();
-  for (double a = min_a; a<=max_a; a+=da_)
-  {
-    double s = seg->s(a), left_int = 0, right_int =0;
-    left_int = scan_left(a, s, left_cand);
-    right_int = scan_right(a, s, right_cand);
-    seg->add_int_sample(a, left_int, right_int);
-  }
-  return true;
+  for(double a = min_a; a<=max_a; a+=da_)
+    {
+      double s = seg->s(a), left_int=0, right_int=0, left_ds=0, right_ds=0;
+      left_int = scan_left(a, s, left_cand, left_ds);
+      right_int = scan_right(a, s, right_cand, right_ds);
+      seg->add_int_sample(a, left_ds, left_int, right_ds, right_int); 
+    }
+return true;
 }
 
 //======================================================================
@@ -726,4 +737,50 @@ void strk_epipolar_grouper::brute_force_match()
           }
         }
     }
+}
+
+vil1_memory_image_of<unsigned char> strk_epipolar_grouper::epi_region_image()
+{
+  vil1_memory_image_of<unsigned char> out;
+  if(!image_||!min_epi_segs_[frame_].size())
+    return out;
+  int w = image_.width(), h = image_.height();
+  out.resize(w,h);
+  for(int r = 0; r<h; r++)
+    for(int c = 0; c<w; c++)
+      out(c,r)=0;
+  vcl_vector<strk_epi_seg_sptr>& segs = min_epi_segs_[frame_];
+  for(vcl_vector<strk_epi_seg_sptr>::iterator sit = segs.begin();
+      sit != segs.end(); sit++)
+    {
+      strk_epi_seg_sptr seg = (*sit);
+      double amin = seg->min_alpha(), amax = seg->max_alpha();
+      for(double a = amin; a<=amax; a+=da_)
+        {
+          double s0 = seg->s(a);
+          double slmin = s0-seg->left_ds(a); 
+          double srmax = s0+seg->right_ds(a);
+          unsigned char il = (unsigned char)seg->left_int(a);
+          unsigned char ir = (unsigned char)seg->right_int(a);
+          double u, v;
+          int ui, vi;
+
+          for(double s = slmin; s<s0; s++)
+            {
+              image_coords(a, s, u, v);
+              ui = (int)(u+0.5), vi = (int)(v+0.5);
+              if(out(ui,vi)==0)
+                out(ui, vi) = il;
+            }
+                
+          for(double s = s0; s<srmax; s++)
+            {
+              image_coords(a, s, u, v);
+              ui = (int)(u+0.5), vi = (int)(v+0.5);
+              if(out(ui,vi)==0)
+                out(ui, vi) = ir;
+            }
+        }
+    }
+  return out;
 }

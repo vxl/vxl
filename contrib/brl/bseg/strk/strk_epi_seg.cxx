@@ -230,14 +230,44 @@ double strk_epi_seg::tan_ang(double alpha)
 
 //Add an intensity sample 
 void strk_epi_seg::add_int_sample(const double alpha, 
+                                   const double left_ds,
                                    const double left_int,
+                                   const double right_ds,
                                    const double right_int)
 {
 
    int_alpha_.push_back(alpha);
+   left_ds_.push_back(left_ds);
    left_int_.push_back(left_int);
+   right_ds_.push_back(right_ds);
    right_int_.push_back(right_int);
   int_valid_ = false;
+}
+
+//Linearly interpolate left interval length
+double strk_epi_seg::left_ds(double alpha)
+{
+
+  assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
+  double last_a;
+  int n = int_alpha_.size();
+  for(int i = 0; i<n; i++)
+    {
+      double a = int_alpha_[i];
+      if(a<alpha)
+        {
+          last_a = a;
+          continue;
+        }
+      if(a==alpha)
+        return left_ds_[i];
+      double lds = linear_interpolate(last_a, a,
+                                      left_ds_[i-1],
+                                      left_ds_[i], alpha);
+      return lds;
+    }
+
+  return -1;
 }
 
 
@@ -262,6 +292,32 @@ double strk_epi_seg::left_int(double alpha)
                                     left_int_[i-1],
                                     left_int_[i], alpha);
       return li;
+    }
+
+  return -1;
+}
+
+//Linearly interpolate left interval length
+double strk_epi_seg::right_ds(double alpha)
+{
+
+  assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
+  double last_a;
+  int n = int_alpha_.size();
+  for(int i = 0; i<n; i++)
+    {
+      double a = int_alpha_[i];
+      if(a<alpha)
+        {
+          last_a = a;
+          continue;
+        }
+      if(a==alpha)
+        return right_ds_[i];
+      double rds = linear_interpolate(last_a, a,
+                                      right_ds_[i-1],
+                                      right_ds_[i], alpha);
+      return rds;
     }
 
   return -1;
