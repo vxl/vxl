@@ -13,4 +13,7 @@ IF(BUILD_TESTING)
   # test
   ADD_EXECUTABLE( netlib_tricall tricall.c )
   ADD_TEST( netlib_test_tricall netlib_tricall )
+  # test
+  ADD_EXECUTABLE( netlib_integral_test integral-test.c )
+  ADD_TEST( netlib_test_integral netlib_integral_test )
 ENDIF(BUILD_TESTING)

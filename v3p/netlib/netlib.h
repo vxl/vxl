@@ -666,6 +666,11 @@ double pythag_(const double *a, const double *b);
   int wevmw_(int *n, double *v, double *w);
   int zbrent_(int *n, double *tri, double *eps, int *nsig, double *aa, double *bb, int *maxfnn, int *ier);
 
+  int trapru_(double f(float*), float *a, float *b, int *m, float *trule);
+  int simpru_(double f(float*), float *a, float *b, int *m, float *srule);
+  /*: computes integral; input: f=integrand a,b=endpoints tol=tolerance; output: errbdd=error_estimation m=substates */
+  int adaptquad_(double f(float*), float *a, float *b, float *tol, float *srmat, float *integral, float *errbdd, int *m, int*state);
+
 #ifdef __cplusplus
 }
 #endif
