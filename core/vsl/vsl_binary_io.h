@@ -124,7 +124,7 @@ public:
 
   //: Create this adaptor from a file.
   // The adapter will delete the internal stream automatically on destruction.
-  vsl_b_ofstream(char *filename,
+  vsl_b_ofstream(const char *filename,
     vcl_ios_openmode mode = vcl_ios_out | vcl_ios_trunc):
     vsl_b_ostream(new vcl_ofstream(filename, mode | vcl_ios_binary)) {}
 
@@ -225,7 +225,7 @@ public:
 
   //: Create this adaptor from a file.
   // The adapter will delete the stream automatically on destruction.
-  vsl_b_ifstream(char *filename, vcl_ios_openmode mode = vcl_ios_in):
+  vsl_b_ifstream(const char *filename, vcl_ios_openmode mode = vcl_ios_in):
     vsl_b_istream(new vcl_ifstream(filename, mode | vcl_ios_binary)) {}
 
   //: Virtual destructor.so that it can be overloaded
