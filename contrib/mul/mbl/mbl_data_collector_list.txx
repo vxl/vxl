@@ -6,6 +6,7 @@
 #include <mbl/mbl_data_collector_list.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
+#include <vsl/vsl_vector_io.h>
 
 //=======================================================================
 // Dflt ctor
@@ -55,6 +56,28 @@ mbl_data_wrapper<T >& mbl_data_collector_list<T>::data_wrapper()
 }
 
 template <class T>
+vcl_string mbl_data_collector_list<T>::is_a() const
+{
+  return vcl_string("mbl_data_collector_list<T>");
+}
+
+//=======================================================================
+
+template <class T>
+short mbl_data_collector_list<T>::version_no() const
+{
+  return 1;
+}
+
+//=======================================================================
+
+template <class T>
+mbl_data_collector_base* mbl_data_collector_list<T>::clone() const
+{
+  return new mbl_data_collector_list<T>(*this);
+}
+
+template <class T>
 void mbl_data_collector_list<T>::print_summary(vcl_ostream& os) const
 {
   os<<"Number stored: "<<data_.size()<<vcl_endl;
@@ -64,7 +87,7 @@ template <class T>
 void mbl_data_collector_list<T>::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs, version_no());
-  vsl_b_write(bfs, data_());
+  vsl_b_write(bfs, data_);
 }
 
 template <class T>
