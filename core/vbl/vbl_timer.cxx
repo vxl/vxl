@@ -29,6 +29,20 @@
 
 #include "vbl_timer.h"
 
+#include <vcl/vcl_sys/time.h>
+#include <vcl/vcl_ctime.h>
+
+struct vbl_timer_data
+{
+#ifndef WIN32
+  tms usage0;                    // usage mark. 
+  struct timeval real0;          // wall clock mark.
+#else
+ clock_t usage0;
+ struct _timeb real0;
+#endif
+};
+
 #include <vxl_config.h> // VXL_TWO_ARG_GETTIME
 
 #include <vcl/vcl_climits.h>   // for CLK_TCK
@@ -47,25 +61,28 @@
 #undef CLK_TCK
 #define CLK_TCK sysconf(_SC_CLK_TCK)
 
+vbl_timer::vbl_timer() : data(new vbl_timer_data) { mark(); }
+vbl_timer::~vbl_timer() { delete data; data = 0; }
+
 // -- Sets the reference time to now.
 
 void vbl_timer::mark () {
 #ifndef WIN32
-  times(&usage0);		// user/system time
+  times(&data->usage0);		// user/system time
 #ifndef SYSV
   struct timezone tz;
-  gettimeofday(&real0, &tz);		// wall clock time
+  gettimeofday(&data->real0, &tz);		// wall clock time
 #else
 #if VXL_TWO_ARG_GETTIME
-  gettimeofday(&real0, (void*)0);
+  gettimeofday(&data->real0, (void*)0);
 #else
-  gettimeofday(&real0);
+  gettimeofday(&data->real0);
 #endif
 #endif 
 #else
   // Win32 section
-  usage0 = clock();
-  _ftime(&real0);
+  data->usage0 = clock();
+  _ftime(&data->real0);
 #endif
 }
 
@@ -86,8 +103,8 @@ long vbl_timer::real () {
   gettimeofday(&real);
 #endif
 #endif 
- s  = real.tv_sec    - real0.tv_sec;
- long us = real.tv_usec - real0.tv_usec;
+ s  = real.tv_sec    - data->real0.tv_sec;
+ long us = real.tv_usec - data->real0.tv_usec;
 
  if(us < 0)
    {us += 1000000;
@@ -99,8 +116,8 @@ long vbl_timer::real () {
  // Win32 section
  struct _timeb real;
  _ftime(&real);
- s = real.time - real0.time;
- long ms = real.millitm - real0.millitm;
+ s = real.time - data->real0.time;
+ long ms = real.millitm - data->real0.millitm;
 
  if(ms < 0) {
    ms += 1000;
@@ -116,10 +133,10 @@ long vbl_timer::user () {
 #ifndef WIN32
   tms usage;
   times(&usage);		// new user/system time
-  return (usage.tms_utime - usage0.tms_utime) * 1000 / CLK_TCK;
+  return (usage.tms_utime - data->usage0.tms_utime) * 1000 / CLK_TCK;
 #else
   clock_t usage = clock();
-  return (usage - usage0) / (CLOCKS_PER_SEC/1000);
+  return (usage - data->usage0) / (CLOCKS_PER_SEC/1000);
 #endif
 }
 
@@ -130,7 +147,7 @@ long vbl_timer::system () {
 #ifndef WIN32
   tms usage;
   times(&usage);		// new user/system time
-  return (usage.tms_stime - usage0.tms_stime) * 1000 / CLK_TCK;
+  return (usage.tms_stime - data->usage0.tms_stime) * 1000 / CLK_TCK;
 #else
     return 0L;
 #endif
@@ -144,10 +161,10 @@ long vbl_timer::all () {
   tms usage;
   times(&usage);		// new user/system time
   return (usage.tms_utime + usage.tms_stime -
-	  usage0.tms_utime - usage0.tms_stime)  * 1000 / CLK_TCK;
+	  data->usage0.tms_utime - data->usage0.tms_stime)  * 1000 / CLK_TCK;
 #else
   clock_t usage = clock();
-  return (usage - usage0) / (CLOCKS_PER_SEC/1000);
+  return (usage - data->usage0) / (CLOCKS_PER_SEC/1000);
 #endif
 }
 

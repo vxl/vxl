@@ -38,32 +38,29 @@
 // specific notes.
 //
 
-#include <vcl/vcl_sys/time.h>
-#include <vcl/vcl_ctime.h>
+struct vbl_timer_data;
+
 #include <vcl/vcl_iosfwd.h>
 
 class vbl_timer {
 public:
-  vbl_timer() {mark();}	// construct & mark
+  vbl_timer();   // construct and mark
+  ~vbl_timer();
   
-  void mark();			// mark timer
-  long real();			// real        time (ms) since last Mark
-  
-  long user();			// user        time (ms) since last Mark
-  long system();		// system      time (ms) since last Mark
-  long all();			// user+system time (ms) since last Mark
+  void mark();   // mark timer
 
+  long real();   // real        time (ms) since last mark
+  long user();   // user        time (ms) since last mark
+  long system(); // system      time (ms) since last mark
+  long all();    // user+system time (ms) since last mark
+  
   void print(ostream& s);
   
 private:
-
-#ifndef WIN32
-  tms usage0;                    // usage mark. 
-  struct timeval real0;          // wall clock mark.
-#else
- clock_t usage0;
- struct _timeb real0;
-#endif
+  vbl_timer_data *data;
+  // disallow.
+  vbl_timer(vbl_timer const &) { }
+  void operator=(vbl_timer const &) { }
 };
 
 #endif

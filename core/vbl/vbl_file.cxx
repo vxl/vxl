@@ -120,7 +120,8 @@ vcl_string vbl_file::expand_tilde(char const* vbl_filename)
 #endif
 }
 
-vcl_string vbl_file::basename(char const* filename, char const* suffix) {
+vcl_string vbl_file::basename(char const* filename, char const* suffix)
+{
   vcl_string fn(filename);
   unsigned int start = fn.rfind('/') + 1;
   unsigned int end;
