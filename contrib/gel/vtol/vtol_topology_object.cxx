@@ -290,7 +290,7 @@ void vtol_topology_object::describe_inferiors(vcl_ostream &strm,
   topology_list::const_iterator i;
   for (i=inferiors()->begin();i!=inferiors()->end();++i)
   {
-    for (int n=0; n<blanking; ++n) strm << ' ';
+    for (int n=0; n<blanking+2; ++n) strm << ' ';
     (*i)->print();
   }
 }
