@@ -618,9 +618,10 @@ void vtol_cycle_processor::compute_cycles()
             if (is_cycle)
               chains_.push_back(cycle);
             else//path was all bridge edges
-              for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = cycle_edges.begin();
-                   eit != cycle_edges.end(); eit++)
-                cycle_edges.erase(eit);
+              cycle_edges.clear();
+//               for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = cycle_edges.begin();
+//                    eit != cycle_edges.end(); eit++)
+//                 cycle_edges.erase(eit);
           }
         if (!found_next_edge_)
           {
@@ -631,9 +632,8 @@ void vtol_cycle_processor::compute_cycles()
               if (touched(*eit)&&used(*eit))
                 removed_edges.push_back(*eit);
 
-            for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = removed_edges.begin();
-                 eit != removed_edges.end(); eit++)
-              removed_edges.erase(eit);
+            
+              removed_edges.clear();
 
             this->set_bridge_vars();
           }
