@@ -114,18 +114,16 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double>&
   vcl_vector<double> temp_vecs(n*dim);
 
   // set nblock = vcl_max(10, dim/6) :
-  int nblock = 10;         // nblock = 2
-  if (nblock > dim/6) nblock = dim/6;
+  int nblock = (dim>60) ? dim/6 : 10;
 
   // isn't this rather a lot ? -- fsm  
   int maxop = dim*10;      // dim*20;
 
-  // set maxj = vcl_max(maxop*nblock, 6*nblock+1) :
+  // set maxj = vcl_max(40, maxop*nblock, 6*nblock+1) :
   int maxj = maxop*nblock; // 2*n+1;
   int t1 = 6*nblock+1;
   if (maxj < t1) maxj = t1;
-  // but it must be at least 40 :
-  if (maxj<40) maxj=40;
+  if (maxj < 40) maxj = 40;
 
   // Calculate size of workspace needed.  These expressions come from
   // the LASO documentation.
@@ -136,7 +134,7 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double>&
   vcl_vector<double> work(work_size+10);
 
   // Set starting vectors to zero.
-  for (unsigned i=0; i<dim*nblock; ++i) 
+  for (int i=0; i<dim*nblock; ++i) 
     work[i] = 0.0;
 
   vcl_vector<int> ind(n);
@@ -216,12 +214,12 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double>&
   nvalues = n;
   vectors = new vnl_vector<double>[n];
   values = new double[n];
-  for (unsigned i=0; i<n; ++i) {
+  for (int i=0; i<n; ++i) {
     values[i] = temp_vals[i];
     // cout << "value " << temp_vals[i] 
     //   << " accuracy " << temp_vals[i+n*2] << endl;
     vnl_vector<double> vec(dim,0.0);
-    for (unsigned j=0; j<dim; ++j)
+    for (int j=0; j<dim; ++j)
       vec[j] = temp_vecs[j + dim*i];
     vectors[i] = vec;
   }
