@@ -54,6 +54,13 @@ while (<>)
     s/\bDECLARE_DYNCREATE\s*\([^()]*\)//g; # for MFC
     s/\bTODO\b/\\todo/g;
 
+    # perform this replacement temporarily. Make it permanent in the code
+    # when doxygen 1.3.4 is more widely distributed
+    if ($ENV{"REPLACE_RELATES_WITH_RELATESALSO"} ne "")
+    {
+        s/\\relates\b/\\relatesalso/;
+    }
+
     if ( $should_end_verbatim )
     {
         $verbatim = 0;
