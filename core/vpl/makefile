@@ -7,6 +7,8 @@ LIBRARY := vpl
 VERSION := 1.0
 
 SOURCES += vpl.cxx # includes one of os_cygwin/vpl.cxx os_win32/vpl.cxx os_unix/vpl.cxx
+SOURCES += vpl_fdopen.cxx
+SOURCES += vpl_fileno.cxx
 MANPAGE_SOURCES += vpl_mutex.h
 
 DEFINES += -DBUILDING_VPL_DLL
