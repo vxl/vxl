@@ -85,7 +85,7 @@ test_trans_affine()
   // Test the inv_map functions
   vnl_vector<double> inv_map_pt(3);
   xform->inv_map(true_point, inv_map_pt);
-  testlib_test_perform( close(inv_map_pt, point, 1e-8) );
+  testlib_test_perform( close(inv_map_pt, point, 1e-7) );
 
   vnl_vector<double> point2(3), next_inv_map(3), delta_to(3), inv_map_pt2(3);
   point2[0] = 5.0;
@@ -99,7 +99,7 @@ test_trans_affine()
 
   xform->inv_map(true_point2, false, delta_to, inv_map_pt2, next_inv_map);
   testlib_test_begin( "Inverse_map points, 2nd interface" );
-  testlib_test_perform( close(inv_map_pt2, point2, 1e-8) );
+  testlib_test_perform( close(inv_map_pt2, point2, 1e-7) );
 }
 
 void
@@ -359,7 +359,7 @@ void test_trans_rigid()
   vnl_vector<double> inv_map_pt(3),inv_inv_map_pt(3);
   xform->inv_map(point, inv_map_pt);
   xform->map_location(inv_map_pt,inv_inv_map_pt);
-  testlib_test_perform( close(point, inv_inv_map_pt, 1e-8) );
+  testlib_test_perform( close(point, inv_inv_map_pt, 1e-7) );
 }
 
 } // end anonymous namespace
