@@ -183,46 +183,45 @@ void vtol_vertex_2d::describe(vcl_ostream &strm,
 //
 //    Implementor Functions
 
-vtol_edge_sptr vtol_vertex_2d::new_edge(vtol_vertex_2d_sptr const& v)
-{
-  return new_edge(v->cast_to_vertex());
-}
-
 //-----------------------------------------------------------------------------
 //: Create a line edge from `this' and `other' only if this edge does not exist.
 //  Otherwise it just returns the existing edge.
 // Require: other!=*this
 //-----------------------------------------------------------------------------
-vtol_edge_sptr vtol_vertex_2d::new_edge(vtol_vertex_sptr const& other)
+vtol_edge_sptr vtol_vertex_2d::new_edge(vtol_vertex_2d_sptr const& other)
 {
   // require
-  assert(other != this);
-
-  vtol_vertex_2d_sptr other2d = other->cast_to_vertex_2d();
-  assert(other2d);
+  assert(other);
+  assert(*other != *this);
 
   // awf: load vrml speed up by factor of 2 using this loop.
   vtol_edge_sptr result = 0;
 
   // Scan Zero Chains
   bool found = false;
+  vtol_vertex_sptr v = other->cast_to_vertex();
   vcl_list<vtol_topology_object*>::const_iterator zp;
   for (zp=superiors_.begin();zp!=superiors_.end()&&!found;++zp)
+  {
+    // Scan superiors of ZChain (i.e. edges)
+    const vcl_list<vtol_topology_object*> *sups=(*zp)->superiors_list();
+    vcl_list<vtol_topology_object*>::const_iterator ep;
+    for (ep=sups->begin();ep!=sups->end()&&!found;++ep)
     {
-      // Scan superiors of ZChain (i.e. edges)
-      const vcl_list<vtol_topology_object*> *sups=(*zp)->superiors_list();
-      vcl_list<vtol_topology_object*>::const_iterator ep;
-      for (ep=sups->begin();ep!=sups->end()&&!found;++ep)
-        {
-          vtol_edge_sptr e=(*ep)->cast_to_edge();
-          if (e->v1()==other||e->v2()==other)
-            { result=e; found = true; }
-        }
+      vtol_edge_sptr e=(*ep)->cast_to_edge();
+      if (e->v1()==v||e->v2()==v)
+        { result=e; found = true; }
     }
+  }
   if (!result)
-    result= new vtol_edge_2d(this,other2d);
+    result= new vtol_edge_2d(this,other);
 
   return result;
+}
+
+vtol_edge_sptr vtol_vertex_2d::new_edge(vtol_vertex_sptr const& other)
+{
+  return new_edge(vtol_vertex_2d_sptr(other->cast_to_vertex_2d()));
 }
 
 //: Returns the squared distance from the vertex and the vector location, v.
@@ -245,22 +244,22 @@ double vtol_vertex_2d::euclidean_distance(vtol_vertex_2d& v)
 vtol_vertex_2d &vtol_vertex_2d::operator=(const vtol_vertex_2d &other)
 {
   if (this!=&other)
-    {
-      this->touch(); //Timestamp update
-      // Must allocate here, since this pointer will be unref()ed by destructor
-      point_=new vsol_point_2d(*(other.point_));
-    }
+  {
+    this->touch(); //Timestamp update
+    // Must allocate here, since this pointer will be unref()ed by destructor
+    point_=new vsol_point_2d(*(other.point_));
+  }
   return *this;
 }
 
 vtol_vertex& vtol_vertex_2d::operator=(const vtol_vertex &other)
 {
   if (this!=&other)
-    {
-      this->touch(); //Timestamp update
-      // Must allocate here, since this pointer will be unref()ed by destructor
-      point_=new vsol_point_2d(*(other.cast_to_vertex_2d()->point_));
-    }
+  {
+    this->touch(); //Timestamp update
+    // Must allocate here, since this pointer will be unref()ed by destructor
+    point_=new vsol_point_2d(*(other.cast_to_vertex_2d()->point_));
+  }
   return *this;
 }
 
