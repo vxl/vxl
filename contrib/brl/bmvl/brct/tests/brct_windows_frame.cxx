@@ -27,6 +27,7 @@
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vil1/vil1_load.h>
 #define JOE_RECON
+
 //static live_video_manager instance
 brct_windows_frame *brct_windows_frame::instance_ = 0;
 
@@ -140,7 +141,6 @@ bool brct_windows_frame::handle(const vgui_event &e)
   return this->child.handle(e);
 }
 
-
 void brct_windows_frame::quit()
 {
   clean_up();
@@ -237,7 +237,6 @@ void brct_windows_frame::remove_curve3d()
   this->post_redraw();
 }
 
-
 void brct_windows_frame::
 show_epipolar_lines(vcl_vector<vgl_point_2d<double> > const& c2d)
 {
@@ -247,17 +246,16 @@ show_epipolar_lines(vcl_vector<vgl_point_2d<double> > const& c2d)
   else
     e = epi_recon_->get_cur_epipole();
   double ex = e.x(), ey = e.y();
-  int n =0;
-  for (vcl_vector<vgl_point_2d<double> >::const_iterator pit = c2d.begin();
-      pit != c2d.end(); pit++)
-    {
-      double px = (*pit).x(), py = (*pit).y();
-      easy_2d_->set_foreground(1, 1, 0);
-      easy_2d_->add_infinite_line( -(py-ey), px-ex, ex*py - px*ey);
-      easy_2d_->set_foreground(1, 0, 0);
-      n++;
-    }
+  vcl_vector<vgl_point_2d<double> >::const_iterator pit = c2d.begin();
+  for (int n = 0; pit != c2d.end(); ++pit, ++n)
+  {
+    double px = (*pit).x(), py = (*pit).y();
+    easy_2d_->set_foreground(1, 1, 0);
+    easy_2d_->add_infinite_line( -(py-ey), px-ex, ex*py - px*ey);
+    easy_2d_->set_foreground(1, 0, 0);
+  }
 }
+
 void brct_windows_frame::init_kalman()
 {
   vcl_vector<vgl_point_2d<double> > c2d;
@@ -269,10 +267,10 @@ void brct_windows_frame::init_kalman()
   }
 
   if (!kalman_&&!epi_recon_)
-    {
-      vcl_cout<<"brct_windows_frame::kalman or recon not created yet\n";
-      return;
-    }
+  {
+    vcl_cout<<"brct_windows_frame::kalman or recon not created yet\n";
+    return;
+  }
   if (kalman_)
     kalman_->init();
   else
@@ -311,7 +309,6 @@ void brct_windows_frame::init_kalman()
 void brct_windows_frame::go()
 {
   remove_curve3d();
-
 
   // add current data
   vcl_vector<vgl_point_2d<double> > c2d;
@@ -605,6 +602,7 @@ static void write_vrml_header(vcl_ofstream& str)
       << "  coord Coordinate{\n"
       << "   point[\n";
 }
+
 static void write_vrml_trailer(vcl_ofstream& str)
 {
   str << "  ]\n"
@@ -653,11 +651,8 @@ void brct_windows_frame::write_vrml_file()
   if (!out)
     return;
   write_vrml_header(out);
- bugl_curve_3d c3d;
-  if (kalman_)
-   c3d = kalman_->get_curve_3d();
-  else
-    c3d = epi_recon_->get_curve_3d();
+  bugl_curve_3d c3d = kalman_ ? kalman_->get_curve_3d()
+                              : epi_recon_->get_curve_3d();
 
   int size = c3d.get_num_points();
   vcl_vector<vgl_point_3d<double> > pts(size);
