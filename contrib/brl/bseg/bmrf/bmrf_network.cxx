@@ -195,7 +195,7 @@ bmrf_network::b_write( vsl_b_ostream& os ) const
 {
   vsl_b_write(os, version());
   // write the number of nodes
-  vsl_b_write(os, unsigned int(node_from_seg_.size()));
+  vsl_b_write(os, (unsigned int)node_from_seg_.size());
   // write all the nodes
   seg_node_map::const_iterator itr = node_from_seg_.begin();
 
@@ -204,7 +204,7 @@ bmrf_network::b_write( vsl_b_ostream& os ) const
   }
 
   // write the number of epipoles
-  vsl_b_write(os, unsigned int(epipoles_.size()));
+  vsl_b_write(os, (unsigned int)epipoles_.size());
   // write all the epipoles
   for( vcl_vector<bmrf_epipole>::const_iterator itr = epipoles_.begin();
        itr != epipoles_.end(); ++itr ){
