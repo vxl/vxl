@@ -149,6 +149,37 @@ inline void vil3d_convert_stretch_range(const vil3d_image_view<inP>& src,
 }
 
 
+//: Convert src image<inP> to dest image<double> by stretching 
+// input range [src_lo, src_hi] to output range [dest_lo, dest_hi].
+// Inputs < src_lo are mapped to dest_lo, and inputs > src_hi to dest_hi.
+template <class inP>
+inline void vil3d_convert_stretch_range_limited(const vil3d_image_view<inP>& src,
+                                                vil3d_image_view<double>& dest,
+                                                const inP src_lo, 
+                                                const inP src_hi,
+                                                const double dest_lo, 
+                                                const double dest_hi)
+{
+  double b = 0.0;
+
+  double ddest = dest_hi - dest_lo;
+  double dsrc = static_cast<double>(src_hi - src_lo);  
+  double dds = ddest / dsrc;
+  
+  dest.set_size(src.ni(), src.nj(), src.nk(), src.nplanes());
+  for (unsigned p = 0; p < src.nplanes(); ++p)
+    for (unsigned k = 0; k < src.nk(); ++k)
+      for (unsigned j = 0; j < src.nj(); ++j)
+        for (unsigned i = 0; i < src.ni(); ++i)
+        {
+          inP s = src(i,j,k,p);
+          dest(i,j,k,p) = s<=src_lo ? dest_lo :
+                          s>=src_hi ? dest_hi :
+                                      dest_lo + dds*static_cast<double>(p-src_lo);
+        }
+}
+
+
 //: Cast the unknown pixel type to the known one.
 //
 // This function is designed to be used with vil3d_load or
