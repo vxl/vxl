@@ -13,8 +13,7 @@
 #include <vil3d/algo/vil3d_threshold.h>
 #include <vcl_fstream.h>
 
-//: Compute a mask where the regions in each slice of a 3D
-//  image bounded by contours are set to "on"
+//: Compute a mask where the regions in each slice of a 3D image bounded by contours are set to "on"
 
 void vil3d_fill_boundary(vil3d_image_view<bool>& bool_image)
 {
@@ -26,7 +25,7 @@ void vil3d_fill_boundary(vil3d_image_view<bool>& bool_image)
   // input image is binary, converted to int (need to speak to tim about data types accepted by threshold
   vil3d_image_view<int> image(ni,nj,nk,nplanes);
   vil3d_convert_cast(bool_image,image);
-  
+
   vcl_ptrdiff_t istep = image.istep(), jstep = image.jstep(), kstep = image.kstep();
 
   // scan the image and look for a boundary pixel
@@ -39,9 +38,9 @@ void vil3d_fill_boundary(vil3d_image_view<bool>& bool_image)
   for (int k = 0; k < nk; k++)
   {
     boundary_label = 3;
-    for(int j = 0; j < nj; j++)
+    for (int j = 0; j < nj; j++)
     {
-      for(int i = 0; i < ni; i++, p0+=istep)
+      for (int i = 0; i < ni; i++, p0+=istep)
       {
         if (*p0 == 1)
         {
@@ -57,12 +56,11 @@ void vil3d_fill_boundary(vil3d_image_view<bool>& bool_image)
   vil3d_threshold_above(image,bool_image,3);
 }
 
-//:  Follow the current boundary in the current slice 
-//  labelling boundary pixels and background pixels  
+//: Follow the current boundary in the current slice.
+//  labelling boundary pixels and background pixels
 //  that border the boundary.
 void label_boundary_and_bkg(vil3d_image_view<int> &image, int *p, int boundary_label, int background_label)
 {
-
   vcl_ptrdiff_t istep = image.istep(), jstep = image.jstep();
   vcl_vector<vcl_ptrdiff_t> neighbourhood(8);
   vcl_vector<int> next_dir(8);
@@ -92,11 +90,11 @@ void label_boundary_and_bkg(vil3d_image_view<int> &image, int *p, int boundary_l
   {
     *p0 = boundary_label;
     counter++;
-    
-    for(i = 0; i < 8; i++)
+
+    for (i = 0; i < 8; i++)
     {
       p1 = p0+neighbourhood[offset];
-      if((*(p1) == 1) || (*(p1) == boundary_label))  // this means we visit some pixels
+      if ((*(p1) == 1) || (*(p1) == boundary_label))  // this means we visit some pixels
       {                        // more than once. needed for degenerate cases
         p0 = p1;
         offset = next_dir[offset];
@@ -143,14 +141,14 @@ void fill_boundary(vil3d_image_view<int> &image, int *p0, int boundary_label, in
   int *p1;
 
   //pixel_stack.push(p0);
-  while(!pixel_stack.empty())
+  while (!pixel_stack.empty())
   {
     p0 = pixel_stack.top();
     pixel_stack.pop();
-    for(i = 0;i < 8;i++)
+    for (i = 0;i < 8;i++)
     {
       p1 = p0+neighbourhood[i];
-      if(*p1 != boundary_label && *p1 != background_label)
+      if (*p1 != boundary_label && *p1 != background_label)
       {
         *p1 = boundary_label;
         pixel_stack.push(p1);
