@@ -1,12 +1,18 @@
 #include "vipl_moment.h"
 
-template <class T> T
-pow (const T& xin, int y)
+// "integer power" function, used in the filter.
+// Note that the input and return types are double: we could have made this
+// templated on the "DataIn" type, but it makes no sense to do arithmetic
+// on say a ubyte value in ubyte, as we don't want a "modulo 256" result!
+// (Actually the return type should be vnl_numeric_traits<T>::real_t
+// but only for T=complex this makes a difference, and we don't want to
+// depend on vnl just for this alone.)
+
+static double pow (double x, int y)
 {
   if (y == 0)
-    return T (1.0);
-  T r = 1;
-  T x (xin);
+    return 1.0;
+  double r = 1.0;
   if (y < 0)
   {
     y = -y;
@@ -32,7 +38,7 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   ImgOut &out = *out_data_ptr();
 
 
-  // We create a float buffer to hold the computed values.
+  // We create a (double) float buffer to hold the computed values.
 
   int startx = start(X_Axis());
   int starty = start(Y_Axis());
@@ -43,7 +49,7 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   int sizex = stopx-startx;
   int sizey = stopy-starty;
 
-  float* tempbuf = new float[sizex*sizey];
+  double* tempbuf = new double[sizex*sizey];
 
 
   int size = width_*height_; // size of the mask
@@ -54,7 +60,7 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   int y2 = height_/2;
 
   DataIn w;
-  float d = 0.0;
+  double d = 0.0;
 
   // First we create the outvalue for the first element
 
@@ -62,7 +68,7 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
     for (int j=starty-y1;j<=(starty+y2);++j)
     {
       w = getpixel(in,i,j,w);
-      d +=  pow(w,order_);
+      d += pow(double(w),order_);
     }
   tempbuf[0] = d;
   d/=size;
@@ -76,9 +82,9 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
     for (int j = starty-y1;j<=starty+y2;++j)
     {
       w  = getpixel(in,i-1-x1,j,w);
-      d -= pow(w,order_);
+      d -= pow(double(w),order_);
       w  = getpixel(in,i+x2,j,w);
-      d += pow(w,order_);
+      d += pow(double(w),order_);
     }
     tempbuf[i-startx] = d;
     d /= size;
@@ -93,9 +99,9 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
     for (int i = startx-x1;i<=startx+x2;++i)
     {
       w  = getpixel(in,i,j-1-y1,w);
-      d -= pow(w,order_);
+      d -= pow(double(w),order_);
       w  = getpixel(in,i,j+y2,w);
-      d += pow(w,order_);
+      d += pow(double(w),order_);
     }
     tempbuf[(j-starty)*sizex] = d;
     d /= size;
@@ -110,10 +116,10 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
       int i1 = i-startx;
       int j1 = j-starty;
       d = tempbuf[i1-1 + j1*sizex] + tempbuf[i1+(j1-1)*sizex] - tempbuf[(i1-1) + (j1-1)*sizex];
-      w = getpixel(in,i-x1-1,j-y1-1,w);  d += pow(w,order_);
-      w = getpixel(in,i-x1-1,j+y2,w);    d -= pow(w,order_);
-      w = getpixel(in,i+x2,j-y1-1,w);    d -= pow(w,order_);
-      w = getpixel(in,i+x2,j+y2,w);      d += pow(w,order_);
+      w = getpixel(in,i-x1-1,j-y1-1,w);  d += pow(double(w),order_);
+      w = getpixel(in,i-x1-1,j+y2,w);    d -= pow(double(w),order_);
+      w = getpixel(in,i+x2,j-y1-1,w);    d -= pow(double(w),order_);
+      w = getpixel(in,i+x2,j+y2,w);      d += pow(double(w),order_);
       tempbuf[i1+j1*sizex] = d;
       d /= size;
       fsetpixel(out,i,j,(DataOut)d);
