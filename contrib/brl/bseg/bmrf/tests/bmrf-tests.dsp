@@ -230,6 +230,9 @@ SOURCE=.\test_include.cxx
 # Begin Source File
 SOURCE=.\test_network.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_network_builder.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

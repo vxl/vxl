@@ -279,6 +279,15 @@ SOURCE=.\dcmdata/libsrc/dcvrut.cxx
 SOURCE=.\dcmdata/libsrc/dcxfer.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\dcmdata/libsrc/dcdebug.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\dcmdata/libsrc/dcistrmz.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\dcmdata/libsrc/dcostrmz.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\dcmimgle/libsrc/dcmimage.cxx
 # End Source File
 # Begin Source File

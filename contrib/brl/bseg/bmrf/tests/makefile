@@ -8,6 +8,7 @@ TESTS += test_epi_point.cxx
 TESTS += test_epi_seg.cxx
 TESTS += test_node.cxx
 TESTS += test_network.cxx
+TESTS += test_network_builder.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
