@@ -127,3 +127,8 @@ debug=$(debug_for_optimize) # needed for using $(optimize) on some files
 ifeq "HP-UX" "$(findstring HP-UX,$(OS))"
 pic = $(PIC)
 endif
+
+# on Solaris, with optimisation, this library needs -fPIC:
+ifeq "$(BUILD)" "shared-opt"
+pic = $(PIC)
+endif
