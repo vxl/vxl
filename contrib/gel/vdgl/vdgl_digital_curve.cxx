@@ -4,6 +4,8 @@
 #endif
 
 #include "vdgl_digital_curve.h"
+#include <vnl/vnl_numeric_traits.h>
+#include <vnl/vnl_math.h>
 #include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator_linear.h>
@@ -86,4 +88,30 @@ bool vdgl_digital_curve::split(vsol_point_2d_sptr const& v,
   dc1 = new vdgl_digital_curve(new vdgl_interpolator_linear(ec1));
   dc2 = new vdgl_digital_curve(new vdgl_interpolator_linear(ec2));
   return true;
+}
+//: scan all the points on the curve and compute the bounds
+void vdgl_digital_curve::compute_bounding_box(void)
+{
+  //initalize maxv, minv
+  double maxv = vnl_numeric_traits<double>::maxval;
+  double minv = -maxv;
+  double xmin = maxv, ymin = maxv, xmax = minv, ymax = minv;
+  
+  vdgl_edgel_chain_sptr ec = interpolator_->get_edgel_chain();
+  int N = ec->size();
+  for(int i=0; i<N; i++)
+    {
+      vdgl_edgel ed = (*ec)[i];
+      double x = ed.x(), y = ed.y();
+      xmin = vnl_math_min(xmin, x);
+      ymin = vnl_math_min(ymin, y);
+      xmax = vnl_math_max(xmax, x);
+      ymax = vnl_math_max(ymax, y);
+    }
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_2d;
+  bounding_box_->set_min_x(xmin);
+  bounding_box_->set_max_x(xmax);
+  bounding_box_->set_min_y(ymin);
+  bounding_box_->set_max_y(ymax);
 }

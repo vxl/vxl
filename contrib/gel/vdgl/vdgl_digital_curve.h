@@ -63,7 +63,8 @@ class vdgl_digital_curve : public vsol_curve_2d
   //---------------------------------------------------------------------------
   virtual vdgl_digital_curve const*cast_to_digital_curve(void)const{return this;}
   virtual vdgl_digital_curve *cast_to_digital_curve(void) {return this;}
-
+  //: bounding box
+  virtual void compute_bounding_box(void);
   // INTERNALS-----------------------------------------------------------------
  protected:
   // Data Members--------------------------------------------------------------
