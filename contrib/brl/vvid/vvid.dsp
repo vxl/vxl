@@ -72,6 +72,15 @@ SOURCE=.\vvid_harris_corner_process.cxx
 # Begin Source File
 SOURCE=.\vvid_frame_trail.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vvid_edge_line_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_grid_finder_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_line_fit_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -137,6 +146,15 @@ SOURCE=.\vvid_harris_corner_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vvid_frame_trail.h
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_edge_line_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_grid_finder_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_line_fit_process.h
 # End Source File
 # End Group
 # End Target
