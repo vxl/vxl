@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_viewer2D_tableau.cxx
+// This is core/vgui/vgui_viewer2D_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -51,8 +51,9 @@ vgui_viewer2D_tableau::vgui_viewer2D_tableau(vgui_tableau_sptr const& s) :
   sweep_next(false),
   prev_x(0), prev_y(0),
   zoom_x(0), zoom_y(0),
-  npos_x(0), npos_y(0),
-  zoom_factor(1.5)
+  new_x(0), new_y(0),
+  zoom_factor(1.5f),
+  npos_x(0), npos_y(0)
 {
 }
 
@@ -184,8 +185,8 @@ bool vgui_viewer2D_tableau::handle(const vgui_event& e)
   //normally this would be in the key press event 
   //routine, but we need to get our hands on the window
   //and the event is not passed into the key_press method.
-  if(e.type ==vgui_KEY_PRESS)
-    if(e.key=='c')
+  if (e.type ==vgui_KEY_PRESS)
+    if (e.key=='c')
       {
         vgui_adaptor* adap = e.origin;
         vgui_window* win = adap->get_window();
