@@ -1,11 +1,11 @@
+#include "rsdl_dist.h"
 
+#include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 
-#include <rsdl/rsdl_dist.h>
-
-double  
+double
 rsdl_dist_sq( const rsdl_point& p, const rsdl_point& q )
 {
   unsigned int Nc = p.num_cartesian();
@@ -25,26 +25,26 @@ rsdl_dist_sq( const rsdl_point& p, const rsdl_point& q )
     }
     sum_sq += vnl_math_sqr( diff );
   }
-   
+
   return sum_sq;
 }
 
 
-double 
+double
 rsdl_dist( const rsdl_point& p, const rsdl_point& q )
 {
   return vcl_sqrt( rsdl_dist_sq( p, q ) );
 }
 
 
-double  
+double
 rsdl_dist_sq( const rsdl_point & p, const rsdl_bounding_box &  b )
 {
   double sum_sq = 0;
   unsigned int Nc = p.num_cartesian();
   unsigned int Na = p.num_angular();
   assert( Nc == b.num_cartesian() && Na == b.num_angular() );
- 
+
   for ( unsigned int i=0; i<Nc; ++i ) {
     double x0 = b.min_cartesian(i), x1 = b.max_cartesian(i);
     double x = p.cartesian(i);
@@ -55,11 +55,11 @@ rsdl_dist_sq( const rsdl_point & p, const rsdl_bounding_box &  b )
       sum_sq += vnl_math_sqr( x1 - x );
     }
   }
-      
+
   for ( unsigned int j=0; j<Na; ++j ) {
     double a0 = b.min_angular(j), a1 = b.max_angular(j);
     double a = p.angular(j);
-    if ( a0 > a1 ) {             // interval wraps around 0 
+    if ( a0 > a1 ) {             // interval wraps around 0
       if ( a < a0 && a > a1 ) {  // outside interval, calculate distance
         sum_sq += vnl_math_sqr( vnl_math_min( a0-a, a-a1 ) );
       }
@@ -73,12 +73,11 @@ rsdl_dist_sq( const rsdl_point & p, const rsdl_bounding_box &  b )
       }
     }
   }
-   
+
   return sum_sq;
- 
 }
 
-double  
+double
 rsdl_dist( const rsdl_point & p, const rsdl_bounding_box& b )
 {
   return vcl_sqrt( rsdl_dist_sq( p, b ) );
@@ -86,13 +85,13 @@ rsdl_dist( const rsdl_point & p, const rsdl_bounding_box& b )
 
 
 bool
-rsdl_dist_point_in_box( const rsdl_point & pt, 
+rsdl_dist_point_in_box( const rsdl_point & pt,
                         const rsdl_bounding_box & box )
 {
   unsigned int Nc = pt.num_cartesian();
   unsigned int Na = pt.num_angular();
   assert( Nc == box.num_cartesian() && Na == box.num_angular() );
-  
+
   for ( unsigned int i=0; i<Nc; ++i ) {
     double x = pt.cartesian(i);
     if ( x < box.min_cartesian(i) || box.max_cartesian(i) < x )
@@ -115,7 +114,7 @@ rsdl_dist_point_in_box( const rsdl_point & pt,
 }
 
 void
-rsdl_dist_box_relation( const rsdl_bounding_box & inner, 
+rsdl_dist_box_relation( const rsdl_bounding_box & inner,
                         const rsdl_bounding_box & outer,
                         bool& inside,
                         bool& intersects )
@@ -124,7 +123,7 @@ rsdl_dist_box_relation( const rsdl_bounding_box & inner,
   unsigned int Na = inner.num_angular();
   assert( Nc == outer.num_cartesian() && Na == outer.num_angular() );
   inside = intersects = true;
- 
+
   for ( unsigned int i=0; i<Nc && intersects; ++i ) {
     double x0 = inner.min_cartesian(i), x1 = inner.max_cartesian(i);
     double y0 = outer.min_cartesian(i), y1 = outer.max_cartesian(i);

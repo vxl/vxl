@@ -1,7 +1,8 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-#include <vcsl/vcsl_perspective.h>
+#include "vcsl_perspective.h"
+#include <vcl_cassert.h>
 
 //***************************************************************************
 // Status report
@@ -95,7 +96,7 @@ vnl_vector<double> vcsl_perspective::inverse(const vnl_vector<double> &v,
 //---------------------------------------------------------------------------
 double vcsl_perspective::focal_value(double time) const
 {
-  if(beat_.size()==0) // static
+  if (beat_.size()==0) // static
     return focal_[0];
   else
     {

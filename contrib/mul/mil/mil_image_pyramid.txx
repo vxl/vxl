@@ -4,9 +4,10 @@
 //:
 //  \file
 
-#include <mil/mil_image_pyramid.h>
-#include <mil/mil_image.h>
+#include "mil_image_pyramid.h"
+
 #include <vcl_cstdlib.h> // for abort()
+#include <vcl_cassert.h>
 
 //------------------------------------------------------------------------
 //: Convert an image pyramid into a flat image containing each layer.

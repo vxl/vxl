@@ -23,6 +23,7 @@
 #include <vsl/vsl_indent.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
+#include <vcl_cassert.h>
 
 //=======================================================================
 

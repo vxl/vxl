@@ -20,14 +20,14 @@
 //  definition. I'll check one day.
 //
 
+#include "mbl_rbf_network.h"
+
 #include <vcl_cstdlib.h>
-#include <mbl/mbl_rbf_network.h>
+#include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <mbl/mbl_stats_1d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <mbl/mbl_matxvec.h>
-#include <mbl/mbl_matrix_products.h>
-
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_vector_io.h>
 

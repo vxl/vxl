@@ -19,6 +19,7 @@
 #include <vcl_iosfwd.h>
 #include <vgl/vgl_fwd.h> // declare vgl_homg_point_2d and vgl_line_2d
 #include <vgl/vgl_vector_2d.h>
+#include <vcl_cassert.h>
 #include <vcl_vector.h>
 
 //: Represents a cartesian 2D point

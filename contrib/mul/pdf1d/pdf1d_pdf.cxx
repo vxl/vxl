@@ -14,9 +14,9 @@
 #include "pdf1d_pdf.h"
 #include <vcl_cstdlib.h>
 #include <vcl_cmath.h>
-#include <vcl_queue.h>
 #include <vcl_ctime.h>
 #include <vcl_algorithm.h>
+#include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/vnl_math.h>

@@ -8,6 +8,7 @@
 #include "ImageMetric.h"
 
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_math.h>
 #include <mvl/HomgPoint2D.h>

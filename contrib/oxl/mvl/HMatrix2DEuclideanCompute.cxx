@@ -4,12 +4,9 @@
 
 #include "HMatrix2DEuclideanCompute.h"
 
-#include <vcl_vector.h>
+#include <vcl_cassert.h>
 
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_2x2.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_transpose.h>

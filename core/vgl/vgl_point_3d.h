@@ -18,6 +18,7 @@
 #include <vcl_iosfwd.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_plane_3d
 #include <vgl/vgl_vector_3d.h>
+#include <vcl_cassert.h>
 #include <vcl_vector.h>
 
 //: Represents a cartesian 3D point

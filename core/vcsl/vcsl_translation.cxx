@@ -5,7 +5,8 @@
 //:
 // \file
 
-#include <vcsl/vcsl_translation.h>
+#include "vcsl_translation.h"
+#include <vcl_cassert.h>
 
 //***************************************************************************
 // Status report
@@ -69,7 +70,7 @@ vnl_vector<double> vcsl_translation::execute(const vnl_vector<double> &v,
 
   vnl_vector<double> value=vector_value(time);
   vnl_vector<double> result(v.size());
-  for(unsigned int i=0;i<v.size();++i)
+  for (unsigned int i=0;i<v.size();++i)
     result.put(i,v.get(i)+value.get(i));
 
   return result;
@@ -89,7 +90,7 @@ vnl_vector<double> vcsl_translation::inverse(const vnl_vector<double> &v,
 
   vnl_vector<double> value=vector_value(time);
   vnl_vector<double> result(v.size());
-  for(unsigned int i=0;i<v.size();++i)
+  for (unsigned int i=0;i<v.size();++i)
     result.put(i,v.get(i)-value.get(i));
 
   return result;
@@ -100,7 +101,7 @@ vnl_vector<double> vcsl_translation::inverse(const vnl_vector<double> &v,
 //---------------------------------------------------------------------------
 vnl_vector<double> vcsl_translation::vector_value(double time) const
 {
-  if(beat_.size()==0) // static
+  if (beat_.size()==0) // static
     return vector_[0];
   else
     {

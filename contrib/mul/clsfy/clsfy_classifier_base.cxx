@@ -10,9 +10,9 @@
 //  2 May 2001 IMS Converted to VXL
 // \endverbatim
 
+#include "clsfy_classifier_base.h"
 #include <vcl_iostream.h>
-
-#include <clsfy/clsfy_classifier_base.h>
+#include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>

@@ -7,6 +7,7 @@
 
 #include "PairMatchSetCorner.h"
 
+#include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <mvl/HomgInterestPointSet.h>
 
@@ -70,7 +71,7 @@ void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
   points1.resize(n);
   points2.resize(n);
   int i = 0;
-  for(iterator match = *this; match; ++match) {
+  for (iterator match = *this; match; ++match) {
     points1[i] = _corners1->get_homg(match.get_i1());
     points2[i] = _corners2->get_homg(match.get_i2());
     ++i;
@@ -93,7 +94,7 @@ void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
   corner_index_1.resize(n);
   corner_index_2.resize(n);
   int i = 0;
-  for(iterator match = *this; match; match.next()) {
+  for (iterator match = *this; match; match.next()) {
     corner_index_1[i] = match.get_i1();
     corner_index_2[i] = match.get_i2();
     points1[i] = _corners1->get_homg(match.get_i1());
@@ -111,7 +112,7 @@ void PairMatchSetCorner::set(const vcl_vector<bool>& inliers,
 {
   clear();
   unsigned n = inliers.size();
-  for(unsigned i = 0; i < n; ++i)
+  for (unsigned i = 0; i < n; ++i)
     if (inliers[i])
       add_match(corner_index_1[i], corner_index_2[i]);
 }

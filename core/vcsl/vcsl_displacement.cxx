@@ -1,7 +1,8 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-#include <vcsl/vcsl_displacement.h>
+#include "vcsl_displacement.h"
+#include <vcl_cassert.h>
 
 //***************************************************************************
 // Status report

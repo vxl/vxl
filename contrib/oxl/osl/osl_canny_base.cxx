@@ -7,6 +7,7 @@
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
 #include <vcl_list.h>
+#include <vcl_cassert.h>
 
 //--------------------------------------------------------------
 

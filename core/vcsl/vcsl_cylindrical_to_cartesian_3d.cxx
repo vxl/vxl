@@ -5,7 +5,8 @@
 //:
 // \file
 
-#include <vcsl/vcsl_cylindrical_to_cartesian_3d.h>
+#include "vcsl_cylindrical_to_cartesian_3d.h"
+#include <vcl_cassert.h>
 #include <vcl_cmath.h> // for sqrt(), cos(), sin()
 
 #include <vcsl/vcsl_spatial.h>
@@ -98,7 +99,7 @@ vcsl_cylindrical_to_cartesian_3d::inverse(const vnl_vector<double> &v,
 vcsl_cylindrical_to_cartesian_3d_sptr
 vcsl_cylindrical_to_cartesian_3d::instance(void)
 {
-  if(instance_.ptr()==0)
+  if (instance_.ptr()==0)
     instance_=new vcsl_cylindrical_to_cartesian_3d;
   return instance_;
 }

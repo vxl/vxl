@@ -1,4 +1,4 @@
-
+#include <vcl_cassert.h>
 #include <vcl_fstream.h>
 #include <vul/vul_awk.h>
 

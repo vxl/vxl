@@ -1,10 +1,11 @@
-#include <rrel/rrel_orthogonal_regression.h>
+#include "rrel_orthogonal_regression.h"
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 
+#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 

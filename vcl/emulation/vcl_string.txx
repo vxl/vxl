@@ -32,6 +32,8 @@
 // in ANSI X3J16/94-0013R2.
 // Rewritten by awf@robots.ox.ac.uk to use non-refcounting implementation.
 
+#include <vcl_cassert.h>
+
 extern "C++" {
 
 template <class charT, class traits>

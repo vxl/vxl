@@ -10,6 +10,7 @@
 #endif
 #include "osl_ortho_regress.h"
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 // convenience methods
 

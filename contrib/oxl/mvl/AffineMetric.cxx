@@ -8,6 +8,7 @@
 #include "AffineMetric.h"
 
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 #include <vnl/algo/vnl_svd.h>
 

@@ -15,7 +15,7 @@
 #include <mil3d/mil3d_transform_3d.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vcl_vector.h>
-#include <vil/vil_byte.h>
+#include <vcl_cassert.h>
 
 //: Represent images of one or more planes of type T.
 //  Each plane is nx() x ny() x nz() Ts, with the (x,y) element
@@ -40,7 +40,8 @@
 //  determine the format.
 
 template<class T>
-class mil3d_image_3d_of : public mil3d_image_3d {
+class mil3d_image_3d_of : public mil3d_image_3d
+{
 private:
   //: Pointer to image data
   vbl_smart_ptr<mil_image_data<T> > data_;

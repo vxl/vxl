@@ -3,6 +3,7 @@
 //  \author Tim Cootes
 
 #include <mil/mil_convert_image_2d.h>
+#include <vcl_cassert.h>
 
 //: Copies src_im (of bytes) into dest_im (of float)
 void mil_convert_image_2d(mil_image_2d_of<float>& dest,
@@ -47,7 +48,7 @@ void mil_convert_image_2d_stretch(mil_image_2d_of<vil_byte>& dest,
 {
   float min, max;
   src.getRange(min,max);
-  mil_convert_image_2d(dest,src,255/(max-min),-min);  
+  mil_convert_image_2d(dest,src,255/(max-min),-min);
 }
 
 //: Copys src_im (of float) into dest_im (of byte)

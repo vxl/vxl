@@ -11,11 +11,10 @@
 // Required libraries: vcl, vbl, vnl, vcsl
 
 #include <vcsl/vcsl_cartesian_3d.h>
-//#include <vcsl/vcsl_translation.h>
 #include <vcsl/vcsl_rotation.h>
-//#include <vcsl/vcsl_displacement.h>
 #include <vnl/vnl_math.h>
 #include <vcsl/vcsl_graph.h>
+#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
 int main()

@@ -1,4 +1,4 @@
-#include <rrel/rrel_irls.h>
+#include "rrel_irls.h"
 
 #include <rrel/rrel_estimation_problem.h>
 #include <rrel/rrel_wls_obj.h>
@@ -10,6 +10,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 
 const double rrel_irls::dflt_convergence_tol_ = 1e-4;
 const int rrel_irls::dflt_max_iterations_ = 25;
@@ -28,14 +29,14 @@ rrel_irls::rrel_irls( int max_iterations )
 }
 
 // -------------------------------------------------------------------------
-void 
+void
 rrel_irls::set_est_scale( int iterations_for_scale_est,
                           bool use_weighted_scale )
 {
   est_scale_during_ = true;
   use_weighted_scale_ = use_weighted_scale;
   iterations_for_scale_est_ = iterations_for_scale_est;
-  if ( iterations_for_scale_est_ < 0 ) 
+  if ( iterations_for_scale_est_ < 0 )
     vcl_cerr << "rrel_irls::est_scale_during WARNING last_scale_est_iter is \n"
              << "negative, so scale will not be estimated!\n";
 }
@@ -49,7 +50,7 @@ rrel_irls::set_no_scale_est()
 }
 
 // -------------------------------------------------------------------------
-void 
+void
 rrel_irls::initialize_scale( double scale )
 {
   scale_ = scale;
@@ -57,7 +58,7 @@ rrel_irls::initialize_scale( double scale )
 }
 
 // -------------------------------------------------------------------------
-double 
+double
 rrel_irls::scale() const
 {
   assert( scale_initialized_ );
@@ -65,10 +66,8 @@ rrel_irls::scale() const
 }
 
 
-
-
 // -------------------------------------------------------------------------
-void 
+void
 rrel_irls::set_max_iterations( int max_iterations )
 {
   max_iterations_ = max_iterations;
@@ -77,7 +76,7 @@ rrel_irls::set_max_iterations( int max_iterations )
 
 
 // -------------------------------------------------------------------------
-void 
+void
 rrel_irls::set_convergence_test( double convergence_tol )
 {
   test_converge_ = true;
@@ -87,7 +86,7 @@ rrel_irls::set_convergence_test( double convergence_tol )
 
 
 // -------------------------------------------------------------------------
-void 
+void
 rrel_irls::set_no_convergence_test( )
 {
   test_converge_ = false;
@@ -95,7 +94,7 @@ rrel_irls::set_no_convergence_test( )
 
 
 // -------------------------------------------------------------------------
-void 
+void
 rrel_irls::initialize_params( const vnl_vector<double>& init_params )
 {
   params_ = init_params;
@@ -103,7 +102,7 @@ rrel_irls::initialize_params( const vnl_vector<double>& init_params )
 }
 
 
-bool 
+bool
 rrel_irls::estimate( const rrel_estimation_problem* problem,
                      const rrel_wls_obj* obj )
 {
@@ -116,8 +115,9 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
   bool failed = false;
 
   //  Parameter initialization, if necessary
-  if ( ! params_initialized_ ) { 
-    if ( ! problem->weighted_least_squares_fit( params_, cofact_ ) ) 
+  if ( ! params_initialized_ )
+  {
+    if ( ! problem->weighted_least_squares_fit( params_, cofact_ ) )
       return false;
     allow_convergence_test = false;
     params_initialized_ = true;
@@ -125,12 +125,12 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
 
 
   //  Scale initialization, if necessary
-  if( obj->requires_prior_scale() && problem->scale_type() == rrel_estimation_problem::NONE ) {
+  if ( obj->requires_prior_scale() && problem->scale_type() == rrel_estimation_problem::NONE ) {
     vcl_cerr << "irls::estimate: Objective function requires a prior scale, and the problem does not provide one.\n"
              << "                Aborting estimation." << vcl_endl;
     return false;
   } else {
-    if( problem->scale_type() == rrel_estimation_problem::NONE && ! scale_initialized_ ) {
+    if ( problem->scale_type() == rrel_estimation_problem::NONE && ! scale_initialized_ ) {
       problem->compute_residuals( params_, residuals );
       scale_ = rrel_util_median_abs_dev_scale( residuals.begin(), residuals.end(), num_for_fit );
       allow_convergence_test = false;
@@ -138,7 +138,7 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
     }
   }
 
-  if ( trace_level_ >= 1 ) 
+  if ( trace_level_ >= 1 )
     vcl_cout << "Initial estimate: " << params_ << ", scale = " << scale_ <<  vcl_endl;
 
   //  Basic loop:
@@ -148,7 +148,7 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
   //  4. Calculate scale
   //  5. Calculate new estimate
   //
-  
+
   converged_ = false;
   while ( true ) {
     //  Step 1.  Residuals
@@ -166,8 +166,8 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
     ++ iteration_;
     if ( iteration_ > max_iterations_ ) break;
     if ( trace_level_ >= 1 ) vcl_cout << "\nIteration: " << iteration_ << vcl_endl;
-    
-    //  Step 3. Weights 
+
+    //  Step 3. Weights
     problem->compute_weights( residuals, obj, scale_, weights );
     if ( trace_level_ >= 2 ) trace_weights( weights );
 
@@ -177,7 +177,7 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
       allow_convergence_test = false;
       if ( trace_level_ >= 1 ) vcl_cout << "num samples for fit = " << num_for_fit << vcl_endl;
       if ( use_weighted_scale_ ) {
-        scale_ = rrel_util_weighted_scale( residuals.begin(), residuals.end(), 
+        scale_ = rrel_util_weighted_scale( residuals.begin(), residuals.end(),
                                            weights.begin(), num_for_fit );
       }
       else {
@@ -192,7 +192,7 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
       }
     }
     else
-      allow_convergence_test = true; 
+      allow_convergence_test = true;
 
     // Step 5.  Weighted least-squares
     if ( !problem->weighted_least_squares_fit( params_, cofact_, &weights ) ) {
@@ -207,7 +207,7 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
 
 
 // -------------------------------------------------------------------------
-const vnl_vector<double>& 
+const vnl_vector<double>&
 rrel_irls::params() const
 {
   assert( params_initialized_ );
@@ -215,15 +215,13 @@ rrel_irls::params() const
 }
 
 
-
 // -------------------------------------------------------------------------
-const vnl_matrix<double>& 
+const vnl_matrix<double>&
 rrel_irls::cofactor() const
 {
   assert( params_initialized_ );
   return cofact_;
 }
-
 
 
 // -------------------------------------------------------------------------
@@ -232,7 +230,6 @@ rrel_irls::iterations_used() const
 {
   return iteration_-1;
 }
-
 
 
 // -------------------------------------------------------------------------
@@ -264,9 +261,8 @@ rrel_irls::has_converged( const vcl_vector<double>& residuals,
 }
 
 
-
 // -------------------------------------------------------------------------
-void 
+void
 rrel_irls::trace_residuals( const vcl_vector<double>& residuals ) const
 {
   vcl_cout << "Residuals: " << "\n";
@@ -276,7 +272,7 @@ rrel_irls::trace_residuals( const vcl_vector<double>& residuals ) const
 
 
 // -------------------------------------------------------------------------
-void  
+void
 rrel_irls::trace_weights( const vcl_vector<double>& weights ) const
 {
   vcl_cout << "Weights: " << "\n";

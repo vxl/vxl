@@ -5,8 +5,9 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
 #include "vgl_homg_line_2d.h"
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 

@@ -16,6 +16,7 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_polygon.h>
+#include <vcl_cassert.h>
 #include <vcl_cmath.h> // for vcl_sqrt()
 
 template <class Type>
@@ -136,19 +137,21 @@ template <class Type>
 double vgl_distance(vgl_polygon const& poly, vgl_point_2d<Type> const& point)
 {
   double dist = -1;
-  for( int s=0; s < poly.num_sheets(); ++s ) {
+  for ( int s=0; s < poly.num_sheets(); ++s )
+  {
     unsigned int n = poly[s].size();
     assert( n > 1 );
     double dd = vgl_distance_to_linesegment(poly[s][n-1].x(), poly[s][n-1].y(),
                                             poly[s][0  ].x(), poly[s][0  ].y(),
                                             point.x(), point.y());
-    for( unsigned int i=0; i < n-1; ++i ) {
+    for ( unsigned int i=0; i < n-1; ++i )
+    {
       double nd = vgl_distance_to_linesegment(poly[s][i  ].x(), poly[s][i  ].y(),
                                               poly[s][i+1].x(), poly[s][i+1].y(),
                                               point.x(), point.y());
-      if( nd<dd )  dd=nd;
+      if ( nd<dd )  dd=nd;
     }
-    if( dist < 0 || dd < dist )  dist = dd;
+    if ( dist < 0 || dd < dist )  dist = dd;
   }
 
   return dist;

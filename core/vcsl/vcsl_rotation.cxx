@@ -5,7 +5,8 @@
 //:
 // \file
 
-#include <vcsl/vcsl_rotation.h>
+#include "vcsl_rotation.h"
+#include <vcl_cassert.h>
 
 //***************************************************************************
 // Status report

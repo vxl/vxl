@@ -1,4 +1,4 @@
-#include <rrel/rrel_linear_regression.h>
+#include "rrel_linear_regression.h"
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
@@ -6,7 +6,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-
+#include <vcl_cassert.h>
 
 rrel_linear_regression::rrel_linear_regression( const vcl_vector< vnl_vector<double> >& pts,
                                                 bool use_intercept )
@@ -52,7 +52,7 @@ rrel_linear_regression::rrel_linear_regression( const vcl_vector< vnl_vector<dou
          << "solutions exists.\n";
   }
   set_num_samples_for_fit( param_dof() );
-}  
+}
 
 // ctor that just copies the independent and dependent variables vectors.
 rrel_linear_regression::rrel_linear_regression( const vcl_vector< vnl_vector<double> >& ind_vars,
@@ -114,7 +114,7 @@ rrel_linear_regression::fit_from_minimal_set( const vcl_vector<int>& point_indic
 }
 
 
-void 
+void
 rrel_linear_regression::compute_residuals( const vnl_vector<double>& params,
                                            vcl_vector<double>& residuals ) const
 {

@@ -5,11 +5,11 @@
 //:
 //  \file
 
+#include "mil_image_pyramid.h"
 
 #include <vcl_cstdlib.h>
-#include <mil/mil_image_pyramid.h>
+#include <vcl_cassert.h>
 #include <mil/mil_image.h>
-#include <vsl/vsl_indent.h>
 
 //=======================================================================
 

@@ -4,6 +4,7 @@
 
 #include "vidl_image_list_codec.h"
 
+#include <vcl_cassert.h>
 #include <vcl_cstdio.h>
 #include <vcl_iostream.h>
 
@@ -111,7 +112,7 @@ vidl_codec_sptr vidl_image_list_codec::load(const char* fname, char mode)
   //   index 0 and stopping when we run out of images
   assert(mode == 'r');
 
-  for( int i=0; true; i++)
+  for ( int i=0; true; i++)
     {
       const char *name = vul_sprintf( fname, i).c_str();
       vil_image img= vil_load(name);

@@ -1,5 +1,6 @@
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 #include <vnl/algo/vnl_svd.h>
 #include <mvl/HMatrix2D.h>
 #include <mvl/HomgMetric.h>

@@ -1,7 +1,8 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-#include <vcsl/vcsl_matrix.h>
+#include "vcsl_matrix.h"
+#include <vcl_cassert.h>
 #include <vcl_cmath.h> // for vcl_cos(), vcl_sin()
 
 //***************************************************************************
@@ -103,7 +104,7 @@ vnl_vector<double> vcsl_matrix::inverse(const vnl_vector<double> &v,
 
 vnl_matrix<double> vcsl_matrix::matrix_value(double time, bool type) const
 {
-  if(beat_.size()==0) // static
+  if (beat_.size()==0) // static
     return param_to_matrix(matrix_[0],type);
 
   else
@@ -153,8 +154,8 @@ vnl_matrix<double>  vcsl_matrix::param_to_matrix(vcsl_matrix_param_sptr from,boo
   else
   {
     vnl_matrix<double> temp(3,3);
-    for(int i=0;i<3;i++)
-      for(int j=0;j<3;j++)
+    for (int i=0;i<3;i++)
+      for (int j=0;j<3;j++)
         temp(i,j)=R(i,j);
     return temp*T;
   }

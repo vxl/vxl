@@ -10,6 +10,7 @@
 
 #include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>

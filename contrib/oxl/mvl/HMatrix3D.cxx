@@ -6,6 +6,7 @@
 //  \file
 
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_svd.h>
@@ -56,12 +57,12 @@ HMatrix3D::HMatrix3D(const vnl_matrix<double>& M, const vnl_vector<double>& m)
   assert(M.columns() == 3);
   assert(m.size() == 3);
 
-  for(int r = 0; r < 3; ++r) {
-    for(int c = 0; c < 3; ++c)
+  for (int r = 0; r < 3; ++r) {
+    for (int c = 0; c < 3; ++c)
       (*this)(r, c) = M(r,c);
     (*this)(r, 3) = m(r);
   }
-  for(int c = 0; c < 3; ++c)
+  for (int c = 0; c < 3; ++c)
     (*this)(3,c) = 0;
   (*this)(3,3) = 1;
 }
@@ -117,8 +118,8 @@ vcl_ostream& operator<<(vcl_ostream& s, const HMatrix3D& h)
 //: Load H from ASCII file.
 bool HMatrix3D::load(vcl_istream& s)
 {
-  (*this).read_ascii(s);
-  return (s.good() || s.eof());
+  this->read_ascii(s);
+  return s.good() || s.eof();
 }
 
 //: Load H from ASCII file.
@@ -134,7 +135,7 @@ vcl_istream& operator>>(vcl_istream& s, HMatrix3D& H)
 //: Get matrix element at (row_index, col_index)
 double HMatrix3D::get (unsigned int row_index, unsigned int col_index) const
 {
-  return (*this). get (row_index, col_index);
+  return this -> get(row_index, col_index);
 }
 
 //-----------------------------------------------------------------------------
@@ -143,7 +144,7 @@ void HMatrix3D::get (double *t_matrix) const
 {
   for (int row_index = 0; row_index < 4; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
-      *t_matrix++ = (*this). get (row_index, col_index);
+      *t_matrix++ = this -> get(row_index, col_index);
 }
 
 //-----------------------------------------------------------------------------
@@ -157,6 +158,6 @@ void HMatrix3D::get (vnl_matrix<double>* t_matrix) const
 //: Return the inverse of this HMatrix3D.  Computed using vnl_svd<double>.
 HMatrix3D HMatrix3D::Inverse () const
 {
-  vnl_svd<double> svd((*this));
+  vnl_svd<double> svd(*this);
   return svd.inverse();
 }

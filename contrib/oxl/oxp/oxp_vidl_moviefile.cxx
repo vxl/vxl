@@ -8,10 +8,9 @@
 #include <vcl_strstream.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
+#include <vcl_cassert.h>
 
 #include <vxl_config.h>
-
-#include <vul/vul_printf.h>
 
 #include <vidl/vidl_movie_sptr.h>
 #include <vidl/vidl_movie.h>

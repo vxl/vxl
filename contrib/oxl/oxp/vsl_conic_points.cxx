@@ -9,6 +9,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
+#include <vcl_cassert.h>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_diag_matrix.h>
@@ -70,7 +71,7 @@ spaced_angles(double alpha1,
   double k=0.05;
   double offset=0.02;
 
-  for(double alpha = alpha1;;) {
+  for (double alpha = alpha1;;) {
     double d = l(0) * vcl_cos(alpha) + l(1) * vcl_sin(alpha) + l(2);
     alpha += k*d*d + offset;
 
@@ -86,7 +87,7 @@ spaced_angles(double alpha1,
   vnl_double_3 point;
   vnl_double_3 tpoint;
   vnl_double_2 nonhomg;
-  for(unsigned j=0;j<ang.size();j++)
+  for (unsigned int j=0;j<ang.size();j++)
     {
       point(0)=vcl_cos(ang[j]);
       point(1)=vcl_sin(ang[j]);
@@ -138,7 +139,7 @@ vsl_conic_points::vsl_conic_points(vsl_conic_as_matrix const& conic,
   }
 
   vnl_diag_matrix<double> Q(3);
-  for(unsigned i=0; i<3; i++)
+  for (unsigned int i=0; i<3; i++)
     Q(i,i) = vcl_sqrt(vcl_fabs(eig.D(i,i)));
 
   vnl_matrix<double> H = Q*eig.V.transpose();
@@ -149,7 +150,7 @@ vsl_conic_points::vsl_conic_points(vsl_conic_as_matrix const& conic,
 
   vnl_double_3 l(0,0,1);
   vnl_double_3 l_infty = Hinv.transpose() * l;
-  for(unsigned m=0;m<alphas.size();m+=2) {
+  for (unsigned int m=0;m<alphas.size();m+=2) {
     spaced_angles(alphas[m],alphas[m+1],l_infty,Hinv, &points);
     segment_ends.push_back(points.size());
   }
@@ -163,24 +164,24 @@ vsl_conic_points::find_angles(vnl_matrix<double> const& b, vnl_matrix<double> co
   vnl_double_3 l_infty = Hinv.transpose() * l;
   vcl_vector<double> phi;
   theta_pair phis;
-  for(unsigned i=0;i<4;i++)
+  for (unsigned int i=0;i<4;i++)
    {
      phis = inter_line_circle(boundary_lines.get_column(i));
-     if(phis.theta1 != -1)
+     if (phis.theta1 != -1)
        {
-         if(phis.theta1<0)
+         if (phis.theta1<0)
            {
              phis.theta1 +=2*vnl_math::pi;
            }
-         if(phis.theta1>2*vnl_math::pi)
+         if (phis.theta1>2*vnl_math::pi)
            {
              phis.theta1 -= 2*vnl_math::pi;
            }
-         if(phis.theta2<0)
+         if (phis.theta2<0)
            {
              phis.theta2  += 2*vnl_math::pi;
            }
-         if(phis.theta2 >2*vnl_math::pi)
+         if (phis.theta2 >2*vnl_math::pi)
            {
              phis.theta2 -= 2*vnl_math::pi;
            }
@@ -188,14 +189,14 @@ vsl_conic_points::find_angles(vnl_matrix<double> const& b, vnl_matrix<double> co
          phi.push_back(phis.theta2); // place phi values in array
        }
    }
-  if(phi.size()==0)
+  if (phi.size()==0)
     {
       // fully inside
       phi.push_back(1);//atan2(l_infty[1], l_infty[0])); gsgs
     }
   vcl_sort(phi.begin(), phi.end());
 
-  for(unsigned n=0;n<phi.size();n++)
+  for (unsigned int n=0;n<phi.size();n++)
     {
     phi[n]+=2*vnl_math::pi;
     }
@@ -212,7 +213,7 @@ vsl_conic_points::find_angles(vnl_matrix<double> const& b, vnl_matrix<double> co
   assert(-b(2,0) < -b(2,1)); // xmin < xmax
   assert(-b(2,2) < -b(2,3)); // ymin < ymax
 
-  for (unsigned j=0;j<(phi.size()-1);j++)
+  for (unsigned int j=0;j<(phi.size()-1);j++)
     {
       double alpha = (phi[j]+phi[j+1])/2;
       vnl_double_3  a(vcl_cos(alpha),vcl_sin(alpha),1);

@@ -2,6 +2,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
 #include <vxl_config.h>
+#include <vcl_cassert.h>
 #include <vcl_map.txx>
 #include <vcl_cstdlib.h> // abort()
 #include <vcl_cstring.h> // memcpy()

@@ -16,6 +16,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 
 #include <vul/vul_arg.h>
 
@@ -26,7 +27,6 @@
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_menu.h>
-#include <vgui/vgui_tag.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_find.h>
@@ -140,8 +140,8 @@ bool get_twoviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
   int nb_views = xcv_tab->get_selected_positions(&cols, &rows, &times);
   // if not selected,  pick top left pair.
   if (nb_views != 2) {
-    for(unsigned int i = 0; i < xcv_tab->rows(); ++i)
-      for(unsigned int j = 0; j < xcv_tab->cols(); ++j)
+    for (unsigned int i = 0; i < xcv_tab->rows(); ++i)
+      for (unsigned int j = 0; j < xcv_tab->cols(); ++j)
         xcv_tab->set_selected(i,j, false);
     cols.clear();
     rows.clear();

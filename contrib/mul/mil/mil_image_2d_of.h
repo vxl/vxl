@@ -14,7 +14,7 @@
 #include <mil/mil_transform_2d.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vcl_vector.h>
-#include <vil/vil_byte.h>
+#include <vcl_cassert.h>
 
 //: Represent images of one or more planes of type T.
 //  Each plane is nx() x ny() Ts, with the (x,y) element
@@ -37,8 +37,10 @@
 //
 //  It is safest to examine the number of planes, xstep() and ystep() to
 //  determine the format.
+
 template<class T>
-class mil_image_2d_of : public mil_image_2d {
+class mil_image_2d_of : public mil_image_2d
+{
 private:
     //: Pointer to image data
     vbl_smart_ptr<mil_image_data<T> > data_;

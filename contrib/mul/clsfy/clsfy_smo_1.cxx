@@ -18,7 +18,7 @@
 #include <vcl_algorithm.h>
 #include <vnl/vnl_math.h>
 #include <vcl_iostream.h>
-#include <vul/vul_printf.h>
+#include <vcl_cassert.h>
 
 // Linear SMO
 

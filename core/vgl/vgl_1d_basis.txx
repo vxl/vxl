@@ -3,6 +3,7 @@
 #define vgl_1d_basis_txx_
 
 #include "vgl_1d_basis.h"
+#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
 template <class T>

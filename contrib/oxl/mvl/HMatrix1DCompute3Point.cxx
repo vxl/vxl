@@ -1,6 +1,7 @@
 #include "HMatrix1DCompute3Point.h"
 
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 #include <mvl/HMatrix1D.h>
 
 //
@@ -15,7 +16,6 @@ direct_compute(double T[2][2],
                double q11,double q12,double q13,// q1 q2 q3
                double q21,double q22,double q23)
 {
-
   double A[2][2],B[2][2];
   double t;
 

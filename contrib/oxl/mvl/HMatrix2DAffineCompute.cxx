@@ -6,16 +6,14 @@
 //  \file
 
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
 #include <mvl/HMatrix2D.h>
 #include <mvl/HomgPoint2D.h>
 #include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
 #include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_2x2.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_transpose.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 

@@ -4,12 +4,9 @@
 
 #include "HMatrix2DSimilarityCompute.h"
 
-#include <vcl_vector.h>
+#include <vcl_cassert.h>
 
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_2x2.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_transpose.h>
@@ -60,7 +57,6 @@ HMatrix2DSimilarityCompute::tmp_fun(PointArray const& pts1,
                                     PointArray const& pts2,
                                     HMatrix2D *H)
 {
-
   assert(pts1.size() == pts2.size());
 
   NonHomg p1(pts1);
