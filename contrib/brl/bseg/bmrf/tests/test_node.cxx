@@ -5,8 +5,7 @@
 
 #include <bmrf/bmrf_node_sptr.h>
 #include <bmrf/bmrf_node.h>
-
-
+ 
 //: Test the node class
 void test_node()
 {
