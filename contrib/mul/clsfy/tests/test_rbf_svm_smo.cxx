@@ -9,7 +9,6 @@
 #include <vcl_vector.h>
 #include <vcl_limits.h>
 #include <vcl_iostream.h>
-#include <vcl_strstream.h>
 #include <vcl_iomanip.h>
 #include <vcl_string.h>
 #include <clsfy/clsfy_rbf_svm.h>
@@ -29,9 +28,9 @@
 void test_rbf_svm()
 {
   vcl_cout << "\n\n\n";
-  vcl_cout << "************************************\n";
-  vcl_cout << " Testing clsf_rbf_svm_smo_1_builder\n";
-  vcl_cout << "************************************\n";
+  vcl_cout << "*************************************\n";
+  vcl_cout << " Testing clsfy_rbf_svm_smo_1_builder\n";
+  vcl_cout << "*************************************\n";
 
   vcl_cout<<"======== TESTING BUILDING ===========\n";
 
@@ -246,7 +245,7 @@ void test_rbf_svm()
 
   TEST("Saved Classifier.log_l() = Loaded Classifier.log_l()",
     svmo.log_l(vnl_vector<double>(nDims, 0.3)),
-    svmo.log_l(vnl_vector<double>(nDims, 0.3)));
+    svmi.log_l(vnl_vector<double>(nDims, 0.3)));
 
   TEST("Saved Classifier = Classifier Loaded by Base Class Ptr",
     svmo.is_a(), pClassifier2->is_a());
