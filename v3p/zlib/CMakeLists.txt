@@ -8,6 +8,7 @@ ADD_LIBRARY( zlib zlib_sources )
 
 SOURCE_FILES( zlib_sources
   zlib.h
+  zconf.h
 
   adler32.c
   compress.c
