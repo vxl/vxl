@@ -71,7 +71,7 @@ vpdfl_pc_gaussian& vpdfl_pc_gaussian_builder::gaussian(vpdfl_pdf_base& model) co
 	return (vpdfl_pc_gaussian&) model;
 }
 
-vpdfl_pdf_base* vpdfl_pc_gaussian_builder::new_model()
+vpdfl_pdf_base* vpdfl_pc_gaussian_builder::new_model() const
 {
 	return new vpdfl_pc_gaussian();
 }

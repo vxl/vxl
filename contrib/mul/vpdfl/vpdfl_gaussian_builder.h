@@ -52,7 +52,7 @@ public:
 	virtual ~vpdfl_gaussian_builder();
 	
 		//: Create empty model
-	virtual vpdfl_pdf_base* new_model();
+	virtual vpdfl_pdf_base* new_model() const;
 	
 		//: Define lower threshold on variance for built models
 	virtual void set_min_var(double min_var);

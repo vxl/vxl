@@ -36,7 +36,7 @@ vpdfl_axis_gaussian& vpdfl_axis_gaussian_builder::gaussian(vpdfl_pdf_base& model
   return (vpdfl_axis_gaussian&) model;
 }
 
-vpdfl_pdf_base* vpdfl_axis_gaussian_builder::new_model()
+vpdfl_pdf_base* vpdfl_axis_gaussian_builder::new_model() const
 {
   return new vpdfl_axis_gaussian;
 }

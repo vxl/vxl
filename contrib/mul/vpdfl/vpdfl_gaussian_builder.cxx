@@ -52,7 +52,7 @@ vpdfl_gaussian& vpdfl_gaussian_builder::gaussian(vpdfl_pdf_base& model) const
 }
 //=======================================================================
 
-vpdfl_pdf_base* vpdfl_gaussian_builder::new_model()
+vpdfl_pdf_base* vpdfl_gaussian_builder::new_model() const
 {
 	return new vpdfl_gaussian;
 }

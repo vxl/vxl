@@ -54,7 +54,7 @@ public:
 	virtual ~vpdfl_pc_gaussian_builder();
 	
 		//: Create empty model
-	virtual vpdfl_pdf_base* new_model();
+	virtual vpdfl_pdf_base* new_model() const;
 	
 	
 		//: Build default model with given mean

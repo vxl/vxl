@@ -40,7 +40,7 @@ public:
   virtual ~vpdfl_builder_base();
 
     //: Create empty model
-  virtual vpdfl_pdf_base* new_model() = 0;
+  virtual vpdfl_pdf_base* new_model() const = 0;
 
     //: Define lower threshold on variance for built models
   virtual void set_min_var(double min_var) =0;
