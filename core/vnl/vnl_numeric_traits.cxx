@@ -35,7 +35,7 @@ const bool vnl_numeric_traits<bool>::maxval = true;
 
 const char vnl_numeric_traits<char>::zero = 0;
 const char vnl_numeric_traits<char>::one = 1;
-const char vnl_numeric_traits<char>::maxval = 127;
+const char vnl_numeric_traits<char>::maxval = char(255)<0?127:255;
 
 const unsigned char vnl_numeric_traits<unsigned char>::zero = 0;
 const unsigned char vnl_numeric_traits<unsigned char>::one = 1;
