@@ -27,14 +27,12 @@ class clsfy_builder_1d;
 class clsfy_classifier_base;
 
 //: Base for classes to build clsfy_classifier_base objects
-class clsfy_adaboost_sorted_builder : public clsfy_builder_base {
-
-private:
-
+class clsfy_adaboost_sorted_builder : public clsfy_builder_base
+{
   // Parameters of builder
 
-  //: bool indicating whether or not to save data to disk
-  // nb useful to save data to disk, if don't have enough RAM
+  //: bool indicating whether or not to save data to disk.
+  // NB useful to save data to disk, if don't have enough RAM
   // but also makes training very slow
   bool save_data_to_disk_;
 
@@ -88,7 +86,7 @@ public:
   virtual bool is_class(vcl_string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
-	virtual	clsfy_builder_base*	clone()	const;
+  virtual clsfy_builder_base* clone() const;
 
   //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
