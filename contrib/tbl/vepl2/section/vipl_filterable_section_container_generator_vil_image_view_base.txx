@@ -1,5 +1,5 @@
-#ifndef vipl_filterable_section_container_generator_vil_image_view_txx_
-#define vipl_filterable_section_container_generator_vil_image_view_txx_
+#ifndef vipl_filterable_section_container_generator_vil_image_view_base_txx_
+#define vipl_filterable_section_container_generator_vil_image_view_base_txx_
 
 #include <vil/vil_image_view_base.h>
 
@@ -24,4 +24,4 @@ vipl_filterable_section_container_generator(const vil_image_view_base& im, DataT
   return rtn;
 }
 
-#endif // vipl_filterable_section_container_generator_vil_image_view_txx_
+#endif // vipl_filterable_section_container_generator_vil_image_view_base_txx_
