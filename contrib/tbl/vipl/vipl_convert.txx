@@ -3,6 +3,11 @@
 
 #include "vipl_convert.h"
 
+#include <vcl_compiler.h>
+#ifdef VCL_VC
+# pragma warning(disable:4244) // disable conversion warning for explicit cast at line 23
+#endif
+
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_convert <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
 {
