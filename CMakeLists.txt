@@ -3,13 +3,6 @@
 #
 #   geoff.cross@crd.ge.com
 
-OPTION(CYGWIN_UNSET_WIN32 "Should WIN32 be unset under Cygwin?" NO)
-IF(CYGWIN_UNSET_WIN32)
-  IF(CYGWIN)
-    SET(WIN32 0)
-  ENDIF(CYGWIN)
-ENDIF(CYGWIN_UNSET_WIN32)
-
 PROJECT(allvxl)
 
 INCLUDE (${CMAKE_ROOT}/Modules/Dart.cmake)
@@ -18,6 +11,18 @@ IF(WIN32)
   OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" NO)
 ELSE(WIN32)
   OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" YES)
+ENDIF(WIN32)
+
+# Assume no MFC support
+SET(HAS_MFC 0)
+# Add MFC support if win32 and not cygwin and not borland
+IF(WIN32)
+  IF(NOT CYGWIN)
+     IF(NOT BORLAND)
+       SET(HAS_MFC 1)
+       ADD_DEFINITIONS(-DHAS_MFC)
+     ENDIF(NOT BORLAND)
+  ENDIF(NOT CYGWIN)
 ENDIF(WIN32)
 
 # Some people may want to build the test cases even though they aren't
@@ -102,7 +107,9 @@ INCLUDE_DIRECTORIES(${allvxl_BINARY_DIR}/vcl
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
 
 IF(WIN32)
-  INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl/config.win32-VC60)
+  IF(NOT CYGWIN)
+    INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl/config.win32-VC60)
+  ENDIF(NOT CYGWIN)
 ENDIF(WIN32)
 
 IF(RUN_CONFIGURE)
