@@ -30,7 +30,7 @@ void distance_squared(const vcl_vector<vnl_vector<T> > &s1, const vcl_vector<vnl
         d[i] = vnl_vector_ssd(s1[i], s2[i]);
     }
     vcl_clock_t t1=vcl_clock();
-    stats[st] = (1e9*((double(t1)-double(t0)))/(n_loops*CLOCKS_PER_SEC));
+    stats[st] = (1e9*((double(t1)-double(t0)))/((double)n_loops*(double)CLOCKS_PER_SEC));
   }
   vcl_sort(stats.begin(), stats.end());
   vcl_cout<<"  Mean: "<<stats.mean()
@@ -51,7 +51,7 @@ void dot_product(const vcl_vector<vnl_vector<T> > &s1, const vcl_vector<vnl_vect
         d[i] = dot_product(s1[i], s2[i]);
     }
     vcl_clock_t t1=vcl_clock();
-    stats[st] = (1e9*((double(t1)-double(t0)))/(n_loops*CLOCKS_PER_SEC));
+    stats[st] = (1e9*((double(t1)-double(t0)))/((double)n_loops*(double)CLOCKS_PER_SEC));
   }
   vcl_sort(stats.begin(), stats.end());
   vcl_cout<<"  Mean: "<<stats.mean()
@@ -71,7 +71,7 @@ void mat_x_vec(const vnl_matrix<T> &s1, const vcl_vector<vnl_vector<T> > &s2,
         d[i] = s1 * s2[i];
     }
     vcl_clock_t t1=vcl_clock();
-    stats[st] = (1e6*((double(t1)-double(t0)))/(n_loops*CLOCKS_PER_SEC));
+    stats[st] = (1e6*((double(t1)-double(t0)))/((double)n_loops*(double)CLOCKS_PER_SEC));
   }
   vcl_sort(stats.begin(), stats.end());
   vcl_cout<<"  Mean: "<<stats.mean()
