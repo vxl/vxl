@@ -478,16 +478,16 @@ public:
   //: Iterators
   typedef T       *iterator;
   //: Iterator pointing to start of data
-  iterator       begin() { return data[0]; }
+  iterator       begin() { return data?data[0]:0; }
   //: Iterator pointing to element beyond end of data
-  iterator       end() { return data[0]+num_rows*num_cols; }
+  iterator       end() { return data?data[0]+num_rows*num_cols:0; }
 
   //: Const iterators
   typedef T const *const_iterator;
   //: Iterator pointing to start of data
-  const_iterator begin() const { return data[0]; }
+  const_iterator begin() const { return data?data[0]:0; }
   //: Iterator pointing to element beyond end of data
-  const_iterator end() const { return data[0]+num_rows*num_cols; }
+  const_iterator end() const { return data?data[0]+num_rows*num_cols:0; }
 
   //--------------------------------------------------------------------------------
 
