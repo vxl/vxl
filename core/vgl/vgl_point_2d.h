@@ -66,14 +66,17 @@ public:
 
   // Data Access-------------------------------------------------------------
 
+  inline Type &x() {return x_;}
+  inline Type &y() {return y_;}
+  
   inline Type x() const {return x_;}
   inline Type y() const {return y_;}
 
   //: Set x and y
-  //  Note that x and y cannot be set individually.
+  //  Note that x and y can also be set individually.
   inline void set (Type px, Type py){ x_ = px; y_ = py; }
   //: Set x and y
-  //  Note that x and y cannot be set individually.
+  //  Note that x and y can also be set individually.
   inline void set (Type const p[2]) { x_ = p[0]; y_ = p[1]; }
 
   //: Return true iff the point is at infinity (an ideal point).
