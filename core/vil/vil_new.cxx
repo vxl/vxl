@@ -26,9 +26,15 @@
 // a temporary file on disk if the sizes are large.
 
 //: Make a new image of given format.
+// If the format is not scalar, the number of planes must be 1. When you create
+// a multi-component image in this way, the vil_image_resource API will treat
+// it as a scalar pixel image with multiple planes. (This doesn't affect the
+// underlying data storage.)
 vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, unsigned nplanes,
                                                vil_pixel_format format)
 {
+  assert(nplanes == 1 || vil_pixel_format_num_components(format) == 1);
+
   return new vil_memory_image(ni, nj, nplanes, format);
 }
 
@@ -36,7 +42,10 @@ vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, unsigne
 //: Make a new image resource that is a wrapper on an existing view's data.
 // \note The output will be a shallow copy of the input, so changing the pixel values
 // of one may change the pixel value of the other. Thanks to the magic of smart pointers,
-// the output will remain valid even if you destroy the input.
+// the output will remain valid even if you destroy the input. When you wrap
+// a multi-component image in this way, the vil_image_resource API will treat
+// it as a scalar pixel image with multiple planes. (This doesn't affect the
+// underlying data storage.)
 // \relates vil_image_resource
 vil_image_resource_sptr vil_new_image_resource_of_view(vil_image_view_base & view)
 {
