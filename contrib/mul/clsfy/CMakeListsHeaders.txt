@@ -18,4 +18,8 @@ SOURCE_FILES(clsfy_sources
   clsfy_smo_1.h
   clsfy_rbf_svm.h
   clsfy_rbf_svm_smo_1_builder.h
+  clsfy_adaboost_trainer.h
+  clsfy_adaboost_sorted_trainer.h
+  clsfy_binary_threshold_1d_builder.h
+  clsfy_binary_threshold_1d_sorted_builder.h
 )

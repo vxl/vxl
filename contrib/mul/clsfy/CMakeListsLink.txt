@@ -1,10 +1,7 @@
 # ./mul/clsfy/CMakeListsLink.txt
-
 LINK_LIBRARIES( clsfy )
+LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/mul/clsfy )
 
-IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
-  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/mul/clsfy )
-ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
 
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/mul/vpdfl/CMakeListsLink.txt )
