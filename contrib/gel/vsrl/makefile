@@ -1,12 +1,10 @@
 #   DESCRIPTION:
 #
 #   This is the vsrl (dense matcher) library.
-#
-#   DEPENDENCIES:  libvil libvnl
 
 USES += contrib/gel contrib/brl/bseg contrib/tbl core
 
-IMMEDIATE_LIBS := -lvtol -lvdgl -lvgui -lvepl -lvgl -lvil -lvnl
+IMMEDIATE_LIBS := -lvtol -lvdgl -lvgui -lvepl -lvgl -lvil1 -lvnl
 
 LIBRARY := vsrl
 VERSION := 1.0
