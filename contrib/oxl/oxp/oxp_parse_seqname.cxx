@@ -4,6 +4,7 @@
 
 #include "oxp_parse_seqname.h"
 
+#include <vcl_cstring.h>
 #include <vcl_cstdlib.h> // atoi()
 #include <vcl_iostream.h>
 
@@ -46,17 +47,17 @@ void oxp_parse_seqname::parse(char const* s)
 
 
     if (match_start.length() > 0)
-      start = atoi(match_start.c_str());
+      start = vcl_atoi(match_start.c_str());
 
     if (match_step.length() > 0)
-      step = atoi(match_step.c_str()+1);
+      step = vcl_atoi(match_step.c_str()+1);
 
     if (match_end.length() > 0)
-      end = atoi(match_end.c_str());
+      end = vcl_atoi(match_end.c_str());
 
     vbl_printf(vcl_cerr, "[%d:%d:%d]\n", start, step, end);
 
-  } else if (strchr(s, ',')) {
+  } else if (vcl_strchr(s, ',')) {
     vbl_printf(vcl_cerr, "oxp_parse_seqname: Warning: \"%s\" contains a comma, but didn't match my regexp.\n", s);
   }
 

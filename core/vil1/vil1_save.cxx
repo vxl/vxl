@@ -54,7 +54,7 @@ bool vil_save(vil_image const& i, char const* filename)
   char const *file_format = 0;
 
   // find last "."
-  char const *dot = strrchr(filename, '.');
+  char const *dot = vcl_strrchr(filename, '.');
   if (!dot) {
     // filename doesn't end in ".anything"
     vcl_cerr << __FILE__ ": assuming pnm format for \'" << filename << "\'" << vcl_endl;
@@ -63,7 +63,7 @@ bool vil_save(vil_image const& i, char const* filename)
   else {
     // translate common extensions into known file formats.
     if (false) { }
-#define macro(ext, fmt) else if (!strcmp(dot, "." #ext)) file_format = #fmt
+#define macro(ext, fmt) else if (!vcl_strcmp(dot, "." #ext)) file_format = #fmt
     macro(bmp, bmp);
     macro(pbm, pnm);
     macro(pgm, pnm);

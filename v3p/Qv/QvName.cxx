@@ -119,7 +119,7 @@ QvName::isNodeNameChar(char c)
 {
     if (isalnum(c)) return TRUE;
 
-    if ((strchr(badCharacters, c) != NULL) ||
+    if ((vcl_strchr(badCharacters, c) != NULL) ||
         isspace(c) || iscntrl(c)) return FALSE;
 
     return TRUE;
