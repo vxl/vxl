@@ -25,7 +25,7 @@ bool vil_resample_image(vil_image const &base, unsigned new_width, unsigned new_
   // make buffer for, and get, region needed from base image.
   vil_buffer<T> base_buf(base_w * base_h);
   if (! base.get_section(&base_buf[0], base_x0, base_y0, base_w, base_h)) {
-    cerr << __FILE__ ": get_section() failed on base image " << base << endl;
+    vcl_cerr << __FILE__ ": get_section() failed on base image " << base << vcl_endl;
     return false;
   }
  

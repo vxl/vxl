@@ -50,13 +50,13 @@ vil_image vil_new(vil_stream* os,
     if (strcmp(fmt->tag(), file_format) == 0) {
       outimage = fmt->make_output_image(os, planes, width, height, components, bits_per_component, format);
       if (outimage == 0) {
-	cerr << "vil_new: Unknown cannot new to type [" << file_format << "]\n";
+	vcl_cerr << "vil_new: Unknown cannot new to type [" << file_format << "]\n";
       }
       return outimage;
     }
   }
   
-  cerr << "vil_new: Unknown file type [" << file_format << "]\n";
+  vcl_cerr << "vil_new: Unknown file type [" << file_format << "]\n";
   return 0;
 }
 

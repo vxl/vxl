@@ -36,7 +36,7 @@ bool vil_scale_intensities_image_impl::get_section(void * buf, int x0, int y0, i
   case VIL_RGB_DOUBLE:
     return vil_scale_intensities_image(base, scale_, shift_, (vil_rgb<double>*)buf, x0, y0, w, h);
   default:
-    cerr << __FILE__ ": not implemented for this pixel type" << endl;
+    vcl_cerr << __FILE__ ": not implemented for this pixel type" << vcl_endl;
     return false;
   }
 }

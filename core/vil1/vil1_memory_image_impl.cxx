@@ -88,7 +88,7 @@ void vil_memory_image_impl::init(int planes, int w, int h, vil_pixel_format pixe
   case VIL_RGB_BYTE: init(planes, w, h, 3,  8, VIL_COMPONENT_FORMAT_UNSIGNED_INT); break;
   case VIL_FLOAT:    init(planes, w, h, 1, 32, VIL_COMPONENT_FORMAT_UNSIGNED_INT); break;
   default:
-    cerr << "vil_memory_image_impl: crazy format!\n";
+    vcl_cerr << "vil_memory_image_impl: crazy format!\n";
   }
 }
 

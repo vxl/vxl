@@ -49,7 +49,7 @@ bool vil_skip_image_impl::get_property(char const *, void * VCL_DEFAULT_VALUE(0)
 bool vil_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h) const 
 {
   if (base.bits_per_component() % CHAR_BIT) {
-    cerr << __FILE__ " : urgh!" << endl;
+    vcl_cerr << __FILE__ " : urgh!" << vcl_endl;
     return false; // FIXME
   }
 

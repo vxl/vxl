@@ -55,13 +55,13 @@ bool vil_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int 
   //cerr << "x0 y0 w h = " << x0 << ' ' << y0 << ' ' << w << ' ' << h << endl;
 
   if (base.bits_per_component() % CHAR_BIT) {
-    cerr << __FILE__ " : urgh!" << endl;
+    vcl_cerr << __FILE__ " : urgh!" << vcl_endl;
     return false; // FIXME
   }
 
   // compute and check bounds of region requested.
   if (x0 < 0 || y0 < 0 || x0+w > new_width || y0+h > new_height) {
-    cerr << __FILE__ ": invalid section bounds" << endl;
+    vcl_cerr << __FILE__ ": invalid section bounds" << vcl_endl;
     return false;
   }
   
@@ -77,7 +77,7 @@ bool vil_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int 
 			x0, y0, w, h);
     
   default:
-    cerr << __FILE__ ": not implemented for this pixel type" << endl;
+    vcl_cerr << __FILE__ ": not implemented for this pixel type" << vcl_endl;
     return false;
   }
 }

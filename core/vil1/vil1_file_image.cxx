@@ -29,10 +29,10 @@ bool vil_file_image::load(char const* filename, verbosity v VCL_DEFAULT_VALUE(ve
 {
   vil_image i = vil_load(filename);
   if (v == verbose) {
-    cerr << "vil_file_image: Loaded [" << filename << "]\n";
+    vcl_cerr << "vil_file_image: Loaded [" << filename << "]\n";
   }
   if (!i && v != silent) {
-    cerr << "vil_file_image: Could not load [" << filename << "]\n";
+    vcl_cerr << "vil_file_image: Could not load [" << filename << "]\n";
   }
   
   vil_image::operator= (i);

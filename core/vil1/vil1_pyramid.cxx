@@ -23,7 +23,7 @@ vil_pyramid::~vil_pyramid()
 vil_image vil_pyramid::operator[](unsigned i)
 {
   while (i >= levels.size()) {
-    cerr << "making pyramid level " << levels.size() << endl;
+    vcl_cerr << "making pyramid level " << levels.size() << vcl_endl;
     vil_image I = levels.back();
     I = vil_resample(I, I.width()/2, I.height()/2);
     switch (cs) {

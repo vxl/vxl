@@ -18,21 +18,21 @@ vil_convolve_separable(float const kernel[], unsigned N,
   unsigned w = buf.width();
   unsigned h = buf.height();
     
-  cerr << "convolve x..." << flush;
+  vcl_cerr << "convolve x..." << vcl_flush;
   vil_convolve_1d_x(K,
 		    vil_convolve_signal_2d<pixel_type const>(buf.row_array(), 0, 0, w,  0, 0, h),
 		    (float_type*)0,
 		    vil_convolve_signal_2d<float_type         >(tmp.row_array(), 0, 0, w,  0, 0, h),
 		    vil_convolve_trim, vil_convolve_trim);
-  cerr << "done" << endl;
+  vcl_cerr << "done" << vcl_endl;
 
-  cerr << "convolve y..." << flush;
+  vcl_cerr << "convolve y..." << vcl_flush;
   vil_convolve_1d_y(K,
 		    vil_convolve_signal_2d<float_type const>(tmp.row_array(), 0, 0, w,  0, 0, h),
 		    (float_type*)0,
 		    vil_convolve_signal_2d<float_type      >(out.row_array(), 0, 0, w,  0, 0, h),
 		    vil_convolve_trim, vil_convolve_trim);
-  cerr << "done" << endl;
+  vcl_cerr << "done" << vcl_endl;
 }
 
 template <class pixel_type, class float_type>

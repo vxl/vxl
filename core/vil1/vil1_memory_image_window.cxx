@@ -179,8 +179,8 @@ double vil_memory_image_window::normalised_cross_correlation(const vil_memory_im
   }
   
    
-  std_dev_I1_uv = sqrt(result_I1);
-  std_dev_I2_uv = sqrt(result_I2);
+  std_dev_I1_uv = vcl_sqrt(result_I1);
+  std_dev_I2_uv = vcl_sqrt(result_I2);
 
 
    ///////////////////////////////////////
@@ -203,7 +203,7 @@ double vil_memory_image_window::normalised_cross_correlation(const vil_memory_im
      }
    }
    
-   result /=  sqrt(std_dev_I1_uv * std_dev_I1_uv
+   result /=  vcl_sqrt(std_dev_I1_uv * std_dev_I1_uv
 		   * std_dev_I2_uv * std_dev_I2_uv);	   
    
    return result;

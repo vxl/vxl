@@ -16,8 +16,8 @@
 #include <vil/vil_memory_image_of_format.txx>
 
 template <class T>
-class vil_image_as_impl : public vil_image_impl, public vil_memory_image_of_format<T> {
-public:
+struct vil_image_as_impl : vil_image_impl, vil_memory_image_of_format<T>
+{
   typedef vil_memory_image_of_format<T> format;
   vil_image image;
   vil_image_as_impl(vil_image const &underlying) : image(underlying) { }
@@ -99,14 +99,14 @@ bool vil_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, i
   
   //
   else {
-    cerr << __FILE__ ": get_section() not implemented for " << image << endl;
+    vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
     return false;
   }
   
 }
 // instantiate for int.
-  template class vil_image_as_impl<int>;
+template struct vil_image_as_impl<int>;
 
 vil_image vil_image_as_int(vil_image const &image) {
   return vil_image(new vil_image_as_impl<int>(image));
@@ -162,14 +162,14 @@ bool vil_image_as_impl<vil_byte>::get_section(void *buf, int x0, int y0, int wid
   
   //
   else {
-    cerr << __FILE__ ": get_section() not implemented for " << image << endl;
+    vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
     return false;
   }
   
 }
 // instantiate for byte.
-template class vil_image_as_impl<vil_byte>;
+template struct vil_image_as_impl<vil_byte>;
 
 vil_image vil_image_as_byte(vil_image const &image) {
   return vil_image(new vil_image_as_impl<vil_byte>(image));
@@ -216,14 +216,14 @@ bool vil_image_as_impl<float>::get_section(void *buf, int x0, int y0, int width,
   
   //
   else {
-    cerr << __FILE__ ": get_section() not implemented for " << image << endl;
+    vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
     return false;
   }
   
 }
 // instantiate for float.
-template class vil_image_as_impl<float>;
+template struct vil_image_as_impl<float>;
 
 vil_image vil_image_as_float(vil_image const &image) {
   return vil_image(new vil_image_as_impl<float>(image));
@@ -270,14 +270,14 @@ bool vil_image_as_impl<double>::get_section(void *buf, int x0, int y0, int width
   
   //
   else {
-    cerr << __FILE__ ": get_section() not implemented for " << image << endl;
+    vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
     return false;
   }
   
 }
 // instantiate for double.
-template class vil_image_as_impl<double>;
+template struct vil_image_as_impl<double>;
 
 vil_image vil_image_as_double(vil_image const &image) {
   return vil_image(new vil_image_as_impl<double>(image));
@@ -326,14 +326,14 @@ bool vil_image_as_impl<vil_rgb<unsigned char> >::get_section(void *buf,
   
   //
   else {
-    cerr << __FILE__ ": get_section() not implemented for " << image << endl;
+    vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
     return false;
   }
   
 }
 // instantiate for vil_rgb_byte .
-template class vil_image_as_impl<vil_rgb<unsigned char> >;
+template struct vil_image_as_impl<vil_rgb<unsigned char> >;
 
 vil_image vil_image_as_rgb_byte(vil_image const &image) {
   return vil_image(new vil_image_as_impl<vil_rgb<unsigned char> >(image));
@@ -381,14 +381,14 @@ bool vil_image_as_impl<vil_rgb<float> >::get_section(void *buf,
   
   //
   else {
-    cerr << __FILE__ ": get_section() not implemented for " << image << endl;
+    vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
     return false;
   }
   
 }
 // instantiate for vil_rgb_float .
-template class vil_image_as_impl<vil_rgb<float> >;
+template struct vil_image_as_impl<vil_rgb<float> >;
 
 vil_image vil_image_as_rgb_float(vil_image const &image) {
   return vil_image(new vil_image_as_impl<vil_rgb<float> >(image));

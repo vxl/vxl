@@ -34,8 +34,8 @@ void vil_convolve_simple(I1 const* const* input1, unsigned w1, unsigned h1,
   //?? typedef typename vil_ip_traits<O* const*>::pixel_type OutType;
 
 #if TRACE
-  cerr << "w1 h1 = " << w1 << ' ' << h1 << endl;
-  cerr << "w2 h2 = " << w2 << ' ' << h2 << endl;
+  vcl_cerr << "w1 h1 = " << w1 << ' ' << h1 << vcl_endl;
+  vcl_cerr << "w2 h2 = " << w2 << ' ' << h2 << vcl_endl;
 #endif
 
   // here we go : vrrrm.. vrrrm..
@@ -98,7 +98,7 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
   for (unsigned k=0; k<h1; ++k)
     in1[k] = input1[y1+k] + x1;
 #if TRACE
-  cerr << in1.size() << " rasters in in1" << endl;
+  vcl_cerr << in1.size() << " rasters in in1" << vcl_endl;
 #endif
   
   //
@@ -106,7 +106,7 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
   for (unsigned k=0; k<h2; ++k)
     in2[k] = input2[y2+k] + x2;
 #if TRACE
-  cerr << in2.size() << " rasters in in2" << endl;
+  vcl_cerr << in2.size() << " rasters in in2" << vcl_endl;
 #endif
 
   //
@@ -114,7 +114,7 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
   for (unsigned k=0; k<h1+h2-1; ++k)
     out[k] = output[yo+k] + xo;
 #if TRACE
-  cerr << out.size() << " rasters in out" << endl;
+  vcl_cerr << out.size() << " rasters in out" << vcl_endl;
 #endif
   
   // call the simpler routine (see comment above for explanation of hack).
