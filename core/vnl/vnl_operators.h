@@ -45,9 +45,9 @@ bool operator<(vnl_matrix<T> const& lhs, vnl_matrix<T> const& rhs)
   if (&lhs == &rhs)  return false;              // same object => equal.
 
   if (lhs.rows() < rhs.rows())  return true;        // Size different ?
-  else if lhs.rows() > rhs.rows()) return false;
+  else if (lhs.rows() > rhs.rows()) return false;
   else if (lhs.cols() < rhs.cols())  return true;
-  else if lhs.cols() > rhs.cols()) return false;
+  else if (lhs.cols() > rhs.cols()) return false;
 
 
   for (unsigned i = 0; i < size(); i++)         // For each index
