@@ -25,12 +25,12 @@ class vil_gen_file_format : public vil_file_format {
 public:
   virtual char const* tag() const;
   virtual vil_image_impl* make_input_image(vil_stream* vs);
-  virtual vil_image_impl* make_output_image(vil_stream* vs, int planes,
-                                            int width,
-                                            int height,
-                                            int components,
-                                            int bits_per_component,
-                                            vil_component_format format) {
+  virtual vil_image_impl* make_output_image(vil_stream* /*vs*/, int /*planes*/,
+                                            int /*width*/,
+                                            int /*height*/,
+                                            int /*components*/,
+                                            int /*bits_per_component*/,
+                                            vil_component_format /*format*/) {
     return 0;
   }
 };

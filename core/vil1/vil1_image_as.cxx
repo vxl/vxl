@@ -25,7 +25,7 @@
 
 
 template <class T>
-struct vil_image_as_impl : vil_image_impl, vil_memory_image_of_format<T>
+struct vil_image_as_impl : public vil_image_impl, public vil_memory_image_of_format<T>
 {
   typedef vil_memory_image_of_format<T> format;
   vil_image image;
@@ -64,7 +64,7 @@ struct vil_image_as_impl : vil_image_impl, vil_memory_image_of_format<T>
 //--------------------------------------------------------------------------------
 
 template<class Inp, class Out>
-bool convert_grey_to_grey( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* dummy1, Out* dummy2 )
+bool convert_grey_to_grey( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
   vcl_vector<Inp> scan(width);
   for (int j=0; j<height; ++j) {
@@ -78,7 +78,7 @@ bool convert_grey_to_grey( const vil_image& image, void* buf, int x0, int y0, in
 
 
 template<class Inp, class Out>
-bool convert_rgb_to_grey( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* dummy1, Out* dummy2 )
+bool convert_rgb_to_grey( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
   vcl_vector<Inp> scan(3*width);
   for (int j=0; j<height; ++j) {
@@ -101,7 +101,7 @@ bool convert_rgb_to_grey( const vil_image& image, void* buf, int x0, int y0, int
 
 
 template<class Inp, class Out>
-bool convert_grey_to_rgb( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* dummy1, Out* dummy2 )
+bool convert_grey_to_rgb( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
   vcl_vector<Inp> scan(width);
   for (int j=0; j<height; ++j) {
@@ -118,7 +118,7 @@ bool convert_grey_to_rgb( const vil_image& image, void* buf, int x0, int y0, int
 
 
 template<class Inp, class Out>
-bool convert_rgb_to_rgb( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* dummy1, Out* dummy2 )
+bool convert_rgb_to_rgb( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
   vcl_vector<Inp> scan(3*width);
   for (int j=0; j<height; ++j) {
@@ -134,7 +134,7 @@ bool convert_rgb_to_rgb( const vil_image& image, void* buf, int x0, int y0, int 
 }
 
 template<class Inp, class Out>
-bool convert_rgba_to_rgb( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* dummy1, Out* dummy2 )
+bool convert_rgba_to_rgb( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
   vcl_vector<Inp> scan(4*width);
   for (int j=0; j<height; ++j) {
@@ -151,7 +151,7 @@ bool convert_rgba_to_rgb( const vil_image& image, void* buf, int x0, int y0, int
 
 
 template<class Inp, class Out>
-bool convert_rgba_to_grey( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* dummy1, Out* dummy2 )
+bool convert_rgba_to_grey( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
   vcl_vector<Inp> scan(4*width);
   for (int j=0; j<height; ++j) {

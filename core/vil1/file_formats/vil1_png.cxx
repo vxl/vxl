@@ -177,7 +177,7 @@ struct vil_png_structures {
     if (rows == 0)
       return (ok = problem("couldn't allocate space for image"));
 
-    int linesize;
+    unsigned long linesize;
     if (png_get_bit_depth( png_ptr, info_ptr ) == 16)
       linesize = 2 * info_ptr->width;
     else
@@ -267,12 +267,12 @@ bool vil_png_generic_image::get_property(char const *tag, void *prop) const
   return false;
 }
 
-vil_png_generic_image::vil_png_generic_image(vil_stream* is, int planes,
+vil_png_generic_image::vil_png_generic_image(vil_stream* is, int /*planes*/,
                                                int width,
                                                int height,
                                                int components,
                                                int bits_per_component,
-                                               vil_component_format format):
+                                               vil_component_format /*format*/):
   vs_(is),
   width_(width),
   height_(height),
@@ -302,7 +302,7 @@ bool vil_png_generic_image::read_header()
 
   png_setjmp_on(return false);
 
-  vs_->seek(0);
+  vs_->seek(0L);
   png_byte sig_buf [SIG_CHECK_SIZE];
   if (vs_->read(sig_buf, SIG_CHECK_SIZE) != SIG_CHECK_SIZE) {
     png_setjmp_off();
@@ -354,7 +354,7 @@ bool vil_png_generic_image::write_header()
 
   png_setjmp_on( return false );
 
-  vs_->seek(0);
+  vs_->seek(0L);
 
   png_set_write_fn(p->png_ptr, vs_, user_write_data, user_flush_data);
 
