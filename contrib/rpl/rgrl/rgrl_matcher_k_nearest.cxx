@@ -23,6 +23,7 @@ rgrl_matcher_k_nearest( unsigned int k, double dist_thres )
   : k_( k ),
     thres_( dist_thres )
 {
+  if( thres_ > 0.0 )  thres_ = thres_*thres_;
 }
 
 
