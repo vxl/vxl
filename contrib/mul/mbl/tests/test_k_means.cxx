@@ -40,10 +40,11 @@ void test_k_means()
       data[i](j) = rng.drand32(0.0, 1.0);
 
   vcl_vector<vnl_vector<double> > centres;
-  vcl_vector<unsigned> clusters;    
+  vcl_vector<unsigned> clusters;
+  mbl_data_array_wrapper<vnl_vector<double> > data_array1(data);
+
   unsigned nIts =
-    mbl_k_means(mbl_data_array_wrapper<vnl_vector<double> >(data),
-                nCentres, &centres, &clusters);
+    mbl_k_means(data_array1, nCentres, &centres, &clusters);
   vcl_cout << "Took " << nIts << " iterations." << vcl_endl;
 
   vbl_bounding_box<double, nDims> bbox;
@@ -106,14 +107,15 @@ void test_k_means()
 
   vcl_vector<unsigned> clusters2;    
  
-  mbl_k_means(mbl_data_array_wrapper<vnl_vector<double> >(data), nCentres, &centres, &clusters2);
+  mbl_data_array_wrapper<vnl_vector<double> > data_array2(data);
+  mbl_k_means(data_array2, nCentres, &centres, &clusters2);
 
 
   vcl_cout << "\n\n======Test Stability of solution" << vcl_endl;
   TEST("Cluster partitions do not change when restarting with the found centres", clusters2, clusters);
 
   centres.resize(0);
-  mbl_k_means(mbl_data_array_wrapper<vnl_vector<double> >(data), nCentres, &centres, &clusters2);
+  mbl_k_means(data_array2, nCentres, &centres, &clusters2);
   TEST("Cluster partitions do not change when restarting with the found partition", clusters2, clusters);
   vcl_cout << vcl_endl << vcl_endl;
 
