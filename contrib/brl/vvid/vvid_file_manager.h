@@ -105,6 +105,9 @@ class vvid_file_manager : public vgui_wrapper_tableau
   //: show VanDuc edges
   void compute_vd_edges();
 
+  //: show curve tracking
+  void compute_curve_tracking();
+
   //: get the window of this player
   vgui_window* get_window(){return win_;}
 
@@ -121,6 +124,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   void display_image();
   void display_spatial_objects();
   void display_topology();
+	void set_changing_colors(int num, float *r, float *g, float *b);
  private:
   //utility functions
 
@@ -132,6 +136,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   bool prev_frame_;
   bool track_;//keep trail of display items
   int window_;//frame trail time window
+	bool color_label_;//display with a different color for different labels
   float time_interval_;
   unsigned width_;
   unsigned height_;

@@ -22,6 +22,9 @@
 #include <vgui/vgui_image_tableau.h>
 #include <sdet/sdet_harris_detector_params.h>
 #include <sdet/sdet_detector_params.h>
+#include <bdgl/bdgl_curve_tracker.h>
+#include <bdgl/bdgl_curve_matcher.h>
+
 
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
@@ -30,6 +33,7 @@
 #include <vvid/vvid_lucas_kanade_process.h>
 #include <vvid/vvid_harris_corner_process.h>
 #include <vvid/vvid_edge_process.h>
+#include <vvid/vvid_curve_tracking_process.h>
 
 //static manager instance
 vvid_file_manager *vvid_file_manager::instance_ = 0;
@@ -77,6 +81,7 @@ vvid_file_manager::vvid_file_manager(): vgui_wrapper_tableau()
   width_ = 512;
   height_ = 512;
   track_ = false;
+	color_label_ = false;
   window_ = 0;
   frame_trail_.clear();
   my_movie_=(vidl_movie*)0;
@@ -123,18 +128,67 @@ void vvid_file_manager::display_spatial_objects()
   if (easy0_)
   {
     easy0_->clear_all();
-    //If tracking is on then we maintain a queue of points
-    if(track_)
-      {
-        frame_trail_.add_spatial_objects(sos);
-        vcl_vector<vsol_spatial_object_2d_sptr> temp;
-        frame_trail_.get_spatial_objects(temp);
-        easy0_->add_spatial_objects(temp);
-      }
-    else
-      easy0_->add_spatial_objects(sos);
+		if (color_label_) {
+			float r,g,b;
+			//If tracking is on then we maintain a queue of points
+			if(track_) {
+				frame_trail_.add_spatial_objects(sos);
+				vcl_vector<vsol_spatial_object_2d_sptr> temp;
+				frame_trail_.get_spatial_objects(temp);
+				for (int i=0;i<temp.size();i++) {
+					set_changing_colors( temp[i]->get_tag_id() , &r, &g, &b );
+					easy0_->set_vsol_spatial_object_2d_style(temp[i], r, g, b, 1.0, 2.0 );
+					easy0_->add_spatial_object(temp[i]);
+				}
+			} else {
+				for (int i=0;i<sos.size();i++) {
+					set_changing_colors( sos[i]->get_tag_id() , &r, &g, &b );
+					//vcl_cout<<"("<<sos[i]->get_tag_id()<<")\n";
+					easy0_->set_vsol_spatial_object_2d_style(sos[i], r, g, b, 1.0, 2.0 );
+					easy0_->add_spatial_object(sos[i]);
+				}
+			}
+		} else {
+			//If tracking is on then we maintain a queue of points
+			if(track_)
+				{
+					frame_trail_.add_spatial_objects(sos);
+					vcl_vector<vsol_spatial_object_2d_sptr> temp;
+					frame_trail_.get_spatial_objects(temp);
+					easy0_->add_spatial_objects(temp);
+				}
+			else
+				easy0_->add_spatial_objects(sos);
+		}
   }
 }
+
+// set changing colors for labelling curves, points, etc
+//-----------------------------------------------------------------------------
+void vvid_file_manager::set_changing_colors(int num, float *r, float *g, float *b)
+{
+  int strength = num/6;
+  int pattern  = num%6;
+  strength %= 20;
+  float s = 1.0f - strength * 0.05f;
+
+  switch(pattern)
+  {
+    case 0 : (*r) = s; (*g) = 0; (*b) = 0; break;
+    case 1 : (*r) = 0; (*g) = s; (*b) = 0; break;
+    case 2 : (*r) = 0; (*g) = 0; (*b) = s; break;
+    case 3 : (*r) = s; (*g) = s; (*b) = 0; break;
+    case 4 : (*r) = 0; (*g) = s; (*b) = s; break;
+    case 5 : (*r) = s; (*g) = 0; (*b) = s; break;
+    default: (*r) = 0; (*g) = 0; (*b) = 0; break; // this will never happen
+  }
+  //vcl_cout<<"color : "<<(*r)<<" : "<<(*g)<<" : "<<(*b)<<"\n";
+
+  return;
+}
+
+
+
 //-------------------------------------------------------------
 //: Display topology objects
 //
@@ -222,6 +276,8 @@ void vvid_file_manager::load_video_file()
   grid_->post_redraw();
   vgui::run_till_idle();
 }
+
+//----------------------------------------------
 void vvid_file_manager::cached_play()
 {
   vul_timer t;
@@ -255,6 +311,7 @@ void vvid_file_manager::cached_play()
     }
 }
 
+//----------------------------------------------
 void vvid_file_manager::un_cached_play()
 {
   vidl_movie::frame_iterator pframe(my_movie_);
@@ -452,6 +509,50 @@ void vvid_file_manager::compute_vd_edges()
     dp.aggressive_junction_closure=-1;
 
   video_process_  = new vvid_edge_process(dp);
+  if(track_)
+    {
+      frame_trail_.clear();
+      frame_trail_.set_window(track_window);
+    }
+}
+
+void vvid_file_manager::compute_curve_tracking()
+{
+  // get parameters
+  static int track_window;
+  static bdgl_curve_matcher_params mp(1.0, 10.0, 0.31416);
+  static bdgl_curve_tracker_params tp(1e6);
+
+  vgui_dialog* tr_dialog = new vgui_dialog("Edge Tracking");
+  tr_dialog->field("Matching threshold", tp.match_thres_);
+  tr_dialog->field("Pixel scale", mp.image_scale_);
+  tr_dialog->field("Gradient scale", mp.grad_scale_);
+  tr_dialog->field("Angle scale", mp.angle_scale_);
+  tr_dialog->checkbox("Tracks", track_);
+  tr_dialog->field("Window", track_window);
+  if (!tr_dialog->ask())
+    return;
+  tp.match_params_ = mp;
+
+  // embedded VD edges computations
+  // VD parameters
+  static bool agr = true;
+  static sdet_detector_params dp;
+  vgui_dialog* vd_dialog = new vgui_dialog("VD Edges");
+  vd_dialog->field("Gaussian sigma", dp.smooth);
+  vd_dialog->field("Noise Threshold", dp.noise_multiplier);
+  vd_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
+  vd_dialog->checkbox("Agressive Closure", agr);
+  if (!vd_dialog->ask())
+    return;
+  if (agr)
+    dp.aggressive_junction_closure=1;
+  else
+    dp.aggressive_junction_closure=0;
+
+	color_label_ = true;
+
+  video_process_  = new vvid_curve_tracking_process(tp,dp);
   if(track_)
     {
       frame_trail_.clear();
