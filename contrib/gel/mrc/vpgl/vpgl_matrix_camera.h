@@ -5,7 +5,7 @@
 class vpgl_matrix_camera : public vpgl_basic_camera
 {
 public:
- 
+
  // Constructors
   vpgl_matrix_camera();
   vpgl_matrix_camera(const vnl_matrix<double>& mat);
@@ -18,7 +18,7 @@ public:
   // Different world-to-image methods
   virtual void world_to_image(const vnl_vector<double>&, double&ix, double&iy);
   virtual void world_to_image(const double& x, const double& y, const double& z,
-			      double& ix, double& iy);
+                              double& ix, double& iy);
   //-----------------------------------------
 #if 0
   virtual void image_to_world(vnl_vector<double>& ray3d_origin,

@@ -9,7 +9,7 @@
 //                            Niskayuna, NY 12309
 //                            All Rights Reserved
 //              Reproduction rights limited as described below.
-//                               
+//
 //      Permission to use, copy, modify, distribute, and sell this software
 //      and its documentation for any purpose is hereby granted without fee,
 //      provided that (i) the above copyright notice and this permission
@@ -19,7 +19,7 @@
 //      the specific, prior written permission of GE CRD, and (iii) any
 //      modifications are clearly marked and summarized in a change history
 //      log.
-//       
+//
 //      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
 //      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
 //      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
@@ -42,12 +42,9 @@ vpgl_basic_camera::vpgl_basic_camera():
   for (int i=0; i<3; i++) init_pt[i]=0.0;
 }
 
-vpgl_basic_camera::~vpgl_basic_camera() 
+vpgl_basic_camera::~vpgl_basic_camera()
 {
 }
-
-
-
 
 //---------------------------------------------------------------------
 //  Various flavours of world_to_image
@@ -60,12 +57,11 @@ void vpgl_basic_camera::world_to_image(const vnl_vector<double>& xyz, double &u,
   world_to_image (xyz[0], xyz[1], xyz[2], u, v);
 }
 
-void vpgl_basic_camera::world_to_image(const double&, const double& , const double& ,
-			    double& , double& )
+void vpgl_basic_camera::world_to_image(const double&,const double&,const double&,
+                                       double&, double&)
 {
   vcl_cerr <<" Can't compute " << "world_to_image";
 }
-
 
 //------------------------------------------------------------------------
 
@@ -74,11 +70,6 @@ void vpgl_basic_camera::image_to_world(vnl_vector<double>& ,vnl_vector<double>& 
   vcl_cerr << " Can't compute ImageToWorld" ;
 }
 
-
-
-
-
-
 void vpgl_basic_camera::set_init_pt(const vnl_vector<double>& pt)
 {
   init_pt = pt;
@@ -86,5 +77,5 @@ void vpgl_basic_camera::set_init_pt(const vnl_vector<double>& pt)
 
 void vpgl_basic_camera::get_init_pt(vnl_vector<double>& pt)
 {
-	for (int i=0; i<3; i++) pt[i]= init_pt[i];
+  for (int i=0; i<3; i++) pt[i]= init_pt[i];
 }
