@@ -18,6 +18,9 @@ vxl vgl vgl_ build
 vxl vil vil_ build
 vxl vul vul_ build
 vxl vpl vpl_ build
+vxl vidl vidl_ build
+vxl vcgl vcgl_ build
+vxl vcsl vcsl_ build
 
 package: mul Manchester University Libraries
 mul mbl mbl_ build
