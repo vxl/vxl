@@ -82,7 +82,8 @@ AC_SUBST(VXL_INT_32)
 AC_SUBST(VXL_INT_64)
 AC_SUBST(VXL_IEEE_32)
 AC_SUBST(VXL_IEEE_64)
-#AC_SUBST(VXL_INT_96)
+#AC_SUBST(VXL_IEEE_96)
+#AC_SUBST(VXL_IEEE_128)
 
 #--------------------------------------------------------------------------------
 # output section:
