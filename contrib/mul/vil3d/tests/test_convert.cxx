@@ -11,9 +11,9 @@
 
 static void test_convert_diff_types(const char * golden_data_dir)
 {
-  vcl_cout << "*********************************************************************\n"
+  vcl_cout << "***********************************************************************\n"
            << " Testing vil3d_convert_cast(vil3d_image_view_base,vil3d_image_view<T>)\n"
-           << "*********************************************************************\n";
+           << "***********************************************************************\n";
 
   vcl_string datadir = golden_data_dir;
   if (*golden_data_dir) datadir += "/";
