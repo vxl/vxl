@@ -148,4 +148,3 @@ SOURCE=.\mvl2_video_writer.h
 # End Group
 # End Target
 # End Project
-
