@@ -9,6 +9,8 @@
 #include <vtol/vtol_face_2d.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
+#include <vgui/vgui_style_factory.h>
+
 
 bgui_vtol2D_tableau::bgui_vtol2D_tableau(const char* n) :
   bgui_vsol2D_tableau(n) { this->init(); }
@@ -61,75 +63,145 @@ void bgui_vtol2D_tableau::init()
 bgui_vtol_soview2D_vertex*
 bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr const& v)
 {
+  return add_vertex( v , vertex_style_.r,
+                         vertex_style_.g,
+                         vertex_style_.b,
+                         vertex_style_.point_radius );
+}
+
+bgui_vtol_soview2D_vertex*
+bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr const& v,
+                                const float r,
+                                const float g,
+                                const float b,
+                                const float point_radius)
+{
   bgui_vtol_soview2D_vertex* obj = new bgui_vtol_soview2D_vertex();
   obj->x = v->x();
   obj->y = v->y();
-  //set the default style
-  bgui_style_sptr sty = style_map_[obj->type_name()];
   add(obj);
-  if (obj)
-    {
-      obj->set_style(sty.ptr());
-      if (highlight_)
-        {
-          int id = obj->get_id();
-          obj_map_[id]=v->cast_to_topology_object();
-        }
-    }
+  obj->set_style( vgui_style_factory::get_style( r,
+                                                 g,
+                                                 b,
+                                                 point_radius,
+                                                 0.0f ) );
+  //set the default style
+  //bgui_style_sptr sty = style_map_[obj->type_name()];
+  if (obj) {
+    //obj->set_style(sty.ptr());
+    //if (highlight_)
+    //  {
+    int id = obj->get_id();
+    obj_map_[id]=v->cast_to_topology_object();
+    //  }
+  }
   return obj;
 }
 
 bgui_vtol_soview2D_edge*
 bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr const& e)
 {
+  return add_edge( e , edge_style_.r,
+                       edge_style_.g,
+                       edge_style_.b,
+                       edge_style_.line_width );
+}
+
+bgui_vtol_soview2D_edge*
+bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr const& e , 
+                              const float r,
+                              const float g,
+                              const float b,
+                              const float line_width)
+{
 #ifdef DEBUG
   print_edgels(e);
 #endif
   bgui_vtol_soview2D_edge* obj = new bgui_vtol_soview2D_edge(e);
   //set the default style
-  bgui_style_sptr sty = style_map_[obj->type_name()];
+  //bgui_style_sptr sty = style_map_[obj->type_name()];
   add(obj);
-  if (obj)
-    {
-      obj->set_style(sty.ptr());
-      if (highlight_)
-        {
-          int id = obj->get_id();
-        obj_map_[id]=e->cast_to_topology_object();
-        }
-    }
+  obj->set_style( vgui_style_factory::get_style( r ,
+                                                 g ,
+                                                 b ,
+                                                 0.0f,
+                                                 line_width ) );
+  if (obj) {
+    //obj->set_style(sty.ptr());
+    // if (highlight_)
+    //   {
+    int id = obj->get_id();
+    obj_map_[id]=e->cast_to_topology_object();
+    //   }
+  }
   return obj;
 }
+
 
 bgui_vtol_soview2D_edge_group*
 bgui_vtol2D_tableau::add_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges)
 {
+  return add_edge_group( edges , edge_group_style_.r,
+                                 edge_group_style_.g,
+                                 edge_group_style_.b,
+                                 edge_group_style_.line_width );
+}
+
+bgui_vtol_soview2D_edge_group*
+bgui_vtol2D_tableau::add_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges,
+                                    const float r ,
+                                    const float g ,
+                                    const float b ,
+                                    const float line_width )
+{
   bgui_vtol_soview2D_edge_group* obj =
     new bgui_vtol_soview2D_edge_group(edges);
   //set the default style
-  bgui_style_sptr sty = style_map_[obj->type_name()];
+  //bgui_style_sptr sty = style_map_[obj->type_name()];
   add(obj);
-  obj->set_style(sty.ptr());
+  obj->set_style( vgui_style_factory::get_style( r ,
+                                                 g ,
+                                                 b , 
+                                                 0.0f ,
+                                                 line_width ) );
+  //obj->set_style(sty.ptr());
   return obj;
 }
 
 bgui_vtol_soview2D_face*
 bgui_vtol2D_tableau::add_face(vtol_face_2d_sptr const& f)
 {
+  return add_face( f , face_style_.r,
+                       face_style_.g,
+                       face_style_.b,
+                       face_style_.line_width );
+}
+
+bgui_vtol_soview2D_face*
+bgui_vtol2D_tableau::add_face(vtol_face_2d_sptr const& f,
+                              const float r,
+                              const float g,
+                              const float b,
+                              const float line_width)
+{
   bgui_vtol_soview2D_face* obj = new bgui_vtol_soview2D_face(f);
 
   //set the default style
-  bgui_style_sptr sty = style_map_[obj->type_name()];
+  //bgui_style_sptr sty = style_map_[obj->type_name()];
   add(obj);
-  if (obj)
-    {
-      obj->set_style(sty.ptr());
-      if (highlight_)
-        {
-          int id = obj->get_id();
-          obj_map_[id]=f->cast_to_topology_object();
-        }
-    }
+  obj->set_style( vgui_style_factory::get_style( r ,
+                                                 g ,
+                                                 b , 
+                                                 0.0f,
+                                                 line_width ) );
+  if (obj) {
+    //  obj->set_style(sty.ptr());
+    //  if (highlight_)
+    //    {
+    int id = obj->get_id();
+    obj_map_[id]=f->cast_to_topology_object();
+    //    }
+  }
   return obj;
 }
 
@@ -143,6 +215,21 @@ add_topology_objects(vcl_vector<vtol_topology_object_sptr> const& tos)
        tot != tos.end(); tot++)
     {
       add_topology_object((*tot));
+    }
+}
+
+void bgui_vtol2D_tableau::
+add_topology_objects(vcl_vector<vtol_topology_object_sptr> const& tos,
+                     const float r,
+                     const float g,
+                     const float b,
+                     const float line_width,
+                     const float point_radius)
+{
+  for (vcl_vector<vtol_topology_object_sptr>::const_iterator tot = tos.begin();
+       tot != tos.end(); tot++)
+    {
+      add_topology_object((*tot) , r , g , b , line_width , point_radius );
     }
 }
 
@@ -173,6 +260,38 @@ add_topology_object(vtol_topology_object_sptr const& tos)
   }
 }
 
+void bgui_vtol2D_tableau::
+add_topology_object(vtol_topology_object_sptr const& tos,
+                    const float r ,
+                    const float g ,
+                    const float b ,
+                    const float line_width ,
+                    const float point_radius)
+{
+  if (tos->cast_to_vertex()) {
+    if (tos->cast_to_vertex()->cast_to_vertex_2d())
+      {
+        vtol_vertex_2d_sptr v =
+          tos->cast_to_vertex()->cast_to_vertex_2d();
+        this->add_vertex(v , r , g , b , point_radius );
+      }
+  } else if (tos->cast_to_edge()) {
+    if (tos->cast_to_edge()->cast_to_edge_2d())
+      {
+        vtol_edge_2d_sptr e =
+          tos->cast_to_edge()->cast_to_edge_2d();
+        this->add_edge(e , r , g , b , line_width );
+      }
+  } else if (tos->cast_to_face()) {
+    if (tos->cast_to_face()->cast_to_face_2d())
+      {
+        vtol_face_2d_sptr f =
+          tos->cast_to_face()->cast_to_face_2d();
+        this->add_face(f , r , g , b , line_width );
+      }
+  }
+}
+
 void bgui_vtol2D_tableau::add_edges(vcl_vector<vtol_edge_2d_sptr> const& edges,
                                     bool verts)
 {
@@ -189,6 +308,33 @@ void bgui_vtol2D_tableau::add_edges(vcl_vector<vtol_edge_2d_sptr> const& edges,
             {
               vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
               this->add_vertex(v);
+            }
+          delete vts;
+        }
+    }
+}
+
+void bgui_vtol2D_tableau::add_edges(vcl_vector<vtol_edge_2d_sptr> const& edges,
+                                    bool verts ,
+                                    const float r ,
+                                    const float g ,
+                                    const float b ,
+                                    const float line_width ,
+                                    const float point_radius )
+{
+  for (vcl_vector<vtol_edge_2d_sptr>::const_iterator eit = edges.begin();
+       eit != edges.end(); eit++)
+    {
+      this->add_edge(*eit , r , g , b , line_width );
+      //optionally display the edge vertices
+      if (verts)
+        {
+          vcl_vector<vtol_vertex_sptr>* vts = (*eit)->vertices();
+          for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts->begin();
+               vit != vts->end(); vit++)
+            {
+              vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
+              this->add_vertex(v , r , g , b , point_radius);
             }
           delete vts;
         }
@@ -212,6 +358,34 @@ bgui_vtol2D_tableau::add_faces(vcl_vector<vtol_face_2d_sptr> const& faces,
             {
               vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
               this->add_vertex(v);
+            }
+          delete vts;
+        }
+    }
+}
+
+void
+bgui_vtol2D_tableau::add_faces(vcl_vector<vtol_face_2d_sptr> const& faces,
+                               bool verts,
+                               const float r ,
+                               const float g ,
+                               const float b ,
+                               const float line_width , 
+                               const float point_radius )
+{
+  for (vcl_vector<vtol_face_2d_sptr>::const_iterator fit = faces.begin();
+       fit != faces.end(); fit++)
+    {
+      vtol_face_2d_sptr f = (*fit);
+      this->add_face(f , r , g , b , line_width );
+      if (verts)
+        {
+          vcl_vector<vtol_vertex_sptr>* vts = f->vertices();
+          for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts->begin();
+               vit != vts->end(); vit++)
+            {
+              vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
+              this->add_vertex(v , r , g , b , point_radius );
             }
           delete vts;
         }
@@ -256,31 +430,47 @@ void bgui_vtol2D_tableau::set_vertex_style(const float r, const float g,
                                            const float b,
                                            const float point_radius)
 {
-  bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, 0.0f);
+/*  bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, 0.0f);
   bgui_vtol_soview2D_vertex sv;
-  style_map_[sv.type_name()]=sty;
+  style_map_[sv.type_name()]=sty;*/
+  vertex_style_.r = r;
+  vertex_style_.g = g;
+  vertex_style_.b = b;
+  vertex_style_.point_radius = point_radius;
 }
 void bgui_vtol2D_tableau::set_edge_style(const float r, const float g,
                                          const float b, const float line_width)
 {
-  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+/*  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
   bgui_vtol_soview2D_edge se;
-  style_map_[se.type_name()]=sty;
+  style_map_[se.type_name()]=sty;*/
+  edge_style_.r = r;
+  edge_style_.g = g;
+  edge_style_.b = b;
+  edge_style_.line_width = line_width;
 }
 
 void bgui_vtol2D_tableau::set_edge_group_style(const float r, const float g,
                                                const float b,
                                                const float line_width)
 {
-  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+ /* bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
   bgui_vtol_soview2D_edge_group sg;
-  style_map_[sg.type_name()]=sty;
+  style_map_[sg.type_name()]=sty; */
+  edge_group_style_.r = r;
+  edge_group_style_.g = g;
+  edge_group_style_.b = b;
+  edge_group_style_.line_width = line_width;
 }
 
 void bgui_vtol2D_tableau::set_face_style(const float r, const float g,
                                          const float b, const float line_width)
 {
-  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+/*  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
   bgui_vtol_soview2D_face sf;
-  style_map_[sf.type_name()]=sty;
+  style_map_[sf.type_name()]=sty; */
+  face_style_.r = r;
+  face_style_.g = g;
+  face_style_.b = b;
+  face_style_.line_width = line_width;
 }

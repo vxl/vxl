@@ -22,6 +22,9 @@
 //   Amir Tamrakar April 22, 2002    Removed the functions to display vsol objects
 //                                   to bgui_vsol2D_tableau and subclasses this
 //                                   from it instead
+//   Mark Johnson June 13, 2003      Stopped using interior class functions to
+//                                   highlight objects. Added support for
+//                                   specifying colors of individual objects.
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
@@ -35,9 +38,8 @@
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vtol/vtol_topology_object_sptr.h>
 #include <vgui/vgui_tableau_sptr.h>
-#include <bgui/bgui_style_sptr.h>
 #include <vgui/vgui_image_tableau_sptr.h>
-#include <vgui/vgui_easy2D_tableau.h>
+#include <bgui/bgui_easy2D_tableau.h>
 #include <bgui/bgui_vsol2D_tableau.h>
 #include <bgui/bgui_vsol2D_tableau_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
@@ -62,28 +64,84 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
 
   //: the vtol display methods for individual topology classes
   bgui_vtol_soview2D_vertex* add_vertex(vtol_vertex_2d_sptr const& v);
+  
+  bgui_vtol_soview2D_vertex* add_vertex(vtol_vertex_2d_sptr const& v,
+                                        const float r,
+                                        const float g,
+                                        const float b,
+                                        const float point_radius );
+  
   bgui_vtol_soview2D_edge* add_edge(vtol_edge_2d_sptr const& e);
+
+  bgui_vtol_soview2D_edge* add_edge(vtol_edge_2d_sptr const& e,
+                                    const float r,
+                                    const float g,
+                                    const float b,
+                                    const float line_width );
 
   bgui_vtol_soview2D_edge_group* add_edge_group(vcl_vector<vtol_edge_2d_sptr>&
                                                 edges);
+
+  bgui_vtol_soview2D_edge_group* add_edge_group(vcl_vector<vtol_edge_2d_sptr>&
+                                                edges,
+                                                const float r,
+                                                const float g,
+                                                const float b,
+                                                const float line_width);
+
   bgui_vtol_soview2D_face* add_face(vtol_face_2d_sptr const& f);
 
+  bgui_vtol_soview2D_face* add_face(vtol_face_2d_sptr const& f,
+                                    const float r,
+                                    const float g,
+                                    const float b,
+                                    const float line_width);
+  
   //: display methods for vectors of topology classes (not grouped)
   void add_topology_object(vtol_topology_object_sptr const& tos);
-
+  
+  void add_topology_object(vtol_topology_object_sptr const& tos,
+                           const float r,
+                           const float g,
+                           const float b,
+                           const float line_width,
+                           const float point_radius);
+  
   void add_topology_objects(vcl_vector<vtol_topology_object_sptr> const& tos);
 
+  void add_topology_objects(vcl_vector<vtol_topology_object_sptr> const& tos,
+                            const float r,
+                            const float g,
+                            const float b,
+                            const float line_width,
+                            const float point_radius);
+  
   void add_edges(vcl_vector<vtol_edge_2d_sptr> const & edges,
                  bool verts=false);
 
+  void add_edges(vcl_vector<vtol_edge_2d_sptr> const & edges,
+                 bool verts,
+                 const float r,
+                 const float g,
+                 const float b,
+                 const float line_width,
+                 const float point_radius);
+
   void add_faces(vcl_vector<vtol_face_2d_sptr> const & faces, bool verts=false);
 
+  void add_faces(vcl_vector<vtol_face_2d_sptr> const & faces, bool verts,
+                 const float r,
+                 const float g,
+                 const float b,
+                 const float line_width,
+                 const float point_radius);
+  
   //: clear the tableau including the highlight map
   void clear_all();
 
   //: Methods for getting mapped objects
-  void enable_highlight(){highlight_ = true;}
-  void disable_highlight(){highlight_ = false;}
+  //void enable_highlight(){highlight_ = true;}
+  //void disable_highlight(){highlight_ = false;}
   vtol_edge_2d_sptr get_mapped_edge(const int id);
 
   //: Methods for changing the default style of displayable objects
@@ -99,6 +157,10 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
   void set_face_style(const float r, const float g, const float b,
                       const float line_width);
  protected:
+  DefaultStyle vertex_style_;
+  DefaultStyle edge_style_;
+  DefaultStyle edge_group_style_;
+  DefaultStyle face_style_;
   void init();
   vcl_map<int, vtol_topology_object_sptr> obj_map_;
 };
