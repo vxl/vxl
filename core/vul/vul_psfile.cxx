@@ -162,7 +162,7 @@ void vul_psfile::compute_bounding_box()
     if (box_height == 0) box_height = 1;
 
     // choose the smaller scaling factor
-    scale_x = scale_y = vcl_min(hsx/box_width, hsy/box_height) * PIX2INCH;
+    scale_x = scale_y = (float)vcl_min(hsx/box_width, hsy/box_height) * PIX2INCH;
 
     RANGE(scale_x,ps_minimum,ps_maximum);
     RANGE(scale_y,ps_minimum,ps_maximum);
@@ -253,7 +253,7 @@ void vul_psfile::print_greyscale_image(unsigned char* buffer, int sizex, int siz
 
   output_filestream
     << new_width << ' ' << new_height << " 8             % dimensions of data\n"
-    << "[" << new_width << " 0 0 -" << new_height << " 0 " << new_height
+    << '[' << new_width << " 0 0 -" << new_height << " 0 " << new_height
     << "]  % mapping matrix\n{currentfile pix readhexstring pop}\nimage\n\n";
   const int linesize = 72;
 
