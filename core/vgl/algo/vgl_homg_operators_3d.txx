@@ -384,7 +384,18 @@ double vgl_homg_operators_3d<Type>::cross_ratio(const vgl_homg_point_3d<Type>& a
   return n/m;
 }
 
-//: Project a point through a 3x4 projective transformation matrix
+//: Homographic transformation of a 3D point through a 4x4 projective transformation matrix
+template <class T>
+vgl_homg_point_3d<T> operator*(vnl_matrix_fixed<T,4,4> const& m,
+                               vgl_homg_point_3d<T> const& p)
+{
+  return vgl_homg_point_3d<T>(m(0,0)*p.x()+m(1,0)*p.y()+m(2,0)*p.z()+m(3,0)*p.w(),
+                              m(0,1)*p.x()+m(1,1)*p.y()+m(2,1)*p.z()+m(3,1)*p.w(),
+                              m(0,2)*p.x()+m(1,2)*p.y()+m(2,2)*p.z()+m(3,2)*p.w(),
+                              m(0,3)*p.x()+m(1,3)*p.y()+m(2,3)*p.z()+m(3,3)*p.w());
+}
+
+//: Project a 3D point to 2D through a 3x4 projective transformation matrix
 template <class T>
 vgl_homg_point_2d<T> operator*(vnl_matrix_fixed<T,3,4> const& m,
                                vgl_homg_point_3d<T> const& p)
@@ -414,5 +425,17 @@ vgl_homg_plane_3d<T> operator*(vnl_matrix_fixed<T,4,3> const& m,
                               m(2,0)*l.a()+m(2,1)*l.b()+m(2,2)*l.c(),
                               m(3,0)*l.a()+m(3,1)*l.b()+m(3,2)*l.c());
 }
+
+#undef VGL_HOMG_OPERATORS_3D_INSTANTIATE
+#define VGL_HOMG_OPERATORS_3D_INSTANTIATE(T) \
+  template class vgl_homg_operators_3d<T >; \
+  template vgl_homg_point_3d<T > operator*(vnl_matrix_fixed<T,4,4> const&,\
+                                           vgl_homg_point_3d<T > const&); \
+  template vgl_homg_point_2d<T > operator*(vnl_matrix_fixed<T,3,4> const&,\
+                                           vgl_homg_point_3d<T > const&); \
+  template vgl_homg_line_2d<T >  operator*(vnl_matrix_fixed<T,3,4> const&,\
+                                           vgl_homg_plane_3d<T > const&); \
+  template vgl_homg_plane_3d<T > operator*(vnl_matrix_fixed<T,4,3> const&,\
+                                           vgl_homg_line_2d<T > const&)
 
 #endif // vgl_homg_operators_3d_txx_

@@ -100,12 +100,16 @@ class vgl_homg_operators_3d
                             const vgl_homg_point_3d<Type >& p4);
 };
 
-//: Project a point through a 3x4 projective transformation matrix
+template <class T>
+vgl_homg_point_3d<T> operator*(vnl_matrix_fixed<T,4,4> const& m,
+                               vgl_homg_point_3d<T> const& p);
+
+//: Project a 3D point to 2D through a 3x4 projective transformation matrix
 template <class T>
 vgl_homg_point_2d<T> operator*(vnl_matrix_fixed<T,3,4> const& m,
                                vgl_homg_point_3d<T> const& p);
 
-//: Project a plane through a 3x4 projective transformation matrix
+//: Project a plane to a 2D line through a 3x4 projective transformation matrix
 template <class T>
 vgl_homg_line_2d<T> operator*(vnl_matrix_fixed<T,3,4> const& m,
                               vgl_homg_plane_3d<T> const& l);
@@ -114,5 +118,8 @@ vgl_homg_line_2d<T> operator*(vnl_matrix_fixed<T,3,4> const& m,
 template <class T>
 vgl_homg_plane_3d<T> operator*(vnl_matrix_fixed<T,4,3> const& m,
                                vgl_homg_line_2d<T> const& l);
+
+#define VGL_HOMG_OPERATORS_3D_INSTANTIATE(T) \
+        "Please #include <vgl/algo/vgl_homg_operators_3d.txx>"
 
 #endif // _vgl_homg_operators_3d_h
