@@ -175,54 +175,51 @@ class vmap_2_map_dart_base_iterator
  public:
   typedef vmap_2_map_dart_base_iterator< Ref,Ptr,It > self_type ;
 
-  vmap_2_map_dart_base_iterator()
-  {}
+  vmap_2_map_dart_base_iterator() {}
 
-  explicit vmap_2_map_dart_base_iterator(It arg)
-      :_it(arg)
-  {}
+  explicit vmap_2_map_dart_base_iterator(It arg) :_it(arg) {}
 
-  vmap_2_map_dart_base_iterator(const self_type &right)
-      :_it((It)right.reference())
-  {}
-
+#if 0 // This constructor is covered by the next one
+  vmap_2_map_dart_base_iterator(const self_type &it) :_it((It)it.reference()) {}
+#endif // 0
 
   template< typename Ref2, typename Ptr2, typename It2 >
-  vmap_2_map_dart_base_iterator(const vmap_2_map_dart_base_iterator<Ref2,Ptr2,It2> &right)
+  vmap_2_map_dart_base_iterator(const vmap_2_map_dart_base_iterator<Ref2,Ptr2,It2> &it)
   {
-    _it=(It)right.reference() ;
+    _it=(It)it.reference();
   }
 
-  ~vmap_2_map_dart_base_iterator()
-  {}
+  ~vmap_2_map_dart_base_iterator() {}
 
-  self_type & operator=(const self_type &right)
+#if 0 // This assignment operator is covered by the next one
+  self_type & operator=(const self_type &it)
   {
-    _it=right._it ;
+    _it=it._it ;
     return *this ;
   }
+#endif // 0
 
   template< typename Ref2, typename Ptr2, typename It2 >
-  self_type & operator=(const vmap_2_map_dart_base_iterator<Ref2,Ptr2,It2> &right)
+  self_type & operator=(const vmap_2_map_dart_base_iterator<Ref2,Ptr2,It2> &it)
   {
-    _it=(It)right.reference() ;
+    _it=(It)it.reference() ;
     return *this ;
   }
 
-  self_type & operator=(const It &right)
+  self_type & operator=(const It &it)
   {
-    _it=right ;
+    _it=it ;
     return *this ;
   }
 
-  bool operator==(const self_type &right) const
+  bool operator==(const self_type &it) const
   {
-    return _it==right._it ;
+    return _it==it._it ;
   }
 
-  bool operator!=(const self_type &right) const
+  bool operator!=(const self_type &it) const
   {
-    return _it!=right._it ;
+    return _it!=it._it ;
   }
 
   Ref operator * () const
@@ -356,15 +353,15 @@ class vmap_2_map : public vmap_owning_sequence<D>
   vmap_2_map()
   {}
 
-  vmap_2_map(const self_type &right) ;
+  vmap_2_map(const self_type &it) ;
 
   virtual ~vmap_2_map();
 
-  self_type & operator=(const self_type &right);
+  self_type & operator=(const self_type &it);
 
-  //: Sets the structure of the map identical to the structure of "right".
+  //: Sets the structure of the map identical to the structure of "it".
   template <class M>
-  void set_structure(const M &right) ;
+  void set_structure(const M &it) ;
 
   //: Returns the number of darts.
   int nb_darts () const
