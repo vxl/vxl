@@ -22,6 +22,7 @@ TESTS += test_rnpoly_roots.cxx
 TESTS += test_sparse_matrix.cxx
 TESTS += test_qsvd.cxx
 TESTS += test_sample.cxx
+TESTS += test_random.cxx
 TESTS += test_functions.cxx
 TESTS += test_numeric_traits.cxx
 TESTS += test_rpoly_roots.cxx

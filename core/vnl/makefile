@@ -134,6 +134,7 @@ MANPAGE_SOURCES += vnl_cross.h
 SOURCES += vnl_erf.cxx
 SOURCES += vnl_gamma.cxx
 SOURCES += vnl_sample.cxx
+SOURCES += vnl_random.cxx
 MANPAGE_SOURCES += vnl_unary_function.txx
 MANPAGE_SOURCES += vnl_identity.h
 
