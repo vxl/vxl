@@ -21,7 +21,12 @@
 void vbl_get_timestamp(int &secs, int &msecs)
 {
   struct timeval  timestamp;
-  void* dummy = 0;
+#ifdef __alpha
+  void*
+#else
+  struct timezone*
+#endif
+        dummy = 0;
   gettimeofday(&timestamp, dummy);
 
   secs = timestamp.tv_sec;
