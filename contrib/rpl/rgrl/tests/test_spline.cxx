@@ -12,16 +12,19 @@ vnl_random random;
 double
 spline_1d_value(double u, vnl_vector<double> c)
 {
-  int f = (int)vcl_floor( u );
-  if ( f < 0 || vcl_ceil( u )+3 > (int)c.size() )
-    return 0;
+  if (u < 0 || u+3 > c.size())
+    return 0.0;
+  unsigned int f = (unsigned int)vcl_floor( u );
 
-  u -= f;
-  return (  (1-u)*(1-u)*(1-u) * c[ f ]
-          + (3*u*u*u-6*u*u+4) * c[ f + 1 ]
-          + (-3*u*u*u+3*u*u+3*u+1) * c[ f + 2 ]
-          + u*u*u * c[ f + 3 ]
-         ) / 6;
+  u -= f; // u is now between 0 and 1
+  if (u==0)  // this avoids access to nonexisting c[f+3] when u+3 == c.size()
+    return (  c[ f ] + 4 * c[ f + 1 ] + c[ f + 2 ] ) / 6;
+  else
+    return (  (1-u)*(1-u)*(1-u) * c[ f ]
+            + (3*u*u*u-6*u*u+4) * c[ f + 1 ]
+            + (-3*u*u*u+3*u*u+3*u+1) * c[ f + 2 ]
+            + u*u*u * c[ f + 3 ]
+           ) / 6;
 }
 
 double
@@ -29,11 +32,11 @@ spline_2d_value( vnl_vector<double> pt, vnl_vector<double> c, vnl_vector< unsign
 {
   assert (m.size() == 2);
   assert (pt.size() == 2);
-  vnl_vector< int > f( m.size() );
+  vnl_vector< unsigned > f( m.size() );
   for (unsigned i = 0; i < m.size(); ++i ) {
-    f[ i ] = (int)vcl_floor( pt[ i ] );
-    if ( f[ i ] < 0 || vcl_ceil( pt[ i ] ) > m[ i ] )
+    if ( pt[ i ] < 0 || pt[ i ] > m[ i ] )
       return 0;
+    f[ i ] = (unsigned int)vcl_floor( pt[ i ] );
   }
   double u = pt[ 0 ] - f[ 0 ]; // a number between 0 and 1
   double v = pt[ 1 ] - f[ 1 ]; // a number between 0 and 1
@@ -42,9 +45,9 @@ spline_2d_value( vnl_vector<double> pt, vnl_vector<double> c, vnl_vector< unsign
   vnl_vector< double > control_v( 4 );
   vnl_vector< double > control_u( 4 );
   for (unsigned j=0; j<4; ++j ) {
-    for (unsigned k=0; k<4; ++k ) {
-      control_u[ k ] = c[ ii+k ];
-    }
+    for (unsigned k=0; k<4; ++k )
+      if (ii+k < c.size())
+        control_u[ k ] = c[ ii+k ];
     control_v[ j ] = spline_1d_value( u, control_u );
     ii += m[0]+3;
   }
@@ -57,16 +60,16 @@ spline_3d_value(vnl_vector<double> pt, vnl_vector<double> c, vnl_vector< unsigne
 {
   assert (m.size() == 3);
   assert (pt.size() == 3);
-  vnl_vector< int > f( m.size() );
+  vnl_vector< unsigned > f( m.size() );
   for (unsigned i = 0; i < m.size(); ++i ) {
-    f[ i ] = (int)vcl_floor( pt[ i ] );
-    if ( f[ i ] < 0 || vcl_ceil( pt[ i ] ) > m[ i ] )
+    if ( pt[ i ] < 0 || pt[ i ] > m[ i ] )
       return 0;
+    f[ i ] = (unsigned int)vcl_floor( pt[ i ] );
   }
   double u = pt[ 0 ] - f[ 0 ]; // a number between 0 and 1
   double v = pt[ 1 ] - f[ 1 ]; // a number between 0 and 1
   double w = pt[ 2 ] - f[ 2 ]; // a number between 0 and 1
-  unsigned ii = f[2] * ( m[0]+3 ) * ( m[1]+3 ) + f[1] * ( m[0] + 3 ) + f[0];
+  unsigned ii = ( f[2] * ( m[1]+3 ) + f[1] ) * ( m[0] + 3 ) + f[0];
 
   vnl_vector< double > control_w( 4 );
   vnl_vector< double > control_v( 4 );
@@ -74,9 +77,9 @@ spline_3d_value(vnl_vector<double> pt, vnl_vector<double> c, vnl_vector< unsigne
   for (unsigned l=0; l<4; ++l ) {
     unsigned j = ii;
     for (unsigned k=0; k<4; ++k ) {
-      for (unsigned n=0; n<4; ++n ) {
-        control_u[ n ] = c[ j+n ];
-      }
+      for (unsigned n=0; n<4; ++n )
+        if (j+n < c.size())
+          control_u[ n ] = c[ j+n ];
       control_v[ k ] = spline_1d_value( u, control_u );
       j += m[0]+3;
     }
