@@ -8,6 +8,11 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 
+#if defined(VCL_BORLAND)
+# include <math.h>
+# include <float.h>
+#endif // defined(VCL_BORLAND)
+
 int test_algorithm_main(int, char*[]);
 int test_cctype_main(int, char*[]);
 int test_cmath_main(int, char*[]);
@@ -71,6 +76,10 @@ int main( int argc, char* argv[] )
     --argc;
   }
 
+  // Disable Borland's floating point exceptions.
+#if defined(VCL_BORLAND)
+  _control87(MCW_EM, MCW_EM);  
+#endif // defined(VCL_BORLAND)
 
   DO_TEST( algorithm );
 
