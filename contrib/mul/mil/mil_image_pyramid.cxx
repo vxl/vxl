@@ -53,7 +53,7 @@ int mil_image_pyramid::lo() const
         //: Highest level
 int mil_image_pyramid::hi() const
 {
-    return image_.size()-1;
+    return ((int)image_.size())-1;
 }
 
 int mil_image_pyramid::nLevels() const
