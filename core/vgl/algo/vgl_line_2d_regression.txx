@@ -10,6 +10,7 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 //: Constructor
 template <class T>
@@ -34,6 +35,7 @@ void vgl_line_2d_regression<T>::increment_partial_sums(const T x, const T y)
 template <class T>
 void vgl_line_2d_regression<T>::decrement_partial_sums(const T x, const T y)
 {
+  assert(npts_!=0);
   Sx_ -= x;
   Sy_ -= y;
   Sxx_ -= x*x;
@@ -68,7 +70,7 @@ bool vgl_line_2d_regression<T>::fit()
   M(0, 0) = Sxx_-Sx_*Sx_/npts_;
   M(0, 1) = M(1, 0) = Sxy_-Sx_*Sy_/npts_;
   M(1, 1) = Syy_-Sy_*Sy_/npts_;
-//vcl_cout << "M \n" << M << "\n";
+//vcl_cout << "M \n" << M << '\n';
   vnl_symmetric_eigensystem<T> sym(M);
   T a = sym.V(0,0);
   T b = sym.V(1,0);
@@ -83,7 +85,7 @@ bool vgl_line_2d_regression<T>::fit_constrained(T x, T y)
 {
   if (npts_<1)
     {
-      vcl_cout << "In vgl_line_2d_regression<T>::fit() - less than 2 points\n";
+      vcl_cout << "In vgl_line_2d_regression<T>::fit_constrained() - less than 1 point\n";
       return false;
     }
   vnl_matrix_fixed<T, 2, 2> M;
@@ -101,7 +103,7 @@ bool vgl_line_2d_regression<T>::fit_constrained(T x, T y)
 template <class T>
 double vgl_line_2d_regression<T>::get_rms_error(const T a, const T b, const T c)
 {
-  if (!npts_)
+  if (npts_==0)
     return 0;
   double t0 = Sxx_*a*a + 2*Sxy_*a*b + Syy_*b*b;
   double t1 = 2*Sx_*a*c + 2*Sy_*b*c + npts_*c*c;
@@ -142,7 +144,7 @@ template <class T>
 double vgl_line_2d_regression<T>::get_rms_error_est(vgl_point_2d<T> const&  p,
                                                     bool increment)
 {
-  if (!npts_)
+  if (npts_==0)
     return 0;
   double d = vgl_distance(p, line_);
   double ds = d*d;
