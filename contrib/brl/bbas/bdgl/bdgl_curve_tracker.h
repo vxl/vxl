@@ -65,10 +65,10 @@ class bdgl_curve_tracker
   void set_output(vcl_vector< vcl_vector< bdgl_curve_tracker_primitive > > curve){ output_curve_=curve; }
 
   vdgl_edgel_chain_sptr get_output_curve_at( unsigned int frame, unsigned int num )
-    { if (output_curve_.size()<=frame || output_curve_[frame].size<=num) return 0;
+    { if (output_curve_.size()<=frame || output_curve_[frame].size()<=num) return 0;
       return output_curve_[frame][num].get_curve(); }
   int get_output_id_at( unsigned int frame, unsigned int num )
-    { if (output_curve_.size()<=frame || output_curve_[frame].size<=num) return -1;
+    { if (output_curve_.size()<=frame || output_curve_[frame].size()<=num) return -1;
       return output_curve_[frame][num].get_id(); }
   int get_output_size_at( unsigned int frame )
     { if (output_curve_.size()<=frame) return -1; return output_curve_[frame].size(); }
