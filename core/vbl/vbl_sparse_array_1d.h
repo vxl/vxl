@@ -24,8 +24,9 @@
 template <class T>
 class vbl_sparse_array_1d: public vbl_sparse_array_base<T, unsigned>
 {
-  typedef typename vbl_sparse_array_base<T,unsigned>::const_iterator const_iterator;
  public:
+  typedef typename vbl_sparse_array_base<T,unsigned>::const_iterator const_iterator;
+
   //: Print the Array to a stream in "(i,j): value" format.
   vcl_ostream& print(vcl_ostream& out) const
   {
