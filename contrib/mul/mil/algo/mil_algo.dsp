@@ -105,6 +105,11 @@ SOURCE=.\mil_algo_exp_filter_1d.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\mil_algo_grad_1x3.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\mil_algo_grad_3x3.cxx
 
 # End Source File
@@ -169,6 +174,11 @@ SOURCE=.\mil_algo_line_filter.h
 # Begin Source File
 
 SOURCE=.\mil_algo_line_filter.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_algo_grad_1x3.h
 
 # End Source File
 # Begin Source File
