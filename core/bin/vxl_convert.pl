@@ -98,7 +98,7 @@ sub main {
     }
     elsif (-f $arg) { 
       #print STDERR "file: $arg\n";
-      if ($arg =~ m/\.bak$/ ||
+      if ($arg =~ m/\.bak$/ || $arg =~ m/\.orig$/ ||
 	  $arg =~ m/\~$/) { print STDERR "ignoring '$arg'\n"; }
       else { push @files, $arg; }
     }
@@ -124,14 +124,14 @@ sub main {
 	print STDERR "*changed*";
 	if ($show_diffs) {
 	    print STDERR "\n========== diffs for $f ==========\n";
-	    &shell("$diff $f $f.filt");
+	    &shell("$diff $f $f.filt || true");
 	}
 	if ($dry_run) {
 	    &shell("$rm $f.filt"); # clean up.
 	}
 	else {
-	    if (! -f "$f.bak") {
-		&shell("$mv $f $f.bak");  # back up.
+	    if (! -f "$f.orig") {
+		&shell("$mv $f $f.orig");  # back up.
 	    } else {
 		unlink($f) || die "cannot unlink $f "; 
 	    }
