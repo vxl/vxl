@@ -29,8 +29,9 @@ template <int DIM>
 struct vbl_bounding_box_DIM { enum { value = DIM }; };
 
 template <class T, class DIM_>
-struct vbl_bounding_box_base
+class vbl_bounding_box_base
 {
+public:
   //: Construct an empty bounding box.
   vbl_bounding_box_base() : initialized_(false) { }
 
