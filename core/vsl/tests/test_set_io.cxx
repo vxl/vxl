@@ -23,7 +23,7 @@ void test_set_io()
   s_string_out.insert("four");
 
   vsl_b_ofstream bfs_out("vsl_set_io_test.bvl.tmp");
-  TEST ("Created vsl_set_io_test.bvl.tmp for writing", (!bfs_out), false);
+  TEST("Created vsl_set_io_test.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, s_int_out);
   vsl_b_write(bfs_out, s_string_out);
   bfs_out.close();
@@ -32,17 +32,16 @@ void test_set_io()
   vcl_set<vcl_string> s_string_in;
 
   vsl_b_ifstream bfs_in("vsl_set_io_test.bvl.tmp");
-  TEST ("Opened vsl_set_io_test.bvl.tmp for reading", (!bfs_in), false);
+  TEST("Opened vsl_set_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, s_int_in);
   vsl_b_read(bfs_in, s_string_in);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  TEST ("vcl_set<int> out == vcl_set<int> in", s_int_out == s_int_in, true);
-  TEST ("vcl_set<vcl_string> out == vcl_set<vcl_string> in",
-    s_string_out == s_string_in, true);
+  TEST("vcl_set<int> out == in", s_int_out, s_int_in);
+  TEST("vcl_set<vcl_string> out == in", s_string_out, s_string_in);
   vsl_print_summary(vcl_cout, s_string_in);
   vcl_cout << vcl_endl;
 }
 
-TESTLIB_DEFINE_MAIN(test_set_io);
+TESTMAIN(test_set_io);

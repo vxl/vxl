@@ -42,4 +42,4 @@ void test_indent()
   vcl_cout<<vsl_indent()<<"Indent Cleared\n";
 }
 
-TESTLIB_DEFINE_MAIN(test_indent);
+TESTMAIN(test_indent);

@@ -37,7 +37,7 @@ void test_arbitrary_length_int_conversion_int()
   vcl_cout << " Max required buffer size is " << maxbuf << " bytes. Used "
            << len << vcl_endl;
 
-  TEST ("Checking that the buffer didn't overflow", len < maxbuf, true);
+  TEST("Checking that the buffer didn't overflow", len < maxbuf, true);
 
   vcl_cout << " Starting decode\n";
   t1 = clock();
@@ -46,12 +46,12 @@ void test_arbitrary_length_int_conversion_int()
   vcl_cout << " Required " << (double)(t2-t1) / CLOCKS_PER_SEC
            << " seconds to decode and test 25M ints.\n";
 
-  TEST ("Checking len == len2", len == len2, true);
+  TEST("Checking len == len2", len, len2);
 
   for (i=0; i <25000000; ++i)
     if (b[i] != (i-12500000)*160) break;
 
-  TEST ("Checking that the results are correct", i == 25000000, true);
+  TEST("Checking that the results are correct", i, 25000000);
   if (i != 25000000)
     vcl_cout << "Failed at number " << i <<vcl_endl;
   delete a;
@@ -85,24 +85,24 @@ void test_arbitrary_length_int_conversion_short()
   vcl_cout << " Max required buffer size is " << maxbuf << ". Used " << len
            << vcl_endl;
 
-  TEST ("Checking that the buffer didn't overflow", len < maxbuf, true);
+  TEST("Checking that the buffer didn't overflow", len < maxbuf, true);
 
   b[0] = (short) (0xc5c5);
   b[65539] = 0x5c5c;
   unsigned long len2 = vsl_convert_from_arbitrary_length(buf, c, 65538);
 
-  TEST ("Checking that the result buffer didn't overflow",
+  TEST("Checking that the result buffer didn't overflow",
     (b[0] == (short)0xc5c5) && (b[65539] == 0x5c5c), true);
 
-  TEST ("Checking len == len2", len == len2, true);
+  TEST("Checking len == len2", len, len2);
 
   for (i=0; i <65536; ++i)
     if (c[i] != i-32768) break;
-  TEST ("Checking that the results are correct", i == 65536, true);
+  TEST("Checking that the results are correct", i, 65536);
   if (i != 65536)
     vcl_cout << "Failed at number " << i <<vcl_endl;
 
-  TEST ("Checking the end conditions", c[65536] == 0 && c[65537] == 1, true);
+  TEST("Checking the end conditions", c[65536] == 0 && c[65537] == 1, true);
 
   delete buf;
 }
@@ -133,23 +133,23 @@ void test_arbitrary_length_int_conversion_ushort()
   vcl_cout << " Max required buffer size is " << maxbuf << ". Used " << len
            << vcl_endl;
 
-  TEST ("Checking that the buffer didn't overflow", len < maxbuf, true);
+  TEST("Checking that the buffer didn't overflow", len < maxbuf, true);
 
   b[0] = 0xc5c5;
   b[65539] = 0x5c5c;
   unsigned len2 = vsl_convert_from_arbitrary_length(buf, c, 65538);
 
-  TEST ("Checking that the result buffer didn't overflow", (b[0] == 0xc5c5)
-    && (b[65539] == 0x5c5c), true);
-  TEST ("Checking len == len2", len == len2, true);
+  TEST("Checking that the result buffer didn't overflow",
+       (b[0] == 0xc5c5) && (b[65539] == 0x5c5c), true);
+  TEST("Checking len == len2", len, len2);
 
   for (i=0; i <65536; ++i)
     if (c[i] != i) break;
-  TEST ("Checking that the results are correct", i == 65536, true);
+  TEST("Checking that the results are correct", i, 65536);
   if (i != 65536)
     vcl_cout << "Failed at number " << i <<vcl_endl;
 
-  TEST ("Checking the end conditions", c[65536] == 0 && c[65537] == 1, true);
+  TEST("Checking the end conditions", c[65536] == 0 && c[65537] == 1, true);
   delete buf;
 }
 
@@ -163,14 +163,14 @@ void test_explicit_int_io()
   unsigned long i;
 
   vsl_b_ofstream bfs_out("vsl_explicit_int_io_test.bvl.tmp");
-  TEST ("Created vsl_explicit_int_io_test.bvl.tmp for writing",
+  TEST("Created vsl_explicit_int_io_test.bvl.tmp for writing",
     (!bfs_out), false);
   for (i = 0; i < 65536; ++i)
     vsl_b_write_uint_16(bfs_out, i);
   bfs_out.close();
 
   vsl_b_ifstream bfs_in("vsl_explicit_int_io_test.bvl.tmp");
-  TEST ("Opened vsl_explicit_int_io_test.bvl.tmp for reading",
+  TEST("Opened vsl_explicit_int_io_test.bvl.tmp for reading",
     (!bfs_in), false);
   for (i = 0; i < 65536; ++i)
   {
@@ -188,7 +188,7 @@ void test_explicit_int_io()
   ss.str().c_str();
   {
     vsl_b_ostream bss(&ss);
-    TEST ("Created stringstream for writing", (!bss), false);
+    TEST("Created stringstream for writing", (!bss), false);
     for (i = 0; i < 65536; ++i)
       vsl_b_write_uint_16(bss, i);
   }
@@ -196,21 +196,21 @@ void test_explicit_int_io()
   vcl_stringstream ss2(ss.str());
   {
     vsl_b_istream bss(&ss2);
-    TEST ("Opened stringstream for reading", (!bss), false);
+    TEST("Opened stringstream for reading", (!bss), false);
     for (i = 0; i < 65536; ++i)
     {
       unsigned long n;
       vsl_b_read_uint_16(bss, n);
       if (n != i) break;
     }
-  TEST ("Finished reading file successfully", (!bss), false);
+    TEST("Finished reading file successfully", (!bss), false);
   }
 #endif
 
-  TEST ("Checking that the results are correct", i == 65536, true);
+  TEST("Checking that the results are correct", i, 65536);
   if (i != 65536)
     vcl_cout << "Failed at number " << i <<vcl_endl;
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
 }
 
 
@@ -227,8 +227,7 @@ void test_extreme_int_io()
   unsigned long max_ulong = ~0;
 
   vsl_b_ofstream bfs_out("vsl_extreme_int_io_test.bvl.tmp");
-  TEST ("Created vsl_extreme_int_io_test.bvl.tmp for writing",
-    (!bfs_out), false);
+  TEST("Created vsl_extreme_int_io_test.bvl.tmp for writing",(!bfs_out),false);
 
   vsl_b_write(bfs_out,min_long);
   vsl_b_write(bfs_out,max_long);
@@ -241,17 +240,16 @@ void test_extreme_int_io()
 
 
   vsl_b_ifstream bfs_in("vsl_extreme_int_io_test.bvl.tmp");
-  TEST ("Opened vsl_extreme_int_io_test.bvl.tmp for reading",
-    (!bfs_in), false);
+  TEST("Opened vsl_extreme_int_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in,min_long_in);
   vsl_b_read(bfs_in,max_long_in);
   vsl_b_read(bfs_in,max_ulong_in);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  TEST ("min_long == min_long_in", min_long == min_long_in, true);
-  TEST ("max_long == max_long_in", max_long == max_long_in, true);
-  TEST ("max_ulong == max_ulong_in", max_ulong == max_ulong_in, true);
+  TEST("min_long == min_long_in", min_long, min_long_in);
+  TEST("max_long == max_long_in", max_long, max_long_in);
+  TEST("max_ulong == max_ulong_in", max_ulong, max_ulong_in);
 }
 
 
@@ -265,4 +263,4 @@ void test_arbitrary_length_int_conversion()
 }
 
 
-TESTLIB_DEFINE_MAIN(test_arbitrary_length_int_conversion);
+TESTMAIN(test_arbitrary_length_int_conversion);

@@ -30,7 +30,7 @@ void test_binary_io()
   vcl_ptrdiff_t ptrdiff_t_out = 23;
 
   vsl_b_ofstream bfs_out("vsl_binary_io_test.bvl.tmp");
-  TEST ("Created vsl_binary_io_test.bvl.tmp for writing", (!bfs_out), false);
+  TEST("Created vsl_binary_io_test.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, b_out);
   vsl_b_write(bfs_out, c_out);
   vsl_b_write(bfs_out, sc_out);
@@ -71,91 +71,89 @@ void test_binary_io()
   // Test the internal consistency - can it load what it just saved?
 
   vsl_b_ifstream bfs_in("vsl_binary_io_test.bvl.tmp");
-  TEST ("Opened vsl_binary_io_test.bvl.tmp for reading", (!bfs_in), false);
+  TEST("Opened vsl_binary_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, b_in);
 
-  TEST ("bool out == bool in", b_out == b_in, true);
+  TEST("bool out == bool in", b_out, b_in);
   vsl_print_summary(vcl_cout, b_out);
   vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, c_in);
-  TEST ("char out == char in", c_out == c_in, true);
+  TEST("char out == char in", c_out, c_in);
   vsl_print_summary(vcl_cout, c_out);
   vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, sc_in);
-  TEST ("signed char out == signed char in", sc_out == sc_in, true);
+  TEST("signed char out == signed char in", sc_out, sc_in);
   vsl_print_summary(vcl_cout, sc_out);
   vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, uc_in);
-  TEST ("unsigned char out == unsigned char in", uc_out == uc_in, true);
+  TEST("unsigned char out == unsigned char in", uc_out, uc_in);
   vsl_print_summary(vcl_cout, uc_out);
   vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, i_in);
-  TEST ("int out == int in", i_out == i_in, true);
+  TEST("int out == int in", i_out, i_in);
   vsl_print_summary(vcl_cout, i_out);
   vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, ui_in);
-  TEST ("unsigned int out == unsigned int in", ui_out == ui_in, true);
+  TEST("unsigned int out == unsigned int in", ui_out, ui_in);
   vsl_print_summary(vcl_cout, ui_out);
   vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, short_in);
-  TEST ("short int out == short int in", short_out == short_in, true);
+  TEST("short int out == short int in", short_out, short_in);
   vsl_print_summary(vcl_cout, short_out);
   vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, ushort_in);
-  TEST ("unsigned short int out == unsigned short int in",
-    ushort_out == ushort_in, true);
+  TEST("unsigned short int out == unsigned short int in", ushort_out, ushort_in);
   vsl_print_summary(vcl_cout, short_out);
   vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, long_in);
-  TEST ("long out == long in", long_out == long_in, true);
+  TEST("long out == long in", long_out, long_in);
   vsl_print_summary(vcl_cout, long_out);
   vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, ulong_in);
-  TEST ("unsigned long out == unsigned long in",
-    ulong_out == ulong_in, true);
+  TEST("unsigned long out == unsigned long in", ulong_out, ulong_in);
   vsl_print_summary(vcl_cout, ulong_out);
   vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, f_in);
-  TEST ("float out == float in", f_out == f_in, true);
+  TEST("float out == float in", f_out, f_in);
   vsl_print_summary(vcl_cout, f_out);
   vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, d_in);
-  TEST ("double out == double in", d_out == d_in, true);
+  TEST("double out == double in", d_out, d_in);
   vsl_print_summary(vcl_cout, d_out);
   vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, string_in);
-  TEST ("string out == string in", string_out == string_in, true);
+  TEST("string out == string in", string_out, string_in);
   vsl_print_summary(vcl_cout, string_out);
   vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, c_string_in);
-  TEST ("C string out == C string in", vcl_strcmp(c_string_out,c_string_in), 0);
+  TEST("C string out == C string in", vcl_strcmp(c_string_out,c_string_in), 0);
   vsl_print_summary(vcl_cout, c_string_out);
   vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, size_t_in);
-  TEST ("vcl_size_t out == vcl_size_t in", size_t_out == size_t_in, true);
+  TEST("vcl_size_t out == vcl_size_t in", size_t_out, size_t_in);
   vsl_print_summary(vcl_cout, size_t_out);
   vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, ptrdiff_t_in);
-  TEST ("vcl_ptrdiff_t out == vcl_ptrdiff_t in", ptrdiff_t_out == ptrdiff_t_in, true);
+  TEST("vcl_ptrdiff_t out == vcl_ptrdiff_t in", ptrdiff_t_out, ptrdiff_t_in);
   vsl_print_summary(vcl_cout, ptrdiff_t_out);
   vcl_cout << vcl_endl;
 
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   vcl_cout << "****************************\n"
@@ -192,8 +190,7 @@ void test_binary_io()
 
   // If this test fails, it could be due to a missing golden file, or one
   // which has got corrupted.
-  TEST ("Opened golden_test_binary_io.bvl for reading",
-    (!bfs_in2), false);
+  TEST("Opened golden_test_binary_io.bvl for reading", (!bfs_in2), false);
   if (!(!bfs_in2))
   {
     vsl_b_read(bfs_in2, b_in2);
@@ -213,29 +210,25 @@ void test_binary_io()
     vsl_b_read(bfs_in2, size_t_in2);
     vsl_b_read(bfs_in2, ptrdiff_t_in2);
   }
-  TEST ("Finished reading file successfully", (!bfs_in2), false);
+  TEST("Finished reading file successfully", (!bfs_in2), false);
   bfs_in2.close();
 
-  TEST ("Golden bool out == bool in", b_out == b_in2, true);
-  TEST ("Golden char out == char in", c_out == c_in2, true);
-  TEST ("Golden signed char out == signed char in", sc_out == sc_in2, true);
-  TEST ("Golden unsigned char out == unsigned char in", uc_out == uc_in2, true);
-  TEST ("Golden int out == int in", i_out == i_in2, true);
-  TEST ("Golden unsigned int out == unsigned int in", ui_out == ui_in2, true);
-  TEST ("Golden short int out == short int in", short_out == short_in2, true);
-  TEST ("Golden unsigned short int out == unsigned short int in",
-    short_out == short_in2, true);
-  TEST ("Golden long out == long in", long_out == long_in2, true);
-  TEST ("Golden unsigned long out == unsigned long in",
-    ulong_out == ulong_in2, true);
-  TEST ("Golden float out == float in", f_out == f_in2, true);
-  TEST ("Golden double out == double in", d_out == d_in2, true);
-  TEST ("Golden string out == string in", string_out == string_in2, true);
-  TEST ("Golden C string out == C string in",
-    vcl_string(c_string_out) == vcl_string(c_string_in2), true);
-  TEST ("Golden vcl_size_t out == vcl_size_t in", size_t_out == size_t_in2, true);
-  TEST ("Golden vcl_ptrdiff_t out == vcl_ptrdiff_t in", 
-    ptrdiff_t_out == ptrdiff_t_in2, true);
+  TEST("Golden bool out == bool in", b_out, b_in2);
+  TEST("Golden char out == char in", c_out, c_in2);
+  TEST("Golden signed char out == signed char in", sc_out, sc_in2);
+  TEST("Golden unsigned char out == unsigned char in", uc_out, uc_in2);
+  TEST("Golden int out == int in", i_out, i_in2);
+  TEST("Golden unsigned int out == unsigned int in", ui_out, ui_in2);
+  TEST("Golden short int out == short int in", short_out, short_in2);
+  TEST("Golden unsigned short int out == unsigned short int in", short_out, short_in2);
+  TEST("Golden long out == long in", long_out, long_in2);
+  TEST("Golden unsigned long out == unsigned long in", ulong_out, ulong_in2);
+  TEST("Golden float out == float in", f_out, f_in2);
+  TEST("Golden double out == double in", d_out, d_in2);
+  TEST("Golden string out == string in", string_out, string_in2);
+  TEST("Golden C string out == C string in", vcl_string(c_string_out), vcl_string(c_string_in2));
+  TEST("Golden vcl_size_t out == vcl_size_t in", size_t_out, size_t_in2);
+  TEST("Golden vcl_ptrdiff_t out == vcl_ptrdiff_t in", ptrdiff_t_out, ptrdiff_t_in2);
 }
 
-TESTLIB_DEFINE_MAIN(test_binary_io);
+TESTMAIN(test_binary_io);

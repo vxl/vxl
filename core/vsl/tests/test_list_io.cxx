@@ -19,7 +19,7 @@ void test_list_io()
     l_float_out.push_back(0.1f*i);
 
   vsl_b_ofstream bfs_out("vsl_list_io_test.bvl.tmp");
-  TEST ("Created vsl_list_io_test.bvl.tmp for writing", (!bfs_out), false);
+  TEST("Created vsl_list_io_test.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, l_int_out);
   vsl_b_write(bfs_out, l_float_out);
   bfs_out.close();
@@ -28,19 +28,17 @@ void test_list_io()
   vcl_list<float> l_float_in;
 
   vsl_b_ifstream bfs_in("vsl_list_io_test.bvl.tmp");
-  TEST ("Opened vsl_list_io_test.bvl.tmp for reading", (!bfs_in), false);
+  TEST("Opened vsl_list_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, l_int_in);
   vsl_b_read(bfs_in, l_float_in);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  TEST ("vcl_list<int> out == vcl_list<int> in",
-    l_int_out == l_int_in, true);
-  TEST ("vcl_list<float> out == vcl_list<float> in",
-    l_float_out == l_float_in, true);
+  TEST("vcl_list<int> out == vcl_list<int> in", l_int_out, l_int_in);
+  TEST("vcl_list<float> out == vcl_list<float> in", l_float_out, l_float_in);
 
   vsl_print_summary(vcl_cout, l_int_in);
   vcl_cout << vcl_endl;
 }
 
-TESTLIB_DEFINE_MAIN(test_list_io);
+TESTMAIN(test_list_io);

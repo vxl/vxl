@@ -31,7 +31,7 @@ void test_map_io()
   m_string_int_out[vcl_string("six")] = 6;
 
   vsl_b_ofstream bfs_out("vsl_map_io_test.bvl.tmp");
-  TEST ("Created vsl_map_io_test.bvl.tmp for writing", (!bfs_out), false);
+  TEST("Created vsl_map_io_test.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, m_int_int_out);
   vsl_b_write(bfs_out, m_int_string_out);
   vsl_b_write(bfs_out, m_string_int_out);
@@ -42,19 +42,16 @@ void test_map_io()
   vcl_map<vcl_string,int, vcl_less<vcl_string> > m_string_int_in;
 
   vsl_b_ifstream bfs_in("vsl_map_io_test.bvl.tmp");
-  TEST ("Opened vsl_map_io_test.bvl.tmp for reading", (!bfs_in), false);
+  TEST("Opened vsl_map_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, m_int_int_in);
   vsl_b_read(bfs_in, m_int_string_in);
   vsl_b_read(bfs_in, m_string_int_in);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  TEST ("vcl_map<int,int> out == vcl_map<int,int> in",
-    m_int_int_out == m_int_int_in, true);
-  TEST ("vcl_map<int,vcl_string> out == vcl_map<int,vcl_string> in",
-    m_int_string_out == m_int_string_in, true);
-  TEST ("vcl_map<vcl_string,int> out == vcl_map<vcl_string,int> in",
-    m_string_int_out == m_string_int_in, true);
+  TEST("vcl_map<int,int> out == in", m_int_int_out, m_int_int_in);
+  TEST("vcl_map<int,vcl_string> out == in", m_int_string_out, m_int_string_in);
+  TEST("vcl_map<vcl_string,int> out == in", m_string_int_out, m_string_int_in);
 
   vsl_print_summary(vcl_cout, m_int_string_in);
   vcl_cout << vcl_endl;
@@ -62,4 +59,4 @@ void test_map_io()
   vcl_cout << vcl_endl;
 }
 
-TESTLIB_DEFINE_MAIN(test_map_io);
+TESTMAIN(test_map_io);

@@ -192,8 +192,7 @@ void test_clipon_polymorphic_io()
   test2_base_class *b2_out = 0;
 
   vsl_b_ofstream bfs_out("vsl_clipon_polymorphic_io_test.bvl.tmp");
-  TEST ("Opened vsl_polymorphic_io_test.bvl.tmp for writing",
-        (!bfs_out), false);
+  TEST("Opened vsl_polymorphic_io_test.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out,d1_out);
   vsl_b_write(bfs_out,b1_out);
   vsl_b_write(bfs_out,b2_out);
@@ -204,26 +203,23 @@ void test_clipon_polymorphic_io()
   test2_base_class *b2_in = new test2_derived_class(7);
 
   vsl_b_ifstream bfs_in("vsl_clipon_polymorphic_io_test.bvl.tmp");
-  TEST ("Opened vsl_polymorphic_io_test.bvl.tmp for reading",
-        (!bfs_in), false);
+  TEST("Opened vsl_polymorphic_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in,d1_in);
   vsl_b_read(bfs_in,b1_in);
   vsl_b_read(bfs_in,b2_in);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
-  bfs_in.close();
+  TEST("Finished reading file successfully", (!bfs_in), false); bfs_in.close();
 
-  TEST ("(clipon) derived in = derived out", d1_in.data(), d1_out.data());
-  TEST ("(clipon) Load derived by base", b1_in->is_a(), d1_out.is_a());
-  TEST ("(clipon) derived in (by ptr) = derived out",
-        b1_in->data(), b1_out->data());
-  TEST ("(clipon) IO for NULL pointers", b2_in, 0);
+  TEST("(clipon) derived in = derived out", d1_in.data(), d1_out.data());
+  TEST("(clipon) Load derived by base", b1_in->is_a(), d1_out.is_a());
+  TEST("(clipon) derived in (by ptr) = derived out", b1_in->data(), b1_out->data());
+  TEST("(clipon) IO for NULL pointers", b2_in, 0);
 
   // Tidy up
   delete b1_in;
   delete b2_in;
 }
 
-TESTLIB_DEFINE_MAIN(test_clipon_polymorphic_io);
+TESTMAIN(test_clipon_polymorphic_io);
 
 // Explicitly instantiate loader
 VSL_CLIPON_BINARY_LOADER_INSTANTIATE(test2_base_class, test2_base_class_io);
