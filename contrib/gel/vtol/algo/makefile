@@ -6,7 +6,8 @@ LIBRARY := vtol-algo
 VERSION := 1.0
 
 SOURCES += vtol_extract_topology.cxx
-SOURCES += vtol_extract_topology_internals.cxx
+MANPAGE_SOURCES += vtol_extract_topology.txx
+#SOURCES += vtol_extract_topology_internals.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
