@@ -1,0 +1,53 @@
+Notes for vil2
+
+
+
+Problems with existing vil
+
+It doesn't support planes very well.
+
+Pointer indexing rather than arithmetic indexing
+  Pointers are slower than arithmetic on most modern platforms
+  It is hard to build a 2d image from a slice of 3d data
+
+The vil_image smart pointer stuff is confusing.
+  Is it a view, is it a smart ptr, is it a smart smart ptr.
+
+There are some fundamental divisions
+  1. data directly accessible v. data downloadable
+  2. data type known at compile time v. data type known at run time.
+  3. data ordering known a priori, v. data ordering known after image loading.
+  Do these not indicate that trying to have a single image type (or hierarchy) is incorrect
+
+What does the single vil_image hierarchy actually give you?
+
+
+
+
+Questions with suggested answers.
+
+Should vil_image_view::resize be virtual and in the base class? (It is in mil_image_2d)
+Ans: Yes -it might be useful.
+
+Should memory_chunk be templated? You could have a memory_chunk containing rgb, and choose to view it as
+a vil2_image_view<rgb<>> with nplanes=1, or vil2_image_view<char> with nplanes =3;
+We can put a image type in a member variable.
+Ans: no - it might be useful.
+
+
+
+Questions:
+
+Should n_planes, height, width return signed or unsigned int?
+
+Should vil_image_view be derived from vil_image_source?
+
+Best names for image_view, image_data, base_image?
+
+Best name for height, width, rows, cols, nx, ny?
+
+
+
+Notes:
+
+#includes to vil are simply to use old vil stuff that I haven't converted yet.
