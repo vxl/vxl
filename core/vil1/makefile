@@ -138,6 +138,11 @@ FLAGS_Templates/vil_interpolate+vil_rgb+uchar-.vil_rgb+double-.cxx := $(optimize
 FLAGS_Templates/vil_interpolate+vil_rgb+uchar-.vil_rgb+float-.cxx := $(optimize)
 FLAGS_Templates/vil_interpolate+vil_rgb+uchar-.vil_rgb+uchar-.cxx := $(optimize)
 
+# but turn off with gcc 3.0 on alpha for some files (memory overflow):
+ifeq ($(OS),OSF1V4)
+FLAGS_vil_image_as.cxx := -O0
+endif
+
 # subdirectories
 #SUBDIRS += algo
 SUBDIRS += io
