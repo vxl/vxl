@@ -86,7 +86,7 @@ protected:
   virtual double focal_value(const double time) const;
 
   //: Angle variation along the time
-  list_of_scalars *_focal;
+  list_of_scalars *focal_;
 };
 
 #endif // #ifndef VCSL_PERSPECTIVE_H

@@ -80,7 +80,7 @@ public:
   virtual vnl_vector<double> *inverse(const vnl_vector<double> &v,
                                       const double time) const;
 protected:
-  vcl_vector<vcsl_spatial_transformation_ref> *_transformations;
+  vcl_vector<vcsl_spatial_transformation_ref> *transformations_;
 };
 
 #endif // #ifndef VCSL_COMPOSITION_H

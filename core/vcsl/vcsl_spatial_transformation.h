@@ -125,8 +125,8 @@ public:
 
 protected:
   //: List of time clocks
-  vcl_vector<double> *_beat;
-  vcl_vector<vcsl_interpolator> *_interpolator;
+  vcl_vector<double> *beat_;
+  vcl_vector<vcsl_interpolator> *interpolator_;
 };
 
 #endif // #ifndef VCSL_SPATIAL_TRANSFORMATION_H

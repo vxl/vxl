@@ -85,7 +85,7 @@ public:
 protected:
 
   //: Vertices of the graph: all the spatial coordinate systems
-  vcl_vector<vcsl_spatial_ref> *_vertices;
+  vcl_vector<vcsl_spatial_ref> *vertices_;
 };
 
 #endif // #ifndef VCSL_GRAPH_H

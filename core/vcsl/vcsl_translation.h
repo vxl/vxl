@@ -85,7 +85,7 @@ protected:
   virtual vnl_vector<double> *vector_value(const double time) const;
 
   //: Direction vector variation along the time
-  list_of_vectors *_vector;
+  list_of_vectors *vector_;
 };
 
 #endif // VCSL_TRANSLATION_H

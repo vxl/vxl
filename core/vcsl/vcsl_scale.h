@@ -80,7 +80,7 @@ protected:
   virtual double scale_value(const double time) const;
 
   //: Scale variation along the time
-  vcl_vector<double> *_scale;
+  vcl_vector<double> *scale_;
 };
 
 #endif // #ifndef VCSL_SCALE_H

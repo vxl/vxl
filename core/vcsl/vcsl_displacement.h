@@ -78,7 +78,7 @@ protected:
   virtual vnl_vector<double> *vector_value(const double time) const;
 
   //: Variation of the point of the axis along the time
-  list_of_vectors *_point;
+  list_of_vectors *point_;
 };
 
 #endif // #ifndef VCSL_DISPLACEMENT_H
