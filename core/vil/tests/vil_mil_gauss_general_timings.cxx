@@ -38,8 +38,8 @@ double mil_method(unsigned n_loops, unsigned nx, unsigned ny)
   mil_image_2d_of<vxl_byte> output, worka, workb;
   for (unsigned n=0;n<n_loops;++n)
   {
-    for (unsigned j=0;j<input.ny();++j)
-      for (unsigned i=0;i<input.nx();++i)
+    for (int j=0;j<input.ny();++j)
+      for (int i=0;i<input.nx();++i)
         input(i,j) = vxl_byte(i+j);
   }
   mil_gaussian_pyramid_builder_2d_general<vxl_byte> builder(1.2);
