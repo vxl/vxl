@@ -126,16 +126,16 @@ FULL_PATH_NAMES        = YES
 # only done if one of the specified strings matches the left-hand part of 
 # the path. It is allowed to use relative paths in the argument list.
 
-STRIP_FROM_PATH        = $IUEROOT/vcl/ \
-                         $IUEROOT/vxl/ \
-                         $IUEROOT/v3p/ \
-                         $IUEROOT/brl/ \
-                         $IUEROOT/gel/ \
-                         $IUEROOT/mul/ \
-                         $IUEROOT/oul/ \
-                         $IUEROOT/oxl/ \
-                         $IUEROOT/rpl/ \
-                         $IUEROOT/tbl/
+STRIP_FROM_PATH        = $VXLROOT/vcl/ \
+                         $VXLROOT/core/ \
+                         $VXLROOT/v3p/ \
+                         $VXLROOT/contrib/brl/ \
+                         $VXLROOT/contrib/gel/ \
+                         $VXLROOT/contrib/mul/ \
+                         $VXLROOT/contrib/oul/ \
+                         $VXLROOT/contrib/oxl/ \
+                         $VXLROOT/contrib/rpl/ \
+                         $VXLROOT/contrib/tbl/
 
 # The INTERNAL_DOCS tag determines if documentation 
 # that is typed after a \internal command is included. If the tag is set 
@@ -345,14 +345,8 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = $IUEROOT/vxl \
-                         $IUEROOT/brl \
-                         $IUEROOT/gel \
-                         $IUEROOT/mul \
-                         $IUEROOT/oul \
-                         $IUEROOT/oxl \
-                         $IUEROOT/rpl \
-                         $IUEROOT/tbl
+INPUT                  = $VXLROOT/core \
+                         $VXLROOT/contrib
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
@@ -373,7 +367,7 @@ RECURSIVE              = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                = vxl/doc vcl
+EXCLUDE                = core/doc vcl
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or directories 
 # that are symbolic links (a Unix filesystem feature) are excluded from the input.
@@ -385,6 +379,7 @@ EXCLUDE_SYMLINKS       = YES
 # certain files from those directories.
 
 EXCLUDE_PATTERNS       = */doc/* */vxl_copyright.h */vcl/* */dll.h \
+                         */vsol.new/* */vtol.new/* \
                          */test* */example* *config* */contrib/* \
                          */Templates/* *_mocced.cxx # *impl*
 
@@ -421,7 +416,7 @@ IMAGE_PATH             =
 # input file. Doxygen will then use the output that the filter program writes 
 # to standard output.
 
-INPUT_FILTER           = $IUEROOT/vxl/doc/vxl_doxy.pl
+INPUT_FILTER           = $VXLROOT/core/doc/vxl_doxy.pl
 
 # If the FILTER_SOURCE_FILES tag is set to YES, the input filter (if set using 
 # INPUT_FILTER) will be used to filter the input files when producing source 
@@ -801,16 +796,16 @@ SEARCH_INCLUDES        = YES
 # contain include files that are not input files but should be processed by 
 # the preprocessor.
 
-INCLUDE_PATH           = $IUEROOT/vxl \
-                         $IUEROOT/v3p \
-                         $IUEROOT/oxl \
-                         $IUEROOT/gel \
-                         $IUEROOT/mul \
-                         $IUEROOT/tbl \
-                         $IUEROOT/rpl \
-                         $IUEROOT/oul \
-                         $IUEROOT/brl \
-                       # $IUEROOT/vcl
+INCLUDE_PATH           = $VXLROOT/core \
+                         $VXLROOT/v3p \
+                         $VXLROOT/contrib/oxl \
+                         $VXLROOT/contrib/gel \
+                         $VXLROOT/contrib/mul \
+                         $VXLROOT/contrib/tbl \
+                         $VXLROOT/contrib/rpl \
+                         $VXLROOT/contrib/oul \
+                         $VXLROOT/contrib/brl \
+                       # $VXLROOT/vcl
 
 # You can use the INCLUDE_FILE_PATTERNS tag to specify one or more wildcard 
 # patterns (like *.h and *.hpp) to filter out the header-files in the 
@@ -837,7 +832,7 @@ PREDEFINED = DOXYGEN_SHOULD_SKIP_THIS FREEVERSION ERROR_CHECKING \
              VCL_CAN_DO_STATIC_TEMPLATE_MEMBER=1 \
              VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER=1 \
              VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD=0 \
-             VCL_ALLOWS_NAMESPACE_STD=1 VCL_NEEDS_NAMESPACE_STD=0 \
+             VCL_ALLOWS_NAMESPACE_STD=1 VCL_NEEDS_NAMESPACE_STD=1 \
              VCL_NO_STATIC_DATA_MEMBERS=0 VCL_HAS_EXCEPTIONS=0 \
              VCL_HAS_TEMPLATE_SYMBOLS=1 VCL_HAS_NAMESPACES=1 \
              VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER=1 \
@@ -850,12 +845,52 @@ PREDEFINED = DOXYGEN_SHOULD_SKIP_THIS FREEVERSION ERROR_CHECKING \
              VXL_BIG_ENDIAN=1 VXL_LITTLE_ENDIAN=0 VNL_DLL_DATA= \
              VXL_HAS_INT_8=1 VXL_HAS_INT_16=1 VXL_HAS_INT_32=1 \
              VXL_HAS_INT_64=1 VXL_HAS_IEEE_32=1 VXL_HAS_IEEE_64=1 \
-             VXL_HAS_IEEE_96=0 VXL_HAS_IEEE_128=0 \
-             vxl_sbyte="signed char" vxl_byte="unsigned char" vxl_int_8="char" \
+             VXL_HAS_IEEE_96=0 VXL_HAS_IEEE_128=0 VXL_HAS_BYTE=1 \
+             VXL_INT_8_STRING=char VXL_INT_16_STRING=short VXL_INT_32_STRING=int \
+             VXL_INT_64_STRING="long long" VXL_IEEE_32_STRING=float \
+             VXL_IEEE_64_STRING=double VXL_IEEE_96_STRING="long double" \
+             VXL_IEEE_128_STRING="long double" VXL_BYTE_STRING=char \
+             vxl_sbyte="signed char" vxl_byte="unsigned char" vxl_int_8=char \
              vxl_sint_8="signed char" vxl_uint_8="unsigned char" \
-             vxl_int_16="short" vxl_uint_16="unsigned short" \
-             vxl_int_32="int" vxl_uint_32="unsigned int" \
-             vxl_ieee_32="float" vxl_ieee_64="double" size_t=vcl_size_t
+             vxl_int_16=short vxl_uint_16="unsigned short" \
+             vxl_int_32=int vxl_uint_32="unsigned int" \
+             vxl_ieee_32=float vxl_ieee_64=double size_t=vcl_size_t \
+             VXL_HAS_PTHREAD_H=1 VXL_HAS_SEMAPHORE_H=1 \
+             VXL_UNISTD_HAS_USECONDS_T=1 VXL_UNISTD_HAS_INTPTR_T=1 \
+             VXL_UNISTD_HAS_UALARM=1 VXL_UNISTD_HAS_USLEEP=1 \
+             VXL_UNISTD_HAS_LCHOWN=1 VXL_UNISTD_HAS_PREAD=1 \
+             VXL_UNISTD_HAS_PWRITE=1 VXL_UNISTD_HAS_TELL=1 \
+             VXL_STDLIB_HAS_QSORT=1 VXL_STDLIB_HAS_LRAND48=1 \
+             VXL_STDLIB_HAS_DRAND48=1 VXL_IEEEFP_HAS_FINITE=1 \
+             VXL_MATH_HAS_FINITE=1 VXL_MATH_HAS_SQRTF=1 \
+             VXL_UNISTD_USLEEP_IS_VOID=0 VXL_TWO_ARG_GETTIME=0 \
+             VXL_HAS_IEEEFP_H=1 \
+             VCL_CXX_HAS_HEADER_CASSERT=1 VCL_CXX_HAS_HEADER_CISO646=1 \
+             VCL_CXX_HAS_HEADER_CSETJMP=1 VCL_CXX_HAS_HEADER_CSTDIO=1 \
+             VCL_CXX_HAS_HEADER_CTIME=1 VCL_CXX_HAS_HEADER_CCTYPE=1 \
+             VCL_CXX_HAS_HEADER_CLIMITS=1 VCL_CXX_HAS_HEADER_CSIGNAL=1 \
+             VCL_CXX_HAS_HEADER_CSTDLIB=1 VCL_CXX_HAS_HEADER_CWCHAR=1 \
+             VCL_CXX_HAS_HEADER_CERRNO=1 VCL_CXX_HAS_HEADER_CLOCALE=1 \
+             VCL_CXX_HAS_HEADER_CSTDARG=1 VCL_CXX_HAS_HEADER_CSTRING=1 \
+             VCL_CXX_HAS_HEADER_CWCTYPE=1 VCL_CXX_HAS_HEADER_CFLOAT=1 \
+             VCL_CXX_HAS_HEADER_CMATH=1 VCL_CXX_HAS_HEADER_CSTDDEF=1 \
+             VCL_CXX_HAS_HEADER_ALGORITHM=1 VCL_CXX_HAS_HEADER_IOMANIP=1 \
+             VCL_CXX_HAS_HEADER_LIST=1 VCL_CXX_HAS_HEADER_OSTREAM=1 \
+             VCL_CXX_HAS_HEADER_STREAMBUF=1 VCL_CXX_HAS_HEADER_BITSET=1 \
+             VCL_CXX_HAS_HEADER_IOS=1 VCL_CXX_HAS_HEADER_LOCALE=1 \
+             VCL_CXX_HAS_HEADER_QUEUE=1 VCL_CXX_HAS_HEADER_STRING=1 \
+             VCL_CXX_HAS_HEADER_COMPLEX=1 VCL_CXX_HAS_HEADER_IOSFWD=1 \
+             VCL_CXX_HAS_HEADER_MAP=1 VCL_CXX_HAS_HEADER_SET=1 \
+             VCL_CXX_HAS_HEADER_TYPEINFO=1 VCL_CXX_HAS_HEADER_DEQUE=1 \
+             VCL_CXX_HAS_HEADER_IOSTREAM=1 VCL_CXX_HAS_HEADER_MEMORY=1 \
+             VCL_CXX_HAS_HEADER_SSTREAM=1 VCL_CXX_HAS_HEADER_UTILITY=1 \
+             VCL_CXX_HAS_HEADER_EXCEPTION=1 VCL_CXX_HAS_HEADER_ISTREAM=1 \
+             VCL_CXX_HAS_HEADER_NEW=1 VCL_CXX_HAS_HEADER_STACK=1 \
+             VCL_CXX_HAS_HEADER_VALARRAY=1 VCL_CXX_HAS_HEADER_FSTREAM=1 \
+             VCL_CXX_HAS_HEADER_ITERATOR=1 VCL_CXX_HAS_HEADER_NUMERIC=1 \
+             VCL_CXX_HAS_HEADER_STDEXCEPT=1 VCL_CXX_HAS_HEADER_VECTOR=1 \
+             VCL_CXX_HAS_HEADER_FUNCTIONAL=1 VCL_CXX_HAS_HEADER_LIMITS=1 \
+             VCL_CXX_HAS_HEADER_STRSTREAM=1
 
 # If the MACRO_EXPANSION and EXPAND_PREDEF_ONLY tags are set to YES then 
 # this tag can be used to specify a list of macro names that should be expanded. 
