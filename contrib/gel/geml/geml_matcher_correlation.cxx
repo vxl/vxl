@@ -134,7 +134,7 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
 	{
 	  vcl_cerr << i << " " << a << vcl_endl;
 	  vcl_cout << corners1_[i].first << " " << corners1_[i].second << " "
-	       << corners2_[a].first << " " << corners2_[a].second << vcl_endl;
+		   << corners2_[a].first << " " << corners2_[a].second << vcl_endl;
 	}
     
 
