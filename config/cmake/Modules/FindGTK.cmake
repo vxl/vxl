@@ -17,7 +17,8 @@ IF(NOT HAS_GTK)
         /usr/include/X11
         /usr/X11R6/include/gtk12
         /usr/include/gtk-1.2
-	/usr/local/include/gtk-1.2
+        /usr/local/include/gtk-1.2
+        /opt/gnome/include
       )
 
       # Some Linux distributions (e.g. Red Hat) have glibconfig.h
@@ -31,7 +32,9 @@ IF(NOT HAS_GTK)
         /usr/openwin/share/include
         /usr/local/include/glib12
         /usr/lib/glib/include
-	/usr/local/lib/glib/include
+        /usr/local/lib/glib/include
+        /opt/gnome/include
+        /opt/gnome/lib/glib/include
       )
 
       FIND_PATH( GTK_glib_INCLUDE_PATH glib.h
@@ -42,13 +45,16 @@ IF(NOT HAS_GTK)
         /usr/local/include/glib12
         /usr/lib/glib/include
         /usr/include/glib-1.2
-	/usr/local/include/glib-1.2
+        /usr/local/include/glib-1.2
+        /opt/gnome/include
+        /opt/gnome/include/glib-1.2
       )
 
       FIND_PATH( GTK_gtkgl_INCLUDE_PATH gtkgl/gtkglarea.h
         /usr/include
         /usr/local/include
         /usr/openwin/share/include
+        /opt/gnome/include
       )
 
       FIND_LIBRARY( GTK_gtkgl_LIBRARY gtkgl
@@ -56,6 +62,7 @@ IF(NOT HAS_GTK)
         /usr/local/lib
         /usr/openwin/lib
         /usr/X11R6/lib
+        /opt/gnome/lib
       )
 
       #
@@ -68,6 +75,7 @@ IF(NOT HAS_GTK)
               /usr/local/lib
               /usr/openwin/lib
               /usr/X11R6/lib
+              /opt/gnome/lib
       )
 
       FIND_LIBRARY( GTK_gdk_LIBRARY
@@ -76,6 +84,7 @@ IF(NOT HAS_GTK)
                /usr/local/lib
                /usr/openwin/lib
                /usr/X11R6/lib
+               /opt/gnome/lib
       )
 
       FIND_LIBRARY( GTK_gmodule_LIBRARY
@@ -84,6 +93,7 @@ IF(NOT HAS_GTK)
                /usr/local/lib
                /usr/openwin/lib
                /usr/X11R6/lib
+               /opt/gnome/lib
       )
 
       FIND_LIBRARY( GTK_glib_LIBRARY
@@ -92,6 +102,7 @@ IF(NOT HAS_GTK)
                /usr/local/lib
                /usr/openwin/lib
                /usr/X11R6/lib
+               /opt/gnome/lib
       )
 
       IF(GTK_gtk_INCLUDE_PATH)
