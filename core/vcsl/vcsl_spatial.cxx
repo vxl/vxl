@@ -295,10 +295,10 @@ void vcsl_spatial::path_from_local_to_cs(const vcsl_spatial_ref &other,
   assert(sens.size()==0);
   assert(path_from_local_to_cs_exists(other,time));
 
-  bool path_exists;
+  //unused bool path_exists;
 
   _graph->init_vertices();
-  path_exists=recursive_path_from_local_to_cs(other,time,path,sens);
+  /*path_exists=*/ recursive_path_from_local_to_cs(other,time,path,sens);
 }
 
 //---------------------------------------------------------------------------
