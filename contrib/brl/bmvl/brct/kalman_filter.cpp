@@ -45,9 +45,6 @@ void kalman_filter::init()
   //
   cur_pos_ = 0;
 
-  // initialize the transit matrix
-  dt_ = 1.0;
-
   //
   memory_size_ = 0;
 
@@ -55,8 +52,6 @@ void kalman_filter::init()
   queue_size_ = 100;
   observes_.resize(queue_size_);
   motions_.resize(queue_size_);
-
-  init_transit_matrix();
 
   init_cam_intrinsic();
   
@@ -74,19 +69,6 @@ kalman_filter::~kalman_filter()
 {
   if(e_)
     delete e_;
-}
-
-void kalman_filter::init_transit_matrix()
-{
-  for (int i=0; i<6; i++)
-    for (int j=0; j<6; j++)
-      A_[i][j] = 0.0;
-
-  for (int i = 0; i<6; i++)
-    A_[i][i] = 1;
-
-  for (int i=0; i<3; i++)
-    A_[i][i+3] = dt_;
 }
 
 void kalman_filter::init_state_vector()
@@ -391,7 +373,8 @@ void kalman_filter::inc()
   //
   // prediction step:
   //
-  vnl_vector_fixed<double, 6> Xpred = A_*X_;
+  vnl_matrix_fixed<double, 6, 6> A = get_transit_matrix(cur_pos_-1, cur_pos_);
+  vnl_vector_fixed<double, 6> Xpred = A*X_;
   vnl_double_3 camCenter(Xpred[0],Xpred[1],Xpred[2]);
   vnl_double_3x4 P = get_projective_matrix(camCenter);
   update_observes(P, cur_pos_);
@@ -409,7 +392,7 @@ void kalman_filter::inc()
 
     vnl_matrix_fixed<double, 2, 6> H = get_H_matrix(P, X);
 
-    vnl_matrix_fixed<double, 6, 6> Qpred = A_*Q_*A_.transpose() + Q0_;
+    vnl_matrix_fixed<double, 6, 6> Qpred = A*Q_*A.transpose() + Q0_;
 
     G_ = Qpred*H.transpose()*vnl_inverse(H*Qpred*H.transpose()+R_);
 
@@ -427,9 +410,10 @@ void kalman_filter::inc()
     Q_ = (I - G_*H)*Qpred;
   }
 
-  Xpred[3] = Xpred[0] - X_[0];
-  Xpred[4] = Xpred[1] - X_[1];
-  Xpred[5] = Xpred[2] - X_[2];
+  double dt = time_tick_[cur_pos_] - time_tick_[cur_pos_-1];
+  Xpred[3] = (Xpred[0] - X_[0])/dt;
+  Xpred[4] = (Xpred[1] - X_[1])/dt;
+  Xpred[5] = (Xpred[2] - X_[2])/dt;
 
   vnl_double_3 xNew(Xpred[0], Xpred[1], Xpred[2]);
 
@@ -533,6 +517,18 @@ void kalman_filter::read_data(const char *fname)
       continue;
     }
   }
+
+  // not this is temporially solution.
+  //setting up the time beats
+  int num_frames = curves_.size();
+  time_tick_.resize(num_frames);
+
+  double time = 0;
+  for(int i=0; i<num_frames; i++){
+    time_tick_[i] = time;
+    time += (i%2==0?1:2);
+ }
+ 
 }
 
 void kalman_filter::init_velocity()
@@ -556,9 +552,14 @@ void kalman_filter::init_velocity()
     T *= -trans_dist;
 
   //initialize the state vector
-  X_[0] = X_[3] = T[0];
-  X_[1] = X_[4] = T[1];
-  X_[2] = X_[5] = T[2];
+  X_[0] = T[0];
+  X_[1] = T[1];
+  X_[2] = T[2];
+
+  double dt = time_tick_[1]-time_tick_[2];
+  X_[3] = T[0] /dt;
+  X_[4] = T[1] /dt;
+  X_[5] = T[2] /dt;
 }
 
 vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
@@ -635,7 +636,8 @@ vnl_matrix<double> kalman_filter::get_predicted_curve()
   //
   // prediction step:
   //
-  vnl_vector_fixed<double, 6> Xpred = A_*X_;
+  vnl_matrix_fixed<double, 6, 6> A = get_transit_matrix(cur_pos_, cur_pos_+1);
+  vnl_vector_fixed<double, 6> Xpred = A*X_;
   vnl_double_3 camCenter(Xpred[0],Xpred[1],Xpred[2]);
   vnl_double_3x4 P = get_projective_matrix(camCenter);
 
@@ -704,5 +706,24 @@ void kalman_filter::init_epipole(double x, double y)
   
   (*e_)[0] = x;
   (*e_)[1] = y;
+}
+
+vnl_matrix_fixed<double, 6, 6> kalman_filter::get_transit_matrix(int i, int j)
+{
+  assert(i>=0 && j>=0);
+  vnl_matrix_fixed<double, 6, 6> A;
+
+  double dt = time_tick_[j] - time_tick_[i];
+  for (int i=0; i<6; i++)
+    for (int j=0; j<6; j++)
+      A[i][j] = 0.0;
+
+  for (int i = 0; i<6; i++)
+    A[i][i] = 1;
+
+  for (int i=0; i<3; i++)
+    A[i][i+3] = dt;
+
+  return A;
 }
 

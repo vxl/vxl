@@ -56,6 +56,9 @@ class kalman_filter
   virtual ~kalman_filter();
 
  protected:
+  //: get time interval from ith frame to j-th frame
+  vnl_matrix_fixed<double, 6, 6> get_transit_matrix(int i, int j);
+
   //: update the confidence for each 3d point
   void update_confidence();
 
@@ -81,6 +84,8 @@ class kalman_filter
 
   vcl_vector<vcl_vector<bugl_gaussian_point_2d<double> > > observes_;
 
+  //: each element represents shoting times for this frame.
+  vcl_vector<double> time_tick_;
   //: each element of the vector represents a projection of the same 3D curves.
   vcl_vector<vdgl_digital_curve_sptr> curves_;
 
@@ -92,9 +97,6 @@ class kalman_filter
 
   //: how much the queue has been used
   int memory_size_;
-
-  //: transit matrix
-  vnl_matrix_fixed<double, 6, 6> A_;
 
   //: state vector
   vnl_vector_fixed<double, 6> X_;
@@ -116,7 +118,6 @@ class kalman_filter
 
   //: camera intrinsic parameters
   vnl_double_3x3 K_;
-  double dt_;
 };
 
 #endif // brct_kalman_filter_h_

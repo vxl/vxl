@@ -112,7 +112,7 @@ void brct_windows_frame::init()
   this->add_child(shell);
 
   // set a kalman filter
-  data_file_name_ = "data/curve28.txt";
+  data_file_name_ = "data/curve34.txt";
   kalman_ = new kalman_filter(data_file_name_.c_str());
   e_ = 0;
 }
