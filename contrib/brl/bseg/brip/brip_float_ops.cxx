@@ -4,6 +4,7 @@
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_smooth.h>
+
 //------------------------------------------------------------
 //  Convolve with a kernel
 //   It's assumed that the kernel is square with odd dimensions
