@@ -1200,9 +1200,6 @@ vnl_matrix<T> vnl_matrix<T>::read(vcl_istream& s)
   return M;
 }
 
-// Statics
-// char* CoolBaseMatrix::print_format = 0;
-
 template <class T>
 void vnl_matrix<T>::set_print_format(char const* x)
 {
@@ -1461,15 +1458,6 @@ char * vnl_matrix<T>::print_format = 0;
 #endif
 
 //--------------------------------------------------------------------------------
-
-//// complain to fsm@robots.ox.ac.uk about this.
-//#if defined(__sgi) && (_COMPILER_VERSION == 721)
-//# undef VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER
-//# undef VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER
-//# define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) /* */
-//# define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x) /* */
-//#endif
-
 
 #define VNL_MATRIX_INSTANTIATE(T) \
 VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(char * vnl_matrix<T >::print_format = 0); \
