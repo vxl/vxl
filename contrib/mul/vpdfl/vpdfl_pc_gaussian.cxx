@@ -328,6 +328,7 @@ const vpdfl_pc_gaussian_builder * vpdfl_pc_gaussian::partition_chooser() const
 void vpdfl_pc_gaussian::set_partition_chooser(
   const vpdfl_pc_gaussian_builder * partition_chooser)
 {
+  delete partition_chooser_;
   if (partition_chooser)
     partition_chooser_ = static_cast<vpdfl_pc_gaussian_builder *>(partition_chooser->clone());
   else
