@@ -5,6 +5,8 @@ IF( HAS_VGUI )
 LINK_LIBRARIES( vgui vidl vul vbl )
 
 ADD_EXECUTABLE( basic01_display_image basic01_display_image.cxx)
+ADD_EXECUTABLE( basic01a_multiple_panes basic01a_multiple_panes.cxx)
+ADD_EXECUTABLE( basic01b_deck basic01b_deck.cxx)
 ADD_EXECUTABLE( basic02_display_line basic02_display_line.cxx)
 ADD_EXECUTABLE( basic03_display_text basic03_display_text.cxx)
 ADD_EXECUTABLE( basic04_display_2d basic04_display_2d.cxx)
@@ -14,6 +16,7 @@ ADD_EXECUTABLE( basic07_dialog basic07_dialog.cxx)
 ADD_EXECUTABLE( basic08_printing basic08_printing.cxx)
 ADD_EXECUTABLE( basic09_mouse_position basic09_mouse_position.cxx)
 ADD_EXECUTABLE( basic10_draw_line basic10_draw_line.cxx)
+ADD_EXECUTABLE( basic10a_rubberband basic10a_rubberband.cxx)
 ADD_EXECUTABLE( basic11_display_3d basic11_display_3d.cxx)
 ADD_EXECUTABLE( example_display_pyramid example_display_pyramid.cxx)
 ADD_EXECUTABLE( example_draw_polygon example_draw_polygon.cxx)
@@ -24,6 +27,14 @@ ADD_EXECUTABLE( example_satellite_tableau example_satellite_tableau.cxx)
 ADD_EXECUTABLE( example_blender_tableau example_blender_tableau.cxx)
 ADD_EXECUTABLE( example_enhance_tableau example_enhance_tableau.cxx)
 ADD_EXECUTABLE( example_poly_tableau example_poly_tableau.cxx)
+
+SET(basic_sources 
+    basic_app.cxx		  
+    basic_manager.cxx  basic_manager.h
+    basic_menus.cxx    basic_menus.h)
+ADD_EXECUTABLE(basic_app basic_sources)
+TARGET_LINK_LIBRARIES(basic_app vgui vul vbl)
+
 
 # GTK examples
 #-------------
