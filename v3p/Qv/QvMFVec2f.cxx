@@ -1,4 +1,5 @@
 #include "QvMFVec2f.h"
+#include <vcl_cstdlib.h>
 
 QV_MFIELD_SOURCE(QvMFVec2f, float, 2, FALSE);
 

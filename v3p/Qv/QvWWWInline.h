@@ -4,6 +4,7 @@
 #include "QvSFEnum.h"
 #include "QvSFVec3f.h"
 #include "QvGroup.h"
+#include "QvSFString.h"
 
 class QvWWWInline : public QvGroup
 {

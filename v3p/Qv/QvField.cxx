@@ -1,6 +1,7 @@
 #include "QvInput.h"
 #include "QvReadError.h"
 #include "QvFields.h"
+#include "QvDB.h"
 
 // Special characters in files
 #define OPEN_BRACE_CHAR         '['

@@ -1,4 +1,5 @@
 #include "QvMFLong.h"
+#include <vcl_cstdlib.h>
 
 #ifdef __osf__
 QV_MFIELD_SOURCE(QvMFLong, int, 1, FALSE)  /* mpichler, 19950622 */

@@ -1,4 +1,5 @@
 #include "QvMFString.h"
+#include <vcl_cstdlib.h>
 
 QV_MFIELD_SOURCE(QvMFString, QvString, 1, TRUE);
 

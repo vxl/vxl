@@ -1,4 +1,5 @@
 #include "QvLists.h"
+#include "QvNode.h"
 
 QvNodeList::QvNodeList() : QvPList()
 {

@@ -1,4 +1,5 @@
 #include "QvUnknownNode.h"
+#include <vcl_cstdlib.h>
 
 QV_NODE_SOURCE(QvUnknownNode);
 
@@ -29,5 +30,5 @@ QvUnknownNode::~QvUnknownNode()
     delete instanceFieldData;
 
     if (className != NULL)
-        free((void *) className); // const violation
+        vcl_free((void *) className); // const violation
 }
