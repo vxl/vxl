@@ -7,7 +7,7 @@
 #include <vcl_vector.h>
 #include <vul/vul_printf.h>
 
-#include <oxp/SGIMovieFile.h>
+#include <oxp/oxp_vidl_moviefile.h>
 #include <oxp/ImageSequenceMovieFile.h>
 #include <oxp/oxp_parse_seqname.h>
 
@@ -34,16 +34,14 @@ MovieFile::MovieFile(char const* filename, int start, int step, int end):
   if (range.start_ != -1) start_ = range.start_;
   if (range.step_  != -1) step_  = range.step_;
   if (range.end_   != -1) end_   = range.end_;
-#ifndef WIN32
-  // Attempt to open for reading.  If it exists, assume it's a movie file.
-  // not on windows, it will create it if it doesn't exist...
-  vcl_ifstream fd(fn.c_str());
+
+  // Attempt to open for reading.  need ios_in as it includes nocreate on windows...
+  vcl_ifstream fd(fn.c_str(), vcl_ios_in);
   if (fd.good())
     {
-      qt = new SGIMovieFile(fn.c_str());
+      qt = new oxp_vidl_moviefile(fn.c_str());
     }
   else
-#endif
     {
       qt = new ImageSequenceMovieFile(fn.c_str(), start_);
     }

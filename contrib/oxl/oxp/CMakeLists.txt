@@ -7,6 +7,9 @@ SOURCE_FILES(oxp_sources
   GXFileVisitor.cxx
   ImageSequenceMovieFile.cxx
   ImageSequenceName.cxx
+  oxp_vidl_moviefile.cxx
+  oxp_vidl_mpeg_codec.cxx
+  oxp_mpeg_codec.cxx
   JPEG_Decompressor.cxx
   Mapping_2d_2d.cxx
   MedianReduceImage.cxx
@@ -18,12 +21,15 @@ SOURCE_FILES(oxp_sources
   SGIMovieFileWrite.cxx
   SequenceFileName.cxx
   oxp_parse_seqname.cxx
+  oxp_bunch_of_files.cxx   
   vsl_conic_as_matrix.cxx
   vsl_conic_as_params.cxx
   vsl_conic_points.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates oxp_sources)
+
+INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindMPEG.cmake )
 
 IF (WIN32)
   IF (NOT CYGWIN)
