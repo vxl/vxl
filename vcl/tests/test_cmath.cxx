@@ -47,7 +47,7 @@ do { \
     double cos = vcl_cos(theta);
     double sin = vcl_sin(theta);
     double tan = vcl_tan(theta);
-    if (theta==0.0) theta = cos + sin + tan; // quell 'unused variable' warning.
+    (void)theta; (void)cos; (void)sin; (void)tan; // quell 'unused variable' warning.
   }
 
 #define macro(T, eps) \

@@ -613,7 +613,7 @@ static int Perform_Distributed_Task(int points,vnl_rnpoly_solve_cmplx sols[LEN_]
   vnl_rnpoly_solve_cmplx p[M_], q[M_], r[M_], pdg[M_], qdg[M_], x[M_];
   int icount[M_];
   int NumSols=0;
-  bool solflag=false;           // flag used to remember if a root is found
+  bool solflag; // flag used to remember if a root is found
   int max_deg=P_;
 #ifdef DEBUG
   char const* FILENAM = "/tmp/cont.results";

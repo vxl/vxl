@@ -664,10 +664,10 @@ template <class T, unsigned nrows, unsigned ncols>
 typename vnl_matrix_fixed_ref_const<T,nrows,ncols>::abs_t
 vnl_matrix_fixed_ref_const<T,nrows,ncols>::operator_inf_norm() const
 {
-  abs_t max = 0;
+  abs_t max(0);
   for (unsigned int i=0; i<nrows; ++i)
   {
-    abs_t tmp = 0;
+    abs_t tmp(0);
     for (unsigned int j=0; j<ncols; ++j)
       tmp += vnl_math_abs( (*this)(i,j) );
     if (tmp > max)
@@ -686,7 +686,7 @@ void vnl_matrix_fixed_ref<T,nrows,ncols>::inplace_transpose() const
   {
     T t = (*this)(i,j);
     (*this)(i,j) = (*this)(j,i);
-    t = (*this)(j,i) = t;
+    (*this)(j,i) = t;
   }
 }
 

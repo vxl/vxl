@@ -7422,7 +7422,7 @@ doublereal timer_(real* dummy)
 /* **                                         ** */
 /* ********************************************* */
 
-    ++dummy;
+    (void)dummy;
     return (doublereal)time(0L);
 } /* timer_ */
 

@@ -5,8 +5,8 @@
 int test_exception_main(int /*argc*/,char* /*argv*/[])
 {
   const char *ex = "\"const char* exception\"";
-  int result = 0;
 #if VCL_HAS_EXCEPTIONS
+  int result = 0;
   vcl_try {
     vcl_cout << "throw " << ex << vcl_endl;
     vcl_throw ex;
@@ -19,8 +19,9 @@ int test_exception_main(int /*argc*/,char* /*argv*/[])
     vcl_cout << "caught nothing.  Bad." << vcl_endl;
     result = 1;
   }
+  return result;
 #else
   vcl_cout << "this compiler does not support exception handling\n";
+  return 0;
 #endif
-  return result;
 }
