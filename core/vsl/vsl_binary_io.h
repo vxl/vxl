@@ -79,7 +79,7 @@ public:
   virtual int get_serialisation_other_data(void *pointer) const;
 
   //: Modify the user-defined data associated with the object
-  // If there is no record of the object, this function will return abort.
+  // If there is no record of the object, this function will abort.
   virtual int set_serialisation_other_data(void *pointer, int other_data);
 
 protected:
@@ -118,14 +118,14 @@ public:
   //: Create this adaptor from a file.
   // The adapter will delete the internal stream automatically on destruction.
   vsl_b_ofstream(vcl_string &filename,
-    int mode = vcl_ios_out | vcl_ios_trunc):
+    vcl_ios_openmode mode = vcl_ios_out | vcl_ios_trunc):
     vsl_b_ostream(new vcl_ofstream(filename.c_str(),
       mode | vcl_ios_binary)) {}
 
   //: Create this adaptor from a file.
   // The adapter will delete the internal stream automatically on destruction.
   vsl_b_ofstream(char *filename,
-    int mode = vcl_ios_out | vcl_ios_trunc):
+    vcl_ios_openmode mode = vcl_ios_out | vcl_ios_trunc):
     vsl_b_ostream(new vcl_ofstream(filename, mode | vcl_ios_binary)) {}
 
   //: Virtual destructor.
@@ -213,19 +213,19 @@ protected:
 };
 
 
-//: An adapter for an ofstream to make it suitabel for binary IO
+//: An adapter for an ofstream to make it suitable for binary IO
 class vsl_b_ifstream: public vsl_b_istream
 {
 public:
   //: Create this adaptor from a file.
   // The adapter will delete the stream automatically on destruction.
-  vsl_b_ifstream(vcl_string &filename, int mode = vcl_ios_in):
+  vsl_b_ifstream(vcl_string &filename, vcl_ios_openmode mode = vcl_ios_in):
     vsl_b_istream(new vcl_ifstream(filename.c_str(),
     mode | vcl_ios_binary)) {}
 
   //: Create this adaptor from a file.
   // The adapter will delete the stream automatically on destruction.
-  vsl_b_ifstream(char *filename, int mode = vcl_ios_in):
+  vsl_b_ifstream(char *filename, vcl_ios_openmode mode = vcl_ios_in):
     vsl_b_istream(new vcl_ifstream(filename, mode | vcl_ios_binary)) {}
 
   //: Virtual destructor.so that it can be overloaded
