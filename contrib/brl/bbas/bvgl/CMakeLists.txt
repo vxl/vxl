@@ -9,11 +9,12 @@ bvgl_h_matrix_2d.h                 bvgl_h_matrix_2d.txx
 bvgl_h_matrix_3d.h                 bvgl_h_matrix_3d.txx 
 bvgl_norm_trans_2d.h	           bvgl_norm_trans_2d.txx
 bvgl_h_matrix_1d_compute.h         bvgl_h_matrix_1d_compute.cxx
-bvgl_h_matrix_1d_compute_design.h  bvgl_h_matrix_1d_compute_design.cxx
+bvgl_h_matrix_1d_compute_linear.h  bvgl_h_matrix_1d_compute_linear.cxx
 bvgl_h_matrix_1d_compute_3point.h  bvgl_h_matrix_1d_compute_3point.cxx
 bvgl_h_matrix_1d_compute_optimize1.h bvgl_h_matrix_1d_compute_optimize1.cxx
 bvgl_h_matrix_2d_compute.h         bvgl_h_matrix_2d_compute.cxx
 bvgl_h_matrix_2d_compute_linear.h  bvgl_h_matrix_2d_compute_linear.cxx
+bvgl_h_matrix_2d_compute_4point.h  bvgl_h_matrix_2d_compute_4point.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates bvgl_sources)

@@ -36,8 +36,6 @@ int main(int, char **)
   vgl_homg_point_2d<double> p24(1.0, 1.0, 1.0), p25(1.5, 1.5, 1.0);
   points2.push_back(p20); points2.push_back(p21); points2.push_back(p22);
   points2.push_back(p23); points2.push_back(p24); points2.push_back(p25);
-  vcl_cout << "Test Summary: " << success << " tests succeeded, "
-           << failures << " tests failed" << (failures?"\t***\n":"\n");
 
   bvgl_h_matrix_2d_compute_linear hmcl;
   bvgl_h_matrix_2d<double> H = hmcl.compute(points1, points2);

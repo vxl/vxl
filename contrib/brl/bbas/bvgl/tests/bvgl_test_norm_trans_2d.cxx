@@ -49,32 +49,6 @@ int main(int, char **)
   vcl_cout << "Residual Center(" << cx/Npts << " " << cy/Npts << ")\n";
   Assert(near_eq(0.0, cx/Npts)&&near_eq(0.0, cy/Npts));
 
-  vcl_cout << "testing normalizing transform for lines\n" << nt << "\n";
-  vcl_vector<vgl_homg_line_2d<double> > lines;
-  for(int i = 0; i<Npts; i++)
-    {
-      double x = i, y = i;
-      vgl_homg_line_2d<double> l(1.0, 0.0, i);
-      lines.push_back(l);
-    }
-  nt.compute_from_lines(lines);
-  vcl_cout << "Normalizing Transform(points) \n" << nt << "\n";
-	
-  vcl_cout << "Normalizing Transform(lines) \n" << nt.get_inverse()
-           << "\n";
-  for(int i = 0; i<Npts; i++,j++)
-    {
-      if(j>9) j = 0;
-      vgl_line_2d<double> lp(nt(lines[i]));
-      lp.normalize();
-      if(!j)
-        {
-          vgl_line_2d<double> l(lines[i]);
-          l.normalize();
-          vcl_cout << "l[" << i << "] =  " <<  l  << "\n";
-          vcl_cout << "lnorm[" << i << "] =  " << lp << "\n";
-        }
-    }
   
 
   vcl_cout << "Test Summary: " << success << " tests succeeded, "

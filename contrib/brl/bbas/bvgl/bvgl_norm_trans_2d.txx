@@ -96,31 +96,15 @@ compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points)
    t12_matrix_.put(1,2, -cy*scale);
    return true;
  }
-//----------------------------------------------------------------
-//  Get the normalizing transform for a set of lines
-//  1) Convert each line to a point which is the closest point on
-//     the line to the origin
-//        p = [nx*d ny*d 1]^t 
-//  2) Apply the point based method to determine the transform.
-//
+
 template <class T>
 bool bvgl_norm_trans_2d<T>::
 compute_from_lines(vcl_vector<vgl_homg_line_2d<T>  > const& lines)
 {
-  int Nlines = lines.size();
-  vcl_vector<vgl_homg_point_2d<T> > points;
-  for(int i = 0; i<Nlines; i++)
-    {
-	    vgl_line_2d<T> l(lines[i]);
-      l.normalize();
-      T A = -l.a()*l.c();
-      T B = -l.b()*l.c();
-      T U = 1;
-      vgl_homg_point_2d<T> p(A, B, U);
-      points.push_back(p);
-    }
- return this->compute_from_points(points);
+  //not yet implemented
+  return false;
 }
+
 //-------------------------------------------------------------------
 // Find the center of a point cloud
 //

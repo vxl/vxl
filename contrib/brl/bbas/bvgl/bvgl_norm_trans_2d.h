@@ -42,9 +42,7 @@ class bvgl_norm_trans_2d: public bvgl_h_matrix_2d<T>
 
  //: compute the normalizing transform
   bool compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points);
-
   bool compute_from_lines(vcl_vector<vgl_homg_line_2d<T>  > const& lines);
- 
 
   // Data Access---------------------------------------------------------------
 
