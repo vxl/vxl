@@ -2,7 +2,7 @@
 
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_real_polynomial.h>
-#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_double_3.h>
 #include <vcl_cmath.h>
 
 void test_real_polynomial()
@@ -46,7 +46,7 @@ void test_real_polynomial()
 
   TEST("Polynomial of degree 0", vnl_real_polynomial(1.0).evaluate(0.5),1.0);
   TEST("Vector initialisation",
-       vnl_real_polynomial(vnl_vector_fixed<double,3>(3.0,2.0,1.0)).evaluate(2.0),17.0);
+       vnl_real_polynomial(vnl_double_3(3.0,2.0,1.0)).evaluate(2.0),17.0);
 
   TEST("RMS difference(f1,f2) is zero",vnl_rms_difference(f1,f1,0,1)<1e-8,true);
 }
