@@ -14,6 +14,7 @@
 // \file
 
 #include <vcl_iostream.h>
+#include <vcl_cmath.h> // vcl_abs(double)
 #include <vsol/vsol_conic_2d.h>
 #include <vsol/vsol_conic_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
