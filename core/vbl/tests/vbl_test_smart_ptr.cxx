@@ -35,6 +35,8 @@ int doit ()
   if (p == (base_impl*)0) // identical result - just to demonstrate operator==()
     p = new base_impl;
 
+  cout << "operator<< gives : " << p << endl;
+
   base_ref a = new base_impl (5);
   if (p == a)
     cout << "FAILED: p==a (wrong)" << endl;

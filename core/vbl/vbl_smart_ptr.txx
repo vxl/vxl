@@ -1,36 +1,40 @@
-#include <vbl/vbl_smart_ptr.h> // see .h file for authors etc.
+#include "vbl_smart_ptr.h"
+#include <vcl/vcl_iostream.h>
 
 // Template definitions for ref() and unref().
 // The client can specialize them between including this file and
-// calling the instantiation macros, but he should be prepared to 
-// implement the protected_ logic in his specialization.
+// calling the instantiation macros.
 template <class T>
-void vbl_smart_ptr<T>::ref()
-  {
-    if (ptr_)
-      {
-        ptr_->ref();
-        protected_ = true;
-      }
-  }
+void vbl_smart_ptr<T>::ref(T *p)
+{
+  if (p)
+    p->ref();
+}
 
 template <class T>
-void vbl_smart_ptr<T>::unref()
-  { 							
-    if (ptr_ && protected_)
-      {
-	ptr_->unref();
-	protected_ = false; /* sure we do not do it twice */
-      }
-  }
+void vbl_smart_ptr<T>::unref(T *p)
+{ 							
+  if (p)
+    p->unref();
+}
+
+template <class T>
+struct vbl_smart_ptr_T_as_string { static char const *str() { return "T"; } };
+
+template <class T>
+ostream& operator<< (ostream& os, vbl_smart_ptr<T> const& r)
+{
+  return os << "vbl_smart_ptr<"
+	    << vbl_smart_ptr_T_as_string<T>::str()
+	    << ">(" << (void*) r.as_pointer() << ")";
+}
 
 //--------------------------------------------------------------------------------
 
-#define VBL_SMART_PTR_INSTANTIATE_inlines(T) \
-VCL_INSTANTIATE_INLINE(bool operator== (vbl_smart_ptr<T > const&, vbl_smart_ptr<T > const&)); \
-VCL_INSTANTIATE_INLINE(ostream& operator<< (ostream&, vbl_smart_ptr<T > const&));
-
 #undef  VBL_SMART_PTR_INSTANTIATE
 #define VBL_SMART_PTR_INSTANTIATE(T) \
-template class vbl_smart_ptr<T >;\
-VBL_SMART_PTR_INSTANTIATE_inlines(T);
+template class vbl_smart_ptr<T >; \
+VCL_DEFINE_SPECIALIZATION struct vbl_smart_ptr_T_as_string<T > \
+{ static char const *str() { return #T; } }; \
+template ostream& operator<< (ostream&, vbl_smart_ptr<T > const&); \
+VCL_INSTANTIATE_INLINE(bool operator== (vbl_smart_ptr<T > const&, vbl_smart_ptr<T > const&));
