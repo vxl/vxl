@@ -99,301 +99,187 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\Templates/vsl_set_io+vcl_string-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_set_io+int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_deque_io+int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vsl_binary_loader_base~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_map_io+int.int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_map_io+int.vcl_string-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_map_io+vcl_string.int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_vector_io+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_vector_io+float-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_vector_io+int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_vector_io+uint-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_vector_io+vcl_string-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_stack_io+int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_pair_io+vcl_pair+uint.uint-.int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_pair_io+vcl_pair+uint.uint-.double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_pair_io+uint.uint-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_pair_io+uint.int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_pair_io+uint.double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_pair_io+int.uint-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_pair_io+double.uint-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_list_io+int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_list_io+float-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_complex_io+float-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_complex_io+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_vector_io+vcl_pair+uint.uint--.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_vector_io+vcl_vector+vcl_pair+uint.uint---.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_vector_io+uchar-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_binary_io.cxx
-
 # End Source File
 # Begin Source File
-
+SOURCE=.\vsl_vector_io_bool.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsl_binary_loader_base.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_indent.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\vsl_binary_explicit_io.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_binary_io.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_binary_loader.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_binary_loader.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_binary_loader_base.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_clipon_binary_loader.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_clipon_binary_loader.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_complex_io.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_complex_io.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_deque_io.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_deque_io.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_indent.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_list_io.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_list_io.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_map_io.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_map_io.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_pair_io.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_pair_io.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_set_io.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_set_io.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_stack_io.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_stack_io.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_string_io.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_string_io.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_vector_io.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_vector_io.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_fwd.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsl_quick_file.h
-
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-
