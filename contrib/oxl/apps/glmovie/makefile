@@ -3,6 +3,7 @@ include $(IUEROOT)/vxl/vil/config.mk
 include $(IUEROOT)/vxl/vnl/algo/config.mk
 USE_OPENGL := 1
 USE_GLUT := 1
+TRY_MPEG := 1
 
 MINI_PROG_SOURCES += vobgetframe.cxx
 
