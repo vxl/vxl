@@ -228,11 +228,12 @@ add_spatial_object_3d(vsol_spatial_object_3d_sptr const& so)
     }
   }
 
-  if (so->cast_to_region()) {
-    if (so->cast_to_region()->cast_to_polygon())
+  if (so->cast_to_surface()) {
+    if (so->cast_to_surface()->cast_to_region() &&
+        so->cast_to_surface()->cast_to_region()->cast_to_polygon_3d())
     {
       vsol_polygon_3d_sptr poly =
-        so->cast_to_region()->cast_to_polygon();
+        so->cast_to_surface()->cast_to_region()->cast_to_polygon_3d();
       this->add_vsol_polygon_3d(poly);
     }
   }
@@ -293,7 +294,6 @@ bgui_vsol_camera_tableau::set_vsol_line_3d_style(const float r,
   style_map_[bgui_vsol_soview2D_line_seg::type_name_()] = vgui_style::new_style(r, g, b, 0.0f, line_width);
 }
 
-
 void
 bgui_vsol_camera_tableau::set_vsol_polygon_3d_style(const float r,
                                                     const float g,
@@ -311,4 +311,3 @@ bgui_vsol_camera_tableau::set_vsol_box_3d_style(const float r,
 {
   style_map_[bgui_vsol_soview2D_polygon::type_name_()] = vgui_style::new_style(r, g, b, 0.0f, line_width);
 }
-
