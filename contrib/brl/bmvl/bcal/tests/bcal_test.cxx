@@ -163,8 +163,8 @@ int main(int argc, char* argv[])
 
   testing_linear_calibration(directory);
 
-  testing_brown_stereor_grid_camera(directory+"/data/point_correspondences.left.txt");
-  testing_brown_stereor_grid_camera(directory+"/data/point_correspondences.right.txt");
+  testing_brown_stereor_grid_camera(directory+"/data/point_correspondences.left");
+  testing_brown_stereor_grid_camera(directory+"/data/point_correspondences.right");
 
   return 0;
 }
