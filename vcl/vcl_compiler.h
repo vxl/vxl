@@ -124,8 +124,8 @@
 // -------------------- template instantiation
 
 // if the compiler doesn't understand "export", we just leave it out.
-// gcc understands it, but ignores it noisily.
-#if !VCL_HAS_EXPORT || defined(VCL_EGCS) || defined(VCL_GCC_295) || defined(VCL_GCC_30)
+// gcc and SunPro 5.0 understand it, but they ignore it noisily.
+#if !VCL_HAS_EXPORT || defined(VCL_EGCS) || defined(VCL_GCC_295) || defined(VCL_GCC_30) || defined(VCL_SUNPRO_CC_50)
 # define export /* ignore */
 #endif
 
