@@ -14,7 +14,7 @@ class gmvl_corner_node : public gmvl_node
 {
 public:
 
-  gmvl_corner_node( const vcl_string type, double x, double y);
+  gmvl_corner_node( double x, double y);
   ~gmvl_corner_node();
 
 protected:

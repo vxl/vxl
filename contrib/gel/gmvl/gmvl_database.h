@@ -27,6 +27,7 @@ public:
 
   // methods on connections
   void add_connection( const gmvl_node_ref node1, const gmvl_node_ref node2);
+  void add_connections( const gmvl_node_ref node1, vcl_vector<gmvl_node_ref> nodes);
 
   // output
   friend ostream &operator<<( ostream &os, const gmvl_database db);

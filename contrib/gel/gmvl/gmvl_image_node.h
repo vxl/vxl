@@ -15,7 +15,7 @@ class gmvl_image_node : public gmvl_node
 {
 public:
 
-  gmvl_image_node( const vcl_string type, vil_image image);
+  gmvl_image_node( vil_image image);
   ~gmvl_image_node();
 
 protected:

@@ -7,10 +7,8 @@
 #include "gmvl_database.h"
 
 
-// vcl_vector<gmvl_node_ref> gmvl_database::get_nodes( const vcl_string name) const
-// {
-// }
 
+// specific node references
 
 void gmvl_database::add_node( const gmvl_node_ref node)
 {
@@ -22,6 +20,8 @@ void gmvl_database::remove_node( const gmvl_node_ref node)
   nodecache_.remove( node);
 }
 
+// specific connection references
+
 void gmvl_database::add_connection( const gmvl_node_ref node1, const gmvl_node_ref node2)
 {
   if( !nodecache_.cached( node1))
@@ -32,6 +32,14 @@ void gmvl_database::add_connection( const gmvl_node_ref node1, const gmvl_node_r
 
   connectioncache_.add( node1, node2);
 }
+
+void gmvl_database::add_connections( const gmvl_node_ref node1, vcl_vector<gmvl_node_ref> nodes)
+{
+  for( int i=0; i< nodes.size(); i++)
+    add_connection( node1, nodes[i]);
+}
+
+// input / output
 
 ostream &operator<<( ostream &os, const gmvl_database db)
 {

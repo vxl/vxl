@@ -24,11 +24,10 @@ class gmvl_node : public vbl_ref_count
 {
 public:
 
-  gmvl_node( const vcl_string name);
+  gmvl_node();
   virtual ~gmvl_node();
 
-  vcl_string get_name() const { return name_; }
-
+  // input output
   friend ostream &operator<<( ostream &os, gmvl_node &node);
 
   // to allow the cache to access ref 
@@ -39,9 +38,6 @@ protected:
   // type name (name of class)
   vcl_string type_;
 
-  // name of object (for instance "input image")
-  vcl_string name_;
-  
   // reference number (used by caches)
   int ref_;
 };
