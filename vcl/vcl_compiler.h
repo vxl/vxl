@@ -123,6 +123,12 @@
 
 // -------------------- template instantiation
 
+// if the compiler doesn't understand "export", we just leave it out.
+// gcc understands it, but ignores it noisily.
+#if !VCL_HAS_EXPORT || defined(VCL_EGCS) || defined(VCL_GCC_295) || defined(VCL_GCC_30)
+# define export /* ignore */
+#endif
+
 #if VCL_NEEDS_INLINE_INSTANTIATION
 # define VCL_INSTANTIATE_INLINE(symbol) template symbol;
 #else
