@@ -149,7 +149,7 @@ inv_map( const vnl_vector<double>& to,
   const double epsilon = 0.01;
   vnl_vector<double> to_est = this->map_location(from);
 
-  // compute the inverse of the Jacobian, which is the A_^-1
+  // compute the inverse of the Jacobian, which is A_^-1
   vnl_svd<double> svd( A_ );
   vnl_matrix<double> J_inv = svd.inverse();
 
