@@ -4,6 +4,9 @@ VERSION := 1.0
 IMMEDIATE_LIBS := -lvnl -lnetlib
 DEFINES += -DBUILDING_VNL_ALGO_DLL
 
+MANPAGE_SOURCES += vnl_algo_fwd.h
+MANPAGE_SOURCES += vnl_netlib.h
+
 # matrix decompositions
 MANPAGE_SOURCES += vnl_svd.txx
 MANPAGE_SOURCES += vnl_matrix_inverse.txx
