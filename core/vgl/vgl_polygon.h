@@ -36,7 +36,7 @@ public:
 
   typedef vcl_vector<point_t> sheet_t;
 
-  // Constructors/Destructors--------------------------------------------------
+  // Constructors/Destructor---------------------------------------------------
 
   //: Default constructor
   vgl_polygon();

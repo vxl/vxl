@@ -25,7 +25,7 @@ class vgl_plane_3d {
 
 public:
 
-  // Constructors/Initializers/Destructors-----------------------------------
+  // Constructors/Initializers/Destructor------------------------------------
 
 #if 0
   // Default constructor

@@ -15,7 +15,7 @@
 #include <vcl_cmath.h>
 #include <vgl/vgl_point_2d.h>
 
-// Constructors/Destructors--------------------------------------------------
+// Constructors/Destructor---------------------------------------------------
 
 template <class Type>
 vgl_box_2d<Type>::vgl_box_2d(const Type min_position[2],

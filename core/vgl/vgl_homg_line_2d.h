@@ -29,7 +29,7 @@ class vgl_homg_line_2d {
 
 public:
 
-  // Constructors/Initializers/Destructors-----------------------------------
+  // Constructors/Initializers/Destructor------------------------------------
 
   //: Default constructor (leaves line undefined)
   vgl_homg_line_2d () {}

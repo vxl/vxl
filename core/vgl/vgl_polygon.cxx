@@ -14,7 +14,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
-// Constructors/Destructors--------------------------------------------------
+// Constructors/Destructor---------------------------------------------------
 
 //---------------------------------------------------------------------------
 // Default constructor

@@ -61,7 +61,7 @@ class vgl_box_2d {
   // PUBLIC INTERFACE----------------------------------------------------------
 public:
 
-  // Constructors/Destructors--------------------------------------------------
+  // Constructors/Destructor---------------------------------------------------
 
   //: Default constructor (creates undefined box)
   vgl_box_2d() {}

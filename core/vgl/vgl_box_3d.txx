@@ -6,7 +6,7 @@
 #include "vgl_box_3d.h"
 #include <vgl/vgl_point_3d.h>
 
-// Constructors/Destructors--------------------------------------------------
+// Constructors/Destructor---------------------------------------------------
 
 template <class Type>
 vgl_box_3d<Type>::vgl_box_3d(Type const min_position[3],

@@ -60,7 +60,7 @@ public:
   // Stores coordinates of a 2d point
   typedef vgl_polygon::point_t Point2;
 
-  // Constructors/Destructors--------------------------------------------------
+  // Constructors/Destructor---------------------------------------------------
 
     //: Construct with a ploygon and bool indicating whether bondary included
   vgl_polygon_scan_iterator(vgl_polygon const& face, bool boundaryp = true);
