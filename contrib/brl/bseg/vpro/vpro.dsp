@@ -161,6 +161,9 @@ SOURCE=.\vpro_spatial_filter_process.cxx
 # Begin Source File
 SOURCE=.\vpro_ihs_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vpro_half_res_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -226,6 +229,9 @@ SOURCE=.\vpro_spatial_filter_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpro_ihs_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpro_half_res_process.h
 # End Source File
 # End Group
 # End Target
