@@ -9,9 +9,9 @@
 // Implementation
 
 #include "vsl_vector_io.h"
+#include <vsl/vsl_binary_explicit_io.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
-#include <vsl/vsl_binary_explicit_io.h>
 #include <vcl_cassert.h>
 
 //====================================================================================

@@ -376,6 +376,9 @@ inline void vsl_print_summary(vcl_ostream& os, double n )
 // If you want to output a block of fundamental data types very efficiently,
 // then just #include <vsl_binary_explicit_io.h>
 template <class T>
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_write_block(vsl_b_ostream &os, const T* begin, unsigned nelems)
 {
   while (nelems--)
@@ -386,6 +389,9 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const T* begin, unsigned nelems
 // If you want to output a block of fundamental data types very efficiently,
 // then just #include <vsl_binary_explicit_io.h>
 template <class T>
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_read_block(vsl_b_istream &is, T* begin, unsigned nelems)
 {
   while (nelems--)

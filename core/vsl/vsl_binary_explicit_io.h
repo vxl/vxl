@@ -138,6 +138,13 @@ macro (signed int);
 macro (unsigned int);
 macro (signed long);
 macro (unsigned long);
+#ifdef VCL_VC70
+// This test will be replaced with !VCL_PTRDIFF_T_IS_A_STANDARD_TYPE
+// When that macro is working.
+macro(vcl_ptrdiff_t);
+macro(vcl_size_t);
+#endif
+#undef macro
 
 //: The maximum length of buffer to use with arbitrary length integers
 // This macro tells you the size of buffer you need when using
@@ -603,6 +610,10 @@ inline void vsl_b_read_int_16(vsl_b_istream& is, long& n )
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the size of the
 // block being read.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_write_block(vsl_b_ostream &os, const double* begin, unsigned nelems)
 {
   double *block = new double[nelems];
@@ -615,6 +626,10 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const double* begin, unsigned n
 
 //: Read a block of doubles from a vsl_b_istream
 // This function is very speed efficient.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_read_block(vsl_b_istream &is, double* begin, unsigned nelems)
 {
   is.is().read((char*) begin, (unsigned long)(nelems*sizeof(double)));
@@ -627,6 +642,10 @@ inline void vsl_b_read_block(vsl_b_istream &is, double* begin, unsigned nelems)
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the size of the
 // block being read.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_write_block(vsl_b_ostream &os, const float* begin, unsigned nelems)
 {
   float *block = new float[nelems];
@@ -638,6 +657,10 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const float* begin, unsigned ne
 
 //: Read a block of floats from a vsl_b_istream
 // This function is very speed efficient.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_read_block(vsl_b_istream &is, float* begin, unsigned nelems)
 {
   is.is().read((char*) begin, (unsigned long)(nelems*sizeof(float)));
@@ -650,6 +673,10 @@ inline void vsl_b_read_block(vsl_b_istream &is, float* begin, unsigned nelems)
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_write_block(vsl_b_ostream &os, const signed int* begin, unsigned nelems)
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed int)) * nelems];
@@ -665,6 +692,10 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const signed int* begin, unsign
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_read_block(vsl_b_istream &is, signed int* begin, unsigned nelems)
 {
   if (!is) return;
@@ -693,6 +724,10 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed int* begin, unsigned nele
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned int* begin, unsigned nelems)
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)) * nelems];
@@ -708,6 +743,10 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned int* begin, unsi
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_read_block(vsl_b_istream &is, unsigned int* begin, unsigned nelems)
 {
   unsigned long nbytes;
@@ -735,6 +774,10 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned int* begin, unsigned ne
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_write_block(vsl_b_ostream &os, const signed short* begin, unsigned nelems)
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed short)) * nelems];
@@ -750,6 +793,10 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const signed short* begin, unsi
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_read_block(vsl_b_istream &is, signed short* begin, unsigned nelems)
 {
   unsigned long nbytes;
@@ -777,6 +824,10 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed short* begin, unsigned ne
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned short* begin, unsigned nelems)
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * nelems];
@@ -792,6 +843,10 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned short* begin, un
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_read_block(vsl_b_istream &is, unsigned short* begin, unsigned nelems)
 {
   unsigned long nbytes;
@@ -819,6 +874,10 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned short* begin, unsigned 
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_write_block(vsl_b_ostream &os, const signed long* begin, unsigned nelems)
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed long)) * nelems];
@@ -834,6 +893,10 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const signed long* begin, unsig
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_read_block(vsl_b_istream &is, signed long* begin, unsigned nelems)
 {
   unsigned long nbytes;
@@ -861,6 +924,10 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed long* begin, unsigned nel
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned long* begin, unsigned nelems)
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * nelems];
@@ -876,6 +943,10 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned long* begin, uns
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+VCL_DEFINE_SPECIALIZATION
+#ifdef VCL_VC60
+static
+#endif
 inline void vsl_b_read_block(vsl_b_istream &is, unsigned long* begin, unsigned nelems)
 {
   unsigned long nbytes;
