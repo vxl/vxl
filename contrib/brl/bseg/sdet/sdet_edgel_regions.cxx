@@ -4,14 +4,11 @@
 // \file
 
 #include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for vcl_abs(int)
-#include <vcl_cassert.h>
 #include <vcl_algorithm.h> // vcl_find()
 #include <vbl/vbl_qsort.h> //for sorting labels
 
 #include <vil/vil_byte.h>
 #include <vil/vil_memory_image_of.h>
-#include <vcl_cmath.h>     // for sqrt()
 #include <vul/vul_timer.h>
 
 #include <vsol/vsol_box_2d.h>
@@ -160,18 +157,16 @@ void sdet_edgel_regions::print_intensity_data()
 //    system to the region label array coordinate system
 unsigned int sdet_edgel_regions::X(unsigned int x)
 {
-  return (x-xo_);
+  return x-xo_;
 }
 
 unsigned int sdet_edgel_regions::Y(unsigned int y)
 {
-  return (y-yo_);
+  return y-yo_;
 }
 
 //---------------------------------------------------------
-//: Transforms the image x coordinate to the array coordinate
-
-//  with a scale factor
+//: Transforms the image x coordinate to the array coordinate with a scale factor
 float sdet_edgel_regions::Xf(float x)
 {
   float xu = (x-xo_)*s_;
@@ -179,7 +174,7 @@ float sdet_edgel_regions::Xf(float x)
 }
 
 //---------------------------------------------------------
-//: 
+//:
 float sdet_edgel_regions::Yf(float y)
 {
   float yu = (y-yo_)*s_;
@@ -299,7 +294,7 @@ compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
   if (debug_)
     this->print_base_equivalence();
   this->ApplyRegionEquivalence();
-  if(debug_)
+  if (debug_)
     vcl_cout << "After Label Equivalence\n";
   if (debug_)
     this->print_region_array();
@@ -311,7 +306,7 @@ compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
 
   //Collect Edge(s) bounding each region
   this->CollectEdges();
-  if(verbose_)
+  if (verbose_)
     vcl_cout << "Propagate Regions and Collect Edges("
              <<  max_region_label_-min_region_label_ << ") in "
              << t.real() << " msecs.\n"<< vcl_flush;
@@ -335,7 +330,7 @@ compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
        fit != faces_->end(); fit++)
     faces.push_back(*fit);
 
-  if(verbose_)
+  if (verbose_)
   vcl_cout << "Compute Edgel Regions Total(" << faces_->size() << ") in "
            << t.real() << " msecs.\n"<< vcl_flush;
   return true;
@@ -641,7 +636,7 @@ bool sdet_edgel_regions::insert_edgel(float pre_x, float pre_y,
       region_label_array_[yinterp][xinterp] = EDGE;
 
       if (!re) continue;
-      sdet_region_edge_sptr const& old_re = 
+      sdet_region_edge_sptr const& old_re =
         edge_boundary_array_[yinterp][xinterp];
       if (old_re&&old_re->get_edge())
         {
@@ -688,7 +683,7 @@ bool sdet_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
 
   xend_ = (unsigned int)b.get_max_x();
   yend_ = (unsigned int)b.get_max_y();
-  
+
   xs_ = (this->GetXSize()-1)*s_+1;
   ys_ = (this->GetYSize()-1)*s_+1;
 
@@ -1158,9 +1153,9 @@ void sdet_edgel_regions::UpdateConnectedNeighborhood(unsigned int x, unsigned in
       {
       vcl_cout << "In sdet_edgel_regions::UpdateNeigborhood(..)"
                << "impossible pattern(" << x << " " << y << ") = " << (int)nhood << vcl_endl;
-        vcl_cout << int(label_code(ul)) << " " << int(label_code(ur)) 
+        vcl_cout << int(label_code(ul)) << " " << int(label_code(ur))
                  <<  "\n";
-        vcl_cout << int(label_code(ll)) << " " << int(label_code(lr)) 
+        vcl_cout << int(label_code(ll)) << " " << int(label_code(lr))
                  <<  "\n\n";
       }
 
@@ -1184,7 +1179,7 @@ static bool reg_edges_neq(sdet_region_edge_sptr const& r1,
 //edge to be superseeded.
 void sdet_edgel_regions::print_edge_colis(unsigned int x, unsigned int y,
                                           sdet_region_edge_sptr const& r1,
-										  sdet_region_edge_sptr const& r2)
+                                          sdet_region_edge_sptr const& r2)
 {
   if (reg_edges_neq(r1, r2))
     if (debug_)
@@ -1450,9 +1445,9 @@ void sdet_edgel_regions::AssignEdgeLabels(unsigned int x, unsigned int y)
       {
         vcl_cout << "In sdet_edgel_regions::UpdateNeigborhood(..)"
                  << "impossible pattern = " << (int)nhood << vcl_endl;
-        vcl_cout << int(label_code(rul)) << " " << int(label_code(rur)) 
+        vcl_cout << int(label_code(rul)) << " " << int(label_code(rur))
                  <<  "\n";
-        vcl_cout << int(label_code(rll)) << " " << int(label_code(rlr)) 
+        vcl_cout << int(label_code(rll)) << " " << int(label_code(rlr))
                  <<  "\n\n";
       }
     }
@@ -1521,7 +1516,7 @@ void sdet_edgel_regions::insert_adjacency(unsigned int r, vtol_edge_2d_sptr e)
 //
 void sdet_edgel_regions::CollectEdges()
 {
-  if(debug_)
+  if (debug_)
     vcl_cout << "region_edges size in CollectEdges = " << region_edges_.size()<< vcl_endl;
   for ( vcl_map<int, sdet_region_edge_sptr >::iterator reit= region_edges_.begin();
         reit != region_edges_.end(); reit++)
@@ -1552,7 +1547,7 @@ void sdet_edgel_regions::CollectFaceEdges()
 {
   vul_timer t;
   unsigned int i;
-  if(debug_)
+  if (debug_)
     vcl_cout<<"Constructing Face-Edges:";
 
   face_edge_index_ = new vcl_vector<vtol_edge_2d_sptr>*[max_region_label_];
@@ -1586,7 +1581,7 @@ void sdet_edgel_regions::CollectFaceEdges()
                     vcl_cout << *(*vit);
                   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit =
                          edges->begin(); eit != edges->end(); eit++)
-                    vcl_cout << "\n Bad Edge(\n" << *((*eit)->v1()) 
+                    vcl_cout << "\n Bad Edge(\n" << *((*eit)->v1())
                              << *((*eit)->v2()) <<")\n";
                 }
 #if 0
@@ -1596,7 +1591,6 @@ void sdet_edgel_regions::CollectFaceEdges()
                   debug_data_->set_edges(*edges);
                 }
 #endif
-            
           }
       if (debug_)
         vcl_cout << " Building Region [" << i << "]\n";
@@ -1617,9 +1611,9 @@ void sdet_edgel_regions::CollectFaceEdges()
       face_edge_index_[i] = edge_list;
     }
 
-  if(debug_)
+  if (debug_)
     vcl_cout << vcl_endl;
-  if(verbose_)
+  if (verbose_)
   vcl_cout << "Constructed Face-Edges(" << max_region_label_ - min_region_label_
            << ") in " << t.real() << " msecs.\n";
 }
@@ -1632,7 +1626,7 @@ void sdet_edgel_regions::ConstructFaces()
 {
   vul_timer t;
   unsigned int i;
-  if(verbose_)
+  if (verbose_)
     vcl_cout<<"Constructing Faces:";
   int n_bad = 0;
   //Initialize the intensity_face_index_
@@ -1671,13 +1665,11 @@ void sdet_edgel_regions::ConstructFaces()
         n_bad++;
       delete face_edges;
     }
-  if(verbose_)
-    {
-      vcl_cout << "\nConstructed Faces(" 
-               << max_region_label_ - min_region_label_
-               << ") in " << t.real() << " msecs.\n";
-      vcl_cout << n_bad << " faces did not pass construction\n" << vcl_flush;
-  }
+  if (verbose_)
+    vcl_cout << "\nConstructed Faces("
+             << max_region_label_ - min_region_label_
+             << ") in " << t.real() << " msecs.\n"
+             << n_bad << " faces did not pass construction\n" << vcl_flush;
 }
 
 //--------------------------------------------------------------
@@ -1749,8 +1741,7 @@ unsigned short sdet_edgel_regions::get_intensity(unsigned int x)
 }
 
 //---------------------------------------------------------------------
-//: Accumulate intensity statistics from each region and update the 
-//  vdgl_intensity_face parameters
+//: Accumulate intensity statistics from each region and update the vdgl_intensity_face parameters
 void sdet_edgel_regions::AccumulateMeans()
 {
   vul_timer t;
@@ -1789,7 +1780,7 @@ void sdet_edgel_regions::AccumulateMeans()
       intensity_face_index_[i]=NULL;
 
   int Nregions = max_region_label_ - min_region_label_;
-  if(verbose_)
+  if (verbose_)
     vcl_cout << "Accumulate Region Means(" << Nregions << ") in "
              << t.real() << " msecs.\n"
              << "Normalized Time = " << (10000.0*t.real())/Npixels << vcl_endl;
@@ -1828,8 +1819,8 @@ void sdet_edgel_regions::AccumulateRegionData()
             }
         }
     }
-  if(verbose_)
-    vcl_cout << "Accumulate Region Data(" 
+  if (verbose_)
+    vcl_cout << "Accumulate Region Data("
              << max_region_label_ - min_region_label_
              << ") in " << t.real() << " msecs.\n";
 }
