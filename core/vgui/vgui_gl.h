@@ -22,7 +22,10 @@ void mb_glDrawBufferWrapper(GLuint);
 #endif
 
 #if (defined(MESA) || defined(GL_MESA_window_pos) || defined(GL_MESA_resize_buffers))
-#  define VGUI_MESA 1
+// xmesa.h is not distributed with Cygwin
+#  ifndef __CYGWIN__
+#    define VGUI_MESA 1
+#  endif
 #endif
 
 // capes - Some defines for OpenGL < v1.2 implementations
