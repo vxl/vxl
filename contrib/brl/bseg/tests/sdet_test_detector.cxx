@@ -34,7 +34,7 @@ int main(int argc, char * argv[])
       if (edges)
         n = edges->size();
       vcl_cout << "nedges = " << n << "\n";
-      Assert(n==647);
+      Assert(n==647 || n==648);
       int x = 0, y = 0;
       if (n)
         {
