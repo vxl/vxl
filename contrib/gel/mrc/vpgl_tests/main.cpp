@@ -54,13 +54,13 @@ int main(int argc, char ** argv)
   vcl_vector<double> parameters;
   vpgl_perspective_camera pers;
   parameters = pers.get_params();
-  parameters[XL] = 10;
-  parameters[YL] =  5;
-  parameters[ZL] =  8;
+  parameters[vpgl_perspective_camera::XL] = 10;
+  parameters[vpgl_perspective_camera::YL] =  5;
+  parameters[vpgl_perspective_camera::ZL] =  8;
 
-  parameters[omega] = vnl_math::pi/2;
-  parameters[phi] =   0;
-  parameters[kappa] = 0;
+  parameters[vpgl_perspective_camera::omega] = vnl_math::pi/2;
+  parameters[vpgl_perspective_camera::phi] =   0;
+  parameters[vpgl_perspective_camera::kappa] = 0;
 
   pers.set_params(parameters);
 
