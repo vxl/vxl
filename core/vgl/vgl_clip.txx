@@ -171,6 +171,7 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
 #define VGL_CLIP_INSTANTIATE(T) \
 template vgl_polygon<T > vgl_clip(vgl_polygon<T >const&,vgl_polygon<T >const&,vgl_clip_type); \
 template bool vgl_clip_lineseg_to_line(T&,T&,T&,T&,T,T,T); \
-template bool vgl_clip_line_to_box(T,T,T,T,T,T,T,T&,T&,T&,T&)
+template bool vgl_clip_line_to_box(T,T,T,T,T,T,T,T&,T&,T&,T&); \
+template vgl_line_segment_2d<T > vgl_clip_line_to_box(vgl_line_2d<T >const&,vgl_box_2d<T >const&)
 
 #endif // vgl_clip_txx_
