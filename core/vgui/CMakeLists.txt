@@ -284,7 +284,7 @@ IF (QT_WRAP_CPP)
     SET( vgui_sources ${vgui_sources} ${vgui_qt_sources} ${vgui_qt_moc_files} )
 
     IF(CMAKE_COMPILER_IS_GNUCXX)
-      SET_SOURCE_FILES_PROPERTIES(moc_vgui_qt_adaptor.cxx COMPILE_FLAGS -O0)
+      SET_SOURCE_FILES_PROPERTIES(${vxl_BINARY_DIR}/core/vgui/moc_vgui_qt_adaptor.cxx COMPILE_FLAGS -O0)
     ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
   ENDIF(VGUI_USE_QT)
