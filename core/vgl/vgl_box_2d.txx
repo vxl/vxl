@@ -3,15 +3,11 @@
 #define vgl_box_2d_txx_
 //:
 // \file
-// \brief Represents a cartesian 2D box.
-// \author Don Hamilton, Peter Tu
-// \date   Feb 15 2000
 
 #include "vgl_box_2d.h"
 #include <vgl/vgl_point_2d.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
-#include <vcl_deprecated.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 
@@ -25,38 +21,34 @@ vgl_box_2d<Type>::vgl_box_2d()
 }
 
 template <class Type>
-vgl_box_2d<Type>::vgl_box_2d(const Type min_position[2],
-                             const Type max_position[2])
+vgl_box_2d<Type>::vgl_box_2d(Type const min_pos[2],
+                             Type const max_pos[2])
 {
-  min_pos_[0]=min_position[0];
-  min_pos_[1]=min_position[1];
-  max_pos_[0]=max_position[0];
-  max_pos_[1]=max_position[1];
+  min_pos_[0]=max_pos_[0]=min_pos[0];
+  min_pos_[1]=max_pos_[1]=min_pos[1];
+  this->add(max_pos);
 }
 
 template <class Type>
-vgl_box_2d<Type>::vgl_box_2d(const vgl_point_2d<Type>& min_position,
-                             const vgl_point_2d<Type>& max_position)
+vgl_box_2d<Type>::vgl_box_2d(vgl_point_2d<Type> const& min_pos,
+                             vgl_point_2d<Type> const& max_pos)
 {
-  min_pos_[0]=min_position.x();
-  min_pos_[1]=min_position.y();
-  max_pos_[0]=max_position.x();
-  max_pos_[1]=max_position.y();
+  min_pos_[0]=max_pos_[0]=min_pos.x();
+  min_pos_[1]=max_pos_[1]=min_pos.y();
+  this->add(max_pos);
 }
 
 template <class Type>
 vgl_box_2d<Type>::vgl_box_2d(Type xmin, Type xmax, Type ymin, Type ymax)
 {
-  min_pos_[0]=xmin;
-  min_pos_[1]=ymin;
-  max_pos_[0]=xmax;
-  max_pos_[1]=ymax;
+  min_pos_[0]=max_pos_[0]=xmin;
+  min_pos_[1]=max_pos_[1]=ymin;
+  this->add(vgl_point_2d<Type>(xmax,ymax));
 }
 
 template <class Type>
-vgl_box_2d<Type>::vgl_box_2d(const Type ref_point[2],
+vgl_box_2d<Type>::vgl_box_2d(Type const ref_point[2],
                              Type width, Type height,
-//                           vgl_box_2d<Type>::point_type t) // fails for C++.NET 2003
                              enum point_type t) // enum necessary for C++.NET 2003
 {
   if (t == vgl_box_2d<Type>::centre)
@@ -85,18 +77,7 @@ vgl_box_2d<Type>::vgl_box_2d(const Type ref_point[2],
 }
 
 template <class Type>
-vgl_box_2d<Type>::vgl_box_2d(const Type minpoint[2],
-                             Type width, Type height)
-{
-  VXL_DEPRECATED("vgl_box_2d constructor from min_pos; you should use an explicit 4th argument");
-  min_pos_[0]=minpoint[0];
-  min_pos_[1]=minpoint[1];
-  max_pos_[0]=minpoint[0]+width;
-  max_pos_[1]=minpoint[1]+height;
-}
-
-template <class Type>
-vgl_box_2d<Type>::vgl_box_2d(const vgl_point_2d<Type>& ref_point,
+vgl_box_2d<Type>::vgl_box_2d(vgl_point_2d<Type> const& ref_point,
                              Type width, Type height,
                              point_type t)
 {
@@ -126,25 +107,16 @@ vgl_box_2d<Type>::vgl_box_2d(const vgl_point_2d<Type>& ref_point,
 }
 
 template <class Type>
-vgl_box_2d<Type>::vgl_box_2d(const vgl_point_2d<Type>& minpoint,
-                             Type width, Type height)
-{
-  VXL_DEPRECATED("vgl_box_2d constructor from min_pos; you should use an explicit 4th argument");
-  min_pos_[0]=minpoint.x();
-  min_pos_[1]=minpoint.y();
-  max_pos_[0]=minpoint.x()+width;
-  max_pos_[1]=minpoint.y()+height;
-}
-
-template <class Type>
 Type vgl_box_2d<Type>::centroid_x() const
 {
+  assert(!is_empty());
   return Type(0.5*(min_pos_[0] + max_pos_[0]));
 }
 
 template <class Type>
 Type vgl_box_2d<Type>::centroid_y() const
 {
+  assert(!is_empty());
   return Type(0.5*(min_pos_[1] + max_pos_[1]));
 }
 
@@ -163,24 +135,28 @@ Type vgl_box_2d<Type>::height() const
 template <class Type>
 vgl_point_2d<Type> vgl_box_2d<Type>::min_point() const
 {
+  assert(!is_empty());
   return vgl_point_2d<Type>(min_pos_[0],min_pos_[1]);
 }
 
 template <class Type>
 vgl_point_2d<Type> vgl_box_2d<Type>::max_point() const
 {
+  assert(!is_empty());
   return vgl_point_2d<Type>(max_pos_[0],max_pos_[1]);
 }
 
 template <class Type>
 vgl_point_2d<Type> vgl_box_2d<Type>::centroid() const
 {
+  assert(!is_empty());
   return vgl_point_2d<Type>(centroid_x(),centroid_y());
 }
 
 template <class Type>
 void vgl_box_2d<Type>::set_centroid_x(Type cent_x)
 {
+  assert(!is_empty());
   Type delta = cent_x - centroid_x();
   min_pos_[0]= min_pos_[0] + delta;
   max_pos_[0]= max_pos_[0] + delta;
@@ -189,6 +165,7 @@ void vgl_box_2d<Type>::set_centroid_x(Type cent_x)
 template <class Type>
 void vgl_box_2d<Type>::set_centroid_y(Type cent_y)
 {
+  assert(!is_empty());
   Type delta = cent_y - centroid_y();
   min_pos_[1]= min_pos_[1] + delta;
   max_pos_[1]= max_pos_[1] + delta;
@@ -200,14 +177,13 @@ inline void set_dim(T & minv, T& maxv, T spread);
 
 
 // All this code is to avoid drift in the centroid.
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 inline void set_dim(int & minv, int& maxv, int spread)
 {
   int sum = minv + maxv;
   sum = sum | (spread&1); //if width is odd, then make sum odd
   minv = int(vcl_floor((sum-spread)/2.0));
   maxv = minv+spread;
-
 }
 
 template <class T>
@@ -224,6 +200,7 @@ inline void set_dim(T & minv, T& maxv, T spread)
 template <class Type>
 void vgl_box_2d<Type>::set_width(Type width)
 {
+  assert(!is_empty());
   set_dim(min_pos_[0], max_pos_[0], width);
 }
 
@@ -234,6 +211,7 @@ void vgl_box_2d<Type>::set_width(Type width)
 template <class Type>
 void vgl_box_2d<Type>::set_height(Type height)
 {
+  assert(!is_empty());
   set_dim(min_pos_[1], max_pos_[1], height);
 }
 
@@ -277,20 +255,6 @@ void vgl_box_2d<Type>::set_max_point(vgl_point_2d<Type> const& max_pt)
 }
 
 template <class Type>
-void vgl_box_2d<Type>::set_centroid(Type const centroid[2])
-{
-  set_centroid_x(centroid[0]);
-  set_centroid_y(centroid[1]);
-}
-
-template <class Type>
-void vgl_box_2d<Type>::set_centroid(vgl_point_2d<Type> const& centroid)
-{
-  set_centroid_x(centroid.x());
-  set_centroid_y(centroid.y());
-}
-
-template <class Type>
 vcl_ostream& vgl_box_2d<Type>::print(vcl_ostream& s) const
 {
   if (is_empty())
@@ -323,10 +287,10 @@ vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
   Type x1 = vcl_min(a.max_x(), b.max_x());
   Type y1 = vcl_min(a.max_y(), b.max_y());
 
-  if (x1 > x0 && y1 > y0)
-    return vgl_box_2d<Type> (x0, x1, y0, y1);
+  if (x1 >= x0 && y1 >= y0)
+    return vgl_box_2d<Type>(x0, x1, y0, y1);
   else
-    return vgl_box_2d<Type> (1,0,1,0);
+    return vgl_box_2d<Type>(); // empty box
 }
 
 //: Add a point to this box.
@@ -387,7 +351,7 @@ void vgl_box_2d<Type>::empty()
 
 //: Print to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_box_2d<Type>& p) {
+vcl_ostream&  operator<<(vcl_ostream& s, vgl_box_2d<Type> const& p) {
   return p.print(s);
 }
 
@@ -397,22 +361,13 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_box_2d<Type>& p) {
   return p.read(is);
 }
 
-//: Return box which bounds p1 and p2 (ie p1,p2 are any two of the corners)
-template <class Type>
-vgl_box_2d<Type> vgl_bounding_box_2d(const vgl_point_2d<Type>& p1,
-                                     const vgl_point_2d<Type>& p2)
-{
-  return vgl_box_2d<Type>(vcl_min(p1.x(),p2.x()), vcl_max(p1.x(),p2.x()),
-                          vcl_min(p1.y(),p2.y()), vcl_max(p1.y(),p2.y()) );
-}
-
 #undef VGL_BOX_2D_INSTANTIATE
 #define VGL_BOX_2D_INSTANTIATE(Type) \
 template class vgl_box_2d<Type >;\
 template vcl_istream& operator>>(vcl_istream&, vgl_box_2d<Type >&);\
 template vcl_ostream& operator<<(vcl_ostream&, vgl_box_2d<Type > const&);\
 template vgl_box_2d<Type > intersect(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&);\
-template vgl_box_2d<Type > vgl_bounding_box_2d(const vgl_point_2d<Type >& p1,\
-                                               const vgl_point_2d<Type >& p2)
+template vgl_box_2d<Type > vgl_bounding_box_2d(vgl_point_2d<Type > const& p1,\
+                                               vgl_point_2d<Type > const& p2)
 
 #endif // vgl_box_2d_txx_
