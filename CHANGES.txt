@@ -1,0 +1,13 @@
+
+
+	Support for MSVC 7
+	Replaced "vil". The old "vil" is now called "vil1". "vil2" has been renamed to "vil".
+		See the vil chapter in the vxl book for details.
+	vnl_matrix_fixed and vnl_vector_fixed upgraded to be fully space efficient.
+	Many hundreds of small bug fixes and improved functionality in the core and contributed libraries.
+
+vxl beta2
+
+	CMake is now the default build system.
+
+vxl beta1
