@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_memory_image_of.txx
+// This is core/vil/vil_memory_image_of.txx
 #ifndef vil_memory_image_of_txx_
 #define vil_memory_image_of_txx_
 
@@ -95,7 +95,7 @@ template <class  T>
 void vil_memory_image_of<T>::resize(int planes, int width, int height)
 {
   assert(ptr);
-  vil_memory_image::resize(width, height);
+  vil_memory_image::resize(planes, width, height);
 }
 
 template <class T>
