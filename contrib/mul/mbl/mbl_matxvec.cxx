@@ -1,8 +1,8 @@
 //:
 // \file
+// \brief Various specialised versions of simple linear algebra operators.
 // \author Tim Cootes
 // \date 3-Oct-97
-// \brief Various specialised versions of simple linear algebra operators.
 // Most of the specialisations are to do with size priorities. If the sizes
 // do not match for normal linear algebra operations, these functions will
 // for example, only use the first n elements of an >n input vector
