@@ -39,6 +39,7 @@ SOURCES += r_cnjg.c
 SOURCES += pow_ii.c
 SOURCES += pow_ri.c
 SOURCES += pow_di.c
+SOURCES += pow_dd.c
 
 # BLAS 
 SOURCES += izamax.c
@@ -157,6 +158,7 @@ SOURCES += camsun.c
 
 # from LASO2
 SOURCES += dnlaso.c
+SOURCES += snlaso.c
 
 # from OPT
 SOURCES += lbfgs.c
