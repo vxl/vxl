@@ -29,10 +29,10 @@ inline void vsl_block_binary_read_confirm_specialisation(vsl_b_istream &is,
     vcl_cerr << "I/O ERROR: vsl_block_binary_read()";
     if (specialised)
       vcl_cerr << "\n           Data was saved using unspecialised slow form and "
-               << "is being loaded\n           using specialised fast form.\n\n"
+               << "is being loaded\n           using specialised fast form.\n\n";
     else
       vcl_cerr << "\n           Data was saved using specialised fast form and "
-               << "is being loaded\n           using unspecialised slow form.\n\n"
+               << "is being loaded\n           using unspecialised slow form.\n\n";
 
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
