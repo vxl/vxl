@@ -18,9 +18,6 @@ MINI_PROG_SOURCES += basic09_mouse_position.cxx
 MINI_PROG_SOURCES += basic10_draw_line.cxx
 MINI_PROG_SOURCES += basic10a_rubberband.cxx
 MINI_PROG_SOURCES += basic11_display_3d.cxx
-MINI_PROG_SOURCES += gtk1_display_image.cxx
-MINI_PROG_SOURCES += gtk2_movie_player.cxx
-MINI_PROG_SOURCES += gtk3_vidl.cxx
 MINI_PROG_SOURCES += example_blender_tableau.cxx
 MINI_PROG_SOURCES += example_display_pyramid.cxx
 MINI_PROG_SOURCES += example_draw_polygon.cxx
@@ -48,6 +45,12 @@ include ${IUEROOT}/config/top-params.mk
 ifdef HAS_GLUT
 MINI_PROG_SOURCES += glut1_raw.cxx
 MINI_PROG_SOURCES += glut2_raw.cxx
+endif
+ifeq ($(HAS_GTKGLAREA),1)
+INCDIRS += $(GTKGLAREA_INC_DIR) $(GTK_INC_DIRS)
+MINI_PROG_SOURCES += gtk1_display_image.cxx
+MINI_PROG_SOURCES += gtk2_movie_player.cxx
+MINI_PROG_SOURCES += gtk3_vidl.cxx
 endif
 
 ######################################
