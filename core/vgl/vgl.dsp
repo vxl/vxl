@@ -475,6 +475,16 @@ SOURCE=.\Templates/vcl_list+vgl_point_2d+double--.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vgl_homg_1d+double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vgl_homg_1d+float-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vgl_ellipse_scan_iterator.cxx
 
 # End Source File
