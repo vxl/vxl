@@ -14,12 +14,12 @@ void test_data_wrapper_pair_mixer(unsigned n1, unsigned n2)
 
   for (unsigned i=0;i<n1;++i)
   {
-    data1[i].resize(1);
+    data1[i].set_size(1);
     data1[i][0] = i;
   }
   for (unsigned i=0;i<n2;++i)
   {
-    data2[i].resize(1);
+    data2[i].set_size(1);
     data2[i][0] = i+n1;
   }
 
@@ -59,7 +59,7 @@ void test_data_wrapper_mixer()
 
   test_data_wrapper_pair_mixer(3,7);
   test_data_wrapper_pair_mixer(1,7);
-  vcl_cout<<"Testing empty data"<<vcl_endl;
+  vcl_cout<<"Testing empty data\n";
   test_data_wrapper_pair_mixer(5,0);
   test_data_wrapper_pair_mixer(0,5);
 }

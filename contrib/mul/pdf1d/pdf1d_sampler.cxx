@@ -68,7 +68,7 @@ void pdf1d_sampler::regular_samples_and_prob(vnl_vector<double>& x, vnl_vector<d
 {
   regular_samples(x);
   int n = x.size();
-  p.resize(n);
+  p.set_size(n);
   double* p_data = p.data_block();
   double* x_data = x.data_block();
 

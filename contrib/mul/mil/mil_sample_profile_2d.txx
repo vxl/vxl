@@ -73,7 +73,7 @@ void mil_sample_profile_2d_safe(vnl_vector<vecType>& vec,
   int xstep = image.xstep();
   int ystep = image.ystep();
 
-  vec.resize(n*np);
+  vec.set_size(n*np);
   vecType* v = vec.begin();
 
   vgl_point_2d<double> p = p0;
@@ -120,7 +120,7 @@ void mil_sample_profile_2d_no_checks(vnl_vector<vecType>& vec,
   int xstep = image.xstep();
   int ystep = image.ystep();
 
-  vec.resize(n*np);
+  vec.set_size(n*np);
   vecType* v = vec.begin();
 
   vgl_point_2d<double> p = p0;
@@ -171,7 +171,7 @@ void mil_sample_profile_2d_ic_safe(vnl_vector<vecType>& vec,
   int nx = image.nx();
   int ny = image.ny();
 
-  vec.resize(n*np);
+  vec.set_size(n*np);
   vecType* v = vec.begin();
 
   vgl_point_2d<double> p = p0;
@@ -225,7 +225,7 @@ void mil_sample_profile_2d_ic(vnl_vector<vecType>& vec,
   int xstep = image.xstep();
   int ystep = image.ystep();
 
-  vec.resize(n*np);
+  vec.set_size(n*np);
   vecType* v = vec.begin();
 
   vgl_point_2d<double> p = p0;

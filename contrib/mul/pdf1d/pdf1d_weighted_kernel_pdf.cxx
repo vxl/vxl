@@ -51,7 +51,7 @@ void pdf1d_weighted_kernel_pdf::pdf1d_weighted_kernel_mean_var(double& mean, dou
 void pdf1d_weighted_kernel_pdf::set_centres(const vnl_vector<double>& x, double width)
 {
   pdf1d_kernel_pdf::set_centres(x, width);
-  weight_.resize(x.size());
+  weight_.set_size(x.size());
   weight_.fill(1.0);
   sum_weights_ = x.size();
 }
@@ -61,7 +61,7 @@ void pdf1d_weighted_kernel_pdf::set_centres(const vnl_vector<double>& x,
                                             const vnl_vector<double>& width)
 {
   pdf1d_kernel_pdf::set_centres(x, width);
-  weight_.resize(x.size());
+  weight_.set_size(x.size());
   weight_.fill(1.0);
   sum_weights_ = x.size();
 }
@@ -158,7 +158,7 @@ void pdf1d_weighted_kernel_pdf::b_read(vsl_b_istream& bfs)
     break;
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_weighted_kernel_pdf&) \n"
-             << "           Unknown version number "<< version << "\n";
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

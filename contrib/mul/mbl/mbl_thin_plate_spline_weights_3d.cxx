@@ -31,7 +31,6 @@ mbl_thin_plate_spline_weights_3d::mbl_thin_plate_spline_weights_3d()
     energy_x_(0),energy_y_(0),energy_z_(0),
     src_pts_(0), pt_wts_(0)
 {
-
 }
 
 //=======================================================================
@@ -46,21 +45,21 @@ mbl_thin_plate_spline_weights_3d::~mbl_thin_plate_spline_weights_3d()
 
 inline double r2lnr( const vgl_vector_3d<double>&  pt, const vgl_point_3d<double> & wt )
 {
-  double r2 = ( pt.x() * pt.x() * wt.x() ) + 
-              ( pt.y() * pt.y() * wt.y() ) + 
+  double r2 = ( pt.x() * pt.x() * wt.x() ) +
+              ( pt.y() * pt.y() * wt.y() ) +
               ( pt.z() * pt.z() * wt.z() );
-  if (r2>1e-8)   
+  if (r2>1e-8)
     return 0.5 * r2 * vcl_log(r2);
-  else     
+  else
     return 0;
 }
 
 inline double r2lnr(double x, double y, double z, double wx, double wy, double wz)
 {
   double r2 = (x * x * wx) + (y * y * wy) + (z * z * wz);
-  if (r2>1e-8) 
+  if (r2>1e-8)
     return 0.5 * r2 * vcl_log(r2);
-  else      
+  else
     return 0;
 }
 
@@ -72,7 +71,7 @@ static void build_K_part( vnl_matrix<double>& L,
                           const vcl_vector<vgl_point_3d<double> >& wts)
 {
   unsigned int n = pts.size();
-  if ( (L.rows()!=n+4) | (L.columns()!=n+4) ) L.resize(n+4,n+4);
+  if ( (L.rows()!=n+4) | (L.columns()!=n+4) ) L.set_size(n+4,n+4);
 
   const vgl_point_3d<double> * pts_data = &pts[0];
   double** K_data = L.data_array();
@@ -88,11 +87,11 @@ static void build_K_part( vnl_matrix<double>& L,
       vgl_point_3d<double> temp_wt;
       if ( j < wts.size() )
       {
-        temp_wt.set( wts[j].x(), wts[j].y(), wts[j].z() );    
+        temp_wt.set( wts[j].x(), wts[j].y(), wts[j].z() );
       }
       else
       {
-        temp_wt.set( 1., 1., 1. ); 
+        temp_wt.set( 1., 1., 1. );
       }
 
       K_data[i][j] = r2lnr( pts_data[i]-pts_data[j], temp_wt );
@@ -106,8 +105,8 @@ static void build_K_part( vnl_matrix<double>& L,
 // and Q is ( 1 x0 y0 z0)
 //          ( 1 x1 y1 z1)
 //             . .  .
-static void build_L( vnl_matrix<double>& L, 
-                     const vcl_vector<vgl_point_3d<double> >& pts, 
+static void build_L( vnl_matrix<double>& L,
+                     const vcl_vector<vgl_point_3d<double> >& pts,
                      const vcl_vector<vgl_point_3d<double> >& wts)
 {
   int i,j;
@@ -146,7 +145,7 @@ void mbl_thin_plate_spline_weights_3d::build_pure_affine(
         const vcl_vector<vgl_point_3d<double> >& dest_pts)
 {
   int n=source_pts.size();
-  L_inv_.resize(0,0);
+  L_inv_.set_size(0,0);
   if (n==0)
   {
     // Set identity transformation
@@ -157,9 +156,9 @@ void mbl_thin_plate_spline_weights_3d::build_pure_affine(
     AyX_ = 0; AyY_ = 1; AyZ_ = 0;
     AzX_ = 0; AzY_ = 0; AzZ_ = 1;
 
-    Wx_.resize(0);
-    Wy_.resize(0);
-    Wz_.resize(0);
+    Wx_.set_size(0);
+    Wy_.set_size(0);
+    Wz_.set_size(0);
 
     src_pts_.resize(0);
 
@@ -172,9 +171,9 @@ void mbl_thin_plate_spline_weights_3d::build_pure_affine(
     Ax0_ = dest_pts[0].x() - source_pts[0].x();
     Ay0_ = dest_pts[0].y() - source_pts[0].y();
     Az0_ = dest_pts[0].z() - source_pts[0].z();
-    Wx_.resize(0);
-    Wy_.resize(0);
-    Wz_.resize(0);
+    Wx_.set_size(0);
+    Wy_.set_size(0);
+    Wz_.set_size(0);
     AxX_ = 1; AxY_ = 0; AxZ_ = 0;
     AyX_ = 0; AyY_ = 1; AyZ_ = 0;
     AzX_ = 0; AzY_ = 0; AzZ_ = 1;
@@ -184,7 +183,7 @@ void mbl_thin_plate_spline_weights_3d::build_pure_affine(
   }
   if (n>=2)
   {
-    vcl_cerr<<"mbl_thin_plate_spline_weights_3d::build_pure_affine() Incomplete. sorry."<<vcl_endl;
+    vcl_cerr<<"mbl_thin_plate_spline_weights_3d::build_pure_affine() Incomplete. sorry.\n";
     vcl_abort();
   }
 }
@@ -196,9 +195,9 @@ void mbl_thin_plate_spline_weights_3d::set_params(const vnl_vector<double>& W1,
 {
   int n = W1.size()-4;
 
-  if (int(Wx_.size()) < n) Wx_.resize(n);
-  if (int(Wy_.size()) < n) Wy_.resize(n);
-  if (int(Wz_.size()) < n) Wz_.resize(n);
+  if (int(Wx_.size()) < n) Wx_.set_size(n);
+  if (int(Wy_.size()) < n) Wy_.set_size(n);
+  if (int(Wz_.size()) < n) Wz_.set_size(n);
 
   double *Wx_data=Wx_.data_block();
   double *Wy_data=Wy_.data_block();
@@ -268,9 +267,9 @@ void mbl_thin_plate_spline_weights_3d::set_up_rhs(vnl_vector<double>& Bx,
 {
   int n =dest_pts.size();
 
-  Bx.resize(n+4);
-  By.resize(n+4);
-  Bz.resize(n+4);
+  Bx.set_size(n+4);
+  By.set_size(n+4);
+  Bz.set_size(n+4);
   double* Bx_data=Bx.data_block();
   double* By_data=By.data_block();
   double* Bz_data=Bz.data_block();
@@ -303,7 +302,7 @@ void mbl_thin_plate_spline_weights_3d::build(const vcl_vector<vgl_point_3d<doubl
     vcl_abort();
   }
 
-  L_inv_.resize(0,0);
+  L_inv_.set_size(0,0);
 
   if (n<2)  // build_pure_affine only copes with trivial cases at the moment
   {
@@ -347,7 +346,7 @@ void mbl_thin_plate_spline_weights_3d::set_source_pts(const vcl_vector<vgl_point
 
   if (n<2) // build_pure_affine only copes with trivial cases at the moment
   {
-    L_inv_.resize(0,0);
+    L_inv_.set_size(0,0);
     return;
   }
 
@@ -425,11 +424,11 @@ vgl_point_3d<double>  mbl_thin_plate_spline_weights_3d::operator()(double x, dou
   {
     if ( i < pt_wts_.size() )
     {
-      temp_wt.set( pt_wts_[i].x(), pt_wts_[i].y(), pt_wts_[i].z() );    
+      temp_wt.set( pt_wts_[i].x(), pt_wts_[i].y(), pt_wts_[i].z() );
     }
     else
     {
-      temp_wt.set( 1., 1., 1. );    
+      temp_wt.set( 1., 1., 1. );
     }
 
     double Ui = r2lnr(x - pts_data[i].x(), y - pts_data[i].y(), z - pts_data[i].z(), temp_wt.x(), temp_wt.y(), temp_wt.z() );
@@ -459,18 +458,18 @@ short mbl_thin_plate_spline_weights_3d::version_no() const
   // required if data is present in this class
 void mbl_thin_plate_spline_weights_3d::print_summary(vcl_ostream& os) const
 {
-  os<<"\nfx: "<<Ax0_<<" + "<<AxX_<<"*x + "<<AxY_;
-  os<<"*y + "<<AxZ_<<"*z   Nonlinear terms:";
+  os<<"\nfx: "<<Ax0_<<" + "<<AxX_<<"*x + "<<AxY_
+    <<"*y + "<<AxZ_<<"*z   Nonlinear terms:";
   for (unsigned int i=0;i<Wx_.size();++i)
-    os<<" "<<Wx_[i];
-  os<<"\nfy: "<<Ay0_<<" + "<<AyX_<<"*x + "<<AyY_;
-  os<<"*y + "<<AyZ_<<"*z   Nonlinear terms:";
+    os<<' '<<Wx_[i];
+  os<<"\nfy: "<<Ay0_<<" + "<<AyX_<<"*x + "<<AyY_
+    <<"*y + "<<AyZ_<<"*z   Nonlinear terms:";
   for (unsigned int i=0;i<Wy_.size();++i)
-    os<<" "<<Wy_[i];
-  os<<"\nfy: "<<Az0_<<" + "<<AzX_<<"*x + "<<AzY_;
-  os<<"*y + "<<AzZ_<<"*z   Nonlinear terms:";
+    os<<' '<<Wy_[i];
+  os<<"\nfy: "<<Az0_<<" + "<<AzX_<<"*x + "<<AzY_
+    <<"*y + "<<AzZ_<<"*z   Nonlinear terms:";
   for (unsigned int i=0;i<Wz_.size();++i)
-    os<<" "<<Wz_[i];
+    os<<' '<<Wz_[i];
   os<<'\n';
 }
 

@@ -74,7 +74,7 @@ void mbl_lda::updateCovar(vnl_matrix<double>& S, const vnl_vector<double>& V)
   unsigned int n = V.size();
   if (S.rows()!=n)
   {
-    S.resize(n,n);
+    S.set_size(n,n);
     S.fill(0);
   }
 
@@ -113,7 +113,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
                     const vnl_matrix<double>& wS, bool compute_wS)
 {
   // Find range of class indices and count #valid
-  int lo_i=label[0]; // =n causes failure if lo_i is less than n  
+  int lo_i=label[0]; // =n causes failure if lo_i is less than n
   int hi_i=-1;
   int n_valid = 0;
   for (int i=0;i<n;++i)
@@ -173,7 +173,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
 
   // Build between class covariance
   // Zero to start:
-  betweenS_.resize(0,0);
+  betweenS_.set_size(0,0);
 
   for (int i=0;i<n_size;++i)
   {
@@ -185,7 +185,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
 
   if (compute_wS)
   {
-    withinS_.resize(0,0);
+    withinS_.set_size(0,0);
     // Count number of samples used to build matrix
     int n_used=0;
     for (int i=0;i<n;++i)
@@ -232,7 +232,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   int t = n_used_classes-1;
   if (t>m) t=m;
   // Copy first t to basis_
-  basis_.resize(m,t);
+  basis_.set_size(m,t);
 
   double **E = EVecs.data_array();
   double **b = basis_.data_array();
@@ -242,12 +242,12 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
     vcl_memcpy(b[i],E[i],bytes_per_row);
   }
 
-  evals_.resize(t);
+  evals_.set_size(t);
   for (int i=0;i<t;++i)
     evals_[i] = evals[i];
 
   // Compute projection of mean into d space
-  d_m_mean_.resize(t);
+  d_m_mean_.set_size(t);
   mbl_matxvec_prod_vm(mean_class_mean_,basis_,d_m_mean_);
 
   // Project each mean into d-space
@@ -338,7 +338,7 @@ void mbl_lda::build(const vnl_matrix<double>& M, const vcl_vector<int>& label,
 //: Project x into discriminant space
 void mbl_lda::x_to_d(vnl_vector<double>& d, const vnl_vector<double>& x) const
 {
-  d.resize(d_m_mean_.size());
+  d.set_size(d_m_mean_.size());
   mbl_matxvec_prod_vm(x,basis_,d);
   d-=d_m_mean_;
 }

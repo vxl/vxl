@@ -23,7 +23,7 @@ vnl_matrix<double> vimt_transform_2d::matrix() const
 
 void vimt_transform_2d::matrix(vnl_matrix<double>& M) const
 {
-    M.resize(3,3);
+    M.set_size(3,3);
     double**m_data = M.data_array();
     m_data[0][0]=xx_;   m_data[0][1]=xy_;   m_data[0][2]=xt_;
     m_data[1][0]=yx_;   m_data[1][1]=yy_;   m_data[1][2]=yt_;
@@ -36,42 +36,42 @@ void vimt_transform_2d::params(vnl_vector<double>& v) const
     switch (form_)
     {
         case (Identity):
-            v.resize(0);
+            v.set_size(0);
             break;
         case (Translation):
-            v.resize(2);
+            v.set_size(2);
             v(0)=xt_; v(1)=yt_;
             break;
         case (ZoomOnly):
-            v.resize(4);
+            v.set_size(4);
             v(0)=xx_; v(1)=yy_;
             v(2)=xt_; v(3)=yt_;
             break;
         case (RigidBody):
-            v.resize(3);
+            v.set_size(3);
             v(0)=vcl_atan2(xy_,xx_); // Angle
             v(1)=xt_; v(2)=yt_;
             break;
         case (Reflection):
-            v.resize(4);
+            v.set_size(4);
             v_data = v.begin();
             v_data[0]=xx_; v_data[1]=xy_;
             v_data[2]=xt_; v_data[3]=yt_;
             break;
         case (Similarity):
-            v.resize(4);
+            v.set_size(4);
             v_data = v.begin();
             v_data[0]=xx_; v_data[1]=xy_;
             v_data[2]=xt_; v_data[3]=yt_;
             break;
         case (Affine):
-            v.resize(6);
+            v.set_size(6);
             v_data = v.begin();
             v_data[0]=xx_; v_data[1]=xy_; v_data[2]=xt_;
             v_data[3]=yx_; v_data[4]=yy_; v_data[5]=yt_;
             break;
         case (Projective):
-            v.resize(9);
+            v.set_size(9);
             v_data = v.begin();
             v_data[0]=xx_; v_data[1]=xy_; v_data[2]=xt_;
             v_data[3]=yx_; v_data[4]=yy_; v_data[5]=yt_;
@@ -86,8 +86,8 @@ void vimt_transform_2d::params(vnl_vector<double>& v) const
 void vimt_transform_2d::setCheck(int n1,int n2,const char* str) const
 {
     if (n1==n2) return;
-    vcl_cerr<<"vimt_transform_2d::set() "<<n1<<" parameters required for ";
-    vcl_cerr<<str<<". Passed "<<n2<<vcl_endl;
+    vcl_cerr<<"vimt_transform_2d::set() "<<n1<<" parameters required for "
+            <<str<<". Passed "<<n2<<vcl_endl;
     vcl_abort();
 }
 
@@ -293,10 +293,10 @@ void vimt_transform_2d::set_affine(const vnl_matrix<double>& M23)  // 2x3 matrix
 
     const double *const *m_data=M23.data_array();
 
-    if (m_data[0][0]*m_data[1][1] - m_data[0][1]*m_data[1][0] < 0)
+    if (m_data[0][0]*m_data[1][1] < m_data[0][1]*m_data[1][0])
     {
-        vcl_cerr << "vimt_transform_2d::affine : "
-                 << "sub (2x2) matrix should have +ve |det|\n";
+        vcl_cerr << "vimt_transform_2d::affine :\n"
+                 << "sub (2x2) matrix should have positive determinant\n";
         vcl_abort();
     }
 
@@ -447,8 +447,8 @@ void vimt_transform_2d::calcInverse()  const
             double det = xx_*yy_-xy_*yx_;
             if (det==0)
             {
-                  vcl_cerr<<"SM_Transform2D::inverse() : No inverse exists for this affine transform (det==0)\n";
-                  vcl_abort();
+              vcl_cerr<<"SM_Transform2D::inverse() : No inverse exists for this affine transform (det==0)\n";
+              vcl_abort();
             }
             xx2_=yy_/det;   xy2_=-xy_/det;
             yx2_=-yx_/det;   yy2_=xx_/det;
@@ -635,48 +635,47 @@ void vimt_transform_2d::print_summary(vcl_ostream& o) const
             break;
 
         case Translation:
-            o << "Translation ";
-            o << "(" << xt_ << "," << yt_ << ")";
+            o << "Translation (" << xt_ << ',' << yt_ << ')';
             break;
 
         case ZoomOnly:
-            o << "ZoomOnly\n";
-            o << vsl_indent()<< "scale factor = (" << xx_ << "," << yy_ << ")\n";
-            o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
+            o << "ZoomOnly\n"
+              << vsl_indent()<< "scale factor = (" << xx_ << ',' << yy_ << ")\n"
+              << vsl_indent()<< "translation = (" << xt_ << ',' << yt_ << ')';
             break;
 
         case RigidBody:
-            o << "RigidBody\n";
-            o << vsl_indent()<< "angle = " << vcl_atan2(yx_,xx_) << vcl_endl;
-            o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
+            o << "RigidBody\n"
+              << vsl_indent()<< "angle = " << vcl_atan2(yx_,xx_) << vcl_endl
+              << vsl_indent()<< "translation = (" << xt_ << ',' << yt_ << ')';
             break;
 
         case Similarity:
-            o << "Similarity {";
-            o << " s= " << vcl_sqrt(xx_*xx_+xy_*xy_);
-            o << " A= " << vcl_atan2(xy_,xx_);
-            o << " t= (" << xt_ << "," << yt_ << " ) }";
+            o << "Similarity {"
+              << " s= " << vcl_sqrt(xx_*xx_+xy_*xy_)
+              << " A= " << vcl_atan2(xy_,xx_)
+              << " t= (" << xt_ << ',' << yt_ << " ) }";
             break;
 
         case Reflection:
-            o << "Reflection\n";
-            o << vsl_indent()<< xx_ << " " << xy_ << vcl_endl;
-            o << vsl_indent()<< yx_ << " " << yy_ << vcl_endl;
-            o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
+            o << "Reflection\n"
+              << vsl_indent()<< xx_ << ' ' << xy_ << vcl_endl
+              << vsl_indent()<< yx_ << ' ' << yy_ << vcl_endl
+              << vsl_indent()<< "translation = (" << xt_ << ',' << yt_ << ')';
             break;
 
         case Affine:
-            o << "Affine\n";
-            o << vsl_indent()<< xx_ << " " << xy_ << vcl_endl;
-            o << vsl_indent()<< yx_ << " " << yy_ << vcl_endl;
-            o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
+            o << "Affine\n"
+              << vsl_indent()<< xx_ << ' ' << xy_ << vcl_endl
+              << vsl_indent()<< yx_ << ' ' << yy_ << vcl_endl
+              << vsl_indent()<< "translation = (" << xt_ << ',' << yt_ << ')';
             break;
 
         case Projective:
-            o << "Projective\n";
-            o << vsl_indent()<< xx_ << " " << xy_ << " " << xt_ << vcl_endl;
-            o << vsl_indent()<< yx_ << " " << yy_ << " " << yt_ << vcl_endl;
-            o << vsl_indent()<< tx_ << " " << ty_ << " " << tt_;
+            o << "Projective\n"
+              << vsl_indent()<< xx_ << ' ' << xy_ << ' ' << xt_ << vcl_endl
+              << vsl_indent()<< yx_ << ' ' << yy_ << ' ' << yt_ << vcl_endl
+              << vsl_indent()<< tx_ << ' ' << ty_ << ' ' << tt_;
             break;
     }
     vsl_indent_dec(o);
@@ -718,8 +717,8 @@ void vimt_transform_2d::b_read(vsl_b_istream& bfs)
         vsl_b_read(bfs,tx_); vsl_b_read(bfs,ty_); vsl_b_read(bfs,tt_);
         break;
     default:
-        vcl_cerr << "I/O ERROR: vimt_transform_2d::b_read(vsl_b_istream&) \n";
-        vcl_cerr << "           Unknown version number "<< version << "\n";
+        vcl_cerr << "I/O ERROR: vimt_transform_2d::b_read(vsl_b_istream&)\n"
+                 << "           Unknown version number "<< version << '\n';
         bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
         return;
     }

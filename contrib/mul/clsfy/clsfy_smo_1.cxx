@@ -336,7 +336,7 @@ int clsfy_smo_1_lin::calc()
 
   if (alph_.empty()) // only initialise alph if it hasn;t been externally set.
   {
-    alph_.resize(N);
+    alph_.set_size(N);
     alph_.fill(0.0);
   }
 
@@ -379,12 +379,11 @@ int clsfy_smo_1_lin::calc()
       vcl_cerr << "Objective function=" << (s - t/2.) << '\t';
       for (int i=0; i<N; i++)
         if (alph_[i] < 0)
-          vcl_cerr << "alph_[" << i << "]=" << alph_[i] << " < 0" << vcl_endl;
+          vcl_cerr << "alph_[" << i << "]=" << alph_[i] << " < 0\n";
       s = 0.;
       for (int i=0; i<N; i++)
         s += alph_[i] * target_[i];
-      vcl_cerr << "s=" << s << '\t';
-      vcl_cerr << "error_rate=" << error_rate() << '\t';
+      vcl_cerr << "s=" << s << "\terror_rate=" << error_rate() << '\t';
     }
 #endif
 
@@ -400,8 +399,8 @@ int clsfy_smo_1_lin::calc()
           else
             bound_support++;
         }
-      vcl_cerr << "non_bound=" << non_bound_support << '\t';
-      vcl_cerr << "bound_support=" << bound_support << vcl_endl;
+      vcl_cerr << "non_bound=" << non_bound_support << '\t'
+               << "bound_support=" << bound_support << vcl_endl;
     }
 #endif
   }

@@ -30,7 +30,7 @@ void get_1d_inputs(vnl_vector<double>& v,
                    mbl_data_wrapper<vnl_vector<double> >& data, int j)
 {
   unsigned long n = data.size();
-  v.resize(n);
+  v.set_size(n);
   data.reset();
   for (unsigned long i=0;i<n;++i)
   {
@@ -83,7 +83,7 @@ void test_adaboost()
   //build +ve
   for (int j=0; j<n_pos; ++j)
   {
-    pos_samples[j].resize(n_clfrs);
+    pos_samples[j].set_size(n_clfrs);
     for (int i=0; i<n_clfrs; ++i)
     {
       vnl_vector<double> x(1);
@@ -95,7 +95,7 @@ void test_adaboost()
   //build -ve
   for (int j=0; j<n_neg; ++j)
   {
-    neg_samples[j].resize(n_clfrs);
+    neg_samples[j].set_size(n_clfrs);
     for (int i=0; i<n_clfrs; ++i)
     {
       vnl_vector<double> x(1);
@@ -178,8 +178,8 @@ void test_adaboost()
     for (int i=0; i<n_neg; ++i)
       if ( pClassifier->classify( neg_samples[i] ) == 1 ) fp++;
 
-    //vcl_cout<<"Applied to training set:\n";
-    //vcl_cout<<"number of classifiers used= "<<k<<vcl_endl;
+    //vcl_cout<<"Applied to training set:\n"
+    //        <<"number of classifiers used= "<<k<<vcl_endl;
     tpr=(tp*1.0)/n_pos;
     vcl_cout<<"True positives= "<<tpr<<vcl_endl;
     fpr= (fp*1.0)/n_neg;

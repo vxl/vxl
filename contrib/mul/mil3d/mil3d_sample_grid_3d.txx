@@ -144,7 +144,7 @@ void mil3d_sample_grid_3d_safe(vnl_vector<vecType>& vec,
   int ystep = image.ystep();
   int zstep = image.zstep();
 
-  vec.resize(nu*nv*nw*np);
+  vec.set_size(nu*nv*nw*np);
   vecType* vc = vec.begin();
 
   vgl_point_3d<double> p1 = p0;
@@ -211,7 +211,7 @@ void mil3d_sample_grid_3d_no_checks(vnl_vector<vecType>& vec,
   int ystep = image.ystep();
   int zstep = image.zstep();
 
-  vec.resize(nu*nv*nw*np);
+  vec.set_size(nu*nv*nw*np);
   vecType* vc = vec.begin();
 
   vgl_point_3d<double> p1 = p0;
@@ -274,7 +274,7 @@ void mil3d_sample_grid_3d_ic_no_checks(vnl_vector<vecType>& vec,
   int ystep = image.ystep();
   int zstep = image.zstep();
 
-  vec.resize(nu*nv*nw*np);
+  vec.set_size(nu*nv*nw*np);
   vecType* vc = vec.begin();
 
   vgl_point_3d<double> p1 = p0;
@@ -334,7 +334,7 @@ void mil3d_sample_grid_3d_ic_safe(vnl_vector<vecType>& vec,
   int ystep = image.ystep();
   int zstep = image.zstep();
 
-  vec.resize(nu*nv*nw*np);
+  vec.set_size(nu*nv*nw*np);
   vecType* vc = vec.begin();
 
   vgl_point_3d<double> p1 = p0;

@@ -37,7 +37,7 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
   vgl_point_2d<double> im_p0 = image.world2im()(p0);
   vgl_point_2d<double> im_p1 = image.world2im()(p0+(n-1)*u);
   int np = image.image().nplanes();
-  vec.resize(n*np);
+  vec.set_size(n*np);
   vecType *v = vec.data_block();
 
   if (image.world2im().form()!=vimt_transform_2d::Projective)

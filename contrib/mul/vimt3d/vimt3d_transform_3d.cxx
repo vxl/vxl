@@ -30,7 +30,7 @@ void vimt3d_transform_3d::matrix(vnl_matrix<double>& M) const
 #if 0 //grv
   if ((M.rows()!=4) || (M.columns()!=4)) M.resize(4,4);
 #endif
-  M.resize(4,4);
+  M.set_size(4,4);
   double**m_data = M.data_array();
   m_data[0][0]=xx_; m_data[0][1]=xy_; m_data[0][2]=xz_; m_data[0][3]=xt_;
   m_data[1][0]=yx_; m_data[1][1]=yy_; m_data[1][2]=yz_; m_data[1][3]=yt_;
@@ -114,30 +114,30 @@ void vimt3d_transform_3d::params(vnl_vector<double>& v) const
   switch (form_)
   {
     case (Identity):
-      v.resize(0);
+      v.set_size(0);
       break;
     case (Translation):
-      if (v.size()!=3) v.resize(3);
+      if (v.size()!=3) v.set_size(3);
       v[0]=xt_; v[1]=yt_; v[2]=zt_;
       break;
     case (ZoomOnly):
-      if (v.size()!=6) v.resize(6);
+      if (v.size()!=6) v.set_size(6);
       v[0]=xx_; v[1]=yy_; v[2]=zz_;
       v[3]=xt_; v[4]=yt_; v[5]=zt_;
       break;
     case (RigidBody):
-      if (v.size()!=6) v.resize(6);
+      if (v.size()!=6) v.set_size(6);
       angles(v[0],v[1],v[2]);
       v[3]=xt_; v[4]=yt_; v[5]=zt_;
       break;
     case (Similarity):
-      if (v.size()!=7) v.resize(7);
+      if (v.size()!=7) v.set_size(7);
       v[0]=xx_; // scaling factor
       angles(v[1],v[2],v[3]);
       v[4]=xt_; v[5]=yt_; v[6]=zt_;
       break;
     case (Affine):
-      if (v.size()!=9) v.resize(9);
+      if (v.size()!=9) v.set_size(9);
       v[0]=xx_; // scaling factor
       v[1]=yy_; // scaling factor
       v[2]=zz_; // scaling factor
@@ -722,8 +722,7 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
     {
       vnl_vector<double> p(3);
       params(p);
-      o << "Translation "
-        << '(' << p(0) << ',' << p(1) << ',' << p(2) << ')';
+      o << "Translation (" << p(0) << ',' << p(1) << ',' << p(2) << ')';
       break;
     }
 
@@ -808,8 +807,7 @@ void vimt3d_transform_3d::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,tx_); vsl_b_read(bfs,ty_); vsl_b_read(bfs,tz_); vsl_b_read(bfs,tt_);
     break;
   default:
-    vcl_cerr<<"vimt3d_transform_3d::load : "
-            <<"Illegal version number : "<< version << vcl_endl;
+    vcl_cerr<<"vimt3d_transform_3d::load : Illegal version number "<<version<<'\n';
     vcl_abort();
   }
 

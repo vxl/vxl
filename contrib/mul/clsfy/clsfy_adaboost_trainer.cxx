@@ -44,7 +44,7 @@ void clsfy_adaboost_trainer::clsfy_get_elements(
                               int j)
 {
   unsigned long n = data.size();
-  v.resize(n);
+  v.set_size(n);
   data.reset();
   for (unsigned long i=0;i<n;++i)
   {
@@ -267,7 +267,7 @@ void clsfy_adaboost_trainer::b_read(vsl_b_istream& /*bfs*/)
     break;
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_adaboost_trainer&) \n"
-             << "           Unknown version number "<< version << "\n";
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

@@ -59,8 +59,8 @@ void test_mixture()
 
   for (int j=0;j<n_comp;++j)
   {
-    mean[j].resize(n);
-    var[j].resize(n);
+    mean[j].set_size(n);
+    var[j].set_size(n);
     for (int i=0;i<n;++i)
     {
       mean[j](i) = i*j;
@@ -87,12 +87,12 @@ void test_mixture()
 
   builder.build(*p_pdf,data_array);
 
-  vcl_cout<<"Original PDF: "<<pdf<<vcl_endl;
-  vcl_cout<<"Mean: "<< pdf.mean() <<vcl_endl;
-  vcl_cout<<"Var:  "<<pdf.variance()<<vcl_endl;
-  vcl_cout<<"New PDF: "<<p_pdf<<vcl_endl;
-  vcl_cout<<"Mean: " << p_pdf->mean()<<vcl_endl;
-  vcl_cout<<"Var:  " << p_pdf->variance()<<vcl_endl;
+  vcl_cout<<"Original PDF: "<<pdf<<vcl_endl
+          <<"Mean: "<< pdf.mean() <<vcl_endl
+          <<"Var:  "<<pdf.variance()<<vcl_endl
+          <<"New PDF: "<<p_pdf<<vcl_endl
+          <<"Mean: " << p_pdf->mean()<<vcl_endl
+          <<"Var:  " << p_pdf->variance()<<vcl_endl;
 
   vpdfl_mixture & gmm =  static_cast<vpdfl_mixture &>(*p_pdf);
 
@@ -147,17 +147,16 @@ void test_mixture()
   vpl_unlink(test_path.c_str());
 #endif
 
-  vcl_cout<<"Original builder: "; vsl_print_summary(vcl_cout, builder); vcl_cout<<vcl_endl;
-  vcl_cout<<"Loaded builder: "; vsl_print_summary(vcl_cout, p_builder2); vcl_cout<<vcl_endl;
-  vcl_cout<<vcl_endl;
+  vcl_cout<<"Original builder: "; vsl_print_summary(vcl_cout, builder);
+  vcl_cout<<"\nLoaded builder: "; vsl_print_summary(vcl_cout, p_builder2);
 
-  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, p_pdf); vcl_cout<<vcl_endl;
-  vcl_cout<<"Mean: " << p_pdf->mean()<<vcl_endl;
-  vcl_cout<<"Var:  " << p_pdf->variance()<<vcl_endl;
-  vcl_cout<<"Loaded PDF: "; vsl_print_summary(vcl_cout, p_pdf2); vcl_cout<<vcl_endl;
-  vcl_cout<<"Mean: " << p_pdf2->mean()<<vcl_endl;
-  vcl_cout<<"Var:  " << p_pdf2->variance()<<vcl_endl;
-  vcl_cout<<vcl_endl<<vcl_endl;
+  vcl_cout<<"\n\nOriginal PDF: "; vsl_print_summary(vcl_cout, p_pdf);
+  vcl_cout<<"\nMean: " << p_pdf->mean()
+          <<"\nVar:  " << p_pdf->variance()
+          <<"\nLoaded PDF: "; vsl_print_summary(vcl_cout, p_pdf2);
+  vcl_cout<<"\nMean: " << p_pdf2->mean()
+          <<"\nVar:  " << p_pdf2->variance()
+          <<"\n\n\n";
 
   vcl_cout << "=============Testing PDF==========";
   vpdfl_sampler_base *p_sampler2 = p_pdf->new_sampler();

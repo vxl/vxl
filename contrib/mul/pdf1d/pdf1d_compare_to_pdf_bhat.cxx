@@ -118,7 +118,7 @@ double pdf1d_compare_to_pdf_bhat::bootstrap_compare_form(vnl_vector<double>& B,
 
   pdf1d_pdf* pdf = builder2.new_model();
 
-  B.resize(n_trials);
+  B.set_size(n_trials);
 
   double sum = 0;
   double b;

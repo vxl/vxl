@@ -38,7 +38,7 @@ void vimt_sample_grid_bilin(vnl_vector<vecType>& vec,
   vgl_point_2d<double> im_p1 = image.world2im()(p0+(n1-1)*u);
   vgl_point_2d<double> im_p2 = image.world2im()(p0+(n2-1)*v);
   int np = image.image().nplanes();
-  vec.resize(n1*n2*np);
+  vec.set_size(n1*n2*np);
   vecType *vec_data = vec.data_block();
 
   if (image.world2im().form()!=vimt_transform_2d::Projective)

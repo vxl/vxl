@@ -29,7 +29,7 @@ void mbl_matrix_product(vnl_matrix<double>& AB, const vnl_matrix<double>& A,
    }
 
    if ( (AB.rows()!=nr1) || (AB.cols()!= nc2) )
-    AB.resize( nr1, nc2 ) ;
+    AB.set_size( nr1, nc2 ) ;
 
   const double *const * AData = A.data_array();
   const double *const * BData = B.data_array();
@@ -91,7 +91,7 @@ void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
   assert(B.columns()>=(unsigned int)nc);
 
   if ( (ABt.rows()!=nr1) || (ABt.columns()!= nr2) )
-    ABt.resize( nr1, nr2 ) ;
+    ABt.set_size( nr1, nr2 ) ;
 
   double const *const * A_data = A.data_array();
   double const *const * B_data = B.data_array();
@@ -139,7 +139,7 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
   }
 
   if ( (AtB.rows()!=(unsigned int)nc_a) || (AtB.columns()!= nc2) )
-    AtB.resize( nc_a, nc2 ) ;
+    AtB.set_size( nc_a, nc2 ) ;
 
   double const *const * A_data = A.data_array();
   double const *const * B_data = B.data_array();
@@ -183,7 +183,7 @@ void mbl_matrix_product_adb(vnl_matrix<double>& ADB,
   assert ( nr2 == d.size() ); // Product : d.nelems != A.ncols
 
   if ( (ADB.rows()!=nr1) || (ADB.cols()!= nc2) )
-    ADB.resize( nr1, nc2 ) ;
+    ADB.set_size( nr1, nc2 ) ;
 
   const double * const* AData = A.data_array();
   const double * const* BData = B.data_array();

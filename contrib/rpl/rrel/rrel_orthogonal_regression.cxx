@@ -146,7 +146,7 @@ rrel_orthogonal_regression::weighted_least_squares_fit( vnl_vector<double>& para
   }
   else {
     vnl_vector<double> norm = svd.nullvector();
-    params.resize(norm.size()+1);
+    params.set_size(norm.size()+1);
     for (unsigned int i=0; i<norm.size(); ++i) {
       params[i] = norm[i];
     }
@@ -160,11 +160,11 @@ void
 rrel_orthogonal_regression::print_points() const
 {
   vcl_cout << "\nrrel_orthogonal_regression::print_points:\n"
-           << "  param_dof() = " << param_dof() << "\n"
+           << "  param_dof() = " << param_dof() << '\n'
            << "  num_pts = " << vars_.rows() << "\n\n"
            << " i   vars_\n"
            << " =   =========\n";
   for ( unsigned int i=0; i<vars_.rows(); ++i ) {
-    vcl_cout << " " << i << "   " << vars_.get_row (i) << "\n";
+    vcl_cout << ' ' << i << "   " << vars_.get_row (i) << '\n';
   }
 }

@@ -92,7 +92,7 @@ void mil_sample_grid_2d_safe(vnl_vector<vecType>& vec,
   int xstep = image.xstep();
   int ystep = image.ystep();
 
-  vec.resize(nu*nv*np);
+  vec.set_size(nu*nv*np);
   vecType* vc = vec.begin();
 
   vgl_point_2d<double> p1 = p0;
@@ -152,7 +152,7 @@ void mil_sample_grid_2d_no_checks(vnl_vector<vecType>& vec,
   int xstep = image.xstep();
   int ystep = image.ystep();
 
-  vec.resize(nu*nv*np);
+  vec.set_size(nu*nv*np);
   vecType* vc = vec.begin();
 
   vgl_point_2d<double> p1 = p0;
@@ -214,7 +214,7 @@ void mil_sample_grid_2d_ic_safe(vnl_vector<vecType>& vec,
   int xstep = image.xstep();
   int ystep = image.ystep();
 
-  vec.resize(nu*nv*np);
+  vec.set_size(nu*nv*np);
   vecType* vc = vec.begin();
 
   vgl_point_2d<double> p1 = p0;
@@ -272,7 +272,7 @@ void mil_sample_grid_2d_ic_no_checks(vnl_vector<vecType>& vec,
   int xstep = image.xstep();
   int ystep = image.ystep();
 
-  vec.resize(nu*nv*np);
+  vec.set_size(nu*nv*np);
   vecType* vc = vec.begin();
 
   vgl_point_2d<double> p1 = p0;

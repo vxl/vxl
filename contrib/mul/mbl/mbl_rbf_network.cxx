@@ -133,9 +133,9 @@ void mbl_rbf_network::setSumToOne(bool flag)
 void mbl_rbf_network::calcWts(vnl_vector<double>& w, const vnl_vector<double>& new_x)
 {
   unsigned int n = x_.size();
-  if (w.size()!=n) w.resize(n);
+  if (w.size()!=n) w.set_size(n);
 
-  if (v_.size()!=n) v_.resize(n);
+  if (v_.size()!=n) v_.set_size(n);
 
   double* v_data = v_.begin();
   const vnl_vector<double>* x_data = &(x_.front());

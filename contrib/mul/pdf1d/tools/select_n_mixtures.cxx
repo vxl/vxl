@@ -42,11 +42,11 @@ void test_form(vcl_vector<double>& B,
 //    B[i] = comparator.compare_form(x.data_block(),x.size(),*builder[i]);
     B[i] = comparator.bootstrap_compare_form(b,x.data_block(),x.size(),*builder[i],10);
     vcl_cout<<i+1<<") B: "<<B[i]<<vcl_endl;
-    ofs<<i+1<<" "<<B[i]<<vcl_endl;
+    ofs<<i+1<<' '<<B[i]<<vcl_endl;
     for (unsigned int j=0;j<b.size();++j)
-      ofs<<" "<<j+1<<" "<<b[j]<<vcl_endl;
+      ofs<<' '<<j+1<<' '<<b[j]<<vcl_endl;
   }
-  vcl_cout<<"------------------------"<<vcl_endl;
+  vcl_cout<<"------------------------\n";
 }
 
 void select_form(vnl_vector<int>& histo,
@@ -61,7 +61,7 @@ void select_form(vnl_vector<int>& histo,
   unsigned int n = builder.size();
   if (histo.size()!=n)
   {
-    histo.resize(n);
+    histo.set_size(n);
     histo.fill(0);
   }
 
@@ -104,11 +104,11 @@ void select_form(int n_samples, int n_trials, int max_comp,
 
   select_form(histo,n_samples,n_trials,true_pdf,builder,comparator);
 
-  vcl_cout<<"PDF: "<<true_pdf<<vcl_endl;
-  vcl_cout<<"Sampling "<<n_samples;
-  vcl_cout<<" values from pdf and computing overlap with kernel estimate."<<vcl_endl;
-  vcl_cout<<"Averaging over "<<n_trials<<" trials."<<vcl_endl;
-  vcl_cout<<"Number of times each number of components preferred: "<<vcl_endl;
+  vcl_cout<<"PDF: "<<true_pdf<<vcl_endl
+          <<"Sampling "<<n_samples
+          <<" values from pdf and computing overlap with kernel estimate.\n"
+          <<"Averaging over "<<n_trials<<" trials.\n"
+          <<"Number of times each number of components preferred:\n";
   for (int i=0;i<max_comp;++i)
   {
     vcl_cout<<i+1<<" components: "<<histo[i]<<vcl_endl;
@@ -140,7 +140,7 @@ int main()
   select_form(n_samples,n_trials,max_comp,true_pdf,comparator);
   ofs.close();
 
-  vcl_cout<<"See B_vs_N_mix.txt"<<vcl_endl;
+  vcl_cout<<"See B_vs_N_mix.txt\n";
 
   return 0;
 }

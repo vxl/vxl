@@ -24,7 +24,7 @@ void arr2vec(vnl_vector<double>& vector,
              int nx,
              const double *double_array)
 {
-  vector.resize(nx);
+  vector.set_size(nx);
   for (int x=0;x<nx;++x)
     vector(x) = double_array[x];
 }
@@ -35,7 +35,7 @@ void vec2mat(vnl_matrix<double>& matrix,
   unsigned int n_rows= list_vec.size();
   unsigned int n_cols= list_vec[0].size();
 
-  matrix.resize( n_rows, n_cols );
+  matrix.set_size( n_rows, n_cols );
   for (unsigned int i=0; i< n_rows; ++i)
   {
     assert ( list_vec[i].size() == n_cols );
@@ -58,7 +58,7 @@ void add_data(vcl_vector< vnl_vector<double> >& d_vec,
 }
 
 void sample_axis_gaussian( vcl_vector< vnl_vector<double> >& sample,
-                     vnl_vector<double>& mean, 
+                     vnl_vector<double>& mean,
                      vnl_vector<double>& var,
                      int ns)
 {
@@ -67,13 +67,12 @@ void sample_axis_gaussian( vcl_vector< vnl_vector<double> >& sample,
   int d= mean.size();
   assert ( mean.size() == var.size() );
   for (int i=0; i<ns; ++i)
-  { 
+  {
     vnl_vector<double> s(d);
     for (int j=0; j<d; ++j)
       s(j)=mzr.normal()*vcl_sqrt( var(j) )+mean(j);
     sample.push_back(s);
   }
-    
 }
 
 
@@ -85,19 +84,19 @@ void test_lda()
 
   //create 2 gaussian distributions
   vnl_vector<double> m0,v0,m1,v1;
-  
+
    // Create g0
   double m0_array[2] = {8, 6};
   arr2vec(m0,2,m0_array);
   double v0_array[2] = {3, 2};
   arr2vec(v0,2,v0_array);
-  
+
    // Create g1
   double m1_array[2] = {1, 2};
   arr2vec(m1,2,m1_array);
   double v1_array[2] = {20, 30};
   arr2vec(v1,2,v1_array);
-  
+
 
   //sample some data
   int n_data=50;
@@ -171,7 +170,7 @@ void test_lda()
   vcl_cout<<"eig_vec= "<<eig_vec<<vcl_endl;
 
    // Test classfication error is reasonable, just using one eigenvector.
-  //actually method above only uses one eigenvector anyway, so results are 
+  //actually method above only uses one eigenvector anyway, so results are
   //the same!
   double mean0=dot_product( lda.class_mean(0), eig_vec );
   double mean1=dot_product( lda.class_mean(1), eig_vec );
@@ -181,26 +180,26 @@ void test_lda()
   {
     double dp0=dot_product( test_d0[i], eig_vec );
     //vcl_cout<<"dp0= "<<dp0<<vcl_endl;
-  
+
     double dm0, dm1;
     dm0= (dp0-mean0)*(dp0-mean0);
     dm1= (dp0-mean1)*(dp0-mean1);
     int c0;
-    if ( dm0< dm1) 
+    if ( dm0< dm1)
       c0=0;
     else
       c0=1;
 
     if (c0 == 0) c0_count++;
-    
+
     double dp1=dot_product( test_d1[i], eig_vec );
     //vcl_cout<<"dp1= "<<dp1<<vcl_endl;
-    
+
     dm0= (dp1-mean0)*(dp1-mean0);
     dm1= (dp1-mean1)*(dp1-mean1);
 
     int c1;
-    if ( dm0< dm1) 
+    if ( dm0< dm1)
       c1=0;
     else
       c1=1;
@@ -211,14 +210,11 @@ void test_lda()
   prop0=c0_count*1.0/n_data;
   prop1=c1_count*1.0/n_data;
 
-  
-  vcl_cout<<"c0 %correct= "<< prop0<<vcl_endl;
-  vcl_cout<<"c1 %correct= "<< prop1<<vcl_endl;
-
+  vcl_cout<<"c0 %correct= "<< prop0<<vcl_endl
+          <<"c1 %correct= "<< prop1<<vcl_endl;
 
   TEST_NEAR("Test prop correct prop0>0.9", prop0, 1.0, 0.1);
   TEST_NEAR("Test prop correct prop1>0.8", prop1, 1.0, 0.2);
-
 }
 
 TESTLIB_DEFINE_MAIN(test_lda);

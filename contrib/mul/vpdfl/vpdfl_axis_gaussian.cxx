@@ -103,7 +103,7 @@ void vpdfl_axis_gaussian::gradient(vnl_vector<double>& g,
   unsigned int n = n_dims();
   assert(x.size() == n);
 
-  if (g.size()!=n) g.resize(n);
+  if (g.size()!=n) g.set_size(n);
 
   double* g_data = g.data_block();
   const double* x_data = x.data_block();
@@ -240,8 +240,8 @@ void vpdfl_axis_gaussian::b_read(vsl_b_istream& bfs)
       vpdfl_pdf_base::b_read(bfs);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_axis_gaussian &) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_axis_gaussian &)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

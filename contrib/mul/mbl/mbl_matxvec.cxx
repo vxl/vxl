@@ -40,8 +40,8 @@ static bool HasNaN(const char* s,
   {
     if (isnan(M(i,j)))
     {
-      vcl_cout<<s<<" has NaN at element "<<i<<","<<j;
-      vcl_cout<<" in a "<<M.nrows()<<" x "<<M.ncols()<<" matrix."<<vcl_endl;
+      vcl_cout<<s<<" has NaN at element "<<i<<','<<j
+              <<" in a "<<M.nrows()<<" x "<<M.ncols()<<" matrix.\n";
       return true;
     }
   }
@@ -59,12 +59,12 @@ void NC_VecXMat(const vnl_vector<double>& V,
   int ncols = M.ncols();
   if (M.nrows()>1)
   {
-    vcl_cerr << "NC_VecXMat : M is a "<<M.nrows()<<"-row matrix."<<vcl_endl;
-    vcl_cerr << "it may only be 1-row." <<vcl_endl;
+    vcl_cerr << "NC_VecXMat : M is a "<<M.nrows()<<"-row matrix.\n"
+             << "it may only be 1-row.\n";
     vcl_abort();
   }
 
-  R.resize(nrows,ncols);
+  R.set_size(nrows,ncols);
 
   const double* v_data = V.dataPtr();
   const double** M_data = M.dataPtr();
@@ -98,7 +98,7 @@ void mbl_matxvec_prod_mv(const vnl_matrix<double>& M,
 {
   int nr = M.rows();
 
-  R.resize(nr);
+  R.set_size(nr);
 
   mbl_matxvec_prod_mv_2(M,V,R);
 }
@@ -123,7 +123,7 @@ void mbl_matxvec_prod_mv_2(const vnl_matrix<double>& M,
 #ifndef NDEBUG
   if (nR>nr)
   {
-    vcl_cerr<<"ERROR: mbl_matxvec_prod_mv_2() R too long."<<vcl_endl;
+    vcl_cerr<<"ERROR: mbl_matxvec_prod_mv_2() R too long.\n";
     vcl_abort();
   }
 #endif
@@ -134,7 +134,7 @@ void mbl_matxvec_prod_mv_2(const vnl_matrix<double>& M,
 #ifndef NDEBUG
   if (t>nc)
   {
-    vcl_cerr<<"ERROR: mbl_matxvec_prod_mv_2() V too long. V has "<<t<<" elements. M has "<<nc<<" columns."<<vcl_endl;
+    vcl_cerr<<"ERROR: mbl_matxvec_prod_mv_2() V too long. V has "<<t<<" elements. M has "<<nc<<" columns.\n";
     vcl_abort();
   }
 #endif
@@ -149,8 +149,8 @@ void mbl_matxvec_prod_mv_2(const vnl_matrix<double>& M,
 #ifndef NDEBUG
   if ((nr<1) || (nc<1))
   {
-    vcl_cerr<<"ERROR: mbl_matxvec_prod_mv_2() - vnl_matrix<double> is 0 x 0"<<vcl_endl;
-    vcl_cerr<<"V has dimension "<<V.size()<<vcl_endl;
+    vcl_cerr<<"ERROR: mbl_matxvec_prod_mv_2() - vnl_matrix<double> is 0 x 0\n"
+            <<"V has dimension "<<V.size()<<vcl_endl;
     vcl_abort();
   }
 #endif
@@ -188,19 +188,19 @@ void TC_MatXVec(const vnl_matrix<double>& M,
   int nr = M.nrows();
   if (index.lo()!=1)
   {
-    vcl_cerr<<"TC_MatXVec(M,V,R,index) : index array must begin at 1"<<vcl_endl;
+    vcl_cerr<<"TC_MatXVec(M,V,R,index) : index array must begin at 1\n";
     vcl_abort();
   }
   int n = index.size();
 
 
-  if (R.size()!=n) R.resize(n);
+  if (R.size()!=n) R.set_size(n);
   double *Rdata = R.dataPtr();
 
   int t = V.size();
   if (t>nc)
   {
-    vcl_cerr<<"TC_MatXVec() R too long."<<vcl_endl;
+    vcl_cerr<<"TC_MatXVec() R too long.\n";
     vcl_abort();
   }
 
@@ -213,8 +213,8 @@ void TC_MatXVec(const vnl_matrix<double>& M,
 
   if ((nr<1) || (nc<1))
   {
-    vcl_cerr<<"TC_MatXVec - vnl_matrix<double> is 0 x 0"<<vcl_endl;
-    vcl_cerr<<"V has dimension "<<V.size()<<vcl_endl;
+    vcl_cerr<<"TC_MatXVec - vnl_matrix<double> is 0 x 0\n"
+            <<"V has dimension "<<V.size()<<vcl_endl;
     vcl_abort();
   }
 
@@ -266,8 +266,8 @@ void mbl_matxvec_add_prod_vm(const vnl_vector<double>& V,
 #ifndef NDEBUG
   if (nr!=V.size())
   {
-    vcl_cerr<<"ERROR: mbl_matxvec_add_prod_vm - V wrong length"<<vcl_endl;
-    vcl_cerr<<"Expected "<<nr<<" got "<<V.size()<<vcl_endl;
+    vcl_cerr<<"ERROR: mbl_matxvec_add_prod_vm - V wrong length\n"
+            <<"Expected "<<nr<<" got "<<V.size()<<vcl_endl;
     vcl_abort();
   }
 #endif //!NDEBUG
@@ -279,8 +279,8 @@ void mbl_matxvec_add_prod_vm(const vnl_vector<double>& V,
 #ifndef NDEBUG
   if ((nr<1) || (nc<1))
   {
-    vcl_cerr<<"ERROR: mbl_matxvec_add_prod_vm - vnl_matrix<double> is 0 x 0"<<vcl_endl;
-    vcl_cerr<<"V has dimension "<<V.size()<<vcl_endl;
+    vcl_cerr<<"ERROR: mbl_matxvec_add_prod_vm - vnl_matrix<double> is 0 x 0\n"
+            <<"V has dimension "<<V.size()<<vcl_endl;
     vcl_abort();
   }
 #endif //!NDEBUG
@@ -318,13 +318,13 @@ void TC_ProductABt(vnl_matrix<double>& ABt,
 #ifndef NDEBUG
    if ( nc2 != nc1 )
    {
-      vcl_cerr<<"TC_ProductABt : B.ncols != A.ncols"<<vcl_endl;
+      vcl_cerr<<"TC_ProductABt : B.ncols != A.ncols\n";
       vcl_abort() ;
    }
 #endif //!NDEBUG
 
    if ( (ABt.nrows()!=nr1) || (ABt.ncols()!= nr2) )
-    ABt.resize( nr1, nr2 ) ;
+    ABt.set_size( nr1, nr2 ) ;
 
   const double ** A_data = A.dataPtr();
   const double ** B_data = B.dataPtr();
@@ -364,12 +364,12 @@ void TC_ProductAtB(vnl_matrix<double>& AtB,
 
    if ( nr2 != nr1 )
    {
-      vcl_cerr<<"TC_ProductAtB : B.nrows != A.nrows"<<vcl_endl;
+      vcl_cerr<<"TC_ProductAtB : B.nrows != A.nrows\n";
       vcl_abort() ;
    }
 
    if ( (AtB.nrows()!=nc1) || (AtB.ncols()!= nc2) )
-    AtB.resize( nc1, nc2 ) ;
+    AtB.set_size( nc1, nc2 ) ;
 
   const double ** A_data = A.dataPtr();
   const double ** B_data = B.dataPtr();
@@ -417,13 +417,13 @@ void TC_ProductMD(vnl_matrix<double>& MD,
   int nc = M.ncols();
   if (d.size()!=nc)
   {
-    vcl_cerr<<"TC_ProductMD() d doesnt match M"<<vcl_endl;
-    vcl_cerr<<"d is "<<d.size()<<" element vector."<<vcl_endl;
-    vcl_cerr<<"M is "<<nr<<" x "<<nc<<vcl_endl;
+    vcl_cerr<<"TC_ProductMD() d doesnt match M\n"
+            <<"d is "<<d.size()<<" element vector.\n"
+            <<"M is "<<nr<<" x "<<nc<<vcl_endl;
     vcl_abort();
   }
 
-  if ((MD.nrows()!=nr) || (MD.ncols()!=nc)) MD.resize(nr,nc);
+  if ((MD.nrows()!=nr) || (MD.ncols()!=nc)) MD.set_size(nr,nc);
 
   double **MD_data = MD.dataPtr();
   const double **M_data = M.dataPtr();
@@ -449,13 +449,13 @@ void TC_ProductDM(vnl_matrix<double>& DM,
   int nc = M.ncols();
   if (d.size()!=nr)
   {
-    vcl_cerr<<"TC_ProductDM() d doesnt match M"<<vcl_endl;
-    vcl_cerr<<"d is "<<d.size()<<" element vector."<<vcl_endl;
-    vcl_cerr<<"M is "<<nr<<" x "<<nc<<vcl_endl;
+    vcl_cerr<<"TC_ProductDM() d doesnt match M\n"
+            <<"d is "<<d.size()<<" element vector.\n"
+            <<"M is "<<nr<<" x "<<nc<<vcl_endl;
     vcl_abort();
   }
 
-  if ((DM.nrows()!=nr) || (DM.ncols()!=nc)) DM.resize(nr,nc);
+  if ((DM.nrows()!=nr) || (DM.ncols()!=nc)) DM.set_size(nr,nc);
 
   double **DM_data = DM.dataPtr();
   const double **M_data = M.dataPtr();

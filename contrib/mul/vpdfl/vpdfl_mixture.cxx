@@ -322,7 +322,7 @@ double vpdfl_mixture::log_p(const vnl_vector<double>& x) const
   int n = n_components();
 
   vnl_vector<double>& log_ps = ws_;
-  log_ps.resize(n);
+  log_ps.set_size(n);
 
   double max_log_p = 0.0; // initialise just to make the compiler happy
   for (int i=0;i<n;++i)

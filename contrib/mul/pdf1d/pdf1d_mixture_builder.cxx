@@ -286,7 +286,7 @@ void pdf1d_mixture_builder::e_step(pdf1d_mixture& model,
   // probs(i)(j+1) is logProb that e.g. j was drawn from component i
   for (unsigned int i=0;i<n_comp;++i)
   {
-    if (probs[i].size()!=n_egs) probs[i].resize(n_egs);
+    if (probs[i].size()!=n_egs) probs[i].set_size(n_egs);
 
     // Any components with zero weights are ignored.
     // Eventually they should be pruned.

@@ -175,7 +175,7 @@ rrel_homography2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
     assert( svd_norm_to.rank() == 3 );
     vnl_matrix< double > H = svd_norm_to.inverse() * normH * norm_matrix_from;
 
-    params.make_size(9);
+    params.set_size(9);
     for ( r=0; r<3; ++r )
       for ( c=0; c<3; ++c )
         params( 3*r + c ) = H( r, c );
@@ -197,7 +197,7 @@ rrel_homography2d_est :: normalize( const vcl_vector< vnl_vector<double> >& pts,
                                     vnl_matrix< double > & norm_matrix ) const
 {
   norm_pts.resize( pts.size() );
-  norm_matrix.resize( 3, 3 );
+  norm_matrix.set_size( 3, 3 );
   norm_matrix.fill( 0.0 );
 
   vnl_vector<double> center( 2, 0.0 );

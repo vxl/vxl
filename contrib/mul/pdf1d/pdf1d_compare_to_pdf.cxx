@@ -40,7 +40,7 @@ double pdf1d_compare_to_pdf::bootstrap_compare(vnl_vector<double>& B,
 {
   vnl_vector<double> sample(n);
 
-  B.resize(n_trials);
+  B.set_size(n_trials);
 
   double sum = 0;
   for (int i=0;i<n_trials;++i)
@@ -83,7 +83,7 @@ double pdf1d_compare_to_pdf::bootstrap_compare_form(vnl_vector<double>& B,
   if (!pdf_.isDefined() || pdf_->is_a()!=builder.new_model_type())
     pdf_ = builder.new_model();
 
-  B.resize(n_trials);
+  B.set_size(n_trials);
 
   double sum = 0;
   for (int i=0;i<n_trials;++i)

@@ -107,7 +107,7 @@ void vpdfl_gaussian_builder::updateCovar(vnl_matrix<double>& S,
   const double *v = vec.data_block();
   if (S.rows()!=n)
   {
-    S.resize(n,n);
+    S.set_size(n,n);
     double **S_data = S.data_array();
     for (unsigned int i=0; i<n; ++i)
       for (unsigned int j=0; j<n; ++j)
@@ -184,7 +184,7 @@ void vpdfl_gaussian_builder::meanCovar(vnl_vector<double>& mean, vnl_matrix<doub
   vnl_vector<double> sum(n_dims);
   sum.fill(0);
 
-  S.resize(0,0);
+  S.set_size(0,0);
 
   data.reset();
   for (unsigned long i=0;i<n_samples;i++)
@@ -234,22 +234,22 @@ void vpdfl_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 
   if (w_sum/n_samples<min_wt)  // ie near zero
   {
-    vcl_cerr<<"vpdfl_gaussian_builder::weighted_build() ";
-    vcl_cerr<<"Weights too close to zero. Sum = "<<w_sum<<vcl_endl;
+    vcl_cerr<<"vpdfl_gaussian_builder::weighted_build() :\n"
+            <<"Weights too close to zero. Sum = "<<w_sum<<vcl_endl;
     vcl_abort();
   }
 
   if (actual_samples==0)
   {
-    vcl_cerr<<"vpdfl_gaussian_builder::weighted_build() All weights zero.\n";
+    vcl_cerr<<"vpdfl_gaussian_builder::weighted_build() :\nAll weights zero.\n";
     vcl_abort();
   }
 
   if (actual_samples==1)
   {
 #if 0
-    vcl_cerr<<"vpdfl_gaussian_builder::weighted_build()";
-    vcl_cerr<<" Warning: Only one sample has non-zero weight.\n";
+    vcl_cerr<<"vpdfl_gaussian_builder::weighted_build() :\n"
+            <<" Warning: Only one sample has non-zero weight.\n";
 #endif
     // Build minimal model about the mean (the one non-zero sample)
     sum/=w_sum;
@@ -334,9 +334,9 @@ void vpdfl_gaussian_builder::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_builder &)\n";
-    vcl_cerr << "           Attempted to load object of type ";
-    vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_builder &)\n"
+             << "           Attempted to load object of type "
+             << name <<" into object of type " << is_a() << vcl_endl;
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -349,8 +349,8 @@ void vpdfl_gaussian_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_builder &)\n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_builder &)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

@@ -39,7 +39,7 @@ pdf1d_kernel_pdf::~pdf1d_kernel_pdf()
 void pdf1d_kernel_pdf::set_centres(const vnl_vector<double>& x, double width)
 {
   x_ = x;
-  width_.resize(x.size());
+  width_.set_size(x.size());
   width_.fill(width);
   all_same_width_ = true;
 

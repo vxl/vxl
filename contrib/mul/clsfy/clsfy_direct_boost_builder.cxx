@@ -258,7 +258,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
 
     // have to resize all vectors
     for (int i=0; i< bs_; ++i)
-      vec[i].resize(n);
+      vec[i].set_size(n);
 
     // add data for both classes
     inputs.reset();
@@ -510,7 +510,7 @@ void clsfy_direct_boost_builder::b_read(vsl_b_istream& /*bfs*/)
     break;
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_direct_boost_builder&) \n"
-             << "           Unknown version number "<< version << "\n";
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

@@ -80,7 +80,7 @@ void vpdfl_gaussian_kernel_pdf_sampler::sample_component(vnl_vector<double>& x,
   const vpdfl_gaussian_kernel_pdf & kpdf = static_cast<const vpdfl_gaussian_kernel_pdf &>(model());
 
   int n_dims = kpdf.n_dims();
-  x.resize(n_dims);
+  x.set_size(n_dims);
 
   const double* m = kpdf.centre()[j].data_block();
   double w = kpdf.width()[j];

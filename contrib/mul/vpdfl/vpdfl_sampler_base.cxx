@@ -70,7 +70,7 @@ void vpdfl_sampler_base::regular_samples_and_prob(
 {
   regular_samples(x);
   int n = x.size();
-  p.resize(n);
+  p.set_size(n);
   double* p_data = p.data_block();
   vnl_vector<double>* x_data = &x[0];
 

@@ -69,7 +69,7 @@ static void build_K_part(vnl_matrix<double>& L,
                          const vcl_vector<vgl_point_2d<double> >& pts)
 {
   unsigned int n = pts.size();
-  if ( (L.rows()!=n+3) | (L.columns()!=n+3) ) L.resize(n+3,n+3);
+  if ( (L.rows()!=n+3) | (L.columns()!=n+3) ) L.set_size(n+3,n+3);
 
   const vgl_point_2d<double> * pts_data = &pts[0];
   double** K_data = L.data_array();
@@ -128,7 +128,7 @@ void mbl_thin_plate_spline_2d::build_pure_affine(
         const vcl_vector<vgl_point_2d<double> >& dest_pts)
 {
   int n=source_pts.size();
-  L_inv_.resize(0,0);
+  L_inv_.set_size(0,0);
   if (n==0)
   {
     // Set identity transformation
@@ -137,8 +137,8 @@ void mbl_thin_plate_spline_2d::build_pure_affine(
     AxX_ = 1; AxY_ = 0;
     AyX_ = 0; AyY_ = 1;
 
-    Wx_.resize(0);
-    Wy_.resize(0);
+    Wx_.set_size(0);
+    Wy_.set_size(0);
 
     src_pts_.resize(0);
 
@@ -150,8 +150,8 @@ void mbl_thin_plate_spline_2d::build_pure_affine(
     // Just apply a translation :
     Ax0_ = dest_pts[0].x() - source_pts[0].x();
     Ay0_ = dest_pts[0].y() - source_pts[0].y();
-    Wx_.resize(0);
-    Wy_.resize(0);
+    Wx_.set_size(0);
+    Wy_.set_size(0);
     AxX_ = 1; AxY_ = 0;
     AyX_ = 0; AyY_ = 1;
     src_pts_.resize(0);
@@ -198,8 +198,8 @@ void mbl_thin_plate_spline_2d::build_pure_affine(
     Ax0_ = u1.x() - (a * x1.x() - b * x1.y());
     Ay0_ = u1.y() - (b * x1.x() + a * x1.y());
 
-    Wx_.resize(0);
-    Wy_.resize(0);
+    Wx_.set_size(0);
+    Wy_.set_size(0);
     src_pts_.resize(0);
 
     return;
@@ -249,8 +249,8 @@ void mbl_thin_plate_spline_2d::build_pure_affine(
     Ax0_ = u0.x() - (a * x0.x() + b * x0.y());
     Ay0_ = u0.y() - (c * x0.x() + d * x0.y());
 
-    Wx_.resize(0);
-    Wy_.resize(0);
+    Wx_.set_size(0);
+    Wy_.set_size(0);
     src_pts_.resize(0);
 
     return;
@@ -263,8 +263,8 @@ void mbl_thin_plate_spline_2d::set_params(const vnl_vector<double>& W1,
 {
   int n = W1.size()-3;
 
-  if (int(Wx_.size()) < n) Wx_.resize(n);
-  if (int(Wy_.size()) < n) Wy_.resize(n);
+  if (int(Wx_.size()) < n) Wx_.set_size(n);
+  if (int(Wy_.size()) < n) Wy_.set_size(n);
 
   double *Wx_data=Wx_.data_block();
   double *Wy_data=Wy_.data_block();
@@ -318,8 +318,8 @@ void mbl_thin_plate_spline_2d::set_up_rhs(vnl_vector<double>& Bx,
 {
   int n =dest_pts.size();
 
-  Bx.resize(n+3);
-  By.resize(n+3);
+  Bx.set_size(n+3);
+  By.set_size(n+3);
   double* Bx_data=Bx.data_block();
   double* By_data=By.data_block();
   const vgl_point_2d<double>  *d_pts_data=&dest_pts[0];
@@ -349,7 +349,7 @@ void mbl_thin_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& so
     vcl_abort();
   }
 
-  L_inv_.resize(0,0);
+  L_inv_.set_size(0,0);
 
   if (n<=3)
   {
@@ -391,7 +391,7 @@ void mbl_thin_plate_spline_2d::set_source_pts(const vcl_vector<vgl_point_2d<doub
 
   if (n<=3)
   {
-    L_inv_.resize(0,0);
+    L_inv_.set_size(0,0);
     return;
   }
 

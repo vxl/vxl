@@ -84,7 +84,7 @@ void vpdfl_axis_gaussian_sampler::sample(vnl_vector<double>& x)
   const double *m = gauss.mean().data_block();
   int n = gauss.n_dims();
 
-  x.resize(n);
+  x.set_size(n);
 
   double* x_data = x.data_block();
   for (int i=0;i<n;++i)

@@ -31,7 +31,7 @@ pdf1d_weighted_epanech_kernel_pdf::pdf1d_weighted_epanech_kernel_pdf(
   vnl_vector<double> x(n);
   for (int i=0;i<n;++i) x(i)=i*sep;
   set_centres(x,width);
-  weight_.resize(n);
+  weight_.set_size(n);
   weight_.fill(1.0);
   sum_weights_ = n;
 }

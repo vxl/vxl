@@ -108,11 +108,11 @@ void mbl_ar_process<T>::learn_burg(vcl_vector<vnl_vector<T> >& data)
   vnl_vector<T> Ef(dim);
   vnl_vector<T> Eb(dim);
 
-  A_1.resize(data[0].size(),data[0].size());
+  A_1.set_size(data[0].size(),data[0].size());
   A_1.fill((T)0.0);
-  A_2.resize(data[0].size(),data[0].size());
+  A_2.set_size(data[0].size(),data[0].size());
   A_2.fill((T)0.0);
-  B_0.resize(data[0].size(),data[0].size());
+  B_0.set_size(data[0].size(),data[0].size());
   B_0.fill((T)0.0);
 
   for (unsigned int j=0;j<data[0].size();j++)

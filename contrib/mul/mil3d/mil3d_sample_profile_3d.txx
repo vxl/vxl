@@ -73,7 +73,7 @@ void mil3d_sample_profile_3d_ic_safe(vnl_vector<vecType>& vec,
   int ny = image.ny();
   int nz = image.nz();
 
-  vec.resize(n*np);
+  vec.set_size(n*np);
   vecType* v = vec.begin();
 
   vgl_point_3d<double> p = p0;
@@ -131,7 +131,7 @@ void mil3d_sample_profile_3d_ic(vnl_vector<vecType>& vec,
   int ystep = image.ystep();
   int zstep = image.zstep();
 
-  vec.resize(n*np);
+  vec.set_size(n*np);
   vecType* v = vec.begin();
 
   vgl_point_3d<double> p = p0;

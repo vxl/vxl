@@ -78,7 +78,7 @@ void vpdfl_pc_gaussian::get_distances(double &mahalDIFS, double &euclidDFFS, con
   dx_ = x;
   dx_ -= mean();
 
-  if (b_.size()!=m) b_.resize(m);
+  if (b_.size()!=m) b_.set_size(m);
 
 
   // Rotate dx_ into co-ordinate frame of axes of Gaussian
@@ -249,10 +249,10 @@ vpdfl_pdf_base* vpdfl_pc_gaussian::clone() const
 
 void vpdfl_pc_gaussian::print_summary(vcl_ostream& os) const
 {
-  os << "\n" << vsl_indent() << "Partition at: " << partition_;
-  os << "  Log(k) for principal space: "<< log_k_principal_ << "\n";
-  os << vsl_indent() <<  "Partition Chooser: " ;
-  if (partition_chooser_) os << *partition_chooser_ << "\n";
+  os << '\n' << vsl_indent() << "Partition at: " << partition_
+     << "  Log(k) for principal space: "<< log_k_principal_ << '\n'
+     << vsl_indent() <<  "Partition Chooser: " ;
+  if (partition_chooser_) os << *partition_chooser_ << '\n';
   else os << "NULL\n";
   os << vsl_indent();
   vpdfl_gaussian::print_summary(os);

@@ -32,8 +32,8 @@ bool mvl_three_view_six_point_structure::compute()
 
   for (int i=0; i<3; ++i) {
     // compute camera pencils.
-    A[i].resize(3, 4);
-    B[i].resize(3, 4);
+    A[i].set_size(3, 4);
+    B[i].set_size(3, 4);
     if (! mvl_five_point_camera_pencil(u[i], v[i], &A[i], &B[i]))
       return false;
 
@@ -68,7 +68,7 @@ bool mvl_three_view_six_point_structure::compute()
     }
     else {
       solution[k].valid = true;
-      solution[k].Q.resize(4);
+      solution[k].Q.set_size(4);
       mvl_psi_invert((re * p + q).data_block(), solution[k].Q.data_block());
     }
 

@@ -67,7 +67,7 @@ void vpdfl_kernel_pdf::set_centres(const vnl_vector<double>* x, int n, double wi
   x_.resize(n);
   for (int i=0;i<n;++i) x_[i] = x[i];
 
-  width_.resize(n);
+  width_.set_size(n);
   width_.fill(width);
   all_same_width_ = true;
 
@@ -76,7 +76,7 @@ void vpdfl_kernel_pdf::set_centres(const vnl_vector<double>* x, int n, double wi
 
 //: Initialise so all kernels have given width
 void vpdfl_kernel_pdf::set_centres(const vnl_vector<double>* x, int n,
-                   const vnl_vector<double>& width)
+                                   const vnl_vector<double>& width)
 {
   assert((unsigned int)n==width.size());
   x_.resize(n);
@@ -155,8 +155,8 @@ void vpdfl_kernel_pdf::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,width_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_kernel_pdf &)\n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_kernel_pdf &)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

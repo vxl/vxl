@@ -210,7 +210,7 @@ double vpdfl_gaussian::log_p(const vnl_vector<double>& x) const
   dx_ = x;
   dx_ -= mean();
 
-  if (b_.size()!=n) b_.resize(n);
+  if (b_.size()!=n) b_.set_size(n);
 
   // Rotate dx_ into co-ordinate frame of axes of Gaussian
   // b_ = P'dx_
@@ -241,13 +241,13 @@ void vpdfl_gaussian::gradient(vnl_vector<double>& g,
   dx_ = x;
   dx_ -= mean();
 
-  if (b_.size()!=n) b_.resize(n);
+  if (b_.size()!=n) b_.set_size(n);
 
   // Rotate dx_ into co-ordinate frame of axes of Gaussian
   // b_ = P'dx_
   mbl_matxvec_prod_vm(dx_, eigenvecs(),b_);
 
-  if (g.size()!=n) g.resize(n);
+  if (g.size()!=n) g.set_size(n);
 
   double* b_data = b_.data_block();
   const double* v_data = eigenvals().data_block();
@@ -293,7 +293,7 @@ void vpdfl_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_min) 
   dx_ -= mean();
 
   unsigned int n = n_dims();
-  if (b_.size()!=n) b_.resize(n);
+  if (b_.size()!=n) b_.set_size(n);
 
   // Rotate dx_ into co-ordinate frame of axes of Gaussian
   // b_ = P'dx_

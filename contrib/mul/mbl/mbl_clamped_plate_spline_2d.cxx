@@ -91,7 +91,7 @@ static void build_L(vnl_matrix<double>& L,
                     const vcl_vector<vgl_point_2d<double> >& pts)
 {
   unsigned int n = pts.size();
-  if ( (L.rows()!=n) || (L.columns()!=n) ) L.resize(n,n);
+  if ( (L.rows()!=n) || (L.columns()!=n) ) L.set_size(n,n);
 
   const vgl_point_2d<double> * pts_data = &pts[0];
   double** K_data = L.data_array();
@@ -122,8 +122,8 @@ void mbl_clamped_plate_spline_2d::set_up_rhs(vnl_vector<double>& Bx,
 {
   int n =dest_pts.size();
 
-  Bx.resize(n);
-  By.resize(n);
+  Bx.set_size(n);
+  By.set_size(n);
   double* Bx_data=Bx.data_block();
   double* By_data=By.data_block();
   const vgl_point_2d<double>  *d_pts_data=&dest_pts[0];
@@ -149,7 +149,7 @@ void mbl_clamped_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >&
     vcl_abort();
   }
 
-  L_inv_.resize(0,0);
+  L_inv_.set_size(0,0);
 
   src_pts_ = source_pts;
 
@@ -157,8 +157,8 @@ void mbl_clamped_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >&
   vnl_vector<double> Bx(n);  // Used to compute X parameters
   vnl_vector<double> By(n);  // Used to compute Y parameters
 
-  Wx_.resize(n);
-  Wy_.resize(n);
+  Wx_.set_size(n);
+  Wy_.set_size(n);
 
   build_L(L,source_pts);
 
@@ -210,8 +210,8 @@ void mbl_clamped_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >&
   vnl_vector<double> Bx(n);  // Used to compute X parameters
   vnl_vector<double> By(n);  // Used to compute Y parameters
 
-  Wx_.resize(n);
-  Wy_.resize(n);
+  Wx_.set_size(n);
+  Wy_.set_size(n);
 
   set_up_rhs(Bx,By,src_pts_,dest_pts);
 

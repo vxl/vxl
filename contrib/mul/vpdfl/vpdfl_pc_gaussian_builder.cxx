@@ -212,7 +212,7 @@ void vpdfl_pc_gaussian_builder::mean_covar(vnl_vector<double>& mean, vnl_matrix<
   vnl_vector<double> sum(n_dims);
   sum.fill(0);
 
-  S.resize(0,0);
+  S.set_size(0,0);
 
   data.reset();
   for (unsigned long i=0;i<n_samples;i++)
@@ -283,7 +283,7 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
   // eigenvalues are highest first now
 
 #if 0
-  vcl_cerr << "S" << S <<vcl_endl
+  vcl_cerr << 'S' << S <<vcl_endl
            << "evals" << evals <<vcl_endl
            << "evecs" << evecs <<vcl_endl;
 #endif
@@ -425,9 +425,9 @@ void vpdfl_pc_gaussian_builder::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian_builder &)\n";
-    vcl_cerr << "           Attempted to load object of type ";
-    vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian_builder &)\n"
+             << "           Attempted to load object of type "
+             << name <<" into object of type " << is_a() << vcl_endl;
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -452,8 +452,8 @@ void vpdfl_pc_gaussian_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs, fixed_partition_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian_builder &)\n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian_builder &)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

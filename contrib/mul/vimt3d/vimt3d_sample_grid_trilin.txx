@@ -119,7 +119,7 @@ void vimt3d_sample_grid_trilin_ic_no_checks(vnl_vector<vecType>& vec,
   vcl_ptrdiff_t kstep = image.kstep();
   vcl_ptrdiff_t pstep = image.planestep();
 
-  vec.resize(nu*nv*nw*np);
+  vec.set_size(nu*nv*nw*np);
   vecType* vc = vec.begin();
 
   vgl_point_3d<double> p1 = p0;
@@ -182,7 +182,7 @@ void vimt3d_sample_grid_trilin_ic_safe(vnl_vector<vecType>& vec,
   vcl_ptrdiff_t kstep = image.kstep();
   vcl_ptrdiff_t pstep = image.planestep();
 
-  vec.resize(nu*nv*nw*np);
+  vec.set_size(nu*nv*nw*np);
   vecType* vc = vec.begin();
 
   vgl_point_3d<double> p1 = p0;
