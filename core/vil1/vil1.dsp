@@ -114,25 +114,43 @@ SOURCE=.\Templates/vcl_vector+vil1_memory_image_of+uchar--.cxx
 SOURCE=.\Templates/vil1_clamp+vil1_rgb+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_convolve_1d+float.float.float.float-.cxx
+SOURCE=.\Templates/vil1_convolve+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_convolve_1d+float.int.float.float-.cxx
+SOURCE=.\Templates/vil1_convolve_1d+double.byte.double.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_convolve_1d+float.uchar.float.float-.cxx
+SOURCE=.\Templates/vil1_convolve_1d+double.double.double.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_convolve_simple+vil1_byte.double.double.float-.cxx
+SOURCE=.\Templates/vil1_convolve_1d+double.double.double.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_convolve_simple+vil1_byte.float.float.vil1_byte-.cxx
+SOURCE=.\Templates/vil1_convolve_1d+double.float.double.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_convolve_simple+vil1_byte.float.vil1_byte.float-.cxx
+SOURCE=.\Templates/vil1_convolve_1d+double.uint_16.double.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_convolve_simple+vil1_byte.vil1_byte.int.int-.cxx
+SOURCE=.\Templates/vil1_convolve_1d+double.uint_32.double.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil1_convolve_1d+float.byte.double.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil1_convolve_1d+float.double.double.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil1_convolve_simple+byte.double.double.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil1_convolve_simple+byte.float.float.byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil1_convolve_simple+byte.float.byte.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil1_convolve_simple+byte.byte.int.int-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil1_interpolate+double.double-.cxx
@@ -210,10 +228,10 @@ SOURCE=.\Templates/vil1_ncc+float.float.double-.cxx
 SOURCE=.\Templates/vil1_ncc+uchar.uchar.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_resample_image+vil1_byte.unsigned-.cxx
+SOURCE=.\Templates/vil1_resample_image+byte.unsigned-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_resample_image+vil1_rgb+vil1_byte-.vil1_rgb+int--.cxx
+SOURCE=.\Templates/vil1_resample_image+vil1_rgb+byte-.vil1_rgb+int--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil1_rgb+double-.cxx
@@ -703,9 +721,6 @@ SOURCE=.\file_formats/vil1_viff_support.h
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil1_viffheader.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil1_byte.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil1_fwd.h
