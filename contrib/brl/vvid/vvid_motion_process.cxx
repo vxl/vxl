@@ -44,7 +44,7 @@ void vvid_motion_process::update_queue(vil_image ix, vil_image iy)
 
 bool vvid_motion_process::execute()
 {
-  if (!this->get_N_inputs()==1)
+  if (!this->get_N_input_images()==1)
     {
       vcl_cout << "In vvid_motion_process::execute() - not at exactly one"
                << " input image \n";

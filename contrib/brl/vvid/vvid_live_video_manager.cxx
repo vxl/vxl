@@ -180,7 +180,7 @@ void vvid_live_video_manager::display_topology()
 {
   vt2D_->clear_all();
   vcl_vector<vtol_topology_object_sptr> const & seg = 
-    video_process_->get_segmentation();
+    video_process_->get_output_topology();
 
   for(vcl_vector<vtol_topology_object_sptr>::const_iterator ti=seg.begin();
       ti != seg.end(); ti++)

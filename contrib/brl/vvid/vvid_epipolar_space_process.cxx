@@ -13,7 +13,7 @@ vvid_epipolar_space_process::~vvid_epipolar_space_process()
 
 bool vvid_epipolar_space_process::execute()
 {
-  if (this->get_N_inputs()!=2)
+  if (this->get_N_input_images()!=2)
     {
       vcl_cout << "In vvid_epipolar_space_process::execute() - not 2"
                << " input images \n";

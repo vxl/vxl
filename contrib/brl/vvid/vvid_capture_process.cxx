@@ -16,7 +16,7 @@ vvid_capture_process::~vvid_capture_process()
 
 bool vvid_capture_process::execute()
 {
-    if (this->get_N_inputs()!=1)
+    if (this->get_N_input_images()!=1)
     {
       vcl_cout << "In vvid_capture_process::execute() - not exactly one"
                << " input image \n";

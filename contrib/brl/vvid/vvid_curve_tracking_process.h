@@ -23,7 +23,7 @@ class vvid_curve_tracking_process : public vvid_video_process, public bdgl_curve
   vvid_curve_tracking_process(const bdgl_curve_tracker_params & tp, const sdet_detector_params & dp);
   ~vvid_curve_tracking_process();
 
-  virtual output_type get_output_type(){return SPATIAL_OBJECT;}
+  virtual process_data_type get_output_type(){return SPATIAL_OBJECT;}
   //: compute edges on the input image
   virtual bool execute();
   virtual bool finish(){return true;}

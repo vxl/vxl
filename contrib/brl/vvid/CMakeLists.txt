@@ -27,6 +27,9 @@ SET(vvid_sources
     vvid_epipolar_space_process.cxx  vvid_epipolar_space_process.h
     vvid_edge_process.cxx            vvid_edge_process.h
     vvid_harris_corner_process.cxx   vvid_harris_corner_process.h
+    vvid_line_fit_process.cxx        vvid_line_fit_process.h
+    vvid_edge_line_process.cxx       vvid_edge_line_process.h
+    vvid_grid_finder_process.cxx     vvid_grid_finder_process.h
     vvid_file_manager.cxx            vvid_file_manager.h
 )
 

@@ -17,13 +17,13 @@ vvid_region_process::~vvid_region_process()
 
 bool vvid_region_process::execute()
 {
-  if (this->get_N_inputs()!=1)
+  if (this->get_N_input_images()!=1)
     {
       vcl_cout << "In vvid_region_process::execute() - not exactly one"
                << " input image \n";
       return false;
     }
-  topo_objs_.clear();
+  output_topo_objs_.clear();
   //assume the input images are grey scale (should really check)
   vil_memory_image_of<unsigned char> img(vvid_video_process::get_input_image(0));
 
@@ -34,7 +34,7 @@ bool vvid_region_process::execute()
   vcl_vector<vdgl_intensity_face_sptr>& regions = rp.get_regions();
   for (vcl_vector<vdgl_intensity_face_sptr>::iterator fit = regions.begin();
        fit != regions.end(); fit++)
-    topo_objs_.push_back((*fit)->cast_to_topology_object());
+    output_topo_objs_.push_back((*fit)->cast_to_topology_object());
   output_image_ = 0;
   return true;
 }

@@ -22,7 +22,7 @@ class vvid_capture_process : public vvid_video_process
  public:
   vvid_capture_process(vcl_string & video_file);
   ~vvid_capture_process();
-  virtual output_type get_output_type(){return NOTYPE;}
+  virtual process_data_type get_output_type(){return NOTYPE;}
   //: compute edges on the input image
   virtual bool execute();
   virtual bool finish();

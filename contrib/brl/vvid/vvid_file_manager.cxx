@@ -8,6 +8,7 @@
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
 #include <vil/vil_image.h>
+#include <vil/vil_rgb.h>
 #include <vil/vil_memory_image_of.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
@@ -22,6 +23,8 @@
 #include <vgui/vgui_image_tableau.h>
 #include <sdet/sdet_harris_detector_params.h>
 #include <sdet/sdet_detector_params.h>
+#include <sdet/sdet_fit_lines_params.h>
+#include <sdet/sdet_grid_finder_params.h>
 #include <bdgl/bdgl_curve_tracker.h>
 #include <bdgl/bdgl_curve_matcher.h>
 
@@ -32,6 +35,8 @@
 #include <vvid/vvid_lucas_kanade_process.h>
 #include <vvid/vvid_harris_corner_process.h>
 #include <vvid/vvid_edge_process.h>
+#include <vvid/vvid_edge_line_process.h>
+#include <vvid/vvid_grid_finder_process.h>
 #include <vvid/vvid_curve_tracking_process.h>
 
 //static manager instance
@@ -123,7 +128,7 @@ void vvid_file_manager::display_spatial_objects()
   if (!video_process_)
     return;
   vcl_vector<vsol_spatial_object_2d_sptr> const& sos =
-    video_process_->get_spatial_objects();
+    video_process_->get_output_spatial_objects();
   if (easy0_)
   {
     easy0_->clear_all();
@@ -192,23 +197,24 @@ void vvid_file_manager::set_changing_colors(int num, float *r, float *g, float *
 //
 void vvid_file_manager::display_topology()
 {
-  easy0_->clear_all();
+  if(!easy0_)
+    return;
+ vul_timer t;
   vcl_vector<vtol_topology_object_sptr> const & topos =
-    video_process_->get_segmentation();
-  if (easy0_)
-  {
-    easy0_->clear_all();
+    video_process_->get_output_topology();
+  easy0_->clear_all();
     //If tracking is on then we maintain a queue of points
-    if (track_)
-      {
-        frame_trail_.add_topology_objects(topos);
-        vcl_vector<vtol_topology_object_sptr> temp;
-        frame_trail_.get_topology_objects(temp);
-        easy0_->add_topology_objects(temp);
+  if (track_)
+    {
+      frame_trail_.add_topology_objects(topos);
+      vcl_vector<vtol_topology_object_sptr> temp;
+      frame_trail_.get_topology_objects(temp);
+      easy0_->add_topology_objects(temp);
       }
-    else
-      easy0_->add_topology_objects(topos);
-  }
+  else
+    easy0_->add_topology_objects(topos);
+  vcl_cout << "display " << topos.size()
+           << " topology objs in " << t.real() << " msecs.\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -239,15 +245,14 @@ void vvid_file_manager::load_video_file()
 
   vidl_movie::frame_iterator pframe(my_movie_);
   pframe = my_movie_->first();
-
   vil_image img = pframe->get_image();
+  vil_image second = (my_movie_->first()+1)->get_image();
   height_ = img.height();
   width_ = img.width();
   vcl_cout << "Video Height " << height_ << vcl_endl
            << " Video Width " << width_ << vcl_endl;
   if (win_)
-    win_->reshape(width_, height_);
-
+    win_->reshape(2*width_, height_);
   int i = 0;
   int inc = 40;
   if (cache_frames_)
@@ -268,9 +273,9 @@ void vvid_file_manager::load_video_file()
     }
   else
     {
-      itab0_->set_image(img);
+      itab0_->set_image(second);
       v2D0_->child.assign(easy0_);
-      itab1_->set_image(img);
+      itab1_->set_image(second);
     }
   grid_->post_redraw();
   vgui::run_till_idle();
@@ -505,9 +510,9 @@ void vvid_file_manager::compute_vd_edges()
     return;
 
   if (agr)
-    dp.aggressive_junction_closure=0;
+    dp.aggressive_junction_closure=1;
   else
-    dp.aggressive_junction_closure=-1;
+    dp.aggressive_junction_closure=0;
 
   video_process_  = new vvid_edge_process(dp);
   if (track_)
@@ -515,6 +520,60 @@ void vvid_file_manager::compute_vd_edges()
       frame_trail_.clear();
       frame_trail_.set_window(track_window);
     }
+}
+
+void vvid_file_manager::compute_line_fit()
+{
+  static bool agr = false;
+  static sdet_detector_params dp;
+  dp.borderp = false;
+  static sdet_fit_lines_params flp;
+  vgui_dialog line_dialog("Video Line Segments");
+  line_dialog.field("Gaussian sigma", dp.smooth);
+  line_dialog.field("Noise Threshold", dp.noise_multiplier);
+  line_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
+  line_dialog.checkbox("Agressive Closure", agr);
+  line_dialog.checkbox("Compute Junctions", dp.junctionp);
+  line_dialog.field("Min Fit Length", flp.min_fit_length_);
+  line_dialog.field("RMS Distance", flp.rms_distance_);
+  if (!line_dialog.ask())
+    return;
+
+  if (agr)
+    dp.aggressive_junction_closure=1;
+  else
+    dp.aggressive_junction_closure=0;
+
+  video_process_  = new vvid_edge_line_process(dp, flp);
+}
+
+void vvid_file_manager::compute_grid_match()
+{
+  static bool agr = false;
+  static sdet_detector_params dp;
+  dp.borderp = false;
+  static sdet_fit_lines_params flp;
+  static sdet_grid_finder_params gfp;
+  vgui_dialog grid_dialog("Grid Match");
+  grid_dialog.field("Gaussian sigma", dp.smooth);
+  grid_dialog.field("Noise Threshold", dp.noise_multiplier);
+  grid_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
+  grid_dialog.checkbox("Agressive Closure", agr);
+  grid_dialog.checkbox("Compute Junctions", dp.junctionp);
+  grid_dialog.field("Min Fit Length", flp.min_fit_length_);
+  grid_dialog.field("RMS Distance", flp.rms_distance_);
+  grid_dialog.field("Angle Tolerance", gfp.angle_tol_);
+  grid_dialog.field("Line Count Threshold", gfp.thresh_);
+
+  if (!grid_dialog.ask())
+    return;
+
+  if (agr)
+    dp.aggressive_junction_closure=1;
+  else
+    dp.aggressive_junction_closure=0;
+
+  video_process_  = new vvid_grid_finder_process(dp, flp, gfp);
 }
 
 void vvid_file_manager::compute_curve_tracking()

@@ -13,7 +13,7 @@ vvid_frame_diff_process::~vvid_frame_diff_process()
 
 bool vvid_frame_diff_process::execute()
 {
-  if (!this->get_N_inputs()==1)
+  if (!this->get_N_input_images()==1)
     {
       vcl_cout << "In vvid_frame_diff_process::execute() - not at exactly one"
                << " input image \n";

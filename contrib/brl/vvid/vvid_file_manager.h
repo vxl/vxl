@@ -109,6 +109,12 @@ class vvid_file_manager : public vgui_wrapper_tableau
   //: show curve tracking
   void compute_curve_tracking();
 
+  //: shown fit lines
+  void compute_line_fit();
+
+  //: shown fit lines
+  void compute_grid_match();
+
   //: get the window of this player
   vgui_window* get_window(){return win_;}
 

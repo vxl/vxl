@@ -28,13 +28,13 @@ vvid_curve_tracking_process::~vvid_curve_tracking_process()
 bool vvid_curve_tracking_process::execute()
 {
   // init
-  if (this->get_N_inputs()!=1)
+  if (this->get_N_input_images()!=1)
     {
       vcl_cout << "In vvid_curve_tracking_process::execute() - not exactly one"
                << " input image \n";
       return false;
     }
-  spat_objs_.clear();
+  output_spat_objs_.clear();
 
   // input image
   vil_image img = vvid_video_process::get_input_image(0);
@@ -86,8 +86,8 @@ bool vvid_curve_tracking_process::execute()
     //vcl_cout<<".";
     vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( get_output_curve_at(t,i) );
     vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
-    spat_objs_.push_back( dc->cast_to_spatial_object_2d() );
-    spat_objs_[spat_objs_.size()-1]->set_tag_id( get_output_id_at(t,i) );
+    output_spat_objs_.push_back( dc->cast_to_spatial_object_2d() );
+    output_spat_objs_[output_spat_objs_.size()-1]->set_tag_id( get_output_id_at(t,i) );
   }
 
   output_image_ = 0;//no output image is produced

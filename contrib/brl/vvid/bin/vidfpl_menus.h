@@ -31,6 +31,8 @@ class vidfpl_menus
   static void compute_lucas_kanade_callback();
   static void compute_harris_corners_callback();
   static void compute_vd_edges_callback();
+  static void compute_line_fit_callback();
+  static void compute_grid_match_callback();
   static void compute_curve_tracking_callback();
   static void quit_callback();
   static vgui_menu get_menu();

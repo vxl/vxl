@@ -17,13 +17,13 @@ vvid_harris_corner_process::~vvid_harris_corner_process()
 
 bool vvid_harris_corner_process::execute()
 {
-  if (this->get_N_inputs()!=1)
+  if (this->get_N_input_images()!=1)
     {
       vcl_cout << "In vvid_harris_corner_process::execute() - not exactly one"
                << " input image \n";
       return false;
     }
-  spat_objs_.clear();
+  output_spat_objs_.clear();
   //assume the input images are grey scale (should really check)
   vil_memory_image_of<unsigned char> img(vvid_video_process::get_input_image(0));
   vvid_video_process::clear_input();
@@ -35,9 +35,9 @@ bool vvid_harris_corner_process::execute()
   if (!N)
     return false;
   for (int i = 0; i<N; i++)
-    spat_objs_.push_back(points[i]->cast_to_spatial_object_2d());
+    output_spat_objs_.push_back(points[i]->cast_to_spatial_object_2d());
   
-  topo_objs_.clear();
+  output_topo_objs_.clear();
   output_image_ = 0;
   return true;
 }
