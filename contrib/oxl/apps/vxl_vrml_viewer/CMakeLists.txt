@@ -1,0 +1,22 @@
+#
+# ./oxl/apps/vxl_vrml_viewer/CMakeLists.txt
+#
+
+ADD_EXECUTABLE( vxl_vrml_viewer vxl_vrml_viewer_sources )
+
+SOURCE_FILES( vxl_vrml_viewer_sources main )
+
+INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake )
+
+INCLUDE( ${allvxl_SOURCE_DIR}/oxl/osl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/oxl/mvl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vgl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/v3p/Qv/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
+LINK_LIBRARIES( -lvgui-vrml )
