@@ -42,23 +42,8 @@ const char * vsol_spatial_object_2d::get_name() const
     return SpatialTypes[0];
 }
 
-void vsol_spatial_object_2d::protected_destroy()
-{
-  if (this->get_references() <= 0)
-  {
-    vcl_cout << "goodbye cruel world\n";
-    delete this;
-  }
-}
-
 vsol_spatial_object_2d::~vsol_spatial_object_2d()
 {
-}
-
-void iu_delete(vsol_spatial_object_2d* so)
-{
-  if (so)
-    so->protected_destroy();
 }
 
 void vsol_spatial_object_2d::compute_bounding_box() const

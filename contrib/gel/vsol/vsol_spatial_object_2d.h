@@ -129,7 +129,7 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
   void set_id(int i) { id_ = i; }
 
   //: unprotect the object
-  void un_protect() { ref_count--; iu_delete(this); }
+  void un_protect() { this->unref(); }
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
@@ -166,8 +166,6 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
   // Data Control--------------------------------------------------------------
 
  public:
-  void protected_destroy();
-
   // bounding box accessors
 
   void check_update_bounding_box() const;  // Test consistency of bound
