@@ -8,7 +8,6 @@
 #include <vcl_cassert.h>
 
 //=======================================================================
-
 //: Cunning pointer for objects that can be cloned.
 //  Used to record base class pointers to objects
 //  When copied, the object pointed to gets cloned.
@@ -73,6 +72,12 @@ class mbl_cloneable_ptr
 
   //: Cast to allow object to look like thing pointed to
   operator BaseClass&() { assert(ptr_!=0); return *ptr_; }
+
+  //: Dereferencing the pointer
+  BaseClass &operator * () { return *ptr_; }
+
+  //: Dereferencing the pointer
+  const BaseClass &operator * () const { return *ptr_; }
 
   //: Cast to allow object to look like thing pointed to
   operator const BaseClass&() const { assert(ptr_!=0); return *ptr_; }
