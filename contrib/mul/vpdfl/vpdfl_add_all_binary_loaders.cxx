@@ -1,3 +1,8 @@
+// This is mul/vpdfl/vpdfl_add_all_binary_loaders.cxx
+#include "vpdfl_add_all_binary_loaders.h"
+//:
+// \file
+
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
 #include <vpdfl/vpdfl_gaussian.h>
