@@ -79,7 +79,7 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
     if(!Computor.compute(seven1, seven2, F_temp))
       vcl_cout << "Seven point failure" << vcl_endl;
 
-    for(int k = 0; k < F_temp.size(); k++) {
+    for(unsigned int k = 0; k < F_temp.size(); k++) {
       int temp_count = 0;
       vcl_vector<bool> list(data_size_);
       vcl_vector<double> residuals = calculate_residuals(point1_image, point2_image, F_temp[k]);
