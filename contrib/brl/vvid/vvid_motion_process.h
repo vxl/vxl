@@ -4,10 +4,7 @@
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief  vvid_motion_process
-//   detects linear motion
-//
-// \endbrief
+// \brief detects linear motion
 // \author
 //   J.L. Mundy
 //
@@ -16,15 +13,12 @@
 //   J.L. Mundy February 16, 2003    Initial version.
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_list.h>
 #include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vil/vil_memory_image_of.h>
 #include <vvid/vvid_video_process.h>
 
 class vvid_motion_process : public vvid_video_process
 {
-public:
+ public:
   enum state_symbol {NO_IMAGE=0, FIRST_IMAGE, IN_PROCESS};
   vvid_motion_process();
   ~vvid_motion_process();
@@ -32,7 +26,7 @@ public:
   //: compute motion
   virtual bool execute();
   virtual bool finish();
-private:
+ private:
   //local methods
   void compute_motion(vil_image ix, vil_image iy);
   void update_queue(vil_image ix, vil_image iy);
@@ -42,6 +36,5 @@ private:
   vcl_vector<vil_image > queuex_;
   vcl_vector<vil_image > queuey_;
 };
-
 
 #endif // vvid_motion_process_h_

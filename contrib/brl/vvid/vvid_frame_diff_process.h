@@ -4,10 +4,7 @@
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief  vvid_frame_diff_process
-//   Computes frame difference (first output is all zeros)
-//
-// \endbrief
+// \brief Computes frame difference (first output is all zeros)
 // \author
 //   J.L. Mundy
 //
@@ -16,25 +13,22 @@
 //   J.L. Mundy February 16, 2003    Initial version.
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_list.h>
-#include <vcl_string.h>
 #include <vil/vil_memory_image_of.h>
 #include <vvid/vvid_video_process.h>
 
 class vvid_frame_diff_process : public vvid_video_process
 {
-public:
+ public:
   vvid_frame_diff_process();
   ~vvid_frame_diff_process();
   virtual output_type get_output_type(){return IMAGE;}
   //: difference sequential frames
   virtual bool execute();
   virtual bool finish();
-private:
+ private:
   //members
   bool first_frame_;
   vil_memory_image_of<float> img0_;
 };
-
 
 #endif // vvid_frame_diff_process_h_
