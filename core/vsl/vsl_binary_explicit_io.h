@@ -609,6 +609,7 @@ inline void vsl_b_read_int_16(vsl_b_istream& is, long& n )
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the size of the
 // block being read.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -625,6 +626,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const double* begin, unsigned n
 
 //: Read a block of doubles from a vsl_b_istream
 // This function is very speed efficient.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -641,6 +643,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, double* begin, unsigned nelems)
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the size of the
 // block being read.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -656,6 +659,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const float* begin, unsigned ne
 
 //: Read a block of floats from a vsl_b_istream
 // This function is very speed efficient.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -672,6 +676,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, float* begin, unsigned nelems)
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -691,6 +696,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const int* begin, unsigned nele
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -723,6 +729,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, int* begin, unsigned nelems)
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -742,6 +749,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned int* begin, unsi
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -773,6 +781,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned int* begin, unsigned ne
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -792,6 +801,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const short* begin, unsigned ne
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -823,6 +833,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, short* begin, unsigned nelems)
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -842,6 +853,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned short* begin, un
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -873,6 +885,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned short* begin, unsigned 
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -892,6 +905,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const long* begin, unsigned nel
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -923,6 +937,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, long* begin, unsigned nelems)
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -942,6 +957,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned long* begin, uns
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
@@ -977,6 +993,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned long* begin, unsigned n
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 inline void vsl_b_write_block(vsl_b_ostream &os, const vcl_ptrdiff_t* begin, unsigned nelems)
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_ptrdiff_t)) * nelems];
@@ -992,6 +1009,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const vcl_ptrdiff_t* begin, uns
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 inline void vsl_b_read_block(vsl_b_istream &is, vcl_ptrdiff_t* begin, unsigned nelems)
 {
   unsigned long nbytes;
@@ -1019,6 +1037,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, vcl_ptrdiff_t* begin, unsigned n
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 inline void vsl_b_write_block(vsl_b_ostream &os, const vcl_size_t* begin, unsigned nelems)
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_size_t)) * nelems];
@@ -1034,6 +1053,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const vcl_size_t* begin, unsign
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
+// \deprecated in favour of vsl_block_binary_read
 inline void vsl_b_read_block(vsl_b_istream &is, vcl_size_t* begin, unsigned nelems)
 {
   unsigned long nbytes;

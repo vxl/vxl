@@ -9,6 +9,9 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
 
+
+
+// IMS Hack: MSVC6.0 has the annoying habit of occasionally forgetting that inline implies static.
 #ifdef VCL_VC60
 #define VCL_VC60_STATIC static
 #else
