@@ -18,7 +18,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <geml/geml_matcher.h>
+#include "geml_matcher.h"
 
 class geml_matcher_correlation : public geml_matcher {
 public:
