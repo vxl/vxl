@@ -47,6 +47,7 @@ contrib/mul vimt   vimt_   build core/vil core/vgl
 contrib/mul vil3d  vil3d_  build core/vil core/vul
 contrib/mul vimt3d vimt3d_ build contrib/mul/vil3d contrib/mul/vimt
 contrib/mul mvl2   mvl2_   build contrib/mul/vimt contrib/mul/mbl core/vul
+contrib/mul ipts   ipts_   build contrib/mul/vimt contrib/mul/mbl core/vgl
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/tbl Various Image Processing Libraries
 contrib/tbl vipl   vipl_   build core/vil1 core/vnl
