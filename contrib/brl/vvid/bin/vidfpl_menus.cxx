@@ -131,9 +131,14 @@ void vidfpl_menus::compute_curve_tracking_callback()
   vvid_file_manager::instance()->compute_curve_tracking();
 }
 
-void vidfpl_menus::compute_corr_tracking_callback()
+void vidfpl_menus::compute_info_tracking_callback()
 {
-  vvid_file_manager::instance()->compute_corr_tracking();
+  vvid_file_manager::instance()->compute_info_tracking();
+}
+
+void vidfpl_menus::display_poly_track_callback()
+{
+  vvid_file_manager::instance()->display_poly_track();
 }
 
 void vidfpl_menus::create_box_callback()
@@ -164,6 +169,7 @@ vgui_menu vidfpl_menus::get_menu()
   menuview.add( "Next", next_frame_callback,(vgui_key)'f', vgui_CTRL);
   menuview.add( "Prev", prev_frame_callback,(vgui_key)'b', vgui_CTRL);
   menuview.add( "Stop", stop_video_callback,(vgui_key)'s', vgui_CTRL);
+  menuview.add( "Display Track", display_poly_track_callback);
   menuview.add( "easy2D Demo", easy2D_tableau_demo_callback);
   //edit menu entries
   menuedit.add( "No Op", no_op_callback);
@@ -175,7 +181,7 @@ vgui_menu vidfpl_menus::get_menu()
   menuedit.add( "Compute Line Fit", compute_line_fit_callback);
   menuedit.add( "Compute Grid Match", compute_grid_match_callback);
   menuedit.add( "Compute Curve Tracking", compute_curve_tracking_callback);
-  menuedit.add( "Compute Corr Tracking", compute_corr_tracking_callback);
+  menuedit.add( "Compute Info Tracking", compute_info_tracking_callback);
   menuedit.add( "Create Box", create_box_callback);
 
   //Top level menu layout

@@ -26,7 +26,7 @@
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_grid_finder_params.h>
-#include <sdet/sdet_tracker_params.h>
+#include <sdet/sdet_info_tracker_params.h>
 #include <bdgl/bdgl_curve_tracking.h>
 
 #include <vidl_vil1/vidl_vil1_io.h>
@@ -39,7 +39,8 @@
 #include <vpro/vpro_edge_line_process.h>
 #include <vpro/vpro_grid_finder_process.h>
 #include <vpro/vpro_curve_tracking_process.h>
-#include <vpro/vpro_corr_tracker_process.h>
+#include <vpro/vpro_info_tracker_process.h>
+#include <vpro/vpro_track_display_process.h>
 
 //static manager instance
 vvid_file_manager *vvid_file_manager::instance_ = 0;
@@ -224,8 +225,8 @@ void vvid_file_manager::display_topology()
   else
     easy0_->add_topology_objects(topos);
 
-  vcl_cout << "display " << topos.size()
-           << " topology objs in " << t.real() << " msecs.\n";
+//   vcl_cout << "display " << topos.size()
+//            << " topology objs in " << t.real() << " msecs.\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -336,7 +337,8 @@ void vvid_file_manager::un_cached_play()
        pframe!=my_movie_->end() && play_video_;
        ++pframe)
   {
-    vgui::out << "frame["<< pframe->get_real_frame_index()<<"]\n";
+    int frame_index = pframe->get_real_frame_index();
+    vgui::out << "frame["<< frame_index <<"]\n";
     vil1_image img = pframe->get_image();
     itab0_->set_image(img);
     // pause by repeating the same frame
@@ -357,6 +359,7 @@ void vvid_file_manager::un_cached_play()
     }
     else if (video_process_)
     {
+      video_process_->set_frame_index(frame_index);
       vil1_memory_image_of<unsigned char> image(img);
       video_process_->add_input_image(image);
       if (video_process_->execute())
@@ -372,6 +375,8 @@ void vvid_file_manager::un_cached_play()
     grid_->post_redraw();
     vgui::run_till_idle();
   }
+  if(video_process_)
+	  video_process_->finish();
 }
 
 void vvid_file_manager::play_video()
@@ -681,27 +686,55 @@ void vvid_file_manager::compute_curve_tracking()
   }
 }
 
-void vvid_file_manager::compute_corr_tracking()
+void vvid_file_manager::compute_info_tracking()
 {
-  static sdet_tracker_params tp;
-  vgui_dialog tracker_dialog("Mutual Information Tracker");
+  static bool output_track = false;
+  static sdet_info_tracker_params tp;  
+  vgui_dialog tracker_dialog("Mutual Information Tracker V1.3");
   tracker_dialog.field("Number of Samples", tp.n_samples_);
   tracker_dialog.field("Search Radius", tp.search_radius_);
   tracker_dialog.field("Angle Range (radians)", tp.angle_range_);
   tracker_dialog.field("Scale Range (1+-s)", tp.scale_range_);
   tracker_dialog.field("Smooth Sigma", tp.sigma_);
   tracker_dialog.checkbox("Add Gradient Info", tp.gradient_info_);
+  tracker_dialog.checkbox("Output Track Data", output_track);
+  tracker_dialog.checkbox("Verbose", tp.verbose_);
   if (!tracker_dialog.ask())
     return;
-  vcl_cout << tp << '\n';
+  static vcl_string track_file;
+  if(output_track)
+  {
+  vgui_dialog output_dialog("Track Data File");
+  static vcl_string ext = "*.*";
+  output_dialog.file("Track File:", ext, track_file);
+  if (!output_dialog.ask())
+    return;
+  }
+  vcl_cout << tp << "\n";
   vtol_topology_object_sptr to = easy0_->get_temp();
   if (!to)
-    vcl_cout << "In vvid_file_manager::compute_corr_tracking() - no model\n";
+    vcl_cout << "In vvid_file_manager::compute_info_tracking() - no model\n";
   else
   {
-    video_process_ = new vpro_corr_tracker_process(tp);
+    vpro_info_tracker_process* vitp = new vpro_info_tracker_process(tp);
+    video_process_ = vitp;
     video_process_->add_input_topology_object(to);
+    if(output_track)
+      if(!vitp->set_output_file(track_file))
+        return;
   }
+}
+void vvid_file_manager::display_poly_track()
+{
+  vgui_dialog output_dialog("Track Data File");
+  static vcl_string track_file;
+  static vcl_string ext = "*.trk";
+  output_dialog.file("Track File:", ext, track_file);
+  if (!output_dialog.ask())
+    return;
+  vpro_track_display_process* vtd = new vpro_track_display_process();
+  video_process_ = vtd;
+  vtd->set_input_file(track_file);
 }
 
 void vvid_file_manager::create_box()

@@ -118,7 +118,10 @@ class vvid_file_manager : public vgui_wrapper_tableau
   void compute_grid_match();
 
   //: show correlation tracking
-  void compute_corr_tracking();
+  void compute_info_tracking();
+
+  //: display a tracked polygon
+  void display_poly_track();
 
   //: create a box by rubberbanding
   void create_box();
