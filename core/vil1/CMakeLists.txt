@@ -36,7 +36,7 @@ ENDIF(HAS_TIFF)
 
 
 
-SET( vil_sources
+SET( vil_sources  ${vil_sources}
   vil_fwd.h
 
   # basic things
