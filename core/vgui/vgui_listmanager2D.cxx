@@ -153,7 +153,7 @@ void vgui_listmanager2D::get_hits(float x, float y, vcl_vector<vcl_vector<unsign
 void vgui_listmanager2D::find_closest(float x, float y, vcl_vector<vcl_vector<unsigned> >* hits,
                                       vgui_soview2D** closest_so, vgui_displaylist2D_sptr* closest_display)
 {
-  float closest_dist = -1; //v*nl_math::maxfloat;
+  float closest_dist = -1; // vnl_numeric_traits<float>::maxval;
   vcl_vector<unsigned> closest_hit;
   vgui_displaylist2D_sptr display;
   closest_display = 0;
@@ -181,7 +181,7 @@ void vgui_listmanager2D::find_closest(float x, float y, vcl_vector<vcl_vector<un
       if (so)
       {
         float dist = so->distance_squared(x,y);
-        if (closest_dist==-1 || dist<closest_dist)
+        if (closest_dist<0 || dist<closest_dist)
         {
           closest_dist = dist;
           *closest_display = display;

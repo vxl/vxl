@@ -113,7 +113,7 @@ void vgui_displaylist2D::get_hits(float x, float y, vcl_vector<unsigned>& my_hit
 
 unsigned vgui_displaylist2D::find_closest(float x, float y, vcl_vector<unsigned>& hits) {
   unsigned closest = 0;
-  float closest_dist = -1; //v*nl_math::maxfloat;
+  float closest_dist = -1; // vnl_numeric_traits<float>::maxval;
 
   for (vcl_vector<unsigned>::iterator h_iter = hits.begin();
        h_iter != hits.end(); ++h_iter) {
@@ -123,7 +123,7 @@ unsigned vgui_displaylist2D::find_closest(float x, float y, vcl_vector<unsigned>
     float dist = so->distance_squared(x,y);
     //vcl_cerr << " distance to " << (void*)so << " = " << dist << vcl_endl;
 
-    if (closest_dist==-1 || dist<closest_dist) {
+    if (closest_dist<0 || dist<closest_dist) {
       closest_dist = dist;
       closest = *h_iter;
     }

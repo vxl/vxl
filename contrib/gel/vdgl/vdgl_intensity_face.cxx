@@ -112,7 +112,8 @@ void vdgl_intensity_face::extrema(vcl_vector<float>& orientation,
 {
   //Iterate through the pixels of the face and determine the
   //extrema of the face projection.
-  fmin = vnl_math::maxfloat; fmax = -vnl_math::maxfloat;
+  float fmin = vnl_numeric_traits<float>::maxval,
+        fmax = -vnl_numeric_traits<float>::maxval;
   for (this->reset(); this->next();)
     {
       //The coordinates of each region pixel
@@ -121,7 +122,8 @@ void vdgl_intensity_face::extrema(vcl_vector<float>& orientation,
       float c = orientation.x(), s = orientation.y();
       float w = (xi*c + yi*s);
       //Update the extrema
-      fmin = vnl_math::min(fmin, w); fmax = vnl_math::max(fmax, w);
+      if (w<fmin) fmin = w;
+      if (w>fmax) fmax = w;
     }
 }
 #endif
@@ -222,8 +224,8 @@ Histogram_ref vdgl_intensity_face::GetAdjacentRegionHistogram()
       if (!af)
         continue;
       afs.push_back(af);
-      mini = vnl_math::min(mini, af->get_min());
-      maxi = vnl_math::max(maxi, af->get_max());
+      if (af->get_min() < mini) mini = af->get_min();
+      if (af->get_max() > maxi) maxi = af->get_max();
     }
   //The histogram of the adjacent regions
   Histogram_ref ha = new Histogram(100, mini, maxi);

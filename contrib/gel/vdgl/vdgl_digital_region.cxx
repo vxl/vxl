@@ -11,7 +11,7 @@
 #include <SpatialBasics/tolerance.h>
 #include <DigitalGeometry/IntensityCoef.h>
 #include <DigitalGeometry/DigitalRegion.h>
-#include <vnl/vnl_math.h>
+#include <vnl/vnl_numeric_traits.h>
 #endif
 
 #ifndef MAX_ROUNDOFF
@@ -570,7 +570,8 @@ float vdgl_digital_region::Ir() const
 Histogram_ref vdgl_digital_region::GetResidualHistogram()
 {
   if (!npts_) return NULL;
-  float min = vnl_math::maxfloat, max = -vnl_math::maxfloat;
+  float min = vnl_numeric_traits<float>::maxval,
+        max = -vnl_numeric_traits<float>::maxval;
   for (this->reset(); this->next();)
     {
       float ir = (float)this->Ir();
