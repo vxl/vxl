@@ -4,22 +4,22 @@
 // \file
 // \brief Robust HMatrix computation
 //
-//    HMatrix2DComputeMLESAC implements
-//    Phil Torr's MLESAC (Maximum Likelyhood Estimation) of the projective matrix.
-//    (or homography)
+//  HMatrix2DComputeMLESAC implements
+//  Phil Torr's MLESAC (Maximum Likelihood Estimation) of the projective matrix.
+//  (or homography)
 //
-//    Points are preconditioned as described in [Hartley, ``In defence of
-//    the 8-point algorithm'', ICCV95].
-//      The conditioning and truncation are optional and may be
-//    omitted. The MLESAC class is also responsible for maintaining the inliers
-//    passed in the PairMatchSetCorner class.
+//  Points are preconditioned as described in [Hartley, ``In defence of
+//  the 8-point algorithm'', ICCV95].
+//    The conditioning and truncation are optional and may be
+//  omitted. The MLESAC class is also responsible for maintaining the inliers
+//  passed in the PairMatchSetCorner class.
 //
 // \author
 //     David N. McKinnon, UQ I.R.I.S., 23.01.2001
 //
 // \verbatim
-// Modifications
-//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+//  Modifications
+//   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -30,8 +30,9 @@
 #include <mvl/AffineMetric.h>
 #include <vcl_vector.h>
 
-class HMatrix2DComputeMLESAC : public HMatrix2DComputeRobust {
-public:
+class HMatrix2DComputeMLESAC : public HMatrix2DComputeRobust
+{
+ public:
   //: Initialize HMatrix2DComputeRobust object.
   HMatrix2DComputeMLESAC(double std);
   virtual ~HMatrix2DComputeMLESAC();

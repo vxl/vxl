@@ -23,7 +23,7 @@
 // - FMatrixCompute7Point    - Oxford implementation of 7-point algorithm
 // - FMatrixCompute8Point    - linear least squares on 8 point matches
 // - FMatrixComputeLMedSq    - Zhengyou Zhang's Least Medium of Squares estimation
-// - FMatrixComputeMLESAC    - Phil Torr's Maximum Likelyhood estimation
+// - FMatrixComputeMLESAC    - Phil Torr's Maximum Likelihood estimation
 // - FMatrixComputeRANSAC    - Phil Torr's Robust Sampling Concensus
 //
 // \verbatim

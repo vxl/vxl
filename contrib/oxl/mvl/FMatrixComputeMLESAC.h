@@ -4,20 +4,20 @@
 // \file
 // \brief Robust FMatrix computation
 //
-//    FMatrixComputeMLESAC implements
-//    Phil Torr's MLESAC (Maximum Likelyhood Estimation) of the fundamental matrix.
+//  FMatrixComputeMLESAC implements
+//  Phil Torr's MLESAC (Maximum Likelihood Estimation) of the fundamental matrix.
 //
-//    Points are preconditioned as described in [Hartley, ``In defence of
-//    the 8-point algorithm'', ICCV95], and the resulting F matrix is rank-2
-//    truncated.  The conditioning and truncation are optional and may be
-//    omitted.
+//  Points are preconditioned as described in [Hartley, ``In defence of
+//  the 8-point algorithm'', ICCV95], and the resulting F matrix is rank-2
+//  truncated.  The conditioning and truncation are optional and may be
+//  omitted.
 //
 // \author
 //     David N. McKinnon, UQ I.R.I.S., 02.12.2000
 //
 // \verbatim
-// Modifications
-//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+//  Modifications
+//   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -26,8 +26,9 @@
 #include <mvl/FManifoldProject.h>
 #include <vcl_vector.h>
 
-class FMatrixComputeMLESAC : public FMatrixComputeRobust {
-public:
+class FMatrixComputeMLESAC : public FMatrixComputeRobust
+{
+ public:
   //: Initialize FMatrixComputeRobust object.
   // If rank2_truncate = false, the resulting solution is not forced to rank 2
   // using the vnl_svd<double>.
