@@ -23,6 +23,7 @@ TESTS += test_algo_exp_filter_1d.cxx
 TESTS += test_pixel_format.cxx
 TESTS += test_image_view_maths.cxx
 TESTS += test_memory_chunk.cxx
+TESTS += test_convert.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
