@@ -143,6 +143,10 @@ SOURCE=.\vbl_file.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vbl_file_iterator.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vbl_get_timestamp.cxx
 # End Source File
 # Begin Source File
@@ -168,6 +172,10 @@ SOURCE=.\vbl_ref_count.cxx
 # Begin Source File
 
 SOURCE=.\vbl_reg_exp.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_sequence_filename_map.cxx
 # End Source File
 # Begin Source File
 
@@ -296,6 +304,10 @@ SOURCE=.\vbl_clamp.h
 # Begin Source File
 
 SOURCE=.\vbl_file.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_file_iterator.h
 # End Source File
 # Begin Source File
 
