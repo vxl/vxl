@@ -1,16 +1,14 @@
+// This is vxl/vnl/tests/test_vector.cxx
 #include <vcl_iostream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-
+#include <testlib/testlib_test.h>
 
 void vnl_vector_test_int() {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing Vector<int>" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "*******************\n"
+           << "Testing Vector<int>\n"
+           << "*******************\n";
   //// test constructors, accessors
   vnl_vector<int> v0;
   TEST("vnl_vector<int> v0()", v0.size(), 0);
@@ -146,9 +144,9 @@ bool float_equal(const float& f1, const float& f2){
 }
 
 void vnl_vector_test_float() {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing Vector<float>" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "*********************\n"
+           << "Testing Vector<float>\n"
+           << "*********************\n";
   //// test constructors, accessors
   vnl_vector<float> v0;
   TEST("vnl_vector<float> v0()", v0.size(), 0);
@@ -296,16 +294,18 @@ void vnl_vector_test_float() {
     vnl_vector<float> v3(-0.5f, 0.f, 0.5f);
     vcl_cout << "v3 = " << v3 << vcl_endl;
     vcl_cout << "v1 - v2 = " << v1 - v2 << vcl_endl;
-    vcl_cout << "angle(v1,v2) = " << angle(v1,v2) << vcl_endl;
-    float ang = angle(v1,v2) * (360/(2*vnl_math::pi));
+    double ang = angle(v1,v2);
+    vcl_cout << "angle(v1,v2) = " << ang << vcl_endl;
+    ang *= 180*vnl_math::one_over_pi;
     vcl_cout << "angle(v1,v2) in degrees = " << ang << vcl_endl;
     vcl_cout << "cross_2d(v1,v2) = " << cross_2d(v1,v2) << vcl_endl;
     vcl_cout << "cross_3d(v1,v2) = " << cross_3d(v1,v2) << vcl_endl;
-    TEST("angle", ang, 90.0f);
-    vcl_cout << "angle(v1,v3) = " << angle(v1,v3) << vcl_endl;
-    float ang2 = angle(v1,v3) * (360/(2*vnl_math::pi));
+    TEST_NEAR("angle(v1,v2)", ang, 90.0, 1e-15);
+    double ang2 = angle(v1,v3);
+    vcl_cout << "angle(v1,v3) = " << ang << vcl_endl;
+    ang2 *= 180*vnl_math::one_over_pi;
     vcl_cout << "angle(v1,v3) in degrees = " << ang2 << vcl_endl;
-    TEST("angle 2", ang2, 135.0f);
+    TEST_NEAR("angle(v1,v3)", ang2, 135.0, 1e-6);
 #if 0
     TEST("squared_distance_2d", squared_distance_2d(v1,v2), 2);
     TEST("squared_distance_3d", squared_distance_3d(v1,v2), 2);
