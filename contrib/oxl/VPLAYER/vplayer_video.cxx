@@ -59,7 +59,7 @@ void vplayer_video::play_video(const void *)
        r->init(*it,new vgui_rubberbander_easy2D_client(*it));
        (*it)->post_redraw();
        frame_num%=my_movie->length();
-       vgui::out<<endl<<"Frame: "<<frame_num++;
+       vgui::out<<"\nFrame: "<<frame_num++;
        while(t.all()<delta_t);
        DRAW();
        t.mark();
@@ -87,7 +87,7 @@ void vplayer_video::go_to_frame(const void *)
     delete r->get_client();
     r->init(tableaux_[frame_num],new vgui_rubberbander_easy2D_client(tableaux_[frame_num]));
     tableaux_[frame_num]->post_redraw();
-    vgui::out<<endl<<"Frame: "<<frame_num;
+    vgui::out<<"\nFrame: "<<frame_num;
     DRAW();
     playing = false;
   }
@@ -110,7 +110,7 @@ void vplayer_video::next_frame(const void *)
       delete r->get_client();
       r->init(tableaux_[frame_num],new vgui_rubberbander_easy2D_client(tableaux_[frame_num]));
       tableaux_[frame_num]->post_redraw();
-      vgui::out<<endl<<"Frame: "<<frame_num;
+      vgui::out<<"\nFrame: "<<frame_num;
       DRAW();
     }
 }
@@ -133,7 +133,7 @@ void vplayer_video::prev_frame(const void *)
       delete r->get_client();
       r->init(tableaux_[frame_num],new vgui_rubberbander_easy2D_client(tableaux_[frame_num]));
       tableaux_[frame_num]->post_redraw();
-      vgui::out<<endl<<"Frame: "<<frame_num;
+      vgui::out<<"\nFrame: "<<frame_num;
       DRAW();
     }
 }
