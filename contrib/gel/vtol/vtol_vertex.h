@@ -2,14 +2,15 @@
 #define VTOL_VERTEX_H
 // .NAME vtol_vertex - Topological container for a spatial point
 // .LIBRARY vtol
-// .HEADER vxl Package
+// .HEADER gel Package
 // .INCLUDE vtol/vtol_vertex.h
 // .FILE vtol_vertex.cxx
 //
 // .SECTION Description
-//  The vtol_vertex class is used to represent either a 2D or 2D point on
-//  a topological structure.  A vtol_vertex maintains a pointer to the IUPoint
-//  which is the actual spatial point.
+//  The vtol_vertex class is used to represent either a 2D or 3D point on
+//  a topological structure.  A vtol_vertex does not actually maintain a pointer
+//  to the vsol_point which is the actual spatial point, since this could either
+//  be a vsol_point_2d or a vsol_point_3d.
 //
 // .SECTION Modifications:
 //     JLM December 1995, Added timeStamp (touch) to
@@ -28,6 +29,12 @@
 
 class vtol_vertex_2d;
 class vtol_vertex_3d;
+class vtol_edge;
+class vtol_zero_chain;
+class vtol_one_chain;
+class vtol_face;
+class vtol_two_chain;
+class vtol_block;
 
 class vtol_vertex
   : public vtol_topology_object
@@ -90,24 +97,24 @@ public:
 
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a vertex, 0 otherwise
+  //: Return `this' if `this' is a 2D vertex, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_vertex_2d *cast_to_vertex_2d(void) const {return NULL;}
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a vertex, 0 otherwise
+  //: Return `this' if `this' is a 2D vertex, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vtol_vertex_2d *cast_to_vertex_2d(void) {return NULL;}
 
 
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a vertex, 0 otherwise
+  //: Return `this' if `this' is a 3D vertex, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_vertex_3d *cast_to_vertex_3d(void) const {return NULL;}
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a vertex, 0 otherwise
+  //: Return `this' if `this' is a 3D vertex, 0 otherwise
   //---------------------------------------------------------------------------
 
   virtual vtol_vertex_3d *cast_to_vertex_3d(void) {return NULL;}
