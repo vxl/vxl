@@ -303,8 +303,8 @@ HomgLine2D
 TriTensor::image1_transfer (const HomgLine2D& line2, const HomgLine2D& line3) const
 {
   vnl_double_3 l1(0,0,0);
-  const vnl_vector<double>& l2 = line2.get_vector();
-  const vnl_vector<double>& l3 = line3.get_vector();
+  const vnl_vector<double>& l2 = line2.get_vector().as_ref();
+  const vnl_vector<double>& l3 = line3.get_vector().as_ref();
 
   for (int i = 0; i < 3; i++)
     for (int j = 0; j < 3; j++)
@@ -322,7 +322,7 @@ TriTensor::image1_transfer (const HomgLine2D& line2, const HomgLine2D& line3) co
 HomgLine2D
 TriTensor::image2_transfer (const HomgLine2D& line1, const HomgLine2D& line3) const
 {
-  return HomgLine2D(vnl_inverse(dot3(line3.get_vector())) * line1.get_vector());
+  return HomgLine2D(vnl_inverse(dot3(line3.get_vector().as_ref())) * line1.get_vector());
 }
 
 //-----------------------------------------------------------------------------
@@ -333,7 +333,7 @@ TriTensor::image2_transfer (const HomgLine2D& line1, const HomgLine2D& line3) co
 HomgLine2D
 TriTensor::image3_transfer (const HomgLine2D& line1, const HomgLine2D& line2) const
 {
-  return HomgLine2D(vnl_inverse(dot2(line2.get_vector())) * line1.get_vector());
+  return HomgLine2D(vnl_inverse(dot2(line2.get_vector().as_ref())) * line1.get_vector());
 }
 
 // == HOMOGRAPHIES FROM LINES ==
@@ -349,13 +349,13 @@ HMatrix2D TriTensor::get_hmatrix_23(const HomgLine2D& line1)
 //: Return the planar homography between views 3 and 1 induced by line 2
 HMatrix2D TriTensor::get_hmatrix_31(const HomgLine2D& line2) const
 {
-  return HMatrix2D(dot2(line2.get_vector()));
+  return HMatrix2D(dot2(line2.get_vector().as_ref()));
 }
 
 //: Return the planar homography between views 2 and 1 induced by line 3
 HMatrix2D TriTensor::get_hmatrix_21(const HomgLine2D& line3) const
 {
-  return HMatrix2D(dot3(line3.get_vector()));
+  return HMatrix2D(dot3(line3.get_vector().as_ref()));
 }
 
 // == CONTRACTION WITH VECTORS ==
@@ -1212,9 +1212,9 @@ struct Column3x3 : public vnl_double_3x3
 //: Compute and cache the two epipoles from image 1.
 bool TriTensor::compute_epipoles() const
 {
-  vnl_double_3x3 T1 = dot1(vnl_double_3(1,0,0));
-  vnl_double_3x3 T2 = dot1(vnl_double_3(0,1,0));
-  vnl_double_3x3 T3 = dot1(vnl_double_3(0,0,1));
+  vnl_double_3x3 T1 = dot1(vnl_double_3(1,0,0).as_ref());
+  vnl_double_3x3 T2 = dot1(vnl_double_3(0,1,0).as_ref());
+  vnl_double_3x3 T3 = dot1(vnl_double_3(0,0,1).as_ref());
 
   vnl_svd<double> svd1(T1);
   vnl_double_3 u1 = svd1.nullvector();
@@ -1295,14 +1295,14 @@ FMatrix TriTensor::get_fmatrix_13() const
 // next two routines retired as caching introduced.  awf, aug97
 FMatrix TriTensor::get_fmatrix_13(const HomgPoint2D& e2, const HomgPoint2D& e3) const
 {
-  return vnl_cross_product_matrix(e3.get_vector()) * dot2(e2.get_vector()).transpose().as_ref();
+  return vnl_cross_product_matrix(e3.get_vector()) * dot2(e2.get_vector().as_ref()).transpose().as_ref();
 }
 
 //  More efficient than above if both F matrices are required.  The epipoles ought
 // to be computed once and the passed twice to get_fmatrix_12 and get_fmatrix_13.
 FMatrix TriTensor::get_fmatrix_12(const HomgPoint2D& e2, const HomgPoint2D& e3) const
 {
-  return vnl_cross_product_matrix(e2.get_vector()) * dot3(e3.get_vector()).transpose().as_ref();
+  return vnl_cross_product_matrix(e2.get_vector()) * dot3(e3.get_vector().as_ref()).transpose().as_ref();
 }
 
 FMatrix TriTensor::compute_fmatrix_23() const
@@ -1351,8 +1351,8 @@ void TriTensor::compute_P_matrices(const vnl_vector<double>& x, double alpha, do
   HomgPoint2D e2 = get_epipole_12();
   HomgPoint2D e3 = get_epipole_13();
 
-  vnl_double_3x3 Te3 = dot3t(e3);
-  vnl_double_3x3 TTe2 = dot2t(e2);
+  vnl_double_3x3 Te3 = dot3t(e3.as_ref());
+  vnl_double_3x3 TTe2 = dot2t(e2.as_ref());
 
   MATLABPRINT((vnl_matrix<double> const&/*2.7*/)Te3);
   MATLABPRINT((vnl_matrix<double> const&/*2.7*/)TTe2);

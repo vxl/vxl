@@ -139,7 +139,7 @@ bool FMatrixCompute7Point::compute_preconditioned(vcl_vector<vgl_homg_point_2d<d
 
   for (unsigned int i = 0; i < roots.size(); i++) {
     vnl_matrix<double> F_temp =
-      F1.get_matrix()*roots[0] + F2.get_matrix()*(1 - roots[i]);
+      F1.get_matrix().as_ref()*roots[0] + F2.get_matrix()*(1 - roots[i]);
     F.push_back(new FMatrix(F_temp));
   }
   // Rank-truncate F
@@ -180,7 +180,7 @@ bool FMatrixCompute7Point::compute_preconditioned(vcl_vector<HomgPoint2D>& point
 
   for (unsigned int i = 0; i < roots.size(); i++) {
     vnl_matrix<double> F_temp =
-      F1.get_matrix()*roots[0] + F2.get_matrix()*(1 - roots[i]);
+      F1.get_matrix().as_ref()*roots[0] + F2.get_matrix()*(1 - roots[i]);
     F.push_back(new FMatrix(F_temp));
   }
   // Rank-truncate F

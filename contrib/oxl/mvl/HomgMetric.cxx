@@ -378,7 +378,7 @@ TriTensor HomgMetric::homg_to_image_T(const TriTensor& T, const HomgMetric& c1, 
   vnl_double_3x3 C2 = c2.get_C();
   vnl_double_3x3 C3 = c3.get_C();
 
-  return T.decondition(C1i.transpose(), C2.transpose(), C3.transpose());
+  return T.decondition(C1i.transpose().as_ref(), C2.transpose().as_ref(), C3.transpose().as_ref());
 }
 
 //: Condition a trifocal tensor.
@@ -389,5 +389,5 @@ TriTensor HomgMetric::image_to_homg_T(const TriTensor& T, const HomgMetric& c1, 
   vnl_double_3x3 C2i = c2.get_C_inverse();
   vnl_double_3x3 C3i = c3.get_C_inverse();
 
-  return T.decondition(C1.transpose(), C2i.transpose(), C3i.transpose());
+  return T.decondition(C1.transpose().as_ref(), C2i.transpose().as_ref(), C3i.transpose().as_ref());
 }

@@ -48,12 +48,12 @@ HomgLine3D::HomgLine3D (const HomgPoint3D& start,
     // Start infinite
     point_finite_ = end;
 
-    const vnl_vector<double>& dir = start.get_vector();
+    const vnl_vector<double>& dir = start.get_vector().as_ref();
     point_infinite_ = HomgPoint3D(dir / dir.magnitude());
   } else {
     // End infinite -- just assign
     point_finite_ = start;
-    const vnl_vector<double>& dir = end.get_vector();
+    const vnl_vector<double>& dir = end.get_vector().as_ref();
     point_infinite_ = HomgPoint3D(dir / dir.magnitude());
   }
 }
@@ -81,7 +81,7 @@ void HomgLine3D::force_point2_infinite()
 //: Return line direction as a 3-vector
 vnl_double_3 HomgLine3D::dir() const
 {
-  const vnl_vector<double>& d = point_infinite_.get_vector();
+  const vnl_vector<double>& d = point_infinite_.get_vector().as_ref();
   if (d[3] != 0) {
     vcl_cerr << *this;
     vcl_cerr << "*** HomgLine3D: Infinite point not at infinity!! ***\n";

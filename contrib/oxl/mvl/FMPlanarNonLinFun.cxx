@@ -62,8 +62,8 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
   vcl_cerr << "FMPlanarNonLinFun: matches = "<<data_size_<<", using "<<FMPlanarNonLinFun_nparams<<" parameters \n";
 
   /* transform F to well-conditioned frame. */
-  const vnl_matrix<double>& post = denorm_matrix_inv_;
-  const vnl_matrix<double>& pre  = denorm_matrix_inv_.transpose();
+  const vnl_matrix<double>& post = denorm_matrix_inv_.as_ref();
+  const vnl_matrix<double>& pre  = denorm_matrix_inv_.transpose().as_ref();
   FMatrixPlanar norm_F(pre * F->get_matrix() * post);
 
   /* parameterise it. */
@@ -280,7 +280,7 @@ void FMPlanarNonLinFun::fmatrix_to_params_awf(const FMatrixPlanar& F, vnl_vector
   // Check parameterization
   {
     FMatrixPlanar back = params_to_fmatrix_awf(params);
-    double norm = vnl_matops::homg_diff(back.get_matrix(), F.get_matrix());
+    double norm = vnl_matops::homg_diff(back.get_matrix().as_ref(), F.get_matrix().as_ref());
     if (norm > 1e-12) {
       vcl_cerr << "FMPlanarNonLinFun: WARNING! deparameterization diff = " << norm << vcl_endl;
       vcl_cerr << "b = [" << back << "];\n";
@@ -300,7 +300,7 @@ FMatrixPlanar FMPlanarNonLinFun::params_to_fmatrix_awf(const vnl_vector<double>&
   vnl_cross_product_matrix E1(v+3);
   vnl_cross_product_matrix E2(v+6);
 
-  vnl_matrix<double> fmat = E2 * L * E1;
+  vnl_matrix<double> fmat = E2.as_ref() * L * E1;
 
   fmat /= fmat.fro_norm();
 
