@@ -1,4 +1,4 @@
-LINK_LIBRARIES(vsl vnl-io vil-io vgl-io vbl-io mbl mil vpdfl)
+LINK_LIBRARIES(vsl vnl_io vil_io vgl_io vbl_io mbl mil vpdfl)
 
 LINK_DIRECTORIES(
 ${allvxl_BINARY_DIR}/mul/vsl
@@ -10,3 +10,5 @@ ${allvxl_BINARY_DIR}/mul/mbl
 ${allvxl_BINARY_DIR}/mul/mil
 ${allvxl_BINARY_DIR}/mul/vpdfl
 )
+
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/CMakeListsLink.txt )
