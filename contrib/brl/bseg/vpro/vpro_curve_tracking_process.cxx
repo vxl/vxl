@@ -1,7 +1,9 @@
 #include <vcl_iostream.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vcl_vector.h>
-#include <bdgl/bdgl_curve_tracker.h>
+//#include <bdgl/bdgl_curve_tracker.h>
+#include <bdgl/bdgl_curve_tracking.h>
+
 #include <brip/brip_float_ops.h>
 #include <vpro/vpro_curve_tracking_process.h>
 #include <sdet/sdet_detector_params.h>
@@ -13,13 +15,14 @@
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_edgel_chain.h>
+#include <bdgl/bdgl_curve_algs.h>
 #include <vsol/vsol_curve_2d.h>
-
-vpro_curve_tracking_process::vpro_curve_tracking_process(const bdgl_curve_tracker_params & tp, const sdet_detector_params & dp)
+#include <vsol/vsol_line_2d.h>
+vpro_curve_tracking_process::vpro_curve_tracking_process(bdgl_curve_tracking_params & tp, const sdet_detector_params & dp)
 {
   detect_params_ = dp;
-  params_ = tp;
-}
+  tp_ = tp;
+ }
 
 vpro_curve_tracking_process::~vpro_curve_tracking_process()
 {
@@ -49,6 +52,7 @@ bool vpro_curve_tracking_process::execute()
   else
     cimg = vil1_memory_image_of<unsigned char>(img);
 
+  this->clear_input();
   //initialize the detector
   sdet_detector detector(detect_params_);
   detector.SetImage(cimg);
@@ -65,33 +69,123 @@ bool vpro_curve_tracking_process::execute()
   vdgl_digital_curve_sptr dc;
   vdgl_interpolator_sptr interp;
   vdgl_edgel_chain_sptr  ec;
-  vcl_vector< vdgl_edgel_chain_sptr > ecl;
+  vcl_vector<vtol_edge_2d_sptr> ecl;
+  ecl.clear();
+
   for (unsigned int i=0;i<edges->size();i++){
-    c = (*edges)[i]->curve();
+    c  = (*edges)[i]->curve();
     dc = c->cast_to_digital_curve();
-    interp = dc->get_interpolator();
-    ec = interp->get_edgel_chain();
-    ecl.push_back(ec);
+	if(dc->length()>tp_.min_length_of_curves)
+	{
+		ecl.push_back((*edges)[i]);
+	}
   }
-  input_curve_.push_back(ecl);
 
+  input_curves_.push_back(ecl);
   // tracking
-  int t = input_curve_.size()-1;
+  int t = input_curves_.size()-1;
   track_frame(t);
+  
+ 
+  	for (unsigned int i=0;i<get_output_size_at(t);i++){
+ 
+	bdgl_tracker_curve_sptr test_curve1=get_output_curve(t,i);
+	bdgl_tracker_curve_sptr new_curve,old_curve;
+	vcl_map<int,int>::iterator iter;
+	vtol_edge_2d_sptr edc=test_curve1->get_curve_set();
 
-  // pass the results
+	vdgl_digital_curve_sptr dc = bdgl_curve_algs::create_digital_curves(test_curve1->desc->points_);
 
-  // display
-  for (int i=0;i<get_output_size_at(t);i++) {
-    //vcl_cout<<".";
-    vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( get_output_curve_at(t,i) );
-    vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
-    output_spat_objs_.push_back( dc->cast_to_spatial_object_2d() );
-    output_spat_objs_[output_spat_objs_.size()-1]->set_tag_id( get_output_id_at(t,i) );
-  }
-
+	if(test_curve1->match_id_==-1 )
+	{
+		output_spat_objs_.push_back( dc->cast_to_spatial_object_2d() );
+		output_spat_objs_[output_spat_objs_.size()-1]->set_tag_id(-1);
+	}
+	else if (test_curve1->match_id_>0 )
+	{
+		output_spat_objs_.push_back( dc->cast_to_spatial_object_2d() );
+		output_spat_objs_[output_spat_objs_.size()-1]->set_tag_id( test_curve1->match_id_ );
+	}
+	
+ }
+  
+  vcl_cout<<"\n frame no :"<<t;
   output_image_ = 0;//no output image is produced
+  write_to_file();
+  
   return true;
 }
 
+
+bool vpro_curve_tracking_process::write_to_file()
+{
+	//search for the biggest curve in output_curve_[0]
+	
+	// writing the code to write tracks and their point correspondences 
+	for(int k=0;k<output_curves_[0].size();k++)
+	{
+		match_data_sptr bmn;
+		int cnt=1;
+		if(output_curves_[0][k]->get_best_match_next())
+		{
+			bmn=output_curves_[0][k]->get_best_match_next();
+			while(bmn)
+			{
+				cnt++;
+				if(bmn->match_curve_set[0]->get_best_match_next())
+					bmn=bmn->match_curve_set[0]->get_best_match_next();
+				else
+					bmn=NULL;
+			}
+		}
+
+		if(cnt>7)
+		{
+
+			vcl_ostringstream o;
+			o<<k;
+			vcl_string curve_num=o.str();
+			vcl_string temp_name="c:\\temp_input\\curve" + curve_num+".txt";
+			vcl_ofstream f( temp_name.c_str());
+			vcl_map<int,int>::iterator iter;
+			double max_length=0;
+			int max_curve_no;
+			f<<"# CONTOUR_EDGE_MAP : canny+van-ducks \n";
+			f<<"# .cem files \n";
+			f<<"# Format : \n";
+			f<<"# Each contour block will consist of the following \n";
+			f<<"# [BEGIN CONTOUR] \n";
+			f<<"# EDGE_COUNT=num_of_edges \n";
+			f<<"# [Pixel_Pos]  Pixel_Dir Pixel_Conf  [Sub_Pixel_Pos] Sub_Pixel_Dir Sub_Pixel_Conf \n";
+			int flag=1;
+			f<<"CURVE\n";
+			bdgl_tracker_curve_sptr obj=output_curves_[0][k];
+			do
+			{
+				f<<"[BEGIN CONTOUR]\n";
+				f<<"EDGE_COUNT="<<obj->desc->points_.size()<<"\n";
+				for(int i=0;i<obj->desc->points_.size();i++)
+				{
+					f<<" "<<"["<<obj->desc->points_[i].x()<<", "<<obj->desc->points_[i].y()
+					 <<"]"<<"   "<<obj->desc->angles_[i]<<" "<<obj->desc->grad_[i]<<"\n";
+					
+				}
+				f<<"[END CONTOUR]\n";
+		
+				if(obj->get_best_match_next())
+				{
+				obj=obj->get_best_match_next()->match_curve_set[0];
+				}
+			else
+				flag=0;
+		}while(flag);
+		f<<"END CURVE\n";
+		f.close();
+		}
+			
+
+	}
+
+	return true;
+}
 //-----------------------------------------------------------------
