@@ -15,12 +15,17 @@
 #include <vil/vil_fwd.h>
 #include <vil/vil_image.h>
 
-//: Load an image
-// Actually, return a pointer to a vil_image_impl object which will read the disk
-// image when get_section is called.
+// vil_load*() returns a vil_image which will "read an image from a file". In practice
+// it may or may not read the image on creation, but a disk read will take place at
+// some point before get_section() returns.
+
+//: Load an image from a file, possibly performing expected conversions.
 vil_image vil_load(char const* filename);
 
-//: Load from istream
-// vil_image_impl* vil_load(istream&);
+//: Load raw from stream.
+vil_image vil_load_raw(vil_stream *);
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_load.
+//: Load raw from file (convenience).
+vil_image vil_load_raw(char const *);
+
+#endif
