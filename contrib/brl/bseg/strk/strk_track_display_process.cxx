@@ -51,14 +51,13 @@ bool strk_track_display_process::input_tracked_faces(vcl_ifstream & str)
   if (y!="Y:")
     return false;
   str >> Y;
-  vcl_vector<vtol_vertex_sptr> verts;
   for (int i = 0; i<n_frames; i++)
   {
-    verts.clear();
+    vcl_vector<vtol_vertex_sptr> verts;
     for (int j = 0; j<n_verts; j++)
     {
-      vtol_vertex_2d* v2d  = new vtol_vertex_2d(X[i][j], Y[i][j]);
-      verts.push_back((vtol_vertex*)v2d);
+      vtol_vertex* v2d  = new vtol_vertex_2d(X[i][j], Y[i][j]);
+      verts.push_back(v2d);
     }
     vgl_point_2d<double> p(cog[i][0], cog[i][1]);
     tracked_cogs_.push_back(p);
@@ -89,7 +88,7 @@ bool strk_track_display_process::execute()
     if (!str)
     {
       vcl_cout << "In strk_track_display_process::execute() -"
-               << " could not open file " << track_file_ << "\n";
+               << " could not open file " << track_file_ << '\n';
       failure_ = true;
       return false;
     }
@@ -117,10 +116,10 @@ bool strk_track_display_process::execute()
   //edges
   for (vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
-    {
-      to = (*eit)->cast_to_edge();
-      output_topo_objs_.push_back(to);
-    }
+  {
+    to = (*eit)->cast_to_edge();
+    output_topo_objs_.push_back(to);
+  }
   return true;
 }
 
@@ -133,7 +132,7 @@ bool strk_track_display_process::set_input_file(vcl_string const& file_name)
   if (!str)
   {
     vcl_cout << "In strk_track_display_process::set_input_file() -"
-             << " could not open file " << track_file_ << "\n";
+             << " could not open file " << track_file_ << '\n';
     return false;
   }
   str.close();

@@ -441,10 +441,8 @@ void strk_info_tracker::refine_best_sample()
   double range_fraction = 0.1;
   if (false) //  if (initial_model_)
   {
-    vtol_face* f = (vtol_face_2d*)initial_model_->cast_to_face();
-    vtol_topology_object* to = (vtol_topology_object*)f;
-    vsol_spatial_object_2d* so = (vsol_spatial_object_2d*)to;
-    vsol_box_2d_sptr bb = so->get_bounding_box();
+    vtol_face* f = initial_model_->cast_to_face();
+    vsol_box_2d_sptr bb = f->get_bounding_box();
     if (bb)
     {
       xrange = range_fraction*bb->width();

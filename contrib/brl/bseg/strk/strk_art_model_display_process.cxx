@@ -30,8 +30,8 @@ static void construct_face_and_cog(const int n_verts,
   vcl_vector<vtol_vertex_sptr> verts;
   for (int i = 0; i<n_verts; i++)
   {
-    vtol_vertex_2d* v2d  = new vtol_vertex_2d(X[frame_index][i], Y[frame_index][i]);
-        verts.push_back((vtol_vertex*)v2d);
+    vtol_vertex* v2d  = new vtol_vertex_2d(X[frame_index][i], Y[frame_index][i]);
+    verts.push_back(v2d);
   }
   face = new vtol_face_2d(verts);
   vgl_point_2d<double> p(cogs[frame_index][0], cogs[frame_index][1]);
@@ -176,7 +176,7 @@ bool strk_art_model_display_process::execute()
     if (!str)
     {
       vcl_cout << "In strk_art_model_display_process::execute() -"
-               << " could not open file " << track_file_ << "\n";
+               << " could not open file " << track_file_ << '\n';
       failure_ = true;
       return false;
     }
@@ -191,11 +191,11 @@ bool strk_art_model_display_process::execute()
       if (!str)
       {
         vcl_cout << "In strk_art_model_display_process::execute() -"
-                 << " could not open file " << track_file_ << "\n";
+                 << " could not open file " << track_file_ << '\n';
         failure_ = true;
         return false;
       }
-        
+
       this->input_tracked_models(str);
       n_models = tracked_models_.size();
       if (!n_models)
@@ -235,7 +235,7 @@ bool strk_art_model_display_process::set_input_file(vcl_string const& file_name)
   if (!str)
   {
     vcl_cout << "In strk_art_model_display_process::set_input_file() -"
-             << " could not open file " << track_file_ << "\n";
+             << " could not open file " << track_file_ << '\n';
     return false;
   }
   str.close();

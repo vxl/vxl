@@ -738,7 +738,7 @@ void sdet_contour::update_edgel_chain(vtol_edge_2d_sptr const& edge,
   //Create a new digital curve
   vdgl_edgel_chain_sptr  ec = new vdgl_edgel_chain;
   vdgl_interpolator_sptr it = new vdgl_interpolator_linear(ec);
-  vsol_curve_2d_sptr dc = (vsol_curve_2d*)(new vdgl_digital_curve(it));
+  vsol_curve_2d_sptr dc = new vdgl_digital_curve(it);
 
   // Cases
   // A. The edge is a cycle
@@ -884,7 +884,7 @@ void sdet_contour::BreakCycle(vtol_vertex_2d_sptr const& junction,
     new vdgl_interpolator_linear(vdgl_edgel_chain_sptr(es));
   vdgl_digital_curve *ds =
     new vdgl_digital_curve( vdgl_interpolator_sptr( it));
-  split->set_curve(*( vsol_curve_2d *) ds);
+  split->set_curve(*ds);
 
   //insert edgels from index to N-1
   //starting at v1()
