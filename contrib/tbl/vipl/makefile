@@ -27,9 +27,11 @@ SOURCES += filter/vipl_filter_abs.cxx
 MANPAGE_SOURCES += filter/vipl_filter_helper.h
 MANPAGE_SOURCES += filter/vipl_trivial_pixeliter.h
 MANPAGE_SOURCES += section/vipl_filterable_section_container_generator_vil_image.txx
+MANPAGE_SOURCES += section/vipl_filterable_section_container_generator_vcl_vector.txx
 MANPAGE_SOURCES += vipl_with_section/vipl_filterable_section_container_generator_section.txx
 MANPAGE_SOURCES += vipl_with_vbl_array_2d/vipl_filterable_section_container_generator_vbl_array_2d.txx
 MANPAGE_SOURCES += vipl_with_vnl_matrix/vipl_filterable_section_container_generator_vnl_matrix.txx
+MANPAGE_SOURCES += vipl_with_vnl_matrix/vipl_filterable_section_container_generator_vnl_vector.txx
 
 # A. Point operators:
 MANPAGE_SOURCES += vipl_convert.txx
@@ -65,9 +67,11 @@ MANPAGE_SOURCES += section/vipl_section_iterator.txx
 
 # Image accessors (getpixel, setpixel)
 MANPAGE_SOURCES += accessors/vipl_accessors_vil_image.txx
+MANPAGE_SOURCES += accessors/vipl_accessors_vcl_vector.txx
 MANPAGE_SOURCES += vipl_with_section/accessors/vipl_accessors_section.txx
 MANPAGE_SOURCES += vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.txx
 MANPAGE_SOURCES += vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.txx
+MANPAGE_SOURCES += vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.txx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
