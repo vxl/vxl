@@ -17,7 +17,6 @@ SET(vtol_sources
  vtol_vertex_2d.cxx       vtol_vertex_2d.h       vtol_vertex_2d_sptr.h
  vtol_topology_io.cxx     vtol_topology_io.h
  vtol_cycle_processor.cxx vtol_cycle_processor.h
- ../vdgl/vdgl_intensity_face.cxx ../vdgl/vdgl_intensity_face.h ../vdgl/vdgl_intensity_face_sptr.h
  vtol_dtd.h
  vtol_macros.h
 )
