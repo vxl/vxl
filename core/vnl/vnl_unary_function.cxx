@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_unary_function.cxx
+// This is core/vnl/vnl_unary_function.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_unary_function.h"
-#include "vnl_identity.h"
+#include <vnl/vnl_identity.h>
 #include <vnl/vnl_vector.h>
 
 template class vnl_unary_function<int,int>;

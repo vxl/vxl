@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_lbfgs.cxx
+// This is core/vnl/algo/vnl_lbfgs.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -15,7 +15,7 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h> // for setw (replaces cout.form())
 
-#include "vnl_netlib.h" // lbfgs_()
+#include <vnl/algo/vnl_netlib.h> // lbfgs_()
 
 //: Default constructor.
 // memory is set to 5, line_search_accuracy to 0.9.

@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_levenberg_marquardt.cxx
+// This is core/vnl/algo/vnl_levenberg_marquardt.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -20,7 +20,7 @@
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_matrix_ref.h>
 #include <vnl/vnl_least_squares_function.h>
-#include "vnl_netlib.h"
+#include <vnl/algo/vnl_netlib.h> // lmdif_()
 
 // see header
 vnl_vector<double> vnl_levenberg_marquardt_minimize(vnl_least_squares_function& f,
@@ -62,8 +62,9 @@ vnl_levenberg_marquardt::~vnl_levenberg_marquardt()
 }
 
 
-class vnl_levenberg_marquardt_Activate {
-public:
+class vnl_levenberg_marquardt_Activate
+{
+ public:
   static vnl_levenberg_marquardt* current;
 
   vnl_levenberg_marquardt_Activate(vnl_levenberg_marquardt* minimizer) {

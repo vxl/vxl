@@ -14,7 +14,7 @@
 #include <vnl/vnl_complex.h>  // vnl_math_squared_magnitude()
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_complex_traits.h>
-#include "vnl_netlib.h"
+#include <vnl/algo/vnl_netlib.h> // dqrdc_(), dqrsl_()
 
 #ifdef HAS_FSM_PACK
 template <typename T> int fsm_qrdc_cxx(vnl_netlib_qrdc_proto(T));
@@ -102,10 +102,10 @@ vnl_matrix<T> const& vnl_qr<T>::Q() const
     ((vnl_matrix<T>*&)Q_) = new vnl_matrix<T>(m,m);
     // extract Q.
     if (verbose) {
-      vcl_cerr << __FILE__ ": vnl_qr<T>::Q()\n";
-      vcl_cerr << " m,n = " << m << ", " << n << vcl_endl;
-      vcl_cerr << " qr0 = [" << qrdc_out_ << "];\n";
-      vcl_cerr << " aux = [" << qraux_ << "];\n";
+      vcl_cerr << __FILE__ ": vnl_qr<T>::Q()\n"
+               << " m,n = " << m << ", " << n << '\n'
+               << " qr0 = [" << qrdc_out_ << "];\n"
+               << " aux = [" << qraux_ << "];\n";
     }
 
     Q_->set_identity();
@@ -211,7 +211,8 @@ vnl_vector<T> vnl_qr<T>::solve(const vnl_vector<T>& b) const
                    &info);
 
   if (info > 0)
-    vcl_cerr << __FILE__ ": vnl_qr<T>::solve() : matrix is rank-deficient by " << info << vcl_endl;
+    vcl_cerr << __FILE__ ": vnl_qr<T>::solve() : matrix is rank-deficient by "
+             << info << '\n';
 
   return x;
 }
@@ -242,7 +243,8 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
                    &info);
 
   if (info > 0)
-    vcl_cerr << __FILE__ ": vnl_qr<T>::QtB() -- matrix is rank-def by " << info << vcl_endl;
+    vcl_cerr << __FILE__ ": vnl_qr<T>::QtB() -- matrix is rank-deficient by "
+             << info << '\n';
 
   return QtB;
 }

@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_real_eigensystem.cxx
+// This is core/vnl/algo/vnl_real_eigensystem.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -14,7 +14,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_fortran_copy.h>
-#include "vnl_netlib.h" // rg_()
+#include <vnl/algo/vnl_netlib.h> // rg_()
 
 //: Extract eigensystem of unsymmetric matrix M, using the EISPACK routine rg.
 //  Should probably switch to using LAPACK's dgeev to avoid transposing.
@@ -39,8 +39,8 @@ vnl_real_eigensystem::vnl_real_eigensystem(vnl_matrix<double> const & M):
   rg_(&n, &n, mf, wr.data_block(), wi.data_block(), &matz, devout.data_block(), iv1.data_block(), fv1.data_block(), &ierr);
 
   if (ierr != 0) {
-    vcl_cerr << " *** vnl_real_eigensystem: Failed on " << ierr << "th eigenvalue\n";
-    vcl_cerr << M << vcl_endl;
+    vcl_cerr << " *** vnl_real_eigensystem: Failed on " << ierr << "th eigenvalue\n"
+             << M << vcl_endl;
   }
 
   // Copy out eigenvalues and eigenvectors

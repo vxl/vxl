@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_cholesky.cxx
+// This is core/vnl/algo/vnl_cholesky.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -14,7 +14,7 @@
 #include <vcl_cmath.h> // pow()
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-#include "vnl_netlib.h" // dpofa_(), dposl_(), dpoco_(), dpodi_()
+#include <vnl/algo/vnl_netlib.h> // dpofa_(), dposl_(), dpoco_(), dpodi_()
 
 //: Cholesky decomposition.
 // Make cholesky decomposition of M optionally computing
@@ -90,7 +90,7 @@ vnl_matrix<double> vnl_cholesky::inverse() const
     vcl_cerr << "vnl_cholesky: Calling inverse() on rank-deficient matrix\n";
     return vnl_matrix<double>();
   }
-  
+
   int n = A_.columns();
   vnl_matrix<double> I = A_;
   int job = 01;

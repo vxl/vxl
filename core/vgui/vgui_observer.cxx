@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_observer.cxx
+// This is core/vgui/vgui_observer.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -9,7 +9,7 @@
 // \brief  See vgui_observer.h for a description of this file.
 
 #include "vgui_observer.h"
-#include "vgui_message.h"
+#include <vgui/vgui_message.h>
 
 vgui_observer::vgui_observer()
 {

@@ -1,6 +1,6 @@
-// This is vxl/vgl/vgl_area.cxx
+// This is core/vgl/vgl_area.cxx
 #include "vgl_area.h"
-#include "vgl_polygon.h"
+#include <vgl/vgl_polygon.h>
 
 #include <vcl_cmath.h> // for vcl_fabs
 

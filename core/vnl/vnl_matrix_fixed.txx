@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_matrix_fixed.txx
+// This is core/vnl/vnl_matrix_fixed.txx
 #ifndef vnl_matrix_fixed_txx_
 #define vnl_matrix_fixed_txx_
 //:
@@ -10,8 +10,8 @@
 #include <vcl_cstdlib.h> // for abort
 #include <vcl_cassert.h>
 
-#include "vnl_error.h"
-#include "vnl_math.h"
+#include <vnl/vnl_error.h>
+#include <vnl/vnl_math.h>
 
 template<class T, unsigned nrows, unsigned ncols>
 void
@@ -136,7 +136,7 @@ vnl_matrix_fixed<T,nrows,ncols>::print(vcl_ostream& os) const
     os << (*this)(i,0);
     for (unsigned int j = 1; j < ncols; j++)
       os << " " << (*this)(i,j);
-    os << "\n";
+    os << '\n';
   }
 }
 
@@ -566,7 +566,7 @@ vnl_matrix_fixed<T,nrows,ncols>::assert_finite_internal() const
     {
       for (unsigned int j=0; j<cols(); ++j)
         vcl_cerr << char(vnl_math_isfinite((*this)(i, j)) ? '-' : '*');
-      vcl_cerr << vcl_endl;
+      vcl_cerr << '\n';
     }
   }
   vcl_cerr << __FILE__ ": calling abort()\n";

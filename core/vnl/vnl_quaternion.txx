@@ -1,10 +1,8 @@
-// This is vxl/vnl/vnl_quaternion.txx
+// This is core/vnl/vnl_quaternion.txx
 #ifndef vnl_quaternion_txx_
 #define vnl_quaternion_txx_
-
 //:
 // \file
-
 //
 // Copyright (C) 1992 General Electric Company.
 //
@@ -37,7 +35,7 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
-#include "vnl_cross.h"
+#include <vnl/vnl_cross.h>
 
 //: Creates a quaternion from its ordered components.
 // x, y, z denote the imaginary part, which are the  coordinates

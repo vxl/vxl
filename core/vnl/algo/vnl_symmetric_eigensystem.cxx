@@ -14,7 +14,7 @@
 #include <vcl_cmath.h> // for sqrt(double)
 #include <vcl_iostream.h>
 #include <vnl/vnl_copy.h>
-#include "vnl_netlib.h" // rs_()
+#include <vnl/algo/vnl_netlib.h> // rs_()
 
 bool vnl_symmetric_eigensystem_compute(vnl_matrix<float> const & A,
                                        vnl_matrix<float>       & V,

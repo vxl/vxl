@@ -1,3 +1,4 @@
+// This is core/vnl/algo/vnl_svd_economy.txx
 #ifndef vnl_svd_economy_txx_
 #define vnl_svd_economy_txx_
 
@@ -8,7 +9,7 @@
 #include <vcl_cmath.h> // for std::abs(double)
 
 #include <vnl/vnl_fortran_copy.h>
-#include "vnl_netlib.h"
+#include <vnl/algo/vnl_netlib.h> // dsvdc_()
 #include <vnl/vnl_matlab_print.h>
 
 #define macro(p, T) \

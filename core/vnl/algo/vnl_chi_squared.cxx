@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_chi_squared.cxx
+// This is core/vnl/algo/vnl_chi_squared.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -8,7 +8,7 @@
 #include "vnl_chi_squared.h"
 
 // FORTRAN routine
-#include "vnl_netlib.h" // dchscdf_()
+#include <vnl/algo/vnl_netlib.h> // dchscdf_()
 
 //: Compute cumulative distribution function for chi-squared distribution.
 // This subroutine computes the cumulative distribution function

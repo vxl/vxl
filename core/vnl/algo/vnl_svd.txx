@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_svd.txx
+// This is core/vnl/algo/vnl_svd.txx
 #ifndef vnl_svd_txx_
 #define vnl_svd_txx_
 //:
@@ -14,7 +14,7 @@
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_fortran_copy.h>
-#include "vnl_netlib.h"
+#include <vnl/algo/vnl_netlib.h> // dsvdc_()
 
 #ifdef HAS_FSM_PACK
 template <typename T> int fsm_svdc_cxx(vnl_netlib_svd_proto(T));
@@ -229,7 +229,7 @@ typename vnl_svd<T>::singval_t vnl_svd<T>::determinant_magnitude() const
     static bool warned = false;
     if (!warned && m_ != n_)
     {
-      vcl_cerr << __FILE__ ": called determinant_magnitude() on SVD of non-square matrix" << vcl_endl;
+      vcl_cerr << __FILE__ ": called determinant_magnitude() on SVD of non-square matrix\n";
       warned = true;
     }
   }

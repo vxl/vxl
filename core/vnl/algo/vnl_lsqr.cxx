@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_lsqr.cxx
+// This is core/vnl/algo/vnl_lsqr.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -15,10 +15,11 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector_ref.h>
 
-#include "vnl_netlib.h" // lsqr_()
+#include <vnl/algo/vnl_netlib.h> // lsqr_()
 
-class vnl_lsqr_Activate {
-public:
+class vnl_lsqr_Activate
+{
+ public:
   static vnl_lsqr* current;
 
   vnl_lsqr_Activate(vnl_lsqr* minimizer) {

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_observable.cxx
+// This is core/vgui/vgui_observable.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -8,7 +8,7 @@
 // \brief  See vgui_observable.h for a description of this file.
 
 #include "vgui_observable.h"
-#include "vgui_observer.h"
+#include <vgui/vgui_observer.h>
 #include <vcl_algorithm.h>
 
 //

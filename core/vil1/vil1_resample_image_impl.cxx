@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_resample_image_impl.cxx
+// This is core/vil/vil_resample_image_impl.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -7,7 +7,7 @@
 // \author fsm
 
 #include "vil_resample_image_impl.h"
-#include "vil_resample_image.h"
+#include <vil/vil_resample_image.h>
 #include <vil/vil_byte.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_pixel.h>

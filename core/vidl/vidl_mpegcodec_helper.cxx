@@ -1,6 +1,6 @@
 // This is core/vidl/vidl_mpegcodec_helper.cxx
 #include "vidl_mpegcodec_helper.h"
-#include "vidl_file_sequence.h"
+#include <vidl/vidl_file_sequence.h>
 #include <vcl_iostream.h>
 #include <vcl_cstring.h> // for memcpy
 #include <vcl_cstdlib.h> // for exit()
@@ -126,18 +126,18 @@ vidl_mpegcodec_helper::execute(decode_request * p)
 }
 
 void
-vidl_mpegcodec_helper::decode_mpeg2 (uint8_t * buf, uint8_t * end)
+vidl_mpegcodec_helper::decode_mpeg2 (uint8_t * buf, uint8_t * endb)
 {
   int num_frames;
 
-  num_frames = mpeg2_decode_data (mpeg2dec_, buf, end);
+  num_frames = mpeg2_decode_data (mpeg2dec_, buf, endb);
 
   output_->last_frame_decoded += num_frames;
 }
 
 #define DEMUX_PAYLOAD_START 1
 int
-vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
+vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
 {
   static int mpeg1_skip_table[16] = {
     0, 0, 4, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -173,13 +173,13 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
         long int missing = (x) - bytes;                        \
         if (missing > 0) {                                     \
             if (header == head_buf) {                          \
-                if (missing <= end - buf) {                    \
+                if (missing <= endb - buf) {                   \
                     vcl_memcpy(header + bytes, buf, missing);  \
                     buf += missing;                            \
                     bytes = (x);                               \
                 } else {                                       \
-                    vcl_memcpy(header + bytes, buf, end - buf);\
-                    state_bytes = bytes + (end - buf);         \
+                    vcl_memcpy(header + bytes, buf, endb-buf); \
+                    state_bytes = bytes + (endb - buf);        \
                     return 0;                                  \
                 }                                              \
             } else {                                           \
@@ -191,10 +191,10 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
         }                                                      \
     } while (0)
 
-#define DONEBYTES(x)                \
+#define DONEBYTES(x)            \
     do {                        \
-        if (header != head_buf)        \
-            buf = header + (x);        \
+        if (header != head_buf) \
+            buf = header + (x); \
     } while (0)
 
     if (flags & DEMUX_PAYLOAD_START)
@@ -208,17 +208,17 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
         }
         break;
     case DEMUX_DATA:
-        if (demux_pid_ || (state_bytes > end - buf)) {
-            decode_mpeg2 (buf, end);
-            state_bytes -= end - buf;
+        if (demux_pid_ || (state_bytes > endb - buf)) {
+            decode_mpeg2 (buf, endb);
+            state_bytes -= endb - buf;
             return 0;
         }
         decode_mpeg2 (buf, buf + state_bytes);
         buf += state_bytes;
         break;
     case DEMUX_SKIP:
-        if (demux_pid_ || (state_bytes > end - buf)) {
-            state_bytes -= end - buf;
+        if (demux_pid_ || (state_bytes > endb - buf)) {
+            state_bytes -= endb - buf;
             return 0;
         }
         buf += state_bytes;
@@ -232,7 +232,7 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
         }
     payload_start:
         header = buf;
-        bytes = end - buf;
+        bytes = endb - buf;
     continue_header:
         NEEDBYTES (4);
         if (header[0] || header[1] || (header[2] != 1)) {
@@ -325,10 +325,10 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
                 }
                 DONEBYTES (len);
                 bytes = 6 + (header[4] << 8) + header[5] - len;
-                if (demux_pid_ || (bytes > end - buf)) {
-                    decode_mpeg2 (buf, end);
+                if (demux_pid_ || (bytes > endb - buf)) {
+                    decode_mpeg2 (buf, endb);
                     state = DEMUX_DATA;
-                    state_bytes = bytes - (end - buf);
+                    state_bytes = bytes - (endb - buf);
                     return 0;
                 } else if (bytes > 0) {
                     decode_mpeg2 (buf, buf + bytes);
@@ -341,9 +341,9 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
                 NEEDBYTES (6);
                 DONEBYTES (6);
                 bytes = (header[4] << 8) + header[5];
-                if (bytes > end - buf) {
+                if (bytes > endb - buf) {
                     state = DEMUX_SKIP;
-                    state_bytes = bytes - (end - buf);
+                    state_bytes = bytes - (endb - buf);
                     return 0;
                 }
                 buf += bytes;
@@ -363,13 +363,13 @@ vidl_mpegcodec_helper::decode_ts(int packets)
 {
   uint8_t * buf;
   uint8_t * data;
-  uint8_t * end;
+  uint8_t * endb;
   int pid;
 
   for (int i = 0; i < packets; i++)
   {
     buf = buffer_ + i * 188;
-    end = buf + 188;
+    endb = buf + 188;
     if (buf[0] != 0x47)
     {
       vcl_cerr << "bad sync byte\n";
@@ -382,11 +382,11 @@ vidl_mpegcodec_helper::decode_ts(int packets)
     if (buf[3] & 0x20)
     { // buf contains an adaptation field
       data = buf + 5 + buf[4];
-      if (data > end)
+      if (data > endb)
         continue;
     }
     if (buf[3] & 0x10)
-      demux (data, end, (buf[1] & 0x40) ? DEMUX_PAYLOAD_START : 0);
+      demux (data, endb, (buf[1] & 0x40) ? DEMUX_PAYLOAD_START : 0);
   }
   return true;
 }

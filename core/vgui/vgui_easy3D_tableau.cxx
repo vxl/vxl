@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_easy3D_tableau.cxx
+// This is core/vgui/vgui_easy3D_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -10,9 +10,9 @@
 
 #include "vgui_easy3D_tableau.h"
 
-#include "vgui_soview3D.h"
-#include "vgui_displaylist3D_tableau.h"
-#include "vgui_style_factory.h"
+#include <vgui/vgui_soview3D.h>
+#include <vgui/vgui_displaylist3D_tableau.h>
+#include <vgui/vgui_style_factory.h>
 
 vgui_easy3D_tableau::
 vgui_easy3D_tableau()

@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_fft.cxx
+// This is core/vnl/algo/vnl_fft.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -8,7 +8,7 @@
 
 #include "vnl_fft.h"
 
-#include "vnl_netlib.h"
+#include <vnl/algo/vnl_netlib.h> // dgpfa_()
 
 void vnl_fft_setgpfa(float *triggs, int size, int pqr[3], int *info)
 {

@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_scale_intensities_image_impl.cxx
+// This is core/vil/vil_scale_intensities_image_impl.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,10 +6,10 @@
 // \file
 
 #include "vil_scale_intensities_image_impl.h"
-#include "vil_scale_intensities_image.h"
-#include "vil_pixel.h"
-#include "vil_rgb.h"
-#include "vil_byte.h"
+#include <vil/vil_scale_intensities_image.h>
+#include <vil/vil_pixel.h>
+#include <vil/vil_rgb.h>
+#include <vil/vil_byte.h>
 #include <vxl_config.h>
 
 vil_image vil_scale_intensities_image_impl::get_plane(int p) const

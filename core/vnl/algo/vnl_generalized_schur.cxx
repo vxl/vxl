@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_generalized_schur.cxx
+// This is core/vnl/algo/vnl_generalized_schur.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -13,7 +13,7 @@
 
 #include <vnl/vnl_vector.h>
 
-#include "vnl_netlib.h" // dgges_()
+#include <vnl/algo/vnl_netlib.h> // dgges_()
 
 VCL_DEFINE_SPECIALIZATION
 bool vnl_generalized_schur(vnl_matrix<double> *A,

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_active_tableau.cxx
+// This is core/vgui/vgui_active_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -15,13 +15,13 @@
 
 #include "vgui_active_tableau.h"
 
-#include "vgui_command.h"
-#include "vgui_menu.h"
+#include <vgui/vgui_command.h>
+#include <vgui/vgui_menu.h>
 
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_active_tableau_new
 vgui_active_tableau::vgui_active_tableau(vgui_tableau_sptr const & t, 
-  bool name_in_menu )
+                                         bool name_in_menu )
   : vgui_wrapper_tableau(t)
   , active_(true)
   , visible_(true)

@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_generalized_eigensystem.cxx
+// This is core/vnl/algo/vnl_generalized_eigensystem.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -11,13 +11,15 @@
 #include "vnl_generalized_eigensystem.h"
 
 #include <vcl_iostream.h>
-#include <vcl_cmath.h> // required for sgi CC 7.30
+#ifdef VCL_SGI_CC_730
+# include <vcl_cmath.h>
+#endif
 
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_svd.h>
-#include "vnl_netlib.h" // rsg_()
+#include <vnl/algo/vnl_netlib.h> // rsg_()
 
 vnl_generalized_eigensystem::vnl_generalized_eigensystem(const vnl_matrix<double>& A,
                                                          const vnl_matrix<double>& B)

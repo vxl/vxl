@@ -11,7 +11,7 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 
-#include "vnl_netlib.h" // dnlaso_()
+#include <vnl/algo/vnl_netlib.h> // dnlaso_()
 
 static vnl_sparse_symmetric_eigensystem * current_system = 0;
 

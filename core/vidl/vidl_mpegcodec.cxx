@@ -1,6 +1,6 @@
 // This is core/vidl/vidl_mpegcodec.cxx
 #include "vidl_mpegcodec.h"
-#include "vidl_yuv_2_rgb.h"
+#include <vidl/vidl_yuv_2_rgb.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
