@@ -21,6 +21,7 @@ void vgui_text_put(char const *str) {
     glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, str[k]);
 }
 #else
+#include <vcl/vcl_iostream.h>
 void vgui_text_put(char const *str) {
   vcl_cerr << __FILE__ ":" << str << vcl_endl;
 }
