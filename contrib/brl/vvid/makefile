@@ -8,12 +8,13 @@ VERSION := 1.0
 IMMEDIATE_LIBS := vvid gevd vgui vidl vul vil
 
 # sources that don't depend on the camera being present
+SOURCES += vvid_frame_trail.cxx
 SOURCES += vvid_video_process.cxx
 MANPAGE_SOURCES += vvid_video_process_sptr.h
 SOURCES += vvid_region_process.cxx
 SOURCES += vvid_capture_process.cxx
+SOURCES += vvid_curve_tracking_process.cxx
 SOURCES += vvid_frame_diff_process.cxx
-SOURCES += vvid_frame_trail.cxx
 SOURCES += vvid_motion_process.cxx
 SOURCES += vvid_lucas_kanade_process.cxx
 SOURCES += vvid_epipolar_space_process.cxx
