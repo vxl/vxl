@@ -71,7 +71,7 @@ AC_DEFUN([AC_CHECK_GENERATE_INTTYPES],
 	    x"$ac_cv_sizeof_int" != x"4"; then
 	    AC_MSG_ERROR([can not build a default inttypes.h])
 	fi
-	cat >$1/inttypes.h << EOF
+	cat >$1/inttypes.h.new << EOF
 /* default inttypes.h for people who do not have it on their system */
 
 #ifndef _INTTYPES_H
@@ -95,6 +95,11 @@ typedef unsigned long long uint64_t;
 #endif
 #endif
 EOF
+	if cmp -s include/inttypes.h.new include/inttypes.h 2>/dev/null; then
+	  echo "include/inttypes.h is unchanged"
+	else
+	  mv include/inttypes.h.new include/inttypes.h
+	fi
 	])])
 
 # Do all the work for Automake.  This macro actually does too much --

@@ -4491,7 +4491,7 @@ _ACEOF
 echo "$as_me: error: can not build a default inttypes.h" >&2;}
    { (exit 1); exit 1; }; }
 	fi
-	cat >include/inttypes.h << EOF
+	cat >include/inttypes.h.new << EOF
 /* default inttypes.h for people who do not have it on their system */
 
 #ifndef _INTTYPES_H
@@ -4515,7 +4515,12 @@ typedef unsigned long long uint64_t;
 #endif
 #endif
 EOF
-
+	if cmp -s include/inttypes.h.new include/inttypes.h 2>/dev/null; then
+	  { echo "$as_me:$LINENO: include/inttypes.h is unchanged" >&5
+    echo "$as_me: include/inttypes.h is unchanged" >&6;}
+	else
+    mv include/inttypes.h.new include/inttypes.h
+	fi
 fi
 
 
