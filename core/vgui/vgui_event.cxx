@@ -58,12 +58,7 @@ vgui_event::vgui_event(vgui_event_type etype)
 //  GUI impl - kym.
 void vgui_event::set_key(vgui_key c)
 {
-  if (c < 32)
-  {
-    // Convert control character to lower case character
-    key = vgui_key(c + 'a' -1);
-  }
-  else if (c >= 'A' && c <= 'Z')
+  if (c >= 'A' && c <= 'Z')
   {
     // Convert upper case to lower case
     key = vgui_key(c + 'a' - 'A');
