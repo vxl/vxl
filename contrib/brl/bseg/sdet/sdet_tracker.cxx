@@ -12,8 +12,8 @@
 
 
 //Gives a sort on correlation score (currently increasing values JLM)
-static bool corr_compare(sdet_correlated_face* & f1,
-                         sdet_correlated_face* & f2)
+static bool corr_compare(sdet_correlated_face* const& f1,
+                         sdet_correlated_face* const& f2)
 {
   return f1->correlation() < f2->correlation();//JLM Switched
 }
@@ -198,7 +198,6 @@ void sdet_tracker::correlate_face(vtol_intensity_face_sptr const& face,
 #endif
   double image_avg = 0, cross_sum=0;
   int n = face->Npix();
-  int count = 20;
   for (face->reset(); face->next();)
   {
     int x = int(face->X()), y = int(face->Y());
