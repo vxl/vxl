@@ -353,8 +353,11 @@ bool vil_ras_generic_image::put_section(void const* buf, int x0, int y0, int xs,
   int buff_byte_width = xs * buff_bytes_per_pixel;
 
   assert( file_bytes_per_pixel == buff_bytes_per_pixel );
+  assert( file_byte_width >= buff_byte_width );
 
-  bool need_pad = ( file_byte_width != buff_byte_width );
+  // only pad if whole lines are written. Otherwise, assume the
+  // previous contents are valid.
+  bool need_pad = ( file_byte_width == buff_byte_width+1 );
   vxl_uint_8 zero = 0;
 
   vxl_uint_8 const* ob = (vxl_uint_8 const*) buf;
