@@ -22,6 +22,8 @@ MANPAGE_SOURCES += vgl_io_line_segment_2d.txx
 MANPAGE_SOURCES += vgl_io_line_segment_3d.txx
 MANPAGE_SOURCES += vgl_io_point_2d.txx
 MANPAGE_SOURCES += vgl_io_point_3d.txx
+MANPAGE_SOURCES += vgl_io_vector_2d.txx
+MANPAGE_SOURCES += vgl_io_vector_3d.txx
 
 ifndef NOTEST
 SUBDIRS += tests
