@@ -76,7 +76,7 @@ void vsl_harris::init_module (vil_image image) {
     for (unsigned j=0; j<image_h; ++j) {
       image.get_section(buf.begin(), 0, j, image_w, 1);
       for (unsigned i=0; i<image_w; ++i)
-	(*image_ptr)[i][j] = (unsigned(buf[3*i+0]) + unsigned(buf[3*i+1]) + unsigned(buf[3*i+2]))/3;
+	(*image_ptr)[j][i] = (unsigned(buf[3*i+0]) + unsigned(buf[3*i+1]) + unsigned(buf[3*i+2]))/3;
     }
   }
   else
