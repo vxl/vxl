@@ -4,8 +4,6 @@
 // \file
 
 #include <vsol/vsol_point_2d.h>
-#include <vgl/algo/vgl_homg_operators_2d.h>
-#include <vcl_cmath.h> // for vcl_abs(double)
 
 //*****************************************************************************
 // External declarations for implementation
@@ -21,7 +19,7 @@
 //---------------------------------------------------------------------------
 vsol_polyline_2d::vsol_polyline_2d()
 {
-	storage_=new vcl_vector<vsol_point_2d_sptr>();
+  storage_=new vcl_vector<vsol_point_2d_sptr>();
 }
 
 //---------------------------------------------------------------------------
