@@ -17,6 +17,9 @@ SUBDIRS(gevd)
 # matcher
 SUBDIRS(geml)
 
+# octree stuff from Geoff's thesis
+SUBDIRS(octree)
+
 # Multi-view database
 SUBDIRS(gmvl)
 
