@@ -79,25 +79,25 @@ class bgui_linked_vsol2D_tableau : public bgui_easy2D_tableau
     add_vsol_point_2d(vsol_point_2d_sptr const& p);
   
   //: display for vsol_line_2d
-  bgui_vsol_soview2D_line_seg*
+  bgui_linked_vsol_soview2D_line_seg*
     add_vsol_line_2d(vsol_line_2d_sptr const& line,
                      const float r,
                      const float g,
                      const float b, 
                      const float line_width);
 
-  bgui_vsol_soview2D_line_seg*
+  bgui_linked_vsol_soview2D_line_seg*
     add_vsol_line_2d(vsol_line_2d_sptr const& line);
   
   //: display for vsol_polyline_2d
-  bgui_vsol_soview2D_polyline*
+  bgui_linked_vsol_soview2D_polyline*
     add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pline,
                          const float r,
                          const float g,
                          const float b,
                          const float line_width);
 
-  bgui_vsol_soview2D_polyline*
+  bgui_linked_vsol_soview2D_polyline*
     add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pline);
          
   //: display for digital_curve

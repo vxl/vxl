@@ -4,24 +4,23 @@
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief A collection of vgui_soview2D objects
+// \brief A collection of linked vgui_soview2D objects
 // \author
-//   J.L. Mundy
+//   M.R. Johnson
 //
 // \verbatim
 //  Modifications:
-//   J.L. Mundy June 2, 2003      Initial version.
-//   Amir Tamrakar June 06, 2003  Added soview for vsol_polyline_2d.
+//   M.R. Johnson June 20, 2003      Initial version.
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
 
 #include <vdgl/vdgl_digital_curve_sptr.h>
-#if 0 // currently not needed
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
+#if 0 // currently not needed
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_conic_2d_sptr.h>
 #include <vsol/vsol_rectangle_2d_sptr.h>
@@ -46,55 +45,104 @@
   //: Returns the type of this class ('bgui_linked_vsol_soview2D_point').
   vcl_string type_name() const { return "bgui_linked_vsol_soview2D_point"; }
 };
-
+*/
 //: vsol_line_2d
-class bgui_linked_vsol_soview2D_line_seg : public vgui_soview2D_lineseg
+class bgui_linked_vsol_soview2D_line_seg : public vgui_soview2D
 {
  public:
-  //: Constructor - creates a default edge_2d view
-  bgui_linked_vsol_soview2D_line_seg() {}
-
   //: Constructor - creates a view of a given vtol_edge_2d
-  bgui_linked_vsol_soview2D_line_seg(vsol_line_2d_sptr const& seg);
+  bgui_linked_vsol_soview2D_line_seg(vsol_line_2d_sptr const& seg)
+  { sptr = seg; };
 
+  //: Destructor - does nothing, smart pointers pass out of scope automatically
+  ~bgui_linked_vsol_soview2D_line_seg() {};
+  
+  //: Print details about this vdgl_digital_curve to the given stream.
+  virtual vcl_ostream& print(vcl_ostream&) const;
+  
   //: Returns the type of this class ('bgui_linked_vsol_soview2D_edge').
   vcl_string type_name() const { return "bgui_linked_vsol_soview2D_line_seg"; }
+
+  //: Render this 2D digital_curve on the display.
+  void draw() const;
+
+  //: Returns the distance squared from this 2D digital_curve to the given position.
+  virtual float distance_squared(float x, float y) const;
+
+  //: Returns the centroid of this 2D digital_curve.
+  void get_centroid(float* x, float* y) const;
+
+  //: Translate this 2D digital_curve by the given x and y distances.
+  void translate(float x, float y);
+
+  //: Smart pointer to a vsol line
+  vsol_line_2d_sptr sptr;
 };
 
 //: vsol_polyline_2d
-class bgui_linked_vsol_soview2D_polyline : public vgui_soview2D_linestrip
+class bgui_linked_vsol_soview2D_polyline : public vgui_soview2D
 {
  public:
-  //: Constructor - creates a default edge_2d view
-  bgui_linked_vsol_soview2D_polyline() {}
-
   //: Constructor - creates a view of a given vsol_polyline_2d
   bgui_linked_vsol_soview2D_polyline(vsol_polyline_2d_sptr const& pline);
 
+  //: Deconstructor
+  ~bgui_linked_vsol_soview2D_polyline() {};
+  
   //: Print details about this vtol_edge_2d to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
 
   //: Returns the type of this class ('bgui_linked_vsol_soview2D_polyline').
   vcl_string type_name() const { return "bgui_linked_vsol_soview2D_polyline"; }
+
+  //: Render this 2D digital_curve on the display.
+  void draw() const;
+
+  //: Returns the distance squared from this 2D digital_curve to the given position.
+  virtual float distance_squared(float x, float y) const;
+
+  //: Returns the centroid of this 2D digital_curve.
+  void get_centroid(float* x, float* y) const;
+
+  //: Translate this 2D digital_curve by the given x and y distances.
+  void translate(float x, float y);
+
+  //: Smart pointer to a vsol line
+  vsol_polyline_2d_sptr sptr;
 };
 
 //: vsol_polygon_2d
-class bgui_linked_vsol_soview2D_polygon : public vgui_soview2D_polygon
+class bgui_linked_vsol_soview2D_polygon : public vgui_soview2D
 {
  public:
-  //: Constructor - creates a default vdgl_polygon view
-  bgui_linked_vsol_soview2D_polygon() {;}
-
-  //: Constructor - creates a view of a vdgl_polygon
+    //: Constructor - creates a view of a vdgl_polygon
   bgui_linked_vsol_soview2D_polygon(vsol_polygon_2d_sptr const& e);
+
+  //: Deconstructor 
+  ~bgui_linked_vsol_soview2D_polygon() {};
 
   //: Print details about this vdgl_polygon to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
 
   //: Returns the type of this class ('bgui_linked_vsol_soview2D_polygon').
   vcl_string type_name() const { return "bgui_linked_vsol_soview2D_polygon"; }
-};
+  
+  //: Render this 2D digital_curve on the display.
+  void draw() const;
 
+  //: Returns the distance squared from this 2D digital_curve to the given position.
+  virtual float distance_squared(float x, float y) const;
+
+  //: Returns the centroid of this 2D digital_curve.
+  void get_centroid(float* x, float* y) const;
+
+  //: Translate this 2D digital_curve by the given x and y distances.
+  void translate(float x, float y);
+
+  //: Smart pointer to a vsol line
+  vsol_polygon_2d_sptr sptr;
+};
+/*
 //: a group of vsol_line_2d - used for projecting 3-d shapes
 class bgui_linked_vsol_soview2D_line_group : public vgui_soview2D_group
 {

@@ -129,21 +129,21 @@ bgui_linked_vsol2D_tableau::add_vsol_point_2d(vsol_point_2d_sptr const& p)
                                  point_style_.point_radius);
 }
 
-bgui_vsol_soview2D_line_seg*
+bgui_linked_vsol_soview2D_line_seg*
 bgui_linked_vsol2D_tableau::add_vsol_line_2d(vsol_line_2d_sptr const& line,
                                       const float r,
                                       const float g,
                                       const float b,
                                       const float line_width)
 {
-  bgui_vsol_soview2D_line_seg* obj =
-    new bgui_vsol_soview2D_line_seg(line);
+  bgui_linked_vsol_soview2D_line_seg* obj =
+    new bgui_linked_vsol_soview2D_line_seg(line);
   add(obj);
   obj->set_style( vgui_style_factory::get_style( r , g , b , 0.0f , line_width ) );
   return obj;
 }
 
-bgui_vsol_soview2D_line_seg*
+bgui_linked_vsol_soview2D_line_seg*
 bgui_linked_vsol2D_tableau::add_vsol_line_2d(vsol_line_2d_sptr const& line)
 {
   return add_vsol_line_2d( line , line_style_.r , 
@@ -152,21 +152,21 @@ bgui_linked_vsol2D_tableau::add_vsol_line_2d(vsol_line_2d_sptr const& line)
                                   line_style_.line_width );
 }
 
-bgui_vsol_soview2D_polyline*
+bgui_linked_vsol_soview2D_polyline*
 bgui_linked_vsol2D_tableau::add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pline,
                                           const float r,
                                           const float g,
                                           const float b,
                                           const float line_width)
 {
-  bgui_vsol_soview2D_polyline* obj =
-    new bgui_vsol_soview2D_polyline(pline);
+  bgui_linked_vsol_soview2D_polyline* obj =
+    new bgui_linked_vsol_soview2D_polyline(pline);
   add(obj);
   obj->set_style( vgui_style_factory::get_style( r , g , b , 0.0f , line_width ) );
   return obj;
 }
 
-bgui_vsol_soview2D_polyline*
+bgui_linked_vsol_soview2D_polyline*
 bgui_linked_vsol2D_tableau::add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pline)
 {
   return add_vsol_polyline_2d( pline , polyline_style_.r , 
