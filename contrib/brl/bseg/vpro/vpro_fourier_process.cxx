@@ -1,24 +1,16 @@
 #include <vcl_iostream.h>
 #include <brip/brip_float_ops.h>
 #include <vpro/vpro_fourier_process.h>
-
-vpro_fourier_process::vpro_fourier_process(vpro_fourier_params vfp):
-  vpro_fourier_params(vfp)
-{
-}
-
-vpro_fourier_process::~vpro_fourier_process()
-{
-}
+#include <vil1/vil1_memory_image_of.h>
 
 bool vpro_fourier_process::execute()
 {
-  if (!this->get_N_input_images()==1)
-    {
-      vcl_cout << "In vpro_fourier_process::execute() - not at exactly one"
-               << " input image \n";
-      return false;
-    }
+  if (this->get_N_input_images()!=1)
+  {
+    vcl_cout << "In vpro_fourier_process::execute() -"
+             << " not at exactly one input image\n";
+    return false;
+  }
   vil1_image img = vpro_video_process::get_input_image(0);
   this->clear_input();
 
@@ -31,10 +23,5 @@ bool vpro_fourier_process::execute()
 
   //convert magnitude component to byte
   output_image_ = brip_float_ops::convert_to_byte(mag, -range_, range_);
-  return true;
-}
-
-bool vpro_fourier_process::finish()
-{
   return true;
 }
