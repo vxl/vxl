@@ -43,7 +43,7 @@ class vdgl_digital_curve : public vsol_curve_2d
   vsol_point_2d_sptr p0() const;
   vsol_point_2d_sptr p1() const;
   double length() const;
-  vsol_spatial_object_2d* clone(void) const;
+  vsol_spatial_object_2d* clone() const;
 
   // warning: the results of these methods are undefined
   void set_p0(const vsol_point_2d_sptr &);
@@ -72,18 +72,18 @@ class vdgl_digital_curve : public vsol_curve_2d
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Return the curve type
-  //---------------------------------------------------------------------------
-  virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::DIGITAL_CURVE; }
-
-  //---------------------------------------------------------------------------
   //: Return `this' if `this' is a digital_curve, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vdgl_digital_curve const*cast_to_vdgl_digital_curve(void)const{return this;}
-  virtual vdgl_digital_curve *cast_to_vdgl_digital_curve(void) {return this;}
+  virtual vdgl_digital_curve const*cast_to_vdgl_digital_curve()const{return this;}
+  virtual vdgl_digital_curve *cast_to_vdgl_digital_curve() {return this;}
 
+ private: // has been superceeded by is_a()
+  //: Return the curve type
+  virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::DIGITAL_CURVE; }
+
+ public:
   //: bounding box
-  virtual void compute_bounding_box(void) const;
+  virtual void compute_bounding_box() const;
 
   //---------------------------------------------------------------------------
   //: Has `this' the same order interpolation and edgel values as other
@@ -95,7 +95,6 @@ class vdgl_digital_curve : public vsol_curve_2d
   //: Has `this' not the same coordinates than `other' ?
   //---------------------------------------------------------------------------
   inline bool operator!=(const vdgl_digital_curve &o) const {return !operator==(o);}
-
 
   // ==== Binary IO methods ======
 
@@ -112,10 +111,10 @@ class vdgl_digital_curve : public vsol_curve_2d
   void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  virtual vcl_string is_a() const { return vcl_string("vdgl_digital_curve"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const;
+  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 };
 
 //: Stream operator

@@ -40,7 +40,7 @@ vdgl_digital_curve::vdgl_digital_curve(vsol_point_2d_sptr const& p0,
   interpolator_ = new vdgl_interpolator_linear(ec);
 }
 
-vsol_spatial_object_2d* vdgl_digital_curve::clone(void) const
+vsol_spatial_object_2d* vdgl_digital_curve::clone() const
 {
   return new vdgl_digital_curve(interpolator_);
 }
@@ -144,7 +144,7 @@ bool vdgl_digital_curve::split(vsol_point_2d_sptr const& v,
 }
 
 //: scan all the points on the curve and compute the bounds.
-void vdgl_digital_curve::compute_bounding_box(void) const
+void vdgl_digital_curve::compute_bounding_box() const
 {
   set_bounding_box(   interpolator_->get_min_x(), interpolator_->get_min_y());
   add_to_bounding_box(interpolator_->get_max_x(), interpolator_->get_max_y());
@@ -232,18 +232,6 @@ short vdgl_digital_curve::version() const
 void vdgl_digital_curve::print_summary(vcl_ostream &os) const
 {
   os << *this;
-}
-
-//: Return a platform independent string identifying the class
-vcl_string vdgl_digital_curve::is_a() const
-{
-  return vcl_string("vdgl_digital_curve");
-}
-
-//: Return true if the argument matches the string identifying the class or any parent class
-bool vdgl_digital_curve::is_class(const vcl_string& cls) const
-{
-  return cls==vdgl_digital_curve::is_a();
 }
 
 //: Binary save vdgl_digital_curve* to stream.

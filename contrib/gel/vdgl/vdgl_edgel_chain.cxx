@@ -12,15 +12,6 @@
 #include <vcl_cstdlib.h> // for vcl_abs(int)
 #include <vcl_iostream.h>
 
-vdgl_edgel_chain::vdgl_edgel_chain()
-{
-}
-
-vdgl_edgel_chain::vdgl_edgel_chain( const vcl_vector<vdgl_edgel> edgels)
-  : es_( edgels)
-{
-}
-
 vdgl_edgel_chain::vdgl_edgel_chain( const double x0, const double y0,
                                     const double x1, const double y1)
 {
@@ -28,10 +19,6 @@ vdgl_edgel_chain::vdgl_edgel_chain( const double x0, const double y0,
   double x, y; // the intermediate pixels
   while (this->line_gen(x0, y0, x1, y1, init, done, x, y))
       es_.push_back(vdgl_edgel( x, y));
-}
-
-vdgl_edgel_chain::~vdgl_edgel_chain()
-{
 }
 
 bool vdgl_edgel_chain::add_edgel( const vdgl_edgel &e)
@@ -265,18 +252,6 @@ short vdgl_edgel_chain::version() const
 void vdgl_edgel_chain::print_summary(vcl_ostream &os) const
 {
   os << *this;
-}
-
-  //: Return a platform independent string identifying the class
-vcl_string vdgl_edgel_chain::is_a() const
-{
-  return vcl_string("vdgl_edgel_chain");
-}
-
-  //: Return true if the argument matches the string identifying the class or any parent class
-bool vdgl_edgel_chain::is_class(const vcl_string& cls) const
-{
-  return cls==vdgl_edgel_chain::is_a();
 }
 
 //: Binary save vdgl_edgel_chain* to stream.

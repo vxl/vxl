@@ -31,15 +31,16 @@ class vdgl_edgel_chain : public vul_timestamp,
  public:
 
   // Constructors/Destructors--------------------------------------------------
-  vdgl_edgel_chain();
-  vdgl_edgel_chain( const vcl_vector<vdgl_edgel> edgels);
+  vdgl_edgel_chain() {}
+  vdgl_edgel_chain(vcl_vector<vdgl_edgel> const& edgels) : es_( edgels) {}
+
   //: make a straight edgel chain from p0 to p1.
   //  Useful for boundary filling and debugging
   vdgl_edgel_chain( const double x0, const double y0,
                     const double x1, const double y1);
   vdgl_edgel_chain(vdgl_edgel_chain const& x)
     : vul_timestamp(), vbl_ref_count(), es_(x.es_) {}
-  ~vdgl_edgel_chain();
+  ~vdgl_edgel_chain() {}
 
   // Operators----------------------------------------------------------------
 
@@ -81,11 +82,10 @@ class vdgl_edgel_chain : public vul_timestamp,
   void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  virtual vcl_string is_a() const { return vcl_string("vdgl_edgel_chain"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const;
-
+  virtual bool is_class(vcl_string const& cls) const { return cls==is_a(); }
 
   // INTERNALS-----------------------------------------------------------------
  protected:
