@@ -25,8 +25,7 @@ MAIN( test_homography2d_est )
 
   p.push_back (t.as_ref());
 
-
-  //first 4 points are colinear.
+  //first 4 points are collinear.
   t(0) = 2; t(1) = 5;
   p.push_back (t.as_ref());
 
