@@ -3,7 +3,10 @@ USES += contrib/brl contrib/brl/bbas contrib/gel core
 LIBRARY := bsol
 VERSION := 1.0
 
+SOURCES += bsol_algs.cxx
+SOURCES += bsol_distance_histogram.cxx
 SOURCES += bsol_hough_line_index.cxx
+MANPAGE_SOURCES += bsol_hough_line_index_sptr.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
