@@ -26,12 +26,16 @@ superiority is undisputed. LAPACK is faster, and more accurate.
 Note that vnl does not use BLAS, but does its own vector and matrix
 multiplications. The speed of the MKL (An Intel supplied/optimised copy
 of BLAS) was compared with gcc's compilation of VNL, and gcc/VNL won.
-gcc/VNL was faster even on the matrix-matrix operations, although the
-difference was more marked on the matrix-vector and vector-vector
-operations. However, LAPACK and LINPACK both need a BLAS, and the MKL 
+gcc/VNL was marginally faster on the matrix-vector operations, although
+the difference was more marked on the vector-vector operations.
+However, LAPACK and LINPACK both need a BLAS, and the MKL 
 was definitely faster than the gcc-compiled version of the default BLAS
 currently in netlib. So it would be worth providing an option to use an
-external BLAS for vnl_algo/netlib.
+external BLAS for vnl_algo/netlib. It might also be worth testing the
+matrix-matrix operations - where MKL's knowledge of cache behaviour
+may help more than vnl's knowledge of the matrix data organisation.
+See https://sourceforge.net/mailarchive/message.php?msg_id=3628964 for
+more details.
 Ian Scott.
 
 
