@@ -13,7 +13,7 @@
 //  Modifications
 //\endverbatim
 
-#include <sys/times.h>  // system/user times with times()
+#include <vcl_sys/times.h>  // for struct tms
 
 #include <vcl_vector.h>
 #include <vil/vil_file_format.h>
@@ -56,12 +56,12 @@ class vil_nitf_image : public vil_image_resource
   unsigned int nj_;  /// number of pixels in y dimension
   unsigned int nplanes_;  /// NOTE: Same as number of bands in NITF terminology
 
-    unsigned int bits_per_component_;  /// For NITF, make equivalent to actual bits per pixel (ABPP)
+  unsigned int bits_per_component_;  /// For NITF, make equivalent to actual bits per pixel (ABPP)
 
   // stream stuff similar to NITFFile.  For now, output_stream_ will always be null.
   // Figure out how to deal with output after reading is OK.  MAL  22oct2003
   vil_stream * in_stream_;  //<! vil_stream for input
-  vil_stream * out_stream_;  //<! vil_stream for output
+  vil_stream * out_stream_; //<! vil_stream for output
   vil_streampos ifilePos_;
   vil_streampos ofilePos_;
   vil_streampos image_data_offset_;
