@@ -50,7 +50,7 @@ from @code{clsfy_builder_base}.
 @item clsfy_classifier_base* new_classifier()
 Create a new classifier of appropriate type on heap and return pointer
 
-@item double build(model, training_inputs, training_outputs)
+@item double build(model, training_inputs, training_outputs, n_classes)
 Train the classifier from the data supplied
 @end table
 
