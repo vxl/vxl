@@ -1,3 +1,3 @@
-#include <vnl/vnl_unary_function.h>
 #include <vnl/vnl_vector.h>
-template class vnl_unary_function<double, vnl_vector<double> >;
+#include <vnl/vnl_unary_function.txx>
+VNL_UNARY_FUNCTION_INSTANTIATE(double, vnl_vector<double> );

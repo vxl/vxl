@@ -22,14 +22,15 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_limits.h>
+
+
 
 //: Abstract 1D map between two types (read spaces)
 template <class Return, class Argument>
 class vnl_unary_function
 {
  public:
-  typedef vcl_numeric_limits<Return> limits;
+//  typedef vcl_numeric_limits<Return> limits;
 
   //: Apply the function.
   // The name is "f" rather than operator(), as the function will generally be
@@ -37,13 +38,13 @@ class vnl_unary_function
   virtual Return f(Argument const& i) = 0;
 
   //: Return bounding cube of range (outputs)
-  virtual Return get_range_min() const { return limits::min(); }
-  virtual Return get_range_max() const { return limits::max(); }
+  virtual Return get_range_min() const;
+  virtual Return get_range_max() const;
 
   //: Copy should allocate a copy of this on the heap and return it.
   // If Subclasses do not implement this function, it will return null, but many
   // applications will never call it, so this may not be a problem for you.
-  virtual vnl_unary_function<Return,Argument>* Copy() const { return 0; }
+  virtual vnl_unary_function<Return, Argument> * Copy() const { return 0; }
 
   virtual ~vnl_unary_function() {}
 };
