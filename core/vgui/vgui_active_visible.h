@@ -1,8 +1,13 @@
-// This is ./oxl/vgui/vgui_active_visible.h
-
+// This is oxl/vgui/vgui_active_visible.h
+#ifndef vgui_active_visible_h_
+#define vgui_active_visible_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
 //:
-// \file   Robotics Research Group, University of Oxford
+// \file
 // \author Philip C. Pritchett
+// Robotics Research Group, University of Oxford
 // \date   25 Jan 00
 // \brief
 //
@@ -10,12 +15,6 @@
 //  Modifications:
 //    25-JAN-2000 P.Pritchett - Initial version.
 // \endverbatim
-
-#ifndef vgui_active_visible_h_
-#define vgui_active_visible_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 #include "vgui_active_visible_sptr.h"
 #include "vgui_wrapper_tableau.h"
