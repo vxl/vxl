@@ -23,7 +23,7 @@
 #include <cool/ListP.h>
 #endif
 
-#include <vtol/vtol_edge_sptr.h>
+#include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_face_sptr.h>
 #include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
@@ -34,7 +34,7 @@
 class vtol_cycle_processor
 {
  public:
-  vtol_cycle_processor(vcl_vector<vtol_edge_sptr>& edges);
+  vtol_cycle_processor(vcl_vector<vtol_edge_2d_sptr>& edges);
   vtol_cycle_processor(vcl_vector<vtol_edge*>& edges);
   ~vtol_cycle_processor(){};
 
@@ -44,10 +44,10 @@ class vtol_cycle_processor
  protected:
   //internal utilites
   void set_bridge_vars();
-  void init(vcl_vector<vtol_edge_sptr>& edges);
-  vtol_edge_sptr search_for_next_edge(vcl_vector<vtol_edge_sptr>& edges_at_last);
+  void init(vcl_vector<vtol_edge_2d_sptr>& edges);
+  vtol_edge_2d_sptr search_for_next_edge(vcl_vector<vtol_edge_2d_sptr>& edges_at_last);
   void add_edge_to_path();
-  bool classify_path(vcl_vector<vtol_edge_sptr>& path_edges, vtol_one_chain_sptr& chain);
+  bool classify_path(vcl_vector<vtol_edge_2d_sptr>& path_edges, vtol_one_chain_sptr& chain);
   void compute_cycles();
   void sort_one_cycles();
   void process();
@@ -58,10 +58,10 @@ class vtol_cycle_processor
   bool _found_next_edge;
   vtol_vertex_sptr _first;
   vtol_vertex_sptr _last;
-  vtol_edge_sptr _l;
-  vtol_edge_sptr _next_edge;
-  vcl_vector<vtol_edge_sptr> _edges;
-  vcl_vector<vtol_edge_sptr> _e_stack;
+  vtol_edge_2d_sptr _l;
+  vtol_edge_2d_sptr _next_edge;
+  vcl_vector<vtol_edge_2d_sptr> _edges;
+  vcl_vector<vtol_edge_2d_sptr> _e_stack;
   vcl_vector<vtol_vertex_sptr> _v_stack;
   vcl_vector<vtol_one_chain_sptr> _chains;
   vcl_vector<vtol_one_chain_sptr> _nested_one_cycles;
