@@ -14,7 +14,11 @@
 # The examples subdirectory contains example programs showing how to use the
 # filter classes with any 2D storage class of your choice.
 #
-SUBDIRS += vipl_with_vnl_matrix vipl_with_section vipl_with_vbl_array_2d
+ifneq (,$(wildcard $(IUEROOT)/Image/ImageProcessingBasics))
+SUBDIRS += vipl_with_section
+endif
+SUBDIRS += vipl_with_vnl_matrix
+SUBDIRS += vipl_with_vbl_array_2d
 SUBDIRS += examples
 
 USES += vxl

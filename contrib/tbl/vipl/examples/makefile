@@ -15,8 +15,9 @@
 #                  vipl_with_section            (for group D)
 
 USES = vxl
-USE_TIFF := 1
-USE_JPEG := 1
+TRY_TIFF := 1
+TRY_JPEG := 1
+TRY_PNG := 1
 
 # A. using vil_image as 2D storage class:
 MINI_PROG_SOURCES += example_convert.cxx
@@ -33,16 +34,20 @@ MINI_PROG_SOURCES += example_median.cxx
 MINI_PROG_SOURCES += example_gradient_mag.cxx
 MINI_PROG_SOURCES += example_sobel.cxx
 
+ifneq (,$(wildcard $(IUEROOT)/Image/ImageProcessingBasics))
 # D. using section<T,2> as 2D storage class:
 MINI_PROG_SOURCES += example_dilate_disk.cxx
 MINI_PROG_SOURCES += example_erode_disk.cxx
 MINI_PROG_SOURCES += example2_threshold.cxx
 MINI_PROG_SOURCES += example_x_gradient.cxx
 MINI_PROG_SOURCES += example_histogram.cxx
+endif
 
 IULIBS += -lvipl_with_vnl_matrix -lvnl   # for B.
 IULIBS += -lvipl_with_vbl_array_2d -lvbl # for C.
+ifneq (,$(wildcard $(IUEROOT)/Image/ImageProcessingBasics))
 IULIBS += -lvipl_with_section            # for D.
+endif
 IULIBS += -lvipl -lvil -lvcl             # for all
 
 ################################

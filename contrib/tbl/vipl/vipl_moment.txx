@@ -8,7 +8,11 @@
 // but only for T=complex this makes a difference, and we don't want to
 // depend on vnl just for this alone.)
 
-static double pow (double x, int y)
+#if !(defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
+// template code cannot see file statics.
+static
+#endif
+double pow (double x, int y)
 {
   if (y == 0)
     return 1.0;

@@ -28,13 +28,13 @@ class vipl_section_container {
   // declare data, accessors from codegen
   vipl_section_container< DataType >* hsthe;
   // allow for subclasses with pass-by-value
-  vcl_vector< int > hsimgsz;
+  vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > hsimgsz;
   // the dimensions of image
-  vcl_vector< int > hsimgstart;
+  vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > hsimgstart;
   // the starting index of image
-  vcl_vector< int > hssecsz;
+  vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > hssecsz;
   // the size of a "normal" section
-  vcl_vector< int > hsoverlap;
+  vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > hsoverlap;
   // the amount to overlap sections
   DataType* hsrawdata;
   // pointer to raw block of data for section (may ==0)
@@ -128,18 +128,18 @@ class vipl_section_container {
   vipl_section_container< DataType >* the() const{ return hsthe;}
   vipl_section_container< DataType >* & ref_the(){ return hsthe;}
   void put_the( vipl_section_container< DataType >* v){ hsthe = v;}
-  vcl_vector< int > const & imgsz() const{ return hsimgsz;}
-  vcl_vector< int > & ref_imgsz(){ return hsimgsz;}
-  void put_imgsz( vcl_vector< int > const & v){ hsimgsz = v;}
-  vcl_vector< int > const & imgstart() const{ return hsimgstart;}
-  vcl_vector< int > & ref_imgstart(){ return hsimgstart;}
-  void put_imgstart( vcl_vector< int > const & v){ hsimgstart = v;}
-  vcl_vector< int > const & secsz() const{ return hssecsz;}
-  vcl_vector< int > & ref_secsz(){ return hssecsz;}
-  void put_secsz( vcl_vector< int > const & v){ hssecsz = v;}
-  vcl_vector< int > const & overlap() const{ return hsoverlap;}
-  vcl_vector< int > & ref_overlap(){ return hsoverlap;}
-  void put_overlap( vcl_vector< int > const & v){ hsoverlap = v;}
+  vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > const & imgsz() const{ return hsimgsz;}
+  vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > & ref_imgsz(){ return hsimgsz;}
+  void put_imgsz( vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > const & v){ hsimgsz = v;}
+  vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > const & imgstart() const{ return hsimgstart;}
+  vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > & ref_imgstart(){ return hsimgstart;}
+  void put_imgstart( vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > const & v){ hsimgstart = v;}
+  vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > const & secsz() const{ return hssecsz;}
+  vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > & ref_secsz(){ return hssecsz;}
+  void put_secsz( vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > const & v){ hssecsz = v;}
+  vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > const & overlap() const{ return hsoverlap;}
+  vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > & ref_overlap(){ return hsoverlap;}
+  void put_overlap( vcl_vector< VCL_SUNPRO_ALLOCATOR_HACK(int) > const & v){ hsoverlap = v;}
   DataType* rawdata() const{ return hsrawdata;}
   DataType* & ref_rawdata(){ return hsrawdata;}
   void put_rawdata( DataType* v){ hsrawdata = v;}
