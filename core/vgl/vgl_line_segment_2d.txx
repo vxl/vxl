@@ -9,7 +9,7 @@
 template <class Type>
 vcl_ostream& operator<<(vcl_ostream& s, vgl_line_segment_2d<Type> const & p)
 {
-  return s << p.point1() << " " << p.point2() << vcl_endl;
+  return s << "<vgl_line_segment_2d " << p.point1() << " to " << p.point2() << " >";
 }
 
 template <class Type>
