@@ -147,7 +147,8 @@ down. Decision at Providence meeting.</p>
 These functions cannot return a real vil2_image_view&lt;T&gt; because that would
 involve knowing T in advance. They cannot return references because the real
 object will get destroyed as the function ends before it is assigned to a
-variable in the calling level. We use the smart over the raw pointer to avoid a likely source of memory leaks. However, most code in vil2 should operate on
+variable in the calling level. We use the smart over the raw pointer to avoid a
+likely source of memory leaks. However, most code in vil2 should operate on
 <code>vil2_image_view&lt;T&gt;</code>.
 Decision at Providence meeting.</p>
 <h4><code>vil2_image_view&lt;T&gt;</code> should not be derived from <code>vil2_image_resource</code></h4>

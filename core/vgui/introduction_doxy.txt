@@ -30,7 +30,8 @@
 * - vgui_vrml_tableau : displays VRML.
 * - vgui_blackbox_tableau : records and plays back events.
 * - vgui_debug_tableau : prints events then forwards them to a child tableau.
-* - vgui_shell_tableau : to go at the top of one's tableau hierarchy (contains vgui_clear_tableau, vgui_quit_tableau and vgui_tview_launcher_tableau).
+* - vgui_shell_tableau : to go at the top of one's tableau hierarchy
+*   (contains vgui_clear_tableau, vgui_quit_tableau and vgui_tview_launcher_tableau).
 *
 * You can write your GUI in, for example, MFC and use
 * vgui_adaptor/vgui_tableau to produce an OpenGL area.  In fact, this is
