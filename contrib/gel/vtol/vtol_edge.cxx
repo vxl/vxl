@@ -74,17 +74,14 @@ void vtol_edge::set_v2(vtol_vertex_sptr new_v2)
 
 //---------------------------------------------------------------------------
 //: Set the first and last endpoints
-// Require: vertex_of_edge(new_v1) and vertex_of_edge(new_v2)
-//---------------------------------------------------------------------------
-
-
-//:
-//     This function removes curendpt from the edge and replaces it with
-//     newendpt.  Both curendpt and newendpt must be non-NULL pointers,
-//     curendpt must point to an endpoint of the edge (either v1_ or
-//     v2_), and newendpt must be colinear with the edge.  Neither vertex
-//     is destroyed in the process; only links are manipulated.
-//     (RYF 7-14-98)
+// Require: vertex_of_edge(new_v1) and vertex_of_edge(new_v2).
+//
+//  This function removes curendpt from the edge and replaces it with
+//  newendpt.  Both curendpt and newendpt must be non-NULL pointers,
+//  curendpt must point to an endpoint of the edge (either v1_ or
+//  v2_), and newendpt must be collinear with the edge.  Neither vertex
+//  is destroyed in the process; only links are manipulated.
+//  (RYF 7-14-98)
 //
 void vtol_edge::replace_end_point(vtol_vertex &curendpt,
                                   vtol_vertex &newendpt)
