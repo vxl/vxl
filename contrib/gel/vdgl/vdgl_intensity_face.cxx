@@ -137,9 +137,8 @@ vdgl_intensity_face::IsHoleP()
     return false;
   vtol_edge_sptr e = edges->front();
   bool ret = false;
-  const vcl_vector<vtol_topology_object_sptr>* chains = e->superiors();
-  for (vcl_vector<vtol_topology_object_sptr>::const_iterator i = chains->begin();
-       i != chains->end(); ++i)
+  const topology_list* chains = e->superiors();
+  for (topology_list::const_iterator i=chains->begin(); i!=chains->end(); ++i)
     {
       vtol_one_chain* onec = (*i)->cast_to_one_chain();
       if (onec->numsup() > 0)
@@ -148,6 +147,7 @@ vdgl_intensity_face::IsHoleP()
         break;
       }
     }
+  delete chains;
   delete edges;
   return ret;
 }
