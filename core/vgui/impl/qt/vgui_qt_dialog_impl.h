@@ -40,7 +40,7 @@ class vgui_qt_dialog_impl :
    void* color_chooser_widget(const char *,vcl_string&);//, vcl_string&);
    void* inline_color_chooser_widget(const char *,vcl_string&);//, vcl_string&);
 
-   void  modal(bool m) { is_modal = m; }
+   void  modal(bool m);
 
    bool  ask();
 };

@@ -20,6 +20,7 @@
 #include <qcolordialog.h>
 
 static bool is_modal = true;
+void vgui_qt_dialog_impl::modal (bool m) {is_modal=m; }
 
 //-----------------------------------------------------------------------------
 vgui_qt_dialog_impl::vgui_qt_dialog_impl(const char* name)
