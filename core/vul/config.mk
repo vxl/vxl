@@ -1,1 +1,2 @@
 USE_SOCKETS := 1
+IULIBS += -lvul
