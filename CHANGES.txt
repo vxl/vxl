@@ -28,6 +28,12 @@ effect. If you change something in VXL, please document it here.
       - vbl_basic_tuple, vbl_basic_relation, etc. are deprecated since we have
         no decent explanation of how to use them.
 
+      - VXL can now be compiled with Borland's bcc 5.5
+
+      - All the configure scripts have been rewritten in CMake. This should
+        mean less platform-specifc hacks, and easier porting to any new
+        platforms supported by CMake.
+
       - VXL can now be compiled with MinGW (www.mingw.org).  This can
         be done using the -mno-cygwin option to gcc in Cygwin and
         probably also with the basic MinGW tools as well.
