@@ -143,7 +143,7 @@ foreach $f (@FILES)
     $printed = 1;
   }
 # 11. Inclusion guard
-  if ($file_s =~ m/^\s*\#ifndef\s+(\S+)\s*\n#define\s+\1\s*\n/) {
+  if ($file_s =~ m/^\s*\#ifndef\s+(\S+)\s*\n#define\s+\1\s*(\s[^\n]*)?\n/) {
     $guard = $1;
     if (defined($inclusion_guards{"$guard"})) {
       print "$f\t\# has the same inclusion guard as " . $inclusion_guards{"$guard"} . "\n";
