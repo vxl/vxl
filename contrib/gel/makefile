@@ -30,7 +30,7 @@ SUBDIRS += vsol
 # topology
 SUBDIRS += gst vtol
 
-# digital geometry
+# digital  geometry
 SUBDIRS += vdgl
 
 # photogrammetry
