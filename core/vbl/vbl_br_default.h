@@ -12,6 +12,8 @@
 //              I can't find a mutually acceptable syntax at the moment.
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+// IMS (Manchester) 21/10/2003: Deprecated - Decision at Providence 2002 Meeting.
+//                              Can be deleted after VXL-1.1
 // \endverbatim
 
 #ifdef _MSC_VER
@@ -27,6 +29,7 @@
 #include <vbl/vbl_basic_relation_where.h>
 #include <vbl/vbl_basic_optional.h>
 #include <vbl/vbl_hash_map.h>
+#include <vcl_deprecated_header.h>
 
 // Forward declare the implementation.
 template <class T1, class T2,
@@ -37,6 +40,8 @@ class vbl_br_default;
 
 //------------------------------------------------------------
 //: This iterator is used when the where clause has at least one non-wild element.
+//
+// \deprecated Because no-one knows what it does.
 template <class T1, class T2,
   VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),
@@ -82,6 +87,8 @@ class vbl_br_default_iter : public vbl_br_iter_impl<T1,T2,T3,T4,T5>
 
 //------------------------------------------------------------
 //: This iterator is used when the where clause has all wild elements.
+//
+// \deprecated Because no-one knows what it does.
 template <class T1, class T2,
   VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),
@@ -125,6 +132,8 @@ class vbl_br_default_wild_iter : public vbl_br_iter_impl<T1,T2,T3,T4,T5>
 // which is used unless the factory has been set otherwise.  The
 // relation is implemented using one hash table for each attribute
 // as indices, with values being lists of tuple references.
+//
+// \deprecated Because no-one knows what it does.
 template <class T1, class T2, class T3, class T4, class T5>
 class vbl_br_default : public vbl_br_impl<T1,T2,T3,T4,T5>
 // defaults for T3 T4 T5 already declared around line 92 -- PLEASE don't put them back here!! - PVr

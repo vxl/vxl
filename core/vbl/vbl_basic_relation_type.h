@@ -10,12 +10,17 @@
 // Modifications
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // Peter Vanroose - Jan 2002 - Removed DEX support
+// IMS (Manchester) 21/10/2003: Deprecated - Decision at Providence 2002 Meeting.
+//                              Can be deleted after VXL-1.1
 // \endverbatim
 //
 
+#include <vcl_deprecated_header.h>
+
 
 //: A base class for all vbl_basic_relations; provides type-safe downcasting
-
+//
+// \deprecated Because no-one knows what it does.
 class vbl_basic_relation_type
 {
  public:

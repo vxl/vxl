@@ -10,11 +10,14 @@
 // \verbatim
 // Modifications
 // PDA (Manchester) 23/03/2001: Tidied up the documentation
+// IMS (Manchester) 21/10/2003: Deprecated - Decision at Providence 2002 Meeting.
+//                              Can be deleted after VXL-1.1
 // \endverbatim
 
 #include <vcl_iostream.h>
 #include <vbl/vbl_basic_optional.h>
 #include <vbl/vbl_protection_traits.h>
+#include <vcl_deprecated_header.h>
 
 #ifdef __STL_USE_ABBREVS
 #define vbl_basic_tuple vBl_Bt
@@ -25,6 +28,7 @@
 // classes, from one to five.  This restriction of up to five
 // attributes per tuple may be increased as needed.
 //
+// \deprecated Because no-one knows what it does.
 template <class T1, class T2,
           VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
           VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional),

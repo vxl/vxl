@@ -25,8 +25,12 @@
 // Non-type template parameters are not allowed for function templates.
 #endif
 
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+// Helper class for vbl_bounding_box
 template <int DIM>
 struct vbl_bounding_box_DIM { enum { value = DIM }; };
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 template <class T, class DIM_>
 class vbl_bounding_box_base

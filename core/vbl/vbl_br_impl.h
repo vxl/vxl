@@ -9,6 +9,8 @@
 // \verbatim
 // Modifications
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
+// IMS (Manchester) 21/10/2003: Deprecated - Decision at Providence 2002 Meeting.
+//                              Can be deleted after VXL-1.1
 // \endverbatim
 
 
@@ -20,6 +22,7 @@
 #include <vbl/vbl_basic_tuple.h>
 #include <vbl/vbl_basic_relation_where.h>
 #include <vbl/vbl_ref_count.h>
+#include <vcl_deprecated_header.h>
 
 template <class T1, class T2,
           VCL_DFL_TYPE_PARAM_STLDECL(T3, vbl_basic_optional),
@@ -29,6 +32,8 @@ class vbl_basic_relation_factory;
 
 //------------------------------------------------------------
 //: Abstract base class for implementations of easy relation iterators.
+//
+// \deprecated Because no-one knows what it does.
 template <class T1, class T2,
           VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
           VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional),
@@ -71,6 +76,8 @@ class vbl_br_iter_impl
 // for those types.  This is an abstract base class, the only
 // functionality implemented here being the naming of
 // relations.
+//
+// \deprecated Because no-one knows what it does.
 template <class T1, class T2,
           VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
           VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),

@@ -10,16 +10,20 @@
 //  Modifications
 //   PDA (Manchester) 21/03/2001: Tidied up the documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+//   IMS (Manchester) 21/10/2003: Deprecated - Decision at Providence 2002 Meeting.
+//                               Can be deleted after VXL-1.1
 // \endverbatim
 
 
 #include <vbl/vbl_basic_tuple.h>
 #include <vcl_iosfwd.h>
+#include <vcl_deprecated_header.h>
 
 //: A tuple used to select in vbl_basic_relation
 //  This class is used internal to the vbl_basic_relation class to specify
 //  the attributes currently selected in the relation.
 //
+// \deprecated Because no-one knows what it does.
 template <class T1, class T2,
           VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
           VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional),

@@ -8,10 +8,14 @@
 // \verbatim
 // Modifications
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
+// IMS (Manchester) 21/10/2003: Deprecated - Decision at Providence 2002 Meeting.
+//                              Can be deleted after VXL-1.1
+//        
 // \endverbatim
 
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
+#include <vcl_deprecated_header.h>
 
 #ifdef __STL_USE_ABBREVS
 #define vbl_basic_optional vbl_bRo
@@ -24,6 +28,7 @@
 // templates so that only the appropriate pieces of code are
 // included in each instantiation.
 //
+// \deprecated Because no-one knows what it does.
 class vbl_basic_optional
 {
  public:
@@ -37,6 +42,8 @@ class vbl_basic_optional
 // whether or not a given class is vbl_basic_optional.  Uses an enum because
 // it is more widely supported than a static const bool.
 // vbl_basic_optional_traits<T>::IsOptional == false.
+//
+// \deprecated Because no-one knows what it does.
 template <class T>
 class vbl_basic_optional_traits
 {
