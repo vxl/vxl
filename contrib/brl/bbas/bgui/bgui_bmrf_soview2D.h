@@ -44,6 +44,9 @@ class bgui_bmrf_epi_seg_soview2D : public vgui_soview2D
   //: Returns the centroid of this epi_seg.
   void get_centroid(float* x, float* y) const;
 
+  //: Translate this soview2D by the given x and y distances.
+  virtual void translate(float x, float y);
+
   //: Returns a smart pointer to the segment
   bmrf_epi_seg_sptr seg_sptr() const { return seg_sptr_; }
 

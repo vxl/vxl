@@ -39,6 +39,7 @@ bgui_bmrf_epi_seg_soview2D::print(vcl_ostream&s) const
   return s << "[ a bmrf_epi_seg FIXME ]";
 }
 
+
 //: Returns the distance squared from this bmrf_epi_seg to the given position.
 float
 bgui_bmrf_epi_seg_soview2D::distance_squared(float x, float y) const
@@ -63,6 +64,7 @@ bgui_bmrf_epi_seg_soview2D::distance_squared(float x, float y) const
   return dd;
 }
 
+
 //: Returns the centroid of this bmrf_epi_seg.
 void
 bgui_bmrf_epi_seg_soview2D::get_centroid(float* x, float* y) const
@@ -78,6 +80,19 @@ bgui_bmrf_epi_seg_soview2D::get_centroid(float* x, float* y) const
   float s = 1.0f / float(n);
   *x *= s;
   *y *= s;
+}
+
+
+//: Translate this soview2D by the given x and y distances.
+void
+bgui_bmrf_epi_seg_soview2D::translate(float x, float y)
+{
+  // WARNING - This updates x,y position of each point but DOES NOT
+  //           adjust any other dependent variables such as s and alpha
+  vcl_vector<bmrf_epi_point_sptr>::const_iterator p_itr;
+  for(p_itr = seg_sptr_->begin(); p_itr != seg_sptr_->end(); ++p_itr){
+    (*p_itr)->set( (*p_itr)->x()+x, (*p_itr)->y()+y );
+  }
 }
 
 
