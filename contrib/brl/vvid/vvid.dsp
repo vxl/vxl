@@ -25,6 +25,9 @@ SOURCE=.\Templates/vcl_vector+vvid_live_video_frame_sptr-.cxx
 SOURCE=.\Templates/vcl_vector+vvid_live_video_tableau_sptr-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vvid_curve_tracking_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vvid_epipolar_space_process.cxx
 # End Source File
 # Begin Source File
@@ -77,6 +80,9 @@ SOURCE=.\cmu_1394_camera.h
 # End Source File
 # Begin Source File
 SOURCE=.\cmu_1394_camera_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_curve_tracking_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vvid_epipolar_space_process.h
