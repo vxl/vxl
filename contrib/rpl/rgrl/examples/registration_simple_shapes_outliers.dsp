@@ -203,15 +203,6 @@ LINK32=link.exe
 # Begin Source File
 SOURCE=.\registration_simple_shapes_outliers.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\test_util.cxx
-# End Source File
-# End Group
-# Begin Group "Header Files"
-# PROP Default_Filter ""
-# Begin Source File
-SOURCE=.\test_util.h
-# End Source File
 # End Group
 # End Target
 # End Project
