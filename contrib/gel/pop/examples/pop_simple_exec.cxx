@@ -29,10 +29,8 @@ int main(int argc, char** argv)
 
   vcl_vector<pop_parameter*> params = pm.new_parameters(6);
 
-  // set the rotation to non changeble and just test the translation
-  // component.
-  // the first three parameters are rotation and the second three are
-  // translation
+  // set the rotation to non changeable and just test the translation component.
+  // the first 3 parameters are rotation and the second 3 are translation.
 
   for (int i=0;i<3;i++) {
     params[i]->value_=0.0;
