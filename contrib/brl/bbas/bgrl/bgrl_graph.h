@@ -18,7 +18,6 @@
 // \endverbatim
 
 
-#include <vcl_deque.h>
 #include <vcl_set.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_ref_count.h>
@@ -125,7 +124,7 @@ class bgrl_graph : public vbl_ref_count
    protected:
     bgrl_graph_sptr graph_;
     bgrl_search_func_sptr search_func_;
-    
+
     bool use_internal_;
     vertex_iterator internal_;
   };
@@ -136,7 +135,6 @@ class bgrl_graph : public vbl_ref_count
   iterator begin(const bgrl_search_func_sptr& func = NULL) { return iterator(this, func); }
   //: Depth first search end iterator
   iterator end()   { return iterator(this, NULL); }
-
 };
 
 
