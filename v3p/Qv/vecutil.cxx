@@ -53,10 +53,8 @@
 // flag inside tells wheter to pick the outer (default) or inner side of the cube
 // (this test requires only 3 divisions, up to 6 multiplications and some additions/comparisons)
 
-float rayhitscube (
-  const point3D& A, const vector3D& b, float tnear, float tmin,
-  const point3D& min, const point3D& max, vector3D* normal, int inside
-)
+float rayhitscube ( const point3D& A, const vector3D& b, float tnear, float tmin,
+                    const point3D& min, const point3D& max, vector3D* normal, int inside )
 {
   float thit, hpx, hpy, hpz;  // hit time and hit point
 
@@ -114,10 +112,8 @@ float rayhitscube (
 // tests wheter ray A + b.t comes near the line P + k.v (dist^2 <= eps2)
 // if so, t is returned (but tmin not changed), 0.0 otherwise
 
-float rayhitsline (
-  const point3D& A, const vector3D& b, float tnear, float tmin,
-  const point3D& P, const vector3D& v, float eps2
-)
+float rayhitsline ( const point3D& A, const vector3D& b, float tnear, float tmin,
+                    const point3D& P, const vector3D& v, float eps2 )
 {
   vector3D bv, pa, h;  // line direction, b X v, P - A, helper
 
@@ -167,10 +163,8 @@ float rayhitsline (
 // tests whether ray A + b.t comes near point P (distance^2 <= eps2)
 // if so, t is returned (but tmin not changed), 0.0 otherwise
 
-float rayhitspoint (
-  const point3D& A, const vector3D& b, float tnear, float tmin,
-  const point3D& P, float eps2
-)
+float rayhitspoint ( const point3D& A, const vector3D& b, float tnear, float tmin,
+                     const point3D& P, float eps2 )
 {
   float denom = dot3D (b, b);
 

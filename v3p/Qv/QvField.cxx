@@ -47,8 +47,9 @@ QvField::read(QvInput *in, const QvName &name) const
     in->putBack(c);
 
     if (! ((QvField*)this)->readValue(in)) {
-        QvReadError::post(in, "Couldn't read value for field \"%s\"\n"
-                              "(ignoring remaining data of current node)",
+        QvReadError::post(in,
+                          "Couldn't read value for field \"%s\"\n"
+                          "(ignoring remaining data of current node)",
                           name.getString());
         return FALSE;
     }
