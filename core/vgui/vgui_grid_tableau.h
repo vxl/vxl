@@ -23,18 +23,22 @@
 #include <vgui/vgui_polytab.h>
 #include <vgui/vgui_event_condition.h>
 
+struct vgui_grid_tableau_data
+{
+  int handle;       // Handle returned by polytab
+  int tab_pos;      // Position in tableaux vcl_list (tabs)
+  bool is_default;  // True if this is a default tableau (not set by the user)
+  int time_selected;// Time last left clicked on (-1 if not selected)
+};
+
+bool operator==(vgui_grid_tableau_data const &a,
+		vgui_grid_tableau_data const &b);
+
 class vgui_grid_tableau : public vgui_polytab
 {
 public:
-
-  struct grid_data
-  {
-    int handle;       // Handle returned by polytab
-    int tab_pos;      // Position in tableaux vcl_list (tabs)
-    bool is_default;  // True if this is a default tableau (not set by the user)
-    int time_selected;// Time last left clicked on (-1 if not selected)
-  };
-
+  typedef vgui_grid_tableau_data grid_data;
+  
   vcl_string type_name() const;
 
   vgui_grid_tableau(unsigned initial_columns = 1, unsigned initial_rows = 1);
