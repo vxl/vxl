@@ -328,14 +328,19 @@ bool vgui_rubberband_tableau::handle_circle(vgui_event const &e, float ix, float
 {
   if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
   {
-    float radi = hypot(x_coords[0] - lastx, y_coords[0]-lasty);
+    // hypot(x_coords[0] - lastx, y_coords[0]-lasty);
+    float dx = x_coords[0] - lastx;
+    float dy = y_coords[0] - lasty;
+    float radi = vcl_sqrt(dx*dx + dy*dy);
     draw_circle(x_coords[0], y_coords[0], radi);
     return true;
   }
   if (gesture1(e))
   {
     // Circle is completed, add to the client:
-    float radi = hypot(x_coords[0] - ix, y_coords[0]-iy);
+    float dx = x_coords[0] - ix;
+    float dy = y_coords[0] - iy;
+    float radi = vcl_sqrt(dx*dx + dy*dy);
     client_->add_circle(x_coords[0],y_coords[0],radi);
     active = false;
     obj_type = none_enum;
