@@ -34,14 +34,25 @@ public:
     Base::num_elmts = n;
   }
 
+  //: Copy constructor
+  // Do *not* call anything else than the default constructor of vnl_vector<T>
+  // (That is why the default copy constructor is *not* good.)
+  vnl_vector_ref(vnl_vector_ref<T> const& v) : vnl_vector<T>() {
+    Base::data = (T*)(v.data_block()); // const incorrect!
+    Base::num_elmts = v.size();
+  }
+
   //: Destructor
   // Prevents base destructor from releasing memory we don't own
   ~vnl_vector_ref() {
-
     Base::data = 0;
   }
 
-  //private:
+private:
+
+  //: Copy constructor from vnl_vector<T> is disallowed:
+  vnl_vector_ref(vnl_vector<T> const&) {}
+ 
   // Private operator new because deleting a pointer to
   // one of these through a baseclass pointer will attempt
   // to free the referenced memory.
@@ -50,7 +61,7 @@ public:
   // NOW COMMENTED OUT - PVR, may 97
   //void* operator new(size_t) { return 0; }
 
-  //public:
+  public:
   // Privatizing other new means we must offer placement new for STL
   //void* operator new(size_t, void* space) { return space; }
 };
