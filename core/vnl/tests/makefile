@@ -23,7 +23,6 @@ TESTS += test_sparse_matrix.cxx
 TESTS += test_qsvd.cxx
 TESTS += test_sample.cxx
 TESTS += test_functions.cxx
-TESTS += test_numeric_limits.cxx
 TESTS += test_numeric_traits.cxx
 TESTS += test_rpoly_roots.cxx
 TESTS += test_cpoly_roots.cxx
