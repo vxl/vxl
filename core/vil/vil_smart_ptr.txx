@@ -40,7 +40,6 @@ vcl_ostream& operator<< (vcl_ostream& os, vil_smart_ptr<T> const& r)
 template class vil_smart_ptr<T >; \
 VCL_DEFINE_SPECIALIZATION struct vil_smart_ptr_T_as_string<T > \
 { static char const *str() { return #T; } }; \
-template vcl_ostream& operator<< (vcl_ostream&, vil_smart_ptr<T > const&); \
-VCL_INSTANTIATE_INLINE(bool operator== (vil_smart_ptr<T > const&, vil_smart_ptr<T > const&))
+template vcl_ostream& operator<< (vcl_ostream&, vil_smart_ptr<T > const&);
 
 #endif // vil_smart_ptr_txx_
