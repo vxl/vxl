@@ -46,7 +46,7 @@ public:
 					       vil_component_format format);
 };
 
-//: Generic image implementation for PNM files
+//: Generic image implementation for MIT files
 class vil_mit_generic_image : public vil_image_impl {
   vil_stream* is_;
   int magic_;
@@ -83,17 +83,13 @@ public:
 
   virtual int bits_per_component() const 
   { 
-    int bpc; 
-    if (type_ == 1) bpc = bits_per_pixel_;
-    if (type_ == 2) bpc = bits_per_pixel_ / 3;
-    if (type_ == 6) bpc = bits_per_pixel_;
-    return bpc; 
-  };
+    return (type_ != 2) ? bits_per_pixel_ : bits_per_pixel_ / 3;
+  }
 
   virtual int bytes_per_pixel() const
   {
     return bits_per_pixel_ / 8;
-  };
+  }
 
   virtual enum vil_component_format component_format() const 
   { 
