@@ -83,8 +83,6 @@ ENDIF(BUILD_CONVERSIONS)
 
 # For out of place builds, the configure generated headers are in the
 # binary directory
-SET (LIBRARY_OUTPUT_PATH ${allvxl_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
-SET (EXECUTABLE_OUTPUT_PATH ${allvxl_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
 INCLUDE_DIRECTORIES(${allvxl_BINARY_DIR}/vcl
                     ${allvxl_BINARY_DIR}/vxl)
 
