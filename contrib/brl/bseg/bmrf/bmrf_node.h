@@ -16,6 +16,7 @@
 
 #include <vcl_list.h>
 #include <vcl_vector.h>
+#include <vcl_map.h>
 #include <vcl_iosfwd.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -134,6 +135,14 @@ class bmrf_node : public vbl_ref_count
   // \retval true if any arcs were removed
   // \retval false of all arcs are valid
   bool purge();
+
+ protected:
+  //: Compute the weights of each node for use in probability computation
+  // Nodes are weighted by alpha overlap and intesity similarity
+  void compute_weights();
+
+  //: Map nodes to weights
+  vcl_map<bmrf_node*, double> weight_;
 
  private:  
   //: A smart pointer to the underlying epi-segment data

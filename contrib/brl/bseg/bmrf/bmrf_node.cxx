@@ -79,69 +79,147 @@ bmrf_node::purge()
 }
 
 
-//: Calculate the conditional probability that this node is correct give its neighbors
-double
-bmrf_node::probability()
+// Helper function to compute the average distance ratio in the overlapping alpha
+static double
+avg_distance_ratio( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2)
 {
-  // Have not yet determined how this will be computed
-  return probability_;
+  double min_alpha = MAX(ep1->min_alpha(), ep2->min_alpha());
+  double max_alpha = MIN(ep1->max_alpha(), ep2->max_alpha());
+  double d_alpha =  MIN( (ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
+                         (ep2->max_alpha() - ep2->min_alpha())/ep2->n_pts() );
+  
+  double s1 = 0.0, s2 = 0.0;
+  for (double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha){
+    s1 += ep1->s(alpha);
+    s2 += ep2->s(alpha);
+  }
+  return s1 / s2;
 }
 
 
 // Helper function to compute match error between to segments
 static double
-bmrf_match_error( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2, double &alpha_range )
+bmrf_match_error( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2 )
 {
   double min_alpha = MAX(ep1->min_alpha(), ep2->min_alpha());
   double max_alpha = MIN(ep1->max_alpha(), ep2->max_alpha());
-  alpha_range = max_alpha - min_alpha;
+
   double d_alpha =  MIN( (ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
                          (ep2->max_alpha() - ep2->min_alpha())/ep2->n_pts() );
   // static double d_alpha = 0.0006;
-  int num_pts = 0;
-  double error = 0.0;
-  for (double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha, ++num_pts) {
+
+  double s_error = 0.0;
+  for (double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha) {
     double ds = ep1->s(alpha) - ep2->s(alpha);
-    //double dli = ep1->left_int(alpha) - ep2->left_int(alpha);
-    //double dri = ep1->right_int(alpha) - ep2->right_int(alpha);
-    error += ds*ds; //+ dli*dli + dri*dri;
+    s_error += ds*ds; 
   }
-  return error * d_alpha / alpha_range;//(max_alpha - min_alpha); // num_pts;
+  return s_error * d_alpha / (max_alpha - min_alpha);
 }
+
+
+//: Calculate the conditional probability that this node is correct give its neighbors
+double
+bmrf_node::probability()
+{
+  
+  if(weight_.empty())
+    this->compute_weights();
+
+  double prob = 0.0;
+  vcl_vector<vcl_pair<double,double> > pmf;
+  for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr ) {
+    bmrf_node_sptr neighbor = (*a_itr)->to();
+    double dist_ratio = avg_distance_ratio(this->epi_seg(), neighbor->epi_seg());
+    int time_step = neighbor->frame_num() - this->frame_num();
+    double gamma = (1.0 - dist_ratio) / time_step;
+    
+    bmrf_epi_transform_sptr xform = new bmrf_const_epi_transform(gamma);
+    pmf.push_back(vcl_pair<double,double>(this->probability(xform),gamma));
+  }
+  vcl_sort(pmf.begin(), pmf.end());
+/*
+  vcl_cout << "Samples" << vcl_endl;
+  for ( vcl_vector<vcl_pair<double,double> >::iterator p_itr = pmf.begin();
+        p_itr != pmf.end();  ++p_itr )
+    vcl_cout << p_itr->second <<'\t'<< p_itr->first << vcl_endl;
+  vcl_cout << vcl_endl;
+*/
+  
+  probability_ = (pmf.empty()) ? 0 : pmf.back().first;
+  return probability_;
+}
+
 
 //: Calculate the error in similarity between this trasformed by \p xform
 double
 bmrf_node::probability(const bmrf_epi_transform_sptr& xform)
 {
+  if(weight_.empty())
+    this->compute_weights();
+
   // precompute the segment in the next and previous frames since
   // this should make up most of the neighbors
   bmrf_epi_seg_sptr prev_seg = xform->apply(this->epi_seg(), -1.0);
   bmrf_epi_seg_sptr next_seg = xform->apply(this->epi_seg(), 1.0);
   double prob = 0.0;
-  double total_wgt = 0.0;
-  int num_neighbors = 0;
-  for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr, ++num_neighbors ) {
+  for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr ) {
     bmrf_node_sptr neighbor = (*a_itr)->to();
     int time_step = neighbor->frame_num() - this->frame_num();
     double error;
-    double wgt;
     switch(time_step) {
      case -1:
-      error = bmrf_match_error(prev_seg, neighbor->epi_seg(), wgt);
+      error = bmrf_match_error(prev_seg, neighbor->epi_seg());
       break;
      case 1:
-      error = bmrf_match_error(next_seg, neighbor->epi_seg(), wgt);
+      error = bmrf_match_error(next_seg, neighbor->epi_seg());
       break;
      default:
       // compute less likely transformations as needed
       bmrf_epi_seg_sptr xform_seg = xform->apply(this->epi_seg(), double(time_step));
-      error = bmrf_match_error(xform_seg, neighbor->epi_seg(), wgt);
+      error = bmrf_match_error(xform_seg, neighbor->epi_seg());
     }
-    //vcl_cout << "Error = " << error << vcl_endl;
-    prob += wgt*vcl_exp(-error/2.0);
-    total_wgt += wgt;
+    vcl_map<bmrf_node*, double>::iterator w_itr = weight_.find(neighbor.ptr());
+    prob += w_itr->second * vcl_exp(-error/2.0);
   }
-  return prob / (total_wgt /*num_neighbors*/ * 2.50663);
+  return prob * 0.398942; // 1/sqrt(2*pi)
+}
+
+
+//: Compute the weights of each node for use in probability computation
+// Nodes are weighted by alpha overlap and intesity similarity
+void 
+bmrf_node::compute_weights()
+{
+  double int_var = 0.001; // intensity variance
+  double total_wgt = 0.0;
+  bmrf_epi_seg_sptr ep1 = this->epi_seg();
+  for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr ) {
+    bmrf_node_sptr neighbor = (*a_itr)->to();
+    bmrf_epi_seg_sptr ep2 = neighbor->epi_seg();
+
+    double min_alpha = MAX(ep1->min_alpha(), ep2->min_alpha());
+    double max_alpha = MIN(ep1->max_alpha(), ep2->max_alpha());
+    double alpha_range = max_alpha - min_alpha;
+    double d_alpha =  MIN( (ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
+                           (ep2->max_alpha() - ep2->min_alpha())/ep2->n_pts() );
+
+    double l_error = 0.0, r_error = 0.0;
+    for (double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha) {   
+      double dli = (ep1->left_int(alpha) - ep2->left_int(alpha));
+      double dri = (ep1->right_int(alpha) - ep2->right_int(alpha));
+      l_error += dli*dli;
+      r_error += dri*dri;
+    }
+    double int_error = (l_error + r_error) * d_alpha / (alpha_range * int_var);
+    double wgt = alpha_range*vcl_exp(-int_error/2.0);
+    weight_[neighbor.ptr()] = wgt;
+    total_wgt += alpha_range;
+  }
+  double scale = 1.0/total_wgt;
+  for( vcl_map<bmrf_node*, double>::iterator w_itr = weight_.begin();
+       w_itr != weight_.end();  ++w_itr ){
+    w_itr->second *= scale; 
+  }
 }
 
 
