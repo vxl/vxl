@@ -1,0 +1,3 @@
+
+LINK_LIBRARIES( mil_algo )
+LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/mul/mil/algo )

@@ -13,6 +13,7 @@
 #include <mil/tests/test_gauss_reduce_2d.cxx>
 #include <mil/tests/test_gaussian_pyramid_builder_2d.cxx>
 #include <mil/tests/test_gaussian_pyramid_builder_2d_general.cxx>
+#include <mil/tests/test_algo_exp_filter_1d.cxx>
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \
@@ -29,6 +30,7 @@ void run_test_mil()
   test_gauss_reduce_2d();
   test_gaussian_pyramid_builder_2d();
   test_gaussian_pyramid_builder_2d_general();
+  test_algo_exp_filter_1d();
 }
 
 
