@@ -1,3 +1,4 @@
+// This is mul/vil2/vil2_bilin_interp.h
 #ifndef vil2_bilin_interp_h_
 #define vil2_bilin_interp_h_
 //: \file
@@ -5,7 +6,6 @@
 //  \author Tim Cootes
 
 #include <vcl_cassert.h>
-#include <vcl_cfloat.h>
 
 //: Compute bilinear interpolation at (x,y), no bound checks
 //  Image is nx * ny array of Ts. x,y element is data[ystep*y+xstep*x]
@@ -38,7 +38,7 @@ inline double vil2_bilin_interp(double x, double y, const T* data, int xstep, in
 //  The safe interpolatable region is [0,nx)*[0,ny).
 template<class T>
 inline double vil2_safe_bilin_interp(double x, double y, const T* data,
-                                       int nx, int ny, int xstep, int ystep)
+                                     int nx, int ny, int xstep, int ystep)
 {
     if (x<0) return 0.0;
     if (y<0) return 0.0;
@@ -54,7 +54,7 @@ inline double vil2_safe_bilin_interp(double x, double y, const T* data,
 //  The safe interpolatable region is [0,nx)*[0,ny).
 template<class T>
 inline double vil2_assert_bilin_interp(double x, double y, const T* data,
-                                         int nx, int ny, int xstep, int ystep)
+                                       int nx, int ny, int xstep, int ystep)
 {
     assert (x>=0);
     assert (y>=0);
