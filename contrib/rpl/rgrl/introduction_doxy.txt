@@ -1,0 +1,44 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage rgrl : Rensselaer (Generalized) Registration Library
+* The library is designed as a set of techniques to allow realization
+* of a variety of correspondence-based registration algorithms.
+*
+* Components of the framework include initializers, feature sets,
+* correspondence generators, robust transformation estimators, and
+* convergence testers. Multiple feature types may be used either
+* simultaneously or sequentially, and multiresolution is handled
+* naturally. 
+*
+* class rgrl_feature_based_registration
+*  - the engine that represent the framework
+*
+* class rgrl_feature
+*  - basic primitives of correspondence-based registration
+*  - pre-computed or constructed dynamically
+*
+* class rgrl_feature_set
+*  - a collection of features
+*  - with representations suitable for spatial queries such as
+*    finding the nearest neighbors
+*
+* class rgrl_initializer
+*  - method to generate the initial transformation
+* 
+* class rgrl_matcher
+*  - generating correspondences from the two image feature sets.
+* 
+* class rgrl_estimator
+*  - estimating the spatial relationship that maps the moving image to
+*    the fixed image using the matches
+*  - transformation parameters stored in the rgrl_transformation of
+*    the same model
+*
+* class rgrl_scale_estimator and rgrl_weighter
+*  - for robust transformation estimation in the presence of
+*    outliers/mis-matches
+*
+* class rgrl_convergence_tester
+*  - testing whether the estimation has converged to a stable solution
+*    or is oscillating.
+*
+*/
