@@ -5,7 +5,7 @@
 #include <vnl/vnl_math.h>
 
 #include <rrel/rrel_util.h>
-#include <vnl/vnl_test.h>
+#include <vbl/vbl_test.h>
 
 
 bool is_sorted( double* first, double* last )
@@ -22,7 +22,7 @@ bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-4; }
 int
 main()
 {
-  vnl_test_start( "rrel_util" );
+  vbl_test_start( "rrel_util" );
 
   //
   //  rrel_util_median_abs_dev_scale
@@ -31,9 +31,9 @@ main()
                         -56.0, -2.4, 3.1, 1.1, 2.15, -2.1, -0.8 };
   vcl_vector<double> test_vec( test_arr, test_arr+14 );
   const double target=3.0*1.4826*(1+5.0/11);
-  vnl_test_begin( "rrel_util_median_abs_dev_scale" );
+  vbl_test_begin( "rrel_util_median_abs_dev_scale" );
   double res = rrel_util_median_abs_dev_scale( test_vec.begin(), test_vec.end(), 3 );
-  vnl_test_perform( close( res, target ) );
+  vbl_test_perform( close( res, target ) );
 
   //
   //  rrel_util_weighted_scale
@@ -48,10 +48,10 @@ main()
   }
   int num = 10;
   int dof = 1;
-  vnl_test_begin( "rrel_util_weighted_scale" );
+  vbl_test_begin( "rrel_util_weighted_scale" );
   double corr_wgted_scale = vcl_sqrt( sum_wr / ( sum_w * (num-dof) / num ) );
   double est_wgted_scale = rrel_util_weighted_scale( (double*)rs_arr, rs_arr+10, (double*)wgt_arr, dof );
-  vnl_test_perform( close(corr_wgted_scale, est_wgted_scale) );
+  vbl_test_perform( close(corr_wgted_scale, est_wgted_scale) );
 
   //
   //  rrel_util_median_and_scale
@@ -64,13 +64,13 @@ main()
   const double corr_median = 1.1;
   dof = 1;
   const double corr_scale = 3.2 * (1.0 + 5.0/(18.0-dof)) * 1.4826;
-  vnl_test_begin( "rrel_util_median_and_scale_copy" );
+  vbl_test_begin( "rrel_util_median_and_scale_copy" );
   rrel_util_median_and_scale_copy( test_vect4.begin(), test_vect4.end(), median, scale, dof);
-  vnl_test_perform( close(median,corr_median) && close(scale,corr_scale) );
-  vnl_test_begin( "rrel_util_median_and_scale" );
+  vbl_test_perform( close(median,corr_median) && close(scale,corr_scale) );
+  vbl_test_begin( "rrel_util_median_and_scale" );
   rrel_util_median_and_scale( test_vect4.begin(), test_vect4.end(),
                               median, scale, 1 );
-  vnl_test_perform( close(median,corr_median) && close(scale,corr_scale) );
+  vbl_test_perform( close(median,corr_median) && close(scale,corr_scale) );
 
   //
   //  rrel_util_intercept_adjustment
@@ -80,14 +80,14 @@ main()
   vcl_vector<double> test_vect2( test_arr2, test_arr2+16 );
   double center, half_width;
   const double corr_center=-0.45, corr_half_width=1.65;
-  vnl_test_begin( "rrel_util_intercept_adjustment_copy --- correct?");
+  vbl_test_begin( "rrel_util_intercept_adjustment_copy --- correct?");
   rrel_util_intercept_adjustment( test_vect2.begin(), test_vect2.end(), center, half_width, 1 );
-  vnl_test_perform( close(center,corr_center) && close(half_width, corr_half_width) );
-  vnl_test_begin( "rrel_util_intercept_adjustment(pointer) --- correct?");
+  vbl_test_perform( close(center,corr_center) && close(half_width, corr_half_width) );
+  vbl_test_begin( "rrel_util_intercept_adjustment(pointer) --- correct?");
   rrel_util_intercept_adjustment( test_vect2.begin(), test_vect2.end(), center, half_width, 1 );
-  vnl_test_perform( close(center,corr_center) && close(half_width, corr_half_width) );
-  vnl_test_begin( "rrel_util_intercept_adjustment (pointer) --- sorted?");
-  vnl_test_perform( is_sorted( test_vect2.begin(), test_vect2.end() ) );
+  vbl_test_perform( close(center,corr_center) && close(half_width, corr_half_width) );
+  vbl_test_begin( "rrel_util_intercept_adjustment (pointer) --- sorted?");
+  vbl_test_perform( is_sorted( test_vect2.begin(), test_vect2.end() ) );
 
   //
   //  rrel_util_intercept_adjust_stats
@@ -97,15 +97,15 @@ main()
                          -56.0, -2.4, 3.1,  1.1,  2.1,  -2.1, -0.8, 0.6 };
   vcl_vector<double> test_vec3( test_arr3, test_arr3+16 );
   const double corr_mean=-0.2692307, corr_std=2.140632, corr_frac = 0.8125;
-  vnl_test_begin( "rrel_util_intercept_adjust_stats_copy " );
+  vbl_test_begin( "rrel_util_intercept_adjust_stats_copy " );
   rrel_util_intercept_adjust_stats_copy( test_vec3.begin(), test_vec3.end(), mean, std, frac, 1 );
-  vnl_test_perform( close(mean,corr_mean) && close(std,corr_std) && close(frac,corr_frac) );
-  vnl_test_begin( "rrel_util_intercept_adjust_stats (pointer) " );
+  vbl_test_perform( close(mean,corr_mean) && close(std,corr_std) && close(frac,corr_frac) );
+  vbl_test_begin( "rrel_util_intercept_adjust_stats (pointer) " );
   rrel_util_intercept_adjust_stats( test_vec3.begin(), test_vec3.end(),
                                     mean, std, frac, 1 );
-  vnl_test_perform( close(mean,corr_mean) && close(std,corr_std) && close(frac,corr_frac) );
+  vbl_test_perform( close(mean,corr_mean) && close(std,corr_std) && close(frac,corr_frac) );
 
-  vnl_test_summary();
+  vbl_test_summary();
 
   return 0;
 }
