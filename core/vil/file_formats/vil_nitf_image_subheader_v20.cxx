@@ -38,6 +38,50 @@ vil_nitf_image_subheader_v20::vil_nitf_image_subheader_v20()
   init();
 }
 
+//:  Create new instance of vil_nitf_image_subheader_band with same
+//   values as passed instance.   
+//   TBD: Modify code to return smart pointer.  Requires also modifying type
+//   of attribute bands in vil_nitf_image_subheader which is currently
+//   vil_nitf_image_subheader_band**.      mal 2004jan21
+//
+//  \param ish_band existing instance
+//
+//  \return pointer to new instance of vil_nitf_image_subheader_band
+//
+vil_nitf_image_subheader_band * vil_nitf_image_subheader_v20::new_image_header_band (
+    vil_nitf_image_subheader_band * ish_band)
+{
+    static vcl_string method_name = "vil_nitf_image_subheader_v20::new_image_header_band: ";
+
+    vil_nitf_image_subheader_band * rval = new vil_nitf_image_subheader_band;
+
+    rval->ITYPE = rval->IFC = rval->IMFLT = 0;
+    STRCPY (rval->ITYPE, "  /      "); // 2 char + / + 6 characters + NULL.
+    STRCPY (rval->IFC,   "N");         // 1 character+NULL  (not used).
+    STRCPY (rval->IMFLT, "   ");       // 3 characters+NULL (not used).
+    rval->NLUTS = rval->NELUT = 0;
+    rval->LUTD  = 0;
+
+    if (ish_band != NULL) {
+        if (ish_band->ITYPE) FilledCopy (rval->ITYPE, ish_band->ITYPE);
+        if (ish_band->IFC)   FilledCopy (rval->IFC,   ish_band->IFC);
+        if (ish_band->IMFLT) FilledCopy (rval->IMFLT, ish_band->IMFLT);
+        if (ish_band->NLUTS > 0 && ish_band->NELUT > 0) {
+            rval->NLUTS = ish_band->NLUTS;
+            rval->NELUT = ish_band->NELUT;
+            rval->LUTD  = new unsigned char*[rval->NLUTS];
+
+            unsigned int j;
+            for (j = 0; j < rval->NLUTS; j++) {
+                rval->LUTD[j] = new unsigned char[rval->NELUT];
+                vcl_memcpy(rval->LUTD[j], ish_band->LUTD[j], rval->NELUT);
+            }
+        }
+    }
+
+    return rval;
+}
+
 //====================================================================
 //: Builds a Version 2.0 vil_nitf_image_subheader from an arbitrary header.
 //====================================================================
@@ -383,7 +427,7 @@ StatusCode vil_nitf_image_subheader_v20::Read(vil_stream* file)
       if (debug_level > 1) {
         vcl_cout << method_name << "read data for band[" << n << "]\n";
       }
-      bands[n] = version_->newImageHeaderBand();
+      bands[n] = new_image_header_band();
       if ((file->read(bands[n]->ITYPE, 8) < 8) ||
           (file->read(bands[n]->IFC,   1) < 1) ||
           ((bands[n]->IFC[0] != 'N') && (bands[n]->IFC[0] != ' ')) ||
@@ -1279,7 +1323,7 @@ void vil_nitf_image_subheader_v20::init()
   IREP = 0;
   ICAT = 0;
 
-  setVersion(vil_nitf_version_v20::GetVersion());
+  setVersion (vil_nitf_version_v20::get_version_str());
 
   char initstr[80];                   // Will be filled with spaces.
 
