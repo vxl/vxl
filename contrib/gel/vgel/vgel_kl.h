@@ -25,6 +25,8 @@ class vgel_kl
 
     KLT_PixelType*      prev_frame_;
 
+    KLT_FeatureList     fl_;
+
  public:
 
 //***************************************************************************
@@ -44,7 +46,7 @@ class vgel_kl
   virtual void reset_prev_frame();
 
   virtual void match_sequence(vil1_image&, vil1_image&,
-                              vgel_multi_view_data_vertex_sptr);
+                              vgel_multi_view_data_vertex_sptr, bool);
 
   virtual void match_sequence(vcl_vector<vil1_image> &,
                               vgel_multi_view_data_vertex_sptr);

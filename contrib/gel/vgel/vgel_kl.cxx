@@ -18,6 +18,7 @@ vgel_kl::vgel_kl(const vgel_kl_params & params) : params_(params)
 {
     prev_frame_ = NULL;
     seq_tc_ = NULL;
+    fl_ = NULL;
 }
 
 vgel_kl::~vgel_kl()
@@ -37,11 +38,17 @@ void vgel_kl::reset_prev_frame()
         KLTFreeTrackingContext(seq_tc_);
         seq_tc_ = NULL;
     }
+    if (fl_)
+    {
+        KLTFreeFeatureList(fl_);
+        fl_ = NULL;
+    }
 }
 
 void vgel_kl::match_sequence(vil1_image&                        prev_img,
                              vil1_image&                        cur_img,
-                             vgel_multi_view_data_vertex_sptr   matches)
+                             vgel_multi_view_data_vertex_sptr   matches,
+                             bool                               use_persistent_features)
 {
     // Get the current image width & height.  (The KLT code
     // assumes these are constant for the duration of a
@@ -52,8 +59,20 @@ void vgel_kl::match_sequence(vil1_image&                        prev_img,
     // Get the current image as a linear buffer
     KLT_PixelType*    cur_frame = convert_to_gs_image(cur_img);
 
-    // Allocate a feature list for the frame
-    KLT_FeatureList    fl = KLTCreateFeatureList(params_.numpoints);
+    if (use_persistent_features)
+    {
+        // If there's no feature list yet...
+        if (!fl_)
+        {
+            // Allocate a feature list for the frame
+            fl_ = KLTCreateFeatureList(params_.numpoints);
+        }
+    }
+    else
+    {
+        // Allocate a feature list for the frame
+        fl_ = KLTCreateFeatureList(params_.numpoints);
+    }
 
     // If there's no previous frame yet...
     if (!prev_frame_)
@@ -69,22 +88,39 @@ void vgel_kl::match_sequence(vil1_image&                        prev_img,
         seq_tc_ = KLTCreateTrackingContext();
         set_tracking_context(seq_tc_);
         seq_tc_->sequentialMode = TRUE;
+
+        if (use_persistent_features)
+        {
+            // Get some features from the first image
+            KLTSelectGoodFeatures(seq_tc_, prev_frame_, width, height, fl_);
+        }
+    }
+
+    if (!use_persistent_features)
+    {
+        KLTReplaceLostFeatures(seq_tc_, prev_frame_, width, height, fl_);
     }
 
     // Create a feature table for the previous & current frames
     KLT_FeatureTable    ft = KLTCreateFeatureTable(2, params_.numpoints);
 
-    // Get some features from the image (used any cached pyramids in context)
-    KLTReplaceLostFeatures(seq_tc_, prev_frame_, width, height, fl);
-
     // Store the previous frame's feature list
-    KLTStoreFeatureList(fl, ft, 0);
+    KLTStoreFeatureList(fl_, ft, 0);
 
     // Track the points
-    KLTTrackFeatures(seq_tc_, prev_frame_, cur_frame, width, height, fl);
+    KLTTrackFeatures(seq_tc_, prev_frame_, cur_frame, width, height, fl_);
+
+    if (use_persistent_features)
+    {
+        // Restore lost features
+        if (params_.replaceLostPoints)
+        {
+            KLTReplaceLostFeatures(seq_tc_, cur_frame, width, height, fl_);
+        }
+    }
 
     // Store the current frame's feature list
-    KLTStoreFeatureList(fl, ft, 1);
+    KLTStoreFeatureList(fl_, ft, 1);
 
     if (matches)
     {
@@ -95,13 +131,26 @@ void vgel_kl::match_sequence(vil1_image&                        prev_img,
     // We're done with the feature table
     KLTFreeFeatureTable(ft);
 
+    if (use_persistent_features)
+    {
+        // Reset the val fields on the features to a positive value
+        // for the next call to matches_from_feature_table()
+        for (int pointnum = 0; pointnum < fl_->nFeatures; pointnum++)
+        {
+            fl_->feature[pointnum]->val = 1;
+        }
+    }
+    else
+    {
+        // We're done with the feature list
+        KLTFreeFeatureList(fl_);
+        fl_ = NULL;
+    }
+
     // We're done with the previous frame data -- save
     // current frame data as previous data for next frame
     delete prev_frame_;
     prev_frame_ = cur_frame;
-
-    // We're done with the feature list
-    KLTFreeFeatureList(fl);
 }
 
 void vgel_kl::match_sequence(vcl_vector<vil1_image>&            image_list,
@@ -186,11 +235,16 @@ void vgel_kl::matches_from_feature_table(KLT_FeatureTable   ft,
             float   x = feat->x;
             float   y = feat->y;
 
+//            printf("ft->feature[%03d][%d] = (%09.6f %09.6f %-05d)\n",
+//                    pointnum, viewnum, x, y, feat->val);
+
             // Test to see if this is the continuation of a sequence
             // - then put in the table
             if (feat->val == 0)
             {
                 vtol_vertex_2d_sptr vertex = new vtol_vertex_2d(x, y);
+//                printf("\tmatches->set1(%d, %-04d, (%9.6f, %9.6f))\n",
+//                       viewnum, matchnum, x, y);
                 matches->set(viewnum, matchnum, vertex);
             }
             // Otherwise, this is the start of a sequence
@@ -206,7 +260,9 @@ void vgel_kl::matches_from_feature_table(KLT_FeatureTable   ft,
 
                     // Store it
                     vtol_vertex_2d_sptr vertex = new vtol_vertex_2d(x, y);
-                    matches->set (viewnum, matchnum, vertex);
+//                    printf("\tmatches->set2(%d, %-04d, (%9.6f, %9.6f))\n",
+//                           viewnum, matchnum, x, y);
+                    matches->set(viewnum, matchnum, vertex);
                 }
             }
         }
