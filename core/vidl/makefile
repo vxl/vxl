@@ -6,6 +6,7 @@
 #   DEPENDENCIES: vbl vil
 
 USES += core
+TRY_AVI := 1
 TRY_MPEG2 := 1
 
 LIBRARY := vidl
@@ -30,7 +31,6 @@ SOURCES += vidl_mpegcodec_helper.cxx
 SOURCES += vidl_yuv_2_rgb.cxx
 endif
 
-MANPAGE_SOURCES += vidl_avicodec_sptr.h
 MANPAGE_SOURCES += vidl_clip_sptr.h
 MANPAGE_SOURCES += vidl_codec_sptr.h
 MANPAGE_SOURCES += vidl_frame_sptr.h
@@ -40,13 +40,19 @@ ifdef HAS_MPEG2
 MANPAGE_SOURCES += vidl_mpegcodec_sptr.h
 endif
 
+ifdef HAS_AVI
+MANPAGE_SOURCES += vidl_avicodec.h
 # I think we should ask for the microsoft
 # compiler instead of $(OS); if you know how to
 # do it, feel free to participate.
 ifeq ($(OS),win32)
-# avi codec which works under NT
-SOURCES += vidl_avicodec.cxx
+# avi codec which works under NT/Xp
+SOURCES += vidl_win_avicodec.cxx
+else
+# avi codec which works under Linux
+SOURCES += vidl_avifile_avicodec.cxx
 endif # win32
+endif # HAS_AVI
 
 ifndef NOTEST
 SUBDIRS += tests examples
