@@ -80,8 +80,11 @@ void testlib_test_assert_near(const vcl_string& msg, double expr, double target,
 {
   vcl_cout << msg << " should be " << target << ", is " << expr << ", ";
   double diff = vcl_abs(expr - target);
-  if (target != 0.0)
+  if (target != 0.0) {
+    vcl_cout.setf(vcl_ios::scientific);
     vcl_cout << "difference " << diff << ", ";
+    vcl_cout.unsetf(vcl_ios::scientific);
+  }
   testlib_test_perform(diff < tol);
 }
 
