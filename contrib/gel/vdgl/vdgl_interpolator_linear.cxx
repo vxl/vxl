@@ -27,6 +27,7 @@ double vdgl_interpolator_linear::get_x( const double index)
   double d= index- a;
 
   vdgl_edgel ae( chain_->edgel( a));
+  if (d==0) return ae.get_x(); /* to avoid accessing nonexistent edgel */
   vdgl_edgel be( chain_->edgel( b));
 
   return (2*be.get_x()*d+ae.get_x()*(1-d));
@@ -40,6 +41,7 @@ double vdgl_interpolator_linear::get_y( const double index)
   double d= index- a;
 
   vdgl_edgel ae( chain_->edgel( a));
+  if (d==0) return ae.get_y(); /* to avoid accessing nonexistent edgel */
   vdgl_edgel be( chain_->edgel( b));
 
   return (2*be.get_y()*d+ae.get_y()*(1-d));
@@ -53,6 +55,7 @@ double vdgl_interpolator_linear::get_theta( const double index)
   double d= index- a;
 
   vdgl_edgel ae( chain_->edgel( a));
+  if (d==0) return ae.get_theta(); /* to avoid accessing nonexistent edgel */
   vdgl_edgel be( chain_->edgel( b));
 
   return (2*be.get_theta()*d+ae.get_theta()*(1-d));
