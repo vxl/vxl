@@ -2,4 +2,4 @@ SUBDIRS = \
 v3p \
 vxl
 
-ME=TARGET
+PROJECT=TARGET

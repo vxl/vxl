@@ -1,9 +1,9 @@
-ME = vcl
+LIBRARY = vcl
 
-COMPILE_CLASSES = \
+SOURCE_FILES = \
 vcl_cmath \
 vcl_cassert \
 vcl_unistd 
 
 
-TEMPLATE_INSTANCE_DIRECTORY = Templates
+AUX_SOURCE_DIRECTORY = Templates

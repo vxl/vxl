@@ -1,11 +1,11 @@
-ME = vnl-algo
+LIBRARY = vnl-algo
 
 LINK_LIBRARIES = \
 vnl \
 vcl \
 netlib 
 
-COMPILE_CLASSES = \
+SOURCE_FILES = \
 vnl_cholesky \
 vnl_real_eigensystem \
 vnl_complex_eigensystem \
@@ -26,4 +26,4 @@ vnl_determinant \
 vnl_chi_squared \
 vnl_gaussian_kernel_1d 
 
-TEMPLATE_INSTANCE_DIRECTORY = Templates
+AUX_SOURCE_DIRECTORY = Templates

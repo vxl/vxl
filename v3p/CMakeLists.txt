@@ -1,4 +1,4 @@
 SUBDIRS = \
 netlib
 
-ME=V3P
+PROJECT=V3P

@@ -1,6 +1,6 @@
-ME = netlib
+LIBRARY = netlib
 
-COMPILE_CLASSES = \
+SOURCE_FILES = \
 c_sqrt \
 z_sqrt \
 cdabs \
@@ -193,7 +193,7 @@ zlatrs \
 ztrevc \
 zung2r \
 zunghr \
-zungqr \
+zungqr 
 
 
 

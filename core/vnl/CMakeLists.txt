@@ -2,9 +2,9 @@ SUBDIRS = \
 algo \
 tests
 
-ME = vnl
+LIBRARY = vnl
 
-COMPILE_CLASSES = \
+SOURCE_FILES = \
 vnl_alloc \
 vnl_math \
 vnl_copy \
@@ -53,4 +53,4 @@ vnl_transpose
 
 
 
-TEMPLATE_INSTANCE_DIRECTORY = Templates
+AUX_SOURCE_DIRECTORY = Templates
