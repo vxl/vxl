@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_symmetric_eigensystem.h
+// This is core/vnl/algo/vnl_symmetric_eigensystem.h
 #ifndef vnl_symmetric_eigensystem_h_
 #define vnl_symmetric_eigensystem_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -43,10 +43,11 @@
 // \date   29 Aug 96
 //
 // \verbatim
-// Modifications
-//  fsm, 5 March 2000: templated
-//  dac (Manchester) 28/03/2001: tidied up documentation
+//  Modifications
+//   fsm, 5 March 2000: templated
+//   dac (Manchester) 28/03/2001: tidied up documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+//   Jan.2003 - Peter Vanroose - added missing implementation for solve(b,x)
 // \endverbatim
 
 #include <vnl/vnl_matrix.h>
@@ -125,7 +126,7 @@ class vnl_symmetric_eigensystem
   vnl_vector<T> solve(vnl_vector<T> const & b);
 
   //: Solve LS problem M x = b
-  void solve(vnl_vector<T> const & b, vnl_vector<T> * x);
+  void solve(vnl_vector<T> const & b, vnl_vector<T> * x) { *x = solve(b); }
 };
 
 #endif // vnl_symmetric_eigensystem_h_
