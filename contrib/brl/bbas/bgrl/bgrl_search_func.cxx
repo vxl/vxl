@@ -11,7 +11,7 @@
 bgrl_edge_sptr
 bgrl_breadth_search::next_vertex()
 {
-  if (!curr_vertex_) 
+  if (!curr_vertex_)
     return NULL;
 
   for ( bgrl_vertex::edge_iterator itr = curr_vertex_->begin();
@@ -43,7 +43,7 @@ bgrl_breadth_search::next_vertex()
 bgrl_edge_sptr
 bgrl_depth_search::next_vertex()
 {
-  if (!curr_vertex_) 
+  if (!curr_vertex_)
     return NULL;
 
   for ( bgrl_vertex::edge_iterator itr = curr_vertex_->begin();
