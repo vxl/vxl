@@ -233,6 +233,32 @@
 #define VCL_TEMPLATE_MATCHES_TOO_OFTEN 1
 
 
+//: VCL_HAS_SLICED_DESTRUCTOR_BUG
+//
+// Consider this example code that creates a temporary in the call to f:
+// \code
+//  struct A { A(); A(const A&); ~A(); };
+//  struct B: public A { B(); B(const B& b); ~B(); };
+//  struct C { operator B(); };
+//  void f(A);
+//  void g(C c) { f(c); } // fails to call ~B() on 2nd temporary B
+// \endcode
+// Compilers will call c.operator B() to implement the conversion
+// necessary to call f(c).  Some compilers will then create a
+// temporary A by copy-constructing the temporary B to bind the
+// argument of f.  Others will create a second temporary B by
+// copy-constructing the first temporary B and bind the A-portion of
+// the object to the argument of f.  Some compilers (at least Intel
+// C++ 7.0 and 7.1) will create a second temporary B but forget to
+// call ~B() when destroying it.  This can cause resource leaks.
+//
+// The VCL_HAS_SLICED_DESTRUCTOR_BUG is set to 1 if this bug exists in
+// the compiler and 0 otherwise.
+//#define VCL_HAS_SLICED_DESTRUCTOR_BUG 1 /* bug exists */
+//#define VCL_HAS_SLICED_DESTRUCTOR_BUG 0 /* bug does not exist */
+#define VCL_HAS_SLICED_DESTRUCTOR_BUG 0
+
+
 //: VCL_NULL_TMPL_ARGS
 //
 // Define to <> for compilers that require them in friend template function

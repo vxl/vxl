@@ -54,6 +54,52 @@ MACRO(PERFORM_CMAKE_TEST FILE TEST)
 ENDMACRO(PERFORM_CMAKE_TEST FILE TEST)
 
 #
+# Perform the VXL specific try-run test with status output
+#
+
+MACRO(PERFORM_CMAKE_TEST_RUN FILE TEST)
+  IF("${TEST}" MATCHES "^${TEST}$")
+    # Perform test
+    SET(MACRO_CHECK_FUNCTION_DEFINITIONS
+        "-D${TEST} ${CMAKE_REQUIRED_FLAGS}")
+    IF(CMAKE_REQUIRED_LIBRARIES)
+      SET(TEST_ADD_LIBRARIES
+          "-DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}")
+    ENDIF(CMAKE_REQUIRED_LIBRARIES)
+    MESSAGE(STATUS "Performing Test ${TEST}")
+
+    TRY_RUN(${TEST} ${TEST}_COMPILED
+            ${CMAKE_BINARY_DIR}
+            ${vxl_config_SOURCE_DIR}/${FILE}
+            CMAKE_FLAGS -DCOMPILE_DEFINITIONS:STRING=${MACRO_CHECK_FUNCTION_DEFINITIONS}
+            "${TEST_ADD_LIBRARIES}"
+            OUTPUT_VARIABLE OUTPUT)
+    IF(${TEST}_COMPILED)
+      IF(${TEST})
+        SET(${TEST} 1 CACHE INTERNAL "VXL test ${FUNCTION}")
+        MESSAGE(STATUS "Performing Test ${TEST} - Success")
+      ELSE(${TEST})
+        MESSAGE(STATUS "Performing Test ${TEST} - Failed")
+        SET(${TEST} 0 CACHE INTERNAL "Test ${FUNCTION}")
+        WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
+                   "Performing Test ${TEST} failed with the following output:\n"
+                   "${OUTPUT}\n" APPEND)
+      ENDIF(${TEST})
+    ELSE(${TEST}_COMPILED)
+      MESSAGE(STATUS "Performing Try-Run Test ${TEST} - Test Compilation Failed")
+      WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
+                 "Performing Try-Run Test ${TEST} failed to compile with the following output:\n"
+                 "${OUTPUT}\n" APPEND)
+    ENDIF(${TEST}_COMPILED)
+  ELSE("${TEST}" MATCHES "^${TEST}$")
+    # Have result
+    #FOREACH(tst ${TEST})
+    #  MESSAGE("Test ${TEST} resulted in ${${tst}}")
+    #ENDFOREACH(tst ${TEST})
+  ENDIF("${TEST}" MATCHES "^${TEST}$")
+ENDMACRO(PERFORM_CMAKE_TEST_RUN FILE TEST)
+
+#
 # Check for include file and if not found, set variable to 0
 #
 
@@ -231,6 +277,7 @@ PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_MATH_HAS_FINITE)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_IEEEFP_HAS_FINITE)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_STDLIB_HAS_LRAND48)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_STDLIB_HAS_DRAND48)
+PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_HAS_SLICED_DESTRUCTOR_BUG)
 
 # Test how to define a template specialization, and whether
 # specializations can be properly distinguished by top-level
