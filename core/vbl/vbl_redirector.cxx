@@ -34,7 +34,7 @@ public:
 #if defined(VCL_SGI_CC)
 # define xsputn_const const
 # define xsputn_sizet int
-#elif defined(VCL_SUNPRO_CC_50)
+#elif defined(VCL_SUNPRO_CC_50) || defined(VCL_KAI) // RogueWave or ISO?
 # define xsputn_const const
 # define xsputn_sizet vcl_streamsize
 #else

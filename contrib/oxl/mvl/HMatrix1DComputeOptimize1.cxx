@@ -36,7 +36,7 @@ public:
   void boo(const vnl_vector<double> &x) {
     assert(x.size()==3);
     int f=cout.flags();
-    cout.flags(ios::fixed | ios::showpos);
+    cout.flags(vcl_ios::fixed | vcl_ios::showpos);
     double z,y;
     for (unsigned i=0;i<N;i++) {
       z=z1[i];

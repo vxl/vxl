@@ -122,3 +122,7 @@ include ${IUEROOT}/config/top.mk
 ifeq ($(OS),hpux10.20)
 pic = $(PIC)
 endif
+
+ifeq ($(IU_COMPILER),KCC)
+pic := $(PIC)
+endif

@@ -18,7 +18,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl/vcl_map.h>
-#include <vcl/vcl_memory.h>
+//#include <vcl/vcl_memory.h>
 #include <vcl/vcl_utility.h>
 #include <vcl/vcl_iostream.h>
 

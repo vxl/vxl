@@ -184,4 +184,24 @@ public:
   void display_help( char const* progname= 0);
 };
 
+#ifdef VCL_KAI
+#define declare_specialization(T) \
+template <> void settype(vbl_arg<T > &); \
+template <> void print_value(vcl_ostream &, vbl_arg<T > const &); \
+template <> int  parse(vbl_arg<T> *, char **)
+
+declare_specialization(bool);
+declare_specialization(int);
+declare_specialization(unsigned);
+declare_specialization(char*);
+declare_specialization(char const*);
+declare_specialization(double);
+#include <vcl/vcl_list.h>
+declare_specialization(vcl_list<int>);
+#include <vcl/vcl_string.h>
+declare_specialization(vcl_string);
+
+#undef declare_specialization
+#endif
+
 #endif
