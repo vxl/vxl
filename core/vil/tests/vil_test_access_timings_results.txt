@@ -8,6 +8,12 @@ Method5: for (unsigned i=ni;i>ni;--i,pixel-=istep) *pixel = vxl_byte(i-1+j+3*p);
 
 Times to fill a 256 x 256 image of 3 planes (in microsecs) [Range= 0.5(max-min)]
 
+
+----------------------------------------------------------------------------
+GCC 2.95.x
+----------------------------------------------------------------------------
+
+
 550MHz P3 Linux Box, using gcc-2.95.2
 ----------------------------------
 No optimisation:
@@ -33,10 +39,117 @@ Method 5) Mean: 2040us  +/-50us
 
 Conclusion: Methods 3&4 (using pointer incrementing) about 3x faster than im(i,j,p)
 
+
+1.1 GHz AMD FreeBSD 4.5, using gcc-2.95.3
+-----------------------------------------
+No optimization:
+Method 1) Mean: 10938us  +/-156us
+Method 2) Mean: 9984us  +/-39us
+Method 3) Mean: 5555us  +/-39us
+Method 4) Mean: 2008us  +/-39us
+Method 5) Mean: 2023us  +/-39us
+
+No optimization with -DNDEBUG:
+Method 1) Mean: 8766us  +/-78us
+Method 2) Mean: 7133us  +/-117us
+Method 3) Mean: 5188us  +/-78us
+Method 4) Mean: 2148us  +/-39us
+Method 5) Mean: 2109us  +/-78us
+
+Using -g -O2:
+Method 1) Mean: 2883us  +/-78us
+Method 2) Mean: 3398us  +/-39us
+Method 3) Mean: 914us  +/-39us
+Method 4) Mean: 750us  +/-39us
+Method 5) Mean: 742us  +/-39us
+
+Using -g -O2 -DNDEBUG
+Method 1) Mean: 2617us  +/-39us
+Method 2) Mean: 3219us  +/-39us
+Method 3) Mean: 914us  +/-39us
+Method 4) Mean: 750us  +/-39us
+Method 5) Mean: 742us  +/-39us
+
+Using -g -O3 -DNDEBUG:
+Method 1) Mean: 2523us  +/-78us
+Method 2) Mean: 3219us  +/-39us
+Method 3) Mean: 820us  +/-39us
+Method 4) Mean: 750us  +/-39us
+Method 5) Mean: 734us  +/-39us
+
+Using -O3 -NDEBUG:
+Method 1) Mean: 2531us  +/-39us
+Method 2) Mean: 2688us  +/-39us
+Method 3) Mean: 750us  +/-39us
+Method 4) Mean: 836us  +/-39us
+Method 5) Mean: 742us  +/-39us
+
+Using -DNDEBUG -O3 -funroll-loops:
+Method 1) Mean: 2609us  +/-78us
+Method 2) Mean: 2625us  +/-39us
+Method 3) Mean: 766us  +/-78us
+Method 4) Mean: 508us  +/-39us
+Method 5) Mean: 477us  +/-39us
+
+
+----------------------------------------------------------------------------
+GCC 3.0.x
+----------------------------------------------------------------------------
+
+1.1 GHz AMD FreeBSD 4.5, using gcc 3.0.4
+----------------------------------------
+No optimization:
+Method 1) Mean: 10352us  +/-117us
+Method 2) Mean: 8391us  +/-78us
+Method 3) Mean: 6305us  +/-78us
+Method 4) Mean: 1844us  +/-78us
+Method 5) Mean: 1797us  +/-78us
+
+No optimization with -DNDEBUG:
+Method 1) Mean: 7188us  +/-78us
+Method 2) Mean: 5367us  +/-78us
+Method 3) Mean: 5586us  +/-39us
+Method 4) Mean: 1844us  +/-39us
+Method 5) Mean: 1859us  +/-78us
+
+Using -O2:
+Method 1) Mean: 3320us  +/-78us
+Method 2) Mean: 3039us  +/-39us
+Method 3) Mean: 1328us  +/-0us
+Method 4) Mean: 734us  +/-39us
+Method 5) Mean: 898us  +/-39us
+
+Using -O2 -DNDEBUG:
+Method 1) Mean: 2516us  +/-39us
+Method 2) Mean: 2695us  +/-78us
+Method 3) Mean: 1266us  +/-39us
+Method 4) Mean: 742us  +/-78us
+Method 5) Mean: 898us  +/-39us
+
+Using -O3 -DNDEBUG
+Method 1) Mean: 2516us  +/-39us
+Method 2) Mean: 2695us  +/-39us
+Method 3) Mean: 1266us  +/-39us
+Method 4) Mean: 734us  +/-39us
+Method 5) Mean: 906us  +/-39us
+
+Using -O3 -DNDEBUG -funroll-loops
+Method 1) Mean: 2711us  +/-78us
+Method 2) Mean: 2641us  +/-78us
+Method 3) Mean: 1289us  +/-117us
+Method 4) Mean: 477us  +/-78us
+Method 5) Mean: 898us  +/-39us
+
+
+
+----------------------------------------------------------------------------
+MSVC 6.0 SP5
+----------------------------------------------------------------------------
+
+
 850Mhz P3 Windows 2000, using MSVC 6.0 SP5
 ------------------------------------------
 No Optimisation (Debug)
-Times to fill a 256 x 256 image of 3 planes (in microsecs) [Range= 0.5(max-min)]
 Method 1) Mean: 14170us  +/-200us
 Method 2) Mean: 11987us  +/-105us
 Method 3) Mean: 7311us  +/-5us
@@ -44,7 +157,6 @@ Method 4) Mean: 2844us  +/-50us
 Method 5) Mean: 2844us  +/-55us
 
 Optimisation with specified inlining (with debug info added) (RelwithDebInfo)
-Times to fill a 256 x 256 image of 3 planes (in microsecs) [Range= 0.5(max-min)]
 Method 1) Mean: 3535us  +/-50us
 Method 2) Mean: 3214us  +/-50us
 Method 3) Mean: 1392us  +/-100us
@@ -52,7 +164,6 @@ Method 4) Mean: 1192us  +/-55us
 Method 5) Mean: 761us  +/-55us
 
 Optimisation with optimiser controlled inlining (with debug info added)
-Times to fill a 256 x 256 image of 3 planes (in microsecs) [Range= 0.5(max-min)]
 Method 1) Mean: 3545us  +/-55us
 Method 2) Mean: 3214us  +/-50us
 Method 3) Mean: 1402us  +/-5us
