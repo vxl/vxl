@@ -20,10 +20,13 @@
 //   22-Jun-03 Peter Vanroose - vcl_list replaced by vcl_vector in lines_to_point
 // \endverbatim
 
-#include <vnl/vnl_fwd.h>
-#include <vgl/vgl_fwd.h>
 #include <vcl_list.h>
 #include <vcl_vector.h>
+#ifdef VCL_VC60
+# include <vcl_limits.h>
+#endif
+#include <vnl/vnl_fwd.h>
+#include <vgl/vgl_fwd.h>
 
 //: 2D homogeneous operations
 template <class T>
