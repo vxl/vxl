@@ -24,8 +24,8 @@
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_grid_finder_params.h>
-#include <bdgl/bdgl_curve_tracker.h>
-#include <bdgl/bdgl_curve_matcher.h>
+#include <bdgl/bdgl_curve_tracking.h>
+#include <bdgl/bdgl_curve_matching.h>
 
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
@@ -570,7 +570,7 @@ void vvid_file_manager::compute_grid_match()
   grid_dialog.field("RMS Distance", flp.rms_distance_);
   grid_dialog.field("Angle Tolerance", gfp.angle_tol_);
   grid_dialog.field("Line Count Threshold", gfp.thresh_);
-  grid_dialog.checkbox("Debug Output", gfp.verbose_);
+//  grid_dialog.checkbox("Debug Output", gfp.verbose_);
 
   if (!grid_dialog.ask())
     return;
@@ -587,43 +587,86 @@ void vvid_file_manager::compute_grid_match()
 void vvid_file_manager::compute_curve_tracking()
 {
   // get parameters
-  static int track_window;
-  static bdgl_curve_matcher_params mp(1.0, 10.0, 0.31416);
-  static bdgl_curve_tracker_params tp(1e6);
+ static int track_window;
+  static bdgl_curve_tracking_params tp;
 
-  vgui_dialog* tr_dialog = new vgui_dialog("Edge Tracking");
-  tr_dialog->field("Matching threshold", tp.match_thres_);
-  tr_dialog->field("Pixel scale", mp.image_scale_);
-  tr_dialog->field("Gradient scale", mp.grad_scale_);
-  tr_dialog->field("Angle scale", mp.angle_scale_);
+  vgui_dialog* tr_dialog = new vgui_dialog("Curve Tracking");
+  tr_dialog->field("Estimated Motion", tp.mp.motion_in_pixels);
+  tr_dialog->field("No of Top matches",tp.mp.no_of_top_choices);
+  tr_dialog->field("Min Length of curves",tp.min_length_of_curves);
+  
+  tr_dialog->checkbox("Clustering", tp.clustering_);
+  tr_dialog->field("No of clusters ",tp.cp.no_of_clusters);
+  tr_dialog->field("Min Euc Distance",tp.cp.min_cost_threshold);
+  tr_dialog->field("Fg and Bg Threshold",tp.cp.foreg_backg_threshold);
+
+  
   tr_dialog->checkbox("Tracks", track_);
   tr_dialog->field("Window", track_window);
+  static sdet_detector_params dp;
+  static bool agr = true;
+  tr_dialog->field("Gaussian sigma", dp.smooth);
+  tr_dialog->field("Noise Threshold", dp.noise_multiplier);
+  tr_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
+  tr_dialog->checkbox("Compute Junctions", dp.junctionp);
+  tr_dialog->checkbox("Agressive Closure", agr);
   if (!tr_dialog->ask())
     return;
-  tp.match_params_ = mp;
+  
+  
 
-  // embedded VD edges computations
-  // VD parameters
-  static bool agr = true;
-  static sdet_detector_params dp;
-  vgui_dialog* vd_dialog = new vgui_dialog("VD Edges");
-  vd_dialog->field("Gaussian sigma", dp.smooth);
-  vd_dialog->field("Noise Threshold", dp.noise_multiplier);
-  vd_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
-  vd_dialog->checkbox("Agressive Closure", agr);
-  if (!vd_dialog->ask())
-    return;
   if (agr)
     dp.aggressive_junction_closure=1;
   else
     dp.aggressive_junction_closure=0;
+  
 
+  // embedded VD edges computations
+  // VD parameters
+  
+  
+ 
   color_label_ = true;
 
-  video_process_  = new vpro_curve_tracking_process(tp,dp);
+
+  if(cache_frames_)
+  {
+	  video_process_  = new vpro_curve_tracking_process(tp,dp);
+	  for (vcl_vector<bgui_vtol2D_tableau_sptr>::iterator vit = tabs_.begin();
+       vit != tabs_.end()&&play_video_; vit++)
+	   {
+			vgui_image_tableau_sptr temp_img=(*vit)->get_image_tableau();
+			vil1_image temp1_img=temp_img->get_image();
+			vil1_memory_image_of<unsigned char> image(temp1_img);
+			video_process_->add_input_image(image);
+			if (video_process_->execute())
+            {
+              if (video_process_->get_output_type()==vpro_video_process::IMAGE)
+                vcl_cout<<"\n output is image";//display_image();
+              if (video_process_->get_output_type()==
+                  vpro_video_process::SPATIAL_OBJECT)
+				 {	
+				cached_spat_objs_.push_back(video_process_->get_output_spatial_objects());
+			  }
+				
+              if (video_process_->get_output_type()==
+                  vpro_video_process::TOPOLOGY)
+                vcl_cout<<"\n output is topology_objects";//display_topology();
+            }
+	   }
+	   
+  }
+  else
+  {
+   video_process_  = new vpro_curve_tracking_process(tp,dp);
+  
+  }
+
   if (track_)
     {
       frame_trail_.clear();
       frame_trail_.set_window(track_window);
     }
+  
+
 }
