@@ -7,8 +7,11 @@ VERSION := 1.0
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+# This is where configure will put vil/vil_config.h
+INCDIRS += $(RELOBJDIR)/include
+
 # basic things
-MANPAGE_SOURCES += vil_config.h.in vil_config.h
+MANPAGE_SOURCES += vil_config.h.in
 
 SOURCES += vil_image_resource.cxx
 MANPAGE_SOURCES += vil_image_resource_sptr.h
@@ -126,6 +129,12 @@ SOURCES += vil_open.cxx
 ifndef NOTEST
  SUBDIRS += tests examples
 endif
+
+# configure stuff:
+xall:: $(RELOBJDIR)/include/vil/vil_config.h
+$(RELOBJDIR)/include/vil/vil_config.h: vil_config.h.in
+	mkdir -p $(RELOBJDIR)/include/vil
+	sed -e 's/@HAS_.*@/1/' -e 's/[._]in//g' $^ > $@
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk
