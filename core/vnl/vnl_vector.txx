@@ -547,8 +547,8 @@ vnl_vector<T>& vnl_vector<T>::update (vnl_vector<T> const& v, unsigned start) {
 
 template<class T>
 vnl_vector<T> vnl_vector<T>::extract (unsigned len, unsigned start) const {
-  unsigned end = start + len;
 #if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+  unsigned end = start + len;
   if (this->num_elmts < end)
     vnl_error_vector_dimension ("extract", end-start, len);
 #endif
