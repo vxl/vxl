@@ -227,6 +227,9 @@ SOURCE=.\vil_corners.cxx
 # Begin Source File
 SOURCE=.\vil_orientations.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vil_colour_space.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -391,6 +394,9 @@ SOURCE=.\vil_tile_images.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_orientations.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_colour_space.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
