@@ -134,7 +134,7 @@ double method6(vil2_image_view<imT>& image, int n_loops)
     for (unsigned j=0;j<nj;++j,row += jstep)
     {
       for (unsigned i=0;i<ni;++i)
-        row[i] = imT(i+j+3*p);
+        row[i*istep] = imT(i+j+3*p);
     }
    }
   }
@@ -151,21 +151,21 @@ double method7(vil2_image_view<imT>& image, int n_loops)
   imT* raster_ptrs[NP][NJ];
 
   {
-    unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
-    for (unsigned p=0;p<np;++p)
+    unsigned nj=image.nj();
+    for (unsigned p=0;p<NP;++p)
       for (unsigned j=0;j<nj;++j)
-        (raster_ptrs)[p][j] = & image(0,j,p);
+        raster_ptrs[p][j] = & image(0,j,p);
   }
 
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
   {
-   unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
-   for (unsigned p=0;p<np;++p)
+   unsigned nj=image.nj();
+   for (unsigned p=0;p<NP;++p)
    {
     for (unsigned j=0;j<nj;++j)
     {
-      for (unsigned i=0;i<ni;++i)
+      for (unsigned i=0;i<NI;++i)
         raster_ptrs[p][j][i] = imT(i+j+3*p);
     }
    }
@@ -202,20 +202,18 @@ double method8(vil2_image_view<imT>& image, int n_loops)
 template <class imT>
 double method(int i, vil2_image_view<imT>& image, int n_loops)
 {
-  double t;
   switch (i)
   {
-    case 1 : t=method1(image,n_loops); break;
-    case 2 : t=method2(image,n_loops); break;
-    case 3 : t=method3(image,n_loops); break;
-    case 4 : t=method4(image,n_loops); break;
-    case 5 : t=method5(image,n_loops); break;
-    case 6 : t=method6(image,n_loops); break;
-    case 7 : t=method7(image,n_loops); break;
-    case 8 : t=method8(image,n_loops); break;
-    default: t=-1;
+    case 1 : return method1(image,n_loops);
+    case 2 : return method2(image,n_loops);
+    case 3 : return method3(image,n_loops);
+    case 4 : return method4(image,n_loops);
+    case 5 : return method5(image,n_loops);
+    case 6 : return method6(image,n_loops);
+    case 7 : return method7(image,n_loops);
+    case 8 : return method8(image,n_loops);
+    default: return -1.0;
   }
-  return t;
 }
 
 template <class imT>
