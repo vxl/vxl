@@ -88,7 +88,11 @@ public:
   bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
   {
     assert( p == 0 );
-    return img_ && pixel.size() == 1 && pixel[0] == img_(x,y);
+    if (!img_ || pixel.size() != 1) return false;
+    int imp = img_.bits_per_component()==1 ? (img_(x/8,y)>>(7-x&7))&1 : img_(x,y);
+    if (pixel[0] != imp)
+      vcl_cerr << "(x,y)=(" << x << ',' << y << "): p=" << pixel[0] << ", i=" << imp << '\n';
+    return pixel[0] == imp;
   }
 private:
   vil_memory_image_of< T > img_;
@@ -97,7 +101,8 @@ private:
 template class CheckRGB< vxl_uint_8 >;
 template class CheckColourPlanes< vxl_uint_8 >;
 template class CheckGrey< vxl_uint_8 >;
-
+template class CheckGrey< vxl_uint_16 >;
+template class CheckRGB< vxl_uint_16 >;
 
 bool
 test( const char* true_data_file, const CheckPixel& check )
@@ -158,6 +163,10 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_start(" file format read");
 
   vcl_cout << "Portable aNy Map [pnm]: pbm, pgm, ppm)\n";
+  testlib_test_begin( "  1-bit pbm ascii" );
+  testlib_test_perform( test( "ff_grey1bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey1bit_ascii.pbm" ) ) );
+  testlib_test_begin( "  1-bit pbm raw" );
+  testlib_test_perform( test( "ff_grey1bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey1bit_raw.pbm" ) ) );
   testlib_test_begin( "  8-bit pgm ascii" );
   testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_ascii.pgm" ) ) );
   testlib_test_begin( "  8-bit pgm raw" );

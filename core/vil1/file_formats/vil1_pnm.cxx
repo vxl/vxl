@@ -277,11 +277,7 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
   unsigned short* jb = (unsigned short*) buf;
   unsigned int* kb = (unsigned int*) buf;
   //
-  if (magic_ == 1) // ascii pbm
-  {
-    vcl_cerr << __FILE__ << ": ascii bitmap not implemented\n";
-    return false;
-  } if (magic_ > 4) // pgm or ppm raw image
+  if (magic_ > 4) // pgm or ppm raw image
   {
     int bytes_per_sample = (bits_per_component_+7)/8;
     int bytes_per_pixel = components_ * bytes_per_sample;
@@ -334,7 +330,13 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
       for (int t = 0; t < x0*components_; ++t) { int a; (*vs_) >> a; }
       // 2. Read the data
       //
-      if (bits_per_component_ <= 8)
+      if (bits_per_component_ <= 1) {
+        --ib; // to compensate for first ++ib
+        for (int x=0,t=0; x<xs*components_; ++x,++t) {
+          if ((t&=7)==0) *++ib=0; int a; (*vs_) >> a; if (a) *ib|=(1<<(7-t)); }
+        ++ib;
+      }
+      else if (bits_per_component_ <= 8)
         for (int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; *(ib++)=a; }
       else if (bits_per_component_ <= 16)
         for (int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; *(jb++)=a; }
@@ -359,11 +361,7 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
   unsigned short const* pb = (unsigned short const*) buf;
   unsigned int const* qb = (unsigned int const*) buf;
 
-  if (magic_ == 1) // ascii pbm
-  {
-    vcl_cerr << __FILE__ << ": ascii bitmap not implemented\n";
-    return false;
-  } else if (magic_ > 4) // pgm or ppm raw image
+  if (magic_ > 4) // pgm or ppm raw image
   {
     int bytes_per_sample = (bits_per_component_+7)/8;
     int bytes_per_pixel = components_ * bytes_per_sample;
@@ -433,8 +431,10 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
       return false; // can only write the full image in this mode
     vs_->seek(start_of_data_);
     for (int y = 0; y < ys; ++y) {
-      if (bits_per_component_ <= 8)
-        for (int x = 0; x < xs*components_; ++x) { (*vs_) << ob[x]; }
+      if (bits_per_component_ <= 1)
+        for (int x = 0; x < xs*components_; ++x) { (*vs_) << int((ob[x/8]>>(7-x&7))&1); }
+      else if (bits_per_component_ <= 8)
+        for (int x = 0; x < xs*components_; ++x) { (*vs_) << int(ob[x]); }
       else if (bits_per_component_ <= 16)
         for (int x = 0; x < xs*components_; ++x) { (*vs_) << pb[x]; }
       else

@@ -9,7 +9,6 @@
 
 #include "vil_memory_image_of.h"
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // abort()
 #include <vil/vil_memory_image_of_format.txx>
 
 template <class T>
@@ -78,7 +77,7 @@ vil_memory_image_of<T>& vil_memory_image_of<T>::operator=(vil_memory_image_of<T>
 template <class T>
 vil_memory_image_of<T>& vil_memory_image_of<T>::operator=(vil_image const &that)
 {
-  assert(that.bits_per_component() * that.components() == 8 * sizeof (T));
+  assert((that.bits_per_component() * that.components()+7)/8 == sizeof (T));
   vil_memory_image::operator=(that);
   return *this;
 }
