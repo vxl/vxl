@@ -270,7 +270,7 @@ void vul_arg_info_list::display_help( char const*progname)
       }
   vul_printf(vcl_cerr, fmtbuf.c_str(), help_.c_str(), "bool", "Print this message\n");
 
-  if (description_.empty()) vcl_cerr << '\n' << description_;
+  if (!description_.empty()) vcl_cerr << '\n' << description_;
 }
 
 //: Parse the command line, using the current list of args.
