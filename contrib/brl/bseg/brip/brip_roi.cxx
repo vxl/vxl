@@ -1,7 +1,5 @@
-//-*-c++-*-
 #include <vsol/vsol_box_2d.h>
 #include <brip/brip_roi.h>
-
 
 brip_roi::brip_roi(const int n_image_cols, const int n_image_rows)
 {
@@ -16,33 +14,32 @@ void brip_roi::set_image_bounds(const int n_image_cols,
   n_image_rows_ = n_image_rows;
 }
 
-
-vsol_box_2d_sptr brip_roi::clip_to_image_bounds(vsol_box_2d_sptr box, 
+vsol_box_2d_sptr brip_roi::clip_to_image_bounds(vsol_box_2d_sptr box,
                                                 const int n_image_cols,
                                                 const int n_image_rows)
 {
-  if(!box||!n_image_cols_||!n_image_rows_)
+  if (!box||!n_image_cols_||!n_image_rows_)
     return box;
   int x0 = (int)box->get_min_x();
   int y0 = (int)box->get_min_y();
-  int xm = box->get_max_x();
-  int ym = box->get_max_y();
+  int xm = (int)box->get_max_x();
+  int ym = (int)box->get_max_y();
   //clip to image bounds
-  if(x0 < 0)
+  if (x0 < 0)
     x0 = 0;
-  if(y0 < 0)
+  if (y0 < 0)
     y0 = 0;
-  if(x0 > n_image_cols_-1)
+  if (x0 > n_image_cols_-1)
     x0 = n_image_cols_-1;
-  if(y0 > n_image_rows-1)
+  if (y0 > n_image_rows-1)
     y0 = n_image_rows-1;
-  if(xm < 0)
+  if (xm < 0)
     xm = 0;
-  if(xm > n_image_cols_-1)
+  if (xm > n_image_cols_-1)
     xm = n_image_cols_-1;
-  if(ym < 0)
+  if (ym < 0)
     ym = 0;
-  if(ym > n_image_rows_-1)
+  if (ym > n_image_rows_-1)
     ym = n_image_rows_-1;
   vsol_box_2d_sptr cbox = new vsol_box_2d();
   cbox->add_point(x0, y0);
@@ -59,13 +56,13 @@ void brip_roi::add_region(const int x0, const int y0, const int xs, const int ys
   reg->add_point(x0+xs-1, y0);
   reg->add_point(x0+xs-1, y0+ys-1);
   reg->add_point(x0, y0+ys-1);
-  if(!n_image_cols_||!n_image_rows_)
-    {    
-      regions_.push_back(reg);
-      return;
-    }
+  if (!n_image_cols_||!n_image_rows_)
+  {
+    regions_.push_back(reg);
+    return;
+  }
   //need to potentially clip the region
-  vsol_box_2d_sptr creg = 
+  vsol_box_2d_sptr creg =
     this->clip_to_image_bounds(reg, n_image_cols_, n_image_rows_);
   regions_.push_back(creg);
 }
@@ -77,38 +74,39 @@ void brip_roi::add_region(const int xc, const int yc, const int radius)
   reg->add_point(xc+radius, yc-radius);
   reg->add_point(xc+radius, yc+radius);
   reg->add_point(xc-radius, yc+radius);
-  if(!n_image_cols_||!n_image_rows_)
-    {    
-      regions_.push_back(reg);
-      return;
-    }
+  if (!n_image_cols_||!n_image_rows_)
+  {
+    regions_.push_back(reg);
+    return;
+  }
   //need to potentially clip the region
-  vsol_box_2d_sptr creg = 
+  vsol_box_2d_sptr creg =
     this->clip_to_image_bounds(reg, n_image_cols_, n_image_rows_);
   regions_.push_back(creg);
 }
 
 void brip_roi::add_region(vsol_box_2d_sptr const & box)
 {
-  if(!n_image_cols_||!n_image_rows_)
-    {    
-      regions_.push_back(box);
-      return;
-    }
+  if (!n_image_cols_||!n_image_rows_)
+  {
+    regions_.push_back(box);
+    return;
+  }
   //need to potentially clip the region
-  vsol_box_2d_sptr creg = 
+  vsol_box_2d_sptr creg =
     this->clip_to_image_bounds(box, n_image_cols_, n_image_rows_);
   regions_.push_back(creg);
 }
+
 //return true if there are no regions or if they are all empty
 bool brip_roi::empty()
 {
-  if(!regions_.size())
+  if (!regions_.size())
     return true;
 #if 0//later
-  for(vcl_vector<vgl_box_2d<int> >::iterator rit = regions_.begin();
-      rit != regions_.end(); rit++)
-    if(!(*rit).is_empty())
+  for (vcl_vector<vgl_box_2d<int> >::iterator rit = regions_.begin();
+       rit != regions_.end(); rit++)
+    if (!(*rit).is_empty())
       return false;
 #endif
   return false;
@@ -118,39 +116,42 @@ void brip_roi::clip_to_image_bounds(const int n_image_cols,
                                     const int n_image_rows)
 {
   vcl_vector<vsol_box_2d_sptr> temp;
-  for(vcl_vector<vsol_box_2d_sptr>::iterator rit = regions_.begin();
-      rit != regions_.end(); rit++)
+  for (vcl_vector<vsol_box_2d_sptr>::iterator rit = regions_.begin();
+       rit != regions_.end(); rit++)
     temp.push_back(this->clip_to_image_bounds(*rit, n_image_cols_, n_image_rows_));
   regions_ = temp;
 }
 
 int brip_roi::cmin(int i)
 {
-  if(i<0||i>=regions_.size())
+  if (i<0||i>=int(regions_.size()))
     return 0;
   else
-    return regions_[i]->get_min_x();
+    return (int)regions_[i]->get_min_x();
 }
+
 int brip_roi::cmax(int i)
 {
-  if(i<0||i>=regions_.size())
+  if (i<0||i>=int(regions_.size()))
     return 0;
   else
-    return regions_[i]->get_max_x();
+    return (int)regions_[i]->get_max_x();
 }
+
 int brip_roi::rmin(int i)
 {
-  if(i<0||i>=regions_.size())
+  if (i<0||i>=int(regions_.size()))
     return 0;
   else
-    return regions_[i]->get_min_y();
+    return (int)regions_[i]->get_min_y();
 }
+
 int brip_roi::rmax(int i)
 {
-  if(i<0||i>=regions_.size())
+  if (i<0||i>=int(regions_.size()))
     return 0;
   else
-    return regions_[i]->get_max_y();
+    return (int)regions_[i]->get_max_y();
 }
 
 int brip_roi::ic(int col, int i)
@@ -166,6 +167,6 @@ int brip_roi::ir(int row, int i)
 bool brip_roi::remove_region(int i)
 {
   //not yet implemented
-  return true;
+  return false;
 }
 
