@@ -5,7 +5,7 @@ aren't documented here, unless the bug-fix has a major observable
 effect. If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
-VXL 1.1.0	- May 2003
+VXL 1.1.0	- May 2004
 
       - Automated codec registration in vidl based on the approach of vil
         file formats.  vidl_io::register_codec() is no longer needed.
