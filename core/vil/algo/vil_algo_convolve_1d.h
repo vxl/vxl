@@ -260,7 +260,8 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
       assert (start_option != vil2_convolve_periodic_extend ||
         end_option != vil2_convolve_periodic_extend);}
 
-  friend vil2_image_resource_sptr vil2_algo_convolve_1d( const vil2_image_resource_sptr& src_im, const destT dt, const kernelT* kernel,
+  friend vil2_image_resource_sptr vil2_algo_convolve_1d VCL_NULL_TMPL_ARGS (
+    const vil2_image_resource_sptr& src_im, const destT dt, const kernelT* kernel,
     int k_lo, int k_hi, const accumT ac,
     vil2_convolve_boundary_option start_option,
     vil2_convolve_boundary_option end_option);
