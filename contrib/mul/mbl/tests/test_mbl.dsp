@@ -218,6 +218,9 @@ SOURCE=.\test_thin_plate_spline_weights_3d.cxx
 # Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_stats_nd.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
