@@ -5,6 +5,7 @@
 // \file
 
 #include "vgl_homg_line_2d.h"
+#include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -12,7 +13,7 @@
 
 template <class Type>
 vgl_homg_line_2d<Type>::vgl_homg_line_2d (vgl_line_2d<Type> const& l)
- : a_(l.a()) , b_(l.b()) , c_(l.c())
+  : a_(l.a()) , b_(l.b()) , c_(l.c())
 {
 }
 
@@ -69,6 +70,47 @@ vcl_istream&  operator>>(vcl_istream& is, vgl_homg_line_2d<Type>& p) {
   return is;
 }
 
+template <class Type>	
+void vgl_homg_line_2d<Type>::normalize()
+{
+  double sum = a_*a_ + b_*b_;	  	
+	double den = vcl_sqrt(sum);
+  if(den<1.0e-8)//don't normalize ideal line
+    return;
+  double an= (double)a()/den;
+  double bn= (double)b()/den;
+  double cn= (double)c()/den;
+  //standardize so that a is positive unless a is too small, then 
+  //standardize the sign of b
+  if(vcl_fabs(an)>0.1)
+    if(an>0)
+      {
+        a_ = (Type)an;
+        b_ = (Type)bn;
+        c_ = (Type)cn;
+      }
+    else
+      {
+        a_ = -(Type)an;
+        b_ = -(Type)bn;
+        c_ = -(Type)cn;
+      }
+  else
+    if(bn>0)
+      {
+        a_ = (Type)an;
+        b_ = (Type)bn;
+        c_ = (Type)cn;
+      }        
+    else
+      {
+        a_ = -(Type)an;
+        b_ = -(Type)bn;
+        c_ = -(Type)cn;
+      }        
+      
+  return;
+}
 #undef VGL_HOMG_LINE_2D_INSTANTIATE
 #define VGL_HOMG_LINE_2D_INSTANTIATE(T) \
 template class vgl_homg_line_2d<T >; \

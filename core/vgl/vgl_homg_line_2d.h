@@ -86,6 +86,9 @@ class vgl_homg_line_2d
   //: unit vector orthogonal to line, or (0,0) if line at infinity
   inline vgl_vector_2d<double> normal() const { return normalized(vgl_vector_2d<double>(a_,b_)); }
 
+  //: divide all coefficients by sqrt(a^2 + b^2)
+  void normalize(); 
+
   //: Set a b c.
   //  The three given numbers should not be all 0
   //  Note that it does not make sense to set a, b or c separately
