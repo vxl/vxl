@@ -9,7 +9,6 @@
 //-----------------------------------------------------------------------------
 
 #include "vil2_transpose.h"
-#include "vcl_cstring.h"
 
 vil2_image_resource_sptr vil2_transpose(const vil2_image_resource_sptr &src)
 {
