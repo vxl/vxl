@@ -9,6 +9,14 @@
 #include <vipl/filter/vipl_filter_abs.h> // for default def of FILTER_IMPTR_INC_REFCOUNT
 #include <vcl_iostream.h> // for error message stuff
 
+#include <vcl_compiler.h>
+
+#ifdef VCL_VC
+// Disable complaints about empty controlled statements (from blank macro expansion)
+# pragma warning( push )
+# pragma warning( disable : 4390 )
+#endif
+
 //: Assigns the pointers directly. Does not attempt to deep copy them.
 template < class DataType >
 vipl_section_descriptor< DataType > ::vipl_section_descriptor(
@@ -30,6 +38,10 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(
            << "vipl_section_descriptor< DataType >* desc, vipl_section_container< DataType >* container\n";
 #endif
 }
+
+#ifdef VCL_VC
+# pragma warning( pop )
+#endif
 
 //: Deep-copies the pointers
 template < class DataType >

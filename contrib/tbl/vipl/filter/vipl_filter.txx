@@ -8,7 +8,7 @@
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h> // for vcl_max and vcl_min
 
-#ifdef VCL_WIN32
+#ifdef VCL_VC
 #pragma warning( disable: 4390 )
 #endif
 

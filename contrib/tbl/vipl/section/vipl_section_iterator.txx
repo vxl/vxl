@@ -12,6 +12,12 @@
 #include <vcl_iostream.h> // for error message stuff
 #endif
 
+#ifdef VCL_VC
+// Disable complaints about empty controlled statements (from blank macro expansion)
+# pragma warning( push )
+# pragma warning( disable : 4390 )
+#endif
+
 // Assigns the pointer directly. Does not deep copy them.
 template < class DataType >
   vipl_section_iterator< DataType > ::vipl_section_iterator(
@@ -28,6 +34,13 @@ template < class DataType >
            << "vipl_section_descriptor< DataType >* desc, vipl_section_container< DataType >* containr\n";
 #endif
 }
+
+#ifdef VCL_VC
+// Disable complaints about empty controlled statements (from blank macro expansion)
+# pragma warning( pop )
+# pragma warning( disable : 4390 )
+#endif
+
 
 // Deep copies the pointers.
 template < class DataType >
