@@ -1259,11 +1259,15 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
     }
     s >> row[0];
     if (!s.good())
+    {
+      vnl_c_vector<T>::deallocate(row, colz);
       break;
+    }
     for (unsigned int k = 1; k < colz; ++k) {
       if (s.eof()) {
         vcl_cerr << "vnl_matrix<T>::read_ascii: Error, EOF on row "
                  << row_vals.size() << ", column " << k << vcl_endl;
+
         return false;
       }
       s >> row[k];
