@@ -44,15 +44,6 @@ bmrf_epi_point::bmrf_epi_point()
   tan_ang_ = 0;
 }
 
-vcl_ostream& operator<<(vcl_ostream& s, bmrf_epi_point const& ep)
-{
-  s << '(' << (int)ep.x() << ' ' << (int)ep.y() << ")[" << ep.alpha()
-    << ' ' << ep.s() << ' '  << ep.grad_mag() << ' ' << ep.grad_ang() << ' '
-    << ep.tan_ang() << "]\n";
-
-  return s;
-}
-
 //: Binary save self to stream.
 void bmrf_epi_point::b_write(vsl_b_ostream &os) const
 {
@@ -112,3 +103,42 @@ bool bmrf_epi_point::is_class(const vcl_string& cls) const
 {
   return cls==bmrf_epi_point::is_a();
 }
+
+//external functions
+vcl_ostream& operator<<(vcl_ostream& s, bmrf_epi_point const& ep)
+{
+  s << '(' << (int)ep.x() << ' ' << (int)ep.y() << ")[" << ep.alpha()
+    << ' ' << ep.s() << ' '  << ep.grad_mag() << ' ' << ep.grad_ang() << ' '
+    << ep.tan_ang() << "]\n";
+
+  return s;
+}
+
+//: Binary save bmrf_epi_point to stream.
+void
+vsl_b_write(vsl_b_ostream &os, bmrf_epi_point_sptr const& ep)
+{
+  if (!ep){
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    ep->b_write(os);
+  }
+}
+
+
+//: Binary load bmrf_epi_point from stream.
+void
+vsl_b_read(vsl_b_istream &is, bmrf_epi_point_sptr &ep)
+{
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr){
+    ep = new bmrf_epi_point();
+    ep->b_read(is);
+  }
+  else
+    ep = 0;
+}
+

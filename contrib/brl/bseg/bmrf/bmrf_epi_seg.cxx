@@ -531,21 +531,6 @@ double bmrf_epi_seg::match(const double a,
   return tot;
 }
 #endif
-vcl_ostream&  operator<<(vcl_ostream& s, bmrf_epi_seg const& epi_seg)
-{
-  int n = epi_seg.n_pts();
-  bmrf_epi_seg& es = const_cast<bmrf_epi_seg &>(epi_seg);//cast away const
-  s << "Epi Segment[" << n <<"]\n"
-    << "alpha:[" << es.min_alpha() << ' ' << es.max_alpha() << "]\n"
-    << "s:[" << es.min_s() << ' ' << es.max_s() << "]\n"
-    << "tan_ang:[" << es.min_tan_ang() << ' ' << es.avg_tan_ang()
-    << ' ' << es.max_tan_ang() << "]\n"
-    << "left_int:[" << es.min_left_int() << ' ' << es.avg_left_int()
-    << ' ' << es.max_left_int() << "]("<< es.left_int_sd()<< ")\n"
-    << "right_int:[" << es.min_right_int() << ' ' << es.avg_right_int()
-    << ' ' << es.max_right_int() << "]("<< es.right_int_sd()<< ")\n";
-  return s;
-}
 
 //: Binary save self to stream.
 void bmrf_epi_seg::b_write(vsl_b_ostream &os) const
@@ -628,5 +613,49 @@ vcl_string bmrf_epi_seg::is_a() const
 bool bmrf_epi_seg::is_class(const vcl_string& cls) const
 {
   return cls==bmrf_epi_seg::is_a();
+}
+
+vcl_ostream&  operator<<(vcl_ostream& s, bmrf_epi_seg const& epi_seg)
+{
+  int n = epi_seg.n_pts();
+  bmrf_epi_seg& es = const_cast<bmrf_epi_seg &>(epi_seg);//cast away const
+  s << "Epi Segment[" << n <<"]\n"
+    << "alpha:[" << es.min_alpha() << ' ' << es.max_alpha() << "]\n"
+    << "s:[" << es.min_s() << ' ' << es.max_s() << "]\n"
+    << "tan_ang:[" << es.min_tan_ang() << ' ' << es.avg_tan_ang()
+    << ' ' << es.max_tan_ang() << "]\n"
+    << "left_int:[" << es.min_left_int() << ' ' << es.avg_left_int()
+    << ' ' << es.max_left_int() << "]("<< es.left_int_sd()<< ")\n"
+    << "right_int:[" << es.min_right_int() << ' ' << es.avg_right_int()
+    << ' ' << es.max_right_int() << "]("<< es.right_int_sd()<< ")\n";
+  return s;
+}
+
+//: Binary save bmrf_epi_seg to stream.
+void
+vsl_b_write(vsl_b_ostream &os, bmrf_epi_seg_sptr const& eps)
+{
+  if (!eps){
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    eps->b_write(os);
+  }
+}
+
+
+//: Binary load bmrf_epi_seg from stream.
+void
+vsl_b_read(vsl_b_istream &is, bmrf_epi_seg_sptr& eps)
+{
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr){
+    eps = new bmrf_epi_seg();
+    eps->b_read(is);
+  }
+  else
+    eps = 0;
 }
 

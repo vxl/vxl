@@ -89,4 +89,11 @@ class bmrf_epi_point:  public vbl_ref_count
 };
 vcl_ostream&  operator<<(vcl_ostream& s, bmrf_epi_point const& ep);
 
+#include <bmrf/bmrf_epi_point_sptr.h>
+//: Binary save bmrf_node* to stream.
+void vsl_b_write(vsl_b_ostream &os, bmrf_epi_point_sptr const& n);
+
+//: Binary load bmrf_node* from stream.
+void vsl_b_read(vsl_b_istream &is, bmrf_epi_point_sptr &n);
+
 #endif // bmrf_epi_point_h_

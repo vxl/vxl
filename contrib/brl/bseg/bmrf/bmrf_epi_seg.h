@@ -31,7 +31,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 #include <bmrf/bmrf_epi_point_sptr.h>
-//#include <bmrf/bmrf_epi_seg_sptr.h>
+#include <bmrf/bmrf_epi_seg_sptr.h>
 
 class bmrf_epi_seg :  public vbl_ref_count
 {
@@ -87,7 +87,7 @@ class bmrf_epi_seg :  public vbl_ref_count
 
   //: utility methods
   void clear(){seg_.clear();}
-#if 0
+
   //: static matching methods
   static double tan_ang_match(const double a,
                               bmrf_epi_seg_sptr const& sa,
@@ -105,7 +105,7 @@ class bmrf_epi_seg :  public vbl_ref_count
   static double match(const double a,
                       bmrf_epi_seg_sptr const& sa,
                       bmrf_epi_seg_sptr const& sb);
-#endif
+
   // ==== Binary IO methods ======
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;
@@ -161,5 +161,11 @@ class bmrf_epi_seg :  public vbl_ref_count
 };
 
 vcl_ostream& operator<<(vcl_ostream& s, bmrf_epi_seg const& ec);
+
+//: Binary save bmrf_epi_seg to stream.
+void vsl_b_write(vsl_b_ostream &os,  bmrf_epi_seg_sptr const& eps);
+
+//: Binary load bmrf_epi_seg from stream.
+void vsl_b_read(vsl_b_istream &is, bmrf_epi_seg_sptr &eps);
 
 #endif // bmrf_epi_seg_h_
