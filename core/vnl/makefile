@@ -171,4 +171,5 @@ FLAGS_Templates/vnl_matrix+vcl_complex+double--.cxx := -O0
 FLAGS_Templates/vnl_matrix+vcl_complex+long_double--.cxx := -O0
 FLAGS_Templates/vnl_matrix_fixed+vnl_bignum.3.3-.cxx := -O0
 FLAGS_Templates/vnl_vector+vnl_rational-.cxx := -O0
+FLAGS_Templates/vnl_vector_fixed+vnl_rational.3-.cxx := -O0
 endif
