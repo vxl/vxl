@@ -165,15 +165,15 @@ bool vgui_test_thingy3d::handle(const vgui_event &e) {
 
 //--------------------------------------------------------------------------------
 
-vgui_test_credits::vgui_test_credits() : vgui_text() {
-  vgui_text::add( 40,  50, "vgui - Visual Geometry User Interface");
-  vgui_text::add( 25, 150, "written by : ");
+vgui_test_credits::vgui_test_credits() {
+  vgui_text_tableau::add( 40,  50, "vgui - Visual Geometry User Interface");
+  vgui_text_tableau::add( 25, 150, "written by : ");
   // well - myself and fred did do most of the work :)
-  vgui_text::add(110, 180, "Philip Pritchett");
-  vgui_text::add(110, 210, "Frederik Schaffalitzky");
-  vgui_text::add(110, 240, "Andrew Fitzgibbon");
-  vgui_text::add(110, 270, "Geoffrey Cross");
-  vgui_text::add(110, 300, "Karen McGaul");
+  vgui_text_tableau::add(110, 180, "Philip Pritchett");
+  vgui_text_tableau::add(110, 210, "Frederik Schaffalitzky");
+  vgui_text_tableau::add(110, 240, "Andrew Fitzgibbon");
+  vgui_text_tableau::add(110, 270, "Geoffrey Cross");
+  vgui_text_tableau::add(110, 300, "Karen McGaul");
 }
 
 bool vgui_test_credits::handle(vgui_event const &e) {
@@ -194,7 +194,7 @@ bool vgui_test_credits::handle(vgui_event const &e) {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  return vgui_text::handle(e);
+  return vgui_text_tableau::handle(e);
 }
 
 //--------------------------------------------------------------------------------
