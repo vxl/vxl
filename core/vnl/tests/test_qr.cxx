@@ -68,9 +68,9 @@ void double_test()
 
 //--------------------------------------------------------------------------------
 
-inline float  eps(float *) { return 1e-5; }
+inline float  eps(float *) { return 1e-5f; }
 inline double eps(double *) { return 1e-12; }
-inline float  eps(vcl_complex<float> *) { return 1e-5; }
+inline float  eps(vcl_complex<float> *) { return 1e-5f; }
 inline double eps(vcl_complex<double> *) { return 1e-12; }
 #define rounding_epsilon(T) ::eps((T*)0)
 

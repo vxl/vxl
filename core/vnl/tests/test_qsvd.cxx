@@ -13,12 +13,10 @@ int sggsvd_(char const *jobu, char const *jobv, char const *jobq, int *m, int *n
 
 static
 void test_qsvd() {
-  //float A[9]={2./3, -1.36/3, .2/3,   2.8/3, .4/3, 1./3,   1, .16, -.2};
-  float AA[9]={2./3, -1.36/3, .2/3,   2.8/3, .4/3, 1./3,   1, .16, -.2};
-  //float B[9]={.16, -.224, -.768,   .8, .36, -.48,  1.12, -.168, -.576};
-  float BB[9]={.16, -.224, -.768,   .8, .36, -.48,  1.12, -.168, -.576};
+  float AA[9]={2.f/3, -1.36f/3, .2f/3,   2.8f/3, .4f/3, 1.f/3,   1, .16f, -.2f};
+  float BB[9]={.16f, -.224f, -.768f,  .8f, .36f, -.48f,  1.12f, -.168f, -.576f};
   float U[9], V[9], Q[9], Alpha[3], Beta[3], Work[12];
-  int m=3, n=3, p=3, k, l, Iwork[3], info, tests_failed=0, tests_succeeded=0;
+  int m=3, n=3, p=3, k, l, Iwork[3], info;
 
   sggsvd_("U", "V", "Q", &m, &n, &p, &k, &l, AA, &n, BB, &n, Alpha, Beta,
           U, &n, V, &n, Q, &n, Work, Iwork, &info);
