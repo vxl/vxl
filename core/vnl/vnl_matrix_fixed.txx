@@ -135,7 +135,7 @@ vnl_matrix_fixed<T,nrows,ncols>::print(vcl_ostream& os) const
   {
     os << (*this)(i,0);
     for (unsigned int j = 1; j < ncols; j++)
-      os << " " << (*this)(i,j);
+      os << ' ' << (*this)(i,j);
     os << '\n';
   }
 }
@@ -265,7 +265,6 @@ template<class T, unsigned nrows, unsigned ncols>
 void
 vnl_matrix_fixed<T,nrows,ncols>::normalize_rows()
 {
-  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
   for (unsigned int i = 0; i < nrows; i++)
   {
     abs_t norm(0); // double will not do for all types.
@@ -290,7 +289,6 @@ template<class T, unsigned nrows, unsigned ncols>
 void
 vnl_matrix_fixed<T,nrows,ncols>::normalize_columns()
 {
-  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
   for (unsigned int j = 0; j < ncols; j++) {  // For each column in the Matrix
     abs_t norm(0); // double will not do for all types.
     for (unsigned int i = 0; i < nrows; i++)
@@ -553,7 +551,7 @@ vnl_matrix_fixed<T,nrows,ncols>::assert_finite_internal() const
   if (is_finite())
     return;
 
-  vcl_cerr << "\n\n" << __FILE__ ":" << __LINE__ << ": matrix has non-finite elements\n";
+  vcl_cerr << "\n\n" __FILE__ ":" << __LINE__ << ": matrix has non-finite elements\n";
 
   if (rows() <= 20 && cols() <= 20)
     vcl_cerr << __FILE__ ": here it is:\n" << *this << '\n';
