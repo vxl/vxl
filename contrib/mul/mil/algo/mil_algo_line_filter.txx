@@ -418,6 +418,6 @@ void mil_algo_line_filter<Type>::dark_lines_5x5(mil_image_2d_of<unsigned char>& 
 
 #undef MIL_ALGO_LINE_FILTER_INSTANTIATE
 #define MIL_ALGO_LINE_FILTER_INSTANTIATE(T) \
- template class mil_algo_line_filter<T>
+ template class mil_algo_line_filter<T >
 
 #endif
