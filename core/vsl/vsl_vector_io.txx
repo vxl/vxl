@@ -14,27 +14,22 @@
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 
-
-//===================================================================================
-// Some old code to support backwards compatibility for reading existing files
-
-
 //====================================================================================
 //: Write vector to binary stream
 template <class T>
 void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T>& v)
 {
+  unsigned n = v.size();
   // There is nothing in the STL standard that says that vector<> has
   // to store its data in a contiguous memory block. However, most
   // implementations do store data this way.
   // Check this assumption holds.
-  assert(v.size() == 0 || &v[v.size() - 1] + 1 == &v[0] + v.size());
+  assert(n == 0 || &v[n-1] + 1 == &v[0] + n);
 
   const short version_no = 2;
   vsl_b_write(s, version_no);
-  unsigned n = v.size();
   vsl_b_write(s,n);
-  if (n)
+  if (n!=0)
     vsl_block_binary_write(s, &v.front(), n);
 }
 
@@ -45,43 +40,34 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
 {
   if (!is) return;
 
-  unsigned n;
   short ver;
   vsl_b_read(is, ver);
+  unsigned n;
+  vsl_b_read(is,n);
+  v.resize(n);
+
+  // There is nothing in the STL standard that says that vector<> has
+  // to store its data in a contiguous memory block. However, most
+  // implementations do store data this way.
+  // Check this assumption holds.
+  assert(n == 0 || &v[n-1] + 1 == &v[0] + n);
+
   switch (ver)
   {
-  case 1:
-    vsl_b_read(is,n);
-    v.resize(n);
-
-    // There is nothing in the STL standard that says that vector<> has
-    // to store its data in a contiguous memory block. However, most
-    // implementations do store data this way.
-    // Check this assumption holds.
-    assert(v.size() == 0 || &v[v.size() - 1] + 1 == &v[0] + v.size());
-
-    if (v.size())
+   case 1:
+    if (n!=0)
     {
-      vsl_b_read_block_old(is, &v[0], n);
+      vsl_b_read_block_old(is, &v.front(), n);
     }
     break;
-  case 2:
-    vsl_b_read(is,n);
-    v.resize(n);
-
-    // There is nothing in the STL standard that says that vector<> has
-    // to store its data in a contiguous memory block. However, most
-    // implementations do store data this way.
-    // Check this assumption holds.
-    assert(v.size() == 0 || &v[v.size() - 1] + 1 == &v[0] + v.size());
-
-    if (v.size())
+   case 2:
+    if (n!=0)
     {
       vsl_block_binary_read(is, &v.front(), n);
     }
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_vector<T>&)\n"
              << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
