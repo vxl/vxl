@@ -18,18 +18,18 @@ extern "C" {
 #include <vidl/vidl_movie_sptr.h>
 
 
-class vmal_kl {
+class vmal_kl
+{
+ public:
 
-public:
-
-//---------------------------------------------------------------------------
-//: Default constructor. Parametres set to defaults
-//---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //: Default constructor. Parametres set to defaults
+  //---------------------------------------------------------------------------
   explicit vmal_kl(const vmal_kl_params & params);
 
-//---------------------------------------------------------------------------
-//: Destructor.
-//---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //: Destructor.
+  //---------------------------------------------------------------------------
   ~vmal_kl();
 
   void match_sequence(vcl_vector<vil1_image> &,vmal_multi_view_data_vertex_sptr);
@@ -38,12 +38,12 @@ public:
 
   vcl_vector<vtol_vertex_2d_sptr> * extract_points(vil1_image &);
 
-private:
-  vmal_kl_params _params;
+ private:
+  vmal_kl_params params_;
 
   KLT_PixelType* convert_to_gs_image(vil1_image &);
 
   void set_tracking_context( KLT_TrackingContext tc);
 };
 
-#endif // vmal_kl_
+#endif // vmal_kl_h_
