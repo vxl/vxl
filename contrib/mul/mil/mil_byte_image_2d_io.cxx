@@ -182,18 +182,25 @@ bool mil_byte_image_2d_io::saveImage(const mil_image& image,
 {
   assert(image.is_a()=="mil_image_2d_of<vil_byte>");
 
-  const mil_image_2d_of<vil_byte>& bp_image
-    = (const mil_image_2d_of<vil_byte>&) image;
-
   vcl_string filetype = f_type;
   if (f_type=="")
     filetype=guessFileType(path);
 
-  if (filetype=="Unknown") return false;
-
-
-  vcl_cerr<<"saveImage Not yet implementated. Sorry."<<vcl_endl;
+  if (filetype=="Unknown")
+  {
+    vcl_cerr<<"File type for "<<path<<" unknown"<<vcl_endl;
+    return false;
+  }
+ 
+#if 0 // not yet implemented
+  const mil_image_2d_of<vil_byte>& bp_image
+    = (const mil_image_2d_of<vil_byte>&) image;
+  ...
+  return true;
+#else
+  vcl_cerr<<"saveImage Not yet implemented. Sorry."<<vcl_endl;
   return false;
+#endif
 }
 
 
