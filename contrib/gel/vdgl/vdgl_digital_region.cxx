@@ -252,6 +252,7 @@ float vdgl_digital_region::ComputeIntensityStdev()
     io_stdev_ += (pix_[i]-mean)*(pix_[i]-mean);
   }
   io_stdev_ = io_stdev_ * 1.0f/(npts_ - 1.0f);
+  io_stdev_ = vcl_sqrt(io_stdev_);
   return io_stdev_;
 }
 
