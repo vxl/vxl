@@ -27,7 +27,7 @@ pop_parameter* pop_manager::new_parameter()
   return p;
 }
 
-//: create a vector of paramters
+//: create a vector of parameters
 vcl_vector<pop_parameter*> pop_manager::new_parameters(int num_param)
 {
   vcl_vector<pop_parameter*> params(num_param);
@@ -43,7 +43,7 @@ void pop_manager::add_object(pop_object *obj)
 }
 
 
-//: update all the objets
+//: update all the objects
 void pop_manager::update()
 {
   // call update on all known objects
@@ -52,10 +52,10 @@ void pop_manager::update()
 }
 
 
-//: get a vector of changeble parameters
+//: get a vector of changeable parameters
 vcl_vector<pop_parameter*> pop_manager::get_changeable_parameters()
 {
-  // first find all changeble parameters
+  // first find all changeable parameters
   vcl_list<pop_parameter*> cp;
 
   for (vcl_list<pop_parameter*>::iterator it=params_.begin();it!=params_.end();++it) {
