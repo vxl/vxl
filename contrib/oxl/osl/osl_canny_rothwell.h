@@ -36,6 +36,8 @@
 //         Fixed bugs in Final_hysteresis() and Jump_single_pixels().
 
 #include <osl/osl_canny_base.h>
+#include <vil/vil_image.h>
+
 class osl_canny_rothwell_params;
 
 class osl_canny_rothwell : public osl_canny_base {

@@ -35,6 +35,7 @@
 //   F. Schaffaliztky 2-apr-99   converted from Segmentation to osl
 
 #include <vcl_vector.h>
+#include <vil/vil_image.h>
 #include <osl/osl_canny_base.h>
 
 class osl_canny_ox_params;

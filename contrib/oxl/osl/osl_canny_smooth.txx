@@ -1,23 +1,23 @@
 #ifndef osl_canny_smooth_txx_
 #define osl_canny_smooth_txx_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 //:
 //  \file
 //
 // Notes
-// 1. if this file is not in Templates, gcc 2.7 does not instantiate.
-// 2. even if this file is in Templates, SunPro 5.0 will fail to
+// -  if this file is not in Templates, gcc 2.7 does not instantiate.
+// -  even if this file is in Templates, SunPro 5.0 will fail to
 //    instantiate symbols whose signatures contain a parameter of
 //    the form "type * const *". hence the 'unpro_const' macro. fsm.
+//
+// \author fsm@robots.ox.ac.uk
 
 #include "osl_canny_smooth.h"
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vil/vil_rgb.h>
+#include <vil/vil_memory_image_of.h>
 
 
 template <class T>

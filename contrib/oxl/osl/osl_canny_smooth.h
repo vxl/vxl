@@ -9,7 +9,7 @@
 // .FILE osl_canny_smooth.txx
 // \author fsm@robots.ox.ac.uk
 
-#include <vil/vil_memory_image_of.h>
+#include <vil/vil_image.h>
 
 #ifdef __SUNPRO_CC
 # define unpro_const /*const*/

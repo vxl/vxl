@@ -13,17 +13,21 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vil/vil_rgb.h>
+#include <vil/vil_byte.h>
 #include <vil/vil_pixel.h>
+#include <vil/vil_memory_image_of.h>
 
-// #include <vil/vil_save.h>
-// void debug_save(float const * const *image_out, int w, int h, char const *file) {
-//   vil_memory_image_of<unsigned char> debug(w, h);
-//   for (unsigned i=0; i<h; ++i)
-//     for (unsigned j=0; j<w; ++j)
-//       debug[i][j] = (unsigned char) image_out[i][j];
-//   vcl_cerr << "save to " << file << vcl_endl;
-//   vil_save(debug, file, "png");
-// }
+#if 0
+#include <vil/vil_save.h>
+void debug_save(float const * const *image_out, int w, int h, char const *file) {
+  vil_memory_image_of<unsigned char> debug(w, h);
+  for (unsigned i=0; i<h; ++i)
+    for (unsigned j=0; j<w; ++j)
+      debug[i][j] = (unsigned char) image_out[i][j];
+  vcl_cerr << "save to " << file << vcl_endl;
+  vil_save(debug, file, "png");
+}
+#endif
 
 
 //"osl_canny_smooth.cxx", line 37: Error: Overloading ambiguity between

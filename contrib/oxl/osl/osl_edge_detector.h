@@ -60,6 +60,7 @@
 
 #include <osl/osl_canny_port.h>
 #include <osl/osl_edge_detector_params.h>
+#include <vil/vil_image.h>
 
 struct osl_edge_detector : public osl_edge_detector_params
 {
