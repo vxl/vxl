@@ -1,10 +1,9 @@
-//
-// vsrl_manager.cxx
-//
-// This program was written to test the Dense Matching software
-//
+//:
+// \file
+// \brief This program was written to test the Dense Matching software
+// \author
 // G.W. Brooksby
-// 02/13/03
+// \date 02/13/03
 
 #include <vcl_cstdlib.h>
 #include <vcl_cmath.h>
@@ -248,7 +247,7 @@ bool vsrl_manager::handle(vgui_event const & event)
     {
       vgl_point_2d<float>  pos = vpicker0_->get_point();  // get the last point picked
       vcl_cout << "handle: pos = " << pos << vcl_endl;
-      int x = pos.x(); int y = pos.y(); // convert to int.
+      int x = int(pos.x()); int y = int(pos.y()); // convert to int.
       show_correlations(x,y);
     }
   return true;
@@ -355,7 +354,7 @@ bool vsrl_manager::put_lines()
 bool vsrl_manager::do_dense_matching()
 {
   if (!imgL_ || !imgR_) return false;
-  
+
   static float sig = 1.0;
   static float cutoff = 0.01;
   static bool smoothing = false;
@@ -365,7 +364,7 @@ bool vsrl_manager::do_dense_matching()
   gs_dialog.checkbox("Perform Gaussian Smoothing",smoothing);
   if (!gs_dialog.ask()) return false;
 
-  // If desired, we can do Gaussian smoothing.  This can be handy for 
+  // If desired, we can do Gaussian smoothing.  This can be handy for
   // badly interlaced images.
   if (smoothing) {
     vil1_image left = vepl_gaussian_convolution(imgL_,sig,cutoff);
@@ -526,7 +525,7 @@ void vsrl_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
                                 bool verts)
 {
   // This segment of code is ripped from various places in brl...bgui.
-  
+
   vcl_vector<float>::iterator sm = shadow_metric_->begin();
 
    for (vcl_vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
@@ -783,8 +782,8 @@ void vsrl_manager::find_shadows(vcl_vector<vtol_intensity_face_sptr>& faces)
   return;
 }
 
-//--  This algorithm taken pretty much verbatim from the DDB/RegionSaliency class.
-//    Repeated here for digital regions instead of intensity faces...
+//: This algorithm taken pretty much verbatim from the DDB/RegionSaliency class.
+//  Repeated here for digital regions instead of intensity faces...
 //
 
 void vsrl_manager::find_shadows(vcl_vector<vdgl_digital_region*> regions)
@@ -796,15 +795,15 @@ void vsrl_manager::find_shadows(vcl_vector<vdgl_digital_region*> regions)
 
   e2d1_->set_foreground(0,0,1);
   e2d1_->set_point_radius(5);
-  
+
   int i=0;
-  
+
   vcl_vector<float>::iterator sm = shadow_metric_->begin();
   vcl_cout << "Shadow Threshold: " << shadow_mean_ << vcl_endl;
-  
+
   for (vcl_vector<vdgl_digital_region*>::iterator rit = regions.begin();
        rit != regions.end(); rit++) {
-    
+
     if ((*rit)->Npix() > 0) {
       (*rit)->ComputeIntensityStdev();
       vcl_cout << "Intensity Face: " << i << "  Io = " << (*rit)->Io()
@@ -816,21 +815,21 @@ void vsrl_manager::find_shadows(vcl_vector<vdgl_digital_region*> regions)
         *sm=1.0;
       }
       else {
-        
+
         // This segment of code is taken from the HistEntropy class
         // in TargetJr, GeneralUtility/Basics.  It is used to mimic
         // the operation of the shadow detection used in the DDB
         // RegionSaliency class.
-        
+
         float m1=(*rit)->Io(); // Get the region mean
         float v1=(*rit)->Io_sd(); // Get the region Stdev.
-        
+
         // Later we can adjust the shadow reference parameters.
-        
+
         // For now, this is what we'll use...
         float m2 = shadow_mean_; // m2 is the reference shadow mean.
         float v2 = 1.0; // v2 is the reference shadow stdev.
-        
+
         if (m1==0 || m2==0) {
           *sm=0.0;
         }
@@ -838,12 +837,12 @@ void vsrl_manager::find_shadows(vcl_vector<vdgl_digital_region*> regions)
           *sm=0;
         }
         else {
-          *sm = exp(- fabs( 0.693 * (m1 - m2) * sqrt(1.0/(v1*v1) + 1.0/(v2*v2))));
+          *sm = vcl_exp(- vcl_fabs(0.693 * (m1-m2) * vcl_sqrt(1.0/(v1*v1) + 1.0/(v2*v2))));
         }
       }
       vcl_cout << "  Shadow = " << *sm << vcl_endl;
     }
-    
+
     if (*sm ==1) {
       e2d1_->add_point((*rit)->Xo(),(*rit)->Yo());
     }
@@ -853,19 +852,17 @@ void vsrl_manager::find_shadows(vcl_vector<vdgl_digital_region*> regions)
   }
   e2d1_->set_foreground(1,0,0);
   e2d1_->set_point_radius(5);
-
 }
 
 // Though called "run_jseg" this routine does more than that.  After the jseg routine
 // executes, the output of jseg is partitioned into digital_regions and a vector of
 // the resulting digital regions is returned.
 
-vcl_vector<vdgl_digital_region*> 
+vcl_vector<vdgl_digital_region*>
 vsrl_manager::run_jseg(vil1_image image_in)
 {
 #ifndef INCLUDE_JSEG
-  vcl_cout << "vsrl_manager::run_jseg - Error. JSEG not included in this compilation."
-           << vcl_endl;
+  vcl_cout << "vsrl_manager::run_jseg - Error. JSEG not included in this compilation.\n";
   vcl_vector<vdgl_digital_region*> empty;
   return empty;
 #else
@@ -900,7 +897,7 @@ vsrl_manager::run_jseg(vil1_image image_in)
 
   // Initialize things with one region
   // We'll use a 3D region and use the Z coord. for the class label.
-  vcl_cout << "Creating initial region.  #0" << vcl_endl;
+  vcl_cout << "Creating initial region.  #0\n";
   vdgl_digital_region* region1 = new vdgl_digital_region();
 
   // vdgl_digital_region(x,y,z,pix)
@@ -965,7 +962,7 @@ vsrl_manager::run_jseg(vil1_image image_in)
       // for this pixel, make a new region and insert it.
     }
   }
-  vcl_cout << "Finished Creating Regions." << vcl_endl;
+  vcl_cout << "Finished Creating Regions.\n";
   // Overlay the regions on the original image
   if (image_in == imgL_){
     show_jseg_boundaries(js_out, e2d0_);
@@ -988,16 +985,16 @@ void vsrl_manager::show_jseg_boundaries(vil1_memory_image_of<unsigned char>* jse
                                         vgui_easy2D_tableau_sptr tab)
 {
   if (tab == e2d0_) {
-    e2d0_->set_foreground(1,0,0);    
-    e2d2_->set_foreground(1,0,0);    
+    e2d0_->set_foreground(1,0,0);
+    e2d2_->set_foreground(1,0,0);
   }
   if (tab == e2d1_) {
-    e2d1_->set_foreground(0,1,0);    
-    e2d2_->set_foreground(0,1,0);    
+    e2d1_->set_foreground(0,1,0);
+    e2d2_->set_foreground(0,1,0);
   }
 
   vil1_memory_image_of<unsigned char> rimg(jseg_out->width(),jseg_out->height());
-  
+
   tab->set_point_radius(1);
   e2d2_->set_point_radius(1);
   for (int x=0;x<jseg_out->cols()-1;x++) {
@@ -1020,9 +1017,9 @@ void vsrl_manager::show_jseg_boundaries(vil1_memory_image_of<unsigned char>* jse
   vcl_string fname="regions.tif";
   vil1_save(rimg,fname.c_str());
   this->post_redraw();
-  e2d0_->set_foreground(1,0,0);    
-  e2d1_->set_foreground(1,0,0);    
-  e2d2_->set_foreground(1,0,0);    
+  e2d0_->set_foreground(1,0,0);
+  e2d1_->set_foreground(1,0,0);
+  e2d2_->set_foreground(1,0,0);
   tab->set_point_radius(5);
   e2d2_->set_point_radius(5);
 }
@@ -1034,8 +1031,7 @@ float* vsrl_manager::show_correlations(int x, int y)
 {
   // Don't try anything funny.
   if (!imgL_ || !imgR_) {
-    vcl_cerr << "vsrl_manager::show_correlations() -> 2 images not loaded. Abort."
-             << vcl_endl;
+    vcl_cerr << "vsrl_manager::show_correlations() -> 2 images not loaded. Abort.\n";
     return NULL;
   }
 
@@ -1046,8 +1042,7 @@ float* vsrl_manager::show_correlations(int x, int y)
   // Make 'em pick the point in the left pane...
   if (c!=0) {
     vcl_cerr << "vsrl_manager::show_correlations() -> "
-             << "Please pick point in left pane. "
-             << vcl_endl;
+             << "Please pick point in left pane.\n";
     return NULL;
   }
 
@@ -1063,8 +1058,8 @@ float* vsrl_manager::show_correlations(int x, int y)
   pos = vpicker0_->get_point();
   int range = params_->correlation_range;
   float* results = new float[(2*range)+1];
-  vcl_cout << "Correlation results about point: " << x << ", " << y << vcl_endl;
-  vcl_cout << "X: Y: R:" << vcl_endl;
+  vcl_cout << "Correlation results about point: " << x << ", " << y << vcl_endl
+           << "X: Y: R:\n";
   for (int xo=-range; xo<=range; xo++) {
     results[xo+range] = corr.get_correlation(x,y,(x+xo),y);
     vcl_cout << (x+xo) << "  " << y << "  " << results[xo+range] << vcl_endl;
@@ -1080,7 +1075,7 @@ float* vsrl_manager::show_correlations(int x, int y)
 void vsrl_manager::raw_correlation()
 {
   if (!imgL_ || !imgR_) return;
-  
+
   // Gaussian Smoothing (if needed)...
   static float sig = 1.0;
   static float cutoff = 0.01;
@@ -1140,7 +1135,7 @@ void vsrl_manager::raw_correlation()
 
 vil1_image* vsrl_manager::make_jseg_image(vil1_memory_image_of<unsigned char>* jseg_out)
 {
-  vil1_memory_image_of<unsigned char>* b_image = 
+  vil1_memory_image_of<unsigned char>* b_image =
     new vil1_memory_image_of<unsigned char>(jseg_out->width(),jseg_out->height());
   for (int y=0;y<jseg_out->rows()-1;y++) {
     for (int x=0;x<jseg_out->cols()-1;x++) {
@@ -1162,8 +1157,7 @@ vil1_image* vsrl_manager::make_jseg_image(vil1_memory_image_of<unsigned char>* j
 void vsrl_manager::boundary_matching()
 {
 #ifndef INCLUDE_JSEG
-  vcl_cout << "vsrl_manager::boundary_matching - Error. JSEG not included in this compilation."
-           << vcl_endl;
+  vcl_cout << "vsrl_manager::boundary_matching - Error. JSEG not included in this compilation.\n";
   return;
 #else
   // Set up the JSEG parameters
@@ -1208,7 +1202,7 @@ void vsrl_manager::boundary_matching()
   imgR_ = *bi_R;
   this->post_redraw();
 
-  vcl_cout << "Beginning dense matching..." << vcl_endl;
+  vcl_cout << "Beginning dense matching...\n";
 
   vsrl_stereo_dense_matcher matcher(*bi_L,*bi_R);
   matcher.set_correlation_range(params_->correlation_range);
@@ -1247,7 +1241,7 @@ void vsrl_manager::boundary_matching()
 
 void vsrl_manager::region_disparity()
 {
-  // This method depends on the JSEG package being present and 
+  // This method depends on the JSEG package being present and
   // linked in.  If not, it should abort.
 
 #ifdef INCLUDE_JSEG
@@ -1262,7 +1256,7 @@ void vsrl_manager::region_disparity()
   // Find disparity using regions
   vsrl_region_disparity r_disp(&imgL_, &imgR_);
   vil1_memory_image_of<unsigned char> disp(disp_img_);
-  vcl_cout << "vsrl_manager::region_disparity" << vcl_endl;
+  vcl_cout << "vsrl_manager::region_disparity\n";
   r_disp.SetDisparityImage(&disp);
   r_disp.SetRegions(&dregs);
   r_disp.Execute();
@@ -1281,8 +1275,8 @@ void vsrl_manager::region_disparity()
   dimg_tab_->set_image(scale_image(disp));
 #else
   vcl_cout << "vsrl_manager::region_disparity: Error - JSEG package required "
-           << "but not included in this compilation." << vcl_endl;
-  vcl_cout << "Compilation flag INCLUDE_JSEG not set." << vcl_endl;
+           << "but not included in this compilation.\n"
+           << "Compilation flag INCLUDE_JSEG not set.\n";
 #endif
 
   this->post_redraw();
@@ -1292,7 +1286,7 @@ void vsrl_manager::region_disparity()
 void vsrl_manager::corner_method()
 {
   if (!imgL_ || !imgR_) {
-    vcl_cout << "vsrl_manager::corner_method - No Images Loaded." << vcl_endl;
+    vcl_cout << "vsrl_manager::corner_method - No Images Loaded.\n";
     return; // Sanity check.
   }
 
@@ -1315,7 +1309,7 @@ void vsrl_manager::corner_method()
   // At this point we should have a bunch of matched KL points
   // get the matched points from the KLT structures
   vcl_vector<vtol_vertex_2d_sptr> pts0;
-  vcl_vector<vtol_vertex_2d_sptr> pts1;  	  
+  vcl_vector<vtol_vertex_2d_sptr> pts1;
   matched_points->get (0, 1, pts0, pts1);
 
   // Get an image to store disparities in; make sure it starts out at zero
@@ -1341,7 +1335,7 @@ void vsrl_manager::corner_method()
 
   // Offset for zero disparity; allows us to handle negative disparities
   int zero_disp = 128;
-  vcl_cout << "vsrl_manager::corner_method(): " << vcl_endl;
+  vcl_cout << "vsrl_manager::corner_method():\n";
   float x0, x1, y0, y1, d; // d = disparity (proportional to z)
   vnl_vector<double> v_ang(2,0,0);
   vtol_vertex_2d tmp;
@@ -1355,7 +1349,7 @@ void vsrl_manager::corner_method()
     y1 = tmp.y();
     d = x1 - x0; // Disparity
     // stuff the disparity into the right place in the image buffer
-    disp(x0,y0) = d + zero_disp; // Add in the "0" offset.
+    disp(int(x0),int(y0)) = vil1_byte(d + zero_disp); // Add in the "0" offset.
     vnl_vector<double> v_cart(2,x0,y0);
     rsdl_point rpt(v_cart,v_ang); // make the rsdl point
     rsdlvec.push_back(rpt);  // add the point to the list for the kd_tree
@@ -1370,10 +1364,10 @@ void vsrl_manager::corner_method()
   vcl_vector<rsdl_point> neighbors;
   vcl_vector<int> index;
 
-  // Now scan the image and insert disparity as retreived from
+  // Now scan the image and insert disparity as retrieved from
   // the rsdl_kd_tree.
   int min_disp = 255;
-  double xd, yd;
+  int xd, yd;
   for (int y=0; y<disp.rows(); y++) {
     for (int x=0; x<disp.cols(); x++) {
       // Only calculate for the pixels that aren't corner points
@@ -1382,9 +1376,9 @@ void vsrl_manager::corner_method()
         rsdl_point query(v_cart,v_ang);
         // Get the nearest neighbor; we'll use that disparity for now
         tree.n_nearest(query,1,neighbors,index);
-        rsdl_point* nn = neighbors.begin();  // This should be the nearest neighbor pt.
-        xd = nn->cartesian(0);
-        yd = nn->cartesian(1);
+        rsdl_point& nn = neighbors.front();  // This should be the nearest neighbor pt.
+        xd = int(nn.cartesian(0));
+        yd = int(nn.cartesian(1));
         //        vcl_cout << "X,Y: " << x << "," << y << "\tXD,YD: " << xd << "," << yd << vcl_endl;
         disp(x,y) = disp(xd,yd); // assign disparity to nearest neighbor's value
         if (disp(xd,yd) < min_disp) min_disp = disp(xd,yd);
@@ -1426,7 +1420,7 @@ void vsrl_manager::set_kl_params(vgel_kl_params* kl_params)
   kl_dialog.checkbox("Smooth before selecting",kl_params->smoothBeforeSelecting);
   kl_dialog.checkbox("Write internal images",kl_params->writeInternalImages);
   kl_dialog.checkbox("Verbose",kl_params->verbose);
-  if (!kl_dialog.ask()) return; 
+  if (!kl_dialog.ask()) return;
   return;
 }
 
