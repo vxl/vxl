@@ -219,7 +219,7 @@ INLINE_LOOP ForwardIterator vcl_uninitialized_copy(InputIterator first,
 #  endif
         IUEg__TRY
         {
-    for ( ;first != last; ++result, ++first )
+    for (; first != last; ++result, ++first )
         vcl_construct(&*result, *first);
         }
 #  if defined ( __STL_USE_EXCEPTIONS )
@@ -243,7 +243,7 @@ vcl_uninitialized_fill(ForwardIterator first, ForwardIterator last,
 #  endif
     IUEg__TRY
     {
-    for ( ;first != last; ++first )
+    for (; first != last; ++first )
         vcl_construct( &*first, x );
     }
 #  if defined ( __STL_USE_EXCEPTIONS )
@@ -287,7 +287,7 @@ __default_initialize(ForwardIterator first, ForwardIterator last)
 #  endif
     IUEg__TRY
     {
-    for ( ;first != last; ++first )
+    for (; first != last; ++first )
         __default_construct(&*first);
     }
 #  if defined ( __STL_USE_EXCEPTIONS )
@@ -323,7 +323,7 @@ template <class InputIterator, class OutputIterator>
 INLINE_LOOP OutputIterator __copy(InputIterator first, InputIterator last,
                                   OutputIterator result, vcl_input_iterator_tag)
 {
-  for ( ; first != last; ++result, ++first)
+  for (; first != last; ++result, ++first)
     *result = *first;
   return result;
 }
@@ -383,7 +383,7 @@ INLINE_LOOP void
 vcl_fill(ForwardIterator first, ForwardIterator last, const T& value)
 {
   __stl_debug_check(__check_range(first, last));
-  for ( ; first != last; ++first)
+  for (; first != last; ++first)
     *first = value;
 }
 
@@ -391,7 +391,7 @@ template <class OutputIterator, class Size, class T>
 INLINE_LOOP OutputIterator
 vcl_fill_n(OutputIterator first, Size n, const T& value)
 {
-  for ( ; n > 0; --n, ++first)
+  for (; n > 0; --n, ++first)
     *first = value;
   return first;
 }
@@ -422,7 +422,7 @@ INLINE_LOOP bool vcl_equal(InputIterator1 first1, InputIterator1 last1,
                   InputIterator2 first2)
 {
   __stl_debug_check(__check_range(first1, last1));
-  for ( ; first1 != last1; ++first1, ++first2)
+  for (; first1 != last1; ++first1, ++first2)
     if (!(*first1 == *first2))
       return false;
   return true;
@@ -433,7 +433,7 @@ INLINE_LOOP bool vcl_equal(InputIterator1 first1, InputIterator1 last1,
                   InputIterator2 first2, BinaryPredicate binary_pred)
 {
   __stl_debug_check(__check_range(first1, last1));
-  for ( ; first1 != last1; ++first1, ++first2)
+  for (; first1 != last1; ++first1, ++first2)
     if (!binary_pred(*first1, *first2))
       return false;
   return true;

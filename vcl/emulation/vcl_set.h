@@ -175,7 +175,7 @@ inline bool operator==(const __set__<Key, Compare, Alloc>& x,
 template <class Key, class Compare, class Alloc>
 inline bool operator<(const __set__<Key, Compare, Alloc>& x,
                       const __set__<Key, Compare, Alloc>& y) {
-  return x.t < y.t ;
+  return x.t < y.t;
 }
 
 # if defined (__STL_CLASS_PARTIAL_SPECIALIZATION )

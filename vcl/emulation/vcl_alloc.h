@@ -236,7 +236,7 @@ public:
 // malloc_alloc out-of-memory handling
 # if ( __STL_STATIC_TEMPLATE_DATA > 0 )
 template <int inst>
-__oom_handler_type __malloc_alloc<inst>::oom_handler=(__oom_handler_type)0 ;
+__oom_handler_type __malloc_alloc<inst>::oom_handler=(__oom_handler_type)0;
 #  else
 __DECLARE_INSTANCE(__oom_handler_type, __malloc_alloc<0>::oom_handler,0);
 # endif /* ( __STL_STATIC_TEMPLATE_DATA > 0 ) */
@@ -605,7 +605,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
             /* Build free vcl_list in chunk */
               result = (obj *)chunk;
               *my_free_list = next_obj = (obj *)(chunk + n);
-              for (i = 1; ; i++) {
+              for (i = 1; true; i++) {
                 current_obj = next_obj;
                 next_obj = (obj *)((char *)next_obj + n);
                 if (nobjs - 1 == i) {

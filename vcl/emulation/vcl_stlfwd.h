@@ -137,7 +137,7 @@ typedef __alloc<false,0> vcl_alloc;
 # if !defined(VECTOR_H) && !defined(__STL_DEFAULT_TYPE_PARAM) && ( !defined(__STL_NAMESPACES) || defined(__STL_NO_NAMESPACES))
     template <class T> class vcl_vector;
 # else
-    template <class T, VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) > class vcl_vector ;
+    template <class T, VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) > class vcl_vector;
 # endif
 #endif
 

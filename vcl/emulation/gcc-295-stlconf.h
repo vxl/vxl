@@ -179,12 +179,12 @@
 // change this if don't think that is standard enough ;)
 #  define __STL_NAMESPACE std
 #  define __BEGIN_STL_NAMESPACE namespace __STL_NAMESPACE {
-#  define __STL_USING_NAMESPACE  using namespace __STL_NAMESPACE ;
+#  define __STL_USING_NAMESPACE  using namespace __STL_NAMESPACE;
 
 #  ifdef __STL_NO_USING_STD
 #   define __USING_NAMESPACE
 #  else
-#   define __USING_NAMESPACE using namespace __STL_NAMESPACE ;
+#   define __USING_NAMESPACE using namespace __STL_NAMESPACE;
 #  endif
 #  ifdef __STL_DEFAULT_TYPE_PARAM
 #    define __STL_FULL_NAMESPACE __STL_NAMESPACE
@@ -193,7 +193,7 @@
 #  else
 #    define __STL_FULL_NAMESPACE sgi_full
 #    define __BEGIN_STL_FULL_NAMESPACE namespace __STL_FULL_NAMESPACE {
-#    define __END_STL_FULL_NAMESPACE } ;
+#    define __END_STL_FULL_NAMESPACE };
 #  endif
 #  define __END_STL_NAMESPACE }; __USING_NAMESPACE
     // workaround tuning

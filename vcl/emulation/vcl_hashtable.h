@@ -91,7 +91,7 @@ template <class Key> struct vcl_hash { };
 inline vcl_size_t VCL_hash_string(const char* s)
 {
   unsigned long h = 0;
-  for ( ; *s; ++s)
+  for (; *s; ++s)
     h = 5*h + *s;
 
   return vcl_size_t(h);
@@ -269,7 +269,7 @@ private:
   typedef vcl_hashtable_node<Value> node;
   typedef vcl_simple_alloc<node, Alloc> node_allocator;
 public: // These are public to get around restriction on protected access
-  typedef vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(node*) > buckets_type ;
+  typedef vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(node*) > buckets_type;
   buckets_type buckets; // awf killed optional allocator
   size_type num_elements;
 protected:
@@ -461,7 +461,7 @@ public:
   {
     size_type n = l - f;
     resize(num_elements + n);
-    for ( ; n > 0; --n)
+    for (; n > 0; --n)
       insert_unique_noresize(*f++);
   }
 
@@ -469,7 +469,7 @@ public:
   {
     size_type n = l - f;
     resize(num_elements + n);
-    for ( ; n > 0; --n)
+    for (; n > 0; --n)
       insert_equal_noresize(*f++);
   }
 
@@ -485,7 +485,7 @@ public:
     size_type n = 0;
     vcl_distance(f, l, n);
     resize(num_elements + n);
-    for ( ; n > 0; --n)
+    for (; n > 0; --n)
       insert_unique_noresize(*f++);
   }
 
@@ -494,7 +494,7 @@ public:
     size_type n = 0;
     vcl_distance(f, l, n);
     resize(num_elements + n);
-    for ( ; n > 0; --n)
+    for (; n > 0; --n)
       insert_equal_noresize(*f++);
   }
 
@@ -695,7 +695,7 @@ bool operator==(const vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, A
   for (int n = 0; n < ht1.buckets.size(); ++n) {
     node* cur1 = ht1.buckets[n];
     node* cur2 = ht2.buckets[n];
-    for ( ; cur1 && cur2 && cur1->val == cur2->val;
+    for (; cur1 && cur2 && cur1->val == cur2->val;
           cur1 = cur1->next, cur2 = cur2->next)
       {}
     if (cur1 || cur2)
@@ -796,7 +796,7 @@ vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::equal_range(con
   typedef vcl_pair<const_iterator, const_iterator> pii;
   const size_type n = bkt_num_key(key);
 
-  for (const node* first = buckets[n] ; first; first = first->next) {
+  for (const node* first = buckets[n]; first; first = first->next) {
     if (equals(get_key(first->val), key)) {
       for (const node* cur = first->next; cur; cur = cur->next)
         if (!equals(get_key(cur->val), key))

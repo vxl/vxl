@@ -68,7 +68,7 @@ VCL_INSTANTIATE_INLINE(void vcl_distance(HTIterc ## TAG, HTIterc ## TAG, vcl_siz
 VCL_INSTANTIATE_INLINE(void __distance(HTIterc ## TAG, HTIterc ## TAG const &, vcl_size_t &, vcl_forward_iterator_tag)); \
 VCL_PAIR_INSTANTIATE(HTIterc ## TAG, bool); \
 VCL_PAIR_INSTANTIATE(HTIterc ## TAG, HTIterc ## TAG); \
-template struct vcl_hashtable_node<Value > ; \
+template struct vcl_hashtable_node<Value >; \
 typedef vcl_hashtable_node<Value > HTNode ## TAG; \
 typedef vcl_hashtable_node<Value >* HTNodeP ## TAG; \
 VCL_UNARY_INSTANTIATE(HTNodeP ## TAG); \

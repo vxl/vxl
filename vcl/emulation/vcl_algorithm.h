@@ -544,7 +544,7 @@ template <class ForwardIterator, class Distance>
 IUEi_STL_INLINE
 void __rotate(ForwardIterator first, ForwardIterator middle,
               ForwardIterator last, Distance*, vcl_forward_iterator_tag) {
-    for (ForwardIterator i = middle; ;) {
+    for (ForwardIterator i = middle; true; ) {
         iter_swap(first, i);
         ++first;
         ++i;
@@ -1918,7 +1918,7 @@ OutputIterator vcl_merge(InputIterator1 first1, InputIterator1 last1,
                      OutputIterator result) {
     __stl_debug_check(__check_range(first1, last1));
     __stl_debug_check(__check_range(first2, last2));
-    for (; first1 != last1 && first2 != last2 ; ++result)
+    for (; first1 != last1 && first2 != last2; ++result)
         if (*first2 < *first1)
             *result = *first2++;
         else
@@ -1933,7 +1933,7 @@ OutputIterator vcl_merge(InputIterator1 first1, InputIterator1 last1,
                      OutputIterator result, Compare comp) {
     __stl_debug_check(__check_range(first1, last1));
     __stl_debug_check(__check_range(first2, last2));
-    for (; first1 != last1 && first2 != last2 ; ++result)
+    for (; first1 != last1 && first2 != last2; ++result)
         if (comp(*first2, *first1))
             *result = *first2++;
         else
@@ -2461,7 +2461,7 @@ OutputIterator set_symmetric_difference(InputIterator1 first1,
 
 template <class ForwardIterator>
 IUEi_STL_INLINE
-ForwardIterator max_element(ForwardIterator first, ForwardIterator last) {
+ForwardIterator vcl_max_element(ForwardIterator first, ForwardIterator last) {
     __stl_debug_check(__check_range(first, last));
     if (first == last) return first;
     ForwardIterator result = first;
@@ -2472,8 +2472,8 @@ ForwardIterator max_element(ForwardIterator first, ForwardIterator last) {
 
 template <class ForwardIterator, class Compare>
 IUEi_STL_INLINE
-ForwardIterator max_element(ForwardIterator first, ForwardIterator last,
-                            Compare comp) {
+ForwardIterator vcl_max_element(ForwardIterator first, ForwardIterator last,
+                                Compare comp) {
     __stl_debug_check(__check_range(first, last));
     if (first == last) return first;
     ForwardIterator result = first;
@@ -2546,7 +2546,7 @@ bool next_permutation(BidirectionalIterator first, BidirectionalIterator last,
     --i;
 
     for (;;) {
-        BidirectionalIterator ii = i ;
+        BidirectionalIterator ii = i;
         if (comp(*--i, *ii)) {
             BidirectionalIterator j = last;
             while (!comp(*i, *--j));
@@ -2621,7 +2621,7 @@ template <class InputIterator, class T>
 IUEi_STL_INLINE
 T vcl_accumulate(InputIterator first, InputIterator last, T init) {
     __stl_debug_check(__check_range(first, last));
-    for (; first != last ; ++first)
+    for (; first != last; ++first)
         init = init + *first;
     return init;
 }
@@ -2631,7 +2631,7 @@ IUEi_STL_INLINE
 T vcl_accumulate(InputIterator first, InputIterator last, T init,
              BinaryOperation binary_op) {
     __stl_debug_check(__check_range(first, last));
-    for (; first != last ; ++first)
+    for (; first != last; ++first)
         init = binary_op(init, *first);
     return init;
 }
