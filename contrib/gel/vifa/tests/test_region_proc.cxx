@@ -79,7 +79,7 @@ static void test_region_proc(int argc, char* argv[])
             vcl_cout << "      Edge #" << k << ": ";
             (*tli)->describe(vcl_cout, 6);
 
-            if ((*tli)->topology_type() == vtol_topology_object::EDGE)
+            if ((*tli)->cast_to_edge())
             {
               vtol_edge_2d* e = (*tli)->cast_to_edge()->cast_to_edge_2d();
               vtol_vertex_2d* p1 = e->v1()->cast_to_vertex_2d();
