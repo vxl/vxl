@@ -1,11 +1,9 @@
 // This is core/vil/tests/test_algo_cartesian_differential_invariants.cxx
 #include <vcl_iostream.h>
-#include <vcl_algorithm.h>
-#include <vcl_vector.h>
-#include <vcl_cstdlib.h> // for abs(int)
+#include <vcl_cassert.h>
+#include <vcl_cmath.h> // for fabs(float)
 #include <vil/vil_image_view.h>
 #include <vil/vil_print.h>
-#include <vnl/vnl_c_vector.h>
 #include <vil/algo/vil_cartesian_differential_invariants.h>
 #include <testlib/testlib_test.h>
 
@@ -29,7 +27,7 @@ static void test_algo_cartesian_differential_invariants()
   vcl_cout << "Destination\n";
   vil_print_all(vcl_cout,  dest);
   TEST("dest is correct size", dest.ni()==n && dest.nj()==n &&
-    dest.nplanes()==8, true);
+       dest.nplanes()==8, true);
 
 
   // I have visually compared impulse response function images from
@@ -38,7 +36,7 @@ static void test_algo_cartesian_differential_invariants()
   // my code uses pixel integration sampling, so the results are not
   // directly comparable.
   // See cpp_above_matlab_comparing_cdi_code.png for impulse responses
-  // from VXL and matlab versions (VXL verson on top).
+  // from VXL and matlab versions (VXL version on top).
 
   // The following is a regression test. The golden values are
   // merely verified as above.
@@ -147,7 +145,7 @@ static void test_algo_cartesian_differential_invariants()
   unsigned i;
   for (i=0; i<dest.size(); ++i)
   {
-    if ( vcl_abs(*p_dest - *p_golden) > vcl_abs(*p_golden) * 1e-6)
+    if ( vcl_fabs(*p_dest - *p_golden) > vcl_fabs(*p_golden) * 1e-6)
     {
       vcl_cout << "Found excess value at pixel " << i << vcl_endl;
       break;
@@ -170,11 +168,8 @@ static void test_algo_cartesian_differential_invariants()
   vil_cartesian_differential_invariants_3(src, dest2, 1.0);
   for (unsigned i=0; i<8; ++i)
     TEST_NEAR("cartesian invariance", dest2(n/2,n/2,i), dest2(n/2,n/2,i),
-      vcl_abs(dest2(n/2,n/2,i)*1.e-4f));
- 
-
+              vcl_fabs(dest2(n/2,n/2,i)*1.e-4f));
 }
-
 
 
 MAIN( test_algo_cartesian_differential_invariants )
