@@ -83,6 +83,9 @@ struct vbl_shared_pointer
   operator bool() const { return data != 0; }
 
   // conversion to pointer
+  // These may generate warnings when T is not a compound type. Ignore them.
+  // It is not possible to fix these warnings by making them external functions,
+  // and instantiating them as necessary, because operator->() must be a member.
   T const *operator->() const { return as_pointer(); }
   T       *operator->() { return as_pointer(); }
 
