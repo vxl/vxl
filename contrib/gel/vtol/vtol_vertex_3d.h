@@ -85,7 +85,9 @@ public:
   two_chain_list_3d *two_chains(void);
   block_list_3d *blocks(void);
 
+#if 0 // Only implemented in vtol_vertex.cxx, not in vtol_vertex_3d.cxx
   void explore_vertex(vertex_list_3d&);
+#endif
   // Methods called on Vertex
   // for vsol_point_3d.   These are here
   // during the transition period.
