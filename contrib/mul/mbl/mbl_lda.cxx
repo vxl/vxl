@@ -1,7 +1,7 @@
-// This is mul/mbl/mbl_lda.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#ifdef __GNUC__
 #pragma implementation
 #endif
+
 //:
 // \file
 // \brief  Class to perform linear discriminant analysis
@@ -13,13 +13,14 @@
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h> // for size_t
 #include <vcl_cstring.h> // for memcpy()
-#include <vcl_cstdlib.h> // for vcl_abort()
 #include <mbl/mbl_matxvec.h>
 #include <vsl/vsl_indent.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_vector_io.h>
+#include <mbl/mbl_print.h>
+
 
 //=======================================================================
 
@@ -34,7 +35,7 @@ mbl_lda::~mbl_lda()
 }
 
 //=======================================================================
-
+/*
 static void ZeroMatrix(vnl_matrix<double>& M)
 {
   int nr=M.rows();
@@ -44,7 +45,7 @@ static void ZeroMatrix(vnl_matrix<double>& M)
     for (int j=0;j<nc;++j)
       m[i][j]=0.0;
 }
-
+*/
 //=======================================================================
 
 void mbl_lda::updateCovar(vnl_matrix<double>& S, const vnl_vector<double>& V)
@@ -53,7 +54,7 @@ void mbl_lda::updateCovar(vnl_matrix<double>& S, const vnl_vector<double>& V)
   if (S.rows()!=n)
   {
     S.resize(n,n);
-    ZeroMatrix(S);
+    S.fill(0);
   }
 
   double** s = S.data_array();
@@ -65,6 +66,20 @@ void mbl_lda::updateCovar(vnl_matrix<double>& S, const vnl_vector<double>& V)
     for (unsigned int j=0;j<n;++j)
       row[j] += vi*v[j];
   }
+}
+
+////////////////////////////////////////////////
+// find out how many id in the label vector
+int mbl_lda::nDistinctIDs(const int* id, const int n)
+{
+	vcl_vector<int> dids;
+	for (int i=0;i<n;++i)
+	{
+		if (vcl_find(dids.begin(), dids.end(), id[i])==dids.end())  // if (Index(dids,id[i])<0)
+       dids.push_back(id[i]);
+	}
+	
+	return dids.size();
 }
 
 //=======================================================================
@@ -90,13 +105,19 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
     }
   }
 
-  assert(lo_i==0);
+//  assert(lo_i==0);
+
 
   // Compute mean of each class
-  int n_classes = hi_i+1;
-  mean_.resize(n_classes);
-  n_samples_.resize(n_classes);
-  for (int i=0;i<n_classes;++i)
+  int n_classes = nDistinctIDs(label,n);
+  vcl_cout<<"There are "<<n_classes<<" classes to build LDA space"<<vcl_endl;
+  vcl_cout<<"Mix label index is "<<hi_i<<vcl_endl;
+  vcl_cout<<"Min label index is "<<lo_i<<vcl_endl;
+  
+  int n_size=hi_i+1;
+  mean_.resize(n_size);
+  n_samples_.resize(n_size);
+  for (int i=0;i<n_size;++i)
     n_samples_[i]=0;
 
   for (int i=0;i<n;++i)
@@ -116,12 +137,12 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   }
 
   int n_used_classes = 0;
-  for (int i=0;i<n_classes;++i)
+  for (int i=0;i<n_size;++i)
   {
     if (n_samples_[i]>0)
     {
       mean_[i]/=n_samples_[i];
-      if (i==0) mean_class_mean_ = mean_[i];
+      if (i==lo_i) mean_class_mean_ = mean_[i];
       else      mean_class_mean_ += mean_[i];
       n_used_classes++;
     }
@@ -133,7 +154,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   // Zero to start:
   betweenS_.resize(0,0);
 
-  for (int i=0;i<n_classes;++i)
+  for (int i=0;i<n_size;++i)
   {
     if (n_samples_[i]>0)
       updateCovar(betweenS_,mean_[i] - mean_class_mean_);
@@ -162,33 +183,27 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
 
   vnl_matrix<double> wS_inv;
   //  NR_Inverse(wS_inv,withinS_);
-  vnl_svd<double> wS_svd(withinS_); // vnl_svd<double> wS_svd(wS) is wrong
-  wS_inv = wS_svd.inverse();
+  vnl_svd<double> wS_svd(withinS_, -1.0e-10); // important!!! as the sigma_min=0.0
+  //double svd_min=wS_svd.sigma_min();
+  //double svd_max=wS_svd.sigma_max();
 
-  vnl_matrix<double> A = betweenS_ * wS_inv;
+  wS_inv = wS_svd.inverse();
+  
+  //vnl_matrix<double> B=withinS_*wS_inv;
+  //vcl_cout<<B<<vcl_endl;
+
+  //vnl_matrix<double> A = betweenS_ * wS_inv;
+  vnl_matrix<double> A = wS_inv* betweenS_;
 
   // Compute eigenvectors and eigenvalues (descending order)
   vnl_matrix<double> EVecs(A.rows(), A.columns());
   vnl_vector<double> evals(A.columns());
   //  NR_CalcSymEigens(A,EVecs,evals,false);
   vnl_symmetric_eigensystem_compute(A, EVecs, evals);
-
+  
   //make the eigenvector matrix (columns) and eigenvalue vector in descending order.
-  vnl_vector<double> temp_vect(EVecs.rows());
-  double temp_val;
-  int n_cols = EVecs.columns();
-
-  for (int i=0; i<n_cols/2; ++i)
-  {
-    // swap t_EVects columes
-    temp_vect=EVecs.get_column(i);
-    EVecs.set_column(i, EVecs.get_column(n_cols-1-i));
-    EVecs.set_column((n_cols-1-i), temp_vect);
-    // swap t_evals elem
-    temp_val=evals.get(i);
-    evals.put(i, evals.get(n_cols-1-i));
-    evals.put((n_cols-1-i), temp_val);
-  }
+  evals.flip();
+  EVecs.fliplr();
 
   // Record n_classes-1 vector basis
   int m = EVecs.rows();
@@ -215,8 +230,8 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   mbl_matxvec_prod_vm(mean_class_mean_,basis_,d_m_mean_);
 
   // Project each mean into d-space
-  d_mean_.resize(n_classes);
-  for (int i=0;i<n_classes;++i)
+  d_mean_.resize(n_size);
+  for (int i=0;i<n_size;++i)
     if (n_samples_[i]>0)
       x_to_d(d_mean_[i],mean_[i]);
 }
