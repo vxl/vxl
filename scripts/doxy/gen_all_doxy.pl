@@ -95,6 +95,11 @@ sub update_library
 
   if (! -e $library)
   {
+    if ($cvsup ne "true")
+	{
+	  die "$vxlsrc/$package/$library does not exist.\n";
+	}
+
     # Check the library out of cvs
     $cmd="cvs -z3 co $library\n";
     xec($cmd);
