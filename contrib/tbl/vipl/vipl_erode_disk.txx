@@ -18,9 +18,9 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   // apply filter:
   vcl_cout << " set start & stop ...";
   int startx = start(X_Axis());
-  int starty = start(Y_Axis());
+  int starty = start(Y_Axis()); starty = 0;
   int stopx = stop(X_Axis());
-  int stopy = stop(Y_Axis());
+  int stopy = stop(Y_Axis()); stopy = out.height();
   vcl_cout << " (" << startx << ':' << stopx << ',' << starty << ':' << stopy << ')';
   vcl_cout << " run over image ...";
   for(int j = starty; j < stopy; ++j)
