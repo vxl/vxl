@@ -72,14 +72,6 @@ class vil2_pnm_image : public vil2_image_data
   virtual unsigned bits_per_component() const { return bits_per_component_; }
   virtual enum vil_component_format component_format() const { return VIL_COMPONENT_FORMAT_UNSIGNED_INT; }
 
-  //: Create a read/write view of the data.
-  // Modifying this view might modify the actual data.
-  // If you want to modify this data in place, call put_view after you done, and 
-  // it should work efficiently.
-  // \return 0 if unable to get view of correct size.
-  virtual vil2_image_view_base* get_view(unsigned x0, unsigned y0, unsigned plane0,
-                                         unsigned nx, unsigned ny, unsigned nplanes) const;
-
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.
   virtual vil2_image_view_base* get_copy_view(unsigned x0, unsigned y0, unsigned plane0,

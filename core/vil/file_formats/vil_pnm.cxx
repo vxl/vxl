@@ -271,7 +271,7 @@ bool operator>>(vil_stream& vs, int& a)
   return true;
 }
 
-vil2_image_view_base* vil2_pnm_image::get_view(
+vil2_image_view_base* vil2_pnm_image::get_copy_view(
   unsigned x0, unsigned y0, unsigned plane0,
   unsigned nx, unsigned ny, unsigned nplanes) const
 {
@@ -385,15 +385,6 @@ vil2_image_view_base* vil2_pnm_image::get_view(
     else
       return new vil2_image_view<unsigned int>(buf, (unsigned int*)buf->data(), nx, ny, nplanes, nplanes, nx*nplanes, 1);
   }
-}
-
-
-vil2_image_view_base* vil2_pnm_image::get_copy_view(
-  unsigned x0, unsigned y0, unsigned plane0,
-  unsigned nx, unsigned ny, unsigned nplanes) const
-{
-  // The data is on disk, so all views are copy views.
-  return get_view(x0, y0, plane0, nx, ny, nplanes);
 }
 
 
