@@ -42,4 +42,6 @@ VCL_INSTANTIATE_INLINE(Out vcl_copy_backward(Inp, Inp, Out))
 #define VCL_FIND_IF_INSTANTIATE(I, P) \
 VCL_INSTANTIATE_INLINE(I vcl_find_if(I, I, P))
 
+#define VCL_UNIQUE_INSTANTIATE(I) /* */
+
 #endif // vcl_emulation_algorithm_txx_
