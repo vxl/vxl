@@ -380,7 +380,7 @@ bool vul_http_exists(char const *url)
 }
 
 
-vcl_istream * vul_url::open(const char * url)
+vcl_istream * vul_url::open(const char * url, vcl_ios::open_mode mode)
 {
   // check for null pointer or empty strings.
   if (!url || !*url)
@@ -389,7 +389,7 @@ vcl_istream * vul_url::open(const char * url)
 
   // check for filenames beginning "file:".
   if (l > 7 && vcl_strncmp(url, "file://", 7) == 0)
-    return new vcl_ifstream(url+7,vcl_ios_binary);
+    return new vcl_ifstream(url+7,mode);
 
   // maybe it's an http URL?
   if (l > 7 && vcl_strncmp(url, "http://", 7) == 0)
@@ -404,7 +404,7 @@ vcl_istream * vul_url::open(const char * url)
   }
 
   // try an ordinary filename
-  return new vcl_ifstream(url, vcl_ios_binary);
+  return new vcl_ifstream(url, mode);
 }
 
 

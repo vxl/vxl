@@ -7,12 +7,16 @@
 #include <vcl_istream.h>
 #include <vcl_string.h>
 
-
+//: Functions to test and open streams via a URL
 class vul_url
 {
 public:
 //: open an URL
-  static vcl_istream * open(const char * url);
+// If url is "file://..." open as a file with given mode.
+// If url is "http://..." open using vul_http_open
+// If url is "ftp://..." attempt ftp
+// Otherwise assume it is a filename and open with given mode
+  static vcl_istream * open(const char * url, vcl_ios::open_mode mode=vcl_ios::in );
 
 //: Does that URL exist
 // If the URL does not begin with a recognised xcheme identifier, the function will
