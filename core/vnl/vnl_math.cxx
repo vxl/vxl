@@ -22,12 +22,17 @@
 # endif
 
 #elif VXL_C_MATH_HAS_FINITE
-# include <math.h>  // dont_vxl_filter: this is *not* supposed to be <cmath>
+# include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
 # ifndef __alpha__ // on Alpha, finitef() must be used for float args instead of finite()
 #  define finitef finite
 # endif
 
-#elif defined(SYSV) && !defined(hppa)
+#elif defined(__hpux) 
+# include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
+# define finite _Isfinite
+# define finitef _Isfinitef
+
+#elif defined(SYSV)
 // needed on platforms with finite() declared in strange places, e.g. on alpha
 extern "C" int finite(double);
 # ifdef __alpha__ // on Alpha, finitef() must be used for float args instead of finite()
@@ -37,8 +42,9 @@ extern "C" int finitef(float);
 # endif
 
 #elif defined(VCL_BORLAND) 
-# include <math.h>
+# include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
 # include <float.h>
+
 #else
 # warning finite() is not declared on this platform
 # define VNL_HAS_NO_FINITE
@@ -49,7 +55,7 @@ extern "C" int finitef(float);
 #endif
 
 #if defined(__APPLE__)
-# include <math.h>
+# include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
 # define isnan __isnan
 #endif
 
