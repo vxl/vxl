@@ -6,13 +6,13 @@
 #endif
 //:
 // \file
-// \brief In-place 1D fast fourier transform
+// \brief In-place 1D fast Fourier transform
 // \author fsm
 
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_fft_base.h>
 
-//: In-place 1D fast fourier transform
+//: In-place 1D fast Fourier transform
 
 template <class T>
 struct vnl_fft_1d : public vnl_fft_base<1, T>

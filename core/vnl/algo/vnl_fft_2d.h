@@ -6,13 +6,13 @@
 #endif
 //:
 // \file
-// \brief In-place 2D fast fourier transform
+// \brief In-place 2D fast Fourier transform
 // \author fsm
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_fft_base.h>
 
-//: In-place 2D fast fourier transform
+//: In-place 2D fast Fourier transform
 
 template <class T>
 struct vnl_fft_2d : public vnl_fft_base<2, T>

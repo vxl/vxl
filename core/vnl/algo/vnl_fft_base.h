@@ -6,13 +6,13 @@
 #endif
 //:
 // \file
-// \brief In-place n-D fast fourier transform
+// \brief In-place n-D fast Fourier transform
 // \author fsm
 
 #include <vcl_complex.h>
 #include <vnl/algo/vnl_fft_prime_factors.h>
 
-//: Base class for in-place ND fast fourier transform.
+//: Base class for in-place ND fast Fourier transform.
 
 export template <int D, class T>
 struct vnl_fft_base
