@@ -91,7 +91,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
       accumT sum = 0;
       const srcT* s = src;
       const kernelT* k = kernel+i*kstep;
-      for (int j=i;j<=k_hi;++j,s+=s_step,k+=kstep) sum+= (*s)*(*k);
+      for (int j=i;j<=k_hi;++j,s+=s_step,k+=kstep) sum+= (accumT)((*s)*(*k));
       *dest=sum;
     }
   }
@@ -105,8 +105,8 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
       accumT sum=0;
       for (int j=k_lo;j<=k_hi;++j)
       {
-        if ((i+j)<0) sum+=src[0]*kernel[j*kstep];
-        else         sum+=src[(i+j)*s_step]*kernel[j*kstep];
+        if ((i+j)<0) sum+=(accumT)(src[0]*kernel[j*kstep]);
+        else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*kstep]);
       }
       dest[i*d_step]=sum;
     }
@@ -121,8 +121,8 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
       accumT sum=0;
       for (int j=k_lo;j<=k_hi;++j)
       {
-        if ((i+j)<0) sum+=src[0]*kernel[j*kstep];
-        else         sum+=src[(i+j)*s_step]*kernel[j*kstep];
+        if ((i+j)<0) sum+=(accumT)(src[0]*kernel[j*kstep]);
+        else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*kstep]);
       }
       dest[i*d_step]=sum;
     }
@@ -136,7 +136,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
     {
       accumT sum=0;
       for (int j=k_lo;j<=k_hi;++j)
-        sum+=src[((i+j+n)%n)*s_step]*kernel[j*kstep];
+        sum+=(accumT)(src[((i+j+n)%n)*s_step]*kernel[j*kstep]);
       dest[i*d_step]=sum;
     }
   }
@@ -145,7 +145,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
   {
     // Truncate and reweight kernel
     accumT k_sum_all=0;
-    for (int j=k_lo;j<=k_hi;++j) k_sum_all+=kernel[j*kstep];
+    for (int j=k_lo;j<=k_hi;++j) k_sum_all+=(accumT)(kernel[j*kstep]);
 
     int i_max = -1-k_lo;
     for (int i=0;i<=i_max;++i)
@@ -156,8 +156,8 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
       // ie i+j>=0  (so j starts at -i)
       for (int j=-i;j<=k_hi;++j)
       {
-        sum+=src[(i+j)*s_step]*kernel[j*kstep];
-        k_sum += kernel[j*kstep];
+        sum+=(accumT)(src[(i+j)*s_step]*kernel[j*kstep]);
+        k_sum += (accumT)(kernel[j*kstep]);
       }
       dest[i*d_step]=sum*k_sum_all/k_sum;
     }
@@ -193,7 +193,7 @@ inline void vil2_algo_convolve_1d(const srcT* src0, unsigned nx, int s_step,
   {
     accumT sum = 0;
     const srcT* s= src;
-    for (const kernelT *k = k_begin;k!=k_end; ++k,s+=s_step) sum+= (*k)*(*s);
+    for (const kernelT *k = k_begin;k!=k_end; ++k,s+=s_step) sum+= (accumT)((*k)*(*s));
     *dest = destT(sum);
   }
 
@@ -236,7 +236,7 @@ inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
 }
 
 template <class destT, class kernelT, class accumT>
-inline vil2_image_resource_sptr vil2_algo_convolve_1d<kernelT, accumT, destT>(
+inline vil2_image_resource_sptr vil2_algo_convolve_1d(
   const vil2_image_resource_sptr& src_im,
   const destT dt,
   const kernelT* kernel, int k_lo, int k_hi,
@@ -335,7 +335,7 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
 //: Create an image_resource object which convolve kernel[x] x in [k_lo,k_hi] with srcT
 // \param kernel should point to tap 0.
 template <class destT, class kernelT, class accumT>
-inline vil2_image_resource_sptr vil2_algo_convolve_1d<kernelT, accumT, destT>(
+inline vil2_image_resource_sptr vil2_algo_convolve_1d(
   const vil2_image_resource_sptr& src_im,
   const destT dt,
   const kernelT* kernel, int k_lo, int k_hi,
