@@ -153,9 +153,13 @@ macro( vxl_int_64 )
 #endif
 macro( float )
 macro( double )
-macro( vil_rgb<vxl_byte> )
-macro( vil_rgba<vxl_byte> )
 #undef macro
+VCL_DEFINE_SPECIALIZATION
+inline void vil_convert_cast_pixel<vil_rgb<vxl_byte>, vil_rgb<vxl_byte> >::operator () (
+  vil_rgb<vxl_byte> v, vil_rgb<vxl_byte>& d) const { d.r=v.r, d.g=v.g, d.b=v.b; }
+VCL_DEFINE_SPECIALIZATION
+inline void vil_convert_cast_pixel<vil_rgba<vxl_byte>, vil_rgba<vxl_byte> >::operator () (
+  vil_rgba<vxl_byte> v, vil_rgba<vxl_byte>& d) const { d.r=v.r, d.g=v.g, d.b=v.b, d.a=v.a; }
 #define macro( in )\
 VCL_DEFINE_SPECIALIZATION \
 inline void vil_convert_cast_pixel<in,vcl_complex<double> >::operator () (in v, vcl_complex<double>& d) const \
