@@ -31,6 +31,7 @@ public:
   bool check_validity() const;
 
   // useful computational accessors
+  bool inside( const double x, const double y) const;
   bool inside( const gst_vertex_2d_ref v) const;
 
   // output

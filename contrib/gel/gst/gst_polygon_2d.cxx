@@ -53,19 +53,19 @@ bool gst_polygon_2d::check_validity() const
 //   from comp.graphics.algorithms faq
 //   should only call if validity passes (no check
 //   for efficiency)
-bool gst_polygon_2d::inside( const gst_vertex_2d_ref v) const
+bool gst_polygon_2d::inside( const double x, const double y) const
 {
   bool c= false;
 
   for( int i=0, j= edges_.size()-1; i< edges_.size(); j= i++)
     {
-      if ((((edges_[i]->get_start()->get_y()<= v->get_y()) && 
-	    (v->get_y()< edges_[j]->get_start()->get_y())) ||
-	   ((edges_[j]->get_start()->get_y()<= v->get_y()) && 
-	    (v->get_y()< edges_[i]->get_start()->get_y()))) &&
-	  (v->get_x()< (edges_[j]->get_start()->get_x() - 
-			edges_[i]->get_start()->get_x()) * (v->get_y() - 
-							    edges_[i]->get_start()->get_y()) / 
+      if ((((edges_[i]->get_start()->get_y()<= y) && 
+	    (y< edges_[j]->get_start()->get_y())) ||
+	   ((edges_[j]->get_start()->get_y()<= y) && 
+	    (y< edges_[i]->get_start()->get_y()))) &&
+	  (x< (edges_[j]->get_start()->get_x() - 
+	       edges_[i]->get_start()->get_x()) * (y - 
+						   edges_[i]->get_start()->get_y()) / 
 	   (edges_[j]->get_start()->get_y() - edges_[i]->get_start()->get_y()) + 
 	   edges_[i]->get_start()->get_x()))
 	{
@@ -75,6 +75,11 @@ bool gst_polygon_2d::inside( const gst_vertex_2d_ref v) const
     }
   
   return c;
+}
+
+bool gst_polygon_2d::inside( const gst_vertex_2d_ref v) const
+{
+  return inside( v->get_x(), v->get_y());
 }
 
 
