@@ -42,33 +42,35 @@ strk_info_tracker::~strk_info_tracker()
 void strk_info_tracker::set_image_0(vil1_image& image)
 {
   if (!image)
-    {
-      vcl_cout <<"In strk_info_tracker::set_image_i(.) - null input\n";
-      return;
-    }
+  {
+    vcl_cout <<"In strk_info_tracker::set_image_i(.) - null input\n";
+    return;
+  }
 
   vil1_memory_image_of<float> in, hue, sat;
   int w = image.width(), h = image.height();
 
-  if(!color_info_||image.components()==1)
-    {
-      vil1_memory_image_of<float> in=brip_vil1_float_ops::convert_to_float(image);
-      image_0_= brip_vil1_float_ops::gaussian(in, sigma_);
-    }
+  if (!color_info_||image.components()==1)
+  {
+    vil1_memory_image_of<float> in=brip_vil1_float_ops::convert_to_float(image);
+    image_0_= brip_vil1_float_ops::gaussian(in, sigma_);
+  }
 
-  if(color_info_&&image.components()==3)
-    {
-      vil1_memory_image_of<vil1_rgb<unsigned char> > temp(image);
-      brip_vil1_float_ops::convert_to_IHS(temp, in, hue, sat);
-      image_0_= brip_vil1_float_ops::gaussian(in, sigma_);
-      hue_0_ = brip_vil1_float_ops::gaussian(hue, sigma_);
-      sat_0_ = brip_vil1_float_ops::gaussian(sat, sigma_);
-    }
+  if (color_info_&&image.components()==3)
+  {
+    vil1_memory_image_of<vil1_rgb<unsigned char> > temp(image);
+    brip_vil1_float_ops::convert_to_IHS(temp, in, hue, sat);
+    image_0_= brip_vil1_float_ops::gaussian(in, sigma_);
+    hue_0_ = brip_vil1_float_ops::gaussian(hue, sigma_);
+    sat_0_ = brip_vil1_float_ops::gaussian(sat, sigma_);
+  }
 
-  if(gradient_info_){
-  Ix_0_.resize(w,h);
-  Iy_0_.resize(w,h);
-  brip_vil1_float_ops::gradient_3x3(image_0_, Ix_0_, Iy_0_);}
+  if (gradient_info_)
+  {
+    Ix_0_.resize(w,h);
+    Iy_0_.resize(w,h);
+    brip_vil1_float_ops::gradient_3x3(image_0_, Ix_0_, Iy_0_);
+  }
 }
 
 //-------------------------------------------------------------------------
@@ -77,33 +79,35 @@ void strk_info_tracker::set_image_0(vil1_image& image)
 void strk_info_tracker::set_image_i(vil1_image& image)
 {
   if (!image)
-    {
-      vcl_cout <<"In strk_info_tracker::set_image_i(.) - null input\n";
-      return;
-    }
+  {
+    vcl_cout <<"In strk_info_tracker::set_image_i(.) - null input\n";
+    return;
+  }
 
   vil1_memory_image_of<float> in, hue, sat;
   int w = image.width(), h = image.height();
 
-  if(!color_info_||image.components()==1)
-    {
-      vil1_memory_image_of<float> in=brip_vil1_float_ops::convert_to_float(image);
-      image_i_= brip_vil1_float_ops::gaussian(in, sigma_);
-    }
+  if (!color_info_||image.components()==1)
+  {
+    vil1_memory_image_of<float> in=brip_vil1_float_ops::convert_to_float(image);
+    image_i_= brip_vil1_float_ops::gaussian(in, sigma_);
+  }
 
-  if(color_info_&&image.components()==3)
-    {
-      vil1_memory_image_of<vil1_rgb<unsigned char> > temp(image);
-      brip_vil1_float_ops::convert_to_IHS(temp, in, hue, sat);
-      image_i_= brip_vil1_float_ops::gaussian(in, sigma_);
-      hue_i_ = brip_vil1_float_ops::gaussian(hue, sigma_);
-      sat_i_ = brip_vil1_float_ops::gaussian(sat, sigma_);
-    }
+  if (color_info_&&image.components()==3)
+  {
+    vil1_memory_image_of<vil1_rgb<unsigned char> > temp(image);
+    brip_vil1_float_ops::convert_to_IHS(temp, in, hue, sat);
+    image_i_= brip_vil1_float_ops::gaussian(in, sigma_);
+    hue_i_ = brip_vil1_float_ops::gaussian(hue, sigma_);
+    sat_i_ = brip_vil1_float_ops::gaussian(sat, sigma_);
+  }
 
-  if(gradient_info_){
-  Ix_i_.resize(w,h);
-  Iy_i_.resize(w,h);
-  brip_vil1_float_ops::gradient_3x3(image_i_, Ix_i_, Iy_i_);}
+  if (gradient_info_)
+  {
+    Ix_i_.resize(w,h);
+    Iy_i_.resize(w,h);
+    brip_vil1_float_ops::gradient_3x3(image_i_, Ix_i_, Iy_i_);
+  }
 }
 
 //--------------------------------------------------------------------------
@@ -123,9 +127,9 @@ void strk_info_tracker::init()
     return;
   strk_tracking_face_2d_sptr tf;
   tf = new strk_tracking_face_2d(initial_model_, image_0_,
-                                 Ix_0_, Iy_0_, hue_0_, sat_0_, 
+                                 Ix_0_, Iy_0_, hue_0_, sat_0_,
                                  min_gradient_,
-								 parzen_sigma_);
+                                 parzen_sigma_);
   current_samples_.push_back(tf);
  }
 
@@ -155,14 +159,14 @@ void strk_info_tracker::generate_samples()
   for (vcl_vector<strk_tracking_face_2d_sptr>::iterator fit =
        current_samples_.begin(); fit != current_samples_.end(); fit++)
     for (int i = 0; i<n_samples_; i++)
-      {
-        strk_tracking_face_2d_sptr tf;
-        tf = this->generate_randomly_positioned_sample(*fit);
-        if (!tf)
-          continue;
-        tf->compute_mutual_information(image_i_, Ix_i_, Iy_i_, hue_i_, sat_i_);
-        hypothesized_samples_.push_back(tf);
-      }
+    {
+      strk_tracking_face_2d_sptr tf;
+      tf = this->generate_randomly_positioned_sample(*fit);
+      if (!tf)
+        continue;
+      tf->compute_mutual_information(image_i_, Ix_i_, Iy_i_, hue_i_, sat_i_);
+      hypothesized_samples_.push_back(tf);
+    }
 
   //sort the hypotheses
   vcl_sort(hypothesized_samples_.begin(),
@@ -171,9 +175,13 @@ void strk_info_tracker::generate_samples()
 
 bool strk_info_tracker::refresh_sample()
 {
+#if 0
   double t = vcl_rand()/(RAND_MAX+1.0);
-//  return t<=frac_time_samples_;
-  return 0;
+  return t<=frac_time_samples_;
+#else
+  vcl_rand();
+  return false;
+#endif // 0
 }
 
 strk_tracking_face_2d_sptr strk_info_tracker::
@@ -194,10 +202,12 @@ clone_and_refresh_data(strk_tracking_face_2d_sptr const& sample)
 void strk_info_tracker::cull_samples()
 {
   current_samples_.clear();
-  for (int i =0; i<n_samples_; i++)
+  for (int i=0; i<n_samples_; i++)
+  {
     current_samples_.push_back(hypothesized_samples_[i]);
-      //     vcl_cout << "I[" << i << "]= " << hypothesized_samples_[i]->total_info() << "\n";
-      //     vcl_cout << vcl_flush;
+    if (debug_)
+      vcl_cout << "I[" << i << "]= " << hypothesized_samples_[i]->total_info() << vcl_endl;
+  }
 
   strk_tracking_face_2d_sptr tf = hypothesized_samples_[0];
   if (verbose_)
@@ -206,27 +216,19 @@ void strk_info_tracker::cull_samples()
              << ") + GradInfo(" <<  tf->grad_mutual_info()
              << ") + ColorInfo(" <<  tf->color_mutual_info()
              << ")\n" << vcl_flush;
-  
-  if(debug_)
+
+  if (debug_)
     vcl_cout << "model_intensity_entropy = " << tf->model_intensity_entropy()
-             << "\n"
-             << "intensity_entropy = " << tf->intensity_entropy()
-             << "\n"
-             << "intensity_joint_entropy = " <<tf->intensity_joint_entropy()
-             << "\n\n"
-             << "model_gradient_entropy = " << tf->model_gradient_entropy()
-             << "\n"
-             << "gradient_entropy = " << tf->gradient_entropy()
-             << "\n"
-             << "gradient_joint_entropy = " << tf->gradient_joint_entropy()
-             << "\n\n"
-             << "model_color_entropy = " << tf->model_color_entropy()
-             << "\n"
-             << "color_entropy = " << tf->color_entropy()
-             << "\n"
-             << "color_joint_entropy = " << tf->color_joint_entropy()
+             << "\nintensity_entropy = " << tf->intensity_entropy()
+             << "\nintensity_joint_entropy = " <<tf->intensity_joint_entropy()
+             << "\n\nmodel_gradient_entropy = " << tf->model_gradient_entropy()
+             << "\ngradient_entropy = " << tf->gradient_entropy()
+             << "\ngradient_joint_entropy = " << tf->gradient_joint_entropy()
+             << "\n\nmodel_color_entropy = " << tf->model_color_entropy()
+             << "\ncolor_entropy = " << tf->color_entropy()
+             << "\ncolor_joint_entropy = " << tf->color_joint_entropy()
              << "\n\n\n" << vcl_flush;
-  
+
   hypothesized_samples_.clear();
   //save track history
   strk_tracking_face_2d_sptr refreshed_best =
@@ -246,85 +248,87 @@ void strk_info_tracker::refine_best_sample()
   double idtx_max=0, idty_max=0, inf_max= btf->total_info();
   double inf = 0;
   double xrange = 0, yrange = 0;
-  vcl_cout << "Initial Info " << inf_max << "\n";
+  vcl_cout << "Initial Info " << inf_max << vcl_endl;
   double range_fraction = 0.1;
-  if (false)
-    //  if (initial_model_)
+  if (false) //  if (initial_model_)
+  {
+    vtol_face* f = (vtol_face_2d*)initial_model_->cast_to_face();
+    vtol_topology_object* to = (vtol_topology_object*)f;
+    vsol_spatial_object_2d* so = (vsol_spatial_object_2d*)to;
+    vsol_box_2d_sptr bb = so->get_bounding_box();
+    if (bb)
     {
-      vtol_face* f = (vtol_face_2d*)initial_model_->cast_to_face();
-      vtol_topology_object* to = (vtol_topology_object*)f;
-      vsol_spatial_object_2d* so = (vsol_spatial_object_2d*)to;
-      vsol_box_2d_sptr bb = so->get_bounding_box();
-      if (bb)
-        {
-          xrange = range_fraction*bb->width();
-          yrange = range_fraction*bb->height();
-        }
+      xrange = range_fraction*bb->width();
+      yrange = range_fraction*bb->height();
     }
+  }
   double dx = (2*xrange)/n_samples_, dy = (2*yrange)/n_samples_;
-  vcl_cout << "X,Y range(" << xrange << " " << yrange << ")\n";
+  vcl_cout << "X,Y range(" << xrange << ' ' << yrange << ")\n";
   strk_tracking_face_2d_sptr tf = new strk_tracking_face_2d(btf);
   for (double ty = -yrange; ty<=yrange; ty+=dy)
     for (double tx = -xrange; tx<=xrange;tx+=dx)
+    {
+      if (tx||ty)
       {
-        if (tx||ty)
-          {
-            tf->transform(tx, ty, 0, 1.0);
-            this->mutual_info_face(tf);
-            inf = tf->total_info();
-            //            vcl_cout << "(" << tx << " " << ty  << ")=" << inf << "\n";
-            tf->transform(-tx, -ty, 0, 1.0);
-            if (inf>inf_max)
-              {
-                inf_max = inf;
-                idtx_max = tx;
-                idty_max = ty;
-              }
-          }
+        tf->transform(tx, ty, 0, 1.0);
+        this->mutual_info_face(tf);
+        inf = tf->total_info();
+        if (debug_)
+          vcl_cout << '(' << tx << ' ' << ty  << ")=" << inf << vcl_endl;
+        tf->transform(-tx, -ty, 0, 1.0);
+        if (inf>inf_max)
+        {
+          inf_max = inf;
+          idtx_max = tx;
+          idty_max = ty;
+        }
       }
+    }
   idtx = idtx_max;
   idty = idty_max;
-//   float dtx = 0, dty = 0, dth = 0, ds = 0;
-//   double bgtx=0, bgty=0, bgth=0, bgsc=1.0;
-//   double gtx=0, gty=0, gth=0, gsc=1.0;
-//   baf->global_transform(bgtx, bgty, bgth, bgsc);
-//   strk_quadratic_interpolator qtrans;
-//   // strk_parabolic_interpolator pith;
-//   //   strk_parabolic_interpolator pisc;
-//   for (int i = 0; i<search_pattern.size(); i++)
-//     {
-//       strk_tracking_face_2d_sptr af = search_pattern[i];
-//       if (!af)
-//         continue;
-//       af->global_transform(gtx, gty, gth, gsc);
-//       dtx = gtx-bgtx; dty = gty-bgty;
-//       //       dth = gth-bgth;
-//       //       ds = gsc/bgsc-1.0;
-//       double inf = af->total_info();
-//       qtrans.add_data_point(dtx,dty,inf);
-//       //       pith.add_data_point(dth, inf);
-//       //       pisc.add_data_point(ds, inf);
-//     }
+#if 0 // 34 lines commented out
+  float dtx = 0, dty = 0, dth = 0, ds = 0;
+  double bgtx=0, bgty=0, bgth=0, bgsc=1.0;
+  double gtx=0, gty=0, gth=0, gsc=1.0;
+  baf->global_transform(bgtx, bgty, bgth, bgsc);
+  strk_quadratic_interpolator qtrans;
+  strk_parabolic_interpolator pith;
+  strk_parabolic_interpolator pisc;
+  for (int i = 0; i<search_pattern.size(); i++)
+  {
+    strk_tracking_face_2d_sptr af = search_pattern[i];
+    if (!af)
+      continue;
+    af->global_transform(gtx, gty, gth, gsc);
+    dtx = gtx-bgtx; dty = gty-bgty;
+    dth = gth-bgth;
+    ds = gsc/bgsc-1.0;
+    double inf = af->total_info();
+    qtrans.add_data_point(dtx,dty,inf);
+    pith.add_data_point(dth, inf);
+    pisc.add_data_point(ds, inf);
+  }
 
-//   if (search_radius_&&qtrans.solve())
-//     qtrans.extremum(idtx, idty);
-  //limit the interpolated value
-  //   if (vcl_fabs(idtx)>search_radius_)
-  //     idtx = 0;
-  //   if (vcl_fabs(idty)>search_radius_)
-  //     idty = 0;
-  //   if (vcl_fabs(idth)>angle_range_)
-  //     idth = 0;
-  //   if (vcl_fabs(ids)>scale_range_)
-  //     ids = 0;
+  if (search_radius_&&qtrans.solve())
+    qtrans.extremum(idtx, idty);
+  // limit the interpolated value
+  if (vcl_fabs(idtx)>search_radius_)
+    idtx = 0;
+  if (vcl_fabs(idty)>search_radius_)
+    idty = 0;
+  if (vcl_fabs(idth)>angle_range_)
+    idth = 0;
+  if (vcl_fabs(ids)>scale_range_)
+    ids = 0;
+#endif // 0
   btf->transform(idtx, idty, idth, 1.0+ids);
   this->mutual_info_face(btf);
   double info = btf->total_info();
-  vcl_cout << "Final dtrans (" << idtx << " " << idty
-           << " " << idth << " " << ids << ") = " << info
-           <<  "\n" << vcl_flush;
+  vcl_cout << "Final dtrans (" << idtx << ' ' << idty
+           << ' ' << idth << ' ' << ids << ") = " << info
+           << vcl_endl;
 }
-#endif
+#endif // 0
 
 //--------------------------------------------------------------------------
 //: because of sorting, the best sample will be the first current sample
@@ -353,7 +357,7 @@ void strk_info_tracker::track()
   vul_timer t;
   this->generate_samples();
   if (verbose_)
-    vcl_cout << "Samples generated " << t.real() << " msecs.\n";
+    vcl_cout << "Samples generated in " << t.real() << " msecs.\n";
   this->cull_samples();
 }
 
@@ -364,7 +368,7 @@ void strk_info_tracker::clear()
 }
 
 //--------------------------------------------------------------------------
-//: Evaluate information between I_0 and I_i at the initial region 
+//: Evaluate information between I_0 and I_i at the initial region
 //  Useful for debugging purposes.
 void strk_info_tracker::evaluate_info()
 {
@@ -375,33 +379,25 @@ void strk_info_tracker::evaluate_info()
                               Ix_0_, Iy_0_, hue_0_, sat_0_,
                               min_gradient_,
                               parzen_sigma_);
-  if(!tf->compute_mutual_information(image_i_, Ix_i_, Iy_i_, hue_i_, sat_i_))
+  if (!tf->compute_mutual_information(image_i_, Ix_i_, Iy_i_, hue_i_, sat_i_))
     return;
-  
+
   if (verbose_)
     vcl_cout << "Total Inf = " << tf->total_info()
              << " = IntInfo(" <<  tf->int_mutual_info()
              << ") + GradInfo(" <<  tf->grad_mutual_info()
              << ") + ColorInfo(" <<  tf->color_mutual_info()
              << ")\n" << vcl_flush;
-  
-  if(debug_)
+
+  if (debug_)
     vcl_cout << "model_intensity_entropy = " << tf->model_intensity_entropy()
-             << "\n"
-             << "intensity_entropy = " << tf->intensity_entropy()
-             << "\n"
-             << "intensity_joint_entropy = " <<tf->intensity_joint_entropy()
-             << "\n\n"
-             << "model_gradient_entropy = " << tf->model_gradient_entropy()
-             << "\n"
-             << "gradient_entropy = " << tf->gradient_entropy()
-             << "\n"
-             << "gradient_joint_entropy = " << tf->gradient_joint_entropy()
-             << "\n\n"
-             << "model_color_entropy = " << tf->model_color_entropy()
-             << "\n"
-             << "color_entropy = " << tf->color_entropy()
-             << "\n"
-             << "color_joint_entropy = " << tf->color_joint_entropy()
+             << "\nintensity_entropy = " << tf->intensity_entropy()
+             << "\nintensity_joint_entropy = " <<tf->intensity_joint_entropy()
+             << "\n\nmodel_gradient_entropy = " << tf->model_gradient_entropy()
+             << "\ngradient_entropy = " << tf->gradient_entropy()
+             << "\ngradient_joint_entropy = " << tf->gradient_joint_entropy()
+             << "\n\nmodel_color_entropy = " << tf->model_color_entropy()
+             << "\ncolor_entropy = " << tf->color_entropy()
+             << "\ncolor_joint_entropy = " << tf->color_joint_entropy()
              << "\n\n\n"<< vcl_flush;
 }
