@@ -12,9 +12,7 @@
 
 #ifndef JPEGLIB_H
 #define JPEGLIB_H
-#ifdef __cplusplus
-extern "C" {
-#endif
+
 /*
  * First we include the configuration files that record how this
  * installation of the JPEG library is set up.  jconfig.h can be
@@ -1053,7 +1051,5 @@ struct jpeg_color_quantizer { long dummy; };
 #include "jpegint.h"		/* fetch private declarations */
 #include "jerror.h"		/* fetch error codes too */
 #endif
-#ifdef __cplusplus
-}
-#endif
+
 #endif /* JPEGLIB_H */

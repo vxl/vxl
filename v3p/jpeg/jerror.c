@@ -13,6 +13,10 @@
  * These routines are used by both the compression and decompression code.
  */
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 /* this is not a core library module, so it doesn't define JPEG_INTERNALS */
 #include "jinclude.h"
 #include "jpeglib.h"
@@ -84,8 +88,12 @@ output_message (j_common_ptr cinfo)
   /* Create the message */
   (*cinfo->err->format_message) (cinfo, buffer);
 
+/* #ifdef _WIN32 */
+/*   MessageBox(GetActiveWindow(), buffer, "JPEG Error", MB_OK); */
+/* #else */
   /* Send it to stderr, adding a newline */
   fprintf(stderr, "%s\n", buffer);
+/* #endif */
 }
 
 

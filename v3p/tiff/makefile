@@ -34,6 +34,7 @@ SOURCES += tif_strip.c
 SOURCES += tif_tile.c
 SOURCES += tif_warning.c
 SOURCES += tif_write.c
+SOURCES += tif_aux.c
 
 DOCFILES = tiff
 

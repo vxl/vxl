@@ -185,9 +185,21 @@ typedef unsigned int JDIMENSION;
 /* a function used only in its module: */
 #define LOCAL(type)		static type
 /* a function referenced thru EXTERNs: */
+#if defined(_WIN32) && defined(_jpeg_mak)
+#define GLOBAL(type)		__declspec(dllexport) type
+#else
 #define GLOBAL(type)		type
+#endif
 /* a reference to a GLOBAL function: */
+#ifdef _WIN32
+#ifdef _jpeg_mak
+#define EXTERN(type)		__declspec(dllexport) type
+#else  /* not building dll */
+#define EXTERN(type)		__declspec(dllimport) type
+#endif
+#else  /* not _WIN32 */
 #define EXTERN(type)		extern type
+#endif
 
 
 /* This macro is used to declare a "method", that is, a function pointer.
@@ -209,10 +221,12 @@ typedef unsigned int JDIMENSION;
  * explicit coding is needed; see uses of the NEED_FAR_POINTERS symbol.
  */
 
+#ifndef FAR
 #ifdef NEED_FAR_POINTERS
 #define FAR  far
 #else
 #define FAR
+#endif
 #endif
 
 
@@ -224,8 +238,11 @@ typedef unsigned int JDIMENSION;
  */
 
 #ifndef HAVE_BOOLEAN
-/*typedef int boolean;*/
-typedef unsigned int boolean; 
+#ifdef _WIN32
+typedef unsigned char boolean;
+#else
+typedef int boolean;
+#endif
 #endif
 #ifndef FALSE			/* in case these macros already exist */
 #define FALSE	0		/* values of boolean */
