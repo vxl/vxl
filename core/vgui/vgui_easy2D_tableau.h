@@ -27,6 +27,7 @@
 #include <vgui/vgui_parent_child_link.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_easy2D_tableau_sptr.h>
+#include <vgui/vgui_style.h>
 #include <vgui/vgui_style_sptr.h>
 
 class vgui_soview2D;
