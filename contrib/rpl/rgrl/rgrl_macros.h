@@ -13,42 +13,42 @@
 #endif
 
 //: Macro to print the debug message in a class member functions
-#define DebugMacro(level, x) \
-{ if (this->debug_flag() >= level) { \
+#define DebugMacro(level, x) do \
+{ if (level == 0 || this->debug_flag() >= level) { \
     vcl_cout<< "Debug: "<< RGRL_HERE << " ( line " \
             << __LINE__ <<" )\n" << "       "<<x; } \
-}
+} while (false)
 
 //: Macro to print the debug message without preprocessor info
-#define DebugMacro_abv(level, x) \
-{ if (this->debug_flag() >= level) { vcl_cout<<"       "<<x; } \
-}
+#define DebugMacro_abv(level, x) do \
+{ if (level == 0 || this->debug_flag() >= level) { vcl_cout<<"       "<<x; } \
+} while (false)
 
 //: Macro to print the warning message in a class member functions
-#define WarningMacro(x) \
+#define WarningMacro(x) do \
 {  if ( this->warning() ) { \
      vcl_cout<< "WARNING: "<< RGRL_HERE <<" ( line " \
              << __LINE__ <<" )\n" \
              << "       "<<x; }  \
-}
+} while (false)
 
 //: Macro to print the warning message without class info
-#define WarningMacro_abv(x) \
+#define WarningMacro_abv(x) do \
 { if ( this->warning() ) { \
     vcl_cout<<<"WARNING: "<<x; } \
-}
+} while (false)
 
 //: Macro to print the debug message in a stand-alone function
-#define DebugFuncMacro(flag, level, x) \
+#define DebugFuncMacro(flag, level, x) do \
 { if (flag >= level) { \
     vcl_cout<< "Debug: " << RGRL_HERE << " ( line " \
             << __LINE__ <<" )\n" << "       "<<x; } \
-}
+} while (false)
 
 //: Macro to print the debug message in a stand-alone function without preprocessor info
-#define DebugFuncMacro_abv(flag, level, x) \
+#define DebugFuncMacro_abv(flag, level, x) do \
 { if (flag >= level) { vcl_cout<<"       "<<x; } \
-}
+} while (false)
 
 //: Macro to define type-related functions of the class
 //

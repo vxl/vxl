@@ -448,8 +448,9 @@ register_single_feature( rgrl_mask_box            image_region,
 
     if ( failed ) {
       if ( !scale_in_range )
-        DebugMacro(  1, " Geometric scale above the expected value\n" )
-      else DebugMacro( 1, " Failed with empty match set, or irls estimation\n" )
+        DebugMacro(  1, " Geometric scale above the expected value\n" );
+      else
+        DebugMacro( 1, " Failed with empty match set, or irls estimation\n" );
       continue;
     }
     if ( current_status->has_converged() )
@@ -715,8 +716,9 @@ register_multi_feature( rgrl_mask_box            image_region,
 
       if ( failed ) {
         if ( !scale_in_range )
-          DebugMacro(  2, " Geometric scale above the expected value\n" )
-        else DebugMacro(  2, " Failed with empty match set, or feature_based\n" );
+          DebugMacro(  2, " Geometric scale above the expected value\n" );
+        else
+          DebugMacro(  2, " Failed with empty match set, or feature_based\n" );
         continue;
       }
       if ( current_status->has_converged() )

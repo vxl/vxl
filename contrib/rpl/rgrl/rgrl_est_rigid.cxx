@@ -172,7 +172,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     //
 
     cur_stat.push_back(vnl_determinant(R));
-    DebugMacro_abv(2, "about to orthonormalize with determinant "<<vnl_determinant(R)<<vcl_endl;)
+    DebugMacro_abv(2, "about to orthonormalize with determinant "<<vnl_determinant(R)<<vcl_endl);
     vnl_svd<double> svdR( R );
 
     // Set singular values to unity
