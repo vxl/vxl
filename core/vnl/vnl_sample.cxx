@@ -17,7 +17,7 @@ double vnl_sample_uniform(double a, double b)
     // so use the following congruential random number generator - PVr
   static unsigned long seed = 12345;
   seed = (seed*16807)%2147483647L;
-  double u = seed/2147483711;
+  double u = (double)seed/2147483711.0;
 #else
     // If you don't have drand48() you must define 
     // the macro VCL_NO_DRAND48 somewhere.
