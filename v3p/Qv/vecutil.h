@@ -40,17 +40,16 @@
 #define harmony_scene_vecutil_h
 
 #include "vectors.h"
+#include "Qv_pi.h"
 
 #include <vcl_ostream.h>
 
-#include <vcl_compiler.h>
 #ifdef VCL_WIN32
 #  include <vcl_cfloat.h>
 #  ifndef MAXFLOAT
 #    define MAXFLOAT FLT_MAX
 #  endif
-#  define QV_PI   3.14159265358979323846  // M_PI is not iso standard
-#  define QV_PI_4 0.78539816339744830962  // M_PI_4 is not iso standard
+// QV_PI defined in Qv_pi.h now. It's not specific to windows.
 #  define ARRAYconst  /* gorasche: causes problems with MSC */
 #else
 #  ifndef FREEBSD

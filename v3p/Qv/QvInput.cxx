@@ -394,7 +394,7 @@ QvInput::readInteger(long &l)
     if (! readUnsignedIntegerString(s))
 	return FALSE;
 
-    l = strtol(str, NULL, 0);
+    l = vcl_strtol(str, NULL, 0);
 
     return TRUE;
 }
@@ -406,7 +406,7 @@ QvInput::readUnsignedInteger(unsigned long &l)
     if (! readUnsignedIntegerString(str))
 	return FALSE;
 
-    l = strtoul(str, NULL, 0);
+    l = vcl_strtoul(str, NULL, 0);
 
     return TRUE;
 }
