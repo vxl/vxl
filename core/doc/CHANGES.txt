@@ -5,7 +5,7 @@ alias chall "~/target/vxl/vgui/findsrc . | xargs iue-subst.pl "
 
 
 s!IUE_numeric_traits!vnl_numeric_traits!g;
-s!IUE_string.h!vcl/vcl_string.h!g;
+s!IUE_string.h!vcl_string.h!g;
 s!\bIUE_math\b!math!g;
 s!\bImageBuffer\b!vnl_memory_image_of!g;
 s!\blist\b!vcl_list!g;
@@ -15,13 +15,13 @@ s!\bstring\b!vcl_string!g;
 s!\bvector\b!vcl_vector!g;
 s!<math/math.h>!<vnl/vnl_math.h>!g;
 s!<math/numeric_traits.h>!<vnl/vnl_numeric_traits.h>!g;
-s!IUE_string.h!vcl/vcl_string.h!g;
+s!IUE_string.h!vcl_string.h!g;
 s!\bstring\b!vcl_string!g;
 s!\bRGBcell\b!vbl_rgb<byte>!g;
 s!\bVGUI_refcount!vbl_ref_count!g;
 s!Basics/IUE_sprintf.h!vbl/vbl_sprintf.h!g;
 s!Basics/RGB.h!vbl/vbl_rgb.h!g;
-s!<vector.h>!<vcl/vcl_vector.h>!g;
+s!<vector.h>!<vcl_vector.h>!g;
 s!\bvector\b!vcl_vector!g;
 s!INSTANTIATE_COPY!VCL_COPY_INSTANTIATE!g;
 s!INSTANTIATE_COPY!VCL_COPY_INSTANTIATE!g;
