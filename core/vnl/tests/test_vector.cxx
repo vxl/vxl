@@ -107,6 +107,8 @@ void vnl_vector_test_int() {
     vnl_vector<int> v3(3,3,v3values);
     TEST("dot_product(v1,v2)",
          (dot_product(v1,v2)==0 && dot_product(v1,v3)==0 && dot_product(v2,v3)==0), true);
+    TEST("dot_product(v1,v1)",
+         (dot_product(v1,v1)==1 && dot_product(v2,v2)==1 && dot_product(v3,v3)==1), true);
     TEST("4d-v=3d-v", ((v = v3), v.size()==3 && v==v3), true);
     TEST("cross_3d(v1,v2)", cross_3d(v1,v2), v3);
     TEST("cross_3d(v2,v3)", cross_3d(v2,v3), v1);
