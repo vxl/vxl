@@ -1,4 +1,4 @@
-// This is oxl/mvl/vgl_h_matrix_2d_compute_linear.cxx
+// This is core/vgl/algo/vgl_h_matrix_2d_compute_linear.cxx
 #include "vgl_h_matrix_2d_compute_linear.h"
 //:
 //  \file
@@ -99,8 +99,8 @@ solve_linear_problem(int equ_count,
   // FSM added :
   //
   if (svd.W(7)<DEGENERACY_THRESHOLD*svd.W(8)) {
-    vcl_cerr << "vgl_h_matrix_2d_compute_linear : design matrix has rank < 8" << vcl_endl;
-    vcl_cerr << "vgl_h_matrix_2d_compute_linear : probably due to degenerate point configuration" << vcl_endl;
+    vcl_cerr << "vgl_h_matrix_2d_compute_linear : design matrix has rank < 8\n"
+             << "vgl_h_matrix_2d_compute_linear : probably due to degenerate point configuration\n";
     return false;
   }
   // form the matrix from the nullvector
@@ -113,7 +113,7 @@ compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
           vcl_vector<vgl_homg_point_2d<double> > const& points2,
           vgl_h_matrix_2d<double>& H)
 {
-  //number of points must be the same 
+  //number of points must be the same
   assert(points1.size() == points2.size());
   int n = points1.size();
 
@@ -125,21 +125,21 @@ compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   }
   //compute the normalizing transforms
   vgl_norm_trans_2d<double> tr1, tr2;
-  if(!tr1.compute_from_points(points1))
+  if (!tr1.compute_from_points(points1))
     return false;
-  if(!tr2.compute_from_points(points2))
+  if (!tr2.compute_from_points(points2))
     return false;
   vcl_vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
-  for(int i = 0; i<n; i++)
+  for (int i = 0; i<n; i++)
     {
       tpoints1.push_back(tr1(points1[i]));
       tpoints2.push_back(tr2(points2[i]));
     }
   vgl_h_matrix_2d<double> hh;
-  if(!solve_linear_problem(equ_count, tpoints1, tpoints2, hh))
+  if (!solve_linear_problem(equ_count, tpoints1, tpoints2, hh))
     return false;
   //
-  // Next, hh has to be transformed back to the coordinate system of 
+  // Next, hh has to be transformed back to the coordinate system of
   // the original point sets, i.e.,
   //  p1' = tr1 p1 , p2' = tr2 p2
   // hh was detemined from the transform relation
@@ -156,40 +156,40 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
           vcl_vector<vgl_homg_line_2d<double> > const& lines2,
           vgl_h_matrix_2d<double>& H)
 {
-  //number of lines must be the same 
+  //number of lines must be the same
   assert(lines1.size() == lines2.size());
   int n = lines1.size();
   int equ_count = 2*n;
   //compute the normalizing transforms. By convention, these are point
   //transformations.
   vgl_norm_trans_2d<double> tr1, tr2;
-  if(!tr1.compute_from_lines(lines1))
+  if (!tr1.compute_from_lines(lines1))
     return false;
-  if(!tr2.compute_from_lines(lines2))
+  if (!tr2.compute_from_lines(lines2))
     return false;
   vcl_vector<vgl_homg_point_2d<double> > tlines1, tlines2;
-  for(vcl_vector<vgl_homg_line_2d<double> >::const_iterator 
-        lit = lines1.begin(); lit != lines1.end(); lit++)
+  for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
+       lit = lines1.begin(); lit != lines1.end(); lit++)
     {
       // transform the lines according to the normalizing transform
       vgl_homg_line_2d<double> l = tr1(*lit);
       // convert the line to a point to use the same linear code
-      vgl_homg_point_2d<double> p(l.a(), l.b(), l.c()); 
+      vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
       tlines1.push_back(p);
     }
-  for(vcl_vector<vgl_homg_line_2d<double> >::const_iterator 
-        lit = lines2.begin(); lit != lines2.end(); lit++)
+  for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
+       lit = lines2.begin(); lit != lines2.end(); lit++)
     {
       // transform the lines according to the normalizing transform
       vgl_homg_line_2d<double> l = tr2(*lit);
       // convert the line to a point to use the same linear code
-      vgl_homg_point_2d<double> p(l.a(), l.b(), l.c()); 
+      vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
       tlines2.push_back(p);
   }
-    
+
 
   vgl_h_matrix_2d<double> hl,hp,tr2inv;
-  if(!solve_linear_problem(equ_count, tlines1, tlines2, hl))
+  if (!solve_linear_problem(equ_count, tlines1, tlines2, hl))
     return false;
   // The result is a transform on lines so we need to convert it to
   // a point transform, i.e., hp = hl^-t.
@@ -197,7 +197,7 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
   vnl_matrix_fixed<double, 3, 3> Mp = (vnl_inverse(Ml)).transpose();
   hp.set(Mp);
   //
-  // Next, hp has to be transformed back to the coordinate system of 
+  // Next, hp has to be transformed back to the coordinate system of
   // the original lines, i.e.,
   //  l1' = tr1 l1 , l2' = tr2 l2
   // hp was determined from the transform relation
@@ -209,17 +209,18 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
   return true;
 }
 //--------------------------------------------------------
-//: The solution equations should be weighted by the length of 
-//  the corresponding line matches.  This weighting is given by w. 
+//:
+//  The solution equations should be weighted by the length of
+//  the corresponding line matches.  This weighting is given by w.
 //
-//  The two equations resulting from l1i<->l2i should be 
+//  The two equations resulting from l1i<->l2i should be
 //  weighted by wi.  Form a m x m diagonal matrix W with elements from w,
-//  with m = 2*Nc, where Nc=l1.size()=l2.size() is the number of 
-//  corresponding line pairs.  The weighted least squares problem is 
+//  with m = 2*Nc, where Nc=l1.size()=l2.size() is the number of
+//  corresponding line pairs.  The weighted least squares problem is
 //  expressed as:
 //
-//               (D^tWD)x = Mx = 0  
-//            
+//               (D^tWD)x = Mx = 0
+//
 //  where D is the design matrix and x is the 9 element vector of unknown
 //  homography matrix elements. This problem can be solved using SVD as in the
 //  case of unweighted least squares.
@@ -231,11 +232,11 @@ solve_weighted_least_squares(vcl_vector<vgl_homg_line_2d<double> > const& l1,
                              vgl_h_matrix_2d<double>& H)
 {
   int Nc = l1.size();
-  // Note the w has size Nc so we need to form a 2*Nc vector with 
+  // Note the w has size Nc so we need to form a 2*Nc vector with
   // repeated values
   vnl_vector<double> two_w(2*Nc);
   int j =0;
-  for(int i = 0; i<Nc; i++, j+=2)
+  for (int i = 0; i<Nc; i++, j+=2)
     {
       two_w[j]=w[i];
       two_w[j+1]=w[i];
@@ -278,8 +279,8 @@ solve_weighted_least_squares(vcl_vector<vgl_homg_line_2d<double> > const& l1,
   // FSM added :
   //
   if (svd.W(7)<DEGENERACY_THRESHOLD*svd.W(8)) {
-    vcl_cerr << "vgl_h_matrix_2d_compute_linear : design matrix has rank < 8" << vcl_endl;
-    vcl_cerr << "vgl_h_matrix_2d_compute_linear : probably due to degenerate point configuration" << vcl_endl;
+    vcl_cerr << "vgl_h_matrix_2d_compute_linear : design matrix has rank < 8\n"
+             << "vgl_h_matrix_2d_compute_linear : probably due to degenerate point configuration\n";
     return false;
   }
   // form the matrix from the nullvector
@@ -293,35 +294,34 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
           vcl_vector<double> const & weights,
           vgl_h_matrix_2d<double>& H)
 {
-  //number of lines must be the same 
+  //number of lines must be the same
   assert(lines1.size() == lines2.size());
   int n = lines1.size();
   //compute the normalizing transforms. By convention, these are point
   //transformations.
   vgl_norm_trans_2d<double> tr1, tr2;
-  if(!tr1.compute_from_lines(lines1))
+  if (!tr1.compute_from_lines(lines1))
     return false;
-  if(!tr2.compute_from_lines(lines2))
+  if (!tr2.compute_from_lines(lines2))
     return false;
   vcl_vector<vgl_homg_line_2d<double> > tlines1, tlines2;
-  for(vcl_vector<vgl_homg_line_2d<double> >::const_iterator 
-        lit = lines1.begin(); lit != lines1.end(); lit++)
+  for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
+       lit = lines1.begin(); lit != lines1.end(); lit++)
     {
       // transform the lines according to the normalizing transform
       vgl_homg_line_2d<double> l = tr1(*lit);
       tlines1.push_back(l);
     }
-  for(vcl_vector<vgl_homg_line_2d<double> >::const_iterator 
-        lit = lines2.begin(); lit != lines2.end(); lit++)
+  for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
+       lit = lines2.begin(); lit != lines2.end(); lit++)
     {
       // transform the lines according to the normalizing transform
       vgl_homg_line_2d<double> l = tr2(*lit);
       tlines2.push_back(l);
   }
-    
 
   vgl_h_matrix_2d<double> hl,hp,tr2inv;
-  if(!solve_weighted_least_squares(tlines1, tlines2, weights, hl))
+  if (!solve_weighted_least_squares(tlines1, tlines2, weights, hl))
     return false;
   // The result is a transform on lines so we need to convert it to
   // a point transform, i.e., hp = hl^-t.
@@ -329,7 +329,7 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
   vnl_matrix_fixed<double, 3, 3> Mp = (vnl_inverse(Ml)).transpose();
   hp.set(Mp);
   //
-  // Next, hp has to be transformed back to the coordinate system of 
+  // Next, hp has to be transformed back to the coordinate system of
   // the original lines, i.e.,
   //  l1' = tr1 l1 , l2' = tr2 l2
   // hp was determined from the transform relation
