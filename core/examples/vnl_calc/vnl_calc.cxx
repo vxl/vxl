@@ -98,7 +98,7 @@ int main(int argc, char ** argv)
 #define SHIFT { if (++i >= argc) cantshift(arg); else arg = argv[i]; }
 
     if (arg[0] >= '0' && arg[0] <= '9') {
-      stack.push(Matrix(1,1,atof(arg.c_str())));
+      stack.push(Matrix(1,1,vcl_atof(arg.c_str())));
     }
     else if (arg == "+") {
       POP2(a+b);
