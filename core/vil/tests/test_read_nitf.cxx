@@ -9,13 +9,15 @@
 
 #include <vil/vil_open.h>
 #include <vil/vil_stream.h>
+#include <vil/file_formats/vil_nitf.h>
 
 #include <vpgl/vpgl_rational_camera.h>
-#include <ge_file_formats/vil_nitf.h>
 
-//: Test to read NITF file using class vil_nitf.
-//
-static void test_read_nitf(char const* filename)
+/**
+ * Test to read NITF file using class vil_nitf.
+ * NOTE: Only reads header data.
+ */
+static void test_read_nitf (char const* filename)
 {
     static vcl_string method_name = "test_read_nitf: ";
 
@@ -178,18 +180,17 @@ static void test_read_nitf(char const* filename)
 }  // end method test_read_nitf
 
 //*****************************************************************************
-int main(int argc, char **argv)
+int main (int argc, char **argv)
 {
     static vcl_string method_name = "main: ";
 
-    char * test_input_file = "schen9_29a.nitf";
+    vcl_cout << "argc = " << argc << vcl_endl ;
 
-    vcl_cout << "argc = " << argc << vcl_endl;
     if (argc > 1) {
-      for (int i = 1; i < argc; ++i) {
-        vcl_cout << "argv[" << i << "] = <" << argv[i] << ">\n";
-        test_input_file = argv[i];
-        test_read_nitf(test_input_file);
+      for (int i = 1 ; i < argc ; ++i) { 
+	vcl_cout << "argv[" << i << "] = <" << argv[i] << ">" << vcl_endl ;
+	char * test_input_file = argv[i] ;
+	test_read_nitf (test_input_file) ;
       }
     }
     else {
