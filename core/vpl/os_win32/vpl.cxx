@@ -48,3 +48,8 @@ vpl_usleep( unsigned int t )
   Sleep( t / 1000 );
   return 0;
 }
+
+int vpl_putenv ( const char * envvar )
+{
+  return _putenv(envvar);
+}

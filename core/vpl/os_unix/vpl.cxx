@@ -57,3 +57,9 @@ vpl_usleep( unsigned int t )
   return 0;
 #endif
 }
+
+
+int vpl_putenv ( const char * envvar )
+{
+  return putenv(envar);
+}
