@@ -13,11 +13,7 @@
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/algo/vnl_netlib.h>
 
-#ifndef vnl_qr_fsm
-#define vnl_qr_fsm 0
-#endif
-
-#if vnl_qr_fsm
+#ifdef HAS_FSM_PACK
 template <typename T> int fsm_qrdc_cxx(vnl_netlib_qrdc_proto(T));
 template <typename T> int fsm_qrsl_cxx(vnl_netlib_qrsl_proto(T));
 # define vnl_linpack_qrdc fsm_qrdc_cxx
