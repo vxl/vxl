@@ -77,7 +77,6 @@ SOURCE_FILES(vgui_sources
   vgui_tableau.h
   vgui_tag.h
   vgui_test.h
-  vgui_text.h
   vgui_text_graph.h
   vgui_text_put.h
   vgui_text_tableau.h
