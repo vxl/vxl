@@ -5,7 +5,11 @@
 #pragma interface
 #endif
 //
-// Class : vnl_linear_system
+// .NAME        vnl_linear_system
+// .LIBRARY     vnl
+// .HEADER	vxl package
+// .INCLUDE     vnl/vnl_linear_system.h
+// .FILE        vnl/vnl_linear_system.cxx
 //
 // .SECTION Description
 //    vnl_linear_system provides an abstraction for a linear system
@@ -15,11 +19,6 @@
 //    makes it possible to solve very large, sparse systems which it would
 //    be inefficient to store in matrix form.
 //
-// .NAME        vnl_linear_system
-// .LIBRARY     vnl
-// .HEADER	Numerics Package
-// .INCLUDE     vnl/vnl_linear_system.h
-// .FILE        vnl/vnl_linear_system.cxx
 // .SECTION Author
 //     David Capel, capes@robots, July 2000
 //

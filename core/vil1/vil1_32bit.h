@@ -10,7 +10,8 @@
 // The endianness refers to the format in the stream, not the
 // native format of the compiler or execution environment.
 //
-// .AUTHOR fsm
+// .SECTION Author
+//     fsm
 
 class vil_stream;
 #include <vxl_misc_config.h>

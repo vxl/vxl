@@ -1,17 +1,13 @@
-
 #ifndef vtol_hierarchy_node_3d_h_
 #define vtol_hierarchy_node_3d_h_
 //-----------------------------------------------------------------------------
-//
-// Class : vtol_hierarchy_node_3d
-//
 //
 // .NAME        vtol_hierarchy_node_3d - Base class of TwoChain and OneChain (representation of holes)
 // .LIBRARY     vtol
 // .HEADER vxl package
 // .INCLUDE     vtol/vtol_hierarchy_node_3d.h
-// .FILE        vtol_hierarchy_node_3d.h
 // .FILE        vtol_hierarchy_node_3d.cxx
+//
 // .SECTION Author
 //     Patricia A. Vrobel
 // .SECTION Description

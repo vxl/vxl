@@ -4,7 +4,8 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// Author: awf@robots.ox.ac.uk
+// .SECTION Author
+//    awf@robots.ox.ac.uk
 // Created: 15 Mar 00
 
 #include <vcl/vcl_string.h>

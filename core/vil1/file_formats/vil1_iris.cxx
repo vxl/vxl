@@ -5,8 +5,6 @@
 //
 // Author: Joris Schouteden
 // Created: 17 Feb 2000
-// Modifications:
-//   000217 JS  Initial version, copied from IrisRGBImage.C
 //
 //-----------------------------------------------------------------------------
 

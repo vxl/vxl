@@ -3,6 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .SECTION Description
 //    vnl_sparse_matrix<T> - Simple sparse matrix.  Only those values which
 //    are non-zero are stored. The sparse matrix currently supports
 //    only getting/putting elements, and multiply by vector or another
@@ -12,10 +13,10 @@
 //    of the pair indicates the column index, and the second the
 //    value.  All rows are stored, as vcl_vector<row>;
 //
+// .SECTION Author
+//     Rupert W. Curwen, GE CR&D, 20 Oct 98
 //
-// Author: Rupert W. Curwen, GE CR&D, 20 Oct 98
-//
-// Modifications: 
+// .SECTION Modifications: 
 //
 //     Robin Flatland 5/31/99 Added pre_mult(lhs,result), where
 //                            lhs is a vector.

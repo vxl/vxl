@@ -5,10 +5,10 @@
 #pragma interface
 #endif
 
-// .NAME vil_mit -  Image in MIT format
+// .NAME vil_mit - Image in MIT format
 // .LIBRARY vil
-// .HEADER vil
-// .INCLUDE vil/vil_mit.h
+// .HEADER vxl Package
+// .INCLUDE vil/file_formats/vil_mit.h
 // .SECTION Description
 //   vil_mit is a simple image format consisting of a header
 //   of 4 shorts (type,bits_per_pixel,width,height) and the raw data.

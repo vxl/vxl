@@ -5,19 +5,18 @@
 #pragma interface
 #endif
 //
-// Class : vnl_vector_ref
-//
-// .SECTION Description
-//    See vnl_matrix_ref.
-//
 // .NAME        vnl_vector_ref - vnl_vector using user-supplied storage
 // .LIBRARY     vnl
 // .INCLUDE     vnl/vnl_vector_ref.h
 // .FILE        vnl/vnl_vector_ref.cxx
+//
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
 //
-// .SECTION Modifications:
+// .SECTION See also
+//    vnl_matrix_ref
+//
+// .SECTION Modifications
 //     <none yet>
 //
 //-----------------------------------------------------------------------------

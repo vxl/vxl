@@ -6,7 +6,6 @@
 // .LIBRARY     vtol
 // .HEADER      vxl package
 // .INCLUDE     vtol/vtol_one_chain_2d.h
-// .FILE        vtol_one_chain_2d.h
 // .FILE        vtol_one_chain_2d.cxx
 //
 // .SECTION Description

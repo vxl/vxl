@@ -4,24 +4,24 @@
 //
 // .NAME vsl_canny_base - a base class for edge detectors
 // .LIBRARY vsl
-// .HEADER Segmentation package
+// .HEADER vxl package
 // .INCLUDE vsl/vsl_canny_base.h
 // .FILE vsl_canny_base.cxx
 //
-// .SECTION Description:
+// .SECTION Description
 //
 // Definition of a base class for doing Canny edge detection. 
 // Note that nothing special has been done around the border of the image;
 // we have simply ignored a border of size _width all the way round. Perhaps
 // this should be changed to provide consistency with the rest of TargetJr.
 //
-// .SECTION Author:
+// .SECTION Author
 //       Samer Abdallah - 5/10/95
 //       Robotics Research Group, Oxford University
 //         vsl_canny_base is built from Canny  which was originally developed by
 //         Charlie Rothwell - 25/1/92
 //         GE Corporate Research and Development
-// .SECTION Modifications :
+// .SECTION Modifications
 //       Samer Abdallah (samer@robots.ox.ac.uk) - 18/05/96
 //        Cleared some compiler warnings
 //

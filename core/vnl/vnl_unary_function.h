@@ -7,7 +7,7 @@
 //
 // .NAME        vnl_unary_function - Abstract 1D map.
 // .LIBRARY     vnl
-// .HEADER	Numerics Package
+// .HEADER	vxl package
 // .INCLUDE     vnl/vnl_unary_function.h
 // .FILE        vnl/vnl_unary_function.cxx
 //

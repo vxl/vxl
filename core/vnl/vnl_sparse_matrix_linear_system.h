@@ -5,16 +5,15 @@
 #pragma interface
 #endif
 //
-// Class : vnl_sparse_matrix_linear_system
+// .NAME        vnl_sparse_matrix_linear_system - vnl_sparse_matrix -> vnl_linear_system adaptor
+// .LIBRARY     vnl
+// .HEADER	vxl package
+// .INCLUDE     vnl/vnl_sparse_matrix_linear_system.h
+// .FILE        vnl/vnl_sparse_matrix_linear_system.cxx
 //
 // .SECTION Description
 //    An adaptor that converts a vnl_sparse_matrix<T> to a vnl_linear_system
 //
-// .NAME        vnl_sparse_matrix_linear_system - vnl_sparse_matrix -> vnl_linear_system adaptor
-// .LIBRARY     vnl
-// .HEADER	Numerics Package
-// .INCLUDE     vnl/vnl_sparse_matrix_linear_system.h
-// .FILE        vnl/vnl_sparse_matrix_linear_system.cxx
 // .SECTION Author
 //     David Capel, capes@robots, July 2000
 //

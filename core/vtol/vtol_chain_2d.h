@@ -2,19 +2,16 @@
 #define vtol_chain_2d_h_
 //-----------------------------------------------------------------------------
 //
-// Class : vtol_chain_2d
-//
-//
-// .NAME        vtol_chain_2d - Base class of TwoChain and OneChain (representation of holes)
+// .NAME        vtol_chain_2d - Base class for representation of holes
 // .LIBRARY     vtol
 // .HEADER vxl package
 // .INCLUDE     vtol/vtol_chain_2d.h
-// .FILE        vtol_chain_2d.h
 // .FILE        vtol_chain_2d.cxx
+//
 // .SECTION Author
 //     Patricia A. Vrobel
 // .SECTION Description
-//   The vtol_chain_2d class is a base class of TwoChain and OneChain.  It
+//   The vtol_chain_2d class is a base class of vtol_one_chain_2d and vtol_two_chain_2d.  It
 //   provides the data and methods for creating the doubly linked subhierarchy
 //   of holes in Blocks and Faces respectively.  (Warning:: this class and
 //   philosophy of holes may not be around after evaluation of the necessity

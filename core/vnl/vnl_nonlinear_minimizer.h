@@ -5,17 +5,16 @@
 #pragma interface
 #endif
 //
-// Class : vnl_nonlinear_minimizer
+// .NAME        vnl_nonlinear_minimizer - Base class for nonlinear optimization
+// .LIBRARY     vnl
+// .HEADER	vxl package
+// .INCLUDE     vnl/vnl_nonlinear_minimizer.h
+// .FILE        vnl/vnl_nonlinear_minimizer.cxx
 //
 // .SECTION Description
 //    vnl_nonlinear_minimizer is a base class for nonlinear optimization.
 //    It defines a few common abilities such as get_num_evaluations
 //
-// .NAME        vnl_nonlinear_minimizer - Base class for nonlinear optimization.
-// .LIBRARY     vnl
-// .HEADER	Numerics Package
-// .INCLUDE     vnl/vnl_nonlinear_minimizer.h
-// .FILE        vnl/vnl_nonlinear_minimizer.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 22 Aug 99
 //

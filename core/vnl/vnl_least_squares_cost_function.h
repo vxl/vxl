@@ -5,16 +5,15 @@
 #pragma interface
 #endif
 //
-// Class : vnl_least_squares_cost_function
+// .NAME        vnl_least_squares_cost_function - vnl_least_squares_function -> vnl_cost_function adaptor
+// .LIBRARY     vnl
+// .HEADER	vxl package
+// .INCLUDE     vnl/vnl_least_squares_cost_function.h
+// .FILE        vnl/vnl_least_squares_cost_function.cxx
 //
 // .SECTION Description
 //    An adaptor that converts a vnl_least_squares_function to a vnl_cost_function
 //
-// .NAME        vnl_least_squares_cost_function - vnl_least_squares_function -> vnl_cost_function adaptor
-// .LIBRARY     vnl
-// .HEADER	Numerics Package
-// .INCLUDE     vnl/vnl_least_squares_cost_function.h
-// .FILE        vnl/vnl_least_squares_cost_function.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 20 Aug 99
 //

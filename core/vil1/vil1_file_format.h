@@ -1,7 +1,8 @@
 #ifndef vil_file_format_h_
 #define vil_file_format_h_
 
-// Author: awf
+// .SECTION Author
+//    awf
 
 #include <vil/vil_fwd.h>
 #include <vil/vil_image_impl.h>

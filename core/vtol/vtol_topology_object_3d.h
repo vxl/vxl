@@ -1,13 +1,12 @@
 #ifndef TOPOLOGY_OBJECT_3D_H
 #define TOPOLOGY_OBJECT_3D_H
-
 //
 // .NAME        vtol_topology_object_3d - base class for topology objects
 // .LIBRARY     vtol
 // .HEADER vxl package
 // .INCLUDE     vtol/vtol_topology_object_3d.h
-// .FILE        vtol_topology_object_3d.h
 // .FILE        vtol_topology_object_3d.cxx
+//
 // .SECTION Description
 //  The TopologyObject class is the interface base class for all
 //  topological entites. There are only access methods in this class.

@@ -5,7 +5,11 @@
 #pragma interface
 #endif
 //
-// Class : vnl_matrix_ref
+// .NAME        vnl_matrix_ref - vnl_matrix reference to user-supplied storage
+// .LIBRARY     vnl
+// .HEADER	vxl package
+// .INCLUDE     vnl/vnl_matrix_ref.h
+// .FILE        vnl/vnl_matrix_ref.cxx
 //
 // .SECTION Description
 //    vnl_matrix_ref is a vnl_matrix for which the data space has been
@@ -25,11 +29,6 @@
 //    operator new, and are therefore unlikely to be the unwitting subject
 //    of an operator delete.
 //
-// .NAME        vnl_matrix_ref - vnl_matrix reference to user-supplied storage.
-// .LIBRARY     vnl
-// .HEADER	Numerics package
-// .INCLUDE     vnl/vnl_matrix_ref.h
-// .FILE        vnl/vnl_matrix_ref.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
 //

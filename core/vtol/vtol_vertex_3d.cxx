@@ -554,7 +554,7 @@ void vtol_vertex_3d::explore_vertex(vertex_list_3d &verts)
 //
 //    A record of the changes to the topological structure is returned 
 //    through the parameters changes and deleted.  For details on what is
-//    stored in these parameters, see Edge::Disconnect( changes, deleted ).
+//    stored in these parameters, see vtol_edge_3d::disconnect( changes, deleted ).
 //    (RYF 7-16-98)
 //
 bool vtol_vertex_3d::disconnect(topology_list_3d  &changes,

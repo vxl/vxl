@@ -5,16 +5,15 @@
 #pragma interface
 #endif
 //
-// Class : vnl_c_vector
+// .NAME        vnl_c_vector - Math on blocks of memory
+// .LIBRARY     vnl
+// .HEADER	vxl package
+// .INCLUDE     vnl/vnl_c_vector.h
+// .FILE        vnl_c_vector.txx
 //
 // .SECTION Description
 //    vnl_c_vector interfaces to lowlevel memory-block operations.
 //
-// .NAME        vnl_c_vector - Math on blocks of memory
-// .LIBRARY     vnl
-// .HEADER	Numerics Package
-// .INCLUDE     vnl/vnl_c_vector.h
-// .FILE        vnl_c_vector.txx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Feb 98
 //

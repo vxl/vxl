@@ -6,7 +6,7 @@
 //
 // .NAME        vnl_numeric_traits - Templated zero/one/precision
 // .LIBRARY     vnl
-// .HEADER      Numerics Package
+// .HEADER      vxl package
 // .INCLUDE     vnl/vnl_numeric_traits.h
 // .FILE        vnl/vnl_numeric_traits.cxx
 //

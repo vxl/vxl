@@ -2,10 +2,9 @@
 #define vtol_edge_2d_h
 
 // .NAME vtol_edge_2d - Represents the basic 1D topological entity
-// .LIBRARY Topology
-// .HEADER SpatialObjects Package
-// .INCLUDE Topology/vtol_edge_2d.h
-// .FILE vtol_edge_2d.h
+// .LIBRARY vtol
+// .HEADER vxl package
+// .INCLUDE vtol/vtol_edge_2d.h
 // .FILE vtol_edge_2d.cxx
 //
 // .SECTION Description

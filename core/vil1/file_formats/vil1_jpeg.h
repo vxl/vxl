@@ -4,8 +4,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// Author: fsm@robots.ox.ac.uk
+// .SECTION Author
+//    fsm@robots.ox.ac.uk
 // Created: 17 Feb 2000
+// .SECTION Modifications:
 // Adapted from geoff's code in ImageClasses/JPEGImage.*
 
 #include <vil/vil_file_format.h>

@@ -2,7 +2,11 @@
 #define vtol_two_chain_3d_H
 //-----------------------------------------------------------------------------
 //
-// Class : vtol_two_chain_3d
+// .NAME        vtol_two_chain_3d - Represents a set of vtol_face_3d
+// .LIBRARY     vtol
+// .HEADER      vxl  package
+// .INCLUDE     vtol/vtol_two_chain_3d.h
+// .FILE        vtol_two_chain_3d.cxx
 //
 // .SECTION Description
 //  The vtol_two_chain_3d class is used to represent a set of vtol_face_3ds on a topological
@@ -11,12 +15,6 @@
 //  the chain of vtol_face_3d encloses a volume, then the vtol_two_chain_3d may be used as
 //  the boundary of a topological vtol_block_3d in a 3D structure.
 //
-// .NAME        vtol_two_chain_3d - Represents a set of vtol_face_3d
-// .LIBRARY     vtol
-// .HEADER      vxl  package
-// .INCLUDE     vtol/vtol_two_chain_3d.h
-// .FILE        vtol_two_chain_3d.h
-// .FILE        vtol_two_chain_3d.cxx
 // .SECTION Author
 //     Patricia A. Vrobel
 //

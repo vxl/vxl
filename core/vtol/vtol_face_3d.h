@@ -5,8 +5,8 @@
 // .LIBRARY vtol
 // .HEADER vxl Package
 // .INCLUDE vtol/vtol_face_3d.h
-// .FILE vtol_face_3d.h
 // .FILE vtol_face_3d.cxx
+//
 // .SECTION Description
 //  The vtol_face_3d class is used to represent a topological face.
 //  A vtol_face_3d maintains a pointer to the Surface which describes the

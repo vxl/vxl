@@ -625,7 +625,7 @@ bool vtol_one_chain_3d::operator==(const vtol_one_chain_3d& ch) const
   if (this == &ch) return true;
 
   // Check to see if the number of vertices is the same
-  /*
+#if 0 // 10 lines commented out
   vcl_vector<vtol_vertex_3d*>* verts1 = this->vertices();
   vcl_vector<vtol_vertex_3d*>* verts2 = ch.vertices();
   if(verts1->size() != verts2->size())
@@ -636,7 +636,7 @@ bool vtol_one_chain_3d::operator==(const vtol_one_chain_3d& ch) const
     }
   delete verts1;
   delete verts2;
-  */
+#endif
   
   if (inf1->size() != inf2->size())
     return false;

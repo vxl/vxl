@@ -1,8 +1,10 @@
 #ifndef vsl_harris_params_h_
 #define vsl_harris_params_h_
 
-// Author: Andrew W. Fitzgibbon, Oxford RRG, 07 Feb 97
-// Modification: fsm. various ports and modifications.
+// .SECTION Author
+//    Andrew W. Fitzgibbon, Oxford RRG, 07 Feb 97
+// .SECTION Modifications
+//    fsm. various ports and modifications.
 
 //: parameter block class for the vsl_harris class.
 class vsl_harris_params {

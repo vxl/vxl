@@ -5,18 +5,17 @@
 #pragma interface "vnl_numeric_limits.h"
 #endif
 //
-// Class : numeric_limits
+// .NAME        numeric_limits - Standard limits for numeric datatypes
+// .LIBRARY     vnl
+// .HEADER	vxl package
+// .INCLUDE     vnl/vnl_numeric_limits.h
+// .FILE        vnl/vnl_numeric_limits.cxx
 //
 // .SECTION Description
 //    Implementation of the May 96 ANSI Draft Working Paper (DWP)
 //    numeric_limits class.  Numbering in
 //    the documentation below refers to section 18.2 of the DWP.
 //
-// .NAME        numeric_limits - Standard limits for numeric datatypes
-// .LIBRARY     vnl
-// .HEADER	Numerics Package
-// .INCLUDE     vnl/vnl_numeric_limits.h
-// .FILE        vnl/vnl_numeric_limits.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 28 Aug 96
 //

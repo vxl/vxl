@@ -4,8 +4,8 @@
 // .LIBRARY vtol
 // .HEADER vxl Package
 // .INCLUDE vtol/vtol_face_2d.h
-// .FILE vtol_face_2d.h
 // .FILE vtol_face_2d.cxx
+//
 // .SECTION Description
 //  The vtol_face_2d class is used to represent a topological face.
 //  A vtol_face_2d maintains a pointer to the Surface which describes the

@@ -4,7 +4,8 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// Author: awf@robots.ox.ac.uk
+// .SECTION Author
+//    awf@robots.ox.ac.uk
 // Created: 02 Mar 00
 
 struct vil_ip_traits_null_type {};

@@ -5,7 +5,7 @@
 #endif
 // .NAME        vnl_transpose - Efficient matrix transpose.
 // .LIBRARY     vnl
-// .HEADER	Numerics Package
+// .HEADER	vxl package
 // .INCLUDE     vnl/vnl_transpose.h
 // .FILE        vnl/vnl_transpose.cxx
 //
@@ -23,7 +23,8 @@
 //    NOTE: This is a reference class, so should be shorted-lived than the
 //    matrix to which it refers.
 //
-// Author: Andrew W. Fitzgibbon, Oxford RRG, 23 Dec 96
+// .SECTION Author
+//    Andrew W. Fitzgibbon, Oxford RRG, 23 Dec 96
 
 #include <vcl/vcl_iostream.h>
 #include <vnl/vnl_matops.h>

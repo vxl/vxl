@@ -42,8 +42,10 @@
 // \end{quote}
 // @}
 //
-// Author: Andrew W. Fitzgibbon, Oxford RRG, 29 Aug 96
-// History: fsm@robots, 5 March 2000: templated
+// .SECTION Author
+//    Andrew W. Fitzgibbon, Oxford RRG, 29 Aug 96
+// .SECTION Modifications:
+//    fsm@robots, 5 March 2000: templated
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>

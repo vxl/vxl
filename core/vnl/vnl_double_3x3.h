@@ -5,17 +5,16 @@
 #pragma interface
 #endif
 //
-// Class : vnl_double_3x3
+// .NAME        vnl_double_3x3 - 3x3 Matrix of double
+// .LIBRARY     vnl
+// .HEADER	vxl package
+// .INCLUDE     vnl/vnl_double_3x3.h
+// .FILE        vnl/vnl_double_3x3.cxx
 //
 // .SECTION Description
 //    vnl_double_3x3 is a vnl_matrix<double> of fixed size 3x3.  It is
 //    merely a typedef for vnl_matrix_fixed<double,3,3>
 //
-// .NAME        vnl_double_3x3 - 3x3 Matrix of double
-// .LIBRARY     vnl
-// .HEADER	Numerics package
-// .INCLUDE     vnl/vnl_double_3x3.h
-// .FILE        vnl/vnl_double_3x3.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
 //

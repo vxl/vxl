@@ -7,7 +7,7 @@
 //
 // .NAME        vnl_real_npolynomial - real polynomial in N variables.
 // .LIBRARY     vnl
-// .HEADER      Numerics package
+// .HEADER      vxl package
 // .INCLUDE     vnl/vnl_real_npolynomial.h
 // .FILE        vnl/vnl_real_npolynomial.cxx
 //

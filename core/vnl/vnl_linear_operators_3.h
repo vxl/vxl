@@ -5,16 +5,17 @@
 #pragma interface
 #endif
 //
+// .NAME        vnl_linear_operators_3 - 3D linear algebra operations
+// .LIBRARY     vnl
+// .HEADER	vxl package
+// .INCLUDE     vnl/vnl_linear_operators_3.h
+// .FILE        vnl/vnl_linear_operators_3.cxx
+//
 // .SECTION Description
 //    Specialized linear operators for 3D vectors and matrices.
 //    Include this file if you're inlining or compiling linear algebra
 //    code for speed.
 //
-// .NAME        vnl_linear_operators_3 - 3D linear algebra operations
-// .LIBRARY     vnl
-// .HEADER	Numerics package
-// .INCLUDE     vnl/vnl_linear_operators_3.h
-// .FILE        vnl/vnl_linear_operators_3.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
 //

@@ -228,7 +228,7 @@ void vtol_zero_chain_3d::describe(ostream& strm, int blanking) const
 //
 //    A record of the changes to the topological structure is returned 
 //    through the parameters changes and deleted.  For details on what is
-//    stored in these parameters, see vtol_edge_3d::Disconnect( changes, deleted ).
+//    stored in these parameters, see vtol_edge_3d::disconnect( changes, deleted ).
 //    (RYF 7-16-98)
 //
 bool vtol_zero_chain_3d::disconnect( vcl_vector< vtol_topology_object_3d * > & changes,
@@ -260,7 +260,7 @@ bool vtol_zero_chain_3d::disconnect( vcl_vector< vtol_topology_object_3d * > & c
 //    Removes the vertex from the zero chain.  If the removal of
 //    the vertex invalidates the superior edge, then the zero
 //    chain is recursively removed from the superior edge.
-//    For more details, see vtol_edge_3d::Disconnect( changes, deleted )
+//    For more details, see vtol_edge_3d::disconnect( changes, deleted )
 //    (RYF 7-16-98)
 //
 bool vtol_zero_chain_3d::remove( vtol_vertex_3d * vertex,

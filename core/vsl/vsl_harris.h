@@ -9,16 +9,16 @@
 //                      strength * relative  minimum).
 //   scale factor     - the 'k' from the harris auto-correlation expression.
 //
-// Author: Paul Beardsley, Robotics Research Group, Oxford University 
+// .SECTION Author
+//    Paul Beardsley, Robotics Research Group, Oxford University 
 // Created: 16.10.95
 //
-// History:
+// .SECTION Modifications:
 //       First version generated from C code with minimal modification for C++/
 //	 Target data structures.
 //   P.Vanroose  Mar97  corrected memory management (_point_list & *_free_*())
 //   P.Vanroose  Aug97  _point_list now safer (added AddPoint(); SetPointList() out of use now)
-//   J.Mundy     Jan98  slight modified the interface to correspond to new
-//               style  using parameter blocks and image dispatch
+//   J.Mundy     Jan98  slight modified the interface to correspond to new style using parameter blocks and image dispatch
 #include <vcl/vcl_iosfwd.h>
 #include <vcl/vcl_vector.h>
 #include <vcl/vcl_utility.h>

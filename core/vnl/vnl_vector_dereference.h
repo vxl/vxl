@@ -5,16 +5,15 @@
 #pragma interface
 #endif
 //
-// Class : vnl_vector_dereference
+// .NAME        vnl_vector_dereference - Undocumented class FIXME
+// .LIBRARY     vnl
+// .HEADER	vxl package
+// .INCLUDE     vnl/vnl_vector_dereference.h
+// .FILE        vnl/vnl_vector_dereference.cxx
 //
 // .SECTION Description
 //    vnl_vector_dereference is a class that awf hasn't documented properly. FIXME
 //
-// .NAME        vnl_vector_dereference - Undocumented class FIXME
-// .LIBRARY     vnl
-// .HEADER	Numerics Package
-// .INCLUDE     vnl/vnl_vector_dereference.h
-// .FILE        vnl/vnl_vector_dereference.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 28 Nov 98
 //

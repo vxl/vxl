@@ -1,18 +1,16 @@
 #ifndef VTOL_TOPOLOGY_HIERARCHY_NODE_3D_H
 #define VTOL_TOPOLOGY_HIERARCHY_NODE_3D_H
-
-
+//
+// .NAME        vtol_topology_hierarchy_node_3d - Base class of vtol_topology_object_3d (inferior/superior mechanics)
+// .LIBRARY     vtol
+// .INCLUDE     vtol/vtol_topology_hierarchy_node_3d.h
+// .FILE        vtol_topology_hierarchy_node_3d.cxx
 //
 // .SECTION Description
 //  The vtol_topology_hierarchy_node_3d is a base class inherited by vtol_topology_object_3d.
 //  It provides the data and methods for creating the doubly linked structure
 //  of inferiors and superiors.
 //
-// .NAME        vtol_topology_hierarchy_node_3d - Base class of vtol_topology_object_3d (inferior/superior mechanics)
-// .LIBRARY     vtol
-// .INCLUDE     Topology/vtol_topology_hierarchy_node_3d.h
-// .FILE        vtol_topology_hierarchy_node_3d.h
-// .FILE        vtol_topology_hierarchy_node_3d.cxx
 // .SECTION Author
 //     Patricia A. Vrobel - ported Peter Tu
 //

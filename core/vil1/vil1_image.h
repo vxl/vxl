@@ -19,6 +19,7 @@
 // vbl_smart_ptr<vil_image_impl>, but with some extra convenience
 // methods.  These methods might traditionally be attached to the ABC
 // image_impl, but this avoids cluttering that interface.
+
 class vil_image {
 public:
   //undoc delegation macro for consistency, not convenience.

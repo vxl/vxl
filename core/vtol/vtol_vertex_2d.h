@@ -4,8 +4,8 @@
 // .LIBRARY vtol
 // .HEADER vxl Package
 // .INCLUDE vtol/vtol_vertex_2d.h
-// .FILE vtol_vertex_2d.h
 // .FILE vtol_vertex_2d.cxx
+//
 // .SECTION Description
 //  The vtol_vertex_2d class is used to represent either a 2D or 2D point on
 //  a topological structure.  A vtol_vertex_2d maintains a pointer to the IUPoint

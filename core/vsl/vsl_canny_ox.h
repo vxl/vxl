@@ -2,7 +2,9 @@
 #ifndef _vsl_canny_ox_h
 #define _vsl_canny_ox_h
 //
-// The `Sheffield' Canny edge detector:
+// .NAME vsl_canny_ox - The `Sheffield' Canny edge detector
+//
+// .SECTION Description
 //
 // A class for performing the AZ-standard version of Canny's edge detector.
 // The basic implementatation is similar to that described in Canny's thesis,
@@ -14,17 +16,15 @@
 // uses _sub_area_OX to normalise the (gaussian) smoothed border pixels---see
 // the description of Smooth_imageOX().
 //
-// History:
+// .SECTION Author
+//   Samer Abdallah (samer@robots.ox.ac.uk) - 5/10/95
+//   Robotics Research Group, University of Oxford
 //
+// .SECTION Modifications
 // The original C implementation of this canny edge detector 
 // came from AIRUV at Sheffield. It was later modified by 
 // Charlie Rothwell, Nic Pillow and Sven Utcke. 
 //
-// .SECTION Author:
-//   Samer Abdallah (samer@robots.ox.ac.uk) - 5/10/95
-//   Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications : 
 //   Samer Abdallah - 18/05/96 - Cleared some compiler warnings
 //   Samer Abdallah - 24/05/96 - Fixed _theta[x][y] in Non_maximal_supressionOX
 //                               _theta[x][y] now stores the edge normal

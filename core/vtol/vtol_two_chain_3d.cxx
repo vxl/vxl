@@ -180,11 +180,9 @@ vtol_two_chain_3d::topology_type(void) const
   return TWOCHAIN;
 }
 
-/*
- ******************************************************
- *
- *   Editing Functions
- */
+//*****************************************************
+//   Editing Functions
+//*****************************************************
 
 //:
 // add the superiors from the parent
@@ -292,7 +290,7 @@ void vtol_two_chain_3d::remove_inferior_two_chain(vtol_two_chain_3d* vtol_two_ch
 //
 //    A record of the changes to the topological structure is returned 
 //    through the parameters changes and deleted.  For details on what is
-//    stored in these parameters, see Edge::Disconnect( changes, deleted ).
+//    stored in these parameters, see vtol_edge_3d::disconnect( changes, deleted ).
 //    (RYF 7-16-98)
 //
 bool vtol_two_chain_3d::disconnect( vcl_vector< vtol_topology_object_3d * > & changes,
@@ -350,7 +348,7 @@ bool vtol_two_chain_3d::disconnect( vcl_vector< vtol_topology_object_3d * > & ch
 //    Removes the face from the two chain.  The removal of
 //    the face may invalidate superior blocks, so the two chain
 //    is recursively removed its superior blocks.
-//    For more details, see Edge::Disconnect( changes, deleted )
+//    For more details, see vtol_edge_3d::disconnect( changes, deleted )
 //
 bool vtol_two_chain_3d::remove( vtol_face_3d * face,
                        vcl_vector< vtol_topology_object_3d * > & changes,
@@ -666,12 +664,9 @@ void vtol_two_chain_3d::clear()
   unlink_all_inferiors(this);
 }
 
-/*
- ******************************************************
- *
- *    Accessor Functions
- */
-
+//*****************************************************
+//    Accessor Functions
+//*****************************************************
 
 //: 
 // outside boundary vertices
@@ -844,13 +839,9 @@ vcl_vector<vtol_two_chain_3d*>* vtol_two_chain_3d::outside_boundary_two_chains()
   LIST_SELF_3d(vtol_two_chain_3d);
 }
 
-
-
-/*
- ******************************************************
- *
- *    Operator Functions
- */
+//*****************************************************
+//    Operator Functions
+//*****************************************************
 
 //:
 // equality operator 
@@ -896,12 +887,9 @@ bool vtol_two_chain_3d::operator==(const vsol_spatial_object_3d& obj) const
   : false;
 }
 
-
-/*
- ******************************************************
- *
- *    Utility Functions
- */
+//*****************************************************
+//    Utility Functions
+//*****************************************************
 
 //:
 // correct the chain directions
@@ -922,11 +910,9 @@ void vtol_two_chain_3d::correct_chain_directions()
 #endif
 }
 
-/*
- ******************************************************
- *
- *    Print Functions
- */
+//*****************************************************
+//    Print Functions
+//*****************************************************
 
 void vtol_two_chain_3d::print(ostream& strm) const
 {

@@ -10,7 +10,8 @@
 //    vnl_matlab_filewrite is a collection of I/O functions for reading/writing
 //    matrices in the compact MATLAB binary format (.mat)
 //
-// Author: David Capel, Oxford RRG, 17 August 1998
+// .SECTION Author
+//    David Capel, Oxford RRG, 17 August 1998
 
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_fstream.h>

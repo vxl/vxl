@@ -5,8 +5,8 @@
 // .LIBRARY vtol
 // .HEADER vxl Package
 // .INCLUDE vtol/vtol_vertex_3d.h
-// .FILE vtol_vertex_3d.h
 // .FILE vtol_vertex_3d.cxx
+//
 // .SECTION Description
 //  The vtol_vertex_3d class is used to represent either a 3D or 3D point on
 //  a topological structure.  A vtol_vertex_3d maintains a pointer to the IUPoint

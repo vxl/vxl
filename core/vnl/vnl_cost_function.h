@@ -7,7 +7,7 @@
 //
 // .NAME        vnl_cost_function - Vector->Real function
 // .LIBRARY     vnl
-// .HEADER	Numerics Package
+// .HEADER	vxl package
 // .INCLUDE     vnl/vnl_cost_function.h
 // .FILE        vnl/vnl_cost_function.cxx
 // .EXAMPLE     vnl/examples/vnl_amoeba.cxx

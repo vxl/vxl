@@ -451,7 +451,7 @@ bool vtol_face_3d::add_edge_loop(vtol_one_chain_3d* new_vtol_one_chain_3d)
 //
 //    A record of the changes to the topological structure is returned 
 //    through the parameters changes and deleted.  For details on what is
-//    stored in these parameters, see vtol_edge_3d::Disconnect( changes, deleted ).
+//    stored in these parameters, see vtol_edge_3d::disconnect( changes, deleted ).
 //    (RYF 7-16-98)
 //
 bool vtol_face_3d::disconnect( vcl_vector< vtol_topology_object_3d * > & changes,
@@ -488,7 +488,7 @@ bool vtol_face_3d::disconnect( vcl_vector< vtol_topology_object_3d * > & changes
 //    If the one chain is a hole, the face is still valid even with
 //    the hole's removal.  In this case, the hole is unlinked from the
 //    the face and appended to the list changes.
-//    For more details, see vtol_edge_3d::Disconnect( changes, deleted )
+//    For more details, see vtol_edge_3d::disconnect( changes, deleted )
 //    (RYF 7-16-98)
 //
 

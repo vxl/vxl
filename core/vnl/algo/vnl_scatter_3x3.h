@@ -5,16 +5,15 @@
 #pragma interface
 #endif
 //
-// Class : vnl_scatter_3x3
+// .NAME        vnl_scatter_3x3 - Undocumented class DOCME
+// .LIBRARY     vnl
+// .HEADER	vxl package
+// .INCLUDE     vnl/algo/vnl_scatter_3x3.h
+// .FILE        vnl_scatter_3x3.cxx
 //
 // .SECTION Description
 //    vnl_scatter_3x3 is a class that awf hasn't documented properly. DOCME
 //
-// .NAME        vnl_scatter_3x3 - Undocumented class DOCME
-// .LIBRARY     vnl
-// .HEADER	Numerics Package
-// .INCLUDE     vnl/vnl_scatter_3x3.h
-// .FILE        vnl/vnl_scatter_3x3.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
 //

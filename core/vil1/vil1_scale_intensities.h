@@ -4,7 +4,7 @@
 #pragma interface
 #endif
 // .NAME    vil_scale_intensities - Templated functions to scale/shift image pixel values
-// .HEADER  Basics Package
+// .HEADER  vxl package
 // .LIBRARY vil
 // .INCLUDE vil/vil_scale_intensities.h
 // .FILE    vil/vil_scale_intensities.cxx

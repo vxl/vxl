@@ -3,22 +3,28 @@
 #ifdef __GNUC__
 #pragma interface "vnl_matlab_print2"
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+//
+// .SECTION Description
 // After including this header file, the client should be able to say :
+// \verbatim
 //   vnl_matrix<double> foo(3, 14);
-// ....
+//  ....
 //   cerr << "and the blasted matrix is :" << endl
 //        << vnl_matlab_print(foo)
 //        << vnl_matlab_print(foo, "foo")
 //        << vnl_matlab_print(foo, 0, vnl_matlab_fmt_long);
+// \endverbatim
 // instead of
-// ....
+// \verbatim
+//  ....
 //   cerr << "and the blasted matrix is :" << endl;
 //        vnl_matlab_print(cerr, foo);
 //        vnl_matlab_print(cerr, foo, "foo");
 //        vnl_matlab_print(cerr, foo, 0, vnl_matlab_fmt_long);
+// \endverbatim
+//
+// .SECTION Author
+//     fsm@robots.ox.ac.uk
 
 #include <vnl/vnl_matlab_print.h>
 

@@ -1,6 +1,7 @@
 #ifndef _vsl_canny_rothwell_h
 #define _vsl_canny_rothwell_h
-// .SECTION Description:
+
+// .SECTION Description
 //
 // A class for performing traditional Canny edge detection. The basic
 // implementatation is as close to that described in Canny's thesis
@@ -20,11 +21,11 @@
 // we have simply ignored a border of size _width all the way round. Perhaps
 // this should be changed to provide consistency with the rest of TargetJr.
 //
-// .SECTION Author:
+// .SECTION Author
 //       Charlie Rothwell - 25/1/92
 //       GE Corporate Research and Development
 //
-// .SECTION Modifications :
+// .SECTION Modifications
 //       Samer Abdallah - 5/10/95
 //       Robotics Research Group, Oxford University
 //         Most members and methods placed in new base class vsl_canny_rothwellBase.

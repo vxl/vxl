@@ -5,17 +5,16 @@
 #pragma interface
 #endif
 //
-// Class : Identity
+// .NAME        vnl_dentity - Undocumented class DOCME
+// .LIBRARY     vnl
+// .HEADER	vxl package
+// .INCLUDE     vnl/vnl_identity.h
+// .FILE        vnl/vnl_identity.cxx
+// .FILE        vnl_identity.txx
 //
 // .SECTION Description
 //    Identity is a class that awf hasn't documented properly. DOCME
 //
-// .NAME        Identity - Undocumented class DOCME
-// .LIBRARY     vnl
-// .HEADER	Numerics Package
-// .INCLUDE     vnl/vnl_identity.h
-// .FILE        vnl/vnl_identity.cxx
-// .FILE        Identity.C
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 07 Dec 98
 //

@@ -2,8 +2,9 @@
 #ifndef _vsl_edge_detector_h
 #define _vsl_edge_detector_h
 //
-// vsl_edge_detector - Charlie's topological edge detector:
+// .NAME vsl_edge_detector - Charlie's topological edge detector:
 //
+// .SECTION Description
 // A class for performing topologically-accurate edgel detection.  NB: this
 // implementation is (unintentionally) stochastic, so you don't necessarily
 // get the same results from the same image.
@@ -21,7 +22,7 @@
 //             Charlie Rothwell - 5/10/94
 //             INRIA, Sophia Antipolis
 //
-// Modifications :
+// .SECTION Modifications:
 //          CAR March 1995: improved memory management so that computation
 //             time is reduced. Re-use of certain large arrays. Tried to
 //             re-write Set_thresholds() to use Delauney triangulation rather

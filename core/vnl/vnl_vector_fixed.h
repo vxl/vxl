@@ -8,16 +8,15 @@
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_c_vector.h>	
 
-// Class : vnl_vector_fixed
+// .NAME        vnl_vector_fixed - Fixed length stack-stored vnl_vector.
+// .LIBRARY     vnl
+// .INCLUDE     vnl/vnl_vector_fixed.h
+// .FILE        vnl_vector_fixed.txx
 //
 // .SECTION Description
 //    vnl_vector_fixed is a fixed-length, stack storage vnl_vector.
 //    See the docs for vnl_matrix_ref
 //
-// .NAME        vnl_vector_fixed - Fixed length stack-stored vnl_vector.
-// .LIBRARY     vnl
-// .INCLUDE     vnl/vnl_vector_fixed.h
-// .FILE        vnl_vector_fixed.txx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
 

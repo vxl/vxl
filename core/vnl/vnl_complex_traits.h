@@ -6,7 +6,7 @@
 //
 // .NAME        vnl_complex_traits
 // .LIBRARY     vnl
-// .HEADER      Numerics Package
+// .HEADER      vxl package
 // .INCLUDE     vnl/vnl_complex_traits.h
 // .FILE        vnl/vnl_complex_traits.cxx
 //

@@ -6,7 +6,6 @@
 // .LIBRARY     vtol
 // .HEADER vxl package
 // .INCLUDE     vtol/vtol_topology_object_2d.h
-// .FILE        vtol_topology_object_2d.h
 // .FILE        vtol_topology_object_2d.cxx
 // .SECTION Description
 //  The TopologyObject class is the interface base class for all

@@ -4,7 +4,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// namespace vnl_math
+//
+// .NAME        vnl_math - namespace with standard math functions
+// .LIBRARY     vnl
+// .HEADER	vxl package
+// .INCLUDE     vnl/vnl_math.h
+// .FILE        vnl/vnl_math.cxx
 //
 // .SECTION Description
 //    The vnl_math namespace provides a standard set of the simple mathematical
@@ -19,17 +24,12 @@
 //    the IEEE double machine precision.  This is the smallest number
 //    eps such that 1+eps != 1.
 //
-// .NAME        vnl_math - Provide standard math functions
-// .LIBRARY     vnl
-// .HEADER	Numerics package
-// .INCLUDE     vnl/vnl_math.h
-// .FILE        vnl/vnl_math.cxx
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, July 13, 1996
-//
 //    The operations are overloaded for int, float and double arguments,
 //    which in combination with inlining can make them  more efficient than
 //    their counterparts in the standard C library.
+//
+// .SECTION Author
+//     Andrew W. Fitzgibbon, Oxford RRG, July 13, 1996
 //
 
 #include <vcl/vcl_cmath.h>

@@ -5,7 +5,11 @@
 #pragma interface
 #endif
 //
-// Class : vnl_lsqr
+// .NAME        vnl_lsqr - Undocumented class FIXME
+// .LIBRARY     vnl
+// .HEADER	vxl Package
+// .INCLUDE     vnl/algo/vnl_lsqr.h
+// .FILE        vnl_lsqr.cxx
 //
 // .SECTION Description
 //    vnl_lsqr implements an algorithm for large, sparse linear systems and
@@ -13,11 +17,6 @@
 //    of Paige and Saunders (ACM TOMS 583). The sparse system is encapsulated
 //    by a vnl_linear_system.
 //
-// .NAME        vnl_lsqr - Undocumented class FIXME
-// .LIBRARY     vnl
-// .HEADER	vnl Package
-// .INCLUDE     vnl/algo/vnl_lsqr.h
-// .FILE        vnl_lsqr.cxx
 // .SECTION Author
 //     David Capel, capes@robots, July 2000
 //

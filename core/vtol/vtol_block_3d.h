@@ -6,7 +6,6 @@
 // .LIBRARY     vtol
 // .HEADER      vxl package
 // .INCLUDE     vtol/vtol_block_3d.h
-// .FILE        vtol_block_3d.h
 // .FILE        vtol_block_3d.cxx
 //
 // .SECTION Description

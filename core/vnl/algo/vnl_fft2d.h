@@ -22,9 +22,10 @@
 //  of the 'number' (the size of the array) to be FFT'd.
 //  (integral part of Temperton's algorithm)
 //
-//  .SECTION Author
-//  Veit U.B. Schenk, Oxford RRG, 19 Mar 98
-//  .SECTION Modifications:
+// .SECTION Author
+//   Veit U.B. Schenk, Oxford RRG, 19 Mar 98
+// .SECTION Modifications:
+//
 //-----------------------------------------------------------------------------
 
 #ifndef vnl_fft2d_h_

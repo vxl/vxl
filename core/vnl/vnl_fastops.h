@@ -14,7 +14,8 @@
 //    using the vnl_transpose envelope-letter class to achieve the same results
 //    with about a 10% speed penalty.
 //
-// Author:  Andrew W. Fitzgibbon, Oxford RRG, 09 Dec 96
+// .SECTION Author
+//    Andrew W. Fitzgibbon, Oxford RRG, 09 Dec 96
 
 #include <vnl/vnl_matops.h>
 

@@ -2,19 +2,17 @@
 #define vtol_zero_chain_3d_H
 //-----------------------------------------------------------------------------
 //
-// Class : vtol_zero_chain_3d
+// .NAME        vtol_zero_chain_3d - Represents a set of Vertices
+// .LIBRARY     vtol
+// .HEADER	vxl package
+// .INCLUDE     vtol/vtol_zero_chain_3d.h
+// .FILE        vtol_zero_chain_3d.cxx
 //
 // .SECTION Description
 //  The vtol_zero_chain_3d class is used to represent a set of Vertices on
 //  a topological structure. A vtol_zero_chain_3d maintains only the inferiors and
 //  superiors. It is the topological inferior of an Edge.
 //
-// .NAME        vtol_zero_chain_3d - Represents a set of Vertices
-// .LIBRARY     Topology
-// .HEADER SpatialObjects package
-// .INCLUDE     Topology/vtol_zero_chain_3d.h
-// .FILE        vtol_zero_chain_3d.h
-// .FILE        vtol_zero_chain_3d.cxx
 // .SECTION Author
 //     Patricia A. Vrobel
 //     PTU - ported may 2000

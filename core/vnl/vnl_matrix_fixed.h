@@ -5,7 +5,7 @@
 #endif
 // .NAME        vnl_matrix_fixed<T,m,n> - Fixed size matrix
 // .LIBRARY     vnl
-// .HEADER	Numerics Package
+// .HEADER	vxl package
 // .INCLUDE     vnl/vnl_matrix_fixed.h
 // .FILE        vnl_matrix_fixed.txx
 //

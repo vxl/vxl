@@ -230,11 +230,9 @@ vtol_two_chain_2d::topology_type(void) const
   return TWOCHAIN;
 }
 
-/*
- ******************************************************
- *
- *   Editing Functions
- */
+//***************************************************************************
+//   Editing Functions
+//***************************************************************************
 
 //:
 // add the superiors from the parent
@@ -498,12 +496,9 @@ vtol_two_chain_2d::valid_chain_type(const vtol_chain_2d &chain_inf_sup) const
   return chain_inf_sup.cast_to_two_chain()!=0;
 }
 
-/*
- ******************************************************
- *
- *    Accessor Functions
- */
-
+//***************************************************************************
+//    Accessor Functions
+//***************************************************************************
 
 //: 
 // outside boundary vertices
@@ -763,11 +758,10 @@ vcl_vector<vtol_two_chain_2d*>  *vtol_two_chain_2d::outside_boundary_compute_two
 {
  LIST_SELF_2d(vtol_two_chain_2d);
 }
-/*
- ******************************************************
- *
- *    Operator Functions
- */
+
+//***************************************************************************
+//     Operator Functions
+//***************************************************************************
 
 //:
 // equality operator 
@@ -817,11 +811,9 @@ bool vtol_two_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
 }
 
 
-/*
- ******************************************************
- *
- *    Utility Functions
- */
+//***************************************************************************
+//    Utility Functions
+//***************************************************************************
 
 //:
 // correct the chain directions
@@ -841,11 +833,9 @@ void vtol_two_chain_2d::correct_chain_directions(void)
 #endif
 }
 
-/*
- ******************************************************
- *
- *    Print Functions
- */
+//***************************************************************************
+//    Print Functions
+//***************************************************************************
 
 void vtol_two_chain_2d::print(ostream &strm) const
 {

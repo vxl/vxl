@@ -6,7 +6,7 @@
 //
 // .NAME        vnl_matrix_fixed_ref - Fixed size stack-stored vnl_matrix.
 // .LIBRARY     vnl
-// .HEADER	Numerics package
+// .HEADER	vxl package
 // .INCLUDE     vnl/vnl_matrix_fixed_ref.h
 // .FILE        vnl/vnl_matrix_fixed_ref.cxx
 //

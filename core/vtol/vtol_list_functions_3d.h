@@ -1,14 +1,11 @@
-
+// .NAME        vtol_list_functions_3d - Base class of vtol_topology_object_3d (inferior/superior mechanics)
+// .LIBRARY     vtol
+// .INCLUDE     vtol/vtol_list_functions_3d.h
+// .FILE        vtol_list_functions_3d.cxx
 //
 // .SECTION Description
 //  These are a set of functions that can be used to process lists
-
 //
-// .NAME        vtol_list_functions_3d - Base class of vtol_topology_object_3d (inferior/superior mechanics)
-// .LIBRARY     vtol
-// .INCLUDE     Topology/vtol_list_functions_3d.h
-// .FILE        vtol_list_functions_3d.h
-// .FILE        vtol_list_functions_3d.cxx
 // .SECTION Author
 //     Patricia A. Vrobel - ported Peter Tu
 //

@@ -5,7 +5,11 @@
 #pragma interface
 #endif
 //
-// Class : vnl_least_squares_function
+// .NAME        vnl_least_squares_function - Many-to-many function.
+// .LIBRARY     vnl
+// .HEADER	vxl package
+// .INCLUDE     vnl/vnl_least_squares_function.h
+// .FILE        vnl/vnl_least_squares_function.cxx
 //
 // .SECTION Description
 //    vnl_least_squares_function is an abstract base for functions to be minimized
@@ -18,11 +22,6 @@
 //    objects, will almost certainly be writing to members during the
 //    computation.  For the moment it's non-const, but we'll see...
 //
-// .NAME        vnl_least_squares_function - Many-to-many function.
-// .LIBRARY     vnl
-// .HEADER	Numerics Package
-// .INCLUDE     vnl/vnl_least_squares_function.h
-// .FILE        vnl/vnl_least_squares_function.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 31 Aug 96
 //

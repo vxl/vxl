@@ -1,7 +1,8 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_crop_h_
 #define vil_crop_h_
-// Author: awf@robots.ox.ac.uk
+// .SECTION Author
+//    awf@robots.ox.ac.uk
 // Created: 16 Feb 00
 
 #include <vil/vil_fwd.h>
