@@ -17,6 +17,7 @@
 #include <vcl_cassert.h>
 #include <vnl/vnl_tag.h>
 #include <vnl/vnl_error.h>
+#include <vnl/vnl_config.h>
 #include <vnl/vnl_c_vector.h>
 
 export template <class T> class vnl_vector;
@@ -170,8 +171,10 @@ public:
   // There are assert style boundary checks - #define NDEBUG to turn them off.
   T       & operator() (unsigned r, unsigned c)
   {
+#if VNL_CONFIG_CHECK_BOUNDS
     assert(r<rows());   // Check the row index is valid
     assert(c<cols());   // Check the column index is valid
+#endif
     return this->data[r][c];
   }
 
@@ -179,8 +182,10 @@ public:
   // There are assert style boundary checks - #define NDEBUG to turn them off.
   T const & operator() (unsigned r, unsigned c) const
   {
+#if VNL_CONFIG_CHECK_BOUNDS
     assert(r<rows());   // Check the row index is valid
     assert(c<cols());   // Check the column index is valid
+#endif
     return this->data[r][c];
   }
 
@@ -406,11 +411,20 @@ public:
 
   // predicates
 
+  //: Return true iff the size is zero.
+  bool empty() const { return !data || !num_rows || !num_cols; }
+
+  //:  Return true if all elements equal to identity.
+  bool is_identity() const;
+
   //:  Return true if all elements equal to identity, within given tolerance
-  bool is_identity(double tol = 0) const;
+  bool is_identity(double tol) const;
+
+  //: Return true if all elements equal to zero.
+  bool is_zero() const;
 
   //: Return true if all elements equal to zero, within given tolerance
-  bool is_zero(double tol = 0) const;
+  bool is_zero(double tol) const;
 
   //: Return true if finite
   bool is_finite() const;
@@ -422,14 +436,14 @@ public:
   // This function does or tests nothing if NDEBUG is defined
   void assert_size(unsigned rows, unsigned cols) const {
 #ifndef NDEBUG
-    assert_size1(rows, cols);
+    assert_size_internal(rows, cols);
 #endif
   }
   //: abort if matrix containins any INFs or NANs
   // This function does or tests nothing if NDEBUG is defined
   void assert_finite() const {
 #ifndef NDEBUG
-    assert_finite1();
+    assert_finite_internal();
 #endif 
   }
 
@@ -505,8 +519,8 @@ protected:
   unsigned num_cols;   // Number of columns
   T** data;            // Pointer to the vnl_matrix
 
-  void assert_size1(unsigned rows, unsigned cols) const;
-  void assert_finite1() const;
+  void assert_size_internal(unsigned rows, unsigned cols) const;
+  void assert_finite_internal() const;
 
   //: Delete data
   void destroy();

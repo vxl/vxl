@@ -381,9 +381,9 @@ bool vnl_matrix<T>::resize (unsigned rowz, unsigned colz)
 
 template<class T>
 void vnl_matrix<T>::fill (T const& value) {
-  for (unsigned int i = 0; i < this->num_rows; i++)    // For each row in the Matrix
-    for (unsigned int j = 0; j < this->num_cols; j++)  // For each element in column
-      this->data[i][j] = value;                 // Assign fill value
+  for (unsigned int i = 0; i < this->num_rows; i++)
+    for (unsigned int j = 0; j < this->num_cols; j++)
+      this->data[i][j] = value;
 }
 
 //: Sets all diagonal elements of matrix to specified value. O(n).
@@ -391,7 +391,7 @@ void vnl_matrix<T>::fill (T const& value) {
 template<class T>
 void vnl_matrix<T>::fill_diagonal (T const& value) {
   for (unsigned int i = 0; i < this->num_rows && i < this->num_cols; i++)
-    this->data[i][i] = value;                   // Assign fill value
+    this->data[i][i] = value;
 }
 
 //: Assigns value to all elements of a matrix. O(m*n).
@@ -411,21 +411,27 @@ void vnl_matrix<T>::fill_diagonal (T const& value) {
 
 template<class T>
 vnl_matrix<T>& vnl_matrix<T>::operator= (vnl_matrix<T> const& rhs) {
-  if (this != &rhs) {                           // make sure *this != m
-    this->resize(rhs.num_rows, rhs.num_cols);
-    for (unsigned int i = 0; i < this->num_rows; i++)  // For each row in the Matrix
-      for (unsigned int j = 0; j < this->num_cols; j++) // For each element in column
-        this->data[i][j] = rhs.data[i][j];      // Copy value
+  if (this != &rhs) { // make sure *this != m
+    if (rhs.data) {
+      this->resize(rhs.num_rows, rhs.num_cols);
+      for (unsigned int i = 0; i < this->num_rows; i++)
+        for (unsigned int j = 0; j < this->num_cols; j++)
+          this->data[i][j] = rhs.data[i][j];
+    }
+    else {
+      // rhs is default-constructed.
+      clear();
+    }
   }
-  return *this;                                 // Return Matrix reference
+  return *this;
 }
 
 template<class T>
 void vnl_matrix<T>::print(vcl_ostream& os) const {
-  for (unsigned int i = 0; i < this->rows(); i++) {    // For each row in matrix
-    for (unsigned int j = 0; j < this->columns(); j++) // For each column in matrix
-      os << this->data[i][j] << " ";            // Output data element
-    os << "\n";                                 // Output newline
+  for (unsigned int i = 0; i < this->rows(); i++) {
+    for (unsigned int j = 0; j < this->columns(); j++)
+      os << this->data[i][j] << " ";
+    os << "\n";
   }
 }
 
@@ -434,11 +440,9 @@ void vnl_matrix<T>::print(vcl_ostream& os) const {
 
 template<class T>
 vcl_ostream& operator<< (vcl_ostream& os, vnl_matrix<T> const& m) {
-  for (unsigned int i = 0; i < m.rows(); ++i) {        // For each row
-    for (unsigned int j = 0; j < m.columns(); ++j) {   // For each column
-      // Output data element
+  for (unsigned int i = 0; i < m.rows(); ++i) {
+    for (unsigned int j = 0; j < m.columns(); ++j)
       os << m(i, j) << " ";
-    }
     os << vcl_endl;
   }
   return os;
@@ -1007,6 +1011,20 @@ bool vnl_matrix<T>::operator_eq(vnl_matrix<T> const& rhs) const {
   return true;                                           // Else same; return true
 }
 
+template <class T>
+bool vnl_matrix<T>::is_identity() const
+{
+  T const zero(0);
+  T const one(1);
+  for (unsigned int i = 0; i < this->rows(); ++i)
+    for (unsigned int j = 0; j < this->columns(); ++j) {
+      T xm = (*this)(i,j);
+      if ( !((i == j) ? (xm == one) : (xm == zero)) )
+        return false;
+    }
+  return true;
+}
+
 //: Return true if maximum absolute deviation of M from identity is <= tol.
 template <class T>
 bool vnl_matrix<T>::is_identity(double tol) const
@@ -1022,7 +1040,19 @@ bool vnl_matrix<T>::is_identity(double tol) const
   return true;
 }
 
-//: Return true if max(abs((*this))) <= tol.  Tol defaults to zero.
+template <class T>
+bool vnl_matrix<T>::is_zero() const
+{
+  T const zero(0);
+  for (unsigned int i = 0; i < this->rows(); ++i)
+    for (unsigned int j = 0; j < this->columns(); ++j)
+      if ( !( (*this)(i, j) == zero) )
+        return false;
+
+  return true;
+}
+
+//: Return true if max(abs((*this))) <= tol.
 template <class T>
 bool vnl_matrix<T>::is_zero(double tol) const
 {
@@ -1060,7 +1090,7 @@ bool vnl_matrix<T>::is_finite() const
 
 //: Abort if any element of M is inf or nan
 template <class T>
-void vnl_matrix<T>::assert_finite1() const
+void vnl_matrix<T>::assert_finite_internal() const
 {
   if (is_finite())
     return;
@@ -1086,7 +1116,7 @@ void vnl_matrix<T>::assert_finite1() const
 
 //: Abort unless M has the given size.
 template <class T>
-void vnl_matrix<T>::assert_size1(unsigned rs,unsigned cs) const
+void vnl_matrix<T>::assert_size_internal(unsigned rs,unsigned cs) const
 {
   if (this->rows()!=rs || this->cols()!=cs) {
     vcl_cerr << __FILE__ "vnl_matrix : has size " << this->rows() << 'x' << this->cols()
