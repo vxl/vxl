@@ -23,6 +23,7 @@
 
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
+#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>
 
 // BeginLatex
@@ -114,7 +115,7 @@ int
 main( int argc, char* argv[] )
 {
   if ( argc < 2 ) {
-    vcl_cerr << "Missing Parameters" << vcl_endl
+    vcl_cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " ImageFeatureFile\n";
     return 1;

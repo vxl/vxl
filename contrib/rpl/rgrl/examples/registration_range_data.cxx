@@ -20,6 +20,7 @@
 #include <vcl_sstream.h>
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
+#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>
 
 #include <rrel/rrel_muset_obj.h>
@@ -153,7 +154,7 @@ int
 main( int argc, char* argv[] )
 {
   if ( argc < 3 ) {
-    vcl_cerr << "Missing Parameters" << vcl_endl
+    vcl_cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " FixedImageFeatureFile MovingImageFeatureFile\n";
     return 1;

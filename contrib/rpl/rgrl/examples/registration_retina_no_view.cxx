@@ -60,9 +60,9 @@
 // vessel direction with width.
 //
 
-
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
+#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>
 
 #include <vil/vil_load.h>
@@ -215,7 +215,7 @@ int
 main( int argc, char* argv[] )
 {
   if ( argc < 5 ) {
-    vcl_cerr << "Missing Parameters" << vcl_endl
+    vcl_cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " FixedImageTraceFile FixedImageLandmarkFile MovingImageTraceFile MovingImageLandmarkFile MaskImage\n";
     return 1;
