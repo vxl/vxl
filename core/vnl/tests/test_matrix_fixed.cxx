@@ -1,5 +1,4 @@
 #include <vcl_new.h>
-#include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cstddef.h> // for vcl_size_t
 #include <vcl_iostream.h>
@@ -52,7 +51,7 @@ void test_matrix_fixed()
   // This shouldn't compile...
   // vnl_matrix<double>* base = new vnl_double_3x3(datablock);
 
-  vcl_cout << "Now watch them mallocs\n";
+  vcl_cout << "Now watch the mallocs\n";
   vnl_matrix<double>& CX = X;
   vnl_vector<double>& cv = v;
   vcl_cout << "X v = " << CX * (cv + cv) << vcl_endl;
@@ -74,7 +73,8 @@ void* operator new(vcl_size_t s)
   ++malloc_count;
 
   if (verbose_malloc)
-    vcl_printf("malloc: %08X for %d\n", unsigned(r), int(s));
+    vcl_cout << "malloc: " << vcl_hex << (unsigned)r
+             << " for " << vcl_dec << s << vcl_endl;
 
   return r;
 }
@@ -85,7 +85,7 @@ void operator delete(void* s)
 #endif
 {
   if (verbose_malloc)
-    vcl_printf("delete: %08X\n", unsigned(s));
+    vcl_cout << "delete: " << vcl_hex << (unsigned)s << vcl_dec << vcl_endl;
 
   vcl_free(s);
 }
