@@ -213,8 +213,8 @@ int vgui_mfc_adaptor::OnCreate(LPCREATESTRUCT lpCreateStruct)
     // DIB sections (especially large DIBs) can be blitted to the screen faster than normal
     // DIBs and bitmaps.
 
-    HBITMAP hbmp = CreateDIBSection(m_pDC->GetSafeHdc(),
-      (BITMAPINFO *)&bmi,DIB_RGB_COLORS,&buffer,NULL,0);
+    HBITMAP hbmp = CreateDIBSection(m_pDC->GetSafeHdc(),(BITMAPINFO *)&bmi,
+                                    DIB_RGB_COLORS,&buffer,NULL,0);
     m_oldbitmap = (HBITMAP)::SelectObject(m_pDC->GetSafeHdc(),hbmp);
     set_double_buffering(false);
   }
@@ -356,7 +356,7 @@ void vgui_mfc_adaptor::service_redraws()
       RECT r;
       wnd->GetClientRect(&r);
       win_dc->BitBlt(0,0,r.right,r.bottom,vgui_mfc_adaptor_global_dc,0,0,SRCCOPY);
-	  wnd->ReleaseDC(win_dc);
+      wnd->ReleaseDC(win_dc);
     }
 
     swap_buffers();
@@ -427,8 +427,8 @@ void vgui_mfc_adaptor::OnSize(UINT nType, int cx, int cy)
     // DIB sections (especially large DIBs) can be blitted to the screen faster than normal
     // DIBs and bitmaps.
 
-    HBITMAP hbmp = CreateDIBSection(m_pDC->GetSafeHdc(),(BITMAPINFO *)&bmi,DIB_RGB_COLORS,&buffer,
-      NULL,0);
+    HBITMAP hbmp = CreateDIBSection(m_pDC->GetSafeHdc(),(BITMAPINFO *)&bmi,
+                                    DIB_RGB_COLORS,&buffer, NULL,0);
     m_oldbitmap = (HBITMAP)SelectObject(m_pDC->GetSafeHdc(),hbmp);
     DeleteObject(m_oldbitmap);
   }
