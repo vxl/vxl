@@ -11,7 +11,7 @@
 template <class T>
 double vgl_vector_3d<T>::length() const
 {
-  return vcl_sqrt( 0.0+x()*x()+y()*y()+z()*z() );
+  return vcl_sqrt( 0.0+sqr_length() );
 }
 
 template<class T>
@@ -25,19 +25,18 @@ bool orthogonal(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b, double eps
 {
   T dot = dot_product(a,b); // should be zero
   if (eps <= 0 || dot == T(0)) return dot == T(0);
-  // Since dot != 0, a and b cannot have zero length:
-  double dev = dot / a.length() / b.length();
-  return (dev < eps && -dev < eps);
+  eps *= eps * a.sqr_length() * b.sqr_length();
+  dot *= dot;
+  return (dot < eps);
 }
 
 template <class T>
 bool parallel(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b, double eps)
 {
-  double cross = cross_product(a,b).length(); // should be zero
+  double cross = cross_product(a,b).sqr_length(); // should be zero
   if (eps <= 0 || cross == 0.0) return cross == 0.0;
-  // Since cross != 0, a and b cannot have zero length:
-  double dev = cross / a.length() / b.length();
-  return (dev < eps && -dev < eps);
+  eps *= eps * a.sqr_length() * b.sqr_length();
+  return (cross < eps);
 }
 
 //: Write "<vgl_vector_3d x,y,z> " to stream

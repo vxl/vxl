@@ -11,13 +11,7 @@
 template <class T>
 double vgl_vector_2d<T>::length() const
 {
-  return vcl_sqrt( 0.0+x()*x()+y()*y() );
-}
-
-template <class T>
-double vgl_vector_2d<T>::sqr_length() const
-{
-  return  0.0+x()*x()+y()*y() ;
+  return vcl_sqrt( 0.0+sqr_length() );
 }
 
 template<class T>
@@ -31,9 +25,9 @@ bool orthogonal(vgl_vector_2d<T> const& a, vgl_vector_2d<T> const& b, double eps
 {
   T dot = dot_product(a,b); // should be zero
   if (eps <= 0 || dot == T(0)) return dot == T(0);
-  // Since dot != 0, a and b cannot have zero length:
-  double dev = dot / a.length() / b.length();
-  return (dev < eps && -dev < eps);
+  eps *= eps * a.sqr_length() * b.sqr_length();
+  dot *= dot;
+  return (dot < eps);
 }
 
 template <class T>
@@ -41,9 +35,8 @@ bool parallel(vgl_vector_2d<T> const& a, vgl_vector_2d<T> const& b, double eps)
 {
   T cross = cross_product(a,b); // should be zero
   if (eps <= 0 || cross == T(0)) return cross == T(0);
-  // Since cross != 0, a and b cannot have zero length:
-  double dev = cross / a.length() / b.length();
-  return (dev < eps && -dev < eps);
+  eps *= eps * a.sqr_length() * b.sqr_length();
+  return (cross*cross < eps);
 }
 
 //: Write "<vgl_vector_2d x,y> " to stream

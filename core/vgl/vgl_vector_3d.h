@@ -62,7 +62,10 @@ public:
   inline bool operator!=(vgl_vector_3d<T>const& v)const{return !operator==(v);}
 
   //: Return the length of this vector.
-  double length() const; // return sqrt( x()*x()+y()*y()+z()*z() );
+  double length() const; // return sqrt( sqr_length() );
+
+  //: Return the squared length of this vector.
+  inline T sqr_length() const { return x()*x()+y()*y()+z()*z(); }
 };
 
 #define v vgl_vector_3d<T>
@@ -80,6 +83,9 @@ template <class T> vcl_istream& operator>>(vcl_istream& s, v& p);
 
 //: Return the length of a vector.
 template <class T> inline double length(v const& a) { return a.length(); }
+
+//: Return the squared length of a vector.
+template <class T> inline T sqr_length(v const& a) { return a.sqr_length(); }
 
 //: c=a+b: add two vectors.
 template <class T> inline v      operator+(v const& a, v const& b) { return v(a.x()+b.x(), a.y()+b.y(), a.z()+b.z()); }
