@@ -24,13 +24,14 @@ void test_read_props()
            <<   " Testing mbl_read_props\n"
            <<   "************************\n";
 
+#if VCL_HAS_WORKING_STRINGSTREAM
   {
     vcl_cout << "\nCase 1\n";
     vcl_istringstream ss("{}");
     mbl_read_props_type props = mbl_read_props( ss );
     mbl_read_props_print(vcl_cout, props); 
     TEST("Case 1: props[ \"a\" ] == \"\"",
-      props[ "a" ] == "" && !ss.fail(), true);
+         props[ "a" ] == "" && !ss.fail(), true);
   }
 
 #if 0 // This one won't work because the { } should be on their own lines
@@ -40,7 +41,7 @@ void test_read_props()
     mbl_read_props_type props = mbl_read_props( ss ); 
     mbl_read_props_print(vcl_cout, props); 
     TEST("Case 2: props[ \"a\" ] == \"a\"",
-      props[ "a" ] == "a" && !ss.fail(), true);
+         props[ "a" ] == "a" && !ss.fail(), true);
   }
 #endif // 0
 
@@ -50,7 +51,7 @@ void test_read_props()
     mbl_read_props_type props = mbl_read_props( ss );
     mbl_read_props_print(vcl_cout, props); 
     TEST("Case 3: props[ \"a\" ] == \"a\"",
-      props[ "a" ] == "a" && !ss.fail(), true);
+         props[ "a" ] == "a" && !ss.fail(), true);
   }
 
   {
@@ -59,7 +60,7 @@ void test_read_props()
     mbl_read_props_type props = mbl_read_props( ss );
     mbl_read_props_print(vcl_cout, props); 
     TEST("Case 4: props[ \"a\" ] == \"a\"",
-      props[ "a" ] == "a" && !ss.fail(), true);
+         props[ "a" ] == "a" && !ss.fail(), true);
   }
 
   {
@@ -68,9 +69,9 @@ void test_read_props()
     mbl_read_props_type props = mbl_read_props( ss );
     mbl_read_props_print(vcl_cout, props); 
     TEST("Case 5a: props[ \"a\" ] == \"a\"",
-      props[ "a" ] == "a" && !ss.fail(), true);
+         props[ "a" ] == "a" && !ss.fail(), true);
     TEST("Case 5b: props[ \"b\" ] == \"b\"",
-      props[ "b" ] == "b" && !ss.fail(), true);
+         props[ "b" ] == "b" && !ss.fail(), true);
   }
 
   {
@@ -79,7 +80,7 @@ void test_read_props()
     mbl_read_props_type props = mbl_read_props( ss );
     mbl_read_props_print(vcl_cout, props); 
     TEST("Case 6: props[ \"a\" ] == \"b\"",
-      props[ "a" ] == "b" && !ss.fail(), true);
+         props[ "a" ] == "b" && !ss.fail(), true);
   }
 
   {
@@ -88,9 +89,9 @@ void test_read_props()
     mbl_read_props_type props = mbl_read_props( ss );
     mbl_read_props_print(vcl_cout, props); 
     TEST("Case 7a: props[ \"a\" ] == \"a\"",
-      props[ "a" ] == "a" && !ss.fail(), true);
+         props[ "a" ] == "a" && !ss.fail(), true);
     TEST("Case 7b: props[ \"b\" ] == \"b\"",
-      props[ "b" ] == "b" && !ss.fail(), true);
+         props[ "b" ] == "b" && !ss.fail(), true);
   }
 
   {
@@ -107,7 +108,7 @@ void test_read_props()
 
     mbl_read_props_print(vcl_cout, props); 
     TEST("Case 8a: props[ \"a\" ] == \"a\"",
-      props[ "a" ] == "a" && !ss.fail(), true);
+         props[ "a" ] == "a" && !ss.fail(), true);
     vcl_istringstream ssb(props[ "b" ]);
     vcl_string sb;
     ssb >> sb;
@@ -115,7 +116,7 @@ void test_read_props()
     mbl_read_props_type propsb = mbl_read_props( ssb );
     mbl_read_props_print(vcl_cout, propsb); 
     TEST("Case 8c: propsb[ \"ba\" ] == \"ba\"",
-      propsb[ "ba" ] == "ba" && !ssb.fail(), true);
+         propsb[ "ba" ] == "ba" && !ssb.fail(), true);
   }
 
   {
@@ -128,7 +129,7 @@ void test_read_props()
     mbl_read_props_print(vcl_cout, props); 
     TEST("Case 8.5a: props[ \"a\" ] == \"a\"", props[ "a" ] == "a" && !ss.fail(), true);
     TEST("Case 8.5b: props[ \"b\" ] == b_ans",
-      strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
+         strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
   }
 
   {
@@ -141,7 +142,7 @@ void test_read_props()
     mbl_read_props_print(vcl_cout, props); 
     TEST("Case 9a: props[ \"a\" ] == \"a\"", props[ "a" ] == "a" && !ss.fail(), true);
     TEST("Case 9b: props[ \"b\" ] == b_ans",
-      strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
+         strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
     TEST("Case 9c: props[ \"c\" ] == \"c\"", props[ "c" ] == "c", true);
   }
 
@@ -156,10 +157,10 @@ void test_read_props()
     mbl_read_props_print(vcl_cout, props); 
     TEST("Case 10a: props[ \"a\" ] == \"a\"", props[ "a" ] == "a" && !ss.fail(), true);
     TEST("Case 10b: props[ \"b\" ] == b_ans",
-      strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
+         strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
     TEST("Case 10c: props[ \"c\" ] == \"c\"", props[ "c" ] == "c", true);
     TEST("Case 10d: props[ \"d\" ] == d_ans",
-      strip_ws(props[ "d" ]) == strip_ws(d_ans) && !ss.fail(), true);
+         strip_ws(props[ "d" ]) == strip_ws(d_ans) && !ss.fail(), true);
   }
 
   {
@@ -176,13 +177,13 @@ void test_read_props()
 
     mbl_read_props_print(vcl_cout, props); 
     TEST("Case 11a: props[ \"a\" ] == \"a\"",
-      props[ "a" ] == "a" && !ss.fail(), true);
+         props[ "a" ] == "a" && !ss.fail(), true);
     TEST("Case 11b: props[ \"b\" ] == b_ans",
-      strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
+         strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
   }
   {
     vcl_cout << "\nCase 12\n";
-    vcl_istringstream ss("{\n  a: a\n  b: \n  {\n    ba: ba\n    bb: bb\n    {\n      bba: bba\n    }\n  }\n}");
+    vcl_istringstream ss("{\n  a: a\n  b:\n  {\n    ba: ba\n    bb: bb\n    {\n      bba: bba\n    }\n  }\n}");
     vcl_string b_ans( "{\n    ba: ba\n    bb: bb\n    {\n      bba: bba\n    }\n  }" );
 
 //    vcl_cout << ss.str() << vcl_endl;
@@ -194,12 +195,15 @@ void test_read_props()
 
     mbl_read_props_print(vcl_cout, props); 
     TEST("Case 12a: props[ \"a\" ] == \"a\"",
-      props[ "a" ] == "a" && !ss.fail(), true);
+         props[ "a" ] == "a" && !ss.fail(), true);
     TEST("Case 12b: props[ \"b\" ] == b_ans",
-      strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
+         strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
   }
 
   vcl_cout << "\n\n";
+#else // VCL_HAS_WORKING_STRINGSTREAM
+  vcl_cout << "\nTests not run since this compiler has no fully functional std:stringstream\n\n";
+#endif // VCL_HAS_WORKING_STRINGSTREAM
 }
 
 TESTMAIN(test_read_props);

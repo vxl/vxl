@@ -11,6 +11,7 @@ void test_parse_block()
            <<   " Testing mbl_parse_block\n"
            <<   "*************************\n";
 
+#if VCL_HAS_WORKING_STRINGSTREAM
   {
     vcl_istringstream ss("{}");
     TEST("Trivial case 1", mbl_parse_block(ss) == "{}" && !ss.fail(), true);
@@ -42,11 +43,14 @@ void test_parse_block()
   }
 
   {
-    vcl_istringstream ss("{ a\n {b\n  // wibble } \n}c }");
+    vcl_istringstream ss("{ a\n {b\n  // wibble }\n}c }");
     TEST("Comment case 1", mbl_parse_block(ss) == "{ a\n {b\n}c }" && !ss.fail(), true);
   }
 
   vcl_cout << "\n\n";
+#else // VCL_HAS_WORKING_STRINGSTREAM
+  vcl_cout << "\nTests not run since this compiler has no fully functional std:stringstream\n\n";
+#endif // VCL_HAS_WORKING_STRINGSTREAM
 }
 
 TESTMAIN(test_parse_block);
