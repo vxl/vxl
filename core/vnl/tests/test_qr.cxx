@@ -1,5 +1,5 @@
+// This is vxl/vnl/tests/test_qr.cxx
 #include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
 #include <vcl_complex.h>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_matrix.h>

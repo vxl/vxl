@@ -1,9 +1,7 @@
-#include <vcl_cstdlib.h>
+// This is vxl/vnl/tests/test_sparse_matrix.cxx
 #include <vcl_ctime.h>
 #include <vcl_iostream.h>
-#include <vcl_iomanip.h>
 #include <vcl_cmath.h>
-
 #include <vnl/vnl_sparse_matrix.h>
 #include <vnl/algo/vnl_sparse_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
