@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"  == include path
+# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/mul"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
 # vpdfl  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vpdfl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vpdfl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vpdfl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vpdfl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vpdfl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vpdfl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vpdfl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vpdfl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,53 +156,53 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE=.\CMakeLists.txt
+SOURCE="c:/awf/src/vxl/mul/vpdfl/CMakeLists.txt"
 
 !IF  "$(CFG)" == "vpdfl - Win32 Release"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/mul/CMakeLists.txt"\
-	"$(IUEROOT)/mul/vpdfl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/mul/CMakeLists.txt"\
+	"c:/awf/src/vxl/mul/vpdfl/CMakeLists.txt"
 # Begin Custom Build
 
 "vpdfl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/mul/vpdfl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/mul/vpdfl" -O"$(IUEROOT)/mul/vpdfl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/mul/vpdfl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/mul/vpdfl" -O"c:/awf/src/vxl/mul/vpdfl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vpdfl - Win32 Debug"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/mul/CMakeLists.txt"\
-	"$(IUEROOT)/mul/vpdfl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/mul/CMakeLists.txt"\
+	"c:/awf/src/vxl/mul/vpdfl/CMakeLists.txt"
 # Begin Custom Build
 
 "vpdfl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/mul/vpdfl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/mul/vpdfl" -O"$(IUEROOT)/mul/vpdfl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/mul/vpdfl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/mul/vpdfl" -O"c:/awf/src/vxl/mul/vpdfl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vpdfl - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/mul/CMakeLists.txt"\
-	"$(IUEROOT)/mul/vpdfl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/mul/CMakeLists.txt"\
+	"c:/awf/src/vxl/mul/vpdfl/CMakeLists.txt"
 # Begin Custom Build
 
 "vpdfl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/mul/vpdfl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/mul/vpdfl" -O"$(IUEROOT)/mul/vpdfl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/mul/vpdfl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/mul/vpdfl" -O"c:/awf/src/vxl/mul/vpdfl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vpdfl - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/mul/CMakeLists.txt"\
-	"$(IUEROOT)/mul/vpdfl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/mul/CMakeLists.txt"\
+	"c:/awf/src/vxl/mul/vpdfl/CMakeLists.txt"
 # Begin Custom Build
 
 "vpdfl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/mul/vpdfl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/mul/vpdfl" -O"$(IUEROOT)/mul/vpdfl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/mul/vpdfl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/mul/vpdfl" -O"c:/awf/src/vxl/mul/vpdfl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
@@ -213,127 +213,127 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\Templates/mbl_cloneable_ptr+vpdfl_builder_base-.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/mbl_cloneable_ptr+vpdfl_builder_base-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/mbl_cloneable_ptr+vpdfl_pdf_base-.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/mbl_cloneable_ptr+vpdfl_pdf_base-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vpdfl_builder_base~-.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/vcl_vector+vpdfl_builder_base~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vpdfl_pdf_base~-.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/vcl_vector+vpdfl_pdf_base~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vpdfl_sampler_base~-.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/vcl_vector+vpdfl_sampler_base~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vsl_binary_loader+vpdfl_builder_base-.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/vsl_binary_loader+vpdfl_builder_base-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vsl_binary_loader+vpdfl_pdf_base-.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/vsl_binary_loader+vpdfl_pdf_base-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vsl_vector_io+vpdfl_builder_base~-.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/vsl_vector_io+vpdfl_builder_base~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vsl_vector_io+vpdfl_pdf_base~-.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/vsl_vector_io+vpdfl_pdf_base~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_axis_gaussian.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_axis_gaussian.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_axis_gaussian_builder.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_axis_gaussian_builder.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_axis_gaussian_sampler.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_axis_gaussian_sampler.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_builder_base.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_builder_base.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_gaussian.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_gaussian.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_gaussian_builder.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_gaussian_builder.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_gaussian_sampler.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_gaussian_sampler.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_mixture.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_mixture.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_mixture_builder.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_mixture_builder.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_mixture_sampler.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_mixture_sampler.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_pc_gaussian.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_pc_gaussian.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_pc_gaussian_builder.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_pc_gaussian_builder.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_pc_gaussian_sampler.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_pc_gaussian_sampler.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_pdf_base.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_pdf_base.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_prob_chi2.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_prob_chi2.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vpdfl_sampler_base.cxx
+SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_sampler_base.cxx
 
 # End Source File
 # End Group

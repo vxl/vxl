@@ -23,6 +23,6 @@ void vgui_text_put(char const *str)
 #include <vcl_iostream.h>
 void vgui_text_put(char const *str)
 {
-  vcl_cerr << __FILE__ ":" << str << vcl_endl;
+  vcl_cerr << __FILE__ ":!defined(HAS_GLUT):" << str << vcl_endl;
 }
 #endif

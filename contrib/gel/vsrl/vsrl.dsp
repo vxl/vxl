@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"  == include path
+# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
 #  == override in output directory
 # vsrl  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsrl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsrl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsrl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsrl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsrl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsrl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsrl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsrl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,57 +156,57 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE=.\CMakeLists.txt
+SOURCE="c:/awf/src/vxl/gel/vsrl/CMakeLists.txt"
 
 !IF  "$(CFG)" == "vsrl - Win32 Release"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	"$(IUEROOT)/gel/vsrl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/gel/CMakeLists.txt"\
+	"c:/awf/src/vxl/gel/vsrl/CMakeLists.txt"
 # Begin Custom Build
 
 "vsrl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/vsrl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vsrl" -O"$(IUEROOT)/gel/vsrl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/vsrl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/vsrl" -O"c:/awf/src/vxl/gel/vsrl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vsrl - Win32 Debug"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	"$(IUEROOT)/gel/vsrl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/gel/CMakeLists.txt"\
+	"c:/awf/src/vxl/gel/vsrl/CMakeLists.txt"
 # Begin Custom Build
 
 "vsrl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/vsrl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vsrl" -O"$(IUEROOT)/gel/vsrl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/vsrl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/vsrl" -O"c:/awf/src/vxl/gel/vsrl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vsrl - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	"$(IUEROOT)/gel/vsrl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/gel/CMakeLists.txt"\
+	"c:/awf/src/vxl/gel/vsrl/CMakeLists.txt"
 # Begin Custom Build
 
 "vsrl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/vsrl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vsrl" -O"$(IUEROOT)/gel/vsrl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/vsrl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/vsrl" -O"c:/awf/src/vxl/gel/vsrl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vsrl - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	"$(IUEROOT)/gel/vsrl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/gel/CMakeLists.txt"\
+	"c:/awf/src/vxl/gel/vsrl/CMakeLists.txt"
 # Begin Custom Build
 
 "vsrl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/vsrl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vsrl" -O"$(IUEROOT)/gel/vsrl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/vsrl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/vsrl" -O"c:/awf/src/vxl/gel/vsrl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
@@ -217,92 +217,92 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vsrl_intensity_token~-.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/Templates/vcl_vector+vsrl_intensity_token~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vsrl_token~-.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/Templates/vcl_vector+vsrl_token~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_3d_output.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_3d_output.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_dense_matcher.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_dense_matcher.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_diffusion.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_diffusion.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_dynamic_program.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_dynamic_program.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_image_correlation.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_image_correlation.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_intensity_token.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_intensity_token.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_null_token.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_null_token.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_parameters.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_parameters.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_raster_dp_setup.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_raster_dp_setup.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_results_dense_matcher.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_results_dense_matcher.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_saliency_diffusion.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_saliency_diffusion.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_step_diffusion.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_step_diffusion.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_stereo_dense_matcher.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_stereo_dense_matcher.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_token.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_token.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_token_saliency.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_token_saliency.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsrl_window_accumulator.cxx
+SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_window_accumulator.cxx
 
 # End Source File
 # End Group

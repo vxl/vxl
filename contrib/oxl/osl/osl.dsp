@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"  == include path
+# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
 #  == override in output directory
 # osl  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "osl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "osl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "osl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "osl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "osl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "osl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "osl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "osl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,57 +156,57 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE=.\CMakeLists.txt
+SOURCE="c:/awf/src/vxl/oxl/osl/CMakeLists.txt"
 
 !IF  "$(CFG)" == "osl - Win32 Release"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/oxl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/osl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/osl/CMakeLists.txt"
 # Begin Custom Build
 
 "osl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/osl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/osl" -O"$(IUEROOT)/oxl/osl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/osl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/osl" -O"c:/awf/src/vxl/oxl/osl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "osl - Win32 Debug"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/oxl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/osl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/osl/CMakeLists.txt"
 # Begin Custom Build
 
 "osl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/osl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/osl" -O"$(IUEROOT)/oxl/osl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/osl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/osl" -O"c:/awf/src/vxl/oxl/osl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "osl - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/oxl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/osl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/osl/CMakeLists.txt"
 # Begin Custom Build
 
 "osl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/osl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/osl" -O"$(IUEROOT)/oxl/osl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/osl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/osl" -O"c:/awf/src/vxl/oxl/osl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "osl - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/oxl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/osl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/osl/CMakeLists.txt"
 # Begin Custom Build
 
 "osl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/osl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/osl" -O"$(IUEROOT)/oxl/osl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/osl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/osl" -O"c:/awf/src/vxl/oxl/osl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
@@ -217,212 +217,212 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\Templates/osl_1d_half_kernel+double-.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/osl_1d_half_kernel+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/osl_canny_smooth+float-.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/osl_canny_smooth+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/osl_canny_smooth+ushort-.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/osl_canny_smooth+ushort-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/osl_canny_smooth+vil_byte-.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/osl_canny_smooth+vil_byte-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/osl_canny_smooth+vil_rgb+uchar--.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/osl_canny_smooth+vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_list+osl_edgel_chain~-.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_list+osl_edgel_chain~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_list+osl_edge~-.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_list+osl_edge~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_list+osl_vertex~-.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_list+osl_vertex~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+osl_LINK~-.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_vector+osl_LINK~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+osl_edge~-.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_vector+osl_edge~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+osl_vertex~-.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_vector+osl_vertex~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\internals/droid.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/internals/droid.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\internals/osl_reorder_chain.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/internals/osl_reorder_chain.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_OrthogRegress.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_OrthogRegress.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_break_edge.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_break_edge.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_base.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_base.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_gradient.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_gradient.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_nms.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_nms.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_ox.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_ox.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_ox_params.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_ox_params.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_port.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_port.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_rothwell.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_rothwell.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_rothwell_params.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_rothwell_params.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_smooth.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_smooth.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_chamfer.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_chamfer.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_convolve.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_convolve.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_easy_canny.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_easy_canny.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_edge.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_edge.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_edge_detector.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_edge_detector.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_edge_detector_params.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_edge_detector_params.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_edgel_chain.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_edgel_chain.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_fit_lines.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_fit_lines.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_fit_lines_params.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_fit_lines_params.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_harris.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_harris.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_harris_params.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_harris_params.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_kernel.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_kernel.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_load_topology.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_load_topology.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_ortho_regress.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_ortho_regress.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_roi_window.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_roi_window.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_save_topology.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_save_topology.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_topology.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_topology.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_vertex.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_vertex.cxx
 
 # End Source File
 # End Group

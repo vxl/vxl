@@ -10,8 +10,8 @@
 
 # variables to REPLACE
 # 
-# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p"  == include path
-#   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -D_AFXDLL -DHAS_QV == compiler defines
+# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/pkg/glut/glut-3.7.1/include" /I "c:/awf/src/vxl/v3p"  == include path
+#   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -D_AFXDLL -DHAS_GLUT -DHAS_QV == compiler defines
 #  == override in output directory
 # vgui_mfc  == name of output library
 
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -D_AFXDLL -DHAS_QV /D "vgui_mfc_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/pkg/glut/glut-3.7.1/include" /I "c:/awf/src/vxl/v3p"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -D_AFXDLL -DHAS_GLUT -DHAS_QV /D "vgui_mfc_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -D_AFXDLL -DHAS_QV /D "vgui_mfc_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/pkg/glut/glut-3.7.1/include" /I "c:/awf/src/vxl/v3p"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -D_AFXDLL -DHAS_GLUT -DHAS_QV /D "vgui_mfc_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -D_AFXDLL -DHAS_QV /D "vgui_mfc_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/pkg/glut/glut-3.7.1/include" /I "c:/awf/src/vxl/v3p"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -D_AFXDLL -DHAS_GLUT -DHAS_QV /D "vgui_mfc_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -D_AFXDLL -DHAS_QV /D "vgui_mfc_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/pkg/glut/glut-3.7.1/include" /I "c:/awf/src/vxl/v3p"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -D_AFXDLL -DHAS_GLUT -DHAS_QV /D "vgui_mfc_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,77 +156,77 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE=.\CMakeLists.txt
+SOURCE="c:/awf/src/vxl/oxl/vgui/impl/mfc/CMakeLists.txt"
 
 !IF  "$(CFG)" == "vgui_mfc - Win32 Release"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindGLUT.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindQv.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindX11.cmake"\
-	"$(IUEROOT)/oxl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/vgui/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/vgui/impl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/vgui/impl/mfc/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindGLUT.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindQv.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindX11.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/vgui/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/vgui/impl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/vgui/impl/mfc/CMakeLists.txt"
 # Begin Custom Build
 
 "vgui_mfc.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/vgui/impl/mfc/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/vgui/impl/mfc" -O"$(IUEROOT)/oxl/vgui/impl/mfc" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/vgui/impl/mfc/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/vgui/impl/mfc" -O"c:/awf/src/vxl/oxl/vgui/impl/mfc" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vgui_mfc - Win32 Debug"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindGLUT.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindQv.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindX11.cmake"\
-	"$(IUEROOT)/oxl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/vgui/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/vgui/impl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/vgui/impl/mfc/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindGLUT.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindQv.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindX11.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/vgui/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/vgui/impl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/vgui/impl/mfc/CMakeLists.txt"
 # Begin Custom Build
 
 "vgui_mfc.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/vgui/impl/mfc/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/vgui/impl/mfc" -O"$(IUEROOT)/oxl/vgui/impl/mfc" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/vgui/impl/mfc/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/vgui/impl/mfc" -O"c:/awf/src/vxl/oxl/vgui/impl/mfc" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vgui_mfc - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindGLUT.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindQv.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindX11.cmake"\
-	"$(IUEROOT)/oxl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/vgui/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/vgui/impl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/vgui/impl/mfc/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindGLUT.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindQv.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindX11.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/vgui/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/vgui/impl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/vgui/impl/mfc/CMakeLists.txt"
 # Begin Custom Build
 
 "vgui_mfc.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/vgui/impl/mfc/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/vgui/impl/mfc" -O"$(IUEROOT)/oxl/vgui/impl/mfc" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/vgui/impl/mfc/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/vgui/impl/mfc" -O"c:/awf/src/vxl/oxl/vgui/impl/mfc" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vgui_mfc - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindGLUT.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindQv.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindX11.cmake"\
-	"$(IUEROOT)/oxl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/vgui/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/vgui/impl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/vgui/impl/mfc/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindGLUT.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindQv.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindX11.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/vgui/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/vgui/impl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/vgui/impl/mfc/CMakeLists.txt"
 # Begin Custom Build
 
 "vgui_mfc.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/vgui/impl/mfc/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/vgui/impl/mfc" -O"$(IUEROOT)/oxl/vgui/impl/mfc" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/vgui/impl/mfc/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/vgui/impl/mfc" -O"c:/awf/src/vxl/oxl/vgui/impl/mfc" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
@@ -237,67 +237,67 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\vgui_mfc.cxx
+SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_mfc_adaptor.cxx
+SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_adaptor.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_mfc_app.cxx
+SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_app.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_mfc_app_init.cxx
+SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_app_init.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_mfc_dialog_impl.cxx
+SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_dialog_impl.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_mfc_doc.cxx
+SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_doc.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_mfc_mainfrm.cxx
+SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_mainfrm.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_mfc_statusbar.cxx
+SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_statusbar.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_mfc_tag.cxx
+SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_tag.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_mfc_util.cxx
+SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_util.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_mfc_utils.cxx
+SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_utils.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_mfc_view.cxx
+SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_view.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_mfc_window.cxx
+SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_window.cxx
 
 # End Source File
 # End Group

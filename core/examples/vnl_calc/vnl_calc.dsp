@@ -10,11 +10,11 @@
 
 # variables to REPLACE
 # 
-# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"  == include path
+# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"  == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 # vnl_calc  == name of output library
-#  /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl"  /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl"  /LIBPATH:"$(IUEROOT)/v3p/netlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/netlib"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo"  /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl"  /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl"  /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl"  /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl"  "vbl.lib" "netlib.lib" "vnl_algo.lib" "vnl.lib" "netlib.lib" "vcl.lib" "vcl.lib" "netlib.lib" /STACK:10000000  == libraries linked in 
+#  /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl"  /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl"  /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo"  /LIBPATH:"c:/awf/src/vxl/v3p/netlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/netlib"  "vbl.lib" "vnl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vcl.lib" "vcl.lib" "netlib.lib" "m.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=vnl_calc - Win32 Debug
@@ -58,7 +58,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vnl_calc_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vnl_calc_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -70,23 +70,25 @@ LINK32=link.exe
 # ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/netlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/netlib" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/netlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/netlib" 
 # ADD LINK32 "vbl.lib"
-# ADD LINK32 "netlib.lib"
-# ADD LINK32 "vnl_algo.lib"
 # ADD LINK32 "vnl.lib"
+# ADD LINK32 "vcl.lib"
+# ADD LINK32 "vnl_algo.lib"
 # ADD LINK32 "netlib.lib"
+# ADD LINK32 "vnl.lib"
 # ADD LINK32 "vcl.lib"
 # ADD LINK32 "vcl.lib"
 # ADD LINK32 "netlib.lib"
+# ADD LINK32 "m.lib"
 # ADD LINK32 /STACK:10000000 
 
 
@@ -104,7 +106,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
 # ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vnl_calc_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vnl_calc_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -118,23 +120,25 @@ LINK32=link.exe
 # ADD BASE LINK32   kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/netlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/netlib" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/netlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/netlib" 
 # ADD LINK32 "vbl.lib"
-# ADD LINK32 "netlib.lib"
-# ADD LINK32 "vnl_algo.lib"
 # ADD LINK32 "vnl.lib"
+# ADD LINK32 "vcl.lib"
+# ADD LINK32 "vnl_algo.lib"
 # ADD LINK32 "netlib.lib"
+# ADD LINK32 "vnl.lib"
 # ADD LINK32 "vcl.lib"
 # ADD LINK32 "vcl.lib"
 # ADD LINK32 "netlib.lib"
+# ADD LINK32 "m.lib"
 # ADD LINK32 /STACK:10000000 
 
 
@@ -150,8 +154,8 @@ LINK32=link.exe
 # PROP Intermediate_Dir "MinSizeRel"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /nologo  /D "WIN32" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vnl_calc_EXPORTS"
+# ADD CPP /nologo  /D "WIN32" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vnl_calc_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -163,23 +167,25 @@ LINK32=link.exe
 # ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 # ADD LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/netlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/netlib" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/netlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/netlib" 
 # ADD LINK32 "vbl.lib"
-# ADD LINK32 "netlib.lib"
-# ADD LINK32 "vnl_algo.lib"
 # ADD LINK32 "vnl.lib"
+# ADD LINK32 "vcl.lib"
+# ADD LINK32 "vnl_algo.lib"
 # ADD LINK32 "netlib.lib"
+# ADD LINK32 "vnl.lib"
 # ADD LINK32 "vcl.lib"
 # ADD LINK32 "vcl.lib"
 # ADD LINK32 "netlib.lib"
+# ADD LINK32 "m.lib"
 # ADD LINK32 /STACK:10000000 
 
 
@@ -197,7 +203,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vnl_calc_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vnl_calc_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -209,23 +215,25 @@ LINK32=link.exe
 # ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/netlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/netlib" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/netlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/netlib" 
 # ADD LINK32 "vbl.lib"
-# ADD LINK32 "netlib.lib"
-# ADD LINK32 "vnl_algo.lib"
 # ADD LINK32 "vnl.lib"
+# ADD LINK32 "vcl.lib"
+# ADD LINK32 "vnl_algo.lib"
 # ADD LINK32 "netlib.lib"
+# ADD LINK32 "vnl.lib"
 # ADD LINK32 "vcl.lib"
 # ADD LINK32 "vcl.lib"
 # ADD LINK32 "netlib.lib"
+# ADD LINK32 "m.lib"
 # ADD LINK32 /STACK:10000000 
 
 
@@ -240,81 +248,81 @@ LINK32=link.exe
 
 # Begin Source File
 
-SOURCE=.\CMakeLists.txt
+SOURCE="c:/awf/src/vxl/vxl/examples/vnl_calc/CMakeLists.txt"
 
 !IF  "$(CFG)" == "vnl_calc - Win32 Release"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindNetlib.cmake"\
-	"$(IUEROOT)/v3p/netlib/CMakeListsLink.txt"\
-	"$(IUEROOT)/vcl/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/examples/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/examples/vnl_calc/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vbl/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/vnl/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/vnl/algo/CMakeListsLink.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNetlib.cmake"\
+	"c:/awf/src/vxl/v3p/netlib/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vcl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/examples/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/examples/vnl_calc/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vbl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/vnl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/vnl/algo/CMakeListsLink.txt"
 # Begin Custom Build
 
 "vnl_calc.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/examples/vnl_calc/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/examples/vnl_calc" -O"$(IUEROOT)/vxl/examples/vnl_calc" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/examples/vnl_calc/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/examples/vnl_calc" -O"c:/awf/src/vxl/vxl/examples/vnl_calc" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vnl_calc - Win32 Debug"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindNetlib.cmake"\
-	"$(IUEROOT)/v3p/netlib/CMakeListsLink.txt"\
-	"$(IUEROOT)/vcl/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/examples/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/examples/vnl_calc/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vbl/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/vnl/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/vnl/algo/CMakeListsLink.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNetlib.cmake"\
+	"c:/awf/src/vxl/v3p/netlib/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vcl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/examples/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/examples/vnl_calc/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vbl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/vnl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/vnl/algo/CMakeListsLink.txt"
 # Begin Custom Build
 
 "vnl_calc.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/examples/vnl_calc/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/examples/vnl_calc" -O"$(IUEROOT)/vxl/examples/vnl_calc" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/examples/vnl_calc/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/examples/vnl_calc" -O"c:/awf/src/vxl/vxl/examples/vnl_calc" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vnl_calc - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindNetlib.cmake"\
-	"$(IUEROOT)/v3p/netlib/CMakeListsLink.txt"\
-	"$(IUEROOT)/vcl/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/examples/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/examples/vnl_calc/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vbl/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/vnl/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/vnl/algo/CMakeListsLink.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNetlib.cmake"\
+	"c:/awf/src/vxl/v3p/netlib/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vcl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/examples/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/examples/vnl_calc/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vbl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/vnl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/vnl/algo/CMakeListsLink.txt"
 # Begin Custom Build
 
 "vnl_calc.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/examples/vnl_calc/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/examples/vnl_calc" -O"$(IUEROOT)/vxl/examples/vnl_calc" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/examples/vnl_calc/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/examples/vnl_calc" -O"c:/awf/src/vxl/vxl/examples/vnl_calc" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vnl_calc - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindNetlib.cmake"\
-	"$(IUEROOT)/v3p/netlib/CMakeListsLink.txt"\
-	"$(IUEROOT)/vcl/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/examples/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/examples/vnl_calc/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vbl/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/vnl/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/vnl/algo/CMakeListsLink.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNetlib.cmake"\
+	"c:/awf/src/vxl/v3p/netlib/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vcl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/examples/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/examples/vnl_calc/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vbl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/vnl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/vnl/algo/CMakeListsLink.txt"
 # Begin Custom Build
 
 "vnl_calc.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/examples/vnl_calc/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/examples/vnl_calc" -O"$(IUEROOT)/vxl/examples/vnl_calc" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/examples/vnl_calc/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/examples/vnl_calc" -O"c:/awf/src/vxl/vxl/examples/vnl_calc" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
@@ -325,7 +333,7 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\vnl_calc.cxx
+SOURCE=c:/awf/src/vxl/vxl/examples/vnl_calc/vnl_calc.cxx
 
 # End Source File
 # End Group

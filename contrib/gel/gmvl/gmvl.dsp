@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"  == include path
+# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
 #  == override in output directory
 # gmvl  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "gmvl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "gmvl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "gmvl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "gmvl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "gmvl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "gmvl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "gmvl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "gmvl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,57 +156,57 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE=.\CMakeLists.txt
+SOURCE="c:/awf/src/vxl/gel/gmvl/CMakeLists.txt"
 
 !IF  "$(CFG)" == "gmvl - Win32 Release"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	"$(IUEROOT)/gel/gmvl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/gel/CMakeLists.txt"\
+	"c:/awf/src/vxl/gel/gmvl/CMakeLists.txt"
 # Begin Custom Build
 
 "gmvl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/gmvl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/gmvl" -O"$(IUEROOT)/gel/gmvl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/gmvl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/gmvl" -O"c:/awf/src/vxl/gel/gmvl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "gmvl - Win32 Debug"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	"$(IUEROOT)/gel/gmvl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/gel/CMakeLists.txt"\
+	"c:/awf/src/vxl/gel/gmvl/CMakeLists.txt"
 # Begin Custom Build
 
 "gmvl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/gmvl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/gmvl" -O"$(IUEROOT)/gel/gmvl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/gmvl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/gmvl" -O"c:/awf/src/vxl/gel/gmvl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "gmvl - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	"$(IUEROOT)/gel/gmvl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/gel/CMakeLists.txt"\
+	"c:/awf/src/vxl/gel/gmvl/CMakeLists.txt"
 # Begin Custom Build
 
 "gmvl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/gmvl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/gmvl" -O"$(IUEROOT)/gel/gmvl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/gmvl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/gmvl" -O"c:/awf/src/vxl/gel/gmvl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "gmvl - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	"$(IUEROOT)/gel/gmvl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/gel/CMakeLists.txt"\
+	"c:/awf/src/vxl/gel/gmvl/CMakeLists.txt"
 # Begin Custom Build
 
 "gmvl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/gmvl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/gmvl" -O"$(IUEROOT)/gel/gmvl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/gmvl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/gmvl" -O"c:/awf/src/vxl/gel/gmvl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
@@ -217,77 +217,77 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\Templates/vbl_smart_ptr+gmvl_connection-.cxx
+SOURCE=c:/awf/src/vxl/gel/gmvl/Templates/vbl_smart_ptr+gmvl_connection-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vbl_smart_ptr+gmvl_node-.cxx
+SOURCE=c:/awf/src/vxl/gel/gmvl/Templates/vbl_smart_ptr+gmvl_node-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+gmvl_connection_sptr-.cxx
+SOURCE=c:/awf/src/vxl/gel/gmvl/Templates/vcl_vector+gmvl_connection_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+gmvl_node_sptr-.cxx
+SOURCE=c:/awf/src/vxl/gel/gmvl/Templates/vcl_vector+gmvl_node_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vcl_pair+vcl_string.vcl_vector+gmvl_node_sptr---.cxx
+SOURCE=c:/awf/src/vxl/gel/gmvl/Templates/vcl_vector+vcl_pair+vcl_string.vcl_vector+gmvl_node_sptr---.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\gmvl_connection.cxx
+SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_connection.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\gmvl_connection_cache.cxx
+SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_connection_cache.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\gmvl_corner_node.cxx
+SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_corner_node.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\gmvl_database.cxx
+SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_database.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\gmvl_helpers.cxx
+SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_helpers.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\gmvl_image_node.cxx
+SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_image_node.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\gmvl_node.cxx
+SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_node.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\gmvl_node_cache.cxx
+SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_node_cache.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\gmvl_tag_node.cxx
+SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_tag_node.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\gmvl_topology_node.cxx
+SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_topology_node.cxx
 
 # End Source File
 # End Group

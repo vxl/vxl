@@ -1,8 +1,21 @@
-# Microsoft Developer Studio Project File - Name="vul_test_arg" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="pcbuilder" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# TARGTYPE "Win32 (x86) Console Application" 0x0103
+# CM DSP Header file
+# This file is read by the build system of cm, and is used as the top part of
+# a microsoft project dsp header file
+# IF this is in a dsp file, then it is not the header, but has
+# already been used, so do not edit here...
+
+# variables to REPLACE
+# 
+# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"  == include path
+#  == override in output directory
+#   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
+# vul_test_arg  == name of output library
+#  /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul"  /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul"  /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl"  /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl"  "vul.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
+# TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=vul_test_arg - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
@@ -17,8 +30,10 @@ CFG=vul_test_arg - Win32 Debug
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vul_test_arg - Win32 Release" (based on "Win32 (x86) Console Application")
-!MESSAGE "vul_test_arg - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "vul_test_arg - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "vul_test_arg - Win32 MinSizeRel" (based on "Win32 (x86) Application")
+!MESSAGE "vul_test_arg - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "vul_test_arg - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -26,6 +41,7 @@ CFG=vul_test_arg - Win32 Debug
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
+MTL=midl.exe
 RSC=rc.exe
 
 !IF  "$(CFG)" == "vul_test_arg - Win32 Release"
@@ -40,16 +56,28 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /YX /FD /c
+# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vul_test_arg_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 vul.lib vcl.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
+# ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
+
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 "vul.lib"
+# ADD LINK32 "vcl.lib"
+# ADD LINK32 /STACK:10000000 
+
 
 !ELSEIF  "$(CFG)" == "vul_test_arg - Win32 Debug"
 
@@ -63,17 +91,99 @@ LINK32=link.exe
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob0 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /FD /GZ /c
-# SUBTRACT CPP /YX
+# ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
+# ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vul_test_arg_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MDd /Zi /Od /GZ
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 vul.lib vcl.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
+# ADD BASE LINK32   kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
+
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 "vul.lib"
+# ADD LINK32 "vcl.lib"
+# ADD LINK32 /STACK:10000000 
+
+
+!ELSEIF  "$(CFG)" == "vul_test_arg - Win32 MinSizeRel"
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "MinSizeRel"
+# PROP BASE Intermediate_Dir "MinSizeRel"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "MinSizeRel"
+# PROP Intermediate_Dir "MinSizeRel"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /nologo  /D "WIN32" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vul_test_arg_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /O1
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
+# ADD LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
+
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 "vul.lib"
+# ADD LINK32 "vcl.lib"
+# ADD LINK32 /STACK:10000000 
+
+
+!ELSEIF  "$(CFG)" == "vul_test_arg - Win32 RelWithDebInfo"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "RelWithDebInfo"
+# PROP BASE Intermediate_Dir "RelWithDebInfo"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "RelWithDebInfo"
+# PROP Intermediate_Dir "RelWithDebInfo"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vul_test_arg_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /Zi /O2
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
+
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
+# ADD LINK32 "vul.lib"
+# ADD LINK32 "vcl.lib"
+# ADD LINK32 /STACK:10000000 
+
 
 !ENDIF 
 
@@ -81,21 +191,86 @@ LINK32=link.exe
 
 # Name "vul_test_arg - Win32 Release"
 # Name "vul_test_arg - Win32 Debug"
-# Begin Group "Source Files"
+# Name "vul_test_arg - Win32 MinSizeRel"
+# Name "vul_test_arg - Win32 RelWithDebInfo"
 
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\vul_test_arg.cxx
+SOURCE="c:/awf/src/vxl/vxl/vul/tests/CMakeLists.txt"
+
+!IF  "$(CFG)" == "vul_test_arg - Win32 Release"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vcl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vul/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vul/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/vul/tests/CMakeLists.txt"
+# Begin Custom Build
+
+"vul_test_arg.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vul/tests/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vul/tests" -O"c:/awf/src/vxl/vxl/vul/tests" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "vul_test_arg - Win32 Debug"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vcl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vul/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vul/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/vul/tests/CMakeLists.txt"
+# Begin Custom Build
+
+"vul_test_arg.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vul/tests/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vul/tests" -O"c:/awf/src/vxl/vxl/vul/tests" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "vul_test_arg - Win32 MinSizeRel"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vcl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vul/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vul/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/vul/tests/CMakeLists.txt"
+# Begin Custom Build
+
+"vul_test_arg.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vul/tests/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vul/tests" -O"c:/awf/src/vxl/vxl/vul/tests" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "vul_test_arg - Win32 RelWithDebInfo"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vcl/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vul/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vul/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/vul/tests/CMakeLists.txt"
+# Begin Custom Build
+
+"vul_test_arg.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vul/tests/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vul/tests" -O"c:/awf/src/vxl/vxl/vul/tests" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ENDIF
+
+# End Source File
+# Begin Group "Source Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vul/tests/vul_test_arg.cxx
+
 # End Source File
 # End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
-# End Group
-# Begin Group "Resource Files"
-
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
+

@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/v3p/jpeg" /I "$(IUEROOT)/v3p/png" /I "$(IUEROOT)/v3p/zlib" /I "$(IUEROOT)/v3p/tiff"  == include path
+# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/v3p/jpeg" /I "c:/awf/src/vxl/v3p/png" /I "c:/awf/src/vxl/v3p/zlib" /I "c:/awf/src/vxl/v3p/tiff"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF == compiler defines
 #  == override in output directory
 # vil_io  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/v3p/jpeg" /I "$(IUEROOT)/v3p/png" /I "$(IUEROOT)/v3p/zlib" /I "$(IUEROOT)/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "vil_io_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/v3p/jpeg" /I "c:/awf/src/vxl/v3p/png" /I "c:/awf/src/vxl/v3p/zlib" /I "c:/awf/src/vxl/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "vil_io_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/v3p/jpeg" /I "$(IUEROOT)/v3p/png" /I "$(IUEROOT)/v3p/zlib" /I "$(IUEROOT)/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "vil_io_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/v3p/jpeg" /I "c:/awf/src/vxl/v3p/png" /I "c:/awf/src/vxl/v3p/zlib" /I "c:/awf/src/vxl/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "vil_io_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/v3p/jpeg" /I "$(IUEROOT)/v3p/png" /I "$(IUEROOT)/v3p/zlib" /I "$(IUEROOT)/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "vil_io_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/v3p/jpeg" /I "c:/awf/src/vxl/v3p/png" /I "c:/awf/src/vxl/v3p/zlib" /I "c:/awf/src/vxl/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "vil_io_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/v3p/jpeg" /I "$(IUEROOT)/v3p/png" /I "$(IUEROOT)/v3p/zlib" /I "$(IUEROOT)/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "vil_io_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/v3p/jpeg" /I "c:/awf/src/vxl/v3p/png" /I "c:/awf/src/vxl/v3p/zlib" /I "c:/awf/src/vxl/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "vil_io_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,105 +156,105 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE=.\CMakeLists.txt
+SOURCE="c:/awf/src/vxl/vxl/vil/io/CMakeLists.txt"
 
 !IF  "$(CFG)" == "vil_io - Win32 Release"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindJPEG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindPNG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindTIFF.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindZLIB.cmake"\
-	"$(IUEROOT)/v3p/jpeg/CMakeListsLink.txt"\
-	"$(IUEROOT)/v3p/png/CMakeListsLink.txt"\
-	"$(IUEROOT)/v3p/tiff/CMakeListsLink.txt"\
-	"$(IUEROOT)/v3p/zlib/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vil/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vil/io/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindJPEG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindPNG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindTIFF.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindZLIB.cmake"\
+	"c:/awf/src/vxl/v3p/jpeg/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/v3p/png/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/v3p/tiff/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/v3p/zlib/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vil/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vil/io/CMakeLists.txt"
 # Begin Custom Build
 
 "vil_io.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vil/io/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vil/io" -O"$(IUEROOT)/vxl/vil/io" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vil/io/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vil/io" -O"c:/awf/src/vxl/vxl/vil/io" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vil_io - Win32 Debug"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindJPEG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindPNG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindTIFF.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindZLIB.cmake"\
-	"$(IUEROOT)/v3p/jpeg/CMakeListsLink.txt"\
-	"$(IUEROOT)/v3p/png/CMakeListsLink.txt"\
-	"$(IUEROOT)/v3p/tiff/CMakeListsLink.txt"\
-	"$(IUEROOT)/v3p/zlib/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vil/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vil/io/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindJPEG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindPNG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindTIFF.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindZLIB.cmake"\
+	"c:/awf/src/vxl/v3p/jpeg/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/v3p/png/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/v3p/tiff/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/v3p/zlib/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vil/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vil/io/CMakeLists.txt"
 # Begin Custom Build
 
 "vil_io.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vil/io/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vil/io" -O"$(IUEROOT)/vxl/vil/io" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vil/io/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vil/io" -O"c:/awf/src/vxl/vxl/vil/io" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vil_io - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindJPEG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindPNG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindTIFF.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindZLIB.cmake"\
-	"$(IUEROOT)/v3p/jpeg/CMakeListsLink.txt"\
-	"$(IUEROOT)/v3p/png/CMakeListsLink.txt"\
-	"$(IUEROOT)/v3p/tiff/CMakeListsLink.txt"\
-	"$(IUEROOT)/v3p/zlib/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vil/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vil/io/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindJPEG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindPNG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindTIFF.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindZLIB.cmake"\
+	"c:/awf/src/vxl/v3p/jpeg/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/v3p/png/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/v3p/tiff/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/v3p/zlib/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vil/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vil/io/CMakeLists.txt"
 # Begin Custom Build
 
 "vil_io.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vil/io/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vil/io" -O"$(IUEROOT)/vxl/vil/io" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vil/io/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vil/io" -O"c:/awf/src/vxl/vxl/vil/io" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vil_io - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindJPEG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindPNG.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindTIFF.cmake"\
-	"$(IUEROOT)/config.cmake/Modules/FindZLIB.cmake"\
-	"$(IUEROOT)/v3p/jpeg/CMakeListsLink.txt"\
-	"$(IUEROOT)/v3p/png/CMakeListsLink.txt"\
-	"$(IUEROOT)/v3p/tiff/CMakeListsLink.txt"\
-	"$(IUEROOT)/v3p/zlib/CMakeListsLink.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vil/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vil/io/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindJPEG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindPNG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindTIFF.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindZLIB.cmake"\
+	"c:/awf/src/vxl/v3p/jpeg/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/v3p/png/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/v3p/tiff/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/v3p/zlib/CMakeListsLink.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vil/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vil/io/CMakeLists.txt"
 # Begin Custom Build
 
 "vil_io.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vil/io/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vil/io" -O"$(IUEROOT)/vxl/vil/io" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vil/io/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vil/io" -O"c:/awf/src/vxl/vxl/vil/io" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
@@ -265,117 +265,117 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+bool-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+bool-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+signed_char-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+signed_char-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+signed_int-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+signed_int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+signed_short-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+signed_short-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+unsigned_char-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+unsigned_char-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+unsigned_int-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+unsigned_int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+unsigned_short-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+unsigned_short-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+vcl_complex+double--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+vcl_complex+float--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+vil_rgb+double--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+vil_rgb+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+vil_rgb+float--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+vil_rgb+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+vil_rgb+uchar--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_rgb+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_rgb+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_rgb+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_rgb+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_rgba+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_rgba+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_rgba+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_rgba+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vil_io_image.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/vil_io_image.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vil_io_image_impl.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/vil_io_image_impl.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vil_io_memory_image.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/vil_io_memory_image.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vil_io_memory_image_format.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/vil_io_memory_image_format.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vil_io_memory_image_impl.cxx
+SOURCE=c:/awf/src/vxl/vxl/vil/io/vil_io_memory_image_impl.cxx
 
 # End Source File
 # End Group

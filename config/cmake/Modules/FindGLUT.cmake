@@ -4,6 +4,29 @@
 
 IF(NOT HAS_GLUT)
   # don't even bother under WIN32
+  IF (WIN32)
+    # Oh go on, have a go...
+    SET( HAS_GLUT "NO" )
+  
+    FIND_PATH( GLUT_INCLUDE_PATH GL/glut.h 
+      ${GLUT_ROOT_PATH}/include
+    )
+  
+    FIND_LIBRARY( GLUT_glut_LIBRARY glut
+      ${GLUT_ROOT_PATH}/Release
+    )
+
+    IF(GLUT_INCLUDE_PATH)
+      IF(GLUT_glut_LIBRARY)
+        INCLUDE_DIRECTORIES( ${GLUT_INCLUDE_PATH} )
+        LINK_LIBRARIES( ${GLUT_glut_LIBRARY} )
+        SET( HAS_GLUT "YES" )
+        ADD_DEFINITIONS( -DHAS_GLUT )
+      ENDIF(GLUT_glut_LIBRARY)
+    ENDIF(GLUT_INCLUDE_PATH)
+
+  ENDIF (WIN32)
+
   IF (UNIX)
   
     SET( HAS_GLUT "NO" )

@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"  == include path
+# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
 # vgl  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vgl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vgl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vgl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vgl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vgl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vgl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vgl_EXPORTS"
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vgl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,53 +156,53 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE=.\CMakeLists.txt
+SOURCE="c:/awf/src/vxl/vxl/vgl/CMakeLists.txt"
 
 !IF  "$(CFG)" == "vgl - Win32 Release"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vgl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vgl/CMakeLists.txt"
 # Begin Custom Build
 
 "vgl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vgl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vgl" -O"$(IUEROOT)/vxl/vgl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vgl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vgl" -O"c:/awf/src/vxl/vxl/vgl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vgl - Win32 Debug"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vgl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vgl/CMakeLists.txt"
 # Begin Custom Build
 
 "vgl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vgl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vgl" -O"$(IUEROOT)/vxl/vgl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vgl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vgl" -O"c:/awf/src/vxl/vxl/vgl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vgl - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vgl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vgl/CMakeLists.txt"
 # Begin Custom Build
 
 "vgl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vgl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vgl" -O"$(IUEROOT)/vxl/vgl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vgl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vgl" -O"c:/awf/src/vxl/vxl/vgl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vgl - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vgl/CMakeLists.txt"
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vgl/CMakeLists.txt"
 # Begin Custom Build
 
 "vgl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vgl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vgl" -O"$(IUEROOT)/vxl/vgl" -B"$(IUEROOT)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vgl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vgl" -O"c:/awf/src/vxl/vxl/vgl" -B"c:/awf/src/vxl"
 
 # End Custom Build
 
@@ -213,337 +213,337 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vcl_vector+vgl_point_2d+float---.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vcl_vector+vcl_vector+vgl_point_2d+float---.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vgl_homg_point_1d+float--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vcl_vector+vgl_homg_point_1d+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vgl_homg_point_2d+int--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vcl_vector+vgl_homg_point_2d+int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vgl_homg_point_3d+int--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vcl_vector+vgl_homg_point_3d+int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vgl_point_2d+double--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vcl_vector+vgl_point_2d+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vgl_point_2d+float--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vcl_vector+vgl_point_2d+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vgl_point_2d+int--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vcl_vector+vgl_point_2d+int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vgl_point_3d+double--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vcl_vector+vgl_point_3d+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vgl_point_3d+float--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vcl_vector+vgl_point_3d+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vgl_point_3d+int--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vcl_vector+vgl_point_3d+int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vgl_polygon-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vcl_vector+vgl_polygon-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_box_2d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_box_2d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_box_2d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_box_2d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_box_2d+int-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_box_2d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_box_3d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_box_3d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_box_3d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_box_3d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_box_3d+int-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_box_3d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_line_2d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_line_2d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_line_2d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_line_2d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_line_2d+int-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_line_2d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_line_3d_2_points+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_line_3d_2_points+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_line_3d_2_points+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_line_3d_2_points+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_line_3d_2_points+int-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_line_3d_2_points+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_plane_3d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_plane_3d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_plane_3d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_plane_3d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_plane_3d+int-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_plane_3d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_point_1d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_point_1d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_point_1d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_point_1d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_point_1d+int-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_point_1d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_point_2d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_point_2d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_point_2d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_point_2d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_point_2d+int-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_point_2d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_point_3d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_point_3d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_point_3d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_point_3d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_point_3d+int-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_homg_point_3d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_line_2d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_line_2d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_line_2d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_line_2d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_line_segment_2d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_line_segment_2d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_line_segment_2d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_line_segment_2d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_line_segment_3d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_line_segment_3d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_line_segment_3d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_line_segment_3d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_plane_3d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_plane_3d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_plane_3d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_plane_3d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_point_2d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_point_2d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_point_2d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_point_2d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_point_2d+int-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_point_2d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_point_3d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_point_3d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_point_3d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_point_3d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_point_3d+int-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_point_3d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_vector_2d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_vector_2d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_vector_2d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_vector_2d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_vector_2d+int-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_vector_2d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_vector_3d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_vector_3d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_vector_3d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_vector_3d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_vector_3d+int-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/Templates/vgl_vector_3d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_1d_basis.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/vgl_1d_basis.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_clip.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/vgl_clip.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_distance.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/vgl_distance.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_lineseg_test.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/vgl_lineseg_test.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_polygon.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/vgl_polygon.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_polygon_scan_iterator.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/vgl_polygon_scan_iterator.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_polygon_test.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/vgl_polygon_test.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_region_scan_iterator.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/vgl_region_scan_iterator.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_test.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/vgl_test.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_triangle_scan_iterator.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/vgl_triangle_scan_iterator.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_triangle_test.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/vgl_triangle_test.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_window_scan_iterator.cxx
+SOURCE=c:/awf/src/vxl/vxl/vgl/vgl_window_scan_iterator.cxx
 
 # End Source File
 # End Group

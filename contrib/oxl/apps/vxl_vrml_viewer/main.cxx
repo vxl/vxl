@@ -39,16 +39,15 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_error_dialog.h>
 
+# include <vgui/vgui_linker_hack.h>
+
 #ifdef WIN32
-# include <vgui/vgui_linker_hack.h>
 # include <vgui/impl/mfc/vgui_mfc_app_init.h>
-vgui_mfc_app_init theAppinit;
-#else
-# include <vgui/vgui_linker_hack.h>
 #endif
 
 vgui_deck_tableau_sptr thedeck;
 vcl_vector<vgui_vrml_tableau_sptr> thevrmls;
+vgui_viewer3D_sptr theviewer;
 
 vgui_tableau_sptr make_3d_tableau(char const* filename)
 {
@@ -81,7 +80,7 @@ vgui_tableau_sptr make_3d_tableau(char const* filename)
   // Composite the easy and vrml
 
   vgui_text_new text;
-  text->add(0,0, filename);
+  text->add(-.8f,-.8f, filename);
 
   vgui_composite_new c(vrml, text);
 
@@ -93,7 +92,7 @@ vgui_tableau_sptr make_3d_tableau(char const* filename)
 void load_vrml()
 {
   vgui_dialog d("Load vrml");
-  vcl_string filename = "/vrmls/ashmolean/vase1/ppm_cropped/s.000.ppm";
+  vcl_string filename = "find_a_vrml_file.wrl";
   vcl_string re = "*.*";
   d.inline_file("Filename", re, filename);
   if (!d.ask())
@@ -128,6 +127,11 @@ void next_style()
     thevrmls[i]->invalidate_vrml();
 }
 
+void toggle_headlight()
+{
+  theviewer->lighting = !theviewer->lighting;
+  theviewer->post_redraw();
+}
 
 vgui_menu make_menubar()
 {
@@ -137,6 +141,7 @@ vgui_menu make_menubar()
 
   vgui_menu display;
   display.add("Change style", next_style, vgui_key_CTRL('t'));
+  display.add("Toggle headlight", toggle_headlight, vgui_key_CTRL('h'));
 
   // Make bar
   vgui_menu bar;
@@ -158,6 +163,7 @@ int main(int argc, char **argv)
   }
 
   vgui_viewer3D_new viewer(deck);
+  theviewer = viewer;
 
   vgui_shell_tableau_new shell(viewer);
 
