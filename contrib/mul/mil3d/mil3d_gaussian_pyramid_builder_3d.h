@@ -15,10 +15,19 @@
 //  Smooth with a gaussian filter (1-5-8-5-1 by default)
 //  and subsample so that image at level i-1 is half the
 //  size of that at level i
+//
+//  Note that if set_uniform_reduction(false) and width of z pixels much more
+//  than that in x and y,  then only smooth and sub-sample in x and y.
+//  This is useful for images with non-isotropic sampling (eg MR images)
 template <class T>
 class mil3d_gaussian_pyramid_builder_3d : public mil_image_pyramid_builder
 {
   int max_levels_;
+
+  //: When true, subsample in x,y,z every time.
+  //  When not true and width of z pixels much more than that in x and y,
+  //  then only smooth and sub-sample in x and y
+  bool uniform_reduction_;
 
   mutable mil3d_image_3d_of<T> work_im1_,work_im2_;
 
@@ -46,6 +55,17 @@ class mil3d_gaussian_pyramid_builder_3d : public mil_image_pyramid_builder
   void gauss_reduce_15851(mil3d_image_3d_of<T>& dest_im,
                     const mil3d_image_3d_of<T>& src_im) const;
 
+  //: Smooth and subsample src_im to produce dest_im, smoothing in x and y only
+  //  Applies 1-5-8-5-1 filter and subsamples in x then y, but not z
+  void gauss_reduce_xy_15851(mil3d_image_3d_of<T>& dest_im,
+                    const mil3d_image_3d_of<T>& src_im) const;
+
+  //: Select number of levels to use
+  int n_levels(const mil3d_image_3d_of<T>& base_image) const;
+
+  //: Compute real world size of pixel in image
+  void get_pixel_size(double &dx, double& dy, double& dz, const mil3d_image_3d_of<T>& image) const;
+
  public:
   //: Dflt ctor
   mil3d_gaussian_pyramid_builder_3d();
@@ -58,6 +78,16 @@ class mil3d_gaussian_pyramid_builder_3d : public mil_image_pyramid_builder
 
   //: Set current filter width (must be 5 at present)
   void set_filter_width(unsigned);
+
+  //: When true, subsample in x,y,z every time.
+  //  When not true and width of z pixels much more than that in x and y,
+  //  then only smooth and sub-sample in x and y
+  bool uniform_reduction() const { return uniform_reduction_; }
+
+  //: When true, subsample in x,y,z every time.
+  //  When not true and width of z pixels much more than that in x and y,
+  //  then only smooth and sub-sample in x and y
+  void set_uniform_reduction(bool b) { uniform_reduction_ = b; }
 
   //: Create new (empty) pyramid on heap.
   //  Caller responsible for its deletion
@@ -81,7 +111,7 @@ class mil3d_gaussian_pyramid_builder_3d : public mil_image_pyramid_builder
   virtual void extend(mil_image_pyramid&) const;
 
   //: Smooth and subsample src_im to produce dest_im.
-  //  Applies filter in x and y, then samples every other pixel.
+  //  Applies filter in x,y and z, then samples every other pixel.
   //  Filter width defined by set_filter_width()
   void gauss_reduce(mil3d_image_3d_of<T>& dest_im,
                     const mil3d_image_3d_of<T>& src_im) const;

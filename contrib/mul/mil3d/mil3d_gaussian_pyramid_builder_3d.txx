@@ -19,7 +19,7 @@
 
 template<class T>
 mil3d_gaussian_pyramid_builder_3d<T>::mil3d_gaussian_pyramid_builder_3d()
-: max_levels_(99),filter_width_(5)
+: max_levels_(99),uniform_reduction_(false),filter_width_(5)
 {
   set_min_size(5, 5, 5);
 }
@@ -51,6 +51,41 @@ template<class T>
 int mil3d_gaussian_pyramid_builder_3d<T>::maxLevels() const
 {
   return max_levels_;
+}
+
+//: Select number of levels to use
+template<class T>
+int mil3d_gaussian_pyramid_builder_3d<T>::n_levels(const mil3d_image_3d_of<T>& base_image) const
+{
+  int nx = base_image.nx();
+  int ny = base_image.ny();
+  int nz = base_image.nz();
+  double dx,dy,dz;
+  get_pixel_size(dx,dy,dz,base_image);
+  // Compute number of levels to pyramid so that top is no less
+  // than min_x_size_ x min_y_size_ x min_z_size_
+  int max_levels = 0;
+  while ((nx>=int(min_x_size_)) && (ny>=int(min_y_size_)) && (nz>=int(min_z_size_)))
+  {
+    if (uniform_reduction_  || (dz*dz/(dx*dx)<=2.0))
+	{
+      nx = (nx+1)/2; dx*=2;
+      ny = (ny+1)/2; dy*=2;
+      nz = (nz+1)/2; dz*=2;
+    }
+	else
+	{
+	  // Pixels large in z, so don't smooth them
+      nx = (nx+1)/2; dx*=2;
+      ny = (ny+1)/2; dy*=2;
+	}
+    max_levels++;
+  }
+  if (max_levels<1) max_levels = 1;
+  if (max_levels>max_levels_)
+    max_levels=max_levels_;
+
+  return max_levels;
 }
 
 //=======================================================================
@@ -101,10 +136,6 @@ void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_15851(mil3d_image_3d_of<
     dest_im.set_n_planes(n_planes);
   dest_im.resize(nx2,ny2,nz2);
 
-vcl_cout<<"Generating new image of size "<<nx2<<" x "<<ny2<<" x "<<nz2<<vcl_endl;
-vcl_cout<<"Dest im zstep = "<<dest_im.zstep()<<vcl_endl;
-vcl_cout<<dest_im<<vcl_endl;
-
   if (work_im1_.nx()<nx2 || work_im1_.ny()<ny || work_im1_.nz()<nz)
     work_im1_.resize(nx2,ny,nz);
 
@@ -136,6 +167,52 @@ vcl_cout<<dest_im<<vcl_endl;
   dest_im.setWorld2im(scaling * src_im.world2im());
 }
 
+//: Smooth and subsample src_im to produce dest_im, smoothing in x and y only
+//  Applies 1-5-8-5-1 filter and subsamples in x then y, but not z
+template<class T>
+void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_xy_15851(mil3d_image_3d_of<T>& dest_im,
+                                                            const mil3d_image_3d_of<T>& src_im) const
+{
+  int nx = src_im.nx();
+  int ny = src_im.ny();
+  int nz = src_im.nz();
+  int n_planes = src_im.n_planes();
+
+  // Output image size
+  int nx2 = (nx+1)/2;
+  int ny2 = (ny+1)/2;
+  int nz2 = nz;
+
+  if (dest_im.n_planes()!=n_planes)
+    dest_im.set_n_planes(n_planes);
+  dest_im.resize(nx2,ny2,nz2);
+
+  if (work_im1_.nx()<nx2 || work_im1_.ny()<ny || work_im1_.nz()<nz)
+    work_im1_.resize(nx2,ny,nz);
+
+  if (work_im2_.nx()<nx2 || work_im2_.ny()<ny2 || work_im2_.nz()<nz)
+    work_im2_.resize(nx2,ny2,nz);
+
+  // Reduce plane-by-plane
+  for (int i=0;i<n_planes;++i)
+  {
+    // Smooth and subsample in x, result in work_im1_
+    mil3d_gauss_reduce_3d(work_im1_.plane(0),work_im1_.xstep(),work_im1_.ystep(),work_im1_.zstep(),
+      src_im.plane(i),nx,ny,nz,
+      src_im.xstep(),src_im.ystep(),src_im.zstep());
+
+    // Smooth and subsample in y (by implicitly transposing)
+    mil3d_gauss_reduce_3d(dest_im.plane(0),dest_im.ystep(),dest_im.xstep(),dest_im.zstep(),
+      work_im1_.plane(0),ny,nx2,nz,
+      work_im1_.ystep(),work_im1_.xstep(),work_im1_.zstep());
+  }
+
+  // Sort out world to image transformation for destination image
+  mil3d_transform_3d scaling;
+  scaling.set_zoom_only(0.5,0.5,1.0,0,0,0);
+  dest_im.setWorld2im(scaling * src_im.world2im());
+}
+
 //=======================================================================
 //: Smooth and subsample src_im to produce dest_im
 //  Applies 1-5-8-5-1 filter in x and y, then samples
@@ -144,16 +221,28 @@ template<class T>
 void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce(mil3d_image_3d_of<T>& dest_im,
                                                       const mil3d_image_3d_of<T>& src_im) const
 {
-  switch (filter_width_)
+  // Assume filter width is 5 for the moment.
+  if (filter_width_!=5)
   {
-    case (5):
-      gauss_reduce_15851(dest_im,src_im);
-      break;
-    default:
-      vcl_cerr<<"mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce() ";
-      vcl_cerr<<"Cannot cope with filter width of "<<filter_width_<<vcl_endl;
-      vcl_abort();
+    vcl_cerr<<"mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce() ";
+    vcl_cerr<<"Cannot cope with filter width of "<<filter_width_<<vcl_endl;
+    vcl_abort();
   }
+
+  double dx,dy,dz;
+  get_pixel_size(dx,dy,dz,src_im);
+
+  if (uniform_reduction_)
+  {
+    gauss_reduce_15851(dest_im,src_im);
+  }
+
+  // If dz is much larger than dx, then don't subsample in that direction
+  if (dz*dz/(dx*dx)>2.0)
+    gauss_reduce_xy_15851(dest_im,src_im);
+  else
+    gauss_reduce_15851(dest_im,src_im);
+
 }
 
 //=======================================================================
@@ -210,18 +299,7 @@ void mil3d_gaussian_pyramid_builder_3d<T>::build(mil_image_pyramid& image_pyr,
   int ny = base_image.ny();
   int nz = base_image.nz();
 
-  // Compute number of levels to pyramid so that top is no less
-  // than min_x_size_ x min_y_size_ x minZsize_
-  int s = 1;
-  int max_levels = 1;
-  while ((nx/(2*s)>=int(min_x_size_)) && (ny/(2*s)>=int(min_y_size_)) && (nz/(2*s)>=int(min_z_size_)))
-  {
-    max_levels++;
-    s*=2;
-  }
-
-  if (max_levels>max_levels_)
-    max_levels=max_levels_;
+  int max_levels=n_levels(base_image);
 
   work_im1_.resize(nx,ny,nz);
   work_im2_.resize(nx,ny,nz);
@@ -255,6 +333,22 @@ void mil3d_gaussian_pyramid_builder_3d<T>::build(mil_image_pyramid& image_pyr,
   image_pyr.setWidths(base_pixel_width,scale_step);
 }
 
+//: Compute real world size of pixel
+template<class T>
+void mil3d_gaussian_pyramid_builder_3d<T>::get_pixel_size(double &dx, double& dy, double& dz,
+         const mil3d_image_3d_of<T>& image) const
+{
+  // Estimate width of pixels in base image
+  vgl_point_3d<double>  c0(0,0,0);
+  vgl_point_3d<double>  cx(1,0,0);
+  vgl_point_3d<double>  cy(0,1,0);
+  vgl_point_3d<double>  cz(0,0,1);
+  mil3d_transform_3d im2world = image.world2im().inverse();
+  dx = (im2world(cx) - im2world(c0)).length();
+  dy = (im2world(cy) - im2world(c0)).length();
+  dz = (im2world(cz) - im2world(c0)).length();
+}
+
 //=======================================================================
 //: Extend pyramid
 template<class T>
@@ -269,18 +363,7 @@ void mil3d_gaussian_pyramid_builder_3d<T>::extend(mil_image_pyramid& image_pyr) 
   int ny = image_pyr(0).ny();
   int nz = image_pyr(0).nz();
 
-  // Compute number of levels to pyramid so that top is no less
-  // than 5 x 5
-  double s = 1;
-  int max_levels = 1;
-  while ((nx/(scale_step()*s)>=min_x_size_) && (ny/(scale_step()*s)>=min_x_size_) && (nz/(2*s)>=int(min_z_size_)))
-  {
-    max_levels++;
-    s*=scale_step();
-  }
-
-  if (max_levels>max_levels_)
-    max_levels=max_levels_;
+  int max_levels=n_levels((const mil3d_image_3d_of<T>&)image_pyr(0));
 
   work_im1_.resize(nx,ny,nz);
   work_im2_.resize(nx,ny,nz);
@@ -327,7 +410,7 @@ bool mil3d_gaussian_pyramid_builder_3d<T>::is_class(vcl_string const& s) const
 template<class T>
 short mil3d_gaussian_pyramid_builder_3d<T>::version_no() const
 {
-  return 2;
+  return 1;
 }
 
 //=======================================================================
@@ -352,6 +435,7 @@ void mil3d_gaussian_pyramid_builder_3d<T>::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
   vsl_b_write(bfs,max_levels_);
+  vsl_b_write(bfs,uniform_reduction_);
   vsl_b_write(bfs,filter_width_);
 }
 
@@ -368,10 +452,7 @@ void mil3d_gaussian_pyramid_builder_3d<T>::b_read(vsl_b_istream& bfs)
   {
   case (1):
     vsl_b_read(bfs,max_levels_);
-    filter_width_=5;
-    break;
-  case (2):
-    vsl_b_read(bfs,max_levels_);
+    vsl_b_read(bfs,uniform_reduction_);
     vsl_b_read(bfs,filter_width_);
     break;
   default:
