@@ -47,12 +47,12 @@ void vsol_box_3d::add_point(double x, double y, double z)
 }
 
 //: compare mins and maxs between this and the comp_box, grow to the bounding box
-void vsol_box_3d::grow_minmax_bounds(vsol_box_3d & comp_box)
+void vsol_box_3d::grow_minmax_bounds(vsol_box_3d_sptr const& comp_box)
 {
-  if (comp_box.box_.empty()) return;
-  if (box_.empty()) { operator=(comp_box); return; }
-  box_.update(comp_box.get_min_x(),comp_box.get_min_y(),comp_box.get_min_z());
-  box_.update(comp_box.get_max_x(),comp_box.get_max_y(),comp_box.get_max_z());
+  if (comp_box->box_.empty()) return;
+  if (box_.empty()) { operator=(*comp_box); return; }
+  box_.update(comp_box->get_min_x(),comp_box->get_min_y(),comp_box->get_min_z());
+  box_.update(comp_box->get_max_x(),comp_box->get_max_y(),comp_box->get_max_z());
 }
 
 //-------------------------------------------------------------------

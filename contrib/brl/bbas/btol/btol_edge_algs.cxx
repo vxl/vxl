@@ -12,7 +12,7 @@
 
 const double btol_edge_algs::tol = 1e-6;
 
-//: Destructor
+// Destructor
 btol_edge_algs::~btol_edge_algs()
 {
 }
@@ -107,7 +107,7 @@ vsol_box_2d btol_edge_algs::bounding_box(vcl_vector<vtol_edge_2d_sptr>& edges)
       continue;
     }
     if (c->cast_to_vdgl_digital_curve())
-      b.grow_minmax_bounds(*c->cast_to_vdgl_digital_curve()->get_bounding_box());
+      b.grow_minmax_bounds(c->cast_to_vdgl_digital_curve()->get_bounding_box());
     else
       vcl_cout << "In btol_edge_algs::bounding_box(..) -"
                << " curve has unknown geometry\n";

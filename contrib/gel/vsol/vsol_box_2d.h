@@ -11,14 +11,16 @@
 //  Modifications
 //   2003/01/09 Peter Vanroose deprecated set_min_x() etc. and replaced with
 //                             more safe add_point()
-//   2004/05/10 Joseph Mundy  added binary I/O methods
-//   2004/05/10 Joseph Mundy  changed bounds access methods to const
+//   2004/05/10 Joseph Mundy   added binary I/O methods
+//   2004/05/10 Joseph Mundy   changed bounds access methods to const
+//   2004/09/27 Peter Vanroose grow_minmax_bounds() now takes smart pointer arg
 // \endverbatim
 
 #include <vsl/vsl_binary_io.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_bounding_box.h>
+#include "vsol_box_2d_sptr.h"
 
 //: A bounding box for 2d spatial objects
 
@@ -55,7 +57,7 @@ class vsol_box_2d : public vbl_ref_count, public vul_timestamp
 
   //: Compare this' bounds to comp_box and grow to the maximum bounding box.
   //  I.e., take the convex union of this and comp_box
-  void grow_minmax_bounds(vsol_box_2d & comp_box);
+  void grow_minmax_bounds(vsol_box_2d_sptr const& comp_box);
 
   //: a<b means a is inside b
   bool operator< (vsol_box_2d& box) const;
@@ -86,8 +88,6 @@ class vsol_box_2d : public vbl_ref_count, public vul_timestamp
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 };
-
-#include "vsol_box_2d_sptr.h"
 
 //: Stream operator
 vcl_ostream&  operator<<(vcl_ostream& s, vsol_box_2d const& p);
