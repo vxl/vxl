@@ -128,7 +128,7 @@ vil_image_view_base_sptr vidl_avicodec::get_view(
     {
       vcl_cerr << "vidl_avicodec : Don't know how to process a "
                << BitsPerPixel<< " bits per pixel AVI File.\n";
-      return false;
+      return 0;
     }
 
   DIB += *(LPDWORD)DIB;
