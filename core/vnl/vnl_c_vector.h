@@ -30,7 +30,7 @@ template <class T, class S> void vnl_c_vector_inf_norm(T const *p, unsigned n, S
 template <class T, class S> void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out);
 template <class T, class S> void vnl_c_vector_rms_norm(T const *p, unsigned n, S *out);
 
-template <class T>
+export template <class T>
 class vnl_c_vector {
 public:
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;

@@ -29,6 +29,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
+export
 template <class T>
 class vnl_diag_matrix {
 public:
