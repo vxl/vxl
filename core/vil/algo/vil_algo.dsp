@@ -315,6 +315,9 @@ SOURCE=.\vil_grid_merge.h
 SOURCE=.\vil_find_4con_boundary.h
 # End Source File
 # Begin Source File
+SOURCE=.\vil_find_peaks.h
+# End Source File
+# Begin Source File
 SOURCE=.\vil_fft.h
 # End Source File
 # Begin Source File
