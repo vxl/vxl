@@ -60,7 +60,12 @@ vil2_image_resource_sptr vil2_png_file_format::make_output_image(vil2_stream* vs
   if (format != VIL2_PIXEL_FORMAT_BYTE &&
       format != VIL2_PIXEL_FORMAT_UINT_16)
   // FIXME || format != VIL2_PIXEL_FORMAT_BOOL
+   
+  {
+    vcl_cout<<"ERROR! vil2_png_file_format::make_output_image()"<<vcl_endl;
+    vcl_cout<<"Pixel format should be byte, but is "<<format<<" instead."<<vcl_endl;
     return 0;
+  }
 
   return new vil2_png_image(vs, nx, ny, nplanes, format);
 }

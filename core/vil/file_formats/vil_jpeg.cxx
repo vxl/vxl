@@ -65,7 +65,11 @@ vil2_image_resource_sptr
                                            enum vil2_pixel_format format)
 {
   if (format != VIL2_PIXEL_FORMAT_BYTE)
+  {
+    vcl_cout<<"ERROR! vil2_jpeg_file_format::make_output_image()"<<vcl_endl;
+    vcl_cout<<"Pixel format should be byte, but is "<<format<<" instead."<<vcl_endl;
     return 0;
+  }
   return new vil2_jpeg_image(vs, nx, ny, nplanes, format);
 }
 
