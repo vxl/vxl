@@ -12,6 +12,7 @@ TESTMAIN = test_driver.cxx
 TESTS += test_image_resource.cxx
 TESTS += test_image_view.cxx
 TESTS += test_memory_chunk.cxx
+TESTS += test_stream.cxx 
 
 # file format readers/writers
 TESTS += test_file_format_read.cxx
