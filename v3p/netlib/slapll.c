@@ -101,7 +101,7 @@
 
     slarfg_(n, &x[1], &x[*incx + 1], incx, &tau);
     a11 = x[1];
-    x[1] = 1.f;
+    x[1] = 1.0;
 
     c = -tau * sdot_(n, &x[1], incx, &y[1], incy);
     saxpy_(n, &c, &x[1], incx, &y[1], incy);
