@@ -23,7 +23,7 @@ vsol_tetrahedron::vsol_tetrahedron(const vsol_point_3d_sptr &new_p0,
   storage_[0]=new_p0;
   storage_[1]=new_p1;
   storage_[2]=new_p2;
-  storage_[4]=new_p3;
+  storage_[3]=new_p3;
 }
 
 //---------------------------------------------------------------------------
