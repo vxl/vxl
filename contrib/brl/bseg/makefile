@@ -8,7 +8,7 @@ SUBDIRS += sdet
 SUBDIRS += segv
 
 # float image operations
-SUBDIRS := brip
+SUBDIRS += brip
 
 # segmentation application executables
 SUBDIRS += sbin
