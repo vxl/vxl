@@ -49,7 +49,8 @@
 
 #include <vcl/vcl_cstddef.h>
 #include <vcl/vcl_cstdlib.h>
-#include <vcl/emulation/vcl_string.h>
+//#include <vcl/emulation/vcl_string.h>
+#include <vcl/vcl_cstring.h>
 #include <vcl/vcl_cassert.h>
 
 #ifndef __RESTRICT

@@ -52,7 +52,8 @@
 #ifndef vcl_emulation_algobase_h
 #define vcl_emulation_algobase_h
 
-#include <vcl/emulation/vcl_string.h>
+//#include <vcl/emulation/vcl_string.h>
+#include <vcl/vcl_cstring.h>
 #include <vcl/vcl_climits.h>
 #include <vcl/emulation/vcl_functional.h>
 #include <vcl/emulation/vcl_pair.h>

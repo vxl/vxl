@@ -2,12 +2,10 @@
 #include <vcl/vcl_iomanip.h>
 
 #if (defined(VCL_GCC_295) || defined(VCL_EGCS)) && !defined(GNU_LIBSTDCXX_V3)
-
-#if !VCL_HAS_TEMPLATE_SYMBOLS // not needed except with -fguiding-decls (fsm)
+# if !VCL_HAS_TEMPLATE_SYMBOLS
 //template class smanip<int>;
 template ostream & operator<<(ostream &, smanip<int> const &);
-#endif
-
+# endif
 #endif
 
 

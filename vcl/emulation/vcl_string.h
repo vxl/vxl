@@ -296,8 +296,11 @@ public:
     { return replace (i1 - begin (), i2 - i1, n, c); }
 #if 0
   template<class InputIterator>
-    vcl_basic_string& replace(iterator i1, iterator i2,
-			  InputIterator j1, InputIterator j2);
+  vcl_basic_string& replace(iterator i1, iterator i2, InputIterator j1, InputIterator j2);
+#else
+  // no member templates:
+  vcl_basic_string& replace(charT *i1, charT *i2, charT const *j1, charT const *j2)
+    { return replace(i1 - begin(), i2-i1, j1, j2-j1); }
 #endif
 
 // @{ MISCELLANEOUS @}
