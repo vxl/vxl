@@ -1,6 +1,7 @@
 //:
 // \file
 #include <vcl_algorithm.h> // vcl_find()
+#include <vcl_cmath.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <btol/btol_edge_algs.h>
 #include <vtol/vtol_topology_object_sptr.h>
@@ -21,7 +22,8 @@ btol_edge_algs::~btol_edge_algs()
 // If v is not within etol of a point on edge e then false is returned, and
 // e is not split
 //-----------------------------------------------------------------------------
-bool btol_edge_algs::split_edge_2d(vtol_vertex_2d_sptr& v, vtol_edge_2d_sptr& e,
+bool btol_edge_algs::split_edge_2d(vtol_vertex_2d_sptr const& v,
+                                   vtol_edge_2d_sptr const& e,
                                    vtol_edge_2d_sptr& e1, vtol_edge_2d_sptr& e2)
 {
   vcl_cout << "tol " << btol_edge_algs::tol << vcl_endl;
@@ -29,7 +31,7 @@ bool btol_edge_algs::split_edge_2d(vtol_vertex_2d_sptr& v, vtol_edge_2d_sptr& e,
  return true;
 }
 
-bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr& e)
+bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr const& e)
 {
   if (!e->v1()||!e->v2())
     return false;
@@ -39,7 +41,10 @@ bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr& e)
   vtol_edge_sptr toe = e->cast_to_edge();
   vcl_vector<vtol_topology_object_sptr>* infs = toe->inferiors();
   //this will be the zero_chain for the edge
-  if (infs->size()!=1)
+  //Can have an edge with no vertices
+  if(!infs->size())
+    return true;
+  if (infs->size()>1)
     {
       vcl_cout << " In btol_edge_algs::unlink_all_inferiors_twoway(..) "
                << " inferiors inconsistent size\n";
@@ -63,9 +68,9 @@ bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr& e)
 //-----------------------------------------------------------------------------
 // Replaces va by vb on edge e.
 //-----------------------------------------------------------------------------
-bool btol_edge_algs::subst_vertex_on_edge(vtol_vertex_sptr& va,
-                                          vtol_vertex_sptr& vb,
-                                          vtol_edge_sptr& e)
+bool btol_edge_algs::subst_vertex_on_edge(vtol_vertex_sptr const& va,
+                                          vtol_vertex_sptr const& vb,
+                                          vtol_edge_sptr const& e)
 {
   if (!va||!vb||!e)
     return false;
@@ -114,7 +119,7 @@ vsol_box_2d btol_edge_algs::bounding_box(vcl_vector<vtol_edge_2d_sptr>& edges)
 
 //: a bit more convenient interface for finding edges than messing with iterators
 void btol_edge_algs::edge_2d_erase(vcl_vector<vtol_edge_2d_sptr>& edges,
-                                   vtol_edge_2d_sptr& e)
+                                   vtol_edge_2d_sptr const& e)
 {
   vcl_vector<vtol_edge_2d_sptr>::iterator eit =
     vcl_find(edges.begin(), edges.end(), e);
@@ -122,4 +127,20 @@ void btol_edge_algs::edge_2d_erase(vcl_vector<vtol_edge_2d_sptr>& edges,
     return;
   edges.erase(eit);
   return;
+}
+//: find the vertex closest to the given position
+//  and return it
+vtol_vertex_2d_sptr btol_edge_algs::closest_vertex(vtol_edge_2d_sptr const& e,
+                                                   const double x,
+                                                   const double y)
+{
+  double x1 = e->v1()->cast_to_vertex_2d()->x();
+  double y1 = e->v1()->cast_to_vertex_2d()->y();
+  double x2 = e->v2()->cast_to_vertex_2d()->x();
+  double y2 = e->v2()->cast_to_vertex_2d()->y();
+  double d1 = vcl_sqrt((x1-x)*(x1-x)+(y1-y)*(y1-y));
+  double d2 = vcl_sqrt((x2-x)*(x2-x)+(y2-y)*(y2-y));
+  if(d1<d2)
+    return e->v1()->cast_to_vertex_2d();
+  return e->v2()->cast_to_vertex_2d();
 }
