@@ -10,13 +10,15 @@
 //: Construct a design matrix for the fundamental matrix least squares problem.
 // Specifically, it constructs the matrix
 // \f[
-// D = \mmatrix{9}{ m_{11} m'_{11} & m_{12} m_{11}'  & m_{13} m'_{11} &
+// D = \left( \begin{array}{lllllllll}
+//          m_{11} m'_{11} & m_{12} m'_{11}  & m_{13} m'_{11} &
 //          m_{11} m'_{12} & m_{12} m'_{12}  & m_{13} m'_{12} &
-//          m_{11} m'_{13} & m_{12} m'_{13}  & m_{13} m'_{13} \cr
-//          \vdots\cr
+//          m_{11} m'_{13} & m_{12} m'_{13}  & m_{13} m'_{13} \\
+//          \vdots & & & & & & & & \\
 //          m_{n1} m'_{n1} & m_{n2} m'_{n1}  & m_{n3} m'_{n1} &
 //          m_{n1} m'_{n2} & m_{n2} m'_{n2}  & m_{n3} m'_{n2} &
-//          m_{n1} m'_{n3} & m_{n2} m'_{n3}  & m_{n3} m'_{n3} }
+//          m_{n1} m'_{n3} & m_{n2} m'_{n3}  & m_{n3} m'_{n3}
+//     \end{array} \right)
 // \f]
 // such that $ D f = 0 $ for
 // $f = (F_{11} F_{12} F_{13} F_{21} F_{22} F_{23} F_{31} F_{32} F_{33}) $
