@@ -105,11 +105,11 @@ logical *fail;
     global_1.eta = 2.23e-16f;
     /* the sun compiler will not compile with the number too large for float */
 #ifdef __SUNPRO_C
-    infin = (float)3.40282346638528860e+38;
+    infin = 3.40282346638528860e+38f;
 #else
     infin = (float)1e50; /* on purpose too large to fit in `float' type */
 #endif
-    smalno = (float)1e-45;
+    smalno = 1e-33;
 /* ARE AND MRE REFER TO THE UNIT ERROR IN + AND * */
 /* RESPECTIVELY. THEY ARE ASSUMED TO BE THE SAME AS */
 /* ETA. */
