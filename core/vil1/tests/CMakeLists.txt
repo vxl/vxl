@@ -1,16 +1,8 @@
-#
 # ./vxl/vil/tests/CMakeLists.txt
-#
-#   geoff.cross@crd.ge.com
-#
 
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
-
-# test_interpolate uses pow():
-IF(UNIX)
-  LINK_LIBRARIES( m )
-ENDIF(UNIX)
+INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
 
 ADD_EXECUTABLE( vil_test_all         vil_test_all.cxx )
 ADD_EXECUTABLE( test_flipud          test_flipud.cxx )
@@ -22,7 +14,6 @@ ADD_EXECUTABLE( test_memory_image_of test_memory_image_of.cxx )
 ADD_EXECUTABLE( test_save_load_image test_save_load_image.cxx )
 ADD_EXECUTABLE( test_write_endian    test_write_endian.cxx )
 ADD_EXECUTABLE( test_colour_space    test_colour_space.cxx )
-
 
 ADD_TEST( vil_test_all         	   vil_test_all )
 ADD_TEST( vil_test_flipud          test_flipud )
