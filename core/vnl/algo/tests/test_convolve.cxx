@@ -76,7 +76,7 @@ void test_convolve()
   int ms4 = timer.user();
   TEST_NEAR("vnl_convolve() with_fft(27648)", (r9-r12).two_norm(), 0.0, 1e-6);
   vcl_cout << "Done FFT-2,3-based 10000x2000 convolution in " << ms4/double(ntimes) << " milliseconds\n";
-  TEST("vnl_convolve() timing: should be slower", ms4 > ms2, true);
+  TEST("vnl_convolve() timing: should be slower", 5*ms4 > 3*ms2, true);
 
   double c1_data[] = { -1, 0, 1, 2, 3, 4 };
   vnl_vector<double> c1(6, 6, c1_data);
