@@ -102,27 +102,23 @@ bool  sdet_detector::DoContour()
     return false;
   }
 
-#if 0
-  vcl_vector<vtol_edge_2d_sptr>::iterator edge;
-  vcl_cout << "IN DoContour before SubPixelAccuracy\n";
-  this->print(vcl_cout);
-  for ( edge = edges->begin() ; edge != edges->end(); ++edge)
-  {
-    vcl_cout << "Edgel output from DoContour:";
-    (*edge)->describe(vcl_cout, 2);
-  }
-#endif
-  if (this->borderp)            // insert a virtual contour to enforce
-    contour.InsertBorder(*edges, *vertices); // closure at border
+  //Insert a virtual border to enforce closure to support region topology.
+  if (this->borderp)  
+    contour.InsertBorder(*edges, *vertices);
 
-  contour.SubPixelAccuracy(*edges, *vertices, // insert subpixel
-                           *locationx, *locationy); // accuracy
+  //Move the edgel locations to interpolated positions using zero crossings
+  contour.SubPixelAccuracy(*edges, *vertices,
+                           *locationx, *locationy);
 
-  if (this->spacingp)           // reduce zig-zags and space out pixels
-    sdet_contour::EqualizeSpacing(*edges); // in chains
+  // Reduce zig-zags and space out pixels in chains
+  if (this->spacingp)           
+    sdet_contour::EqualizeSpacing(*edges); 
 
+  //Set gradient magnitude and angle values on each edgel
   if (grad_mag&&angle)
-    sdet_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continous edgel orientation.
+    sdet_contour::SetEdgelData(*grad_mag, *angle, *edges); 
+
+  //Keep this code which will be needed when we have ROI's
 #if 0 // TargetJr
    const RectROI* roi = image->GetROI();
    sdet_contour::Translate(*edges, *vertices, // display location at center
@@ -259,13 +255,19 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
   gevd_bufferxy* image_float_buf = 0;
 
   if (image_float_buf) return image_float_buf;
-
+  //Tests for validity
   if (!image)
     {
-      vcl_cout << "No image\n";
+      vcl_cout << "In sdet_detector::GetBufferFromImage() - no image\n";
       return 0;
     }
-
+  if(image.components()!=1)
+    {
+      vcl_cout << "In sdet_detector::GetBufferFromImage()"
+               << " - not exactly one component \n";
+      return 0;
+    }
+    
 #if 0 // TargetJr
   RectROI* roi = image->GetROI(); // find user-selected region of interest
   int sizex = roi->GetSizeX();
@@ -286,7 +288,6 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
     }
 #endif
 
-  //   gevd_bufferxy image_buf(sizex, sizey, image->GetBitsPixel());
    gevd_bufferxy image_buf(sizex, sizey, image.bits_per_component());
 
 #if 0 // commented out
