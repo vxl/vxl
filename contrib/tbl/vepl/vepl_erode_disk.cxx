@@ -1,49 +1,45 @@
 #include "vepl_erode_disk.h"
-#include <vil/vil_rgb.h>
 #include <vipl/accessors/vipl_accessors_vil_image.h>
 #include <vipl/vipl_erode_disk.h>
 #include <vil/vil_memory_image_of.h>
-
-typedef unsigned char ubyte;
-
-#if 0 // currently no erosion for colour images
-static inline bool operator<(vil_rgb<ubyte> const& a, vil_rgb<ubyte> const& b)
-{
-  return a.r<b.r || (a.r==b.r && a.g<b.g) || (a.r==b.r && a.g==b.g && a.b<b.b);
-}
-#endif // 0
+#include <vil/vil_rgb.h>
 
 vil_image vepl_erode_disk(vil_image const& image, float radius)
 {
   // byte greyscale
   if (vil_pixel_format(image) == VIL_BYTE) {
+    typedef unsigned char ubyte;
     vil_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
     vil_memory_image_of<ubyte> out(image);
-    vipl_erode_disk<vil_image,vil_image,ubyte,ubyte,vipl_trivial_pixeliter> op(radius);
+    vipl_erode_disk<vil_image,vil_image,ubyte,ubyte> op(radius);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
     return out;
   }
 
-#if 0 // currently no erosion for colour images
-  // byte rgb
-  else if (vil_pixel_format(image) == VIL_RGB_BYTE) {
-    vil_memory_image_of<vil_rgb<ubyte> > mem(image); // load in memory to pass to filter
-    vil_memory_image_of<vil_rgb<ubyte> > out(image);
-    vipl_erode_disk<vil_image,vil_image,vil_rgb<ubyte> ,vil_rgb<ubyte> ,vipl_trivial_pixeliter> op(radius);
+  // byte rgb: process colour bands independently as ubyte images
+  else if (vil_pixel_format(image) == VIL_RGB_BYTE)
+  {
+    typedef unsigned char ubyte;
+    typedef vil_rgb<ubyte> r_g_b;
+    vil_memory_image_of<r_g_b> in(image); // load in memory to pass to filter
+    vil_memory_image_of<r_g_b> out(image);
+    vil_memory_image_of<ubyte> mem((ubyte*)(in.get_buffer()),3*in.width(),in.height()); // reinterpret as ubyte
+    vil_memory_image_of<ubyte> mout((ubyte*)(out.get_buffer()),3*in.width(),in.height());
+    vipl_erode_disk<vil_image,vil_image,ubyte,ubyte> op(radius);
     op.put_in_data_ptr(&mem);
-    op.put_out_data_ptr(&out);
+    op.put_out_data_ptr(&mout);
     op.filter();
     return out;
   }
-#endif
 
-  // short
+  // 16-bit greyscale
   else if (vil_pixel_format(image) == VIL_UINT16) {
-    vil_memory_image_of<unsigned short> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<unsigned short> out(image);
-    vipl_erode_disk<vil_image,vil_image,unsigned short,unsigned short,vipl_trivial_pixeliter> op(radius);
+    typedef unsigned short ushort;
+    vil_memory_image_of<ushort> mem(image); // load in memory to pass to filter
+    vil_memory_image_of<ushort> out(image);
+    vipl_erode_disk<vil_image,vil_image,ushort,ushort> op(radius);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -55,7 +51,7 @@ vil_image vepl_erode_disk(vil_image const& image, float radius)
   else if (vil_pixel_format(image) == VIL_UINT32) {
     vil_memory_image_of<unsigned> mem(image); // load in memory to pass to filter
     vil_memory_image_of<unsigned> out(image);
-    vipl_erode_disk<vil_image,vil_image,unsigned,unsigned,vipl_trivial_pixeliter> op(radius);
+    vipl_erode_disk<vil_image,vil_image,unsigned,unsigned> op(radius);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -67,7 +63,7 @@ vil_image vepl_erode_disk(vil_image const& image, float radius)
   else if (vil_pixel_format(image) == VIL_FLOAT) {
     vil_memory_image_of<float> mem(image); // load in memory to pass to filter
     vil_memory_image_of<float> out(image);
-    vipl_erode_disk<vil_image,vil_image,float,float,vipl_trivial_pixeliter> op(radius);
+    vipl_erode_disk<vil_image,vil_image,float,float> op(radius);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -78,7 +74,7 @@ vil_image vepl_erode_disk(vil_image const& image, float radius)
   else if (vil_pixel_format(image) == VIL_DOUBLE) {
     vil_memory_image_of<double> mem(image); // load in memory to pass to filter
     vil_memory_image_of<double> out(image);
-    vipl_erode_disk<vil_image,vil_image,double,double,vipl_trivial_pixeliter> op(radius);
+    vipl_erode_disk<vil_image,vil_image,double,double> op(radius);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();

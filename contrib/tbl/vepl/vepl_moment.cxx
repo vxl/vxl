@@ -12,7 +12,7 @@ vil_image vepl_moment(vil_image const& image, int order, int width, int height)
     typedef unsigned char ubyte;
     vil_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
     vil_memory_image_of<ubyte> out(image);
-    vipl_moment<vil_image,vil_image,ubyte,ubyte,vipl_trivial_pixeliter> op(order, width, height);
+    vipl_moment<vil_image,vil_image,ubyte,ubyte> op(order, width, height);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -25,11 +25,23 @@ vil_image vepl_moment(vil_image const& image, int order, int width, int height)
     return 0;
   }
 
+  // 16-bit greyscale
+  else if (vil_pixel_format(image) == VIL_UINT16) {
+    typedef unsigned short ushort;
+    vil_memory_image_of<ushort> mem(image); // load in memory to pass to filter
+    vil_memory_image_of<ushort> out(image);
+    vipl_moment<vil_image,vil_image,ushort,ushort> op(order, width, height);
+    op.put_in_data_ptr(&mem);
+    op.put_out_data_ptr(&out);
+    op.filter();
+    return out;
+  }
+
   // float
   else if (vil_pixel_format(image) == VIL_FLOAT) {
     vil_memory_image_of<float> mem(image); // load in memory to pass to filter
     vil_memory_image_of<float> out(image);
-    vipl_moment<vil_image,vil_image,float,float,vipl_trivial_pixeliter> op(order, width, height);
+    vipl_moment<vil_image,vil_image,float,float> op(order, width, height);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -40,7 +52,7 @@ vil_image vepl_moment(vil_image const& image, int order, int width, int height)
   else if (vil_pixel_format(image) == VIL_DOUBLE) {
     vil_memory_image_of<double> mem(image); // load in memory to pass to filter
     vil_memory_image_of<double> out(image);
-    vipl_moment<vil_image,vil_image,double,double,vipl_trivial_pixeliter> op(order, width, height);
+    vipl_moment<vil_image,vil_image,double,double> op(order, width, height);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
