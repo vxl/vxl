@@ -267,7 +267,6 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_vector<double> from_pt( 2 );
   vnl_vector<double> to_pt( 2 );
   double sum_wgt = 0.0;
-  unsigned count=0;  //for debugging
   for ( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
     for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
