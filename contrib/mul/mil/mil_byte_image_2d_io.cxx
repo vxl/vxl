@@ -209,8 +209,8 @@ bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil_byte>& image,
     return false;
   }
 
-  int nx=image.nx();
-  int ny=image.ny();
+//int nx=image.nx();
+//int ny=image.ny();
 
   if (image_is_grey)
   {
