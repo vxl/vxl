@@ -646,6 +646,19 @@ vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
   return pts;
 }
 
+vcl_vector<vgl_point_2d<double> > kalman_filter::get_next_observes()
+{
+  vcl_vector<vgl_point_2d<double> > pts;
+  pts.resize(num_points_);
+
+  vdgl_digital_curve_sptr dc = curves_[cur_pos_+1];
+  for (int i=0; i<num_points_; i++) {
+    double s = double(i) / double(num_points_);
+    pts[i].set(dc->get_x(s), dc->get_y(s));
+  }
+  return pts;
+}
+
 vcl_vector<vgl_point_2d<double> > kalman_filter::get_cur_observes()
 {
   vcl_vector<vgl_point_2d<double> > pts;
