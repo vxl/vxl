@@ -1,4 +1,4 @@
-// This is ${FILESTEM}.h
+// This is @(eval (file-name-nondirectory (file-name-directory-noslash dirname)))/@(eval dirbase)/${FILESTEM}.h
 #ifndef ${FILESTEM}_h_
 #define ${FILESTEM}_h_
 //:
@@ -9,32 +9,37 @@
 //  <long description!!> FIXME
 //
 // \verbatim
-// Example
-//  @(eval (file-name-nondirectory (file-name-directory-noslash dirname)))/@(eval dirbase)/examples/${FILESTEM}_example.cxx FIXME
+//  Example
+//   @(eval (file-name-nondirectory (file-name-directory-noslash dirname)))/@(eval dirbase)/examples/${FILESTEM}_example.cxx FIXME
 // \endverbatim
 //
 // \verbatim
-// See also
-//    <list of related classes> FIXME
+//  See also
+//   <list of related classes> FIXME
 // \endverbatim
 //
 // \verbatim
-// Modifications
+//  Modifications
 //   <none yet>
 // \endverbatim
 
-//: A brief description of the class
+//: A brief description of the class.
 // More information about the class
-
-class ${FILESTEM} {
+class ${FILESTEM}
+{
   // PUBLIC INTERFACE----------------------------------------------------------
-public:
+ public:
 
   // Constructors/Destructors--------------------------------------------------
 
-  ${FILESTEM}();
-  ${FILESTEM}(${FILESTEM} const&);
-  ~${FILESTEM}();
+  //: Default constructor
+  ${FILESTEM}() : data_member_(0) {}
+  //: Copy Constructor
+  ${FILESTEM}(${FILESTEM} const& c) : data_member_(c.data_member()) {}
+  //: Constructor from an int
+  ${FILESTEM}(int v) : data_member_(v) {}
+  // Destructor
+ ~${FILESTEM}() {}
 
   // Operators-----------------------------------------------------------------
   ${FILESTEM}& operator=(${FILESTEM} const&);
@@ -53,11 +58,11 @@ public:
   // Utility Methods-----------------------------------------------------------
 
   // INTERNALS-----------------------------------------------------------------
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   int data_member_;
 
-private:
+ private:
   // Helpers-------------------------------------------------------------------
 };
 
