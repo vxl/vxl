@@ -138,8 +138,13 @@ PASSTHRU(mode_t, umask, (vpl_mode_t  a0), (a0))
 
 PASSTHRU(int, access, (const char *  a0,int  a1), (a0, a1));
 PASSTHRU(unsigned int, alarm, (unsigned int  a0), (a0));
+#if defined(__FreeBSD__)
+extern "C" char* brk( const char *) VPL_THROW(());
+PASSTHRU(char *, brk, (const char* a0), (a0));
+#else
 extern "C" int brk (void*) VPL_THROW(());
 PASSTHRU(int, brk, (void *  a0), (a0));
+#endif
 PASSTHRU(int, chdir, (const char * s), (s));
 PASSTHRU(int, chown, (const char *  a0,vpl_uid_t  a1,vpl_gid_t  a2), (a0, a1, a2));
 PASSTHRU(int, close, (int  a0), (a0));
@@ -255,7 +260,11 @@ PASSTHRU(int, rmdir, (const char * s), (s));
 PASSTHRU(void           *, sbrk, (vpl_intptr_t  a0), (a0));
 PASSTHRU(int, setgid, (vpl_gid_t  a0), (a0));
 PASSTHRU(int, setpgid, (vpl_pid_t  a0,vpl_pid_t  a1), (a0, a1));
+#if defined(__FreeBSD__)
+PASSTHRU(vpl_pid_t, setpgrp, (vpl_pid_t a0, vpl_pid_t a1), (a0, a1));
+#else
 PASSTHRU(vpl_pid_t, setpgrp, (void), ());
+#endif
 PASSTHRU(int, setregid, ( vpl_gid_t  a0, vpl_gid_t  a1 ), (a0, a1));
 PASSTHRU(int, setreuid, ( vpl_uid_t  a0, vpl_uid_t  a1 ), (a0, a1));
 PASSTHRU(vpl_pid_t, setsid, (void), ());
