@@ -5,7 +5,7 @@
 #   DEPENDENCIES:  libvcl libvbl libvsol
 
 USES += vxl gel
-IMMEDIATE_LIBS += -lvsol -lvbl -lvul
+IMMEDIATE_LIBS += -lvdgl -lvsol -lvbl -lvul
 
 LIBRARY := vtol
 VERSION := 1.0
@@ -27,6 +27,7 @@ SOURCES += vtol_face_2d.cxx
 SOURCES += vtol_vertex_2d.cxx
 
 SOURCES += vtol_topology_io.cxx
+SOURCES += vtol_cycle_processor.cxx
 
 MANPAGE_SOURCES += vtol_block_sptr.h
 MANPAGE_SOURCES += vtol_chain_sptr.h
