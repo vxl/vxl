@@ -31,6 +31,8 @@ SOURCES += vil2_plane.cxx
 SOURCES += vil2_print.cxx
 MANPAGE_SOURCES += vil2_view_as.h
 MANPAGE_SOURCES += vil2_fill.h
+MANPAGE_SOURCES += vil2_convert.h
+MANPAGE_SOURCES += vil2_transform.h
 
 SUBDIRS += algo io
 
