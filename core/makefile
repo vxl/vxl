@@ -26,17 +26,17 @@ SUBDIRS += vil vil1 vil/algo
 # stream I/O
 SUBDIRS += vsl vul/io vbl/io vnl/io vgl/io vil/io vil1/io
 
-# video
-SUBDIRS += vidl
-
-# video (using vil1)
-SUBDIRS += vidl_vil1
-
 # coordinate systems
 SUBDIRS += vcsl
 
 # multi-platform GUI toolkit
 SUBDIRS += vgui
+
+# video
+SUBDIRS += vidl
+
+# video (using vil1)
+SUBDIRS += vidl_vil1
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
