@@ -56,8 +56,10 @@ void test_math() {
 #pragma warning ( pop )
 #endif
 
+#if !defined(VCL_VC50) && !defined(VCL_VC60)
   long double a5 = (long double)1/(long double)0; // compiler warning
   long double a6 = -(long double)1/(long double)0; // compiler warning
+#endif
 
 #if defined(__alpha__)
   float b1 = 0.0f/0.0f; // compiler warning
@@ -94,12 +96,14 @@ void test_math() {
   testlib_test_assert("!isinf(0/0d)    ", !vnl_math_isinf(b2));
   testlib_test_assert(" isnan(0/0d)    ",  vnl_math_isnan(b2));
 
+#if !defined(VCL_VC50) && !defined(VCL_VC60)
   testlib_test_assert("!isfinite(1/0l) ", !vnl_math_isfinite(a5));
   testlib_test_assert(" isinf(1/0l)    ",  vnl_math_isinf(a5));
   testlib_test_assert("!isnan(1/0l)    ", !vnl_math_isnan(a5));
   testlib_test_assert("!isfinite(-1/0l)", !vnl_math_isfinite(a6));
   testlib_test_assert(" isinf(-1/0l)   ",  vnl_math_isinf(a6));
   testlib_test_assert("!isnan(-1/0l)   ", !vnl_math_isnan(a6));
+#endif
   testlib_test_assert("!isfinite(0/0l) ", !vnl_math_isfinite(b3));
   testlib_test_assert("!isinf(0/0l)    ", !vnl_math_isinf(b3));
   testlib_test_assert(" isnan(0/0l)    ",  vnl_math_isnan(b3));
