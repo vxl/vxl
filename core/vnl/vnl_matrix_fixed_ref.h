@@ -173,10 +173,6 @@
 // such calls.
 //
 
-// forward declaration
-template <class T, unsigned num_rows, unsigned num_cols>
-class vnl_matrix_fixed_ref;
-
 
 template <class T, unsigned num_rows, unsigned num_cols>
 class vnl_matrix_fixed_ref_const
@@ -217,10 +213,6 @@ class vnl_matrix_fixed_ref_const
   {
     return data_;
   }
-#if 0
-  //: Return reference to the element at specified index. No range checking.
-  T const & operator() (unsigned int i, unsigned int j) const { return data_[num_cols*i + j]; }
-#endif // 0
 
   //: Const iterators
   typedef T const *const_iterator;
@@ -233,13 +225,6 @@ class vnl_matrix_fixed_ref_const
   typedef const T element_type;
   //: Type defs for iterators
   typedef const T       *iterator;
-#if 0
-  //: Iterator pointing to start of data
-  iterator begin() { return data_block(); }
-
-  //: Iterator pointing to element beyond end of data
-  iterator end() { return data_block()+ size(); }
-#endif // 0
 
   T const & operator() (unsigned r, unsigned c) const
   {
@@ -293,13 +278,6 @@ class vnl_matrix_fixed_ref_const
   //  Thus it contains elements  [top,top+rows-1][left,left+cols-1]
   vnl_matrix<T> extract (unsigned rows,  unsigned cols,
                          unsigned top=0, unsigned left=0) const;
-#if 0
-  //: Get a vector equal to the given row
-  vnl_vector<T> get_row   (unsigned row) const;
-
-  //: Get a vector equal to the given column
-  vnl_vector<T> get_column(unsigned col) const;
-#endif // 0
 
   //: Get n rows beginning at rowstart
   vnl_matrix<T> get_n_rows   (unsigned rowstart, unsigned n) const;
@@ -400,9 +378,17 @@ class vnl_matrix_fixed_ref_const
   static bool equal( const T* a, const T* b ) { return vnl_matrix_fixed<T,num_rows,num_cols>::equal(a,b); }
 
  private:
-  const vnl_matrix_fixed_ref_const<T,num_rows,num_cols> & operator=(const vnl_matrix_fixed<T,num_rows,num_cols>& i_Input) const;
-  const vnl_matrix_fixed_ref_const<T,num_rows,num_cols> & operator=(const vnl_matrix_fixed_ref_const<T,num_rows,num_cols>& ) const;
-  const vnl_matrix_fixed_ref_const<T,num_rows,num_cols> & operator=(const vnl_matrix_fixed_ref<T,num_rows,num_cols>& ) const;
+  const vnl_matrix_fixed_ref_const<T,num_rows,num_cols> & operator=(const vnl_matrix_fixed<T,num_rows,num_cols>& i_Input) const
+  {
+	  assert(!"This is illegal for a fixed_ref_const");
+	  return *this;
+  }
+
+  const vnl_matrix_fixed_ref_const<T,num_rows,num_cols> & operator=(const vnl_matrix_fixed_ref_const<T,num_rows,num_cols>& ) const
+  {
+	  assert(!"This is illegal for a fixed_ref_const");
+	  return *this;
+  }
 
   void assert_finite_internal() const;
 
@@ -639,16 +625,6 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
   // : Read a vnl_matrix from an ascii vcl_istream, automatically determining file size if the input matrix has zero size.
   bool read_ascii(vcl_istream& s) const;
 
-  //--------------------------------------------------------------------------------
-#if 0
-  //: Access the contiguous block storing the elements in the matrix row-wise. O(1).
-  // 1d array, row-major order.
-  T const* data_block () const { return data_[0]; }
-
-  //: Access the contiguous block storing the elements in the matrix row-wise. O(1).
-  // 1d array, row-major order.
-  T      * data_block () { return data_[0]; }
-#endif // 0
 
   //----------------------------------------------------------------------
   // Conversion to vnl_matrix_ref.
@@ -691,14 +667,6 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
   iterator       begin() const { return data_block(); }
   //: Iterator pointing to element beyond end of data
   iterator       end() const { return begin() + size(); }
-#if 0
-  //: Const iterators
-  typedef T const *const_iterator;
-  //: Iterator pointing to start of data
-  const_iterator begin() const { return data_; }
-  //: Iterator pointing to element beyond end of data
-  const_iterator end() const { return begin() + size(); }
-#endif // 0
   //--------------------------------------------------------------------------------
 
   //: Return true if *this == rhs
