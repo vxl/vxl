@@ -2,6 +2,19 @@
 // \file
 // \author Peter.Vanroose@esat.kuleuven.ac.be
 // \date 17 February, 2000
+// \verbatim
+// Modifications
+// 18 Jul 2000 - add vil_buffer, and mit bug fix.
+// 10 Aug 2000 - Peter Vanroose - added non-exact match
+// 10 Aug 2000 - Peter Vanroose - added bmp and mit tests
+// 10 Aug 2000 - Peter Vanroose - test TIFF and JPEG presence
+// 26 Aug 2000 - .bmp loader works (again) on solaris + linux
+// 28 Aug 2000 - Peter Vanroose - bmp write of colour images fixed
+//  6 Dec 2000 - vil_rgb_byte deprecated
+// 21 Jan 2001 - deprecated vil_buffer<> - use vcl_vector<> instead
+//  1 May 2001 - Peter Vanroose - now using vil_test.h
+// 7 June 2001 - Peter Vanroose - test added for pbm images
+// \endverbatim
 
 #include <vcl_string.h>
 #include <vcl_cstring.h>
@@ -18,7 +31,7 @@
 
 #include <vil/vil_test.h>
 
-#ifndef LEAVE_IMAGES_BEHIND 
+#ifndef LEAVE_IMAGES_BEHIND
 #define LEAVE_IMAGES_BEHIND 0
 #endif
 
