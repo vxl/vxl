@@ -6,6 +6,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
+
 void vnl_vector_test_int() {
   vcl_cout << "***********************" << vcl_endl;
   vcl_cout << "Testing Vector<int>" << vcl_endl;
@@ -453,6 +454,57 @@ void vnl_vector_test_conversion() {
 #endif
 }
 
+#define TIMING 0
+
+#if TIMING
+#include <vul/vul_timer.h>
+void vnl_vector_test_two_nrm2_timing(unsigned size, unsigned long num)
+{
+  vnl_vector<double> a(size);
+  for (unsigned i= 0; i < size; i++)
+    a(i) = i / size;
+
+  double c=0;
+  vul_timer t;
+  for (unsigned i = 0; i <num;i++)
+    c+= vnl_c_vector<double>::two_nrm2(a.begin(), size);
+  double time = t.real();
+  vcl_cout <<" Time for finding the two_nrm2 of " << size <<
+    "-D vectors " << num << "times  = " << time / 1000.0 << "s." << vcl_endl;
+
+}
+void vnl_vector_test_euclid_dist_sq_timing(unsigned size, unsigned long num)
+{
+  vnl_vector<double> a(size);
+  vnl_vector<double> b(size);
+  for (unsigned i= 0; i < size; i++)
+  {
+    a(i) = i / size;
+    b(i) = i * i / size;
+  }
+
+  double c=0;
+  vul_timer t;
+  for (unsigned i = 0; i <num;i++)
+    c+= vnl_c_vector<double>::euclid_dist_sq(a.begin(), b.begin(), size);
+  double time = t.real();
+  vcl_cout <<" Time for finding the euclid_dist_sq of " << size <<
+    "-D vectors " << num << "times  = " << time / 1000.0 << "s." << vcl_endl;
+
+}
+
+void vnl_vector_test_timing()
+{
+  vnl_vector_test_two_nrm2_timing(20000,20000ul);
+  vnl_vector_test_two_nrm2_timing(1000,400000ul);
+  vnl_vector_test_two_nrm2_timing(100,4000000ul);
+  vnl_vector_test_two_nrm2_timing(4,100000000ul);
+  vnl_vector_test_euclid_dist_sq_timing(40000,10000ul);
+  vnl_vector_test_euclid_dist_sq_timing(1000,400000ul);
+  vnl_vector_test_euclid_dist_sq_timing(100,4000000ul);
+  vnl_vector_test_euclid_dist_sq_timing(4,100000000ul);
+}
+#endif
 
 void vnl_vector_test_leak()           // use top4.1 to watch for memory.
 {                                     // remember to kill process.
@@ -469,6 +521,9 @@ void test_vector()
   vnl_vector_test_float();
   vnl_vector_test_matrix();
   vnl_vector_test_conversion();
+#if TIMING
+  vnl_vector_test_timing();
+#endif
 #if LEAK
   vnl_vector_test_leak();
 #endif

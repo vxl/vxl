@@ -215,8 +215,9 @@ T vnl_c_vector<T>::min_value(T const *src, unsigned n) {
 template<class T>
 T vnl_c_vector<T>::euclid_dist_sq(T const *a, T const *b, unsigned n)
 {
-  T diff;
+//IMS: Unable to optimise this any further for MSVC compiler
   T sum(0);
+  T diff;
   for (unsigned i=0; i<n; ++i)
   {
     diff = a[i] - b[i];
@@ -232,9 +233,19 @@ T vnl_c_vector<T>::euclid_dist_sq(T const *a, T const *b, unsigned n)
 template <class T, class S>
 void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out)
 {
+#ifdef VCL_VC
+// IMS: MSVC's optimiser does much better with this
+// consistently about 30% better over vectors from 4 to 20000 dimensions.
+  S val =0;
+  T const* end = p+n;
+  while (p != end)
+    val += vnl_math_squared_magnitude(*p++);
+  *out = val;
+#else
   *out = 0;
   for(unsigned i=0; i<n; ++i)
     *out += vnl_math_squared_magnitude(p[i]);
+#endif
 }
 
 template <class T, class S>
