@@ -247,6 +247,7 @@ SET( vcl_sources
   gcc-295/vcl_iterator.txx
   gcc-295/vcl_list.txx
   gcc-295/vcl_map.txx
+  gcc-295/vcl_memory.h
   gcc-295/vcl_queue.txx
   gcc-295/vcl_set.txx
   gcc-295/vcl_string.txx
