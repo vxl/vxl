@@ -301,6 +301,9 @@ SOURCE=.\test_from_image_2d.cxx
 # Begin Source File
 SOURCE=.\test_algo_anisotropic_filter.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_resample.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
