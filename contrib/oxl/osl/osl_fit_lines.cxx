@@ -321,7 +321,7 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_
           // currently fitted line
           distance =
             data_->GetA()*dc->GetX(finish) + data_->GetB()*dc->GetY(finish) + data_->GetC();
-          new_est_cost = (segment_length*new_est_cost + vcl_fabs(distance)) / (segment_length+1);
+          new_est_cost = (segment_length*new_est_cost + vcl_abs(distance)) / (segment_length+1);
 
           // If this residual is low enough, include the point within
           // the orthogonal regression data class
