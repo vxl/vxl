@@ -17,8 +17,8 @@
 //    \noindent {\tt vnl_cross_product_matrix(e)} is the matrix $[e]_\times$:
 //   \[
 //   \left( \begin{array}{ccc}
-//          0  & -e_3  &  e_2 \\ 
-//        e_3  &  0    & -e_1 \\ 
+//          0  & -e_3  &  e_2 \\ %
+//        e_3  &  0    & -e_1 \\ %
 //       -e_2  &  e_1  &  0
 //   \end{array} \right)
 //   \]@}
