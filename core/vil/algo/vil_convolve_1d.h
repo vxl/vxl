@@ -128,7 +128,7 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_s
       accumT sum=0;
       for (int j=-k_hi;j<=-k_lo;++j)
       {
-        if ((i+j)<0) sum+=(accumT)(src[0]*kernel[j*(-kstep)]);
+        if ((i+j)<0) sum+=(accumT)(src[-(i+j)*s_step]*kernel[j*(-kstep)]);
         else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
       }
       dest[i*d_step]=(destT)sum;
@@ -141,7 +141,7 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_s
     for (int i=0;i<=i_max;++i)
     {
       accumT sum=0;
-      for (int j=k_hi;j<=k_lo;--j)
+      for (int j=k_hi;j>=k_lo;--j)
         sum+=(accumT)(src[((i-j+n)%n)*s_step]*kernel[j*kstep]);
       dest[i*d_step]=(destT)sum;
     }
@@ -236,9 +236,30 @@ inline void vil2_convolve_1d(const vil2_image_view<srcT>& src_im,
     destT* dest_row = dest_im.top_left_ptr()+p*dest_im.planestep();
 
     // Apply convolution to each row in turn
-    for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
-      vil2_convolve_1d(src_row,ni,s_istep,  dest_row,d_istep,
-                       kernel,k_lo,k_hi,ac,start_option,end_option);
+    // First check if either istep is 1 for speed optimisation.
+
+    if (s_istep == 1)
+    {
+      if (d_istep == 1)
+        for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+          vil2_convolve_1d(src_row,ni,1,  dest_row,1,
+                           kernel,k_lo,k_hi,ac,start_option,end_option);
+      else
+        for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+          vil2_convolve_1d(src_row,ni,1,  dest_row,d_istep,
+                           kernel,k_lo,k_hi,ac,start_option,end_option);
+    }
+    else
+    {
+      if (d_istep == 1)
+        for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+          vil2_convolve_1d(src_row,ni,s_istep,  dest_row,1,
+                           kernel,k_lo,k_hi,ac,start_option,end_option);
+      else
+        for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+          vil2_convolve_1d(src_row,ni,s_istep,  dest_row,d_istep,
+                           kernel,k_lo,k_hi,ac,start_option,end_option);
+    }
   }
 }
 

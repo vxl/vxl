@@ -95,10 +95,10 @@ void test_algo_correlate_1d_double()
                     double(), // indicates accumulator type
                     vil2_convolve_reflect_extend,vil2_convolve_reflect_extend);
 
-  TEST_NEAR("Start",dest[1],n+8,1e-6);
+  TEST_NEAR("Start",dest[1],10.0,1e-6);
   TEST_NEAR("First full value",dest[2],14.0,1e-6);
   TEST_NEAR("Last full value",dest[n-1],6*n-4.0,1e-6);
-  TEST_NEAR("End",dest[n],3*n+2,1e-6);
+  TEST_NEAR("End",dest[n],6.0*n-4.0,1e-6);
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 

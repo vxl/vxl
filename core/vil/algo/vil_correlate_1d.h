@@ -16,108 +16,7 @@
 #include <vil2/vil2_property.h>
 #include <vil2/algo/vil2_convolve_1d.h>
 
-//: correlate edge with kernel[x*kstep] x in [k_lo,k_hi] (k_lo<=0)
-//  Fills only edge: dest[i], i=0..(-k_lo-1)
-template <class srcT, class destT, class kernelT, class accumT>
-inline void vil2_correlate_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_step,
-                                  destT* dest, vcl_ptrdiff_t d_step,
-                                  const kernelT* kernel,
-                                  vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
-                                  vcl_ptrdiff_t kstep, accumT,
-                                  vil2_convolve_boundary_option option)
-{
-  if (option==vil2_convolve_ignore_edge) return;
-  if (option==vil2_convolve_no_extend)
-  {
-    // Initialise first elements of row to zero
-    for (int i=k_lo;i<0;++i,dest+=d_step)
-      *dest = 0;
-  }
-  else if (option==vil2_convolve_zero_extend)
-  {
-    // Assume src[i]==0 for i<0
-    for (int i=k_lo+1;i<=0;++i,dest+=d_step,src+=s_step)
-    {
-      accumT sum = 0;
-      const srcT* s = src;
-      const kernelT* k = kernel+i*kstep;
-      for (int j=i;j<=k_hi;++j,s+=s_step,k+=kstep)
-        sum+= (accumT)((*s)*(*k));
-      *dest=(destT)sum;
-    }
-  }
-  else if (option==vil2_convolve_constant_extend)
-  {
-    // Assume src[i]=src[0] for i<0
-    int i_max = 1-k_lo;
-    for (int i=0;i<=i_max;++i)
-    {
-      accumT sum=0;
-      for (int j=k_lo;j<=k_hi;++j)
-      {
-        if ((i+j)<0) sum+=(accumT)(src[0]*kernel[j*kstep]);
-        else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*kstep]);
-      }
-      dest[i*d_step]=(destT)sum;
-    }
-  }
-  else if (option==vil2_convolve_periodic_extend)
-  {
-    // Assume src[i]=src[0] for i<0
-    int i_max = -1-k_lo;
-    for (int i=0;i<=i_max;++i)
-    {
-      accumT sum=0;
-      for (int j=k_lo;j<=k_hi;++j)
-      {
-        if ((i+j)<0) sum+=(accumT)(src[0]*kernel[j*kstep]);
-        else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*kstep]);
-      }
-      dest[i*d_step]=(destT)sum;
-    }
-  }
-  else if (option==vil2_convolve_reflect_extend)
-  {
-    // Assume src[i]=src[n+i] for i<0
-    int i_max = -1-k_lo;
-    for (int i=0;i<=i_max;++i)
-    {
-      accumT sum=0;
-      for (int j=k_lo;j<=k_hi;++j)
-        sum+=(accumT)(src[((i+j+n)%n)*s_step]*kernel[j*kstep]);
-      dest[i*d_step]=(destT)sum;
-    }
-  }
-  else if (option==vil2_convolve_trim)
-  {
-    // Truncate and reweigh kernel
-    accumT k_sum_all=0;
-    for (int j=k_lo;j<=k_hi;++j) k_sum_all+=(accumT)(kernel[j*kstep]);
-
-    int i_max = -1-k_lo;
-    for (int i=0;i<=i_max;++i)
-    {
-      accumT sum=0;
-      accumT k_sum=0;
-      // Sum elements which overlap src
-      // ie i+j>=0  (so j starts at -i)
-      for (int j=-i;j<=k_hi;++j)
-      {
-        sum+=(accumT)(src[(i+j)*s_step]*kernel[j*kstep]);
-        k_sum += (accumT)(kernel[j*kstep]);
-      }
-      dest[i*d_step]=(destT)(sum*k_sum_all/k_sum);
-    }
-  }
-  else
-  {
-    vcl_cout<<"vil2_correlate_edge_1d: ";
-    vcl_cout<<"Sorry, can't deal with supplied edge option.\n";
-    vcl_abort();
-  }
-}
-
-//: correlate kernel[x] (x in [k_lo,k_hi]) with srcT
+//: Correlate kernel[x] (x in [k_lo,k_hi]) with srcT
 // Assumes dest and src same size (nx)
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_correlate_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
@@ -129,7 +28,7 @@ inline void vil2_correlate_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_ste
                              vil2_convolve_boundary_option end_option)
 {
   // Deal with start (fill elements 0..1-k_lo of dest)
-  vil2_correlate_edge_1d(src0,nx,s_step,dest0,d_step,kernel,k_lo,k_hi,1,ac,start_option);
+  vil2_convolve_edge_1d(src0,nx,s_step,dest0,d_step,kernel,-k_hi,-k_lo,-1,ac,start_option);
 
   const kernelT* k_begin = kernel+k_lo;
   const kernelT* k_end   = kernel+k_hi+1;
@@ -145,9 +44,9 @@ inline void vil2_correlate_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_ste
   }
 
   // Deal with end  (reflect data and kernel!)
-  vil2_correlate_edge_1d(src0+(nx-1)*s_step,nx,-s_step,
+  vil2_convolve_edge_1d(src0+(nx-1)*s_step,nx,-s_step,
                         dest0+(nx-1)*d_step,-d_step,
-                        kernel,-k_hi,-k_lo,-1,ac,end_option);
+                        kernel,k_lo,k_hi,1,ac,end_option);
 }
 
 //: correlate kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
@@ -178,9 +77,30 @@ inline void vil2_correlate_1d(const vil2_image_view<srcT>& src_im,
     destT* dest_row = dest_im.top_left_ptr()+p*dest_im.planestep();
 
     // Apply convolution to each row in turn
-    for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
-      vil2_correlate_1d(src_row,ni,s_istep,  dest_row,d_istep,
-                       kernel,k_lo,k_hi,ac,start_option,end_option);
+    // First check if either istep is 1 for speed optimisation.
+    if (s_istep == 1)
+    {
+      if (d_istep == 1)
+        for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+          vil2_correlate_1d(src_row,ni,1,  dest_row,1,
+                           kernel,k_lo,k_hi,ac,start_option,end_option);
+      else
+        for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+          vil2_correlate_1d(src_row,ni,1,  dest_row,d_istep,
+                           kernel,k_lo,k_hi,ac,start_option,end_option);
+    }
+    else
+    {
+      if (d_istep == 1)
+        for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+          vil2_correlate_1d(src_row,ni,s_istep,  dest_row,1,
+                           kernel,k_lo,k_hi,ac,start_option,end_option);
+      else
+        for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+          vil2_correlate_1d(src_row,ni,s_istep,  dest_row,d_istep,
+                           kernel,k_lo,k_hi,ac,start_option,end_option);
+    }
+
   }
 }
 
