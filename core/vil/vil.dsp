@@ -129,7 +129,7 @@ SOURCE=.\Templates/vil2_smart_ptr+vil2_memory_chunk-.cxx
 SOURCE=.\Templates/vil2_image_view+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgb+float--.cxx
+SOURCE=.\Templates/vil2_image_view+vil2_rgb+float--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_crop.cxx
@@ -168,13 +168,13 @@ SOURCE=.\Templates/vil2_image_view+int_32-.cxx
 SOURCE=.\Templates/vil2_image_view+uint_32-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgb+int_16--.cxx
+SOURCE=.\Templates/vil2_image_view+vil2_rgb+int_16--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgb+int_32--.cxx
+SOURCE=.\Templates/vil2_image_view+vil2_rgb+int_32--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgb+uint_32--.cxx
+SOURCE=.\Templates/vil2_image_view+vil2_rgb+uint_32--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil2_sample_grid_bilin+byte.double-.cxx
@@ -186,16 +186,16 @@ SOURCE=.\Templates/vil2_sample_profile_bilin+byte.double-.cxx
 SOURCE=.\Templates/vil2_image_view+uint_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgb+byte--.cxx
+SOURCE=.\Templates/vil2_image_view+vil2_rgb+byte--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgb+uint_16--.cxx
+SOURCE=.\Templates/vil2_image_view+vil2_rgb+uint_16--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgb+double--.cxx
+SOURCE=.\Templates/vil2_image_view+vil2_rgb+double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgba+byte--.cxx
+SOURCE=.\Templates/vil2_image_view+vil2_rgba+byte--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil2_image_view+double-.cxx
@@ -228,13 +228,13 @@ SOURCE=.\Templates/vil2_copy+uint_16-.cxx
 SOURCE=.\Templates/vil2_copy+uint_32-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_copy+vil_rgb+byte--.cxx
+SOURCE=.\Templates/vil2_copy+vil2_rgb+byte--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil2_image_view+sbyte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgb+sbyte--.cxx
+SOURCE=.\Templates/vil2_image_view+vil2_rgb+sbyte--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil2_resample_bilin+byte.double-.cxx
@@ -249,7 +249,7 @@ SOURCE=.\Templates/vil2_resample_bilin+float.double-.cxx
 SOURCE=.\Templates/vil2_sample_grid_bilin+float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgba+float--.cxx
+SOURCE=.\Templates/vil2_image_view+vil2_rgba+float--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil2_bmp.cxx
@@ -304,6 +304,54 @@ SOURCE=.\file_formats/vil2_jpeg_destination_mgr.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil2_jpeg_source_mgr.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_rgb+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_rgb+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_rgb+long-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_rgb+uint-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_rgb+unsignedchar-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_rgb+vxl_uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_rgba+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_rgba+unsignedchar-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_open.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_stream.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_stream_16bit.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_stream_32bit.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_stream_core.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_stream_fstream.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_stream_section.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_stream_url.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -457,6 +505,45 @@ SOURCE=.\file_formats/vil2_tiff.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_pixel_traits.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_fwd.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_open.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_rgb.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_rgb.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_rgba.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_rgba.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_stream.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_stream_16bit.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_stream_32bit.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_stream_core.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_stream_fstream.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_stream_section.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_stream_url.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

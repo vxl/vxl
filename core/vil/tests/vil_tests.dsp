@@ -104,6 +104,9 @@ SOURCE=.\test_algo_line_filter.cxx
 # Begin Source File
 SOURCE=.\test_algo_correlate_1d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_correlate_2d.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # End Group

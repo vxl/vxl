@@ -105,7 +105,7 @@ SOURCE=.\vimt_dummy.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\vimt_convolve_2d.h
+SOURCE=.\vimt_correlate_2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vimt_find_peaks.h
