@@ -83,17 +83,23 @@ frame_image(const int frame,
           s0 = s;
           continue;
         }
-      for(float si = s0; si<=s; si++)
-        for(float a =bar_alpha_low; a<=bar_alpha_high; a+=1/si)
+      double u0_low, u_low, u0_high, u_high, 
+        v_low_s0, v_high_s0, v_low_s, v_high_s;
+      nb.image_coords(bar_alpha_low, s0, u0_low, v_low_s0);
+      nb.image_coords(bar_alpha_low, s, u_low, v_low_s);
+      nb.image_coords(bar_alpha_high, s0, u0_high, v_high_s0);
+      nb.image_coords(bar_alpha_high, s, u_high, v_high_s);
+      int u0 = (int)((u0_low+u0_high)/2), u = (int)((u_low+u_high)/2);
+      int v_low = (int)((v_low_s0+v_low_s)/2), v_high =(int)((v_high_s0+v_high_s)/2);
+      for(int ui = u0; ui<=u; ui++)
+        for(int vi = v_low; vi<=v_high; vi++)
           {
-            double u, v;
-            nb.image_coords(a, si, u, v);
-            if(u<0||u>=100||v<0||v>=100)//for now JLM
+            if(ui<0||ui>=100||vi<0||vi>=100)//for now JLM
               continue;
             if(low_grey)
-              image(u,v) = low_grey_level;
+              image(ui,vi) = low_grey_level;
             else
-              image(u,v) = high_grey_level;
+              image(ui,vi) = high_grey_level;
           }
       s0 =s;
     }
@@ -126,7 +132,7 @@ void test_network_builder()
   bmrf_network_builder nb(nbp);
   nb.init();
   int n_frames=3;
-  vcl_string file = "c:/images/tmp/bmrf_node";
+  vcl_string file = "bmrf_node";
   for(int f = 0; f<n_frames; f++)
     {
       vil_image_view<float> image = frame_image(f,
