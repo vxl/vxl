@@ -226,16 +226,16 @@ void xcv_display::line_profile(const vil_image& src, float x0, float y0, float x
   float x_step = (x1 - x0)/(num_points-1);
   float y_step = (y1 - y0)/(num_points-1);
 
+  // copy input image to byte buffer
+  //vil_memory_image_of<vil_byte> memimg(src);
+  vil_memory_image_of<vil_byte> memimg;
+  memimg.resize(src.width(), src.height());
+  vil_image_as_byte(src).get_section(memimg.get_buffer(), 0, 0, src.width(), src.height());
+
   for(int i = num_points-1; i>=0; i--)
   {
     xvals[i] = x0 + x_step*i;
     yvals[i] = y0 + y_step*i;
-
-    // copy input image to byte buffer
-    //vil_memory_image_of<vil_byte> memimg(src);
-    vil_memory_image_of<vil_byte> memimg;
-    memimg.resize(src.width(), src.height());
-    vil_image_as_byte(src).get_section(memimg.get_buffer(), 0, 0, src.width(), src.height());
 
     if (sdepth == 8)
     {
@@ -289,6 +289,12 @@ void xcv_display::show_line_slice()
   axes->compute_axes();
   vgui_viewer2D_new viewer(axes);
 
+  vgui_dialog profile_dialog("Image Line Profile");
+  profile_dialog.inline_tableau(vgui_shell_tableau_new(viewer), 700, 500);
+  profile_dialog.set_ok_button("close");
+  profile_dialog.set_cancel_button(0);
+  profile_dialog.ask();
+  /*
   vgui_window *popup = vgui::produce_window(700, 500, "Image Line Profile");
   if (popup)
   {
@@ -296,6 +302,7 @@ void xcv_display::show_line_slice()
     popup->get_adaptor()->set_tableau(vgui_shell_tableau_new(viewer));
     popup->show();
   }
+  */
 }
 
 //-----------------------------------------------------------------------------
