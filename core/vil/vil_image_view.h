@@ -21,11 +21,20 @@ template <class T>
 class vil2_image_view : public vil2_image_view_base
 {
 protected:
+  //: Points to the first (top-left) pixel in the image.
   T * top_left_;
+
+  //: Add this to your current pixel pointer to get the pixel to the right.
   int xstep_;
+
+  //: Add this to your current pixel pointer to get the pixel below.
   int ystep_;
+
+  //: Add this to your current pixel pointer to get the same pixel in the next plane.
   int planestep_;
 
+  //: Points to a controlled image data.
+  // If the pointer is null, but top_left_ is not, then the view is of somebody else's data.
   vil2_smart_ptr<vil2_memory_chunk> ptr_;
 public:
 
