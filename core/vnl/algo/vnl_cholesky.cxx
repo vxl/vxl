@@ -9,9 +9,9 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_cholesky.h"
+#include <vcl_cmath.h> // pow()
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-#include <vnl/vnl_math.h> // pow()
 #include <vnl/algo/vnl_netlib.h> // dpofa_(), dposl_(), dpoco_(), dpodi_()
 
 // -- Make cholesky decomposition of M optionally computing
@@ -72,7 +72,7 @@ double vnl_cholesky::determinant() const
   unsigned n = A_.columns();
   double det[2];
   dpodi_((double*)A_.data_block(), n, n, det, 10);
-  return det[0] * pow(10, det[1]);
+  return det[0] * vcl_pow(10, det[1]);
 }
 
 // -- Compute inverse.  Not efficient.
