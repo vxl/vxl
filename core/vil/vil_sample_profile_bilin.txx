@@ -1,12 +1,12 @@
-// This is mul/vil2/vil2_sample_profile_bilin.txx
+// This is core/vil2/vil2_sample_profile_bilin.txx
 #ifndef vil2_sample_profile_bilin_txx_
 #define vil2_sample_profile_bilin_txx_
 //:
-//  \file
-//  \brief Profile sampling functions for 2D images
-//  \author Tim Cootes
+// \file
+// \brief Profile sampling functions for 2D images
+// \author Tim Cootes
 
-#include <vil2/vil2_sample_profile_bilin.h>
+#include "vil2_sample_profile_bilin.h"
 #include <vil2/vil2_bilin_interp.h>
 
 inline bool vil2_profile_in_image(double x0, double y0,
