@@ -42,8 +42,7 @@ class rgrl_transformation
   //: initialize with covariance matrix
   rgrl_transformation( const vnl_matrix<double>& cov );
 
-  //:  Apply the transformation to create a new (mapped) location
-  //
+  //: Apply the transformation to create a new (mapped) location
   void map_location( vnl_vector<double> const& from,
                      vnl_vector<double>      & to    ) const;
 
@@ -88,15 +87,15 @@ class rgrl_transformation
                       vnl_vector<double> const& from_dir,
                       vnl_vector<double>      & to_dir    ) const;
 
-
+#if 0
   // Don't provide this interface because it is quite easy to confuse
   // it with the three vector version. If you intended to call the
   // three vector version, but forget to provide the location, then
   // the compiler will simply call this version and there will be no
   // error; just wrong results.
-  //
-  //vnl_vector<double> map_direction( vnl_vector<double> const& from_loc,
-  //                                  vnl_vector<double> const& from_dir ) const;
+  vnl_vector<double> map_direction( vnl_vector<double> const& from_loc,
+                                    vnl_vector<double> const& from_dir ) const;
+#endif // 0
 
   //:  Apply to an intensity, with a default of the identity.
   virtual
@@ -116,7 +115,7 @@ class rgrl_transformation
                         bool initialize_next,
                         const vnl_vector<double>& to_delta,
                         vnl_vector<double>& from,
-                        vnl_vector<double>& from_next_est) const ;
+                        vnl_vector<double>& from_next_est) const = 0;
 
   //:  Parameter covariance matrix
   vnl_matrix<double> covar() const;
@@ -130,20 +129,20 @@ class rgrl_transformation
   //:  Inverse map based on the transformation.
   //   This function only exist for certain transformations.
   virtual void inv_map( const vnl_vector<double>& to,
-                        vnl_vector<double>& from ) const;
+                        vnl_vector<double>& from ) const = 0;
 
   //: is this an invertible transformation?
   virtual bool is_invertible() const { return false; }
-  
+
   //: Return an inverse transformation
   //  This function only exist for certain transformations.
-  virtual rgrl_transformation_sptr inverse_transform() const;
-  
+  virtual rgrl_transformation_sptr inverse_transform() const = 0;
+
   //: Return the jacobian of the transform
   virtual vnl_matrix<double> jacobian( vnl_vector<double> const& from_loc ) const = 0;
 
   //:  transform the transformation for images of different resolution
-  virtual rgrl_transformation_sptr scale_by( double scale ) const;
+  virtual rgrl_transformation_sptr scale_by( double scale ) const = 0;
 
   //: output transformation
   virtual void write( vcl_ostream& os ) const = 0;
@@ -155,10 +154,10 @@ class rgrl_transformation
   //  Unless the transformation is not estimated using estimators in rgrl,
   //  it does not need to be set explicitly
   void set_scaling_factors( vnl_vector<double> const& scaling );
-  
+
   //: return scaling factor
   const vnl_vector<double>& scaling_factors() const { return scaling_factors_; }
-  
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_transformation, rgrl_object );
 
@@ -181,22 +180,22 @@ class rgrl_transformation
                 vnl_vector<double>      & to_dir    ) const = 0;
 
  protected:
-  
+
   //: covariance matrix
-  //  Unlike transformation parameters, covariance is always a mtrix of double. 
-  vnl_matrix<double> covar_; 
-  
-  //: flag of setting covariance 
+  //  Unlike transformation parameters, covariance is always a mtrix of double.
+  vnl_matrix<double> covar_;
+
+  //: flag of setting covariance
   //  Check it before using covariance matrix
   bool is_covar_set_;
-  
+
   //: scaling factors of current transformation on each dimension
-  //  this is computed from current transformation.
+  //  This is computed from current transformation.
   //  And it has nothing to do with how to transform points
-  vnl_vector<double> scaling_factors_; 
+  vnl_vector<double> scaling_factors_;
 };
 
-vcl_ostream& 
+vcl_ostream&
 operator<< (vcl_ostream& os, rgrl_transformation const& xform );
 
 #endif

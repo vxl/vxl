@@ -1,7 +1,6 @@
 #include <rgrl/rgrl_transformation.h>
 #include <rgrl/rgrl_util.h>
 #include <vnl/vnl_math.h>
-
 //:
 // \file
 // \brief Base class for transformation representation, estimations and application in generalized registration library
@@ -28,7 +27,6 @@ rgrl_transformation::
 {
 }
 
-
 void
 rgrl_transformation::
 map_location( vnl_vector<double> const& from,
@@ -36,7 +34,6 @@ map_location( vnl_vector<double> const& from,
 {
   map_loc( from, to );
 }
-
 
 vnl_vector<double>
 rgrl_transformation::
@@ -91,8 +88,8 @@ map_normal( vnl_vector<double> const & from_loc,
 
   // assuming it is face feature, i.e., with dimension n-1
   unsigned int m = from_loc.size();
-  if (m == 2) {//rotate the tangent by 90 degrees
-
+  if (m == 2) //rotate the tangent by 90 degrees
+  {
     // rotate from_dir
     vnl_vector< double > from_tangent(2);
     from_tangent[0] =  from_dir[1];
@@ -108,7 +105,8 @@ map_normal( vnl_vector<double> const & from_loc,
     to_dir[0] = -xformed_tangent[1];
     to_dir[1] =  xformed_tangent[0];
   }
-  else { //m == 3, compute the normal as the cross-product of the two xformed tangents
+  else //m == 3, compute the normal as the cross-product of the two xformed tangents
+  {
     // avoid using SVD to
     // obtain two tangent bases
     // Description of this naive method:
@@ -224,19 +222,8 @@ map_intensity( vnl_vector<double> const& /*from*/,
   return intensity;
 }
 
-void
-rgrl_transformation::
-inv_map( const vnl_vector<double>& /*to*/,
-         bool /*initialize_next*/,
-         const vnl_vector<double>& /*to_delta*/,
-         vnl_vector<double>& /*from*/,
-         vnl_vector<double>& /*from_next_est*/) const
-{
-  assert ( ! "rgrl_transformation::inv_map() is not defined" );
-}
-
 //:  Parameter covariance matrix
-vnl_matrix<double> 
+vnl_matrix<double>
 rgrl_transformation::
 covar() const
 {
@@ -245,58 +232,33 @@ covar() const
 }
 
 //:  set parameter covariance matrix
-void 
+void
 rgrl_transformation::
 set_covar( const vnl_matrix<double>& covar )
 {
   covar_ = covar;
-  if( covar.rows() > 0 && covar.cols() > 0 ) {
+  if ( covar.rows() > 0 && covar.cols() > 0 ) {
     is_covar_set_ = true;
   }
-}
-
-void
-rgrl_transformation::
-inv_map( const vnl_vector<double>& /*to*/,
-         vnl_vector<double>& /*from*/ ) const
-{
-  assert ( ! "rgrl_transformation::inv_map() is not defined" );
-}
-
-rgrl_transformation_sptr 
-rgrl_transformation::
-inverse_transform( ) const
-{
-  assert ( ! "rgrl_transformation::inverse_transform() is not defined" );
-  return 0;
-}
-
-
-rgrl_transformation_sptr
-rgrl_transformation::
-scale_by( double /*scale*/ ) const
-{
-  assert ( ! "rgrl_transformation::scale_by() is not defined" );
-  return 0;
 }
 
 //: set scaling factors
 //  Unless the transformation is not estimated using estimators in rgrl,
 //  it does not need to be set explicitly
-void 
+void
 rgrl_transformation::
 set_scaling_factors( vnl_vector<double> const& scaling )
-{ 
+{
   // checking scaling
   // set it to epsison if scaling is in fact zero
-  for( unsigned int i=0; i<scaling.size(); ++i )
+  for ( unsigned int i=0; i<scaling.size(); ++i )
     assert( vnl_math_isfinite( scaling[i] ) && scaling[i] > 0.0 );
-    
-  scaling_factors_ = scaling; 
+
+  scaling_factors_ = scaling;
 }
 
 
-vcl_ostream& 
+vcl_ostream&
 operator<< (vcl_ostream& os, rgrl_transformation const& xform )
 {
   xform.write( os );

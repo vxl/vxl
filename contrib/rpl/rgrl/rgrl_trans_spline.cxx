@@ -32,7 +32,7 @@ rgrl_trans_spline( vcl_vector<rgrl_spline_sptr> const& splines,
                    vnl_vector< double > const& x0, vnl_vector< double > const& delta,
                    vnl_matrix< double > const& covar,
                    rgrl_transformation_sptr xform )
-  : rgrl_transformation( covar ), 
+  : rgrl_transformation( covar ),
     xform_( xform ), splines_( splines ), x0_( x0 ), delta_( delta )
 {
   assert( x0_.size() == delta_.size() );
@@ -204,3 +204,37 @@ read( vcl_istream& is )
   }
 }
 
+void
+rgrl_trans_spline::
+inv_map( vnl_vector<double> const& /*to*/,
+         bool /*initialize_next*/,
+         vnl_vector<double> const& /*to_delta*/,
+         vnl_vector<double>& /*from*/,
+         vnl_vector<double>& /*from_next_est*/) const
+{
+  assert ( ! "rgrl_trans_spline::inv_map() is not defined" );
+}
+
+void
+rgrl_trans_spline::
+inv_map( vnl_vector<double> const& /*to*/,
+         vnl_vector<double>& /*from*/ ) const
+{
+  assert ( ! "rgrl_trans_spline::inv_map() is not defined" );
+}
+
+rgrl_transformation_sptr
+rgrl_trans_spline::
+inverse_transform( ) const
+{
+  assert ( ! "rgrl_trans_spline::inverse_transform() is not defined" );
+  return 0;
+}
+
+rgrl_transformation_sptr
+rgrl_trans_spline::
+scale_by( double /*scale*/ ) const
+{
+  assert ( ! "rgrl_trans_spline::scale_by() is not defined" );
+  return 0;
+}

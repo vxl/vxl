@@ -1,3 +1,5 @@
+//:
+// \file
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 
@@ -45,11 +47,11 @@ rgrl_trans_homography2d( vnl_matrix<double> const& H,
   vnl_matrix<double> to_matrix(3,3, vnl_matrix_identity);
   to_matrix(0,2) = -to_centre[0];
   to_matrix(1,2) = -to_centre[1];
-  
+
   vnl_matrix<double> from_matrix(3,3, vnl_matrix_identity);
   from_matrix(0,2) = -from_centre[0];
   from_matrix(1,2) = -from_centre[1];
-    
+
   vnl_svd<double> svd_to( to_matrix );
   assert( svd_to.rank() == 3 );
   H_ = svd_to.inverse() * H * from_matrix;
@@ -57,7 +59,7 @@ rgrl_trans_homography2d( vnl_matrix<double> const& H,
 }
 
 
-vnl_matrix<double> 
+vnl_matrix<double>
 rgrl_trans_homography2d::
 transfer_error_covar( vnl_vector<double> const& from_loc  ) const
 {
@@ -84,14 +86,14 @@ transfer_error_covar( vnl_vector<double> const& from_loc  ) const
   J_wrt_h(1,6) = -1*p(0)*h_1Tp*h_2Tp_inv;
   J_wrt_h(1,7) = -1*p(1)*h_1Tp*h_2Tp_inv;
   J_wrt_h(1,8) = -1*p(2)*h_1Tp*h_2Tp_inv;
-  
+
   J_wrt_h(1,8) *= h_2Tp_inv;
 
   return J_wrt_h * covar_ * J_wrt_h.transpose();
 }
 
 //: Inverse map using pseudo-inverse of H_.
-void 
+void
 rgrl_trans_homography2d::
 inv_map( const vnl_vector<double>& to,
          vnl_vector<double>& from ) const
@@ -109,7 +111,7 @@ inv_map( const vnl_vector<double>& to,
 }
 
 //:  Inverse map with an initial guess
-void 
+void
 rgrl_trans_homography2d::
 inv_map( const vnl_vector<double>& to,
          bool initialize_next,
@@ -122,24 +124,24 @@ inv_map( const vnl_vector<double>& to,
   int t=0;
   const int max_t = 50;  //  Generally, only one or two iterations should be needed.
   assert (to.size() == from.size());
-  int m = to.size();
   vnl_vector<double> to_est = this->map_location(from);
   vnl_matrix<double> approx_A_inv;
   vnl_matrix<double> J;
   vnl_vector<double> homo_from_delta(3,1);
   vnl_vector<double> from_delta(2,1);
 
-  while ( vnl_vector_ssd(to, to_est) > eps_squared && t<max_t ) {
-    t ++ ;
+  while ( vnl_vector_ssd(to, to_est) > eps_squared && t<max_t )
+  {
+    ++t;
 
     // compute the inverse of the approximated affine from the jacobian
     J = jacobian( from );
     vnl_svd<double> svd(J);
     approx_A_inv = svd.inverse();
-    
+
     // Increase "from" by approx_A^-1*(to-to_est).  "homo_from_delta"
     // provides the correct direction, but its magnitude is
-    // arbitary. To get around the problem, we take (to -
+    // arbitrary. To get around the problem, we take (to -
     // to_est).two_norm() as an indication as the magnitude.
 
     homo_from_delta = approx_A_inv * (to - to_est);
@@ -169,14 +171,14 @@ inv_map( const vnl_vector<double>& to,
 }
 
 //: Return the jacobian of the transform.
-vnl_matrix<double> 
+vnl_matrix<double>
 rgrl_trans_homography2d::
 jacobian( vnl_vector<double> const& from_loc ) const
 {
-  // Let h_i be the i_th row of H_, and p be the homogenous vector of from_loc
+  // Let h_i be the i_th row of H_, and p be the homogeneous vector of from_loc
   // f_0(p) = h_0.p/h_2.p
   // f_1(p) = h_1.p/h_2.p
-  // The jacobian is a 2x3 matrix with entries 
+  // The jacobian is a 2x3 matrix with entries
   // [d(f_0)/dx   d(f_0)/dy   d(f_0)/dw;
   //  d(f_1)/dx   d(f_1)/dy   d(f_1)/dw]
   //
@@ -188,7 +190,7 @@ jacobian( vnl_vector<double> const& from_loc ) const
   double inv_mapped_w = 1/dot_product(h_2, p);
   double mapped_x = dot_product(h_0, p)*inv_mapped_w;
   double mapped_y = dot_product(h_1, p)*inv_mapped_w;
-  
+
   vnl_matrix<double> jacobian(2, 3);
   jacobian.set_row(0, h_0-mapped_x*h_2 );
   jacobian.set_row(1, h_1-mapped_y*h_2 );
@@ -197,7 +199,7 @@ jacobian( vnl_vector<double> const& from_loc ) const
 }
 
 // for output UNCENTERED transformation and the original center
-void 
+void
 rgrl_trans_homography2d::
 write(vcl_ostream& os ) const
 {
@@ -209,7 +211,7 @@ write(vcl_ostream& os ) const
 }
 
 // for input
-void 
+void
 rgrl_trans_homography2d::
 read(vcl_istream& is )
 {
@@ -237,7 +239,7 @@ read(vcl_istream& is )
   }
 }
 
-void 
+void
 rgrl_trans_homography2d::
 map_loc( vnl_vector<double> const& from,
          vnl_vector<double>      & to ) const
@@ -249,7 +251,7 @@ map_loc( vnl_vector<double> const& from,
   to[1] = h_to[1]/h_to[2];
 }
 
-void 
+void
 rgrl_trans_homography2d::
 map_dir( vnl_vector<double> const& from_loc,
          vnl_vector<double> const& from_dir,
@@ -265,11 +267,18 @@ map_dir( vnl_vector<double> const& from_loc,
   to_dir.normalize();
 }
 
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_homography2d::
 scale_by( double scale ) const
-{ 
-  assert(false); 
+{
+  assert(false);
   return 0;
 }
 
+rgrl_transformation_sptr
+rgrl_trans_homography2d::
+inverse_transform( ) const
+{
+  assert ( ! "rgrl_trans_homography2d::inverse_transform() is not defined" );
+  return 0;
+}

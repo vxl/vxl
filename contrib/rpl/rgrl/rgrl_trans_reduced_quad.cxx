@@ -336,3 +336,30 @@ read( vcl_istream& is )
     is >> Q_ >> A_ >> trans_ >> from_centre_;
   }
 }
+
+void
+rgrl_transformation::
+inv_map( const vnl_vector<double>& /*to*/,
+         bool /*initialize_next*/,
+         const vnl_vector<double>& /*to_delta*/,
+         vnl_vector<double>& /*from*/,
+         vnl_vector<double>& /*from_next_est*/) const
+{
+  assert ( ! "rgrl_transformation::inv_map() is not defined" );
+}
+
+void
+rgrl_trans_reduced_quad::
+inv_map( vnl_vector<double> const& /*to*/,
+         vnl_vector<double>& /*from*/ ) const
+{
+  assert ( ! "rgrl_trans_reduced_quad::inv_map() is not defined" );
+}
+
+rgrl_transformation_sptr
+rgrl_trans_reduced_quad::
+inverse_transform( ) const
+{
+  assert ( ! "rgrl_trans_reduced_quad::inverse_transform() is not defined" );
+  return 0;
+}

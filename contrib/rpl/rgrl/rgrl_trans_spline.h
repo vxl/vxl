@@ -82,8 +82,15 @@ class rgrl_trans_spline
   // each other's variables are 0.  So I don't save the covariance
   // between them.  However, the covariance between the parameters is
   // the same for each spline. So here, only one covariance is saved.
-  vnl_vector< double >  x0_;
+  vnl_vector<double> x0_;
   vnl_vector<double> delta_;
+
+  // TODO - pure virtual functions of rgrl_transformation
+  virtual void inv_map(vnl_vector<double> const&, bool,
+                       vnl_vector<double> const&, vnl_vector<double>&, vnl_vector<double>&) const;
+  virtual void inv_map(vnl_vector<double> const&, vnl_vector<double>&) const;
+  virtual rgrl_transformation_sptr inverse_transform() const;
+  virtual rgrl_transformation_sptr scale_by(double) const;
 };
 
 #endif

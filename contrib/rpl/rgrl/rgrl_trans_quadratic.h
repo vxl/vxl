@@ -85,17 +85,17 @@ class rgrl_trans_quadratic
   vnl_vector<double> const& t() const;
 
   //:  Inverse map with an initial guess
-  void inv_map( const vnl_vector<double>& to,
-                bool initialize_next,
-                const vnl_vector<double>& to_delta,
-                vnl_vector<double>& from,
-                vnl_vector<double>& from_next_est) const;
+  virtual void inv_map( const vnl_vector<double>& to,
+                        bool initialize_next,
+                        const vnl_vector<double>& to_delta,
+                        vnl_vector<double>& from,
+                        vnl_vector<double>& from_next_est) const;
 
   //: Return the jacobian of the transform
   vnl_matrix<double> jacobian( vnl_vector<double> const& from_loc ) const;
 
   //:  transform the transformation for images of different resolution
-  rgrl_transformation_sptr scale_by( double scale ) const;
+  virtual rgrl_transformation_sptr scale_by( double scale ) const;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_trans_quadratic, rgrl_transformation );
@@ -121,6 +121,10 @@ class rgrl_trans_quadratic
   vnl_matrix<double> A_;
   vnl_vector<double> trans_;
   vnl_vector<double> from_centre_;
+
+  // TODO - pure virtual functions of rgrl_transformation
+  virtual void inv_map(vnl_vector<double> const&, vnl_vector<double>&) const;
+  virtual rgrl_transformation_sptr inverse_transform() const;
 };
 
 #endif

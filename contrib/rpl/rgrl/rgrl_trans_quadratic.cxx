@@ -33,7 +33,7 @@ rgrl_trans_quadratic( vnl_matrix<double> const& in_Q,
   assert ( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
-  if( is_covar_set() ) {
+  if ( is_covar_set() ) {
     assert ( covar_.rows() == covar_.cols() );
     assert ( covar_.rows() == A_.rows()* (Q_.cols()+A_.cols() + 1 ) );
   }
@@ -48,7 +48,6 @@ rgrl_trans_quadratic( vnl_matrix<double> const& in_Q,
     trans_( in_trans ),
     from_centre_( in_trans.size(), 0.0 )
 {
-  int dim = trans_.size();
   assert ( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
@@ -72,10 +71,10 @@ rgrl_trans_quadratic( vnl_matrix<double> const& in_Q,
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
   assert ( from_centre_.size() == trans_.size() );
-  if( is_covar_set() ) {
+  if ( is_covar_set() ) {
     assert ( covar_.rows() == covar_.cols() );
     assert ( covar_.rows() == A_.rows()* ( Q_.cols() + A_.cols() + 1) );
-  }   
+  }
 
   // Uncenter the transform
   vnl_vector<double> new_trans;
@@ -337,8 +336,6 @@ void
 rgrl_trans_quadratic::
 read( vcl_istream& is )
 {
-  int dim;
-
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
 
@@ -352,7 +349,7 @@ read( vcl_istream& is )
   }
 
   // input global xform
-  dim=-1;
+  int dim=-1;
   is >> dim;
   if ( dim > 0 ) {
     Q_.set_size( dim, dim + int(dim*(dim-1)/2) );
@@ -361,4 +358,20 @@ read( vcl_istream& is )
     from_centre_.set_size( dim );
     is >> Q_ >> A_ >> trans_ >> from_centre_;
   }
+}
+
+void
+rgrl_trans_quadratic::
+inv_map( vnl_vector<double> const& /*to*/,
+         vnl_vector<double>& /*from*/ ) const
+{
+  assert ( ! "rgrl_trans_quadratic::inv_map() is not defined" );
+}
+
+rgrl_transformation_sptr
+rgrl_trans_quadratic::
+inverse_transform( ) const
+{
+  assert ( ! "rgrl_trans_quadratic::inverse_transform() is not defined" );
+  return 0;
 }
