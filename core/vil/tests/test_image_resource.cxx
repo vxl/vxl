@@ -11,18 +11,19 @@
 #include <vil2/vil2_print.h>
 #include <vil2/vil2_decimate.h>
 
-void test_image_resource_1()
-{
-  vcl_cout << "*********************************\n";
-  vcl_cout << " Testing vil2_image_resource objects\n";
-  vcl_cout << "*********************************\n";
 
-  vil2_image_resource_sptr mem = vil2_new_image_resource(10,8,1,VIL2_PIXEL_FORMAT_FLOAT);
-//  vil2_memory_image mem(10,8,1,VIL2_PIXEL_FORMAT_FLOAT);
+template <class T>
+void test_image_resource(vcl_string type, vil2_pixel_format format, T dummy)
+{
+  vcl_cout << "******************************************************************\n";
+  vcl_cout << " Testing vil2_image_resource objects with pixel type = " << type << "\n";
+  vcl_cout << "******************************************************************\n";
+
+  vil2_image_resource_sptr mem = vil2_new_image_resource(10,8,1,format);
 
   TEST("vil2_new_image_resource", mem, true);
 
-  vil2_image_view<float> view1 = mem->get_view(0, mem->ni(), 0, mem->nj());
+  vil2_image_view<T> view1 = mem->get_view(0, mem->ni(), 0, mem->nj());
   TEST("vil2_memory_image::get_view()", view1 && view1.ni()==10 && view1.nj()==8
     && view1.nplanes()==1, true );
 
@@ -34,7 +35,7 @@ void test_image_resource_1()
 
   TEST("vil2_crop(image_resource)", crop, true);
 
-  vil2_image_view<float> view2 = crop->get_copy_view(0, crop->ni(), 0, crop->nj());
+  vil2_image_view<T> view2 = crop->get_copy_view(0, crop->ni(), 0, crop->nj());
   TEST("vil2_memory_image::get_copy_view()",
        view2 && view2.ni()==6 && view2.nj()==4 && view2.nplanes()==1, true );
 
@@ -46,7 +47,7 @@ void test_image_resource_1()
   vil2_print_all(vcl_cout, view1);
 
 
-  float v1, v2;
+  T v1, v2;
 
   vil2_math_value_range(view1, v1, v2);
   TEST("Value range is 0,10", v1 == 0.0f && v2 == 10.0f, true);
@@ -97,6 +98,7 @@ void test_image_resource_1()
   vil2_image_resource_sptr dec = vil2_decimate(flip4, 2, 3);
   view1 = dec->get_view(0,dec->ni(),0,dec->nj());
   TEST("vil2_decimate get_view", view1, true);
+  TEST("vil2_decimate get_copy_view", dec->get_copy_view(0,dec->ni()/2,0,dec->nj()/2), true);
   TEST("vil2_decimate get_view sizes", view1.ni() == 5 && view1.nj() == 2, true);
   TEST("vil2_decimate get_view pixels", view1(0,1) == 20.0f && view1(1,1) == 10.0f && view1(1,0) == 0.0f, true);
   view2 = flip4->get_copy_view(0,10,0,8);
@@ -111,7 +113,14 @@ void test_image_resource_1()
 MAIN( test_image_resource )
 {
   START( "vil2_image_resource" );
-  test_image_resource_1();
+  test_image_resource("float", VIL2_PIXEL_FORMAT_FLOAT, float());
+  test_image_resource("double", VIL2_PIXEL_FORMAT_DOUBLE, double());
+  test_image_resource("vxl_byte", VIL2_PIXEL_FORMAT_BYTE, vxl_byte());
+  test_image_resource("vxl_sbyte", VIL2_PIXEL_FORMAT_SBYTE, vxl_sbyte());
+  test_image_resource("vxl_int_16", VIL2_PIXEL_FORMAT_INT_16, vxl_int_16());
+  test_image_resource("vxl_uint_16", VIL2_PIXEL_FORMAT_UINT_16, vxl_uint_16());
+  test_image_resource("vxl_int_32", VIL2_PIXEL_FORMAT_INT_32, vxl_int_32());
+  test_image_resource("vxl_uint_32", VIL2_PIXEL_FORMAT_UINT_32, vxl_uint_32());
 
   SUMMARY();
 }

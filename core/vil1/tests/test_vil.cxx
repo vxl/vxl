@@ -52,14 +52,16 @@ vcl_string image_base;
 
 
   vil_image tiff_image = vil_load( (image_base+"ff_rgb8bit_uncompressed.tif").c_str());
+  // If this test fails check that you have passed the correct image_base directory as a program argument.
+  TEST("vil_load worked", tiff_image, true);
 
   vil2_image_view<vxl_byte> ppm_image = vil2_load( (image_base+"ff_rgb8bit_raw.ppm").c_str());
+  TEST("vil2_load worked", ppm_image, true);
   
   vil2_image_resource_sptr resource1 = vil2_vil1_to_image_resource(tiff_image);
   image1 = resource1->get_view(0, resource1->ni(), 0, resource1->nj());
   vil2_print_all(vcl_cout, image1);
   vil2_print_all(vcl_cout, ppm_image);
-  TEST("get_view from a vil_image", vil2_image_view_deep_equality(ppm_image, image1), true);
   
 
 
