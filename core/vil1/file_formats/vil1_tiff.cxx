@@ -245,11 +245,11 @@ bool vil_tiff_generic_image::get_property(char const *tag, void *prop) const
   return false;
 }
 
-bool vil_tiff_generic_image::set_property(char const *tag, void *prop) const
+bool vil_tiff_generic_image::set_property(char const *tag, const void *prop) const
 {
   bool topdown; get_property(vil_property_top_row_first, &topdown);
   bool leftright; get_property(vil_property_left_first, &leftright);
-  bool newprop = prop ? (*(bool*)prop) : true; // default is to set the property
+  const bool newprop = prop ? (*(const bool*)prop) : true; // default is to set the property
 
   if (0==vcl_strcmp(tag, vil_property_top_row_first))
   {
