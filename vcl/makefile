@@ -251,10 +251,15 @@ MANPAGE_SOURCES += sunpro/vcl_vector.txx
 
 MANPAGE_SOURCES += win32-vc60/vcl_cmath.h
 MANPAGE_SOURCES += win32-vc60/vcl_complex.h
+MANPAGE_SOURCES += win32-vc60/vcl_cstdarg.h
 MANPAGE_SOURCES += win32-vc60/vcl_cstdlib.h
 MANPAGE_SOURCES += win32-vc60/vcl_string.h
 MANPAGE_SOURCES += win32-vc70/vcl_cmath.h
 MANPAGE_SOURCES += win32-vc70/vcl_cstdlib.h
+
+MANPAGE_SOURCES += borland55/vcl_cfloat.h
+MANPAGE_SOURCES += borland55/vcl_ciso646.h
+MANPAGE_SOURCES += borland56/vcl_complex.h
 
 MANPAGE_SOURCES += mwerks/vcl_cmath.h
 MANPAGE_SOURCES += mwerks/vcl_complex.h
