@@ -196,6 +196,9 @@ SOURCE=.\test_sample.cxx
 SOURCE=.\test_diag_matrix.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_rank.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_sparse_matrix.cxx
 # End Source File
 # Begin Source File
