@@ -31,21 +31,26 @@ private:
 
 public:
   
-  //: Dflt ctor
-  //  Creates an empty one-plane image.
-  vimt3d_image_3d_of();
+  //: Construct an empty one-plane image.
+  vimt3d_image_3d_of() {}
 
-  //: Create an n_plane plane image of ni x nj pixels
-  vimt3d_image_3d_of(unsigned ni, unsigned nj, unsigned nk, unsigned n_planes=1);
 
-  //: Construct from a view and a world-to-image transform (takes copies of both)
-  vimt3d_image_3d_of(const vil3d_image_view<T>& view, const vimt3d_transform_3d& w2i)
-    : vimt3d_image_3d(w2i),image_(view) {}
+  //: Construct an image of size (ni, nj, nk, np) with optional world_to_image transform w2i.
+  vimt3d_image_3d_of(unsigned ni, unsigned nj, unsigned nk, unsigned np=1,
+                     const vimt3d_transform_3d& w2i=vimt3d_transform_3d())
+    : vimt3d_image_3d(w2i), image_(ni, nj, nk, np) {}
 
+
+  //: Construct from a view and a world-to-image transform (takes copies of both).
+  vimt3d_image_3d_of(const vil3d_image_view<T>& view, 
+                     const vimt3d_transform_3d& w2i)
+    : vimt3d_image_3d(w2i), image_(view) {}
+ 
+  
   //: Destructor
   virtual ~vimt3d_image_3d_of();
 
-  //: Baseclass view of image
+  //: Base class view of image
   virtual const vil3d_image_view_base& image_base() const { return image_; }
 
   //: Image view

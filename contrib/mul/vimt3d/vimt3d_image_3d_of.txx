@@ -18,22 +18,6 @@
 
 
 //=======================================================================
-template<class T>
-vimt3d_image_3d_of<T>::vimt3d_image_3d_of()
-{
-}
-
-
-//=======================================================================
-template<class T>
-vimt3d_image_3d_of<T>::vimt3d_image_3d_of(unsigned ni, unsigned nj,
-                                          unsigned nk, unsigned nplanes)
-  : image_(ni,nj,nk,nplanes)
-{
-}
-
-
-//=======================================================================
 //: Perform deep copy of src into this image
 template<class T>
 void vimt3d_image_3d_of<T>::deep_copy(const vimt3d_image_3d_of& src)

@@ -15,17 +15,6 @@
 
 //=======================================================================
 
-template<class T>
-vimt_image_2d_of<T>::vimt_image_2d_of()
-{
-}
-
-template<class T>
-vimt_image_2d_of<T>::vimt_image_2d_of(unsigned nx, unsigned ny, unsigned nplanes)
-: image_(nx,ny,nplanes)
-{
-}
-
 //: Perform deep copy of src into this image
 template<class T>
 void vimt_image_2d_of<T>::deep_copy(const vimt_image_2d_of& src)

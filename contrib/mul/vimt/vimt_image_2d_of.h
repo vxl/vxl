@@ -21,18 +21,25 @@ class vimt_image_2d_of : public vimt_image_2d
   //: Shallow equality tester.
   //  The parameter must be identical type to this.
   bool equals(const vimt_image &) const;
- public:
-  //: Dflt ctor
-  //  Creates an empty one-plane image.
-  vimt_image_2d_of();
 
-  //: Create an n_plane plane image of nx x ny pixels
-  vimt_image_2d_of(unsigned nx, unsigned ny, unsigned n_planes=1);
+public:
+
+  //: Default constructor
+  //  Creates an empty one-plane image.
+  vimt_image_2d_of() {}
+
+
+  //: Construct an image of size (ni, nj, np) with optional world_to_image transform w2i.
+  vimt_image_2d_of(unsigned ni, unsigned nj, unsigned np=1,
+                   const vimt_transform_2d& w2i=vimt_transform_2d())
+    : vimt_image_2d(w2i), image_(ni, nj, np) {}
+
 
   //: Construct from a view and a world-to-image transform (takes copies of both)
   vimt_image_2d_of(const vil_image_view<T>& view, const vimt_transform_2d& w2i)
-    : vimt_image_2d(w2i),image_(view) {}
+    : vimt_image_2d(w2i), image_(view) {}
 
+  
   //: Destructor
   virtual ~vimt_image_2d_of();
 
