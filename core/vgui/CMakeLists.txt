@@ -1,3 +1,8 @@
+#
+# ./oxl/vgui/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 ADD_LIBRARY(vgui vgui_sources)
 

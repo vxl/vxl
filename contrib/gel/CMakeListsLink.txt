@@ -1,3 +1,8 @@
+#
+# ./gel/CMakeListsLink.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 LINK_LIBRARIES(gbl gmvl gst vsol vtol vdgl vsrl)
 

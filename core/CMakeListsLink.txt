@@ -1,3 +1,8 @@
+#
+# ./vxl/CMakeListsLink.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 LINK_LIBRARIES(vbl vpl vil vil_file_formats vnl vnl_algo vgl)
 

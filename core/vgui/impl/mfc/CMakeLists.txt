@@ -1,3 +1,8 @@
+#
+# ./oxl/vgui/impl/mfc/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 ADD_LIBRARY(vgui_mfc vgui_mfc_sources)
 

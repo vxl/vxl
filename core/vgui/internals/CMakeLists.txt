@@ -1,3 +1,8 @@
+#
+# ./oxl/vgui/internals/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 
 ADD_LIBRARY(vgui_internals vgui_internals_sources)

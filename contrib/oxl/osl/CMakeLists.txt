@@ -1,3 +1,8 @@
+#
+# ./oxl/osl/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 ADD_LIBRARY(osl osl_sources)
 

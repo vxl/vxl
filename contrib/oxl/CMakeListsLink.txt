@@ -1,3 +1,8 @@
+#
+# ./oxl/CMakeListsLink.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 LINK_LIBRARIES(osl osl_internals vgui vgui_internals vgui_mfc glu32 opengl32)
 
