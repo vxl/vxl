@@ -59,9 +59,7 @@ SET( vnl_sources
   vnl_double_4x4.h
   vnl_double_5.h
   vnl_identity.h
-  vnl_matlab_file_write.h
   vnl_operators.h
-  vnl_random.h
   vnl_tag.h
   vnl_vector_dereference.h
 
