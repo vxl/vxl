@@ -44,6 +44,7 @@ SOURCES += vil_trace_8con_boundary.cxx
 SOURCES += vil_corners.cxx
 MANPAGE_SOURCES += vil_find_peaks.h
 MANPAGE_SOURCES += vil_region_finder.txx
+MANPAGE_SOURCES += vil_cartesian_differential_invariants.txx
 
 ################################
 include ${IUEROOT}/config/top.mk
