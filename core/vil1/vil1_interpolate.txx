@@ -55,7 +55,7 @@ bool vil_interpolate_bilinear(vil_memory_image_of<T> const& img, double src_x, d
   double weight01 = beta*(1-alpha);
   double weight11 = alpha*beta;
       
-  *out = pix00 * weight00 + pix10 * weight10 + pix01 * weight01 + pix11 * weight11;
+  *out = U(pix00 * weight00 + pix10 * weight10 + pix01 * weight01 + pix11 * weight11);
   return true;
 }
 
@@ -93,9 +93,9 @@ bool vil_interpolate_bilinear_grad(vil_memory_image_of<T> const& img, double src
   double weight01 = beta*(1-alpha);
   double weight11 = alpha*beta;
       
-  *out_i = pix00 * weight00 + pix10 * weight10 + pix01 * weight01 + pix11 * weight11;
-  *out_dx = pix00 * (beta-1) + pix10 * (1-beta) - pix01 * beta + pix11 * beta;
-  *out_dy = pix00 * (alpha-1) - pix10 * alpha + pix01 * (1-alpha) + pix11 * alpha;
+  *out_i = U(pix00 * weight00 + pix10 * weight10 + pix01 * weight01 + pix11 * weight11);
+  *out_dx = U(pix00 * (beta-1) + pix10 * (1-beta) - pix01 * beta + pix11 * beta);
+  *out_dy = U(pix00 * (alpha-1) - pix10 * alpha + pix01 * (1-alpha) + pix11 * alpha);
 
   return true;
 }
@@ -138,11 +138,11 @@ bool vil_interpolate_bicubic(vil_memory_image_of<T> const& img, double src_x, do
   double t3 = (beta-1)*beta*beta;
 
 #define I(dx,dy) (img(src_x_int + (dx), src_y_int + (dy)))
-  *out = 0.25*
+  *out =U(0.25*
     ( (s0*I(-1,-1) + s1*I(+0,-1) + s2*I(+1,-1) + s3*I(+2,-1))*t0 +
       (s0*I(-1,+0) + s1*I(+0,+0) + s2*I(+1,+0) + s3*I(+2,+0))*t1 +
       (s0*I(-1,+1) + s1*I(+0,+1) + s2*I(+1,+1) + s3*I(+2,+1))*t2 +
-      (s0*I(-1,+2) + s1*I(+0,+2) + s2*I(+1,+2) + s3*I(+2,+2))*t3 );
+      (s0*I(-1,+2) + s1*I(+0,+2) + s2*I(+1,+2) + s3*I(+2,+2))*t3 ));
 #undef I
   return true;
 }
