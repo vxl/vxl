@@ -97,12 +97,9 @@ void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
 {
   set_size(src.ni(),src.nj(),src.nplanes());
 
-  vcl_ptrdiff_t s_planestep = src.planestep();
-  vcl_ptrdiff_t s_istep = src.istep();
-  vcl_ptrdiff_t s_jstep = src.jstep();
-
   if (src.is_contiguous())
   {
+    istep_=src.istep_; jstep_= src.jstep_; planestep_ = src.planestep_;
     if (src.istep()>0 && src.jstep()>0 && src.planestep()>=0)
     {
       vcl_memcpy(top_left_,src.top_left_ptr(),src.size()*sizeof(T));
@@ -114,6 +111,10 @@ void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
     while (s_it!=end_it) {*d_it = *s_it; ++s_it; ++d_it; }
     return;
   }
+
+  const vcl_ptrdiff_t s_planestep = src.planestep();
+  const vcl_ptrdiff_t s_istep = src.istep();
+  const vcl_ptrdiff_t s_jstep = src.jstep();
 
   // Do a deep copy
   // This is potentially inefficient
