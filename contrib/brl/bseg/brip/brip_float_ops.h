@@ -187,6 +187,11 @@ class brip_float_ops
                              const float f0, const float radius,
                              const bool output_fourier_mag,
                              vil1_memory_image_of<float> & output);
+  //: 2x2 bilinear interpolation of image at specified location
+  static double 
+    bilinear_interpolation(vil1_memory_image_of<float> const & input,
+                            const double x, const double y);
+    
  private:
 
   //: find if the center pixel of a neighborhood is the maximum value

@@ -1279,4 +1279,29 @@ spatial_frequency_filter(vil1_memory_image_of<float> const & input,
   brip_float_ops::resize(pow_two_filt, input.width(), input.height(), output);
   return true;
 }
+//----------------------------------------------------------------------
+//: Bi-linear interpolation on the neigborhood below.
+//      xr
+//   yr 0  x
+//      x  x
+//
+double brip_float_ops::
+ bilinear_interpolation(vil1_memory_image_of<float> const & input,
+                         const double x, const double y)
+{
+  //check bounds
+  int w = input.width(), h = input.height();
+  //the pixel containing the interpolated point
+  int xr = (int)(x+0.5), yr = (int)(y+0.5);
+  if(xr<0||xr>w-2)
+    return 0;
+  if(yr<0||yr>h-2)
+    return 0;
+  double int00 = input(xr, yr), int10 = input(xr+1,yr);
+  double int01 = input(xr, yr+1), int11 = input(xr+1,yr+1);
+  
+  double s00 = (1-x+xr)*(1-y+yr)*int00,   s10 = (x-xr)*(1-y+yr)*int10;
+  double s01 = (1-x+xr)*(y-yr)*int01, s11 = (x-xr)*(y-yr)*int11;
+  return (s00+s01+s10+s11);
+}
 
