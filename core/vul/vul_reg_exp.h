@@ -27,19 +27,18 @@
 
 #include <vcl_string.h>
 
-const int NSUBEXP = 10;
+const int vul_reg_exp_nsubexp = 10;
 
 //: Pattern matching with regular expressions.
-//  A regular expression allows a programmer to specify  complex
-//  patterns  that  can  be searched for and matched against the
+//  A regular expression allows a programmer to specify complex
+//  patterns that can be searched for and matched against the
 //  character string of a string object. In its simplest form, a
-//  regular  expression  is  a  sequence  of  characters used to
-//  search for exact character matches. However, many times  the
-//  exact  sequence to be found is not known, or only a match at
-//  the beginning or end of a string is desired. The vbl  regu-
-//  lar  expression  class implements regular expression pattern
-//  matching as is found and implemented in many  UNIX  commands
-//  and utilities.
+//  regular expression is a sequence of characters used to search for
+//  exact character matches. However, many times the exact sequence to
+//  be found is not known, or only a match at the beginning or end of
+//  a string is desired. This regular expression class implements
+//  regular expression pattern matching as is found and implemented in
+//  many UNIX commands and utilities.
 //
 //  Example: The perl code
 // \code
@@ -50,14 +49,13 @@ const int NSUBEXP = 10;
 // \code
 //     vul_reg_exp re("([a-z]+)\\.cc");
 //     re.find(filename);
-//     vcl_cerr << re.match(1);
+//     vcl_cout << re.match(1);
 // \endcode
 //
-//  The regular expression class provides a convenient mechanism
-//  for  specifying  and  manipulating  regular expressions. The
-//  regular expression object allows specification of such  pat-
-//  terns  by using the following regular expression metacharac-
-//  ters:
+//  The regular expression class provides a convenient mechanism for
+//  specifying and manipulating regular expressions. The regular
+//  expression object allows specification of such patterns by using
+//  the following regular expression metacharacters:
 //
 // \verbatim
 //   ^        Matches at beginning of a line
@@ -72,12 +70,11 @@ const int NSUBEXP = 10;
 //  ()        Saves a matched expression and uses it in a later match
 // \endverbatim
 //
-//  Note that more than one of these metacharacters can be  used
-//  in  a  single  regular expression in order to create complex
-//  search patterns. For example, the pattern [^ab1-9]  says  to
-//  match  any  character  sequence that does not begin with the
-//  characters "ab"  followed  by  numbers  in  the  series  one
-//  through nine.
+//  Note that more than one of these metacharacters can be used in a
+//  single regular expression in order to create complex search
+//  patterns. For example, the pattern [^ab1-9] says to match any
+//  character sequence that does not begin with the characters "a",
+//  "b", or the characters "1" through "9".
 //
 class vul_reg_exp {
 public:
@@ -124,11 +121,11 @@ public:
 
 private:
   //: anchor point of start position for n-th matching regular expression
-  const char* startp[NSUBEXP];
+  const char* startp[vul_reg_exp_nsubexp];
   //: anchor point of end position for n-th matching regular expression
-  const char* endp[NSUBEXP];
+  const char* endp[vul_reg_exp_nsubexp];
   //: private function to clear startp[] and endp[]
-  void clear_bufs() { for (int n=0; n<NSUBEXP; ++n) startp[n]=endp[n]=0; }
+  void clear_bufs() { for (int n=0; n<vul_reg_exp_nsubexp; ++n) startp[n]=endp[n]=0; }
   //: Internal use only
   char  regstart;
   //: Internal use only
