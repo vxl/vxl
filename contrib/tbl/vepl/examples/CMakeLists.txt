@@ -5,10 +5,10 @@
 #
 # This should make it clear how to use the filter classes with any 2D storage
 # class of your choice.  Examples using those filter classes, templated on
-# either vil_image, vnl_matrix<T>, section<T,2> or vbl_array_2d<T> are in this
+# either vil1_image, vnl_matrix<T>, section<T,2> or vbl_array_2d<T> are in this
 # directory.  - PVr.
 #
-#   DEPENDENCIES:  vepl vipl vil
+#   DEPENDENCIES:  vepl vipl vil1
 
 LINK_LIBRARIES( vepl )
 

@@ -2,8 +2,8 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 
-#include <vil/vil_image.h>
-#include <vil/vil_load.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_load.h>
 
 #include <vtol/vtol_vertex_2d_sptr.h>
 
@@ -16,7 +16,7 @@ int main( int argc, char **argv)
   vgel_kl_params kl_params;
   kl_params.numpoints=500;
 
-  vcl_vector<vil_image> images;
+  vcl_vector<vil1_image> images;
 
   if (argc < 4)
     vcl_cerr << "Warning: you should give three image file names as command line arguments\n";
@@ -25,9 +25,9 @@ int main( int argc, char **argv)
   vcl_string file1 = (argc > 2) ? argv[2] : "c:/geoff/images/skull/a.001.jpg";
   vcl_string file2 = (argc > 3) ? argv[3] : "c:/geoff/images/skull/a.002.jpg";
 
-  vil_image im0= vil_load(file0.c_str());
-  vil_image im1= vil_load(file1.c_str());
-  vil_image im2= vil_load(file2.c_str());
+  vil1_image im0= vil1_load(file0.c_str());
+  vil1_image im1= vil1_load(file1.c_str());
+  vil1_image im2= vil1_load(file2.c_str());
   if (!im0 || !im1 || !im2) return 1; // error return on failing file open
 
   images.push_back( im0);

@@ -4,7 +4,7 @@
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that
 //  case is clipped (threshold value argv[3], default 10) to argv[2]
 //  which is always a PGM file image.
-//  Uses vipl_threshold<vil_image,vil_image,ubyte,ubyte>.
+//  Uses vipl_threshold<vil1_image,vil1_image,ubyte,ubyte>.
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   15 nov. 1997
@@ -14,17 +14,17 @@
 //   Peter Vanroose, Aug.2000 - adapted to vxl
 // \endverbatim
 //
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_pixel.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_pixel.h>
 #include <vipl/accessors/vipl_accessors_vil_image.h>
 #include <vipl/vipl_threshold.h>
 
 typedef unsigned char ubyte;
-typedef vil_image img_type;
+typedef vil1_image img_type;
 
 // for I/O:
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_save.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for atoi()
 
@@ -33,11 +33,11 @@ main(int argc, char** argv) {
   if (argc < 3) { vcl_cerr << "Syntax: example4_threshold file_in file_out [threshold]\n"; return 1; }
 
   // The input image:
-  vil_image in = vil_load(argv[1]);
-  if (vil_pixel_format(in) != VIL_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  vil1_image in = vil1_load(argv[1]);
+  if (vil1_pixel_format(in) != VIL1_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The output image:
-  vil_memory_image_of<ubyte> out(in);
+  vil1_memory_image_of<ubyte> out(in);
 
   // The image sizes:
   int xs = in.width();
@@ -46,7 +46,7 @@ main(int argc, char** argv) {
   // The threshold value:
   ubyte threshold = (argc < 4) ? 64 : vcl_atoi(argv[3]);
 
-  vil_memory_image_of<ubyte> src(in); // in-memory vil_image
+  vil1_memory_image_of<ubyte> src(in); // in-memory vil1_image
   ubyte* buf = new ubyte[in.get_size_bytes()];
 
   // set the input image:
@@ -62,7 +62,7 @@ main(int argc, char** argv) {
   // Write output:
   src.get_section(buf,0,0,xs,ys);
   out.put_section(buf,0,0,xs,ys);
-  vil_save(out, argv[2], "pnm");
+  vil1_save(out, argv[2], "pnm");
   vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
 
   delete[] buf;

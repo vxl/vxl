@@ -3,8 +3,8 @@
 #include <vsrl/vsrl_results_dense_matcher.h>
 #include <vsrl/vsrl_3d_output.h>
 
-#include <vil/vil_image.h>
-#include <vil/vil_load.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_load.h>
 #include <vsrl/vsrl_parameters.h>
 
 // we want to make a 3D dataset from a given set of data points
@@ -19,12 +19,12 @@ int main(int argc, char ** argv)
 
   // load the two images
 
-  vil_image image1 = vil_load(argv[1]);
-  vil_image image2 = vil_load(argv[2]);
+  vil1_image image1 = vil1_load(argv[1]);
+  vil1_image image2 = vil1_load(argv[2]);
 
   // load the disparity image
 
-  vil_image disp_image = vil_load(argv[3]);
+  vil1_image disp_image = vil1_load(argv[3]);
 
   vsrl_results_dense_matcher matcher(image1,disp_image);
 

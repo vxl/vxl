@@ -22,9 +22,9 @@
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   28 April 2001
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 //: median filter with circular element of supplied radius
-vil_image vepl_median(vil_image const& , float radius=1.0);
+vil1_image vepl_median(vil1_image const& , float radius=1.0);
 
 #endif // vepl_median_h_

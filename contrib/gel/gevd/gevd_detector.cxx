@@ -6,7 +6,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 #include "gevd_pixel.h"
 #include "gevd_float_operators.h"
@@ -33,7 +33,7 @@ gevd_detector::gevd_detector(gevd_detector_params& params)
     noise = params.noise_multiplier;
 }
 
-gevd_detector::gevd_detector(vil_image img, float smoothSigma, float noiseSigma,
+gevd_detector::gevd_detector(vil1_image img, float smoothSigma, float noiseSigma,
                              float contour_factor, float junction_factor, int min_length,
                              float maxgap, float min_jump)
   :  image(img), noise(noiseSigma), edgel(NULL), direction(NULL),

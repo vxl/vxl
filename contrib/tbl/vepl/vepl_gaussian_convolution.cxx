@@ -3,17 +3,17 @@
 #include <vcl_iostream.h>
 #include <vipl/accessors/vipl_accessors_vil_image.h>
 #include <vipl/vipl_gaussian_convolution.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_rgb.h>
 
-vil_image vepl_gaussian_convolution(vil_image const& image, double sigma, double cutoff)
+vil1_image vepl_gaussian_convolution(vil1_image const& image, double sigma, double cutoff)
 {
   // byte greyscale
-  if (vil_pixel_format(image) == VIL_BYTE) {
+  if (vil1_pixel_format(image) == VIL1_BYTE) {
     typedef unsigned char ubyte;
-    vil_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<ubyte> out(image);
-    vipl_gaussian_convolution<vil_image,vil_image,ubyte,ubyte> op(sigma, cutoff);
+    vil1_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<ubyte> out(image);
+    vipl_gaussian_convolution<vil1_image,vil1_image,ubyte,ubyte> op(sigma, cutoff);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -21,15 +21,15 @@ vil_image vepl_gaussian_convolution(vil_image const& image, double sigma, double
   }
 
   // byte rgb: process colour bands independently as ubyte images
-  else if (vil_pixel_format(image) == VIL_RGB_BYTE)
+  else if (vil1_pixel_format(image) == VIL1_RGB_BYTE)
   {
     typedef unsigned char ubyte;
-    typedef vil_rgb<ubyte> r_g_b;
-    vil_memory_image_of<r_g_b> in(image); // load in memory to pass to filter
-    vil_memory_image_of<r_g_b> out(image);
-    vil_memory_image_of<ubyte> mem((ubyte*)(in.get_buffer()),3*in.width(),in.height()); // reinterpret as ubyte
-    vil_memory_image_of<ubyte> mout((ubyte*)(out.get_buffer()),3*in.width(),in.height());
-    vipl_gaussian_convolution<vil_image,vil_image,ubyte,ubyte> op(sigma, cutoff);
+    typedef vil1_rgb<ubyte> r_g_b;
+    vil1_memory_image_of<r_g_b> in(image); // load in memory to pass to filter
+    vil1_memory_image_of<r_g_b> out(image);
+    vil1_memory_image_of<ubyte> mem((ubyte*)(in.get_buffer()),3*in.width(),in.height()); // reinterpret as ubyte
+    vil1_memory_image_of<ubyte> mout((ubyte*)(out.get_buffer()),3*in.width(),in.height());
+    vipl_gaussian_convolution<vil1_image,vil1_image,ubyte,ubyte> op(sigma, cutoff);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&mout);
     op.filter();
@@ -38,11 +38,11 @@ vil_image vepl_gaussian_convolution(vil_image const& image, double sigma, double
 
 
   // 16-bit greyscale
-  else if (vil_pixel_format(image) == VIL_UINT16) {
+  else if (vil1_pixel_format(image) == VIL1_UINT16) {
     typedef unsigned short ushort;
-    vil_memory_image_of<ushort> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<ushort> out(image);
-    vipl_gaussian_convolution<vil_image,vil_image,ushort,ushort> op(sigma, cutoff);
+    vil1_memory_image_of<ushort> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<ushort> out(image);
+    vipl_gaussian_convolution<vil1_image,vil1_image,ushort,ushort> op(sigma, cutoff);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -50,10 +50,10 @@ vil_image vepl_gaussian_convolution(vil_image const& image, double sigma, double
   }
 
   // float
-  else if (vil_pixel_format(image) == VIL_FLOAT) {
-    vil_memory_image_of<float> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<float> out(image);
-    vipl_gaussian_convolution<vil_image,vil_image,float,float> op(sigma, cutoff);
+  else if (vil1_pixel_format(image) == VIL1_FLOAT) {
+    vil1_memory_image_of<float> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<float> out(image);
+    vipl_gaussian_convolution<vil1_image,vil1_image,float,float> op(sigma, cutoff);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -61,10 +61,10 @@ vil_image vepl_gaussian_convolution(vil_image const& image, double sigma, double
   }
 
   // double
-  else if (vil_pixel_format(image) == VIL_DOUBLE) {
-    vil_memory_image_of<double> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<double> out(image);
-    vipl_gaussian_convolution<vil_image,vil_image,double,double> op(sigma, cutoff);
+  else if (vil1_pixel_format(image) == VIL1_DOUBLE) {
+    vil1_memory_image_of<double> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<double> out(image);
+    vipl_gaussian_convolution<vil1_image,vil1_image,double,double> op(sigma, cutoff);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();

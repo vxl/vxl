@@ -2,7 +2,7 @@
 #include "vsrl_token_saliency.h"
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_save.h>
 
 vsrl_token_saliency::vsrl_token_saliency(vsrl_image_correlation *image_correlation)
 {
@@ -140,7 +140,7 @@ void vsrl_token_saliency::create_saliency_image(char *filename)
 
   // make an image buffer
 
-  vil_byte_buffer buffer(width,height);
+  vil1_byte_buffer buffer(width,height);
 
   // copy the matrix into the byte buffer
 
@@ -150,7 +150,7 @@ void vsrl_token_saliency::create_saliency_image(char *filename)
 
   // save the file
 
-  vil_save(buffer,filename);
+  vil1_save(buffer,filename);
 }
 
 void vsrl_token_saliency::compute_saliency_matrix()

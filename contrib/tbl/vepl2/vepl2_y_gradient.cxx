@@ -2,25 +2,25 @@
 #include "vepl2_y_gradient.h"
 #include <vepl2/accessors/vipl_accessors_vil2_image_view_base.h>
 #include <vipl/vipl_y_gradient.h>
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_pixel_format.h>
-#include <vil2/vil2_plane.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_pixel_format.h>
+#include <vil/vil_plane.h>
 #include <vxl_config.h> // for vxl_byte
 
-vil2_image_view_base_sptr vepl2_y_gradient(vil2_image_view_base const& image, double scale, double shift)
+vil_image_view_base_sptr vepl2_y_gradient(vil_image_view_base const& image, double scale, double shift)
 {
   // multi-planar image
   // since vipl does not know the concept of planes, run filter on each plane
   if (image.nplanes() > 1) {
-    if (image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
-      vil2_image_view<vxl_byte>* out = new vil2_image_view<vxl_byte>(image.ni(),image.nj(),image.nplanes());
-      vil2_image_view<vxl_byte> in = image, in1 = vil2_plane(in,0), out1 = vil2_plane(*out,0);
-      vipl_y_gradient<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte>
+    if (image.pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
+      vil_image_view<vxl_byte>* out = new vil_image_view<vxl_byte>(image.ni(),image.nj(),image.nplanes());
+      vil_image_view<vxl_byte> in = image, in1 = vil_plane(in,0), out1 = vil_plane(*out,0);
+      vipl_y_gradient<vil_image_view_base,vil_image_view_base,vxl_byte,vxl_byte>
         op(scale, (vxl_byte)(shift+0.5));
       op.put_in_data_ptr(&in1); op.put_out_data_ptr(&out1); op.filter();
-      in1 = vil2_plane(in,1), out1 = vil2_plane(*out,1);
+      in1 = vil_plane(in,1), out1 = vil_plane(*out,1);
       op.put_in_data_ptr(&in1); op.put_out_data_ptr(&out1); op.filter();
-      in1 = vil2_plane(in,2), out1 = vil2_plane(*out,2);
+      in1 = vil_plane(in,2), out1 = vil_plane(*out,2);
       op.put_in_data_ptr(&in1); op.put_out_data_ptr(&out1); op.filter();
       return out;
     }
@@ -31,9 +31,9 @@ vil2_image_view_base_sptr vepl2_y_gradient(vil2_image_view_base const& image, do
   }
 
   // byte greyscale
-  else if (image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
-    vil2_image_view<vxl_byte>* out = new vil2_image_view<vxl_byte>(image.ni(),image.nj(),image.nplanes());
-    vipl_y_gradient<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte>
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
+    vil_image_view<vxl_byte>* out = new vil_image_view<vxl_byte>(image.ni(),image.nj(),image.nplanes());
+    vipl_y_gradient<vil_image_view_base,vil_image_view_base,vxl_byte,vxl_byte>
       op(scale, (vxl_byte)(shift+0.5));
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
@@ -42,10 +42,10 @@ vil2_image_view_base_sptr vepl2_y_gradient(vil2_image_view_base const& image, do
   }
 
   // byte rgb
-  else if (image.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE) {
-    vil2_image_view<vxl_byte> in = image; // in will have 3 planes but 1 component
-    vil2_image_view<vxl_byte>* out = new vil2_image_view<vxl_byte>(image.ni(),image.nj(),3*image.nplanes());
-    vipl_y_gradient<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte>
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_RGB_BYTE) {
+    vil_image_view<vxl_byte> in = image; // in will have 3 planes but 1 component
+    vil_image_view<vxl_byte>* out = new vil_image_view<vxl_byte>(image.ni(),image.nj(),3*image.nplanes());
+    vipl_y_gradient<vil_image_view_base,vil_image_view_base,vxl_byte,vxl_byte>
       op(scale, (vxl_byte)(shift+0.5));
     op.put_in_data_ptr(&in);
     op.put_out_data_ptr(out);
@@ -54,9 +54,9 @@ vil2_image_view_base_sptr vepl2_y_gradient(vil2_image_view_base const& image, do
   }
 
   // short
-  else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) {
-    vil2_image_view<vxl_uint_16>* out = new vil2_image_view<vxl_uint_16>(image.ni(),image.nj(),image.nplanes());
-    vipl_y_gradient<vil2_image_view_base,vil2_image_view_base,vxl_uint_16,vxl_uint_16>
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_UINT_16) {
+    vil_image_view<vxl_uint_16>* out = new vil_image_view<vxl_uint_16>(image.ni(),image.nj(),image.nplanes());
+    vipl_y_gradient<vil_image_view_base,vil_image_view_base,vxl_uint_16,vxl_uint_16>
       op(scale, (vxl_uint_16)(shift+0.5));
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
@@ -65,9 +65,9 @@ vil2_image_view_base_sptr vepl2_y_gradient(vil2_image_view_base const& image, do
   }
 
   // int
-  else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) {
-    vil2_image_view<vxl_uint_32>* out = new vil2_image_view<vxl_uint_32>(image.ni(),image.nj(),image.nplanes());
-    vipl_y_gradient<vil2_image_view_base,vil2_image_view_base,vxl_uint_32,vxl_uint_32>
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_UINT_32) {
+    vil_image_view<vxl_uint_32>* out = new vil_image_view<vxl_uint_32>(image.ni(),image.nj(),image.nplanes());
+    vipl_y_gradient<vil_image_view_base,vil_image_view_base,vxl_uint_32,vxl_uint_32>
       op(scale, (vxl_uint_32)(shift+0.5));
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
@@ -76,9 +76,9 @@ vil2_image_view_base_sptr vepl2_y_gradient(vil2_image_view_base const& image, do
   }
 
   // float
-  else if (image.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) {
-    vil2_image_view<float>* out = new vil2_image_view<float>(image.ni(),image.nj(),image.nplanes());
-    vipl_y_gradient<vil2_image_view_base,vil2_image_view_base,float,float>
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
+    vil_image_view<float>* out = new vil_image_view<float>(image.ni(),image.nj(),image.nplanes());
+    vipl_y_gradient<vil_image_view_base,vil_image_view_base,float,float>
       op(scale, (float)shift);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
@@ -87,9 +87,9 @@ vil2_image_view_base_sptr vepl2_y_gradient(vil2_image_view_base const& image, do
   }
 
   // double
-  else if (image.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) {
-    vil2_image_view<double>* out = new vil2_image_view<double>(image.ni(),image.nj(),image.nplanes());
-    vipl_y_gradient<vil2_image_view_base,vil2_image_view_base,double,double>
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) {
+    vil_image_view<double>* out = new vil_image_view<double>(image.ni(),image.nj(),image.nplanes());
+    vipl_y_gradient<vil_image_view_base,vil_image_view_base,double,double>
       op(scale, shift);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);

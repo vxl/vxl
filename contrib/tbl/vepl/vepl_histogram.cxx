@@ -4,16 +4,16 @@
 #include <vipl/accessors/vipl_accessors_vcl_vector.h>
 #include <vipl/accessors/vipl_accessors_vil_image.h>
 #include <vipl/vipl_histogram.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 
-vcl_vector<unsigned int> vepl_histogram(vil_image const& image)
+vcl_vector<unsigned int> vepl_histogram(vil1_image const& image)
 {
   // byte greyscale
-  if (vil_pixel_format(image) == VIL_BYTE) {
+  if (vil1_pixel_format(image) == VIL1_BYTE) {
     typedef unsigned char ubyte;
-    vil_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
     vcl_vector<unsigned int> out(256);
-    vipl_histogram<vil_image,vcl_vector<unsigned int>, ubyte,unsigned int> op;
+    vipl_histogram<vil1_image,vcl_vector<unsigned int>, ubyte,unsigned int> op;
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -21,10 +21,10 @@ vcl_vector<unsigned int> vepl_histogram(vil_image const& image)
   }
 
   // short greyscale
-  if (vil_pixel_format(image) == VIL_UINT16) {
-    vil_memory_image_of<unsigned short> mem(image); // load in memory to pass to filter
+  if (vil1_pixel_format(image) == VIL1_UINT16) {
+    vil1_memory_image_of<unsigned short> mem(image); // load in memory to pass to filter
     vcl_vector<unsigned int> out(65536);
-    vipl_histogram<vil_image,vcl_vector<unsigned int>, unsigned short,unsigned int> op;
+    vipl_histogram<vil1_image,vcl_vector<unsigned int>, unsigned short,unsigned int> op;
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -32,17 +32,17 @@ vcl_vector<unsigned int> vepl_histogram(vil_image const& image)
   }
 
   // byte rgb
-  else if (vil_pixel_format(image) == VIL_RGB_BYTE) {
+  else if (vil1_pixel_format(image) == VIL1_RGB_BYTE) {
     vcl_cerr << __FILE__ ": vepl_histogram() cannot be implemented for colour images\n";
     return vcl_vector<unsigned int>();
   }
 
   // float, pixel values between 0 and 1
-  else if (vil_pixel_format(image) == VIL_FLOAT) {
-    vil_memory_image_of<float> mem(image); // load in memory to pass to filter
+  else if (vil1_pixel_format(image) == VIL1_FLOAT) {
+    vil1_memory_image_of<float> mem(image); // load in memory to pass to filter
     vcl_vector<unsigned int> out(1000);
     // Must scale the pixel values from [0,1] to [0,1000]
-    vipl_histogram<vil_image,vcl_vector<unsigned int>, float,unsigned int> op(0.001f);
+    vipl_histogram<vil1_image,vcl_vector<unsigned int>, float,unsigned int> op(0.001f);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -50,11 +50,11 @@ vcl_vector<unsigned int> vepl_histogram(vil_image const& image)
   }
 
   // double, pixel values between 0 and 1
-  else if (vil_pixel_format(image) == VIL_DOUBLE) {
-    vil_memory_image_of<double> mem(image); // load in memory to pass to filter
+  else if (vil1_pixel_format(image) == VIL1_DOUBLE) {
+    vil1_memory_image_of<double> mem(image); // load in memory to pass to filter
     vcl_vector<unsigned int> out(1000);
     // Must scale the pixel values from [0,1] to [0,1000]
-    vipl_histogram<vil_image,vcl_vector<unsigned int>, double,unsigned int> op(0.001);
+    vipl_histogram<vil1_image,vcl_vector<unsigned int>, double,unsigned int> op(0.001);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();

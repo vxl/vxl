@@ -21,9 +21,9 @@
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   28 April 2001
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 //: gaussian smoothing with given sigma (default 1)
-vil_image vepl_gaussian_convolution(vil_image const& , double sigma=1, double cutoff=0.01);
+vil1_image vepl_gaussian_convolution(vil1_image const& , double sigma=1, double cutoff=0.01);
 
 #endif // vepl_gaussian_convolution_h_

@@ -5,7 +5,7 @@
 //  \file
 
 #include <vsrl/vsrl_raster_dp_setup.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vsrl/vsrl_dense_matcher.h>
 #include <vsrl/vsrl_image_correlation.h>
 
@@ -27,7 +27,7 @@ class vsrl_stereo_dense_matcher : public vsrl_dense_matcher
  public:
 
   // constructor
-  vsrl_stereo_dense_matcher(const vil_image &im1, const vil_image &im2);
+  vsrl_stereo_dense_matcher(const vil1_image &im1, const vil1_image &im2);
 
   // destructor
   ~vsrl_stereo_dense_matcher();

@@ -2,24 +2,24 @@
 #include "vepl2_erode_disk.h"
 #include <vepl2/accessors/vipl_accessors_vil2_image_view_base.h>
 #include <vipl/vipl_erode_disk.h>
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_pixel_format.h>
-#include <vil2/vil2_plane.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_pixel_format.h>
+#include <vil/vil_plane.h>
 #include <vxl_config.h> // for vxl_byte
 
-vil2_image_view_base_sptr vepl2_erode_disk(vil2_image_view_base const& image, float radius)
+vil_image_view_base_sptr vepl2_erode_disk(vil_image_view_base const& image, float radius)
 {
   // multi-planar image
   // since vipl does not know the concept of planes, run filter on each plane
   if (image.nplanes() > 1) {
-    if (image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
-      vil2_image_view<vxl_byte>* out = new vil2_image_view<vxl_byte>(image.ni(),image.nj(),image.nplanes());
-      vil2_image_view<vxl_byte> in = image, in1 = vil2_plane(in,0), out1 = vil2_plane(*out,0);
-      vipl_erode_disk<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte> op(radius);
+    if (image.pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
+      vil_image_view<vxl_byte>* out = new vil_image_view<vxl_byte>(image.ni(),image.nj(),image.nplanes());
+      vil_image_view<vxl_byte> in = image, in1 = vil_plane(in,0), out1 = vil_plane(*out,0);
+      vipl_erode_disk<vil_image_view_base,vil_image_view_base,vxl_byte,vxl_byte> op(radius);
       op.put_in_data_ptr(&in1); op.put_out_data_ptr(&out1); op.filter();
-      in1 = vil2_plane(in,1), out1 = vil2_plane(*out,1);
+      in1 = vil_plane(in,1), out1 = vil_plane(*out,1);
       op.put_in_data_ptr(&in1); op.put_out_data_ptr(&out1); op.filter();
-      in1 = vil2_plane(in,2), out1 = vil2_plane(*out,2);
+      in1 = vil_plane(in,2), out1 = vil_plane(*out,2);
       op.put_in_data_ptr(&in1); op.put_out_data_ptr(&out1); op.filter();
       return out;
     }
@@ -30,9 +30,9 @@ vil2_image_view_base_sptr vepl2_erode_disk(vil2_image_view_base const& image, fl
   }
 
   // byte greyscale
-  else if (image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
-    vil2_image_view<vxl_byte>* out = new vil2_image_view<vxl_byte>(image.ni(),image.nj(),image.nplanes());
-    vipl_erode_disk<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte> op(radius);
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
+    vil_image_view<vxl_byte>* out = new vil_image_view<vxl_byte>(image.ni(),image.nj(),image.nplanes());
+    vipl_erode_disk<vil_image_view_base,vil_image_view_base,vxl_byte,vxl_byte> op(radius);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -40,10 +40,10 @@ vil2_image_view_base_sptr vepl2_erode_disk(vil2_image_view_base const& image, fl
   }
 
   // byte rgb
-  else if (image.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE) {
-    vil2_image_view<vxl_byte> in = image; // in will have 3 planes but 1 component
-    vil2_image_view<vxl_byte>* out = new vil2_image_view<vxl_byte>(image.ni(),image.nj(),3*image.nplanes());
-    vipl_erode_disk<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte> op(radius);
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_RGB_BYTE) {
+    vil_image_view<vxl_byte> in = image; // in will have 3 planes but 1 component
+    vil_image_view<vxl_byte>* out = new vil_image_view<vxl_byte>(image.ni(),image.nj(),3*image.nplanes());
+    vipl_erode_disk<vil_image_view_base,vil_image_view_base,vxl_byte,vxl_byte> op(radius);
     op.put_in_data_ptr(&in);
     op.put_out_data_ptr(out);
     op.filter();
@@ -51,9 +51,9 @@ vil2_image_view_base_sptr vepl2_erode_disk(vil2_image_view_base const& image, fl
   }
 
   // short
-  else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) {
-    vil2_image_view<unsigned short>* out = new vil2_image_view<unsigned short>(image.ni(),image.nj(),image.nplanes());
-    vipl_erode_disk<vil2_image_view_base,vil2_image_view_base,unsigned short,unsigned short> op(radius);
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_UINT_16) {
+    vil_image_view<unsigned short>* out = new vil_image_view<unsigned short>(image.ni(),image.nj(),image.nplanes());
+    vipl_erode_disk<vil_image_view_base,vil_image_view_base,unsigned short,unsigned short> op(radius);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -61,9 +61,9 @@ vil2_image_view_base_sptr vepl2_erode_disk(vil2_image_view_base const& image, fl
   }
 
   // int
-  else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) {
-    vil2_image_view<unsigned>* out = new vil2_image_view<unsigned>(image.ni(),image.nj(),image.nplanes());
-    vipl_erode_disk<vil2_image_view_base,vil2_image_view_base,unsigned,unsigned> op(radius);
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_UINT_32) {
+    vil_image_view<unsigned>* out = new vil_image_view<unsigned>(image.ni(),image.nj(),image.nplanes());
+    vipl_erode_disk<vil_image_view_base,vil_image_view_base,unsigned,unsigned> op(radius);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -71,9 +71,9 @@ vil2_image_view_base_sptr vepl2_erode_disk(vil2_image_view_base const& image, fl
   }
 
   // float
-  else if (image.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) {
-    vil2_image_view<float>* out = new vil2_image_view<float>(image.ni(),image.nj(),image.nplanes());
-    vipl_erode_disk<vil2_image_view_base,vil2_image_view_base,float,float> op(radius);
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
+    vil_image_view<float>* out = new vil_image_view<float>(image.ni(),image.nj(),image.nplanes());
+    vipl_erode_disk<vil_image_view_base,vil_image_view_base,float,float> op(radius);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -81,9 +81,9 @@ vil2_image_view_base_sptr vepl2_erode_disk(vil2_image_view_base const& image, fl
   }
 
   // double
-  else if (image.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) {
-    vil2_image_view<double>* out = new vil2_image_view<double>(image.ni(),image.nj(),image.nplanes());
-    vipl_erode_disk<vil2_image_view_base,vil2_image_view_base,double,double> op(radius);
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) {
+    vil_image_view<double>* out = new vil_image_view<double>(image.ni(),image.nj(),image.nplanes());
+    vipl_erode_disk<vil_image_view_base,vil_image_view_base,double,double> op(radius);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();

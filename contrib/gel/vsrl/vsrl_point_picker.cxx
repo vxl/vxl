@@ -7,7 +7,7 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_find.h>
 #include <vgui/vgui_projection_inspector.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 // Default ctor
 vsrl_point_picker::vsrl_point_picker( vgui_tableau_sptr child)
@@ -101,7 +101,7 @@ vgl_point_2d<float> vsrl_point_picker::put_H_line(float x, float y)
   // Get the easy2D tableau pointers
   vgui_easy2D_tableau_sptr e2d = get_easy2D_pointer(this);
   vgui_image_tableau_sptr img_tab = get_image_tab_pointer(this);
-  vil_image img = img_tab->get_image();
+  vil1_image img = img_tab->get_image();
   int xmin = 0;
   int xmax = img.cols()-1;
 

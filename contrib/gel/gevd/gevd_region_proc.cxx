@@ -34,7 +34,7 @@ gevd_region_proc::~gevd_region_proc()
 //---------------------------------------------------------
 //: Extract the region of interest from image_ as a BufferXY.
 //
-gevd_bufferxy* gevd_region_proc::get_image_buffer(vil_image& image)
+gevd_bufferxy* gevd_region_proc::get_image_buffer(vil1_image& image)
 {
   if (!image)
     return NULL;
@@ -79,7 +79,7 @@ gevd_bufferxy* gevd_region_proc::put_float_buffer(gevd_bufferxy* fbuf)
 //-------------------------------------------------------------------------
 //: Set the image to be processed
 //
-void gevd_region_proc::set_image(vil_image& image)
+void gevd_region_proc::set_image(vil1_image& image)
 {
   if (!image)
     {

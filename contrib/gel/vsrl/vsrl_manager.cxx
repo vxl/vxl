@@ -9,9 +9,9 @@
 #include <vcl_cstdlib.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
-#include <vil/vil_load.h>
-#include <vil/vil_scale_intensities.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_scale_intensities.h>
+#include <vil1/vil1_save.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_menu.h>
@@ -118,7 +118,7 @@ void vsrl_manager::load_left_image()
   static vcl_string ext = "*.*";
   load_image_dlg.file("Image Filename:", ext, image_filename);
   if (!load_image_dlg.ask()) return;
-  imgL_ = vil_load(image_filename.c_str());
+  imgL_ = vil1_load(image_filename.c_str());
   itabL_->set_image(imgL_);
   this->post_redraw();
   return;
@@ -131,7 +131,7 @@ void vsrl_manager::load_right_image()
   static vcl_string ext = "*.*";
   load_image_dlg.file("Image Filename:", ext, image_filename);
   if (!load_image_dlg.ask()) return;
-  imgR_ = vil_load(image_filename.c_str());
+  imgR_ = vil1_load(image_filename.c_str());
   itabR_->set_image(imgR_);
   this->post_redraw();
   return;
@@ -144,10 +144,10 @@ void vsrl_manager::load_disparity_image()
   static vcl_string ext = "*.*";
   load_image_dlg.file("Disparity Image Filename:", ext, image_filename);
   if (!load_image_dlg.ask()) return;
-  disp_img_ = vil_load(image_filename.c_str());
-  vil_memory_image_of<unsigned char> real_image(disp_img_);
+  disp_img_ = vil1_load(image_filename.c_str());
+  vil1_memory_image_of<unsigned char> real_image(disp_img_);
 
-  vil_image scaled_image = scale_image(real_image);
+  vil1_image scaled_image = scale_image(real_image);
 
   // Display the scaled image
   dimg_tab_->set_image(scaled_image);
@@ -161,8 +161,8 @@ void vsrl_manager::save_disparity_image()
   static vcl_string ext = "*.tif";
   save_image_dlg.file("Disparity Image Filename", ext, image_filename);
   if (!save_image_dlg.ask()) return;
-  vil_memory_image_of<unsigned char> disp(disp_img_);
-  if (!vil_save(disp,image_filename.c_str())) {
+  vil1_memory_image_of<unsigned char> disp(disp_img_);
+  if (!vil1_save(disp,image_filename.c_str())) {
     vcl_cout << "Error saving disparity image!\n";
   }
   return;
@@ -237,7 +237,7 @@ bool vsrl_manager::validate_point(vgl_point_2d<float> const& pt)
 
 int vsrl_manager::get_disparity(vgl_point_2d<float> const& pt)
 {
-  vil_memory_image_of<unsigned char> disp(disp_img_);
+  vil1_memory_image_of<unsigned char> disp(disp_img_);
   int pixel_val = disp(int(pt.x()),int(pt.y()));
   if (pixel_val > 0) {
     // we subtract the disparity bias, plus 1 for the indexing offset
@@ -337,7 +337,7 @@ bool vsrl_manager::do_dense_matching()
 
   // Get & display the disparity image
   // Get a buffer the size of the left image
-  vil_memory_image_of<unsigned char> buffer(imgL_);
+  vil1_memory_image_of<unsigned char> buffer(imgL_);
   // Zero out the buffer
   for (int x=0;x<buffer.width();x++)
     for (int y=0;y<buffer.height();y++)
@@ -356,7 +356,7 @@ bool vsrl_manager::do_dense_matching()
   }
   // Display the disparity image
   disp_img_ = buffer;
-  vil_image scaled_image = scale_image(buffer);
+  vil1_image scaled_image = scale_image(buffer);
   dimg_tab_->set_image(scaled_image);
 
   vcl_cout << "Dense Matcher complete.\n";
@@ -364,7 +364,7 @@ bool vsrl_manager::do_dense_matching()
   return true;
 }
 
-vil_image vsrl_manager::scale_image(vil_memory_image_of<unsigned char> img)
+vil1_image vsrl_manager::scale_image(vil1_memory_image_of<unsigned char> img)
 {
   double maxval = 0;
   double minval = 1e15;
@@ -383,11 +383,11 @@ vil_image vsrl_manager::scale_image(vil_memory_image_of<unsigned char> img)
 
   double scale = 255.0/maxval;
   double shift = 0;
-  vil_image scaled_image = vil_scale_intensities(img, scale, shift);
+  vil1_image scaled_image = vil1_scale_intensities(img, scale, shift);
   return scaled_image;
 }
 
-vil_image vsrl_manager::scale_image(vil_memory_image_of<double> img)
+vil1_image vsrl_manager::scale_image(vil1_memory_image_of<double> img)
 {
   double maxval = 0;
   double minval = 1e15;
@@ -406,7 +406,7 @@ vil_image vsrl_manager::scale_image(vil_memory_image_of<double> img)
 
   double scale = 255.0/maxval;
   double shift = 0;
-  vil_image scaled_image = vil_scale_intensities(img, scale, shift);
+  vil1_image scaled_image = vil1_scale_intensities(img, scale, shift);
   return scaled_image;
 }
 
@@ -439,7 +439,7 @@ void vsrl_manager::find_regions()
   rp.extract_regions();
   if (debug)
     {
-      vil_image ed_img = rp.get_edge_image();
+      vil1_image ed_img = rp.get_edge_image();
       vgui_image_tableau_sptr itab =  e2d0_->get_image_tableau();
       if (!itab)
         {
@@ -455,7 +455,7 @@ void vsrl_manager::find_regions()
     }
   if (residual)
     {
-      vil_image res_img = rp.get_residual_image();
+      vil1_image res_img = rp.get_residual_image();
       vgui_image_tableau_sptr itab =  e2d0_->get_image_tableau();
       if (!itab)
         {
@@ -614,13 +614,13 @@ vsrl_manager::draw_vector_at(vgl_vector_2d<float>* vec, float x, float y, float 
 
 // Calculate & Display Image Gradient magnitudes
 //
-vil_image
-vsrl_manager::show_gradient_mag(vil_image* im_in)
+vil1_image
+vsrl_manager::show_gradient_mag(vil1_image* im_in)
 {
-  vil_image im_out = vepl_gradient_mag(*im_in);
+  vil1_image im_out = vepl_gradient_mag(*im_in);
   disp_img_ = im_out;  // this line lets us save out the image
-  vil_memory_image_of<unsigned char> tmp(im_out);
-  vil_image scaled_image = scale_image(tmp);
+  vil1_memory_image_of<unsigned char> tmp(im_out);
+  vil1_image scaled_image = scale_image(tmp);
   dimg_tab_->set_image(scaled_image);
   this->post_redraw();
   return im_out;
@@ -628,8 +628,8 @@ vsrl_manager::show_gradient_mag(vil_image* im_in)
 
 // Calculate & Display Image Gradient directions
 //
-vil_image
-vsrl_manager::show_gradient_dir(vil_memory_image_of<double> im_in)
+vil1_image
+vsrl_manager::show_gradient_dir(vil1_memory_image_of<double> im_in)
 {
   // calculate the gradient
   // I prefer to implement my own gradient operation because I want to handle the edges
@@ -638,7 +638,7 @@ vsrl_manager::show_gradient_dir(vil_memory_image_of<double> im_in)
   // the <unsigned char> image.
   vcl_cout << "vsrl_manager::show_gradient_dir() - Begin\n";
 
-  vil_memory_image_of<double> im_out(im_in.width(),im_in.height());
+  vil1_memory_image_of<double> im_out(im_in.width(),im_in.height());
 
   const double shift=128;
   const double scale=40; // actually: 127/pi
@@ -661,7 +661,7 @@ vsrl_manager::show_gradient_dir(vil_memory_image_of<double> im_in)
     }
   }
 
-  vil_image scaled_image = scale_image(im_out);
+  vil1_image scaled_image = scale_image(im_out);
   dimg_tab_->set_image(scaled_image);
   this->post_redraw();
   vcl_cout << "vsrl_manager::show_gradient_dir() - End\n";
@@ -672,13 +672,13 @@ vsrl_manager::show_gradient_dir(vil_memory_image_of<double> im_in)
 void
 vsrl_manager::test_func()
 {
-  vil_memory_image_of<double> img = make_3d();
+  vil1_memory_image_of<double> img = make_3d();
   show_gradient_dir(img);
   return;
 }
 
 // Generate 3D output & display range image
-vil_memory_image_of<double>
+vil1_memory_image_of<double>
 vsrl_manager::make_3d()
 {
   // set up the dense matcher
@@ -688,7 +688,7 @@ vsrl_manager::make_3d()
   output.set_matcher(&matcher);
   //  Write the 3D output & triangles to out.dat
   output.write_output("out.dat");
-  vil_image scaled_image = scale_image(output.range_image_);
+  vil1_image scaled_image = scale_image(output.range_image_);
   itabR_->set_image(scaled_image);  // put the image in the viewer
   this->post_redraw();
   return output.range_image_;

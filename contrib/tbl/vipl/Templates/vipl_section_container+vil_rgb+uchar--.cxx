@@ -1,6 +1,6 @@
 #ifndef INSTANTIATE_TEMPLATES
 #include <vipl/section/vipl_section_container.txx>
-#include <vil/vil_rgb.h>
-typedef vil_rgb<unsigned char> rgbcell;
+#include <vil1/vil1_rgb.h>
+typedef vil1_rgb<unsigned char> rgbcell;
 template class vipl_section_container<rgbcell>;
 #endif

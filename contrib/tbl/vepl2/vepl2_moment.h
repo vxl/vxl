@@ -17,9 +17,9 @@
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   7 October 2002
 
-#include <vil2/vil2_image_view_base.h>
+#include <vil/vil_image_view_base.h>
 
 //: computation of n-th order moment of given order, width and height
-vil2_image_view_base_sptr vepl2_moment(vil2_image_view_base const& , int order, int width=3, int height=3);
+vil_image_view_base_sptr vepl2_moment(vil_image_view_base const& , int order, int width=3, int height=3);
 
 #endif // vepl2_moment_h_

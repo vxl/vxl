@@ -5,18 +5,18 @@
 #include "vepl2_convert.h"
 #include <vepl2/accessors/vipl_accessors_vil2_image_view_base.h>
 #include <vipl/vipl_convert.h>
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_pixel_format.h>
-#include <vil2/vil2_rgb.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_pixel_format.h>
+#include <vil/vil_rgb.h>
 #include <vxl_config.h> // for vxl_byte
 
 template <class D>
-vil2_image_view_base_sptr vepl2_convert(vil2_image_view_base const& image, D dummy)
+vil_image_view_base_sptr vepl2_convert(vil_image_view_base const& image, D dummy)
 {
   // byte greyscale
-  if (image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
-    vil2_image_view<D > out(image.ni(),image.nj(),image.nplanes());
-    vipl_convert<vil2_image_view_base,vil2_image_view_base,vxl_byte,D> op;
+  if (image.pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
+    vil_image_view<D > out(image.ni(),image.nj(),image.nplanes());
+    vipl_convert<vil_image_view_base,vil_image_view_base,vxl_byte,D> op;
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -24,9 +24,9 @@ vil2_image_view_base_sptr vepl2_convert(vil2_image_view_base const& image, D dum
   }
 
   // byte rgb
-  else if (image.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE) {
-    vil2_image_view<D > out(image.ni(),image.nj(),image.nplanes());
-    vipl_convert<vil2_image_view_base,vil2_image_view_base,vil2_rgb<vxl_byte>,D> op;
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_RGB_BYTE) {
+    vil_image_view<D > out(image.ni(),image.nj(),image.nplanes());
+    vipl_convert<vil_image_view_base,vil_image_view_base,vil_rgb<vxl_byte>,D> op;
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -34,9 +34,9 @@ vil2_image_view_base_sptr vepl2_convert(vil2_image_view_base const& image, D dum
   }
 
   // float
-  else if (image.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) {
-    vil2_image_view<D > out(image.ni(),image.nj(),image.nplanes());
-    vipl_convert<vil2_image_view_base,vil2_image_view_base,float,D> op;
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
+    vil_image_view<D > out(image.ni(),image.nj(),image.nplanes());
+    vipl_convert<vil_image_view_base,vil_image_view_base,float,D> op;
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -44,9 +44,9 @@ vil2_image_view_base_sptr vepl2_convert(vil2_image_view_base const& image, D dum
   }
 
   // double
-  else if (image.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) {
-    vil2_image_view<D > out(image.ni(),image.nj(),image.nplanes());
-    vipl_convert<vil2_image_view_base,vil2_image_view_base,double,D> op;
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) {
+    vil_image_view<D > out(image.ni(),image.nj(),image.nplanes());
+    vipl_convert<vil_image_view_base,vil_image_view_base,double,D> op;
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();

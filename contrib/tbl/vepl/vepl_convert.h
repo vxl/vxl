@@ -10,11 +10,11 @@
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   28 April 2001
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 //: convert between arbitrary image types
 template <class D>
-vil_image vepl_convert(vil_image const& , D dummy);
+vil1_image vepl_convert(vil1_image const& , D dummy);
 
 #ifdef INSTANTIATE_TEMPLATES
 #include "vepl_convert.txx"

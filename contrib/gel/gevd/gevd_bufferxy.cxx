@@ -52,8 +52,8 @@ gevd_bufferxy::gevd_bufferxy(int x, int y, int b, void* memptr) : gevd_memory_mi
   SetStatus(MM_PROTECTED);
 }
 
-//: Construct a gevd_bufferxy from a vil_image
-gevd_bufferxy::gevd_bufferxy(vil_image &image) : gevd_memory_mixin( image.get_size_bytes() )
+//: Construct a gevd_bufferxy from a vil1_image
+gevd_bufferxy::gevd_bufferxy(vil1_image &image) : gevd_memory_mixin( image.get_size_bytes() )
 {
   int sizey= image.rows();
   int sizex= image.cols();

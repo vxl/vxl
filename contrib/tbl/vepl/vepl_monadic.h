@@ -18,15 +18,15 @@
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   28 April 2001
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 //: replace pixels by their absolute value
-vil_image vepl_monadic_abs(vil_image const& );
+vil1_image vepl_monadic_abs(vil1_image const& );
 //: replace pixels by their square root
-vil_image vepl_monadic_sqrt(vil_image const& );
+vil1_image vepl_monadic_sqrt(vil1_image const& );
 //: replace pixels by their square
-vil_image vepl_monadic_sqr(vil_image const& );
+vil1_image vepl_monadic_sqr(vil1_image const& );
 //: replace pixels by a linear distortion
-vil_image vepl_monadic_shear(vil_image const& , double shift, double scale);
+vil1_image vepl_monadic_shear(vil1_image const& , double shift, double scale);
 
 #endif // vepl_monadic_h_

@@ -15,12 +15,12 @@ int vepl2_test_dyadic()
 {
   vcl_cout << "Starting vepl2_dyadic tests\n"
            << "Creating test and output images ...";
-  vil2_image_view_base_sptr byte_img = CreateTest8bitImage(32,32),  byte_ori = CreateTest8bitImage(32,32);
-  vil2_image_view_base_sptr shrt_img = CreateTest16bitImage(32,32), shrt_ori = CreateTest16bitImage(32,32);
-  vil2_image_view_base_sptr int__img = CreateTest32bitImage(32,32), int__ori = CreateTest32bitImage(32,32);
-  vil2_image_view_base_sptr flot_img = CreateTestfloatImage(32,32), flot_ori = CreateTestfloatImage(32,32);
-  vil2_image_view_base_sptr dble_img = CreateTestdoubleImage(32,32),dble_ori = CreateTestdoubleImage(32,32);
-  vil2_image_view_base_sptr colr_img = CreateTest3planeImage(32,32),colr_ori = CreateTest3planeImage(32,32);
+  vil_image_view_base_sptr byte_img = CreateTest8bitImage(32,32),  byte_ori = CreateTest8bitImage(32,32);
+  vil_image_view_base_sptr shrt_img = CreateTest16bitImage(32,32), shrt_ori = CreateTest16bitImage(32,32);
+  vil_image_view_base_sptr int__img = CreateTest32bitImage(32,32), int__ori = CreateTest32bitImage(32,32);
+  vil_image_view_base_sptr flot_img = CreateTestfloatImage(32,32), flot_ori = CreateTestfloatImage(32,32);
+  vil_image_view_base_sptr dble_img = CreateTestdoubleImage(32,32),dble_ori = CreateTestdoubleImage(32,32);
+  vil_image_view_base_sptr colr_img = CreateTest3planeImage(32,32),colr_ori = CreateTest3planeImage(32,32);
   vcl_cout << " done\n";
 
   vcl_string m = "vepl2_dyadic";
@@ -32,14 +32,14 @@ int vepl2_test_dyadic()
   ONE_TEST(vepl2_dyadic_sum,int__img,int__ori,unsigned int,21757966,m+"_sum_int");
   ONE_TEST(vepl2_dyadic_sum,flot_img,flot_ori,float,278,m+"_sum_float");
   ONE_TEST(vepl2_dyadic_sum,dble_img,dble_ori,double,278,m+"_sum_double");
-  ONE_TEST(vepl2_dyadic_sum,colr_img,colr_ori,vil2_rgb<unsigned char>,13950,m+"_sum_colour");
+  ONE_TEST(vepl2_dyadic_sum,colr_img,colr_ori,vil_rgb<unsigned char>,13950,m+"_sum_colour");
 
   ONE_TEST(vepl2_dyadic_dif,byte_img,byte_ori,unsigned char,0,m+"_dif_byte");
   ONE_TEST(vepl2_dyadic_dif,shrt_img,shrt_ori,unsigned short,0,m+"_dif_short");
   ONE_TEST(vepl2_dyadic_dif,int__img,int__ori,unsigned int,0,m+"_dif_int");
   ONE_TEST(vepl2_dyadic_dif,flot_img,flot_ori,float,0,m+"_dif_float");
   ONE_TEST(vepl2_dyadic_dif,dble_img,dble_ori,double,0,m+"_dif_double");
-  ONE_TEST(vepl2_dyadic_dif,colr_img,colr_ori,vil2_rgb<unsigned char>,0,m+"_dif_colour");
+  ONE_TEST(vepl2_dyadic_dif,colr_img,colr_ori,vil_rgb<unsigned char>,0,m+"_dif_colour");
 
   ONE_TEST(vepl2_dyadic_min,byte_img,byte_ori,unsigned char,0,m+"min__byte");
   ONE_TEST(vepl2_dyadic_min,shrt_img,shrt_ori,unsigned short,0,m+"min__short");

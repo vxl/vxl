@@ -26,7 +26,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(gevd ${gevd_sources})
-TARGET_LINK_LIBRARIES(gevd vtol vdgl vil vnl vbl)
+TARGET_LINK_LIBRARIES(gevd vtol vdgl vil1 vnl vbl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

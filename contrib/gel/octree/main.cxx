@@ -26,10 +26,10 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_byte.h>
-#include <vil/vil_image.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_byte.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_memory_image_of.h>
 
 #include <mvl/PMatrix.h>
 
@@ -41,7 +41,7 @@
 
 #define MAXIMAGES 500
 
-vil_memory_image_of<vil_byte> *imagestore[MAXIMAGES];
+vil1_memory_image_of<vil1_byte> *imagestore[MAXIMAGES];
 PMatrix                       *pmatrixstore[MAXIMAGES];
 vbl_array_2d<short>           *distancestore[MAXIMAGES];
 int                           updatecounter= 0;
@@ -97,7 +97,7 @@ void computeborgefors( const vbl_array_2d<bool> &edges, vbl_array_2d<short> &dis
 
 
 ///////////////////////////////////////////////////////////////////
-void computeedgemap( vil_memory_image_of<vil_byte> imbuf, vbl_array_2d<bool> &edges)
+void computeedgemap( vil1_memory_image_of<vil1_byte> imbuf, vbl_array_2d<bool> &edges)
 {
   int r = edges.rows(), c = edges.columns();
   assert( r == int(imbuf.width()));
@@ -195,7 +195,7 @@ cubetest_t DoScan( VoxmapImagePoints const& voxmap, Voxel &voxel, int imageindex
 
       for (int x=polyscan.startx(); x <= polyscan.endx() && expecting != 3; ++x)
         {
-          vil_byte pix= (*imagestore[imageindex])(int(x),int(y));
+          vil1_byte pix= (*imagestore[imageindex])(int(x),int(y));
           int t;
           if (pix) t= 1;
           else t= 2;
@@ -274,8 +274,8 @@ int main(int argc, char ** argv)
       vcl_cerr << "Loading image : " << *it << vcl_endl;
 
       // load all images and pmatrices
-      vil_image image= vil_load( vul_sprintf(( char *) imagefilename(), *it));
-      imagestore[*it]= new vil_memory_image_of<vil_byte>( image);
+      vil1_image image= vil1_load( vul_sprintf(( char *) imagefilename(), *it));
+      imagestore[*it]= new vil1_memory_image_of<vil1_byte>( image);
       assert( *imagestore[*it]);
 
       vcl_ifstream pmatrixin( vul_sprintf(( char *) pmatrixfilename(), *it));

@@ -10,8 +10,8 @@
 
 #include <vdgl/vdgl_intensity_face.h>
 
-#include <vil/vil_byte.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_byte.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vcl_cmath.h>     // for sqrt()
 #include <vul/vul_timer.h>
 
@@ -278,7 +278,7 @@ bool gevd_edgel_regions::compute_edgel_regions(gevd_bufferxy* buf,
 //   1) Connected components 2)Edge-label assignment 3)Collect region
 //   boundaries 4) Construct vdgl_intensity_faces 5)Calculate intensity fit
 bool
-gevd_edgel_regions::compute_edgel_regions(vil_image* image,
+gevd_edgel_regions::compute_edgel_regions(vil1_image* image,
                                           vcl_vector<vtol_edge_2d_sptr>& sgrp,
                                           vcl_vector<vdgl_intensity_face_sptr>& faces)
 {
@@ -395,7 +395,7 @@ unsigned int gevd_edgel_regions::BaseLabel(unsigned int label)
 //  Paint the edgels into the region label array and then
 //    output an image where the value is 255 if the pixel is an
 //    edge, 0 otherwise
-vil_image* gevd_edgel_regions::GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& sg)
+vil1_image* gevd_edgel_regions::GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& sg)
 {
   if (!this->InitRegionArray(sg)) return NULL;
   int sizex = this->GetXSize(), sizey = this->GetYSize();
@@ -410,7 +410,7 @@ vil_image* gevd_edgel_regions::GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& sg)
       else
         image->PutPixel(&no_edge, x, y);
 #endif
-  vil_memory_image_of<vil_byte> * image = new vil_memory_image_of<vil_byte>(sizex,sizey);
+  vil1_memory_image_of<vil1_byte> * image = new vil1_memory_image_of<vil1_byte>(sizex,sizey);
 
   for (int y = 0; y<sizey; y++)
     for (int x = 0; x<sizex; x++)

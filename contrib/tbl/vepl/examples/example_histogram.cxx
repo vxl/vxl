@@ -11,8 +11,8 @@
 #include <vepl/vepl_histogram.h>
 
 // for I/O:
-#include <vil/vil_load.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_image.h>
 #include <vcl_iostream.h>
 
 typedef unsigned char ubyte;
@@ -26,7 +26,7 @@ main(int argc, char** argv) {
   }
 
   // The input image:
-  vil_image in = vil_load(argv[1]);
+  vil1_image in = vil1_load(argv[1]);
 
   // The filter:
   vcl_vector<unsigned int> out = vepl_histogram(in);

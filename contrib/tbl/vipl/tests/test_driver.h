@@ -1,26 +1,26 @@
 #ifndef vipl_test_driver_h_
 #define vipl_test_driver_h_
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <mil/mil_image_2d_of.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <testlib/testlib_test.h>
 
 // create an 8 bit test image
-vil_image CreateTest8bitImage(int wd, int ht);
+vil1_image CreateTest8bitImage(int wd, int ht);
 
 // create a 16 bit test image
-vil_image CreateTest16bitImage(int wd, int ht);
+vil1_image CreateTest16bitImage(int wd, int ht);
 
 // create a 24 bit color test image
-vil_image CreateTest24bitImage(int wd, int ht);
+vil1_image CreateTest24bitImage(int wd, int ht);
 
 // create a 24 bit color test image, with 3 planes
-vil_image CreateTest3planeImage(int wd, int ht);
+vil1_image CreateTest3planeImage(int wd, int ht);
 
 // create a float-pixel test image
-vil_image CreateTestfloatImage(int wd, int ht);
+vil1_image CreateTestfloatImage(int wd, int ht);
 
 // create an 8 bit test image
 mil_image_2d_of<unsigned char> Create_mil8bitImage(int wd, int ht);
@@ -33,7 +33,7 @@ mil_image_2d_of<float> Create_milfloatImage(int wd, int ht);
 
 // Compare two images and return true if their difference is not v
 template <class T>
-bool difference(vil_image const& a, vil_image const& b, double v, vcl_string const& m, T);
+bool difference(vil1_image const& a, vil1_image const& b, double v, vcl_string const& m, T);
 template <class T>
 bool difference(mil_image_2d_of<T> const& a, mil_image_2d_of<T> const& b, double v, vcl_string const& m, T);
 

@@ -1,4 +1,4 @@
 #ifndef INSTANTIATE_TEMPLATES
 #include <vepl/vepl_convert.txx>
-template vil_image vepl_convert(vil_image const&, short);
+template vil1_image vepl_convert(vil1_image const&, short);
 #endif

@@ -17,9 +17,9 @@
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   28 April 2001
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 //: computation of n-th order moment of given order, width and height
-vil_image vepl_moment(vil_image const& , int order, int width=3, int height=3);
+vil1_image vepl_moment(vil1_image const& , int order, int width=3, int height=3);
 
 #endif // vepl_moment_h_

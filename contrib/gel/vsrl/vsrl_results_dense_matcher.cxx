@@ -4,7 +4,7 @@
 
 
 // constructor
-vsrl_results_dense_matcher::vsrl_results_dense_matcher(const vil_image &image1, const vil_image &disparity):
+vsrl_results_dense_matcher::vsrl_results_dense_matcher(const vil1_image &image1, const vil1_image &disparity):
   vsrl_dense_matcher(image1),
   disparity_(disparity)
 {

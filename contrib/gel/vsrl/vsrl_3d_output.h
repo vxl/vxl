@@ -12,8 +12,8 @@
 #include <vsrl/vsrl_dense_matcher.h>
 #include <vsrl/vsrl_image_correlation.h>
 #include <vnl/vnl_matrix.h>
-#include <vil/vil_image.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vsrl/vsrl_diffusion.h>
 
 class vsrl_3d_output
@@ -24,8 +24,8 @@ class vsrl_3d_output
 
   // the image buffers
 
-  vil_memory_image_of<int> buffer1_;
-  vil_memory_image_of<int> buffer2_;
+  vil1_memory_image_of<int> buffer1_;
+  vil1_memory_image_of<int> buffer2_;
 
   // the projective transform used to convert the initial values
   // of X into the true values of X
@@ -34,14 +34,14 @@ class vsrl_3d_output
 
   vsrl_image_correlation image_correlation_; // the image correlation object
 
-  vil_image image1_; // the first image
-  vil_image image2_; // the second image
+  vil1_image image1_; // the first image
+  vil1_image image2_; // the second image
 
  public:
 
   // the constructor
 
-  vsrl_3d_output(const vil_image &im1, const vil_image &im2);
+  vsrl_3d_output(const vil1_image &im1, const vil1_image &im2);
 
   // destructor
   ~vsrl_3d_output();
@@ -61,7 +61,7 @@ class vsrl_3d_output
 
   void write_output(char *filename);
 
-  vil_memory_image_of<double> range_image_;
+  vil1_memory_image_of<double> range_image_;
 
  private:
 

@@ -13,15 +13,15 @@
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   28 April 2001
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 //: add the second image to the first one pixelwise
-void vepl_dyadic_sum(vil_image , vil_image const& );
+void vepl_dyadic_sum(vil1_image , vil1_image const& );
 //: subtract the second image from the first one pixelwise
-void vepl_dyadic_dif(vil_image , vil_image const& );
+void vepl_dyadic_dif(vil1_image , vil1_image const& );
 //: replace pixels of the first image by minimum pixel value of both
-void vepl_dyadic_min(vil_image , vil_image const& );
+void vepl_dyadic_min(vil1_image , vil1_image const& );
 //: replace pixels of the first image by maximum pixel value of both
-void vepl_dyadic_max(vil_image , vil_image const& );
+void vepl_dyadic_max(vil1_image , vil1_image const& );
 
 #endif // vepl_dyadic_h_

@@ -6,13 +6,13 @@
 #include <vsrl/vsrl_step_diffusion.h>
 #include <vsrl/vsrl_token_saliency.h>
 #include <vsrl/vsrl_saliency_diffusion.h>
-#include <vil/vil_image.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_save.h>
 #include <vsrl/vsrl_parameters.h>
 
 // the constructor
-vsrl_3d_output::vsrl_3d_output(const vil_image &im1, const vil_image &im2):
+vsrl_3d_output::vsrl_3d_output(const vil1_image &im1, const vil1_image &im2):
 buffer1_(im1),
 buffer2_(im2),
 H_(4,4),
@@ -342,7 +342,7 @@ void vsrl_3d_output::write_disparity_image(char *filename,vsrl_diffusion *diff)
 
   // make a buffer which has the size of image1
 
-  vil_memory_image_of<int> buffer(image1_);
+  vil1_memory_image_of<int> buffer(image1_);
 
   for (int x=0;x<buffer.width();x++)
     for (int y=0;y<buffer.height();y++)
@@ -366,6 +366,6 @@ void vsrl_3d_output::write_disparity_image(char *filename,vsrl_diffusion *diff)
     }
 
   // save the file
-  // vil_save(buffer, filename, image1_.file_format());
-  vil_save(buffer, filename);
+  // vil1_save(buffer, filename, image1_.file_format());
+  vil1_save(buffer, filename);
 }

@@ -1,11 +1,11 @@
 // The following text is included in the main documentation page by doxygen
 /*! \mainpage vepl : Easy Image Processing Library
 * This library essentially just provides wrappers around the templated IP
-* classes of the \c vipl library, but limited to images of type \c vil_image .
+* classes of the \c vipl library, but limited to images of type \c vil1_image .
 *
 * For every class in \c vipl , there is a function in \c vepl with the same
-* name (after substituting "vipl" by "vepl"), which returns a \c vil_image,
-* whose first argument is a \c vil_image (the input image), and where the
+* name (after substituting "vipl" by "vepl"), which returns a \c vil1_image,
+* whose first argument is a \c vil1_image (the input image), and where the
 * possible extra arguments are identical to the arguments of the constructor of
 * the corresponding \c vipl class.
 *
@@ -15,10 +15,10 @@
 * reading the filter parameters from standard input.  Ignoring this, the use of
 * a particular IP filter is just a single line: e.g.:
 * \verbatim
-*   vil_image im1 = vil_load("filename"); // assume "ubyte" image
-*   vil_image im2 = vepl_gradient_mag(im1);
-*   vil_image im3 = vepl_median(im2, 1.5); // median filter with radius 1.5
-*   vil_image im4 = vepl_threshold(im3, 59,0,255); // binary clipping at 59
-*   vil_save(im4, "edges_image.pgm", "pnm");
+*   vil1_image im1 = vil1_load("filename"); // assume "ubyte" image
+*   vil1_image im2 = vepl_gradient_mag(im1);
+*   vil1_image im3 = vepl_median(im2, 1.5); // median filter with radius 1.5
+*   vil1_image im4 = vepl_threshold(im3, 59,0,255); // binary clipping at 59
+*   vil1_save(im4, "edges_image.pgm", "pnm");
 * \endverbatim
 */

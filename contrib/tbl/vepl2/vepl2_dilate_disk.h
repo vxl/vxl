@@ -25,9 +25,9 @@
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   7 October 2002
 
-#include <vil2/vil2_image_view_base.h>
+#include <vil/vil_image_view_base.h>
 
 //: morphological dilation with circular element
-vil2_image_view_base_sptr vepl2_dilate_disk(vil2_image_view_base const& , float radius);
+vil_image_view_base_sptr vepl2_dilate_disk(vil_image_view_base const& , float radius);
 
 #endif // vepl2_dilate_disk_h_

@@ -17,10 +17,10 @@
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   7 October 2002
 
-#include <vil2/vil2_image_view_base.h>
+#include <vil/vil_image_view_base.h>
 #include <vcl_vector.h>
 
 //: pixel value histogram of 2D image, stored in a 256x1 output image
-vcl_vector<unsigned int> vepl2_histogram(vil2_image_view_base const& );
+vcl_vector<unsigned int> vepl2_histogram(vil_image_view_base const& );
 
 #endif // vepl2_histogram_h_

@@ -2,11 +2,11 @@
 /*! \mainpage vepl2 : Easy Image Processing Library
 * This library essentially just provides wrappers around the templated IP
 * classes of the \c vipl library, but limited to images of type
-* \c vil2_image_view<T> .
+* \c vil_image_view<T> .
 *
 * For every class in \c vipl , there is a function in \c vepl2 with the same
 * name (after substituting "vipl" by "vepl2"), which returns a
-* \c vil2_image_view<T>, whose first argument is a \c vil2_image_view<T>
+* \c vil_image_view<T>, whose first argument is a \c vil_image_view<T>
 * (the input image), and where the possible extra arguments are identical to
 * the arguments of the constructor of the corresponding \c vipl class.
 *
@@ -16,10 +16,10 @@
 * reading the filter parameters from standard input.  Ignoring this, the use of
 * a particular IP filter is just a single line: e.g.:
 * \verbatim
-*   vil2_image_view<vxl_byte> im1 = vil2_load("filename"); // assume "ubyte" image
-*   vil2_image_view<vxl_byte> im2 = vepl2_gradient_mag(im1);
-*   vil2_image_view<vxl_byte> im3 = vepl2_median(im2, 1.5); // median filter with radius 1.5
-*   vil2_image_view<vxl_byte> im4 = vepl2_threshold(im3, 59,0,255); // binary clipping at 59
-*   vil2_save(im4, "edges_image.pgm", "pnm");
+*   vil_image_view<vxl_byte> im1 = vil_load("filename"); // assume "ubyte" image
+*   vil_image_view<vxl_byte> im2 = vepl2_gradient_mag(im1);
+*   vil_image_view<vxl_byte> im3 = vepl2_median(im2, 1.5); // median filter with radius 1.5
+*   vil_image_view<vxl_byte> im4 = vepl2_threshold(im3, 59,0,255); // binary clipping at 59
+*   vil_save(im4, "edges_image.pgm", "pnm");
 * \endverbatim
 */

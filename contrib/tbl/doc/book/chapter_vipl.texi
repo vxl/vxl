@@ -24,10 +24,10 @@ the destination image, the source pixels, the destination pixels,
 and the pixel iterator. So a concrete use might be:
 
 @example
-typedef vil_memory_image_of<vil_byte> im_type;
+typedef vil1_memory_image_of<vil1_byte> im_type;
 im_type src, dest;
 ...
-vipl_gaussian_convolution<im_type,im_type,vil_byte,vil_byte,vipl_trivial_pixeliter> op(2.0);
+vipl_gaussian_convolution<im_type,im_type,vil1_byte,vil1_byte,vipl_trivial_pixeliter> op(2.0);
 op.put_in_data_ptr(&src);
 op.put_out_data_ptr(&dest);
 op.filter();

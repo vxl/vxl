@@ -8,8 +8,8 @@
 #ifndef vsrl_manager_h_
 #define vsrl_manager_h_
 
-#include <vil/vil_image.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
@@ -52,17 +52,17 @@ class vsrl_manager : public vgui_wrapper_tableau
   void draw_north_arrow();
   void test_func();
   vgui_soview2D_lineseg* draw_vector_at(vgl_vector_2d<float>* vec, float x, float y, float theta);
-  vil_image scale_image(vil_memory_image_of<unsigned char> img);
-  vil_image scale_image(vil_memory_image_of<double> img);
-  vil_image show_gradient_mag(vil_image* im_in);
-  vil_image show_gradient_dir(vil_memory_image_of<double> im_in);
-  vil_memory_image_of<double> make_3d();
+  vil1_image scale_image(vil1_memory_image_of<unsigned char> img);
+  vil1_image scale_image(vil1_memory_image_of<double> img);
+  vil1_image show_gradient_mag(vil1_image* im_in);
+  vil1_image show_gradient_dir(vil1_memory_image_of<double> im_in);
+  vil1_memory_image_of<double> make_3d();
 
  private:
   vsrl_manager(); // default constructor is private: only one instance allowed
-  vil_image imgL_;
-  vil_image imgR_;
-  vil_image disp_img_;
+  vil1_image imgL_;
+  vil1_image imgR_;
+  vil1_image disp_img_;
   vsrl_parameters* params_;
   vgui_grid_tableau_sptr grid_;
   vgui_image_tableau_sptr itabL_;

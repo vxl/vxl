@@ -22,9 +22,9 @@
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   28 April 2001
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 //: morphological erosion with circular element of supplied radius
-vil_image vepl_erode_disk(vil_image const& , float radius);
+vil1_image vepl_erode_disk(vil1_image const& , float radius);
 
 #endif // vepl_erode_disk_h_

@@ -1,14 +1,14 @@
 //:
 // \file
 //  Test of the vipl_histogram templated IP classes
-//  vipl_histogram<vil_image,vnl_vector,T,unsigned>
+//  vipl_histogram<vil1_image,vnl_vector,T,unsigned>
 //  for T in { unsigned char, unsigned short, float }.
 //
 // \author Ian Scott, ISBE, Manchester.
 // \date   22 May 2002
 //
 
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vipl/accessors/vipl_accessors_vil_image.h>
 #include <vipl/accessors/vipl_accessors_vcl_vector.h>
 #include <vipl/vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.h>
@@ -19,10 +19,10 @@
 
 
 //create and image containing no 0s, one 1, two 2s, three 3s, etc.
-vil_image vipl_test_histogram_CreateTest8bitImage(int wd, int ht)
+vil1_image vipl_test_histogram_CreateTest8bitImage(int wd, int ht)
 {
   unsigned char i =0, j=1;
-  vil_memory_image_of<unsigned char> image(wd, ht);
+  vil1_memory_image_of<unsigned char> image(wd, ht);
   for (int x = 0; x < wd; x++) {
     for (int y = 0; y < ht; y++) {
 //    vcl_printf("%3d", j);
@@ -37,7 +37,7 @@ vil_image vipl_test_histogram_CreateTest8bitImage(int wd, int ht)
 
 
 int vipl_test_histogram() {
-  vil_image byte_img = vipl_test_histogram_CreateTest8bitImage(32, 32);
+  vil1_image byte_img = vipl_test_histogram_CreateTest8bitImage(32, 32);
 
   vcl_cout << "Starting vipl_histogram test\n";
 
@@ -45,7 +45,7 @@ int vipl_test_histogram() {
     const unsigned expected_n = 45;
     const int scale = 2;
     vnl_vector<unsigned> byte_out(expected_n / scale + 1);
-    vipl_histogram<vil_image,vnl_vector<unsigned>, unsigned char,unsigned> op(scale);
+    vipl_histogram<vil1_image,vnl_vector<unsigned>, unsigned char,unsigned> op(scale);
     op.put_in_data_ptr(&byte_img); op.put_out_data_ptr(&byte_out); op.filter();
 
     // check that final bin has correct number.
@@ -60,7 +60,7 @@ int vipl_test_histogram() {
   }
   {
     vcl_vector<unsigned> byte_out(46);
-    vipl_histogram<vil_image,vcl_vector<unsigned>, unsigned char,unsigned> op;
+    vipl_histogram<vil1_image,vcl_vector<unsigned>, unsigned char,unsigned> op;
     op.put_in_data_ptr(&byte_img); op.put_out_data_ptr(&byte_out); op.filter();
 
     // check that final bin has correct number.

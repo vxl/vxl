@@ -24,7 +24,7 @@
 //-------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <gevd/gevd_bufferxy.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vdgl/vdgl_digital_region.h>
 #include <gevd/gevd_region_proc_params.h>
 
@@ -36,7 +36,7 @@ public:
 
   ~gevd_region_proc();
   //Accessors
-  void set_image(vil_image& image);
+  void set_image(vil1_image& image);
 //  void set_roi_proc(lung_roi_proc_ref& roi_proc){roi_proc_ = roi_proc;}
 
   // vector<gevd_poly_intensity_face_sptr>& get_regions(){return regions_;}
@@ -54,17 +54,17 @@ public:
 
 protected:
   //protected methods
-  gevd_bufferxy* get_image_buffer(vil_image& image);
+  gevd_bufferxy* get_image_buffer(vil1_image& image);
   gevd_bufferxy* get_float_buffer(gevd_bufferxy* b);
   gevd_bufferxy* put_float_buffer(gevd_bufferxy* fbuf);
-  vil_image buffer_to_image(gevd_bufferxy* buf);
+  vil1_image buffer_to_image(gevd_bufferxy* buf);
   void restore_image_rois();
   //members
   bool debug_;//debug flag
   bool regions_valid_;      //process state flag
   float expand_scale_;
   float burt_adelson_factor_;
-  vil_image image_;  //input image
+  vil1_image image_;  //input image
   gevd_bufferxy* buf_;
   //lung_roi_proc_ref roi_proc_; //Lung roi processor
   //vector<gevd_poly_intensity_face_ref> regions_; //resulting intensity faces

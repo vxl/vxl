@@ -52,7 +52,7 @@
 #include <gevd/gevd_region_edge.h>
 #include <gevd/gevd_bufferxy.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 
 class gevd_edgel_regions
@@ -63,7 +63,7 @@ public:
   gevd_edgel_regions(bool debug = false);
   ~gevd_edgel_regions();
   //Main process method
-  bool compute_edgel_regions(vil_image* image,
+  bool compute_edgel_regions(vil1_image* image,
                              vcl_vector<vtol_edge_2d_sptr>& sgrp,
                              vcl_vector<vdgl_intensity_face_sptr>& faces);
 
@@ -82,7 +82,7 @@ public:
   unsigned int** GetRegionArray(){return region_label_array_;}
   int GetXSize(){return xend_ - xo_ + 1;}
   int GetYSize(){return yend_ - yo_ + 1;}
-  vil_image* GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& edgels);
+  vil1_image* GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& edgels);
 #if 0
   topo_debug_data_ref get_topo_debug_data(){return debug_data_;};
 #endif
@@ -152,7 +152,7 @@ protected:
   bool image_source_;
   bool buf_source_;
   float magnification_;
-  vil_image* image_;
+  vil1_image* image_;
   gevd_bufferxy* buf_;
   gevd_region_edge*** edge_boundary_array_;
   unsigned int** region_label_array_;

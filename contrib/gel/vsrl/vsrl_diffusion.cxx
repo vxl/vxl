@@ -2,9 +2,9 @@
 #include "vsrl_diffusion.h"
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h> // for std::sprintf()
-#include <vil/vil_byte.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_byte.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_save.h>
 #include <vsrl/vsrl_parameters.h>
 
 vsrl_diffusion::vsrl_diffusion(vsrl_dense_matcher *matcher)
@@ -65,7 +65,7 @@ void vsrl_diffusion::write_image(char *file_name,vnl_matrix<double> *mat)
 
   vcl_cout << "Writing file " << file_name << vcl_endl;
 
-  vil_memory_image_of<vil_byte> buffer(get_width(),get_height());
+  vil1_memory_image_of<vil1_byte> buffer(get_width(),get_height());
 
   int x,y;
   int disparity;
@@ -98,8 +98,8 @@ void vsrl_diffusion::write_image(char *file_name,vnl_matrix<double> *mat)
   }
 
   // save the file
-  // vil_save(buffer, filename, image1_.file_format());
-  vil_save(buffer, file_name);
+  // vil1_save(buffer, filename, image1_.file_format());
+  vil1_save(buffer, file_name);
 }
 
 void vsrl_diffusion::write_disparity_image(char *filename)

@@ -6,8 +6,8 @@
 #include <vnl/vnl_int_3.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_save.h>
 
 //#include <vcl_cstdio.h>
 #include <vcl_cmath.h>
@@ -340,8 +340,8 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
       buf[i*w+j]=(unsigned char)value;
     }
   }
-  vil_memory_image_of<vil_byte> ima(buf, w, h);
-  vil_save(ima, "lolo.pgm");
+  vil1_memory_image_of<vil1_byte> ima(buf, w, h);
+  vil1_save(ima, "lolo.pgm");
   delete [] buf;
 }
 

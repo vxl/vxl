@@ -1,8 +1,8 @@
 // This is tbl/vipl/tests/test_driver.cxx
 #include "test_driver.h"
 #include <testlib/testlib_register.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb_byte.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_rgb_byte.h>
 #include <vcl_cmath.h> // for vcl_fabs()
 
 DECLARE( vipl_test_histogram );
@@ -22,9 +22,9 @@ register_tests()
 DEFINE_MAIN;
 
 // create an 8 bit test image
-vil_image CreateTest8bitImage(int wd, int ht)
+vil1_image CreateTest8bitImage(int wd, int ht)
 {
-  vil_memory_image_of<unsigned char> image(wd, ht);
+  vil1_memory_image_of<unsigned char> image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
       unsigned char data = ((x-wd/2)*(y-ht/2)/16) % (1<<8);
@@ -34,9 +34,9 @@ vil_image CreateTest8bitImage(int wd, int ht)
 }
 
 // create a 16 bit test image
-vil_image CreateTest16bitImage(int wd, int ht)
+vil1_image CreateTest16bitImage(int wd, int ht)
 {
-  vil_memory_image_of<unsigned short> image(wd, ht);
+  vil1_memory_image_of<unsigned short> image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
       unsigned short data = ((x-wd/2)*(y-ht/2)/16) % (1<<16);
@@ -46,9 +46,9 @@ vil_image CreateTest16bitImage(int wd, int ht)
 }
 
 // create a 24 bit color test image
-vil_image CreateTest24bitImage(int wd, int ht)
+vil1_image CreateTest24bitImage(int wd, int ht)
 {
-  vil_memory_image_of<vil_rgb_byte> image(wd, ht);
+  vil1_memory_image_of<vil1_rgb_byte> image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
       unsigned char data[3] = { x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)) };
@@ -58,9 +58,9 @@ vil_image CreateTest24bitImage(int wd, int ht)
 }
 
 // create a 24 bit color test image, with 3 planes
-vil_image CreateTest3planeImage(int wd, int ht)
+vil1_image CreateTest3planeImage(int wd, int ht)
 {
-  vil_memory_image image(3, wd, ht, 1, 8, VIL_COMPONENT_FORMAT_UNSIGNED_INT);
+  vil1_memory_image image(3, wd, ht, 1, 8, VIL1_COMPONENT_FORMAT_UNSIGNED_INT);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
       unsigned char data[3] = { x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)) };
@@ -70,9 +70,9 @@ vil_image CreateTest3planeImage(int wd, int ht)
 }
 
 // create a float-pixel test image
-vil_image CreateTestfloatImage(int wd, int ht)
+vil1_image CreateTestfloatImage(int wd, int ht)
 {
-  vil_memory_image_of<float> image(wd, ht);
+  vil1_memory_image_of<float> image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
       float data = 0.01f * ((x-wd/2)*(y-ht/2)/16);
@@ -119,7 +119,7 @@ mil_image_2d_of<float> Create_milfloatImage(int wd, int ht)
 
 // Compare two images and return true (=failure) if their difference is not v
 template <class T>
-bool difference(vil_image const& a, vil_image const& b, double v, vcl_string const& m, T)
+bool difference(vil1_image const& a, vil1_image const& b, double v, vcl_string const& m, T)
 {
   int sx = a.width();
   int sy = a.height();
@@ -143,9 +143,9 @@ bool difference(vil_image const& a, vil_image const& b, double v, vcl_string con
   return ret;
 }
 
-template bool difference(vil_image const&, vil_image const&, double, vcl_string const&, unsigned char);
-template bool difference(vil_image const&, vil_image const&, double, vcl_string const&, unsigned short);
-template bool difference(vil_image const&, vil_image const&, double, vcl_string const&, float);
+template bool difference(vil1_image const&, vil1_image const&, double, vcl_string const&, unsigned char);
+template bool difference(vil1_image const&, vil1_image const&, double, vcl_string const&, unsigned short);
+template bool difference(vil1_image const&, vil1_image const&, double, vcl_string const&, float);
 
 template <class T>
 bool difference(mil_image_2d_of<T> const& a, mil_image_2d_of<T> const& b, double v, vcl_string const& m, T)

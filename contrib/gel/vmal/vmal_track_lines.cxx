@@ -25,7 +25,7 @@ vmal_track_lines::~vmal_track_lines()
 
 void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr>*>* fit_lines,
                                    const vcl_vector<vcl_vector<vtol_edge_2d_sptr>*>* transformed_lines,
-                                   const vcl_vector<vil_image> &images,
+                                   const vcl_vector<vil1_image> &images,
                                    const vcl_vector<vnl_double_3x3> &homo,
                                    vmal_multi_view_data_edge_sptr matches)
 {
@@ -519,8 +519,8 @@ void vmal_track_lines::sort_a_pair_of_line(vtol_edge_2d_sptr line0,
 double vmal_track_lines::lines_correlation(vtol_edge_2d_sptr line0,
                            vtol_edge_2d_sptr line1,
                            const vnl_double_3x3 & H,
-                           vil_memory_image_of<vil_byte> &image0,
-                       vil_memory_image_of<vil_byte> &image1)
+                           vil1_memory_image_of<vil1_byte> &image0,
+                       vil1_memory_image_of<vil1_byte> &image1)
 {
   vtol_edge_2d_sptr s_line0;
   vtol_edge_2d_sptr s_line1;
@@ -558,13 +558,13 @@ double vmal_track_lines::lines_correlation(vtol_edge_2d_sptr line0,
 void vmal_track_lines::cost_function(vtol_edge_2d_sptr line0,
                                      vtol_edge_2d_sptr t_line0,
                                      vtol_edge_2d_sptr line1,
-                                     const vil_image &image0,
-                                     const vil_image &image1,
+                                     const vil1_image &image0,
+                                     const vil1_image &image1,
                                      const vnl_double_3x3 homo,
                                      double &result)
 {
-  vil_memory_image_of<vil_byte> i0;
-  vil_memory_image_of<vil_byte> i1;
+  vil1_memory_image_of<vil1_byte> i0;
+  vil1_memory_image_of<vil1_byte> i1;
   convert_grey_memory_image(image0,i0);
   convert_grey_memory_image(image1,i1);
   result=lines_correlation(line0, line1, homo, i0, i1);

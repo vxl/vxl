@@ -24,9 +24,9 @@
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   28 April 2001
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 //: set pixel to given value if above/below certain threshold
-vil_image vepl_threshold(vil_image const& , double threshold=128.0, double below=1.0, double above=0.0);
+vil1_image vepl_threshold(vil1_image const& , double threshold=128.0, double below=1.0, double above=0.0);
 
 #endif // vepl_threshold_h_

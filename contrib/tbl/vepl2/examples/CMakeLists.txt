@@ -1,11 +1,11 @@
 #   DESCRIPTION:
 #
 #   This is the vepl2/examples directory, containing examples programs for the
-# vepl2 ("easy" image processing with vil2) library.  - PVr.
+# vepl2 ("easy" image processing with vil) library.  - PVr.
 #
-#   DEPENDENCIES:  vepl2 vipl vil2
+#   DEPENDENCIES:  vepl2 vipl vil
 
-LINK_LIBRARIES( vepl2 vil2 )
+LINK_LIBRARIES( vepl2 vil )
 
 ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
 

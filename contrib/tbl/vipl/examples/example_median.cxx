@@ -7,7 +7,7 @@
 //  case its median smoothed version (with circular kernel, default the
 //  3x3 square) is written to argv[2] which is always a PGM file image.
 //  Uses vipl_median<vnl_matrix<ubyte>,vnl_matrix<ubyte>,ubyte,ubyte>.
-//  The conversion between vil_image and the in-memory vnl_matrix<ubyte>
+//  The conversion between vil1_image and the in-memory vnl_matrix<ubyte>
 //  is done explicitly.
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
@@ -19,8 +19,8 @@
 // \endverbatim
 //
 #include <vnl/vnl_matrix.h>
-#include <vil/vil_pixel.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_pixel.h>
+#include <vil1/vil1_memory_image_of.h>
 
 #include <vipl/vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.h>
 #include <vipl/vipl_median.h>
@@ -30,8 +30,8 @@ typedef unsigned char ubyte;
 typedef vnl_matrix<ubyte> img_type;
 
 // for I/O:
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_save.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for atof()
 
@@ -40,11 +40,11 @@ main(int argc, char** argv) {
   if (argc < 3) { vcl_cerr << "Syntax: example_median file_in file_out [radius]\n"; return 1; }
 
   // The input image:
-  vil_image in = vil_load(argv[1]);
-  if (vil_pixel_format(in) != VIL_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  vil1_image in = vil1_load(argv[1]);
+  if (vil1_pixel_format(in) != VIL1_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The output image:
-  vil_memory_image_of<ubyte> out(in);
+  vil1_memory_image_of<ubyte> out(in);
 
   // The image sizes:
   int xs = in.width();
@@ -67,7 +67,7 @@ main(int argc, char** argv) {
 
   // Write output:
   out.put_section(dst.begin(),0,0,xs,ys);
-  vil_save(out, argv[2], "pnm");
+  vil1_save(out, argv[2], "pnm");
   vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
 
   return 0;

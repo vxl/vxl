@@ -10,15 +10,15 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   15 May 2001, from vipl/examples
 //
-#include <vil/vil_pixel.h>
+#include <vil1/vil1_pixel.h>
 
 #include <vepl/vepl_threshold.h>
 
 typedef unsigned char ubyte;
 
 // for I/O:
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_save.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for atoi()
 
@@ -31,8 +31,8 @@ main(int argc, char** argv) {
   }
 
   // The input image:
-  vil_image in = vil_load(argv[1]);
-  if (vil_pixel_format(in) != VIL_BYTE)
+  vil1_image in = vil1_load(argv[1]);
+  if (vil1_pixel_format(in) != VIL1_BYTE)
   {
     vcl_cerr << "Please use a ubyte image as input\n";
     return 2;
@@ -42,10 +42,10 @@ main(int argc, char** argv) {
   ubyte threshold = (argc < 4) ? 128 : vcl_atoi(argv[3]);
 
   // perform thresholding:
-  vil_image out = vepl_threshold(in,threshold,0,255);
+  vil1_image out = vepl_threshold(in,threshold,0,255);
 
   // Write output:
-  vil_save(out, argv[2], "pnm");
+  vil1_save(out, argv[2], "pnm");
   vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
 
   return 0;

@@ -7,7 +7,7 @@
 //
 //   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
-//   TargetJr or not, vil or not) of any pixel data type.
+//   TargetJr or not, vil1 or not) of any pixel data type.
 //
 //   Note that the user has to make sure that the output values fall into
 //   the output pixel range, by specifying appropriate scale and shift;

@@ -10,8 +10,8 @@
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
-#include <vil/vil_image.h>
-#include <vil/vil_load.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_load.h>
 #include <gmvl/gmvl_corner_node.h>
 #include <gmvl/gmvl_image_node.h>
 
@@ -48,7 +48,7 @@ vcl_vector<gmvl_node_sptr> gmvl_load_raw_corners( const vcl_string filename)
 
 gmvl_node_sptr gmvl_load_image( const vcl_string filename)
 {
-  vil_image image= vil_load( filename.c_str());
+  vil1_image image= vil1_load( filename.c_str());
   gmvl_image_node *node= new gmvl_image_node( image);
 
   if (image)

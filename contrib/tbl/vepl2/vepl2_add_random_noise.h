@@ -13,9 +13,9 @@
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   7 October 2002
 
-#include <vil2/vil2_image_view_base.h>
+#include <vil/vil_image_view_base.h>
 
 //: add random noise to all pixels
-vil2_image_view_base_sptr vepl2_add_random_noise(vil2_image_view_base const& , double maxdev);
+vil_image_view_base_sptr vepl2_add_random_noise(vil_image_view_base const& , double maxdev);
 
 #endif // vepl2_add_random_noise_h_

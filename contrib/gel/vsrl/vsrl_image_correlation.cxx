@@ -3,13 +3,13 @@
 
 #include <vcl_cmath.h> // for sqrt(double)
 #include <vcl_cassert.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vsrl/vsrl_window_accumulator.h>
 #include <vsrl/vsrl_parameters.h>
 
 // constructor
 
-vsrl_image_correlation::vsrl_image_correlation(const vil_image &im1, const vil_image &im2):
+vsrl_image_correlation::vsrl_image_correlation(const vil1_image &im1, const vil1_image &im2):
   buffer1_(im1),
   buffer2_(im2)
 {
@@ -69,7 +69,7 @@ int vsrl_image_correlation::get_correlation_range()
 
 // make sure that a point is in the range of the image
 
-bool vsrl_image_correlation::check_range(vil_byte_buffer &buf, int x, int y)
+bool vsrl_image_correlation::check_range(vil1_byte_buffer &buf, int x, int y)
 {
   return x>=0 && x<buf.width() && y>=0 && y<buf.height();
 }
@@ -341,7 +341,7 @@ int vsrl_image_correlation::get_image2_height()
 
 // compute the local stats of a window
 // slow
-void vsrl_image_correlation::compute_local_stats(vil_byte_buffer &buf, int x, int y, double &mean, double &std)
+void vsrl_image_correlation::compute_local_stats(vil1_byte_buffer &buf, int x, int y, double &mean, double &std)
 {
   // find the dimensions of the window;
 

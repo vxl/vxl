@@ -16,9 +16,9 @@
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   28 April 2001
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 //: Convolve image with vertical [-1 1] filter
-vil_image vepl_y_gradient(vil_image const& , double scale=1.0, double shift=0.0);
+vil1_image vepl_y_gradient(vil1_image const& , double scale=1.0, double shift=0.0);
 
 #endif // vepl_y_gradient_h_

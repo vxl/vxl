@@ -2,10 +2,10 @@
 #include "vgel_kl.h"
 
 #include <vxl_config.h>
-#include <vil/vil_byte.h>
-#include <vil/vil_pixel.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_image_as.h>
+#include <vil1/vil1_byte.h>
+#include <vil1/vil1_pixel.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_image_as.h>
 #include <vgel/vgel_multi_view_data.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vidl/vidl_movie.h>
@@ -21,7 +21,7 @@ vgel_kl::~vgel_kl()
 {
 }
 
-void vgel_kl::match_sequence(vcl_vector<vil_image> &image_list,vgel_multi_view_data_vertex_sptr matches)
+void vgel_kl::match_sequence(vcl_vector<vil1_image> &image_list,vgel_multi_view_data_vertex_sptr matches)
 {
   // Uses the KL tracker to track points through an image
   int nFeatures = _params.numpoints;
@@ -110,18 +110,18 @@ void vgel_kl::match_sequence(vcl_vector<vil_image> &image_list,vgel_multi_view_d
 
 void vgel_kl::match_sequence(vidl_movie_sptr movie,vgel_multi_view_data_vertex_sptr matches)
 {
-  vcl_vector<vil_image> image_list;
+  vcl_vector<vil1_image> image_list;
   for (vidl_movie::frame_iterator pframe = movie->first();
        pframe <= movie->last();
        ++pframe)
   {
-    vil_image im = vil_image(pframe->get_image());
+    vil1_image im = vil1_image(pframe->get_image());
     image_list.push_back(im);
   }
   match_sequence(image_list,matches);
 }
 
-vcl_vector<vtol_vertex_2d_sptr>* vgel_kl::extract_points(vil_image & image)
+vcl_vector<vtol_vertex_2d_sptr>* vgel_kl::extract_points(vil1_image & image)
 {
   int width=image.width();
   int height=image.height();
@@ -170,10 +170,10 @@ vcl_vector<vtol_vertex_2d_sptr>* vgel_kl::extract_points(vil_image & image)
   return grp;
 }
 
-//Convert a vil_image to an array of grey scale
-KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image &image)
+//Convert a vil1_image to an array of grey scale
+KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
 {
-  if (vil_pixel_format(image)==VIL_RGB_BYTE)
+  if (vil1_pixel_format(image)==VIL1_RGB_BYTE)
   {
     vcl_cerr << "Converting image to grey scale..." << vcl_endl;
 
@@ -183,11 +183,11 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image &image)
     vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl;
     vcl_cerr << "pixel type: byte" << vcl_endl;
 
-    vil_memory_image_of<vil_byte> ima_mono;
+    vil1_memory_image_of<vil1_byte> ima_mono;
     ima_mono.resize(w,h);
 
-    vil_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
-    vil_byte* p=ima_mono.get_buffer();
+    vil1_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
+    vil1_byte* p=ima_mono.get_buffer();
 
     for (int i=0;i<w;i++)
       for (int j=0;j<h;j++)
@@ -196,7 +196,7 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image &image)
       }
     return tab_mono;
   }
-  else if (vil_pixel_format(image)==VIL_BYTE)
+  else if (vil1_pixel_format(image)==VIL1_BYTE)
   {
     int w=image.width();
     int h=image.height();
@@ -204,11 +204,11 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image &image)
     vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl;
     vcl_cerr << "pixel type: byte" << vcl_endl;
 
-    vil_memory_image_of<vil_byte> ima_mono;
+    vil1_memory_image_of<vil1_byte> ima_mono;
     ima_mono.resize(w,h);
 
-    vil_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
-    vil_byte* p=ima_mono.get_buffer();
+    vil1_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
+    vil1_byte* p=ima_mono.get_buffer();
 
     for (int i=0;i<w;i++)
       for (int j=0;j<h;j++)
@@ -218,7 +218,7 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image &image)
 
     return tab_mono;
   }
-  else if (vil_pixel_format(image)==VIL_UINT16)
+  else if (vil1_pixel_format(image)==VIL1_UINT16)
   {
     int w=image.width();
     int h=image.height();
@@ -226,10 +226,10 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image &image)
     vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl;
     vcl_cerr << "pixel type: uint_16" << vcl_endl;
 
-    vil_memory_image_of<vxl_uint_16> ima_mono;
+    vil1_memory_image_of<vxl_uint_16> ima_mono;
     ima_mono.resize(w,h);
 
-    vil_image_as_uint16(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
+    vil1_image_as_uint16(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
     vxl_uint_16* p=ima_mono.get_buffer();
 
     for (int i=0;i<w;i++)
@@ -243,7 +243,7 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image &image)
   else
   {
       vcl_cerr << "Error: Cannot convert pixel type: "
-               << vil_print(vil_pixel_format(image)) << vcl_endl;
+               << vil1_print(vil1_pixel_format(image)) << vcl_endl;
       return NULL;
   }
 }

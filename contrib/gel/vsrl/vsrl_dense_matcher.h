@@ -1,7 +1,7 @@
 #ifndef vsrl_dense_matcher_h
 #define vsrl_dense_matcher_h
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 // this is a base class for various dence matchers
 
@@ -9,14 +9,14 @@ class vsrl_dense_matcher
 {
  protected:
 
-  vil_image image1_;
+  vil1_image image1_;
   int correlation_range_;
 
  public:
 
   // constructor
 
-  vsrl_dense_matcher(const vil_image &image1);
+  vsrl_dense_matcher(const vil1_image &image1);
 
   // destructor
 

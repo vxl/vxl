@@ -19,13 +19,13 @@
 //
 // \verbatim
 //  Modifications
-//   25-May-2002 - Peter Vanroose - changed return type from vil_image to vcl_vector<uint>
+//   25-May-2002 - Peter Vanroose - changed return type from vil1_image to vcl_vector<uint>
 // \endverbatim
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vcl_vector.h>
 
 //: pixel value histogram of 2D image, stored in a 256x1 output image
-vcl_vector<unsigned int> vepl_histogram(vil_image const& );
+vcl_vector<unsigned int> vepl_histogram(vil1_image const& );
 
 #endif // vepl_histogram_h_

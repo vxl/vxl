@@ -14,7 +14,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
 
-#include <vil/vil_memory_image_window.h>
+#include <vil1/vil1_memory_image_window.h>
 
 #include "geml_matcher_correlation.h"
 
@@ -26,8 +26,8 @@
 #define SEARCH_WINDOW_Y 50
 #define NO_SCORE -2
 
-geml_matcher_correlation::geml_matcher_correlation( const vil_memory_image_of<vil_byte> image1,
-                                                    const vil_memory_image_of<vil_byte> image2,
+geml_matcher_correlation::geml_matcher_correlation( const vil1_memory_image_of<vil1_byte> image1,
+                                                    const vil1_memory_image_of<vil1_byte> image2,
                                                     const vcl_vector< vcl_pair<float,float> > &corners1,
                                                     const vcl_vector< vcl_pair<float,float> > &corners2)
   : geml_matcher( image1, image2, corners1, corners2)
@@ -157,8 +157,8 @@ vcl_pair<double,double> geml_matcher_correlation::best_local_correlation_score( 
   double bestscore1= -1;
   double bestscore2= -1;
 
-  vil_memory_image_window w1( im1_, int(x1), int(y1), CORRELATION_KERNEL);
-  vil_memory_image_window w2( im2_, int(x2), int(y2), CORRELATION_KERNEL);
+  vil1_memory_image_window w1( im1_, int(x1), int(y1), CORRELATION_KERNEL);
+  vil1_memory_image_window w2( im2_, int(x2), int(y2), CORRELATION_KERNEL);
 
   for (int x= -MAX_CORNER_ERROR; x<= MAX_CORNER_ERROR; x++)
     {

@@ -51,7 +51,7 @@ IF (HAS_VGUI)
   TARGET_LINK_LIBRARIES(vsrl vepl)
  ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/tbl/vepl/CMakeLists.txt )
 ENDIF (HAS_VGUI)
-TARGET_LINK_LIBRARIES(vsrl vtol vdgl vgl vil vnl)
+TARGET_LINK_LIBRARIES(vsrl vtol vdgl vgl vil1 vnl)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)

@@ -16,7 +16,7 @@ SET(gmvl_sources
 AUX_SOURCE_DIRECTORY(Templates gmvl_sources)
 
 ADD_LIBRARY(gmvl ${gmvl_sources})
-TARGET_LINK_LIBRARIES(gmvl vtol vil vcl)
+TARGET_LINK_LIBRARIES(gmvl vtol vil1 vcl)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)

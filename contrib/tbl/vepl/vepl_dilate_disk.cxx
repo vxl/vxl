@@ -1,17 +1,17 @@
 #include "vepl_dilate_disk.h"
 #include <vipl/accessors/vipl_accessors_vil_image.h>
 #include <vipl/vipl_dilate_disk.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_rgb.h>
 
-vil_image vepl_dilate_disk(vil_image const& image, float radius)
+vil1_image vepl_dilate_disk(vil1_image const& image, float radius)
 {
   // byte greyscale
-  if (vil_pixel_format(image) == VIL_BYTE) {
+  if (vil1_pixel_format(image) == VIL1_BYTE) {
     typedef unsigned char ubyte;
-    vil_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<ubyte> out(image);
-    vipl_dilate_disk<vil_image,vil_image,ubyte,ubyte> op(radius);
+    vil1_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<ubyte> out(image);
+    vipl_dilate_disk<vil1_image,vil1_image,ubyte,ubyte> op(radius);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -19,15 +19,15 @@ vil_image vepl_dilate_disk(vil_image const& image, float radius)
   }
 
   // byte rgb: process colour bands independently as ubyte images
-  else if (vil_pixel_format(image) == VIL_RGB_BYTE)
+  else if (vil1_pixel_format(image) == VIL1_RGB_BYTE)
   {
     typedef unsigned char ubyte;
-    typedef vil_rgb<ubyte> r_g_b;
-    vil_memory_image_of<r_g_b> in(image); // load in memory to pass to filter
-    vil_memory_image_of<r_g_b> out(image);
-    vil_memory_image_of<ubyte> mem((ubyte*)(in.get_buffer()),3*in.width(),in.height()); // reinterpret as ubyte
-    vil_memory_image_of<ubyte> mout((ubyte*)(out.get_buffer()),3*in.width(),in.height());
-    vipl_dilate_disk<vil_image,vil_image,ubyte,ubyte> op(radius);
+    typedef vil1_rgb<ubyte> r_g_b;
+    vil1_memory_image_of<r_g_b> in(image); // load in memory to pass to filter
+    vil1_memory_image_of<r_g_b> out(image);
+    vil1_memory_image_of<ubyte> mem((ubyte*)(in.get_buffer()),3*in.width(),in.height()); // reinterpret as ubyte
+    vil1_memory_image_of<ubyte> mout((ubyte*)(out.get_buffer()),3*in.width(),in.height());
+    vipl_dilate_disk<vil1_image,vil1_image,ubyte,ubyte> op(radius);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&mout);
     op.filter();
@@ -35,11 +35,11 @@ vil_image vepl_dilate_disk(vil_image const& image, float radius)
   }
 
   // 16-bit greyscale
-  else if (vil_pixel_format(image) == VIL_UINT16) {
+  else if (vil1_pixel_format(image) == VIL1_UINT16) {
     typedef unsigned short ushort;
-    vil_memory_image_of<ushort> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<ushort> out(image);
-    vipl_dilate_disk<vil_image,vil_image,ushort,ushort> op(radius);
+    vil1_memory_image_of<ushort> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<ushort> out(image);
+    vipl_dilate_disk<vil1_image,vil1_image,ushort,ushort> op(radius);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -47,10 +47,10 @@ vil_image vepl_dilate_disk(vil_image const& image, float radius)
   }
 
   // float
-  else if (vil_pixel_format(image) == VIL_FLOAT) {
-    vil_memory_image_of<float> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<float> out(image);
-    vipl_dilate_disk<vil_image,vil_image,float,float> op(radius);
+  else if (vil1_pixel_format(image) == VIL1_FLOAT) {
+    vil1_memory_image_of<float> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<float> out(image);
+    vipl_dilate_disk<vil1_image,vil1_image,float,float> op(radius);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -59,10 +59,10 @@ vil_image vepl_dilate_disk(vil_image const& image, float radius)
 
 #if 0 // currently no dilation for unsigned short
   // short
-  else if (vil_pixel_format(image) == VIL_UINT16) {
-    vil_memory_image_of<unsigned short> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<unsigned short> out(image);
-    vipl_dilate_disk<vil_image,vil_image,unsigned short,unsigned short> op(radius);
+  else if (vil1_pixel_format(image) == VIL1_UINT16) {
+    vil1_memory_image_of<unsigned short> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<unsigned short> out(image);
+    vipl_dilate_disk<vil1_image,vil1_image,unsigned short,unsigned short> op(radius);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -71,10 +71,10 @@ vil_image vepl_dilate_disk(vil_image const& image, float radius)
 #endif
 
   // double
-  else if (vil_pixel_format(image) == VIL_DOUBLE) {
-    vil_memory_image_of<double> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<double> out(image);
-    vipl_dilate_disk<vil_image,vil_image,double,double> op(radius);
+  else if (vil1_pixel_format(image) == VIL1_DOUBLE) {
+    vil1_memory_image_of<double> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<double> out(image);
+    vipl_dilate_disk<vil1_image,vil1_image,double,double> op(radius);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();

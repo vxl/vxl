@@ -215,7 +215,7 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
 //:
 // Return -/+ PI/2, to encode the existence of an end point
 // on the left/right side of the current contour point i,j.
-// Note, in vil, images have a left-handed (i,j) coordinate frame,
+// Note, in vil1, images have a left-handed (i,j) coordinate frame,
 // i.e., i increases left to right and j increases downward in the image.
 //
 // The search proceeds as follows:

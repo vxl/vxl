@@ -1,9 +1,9 @@
 #include <vsrl/vsrl_stereo_dense_matcher.h>
 #include <vsrl/vsrl_parameters.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_save.h>
 #include <vcl_iostream.h>
 
-vsrl_stereo_dense_matcher::vsrl_stereo_dense_matcher(const vil_image &im1, const vil_image &im2):
+vsrl_stereo_dense_matcher::vsrl_stereo_dense_matcher(const vil1_image &im1, const vil1_image &im2):
   vsrl_dense_matcher(im1),
   image_correlation_(im1,im2)
 {
@@ -133,7 +133,7 @@ void vsrl_stereo_dense_matcher::write_disparity_image(char *filename)
 
   // make a buffer which has the size of image1
 
-  vil_byte_buffer buffer(image1_);
+  vil1_byte_buffer buffer(image1_);
 
   for (int x=0;x<buffer.width();x++)
     for (int y=0;y<buffer.height();y++)
@@ -154,8 +154,8 @@ void vsrl_stereo_dense_matcher::write_disparity_image(char *filename)
      }
 
   // save the file, using file name extension to determine type
-  // vil_save(buffer, filename, image1_.file_format());
-  vil_save(buffer, filename);
+  // vil1_save(buffer, filename, image1_.file_format());
+  vil1_save(buffer, filename);
 }
 
 // print out the correlation costs for point x,y

@@ -8,8 +8,8 @@
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_edge_2d.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_image_as.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_image_as.h>
 
 vtol_vertex_2d_sptr convert_vertex_2d(osl_vertex & in)
 {
@@ -158,14 +158,14 @@ void convert_point_double_3(vtol_vertex_2d_sptr in,
   out[2]=1;
 }
 
-void convert_grey_memory_image(const vil_image & image,
-                               vil_memory_image_of<vil_byte> &ima_mono)
+void convert_grey_memory_image(const vil1_image & image,
+                               vil1_memory_image_of<vil1_byte> &ima_mono)
 {
   int w=image.width();
   int h=image.height();
 
   ima_mono.resize(w,h);
 
-  vil_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
+  vil1_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
 }
 

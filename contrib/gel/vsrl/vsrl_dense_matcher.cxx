@@ -2,7 +2,7 @@
 #include "vsrl_dense_matcher.h"
 
 // constructor
-vsrl_dense_matcher::vsrl_dense_matcher(const vil_image &im1)
+vsrl_dense_matcher::vsrl_dense_matcher(const vil1_image &im1)
 {
   image1_=im1;
 }

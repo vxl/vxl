@@ -17,8 +17,8 @@
 #include <vepl/vepl_dyadic.h>
 
 // for I/O:
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_save.h>
 #include <vcl_iostream.h>
 
 typedef unsigned char ubyte;
@@ -32,15 +32,15 @@ main(int argc, char** argv) {
   }
 
   // The input image:
-  vil_image in = vil_load(argv[1]);
+  vil1_image in = vil1_load(argv[1]);
   float dummy_f = 0;
   in = vepl_convert(in, dummy_f);
 
   // The second moment filter.  result: E(X*X).
-  vil_image out = vepl_moment(in, 2, 5, 5);
+  vil1_image out = vepl_moment(in, 2, 5, 5);
 
   // The first moment filter.  result: E(X).
-  vil_image tmp = vepl_moment(in, 1, 5, 5);
+  vil1_image tmp = vepl_moment(in, 1, 5, 5);
 
   // The monadic "square" point operator (input=output).  result: E(X)*E(X)
   tmp = vepl_monadic_sqr(tmp);
@@ -54,7 +54,7 @@ main(int argc, char** argv) {
   // vepl_convert to ubyte and write to PGM file:
   ubyte dummy = 0;
   out = vepl_convert(out, dummy);
-  vil_save(out, argv[2], "pnm");
+  vil1_save(out, argv[2], "pnm");
   vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
 
   return 0;

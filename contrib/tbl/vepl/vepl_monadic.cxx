@@ -2,7 +2,7 @@
 #include "vepl_monadic.h"
 #include <vipl/accessors/vipl_accessors_vil_image.h>
 #include <vipl/vipl_monadic.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
@@ -23,28 +23,28 @@ float shear_float(float const& a) { return float((a+shift_)*scale_); }
 double shear_double(double const& a) { return (a+shift_)*scale_; }
 
 
-vil_image vepl_monadic_abs(vil_image const& image)
+vil1_image vepl_monadic_abs(vil1_image const& image)
 {
   // byte greyscale
-  if (vil_pixel_format(image) == VIL_BYTE) {
+  if (vil1_pixel_format(image) == VIL1_BYTE) {
     return image; // ubyte is unsigned so nothing happens
   }
 
   // byte rgb
-  else if (vil_pixel_format(image) == VIL_RGB_BYTE) {
+  else if (vil1_pixel_format(image) == VIL1_RGB_BYTE) {
     return image; // ubyte is unsigned so nothing happens
   }
 
   // 16-bit greyscale
-  else if (vil_pixel_format(image) == VIL_UINT16) {
+  else if (vil1_pixel_format(image) == VIL1_UINT16) {
     return image; // ushort is unsigned so nothing happens
   }
 
   // float
-  else if (vil_pixel_format(image) == VIL_FLOAT) {
-    vil_memory_image_of<float> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<float> out(image);
-    vipl_monadic<vil_image,vil_image,float,float> op(abs_float);
+  else if (vil1_pixel_format(image) == VIL1_FLOAT) {
+    vil1_memory_image_of<float> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<float> out(image);
+    vipl_monadic<vil1_image,vil1_image,float,float> op(abs_float);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -52,10 +52,10 @@ vil_image vepl_monadic_abs(vil_image const& image)
   }
 
   // double
-  else if (vil_pixel_format(image) == VIL_DOUBLE) {
-    vil_memory_image_of<double> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<double> out(image);
-    vipl_monadic<vil_image,vil_image,double,double> op(abs_double);
+  else if (vil1_pixel_format(image) == VIL1_DOUBLE) {
+    vil1_memory_image_of<double> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<double> out(image);
+    vipl_monadic<vil1_image,vil1_image,double,double> op(abs_double);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -69,13 +69,13 @@ vil_image vepl_monadic_abs(vil_image const& image)
   }
 }
 
-vil_image vepl_monadic_sqrt(vil_image const& image)
+vil1_image vepl_monadic_sqrt(vil1_image const& image)
 {
   // float
-  if (vil_pixel_format(image) == VIL_FLOAT) {
-    vil_memory_image_of<float> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<float> out(image);
-    vipl_monadic<vil_image,vil_image,float,float> op(sqrt_float);
+  if (vil1_pixel_format(image) == VIL1_FLOAT) {
+    vil1_memory_image_of<float> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<float> out(image);
+    vipl_monadic<vil1_image,vil1_image,float,float> op(sqrt_float);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -83,10 +83,10 @@ vil_image vepl_monadic_sqrt(vil_image const& image)
   }
 
   // double
-  else if (vil_pixel_format(image) == VIL_DOUBLE) {
-    vil_memory_image_of<double> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<double> out(image);
-    vipl_monadic<vil_image,vil_image,double,double> op(sqrt_double);
+  else if (vil1_pixel_format(image) == VIL1_DOUBLE) {
+    vil1_memory_image_of<double> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<double> out(image);
+    vipl_monadic<vil1_image,vil1_image,double,double> op(sqrt_double);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -100,13 +100,13 @@ vil_image vepl_monadic_sqrt(vil_image const& image)
   }
 }
 
-vil_image vepl_monadic_sqr(vil_image const& image)
+vil1_image vepl_monadic_sqr(vil1_image const& image)
 {
   // byte greyscale
-  if (vil_pixel_format(image) == VIL_BYTE) {
-    vil_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<ubyte> out(image);
-    vipl_monadic<vil_image,vil_image,ubyte,ubyte> op(sqr_ubyte);
+  if (vil1_pixel_format(image) == VIL1_BYTE) {
+    vil1_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<ubyte> out(image);
+    vipl_monadic<vil1_image,vil1_image,ubyte,ubyte> op(sqr_ubyte);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -114,10 +114,10 @@ vil_image vepl_monadic_sqr(vil_image const& image)
   }
 
   // 16-bit greyscale
-  else if (vil_pixel_format(image) == VIL_UINT16) {
-    vil_memory_image_of<ushort> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<ushort> out(image);
-    vipl_monadic<vil_image,vil_image,ushort,ushort> op(sqr_ushort);
+  else if (vil1_pixel_format(image) == VIL1_UINT16) {
+    vil1_memory_image_of<ushort> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<ushort> out(image);
+    vipl_monadic<vil1_image,vil1_image,ushort,ushort> op(sqr_ushort);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -125,10 +125,10 @@ vil_image vepl_monadic_sqr(vil_image const& image)
   }
 
   // float
-  else if (vil_pixel_format(image) == VIL_FLOAT) {
-    vil_memory_image_of<float> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<float> out(image);
-    vipl_monadic<vil_image,vil_image,float,float> op(sqr_float);
+  else if (vil1_pixel_format(image) == VIL1_FLOAT) {
+    vil1_memory_image_of<float> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<float> out(image);
+    vipl_monadic<vil1_image,vil1_image,float,float> op(sqr_float);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -136,10 +136,10 @@ vil_image vepl_monadic_sqr(vil_image const& image)
   }
 
   // double
-  else if (vil_pixel_format(image) == VIL_DOUBLE) {
-    vil_memory_image_of<double> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<double> out(image);
-    vipl_monadic<vil_image,vil_image,double,double> op(sqr_double);
+  else if (vil1_pixel_format(image) == VIL1_DOUBLE) {
+    vil1_memory_image_of<double> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<double> out(image);
+    vipl_monadic<vil1_image,vil1_image,double,double> op(sqr_double);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -153,15 +153,15 @@ vil_image vepl_monadic_sqr(vil_image const& image)
   }
 }
 
-vil_image vepl_monadic_shear(vil_image const& image, double shift, double scale)
+vil1_image vepl_monadic_shear(vil1_image const& image, double shift, double scale)
 {
   shift_ = shift; scale_ = scale;
 
   // byte greyscale
-  if (vil_pixel_format(image) == VIL_BYTE) {
-    vil_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<ubyte> out(image);
-    vipl_monadic<vil_image,vil_image,ubyte,ubyte> op(shear_ubyte);
+  if (vil1_pixel_format(image) == VIL1_BYTE) {
+    vil1_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<ubyte> out(image);
+    vipl_monadic<vil1_image,vil1_image,ubyte,ubyte> op(shear_ubyte);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -169,10 +169,10 @@ vil_image vepl_monadic_shear(vil_image const& image, double shift, double scale)
   }
 
   // 16-bit greyscale
-  else if (vil_pixel_format(image) == VIL_UINT16) {
-    vil_memory_image_of<ushort> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<ushort> out(image);
-    vipl_monadic<vil_image,vil_image,ushort,ushort> op(shear_ushort);
+  else if (vil1_pixel_format(image) == VIL1_UINT16) {
+    vil1_memory_image_of<ushort> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<ushort> out(image);
+    vipl_monadic<vil1_image,vil1_image,ushort,ushort> op(shear_ushort);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -180,10 +180,10 @@ vil_image vepl_monadic_shear(vil_image const& image, double shift, double scale)
   }
 
   // float
-  else if (vil_pixel_format(image) == VIL_FLOAT) {
-    vil_memory_image_of<float> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<float> out(image);
-    vipl_monadic<vil_image,vil_image,float,float> op(shear_float);
+  else if (vil1_pixel_format(image) == VIL1_FLOAT) {
+    vil1_memory_image_of<float> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<float> out(image);
+    vipl_monadic<vil1_image,vil1_image,float,float> op(shear_float);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -191,10 +191,10 @@ vil_image vepl_monadic_shear(vil_image const& image, double shift, double scale)
   }
 
   // double
-  else if (vil_pixel_format(image) == VIL_DOUBLE) {
-    vil_memory_image_of<double> mem(image); // load in memory to pass to filter
-    vil_memory_image_of<double> out(image);
-    vipl_monadic<vil_image,vil_image,double,double> op(shear_double);
+  else if (vil1_pixel_format(image) == VIL1_DOUBLE) {
+    vil1_memory_image_of<double> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<double> out(image);
+    vipl_monadic<vil1_image,vil1_image,double,double> op(shear_double);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();

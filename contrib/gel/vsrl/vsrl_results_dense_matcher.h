@@ -4,8 +4,8 @@
 //:
 //  \file
 
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_image.h>
 #include <vsrl/vsrl_dense_matcher.h>
 #include <vsrl/vsrl_image_correlation.h>
 
@@ -17,12 +17,12 @@ class vsrl_results_dense_matcher : public vsrl_dense_matcher
 {
  protected:
 
-  vil_memory_image_of<unsigned char> disparity_; //!< memory images of the disparities
+  vil1_memory_image_of<unsigned char> disparity_; //!< memory images of the disparities
 
  public:
 
   // constructor
-  vsrl_results_dense_matcher(const vil_image &image1, const vil_image &disparity);
+  vsrl_results_dense_matcher(const vil1_image &image1, const vil1_image &disparity);
 
   // destructor
   virtual ~vsrl_results_dense_matcher();

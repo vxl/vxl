@@ -58,7 +58,7 @@ AUX_SOURCE_DIRECTORY(vipl_with_mil/Templates vipl_sources)
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
  SET_SOURCE_FILES_PROPERTIES(
-  vipl_with_section/Templates/vipl_filter_2d+section+vil_rgb+uchar-.2-.section+vil_rgb+uchar-.2-.vil_rgb+uchar-.vil_rgb+uchar--.cxx
+  vipl_with_section/Templates/vipl_filter_2d+section+vil1_rgb+uchar-.2-.section+vil1_rgb+uchar-.2-.vil1_rgb+uchar-.vil1_rgb+uchar--.cxx
   COMPILE_FLAGS -O1
  )
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
@@ -67,7 +67,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 INCLUDE_DIRECTORIES(${MUL_INCLUDE_DIR})
 
 ADD_LIBRARY(vipl ${vipl_sources})
-TARGET_LINK_LIBRARIES(vipl vil vnl)
+TARGET_LINK_LIBRARIES(vipl vil1 vnl)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)

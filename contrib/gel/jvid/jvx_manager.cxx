@@ -5,7 +5,7 @@
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_error_dialog.h>
@@ -73,7 +73,7 @@ void jvx_manager::load_video_file()
   vidl_movie::frame_iterator pframe(my_movie_);
   pframe = my_movie_->first();
 
-  vil_image img = pframe->get_image();
+  vil1_image img = pframe->get_image();
   height_ = img.height();
   width_ = img.width();
   vcl_cout << "Video Height " << height_ << vcl_endl

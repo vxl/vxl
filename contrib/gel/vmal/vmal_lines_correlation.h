@@ -26,8 +26,8 @@
 //--------------------------------------------------------------------------------
 
 #include <vnl/vnl_double_3.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_byte.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_byte.h>
 
 class vmal_lines_correlation
 {
@@ -40,19 +40,19 @@ class vmal_lines_correlation
 
   double find_min_corr(vnl_double_3 &line0p, vnl_double_3 &line0q,
              vnl_double_3 &line1p, vnl_double_3 &line1q,
-             vil_memory_image_of<vil_byte> &image0,
-             vil_memory_image_of<vil_byte> &image1,
+             vil1_memory_image_of<vil1_byte> &image0,
+             vil1_memory_image_of<vil1_byte> &image1,
              vnl_double_3 &trans);
 
   double lines_correlation(vnl_double_3 &line0_p, vnl_double_3 &line0_q,
                  vnl_double_3 &line1_p, vnl_double_3 &line1_q,
-               vil_memory_image_of<vil_byte> &image0,
-               vil_memory_image_of<vil_byte> &image1,
+               vil1_memory_image_of<vil1_byte> &image0,
+               vil1_memory_image_of<vil1_byte> &image1,
                vnl_double_3 &trans, int bias);
 
   bool interpol_pixel(vnl_double_3 &pixel0, vnl_double_3 &pixel1,
-              vil_memory_image_of<vil_byte> &image0,
-            vil_memory_image_of<vil_byte> &image1,
+              vil1_memory_image_of<vil1_byte> &image0,
+            vil1_memory_image_of<vil1_byte> &image1,
             unsigned char &value0, unsigned char &value1);
 
  private:

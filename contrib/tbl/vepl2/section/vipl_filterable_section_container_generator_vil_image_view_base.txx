@@ -1,7 +1,7 @@
 #ifndef vipl_filterable_section_container_generator_vil2_image_view_txx_
 #define vipl_filterable_section_container_generator_vil2_image_view_txx_
 
-#include <vil2/vil2_image_view_base.h>
+#include <vil/vil_image_view_base.h>
 
 #define FILTER_IMPTR_DEC_REFCOUNT(v) {delete (v); (v)=0;}
 #define FILTER_IMPTR_INC_REFCOUNT(v)
@@ -11,7 +11,7 @@
 #include <vipl/section/vipl_section_iterator.txx>
 template <class DataType>
 vipl_section_container<DataType>*
-vipl_filterable_section_container_generator(const vil2_image_view_base& im, DataType*)
+vipl_filterable_section_container_generator(const vil_image_view_base& im, DataType*)
 {
   vipl_section_container<DataType> *rtn = new vipl_section_container<DataType>((vipl_section_container<DataType>*)0);
   rtn->put_imgptr((const void*) &im);

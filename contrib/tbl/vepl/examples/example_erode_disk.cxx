@@ -6,7 +6,7 @@
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that
 //  case is eroded (circular kernel, default 3x3 square) to argv[2]
 //  which is always a PGM file image.
-//  The conversion between vil_image and the in-memory section<ubyte,2>
+//  The conversion between vil1_image and the in-memory section<ubyte,2>
 //  is done explicitly.
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
@@ -17,8 +17,8 @@
 typedef unsigned char ubyte;
 
 // for I/O:
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_save.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for atof()
 
@@ -31,16 +31,16 @@ main(int argc, char** argv) {
   }
 
   // The input image:
-  vil_image in = vil_load(argv[1]);
+  vil1_image in = vil1_load(argv[1]);
 
   // The radius: (default is 3x3 square)
   float radius = (argc < 4) ? 1.5f : (float)vcl_atof(argv[3]);
 
   // The filter:
-  vil_image out = vepl_erode_disk(in,radius);
+  vil1_image out = vepl_erode_disk(in,radius);
 
   // Write output:
-  vil_save(out, argv[2], "pnm");
+  vil1_save(out, argv[2], "pnm");
   vcl_cout << "Written image of type PNM to " << argv[2] << vcl_endl;
 
   return 0;

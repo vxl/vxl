@@ -4,13 +4,13 @@
 //:
 // \file
 
-#include <vil/vil_byte.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_byte.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vnl/vnl_matrix.h>
 
-typedef vil_memory_image_of<vil_byte> vil_byte_buffer;
+typedef vil1_memory_image_of<vil1_byte> vil1_byte_buffer;
 
-class vil_image;
+class vil1_image;
 
 //:
 // this class will determine the correlation between two images for
@@ -20,7 +20,7 @@ class vsrl_image_correlation
 {
  public:
   // constructor
-  vsrl_image_correlation(const vil_image &im1, const vil_image &im2);
+  vsrl_image_correlation(const vil1_image &im1, const vil1_image &im2);
 
   // destructor
   ~vsrl_image_correlation();
@@ -96,14 +96,14 @@ class vsrl_image_correlation
 
   //: memory images of the data
 
-  vil_byte_buffer buffer1_;
-  vil_byte_buffer buffer2_;
+  vil1_byte_buffer buffer1_;
+  vil1_byte_buffer buffer2_;
 
   //: compute the local stats using the slow method.
-  void compute_local_stats(vil_byte_buffer &buf, int x, int y, double &mean, double &std);
+  void compute_local_stats(vil1_byte_buffer &buf, int x, int y, double &mean, double &std);
 
   //: make sure that x and y are in the bounds of buf
-  bool check_range(vil_byte_buffer &buf, int x, int y);
+  bool check_range(vil1_byte_buffer &buf, int x, int y);
 };
 
 #endif // vsrl_image_correlation_h

@@ -12,7 +12,7 @@ extern "C" {
 }
 #include <vmal/vmal_kl_params.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vcl_vector.h>
 #include <vmal/vmal_multi_view_data_vertex_sptr.h>
 #include <vidl/vidl_movie_sptr.h>
@@ -32,16 +32,16 @@ public:
 //---------------------------------------------------------------------------
   ~vmal_kl();
 
-  void match_sequence(vcl_vector<vil_image> &,vmal_multi_view_data_vertex_sptr);
+  void match_sequence(vcl_vector<vil1_image> &,vmal_multi_view_data_vertex_sptr);
 
   void match_sequence(vidl_movie_sptr,vmal_multi_view_data_vertex_sptr);
 
-  vcl_vector<vtol_vertex_2d_sptr> * extract_points(vil_image &);
+  vcl_vector<vtol_vertex_2d_sptr> * extract_points(vil1_image &);
 
 private:
   vmal_kl_params _params;
 
-  KLT_PixelType* convert_to_gs_image(vil_image &);
+  KLT_PixelType* convert_to_gs_image(vil1_image &);
 
   void set_tracking_context( KLT_TrackingContext tc);
 };
