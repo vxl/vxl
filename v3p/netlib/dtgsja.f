@@ -167,8 +167,8 @@
 *          TOLA and TOLB are the convergence criteria for the Jacobi-
 *          Kogbetliantz iteration procedure. Generally, they are the
 *          same as used in the preprocessing step, say
-*              TOLA = max(M,N)*norm(A)*MAZHEPS,
-*              TOLB = max(P,N)*norm(B)*MAZHEPS.
+*              TOLA = max(M,N)*norm(A)*MACHEPS,
+*              TOLB = max(P,N)*norm(B)*MACHEPS.
 *
 *  ALPHA   (output) DOUBLE PRECISION array, dimension (N)
 *  BETA    (output) DOUBLE PRECISION array, dimension (N)

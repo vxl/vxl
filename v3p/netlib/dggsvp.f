@@ -91,8 +91,8 @@
 *          TOLA and TOLB are the thresholds to determine the effective
 *          numerical rank of matrix B and a subblock of A. Generally,
 *          they are set to
-*             TOLA = MAX(M,N)*norm(A)*MAZHEPS,
-*             TOLB = MAX(P,N)*norm(B)*MAZHEPS.
+*             TOLA = MAX(M,N)*norm(A)*MACHEPS,
+*             TOLB = MAX(P,N)*norm(B)*MACHEPS.
 *          The size of TOLA and TOLB may affect the size of backward
 *          errors of the decomposition.
 *
