@@ -44,7 +44,11 @@ static void run_constructor_tests() {
   {vnl_bignum b("123e5"); TEST("vnl_bignum b(\"123e5\");", b, 12300000L);}
   {vnl_bignum b("123e+4"); TEST("vnl_bignum b(\"123e+4\");", b, 1230000L);}
   {vnl_bignum b("123e12"); TEST("vnl_bignum b(\"123e12\");", (double)b, 123e12);}
-  {vnl_bignum b("-123e120"); TEST("vnl_bignum b(\"-123e120\");", (double)b, -123e120);}
+  {vnl_bignum b("-1e120"); vcl_stringstream s; s << b;
+   // verify that b outputs as  "-1000...00" (120 zeros)
+   bool t = s.str()[0] == '-' && s.str()[1] == '1' && s.str()[122] == '\0'; 
+   for (int i=0; i<120; ++i) t = t && s.str()[i+2] == '0';
+   TEST("vnl_bignum b(\"-1e120\") outputs as \"-10000...00\"", t, true);}
   {vnl_bignum b("0x0"); TEST("vnl_bignum b(\"0x0\");", b, 0x0);}
   {vnl_bignum b("0x9"); TEST("vnl_bignum b(\"0x9\");", b, 0x9);}
   {vnl_bignum b("0xa"); TEST("vnl_bignum b(\"0xa\");", b, 0xa);}
