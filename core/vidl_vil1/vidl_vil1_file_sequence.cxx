@@ -97,7 +97,7 @@ bool vidl_vil1_file_sequence::open(vcl_string const& fmt)
   // Summarize:
   vcl_cerr << "files: sizeof offset_t = " << sizeof(offset_t) << '\n';
   for (unsigned int i = 0; i < n; ++i)
-    vcl_cerr << "   " << filenames[i].c_str() << "  " << start_byte[i] << '\n';
+    vcl_cerr << "   " << (int) filenames[i].c_str() << "  " << (int) start_byte[i] << '\n';
   vcl_cerr << '\n';
 
   return true;
@@ -120,14 +120,14 @@ void vidl_vil1_file_sequence::seek(offset_t to)
   }
 
   if (newindex == -1) {
-    vcl_cerr << "ERROR: Could not seek to [" << to << "]\n";
+    vcl_cerr << "ERROR: Could not seek to [" << (int) to << "]\n";
     return;
   }
 
   current_file_index = newindex;
 
   offset_t file_ptr = to - start_byte[current_file_index];
-  vcl_cerr << " si = " << start_byte[current_file_index] << " to = " << to << '\n';
+  vcl_cerr << " si = " << (int) start_byte[current_file_index] << " to = " << (int) to << '\n';
   assert(file_ptr >= 0);
   assert(file_ptr < (offset_t)filesizes[current_file_index]);
 
