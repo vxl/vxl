@@ -29,8 +29,7 @@
 // fsm
 //
 
-//static const float vgl_polygon_scan_iterator_offset = 0.5f;
-static const float vgl_polygon_scan_iterator_offset = 0.0f;
+static const float vgl_polygon_scan_iterator_offset = 0.0f; // was 0.5f;
 
 // find minimum of a and b
 #undef MIN
@@ -181,27 +180,27 @@ void vgl_polygon_scan_iterator<T>::init()
   // set y0 and y1 to bottommost and topmost scan lines
   if (have_window)
   {
-      if (boundp)
-        y0 = (int)MAX(win.min_y(), vcl_floor( miny - vgl_polygon_scan_iterator_offset));
-      else
-        y0 = (int)MAX(win.min_y(), vcl_ceil( miny - vgl_polygon_scan_iterator_offset));
+    if (boundp)
+      y0 = (int)MAX(win.min_y(), vcl_floor( miny - vgl_polygon_scan_iterator_offset));
+    else
+      y0 = (int)MAX(win.min_y(), vcl_ceil( miny - vgl_polygon_scan_iterator_offset));
 
-      if (boundp)
-        y1 = (int)MIN(win.max_y()-1, vcl_ceil( maxy - vgl_polygon_scan_iterator_offset));
-      else
-        y1 = (int)MIN(win.max_y()-1, vcl_floor( maxy - vgl_polygon_scan_iterator_offset));
+    if (boundp)
+      y1 = (int)MIN(win.max_y()-1, vcl_ceil( maxy - vgl_polygon_scan_iterator_offset));
+    else
+      y1 = (int)MIN(win.max_y()-1, vcl_floor( maxy - vgl_polygon_scan_iterator_offset));
   }
   else
   {
-      if (boundp)
-        y0 = (int)vcl_floor( miny - vgl_polygon_scan_iterator_offset);
-      else
-        y0 = (int)vcl_ceil( miny - vgl_polygon_scan_iterator_offset);
+    if (boundp)
+      y0 = (int)vcl_floor( miny - vgl_polygon_scan_iterator_offset);
+    else
+      y0 = (int)vcl_ceil( miny - vgl_polygon_scan_iterator_offset);
 
-      if (boundp)
-        y1 = (int)vcl_ceil( maxy - vgl_polygon_scan_iterator_offset);
-      else
-        y1 = (int)vcl_floor(  maxy - vgl_polygon_scan_iterator_offset);
+    if (boundp)
+      y1 = (int)vcl_ceil( maxy - vgl_polygon_scan_iterator_offset);
+    else
+      y1 = (int)vcl_floor(  maxy - vgl_polygon_scan_iterator_offset);
   }
 }
 
@@ -338,15 +337,16 @@ bool vgl_polygon_scan_iterator<T>::next( )
   {
     // Current scan line is not the last one.
     bool not_last = true;
+
     // If boundary included and processing first or last scan line
     // floating point scan line must be taken as a min/max y coordinate
     // of the polygon. Otherwise these scan lines are not included because
     // of the earlier rounding (ceil/floor).
     if ( boundp ) {
       if ( y == y0 )
-        fy = get_y( yverts[ 0 ] );
+        fy = vcl_floor(get_y( yverts[ 0 ] ));
       else if ( y == y1 ) {
-        fy = get_y( yverts[ numverts - 1 ] );
+        fy = vcl_ceil(get_y( yverts[ numverts - 1 ] ));
         not_last = false;
       }
       else
@@ -355,7 +355,7 @@ bool vgl_polygon_scan_iterator<T>::next( )
     else
       fy = T(y);
 
-    for (; k<numverts && get_y(yverts[k]) <= (fy+vgl_polygon_scan_iterator_offset) && not_last; k++)
+    for (; k<numverts && get_y(yverts[k]) <= fy+vgl_polygon_scan_iterator_offset && not_last; k++)
     {
       curvert = yverts[ k ];
 
@@ -363,16 +363,16 @@ bool vgl_polygon_scan_iterator<T>::next( )
       // from crossedges list if they cross scanline y
       get_prev_vert( curvert, prevvert );
 
-      if ( get_y( prevvert ) <= (fy-vgl_polygon_scan_iterator_offset))  // old edge, remove from active list
+      if ( get_y( prevvert ) <= fy-vgl_polygon_scan_iterator_offset)  // old edge, remove from active list
         delete_edge( prevvert );
-      else if ( get_y( prevvert ) > (fy+vgl_polygon_scan_iterator_offset))  // new edge, add to active list
+      else if ( get_y( prevvert ) > fy+vgl_polygon_scan_iterator_offset)  // new edge, add to active list
         insert_edge( prevvert );
 
       get_next_vert( curvert, nextvert );
 
-      if ( get_y( nextvert ) <= (fy-vgl_polygon_scan_iterator_offset))  // old edge, remove from active list
+      if ( get_y( nextvert ) <= fy-vgl_polygon_scan_iterator_offset)  // old edge, remove from active list
         delete_edge( curvert );
-      else if ( get_y( nextvert ) > (fy+vgl_polygon_scan_iterator_offset))  // new edge, add to active list
+      else if ( get_y( nextvert ) > fy+vgl_polygon_scan_iterator_offset)  // new edge, add to active list
         insert_edge( curvert );
     }
 
@@ -445,9 +445,10 @@ void vgl_polygon_scan_iterator<T>::display_crossedges()
              << "numcrossedges: " << numcrossedges << vcl_endl;
     for (int i = 0; i< numcrossedges; i++ )
     {
-        vcl_cout << "x = " << crossedges[i].x
-                 << "y = " << crossedges[i].dx;
-        crossedges[i].v.display( "v: " );
+        vcl_cout << "x = " << crossedges[i].x << '\n'
+                 << "y = " << crossedges[i].dx << '\n'
+                 << "v: chainnum=" << crossedges[i].v.chainnum
+                 << ", vertnum=" << crossedges[i].v.vertnum << '\n';
     }
     vcl_cout << "---------------------\n" << vcl_flush;
 }

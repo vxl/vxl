@@ -10,12 +10,12 @@
 //   Binary IO added and documentation tidied up NPC, 20/03/01
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Nov.2003 - Peter Vanroose - made vgl_polygon_scan_iterator a templated class
+//   Apr.2004 - Peter Vanroose - corrected an earlier with_boundary fix in next()
 // \endverbatim
 
 #include <vgl/vgl_region_scan_iterator.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_box_2d.h>
-#include <vcl_iostream.h> // to be removed when vertind::display() is removed
 
 //: Fill a polygonal face with interior scan lines
 //  This class provides an iterator-style interface to polygon scan
@@ -118,10 +118,6 @@ class vgl_polygon_scan_iterator : public vgl_region_scan_iterator
   struct vertind {
     int chainnum; //!< which chain the vertex is part of
     int vertnum;  //!< which vertex in the chain
-    // This function HAS TO be inlined here, since MSVC-7 cannot handle member
-    // function definition of nested classes of a template class outside the class:
-    void display(char const*s) { vcl_cout<<s<<" chainnum="<<chainnum<<", vertnum="<<vertnum<<'\n'; }
-    // Maybe we should consider removing this method altogether? - PVr
   };
 
   //: Describes an edge crossing the current scan line
