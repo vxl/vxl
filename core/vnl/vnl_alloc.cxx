@@ -1,4 +1,7 @@
 // This is vxl/vnl/vnl_alloc.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
 #include "vnl_alloc.h"
 
