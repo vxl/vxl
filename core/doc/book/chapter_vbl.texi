@@ -7,7 +7,7 @@ All C++ programs need a few basic utilities, and all C++ programmers write
 their own at some point.  The things included in vbl are not considered any
 better or worse than the several other libraries available, but they are
 consistently named and lightweight.  The key elements of this library
-are
+are:
 
 @deffn {class template} @code{vbl_smart_ptr}
 Reference counted smart pointers for any class that defines @code{ref} and

@@ -2,12 +2,11 @@
 General utilities are often handy.  vul has a few.
 @endchapsummary
 
-
-All C++ programs need a few basic utilities, and all C++ programmers write
-their own at some point.  The things included in vbl are not considered any
-better or worse than the several other libraries available, but they are
-consistently named and lightweight.  The key elements of this library
-are
+Like vbl, vul also provides some basic utilities. The difference is
+philosophical: vbl includes things that could be thought of as extending
+the STL, while vul provides just plain utilities which don't claim to be
+useful or general enough to incorporate into the STL, and may not follow
+the spirit of the STL. The key elements of this library are:
 
 @deffn class @code{vul_file}
 @deffnx class @code{vul_directory}
@@ -138,7 +137,7 @@ program, use its @code{()} operator:
    vcl_cerr << "The threshold = " << my_threshold() << vcl_endl;
 @end example
 To check if an argument was changed from its default value, one can check
-@code{bool my_naughty_threshold.set()}.
+@code{bool my_threshold.set()}.
 
 Here is a complete example which uses @code{vul_arg}.  I tend to give these
 argument variables names beginning with @code{a_}, but don't let that put

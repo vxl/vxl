@@ -416,7 +416,7 @@ are moderately well behaved.
 @item @code{vnl_conjugate_gradient}: Fletcher-Reeves form of the conjugate
 gradient algorithm.
 
-@item @code {vnl_lbfgs): Limited memory Broyden Fletcher Goldfarb Shannon
+@item @code{vnl_lbfgs}: Limited memory Broyden Fletcher Goldfarb Shannon
 minimisation. Requires 1st derivatives. Considered to be the best
 general optimisation algorithm for functions which are well behaved
 (i.e. locally smooth without too many local minima.)
