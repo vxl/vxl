@@ -25,4 +25,4 @@ ADD_TEST( vimt_test_scale_pyramid_builder_2d     vimt_test_driver test_scale_pyr
 ADD_TEST( vimt_test_gaussian_pyramid_builder_2d_general  vimt_test_driver test_gaussian_pyramid_builder_2d_general )
 ADD_TEST( vimt_test_find_peaks              vimt_test_driver test_find_peaks )
 ADD_TEST( vimt_test_find_troughs            vimt_test_driver test_find_troughs )
-ADD_TEST( vimt_test_correlate_2d             vimt_test_driver test_conrrelate_2d )
+ADD_TEST( vimt_test_correlate_2d             vimt_test_driver test_correlate_2d )
