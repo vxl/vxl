@@ -41,10 +41,17 @@
 
 #elif defined(VCL_GCC) && defined(VCL_CXX_HAS_HEADER_FUNCTIONAL)
 # include "vcl_utility.h"
+# if defined(VCL_GCC_30)
+using std::rel_ops::operator!=;
+using std::rel_ops::operator>;
+using std::rel_ops::operator<=;
+using std::rel_ops::operator>=;
+# else
 using std::operator!=;
 using std::operator>;
 using std::operator<=;
 using std::operator>=;
+# endif
 
 #elif defined(VCL_SGI_CC)
 # include "vcl_utility.h"
