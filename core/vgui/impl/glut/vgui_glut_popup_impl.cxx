@@ -114,14 +114,20 @@ void vgui_glut_popup_impl::build_internal(vgui_menu const &m) {
 // idle event before invoking the vgui_command. E.g. if the command
 // were to start run_one_event()ing, heap corruption often results.
 // To accomplish that, the action of selecting a menu item just
-// queues the command on the adaptor.
+// queues the command for later execution.
 
-void vgui_glut_popup_impl::command_func(int value) {
+#include "vgui_glut.h"
+
+void vgui_glut_popup_impl::command_func(int value)
+{
   if (value == 0)
     vgui_macro_warning << "null command" << vcl_endl;
   else if (value == 1)
     vcl_cerr << "[that's a separator]" << vcl_endl;
-  else
-    vgui_glut_adaptor::queue_command(reinterpret_cast<vgui_command *>(value));
+  else {
+    int win = glutGetWindow();
+    vgui_glut_adaptor *a = vgui_glut_adaptor::get_adaptor(win);
+    vgui_command      *c = reinterpret_cast<vgui_command *>(value);
+    vgui_glut_queue_command(a, c);
+  }
 }
-

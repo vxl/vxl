@@ -600,66 +600,26 @@ void vgui_glut_adaptor::bind_popups(vgui_modifier mod, vgui_button but) {
 
 // Static callbacks. First the special cases :
 
-
-
-// and then sets the idle callback. When glut
-// is next idle, the idle callback will invoke the command and
-// then disable the idle callback again.
-//
-// NB: must make sure the command is executed within the right
-// glut context (i.e. the current window must be the same as it
-// was when the menu was pulled down).
-static int           vgui_glut_adaptor_menu_window  = 0;
-static vgui_command *vgui_glut_adaptor_menu_command = 0;
-
-void vgui_glut_adaptor::queue_command(vgui_command *c) {
-  vgui_glut_adaptor_menu_window = glutGetWindow();
-  vgui_glut_adaptor_menu_command = c;
-  c->ref(); // this matches unref() in idle_callback.
-  glutIdleFunc(vgui_glut_adaptor::idle_callback);
-}
-
-//: menu commands to be executed are stored in 'vgui_adaptor_menu_command'.
-// see comments in popup_impl.cxx
-void vgui_glut_adaptor::idle_callback() {
-  if (vgui_glut_adaptor_menu_command) {
-    glutSetWindow(vgui_glut_adaptor_menu_window);
-    //cerr << "cmnd = " << (void*)vgui_glut_adaptor_menu_command << endl;
-    vgui_glut_adaptor_menu_command->execute();
-    //cerr << "returned successfully" << endl;
-    vgui_glut_adaptor_menu_command->unref(); // this matches ref() in queue_command.
-    vgui_glut_adaptor_menu_command = 0;
-  }
-  glutIdleFunc(0); // disable again
-}
-
-//------------------------------------------------------------
-
-#define can_cast_ptr_to_int 0
-
 //: post timeout events
-typedef struct {
+struct vgui_glut_adaptor_callback_data
+{
   vgui_glut_adaptor *org;
-  int      val;
-} vgui_glut_adaptor_callback_data;
+  int val;
+};
 
-#if !can_cast_ptr_to_int
 #include <vcl_utility.h>
 #include <vcl_list.h>
 typedef vcl_pair<void*, int> pair_Pv_i;
 typedef vcl_list<pair_Pv_i> list_Pv_i;
 static list_Pv_i *timer_posts = 0;
-#endif
 
-void vgui_glut_adaptor::post_timer(float timeout, int name) {
+void vgui_glut_adaptor::post_timer(float timeout, int name)
+{
   vgui_glut_adaptor_callback_data *ff = new vgui_glut_adaptor_callback_data;   // <*> acquire resource
   ff->org = this;
   ff->val = name;
 
   // convert the pointer 'ff' to an int 'value'.
-#if can_cast_ptr_to_int
-  int value = reinterpret_cast<int>(ff);
-#else
   int value = 0;
   if (!timer_posts)
     timer_posts = new list_Pv_i;
@@ -667,19 +627,14 @@ void vgui_glut_adaptor::post_timer(float timeout, int name) {
     if (value <= (*i).second)
       value = (*i).second + 1;
   timer_posts->push_front(pair_Pv_i(ff, value));
-#endif
-
+  
   // pass 'value' to the GLUT api.
-  glutTimerFunc(int(timeout*1000),
-                vgui_glut_adaptor::timer_callback,
-                value);
+  glutTimerFunc(int(timeout*1000), vgui_glut_adaptor::timer_callback, value);
 }
 
-void vgui_glut_adaptor::timer_callback(int value) {
+void vgui_glut_adaptor::timer_callback(int value)
+{
   // convert 'value' back to a pointer 'ff'.
-#if can_cast_ptr_to_int
-  vgui_glut_adaptor_callback_data *ff = reinterpret_cast<vgui_glut_adaptor_callback_data*>(value);
-#else
   vgui_glut_adaptor_callback_data *ff = 0;
   assert(timer_posts);
   for (list_Pv_i::iterator i=timer_posts->begin(); i!=timer_posts->end(); ++i)
@@ -689,8 +644,7 @@ void vgui_glut_adaptor::timer_callback(int value) {
       break;
     }
   assert(ff);
-#endif
-
+  
   ff->org->timer(ff->val);
   delete ff;                               // <*> release resource
 }

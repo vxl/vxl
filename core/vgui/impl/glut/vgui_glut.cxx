@@ -89,15 +89,18 @@ static vcl_jmp_buf internal_buf;
 
 // This function is the idle callback used
 // to longjmp() out of the GLUT event loop.
-static void internal_longjmp_idler()
+static
+void internal_longjmp_idler()
 {
   vcl_longjmp(internal_buf, internal_label);
+  assert(false);
 }
 
 // This function lets the GLUT event loop run till it becomes
 // idle and then returns to the caller. It is intended to be
 // re-entrant, hence the saving and restoring of the jmp_buf.
-static void internal_run_till_idle()
+static
+void internal_run_till_idle()
 {
   // save the current jmp_buf;
   vcl_jmp_buf saved_buf;
@@ -132,6 +135,51 @@ static void internal_run_till_idle()
 
 //--------------------------------------------------------------------------------
 
+#include <vcl_list.h>
+#include <vcl_utility.h>
+#include <vgui/vgui_command.h>
+#include "vgui_glut_adaptor.h"
+
+static
+vcl_list<vcl_pair<void *, void *> > vgui_glut_command_queue;
+
+void vgui_glut_queue_command(vgui_glut_adaptor *a, vgui_command *c)
+{
+  c->ref(); // matched by unref() in process_command_queue();
+  vgui_glut_command_queue.push_back(vcl_pair<void *, void *>(a, c));
+}
+
+static
+void vgui_glut_process_command_queue()
+{
+  while (! vgui_glut_command_queue.empty()) {
+    // remove from front of queue.
+    vcl_pair<void *, void *> p = vgui_glut_command_queue.front();
+    vgui_glut_command_queue.pop_front();
+    
+    // a bit of casting.
+    vgui_glut_adaptor *a = static_cast<vgui_glut_adaptor *>(p.first );
+    vgui_command      *c = static_cast<vgui_command *>(p.second);
+    
+    // switch to the relevant GL context.
+    int old_win = glutGetWindow();
+    if (old_win != a->get_id())
+      glutSetWindow(a->get_id());
+    
+    // execute the command.
+    //vcl_cerr << "cmnd = " << (void*)vgui_glut_adaptor_menu_command << vcl_endl;
+    c->execute();
+    //vcl_cerr << "returned successfully" << vcl_endl;
+    
+    // this matches ref() in vgui_glut_queue_command()
+    c->unref();
+    
+    // switch back to the old GL context.
+    if (old_win != 0 && old_win != a->get_id())
+      glutSetWindow(old_win);
+  }
+}
+
 // When set, this flag indicates that the event
 // loop should be terminated in the near future.
 static bool internal_quit_flag = false;
@@ -139,8 +187,10 @@ static bool internal_quit_flag = false;
 void vgui_glut::run()
 {
   internal_quit_flag = false;
-  while (! internal_quit_flag)
+  while (! internal_quit_flag) {
     internal_run_till_idle();
+    vgui_glut_process_command_queue();
+  }
   vgui_macro_warning << "end of vgui_glut event loop" << vcl_endl;
 }
 
@@ -159,11 +209,13 @@ void vgui_glut::quit()
 void vgui_glut::run_one_event()
 {
   internal_run_till_idle();
+  vgui_glut_process_command_queue();
 }
 
 void vgui_glut::run_till_idle()
 {
   internal_run_till_idle();
+  vgui_glut_process_command_queue();
 }
 
 //--------------------------------------------------------------------------------
