@@ -49,9 +49,9 @@ static unsigned next_power_of_two(unsigned n) {
 //: constructor. determine size of memory block to allocate. initialize the_rasters.
 vgui_section_buffer::vgui_section_buffer(int x_, int y_,
                                          unsigned w_, unsigned h_,
-                                         GLenum format_ VCL_DEFAULT_VALUE(GL_NONE),
-                                         GLenum type_ VCL_DEFAULT_VALUE(GL_NONE),
-                                         bool alloc_as_texture VCL_DEFAULT_VALUE(false))
+                                         GLenum format_,
+                                         GLenum type_,
+                                         bool alloc_as_texture)
   : format(format_), type(type_)
   , x(x_), y(y_)
   , w(w_), h(h_)
@@ -389,7 +389,7 @@ bool vgui_section_buffer::draw_as_image(float x0, float y0,  float x1, float y1)
 // vgui_section_buffer which loaded its texture image.
 static vgui_section_buffer const *last = 0;
 
-bool vgui_section_buffer::texture_begin(bool force_load VCL_DEFAULT_VALUE(false)) const
+bool vgui_section_buffer::texture_begin(bool force_load) const
 {
   vgui_macro_report_errors;
 

@@ -10,7 +10,7 @@
 #include <vil/vil_resample.h>
 #include <vil/vil_memory_image.h>
 
-vil_pyramid::vil_pyramid(vil_image const &I, cache_strategy cs_ VCL_DEFAULT_VALUE(memory))
+vil_pyramid::vil_pyramid(vil_image const &I, cache_strategy cs_)
 {
   cs = cs_;
   levels.push_back(I);

@@ -39,7 +39,7 @@ vil_image vil_new(vil_stream* os,
                   int components,
                   int bits_per_component,
                   vil_component_format format,
-                  char const* file_format VCL_DEFAULT_VALUE(0))
+                  char const* file_format)
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
@@ -65,7 +65,7 @@ vil_image vil_new(vil_stream* os,
 vil_image vil_new(vil_stream* os,
                   int width, int height,
                   vil_image const& prototype,
-                  char const* file_format VCL_DEFAULT_VALUE(0))
+                  char const* file_format)
 {
   return vil_new(os,
                  prototype.planes(),
@@ -82,7 +82,7 @@ vil_image vil_new(vil_stream* os,
 vil_image vil_new(char const* filename,
                   int width, int height,
                   vil_image const& prototype,
-                  char const* file_format VCL_DEFAULT_VALUE(0))
+                  char const* file_format)
 {
   vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
   return vil_new(os,

@@ -74,7 +74,7 @@ vgl_polygon_scan_iterator::~vgl_polygon_scan_iterator()
 }
 
 vgl_polygon_scan_iterator::vgl_polygon_scan_iterator(vgl_polygon const& face,
-                                                     bool boundaryp VCL_DEFAULT_VALUE(true)):
+                                                     bool boundaryp):
   poly_(face)
 {
   boundp = boundaryp;

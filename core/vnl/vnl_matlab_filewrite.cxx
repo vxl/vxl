@@ -13,7 +13,7 @@
 #include <vnl/vnl_matlab_write.h>
 
 vnl_matlab_filewrite::vnl_matlab_filewrite(char const *file_name,
-                                           char const *basename VCL_DEFAULT_VALUE(0))
+                                           char const *basename)
   : basename_(basename ? basename : "targetvar"), variable_int_(0)
 {
   out_.open(file_name, vcl_ios_out | vcl_ios_binary);

@@ -28,12 +28,12 @@ vil_image vil_image_impl::get_plane(int ) const
   return 0;
 }
 
-bool vil_image_impl::get_property(char const *, void * VCL_DEFAULT_VALUE(0)) const 
+bool vil_image_impl::get_property(char const *, void *) const 
 {
   return false;
 }
 
-bool vil_image_impl::set_property(char const *, void const * VCL_DEFAULT_VALUE(0)) const 
+bool vil_image_impl::set_property(char const *, void const *) const 
 {
   return false;
 }

@@ -39,7 +39,7 @@ bool vil_resample_image_impl::put_section(void const * , int, int, int, int)
   return false;
 }
 
-bool vil_resample_image_impl::get_property(char const *, void * VCL_DEFAULT_VALUE(0)) const
+bool vil_resample_image_impl::get_property(char const *, void *) const
 {
   return false;
 }

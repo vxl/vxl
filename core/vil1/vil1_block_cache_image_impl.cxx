@@ -33,7 +33,7 @@ bool vil_block_cache_image_impl::put_section(void const *buf, int x0, int y0, in
 //--------------------------------------------------------------------------------
 
 bool vil_block_cache_image_impl::get_property(char const *tag,
-                                              void *out VCL_DEFAULT_VALUE(0)) const
+                                              void *out) const
 {
   if (strcmp(tag, "is_blocked") == 0)
     return true;

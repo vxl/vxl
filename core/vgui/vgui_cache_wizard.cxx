@@ -28,8 +28,8 @@ bool debug = false;
 vgui_cache_wizard *vgui_cache_wizard::instance_ = 0;
 // -- Constructor. Set the image quadrant width/height. Do use sensible values(i.e. powers of two)
 // Otherwise the cache wizard won't work
-vgui_cache_wizard::vgui_cache_wizard(int quadrant_width, //VCL_DEFAULT_VALUE(DEFAULT_QUADRANT_WIDTH),
-                                     int quadrant_height) //VCL_DEFAULT_VALUE(DEFAULT_QUADRANT_HEIGHT))
+vgui_cache_wizard::vgui_cache_wizard(int quadrant_width,
+                                     int quadrant_height)
 {
   if(debug) vcl_cerr << __FILE__": this is the constructor" << vcl_endl;
   //*(int*)0 = 1;

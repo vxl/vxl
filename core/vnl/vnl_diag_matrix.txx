@@ -44,7 +44,7 @@ vcl_ostream& operator<< (vcl_ostream& s, const vnl_diag_matrix<T>& D)
 // -- Compares two matrices for component-wise equality within a small epsilon
 template<class T>
 bool epsilon_equals (const vnl_diag_matrix<T>& m1, const vnl_diag_matrix<T>& m2,
-                     double alt_epsilon VCL_DEFAULT_VALUE(0))
+                     double alt_epsilon)
 {
   if (alt_epsilon < 0)
     {

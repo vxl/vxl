@@ -30,7 +30,7 @@ bool vgui_section_render(void const *pixels,
                          float x1, float y1,
                          GLenum format,
                          GLenum type,
-                         bool use_vgui_rasterpos VCL_DEFAULT_VALUE(false))
+                         bool use_vgui_rasterpos)
 {
   assert(pixels);
   assert(x0 <= x1);

@@ -7,7 +7,7 @@
 
 vgui_glut_window::vgui_glut_window(char const *title,
                                    unsigned w, unsigned h,
-                                   int posx VCL_DEFAULT_VALUE(-1), int posy VCL_DEFAULT_VALUE(-1))
+                                   int posx, int posy)
   : vgui_window()
   , glutwin(0)
   , pending_reshape(false)
