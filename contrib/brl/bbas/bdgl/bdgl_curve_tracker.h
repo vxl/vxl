@@ -18,7 +18,6 @@
 #include <bdgl/bdgl_curve_region.h>
 #include <bdgl/bdgl_curve_matcher.h>
 #include <bdgl/bdgl_curve_tracker_primitive.h>
-#include <bgui/bgui_vtol2D_tableau_sptr.h>
 
 
 //-----------------------------------------------------------------------------
@@ -65,10 +64,15 @@ class bdgl_curve_tracker
   vcl_vector< vcl_vector< bdgl_curve_tracker_primitive > > get_output(){ return output_curve_; }
   void set_output(vcl_vector< vcl_vector< bdgl_curve_tracker_primitive > > curve){ output_curve_=curve; }
 
+	vdgl_edgel_chain_sptr get_output_curve_at( int frame, int num )
+		{ return output_curve_[frame][num].get_curve(); }
+	int get_output_id_at( int frame, int num )
+		{ return output_curve_[frame][num].get_id(); }
+	int get_output_size_at( int frame )
+		{ return output_curve_[frame].size(); }
+
   void track();
-  void track_frame(int frame);
-  void draw_lines(int frame, bgui_vtol2D_tableau_sptr const& tab);
-  void set_colors(int num, float *r, float *g, float *b);
+	void track_frame(int frame);
 };
 
 //-----------------------------------------------------------------------------

@@ -12,11 +12,6 @@
 #include <bdgl/bdgl_curve_region.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
-#include <bgui/bgui_vtol2D_tableau_sptr.h>
-#include <bgui/bgui_vtol2D_tableau.h>
-#include <bgui/bgui_vtol_soview2D.h>
-#include <bgui/bgui_style.h>
-#include <bgui/bgui_style_sptr.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_interpolator_linear.h>
@@ -260,50 +255,6 @@ void bdgl_curve_tracker::track_frame(int frame)
     }
     output_curve_.insert(output_curve_.end(), primitive_list);
   }
-
-  return;
-}
-
-//-----------------------------------------------------------------------------
-void bdgl_curve_tracker::draw_lines(int frame, bgui_vtol2D_tableau_sptr const& tab)
-{
-  float r,g,b;
-
-  vcl_cout<<"display tracked curves\n";
-  tab->disable_highlight();
-  
-  if ( (frame >= 0) && (frame < output_curve_.size()) ){
-    for (unsigned int i=0;i<output_curve_[frame].size();i++){
-      //vcl_cout<<".";
-      set_colors( output_curve_[frame][i].get_id(), &r, &g, &b );
-      tab->set_edgel_chain_style(r, g, b, 3.0);
-      tab->add_edgel_chain( output_curve_[frame][i].get_curve() );
-    }
-  }
-  tab->post_redraw();
-
-  return;
-}
-
-//-----------------------------------------------------------------------------
-void bdgl_curve_tracker::set_colors(int num, float *r, float *g, float *b)
-{
-  int strength = num/6;
-  int pattern  = num%6;
-  strength %= 20;
-  float s = 1.0f - strength * 0.05f;
-
-  switch(pattern)
-  {
-    case 0 : (*r) = s; (*g) = 0; (*b) = 0; break;
-    case 1 : (*r) = 0; (*g) = s; (*b) = 0; break;
-    case 2 : (*r) = 0; (*g) = 0; (*b) = s; break;
-    case 3 : (*r) = s; (*g) = s; (*b) = 0; break;
-    case 4 : (*r) = 0; (*g) = s; (*b) = s; break;
-    case 5 : (*r) = s; (*g) = 0; (*b) = s; break;
-    default: (*r) = 0; (*g) = 0; (*b) = 0; break; // this will never happen
-  }
-  //vcl_cout<<"color : "<<(*r)<<" : "<<(*g)<<" : "<<(*b)<<"\n";
 
   return;
 }
