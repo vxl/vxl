@@ -866,11 +866,42 @@ vcl_istream& operator>> (vcl_istream& is, vnl_matrix_fixed<T,m,n>& mat)
   return is;
 }
 
+// More workarounds for Visual C++ 6.0. The problem is that VC6 cannot
+// automatically determine the m of the second parameter, for some
+// reason. Also, VC6 can't figure out that vector_fixed::SIZE is a
+// compile time constant when used in the return parameter. So, we
+// have to introduce a helper class to do it.
+//
+#if VCL_VC60
+
+template<class T, unsigned m, class FixedVector>
+struct outer_product_fixed_type_helper
+{
+  typedef vnl_matrix_fixed<T,m,FixedVector::SIZE> result_matrix;
+};
+template<class V1, class V2, class RM>
+struct outer_product_fixed_calc_helper
+{
+  static RM calc( V1 const& a, V2 const& b );
+};
+template <class T, unsigned m, class SecondFixedVector>
+outer_product_fixed_type_helper<T,m,SecondFixedVector>::result_matrix
+outer_product(vnl_vector_fixed<T,m> const& a, SecondFixedVector const& b)
+{
+  typedef vnl_vector_fixed<T,m> VecA;
+  typedef vnl_vector_fixed<T,SecondFixedVector::SIZE> VecB;
+  typedef outer_product_fixed_type_helper<T,m,SecondFixedVector>::result_matrix ResultMat;
+  return outer_product_fixed_calc_helper<VecA,VecB,ResultMat>::calc(a,b);
+}
+
+#else // no need for VC6 workaround for outer_product
+
 //:
 // \relates vnl_vector_fixed
 template <class T, unsigned m, unsigned n>
 vnl_matrix_fixed<T,m,n> outer_product(vnl_vector_fixed<T,m> const& a, vnl_vector_fixed<T,n> const& b);
 
+#endif // VC6 workaround for outer_product
 
 #define VNL_MATRIX_FIXED_INSTANTIATE(T, M, N) \
 extern "please include vnl/vnl_matrix_fixed.txx instead"

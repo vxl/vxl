@@ -83,6 +83,8 @@ class vnl_vector_fixed
 {
  public:
   typedef unsigned int size_type;
+  // Compile-time accessible attribute to get the dimensionality of the vector.
+  enum{ SIZE = n };
 
  protected:
   T data_[n];

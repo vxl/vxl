@@ -682,6 +682,33 @@ void vnl_matrix_fixed<T,nrows,ncols>::inplace_transpose()
   }
 }
 
+// Workaround for argument deduction bug in VC6. See comment in .h
+// file.  Note that the body of the function is outside the #ifdefs to
+// maintain a single implementation of the function. The way to read
+// this code is to just jump to the #else part and scan down, ignoring
+// the #endif. Unless, of course, you are masochist and actually want
+// to read the workaround.
+//
+#if VCL_VC60
+
+template<class VecA, class VecB, class RM>
+RM
+outer_product_fixed_calc_helper<VecA,VecB,RM>::calc( VecA const& a, VecB const& b )
+{
+  RM out; // RM should be a vnl_matrix_fixed of VecA::SIZE by VecB::SIZE
+  for (unsigned int i = 0; i < VecA::SIZE; i++)
+    for (unsigned int j = 0; j < VecB::SIZE; j++)
+      out[i][j] = a[i] * b[j];
+  return out;
+};
+
+#define VNL_OUTER_PRODUCT_FIXED_INSTANTIATE( T, M, N ) \
+  template struct outer_product_fixed_calc_helper< vnl_vector_fixed<T,M>, \
+                                                   vnl_vector_fixed<T,N>, \
+                                                   vnl_matrix_fixed<T,M,N> >
+
+#else // no need for workaround; declare the function sanely.
+
 template <class T, unsigned m, unsigned n>
 vnl_matrix_fixed<T,m,n>
 outer_product(vnl_vector_fixed<T,m> const& a, vnl_vector_fixed<T,n> const& b)
@@ -693,10 +720,17 @@ outer_product(vnl_vector_fixed<T,m> const& a, vnl_vector_fixed<T,n> const& b)
   return out;
 }
 
+#define VNL_OUTER_PRODUCT_FIXED_INSTANTIATE( T, M, N ) \
+  template vnl_matrix_fixed<T,M,N> outer_product( vnl_vector_fixed<T,M> const&, \
+                                                  vnl_vector_fixed<T,N> const& )
+                                                   
+
+#endif // VC60 outer_product workaround
+
 
 #undef VNL_MATRIX_FIXED_INSTANTIATE
 #define VNL_MATRIX_FIXED_INSTANTIATE(T, M, N) \
-template class vnl_matrix_fixed<T,M,N >; \
-template vnl_matrix_fixed<T,M,N > outer_product(vnl_vector_fixed<T,M > const&, vnl_vector_fixed<T,N > const&)
+  template class vnl_matrix_fixed<T,M,N >; \
+  VNL_OUTER_PRODUCT_FIXED_INSTANTIATE( T, M, N );
 
 #endif // vnl_matrix_fixed_txx_
