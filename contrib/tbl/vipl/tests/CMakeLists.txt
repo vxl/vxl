@@ -3,9 +3,9 @@
 ADD_EXECUTABLE( vipl_test_driver
   test_driver.cxx
 
-  test_threshold.cxx
-  test_erode_disk.cxx
-  test_gaussian_convolution.cxx
+  vipl_test_threshold.cxx
+  vipl_test_erode_disk.cxx
+  vipl_test_gaussian_convolution.cxx
 )
 
 ADD_TEST(vipl_test_threshold            vipl_test_driver vipl_test_threshold)
