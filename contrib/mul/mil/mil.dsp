@@ -240,6 +240,11 @@ SOURCE=.\mil_byte_image_2d_io.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\mil_byte_image_2d_io_plugin.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\mil_convert_image_2d.cxx
 
 # End Source File
@@ -369,6 +374,11 @@ SOURCE=.\mil_normalise_image_2d.cxx
 # Begin Source File
 
 SOURCE=.\mil_byte_image_2d_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_byte_image_2d_io_plugin.h
 
 # End Source File
 # Begin Source File
