@@ -37,6 +37,7 @@ SOURCES += vnl_complex.cxx
 SOURCES += vnl_error.cxx
 SOURCES += vnl_test.cxx
 SOURCES += vnl_matlab_print.cxx
+MANPAGE_SOURCES += vnl_matlab_print.txx
 SOURCES += vnl_matlab_print_format.cxx
 SOURCES += vnl_matlab_print_scalar.cxx
 SOURCES += vnl_matlab_print2.cxx
@@ -48,8 +49,6 @@ SOURCES += vnl_matops.cxx
 SOURCES += vnl_real_polynomial.cxx
 SOURCES += vnl_real_npolynomial.cxx
 SOURCES += vnl_binary.cxx
-#need ci SOURCES += vnl_binary_io.cxx
-#need ci SOURCES += vnl_binary_loader_base.cxx
 
 # ops
 SOURCES += vnl_fastops.cxx
