@@ -390,13 +390,33 @@ export VCL_CAN_DO_PARTIAL_SPECIALIZATION
 AC_LANG_RESTORE])
 
 
-### Check whether the compiler has a header <blah>.
-# VCL_CXX_HAS_HEADER(blah, VCL_CXX_HAS_HEADER_BLAH)
-AC_DEFUN(VCL_CXX_HAS_HEADER,[
+###
+AC_DEFUN(VCL_CXX_COMPLEX_POW_WORKS,[
+AC_MSG_CHECKING([whether the C++ compiler has a fully functional pow(complex,complex)])
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
-AC_CHECK_HEADER($1,[$2=1],[$2=0])
+VCL_COMPILE_CXX
+AC_TRY_RUN([
+// It appears several programmers have (independently)
+// not realised their lack of knowledge of complex numbers.
+// pow(complex(-1,0),0.5) should return (0,1) not (Nan,0), etc.
+#include <complex>
+int main()
+{
+  const std::complex<double> neg1(-1.0,0.0);
+  const std::complex<double> half(0.5,0.0);
+  std::complex<double> sqrt_neg1 = std::pow(neg1, 0.5);
+  if ( std::abs(sqrt_neg1.real()) > 1e-6 || std::abs(sqrt_neg1-1.0) < 1e-6 ) return 1;
+  sqrt_neg1 = std::pow(neg1, half);
+  if ( std::abs(sqrt_neg1.real()) > 1e-6 || std::abs(sqrt_neg1-1.0) < 1e-6 ) return 1;
+  sqrt_neg1 = std::pow(-1.0, half);
+  if ( std::abs(sqrt_neg1.real()) > 1e-6 || std::abs(sqrt_neg1-1.0) < 1e-6 ) return 1;
+  return 0; // success
+}
+],,[VCL_COMPLEX_POW_WORKS=1;AC_MSG_RESULT(yes)],[VCL_COMPLEX_POW_WORKS=0;AC_MSG_RESULT(no)])
+export VCL_COMPLEX_POW_WORKS
 AC_LANG_RESTORE])
+
 
 
 ###

@@ -61,6 +61,14 @@
 #define VCL_FOR_SCOPE_HACK 1
 
 
+//: VCL_COMPLEX_POW_WORKS
+//
+// It appears several programmers have (independently)
+// not realised their lack of knowledge of complex numbers.
+// pow(complex(-1,0),0.5) should return (0,1) not (Nan,0), etc.
+#define VCL_COMPLEX_POW_WORKS 1
+
+
 //: VCL_DEFAULT_VALUE(x)
 //
 // Used to provide default values for function args in definition
