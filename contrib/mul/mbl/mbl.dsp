@@ -428,6 +428,9 @@ SOURCE=.\mbl_correspond_points.h
 # Begin Source File
 SOURCE=.\mbl_jarque_bera.h
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_test.h
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
