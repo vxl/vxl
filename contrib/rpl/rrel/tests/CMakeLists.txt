@@ -1,5 +1,8 @@
-# ./rpl/rrel/tests/CMakeLists.txt
+# rpl/rrel/tests/CMakeLists.txt
 
+SET( rrel_tests_sources
+  # empty list
+)
 AUX_SOURCE_DIRECTORY( Templates rrel_tests_sources )
 
 ADD_EXECUTABLE( rrel_test_driver
