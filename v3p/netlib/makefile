@@ -106,5 +106,7 @@ include $(SYS_IUPACKAGES)/config/top.mk
 ##########################################
 
 ifneq ($(OS),win32)
+ifneq ($(OS),hpux10.20)
   APP_CFLAGS = -O2 
+endif
 endif
