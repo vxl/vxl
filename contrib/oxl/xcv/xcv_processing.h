@@ -1,18 +1,18 @@
 #ifndef xcv_processing_h_
 #define xcv_processing_h_
-
-//--------------------------------------------------------------------------------
-// .NAME    xcv_processing - xcv menu and interface for image processing
-// .INCLUDE xcv/xcv_processing.h
-// .FILE    xcv_processing.cxx
-// .SECTION Description
-//    Creates a menu for, and provides an interface to image processing operations
-//    contained in vxl.
-// .SECTION Author
-//   K.Y.McGaul
-// .SECTION Modifications
-//   K.Y.McGaul     26-SEP-2000    Initial version.
-//--------------------------------------------------------------------------------
+//
+// This is xcv/xcv_processing.h
+//
+//: Creates a menu for, and provides an interface to image processing operations
+//  contained in vxl.
+//
+// \file
+// \author  K.Y.McGaul
+// \verbatim
+//  Modifications
+//    K.Y.McGaul     26-SEP-2000    Initial version.
+// \endverbatim
+//
 
 class vgui_menu;
 class osl_harris_params;

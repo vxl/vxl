@@ -1,16 +1,19 @@
 #ifndef xcv_tjunction_h_
 #define xcv_tjunction_h_
-
-//--------------------------------------------------------------------------------
-// .NAME    xcv_tjunction
-// .INCLUDE xcv/xcv_tjunction.h
-// .FILE    xcv_tjunction.cxx
-// .SECTION Author
-//   K.Y.McGaul
-// .SECTION Modifications:
+//
+// This is xcv/xcv_tjunction.h
+// 
+//: Events sent to this tableau are passed on to both its child tableau
+//  and to the xcv_mview_manager registered in the constructor.
+//
+// \file
+// \author  K.Y.McGaul
+// \verbatim
+//  Modifications:
 //   K.Y.McGaul     05-MAY-2000    Initial version.
-//   Marko Bacic   15-AUG-2000    Reversed the order in 'handle'
-//--------------------------------------------------------------------------------
+//   Marko Bacic    15-AUG-2000    Reversed the order in 'handle'
+// \endverbatim
+//
 
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_slot.h>
@@ -27,6 +30,7 @@ public:
   vcl_string pretty_name() const;
 
   void set_child(vgui_tableau_sptr const& new_child);
+  //: Handle events by passing them to the manager and the child tableau.
   bool handle(const vgui_event&);
 
 private:

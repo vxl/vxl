@@ -1,7 +1,9 @@
-//-----------------------------------------------------------------------------
-// .DESCRIPTION:
-//   See xcv_threeview_manager.h.
-//-----------------------------------------------------------------------------
+//
+// This is xcv/xcv_threeview_manager.cxx
+// See xcv_threeview_manager.h for a description of this file.
+//
+// \author K.Y.McGaul
+//
 
 #include "xcv_threeview_manager.h"
 
@@ -84,7 +86,7 @@ void xcv_threeview_manager::draw_tri_tensor(vgui_event const& e, vgui_tableau_sp
 
 
 //-----------------------------------------------------------------------------
-//: Handle any events we are interested in.
+//: Handle all events sent to this manager.
 //-----------------------------------------------------------------------------
 void xcv_threeview_manager::handle_tjunction_event(vgui_event const& e, vgui_tableau_sptr const& child_tab)
 {

@@ -1,7 +1,9 @@
-//-----------------------------------------------------------------------------
-// .DESCRIPTION:
-//   See xcv_geometry.h.
-//-----------------------------------------------------------------------------
+//
+// This is xcv/xcv_geometry.cxx
+// See xcv_geometry.h for a description of this file.
+// 
+// \author K.Y.McGaul
+//
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -231,7 +233,7 @@ void xcv_geometry::delete_all()
 }
 
 //-----------------------------------------------------------------------------
-//: Delete all points
+//: Delete all points.
 //-----------------------------------------------------------------------------
 void xcv_geometry::delete_points()
 {
@@ -258,7 +260,7 @@ void xcv_geometry::delete_points()
   }
 }
 //-----------------------------------------------------------------------------
-//: Delete all lines
+//: Delete all lines.
 //-----------------------------------------------------------------------------
 void xcv_geometry::delete_lines()
 {
@@ -285,7 +287,7 @@ void xcv_geometry::delete_lines()
   }
 }
 //-----------------------------------------------------------------------------
-//: Delete all infinite lines
+//: Delete all infinite lines.
 //-----------------------------------------------------------------------------
 void xcv_geometry::delete_inf_lines()
 {
@@ -312,7 +314,7 @@ void xcv_geometry::delete_inf_lines()
   }
 }
 //-----------------------------------------------------------------------------
-//: Delete all circles
+//: Delete all circles.
 //-----------------------------------------------------------------------------
 void xcv_geometry::delete_circles()
 {
@@ -339,7 +341,7 @@ void xcv_geometry::delete_circles()
   }
 }
 //-----------------------------------------------------------------------------
-//: Delete all linestrips
+//: Delete all linestrips.
 //-----------------------------------------------------------------------------
 void xcv_geometry::delete_linestrips()
 {
@@ -500,22 +502,32 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
   }
   fs.close();
 }
+
+//: Save all circles into a file.
 void xcv_geometry::save_circles()
 {
   save("vgui_soview2D_circle","Save circles");
 }
+
+//: Save all points into a file.
 void xcv_geometry::save_points()
 {
   save("vgui_soview2D_point","Save points");
 }
+
+//: Save all lines into a file.
 void xcv_geometry::save_lines()
 {
   save("vgui_soview2D_lineseg","Save lines");
 }
+
+//: Save all linestrips into a file.
 void xcv_geometry::save_linestrips()
 {
   save("vgui_soview2D_linestrip","Save linestrip");
 }
+
+//: Save all geometric objects into a file.
 void xcv_geometry::save_geometry()
 {
   save(0,"Save geometry");
@@ -620,31 +632,11 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
   fs.close();
 }
 
+//: Load all geometric objects from a file.
 void xcv_geometry::load_geometry()
 {
   load(0,"Load geometry");
 }
-
-void xcv_geometry::load_circles()
-{
-  load("vgui_soview2D_circle","Load circles");
-}
-
-void xcv_geometry::load_points()
-{
-  load("vgui_soview2D_point","Load points");
-}
-
-void xcv_geometry::load_lines()
-{
-  load("vgui_soview2D_lineseg","Load lines");
-}
-
-void xcv_geometry::load_linestrips()
-{
-  load("vgui_soview2D_linestrip","Load linestrip");
-}
-
 
 //: Add sheets to gui
 static void add(vgl_polygon const& p)
@@ -659,7 +651,8 @@ static void add(vgl_polygon const& p)
   }
 }
 
-//:
+//========================================================================
+//:  Intersect two polygons to get a set of non-intersecting polygons.
 void xcv_geometry::polygon_intersect()
 {
   vcl_vector<vgl_polygon> all_polys;
@@ -698,7 +691,8 @@ void xcv_geometry::polygon_intersect()
   add(vcgl_polygon_clip_subtract(all_polys[1], all_polys[0]));
 }
 
-//
+//========================================================================
+//: Move geometric objects apart.
 static void xcv_geometry_explode_geometry()
 {
   double d = 20;

@@ -1,22 +1,22 @@
 #ifndef xcv_twoview_manager_h_
 #define xcv_twoview_manager_h_
-
-//--------------------------------------------------------------------------------
-// .NAME    xcv_twoview_manager
-// .INCLUDE xcv/xcv_twoview_manager.h
-// .FILE    xcv_twoview_manager.cxx
-// .SECTION Description:
-//    Handles events which occur in one view but are displayed in two views
-//    simultaneously (eg. displaying the epipolar line in one view corresponding
-//    to a mouse press in the other view.)
-//    Also holds data which links two views, eg. corner matches, FMatrix and
-//    HMatrix2D.
-// .SECTION Author
-//   K.Y.McGaul
-// .SECTION Modifications:
+//
+// This is xcv/xcv_twoview_manager.h
+//
+//: Handles events which occur in one view but are displayed in two views
+//  simultaneously (eg. displaying the epipolar line in one view corresponding
+//  to a mouse press in the other view.)
+//  Also holds data which links two views, eg. corner matches, FMatrix and
+//  HMatrix2D.
+//
+// \file
+// \author   K.Y.McGaul
+// \verbatim
+//  Modifications:
 //   K.Y.McGaul     05-MAY-2000    Initial version.
 //   Marko Bacic    18-AUG-2000    Sorted out display of epipolar lines
-//--------------------------------------------------------------------------------
+// \endverbatim
+//
 
 #include <mvl/FMatrix.h>
 #include <mvl/HMatrix2D.h>
@@ -60,6 +60,7 @@ public:
   //: Return corner_matches.
   PairMatchSetCorner* get_corner_matches(){return corner_matches;}
 
+  //: Handle all events sent to this manager.
   void handle_tjunction_event(vgui_event const& e, vgui_tableau_sptr const& child_tab);
 
 private:

@@ -1,7 +1,7 @@
-//-----------------------------------------------------------------------------
-// .DESCRIPTION:
-//   See xcv_processing.h.
-//-----------------------------------------------------------------------------
+//
+// This is xcv/xcv_processing.cxx
+// See xcv_processing.h for a description of this file.
+//
 
 #include "xcv_processing.h"
 

@@ -1,3 +1,10 @@
+//
+// This is xcv/xcv_tjunction.cxx
+// See xcv_tjunction.h for a description of this file.
+//
+// \author  K.Y.McGaul
+//
+
 #include "xcv_tjunction.h"
 
 xcv_tjunction::xcv_tjunction(xcv_mview_manager* xmm)
