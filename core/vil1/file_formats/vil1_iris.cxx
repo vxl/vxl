@@ -3,17 +3,15 @@
 #pragma implementation
 #endif
 //
-//
 // Author: Joris Schouteden
 // Created: 17 Feb 2000
 //
 //-----------------------------------------------------------------------------
 
-
 #include "vil1_iris.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>
+#include <vcl_cstring.h> // for memcpy()
 #include <vcl_iostream.h>
 
 #include <vil1/vil1_stream.h>
@@ -67,11 +65,11 @@ vil1_image_impl* vil1_iris_file_format::make_input_image(vil1_stream* is)
 }
 
 vil1_image_impl* vil1_iris_file_format::make_output_image(vil1_stream* is, int planes,
-                                                        int width,
-                                                        int height,
-                                                        int components,
-                                                        int bits_per_component,
-                                                        vil1_component_format format)
+                                                          int width,
+                                                          int height,
+                                                          int components,
+                                                          int bits_per_component,
+                                                          vil1_component_format format)
 {
   return new vil1_iris_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
@@ -108,11 +106,11 @@ char const* vil1_iris_generic_image::file_format() const
 }
 
 vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream* is, int planes,
-                                               int width,
-                                               int height,
-                                               int components,
-                                               int bits_per_component,
-                                               vil1_component_format /*format*/):
+                                                 int width,
+                                                 int height,
+                                                 int components,
+                                                 int bits_per_component,
+                                                 vil1_component_format /*format*/):
   is_(is)
 {
   is_->ref();
@@ -130,25 +128,13 @@ vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream* is, int planes,
     vcl_strcpy(imagename_, "vil1 writes an iris image!");
     colormap_ = 0;
 
-    if ((components * planes) == 1)
-    {
-      components_ = 1;
-      planes_ = 1;
+    components_ = 1;
+    planes_ = components * planes;
+    if (planes_ == 1)
       dimension_ = 2;
-    }
-    else if ((components * planes) == 3)
-    {
-      components_ = 1;
-      planes_ = 3;
+    else if (planes_ == 3 || planes_ == 4)
       dimension_ = 3;
-    }
-         else if ((components * planes) == 4)
-         {
-           components_ = 1;
-                planes_ = 4;
-                dimension_ = 3;
-         }
-         else vcl_cerr << __FILE__ ": Cannot write iris image, they can do but grayscale or RGB(A)\n";
+    else vcl_cerr << __FILE__ ": Cannot write iris image, they can only do grayscale or RGB(A)\n";
     write_header();
   }
   else vcl_cerr << __FILE__ ": Cannot write iris image, they want 8 or 16 bits per component\n";
@@ -221,7 +207,7 @@ bool vil1_iris_generic_image::write_header()
 {
 #ifdef DEBUG
   vcl_cerr << __FILE__ ": vil1_iris_generic_image::write_header()\n"
-           << "Here we go : \n"
+           << "Here we go :\n"
            << "magic_      = " << magic_    << vcl_endl
            << "storage_    = " << storage_ << vcl_endl
            << "bytes_per_c = " << bytes_per_component_ << vcl_endl
@@ -261,7 +247,7 @@ bool vil1_iris_generic_image::write_header()
 
 vil1_image vil1_iris_generic_image::get_plane(int plane) const
 {
-  assert(plane < planes_); // should this be 'plane <= planes_'? planes start at 0.
+  assert(plane >= 0 && plane < planes_);
   vcl_cerr << __FILE__ ": do something for vil1_iris_generic_image::get_plane\n";
   return 0;
 }
@@ -287,65 +273,53 @@ bool vil1_iris_generic_image::get_section(void* buf, int x0, int y0, int xs, int
 
 bool vil1_iris_generic_image::get_section_verbatim(void* ib, int x0, int y0, int xs, int ys) const
 {
-  int row_len = xs * bytes_per_pixel();
+  int row_len = xs * bytes_per_component_;
 
   unsigned char* dp = (unsigned char*)ib;
 
-  for (int channel=0; channel<planes_; ++channel) {
-#ifdef DEBUG
-    vcl_cerr << "c" << channel;
-#endif
-    unsigned char* cbi = dp;
+  for (int channel=0; channel<planes_; ++channel)
+  {
+    unsigned char* cbi = dp + row_len*ys*channel;
     // skip cbi to point at last row of section
     cbi+=(row_len*(ys-1));
-    cbi+=channel;
 
     is_->seek(512L + channel * width_ * height_ + (y0 * width_) + x0);
                                         // actually: times cell size
-    int nbytes = xs;
 
     int skipbytes_end = width_ - xs; // bytes to skip, across consecutive rows
 
     // number of rows to read
-    for (int row = 0; row < ys; ++row) {
+    for (int row = 0; row < ys; ++row,cbi-=row_len)
+    {
       // step to end of row and then to within next row, where next block begins
       if (row > 0) is_->seek(is_->tell() + skipbytes_end);
-
-      for (int col = 0; col < nbytes; ++col) {
-        is_->read(cbi, bytes_per_component_);
-        cbi += planes_;
-      }
-
-      // skip cbi back two rows
-      cbi-=(row_len*2);
+      is_->read(cbi, row_len);
     }
   }
-#ifdef DEBUG
-  vcl_cerr << vcl_endl;
-#endif
   return true;
 }//GetSectionVERBATIM
 
 
 bool vil1_iris_generic_image::get_section_rle(void* ib, int x0, int y0, int xs, int ys) const
 {
-  int row_len = xs * bytes_per_pixel();
+  int row_len = xs * bytes_per_component_;
 
   unsigned char* dp = (unsigned char*)ib;
+  unsigned char* exrow = new unsigned char[width_];
 
-  for (int channo=0; channo<planes_; ++channo) {
-    unsigned char* cbi = dp;
-    cbi+=channo;
-
+  // for each channel
+  for (int channel=0; channel<planes_; ++channel)
+  {
+    unsigned char* cbi = dp + row_len*ys*channel;
     // skip cbi to point at last row of section
-    cbi+=(row_len*(ys-1));
+    cbi+=row_len*(ys-1);
 
     // for each row
-    for (int rowno=y0; rowno<(y0+ys); ++rowno) {
+    for (int rowno=y0; rowno<y0+ys; ++rowno,cbi-=row_len)
+    {
       // find length and start position
-      int ysize = height_;
-      unsigned long rleoffset =  starttab_[rowno+channo*ysize];
-      unsigned long rlelength = lengthtab_[rowno+channo*ysize];
+      unsigned long rleoffset =  starttab_[rowno+channel*height_];
+      unsigned long rlelength = lengthtab_[rowno+channel*height_];
 
       // read rle row into array
       unsigned char* rlerow = new unsigned char[rlelength];
@@ -353,67 +327,50 @@ bool vil1_iris_generic_image::get_section_rle(void* ib, int x0, int y0, int xs, 
       is_->read((void*)rlerow, rlelength);
 
       // decode rle row
-      unsigned char* exrow = new unsigned char[width_];
       expandrow(exrow,rlerow,0);
+      delete[] rlerow;
 
       // write expanded row in store
-      for (int colno = x0; colno < (x0+xs); ++colno) {
-        //is_->ReadBytes(cbi, header._BPC);
-        *cbi = exrow[colno];
-         cbi+= planes_;
-      }
-      // skip cbi back two rows
-      cbi-=(row_len*2);
+      vcl_memcpy(cbi,exrow+x0,xs);
     }
   }
+  delete[] exrow;
   return true;
 }
 
 
-bool vil1_iris_generic_image::put_section(void const* buf, int x0, int y0, int width, int height)
+bool vil1_iris_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
 {
-  int ynul = height_ - y0 - height;
+  int ynul = height_ - y0 - ys;
 
-  const unsigned char* cbi;
-  int row_len = width * bytes_per_pixel();
+  int row_len = xs * bytes_per_component_;
 
   // for each channel
-  for (int channel=0; channel<planes_; ++channel) {
-
-    cbi = (const unsigned char*) buf;
-    cbi += channel;
-
+  for (int channel=0; channel<planes_; ++channel)
+  {
+    const unsigned char* cbi = (const unsigned char*)buf + row_len*ys*channel;
     // skip cbi to point at last row of section
-    cbi+=(row_len*(height-1));
+    cbi+=row_len*(ys-1);
 
     // skip to start of section
     is_->seek(512 + channel * width_ * height_
               + ynul*width_*bytes_per_pixel() + x0*bytes_per_pixel());
 
-    int nbytes = width;
-    int skipbytes_end = (width_ - width);
+    int skipbytes_end = width_ - xs;
 
     // number of rows to write
-    for (int row = 0; row < height; ++row) {
+    for (int row = 0; row < ys; ++row,cbi-=row_len)
+    {
       // step to end of row, and then to beginning of block on next row
       if (row > 0) is_->seek(is_->tell() + skipbytes_end);
-
-      // number of pixels to write
-      for (int col = 0; col < nbytes; ++col) {
-        is_->write(cbi, bytes_per_component_);
-        cbi+=planes_;
-      }
-
-      // skip cbi back two rows
-      cbi-=(row_len*2);
+      is_->write(cbi, row_len);
     }
   }
   return true;
 }
 
-
-bool vil1_iris_generic_image::read_offset_tables() {
-
+bool vil1_iris_generic_image::read_offset_tables()
+{
   int tablen;
   tablen = height_ * planes_;
 
@@ -435,7 +392,8 @@ bool vil1_iris_generic_image::read_offset_tables() {
 }
 
 
-short get_short(vil1_stream* file, int location){
+short get_short(vil1_stream* file, int location)
+{
   if (location >= 0) file->seek(location);
 
   unsigned char buff[2];
@@ -444,7 +402,8 @@ short get_short(vil1_stream* file, int location){
 }
 
 
-char get_char(vil1_stream* file, int location){
+char get_char(vil1_stream* file, int location)
+{
   if (location >= 0) file->seek(location);
 
   unsigned char buff[1];
@@ -452,7 +411,8 @@ char get_char(vil1_stream* file, int location){
   return buff[0];
 }
 
-unsigned short get_ushort(vil1_stream* file, int location){
+unsigned short get_ushort(vil1_stream* file, int location)
+{
   if (location >= 0) file->seek(location);
 
   unsigned char buff[2];
@@ -460,7 +420,8 @@ unsigned short get_ushort(vil1_stream* file, int location){
   return (buff[0]<<8)+(buff[1]<<0);
 }
 
-long get_long(vil1_stream* file, int location){
+long get_long(vil1_stream* file, int location)
+{
   if (location >= 0) file->seek(location);
 
   unsigned char buff[4];
@@ -506,23 +467,19 @@ void expandrow(unsigned char *optr, unsigned char *iptr, int z)
   unsigned char pixel, count;
 
   optr += z;
-  while (1) {
+  while (true)
+  {
     pixel = *iptr++;
     if ( !(count = (pixel & 0x7f)) )
       return;
-    if (pixel & 0x80) {
-      while (count--) {
-        *optr = *iptr++;
-        //optr+=4;
-        optr++;
-      }
-    } else {
+    if (pixel & 0x80)
+    {
+      while (count--) { *optr = *iptr++; ++optr; }
+    }
+    else
+    {
       pixel = *iptr++;
-      while (count--) {
-        *optr = pixel;
-        //optr+=4;
-        optr++;
-      }
+      while (count--) { *optr = pixel; ++optr; }
     }
   }
 }

@@ -13,7 +13,8 @@
 //  Modifications
 //  17-Feb-2000 JS - Initial version, copied from IrisRGBImage.C
 //     Jul-2000 Peter Vanroose - bug fixed in write_header() by adding extra argument to constructor to pass imagename_ member
-//  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
+//   3-Oct-2001 Peter Vanroose - Implemented get_property("top_row_first")
+//   5-Jun-2003 Peter Vanroose - bug fix in get_section & put_section: storage is planar, not RGB
 //\endverbatim
 
 #include <vil1/vil1_file_format.h>
@@ -26,11 +27,11 @@ class vil1_iris_file_format : public vil1_file_format
   virtual char const* tag() const;
   virtual vil1_image_impl* make_input_image(vil1_stream* vs);
   virtual vil1_image_impl* make_output_image(vil1_stream* vs, int planes,
-                                            int width,
-                                            int height,
-                                            int components,
-                                            int bits_per_component,
-                                            vil1_component_format format);
+                                             int width,
+                                             int height,
+                                             int components,
+                                             int bits_per_component,
+                                             vil1_component_format format);
 };
 
 //: Generic image implementation for RGB files
@@ -46,35 +47,30 @@ class vil1_iris_generic_image : public vil1_image_impl
  public:
 
   vil1_iris_generic_image(vil1_stream* is, char* imagename = "");
-  vil1_iris_generic_image(vil1_stream* is, int planes,
-                                               int width,
-                                               int height,
-                                               int components,
-                                               int bits_per_component,
-                                               vil1_component_format format);
+  vil1_iris_generic_image(vil1_stream* is,
+                          int planes,
+                          int width,
+                          int height,
+                          int components,
+                          int bits_per_component,
+                          vil1_component_format format);
   ~vil1_iris_generic_image();
 
-  //: Dimensions.  Planes x W x H x Components
+  //: Dimensions.  Planes x W x H x Components.  components() is always 1.
   virtual int planes() const { return planes_; }
   virtual int width() const { return width_; }
   virtual int height() const { return height_; }
   virtual int components() const { return components_; }
 
   virtual int bits_per_component() const { return bytes_per_component_ * 8; }
-  virtual int bytes_per_pixel() const { return bytes_per_component_ * planes_; };
+  int bytes_per_pixel() const { return bytes_per_component_ * planes_; };
 
   virtual enum vil1_component_format component_format() const { return VIL1_COMPONENT_FORMAT_UNSIGNED_INT; }
 
   virtual vil1_image get_plane(int) const;
 
-  //: Copy plane PLANE of this to BUF,
   virtual bool get_section(void* buf, int x0, int y0, int, int) const;
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
-
-  //: Return the image interpreted as rgb bytes.
-  //virtual bool get_section_rgb_byte(void* buf, int plane, int x0, int y0, int width, int height) const;
-  //virtual bool get_section_float(void* buf, int plane, int x0, int y0, int width, int height) const;
-  //virtual bool get_section_byte(void* buf, int plane, int x0, int y0, int width, int height) const;
 
   char const* file_format() const;
   bool get_property(char const *tag, void *prop = 0) const;
