@@ -16,7 +16,9 @@
 #include <vcl_iomanip.h> // for setw (replaces cout.form())
 
 #include <vnl/algo/vnl_netlib.h> // lbfgs_()
+extern "C" {
 #include <lbfgs.h> // from netlib, for lb3_ data struct
+}
 
 //: Default constructor.
 // memory is set to 5, line_search_accuracy to 0.9.
