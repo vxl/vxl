@@ -175,6 +175,8 @@ bool vul_reg_exp::deep_equal (vul_reg_exp const& rxp) const {
            this->endp[0] == rxp.endp[0];        // Return true
 }
 
+
+
 // The remaining code in this file is derived from the  regular expression code
 // whose  copyright statement appears  below.  It has been  changed to work
 // with the class concepts of C++ and COOL.
@@ -312,6 +314,30 @@ const unsigned char MAGIC = 0234;
 #define SIMPLE          02      // Simple enough to be STAR/PLUS operand.
 #define SPSTART         04      // Starts with * or +.
 #define WORST           0       // Worst case.
+
+
+
+//: Return an expression that will match precisely c
+// The returned string is owned by the function, and
+// will be overwritten in subsequent calls.
+const char * vul_reg_exp::protect(char c)
+{
+  //: This should be in thread local storage.
+  static char pattern[3];
+
+  if (strchr(META, c) != 0)
+  {
+    pattern[0] = '\\';
+    pattern[1] = c;
+    pattern[2] = 0;
+  }
+  else
+  {
+    pattern[0] = c;
+    pattern[1] = 0;
+  }
+  return pattern;
+}
 
 
 /////////////////////////////////////////////////////////////////////////

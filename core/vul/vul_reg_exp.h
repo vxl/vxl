@@ -12,6 +12,7 @@
 // Peter Vanroose   27/05/2001: Corrected the documentation
 // Peter Vanroose   07/02/2002: brief doxygen comment placed on single line
 // Peter Vanroose   13/06/2002: bug fix: crash in match() when startp==endp==0
+// Ian Scott        08/06/2003: Add protect(char) function
 // \endverbatim
 //
 // Original Copyright notice:
@@ -133,6 +134,11 @@ class vul_reg_exp
     return this->endp[n] == this->startp[n] ? vcl_string("") :
            vcl_string(this->startp[n], this->endp[n] - this->startp[n]);
   }
+  //: Return an expression that will match precisely c
+  // The returned string is owned by the function, and
+  // will be overwritten in subsequent calls.
+  static const char * protect(char c);
+
  private:
   //: private function to clear startp[] and endp[]
   void clear_bufs() { for (int n=0; n<vul_reg_exp_nsubexp; ++n) startp[n]=endp[n]=0; }
