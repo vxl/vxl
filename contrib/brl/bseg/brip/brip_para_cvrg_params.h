@@ -9,32 +9,31 @@
 // \verbatim
 //  Modifications:
 //   Ported to vxl July 01, 2004
+//   9 Sept 2004 - Peter Vanroose - removed InitParams
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <gevd/gevd_param_mixin.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 
 class brip_para_cvrg_params : public gevd_param_mixin
 {
  public:
+  brip_para_cvrg_params(float sigma = 1, float thresh = 20,
+                        float gauss_tail = 0.015,
+                        int proj_width =7, int proj_height=2,
+                        int sup_radius = 1, bool verbose = false)
+  : sigma_(sigma), thresh_(thresh), gauss_tail_(gauss_tail),
+    proj_width_(proj_width), proj_height_(proj_height),
+    sup_radius_(sup_radius), verbose_(verbose) {}
 
-  brip_para_cvrg_params(float sigma  = 1, float thresh  = 20,
-                     float gauss_tail  = 0.015,
-                     int proj_width =7, int proj_height=2,
-                     int sup_radius = 1,
-                     bool verbose = false);
+  brip_para_cvrg_params(brip_para_cvrg_params const& pcp)
+  : gevd_param_mixin(), sigma_(pcp.sigma_), thresh_(pcp.thresh_),
+    gauss_tail_(pcp.gauss_tail_), proj_width_(pcp.proj_width_),
+    proj_height_(pcp.proj_height_), sup_radius_(pcp.sup_radius_),
+    verbose_(pcp.verbose_) {}
 
-  brip_para_cvrg_params(const brip_para_cvrg_params& old_params);
   bool SanityCheck();
 
- protected:
-  void InitParams(float sigma, float thresh,
-                  float gauss_tail,
-                  int proj_width, int proj_height,
-                  int sup_radius, bool verbose);
-  friend
-  vcl_ostream& operator<<(vcl_ostream& os, const brip_para_cvrg_params& pcp);
- public:
   //
   float sigma_;       //!< Standard deviation of the smoothing kernel
   float thresh_;      //!< Low hysteresis threshold
@@ -44,5 +43,7 @@ class brip_para_cvrg_params : public gevd_param_mixin
   int sup_radius_;    //!< The non_maximum suppression kernel width.
   bool verbose_;      //!< output debug messages
 };
+
+vcl_ostream& operator<<(vcl_ostream& os, brip_para_cvrg_params const& pcp);
 
 #endif

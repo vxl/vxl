@@ -4,40 +4,6 @@
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
 
-//------------------------------------------------------------------------
-// Constructors
-//
-
-brip_para_cvrg_params::brip_para_cvrg_params(const brip_para_cvrg_params& pdp)
-{
-  InitParams(pdp.sigma_, pdp.thresh_, pdp.gauss_tail_,
-             pdp.proj_width_, pdp.proj_height_,
-             pdp.sup_radius_, pdp.verbose_);
-}
-
-brip_para_cvrg_params::brip_para_cvrg_params(float sigma, float thresh,
-                                             float gauss_tail, int proj_width,
-                                             int proj_height, int sup_radius,
-                                             bool verbose)
-{
-  InitParams(sigma, thresh, gauss_tail, proj_width, proj_height,
-             sup_radius, verbose);
-}
-
-void brip_para_cvrg_params::InitParams(float sigma, float thresh,
-                                    float gauss_tail,
-                                    int proj_width, int proj_height,
-                                    int sup_radius, bool verbose)
-{
-  sigma_ = sigma;
-  thresh_ = thresh;
-  gauss_tail_ = gauss_tail;
-  proj_width_ = proj_width;
-  proj_height_ = proj_height;
-  sup_radius_ = sup_radius;
-  verbose_ = verbose;
-}
-
 //-----------------------------------------------------------------------------
 //
 //: Checks that parameters are within acceptable bounds
