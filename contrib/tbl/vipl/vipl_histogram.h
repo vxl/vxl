@@ -9,7 +9,7 @@
 // \date   15 November 1997.
 //
 // \verbatim
-// Modifications:
+//  Modifications:
 //   Terry Boult - December 1997 - remark added to documentation
 //   Peter Vanroose, Aug.2000 - adapted to vxl
 // \endverbatim
@@ -75,22 +75,22 @@
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_histogram : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 {
-// -+-+- data members: -+-+-
-public: DataIn scalein_;
-public: DataIn scalein() const { return scalein_; }
-public: DataIn shiftin_;
-public: DataIn shiftin() const { return shiftin_; }
-public: DataOut scaleout_;
-public: DataOut scaleout() const { return scaleout_; }
+  // -+-+- data members: -+-+-
+ public: DataIn scalein_;
+ public: DataIn scalein() const { return scalein_; }
+ public: DataIn shiftin_;
+ public: DataIn shiftin() const { return shiftin_; }
+ public: DataOut scaleout_;
+ public: DataOut scaleout() const { return scaleout_; }
 
   // the column of 2D "image" do we store the histogram
-public: int indexout_;
-public: int indexout() const { return indexout_; }
-public: bool checkrange_;
-public: bool checkrange() const { return checkrange_; }
+ public: int indexout_;
+ public: int indexout() const { return indexout_; }
+ public: bool checkrange_;
+ public: bool checkrange() const { return checkrange_; }
 
-// -+-+- constructors/destructors: -+-+-
-public:
+  // -+-+- constructors/destructors: -+-+-
+ public:
   inline vipl_histogram(DataIn si=1, DataIn shi=0, DataOut so=1)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>()
            , scalein_(si)
@@ -117,7 +117,7 @@ public:
 // -+-+- required method for filters: -+-+-
   bool section_applyop();
 
-  //: Use the preop stageto zero this histogram.
+  //: Use the preop stage to zero this histogram.
   bool section_preop();
 };
 
