@@ -1,7 +1,7 @@
 #ifndef vnl_sample_h_
 #define vnl_sample_h_
 #ifdef __GNUC__
-#pragma interface "vnl_sample"
+#pragma interface "vnl_sample.h"
 #endif
 
 // .NAME  vnl_sample - easy ways to sample from various probability distributions

@@ -1,7 +1,7 @@
 #ifndef vnl_matlab_read_h_
 #define vnl_matlab_read_h_
 #ifdef __GNUC__
-#pragma interface "vnl_matlab_read"
+#pragma interface "vnl_matlab_read.h"
 #endif
 /*
   fsm@robots.ox.ac.uk

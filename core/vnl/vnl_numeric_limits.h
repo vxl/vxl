@@ -2,7 +2,7 @@
 #ifndef vnl_numeric_limits_h_
 #define vnl_numeric_limits_h_
 #ifdef __GNUC__
-#pragma interface "vnl_numeric_limits"
+#pragma interface "vnl_numeric_limits.h"
 #endif
 //
 // Class : numeric_limits

@@ -2,7 +2,7 @@
 #ifndef vnl_unary_function_h_
 #define vnl_unary_function_h_
 #ifdef __GNUC__
-#pragma interface
+#pragma interface "vnl_unary_function.h"
 #endif
 //
 // .NAME        vnl_unary_function - Abstract 1D map.

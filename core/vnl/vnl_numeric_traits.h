@@ -1,7 +1,7 @@
 #ifndef vnl_numeric_traits_h_
 #define vnl_numeric_traits_h_
 #ifdef __GNUC__
-#pragma interface
+#pragma interface "vnl_numeric_traits.h"
 #endif
 //
 // .NAME        vnl_numeric_traits - Templated zero/one/precision
