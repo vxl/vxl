@@ -59,6 +59,12 @@ endif
 
 DEFINES += -DBUILDING_VCL_DLL
 
+ifneq (,$(strip $(wildcard $(HOME)/fast.mk))) # fsm@robots.ox.ac.uk
+VERYFAST := -O3 -ffast-math -fstrict-aliasing -fstrength-reduce -funroll-loops -fgcse  -march=pentiumpro
+FLAGS_Templates/vcl_map+int.void~-.cxx += $(VERYFAST)
+FLAGS_Templates/vcl_map+vcl_pair+int.int-.void~-.cxx += $(VERYFAST)
+endif
+
 ifndef NOTEST
 SUBDIRS = tests
 endif

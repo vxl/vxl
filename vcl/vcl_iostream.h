@@ -42,7 +42,7 @@
 
 // ------------------------------------------------------------
 
-#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_720)
+#if defined(VCL_SGI_CC_720)
 # include <iostream.h>
 # define vcl_generic_iostream_STD /* */
 # include "generic/vcl_iostream.h"

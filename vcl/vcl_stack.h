@@ -6,9 +6,9 @@
 #if !VCL_USE_NATIVE_STL
 # include "emulation/vcl_stack.h"
 
-#elif defined(__GNUC__)
-# include <stack.h>
-# define vcl_stack stack
+//#elif defined(__GNUC__)
+//# include <stack.h>
+//# define vcl_stack stack
 
 #else
 # include "iso/vcl_stack.h"

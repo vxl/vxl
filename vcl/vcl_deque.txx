@@ -1,3 +1,6 @@
+#ifndef vcl_deque_txx_
+#define vcl_deque_txx_
+
 // -*- c++ -*-
 #include "vcl_deque.h"
 
@@ -17,4 +20,6 @@
 # include "win32/vcl_deque.txx"
 #else
 # include "iso/vcl_deque.txx"
+#endif
+
 #endif
