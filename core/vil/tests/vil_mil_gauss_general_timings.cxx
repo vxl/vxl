@@ -51,7 +51,8 @@ double mil_method(unsigned n_loops, unsigned nx, unsigned ny)
 
   vcl_time_t t0=vcl_clock();
 
-  mil_gaussian_pyramid_builder_2d_general<vxl_byte>::gauss_reduce(output.plane(0), output.ystep(),
+  mil_gaussian_pyramid_builder_2d_general<vxl_byte>::gauss_reduce(
+                      output.plane(0), output.ystep(),
                       input.plane(0),
                       input.nx(), input.ny(),
                       output.nx(), output.ny(),
@@ -65,22 +66,21 @@ double mil_method(unsigned n_loops, unsigned nx, unsigned ny)
 }
 
 
-
 int main(int argc, char** argv)
 {
-
   unsigned n_loops = 20, nx = 320, ny = 240;
-  vcl_cout<<"Times to do a gaussion subsample of a "<<nx<<" x "<<ny<<" image of 1 planes (in microsecs) [Range= 0.5(max-min)]"<<vcl_endl;
-  
+  vcl_cout<<"Times to do a gaussion subsample of a "<<nx<<" x "<<ny
+          <<" image of 1 planes (in microsecs) [Range= 0.5(max-min)]\n";
+
   mbl_stats_1d stats;
   for (int j=0;j<10;++j) stats.obs(vil2_method(n_loops, nx, ny));
   vcl_cout<<"Using operator():        Mean: "<<int(stats.mean()+0.5)
-          <<"us  +/-"<<int(0.5*(stats.max()-stats.min())+0.5)<<"us"<<vcl_endl;
+          <<"us  +/-"<<int(0.5*(stats.max()-stats.min())+0.5)<<"us\n";
 
   stats.clear();
   for (int j=0;j<10;++j) stats.obs(mil_method(n_loops, nx, ny));
   vcl_cout<<"Using explicit pointers: Mean: "<<int(stats.mean()+0.5)
-          <<"us  +/-"<<int(0.5*(stats.max()-stats.min())+0.5)<<"us"<<vcl_endl;
+          <<"us  +/-"<<int(0.5*(stats.max()-stats.min())+0.5)<<"us\n";
 
   return 0;
 }
