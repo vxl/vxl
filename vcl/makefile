@@ -15,6 +15,9 @@ MANPAGE_SOURCES += vcl_stlfwd.h
 MANPAGE_SOURCES += vcl_iosfwd.h
 MANPAGE_SOURCES += vcl_complex_fwd.h
 MANPAGE_SOURCES += vcl_where_root_dir.h.in
+MANPAGE_SOURCES += vcl_config_compiler.h.in
+MANPAGE_SOURCES += vcl_config_headers.h.in
+MANPAGE_SOURCES += vcl_config_manual.h.in
 
 SOURCES += vcl_cmath.cxx
 SOURCES += vcl_cstdlib.cxx
