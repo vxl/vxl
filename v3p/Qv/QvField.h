@@ -16,7 +16,7 @@ public:
 
   void          setDefault(QvBool def)  { flags.hasDefault = def; }
   void          setContainer(QvNode *cont);
-  QvBool        read(QvInput *in, const QvName &name);
+  QvBool        read(QvInput *in, const QvName &name) const;
 
   QvField()     { flags.hasDefault = TRUE; }
 

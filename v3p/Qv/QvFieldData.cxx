@@ -75,11 +75,11 @@ QvFieldData::getFieldName(int index) const
     return ((QvFieldEntry *) fields[index])->name;
 }
 
-QvField *
+QvField const*
 QvFieldData::getField(const QvNode *object, int index) const
 {
-    return (QvField *) ((const char *) object +
-                        ((QvFieldEntry const *) fields[index])->offset);
+    return (QvField const*) ((const char *) object +
+                             ((QvFieldEntry const *) fields[index])->offset);
 }
 
 #include <vcl_cctype.h>
@@ -154,9 +154,11 @@ QvFieldData::getEnumData(const char *typeNameArg, int &num,
 {
     QvName typeName = stripWhite(typeNameArg);
 
-    for (int i=0; i<enums.getLength(); i++) {
+    for (int i=0; i<enums.getLength(); i++)
+    {
         struct QvEnumEntry *e = (struct QvEnumEntry *) enums[i];
-        if (e->typeName == typeName) {
+        if (e->typeName == typeName)
+        {
             num         = e->num;
             vals        = e->vals;
             names       = e->names;

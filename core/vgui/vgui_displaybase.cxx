@@ -238,7 +238,7 @@ bool vgui_displaybase::handle(const vgui_event& e)
 bool vgui_displaybase::is_selected(unsigned id)
 {
   vcl_vector<unsigned>::iterator result = vcl_find(selections.begin(), selections.end(), id);
-  return (result != selections.end());
+  return result != selections.end();
 }
 
 vcl_vector<unsigned> const & vgui_displaybase::get_selected() const
@@ -295,7 +295,7 @@ bool vgui_displaybase::select(unsigned id)
       {
         vgui_message msg;
         //msg.text = "soview select";
-        msg.user = (void*) &vgui_soview::msg_select;
+        msg.user = (void const*) &vgui_soview::msg_select;
         so->notify(msg);
 
         if (cb_) cb_->select(id);
@@ -317,7 +317,7 @@ bool vgui_displaybase::deselect(unsigned id)
     vgui_soview* so = vgui_soview::id_to_object(id);
     vgui_message msg;
     //msg.text = "soview deselect";
-    msg.user = (void*) &vgui_soview::msg_deselect;
+    msg.user = (void const*) &vgui_soview::msg_deselect;
     so->notify(msg);
 
     if (cb_) cb_->deselect(id);
@@ -342,7 +342,7 @@ bool vgui_displaybase::deselect_all()
     // notify so's observers
     vgui_soview* so = vgui_soview::id_to_object(id);
     vgui_message msg;
-    msg.user = (void*)&vgui_soview::msg_deselect;
+    msg.user = (void const*)&vgui_soview::msg_deselect;
     so->notify(msg);
 
     if (cb_) cb_->deselect(id);
@@ -357,7 +357,7 @@ bool vgui_displaybase::deselect_all()
 
 bool vgui_displaybase::is_highlighted(unsigned id)
 {
-  return (id == highlighted);
+  return id == highlighted;
 }
 
 unsigned vgui_displaybase::get_highlighted()
@@ -398,4 +398,3 @@ vgui_soview* vgui_displaybase::contains_hit(vcl_vector<unsigned> names)
 
   return 0;
 }
-

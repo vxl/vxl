@@ -26,16 +26,16 @@ const char* const IgnoreErrorMsg =  // mpichler, 19950712
   "(further occurances will not be reported)";
 
 QvBool
-QvField::read(QvInput *in, const QvName &name)
+QvField::read(QvInput *in, const QvName &name) const
 {
   char c;
 
-    setDefault(FALSE);
+  ((QvField*)this)->setDefault(FALSE); // mutable const
 
   // mpichler, 19950712 (re-activated from QvLib 1.0beta)
   if (in->read(c) && c == IGNORE_CHAR)
   {
-    setDefault(TRUE);
+    ((QvField*)this)->setDefault(TRUE); // mutable const
     if (QvDB::warn_ignorechar)
     { QvReadError::post (in, IgnoreErrorMsg, name.getString ());
       QvDB::warn_ignorechar = 0;
@@ -45,7 +45,7 @@ QvField::read(QvInput *in, const QvName &name)
   {
     in->putBack(c);
 
-    if (! readValue(in)) {
+    if (! ((QvField*)this)->readValue(in)) {
         QvReadError::post(in, "Couldn't read value for field \"%s\"\n"
                               "(ignoring remaining data of current node)",
                           name.getString());
@@ -56,7 +56,8 @@ QvField::read(QvInput *in, const QvName &name)
     {
       if (c == IGNORE_CHAR)
       {
-        setDefault(TRUE);  // VRML has no ignore flag - use default value
+        // VRML has no ignore flag - use default value
+        ((QvField*)this)->setDefault(TRUE); // mutable const
         if (QvDB::warn_ignorechar)
         { QvReadError::post (in, IgnoreErrorMsg, name.getString ());
           QvDB::warn_ignorechar = 0;

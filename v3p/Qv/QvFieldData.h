@@ -21,7 +21,7 @@ class QvFieldData {
 
     const QvName & getFieldName(int index) const;
 
-    QvField *      getField(const QvNode *object, int index) const;
+    QvField const* getField(const QvNode *object, int index) const;
 
     void           addEnumValue(const char *typeName,
                                 const char *valName, int val);

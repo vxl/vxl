@@ -73,7 +73,7 @@ int SGIMovieFile::GetFrameSize(int frame_index)
 
 bool SGIMovieFile::HasFrame(int frame_index)
 {
-  return (0 <= frame_index) && (frame_index < GetLength());
+  return 0 <= frame_index && frame_index < GetLength();
 }
 
 SGIMovieFilePrivates::SGIMovieFilePrivates(char const* fn):
@@ -132,10 +132,10 @@ SGIMovieFilePrivates::SGIMovieFilePrivates(char const* fn):
     vul_printf(vcl_cerr, "SGIMovieFile: Number of audio/video tracks: %d/%d\n", NUM_A_TRACKS, NUM_I_TRACKS);
 
   // Load Audio and video info
-  for(int i = 0; i < NUM_A_TRACKS; ++i)
+  for (int i = 0; i < NUM_A_TRACKS; ++i)
     audio.push_back(SGIMV_Variables(f));
 
-  for(int i = 0; i < NUM_I_TRACKS; ++i)
+  for (int i = 0; i < NUM_I_TRACKS; ++i)
     video.push_back(SGIMV_Variables(f));
 
   // Assign vars
@@ -146,7 +146,7 @@ SGIMovieFilePrivates::SGIMovieFilePrivates(char const* fn):
 
   if (MovieFileInterface::verbose) {
     // Print
-    for(int i = 0; i < NUM_A_TRACKS; ++i)
+    for (int i = 0; i < NUM_A_TRACKS; ++i)
       audio[i].print(vcl_cerr);
 
   // Video SGIMV_Variables:
@@ -162,27 +162,27 @@ SGIMovieFilePrivates::SGIMovieFilePrivates(char const* fn):
   //             WIDTH = 768
   //       __DIR_COUNT = 750
   //
-    for(int i = 0; i < NUM_I_TRACKS; ++i)
+    for (int i = 0; i < NUM_I_TRACKS; ++i)
       video[i].print(vcl_cerr);
   }
 
   // Load indices
-  for(int i = 0; i < NUM_A_TRACKS; ++i)
+  for (int i = 0; i < NUM_A_TRACKS; ++i)
     audio_indices.push_back(SGIMV_FrameIndexArray(f, audio[i].get_int("__DIR_COUNT")));
 
-  for(int i = 0; i < NUM_I_TRACKS; ++i) {
+  for (int i = 0; i < NUM_I_TRACKS; ++i) {
     int nframes = video[i].get_int("__DIR_COUNT");
     video_indices.push_back(SGIMV_FrameIndexArray(f, nframes));
     SGIMV_FrameIndexArray& frame_indices = video_indices[i];
     field_indices.push_back(vcl_vector<int>(nframes * 2, 0));
     // Fill every second field index.
-    for(int ff = 0; ff < nframes; ++ff)
+    for (int ff = 0; ff < nframes; ++ff)
       field_indices[i][ff*2] = frame_indices[ff].offset;
   }
 
   SGIMV_FrameIndexArray& video_index = video_indices[0];
   if (MovieFileInterface::verbose) {
-    for(unsigned i = 0; i < video_index.size(); ++i) {
+    for (unsigned i = 0; i < video_index.size(); ++i) {
       if (i > 10 && i < 740)
         continue;
       vul_printf(vcl_cerr, "SGIMovieFile: Frame %3d", i);
@@ -263,7 +263,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
     if (MovieFileInterface::verbose) vul_printf(vcl_cerr, "[JPEG %d @ %d ", frame_index, s);
 
     JPEG_Decompressor jpeg(fileno(fp));
-    for(int i = 0; i < interlace_factor; ++i) {
+    for (int i = 0; i < interlace_factor; ++i) {
       if (MovieFileInterface::verbose) vul_printf(vcl_cerr, "fld %d ", i);
       if (i > 0) jpeg.StartNextJPEG();
 
@@ -280,7 +280,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
       }
 
       int outrowsize = w * bytes_per_pixel;
-      for(int y = 0; y < jpeg.height(); ++y) {
+      for (int y = 0; y < jpeg.height(); ++y) {
         char *jbuf = (char*)jpeg.GetNextScanLine();
         if (!jbuf) {
           vul_printf(vcl_cerr, "SGIMovieFile: JPEG_Decompressor failed to load scanline %d, field %d, frame %d\n",
@@ -324,7 +324,7 @@ bool SGIMovieFile::GetField(int field_index, void* buffer)
       p->fp->seekg(frame_start);
 
       jpeg = new JPEG_Decompressor(p->fp->rdbuf()->fd());
-      for(int y = 0; y < jpeg->height(); ++y)
+      for (int y = 0; y < jpeg->height(); ++y)
         jpeg->GetNextScanLine();
 
       // Now file position is at second field, remember it in case anyone wants this field again.
@@ -352,7 +352,7 @@ bool SGIMovieFile::GetField(int field_index, void* buffer)
 
     int bytes_per_pixel = GetBitsPixel() / 8;
     int outrowsize = w * bytes_per_pixel;
-    for(int y = 0; y < jpeg->height(); ++y) {
+    for (int y = 0; y < jpeg->height(); ++y) {
       char *jbuf = (char*)jpeg->GetNextScanLine();
       if (!jbuf) {
         vul_printf(vcl_cerr, "SGIMovieFile: JPEG_Decompressor failed to load scanline %d, field %d\n",
@@ -389,7 +389,7 @@ void SGIMV_Variables::read(vcl_istream& f) {
   if (n > 1000L) {
     vul_printf(vcl_cerr, "SGIMovieFile: warning: A Variable list is %d elements long\n", n);
   }
-  for(unsigned long i = 0; i < n; ++i) {
+  for (unsigned long i = 0; i < n; ++i) {
     VarData v;
 
     char var_buf[17];
@@ -420,7 +420,7 @@ double SGIMV_Variables::get_double(vcl_string const& s)
   const vcl_string& v = data[s];
   if (v.size() == 0)
     return -1.0;
-  vcl_istrstream vs((char*)v.data(), v.size());
+  vcl_istrstream vs((const char*)v.data(), v.size());
   double x;
   vs >> x;
   return x;
@@ -429,7 +429,7 @@ double SGIMV_Variables::get_double(vcl_string const& s)
 vcl_ostream& SGIMV_Variables::print(vcl_ostream& s) const
 {
   vul_printf(s, "SGIMV_Variables:\n", data.size());
-  for(VarData::const_iterator i = data.begin(); i != data.end(); ++i)
+  for (VarData::const_iterator i = data.begin(); i != data.end(); ++i)
     vul_printf(s, "   %16s = %s\n", (*i).first.c_str(), (*i).second.c_str());
   return s;
 }
@@ -446,7 +446,7 @@ SGIMV_FrameIndexArray::SGIMV_FrameIndexArray(vcl_istream& f, int n):
 //     word frame; // ????
 //   };
 
-  for(int i = 0; i < n; ++i) {
+  for (int i = 0; i < n; ++i) {
     (*this)[i].offset = get_u32(f);
     (*this)[i].size = get_u32(f);
     /* int pad1 = */ get_u32(f);
@@ -459,12 +459,12 @@ SGIMV_FrameIndexArray::SGIMV_FrameIndexArray(vcl_istream& f, int n):
 #if 0 // unused
 static void hexdump(vcl_ifstream& f, int nframes)
 {
-  for(int j = 0; j < nframes; ++j) {
+  for (int j = 0; j < nframes; ++j) {
     int pos = f.tellg();
     vxl_uint_8 buf[16];
     f.read((char*)buf,16);
     vul_printf(vcl_cerr, "%08x:", pos);
-    for(int i = 0; i < 16; ++i) {
+    for (int i = 0; i < 16; ++i) {
       if (i % 4 == 0) vul_printf(vcl_cerr, " ");
       vul_printf(vcl_cerr, "%02x", buf[i]);
     }
@@ -484,8 +484,8 @@ static unsigned long get_u32(vcl_istream& f)
 {
   vxl_uint_8 buf[4];
   f.read((char*)buf, 4);
-  return (((unsigned long)buf[0] << 24) |
-          ((unsigned long)buf[1] << 16) |
-          ((unsigned long)buf[2] << 8) |
-          buf[3]);
+  return ((unsigned long)buf[0] << 24) |
+         ((unsigned long)buf[1] << 16) |
+         ((unsigned long)buf[2] <<  8) |
+          (unsigned long)buf[3];
 }

@@ -27,10 +27,12 @@ static int attribs[] = { GLX_RGBA,
 
 unsigned char data[512*512*4];
 
-// static Bool WaitForNotify(Display *d, XEvent *e, char *arg)
-// {
-//   return (e->type == MapNotify) && (e->xmap.window == (Window)arg);
-// }
+#if 0
+static Bool WaitForNotify(Display *d, XEvent *e, char *arg)
+{
+  return e->type == MapNotify && e->xmap.window == (Window)arg;
+}
+#endif
 
 double fps_gl (GLenum pack_type, GLenum pix_type)
 {
@@ -208,8 +210,8 @@ int main (int argc, char** argv)
   glXMakeCurrent(display, window, context);
 
   bool little_endian = (ImageByteOrder(display) == LSBFirst);
-  vcl_cerr << "GL_VERSION : " <<  (char *) glGetString(GL_VERSION) << vcl_endl;
-  vcl_cerr << "GL_RENDERER : " << (char *) glGetString(GL_RENDERER) << vcl_endl;
+  vcl_cerr << "GL_VERSION : " <<  (const char*) glGetString(GL_VERSION) << '\n';
+  vcl_cerr << "GL_RENDERER : " << (const char*) glGetString(GL_RENDERER)<< '\n';
   vcl_cerr << vcl_endl;
   vcl_cerr << "X Display - \n";
   vcl_cerr << "      byte-order : " << (little_endian ? "little-endian" : "big-endian") << vcl_endl;
@@ -433,7 +435,6 @@ int main (int argc, char** argv)
     fps = fps_hermes(1.0, 0.51, src_format, backbuffer);
     vul_printf(vcl_cerr,"%1.1e  ",0.51*0.51*512*512*fps);
     vcl_cerr << vcl_endl;
-
   }
   Hermes_Done();
   }

@@ -26,7 +26,7 @@ void print_word(GLuint w) {
 void print_binary(char const *fmt, void const *addr, unsigned bytes) {
   if (fmt)
     vcl_cerr << fmt << " : ";
-  GLubyte const *ptr = (GLubyte*)addr;
+  GLubyte const *ptr = (GLubyte const*)addr;
 
   for (int i=bytes; i<4; ++i)
     vcl_cerr << "--------" << ' ';
