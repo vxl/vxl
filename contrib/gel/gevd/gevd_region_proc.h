@@ -95,7 +95,7 @@ public:
 //  void set_roi_proc(lung_roi_proc_ref& roi_proc){_roi_proc = roi_proc;}
 
   // vector<gevd_poly_intensity_face_sptr>& get_regions(){return _regions;}
-  vcl_vector<vdgl_digital_region_sptr>& get_regions(){return _regions;}
+  vcl_vector<vdgl_digital_region *>& get_regions(){return _regions;}
 
   //Utility Methods
   void extract_regions();
@@ -123,6 +123,6 @@ protected:
   gevd_bufferxy* _buf;
   //lung_roi_proc_ref _roi_proc; //Lung roi processor
   //vector<gevd_poly_intensity_face_ref> _regions; //resulting intensity faces
-  vcl_vector<vdgl_digital_region_sptr> _regions; //resulting digital regions
+  vcl_vector<vdgl_digital_region *> _regions; //resulting digital regions
 };
 #endif

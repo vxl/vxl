@@ -267,7 +267,7 @@ void region_proc::extract_regions()
       //end joe mod
       vdgl_intensity_face_sptr intf = (*fit);
       //vcl_vector<OneChain*>* chains = intf->OneChains();
-      vdgl_digital_region_sptr dr = intf->cast_to_digital_region();
+      vdgl_digital_region * dr = intf->cast_to_digital_region();
       //vdgl_poly_intensity_face_ref rf = new vdgl_poly_intensity_face(chains, *dr);
       _regions.push_back(dr);
       //delete chains;

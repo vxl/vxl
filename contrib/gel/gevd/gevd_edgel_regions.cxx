@@ -726,7 +726,7 @@ bool gevd_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
   double ymin;
   double xmax;
   double ymax;
-  vsol_box_3d_sptr b;
+  vsol_box_2d_sptr b;
   vcl_vector<vtol_edge_2d_sptr>::iterator i;
 
   for (i=sg.begin();i!=sg.end();++i)

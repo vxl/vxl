@@ -50,4 +50,5 @@ public:
   gevd_detector_params dp_;  //!< parameters associated with step and fold detection
 };
 
+
 #endif // gevd_region_proc_params_h_
