@@ -66,7 +66,7 @@ class vdgl_edgel_chain : public vul_timestamp,
 
   //: Advance along a line and generate contiguous pixels on the line.
   bool line_gen(float xs, float ys, float xe, float ye,
-                bool& init, bool& done, unsigned int& x, unsigned int& y);
+                bool& init, bool& done, float& x, float& y);
 
   // Data Members--------------------------------------------------------------
 

@@ -24,11 +24,10 @@ vdgl_edgel_chain::vdgl_edgel_chain( const double x0, const double y0,
                                     const double x1, const double y1)
 {
   bool init = true, done = false;//should be internal statics but seems not to work
-  unsigned int x, y; // the intermediate pixels
+  float x, y; // the intermediate pixels
   while (this->line_gen(x0, y0, x1, y1, init, done, x, y))
-    es_.push_back(vdgl_edgel( x, y));
+      es_.push_back(vdgl_edgel( x, y));
 }
-
 vdgl_edgel_chain::~vdgl_edgel_chain()
 {
 }
@@ -143,7 +142,7 @@ bool vdgl_edgel_chain::split( double x, double y,
 //
 bool vdgl_edgel_chain::line_gen(float xs, float ys, float xe, float ye,
                                 bool& init, bool& done,
-                                unsigned int& x, unsigned int& y)
+                                float& x, float& y)
 {
   assert(xs >= 0.0f); assert(ys >= 0.0f);
   const float pix_edge = 1.0f; //We are working at scale = 1.0
@@ -179,13 +178,13 @@ bool vdgl_edgel_chain::line_gen(float xs, float ys, float xe, float ye,
       //Check for end of segment, make sure we emit the end of the segment
       if ((xe>=xs&&xi>xe)||(xe<=xs&&xi<xe)||(ye>=ys&&yi>ye)||(ye<=ys&&yi<ye))
         {
-          x = (unsigned int)xe; y = (unsigned int)ye;
+          x = xe; y = ye;
           done = true;
           return true;
         }
       //Check if we have advanced by more than .5 pixels
-      x = (unsigned int)(xi/pix_edge);
-      y = (unsigned int)(yi/pix_edge);
+      x = (xi/pix_edge);
+      y = (yi/pix_edge);
       float dx1 = (float)(int(x)-xp), dy1 = (float)(int(y)-yp);
       if (vcl_abs(dx1)>(.5*pix_edge)||vcl_abs(dy1)>(.5*pix_edge))
         return true;
