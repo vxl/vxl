@@ -12,6 +12,7 @@
 @ios::app
 @ios::trunc
 @ios::binary
+@ios::openmode
 @hex
 @dec
 @ws

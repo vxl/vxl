@@ -50,6 +50,10 @@
 #ifndef vcl_ios_binary
 #define vcl_ios_binary vcl_generic_iostream_STD :: ios::binary
 #endif
+// ios::openmode
+#ifndef vcl_ios_openmode
+#define vcl_ios_openmode vcl_generic_iostream_STD :: ios::openmode
+#endif
 // hex
 #ifndef vcl_hex
 #define vcl_hex vcl_generic_iostream_STD :: hex

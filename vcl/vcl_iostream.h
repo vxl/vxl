@@ -60,6 +60,8 @@ inline istream& operator>>(istream& s, signed char& c)
   c = i;
   return s;
 }
+# undef  vcl_ios_openmode
+# define vcl_ios_openmode   ios::open_mode
 // SGI CC has no ios::bin, but since UNIX makes no distinction
 // between binary and non-binary, 0 works just as well.
 # undef  vcl_ios_binary
