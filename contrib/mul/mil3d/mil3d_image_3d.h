@@ -41,12 +41,12 @@ public:
     //: Set world-to-image transformation
 //    virtual void setWorld2im(const mil3d_transform_3d& w2i) =0;
 
-    //: Resize current planes to [0..nx-1][0..ny-1]
+    //: Resize current planes to [0..nx-1][0..ny-1][0..nz-1]
     //  Implemented using resize2()
     void resize(int nx, int ny, int nz)
     { resize2(nx,ny,nz); }
 
-    //: Resize to n_planes of [0..nx-1][0..ny-1]
+    //: Resize to n_planes of [0..nx-1][0..ny-1][0..nz-1]
     //  Implemented using resize2()
     void resize(int nx, int ny, int nz, int n_planes)
     { resize3(nx,ny,nz,n_planes); }
