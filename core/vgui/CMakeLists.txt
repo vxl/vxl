@@ -42,7 +42,7 @@ SET(vgui_sources
   vgui_window.cxx               vgui_window.h
   vgui_adaptor.cxx              vgui_adaptor.h
   vgui_tableau.cxx              vgui_tableau.h          vgui_tableau_sptr.h
-  vgui_slot.cxx                 vgui_slot.h
+  vgui_parent_child_link.cxx                 vgui_parent_child_link.h
   vgui_key.cxx                  vgui_key.h
   vgui_button.cxx               vgui_button.h
   vgui_modifier.cxx             vgui_modifier.h
@@ -53,7 +53,7 @@ SET(vgui_sources
   vgui_message.cxx              vgui_message.h
   vgui_observer.cxx             vgui_observer.h
   vgui_observable.cxx           vgui_observable.h
-  vgui_satellite.txx            vgui_satellite.h
+  vgui_satellite_tableau.txx vgui_satellite_tableau.h 
 
   # utility
   vgui_find.cxx                 vgui_find.h
@@ -76,50 +76,49 @@ SET(vgui_sources
   vgui_cache_wizard.cxx         vgui_cache_wizard.h
   vgui_image_renderer.cxx       vgui_image_renderer.h
   vgui_image_tableau.cxx        vgui_image_tableau.h    vgui_image_tableau_sptr.h
-  vgui_image_blender.cxx        vgui_image_blender.h
+  vgui_blender_tableau.cxx   vgui_blender_tableau.h vgui_blender_tableau_sptr.h
 
   # tableau mixins and miscellaneous
   vgui_wrapper_tableau.cxx      vgui_wrapper_tableau.h  vgui_wrapper_tableau_sptr.h
   vgui_deck_tableau.cxx         vgui_deck_tableau.h     vgui_deck_tableau_sptr.h
-  vgui_composite.cxx            vgui_composite.h        vgui_composite_sptr.h
-  vgui_polytab.cxx              vgui_polytab.h          vgui_polytab_sptr.h
+  vgui_composite_tableau.cxx            vgui_composite_tableau.h        vgui_composite_tableau_sptr.h
+  vgui_poly_tableau.cxx      vgui_poly_tableau.h  vgui_poly_tableau_sptr.h
   vgui_grid_tableau.cxx         vgui_grid_tableau.h     vgui_grid_tableau_sptr.h
   vgui_drag_mixin.cxx           vgui_drag_mixin.h
-  vgui_active_visible.cxx       vgui_active_visible.h   vgui_active_visible_sptr.h
-  vgui_drag_tableau.cxx         vgui_drag_tableau.h
+  vgui_active_tableau.cxx       vgui_active_tableau.h   vgui_active_tableau_sptr.h
+  vgui_drag_tableau.cxx         vgui_drag_tableau.h  vgui_drag_tableau_sptr.h
   vgui_clear_tableau.cxx        vgui_clear_tableau.h    vgui_clear_tableau_sptr.h
   vgui_debug_tableau.cxx        vgui_debug_tableau.h    vgui_debug_tableau_sptr.h
   vgui_quit_tableau.cxx         vgui_quit_tableau.h     vgui_quit_tableau_sptr.h
-  vgui_tview_launcher.cxx       vgui_tview_launcher.h   vgui_tview_launcher_sptr.h
+  vgui_tview_launcher_tableau.cxx vgui_tview_launcher_tableau.h vgui_tview_launcher_tableau_sptr.h
   vgui_shell_tableau.cxx        vgui_shell_tableau.h    vgui_shell_tableau_sptr.h
   vgui_text_put.cxx             vgui_text_put.h
   vgui_text_tableau.cxx         vgui_text_tableau.h     vgui_text_tableau_sptr.h
-  vgui_blackbox.cxx             vgui_blackbox.h         vgui_blackbox_sptr.h
-  vgui_enhance.cxx              vgui_enhance.h          vgui_enhance_sptr.h
-  vgui_tview.cxx                vgui_tview.h            vgui_tview_sptr.h
-  vgui_function_tableau.cxx     vgui_function_tableau.h
+  vgui_blackbox_tableau.cxx vgui_blackbox_tableau.h vgui_blackbox_tableau_sptr.h
+  vgui_enhance_tableau.cxx  vgui_enhance_tableau.h vgui_enhance_tableau_sptr.h
+  vgui_tview_tableau.cxx        vgui_tview_tableau.h   vgui_tview_tableau_sptr.h
+  vgui_function_tableau.cxx vgui_function_tableau.h vgui_function_tableau_sptr.h
   vgui_roi_tableau.cxx          vgui_roi_tableau.h      vgui_roi_tableau_sptr.h
-  vgui_rubberbander.cxx         vgui_rubberbander.h     vgui_rubberbander_sptr.h
-  vgui_load.cxx                 vgui_load.h             vgui_load_sptr.h
+  vgui_rubberband_tableau.cxx vgui_rubberband_tableau.h vgui_rubberband_tableau_sptr.h
+  vgui_loader_tableau.cxx    vgui_loader_tableau.h   vgui_loader_tableau_sptr.h
   vgui_color_text.cxx           vgui_color_text.h
   vgui_event_server.cxx         vgui_event_server.h
   vgui_error_dialog.cxx         vgui_error_dialog.h
 
-  # pcp
   vgui_soview.cxx               vgui_soview.h
   vgui_soview2D.cxx             vgui_soview2D.h
   vgui_soview3D.cxx             vgui_soview3D.h
   vgui_style.cxx                vgui_style.h
   vgui_style_factory.cxx        vgui_style_factory.h
-  vgui_displaybase.cxx          vgui_displaybase.h      vgui_displaybase_sptr.h
-  vgui_displaylist2D.cxx        vgui_displaylist2D.h    vgui_displaylist2D_sptr.h
-  vgui_displaylist3D.cxx        vgui_displaylist3D.h
-  vgui_easy2D.cxx               vgui_easy2D.h           vgui_easy2D_sptr.h
-  vgui_easy3D.cxx               vgui_easy3D.h           vgui_easy3D_sptr.h
-  vgui_listmanager2D.cxx        vgui_listmanager2D.h    vgui_listmanager2D_sptr.h
-  vgui_viewer2D.cxx             vgui_viewer2D.h         vgui_viewer2D_sptr.h
+  vgui_displaybase_tableau.cxx  vgui_displaybase_tableau.h vgui_displaybase_tableau_sptr.h
+  vgui_displaylist2D_tableau.cxx  vgui_displaylist2D_tableau.h vgui_displaylist2D_tableau_sptr.h
+  vgui_displaylist3D_tableau.cxx  vgui_displaylist3D_tableau.h vgui_displaylist3D_tableau_sptr.h
+  vgui_easy2D_tableau.cxx      vgui_easy2D_tableau.h  vgui_easy2D_tableau_sptr.h
+  vgui_easy3D_tableau.cxx      vgui_easy3D_tableau.h  vgui_easy3D_tableau_sptr.h
+  vgui_listmanager2D_tableau.cxx   vgui_listmanager2D_tableau.h  vgui_listmanager2D_tableau_sptr.h
+  vgui_viewer2D_tableau.cxx vgui_viewer2D_tableau.h vgui_viewer2D_tableau_sptr.h
   internals/trackball.c         internals/trackball.h
-  vgui_viewer3D.cxx             vgui_viewer3D.h         vgui_viewer3D_sptr.h
+  vgui_viewer3D_tableau.cxx vgui_viewer3D_tableau.h vgui_viewer3D_tableau_sptr.h
 
   # dialog classes
   vgui_dialog.cxx                    vgui_dialog.h
@@ -133,23 +132,17 @@ SET(vgui_sources
   vgui_statusbuf.cxx            vgui_statusbuf.h
   vgui_statusbar.cxx            vgui_statusbar.h
 
-  # experiment with new event model
-  vgui_slab.cxx                 vgui_slab.h
-  vgui_event_loop.cxx           vgui_event_loop.h
-
   # extra header files
-  vgui_deck.h
   vgui_gl.h
   vgui_glu.h
   vgui_glx.h
-  vgui_linker_hack.h
 
   # internals
   internals/vgui_invert_homg4x4.cxx  internals/vgui_invert_homg4x4.h
   internals/vgui_back_project.cxx    internals/vgui_back_project.h
   internals/vgui_un_project.cxx      internals/vgui_un_project.h
   internals/vgui_adaptor_tableau.cxx internals/vgui_adaptor_tableau.h
-  internals/vgui_slot_data.cxx       internals/vgui_slot_data.h
+  internals/vgui_parent_child_link_data.cxx       internals/vgui_parent_child_link_data.h
   internals/vgui_adaptor_mixin.cxx   internals/vgui_adaptor_mixin.h
   internals/vgui_overlay_helper.cxx  internals/vgui_overlay_helper.h
   internals/vgui_multiply_4x4.cxx    internals/vgui_multiply_4x4.h
@@ -315,7 +308,6 @@ IF (MFC_FOUND)
       impl/mfc/vgui_mfc_mainfrm.cxx     impl/mfc/vgui_mfc_mainfrm.h
       impl/mfc/vgui_mfc_statusbar.cxx   impl/mfc/vgui_mfc_statusbar.h
       impl/mfc/vgui_mfc_tag.cxx
-      impl/mfc/vgui_mfc_util.cxx        impl/mfc/vgui_mfc_util.h
       impl/mfc/vgui_mfc_utils.cxx       impl/mfc/vgui_mfc_utils.h
       impl/mfc/vgui_mfc_view.cxx        impl/mfc/vgui_mfc_view.h
       impl/mfc/vgui_mfc_window.cxx      impl/mfc/vgui_mfc_window.h
@@ -326,62 +318,6 @@ IF (MFC_FOUND)
   ENDIF(VGUI_USE_MFC)
 
 ENDIF (MFC_FOUND)
-
-
-##################################################
-# X
-##################################################
-
-IF (X11_FOUND)
-
-  OPTION(VGUI_USE_X "Should X support be compiled into vgui?" YES)
-
-  IF(VGUI_USE_X)
-
-    ADD_DEFINITIONS( "-DVGUI_USE_X" )
-
-    INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
-
-    SET(vgui_X_sources
-      impl/X/vgui_X_utils.cxx impl/X/vgui_X_utils.h
-    )
-
-    SET( vgui_sources ${vgui_sources} ${vgui_X_sources} )
-
-  ENDIF(VGUI_USE_X)
-
-ENDIF (X11_FOUND)
-
-
-##################################################
-# glX
-##################################################
-
-IF (HAS_GLX)
-
-  OPTION(VGUI_USE_GLX "Should glX support be compiled into vgui?" YES)
-
-  IF(VGUI_USE_GLX)
-
-    ADD_DEFINITIONS( "-DVGUI_USE_GLX" )
-
-    SET(vgui_IMPL_GLX "vgui_glX" CACHE INTERNAL "Set if vgui has GLX")
-
-    SET(vgui_glX_sources
-      impl/glX/vgui_glX_window.cxx  impl/glX/vgui_glX_window.h
-      impl/glX/vgui_glX_tag.cxx
-      impl/glX/vgui_glX_adaptor.cxx impl/glX/vgui_glX_adaptor.h
-      impl/glX/vgui_glX.cxx         impl/glX/vgui_glX.h
-    )
-
-    SET( vgui_sources ${vgui_sources} ${vgui_glX_sources} )
-
-    AUX_SOURCE_DIRECTORY(impl/glX/Templates vgui_glX_sources)
-
-  ENDIF(VGUI_USE_GLX)
-
-ENDIF (HAS_GLX)
-
 
 ##################################################
 # GTK
@@ -414,99 +350,6 @@ IF (GTK_FOUND)
   ENDIF(VGUI_USE_GTK)
 
 ENDIF (GTK_FOUND)
-
-
-##################################################
-# SDL
-##################################################
-
-IF (HAS_SDL)
-
-  OPTION(VGUI_USE_SDL "Should SDL support be compiled into vgui?" YES)
-
-  IF(VGUI_USE_SDL)
-
-    ADD_DEFINITIONS( "-DVGUI_USE_SDL" )
-
-    SET(vgui_SDL_sources
-      impl/SDL/vgui_SDL.cxx         impl/SDL/vgui_SDL.h
-      impl/SDL/vgui_SDL_tag.cxx
-      impl/SDL/vgui_SDL_factory.cxx impl/SDL/vgui_SDL_factory.h
-      impl/SDL/vgui_SDL_window.cxx  impl/SDL/vgui_SDL_window.h
-      impl/SDL/vgui_SDL_adaptor.cxx impl/SDL/vgui_SDL_adaptor.h
-    )
-
-    SET( vgui_sources ${vgui_sources} ${vgui_SDL_sources} )
-
-    #ADD_EXECUTABLE(test-SDL test-SDL.cxx)
-    #TARGET_LINK_LIBRARIES(test-SDL vgui_SDL)
-
-  ENDIF(VGUI_USE_SDL)
-
-ENDIF (HAS_SDL)
-
-
-##################################################
-# Motif
-##################################################
-
-IF (HAS_MOTIF)
-
-  OPTION(VGUI_USE_XM "Should Motif support be compiled into vgui?" YES)
-
-  IF(VGUI_USE_XM)
-
-    ADD_DEFINITIONS( "-DVGUI_USE_XM" )
-
-    SET(vgui_Xm_sources
-      impl/Xm/vgui_Xm_window.cxx      impl/Xm/vgui_Xm_window.h
-      impl/Xm/vgui_Xm_utils.cxx       impl/Xm/vgui_Xm_utils.h
-      impl/Xm/vgui_Xm_tag.cxx
-      impl/Xm/vgui_Xm_statusbar.cxx   impl/Xm/vgui_Xm_statusbar.h
-      impl/Xm/vgui_Xm_dialog_impl.cxx impl/Xm/vgui_Xm_dialog_impl.h
-      impl/Xm/vgui_Xm_adaptor.cxx     impl/Xm/vgui_Xm_adaptor.h
-      impl/Xm/vgui_Xm.cxx             impl/Xm/vgui_Xm.h
-    )
-
-    SET( vgui_sources ${vgui_sources} ${vgui_Xm_sources} )
-
-    AUX_SOURCE_DIRECTORY(impl/Xm/Templates vgui_Xm_sources)
-
-  ENDIF(VGUI_USE_XM)
-
-ENDIF (HAS_MOTIF)
-
-
-##################################################
-# FLTK
-##################################################
-
-IF (FLTK_FOUND)
-
-  OPTION(VGUI_USE_FL "Should Fl support be compiled into vgui?" YES)
-
-  IF(VGUI_USE_FL)
-
-    ADD_DEFINITIONS( "-DVGUI_USE_FL" )
-
-    INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR} ${FLTK_INCLUDE_DIR})
-
-    SET(vgui_Fl_sources
-      impl/Fl/vgui_Fl.cxx             impl/Fl/vgui_Fl.h
-      impl/Fl/vgui_Fl_tag.cxx
-      impl/Fl/vgui_Fl_window.cxx      impl/Fl/vgui_Fl_window.h
-      impl/Fl/vgui_Fl_adaptor.cxx     impl/Fl/vgui_Fl_adaptor.h
-      impl/Fl/vgui_Fl_dialog_impl.cxx impl/Fl/vgui_Fl_dialog_impl.h
-      impl/Fl/vgui_Fl_utils.cxx       impl/Fl/vgui_Fl_utils.h
-      impl/Fl/vgui_Fl_statusbar.cxx   impl/Fl/vgui_Fl_statusbar.h
-    )
-
-    SET( vgui_sources ${vgui_sources} ${vgui_Fl_sources} )
-
-  ENDIF(VGUI_USE_FL)
-
-ENDIF (FLTK_FOUND)
-
 
 ######################################################################
 # END TOOLKIT IMPLEMENTATIONS
