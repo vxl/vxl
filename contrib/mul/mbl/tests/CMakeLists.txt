@@ -66,10 +66,6 @@ ADD_TEST( mbl_test_read_props mbl_test_all test_read_props )
 ADD_TEST( mbl_test_correspond_points mbl_test_all test_correspond_points )
 ADD_TEST( mbl_test_rbf_network mbl_test_all test_rbf_network )
 
-# Now split into seperate files, don't know which ones (if any) need special treatment - IMS
-#IF(CMAKE_COMPILER_IS_GNUCXX)
-#  SET_SOURCE_FILES_PROPERTIES(test_mbl.cxx PROPERTIES COMPILE_FLAGS -O0)
-#ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_EXECUTABLE( mbl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( mbl_test_include mbl )
