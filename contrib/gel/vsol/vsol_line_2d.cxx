@@ -7,6 +7,7 @@
 // External declarations for implementation
 //*****************************************************************************
 #include <vcl_cassert.h>
+#include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 #include <vsol/vsol_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -184,6 +185,17 @@ void vsol_line_2d::compute_bounding_box(void) const
 double vsol_line_2d::length(void) const
 {
   return p0_->distance(p1_);
+}
+
+//---------------------------------------------------------------------------
+//: Return the tangent angle in degrees  of `this'
+//---------------------------------------------------------------------------
+double vsol_line_2d::tangent_angle(void) const
+{
+  double deg_per_rad = 180/3.14159265358979323846;
+  double dy = p1_->y()-p0_->y();
+  double dx = p1_->x()-p0_->x();
+  return deg_per_rad*vcl_atan2(dy,dx);
 }
 
 //***************************************************************************
