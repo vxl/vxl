@@ -1,4 +1,5 @@
 #include "vpgl_tests.h"
+#include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_vector.h>
 #include <vcsl/vcsl_spatial.h>
 #include <vcsl/vcsl_unit.h>
@@ -14,7 +15,7 @@
 #include <vcl_cstdlib.h>
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
-VBL_SMART_PTR_INSTANTIATE(matrix_param);
+//VBL_SMART_PTR_INSTANTIATE(matrix_param);
 VBL_SMART_PTR_INSTANTIATE(vpgl_matrix_camera);
 VBL_SMART_PTR_INSTANTIATE(vcsl_axis);
 VBL_SMART_PTR_INSTANTIATE(vcsl_unit);
