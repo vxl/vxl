@@ -11,8 +11,6 @@
 // .FILE	vnl_nonlinear_minimizer.cxx
 //
 // .SECTION Description
-//    vnl_nonlinear_minimizer is a base class for nonlinear optimization.
-//    It defines a few common abilities such as get_num_evaluations
 //
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 22 Aug 99
@@ -24,6 +22,14 @@
 
 #include <vnl/vnl_matrix.h>
 
+//: vnl_nonlinear_minimizer is a base class for nonlinear optimization.
+// It defines a few common abilities such as get_num_evaluations.
+// Known derived classes are:
+//   vnl_levenberg_marquardt
+//   vnl_lbfgs
+//   vnl_conjugate_gradient
+//   vnl_brent
+//   vnl_powell
 class vnl_nonlinear_minimizer {
 public:
   vnl_nonlinear_minimizer();
@@ -135,6 +141,9 @@ protected:
   int check_derivatives_;
   ReturnCodes failure_code_;
 
+  void reset();
+  void report_eval(double f);
+  void report_iter();
 };
 
 #endif // vnl_nonlinear_minimizer_h_
