@@ -7,6 +7,9 @@ INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
 INCLUDE(${MODULE_PATH}/FindPNG.cmake)
 INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
 
+# Put something in the vil_sources variable so we can just append to it
+SET( vil_sources  vil_fwd.h )
+
 IF(PNG_FOUND)
   INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})
   ADD_DEFINITIONS( ${PNG_DEFINITIONS}  -DHAS_PNG )
@@ -39,8 +42,6 @@ ENDIF(TIFF_FOUND)
 
 
 SET( vil_sources  ${vil_sources}
-  vil_fwd.h
-
   # basic things
   vil_pixel.cxx vil_pixel.h
   vil_image_impl.cxx vil_image_impl.h
