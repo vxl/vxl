@@ -193,8 +193,7 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * \section Legacy interfaces
 *
 * There are two reasons to still use vil1 (currently core/vil1)
-* - vil1  has more image processing functions and image loaders than vil at
-* the moment.
+* - vil1 has one or two image processing functions and image loaders that have yet to be ported to vil
 * - You may have lots of code that uses vil1, and haven't yet converted to vil.
 *
 * There are several functions to convert between the various types of vil1 and vil images.
@@ -210,6 +209,7 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * - vil_convolve_2d   - Convolve with 2D filter (no edge effects catered for yet!)
 * - vil_correlate_1d   - Similar to vil_convolve_1d but with reversing the kernel
 * - vil_correlate_2d   - Similar to vil_convolve_2d but with reversing the kernel
+* - vil_gauss_filter_gen_ntap - Generate an n-tap FIR filter from a Gaussian function
 * - vil_exp_filter_i - Apply exponential filter along i axis (fast recursive method)
 * - vil_exp_filter_j - Apply exponential filter along j axis (fast recursive method)
 * - vil_exp_filter_2d - Apply exponential filter along i and j (fast recursive method)
@@ -224,6 +224,7 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * - vil_find_peaks     - Locate local peaks in an image
 * - vil_orientations   - Compute angle and edge magnitude at each pixel
 * - vil_distance_transform - Apply distance transform to images
+* - vil_histogram_equalise - Replace every pixel by its intensity rank
 *
 * See also the vipl library for a more generic image processing interface and
 * more image processing algorithms.
