@@ -57,11 +57,6 @@
 # else
 #  define VCL_GCC_30
 # endif
-# if defined (GNU_LIBSTDCXX_V3)
-#  define VCL_GCC_WITH_GNU_LIBSTDCXX_V3
-# else
-#  define VCL_GCC_WITH_GNU_LIBSTDCXX_V2
-# endif
 #endif
 
 #if defined(_WIN32) || defined(WIN32)
@@ -91,6 +86,20 @@
 #include <vcl/vcl_config_manual.h>
 #include <vcl/vcl_config_compiler.h>
 #include <vcl/vcl_config_headers.h>
+
+// This *needs* to come after vcl_config_headers.h
+#ifdef __GNUC__
+// One difference between v2 and v3 is that the former has
+// no <istream> header file whereas v3 has the lot.
+# if !defined(GNU_LIBSTDCXX_V3) && defined(VCL_GCC_295) && VCL_CXX_HAS_HEADER_ISTREAM
+#  define GNU_LIBSTDCXX_V3 1
+# endif
+# if defined (GNU_LIBSTDCXX_V3)
+#  define VCL_GCC_WITH_GNU_LIBSTDCXX_V3
+# else
+#  define VCL_GCC_WITH_GNU_LIBSTDCXX_V2
+# endif
+#endif
 
 // -------------------- default template parameters
 #if VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER

@@ -11,7 +11,7 @@ namespace std { template void std::fill(vcl_vector<T >::iterator, vcl_vector<T >
 namespace { \
   bool tickler(vcl_vector<T >::const_iterator const &a, \
                vcl_vector<T >::iterator const &b) \
-  { return (a != a) && (a != b) && (b != a) && (b != b); } \
+  { return (a != a) && (a != b) && (b != a) && (b != b) && (a <= a) && (a <= b) && (b <= a) && (b <= b); } \
 }
 
 #endif
