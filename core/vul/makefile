@@ -24,7 +24,6 @@ SOURCES += vul_reg_exp.cxx
 SOURCES += vul_sprintf.cxx
 SOURCES += vul_string.cxx
 SOURCES += vul_timer.cxx
-SOURCES += vul_test.cxx
 SOURCES += vul_get_timestamp.cxx
 SOURCES += vul_timestamp.cxx  # ??
 SOURCES += vul_user_info.cxx
