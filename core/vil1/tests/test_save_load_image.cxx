@@ -1,4 +1,4 @@
-// This is ./vxl/vil/tests/test_save_load_image.cxx
+// This is vxl/vil/tests/test_save_load_image.cxx
 
 //:
 // \file
@@ -23,9 +23,7 @@
 #include <vcl_string.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
-#include <vcl_ios.h>
 #include <vcl_fstream.h>
-#include <vcl_iomanip.h> // vcl_flush
 #include <vcl_vector.h>
 
 #include <vul/vul_temp_filename.h>
@@ -134,7 +132,7 @@ bool test_image_equal(char const* type_name,
   int bad = 0;
   for (int i=0; i < image.get_size_bytes(); ++i)
   {
-    if(image_buf[i] != image_buf2[i])
+    if (image_buf[i] != image_buf2[i])
     {
 #ifdef DEBUG
       if (++bad < 20)
@@ -352,9 +350,9 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
 vil_image CreateTest1bitImage(int wd, int ht)
 {
   vil_memory_image image(1, wd, ht, 1, 1, VIL_COMPONENT_FORMAT_UNSIGNED_INT);
-  for(int y = 0; y < ht; ++y) {
+  for (int y = 0; y < ht; ++y) {
     unsigned char* data = new unsigned char[(wd+7)/8];
-    for(int x = 0; x < (wd+7)/8; x++)
+    for (int x = 0; x < (wd+7)/8; x++)
       data[x] = ((8*x-wd/2)*(y-ht/2)/16) & 0xff;
     // zero the last few bits, if wd is not a multiple of 8:
     int s = wd&7; // = wd%8;
@@ -370,8 +368,8 @@ vil_image CreateTest1bitImage(int wd, int ht)
 vil_image CreateTest8bitImage(int wd, int ht)
 {
   vil_memory_image_of<unsigned char> image(wd, ht);
-  for(int y = 0; y < ht; y++)
-    for(int x = 0; x < wd; x++) {
+  for (int y = 0; y < ht; y++)
+    for (int x = 0; x < wd; x++) {
       unsigned char data = ((x-wd/2)*(y-ht/2)/16) & 0xff;
       image.put_section(&data, x, y, 1, 1);
     }
@@ -382,8 +380,8 @@ vil_image CreateTest8bitImage(int wd, int ht)
 vil_image CreateTest16bitImage(int wd, int ht)
 {
   vil_memory_image_of<unsigned short> image(wd, ht);
-  for(int y = 0; y < ht; y++)
-    for(int x = 0; x < wd; x++) {
+  for (int y = 0; y < ht; y++)
+    for (int x = 0; x < wd; x++) {
       unsigned short data = ((x-wd/2)*(y-ht/2)/16) & 0xffff;
       image.put_section(&data, x, y, 1, 1);
   }
@@ -395,8 +393,8 @@ vil_image CreateTest16bitImage(int wd, int ht)
 vil_image CreateTest32bitImage(int wd, int ht)
 {
   vil_memory_image_of<unsigned int> image(wd, ht);
-  for(int y = 0; y < ht; y++)
-    for(int x = 0; x < wd; x++)
+  for (int y = 0; y < ht; y++)
+    for (int x = 0; x < wd; x++)
       image(x, y) = x + wd*y;
   return image;
 }
@@ -406,8 +404,8 @@ vil_image CreateTest32bitImage(int wd, int ht)
 vil_image CreateTest24bitImage(int wd, int ht)
 {
   vil_memory_image_of<vil_rgb<unsigned char> > image(wd, ht);
-  for(int x = 0; x < wd; x++)
-    for(int y = 0; y < ht; y++) {
+  for (int x = 0; x < wd; x++)
+    for (int y = 0; y < ht; y++) {
       unsigned char data[3] = { x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)) };
       image.put_section(data, x, y, 1, 1);
     }
@@ -419,8 +417,8 @@ vil_image CreateTest24bitImage(int wd, int ht)
 vil_image CreateTest3planeImage(int wd, int ht)
 {
   vil_memory_image image(3, wd, ht, 1, 8, VIL_COMPONENT_FORMAT_UNSIGNED_INT);
-  for(int x = 0; x < wd; x++)
-    for(int y = 0; y < ht; y++) {
+  for (int x = 0; x < wd; x++)
+    for (int y = 0; y < ht; y++) {
       unsigned char data[3] = { x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)) };
       image.put_section(data, x, y, 1, 1);
     }
@@ -432,9 +430,9 @@ vil_image CreateTest3planeImage(int wd, int ht)
 vil_image CreateTestfloatImage(int wd, int ht)
 {
   vil_memory_image_of<float> image(wd, ht);
-  for(int x = 0; x < wd; x++)
-    for(int y = 0; y < ht; y++) {
-      float data = 0.01 * ((x-wd/2)*(y-ht/2)/16);
+  for (int x = 0; x < wd; x++)
+    for (int y = 0; y < ht; y++) {
+      float data = 0.01f * ((x-wd/2)*(y-ht/2)/16);
       image.put_section(&data, x, y, 1, 1);
     }
   return image;
