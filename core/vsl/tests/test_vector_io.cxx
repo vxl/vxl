@@ -1,22 +1,20 @@
+// This is vxl/vsl/tests/test_vector_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
+#include <testlib/testlib_test.h>
 
 void test_vector_io()
 {
-  vcl_cout << "****************************" << vcl_endl;
-  vcl_cout << "Testing vcl_vector binary io" << vcl_endl;
-  vcl_cout << "****************************" << vcl_endl;
+  vcl_cout << "****************************\n"
+           << "Testing vcl_vector binary io\n"
+           << "****************************\n";
 
   int n = 10;
   vcl_vector<int> v_int_out(n);
   for (int i=0;i<n;++i) v_int_out[i]=i;
   vcl_vector<float> v_float_out(n);
-  for (int i=0;i<n;++i) v_float_out[i]=i;
+  for (int i=0;i<n;++i) v_float_out[i]=0.1f*i;
 
   vsl_b_ofstream bfs_out("vsl_vector_io_test.bvl.tmp");
   TEST ("Created vsl_vector_io_test.bvl.tmp for writing", (!bfs_out), false);

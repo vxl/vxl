@@ -1,16 +1,14 @@
+// This is vxl/vsl/tests/test_list_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_list_io.h>
+#include <testlib/testlib_test.h>
 
 void test_list_io()
 {
-  vcl_cout << "****************************" << vcl_endl;
-  vcl_cout << "Testing vcl_list binary io" << vcl_endl;
-  vcl_cout << "****************************" << vcl_endl;
+  vcl_cout << "**************************\n"
+           << "Testing vcl_list binary io\n"
+           << "**************************\n";
 
   int n = 10;
   vcl_list<int> l_int_out;
@@ -18,7 +16,7 @@ void test_list_io()
     l_int_out.push_back(i);
   vcl_list<float> l_float_out;
   for (int i=0;i<n;++i)
-    l_float_out.push_back(i);
+    l_float_out.push_back(0.1f*i);
 
   vsl_b_ofstream bfs_out("vsl_list_io_test.bvl.tmp");
   TEST ("Created vsl_list_io_test.bvl.tmp for writing", (!bfs_out), false);
