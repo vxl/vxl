@@ -162,9 +162,11 @@ SET( vil_sources ${vil_sources}
 )
 
 IF (BORLAND)
-  # avoid warnings in dcmtk include files about variables that are
-  # assigned a value, but never used. We don't want to maintain dcmtk
-  SET_SOURCE_FILES_PROPERTIES(vil_dicom.cxx PROPERTIES COMPILE_FLAGS -w-8004)
+  IF (HAS_DCMTK)
+    # avoid warnings in dcmtk include files about variables that are
+    # assigned a value, but never used. We don't want to maintain dcmtk
+    SET_SOURCE_FILES_PROPERTIES(file_formats/vil_dicom.cxx PROPERTIES COMPILE_FLAGS -w-8004)
+  ENDIF (HAS_DCMTK)
 ENDIF (BORLAND)
 
 
