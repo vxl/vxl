@@ -19,26 +19,26 @@ static
 void test_static_const_definition()
 {
 #define TEST_TYPE( Type ) \
-  test_if_bool_defined( vcl_numeric_limits< int >::is_specialized ); \
-  test_if_int_defined( vcl_numeric_limits< int >::digits ); \
-  test_if_int_defined( vcl_numeric_limits< int >::digits10 ); \
-  test_if_bool_defined( vcl_numeric_limits< int >::is_signed ); \
-  test_if_bool_defined( vcl_numeric_limits< int >::is_integer ); \
-  test_if_bool_defined( vcl_numeric_limits< int >::is_exact ); \
-  test_if_int_defined( vcl_numeric_limits< int >::radix ); \
-  test_if_int_defined( vcl_numeric_limits< int >::min_exponent ); \
-  test_if_int_defined( vcl_numeric_limits< int >::min_exponent10 ); \
-  test_if_int_defined( vcl_numeric_limits< int >::max_exponent ); \
-  test_if_int_defined( vcl_numeric_limits< int >::max_exponent10 ); \
-  test_if_bool_defined( vcl_numeric_limits< int >::has_infinity ); \
-  test_if_bool_defined( vcl_numeric_limits< int >::has_quiet_NaN ); \
-  test_if_bool_defined( vcl_numeric_limits< int >::has_signaling_NaN ); \
-  test_if_bool_defined( vcl_numeric_limits< int >::has_denorm ); \
-  test_if_bool_defined( vcl_numeric_limits< int >::is_iec559 ); \
-  test_if_bool_defined( vcl_numeric_limits< int >::is_bounded ); \
-  test_if_bool_defined( vcl_numeric_limits< int >::is_modulo ); \
-  test_if_bool_defined( vcl_numeric_limits< int >::traps ); \
-  test_if_bool_defined( vcl_numeric_limits< int >::tinyness_before );
+  test_if_bool_defined( vcl_numeric_limits< Type >::is_specialized ); \
+  test_if_int_defined( vcl_numeric_limits< Type >::digits ); \
+  test_if_int_defined( vcl_numeric_limits< Type >::digits10 ); \
+  test_if_bool_defined( vcl_numeric_limits< Type >::is_signed ); \
+  test_if_bool_defined( vcl_numeric_limits< Type >::is_integer ); \
+  test_if_bool_defined( vcl_numeric_limits< Type >::is_exact ); \
+  test_if_int_defined( vcl_numeric_limits< Type >::radix ); \
+  test_if_int_defined( vcl_numeric_limits< Type >::min_exponent ); \
+  test_if_int_defined( vcl_numeric_limits< Type >::min_exponent10 ); \
+  test_if_int_defined( vcl_numeric_limits< Type >::max_exponent ); \
+  test_if_int_defined( vcl_numeric_limits< Type >::max_exponent10 ); \
+  test_if_bool_defined( vcl_numeric_limits< Type >::has_infinity ); \
+  test_if_bool_defined( vcl_numeric_limits< Type >::has_quiet_NaN ); \
+  test_if_bool_defined( vcl_numeric_limits< Type >::has_signaling_NaN ); \
+  test_if_bool_defined( vcl_numeric_limits< Type >::has_denorm ); \
+  test_if_bool_defined( vcl_numeric_limits< Type >::is_iec559 ); \
+  test_if_bool_defined( vcl_numeric_limits< Type >::is_bounded ); \
+  test_if_bool_defined( vcl_numeric_limits< Type >::is_modulo ); \
+  test_if_bool_defined( vcl_numeric_limits< Type >::traps ); \
+  test_if_bool_defined( vcl_numeric_limits< Type >::tinyness_before );
 
   TEST_TYPE(int);
   TEST_TYPE(long);
