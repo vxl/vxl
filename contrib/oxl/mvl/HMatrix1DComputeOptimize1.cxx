@@ -105,7 +105,7 @@ HMatrix1DComputeOptimize1::compute_cool_homg(const vcl_vector<vgl_homg_point_1d<
 
   // map the points in p1 under M so that we are looking for a correction near the identity :
   for (unsigned i=0;i<N;i++) {
-    vgl_homg_point_1d<double> v = M->transform_to_plane2(p1[i]);
+    vgl_homg_point_1d<double> v = (*M)(p1[i]);
     if (v.w() == 0.0) return false;
     z1[i] = v.x()/v.w(); // make nonhomogeneous
     if (p2[i].w()) return false;
