@@ -2,7 +2,9 @@
 # ./oxl/apps/vxl_vrml_viewer/CMakeLists.txt
 #
 
-ADD_EXECUTABLE( glmovie glmovie.cxx )
+IF (HAS_GLUT)
+ ADD_EXECUTABLE( glmovie glmovie.cxx )
+ENDIF (HAS_GLUT)
 
 ADD_EXECUTABLE( vobgetframe vobgetframe.cxx )
 
