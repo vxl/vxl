@@ -13,6 +13,7 @@
 // Peter Vanroose -  2 July 2001 - Added constructor from 3 planes
 // Peter Vanroose -  1 July 2001 - Renamed data to x_ y_ z_ w_ and inlined constructors
 // Peter Vanroose - 27 June 2001 - Implemented operator==
+// Peter Vanroose - 15 July 2002 - Added coplanar()
 // \endverbatim
 
 #include <vgl/vgl_point_3d.h>
@@ -24,9 +25,13 @@
 template <class Type>
 class vgl_homg_point_3d
 {
-  // PUBLIC INTERFACE--------------------------------------------------------
+  // the data associated with this point
+  Type x_;
+  Type y_;
+  Type z_;
+  Type w_;
 
-public:
+ public:
 
   // Constructors/Initializers/Destructor------------------------------------
 
@@ -94,15 +99,6 @@ public:
            vgl_Abs(w()) <= tol * vgl_Abs(z());
 #undef vgl_Abs
   }
-
-  // INTERNALS---------------------------------------------------------------
-
-private:
-  // the data associated with this point
-  Type x_;
-  Type y_;
-  Type z_;
-  Type w_;
 };
 
 //  +-+-+ point_3d simple I/O +-+-+
@@ -122,6 +118,26 @@ vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_3d<Type>& p);
 template <class Type> inline
 bool is_ideal(vgl_homg_point_3d<Type> const& p, Type tol = Type(0)) {
   return p.ideal(); }
+
+//: Return true iff the 4 points are coplanar, i.e., they belong to a common plane
+template <class Type> inline
+bool coplanar(vgl_homg_point_3d<Type> const& p1,
+              vgl_homg_point_3d<Type> const& p2,
+              vgl_homg_point_3d<Type> const& p3,
+              vgl_homg_point_3d<Type> const& p4) {
+  return ((p1.x()*p2.y()-p1.y()*p2.x())*p3.z()
+         +(p3.x()*p1.y()-p3.y()*p1.x())*p2.z()
+         +(p2.x()*p3.y()-p2.y()*p3.x())*p1.z())*p4.w()
+        +((p4.x()*p1.y()-p4.y()*p1.x())*p2.z()
+         +(p2.x()*p4.y()-p2.y()*p4.x())*p1.z()
+         +(p1.x()*p2.y()-p1.y()*p2.x())*p4.z())*p3.w()
+        +((p3.x()*p4.y()-p3.y()*p4.x())*p1.z()
+         +(p1.x()*p3.y()-p1.y()*p3.x())*p4.z()
+         +(p4.x()*p1.y()-p4.y()*p1.x())*p3.z())*p2.w()
+        +((p2.x()*p3.y()-p2.y()*p3.x())*p4.z()
+         +(p4.x()*p2.y()-p4.y()*p2.x())*p3.z()
+         +(p3.x()*p4.y()-p3.y()*p4.x())*p2.z())*p1.w() == 0;
+}
 
 //: The difference of two points is the vector from second to first point
 // This function is only valid if the points are not at infinity.
