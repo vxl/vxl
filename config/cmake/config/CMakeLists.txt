@@ -402,7 +402,7 @@ ENDIF(HAVE_UNISTD_H)
 # configure files
 #
 
-CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_config_compiler.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_compiler.h)
+CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_config_compiler_cmake.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_compiler.h)
 CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_config_headers.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_headers.h)
 CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_config_manual.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_manual.h)
 CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h)
