@@ -9,7 +9,7 @@
 //---------------------------------------------------------------------------
 vcsl_displacement::vcsl_displacement(void)
 {
-  _point=0;
+  point_=0;
 }
 
 //---------------------------------------------------------------------------
@@ -28,18 +28,18 @@ vcsl_displacement::~vcsl_displacement()
 //---------------------------------------------------------------------------
 bool vcsl_displacement::is_valid(void) const
 {
-  return (_point!=0)&&(_axis!=0)&&(_angle!=0)
+  return (point_!=0)&&(axis_!=0)&&(angle_!=0)
     &&(
-       ((_beat==0)&&(_interpolator==0)&&(_point->size()==1)&&
-        (_axis->size()==1)&&(_angle->size()==1)
+       ((beat_==0)&&(interpolator_==0)&&(point_->size()==1)&&
+        (axis_->size()==1)&&(angle_->size()==1)
         )
        ||
        (
-        (_beat!=0)&&(_interpolator!=0)
-        &&(_beat->size()==(_interpolator->size()+1))
-        &&(_beat->size()==_point->size())
-        &&(_beat->size()==_axis->size())
-        &&(_beat->size()==_angle->size())
+        (beat_!=0)&&(interpolator_!=0)
+        &&(beat_->size()==(interpolator_->size()+1))
+        &&(beat_->size()==point_->size())
+        &&(beat_->size()==axis_->size())
+        &&(beat_->size()==angle_->size())
         ));
 }
 
@@ -52,11 +52,11 @@ bool vcsl_displacement::is_valid(void) const
 //---------------------------------------------------------------------------
 void vcsl_displacement::set_static_point(vnl_vector<double> &new_point)
 {
-  if(_point==0||_point->size()!=1)
-    _point=new list_of_vectors(1);
-  (*_point)[0]=&new_point;
-  _beat=0;
-  _interpolator=0;
+  if(point_==0||point_->size()!=1)
+    point_=new list_of_vectors(1);
+  (*point_)[0]=&new_point;
+  beat_=0;
+  interpolator_=0;
 }
 
 //---------------------------------------------------------------------------
@@ -64,9 +64,9 @@ void vcsl_displacement::set_static_point(vnl_vector<double> &new_point)
 //---------------------------------------------------------------------------
 void vcsl_displacement::set_point(list_of_vectors &new_point)
 {
-  if(_point!=0&&_point->size()==1)
-    delete _point;
-  _point=&new_point;
+  if(point_!=0&&point_->size()==1)
+    delete point_;
+  point_=&new_point;
 }
 
 //---------------------------------------------------------------------------
@@ -74,7 +74,7 @@ void vcsl_displacement::set_point(list_of_vectors &new_point)
 //---------------------------------------------------------------------------
 list_of_vectors *vcsl_displacement::point(void) const
 {
-  return _point;
+  return point_;
 }
   
 //***************************************************************************
@@ -120,7 +120,7 @@ vnl_vector<double> *vcsl_displacement::execute(const vnl_vector<double> &v,
     result->put(i,tmp->get(i)+translation->get(i));
   if(_mode_2d)
      delete tmp;
-  if(_beat!=0)
+  if(beat_!=0)
     delete translation;
   return result;
 }
@@ -169,7 +169,7 @@ vnl_vector<double> *vcsl_displacement::inverse(const vnl_vector<double> &v,
     result->put(i,tmp->get(i)+translation->get(i));
   if(_mode_2d)
     delete tmp;
-  if(_beat!=0)
+  if(beat_!=0)
     delete translation;
   return result;
 }
@@ -182,15 +182,15 @@ vnl_vector<double> *vcsl_displacement::vector_value(const double time) const
   vnl_vector<double> *result;
   int i;
 
-  if(_beat==0) // static
-    result=(*_point)[0];
+  if(beat_==0) // static
+    result=(*point_)[0];
   else
     {
       i=matching_interval(time);
-      switch((*_interpolator)[i])
+      switch((*interpolator_)[i])
         {
         case vcsl_linear:
-          result=lvi(*(*_point)[i],*(*_point)[i+1],i,time);
+          result=lvi(*(*point_)[i],*(*point_)[i+1],i,time);
           break;
         case vcsl_cubic:
           assert(false); // Not yet implemented

@@ -12,8 +12,8 @@
 //---------------------------------------------------------------------------
 vcsl_spatial_transformation::vcsl_spatial_transformation(void)
 {
-  _beat=0;
-  _interpolator=0;
+  beat_=0;
+  interpolator_=0;
 }
 
 //---------------------------------------------------------------------------
@@ -32,7 +32,7 @@ vcsl_spatial_transformation::~vcsl_spatial_transformation()
 //---------------------------------------------------------------------------
 vcl_vector<double> *vcsl_spatial_transformation::beat(void) const
 {
-  return _beat;
+  return beat_;
 }
 
 //---------------------------------------------------------------------------
@@ -41,7 +41,7 @@ vcl_vector<double> *vcsl_spatial_transformation::beat(void) const
 vcl_vector<vcsl_interpolator> *
 vcsl_spatial_transformation::interpolators(void) const
 {
-  return _interpolator;
+  return interpolator_;
 }
 
 //---------------------------------------------------------------------------
@@ -49,7 +49,7 @@ vcsl_spatial_transformation::interpolators(void) const
 //---------------------------------------------------------------------------
 bool vcsl_spatial_transformation::valid_time(const double time) const
 {
-  return ((*_beat)[0]<=time)&&(time<=(*_beat)[_beat->size()-1]);
+  return ((*beat_)[0]<=time)&&(time<=(*beat_)[beat_->size()-1]);
 }
 
 //---------------------------------------------------------------------------
@@ -57,9 +57,9 @@ bool vcsl_spatial_transformation::valid_time(const double time) const
 //---------------------------------------------------------------------------
 bool vcsl_spatial_transformation::is_valid(void) const
 {
-  return ((_beat==0)&&(_interpolator==0))||
-    ((_beat!=0)&&(_interpolator!=0)
-     &&(_beat->size()==(_interpolator->size()+1)));
+  return ((beat_==0)&&(interpolator_==0))||
+    ((beat_!=0)&&(interpolator_!=0)
+     &&(beat_->size()==(interpolator_->size()+1)));
 }
 
 //***************************************************************************
@@ -83,11 +83,11 @@ int vcsl_spatial_transformation::matching_interval(const double time) const
   // Dichotomic research of the index
 
   inf=0;
-  sup=_beat->size()-1;
+  sup=beat_->size()-1;
   while((sup-inf)!=1)
     {
       mid=(inf+sup)/2;
-      if((*_beat)[mid]>time)
+      if((*beat_)[mid]>time)
         sup=mid;
       else
         inf=mid;
@@ -106,7 +106,7 @@ int vcsl_spatial_transformation::matching_interval(const double time) const
 //---------------------------------------------------------------------------
 void vcsl_spatial_transformation::set_beat(vcl_vector<double> &new_beat)
 {
-  _beat=&new_beat;
+  beat_=&new_beat;
 }
 
 //---------------------------------------------------------------------------
@@ -115,7 +115,7 @@ void vcsl_spatial_transformation::set_beat(vcl_vector<double> &new_beat)
 void
 vcsl_spatial_transformation::set_interpolators(vcl_vector<vcsl_interpolator> &new_interpolators)
 {
-  _interpolator=&new_interpolators;
+  interpolator_=&new_interpolators;
 }
 
 //***************************************************************************
@@ -135,8 +135,8 @@ double vcsl_spatial_transformation::lsi(const double v0,
   double t0;
   double t1;
 
-  t0=(*_beat)[index];
-  t1=(*_beat)[index+1];
+  t0=(*beat_)[index];
+  t1=(*beat_)[index+1];
 
   result=(v0*(t1-time)+v1*(time-t0))/(t1-t0);
 
@@ -163,8 +163,8 @@ vcsl_spatial_transformation::lvi(const vnl_vector<double> &v0,
   double denominator;
 
   size=v0.size();
-  t0=(*_beat)[index];
-  t1=(*_beat)[index+1];
+  t0=(*beat_)[index];
+  t1=(*beat_)[index+1];
 
   result=new vnl_vector<double>(size);
 
@@ -197,8 +197,8 @@ vcsl_spatial_transformation::lqi(const vnl_quaternion<double> &v0,
   double coef1;
   double coef2;
 
-  t0=(*_beat)[index];
-  t1=(*_beat)[index+1];
+  t0=(*beat_)[index];
+  t1=(*beat_)[index+1];
   t=(time-t0)/(t1-t0);
 
   { // sunpro 5.0 is overload challenged

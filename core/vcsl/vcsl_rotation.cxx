@@ -9,8 +9,8 @@
 //---------------------------------------------------------------------------
 vcsl_rotation::vcsl_rotation(void)
 {
-  _angle=0;
-  _axis=0;
+  angle_=0;
+  axis_=0;
   _mode_2d=false;
 }
 
@@ -39,17 +39,17 @@ bool vcsl_rotation::is_invertible(const double time) const
 //---------------------------------------------------------------------------
 bool vcsl_rotation::is_valid(void) const
 {
-  return (_axis!=0)&&(_angle!=0)
+  return (axis_!=0)&&(angle_!=0)
     &&(
-       ((_beat==0)&&(_interpolator==0)&&
-        (_axis->size()==1)&&(_angle->size()==1)
+       ((beat_==0)&&(interpolator_==0)&&
+        (axis_->size()==1)&&(angle_->size()==1)
         )
        ||
        (
-        (_beat!=0)&&(_interpolator!=0)
-        &&(_beat->size()==(_interpolator->size()+1))
-        &&(_beat->size()==_axis->size())
-        &&(_beat->size()==_angle->size())
+        (beat_!=0)&&(interpolator_!=0)
+        &&(beat_->size()==(interpolator_->size()+1))
+        &&(beat_->size()==axis_->size())
+        &&(beat_->size()==angle_->size())
         ));
 }
 
@@ -116,11 +116,11 @@ void vcsl_rotation::set_3d(void)
 void vcsl_rotation::set_static_2d(const double new_angle)
 {
   _mode_2d=true;
-  if(_angle==0||_angle->size()!=1)
-    _angle=new vcl_vector<double>(1);
-  (*_angle)[0]=new_angle;
-  _beat=0;
-  _interpolator=0;
+  if(angle_==0||angle_->size()!=1)
+    angle_=new vcl_vector<double>(1);
+  (*angle_)[0]=new_angle;
+  beat_=0;
+  interpolator_=0;
 }
 
 //---------------------------------------------------------------------------
@@ -130,15 +130,15 @@ void vcsl_rotation::set_static(const double new_angle,
                                vnl_vector<double> &new_axis)
 {
   _mode_2d=false;
-  if(_angle==0||_angle->size()!=1)
+  if(angle_==0||angle_->size()!=1)
     {
-      _angle=new vcl_vector<double>(1);
-      _axis=new vcl_vector<vnl_vector<double> *>(1);
+      angle_=new vcl_vector<double>(1);
+      axis_=new vcl_vector<vnl_vector<double> *>(1);
     }
-  (*_angle)[0]=new_angle;
-  (*_axis)[0]=&new_axis;
-  _beat=0;
-  _interpolator=0;
+  (*angle_)[0]=new_angle;
+  (*axis_)[0]=&new_axis;
+  beat_=0;
+  interpolator_=0;
 }
 
 //---------------------------------------------------------------------------
@@ -146,9 +146,9 @@ void vcsl_rotation::set_static(const double new_angle,
 //---------------------------------------------------------------------------
 void vcsl_rotation::set_angle(list_of_scalars &new_angle)
 {
-  if(_angle!=0&&_angle->size()==1) // static rotation
-    delete _angle;
-  _angle=&new_angle;
+  if(angle_!=0&&angle_->size()==1) // static rotation
+    delete angle_;
+  angle_=&new_angle;
 }
 
 //---------------------------------------------------------------------------
@@ -156,7 +156,7 @@ void vcsl_rotation::set_angle(list_of_scalars &new_angle)
 //---------------------------------------------------------------------------
 list_of_scalars *vcsl_rotation::angle(void) const
 {
-  return _angle;
+  return angle_;
 }
 
 //---------------------------------------------------------------------------
@@ -168,10 +168,10 @@ void vcsl_rotation::set_axis(list_of_vectors &new_axis)
   // require
   assert(are_unit_axes(new_axis));
 
-  if(_axis!=0&&_axis->size()==1) // static rotation
-    delete _axis;
+  if(axis_!=0&&axis_->size()==1) // static rotation
+    delete axis_;
 
-  _axis=&new_axis;
+  axis_=&new_axis;
 }
 
 //---------------------------------------------------------------------------
@@ -179,7 +179,7 @@ void vcsl_rotation::set_axis(list_of_vectors &new_axis)
 //---------------------------------------------------------------------------
 list_of_vectors *vcsl_rotation::axis(void) const
 {
-  return _axis;
+  return axis_;
 }
   
 //***************************************************************************
@@ -291,7 +291,7 @@ vnl_quaternion<double> *vcsl_rotation::quaternion(const double time) const
   vnl_quaternion<double> *q0;
   vnl_quaternion<double> *q1;
 
-  if(_beat==0) // static
+  if(beat_==0) // static
     {
       if(_mode_2d)
         {
@@ -299,11 +299,11 @@ vnl_quaternion<double> *vcsl_rotation::quaternion(const double time) const
           axis_2d->put(0,0);
           axis_2d->put(1,0);
           axis_2d->put(2,1);
-          result=new vnl_quaternion<double>(*axis_2d,(*_angle)[0]);
+          result=new vnl_quaternion<double>(*axis_2d,(*angle_)[0]);
           delete axis_2d;
         }
       else
-        result=new vnl_quaternion<double>(*(*_axis)[0],(*_angle)[0]);
+        result=new vnl_quaternion<double>(*(*axis_)[0],(*angle_)[0]);
     }
   else
     {
@@ -317,18 +317,18 @@ vnl_quaternion<double> *vcsl_rotation::quaternion(const double time) const
           axis_2d->put(2,1);
         }
       
-      switch((*_interpolator)[i])
+      switch((*interpolator_)[i])
         {
         case vcsl_linear:
           if(_mode_2d)
             {
-              q0=new vnl_quaternion<double>(*axis_2d,(*_angle)[i]);
-              q1=new vnl_quaternion<double>(*axis_2d,(*_angle)[i+1]);
+              q0=new vnl_quaternion<double>(*axis_2d,(*angle_)[i]);
+              q1=new vnl_quaternion<double>(*axis_2d,(*angle_)[i+1]);
             }
           else
             {
-              q0=new vnl_quaternion<double>(*(*_axis)[i],(*_angle)[i]);
-              q1=new vnl_quaternion<double>(*(*_axis)[i+1],(*_angle)[i+1]);
+              q0=new vnl_quaternion<double>(*(*axis_)[i],(*angle_)[i]);
+              q1=new vnl_quaternion<double>(*(*axis_)[i+1],(*angle_)[i+1]);
             }
           result=lqi(*q0,*q1,i,time);
           delete q1;

@@ -33,7 +33,7 @@ vcsl_coordinate_system::~vcsl_coordinate_system()
 //---------------------------------------------------------------------------
 int vcsl_coordinate_system::dimensionnality(void) const
 {
-  return _axes.size();
+  return axes_.size();
 }
 
 //---------------------------------------------------------------------------
@@ -41,7 +41,7 @@ int vcsl_coordinate_system::dimensionnality(void) const
 //---------------------------------------------------------------------------
 bool vcsl_coordinate_system::valid_axis(const int i) const
 {
-  return (i>=0)&&(i<_axes.size());
+  return (i>=0)&&(i<axes_.size());
 }
 
 //---------------------------------------------------------------------------
@@ -53,7 +53,7 @@ vcsl_axis_ref vcsl_coordinate_system::axis(const int i) const
   // require
   assert(valid_axis(i));
 
-  return _axes[i];
+  return axes_[i];
 }
 
 //***************************************************************************
@@ -83,7 +83,7 @@ vcsl_coordinate_system::from_cs_to_standard_units(const vnl_vector<double> &v) c
   result=new vnl_vector<double>(v.size());
 
   j=0;
-  for(i=_axes.begin();i!=_axes.end();++i)
+  for(i=axes_.begin();i!=axes_.end();++i)
     {
       result->put(j,v.get(j)/(*i)->unit()->units_per_standard_unit());
       ++j;
@@ -105,7 +105,7 @@ vcsl_coordinate_system::from_standard_units_to_cs(const vnl_vector<double> &v) c
 
   result=new vnl_vector<double>(v.size());
   j=0;
-  for(i=_axes.begin();i!=_axes.end();++i)
+  for(i=axes_.begin();i!=axes_.end();++i)
     {
       result->put(j,v.get(j)*(*i)->unit()->units_per_standard_unit());
       ++j;

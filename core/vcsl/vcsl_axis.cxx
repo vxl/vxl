@@ -15,8 +15,8 @@
 //---------------------------------------------------------------------------
 vcsl_axis::vcsl_axis(void)
 {
-  _dimension=vcsl_length::instance().ptr();
-  _unit=vcsl_meter::instance().ptr();
+  dimension_=vcsl_length::instance().ptr();
+  unit_=vcsl_meter::instance().ptr();
 }
 
 //---------------------------------------------------------------------------
@@ -24,8 +24,8 @@ vcsl_axis::vcsl_axis(void)
 //---------------------------------------------------------------------------
 vcsl_axis::vcsl_axis(vcsl_dimension &new_dimension)
 {
-  _dimension=&new_dimension;
-  _unit=_dimension->standard_unit();
+  dimension_=&new_dimension;
+  unit_=dimension_->standard_unit();
 }
 
 //---------------------------------------------------------------------------
@@ -38,8 +38,8 @@ vcsl_axis::vcsl_axis(vcsl_dimension &new_dimension,
   // require
   assert(new_dimension.compatible_unit(new_unit));
 
-  _dimension=&new_dimension;
-  _unit=&new_unit;
+  dimension_=&new_dimension;
+  unit_=&new_unit;
 }
 
 //---------------------------------------------------------------------------
@@ -49,9 +49,9 @@ vcsl_axis::vcsl_axis(vcsl_dimension &new_dimension,
                      vcsl_unit &new_unit,
                      vcl_string &new_label)
 {
-  _dimension=&new_dimension;
-  _unit=&new_unit;
-  _label=new_label;
+  dimension_=&new_dimension;
+  unit_=&new_unit;
+  label_=new_label;
 }
 
 //---------------------------------------------------------------------------
@@ -59,9 +59,9 @@ vcsl_axis::vcsl_axis(vcsl_dimension &new_dimension,
 //---------------------------------------------------------------------------
 vcsl_axis::vcsl_axis(const vcsl_axis &other)
 {
-  _dimension=other._dimension;
-  _unit=other._unit;
-  _label=other._label;
+  dimension_=other.dimension_;
+  unit_=other.unit_;
+  label_=other.label_;
 }
 
 //---------------------------------------------------------------------------
@@ -80,7 +80,7 @@ vcsl_axis::~vcsl_axis()
 //---------------------------------------------------------------------------
 const vcsl_dimension_ref vcsl_axis::dimension(void) const
 {
-  return _dimension;
+  return dimension_;
 }
 
 //---------------------------------------------------------------------------
@@ -88,7 +88,7 @@ const vcsl_dimension_ref vcsl_axis::dimension(void) const
 //---------------------------------------------------------------------------
 const vcsl_unit_ref vcsl_axis::unit(void) const
 {
-  return _unit;
+  return unit_;
 }
 
 //---------------------------------------------------------------------------
@@ -96,7 +96,7 @@ const vcsl_unit_ref vcsl_axis::unit(void) const
 //---------------------------------------------------------------------------
 const vcl_string vcsl_axis::label(void) const
 {
-  return _label;
+  return label_;
 }
 
 //***************************************************************************
@@ -108,8 +108,8 @@ const vcl_string vcsl_axis::label(void) const
 //---------------------------------------------------------------------------
 void vcsl_axis::set_dimension(vcsl_dimension &new_dimension)
 {
-  _dimension=&new_dimension;
-  _unit=_dimension->standard_unit();
+  dimension_=&new_dimension;
+  unit_=dimension_->standard_unit();
 }
 
 //---------------------------------------------------------------------------
@@ -122,8 +122,8 @@ void vcsl_axis::set_dimension_and_unit(vcsl_dimension &new_dimension,
   // require
   assert(new_dimension.compatible_unit(new_unit));
 
-  _dimension=&new_dimension;
-  _unit=&new_unit;
+  dimension_=&new_dimension;
+  unit_=&new_unit;
 }
 
 //---------------------------------------------------------------------------
@@ -135,7 +135,7 @@ void vcsl_axis::set_unit(vcsl_unit &new_unit)
   // require
   assert(dimension()->compatible_unit(new_unit));
 
-  _unit=&new_unit;
+  unit_=&new_unit;
 }
 
 //---------------------------------------------------------------------------
@@ -143,5 +143,5 @@ void vcsl_axis::set_unit(vcsl_unit &new_unit)
 //---------------------------------------------------------------------------
 void vcsl_axis::set_label(const vcl_string &new_label)
 {
-  _label=new_label;
+  label_=new_label;
 }

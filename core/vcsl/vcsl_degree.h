@@ -50,6 +50,6 @@ protected:
   explicit vcsl_degree(void);
   
   //: Reference to the unique vcsl_degree object
-  static vcsl_degree_ref _instance;
+  static vcsl_degree_ref instance_;
 };
 #endif // #ifndef VCSL_DEGREE_H

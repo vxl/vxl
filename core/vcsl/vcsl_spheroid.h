@@ -121,13 +121,13 @@ protected:
   //***************************************************************************
 
   //: Major axis of spheroid
-  double _a;
+  double a_;
   //: Minor axis of spheroid
-  double _b;
+  double b_;
   //: Eccentricity of spheroid
-  double _e;
+  double e_;
   //: Flattening of spheroid
-  double _f;
+  double f_;
 };
 
 #endif // #ifndef VCSL_SPHEROID_H

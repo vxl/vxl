@@ -151,25 +151,25 @@ protected:
                                   vcl_vector<bool> &sens);
 
   //: successive parents of `this' along the time
-  vcl_vector<vcsl_spatial_ref> *_parent;
+  vcl_vector<vcsl_spatial_ref> *parent_;
 
   //: Clock times 
-  vcl_vector<double> *_beat;
+  vcl_vector<double> *beat_;
 
   //: successive transformations from `this' to `parent' along the time
-  vcl_vector<vcsl_spatial_transformation_ref> *_motion;
+  vcl_vector<vcsl_spatial_transformation_ref> *motion_;
 
   //: List of spatial coordinate system that can be child of `this' at a time
   vcl_vector<vcsl_spatial_ref> *_potential_children;
 
   //: List of all the spatial coordinate system of the graph
-  vcsl_graph_ref _graph;
+  vcsl_graph_ref graph_;
 
   //: True if `this' is already reached during the search path algorithm
-  bool _reached;
+  bool reached_;
 
   // class invariants
-  // (_parent.size()==_motion.size())&&(_parent.size()+1==_beats.size())
+  // (parent_.size()==motion_.size())&&(parent_.size()+1==beats_.size())
 };
 
 #endif // #ifndef VCSL_SPATIAL_H

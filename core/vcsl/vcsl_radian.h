@@ -50,6 +50,6 @@ protected:
   explicit vcsl_radian(void);
   
   //: Reference to the unique vcsl_radian object
-  static vcsl_radian_ref _instance;
+  static vcsl_radian_ref instance_;
 };
 #endif // #ifndef VCSL_RADIAN_H

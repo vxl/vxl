@@ -95,13 +95,13 @@ protected:
   //***************************************************************************
 
   //: Dimension
-  vcsl_dimension_ref _dimension;
+  vcsl_dimension_ref dimension_;
 
   //: Unit of the dimension
-  vcsl_unit_ref _unit;
+  vcsl_unit_ref unit_;
 
   //: Label of the axis
-  vcl_string _label;
+  vcl_string label_;
 };
 
 #endif // #ifndef VCSL_AXIS_H

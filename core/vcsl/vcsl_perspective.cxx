@@ -38,11 +38,11 @@ bool vcsl_perspective::is_invertible(const double time) const
 //---------------------------------------------------------------------------
 bool vcsl_perspective::is_valid(void) const
 {
-  return (_focal!=0)&&(((_beat==0)&&(_interpolator==0)&&(_focal->size()==1))
+  return (focal_!=0)&&(((beat_==0)&&(interpolator_==0)&&(focal_->size()==1))
                         ||
-                        ((_beat!=0)&&(_interpolator!=0)
-                         &&(_beat->size()==(_interpolator->size()+1))
-                         &&(_beat->size()==_focal->size())));
+                        ((beat_!=0)&&(interpolator_!=0)
+                         &&(beat_->size()==(interpolator_->size()+1))
+                         &&(beat_->size()==focal_->size())));
 }
 
 //***************************************************************************
@@ -54,11 +54,11 @@ bool vcsl_perspective::is_valid(void) const
 //---------------------------------------------------------------------------
 void vcsl_perspective::set_static(const double new_focal)
 {
-  if(_focal==0||_focal->size()!=1)
-    _focal=new list_of_scalars(1);
-  (*_focal)[0]=new_focal;
-  _beat=0;
-  _interpolator=0;
+  if(focal_==0||focal_->size()!=1)
+    focal_=new list_of_scalars(1);
+  (*focal_)[0]=new_focal;
+  beat_=0;
+  interpolator_=0;
 }
 
 //---------------------------------------------------------------------------
@@ -66,9 +66,9 @@ void vcsl_perspective::set_static(const double new_focal)
 //---------------------------------------------------------------------------
 void vcsl_perspective::set_focal(list_of_scalars &new_focal)
 {
-   if(_focal!=0&&_focal->size()==1)
-    delete _focal;
-  _focal=&new_focal;
+   if(focal_!=0&&focal_->size()==1)
+    delete focal_;
+  focal_=&new_focal;
 }
 
 //---------------------------------------------------------------------------
@@ -76,7 +76,7 @@ void vcsl_perspective::set_focal(list_of_scalars &new_focal)
 //---------------------------------------------------------------------------
 list_of_scalars *vcsl_perspective::focal(void) const
 {
-  return _focal;
+  return focal_;
 }
 
 //***************************************************************************
@@ -130,15 +130,15 @@ double vcsl_perspective::focal_value(const double time) const
   double result;
   int i;
 
-  if(_beat==0) // static
-    result=(*_focal)[0];
+  if(beat_==0) // static
+    result=(*focal_)[0];
   else
     {
       i=matching_interval(time);
-      switch((*_interpolator)[i])
+      switch((*interpolator_)[i])
         {
         case vcsl_linear:
-          result=lsi((*_focal)[i],(*_focal)[i+1],i,time);
+          result=lsi((*focal_)[i],(*focal_)[i+1],i,time);
           break;
         case vcsl_cubic:
           assert(false); // Not yet implemented

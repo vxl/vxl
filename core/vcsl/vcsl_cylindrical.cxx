@@ -14,11 +14,11 @@ vcsl_cylindrical::vcsl_cylindrical(void)
 {
   vcsl_axis_ref a;
   a=new vcsl_axis;
-  _axes.push_back(a);
+  axes_.push_back(a);
   a=new vcsl_axis(*(vcsl_angle::instance().ptr()));
-  _axes.push_back(a);
+  axes_.push_back(a);
   a=new vcsl_axis;
-  _axes.push_back(a);
+  axes_.push_back(a);
 }
 
 //---------------------------------------------------------------------------

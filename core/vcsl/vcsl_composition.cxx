@@ -36,7 +36,7 @@ bool vcsl_composition::is_invertible(const double time) const
   vcl_vector<vcsl_spatial_transformation_ref>::const_iterator i;
 
   result=true;
-  for(i=_transformations->begin();i!=_transformations->end()&&result;++i)
+  for(i=transformations_->begin();i!=transformations_->end()&&result;++i)
     result=(*i)->is_invertible(time);
 
   return result;
@@ -52,7 +52,7 @@ bool vcsl_composition::is_valid(void) const
   vcl_vector<vcsl_spatial_transformation_ref>::const_iterator i;
 
   result=true;
-  for(i=_transformations->begin();i!=_transformations->end()&&result;++i)
+  for(i=transformations_->begin();i!=transformations_->end()&&result;++i)
     result=(*i)->is_valid();
 
   return result;
@@ -64,7 +64,7 @@ bool vcsl_composition::is_valid(void) const
 vcl_vector<vcsl_spatial_transformation_ref> *
 vcsl_composition::composition(void) const
 {
-  return _transformations;
+  return transformations_;
 }
 
 //***************************************************************************
@@ -78,7 +78,7 @@ vcsl_composition::composition(void) const
 void
 vcsl_composition::set_composition(vcl_vector<vcsl_spatial_transformation_ref> &new_transformations)
 {
-  _transformations=&new_transformations;
+  transformations_=&new_transformations;
 }
 
 //***************************************************************************
@@ -101,7 +101,7 @@ vnl_vector<double> *vcsl_composition::execute(const vnl_vector<double> &v,
   vcl_vector<vcsl_spatial_transformation_ref>::const_iterator i;
   
   tmp2=&v;
-  for(i=_transformations->begin();i!=_transformations->end();++i)
+  for(i=transformations_->begin();i!=transformations_->end();++i)
     {
       tmp=(*i)->execute(*tmp2,time);
       if(tmp2!=&v)
@@ -132,7 +132,7 @@ vnl_vector<double> *vcsl_composition::inverse(const vnl_vector<double> &v,
   
   tmp2=&v;
 
-  for(i=_transformations->rbegin();i!=_transformations->rend();++i)
+  for(i=transformations_->rbegin();i!=transformations_->rend();++i)
     {
       tmp=(*i)->inverse(*tmp2,time);
       if(tmp2!=&v)

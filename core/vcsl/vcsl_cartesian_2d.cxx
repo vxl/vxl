@@ -13,9 +13,9 @@ vcsl_cartesian_2d::vcsl_cartesian_2d(void)
 {
   vcsl_axis_ref a;
   a=new vcsl_axis;
-  _axes.push_back(a);
+  axes_.push_back(a);
   a=new vcsl_axis(*(a.ptr()));
-  _axes.push_back(a);
+  axes_.push_back(a);
   _right_handed=true;
 }
 

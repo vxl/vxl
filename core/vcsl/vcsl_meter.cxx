@@ -33,9 +33,9 @@ double vcsl_meter::units_per_standard_unit(void) const
 //---------------------------------------------------------------------------
 vcsl_meter_ref vcsl_meter::instance(void)
 {
-  if(_instance.ptr()==0)
-    _instance=new vcsl_meter;
-  return _instance;
+  if(instance_.ptr()==0)
+    instance_=new vcsl_meter;
+  return instance_;
 }
 
 //---------------------------------------------------------------------------
@@ -48,4 +48,4 @@ vcsl_meter::vcsl_meter(void)
 //---------------------------------------------------------------------------
 // Reference to the unique vcsl_meter object
 //---------------------------------------------------------------------------
-vcsl_meter_ref vcsl_meter::_instance=0;
+vcsl_meter_ref vcsl_meter::instance_=0;

@@ -65,7 +65,7 @@ protected:
   //***************************************************************************
   
   //: Spheroid
-  vcsl_spheroid_ref _spheroid;
+  vcsl_spheroid_ref spheroid_;
 };
 
 #endif // #ifndef VCSL_GEOGRAPHIC_H

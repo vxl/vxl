@@ -9,7 +9,7 @@
 //---------------------------------------------------------------------------
 vcsl_translation::vcsl_translation(void)
 {
-  _vector=0;
+  vector_=0;
 }
 
 //---------------------------------------------------------------------------
@@ -40,11 +40,11 @@ bool vcsl_translation::is_invertible(const double time) const
 //---------------------------------------------------------------------------
 bool vcsl_translation::is_valid(void) const
 {
-  return (_vector!=0)&&(((_beat==0)&&(_interpolator==0)&&(_vector->size()==1))
+  return (vector_!=0)&&(((beat_==0)&&(interpolator_==0)&&(vector_->size()==1))
                         ||
-                        ((_beat!=0)&&(_interpolator!=0)
-                         &&(_beat->size()==(_interpolator->size()+1))
-                         &&(_beat->size()==_vector->size())));
+                        ((beat_!=0)&&(interpolator_!=0)
+                         &&(beat_->size()==(interpolator_->size()+1))
+                         &&(beat_->size()==vector_->size())));
 }
 
 //***************************************************************************
@@ -55,11 +55,11 @@ bool vcsl_translation::is_valid(void) const
 //---------------------------------------------------------------------------
 void vcsl_translation::set_static(vnl_vector<double> &new_vector)
 {
-  if(_vector==0||_vector->size()!=1)
-    _vector=new list_of_vectors(1);
-  (*_vector)[0]=&new_vector;
-  _beat=0;
-  _interpolator=0;
+  if(vector_==0||vector_->size()!=1)
+    vector_=new list_of_vectors(1);
+  (*vector_)[0]=&new_vector;
+  beat_=0;
+  interpolator_=0;
 }
 
 //---------------------------------------------------------------------------
@@ -67,9 +67,9 @@ void vcsl_translation::set_static(vnl_vector<double> &new_vector)
 //---------------------------------------------------------------------------
 void vcsl_translation::set_vector(list_of_vectors &new_vector)
 {
-  if(_vector!=0&&_vector->size()==1)
-    delete _vector;
-  _vector=&new_vector;
+  if(vector_!=0&&vector_->size()==1)
+    delete vector_;
+  vector_=&new_vector;
 }
 
 //---------------------------------------------------------------------------
@@ -77,7 +77,7 @@ void vcsl_translation::set_vector(list_of_vectors &new_vector)
 //---------------------------------------------------------------------------
 list_of_vectors *vcsl_translation::vector(void) const
 {
-  return _vector;
+  return vector_;
 }
 
 //***************************************************************************
@@ -103,7 +103,7 @@ vnl_vector<double> *vcsl_translation::execute(const vnl_vector<double> &v,
   for(i=0;i<v.size();++i)
     result->put(i,v.get(i)+value->get(i));
 
-  if(_beat!=0) // dynamic
+  if(beat_!=0) // dynamic
     delete value;
 
   return result;
@@ -130,7 +130,7 @@ vnl_vector<double> *vcsl_translation::inverse(const vnl_vector<double> &v,
   for(i=0;i<v.size();++i)
     result->put(i,v.get(i)-value->get(i));
 
-  if(_beat!=0) // dynamic
+  if(beat_!=0) // dynamic
     delete value;
 
   return result;
@@ -144,15 +144,15 @@ vnl_vector<double> *vcsl_translation::vector_value(const double time) const
   vnl_vector<double> *result;
   int i;
   
-  if(_beat==0) // static
-    result=(*_vector)[0];
+  if(beat_==0) // static
+    result=(*vector_)[0];
   else
     {
       i=matching_interval(time);
-      switch((*_interpolator)[i])
+      switch((*interpolator_)[i])
         {
         case vcsl_linear:
-          result=lvi(*(*_vector)[i],*(*_vector)[i+1],i,time);
+          result=lvi(*(*vector_)[i],*(*vector_)[i+1],i,time);
           break;
         case vcsl_cubic:
           assert(false); // Not yet implemented

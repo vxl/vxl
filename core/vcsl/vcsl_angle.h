@@ -52,6 +52,6 @@ protected:
   explicit vcsl_angle(void);
 
   //: Reference to the unique vcsl_angle object
-  static vcsl_angle_ref _instance;
+  static vcsl_angle_ref instance_;
 };
 #endif // VCSL_ANGLE_H

@@ -35,9 +35,9 @@ double vcsl_degree::units_per_standard_unit(void) const
 //---------------------------------------------------------------------------
 vcsl_degree_ref vcsl_degree::instance(void)
 {
-  if(_instance.ptr()==0)
-    _instance=new vcsl_degree;
-  return _instance;
+  if(instance_.ptr()==0)
+    instance_=new vcsl_degree;
+  return instance_;
 }
 
 //---------------------------------------------------------------------------
@@ -50,4 +50,4 @@ vcsl_degree::vcsl_degree(void)
 //---------------------------------------------------------------------------
 // Reference to the unique vcsl_degree object
 //---------------------------------------------------------------------------
-vcsl_degree_ref vcsl_degree::_instance=0;
+vcsl_degree_ref vcsl_degree::instance_=0;

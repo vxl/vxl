@@ -42,9 +42,9 @@ vcsl_unit_ref vcsl_length::standard_unit(void) const
 //---------------------------------------------------------------------------
 vcsl_length_ref vcsl_length::instance(void)
 {
-  if(_instance.ptr()==0)
-    _instance=new vcsl_length;
-  return _instance;
+  if(instance_.ptr()==0)
+    instance_=new vcsl_length;
+  return instance_;
 }
 
 //---------------------------------------------------------------------------
@@ -57,4 +57,4 @@ vcsl_length::vcsl_length(void)
 //---------------------------------------------------------------------------
 // Reference to the unique vcsl_length object
 //---------------------------------------------------------------------------
-vcsl_length_ref vcsl_length::_instance=0;
+vcsl_length_ref vcsl_length::instance_=0;

@@ -42,9 +42,9 @@ vcsl_unit_ref vcsl_angle::standard_unit(void) const
 //---------------------------------------------------------------------------
 vcsl_angle_ref vcsl_angle::instance(void)
 {
-  if(_instance.ptr()==0)
-    _instance=new vcsl_angle;
-  return _instance;
+  if(instance_.ptr()==0)
+    instance_=new vcsl_angle;
+  return instance_;
 }
 
 //---------------------------------------------------------------------------
@@ -57,4 +57,4 @@ vcsl_angle::vcsl_angle(void)
 //---------------------------------------------------------------------------
 // Reference to the unique vcsl_angle object
 //---------------------------------------------------------------------------
-vcsl_angle_ref vcsl_angle::_instance=0;
+vcsl_angle_ref vcsl_angle::instance_=0;

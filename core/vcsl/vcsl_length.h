@@ -52,6 +52,6 @@ protected:
   explicit vcsl_length(void);
 
   //: Reference to the unique vcsl_length object
-  static vcsl_length_ref _instance;
+  static vcsl_length_ref instance_;
 };
 #endif // VCSL_LENGTH_H

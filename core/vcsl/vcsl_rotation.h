@@ -117,10 +117,10 @@ protected:
   bool _mode_2d;
 
   //: Angle variation along the time in radians
-  list_of_scalars *_angle;
+  list_of_scalars *angle_;
 
   //: Direction vector variation along the time
-  list_of_vectors *_axis;
+  list_of_vectors *axis_;
 };
 
 #endif // #ifndef VCSL_ROTATION_H

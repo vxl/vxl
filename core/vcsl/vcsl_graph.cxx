@@ -13,7 +13,7 @@
 //---------------------------------------------------------------------------
 vcsl_graph::vcsl_graph(void)
 {
-  _vertices=new vcl_vector<vcsl_spatial_ref>;
+  vertices_=new vcl_vector<vcsl_spatial_ref>;
 }
 
 //---------------------------------------------------------------------------
@@ -21,7 +21,7 @@ vcsl_graph::vcsl_graph(void)
 //---------------------------------------------------------------------------
 vcsl_graph::~vcsl_graph()
 {
-  delete _vertices;
+  delete vertices_;
 }
 
 //***************************************************************************
@@ -33,7 +33,7 @@ vcsl_graph::~vcsl_graph()
 //---------------------------------------------------------------------------
 int vcsl_graph::count(void) const
 {
-  return _vertices->size();
+  return vertices_->size();
 }
 
 //***************************************************************************
@@ -50,7 +50,7 @@ bool vcsl_graph::has(const vcsl_spatial_ref &cs) const
   vcl_vector<vcsl_spatial_ref>::const_iterator i;
 
   result=false;
-  for(i=_vertices->begin();i!=_vertices->end()&&!result;++i)
+  for(i=vertices_->begin();i!=vertices_->end()&&!result;++i)
     result=(*i)==cs;
 
   return result;
@@ -77,7 +77,7 @@ vcsl_spatial_ref vcsl_graph::item(const int index) const
   // require
   assert(valid_index(index));
 
-  return (*_vertices)[index];
+  return (*vertices_)[index];
 }
 
 //---------------------------------------------------------------------------
@@ -89,7 +89,7 @@ void vcsl_graph::put(const vcsl_spatial_ref &cs)
   // require
   assert(!has(cs));
 
-  _vertices->push_back(cs);
+  vertices_->push_back(cs);
 }
 
 //---------------------------------------------------------------------------
@@ -103,9 +103,9 @@ void vcsl_graph::remove(const vcsl_spatial_ref &cs)
   
   vcl_vector<vcsl_spatial_ref>::iterator i;
 
-  for(i=_vertices->begin();i!=_vertices->end()&&((*i)!=cs);++i)
+  for(i=vertices_->begin();i!=vertices_->end()&&((*i)!=cs);++i)
     ;
-  _vertices->erase(i);
+  vertices_->erase(i);
 }
 
 //***************************************************************************
@@ -118,6 +118,6 @@ void vcsl_graph::init_vertices(void) const
 {
   vcl_vector<vcsl_spatial_ref>::iterator i;
 
-  for(i=_vertices->begin();i!=_vertices->end();++i)
+  for(i=vertices_->begin();i!=vertices_->end();++i)
     (*i)->set_reached(false);
 }

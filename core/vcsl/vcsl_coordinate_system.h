@@ -88,7 +88,7 @@ protected:
   //***************************************************************************
 
   //: List of axes
-  vcl_vector<vcsl_axis_ref> _axes;
+  vcl_vector<vcsl_axis_ref> axes_;
 };
 
 #endif // #ifndef VCSL_COORDINATE_SYSTEM_H

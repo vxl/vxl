@@ -76,7 +76,7 @@ protected:
   explicit vcsl_cylindrical_to_cartesian_3d(void);
 
   //: Reference to the unique vcsl_cylindrical_to_cartesian_3d object
-  static vcsl_cylindrical_to_cartesian_3d_ref _instance;
+  static vcsl_cylindrical_to_cartesian_3d_ref instance_;
 };
 
 #endif // #ifndef VCSL_CYLINDRICAL_TO_CARTESIAN_3D_H

@@ -11,7 +11,7 @@
 //---------------------------------------------------------------------------
 vcsl_geographic::vcsl_geographic(void)
 {
-  _spheroid=new vcsl_spheroid();
+  spheroid_=new vcsl_spheroid();
 }
 
 //---------------------------------------------------------------------------
@@ -30,7 +30,7 @@ vcsl_geographic::~vcsl_geographic()
 //---------------------------------------------------------------------------
 vcsl_spheroid_ref vcsl_geographic::spheroid(void) const
 {
-  return _spheroid;
+  return spheroid_;
 }
 
 //***************************************************************************
@@ -42,5 +42,5 @@ vcsl_spheroid_ref vcsl_geographic::spheroid(void) const
 //---------------------------------------------------------------------------
 void vcsl_geographic::set_spheroid(vcsl_spheroid &new_spheroid)
 {
-  _spheroid=&new_spheroid;
+  spheroid_=&new_spheroid;
 }

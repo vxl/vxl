@@ -50,6 +50,6 @@ protected:
   explicit vcsl_meter(void);
   
   //: Reference to the unique vcsl_meter object
-  static vcsl_meter_ref _instance;
+  static vcsl_meter_ref instance_;
 };
 #endif // #ifndef VCSL_METER_H
