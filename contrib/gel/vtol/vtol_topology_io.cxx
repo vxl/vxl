@@ -1,5 +1,5 @@
 
-#include <vcl/vcl_fstream.h>
+#include <vcl_fstream.h>
 
 #include <vtol/vtol_topology_io.h>
 

@@ -1,0 +1,17 @@
+
+ADD_LIBRARY(vgui_mfc vgui_mfc_sources)
+
+SOURCE_FILES(vgui_mfc_sources
+vgui_mfc
+vgui_mfc_adaptor
+vgui_mfc_app
+vgui_mfc_app_init
+vgui_mfc_dialog_impl
+vgui_mfc_doc
+vgui_mfc_mainfrm
+vgui_mfc_statusbar
+vgui_mfc_tag
+vgui_mfc_utils
+vgui_mfc_view
+vgui_mfc_window
+)
