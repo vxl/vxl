@@ -183,7 +183,7 @@ void test_explicit_int_io()
   int i;
 
   vsl_b_ofstream bfs_out("vsl_explicit_int_io_test.bvl.tmp",
-    vcl_ios_out | vcl_ios_binary);
+    vcl_ios_openmode(vcl_ios_out | vcl_ios_binary));
   TEST ("Created vsl_explicit_int_io_test.bvl.tmp for writing",
     (!bfs_out), false);
   for (i = 0; i < 65536; ++i)
@@ -191,7 +191,7 @@ void test_explicit_int_io()
   bfs_out.close();
 
   vsl_b_ifstream bfs_in("vsl_explicit_int_io_test.bvl.tmp",
-    vcl_ios_in | vcl_ios_binary);
+    vcl_ios_openmode(vcl_ios_in | vcl_ios_binary));
   TEST ("Opened vsl_explicit_int_io_test.bvl.tmp for reading",
     (!bfs_in), false);
   for (i = 0; i < 65536; ++i)
@@ -248,7 +248,7 @@ void test_extreme_int_io()
   unsigned long max_ulong = ~0;
 
   vsl_b_ofstream bfs_out("vsl_extreme_int_io_test.bvl.tmp",
-    vcl_ios_out | vcl_ios_binary);
+    vcl_ios_openmode(vcl_ios_out | vcl_ios_binary));
   TEST ("Created vsl_extreme_int_io_test.bvl.tmp for writing",
     (!bfs_out), false);
 
@@ -263,7 +263,7 @@ void test_extreme_int_io()
 
 
   vsl_b_ifstream bfs_in("vsl_extreme_int_io_test.bvl.tmp",
-    vcl_ios_in | vcl_ios_binary);
+    vcl_ios_openmode(vcl_ios_in | vcl_ios_binary));
   TEST ("Opened vsl_extreme_int_io_test.bvl.tmp for reading",
     (!bfs_in), false);
   vsl_b_read(bfs_in,min_long_in);

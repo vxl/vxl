@@ -25,7 +25,7 @@ void test_set_io()
   s_string_out.insert("four");
 
   vsl_b_ofstream bfs_out("vsl_set_io_test.bvl.tmp", 
-    vcl_ios_out | vcl_ios_binary);
+    vcl_ios_openmode(vcl_ios_out | vcl_ios_binary));
   TEST ("Created vsl_set_io_test.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, s_int_out);
   vsl_b_write(bfs_out, s_string_out);
@@ -35,7 +35,7 @@ void test_set_io()
   vcl_set<vcl_string> s_string_in;
   
   vsl_b_ifstream bfs_in("vsl_set_io_test.bvl.tmp", 
-    vcl_ios_in | vcl_ios_binary);
+    vcl_ios_openmode(vcl_ios_in | vcl_ios_binary));
   TEST ("Opened vsl_set_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, s_int_in);
   vsl_b_read(bfs_in, s_string_in);
