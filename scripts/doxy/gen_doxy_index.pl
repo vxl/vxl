@@ -142,7 +142,7 @@ sub print_book_index_links
     chomp;
     ($module, @textline) = split /\s/;
 
-      $link = "html/books/$module/book.html";
+      $link = "books/$module/book.html";
 
       print_link($_,$link);
       print OF "<br>";
