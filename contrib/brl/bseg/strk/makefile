@@ -29,6 +29,14 @@ SOURCES += strk_epipolar_grouper_process.cxx
 SOURCES += strk_region_info.cxx
 SOURCES += strk_region_info_params.cxx
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+ SUBDIRS += tests
+endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
