@@ -290,13 +290,14 @@ void vnl_levenberg_marquardt::lmder_lsqfun(int* n,     // I   Number of residual
               &(active->epsfcn),
               wa1.data_block());
       // compute difference
-      diff = (ref_fJ-finite_jac).array_two_norm();
-      if ( diff > vcl_sqrt(active->epsfcn) )
-        vcl_cerr << "Current x value:\n" << ref_x << vcl_endl
-                 << "Analytical Jacobian is different form finite difference by " << diff << vcl_endl
-                 << "  Analytical Jacobian is:\n   " << ref_fJ.transpose() << vcl_endl
-                 << "  Finite-difference Jacobian is:\n   " << finite_jac.transpose() << vcl_endl
-                 << vcl_endl;
+      for( unsigned i=0; i<ref_fJ.cols(); ++i )
+        for( unsigned j=0; j<ref_fJ.rows(); ++j ) {
+          diff = ref_fJ(j,i) - finite_jac(j,i);
+          diff = diff*diff;
+          if( diff > active->epsfcn ) {
+            vcl_cerr << "Jac(" << i << ", " << j << ") diff: " << ref_fJ(j,i) << ' ' << finite_jac(j,i) << vcl_endl;
+          }
+        }
     }
   }
 
