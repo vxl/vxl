@@ -136,10 +136,6 @@ AUX_SOURCE_DIRECTORY(Templates vil_sources)
 # Because of the way CMake orders the compile flags, this currently
 # has no effect.
 #
-# This may not be a smart approach.  In Windows it can be harmful to
-# mix objects built in release and debug modes because then different
-# libraries are required.
-#
 # IF(CMAKE_SYSTEM_AND_CXX_COMPILER_INFO_FILE MATCHES "Windows-cl")
 #   FOREACH( f ${vil_sources} )
 #     # matches the vil_bicub_interp files in Templates/
