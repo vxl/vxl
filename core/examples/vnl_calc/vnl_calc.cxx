@@ -32,23 +32,21 @@ template <class T>
 class mystack : public vcl_vector<T>
 {
  public:
-  void push(const T& t) {
-    push_back(t);
-  }
+  void push(const T& t) { push_back(t); }
 
   T pop() {
-    int n = size();
+    int n = this->size();
     if (n == 0) {
       vcl_cerr <<  "ZOKS: Stack underflow\n";
       vcl_exit(1);
     }
     T tmp = (*this)[n-1];
-    pop_back();
+    this->pop_back();
     return tmp;
   }
 
   void print() {
-    for (unsigned i = 0; i < size(); ++i)
+    for (unsigned i = 0; i < this->size(); ++i)
       vcl_cout << (*this)[i] << vcl_endl;
   }
 };
