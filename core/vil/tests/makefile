@@ -34,6 +34,15 @@ TESTS += test_greyscale_erode.cxx
 TESTS += test_median.cxx
 TESTS += test_algo_exp_grad_filter_1d.cxx
 
+include ${IUEROOT}/mul/mbl/config.mk
+include ${IUEROOT}/mul/mil/config.mk
+MINI_PROG_SOURCES += vil2_mil_gauss_general_timings.cxx
+MINI_PROG_SOURCES += vil2_vil_compare_access_timings.cxx
+MINI_PROG_SOURCES += vil2_test_access_timings.cxx
+MINI_PROG_SOURCES += vil2_test_random_access_timings.cxx
+MINI_PROG_SOURCES += vil2_test_access_timings_noplanes.cxx
+MINI_PROG_SOURCES += vil2_test_pair_access_timings.cxx
+
 include ${IUEROOT}/config/identify-os.mk
 ifeq ($(OS),OSF1V4) # with optimisation, gcc 3.x runs out of memory
 FLAGS_test_algo_convolve_1d.cxx := -O0
