@@ -49,10 +49,10 @@ vtol_one_chain::vtol_one_chain(edge_list const& edgs,
   set_cycle(new_is_cycle);
 
   for (edge_list::const_iterator i=edgs.begin(); i!=edgs.end(); ++i)
-    {
-      link_inferior(*i);
-      directions_.push_back((signed char)1);
-    }
+  {
+    link_inferior(*i);
+    directions_.push_back((signed char)1);
+  }
 
   if (is_cycle())
     determine_edge_directions();
@@ -121,23 +121,23 @@ vtol_one_chain::vtol_one_chain(vtol_one_chain const& other)
 
   int i=0;
   for (vertex_list::iterator v=verts->begin();v!=verts->end();++v,++i)
-    {
-      vtol_vertex_sptr ve=*v;
-      newverts[i]=ve->clone()->cast_to_topology_object();
-      ve->set_id(i);
-    }
+  {
+    vtol_vertex_sptr ve=*v;
+    newverts[i]=ve->clone()->cast_to_topology_object();
+    ve->set_id(i);
+  }
 
   vcl_vector<signed char>::iterator dir=el->directions_.begin();
   topology_list::iterator inf=el->inferiors()->begin();
   for (; dir!=el->directions_.end(); ++dir,++inf)
-    {
-      vtol_edge_sptr e=(*inf)->cast_to_edge();
+  {
+    vtol_edge_sptr e=(*inf)->cast_to_edge();
 
-      vtol_edge_sptr newedge = newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(
-                               newverts[e->v2()->get_id()]->cast_to_vertex());
-      link_inferior(newedge);
-      directions_.push_back(*dir);
-    }
+    vtol_edge_sptr newedge = newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(
+                             newverts[e->v2()->get_id()]->cast_to_vertex());
+    link_inferior(newedge);
+    directions_.push_back(*dir);
+  }
   set_cycle(el->is_cycle());
   const chain_list *hierarchy_infs=el->chain_inferiors();
 
@@ -145,7 +145,7 @@ vtol_one_chain::vtol_one_chain(vtol_one_chain const& other)
     link_chain_inferior((*h)->clone()->cast_to_topology_object()->cast_to_one_chain());
   delete verts;
 }
-#endif
+#endif // 0
 
 //---------------------------------------------------------------------------
 // Destructor
@@ -174,33 +174,33 @@ vtol_one_chain::copy_with_arrays(topology_list &verts,
   vcl_vector<signed char>::const_iterator di=directions_.begin();
   topology_list::const_iterator ti=inferiors()->begin();
   for (; ti!=inferiors()->end(); ++ti,++di)
-    {
-      vtol_edge *e=(*ti)->cast_to_edge();
-      vtol_edge *newedge=edges[e->get_id()]->cast_to_edge();
+  {
+    vtol_edge *e=(*ti)->cast_to_edge();
+    vtol_edge *newedge=edges[e->get_id()]->cast_to_edge();
 
-      assert(*e == *newedge);
+    assert(*e == *newedge);
 
-      result->link_inferior(newedge);
-      result->directions_.push_back((*di));
-    }
+    result->link_inferior(newedge);
+    result->directions_.push_back((*di));
+  }
   result->set_cycle(is_cycle());
   const chain_list *hierarchy_infs=chain_inferiors();
 
   for (chain_list::const_iterator hi=hierarchy_infs->begin();hi!=hierarchy_infs->end();++hi)
+  {
+    vtol_one_chain_sptr tch = (*hi)->cast_to_one_chain();
+    int n = tch->num_edges();
+    vsol_spatial_object_2d_sptr so = (*hi)->clone();
+    vtol_one_chain *temp = so->cast_to_topology_object()->cast_to_one_chain();
+    // we have to set the ids here because the clone operation does not
+    // copy the id field on vsol_spatial_object_2d
+    for (int i=0; i<n; ++i)
     {
-      vtol_one_chain_sptr tch = (*hi)->cast_to_one_chain();
-      int n = tch->num_edges();
-      vsol_spatial_object_2d_sptr so = (*hi)->clone();
-      vtol_one_chain *temp = so->cast_to_topology_object()->cast_to_one_chain();
-      //we have to set the ids here because the clone operation does not
-      //copy the id field on vsol_spatial_object_2d
-      for(int i = 0; i<n; ++i)
-        {
-          vtol_edge_sptr e = temp->edge(i);
-          e->set_id(tch->edge(i)->get_id());
-        }
-      result->link_chain_inferior(temp->copy_with_arrays(verts,edges));
+      vtol_edge_sptr e = temp->edge(i);
+      e->set_id(tch->edge(i)->get_id());
     }
+    result->link_chain_inferior(temp->copy_with_arrays(verts,edges));
+  }
 
   assert(*result == *this);
 
@@ -218,12 +218,12 @@ signed char vtol_one_chain::direction(vtol_edge const &e) const
   vcl_vector<signed char>::const_iterator dit=directions_.begin();
   topology_list::const_iterator toit;
   for (toit=inferiors()->begin();toit!=inferiors()->end();++toit)
-    {
-      vtol_edge *ce=(*toit)->cast_to_edge();
-      if (ce==&e)
-        return *dit;
-      ++dit;
-    }
+  {
+    vtol_edge *ce=(*toit)->cast_to_edge();
+    if (ce==&e)
+      return *dit;
+    ++dit;
+  }
   return (signed char)1;
 }
 
@@ -238,19 +238,19 @@ vtol_one_chain::outside_boundary_compute_vertices(void)
   topology_list::iterator inf=inferiors()->begin();
   vcl_vector<signed char>::iterator dir=directions_.begin();
   for (; inf!=inferiors()->end(); ++inf,++dir)
+  {
+    vtol_edge_sptr e=(*inf)->cast_to_edge();
+    if ((*dir)< 0)
     {
-      vtol_edge_sptr e=(*inf)->cast_to_edge();
-      if ((*dir)< 0)
-        {
-          result->push_back(e->v2()->cast_to_vertex());
-          result->push_back(e->v1()->cast_to_vertex());
-        }
-      else
-        {
-          result->push_back(e->v1()->cast_to_vertex());
-          result->push_back(e->v2()->cast_to_vertex());
-        }
+      result->push_back(e->v2()->cast_to_vertex());
+      result->push_back(e->v1()->cast_to_vertex());
     }
+    else
+    {
+      result->push_back(e->v1()->cast_to_vertex());
+      result->push_back(e->v2()->cast_to_vertex());
+    }
+  }
   return tagged_union(result);
 }
 
@@ -374,21 +374,21 @@ vcl_vector<vtol_one_chain*> *vtol_one_chain::compute_one_chains(void)
 
   for (chain_list::iterator i=chain_inferiors_.begin();
        i!=chain_inferiors_.end();++i)
-    {
-      vsol_spatial_object_2d_sptr so = (*i)->clone();
-      //==============================================================
-      //compensate for leaving scope.  The clone method returns a smart
-      //pointer, but the output in this method is a bare pointer.  Thus
-      //so will be deleted when the routine leaves scope.  The calling
-      //routine for compute_one_chains will push these one_chains on a list
-      //of smart pointers so there should be no leak.  This routine never
-      //worked-- JLM
-      so->ref();
-      //===============================================================
-      vtol_one_chain* sub_chain = so->cast_to_topology_object()->
-        cast_to_one_chain();
-      result->push_back(sub_chain);
-    }
+  {
+    vsol_spatial_object_2d_sptr so = (*i)->clone();
+    //==============================================================
+    //compensate for leaving scope.  The clone method returns a smart
+    //pointer, but the output in this method is a bare pointer.  Thus
+    //so will be deleted when the routine leaves scope.  The calling
+    //routine for compute_one_chains will push these one_chains on a list
+    //of smart pointers so there should be no leak.  This routine never
+    //worked -- JLM
+    so->ref();
+    //===============================================================
+    vtol_one_chain* sub_chain = so->cast_to_topology_object()->
+      cast_to_one_chain();
+    result->push_back(sub_chain);
+  }
   return result;
 }
 
@@ -451,24 +451,24 @@ vcl_vector<vtol_one_chain*> *vtol_one_chain::outside_boundary_compute_one_chains
 vcl_vector<vtol_face*> *vtol_one_chain::compute_faces(void)
 {
   if (is_sub_chain())
-    {
-      vcl_vector<vtol_face*> *result=new vcl_vector<vtol_face*>();
-      one_chain_list *onech=superior_one_chains();
+  {
+    vcl_vector<vtol_face*> *result=new vcl_vector<vtol_face*>();
+    one_chain_list *onech=superior_one_chains();
 
-      for (one_chain_list::iterator i=onech->begin();i!=onech->end();++i)
-        {
-          vcl_vector<vtol_face*> *sublist=(*i)->compute_faces();
-          vcl_vector<vtol_face*>::iterator ii;
-          for (ii=sublist->begin();ii!=sublist->end();++ii)
-            result->push_back(*ii);
-          delete sublist;
-        }
-      return tagged_union(result);
-    }
-  else
+    for (one_chain_list::iterator i=onech->begin();i!=onech->end();++i)
     {
-      SEL_SUP(vtol_face, compute_faces);
+      vcl_vector<vtol_face*> *sublist=(*i)->compute_faces();
+      vcl_vector<vtol_face*>::iterator ii;
+      for (ii=sublist->begin();ii!=sublist->end();++ii)
+        result->push_back(*ii);
+      delete sublist;
     }
+    return tagged_union(result);
+  }
+  else
+  {
+    SEL_SUP(vtol_face, compute_faces);
+  }
 }
 
 //---------------------------------------------------------------------------
@@ -477,24 +477,24 @@ vcl_vector<vtol_face*> *vtol_one_chain::compute_faces(void)
 vcl_vector<vtol_two_chain*> *vtol_one_chain::compute_two_chains(void)
 {
   if (is_sub_chain())
-    {
-      vcl_vector<vtol_two_chain*> *result=new vcl_vector<vtol_two_chain*>;
-      one_chain_list *onech=superior_one_chains();
+  {
+    vcl_vector<vtol_two_chain*> *result=new vcl_vector<vtol_two_chain*>;
+    one_chain_list *onech=superior_one_chains();
 
-      for (one_chain_list::iterator i=onech->begin();i!=onech->end();++i)
-        {
-          vcl_vector<vtol_two_chain*> *sublist=(*i)->compute_two_chains();
-          vcl_vector<vtol_two_chain*>::iterator ii;
-          for (ii=sublist->begin();ii!=sublist->end();++ii)
-            result->push_back(*ii);
-          delete sublist;
-        }
-      return tagged_union(result);
-    }
-  else
+    for (one_chain_list::iterator i=onech->begin();i!=onech->end();++i)
     {
-      SEL_SUP(vtol_two_chain, compute_two_chains);
+      vcl_vector<vtol_two_chain*> *sublist=(*i)->compute_two_chains();
+      vcl_vector<vtol_two_chain*>::iterator ii;
+      for (ii=sublist->begin();ii!=sublist->end();++ii)
+        result->push_back(*ii);
+      delete sublist;
     }
+    return tagged_union(result);
+  }
+  else
+  {
+    SEL_SUP(vtol_two_chain, compute_two_chains);
+  }
 }
 
 //---------------------------------------------------------------------------
@@ -503,23 +503,23 @@ vcl_vector<vtol_two_chain*> *vtol_one_chain::compute_two_chains(void)
 vcl_vector<vtol_block*> *vtol_one_chain::compute_blocks(void)
 {
   if (is_sub_chain())
+  {
+    vcl_vector<vtol_block*> *result=new vcl_vector<vtol_block*>;
+    one_chain_list *onech=superior_one_chains();
+    for (one_chain_list::iterator i=onech->begin();i!=onech->end();++i)
     {
-      vcl_vector<vtol_block*> *result=new vcl_vector<vtol_block*>;
-      one_chain_list *onech=superior_one_chains();
-      for (one_chain_list::iterator i=onech->begin();i!=onech->end();++i)
-        {
-          vcl_vector<vtol_block*> *sublist=(*i)->compute_blocks();
-          vcl_vector<vtol_block*>::iterator ii;
-          for (ii=sublist->begin();ii!=sublist->end();++ii)
-            result->push_back(*ii);
-          delete sublist;
-        }
-      return tagged_union(result);
+      vcl_vector<vtol_block*> *sublist=(*i)->compute_blocks();
+      vcl_vector<vtol_block*>::iterator ii;
+      for (ii=sublist->begin();ii!=sublist->end();++ii)
+        result->push_back(*ii);
+      delete sublist;
     }
+    return tagged_union(result);
+  }
   else
-    {
-      SEL_SUP(vtol_block, compute_blocks);
-    }
+  {
+    SEL_SUP(vtol_block, compute_blocks);
+  }
 }
 
 //---------------------------------------------------------------------------
@@ -532,18 +532,18 @@ vcl_vector<vtol_block*> *vtol_one_chain::compute_blocks(void)
 void vtol_one_chain::compute_bounding_box(void) const
 {
   if (!this->bounding_box_)
-    {
-      vcl_cout << "In void vtol_one_chain::compute_bounding_box() - shouldn't happen\n";
-      return;
-    }
+  {
+    vcl_cout << "In void vtol_one_chain::compute_bounding_box() - shouldn't happen\n";
+    return;
+  }
 
   edge_list *edgs= const_cast<vtol_one_chain*>(this)->edges();
 
   if (edgs->size()==0)//default method, things are screwed up anyway
-    {
-      vtol_topology_object::compute_bounding_box();
-      return;
-    }
+  {
+    vtol_topology_object::compute_bounding_box();
+    return;
+  }
   //at this point we need to clear the bounds of the box
   //to correctly reflect edge bounds
   bounding_box_->reset_bounds();
@@ -579,63 +579,63 @@ void vtol_one_chain::determine_edge_directions(void)
   directions_.clear();
   num_edges=numinf();
   if (num_edges>=2)
+  {
+    // Determining the cycle direction
+    // with reference to the first edge.
+
+    topology_list::iterator i=inferiors()->begin();
+    first_edge=(*i)->cast_to_edge();
+    ++i;
+
+    second_edge=(*i)->cast_to_edge();
+
+    if (second_edge->is_endpoint1(*(first_edge->v1())))
     {
-      // Determining the cycle direction
-      // with reference to the first edge.
-
-      topology_list::iterator i=inferiors()->begin();
-      first_edge=(*i)->cast_to_edge();
-      ++i;
-
-      second_edge=(*i)->cast_to_edge();
-
-      if (second_edge->is_endpoint1(*(first_edge->v1())))
-        {
-          directions_.push_back((signed char)(-1));
-          tweeney=second_edge->v2();
-          directions_.push_back((signed char)1);
-        }
-      else if (second_edge->is_endpoint2(*(first_edge->v1())))
-        {
-          directions_.push_back((signed char)(-1));
-          directions_.push_back((signed char)(-1));
-          tweeney=second_edge->v1();
-        }
-      else
-        {
-          directions_.push_back((signed char)1);
-          if (second_edge->is_endpoint1(*(first_edge->v2())))
-            {
-              tweeney=second_edge->v2();
-              directions_.push_back((signed char)1);
-            }
-          else
-            {
-              tweeney=second_edge->v1();
-              directions_.push_back((signed char)(-1));
-            }
-        }
-      if (num_edges>2)
-        {
-          vtol_edge *cur_edge;
-          ++i;
-          while (i!=inferiors()->end())
-            {
-              cur_edge=(*i)->cast_to_edge();
-              if (cur_edge->is_endpoint1(*tweeney))
-                {
-                  tweeney=cur_edge->v2();
-                  directions_.push_back((signed char)1);
-                }
-              else
-                {
-                  tweeney=cur_edge->v1();
-                  directions_.push_back((signed char)(-1));
-                }
-              ++i;
-            }
-        }
+      directions_.push_back((signed char)(-1));
+      tweeney=second_edge->v2();
+      directions_.push_back((signed char)1);
     }
+    else if (second_edge->is_endpoint2(*(first_edge->v1())))
+    {
+      directions_.push_back((signed char)(-1));
+      directions_.push_back((signed char)(-1));
+      tweeney=second_edge->v1();
+    }
+    else
+    {
+      directions_.push_back((signed char)1);
+      if (second_edge->is_endpoint1(*(first_edge->v2())))
+      {
+        tweeney=second_edge->v2();
+        directions_.push_back((signed char)1);
+      }
+      else
+      {
+        tweeney=second_edge->v1();
+        directions_.push_back((signed char)(-1));
+      }
+    }
+    if (num_edges>2)
+    {
+      vtol_edge *cur_edge;
+      ++i;
+      while (i!=inferiors()->end())
+      {
+        cur_edge=(*i)->cast_to_edge();
+        if (cur_edge->is_endpoint1(*tweeney))
+        {
+          tweeney=cur_edge->v2();
+          directions_.push_back((signed char)1);
+        }
+        else
+        {
+          tweeney=cur_edge->v1();
+          directions_.push_back((signed char)(-1));
+        }
+        ++i;
+      }
+    }
+  }
   else if (num_edges==1)
     directions_.push_back((signed char)1);
 }
@@ -674,7 +674,7 @@ void vtol_one_chain::add_edge(vtol_edge &new_edge,
     directions_.push_back((signed char)(-1));
   link_inferior(&new_edge);
 }
-#endif
+#endif // 1
 
 //---------------------------------------------------------------------------
 //: Remove an edge
@@ -690,12 +690,12 @@ void vtol_one_chain::remove_edge(vtol_edge_sptr const& doomed_edge,
   topology_list::difference_type index=i-inferiors()->begin();
 
   if (index>=0 && i!= inferiors()->end())
-    {
-      vcl_vector<signed char>::iterator j = directions_.begin() + index;
-      directions_.erase(j);// get rid of the direction associated with the edge
-      touch();
-      unlink_inferior(doomed_edge);
-    }
+  {
+    vcl_vector<signed char>::iterator j = directions_.begin() + index;
+    directions_.erase(j);// get rid of the direction associated with the edge
+    touch();
+    unlink_inferior(doomed_edge);
+  }
 }
 
 void vtol_one_chain::remove_edge(vtol_edge_2d_sptr const& doomed_edge,
@@ -709,12 +709,12 @@ void vtol_one_chain::remove_edge(vtol_edge_2d_sptr const& doomed_edge,
   topology_list::difference_type index=i-inferiors()->begin();
 
   if (index>=0 && i!= inferiors()->end())
-    {
-      vcl_vector<signed char>::iterator j = directions_.begin() + index;
-      directions_.erase(j);// get rid of the direction associated with the edge
-      touch();
-      unlink_inferior(doomed_edge->cast_to_edge());
-    }
+  {
+    vcl_vector<signed char>::iterator j = directions_.begin() + index;
+    directions_.erase(j);// get rid of the direction associated with the edge
+    touch();
+    unlink_inferior(doomed_edge->cast_to_edge());
+  }
 }
 
 #if 1 // deprecated
@@ -729,14 +729,14 @@ void vtol_one_chain::remove_edge(vtol_edge &doomed_edge,
   topology_list::difference_type index=i-inferiors()->begin();
 
   if (index>=0 && i!= inferiors()->end())
-    {
-      vcl_vector<signed char>::iterator j = directions_.begin() + index;
-      directions_.erase(j);// get rid of the direction associated with the edge
-      touch();
-      unlink_inferior(&doomed_edge);
-    }
+  {
+    vcl_vector<signed char>::iterator j = directions_.begin() + index;
+    directions_.erase(j);// get rid of the direction associated with the edge
+    touch();
+    unlink_inferior(&doomed_edge);
+  }
 }
-#endif
+#endif // 1
 
 //---------------------------------------------------------------------------
 //: Comparison operator
