@@ -17,6 +17,7 @@ SOURCES += vil3d_file_format.cxx
 SOURCES += vil3d_header_data.cxx
 SOURCES += file_formats/vil3d_gipl_format.cxx
 SOURCES += vil3d_load.cxx
+MANPAGE_SOURCES += vil3d_transform.h
 
 SUBDIRS += algo io
 
