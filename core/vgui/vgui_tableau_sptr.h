@@ -26,6 +26,7 @@ struct vgui_tableau_sptr_t : public B {
   vgui_tableau_sptr_t(vgui_tableau_sptr_t<T> const& r): B(r) {}
   void operator=(vgui_tableau_sptr_t<T> const& r) { B::operator=(r); }
   T* operator->() const { return (T*)this->as_pointer(); }
+  T& operator*() const { return *((T*)this->as_pointer()); }
 };
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 
