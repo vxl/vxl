@@ -59,3 +59,12 @@ void vsol_box_2d::set_max_y(const double& v)
   (_box.max())[1]=v;
 }
 
+// compare mins and maxs between this and the comp_box, grow to the bounding box
+void vsol_box_2d::grow_minmax_bounds(vsol_box_2d & comp_box)
+{
+  if (comp_box.get_min_x() < get_min_x()) set_min_x(comp_box.get_min_x());
+  if (comp_box.get_max_x() > get_max_x()) set_max_x(comp_box.get_max_x());
+  if (comp_box.get_min_y() < get_min_y()) set_min_y(comp_box.get_min_y());
+  if (comp_box.get_max_y() > get_max_y()) set_max_y(comp_box.get_max_y());
+}
+

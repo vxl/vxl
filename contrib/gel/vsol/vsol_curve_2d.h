@@ -1,21 +1,22 @@
 #ifndef VSOL_CURVE_2D_H
 #define VSOL_CURVE_2D_H
 //*****************************************************************************
-//:
-//  \file
-// \brief Abstract curve in a 2D space
 //
-// \author
+// .NAME vsol_curve_2d - Abstract curve in a 2D space
+// .LIBRARY vsol
+// .INCLUDE vsol/vsol_curve_2d.h
+// .FILE    vsol/vsol_curve_2d.cxx
+//
+// .SECTION Author
 // François BERTEL
 //
-// \verbatim
-// Modifications
-//  2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-//  2000/04/27 François BERTEL Creation
-// \endverbatim
+// .SECTION Modifications
+// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+// 2000/04/27 François BERTEL Creation
 //*****************************************************************************
 
 class vsol_curve_2d;
+class vdgl_digital_curve;
 
 //*****************************************************************************
 // External declarations for values
@@ -33,6 +34,7 @@ public:
   { CURVE_NO_TYPE=0,
     LINE,
     CONIC,
+    DIGITAL_CURVE,
     NUM_CURVE_TYPES
   };
 
@@ -58,6 +60,15 @@ public:
   //***************************************************************************
   // Access
   //***************************************************************************
+
+  //***************************************************************************
+  // Replaces dynamic_cast<T>
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is an digital_curve, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual vdgl_digital_curve *cast_to_digital_curve(void) {return NULL;}
 
   //---------------------------------------------------------------------------
   //: Return the first point of `this'

@@ -3,6 +3,7 @@ SOURCE_FILES( vtol_sources
   vtol_block_sptr.h
   vtol_chain.h
   vtol_chain_sptr.h
+  vtol_cycle_processor.h
   vtol_dtd.h
   vtol_edge.h
   vtol_edge_2d.h

@@ -16,5 +16,9 @@ vsol_curve_2d::~vsol_curve_2d()
 {
 }
 
+//***************************************************************************
+// Replaces dynamic_cast<T>
+//***************************************************************************
+
 //#include <vcl_rel_ops.h> // gcc 2.7
 //VCL_INSTANTIATE_INLINE(bool operator!=(vsol_curve_2d const &, vsol_curve_2d const &));

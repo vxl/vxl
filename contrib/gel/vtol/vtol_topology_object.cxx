@@ -270,7 +270,7 @@ void vtol_topology_object::link_inferior(vtol_topology_object &inferior)
 
   // Is this true?
   if ( is_inferior ( inferior ) ) { return; }
-
+  
   assert(!is_inferior(inferior));
 
   _inferiors.push_back(&inferior);
@@ -293,7 +293,7 @@ void vtol_topology_object::unlink_inferior(vtol_topology_object &inferior)
 
   // Is this true?
   if ( !is_inferior ( inferior ) ) { return; }
-
+  
   assert(is_inferior(inferior));
 
   vcl_vector<vtol_topology_object_sptr>::iterator i;

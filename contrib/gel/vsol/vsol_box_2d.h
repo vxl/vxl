@@ -1,13 +1,18 @@
 #ifndef vsol_box_2d_H
 #define vsol_box_2d_H
-//:
-//  \file
-// \brief A bounding box
 //
-//  Note that the definition of width, depth and
-//  height are such that the X-Y plane is considered
-//  as a Rectangle with a "width" and "height"
-//  according to the usual definition.
+// .NAME        vsol_box_2d - A bounding box
+// .LIBRARY     vsol
+// .HEADER      gel package
+// .INCLUDE     vsol/vsol_box_2d.h
+// .FILE        vsol_box_2d.cxx
+//
+// .SECTION Description
+//                     Note that the definition of width, depth and
+//                     height are such that the X-Y plane is considered
+//                     as a Rectangle with a "width" and "height"
+//                     according to the usual definition.
+//
 
 #include <vsol/vsol_box_2d_sptr.h>
 
@@ -17,6 +22,7 @@
 #include <vbl/vbl_bounding_box.h>
 
 //: \brief a bounding box for spatial objects
+
 
 class vsol_box_2d
   : public vbl_ref_count,
@@ -42,6 +48,9 @@ class vsol_box_2d
 
   void set_min_y(const double &v);
   void set_max_y(const double &v);
+
+  //Compare this' bounds to comp_box and grow to the maximum bounding box
+  void grow_minmax_bounds(vsol_box_2d & comp_box);
 
  protected:
 

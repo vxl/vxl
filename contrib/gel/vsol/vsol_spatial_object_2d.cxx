@@ -1,8 +1,5 @@
 #include <vsol/vsol_spatial_object_2d.h>
 
-//:
-//  \file
-
 #include <vcl_iostream.h>
 
 const float vsol_spatial_object_2d::eps=1.0e-3f;
@@ -30,6 +27,7 @@ const char *vsol_spatial_object_2d::get_name(void) const
 
 void vsol_spatial_object_2d::protected_destroy()
 {
+
   if(this->get_references() <= 0)
     {
       vcl_cout << "goodbye crule world " << vcl_endl;
@@ -79,8 +77,7 @@ void  iu_delete(vsol_spatial_object_2d* so)
 }
 
 //---------------------------------------------------------------------------
-//: The same behavior than dynamic_cast<>.
-//  Needed because VXL is not compiled with -frtti :-(
+//: The same behavior than dynamic_cast<>. Needed because VXL is not compiled with -frtti :-(
 //---------------------------------------------------------------------------
 const vsol_group_2d *vsol_spatial_object_2d::cast_to_group(void) const
 {
@@ -104,8 +101,7 @@ vsol_spatial_object_2d::Transform(CoolTransform const& )
 }
 
 //------------------------------------------------------------
-//:
-// Return the projective transformation needed to move GetLocation() to (0,0,0),
+//: Return the projective transformation needed to move GetLocation() to (0,0,0),
 // GetOrientation() to (1,0,0), GetNormal() to (0,0,1) and GetSize() to (1,1,1).
 CoolTransform vsol_spatial_object_2d::GetTransformation() const
 {
@@ -114,8 +110,7 @@ CoolTransform vsol_spatial_object_2d::GetTransformation() const
 }
 
 //------------------------------------------------------------
-//:
-// Leave GetLocation() fixed, move all other points towards or away from it
+//: leave GetLocation() fixed, move all other points towards or away from it
 // by the given scale factor.  Smaller than 1 means towards.  Negative moves the
 // points to the other side of GetLocation().
 bool
@@ -126,8 +121,7 @@ vsol_spatial_object_2d::LinearScale(float )
 }
 
 //------------------------------------------------------------
-//:
-// Leave GetOrientation() fixed, translate all points so that GetLocation()
+//: leave GetOrientation() fixed, translate all points so that GetLocation()
 // moves to (0,0,0).
 bool
 vsol_spatial_object_2d::Translate()
@@ -137,8 +131,7 @@ vsol_spatial_object_2d::Translate()
 }
 
 //------------------------------------------------------------
-//:
-// Leave GetLocation() fixed, rotate all other points around it so that
+//: leave GetLocation() fixed, rotate all other points around it so that
 // GetOrientation() moves to (1,0,0).
 bool
 vsol_spatial_object_2d::Rotate()
@@ -148,8 +141,7 @@ vsol_spatial_object_2d::Rotate()
 }
 
 //------------------------------------------------------------
-//:
-// Leave GetOrientation() fixed, rotate all other points around it over 180
+//: leave GetOrientation() fixed, rotate all other points around it over 180
 // degrees.
 bool
 vsol_spatial_object_2d::Reflect()
@@ -159,8 +151,7 @@ vsol_spatial_object_2d::Reflect()
 }
 
 //------------------------------------------------------------
-//:
-// Leave GetOrientation() fixed, move all other points parallel to it,
+//: leave GetOrientation() fixed, move all other points parallel to it,
 // over a distance which is proportional to its distance to GetOrientation().
 // A right angle becomes an angle of a (in degrees).
 bool
@@ -172,11 +163,20 @@ vsol_spatial_object_2d::Shear(float )
 #endif
 
 //---------------------------------------------------------------------------
-//: Compute bounding box, do nothing in this case
+//: compute bounding box, do nothing in this case
 //---------------------------------------------------------------------------
 void vsol_spatial_object_2d::compute_bounding_box(void)
 {
   if(_bounding_box==0)
     _bounding_box = new vsol_box_2d;
   _bounding_box->touch();
+}
+
+void vsol_spatial_object_2d::grow_minmax_bounds(vsol_box_2d & comp_box)
+{
+  if(_bounding_box==0)
+    {
+    _bounding_box=new vsol_box_2d;
+    }
+  _bounding_box->grow_minmax_bounds(comp_box);
 }

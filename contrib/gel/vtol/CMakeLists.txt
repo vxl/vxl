@@ -18,6 +18,7 @@ SOURCE_FILES( vtol_sources
   vtol_face_2d.cxx
   vtol_vertex_2d.cxx
   vtol_topology_io.cxx
+  vtol_cycle_processor.cxx
 )
 
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
