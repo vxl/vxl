@@ -13,6 +13,7 @@
 // \endverbatim
 
 #include <vcl_string.h>
+#include <vcl/vcl_complex_fwd.h>
 
 //: initialise test counters, check test name 'name' exists
 void testlib_test_start(const char* name = 0);
@@ -28,6 +29,9 @@ void testlib_test_assert(const vcl_string& msg, bool expr);
 //: output msg, then perform test to see if expr is within tol of target
 void testlib_test_assert_near(const vcl_string& msg, double expr,
                               double target = 0, double tol = 1e-12);
+//: output msg, then perform test to see if expr is within tol of target
+void testlib_test_assert_near(const vcl_string& msg, vcl_complex<double> expr,
+                              vcl_complex<double> target, double tol = 1e-12);
 
 #define Assert testlib_test_assert
 #define AssertNear testlib_test_assert_near

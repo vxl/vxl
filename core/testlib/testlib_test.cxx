@@ -20,6 +20,7 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h> // for setfill, setw
+#include <vcl_complex.h>
 
 static int num_test;
 static int tests_passed;
@@ -78,6 +79,12 @@ void testlib_test_assert(const vcl_string& msg, bool expr)
 }
 
 void testlib_test_assert_near(const vcl_string& msg, double expr, double target, double tol)
+{
+  vcl_cout << msg << " should be " << target << ", is " << expr << ", ";
+  testlib_test_perform(vcl_abs(expr - target) < tol);
+}
+
+void testlib_test_assert_near(const vcl_string& msg, vcl_complex<double> expr, vcl_complex<double> target, double tol)
 {
   vcl_cout << msg << " should be " << target << ", is " << expr << ", ";
   testlib_test_perform(vcl_abs(expr - target) < tol);
