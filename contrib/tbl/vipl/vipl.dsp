@@ -243,6 +243,11 @@ SOURCE=.\Templates/vipl_accessors_vil_image+ushort-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vipl_accessors_vil_image+vil_rgb+uchar--.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vipl_add_random_noise+vil_image.vil_image.uchar.uchar-.cxx
 
 # End Source File
@@ -519,11 +524,6 @@ SOURCE=.\vipl_with_section/Templates/vipl_accessors_section+uchar.2-.cxx
 # Begin Source File
 
 SOURCE=.\vipl_with_section/Templates/vipl_accessors_section+vil_rgb+uchar-.2-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vipl_with_section/Templates/vipl_dilate_disk+section+vil_rgb+uchar-.2-.section+vil_rgb+uchar-.2-.vil_rgb+uchar-.vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
