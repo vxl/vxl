@@ -8,56 +8,28 @@
 //
 //--------------------------------------------------------------
 
-
-// -- Constructor
-template <class T>
-vbl_array_3d<T>::vbl_array_3d (unsigned int n1, unsigned int n2, unsigned int n3):
-  base(n1, n2, n3)
-{
-  allocate_array(n1, n2, n3);
-}
-
-// -- Constructor.  Make an vbl_array_3d and fill it with fill_value
-template <class T>
-vbl_array_3d<T>::vbl_array_3d (unsigned int n1, unsigned int n2, unsigned int n3, const T& fill_value):
-  base(n1, n2, n3)
-{
-  allocate_array(n1, n2, n3);
-  fill(fill_value);
-}
-
-// -- Constructor
-template <class T>
-vbl_array_3d<T>::vbl_array_3d (unsigned int n1, unsigned int n2, unsigned int n3, const T *static_array):
-  base(n1, n2, n3)
-{
-  allocate_array (n1, n2, n3);
-  set(static_array);
-}
-
-// -- Copy constructor
-template <class T>
-vbl_array_3d<T>::vbl_array_3d(vbl_array_3d<T> const& that):
-  base(that.row1_count_, that.row2_count_, that.row3_count_)
-{
-  allocate_array(row1_count_, row2_count_, row3_count_);
-  set(that.data_block());
-}
-
 // -- Constructor utility.  This allocates a 3D array which can be
 // referenced using the form myarray[a][b][c].  Useful in C although maybe
 // superfluous here as access is via a get function anyway.
 template <class T>
-void vbl_array_3d<T>::allocate_array (unsigned int n1, unsigned int n2, unsigned int n3)
+void vbl_array_3d<T>::construct(int n1, int n2, int n3)
 {
+  assert(n1 >= 0);
+  assert(n2 >= 0);
+  assert(n3 >= 0);
+  
+  row1_count_ = n1;
+  row2_count_ = n2;
+  row3_count_ = n3;
+  
   // allocate the memory for the first level pointers.
-  _element = new T** [n1];
-
+  element_ = new T** [n1];
+  
   // set the first level pointers and allocate the memory for the second level pointers.
   {
-    _element[0] = new T* [n1 * n2];
+    element_[0] = new T* [n1 * n2];
     for (unsigned row1_index = 0; row1_index < n1; row1_index++)
-      _element [row1_index] = _element[0] + n2 * row1_index;
+      element_ [row1_index] = element_[0] + n2 * row1_index;
   }
   
   T* array_ptr = new T [n1*n2*n3];
@@ -65,34 +37,33 @@ void vbl_array_3d<T>::allocate_array (unsigned int n1, unsigned int n2, unsigned
   // set the second level pointers.
   for (unsigned row1_index = 0; row1_index < n1; row1_index++)
     for (unsigned row2_index = 0; row2_index < n2; row2_index++) {
-      _element [row1_index][row2_index] = array_ptr;
+      element_ [row1_index][row2_index] = array_ptr;
       array_ptr += n3;
     }
 }
 
-// -- Destructor
 template <class T>
-vbl_array_3d<T>::~vbl_array_3d()
+void vbl_array_3d<T>::destruct()
 {
-  // remove the actual members.
-  delete [] _element [0][0];
-
-  // remove the second level pointers.
-  delete [] _element [0];
-  
-  // remove the first level pointers.
-  delete [] _element;
+  if (element_) {
+    // remove the actual members.
+    delete [] element_ [0][0];
+    
+    // remove the second level pointers.
+    delete [] element_ [0];
+    
+    // remove the first level pointers.
+    delete [] element_;
+  }
 }
 
-// -- Assignment
 template <class T>
-vbl_array_3d<T>& vbl_array_3d<T>::operator = (vbl_array_3d<T> const& that)
+void vbl_array_3d<T>::resize(int n1, int n2, int n3)
 {
-  assert(row1_count_ == that.row1_count_);
-  assert(row2_count_ == that.row2_count_);
-  assert(row3_count_ == that.row3_count_);
-  set(that.data_block());
-  return *this;
+  if (n1 == row1_count_ && n2 == row2_count_ && n3 == row3_count_)
+    return;
+  destruct();
+  construct(n1, n2, n3);
 }
 
 // -- Fill from static array of Ts.  The final index fills fastest, so if
@@ -104,7 +75,7 @@ void vbl_array_3d<T>::set(T const* p)
   for (unsigned int row1_index = 0; row1_index < row1_count_; row1_index++)
     for (unsigned int row2_index = 0; row2_index < row2_count_; row2_index++)
       for (unsigned int row3_index = 0; row3_index < row3_count_; row3_index++)
-	_element [row1_index][row2_index][row3_index] = *p++;
+	element_ [row1_index][row2_index][row3_index] = *p++;
 }
 
 // -- Get into array
@@ -114,7 +85,7 @@ void vbl_array_3d<T>::get(T* p) const
   for (unsigned int row1_index = 0; row1_index < row1_count_; row1_index++)
     for (unsigned int row2_index = 0; row2_index < row2_count_; row2_index++)
       for (unsigned int row3_index = 0; row3_index < row3_count_; row3_index++)
-	*p++ = _element [row1_index][row2_index][row3_index];
+	*p++ = element_ [row1_index][row2_index][row3_index];
 }
 
 // -- Fill with constant
@@ -124,7 +95,7 @@ void vbl_array_3d<T>::fill(T const& value)
   int n = row1_count_ * row2_count_ * row3_count_;
   T* d = data_block();
   T* e = d + n;
-  while(d < e)
+  while (d < e)
     *d++ = value;
 }
 
@@ -133,11 +104,11 @@ void vbl_array_3d<T>::fill(T const& value)
 #include <vcl_iostream.h>
 
 template <class T>
-vcl_ostream & operator<<(vcl_ostream &os,const vbl_array_3d<T> & A)
+vcl_ostream & operator<<(vcl_ostream& os, vbl_array_3d<T> const& A)
 {
-  for (int i=0;i<A.get_row1_count();i++) {
-    for (int j=0;j<A.get_row2_count();j++) {
-      for (int k=0;k<A.get_row3_count();k++) {
+  for (int i=0; i<A.get_row1_count(); ++i) {
+    for (int j=0; j<A.get_row2_count(); ++j) {
+      for (int k=0; k<A.get_row3_count(); ++k) {
 	if (k)
 	  os << ' ';
 	os << A(i,j,k);
@@ -150,11 +121,11 @@ vcl_ostream & operator<<(vcl_ostream &os,const vbl_array_3d<T> & A)
 }
 
 template <class T>
-vcl_istream & operator>>(vcl_istream &is,vbl_array_3d<T> & A)
+vcl_istream & operator>>(vcl_istream& is, vbl_array_3d<T>& A)
 {
-  for (int i=0;i<A.get_row1_count();i++)
-    for (int j=0;j<A.get_row2_count();j++)
-      for (int k=0;k<A.get_row3_count();k++)
+  for (int i=0; i<A.get_row1_count(); ++i)
+    for (int j=0; j<A.get_row2_count(); ++j)
+      for (int k=0; k<A.get_row3_count(); ++k)
 	is >> A(i,j,k);
   return is;
 }
