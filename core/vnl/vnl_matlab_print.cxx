@@ -133,9 +133,9 @@ void vnl_dbprintmx(vnl_matrix<double> const& p)
 #define inst(T) \
 template ostream &vnl_matlab_print(ostream &, T const *, unsigned, vnl_matlab_print_format); \
 template ostream &vnl_matlab_print(ostream &, T const * const *, unsigned, unsigned, vnl_matlab_print_format); \
-template ostream &vnl_matlab_print(ostream &, vnl_diag_matrix<T> const &, char const *, vnl_matlab_print_format); \
-template ostream &vnl_matlab_print(ostream &, vnl_matrix<T> const &, char const *, vnl_matlab_print_format); \
-template ostream &vnl_matlab_print(ostream &, vnl_vector<T> const &, char const *, vnl_matlab_print_format);
+template ostream &vnl_matlab_print(ostream &, vnl_diag_matrix<T > const &, char const *, vnl_matlab_print_format); \
+template ostream &vnl_matlab_print(ostream &, vnl_matrix<T > const &, char const *, vnl_matlab_print_format); \
+template ostream &vnl_matlab_print(ostream &, vnl_vector<T > const &, char const *, vnl_matlab_print_format);
 inst(int);
 inst(float);
 inst(double);
