@@ -49,7 +49,7 @@ vidl_player_load_mpegcodec_callback(vidl_codec * vc)
 #endif // HAS_MPEG2
 
 
-//----- Static munu callback functions -----
+//----- Static menu callback functions -----
 
 void vidl_player_menus::load_video_callback()
 {
