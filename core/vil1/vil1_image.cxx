@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vil_image.h"
+#pragma implementation "vil_image"
 #endif
 
 #include "vil_image.h"

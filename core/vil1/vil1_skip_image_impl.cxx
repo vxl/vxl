@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vil_skip_image_impl.h"
+#pragma implementation "vil_skip_image_impl"
 #endif
 #include "vil_skip_image_impl.h"
 

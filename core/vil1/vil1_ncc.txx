@@ -1,9 +1,10 @@
 /*
   capes@robots.ox.ac.uk
 */
-#ifdef __GNUC__
-#pragma implementation "vil_ncc.h"
-#endif
+//Error: `#pragma implementation' can only appear at top-level
+//#ifdef __GNUC__
+//#pragma implementation "vil_ncc"
+//#endif
 #include "vil_ncc.h"
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_cmath.h> // vcl_sqrt()
