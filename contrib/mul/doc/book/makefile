@@ -37,7 +37,7 @@ ifdef aaa
 book.html: $(SOURCEFILES)  mbl_mz_random_graph1.png mbl_mz_random_graph2.png mbl_mz_random_graph3.png
 	$(MAKEINFO) $(MAKEINFOFLAGS) book.texi --html -o $@ --number-sections
 else
-book.html: $(SOURCEFILES)
+book.html: $(SOURCEFILES) mbl_mz_random_graph1.png mbl_mz_random_graph2.png mbl_mz_random_graph3.png
 	$(TEXI2HTML) book.texi -expand info -number -split chapter -no-section_navigation -frames
 endif
 
