@@ -1,6 +1,6 @@
+// This is vcl/vcl_iostream.h
 #ifndef vcl_iostream_h_
 #define vcl_iostream_h_
-
 //: 
 // \file
 // \brief Include compiler's <iostream.h> in a uniform way.
@@ -55,6 +55,11 @@
 #if defined(VCL_VC50)
 # undef  vcl_ios_in
 # define vcl_ios_in      (std::ios::in | std::ios::nocreate)
+#endif
+
+// It seems that VC++ can show strange behaviour without this include:
+#if defined(VCL_VC)
+# include <vcl_fstream.h>
 #endif
 
 #endif // vcl_iostream_h_
