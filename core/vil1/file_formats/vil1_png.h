@@ -26,11 +26,11 @@ class vil_png_file_format : public vil_file_format
   virtual char const* tag() const;
   virtual vil_image_impl* make_input_image(vil_stream* vs);
   virtual vil_image_impl* make_output_image(vil_stream* vs, int planes,
-                                               int width,
-                                               int height,
-                                               int components,
-                                               int bits_per_component,
-                                               vil_component_format format);
+                                            int width,
+                                            int height,
+                                            int components,
+                                            int bits_per_component,
+                                            vil_component_format format);
 };
 
 //: Generic image implementation for PNG files

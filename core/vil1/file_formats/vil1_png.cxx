@@ -53,11 +53,11 @@ vil_image_impl* vil_png_file_format::make_input_image(vil_stream* is)
 }
 
 vil_image_impl* vil_png_file_format::make_output_image(vil_stream* is, int planes,
-                                               int width,
-                                               int height,
-                                               int components,
-                                               int bits_per_component,
-                                               vil_component_format format)
+                                                       int width,
+                                                       int height,
+                                                       int components,
+                                                       int bits_per_component,
+                                                       vil_component_format format)
 {
   return new vil_png_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
