@@ -1,0 +1,53 @@
+VXL is a multi-platform collection of C++ software libraries for
+Computer Vision and Image Understanding developed and maintained by a
+number of research groups around the world. More details are available
+at http://vxl.sourceforge.net/
+
+----------------------------------------------------------------------
+
+These installation instructions are also available at
+  http://vxl.sourceforge.net/releases/install-beta.html
+
+----------------------------------------------------------------------
+
+
+How to build VXL
+----------------
+
+The most common build system used for VXL is CMake. You should first
+download and install CMake, available at http//www.cmake.org. VXL
+requires CMake version 1.4.3 or higher.
+
+Extract the VXL source into the directory vxl-1.0-beta2. Create a
+separate output directory bin parallel to the source directory:
+
+   .../.../... ---+--- vxl-1.0-beta2 ---+--- vxl
+                  |                     |
+                  |                     +--- vcl
+                  |                     ...
+                  |
+                  +--- bin
+
+Let us call the former $VXLSRC and the latter $VXLBIN. 
+
+Change current directory to $VXLBIN and run CMake, specifying $VXLSRC
+as the source directory.
+
+Unix and Cygwin: Run
+
+  ccmake $VXLSRC
+        
+Windows: Run CMakeSetup and specify the source and binary directories
+  as $VXLSRC and $VXLBIN, respectively.
+
+Repeatedly select "Configure" ("C" on Unix) until the entries
+stop changing and you get the chance to generate the makefiles ("OK"
+on Windows, and "G" on Unix).
+
+In the CMake interface, you can choose which parts of the VXL tree you
+wish to build. The default is to build everything except vgui and its
+dependents. Building vgui requires the presence of OpenGL and
+GLU. Often, these are in a platform specific area of the machine, and
+hence cannot be detected by CMake. If you have these on your system,
+and wish to build vgui, set BUILD_VGUI to "ON" and make sure the
+appropriate entries in the CMake cache are valid.
