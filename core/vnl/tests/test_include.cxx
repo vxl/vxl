@@ -123,6 +123,7 @@
 #include <vnl/algo/vnl_scatter_3x3.h>
 #include <vnl/algo/vnl_sparse_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_svd.h>
+#include <vnl/algo/vnl_svd_economy.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
 #include <vnl/algo/vnl_fft_base.h>
