@@ -1,7 +1,5 @@
-// This is brl/bbas/bdgl/tests/test_curve_algs.cxx
-#include <vcl_cstdlib.h>
+// This is brl/bbas/bsol/tests/test_hough_index.cxx
 #include <vcl_iostream.h>
-#include <vcl_cstdio.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_line_2d.h>
@@ -11,7 +9,6 @@
 #define pclose _pclose
 #define Assert(x) { vcl_cout << #x "\t\t\t test "; \
   if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
-
 
 int main(int, char **)
 {
@@ -43,15 +40,15 @@ int main(int, char **)
   Assert(remove_l&&!found_l);
   vcl_cout << "Testing collinearity\n";
   hl.index(l);
-  vcl_vector<vsol_line_2d_sptr> & colinear = hl.lines_in_interval(l4, 1, 2.0);
+  vcl_vector<vsol_line_2d_sptr> colinear = hl.lines_in_interval(l4, 1, 2.0);
   vcl_cout << "colinear lines size " << colinear.size() << "\n";
   vcl_cout << "the colinear line x00" << colinear[0]->p0()->x() << "\n";
   Assert(colinear.size()==1&&colinear[0]->p0()->x()==0);
-    
+
   vcl_cout << "Testing parallel\n";
   hl.index(l3);
-  vcl_vector<vsol_line_2d_sptr> & parallel = hl.parallel_lines(45, 0.5);
-  vcl_vector<vsol_line_2d_sptr> & non_parallel = hl.parallel_lines(40, 0.5);
+  vcl_vector<vsol_line_2d_sptr> parallel = hl.parallel_lines(45, 0.5);
+  vcl_vector<vsol_line_2d_sptr> non_parallel = hl.parallel_lines(40, 0.5);
   vcl_cout << "parallel lines size " << parallel.size() << "\n";
   vcl_cout << "non_parallel lines size " << non_parallel.size() << "\n";
   Assert(parallel.size()==2&&non_parallel.size()==0)
