@@ -163,6 +163,26 @@ SOURCE=.\mil3d_gauss_reduce_3d.cxx
 SOURCE=.\mil3d_gaussian_pyramid_builder_3d.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil3d_sample_grid_3d+float.double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil3d_sample_grid_3d+int.double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil3d_sample_grid_3d+uchar.double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil3d_sample_profile_3d+int.double-.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -214,6 +234,16 @@ SOURCE=.\mil3d_gaussian_pyramid_builder_3d.h
 # Begin Source File
 
 SOURCE=.\mil3d_gaussian_pyramid_builder_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil3d_sample_grid_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil3d_sample_grid_3d.txx
 
 # End Source File
 # End Group
