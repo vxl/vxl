@@ -13,6 +13,7 @@ TESTS += test_array_1d_io.cxx
 TESTS += test_array_2d_io.cxx
 TESTS += test_array_3d_io.cxx
 TESTS += test_sparse_array_io.cxx
+TESTS += test_triple_io.cxx
 TESTS += golden_test_vbl_io.cxx
 
 SOURCES += vbl_io_test_classes.cxx
