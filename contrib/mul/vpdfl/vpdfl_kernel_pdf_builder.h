@@ -89,7 +89,8 @@ public:
 
     //: Build from n elements in data[i].  Chooses width.
     //  Same width selected for all points, using
-    //  $w=(3n/4)^{-0.2}\sigma$, as suggested by Silverman
+    //  $w=(4/(2n+d.n)^{1/(d+4)}\sigma$, as suggested by Silverman
+    //  Note: This value only suitable for gaussian kernels!
   void build_select_equal_width(vpdfl_kernel_pdf& kpdf,
                                  const vnl_vector<double>* data, int n) const;
 

@@ -182,7 +182,8 @@ void vpdfl_kernel_pdf_builder::build_fixed_width(vpdfl_kernel_pdf& kpdf,
 
 //: Build from n elements in data[i].  Chooses width.
 //  Same width selected for all points, using
-//  $w=(3n/4)^{-0.2}\sigma$, as suggested by Silverman
+//  $w=(4/(2n+d.n)^{1/(d+4)}\sigma$, as suggested by Silverman
+//  Note: This value only suitable for gaussian kernels!
 void vpdfl_kernel_pdf_builder::build_select_equal_width(vpdfl_kernel_pdf& kpdf,
                               const vnl_vector<double>* data, int n) const
 {
@@ -194,7 +195,8 @@ void vpdfl_kernel_pdf_builder::build_select_equal_width(vpdfl_kernel_pdf& kpdf,
 
   double d = data[0].size();
 
-  double k_var = mean_var*vcl_pow(4.0/(3*n),0.4*d);  // Check this!!
+  // See Silverman, p88-89 : This is suitable for Gaussian kernels
+  double k_var = mean_var*vcl_pow(4.0/(n*(d+2)),2.0/(d+4));
   double w = vcl_sqrt(k_var);
 
   build_fixed_width(kpdf,data,n,w);
