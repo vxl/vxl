@@ -74,7 +74,7 @@ T& vbl_big_sparse_array_3d<T>::operator() (unsigned i, unsigned j, unsigned k)
 template <class T>
 T const& vbl_big_sparse_array_3d<T>::operator() (unsigned i, unsigned j, unsigned k) const
 {
-  Map::const_iterator p = storage_.find(bigencode(i,j,k));
+  typename Map::const_iterator p = storage_.find(bigencode(i,j,k));
 #ifdef DEBUG
   vcl_cout << "{vbl_big_sparse_array_3d(" << i << "," << j << "," << k << ") - "
            << "storage[" << bigencode(i,j,k) << "] - " << storage_[bigencode(i,j,k)] << "}\n";
@@ -97,7 +97,7 @@ template <class T>
 bool vbl_big_sparse_array_3d<T>::put(unsigned i, unsigned j, unsigned k, T const& t)
 {
   unsigned int v = bigencode(i,j,k);
-  vcl_pair<Map::iterator,bool> res = storage_.insert(Map::value_type(v,t));
+  vcl_pair<typename Map::iterator,bool> res = storage_.insert(Map::value_type(v,t));
 #ifdef DEBUG
   vcl_cout << "{vbl_big_sparse_array_3d::put(" << i << "," << j << "," << k << ") - "
            << res.second << "}\n";
@@ -108,7 +108,7 @@ bool vbl_big_sparse_array_3d<T>::put(unsigned i, unsigned j, unsigned k, T const
 template <class T>
 vcl_ostream& vbl_big_sparse_array_3d<T>::print(vcl_ostream& out) const
 {
-  for (Map::const_iterator p = storage_.begin(); p != storage_.end(); ++p) {
+  for (typename Map::const_iterator p = storage_.begin(); p != storage_.end(); ++p) {
     unsigned i,j,k;
     bigdecode((*p).first, i, j, k);
     out << "(" << i << "," << j << "," << k << "): " << (*p).second << vcl_endl;
