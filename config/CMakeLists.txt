@@ -1,7 +1,14 @@
-# This CMakeLists.txt handles the creation of files needed by other
-# projects that need to use VXL.  Nothing is built by this
-# CMakeLists.txt file.
+# This CMakeLists.txt file handles the creation of files needed by other
+# client projects that use VXL.  Nothing is built by this
+# CMakeLists.txt file.  This CMakeLists.txt file must be processed by
+# CMake after all the other CMakeLists.txt files in the VXL tree,
+# which is why the SUBDIRS(config) command is at the end of the top
+# level CMakeLists.txt file.
 
+# It might be a good idea to move this CMakeLists.txt file to its own
+# new directory named VXLSRC/export.
+
+# Needed to get non-cached settings used in VXLConfig.cmake.in
 INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
 
 # Save the compiler settings so another project can import them.
