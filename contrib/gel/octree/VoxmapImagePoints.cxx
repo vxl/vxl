@@ -75,3 +75,6 @@ vnl_double_2 VoxmapImagePoints::GetCornerImage( int x, int y, int z, int dx, int
 
   return np;
 }
+
+#include <vbl/vbl_sparse_array_3d.txx>
+VBL_SPARSE_ARRAY_3D_INSTANTIATE(vnl_double_2);
