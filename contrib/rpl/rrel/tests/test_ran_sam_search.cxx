@@ -24,8 +24,6 @@ double noise( double sigma )
   return rand.normal() * sigma;
 }
 
-const double conv_tolerance=1.0e-5;
-
 bool
 sample_ok( const vcl_vector<int>& indices, int num_pts )
 {
@@ -179,7 +177,7 @@ main()
   //  Actually running the random sampler ...
   //
   bool ok;
-  int trace_level=0;
+//int trace_level=0;
   vbl_test_begin( "estimate succeed" );
   vbl_test_perform( ransam->estimate( lr, lms ) );
   vnl_vector<double> est_params = ransam->params();
@@ -207,7 +205,7 @@ main()
   vbl_test_begin( "num samples for matching problem" );
   vbl_test_perform( ransam->samples_tested() == 12 );
 #endif
-  trace_level=0;
+//trace_level=0;
   vbl_test_begin( "non-unique estimate succeed" );
   vbl_test_perform( ransam->estimate( match_prob, lms ) );
   est_params = ransam->params();
