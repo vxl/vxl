@@ -16,7 +16,7 @@ SET(clsfy_sources
  clsfy_classifier_1d.cxx                      clsfy_classifier_1d.h
  clsfy_binary_threshold_1d.cxx                clsfy_binary_threshold_1d.h
  clsfy_binary_threshold_1d_builder.cxx        clsfy_binary_threshold_1d_builder.h
- clsfy_binary_threshold_1d_sorted_builder.cxx clsfy_binary_threshold_1d_sorted_builder.h
+ clsfy_binary_threshold_1d_sorted_builder.cxx      clsfy_binary_threshold_1d_sorted_builder.h
  clsfy_builder_1d.cxx                         clsfy_builder_1d.h
  clsfy_smo_base.cxx                           clsfy_smo_base.h
  clsfy_smo_1.cxx                              clsfy_smo_1.h
@@ -24,12 +24,13 @@ SET(clsfy_sources
  clsfy_rbf_svm_smo_1_builder.cxx              clsfy_rbf_svm_smo_1_builder.h
  clsfy_adaboost_trainer.cxx                   clsfy_adaboost_trainer.h
  clsfy_adaboost_sorted_trainer.cxx            clsfy_adaboost_sorted_trainer.h
+ clsfy_adaboost_sorted_trainer2.cxx            clsfy_adaboost_sorted_trainer2.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates clsfy_sources)
 
 ADD_LIBRARY(clsfy ${clsfy_sources})
-TARGET_LINK_LIBRARIES(clsfy vpdfl mbl vnl_algo vnl_io vbl)
+TARGET_LINK_LIBRARIES(clsfy vpdfl mbl vnl_algo vnl_io vbl vbl_io)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)
