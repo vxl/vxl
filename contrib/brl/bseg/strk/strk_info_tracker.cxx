@@ -4,8 +4,6 @@
 // \file
 #include <vcl_algorithm.h>
 #include <vcl_cstdlib.h> // for rand()
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_numeric_traits.h>
 #include <vul/vul_timer.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vgl/vgl_polygon.h>
@@ -189,23 +187,23 @@ generate_randomly_positioned_sample(strk_tracking_face_2d_sptr const& seed)
 static void
 print_tracking_bounds(vcl_vector<strk_tracking_face_2d_sptr> const& faces)
 {
-  if (!faces.size())
+  if (faces.size() == 0)
     return;
-  float xmin = vnl_numeric_traits<float>::maxval, xmax =0;
-  float ymin = xmin, ymax = 0;
+#ifdef DEBUG
+  float xmin = faces.front()->face()->Xo(), xmax = xmin;
+  float ymin = faces.front()->face()->Yo(), ymax = ymin;
   for (vcl_vector<strk_tracking_face_2d_sptr>::const_iterator fit =
        faces.begin(); fit != faces.end(); fit++)
-    {
-      float x = (*fit)->face()->Xo(), y = (*fit)->face()->Yo();
-      xmin = vnl_math_min(xmin, x);
-      xmax = vnl_math_max(xmax, x);
-      ymin = vnl_math_min(ymin, y);
-      ymax = vnl_math_max(ymax, y);
-    }
+  {
+    float x = (*fit)->face()->Xo(), y = (*fit)->face()->Yo();
+    if (x < xmin) xmin = x;
+    if (x > xmax) xmax = x;
+    if (y < ymin) ymin = y;
+    if (y > ymax) ymax = y;
+  }
   strk_tracking_face_2d_sptr f = faces[0];
   float search_area = (xmax-xmin)*(ymax-ymin);
   float R = f->Npix()/search_area;
-#if 0
    vcl_cout << "S[(" << xmin << ' ' << xmax << ")(" << ymin << ' ' << ymax
             << ")]= " << search_area << ", area ratio = " << R << '\n';
 #endif
