@@ -3,7 +3,6 @@ SOURCE_FILES(octree_sources
   ConvexHull.h
   Cube.h
   OctreeLevel.h
-  RawPMatrixStore.h
   Voxel.h
   VoxmapImagePoints.h
   VoxmapPoints.h
