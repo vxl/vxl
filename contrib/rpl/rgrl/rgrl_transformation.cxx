@@ -293,7 +293,6 @@ rgrl_transformation::
 read( vcl_istream& is )
 {
   vcl_string tag_str;
-  vcl_streampos pos;
 
   // skip any empty lines
   rgrl_util_skip_empty_lines( is );
