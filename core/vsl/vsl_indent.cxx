@@ -30,7 +30,7 @@ indent_data_type* indent_data(vcl_ostream& os)
   entry = indent_data_map.find(&os);
   }
 
-  return &(entry->second);
+  return &((*entry).second);
 }
 
 //: Increments current indent for given stream

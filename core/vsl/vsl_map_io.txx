@@ -17,8 +17,8 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_map<Key, T, Compare>& v)
   vsl_b_write(s, v.size());
   for (vcl_map<Key, T, Compare>::const_iterator iter = v.begin(); iter != v.end(); iter++)
   {
-    vsl_b_write(s,iter->first);
-    vsl_b_write(s,iter->second);
+    vsl_b_write(s,(*iter).first);
+    vsl_b_write(s,(*iter).second);
   }
 }
 
@@ -50,9 +50,9 @@ void vsl_print_summary(vcl_ostream& os, const vcl_map<Key, T, Compare> &v)
     && i< 5; iter++,i++)
   {
     os << " " << i << ": ";
-    vsl_print_summary(os, iter->first);
+    vsl_print_summary(os, (*iter).first);
     os << ", ";
-    vsl_print_summary(os, iter->second);
+    vsl_print_summary(os, (*iter).second);
     os << vcl_endl;
   }
   if (v.size() > 5)

@@ -344,7 +344,7 @@ void vsl_b_read(vsl_b_istream &is,double& n )
     }
     else
     {
-      return entry->second.first;
+      return (*entry).second.first;
     }
   }
 
@@ -362,7 +362,7 @@ void vsl_b_read(vsl_b_istream &is,double& n )
     }
     else
     {
-      return entry->second.second;
+      return (*entry).second.second;
     }
   }
 
@@ -381,7 +381,7 @@ void vsl_b_read(vsl_b_istream &is,double& n )
     }
     else
     {
-      return entry->second.second;
+      return (*entry).second.second;
     }
   }
 
@@ -485,7 +485,7 @@ void vsl_b_read(vsl_b_istream &is,double& n )
     }
     else
     {
-      return entry->second.first;
+      return (*entry).second.first;
     }
   }
 
@@ -502,7 +502,7 @@ void vsl_b_read(vsl_b_istream &is,double& n )
     }
     else
     {
-      return entry->second.second;
+      return (*entry).second.second;
     }
   }
 
@@ -522,7 +522,7 @@ void vsl_b_read(vsl_b_istream &is,double& n )
     }
     else
     {
-      return entry->second.second;
+      return (*entry).second.second;
     }
   }
 
