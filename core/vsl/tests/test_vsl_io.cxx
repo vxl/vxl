@@ -1,7 +1,11 @@
 
 // First define testmain
 
+
 #include <vsl/vsl_test.h>
+
+// Test forward declarations.
+#include <vsl/vsl_fwd.h>
 
 #undef TESTMAIN
 #define TESTMAIN(x)
