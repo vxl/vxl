@@ -85,15 +85,15 @@ class vidl_movie : public vbl_ref_count
     // Also look at examples/vidl_mpegcodec_example.cxx for other examples
 
    private :
-    vidl_movie_sptr movie_;
+    vidl_movie* movie_;
     int frame_number_;
 
    public :
     // Constructors / destructors
-    frame_iterator (vidl_movie_sptr movie, int frame_number) :
+    frame_iterator (vidl_movie* movie, int frame_number) :
       movie_(movie), frame_number_(frame_number) {}
 
-    frame_iterator (vidl_movie_sptr movie) :
+    frame_iterator (vidl_movie* movie) :
       movie_(movie), frame_number_(0) {}
 
     frame_iterator (const frame_iterator &fr) :
@@ -161,7 +161,7 @@ class vidl_movie : public vbl_ref_count
 
     // Data member access
     int current_frame_number () const { return frame_number_; }
-    vidl_movie_sptr get_movie() const { return movie_; }
+    vidl_movie* get_movie() const { return movie_; }
   };
 
   //---------------------------------------------------------------------
