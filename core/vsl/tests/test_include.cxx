@@ -3,6 +3,7 @@
 #include <vsl/vsl_binary_explicit_io.h>
 #include <vsl/vsl_binary_loader_base.h>
 #include <vsl/vsl_binary_loader.h>
+#include <vsl/vsl_block_binary.h>
 #include <vsl/vsl_clipon_binary_loader.h>
 #include <vsl/vsl_complex_io.h>
 #include <vsl/vsl_deque_io.h>
