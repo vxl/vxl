@@ -52,19 +52,19 @@ extern void iu_delete(vsol_spatial_object_2d *);
 #define VSOL_SPATIAL_OBJECT_FLAGS_
 
 // system flags
-const unsigned int UNIONBIT       = 0x80000000;
-const unsigned int SYSTEM_FLAG1   = 0x01000000;
+const unsigned int VSOL_UNIONBIT       = 0x80000000;
+const unsigned int VSOL_SYSTEM_FLAG1   = 0x01000000;
 // user flags
-const unsigned int FLAG1          = 0x40000000;
-const unsigned int FLAG2          = 0x20000000;
-const unsigned int FLAG3          = 0x1000000;
-const unsigned int FLAG4          = 0x08000000;
-const unsigned int FLAG5          = 0x04000000;
-const unsigned int FLAG6          = 0x02000000;
+const unsigned int VSOL_FLAG1          = 0x40000000;
+const unsigned int VSOL_FLAG2          = 0x20000000;
+const unsigned int VSOL_FLAG3          = 0x1000000;
+const unsigned int VSOL_FLAG4          = 0x08000000;
+const unsigned int VSOL_FLAG5          = 0x04000000;
+const unsigned int VSOL_FLAG6          = 0x02000000;
 
 // mask for last three bytes of tag field
-const unsigned int DEXID_BITS     = 0x00FFFFFF;
-const unsigned int FLAG_BITS      = 0xFF000000;
+const unsigned int VSOL_DEXID_BITS     = 0x00FFFFFF;
+const unsigned int VSOL_FLAG_BITS      = 0xFF000000;
 
 #endif
 
@@ -326,7 +326,7 @@ public:
 inline void vsol_spatial_object_2d::set_tag_id(int id)
 {
   //     ( set the new id bits)  or (save just the flag bits from the _tag)
-  _tag = ( (id & DEXID_BITS)     |  ( _tag & FLAG_BITS ));
+  _tag = ( (id & VSOL_DEXID_BITS)     |  ( _tag & VSOL_FLAG_BITS ));
 }
 
 // -- Bounds Accessors:  min_ and max_ are provided as methods on vsol_spatial_object_2d
@@ -417,20 +417,20 @@ inline void vsol_spatial_object_2d::set_max_y(float ymax)
 }
 
 
-// -- set_ a flag for a spatialObject, flag can be FLAG[1-6] 
+// -- set a flag for a spatial object, flag can be VSOL_FLAG[1-6] 
 inline void vsol_spatial_object_2d::set_user_flag(unsigned int flag)
 {
   _tag =  (_tag | flag);
 }
 
-// -- get_ a flag for a spatialObject, flag can be FLAG[1-6] return value is
-//    one or zero.
+// -- get a flag for a spatial object,
+//    flag can be VSOL_FLAG[1-6], return value is one or zero.
 inline unsigned int  vsol_spatial_object_2d::get_user_flag(unsigned int flag)
 {
   return (_tag & flag) ? 1 : 0;
 }
 
-// -- set_ a flag for a spatialObject, flag can be FLAG[1-6] value is
+// -- set_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6] value is
 //    set to zero.
 inline void vsol_spatial_object_2d::unset_user_flag(unsigned int flag)
 {
@@ -440,23 +440,23 @@ inline void vsol_spatial_object_2d::unset_user_flag(unsigned int flag)
 // -- set_ the flag used by TAGGED_UNION. 
 inline void vsol_spatial_object_2d::set_tagged_union_flag(void)
 {
-  set_user_flag(UNIONBIT);
+  set_user_flag(VSOL_UNIONBIT);
 }
 
 // -- get_ the flag used by TAGGED_UNION. 
 inline unsigned int vsol_spatial_object_2d::get_tagged_union_flag(void)
 {
-  return get_user_flag(UNIONBIT);
+  return get_user_flag(VSOL_UNIONBIT);
 }
 
 inline void vsol_spatial_object_2d::unset_tagged_union_flag()
 {
-  unset_user_flag(UNIONBIT);
+  unset_user_flag(VSOL_UNIONBIT);
 }
 
 inline int vsol_spatial_object_2d::get_tag_id()
 {
-  return _tag & DEXID_BITS;
+  return _tag & VSOL_DEXID_BITS;
 }
 
 inline void vsol_spatial_object_2d::print(vcl_ostream &strm) const
