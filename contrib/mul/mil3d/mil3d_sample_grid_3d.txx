@@ -48,7 +48,7 @@ inline bool mil3d_grid_in_image(const vgl_point_3d<double>& p,
 
 //: True if grid of size nu * nv * nw (in steps of u,v,w) is entirely in the image.
 //  p defines centre of one size.
-inline bool mil3d_grid_in_image_c(const vgl_point_3d<double>& im_p,
+inline bool mil3d_grid_in_image_ic(const vgl_point_3d<double>& im_p,
                                   const vgl_vector_3d<double>& im_u,
                                   const vgl_vector_3d<double>& im_v,
                                   const vgl_vector_3d<double>& im_w,
@@ -112,7 +112,7 @@ void mil3d_sample_grid_3d_ic(vnl_vector<vecType>& vec,
                              const vgl_vector_3d<double>& im_w,
                              int nu, int nv, int nw)
 {
-  if (mil3d_grid_in_image(im_p,im_u,im_v,im_w,nu,nv,nw,image))
+  if (mil3d_grid_in_image_ic(im_p,im_u,im_v,im_w,nu,nv,nw,image))
     mil3d_sample_grid_3d_ic_no_checks(vec,image,im_p,im_u,im_v,im_w,nu,nv,nw);
   else
     mil3d_sample_grid_3d_ic_safe(vec,image,im_p,im_u,im_v,im_w,nu,nv,nw);
