@@ -262,7 +262,7 @@ foreach $f (@FILES)
     elsif ($j eq "vgl/vgl_distance.h") { $i="$i(2)?(|[a-z_]+)"; }
     elsif ($j eq "vgl/vgl_triangle_test.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vgl/algo/vgl_homg_operators_2d.h") { $i="($i|vnl_double_3x3[^\000]*vgl_homg_point_2d|cond_matrix . x)"; }
-    elsif ($j eq "vgl/algo/vgl_homg_operators_3d.h") { $i="($i|vnl_double_4x4[^\000]*vgl_homg_point_3d)"; }
+    elsif ($j eq "vgl/algo/vgl_homg_operators_3d.h") { $i="($i|vnl_double_4x4[^\000]*vgl_homg_point_3d|p_matrix_ \\* X)"; }
     elsif ($j eq "vgui/vgui_adaptor.h") { $i="(vgui|get)_(adaptor|event)"; }
     elsif ($j eq "vgui/vgui_color_text.h") { $i="(text_to_color|(red|green|blue)_value)"; }
     elsif ($j eq "vgui/vgui_command.h") { $i="($i(|_[a-z_]+)|VGUI_COMMAND_SIMPLE_INSTANTIATE)"; }
@@ -287,7 +287,7 @@ foreach $f (@FILES)
     elsif ($j =~ m/vil2?\/vil2?_copy\.h$/) { $i="($i)(|_deep|_to_window|_reformat)"; }
     elsif ($j =~ m/vil2?\/algo\/vil2?_exp_filter_1d.h$/) { $i="vil2\?_exp_filter_(1d|i|j)"; }
     elsif ($j =~ m/vil2?\/algo\/vil2?_exp_grad_filter_1d.h$/) { $i="vil2\?_exp_grad_filter_(1d|i|j)"; }
-    elsif ($j =~ m/vil2?\/vil2?_fill\.h$/) { $i="($i)_(line|row|col)"; }
+    elsif ($j =~ m/vil2?\/vil2?_fill\.h$/) { $i="($i)_(line|row|col|mask)"; }
     elsif ($j =~ m/vil2?\/vil2?_flip\.h$/) { $i="($i)_(ud|lr)"; }
     elsif ($j =~ m/vil2?\/algo\/vil2?_gauss_filter\.h$/) { $i="($i)_(5tap(_params)?)"; }
     elsif ($j =~ m/vil2?\/algo\/vil2?_gauss_reduce\.h$/) { $i="$i(|_params|_general|_121)"; }
@@ -416,7 +416,7 @@ foreach $f (@FILES)
     $printed = 1;
   }
   if ($cpp_file && $f !~ m/\bvidl\/vidl_mpegcodec\.cxx$/ && $f !~ m/\bvul\/vul_url\.cxx$/ &&
-      $file =~ m/\001[^\001\002]{111,}/)
+      $f !~ m/\bvul\/tests\/test_file_iterator\.cxx$/ && $file =~ m/\001[^\001\002]{111,}/)
   {
     print "$f\t\# contains long /*...*/ comments\n";
     $printed = 1;
@@ -640,6 +640,7 @@ foreach $f (@FILES)
     if ($cpp_file &&
         ($wd !~ m/end/ || 
          ($f !~ m/\boxp\/oxp_mpeg_codec\.cxx$/ &&
+          $f !~ m/\bvil3d_slice_list\.cxx$/ &&
           $f !~ m/\b(rrel\/rrel_util|rsdl\/rsdl_borgefors)\.txx$/ ) ) &&
         $file_s =~ m/,\s*$wd\s*\)/)
     {
