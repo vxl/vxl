@@ -20,10 +20,6 @@ SET(sdet_sources
     sdet_fit_lines_params.cxx    sdet_fit_lines_params.h
     sdet_grid_finder_params.cxx  sdet_grid_finder_params.h
     sdet_grid_finder.cxx         sdet_grid_finder.h
-    sdet_tracker_params.cxx      sdet_tracker_params.h
-    sdet_tracker.cxx             sdet_tracker.h
-    sdet_info_tracker_params.cxx sdet_info_tracker_params.h
-    sdet_info_tracker.cxx        sdet_info_tracker.h
     # although not ready for use:
     sdet_champher.h
 )
