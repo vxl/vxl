@@ -6,8 +6,10 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 
 SET(bmrf_sources
+    bmrf_epipole.cxx           bmrf_epipole.h
     bmrf_epi_point.cxx         bmrf_epi_point.h          bmrf_epi_point_sptr.h
     bmrf_epi_seg.cxx           bmrf_epi_seg.h            bmrf_epi_seg_sptr.h
+    bmrf_epi_transform.cxx     bmrf_epi_transform.h      bmrf_epi_transform_sptr.h
     bmrf_node.cxx              bmrf_node.h               bmrf_node_sptr.h
     bmrf_network.cxx           bmrf_network.h            bmrf_network_sptr.h
     bmrf_network_builder_params.cxx   bmrf_network_builder_params.h  
