@@ -56,7 +56,7 @@ class vsol_rectangle_2d : public vsol_polygon_2d
   //: Default Constructor - needed for binary I/O
   //---------------------------------------------------------------------------
   vsol_rectangle_2d();
-  
+
   //---------------------------------------------------------------------------
   //: Constructor from 4 points, the corners of the rectangle
   //---------------------------------------------------------------------------
@@ -64,14 +64,13 @@ class vsol_rectangle_2d : public vsol_polygon_2d
                     const vsol_point_2d_sptr &new_p1,
                     const vsol_point_2d_sptr &new_p2,
                     const vsol_point_2d_sptr &new_p3);
-    
 
   //---------------------------------------------------------------------------
   //: Constructor from 3 points.
   //  `new_pc' is the origin of the rectangle. `new_pabs' defines the abscissa
-  //  axis and the width/2. `new_pord' defines the ordinate axis and the 
+  //  axis and the width/2. `new_pord' defines the ordinate axis and the
   //  height/2.
-  //  REQUIRE: valid_vertices(new_pc,new_pabs,new_pord)  
+  //  REQUIRE: valid_vertices(new_pc,new_pabs,new_pord)
   //---------------------------------------------------------------------------
   vsol_rectangle_2d(const vsol_point_2d_sptr &new_pc,
                     const vsol_point_2d_sptr &new_pabs,
@@ -79,8 +78,7 @@ class vsol_rectangle_2d : public vsol_polygon_2d
 
 
   //---------------------------------------------------------------------------
-  //: Constructor from center, half_width, half_height,
-  //  angle(ccw from x axis, in deg/rad)
+  //: Constructor from center, half_width, half_height, angle(ccw from x axis, in deg/rad)
   //---------------------------------------------------------------------------
   vsol_rectangle_2d(const vsol_point_2d_sptr &center,
                     const double half_width,
