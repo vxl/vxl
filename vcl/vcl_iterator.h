@@ -39,9 +39,14 @@
 # define vcl_reverse_iterator      /*std::*/reverse_iterator
 # define vcl_istream_iterator      /*std::*/istream_iterator
 # define vcl_ostream_iterator      /*std::*/ostream_iterator
+# define vcl_istreambuf_iterator   /*std::*/istreambuf_iterator
+# define vcl_ostreambuf_iterator   /*std::*/ostreambuf_iterator
 # define vcl_back_insert_iterator  /*std::*/back_insert_iterator
 # define vcl_front_insert_iterator /*std::*/front_insert_iterator
 # define vcl_insert_iterator       /*std::*/insert_iterator
+# define vcl_inserter              /*std::*/inserter
+# define vcl_back_inserter         /*std::*/back_inserter
+# define vcl_front_inserter        /*std::*/front_inserter
 
 # define vcl_input_iterator_tag         /*std::*/input_iterator_tag
 # define vcl_output_iterator_tag        /*std::*/output_iterator_tag
