@@ -105,7 +105,7 @@ HomgLine2D ImageMetric::image_to_homg_line(const HomgLine2D& l)
 
 
 //: Convert homogeneous line segment in conditioned coordinates to one in image coordinates
-HomgLineSeg2D ImageMetric::homg_to_image(const HomgLineSeg2D& l)
+HomgLineSeg2D ImageMetric::homg_line_to_image(const HomgLineSeg2D& l)
 {
   // get points, decondition, and rejoin
   HomgPoint2D i1 = homg_to_imagehomg(l.get_point1());
@@ -113,7 +113,7 @@ HomgLineSeg2D ImageMetric::homg_to_image(const HomgLineSeg2D& l)
   return HomgLineSeg2D(i1, i2);
 }
 
-HomgLineSeg2D ImageMetric::image_to_homg(const HomgLineSeg2D& l)
+HomgLineSeg2D ImageMetric::image_to_homg_line(const HomgLineSeg2D& l)
 {
   HomgPoint2D i1 = imagehomg_to_homg(l.get_point1());
   HomgPoint2D i2 = imagehomg_to_homg(l.get_point2());

@@ -64,8 +64,8 @@ public:
   virtual HomgLine2D homg_to_image_line(const HomgLine2D&);
   virtual HomgLine2D image_to_homg_line(const HomgLine2D&);
 
-  virtual HomgLineSeg2D image_to_homg(const HomgLineSeg2D&);
-  virtual HomgLineSeg2D homg_to_image(const HomgLineSeg2D&);
+  virtual HomgLineSeg2D image_to_homg_line(const HomgLineSeg2D&);
+  virtual HomgLineSeg2D homg_line_to_image(const HomgLineSeg2D&);
 
   virtual FMatrix image_to_homg_deprecated(FMatrix const&);
   virtual FMatrix homg_to_image_deprecated(FMatrix const&);

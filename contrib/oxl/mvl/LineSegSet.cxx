@@ -84,7 +84,7 @@ bool LineSegSet::load_ascii(vcl_istream& f, HomgMetric const& c)
     HomgPoint2D p1(x1, y1);
     HomgPoint2D p2(x2, y2);
     HomgLineSeg2D line(p1, p2);
-    _hlines.push_back(c.image_to_homg(line));
+    _hlines.push_back(c.image_to_homg_line(line));
   }
 
   vcl_cerr << "Loaded " << _hlines.size() << " line segments\n";
@@ -146,7 +146,7 @@ int LineSegSet::pick_line_index(double x, double y)
   int nlines = _hlines.size();
   for(int i = 0; i < nlines; ++i) {
     const HomgLineSeg2D& l = _hlines[i];
-    HomgLineSeg2D l_decond = metric.homg_to_image(l);
+    HomgLineSeg2D l_decond = metric.homg_line_to_image(l);
 
     double d = l_decond.picking_distance(p);
 

@@ -66,8 +66,8 @@ public:
   HomgLine2D homg_to_image_line(const HomgLine2D&) const;
   HomgLine2D image_to_homg_line(const HomgLine2D&) const;
 
-  HomgLineSeg2D image_to_homg(const HomgLineSeg2D&) const;
-  HomgLineSeg2D homg_to_image(const HomgLineSeg2D&) const;
+  HomgLineSeg2D image_to_homg_line(const HomgLineSeg2D&) const;
+  HomgLineSeg2D homg_line_to_image(const HomgLineSeg2D&) const;
 
   // ** Measurements
   double perp_dist_squared(const HomgPoint2D&, const HomgLine2D&) const;

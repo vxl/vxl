@@ -104,15 +104,15 @@ HomgLine2D HomgMetric::image_to_homg_line(const HomgLine2D& l) const
   else return l;
 }
 
-HomgLineSeg2D HomgMetric::image_to_homg(const HomgLineSeg2D& l) const
+HomgLineSeg2D HomgMetric::image_to_homg_line(const HomgLineSeg2D& l) const
 {
-  if (_metric) return _metric->image_to_homg(l);
+  if (_metric) return _metric->image_to_homg_line(l);
   else return l;
 }
 
-HomgLineSeg2D HomgMetric::homg_to_image(const HomgLineSeg2D& l) const
+HomgLineSeg2D HomgMetric::homg_line_to_image(const HomgLineSeg2D& l) const
 {
-  if (_metric) return _metric->homg_to_image(l);
+  if (_metric) return _metric->homg_line_to_image(l);
   else return l;
 }
 
