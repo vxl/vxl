@@ -10,8 +10,8 @@ extern void sig_die(char*, int);
 void c_div(complex       *c, complex       *a, complex       *b)
 #endif
 {
-  double ratio, den;
-  double abr, abi;
+  float ratio, den;
+  float abr, abi;
   float ar = a->r, ai = a->i;
 
   if( (abr = b->r) < 0.)
@@ -31,14 +31,14 @@ void c_div(complex       *c, complex       *a, complex       *b)
       sig_die("complex division by zero", 1);
 #endif
     }
-    ratio = (double)b->r / b->i ;
+    ratio = b->r / b->i ;
     den = b->i * (1 + ratio*ratio);
     c->r = (ar*ratio + ai) / den;
     c->i = (ai*ratio - ar) / den;
   }
 
   else {
-    ratio = (double)b->i / b->r ;
+    ratio = b->i / b->r ;
     den = b->r * (1 + ratio*ratio);
     c->r = (ar + ai*ratio) / den;
     c->i = (ai - ar*ratio) / den;
