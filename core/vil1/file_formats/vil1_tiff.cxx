@@ -213,7 +213,8 @@ static int vil_tiff_closeproc(thandle_t h)
 static toff_t vil_tiff_sizeproc(thandle_t)
 {
   trace << "vil_tiff_sizeproc\n";
-  return -1;
+  // TODO
+  return (toff_t)(-1); // could be unsigned - avoid compiler warning
 }
 
 static int vil_tiff_mapfileproc(thandle_t, tdata_t*, toff_t*)

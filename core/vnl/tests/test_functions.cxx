@@ -102,7 +102,7 @@ int test_functions()
   for (int i=0; i<20; i++)
   {
     sample_seed = (sample_seed*16807)%2147483647L;
-    double u = double(sample_seed)/2147483711L;
+    double u = double(sample_seed)/0x7fffffff; // 0x7fffffff == 2147483711L
     hist1[i] = 10.0+20.0*(u-0.5); // uniform in the interval 0 - 20
   }
   chisq = 0;
