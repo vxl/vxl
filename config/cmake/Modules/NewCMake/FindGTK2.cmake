@@ -1,5 +1,5 @@
 #
-# try to find GTK2 (and glib2) and GTKGLArea
+# try to find GTK2 (and glib2) and GTKGLExt
 #
 
 # GTK2_INCLUDE_DIR   - Directories to include to use GTK2
