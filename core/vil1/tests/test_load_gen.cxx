@@ -1,8 +1,6 @@
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
 
-#include <vul/vul_temp_filename.h>
-
 #include <vil/vil_load.h>
 #include <vil/vil_byte.h>
 #include <vil/vil_rgb.h>
@@ -13,8 +11,6 @@
 static void test_rgb(char const *name, int w, int h,
                      unsigned r, unsigned g, unsigned b)
 {
-  vcl_string tmp_nam = vul_temp_filename() + ".pgm";
-
   vil_image i = vil_load(name);
 
   vcl_cout <<
@@ -48,8 +44,6 @@ static void test_rgb(char const *name, int w, int h,
 
 static void test_gray(char const *name, int w, int h, unsigned v)
 {
-  vcl_string tmp_nam = vul_temp_filename() + ".pgm";
-
   vil_image i = vil_load(name);
 
   vcl_cout <<
