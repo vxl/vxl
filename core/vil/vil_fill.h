@@ -47,11 +47,9 @@ void vil_fill_line(T* data, unsigned n, vcl_ptrdiff_t step, T value)
 template<class T>
 void vil_fill_row(vil_image_view<T>& view, unsigned j, T value)
 {
-  unsigned ni = view.ni(); vcl_ptrdiff_t istep=view.istep();
-  unsigned nj = view.nj(); vcl_ptrdiff_t jstep=view.jstep();
-  unsigned np = view.nplanes(); vcl_ptrdiff_t pstep = view.planestep();
-
-  assert(j<nj);
+  unsigned ni = view.ni();      vcl_ptrdiff_t istep=view.istep();
+  assert(j<view.nj());          vcl_ptrdiff_t jstep=view.jstep();
+  unsigned np = view.nplanes(); vcl_ptrdiff_t pstep=view.planestep();
 
   T* row = view.top_left_ptr() + j*jstep;
   for (unsigned p=0;p<np;++p,row += pstep)
@@ -64,11 +62,10 @@ void vil_fill_row(vil_image_view<T>& view, unsigned j, T value)
 template<class T>
 void vil_fill_col(vil_image_view<T>& view, unsigned i, T value)
 {
-  unsigned ni = view.ni(); vcl_ptrdiff_t istep=view.istep();
-  unsigned nj = view.nj(); vcl_ptrdiff_t jstep=view.jstep();
-  unsigned np = view.nplanes(); vcl_ptrdiff_t pstep = view.planestep();
-
-  assert(i<ni);
+  assert(i<view.ni());          vcl_ptrdiff_t istep=view.istep();
+  unsigned nj = view.nj();      vcl_ptrdiff_t jstep=view.jstep();
+  unsigned np = view.nplanes(); vcl_ptrdiff_t pstep=view.planestep();
+ 
   T* col_top = view.top_left_ptr() + i*istep;
   for (unsigned p=0;p<np;++p,col_top += pstep)
     vil_fill_line(col_top,nj,jstep,value);
@@ -83,7 +80,7 @@ void vil_fill_mask(vil_image_view<srcT>& image,
                    const vil_image_view<bool>& mask,
                    srcT value, bool b=true)
 {
-  unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
+  unsigned ni = image.ni(), nj = image.nj(), np = image.nplanes();
   assert(ni==mask.ni() && nj==mask.nj());
   assert(mask.nplanes()==1 ||  mask.nplanes() ==np);
 

@@ -36,9 +36,8 @@ inline vil_image_view<T> vil_planes(const vil_image_view<T> &im,
                                     unsigned n)
 {
   assert(first<im.nplanes());
-  int end = first + n*skip;
-  assert(end >= 0);
-  assert((unsigned)end <= im.nplanes());
+  assert(first + n*skip >= 0);
+  assert((unsigned)(first + n*skip) <= im.nplanes());
   return vil_image_view<T>(im.memory_chunk(),
                            im.top_left_ptr()+first*im.planestep(),
                            im.ni(),im.nj(),n,
