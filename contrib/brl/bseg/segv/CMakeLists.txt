@@ -4,7 +4,7 @@
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
-
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 # determines if vgui is built and opengl is available
 INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
  
@@ -22,6 +22,6 @@ AUX_SOURCE_DIRECTORY(Templates segv_sources)
 
 ADD_LIBRARY(segv ${segv_sources})
 
-TARGET_LINK_LIBRARIES(segv sdet gevd vdgl vtol vsol vil vnl vbl)
+TARGET_LINK_LIBRARIES(segv sdet bxml gevd vdgl vtol vsol vil vnl vbl)
 
 ENDIF(HAS_VGUI)
