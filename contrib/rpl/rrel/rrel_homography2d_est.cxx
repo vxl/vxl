@@ -12,14 +12,15 @@
 
 rrel_homography2d_est :: rrel_homography2d_est( const vcl_vector< vgl_homg_point_2d<double> > & from_pts,
                                                 const vcl_vector< vgl_homg_point_2d<double> > & to_pts,
-                                                const int homog_dof )
+                                                unsigned int homog_dof )
   : rrel_estimation_problem( homog_dof /*dof*/, ( homog_dof / 2 ) /*points to instantiate*/ )
 {
-  assert( homog_dof == ( homog_dof / 2 ) * 2 ); // Make sure DOF is even
+  assert( homog_dof%2 == 0 ); // Make sure DOF is even
   assert( from_pts.size() == to_pts.size() );
   vnl_vector< double > p(3), q(3);
 
-  for ( unsigned int i=0; i<from_pts.size(); ++i ) {
+  for ( unsigned int i=0; i<from_pts.size(); ++i )
+  {
     p[0] = from_pts[i].x();
     p[1] = from_pts[i].y();
     p[2] = from_pts[i].w();
@@ -38,11 +39,11 @@ rrel_homography2d_est :: rrel_homography2d_est( const vcl_vector< vgl_homg_point
 
 rrel_homography2d_est :: rrel_homography2d_est( const vcl_vector< vnl_vector<double> > & from_pts,
                                                 const vcl_vector< vnl_vector<double> > & to_pts,
-                                                const int homog_dof )
+                                                unsigned int homog_dof )
   : rrel_estimation_problem( homog_dof /*dof*/, ( homog_dof / 2 ) /*points to instantiate*/ ),
     from_pts_( from_pts ), to_pts_( to_pts )
 {
-  assert( homog_dof == ( homog_dof / 2 ) * 2 ); // Make sure DOF is even
+  assert( homog_dof%2 == 0 ); // Make sure DOF is even
   assert( from_pts_.size() == to_pts_.size() );
   for ( unsigned int i=0; i<from_pts_.size(); ++i ) {
     assert( from_pts_[ i ][ 2 ] != 0 );
@@ -72,7 +73,8 @@ rrel_homography2d_est :: fit_from_minimal_set( const vcl_vector<int>& point_indi
   vnl_matrix< double > A(9, 9, 0.0);
   assert( point_indices.size() == min_num_pts_ );
 
-  for ( int i=0; i<min_num_pts_; ++i ) {
+  for ( unsigned int i=0; i<min_num_pts_; ++i )
+  {
     int loc = point_indices[ i ];
     A( 2*i, 0 ) = A( 2*i+1, 3 ) = from_pts_[ loc ][ 0 ] * to_pts_[ loc ][ 2 ];
     A( 2*i, 1 ) = A( 2*i+1, 4 ) = from_pts_[ loc ][ 1 ] * to_pts_[ loc ][ 2 ];
@@ -117,7 +119,8 @@ rrel_homography2d_est :: compute_residuals( const vnl_vector<double>& params,
   vnl_vector< double > trans_pt( 3 ), inv_trans_pt( 3 );
   double del_x, del_y, inv_del_x, inv_del_y;
 
-  for ( unsigned int i=0; i<from_pts_.size(); ++i ) {
+  for ( unsigned int i=0; i<from_pts_.size(); ++i )
+  {
     trans_pt = H * from_pts_[ i ];
     inv_trans_pt = H_inv * to_pts_[ i ];
 
@@ -155,7 +158,8 @@ rrel_homography2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
   this -> normalize( to_pts_, *w, norm_to, norm_matrix_to );
 
   vnl_matrix< double > A( 2*from_pts_.size(), 9, 0.0 );
-  for ( unsigned int i=0; i<from_pts_.size(); ++i ) {
+  for ( unsigned int i=0; i<from_pts_.size(); ++i )
+  {
     A( 2*i, 0 ) = A( 2*i+1, 3 ) = (*w)[i] * norm_from[ i ][ 0 ] * norm_to[ i ][ 2 ];
     A( 2*i, 1 ) = A( 2*i+1, 4 ) = (*w)[i] * norm_from[ i ][ 1 ] * norm_to[ i ][ 2 ];
     A( 2*i, 2 ) = A( 2*i+1, 5 ) = (*w)[i] * norm_from[ i ][ 2 ] * norm_to[ i ][ 2 ];
@@ -173,7 +177,8 @@ rrel_homography2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
   if ( svd.rank() < homog_dof_ ) {
     result= false;
   }
-  else {
+  else
+  {
     vnl_vector< double > nparams = svd.nullvector();
     vnl_matrix< double > normH( 3, 3 );
     params_to_homog(nparams, normH);
@@ -198,18 +203,18 @@ void
 rrel_homography2d_est :: homog_to_params(const vnl_matrix<double>& m,
                                          vnl_vector<double>&       p) const
 {
-    for ( int r=0; r<3; ++r )
-      for ( int c=0; c<3; ++c )
-        p( 3*r + c ) = m( r, c );
+  for ( int r=0; r<3; ++r )
+    for ( int c=0; c<3; ++c )
+      p( 3*r + c ) = m( r, c );
 }
 
 void
 rrel_homography2d_est :: params_to_homog(const vnl_vector<double>& p,
                                          vnl_matrix<double>&       m) const
 {
-    for ( int r=0; r<3; ++r )
-      for ( int c=0; c<3; ++c )
-        m( r, c ) = p( 3*r + c );
+  for ( int r=0; r<3; ++r )
+    for ( int c=0; c<3; ++c )
+      m( r, c ) = p( 3*r + c );
 }
 
 void
