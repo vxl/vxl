@@ -56,6 +56,6 @@ T vnl_determinant(vnl_matrix<T> const &M, bool balance)
 #undef VNL_ALGO_DETERMINANT_INSTANTIATE
 #define VNL_ALGO_DETERMINANT_INSTANTIATE(T) \
 template T vnl_determinant(T const * const *, int, bool); \
-template T vnl_determinant(vnl_matrix<T > const &)
+template T vnl_determinant(vnl_matrix<T > const &, bool)
 
 #endif
