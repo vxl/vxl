@@ -25,6 +25,9 @@ vcl_string vul_expand_path_uncached(char const *path_) { return vcl_string(path_
 static
 vcl_string vul_expand_path_internal(vcl_string path)
 {
+  if (path == "/")
+    return path; // FIXME: without this something breaks; not sure why.
+  
   // expand ~/ or just ~
   if ((path.size()>=2 && path[0] == '~' && path[1] == '/') || path == "~") {
     char const *HOME = getenv("HOME");
