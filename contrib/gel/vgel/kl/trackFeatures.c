@@ -258,11 +258,10 @@ static float _sumAbsFloatWindow(
                                 int height)
 {
   float sum = 0.0;
-  int w;
 
   for ( ; height > 0 ; height--)
-    for (w=0 ; w < width ; w++)
-      sum += fabs(*fw++);
+    while (--width >= 0)
+      sum += (float)fabs(*fw++);
 
   return sum;
 }
@@ -406,7 +405,7 @@ void KLTTrackFeatures(
   _KLT_FloatImage tmpimg, floatimg1, floatimg2;
   _KLT_Pyramid pyramid1, pyramid1_gradx, pyramid1_grady,
     pyramid2, pyramid2_gradx, pyramid2_grady;
-  float subsampling = tc->subsampling;
+  int subsampling = tc->subsampling;
   float xloc, yloc, xlocout, ylocout;
   int val;
   int indx, r;
