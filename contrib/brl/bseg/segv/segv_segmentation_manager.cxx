@@ -184,7 +184,7 @@ void segv_segmentation_manager::vd_edges()
     return;
 
   if (agr)
-	dp.aggressive_junction_closure=1;
+    dp.aggressive_junction_closure=1;
   else
     dp.aggressive_junction_closure=0;
 
@@ -193,7 +193,7 @@ void segv_segmentation_manager::vd_edges()
 
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
-  if(edges)
+  if (edges)
     this->draw_edges(*edges, true);
 }
 
@@ -251,7 +251,6 @@ void segv_segmentation_manager::regions()
       }
       itab->set_image(res_img);
     }
-
 }
 
 #ifdef HAS_XERCES
@@ -334,8 +333,8 @@ void segv_segmentation_manager::test_digital_lines()
   t2D_->set_foreground(1.0, 1.0, 0.0);
   vsol_point_2d_sptr pa = new vsol_point_2d(0,0);
   vsol_point_2d_sptr pb = new vsol_point_2d(20,0);
-  vsol_point_2d_sptr pc = new vsol_point_2d(10, 20);  
-  vsol_point_2d_sptr pd = new vsol_point_2d(20,20);  
+  vsol_point_2d_sptr pc = new vsol_point_2d(10, 20);
+  vsol_point_2d_sptr pd = new vsol_point_2d(20,20);
   vsol_point_2d_sptr pe = new vsol_point_2d(20, 10);
   vsol_point_2d_sptr pf = new vsol_point_2d(0, 20);
   vdgl_digital_curve_sptr cab = new vdgl_digital_curve(pa, pb);

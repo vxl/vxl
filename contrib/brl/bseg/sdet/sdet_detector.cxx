@@ -65,10 +65,10 @@ void sdet_detector::ClearData()
   delete edgel; delete direction; delete locationx; delete locationy;
   delete grad_mag; delete angle;
   delete [] junctionx; delete [] junctiony;
-  if(vertices)
-	  vertices->clear();
-  if(edges)
-	  edges->clear();
+  if (vertices)
+    vertices->clear();
+  if (edges)
+    edges->clear();
   delete vertices;
   vertices = 0;
   delete edges;
@@ -95,21 +95,23 @@ bool  sdet_detector::DoContour()
   // first, find isolated chains/cycles
   bool find_net  = contour.FindNetwork(*edgel, junctionp,
                                        njunction,
-                                       junctionx, junctiony, 
+                                       junctionx, junctiony,
                                        edges, vertices);
   if (!find_net) {
     vcl_cout << "***Fail on FindNetwork.\n";
     return false;
   }
 
-  //vcl_vector<vtol_edge_2d_sptr>::iterator edge;
-  //  vcl_cout << "IN DoContour before SubPixelAccuracy\n";
-  //  this->print(vcl_cout);
-//   for ( edge = edges->begin() ; edge != edges->end(); ++edge)
-//     {
-//     vcl_cout << "Edgel output from DoContour:";
-//     (*edge)->describe(vcl_cout, 2);
-//     }
+#if 0
+  vcl_vector<vtol_edge_2d_sptr>::iterator edge;
+  vcl_cout << "IN DoContour before SubPixelAccuracy\n";
+  this->print(vcl_cout);
+  for ( edge = edges->begin() ; edge != edges->end(); ++edge)
+  {
+    vcl_cout << "Edgel output from DoContour:";
+    (*edge)->describe(vcl_cout, 2);
+  }
+#endif
   if (this->borderp)            // insert a virtual contour to enforce
     contour.InsertBorder(*edges, *vertices); // closure at border
 
@@ -121,12 +123,12 @@ bool  sdet_detector::DoContour()
 
   if (grad_mag&&angle)
     sdet_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continous edgel orientation.
-
-//   const RectROI* roi = image->GetROI();
-//   sdet_contour::Translate(*edges, *vertices, // display location at center
-//                      roi->GetOrigX()+0.5, // of pixel instead of
-//                      roi->GetOrigY()+0.5); // upper-left corner
-
+#if 0 // TargetJr
+   const RectROI* roi = image->GetROI();
+   sdet_contour::Translate(*edges, *vertices, // display location at center
+                           roi->GetOrigX()+0.5, // of pixel instead of
+                           roi->GetOrigY()+0.5); // upper-left corner
+#endif
   return true;
 }
 
@@ -138,10 +140,12 @@ bool  sdet_detector::DoFoldContour()
 {
   if (edges && vertices) return true;
 
-//   if (!DoFold()) {
-//     vcl_cout << "***Fail on DoFoldContour.\n";
-//     return false;
-//   }
+#if 0
+  if (!DoFold()) {
+    vcl_cout << "***Fail on DoFoldContour.\n";
+    return false;
+  }
+#endif
   sdet_contour::ClearNetwork(edges, vertices);       // delete vertices/edges
   sdet_contour contour(this->hysteresisFactor*this->noiseThreshold,
                   this->minLength, this->minJump*this->noiseThreshold,
@@ -164,12 +168,13 @@ bool  sdet_detector::DoFoldContour()
     contour.InsertBorder(*edges, *vertices); // closure at border
   if (grad_mag&&angle)
     sdet_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continous edgel orientation.
-//  sdet_contour::add_vertex_edgels(*edges);
-//   const RectROI* roi = image->GetROI();
-//   sdet_contour::Translate(*edges, *vertices, // display location at center
-//                      roi->GetOrigX()+0.5, // of pixel instead of
-//                      roi->GetOrigY()+0.5); // upper-left corner
-
+#if 0 // TargetJr
+  sdet_contour::add_vertex_edgels(*edges);
+  const RectROI* roi = image->GetROI();
+  sdet_contour::Translate(*edges, *vertices, // display location at center
+                          roi->GetOrigX()+0.5, // of pixel instead of
+                          roi->GetOrigY()+0.5); // upper-left corner
+#endif
   return true;
 }
 
@@ -261,10 +266,11 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
       return 0;
     }
 
-
-  //  RectROI* roi = image->GetROI(); // find user-selected region of interest
-  //  int sizex = roi->GetSizeX();
-  //  int sizey = roi->GetSizeY();
+#if 0 // TargetJr
+  RectROI* roi = image->GetROI(); // find user-selected region of interest
+  int sizex = roi->GetSizeX();
+  int sizey = roi->GetSizeY();
+#endif
   int sizey= image.rows();
   int sizex= image.cols();
 
@@ -296,7 +302,7 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
        delete image_float_buf;
        image_float_buf = 0;
      }
-    
+
    return image_float_buf;
 }
 
