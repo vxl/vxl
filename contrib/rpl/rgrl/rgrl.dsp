@@ -411,9 +411,6 @@ SOURCE=.\rgrl_trans_couple.cxx
 SOURCE=.\rgrl_converge_status_nas.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\rgrl_convergence_on_weighted_nas.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\rgrl_matcher_k_nearest_random.cxx
 # End Source File
 # End Group
@@ -751,9 +748,6 @@ SOURCE=.\rgrl_trans_couple.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_converge_status_nas.h
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_convergence_on_weighted_nas.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_matcher_k_nearest_random.h
