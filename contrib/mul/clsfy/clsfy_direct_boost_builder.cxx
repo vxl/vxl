@@ -92,49 +92,54 @@ double clsfy_direct_boost_builder::calc_threshold(
   }
 
   // calc number of negative examples
-  int tot_pos=0;
+  unsigned int tot_pos=0;
   for (unsigned i=0;i<n;++i)
-    if ( outputs[i]== 1 ) tot_pos++;
+    if ( outputs[i] == 1 ) ++tot_pos;
 
   // then find threshold that gives min_error over training set
   vcl_vector<int> index;
   mbl_index_sort(scores, index);
 
-  int n_pos=0;
-  int n_neg=0;
+  unsigned int n_pos=0;
+  unsigned int n_neg=0;
   int min_error= n+1;
   double min_thresh= -1;
   for (unsigned long i=0;i<n;++i)
   {
-    //vcl_cout<<"scores[ index["<<i<<"] ]= "<<scores[ index[i] ]<<" : ";
-    //vcl_cout<<"outputs[ index["<<i<<"] ]= "<<outputs[ index[i] ]<<vcl_endl;
-    if ( outputs[ index[i] ] == 0 ) n_neg++;
-    else if ( outputs[ index[i] ] == 1 ) n_pos++;
+#ifdef DEBUG
+    vcl_cout<<" scores[ index["<<i<<"] ] = "<< scores[ index[i] ]<<" ; "
+            <<"outputs[ index["<<i<<"] ] = "<<outputs[ index[i] ]<<'\n';
+#endif
+    if ( outputs[ index[i] ] == 0 ) ++n_neg;
+    else if ( outputs[ index[i] ] == 1 ) ++n_pos;
     else
     {
-      vcl_cout<<"ERROR: clsfy_direct_boost_basic_builder::calc_threshold()"<<vcl_endl;
-      vcl_cout<<"Unrecognised output value"<<vcl_endl;
-      vcl_cout<<"outputs["<<index[i]<<"]="<<outputs[index[i]]<<vcl_endl;
+      vcl_cout<<"ERROR: clsfy_direct_boost_basic_builder::calc_threshold()\n"
+              <<"Unrecognised output value\n"
+              <<"outputs[ index["<<i<<"] ] = outputs["<<index[i]<<"] = "
+              <<outputs[index[i]]<<'\n';
       vcl_abort();
     }
 
-    //vcl_cout<<"n= "<<n<<vcl_endl;
-    //vcl_cout<<"n_pos= "<<n_pos<<vcl_endl;
-    //vcl_cout<<"n_neg= "<<n_neg<<vcl_endl;
+#ifdef DEBUG
+    vcl_cout<<"n = "<<n<<", n_pos= "<<n_pos<<", n_neg= "<<n_neg<<'\n';
+#endif
     int error= n_neg+(tot_pos-n_pos);
 
     if ( error<= min_error )
     {
       min_error= error;
       min_thresh = scores[ index[i] ] + 0.001 ;
-      //vcl_cout<<"error= "<<error<<vcl_endl;
-      //vcl_cout<<"min_thresh= "<<min_thresh<<vcl_endl;
+#ifdef DEBUG
+      vcl_cout<<"error= "<<error<<", min_thresh= "<<min_thresh<<'\n';
+#endif
     }
   }
 
-  assert( n_pos+ n_neg== n );
-  //vcl_cout<<"min_error= "<<min_error<<vcl_endl;
-  //vcl_cout<<"min_thresh= "<<min_thresh<<vcl_endl;
+  assert( n_pos + n_neg == n );
+#ifdef DEBUG
+  vcl_cout<<"min_error= "<<min_error<<", min_thresh= "<<min_thresh<<'\n';
+#endif
 
   return min_thresh;
 }
@@ -157,9 +162,9 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   // check parameters are OK
   if ( max_n_clfrs_ < 0 )
   {
-    vcl_cout<<"Error: clsfy_direct_boost_builder::build"<<vcl_endl;
-    vcl_cout<<"max_n_clfrs_ = "<<max_n_clfrs_<<" ie < 0 "<<vcl_endl;
-    vcl_cout<<"set using set_max_n_clfrs()"<<vcl_endl;
+    vcl_cout<<"Error: clsfy_direct_boost_builder::build\n"
+            <<"max_n_clfrs_ = "<<max_n_clfrs_<<" ie < 0\n"
+            <<"set using set_max_n_clfrs()\n";
     vcl_abort();
   }
   else
@@ -170,10 +175,10 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
 
   if ( weak_builder_ == 0 )
   {
-    vcl_cout<<"Error: clsfy_direct_boost_builder::build"<<vcl_endl;
-    vcl_cout<<"weak_builder_ pointer has not been set "<<vcl_endl;
-    vcl_cout<<"need to provide a builder to build each weak classifier"<<vcl_endl;
-    vcl_cout<<"set using set_weak_builder()"<<vcl_endl;
+    vcl_cout<<"Error: clsfy_direct_boost_builder::build\n"
+            <<"weak_builder_ pointer has not been set\n"
+            <<"need to provide a builder to build each weak classifier\n"
+            <<"set using set_weak_builder()\n";
     vcl_abort();
   }
   else
@@ -184,9 +189,9 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
 
   if ( bs_ < 0 )
   {
-    vcl_cout<<"Error: clsfy_direct_boost_builder::build"<<vcl_endl;
-    vcl_cout<<"bs_ = "<<bs_<<" ie < 0 "<<vcl_endl;
-    vcl_cout<<"set using set_batch_size()"<<vcl_endl;
+    vcl_cout<<"Error: clsfy_direct_boost_builder::build\n"
+            <<"bs_ = "<<bs_<<" ie < 0\n"
+            <<"set using set_batch_size()\n";
     vcl_abort();
   }
   else
@@ -205,8 +210,8 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   // then sort all data once, then build the classifier
 
   // number of examples
-  unsigned n= inputs.size();
-  //vcl_cout<<"n= "<<n<<vcl_endl;
+  unsigned n = inputs.size();
+  //vcl_cout<<"n = "<<n<<vcl_endl;
 
   // Dimensionality of data
   inputs.reset();
@@ -227,13 +232,13 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
 
   if (save_data_to_disk_)
   {
-    vcl_cout<<"saving data to disk! "<<vcl_endl;
+    vcl_cout<<"saving data to disk!\n";
     collector= &file_collector;
   }
   else
   {
     //bs_ = n ;
-    vcl_cout<<"saving data to ram! "<<vcl_endl;
+    vcl_cout<<"saving data to ram!\n";
     collector= &ram_collector;
   }
 
@@ -350,8 +355,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
 
     // store best classifier that is left in list
     int ind= index[0];
-    vcl_cout<<"ind= "<<ind<<vcl_endl;
-    vcl_cout<<"errors["<<ind<<"]= "<<errors[ind]<<vcl_endl;
+    vcl_cout<<"ind= "<<ind<<", errors["<<ind<<"]= "<<errors[ind]<<'\n';
     if (errors[ind]> 0.5 ) break;
 
     if (errors[ind]==0)
@@ -384,8 +388,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
     {
       vcl_vector<bool>& j_vec=responses[ index[j] ];
       double prop_same= calc_prop_same(i_vec,j_vec);
-      //vcl_cout<<"prop_same= "<<prop_same<<vcl_endl;
-      //vcl_cout<<"prop_= "<<prop_<<vcl_endl;
+      //vcl_cout<<"prop_same= "<<prop_same<<", prop_= "<<prop_<<'\n';
       if ( prop_same < prop_ )
         new_index.push_back( index[j] );
       else
@@ -412,7 +415,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   // does clsfy_test_error balk if have too much data?
   // should be OK because just passes mbl_data_wrapper and evaluates
   // one at a time, so if using mbl_file_data_wrapper should be OK!
-  vcl_cout<<"calculating training error"<<vcl_endl;
+  vcl_cout<<"calculating training error\n";
   return clsfy_test_error(strong_classifier, inputs, outputs);
 }
 
@@ -472,7 +475,7 @@ void clsfy_direct_boost_builder::print_summary(vcl_ostream& os) const
   // clsfy_builder_base::print_summary(os); // Uncomment this line if it has one.
   // vsl_print_summary(os, data_); // Example of data output
 
-  vcl_cerr << "clsfy_direct_boost_builder::print_summary() NYI" << vcl_endl;
+  vcl_cerr << "clsfy_direct_boost_builder::print_summary() NYI\n";
 }
 
 //=======================================================================
@@ -483,7 +486,7 @@ void clsfy_direct_boost_builder::b_write(vsl_b_ostream& bfs) const
   //vsl_b_write(bfs, version_no());
   //clsfy_builder_base::b_write(bfs);  // Needed if base has any data
   //vsl_b_write(bfs, data_);
-  vcl_cerr << "clsfy_direct_boost_builder::b_write() NYI" << vcl_endl;
+  vcl_cerr << "clsfy_direct_boost_builder::b_write() NYI\n";
 }
 
 //=======================================================================
@@ -491,7 +494,7 @@ void clsfy_direct_boost_builder::b_write(vsl_b_ostream& bfs) const
   // required if data is present in this base class
 void clsfy_direct_boost_builder::b_read(vsl_b_istream& bfs)
 {
-  vcl_cerr << "clsfy_direct_boost_builder::b_read() NYI" << vcl_endl;
+  vcl_cerr << "clsfy_direct_boost_builder::b_read() NYI\n";
 #if 0
   if (!bfs) return;
 
