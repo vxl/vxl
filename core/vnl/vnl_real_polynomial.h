@@ -17,10 +17,12 @@
 // 23 may 97, Peter Vanroose - "NO_COMPLEX" option added (until "complex" type is standardised)
 // 27/03/2001 Ian Scott and Tim Cootes - Added Binary IO
 // 27/03/2001 Ian Scott - Comments tidied up
+// 25/11/2001 Peter Vanroose - added operator==(), derivative(), primitive(), print()
 // \endverbatim
 
 #include <vnl/vnl_vector.h>
 #include <vcl_complex.h>
+#include <vcl_iosfwd.h>
 
 //:Evaluation of real polynomials at real and complex points.
 //    vnl_real_polynomial represents a univariate polynomial with real
@@ -40,22 +42,26 @@ public:
   // of coefficients, one greater than the degree.
   vnl_real_polynomial(double const * a, int len): coeffs_(a, len) {}
 
+  //: Initialize polynomial from double.
+  // Useful when adding or multiplying a polynomial and a number.
+  vnl_real_polynomial(double a): coeffs_(1) { coeffs_[0] = a; }
+
   //: Initialize polynomial of a given degree.
   vnl_real_polynomial(int d): coeffs_(d+1) {}
+
+  bool operator==(vnl_real_polynomial const& p) { return p.coefficients() == coeffs_; }
 
   //: Evaluate polynomial at value x
   double evaluate(double x) const;
 
-	//: Evaluate integral at x (assuming constant of integration is zero)
-	double evaluate_integral(double x) const;
+  //: Evaluate integral at x (assuming constant of integration is zero)
+  double evaluate_integral(double x) const;
 
-	//: Evaluate integral between x1 and x2
-	double evaluate_integral(double x1, double x2) const;
+  //: Evaluate integral between x1 and x2
+  double evaluate_integral(double x1, double x2) const;
 
   //: Evaluate derivative at value x
-private: // not implemented
   double devaluate(double x) const;
-public:
 
   //: Evaluate polynomial at complex value x
   vcl_complex<double> evaluate(vcl_complex<double> const& x) const;
@@ -63,6 +69,13 @@ public:
 
   //: Evaluate derivative at complex value x
   vcl_complex<double> devaluate(vcl_complex<double> const& x) const;
+
+  //: Return derivative of this polynomial
+  vnl_real_polynomial derivative() const;
+
+  //: Return primitive function (inverse derivative) of this polynomial
+ // Since a primitive function is not unique, the one with constant = 0 is returned
+  vnl_real_polynomial primitive() const;
 
   // Data Access---------------------------------------------------------------
 
@@ -80,6 +93,9 @@ public:
         vnl_vector<double>& coefficients()       { return coeffs_; }
 
   void set_coefficients(vnl_vector<double> const& coeffs) {coeffs_ = coeffs;}
+
+  //: Print this polynomial to stream
+  void print(vcl_ostream& os) const;
 
 protected:
   //: The coefficients of the polynomial.
