@@ -2,7 +2,6 @@ USES += contrib/brl contrib/gel contrib/brl/bbas core
 include ../config.mk
 include ${IUEROOT}/contrib/gel/vdgl/config.mk
 include ${IUEROOT}/contrib/gel/vtol/config.mk
-include ${IUEROOT}/core/vnl/config.mk
 include ${IUEROOT}/core/testlib/config.mk
 
 ifdef HAS_XERCES
