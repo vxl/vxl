@@ -432,7 +432,7 @@ vcl_ostream& operator<< (vcl_ostream& os, vnl_matrix<T> const& m) {
       // Output data element
       if (vnl_matrix<T>::print_format_set()) {
         char buf[1024];
-        sprintf(buf, vnl_matrix<T>::get_print_format(), m(i, j));
+        vcl_sprintf(buf, vnl_matrix<T>::get_print_format(), m(i, j));
         os << buf << " ";
       }
       else
@@ -803,7 +803,8 @@ void vnl_matrix<T>::normalize_rows()
       norm += vnl_math_squared_magnitude(this->data[i][j]);
 
     if (norm != 0) {
-      vnl_numeric_traits<vnl_numeric_traits<T>::abs_t>::real_t scale = 1.0/sqrt(norm);
+      typedef typename vnl_numeric_traits<T>::abs_t brrz;
+      typename vnl_numeric_traits<brrz>::real_t scale = 1.0/vcl_sqrt(norm);
       for (unsigned int j = 0; j < this->num_cols; j++) {
         // FIXME need correct rounding here
         // There is no *standard* no operator*(complex<float>, double).
@@ -824,7 +825,8 @@ void vnl_matrix<T>::normalize_columns()
       norm += vnl_math_squared_magnitude(this->data[i][j]);
 
     if (norm != 0) {
-      vnl_numeric_traits<vnl_numeric_traits<T>::abs_t>::real_t scale = 1.0/sqrt(norm);
+      typedef typename vnl_numeric_traits<T>::abs_t brrz;
+      typename vnl_numeric_traits<brrz>::real_t scale = 1.0/vcl_sqrt(norm);
       for (unsigned int i = 0; i < this->num_rows; i++) {
         // FIXME need correct rounding here
         // There is no *standard* no operator*(complex<float>, double).
@@ -1435,10 +1437,10 @@ void vnl_matrix<T>::inplace_transpose()
   unsigned iwrk = (m+n)/2;
   vcl_vector<char> move(iwrk);
 
-  int iok = ::vnl_inplace_transpose(data_block(), n, m, move.begin(), iwrk);
+  int iok = ::vnl_inplace_transpose(data_block(), n, m, &move[0], iwrk);
   if (iok != 0)
     vcl_cerr << __FILE__ " : inplace_transpose() -- iok = " << iok << vcl_endl;
-
+  
   this->num_rows = n;
   this->num_cols = m;
 
