@@ -1683,11 +1683,6 @@ SOURCE=.\vnl_sym_matrix.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_test.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vnl_trace.h
 
 # End Source File
