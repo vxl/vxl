@@ -86,8 +86,6 @@ template<class T>
 void mil_image_2d_of<T>::resize2(int nx, int ny)
 {
   if (nx==nx_ && ny==ny_  || n_planes()==0) return;
-  assert(nx>=0);
-  assert(ny>=0);
   
   release_data();
   
@@ -195,10 +193,31 @@ void mil_image_2d_of<T>::set(vcl_vector<T*>& planes,
                              int nx, int ny, int xstep, int ystep,
                              const char* format)
 {
-  assert(nx>=0);
-  assert(ny>=0);
   release_data();
   planes_ = planes;
+  
+  nx_ = nx;
+  ny_ = ny;
+  xstep_ = xstep;
+  ystep_ = ystep;
+  
+  format_ = format;
+}
+
+//=======================================================================
+//: Define parameters
+//  planes[i] is pointer to i'th plane of nx x ny image data
+//  i should be valid in range [0,n_planes-1]
+//  Copies of pointers recorded (ie a shallow copy)
+template<class T>
+void mil_image_2d_of<T>::set(T** planes, int n_planes,
+                             int nx, int ny, int xstep, int ystep,
+                             const char* format)
+{
+  release_data();
+  planes_.resize(n_planes);
+  for (int i=0; i<n_planes; ++i)
+    planes_[i] = planes[i];
   
   nx_ = nx;
   ny_ = ny;
@@ -213,8 +232,6 @@ void mil_image_2d_of<T>::set(vcl_vector<T*>& planes,
 template<class T>
 void mil_image_2d_of<T>::setGrey(T* grey_data, int nx, int ny, int ystep)
 {
-  assert(nx>=0);
-  assert(ny>=0);
   release_data();
   planes_.resize(1);
   planes_[0] = grey_data;
@@ -234,8 +251,6 @@ template<class T>
 void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
                                 int nx, int ny, int ystep)
 {
-  assert(nx>=0);
-  assert(ny>=0);
   release_data();
   planes_.resize(3);
   planes_[0] = r;
@@ -255,8 +270,6 @@ template<class T>
 void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
                                 int nx, int ny, int xstep, int ystep)
 {
-  assert(nx>=0);
-  assert(ny>=0);
   release_data();
   planes_.resize(3);
   planes_[0] = r;
@@ -302,11 +315,7 @@ template<class T>
 void mil_image_2d_of<T>::setToWindow(const mil_image_2d_of& im,
                                      int xlo, int xhi, int ylo, int yhi)
 {
-  assert(this!=&im); // Can't be a window to yourself
-  assert(xlo>=0);
-  assert(ylo>=0);
-  assert(xhi<im.nx());
-  assert(yhi<im.ny());
+  assert(this!=&im);
   
   int n_planes = im.n_planes();
   set_n_planes(n_planes);

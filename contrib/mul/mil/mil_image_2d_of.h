@@ -47,6 +47,7 @@ private:
     int xstep_,ystep_;
     vcl_string format_;
     mil_transform_2d world2im_;
+
     void release_data();
 
     //: Resize current planes to [0..nx-1][0..ny-1]
@@ -56,7 +57,6 @@ private:
     virtual void resize3(int nx, int ny, int n_planes);
 
 public:
-    typedef T pixel_type;
 
     //: Dflt ctor
     //  Creates an empty one plane image.
@@ -87,6 +87,14 @@ public:
     //  (x,y) point in plane i given by planes[i][x*xstep + y*ystep]
     void set(vcl_vector<T*>& planes, int nx, int ny,
              int xstep, int ystep,
+             const char* format);
+
+    //: Define parameters
+    //  planes[i] is pointer to i'th plane of nx x ny image data
+    //  i should be valid in range [0,n_planes-1]
+    //  Copies of pointers recorded (ie a shallow copy)
+    void set(T** planes, int n_planes,
+             int nx, int ny, int xstep, int ystep,
              const char* format);
 
     //: Define parameters for grey scale images (single plane)
