@@ -244,7 +244,7 @@ tb_project_to_sphere(float r, float x, float y)
 #define RENORMCOUNT 97
 
 void
-add_quats(float q1[4], float q2[4], float dest[4])
+add_quats(const float q1[4], const float q2[4], float dest[4])
 {
     static int count=0;
     float t1[4], t2[4], t3[4];
