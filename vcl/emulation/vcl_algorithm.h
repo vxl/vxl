@@ -56,6 +56,7 @@
 #include "vcl_algobase.h"
 #include "vcl_heap.h"
 #include "vcl_tempbuf.h"
+#define vcl_remove vcl_remove
 
 template <class T>
 inline const T& __median(const T& a, const T& b, const T& c) {
@@ -338,7 +339,7 @@ OutputIterator vcl_remove_copy(InputIterator first, InputIterator last,
 template <class InputIterator, class OutputIterator, class Predicate>
 IUEi_STL_INLINE
 OutputIterator vcl_remove_copy_if(InputIterator first, InputIterator last,
-                              OutputIterator result, Predicate pred) {
+                                  OutputIterator result, Predicate pred) {
     __stl_debug_check(__check_range(first, last));
     for (; first != last; ++first) {
         if (!pred(*first)) {
@@ -351,8 +352,7 @@ OutputIterator vcl_remove_copy_if(InputIterator first, InputIterator last,
 
 template <class ForwardIterator, class T>
 IUEi_STL_INLINE
-ForwardIterator vcl_remove(ForwardIterator first, ForwardIterator last,
-                       const T& value) {
+ForwardIterator vcl_remove(ForwardIterator first, ForwardIterator last, const T& value) {
     __stl_debug_check(__check_range(first, last));
     first = vcl_find(first, last, value);
     ForwardIterator next = first;
@@ -361,8 +361,7 @@ ForwardIterator vcl_remove(ForwardIterator first, ForwardIterator last,
 
 template <class ForwardIterator, class Predicate>
 IUEi_STL_INLINE
-ForwardIterator vcl_remove_if(ForwardIterator first, ForwardIterator last,
-                          Predicate pred) {
+ForwardIterator vcl_remove_if(ForwardIterator first, ForwardIterator last, Predicate pred) {
     __stl_debug_check(__check_range(first, last));
     first = vcl_find_if(first, last, pred);
     ForwardIterator next = first;
