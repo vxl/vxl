@@ -495,10 +495,7 @@ void brct_algos::write_vrml_points(vcl_ofstream& str,
   int n = pts3d.size();
   for (int i =0; i<n; i++)
     str << -pts3d[i]->x() << ' ' << pts3d[i]->y() << ' ' << pts3d[i]->z() << '\n';
-  str << "   ]\n"
-      << "  }\n"
-      << " }\n"
-      << "}\n";
+  str << "   ]\n  }\n }\n}\n";
 }
 
 void brct_algos::write_vrml_box(vcl_ofstream& str, vsol_box_3d_sptr const& box,
@@ -678,9 +675,9 @@ bool brct_algos::homography(vcl_vector<vgl_point_3d<double> > const& world_point
   vgl_h_matrix_2d_compute_linear hc;
   hc.verbose(true);
   bool success = hc.compute(h_world_points, h_image_points, H);
-  if(!success)
+  if (!success)
     return false;
-  if(!optimize)
+  if (!optimize)
     return true;
   // optimize the homography using Levenberg-Marquardt
   vgl_h_matrix_2d_optimize_lmq lm(H);
@@ -725,7 +722,7 @@ homography_ransac(vcl_vector<vgl_point_3d<double> > const& world_points,
   H.set((ransam->params()).data_block());
   delete ransac;
   delete ransam;
-  if(!optimize)
+  if (!optimize)
     return true;
 
   // optimize the homography using Levenberg-Marquardt
@@ -769,11 +766,11 @@ homography_muse(vcl_vector<vgl_point_3d<double> > const& world_points,
                << "estimate = " << ransam->params() << vcl_endl
                << "scale = " << ransam->scale() << vcl_endl;
     }
-  
+
   H.set((ransam->params()).data_block());
   delete muset;
   delete ransam;
-  if(!optimize)
+  if (!optimize)
     return true;
 
   // optimize the homography using Levenberg-Marquardt
@@ -904,11 +901,11 @@ read_target_corrs(vcl_ifstream& str,
     str >> temp;
     if (temp != "CORRESP:")
       return false;
-	bool val;
+    bool val;
     int junk;
     vgl_point_2d<double> image_point;
     vgl_point_3d<double> world_point;
-    str >> val >> junk	
+    str >> val >> junk
         >> world_point >> image_point;
     vcl_cout << "W " << world_point << "  I " << image_point << '\n';
     valid.push_back(val);
@@ -917,12 +914,13 @@ read_target_corrs(vcl_ifstream& str,
   }
   return true;
 }
+
 bool brct_algos::write_corrs(vcl_ofstream& str,
                              vcl_vector<bool>& valid,
                              vcl_vector<vgl_point_2d<double> >& image_points,
                              vcl_vector<vgl_point_3d<double> >& world_points)
 {
-  if(!str)
+  if (!str)
     return false;
   str << "NUMPOINTS:";
   int n_corrs = world_points.size();
@@ -931,11 +929,11 @@ bool brct_algos::write_corrs(vcl_ofstream& str,
   {
     vgl_point_3d<double> P = world_points[i];
     vgl_point_2d<double> p = image_points[i];
-    str << "CORRESP:";
-    str << ' ' << (int)valid[i];
-    str << ' ' << i;
-    str << ' ' << P.x() << ' ' << P.y() << ' ' << P.z(); 
-    str << ' ' << p.x() << ' ' << p.y() << '\n';
+    str << "CORRESP:"
+        << ' ' << (int)valid[i]
+        << ' ' << i
+        << ' ' << P.x() << ' ' << P.y() << ' ' << P.z()
+        << ' ' << p.x() << ' ' << p.y() << '\n';
   }
   return true;
 }
@@ -991,49 +989,51 @@ vgl_p_matrix<double> brct_algos::p_from_h(vgl_h_matrix_2d<double> const& H)
   vgl_p_matrix<double> P(Mp);
   return P;
 }
+
 //------------------------------------------------------------
-//: form a p_matrix from a homography and Z-y pairs,
-//   assumes the world plane is X-Y.
+//: form a p_matrix from a homography and Z-y pairs, assumes the world plane is X-Y.
 //  hi are columns from H
-// Given H = [h0|h1|h2], then P = [h0|h1|h'|h2]
-//                         _   _
-//                         | 0 |
-// where h' is of the form | v |
-//                         | 0 |
-//                         -   -
+// Given H = [h0|h1|h2], then P = [h0|h1|h'|h2], where h' is of the form
+// \verbatim
+// _   _
+// | 0 |
+// | v |
+// | 0 |
+// -   -
+// \endverbatim
 //  Given a y-Z pair
-//         h01 X + h11 Y  +  v Z + h21 
+// \verbatim
+//         h01 X + h11 Y  +  v Z + h21
 //   y =   -------------------------------
-//             h02 X + h12 Y  + h22 
-//              1
-//  Thus  v =  ---(y(h02 X + h12 Y  + h22) - h01 X - h11 Y - h21)
-//              Z
+//             h02 X + h12 Y  + h22
+// \endverbatim
+//  Thus  $ v =  (y(h_{02}X + h_{12}Y  + h_{22}) - h_{01}X - h_{11}Y - h_{21}) / Z $
+//
 vgl_p_matrix<double> brct_algos::
 p_from_h(vgl_h_matrix_2d<double> const& H, vcl_vector<double> const& image_y,
          vcl_vector<vgl_point_3d<double> > const& world_p)
 {
-
   unsigned n = world_p.size();
-  if(!n)
+  if (!n)
     return brct_algos::p_from_h(H);
-  vnl_double_3x3 h = H.get_matrix();  
+  vnl_double_3x3 h = H.get_matrix();
   double vsum = 0;
-  for(unsigned i = 0; i<n; ++i)
-    {
-      vgl_point_3d<double> pw = world_p[i];
-      if(vcl_fabs(pw.z()) < 0.01)
-        continue;
-      //note h has row vectors not column vectors as in comments
-      //so transpose indices
-      double temp = image_y[i]*(h[2][0]*pw.x() + h[2][1]*pw.y() + h[2][2]);
-      temp -= h[1][0]*pw.x();
-      temp -= h[1][1]*pw.y();
-      temp -= h[1][2];
-      temp /= pw.z();
-      vsum += temp;
-    }
+  for (unsigned i = 0; i<n; ++i)
+  {
+    vgl_point_3d<double> pw = world_p[i];
+    if (vcl_fabs(pw.z()) < 0.01)
+      continue;
+    //note h has row vectors not column vectors as in comments
+    //so transpose indices
+    double temp = image_y[i]*(h[2][0]*pw.x() + h[2][1]*pw.y() + h[2][2]);
+    temp -= h[1][0]*pw.x();
+    temp -= h[1][1]*pw.y();
+    temp -= h[1][2];
+    temp /= pw.z();
+    vsum += temp;
+  }
   vsum /= n;
-  if(vcl_fabs(vsum) < 1e-06)
+  if (vcl_fabs(vsum) < 1e-6)
     return brct_algos::p_from_h(H);
   vgl_p_matrix<double> P = brct_algos::p_from_h(H);
   vnl_double_3x4 p = P.get_matrix();
