@@ -975,6 +975,7 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
 
 ///////////////////////////////////////////////////////////////////////
 /// Create set of pyramid images.
+///     NOTE: Currently, this method only works for 16 bit images.
 ///
 /// \param levels number of levels of pyramid images
 /// \param file_name base file
