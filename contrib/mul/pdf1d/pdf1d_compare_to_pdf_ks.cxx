@@ -1,6 +1,7 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//:
 // \file
 // \author Tim Cootes
 // \brief Test if data from a given distribution using Kolmogorov-Smirnov
@@ -11,8 +12,6 @@
 #include <vcl_cstdlib.h> // vcl_abort()
 #include <vbl/vbl_qsort.h>
 
-#include <vsl/vsl_indent.h>
-#include <mbl/mbl_data_wrapper.h>
 #include <pdf1d/pdf1d_prob_ks.h>
 #include <pdf1d/pdf1d_compare_to_pdf_ks.h>
 
@@ -41,9 +40,9 @@ double pdf1d_compare_to_pdf_ks::compare(const double* data, int n,
   if (!pdf.cdf_is_analytic())
   {
     vcl_cerr<<"Warning: pdf1d_compare_to_pdf_ks::compare() ";
-	vcl_cerr<<"Incorrectly assuming an analytic form for CDF."<<vcl_cout;
-	// Should use slightly different implementation when estimating CDF using samples
-	// Not yet implemented though.
+    vcl_cerr<<"Incorrectly assuming an analytic form for CDF."<<vcl_cout;
+    // Should use slightly different implementation when estimating CDF using samples
+    // Not yet implemented though.
   }
 
   // Sort the data
@@ -58,16 +57,16 @@ double pdf1d_compare_to_pdf_ks::compare(const double* data, int n,
   for (int i=0;i<n;++i)
   {
     double cdf = pdf.cdf(s[i]);
-	double data_cdf = (1.0+i)/n;
-	double d = vcl_fabs(cdf-data_cdf);
-	if (d>d_max) d_max=d;
-	d = vcl_fabs(cdf_last-data_cdf);
-	if (d>d_max) d_max=d;
+    double data_cdf = (1.0+i)/n;
+    double d = vcl_fabs(cdf-data_cdf);
+    if (d>d_max) d_max=d;
+    d = vcl_fabs(cdf_last-data_cdf);
+    if (d>d_max) d_max=d;
 
-	cdf_last = cdf;
+    cdf_last = cdf;
   }
 
-  double root_n = vcl_sqrt(n);
+  double root_n = vcl_sqrt(double(n));
   return pdf1d_prob_ks((root_n+0.12+0.11/root_n)*d_max);
 }
 
