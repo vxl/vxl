@@ -39,8 +39,8 @@ struct vgui_event_condition
   vgui_event_condition(vgui_button b, vgui_modifier m = vgui_MODIFIER_NULL, bool p = true)
     : on(true), pressed(p), key(vgui_KEY_NULL), button(b), modifier(m) { }
   
-  void enable(bool v) { on = v; }
-  void disable(bool v) { on = !v; }
+  void enable(bool v = true) { on = v; }
+  void disable(bool v = true) { on = !v; }
   
   //: E.g. if (c_mouse_spin(e))
   bool operator()(vgui_event const &e) const;
