@@ -12,7 +12,7 @@
 #include <vil3d/vil3d_image_view.h>
 #include <vcl_iostream.h>
 
-#ifdef VCL_VC70
+#if defined(VCL_VC70) || defined(VCL_VC71)
 #  pragma warning( push )
 #  pragma warning( disable: 4244 )  // conversion from ptrdiff_t to int, possible loss of data
 #endif
@@ -47,7 +47,7 @@ inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
   }
 }
 
-#ifdef VCL_VC70
+#if defined(VCL_VC70) || defined(VCL_VC71)
 #  pragma warning( pop )
 #endif
 
