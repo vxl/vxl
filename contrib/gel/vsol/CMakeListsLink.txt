@@ -1,7 +1,6 @@
 # ./gel/vsol/CMakeListsLink.txt
 
 LINK_LIBRARIES( vsol )
-LINK_DIRECTORIES ( ${allvxl_BINARY_DIR}/gel/vsol )
 
 IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
   LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/gel/vsol )
