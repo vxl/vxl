@@ -199,7 +199,7 @@ inline void vil2_algo_convolve_1d(const srcT* src0, unsigned nx, int s_step,
 }
 
 //: Convolve kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
-// On exit dest_im(i,j) = sum src(i+x,j)*kernel(i)  (x=k_lo..k_hi)
+// On exit dest_im(i,j) = sum src(i+x,j)*kernel(x)  (x=k_lo..k_hi)
 //
 // Assumes dest and src same size (nx)
 template <class srcT, class destT, class kernelT, class accumT>
