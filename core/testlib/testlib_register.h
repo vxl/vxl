@@ -37,7 +37,7 @@ extern vcl_vector<vcl_string>       testlib_test_name_;
 //: Register the test with the driver.
 // \param testname should be the same as one of the tests declared with DECLARE.
 #define REGISTER( testname ) \
-   testlib_test_func_.push_back( testname ## _main ); \
+   testlib_test_func_.push_back( & testname ## _main ); \
    testlib_test_name_.push_back( #testname )
 
 #endif
