@@ -10,7 +10,7 @@ TESTS += test_face_2d.cxx
 TESTS += test_two_chain.cxx
 TESTS += test_block.cxx
 
-IULIBS += -lvtol -lvsol -lvgl-algo -lvgl -lvnl-algo -lvnl -lvbl -lvul
+IULIBS += -lvtol -lvsol -lvdgl -lvgl-algo -lvgl -lvnl-algo -lvnl -lvbl -lvul
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
