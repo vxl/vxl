@@ -1,16 +1,16 @@
 #ifndef vil3d_threshold_txx_
 #define vil3d_threshold_txx_
 //:
-//  \file
-//  \brief Apply thresholds to image data
-//  \author Tim Cootes
+// \file
+// \brief Apply thresholds to image data
+// \author Tim Cootes
 
 #include "vil3d_threshold.h"
 
 //: Apply threshold such that dest(i,j,k,p)=true if src(i,j,k,p)>=t
 template<class srcT>
 void vil3d_threshold_above(const vil3d_image_view<srcT>& src,
-                          vil3d_image_view<bool>& dest,  srcT t)
+                           vil3d_image_view<bool>& dest,  srcT t)
 {
   unsigned ni = src.ni(),nj = src.nj(),nk = src.nk(),np = src.nplanes();
   dest.set_size(ni,nj,nk,np);
@@ -43,7 +43,7 @@ void vil3d_threshold_above(const vil3d_image_view<srcT>& src,
 //: Apply threshold such that dest(i,j,k,p)=true if src(i,j,k,p)<=t
 template<class srcT>
 void vil3d_threshold_below(const vil3d_image_view<srcT>& src,
-                          vil3d_image_view<bool>& dest,  srcT t)
+                           vil3d_image_view<bool>& dest,  srcT t)
 {
   unsigned ni = src.ni(),nj = src.nj(),nk = src.nk(),np = src.nplanes();
   dest.set_size(ni,nj,nk,np);
@@ -76,7 +76,7 @@ void vil3d_threshold_below(const vil3d_image_view<srcT>& src,
 //: Apply threshold such that dest(i,j,k,p)=true if t0<=src(i,j,k,p)<=t1
 template<class srcT>
 void vil3d_threshold_inside(const vil3d_image_view<srcT>& src,
-                          vil3d_image_view<bool>& dest,  srcT t0, srcT t1)
+                            vil3d_image_view<bool>& dest,  srcT t0, srcT t1)
 {
   unsigned ni = src.ni(),nj = src.nj(),nk = src.nk(),np = src.nplanes();
   dest.set_size(ni,nj,nk,np);
@@ -109,7 +109,7 @@ void vil3d_threshold_inside(const vil3d_image_view<srcT>& src,
 //: Apply threshold such that dest(i,j,k,p)=true if src(i,j,k,p)<=t0 or src(i,j,k,p)>=t1
 template<class srcT>
 void vil3d_threshold_outside(const vil3d_image_view<srcT>& src,
-                          vil3d_image_view<bool>& dest,  srcT t0, srcT t1)
+                             vil3d_image_view<bool>& dest,  srcT t0, srcT t1)
 {
   unsigned ni = src.ni(),nj = src.nj(),nk = src.nk(),np = src.nplanes();
   dest.set_size(ni,nj,nk,np);
@@ -141,14 +141,13 @@ void vil3d_threshold_outside(const vil3d_image_view<srcT>& src,
 
 #undef VIL3D_THRESHOLD_INSTANTIATE
 #define VIL3D_THRESHOLD_INSTANTIATE(srcT) \
-template void vil3d_threshold_above(const vil3d_image_view<srcT>& src, \
-                          vil3d_image_view<bool>& dest,  srcT t); \
-template void vil3d_threshold_below(const vil3d_image_view<srcT>& src, \
-                          vil3d_image_view<bool>& dest,  srcT t); \
-template void vil3d_threshold_inside(const vil3d_image_view<srcT>& src, \
-                          vil3d_image_view<bool>& dest,  srcT t0, srcT t1); \
-template void vil3d_threshold_outside(const vil3d_image_view<srcT>& src, \
-                          vil3d_image_view<bool>& dest,  srcT t0, srcT t1)
+template void vil3d_threshold_above(const vil3d_image_view<srcT >& src, \
+                          vil3d_image_view<bool >& dest,  srcT t); \
+template void vil3d_threshold_below(const vil3d_image_view<srcT >& src, \
+                          vil3d_image_view<bool >& dest,  srcT t); \
+template void vil3d_threshold_inside(const vil3d_image_view<srcT >& src, \
+                          vil3d_image_view<bool >& dest,  srcT t0, srcT t1); \
+template void vil3d_threshold_outside(const vil3d_image_view<srcT >& src, \
+                          vil3d_image_view<bool >& dest,  srcT t0, srcT t1)
 
-
-#endif
+#endif // vil3d_threshold_txx_

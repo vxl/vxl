@@ -1,4 +1,4 @@
-// This is mul/vil3d/tests/test_threshold.cxx
+// This is mul/vil3d/tests/test_algo_threshold.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
@@ -7,9 +7,9 @@
 
 void test_threshold_byte(const vil3d_image_view<vxl_byte>& image)
 {
-  vcl_cout << "**********************\n"
+  vcl_cout << "*************************\n"
            << " Testing vil3d_threshold\n"
-           << "**********************\n";
+           << "*************************\n";
 
   vil3d_image_view<bool> bool_im;
 
