@@ -5,6 +5,7 @@ include ${IUEROOT}/core/testlib/config.mk
 TESTMAIN := test_driver.cxx
 
 SOURCES += vbl_test_classes.cxx
+SOURCES += vbl_test_array_x.cxx
 SOURCES += vbl_test_all.cxx
 TESTS += vbl_test_array.cxx
 TESTS += vbl_test_sparse_array_2d.cxx
