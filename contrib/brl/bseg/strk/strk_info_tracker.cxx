@@ -3,6 +3,7 @@
 //:
 // \file
 #include <vcl_algorithm.h>
+#include <vcl_cstdlib.h> // for rand()
 #include <vul/vul_timer.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <brip/brip_float_ops.h>
@@ -116,10 +117,10 @@ generate_randomly_positioned_sample(strk_tracking_face_2d_sptr const& seed)
   if (!seed)
     return 0;
   //random sample of uniform distribution
-  float tx = (2.0*search_radius_)*(rand()/(RAND_MAX+1.0)) - search_radius_;
-  float ty = (2.0*search_radius_)*(rand()/(RAND_MAX+1.0)) - search_radius_;
-  float theta = (2.0*angle_range_)*(rand()/(RAND_MAX+1.0)) - angle_range_;
-  float s = (2.0*scale_range_)*(rand()/(RAND_MAX+1.0)) - scale_range_;
+  float tx = (2.f*search_radius_)*float(vcl_rand()/(RAND_MAX+1.0)) - search_radius_;
+  float ty = (2.f*search_radius_)*float(vcl_rand()/(RAND_MAX+1.0)) - search_radius_;
+  float theta = (2.f*angle_range_)*float(vcl_rand()/(RAND_MAX+1.0)) - angle_range_;
+  float s = (2.f*scale_range_)*float(vcl_rand()/(RAND_MAX+1.0)) - scale_range_;
   float scale = 1+s;
   strk_tracking_face_2d* tf = new strk_tracking_face_2d(seed);
   tf->transform(tx, ty, theta, scale);
@@ -150,7 +151,7 @@ void strk_info_tracker::generate_samples()
 
 bool strk_info_tracker::refresh_sample()
 {
-  float t = rand()/(RAND_MAX+1.0);
+  double t = vcl_rand()/(RAND_MAX+1.0);
   return t<=frac_time_samples_;
 }
 
