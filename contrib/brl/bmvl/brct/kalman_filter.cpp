@@ -356,9 +356,9 @@ void kalman_filter::update_confidence()
       bugl_gaussian_point_2d<double> x = brct_algos::project_3d_point(cams[f], curve_3d_[i]);
       vgl_point_2d<double> u = brct_algos::most_possible_point(curves_[cur_pos_ - f], x);
 
-	  vnl_double_2 z(x.x(), x.y()), z_matched(u.x(), u.y());
-	  prob *= matched_point_prob(z, z_matched);
-     }
+      vnl_double_2 z(x.x(), x.y()), z_matched(u.x(), u.y());
+      prob *= matched_point_prob(z, z_matched);
+    }
 
     prob_[i] = prob;
     normalization_factor += prob_[i];
@@ -367,9 +367,9 @@ void kalman_filter::update_confidence()
   vcl_cout<<"normalization_factor = "<<normalization_factor;
   // normalize the probability weight across all the points
 
-  if(normalization_factor == 0)
+  if (normalization_factor == 0)
     return ;
-  
+
   for (int i=0; i<num_points_; i++)
     prob_[i] /= normalization_factor;
 }
@@ -413,8 +413,8 @@ void kalman_filter::inc()
     vnl_double_2 z(cur_measures[i].x(), cur_measures[i].y());
 
     vnl_double_2 z_pred = projection(P,X);
-    if(matched_point_prob(z, z_pred) > 0){ // if not a outlir
-      //
+    if (matched_point_prob(z, z_pred) > 0) // if not a outlier
+    {
       // go to the correction step
       //
       Xpred = Xpred +  G_*(z - z_pred)*prob_[i];
@@ -597,12 +597,11 @@ vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
   yc /= num_points_;
   zc /= num_points_;
 
-  for (int i=0; i<num_points_; i++){
-	  if(prob_[i] > 0){
-	    vgl_point_3d<double> pt(curve_3d_[i].x()-xc, curve_3d_[i].y()-yc, curve_3d_[i].z()-zc);
-		pts.push_back(pt);
-	  }
-  }
+  for (int i=0; i<num_points_; i++)
+    if (prob_[i] > 0) {
+      vgl_point_3d<double> pt(curve_3d_[i].x()-xc, curve_3d_[i].y()-yc, curve_3d_[i].z()-zc);
+      pts.push_back(pt);
+    }
 
   return pts;
 }
@@ -745,10 +744,10 @@ double kalman_filter::matched_point_prob(vnl_double_2& z, vnl_double_2& z_pred)
   vnl_double_2 dz = z - z_pred;
   double d2 = dz[0]*dz[0] + dz[1]*dz[1];
 
-  if( d2 > 1)
-	  return 0;
+  if (d2 > 1)
+    return 0;
   else
-	  return exp(-d2/2);
+    return vcl_exp(-d2/2);
 }
 
 
