@@ -6,7 +6,7 @@
 #if !VCL_USE_NATIVE_STL
 # include <vcl/emulation/vcl_list.h>
 #else
-# ifdef __GNUC__
+# ifdef VCL_GCC_WITH_LIBSTDCXX_V2
 #  include_next <list.h>
 #  define vcl_list list
 # else

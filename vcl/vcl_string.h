@@ -7,7 +7,7 @@
 #if !VCL_USE_NATIVE_STL
 # include <vcl/emulation/vcl_string.h>
 
-#elif defined(__GNUC__)
+#elif defined(VCL_GCC_WITH_GNU_LIBSTDCXX_V2)
 # include <string>
 # define vcl_string string
 # define vcl_string_char_traits string_char_traits

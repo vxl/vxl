@@ -32,7 +32,7 @@
 
 
 // ---------- later versions of gcc, e.g. egcs and 2.95
-#elif defined(VCL_GCC_EGCS)
+#elif defined(VCL_GCC_EGCS) && !defined(GNU_LIBSTDCXX_V3)
 # include <iterator.h>
 # define vcl_iterator_traits       /*std::*/iterator_traits
 # define vcl_iterator              /*non-std*/forward_iterator

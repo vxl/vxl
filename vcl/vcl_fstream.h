@@ -7,14 +7,15 @@
 // this is to get the vcl_ios_* macros.
 #include <vcl/vcl_iostream.h>
 
-// include compiler header.
-#if defined(VCL_WIN32) && defined(VCL_USE_NATIVE_STL)
-#include <fstream>
+
+#if defined(VCL_GCC_27) || defined(VCL_GCC_WITH_LIBSTDCXX_V2) || defined(VCL_SGI_CC)
+# include <fstream.h>
+
+#else  // -------------------- ISO
+# include <fstream>
 using std :: fstream;
 using std :: ofstream;
 using std :: ifstream;
-#else
-#include <fstream.h>
 #endif
 
 #endif

@@ -18,7 +18,7 @@
 // this header is wrong, but bear with it for now.
 # include <vcl/vcl_functional.h>
 
-#elif defined(VCL_GCC)
+#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
 // also wrong.
 # include <vcl/vcl_functional.h>
 

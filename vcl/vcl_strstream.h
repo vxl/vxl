@@ -8,13 +8,12 @@
 #include <vcl/vcl_iostream.h>
 
 // include compiler header.
-#ifdef VCL_WIN32
-#include <strstream>
+#if defined(VCL_GCC_27) || defined(VCL_GCC_WITH_LIBSTDCXX_V2) || defined(VCL_SGI_CC)
+# include <strstream.h>
+#else // -------------------- ISO
+# include <strstream>
 using std :: ostrstream;
 using std :: istrstream;
-
-#else
-#include <strstream.h>
 #endif
 
 #endif

@@ -22,7 +22,7 @@
 template <class T> class vcl_complex;
 
 // ---------- native gcc
-#elif defined(__GNUC__)
+#elif defined(VCL_GCC_WITH_LIBSTDCXX_V2)
 template <class T> class complex;
 # define vcl_complex complex
 

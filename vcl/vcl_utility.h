@@ -7,7 +7,7 @@
 # include <vcl/emulation/vcl_utility.h>
 # define vcl_make_pair make_pair
 
-#elif defined(__GNUC__)
+#elif defined(VCL_GCC_WITH_GNU_LIBSTDCXX_V2)
 # include <utility>
 # define vcl_pair pair
 # define vcl_make_pair make_pair

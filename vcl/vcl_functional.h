@@ -11,7 +11,7 @@
 #else
 
 // Include system header and define vcl_functional_h_STD :
-# if defined(VCL_GCC)
+# if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
 #  include <function.h>
 #  define vcl_function_h_STD ::
 

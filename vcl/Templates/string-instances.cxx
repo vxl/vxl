@@ -1,7 +1,7 @@
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_string.h>
 
-#ifdef VCL_GCC_295
+#if defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
 // gcc2.95 needs implicit templates tickled to link strings....
 
 template class basic_string<char, string_char_traits<char> >;

@@ -16,7 +16,7 @@
 # include <vcl/emulation/vcl_algorithm.h>
 # define vcl_algorithm_h_std(x) /*std::*/::x
 
-#elif defined(VCL_GCC)
+#elif defined(VCL_GCC_WITH_LIBSTDCXX_V2)
 # include <algo.h>
 # define vcl_algorithm_h_std(x) /*std::*/::x
 
@@ -31,7 +31,9 @@
 #  ifdef VCL_USE_NATIVE_STL // because this is already in emulation/vcl_algobase.h
 // SunPro 5.0 <algorithm> does not supply destroy() - sigh...
 // vc 6.0 supplies allocator<T>::destroy(T *) - groan...
-template <class T> inline void destroy(T *p) { p->~T(); }
+namespace std {
+  template <class T> inline void destroy(T *p) { p->~T(); }
+}
 #  endif
 # endif
 
@@ -41,7 +43,7 @@ template <class T> inline void destroy(T *p) { p->~T(); }
 #endif
 
 // Now #define vcl_blah to std::blah
-#define vcl_destroy           destroy
+#define vcl_destroy           vcl_algorithm_h_std(destroy)
 #define vcl_adjacent_find     vcl_algorithm_h_std(adjacent_find)
 #define vcl_and 	      vcl_algorithm_h_std(and)
 #define vcl_binary 	      vcl_algorithm_h_std(binary)

@@ -24,7 +24,7 @@ C++ headers for C++ library
 <algorithm>  
 <iomanip>    
 <list>       
-<iostream>   
+<ostream>   
 <streambuf>  
 <bitset>     
 <ios>        

@@ -9,7 +9,7 @@
 # include <vcl/emulation/vcl_set.h>
 # include <vcl/emulation/vcl_multiset.h>
 
-#elif defined(__GNUC__)
+#elif defined(VCL_GCC_WITH_LIBSTDCXX_V2)
 # include <set>
 # include <multiset.h>
 # define vcl_set set

@@ -8,8 +8,10 @@
 # include <vcl/emulation/vcl_complex.txx>
 #elif defined(VCL_EGCS)
 # include <vcl/egcs/vcl_complex.txx>
-#elif defined(VCL_GCC_295)
+#elif defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
 # include <vcl/gcc-295/vcl_complex.txx>
+#elif defined(VCL_GCC_295) && defined(GNU_LIBSTDCXX_V3)
+# include <vcl/emulation/vcl_complex.txx>
 #elif defined(VCL_SUNPRO_CC)
 # include <vcl/sunpro/vcl_complex.txx>
 //#elif defined(VCL_SGI_CC)
@@ -17,7 +19,7 @@
 #elif defined(VCL_WIN32)
 # include <vcl/win32/vcl_complex.txx>
 #else
-  error "USE_NATIVE_COMPLEX with unknown compiler"
+#  error "USE_NATIVE_COMPLEX with unknown compiler"
 #endif
 
 #endif

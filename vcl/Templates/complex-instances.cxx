@@ -56,7 +56,7 @@ do_inlines(float);
 do_inlines(double);
 
 // ---------- gcc 2.95
-#elif defined(VCL_GCC_295)
+#elif defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
 # define VCL_COMPLEX_INSTANTIATE_INLINE(x) template x
 # define do_inlines(FLOAT) \
 VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(complex<FLOAT >const&,complex<FLOAT >const&));\

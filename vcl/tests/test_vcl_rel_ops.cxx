@@ -19,6 +19,7 @@ int function()
   if (x >  y) return 4;
   if (x <= y) return 5;
   if (x >= y) return 6;
+  return 0;
 }
 
 int main(int, char **)

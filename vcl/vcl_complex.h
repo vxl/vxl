@@ -28,9 +28,13 @@
 # include <vcl/emulation/vcl_complex.h>
 
 // ---------- native gcc
-#elif defined(__GNUC__)
+#elif defined(VCL_GCC_WITH_GNU_LIBSTDCXX_V2)
 # include <complex>
 # define vcl_complex complex
+
+// ---------- gcc 2.95.2 with libstdc++-v3
+#elif defined(VCL_GCC_295) && defined(GNU_LIBSTDCXX_V3)
+# include <vcl/emulation/vcl_complex.h>
 
 // ---------- native WIN32
 #elif defined(VCL_WIN32)
