@@ -7,7 +7,7 @@
 
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 #include <vcl_ctime.h>
 #include <mbl/mbl_stats_1d.h>
 #include <vcl_cassert.h>
@@ -17,7 +17,7 @@ const unsigned NJ=256;
 const unsigned NP=3;
 
 template <class imT>
-double method1(vil2_image_view<imT>& image, int n_loops)
+double method1(vil_image_view<imT>& image, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
@@ -32,7 +32,7 @@ double method1(vil2_image_view<imT>& image, int n_loops)
 }
 
 template <class imT>
-double method2(vil2_image_view<imT>& image, int n_loops)
+double method2(vil_image_view<imT>& image, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
@@ -48,7 +48,7 @@ double method2(vil2_image_view<imT>& image, int n_loops)
 }
 
 template <class imT>
-double method3(vil2_image_view<imT>& image, int n_loops)
+double method3(vil_image_view<imT>& image, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
@@ -70,7 +70,7 @@ double method3(vil2_image_view<imT>& image, int n_loops)
 }
 
 template <class imT>
-double method4(vil2_image_view<imT>& image, int n_loops)
+double method4(vil_image_view<imT>& image, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
@@ -94,7 +94,7 @@ double method4(vil2_image_view<imT>& image, int n_loops)
 }
 
 template <class imT>
-double method5(vil2_image_view<imT>& image, int n_loops)
+double method5(vil_image_view<imT>& image, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
@@ -118,10 +118,10 @@ double method5(vil2_image_view<imT>& image, int n_loops)
 }
 
 template <class imT>
-double method6(vil2_image_view<imT>& image, int n_loops)
+double method6(vil_image_view<imT>& image, int n_loops)
 {
   assert(image.istep() == 1);
-  // Uses row[i] to simulate lookup type access used in original vil images
+  // Uses row[i] to simulate lookup type access used in original vil1 images
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
   {
@@ -143,10 +143,10 @@ double method6(vil2_image_view<imT>& image, int n_loops)
 }
 
 template <class imT>
-double method7(vil2_image_view<imT>& image, int n_loops)
+double method7(vil_image_view<imT>& image, int n_loops)
 {
   assert(image.istep() == 1);
-  // Uses row[i] to simulate lookup type access used in original vil images
+  // Uses row[i] to simulate lookup type access used in original vil1 images
   assert(image.nplanes() == NP && image.ni() == NI);
   imT* raster_ptrs[NP][NJ];
 
@@ -175,7 +175,7 @@ double method7(vil2_image_view<imT>& image, int n_loops)
 }
 
 template <class imT>
-double method8(vil2_image_view<imT>& image, int n_loops)
+double method8(vil_image_view<imT>& image, int n_loops)
 {
   assert(image.istep() == 1);
 
@@ -200,7 +200,7 @@ double method8(vil2_image_view<imT>& image, int n_loops)
 }
 
 template <class imT>
-double method(int i, vil2_image_view<imT>& image, int n_loops)
+double method(int i, vil_image_view<imT>& image, int n_loops)
 {
   switch (i)
   {
@@ -217,7 +217,7 @@ double method(int i, vil2_image_view<imT>& image, int n_loops)
 }
 
 template <class imT>
-void compute_stats(int i, vil2_image_view<imT>& image, int n_loops)
+void compute_stats(int i, vil_image_view<imT>& image, int n_loops)
 {
   mbl_stats_1d stats;
   for (int j=0;j<10;++j) stats.obs(method(i,image,n_loops));
@@ -227,8 +227,8 @@ void compute_stats(int i, vil2_image_view<imT>& image, int n_loops)
 
 int main(int argc, char** argv)
 {
-  vil2_image_view<vxl_byte> byte_image(NI,NJ,NP);
-  vil2_image_view<float>    float_image(NI,NJ,NP);
+  vil_image_view<vxl_byte> byte_image(NI,NJ,NP);
+  vil_image_view<float>    float_image(NI,NJ,NP);
   int n_loops = 100;
 
   vcl_cout<<"Times to fill a "<<NI<<" x "<<NJ

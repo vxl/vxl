@@ -1,4 +1,4 @@
-// This is core/vil2/file_formats/vil2_jpeg_source_mgr.cxx
+// This is core/vil/file_formats/vil_jpeg_source_mgr.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -10,10 +10,10 @@
 //     11 Oct 2002 Ian Scott - converted to vil22
 //\endverbatim
 
-#include "vil2_jpeg_source_mgr.h"
+#include "vil_jpeg_source_mgr.h"
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h> // for vcl_size_t
-#include <vil2/vil2_stream.h>
+#include <vil/vil_stream.h>
 
 #define STATIC /*static*/
 
@@ -25,22 +25,22 @@
 //
 #define SIZEOF(object) ((vcl_size_t) sizeof(object))
 
-// Implement a jpeg_source_manager for vil2_stream *.
+// Implement a jpeg_source_manager for vil_stream *.
 // Adapted by fsm from the FILE * version in jdatasrc.c
 
-#define vil2_jpeg_INPUT_BUF_SIZE  4096 // choose an efficiently fread'able size
-typedef vil2_jpeg_stream_source_mgr *vil2_jpeg_srcptr;
+#define vil_jpeg_INPUT_BUF_SIZE  4096 // choose an efficiently fread'able size
+typedef vil_jpeg_stream_source_mgr *vil_jpeg_srcptr;
 
 
 // * Initialize source --- called by jpeg_read_header
 // * before any data is actually read.
 STATIC
 void
-vil2_jpeg_init_source (j_decompress_ptr cinfo)
+vil_jpeg_init_source (j_decompress_ptr cinfo)
 {
-  //vcl_cerr << "vil2_jpeg_init_source()\n";
+  //vcl_cerr << "vil_jpeg_init_source()\n";
 
-  vil2_jpeg_srcptr src = ( vil2_jpeg_srcptr )( cinfo->src );
+  vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
 
   // We reset the empty-input-file flag for each image,
   // but we don't clear the input buffer.
@@ -80,11 +80,11 @@ vil2_jpeg_init_source (j_decompress_ptr cinfo)
 //  * the front of the buffer rather than discarding it.
 STATIC
 jpeg_boolean
-vil2_jpeg_fill_input_buffer (j_decompress_ptr cinfo)
+vil_jpeg_fill_input_buffer (j_decompress_ptr cinfo)
 {
-  vil2_jpeg_srcptr src = ( vil2_jpeg_srcptr )( cinfo->src );
+  vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
 
-  int nbytes = src->stream->read(src->buffer, vil2_jpeg_INPUT_BUF_SIZE);
+  int nbytes = src->stream->read(src->buffer, vil_jpeg_INPUT_BUF_SIZE);
 
   if (nbytes <= 0) {
     if (src->start_of_file) // Treat empty input file as fatal error
@@ -114,9 +114,9 @@ vil2_jpeg_fill_input_buffer (j_decompress_ptr cinfo)
 //  * buffer is the application writer's problem.
 STATIC
 void
-vil2_jpeg_skip_input_data (j_decompress_ptr cinfo, long num_bytes)
+vil_jpeg_skip_input_data (j_decompress_ptr cinfo, long num_bytes)
 {
-  vil2_jpeg_srcptr src = ( vil2_jpeg_srcptr )( cinfo->src );
+  vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
 
   // Just a dumb implementation for now.  Could use fseek() except
   // it doesn't work on pipes.  Not clear that being smart is worth
@@ -125,7 +125,7 @@ vil2_jpeg_skip_input_data (j_decompress_ptr cinfo, long num_bytes)
   if (num_bytes > 0) {
     while (num_bytes > (long) src->base.bytes_in_buffer) {
       num_bytes -= (long) src->base.bytes_in_buffer;
-      vil2_jpeg_fill_input_buffer(cinfo);
+      vil_jpeg_fill_input_buffer(cinfo);
       // note we assume that fill_input_buffer will never return FALSE,
       // so suspension need not be handled.
     }
@@ -143,31 +143,31 @@ vil2_jpeg_skip_input_data (j_decompress_ptr cinfo, long num_bytes)
 //  * for error exit.
 STATIC
 void
-vil2_jpeg_term_source (j_decompress_ptr /*cinfo*/)
+vil_jpeg_term_source (j_decompress_ptr /*cinfo*/)
 {
   // no work necessary here
 }
 
 STATIC
 void
-vil2_jpeg_stream_src_set (j_decompress_ptr cinfo, vil2_stream *vs)
+vil_jpeg_stream_src_set (j_decompress_ptr cinfo, vil_stream *vs)
 {
   // The source object and input buffer are made permanent so that a series
-  // of JPEG images can be read from the same file by calling vil2_jpeg_stream_src
+  // of JPEG images can be read from the same file by calling vil_jpeg_stream_src
   // only before the first one.  (If we discarded the buffer at the end of
   // one image, we'd likely lose the start of the next one.)
   // This makes it unsafe to use this manager and a different source
   // manager serially with the same JPEG object.  Caveat programmer.
-  vil2_jpeg_srcptr src = ( vil2_jpeg_srcptr )( cinfo->src );
+  vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
 
   assert(! src); // this function must be called only once on each cinfo.
 
-  //vcl_cerr << "vil2_jpeg_stream_src() : creating new data source\n";
+  //vcl_cerr << "vil_jpeg_stream_src() : creating new data source\n";
 
-  src = (vil2_jpeg_srcptr) // allocate
+  src = (vil_jpeg_srcptr) // allocate
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo,
                                 JPOOL_PERMANENT,
-                                SIZEOF(vil2_jpeg_stream_source_mgr));
+                                SIZEOF(vil_jpeg_stream_source_mgr));
   // set pointer in cinfo
   cinfo->src = reinterpret_cast<struct jpeg_source_mgr *>(src);
 
@@ -177,24 +177,24 @@ vil2_jpeg_stream_src_set (j_decompress_ptr cinfo, vil2_stream *vs)
   src->buffer = (JOCTET *)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo,
                                 JPOOL_PERMANENT,
-                                vil2_jpeg_INPUT_BUF_SIZE * SIZEOF(JOCTET));
+                                vil_jpeg_INPUT_BUF_SIZE * SIZEOF(JOCTET));
 
   src->start_of_file = TRUE;
 
   // fill in methods in base class :
-  src->base.init_source       = vil2_jpeg_init_source;
-  src->base.fill_input_buffer = vil2_jpeg_fill_input_buffer;
-  src->base.skip_input_data   = vil2_jpeg_skip_input_data;
+  src->base.init_source       = vil_jpeg_init_source;
+  src->base.fill_input_buffer = vil_jpeg_fill_input_buffer;
+  src->base.skip_input_data   = vil_jpeg_skip_input_data;
   src->base.resync_to_restart =     jpeg_resync_to_restart; // use default method
-  src->base.term_source       = vil2_jpeg_term_source;
+  src->base.term_source       = vil_jpeg_term_source;
 }
 
 STATIC
 void
-vil2_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil2_stream *vs)
+vil_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil_stream *vs)
 {
   { // verify
-    vil2_jpeg_srcptr src = ( vil2_jpeg_srcptr )( cinfo->src );
+    vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
     assert(src != 0);
     assert(src->stream == vs);
   }

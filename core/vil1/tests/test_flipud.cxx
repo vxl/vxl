@@ -1,12 +1,12 @@
 #include <vcl_iostream.h>
 
-#include <vil/vil_memory_image.h>
-#include <vil/vil_flipud.h>
+#include <vil1/vil1_memory_image.h>
+#include <vil1/vil1_flipud.h>
 
 #include <testlib/testlib_test.h>
 
 static
-void p(vil_image const& m)
+void p(vil1_image const& m)
 {
   for (int y = 0; y < m.height(); ++y) {
     for (int x = 0; x < m.width(); ++x) {
@@ -20,7 +20,7 @@ void p(vil_image const& m)
 
 void test_flipud()
 {
-  vil_memory_image m(3, 2, VIL_BYTE);
+  vil1_memory_image m(3, 2, VIL1_BYTE);
 
   unsigned char data[] = {
     1, 2, 3,
@@ -34,7 +34,7 @@ void test_flipud()
   m.put_section(data, 0, 0, 3, 2);
   p(m);
 
-  vil_image flip = vil_flipud(m);
+  vil1_image flip = vil1_flipud(m);
   p(flip);
 
   int i;

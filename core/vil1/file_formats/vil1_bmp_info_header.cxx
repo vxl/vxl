@@ -1,4 +1,4 @@
-// This is core/vil/file_formats/vil_bmp_info_header.cxx
+// This is core/vil1/file_formats/vil1_bmp_info_header.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,14 +6,14 @@
 // \file
 // \author fsm
 
-#include "vil_bmp_info_header.h"
+#include "vil1_bmp_info_header.h"
 
 #include <vcl_iostream.h>
 
-#include <vil/vil_stream.h>
-#include <vil/vil_32bit.h>
+#include <vil1/vil1_stream.h>
+#include <vil1/vil1_32bit.h>
 
-vil_bmp_info_header::vil_bmp_info_header()
+vil1_bmp_info_header::vil1_bmp_info_header()
 {
   compression = 0;
   bitmap_size = 0;
@@ -23,29 +23,29 @@ vil_bmp_info_header::vil_bmp_info_header()
   colorcount = 0;
 }
 
-void vil_bmp_info_header::read(vil_stream *s)
+void vil1_bmp_info_header::read(vil1_stream *s)
 {
-  compression = vil_32bit_read_little_endian(s);
-  bitmap_size = vil_32bit_read_little_endian(s);
-  horiz_res   = vil_32bit_read_little_endian(s);
-  verti_res   = vil_32bit_read_little_endian(s);
-  colormapsize= vil_32bit_read_little_endian(s);
-  colorcount  = vil_32bit_read_little_endian(s);
+  compression = vil1_32bit_read_little_endian(s);
+  bitmap_size = vil1_32bit_read_little_endian(s);
+  horiz_res   = vil1_32bit_read_little_endian(s);
+  verti_res   = vil1_32bit_read_little_endian(s);
+  colormapsize= vil1_32bit_read_little_endian(s);
+  colorcount  = vil1_32bit_read_little_endian(s);
 }
 
-void vil_bmp_info_header::write(vil_stream *s) const
+void vil1_bmp_info_header::write(vil1_stream *s) const
 {
-  vil_32bit_write_little_endian(s, compression);
-  vil_32bit_write_little_endian(s, bitmap_size);
-  vil_32bit_write_little_endian(s, horiz_res);
-  vil_32bit_write_little_endian(s, verti_res);
-  vil_32bit_write_little_endian(s, colormapsize);
-  vil_32bit_write_little_endian(s, colorcount);
+  vil1_32bit_write_little_endian(s, compression);
+  vil1_32bit_write_little_endian(s, bitmap_size);
+  vil1_32bit_write_little_endian(s, horiz_res);
+  vil1_32bit_write_little_endian(s, verti_res);
+  vil1_32bit_write_little_endian(s, colormapsize);
+  vil1_32bit_write_little_endian(s, colorcount);
 }
 
-void vil_bmp_info_header::print(vcl_ostream &s) const
+void vil1_bmp_info_header::print(vcl_ostream &s) const
 {
-  s << "vil_bmp_info_header:\n"
+  s << "vil1_bmp_info_header:\n"
     << "  compression  : " << compression << vcl_endl
     << "  bitmap_size  : " << bitmap_size << vcl_endl
     << "  horiz_res    : " << horiz_res << vcl_endl

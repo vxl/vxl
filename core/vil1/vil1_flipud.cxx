@@ -1,4 +1,4 @@
-// This is core/vil/vil_flipud.cxx
+// This is core/vil1/vil1_flipud.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,9 +6,9 @@
 // \file
 // \author fsm
 
-#include "vil_flipud.h"
-#include <vil/vil_flipud_impl.h>
+#include "vil1_flipud.h"
+#include <vil1/vil1_flipud_impl.h>
 
-vil_image vil_flipud(vil_image const &I) {
-  return new vil_flipud_impl(I);
+vil1_image vil1_flipud(vil1_image const &I) {
+  return new vil1_flipud_impl(I);
 }

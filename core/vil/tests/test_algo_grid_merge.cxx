@@ -1,20 +1,20 @@
-// This is core/vil2/tests/test_algo_grid_merge.cxx
+// This is core/vil/tests/test_algo_grid_merge.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
-#include <vil2/algo/vil2_grid_merge.h>
+#include <vil/algo/vil_grid_merge.h>
 
 void test_grid_merge_byte()
 {
   vcl_cout << "*************************\n"
-           << " Testing vil2_grid_merge\n"
+           << " Testing vil_grid_merge\n"
            << "*************************\n";
 
-  vil2_image_view<int> image1,image2, dest_image;
+  vil_image_view<int> image1,image2, dest_image;
 
   image1.set_size(20,30);  image1.fill(17);
   image2.set_size(20,30);  image2.fill(31);
 
-  vil2_grid_merge(image1,image2,dest_image,5,3);
+  vil_grid_merge(image1,image2,dest_image,5,3);
 
   TEST("Width",dest_image.ni(),image1.ni());
   TEST("Height",dest_image.nj(),image1.nj());
@@ -27,7 +27,7 @@ void test_grid_merge_byte()
 
 MAIN( test_algo_grid_merge )
 {
-  START( "vil2_grid_merge" );
+  START( "vil_grid_merge" );
 
   test_grid_merge_byte();
 

@@ -1,6 +1,6 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
-#include <vil/vil_colour_space.h>
+#include <vil1/vil1_colour_space.h>
 
 #include <testlib/testlib_test.h>
 
@@ -17,13 +17,13 @@ MAIN( test_colour_space )
   vcl_cout<<"g= "<<g<<vcl_endl;
   vcl_cout<<"b= "<<b<<vcl_endl;
 
-  vil_colour_space_RGB_to_HSV(r,g,b,&h,&s,&v);
+  vil1_colour_space_RGB_to_HSV(r,g,b,&h,&s,&v);
 
   vcl_cout<<"h= "<<h<<vcl_endl;
   vcl_cout<<"s= "<<s<<vcl_endl;
   vcl_cout<<"v= "<<v<<vcl_endl;
 
-  vil_colour_space_HSV_to_RGB(h,s,v,&nr,&ng,&nb);
+  vil1_colour_space_HSV_to_RGB(h,s,v,&nr,&ng,&nb);
 
   vcl_cout<<"nr= "<<nr<<vcl_endl;
   vcl_cout<<"ng= "<<ng<<vcl_endl;

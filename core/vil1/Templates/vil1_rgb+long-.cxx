@@ -1,4 +1,4 @@
-#include <vil/vil_rgb.txx>
+#include <vil1/vil1_rgb.txx>
 
-VIL_RGB_INSTANTIATE(long);
-VIL_RGB_INSTANTIATE_LS(long);
+VIL1_RGB_INSTANTIATE(long);
+VIL1_RGB_INSTANTIATE_LS(long);

@@ -1,3 +1,3 @@
-#include <vil2/vil2_image_view.txx>
+#include <vil/vil_image_view.txx>
 #include <vxl_config.h>
-VIL2_IMAGE_VIEW_INSTANTIATE(vxl_uint_32);
+VIL_IMAGE_VIEW_INSTANTIATE(vxl_uint_32);

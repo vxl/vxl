@@ -1,6 +1,6 @@
-// This is core/vil/file_formats/vil_jpeg_decompressor.h
-#ifndef vil_jpeg_decompressor_h_
-#define vil_jpeg_decompressor_h_
+// This is core/vil1/file_formats/vil1_jpeg_decompressor.h
+#ifndef vil1_jpeg_decompressor_h_
+#define vil1_jpeg_decompressor_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -8,20 +8,20 @@
 // \file
 // \author fsm
 
-#include <vil/vil_jpeglib.h>
-class vil_stream;
+#include <vil1/vil1_jpeglib.h>
+class vil1_stream;
 
-class vil_jpeg_decompressor
+class vil1_jpeg_decompressor
 {
  public:
   struct jpeg_error_mgr         jerr;
   struct jpeg_decompress_struct jobj;
-  vil_stream *stream;
+  vil1_stream *stream;
 
-  vil_jpeg_decompressor(vil_stream *s);
+  vil1_jpeg_decompressor(vil1_stream *s);
 
   // NB. does not delete the stream.
-  ~vil_jpeg_decompressor();
+  ~vil1_jpeg_decompressor();
 
   // Do *not* delete the return value. Leave it alone.
   // The return value is zero on failure.
@@ -40,4 +40,4 @@ class vil_jpeg_decompressor
   JSAMPLE *biffer;   // pointer to scanline buffer.
 };
 
-#endif // vil_jpeg_decompressor_h_
+#endif // vil1_jpeg_decompressor_h_

@@ -7,26 +7,26 @@
 
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 #include <vcl_ctime.h>
 #include <mbl/mbl_stats_1d.h>
-#include <vil2/algo/vil2_gauss_reduce.h>
+#include <vil/algo/vil_gauss_reduce.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_gaussian_pyramid_builder_2d_general.h>
 
-double vil2_method(unsigned n_loops, unsigned nx, unsigned ny)
+double vil_method(unsigned n_loops, unsigned nx, unsigned ny)
 {
-  vil2_image_view<vxl_byte> input(nx, ny);
-  vil2_image_view<vxl_byte> output, tempa, tempb;
+  vil_image_view<vxl_byte> input(nx, ny);
+  vil_image_view<vxl_byte> output, tempa, tempb;
   for (unsigned n=0;n<n_loops;++n)
   {
     for (unsigned j=0;j<input.nj();++j)
       for (unsigned i=0;i<input.ni();++i)
         input(i,j) = vxl_byte(i+j);
   }
-  vil2_gauss_reduce_params params(1.2);
+  vil_gauss_reduce_params params(1.2);
   vcl_time_t t0=vcl_clock();
-  vil2_gauss_reduce_general(input, output, params);
+  vil_gauss_reduce_general(input, output, params);
 
   vcl_time_t t1=vcl_clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
           <<" image of 1 planes (in microsecs) [Range= 0.5(max-min)]\n";
 
   mbl_stats_1d stats;
-  for (int j=0;j<10;++j) stats.obs(vil2_method(n_loops, nx, ny));
+  for (int j=0;j<10;++j) stats.obs(vil_method(n_loops, nx, ny));
   vcl_cout<<"Using operator():        Mean: "<<int(stats.mean()+0.5)
           <<"us  +/-"<<int(0.5*(stats.max()-stats.min())+0.5)<<"us\n";
 

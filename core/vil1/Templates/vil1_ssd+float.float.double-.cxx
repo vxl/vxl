@@ -1,3 +1,3 @@
-#include <vil/vil_ssd.txx>
+#include <vil1/vil1_ssd.txx>
 
-VIL_SSD_INSTANTIATE(float, float, double);
+VIL1_SSD_INSTANTIATE(float, float, double);

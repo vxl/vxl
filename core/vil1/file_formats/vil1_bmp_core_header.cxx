@@ -1,4 +1,4 @@
-// This is core/vil/file_formats/vil_bmp_core_header.cxx
+// This is core/vil1/file_formats/vil1_bmp_core_header.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,15 +6,15 @@
 // \file
 // \author fsm
 
-#include "vil_bmp_core_header.h"
+#include "vil1_bmp_core_header.h"
 
 #include <vcl_iostream.h>
 
-#include <vil/vil_stream.h>
-#include <vil/vil_16bit.h>
-#include <vil/vil_32bit.h>
+#include <vil1/vil1_stream.h>
+#include <vil1/vil1_16bit.h>
+#include <vil1/vil1_32bit.h>
 
-vil_bmp_core_header::vil_bmp_core_header()
+vil1_bmp_core_header::vil1_bmp_core_header()
 {
   header_size = disk_size;
   width = 0;
@@ -23,28 +23,28 @@ vil_bmp_core_header::vil_bmp_core_header()
   bitsperpixel = 8;
 }
 
-void vil_bmp_core_header::read(vil_stream *s)
+void vil1_bmp_core_header::read(vil1_stream *s)
 {
-  header_size  = vil_32bit_read_little_endian(s);
-  width        = vil_32bit_read_little_endian(s);
-  height       = vil_32bit_read_little_endian(s);
-  planes       = vil_16bit_read_little_endian(s);
-  bitsperpixel = vil_16bit_read_little_endian(s);
+  header_size  = vil1_32bit_read_little_endian(s);
+  width        = vil1_32bit_read_little_endian(s);
+  height       = vil1_32bit_read_little_endian(s);
+  planes       = vil1_16bit_read_little_endian(s);
+  bitsperpixel = vil1_16bit_read_little_endian(s);
   // allowed values for bitsperpixel are 1 4 8 16 24 32; currently we only support 8 and 24
 }
 
-void vil_bmp_core_header::write(vil_stream *s) const
+void vil1_bmp_core_header::write(vil1_stream *s) const
 {
-  vil_32bit_write_little_endian(s, header_size);
-  vil_32bit_write_little_endian(s, width);
-  vil_32bit_write_little_endian(s, height);
-  vil_16bit_write_little_endian(s, planes);
-  vil_16bit_write_little_endian(s, bitsperpixel);
+  vil1_32bit_write_little_endian(s, header_size);
+  vil1_32bit_write_little_endian(s, width);
+  vil1_32bit_write_little_endian(s, height);
+  vil1_16bit_write_little_endian(s, planes);
+  vil1_16bit_write_little_endian(s, bitsperpixel);
 }
 
-void vil_bmp_core_header::print(vcl_ostream &s) const
+void vil1_bmp_core_header::print(vcl_ostream &s) const
 {
-  s << "vil_bmp_core_header:\n"
+  s << "vil1_bmp_core_header:\n"
     << "  header_size  : " << header_size  << vcl_endl
     << "  width        : " << width        << vcl_endl
     << "  height       : " << height       << vcl_endl

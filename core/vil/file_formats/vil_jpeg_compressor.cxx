@@ -1,4 +1,4 @@
-// This is core/vil2/file_formats/vil2_jpeg_compressor.cxx
+// This is core/vil/file_formats/vil_jpeg_compressor.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -10,12 +10,12 @@
 //     11 Oct 2002 Ian Scott - converted to vil22
 //\endverbatim
 
-#include "vil2_jpeg_compressor.h"
-#include "vil2_jpeg_destination_mgr.h"
-#include <vil2/vil2_stream.h>
+#include "vil_jpeg_compressor.h"
+#include "vil_jpeg_destination_mgr.h"
+#include <vil/vil_stream.h>
 #include <vcl_iostream.h>
 
-vil2_jpeg_compressor::vil2_jpeg_compressor(vil2_stream *s)
+vil_jpeg_compressor::vil_jpeg_compressor(vil_stream *s)
   : stream(s)
   , ready(false)
 {
@@ -31,13 +31,13 @@ vil2_jpeg_compressor::vil2_jpeg_compressor(vil2_stream *s)
   jpeg_create_compress(&jobj);
 
   // set the data destination
-  vil2_jpeg_stream_dst_set(&jobj, stream);
+  vil_jpeg_stream_dst_set(&jobj, stream);
 }
 
-bool vil2_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline) {
+bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline) {
   if (!ready) {
     // rewind the stream
-    vil2_jpeg_stream_dst_rewind(&jobj, stream);
+    vil_jpeg_stream_dst_rewind(&jobj, stream);
 
     //
     jobj.next_scanline = 0;
@@ -84,7 +84,7 @@ bool vil2_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline
   return true;
 }
 
-vil2_jpeg_compressor::~vil2_jpeg_compressor() {
+vil_jpeg_compressor::~vil_jpeg_compressor() {
   // finish compression if necessary
   if (ready)
     jpeg_finish_compress(&jobj);

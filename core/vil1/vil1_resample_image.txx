@@ -1,16 +1,16 @@
-// This is core/vil/vil_resample_image.txx
-#ifndef vil_resample_image_txx_
-#define vil_resample_image_txx_
+// This is core/vil1/vil1_resample_image.txx
+#ifndef vil1_resample_image_txx_
+#define vil1_resample_image_txx_
 
-#include "vil_resample_image.h"
+#include "vil1_resample_image.h"
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 template <class T, class A>
-bool vil_resample_image(vil_image const &base, unsigned new_width, unsigned new_height,
+bool vil1_resample_image(vil1_image const &base, unsigned new_width, unsigned new_height,
                         T *buf, A* /*dummy*/,
                         int x0, int y0, int w, int h)
 {
@@ -67,8 +67,8 @@ bool vil_resample_image(vil_image const &base, unsigned new_width, unsigned new_
   return true;
 }
 
-#undef VIL_RESAMPLE_IMAGE_INSTANTIATE
-#define VIL_RESAMPLE_IMAGE_INSTANTIATE(T, A) \
-template bool vil_resample_image(vil_image const &, unsigned, unsigned, T *, A *, int, int, int, int)
+#undef VIL1_RESAMPLE_IMAGE_INSTANTIATE
+#define VIL1_RESAMPLE_IMAGE_INSTANTIATE(T, A) \
+template bool vil1_resample_image(vil1_image const &, unsigned, unsigned, T *, A *, int, int, int, int)
 
 #endif

@@ -1,4 +1,4 @@
-// This is core/vil/vil_image_impl.cxx
+// This is core/vil1/vil1_image_impl.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -9,39 +9,39 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vil_image_impl.h"
+#include "vil1_image_impl.h"
 #include <vcl_iostream.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 //--------------------------------------------------------------------------------
 
 //: the reference count starts at 0.
-vil_image_impl::vil_image_impl() : reference_count(0) { }
+vil1_image_impl::vil1_image_impl() : reference_count(0) { }
 
-vil_image_impl::~vil_image_impl() { }
+vil1_image_impl::~vil1_image_impl() { }
 
-vil_image vil_image_impl::get_plane(int ) const
+vil1_image vil1_image_impl::get_plane(int ) const
 {
   vcl_cerr << __FILE__ ":" << __LINE__ << ": get_plane()\n"; // probably remove this.
   return 0;
 }
 
-bool vil_image_impl::get_property(char const *, void *) const
+bool vil1_image_impl::get_property(char const *, void *) const
 {
   return false;
 }
 
-bool vil_image_impl::set_property(char const *, void const *) const
+bool vil1_image_impl::set_property(char const *, void const *) const
 {
   return false;
 }
 
-bool vil_image_impl::get_section(void* /*buf*/, int /*x0*/, int /*y0*/, int /*width*/, int /*height*/) const
+bool vil1_image_impl::get_section(void* /*buf*/, int /*x0*/, int /*y0*/, int /*width*/, int /*height*/) const
 {
   return false;
 }
 
-bool vil_image_impl::put_section(void const* /*buf*/, int /*x0*/, int /*y0*/, int /*width*/, int /*height*/)
+bool vil1_image_impl::put_section(void const* /*buf*/, int /*x0*/, int /*y0*/, int /*width*/, int /*height*/)
 {
   return false;
 }
@@ -49,16 +49,16 @@ bool vil_image_impl::put_section(void const* /*buf*/, int /*x0*/, int /*y0*/, in
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 //: Return the name of the class;
-vcl_string vil_image_impl::is_a() const
+vcl_string vil1_image_impl::is_a() const
 {
-  static const vcl_string class_name_="vil_image_impl";
+  static const vcl_string class_name_="vil1_image_impl";
   return class_name_;
 }
 
 //: Return true if the name of the class matches the argument
-bool vil_image_impl::is_class(vcl_string const& s) const
+bool vil1_image_impl::is_class(vcl_string const& s) const
 {
-  return s==vil_image_impl::is_a();
+  return s==vil1_image_impl::is_a();
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */

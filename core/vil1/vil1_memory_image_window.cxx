@@ -1,4 +1,4 @@
-// This is core/vil/vil_memory_image_window.cxx
+// This is core/vil1/vil1_memory_image_window.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -8,18 +8,18 @@
 // \date   19 Aug 96
 //-----------------------------------------------------------------------------
 
-#include "vil_memory_image_window.h"
+#include "vil1_memory_image_window.h"
 #include <vcl_cmath.h>
 
-vil_memory_image_window::vil_memory_image_window(
-           const vil_memory_image_of<vil_byte>& image,
+vil1_memory_image_window::vil1_memory_image_window(
+           const vil1_memory_image_of<vil1_byte>& image,
            int centre_x, int centre_y, int mask_size):
   image1_(image)
 {
   init(centre_x, centre_y, mask_size);
 }
 
-void vil_memory_image_window::init(int centre_x, int centre_y, int mask_size)
+void vil1_memory_image_window::init(int centre_x, int centre_y, int mask_size)
 {
   mask_size_ = mask_size;
   centre1_x_ = centre_x;
@@ -28,7 +28,7 @@ void vil_memory_image_window::init(int centre_x, int centre_y, int mask_size)
   mask1_row_index_ = centre_y - mask_size_ / 2;
 }
 
-float vil_memory_image_window::mean_intensity()
+float vil1_memory_image_window::mean_intensity()
 {
   int tot = 0;
   for (int row_index = 0; row_index < mask_size_; row_index++)
@@ -43,7 +43,7 @@ inline int labs(int x) { return (x > 0) ? x : -x; }
 // This is a useful check to have anyway as the default arg of MAXINT avoids
 // accumulator overflow which can easily happen on certain medical and range
 // images.
-int vil_memory_image_window::sum_abs_diff(const vil_memory_image_of<vil_byte>& image2,
+int vil1_memory_image_window::sum_abs_diff(const vil1_memory_image_of<vil1_byte>& image2,
                                           int centre2_x, int centre2_y,
                                           int early_exit_level)
 {
@@ -85,7 +85,7 @@ int vil_memory_image_window::sum_abs_diff(const vil_memory_image_of<vil_byte>& i
 // This is a useful check to have anyway as the default arg of MAXINT avoids
 // accumulator overflow which can easily happen on certain medical and range
 // images.
-int vil_memory_image_window::sum_sqr_diff(const vil_memory_image_of<vil_byte>& image2,
+int vil1_memory_image_window::sum_sqr_diff(const vil1_memory_image_of<vil1_byte>& image2,
                                           int centre2_x, int centre2_y,
                                           int early_exit_level)
 {
@@ -124,7 +124,7 @@ int vil_memory_image_window::sum_sqr_diff(const vil_memory_image_of<vil_byte>& i
 }
 
 
-int vil_memory_image_window::normalised_sum_abs_diff(const vil_memory_image_of<vil_byte>& image2,
+int vil1_memory_image_window::normalised_sum_abs_diff(const vil1_memory_image_of<vil1_byte>& image2,
                                                      int centre2_x, int centre2_y,
                                                      double normalise_ratio,
                                                      int early_exit_level)
@@ -148,7 +148,7 @@ int vil_memory_image_window::normalised_sum_abs_diff(const vil_memory_image_of<v
 }
 
 
-double vil_memory_image_window::normalised_cross_correlation(const vil_memory_image_of<vil_byte>& image2,
+double vil1_memory_image_window::normalised_cross_correlation(const vil1_memory_image_of<vil1_byte>& image2,
                                                              int centre2_x, int centre2_y)
 {
   // set mask size

@@ -1,4 +1,4 @@
-// This is core/vil/vil_new.cxx
+// This is core/vil1/vil1_new.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -9,63 +9,63 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vil_new.h"
+#include "vil1_new.h"
 
 #include <vcl_cstring.h>
 #include <vcl_cassert.h>
 
-#include <vil/vil_file_format.h>
-#include <vil/vil_stream_fstream.h>
-#include <vil/vil_image_impl.h>
-#include <vil/vil_image.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_file_format.h>
+#include <vil1/vil1_stream_fstream.h>
+#include <vil1/vil1_image_impl.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_memory_image_of.h>
 
-vil_image vil_new(int width, int height, vil_image const& prototype)
+vil1_image vil1_new(int width, int height, vil1_image const& prototype)
 {
-  switch (vil_pixel_format(prototype)) {
-  case VIL_BYTE: return vil_memory_image_of<unsigned char>(width, height);
+  switch (vil1_pixel_format(prototype)) {
+  case VIL1_BYTE: return vil1_memory_image_of<unsigned char>(width, height);
   default:
-    assert(!"vil_new");
+    assert(!"vil1_new");
     return 0;
   }
 }
 
 
-vil_image vil_new(vil_stream* os,
+vil1_image vil1_new(vil1_stream* os,
                   int planes,
                   int width,
                   int height,
                   int components,
                   int bits_per_component,
-                  vil_component_format format,
+                  vil1_component_format format,
                   char const* file_format)
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
 
-  vil_image_impl* outimage = 0;
-  for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
-    vil_file_format* fmt = *p;
+  vil1_image_impl* outimage = 0;
+  for (vil1_file_format** p = vil1_file_format::all(); *p; ++p) {
+    vil1_file_format* fmt = *p;
     if (vcl_strcmp(fmt->tag(), file_format) == 0) {
       outimage = fmt->make_output_image(os, planes, width, height, components, bits_per_component, format);
       if (outimage == 0) {
-        vcl_cerr << "vil_new: Unknown cannot new to type [" << file_format << "]\n";
+        vcl_cerr << "vil1_new: Unknown cannot new to type [" << file_format << "]\n";
       }
       return outimage;
     }
   }
 
-  vcl_cerr << "vil_new: Unknown file type [" << file_format << "]\n";
+  vcl_cerr << "vil1_new: Unknown file type [" << file_format << "]\n";
   return 0;
 }
 
-//: Make a new vil_image_impl, writing to stream "os", size "w" x "h", copying pixel format etc from "prototype".
-vil_image vil_new(vil_stream* os,
+//: Make a new vil1_image_impl, writing to stream "os", size "w" x "h", copying pixel format etc from "prototype".
+vil1_image vil1_new(vil1_stream* os,
                   int width, int height,
-                  vil_image const& prototype,
+                  vil1_image const& prototype,
                   char const* file_format)
 {
-  return vil_new(os,
+  return vil1_new(os,
                  prototype.planes(),
                  width,
                  height,
@@ -75,14 +75,14 @@ vil_image vil_new(vil_stream* os,
                  file_format ? file_format : prototype.file_format());
 }
 
-//: Make a new vil_image_impl, writing to file "filename", size "w" x "h", copying pixel format etc from "prototype".
-vil_image vil_new(char const* filename,
+//: Make a new vil1_image_impl, writing to file "filename", size "w" x "h", copying pixel format etc from "prototype".
+vil1_image vil1_new(char const* filename,
                   int width, int height,
-                  vil_image const& prototype,
+                  vil1_image const& prototype,
                   char const* file_format)
 {
-  vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
-  return vil_new(os,
+  vil1_stream_fstream* os = new vil1_stream_fstream(filename, "w");
+  return vil1_new(os,
                  prototype.planes(),
                  width,
                  height,

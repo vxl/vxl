@@ -1,24 +1,24 @@
-// This is core/vil2/file_formats/vil2_ras.cxx
+// This is core/vil/file_formats/vil_ras.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
 // \file
 
-#include "vil2_ras.h"
+#include "vil_ras.h"
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 
-#include <vil2/vil2_stream.h>
-#include <vil2/vil2_image_resource.h>
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_memory_chunk.h>
+#include <vil/vil_stream.h>
+#include <vil/vil_image_resource.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_memory_chunk.h>
 
 #include <vxl_config.h>
 
-char const* vil2_ras_format_tag = "ras";
+char const* vil_ras_format_tag = "ras";
 
 
 // ===========================================================================
@@ -46,7 +46,7 @@ namespace
   //: Equivalent of ntoh
   // Read a big-endian word from the stream, storing it in the
   // native format.
-  bool read_uint_32( vil2_stream* vs, vxl_uint_32& word )
+  bool read_uint_32( vil_stream* vs, vxl_uint_32& word )
   {
     if ( vs->read( &word, 4 ) < 4 )
       return false;
@@ -56,7 +56,7 @@ namespace
 
   //: Equivalent of hton
   // Write a host-format word as to a big-endian formatted stream.
-  bool write_uint_32( vil2_stream* vs, vxl_uint_32 word )
+  bool write_uint_32( vil_stream* vs, vxl_uint_32 word )
   {
     swap_endian( word );
     return vs->write( &word, 4 ) == 4;
@@ -86,12 +86,12 @@ namespace
 
 
 // ===========================================================================
-//                                                        vil2_ras_file_format
+//                                                        vil_ras_file_format
 
 
-vil2_image_resource_sptr
-vil2_ras_file_format::
-make_input_image( vil2_stream* vs )
+vil_image_resource_sptr
+vil_ras_file_format::
+make_input_image( vil_stream* vs )
 {
   // Check the magic number
   vxl_uint_8 buf[4] = { 0, 0, 0, 0 };
@@ -100,36 +100,36 @@ make_input_image( vil2_stream* vs )
            buf[2] == RAS_MAGIC[2] && buf[3] == RAS_MAGIC[3]  ) )
     return 0;
 
-  return new vil2_ras_image( vs );
+  return new vil_ras_image( vs );
 }
 
 
-vil2_image_resource_sptr
-vil2_ras_file_format::
-make_output_image( vil2_stream* vs,
+vil_image_resource_sptr
+vil_ras_file_format::
+make_output_image( vil_stream* vs,
                    unsigned ni,
                    unsigned nj,
                    unsigned nplanes,
-                   vil2_pixel_format format )
+                   vil_pixel_format format )
 {
-  return new vil2_ras_image(vs, ni, nj, nplanes, format );
+  return new vil_ras_image(vs, ni, nj, nplanes, format );
 }
 
 
 char const*
-vil2_ras_file_format::
+vil_ras_file_format::
 tag() const
 {
-  return vil2_ras_format_tag;
+  return vil_ras_format_tag;
 }
 
 
 // ===========================================================================
-//                                                              vil2_ras_image
+//                                                              vil_ras_image
 
 
-vil2_ras_image::
-vil2_ras_image( vil2_stream* vs ):
+vil_ras_image::
+vil_ras_image( vil_stream* vs ):
   vs_(vs)
 {
   vs_->ref();
@@ -138,7 +138,7 @@ vil2_ras_image( vil2_stream* vs ):
 
 
 bool
-vil2_ras_image::
+vil_ras_image::
 get_property( char const *tag, void *prop ) const
 {
   // This is not an in-memory image type, nor is it read-only:
@@ -147,33 +147,33 @@ get_property( char const *tag, void *prop ) const
 
 
 char const*
-vil2_ras_image::
+vil_ras_image::
 file_format() const
 {
-  return vil2_ras_format_tag;
+  return vil_ras_format_tag;
 }
 
 
-vil2_ras_image::
-vil2_ras_image( vil2_stream* vs,
+vil_ras_image::
+vil_ras_image( vil_stream* vs,
                 unsigned ni,
                 unsigned nj,
                 unsigned nplanes,
-                vil2_pixel_format format )
+                vil_pixel_format format )
 {
   vs_->ref();
   width_ = ni;
   height_ = nj;
 
-  components_ = nplanes * vil2_pixel_format_num_components( format );
+  components_ = nplanes * vil_pixel_format_num_components( format );
   if ( components_ != 1 && components_ != 3 ) {
     vcl_cerr << __FILE__ << ": can't handle "
              << nplanes << " x "
-             << vil2_pixel_format_num_components( format ) << " components\n";
+             << vil_pixel_format_num_components( format ) << " components\n";
     return;
   }
 
-  bits_per_component_ = 8 * vil2_pixel_format_sizeof_components( format );
+  bits_per_component_ = 8 * vil_pixel_format_sizeof_components( format );
 
   if ( bits_per_component_ != 8 ) {
     vcl_cerr << __FILE__ << ": can't handle " << bits_per_component_ << " bits per component\n";
@@ -195,8 +195,8 @@ vil2_ras_image( vil2_stream* vs,
 }
 
 
-vil2_ras_image::
-~vil2_ras_image( )
+vil_ras_image::
+~vil_ras_image( )
 {
   delete[] col_map_;
   vs_->unref();
@@ -205,7 +205,7 @@ vil2_ras_image::
 
 //: Read the header of a Sun raster file.
 bool
-vil2_ras_image::
+vil_ras_image::
 read_header( )
 {
   // Go to start of file
@@ -268,7 +268,7 @@ read_header( )
 
   if ( map_length_ ) {
     col_map_ = new vxl_uint_8[ map_length_ ];
-    vs_->read( col_map_, (vil2_streampos)map_length_ );
+    vs_->read( col_map_, (vil_streampos)map_length_ );
   } else {
     col_map_ = 0;
   }
@@ -287,7 +287,7 @@ read_header( )
 
 
 bool
-vil2_ras_image::
+vil_ras_image::
 write_header()
 {
   vs_->seek(0);
@@ -312,7 +312,7 @@ write_header()
 
 
 unsigned
-vil2_ras_image::
+vil_ras_image::
 nplanes() const
 {
   return components_;
@@ -320,7 +320,7 @@ nplanes() const
 
 
 unsigned
-vil2_ras_image::
+vil_ras_image::
 ni() const
 {
   return width_;
@@ -328,24 +328,24 @@ ni() const
 
 
 unsigned
-vil2_ras_image::
+vil_ras_image::
 nj() const
 {
   return height_;
 }
 
 
-vil2_pixel_format
-vil2_ras_image::
+vil_pixel_format
+vil_ras_image::
 pixel_format() const
 {
   assert( bits_per_component_ == 8 );
-  return VIL2_PIXEL_FORMAT_BYTE;
+  return VIL_PIXEL_FORMAT_BYTE;
 }
 
 
-vil2_image_view_base_sptr
-vil2_ras_image::
+vil_image_view_base_sptr
+vil_ras_image::
 get_copy_view( unsigned i0, unsigned ni,
                unsigned j0, unsigned nj ) const
 {
@@ -359,7 +359,7 @@ get_copy_view( unsigned i0, unsigned ni,
   unsigned file_byte_start = start_of_data_ + j0 * file_byte_width + i0 * file_bytes_per_pixel;
   unsigned buff_byte_width = ni * buff_bytes_per_pixel;
 
-  vil2_memory_chunk_sptr buf = new vil2_memory_chunk(ni * nj * components_, VIL2_PIXEL_FORMAT_BYTE );
+  vil_memory_chunk_sptr buf = new vil_memory_chunk(ni * nj * components_, VIL_PIXEL_FORMAT_BYTE );
   vxl_uint_8* ib = reinterpret_cast<vxl_uint_8*>( buf->data() );
 
   if ( !col_map_ ) {
@@ -400,18 +400,18 @@ get_copy_view( unsigned i0, unsigned ni,
     }
   }
 
-  return new vil2_image_view<vxl_byte>( buf, ib,
+  return new vil_image_view<vxl_byte>( buf, ib,
                                         width_, height_, components_,
                                         components_, components_*width_, 1 );
 }
 
 
 bool
-vil2_ras_image::
-put_view( const vil2_image_view_base& view, unsigned i0, unsigned j0 )
+vil_ras_image::
+put_view( const vil_image_view_base& view, unsigned i0, unsigned j0 )
 {
   // Get a 3-plane view of the section
-  vil2_image_view<vxl_uint_8> section( view );
+  vil_image_view<vxl_uint_8> section( view );
 
   if ( ! this->view_fits( section, i0, j0 ) ) {
     vcl_cerr << "ERROR: " << __FILE__ << ": view does not fit\n";

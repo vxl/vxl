@@ -1,8 +1,8 @@
 #include <testlib/testlib_test.h>
 
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb.h>
-#include <vil/vil_load.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_rgb.h>
+#include <vil1/vil1_load.h>
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -35,7 +35,7 @@ class CheckRGB : public CheckPixel
 public:
   CheckRGB( const char* file )
   {
-    vil_image i = vil_load( (image_base + file).c_str() );
+    vil1_image i = vil1_load( (image_base + file).c_str() );
     if ( !i )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
@@ -46,7 +46,7 @@ public:
   {
     assert( p == 0 );
     if (!img_ || pixel.size() != 3) return false;
-    vil_rgb<T> imp = img_(x,y);
+    vil1_rgb<T> imp = img_(x,y);
     if (pixel[0] != imp.r || pixel[1] != imp.g || pixel[2] != imp.b)
       vcl_cout << "(x,y)=(" << x << ',' << y << "): p="
                << pixel[0] << ',' << pixel[1] << ',' << pixel[2]
@@ -54,7 +54,7 @@ public:
     return pixel[0] == imp.r && pixel[1] == imp.g && pixel[2] == imp.b;
   }
 private:
-  vil_memory_image_of< vil_rgb<T> > img_;
+  vil1_memory_image_of< vil1_rgb<T> > img_;
 };
 
 template<class T>
@@ -63,7 +63,7 @@ class CheckColourPlanes : public CheckPixel
 public:
   CheckColourPlanes( const char* file )
   {
-    vil_image i = vil_load( (image_base + file).c_str() );
+    vil1_image i = vil1_load( (image_base + file).c_str() );
     if ( !i )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
@@ -80,7 +80,7 @@ public:
     return pixel[0] == imp;
   }
 private:
-  vil_memory_image_of< T > img_;
+  vil1_memory_image_of< T > img_;
 };
 
 template<class T>
@@ -89,7 +89,7 @@ class CheckGrey : public CheckPixel
 public:
   CheckGrey( const char* file )
   {
-    vil_image i = vil_load( (image_base + file).c_str() );
+    vil1_image i = vil1_load( (image_base + file).c_str() );
     if ( !i )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
@@ -106,7 +106,7 @@ public:
     return pixel[0] == imp;
   }
 private:
-  vil_memory_image_of< T > img_;
+  vil1_memory_image_of< T > img_;
 };
 
 template<class T>
@@ -115,7 +115,7 @@ class CheckBit : public CheckPixel
 public:
   CheckBit( const char* file )
   {
-    vil_image i = vil_load( (image_base + file).c_str() );
+    vil1_image i = vil1_load( (image_base + file).c_str() );
     if ( !i )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
@@ -132,7 +132,7 @@ public:
     return pixel[0] == imp;
   }
 private:
-  vil_memory_image_of< T > img_;
+  vil1_memory_image_of< T > img_;
 };
 
 template class CheckRGB< vxl_uint_8 >;

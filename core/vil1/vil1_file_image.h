@@ -1,6 +1,6 @@
-// This is core/vil/vil_file_image.h
-#ifndef vil_file_image_h_
-#define vil_file_image_h_
+// This is core/vil1/vil1_file_image.h
+#ifndef vil1_file_image_h_
+#define vil1_file_image_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -11,10 +11,10 @@
 // \date 15 Mar 00
 
 #include <vcl_string.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 //: Load an image from disk
-class vil_file_image : public vil_image
+class vil1_file_image : public vil1_image
 {
  public:
   enum verbosity {
@@ -24,12 +24,12 @@ class vil_file_image : public vil_image
   };
 
   //: Default constructor
-  vil_file_image();
+  vil1_file_image();
 
   //: Attempt to load named file
-  vil_file_image(char const* filename, verbosity = verbose);
+  vil1_file_image(char const* filename, verbosity = verbose);
   //: Attempt to load named file
-  vil_file_image(vcl_string const&, verbosity = verbose);
+  vil1_file_image(vcl_string const&, verbosity = verbose);
 
   //: Attempt to load named file
   bool load(char const* filename, verbosity = verbose);
@@ -37,4 +37,4 @@ class vil_file_image : public vil_image
   bool load(vcl_string const&, verbosity = verbose);
 };
 
-#endif // vil_file_image_h_
+#endif // vil1_file_image_h_

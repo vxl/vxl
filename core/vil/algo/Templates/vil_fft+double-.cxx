@@ -1,2 +1,2 @@
-#include <vil2/algo/vil2_fft.txx>
-VIL2_FFT_INSTANTIATE(double);
+#include <vil/algo/vil_fft.txx>
+VIL_FFT_INSTANTIATE(double);

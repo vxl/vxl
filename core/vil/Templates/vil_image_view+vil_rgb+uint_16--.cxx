@@ -1,4 +1,4 @@
-#include <vil2/vil2_image_view.txx>
-#include <vil2/vil2_rgb.h>
+#include <vil/vil_image_view.txx>
+#include <vil/vil_rgb.h>
 #include <vxl_config.h>
-VIL2_IMAGE_VIEW_INSTANTIATE(vil2_rgb<vxl_uint_16> );
+VIL_IMAGE_VIEW_INSTANTIATE(vil_rgb<vxl_uint_16> );

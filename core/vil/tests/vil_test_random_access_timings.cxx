@@ -7,7 +7,7 @@
 
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 #include <vcl_ctime.h>
 #include <mbl/mbl_stats_1d.h>
 #include <vcl_vector.h>
@@ -20,7 +20,7 @@ const double dx = 0.7;
 const double dy = 1.3;
 
 template <class imT>
-double method1(vil2_image_view<imT>& image,
+double method1(vil_image_view<imT>& image,
                const int* x, const int* y, int n_pts, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
@@ -36,7 +36,7 @@ double method1(vil2_image_view<imT>& image,
 }
 
 template <class imT>
-double method2(vil2_image_view<imT>& image,
+double method2(vil_image_view<imT>& image,
                const int* x, const int* y, int n_pts, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
@@ -53,11 +53,11 @@ double method2(vil2_image_view<imT>& image,
 
 
 template <class imT>
-double method3(vil2_image_view<imT>& image,
+double method3(vil_image_view<imT>& image,
                const int* x, const int* y, int n_pts, int n_loops)
 {
   assert (image.istep() == 1);
-  // Uses row[i] to simulate lookup type access used in original vil images
+  // Uses row[i] to simulate lookup type access used in original vil1 images
   assert(image.ni() == NI);
   imT* raster_ptrs[NJ];
 
@@ -81,7 +81,7 @@ double method3(vil2_image_view<imT>& image,
 
 
 template <class imT>
-double method(int i, vil2_image_view<imT>& image,
+double method(int i, vil_image_view<imT>& image,
               const int* x, const int* y, int n_pts, int n_loops)
 {
   double t;
@@ -96,7 +96,7 @@ double method(int i, vil2_image_view<imT>& image,
 }
 
 template <class imT>
-void compute_stats(int i, vil2_image_view<imT>& image,
+void compute_stats(int i, vil_image_view<imT>& image,
                    const int* x, const int* y, int n_pts, int n_loops)
 {
   mbl_stats_1d stats;
@@ -143,7 +143,7 @@ inline double bilin_interp2(double x, double y, const T** data)
 }
 
 template <class imT>
-double bilin_method1(vil2_image_view<imT>& image, int n_pts, int n_loops, double& sum)
+double bilin_method1(vil_image_view<imT>& image, int n_pts, int n_loops, double& sum)
 {
   vcl_time_t t0=vcl_clock();
   sum=0.0;
@@ -161,7 +161,7 @@ double bilin_method1(vil2_image_view<imT>& image, int n_pts, int n_loops, double
 }
 
 template <class imT>
-double bilin_method2(vil2_image_view<imT>& image, int n_pts, int n_loops, double& sum)
+double bilin_method2(vil_image_view<imT>& image, int n_pts, int n_loops, double& sum)
 {
   vcl_time_t t0=vcl_clock();
   sum=0.0;
@@ -177,10 +177,10 @@ double bilin_method2(vil2_image_view<imT>& image, int n_pts, int n_loops, double
 }
 
 template <class imT>
-double bilin_method3(vil2_image_view<imT>& image, int n_pts, int n_loops, double& sum)
+double bilin_method3(vil_image_view<imT>& image, int n_pts, int n_loops, double& sum)
 {
   assert (image.istep() == 1);
-  // Uses row[i] to simulate lookup type access used in original vil images
+  // Uses row[i] to simulate lookup type access used in original vil1 images
   assert(image.ni() == NI);
   const imT* raster_ptrs[NJ];
 
@@ -204,7 +204,7 @@ double bilin_method3(vil2_image_view<imT>& image, int n_pts, int n_loops, double
 }
 
 template <class imT>
-double bilin_method(int i, vil2_image_view<imT>& image, int n_pts, int n_loops)
+double bilin_method(int i, vil_image_view<imT>& image, int n_pts, int n_loops)
 {
   double t,sum;
   switch (i)
@@ -218,7 +218,7 @@ double bilin_method(int i, vil2_image_view<imT>& image, int n_pts, int n_loops)
 }
 
 template <class imT>
-void compute_bilin_stats(int i, vil2_image_view<imT>& image,int n_pts, int n_loops)
+void compute_bilin_stats(int i, vil_image_view<imT>& image,int n_pts, int n_loops)
 {
   mbl_stats_1d stats;
   vcl_cout << "\t\t\t\t";
@@ -229,8 +229,8 @@ void compute_bilin_stats(int i, vil2_image_view<imT>& image,int n_pts, int n_loo
 
 int main(int argc, char** argv)
 {
-  vil2_image_view<vxl_byte> byte_image(NI,NJ,1);  byte_image.fill(17);
-  vil2_image_view<float>    float_image(NI,NJ,1); float_image.fill(17);
+  vil_image_view<vxl_byte> byte_image(NI,NJ,1);  byte_image.fill(17);
+  vil_image_view<float>    float_image(NI,NJ,1); float_image.fill(17);
   int n_loops = 10000;
   int n_pts = 1000;
   vcl_vector<int> x(n_pts),y(n_pts);

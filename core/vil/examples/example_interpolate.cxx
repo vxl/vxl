@@ -6,13 +6,13 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_save.h>
-#include <vil2/vil2_print.h>
-#include <vil2/vil2_bilin_interp.h>
-#include <vil2/vil2_bicub_interp.h>
-#include <vil2/vil2_resample_bilin.h>
-#include <vil2/vil2_resample_bicub.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_save.h>
+#include <vil/vil_print.h>
+#include <vil/vil_bilin_interp.h>
+#include <vil/vil_bicub_interp.h>
+#include <vil/vil_resample_bilin.h>
+#include <vil/vil_resample_bicub.h>
 
 int
 main (int argc, char** argv)
@@ -28,7 +28,7 @@ main (int argc, char** argv)
   unsigned np = 3;              // 3 plane/color image
 
   // the original image
-  vil2_image_view<vxl_byte> image_orig (ni, nj, np);
+  vil_image_view<vxl_byte> image_orig (ni, nj, np);
 
   // orig image values will stay this far from 0 and 255
   vxl_byte pad = 16;
@@ -43,10 +43,10 @@ main (int argc, char** argv)
           vxl_byte((87+145*i+167*j+197*p*i*j) % (256 - 2*pad) + pad);
 
   vcl_cout << "Original image:" << vcl_endl;
-  vil2_print_all (vcl_cout, image_orig);
+  vil_print_all (vcl_cout, image_orig);
 
   const char * fn_orig = "example_interpolate_image_orig.png";
-  vil2_save(image_orig, fn_orig);
+  vil_save(image_orig, fn_orig);
   vcl_cout << "Wrote original image to "
            << fn_orig << vcl_endl;
 
@@ -55,23 +55,23 @@ main (int argc, char** argv)
 
   // create and save a bilinearly interpolated over-sampled image
   const char * fn_bilin = "example_interpolate_image_bilin.png";
-  vil2_image_view<vxl_byte> image_bilin;
-  vil2_resample_bilin(image_orig, image_bilin,
+  vil_image_view<vxl_byte> image_bilin;
+  vil_resample_bilin(image_orig, image_bilin,
                       -1.0, -1.0,
                       1.0/fact, 0.0, 0.0, 1.0/fact,
                       fact*(ni+1)+1, fact*(nj+1)+1);
-  vil2_save(image_bilin, fn_bilin);
+  vil_save(image_bilin, fn_bilin);
   vcl_cout << "Wrote bilinearly interpolated over-sampled image to "
            << fn_bilin << vcl_endl;
 
   // create and save a bicubicly interpolated over-sampled image
   const char * fn_bicub = "example_interpolate_image_bicub.png";
-  vil2_image_view<vxl_byte> image_bicub;
-  vil2_resample_bicub(image_orig, image_bicub,
+  vil_image_view<vxl_byte> image_bicub;
+  vil_resample_bicub(image_orig, image_bicub,
                       -1.0, -1.0,
                       1.0/fact, 0.0, 0.0, 1.0/fact,
                       fact*(ni+1)+1, fact*(nj+1)+1);
-  vil2_save(image_bicub, fn_bicub);
+  vil_save(image_bicub, fn_bicub);
   vcl_cout << "Wrote bicubicly interpolated over-sampled image to "
            << fn_bilin << vcl_endl;
 
@@ -93,10 +93,10 @@ main (int argc, char** argv)
       double y = double(k) / fact;
       vcl_cout << "y: " << vcl_setw(5) << y << "  ";
 
-      double v_bilin = vil2_bilin_interp_safe (image_orig, x, y);
+      double v_bilin = vil_bilin_interp_safe (image_orig, x, y);
       vcl_cout << "bilin: " << vcl_setw(6) << v_bilin << "  ";
 
-      double v_bicub = vil2_bicub_interp_safe (image_orig, x, y);
+      double v_bicub = vil_bicub_interp_safe (image_orig, x, y);
       vcl_cout << "bicub: " << vcl_setw(6) << v_bicub << "  ";
 
       // if we are lined up on an original pixel value, print that too

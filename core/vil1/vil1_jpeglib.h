@@ -1,6 +1,6 @@
-// This is core/vil/vil_jpeglib.h
-#ifndef vil_jpeglib_h_
-#define vil_jpeglib_h_
+// This is core/vil1/vil1_jpeglib.h
+#ifndef vil1_jpeglib_h_
+#define vil1_jpeglib_h_
 //:
 // \file
 // \brief Stuff for jpeg I/O
@@ -17,4 +17,4 @@ extern "C" {
 #undef boolean
 }
 
-#endif // vil_jpeglib_h_
+#endif // vil1_jpeglib_h_

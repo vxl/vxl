@@ -3,13 +3,13 @@
 //  \brief Perform binary dilation on images
 //  \author Tim Cootes
 
-#include "vil2_binary_dilate.h"
+#include "vil_binary_dilate.h"
 #include <vcl_cassert.h>
 
 //: Dilates src_image to produce dest_image (assumed single plane)
-void vil2_binary_dilate(const vil2_image_view<bool>& src_image,
-                        vil2_image_view<bool>& dest_image,
-                        const vil2_structuring_element& element)
+void vil_binary_dilate(const vil_image_view<bool>& src_image,
+                        vil_image_view<bool>& dest_image,
+                        const vil_structuring_element& element)
 {
   assert(src_image.nplanes()==1);
   unsigned ni = src_image.ni();
@@ -23,7 +23,7 @@ void vil2_binary_dilate(const vil2_image_view<bool>& src_image,
   bool* dest_row0 = dest_image.top_left_ptr();
 
   vcl_vector<vcl_ptrdiff_t> offset;
-  vil2_compute_offsets(offset,element,s_istep,s_jstep);
+  vil_compute_offsets(offset,element,s_istep,s_jstep);
 
   // Define box in which all element will be valid
   int ilo = -element.min_i();
@@ -34,19 +34,19 @@ void vil2_binary_dilate(const vil2_image_view<bool>& src_image,
   // Deal with left edge
   for (int i=0;i<ilo;++i)
     for (unsigned int j=0;j<nj;++j)
-      dest_image(i,j,0)=vil2_binary_dilate(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil_binary_dilate(src_image,0,element,i,j);
   // Deal with right edge
   for (unsigned int i=ihi+1;i<ni;++i)
     for (unsigned int j=0;j<nj;++j)
-      dest_image(i,j,0)=vil2_binary_dilate(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil_binary_dilate(src_image,0,element,i,j);
   // Deal with bottom edge
   for (int i=ilo;i<=ihi;++i)
     for (int j=0;j<jlo;++j)
-      dest_image(i,j,0)=vil2_binary_dilate(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil_binary_dilate(src_image,0,element,i,j);
   // Deal with top edge
   for (int i=ilo;i<=ihi;++i)
     for (unsigned int j=jhi+1;j<nj;++j)
-      dest_image(i,j,0)=vil2_binary_dilate(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil_binary_dilate(src_image,0,element,i,j);
 
   for (int j=jlo;j<=jhi;++j)
   {
@@ -55,7 +55,7 @@ void vil2_binary_dilate(const vil2_image_view<bool>& src_image,
 
     for (int i=ilo;i<=ihi;++i,src_p+=s_istep,dest_p+=d_istep)
     {
-      *dest_p=vil2_binary_dilate(src_p,&offset[0],offset.size());
+      *dest_p=vil_binary_dilate(src_p,&offset[0],offset.size());
     }
   }
 }

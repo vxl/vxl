@@ -1,6 +1,6 @@
-// This is core/vil/io/vil_io_rgb.h
-#ifndef vil_io_rgb_h_
-#define vil_io_rgb_h_
+// This is core/vil1/io/vil1_io_rgb.h
+#ifndef vil1_io_rgb_h_
+#define vil1_io_rgb_h_
 //:
 // \file
 // \date 22 Mar 2001
@@ -11,19 +11,19 @@
 // 2001/03/22 Franck Bettinger    Creation
 // \endverbatim
 
-#include <vil/vil_rgb.h>
+#include <vil1/vil1_rgb.h>
 #include <vsl/vsl_binary_io.h>
 
-//: Binary save vil_rgb to stream.
+//: Binary save vil1_rgb to stream.
 template <class T>
-void vsl_b_write(vsl_b_ostream &os, const vil_rgb<T>& v);
+void vsl_b_write(vsl_b_ostream &os, const vil1_rgb<T>& v);
 
-//: Binary load vil_rgb from stream.
+//: Binary load vil1_rgb from stream.
 template <class T>
-void vsl_b_read(vsl_b_istream &is, vil_rgb<T>& v);
+void vsl_b_read(vsl_b_istream &is, vil1_rgb<T>& v);
 
-//: Print human readable summary of a vil_rgb object to a stream
+//: Print human readable summary of a vil1_rgb object to a stream
 template <class T>
-void vsl_print_summary(vcl_ostream& os,const vil_rgb<T>& v);
+void vsl_print_summary(vcl_ostream& os,const vil1_rgb<T>& v);
 
-#endif // #ifndef vil_io_rgb_h_
+#endif // #ifndef vil1_io_rgb_h_

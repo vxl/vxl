@@ -1,4 +1,4 @@
-// This is core/vil/vil_stream_section.cxx
+// This is core/vil1/vil1_stream_section.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,7 +6,7 @@
 // \file
 // \author fsm
 
-#include "vil_stream_section.h"
+#include "vil1_stream_section.h"
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
@@ -15,10 +15,10 @@
 // end_       : end of section in the underlying stream. -1 if there is no (explicit) end.
 // current_   : current position (in the underlying stream) of the adapted stream.
 
-vil_stream_section::vil_stream_section(vil_stream *underlying, int begin)
+vil1_stream_section::vil1_stream_section(vil1_stream *underlying, int begin)
   : underlying_(underlying)
   , begin_(begin)
-  , end_((vil_streampos)(-1L))
+  , end_((vil1_streampos)(-1L))
   , current_(begin)
 {
   assert(underlying != 0);
@@ -26,7 +26,7 @@ vil_stream_section::vil_stream_section(vil_stream *underlying, int begin)
   underlying_->ref();
 }
 
-vil_stream_section::vil_stream_section(vil_stream *underlying, int begin, int end)
+vil1_stream_section::vil1_stream_section(vil1_stream *underlying, int begin, int end)
   : underlying_(underlying)
   , begin_(begin)
   , end_(end)
@@ -38,16 +38,16 @@ vil_stream_section::vil_stream_section(vil_stream *underlying, int begin, int en
   underlying->ref();
 }
 
-vil_stream_section::~vil_stream_section()
+vil1_stream_section::~vil1_stream_section()
 {
   // unreffing the underlying stream might cause deletion of *this, so
   // zero out the pointer first.
-  vil_stream *u = underlying_;
+  vil1_stream *u = underlying_;
   underlying_ = 0;
   u->unref();
 }
 
-vil_streampos vil_stream_section::write(void const* buf, vil_streampos n)
+vil1_streampos vil1_stream_section::write(void const* buf, vil1_streampos n)
 {
   assert(n >= 0); // wouldn't you want to be told?
 
@@ -68,13 +68,13 @@ vil_streampos vil_stream_section::write(void const* buf, vil_streampos n)
   // failure to seek on underlying stream.
   assert(underlying_->tell() == current_);
 
-  vil_streampos nb = underlying_->write(buf, n);
+  vil1_streampos nb = underlying_->write(buf, n);
   if (nb != -1L)
     current_ += nb;
   return nb;
 }
 
-vil_streampos vil_stream_section::read(void* buf, vil_streampos n)
+vil1_streampos vil1_stream_section::read(void* buf, vil1_streampos n)
 {
   assert(n >= 0); // wouldn't you want to be told?
 
@@ -95,13 +95,13 @@ vil_streampos vil_stream_section::read(void* buf, vil_streampos n)
   // failure to seek on underlying stream.
   assert(underlying_->tell() == current_);
 
-  vil_streampos nb = underlying_->read(buf, n);
+  vil1_streampos nb = underlying_->read(buf, n);
   if (nb != -1L)
     current_ += nb;
   return nb;
 }
 
-void vil_stream_section::seek(vil_streampos position)
+void vil1_stream_section::seek(vil1_streampos position)
 {
   assert(position >= 0); // I would want to be told about this.
 

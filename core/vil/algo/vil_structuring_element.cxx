@@ -1,5 +1,5 @@
-// This is core/vil2/algo/vil2_structuring_element.cxx
-#include "vil2_structuring_element.h"
+// This is core/vil/algo/vil_structuring_element.cxx
+#include "vil_structuring_element.h"
 //:
 // \file
 // \brief Structuring element for morphology represented as a list of non-zero pixels
@@ -8,14 +8,14 @@
 #include <vcl_cassert.h>
 
 //: Define elements { (p_i[k],p_j[k]) }
-vil2_structuring_element::vil2_structuring_element(const vcl_vector<int>& p_i,
+vil_structuring_element::vil_structuring_element(const vcl_vector<int>& p_i,
                                                    const vcl_vector<int>& p_j)
 {
   set(p_i,p_j);
 }
 
 //: Define elements { (p_i[k],p_j[k]) }
-void vil2_structuring_element::set(const vcl_vector<int>& p_i,const vcl_vector<int>& p_j)
+void vil_structuring_element::set(const vcl_vector<int>& p_i,const vcl_vector<int>& p_j)
 {
   assert(p_i.size()==p_j.size());
   assert(p_i.size()>0);
@@ -36,7 +36,7 @@ void vil2_structuring_element::set(const vcl_vector<int>& p_i,const vcl_vector<i
 
 //: Set to disk of radius r
 //  Select pixels in disk s.t. x^x+y^y<=r^r
-void vil2_structuring_element::set_to_disk(double r)
+void vil_structuring_element::set_to_disk(double r)
 {
   vcl_vector<int> px,py;
   double r2 = r*r;
@@ -48,7 +48,7 @@ void vil2_structuring_element::set_to_disk(double r)
 }
 
 //: Set to line along i (ilo,0)..(ihi,0)
-void vil2_structuring_element::set_to_line_i(int ilo, int ihi)
+void vil_structuring_element::set_to_line_i(int ilo, int ihi)
 {
   p_i_.resize(1+ihi-ilo);
   p_j_.resize(1+ihi-ilo);
@@ -62,7 +62,7 @@ void vil2_structuring_element::set_to_line_i(int ilo, int ihi)
 }
 
 //: Set to line along j (jlo,0)..(jhi,0)
-void vil2_structuring_element::set_to_line_j(int jlo, int jhi)
+void vil_structuring_element::set_to_line_j(int jlo, int jhi)
 {
   p_i_.resize(1+jhi-jlo);
   p_j_.resize(1+jhi-jlo);
@@ -76,7 +76,7 @@ void vil2_structuring_element::set_to_line_j(int jlo, int jhi)
 }
 
 //: Write details to stream
-vcl_ostream& operator<<(vcl_ostream& os, const vil2_structuring_element& element)
+vcl_ostream& operator<<(vcl_ostream& os, const vil_structuring_element& element)
 {
   os<<"Bounds ["
     <<element.min_i()<<","<<element.max_i()<<"]["
@@ -88,7 +88,7 @@ vcl_ostream& operator<<(vcl_ostream& os, const vil2_structuring_element& element
 
 //: Generate a list of offsets for use on image with istep,jstep
 //  Gives an efficient way of looping through all the pixels in the structuring element
-void vil2_compute_offsets(vcl_vector<vcl_ptrdiff_t>& offset, const vil2_structuring_element& element,
+void vil_compute_offsets(vcl_vector<vcl_ptrdiff_t>& offset, const vil_structuring_element& element,
                           vcl_ptrdiff_t istep, vcl_ptrdiff_t jstep)
 {
   unsigned n = element.p_i().size();

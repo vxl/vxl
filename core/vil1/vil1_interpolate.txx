@@ -1,12 +1,12 @@
-// This is core/vil/vil_interpolate.txx
+// This is core/vil1/vil1_interpolate.txx
 
 //-*- c++ -*-------------------------------------------------------------------
-#ifndef vil_interpolate_txx_
-#define vil_interpolate_txx_
+#ifndef vil1_interpolate_txx_
+#define vil1_interpolate_txx_
 // Author: awf@robots.ox.ac.uk
 // Created: 02 Apr 00
 
-#include "vil_interpolate.h"
+#include "vil1_interpolate.h"
 
 // Normal (x,y) access doesn't have range checking, so why should this? [capes Nov 1999]
 //
@@ -15,7 +15,7 @@
 // only one coordinate is on the boundary and the other is not. [fsm Sep 2000]
 
 template <class T, class U>
-bool vil_interpolate_nearest(vil_memory_image_of<T> const& img, double src_x, double src_y, U* out)
+bool vil1_interpolate_nearest(vil1_memory_image_of<T> const& img, double src_x, double src_y, U* out)
 {
   int src_x_int = (int)(src_x + 0.5);
   int src_y_int = (int)(src_y + 0.5);
@@ -24,7 +24,7 @@ bool vil_interpolate_nearest(vil_memory_image_of<T> const& img, double src_x, do
 }
 
 template <class T, class U>
-bool vil_interpolate_bilinear(vil_memory_image_of<T> const& img,
+bool vil1_interpolate_bilinear(vil1_memory_image_of<T> const& img,
                               double src_x, double src_y,
                               U* out)
 {
@@ -56,7 +56,7 @@ bool vil_interpolate_bilinear(vil_memory_image_of<T> const& img,
 }
 
 template <class T, class U>
-bool vil_interpolate_bilinear_grad(vil_memory_image_of<T> const& img,
+bool vil1_interpolate_bilinear_grad(vil1_memory_image_of<T> const& img,
                                    double src_x, double src_y,
                                    U* out_i,
                                    U* out_dx,
@@ -81,7 +81,7 @@ bool vil_interpolate_bilinear_grad(vil_memory_image_of<T> const& img,
   double v1 = src_y - src_y_int, v0 = 1-v1;
 
   // the derivatives are obtained by differentating the interpolating expression.
-  // capes@robots: vil_rgb does not have the left operator- defined.
+  // capes@robots: vil1_rgb does not have the left operator- defined.
   *out_i  = U(  (pix00 * v0 + pix01 * v1)*u0 + (pix10 * v0 + pix11 * v1)*u1 );
   *out_dx = U(  (pix10 - pix00) * v0 + (pix11 - pix01) * v1  );
   *out_dy = U(  (pix01 - pix00) * u0 + (pix11 - pix10) * u1  );
@@ -90,7 +90,7 @@ bool vil_interpolate_bilinear_grad(vil_memory_image_of<T> const& img,
 }
 
 template <class T, class U>
-bool vil_interpolate_bicubic(vil_memory_image_of<T> const& img,
+bool vil1_interpolate_bicubic(vil1_memory_image_of<T> const& img,
                              double src_x, double src_y,
                              U* out)
 {
@@ -130,10 +130,10 @@ bool vil_interpolate_bicubic(vil_memory_image_of<T> const& img,
   return true;
 }
 
-#define VIL_INTERPOLATE_INSTANTIATE(T, U) \
-template bool vil_interpolate_nearest(vil_memory_image_of<T > const&, double, double, U*); \
-template bool vil_interpolate_bilinear(vil_memory_image_of<T > const&, double, double, U*); \
-template bool vil_interpolate_bilinear_grad(vil_memory_image_of<T > const&, double, double, U*, U*, U*); \
-template bool vil_interpolate_bicubic(vil_memory_image_of<T > const&, double, double, U*)
+#define VIL1_INTERPOLATE_INSTANTIATE(T, U) \
+template bool vil1_interpolate_nearest(vil1_memory_image_of<T > const&, double, double, U*); \
+template bool vil1_interpolate_bilinear(vil1_memory_image_of<T > const&, double, double, U*); \
+template bool vil1_interpolate_bilinear_grad(vil1_memory_image_of<T > const&, double, double, U*, U*, U*); \
+template bool vil1_interpolate_bicubic(vil1_memory_image_of<T > const&, double, double, U*)
 
-#endif // vil_interpolate_txx_
+#endif // vil1_interpolate_txx_

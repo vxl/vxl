@@ -7,25 +7,25 @@
 
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for imT
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 #include <vcl_ctime.h>
 #include <mbl/mbl_stats_1d.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_rgb.h>
 #include <vil/vil_rgb.h>
-#include <vil2/vil2_rgb.h>
 
 const unsigned NI=256;
 const unsigned NJ=256;
 
 template <class T>
-unsigned width(const vil2_image_view<T> & im){return im.ni();}
+unsigned width(const vil_image_view<T> & im){return im.ni();}
 template <class T>
-unsigned width(const vil_memory_image_of<T> & im){return im.width();}
+unsigned width(const vil1_memory_image_of<T> & im){return im.width();}
 
 template <class T>
-unsigned height(const vil2_image_view<T> & im){return im.nj();}
+unsigned height(const vil_image_view<T> & im){return im.nj();}
 template <class T>
-unsigned height(const vil_memory_image_of<T> & im){return im.height();}
+unsigned height(const vil1_memory_image_of<T> & im){return im.height();}
 
 template <class imT>
 double method1(imT& image, int n_loops)
@@ -82,31 +82,31 @@ void compute_stats(int i, imT& image, int n_loops)
 
 int main(int argc, char** argv)
 {
-  vil_memory_image_of<vxl_byte> byte_1image(NI,NJ);
-  vil_memory_image_of<float>    float_1image(NI,NJ);
-  vil_memory_image_of<vil_rgb<vxl_byte> >    rgb_1image(NI,NJ);
-  vil2_image_view<vxl_byte> byte_2image(NI,NJ);
-  vil2_image_view<float>    float_2image(NI,NJ);
-  vil2_image_view<vil2_rgb<vxl_byte> >    rgb_2image(NI,NJ);
+  vil1_memory_image_of<vxl_byte> byte_1image(NI,NJ);
+  vil1_memory_image_of<float>    float_1image(NI,NJ);
+  vil1_memory_image_of<vil1_rgb<vxl_byte> >    rgb_1image(NI,NJ);
+  vil_image_view<vxl_byte> byte_2image(NI,NJ);
+  vil_image_view<float>    float_2image(NI,NJ);
+  vil_image_view<vil_rgb<vxl_byte> >    rgb_2image(NI,NJ);
   int n_loops = 100;
   vcl_cout<<"Times to fill a "<<NI<<" x "<<NJ
           <<" image of 1 plane (in microsecs) [Range= 0.5(max-min)]"<<vcl_endl;
-  vcl_cout<<"vil_memory_image_of Images of BYTE"<<vcl_endl;
+  vcl_cout<<"vil1_memory_image_of Images of BYTE"<<vcl_endl;
   for (int i=1; i<=2; ++i)
     compute_stats(i,byte_1image,n_loops);
-  vcl_cout<<"vil2_image_view Images of BYTE"<<vcl_endl;
+  vcl_cout<<"vil_image_view Images of BYTE"<<vcl_endl;
   for (int i=1; i<=2; ++i)
     compute_stats(i,byte_2image,n_loops);
-  vcl_cout<<"vil_memory_image_of Images of FLOAT"<<vcl_endl;
+  vcl_cout<<"vil1_memory_image_of Images of FLOAT"<<vcl_endl;
   for (int i=1; i<=2; ++i)
     compute_stats(i,float_1image,n_loops);
-  vcl_cout<<"vil2_image_view Images of FLOAT"<<vcl_endl;
+  vcl_cout<<"vil_image_view Images of FLOAT"<<vcl_endl;
   for (int i=1; i<=2; ++i)
     compute_stats(i,float_2image,n_loops);
-  vcl_cout<<"vil_memory_image_of Images of RGB<BYTE>"<<vcl_endl;
+  vcl_cout<<"vil1_memory_image_of Images of RGB<BYTE>"<<vcl_endl;
   for (int i=1; i<=2; ++i)
     compute_stats(i,rgb_1image,n_loops);
-  vcl_cout<<"vil2_image_view Images of RGB<BYTE>"<<vcl_endl;
+  vcl_cout<<"vil_image_view Images of RGB<BYTE>"<<vcl_endl;
   for (int i=1; i<=2; ++i)
     compute_stats(i,rgb_2image,n_loops);
   return 0;

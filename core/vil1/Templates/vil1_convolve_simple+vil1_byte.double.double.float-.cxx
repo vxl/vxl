@@ -1,4 +1,4 @@
-#include <vil/vil_byte.h>
-#include <vil/vil_convolve_simple.txx>
+#include <vil1/vil1_byte.h>
+#include <vil1/vil1_convolve_simple.txx>
 
-VIL_CONVOLVE_SIMPLE_INSTANTIATE(vil_byte, double, double, float);
+VIL1_CONVOLVE_SIMPLE_INSTANTIATE(vil1_byte, double, double, float);

@@ -1,2 +1,2 @@
-#include <vil2/vil2_sample_grid_bilin.txx>
-VIL2_SAMPLE_GRID_BILIN_INSTANTIATE( float , float );
+#include <vil/vil_sample_grid_bilin.txx>
+VIL_SAMPLE_GRID_BILIN_INSTANTIATE( float , float );

@@ -1,79 +1,79 @@
-// This is core/vil2/file_formats/vil2_dicom.cxx
+// This is core/vil/file_formats/vil_dicom.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
 // \file
 
-#include "vil2_dicom.h"
+#include "vil_dicom.h"
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
 #include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
 
-#include <vil2/vil2_stream.h>
-#include <vil2/vil2_image_resource.h>
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_stream.h>
+#include <vil/vil_image_resource.h>
+#include <vil/vil_image_view.h>
 
 
-char const* vil2_dicom_format_tag = "dicom";
+char const* vil_dicom_format_tag = "dicom";
 
 
-vil2_image_resource_sptr vil2_dicom_file_format::make_input_image(vil2_stream* vs)
+vil_image_resource_sptr vil_dicom_file_format::make_input_image(vil_stream* vs)
 {
-  vil2_dicom_header_format dhf;
+  vil_dicom_header_format dhf;
   if (dhf.isDicomFormat(*vs))
-    return new vil2_dicom_image(vs);
+    return new vil_dicom_image(vs);
   else
     return 0;
 }
 
-vil2_image_resource_sptr vil2_dicom_file_format::make_output_image(vil2_stream* vs,
+vil_image_resource_sptr vil_dicom_file_format::make_output_image(vil_stream* vs,
                                                                    unsigned ni,
                                                                    unsigned nj,
                                                                    unsigned nplanes,
-                                                                   vil2_pixel_format format)
+                                                                   vil_pixel_format format)
 {
-  vcl_cerr << "ERROR: vil2_dicom_file::make_output_file\n"
+  vcl_cerr << "ERROR: vil_dicom_file::make_output_file\n"
            << "       Doesn't support output yet\n";
   return 0;
 #if 0
 
-  if (nplanes != 1 || format != VIL2_PIXEL_FORMAT_INT_32)
+  if (nplanes != 1 || format != VIL_PIXEL_FORMAT_INT_32)
   {
-    vcl_cerr << "ERROR: vil2_dicom_file_format::make_output_image\n"
+    vcl_cerr << "ERROR: vil_dicom_file_format::make_output_image\n"
              << "       Can only create DICOM images with a single plane\n"
              << "       and 32-bit integer pixels\n";
     return 0;
   }
-  return new vil2_dicom_image(vs, ni, nj, nplanes, format);
+  return new vil_dicom_image(vs, ni, nj, nplanes, format);
 #endif
 }
 
-char const* vil2_dicom_file_format::tag() const
+char const* vil_dicom_file_format::tag() const
 {
-  return vil2_dicom_format_tag;
+  return vil_dicom_format_tag;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-bool isEncapsulated(vil2_dicom_header_image_type im_type)
+bool isEncapsulated(vil_dicom_header_image_type im_type)
 {
   switch (im_type)
   {
-  case VIL2_DICOM_HEADER_DITUNKNOWN:
+  case VIL_DICOM_HEADER_DITUNKNOWN:
     return false;  // This should be plain DICOM
-  case VIL2_DICOM_HEADER_DITJPEGBASE:
-  case VIL2_DICOM_HEADER_DITJPEGEXTLOSSY:
-  case VIL2_DICOM_HEADER_DITJPEGSPECNH:
-  case VIL2_DICOM_HEADER_DITJPEGFULLNH:
-  case VIL2_DICOM_HEADER_DITJPEGLOSSLNH:
-  case VIL2_DICOM_HEADER_DITJPEGEXTHIER:
-  case VIL2_DICOM_HEADER_DITJPEGSPECHIER:
-  case VIL2_DICOM_HEADER_DITJPEGFULLHIER:
-  case VIL2_DICOM_HEADER_DITJPEGLOSSLHIER:
-  case VIL2_DICOM_HEADER_DITJPEGLOSSLDEF:
+  case VIL_DICOM_HEADER_DITJPEGBASE:
+  case VIL_DICOM_HEADER_DITJPEGEXTLOSSY:
+  case VIL_DICOM_HEADER_DITJPEGSPECNH:
+  case VIL_DICOM_HEADER_DITJPEGFULLNH:
+  case VIL_DICOM_HEADER_DITJPEGLOSSLNH:
+  case VIL_DICOM_HEADER_DITJPEGEXTHIER:
+  case VIL_DICOM_HEADER_DITJPEGSPECHIER:
+  case VIL_DICOM_HEADER_DITJPEGFULLHIER:
+  case VIL_DICOM_HEADER_DITJPEGLOSSLHIER:
+  case VIL_DICOM_HEADER_DITJPEGLOSSLDEF:
     return true;
   default:
     return false;
@@ -82,7 +82,7 @@ bool isEncapsulated(vil2_dicom_header_image_type im_type)
 
 
 void imageSwap(char *in_im, int num_bytes,
-               vil2_dicom_header_info dhi)
+               vil_dicom_header_info dhi)
 {
   char swaps[2];
   int row_num;
@@ -108,7 +108,7 @@ void imageSwap(char *in_im, int num_bytes,
 }
 
 
-char *convert12to16(char *im, vil2_dicom_header_info dhi,
+char *convert12to16(char *im, vil_dicom_header_info dhi,
                     bool del_old=true)
 {
   int new_im_size=(dhi.dimx_*2) * dhi.dimy_;
@@ -151,44 +151,44 @@ char *convert12to16(char *im, vil2_dicom_header_info dhi,
 }
 
 
-bool checkReadableFormat(vil2_dicom_header_image_type im_type)
+bool checkReadableFormat(vil_dicom_header_image_type im_type)
 {
   bool retval;
   vcl_string type;
 
   switch (im_type)
   {
-  case VIL2_DICOM_HEADER_DITUNKNOWN:      type = "Unknown or Plain DICOM";
+  case VIL_DICOM_HEADER_DITUNKNOWN:      type = "Unknown or Plain DICOM";
                 retval=true; // This should be plain DICOM
                 break;
-  case VIL2_DICOM_HEADER_DITJPEGBASE:    type = "Baseline JPEG (Process 1)";
+  case VIL_DICOM_HEADER_DITJPEGBASE:    type = "Baseline JPEG (Process 1)";
                 retval=false;
                 break;
-  case VIL2_DICOM_HEADER_DITJPEGEXTLOSSY:  type = "Extended JPEG (Processes 2, 3, 4 & 5)";
+  case VIL_DICOM_HEADER_DITJPEGEXTLOSSY:  type = "Extended JPEG (Processes 2, 3, 4 & 5)";
                 retval=false;
                 break;
-  case VIL2_DICOM_HEADER_DITJPEGSPECNH:    type = "Spectral Selection non-hierarchical JPEG (Processes 6, 7, 8 and 9)";
+  case VIL_DICOM_HEADER_DITJPEGSPECNH:    type = "Spectral Selection non-hierarchical JPEG (Processes 6, 7, 8 and 9)";
                 retval=false;
                 break;
-  case VIL2_DICOM_HEADER_DITJPEGFULLNH:    type = "Full Progression non-hierarchical JPEG (Processes 10, 11, 12 and 13)";
+  case VIL_DICOM_HEADER_DITJPEGFULLNH:    type = "Full Progression non-hierarchical JPEG (Processes 10, 11, 12 and 13)";
                 retval=false;
                 break;
-  case VIL2_DICOM_HEADER_DITJPEGLOSSLNH:    type = "Lossless non-hierarchical JPEG (Processes 14 and 15)";
+  case VIL_DICOM_HEADER_DITJPEGLOSSLNH:    type = "Lossless non-hierarchical JPEG (Processes 14 and 15)";
                 retval=false;
                 break;
-  case VIL2_DICOM_HEADER_DITJPEGEXTHIER:    type = "Extended hierarchical JPEG (Processes 16, 17, 18 and 19)";
+  case VIL_DICOM_HEADER_DITJPEGEXTHIER:    type = "Extended hierarchical JPEG (Processes 16, 17, 18 and 19)";
                 retval=false;
                 break;
-  case VIL2_DICOM_HEADER_DITJPEGSPECHIER:  type = "Spectral Selection hierarchical JPEG (Processes 20, 21, 22 and 23)";
+  case VIL_DICOM_HEADER_DITJPEGSPECHIER:  type = "Spectral Selection hierarchical JPEG (Processes 20, 21, 22 and 23)";
                 retval=false;
                 break;
-  case VIL2_DICOM_HEADER_DITJPEGFULLHIER:  type = "Full Progression hierarchical JPEG (Processes 24, 25, 26 and 27)";
+  case VIL_DICOM_HEADER_DITJPEGFULLHIER:  type = "Full Progression hierarchical JPEG (Processes 24, 25, 26 and 27)";
                 retval=false;
                 break;
-  case VIL2_DICOM_HEADER_DITJPEGLOSSLHIER:  type = "Lossless hierarchical JPEG (Processes 28 and 29)";
+  case VIL_DICOM_HEADER_DITJPEGLOSSLHIER:  type = "Lossless hierarchical JPEG (Processes 28 and 29)";
                 retval=false;
                 break;
-  case VIL2_DICOM_HEADER_DITJPEGLOSSLDEF:  type = "Lossless non-hierarchical default (Process 14 [Selection Value 1])";
+  case VIL_DICOM_HEADER_DITJPEGLOSSLDEF:  type = "Lossless non-hierarchical default (Process 14 [Selection Value 1])";
                 retval=true;
                 break;
   default:          type = "Undefined";
@@ -205,49 +205,49 @@ bool checkReadableFormat(vil2_dicom_header_image_type im_type)
 }
 
 
-vil2_dicom_image::vil2_dicom_image(vil2_stream* vs):
+vil_dicom_image::vil_dicom_image(vil_stream* vs):
   vs_(vs)
 {
   vs_->ref();
 
-  vil2_dicom_header_format dhf;
+  vil_dicom_header_format dhf;
   header_ = dhf.readHeader(*vs);
   start_of_pixels_ = vs->tell();
 }
 
-bool vil2_dicom_image::get_property(char const * /*tag*/, void * /*prop*/) const
+bool vil_dicom_image::get_property(char const * /*tag*/, void * /*prop*/) const
 {
   // Need to write lots of access code for the dicom header.
   return false;
 }
 
-char const* vil2_dicom_image::file_format() const
+char const* vil_dicom_image::file_format() const
 {
-  return vil2_dicom_format_tag;
+  return vil_dicom_format_tag;
 }
 
-vil2_dicom_image::vil2_dicom_image(vil2_stream* vs, unsigned ni, unsigned nj,
-                                   unsigned nplanes, vil2_pixel_format format):
+vil_dicom_image::vil_dicom_image(vil_stream* vs, unsigned ni, unsigned nj,
+                                   unsigned nplanes, vil_pixel_format format):
   vs_(vs)
 {
-  assert(!"vil2_dicom_image doesn't yet support output");
+  assert(!"vil_dicom_image doesn't yet support output");
 
   vs_->ref();
 
-  assert(nplanes == 1 && format == VIL2_PIXEL_FORMAT_INT_32);
+  assert(nplanes == 1 && format == VIL_PIXEL_FORMAT_INT_32);
   header_.dimx_=ni;
   header_.dimy_=nj;
   header_.dimz_=1;
 }
 
-vil2_dicom_image::~vil2_dicom_image()
+vil_dicom_image::~vil_dicom_image()
 {
   //delete vs_;
   vs_->unref();
 }
 
 
-enum vil2_pixel_format vil2_dicom_image::pixel_format() const
+enum vil_pixel_format vil_dicom_image::pixel_format() const
 {
   unsigned bytes_read;
   if (header_.allocated_bits_ == 16 ||
@@ -256,22 +256,22 @@ enum vil2_pixel_format vil2_dicom_image::pixel_format() const
   else
     bytes_read = 1;
 
-  if (header_.res_slope_ == VIL2_DICOM_HEADER_DEFAULTSLOPE)
+  if (header_.res_slope_ == VIL_DICOM_HEADER_DEFAULTSLOPE)
     if (header_.pix_rep_ == 0)
       if (bytes_read == 2)
-        return VIL2_PIXEL_FORMAT_UINT_16;
+        return VIL_PIXEL_FORMAT_UINT_16;
       else
-        return VIL2_PIXEL_FORMAT_BYTE;
+        return VIL_PIXEL_FORMAT_BYTE;
     else
       if (bytes_read == 2)
-        return VIL2_PIXEL_FORMAT_INT_16;
+        return VIL_PIXEL_FORMAT_INT_16;
       else
-        return VIL2_PIXEL_FORMAT_SBYTE;
-  else return VIL2_PIXEL_FORMAT_FLOAT;
+        return VIL_PIXEL_FORMAT_SBYTE;
+  else return VIL_PIXEL_FORMAT_FLOAT;
 }
 
 
-vil2_image_view_base_sptr vil2_dicom_image::get_copy_view(
+vil_image_view_base_sptr vil_dicom_image::get_copy_view(
   unsigned x0, unsigned nx, unsigned y0, unsigned ny) const
 {
   if (x0+nx > ni() || y0+ny > nj()) return 0;
@@ -293,7 +293,7 @@ vil2_image_view_base_sptr vil2_dicom_image::get_copy_view(
   // otherwise just read the data
   if (isEncapsulated(header_.image_type_))
   {
-    vcl_cerr<< "ERROR: vil2_dicom_image::get_copy_view\n"
+    vcl_cerr<< "ERROR: vil_dicom_image::get_copy_view\n"
             << "       Can't read DICOM images with encapsulated image types\n";
     return 0;
   }
@@ -340,11 +340,11 @@ vil2_image_view_base_sptr vil2_dicom_image::get_copy_view(
   imageSwap((char *)void_im,bytes_read,header_);
 
 
-  if (header_.res_slope_ == VIL2_DICOM_HEADER_DEFAULTSLOPE)
+  if (header_.res_slope_ == VIL_DICOM_HEADER_DEFAULTSLOPE)
     if (header_.pix_rep_ == 0) // unsigned
       if (bytes_read == 2) // vxl_uint_16
       {
-        vil2_image_view<vxl_uint_16> view(nx, ny);
+        vil_image_view<vxl_uint_16> view(nx, ny);
         for (unsigned i=y0; i<ny; i++)
         {
           int next_row = header_.dimx_*i;
@@ -352,11 +352,11 @@ vil2_image_view_base_sptr vil2_dicom_image::get_copy_view(
             view(j-x0,i-y0) = static_cast<vxl_uint_16 *>(void_im)[next_row+j];
         }
         delete [] (char *) void_im;
-        return new vil2_image_view<vxl_uint_16>(view);
+        return new vil_image_view<vxl_uint_16>(view);
       }
       else // vxl_byte
       {
-        vil2_image_view<vxl_byte> view(nx, ny);
+        vil_image_view<vxl_byte> view(nx, ny);
         for (unsigned i=y0; i<ny; i++)
         {
           int next_row = header_.dimx_*i;
@@ -364,12 +364,12 @@ vil2_image_view_base_sptr vil2_dicom_image::get_copy_view(
             view(j-x0,i-y0) = static_cast<vxl_byte *>(void_im)[next_row+j];
         }
         delete [] (char *) void_im;
-        return new vil2_image_view<vxl_byte>(view);
+        return new vil_image_view<vxl_byte>(view);
       }
     else // signed
       if (bytes_read == 2) // vxl_int_16
       {
-        vil2_image_view<vxl_int_16> view(nx, ny);
+        vil_image_view<vxl_int_16> view(nx, ny);
         for (unsigned i=y0; i<ny; i++)
         {
           int next_row = header_.dimx_*i;
@@ -377,11 +377,11 @@ vil2_image_view_base_sptr vil2_dicom_image::get_copy_view(
             view(j-x0,i-y0) = static_cast<vxl_int_16 *>(void_im)[next_row+j];
         }
         delete [] (char *) void_im;
-        return new vil2_image_view<vxl_int_16>(view);
+        return new vil_image_view<vxl_int_16>(view);
       }
       else // vxl_sbyte
       {
-        vil2_image_view<vxl_sbyte> view(nx, ny);
+        vil_image_view<vxl_sbyte> view(nx, ny);
         for (unsigned i=y0; i<ny; i++)
         {
           int next_row = header_.dimx_*i;
@@ -389,11 +389,11 @@ vil2_image_view_base_sptr vil2_dicom_image::get_copy_view(
             view(j-x0,i-y0) = static_cast<vxl_sbyte *>(void_im)[next_row+j];
         }
         delete [] (char *) void_im;
-        return new vil2_image_view<vxl_sbyte>(view);
+        return new vil_image_view<vxl_sbyte>(view);
       }
   else // floating point image.
   {
-    vil2_image_view<float> view(nx, ny);
+    vil_image_view<float> view(nx, ny);
     float f;
     for (unsigned i=y0; i<ny; i++)
     {
@@ -415,15 +415,15 @@ vil2_image_view_base_sptr vil2_dicom_image::get_copy_view(
       }
     }
     delete [] (char *) void_im;
-    return new vil2_image_view<float>(view);
+    return new vil_image_view<float>(view);
   }
 }
 
 
-bool vil2_dicom_image::put_view(const vil2_image_view_base& view,
+bool vil_dicom_image::put_view(const vil_image_view_base& view,
                               unsigned x0, unsigned y0)
 {
-  assert(!"vil2_dicom_image doesn't yet support output yet");
+  assert(!"vil_dicom_image doesn't yet support output yet");
 
   if (!view_fits(view, x0, y0))
   {
@@ -437,8 +437,8 @@ bool vil2_dicom_image::put_view(const vil2_image_view_base& view,
 //==================================================================
 // readEncapsulatedData
 //==================================================================
-bool vil2_dicom_image::readEncapsulatedData(vimt_image_2d_of<vxl_int_32>&im,
-                      vil2_dicom_header_info head_info,
+bool vil_dicom_image::readEncapsulatedData(vimt_image_2d_of<vxl_int_32>&im,
+                      vil_dicom_header_info head_info,
                       vcl_ifstream &fs)
 {
   // We should now be at the start of the encapsulated data.
@@ -544,7 +544,7 @@ bool vil2_dicom_image::readEncapsulatedData(vimt_image_2d_of<vxl_int_32>&im,
 //==================================================================
 // getDataFromEncapsulation
 //==================================================================
-bool vil2_dicom_image::getDataFromEncapsulation(unsigned char **data, unsigned long &data_len,
+bool vil_dicom_image::getDataFromEncapsulation(unsigned char **data, unsigned long &data_len,
                         vcl_ifstream &fs)
 {
   bool result = true;
@@ -617,7 +617,7 @@ bool vil2_dicom_image::getDataFromEncapsulation(unsigned char **data, unsigned l
 //===============================================================
 // shortSwap
 //===============================================================
-short vil2_dicom_image::shortSwap(short short_in)
+short vil_dicom_image::shortSwap(short short_in)
 {
   short result = short_in;
 
@@ -645,12 +645,12 @@ short vil2_dicom_image::shortSwap(short short_in)
   } // End of if (head_info.file_endian_...
 
   return result;
-} // End of vil2_dicom_image::shortSwap
+} // End of vil_dicom_image::shortSwap
 
 //===============================================================
 // intSwap
 //===============================================================
-int vil2_dicom_image::intSwap(int int_in)
+int vil_dicom_image::intSwap(int int_in)
 {
   int result = int_in;
 
@@ -683,12 +683,12 @@ int vil2_dicom_image::intSwap(int int_in)
   } // End of if (head_info.file_endian_...
 
   return result;
-} // End of vil2_dicom_image::intSwap
+} // End of vil_dicom_image::intSwap
 
 //===============================================================
 // charSwap
 //===============================================================
-void vil2_dicom_image::charSwap(char *char_in, int val_size)
+void vil_dicom_image::charSwap(char *char_in, int val_size)
 {
   // Only swap if the architecture is different to the
   // file (the logic means that if one is unknown it swaps,
@@ -720,6 +720,6 @@ void vil2_dicom_image::charSwap(char *char_in, int val_size)
                << "Value remains unswapped!\n";
     }
   } // End of if (head_info.file_endian_...
-} // End of vil2_dicom_image::charSwap
+} // End of vil_dicom_image::charSwap
 
 #endif // 0

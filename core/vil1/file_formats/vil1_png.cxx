@@ -1,4 +1,4 @@
-// This is core/vil/file_formats/vil_png.cxx
+// This is core/vil1/file_formats/vil1_png.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,16 +6,16 @@
 // \file
 // http://www.mirror.ac.uk/sites/ftp.cdrom.com/pub/png/libpng.html
 
-#include "vil_png.h"
+#include "vil1_png.h"
 
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 
-#include <vil/vil_stream.h>
-#include <vil/vil_image_impl.h>
-#include <vil/vil_image.h>
-#include <vil/vil_property.h>
+#include <vil1/vil1_stream.h>
+#include <vil1/vil1_image_impl.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_property.h>
 
 #include <png.h>
 #if (PNG_LIBPNG_VER_MAJOR == 0)
@@ -28,16 +28,16 @@ extern "You need a later libpng. You should rerun CMake, after setting VXL_FORCE
 // Constants
 #define SIG_CHECK_SIZE 4
 
-char const* vil_png_format_tag = "png";
+char const* vil1_png_format_tag = "png";
 
 // Functions
 static bool problem(char const* msg)
 {
-  vcl_cerr << "[vil_png: PROBLEM " <<msg << "]";
+  vcl_cerr << "[vil1_png: PROBLEM " <<msg << "]";
   return false;
 }
 
-vil_image_impl* vil_png_file_format::make_input_image(vil_stream* is)
+vil1_image_impl* vil1_png_file_format::make_input_image(vil1_stream* is)
 {
   // Attempt to read header
   png_byte sig_buf [SIG_CHECK_SIZE];
@@ -49,35 +49,35 @@ vil_image_impl* vil_png_file_format::make_input_image(vil_stream* is)
   if (png_sig_cmp (sig_buf, (png_size_t) 0, (png_size_t) SIG_CHECK_SIZE) != 0)
     return 0;
 
-  return new vil_png_generic_image(is);
+  return new vil1_png_generic_image(is);
 }
 
-vil_image_impl* vil_png_file_format::make_output_image(vil_stream* is, int planes,
+vil1_image_impl* vil1_png_file_format::make_output_image(vil1_stream* is, int planes,
                                                        int width,
                                                        int height,
                                                        int components,
                                                        int bits_per_component,
-                                                       vil_component_format format)
+                                                       vil1_component_format format)
 {
-  return new vil_png_generic_image(is, planes, width, height, components, bits_per_component, format);
+  return new vil1_png_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
-char const* vil_png_file_format::tag() const
+char const* vil1_png_file_format::tag() const
 {
-  return vil_png_format_tag;
+  return vil1_png_format_tag;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 static void user_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-  vil_stream* f = (vil_stream*)png_get_io_ptr(png_ptr);
+  vil1_stream* f = (vil1_stream*)png_get_io_ptr(png_ptr);
   f->read(data, length);
 }
 
 static void user_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-  vil_stream* f = (vil_stream*)png_get_io_ptr(png_ptr);
+  vil1_stream* f = (vil1_stream*)png_get_io_ptr(png_ptr);
   f->write(data, length);
 }
 
@@ -89,10 +89,10 @@ static void user_flush_data(png_structp png_ptr)
 #endif
 }
 
-struct vil_jmpbuf_wrapper {
+struct vil1_jmpbuf_wrapper {
   jmp_buf jmpbuf;
 };
-static vil_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
+static vil1_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
 static bool jmpbuf_ok = false;
 
 // Must be  a macro - setjmp needs its stack frame to live
@@ -116,16 +116,16 @@ static bool jmpbuf_ok = false;
 //
 static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
 {
-  vcl_cerr << "vil_png:  fatal libpng error: " << msg << '\n';
+  vcl_cerr << "vil1_png:  fatal libpng error: " << msg << '\n';
 
   if (!jmpbuf_ok) {
     // Someone called the error handler when the setjmp was wrong
-    vcl_cerr << "vil_png: jmpbuf is pretty far from ok.  returning\n";
+    vcl_cerr << "vil1_png: jmpbuf is pretty far from ok.  returning\n";
     // vcl_abort();
     return;
   }
 
-  vil_jmpbuf_wrapper  *jmpbuf_ptr = (vil_jmpbuf_wrapper*) png_get_error_ptr(png_ptr);
+  vil1_jmpbuf_wrapper  *jmpbuf_ptr = (vil1_jmpbuf_wrapper*) png_get_error_ptr(png_ptr);
   if (jmpbuf_ptr == NULL) {         // we are completely hosed now
     vcl_cerr << "pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.\n";
     vcl_exit(99);
@@ -134,7 +134,7 @@ static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
   longjmp(jmpbuf_ptr->jmpbuf, 1);
 }
 
-struct vil_png_structures {
+struct vil1_png_structures {
   bool reading_;
   png_struct *png_ptr;
   png_info *info_ptr;
@@ -142,7 +142,7 @@ struct vil_png_structures {
   int channels;
   bool ok;
 
-  vil_png_structures(bool reading) {
+  vil1_png_structures(bool reading) {
     reading_ = reading;
     png_ptr = 0;
     info_ptr = 0;
@@ -224,7 +224,7 @@ struct vil_png_structures {
     return rows;
   }
 
-  ~vil_png_structures() {
+  ~vil1_png_structures() {
     png_setjmp_on(goto del);
     if (reading_) {
       // Reading - just delete
@@ -250,54 +250,54 @@ struct vil_png_structures {
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil_png_generic_image::vil_png_generic_image(vil_stream* is):
+vil1_png_generic_image::vil1_png_generic_image(vil1_stream* is):
   vs_(is),
-  p(new vil_png_structures(true))
+  p(new vil1_png_structures(true))
 {
   vs_->ref();
   read_header();
 }
 
-bool vil_png_generic_image::get_property(char const *tag, void *prop) const
+bool vil1_png_generic_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil_property_left_first))
+  if (0==vcl_strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
   return false;
 }
 
-vil_png_generic_image::vil_png_generic_image(vil_stream* is, int /*planes*/,
+vil1_png_generic_image::vil1_png_generic_image(vil1_stream* is, int /*planes*/,
                                                int width,
                                                int height,
                                                int components,
                                                int bits_per_component,
-                                               vil_component_format /*format*/):
+                                               vil1_component_format /*format*/):
   vs_(is),
   width_(width),
   height_(height),
   components_(components),
   bits_per_component_(bits_per_component),
-  p(new vil_png_structures(false))
+  p(new vil1_png_structures(false))
 {
   vs_->ref();
   write_header();
 }
 
-vil_png_generic_image::~vil_png_generic_image()
+vil1_png_generic_image::~vil1_png_generic_image()
 {
   delete p;
   vs_->unref();
 }
 
-char const* vil_png_generic_image::file_format() const
+char const* vil1_png_generic_image::file_format() const
 {
-  return vil_png_format_tag;
+  return vil1_png_format_tag;
 }
 
-bool vil_png_generic_image::read_header()
+bool vil1_png_generic_image::read_header()
 {
   if (!p->ok)
     return false;
@@ -349,7 +349,7 @@ bool vil_png_generic_image::read_header()
   return true;
 }
 
-bool vil_png_generic_image::write_header()
+bool vil1_png_generic_image::write_header()
 {
   if (!p->ok)
     return false;
@@ -386,7 +386,7 @@ bool vil_png_generic_image::write_header()
   return true;
 }
 
-bool vil_png_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
+bool vil1_png_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
   if (!p->ok)
     return false;
@@ -410,7 +410,7 @@ bool vil_png_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
   return true;
 }
 
-bool vil_png_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
+bool vil1_png_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
 {
   if (!p->ok)
     return false;
@@ -435,8 +435,8 @@ bool vil_png_generic_image::put_section(void const* buf, int x0, int y0, int xs,
   return true;
 }
 
-vil_image vil_png_generic_image::get_plane(int plane) const
+vil1_image vil1_png_generic_image::get_plane(int plane) const
 {
   assert(plane == 0);
-  return const_cast<vil_png_generic_image*>(this);
+  return const_cast<vil1_png_generic_image*>(this);
 }

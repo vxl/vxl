@@ -1,11 +1,11 @@
 #!/usr/bin/perl
-# Does global search and replace of vil code with vil2 equivalent in named file
+# Does global search and replace of vil1 code with vil equivalent in named file
 # Backup saved to filename.old
 $filename=$ARGV[0];
 if (@ARGV!=1)
 {
     print "viltovil2.pl filename\n";
-    print "Performs numerous substitutions to convert from vil to vil2 in named file\n";
+    print "Performs numerous substitutions to convert from vil1 to vil in named file\n";
     print "(Backup saved to filename.old)\n";
     exit 0;
 }
@@ -20,40 +20,40 @@ open(INFILE,"<$backup") or die "Can't open $backup";
 while (<INFILE>)
 {
     # just Filenames
-    s/\b(vxl|core)\/vil\b/core\/vil2/g;
-    s/\bvil\/vil_fwd/vil2\/vil2_fwd/g;
+    s/\b(vxl|core)\/vil1\b/core\/vil/g;
+    s/\bvil\/vil1_fwd/vil\/vil_fwd/g;
 
     # Common functions
-    s/\bvil\/vil_copy\b/vil2\/vil2_copy/g;
-    s/vil_copy/vil2_copy_deep/g;
-    s/\bvil\/vil_skip\b/vil2\/vil2_decimate/g;
-    s/vil_skip/vil2_decimate/g;
-    s/\bvil\/vil_clamp\b/vil2\/vil2_clamp/g;
-    s/vil_clamp/vil2_clamp/g;
-    s/\bvil\/vil_convolve\b/vil2\/algo\/vil2_convolve_1d/g;
-    s/vil_convolve_1d_x/vil2_convolve_1d/g;
-    s/\bvil\/vil_crop\b/vil2\/vil2_crop/g;
-    s/vil_crop/vil2_crop/g;
-    s/\bvil\/vil_flipud\b/vil2\/vil2_flip/g;
-    s/vil_flipud/vil2_flip_ud/g;
-    s/\bvil\/vil_load\b/vil2\/vil2_load/g;
-    s/vil_load/vil2_load/g;
-    s/\bvil\/vil_save\b/vil2\/vil2_save/g;
-    s/vil_save/vil2_save/g;
-    s/\bvil\/vil_image_as\b/vil2\/vil2_convert/g;
-    s/vil_image_as_/vil2_convert_cast</g;
-    s/\bvil\/vil_ncc\b/vil2\/algo\/vil2_normalised_correlation_2d/g;
-    s/vil_ncc/vil2_normalised_correlation_2d</g;
-    s/\bvil\/vil_new\b/vil2\/vil2_new/g;
-    s/vil_new/vil2_new/g;
-    s/\bvil\/vil_ssd\b/vil2\/vil2_math/g;
-    s/vil_ssd/vil2_math_ssd/g;
-    s/\bvil\/vil_scale_intensities\b/vil2\/vil2_math/g;
-    s/vil_scale_intensities/vil2_math_scale_and_offset_values/g;
-    s/\bvil\/vil_32bit\b/vil2\/vil2_stream_32bit/g;
-    s/vil_32bit_/vil2_stream_32bit_/g;
-    s/\bvil\/vil_16bit\b/vil2\/vil2_stream_16bit/g;
-    s/vil_16bit_/vil2_stream_16bit_/g;
+    s/\bvil\/vil1_copy\b/vil\/vil_copy/g;
+    s/vil1_copy/vil_copy_deep/g;
+    s/\bvil\/vil1_skip\b/vil\/vil_decimate/g;
+    s/vil1_skip/vil_decimate/g;
+    s/\bvil\/vil1_clamp\b/vil\/vil_clamp/g;
+    s/vil1_clamp/vil_clamp/g;
+    s/\bvil\/vil1_convolve\b/vil\/algo\/vil_convolve_1d/g;
+    s/vil1_convolve_1d_x/vil_convolve_1d/g;
+    s/\bvil\/vil1_crop\b/vil\/vil_crop/g;
+    s/vil1_crop/vil_crop/g;
+    s/\bvil\/vil1_flipud\b/vil\/vil_flip/g;
+    s/vil1_flipud/vil_flip_ud/g;
+    s/\bvil\/vil1_load\b/vil\/vil_load/g;
+    s/vil1_load/vil_load/g;
+    s/\bvil\/vil1_save\b/vil\/vil_save/g;
+    s/vil1_save/vil_save/g;
+    s/\bvil\/vil1_image_as\b/vil\/vil_convert/g;
+    s/vil1_image_as_/vil_convert_cast</g;
+    s/\bvil\/vil1_ncc\b/vil\/algo\/vil_normalised_correlation_2d/g;
+    s/vil1_ncc/vil_normalised_correlation_2d</g;
+    s/\bvil\/vil1_new\b/vil\/vil_new/g;
+    s/vil1_new/vil_new/g;
+    s/\bvil\/vil1_ssd\b/vil\/vil_math/g;
+    s/vil1_ssd/vil_math_ssd/g;
+    s/\bvil\/vil1_scale_intensities\b/vil\/vil_math/g;
+    s/vil1_scale_intensities/vil_math_scale_and_offset_values/g;
+    s/\bvil\/vil1_32bit\b/vil\/vil_stream_32bit/g;
+    s/vil1_32bit_/vil_stream_32bit_/g;
+    s/\bvil\/vil1_16bit\b/vil\/vil_stream_16bit/g;
+    s/vil1_16bit_/vil_stream_16bit_/g;
 
 
     # Methods that have changed a lot
@@ -65,37 +65,37 @@ while (<INFILE>)
     s/\.height\(\)/.nj()/g;
 
     # Classes
-    s/\bvil\/vil_memory_image_of\b/vil2\/vil2_image_view/g;
-    s/\bvil_memory_image_of\b/vil2_image_view/g;
-    s/\bvil\/vil_memory_image\b/vil2\/vil2_image_view_base/g;
-    s/\bvil_memory_image\b/vil2_image_view_base_sptr/g;
-    s/\bvil\/vil_image\b/vil2\/vil2_image_resource/g;
-    s/\bvil_image\b/vil2_image_resource/g;
-    s/\bvil\/vil_pyramid\b/vimt\/vimt_image_pyramid/g;
-    s/vil_pyramid/vimt_image_pyramid/g;
-    s/\bvil\/vil_file_format\b/vil2\/vil2_file_format/g;
-    s/vil_file_format/vil2_file_format/g;
+    s/\bvil\/vil1_memory_image_of\b/vil\/vil_image_view/g;
+    s/\bvil_memory_image_of\b/vil_image_view/g;
+    s/\bvil\/vil1_memory_image\b/vil\/vil_image_view_base/g;
+    s/\bvil_memory_image\b/vil_image_view_base_sptr/g;
+    s/\bvil\/vil1_image\b/vil\/vil_image_resource/g;
+    s/\bvil_image\b/vil_image_resource/g;
+    s/\bvil\/vil1_pyramid\b/vimt\/vimt_image_pyramid/g;
+    s/vil1_pyramid/vimt_image_pyramid/g;
+    s/\bvil\/vil1_file_format\b/vil\/vil_file_format/g;
+    s/vil1_file_format/vil_file_format/g;
 
     # types
-    s/\bvil\/vil_property\b/vil2\/vil2_property/g;
-    s/vil_property_/vil2_property_/g;
+    s/\bvil\/vil1_property\b/vil\/vil_property/g;
+    s/vil1_property_/vil_property_/g;
 
-    s/\bvil\/vil_byte\b/vxl_config/g;
+    s/\bvil\/vil1_byte\b/vxl_config/g;
     s/\bvil_byte\b/vxl_byte/g;
-    s/\bvil\/vil_rgb_byte\b/vil2\/vil2_rgb/g;
-    s/vil_rgb_byte/vil2_rgb<vxl_byte>/g;
+    s/\bvil\/vil1_rgb_byte\b/vil\/vil_rgb/g;
+    s/vil1_rgb_byte/vil_rgb<vxl_byte>/g;
 
-    # Stuff that was just copied from vil to vil2
-    s/\bvil\/vil_rgba\b/vil2\/vil2_rgba/g;
-    s/vil_rgba</vil2_rgba</g;
-    s/\bvil\/vil_rgb\b/vil2\/vil2_rgb/g;
-    s/vil_rgb</vil2_rgb</g;
+    # Stuff that was just copied from vil1 to vil
+    s/\bvil\/vil1_rgba\b/vil\/vil_rgba/g;
+    s/vil1_rgba</vil_rgba</g;
+    s/\bvil\/vil1_rgb\b/vil\/vil_rgb/g;
+    s/vil1_rgb</vil_rgb</g;
 
-    s/\bvil\/vil_stream/vil2\/vil2_stream/g;
-    s/vil_stream/vil2_stream/g;
+    s/\bvil\/vil1_stream/vil\/vil_stream/g;
+    s/vil1_stream/vil_stream/g;
 
-    s/\bvil\/vil_open\b/vil2\/vil2_open/g;
-    s/vil_open/vil2_open/g;
+    s/\bvil\/vil1_open\b/vil\/vil_open/g;
+    s/vil1_open/vil_open/g;
 
 
     print OUTFILE;

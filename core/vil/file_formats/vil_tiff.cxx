@@ -1,10 +1,10 @@
-// This is core/vil2/file_formats/vil2_tiff.cxx
+// This is core/vil/file_formats/vil_tiff.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
 // \file
-// See vil2_tiff.h for a description of this file.
+// See vil_tiff.h for a description of this file.
 //
 // \author  awf@robots.ox.ac.uk
 //
@@ -13,7 +13,7 @@
 //   09-NOV-2001  K.Y.McGaul  Use default value for orientation when it can't be read.
 // \endverbatim
 
-#include "vil2_tiff.h"
+#include "vil_tiff.h"
 
 #include <vcl_cassert.h>
 #if 0 // commented out
@@ -22,13 +22,13 @@
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 
-#include <vil2/vil2_stream.h>
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_stream.h>
+#include <vil/vil_image_view.h>
 
 #include <tiffio.h>
 
 // Constants
-char const* vil2_tiff_format_tag = "tiff";
+char const* vil_tiff_format_tag = "tiff";
 
 // Functions
 static bool xxproblem(char const* linefile, char const* msg)
@@ -42,7 +42,7 @@ static bool xxproblem(char const* linefile, char const* msg)
 
 #define trace if (true) { } else vcl_cerr
 
-bool vil2_tiff_file_format_probe(vil2_stream* is)
+bool vil_tiff_file_format_probe(vil_stream* is)
 {
   // The byte ordering in a TIFF image (usually) depends on the byte-order
   // of the writing host. The header is always 4 bytes.
@@ -89,52 +89,52 @@ bool vil2_tiff_file_format_probe(vil2_stream* is)
 #endif
 }
 
-vil2_image_resource_sptr vil2_tiff_file_format::make_input_image(vil2_stream* is)
+vil_image_resource_sptr vil_tiff_file_format::make_input_image(vil_stream* is)
 {
-  if (!vil2_tiff_file_format_probe(is))
+  if (!vil_tiff_file_format_probe(is))
     return 0;
 
-  return new vil2_tiff_image(is);
+  return new vil_tiff_image(is);
 }
 
-vil2_image_resource_sptr
-  vil2_tiff_file_format::make_output_image(vil2_stream* vs,
+vil_image_resource_sptr
+  vil_tiff_file_format::make_output_image(vil_stream* vs,
                                            unsigned nx,
                                            unsigned ny,
                                            unsigned nplanes,
-                                           enum vil2_pixel_format format)
+                                           enum vil_pixel_format format)
 {
-  if (nplanes==1 && vil2_pixel_format_sizeof_components(format)>1)
+  if (nplanes==1 && vil_pixel_format_sizeof_components(format)>1)
   {
-    vcl_cerr << "ERROR with vil2_tiff_file_format::make_output_image():\n"
+    vcl_cerr << "ERROR with vil_tiff_file_format::make_output_image():\n"
              << "Can't deal with greyscale images with pixel widths other than 8 bits\n";
     return 0;
   }
-  return new vil2_tiff_image(vs, nx, ny, nplanes, format);
+  return new vil_tiff_image(vs, nx, ny, nplanes, format);
 }
 
-char const* vil2_tiff_file_format::tag() const
+char const* vil_tiff_file_format::tag() const
 {
-  return vil2_tiff_format_tag;
+  return vil_tiff_format_tag;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-struct vil2_tiff_structures {
-  vil2_tiff_structures(vil2_stream *vs_):
+struct vil_tiff_structures {
+  vil_tiff_structures(vil_stream *vs_):
     vs(vs_),
     filesize(0),
     buf(0)
   { if (vs) vs->ref(); }
 
- ~vil2_tiff_structures()
+ ~vil_tiff_structures()
   {
     delete [] buf;
     if (vs) vs->unref();
   }
 
   TIFF* tif;
-  vil2_stream* vs;
+  vil_stream* vs;
   int filesize;
 
   unsigned long tilewidth;
@@ -169,43 +169,43 @@ TIFF* TIFFClientOpen(const char* filename, const char* mode, thandle_t clientdat
     TIFFUnmapFileProc unmapproc)
 #endif
 
-static tsize_t vil2_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
+static tsize_t vil_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
 {
-  vil2_tiff_structures* p = (vil2_tiff_structures*)h;
+  vil_tiff_structures* p = (vil_tiff_structures*)h;
   if (n > p->filesize) p->filesize= n;
   tsize_t ret = p->vs->read(buf, n);
   trace << "readproc, n = " << n << ", ret = " << ret << "\n";
   return ret;
 }
 
-static tsize_t vil2_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
+static tsize_t vil_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
 {
-  vil2_tiff_structures* p = (vil2_tiff_structures*)h;
+  vil_tiff_structures* p = (vil_tiff_structures*)h;
   tsize_t ret = p->vs->write(buf, n);
-  vil2_streampos s = p->vs->tell();
+  vil_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
   trace << "writeproc: ret=" << ret << "/" << n << " , filesize = " << p->filesize << "   " << s << vcl_endl;
   return ret;
 }
 
-static toff_t vil2_tiff_seekproc(thandle_t h, toff_t offset, int whence)
+static toff_t vil_tiff_seekproc(thandle_t h, toff_t offset, int whence)
 {
   trace << "seek " << offset << " w = " << whence << vcl_endl;
-  vil2_tiff_structures* p = (vil2_tiff_structures*)h;
+  vil_tiff_structures* p = (vil_tiff_structures*)h;
   if      (whence == SEEK_SET) { p->vs->seek(offset); }
   else if (whence == SEEK_CUR) { p->vs->seek(p->vs->tell() + offset); }
   else if (whence == SEEK_END) { p->vs->seek(p->filesize + offset); }
-  vil2_streampos s = p->vs->tell();
+  vil_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
   return s;
 }
 
-static int vil2_tiff_closeproc(thandle_t h)
+static int vil_tiff_closeproc(thandle_t h)
 {
-  trace << "vil2_tiff_closeproc\n";
-  vil2_tiff_structures* p = (vil2_tiff_structures*)h;
+  trace << "vil_tiff_closeproc\n";
+  vil_tiff_structures* p = (vil_tiff_structures*)h;
   //delete p->vs;
   if (p->vs) {
     p->vs->unref();
@@ -214,86 +214,86 @@ static int vil2_tiff_closeproc(thandle_t h)
   return 0;
 }
 
-static toff_t vil2_tiff_sizeproc(thandle_t)
+static toff_t vil_tiff_sizeproc(thandle_t)
 {
-  trace << "vil2_tiff_sizeproc\n";
+  trace << "vil_tiff_sizeproc\n";
   // TODO
   return (toff_t)(-1); // could be unsigned - avoid compiler warning
 }
 
-static int vil2_tiff_mapfileproc(thandle_t, tdata_t*, toff_t*)
+static int vil_tiff_mapfileproc(thandle_t, tdata_t*, toff_t*)
 {
-  // TODO: Add mmap support to vil2_tiff_mapfileproc
+  // TODO: Add mmap support to vil_tiff_mapfileproc
   return 0;
 }
 
-static void vil2_tiff_unmapfileproc(thandle_t, tdata_t, toff_t)
+static void vil_tiff_unmapfileproc(thandle_t, tdata_t, toff_t)
 {
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil2_tiff_image::vil2_tiff_image(vil2_stream* is):
-  p(new vil2_tiff_structures(is))
+vil_tiff_image::vil_tiff_image(vil_stream* is):
+  p(new vil_tiff_structures(is))
 {
   read_header();
 }
 
-bool vil2_tiff_image::get_property(char const * /*tag*/, void * /*prop*/) const
+bool vil_tiff_image::get_property(char const * /*tag*/, void * /*prop*/) const
 {
   // This is not an in-memory image type, nor is it read-only:
   return false;
 }
 
 
-vil2_tiff_image::vil2_tiff_image(vil2_stream* is,
+vil_tiff_image::vil_tiff_image(vil_stream* is,
                                  unsigned ni,
                                  unsigned nj,
                                  unsigned nplanes,
-                                 vil2_pixel_format format):
-  p(new vil2_tiff_structures(is))
+                                 vil_pixel_format format):
+  p(new vil_tiff_structures(is))
 {
   width_ = ni;
   height_ = nj;
   components_ = nplanes;
-  bits_per_component_ = vil2_pixel_format_sizeof_components(format)*8;
+  bits_per_component_ = vil_pixel_format_sizeof_components(format)*8;
 
   write_header();
 }
 
-vil2_pixel_format vil2_tiff_image::pixel_format() const
+vil_pixel_format vil_tiff_image::pixel_format() const
 {
   switch (bits_per_component_)
   {
-  case 8: return VIL2_PIXEL_FORMAT_BYTE;
-  case 16: return VIL2_PIXEL_FORMAT_UINT_16;
-  case 32: return VIL2_PIXEL_FORMAT_UINT_32;
-  default: return VIL2_PIXEL_FORMAT_UNKNOWN;
+  case 8: return VIL_PIXEL_FORMAT_BYTE;
+  case 16: return VIL_PIXEL_FORMAT_UINT_16;
+  case 32: return VIL_PIXEL_FORMAT_UINT_32;
+  default: return VIL_PIXEL_FORMAT_UNKNOWN;
   }
 }
 
-vil2_tiff_image::~vil2_tiff_image()
+vil_tiff_image::~vil_tiff_image()
 {
   if (p->tif)
     TIFFClose(p->tif);
   delete p;
 }
 
-char const* vil2_tiff_image::file_format() const
+char const* vil_tiff_image::file_format() const
 {
-  return vil2_tiff_format_tag;
+  return vil_tiff_format_tag;
 }
 
-bool vil2_tiff_image::read_header()
+bool vil_tiff_image::read_header()
 {
   p->vs->seek(0L);
   p->tif = TIFFClientOpen("unknown filename",
                           "rC", // read, enable strip chopping
                           (thandle_t)p,
-                          vil2_tiff_readproc, vil2_tiff_writeproc,
-                          vil2_tiff_seekproc, vil2_tiff_closeproc,
-                          vil2_tiff_sizeproc,
-                          vil2_tiff_mapfileproc, vil2_tiff_unmapfileproc);
+                          vil_tiff_readproc, vil_tiff_writeproc,
+                          vil_tiff_seekproc, vil_tiff_closeproc,
+                          vil_tiff_sizeproc,
+                          vil_tiff_mapfileproc, vil_tiff_unmapfileproc);
 
   if (!p->tif) {
     return problem("TIFFClientOpen");
@@ -322,7 +322,7 @@ bool vil2_tiff_image::read_header()
     this->bits_per_component_ = bitspersample;
     break;
   default:
-    // vcl_cerr << "vil2_tiff: Saw " << samplesperpixel << " samples @ " << bitspersample << "\n";
+    // vcl_cerr << "vil_tiff: Saw " << samplesperpixel << " samples @ " << bitspersample << "\n";
     TIFFError("TIFFImageRH: ", "Can only handle 1-channel gray scale or 3-channel color");
     return false;
   }
@@ -355,7 +355,7 @@ bool vil2_tiff_image::read_header()
       if (!TIFFIsTiled(p->tif)) {
         // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
 #ifdef RIH_DEBUG
-        vcl_cerr << "vil2_tiff: Treating Tiff image as uncompressed ForeignImage\n";
+        vcl_cerr << "vil_tiff: Treating Tiff image as uncompressed ForeignImage\n";
 #endif
       }
     }
@@ -460,7 +460,7 @@ bool vil2_tiff_image::read_header()
 
 
 #if defined(RIH_DEBUG)
-  vcl_printf("vil2_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
+  vcl_printf("vil_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
          " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
          this->width(), this->height(), this->components(), this->bits_per_component(),
          p->tiled, p->compressed, p->rows_per_strip, p->photometric, p->stripsize, p->scanlinesize);
@@ -480,7 +480,7 @@ bool vil2_tiff_image::read_header()
   return true;
 }
 
-bool vil2_tiff_image::write_header()
+bool vil_tiff_image::write_header()
 {
   p->vs->seek(0L);
   p->filesize = 0;
@@ -509,13 +509,13 @@ bool vil2_tiff_image::write_header()
 #endif
 
 
-  p->tif = TIFFClientOpen("file_formats/vil2_tiff.cxx:374:unknown_filename",
+  p->tif = TIFFClientOpen("file_formats/vil_tiff.cxx:374:unknown_filename",
                           "w",
                           (thandle_t)p,
-                          vil2_tiff_readproc, vil2_tiff_writeproc,
-                          vil2_tiff_seekproc, vil2_tiff_closeproc,
-                          vil2_tiff_sizeproc,
-                          vil2_tiff_mapfileproc, vil2_tiff_unmapfileproc);
+                          vil_tiff_readproc, vil_tiff_writeproc,
+                          vil_tiff_seekproc, vil_tiff_closeproc,
+                          vil_tiff_sizeproc,
+                          vil_tiff_mapfileproc, vil_tiff_unmapfileproc);
 
   TIFFSetField(p->tif, TIFFTAG_IMAGEWIDTH, width_);
   TIFFSetField(p->tif, TIFFTAG_IMAGELENGTH, height_);
@@ -572,7 +572,7 @@ bool vil2_tiff_image::write_header()
   p->compressed = (p->compression != COMPRESSION_NONE);
 
   // TIFFSetField(p->tif, TIFFTAG_IMAGEDESCRIPTION, GetDescription());
-  TIFFSetField(p->tif, TIFFTAG_SOFTWARE, "vxl/vil2/file_formats/vil2_tiff.cxx");
+  TIFFSetField(p->tif, TIFFTAG_SOFTWARE, "vxl/vil/file_formats/vil_tiff.cxx");
 
   p->numberofstrips = TIFFNumberOfStrips(p->tif);
   p->scanlinesize = width_ * bitspersample * samplesperpixel / 8;
@@ -598,7 +598,7 @@ bool vil2_tiff_image::write_header()
   p->buf = new unsigned char[p->stripsize];
 
 #ifdef RIH_DEBUG
-  vcl_printf("vil2_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
+  vcl_printf("vil_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
          " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
          this->width(), this->height(), this->components(), this->bits_per_component(),
          p->tiled, p->compressed, p->rows_per_strip, p->photometric, p->stripsize, p->scanlinesize);
@@ -607,21 +607,21 @@ bool vil2_tiff_image::write_header()
   return true;
 }
 
-void vil2_tiff_image::get_resolution(float& x_res, float& y_res, unsigned short& units) const
+void vil_tiff_image::get_resolution(float& x_res, float& y_res, unsigned short& units) const
 {
   TIFFGetField(p->tif, TIFFTAG_XRESOLUTION, &x_res);
   TIFFGetField(p->tif, TIFFTAG_YRESOLUTION, &y_res);
   TIFFGetField(p->tif, TIFFTAG_RESOLUTIONUNIT, &units);
 }
 
-void vil2_tiff_image::set_resolution(float x_res, float y_res, unsigned short units)
+void vil_tiff_image::set_resolution(float x_res, float y_res, unsigned short units)
 {
   TIFFSetField(p->tif, TIFFTAG_XRESOLUTION, x_res);
   TIFFSetField(p->tif, TIFFTAG_YRESOLUTION, y_res);
   TIFFSetField(p->tif, TIFFTAG_RESOLUTIONUNIT, units);
 }
 
-vil2_image_view_base_sptr vil2_tiff_image::get_copy_view(unsigned i0,
+vil_image_view_base_sptr vil_tiff_image::get_copy_view(unsigned i0,
                                                          unsigned ni,
                                                          unsigned j0,
                                                          unsigned nj) const
@@ -629,12 +629,12 @@ vil2_image_view_base_sptr vil2_tiff_image::get_copy_view(unsigned i0,
   if (!p->jumbo_strips)
   {
     if (p->tiled)
-      vcl_cerr << "vil2_tiff_image: TILED TIFF: may be wrongly read?\n";
+      vcl_cerr << "vil_tiff_image: TILED TIFF: may be wrongly read?\n";
 
 
     if (bits_per_component_%8 != 0)
     {
-      vcl_cerr << "vil2_tiff_image: Can't deal with bits per component that isn not a multiple of 8\n";
+      vcl_cerr << "vil_tiff_image: Can't deal with bits per component that isn not a multiple of 8\n";
       return 0;
     }
 
@@ -646,7 +646,7 @@ vil2_image_view_base_sptr vil2_tiff_image::get_copy_view(unsigned i0,
     assert(strip_max <= p->numberofstrips);
     // Get each strip
     unsigned int pixel_bit_size = components_ * bits_per_component_;
-    vil2_memory_chunk_sptr buf = new vil2_memory_chunk(pixel_bit_size*nj*ni, pixel_format());
+    vil_memory_chunk_sptr buf = new vil_memory_chunk(pixel_bit_size*nj*ni, pixel_format());
     {
       for (unsigned long strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
         TIFFReadEncodedStrip(p->tif, strip_id, p->buf, (tsize_t) -1);
@@ -668,13 +668,13 @@ vil2_image_view_base_sptr vil2_tiff_image::get_copy_view(unsigned i0,
       }
     }
     if (bits_per_component_ == 8)
-      return new vil2_image_view<vxl_byte>(buf, (const vxl_byte*)buf->data(), ni, nj,
+      return new vil_image_view<vxl_byte>(buf, (const vxl_byte*)buf->data(), ni, nj,
         components_, components_, components_*ni, 1);
     else if (bits_per_component_ == 16)
-      return new vil2_image_view<vxl_uint_16>(buf, (const vxl_uint_16*)buf->data(), ni, nj,
+      return new vil_image_view<vxl_uint_16>(buf, (const vxl_uint_16*)buf->data(), ni, nj,
         components_, components_, components_*ni, 1);
     else if (bits_per_component_ == 32)
-      return new vil2_image_view<vxl_uint_32>(buf, (const vxl_uint_32*)buf->data(), ni, nj,
+      return new vil_image_view<vxl_uint_32>(buf, (const vxl_uint_32*)buf->data(), ni, nj,
         components_, components_, components_*ni, 1);
     else {
       // not compressed, and jumbo strips. dig it out manually in case ReadScanLine pulls in all the image
@@ -689,26 +689,26 @@ vil2_image_view_base_sptr vil2_tiff_image::get_copy_view(unsigned i0,
   }
 }
 
-bool vil2_tiff_image::put_view(const vil2_image_view_base &im,
+bool vil_tiff_image::put_view(const vil_image_view_base &im,
                                unsigned i0, unsigned j0)
 {
   if (im.pixel_format() != pixel_format())
   {
-    vcl_cerr << "WARNING: vil2_tiff_image::put_view\n"
+    vcl_cerr << "WARNING: vil_tiff_image::put_view\n"
              << "Failed because input is wrong pixel_type.\n"
              << "Input is " << im.pixel_format()
              << ", tiff_image is " << pixel_format() << vcl_endl;
     return false;
   }
-  if (bits_per_component_ != vil2_pixel_format_sizeof_components(pixel_format())*8)
+  if (bits_per_component_ != vil_pixel_format_sizeof_components(pixel_format())*8)
   {
-    vcl_cerr << "WARNING: vil2_tiff_image::put_view\n"
+    vcl_cerr << "WARNING: vil_tiff_image::put_view\n"
              << "Failed because TIFF image has incorrect component size.\n";
     return false;
   }
   if (im.nplanes() != components_)
   {
-    vcl_cerr << "WARNING: vil2_tiff_image::put_view\n"
+    vcl_cerr << "WARNING: vil_tiff_image::put_view\n"
              << "Failed because TIFF image has incorrect component size.\n";
     return false;
   }
@@ -737,35 +737,35 @@ bool vil2_tiff_image::put_view(const vil2_image_view_base &im,
         + i0 * pixel_byte_size;
 
 
-      if (im.pixel_format() == VIL2_PIXEL_FORMAT_BYTE)
+      if (im.pixel_format() == VIL_PIXEL_FORMAT_BYTE)
       {
         // fill one raster with data, component-wise.
         for (unsigned i=0; i<im.ni(); ++i)
           for (unsigned plane=0; plane<im.nplanes(); ++plane)
             *reinterpret_cast<vxl_byte*>(file_row +
               i*pixel_byte_size + plane) =
-              static_cast<const vil2_image_view<vxl_byte>&>(im)(i,y,plane);
+              static_cast<const vil_image_view<vxl_byte>&>(im)(i,y,plane);
       } else
-      if (im.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16)
+      if (im.pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
       {
         // fill one raster with data, component-wise.
         for (unsigned i=0; i<im.ni(); ++i)
           for (unsigned plane=0; plane<im.nplanes(); ++plane)
             *reinterpret_cast<vxl_uint_16*>(file_row +
               i*pixel_byte_size + plane*2) =
-              static_cast<const vil2_image_view<vxl_uint_16>&>(im)(i,y,plane);
+              static_cast<const vil_image_view<vxl_uint_16>&>(im)(i,y,plane);
       } else
-      if (im.pixel_format() == VIL2_PIXEL_FORMAT_UINT_32)
+      if (im.pixel_format() == VIL_PIXEL_FORMAT_UINT_32)
       {
         // fill one raster with data, component-wise.
         for (unsigned i=0; i<im.ni(); ++i)
           for (unsigned plane=0; plane<im.nplanes(); ++plane)
             *reinterpret_cast<vxl_uint_32*>(file_row +
               i*pixel_byte_size + plane*4) =
-              static_cast<const vil2_image_view<vxl_uint_32>&>(im)(i,y,plane);
+              static_cast<const vil_image_view<vxl_uint_32>&>(im)(i,y,plane);
       } else
       {
-        vcl_cerr << "WARNING: vil2_tiff_image::put_view\n"
+        vcl_cerr << "WARNING: vil_tiff_image::put_view\n"
                  << "Can't deal with this pixel depth.\n";
         return false;
       }

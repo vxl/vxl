@@ -1,4 +1,4 @@
-// This is core/vil/vil_copy.cxx
+// This is core/vil1/vil1_copy.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -13,13 +13,13 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include "vil_copy.h"
+#include "vil1_copy.h"
 
 #include <vcl_cassert.h>
-#include <vil/vil_image.h>
-#include <vil/vil_memory_image.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_memory_image.h>
 
-void vil_copy(vil_image const& in, vil_image& out)
+void vil1_copy(vil1_image const& in, vil1_image& out)
 {
 #define assert_dimension_equal(dim) assert(in.dim() == out.dim())
   assert_dimension_equal(height);
@@ -38,24 +38,24 @@ void vil_copy(vil_image const& in, vil_image& out)
   // not just their product.  Hence the assert above.
   unsigned char* buf = new unsigned char[in.get_size_bytes()];
 #ifdef DEBUG
-  vcl_cerr << "...vil_copy() doing get_section()\n";
+  vcl_cerr << "...vil1_copy() doing get_section()\n";
 #endif
   in.get_section(buf, 0, 0, width, height);
 #ifdef DEBUG
-  vcl_cerr << "...vil_copy() doing put_section()\n";
+  vcl_cerr << "...vil1_copy() doing put_section()\n";
 #endif
   out.put_section(buf, 0, 0, width, height);
 #ifdef DEBUG
-  vcl_cerr << "...vil_copy() done\n";
+  vcl_cerr << "...vil1_copy() done\n";
 #endif
   delete[] buf;
 }
 
-vil_memory_image
-vil_copy(vil_image const& src)
+vil1_memory_image
+vil1_copy(vil1_image const& src)
 {
-  vil_memory_image dst( src.planes(), src.width(), src.height(), src.components(),
+  vil1_memory_image dst( src.planes(), src.width(), src.height(), src.components(),
                         src.bits_per_component(), src.component_format() );
-  vil_copy( src, dst );
+  vil1_copy( src, dst );
   return dst;
 }

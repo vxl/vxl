@@ -4,9 +4,9 @@
 // \author Ian Scott
 
 #include <vcl_iostream.h>
-#include <vil2/vil2_load.h>
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_print.h>
+#include <vil/vil_load.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_print.h>
 
 int main(int argc, char** argv)
 {
@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 
   // This is how we initialise an image data object.
 
-  vil2_image_resource_sptr data = vil2_load_image_resource(argv[1]);
+  vil_image_resource_sptr data = vil_load_image_resource(argv[1]);
 
   if (!data)
   {
@@ -31,9 +31,9 @@ int main(int argc, char** argv)
 
   // This is how we get some image pixels from it.
 
-  vil2_image_view<unsigned char> uc_view = data->get_view(0,data->ni(),0, data->nj());
+  vil_image_view<unsigned char> uc_view = data->get_view(0,data->ni(),0, data->nj());
 
-  vil2_print_all(vcl_cout,uc_view);
+  vil_print_all(vcl_cout,uc_view);
 
   return 0;
 }

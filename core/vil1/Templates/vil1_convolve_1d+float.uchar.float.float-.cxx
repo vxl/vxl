@@ -1,3 +1,3 @@
-#include <vil/vil_convolve_1d.txx>
+#include <vil1/vil1_convolve_1d.txx>
 
-VIL_CONVOLVE_1D_INSTANTIATE(float, unsigned char, float, float);
+VIL1_CONVOLVE_1D_INSTANTIATE(float, unsigned char, float, float);

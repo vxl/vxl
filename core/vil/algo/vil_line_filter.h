@@ -1,6 +1,6 @@
-// This is core/vil2/algo/vil2_line_filter.h
-#ifndef vil2_line_filter_h_
-#define vil2_line_filter_h_
+// This is core/vil/algo/vil_line_filter.h
+#ifndef vil_line_filter_h_
+#define vil_line_filter_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -9,7 +9,7 @@
 //  \brief Find line-like structures in a 2D image
 //  \author Tim Cootes
 
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 
 //: Find line-like structures in a 2D image
 //  Generates two images: line_str contains line strength at each pixel,
@@ -19,7 +19,7 @@
 //  0 = Undefined, 1 = horizontal, 2 = 45 degrees etc
 
 template<class Type>
-class vil2_line_filter
+class vil_line_filter
 {
  public:
   //: Find line like structures in image (light lines on dark backgrounds)
@@ -27,9 +27,9 @@ class vil2_line_filter
   //  line_dir contains value indicating direction [0,4]
   //  0 = Undefined, 1 = horizontal, 2 = 45 degrees etc
   //  This version looks for light lines on a dark background only.
-  void light_lines_3x3(vil2_image_view<vxl_byte>& line_dir,
-                       vil2_image_view<float>& line_str,
-                       const vil2_image_view<Type>& image,
+  void light_lines_3x3(vil_image_view<vxl_byte>& line_dir,
+                       vil_image_view<float>& line_str,
+                       const vil_image_view<Type>& image,
                        float edge_thresh=0.1);
 
   //: Find line like structures in image (dark lines on light backgrounds)
@@ -37,9 +37,9 @@ class vil2_line_filter
   //  line_dir contains value indicating direction [0,4]
   //  0 = Undefined, 1 = horizontal, 2 = 45 degrees etc
   //  This version looks for dark lines on a light background only.
-  void dark_lines_3x3(vil2_image_view<vxl_byte>& line_dir,
-                      vil2_image_view<float>& line_str,
-                      const vil2_image_view<Type>& image,
+  void dark_lines_3x3(vil_image_view<vxl_byte>& line_dir,
+                      vil_image_view<float>& line_str,
+                      const vil_image_view<Type>& image,
                       float edge_thresh=0.1);
 
   //: Find line like structures in image (light lines on dark backgrounds)
@@ -48,9 +48,9 @@ class vil2_line_filter
   //  0 = Undefined, 1 = horizontal, 2 = 45 degrees etc
   //  This version looks for light lines on a dark background only
   //  using a 5x5 filter
-  void light_lines_5x5(vil2_image_view<vxl_byte>& line_dir,
-                       vil2_image_view<float>& line_str,
-                       const vil2_image_view<Type>& image,
+  void light_lines_5x5(vil_image_view<vxl_byte>& line_dir,
+                       vil_image_view<float>& line_str,
+                       const vil_image_view<Type>& image,
                        float edge_thresh=0.1);
 
   //: Find line like structures in image (dark lines on light backgrounds)
@@ -59,9 +59,9 @@ class vil2_line_filter
   //  0 = Undefined, 1 = horizontal, 2 = 45 degrees etc
   //  This version looks for dark lines on a light background only
   //  using a 5x5 filter
-  void dark_lines_5x5(vil2_image_view<vxl_byte>& line_dir,
-                      vil2_image_view<float>& line_str,
-                      const vil2_image_view<Type>& image,
+  void dark_lines_5x5(vil_image_view<vxl_byte>& line_dir,
+                      vil_image_view<float>& line_str,
+                      const vil_image_view<Type>& image,
                       float edge_thresh=0.1);
 };
 

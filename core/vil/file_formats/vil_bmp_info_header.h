@@ -1,6 +1,6 @@
-// This is core/vil2/file_formats/vil2_bmp_info_header.h
-#ifndef vil2_bmp_info_header_h_
-#define vil2_bmp_info_header_h_
+// This is core/vil/file_formats/vil_bmp_info_header.h
+#ifndef vil_bmp_info_header_h_
+#define vil_bmp_info_header_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -8,10 +8,10 @@
 // \file
 // \author fsm
 
-class vil2_stream;
+class vil_stream;
 #include <vcl_iosfwd.h>
 
-struct vil2_bmp_info_header
+struct vil_bmp_info_header
 {
   enum { disk_size = 4+4+4+4+4+4 };  // this is what is *on disk*.
   unsigned compression; // 4
@@ -21,10 +21,10 @@ struct vil2_bmp_info_header
   unsigned colormapsize;// 4
   unsigned colorcount;  // 4
 
-  vil2_bmp_info_header();
-  void read(vil2_stream *);
-  void write(vil2_stream *) const;
+  vil_bmp_info_header();
+  void read(vil_stream *);
+  void write(vil_stream *) const;
   void print(vcl_ostream &) const;
 };
 
-#endif // vil2_bmp_info_header_h_
+#endif // vil_bmp_info_header_h_

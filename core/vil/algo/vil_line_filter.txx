@@ -1,13 +1,13 @@
-// This is core/vil2/algo/vil2_line_filter.txx
-#ifndef vil2_line_filter_txx_
-#define vil2_line_filter_txx_
+// This is core/vil/algo/vil_line_filter.txx
+#ifndef vil_line_filter_txx_
+#define vil_line_filter_txx_
 //:
 // \file
 // \brief Find line-like structures in a 2D image
 // \author Tim Cootes
 
-#include "vil2_line_filter.h"
-#include <vil2/vil2_fill.h>
+#include "vil_line_filter.h"
+#include <vil/vil_fill.h>
 #include <vcl_cassert.h>
 
 //: Find line like structures in image (light lines on dark backgrounds)
@@ -16,9 +16,9 @@
 //  0 = Undefined, 1 = horizontal, 2 = 45 degrees etc
 //  This version looks for light lines on a dark background only.
 template <class Type>
-void vil2_line_filter<Type>::light_lines_3x3(vil2_image_view<vxl_byte>& line_dir,
-                                             vil2_image_view<float>& line_str,
-                                             vil2_image_view<Type>const& image,
+void vil_line_filter<Type>::light_lines_3x3(vil_image_view<vxl_byte>& line_dir,
+                                             vil_image_view<float>& line_str,
+                                             vil_image_view<Type>const& image,
                                              float edge_thresh)
 {
   assert(image.nplanes()==1);
@@ -38,10 +38,10 @@ void vil2_line_filter<Type>::light_lines_3x3(vil2_image_view<vxl_byte>& line_dir
   float* s_data = line_str.top_left_ptr();
 
   // Cannot calculate line strength in borders
-  vil2_fill_line(d_data,ni,d_istep,vxl_byte(0));
-  vil2_fill_line(d_data+(nj-1)*d_jstep,ni,d_istep,vxl_byte(0));
-  vil2_fill_line(s_data,ni,s_istep,0.0f);
-  vil2_fill_line(s_data+(nj-1)*s_jstep,ni,s_istep,0.0f);
+  vil_fill_line(d_data,ni,d_istep,vxl_byte(0));
+  vil_fill_line(d_data+(nj-1)*d_jstep,ni,d_istep,vxl_byte(0));
+  vil_fill_line(s_data,ni,s_istep,0.0f);
+  vil_fill_line(s_data+(nj-1)*s_jstep,ni,s_istep,0.0f);
 
   d_data += d_jstep;
   s_data += s_jstep;
@@ -109,9 +109,9 @@ void vil2_line_filter<Type>::light_lines_3x3(vil2_image_view<vxl_byte>& line_dir
 //  line_dir contains value indicating direction [0,4]
 //  0 = Undefined, 1 = horizontal, 2 = 45 degrees etc
 template <class Type>
-void vil2_line_filter<Type>::dark_lines_3x3(vil2_image_view<vxl_byte>& line_dir,
-                                            vil2_image_view<float>& line_str,
-                                            vil2_image_view<Type>const& image,
+void vil_line_filter<Type>::dark_lines_3x3(vil_image_view<vxl_byte>& line_dir,
+                                            vil_image_view<float>& line_str,
+                                            vil_image_view<Type>const& image,
                                             float edge_thresh)
 {
   assert(image.nplanes()==1);
@@ -131,10 +131,10 @@ void vil2_line_filter<Type>::dark_lines_3x3(vil2_image_view<vxl_byte>& line_dir,
   float* s_data = line_str.top_left_ptr();
 
   // Cannot calculate line strength in borders
-  vil2_fill_line(d_data,ni,d_istep,vxl_byte(0));
-  vil2_fill_line(d_data+(nj-1)*d_jstep,ni,d_istep,vxl_byte(0));
-  vil2_fill_line(s_data,ni,s_istep,0.0f);
-  vil2_fill_line(s_data+(nj-1)*s_jstep,ni,s_istep,0.0f);
+  vil_fill_line(d_data,ni,d_istep,vxl_byte(0));
+  vil_fill_line(d_data+(nj-1)*d_jstep,ni,d_istep,vxl_byte(0));
+  vil_fill_line(s_data,ni,s_istep,0.0f);
+  vil_fill_line(s_data+(nj-1)*s_jstep,ni,s_istep,0.0f);
 
   d_data += d_jstep;
   s_data += s_jstep;
@@ -203,9 +203,9 @@ void vil2_line_filter<Type>::dark_lines_3x3(vil2_image_view<vxl_byte>& line_dir,
 //  0 = Undefined, 1 = horizontal, 2 = 45 degrees etc
 //  This version looks for light lines on a dark background only.
 template <class Type>
-void vil2_line_filter<Type>::light_lines_5x5(vil2_image_view<vxl_byte>& line_dir,
-                                             vil2_image_view<float>& line_str,
-                                             vil2_image_view<Type>const& image,
+void vil_line_filter<Type>::light_lines_5x5(vil_image_view<vxl_byte>& line_dir,
+                                             vil_image_view<float>& line_str,
+                                             vil_image_view<Type>const& image,
                                              float edge_thresh)
 {
   assert(image.nplanes()==1);
@@ -225,14 +225,14 @@ void vil2_line_filter<Type>::light_lines_5x5(vil2_image_view<vxl_byte>& line_dir
   float* s_data = line_str.top_left_ptr();
 
   // Cannot calculate line strength in borders
-  vil2_fill_line(d_data,ni,d_istep,vxl_byte(0));
-  vil2_fill_line(d_data+d_jstep,ni,d_istep,vxl_byte(0));
-  vil2_fill_line(d_data+(nj-1)*d_jstep,ni,d_istep,vxl_byte(0));
-  vil2_fill_line(d_data+(nj-2)*d_jstep,ni,d_istep,vxl_byte(0));
-  vil2_fill_line(s_data,ni,s_istep,0.0f);
-  vil2_fill_line(s_data+s_jstep,ni,s_istep,0.0f);
-  vil2_fill_line(s_data+(nj-1)*s_jstep,ni,s_istep,0.0f);
-  vil2_fill_line(s_data+(nj-2)*s_jstep,ni,s_istep,0.0f);
+  vil_fill_line(d_data,ni,d_istep,vxl_byte(0));
+  vil_fill_line(d_data+d_jstep,ni,d_istep,vxl_byte(0));
+  vil_fill_line(d_data+(nj-1)*d_jstep,ni,d_istep,vxl_byte(0));
+  vil_fill_line(d_data+(nj-2)*d_jstep,ni,d_istep,vxl_byte(0));
+  vil_fill_line(s_data,ni,s_istep,0.0f);
+  vil_fill_line(s_data+s_jstep,ni,s_istep,0.0f);
+  vil_fill_line(s_data+(nj-1)*s_jstep,ni,s_istep,0.0f);
+  vil_fill_line(s_data+(nj-2)*s_jstep,ni,s_istep,0.0f);
 
   d_data += 2*d_jstep;
   s_data += 2*s_jstep;
@@ -311,9 +311,9 @@ void vil2_line_filter<Type>::light_lines_5x5(vil2_image_view<vxl_byte>& line_dir
 
 //: Find line like structures in image (dark lines on light backgrounds)
 template <class Type>
-void vil2_line_filter<Type>::dark_lines_5x5(vil2_image_view<vxl_byte>& line_dir,
-                                            vil2_image_view<float>& line_str,
-                                            vil2_image_view<Type>const& image,
+void vil_line_filter<Type>::dark_lines_5x5(vil_image_view<vxl_byte>& line_dir,
+                                            vil_image_view<float>& line_str,
+                                            vil_image_view<Type>const& image,
                                             float edge_thresh)
 {
   assert(image.nplanes()==1);
@@ -333,14 +333,14 @@ void vil2_line_filter<Type>::dark_lines_5x5(vil2_image_view<vxl_byte>& line_dir,
   float* s_data = line_str.top_left_ptr();
 
   // Cannot calculate line strength in borders
-  vil2_fill_line(d_data,ni,d_istep,vxl_byte(0));
-  vil2_fill_line(d_data+d_jstep,ni,d_istep,vxl_byte(0));
-  vil2_fill_line(d_data+(nj-1)*d_jstep,ni,d_istep,vxl_byte(0));
-  vil2_fill_line(d_data+(nj-2)*d_jstep,ni,d_istep,vxl_byte(0));
-  vil2_fill_line(s_data,ni,s_istep,0.0f);
-  vil2_fill_line(s_data+s_jstep,ni,s_istep,0.0f);
-  vil2_fill_line(s_data+(nj-1)*s_jstep,ni,s_istep,0.0f);
-  vil2_fill_line(s_data+(nj-2)*s_jstep,ni,s_istep,0.0f);
+  vil_fill_line(d_data,ni,d_istep,vxl_byte(0));
+  vil_fill_line(d_data+d_jstep,ni,d_istep,vxl_byte(0));
+  vil_fill_line(d_data+(nj-1)*d_jstep,ni,d_istep,vxl_byte(0));
+  vil_fill_line(d_data+(nj-2)*d_jstep,ni,d_istep,vxl_byte(0));
+  vil_fill_line(s_data,ni,s_istep,0.0f);
+  vil_fill_line(s_data+s_jstep,ni,s_istep,0.0f);
+  vil_fill_line(s_data+(nj-1)*s_jstep,ni,s_istep,0.0f);
+  vil_fill_line(s_data+(nj-2)*s_jstep,ni,s_istep,0.0f);
 
   d_data += 2*d_jstep;
   s_data += 2*s_jstep;
@@ -418,8 +418,8 @@ void vil2_line_filter<Type>::dark_lines_5x5(vil2_image_view<vxl_byte>& line_dir,
 }
 
 
-#undef VIL2_LINE_FILTER_INSTANTIATE
-#define VIL2_LINE_FILTER_INSTANTIATE(T) \
- template class vil2_line_filter<T >
+#undef VIL_LINE_FILTER_INSTANTIATE
+#define VIL_LINE_FILTER_INSTANTIATE(T) \
+ template class vil_line_filter<T >
 
 #endif

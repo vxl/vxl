@@ -1,18 +1,18 @@
-// This is core/vil2/algo/vil2_suppress_non_max.h
-#ifndef vil2_suppress_non_max_h_
-#define vil2_suppress_non_max_h_
+// This is core/vil/algo/vil_suppress_non_max.h
+#ifndef vil_suppress_non_max_h_
+#define vil_suppress_non_max_h_
 //:
 // \file
 // \brief Suppress all non-maximal points in image
 // \author Tim Cootes
 
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_fill.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_fill.h>
 #include <vcl_cassert.h>
 
 //: True if pixel at *im is strictly above 8 neighbours
 template <class T>
-inline bool vil2_is_peak_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
+inline bool vil_is_peak_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
 {
   T v = *im;
   if (v<=im[i_step]) return false;
@@ -40,8 +40,8 @@ inline bool vil2_is_peak_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_
 //  suppressed.  This can cause some peaks to be missed.  The effect
 //  can be reduced by using float images and pre-smoothing slightly.
 template <class T>
-inline void vil2_suppress_non_max_3x3(const vil2_image_view<T>& src_im,
-                                      vil2_image_view<T>& dest_im,
+inline void vil_suppress_non_max_3x3(const vil_image_view<T>& src_im,
+                                      vil_image_view<T>& dest_im,
                                       T threshold=0, T non_max_value=0)
 {
   unsigned ni=src_im.ni(),nj=src_im.nj();
@@ -59,7 +59,7 @@ inline void vil2_suppress_non_max_3x3(const vil2_image_view<T>& src_im,
     T* dpixel = drow;
     for (unsigned i=1;i<ni-1;++i,pixel+=istep,dpixel+=distep)
     {
-      if (*pixel<threshold || !vil2_is_peak_3x3(pixel,istep,jstep))
+      if (*pixel<threshold || !vil_is_peak_3x3(pixel,istep,jstep))
         *dpixel = non_max_value;
       else
         *dpixel = *pixel;
@@ -67,10 +67,10 @@ inline void vil2_suppress_non_max_3x3(const vil2_image_view<T>& src_im,
   }
 
   // Border pixels assumed not to be local maxima
-  vil2_fill_row(dest_im,0,non_max_value);
-  vil2_fill_row(dest_im,nj-1,non_max_value);
-  vil2_fill_col(dest_im,0,non_max_value);
-  vil2_fill_col(dest_im,ni-1,non_max_value);
+  vil_fill_row(dest_im,0,non_max_value);
+  vil_fill_row(dest_im,nj-1,non_max_value);
+  vil_fill_col(dest_im,0,non_max_value);
+  vil_fill_col(dest_im,ni-1,non_max_value);
 }
 
-#endif // vil2_suppress_non_max_h_
+#endif // vil_suppress_non_max_h_

@@ -1,4 +1,4 @@
-// This is core/vil/vil_colour_space.cxx
+// This is core/vil1/vil1_colour_space.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,13 +6,13 @@
 // \file
 // \author fsm
 
-#include "vil_colour_space.h"
+#include "vil1_colour_space.h"
 #include <vcl_cstdlib.h>
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h>
 
 template <class T>
-void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3])
+void vil1_colour_space_RGB_to_YIQ(T const in[3], T out[3])
 {
   out[0] = T(0.299) * in[0] + T(0.587) * in[1] + T(0.114) * in[2];
   out[1] = T(0.596) * in[0] - T(0.275) * in[1] - T(0.321) * in[2];
@@ -30,7 +30,7 @@ void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3])
 // \endverbatim
 
 template <class T>
-void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v)
+void vil1_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v)
 {
   T max = vcl_max(r, vcl_max(g, b));
   T min = vcl_min(r, vcl_min(g, b));
@@ -65,7 +65,7 @@ void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v)
 }
 
 template <class T>
-void vil_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b)
+void vil1_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b)
 {
   T p1, p2, p3, f, nr=0, ng=0, nb=0;
   T xh;
@@ -133,8 +133,8 @@ void vil_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b)
 //----------------------------------------------------------------------
 
 #define inst(T) \
-template void vil_colour_space_RGB_to_YIQ(T const [3], T [3]); \
-template void vil_colour_space_RGB_to_HSV(T, T, T, T *, T *, T *); \
-template void vil_colour_space_HSV_to_RGB(T, T, T, T *, T *, T *)
+template void vil1_colour_space_RGB_to_YIQ(T const [3], T [3]); \
+template void vil1_colour_space_RGB_to_HSV(T, T, T, T *, T *, T *); \
+template void vil1_colour_space_HSV_to_RGB(T, T, T, T *, T *, T *)
 
 inst(double);

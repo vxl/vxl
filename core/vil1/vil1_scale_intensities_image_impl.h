@@ -1,20 +1,20 @@
-// This is core/vil/vil_scale_intensities_image_impl.h
-#ifndef vil_scale_intensities_image_impl_h_
-#define vil_scale_intensities_image_impl_h_
+// This is core/vil1/vil1_scale_intensities_image_impl.h
+#ifndef vil1_scale_intensities_image_impl_h_
+#define vil1_scale_intensities_image_impl_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
 // \file
 
-#include <vil/vil_image_impl.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image_impl.h>
+#include <vil1/vil1_image.h>
 #include <vcl_string.h>
 
-class vil_scale_intensities_image_impl : public vil_image_impl
+class vil1_scale_intensities_image_impl : public vil1_image_impl
 {
  public:
-  vil_scale_intensities_image_impl(vil_image const& src, double scale, double shift) :
+  vil1_scale_intensities_image_impl(vil1_image const& src, double scale, double shift) :
     base(src), scale_(scale), shift_(shift) { }
 
   int planes() const { return base.planes(); }
@@ -22,9 +22,9 @@ class vil_scale_intensities_image_impl : public vil_image_impl
   int height() const { return base.height(); }
   int components() const { return base.components(); }
   int bits_per_component() const { return base.bits_per_component(); }
-  vil_component_format component_format() const { return base.component_format(); }
+  vil1_component_format component_format() const { return base.component_format(); }
 
-  vil_image get_plane(int ) const;
+  vil1_image get_plane(int ) const;
 
   bool get_section(void *buf, int x0, int y0, int w, int h) const;
   bool put_section(void const *buf, int x0, int y0, int w, int h);
@@ -41,9 +41,9 @@ class vil_scale_intensities_image_impl : public vil_image_impl
 /* END_MANCHESTER_BINARY_IO_CODE */
 
  private:
-  vil_image base;
+  vil1_image base;
   double scale_;
   double shift_;
 };
 
-#endif // vil_scale_intensities_image_impl_h_
+#endif // vil1_scale_intensities_image_impl_h_

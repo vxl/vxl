@@ -1,5 +1,5 @@
-// This is core/vil2/algo/vil2_gauss_filter.cxx
-#include "vil2_gauss_filter.h"
+// This is core/vil/algo/vil_gauss_filter.cxx
+#include "vil_gauss_filter.h"
 //:
 // \file
 // \brief Functions to smooth an image
@@ -8,7 +8,7 @@
 #include <vcl_cassert.h>
 #include <vnl/vnl_gamma.h> // for vnl_erf()
 
-vil2_gauss_filter_5tap_params::vil2_gauss_filter_5tap_params(double sigma)
+vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double sigma)
 {
   sigma_ = sigma;
   const double z = 1/(vcl_sqrt(2.0)*sigma);

@@ -1,12 +1,12 @@
-// This is core/vil/vil_open.h
-#ifndef vil_open_h_
-#define vil_open_h_
+// This is core/vil1/vil1_open.h
+#ifndef vil1_open_h_
+#define vil1_open_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
 // \file
-// \brief make a vil_stream from a filename, an URL, etc.
+// \brief make a vil1_stream from a filename, an URL, etc.
 //
 // \author fsm
 //
@@ -14,8 +14,8 @@
 //  Modifications
 //\endverbatim
 
-#include <vil/vil_stream.h>
+#include <vil1/vil1_stream.h>
 
-vil_stream *vil_open(char const* what, char const* how = "r");
+vil1_stream *vil1_open(char const* what, char const* how = "r");
 
-#endif // vil_open_h_
+#endif // vil1_open_h_

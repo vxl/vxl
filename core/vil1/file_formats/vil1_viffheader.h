@@ -1,5 +1,5 @@
-#ifndef vil_viffheader_h_
-#define vil_viffheader_h_
+#ifndef vil1_viffheader_h_
+#define vil1_viffheader_h_
 /*
  *----------------------------------------------------------------------
  *
@@ -113,7 +113,7 @@
 
 /* image structure definition */
 
-struct vil_viff_xvimage {
+struct vil1_viff_xvimage {
 
 /*  Administrative or file management information */
 
@@ -394,4 +394,4 @@ examples of proper use.  */
 #define number_of_rows col_size
 #define number_of_cols row_size
 
-#endif /* vil_viffheader_h_ */
+#endif /* vil1_viffheader_h_ */

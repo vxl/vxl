@@ -1,15 +1,15 @@
-// This is core/vil2/tests/test_algo_line_filter.cxx
+// This is core/vil/tests/test_algo_line_filter.cxx
 #include <vcl_iostream.h>
-#include <vil2/algo/vil2_line_filter.h>
-#include <vil2/vil2_image_view.h>
+#include <vil/algo/vil_line_filter.h>
+#include <vil/vil_image_view.h>
 #include <testlib/testlib_test.h>
 
 static unsigned char black = 0, white = 10;
 
 static void print_out(unsigned int n,
-                      const char* s1, vil2_image_view<unsigned char> a,
-                      const char* s2, vil2_image_view<unsigned char> b,
-                      const char* s3, vil2_image_view<float> c)
+                      const char* s1, vil_image_view<unsigned char> a,
+                      const char* s2, vil_image_view<unsigned char> b,
+                      const char* s3, vil_image_view<float> c)
 {
   vcl_cout << '\n';
   vcl_cout.width(n+5); vcl_cout << s1;
@@ -34,19 +34,19 @@ static void print_out(unsigned int n,
 void test_line_filter_byte()
 {
   vcl_cout << "*********************************\n"
-           << " Testing vil2_line_filter (byte)\n"
+           << " Testing vil_line_filter (byte)\n"
            << "*********************************\n";
 
-  vil2_line_filter<unsigned char> filter;
+  vil_line_filter<unsigned char> filter;
 
   // Create test image
   unsigned int n = 10;
-  vil2_image_view<unsigned char> image(n,n);
+  vil_image_view<unsigned char> image(n,n);
   image.fill(black);
   for (unsigned int i=0;i<n;++i) image(i,5)= white;
 
-  vil2_image_view<unsigned char> line_dir;
-  vil2_image_view<float> line_str;
+  vil_image_view<unsigned char> line_dir;
+  vil_image_view<float> line_str;
 
   vcl_cout<<"----- light_lines_3x3() -------\n";
 

@@ -1,4 +1,4 @@
-// This is core/vil/vil_resample.cxx
+// This is core/vil1/vil1_resample.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,13 +6,13 @@
 // \file
 // \author fsm
 
-#include "vil_resample.h"
-#include <vil/vil_resample_image_impl.h>
+#include "vil1_resample.h"
+#include <vil1/vil1_resample_image_impl.h>
 
-vil_image vil_resample(vil_image const &image, int new_width, int new_height)
+vil1_image vil1_resample(vil1_image const &image, int new_width, int new_height)
 {
   if (image && new_width>0 && new_height>0)
-    return vil_image(new vil_resample_image_impl(image, new_width, new_height));
+    return vil1_image(new vil1_resample_image_impl(image, new_width, new_height));
   else
-    return vil_image();
+    return vil1_image();
 }

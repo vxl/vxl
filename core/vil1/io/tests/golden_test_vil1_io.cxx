@@ -1,4 +1,4 @@
-// This is core/vil/io/tests/golden_test_vil_io.cxx
+// This is core/vil1/io/tests/golden_test_vil1_io.cxx
 
 //:
 // \file
@@ -15,24 +15,24 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vsl/vsl_binary_io.h>
-#include <vil/vil_memory_image_of_format.txx>
-#include <vil/vil_memory_image_impl.h>
-#include <vil/io/vil_io_image.h>
-#include <vil/io/vil_io_image_impl.h>
-#include <vil/io/vil_io_memory_image.h>
-#include <vil/io/vil_io_memory_image_format.h>
-#include <vil/io/vil_io_memory_image_impl.h>
-#include <vil/io/vil_io_memory_image_of.h>
-#include <vil/io/vil_io_rgb.h>
-#include <vil/io/vil_io_rgba.h>
+#include <vil1/vil1_memory_image_of_format.txx>
+#include <vil1/vil1_memory_image_impl.h>
+#include <vil1/io/vil1_io_image.h>
+#include <vil1/io/vil1_io_image_impl.h>
+#include <vil1/io/vil1_io_memory_image.h>
+#include <vil1/io/vil1_io_memory_image_format.h>
+#include <vil1/io/vil1_io_memory_image_impl.h>
+#include <vil1/io/vil1_io_memory_image_of.h>
+#include <vil1/io/vil1_io_rgb.h>
+#include <vil1/io/vil1_io_rgba.h>
 
 #include <testlib/testlib_root_dir.h>
 #include <testlib/testlib_test.h>
 
-void golden_test_vil_io(bool save_file=false);
+void golden_test_vil1_io(bool save_file=false);
 
 
-MAIN( golden_test_vil_io )
+MAIN( golden_test_vil1_io )
 {
   bool save_file=false;
 
@@ -43,12 +43,12 @@ MAIN( golden_test_vil_io )
     if (conf==ref)
       save_file =true;
   }
-  golden_test_vil_io(save_file);
+  golden_test_vil1_io(save_file);
   SUMMARY();
 }
 
 
-void golden_test_vil_io(bool save_file)
+void golden_test_vil1_io(bool save_file)
 {
   vcl_cout << "*********************************************************\n"
            << "Testing a golden data file for cross platform consistency\n"
@@ -62,11 +62,11 @@ void golden_test_vil_io(bool save_file)
   // read in.
   //----------------------------------------------------------------------
 
-  // vil_memory_image_of
+  // vil1_memory_image_of
   int height = 9;
   int width = 11; // on purpose not equal to height
   int planes = 1;
-  vil_memory_image_of<int> p_out_memory_image_of(width,height),
+  vil1_memory_image_of<int> p_out_memory_image_of(width,height),
                            p_in_memory_image_of(1,1);
 
   int val = 0;
@@ -74,42 +74,42 @@ void golden_test_vil_io(bool save_file)
     for (int j=0;j<height;j++)
       p_out_memory_image_of(i,j) = val++;
 
-    // vil_memory_image_impl
-    vil_memory_image_of_format<int> memory_image_of_format;
-    vil_memory_image_impl p_out_memory_image_impl(planes,width,height,
+    // vil1_memory_image_impl
+    vil1_memory_image_of_format<int> memory_image_of_format;
+    vil1_memory_image_impl p_out_memory_image_impl(planes,width,height,
                                                   memory_image_of_format.components,
                                                   memory_image_of_format.bits_per_component,
                                                   memory_image_of_format.component_format);
     p_out_memory_image_impl.put_section(p_out_memory_image_of.get_buffer(),
                                         0, 0, width, height);
-    vil_memory_image_of_format<double> format2;
-    vil_memory_image_impl p_in_memory_image_impl(0,0,0,
+    vil1_memory_image_of_format<double> format2;
+    vil1_memory_image_impl p_in_memory_image_impl(0,0,0,
                                                  format2.components,
                                                  format2.bits_per_component,
                                                  format2.component_format);
 
 
-    // vil_memory_image_format
-    vil_memory_image_format p_out_memory_image_format, p_in_memory_image_format;
+    // vil1_memory_image_format
+    vil1_memory_image_format p_out_memory_image_format, p_in_memory_image_format;
     p_out_memory_image_format.components=2;
     p_out_memory_image_format.bits_per_component=32;
-    p_out_memory_image_format.component_format=VIL_COMPONENT_FORMAT_IEEE_FLOAT;
+    p_out_memory_image_format.component_format=VIL1_COMPONENT_FORMAT_IEEE_FLOAT;
 
 
-    // vil_rgb
-    vil_rgb<double> p_out_rgb(1.2,3.4,5.6), p_in_rgb;
+    // vil1_rgb
+    vil1_rgb<double> p_out_rgb(1.2,3.4,5.6), p_in_rgb;
 
 
-    // vil_rgba
-    vil_rgba<double> p_out_rgba(1.2,3.4,5.6,7.8), p_in_rgba;
+    // vil1_rgba
+    vil1_rgba<double> p_out_rgba(1.2,3.4,5.6,7.8), p_in_rgba;
 
 
-    vsl_add_to_binary_loader(vil_io_memory_image_impl());
+    vsl_add_to_binary_loader(vil1_io_memory_image_impl());
 
     // Save if option set
     if (save_file)
     {
-      vsl_b_ofstream bfs_out("golden_test_vil_io.bvl.new");
+      vsl_b_ofstream bfs_out("golden_test_vil1_io.bvl.new");
       if (!bfs_out)
       {
         vcl_cerr<<"Problems opening file for output\n";
@@ -124,7 +124,7 @@ void golden_test_vil_io(bool save_file)
     }
 
     // Read in file to each class in turn
-    vcl_string gold_path=testlib_root_dir()+"/core/vil/io/tests/golden_test_vil_io.bvl";
+    vcl_string gold_path=testlib_root_dir()+"/core/vil1/io/tests/golden_test_vil1_io.bvl";
     vsl_b_ifstream bfs_in(gold_path.c_str());
     vsl_b_read(bfs_in, p_in_memory_image_of);
     vsl_b_read(bfs_in, p_in_memory_image_impl);

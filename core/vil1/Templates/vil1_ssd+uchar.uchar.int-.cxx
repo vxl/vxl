@@ -1,6 +1,6 @@
-#include <vil/vil_ssd.h>
-#include <vil/vil_ssd.txx>
+#include <vil1/vil1_ssd.h>
+#include <vil1/vil1_ssd.txx>
 
 typedef unsigned char byte;
 
-VIL_SSD_INSTANTIATE(byte, byte, int);
+VIL1_SSD_INSTANTIATE(byte, byte, int);

@@ -1,2 +1,2 @@
-#include <vil2/vil2_bicub_interp.txx>
-VIL2_BICUB_INTERP_INSTANTIATE(float);
+#include <vil/vil_bicub_interp.txx>
+VIL_BICUB_INTERP_INSTANTIATE(float);

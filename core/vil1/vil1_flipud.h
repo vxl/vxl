@@ -1,6 +1,6 @@
-// This is core/vil/vil_flipud.h
-#ifndef vil_flipud_h_
-#define vil_flipud_h_
+// This is core/vil1/vil1_flipud.h
+#ifndef vil1_flipud_h_
+#define vil1_flipud_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -9,9 +9,9 @@
 // \brief Turn an image upside-down.
 // \author fsm
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 //: Turn an image upside-down
-vil_image vil_flipud(vil_image const &);
+vil1_image vil1_flipud(vil1_image const &);
 
-#endif // vil_flipud_h_
+#endif // vil1_flipud_h_

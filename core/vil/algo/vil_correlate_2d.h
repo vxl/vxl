@@ -1,6 +1,6 @@
-// This is core/vil2/algo/vil2_correlate_2d.h
-#ifndef vil2_correlate_2d_h_
-#define vil2_correlate_2d_h_
+// This is core/vil/algo/vil_correlate_2d.h
+#ifndef vil_correlate_2d_h_
+#define vil_correlate_2d_h_
 //:
 //  \file
 //  \brief 2D Convolution
@@ -8,14 +8,14 @@
 
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 
 //: Evaluate dot product between kernel and src_im
 // Returns  sum_ijp src_im[i*istep+j*jstep+p*pstep]*kernel(i,j,p)
 template <class srcT, class kernelT, class accumT>
-inline accumT vil2_correlate_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
+inline accumT vil_correlate_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
                                       vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_pstep,
-                                      const vil2_image_view<kernelT>& kernel,
+                                      const vil_image_view<kernelT>& kernel,
                                       accumT)
 {
   unsigned ni = kernel.ni();
@@ -48,11 +48,11 @@ inline accumT vil2_correlate_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
 // dest is resized to (1+src_im.ni()-kernel.ni())x(1+src_im.nj()-kernel.nj())
 // (a one plane image).
 // On exit dest(x,y) = sum_ij src_im(x+i,y+j)*kernel(i,j)
-// \relates vil2_image_view
+// \relates vil_image_view
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil2_correlate_2d(const vil2_image_view<srcT>& src_im,
-                              vil2_image_view<destT>& dest_im,
-                              const vil2_image_view<kernelT>& kernel,
+inline void vil_correlate_2d(const vil_image_view<srcT>& src_im,
+                              vil_image_view<destT>& dest_im,
+                              const vil_image_view<kernelT>& kernel,
                               accumT ac)
 {
   int ni = 1+src_im.ni()-kernel.ni(); assert(ni >= 0);
@@ -72,9 +72,9 @@ inline void vil2_correlate_2d(const vil2_image_view<srcT>& src_im,
     const srcT* sp = src_row;
     destT* dp = dest_row;
     for (int i=0;i<ni;++i, sp += s_istep, dp += d_istep)
-      *dp = (destT)vil2_correlate_2d_at_pt(sp,s_istep,s_jstep,s_pstep,kernel,ac);
+      *dp = (destT)vil_correlate_2d_at_pt(sp,s_istep,s_jstep,s_pstep,kernel,ac);
       // Correlate at src(i,j)
   }
 }
 
-#endif // vil2_correlate_2d_h_
+#endif // vil_correlate_2d_h_

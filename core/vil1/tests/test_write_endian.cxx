@@ -4,8 +4,8 @@
 #include <vpl/vpl.h>
 #include <vul/vul_temp_filename.h>
 
-#include <vil/vil_16bit.h>
-#include <vil/vil_stream_fstream.h>
+#include <vil1/vil1_16bit.h>
+#include <vil1/vil1_stream_fstream.h>
 
 #include <testlib/testlib_test.h>
 
@@ -15,10 +15,10 @@ MAIN( test_write_endian )
 
   vcl_string tmp_nam = vul_temp_filename() + ".bin";
   char const *file = tmp_nam!="" ? tmp_nam.c_str() : "smoo.bin";
-  vil_stream *s = 0;
+  vil1_stream *s = 0;
 
   // write bytes
-  s = new vil_stream_fstream(file, "w");
+  s = new vil1_stream_fstream(file, "w");
   s->ref();
 #ifdef LEAVE_IMAGES_BEHIND
   vpl_chmod(file, 0666); // -rw-rw-rw-
@@ -27,13 +27,13 @@ MAIN( test_write_endian )
   // the bytes written should be 0x02 0x01 0x03 0x04, in that
   // order, on all architectures.
   s->seek(0);
-  vil_16bit_write_little_endian(s, 0x0102);
-  vil_16bit_write_big_endian   (s, 0x0304);
+  vil1_16bit_write_little_endian(s, 0x0102);
+  vil1_16bit_write_big_endian   (s, 0x0304);
 
   s->unref();
 
   // read them again.
-  s = new vil_stream_fstream(file, "r");
+  s = new vil1_stream_fstream(file, "r");
   s->ref();
 
   s->seek(0);

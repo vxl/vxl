@@ -1,31 +1,31 @@
-// This is core/vil2/io/vil2_io_memory_chunk.h
-#ifndef vil2_io_memory_chunk_h_
-#define vil2_io_memory_chunk_h_
+// This is core/vil/io/vil_io_memory_chunk.h
+#ifndef vil_io_memory_chunk_h_
+#define vil_io_memory_chunk_h_
 //:
 // \file
 // \author Tim Cootes
 
-#include <vil2/vil2_memory_chunk.h>
+#include <vil/vil_memory_chunk.h>
 #include <vsl/vsl_binary_io.h>
-#include <vil2/io/vil2_io_smart_ptr.h> // for vsl_b_read(is, vil2_memory_chunk_sptr)
+#include <vil/io/vil_io_smart_ptr.h> // for vsl_b_read(is, vil_memory_chunk_sptr)
 
-//: Binary save vil2_memory_chunk to stream.
-void vsl_b_write(vsl_b_ostream &os, const vil2_memory_chunk& chunk);
+//: Binary save vil_memory_chunk to stream.
+void vsl_b_write(vsl_b_ostream &os, const vil_memory_chunk& chunk);
 
-//: Binary load vil2_memory_chunk from stream.
-void vsl_b_read(vsl_b_istream &is, vil2_memory_chunk& chunk);
+//: Binary load vil_memory_chunk from stream.
+void vsl_b_read(vsl_b_istream &is, vil_memory_chunk& chunk);
 
-//: Binary save vil2_memory_chunk to stream  by pointer
-void vsl_b_write(vsl_b_ostream &os, const vil2_memory_chunk* chunk);
+//: Binary save vil_memory_chunk to stream  by pointer
+void vsl_b_write(vsl_b_ostream &os, const vil_memory_chunk* chunk);
 
-//: Binary load vil2_memory_chunk from stream  onto the heap
-void vsl_b_read(vsl_b_istream &is, vil2_memory_chunk*& chunk);
+//: Binary load vil_memory_chunk from stream  onto the heap
+void vsl_b_read(vsl_b_istream &is, vil_memory_chunk*& chunk);
 
-//: Print human readable summary of a vil2_memory_chunk object to a stream
-void vsl_print_summary(vcl_ostream& os,const vil2_memory_chunk& chunk);
+//: Print human readable summary of a vil_memory_chunk object to a stream
+void vsl_print_summary(vcl_ostream& os,const vil_memory_chunk& chunk);
 
-//: Print human readable summary of a vil2_memory_chunk object to a stream
-inline void vsl_print_summary(vcl_ostream& os,const vil2_memory_chunk* chunk) {
+//: Print human readable summary of a vil_memory_chunk object to a stream
+inline void vsl_print_summary(vcl_ostream& os,const vil_memory_chunk* chunk) {
   vsl_print_summary(os, *chunk); }
 
 

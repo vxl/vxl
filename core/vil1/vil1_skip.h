@@ -1,6 +1,6 @@
-// This is core/vil/vil_skip.h
-#ifndef vil_skip_h_
-#define vil_skip_h_
+// This is core/vil1/vil1_skip.h
+#ifndef vil1_skip_h_
+#define vil1_skip_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -9,8 +9,8 @@
 // \brief a function
 // \author fsm
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
-vil_image vil_skip(vil_image const &, unsigned, unsigned);
+vil1_image vil1_skip(vil1_image const &, unsigned, unsigned);
 
-#endif // vil_skip_h_
+#endif // vil1_skip_h_

@@ -8,8 +8,8 @@
 #include <vpl/vpl.h>
 #include <vul/vul_temp_filename.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_image.h>
 
 #include <testlib/testlib_test.h>
 
@@ -30,10 +30,10 @@ static void test(char const* magic, int comps, int bits, int maxval)
       for (int i=0; i<24; ++i) f << 5+7*i+9*i*i << '\n';
   }
 
-  vil_image i = vil_load(file);
+  vil1_image i = vil1_load(file);
 
   if (i) {
-    vcl_cout << "test vil_load: size " << i.width() << "x" << i.height() << ", "
+    vcl_cout << "test vil1_load: size " << i.width() << "x" << i.height() << ", "
              << i.components() << " component(s)" << ", "
              << i.bits_per_component() << " bits\n";
 
@@ -71,13 +71,13 @@ static void test(char const* magic, int comps, int bits, int maxval)
 
 MAIN( test_load )
 {
-  START( "vil_load" )
+  START( "vil1_load" )
   test("P1", 1,  1, 1);
   test("P2", 1,  8, 255);
   test("P2", 1, 16, 65535);
   test("P2", 1, 32, 16777216);
   test("P3", 3,  8, 255);
-#if 0 // These give a bus error on some platforms when vil_image i is destructed
+#if 0 // These give a bus error on some platforms when vil1_image i is destructed
   test("P3", 3, 16, 65535);
   test("P3", 3, 32, 16777216);
 #endif

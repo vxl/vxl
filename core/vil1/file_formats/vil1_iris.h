@@ -1,6 +1,6 @@
-// This is core/vil/file_formats/vil_iris.h
-#ifndef vil_iris_file_format_h_
-#define vil_iris_file_format_h_
+// This is core/vil1/file_formats/vil1_iris.h
+#ifndef vil1_iris_file_format_h_
+#define vil1_iris_file_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -16,25 +16,25 @@
 //  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
 //\endverbatim
 
-#include <vil/vil_file_format.h>
-#include <vil/vil_image_impl.h>
+#include <vil1/vil1_file_format.h>
+#include <vil1/vil1_image_impl.h>
 
 //: Loader for RGB files (sgi iris)
-class vil_iris_file_format : public vil_file_format
+class vil1_iris_file_format : public vil1_file_format
 {
  public:
   virtual char const* tag() const;
-  virtual vil_image_impl* make_input_image(vil_stream* vs);
-  virtual vil_image_impl* make_output_image(vil_stream* vs, int planes,
+  virtual vil1_image_impl* make_input_image(vil1_stream* vs);
+  virtual vil1_image_impl* make_output_image(vil1_stream* vs, int planes,
                                             int width,
                                             int height,
                                             int components,
                                             int bits_per_component,
-                                            vil_component_format format);
+                                            vil1_component_format format);
 };
 
 //: Generic image implementation for RGB files
-class vil_iris_generic_image : public vil_image_impl
+class vil1_iris_generic_image : public vil1_image_impl
 {
   unsigned long *starttab_;
   unsigned long *lengthtab_;
@@ -42,17 +42,17 @@ class vil_iris_generic_image : public vil_image_impl
   bool read_header();
   bool write_header();
 
-  friend class vil_iris_file_format;
+  friend class vil1_iris_file_format;
  public:
 
-  vil_iris_generic_image(vil_stream* is, char* imagename = "");
-  vil_iris_generic_image(vil_stream* is, int planes,
+  vil1_iris_generic_image(vil1_stream* is, char* imagename = "");
+  vil1_iris_generic_image(vil1_stream* is, int planes,
                                                int width,
                                                int height,
                                                int components,
                                                int bits_per_component,
-                                               vil_component_format format);
-  ~vil_iris_generic_image();
+                                               vil1_component_format format);
+  ~vil1_iris_generic_image();
 
   //: Dimensions.  Planes x W x H x Components
   virtual int planes() const { return planes_; }
@@ -63,9 +63,9 @@ class vil_iris_generic_image : public vil_image_impl
   virtual int bits_per_component() const { return bytes_per_component_ * 8; }
   virtual int bytes_per_pixel() const { return bytes_per_component_ * planes_; };
 
-  virtual enum vil_component_format component_format() const { return VIL_COMPONENT_FORMAT_UNSIGNED_INT; }
+  virtual enum vil1_component_format component_format() const { return VIL1_COMPONENT_FORMAT_UNSIGNED_INT; }
 
-  virtual vil_image get_plane(int) const;
+  virtual vil1_image get_plane(int) const;
 
   //: Copy plane PLANE of this to BUF,
   virtual bool get_section(void* buf, int x0, int y0, int, int) const;
@@ -80,7 +80,7 @@ class vil_iris_generic_image : public vil_image_impl
   bool get_property(char const *tag, void *prop = 0) const;
 
 //protected:
-  vil_stream* is_;
+  vil1_stream* is_;
 
   int magic_;
 
@@ -108,4 +108,4 @@ class vil_iris_generic_image : public vil_image_impl
   bool get_section_verbatim(void* ib, int x0, int y0, int xs, int ys) const;
 };
 
-#endif // vil_iris_file_format_h_
+#endif // vil1_iris_file_format_h_

@@ -1,4 +1,4 @@
-// This is core/vil/vil_image_as.cxx
+// This is core/vil1/vil1_image_as.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,33 +6,33 @@
 // \file
 // \author fsm
 
-#include "vil_image_as.h"
+#include "vil1_image_as.h"
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
-#include <vil/vil_byte.h>
-#include <vil/vil_pixel.h>
-#include <vil/vil_memory_image_of_format.txx>
+#include <vil1/vil1_byte.h>
+#include <vil1/vil1_pixel.h>
+#include <vil1/vil1_memory_image_of_format.txx>
 
 #include <vxl_config.h>
 
 
 template <class T>
-struct vil_image_as_impl : public vil_image_impl, public vil_memory_image_of_format<T>
+struct vil1_image_as_impl : public vil1_image_impl, public vil1_memory_image_of_format<T>
 {
-  typedef vil_memory_image_of_format<T> format;
-  vil_image image;
-  vil_image_as_impl(vil_image const &underlying) : image(underlying) { }
+  typedef vil1_memory_image_of_format<T> format;
+  vil1_image image;
+  vil1_image_as_impl(vil1_image const &underlying) : image(underlying) { }
   int planes() const { return 1; }
   int width() const { return image.width(); }
   int height() const { return image.height(); }
   int components() const { return format::components; }
   int bits_per_component() const { return format::bits_per_component; }
-  vil_component_format component_format() const { return format::component_format; }
-  vil_image get_plane(int i) const { assert(i==0); return const_cast<vil_image_as_impl*>(this); }
+  vil1_component_format component_format() const { return format::component_format; }
+  vil1_image get_plane(int i) const { assert(i==0); return const_cast<vil1_image_as_impl*>(this); }
 
 #if 0
   char const* file_format() const { return 0; }
@@ -56,7 +56,7 @@ struct vil_image_as_impl : public vil_image_impl, public vil_memory_image_of_for
 //--------------------------------------------------------------------------------
 
 template<class Inp, class Out>
-bool convert_grey_to_grey( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
+bool convert_grey_to_grey( const vil1_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
   vcl_vector<Inp> scan(width);
   for (int j=0; j<height; ++j) {
@@ -70,7 +70,7 @@ bool convert_grey_to_grey( const vil_image& image, void* buf, int x0, int y0, in
 
 
 template<class Inp, class Out>
-bool convert_rgb_to_grey( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
+bool convert_rgb_to_grey( const vil1_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
   vcl_vector<Inp> scan(3*width);
   for (int j=0; j<height; ++j) {
@@ -93,7 +93,7 @@ bool convert_rgb_to_grey( const vil_image& image, void* buf, int x0, int y0, int
 
 
 template<class Inp, class Out>
-bool convert_grey_to_rgb( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
+bool convert_grey_to_rgb( const vil1_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
   vcl_vector<Inp> scan(width);
   for (int j=0; j<height; ++j) {
@@ -110,7 +110,7 @@ bool convert_grey_to_rgb( const vil_image& image, void* buf, int x0, int y0, int
 
 
 template<class Inp, class Out>
-bool convert_rgb_to_rgb( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
+bool convert_rgb_to_rgb( const vil1_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
   vcl_vector<Inp> scan(3*width);
   for (int j=0; j<height; ++j) {
@@ -126,7 +126,7 @@ bool convert_rgb_to_rgb( const vil_image& image, void* buf, int x0, int y0, int 
 }
 
 template<class Inp, class Out>
-bool convert_rgba_to_rgb( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
+bool convert_rgba_to_rgb( const vil1_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
   vcl_vector<Inp> scan(4*width);
   for (int j=0; j<height; ++j) {
@@ -143,7 +143,7 @@ bool convert_rgba_to_rgb( const vil_image& image, void* buf, int x0, int y0, int
 
 
 template<class Inp, class Out>
-bool convert_rgba_to_grey( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
+bool convert_rgba_to_grey( const vil1_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
   vcl_vector<Inp> scan(4*width);
   for (int j=0; j<height; ++j) {
@@ -167,118 +167,118 @@ bool convert_rgba_to_grey( const vil_image& image, void* buf, int x0, int y0, in
 
 // Explicitly instantiate the ones we use
 
-//template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vil_byte*,vil_byte*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_16*,vil_byte*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_32*,vil_byte*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, float*,vil_byte*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, double*,vil_byte*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, vil_byte*,vil_byte*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_16*,vil_byte*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, float*,vil_byte*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, double*,vil_byte*);
-template bool convert_rgba_to_grey( const vil_image&, void*, int, int, int, int, vil_byte*,vil_byte*);
+//template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, vil1_byte*,vil1_byte*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,vil1_byte*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, vxl_uint_32*,vil1_byte*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, float*,vil1_byte*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, double*,vil1_byte*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, vil1_byte*,vil1_byte*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,vil1_byte*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, float*,vil1_byte*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, double*,vil1_byte*);
+template bool convert_rgba_to_grey( const vil1_image&, void*, int, int, int, int, vil1_byte*,vil1_byte*);
 
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vil_byte*,vxl_uint_16*);
-//template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_16*,vxl_uint_16*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_32*,vxl_uint_16*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, float*,vxl_uint_16*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, double*,vxl_uint_16*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, vil_byte*,vxl_uint_16*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_16*,vxl_uint_16*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, float*,vxl_uint_16*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, double*,vxl_uint_16*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, vil1_byte*,vxl_uint_16*);
+//template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,vxl_uint_16*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, vxl_uint_32*,vxl_uint_16*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, float*,vxl_uint_16*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, double*,vxl_uint_16*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, vil1_byte*,vxl_uint_16*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,vxl_uint_16*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, float*,vxl_uint_16*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, double*,vxl_uint_16*);
 
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vil_byte*,int*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_16*,int*);
-//template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_32*,int*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, float*,int*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, double*,int*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, vil_byte*,int*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_16*,int*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, float*,int*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, double*,int*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, vil1_byte*,int*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,int*);
+//template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, vxl_uint_32*,int*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, float*,int*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, double*,int*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, vil1_byte*,int*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,int*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, float*,int*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, double*,int*);
 
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vil_byte*,float*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_16*,float*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_32*,float*);
-//template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, float*,float*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, double*,float*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, vil_byte*,float*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_16*,float*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, float*,float*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, double*,float*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, vil1_byte*,float*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,float*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, vxl_uint_32*,float*);
+//template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, float*,float*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, double*,float*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, vil1_byte*,float*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,float*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, float*,float*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, double*,float*);
 
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vil_byte*,double*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_16*,double*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_32*,double*);
-template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, float*,double*);
-//template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, double*,double*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, vil_byte*,double*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_16*,double*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, float*,double*);
-template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, double*,double*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, vil1_byte*,double*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,double*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, vxl_uint_32*,double*);
+template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, float*,double*);
+//template bool convert_grey_to_grey( const vil1_image&, void*, int, int, int, int, double*,double*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, vil1_byte*,double*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,double*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, float*,double*);
+template bool convert_rgb_to_grey( const vil1_image&, void*, int, int, int, int, double*,double*);
 
-template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, vil_byte*,unsigned char* );
-template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, vxl_uint_16*,unsigned char* );
-template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, vxl_uint_32*,unsigned char* );
-template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, float*,unsigned char* );
-template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, double*,unsigned char* );
-//template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, vil_byte*,unsigned char* );
-template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, vxl_uint_16*,unsigned char* );
-template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, float*,unsigned char* );
-template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, double*,unsigned char* );
-template bool convert_rgba_to_rgb( const vil_image&, void*, int, int, int, int, vil_byte*,unsigned char* );
+template bool convert_grey_to_rgb( const vil1_image&, void*, int, int, int, int, vil1_byte*,unsigned char* );
+template bool convert_grey_to_rgb( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,unsigned char* );
+template bool convert_grey_to_rgb( const vil1_image&, void*, int, int, int, int, vxl_uint_32*,unsigned char* );
+template bool convert_grey_to_rgb( const vil1_image&, void*, int, int, int, int, float*,unsigned char* );
+template bool convert_grey_to_rgb( const vil1_image&, void*, int, int, int, int, double*,unsigned char* );
+//template bool convert_rgb_to_rgb( const vil1_image&, void*, int, int, int, int, vil1_byte*,unsigned char* );
+template bool convert_rgb_to_rgb( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,unsigned char* );
+template bool convert_rgb_to_rgb( const vil1_image&, void*, int, int, int, int, float*,unsigned char* );
+template bool convert_rgb_to_rgb( const vil1_image&, void*, int, int, int, int, double*,unsigned char* );
+template bool convert_rgba_to_rgb( const vil1_image&, void*, int, int, int, int, vil1_byte*,unsigned char* );
 
-template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, vil_byte*,vxl_uint_16*);
-template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, vxl_uint_16*,vxl_uint_16*);
-template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, vxl_uint_32*,vxl_uint_16*);
-template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, float*,vxl_uint_16*);
-template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, double*,vxl_uint_16*);
-template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, vil_byte*,vxl_uint_16*);
-//template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, vxl_uint_16*,vxl_uint_16*);
-template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, float*,vxl_uint_16*);
-template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, double*,vxl_uint_16*);
-template bool convert_rgba_to_rgb( const vil_image&, void*, int, int, int, int, vil_byte*,vxl_uint_16*);
+template bool convert_grey_to_rgb( const vil1_image&, void*, int, int, int, int, vil1_byte*,vxl_uint_16*);
+template bool convert_grey_to_rgb( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,vxl_uint_16*);
+template bool convert_grey_to_rgb( const vil1_image&, void*, int, int, int, int, vxl_uint_32*,vxl_uint_16*);
+template bool convert_grey_to_rgb( const vil1_image&, void*, int, int, int, int, float*,vxl_uint_16*);
+template bool convert_grey_to_rgb( const vil1_image&, void*, int, int, int, int, double*,vxl_uint_16*);
+template bool convert_rgb_to_rgb( const vil1_image&, void*, int, int, int, int, vil1_byte*,vxl_uint_16*);
+//template bool convert_rgb_to_rgb( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,vxl_uint_16*);
+template bool convert_rgb_to_rgb( const vil1_image&, void*, int, int, int, int, float*,vxl_uint_16*);
+template bool convert_rgb_to_rgb( const vil1_image&, void*, int, int, int, int, double*,vxl_uint_16*);
+template bool convert_rgba_to_rgb( const vil1_image&, void*, int, int, int, int, vil1_byte*,vxl_uint_16*);
 
-template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, vil_byte*,float*);
-template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, vxl_uint_16*,float*);
-template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, vxl_uint_32*,float*);
-template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, float*,float*);
-template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, double*,float*);
-template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, vil_byte*,float*);
-template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, vxl_uint_16*,float*);
-//template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, float*,float*);
-template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, double*,float*);
-template bool convert_rgba_to_rgb( const vil_image&, void*, int, int, int, int, vil_byte*,float*);
+template bool convert_grey_to_rgb( const vil1_image&, void*, int, int, int, int, vil1_byte*,float*);
+template bool convert_grey_to_rgb( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,float*);
+template bool convert_grey_to_rgb( const vil1_image&, void*, int, int, int, int, vxl_uint_32*,float*);
+template bool convert_grey_to_rgb( const vil1_image&, void*, int, int, int, int, float*,float*);
+template bool convert_grey_to_rgb( const vil1_image&, void*, int, int, int, int, double*,float*);
+template bool convert_rgb_to_rgb( const vil1_image&, void*, int, int, int, int, vil1_byte*,float*);
+template bool convert_rgb_to_rgb( const vil1_image&, void*, int, int, int, int, vxl_uint_16*,float*);
+//template bool convert_rgb_to_rgb( const vil1_image&, void*, int, int, int, int, float*,float*);
+template bool convert_rgb_to_rgb( const vil1_image&, void*, int, int, int, int, double*,float*);
+template bool convert_rgba_to_rgb( const vil1_image&, void*, int, int, int, int, vil1_byte*,float*);
 
 
 //--------------------------------------------------------------------------------
 
 VCL_DEFINE_SPECIALIZATION // specialize for byte.
-bool vil_image_as_impl<vil_byte>::get_section(void *buf, int x0, int y0, int width, int height) const {
-  typedef vil_byte Outtype;
+bool vil1_image_as_impl<vil1_byte>::get_section(void *buf, int x0, int y0, int width, int height) const {
+  typedef vil1_byte Outtype;
 
-  switch( vil_pixel_format(image) ) {
-  case VIL_BYTE:
+  switch( vil1_pixel_format(image) ) {
+  case VIL1_BYTE:
     return image.get_section( buf, x0, y0, width, height );
-  case VIL_UINT16:
+  case VIL1_UINT16:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (vxl_uint_16*)0,(Outtype*)0);
-  case VIL_UINT32:
+  case VIL1_UINT32:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (vxl_uint_32*)0,(Outtype*)0);
-  case VIL_FLOAT:
+  case VIL1_FLOAT:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0);
-  case VIL_DOUBLE:
+  case VIL1_DOUBLE:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
-  case VIL_RGB_BYTE:
-    return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
-  case VIL_RGB_UINT16:
+  case VIL1_RGB_BYTE:
+    return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
+  case VIL1_RGB_UINT16:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vxl_uint_16*)0,(Outtype*)0);
-  case VIL_RGB_FLOAT:
+  case VIL1_RGB_FLOAT:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0);
-  case VIL_RGB_DOUBLE:
+  case VIL1_RGB_DOUBLE:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
-  case VIL_RGBA_BYTE:
-    return convert_rgba_to_grey( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
+  case VIL1_RGBA_BYTE:
+    return convert_rgba_to_grey( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
   default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
@@ -288,56 +288,56 @@ bool vil_image_as_impl<vil_byte>::get_section(void *buf, int x0, int y0, int wid
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil_image_as_impl<vil_byte>::is_a() const
+vcl_string vil1_image_as_impl<vil1_byte>::is_a() const
 {
-  static const vcl_string class_name_="vil_image_as_impl<vil_byte>";
+  static const vcl_string class_name_="vil1_image_as_impl<vil1_byte>";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil_image_as_impl<vil_byte>::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<vil1_byte>::is_class(vcl_string const& s) const
 {
-  return s==vil_image_as_impl<vil_byte>::is_a() || vil_image_impl::is_class(s);
+  return s==vil1_image_as_impl<vil1_byte>::is_a() || vil1_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
 // instantiate for byte.
-template struct vil_image_as_impl<vil_byte>;
+template struct vil1_image_as_impl<vil1_byte>;
 
-vil_image vil_image_as_byte(vil_image const &image) {
-  return vil_image(new vil_image_as_impl<vil_byte>(image));
+vil1_image vil1_image_as_byte(vil1_image const &image) {
+  return vil1_image(new vil1_image_as_impl<vil1_byte>(image));
 }
 
 VCL_DEFINE_SPECIALIZATION
-vil_image vil_image_as(vil_image const &image, vil_byte*) {
-  return vil_image(new vil_image_as_impl<vil_byte>(image));
+vil1_image vil1_image_as(vil1_image const &image, vil1_byte*) {
+  return vil1_image(new vil1_image_as_impl<vil1_byte>(image));
 }
 
 //--------------------------------------------------------------------------------
 
 VCL_DEFINE_SPECIALIZATION // specialize for vxl_uint_16.
-bool vil_image_as_impl<vxl_uint_16>::get_section(void *buf, int x0, int y0, int width, int height) const {
+bool vil1_image_as_impl<vxl_uint_16>::get_section(void *buf, int x0, int y0, int width, int height) const {
   typedef vxl_uint_16 Outtype;
 
-  switch( vil_pixel_format(image) ) {
-  case VIL_BYTE:
-    return convert_grey_to_grey( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
-  case VIL_UINT16:
+  switch( vil1_pixel_format(image) ) {
+  case VIL1_BYTE:
+    return convert_grey_to_grey( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
+  case VIL1_UINT16:
     return image.get_section( buf, x0, y0, width, height );
-  case VIL_UINT32:
+  case VIL1_UINT32:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (vxl_uint_32*)0,(Outtype*)0);
-  case VIL_FLOAT:
+  case VIL1_FLOAT:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0);
-  case VIL_DOUBLE:
+  case VIL1_DOUBLE:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
-  case VIL_RGB_BYTE:
-    return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
-  case VIL_RGB_UINT16:
+  case VIL1_RGB_BYTE:
+    return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
+  case VIL1_RGB_UINT16:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vxl_uint_16*)0,(Outtype*)0);
-  case VIL_RGB_FLOAT:
+  case VIL1_RGB_FLOAT:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0);
-  case VIL_RGB_DOUBLE:
+  case VIL1_RGB_DOUBLE:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
   default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
@@ -349,57 +349,57 @@ bool vil_image_as_impl<vxl_uint_16>::get_section(void *buf, int x0, int y0, int 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil_image_as_impl<vxl_uint_16>::is_a() const
+vcl_string vil1_image_as_impl<vxl_uint_16>::is_a() const
 {
-  static const vcl_string class_name_="vil_image_as_impl<vxl_uint_16>";
+  static const vcl_string class_name_="vil1_image_as_impl<vxl_uint_16>";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil_image_as_impl<vxl_uint_16>::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<vxl_uint_16>::is_class(vcl_string const& s) const
 {
-  return s==vil_image_as_impl<vxl_uint_16>::is_a() || vil_image_impl::is_class(s);
+  return s==vil1_image_as_impl<vxl_uint_16>::is_a() || vil1_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
 // instantiate for vxl_uint_16
-template struct vil_image_as_impl<vxl_uint_16>;
+template struct vil1_image_as_impl<vxl_uint_16>;
 
-vil_image vil_image_as_uint16(vil_image const &image) {
-  return vil_image(new vil_image_as_impl<vxl_uint_16>(image));
+vil1_image vil1_image_as_uint16(vil1_image const &image) {
+  return vil1_image(new vil1_image_as_impl<vxl_uint_16>(image));
 }
 
 VCL_DEFINE_SPECIALIZATION
-vil_image vil_image_as(vil_image const &image, vxl_uint_16*) {
-  return vil_image(new vil_image_as_impl<vxl_uint_16>(image));
+vil1_image vil1_image_as(vil1_image const &image, vxl_uint_16*) {
+  return vil1_image(new vil1_image_as_impl<vxl_uint_16>(image));
 }
 
 
 //--------------------------------------------------------------------------------
 
 VCL_DEFINE_SPECIALIZATION // specialize for int.
-bool vil_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, int height) const {
+bool vil1_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, int height) const {
   typedef int Outtype;
 
-  switch( vil_pixel_format(image) ) {
-  case VIL_BYTE:
-    return convert_grey_to_grey( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
-  case VIL_UINT16:
+  switch( vil1_pixel_format(image) ) {
+  case VIL1_BYTE:
+    return convert_grey_to_grey( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
+  case VIL1_UINT16:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (vxl_uint_16*)0,(Outtype*)0);
-  case VIL_UINT32:
+  case VIL1_UINT32:
     return image.get_section( buf, x0, y0, width, height );
-  case VIL_FLOAT:
+  case VIL1_FLOAT:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0);
-  case VIL_DOUBLE:
+  case VIL1_DOUBLE:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
-  case VIL_RGB_BYTE:
-    return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
-  case VIL_RGB_UINT16:
+  case VIL1_RGB_BYTE:
+    return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
+  case VIL1_RGB_UINT16:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vxl_uint_16*)0,(Outtype*)0);
-  case VIL_RGB_FLOAT:
+  case VIL1_RGB_FLOAT:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0);
-  case VIL_RGB_DOUBLE:
+  case VIL1_RGB_DOUBLE:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
   default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
@@ -411,56 +411,56 @@ bool vil_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, i
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil_image_as_impl<int>::is_a() const
+vcl_string vil1_image_as_impl<int>::is_a() const
 {
-  static const vcl_string class_name_="vil_image_as_impl<int>";
+  static const vcl_string class_name_="vil1_image_as_impl<int>";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil_image_as_impl<int>::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<int>::is_class(vcl_string const& s) const
 {
-  return s==vil_image_as_impl<int>::is_a() || vil_image_impl::is_class(s);
+  return s==vil1_image_as_impl<int>::is_a() || vil1_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
 // instantiate for int.
-template struct vil_image_as_impl<int>;
+template struct vil1_image_as_impl<int>;
 
-vil_image vil_image_as_int(vil_image const &image) {
-  return vil_image(new vil_image_as_impl<int>(image));
+vil1_image vil1_image_as_int(vil1_image const &image) {
+  return vil1_image(new vil1_image_as_impl<int>(image));
 }
 
 VCL_DEFINE_SPECIALIZATION
-vil_image vil_image_as(vil_image const &image, int*) {
-  return vil_image(new vil_image_as_impl<int>(image));
+vil1_image vil1_image_as(vil1_image const &image, int*) {
+  return vil1_image(new vil1_image_as_impl<int>(image));
 }
 
 //--------------------------------------------------------------------------------
 
 VCL_DEFINE_SPECIALIZATION // specialize for float.
-bool vil_image_as_impl<float>::get_section(void *buf, int x0, int y0, int width, int height) const {
+bool vil1_image_as_impl<float>::get_section(void *buf, int x0, int y0, int width, int height) const {
   typedef float Outtype;
 
-  switch( vil_pixel_format(image) ) {
-  case VIL_BYTE:
-    return convert_grey_to_grey( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
-  case VIL_UINT16:
+  switch( vil1_pixel_format(image) ) {
+  case VIL1_BYTE:
+    return convert_grey_to_grey( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
+  case VIL1_UINT16:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (vxl_uint_16*)0,(Outtype*)0);
-  case VIL_UINT32:
+  case VIL1_UINT32:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (vxl_uint_32*)0,(Outtype*)0);
-  case VIL_FLOAT:
+  case VIL1_FLOAT:
     return image.get_section( buf, x0, y0, width, height );
-  case VIL_DOUBLE:
+  case VIL1_DOUBLE:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
-  case VIL_RGB_BYTE:
-    return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
-  case VIL_RGB_UINT16:
+  case VIL1_RGB_BYTE:
+    return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
+  case VIL1_RGB_UINT16:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vxl_uint_16*)0,(Outtype*)0);
-  case VIL_RGB_FLOAT:
+  case VIL1_RGB_FLOAT:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0);
-  case VIL_RGB_DOUBLE:
+  case VIL1_RGB_DOUBLE:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
   default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
@@ -472,56 +472,56 @@ bool vil_image_as_impl<float>::get_section(void *buf, int x0, int y0, int width,
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil_image_as_impl<float>::is_a() const
+vcl_string vil1_image_as_impl<float>::is_a() const
 {
-  static const vcl_string class_name_="vil_image_as_impl<float>";
+  static const vcl_string class_name_="vil1_image_as_impl<float>";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil_image_as_impl<float>::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<float>::is_class(vcl_string const& s) const
 {
-  return s==vil_image_as_impl<float>::is_a() || vil_image_impl::is_class(s);
+  return s==vil1_image_as_impl<float>::is_a() || vil1_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
 // instantiate for float.
-template struct vil_image_as_impl<float>;
+template struct vil1_image_as_impl<float>;
 
-vil_image vil_image_as_float(vil_image const &image) {
-  return vil_image(new vil_image_as_impl<float>(image));
+vil1_image vil1_image_as_float(vil1_image const &image) {
+  return vil1_image(new vil1_image_as_impl<float>(image));
 }
 
 VCL_DEFINE_SPECIALIZATION
-vil_image vil_image_as(vil_image const &image, float*) {
-  return vil_image(new vil_image_as_impl<float>(image));
+vil1_image vil1_image_as(vil1_image const &image, float*) {
+  return vil1_image(new vil1_image_as_impl<float>(image));
 }
 
 //--------------------------------------------------------------------------------
 
 VCL_DEFINE_SPECIALIZATION // specialize for double.
-bool vil_image_as_impl<double>::get_section(void *buf, int x0, int y0, int width, int height) const {
+bool vil1_image_as_impl<double>::get_section(void *buf, int x0, int y0, int width, int height) const {
   typedef double Outtype;
 
-  switch( vil_pixel_format(image) ) {
-  case VIL_BYTE:
-    return convert_grey_to_grey( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
-  case VIL_UINT16:
+  switch( vil1_pixel_format(image) ) {
+  case VIL1_BYTE:
+    return convert_grey_to_grey( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
+  case VIL1_UINT16:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (vxl_uint_16*)0,(Outtype*)0);
-  case VIL_UINT32:
+  case VIL1_UINT32:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (vxl_uint_32*)0,(Outtype*)0);
-  case VIL_FLOAT:
+  case VIL1_FLOAT:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0);
-  case VIL_DOUBLE:
+  case VIL1_DOUBLE:
     return image.get_section( buf, x0, y0, width, height );
-  case VIL_RGB_BYTE:
-    return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
-  case VIL_RGB_UINT16:
+  case VIL1_RGB_BYTE:
+    return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
+  case VIL1_RGB_UINT16:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vxl_uint_16*)0,(Outtype*)0);
-  case VIL_RGB_FLOAT:
+  case VIL1_RGB_FLOAT:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0);
-  case VIL_RGB_DOUBLE:
+  case VIL1_RGB_DOUBLE:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
   default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
@@ -534,62 +534,62 @@ bool vil_image_as_impl<double>::get_section(void *buf, int x0, int y0, int width
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil_image_as_impl<double>::is_a() const
+vcl_string vil1_image_as_impl<double>::is_a() const
 {
-  static const vcl_string class_name_="vil_image_as_impl<double>";
+  static const vcl_string class_name_="vil1_image_as_impl<double>";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil_image_as_impl<double>::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<double>::is_class(vcl_string const& s) const
 {
-  return s==vil_image_as_impl<double>::is_a() || vil_image_impl::is_class(s);
+  return s==vil1_image_as_impl<double>::is_a() || vil1_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
 // instantiate for double.
-template struct vil_image_as_impl<double>;
+template struct vil1_image_as_impl<double>;
 
-vil_image vil_image_as_double(vil_image const &image) {
-  return vil_image(new vil_image_as_impl<double>(image));
+vil1_image vil1_image_as_double(vil1_image const &image) {
+  return vil1_image(new vil1_image_as_impl<double>(image));
 }
 
 VCL_DEFINE_SPECIALIZATION
-vil_image vil_image_as(vil_image const &image, double*) {
-  return vil_image(new vil_image_as_impl<double>(image));
+vil1_image vil1_image_as(vil1_image const &image, double*) {
+  return vil1_image(new vil1_image_as_impl<double>(image));
 }
 
 //--------------------------------------------------------------------------------
 
 VCL_DEFINE_SPECIALIZATION // specialize for rgb.
-bool vil_image_as_impl<vil_rgb<unsigned char> >::get_section(void *buf,
+bool vil1_image_as_impl<vil1_rgb<unsigned char> >::get_section(void *buf,
                                                              int x0, int y0,
                                                              int width, int height) const
 {
   typedef unsigned char Outtype;
 
-  switch( vil_pixel_format(image) ) {
-  case VIL_BYTE:
-    return convert_grey_to_rgb( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0 );
-  case VIL_UINT16:
+  switch( vil1_pixel_format(image) ) {
+  case VIL1_BYTE:
+    return convert_grey_to_rgb( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0 );
+  case VIL1_UINT16:
     return convert_grey_to_rgb( image, buf, x0, y0, width, height, (vxl_uint_16*)0,(Outtype*)0 );
-  case VIL_UINT32:
+  case VIL1_UINT32:
     return convert_grey_to_rgb( image, buf, x0, y0, width, height, (vxl_uint_32*)0,(Outtype*)0 );
-  case VIL_FLOAT:
+  case VIL1_FLOAT:
     return convert_grey_to_rgb( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0 );
-  case VIL_DOUBLE:
+  case VIL1_DOUBLE:
     return convert_grey_to_rgb( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0 );
-  case VIL_RGB_BYTE:
+  case VIL1_RGB_BYTE:
     return image.get_section( buf, x0, y0, width, height );
-  case VIL_RGB_UINT16:
+  case VIL1_RGB_UINT16:
     return convert_rgb_to_rgb( image, buf, x0, y0, width, height, (vxl_uint_16*)0,(Outtype*)0 );
-  case VIL_RGB_FLOAT:
+  case VIL1_RGB_FLOAT:
     return convert_rgb_to_rgb( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0 );
-  case VIL_RGB_DOUBLE:
+  case VIL1_RGB_DOUBLE:
     return convert_rgb_to_rgb( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0 );
-  case VIL_RGBA_BYTE:
-    return convert_rgba_to_rgb( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0 );
+  case VIL1_RGBA_BYTE:
+    return convert_rgba_to_rgb( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0 );
   default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
@@ -599,62 +599,62 @@ bool vil_image_as_impl<vil_rgb<unsigned char> >::get_section(void *buf,
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil_image_as_impl<vil_rgb<unsigned char> >::is_a() const
+vcl_string vil1_image_as_impl<vil1_rgb<unsigned char> >::is_a() const
 {
-  static const vcl_string class_name_="vil_image_as_impl<vil_rgb<unsigned char> >";
+  static const vcl_string class_name_="vil1_image_as_impl<vil1_rgb<unsigned char> >";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil_image_as_impl<vil_rgb<unsigned char> >::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<vil1_rgb<unsigned char> >::is_class(vcl_string const& s) const
 {
-  return s==vil_image_as_impl<vil_rgb<unsigned char> >::is_a() || vil_image_impl::is_class(s);
+  return s==vil1_image_as_impl<vil1_rgb<unsigned char> >::is_a() || vil1_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
-// instantiate for vil_rgb_byte .
-template struct vil_image_as_impl<vil_rgb<unsigned char> >;
+// instantiate for vil1_rgb_byte .
+template struct vil1_image_as_impl<vil1_rgb<unsigned char> >;
 
-vil_image vil_image_as_rgb_byte(vil_image const &image) {
-  return vil_image(new vil_image_as_impl<vil_rgb<unsigned char> >(image));
+vil1_image vil1_image_as_rgb_byte(vil1_image const &image) {
+  return vil1_image(new vil1_image_as_impl<vil1_rgb<unsigned char> >(image));
 }
 
 VCL_DEFINE_SPECIALIZATION
-vil_image vil_image_as(vil_image const &image, vil_rgb<vil_byte>*) {
-  return vil_image(new vil_image_as_impl<vil_rgb<vil_byte> >(image));
+vil1_image vil1_image_as(vil1_image const &image, vil1_rgb<vil1_byte>*) {
+  return vil1_image(new vil1_image_as_impl<vil1_rgb<vil1_byte> >(image));
 }
 
 //--------------------------------------------------------------------------------
 
 VCL_DEFINE_SPECIALIZATION // specialize for rgb float.
-bool vil_image_as_impl<vil_rgb<float> >::get_section(void *buf,
+bool vil1_image_as_impl<vil1_rgb<float> >::get_section(void *buf,
                                                      int x0, int y0,
                                                      int width, int height) const
 {
   typedef float Outtype;
 
-  switch( vil_pixel_format(image) ) {
-  case VIL_BYTE:
-    return convert_grey_to_rgb( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
-  case VIL_UINT16:
+  switch( vil1_pixel_format(image) ) {
+  case VIL1_BYTE:
+    return convert_grey_to_rgb( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
+  case VIL1_UINT16:
     return convert_grey_to_rgb( image, buf, x0, y0, width, height, (vxl_uint_16*)0,(Outtype*)0);
-  case VIL_UINT32:
+  case VIL1_UINT32:
     return convert_grey_to_rgb( image, buf, x0, y0, width, height, (vxl_uint_32*)0,(Outtype*)0);
-  case VIL_FLOAT:
+  case VIL1_FLOAT:
     return convert_grey_to_rgb( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0);
-  case VIL_DOUBLE:
+  case VIL1_DOUBLE:
     return convert_grey_to_rgb( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
-  case VIL_RGB_BYTE:
-    return convert_rgb_to_rgb( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
-  case VIL_RGB_UINT16:
+  case VIL1_RGB_BYTE:
+    return convert_rgb_to_rgb( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
+  case VIL1_RGB_UINT16:
     return convert_rgb_to_rgb( image, buf, x0, y0, width, height, (vxl_uint_16*)0,(Outtype*)0);
-  case VIL_RGB_FLOAT:
+  case VIL1_RGB_FLOAT:
     return image.get_section( buf, x0, y0, width, height );
-  case VIL_RGB_DOUBLE:
+  case VIL1_RGB_DOUBLE:
     return convert_rgb_to_rgb( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
-  case VIL_RGBA_BYTE:
-    return convert_rgba_to_rgb( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
+  case VIL1_RGBA_BYTE:
+    return convert_rgba_to_rgb( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
   default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
@@ -666,63 +666,63 @@ bool vil_image_as_impl<vil_rgb<float> >::get_section(void *buf,
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil_image_as_impl<vil_rgb<float> >::is_a() const
+vcl_string vil1_image_as_impl<vil1_rgb<float> >::is_a() const
 {
-  static const vcl_string class_name_="vil_image_as_impl<vil_rgb<float> >";
+  static const vcl_string class_name_="vil1_image_as_impl<vil1_rgb<float> >";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil_image_as_impl<vil_rgb<float> >::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<vil1_rgb<float> >::is_class(vcl_string const& s) const
 {
-  return s==vil_image_as_impl<vil_rgb<float> >::is_a() || vil_image_impl::is_class(s);
+  return s==vil1_image_as_impl<vil1_rgb<float> >::is_a() || vil1_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
-// instantiate for vil_rgb_float .
-template struct vil_image_as_impl<vil_rgb<float> >;
+// instantiate for vil1_rgb_float .
+template struct vil1_image_as_impl<vil1_rgb<float> >;
 
-vil_image vil_image_as_rgb_float(vil_image const &image) {
-  return vil_image(new vil_image_as_impl<vil_rgb<float> >(image));
+vil1_image vil1_image_as_rgb_float(vil1_image const &image) {
+  return vil1_image(new vil1_image_as_impl<vil1_rgb<float> >(image));
 }
 
 VCL_DEFINE_SPECIALIZATION
-vil_image vil_image_as(vil_image const &image, vil_rgb<float>*) {
-  return vil_image(new vil_image_as_impl<vil_rgb<float> >(image));
+vil1_image vil1_image_as(vil1_image const &image, vil1_rgb<float>*) {
+  return vil1_image(new vil1_image_as_impl<vil1_rgb<float> >(image));
 }
 
 
 //--------------------------------------------------------------------------------
 
 VCL_DEFINE_SPECIALIZATION // specialize for rgb 16-bit.
-bool vil_image_as_impl<vil_rgb<vxl_uint_16> >::get_section(void *buf,
+bool vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::get_section(void *buf,
                                                            int x0, int y0,
                                                            int width, int height) const
 {
   typedef vxl_uint_16 Outtype;
 
-  switch( vil_pixel_format(image) ) {
-  case VIL_BYTE:
-    return convert_grey_to_rgb( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
-  case VIL_UINT16:
+  switch( vil1_pixel_format(image) ) {
+  case VIL1_BYTE:
+    return convert_grey_to_rgb( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
+  case VIL1_UINT16:
     return convert_grey_to_rgb( image, buf, x0, y0, width, height, (vxl_uint_16*)0,(Outtype*)0);
-  case VIL_UINT32:
+  case VIL1_UINT32:
     return convert_grey_to_rgb( image, buf, x0, y0, width, height, (vxl_uint_32*)0,(Outtype*)0);
-  case VIL_FLOAT:
+  case VIL1_FLOAT:
     return convert_grey_to_rgb( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0);
-  case VIL_DOUBLE:
+  case VIL1_DOUBLE:
     return convert_grey_to_rgb( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
-  case VIL_RGB_BYTE:
-    return convert_rgb_to_rgb( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
-  case VIL_RGB_UINT16:
+  case VIL1_RGB_BYTE:
+    return convert_rgb_to_rgb( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
+  case VIL1_RGB_UINT16:
     return image.get_section( buf, x0, y0, width, height );
-  case VIL_RGB_FLOAT:
+  case VIL1_RGB_FLOAT:
     return convert_rgb_to_rgb( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0);
-  case VIL_RGB_DOUBLE:
+  case VIL1_RGB_DOUBLE:
     return convert_rgb_to_rgb( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
-  case VIL_RGBA_BYTE:
-    return convert_rgba_to_rgb( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
+  case VIL1_RGBA_BYTE:
+    return convert_rgba_to_rgb( image, buf, x0, y0, width, height, (vil1_byte*)0,(Outtype*)0);
   default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
@@ -732,27 +732,27 @@ bool vil_image_as_impl<vil_rgb<vxl_uint_16> >::get_section(void *buf,
 
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil_image_as_impl<vil_rgb<vxl_uint_16> >::is_a() const
+vcl_string vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::is_a() const
 {
-  static const vcl_string class_name_="vil_image_as_impl<vil_rgb<vxl_uint_16> >";
+  static const vcl_string class_name_="vil1_image_as_impl<vil1_rgb<vxl_uint_16> >";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil_image_as_impl<vil_rgb<vxl_uint_16> >::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::is_class(vcl_string const& s) const
 {
-  return s==vil_image_as_impl<vil_rgb<vxl_uint_16> >::is_a() || vil_image_impl::is_class(s);
+  return s==vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::is_a() || vil1_image_impl::is_class(s);
 }
 
 
-// instantiate for vil_rgb_uint16 .
-template struct vil_image_as_impl<vil_rgb<vxl_uint_16> >;
+// instantiate for vil1_rgb_uint16 .
+template struct vil1_image_as_impl<vil1_rgb<vxl_uint_16> >;
 
-vil_image vil_image_as_rgb_uint16(vil_image const &image) {
-  return vil_image(new vil_image_as_impl<vil_rgb<vxl_uint_16> >(image));
+vil1_image vil1_image_as_rgb_uint16(vil1_image const &image) {
+  return vil1_image(new vil1_image_as_impl<vil1_rgb<vxl_uint_16> >(image));
 }
 
 VCL_DEFINE_SPECIALIZATION
-vil_image vil_image_as(vil_image const &image, vil_rgb<vxl_uint_16>* ) {
-  return vil_image(new vil_image_as_impl<vil_rgb<vxl_uint_16> >(image));
+vil1_image vil1_image_as(vil1_image const &image, vil1_rgb<vxl_uint_16>* ) {
+  return vil1_image(new vil1_image_as_impl<vil1_rgb<vxl_uint_16> >(image));
 }

@@ -1,6 +1,6 @@
-// This is core/vil/file_formats/vil_tiff.h
-#ifndef vil_tiff_file_format_h_
-#define vil_tiff_file_format_h_
+// This is core/vil1/file_formats/vil1_tiff.h
+#ifndef vil1_tiff_file_format_h_
+#define vil1_tiff_file_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -14,29 +14,29 @@
 //  3 October 2001 Peter Vanroose - Implemented get_property and set_property
 //\endverbatim
 
-#include <vil/vil_file_format.h>
-#include <vil/vil_image_impl.h>
+#include <vil1/vil1_file_format.h>
+#include <vil1/vil1_image_impl.h>
 
 //: Loader for tiff files
-class vil_tiff_file_format : public vil_file_format
+class vil1_tiff_file_format : public vil1_file_format
 {
  public:
   virtual char const* tag() const;
-  virtual vil_image_impl* make_input_image(vil_stream* vs);
-  virtual vil_image_impl* make_output_image(vil_stream* vs, int planes,
+  virtual vil1_image_impl* make_input_image(vil1_stream* vs);
+  virtual vil1_image_impl* make_output_image(vil1_stream* vs, int planes,
                                             int width,
                                             int height,
                                             int components,
                                             int bits_per_component,
-                                            vil_component_format format);
+                                            vil1_component_format format);
 };
 
-struct vil_tiff_structures;
+struct vil1_tiff_structures;
 
 //: Generic image interface for TIFF files
-class vil_tiff_generic_image : public vil_image_impl
+class vil1_tiff_generic_image : public vil1_image_impl
 {
-  vil_tiff_structures* p;
+  vil1_tiff_structures* p;
 
   int width_;
   int height_;
@@ -47,17 +47,17 @@ class vil_tiff_generic_image : public vil_image_impl
   bool read_header();
   bool write_header();
 
-  friend class vil_tiff_file_format;
+  friend class vil1_tiff_file_format;
  public:
 
-  vil_tiff_generic_image(vil_stream* is);
-  vil_tiff_generic_image(vil_stream* is, int planes,
+  vil1_tiff_generic_image(vil1_stream* is);
+  vil1_tiff_generic_image(vil1_stream* is, int planes,
                                                int width,
                                                int height,
                                                int components,
                                                int bits_per_component,
-                                               vil_component_format format);
-  ~vil_tiff_generic_image();
+                                               vil1_component_format format);
+  ~vil1_tiff_generic_image();
 
   //: TIFF specific fields relating to scanned images
   void get_resolution(float& x_res, float& y_res, unsigned short& units) const;
@@ -70,7 +70,7 @@ class vil_tiff_generic_image : public vil_image_impl
   virtual int components() const { return components_; }
 
   virtual int bits_per_component() const { return bits_per_component_; }
-  virtual enum vil_component_format component_format() const { return VIL_COMPONENT_FORMAT_UNSIGNED_INT; }
+  virtual enum vil1_component_format component_format() const { return VIL1_COMPONENT_FORMAT_UNSIGNED_INT; }
 
   //: Copy this to BUF,
   virtual bool get_section(void* buf, int x0, int y0, int width, int height) const;
@@ -80,7 +80,7 @@ class vil_tiff_generic_image : public vil_image_impl
   bool get_property(char const *tag, void *prop = 0) const;
   bool set_property(char const *tag, const void *prop = 0) const;
 
-  vil_image get_plane(int ) const;
+  vil1_image get_plane(int ) const;
 };
 
-#endif // vil_tiff_file_format_h_
+#endif // vil1_tiff_file_format_h_

@@ -1,16 +1,16 @@
-// This is core/vil/vil_ssd.txx
-#ifndef vil_ssd_txx_
-#define vil_ssd_txx_
+// This is core/vil1/vil1_ssd.txx
+#ifndef vil1_ssd_txx_
+#define vil1_ssd_txx_
 
 /*
   fsm
 */
-#include "vil_ssd.h"
+#include "vil1_ssd.h"
 #include <vcl_cassert.h>
 
 template <class I1, class I2, class O>
-O vil_ssd(vil_memory_image_of<I1> const &a,
-          vil_memory_image_of<I2> const &b,
+O vil1_ssd(vil1_memory_image_of<I1> const &a,
+          vil1_memory_image_of<I2> const &b,
           O *)
 {
   assert(a.width() == b.width());
@@ -39,9 +39,9 @@ O vil_ssd(vil_memory_image_of<I1> const &a,
 
 //--------------------------------------------------------------------------------
 
-#define VIL_SSD_INSTANTIATE(I1, I2, O) \
-template O vil_ssd/*<I1, I2, O >*/(vil_memory_image_of<I1 > const &, \
-                                   vil_memory_image_of<I2 > const &, \
+#define VIL1_SSD_INSTANTIATE(I1, I2, O) \
+template O vil1_ssd/*<I1, I2, O >*/(vil1_memory_image_of<I1 > const &, \
+                                   vil1_memory_image_of<I2 > const &, \
                                    O *)
 
-#endif // vil_ssd_txx_
+#endif // vil1_ssd_txx_

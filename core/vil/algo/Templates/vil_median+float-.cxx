@@ -1,2 +1,2 @@
-#include <vil2/algo/vil2_median.txx>
-VIL2_MEDIAN_INSTANTIATE(float );
+#include <vil/algo/vil_median.txx>
+VIL_MEDIAN_INSTANTIATE(float );

@@ -1,59 +1,59 @@
-// This is core/vil/file_formats/vil_bmp.cxx
+// This is core/vil1/file_formats/vil1_bmp.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
-#include "vil_bmp.h"
+#include "vil1_bmp.h"
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_cstring.h>
-#include <vil/vil_stream.h>
-#include <vil/vil_property.h>
+#include <vil1/vil1_stream.h>
+#include <vil1/vil1_property.h>
 
 #define where (vcl_cerr << __FILE__ ":" << __LINE__ << " : ")
 
 //--------------------------------------------------------------------------------
 
-char const* vil_bmp_format_tag = "bmp";
+char const* vil1_bmp_format_tag = "bmp";
 
-vil_image_impl* vil_bmp_file_format::make_input_image(vil_stream* is)
+vil1_image_impl* vil1_bmp_file_format::make_input_image(vil1_stream* is)
 {
   // Attempt to read header
-  vil_bmp_file_header hdr;
+  vil1_bmp_file_header hdr;
   is->seek(0L);
   hdr.read(is);
 
   if ( hdr.signature_valid() )
-    return new vil_bmp_generic_image(is);
+    return new vil1_bmp_generic_image(is);
   else
     return 0;
 }
 
-vil_image_impl* vil_bmp_file_format::make_output_image(vil_stream* is, int planes,
+vil1_image_impl* vil1_bmp_file_format::make_output_image(vil1_stream* is, int planes,
                                                        int width,
                                                        int height,
                                                        int components,
                                                        int bits_per_component,
-                                                       vil_component_format format)
+                                                       vil1_component_format format)
 {
-  return new vil_bmp_generic_image(is, planes, width, height, components, bits_per_component, format);
+  return new vil1_bmp_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
-char const* vil_bmp_file_format::tag() const
+char const* vil1_bmp_file_format::tag() const
 {
-  return vil_bmp_format_tag;
+  return vil1_bmp_format_tag;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-char const* vil_bmp_generic_image::file_format() const
+char const* vil1_bmp_generic_image::file_format() const
 {
-  return vil_bmp_format_tag;
+  return vil1_bmp_format_tag;
 }
 
-vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is)
+vil1_bmp_generic_image::vil1_bmp_generic_image(vil1_stream* is)
   : is_(is)
   , bit_map_start(-1L)
   //, freds_colormap(0)
@@ -63,27 +63,27 @@ vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is)
   read_header();
 }
 
-bool vil_bmp_generic_image::get_property(char const *tag, void *prop) const
+bool vil1_bmp_generic_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = false, true : true;
 
-  if (0==vcl_strcmp(tag, vil_property_left_first))
+  if (0==vcl_strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil_property_component_order_is_BGR))
+  if (0==vcl_strcmp(tag, vil1_property_component_order_is_BGR))
     return prop ? (*(bool*)prop) = true : true;
 
   return false;
 }
 
-vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is,
+vil1_bmp_generic_image::vil1_bmp_generic_image(vil1_stream* is,
                                              int planes,
                                              int width,
                                              int height,
                                              int components,
                                              int bits_per_component,
-                                             vil_component_format /*format*/)
+                                             vil1_component_format /*format*/)
   : is_(is)
   , bit_map_start(-1L)
 {
@@ -101,7 +101,7 @@ vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is,
   write_header();
 }
 
-vil_bmp_generic_image::~vil_bmp_generic_image()
+vil1_bmp_generic_image::~vil1_bmp_generic_image()
 {
 #if 0
   // we must get rid of the local_color_map_;
@@ -125,7 +125,7 @@ vil_bmp_generic_image::~vil_bmp_generic_image()
   is_->unref();
 }
 
-bool vil_bmp_generic_image::read_header()
+bool vil1_bmp_generic_image::read_header()
 {
   // seek to beginning and read file header.
   is_->seek(0L);
@@ -152,10 +152,10 @@ bool vil_bmp_generic_image::read_header()
 
   // determine whether or not there is an info header from
   // the size field.
-  if (core_hdr.header_size == vil_bmp_core_header::disk_size) {
+  if (core_hdr.header_size == vil1_bmp_core_header::disk_size) {
     // no info header.
   }
-  else if (core_hdr.header_size == vil_bmp_core_header::disk_size + vil_bmp_info_header::disk_size) {
+  else if (core_hdr.header_size == vil1_bmp_core_header::disk_size + vil1_bmp_info_header::disk_size) {
     // probably an info header. read it now.
     info_hdr.read(is_);
 #ifdef DEBUG
@@ -258,7 +258,7 @@ bool vil_bmp_generic_image::read_header()
   return true;
 }
 
-bool vil_bmp_generic_image::write_header()
+bool vil1_bmp_generic_image::write_header()
 {
 #ifdef DEBUG
   vcl_cerr << "Writing BMP header\n"
@@ -297,7 +297,7 @@ bool vil_bmp_generic_image::write_header()
 
 //------------------------------------------------------------
 
-bool vil_bmp_generic_image::get_section(void* ib, int x0, int y0, int w, int h) const
+bool vil1_bmp_generic_image::get_section(void* ib, int x0, int y0, int w, int h) const
 {
   assert(ib != 0);
   char *bp = static_cast<char*>(ib);
@@ -326,7 +326,7 @@ bool vil_bmp_generic_image::get_section(void* ib, int x0, int y0, int w, int h) 
 }
 
 
-bool vil_bmp_generic_image::put_section(void const *ib, int x0, int y0, int xs, int ys)
+bool vil1_bmp_generic_image::put_section(void const *ib, int x0, int y0, int xs, int ys)
 {
   assert(ib != 0);
   int bypp = (components() * bits_per_component() +7) / 8;

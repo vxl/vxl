@@ -1,42 +1,42 @@
-// This is core/vil/vil_convolve.txx
-#ifndef vil_convolve_txx_
-#define vil_convolve_txx_
+// This is core/vil1/vil1_convolve.txx
+#ifndef vil1_convolve_txx_
+#define vil1_convolve_txx_
 // \author fsm
-#include "vil_convolve.h"
+#include "vil1_convolve.h"
 #include <vcl_iostream.h>
 
 template <class pixel_type, class float_type>
 void
-vil_convolve_separable(float const kernel[], unsigned N,
-                       vil_memory_image_of<pixel_type>& buf,
-                       vil_memory_image_of<float_type>& tmp,
-                       vil_memory_image_of<float_type>& out
+vil1_convolve_separable(float const kernel[], unsigned N,
+                       vil1_memory_image_of<pixel_type>& buf,
+                       vil1_memory_image_of<float_type>& tmp,
+                       vil1_memory_image_of<float_type>& out
                       )
 {
-  vil_convolve_signal_1d<float const> K(kernel, 0, N/2, N);
+  vil1_convolve_signal_1d<float const> K(kernel, 0, N/2, N);
 
   unsigned w = buf.width();
   unsigned h = buf.height();
 
   vcl_cerr << "convolve x..." << vcl_flush;
-  vil_convolve_1d_x(K,
-                    vil_convolve_signal_2d<pixel_type const>(buf.row_array(), 0, 0, w,  0, 0, h),
+  vil1_convolve_1d_x(K,
+                    vil1_convolve_signal_2d<pixel_type const>(buf.row_array(), 0, 0, w,  0, 0, h),
                     (float_type*)0,
-                    vil_convolve_signal_2d<float_type         >(tmp.row_array(), 0, 0, w,  0, 0, h),
-                    vil_convolve_trim, vil_convolve_trim);
+                    vil1_convolve_signal_2d<float_type         >(tmp.row_array(), 0, 0, w,  0, 0, h),
+                    vil1_convolve_trim, vil1_convolve_trim);
   vcl_cerr << "done\n";
 
   vcl_cerr << "convolve y..." << vcl_flush;
-  vil_convolve_1d_y(K,
-                    vil_convolve_signal_2d<float_type const>(tmp.row_array(), 0, 0, w,  0, 0, h),
+  vil1_convolve_1d_y(K,
+                    vil1_convolve_signal_2d<float_type const>(tmp.row_array(), 0, 0, w,  0, 0, h),
                     (float_type*)0,
-                    vil_convolve_signal_2d<float_type      >(out.row_array(), 0, 0, w,  0, 0, h),
-                    vil_convolve_trim, vil_convolve_trim);
+                    vil1_convolve_signal_2d<float_type      >(out.row_array(), 0, 0, w,  0, 0, h),
+                    vil1_convolve_trim, vil1_convolve_trim);
   vcl_cerr << "done\n";
 }
 
 template <class pixel_type, class float_type>
-vil_image vil_convolve_separable(vil_image const & in,
+vil1_image vil1_convolve_separable(vil1_image const & in,
                                  float const* kernel,
                                  int N,
                                  pixel_type*,
@@ -45,20 +45,20 @@ vil_image vil_convolve_separable(vil_image const & in,
 {
   // Copy input image, unless it's already a memory image
   // of the appropriate format.
-  vil_memory_image_of<pixel_type> inbuf(in);
+  vil1_memory_image_of<pixel_type> inbuf(in);
 
-  vil_memory_image_of<float_type> tmp(in.width(), in.height());
+  vil1_memory_image_of<float_type> tmp(in.width(), in.height());
 
 #if 0
   // Make the output image, on disk if necessary
-  vil_image out = vil_new(in.width(), in.height(), in);
+  vil1_image out = vil1_new(in.width(), in.height(), in);
 #endif
 
   // Make memory image for output, don't read the pixels.
-  vil_memory_image_of<float_type> outbuf(in.width(), in.height());
+  vil1_memory_image_of<float_type> outbuf(in.width(), in.height());
 
   // convolve
-  vil_convolve_separable(kernel, N, inbuf, tmp, outbuf);
+  vil1_convolve_separable(kernel, N, inbuf, tmp, outbuf);
 
 #if 0
   // Put outbuf into output image if necessary
@@ -71,7 +71,7 @@ vil_image vil_convolve_separable(vil_image const & in,
 
 //--------------------------------------------------------------------------------
 
-#undef VIL_CONVOLVE_INSTANTIATE
-#define VIL_CONVOLVE_INSTANTIATE(T)
+#undef VIL1_CONVOLVE_INSTANTIATE
+#define VIL1_CONVOLVE_INSTANTIATE(T)
 
 #endif

@@ -1,9 +1,9 @@
-// This is core/vil2/io/tests/test_memory_chunk_io.cxx
+// This is core/vil/io/tests/test_memory_chunk_io.cxx
 #include <testlib/testlib_test.h>
 
-#include <vil2/vil2_memory_chunk.h>
-#include <vil2/io/vil2_io_memory_chunk.h>
-#include <vil2/io/vil2_io_smart_ptr.h>
+#include <vil/vil_memory_chunk.h>
+#include <vil/io/vil_io_memory_chunk.h>
+#include <vil/io/vil_io_smart_ptr.h>
 #include <vcl_iostream.h>
 #include <vcl_cstring.h> // for memset()
 #include <vxl_config.h>
@@ -16,31 +16,31 @@
 template<class T>
 inline void test_memory_chunk_io_as(T value)
 {
-  vcl_cout<<"Testing IO as type "<<vil2_pixel_format_of(T())<<vcl_endl;
-  vil2_memory_chunk chunk1(35*sizeof(T),
-    vil2_pixel_format_component_format(vil2_pixel_format_of(T())));
+  vcl_cout<<"Testing IO as type "<<vil_pixel_format_of(T())<<vcl_endl;
+  vil_memory_chunk chunk1(35*sizeof(T),
+    vil_pixel_format_component_format(vil_pixel_format_of(T())));
   T* data1 = reinterpret_cast<T*>(chunk1.data());
   vcl_memset(data1,0,35*sizeof(T)); // avoid "UMR" on subsequent vsl_b_write()
   data1[3]= value;
-  vil2_memory_chunk_sptr chunk_sptr1 = new vil2_memory_chunk(chunk1);
+  vil_memory_chunk_sptr chunk_sptr1 = new vil_memory_chunk(chunk1);
 
-  vsl_b_ofstream bfs_out("vil2_memory_chunk_test_io.bvl.tmp");
-  TEST("Created vil2_memory_chunk_test_io.bvl.tmp for writing", (!bfs_out), false);
+  vsl_b_ofstream bfs_out("vil_memory_chunk_test_io.bvl.tmp");
+  TEST("Created vil_memory_chunk_test_io.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, chunk1);
   vsl_b_write(bfs_out, chunk_sptr1);
   bfs_out.close();
 
-  vil2_memory_chunk chunk2;
-  vil2_memory_chunk_sptr chunk_sptr2;
+  vil_memory_chunk chunk2;
+  vil_memory_chunk_sptr chunk_sptr2;
 
-  vsl_b_ifstream bfs_in("vil2_memory_chunk_test_io.bvl.tmp");
-  TEST("Opened vil2_memory_chunk_test_io.bvl.tmp for reading", (!bfs_in), false);
+  vsl_b_ifstream bfs_in("vil_memory_chunk_test_io.bvl.tmp");
+  TEST("Opened vil_memory_chunk_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, chunk2); vcl_cout<<"Read in chunk2\n";
   vsl_b_read(bfs_in, chunk_sptr2);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 #if !LEAVE_FILES_BEHIND
-  vpl_unlink("vil2_memory_chunk_test_io.bvl.tmp");
+  vpl_unlink("vil_memory_chunk_test_io.bvl.tmp");
 #endif
 
   T* data2 = reinterpret_cast<T*>(chunk2.data());
@@ -56,10 +56,10 @@ inline void test_memory_chunk_io_as(T value)
 
 MAIN( test_memory_chunk_io )
 {
-  START( "vil2_memory_chunk" );
+  START( "vil_memory_chunk" );
 
   vcl_cout << "**********************************\n"
-           << " Testing IO for vil2_memory_chunk\n"
+           << " Testing IO for vil_memory_chunk\n"
            << "**********************************\n";
 
   test_memory_chunk_io_as(vxl_uint_32(17));

@@ -1,4 +1,4 @@
-// This is core/vil/vil_skip_image_impl.cxx
+// This is core/vil1/vil1_skip_image_impl.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,14 +6,14 @@
 // \file
 // \author fsm
 
-#include "vil_skip_image_impl.h"
+#include "vil1_skip_image_impl.h"
 
 #include <vcl_climits.h> // CHAR_BIT
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 
-vil_skip_image_impl::vil_skip_image_impl(vil_image const &underlying, unsigned sx, unsigned sy)
+vil1_skip_image_impl::vil1_skip_image_impl(vil1_image const &underlying, unsigned sx, unsigned sy)
   : base(underlying)
   , skipx(sx)
   , skipy(sy)
@@ -23,31 +23,31 @@ vil_skip_image_impl::vil_skip_image_impl(vil_image const &underlying, unsigned s
   assert(skipy>0);
 }
 
-vil_skip_image_impl::~vil_skip_image_impl()
+vil1_skip_image_impl::~vil1_skip_image_impl()
 {
 }
 
 //--------------------------------------------------------------------------------
 
-vil_image vil_skip_image_impl::get_plane(int p) const
+vil1_image vil1_skip_image_impl::get_plane(int p) const
 {
-  vil_image_impl *i = new vil_skip_image_impl(base.get_plane(p), skipx, skipy);
+  vil1_image_impl *i = new vil1_skip_image_impl(base.get_plane(p), skipx, skipy);
   return i; //
 }
 
-bool vil_skip_image_impl::put_section(void const * , int, int, int, int)
+bool vil1_skip_image_impl::put_section(void const * , int, int, int, int)
 {
   return false;
 }
 
-bool vil_skip_image_impl::get_property(char const *, void *) const
+bool vil1_skip_image_impl::get_property(char const *, void *) const
 {
   return false;
 }
 
 //--------------------------------------------------------------------------------
 
-bool vil_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h) const
+bool vil1_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h) const
 {
   if (base.bits_per_component() % CHAR_BIT) {
     vcl_cerr << __FILE__ " : urgh!\n";
@@ -83,16 +83,16 @@ bool vil_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h) 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 //: Return the name of the class;
-vcl_string vil_skip_image_impl::is_a() const
+vcl_string vil1_skip_image_impl::is_a() const
 {
-  static const vcl_string class_name_="vil_skip_image_impl";
+  static const vcl_string class_name_="vil1_skip_image_impl";
   return class_name_;
 }
 
 //: Return true if the name of the class matches the argument
-bool vil_skip_image_impl::is_class(vcl_string const& s) const
+bool vil1_skip_image_impl::is_class(vcl_string const& s) const
 {
-  return s==vil_skip_image_impl::is_a() || vil_image_impl::is_class(s);
+  return s==vil1_skip_image_impl::is_a() || vil1_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */

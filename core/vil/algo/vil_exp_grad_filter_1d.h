@@ -1,11 +1,11 @@
-#ifndef vil2_exp_grad_filter_1d_h_
-#define vil2_exp_grad_filter_1d_h_
+#ifndef vil_exp_grad_filter_1d_h_
+#define vil_exp_grad_filter_1d_h_
 //:
 // \file
 // \brief Apply exponential gradient filter
 // \author Tim Cootes
 
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 
 //: Apply exponential gradient filter to 1D data. Form: sign(i)*exp(c*|i|)
 //  Apply filter to n values src[i*sstep] to produce output dest[i*dstep]
@@ -13,7 +13,7 @@
 //  sign(i)*exp(c*|i|) applied. c=log(k)
 //  Uses fast recursive implementation.
 template <class srcT, class destT, class accumT>
-inline void vil2_exp_grad_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
+inline void vil_exp_grad_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
                                     destT* dest, vcl_ptrdiff_t dstep,
                                     int n, accumT k)
 {
@@ -53,10 +53,10 @@ inline void vil2_exp_grad_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
 //: Apply exponential gradient filter to src_im (along i direction).
 //  Exponential gradient filter of the form sign(i)*exp(c*|i|) applied. c=log(k)
 //  Uses fast recursive implementation.
-// \relates vil2_image_view
+// \relates vil_image_view
 template <class srcT, class destT, class accumT>
-inline void vil2_exp_grad_filter_i(const vil2_image_view<srcT>& src_im,
-                                   vil2_image_view<destT>& dest_im,
+inline void vil_exp_grad_filter_i(const vil_image_view<srcT>& src_im,
+                                   vil_image_view<destT>& dest_im,
                                    accumT k)
 {
   unsigned ni = src_im.ni();
@@ -71,17 +71,17 @@ inline void vil2_exp_grad_filter_i(const vil2_image_view<srcT>& src_im,
     destT* dest_row = dest_im.top_left_ptr()+p*dest_im.planestep();
     // Filter every row
     for (unsigned j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
-      vil2_exp_grad_filter_1d(src_row,s_istep, dest_row,d_istep, ni, k);
+      vil_exp_grad_filter_1d(src_row,s_istep, dest_row,d_istep, ni, k);
   }
 }
 
 //: Apply exponential gradient filter to src_im (along j direction).
 //  Exponential gradient filter of the form sign(j)*exp(c*|j|) applied. c=log(k)
 //  Uses fast recursive implementation.
-// \relates vil2_image_view
+// \relates vil_image_view
 template <class srcT, class destT, class accumT>
-inline void vil2_exp_grad_filter_j(const vil2_image_view<srcT>& src_im,
-                                   vil2_image_view<destT>& dest_im,
+inline void vil_exp_grad_filter_j(const vil_image_view<srcT>& src_im,
+                                   vil_image_view<destT>& dest_im,
                                    accumT k)
 {
   unsigned ni = src_im.ni();
@@ -96,8 +96,8 @@ inline void vil2_exp_grad_filter_j(const vil2_image_view<srcT>& src_im,
     destT* dest_col = dest_im.top_left_ptr()+p*dest_im.planestep();
     // Filter every column
     for (unsigned i=0;i<ni;++i,src_col+=s_istep,dest_col+=d_istep)
-      vil2_exp_grad_filter_1d(src_col,s_jstep, dest_col,d_jstep, nj, k);
+      vil_exp_grad_filter_1d(src_col,s_jstep, dest_col,d_jstep, nj, k);
   }
 }
 
-#endif // vil2_exp_grad_filter_1d_h_
+#endif // vil_exp_grad_filter_1d_h_

@@ -1,3 +1,3 @@
-#include <vil2/vil2_image_view.txx>
+#include <vil/vil_image_view.txx>
 #include <vcl_complex.h>
-VIL2_IMAGE_VIEW_INSTANTIATE(vcl_complex<float>);
+VIL_IMAGE_VIEW_INSTANTIATE(vcl_complex<float>);

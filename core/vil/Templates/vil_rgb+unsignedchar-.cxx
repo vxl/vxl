@@ -1,12 +1,12 @@
-#include <vil2/vil2_rgb.txx>
+#include <vil/vil_rgb.txx>
 
 #if 0
 #if !VCL_HAS_MEMBER_TEMPLATES
-typedef vil2_rgb<double> vil2_rgb_double;
+typedef vil_rgb<double> vil_rgb_double;
 
-VCL_DECLARE_SPECIALIZATION(vil2_rgb<unsigned char>::vil2_rgb(const vil2_rgb_double& r))
+VCL_DECLARE_SPECIALIZATION(vil_rgb<unsigned char>::vil_rgb(const vil_rgb_double& r))
 VCL_DEFINE_SPECIALIZATION
-vil2_rgb<unsigned char>::vil2_rgb(const vil2_rgb_double& r) {
+vil_rgb<unsigned char>::vil_rgb(const vil_rgb_double& r) {
   double r_R = r.r;
   double r_G = r.g;
   double r_B = r.b;
@@ -21,10 +21,10 @@ vil2_rgb<unsigned char>::vil2_rgb(const vil2_rgb_double& r) {
 #endif // 0
 
 VCL_DEFINE_SPECIALIZATION
-vcl_ostream& operator<<(vcl_ostream& s, const vil2_rgb<unsigned char>& rgb)
+vcl_ostream& operator<<(vcl_ostream& s, const vil_rgb<unsigned char>& rgb)
 {
  return s << '[' << (int)rgb.r << ' ' << (int)rgb.g << ' ' << (int)rgb.b << ']';
 }
 
-VIL2_RGB_INSTANTIATE(unsigned char);
-VIL2_RGB_INSTANTIATE_LS(unsigned char);
+VIL_RGB_INSTANTIATE(unsigned char);
+VIL_RGB_INSTANTIATE_LS(unsigned char);

@@ -1,6 +1,6 @@
-// This is core/vil2/algo/vil2_gauss_filter.h
-#ifndef vil2_gauss_filter_h_
-#define vil2_gauss_filter_h_
+// This is core/vil/algo/vil_gauss_filter.h
+#ifndef vil_gauss_filter_h_
+#define vil_gauss_filter_h_
 //:
 //  \file
 //  \brief Smoothes images.
@@ -9,9 +9,9 @@
 //=======================================================================
 // inclusions
 
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 
-class vil2_gauss_filter_5tap_params
+class vil_gauss_filter_5tap_params
 {
   double sigma_;
   double filt2_, filt1_, filt0_;
@@ -20,7 +20,7 @@ class vil2_gauss_filter_5tap_params
          filt_pen_edge0_, filt_pen_edge_n1_;
  public:
   //: Set the
-  explicit vil2_gauss_filter_5tap_params(double sigma_);
+  explicit vil_gauss_filter_5tap_params(double sigma_);
   //: The width of the Gaussian
   double sigma() const {return sigma_;}
 
@@ -70,30 +70,30 @@ class vil2_gauss_filter_5tap_params
 //  Applies 5 element FIR filter in x and y.
 //  Assumes dest_im has sufficient data allocated.
 template <class srcT, class destT>
-void vil2_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_ystep,
+void vil_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_ystep,
                             unsigned ni, unsigned nj,
                             destT* dest_im, vcl_ptrdiff_t dest_ystep,
-                            const vil2_gauss_filter_5tap_params& params,
+                            const vil_gauss_filter_5tap_params& params,
                             destT* work);
 
 //: Smooth a src_im to produce dest_im
 //  Applies 5 element FIR filter in x and y.
 template <class srcT, class destT>
-void vil2_gauss_filter_5tap(const vil2_image_view<srcT>& src_im,
-                            vil2_image_view<destT>& dest_im,
-                            const vil2_gauss_filter_5tap_params &params,
-                            vil2_image_view<destT> &work);
+void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
+                            vil_image_view<destT>& dest_im,
+                            const vil_gauss_filter_5tap_params &params,
+                            vil_image_view<destT> &work);
 
 
 //: Smooth a src_im to produce dest_im
 //  Applies 5 element FIR filter in x and y.
 template <class srcT, class destT>
-inline void vil2_gauss_filter_5tap(const vil2_image_view<srcT>& src_im,
-                                   vil2_image_view<destT>& dest_im,
-                                   const vil2_gauss_filter_5tap_params &params)
+inline void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
+                                   vil_image_view<destT>& dest_im,
+                                   const vil_gauss_filter_5tap_params &params)
 {
-  vil2_image_view<destT> work;
-  vil2_gauss_filter_5tap(src_im, dest_im, params, work);
+  vil_image_view<destT> work;
+  vil_gauss_filter_5tap(src_im, dest_im, params, work);
 }
 
-#endif // vil2_gauss_filter_h_
+#endif // vil_gauss_filter_h_

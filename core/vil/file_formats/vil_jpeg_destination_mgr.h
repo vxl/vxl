@@ -1,6 +1,6 @@
-// This is core/vil2/file_formats/vil2_jpeg_destination_mgr.h
-#ifndef vil2_jpeg_destination_mgr_h_
-#define vil2_jpeg_destination_mgr_h_
+// This is core/vil/file_formats/vil_jpeg_destination_mgr.h
+#ifndef vil_jpeg_destination_mgr_h_
+#define vil_jpeg_destination_mgr_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -12,31 +12,31 @@
 //     11 Oct 2002 Ian Scott - converted to vil22
 //\endverbatim
 
-#include <vil2/file_formats/vil2_jpeglib.h>
-class vil2_stream;
+#include <vil/file_formats/vil_jpeglib.h>
+class vil_stream;
 
-//: this is the data source structure which allows JPEG to write to a vil2_stream.
-struct vil2_jpeg_stream_destination_mgr
+//: this is the data source structure which allows JPEG to write to a vil_stream.
+struct vil_jpeg_stream_destination_mgr
 {
   struct jpeg_destination_mgr base;
 
-  vil2_stream *stream;           /* target stream */
+  vil_stream *stream;           /* target stream */
   JOCTET * buffer;              /* start of buffer */
 };
 
 void
-vil2_jpeg_init_destination (j_compress_ptr cinfo);
+vil_jpeg_init_destination (j_compress_ptr cinfo);
 
 jpeg_boolean
-vil2_jpeg_empty_output_buffer (j_compress_ptr cinfo);
+vil_jpeg_empty_output_buffer (j_compress_ptr cinfo);
 
 void
-vil2_jpeg_term_destination (j_compress_ptr cinfo);
+vil_jpeg_term_destination (j_compress_ptr cinfo);
 
 void
-vil2_jpeg_stream_dst_set (j_compress_ptr cinfo, vil2_stream *vs);
+vil_jpeg_stream_dst_set (j_compress_ptr cinfo, vil_stream *vs);
 
 void
-vil2_jpeg_stream_dst_rewind(j_compress_ptr cinfo, vil2_stream *vs);
+vil_jpeg_stream_dst_rewind(j_compress_ptr cinfo, vil_stream *vs);
 
-#endif // vil2_jpeg_destination_mgr_h_
+#endif // vil_jpeg_destination_mgr_h_

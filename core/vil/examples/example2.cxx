@@ -1,23 +1,23 @@
 //:
 // \file
-// \brief Example of manipulating different views of a vil2_image_view<T>.
+// \brief Example of manipulating different views of a vil_image_view<T>.
 // \author Tim Cootes - Manchester
 
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_crop.h>
-#include <vil2/vil2_transpose.h>
-#include <vil2/vil2_flip.h>
-#include <vil2/vil2_plane.h>
-#include <vil2/vil2_print.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_crop.h>
+#include <vil/vil_transpose.h>
+#include <vil/vil_flip.h>
+#include <vil/vil_plane.h>
+#include <vil/vil_print.h>
 
 int main(int argc, char** argv)
 {
   unsigned ni=8;
   unsigned nj=8;
   unsigned nplanes=2;
-  vil2_image_view<vxl_byte> image(ni,nj,nplanes);
+  vil_image_view<vxl_byte> image(ni,nj,nplanes);
 
   // Slow fill
   for (unsigned p=0;p<nplanes;++p)
@@ -26,35 +26,35 @@ int main(int argc, char** argv)
         image(i,j,p) = vxl_byte(i+10*j+100*p);
 
   vcl_cout<<"Original image:\n";
-  vil2_print_all(vcl_cout,image);
+  vil_print_all(vcl_cout,image);
 
 
   vcl_cout<<"\nView central square of image\n";
-  vil2_image_view<vxl_byte> win1 = vil2_crop(image,2,4,2,4);
-  vil2_print_all(vcl_cout,win1);
+  vil_image_view<vxl_byte> win1 = vil_crop(image,2,4,2,4);
+  vil_print_all(vcl_cout,win1);
 
   vcl_cout<<vcl_endl;
   vcl_cout<<"Manipulate central square of image through the window\n";
   win1.fill(0);
 
   vcl_cout<<"Original image:\n";
-  vil2_print_all(vcl_cout,image);
+  vil_print_all(vcl_cout,image);
 
   vcl_cout<<"\nView first plane of image\n";
-  vil2_image_view<vxl_byte> plane = vil2_plane(image,1);
-  vil2_print_all(vcl_cout,plane);
+  vil_image_view<vxl_byte> plane = vil_plane(image,1);
+  vil_print_all(vcl_cout,plane);
 
   vcl_cout<<"\nCreate transposed view of plane\n";
-  vil2_image_view<vxl_byte> transpose = vil2_transpose(plane);
-  vil2_print_all(vcl_cout,transpose);
+  vil_image_view<vxl_byte> transpose = vil_transpose(plane);
+  vil_print_all(vcl_cout,transpose);
 
   vcl_cout<<"\nCreate view of plane reflected along i\n";
-  vil2_image_view<vxl_byte> ref_i = vil2_flip_lr(plane);
-  vil2_print_all(vcl_cout,ref_i);
+  vil_image_view<vxl_byte> ref_i = vil_flip_lr(plane);
+  vil_print_all(vcl_cout,ref_i);
 
   vcl_cout<<"\nCreate view of plane reflected along j\n";
-  vil2_image_view<vxl_byte> ref_j = vil2_flip_ud(plane);
-  vil2_print_all(vcl_cout,ref_j);
+  vil_image_view<vxl_byte> ref_j = vil_flip_ud(plane);
+  vil_print_all(vcl_cout,ref_j);
 
   return 0;
 }

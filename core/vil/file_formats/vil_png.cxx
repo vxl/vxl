@@ -1,4 +1,4 @@
-// This is core/vil2/file_formats/vil2_png.cxx
+// This is core/vil/file_formats/vil_png.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,14 +6,14 @@
 // \file
 // http://www.libpng.org/pub/png/libpng.html
 
-#include "vil2_png.h"
+#include "vil_png.h"
 
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 
-#include <vil2/vil2_stream.h>
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_stream.h>
+#include <vil/vil_image_view.h>
 
 #include <png.h>
 #if (PNG_LIBPNG_VER_MAJOR == 0)
@@ -26,16 +26,16 @@ extern "You need a later libpng. You should rerun CMake, after setting VXL_FORCE
 // Constants
 #define SIG_CHECK_SIZE 4
 
-char const* vil2_png_format_tag = "png";
+char const* vil_png_format_tag = "png";
 
 // Functions
 static bool problem(char const* msg)
 {
-  vcl_cerr << "[vil2_png: PROBLEM " <<msg << "]";
+  vcl_cerr << "[vil_png: PROBLEM " <<msg << "]";
   return false;
 }
 
-vil2_image_resource_sptr vil2_png_file_format::make_input_image(vil2_stream* is)
+vil_image_resource_sptr vil_png_file_format::make_input_image(vil_stream* is)
 {
   // Attempt to read header
   png_byte sig_buf [SIG_CHECK_SIZE];
@@ -47,44 +47,44 @@ vil2_image_resource_sptr vil2_png_file_format::make_input_image(vil2_stream* is)
   if (png_sig_cmp (sig_buf, (png_size_t) 0, (png_size_t) SIG_CHECK_SIZE) != 0)
     return 0;
 
-  return new vil2_png_image(is);
+  return new vil_png_image(is);
 }
 
-vil2_image_resource_sptr vil2_png_file_format::make_output_image(vil2_stream* vs,
+vil_image_resource_sptr vil_png_file_format::make_output_image(vil_stream* vs,
                                                                  unsigned nx,
                                                                  unsigned ny,
                                                                  unsigned nplanes,
-                                                                 enum vil2_pixel_format format)
+                                                                 enum vil_pixel_format format)
 {
-  if (format != VIL2_PIXEL_FORMAT_BYTE &&
-      format != VIL2_PIXEL_FORMAT_UINT_16)
-  // FIXME || format != VIL2_PIXEL_FORMAT_BOOL
+  if (format != VIL_PIXEL_FORMAT_BYTE &&
+      format != VIL_PIXEL_FORMAT_UINT_16)
+  // FIXME || format != VIL_PIXEL_FORMAT_BOOL
 
   {
-    vcl_cout<<"ERROR! vil2_png_file_format::make_output_image()\n"
+    vcl_cout<<"ERROR! vil_png_file_format::make_output_image()\n"
             <<"Pixel format should be byte, but is "<<format<<" instead.\n";
     return 0;
   }
 
-  return new vil2_png_image(vs, nx, ny, nplanes, format);
+  return new vil_png_image(vs, nx, ny, nplanes, format);
 }
 
-char const* vil2_png_file_format::tag() const
+char const* vil_png_file_format::tag() const
 {
-  return vil2_png_format_tag;
+  return vil_png_format_tag;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 static void user_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-  vil2_stream* f = static_cast<vil2_stream*>(png_get_io_ptr(png_ptr));
+  vil_stream* f = static_cast<vil_stream*>(png_get_io_ptr(png_ptr));
   f->read(data, length);
 }
 
 static void user_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-  vil2_stream* f = static_cast<vil2_stream*>(png_get_io_ptr(png_ptr));
+  vil_stream* f = static_cast<vil_stream*>(png_get_io_ptr(png_ptr));
   f->write(data, length);
 }
 
@@ -94,10 +94,10 @@ static void user_flush_data(png_structp /*png_ptr*/)
   // urk.  how to flush?
 }
 
-struct vil2_jmpbuf_wrapper {
+struct vil_jmpbuf_wrapper {
   jmp_buf jmpbuf;
 };
-static vil2_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
+static vil_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
 static bool jmpbuf_ok = false;
 
 // Must be  a macro - setjmp needs its stack frame to live
@@ -121,16 +121,16 @@ static bool jmpbuf_ok = false;
 //
 static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
 {
-  vcl_cerr << "vil2_png:  fatal libpng error: " << msg << '\n';
+  vcl_cerr << "vil_png:  fatal libpng error: " << msg << '\n';
 
   if (!jmpbuf_ok) {
     // Someone called the error handler when the setjmp was wrong
-    vcl_cerr << "vil2_png: jmpbuf is pretty far from ok.  returning\n";
+    vcl_cerr << "vil_png: jmpbuf is pretty far from ok.  returning\n";
     // vcl_abort();
     return;
   }
 
-  vil2_jmpbuf_wrapper  *jmpbuf_ptr = static_cast<vil2_jmpbuf_wrapper*>(png_get_error_ptr(png_ptr));
+  vil_jmpbuf_wrapper  *jmpbuf_ptr = static_cast<vil_jmpbuf_wrapper*>(png_get_error_ptr(png_ptr));
   if (jmpbuf_ptr == NULL) {         // we are completely hosed now
     vcl_cerr << "pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.\n";
     vcl_exit(99);
@@ -139,7 +139,7 @@ static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
   longjmp(jmpbuf_ptr->jmpbuf, 1);
 }
 
-struct vil2_png_structures {
+struct vil_png_structures {
   bool reading_;
   png_struct *png_ptr;
   png_info *info_ptr;
@@ -147,7 +147,7 @@ struct vil2_png_structures {
   int channels;
   bool ok;
 
-  vil2_png_structures(bool reading) {
+  vil_png_structures(bool reading) {
     reading_ = reading;
     png_ptr = 0;
     info_ptr = 0;
@@ -229,7 +229,7 @@ struct vil2_png_structures {
     return rows;
   }
 
-  ~vil2_png_structures() {
+  ~vil_png_structures() {
     png_setjmp_on(goto del);
     if (reading_) {
       // Reading - just delete
@@ -255,55 +255,55 @@ struct vil2_png_structures {
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil2_png_image::vil2_png_image(vil2_stream* is):
+vil_png_image::vil_png_image(vil_stream* is):
   vs_(is),
-  p_(new vil2_png_structures(true))
+  p_(new vil_png_structures(true))
 {
   vs_->ref();
   read_header();
 }
 
-bool vil2_png_image::get_property(char const* /*tag*/, void* /*prop*/) const
+bool vil_png_image::get_property(char const* /*tag*/, void* /*prop*/) const
 {
   // This is not an in-memory image type, nor is it read-only:
   return false;
 }
 
-vil2_png_image::vil2_png_image(vil2_stream *s,
+vil_png_image::vil_png_image(vil_stream *s,
                                unsigned nx,
                                unsigned ny,
                                unsigned nplanes,
-                               enum vil2_pixel_format format):
+                               enum vil_pixel_format format):
   vs_(s),
   width_(nx),
   height_(ny),
   components_(nplanes),
   format_(format),
-  p_(new vil2_png_structures(false))
+  p_(new vil_png_structures(false))
 {
-  if (format == VIL2_PIXEL_FORMAT_BOOL) bits_per_component_ = 1;
-  else bits_per_component_ = vil2_pixel_format_sizeof_components(format) * 8;
+  if (format == VIL_PIXEL_FORMAT_BOOL) bits_per_component_ = 1;
+  else bits_per_component_ = vil_pixel_format_sizeof_components(format) * 8;
 
   vs_->ref();
   write_header();
-  assert(format == VIL2_PIXEL_FORMAT_BYTE ||
-         format == VIL2_PIXEL_FORMAT_UINT_16);
-  // FIXME || format == VIL2_PIXEL_FORMAT_BOOL
+  assert(format == VIL_PIXEL_FORMAT_BYTE ||
+         format == VIL_PIXEL_FORMAT_UINT_16);
+  // FIXME || format == VIL_PIXEL_FORMAT_BOOL
 }
 
-vil2_png_image::~vil2_png_image()
+vil_png_image::~vil_png_image()
 {
   delete p_;
   vs_->unref();
 }
 
 
-char const* vil2_png_image::file_format() const
+char const* vil_png_image::file_format() const
 {
-  return vil2_png_format_tag;
+  return vil_png_format_tag;
 }
 
-bool vil2_png_image::read_header()
+bool vil_png_image::read_header()
 {
   if (!p_->ok)
     return false;
@@ -348,9 +348,9 @@ bool vil2_png_image::read_header()
   this->components_ = png_get_channels(p_->png_ptr, p_->info_ptr);
   this->bits_per_component_ = png_get_bit_depth(p_->png_ptr, p_->info_ptr);
 
-  if (this->bits_per_component_ == 1) format_ = VIL2_PIXEL_FORMAT_BOOL;
-  else if (this->bits_per_component_ <=8) format_=VIL2_PIXEL_FORMAT_BYTE;
-  else format_ = VIL2_PIXEL_FORMAT_UINT_16;
+  if (this->bits_per_component_ == 1) format_ = VIL_PIXEL_FORMAT_BOOL;
+  else if (this->bits_per_component_ <=8) format_=VIL_PIXEL_FORMAT_BYTE;
+  else format_ = VIL_PIXEL_FORMAT_UINT_16;
 
   if (png_get_valid(p_->png_ptr, p_->info_ptr, PNG_INFO_sBIT)) problem("LAZY AWF! PNG_INFO_sBIT");
 
@@ -359,7 +359,7 @@ bool vil2_png_image::read_header()
   return true;
 }
 
-bool vil2_png_image::write_header()
+bool vil_png_image::write_header()
 {
   if (!p_->ok)
     return false;
@@ -396,7 +396,7 @@ bool vil2_png_image::write_header()
   return true;
 }
 
-vil2_image_view_base_sptr vil2_png_image::get_copy_view(unsigned x0,
+vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
                                                         unsigned nx,
                                                         unsigned y0,
                                                         unsigned ny) const
@@ -410,9 +410,9 @@ vil2_image_view_base_sptr vil2_png_image::get_copy_view(unsigned x0,
 
   int bit_depth = png_get_bit_depth(p_->png_ptr,p_->info_ptr);
   int bytes_per_pixel = bit_depth * p_->channels / 8;
-  int bytes_per_row_dst = nx*nplanes() * vil2_pixel_format_sizeof_components(format_);
+  int bytes_per_row_dst = nx*nplanes() * vil_pixel_format_sizeof_components(format_);
 
-  vil2_memory_chunk_sptr chunk = new vil2_memory_chunk(ny*bytes_per_row_dst,
+  vil_memory_chunk_sptr chunk = new vil_memory_chunk(ny*bytes_per_row_dst,
     format_);
 
   if ((bit_depth==16) &&
@@ -421,7 +421,7 @@ vil2_image_view_base_sptr vil2_png_image::get_copy_view(unsigned x0,
     assert(x0 == 0);
 
     vcl_memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
-    return new vil2_image_view<vxl_uint_16>(chunk, reinterpret_cast<vxl_uint_16*>(chunk->data()),
+    return new vil_image_view<vxl_uint_16>(chunk, reinterpret_cast<vxl_uint_16*>(chunk->data()),
       nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
   }
   if ((bit_depth ==8) &&
@@ -430,7 +430,7 @@ vil2_image_view_base_sptr vil2_png_image::get_copy_view(unsigned x0,
     assert(x0 == 0);
 
     vcl_memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
-    return new vil2_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()),
+    return new vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()),
       nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
   }
   else if (bit_depth==16)
@@ -438,7 +438,7 @@ vil2_image_view_base_sptr vil2_png_image::get_copy_view(unsigned x0,
     png_byte* dst = reinterpret_cast<png_byte*>(chunk->data());
     for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
       vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
-    return new vil2_image_view<vxl_uint_16>(chunk, reinterpret_cast<vxl_uint_16*>(chunk->data()),
+    return new vil_image_view<vxl_uint_16>(chunk, reinterpret_cast<vxl_uint_16*>(chunk->data()),
       nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
   }
   else if (bit_depth==8)
@@ -446,7 +446,7 @@ vil2_image_view_base_sptr vil2_png_image::get_copy_view(unsigned x0,
     png_byte* dst = reinterpret_cast<png_byte*>(chunk->data());
     for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
       vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
-    return new vil2_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()),
+    return new vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()),
       nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
   }
   // FIXME Can't handle pixel depths of 1 2 or 4 pixels yet
@@ -454,7 +454,7 @@ vil2_image_view_base_sptr vil2_png_image::get_copy_view(unsigned x0,
 }
 
 
-bool vil2_png_image::put_view(const vil2_image_view_base &view,
+bool vil_png_image::put_view(const vil_image_view_base &view,
                                unsigned x0, unsigned y0)
 {
   if (!view_fits(view, x0, y0))
@@ -475,8 +475,8 @@ bool vil2_png_image::put_view(const vil2_image_view_base &view,
   // int bytes_per_row_dst = view.ni()*bytes_per_pixel;
   if (bit_depth == 8)
   {
-    if (view.pixel_format() != VIL2_PIXEL_FORMAT_BYTE) return false;
-    const vil2_image_view<vxl_byte> &view2 = static_cast<const vil2_image_view<vxl_byte>&>(view);
+    if (view.pixel_format() != VIL_PIXEL_FORMAT_BYTE) return false;
+    const vil_image_view<vxl_byte> &view2 = static_cast<const vil_image_view<vxl_byte>&>(view);
     if (nplanes()==1)
     {
       for (unsigned y = 0; y < view.nj(); ++y)
@@ -497,8 +497,8 @@ bool vil2_png_image::put_view(const vil2_image_view_base &view,
   }
   else if (bit_depth == 16)
   {
-    if (view.pixel_format() != VIL2_PIXEL_FORMAT_UINT_16) return false;
-    const vil2_image_view<vxl_uint_16> &view2 = static_cast<const vil2_image_view<vxl_uint_16>&>(view);
+    if (view.pixel_format() != VIL_PIXEL_FORMAT_UINT_16) return false;
+    const vil_image_view<vxl_uint_16> &view2 = static_cast<const vil_image_view<vxl_uint_16>&>(view);
     if (nplanes()==1)
     {
       for (unsigned y = 0; y < view.nj(); ++y)

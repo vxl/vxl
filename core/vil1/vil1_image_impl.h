@@ -1,6 +1,6 @@
-// This is core/vil/vil_image_impl.h
-#ifndef vil_image_impl_h_
-#define vil_image_impl_h_
+// This is core/vil1/vil1_image_impl.h
+#ifndef vil1_image_impl_h_
+#define vil1_image_impl_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -8,8 +8,8 @@
 // \file
 // \brief Representation of a generic image
 //
-// A vil_image_impl is reference counted (see below).
-// For a smart-pointer version, use class vil_image.
+// A vil1_image_impl is reference counted (see below).
+// For a smart-pointer version, use class vil1_image.
 //
 // \author AWF
 // \date 17 Feb 2000
@@ -22,29 +22,29 @@
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 
-class vil_image;
+class vil1_image;
 
 //: Describes the interpretation of component bits.
 // These make no statement about the number of
 // bits in the representation.
-enum vil_component_format {
-  VIL_COMPONENT_FORMAT_UNKNOWN,
-  VIL_COMPONENT_FORMAT_UNSIGNED_INT,
-  VIL_COMPONENT_FORMAT_SIGNED_INT,
-  VIL_COMPONENT_FORMAT_IEEE_FLOAT,
-  VIL_COMPONENT_FORMAT_COMPLEX
+enum vil1_component_format {
+  VIL1_COMPONENT_FORMAT_UNKNOWN,
+  VIL1_COMPONENT_FORMAT_UNSIGNED_INT,
+  VIL1_COMPONENT_FORMAT_SIGNED_INT,
+  VIL1_COMPONENT_FORMAT_IEEE_FLOAT,
+  VIL1_COMPONENT_FORMAT_COMPLEX
 };
 
 inline
-const char* vil_print(vil_component_format f)
+const char* vil1_print(vil1_component_format f)
 {
   switch(f) {
-    case VIL_COMPONENT_FORMAT_UNKNOWN: return "VIL_COMPONENT_FORMAT=UNKNOWN";
-    case VIL_COMPONENT_FORMAT_UNSIGNED_INT: return "VIL_COMPONENT_FORMAT=unsigned int";
-    case VIL_COMPONENT_FORMAT_SIGNED_INT: return "VIL_COMPONENT_FORMAT=signed int";
-    case VIL_COMPONENT_FORMAT_IEEE_FLOAT: return "VIL_COMPONENT_FORMAT=IEEE float";
-    case VIL_COMPONENT_FORMAT_COMPLEX: return "VIL_COMPONENT_FORMAT=complex";
-    default: return "VIL_COMPONENT_FORMAT_INVALID";
+    case VIL1_COMPONENT_FORMAT_UNKNOWN: return "VIL1_COMPONENT_FORMAT=UNKNOWN";
+    case VIL1_COMPONENT_FORMAT_UNSIGNED_INT: return "VIL1_COMPONENT_FORMAT=unsigned int";
+    case VIL1_COMPONENT_FORMAT_SIGNED_INT: return "VIL1_COMPONENT_FORMAT=signed int";
+    case VIL1_COMPONENT_FORMAT_IEEE_FLOAT: return "VIL1_COMPONENT_FORMAT=IEEE float";
+    case VIL1_COMPONENT_FORMAT_COMPLEX: return "VIL1_COMPONENT_FORMAT=complex";
+    default: return "VIL1_COMPONENT_FORMAT_INVALID";
   }
 }
 
@@ -82,11 +82,11 @@ const char* vil_print(vil_component_format f)
 // - Pixel : spatial location,
 // - Plane
 
-class vil_image_impl
+class vil1_image_impl
 {
  public:
-  vil_image_impl();
-  virtual ~vil_image_impl();
+  vil1_image_impl();
+  virtual ~vil1_image_impl();
 
   //: Dimensions:  Planes x W x H x Components
   virtual int planes() const = 0;
@@ -105,12 +105,12 @@ class vil_image_impl
   //  A standard RGB RGB RGB image has
   // - components() == 3
   // - bits_per_component() == 8
-  // - component_format() == VIL_COMPONENT_FORMAT_UNSIGNED_INT
-  // Use vil_print(fmt) to return a string description of the format fmt.
-  virtual enum vil_component_format component_format() const = 0;
+  // - component_format() == VIL1_COMPONENT_FORMAT_UNSIGNED_INT
+  // Use vil1_print(fmt) to return a string description of the format fmt.
+  virtual enum vil1_component_format component_format() const = 0;
 
   //: return the ith plane.
-  virtual vil_image get_plane(int ) const;
+  virtual vil1_image get_plane(int ) const;
 
   //: Copy buffer of this to BUF.
   // The buffer is stored like this for each pixel:
@@ -146,8 +146,8 @@ class vil_image_impl
 /* END_MANCHESTER_BINARY_IO_CODE */
 
  private:
-  friend class vil_image;
-  // You probably should not use a vil_image_impl in a vbl_smart_ptr, so the
+  friend class vil1_image;
+  // You probably should not use a vil1_image_impl in a vbl_smart_ptr, so the
   // ref counting methods are called by the unusual up_ref() and down_ref().
   void up_ref() { ++reference_count; }
   void down_ref() {
@@ -157,14 +157,14 @@ class vil_image_impl
   int reference_count;
 };
 
-#define VIL_DISPATCH_AUX(VTYPE, uchar, Template, Args) \
+#define VIL1_DISPATCH_AUX(VTYPE, uchar, Template, Args) \
 case VTYPE: Template<uchar > Args; break;
 
-#define VIL_DISPATCH_IMAGE_OP(f, Template, Args) \
+#define VIL1_DISPATCH_IMAGE_OP(f, Template, Args) \
 switch (f) {\
- VIL_DISPATCH_AUX(VIL_UNSIGNED_8, vil_unsigned_8);\
- VIL_DISPATCH_AUX(VIL_SIGNED_8, vil_signed_8); \
- VIL_DISPATCH_AUX(VIL_FLOAT_32, vil_float_32); \
+ VIL1_DISPATCH_AUX(VIL1_UNSIGNED_8, vil1_unsigned_8);\
+ VIL1_DISPATCH_AUX(VIL1_SIGNED_8, vil1_signed_8); \
+ VIL1_DISPATCH_AUX(VIL1_FLOAT_32, vil1_float_32); \
 }
 
-#endif // vil_image_impl_h_
+#endif // vil1_image_impl_h_

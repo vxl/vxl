@@ -3,11 +3,11 @@
 //  \brief Apply gradient operator to 2D planes of data
 //  \author Tim Cootes
 
-#include "vil2_sobel_1x3.h"
+#include "vil_sobel_1x3.h"
 
 //: Compute gradients of single plane of 2D data using 1x3 Sobel filters
 //  Computes both i and j gradients of an ni x nj plane of data
-void vil2_sobel_1x3_1plane(const unsigned char* src,
+void vil_sobel_1x3_1plane(const unsigned char* src,
                            vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
                            float* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
                            float* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
@@ -105,7 +105,7 @@ void vil2_sobel_1x3_1plane(const unsigned char* src,
 
 //: Compute gradients of single plane of 2D data using 1x3 Sobel filters
 //  Computes both x and j gradients of an nx x nj plane of data
-void vil2_sobel_1x3_1plane(const float* src,
+void vil_sobel_1x3_1plane(const float* src,
                            vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
                            float* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
                            float* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
@@ -201,7 +201,7 @@ void vil2_sobel_1x3_1plane(const float* src,
 
 //: Compute gradients of single plane of 2D data using 1x3 Sobel filters
 //  Computes both x and j gradients of an nx x nj plane of data
-void vil2_sobel_1x3_1plane(const double* src,
+void vil_sobel_1x3_1plane(const double* src,
                            vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
                            double* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
                            double* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,

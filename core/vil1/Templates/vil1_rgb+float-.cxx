@@ -1,4 +1,4 @@
-#include <vil/vil_rgb.txx>
+#include <vil1/vil1_rgb.txx>
 
-VIL_RGB_INSTANTIATE(float);
-VIL_RGB_INSTANTIATE_LS(float);
+VIL1_RGB_INSTANTIATE(float);
+VIL1_RGB_INSTANTIATE_LS(float);

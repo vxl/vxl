@@ -3,11 +3,11 @@
 #include <vpl/vpl.h>
 #include <vul/vul_temp_filename.h>
 
-#include <vil/vil_memory_image.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_memory_image.h>
+#include <vil1/vil1_save.h>
 
 static
-void p(vil_image const& m)
+void p(vil1_image const& m)
 {
   for (int y = 0; y < m.height(); ++y) {
     for (int x = 0; x < m.width(); ++x) {
@@ -23,12 +23,12 @@ int
 test_memory_image_main(int, char*[])
 {
   vcl_string tmp_nam = vul_temp_filename();
-  vcl_string file1 = tmp_nam!="" ? tmp_nam + ".pgm" : "vil_test_memory_image_1.pgm";
+  vcl_string file1 = tmp_nam!="" ? tmp_nam + ".pgm" : "vil1_test_memory_image_1.pgm";
   tmp_nam = vul_temp_filename();
-  vcl_string file2 = tmp_nam!="" ? tmp_nam + ".pgm" : "vil_test_memory_image_2.pgm";
+  vcl_string file2 = tmp_nam!="" ? tmp_nam + ".pgm" : "vil1_test_memory_image_2.pgm";
 
   {
-    vil_memory_image m(3, 2, VIL_BYTE);
+    vil1_memory_image m(3, 2, VIL1_BYTE);
 
     unsigned char data[] = {
       1, 2, 3,
@@ -37,15 +37,15 @@ test_memory_image_main(int, char*[])
     m.put_section(data, 0, 0, 3, 2);
     p(m);
 
-    vil_save(m, file1.c_str(), "pnm");
+    vil1_save(m, file1.c_str(), "pnm");
 #ifdef LEAVE_IMAGES_BEHIND
       vpl_chmod(file1, 0666); // -rw-rw-rw-
 #endif
 
-    vil_memory_image n(data, 3, 2, VIL_BYTE);
+    vil1_memory_image n(data, 3, 2, VIL1_BYTE);
     p(n);
 
-    vil_save(n, file2.c_str(), "pnm");
+    vil1_save(n, file2.c_str(), "pnm");
 #ifdef LEAVE_IMAGES_BEHIND
       vpl_chmod(file2, 0666); // -rw-rw-rw-
 #endif

@@ -1,3 +1,3 @@
-#include <vil/vil_interpolate.txx>
+#include <vil1/vil1_interpolate.txx>
 
-VIL_INTERPOLATE_INSTANTIATE(unsigned char, unsigned char);
+VIL1_INTERPOLATE_INSTANTIATE(unsigned char, unsigned char);

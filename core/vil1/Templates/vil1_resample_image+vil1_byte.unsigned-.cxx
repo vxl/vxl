@@ -1,4 +1,4 @@
-#include <vil/vil_byte.h>
-#include <vil/vil_resample_image.txx>
+#include <vil1/vil1_byte.h>
+#include <vil1/vil1_resample_image.txx>
 
-VIL_RESAMPLE_IMAGE_INSTANTIATE(vil_byte, unsigned);
+VIL1_RESAMPLE_IMAGE_INSTANTIATE(vil1_byte, unsigned);

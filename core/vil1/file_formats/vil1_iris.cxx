@@ -1,4 +1,4 @@
-// This is core/vil/file_formats/vil_iris.cxx
+// This is core/vil1/file_formats/vil1_iris.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -10,31 +10,31 @@
 //-----------------------------------------------------------------------------
 
 
-#include "vil_iris.h"
+#include "vil1_iris.h"
 
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 
-#include <vil/vil_stream.h>
-#include <vil/vil_image_impl.h>
-#include <vil/vil_image.h>
-#include <vil/vil_property.h>
+#include <vil1/vil1_stream.h>
+#include <vil1/vil1_image_impl.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_property.h>
 
-static short get_short(vil_stream* file, int location = -1); // default -1 means: read at current position
-static unsigned short get_ushort(vil_stream* file, int location = -1);
-static char get_char(vil_stream* file, int location = -1);
-static long get_long(vil_stream* file, int location = -1);
-static void send_char(vil_stream* data, int s);
-static void send_short(vil_stream* data, int s);
-static void send_ushort(vil_stream* data, unsigned int s);
-static void send_long(vil_stream* data, long s);
+static short get_short(vil1_stream* file, int location = -1); // default -1 means: read at current position
+static unsigned short get_ushort(vil1_stream* file, int location = -1);
+static char get_char(vil1_stream* file, int location = -1);
+static long get_long(vil1_stream* file, int location = -1);
+static void send_char(vil1_stream* data, int s);
+static void send_short(vil1_stream* data, int s);
+static void send_ushort(vil1_stream* data, unsigned int s);
+static void send_long(vil1_stream* data, long s);
 static void expandrow(unsigned char *optr, unsigned char *iptr, int z);
 
 
-char const* vil_iris_format_tag = "iris";
+char const* vil1_iris_format_tag = "iris";
 
-vil_image_impl* vil_iris_file_format::make_input_image(vil_stream* is)
+vil1_image_impl* vil1_iris_file_format::make_input_image(vil1_stream* is)
 {
   is->seek(0L);
 
@@ -63,27 +63,27 @@ vil_image_impl* vil_iris_file_format::make_input_image(vil_stream* is)
   if (dimension_ > 3 || dimension_ < 1) return 0;
   if (bytes_per_component_ < 1 || bytes_per_component_ > 2) return 0;
 
-  return new vil_iris_generic_image(is,imagename);
+  return new vil1_iris_generic_image(is,imagename);
 }
 
-vil_image_impl* vil_iris_file_format::make_output_image(vil_stream* is, int planes,
+vil1_image_impl* vil1_iris_file_format::make_output_image(vil1_stream* is, int planes,
                                                         int width,
                                                         int height,
                                                         int components,
                                                         int bits_per_component,
-                                                        vil_component_format format)
+                                                        vil1_component_format format)
 {
-  return new vil_iris_generic_image(is, planes, width, height, components, bits_per_component, format);
+  return new vil1_iris_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
-char const* vil_iris_file_format::tag() const
+char const* vil1_iris_file_format::tag() const
 {
-  return vil_iris_format_tag;
+  return vil1_iris_format_tag;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, char* imagename):
+vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream* is, char* imagename):
   is_(is)
 {
   is_->ref();
@@ -91,28 +91,28 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, char* imagename):
   vcl_strncpy(imagename_, imagename, 80);
 }
 
-bool vil_iris_generic_image::get_property(char const *tag, void *prop) const
+bool vil1_iris_generic_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil_property_left_first))
+  if (0==vcl_strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
   return false;
 }
 
-char const* vil_iris_generic_image::file_format() const
+char const* vil1_iris_generic_image::file_format() const
 {
-  return vil_iris_format_tag;
+  return vil1_iris_format_tag;
 }
 
-vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, int planes,
+vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream* is, int planes,
                                                int width,
                                                int height,
                                                int components,
                                                int bits_per_component,
-                                               vil_component_format /*format*/):
+                                               vil1_component_format /*format*/):
   is_(is)
 {
   is_->ref();
@@ -127,7 +127,7 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, int planes,
     height_ = height;
     pixmin_ = 0;
     pixmax_ = (bits_per_component == 8) ? 255 : 65535;
-    vcl_strcpy(imagename_, "vil writes an iris image!");
+    vcl_strcpy(imagename_, "vil1 writes an iris image!");
     colormap_ = 0;
 
     if ((components * planes) == 1)
@@ -154,12 +154,12 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, int planes,
   else vcl_cerr << __FILE__ ": Cannot write iris image, they want 8 or 16 bits per component\n";
 }
 
-vil_iris_generic_image::~vil_iris_generic_image()
+vil1_iris_generic_image::~vil1_iris_generic_image()
 {
   is_ -> unref();
 }
 
-bool vil_iris_generic_image::read_header()
+bool vil1_iris_generic_image::read_header()
 {
   is_->seek(0L);
 
@@ -217,10 +217,10 @@ bool vil_iris_generic_image::read_header()
 }
 
 
-bool vil_iris_generic_image::write_header()
+bool vil1_iris_generic_image::write_header()
 {
 #ifdef DEBUG
-  vcl_cerr << __FILE__ ": vil_iris_generic_image::write_header()\n"
+  vcl_cerr << __FILE__ ": vil1_iris_generic_image::write_header()\n"
            << "Here we go : \n"
            << "magic_      = " << magic_    << vcl_endl
            << "storage_    = " << storage_ << vcl_endl
@@ -259,15 +259,15 @@ bool vil_iris_generic_image::write_header()
 }
 
 
-vil_image vil_iris_generic_image::get_plane(int plane) const
+vil1_image vil1_iris_generic_image::get_plane(int plane) const
 {
   assert(plane < planes_); // should this be 'plane <= planes_'? planes start at 0.
-  vcl_cerr << __FILE__ ": do something for vil_iris_generic_image::get_plane\n";
+  vcl_cerr << __FILE__ ": do something for vil1_iris_generic_image::get_plane\n";
   return 0;
 }
 
 
-bool vil_iris_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
+bool vil1_iris_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
   // at the moment I am not dealing with requests for memory
   // outside the image so just abort if you get any
@@ -285,7 +285,7 @@ bool vil_iris_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
 }
 
 
-bool vil_iris_generic_image::get_section_verbatim(void* ib, int x0, int y0, int xs, int ys) const
+bool vil1_iris_generic_image::get_section_verbatim(void* ib, int x0, int y0, int xs, int ys) const
 {
   int row_len = xs * bytes_per_pixel();
 
@@ -327,7 +327,7 @@ bool vil_iris_generic_image::get_section_verbatim(void* ib, int x0, int y0, int 
 }//GetSectionVERBATIM
 
 
-bool vil_iris_generic_image::get_section_rle(void* ib, int x0, int y0, int xs, int ys) const
+bool vil1_iris_generic_image::get_section_rle(void* ib, int x0, int y0, int xs, int ys) const
 {
   int row_len = xs * bytes_per_pixel();
 
@@ -370,7 +370,7 @@ bool vil_iris_generic_image::get_section_rle(void* ib, int x0, int y0, int xs, i
 }
 
 
-bool vil_iris_generic_image::put_section(void const* buf, int x0, int y0, int width, int height)
+bool vil1_iris_generic_image::put_section(void const* buf, int x0, int y0, int width, int height)
 {
   int ynul = height_ - y0 - height;
 
@@ -412,7 +412,7 @@ bool vil_iris_generic_image::put_section(void const* buf, int x0, int y0, int wi
 }
 
 
-bool vil_iris_generic_image::read_offset_tables() {
+bool vil1_iris_generic_image::read_offset_tables() {
 
   int tablen;
   tablen = height_ * planes_;
@@ -435,7 +435,7 @@ bool vil_iris_generic_image::read_offset_tables() {
 }
 
 
-short get_short(vil_stream* file, int location){
+short get_short(vil1_stream* file, int location){
   if (location >= 0) file->seek(location);
 
   unsigned char buff[2];
@@ -444,7 +444,7 @@ short get_short(vil_stream* file, int location){
 }
 
 
-char get_char(vil_stream* file, int location){
+char get_char(vil1_stream* file, int location){
   if (location >= 0) file->seek(location);
 
   unsigned char buff[1];
@@ -452,7 +452,7 @@ char get_char(vil_stream* file, int location){
   return buff[0];
 }
 
-unsigned short get_ushort(vil_stream* file, int location){
+unsigned short get_ushort(vil1_stream* file, int location){
   if (location >= 0) file->seek(location);
 
   unsigned char buff[2];
@@ -460,7 +460,7 @@ unsigned short get_ushort(vil_stream* file, int location){
   return (buff[0]<<8)+(buff[1]<<0);
 }
 
-long get_long(vil_stream* file, int location){
+long get_long(vil1_stream* file, int location){
   if (location >= 0) file->seek(location);
 
   unsigned char buff[4];
@@ -469,13 +469,13 @@ long get_long(vil_stream* file, int location){
 }
 
 
-void send_char(vil_stream* data, int s)
+void send_char(vil1_stream* data, int s)
 {
   char c = s;
   data->write(&c ,1L);
 }
 
-void send_short(vil_stream* data, int s)
+void send_short(vil1_stream* data, int s)
 {
   unsigned char buff[2];
   buff[0] = (s >> 8) & 0xff;
@@ -483,7 +483,7 @@ void send_short(vil_stream* data, int s)
   data->write(buff, 2L);
 }
 
-void send_ushort(vil_stream* data, unsigned int s)
+void send_ushort(vil1_stream* data, unsigned int s)
 {
   unsigned char buff[2];
   buff[0] = (s >> 8) & 0xff;
@@ -491,7 +491,7 @@ void send_ushort(vil_stream* data, unsigned int s)
   data->write(buff, 2L);
 }
 
-void send_long(vil_stream* data, long s)
+void send_long(vil1_stream* data, long s)
 {
   unsigned char buff[4];
   buff[0] = (unsigned char)((s >> 24) & 0xff);

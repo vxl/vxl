@@ -1,4 +1,4 @@
-// This is core/vil/vil_resample_image_impl.cxx
+// This is core/vil1/vil1_resample_image_impl.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,16 +6,16 @@
 // \file
 // \author fsm
 
-#include "vil_resample_image_impl.h"
-#include <vil/vil_resample_image.h>
-#include <vil/vil_byte.h>
-#include <vil/vil_rgb.h>
-#include <vil/vil_pixel.h>
+#include "vil1_resample_image_impl.h"
+#include <vil1/vil1_resample_image.h>
+#include <vil1/vil1_byte.h>
+#include <vil1/vil1_rgb.h>
+#include <vil1/vil1_pixel.h>
 #include <vcl_climits.h> // CHAR_BIT
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
-vil_resample_image_impl::vil_resample_image_impl(vil_image const &underlying, unsigned nw, unsigned nh)
+vil1_resample_image_impl::vil1_resample_image_impl(vil1_image const &underlying, unsigned nw, unsigned nh)
   : base(underlying)
   , new_width(nw)
   , new_height(nh)
@@ -25,31 +25,31 @@ vil_resample_image_impl::vil_resample_image_impl(vil_image const &underlying, un
   assert(new_height>0);
 }
 
-vil_resample_image_impl::~vil_resample_image_impl()
+vil1_resample_image_impl::~vil1_resample_image_impl()
 {
 }
 
 //--------------------------------------------------------------------------------
 
-vil_image vil_resample_image_impl::get_plane(int p) const
+vil1_image vil1_resample_image_impl::get_plane(int p) const
 {
-  vil_image_impl *i = new vil_resample_image_impl(base.get_plane(p), new_width, new_height);
-  return vil_image(i);
+  vil1_image_impl *i = new vil1_resample_image_impl(base.get_plane(p), new_width, new_height);
+  return vil1_image(i);
 }
 
-bool vil_resample_image_impl::put_section(void const * , int, int, int, int)
+bool vil1_resample_image_impl::put_section(void const * , int, int, int, int)
 {
   return false;
 }
 
-bool vil_resample_image_impl::get_property(char const *, void *) const
+bool vil1_resample_image_impl::get_property(char const *, void *) const
 {
   return false;
 }
 
 //--------------------------------------------------------------------------------
 
-bool vil_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int h) const
+bool vil1_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int h) const
 {
   assert(buf!=0);
   //vcl_cerr << "x0 y0 w h = " << x0 << ' ' << y0 << ' ' << w << ' ' << h << vcl_endl;
@@ -66,14 +66,14 @@ bool vil_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int 
   }
 
   // switch on pixel type:
-  switch ( vil_pixel_format(base) ) {
-  case VIL_BYTE:
-    return vil_resample_image(base, new_width, new_height,
-                              (vil_byte*)buf, (unsigned*)0,
+  switch ( vil1_pixel_format(base) ) {
+  case VIL1_BYTE:
+    return vil1_resample_image(base, new_width, new_height,
+                              (vil1_byte*)buf, (unsigned*)0,
                               x0, y0, w, h);
-  case VIL_RGB_BYTE:
-    return vil_resample_image(base, new_width, new_height,
-                              (vil_rgb<vil_byte>*)buf, (vil_rgb<int>*)0,
+  case VIL1_RGB_BYTE:
+    return vil1_resample_image(base, new_width, new_height,
+                              (vil1_rgb<vil1_byte>*)buf, (vil1_rgb<int>*)0,
                               x0, y0, w, h);
 
   default:
@@ -85,16 +85,16 @@ bool vil_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 //: Return the name of the class;
-vcl_string vil_resample_image_impl::is_a() const
+vcl_string vil1_resample_image_impl::is_a() const
 {
-  static const vcl_string class_name_="vil_resample_image_impl";
+  static const vcl_string class_name_="vil1_resample_image_impl";
   return class_name_;
 }
 
 //: Return true if the name of the class matches the argument
-bool vil_resample_image_impl::is_class(vcl_string const& s) const
+bool vil1_resample_image_impl::is_class(vcl_string const& s) const
 {
-  return s==vil_resample_image_impl::is_a() || vil_image_impl::is_class(s);
+  return s==vil1_resample_image_impl::is_a() || vil1_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */

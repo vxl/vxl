@@ -1,4 +1,4 @@
-// This is core/vil2/tests/test_file_format_read.cxx
+// This is core/vil/tests/test_file_format_read.cxx
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
@@ -8,10 +8,10 @@
 
 #include <testlib/testlib_test.h>
 
-#include <vil2/vil2_rgb.h>
-#include <vil2/vil2_load.h>
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_print.h>
+#include <vil/vil_rgb.h>
+#include <vil/vil_load.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_print.h>
 
 #define DEBUG
 
@@ -39,19 +39,19 @@ class CheckRGB : public CheckPixel
  public:
   CheckRGB( const char* file )
   {
-    vil2_image_resource_sptr ir = vil2_load_image_resource((image_base + file).c_str());
+    vil_image_resource_sptr ir = vil_load_image_resource((image_base + file).c_str());
     if ( !ir )
       vcl_cout << "[ couldn't read header from " << file << "]\n";
     else
     {
-      vil2_image_view_base_sptr im = ir->get_copy_view(0,ir->ni(),0,ir->nj());
+      vil_image_view_base_sptr im = ir->get_copy_view(0,ir->ni(),0,ir->nj());
       if ( !im )
         vcl_cout << "[ couldn't read image data from " << file << "]\n";
       else
       {
         img_ = im;
 #ifdef DEBUG
-        vcl_cout << '\n' << vcl_flush; vil2_print_all(vcl_cout, img_);
+        vcl_cout << '\n' << vcl_flush; vil_print_all(vcl_cout, img_);
 #endif
       }
     }
@@ -63,7 +63,7 @@ class CheckRGB : public CheckPixel
     return img_ && pixel.size() == 3 && pixel[0] == img_(i,j).r && pixel[1] == img_(i,j).g && pixel[2] == img_(i,j).b;
   }
  protected:
-  vil2_image_view< vil2_rgb<T> > img_;
+  vil_image_view< vil_rgb<T> > img_;
 };
 
 template<class T>
@@ -100,19 +100,19 @@ class CheckColourPlanes : public CheckPixel
  public:
   CheckColourPlanes( const char* file )
   {
-    vil2_image_resource_sptr ir = vil2_load_image_resource((image_base + file).c_str());
+    vil_image_resource_sptr ir = vil_load_image_resource((image_base + file).c_str());
     if ( !ir )
       vcl_cout << "[ couldn't read header from " << file << "]\n";
     else
     {
-      vil2_image_view_base_sptr im = ir->get_copy_view(0,ir->ni(),0,ir->nj());
+      vil_image_view_base_sptr im = ir->get_copy_view(0,ir->ni(),0,ir->nj());
       if ( !im )
         vcl_cout << "[ couldn't read image data from " << file << "]\n";
       else
       {
         img_ = im;
 #ifdef DEBUG
-        vcl_cout << '\n' << vcl_flush; vil2_print_all(vcl_cout, img_);
+        vcl_cout << '\n' << vcl_flush; vil_print_all(vcl_cout, img_);
 #endif
       }
     }
@@ -123,7 +123,7 @@ class CheckColourPlanes : public CheckPixel
     return img_ && pixel.size() == 1 && pixel[0] == img_(i,j,p);
   }
  protected:
-  vil2_image_view< T > img_;
+  vil_image_view< T > img_;
 };
 
 template<class T>
@@ -132,19 +132,19 @@ class CheckGrey : public CheckPixel
  public:
   CheckGrey( const char* file )
   {
-    vil2_image_resource_sptr ir = vil2_load_image_resource((image_base + file).c_str());
+    vil_image_resource_sptr ir = vil_load_image_resource((image_base + file).c_str());
     if ( !ir )
       vcl_cout << "[ couldn't read header from " << file << "]\n";
     else
     {
-      vil2_image_view_base_sptr im = ir->get_copy_view(0,ir->ni(),0,ir->nj());
+      vil_image_view_base_sptr im = ir->get_copy_view(0,ir->ni(),0,ir->nj());
       if ( !im )
         vcl_cout << "[ couldn't read image data from " << file << "]\n";
       else
       {
         img_ = im;
 #ifdef DEBUG
-        vcl_cout << '\n' << vcl_flush; vil2_print_all(vcl_cout, img_);
+        vcl_cout << '\n' << vcl_flush; vil_print_all(vcl_cout, img_);
 #endif
       }
     }
@@ -158,7 +158,7 @@ class CheckGrey : public CheckPixel
       pixel[0] == (TruePixelType)img_(i,j);
   }
  protected:
-  vil2_image_view< T > img_;
+  vil_image_view< T > img_;
 };
 
 template<class T>

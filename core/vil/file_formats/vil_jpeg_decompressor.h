@@ -1,6 +1,6 @@
-// This is core/vil2/file_formats/vil2_jpeg_decompressor.h
-#ifndef vil2_jpeg_decompressor_h_
-#define vil2_jpeg_decompressor_h_
+// This is core/vil/file_formats/vil_jpeg_decompressor.h
+#ifndef vil_jpeg_decompressor_h_
+#define vil_jpeg_decompressor_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -12,20 +12,20 @@
 //     11 Oct 2002 Ian Scott - converted to vil22
 //\endverbatim
 
-#include <vil2/file_formats/vil2_jpeglib.h>
-class vil2_stream;
+#include <vil/file_formats/vil_jpeglib.h>
+class vil_stream;
 
-class vil2_jpeg_decompressor
+class vil_jpeg_decompressor
 {
  public:
   struct jpeg_error_mgr         jerr;
   struct jpeg_decompress_struct jobj;
-  vil2_stream *stream;
+  vil_stream *stream;
 
-  vil2_jpeg_decompressor(vil2_stream *s);
+  vil_jpeg_decompressor(vil_stream *s);
 
   // NB. does not delete the stream.
-  ~vil2_jpeg_decompressor();
+  ~vil_jpeg_decompressor();
 
   // Do *not* delete the return value. Leave it alone.
   // The return value is zero on failure.
@@ -44,4 +44,4 @@ class vil2_jpeg_decompressor
   JSAMPLE *biffer;   // pointer to scanline buffer.
 };
 
-#endif // vil2_jpeg_decompressor_h_
+#endif // vil_jpeg_decompressor_h_

@@ -1,12 +1,12 @@
-// This is core/vil2/algo/vil2_gauss_filter.txx
-#ifndef vil2_gauss_filter_txx_
-#define vil2_gauss_filter_txx_
+// This is core/vil/algo/vil_gauss_filter.txx
+#ifndef vil_gauss_filter_txx_
+#define vil_gauss_filter_txx_
 //:
 // \file
 // \brief smooth images
 // \author Ian Scott
 
-#include "vil2_gauss_filter.h"
+#include "vil_gauss_filter.h"
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
@@ -51,9 +51,9 @@ inline float l_round (double x, float )
 //  Assumes dest_im has sufficient data allocated
 
 template <class srcT, class destT>
-void vil2_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptrdiff_t src_jstep,
+void vil_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptrdiff_t src_jstep,
                             destT* dest_im, vcl_ptrdiff_t dest_istep, vcl_ptrdiff_t dest_jstep,
-                            unsigned nx, unsigned ny, const vil2_gauss_filter_5tap_params& params,
+                            unsigned nx, unsigned ny, const vil_gauss_filter_5tap_params& params,
                             destT* work, vcl_ptrdiff_t work_jstep)
 {
   // Convolve src with a 5 x 1 Gaussian filter,
@@ -159,11 +159,11 @@ void vil2_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptr
 }
 
 template <class srcT, class destT>
-void vil2_gauss_filter_5tap(
-                            const vil2_image_view<srcT>& src_im,
-                            vil2_image_view<destT>& dest_im,
-                            const vil2_gauss_filter_5tap_params& params,
-                            vil2_image_view<destT>& work)
+void vil_gauss_filter_5tap(
+                            const vil_image_view<srcT>& src_im,
+                            vil_image_view<destT>& dest_im,
+                            const vil_gauss_filter_5tap_params& params,
+                            vil_image_view<destT>& work)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -175,7 +175,7 @@ void vil2_gauss_filter_5tap(
   // Reduce plane-by-plane
 
   for (unsigned p=0;p<n_planes;++p)
-    vil2_gauss_filter_5tap(&src_im(0,0,p), src_im.istep(), src_im.jstep(),
+    vil_gauss_filter_5tap(&src_im(0,0,p), src_im.istep(), src_im.jstep(),
                            &dest_im(0,0,p), dest_im.istep(), dest_im.jstep(), ni,nj,
                            params, work.top_left_ptr(), work.jstep());
 #if 0
@@ -186,12 +186,12 @@ void vil2_gauss_filter_5tap(
 #endif
 }
 
-#undef VIL2_GAUSS_FILTER_INSTANTIATE
-#define VIL2_GAUSS_FILTER_INSTANTIATE(srcT, destT) \
-template void vil2_gauss_filter_5tap( \
-           const vil2_image_view<srcT >& src_im, \
-           vil2_image_view<destT >& dest_im, \
-           const vil2_gauss_filter_5tap_params& params, \
-           vil2_image_view<destT >& work)
+#undef VIL_GAUSS_FILTER_INSTANTIATE
+#define VIL_GAUSS_FILTER_INSTANTIATE(srcT, destT) \
+template void vil_gauss_filter_5tap( \
+           const vil_image_view<srcT >& src_im, \
+           vil_image_view<destT >& dest_im, \
+           const vil_gauss_filter_5tap_params& params, \
+           vil_image_view<destT >& work)
 
-#endif // vil2_gauss_filter_txx_
+#endif // vil_gauss_filter_txx_

@@ -1,6 +1,6 @@
-// This is core/vil/vil_block_cache_image_impl.h
-#ifndef vil_block_cache_image_impl_h_
-#define vil_block_cache_image_impl_h_
+// This is core/vil1/vil1_block_cache_image_impl.h
+#ifndef vil1_block_cache_image_impl_h_
+#define vil1_block_cache_image_impl_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -8,20 +8,20 @@
 // \file
 // \author fsm
 
-#include <vil/vil_image_impl.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image_impl.h>
+#include <vil1/vil1_image.h>
 #include <vcl_string.h>
 
-//: vil_block_cache_image_impl - adaptor which caches the given image in blocks of given size.
-class vil_block_cache_image_impl : public vil_image_impl
+//: vil1_block_cache_image_impl - adaptor which caches the given image in blocks of given size.
+class vil1_block_cache_image_impl : public vil1_image_impl
 {
  public:
 
  //: Constructor with image and x and y bock-size
-  vil_block_cache_image_impl(vil_image , unsigned blocksizex, unsigned blocksizey);
+  vil1_block_cache_image_impl(vil1_image , unsigned blocksizex, unsigned blocksizey);
 
   //: Destructor
-  ~vil_block_cache_image_impl();
+  ~vil1_block_cache_image_impl();
 
   //: Number of image planes
   int planes() const { return base.planes(); }
@@ -39,10 +39,10 @@ class vil_block_cache_image_impl : public vil_image_impl
   int bits_per_component() const { return base.bits_per_component(); }
 
   //: Component format
-  vil_component_format component_format() const { return base.component_format(); }
+  vil1_component_format component_format() const { return base.component_format(); }
 
   //: Access to image-plane
-  vil_image get_plane(int ) const;
+  vil1_image get_plane(int ) const;
 
   //: Write nominated section of image to buf
   bool get_section(void *buf, int x0, int y0, int w, int h) const;
@@ -66,7 +66,7 @@ class vil_block_cache_image_impl : public vil_image_impl
 
  private:
   // the underlying, uncached image.
-  vil_image base;
+  vil1_image base;
 
   // size of blocks
   unsigned block_size_x;
@@ -75,4 +75,4 @@ class vil_block_cache_image_impl : public vil_image_impl
 
 // Helpers-------------------------------------------------------------------
 
-#endif // vil_block_cache_image_impl_h_
+#endif // vil1_block_cache_image_impl_h_

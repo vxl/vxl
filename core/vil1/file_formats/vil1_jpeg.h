@@ -1,6 +1,6 @@
-// This is core/vil/file_formats/vil_jpeg.h
-#ifndef vil_jpeg_file_format_h_
-#define vil_jpeg_file_format_h_
+// This is core/vil1/file_formats/vil1_jpeg.h
+#ifndef vil1_jpeg_file_format_h_
+#define vil1_jpeg_file_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -16,43 +16,43 @@
 //  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
 //\endverbatim
 
-#include <vil/vil_file_format.h>
-#include <vil/vil_image_impl.h>
+#include <vil1/vil1_file_format.h>
+#include <vil1/vil1_image_impl.h>
 
 // seeks to 0, then checks for magic number. returns true if found.
-bool vil_jpeg_file_probe(vil_stream *vs);
+bool vil1_jpeg_file_probe(vil1_stream *vs);
 
 //: Loader for JPEG files
-class vil_jpeg_file_format : public vil_file_format
+class vil1_jpeg_file_format : public vil1_file_format
 {
  public:
   virtual char const *tag() const;
-  virtual vil_image_impl *make_input_image(vil_stream *vs);
-  virtual vil_image_impl *make_output_image(vil_stream *vs,
+  virtual vil1_image_impl *make_input_image(vil1_stream *vs);
+  virtual vil1_image_impl *make_output_image(vil1_stream *vs,
                                             int planes,
                                             int width,
                                             int height,
                                             int components,
                                             int bits_per_component,
-                                            vil_component_format format);
+                                            vil1_component_format format);
 };
 
 //
-class vil_jpeg_compressor;
-class vil_jpeg_decompressor;
+class vil1_jpeg_compressor;
+class vil1_jpeg_decompressor;
 
 //: generic_image implementation for JPEG files
-class vil_jpeg_generic_image : public vil_image_impl
+class vil1_jpeg_generic_image : public vil1_image_impl
 {
-  vil_jpeg_generic_image(vil_stream *is);
-  vil_jpeg_generic_image(vil_stream *is,
+  vil1_jpeg_generic_image(vil1_stream *is);
+  vil1_jpeg_generic_image(vil1_stream *is,
                          int planes,
                          int width,
                          int height,
                          int components,
                          int bits_per_component,
-                         vil_component_format format);
-  ~vil_jpeg_generic_image();
+                         vil1_component_format format);
+  ~vil1_jpeg_generic_image();
 
   //: implementation of virtual interface.
   int planes() const;
@@ -60,18 +60,18 @@ class vil_jpeg_generic_image : public vil_image_impl
   int height() const;
   int components() const;
   int bits_per_component() const;
-  vil_component_format component_format() const;
+  vil1_component_format component_format() const;
   char const *file_format() const; // returns "jpeg"
   bool get_property(char const *tag, void *prop = 0) const;
-  vil_image get_plane(int ) const;
+  vil1_image get_plane(int ) const;
   bool get_section(void       *buf, int x0, int y0, int w, int h) const;
   bool put_section(void const *buf, int x0, int y0, int w, int h);
 
  private:
-  vil_jpeg_compressor   *jc;
-  vil_jpeg_decompressor *jd;
-  vil_stream *stream;
-  friend class vil_jpeg_file_format;
+  vil1_jpeg_compressor   *jc;
+  vil1_jpeg_decompressor *jd;
+  vil1_stream *stream;
+  friend class vil1_jpeg_file_format;
 };
 
-#endif // vil_jpeg_file_format_h_
+#endif // vil1_jpeg_file_format_h_

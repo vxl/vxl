@@ -1,6 +1,6 @@
-// This is core/vil/vil_byte_swap.h
-#ifndef vil_byte_swap_h_
-#define vil_byte_swap_h_
+// This is core/vil1/vil1_byte_swap.h
+#ifndef vil1_byte_swap_h_
+#define vil1_byte_swap_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -8,9 +8,9 @@
 // \file
 // \author fsm
 
-void vil_byte_swap(void *, void *);
+void vil1_byte_swap(void *, void *);
 
 template <class T>
-inline void vil_byte_swap(T &x) { vil_byte_swap(&x, &x + 1); }
+inline void vil1_byte_swap(T &x) { vil1_byte_swap(&x, &x + 1); }
 
-#endif // vil_byte_swap_h_
+#endif // vil1_byte_swap_h_

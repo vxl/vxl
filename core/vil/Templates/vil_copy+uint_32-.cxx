@@ -1,3 +1,3 @@
-#include <vil2/vil2_copy.txx>
+#include <vil/vil_copy.txx>
 #include <vxl_config.h>
-VIL2_COPY_INSTANTIATE(vxl_uint_32 );
+VIL_COPY_INSTANTIATE(vxl_uint_32 );

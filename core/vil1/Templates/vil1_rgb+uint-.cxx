@@ -1,4 +1,4 @@
-#include <vil/vil_rgb.txx>
+#include <vil1/vil1_rgb.txx>
 
-VIL_RGB_INSTANTIATE(unsigned int);
-VIL_RGB_INSTANTIATE_LS(unsigned int);
+VIL1_RGB_INSTANTIATE(unsigned int);
+VIL1_RGB_INSTANTIATE_LS(unsigned int);

@@ -1,11 +1,11 @@
-// This is core/vil/examples/vil_print_section.cxx
+// This is core/vil1/examples/vil1_print_section.cxx
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>    // atoi()
 
-#include <vil/vil_load.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_image.h>
 
 vcl_ostream &to_dec(vcl_ostream &os, unsigned char c)
 {
@@ -25,12 +25,12 @@ vcl_ostream &to_hex(vcl_ostream &os, unsigned char c)
   return os << dig[(c & 0xF0)>>4] << dig[c & 0x0F];
 }
 
-// usage : vil_print_section image x0 y0 w h
+// usage : vil1_print_section image x0 y0 w h
 int main(int argc, char **argv)
 {
   assert(argc == 6);
 
-  vil_image I = vil_load(argv[1]); assert(I);
+  vil1_image I = vil1_load(argv[1]); assert(I);
   int x0 = vcl_atoi(argv[2]);
   int y0 = vcl_atoi(argv[3]);
   unsigned w = vcl_atoi(argv[4]);

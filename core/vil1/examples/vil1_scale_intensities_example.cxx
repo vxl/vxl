@@ -1,13 +1,13 @@
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_clamp.h>
-#include <vil/vil_image.h>
-#include <vil/vil_image_as.h>
-#include <vil/vil_pixel.h>
-#include <vil/vil_scale_intensities.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_save.h>
+#include <vil1/vil1_clamp.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_image_as.h>
+#include <vil1/vil1_pixel.h>
+#include <vil1/vil1_scale_intensities.h>
 
 int main (int argc, char** argv) {
 
@@ -19,17 +19,17 @@ int main (int argc, char** argv) {
   double scale = vcl_atof(argv[1]);
   double shift = vcl_atof(argv[2]);
 
-  vil_image in = vil_load(argv[3]);
+  vil1_image in = vil1_load(argv[3]);
 
-  if (vil_pixel_format(in) == VIL_BYTE) {
-    vil_image real_img = vil_image_as_float(in);
-    vil_image scaled_image = vil_scale_intensities(real_img, scale, shift);
-    vil_save(vil_image_as_byte(vil_clamp(scaled_image, 0, 255)), argv[4], "pnm");
+  if (vil1_pixel_format(in) == VIL1_BYTE) {
+    vil1_image real_img = vil1_image_as_float(in);
+    vil1_image scaled_image = vil1_scale_intensities(real_img, scale, shift);
+    vil1_save(vil1_image_as_byte(vil1_clamp(scaled_image, 0, 255)), argv[4], "pnm");
   }
-  else if (vil_pixel_format(in) == VIL_RGB_BYTE) {
-    vil_image real_img = vil_image_as_rgb_float(in);
-    vil_image scaled_image = vil_scale_intensities(real_img, scale, shift);
-    vil_save(vil_image_as_rgb_byte(vil_clamp(scaled_image, 0, 255)), argv[4], "pnm");
+  else if (vil1_pixel_format(in) == VIL1_RGB_BYTE) {
+    vil1_image real_img = vil1_image_as_rgb_float(in);
+    vil1_image scaled_image = vil1_scale_intensities(real_img, scale, shift);
+    vil1_save(vil1_image_as_rgb_byte(vil1_clamp(scaled_image, 0, 255)), argv[4], "pnm");
   }
   else
     ;

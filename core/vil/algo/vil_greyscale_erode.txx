@@ -1,20 +1,20 @@
-#ifndef vil2_greyscale_erode_txx_
-#define vil2_greyscale_erode_txx_
+#ifndef vil_greyscale_erode_txx_
+#define vil_greyscale_erode_txx_
 //:
 //  \file
 //  \brief Perform greyscale erosion on images
 //  \author Tim Cootes
 
-#include "vil2_greyscale_erode.h"
+#include "vil_greyscale_erode.h"
 #include <vcl_cassert.h>
 
 //: Erodes src_image to produce dest_image (assumed single plane).
 // dest_image(i0,j0) is the maximum value of the pixels under the
 // structuring element when it is centred on src_image(i0,j0)
 template <class T>
-void vil2_greyscale_erode(const vil2_image_view<T>& src_image,
-                          vil2_image_view<T>& dest_image,
-                          const vil2_structuring_element& element)
+void vil_greyscale_erode(const vil_image_view<T>& src_image,
+                          vil_image_view<T>& dest_image,
+                          const vil_structuring_element& element)
 {
   assert(src_image.nplanes()==1);
   unsigned ni = src_image.ni();
@@ -28,7 +28,7 @@ void vil2_greyscale_erode(const vil2_image_view<T>& src_image,
   T* dest_row0 = dest_image.top_left_ptr();
 
   vcl_vector<vcl_ptrdiff_t> offset;
-  vil2_compute_offsets(offset,element,s_istep,s_jstep);
+  vil_compute_offsets(offset,element,s_istep,s_jstep);
 
   // Define box in which all element will be valid
   int ilo = -element.min_i();
@@ -39,19 +39,19 @@ void vil2_greyscale_erode(const vil2_image_view<T>& src_image,
   // Deal with left edge
   for (int i=0;i<ilo;++i)
     for (unsigned int j=0;j<nj;++j)
-      dest_image(i,j,0)=vil2_greyscale_erode(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil_greyscale_erode(src_image,0,element,i,j);
   // Deal with right edge
   for (unsigned int i=ihi+1;i<ni;++i)
     for (unsigned int j=0;j<nj;++j)
-      dest_image(i,j,0)=vil2_greyscale_erode(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil_greyscale_erode(src_image,0,element,i,j);
   // Deal with bottom edge
   for (int i=ilo;i<=ihi;++i)
     for (int j=0;j<jlo;++j)
-      dest_image(i,j,0)=vil2_greyscale_erode(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil_greyscale_erode(src_image,0,element,i,j);
   // Deal with top edge
   for (int i=ilo;i<=ihi;++i)
     for (unsigned int j=jhi+1;j<nj;++j)
-      dest_image(i,j,0)=vil2_greyscale_erode(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil_greyscale_erode(src_image,0,element,i,j);
 
   for (int j=jlo;j<=jhi;++j)
   {
@@ -59,14 +59,14 @@ void vil2_greyscale_erode(const vil2_image_view<T>& src_image,
     T* dest_p = dest_row0 + j*d_jstep + ilo * d_istep;
 
     for (int i=ilo;i<=ihi;++i,src_p+=s_istep,dest_p+=d_istep)
-      *dest_p=vil2_greyscale_erode(src_p,&offset[0],offset.size());
+      *dest_p=vil_greyscale_erode(src_p,&offset[0],offset.size());
   }
 }
 
-#undef VIL2_GREYSCALE_ERODE_INSTANTIATE
-#define VIL2_GREYSCALE_ERODE_INSTANTIATE(T) \
-template void vil2_greyscale_erode(const vil2_image_view< T >& src_image, \
-                                   vil2_image_view< T >& dest_image, \
-                                   const vil2_structuring_element& element)
+#undef VIL_GREYSCALE_ERODE_INSTANTIATE
+#define VIL_GREYSCALE_ERODE_INSTANTIATE(T) \
+template void vil_greyscale_erode(const vil_image_view< T >& src_image, \
+                                   vil_image_view< T >& dest_image, \
+                                   const vil_structuring_element& element)
 
-#endif // vil2_greyscale_erode_txx_
+#endif // vil_greyscale_erode_txx_

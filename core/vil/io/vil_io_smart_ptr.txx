@@ -1,19 +1,19 @@
-// This is core/vil2/io/vil2_io_smart_ptr.txx
-#ifndef vil2_io_smart_ptr_txx_
-#define vil2_io_smart_ptr_txx_
+// This is core/vil/io/vil_io_smart_ptr.txx
+#ifndef vil_io_smart_ptr_txx_
+#define vil_io_smart_ptr_txx_
 //:
 // \file
-// \brief Serialised binary IO functions for vil2_smart_ptr<T>
+// \brief Serialised binary IO functions for vil_smart_ptr<T>
 // \author Tim Cootes/Ian Scott (Manchester)
 
-#include "vil2_io_smart_ptr.h"
+#include "vil_io_smart_ptr.h"
 #include <vsl/vsl_binary_io.h>
-#include <vil2/vil2_smart_ptr.h>
+#include <vil/vil_smart_ptr.h>
 
 //=========================================================================
 //: Binary save self to stream.
 template<class T>
-void vsl_b_write(vsl_b_ostream & os, const vil2_smart_ptr<T> &p)
+void vsl_b_write(vsl_b_ostream & os, const vil_smart_ptr<T> &p)
 {
   // write version number
   const short io_version_no = 1;
@@ -54,7 +54,7 @@ void vsl_b_write(vsl_b_ostream & os, const vil2_smart_ptr<T> &p)
 //=====================================================================
 //: Binary load self from stream.
 template<class T>
-void vsl_b_read(vsl_b_istream &is, vil2_smart_ptr<T> &p)
+void vsl_b_read(vsl_b_istream &is, vil_smart_ptr<T> &p)
 {
   if (!is) return;
 
@@ -76,7 +76,7 @@ void vsl_b_read(vsl_b_istream &is, vil2_smart_ptr<T> &p)
         // This checks that the saving stream and reading stream
         // both agree on whether or not this is the first time they
         // have seen this object.
-        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil2_smart_ptr<T>&)\n"
+        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_smart_ptr<T>&)\n"
                  << "           De-serialisation failure\n";
         is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
         return;
@@ -92,11 +92,11 @@ void vsl_b_read(vsl_b_istream &is, vil2_smart_ptr<T> &p)
       }
 
       p = pointer; // This operator method will set the internal
-                   //pointer in vil2_smart_ptr.
+                   //pointer in vil_smart_ptr.
     }
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil2_smart_ptr<T>&) \n"
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_smart_ptr<T>&) \n"
              << "           Unknown version number "<< ver << "\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
@@ -106,7 +106,7 @@ void vsl_b_read(vsl_b_istream &is, vil2_smart_ptr<T> &p)
 //=====================================================================
 //: Output a human readable summary to the stream
 template<class T>
-void vsl_print_summary(vcl_ostream & os,const vil2_smart_ptr<T> & p)
+void vsl_print_summary(vcl_ostream & os,const vil_smart_ptr<T> & p)
 {
   os << "Smart ptr to ";
   if (p.ptr())
@@ -125,14 +125,14 @@ void vsl_print_summary(vcl_ostream & os,const vil2_smart_ptr<T> & p)
 //===========================================
 // Deal with base class pointers
 template<class T>
-void vsl_b_read(vsl_b_istream& is, vil2_smart_ptr<T> * &p)
+void vsl_b_read(vsl_b_istream& is, vil_smart_ptr<T> * &p)
 {
   delete p;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr)
   {
-    p = new vil2_smart_ptr<T>;
+    p = new vil_smart_ptr<T>;
     vsl_b_read(is, *p);
   }
   else
@@ -140,7 +140,7 @@ void vsl_b_read(vsl_b_istream& is, vil2_smart_ptr<T> * &p)
 }
 
 template<class T>
-void vsl_b_write(vsl_b_ostream& os, const vil2_smart_ptr<T> *p)
+void vsl_b_write(vsl_b_ostream& os, const vil_smart_ptr<T> *p)
 {
   if (p==0)
   {
@@ -154,22 +154,22 @@ void vsl_b_write(vsl_b_ostream& os, const vil2_smart_ptr<T> *p)
 }
 
 template<class T>
-void vsl_print_summary(vcl_ostream, const vil2_smart_ptr<T> *p)
+void vsl_print_summary(vcl_ostream, const vil_smart_ptr<T> *p)
 {
   if (p==0)
     os << "NULL PTR";
   else
   {
-    os << "vil2_smart_ptr: ";
+    os << "vil_smart_ptr: ";
     vsl_print_summary(*p);
   }
 }
 #endif
 
-#undef VIL2_IO_SMART_PTR_INSTANTIATE
-#define VIL2_IO_SMART_PTR_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, const vil2_smart_ptr<T > &); \
-template void vsl_b_read(vsl_b_istream &, vil2_smart_ptr<T > &); \
-template void vsl_b_write(vsl_b_ostream &, const vil2_smart_ptr<T > &)
+#undef VIL_IO_SMART_PTR_INSTANTIATE
+#define VIL_IO_SMART_PTR_INSTANTIATE(T) \
+template void vsl_print_summary(vcl_ostream &, const vil_smart_ptr<T > &); \
+template void vsl_b_read(vsl_b_istream &, vil_smart_ptr<T > &); \
+template void vsl_b_write(vsl_b_ostream &, const vil_smart_ptr<T > &)
 
-#endif // vil2_io_smart_ptr_txx_
+#endif // vil_io_smart_ptr_txx_

@@ -1,18 +1,18 @@
-// This is core/vil/vil_property.h
-#ifndef vil_property_h_
-#define vil_property_h_
+// This is core/vil1/vil1_property.h
+#ifndef vil1_property_h_
+#define vil1_property_h_
 //:
 // \file
 //
-// There is no class called vil_property.
+// There is no class called vil1_property.
 //
-// The image class vil_image has the methods :
+// The image class vil1_image has the methods :
 // \code
 //   bool get_property(char const *tag, void *property_value = 0) const;
 //   bool set_property(char const *tag, void const *property_value = 0)
 // \endcode
 // which allow format extensions to be added without cluttering the
-// interface to vil_image. The idea is that properties can be
+// interface to vil1_image. The idea is that properties can be
 // identified by a "tag" (some name or other textual description)
 // through which clients can obtain or manipulate extra properties.
 //
@@ -29,14 +29,14 @@
 // That is the purpose of this file. The set of tags is a namespace in
 // the general sense of the word. We only have one namespace, so try
 // not to clutter it. All property tags described in this file should
-// begin with "vil_property_" and that chunk of the namespace is reserved.
+// begin with "vil1_property_" and that chunk of the namespace is reserved.
 //
 // packing of rgb(a) colours in the data produced by get_section().
 // tags:
-// - "vil_property_r_packing"
-// - "vil_property_g_packing"
-// - "vil_property_b_packing"
-// - "vil_property_a_packing"
+// - "vil1_property_r_packing"
+// - "vil1_property_g_packing"
+// - "vil1_property_b_packing"
+// - "vil1_property_a_packing"
 // type: three ints
 //
 // If supported, the returned values describe the index of the
@@ -49,9 +49,9 @@
 //   image.get_section(bif, 0, 0, 256, 256);
 //   int a[3];
 //   char const *tag[] = {
-//     "vil_property_r_packing",
-//     "vil_property_g_packing",
-//     "vil_property_b_packing"
+//     "vil1_property_r_packing",
+//     "vil1_property_g_packing",
+//     "vil1_property_b_packing"
 //   };
 //   for (int p=0; p<3; ++p) {
 //     image.get_property(, a);
@@ -62,8 +62,8 @@
 // \endcode
 // preferred direction for access.
 // tags:
-// - "vil_property_preferred_x_direction"
-// - "vil_property_preferred_y_direction"
+// - "vil1_property_preferred_x_direction"
+// - "vil1_property_preferred_y_direction"
 // type: int
 // If supported, the returned property value is
 // - "-1" if the preferred direction is decreasing.
@@ -73,15 +73,15 @@
 // \author  fsm
 
 //: Indicate whether this is an in-memory image or an on-disk image
-#define vil_property_memory "memory"
+#define vil1_property_memory "memory"
 
 //: Indicate whether the first image row is the top or the bottom of the image
-#define vil_property_top_row_first "top row first"
+#define vil1_property_top_row_first "top row first"
 
 //: Indicate whether the first pixel in an image row is at left or at right
-#define vil_property_left_first "left first"
+#define vil1_property_left_first "left first"
 
 //: Indicate that the colour cell order is B,G,R instead of the default R,G,B
-#define vil_property_component_order_is_BGR "component order is B,G,R"
+#define vil1_property_component_order_is_BGR "component order is B,G,R"
 
-#endif // vil_property_h_
+#endif // vil1_property_h_

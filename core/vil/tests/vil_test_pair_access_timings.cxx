@@ -9,7 +9,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 #include <mbl/mbl_stats_1d.h>
 
 const unsigned NI=256;
@@ -17,8 +17,8 @@ const unsigned NJ=256;
 const unsigned NP=3;
 
 template <class imT>
-double method1(const vil2_image_view<imT>& src_image,
-               vil2_image_view<imT>& dest_image, int n_loops)
+double method1(const vil_image_view<imT>& src_image,
+               vil_image_view<imT>& dest_image, int n_loops)
 {
   dest_image.set_size(src_image.ni(),src_image.nj(),src_image.nplanes());
   vcl_time_t t0=vcl_clock();
@@ -34,8 +34,8 @@ double method1(const vil2_image_view<imT>& src_image,
 }
 
 template <class imT>
-double method2(const vil2_image_view<imT>& src_image,
-               vil2_image_view<imT>& dest_image, int n_loops)
+double method2(const vil_image_view<imT>& src_image,
+               vil_image_view<imT>& dest_image, int n_loops)
 {
   dest_image.set_size(src_image.ni(),src_image.nj(),src_image.nplanes());
   vcl_time_t t0=vcl_clock();
@@ -53,8 +53,8 @@ double method2(const vil2_image_view<imT>& src_image,
 
 
 template <class imT>
-double method3(const vil2_image_view<imT>& src_image,
-               vil2_image_view<imT>& dest_image, int n_loops)
+double method3(const vil_image_view<imT>& src_image,
+               vil_image_view<imT>& dest_image, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
@@ -82,8 +82,8 @@ double method3(const vil2_image_view<imT>& src_image,
 }
 
 template <class imT>
-double method4(const vil2_image_view<imT>& src_image,
-               vil2_image_view<imT>& dest_image, int n_loops)
+double method4(const vil_image_view<imT>& src_image,
+               vil_image_view<imT>& dest_image, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
@@ -108,8 +108,8 @@ double method4(const vil2_image_view<imT>& src_image,
 }
 
 template <class imT>
-double method5(const vil2_image_view<imT>& src_image,
-               vil2_image_view<imT>& dest_image, int n_loops)
+double method5(const vil_image_view<imT>& src_image,
+               vil_image_view<imT>& dest_image, int n_loops)
 {
   // Assumes that istep==1 for both!
   vcl_time_t t0=vcl_clock();
@@ -135,8 +135,8 @@ double method5(const vil2_image_view<imT>& src_image,
 }
 
 template <class imT>
-double method6(const vil2_image_view<imT>& src_image,
-               vil2_image_view<imT>& dest_image, int n_loops)
+double method6(const vil_image_view<imT>& src_image,
+               vil_image_view<imT>& dest_image, int n_loops)
 {
   // Assumes that istep==1 for both!
   vcl_time_t t0=vcl_clock();
@@ -162,11 +162,11 @@ double method6(const vil2_image_view<imT>& src_image,
 }
 
 template <class imT>
-double method7(const vil2_image_view<imT>& src_image,
-               vil2_image_view<imT>& dest_image, int n_loops)
+double method7(const vil_image_view<imT>& src_image,
+               vil_image_view<imT>& dest_image, int n_loops)
 {
   assert (src_image.istep() == 1);
-  // Uses row[i] to simulate lookup type access used in original vil images
+  // Uses row[i] to simulate lookup type access used in original vil1 images
   assert(src_image.nplanes() == NP && src_image.ni() == NI);
   const imT* src_raster_ptrs[NP][NJ];
   imT* dest_raster_ptrs[NP][NJ];
@@ -200,8 +200,8 @@ double method7(const vil2_image_view<imT>& src_image,
 
 
 template <class imT>
-double method(int i, const vil2_image_view<imT>& src_image,
-              vil2_image_view<imT>& dest_image, int n_loops)
+double method(int i, const vil_image_view<imT>& src_image,
+              vil_image_view<imT>& dest_image, int n_loops)
 {
   double t;
   switch (i)
@@ -219,8 +219,8 @@ double method(int i, const vil2_image_view<imT>& src_image,
 }
 
 template <class imT>
-void compute_stats(int i, const vil2_image_view<imT>& src_image,
-                   vil2_image_view<imT>& dest_image, int n_loops)
+void compute_stats(int i, const vil_image_view<imT>& src_image,
+                   vil_image_view<imT>& dest_image, int n_loops)
 {
   mbl_stats_1d stats;
   for (int j=0;j<10;++j) stats.obs(method(i,src_image,dest_image,n_loops));
@@ -230,8 +230,8 @@ void compute_stats(int i, const vil2_image_view<imT>& src_image,
 
 int main(int argc, char** argv)
 {
-  vil2_image_view<vxl_byte> src_byte_image(NI,NJ,NP),dest_byte_image(NI,NJ,NP);
-  vil2_image_view<float>    src_float_image(NI,NJ,NP),dest_float_image(NI,NJ,NP);
+  vil_image_view<vxl_byte> src_byte_image(NI,NJ,NP),dest_byte_image(NI,NJ,NP);
+  vil_image_view<float>    src_float_image(NI,NJ,NP),dest_float_image(NI,NJ,NP);
   int n_loops = 100;
 
   vcl_cout<<"Times to copy and increment a "<<NI<<" x "<<NJ

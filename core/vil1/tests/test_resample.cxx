@@ -1,24 +1,24 @@
-// This is core/vil/tests/test_resample.cxx
+// This is core/vil1/tests/test_resample.cxx
 // \author Peter Vanroose
 
-#include <vil/vil_resample.h>
+#include <vil1/vil1_resample.h>
 
 #include <vcl_iostream.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_save.h>
 #include <testlib/testlib_test.h>
 
 static char default_filename[] = "square.pgm";
 
 template <class T> inline
-T get_pixel(vil_image const& i, int x, int y, T* /*dummy*/) { T t; i.get_section(&t,x,y,1,1); return t; }
+T get_pixel(vil1_image const& i, int x, int y, T* /*dummy*/) { T t; i.get_section(&t,x,y,1,1); return t; }
 
 static unsigned char* t = (unsigned char*)0;
 
 MAIN(test_resample)
 {
-  START("vil_resample");
+  START("vil1_resample");
 
   char* filename = argv[1];
   if (argc<2) {
@@ -26,7 +26,7 @@ MAIN(test_resample)
     vcl_cerr << "Using default input image " << filename << '\n';
   }
 
-  vil_image a = vil_load(filename);
+  vil1_image a = vil1_load(filename);
   if ( !a ) {
     vcl_cerr << "Could not load image " << filename << '\n';
     return 1;
@@ -52,7 +52,7 @@ MAIN(test_resample)
 
   vcl_cout << "Simplest resampling: reduce the image by a factor 2 in both directions.\n";
 
-  vil_image b = vil_resample(a,wd/2,ht/2);
+  vil1_image b = vil1_resample(a,wd/2,ht/2);
   TEST("width", b.width(), wd/2);
   TEST("height", b.height(), ht/2);
 
@@ -63,11 +63,11 @@ MAIN(test_resample)
   TEST("subsampled pixel value", b2, a22); if (b2!=a22) vcl_cout<<b2<<"!="<<a22<<'\n';
   TEST("subsampled pixel value", b3, a33); if (b3!=a33) vcl_cout<<b3<<"!="<<a33<<'\n';
 
-  if (argc>2) vil_save(b, argv[2]);
+  if (argc>2) vil1_save(b, argv[2]);
 
   vcl_cout << "Now enlarge the image by a factor 2 in both directions.\n";
 
-  vil_image c = vil_resample(a,wd*2,ht*2);
+  vil1_image c = vil1_resample(a,wd*2,ht*2);
   TEST("width", c.width(), wd*2);
   TEST("height", c.height(), ht*2);
 
@@ -98,7 +98,7 @@ MAIN(test_resample)
   TEST("intermediate pixel value", c2, a2); if (c2!=a2) vcl_cout<<c2<<"!="<<a2<<'\n';
   TEST("intermediate pixel value", c3, a3); if (c3!=a3) vcl_cout<<c3<<"!="<<a3<<'\n';
 
-  if (argc>3) vil_save(c, argv[3]);
+  if (argc>3) vil1_save(c, argv[3]);
 
   SUMMARY();
 }

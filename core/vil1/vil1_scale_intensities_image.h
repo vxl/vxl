@@ -1,31 +1,31 @@
-// This is core/vil/vil_scale_intensities_image.h
-#ifndef vil_scale_intensities_image_h_
-#define vil_scale_intensities_image_h_
+// This is core/vil1/vil1_scale_intensities_image.h
+#ifndef vil1_scale_intensities_image_h_
+#define vil1_scale_intensities_image_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
 // \file
-// \brief Support function for vil_scale_intensities_image_impl
+// \brief Support function for vil1_scale_intensities_image_impl
 
 #include <vcl_compiler.h>
 
-class vil_image;
+class vil1_image;
 
-#define vil_decl(T) \
-bool vil_scale_intensities_image(vil_image const &base, double scale, double shift, \
+#define vil1_decl(T) \
+bool vil1_scale_intensities_image(vil1_image const &base, double scale, double shift, \
                                  T *buf, int x0, int y0, int w, int h)
 
-template <class T> vil_decl(T);
+template <class T> vil1_decl(T);
 
 #if defined(VCL_KAI) || defined(VCL_COMO)
-template <typename T> struct vil_rgb;
-template <> vil_decl(vil_rgb<unsigned char>);
-template <> vil_decl(vil_rgb<unsigned short>);
-template <> vil_decl(vil_rgb<float>);
-template <> vil_decl(vil_rgb<double>);
+template <typename T> struct vil1_rgb;
+template <> vil1_decl(vil1_rgb<unsigned char>);
+template <> vil1_decl(vil1_rgb<unsigned short>);
+template <> vil1_decl(vil1_rgb<float>);
+template <> vil1_decl(vil1_rgb<double>);
 #endif
 
-#undef vil_decl
+#undef vil1_decl
 
-#endif // vil_scale_intensities_image_h_
+#endif // vil1_scale_intensities_image_h_

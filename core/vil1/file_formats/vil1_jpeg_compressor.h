@@ -1,6 +1,6 @@
-// This is core/vil/file_formats/vil_jpeg_compressor.h
-#ifndef vil_jpeg_compressor_h_
-#define vil_jpeg_compressor_h_
+// This is core/vil1/file_formats/vil1_jpeg_compressor.h
+#ifndef vil1_jpeg_compressor_h_
+#define vil1_jpeg_compressor_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -8,20 +8,20 @@
 // \file
 // \author fsm
 
-#include <vil/vil_jpeglib.h>
-class vil_stream;
+#include <vil1/vil1_jpeglib.h>
+class vil1_stream;
 
-class vil_jpeg_compressor
+class vil1_jpeg_compressor
 {
  public:
   struct jpeg_error_mgr         jerr;
   struct jpeg_compress_struct   jobj;
-  vil_stream *stream;
+  vil1_stream *stream;
 
-  vil_jpeg_compressor(vil_stream *s);
+  vil1_jpeg_compressor(vil1_stream *s);
 
   // NB. does not delete the stream
-  ~vil_jpeg_compressor();
+  ~vil1_jpeg_compressor();
 
   bool write_scanline(unsigned line, JSAMPLE const *);
 
@@ -29,4 +29,4 @@ class vil_jpeg_compressor
   bool ready;
 };
 
-#endif // vil_jpeg_compressor_h_
+#endif // vil1_jpeg_compressor_h_

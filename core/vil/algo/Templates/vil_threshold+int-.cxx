@@ -1,2 +1,2 @@
-#include <vil2/algo/vil2_threshold.txx>
-VIL2_THRESHOLD_INSTANTIATE(int);
+#include <vil/algo/vil_threshold.txx>
+VIL_THRESHOLD_INSTANTIATE(int);

@@ -5,10 +5,10 @@
 
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vil2/vil2_load.h>
-#include <vil2/vil2_save.h>
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_print.h>
+#include <vil/vil_load.h>
+#include <vil/vil_save.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_print.h>
 
 
 int main(int argc, char** argv)
@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 
   // This is how we quickly load an image view.
 
-  vil2_image_view<vxl_byte> b_im = vil2_load(argv[1]);
+  vil_image_view<vxl_byte> b_im = vil_load(argv[1]);
 
   if (!b_im)
   {
@@ -32,13 +32,13 @@ int main(int argc, char** argv)
     return 3;
   }
 
-  vil2_print_all(vcl_cout, b_im);
+  vil_print_all(vcl_cout, b_im);
 
   // We can apply some operation to it.
 
   // And then we save it.
 
-  vil2_save(b_im, "test.pbm");
+  vil_save(b_im, "test.pbm");
 
 
   return 0;

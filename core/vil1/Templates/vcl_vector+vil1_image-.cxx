@@ -1,3 +1,3 @@
 #include <vcl_vector.txx>
-#include <vil/vil_image.h>
-VCL_VECTOR_INSTANTIATE(vil_image);
+#include <vil1/vil1_image.h>
+VCL_VECTOR_INSTANTIATE(vil1_image);

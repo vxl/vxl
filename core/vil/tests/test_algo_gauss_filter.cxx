@@ -1,34 +1,34 @@
-// This is core/vil2/tests/test_algo_gauss_filter.cxx
+// This is core/vil/tests/test_algo_gauss_filter.cxx
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vcl_cstdlib.h> // for abs(int)
 #include <vcl_cmath.h> // for fabs()
 
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_print.h>
-#include <vil2/algo/vil2_gauss_filter.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_print.h>
+#include <vil/algo/vil_gauss_filter.h>
 #include <vxl_config.h>
 #include <testlib/testlib_test.h>
 
 void test_algo_gaussian_filter_byte_float()
 {
   vcl_cout << "*******************************************\n"
-           << " Testing vil2_gauss_filter_5tap byte float\n"
+           << " Testing vil_gauss_filter_5tap byte float\n"
            << "*******************************************\n";
 
   int n = 10;
 
-  vil2_image_view<vxl_byte> src(n,n);
+  vil_image_view<vxl_byte> src(n,n);
   for (int i=0;i<n;++i)
     for (int j=0;j<n;++j)
       src(i,j)=j*10+i;
-  vil2_image_view<float> dest;
-  vil2_gauss_filter_5tap_params params(1.0);
-  vil2_gauss_filter_5tap(src, dest, params);
+  vil_image_view<float> dest;
+  vil_gauss_filter_5tap_params params(1.0);
+  vil_gauss_filter_5tap(src, dest, params);
   vcl_cout << "Source\n";
-  vil2_print_all(vcl_cout,  src);
+  vil_print_all(vcl_cout,  src);
   vcl_cout << "Destination\n";
-  vil2_print_all(vcl_cout,  dest);
+  vil_print_all(vcl_cout,  dest);
 
 
   bool fail=false;
@@ -47,11 +47,11 @@ void test_algo_gaussian_filter_byte_float()
   src.fill(0);
   src(n/2,n/2) = 255;
 
-  vil2_gauss_filter_5tap(src,dest, params);
+  vil_gauss_filter_5tap(src,dest, params);
   vcl_cout << "Source\n";
-  vil2_print_all(vcl_cout,  src);
+  vil_print_all(vcl_cout,  src);
   vcl_cout << "Destination\n";
-  vil2_print_all(vcl_cout,  dest);
+  vil_print_all(vcl_cout,  dest);
 
 
   float sum = 0;

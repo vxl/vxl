@@ -1,6 +1,6 @@
-// This is core/vil/vil_stream.h
-#ifndef vil_stream_h_
-#define vil_stream_h_
+// This is core/vil1/vil1_stream.h
+#ifndef vil1_stream_h_
+#define vil1_stream_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -10,11 +10,11 @@
 // \author  awf@robots.ox.ac.uk
 // \date 16 Feb 00
 
-typedef long int vil_streampos; // should be identical to vcl_istream::streampos
+typedef long int vil1_streampos; // should be identical to vcl_istream::streampos
 
 //: Stream interface for VIL image loaders
 // This allows the loaders to be used with any type of stream.
-class vil_stream
+class vil1_stream
 {
  public:
   //: Return false if the stream is broken.
@@ -22,28 +22,28 @@ class vil_stream
 
   //: Write n bytes from buf. Returns number of bytes written.
   //  The return value is less than n only in case of device failure.
-  virtual vil_streampos write(void const* buf, vil_streampos n) = 0;
+  virtual vil1_streampos write(void const* buf, vil1_streampos n) = 0;
 
   //: Read n bytes into buf. Returns number of bytes read.
   //  The return value is less than n only at eof.
-  virtual vil_streampos read(void* buf, vil_streampos n) = 0;
+  virtual vil1_streampos read(void* buf, vil1_streampos n) = 0;
 
   //: Return file pointer
-  virtual vil_streampos tell() = 0;
+  virtual vil1_streampos tell() = 0;
 
   //: Goto file pointer
-  virtual void seek(vil_streampos position) = 0;
+  virtual void seek(vil1_streampos position) = 0;
 
   //: up/down the reference count
   void ref();
   void unref();
 
  protected:
-  vil_stream();
-  virtual ~vil_stream();
+  vil1_stream();
+  virtual ~vil1_stream();
 
  private: // use the methods, Luke!
   int refcount_;
 };
 
-#endif // vil_stream_h_
+#endif // vil1_stream_h_

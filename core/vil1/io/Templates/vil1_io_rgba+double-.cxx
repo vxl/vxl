@@ -1,4 +1,4 @@
-// Instantiation of IO for vil_rgba<double>
-#include <vil/io/vil_io_rgba.txx>
-VIL_IO_RGBA_INSTANTIATE(double);
+// Instantiation of IO for vil1_rgba<double>
+#include <vil1/io/vil1_io_rgba.txx>
+VIL1_IO_RGBA_INSTANTIATE(double);
 

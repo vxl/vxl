@@ -1,10 +1,10 @@
-// This is core/vil/file_formats/vil_tiff.cxx
+// This is core/vil1/file_formats/vil1_tiff.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
 // \file
-// See vil_tiff.h for a description of this file.
+// See vil1_tiff.h for a description of this file.
 //
 // \author  awf@robots.ox.ac.uk
 //
@@ -13,7 +13,7 @@
 //   09-NOV-2001  K.Y.McGaul  Use default value for orientation when it can't be read.
 // \endverbatim
 
-#include "vil_tiff.h"
+#include "vil1_tiff.h"
 
 #include <vcl_cassert.h>
 #if 0 // commented out
@@ -22,15 +22,15 @@
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 
-#include <vil/vil_stream.h>
-#include <vil/vil_image_impl.h>
-#include <vil/vil_image.h>
-#include <vil/vil_property.h>
+#include <vil1/vil1_stream.h>
+#include <vil1/vil1_image_impl.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_property.h>
 
 #include <tiffio.h>
 
 // Constants
-char const* vil_tiff_format_tag = "tiff";
+char const* vil1_tiff_format_tag = "tiff";
 
 // Functions
 static bool xxproblem(char const* linefile, char const* msg)
@@ -44,7 +44,7 @@ static bool xxproblem(char const* linefile, char const* msg)
 
 #define trace if (true) { } else vcl_cerr
 
-bool vil_tiff_file_format_probe(vil_stream* is)
+bool vil1_tiff_file_format_probe(vil1_stream* is)
 {
   // The byte ordering in a TIFF image (usually) depends on the byte-order
   // of the writing host. The header is always 4 bytes.
@@ -91,44 +91,44 @@ bool vil_tiff_file_format_probe(vil_stream* is)
 #endif
 }
 
-vil_image_impl* vil_tiff_file_format::make_input_image(vil_stream* is)
+vil1_image_impl* vil1_tiff_file_format::make_input_image(vil1_stream* is)
 {
-  if (!vil_tiff_file_format_probe(is))
+  if (!vil1_tiff_file_format_probe(is))
     return 0;
 
-  return new vil_tiff_generic_image(is);
+  return new vil1_tiff_generic_image(is);
 }
 
-vil_image_impl* vil_tiff_file_format::make_output_image(vil_stream* is, int planes,
+vil1_image_impl* vil1_tiff_file_format::make_output_image(vil1_stream* is, int planes,
                                                         int width,
                                                         int height,
                                                         int components,
                                                         int bits_per_component,
-                                                        vil_component_format format)
+                                                        vil1_component_format format)
 {
-  return new vil_tiff_generic_image(is, planes, width, height, components, bits_per_component, format);
+  return new vil1_tiff_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
-char const* vil_tiff_file_format::tag() const
+char const* vil1_tiff_file_format::tag() const
 {
-  return vil_tiff_format_tag;
+  return vil1_tiff_format_tag;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-struct vil_tiff_structures {
-  vil_tiff_structures(vil_stream *vs_):
+struct vil1_tiff_structures {
+  vil1_tiff_structures(vil1_stream *vs_):
     vs(vs_),
     filesize(0),
     buf(0)
     { if (vs) vs->ref(); }
-  ~vil_tiff_structures() {
+  ~vil1_tiff_structures() {
     delete [] buf;
     if (vs) vs->unref();
   }
 
   TIFF* tif;
-  vil_stream* vs;
+  vil1_stream* vs;
   int filesize;
 
   unsigned long tilewidth;
@@ -163,30 +163,30 @@ TIFF* TIFFClientOpen(const char* filename, const char* mode, thandle_t clientdat
     TIFFUnmapFileProc unmapproc)
 #endif
 
-static tsize_t vil_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
+static tsize_t vil1_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
 {
-  vil_tiff_structures* p = (vil_tiff_structures*)h;
+  vil1_tiff_structures* p = (vil1_tiff_structures*)h;
   if (n > p->filesize) p->filesize= n;
   tsize_t ret = p->vs->read(buf, n);
   trace << "readproc, n = " << n << ", ret = " << ret << "\n";
   return ret;
 }
 
-static tsize_t vil_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
+static tsize_t vil1_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
 {
-  vil_tiff_structures* p = (vil_tiff_structures*)h;
+  vil1_tiff_structures* p = (vil1_tiff_structures*)h;
   tsize_t ret = p->vs->write(buf, n);
-  vil_streampos s = p->vs->tell();
+  vil1_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
   trace << "writeproc: ret=" << ret << "/" << n << " , filesize = " << p->filesize << "   " << s << vcl_endl;
   return ret;
 }
 
-static toff_t vil_tiff_seekproc(thandle_t h, toff_t offset, int whence)
+static toff_t vil1_tiff_seekproc(thandle_t h, toff_t offset, int whence)
 {
   trace << "seek " << offset << " w = " << whence << vcl_endl;
-  vil_tiff_structures* p = (vil_tiff_structures*)h;
+  vil1_tiff_structures* p = (vil1_tiff_structures*)h;
   if (whence == SEEK_SET) {
     p->vs->seek(offset);
   } else if (whence == SEEK_CUR) {
@@ -194,16 +194,16 @@ static toff_t vil_tiff_seekproc(thandle_t h, toff_t offset, int whence)
   } else if (whence == SEEK_END) {
     p->vs->seek(p->filesize + offset);
   }
-  vil_streampos s = p->vs->tell();
+  vil1_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
   return s;
 }
 
-static int vil_tiff_closeproc(thandle_t h)
+static int vil1_tiff_closeproc(thandle_t h)
 {
-  trace << "vil_tiff_closeproc\n";
-  vil_tiff_structures* p = (vil_tiff_structures*)h;
+  trace << "vil1_tiff_closeproc\n";
+  vil1_tiff_structures* p = (vil1_tiff_structures*)h;
   //delete p->vs;
   if (p->vs) {
     p->vs->unref();
@@ -212,32 +212,32 @@ static int vil_tiff_closeproc(thandle_t h)
   return 0;
 }
 
-static toff_t vil_tiff_sizeproc(thandle_t)
+static toff_t vil1_tiff_sizeproc(thandle_t)
 {
-  trace << "vil_tiff_sizeproc\n";
+  trace << "vil1_tiff_sizeproc\n";
   // TODO
   return (toff_t)(-1); // could be unsigned - avoid compiler warning
 }
 
-static int vil_tiff_mapfileproc(thandle_t, tdata_t*, toff_t*)
+static int vil1_tiff_mapfileproc(thandle_t, tdata_t*, toff_t*)
 {
-  // TODO: Add mmap support to vil_tiff_mapfileproc
+  // TODO: Add mmap support to vil1_tiff_mapfileproc
   return 0;
 }
 
-static void vil_tiff_unmapfileproc(thandle_t, tdata_t, toff_t)
+static void vil1_tiff_unmapfileproc(thandle_t, tdata_t, toff_t)
 {
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil_tiff_generic_image::vil_tiff_generic_image(vil_stream* is):
-  p(new vil_tiff_structures(is))
+vil1_tiff_generic_image::vil1_tiff_generic_image(vil1_stream* is):
+  p(new vil1_tiff_structures(is))
 {
   read_header();
 }
 
-bool vil_tiff_generic_image::get_property(char const *tag, void *prop) const
+bool vil1_tiff_generic_image::get_property(char const *tag, void *prop) const
 {
   unsigned short orientation;
   int orientation_val_ok = TIFFGetField(p->tif, TIFFTAG_ORIENTATION, &orientation);
@@ -257,22 +257,22 @@ bool vil_tiff_generic_image::get_property(char const *tag, void *prop) const
                   orientation==ORIENTATION_LEFTTOP ||
                   orientation==ORIENTATION_LEFTBOT);
 
-  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = topdown, true : true;
 
-  if (0==vcl_strcmp(tag, vil_property_left_first))
+  if (0==vcl_strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = leftright, true : true;
 
   return false;
 }
 
-bool vil_tiff_generic_image::set_property(char const *tag, const void *prop) const
+bool vil1_tiff_generic_image::set_property(char const *tag, const void *prop) const
 {
-  bool topdown; get_property(vil_property_top_row_first, &topdown);
-  bool leftright; get_property(vil_property_left_first, &leftright);
+  bool topdown; get_property(vil1_property_top_row_first, &topdown);
+  bool leftright; get_property(vil1_property_left_first, &leftright);
   const bool newprop = prop ? (*(const bool*)prop) : true; // default is to set the property
 
-  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
   {
     if (topdown == newprop) // no change necessary
       return true;
@@ -285,7 +285,7 @@ bool vil_tiff_generic_image::set_property(char const *tag, const void *prop) con
     return true;
   }
 
-  else if (0==vcl_strcmp(tag, vil_property_left_first))
+  else if (0==vcl_strcmp(tag, vil1_property_left_first))
   {
     if (leftright == newprop) // no change necessary
       return true;
@@ -302,13 +302,13 @@ bool vil_tiff_generic_image::set_property(char const *tag, const void *prop) con
     return false;
 }
 
-vil_tiff_generic_image::vil_tiff_generic_image(vil_stream* is, int /*planes*/,
+vil1_tiff_generic_image::vil1_tiff_generic_image(vil1_stream* is, int /*planes*/,
                                                int width,
                                                int height,
                                                int components,
                                                int bits_per_component,
-                                               vil_component_format /*format*/):
-  p(new vil_tiff_structures(is))
+                                               vil1_component_format /*format*/):
+  p(new vil1_tiff_structures(is))
 {
   width_ = width;
   height_ = height;
@@ -319,28 +319,28 @@ vil_tiff_generic_image::vil_tiff_generic_image(vil_stream* is, int /*planes*/,
   write_header();
 }
 
-vil_tiff_generic_image::~vil_tiff_generic_image()
+vil1_tiff_generic_image::~vil1_tiff_generic_image()
 {
   if (p->tif)
     TIFFClose(p->tif);
   delete p;
 }
 
-char const* vil_tiff_generic_image::file_format() const
+char const* vil1_tiff_generic_image::file_format() const
 {
-  return vil_tiff_format_tag;
+  return vil1_tiff_format_tag;
 }
 
-bool vil_tiff_generic_image::read_header()
+bool vil1_tiff_generic_image::read_header()
 {
   p->vs->seek(0L);
   p->tif = TIFFClientOpen("unknown filename",
                           "rC", // read, enable strip chopping
                           (thandle_t)p,
-                          vil_tiff_readproc, vil_tiff_writeproc,
-                          vil_tiff_seekproc, vil_tiff_closeproc,
-                          vil_tiff_sizeproc,
-                          vil_tiff_mapfileproc, vil_tiff_unmapfileproc);
+                          vil1_tiff_readproc, vil1_tiff_writeproc,
+                          vil1_tiff_seekproc, vil1_tiff_closeproc,
+                          vil1_tiff_sizeproc,
+                          vil1_tiff_mapfileproc, vil1_tiff_unmapfileproc);
 
   if (!p->tif) {
     return problem("TIFFClientOpen");
@@ -369,7 +369,7 @@ bool vil_tiff_generic_image::read_header()
     this->bits_per_component_ = bitspersample;
     break;
   default:
-    // vcl_cerr << "vil_tiff: Saw " << samplesperpixel << " samples @ " << bitspersample << "\n";
+    // vcl_cerr << "vil1_tiff: Saw " << samplesperpixel << " samples @ " << bitspersample << "\n";
     TIFFError("TIFFImageRH: ", "Can only handle 1-channel gray scale or 3-channel color");
     return false;
   }
@@ -402,7 +402,7 @@ bool vil_tiff_generic_image::read_header()
       if (!TIFFIsTiled(p->tif)) {
         // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
 #ifdef RIH_DEBUG
-        vcl_cerr << "vil_tiff: Treating Tiff image as uncompressed ForeignImage\n";
+        vcl_cerr << "vil1_tiff: Treating Tiff image as uncompressed ForeignImage\n";
 #endif
       }
     }
@@ -507,7 +507,7 @@ bool vil_tiff_generic_image::read_header()
 
 
 #if defined(RIH_DEBUG)
-  vcl_printf("vil_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
+  vcl_printf("vil1_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
          " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
          this->width(), this->height(), this->components(), this->bits_per_component(),
          p->tiled, p->compressed, p->rows_per_strip, p->photometric, p->stripsize, p->scanlinesize);
@@ -527,7 +527,7 @@ bool vil_tiff_generic_image::read_header()
   return true;
 }
 
-bool vil_tiff_generic_image::write_header()
+bool vil1_tiff_generic_image::write_header()
 {
   p->vs->seek(0L);
   p->filesize = 0;
@@ -556,13 +556,13 @@ bool vil_tiff_generic_image::write_header()
 #endif
 
 
-  p->tif = TIFFClientOpen("file_formats/vil_tiff.cxx:374:unknown_filename",
+  p->tif = TIFFClientOpen("file_formats/vil1_tiff.cxx:374:unknown_filename",
                           "w",
                           (thandle_t)p,
-                          vil_tiff_readproc, vil_tiff_writeproc,
-                          vil_tiff_seekproc, vil_tiff_closeproc,
-                          vil_tiff_sizeproc,
-                          vil_tiff_mapfileproc, vil_tiff_unmapfileproc);
+                          vil1_tiff_readproc, vil1_tiff_writeproc,
+                          vil1_tiff_seekproc, vil1_tiff_closeproc,
+                          vil1_tiff_sizeproc,
+                          vil1_tiff_mapfileproc, vil1_tiff_unmapfileproc);
 
   TIFFSetField(p->tif, TIFFTAG_IMAGEWIDTH, width_);
   TIFFSetField(p->tif, TIFFTAG_IMAGELENGTH, height_);
@@ -619,7 +619,7 @@ bool vil_tiff_generic_image::write_header()
   p->compressed = (p->compression != COMPRESSION_NONE);
 
   // TIFFSetField(p->tif, TIFFTAG_IMAGEDESCRIPTION, GetDescription());
-  TIFFSetField(p->tif, TIFFTAG_SOFTWARE, "VXL core/vil/file_formats/vil_tiff.cxx");
+  TIFFSetField(p->tif, TIFFTAG_SOFTWARE, "VXL core/vil1/file_formats/vil1_tiff.cxx");
 
   p->numberofstrips = TIFFNumberOfStrips(p->tif);
   p->scanlinesize = width_ * bitspersample * samplesperpixel / 8;
@@ -645,7 +645,7 @@ bool vil_tiff_generic_image::write_header()
   p->buf = new unsigned char[p->stripsize];
 
 #ifdef RIH_DEBUG
-  vcl_printf("vil_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
+  vcl_printf("vil1_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
          " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
          this->width(), this->height(), this->components(), this->bits_per_component(),
          p->tiled, p->compressed, p->rows_per_strip, p->photometric, p->stripsize, p->scanlinesize);
@@ -654,25 +654,25 @@ bool vil_tiff_generic_image::write_header()
   return true;
 }
 
-void vil_tiff_generic_image::get_resolution(float& x_res, float& y_res, unsigned short& units) const
+void vil1_tiff_generic_image::get_resolution(float& x_res, float& y_res, unsigned short& units) const
 {
   TIFFGetField(p->tif, TIFFTAG_XRESOLUTION, &x_res);
   TIFFGetField(p->tif, TIFFTAG_YRESOLUTION, &y_res);
   TIFFGetField(p->tif, TIFFTAG_RESOLUTIONUNIT, &units);
 }
 
-void vil_tiff_generic_image::set_resolution(float x_res, float y_res, unsigned short units)
+void vil1_tiff_generic_image::set_resolution(float x_res, float y_res, unsigned short units)
 {
   TIFFSetField(p->tif, TIFFTAG_XRESOLUTION, x_res);
   TIFFSetField(p->tif, TIFFTAG_YRESOLUTION, y_res);
   TIFFSetField(p->tif, TIFFTAG_RESOLUTIONUNIT, units);
 }
 
-bool vil_tiff_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
+bool vil1_tiff_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
   if (!p->jumbo_strips) {
     if (p->tiled)
-      vcl_cerr << "vil_tiff_generic_image: TILED TIFF: may be wrongly read?\n";
+      vcl_cerr << "vil1_tiff_generic_image: TILED TIFF: may be wrongly read?\n";
 
     // Random access only to strips.
     // Get the nearby strips...
@@ -709,7 +709,7 @@ bool vil_tiff_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
   }
 }
 
-bool vil_tiff_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
+bool vil1_tiff_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
 {
   // Random access only to strips.
   // Put the nearby strips...
@@ -741,8 +741,8 @@ bool vil_tiff_generic_image::put_section(void const* buf, int x0, int y0, int xs
   return true;
 }
 
-vil_image vil_tiff_generic_image::get_plane(int plane) const
+vil1_image vil1_tiff_generic_image::get_plane(int plane) const
 {
   assert(plane == 0);
-  return const_cast<vil_tiff_generic_image*>(this);
+  return const_cast<vil1_tiff_generic_image*>(this);
 }

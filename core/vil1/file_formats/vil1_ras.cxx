@@ -1,24 +1,24 @@
-// This is core/vil/file_formats/vil_ras.cxx
+// This is core/vil1/file_formats/vil1_ras.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
 // \file
 
-#include "vil_ras.h"
+#include "vil1_ras.h"
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
 
-#include <vil/vil_stream.h>
-#include <vil/vil_image_impl.h>
-#include <vil/vil_image.h>
-#include <vil/vil_property.h>
+#include <vil1/vil1_stream.h>
+#include <vil1/vil1_image_impl.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_property.h>
 
 #include <vxl_config.h>
 
-char const* vil_ras_format_tag = "ras";
+char const* vil1_ras_format_tag = "ras";
 
 namespace {
   inline
@@ -36,7 +36,7 @@ namespace {
   }
 
   // Equivalent of ntoh
-  bool read_uint_32( vil_stream* vs, vxl_uint_32& word )
+  bool read_uint_32( vil1_stream* vs, vxl_uint_32& word )
   {
     if ( vs->read( &word, 4 ) < 4 )
       return false;
@@ -45,7 +45,7 @@ namespace {
   }
 
   // Equivalent of hton
-  bool write_uint_32( vil_stream* vs, vxl_uint_32 word )
+  bool write_uint_32( vil1_stream* vs, vxl_uint_32 word )
   {
     swap_endian( word );
     return vs->write( &word, 4 ) == 4;
@@ -73,7 +73,7 @@ namespace {
 }
 
 
-vil_image_impl* vil_ras_file_format::make_input_image(vil_stream* vs)
+vil1_image_impl* vil1_ras_file_format::make_input_image(vil1_stream* vs)
 {
   // Check the magic number
   vxl_uint_8 buf[4] = { 0, 0, 0, 0 };
@@ -82,44 +82,44 @@ vil_image_impl* vil_ras_file_format::make_input_image(vil_stream* vs)
            buf[2] == RAS_MAGIC[2] && buf[3] == RAS_MAGIC[3]  ) )
     return 0;
 
-  return new vil_ras_generic_image(vs);
+  return new vil1_ras_generic_image(vs);
 }
 
-vil_image_impl* vil_ras_file_format::make_output_image(vil_stream* vs, int planes,
+vil1_image_impl* vil1_ras_file_format::make_output_image(vil1_stream* vs, int planes,
                                                        int width,
                                                        int height,
                                                        int components,
                                                        int bits_per_component,
-                                                       vil_component_format format)
+                                                       vil1_component_format format)
 {
-  return new vil_ras_generic_image(vs, planes, width, height, components, bits_per_component, format);
+  return new vil1_ras_generic_image(vs, planes, width, height, components, bits_per_component, format);
 }
 
-char const* vil_ras_file_format::tag() const
+char const* vil1_ras_file_format::tag() const
 {
-  return vil_ras_format_tag;
+  return vil1_ras_format_tag;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil_ras_generic_image::vil_ras_generic_image(vil_stream* vs):
+vil1_ras_generic_image::vil1_ras_generic_image(vil1_stream* vs):
   vs_(vs)
 {
   vs_->ref();
   read_header();
 }
 
-bool vil_ras_generic_image::get_property(char const *tag, void *prop) const
+bool vil1_ras_generic_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil_property_left_first))
+  if (0==vcl_strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
   // The default raw colour format is BGR. The default indexed colour
   // format is RGB. Go figure.
-  if (0==vcl_strcmp(tag, vil_property_component_order_is_BGR)) {
+  if (0==vcl_strcmp(tag, vil1_property_component_order_is_BGR)) {
     if ( prop )
       (*(bool*)prop) = ( map_type_ == RMT_NONE && type_ != RT_FORMAT_RGB );
     return true;
@@ -128,17 +128,17 @@ bool vil_ras_generic_image::get_property(char const *tag, void *prop) const
   return false;
 }
 
-char const* vil_ras_generic_image::file_format() const
+char const* vil1_ras_generic_image::file_format() const
 {
-  return vil_ras_format_tag;
+  return vil1_ras_format_tag;
 }
 
-vil_ras_generic_image::vil_ras_generic_image(vil_stream* vs, int planes,
+vil1_ras_generic_image::vil1_ras_generic_image(vil1_stream* vs, int planes,
                                              int width,
                                              int height,
                                              int components,
                                              int bits_per_component,
-                                             vil_component_format /*format*/):
+                                             vil1_component_format /*format*/):
   vs_(vs)
 {
   vs_->ref();
@@ -175,7 +175,7 @@ vil_ras_generic_image::vil_ras_generic_image(vil_stream* vs, int planes,
   write_header();
 }
 
-vil_ras_generic_image::~vil_ras_generic_image()
+vil1_ras_generic_image::~vil1_ras_generic_image()
 {
   delete[] col_map_;
   vs_->unref();
@@ -183,7 +183,7 @@ vil_ras_generic_image::~vil_ras_generic_image()
 
 
 //: Read the header of a Sun raster file.
-bool vil_ras_generic_image::read_header()
+bool vil1_ras_generic_image::read_header()
 {
   // Go to start of file
   vs_->seek(0);
@@ -242,7 +242,7 @@ bool vil_ras_generic_image::read_header()
   if ( map_length_ ) {
     assert( map_length_ % 3 == 0 );
     col_map_ = new vxl_uint_8[ map_length_ ];
-    vs_->read( col_map_, (vil_streampos)map_length_ );
+    vs_->read( col_map_, (vil1_streampos)map_length_ );
   } else {
     col_map_ = 0;
   }
@@ -261,7 +261,7 @@ bool vil_ras_generic_image::read_header()
   return true;
 }
 
-bool vil_ras_generic_image::write_header()
+bool vil1_ras_generic_image::write_header()
 {
   vs_->seek(0);
 
@@ -282,7 +282,7 @@ bool vil_ras_generic_image::write_header()
   return true;
 }
 
-bool vil_ras_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
+bool vil1_ras_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
   if ( type_ == RT_BYTE_ENCODED )
     return false; // not yet implemented
@@ -328,7 +328,7 @@ bool vil_ras_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
   return true;
 }
 
-bool vil_ras_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
+bool vil1_ras_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
 {
   if ( col_map_ ) {
     vcl_cerr << __FILE__ << ": writing to file with a colour map is not implemented\n";
@@ -372,8 +372,8 @@ bool vil_ras_generic_image::put_section(void const* buf, int x0, int y0, int xs,
   return true;
 }
 
-vil_image vil_ras_generic_image::get_plane(int plane) const
+vil1_image vil1_ras_generic_image::get_plane(int plane) const
 {
   assert(plane == 0);
-  return const_cast<vil_ras_generic_image*>(this);
+  return const_cast<vil1_ras_generic_image*>(this);
 }

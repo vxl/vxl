@@ -1,4 +1,4 @@
-#include <vil/vil_rgba.txx>
+#include <vil1/vil1_rgba.txx>
 
-VIL_RGBA_INSTANTIATE(float);
-// VIL_RGBA_INSTANTIATE_LS(float);
+VIL1_RGBA_INSTANTIATE(float);
+// VIL1_RGBA_INSTANTIATE_LS(float);

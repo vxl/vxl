@@ -1,3 +1,3 @@
-#include <vil/vil_ncc.txx>
+#include <vil1/vil1_ncc.txx>
 
-VIL_NCC_INSTANTIATE(unsigned char, unsigned char, double);
+VIL1_NCC_INSTANTIATE(unsigned char, unsigned char, double);

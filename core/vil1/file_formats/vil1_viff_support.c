@@ -43,7 +43,7 @@
 #
 */
 
-#include "vil_viffheader.h"
+#include "vil1_viffheader.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,7 +51,7 @@
 
 #define LENGTH 512
 
-int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, int *msize,
+int vil1_viff_imagesize(struct vil1_viff_xvimage *image,int *dsize, int *dcount, int *msize,
                        int *mcount, int *lsize,int *lcount);
 
 /**************************************************************
@@ -72,7 +72,7 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
 *               location_type -- implied or explicit location data
 *               location_dim -- explicit locations can be of any dimension
 *
-*      OUTPUT:  1.  returns a pointer to a vil_viff_xvimage with image defined
+*      OUTPUT:  1.  returns a pointer to a vil1_viff_xvimage with image defined
 *
 * CALLED FROM:
 *
@@ -80,8 +80,8 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
 *
 **************************************************************/
 
-struct vil_viff_xvimage *
-vil_viff_createimage(col_size, row_size, data_storage_type, num_of_images,
+struct vil1_viff_xvimage *
+vil1_viff_createimage(col_size, row_size, data_storage_type, num_of_images,
                      num_data_bands, comment, map_row_size, map_col_size,
                      map_scheme, map_storage_type, location_type, location_dim)
 unsigned
@@ -99,7 +99,7 @@ long    col_size,
 char    *comment;
 {
 struct
-vil_viff_xvimage *image;
+vil1_viff_xvimage *image;
 char    *maps,
         *imagedata,
         tmp_comment[LENGTH];
@@ -112,11 +112,11 @@ int     image_data_size_bytes,          /* # data bytes */
         location_size_bytes,            /* # location bytes */
         location_count_objects;         /* # location objs */
 
-/* malloc room for the vil_viff_xvimage structure */
+/* malloc room for the vil1_viff_xvimage structure */
 
-    if ((image=(struct vil_viff_xvimage *)malloc(sizeof(struct vil_viff_xvimage)))== NULL)
+    if ((image=(struct vil1_viff_xvimage *)malloc(sizeof(struct vil1_viff_xvimage)))== NULL)
     {
-       fprintf(stderr,"vil_viff_createimage: No space for image - malloc failed!\n");
+       fprintf(stderr,"vil1_viff_createimage: No space for image - malloc failed!\n");
        return 0;
     }
 
@@ -172,7 +172,7 @@ int     image_data_size_bytes,          /* # data bytes */
 
 /* get the sizes for the image data, map data, and location data */
 
-    if (! vil_viff_imagesize(image,                     /* vil_viff_xvimage */
+    if (! vil1_viff_imagesize(image,                     /* vil1_viff_xvimage */
                              &image_data_size_bytes,    /* # data bytes */
                              &image_data_count_pixels,  /* # data pixels */
                              &map_size_bytes,           /* # map bytes */
@@ -181,7 +181,7 @@ int     image_data_size_bytes,          /* # data bytes */
                              &location_count_objects    /* # location objs */
                             ))
     {
-        fprintf(stderr, "vil_viff_createimage: Uninterpretable image \
+        fprintf(stderr, "vil1_viff_createimage: Uninterpretable image \
 specificationa\n");
         return 0;
     }
@@ -193,7 +193,7 @@ specificationa\n");
        if ((imagedata = (char *)
           malloc((size_t)image_data_size_bytes)) == NULL)
        {
-           fprintf(stderr,"vil_viff_createimage: Not enough memory for image\
+           fprintf(stderr,"vil1_viff_createimage: Not enough memory for image\
  data!\n");
           return 0;
        }
@@ -209,7 +209,7 @@ specificationa\n");
     {
        if ((maps = (char *)malloc((size_t)map_size_bytes)) == NULL)
        {
-            fprintf(stderr,"vil_viff_createimage: Not enough memory for maps\
+            fprintf(stderr,"vil1_viff_createimage: Not enough memory for maps\
  data!\n");
            return 0;
        }
@@ -227,7 +227,7 @@ specificationa\n");
        if ((location = (float *)
            malloc((size_t)location_size_bytes))==NULL)
        {
-            fprintf(stderr,"vil_viff_createimage: Not enough memory \
+            fprintf(stderr,"vil1_viff_createimage: Not enough memory \
  for location data!\n");
            return 0;
        }
@@ -268,7 +268,7 @@ specificationa\n");
 *
 *************************************************************/
 
-void vil_viff_freeimage(struct vil_viff_xvimage *image)
+void vil1_viff_freeimage(struct vil1_viff_xvimage *image)
 {
         unsigned char id1,id2;
 
@@ -279,16 +279,16 @@ void vil_viff_freeimage(struct vil_viff_xvimage *image)
         if (image != NULL)
         {
            /* Now see of the image itself is legal. This catches accidental
-              attempts to free an image already turned loose by vil_viff_freeimage(). */
+              attempts to free an image already turned loose by vil1_viff_freeimage(). */
            id1 = image->identifier;
            id2 = XV_FILE_MAGIC_NUM;
            if (id1 != id2)
              {
                fprintf(stderr,
-       "vil_viff_freeimage: Attempt to free an object that is not a VIFF image.\n");
+       "vil1_viff_freeimage: Attempt to free an object that is not a VIFF image.\n");
                fprintf(stderr,
-       "vil_viff_freeimage: Object may be a VIFF image that has already been free'd.\n");
-               fprintf(stderr,"vil_viff_freeimage: Attempt aborted.\n");
+       "vil1_viff_freeimage: Object may be a VIFF image that has already been free'd.\n");
+               fprintf(stderr,"vil1_viff_freeimage: Attempt aborted.\n");
                return;
              }
 
@@ -312,7 +312,7 @@ void vil_viff_freeimage(struct vil_viff_xvimage *image)
 }
 
 
-unsigned long vil_viff_getmachsize(unsigned long mtype,unsigned long dtype)
+unsigned long vil1_viff_getmachsize(unsigned long mtype,unsigned long dtype)
 {
    unsigned long tmp = (mtype==VFF_DEP_CRAYORDER) + 1;
    switch(dtype){
@@ -353,7 +353,7 @@ unsigned long vil_viff_getmachsize(unsigned long mtype,unsigned long dtype)
        }
 */
 
-int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, int *msize,
+int vil1_viff_imagesize(struct vil1_viff_xvimage *image,int *dsize, int *dcount, int *msize,
                        int *mcount, int *lsize,int *lcount)
 {
     long rows,cols;
@@ -374,7 +374,7 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
        datasize = ((cols+7)/8)*rows;
        datacount = datasize;
     }else{
-       datasize = cols*rows * vil_viff_getmachsize(mach,
+       datasize = cols*rows * vil1_viff_getmachsize(mach,
                   (unsigned long)image->data_storage_type);
        datacount = cols*rows;
     }
@@ -400,7 +400,7 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
           mapcount = image->map_row_size*image->map_col_size;
           break;
         default:
-          fprintf(stderr,"\nvil_viff_imagesize: Unknown mapping scheme:");
+          fprintf(stderr,"\nvil1_viff_imagesize: Unknown mapping scheme:");
           fprintf(stderr," %lu\n",image->map_scheme);
           return 0;
           /* break; */
@@ -412,7 +412,7 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
     if (image->map_storage_type==VFF_MAPTYP_NONE){
        mapsize = 0;
     }else{
-       mapsize = mapcount*vil_viff_getmachsize(mach,
+       mapsize = mapcount*vil1_viff_getmachsize(mach,
                                                (unsigned long)image->map_storage_type);
     }
 
@@ -420,7 +420,7 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
     ** Compute size of LOCATION data in bytes and floats
     */
     loccount = rows*cols*image->location_dim;
-    locsize  = loccount*vil_viff_getmachsize(mach,(long)VFF_TYP_FLOAT);
+    locsize  = loccount*vil1_viff_getmachsize(mach,(long)VFF_TYP_FLOAT);
 
     *dsize = datasize;
     *dcount = datacount;

@@ -1,4 +1,4 @@
-#include <vil/vil_ncc.txx>
+#include <vil1/vil1_ncc.txx>
 
-VIL_NCC_INSTANTIATE(float, float, double);
+VIL1_NCC_INSTANTIATE(float, float, double);
 

@@ -1,24 +1,24 @@
-// Example use of the vil_rgb and vil_rgb_cell classes.
+// Example use of the vil1_rgb and vil1_rgb_cell classes.
 //
 // Author: Peter Vanroose, KULeuven/ESAT, December 1999
 
 #include <vcl_iostream.h>
-#include <vil/vil_rgb.h>
-typedef vil_rgb<unsigned char> vil_rgb_cell;
+#include <vil1/vil1_rgb.h>
+typedef vil1_rgb<unsigned char> vil1_rgb_cell;
 
-static char* as_hex(vil_rgb_cell const&);
+static char* as_hex(vil1_rgb_cell const&);
 
 int main(int /*argc*/, char** /*argv*/)
 {
-  // The "normal" vil_rgb class, with ubyte cells, is called vil_rgb_cell;
+  // The "normal" vil1_rgb class, with ubyte cells, is called vil1_rgb_cell;
   // its constructor takes the R, G and B values to be set:
-  vil_rgb_cell orange(255,140,0);
-  // A ubyte (= grey pixel) value is automatically converted to an vil_rgb_cell:
-  vil_rgb_cell black = (unsigned char)0;
-  vil_rgb_cell white = (unsigned char)255;
-  vil_rgb_cell grey = (unsigned char)190;
+  vil1_rgb_cell orange(255,140,0);
+  // A ubyte (= grey pixel) value is automatically converted to an vil1_rgb_cell:
+  vil1_rgb_cell black = (unsigned char)0;
+  vil1_rgb_cell white = (unsigned char)255;
+  vil1_rgb_cell grey = (unsigned char)190;
 
-  // Conversely, an vil_rgb_cell can be converted to its ubyte grey equivalent:
+  // Conversely, an vil1_rgb_cell can be converted to its ubyte grey equivalent:
   unsigned char orange_grey = orange.grey();
 
   // Write to a vcl_ostream: the output as the format [R G B].
@@ -26,7 +26,7 @@ int main(int /*argc*/, char** /*argv*/)
            << "/* " << orange << black << white << grey
            << (int)orange_grey << " */\n";
 
-  // And now an .xpm file using these vil_rgb_cells, and the function as_hex:
+  // And now an .xpm file using these vil1_rgb_cells, and the function as_hex:
   vcl_cout << "static char* example_rgb[] = {\n\"20 8 4 1\",\n"
            << "\" \tc " << as_hex(white) << "\",\n"
            << "\"*\tc " << as_hex(black) << "\",\n"
@@ -43,10 +43,10 @@ int main(int /*argc*/, char** /*argv*/)
   return 0;
 }
 
-// This function writes, e.g., vil_rgb_cell(177,49,97) as "#b13161":
+// This function writes, e.g., vil1_rgb_cell(177,49,97) as "#b13161":
 
-char* as_hex(vil_rgb_cell const& rgb) {
-  // The data members r, g and b of an vil_rgb_cell are public:
+char* as_hex(vil1_rgb_cell const& rgb) {
+  // The data members r, g and b of an vil1_rgb_cell are public:
   unsigned char r = rgb.r;
   unsigned char g = rgb.g;
   unsigned char b = rgb.b;

@@ -1,4 +1,4 @@
-// This is core/vil/vil_block_cache_image_impl.cxx
+// This is core/vil1/vil1_block_cache_image_impl.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,7 +6,7 @@
 // \file
 // \author fsm
 
-#include "vil_block_cache_image_impl.h"
+#include "vil1_block_cache_image_impl.h"
 #include <vcl_cstring.h>  // strcmp()
 
 // Constructors/Destructors--------------------------------------------------
@@ -14,30 +14,30 @@
 //---------------------------------------------------------------------------
 // Default constructor
 //---------------------------------------------------------------------------
-vil_block_cache_image_impl::vil_block_cache_image_impl(vil_image i_, unsigned bx, unsigned by)
+vil1_block_cache_image_impl::vil1_block_cache_image_impl(vil1_image i_, unsigned bx, unsigned by)
   : base(i_),block_size_x(bx),block_size_y(by)
 {
 }
 
-vil_block_cache_image_impl::~vil_block_cache_image_impl() {
+vil1_block_cache_image_impl::~vil1_block_cache_image_impl() {
 }
 
-vil_image vil_block_cache_image_impl::get_plane(int ) const {
+vil1_image vil1_block_cache_image_impl::get_plane(int ) const {
   return 0;
 }
 
-bool vil_block_cache_image_impl::get_section(void *buf, int x0, int y0, int w, int h) const {
+bool vil1_block_cache_image_impl::get_section(void *buf, int x0, int y0, int w, int h) const {
   // implement this, please.
   return base.get_section(buf, x0, y0, w, h);
 }
 
-bool vil_block_cache_image_impl::put_section(void const *buf, int x0, int y0, int w, int h) {
+bool vil1_block_cache_image_impl::put_section(void const *buf, int x0, int y0, int w, int h) {
   return base.put_section(buf, x0, y0, w, h);
 }
 
 //--------------------------------------------------------------------------------
 
-bool vil_block_cache_image_impl::get_property(char const *tag,
+bool vil1_block_cache_image_impl::get_property(char const *tag,
                                               void *out) const
 {
   if (vcl_strcmp(tag, "is_blocked") == 0)
@@ -60,16 +60,16 @@ bool vil_block_cache_image_impl::get_property(char const *tag,
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 //: Return the name of the class;
-vcl_string vil_block_cache_image_impl::is_a() const
+vcl_string vil1_block_cache_image_impl::is_a() const
 {
-  static const vcl_string class_name_="vil_block_cache_image_impl";
+  static const vcl_string class_name_="vil1_block_cache_image_impl";
   return class_name_;
 }
 
 //: Return true if the name of the class matches the argument
-bool vil_block_cache_image_impl::is_class(vcl_string const& s) const
+bool vil1_block_cache_image_impl::is_class(vcl_string const& s) const
 {
-  return s==vil_block_cache_image_impl::is_a() || vil_image_impl::is_class(s);
+  return s==vil1_block_cache_image_impl::is_a() || vil1_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */

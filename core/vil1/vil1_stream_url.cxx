@@ -1,4 +1,4 @@
-// This is core/vil/vil_stream_url.cxx
+// This is core/vil1/vil1_stream_url.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,7 +6,7 @@
 // \file
 // \author fsm
 
-#include "vil_stream_url.h"
+#include "vil1_stream_url.h"
 
 #include <vcl_cassert.h>
 #include <vcl_cstdio.h>  // sprintf()
@@ -14,7 +14,7 @@
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vil/vil_stream_core.h>
+#include <vil1/vil1_stream_core.h>
 #include <vcl_fstream.h>
 
 #if defined(unix)
@@ -113,7 +113,7 @@ static vcl_string encode_base64(const vcl_string& in)
 }
 
 
-vil_stream_url::vil_stream_url(char const *url)
+vil1_stream_url::vil1_stream_url(char const *url)
   : u_(0)
 {
   if (vcl_strncmp(url, "http://", 7) != 0)
@@ -260,11 +260,11 @@ vil_stream_url::vil_stream_url(char const *url)
 //  vcl_ofstream test2("/test2.jpg", vcl_ios_binary);
 
   // read from socket into memory.
-  u_ = new vil_stream_core;
+  u_ = new vil1_stream_core;
   u_->ref();
   {
     unsigned entity_marker = 0; // count end of header CR and LFs
-    vil_streampos n;
+    vil1_streampos n;
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
     while ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0L)
 #else
@@ -281,7 +281,7 @@ vil_stream_url::vil_stream_url(char const *url)
       }
       else
       {
-        for (vil_streampos i=0; i<n; ++i)
+        for (vil1_streampos i=0; i<n; ++i)
         {
           if ((entity_marker==2||entity_marker==0) && buffer[i]=='\r') entity_marker++;
           else if (entity_marker==1 && buffer[i]=='\n') entity_marker++;
@@ -302,7 +302,7 @@ vil_stream_url::vil_stream_url(char const *url)
   char btest[4096];
   vcl_ofstream test("/test.jpg", vcl_ios_binary);
   u_->seek(0L);
-  while (vil_streampos bn = u_->read(btest, 4096L))
+  while (vil1_streampos bn = u_->read(btest, 4096L))
     test.write(btest, bn);
   test.close();
 #endif
@@ -316,7 +316,7 @@ vil_stream_url::vil_stream_url(char const *url)
 #endif
 }
 
-vil_stream_url::~vil_stream_url()
+vil1_stream_url::~vil1_stream_url()
 {
   if (u_) {
     u_->unref();

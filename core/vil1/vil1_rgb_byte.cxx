@@ -1,13 +1,13 @@
-// This is core/vil/vil_rgb_byte.cxx
+// This is core/vil1/vil1_rgb_byte.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //
-// vil_rgb_byte
+// vil1_rgb_byte
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 17 Feb 00
 //
 //-----------------------------------------------------------------------------
 
-#define vil_rgb_byte_dont_warn
-#include "vil_rgb_byte.h"
+#define vil1_rgb_byte_dont_warn
+#include "vil1_rgb_byte.h"

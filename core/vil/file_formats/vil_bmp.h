@@ -1,6 +1,6 @@
-// This is core/vil2/file_formats/vil2_bmp.h
-#ifndef vil2_bmp_file_format_h_
-#define vil2_bmp_file_format_h_
+// This is core/vil/file_formats/vil_bmp.h
+#ifndef vil_bmp_file_format_h_
+#define vil_bmp_file_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -15,7 +15,7 @@
 //  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
 //\endverbatim
 
-class vil2_stream;
+class vil_stream;
 
 //=============================================================================
 
@@ -29,35 +29,35 @@ class vil2_stream;
 
 //--------------------------------------------------------------------------------
 
-#include <vil2/vil2_file_format.h>
-#include <vil2/vil2_image_resource.h>
-#include "vil2_bmp_file_header.h"
-#include "vil2_bmp_core_header.h"
-#include "vil2_bmp_info_header.h"
-class vil2_image_view_base;
+#include <vil/vil_file_format.h>
+#include <vil/vil_image_resource.h>
+#include "vil_bmp_file_header.h"
+#include "vil_bmp_core_header.h"
+#include "vil_bmp_info_header.h"
+class vil_image_view_base;
 
 
 //: Loader for BMP files
-class vil2_bmp_file_format : public vil2_file_format
+class vil_bmp_file_format : public vil_file_format
 {
  public:
   virtual char const* tag() const;
-  virtual vil2_image_resource_sptr make_input_image(vil2_stream* vs);
-  virtual vil2_image_resource_sptr make_output_image(vil2_stream* vs,
+  virtual vil_image_resource_sptr make_input_image(vil_stream* vs);
+  virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
                                                      unsigned nx,
                                                      unsigned ny,
                                                      unsigned nplanes,
-                                                     vil2_pixel_format format);
+                                                     vil_pixel_format format);
 };
 
 //: Generic image implementation for BMP files
-class vil2_bmp_image : public vil2_image_resource
+class vil_bmp_image : public vil_image_resource
 {
  public:
-  vil2_bmp_image (vil2_stream* is, unsigned ni,
-    unsigned nj, unsigned nplanes, vil2_pixel_format format);
-  vil2_bmp_image(vil2_stream* is);
-  ~vil2_bmp_image();
+  vil_bmp_image (vil_stream* is, unsigned ni,
+    unsigned nj, unsigned nplanes, vil_pixel_format format);
+  vil_bmp_image(vil_stream* is);
+  ~vil_bmp_image();
 
   //: Dimensions:  planes x width x height x components
   virtual unsigned nplanes() const {
@@ -65,29 +65,29 @@ class vil2_bmp_image : public vil2_image_resource
   virtual unsigned ni() const { return core_hdr.width; }
   virtual unsigned nj() const { return core_hdr.height; }
 
-  virtual enum vil2_pixel_format pixel_format() const {return VIL2_PIXEL_FORMAT_BYTE; }
+  virtual enum vil_pixel_format pixel_format() const {return VIL_PIXEL_FORMAT_BYTE; }
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.
-  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
                                                   unsigned j0, unsigned nj) const;
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(const vil2_image_view_base& im, unsigned i0, unsigned j0);
+  virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
 
   char const* file_format() const;
   bool get_property(char const *tag, void *prop = 0) const;
  private:
-  vil2_stream* is_;
+  vil_stream* is_;
 
   bool read_header();
   bool write_header();
 
-  friend class vil2_bmp_file_format;
+  friend class vil_bmp_file_format;
 
-  vil2_bmp_file_header file_hdr;
-  vil2_bmp_core_header core_hdr;
-  vil2_bmp_info_header info_hdr;
+  vil_bmp_file_header file_hdr;
+  vil_bmp_core_header core_hdr;
+  vil_bmp_info_header info_hdr;
   long bit_map_start; // position in file of bitmap raw data.
 #if 0
   uchar **freds_colormap;
@@ -100,4 +100,4 @@ class vil2_bmp_image : public vil2_image_resource
 };
 
 
-#endif // vil2_bmp_file_format_h_
+#endif // vil_bmp_file_format_h_

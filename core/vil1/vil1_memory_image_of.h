@@ -1,6 +1,6 @@
-// This is core/vil/vil_memory_image_of.h
-#ifndef vil_memory_image_of_h_
-#define vil_memory_image_of_h_
+// This is core/vil1/vil1_memory_image_of.h
+#ifndef vil1_memory_image_of_h_
+#define vil1_memory_image_of_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -23,13 +23,13 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //\endverbatim
 
-#include <vil/vil_image.h>
-#include <vil/vil_memory_image.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_memory_image.h>
 
 //: Image stored entirely in RAM
 //
-//    vil_memory_image_of<Type> provides a templated interface to a
-//    vil_memory_image.  It is assumed that the user has queried the pixel size
+//    vil1_memory_image_of<Type> provides a templated interface to a
+//    vil1_memory_image.  It is assumed that the user has queried the pixel size
 //    of the image and is instantiating an ImageBuffer of the appropriate type.
 //
 //    This allows C-efficiency access with C++ notational convenience after the
@@ -43,7 +43,7 @@
 //    However, image(x, y) is the element in the x-th column and y-th row.
 
 template <class T>
-class vil_memory_image_of : public vil_memory_image
+class vil1_memory_image_of : public vil1_memory_image
 {
  public:
   // The pixel type of this image
@@ -61,41 +61,41 @@ class vil_memory_image_of : public vil_memory_image
   inline unsigned size() const { return rows() * cols(); }
 
   //: Empty image.
-  vil_memory_image_of();
+  vil1_memory_image_of();
 
   //: This is a copy constructor, but it doesn't make a new buffer.
-  vil_memory_image_of(vil_memory_image_of<T> const &);
+  vil1_memory_image_of(vil1_memory_image_of<T> const &);
 
   //: Copy given image into a memory buffer.
   // If it's already a memory image, do as the copy constructor (above) does.
   explicit
-  vil_memory_image_of(vil_image const& image);
+  vil1_memory_image_of(vil1_image const& image);
 
   // Deprecated - This was used to copy the ROI, which is no longer on image
-  //vil_memory_image_of(vil_image const&, bool) {}
+  //vil1_memory_image_of(vil1_image const&, bool) {}
 
   //: Construct a w x h image, pixel format is determined from T
-  vil_memory_image_of(int sizex, int sizey);
+  vil1_memory_image_of(int sizex, int sizey);
 
   //: Construct a w x h image, pixel format is determined from T from memory previously created and pointed to by buf
-  vil_memory_image_of(T *buf, int sizex, int sizey);
+  vil1_memory_image_of(T *buf, int sizex, int sizey);
 #if 0
   //: Make memory imagebuffer, and fill with "value"
-  vil_memory_image_of(int sizex, int sizey, T const& value);
+  vil1_memory_image_of(int sizex, int sizey, T const& value);
 #endif
   //: Clearly, this will deallocate the memory buffer
-  inline ~vil_memory_image_of() {}
+  inline ~vil1_memory_image_of() {}
 
   //: This method hides the operator= in the base class.
-  vil_memory_image_of<T>& operator=(vil_memory_image_of<T> const &);
+  vil1_memory_image_of<T>& operator=(vil1_memory_image_of<T> const &);
 
-  //: Copy a vil_image, only if it's in an appropriate format.
+  //: Copy a vil1_image, only if it's in an appropriate format.
   // This routine does not try to guess how to convert images which are
   // not compatible with T.
-  vil_memory_image_of<T>& operator=(vil_image const &);
+  vil1_memory_image_of<T>& operator=(vil1_image const &);
 
   //: Load image.
-  void set(vil_image const& image);
+  void set(vil1_image const& image);
 
   //: These override the methods in the base class.
   void resize(int width, int height);
@@ -139,4 +139,4 @@ class vil_memory_image_of : public vil_memory_image
   void fill(T const& );
 };
 
-#endif // vil_memory_image_of_h_
+#endif // vil1_memory_image_of_h_

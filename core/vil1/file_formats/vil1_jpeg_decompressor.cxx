@@ -1,4 +1,4 @@
-// This is core/vil/file_formats/vil_jpeg_decompressor.cxx
+// This is core/vil1/file_formats/vil1_jpeg_decompressor.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,9 +6,9 @@
 // \file
 // \author fsm
 
-#include "vil_jpeg_decompressor.h"
-#include "vil_jpeg_source_mgr.h"
-#include <vil/vil_stream.h>
+#include "vil1_jpeg_decompressor.h"
+#include "vil1_jpeg_source_mgr.h"
+#include <vil1/vil1_stream.h>
 #include <vcl_iostream.h>
 
 #define trace if (true) { } else vcl_cerr
@@ -27,7 +27,7 @@
 //    some of the data, call jpeg_abort_decompress().
 // -# destruct the object with jpeg_destroy_decompress().
 
-vil_jpeg_decompressor::vil_jpeg_decompressor(vil_stream *s)
+vil1_jpeg_decompressor::vil1_jpeg_decompressor(vil1_stream *s)
   : stream(s)
   , ready(false)
   , valid(false)
@@ -44,10 +44,10 @@ vil_jpeg_decompressor::vil_jpeg_decompressor(vil_stream *s)
   // we need to read the header here, in order to get parameters such as size.
   //
   // set the data source
-  vil_jpeg_stream_src_set(&jobj, stream);
+  vil1_jpeg_stream_src_set(&jobj, stream);
 
   // rewind the stream
-  vil_jpeg_stream_src_rewind(&jobj, stream);
+  vil1_jpeg_stream_src_rewind(&jobj, stream);
 
   // now we may read the header.
   jpeg_read_header(&jobj, TRUE);
@@ -64,7 +64,7 @@ vil_jpeg_decompressor::vil_jpeg_decompressor(vil_stream *s)
 }
 
 // read the given scanline, skipping/rewinding as required.
-JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line) {
+JSAMPLE const *vil1_jpeg_decompressor::read_scanline(unsigned line) {
   // if the client tries to read the same scanline again, it should be free.
   if (valid && line == jobj.output_scanline-1)
     return biffer;
@@ -83,7 +83,7 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line) {
     trace << "...restarting\n";
 
     // rewind stream
-    vil_jpeg_stream_src_rewind(&jobj, stream);
+    vil1_jpeg_stream_src_rewind(&jobj, stream);
 
     // read header
     jpeg_read_header(&jobj, TRUE);
@@ -123,7 +123,7 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line) {
   // end reached ?
   if (jobj.output_scanline >= jobj.image_height) {
     trace << "...reached end\n";
-    jpeg_finish_decompress(&jobj); // this will call vil_jpeg_term_source()
+    jpeg_finish_decompress(&jobj); // this will call vil1_jpeg_term_source()
     ready = false;
   }
 
@@ -133,7 +133,7 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line) {
 }
 
 
-vil_jpeg_decompressor::~vil_jpeg_decompressor() {
+vil1_jpeg_decompressor::~vil1_jpeg_decompressor() {
   // destroy the pool associated with jobj
   (*jobj.mem->free_pool) ((j_common_ptr) &jobj, JPOOL_IMAGE);
 

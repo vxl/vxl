@@ -1,6 +1,6 @@
-// This is core/vil/vil_colour_space.h
-#ifndef vil_colour_space_h_
-#define vil_colour_space_h_
+// This is core/vil1/vil1_colour_space.h
+#ifndef vil1_colour_space_h_
+#define vil1_colour_space_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -15,7 +15,7 @@
 
 //: Linear transformation from RGB to YIQ colour spaces
 template <class T>
-void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3]);
+void vil1_colour_space_RGB_to_YIQ(T const in[3], T out[3]);
 
 
 //: Transform from RGB to HSV colour spaces
@@ -29,7 +29,7 @@ void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3]);
 //
 // [HSV is also known as HSB]
 template <class T>
-void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v);
+void vil1_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v);
 
 //: Transform from HSV to RGB colour space
 //
@@ -42,6 +42,6 @@ void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v);
 //
 // [HSV is also known as HSB]
 template <class T>
-void vil_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b);
+void vil1_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b);
 
-#endif // vil_colour_space_h_
+#endif // vil1_colour_space_h_

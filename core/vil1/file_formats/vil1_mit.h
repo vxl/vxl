@@ -1,6 +1,6 @@
-// This is core/vil/file_formats/vil_mit.h
-#ifndef vil_mit_file_format_h_
-#define vil_mit_file_format_h_
+// This is core/vil1/file_formats/vil1_mit.h
+#ifndef vil1_mit_file_format_h_
+#define vil1_mit_file_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -8,9 +8,9 @@
 // \file
 // \brief Image in MIT format
 // \author  Alison Noble, Oxford University.
-//          Joris Schouteden, vil version
+//          Joris Schouteden, vil1 version
 //
-//   vil_mit is a simple image format consisting of a header
+//   vil1_mit is a simple image format consisting of a header
 //   of 4 shorts (type,bits_per_pixel,width,height) and the raw data.
 //   The full specification defines a number of image/edge types (see header
 //   for details). Currently only 8-bit images can be read.
@@ -21,8 +21,8 @@
 //  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
 //\endverbatim
 
-#include <vil/vil_file_format.h>
-#include <vil/vil_image_impl.h>
+#include <vil1/vil1_file_format.h>
+#include <vil1/vil1_image_impl.h>
 
 //: Loader for MIT files
 //
@@ -35,23 +35,23 @@
 // -# float
 // -# edge
 
-class vil_mit_file_format : public vil_file_format
+class vil1_mit_file_format : public vil1_file_format
 {
  public:
   virtual char const* tag() const;
-  virtual vil_image_impl* make_input_image(vil_stream* vs);
-  virtual vil_image_impl* make_output_image(vil_stream* vs, int planes,
+  virtual vil1_image_impl* make_input_image(vil1_stream* vs);
+  virtual vil1_image_impl* make_output_image(vil1_stream* vs, int planes,
                                             int width,
                                             int height,
                                             int components,
                                             int bits_per_component,
-                                            vil_component_format format);
+                                            vil1_component_format format);
 };
 
 //: Generic image implementation for MIT files
-class vil_mit_generic_image : public vil_image_impl
+class vil1_mit_generic_image : public vil1_image_impl
 {
-  vil_stream* is_;
+  vil1_stream* is_;
   int magic_;
   int width_;
   int height_;
@@ -67,17 +67,17 @@ class vil_mit_generic_image : public vil_image_impl
   bool read_header();
   bool write_header();
 
-  friend class vil_mit_file_format;
+  friend class vil1_mit_file_format;
  public:
 
-  vil_mit_generic_image(vil_stream* is);
-  vil_mit_generic_image(vil_stream* is, int planes,
+  vil1_mit_generic_image(vil1_stream* is);
+  vil1_mit_generic_image(vil1_stream* is, int planes,
                                                int width,
                                                int height,
                                                int components,
                                                int bits_per_component,
-                                               vil_component_format format);
-  ~vil_mit_generic_image();
+                                               vil1_component_format format);
+  ~vil1_mit_generic_image();
 
   //: Dimensions.  Planes x W x H x Components
   virtual int planes() const { return 1; }
@@ -95,10 +95,10 @@ class vil_mit_generic_image : public vil_image_impl
     return bits_per_pixel_ / 8;
   }
 
-  virtual enum vil_component_format component_format() const
+  virtual enum vil1_component_format component_format() const
   {
-    if (type_ == 1 || type_ == 2) return VIL_COMPONENT_FORMAT_UNSIGNED_INT;
-    else return VIL_COMPONENT_FORMAT_IEEE_FLOAT;
+    if (type_ == 1 || type_ == 2) return VIL1_COMPONENT_FORMAT_UNSIGNED_INT;
+    else return VIL1_COMPONENT_FORMAT_IEEE_FLOAT;
   }
 
   //: Copy this to BUF,
@@ -112,7 +112,7 @@ class vil_mit_generic_image : public vil_image_impl
 
   char const* file_format() const;
   bool get_property(char const *tag, void *prop = 0) const;
-  vil_image get_plane(int ) const;
+  vil1_image get_plane(int ) const;
 };
 
-#endif // vil_mit_file_format_h_
+#endif // vil1_mit_file_format_h_

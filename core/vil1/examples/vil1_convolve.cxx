@@ -1,4 +1,4 @@
-// This is core/vil/examples/vil_convolve.cxx
+// This is core/vil1/examples/vil1_convolve.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
 #endif
@@ -8,11 +8,11 @@
 
 #include <vul/vul_arg.h>
 
-#include <vil/vil_image.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
-#include <vil/vil_convolve_simple.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_save.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_convolve_simple.h>
 
 double mask_diff[1][3] = {
   {-1, 0, 1},
@@ -51,14 +51,14 @@ double mask_gauss_17[1][17] = {
 };
 
 
-struct vil_kernel_info {
+struct vil1_kernel_info {
   char const* name;
   int w;
   int h;
   double* mask;
 };
 
-vil_kernel_info kernels[] = {
+vil1_kernel_info kernels[] = {
   {"diff_x",      3, 1, &mask_diff[0][0]},
   {"diff_y",      1, 3, &mask_diff[0][0]},
   {"sobel_x",     3, 3, &mask_sobel_x[0][0]},
@@ -77,13 +77,13 @@ int main(int argc, char ** argv)
   vul_arg_parse(argc, argv);
 
   // Load from disk into memory "inimg"
-  vil_image in = vil_load(a_input_filename().c_str());
-  vil_memory_image_of<unsigned char> inimg(in);
+  vil1_image in = vil1_load(a_input_filename().c_str());
+  vil1_memory_image_of<unsigned char> inimg(in);
 
   // Build kernel in "kernelimg"
-  vil_memory_image_of<float> kernelimg(0,0);
+  vil1_memory_image_of<float> kernelimg(0,0);
   vcl_string kernel(a_kernel());
-  for (vil_kernel_info* kp = kernels; kp->name; ++kp)
+  for (vil1_kernel_info* kp = kernels; kp->name; ++kp)
     if (kernel == kp->name) {
       kernelimg.resize(kp->w, kp->h);
       double* v = kp->mask;
@@ -101,22 +101,22 @@ int main(int argc, char ** argv)
           kernelimg[y][x] *= float(power);
     }
   if (kernelimg.width() == 0) {
-    vcl_cerr << "vil_convolve: unknown kernel [" << kernel << "]\n";
+    vcl_cerr << "vil1_convolve: unknown kernel [" << kernel << "]\n";
     return -1;
   }
 
   // Make "outimg" -- needs to be big enough to hold the full valid convolution
-  vil_memory_image_of<unsigned char> outimg(in.width()  + kernelimg.width(),
+  vil1_memory_image_of<unsigned char> outimg(in.width()  + kernelimg.width(),
                                             in.height() + kernelimg.height());
   outimg.fill(0);
 
-  vil_convolve_simple(inimg, kernelimg, (float*)0, outimg);
+  vil1_convolve_simple(inimg, kernelimg, (float*)0, outimg);
 
-  vil_save(outimg, a_output_filename().c_str(), in.file_format());
+  vil1_save(outimg, a_output_filename().c_str(), in.file_format());
   return 0;
 }
 
 // save(crop, "t.pgm", "pnm") is implemented as:
-//  (1) makes a file image, format "pnm" (i.e. a vil_pnm_
+//  (1) makes a file image, format "pnm" (i.e. a vil1_pnm_
 //         dimensions,component type,size etc of "crop"
-//  (2) vil_copy(crop, fileimage)
+//  (2) vil1_copy(crop, fileimage)

@@ -1,6 +1,6 @@
-// This is core/vil/vil_copy.h
-#ifndef vil_copy_h_
-#define vil_copy_h_
+// This is core/vil1/vil1_copy.h
+#ifndef vil1_copy_h_
+#define vil1_copy_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -16,13 +16,13 @@
 //     000217 JS  components*planes because get_section returns RGBRGB
 // \endverbatim
 
-#include <vil/vil_fwd.h>
+#include <vil1/vil1_fwd.h>
 
 //: Copy SRC to DST.
 // Images must be exactly the same dimensions, but datatype isn't matched
-void vil_copy(vil_image const& src, vil_image& DST);
+void vil1_copy(vil1_image const& src, vil1_image& DST);
 
 //: Return a memory image copy of SRC.
-vil_memory_image vil_copy(vil_image const& src);
+vil1_memory_image vil1_copy(vil1_image const& src);
 
-#endif // vil_copy_h_
+#endif // vil1_copy_h_

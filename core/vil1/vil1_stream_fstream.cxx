@@ -1,9 +1,9 @@
-// This is core/vil/vil_stream_fstream.cxx
+// This is core/vil1/vil1_stream_fstream.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
-#include "vil_stream_fstream.h"
+#include "vil1_stream_fstream.h"
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
@@ -34,58 +34,58 @@ static vcl_ios_openmode modeflags(char const* mode)
 
 static int id = 0;
 
-vil_stream_fstream::vil_stream_fstream(char const* fn, char const* mode):
+vil1_stream_fstream::vil1_stream_fstream(char const* fn, char const* mode):
   flags_(modeflags(mode)),
   f_(fn, flags_ | vcl_ios_binary) // need ios::binary on windows.
 {
   id_ = ++id;
-  xerr << "vil_stream_fstream(\"" << fn << "\", \""<<mode<<"\") = " << id_ << "\n";
+  xerr << "vil1_stream_fstream(\"" << fn << "\", \""<<mode<<"\") = " << id_ << "\n";
 #if 0
   if (!f_) {
-    vcl_cerr << "vil_stream_fstream::Could not open [" << fn << "]\n";
+    vcl_cerr << "vil1_stream_fstream::Could not open [" << fn << "]\n";
   }
 #endif // 0
 }
 
 #if 0
-vil_stream_fstream::vil_stream_fstream(vcl_fstream& f):
+vil1_stream_fstream::vil1_stream_fstream(vcl_fstream& f):
   f_(f.rdbuf()->fd())
 {
 }
 #endif // 0
 
-vil_stream_fstream::~vil_stream_fstream()
+vil1_stream_fstream::~vil1_stream_fstream()
 {
-  xerr << "vil_stream_fstream# " << id_ << " being deleted\n";
+  xerr << "vil1_stream_fstream# " << id_ << " being deleted\n";
 }
 
-vil_streampos vil_stream_fstream::write(void const* buf, vil_streampos n)
+vil1_streampos vil1_stream_fstream::write(void const* buf, vil1_streampos n)
 {
   assert(id > 0);
   if (!(flags_ & vcl_ios_out)) {
-    vcl_cerr << "vil_stream_fstream: write failed, not an vcl_ostream\n";
+    vcl_cerr << "vil1_stream_fstream: write failed, not an vcl_ostream\n";
     return 0;
   }
 
-  vil_streampos a = tell();
+  vil1_streampos a = tell();
   xerr << "write " << n << vcl_endl;
   f_.write((char const*)buf, n);
   if (!f_.good())
-    vcl_cerr << ("vil_stream_fstream: ERROR: write failed!\n");
-  vil_streampos b = tell();
+    vcl_cerr << ("vil1_stream_fstream: ERROR: write failed!\n");
+  vil1_streampos b = tell();
   f_.flush();
   return b-a;
 }
 
 
-vil_streampos vil_stream_fstream::read(void* buf, vil_streampos n)
+vil1_streampos vil1_stream_fstream::read(void* buf, vil1_streampos n)
 {
   assert(id > 0);
 
   if (!(flags_ & vcl_ios_in))
     return 0;
 
-  vil_streampos a = tell();
+  vil1_streampos a = tell();
   xerr << "read " << n << vcl_endl;
   f_.read((char *)buf, n);
 
@@ -100,15 +100,15 @@ vil_streampos vil_stream_fstream::read(void* buf, vil_streampos n)
   if (!f_.good() && !f_.bad() && f_.eof())
     f_.clear(); // allows subsequent operations
 
-  vil_streampos b = tell();
+  vil1_streampos b = tell();
 
-  vil_streampos numread = b-a;
+  vil1_streampos numread = b-a;
   if (b < a) { xerr << "urgh!\n"; return numread; }
   if (numread != n) xerr << "only read " << numread << vcl_endl;
   return numread;
 }
 
-vil_streampos vil_stream_fstream::tell()
+vil1_streampos vil1_stream_fstream::tell()
 {
   assert(id > 0);
   if (flags_ & vcl_ios_in) {
@@ -122,10 +122,10 @@ vil_streampos vil_stream_fstream::tell()
   }
 
   assert(false); // did you get here? use at least one of vcl_ios_in, vcl_ios_out.
-  return (vil_streampos)(-1L);
+  return (vil1_streampos)(-1L);
 }
 
-void vil_stream_fstream::seek(vil_streampos position)
+void vil1_stream_fstream::seek(vil1_streampos position)
 {
   assert(id > 0);
   bool fi = (flags_ & vcl_ios_in)  != 0;
@@ -133,7 +133,7 @@ void vil_stream_fstream::seek(vil_streampos position)
 
   if (fi && fo) {
     xerr << "seekg and seekp to " << position << vcl_endl;
-    if (position != vil_streampos(f_.tellg())) {
+    if (position != vil1_streampos(f_.tellg())) {
       f_.seekg(position);
       f_.seekp(position);
       assert(f_.good());
@@ -142,7 +142,7 @@ void vil_stream_fstream::seek(vil_streampos position)
 
   else if (fi) {
     xerr << "seek to " << position << vcl_endl;
-    if (position != vil_streampos(f_.tellg())) {
+    if (position != vil1_streampos(f_.tellg())) {
       f_.seekg(position);
       assert(f_.good());
     }

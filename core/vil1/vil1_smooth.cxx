@@ -1,4 +1,4 @@
-// This is core/vil/vil_smooth.cxx
+// This is core/vil1/vil1_smooth.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,30 +6,30 @@
 // \file
 // \author fsm
 
-#include "vil_smooth.h"
+#include "vil1_smooth.h"
 
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
 
-#include <vil/vil_byte.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_convolve.h>
-#include <vil/vil_convolve.txx>
+#include <vil1/vil1_byte.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_convolve.h>
+#include <vil1/vil1_convolve.txx>
 
 #define inst(pixel_type, float_type) \
 template \
-void vil_convolve_separable(float const kernel[], unsigned N, \
-                            vil_memory_image_of<pixel_type> & buf, \
-                            vil_memory_image_of<float_type>& tmp, \
-                            vil_memory_image_of<float_type>& out); \
+void vil1_convolve_separable(float const kernel[], unsigned N, \
+                            vil1_memory_image_of<pixel_type> & buf, \
+                            vil1_memory_image_of<float_type>& tmp, \
+                            vil1_memory_image_of<float_type>& out); \
 template \
-vil_image vil_convolve_separable(vil_image const &, float const*, int, pixel_type*, float_type* )
+vil1_image vil1_convolve_separable(vil1_image const &, float const*, int, pixel_type*, float_type* )
 
-inst(vil_byte, float);
+inst(vil1_byte, float);
 inst(int, float);
 
 
-vil_image vil_smooth_gaussian(vil_image const & in, double sigma)
+vil1_image vil1_smooth_gaussian(vil1_image const & in, double sigma)
 {
   // Create 1-D mask:
   double cutoff = 0.01;
@@ -51,11 +51,11 @@ vil_image vil_smooth_gaussian(vil_image const & in, double sigma)
     mask[x] *= float(mass_scale);
 
   // Call convolver
-  if (vil_pixel_format(in) == VIL_BYTE)
-    return vil_convolve_separable(in, /* xxx */&mask[0], size-1, (vil_byte*)0, (float*)0);
+  if (vil1_pixel_format(in) == VIL1_BYTE)
+    return vil1_convolve_separable(in, /* xxx */&mask[0], size-1, (vil1_byte*)0, (float*)0);
 
-  if (vil_pixel_format(in) == VIL_FLOAT)
-    return vil_convolve_separable(in, /* xxx */&mask[0], size-1, (float*)0, (float*)0);
+  if (vil1_pixel_format(in) == VIL1_FLOAT)
+    return vil1_convolve_separable(in, /* xxx */&mask[0], size-1, (float*)0, (float*)0);
 
   return 0;
 }

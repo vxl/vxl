@@ -1,17 +1,17 @@
-// This is core/vil/vil_ncc.txx
-#ifndef vil_ncc_txx_
-#define vil_ncc_txx_
+// This is core/vil1/vil1_ncc.txx
+#ifndef vil1_ncc_txx_
+#define vil1_ncc_txx_
 
 /*
   capes@robots.ox.ac.uk
 */
-#include "vil_ncc.h"
+#include "vil1_ncc.h"
 #include <vcl_cassert.h>
 #include <vcl_cmath.h> // vcl_sqrt()
 
 template <class I1, class I2, class O>
-O vil_ncc(vil_memory_image_of<I1> const &a,
-          vil_memory_image_of<I2> const &b,
+O vil1_ncc(vil1_memory_image_of<I1> const &a,
+          vil1_memory_image_of<I2> const &b,
           O *)
 {
   assert(a.width() == b.width());
@@ -67,16 +67,16 @@ O vil_ncc(vil_memory_image_of<I1> const &a,
 // for 2.7 we'd have to instantiate the inline function, which can't be done
 // in the macro as it would conflict with the specialization.
 template <class T, class A>
-inline A vil_ncc_cond(T const &x, A *) { return A(x); }
+inline A vil1_ncc_cond(T const &x, A *) { return A(x); }
 
 VCL_DEFINE_SPECIALIZATION
-inline double vil_ncc_cond(unsigned char const &x, double *) { return (double(x)-127.5)/127.5; }
+inline double vil1_ncc_cond(unsigned char const &x, double *) { return (double(x)-127.5)/127.5; }
 #else
-# define vil_ncc_cond(x, ptr_to_A) (x) //(typeof *ptr_to_A)(x)
+# define vil1_ncc_cond(x, ptr_to_A) (x) //(typeof *ptr_to_A)(x)
 #endif
 
 template <class T1, class T2, class A>
-A vil_ncc(T1 const * const *I1, int x1, int y1,
+A vil1_ncc(T1 const * const *I1, int x1, int y1,
           T2 const * const *I2, int x2, int y2,
           int size, A *)
 {
@@ -88,8 +88,8 @@ A vil_ncc(T1 const * const *I1, int x1, int y1,
     T1 const *row1 = I1[y1+j];
     T2 const *row2 = I2[y2+j];
     for (int i=-size; i<=size; ++i) {
-      A im1 = vil_ncc_cond(row1[x1+i], (A*)0);
-      A im2 = vil_ncc_cond(row2[x2+i], (A*)0);
+      A im1 = vil1_ncc_cond(row1[x1+i], (A*)0);
+      A im2 = vil1_ncc_cond(row2[x2+i], (A*)0);
       N += 1;
       S1 += im1; S2 += im2;
       S11 += im1*im1; S12 += im1*im2; S22 += im2*im2;
@@ -101,12 +101,12 @@ A vil_ncc(T1 const * const *I1, int x1, int y1,
 
 //--------------------------------------------------------------------------------
 
-#define VIL_NCC_INSTANTIATE(I1, I2, O) \
-template O vil_ncc/*<I1, I2, O >*/(vil_memory_image_of<I1 > const &, \
-                                   vil_memory_image_of<I2 > const &, \
+#define VIL1_NCC_INSTANTIATE(I1, I2, O) \
+template O vil1_ncc/*<I1, I2, O >*/(vil1_memory_image_of<I1 > const &, \
+                                   vil1_memory_image_of<I2 > const &, \
                                    O *); \
-template O vil_ncc/*<I1, I2, O >*/(I1 const * const *, int, int, \
+template O vil1_ncc/*<I1, I2, O >*/(I1 const * const *, int, int, \
                                    I2 const * const *, int, int, \
                                    int, O *)
 
-#endif // vil_ncc_txx_
+#endif // vil1_ncc_txx_

@@ -1,11 +1,11 @@
-// This is core/vil/file_formats/vil_pnm.cxx
+// This is core/vil1/file_formats/vil1_pnm.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
 // \file
 
-#include "vil_pnm.h"
+#include "vil1_pnm.h"
 
 #include <vcl_cassert.h>
 #include <vcl_cstdio.h> // for sprintf
@@ -14,14 +14,14 @@
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
 
-#include <vil/vil_stream.h>
-#include <vil/vil_image_impl.h>
-#include <vil/vil_image.h>
-#include <vil/vil_property.h>
+#include <vil1/vil1_stream.h>
+#include <vil1/vil1_image_impl.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_property.h>
 
 #include <vxl_config.h>
 
-char const* vil_pnm_format_tag = "pnm";
+char const* vil1_pnm_format_tag = "pnm";
 
 static inline bool iseol(int c)
 {
@@ -33,7 +33,7 @@ static inline bool isws(int c)
   return c == ' ' || c == '\t' || c == 10 || c == 13;
 }
 
-vil_image_impl* vil_pnm_file_format::make_input_image(vil_stream* vs)
+vil1_image_impl* vil1_pnm_file_format::make_input_image(vil1_stream* vs)
 {
   // Attempt to read header
   unsigned char buf[3];
@@ -44,55 +44,55 @@ vil_image_impl* vil_pnm_file_format::make_input_image(vil_stream* vs)
   if (!ok)
     return 0;
 
-  return new vil_pnm_generic_image(vs);
+  return new vil1_pnm_generic_image(vs);
 }
 
-vil_image_impl* vil_pnm_file_format::make_output_image(vil_stream* vs, int planes,
+vil1_image_impl* vil1_pnm_file_format::make_output_image(vil1_stream* vs, int planes,
                                                        int width,
                                                        int height,
                                                        int components,
                                                        int bits_per_component,
-                                                       vil_component_format format)
+                                                       vil1_component_format format)
 {
-  return new vil_pnm_generic_image(vs, planes, width, height, components, bits_per_component, format);
+  return new vil1_pnm_generic_image(vs, planes, width, height, components, bits_per_component, format);
 }
 
-char const* vil_pnm_file_format::tag() const
+char const* vil1_pnm_file_format::tag() const
 {
-  return vil_pnm_format_tag;
+  return vil1_pnm_format_tag;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil_pnm_generic_image::vil_pnm_generic_image(vil_stream* vs):
+vil1_pnm_generic_image::vil1_pnm_generic_image(vil1_stream* vs):
   vs_(vs)
 {
   vs_->ref();
   read_header();
 }
 
-bool vil_pnm_generic_image::get_property(char const *tag, void *prop) const
+bool vil1_pnm_generic_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil_property_left_first))
+  if (0==vcl_strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
   return false;
 }
 
-char const* vil_pnm_generic_image::file_format() const
+char const* vil1_pnm_generic_image::file_format() const
 {
-  return vil_pnm_format_tag;
+  return vil1_pnm_format_tag;
 }
 
-vil_pnm_generic_image::vil_pnm_generic_image(vil_stream* vs, int planes,
+vil1_pnm_generic_image::vil1_pnm_generic_image(vil1_stream* vs, int planes,
                                              int width,
                                              int height,
                                              int components,
                                              int bits_per_component,
-                                             vil_component_format format):
+                                             vil1_component_format format):
   vs_(vs)
 {
   vs_->ref();
@@ -121,14 +121,14 @@ vil_pnm_generic_image::vil_pnm_generic_image(vil_stream* vs, int planes,
   write_header();
 }
 
-vil_pnm_generic_image::~vil_pnm_generic_image()
+vil1_pnm_generic_image::~vil1_pnm_generic_image()
 {
   //delete vs_;
   vs_->unref();
 }
 
 // Skip over spaces and comments; temp is the current vs character
-static void SkipSpaces(vil_stream* vs, char& temp)
+static void SkipSpaces(vil1_stream* vs, char& temp)
 {
   while (isws(temp) || temp == '#')
   {
@@ -141,7 +141,7 @@ static void SkipSpaces(vil_stream* vs, char& temp)
 }
 
 // Get a nonnegative integer from the vs stream; temp is the current vs byte
-static int ReadInteger(vil_stream* vs, char& temp)
+static int ReadInteger(vil1_stream* vs, char& temp)
 {
   int n = 0;
   while ((temp >= '0') && (temp <= '9'))
@@ -182,7 +182,7 @@ static void ConvertHostToMSB( void* buf, int num_words )
 
 
 //: This method accepts any valid PNM file (first 3 bytes "P1\n" to "P6\n")
-bool vil_pnm_generic_image::read_header()
+bool vil1_pnm_generic_image::read_header()
 {
   char temp;
 
@@ -239,18 +239,18 @@ bool vil_pnm_generic_image::read_header()
     else if (maxval_ <= 0xFFFF) bits_per_component_ = 16;
     else if (maxval_ <= 0xFFFFFF) bits_per_component_ = 24;
     else if (maxval_ <= 0x7FFFFFFF) bits_per_component_ = 32;
-    else assert(!"vil_pnm_generic_image: maxval is too big");
+    else assert(!"vil1_pnm_generic_image: maxval is too big");
   }
 
   return true;
 }
 
-bool vil_pnm_generic_image::write_header()
+bool vil1_pnm_generic_image::write_header()
 {
   vs_->seek(0L);
 
   char buf[1024];
-  vcl_sprintf(buf, "P%d\n#vil pnm image, #c=%u, bpc=%u\n%u %u\n",
+  vcl_sprintf(buf, "P%d\n#vil1 pnm image, #c=%u, bpc=%u\n%u %u\n",
               magic_, components_, bits_per_component_, width_, height_);
   vs_->write(buf, vcl_strlen(buf));
   if (magic_ != 1 && magic_ != 4)
@@ -262,7 +262,7 @@ bool vil_pnm_generic_image::write_header()
   return true;
 }
 
-bool operator>>(vil_stream& vs, int& a)
+bool operator>>(vil1_stream& vs, int& a)
 {
   char c; vs.read(&c,1L);
   SkipSpaces(&vs,c);
@@ -271,7 +271,7 @@ bool operator>>(vil_stream& vs, int& a)
   return true;
 }
 
-bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
+bool vil1_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
   unsigned char* ib = (unsigned char*) buf;
   unsigned short* jb = (unsigned short*) buf;
@@ -302,7 +302,7 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
     int byte_out_width = (xs+7)/8;
 
     for (int y = 0; y < ys; ++y) {
-      vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
+      vil1_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
       vs_->seek(byte_start);
       unsigned char a; vs_->read(&a, 1L);
       int s = x0&7; // = x0%8;
@@ -351,11 +351,11 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
   return true;
 }
 
-void operator<<(vil_stream& vs, int a) {
+void operator<<(vil1_stream& vs, int a) {
   char buf[128]; vcl_sprintf(buf, " %d\n", a); vs.write(buf,vcl_strlen(buf));
 }
 
-bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
+bool vil1_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
 {
   unsigned char const* ob = (unsigned char const*) buf;
   unsigned short const* pb = (unsigned short const*) buf;
@@ -365,7 +365,7 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
   {
     int bytes_per_sample = (bits_per_component_+7)/8;
     int bytes_per_pixel = components_ * bytes_per_sample;
-    vil_streampos byte_start = start_of_data_ + (y0 * width_ + x0) * bytes_per_pixel;
+    vil1_streampos byte_start = start_of_data_ + (y0 * width_ + x0) * bytes_per_pixel;
     int byte_width = width_ * bytes_per_pixel;
     int byte_out_width = xs * bytes_per_pixel;
 
@@ -396,7 +396,7 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
     int byte_out_width = (xs+7)/8;
 
     for (int y = 0; y < ys; ++y) {
-      vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
+      vil1_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
       vs_->seek(byte_start);
       int s = x0&7; // = x0%8;
       int t = 0;
@@ -446,8 +446,8 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
   return true;
 }
 
-vil_image vil_pnm_generic_image::get_plane(int plane) const
+vil1_image vil1_pnm_generic_image::get_plane(int plane) const
 {
   assert(plane == 0);
-  return const_cast<vil_pnm_generic_image*>(this);
+  return const_cast<vil1_pnm_generic_image*>(this);
 }

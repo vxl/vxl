@@ -1,5 +1,6 @@
 #include <testlib/testlib_register.h>
 
+DECLARE( test_vil );
 DECLARE( test_load_gen );
 DECLARE( test_assign );
 DECLARE( test_colour_space );
@@ -17,6 +18,7 @@ DECLARE( test_write_endian );
 void
 register_tests()
 {
+  REGISTER( test_vil );
   REGISTER( test_load_gen );
   REGISTER( test_assign );
   REGISTER( test_colour_space );

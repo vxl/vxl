@@ -1,11 +1,11 @@
-#ifndef vil2_grid_merge_h_
-#define vil2_grid_merge_h_
+#ifndef vil_grid_merge_h_
+#define vil_grid_merge_h_
 //:
 // \file
 // \brief Merge two images in a chequer-board pattern.
 // \author Tim Cootes
 
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 #include <vcl_cassert.h>
 
 //: Merge two images in a chequer-board pattern.
@@ -13,9 +13,9 @@
 //  alternatively from each one.
 //  Useful for comparing two images.
 template <class T>
-inline void vil2_grid_merge(const vil2_image_view<T>& image1,
-                            const vil2_image_view<T>& image2,
-                            vil2_image_view<T>& dest_image, 
+inline void vil_grid_merge(const vil_image_view<T>& image1,
+                            const vil_image_view<T>& image2,
+                            vil_image_view<T>& dest_image, 
                             unsigned box_ni, unsigned box_nj)
 {
   unsigned ni = image1.ni();
@@ -36,4 +36,4 @@ inline void vil2_grid_merge(const vil2_image_view<T>& image1,
       }
 }
 
-#endif // vil2_grid_merge_h_
+#endif // vil_grid_merge_h_

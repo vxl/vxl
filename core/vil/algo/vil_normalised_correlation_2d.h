@@ -1,6 +1,6 @@
-// This is core/vil2/algo/vil2_normalised_correlation_2d.h
-#ifndef vil2_normalised_correlation_2d_h_
-#define vil2_normalised_correlation_2d_h_
+// This is core/vil/algo/vil_normalised_correlation_2d.h
+#ifndef vil_normalised_correlation_2d_h_
+#define vil_normalised_correlation_2d_h_
 //:
 // \file
 // \brief 2D normalised correlation
@@ -13,11 +13,11 @@
 //: Evaluate dot product between kernel and src_im
 // Assumes that the kernel has been normalised to have zero mean
 // and unit variance
-// \relates vil2_image_view
+// \relates vil_image_view
 template <class srcT, class kernelT, class accumT>
-inline accumT vil2_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
+inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
                                       vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_pstep,
-                                      const vil2_image_view<kernelT>& kernel,
+                                      const vil_image_view<kernelT>& kernel,
                                       accumT)
 {
   unsigned ni = kernel.ni();
@@ -62,11 +62,11 @@ inline accumT vil2_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
 //
 // Assumes that the kernel has been normalised to have zero mean
 // and unit variance
-// \relates vil2_image_view
+// \relates vil_image_view
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil2_normalised_correlation_2d(const vil2_image_view<srcT>& src_im,
-                                           vil2_image_view<destT>& dest_im,
-                                           const vil2_image_view<kernelT>& kernel,
+inline void vil_normalised_correlation_2d(const vil_image_view<srcT>& src_im,
+                                           vil_image_view<destT>& dest_im,
+                                           const vil_image_view<kernelT>& kernel,
                                            accumT ac)
 {
   unsigned ni = 1+src_im.ni()-kernel.ni(); assert(1+src_im.ni() >= kernel.ni());
@@ -86,9 +86,9 @@ inline void vil2_normalised_correlation_2d(const vil2_image_view<srcT>& src_im,
     const srcT* sp = src_row;
     destT* dp = dest_row;
     for (unsigned i=0;i<ni;++i, sp += s_istep, dp += d_istep)
-      *dp =(destT)vil2_norm_corr_2d_at_pt(sp,s_istep,s_jstep,s_pstep,kernel,ac);
+      *dp =(destT)vil_norm_corr_2d_at_pt(sp,s_istep,s_jstep,s_pstep,kernel,ac);
     // Convolve at src(i,j)
   }
 }
 
-#endif // vil2_normalised_correlation_2d_h_
+#endif // vil_normalised_correlation_2d_h_

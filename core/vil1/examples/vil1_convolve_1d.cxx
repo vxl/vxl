@@ -5,13 +5,13 @@
 
 #include <vul/vul_sprintf.h>
 
-#include <vil/vil_byte.h>
-#include <vil/vil_image.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_as.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_convolve.h>
+#include <vil1/vil1_byte.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_save.h>
+#include <vil1/vil1_image_as.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_convolve.h>
 
 int main(int argc, char **argv) {
   int const N=5;
@@ -37,49 +37,49 @@ int main(int argc, char **argv) {
   for (int i=-N; i<=N; ++i)
     vcl_cerr << kernel[i+N] << vcl_endl;
 
-  vil_convolve_boundary_option option[] = {
-    vil_convolve_no_extend,
-    vil_convolve_zero_extend,
-    vil_convolve_constant_extend,
-    vil_convolve_periodic_extend,
-    vil_convolve_reflect_extend,
-    vil_convolve_trim
+  vil1_convolve_boundary_option option[] = {
+    vil1_convolve_no_extend,
+    vil1_convolve_zero_extend,
+    vil1_convolve_constant_extend,
+    vil1_convolve_periodic_extend,
+    vil1_convolve_reflect_extend,
+    vil1_convolve_trim
   };
 
   for (int i=1; i<argc; ++i) {
     vcl_cerr << "loading image \'" << argv[i] << "\'" << vcl_endl;
-    vil_image I = vil_load(argv[i]);
+    vil1_image I = vil1_load(argv[i]);
     if (!I) {
       vcl_cerr << "load failed" << vcl_endl;
       continue;
     }
 
-    vil_memory_image_of<vil_byte> bytes( vil_image_as_byte(I) );
+    vil1_memory_image_of<vil1_byte> bytes( vil1_image_as_byte(I) );
     unsigned w = bytes.width();
     unsigned h = bytes.height();
-    vil_memory_image_of<float> tmp   (w, h);
-    vil_memory_image_of<float> smooth(w, h);
-    vil_convolve_signal_1d<float const> K(kernel, 0, N, 2*N+1);
+    vil1_memory_image_of<float> tmp   (w, h);
+    vil1_memory_image_of<float> smooth(w, h);
+    vil1_convolve_signal_1d<float const> K(kernel, 0, N, 2*N+1);
 
     for (unsigned j=0; j<sizeof(option)/sizeof(option[0]); ++j) {
       vcl_cerr << "convolve x..." << vcl_flush;
-      vil_convolve_1d_x(K,
-                        vil_convolve_signal_2d<vil_byte const>(bytes.row_array(), 0, 0, w,  0, 0, h),
+      vil1_convolve_1d_x(K,
+                        vil1_convolve_signal_2d<vil1_byte const>(bytes.row_array(), 0, 0, w,  0, 0, h),
                         (float*)0,
-                        vil_convolve_signal_2d<float         >(tmp  .row_array(), 0, 0, w,  0, 0, h),
+                        vil1_convolve_signal_2d<float         >(tmp  .row_array(), 0, 0, w,  0, 0, h),
                         option[j], option[j]);
       vcl_cerr << "done" << vcl_endl;
 
       vcl_cerr << "convolve y..." << vcl_flush;
-      vil_convolve_1d_y(K,
-                        vil_convolve_signal_2d<float const>(tmp   .row_array(), 0, 0, w,  0, 0, h),
+      vil1_convolve_1d_y(K,
+                        vil1_convolve_signal_2d<float const>(tmp   .row_array(), 0, 0, w,  0, 0, h),
                         (float*)0,
-                        vil_convolve_signal_2d<float      >(smooth.row_array(), 0, 0, w,  0, 0, h),
+                        vil1_convolve_signal_2d<float      >(smooth.row_array(), 0, 0, w,  0, 0, h),
                         option[j], option[j]);
       vcl_cerr << "done" << vcl_endl;
 
       vcl_cerr << "save..." << vcl_flush;
-      vil_save(vil_image_as_byte(smooth), vul_sprintf("%s.%d.pnm", argv[i], j).c_str(), "pnm");
+      vil1_save(vil1_image_as_byte(smooth), vul_sprintf("%s.%d.pnm", argv[i], j).c_str(), "pnm");
       vcl_cerr << "done" << vcl_endl;
     }
   }

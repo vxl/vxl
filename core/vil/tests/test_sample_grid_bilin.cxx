@@ -1,18 +1,18 @@
-// This is core/vil2/tests/test_sample_grid_bilin.cxx
+// This is core/vil/tests/test_sample_grid_bilin.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_sample_grid_bilin.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_sample_grid_bilin.h>
 
 void test_sample_grid_bilin_byte()
 {
   vcl_cout << "********************************\n"
-           << " Testing vil2_sample_grid_bilin\n"
+           << " Testing vil_sample_grid_bilin\n"
            << "********************************\n";
 
-  vil2_image_view<vxl_byte> image0;
+  vil_image_view<vxl_byte> image0;
   image0.set_size(10,10);
 
   vcl_cout<<"Testing one plane image\n";
@@ -27,19 +27,19 @@ void test_sample_grid_bilin_byte()
   vcl_vector<double> vec(12);
 
   vcl_cout<<"Fully in image\n";
-  vil2_sample_grid_bilin(&vec[0],image0,x0,y0,dx1,dy1,dx2,dy2,4,3);
+  vil_sample_grid_bilin(&vec[0],image0,x0,y0,dx1,dy1,dx2,dy2,4,3);
   TEST_NEAR("First value",vec[0],55,1e-6);
   TEST_NEAR("Third value",vec[2],75,1e-6);
   TEST_NEAR("Last value",vec[11],78,1e-6);
 
-  vil2_sample_grid_bilin(&vec[0],image0,x0,y0,dx2,dy2,dx1,dy1,4,3);
+  vil_sample_grid_bilin(&vec[0],image0,x0,y0,dx2,dy2,dx1,dy1,4,3);
   TEST_NEAR("First value",vec[0],55,1e-6);
   TEST_NEAR("Third value",vec[2],57,1e-6);
   TEST_NEAR("Last value",vec[11],87,1e-6);
 
   vcl_cout<<"Beyond edge of image\n";
   x0 = 8;
-  vil2_sample_grid_bilin(&vec[0],image0,x0,y0,dx1,dy1,dx2,dy2,4,3);
+  vil_sample_grid_bilin(&vec[0],image0,x0,y0,dx1,dy1,dx2,dy2,4,3);
   TEST_NEAR("First value",vec[0],58,1e-6);
   TEST_NEAR("Last value",vec[11],0,1e-6);
 
@@ -55,7 +55,7 @@ void test_sample_grid_bilin_byte()
 
   vcl_cout<<"Fully in image\n";
   x0 = 5.0;
-  vil2_sample_grid_bilin(&vec2[0],image0,x0,y0,dx1,dy1,dx2,dy2,4,3);
+  vil_sample_grid_bilin(&vec2[0],image0,x0,y0,dx1,dy1,dx2,dy2,4,3);
   TEST_NEAR("First value",vec2[0],55,1e-6);
   TEST_NEAR("Second value",vec2[1],155,1e-6);
   TEST_NEAR("Third value",vec2[2],65,1e-6);
@@ -63,7 +63,7 @@ void test_sample_grid_bilin_byte()
 
   vcl_cout<<"Beyond edge of image\n";
   x0 = 8;
-  vil2_sample_grid_bilin(&vec2[0],image0,x0,y0,dx1,dy1,dx2,dy2,4,3);
+  vil_sample_grid_bilin(&vec2[0],image0,x0,y0,dx1,dy1,dx2,dy2,4,3);
   TEST_NEAR("First value",vec2[0],58,1e-6);
   TEST_NEAR("Last value",vec2[23],0,1e-6);
 }

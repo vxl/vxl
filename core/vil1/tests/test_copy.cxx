@@ -1,7 +1,7 @@
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_copy.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_copy.h>
 
 #include <vxl_config.h>
 #include <vcl_iostream.h>
@@ -12,7 +12,7 @@ static char default_filename[] = "square.pgm";
 
 MAIN( test_copy )
 {
-  START("vil_copy");
+  START("vil1_copy");
 
   const char* filename = argv[1];
   if ( argc<2 ) {
@@ -20,15 +20,15 @@ MAIN( test_copy )
     vcl_cerr << "Using default input image " << filename << vcl_endl;
   }
 
-  vil_image img = vil_load( filename );
+  vil1_image img = vil1_load( filename );
   if ( !img ) {
     vcl_cerr << "Could not load image " << filename << vcl_endl;
     return 1;
   }
-  vil_memory_image_of<vxl_uint_8> a( img );
-  vil_memory_image_of<vxl_uint_8> b( a.width(), a.height() );
-  vil_copy( a, b );
-  vil_memory_image_of<vxl_uint_8> c( vil_copy(a) );
+  vil1_memory_image_of<vxl_uint_8> a( img );
+  vil1_memory_image_of<vxl_uint_8> b( a.width(), a.height() );
+  vil1_copy( a, b );
+  vil1_memory_image_of<vxl_uint_8> c( vil1_copy(a) );
   a(0,0) = 0;
   b(0,0) = 1;
   c(0,0) = 2;

@@ -1,6 +1,6 @@
-// This is core/vil2/file_formats/vil2_ras.h
-#ifndef vil2_ras_file_format_h_
-#define vil2_ras_file_format_h_
+// This is core/vil/file_formats/vil_ras.h
+#ifndef vil_ras_file_format_h_
+#define vil_ras_file_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -11,41 +11,41 @@
 //
 // \verbatim
 // Modifications
-// 22 Apr 2003: Amitha Perera - converted to vil2
+// 22 Apr 2003: Amitha Perera - converted to vil
 // \endverbatim
 
-#include <vil2/vil2_image_resource.h>
-#include <vil2/vil2_file_format.h>
-#include <vil2/vil2_stream.h>
+#include <vil/vil_image_resource.h>
+#include <vil/vil_file_format.h>
+#include <vil/vil_stream.h>
 
 #include <vxl_config.h>
 
-class vil2_image_view_base;
+class vil_image_view_base;
 
 
 //: Loader for Sun raster files
-class vil2_ras_file_format : public vil2_file_format
+class vil_ras_file_format : public vil_file_format
 {
  public:
   virtual char const* tag() const;
-  virtual vil2_image_resource_sptr make_input_image( vil2_stream* vs );
-  virtual vil2_image_resource_sptr make_output_image( vil2_stream* vs,
+  virtual vil_image_resource_sptr make_input_image( vil_stream* vs );
+  virtual vil_image_resource_sptr make_output_image( vil_stream* vs,
                                                       unsigned ni,
                                                       unsigned nj,
                                                       unsigned nplanes,
-                                                      vil2_pixel_format format );
+                                                      vil_pixel_format format );
 };
 
 //: Generic image implementation for Sun raster files
-class vil2_ras_image : public vil2_image_resource
+class vil_ras_image : public vil_image_resource
 {
-  vil2_stream* vs_;
+  vil_stream* vs_;
   vxl_uint_32 width_;
   vxl_uint_32 height_;
   unsigned components_;
   unsigned bits_per_component_; //< always 8
 
-  vil2_streampos start_of_data_;
+  vil_streampos start_of_data_;
 
   vxl_uint_32 depth_;
   vxl_uint_32 length_;
@@ -54,29 +54,29 @@ class vil2_ras_image : public vil2_image_resource
   vxl_uint_32 map_length_;
   vxl_uint_8* col_map_;
 
-  vil2_pixel_format format_;
+  vil_pixel_format format_;
 
   bool read_header();
   bool write_header();
 
-  friend class vil2_ras_file_format;
+  friend class vil_ras_file_format;
  public:
 
-  vil2_ras_image(vil2_stream* is);
-  vil2_ras_image(vil2_stream* is,
+  vil_ras_image(vil_stream* is);
+  vil_ras_image(vil_stream* is,
                  unsigned ni,
                  unsigned nj,
                  unsigned nplanes,
-                 vil2_pixel_format format );
-  virtual ~vil2_ras_image();
+                 vil_pixel_format format );
+  virtual ~vil_ras_image();
 
-  // Inherit the documentation from vil2_image_resource
+  // Inherit the documentation from vil_image_resource
 
   virtual unsigned nplanes() const;
   virtual unsigned ni() const;
   virtual unsigned nj() const;
 
-  virtual vil2_pixel_format pixel_format() const;
+  virtual vil_pixel_format pixel_format() const;
 
   //: Create a read/write view of a copy of this data.
   //
@@ -87,13 +87,13 @@ class vil2_ras_image : public vil2_image_resource
   // stored RGB.
   //
   // \return 0 if unable to get view of correct size, or if resource is write-only.
-  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
                                                   unsigned j0, unsigned nj) const;
 
-  virtual bool put_view(const vil2_image_view_base& im, unsigned i0, unsigned j0);
+  virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
 
   char const* file_format() const;
   bool get_property(char const *tag, void *prop = 0) const;
 };
 
-#endif // vil2_ras_file_format_h_
+#endif // vil_ras_file_format_h_

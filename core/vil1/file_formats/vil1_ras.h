@@ -1,6 +1,6 @@
-// This is core/vil/file_formats/vil_ras.h
-#ifndef vil_ras_file_format_h_
-#define vil_ras_file_format_h_
+// This is core/vil1/file_formats/vil1_ras.h
+#ifndef vil1_ras_file_format_h_
+#define vil1_ras_file_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -9,29 +9,29 @@
 // \author Amitha Perera <perera@cs.rpi.edu>
 // \date 12 Apr 2002
 
-#include <vil/vil_file_format.h>
-#include <vil/vil_image_impl.h>
+#include <vil1/vil1_file_format.h>
+#include <vil1/vil1_image_impl.h>
 
 #include <vxl_config.h>
 
 //: Loader for Sun raster files
-class vil_ras_file_format : public vil_file_format
+class vil1_ras_file_format : public vil1_file_format
 {
  public:
   virtual char const* tag() const;
-  virtual vil_image_impl* make_input_image(vil_stream* vs);
-  virtual vil_image_impl* make_output_image(vil_stream* vs, int planes,
+  virtual vil1_image_impl* make_input_image(vil1_stream* vs);
+  virtual vil1_image_impl* make_output_image(vil1_stream* vs, int planes,
                                             int width,
                                             int height,
                                             int components,
                                             int bits_per_component,
-                                            vil_component_format format);
+                                            vil1_component_format format);
 };
 
 //: Generic image implementation for Sun raster files
-class vil_ras_generic_image : public vil_image_impl
+class vil1_ras_generic_image : public vil1_image_impl
 {
-  vil_stream* vs_;
+  vil1_stream* vs_;
   vxl_uint_32 width_;
   vxl_uint_32 height_;
 
@@ -49,17 +49,17 @@ class vil_ras_generic_image : public vil_image_impl
   bool read_header();
   bool write_header();
 
-  friend class vil_ras_file_format;
+  friend class vil1_ras_file_format;
  public:
 
-  vil_ras_generic_image(vil_stream* is);
-  vil_ras_generic_image(vil_stream* is, int planes,
+  vil1_ras_generic_image(vil1_stream* is);
+  vil1_ras_generic_image(vil1_stream* is, int planes,
                         int width,
                         int height,
                         int components,
                         int bits_per_component,
-                        vil_component_format format);
-  ~vil_ras_generic_image();
+                        vil1_component_format format);
+  ~vil1_ras_generic_image();
 
   //: Dimensions:  planes x width x height x components
   virtual int planes() const { return 1; }
@@ -68,7 +68,7 @@ class vil_ras_generic_image : public vil_image_impl
   virtual int components() const { return components_; }
 
   virtual int bits_per_component() const { return bits_per_component_; }
-  virtual enum vil_component_format component_format() const { return VIL_COMPONENT_FORMAT_UNSIGNED_INT; }
+  virtual enum vil1_component_format component_format() const { return VIL1_COMPONENT_FORMAT_UNSIGNED_INT; }
 
   //: Copy contents of this image to buf
   virtual bool get_section(void* buf, int x0, int y0, int width, int height) const;
@@ -77,7 +77,7 @@ class vil_ras_generic_image : public vil_image_impl
 
   char const* file_format() const;
   bool get_property(char const *tag, void *prop = 0) const;
-  vil_image get_plane(int ) const;
+  vil1_image get_plane(int ) const;
 };
 
-#endif // vil_ras_file_format_h_
+#endif // vil1_ras_file_format_h_
