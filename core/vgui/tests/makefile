@@ -2,9 +2,9 @@ USES += vxl oxl
 TRY_X11 := 1
 TRY_OPENGL := 1
 
-###############################################
-include ${IUELOCALROOT}/oxl/vgui/easy-client.mk
-###############################################
+##########################################
+include ${IUELOCALROOT}/oxl/vgui/config.mk
+##########################################
 
 MINI_PROG_SOURCES += test_popup.cxx      #TESTS += test_popup.cxx
 MINI_PROG_SOURCES += test_timer.cxx      #TESTS += test_timer.cxx
@@ -15,13 +15,16 @@ ifeq (1,$(HAS_X11))
 MINI_PROG_SOURCES += test_drawpix_speed.cxx #TESTS += test_drawpix_speed.cxx
 MINI_PROG_SOURCES += test_acceleration.cxx  #TESTS += test_acceleration.cxx
 endif
+ifeq (1,$(HAS_SDL))
+MINI_PROG_SOURCES += ../impl/SDL/test-SDL.cxx
+endif
 
 # Don't compile these by default.
 ifdef EXTRA_TESTS
 SUBDIRS += old-tests Fl gtk Xm
 endif
 
-MINI_PROG_SOURCES += $(TESTS)
+#MINI_PROG_SOURCES += $(TESTS)
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk

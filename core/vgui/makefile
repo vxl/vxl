@@ -2,6 +2,7 @@ USES += vxl oxl
 USE_OPENGL:=1
 TRY_GLUT := 1 # vgui_text needs glut. fsm.
 TRY_X11 := 1
+TRY_HERMES := 1
 LIBRARY := vgui
 IMMEDIATE_LIBS += -lvil -lvbl -lvnl-algo -lvnl -lvul
 
@@ -225,6 +226,8 @@ AUX_SOURCE_DIRECTORY += impl/Xm/Templates
 endif
 
 ifeq ($(HAS_GTKGLAREA),1)
+INCDIRS += $(GTKGLAREA_INC_DIR)
+DEFINES += $(GTKCONFIGCFLAGS)
 SOURCES += impl/gtk/vgui_gtk.cxx	
 SOURCES += impl/gtk/vgui_gtk_adaptor.cxx	
 SOURCES += impl/gtk/vgui_gtk_dialog_impl.cxx	
@@ -310,7 +313,6 @@ SUBDIRS += examples
 endif
 
 ######################################
-include client.mk
 include ${IUEROOT}/config/top-rules.mk
 ######################################
 
