@@ -45,7 +45,7 @@ TARGET_LINK_LIBRARIES(basic_app vgui vul vbl)
 # The examples use the gtk adaptor (not the gtk2 adaptor), so
 # vgui must have been compiled with gtk1 support for these
 # to work.
-INCLUDE(${MODULE_PATH}/NewCMake/FindGTK.cmake)
+INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
 IF(VGUI_USE_GTK)
  INCLUDE_DIRECTORIES( ${GTK_INCLUDE_DIR} )
 

@@ -12,7 +12,7 @@ ADD_EXECUTABLE( dialog-example dialog-example.cxx )
 ADD_EXECUTABLE( rubberband rubberband.cxx )
 ADD_EXECUTABLE( printing_example printing_example.cxx )
 
-INCLUDE(${MODULE_PATH}/NewCMake/FindGTK.cmake)
+INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
 IF(GTK_FOUND)
  INCLUDE_DIRECTORIES( ${GTK_INCLUDE_DIR} )
 

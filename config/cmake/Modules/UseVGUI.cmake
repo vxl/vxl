@@ -12,7 +12,7 @@ IF(BUILD_VGUI)
     # There is a bug in the CMake 1.4.x dependency analysis that
     # affects the vgui dependencies: the libraries get re-ordered
     # incorrectly. This is a work-around until that gets fixed.
-    INCLUDE(${MODULE_PATH}/NewCMake/FindGTK.cmake)
+    INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
     IF(VGUI_USE_GTK)
       LINK_LIBRARIES( ${GTK_LIBRARIES} ${OPENGL_LIBRARIES} )
     ENDIF(VGUI_USE_GTK)
