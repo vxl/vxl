@@ -4,7 +4,6 @@
 //:
 // \file
 // \brief Minimal implementation of NITFVersion from TargetJr
-//   until decision made on whether full port should be done.  MAL 30sep2003
 //
 // \date: 2003/12/26
 // \author: mlaymon
