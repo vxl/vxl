@@ -43,8 +43,8 @@ double vgl_distance_to_linesegment(double x1, double y1,
   return sqrt(vgl_distance2_to_linesegment(x1, y1, x2, y2, x, y));
 }
 
-double vgl_distance_to_polygon(float const px[], float const py[], unsigned n,
-			       double x, double y)
+double vgl_distance_to_non_closed_polygon(float const px[], float const py[], unsigned n,
+					  double x, double y)
 {
   double dd = -1;
   for (unsigned i=0; i<n-1; ++i) {
@@ -54,6 +54,26 @@ double vgl_distance_to_polygon(float const px[], float const py[], unsigned n,
     if (dd<0 || nd<dd)
       dd = nd;
   }
+  return dd;
+}
+
+double vgl_distance_to_closed_polygon(float const px[], float const py[], unsigned n,
+				      double x, double y)
+{
+  double dd = -1;
+  for (unsigned i=0; i<n-1; ++i) {
+    double nd = vgl_distance_to_linesegment(px[i  ], py[i  ], 
+					    px[i+1], py[i+1],
+					    x, y);
+    if (dd<0 || nd<dd)
+      dd = nd;
+  }
+  double nd = vgl_distance_to_linesegment(px[n-1], py[n-1], 
+					  px[0  ], py[0  ],
+					  x, y);
+  if (dd<0 || nd<dd)
+    dd = nd;
+
   return dd;
 }
 
