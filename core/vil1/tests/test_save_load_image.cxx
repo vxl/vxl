@@ -22,6 +22,7 @@
 #include <vcl_string.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vcl_iomanip.h> // vcl_flush
 #include <vcl_vector.h>
 
@@ -250,7 +251,7 @@ static bool create_grey_gif(const char* filename)
     195, 67, 139, 31, 79, 190, 188, 249, 243, 232, 211, 171, 95, 207, 190, 189, 251, 247, 240, 227, 203, 159, 79, 191, 190, 253,
     251, 248, 243, 235, 223, 207, 191, 191, 255, 255, 0, 6, 40, 224, 128, 4, 22, 104, 224, 129, 8, 38, 168, 224, 130, 12, 54, 232,
     224, 131, 16, 70, 40, 225, 132, 20, 86, 104, 225, 133, 155, 5, 4, 0, 59 };
-  ofstream f(filename);
+  vcl_ofstream f(filename);
   if (!f) return false;
   f << "GIF87a";
   for (int i=0; i<7; ++i) f << a[i];
