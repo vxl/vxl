@@ -627,9 +627,16 @@ sub process_lines {
 
       # hex, dec, etc
       s/\<\<\s*setprecision\s*\(/\<\< vcl_setprecision\(/g;
+      s/\<\<\s*setw\b/\<\< vcl_setw/g;
       s/\<\<\s*hex\s*\<\</\<\< vcl_hex \<\</g;
       s/\<\<\s*dec\s*\<\</\<\< vcl_dec \<\</g;
       s/\>\>\s*ws\b/\>\> vcl_ws/g;
+      
+      s/\bcin\b/vcl_cin/g;
+      s/\bcout\b/vcl_cout/g;
+      s/\bcerr\b/vcl_cerr/g;
+      s/\<\<\s*endl\b/\<\< vcl_endl/g;
+      s/<\<\s*flush\b/\<\< vcl_flush/g;
       
       $saw_vector    = 1 if m/\bvcl_vector\s*</;
       $saw_list      = 1 if m/\bvcl_list\s*</;
