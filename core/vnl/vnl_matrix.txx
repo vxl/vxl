@@ -824,19 +824,17 @@ template<class T>
 void vnl_matrix<T>::normalize_rows()
 {
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
+  typedef typename vnl_numeric_traits<T>::real_t real_t;
+  typedef typename vnl_numeric_traits<real_t>::abs_t abs_real_t;
   for (unsigned int i = 0; i < this->num_rows; i++) {  // For each row in the Matrix
     abs_t norm(0); // double will not do for all types.
     for (unsigned int j = 0; j < this->num_cols; j++)  // For each element in row
       norm += vnl_math_squared_magnitude(this->data[i][j]);
 
     if (norm != 0) {
-      typedef typename vnl_numeric_traits<abs_t>::real_t real_t;
-      real_t scale = real_t(1)/vcl_sqrt((real_t)norm);
-      for (unsigned int j = 0; j < this->num_cols; j++) {
-        // FIXME need correct rounding here
-        // There is e.g. no *standard* operator*=(complex<float>, double), hence the T() cast.
-        this->data[i][j] *= T(scale);
-      }
+      abs_t scale = static_cast<abs_t>(abs_real_t(1)/(vcl_sqrt((abs_real_t)norm)));
+      for (unsigned int j = 0; j < this->num_cols; j++)
+        this->data[i][j] *= scale;
     }
   }
 }
@@ -847,19 +845,17 @@ template<class T>
 void vnl_matrix<T>::normalize_columns()
 {
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
+  typedef typename vnl_numeric_traits<T>::real_t real_t;
+  typedef typename vnl_numeric_traits<real_t>::abs_t abs_real_t;
   for (unsigned int j = 0; j < this->num_cols; j++) {  // For each column in the Matrix
     abs_t norm(0); // double will not do for all types.
     for (unsigned int i = 0; i < this->num_rows; i++)
       norm += vnl_math_squared_magnitude(this->data[i][j]);
 
     if (norm != 0) {
-      typedef typename vnl_numeric_traits<abs_t>::real_t real_t;
-      real_t scale = real_t(1)/vcl_sqrt((real_t)norm);
-      for (unsigned int i = 0; i < this->num_rows; i++) {
-        // FIXME need correct rounding here
-        // There is e.g. no *standard* operator*=(complex<float>, double), hence the T() cast.
-        this->data[i][j] *= T(scale);
-      }
+      abs_t scale = static_cast<abs_t>(abs_real_t(1)/(vcl_sqrt((abs_real_t)norm)));
+      for (unsigned int i = 0; i < this->num_rows; i++) 
+        this->data[i][j] *= scale;
     }
   }
 }

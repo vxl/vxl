@@ -750,8 +750,9 @@ T cos_angle(vnl_vector<T> const& a, vnl_vector<T> const& b) {
   typedef typename vnl_numeric_traits<abs_t>::real_t abs_r;
 
   real_t ab = inner_product(a,b);
-  abs_r a_b = vcl_sqrt( abs_r(a.squared_magnitude() * b.squared_magnitude()) );
-  return T( ab / (real_t)a_b);
+  real_t a_b = static_cast<real_t>(
+    vcl_sqrt( abs_r(a.squared_magnitude() * b.squared_magnitude()) ));
+  return T( ab / a_b);
 }
 
 //: Returns smallest angle between two non-zero n-dimensional vectors. O(n).

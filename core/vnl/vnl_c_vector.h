@@ -99,7 +99,8 @@ class vnl_c_vector
 
   static T max_value(T const *, unsigned);
   static T min_value(T const *, unsigned);
-  static T mean(T const *p, unsigned n) { return sum(p,n)/T(n); }
+
+  static T mean(T const *p, unsigned n) { return sum(p,n)/abs_t(n); }
 
   //:  one_norm : sum of abs values
   static inline abs_t one_norm(T const *p, unsigned n)
