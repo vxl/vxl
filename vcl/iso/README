@@ -18,9 +18,7 @@ If you find that vcl/iso/vcl_blah.h is *almost*
 right for your compiler, you may #include it and
 then fix a few things afterwards (or before).
 
-
-Most of the .h files in this directory are generated
-from templates. Each line @blah in a template file
-expands into a #define vcl_blah std::blah in the .h
-file. There are various checks to make sure we don't
-#define things twice.
+All of the .h files in this directory should look like this:
+  #include <blah>
+  #define vcl_generic_blah_STD std
+  #include "../generic/vcl_blah.h"
