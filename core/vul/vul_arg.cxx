@@ -395,7 +395,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
     for (unsigned int i = 0; i < args_.size(); ++i)
       if (args[i]->option_) {
         vcl_cerr << "Switch " << args_[i]->option_ << ": "
-                 << (!done_once[i]? "not ":"") << "done, value [";
+                 << (!done_once[i] ? "not " : "") << "done, value [";
         args[i]->print_value(vcl_cerr);
         vcl_cerr << "]\n";
       }
@@ -485,13 +485,9 @@ static int list_parse(vcl_list<int> &out, char ** argv)
       // "1:2:10"
       d = vul_string_atoi(match2.substr(1));
       e = vul_string_atoi(match3.substr(1));
-    } else if (matched2) {
-      d = 1;
-      e = vul_string_atoi(match2.substr(1));
-    } else {
-      d = 1;
-      e = s;
     }
+    else if (matched2)
+      e = vul_string_atoi(match2.substr(1));
 
     // vcl_cerr << "  " << s << ':' << d << ':' << e << vcl_endl;
     if (e >= s) {

@@ -165,13 +165,12 @@ void vil_gauss_reduce_general_plane(const vil_image_view<T>& src,
   // First perform horizontal smoothing
   for (unsigned y=0;y<src.nj();y++)
   {
-    unsigned x;
     unsigned ni2 = src.ni()-2;
-    for (x=2;x<ni2;x++)
+    for (unsigned x=2;x<ni2;++x)
       worka(x,y) = l_round(  params.filt2() * (src(x-2,y) + src(x+2,y))
                            + params.filt1() * (src(x-1,y) + src(x+1,y))
                            + params.filt0() *  src(x  ,y),
-                           (T)0);
+                           T(0));
 
     // Now deal with edge effects :
     worka(0,y) = l_round( params.filt_edge0() * src(0,y)
@@ -188,7 +187,6 @@ void vil_gauss_reduce_general_plane(const vil_image_view<T>& src,
                                  + params.filt_pen_edge0() * src(src.ni()-2,y)
                                  + params.filt_pen_edge_n1() * src(src.ni()-1,y), (T)0);
 
-    x++;
     worka(src.ni()-1,y) = l_round( params.filt_edge2() * src(src.ni()-3,y)
                                  + params.filt_edge1() * src(src.ni()-2,y)
                                  + params.filt_edge0() * src(src.ni()-1,y), (T)0);

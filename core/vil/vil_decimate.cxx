@@ -157,13 +157,19 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_view(unsigned i0, unsi
 
 
 //: Put the data in this view back into the image source.
-bool vil_decimate_image_resource::put_view(const vil_image_view_base& im, unsigned i0,
-                                           unsigned j0)
-#if 0 // disable put_view, because current implementation
+#if 1
+bool vil_decimate_image_resource::put_view(const vil_image_view_base&, unsigned, unsigned)
+{
+  vcl_cerr << "ERROR: vil_decimate_image_resource::put_view not implemented\n";
+  return false;
+}
+#else // disable put_view, because current implementation
       // does something really stupid.
       // This put_view, should not just modify the pixels
       // selected by the decimation, but all the unselected
       // pixels around it as well.
+bool vil_decimate_image_resource::put_view(const vil_image_view_base& im, unsigned i0,
+                                           unsigned j0)
 {
   if ((unsigned long)i_factor_ * (unsigned long)im.ni() *
       (unsigned long)j_factor_ * (unsigned long)im.nj() < large_image_limit)
@@ -243,9 +249,4 @@ bool vil_decimate_image_resource::put_view(const vil_image_view_base& im, unsign
     }
   }
 }
-#else // 0
-{
-  vcl_cerr << "ERROR: vil_decimate_image_resource::put_view not implemented\n";
-  return false;
-}
-#endif // 0
+#endif // 1

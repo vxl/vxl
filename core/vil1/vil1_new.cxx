@@ -43,14 +43,12 @@ vil1_image vil1_new(vil1_stream* os,
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
 
-  vil1_image_impl* outimage = 0;
   for (vil1_file_format** p = vil1_file_format::all(); *p; ++p) {
     vil1_file_format* fmt = *p;
     if (vcl_strcmp(fmt->tag(), file_format) == 0) {
-      outimage = fmt->make_output_image(os, planes, width, height, components, bits_per_component, format);
-      if (outimage == 0) {
+      vil1_image_impl* outimage = fmt->make_output_image(os, planes, width, height, components, bits_per_component, format);
+      if (outimage == 0)
         vcl_cerr << "vil1_new: Unknown cannot new to type [" << file_format << "]\n";
-      }
       return outimage;
     }
   }

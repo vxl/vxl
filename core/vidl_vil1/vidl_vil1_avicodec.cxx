@@ -58,8 +58,8 @@ bool vidl_vil1_avicodec::read_header()
   if (avi_stream_info_.rcFrame.right-avi_stream_info_.rcFrame.left
       != avi_file_info_.dwWidth)
   {
-    vcl_cerr << "vidl_vil1_avicodec::read_header width size screwed up"
-             << "\n          size of avi file : " << avi_file_info_.dwWidth
+    vcl_cerr << "vidl_vil1_avicodec::read_header width size screwed up\n"
+             << "          size of avi file : " << avi_file_info_.dwWidth
              << "\n          size of the stream : "
              << avi_stream_info_.rcFrame.right-avi_stream_info_.rcFrame.left
              << vcl_endl;
@@ -105,23 +105,16 @@ bool vidl_vil1_avicodec::get_section(
                                 int xs, // row size
                                 int ys) const // col size
 {
-  int i, j;
-  byte* DIB;
-  byte* StartDIB;
-  byte* db; // current output datas
-
-  DIB = (byte*) AVIStreamGetFrame(avi_get_frame_, position);
+  byte* DIB = (byte*) AVIStreamGetFrame(avi_get_frame_, position);
 
   WORD BitsPerPixel = ((LPBITMAPINFOHEADER)DIB)->biBitCount;
-#if 0
+#ifdef DEBUG
   vcl_cout << "Number of bits : " << BitsPerPixel << "  Number of bytes : " << get_bytes_pixel() << vcl_endl;
-#endif
 
   WORD ColorsUsed = ((LPBITMAPINFOHEADER)DIB)->biClrUsed;
-#if 0
   vcl_cout << "Number of colors used : " << ColorsUsed << vcl_endl;
+  if (ColorsUsed!=0) vcl_cout << "Not sure we can handle the stream if ColorsUsed!=0\n";
 #endif
-  // Not sure we can handle the stream if ColorsUsed!=0
 
   //For the moment
   if ((BitsPerPixel!=16) && (BitsPerPixel!=24))
@@ -132,7 +125,7 @@ bool vidl_vil1_avicodec::get_section(
     }
 
   DIB += *(LPDWORD)DIB;
-  StartDIB = (byte*)DIB;
+  byte* StartDIB = (byte*)DIB;
   // Size of a row in number of bytes in the DIB structure
   // (a row contains a multiple of 4 bytes)
   int line_length = (width()*BitsPerPixel+31)/32*4;
@@ -145,47 +138,46 @@ bool vidl_vil1_avicodec::get_section(
     }
   }
 
-  db = (byte*)ib;
+  byte* db = (byte*)ib; // current output data
 
   // Store the DIB datas into ib (db).
   // Note : DIB is a flipped upside down
   switch (BitsPerPixel)
-    {
+  {
     case 24:
-      for (j=height()-y0-1; j>=height()-y0-ys; j--)
+      for (int j=height()-y0-1; j>=height()-y0-ys; j--)
+      {
+        DIB = StartDIB+ (j*line_length)+x0*(BitsPerPixel/8);
+        for (int i=0; i<xs; i++)
         {
-          DIB = StartDIB+ (j*line_length)+x0*(BitsPerPixel/8);
-          for (i=0; i<xs; i++)
-            {
-              *db = *(DIB+2);
-              *(db+1) = *(DIB+1);
-              *(db+2) = *(DIB);
-              db+=3;
-              DIB+=3;
-            }
+          *db = *(DIB+2);
+          *(db+1) = *(DIB+1);
+          *(db+2) = *(DIB);
+          db+=3;
+          DIB+=3;
         }
+      }
       break;
     case 16:
-       for (j=height()-y0-1; j>=height()-y0-ys; j--)
+      for (int j=height()-y0-1; j>=height()-y0-ys; j--)
+      {
+        DIB = StartDIB + (j*line_length) + x0*(BitsPerPixel/8);
+        for (int i=0; i<xs; i++)
         {
-          DIB = StartDIB + (j*line_length) + x0*(BitsPerPixel/8);
-          for (i=0; i<xs; i++)
-            {
-              WORD* Pixel16 = (WORD*) DIB; // the current 16 bits pixel
-              *db     = (BYTE) RGB16R(*Pixel16);
-              *(db+1) = (BYTE) RGB16G(*Pixel16);
-              *(db+2) = (BYTE) RGB16B(*Pixel16);
-              db+=3;
-              DIB+=2;
-            }
+          WORD* Pixel16 = (WORD*) DIB; // the current 16 bits pixel
+          *db     = (BYTE) RGB16R(*Pixel16);
+          *(db+1) = (BYTE) RGB16G(*Pixel16);
+          *(db+2) = (BYTE) RGB16B(*Pixel16);
+          db+=3;
+          DIB+=2;
         }
+      }
       break;
     default:
       vcl_cerr << "vidl_vil1_avicodec : Don't know how to process a "
                << BitsPerPixel << " bits per pixel AVI File.\n";
-    } // end switch Bits per pixel
+  } // end switch Bits per pixel
 
-  db = NULL;
   return true;
 }
 
@@ -194,10 +186,10 @@ bool vidl_vil1_avicodec::get_section(
 // we may need to change make_dib to
 // be able to put a section different
 // of the entire frame.
-int vidl_vil1_avicodec::put_section(int position,
-                               void* ib,
-                               int x0, int y0,
-                               int xs, int ys)
+int vidl_vil1_avicodec::put_section(int /*position*/,
+                                    void* /*ib*/,
+                                    int /*x0*/, int /*y0*/,
+                                    int /*xs*/, int /*ys*/)
 {
   vcl_cerr << "vidl_vil1_avicodec::put_section not implemented\n";
   return -1;

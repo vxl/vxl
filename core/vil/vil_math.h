@@ -196,14 +196,15 @@ inline void vil_math_mean_and_variance(sumT& mean, sumT& var, const vil_image_vi
 }
 
 //: Functor class to compute square roots (returns zero if x<0)
-class vil_math_sqrt_functor {
-public:
+class vil_math_sqrt_functor
+{
+ public:
   vxl_byte operator()(vxl_byte x) { return vxl_byte(0.5+vcl_sqrt(float(x))); }
   unsigned operator()(unsigned x) { return unsigned(0.5+vcl_sqrt(float(x))); }
-  int operator()(int x)           { return (x>0?int(0.5+vcl_sqrt(float(x))):0); }
-  short operator()(short x)       { return (x>0?short(0.5+vcl_sqrt(float(x))):0); }
-  float operator()(float x)       { return (x>0?vcl_sqrt(x):0.0f); }
-  double operator()(double x)     { return (x>0?vcl_sqrt(x):0.0); }
+  int operator()(int x)           { return x>0?int(0.5+vcl_sqrt(float(x))):0; }
+  short operator()(short x)       { return x>0?short(0.5+vcl_sqrt(float(x))):0; }
+  float operator()(float x)       { return x>0?vcl_sqrt(x):0.0f; }
+  double operator()(double x)     { return x>0?vcl_sqrt(x):0.0; }
 };
 
 //: Compute square-root of each pixel element (or zero if negative)
@@ -241,10 +242,11 @@ inline void vil_math_truncate_range(vil_image_view<T>& image, T min_v, T max_v)
 }
 
 //: Functor class to scale by s
-class vil_math_scale_functor {
-private:
+class vil_math_scale_functor
+{
+ private:
   double s_;
-public:
+ public:
   vil_math_scale_functor(double s) : s_(s) {}
   vxl_byte operator()(vxl_byte x) { return vxl_byte(0.5+s_*x); }
   unsigned operator()(unsigned x) { return unsigned(0.5+s_*x); }
@@ -573,13 +575,12 @@ inline void vil_math_integral_image(const vil_image_view<aT>& imA,
   const aT* rowA = imA.top_left_ptr();
 
   sumT sum;
-  const aT* pixelA = rowA;
   vcl_ptrdiff_t prev_j = -jstepS;
   rowS += jstepS;
 
   for (unsigned j=0;j<nj;++j,rowA += jstepA,rowS += jstepS)
   {
-    pixelA = rowA;
+    const aT* pixelA = rowA;
     pixelS = rowS;
     sum = 0;
     // set first value at start of each row to zero!
@@ -634,7 +635,6 @@ inline void vil_math_integral_sqr_image(const vil_image_view<aT>& imA,
   const aT* rowA = imA.top_left_ptr();
 
   sumT sum,sum2;
-  const aT* pixelA = rowA;
   vcl_ptrdiff_t prev_j = -jstepS;
   vcl_ptrdiff_t prev_j2 = -jstepS2;
   rowS += jstepS;
@@ -642,7 +642,7 @@ inline void vil_math_integral_sqr_image(const vil_image_view<aT>& imA,
 
   for (unsigned j=0;j<nj;++j,rowA += jstepA,rowS += jstepS,rowS2 += jstepS2)
   {
-    pixelA = rowA;
+    const aT* pixelA = rowA;
     pixelS = rowS;
     pixelS2 = rowS2;
     sum = 0;

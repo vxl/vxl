@@ -37,22 +37,18 @@ void vul_awk::next()
 {
   // Read line -- should be quite fast after the first one.
   line_.erase();
-  int l = 0;
   //bool do_backslash_continuations = (int(mode_) & int(backslash_continuations)) != 0;
   //  bool do_strip_comments = (int(mode_) & int(strip_comments)) != 0;
 
-  while (1) {
+  while (true) {
     int c = fd_.get();
     if (c == EOF  ||  fd_.eof()) {
       done_ = true;
       break;
     }
-
     if (c == '\n')
       break;
-
     line_ += c;
-    ++l;
   }
 
   char const* linep = line_.c_str();
@@ -105,6 +101,6 @@ void testvul_awk()
 {
   vcl_cout << "Start\n";
   for (vul_awk awk(vcl_cin); awk; ++awk) {
-    vcl_cout << awk.NF() << ":" << awk[2] << vcl_endl;
+    vcl_cout << awk.NF() << ':' << awk[2] << vcl_endl;
   }
 }

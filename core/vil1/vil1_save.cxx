@@ -70,7 +70,7 @@ bool vil1_save_raw(vil1_image const& i, vil1_stream* os, char const* file_format
 static
 char const *guess_file_format(char const* filename)
 {
-  char const *file_format = 0;
+  char const *file_format = "pnm"; // default file format
 
   // find last "."
   char const *dot = vcl_strrchr(filename, '.');
@@ -96,11 +96,8 @@ char const *guess_file_format(char const* filename)
     macro(gif, gif);
     macro(png, png);
 #undef macro
-    else {
-      //file_format = dot+1; // hope it works.
+    else
       vcl_cerr << __FILE__ ": assuming pnm format for \'" << filename << "\'\n";
-      file_format = "pnm";
-    }
   }
 
   return file_format;

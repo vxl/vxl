@@ -171,10 +171,6 @@ double vil1_memory_image_window::normalised_cross_correlation(const vil1_memory_
   double average_I1_uv;
   double average_I2_uv;
 
-  double std_dev_I1_uv;
-  double std_dev_I2_uv;
-
-
   //////////////////////////////////////////////
   // calculate the average intensities
   //
@@ -192,34 +188,25 @@ double vil1_memory_image_window::normalised_cross_correlation(const vil1_memory_
   average_I1_uv /= ((2*n + 1)*(2*m + 1));
   average_I2_uv /= ((2*n + 1)*(2*m + 1));
 
-
   //////////////////////////////////////////////
   // calculate the std. deviations
   //
 
-  std_dev_I1_uv = 0;
-  std_dev_I2_uv = 0;
-
   double result_I1 = 0;
   double result_I2 = 0;
 
-
   for (i = -n; i < n+1; i++) {
     for (j = -m; j < m+1; j++) {
-      double I1_uv;
-      I1_uv = image1_(u1+i,v1+j);
-      result_I1 += (I1_uv - average_I1_uv ) *
-        (I1_uv - average_I1_uv);
+      double I1_uv = image1_(u1+i,v1+j);
+      result_I1 += (I1_uv - average_I1_uv ) * (I1_uv - average_I1_uv);
 
-      double I2_uv;
-      I2_uv = image2(u2+i,v2+j);
-      result_I2 += (I2_uv - average_I2_uv ) *
-        (I2_uv - average_I2_uv);
+      double I2_uv = image2(u2+i,v2+j);
+      result_I2 += (I2_uv - average_I2_uv ) * (I2_uv - average_I2_uv);
     }
   }
 
-  std_dev_I1_uv = vcl_sqrt(result_I1);
-  std_dev_I2_uv = vcl_sqrt(result_I2);
+  double std_dev_I1_uv = vcl_sqrt(result_I1);
+  double std_dev_I2_uv = vcl_sqrt(result_I2);
 
   ///////////////////////////////////////
   // calculate the correlation score

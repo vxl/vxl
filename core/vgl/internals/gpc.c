@@ -701,8 +701,9 @@ static void build_intersection_table(it_node **it, edge_node *aet, double dy)
   /* Process each AET edge */
   for (edge= aet; edge; edge= edge->next)
   {
-    if ((edge->bstate[ABOVE] == BUNDLE_HEAD) ||
-         edge->bundle[ABOVE][CLIP] || edge->bundle[ABOVE][SUBJ])
+    if (edge->bstate[ABOVE] == BUNDLE_HEAD ||
+        edge->bundle[ABOVE][CLIP] ||
+        edge->bundle[ABOVE][SUBJ])
       add_st_edge(&st, it, edge, dy);
   }
 
@@ -976,7 +977,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
 {
   sb_tree       *sbtree= NULL;
   it_node       *it= NULL, *intersect;
-  edge_node     *edge, *prev_edge, *next_edge, *succ_edge, *e0, *e1;
+  edge_node     *edge, *prev_edge, *next_edge, *succ_edge, *e0;
   edge_node     *aet= NULL, *c_heap= NULL, *s_heap= NULL;
   lmt_node      *lmt= NULL, *local_min;
   polygon_node  *out_poly= NULL, *p, *q, *poly, *npoly, *cf= NULL;
@@ -1070,7 +1071,6 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
 
     /* Create bundles within AET */
     e0= aet;
-    e1= aet;
 
     /* Set up bundle fields of first edge */
     aet->bundle[ABOVE][ aet->type]= (aet->top.y != yb);
@@ -1088,7 +1088,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
       if (next_edge->bundle[ABOVE][next_edge->type])
       {
         if (EQ(e0->xb, next_edge->xb) && EQ(e0->dx, next_edge->dx)
-         && (e0->top.y != yb))
+            && (e0->top.y != yb))
         {
           next_edge->bundle[ABOVE][ next_edge->type]^=
             e0->bundle[ABOVE][ next_edge->type];
@@ -1125,10 +1125,9 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
         {
         case GPC_DIFF:
         case GPC_INT:
-          contributing= (exists[CLIP] && (parity[SUBJ] || horiz[SUBJ]))
-                     || (exists[SUBJ] && (parity[CLIP] || horiz[CLIP]))
-                     || (exists[CLIP] && exists[SUBJ]
-                     && (parity[CLIP] == parity[SUBJ]));
+          contributing= (exists[CLIP] && (parity[SUBJ] || horiz[SUBJ])) ||
+                        (exists[SUBJ] && (parity[CLIP] || horiz[CLIP])) ||
+                        (exists[CLIP] && exists[SUBJ] && parity[CLIP] == parity[SUBJ]);
           br= (parity[CLIP])
            && (parity[SUBJ]);
           bl= (parity[CLIP] ^ edge->bundle[ABOVE][CLIP])
@@ -1150,10 +1149,9 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             ^ (parity[SUBJ] ^ (horiz[SUBJ]!=NH) ^ edge->bundle[BELOW][SUBJ]);
           break;
         case GPC_UNION:
-          contributing= (exists[CLIP] && (!parity[SUBJ] || horiz[SUBJ]))
-                     || (exists[SUBJ] && (!parity[CLIP] || horiz[CLIP]))
-                     || (exists[CLIP] && exists[SUBJ]
-                     && (parity[CLIP] == parity[SUBJ]));
+          contributing= (exists[CLIP] && (!parity[SUBJ] || horiz[SUBJ])) ||
+                        (exists[SUBJ] && (!parity[CLIP] || horiz[CLIP])) ||
+                        (exists[CLIP] && exists[SUBJ] && parity[CLIP] == parity[SUBJ]);
           br= (parity[CLIP])
            || (parity[SUBJ]);
           bl= (parity[CLIP] ^ edge->bundle[ABOVE][CLIP])
@@ -1327,8 +1325,8 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
       /* Process each node in the intersection table */
       for (intersect= it; intersect; intersect= intersect->next)
       {
-        e0= intersect->ie[0];
-        e1= intersect->ie[1];
+        edge_node* e0= intersect->ie[0];
+        edge_node* e1= intersect->ie[1];
 
         /* Only generate output for contributing intersections */
         if ((e0->bundle[ABOVE][CLIP] || e0->bundle[ABOVE][SUBJ])
@@ -1574,19 +1572,18 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
         result->hole[c]= poly->proxy->hole;
         result->contour[c].num_vertices= poly->active;
         MALLOC(result->contour[c].vertex,
-          result->contour[c].num_vertices * sizeof(gpc_vertex),
-          "vertex creation");
+               result->contour[c].num_vertices * sizeof(gpc_vertex),
+               "vertex creation");
 
         v= result->contour[c].num_vertices - 1;
-        for (vtx= poly->proxy->v[LEFT]; vtx; vtx= nv)
+        for (vtx= poly->proxy->v[LEFT]; vtx; vtx= nv, --v)
         {
           nv= vtx->next;
           result->contour[c].vertex[v].x= vtx->x;
           result->contour[c].vertex[v].y= vtx->y;
           FREE(vtx);
-          v--;
         }
-        c++;
+        ++c;
       }
       FREE(poly);
     }
@@ -1874,7 +1871,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
       if (next_edge->bundle[ABOVE][next_edge->type])
       {
         if (EQ(e0->xb, next_edge->xb) && EQ(e0->dx, next_edge->dx)
-         && (e0->top.y != yb))
+            && (e0->top.y != yb))
         {
           next_edge->bundle[ABOVE][ next_edge->type]^=
             e0->bundle[ABOVE][ next_edge->type];
@@ -1911,10 +1908,9 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
         {
         case GPC_DIFF:
         case GPC_INT:
-          contributing= (exists[CLIP] && (parity[SUBJ] || horiz[SUBJ]))
-                     || (exists[SUBJ] && (parity[CLIP] || horiz[CLIP]))
-                     || (exists[CLIP] && exists[SUBJ]
-                     && (parity[CLIP] == parity[SUBJ]));
+          contributing= (exists[CLIP] && (parity[SUBJ] || horiz[SUBJ])) ||
+                        (exists[SUBJ] && (parity[CLIP] || horiz[CLIP])) ||
+                        (exists[CLIP] && exists[SUBJ] && parity[CLIP] == parity[SUBJ]);
           br= (parity[CLIP])
            && (parity[SUBJ]);
           bl= (parity[CLIP] ^ edge->bundle[ABOVE][CLIP])
@@ -1936,10 +1932,9 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             ^ (parity[SUBJ] ^ (horiz[SUBJ]!=NH) ^ edge->bundle[BELOW][SUBJ]);
           break;
         case GPC_UNION:
-          contributing= (exists[CLIP] && (!parity[SUBJ] || horiz[SUBJ]))
-                     || (exists[SUBJ] && (!parity[CLIP] || horiz[CLIP]))
-                     || (exists[CLIP] && exists[SUBJ]
-                     && (parity[CLIP] == parity[SUBJ]));
+          contributing= (exists[CLIP] && (!parity[SUBJ] || horiz[SUBJ])) ||
+                        (exists[SUBJ] && (!parity[CLIP] || horiz[CLIP])) ||
+                        (exists[CLIP] && exists[SUBJ] && parity[CLIP] == parity[SUBJ]);
           br= (parity[CLIP])
            || (parity[SUBJ]);
           bl= (parity[CLIP] ^ edge->bundle[ABOVE][CLIP])
@@ -2315,9 +2310,9 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             prev_edge= prev_edge->prev;
             if (prev_edge)
             {
-              if (prev_edge->bundle[ABOVE][CLIP]
-               || prev_edge->bundle[ABOVE][SUBJ]
-               || (prev_edge->bstate[ABOVE] == BUNDLE_HEAD))
+              if (prev_edge->bundle[ABOVE][CLIP] ||
+                  prev_edge->bundle[ABOVE][SUBJ] ||
+                  prev_edge->bstate[ABOVE] == BUNDLE_HEAD)
                 search= FALSE;
             }
             else

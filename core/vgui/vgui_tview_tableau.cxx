@@ -105,10 +105,9 @@ void vgui_tview_tableau::draw_icons(vgui_tableau_sptr const& parent, float x, fl
   vcl_vector<vgui_tableau_sptr> children;
   parent->get_children(&children);
 
-  if (children.size() > 0) {
-
-    float ny = y + spacing*children.size()/10; // "spacing * (children.size()/10)" is float * (int/int), or float * int.
-    ny = y + spacing*children.size(); // fsm
+  if (children.size() > 0)
+  {
+    float ny = y + spacing*children.size(); // fsm; was: y + spacing*children.size()/10;
     int num = children.size();
 
     float total_x = (num-1)*spacing;

@@ -77,7 +77,7 @@ bool vil_save(const vil_image_view_base &im, char const* filename, char const* f
 static
 char const *guess_file_format(char const* filename)
 {
-  char const *file_format = 0;
+  char const *file_format = "pnm"; // default file format
 
   // find last "."
   char const *dot = vcl_strrchr(filename, '.');
@@ -105,11 +105,8 @@ char const *guess_file_format(char const* filename)
     macro(viff, viff);
     macro(mit, mit);
 #undef macro
-    else {
-      //file_format = dot+1; // hope it works.
+    else
       vcl_cerr << __FILE__ ": assuming pnm format for \'" << filename << "\'\n";
-      file_format = "pnm";
-    }
   }
 
   return file_format;

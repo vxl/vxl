@@ -166,11 +166,10 @@ vil1_stream_url::vil1_stream_url(char const *url)
   {
     WORD wVersionRequested;
     WSADATA wsaData;
-    int err;
 
     wVersionRequested = MAKEWORD( 2, 2 );
 
-    err = WSAStartup( wVersionRequested, &wsaData );
+    /* int err = */ WSAStartup( wVersionRequested, &wsaData );
   }
 #endif
 

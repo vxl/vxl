@@ -106,11 +106,10 @@ vcl_istream * vul_http_open(char const *url)
   {
     WORD wVersionRequested;
     WSADATA wsaData;
-    int err;
 
     wVersionRequested = MAKEWORD( 2, 2 );
 
-    err = WSAStartup( wVersionRequested, &wsaData );
+    /* int err = */ WSAStartup( wVersionRequested, &wsaData );
   }
 #endif
 
@@ -310,11 +309,10 @@ bool vul_http_exists(char const *url)
   {
     WORD wVersionRequested;
     WSADATA wsaData;
-    int err;
 
     wVersionRequested = MAKEWORD( 2, 2 );
 
-    err = WSAStartup( wVersionRequested, &wsaData );
+    /* int err = */ WSAStartup( wVersionRequested, &wsaData );
   }
 #endif
 

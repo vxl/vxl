@@ -55,7 +55,7 @@ static void FPE()
   int one = 1;
   int zero = 0;
   int bad = one/zero;
-  one = bad; // quell compiler warning.
+  (void)bad; // quell compiler warning.
 }
 
 static void ABRT()

@@ -25,7 +25,7 @@ vidl_vil1_movie::vidl_vil1_movie(vidl_vil1_clip_sptr clip)
 {
   // Check validity of initialisation
   if (!clip_.empty())
-    vcl_cerr << "Bad initialisation of the movie."<< vcl_endl;
+    vcl_cerr << "Bad initialisation of the movie.\n";
 
   add_clip(clip);
 }
@@ -81,9 +81,8 @@ int vidl_vil1_movie::length() const
 int vidl_vil1_movie::width() const
 {
   // Get the size X of the first clip
-  int sizeX = 0;
   vcl_list<vidl_vil1_clip_sptr>::const_iterator i=clip_.begin();
-  sizeX = (*i)->width();
+  int sizeX = (*i)->width();
 
   // Check that the (eventually) other clips have the same size
   for (; i!= clip_.end(); ++i)
@@ -103,9 +102,8 @@ int vidl_vil1_movie::width() const
 int vidl_vil1_movie::height() const
 {
   // Get the size Y of the first clip
-  int sizeY = 0;
   vcl_list<vidl_vil1_clip_sptr>::const_iterator i = clip_.begin();
-  sizeY = (*i)->height();
+  int sizeY = (*i)->height();
 
   // Check that the (eventually) other clips have the same size
   for (; i!= clip_.end(); ++i)

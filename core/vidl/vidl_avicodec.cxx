@@ -105,23 +105,16 @@ vil_image_view_base_sptr vidl_avicodec::get_view(
                                 int y0, //!< starting y
                                 int ys ) const //!< col size
 {
-  int i, j;
-  byte* DIB;
-  byte* StartDIB;
-  vxl_byte *db, *ib; // current output datas
-
-  DIB = (byte*) AVIStreamGetFrame(avi_get_frame_, position);
+  byte* DIB = (byte*) AVIStreamGetFrame(avi_get_frame_, position);
 
   WORD BitsPerPixel = ((LPBITMAPINFOHEADER)DIB)->biBitCount;
-#if 0
+#ifdef DEBUG
   vcl_cout << "Number of bits : " << BitsPerPixel << "  Number of bytes : " << get_bytes_pixel() << vcl_endl;
-#endif
 
   WORD ColorsUsed = ((LPBITMAPINFOHEADER)DIB)->biClrUsed;
-#if 0
   vcl_cout << "Number of colors used : " << ColorsUsed << vcl_endl;
+  if (ColorsUsed!=0) vcl_cout << "Not sure we can handle the stream if ColorsUsed!=0\n";
 #endif
-  // Not sure we can handle the stream if ColorsUsed!=0
 
   //For the moment
   if ((BitsPerPixel!=16) && (BitsPerPixel!=24))
@@ -132,13 +125,13 @@ vil_image_view_base_sptr vidl_avicodec::get_view(
     }
 
   DIB += *(LPDWORD)DIB;
-  StartDIB = (byte*)DIB;
+  byte* StartDIB = DIB;
   // Size of a row in number of bytes in the DIB structure
   // (a row contains a multiple of 4 bytes)
   int line_length = (width()*BitsPerPixel+31)/32*4;
 
-  db = new byte[xs*ys*get_bytes_pixel()];
-  ib = db;
+  vxl_byte *db = new byte[xs*ys*get_bytes_pixel()]; // current output data
+  vxl_byte *ib = db;
 
   // The byte swapping below is probabily unnecessary - use vil_flip_ud instead - FIXME
 
@@ -147,10 +140,10 @@ vil_image_view_base_sptr vidl_avicodec::get_view(
   switch (BitsPerPixel)
   {
     case 24:
-      for (j=height()-y0-1; j>=height()-y0-ys; j--)
+      for (int j=height()-y0-1; j>=height()-y0-ys; j--)
       {
         DIB = StartDIB+ (j*line_length)+x0*(BitsPerPixel/8);
-        for (i=0; i<xs; i++)
+        for (int i=0; i<xs; i++)
         {
           *db = *(DIB+2);
           *(db+1) = *(DIB+1);
@@ -161,10 +154,10 @@ vil_image_view_base_sptr vidl_avicodec::get_view(
       }
       break;
     case 16:
-      for (j=height()-y0-1; j>=height()-y0-ys; j--)
+      for (int j=height()-y0-1; j>=height()-y0-ys; j--)
       {
         DIB = StartDIB + (j*line_length) + x0*(BitsPerPixel/8);
-        for (i=0; i<xs; i++)
+        for (int i=0; i<xs; i++)
         {
           WORD* Pixel16 = (WORD*) DIB; // the current 16 bits pixel
           *db     = (BYTE) RGB16R(*Pixel16);
@@ -182,7 +175,6 @@ vil_image_view_base_sptr vidl_avicodec::get_view(
 
   vil_image_view_base_sptr image_sptr(new vil_image_view<vxl_byte>(ib, xs, ys, 3,
                                                                    3, ((xs*3+3)& -4), 1));
-  db = NULL;
   return image_sptr;
 }
 
@@ -191,9 +183,9 @@ vil_image_view_base_sptr vidl_avicodec::get_view(
 // we may need to change make_dib to
 // be able to put a section different
 // of the entire frame.
-bool vidl_avicodec::put_view( int position,
-                              const vil_image_view_base &im,
-                              int x0, int y0)
+bool vidl_avicodec::put_view( int /*position*/,
+                              const vil_image_view_base &/*im*/,
+                              int /*x0*/, int /*y0*/)
 {
   vcl_cerr << "vidl_avicodec::put_section not implemented\n";
   return false;
