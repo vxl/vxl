@@ -1,7 +1,6 @@
 // This is core/vil/tests/test_resample_bicub.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
 #include <vil/vil_resample_bicub.h>
