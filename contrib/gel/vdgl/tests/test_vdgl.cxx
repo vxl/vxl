@@ -1,10 +1,12 @@
-//#include <vcl_iostream.h>
+//:
+// \file
 
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator_cubic.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_fit_line.h>
 #include <vsol/vsol_line_2d.h>
+#include <vcl_iostream.h>
 
 int main()
 {
@@ -36,9 +38,9 @@ int main()
   double x0=0, y0=0, x1=10, y1=10;
   vdgl_edgel_chain_sptr ec = new vdgl_edgel_chain(x0, y0, x1, y1);
   int N = ec->size();
-  vcl_cout << "Chain has " << N << " edgels " << vcl_endl;
-  for(int i = 0; i<N; i++)
-    vcl_cout << "edgel[" << i<<"] = (" << (*ec)[i] << ") " << vcl_endl;
+  vcl_cout << "Chain has " << N << " edgels\n";
+  for (int i = 0; i<N; i++)
+    vcl_cout << "edgel[" << i<<"] = (" << (*ec)[i] << ")\n";
 
   return 0;
 }

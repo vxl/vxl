@@ -2,10 +2,11 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
 
 #include "vdgl_digital_curve.h"
 #include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_math.h>
 #include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator_linear.h>
@@ -96,6 +97,7 @@ bool vdgl_digital_curve::split(vsol_point_2d_sptr const& v,
   dc2 = new vdgl_digital_curve(new vdgl_interpolator_linear(ec2));
   return true;
 }
+
 //: scan all the points on the curve and compute the bounds
 void vdgl_digital_curve::compute_bounding_box(void)
 {
@@ -103,17 +105,17 @@ void vdgl_digital_curve::compute_bounding_box(void)
   double maxv = vnl_numeric_traits<double>::maxval;
   double minv = -maxv;
   double xmin = maxv, ymin = maxv, xmax = minv, ymax = minv;
-  
+
   vdgl_edgel_chain_sptr ec = interpolator_->get_edgel_chain();
   int N = ec->size();
-  for(int i=0; i<N; i++)
+  for (int i=0; i<N; i++)
     {
       vdgl_edgel ed = (*ec)[i];
       double x = ed.x(), y = ed.y();
-      xmin = vnl_math_min(xmin, x);
-      ymin = vnl_math_min(ymin, y);
-      xmax = vnl_math_max(xmax, x);
-      ymax = vnl_math_max(ymax, y);
+      if (x < xmin) xmin = x;
+      if (y < ymin) ymin = y;
+      if (x > xmax) xmax = x;
+      if (y > ymax) ymax = y;
     }
   if (bounding_box_==0)
     bounding_box_=new vsol_box_2d;

@@ -2,11 +2,12 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
 
 #include "vdgl_edgel_chain.h"
 #include <vgl/vgl_distance.h>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
 #include <vcl_cmath.h>   // for vcl_sqrt(float)
 #include <vcl_cstdlib.h> // for vcl_abs(int)
 
@@ -137,8 +138,8 @@ bool vdgl_edgel_chain::split( double x, double y,
   if (split_index < n) ec2 = this->extract_subchain(split_index, n-1);
   return split_index > 0 && split_index < n;
 }
-//
-//:Advance along a line and generate continguous pixels on the line.
+
+//: Advance along a line and generate continguous pixels on the line.
 //
 bool vdgl_edgel_chain::line_gen(float xs, float ys, float xe, float ye,
                                 bool& init, bool& done,
