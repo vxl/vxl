@@ -459,21 +459,21 @@ void segv_segmentation_manager::fit_lines()
   sdet_fit_lines fl(flp);
   fl.set_edges(*edges);
   fl.fit_lines();
-  if(hough_index)
+  if (hough_index)
     {
       vcl_vector<vsol_line_2d_sptr> lines = fl.get_line_segs();
       bsol_hough_line_index hind(0.0, 0.0, img_.width(), img_.height(), 180.0, 5.0);
-      for(vcl_vector<vsol_line_2d_sptr>::iterator lit = lines.begin();
-          lit != lines.end(); lit++)
+      for (vcl_vector<vsol_line_2d_sptr>::iterator lit = lines.begin();
+           lit != lines.end(); lit++)
         hind.index(*lit);
       int rdim = hind.get_r_dimension(), tdim = hind.get_theta_dimension();
       vbl_array_2d<unsigned char> hough_image = hind.get_hough_image();
       vil_memory_image_of<unsigned char> img(tdim, rdim);
-      for(int y = 0; y<rdim; y++)
-        for(int x = 0; x<tdim; x++)
-		   img(x,y) = 30*hough_image[y][x];
-      vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();      
-      if(itab)
+      for (int y = 0; y<rdim; y++)
+        for (int x = 0; x<tdim; x++)
+          img(x,y) = 30*hough_image[y][x];
+      vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
+      if (itab)
         itab->set_image(img);
       return;
     }
