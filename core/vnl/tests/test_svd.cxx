@@ -1,6 +1,7 @@
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <vcl_complex.h>
+#include <vcl_cmath.h> // for vcl_sqrt(double)
 
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_matrix.h>
