@@ -1,6 +1,7 @@
 #ifndef vnl_util_fixed_h_
 #define vnl_util_fixed_h_
-
+//:
+// \file
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 
@@ -8,7 +9,7 @@
 //: Returns the nxn outer product of two nd-vectors, or [v1]^T*[v2]. O(n).
 
 template<class T, unsigned n>
-vnl_matrix_fixed<T, n, n> 
+vnl_matrix_fixed<T, n, n>
 vnl_outer_product_fixed (vnl_vector_fixed<T, n> const& v1,
                          vnl_vector_fixed<T, n> const& v2) {
   vnl_matrix_fixed<T, n, n> out;
@@ -17,6 +18,5 @@ vnl_outer_product_fixed (vnl_vector_fixed<T, n> const& v1,
       out[i][j] = v1[i] * v2[j];
   return out;
 }
-
 
 #endif // vnl_util_fixed_h_
