@@ -7,6 +7,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vgl/vgl_line_2d.h>
+#include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_point_2d.h>
@@ -416,7 +417,7 @@ intensity_candidates(strk_epi_seg_sptr const& seg,
   some_candidates = some_candidates || found_something;
   //scan the min index to the right
   found_something = true;
-  for (int im = min_index+1&&found_something; im<min_segs.size(); im++)
+  for (unsigned int im = min_index+1; im<min_segs.size()&&found_something; ++im)
   {
     if (min_segs[im]->min_s()< s_max-r)
     {
@@ -450,7 +451,7 @@ intensity_candidates(strk_epi_seg_sptr const& seg,
   some_candidates = some_candidates || found_something;
   //scan the max index to the right
   found_something = true;
-  for (int im = max_index+1&&found_something; im<max_segs.size(); im--)
+  for (unsigned int im = max_index+1; im<max_segs.size()&&found_something; --im)
   {
     if (max_segs[im]->max_s()< s_min-r)
     {
@@ -734,7 +735,7 @@ void strk_epipolar_grouper::brute_force_match()
                    << ue << ' ' << ve << "]\n"<< vcl_flush;
           for (double a = as; a<=ae; a+=da_)
           {
-            double m = strk_epi_seg::match(a, *sit0, *sit1);
+            strk_epi_seg::match(a, *sit0, *sit1);
           }
         }
     }
