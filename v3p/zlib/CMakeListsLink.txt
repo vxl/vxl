@@ -1,0 +1,2 @@
+LINK_DIRECTORIES( ${allvxl_SOURCE_DIR}/v3p/zlib )
+LINK_LIBRARIES( zlib )

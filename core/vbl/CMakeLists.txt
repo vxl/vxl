@@ -31,5 +31,5 @@ vbl_user_info
 vbl_redirector
 )
 
-# AUX_SOURCE_DIRECTORY(Templates vbl_sources)
+AUX_SOURCE_DIRECTORY(Templates vbl_sources)
 

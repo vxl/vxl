@@ -4,24 +4,8 @@
 #   geoff.cross@crd.ge.com
 #
 
-LINK_LIBRARIES(vbl vpl vil vil_file_formats vnl vnl_algo vgl)
-
-LINK_DIRECTORIES(
-${allvxl_BINARY_DIR}/vxl/vbl
-${allvxl_BINARY_DIR}/vxl/vpl
-${allvxl_BINARY_DIR}/vxl/vnl
-${allvxl_BINARY_DIR}/vxl/vnl/algo
-${allvxl_BINARY_DIR}/vxl/vil
-${allvxl_BINARY_DIR}/vxl/vil/file_formats
-${allvxl_BINARY_DIR}/vxl/vgl
-)
-
-
-IF(NATIVE_JPEG_LIB_PATH)
-  LINK_LIBRARIES(jpeg)
-  LINK_DIRECTORIES(${NATIVE_JPEG_LIB_PATH})
-ELSE(NATIVE_JPEG_LIB_PATH)
-  LINK_LIBRARIES(jpeg)
-  LINK_DIRECTORIES(${allvxp_BINARY_DIR}/v3p/jpeg)
-ENDIF(NATIVE_JPEG_LIB_PATH)
-
+INCLUDE(${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt)
+INCLUDE(${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt)
+INCLUDE(${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt)
+INCLUDE(${allvxl_SOURCE_DIR}/vxl/vgl/CMakeListsLink.txt)
+INCLUDE(${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt)

@@ -1,0 +1,8 @@
+INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindX11.cmake)
+IF(X11_LIBRARY)
+  LINK_DIRECTORIES( ${X11_LIB_PATH} )
+  LINK_LIBRARIES( ${X11_LIBRARY} )
+ENDIF(X11_LIBRARY)
+
+LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/oxl/vgui/internals )
+LINK_LIBRARIES( vgui_internals )
