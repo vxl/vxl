@@ -27,6 +27,7 @@ MANPAGE_SOURCES += rrel_util.txx
 MANPAGE_SOURCES += rrel_wls_obj.h
 SOURCES += rrel_homography2d_est_aff.cxx
 SOURCES += rrel_affine_est.cxx
+SOURCES += rrel_wgted_ran_sam_search.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk

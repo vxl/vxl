@@ -38,6 +38,8 @@ MANPAGE_SOURCES += vbl_basic_tuple.h
 #MANPAGE_SOURCES += vbl_br_default.txx
 #MANPAGE_SOURCES += vbl_br_impl.txx
 #MANPAGE_SOURCES += vbl_hash_map.txx
+MANPAGE_SOURCES += vbl_checked_delete.h
+MANPAGE_SOURCES += vbl_scoped_ptr.h
 
 # debugging
 
