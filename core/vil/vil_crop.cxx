@@ -2,9 +2,9 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-//
-// vil2_crop
-// Author: Ian Scott.
+//:
+// \file
+// \author Ian Scott.
 //
 //-----------------------------------------------------------------------------
 
