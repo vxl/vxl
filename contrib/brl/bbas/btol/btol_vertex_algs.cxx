@@ -31,6 +31,7 @@ bool btol_vertex_algs::merge_superiors(vtol_vertex_sptr& va,
   return true;
 }
 
+#if 0 // unused static function
 static void vertex_erase(vcl_vector<vtol_vertex_sptr>& verts,
                          vtol_vertex_sptr& v)
 {
@@ -41,3 +42,4 @@ static void vertex_erase(vcl_vector<vtol_vertex_sptr>& verts,
   verts.erase(vit);
   return;
 }
+#endif // 0
