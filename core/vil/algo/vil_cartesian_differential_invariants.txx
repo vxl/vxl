@@ -17,7 +17,7 @@
 //: Compute 1st, 2nd, and 3rd order C.d.i.s of an image.
 // The input must be 1 plane, the output will be 8 planes.
 template <class S, class T>
-inline void vil_cartesian_differential_invariants_3_1plane(
+void vil_cartesian_differential_invariants_3_1plane(
   const vil_image_view<S>& src, vil_image_view<T>& dest, double scale)
 {
   assert(src.nplanes()==1);
