@@ -2,11 +2,13 @@
 #define vipl_erode_disk_txx_
 
 #include <vcl_algorithm.h>
+#include <vcl_iostream.h>
 
 #include "vipl_erode_disk.h"
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
+  vcl_cout << "Starting vipl_erode_disk::section_applyop() ...";
   const ImgIn &in = in_data(0);
   ImgOut &out = *out_data_ptr();
   int size = (radius() < 0) ? 0 : int(radius());
@@ -14,10 +16,12 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   // circular mask was generated in preop(), we just use it here
 
   // apply filter:
+  vcl_cout << " set start & stop ...";
   int startx = start(X_Axis());
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());
   int stopy = stop(Y_Axis());
+  vcl_cout << " run over image ...";
   for(int j = starty; j < stopy; ++j)
     for(int i = startx; i < stopx; ++i) {
       register DataIn
@@ -30,6 +34,7 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
       }
       fsetpixel(out, i, j, (DataOut)v);
     }
+  vcl_cout << " done\n";
   return true;
 }
 
@@ -37,23 +42,29 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
 // section_applyop then on a large image it would be computed many times.
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop(){
+  vcl_cout << "Starting vipl_erode_disk::preop() ...";
   // create circular mask:
   int size = (radius() < 0) ? 0 : int(radius());
   float rs = (radius() < 0) ? 0 : radius() * radius();
   typedef bool* boolptr;
-  if(mask() == 0)
-         ref_mask() = new boolptr[1+size];
+  if(mask() == 0) {
+    vcl_cout << " allocate mask ...";
+    ref_mask() = new boolptr[1+size];
+  }
   else {
-        for (int x=0; x<=size; ++x)
-            if(mask()[x]) delete[] ref_mask()[x];
-        delete[] ref_mask();
-        ref_mask() = new boolptr[1+size];
-        }
-  {for (int x=0; x<=size; ++x) {
+    vcl_cout << " re-allocate mask ...";
+    for (int x=0; x<=size; ++x)
+      if(mask()[x]) delete[] ref_mask()[x];
+    delete[] ref_mask();
+    ref_mask() = new boolptr[1+size];
+  }
+  vcl_cout << " write mask ...";
+  for (int x=0; x<=size; ++x) {
     ref_mask()[x] = new bool[size+1];
     for (int y=0; y<=size; ++y)
       ref_mask()[x][y] = (x*x + y*y <= rs);
-  }}
+  }
+  vcl_cout << " done\n";
   return true;
 }
 
@@ -61,13 +72,16 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop(){
 // destroy the mask in postop, after we are all done filtering
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop(){
+  vcl_cout << "Starting vipl_erode_disk::postop() ...";
   int size = (radius() < 0) ? 0 : int(radius());
-  if(mask()){
+  if(mask()) {
+    vcl_cout << " de-allocate mask ...";
     for (int x=0; x<=size; ++x)
       if(mask()[x]) delete[] ref_mask()[x];
     delete[] ref_mask();
     ref_mask()=0;
   }
+  vcl_cout << " done\n";
   return true;
 }
 

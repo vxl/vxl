@@ -83,12 +83,12 @@ static bool difference(vil_image const& a, vil_image const& b, int v, const char
 {
   int sx = a.width(),  sy = a.height();
   if (sx != b.width() || sy != b.height())
-    {if (m2) vcl_cout<<m<<m2<<" FAILED: images are different size\n"; return true;}
+    {if (m2) vcl_cout<<m<<m2<<" test FAILED: images are different size\n"; return true;}
   if (a.planes() != b.planes() || a.components() != b.components())
-    {if (m2) vcl_cout<<m<<m2<<" FAILED: images have different # planes/components\n"; return true;}
+    {if (m2) vcl_cout<<m<<m2<<" test FAILED: images have different # planes/components\n"; return true;}
   if (a.component_format()   != b.component_format() ||
       a.bits_per_component() != b.bits_per_component())
-    {if (m2) vcl_cout<<m<<m2<<" FAILED: images are different format\n";return true;}
+    {if (m2) vcl_cout<<m<<m2<<" test FAILED: images are different format\n";return true;}
 
   int ret = 0;
   // run over all pixels except for an outer border of 1 pixel:
@@ -117,26 +117,27 @@ static bool difference(vil_image const& a, vil_image const& b, int v, const char
   delete[] v1; delete[] v2;
   ret /= a.planes()*a.components();
   if (vcl_abs(ret - v) > 0.01*vcl_abs(v))
-  { if (m2) vcl_cout<<m<<m2<<" FAILED: "<<ret<<" instead of "<<v<<vcl_endl;return true;}
-  else { if (m2) vcl_cout<<m<<m2<<" PASSED\n"; return false; }
+  { if (m2) vcl_cout<<m<<m2<<" test FAILED: "<<ret<<" instead of "<<v<<vcl_endl;return true;}
+  else { if (m2) vcl_cout<<m<<m2<<" test PASSED\n"; return false; }
 }
 
 #define TEST(i,r,d,T,v,m,m2) { \
   vipl_erode_disk<vil_image,vil_image,T,T> op(5); \
   op.put_in_data_ptr(&r); op.put_out_data_ptr(&i); op.filter(); \
   difference(i,r,v,m,m2); \
-  if (difference(i,r,0)) vcl_cout<<m<<m2<<"FAILED: input image changed!\n"; }
+  if (difference(i,r,0)) vcl_cout<<m<<m2<<" test FAILED: input image changed!\n"; }
 #define ALL_TESTS(d,v,m) \
   TEST(byte_img,byte_ori,d,unsigned char,v,m,"_byte"); \
-  TEST(shrt_img,shrt_ori,d,unsigned short,v,m,"_short")/*; \
-  TEST(flot_img,flot_ori,d,float,v,m,"_float"); \
-  TEST(colr_img,colr_ori,d,vil_rgb_byte,v,m,"_colour") */
+  TEST(shrt_img,shrt_ori,d,unsigned short,v,m,"_short"); \
+/*TEST(flot_img,flot_ori,d,float,v,m,"_float"); */ \
+/*TEST(colr_img,colr_ori,d,vil_rgb_byte,v,m,"_colour") */
 
 int main() {
   vil_image byte_img = CreateTest8bitImage(32,32),  byte_ori = CreateTest8bitImage(32,32);
   vil_image shrt_img = CreateTest16bitImage(32,32), shrt_ori = CreateTest16bitImage(32,32);
-//vil_image colr_img = CreateTest24bitImage(32,32), colr_ori = CreateTest24bitImage(32,32);
   vil_image flot_img = CreateTestfloatImage(32,32), flot_ori = CreateTestfloatImage(32,32);
+//vil_image colr_img = CreateTest24bitImage(32,32), colr_ori = CreateTest24bitImage(32,32);
+  vil_image colr_img = CreateTest3planeImage(32,32),colr_ori = CreateTest3planeImage(32,32);
   vil_memory_image_of<unsigned char> byte_out(32, 32);
   vil_memory_image_of<unsigned short> shrt_out(32, 32);
   vil_memory_image_of<float> flot_out(32, 32);

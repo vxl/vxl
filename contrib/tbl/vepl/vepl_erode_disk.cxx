@@ -59,18 +59,12 @@ vil_image vepl_erode_disk(vil_image const& image, float radius)
 
   // short
   else if (vil_pixel_format(image) == VIL_UINT16) {
-    vcl_cout << "Calling vepl_erode_disk with VIL_UINT16 image\n";
     vil_memory_image_of<unsigned short> mem(image); // load in memory to pass to filter
-    vcl_cout << "Created in-memory version of input image\n";
     vil_memory_image_of<unsigned short> out(image);
-    vcl_cout << "Created in-memory copy for output\n";
     vipl_erode_disk<vil_image,vil_image,unsigned short,unsigned short,vipl_trivial_pixeliter> op(radius);
-    vcl_cout << "Created vipl_erode_disk filter object\n";
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
-    vcl_cout << "Passed input and output image to filter\n";
     op.filter();
-    vcl_cout << "Called filter()\n";
     return out;
   }
 
