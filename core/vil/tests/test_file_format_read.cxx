@@ -296,10 +296,17 @@ CheckPixels( Compare<TruePixelType,ImgPixelType> const& check,
       for ( int i=0; i < width; ++i ) {
         for ( int c=0; c < num_comp; ++c )
         {
-          if ( read_value( fin, pixel[c] ) )
+          // Need to do things this way because pixel[c] may have a
+          // type different from TruePixelType. For example,
+          // vector<bool> has weird types to compensate for the packed
+          // bit representation.
+          //
+          TruePixelType pv;
+          if ( read_value( fin, pv ) )
           {
             return false;
           }
+          pixel[c] = pv;
         }
         if ( !check( img, p, i, j, pixel ) )
           return false;
