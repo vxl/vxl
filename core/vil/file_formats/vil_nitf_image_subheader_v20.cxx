@@ -38,8 +38,7 @@ vil_nitf_image_subheader_v20::vil_nitf_image_subheader_v20()
   init();
 }
 
-//:  Create new instance of vil_nitf_image_subheader_band with same
-//   values as passed instance.   
+//:  Create new instance of vil_nitf_image_subheader_band with same values as passed instance.
 //   TBD: Modify code to return smart pointer.  Requires also modifying type
 //   of attribute bands in vil_nitf_image_subheader which is currently
 //   vil_nitf_image_subheader_band**.      mal 2004jan21
@@ -503,7 +502,7 @@ StatusCode vil_nitf_image_subheader_v20::Read(vil_stream* file)
         !get_unsigned(buffer,&NPPBH, 4, file) ||
         (NPPBH > 9999)         ||
         !get_unsigned(buffer,&NPPBV, 4, file) ||
-        (NPPBV > 9999)) 
+        (NPPBV > 9999))
     {
       error = true;
       break;
@@ -570,14 +569,14 @@ StatusCode vil_nitf_image_subheader_v20::Read(vil_stream* file)
     }
 
     if (debug_level > 0) {
-      vcl_cout << method_name << "XSHD->XHDL = " << XSHD->XHDL << vcl_endl;
-      vcl_cout << method_name << "file position after reading extended header = "
+      vcl_cout << method_name << "XSHD->XHDL = " << XSHD->XHDL << vcl_endl
+               << method_name << "file position after reading extended header = "
                << file->tell() << vcl_endl;
     }
     if (debug_level > 1) {
       if (XSHD->XHDL > 0) {
         vcl_cout << method_name << "XSHD->XHD = <"
-                 << XSHD->XHD << ">\n";
+                 << XSHD->XHD << '>' << vcl_endl;
       }
     }
     done = true;
@@ -1992,7 +1991,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_piaimc_extension()
   work[PIAIMC_CEL] = 0;                          // ensure NULL terminator
 
   if (debug_level > 1) {
-    vcl_cout << "PIAIMC Header = \"" << work << "\"\n";
+    vcl_cout << "PIAIMC Header = \"" << work << '"' << vcl_endl;
   }
 
   offset = 0;  // Let's start clean at the beginning.
