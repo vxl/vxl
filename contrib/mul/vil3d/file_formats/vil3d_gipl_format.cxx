@@ -119,7 +119,8 @@ vil3d_image_resource_sptr vil3d_gipl_format::make_output_image(const char* filen
 	if (format != VIL_PIXEL_FORMAT_BOOL	&& format != VIL_PIXEL_FORMAT_SBYTE	&&
 		format != VIL_PIXEL_FORMAT_BYTE	&& format != VIL_PIXEL_FORMAT_UINT_16 &&
 		format != VIL_PIXEL_FORMAT_INT_16	&& format != VIL_PIXEL_FORMAT_UINT_32 &&
-		format != VIL_PIXEL_FORMAT_FLOAT	&& format != VIL_PIXEL_FORMAT_DOUBLE	)
+		format != VIL_PIXEL_FORMAT_FLOAT	&& format != VIL_PIXEL_FORMAT_DOUBLE &&	
+    format != VIL_PIXEL_FORMAT_INT_32 )
 	{
 		vcl_cerr << "vil3d_gipl_format::make_output_image() WARNING\n"
 			<< "  Unable to deal with file format : " << format << vcl_endl;
@@ -131,7 +132,7 @@ vil3d_image_resource_sptr vil3d_gipl_format::make_output_image(const char* filen
 	vil_stream* os = vil_open(filename, "w");
 	if (!os || !os->ok()) {
 		vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
-		return false;
+		return 0;
 	}
 	
 	if (!os->ok()) return 0; 
