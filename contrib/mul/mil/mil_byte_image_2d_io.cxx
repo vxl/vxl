@@ -59,7 +59,7 @@ const mil_image& mil_byte_image_2d_io::image() const
 
 //: Attempt to load image from named file
 //!in: filetype: String hinting at what image format is
-//  Return true if successfull
+//  Return true if successful
 bool mil_byte_image_2d_io::loadImage(const vcl_string& path,
               const vcl_string& filetype)
 {
@@ -68,7 +68,7 @@ bool mil_byte_image_2d_io::loadImage(const vcl_string& path,
 
 //: Attempt to save image to named file
 //!in: filetype: String defining what format to save in
-//!ret: true if successfull
+//!ret: true if successful
 bool mil_byte_image_2d_io::saveImage(const vcl_string& path,
               const vcl_string& filetype) const
 {
@@ -148,7 +148,7 @@ void mil_byte_image_2d_io::copyGreyToRGB(vil_image& img)
 
 //: Attempt to load image from named file
 //!in: filetype: String hinting at what image format is
-//  Return true if successfull
+//  Return true if successful
 bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
               const vcl_string& path,
               const vcl_string& f_type)
