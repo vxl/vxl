@@ -207,8 +207,10 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * Examples include
 * - vil2_convolve_1d   - Convolve with 1D filter - all manner of edge effects catered for
 * - vil2_convolve_2d   - Convolve with 2D filter (no edge effects catered for yet!)
-* - vil2_exp_filter_1d - Apply exponential filter along one axis (fast recursive method)
-* - vil2_exp_grad_filter_1d - Apply exponential gradient filter along one axis (fast recursive method)
+* - vil2_exp_filter_i - Apply exponential filter along i axis (fast recursive method)
+* - vil2_exp_filter_j - Apply exponential filter along j axis (fast recursive method)
+* - vil2_exp_grad_filter_i - Apply exponential gradient filter along i axis (fast recursive method)
+* - vil2_exp_grad_filter_j - Apply exponential gradient filter along j axis (fast recursive method)
 * - vil2_sobel_3x3     - to generate X/Y gradient images using 3x3 Sobel operators
 * - vil2_gauss_reduce  - smooth and sub-sample to produce half sized image
 * - vil2_median        - Compute median over area described by vil2_structuring_element
