@@ -120,6 +120,12 @@ SOURCE=.\test_suppress_non_max.cxx
 # Begin Source File
 SOURCE=.\test_rotate_image.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_histogram.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_algo_histogram_equalise.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

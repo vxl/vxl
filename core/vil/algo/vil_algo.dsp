@@ -188,6 +188,12 @@ SOURCE=.\Templates/vil_threshold+int-.cxx
 # Begin Source File
 SOURCE=.\Templates/vil_gauss_filter+byte.byte-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vil_histogram.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_histogram_equalise.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -304,6 +310,12 @@ SOURCE=.\vil_exp_filter_2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_suppress_non_max.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_histogram.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_histogram_equalise.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
