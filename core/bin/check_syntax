@@ -104,7 +104,7 @@ foreach $f (@FILES)
   print "$f\t\# consider replacing \"$2\" with \'$2\' in output for $1\n"
     if ($printed && $file =~ m/(\S+)\s*\<\<[^;]+\"(.|\\.)\"/);
   print "$f\t\# consider removing space before \\n\n"
-    if ($printed && $file =~ m/(\s|\\t)\\n/);
+    if ($printed && $file =~ m/(\s|\\t)\\n\b/);
 
 # 4. Consecutive comment blocks, separated by blank lines
   if ($file =~ m!\n\s*//:.*\n( *// .*\n)*\s*\n\s*// !)
@@ -256,6 +256,7 @@ foreach $f (@FILES)
     elsif ($j eq "vepl/vepl_monadic.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vepl/vepl_dyadic.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vgl/vgl_clip.h") { $i="$i(|_[a-z_]+)"; }
+    elsif ($j eq "vgl/vgl_closest_point.h") { $i="$i(s)?"; }
     elsif ($j eq "vgl/vgl_distance.h") { $i="$i(2)?(|[a-z_]+)"; }
     elsif ($j eq "vgl/vgl_triangle_test.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vgl/algo/vgl_homg_operators_2d.h") { $i="($i|vnl_double_3x3[^\000]*vgl_homg_point_2d|cond_matrix . x)"; }
@@ -297,6 +298,7 @@ foreach $f (@FILES)
     elsif ($j =~ m/vil2?\/vil2?_new\.h$/) { $i="($i)_image_(resource|view_j_i_plane|view_plane_i_j)"; }
     elsif ($j =~ m/vil2?\/vil2?_(image_resource|memory_chunk)\.h$/) { $i="$i(|_sptr)"; }
     elsif ($j =~ m/vil2?\/io\/vil2?_io_memory_chunk\.h$/) { $i="($i|vsl_b_write|VIL2\?_IO_SMART_PTR_INSTANTIATE.vil2\?_memory_chunk)"; }
+    elsif ($j =~ m/vil1?\/io\/vil1?_io_rgb\.h$/) { $i="($i|vsl_b_write|VIL1_IO_MEMORY_IMAGE_OF_INSTANTIATE.vil1\?_rgb)"; }
     elsif ($j eq "vil1/vil1_image_as.h") { $i="$i(_[a-z16_]+)?"; }
     elsif ($j eq "vil1/vil1_interpolate.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vil1/vil1_warp.h") { $i="$i(|_mapping|_interpolation_type|_output_driven)"; }
@@ -306,6 +308,7 @@ foreach $f (@FILES)
     elsif ($j =~ m/vil[12]?\/vil[12]?_pixel_format\.h$/) { $i="($i(|_of|_component_format|_sizeof_components|_num_components)|VIL2?_PIXEL_FORMAT_\\S+)"; }
     elsif ($j =~ m/vil2?\/vil2?_print\.h$/) { $i="($i)(|_value|_all)"; }
     elsif ($j =~ m/vil[12]?\/vil[12]?_property\.h$/) { $i="$i(|_[a-z_]+)"; }
+    elsif ($j =~ m/vil2?\/vil2?_rotate\.h$/) { $i="$i(_image)"; }
     elsif ($j eq "vil1/vil1_smooth.h") { $i="($i)_(gaussian|byte_separable_symmetric)"; }
     elsif ($j =~ m/vil2?\/vil2?_transform\.h$/) { $i="($i)2?"; }
     elsif ($j =~ m/vil2?\/vil2?_view_as\.h$/) { $i="($i)(|_planes|_rgb)|vil2\?_view_(real|imag)_part"; }
@@ -342,6 +345,7 @@ foreach $f (@FILES)
     elsif ($j eq "vsl/vsl_indent.h") { $i="$i(|_inc|_dec|_set_tab|_tab|_clear|_clear_all_data)"; }
     elsif ($j =~ m/(vsl\/vsl_[a-z]+_io|v[bginu]l[12]?\/io\/v[bginu]l[12]?_io_[a-z123_]+).h/) { $i="vsl_(b_(read|write)|print_summary)"; }
     elsif ($j eq "vsol/vsol_spatial_object_2d.h") { $i="$i|cast_to_spatial_object_2d\(\)"; }
+    elsif ($j eq "vsol/vsol_curve_2d.h") { $i="$i|cast_to_curve\(\)"; }
     elsif ($j eq "vtol/vtol_vertex_2d.h") { $i="$i|cast_to_vertex_2d\(\)"; }
     elsif ($j eq "vtol/vtol_edge_2d.h") { $i="$i|cast_to_edge_2d\(\)"; }
     elsif ($j eq "vtol/vtol_face_2d.h") { $i="$i|cast_to_face_2d\(\)"; }
@@ -427,7 +431,7 @@ foreach $f (@FILES)
     $printed = 1;
   }
   #typos
-  if ($file =~ m/\b(octover|milisecond|destuct[a-z]*|constuct[a-z]*|detruct[a-z]*|contruct[a-z]*|continou[a-z]*|defaut|condtion|intial[a-z]*|hierach[a-z]*|implemen[^t][a-z]*|ouput|outputing|supres[a-z]*|judicous|posible|begining|decend[a-z]*|verticies|matricies|vertexes|assignement|auxiliar\b|distingish|documenation|Eucl[ie]dian|independant|initialli\S+|initili\S+|measurment|miscelaneous|receipe|(re)?determing|retreive|seciton|thse|utilitites|accomodate|accpet|accurary|adaptative|addresss|alement|alife|anj\b|appication|arangement|arbitar\S+|aready|argree|assembing|authentification|auxilary|auxillary|aynchronous|azimutha|blted|bondary|borgefor\b|chaching|changeble|cicurmstance|cirle|coefficent|coeficient|colinear|colum\b|columnn|comparision|compatibilty|compilant|conjuction|continguous|controled|coordiate|corespondence|decompostion|desctruction|despatch|difuse|difusion|digtial|dimensinal|dimensionnal|documenation|doen|efficents|eigenvale|elment|elminate|encapsuate|encounterd|enquiries|eqivalence|estiamte|expalin|exression|filname|fomatted|fractino|frequence|functon|gettt\S+|graident|hasnt|highlighed|homegenous|homogaphy|homogenious|homogenous|idential|implementatation|incredibably|indentical|indicies|inherance|inhert|initilization|intepolat\S*|intitial|lable|magnitde|maxium|minimially|mininated|neccessary|necesary|nonhomogenous|objet|occured|occurence|oor|openned|orientarion|parallal|parameteric|parametesr|paramters|parapraph|parbolic|perimit|posistion|potetially|preceeding|prefered|progam\S*|protocal|refernce|regualr|reponsib\S+|represet|repsonsib\S+|rreuiqred|samping|severla|simulataneously|singlton|staight|subsitution|succesful\b|suppy|symetric|symmetic|sytem|tableaus|tableax|tableu|talbeau|techinques|tesselate|tesselation|toggeling|tolerence|tranform|tranpose|traveral|unecess\S+|verfication|verson|vlolume|whan|whould|wil\b|wraping|writted|yeild|bandwith|comare|containins|contrain|contor|corrdinate|dependant|dependending|exprimed|heirachy|interator|labled|likelyhood|liklihood|maximun|messsage|minmum|objects\'s|perfrom|polyon|postion|repending|seting|singletion|substract|tablea\b|transfrom|valuse|wether)/i)
+  if ($file =~ m/\b(octover|milisecond|destuct[a-z]*|constuct[a-z]*|detruct[a-z]*|contruct[a-z]*|continou[a-z]*|defaut|condtion|intial[a-z]*|hierach[a-z]*|implemen[^t][a-z]*|ouput|outputing|supres[a-z]*|judicous|posible|begining|decend[a-z]*|verticies|matricies|vertexes|assignement|auxiliar\b|distingish|documenation|Eucl[ie]dian|independant|initialli\S+|initili\S+|measurment|miscelaneous|receipe|(re)?determing|retreive|seciton|thse|utilitites|accomodate|accpet|accurary|adaptative|addresss|alement|alife|anj\b|appication|arangement|arbitar\S+|aready|argree|assembing|authentification|auxilary|auxillary|aynchronous|azimutha|blted|bondary|borgefor\b|chaching|changeble|cicurmstance|cirle|coefficent|coeficient|colinear|colum\b|columnn|comparision|compatibilty|compilant|conjuction|continguous|controled|coordiate|corespondence|decompostion|desctruction|despatch|difuse|difusion|digtial|dimensinal|dimensionnal|documenation|doen|efficents|eigenvale|elment|elminate|encapsuate|encounterd|enquiries|eqivalence|estiamte|expalin|exression|filname|fomatted|fractino|frequence|functon|gettt\S+|graident|hasnt|highlighed|homegenous|homogaphy|homogenious|homogenous|idential|implementatation|incredibably|indentical|indicies|inherance|inhert|initilization|intepolat\S*|intitial|lable|magnitde|maxium|minimially|mininated|neccessary|necesary|nonhomogenous|objet|occured|occurence|oor|openned|orientarion|parallal|parameteric|parametesr|paramters|parapraph|parbolic|perimit|posistion|potetially|preceeding|prefered|progam\S*|protocal|refernce|regualr|reponsib\S+|represet|repsonsib\S+|rreuiqred|samping|severla|simulataneously|singlton|staight|subsitution|succesful\b|suppy|symetric|symmetic|sytem|tableaus|tableax|tableu|talbeau|techinques|tesselate|tesselation|toggeling|tolerence|tranform|tranpose|traveral|unecess\S+|verfication|verson|vlolume|whan|whould|wil\b|wraping|writted|yeild|bandwith|comare|containins|contrain|contor|corrdinate|dependant|dependending|exprimed|hight|heirachy|interator|labled|likelyhood|liklihood|maximun|messsage|minmum|objects\'s|perfrom|polyon|postion|repending|seting|singletion|substract|tablea\b|transfrom|valuse|wether)/i)
   {
     print "$f\t\# probably a mistyping: $1\n";
   }
