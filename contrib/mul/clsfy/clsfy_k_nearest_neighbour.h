@@ -21,12 +21,14 @@
 
 //: A Binary k-Nearest Neighbour Neighbour classifier
 class clsfy_k_nearest_neighbour : public clsfy_classifier_base {
+  //: The number of nearest neighbours to look for.
+  unsigned k_;
 
-  unsigned k_; //!< The number of nearest neighbours to look for.
+  //: The set of training input values.  Size should equal number of outputs.
+  vcl_vector<vnl_vector<double> > trainInputs_;
 
-  vcl_vector<vnl_vector<double> > trainInputs_; //!< The set of training input values.  Size should equal number of outputs.
-
-  vcl_vector<unsigned> trainOutputs_; //!< The set of training output values.  Size should equal number of inputs.
+  //: The set of training output values.  Size should equal number of inputs.
+  vcl_vector<unsigned> trainOutputs_;
 
 public:
   //: Construct a KNN classifier.

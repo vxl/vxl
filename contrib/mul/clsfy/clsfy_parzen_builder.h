@@ -27,9 +27,11 @@
 // classifiers.
 class clsfy_parzen_builder : public clsfy_builder_base
 {
-  double sigma_; //!< The width of the RBF window function.  Default value is 1.0.
+  //: The width of the RBF window function.  Default value is 1.0.
+  double sigma_;
 
-  double power_; //!< The power, p, in the window function.  Default value is 2.0.
+  //: The power, p, in the window function.  Default value is 2.0.
+  double power_; 
 
 public:
   // Dflt ctor
@@ -42,9 +44,9 @@ public:
   //: Build classifier from data
   // return the mean error over the training set.
   virtual double build(clsfy_classifier_base& model,
-                       mbl_data_wrapper<vnl_vector<double> >& inputs,
-                       unsigned nClasses,
-                       const vcl_vector<unsigned> &outputs) const;
+    mbl_data_wrapper<vnl_vector<double> >& inputs,
+    unsigned nClasses,
+    const vcl_vector<unsigned> &outputs) const;
 
   //: Name of the class
   virtual vcl_string is_a() const;

@@ -324,7 +324,7 @@ void test_k_nearest_neighbour()
        win.n_dims() == win_in.n_dims() &&
        win.training_classes() == win_in.training_classes() &&
        win.training_vectors() == win_in.training_vectors() &&
-       win.gamma() == win_in.gamma(),
+       win.rbf_width() == win_in.rbf_width(),
        true);
 
   vcl_cout << "win.log_l(2.0, 2.0) = " << win.log_l(probe) << vcl_endl;

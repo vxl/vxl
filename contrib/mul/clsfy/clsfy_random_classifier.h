@@ -108,22 +108,28 @@ private:
   //: The probabilities of each class.
   // The values will always sum to 1.
   // If the vector is empty then the builder will use the prior probability
-  vcl_vector<double> probs_; //!< The probabilities of each class.
+  vcl_vector<double> probs_;
 
-  double confidence_; //!< The mean confidence noise added to class probabilities
+  //: The mean confidence noise added to class probabilities
+  double confidence_;
 
-  unsigned n_dims_; //!< The classifier may get asked this
+  //: The classifier may get asked this
+  unsigned n_dims_;
 
-  mutable vnl_vector<double> last_inputs_; //!< Give the same answers if the same vector is presented twice in a row
+  //: Give the same answers if the same vector is presented twice in a row
+  mutable vnl_vector<double> last_inputs_;
 
-  mutable vcl_vector<double> last_outputs_; //!< The last class probabilities calculated.
+  //: The last class probabilities calculated.
+  mutable vcl_vector<double> last_outputs_;
 
-  mutable mbl_mz_random rng_; //!< The random number generator used to sample classes.
+  //: The random number generator used to sample classes.
+  mutable mbl_mz_random rng_;
 
-  vcl_vector<double> min_to_win_; //!< The minimum value each class probability needs to be biased by to win
+  //: The minimum value each class probability needs to be biased by to win.
+  vcl_vector<double> min_to_win_;
 };
 
-//: Allows derived class to be loaded by base-class pointer
+  //: Allows derived class to be loaded by base-class pointer
 void vsl_add_to_binary_loader(const clsfy_random_classifier& b);
 
 #endif // clsfy_random_classifier_h_

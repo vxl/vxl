@@ -132,16 +132,10 @@ double clsfy_rbf_parzen::log_l(const vnl_vector<double> &input) const
 void clsfy_rbf_parzen::set_rbf_width(double sigma)
 {
   assert(sigma > 0.0);
+  width_ = sigma;
   gamma_ = -0.5/(sigma*sigma);
 }
 
-//=======================================================================
-//: Set the 1st standard deviation width sigma through gamma = -0.5/(sigma*sigma)
-void clsfy_rbf_parzen::set_gamma(double gamma)
-{
-  assert(gamma < 0.0);
-  gamma_ = gamma;
-}
 
 //=======================================================================
 //: The value p in the window function exp(-1/(2*sigma^p) * |x-y|^p).
@@ -167,7 +161,7 @@ vcl_string clsfy_rbf_parzen::is_a() const
 
 short clsfy_rbf_parzen::version_no() const
 {
-  return 1;
+  return 2;
 }
 
 //=======================================================================
@@ -190,7 +184,7 @@ void clsfy_rbf_parzen::print_summary(vcl_ostream& os) const
 void clsfy_rbf_parzen::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,gamma_);
+  vsl_b_write(bfs,width_);
   vsl_b_write(bfs,power_);
   vsl_b_write(bfs,trainOutputs_);
   vsl_b_write(bfs,trainInputs_);
@@ -208,6 +202,14 @@ void clsfy_rbf_parzen::b_read(vsl_b_istream& bfs)
   {
   case (1):
     vsl_b_read(bfs,gamma_);
+    width_ = vcl_sqrt(-0.5/gamma_);
+    vsl_b_read(bfs,power_);
+    vsl_b_read(bfs,trainOutputs_);
+    vsl_b_read(bfs,trainInputs_);
+    break;
+  case(2):
+    vsl_b_read(bfs,width_);
+    gamma_ = -0.5/(width_*width_);
     vsl_b_read(bfs,power_);
     vsl_b_read(bfs,trainOutputs_);
     vsl_b_read(bfs,trainInputs_);

@@ -14,9 +14,12 @@
 //:  Decisions are based on an explicit multivariate probability distribution
 class clsfy_binary_pdf_classifier : public clsfy_classifier_base {
 protected:
-  vpdfl_pdf_base *pdf_; //!< The current distribution model
+  //: The current distribution model
+  vpdfl_pdf_base *pdf_; 
 
-  double log_prob_limit_; //!< The value of log probability density above which the answer is 1, and below which it is 0
+  //: The value of log probability density marking the class boundary
+  // Above this value the answer is 1, and below it is 0
+  double log_prob_limit_; 
 
 public:
 

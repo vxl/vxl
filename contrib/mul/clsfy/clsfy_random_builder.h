@@ -28,7 +28,8 @@
 // classifiers.
 class clsfy_random_builder : public clsfy_builder_base
 {
-  double confidence_; //!< This is the standard deviation of confidence noise added to class probabilities
+  //: Standard deviation of confidence noise added to class probabilities
+  double confidence_; 
 
 public:
   // Dflt ctor

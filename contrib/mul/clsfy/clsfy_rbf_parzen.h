@@ -23,14 +23,24 @@
 // and finding the majority prediction of the nearby training vectors, each weighted by the window function.
 class clsfy_rbf_parzen : public clsfy_classifier_base
 {
-  double gamma_; //!< Inversely proportional to width of the RBF window function.  Default value is -0.5.
+  //: Workspace value which is cached for speed.
+  // Inversely proportional to width of the RBF window function.  Default value is -0.5.
+  //
   // width = 1/vcl_sqrt(-2.0*gamma_)
+  double gamma_; 
 
-  double power_; //!< The power, p, in the window funtion. Default value is 2.0.
+  //: Width of the rbf window function.
+  // Default value is 1.0.
+  double width_;
 
-  vcl_vector<vnl_vector<double> > trainInputs_; //!< The set of training input values.  Size should equal number of outputs.
+  //: The power, p, in the window funtion. Default value is 2.0.
+  double power_; 
 
-  vcl_vector<unsigned> trainOutputs_; //!< The set of training output values.  Size should equal number of inputs.
+  //: The set of training input values.  Size should equal number of outputs.
+  vcl_vector<vnl_vector<double> > trainInputs_; 
+
+  //: The set of training output values.  Size should equal number of inputs.
+  vcl_vector<unsigned> trainOutputs_; 
 
 public:
   //: Construct a Parzen classifier.
@@ -55,18 +65,11 @@ public:
 
   //: The 1st standard deviation width of the RBF window.
   // The default value is 1.
-  double rbf_width() const { return 1/vcl_sqrt(-2.0*gamma_);}
-
-  //: Since rbf_width() is computing a sqrt at every call, use this for lookup:
-  double gamma() const { return gamma_;}
+  double rbf_width() const { return width_;}
 
   //: Set the 1st standard deviation width of the RBF window.
   // The default value in the constructor is 1.
   void set_rbf_width(double sigma);
-
-  //: Set gamma, which is -1/(2*rbf_width*rbf_width)
-  // The default value in the constructor is -0.5.
-  void set_gamma(double gamma);
 
   //: The value p in the window function exp(-1/(2*sigma^p) * |x-y|^p).
   // The value p affects the kurtosis, or peakyness of the window. Towards 0 gives a more peaked central spike, and longer tail.
