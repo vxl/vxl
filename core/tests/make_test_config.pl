@@ -47,8 +47,8 @@ EOF
 
 ############################################################################
 
-my $var_exp;			# preprocessor variable expression (with paren)
-my $var_name;			# preprocessor variable name (no paren)
+my $var_exp;    # preprocessor variable expression (with paren)
+my $var_name;   # preprocessor variable name (no paren)
 for $var_exp (
 
   # from vcl_config_compiler.h
@@ -197,30 +197,30 @@ for $var_exp (
   'NDEBUG',
 
   # compiler related
-  '__STRICT_ANSI__',		# gcc
-  '__GNUC__',			# gcc
-  '__GNUG__',			# gcc
-  '__GNUC_MINOR__',		# gcc
-  '__VERSION__',		# gcc
-  '__OPTIMIZE__',		# gcc
-  '__SUNPRO_CC',		# sun
-  '_MSC_VER',			# msvc++
-  '_COMPILER_VERSION',		# sgi
-  '__KCC',			# ???
-  '__MWERKS__',			# ???
+  '__STRICT_ANSI__',    # gcc
+  '__GNUC__',           # gcc
+  '__GNUG__',           # gcc
+  '__GNUC_MINOR__',     # gcc
+  '__VERSION__',        # gcc
+  '__OPTIMIZE__',       # gcc
+  '__SUNPRO_CC',        # sun
+  '_MSC_VER',           # msvc++
+  '_COMPILER_VERSION',  # sgi
+  '__KCC',              # ???
+  '__MWERKS__',         # ???
 
   # OS related
-  '__CYGWIN__',			# cygwin
-  '_WIN32',			# windows
-  '__sgi',			# sgi
+  '__CYGWIN__',         # cygwin
+  '_WIN32',             # windows
+  '__sgi',              # sgi
 
   # other
-  '__DATE__',			# gcc
-  '__TIME__',			# gcc
+  '__DATE__',           # gcc
+  '__TIME__',           # gcc
 
   ) {
 $var_name = $var_exp;
-$var_name =~ s/\(.*\)//;	# remove the arguments and parenthesis
+$var_name =~ s/\(.*\)//;        # remove the arguments and parenthesis
 print <<EOF;
   vcl_cout << "$var_exp ";
 #ifdef $var_name

@@ -14,7 +14,6 @@ Why software environments?
 - as a comparison tool for research results
 
 
-
 ----------------------------------------------------------------------
 1. Research groups and their objectives
 
@@ -136,7 +135,6 @@ ANU:
 
 * For new users there are currently not enough useful non-trivial
   algorithms, s.c. "killer demos" in vxl, like Canny, ...
-
 
 
 ----------------------------------------------------------------------
@@ -500,18 +498,15 @@ ANU:
   cleanup vbl_sparse_array*).
 
 
-
-
 ----------------------------------------------------------------------
 17. What happens with old TargetJr
 
 * Segmentation must be ported, especially Van Duc's Canny
-  
+
 * No reason to rewrite "good" algorithm implementations (cf CompGeom)
 
 * Nobody sees the need to re-implement TargetJr in terms of vil, vnl, vbl
 
-  
 
 ----------------------------------------------------------------------
 18. Immediate to-dos (as extracted from above)
@@ -530,8 +525,8 @@ ANU:
 * Document the parts of C++ that may be used by vxl
   - Fred
 
-* Port TargetJr's segmentation package 
-  
+* Port TargetJr's segmentation package
+
 * Work out vipl proposal(s)
   - Andrew
 

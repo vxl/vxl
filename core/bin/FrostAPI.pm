@@ -41,10 +41,10 @@ $frostsocket= "STDOUT";
 sub StartRunTestGroup
   {
     my ($name,$date)= @_;
-     
+
     if (!$date)
       {
-	$date= localtime;
+        $date= localtime;
       }
 
     print $frostsocket "<TestGroupRun Name=\"$name\">\n";
@@ -57,7 +57,7 @@ sub StartRunTest
 
     if (!$date)
       {
-	$date= localtime;
+        $date= localtime;
       }
 
     print $frostsocket "<TestRun Name=\"$name\">\n";
@@ -88,17 +88,17 @@ sub EndRunTest
 
     if( !$success)
       {
-	$success= "t";
+        $success= "t";
       }
     elsif ($success eq "1")
       {
-	$success= "t";
+        $success= "t";
       }
     elsif ($success eq "0")
       {
-	$success= "f";
+        $success= "f";
       }
-    
+
     print $frostsocket "  <Passed>$success</Passed>\n";
     print $frostsocket "</TestRun>\n";
   }
@@ -116,7 +116,7 @@ sub EndRunTestGroup
 
     if (!$date)
       {
-	$date= localtime;
+        $date= localtime;
       }
 
     print $frostsocket "  <EndDateTime>$date</EndDateTime>\n";
@@ -129,20 +129,20 @@ sub StartFrost
 
     if( $host eq "FILE")
       {
-	$frostsocket= "";
-	open( $frostsocket, ">$database");
-	$frosttype= "FILE";
+        $frostsocket= "";
+        open( $frostsocket, ">$database");
+        $frosttype= "FILE";
       }
     else
       {
-	$frostsocket = IO::Socket::INET->new( PeerAddr => $host, PeerPort => 4444, Proto => "tcp", Type => SOCK_STREAM, TimeOut => 10 )
-	  or die $@;
-    
-	print $frostsocket "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-	print $frostsocket "<!DOCTYPE FrostImmediate SYSTEM \"http://pragmatic.crd.ge.com/blezek/xml/FrostImmediate.dtd\">\n";
-	print $frostsocket "<FrostImmediate Database=\"$database\" Server=\"$host\" Username=\"$username\" Password=\"$password\">\n\n";
+        $frostsocket = IO::Socket::INET->new( PeerAddr => $host, PeerPort => 4444, Proto => "tcp", Type => SOCK_STREAM, TimeOut => 10 )
+          or die $@;
 
-	StartSchema();
+        print $frostsocket "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        print $frostsocket "<!DOCTYPE FrostImmediate SYSTEM \"http://pragmatic.crd.ge.com/blezek/xml/FrostImmediate.dtd\">\n";
+        print $frostsocket "<FrostImmediate Database=\"$database\" Server=\"$host\" Username=\"$username\" Password=\"$password\">\n\n";
+
+        StartSchema();
       }
   }
 
@@ -150,20 +150,20 @@ sub EndFrost
   {
     if( $frosttype eq "FILE")
       {
-	close( $frostsocket);
+        close( $frostsocket);
       }
     else
       {
-	EndSchema();
-	
-	print $frostsocket "</FrostImmediate>\n";
-	
-	my $in= <$frostsocket>;
-	
-	if ($in!~ /<Status>true<\/Status>/i)
-	  {
-	    print "Error from server: $in\n";
-	  }
+        EndSchema();
+
+        print $frostsocket "</FrostImmediate>\n";
+
+        my $in= <$frostsocket>;
+
+        if ($in!~ /<Status>true<\/Status>/i)
+          {
+            print "Error from server: $in\n";
+          }
       }
   }
 
@@ -199,7 +199,7 @@ sub DefineTest
 
     for( $i=0; $i<= $#gauges; $i++)
       {
-	print $frostsocket "   <Gauge Name=\"$gauges[$i]\"/>\n";
+        print $frostsocket "   <Gauge Name=\"$gauges[$i]\"/>\n";
       }
 
     print $frostsocket "</Test>\n\n";
@@ -215,7 +215,7 @@ sub DefineMachine
 sub StartDefineTestGroup
   {
     my ($name,$description)=@_;
-    
+
     print $frostsocket "<TestGroup Name=\"$name\" Cardinality=\"1\">\n";
     print $frostsocket "  <Description>$description</Description>\n";
   }

@@ -943,22 +943,22 @@ sub output_lines {
       # if IUE_stlfwd.h was used, take appropriate action
       if ($saw_stlfwd) {
         print "#include <vcl_utility.h>\n" if ($saw_pair   && !$saw_utility_h);
-        print "#include <vcl_vector.h>\n"	 if ($saw_vector && !$saw_vector_h);
-        print "#include <vcl_list.h>\n"	 if ($saw_list   && !$saw_list_h);
-        print "#include <vcl_deque.h>\n"	 if ($saw_deque  && !$saw_deque_h);
-        print "#include <vcl_queue.h>\n"	 if ($saw_queue  && !$saw_queue_h);
-        print "#include <vcl_map.h>\n"	 if ($saw_map    && !$saw_map_h);
-        print "#include <vcl_set.h>\n"	 if ($saw_set    && !$saw_set_h);
+        print "#include <vcl_vector.h>\n"  if ($saw_vector && !$saw_vector_h);
+        print "#include <vcl_list.h>\n"    if ($saw_list   && !$saw_list_h);
+        print "#include <vcl_deque.h>\n"   if ($saw_deque  && !$saw_deque_h);
+        print "#include <vcl_queue.h>\n"   if ($saw_queue  && !$saw_queue_h);
+        print "#include <vcl_map.h>\n"     if ($saw_map    && !$saw_map_h);
+        print "#include <vcl_set.h>\n"     if ($saw_set    && !$saw_set_h);
       }
 
       # we need <memory> with allocator<> :
-      print "#include <vcl_memory.h>\n" if ($saw_allocator && !$saw_memory_h);
+      print "#include <vcl_memory.h>\n"    if ($saw_allocator && !$saw_memory_h);
 
       # we need <functional> with less<> :
       print "#include <vcl_functional.h>\n" if ($saw_less && !$saw_functional_h);
 
       # we need <utility> with map<> or multimap<> :
-      print "#include <vcl_utility.h>\n" if ($saw_map && !$saw_utility_h);
+      print "#include <vcl_utility.h>\n"   if ($saw_map && !$saw_utility_h);
 
       # emit any .txx files needed :
       foreach my $class (@txx_needed) {
