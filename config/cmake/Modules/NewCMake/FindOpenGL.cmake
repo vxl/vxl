@@ -10,7 +10,7 @@
 #
 # Also defined, but not for general use are
 # OPENGL_gl_LIBRARY   - Path to OpenGL Library
-# OPENGL_glu_LIBRARY  - Pat to GLU Librar
+# OPENGL_glu_LIBRARY  - Path to GLU Library
 #
 
 IF (WIN32)
@@ -90,15 +90,6 @@ ELSE (WIN32)
           /usr/X11R6/lib
   )
 
-# On Unix OpenGL most certainly always requires X11.
-# Feel free to tighten up these conditions if you don't think this is always true.
-  IF (OPENGL_gl_LIBRARY)
-    INCLUDE( ${MODULE_PATH}/NewCMake/FindX11.cmake )
-    IF (X11_FOUND)
-      SET (OPENGL_LIBRARIES ${X11_LIBRARIES})
-    ENDIF (X11_FOUND)
-  ENDIF (OPENGL_gl_LIBRARY)
-
   FIND_LIBRARY(OPENGL_glu_LIBRARY
     NAMES MesaGLU GLU
     PATHS /usr/lib
@@ -112,8 +103,8 @@ ENDIF (WIN32)
 
 
 SET( OPENGL_FOUND "NO" )
-IF(OPENGL_INCLUDE_DIR)
-  IF(OPENGL_gl_LIBRARY)
+IF( OPENGL_INCLUDE_DIR )
+  IF( OPENGL_gl_LIBRARY )
 
     IF(OPENGL_xmesa_INCLUDE_DIR)
       SET( OPENGL_XMESA_FOUND "YES" )
@@ -123,19 +114,34 @@ IF(OPENGL_INCLUDE_DIR)
 
     IF(OPENGL_glu_LIBRARY)
       SET( OPENGL_GLU_FOUND "YES" )
+      SET( OPENGL_LIBRARIES  ${OPENGL_glu_LIBRARY} )
     ELSE(OPENGL_glu_LIBRARY)
       SET( OPENGL_GLU_FOUND "NO" )
     ENDIF(OPENGL_glu_LIBRARY)
 
     SET( OPENGL_FOUND "YES" )
-    SET( OPENGL_LIBRARIES  ${OPENGL_glu_LIBRARY} ${OPENGL_gl_LIBRARY} ${OPENGL_LIBRARIES})
+    SET( OPENGL_LIBRARIES  ${OPENGL_LIBRARIES} ${OPENGL_gl_LIBRARY} )
+
+    # On Unix OpenGL most certainly always requires X11.
+    # Feel free to tighten up these conditions if you don't think this
+    # is always true.
+    IF( UNIX )
+    IF( NOT CYGWIN )
+      INCLUDE( ${MODULE_PATH}/NewCMake/FindX11.cmake )
+      IF( X11_FOUND )
+        SET (OPENGL_LIBRARIES ${OPENGL_LIBRARIES} ${X11_LIBRARIES})
+      ENDIF( X11_FOUND )
+    ENDIF( NOT CYGWIN )
+    ENDIF( UNIX )
+
+
 
 #The following deprecated settings are for backwards compatibility with CMake1.4
     SET (OPENGL_LIBRARY ${OPENGL_LIBRARIES})
     SET (OPENGL_INCLUDE_PATH ${OPENGL_INCLUDE_DIR})
 
-  ENDIF(OPENGL_gl_LIBRARY)
-ENDIF(OPENGL_INCLUDE_DIR)
+  ENDIF( OPENGL_gl_LIBRARY )
+ENDIF( OPENGL_INCLUDE_DIR )
 
 MARK_AS_ADVANCED(
   OPENGL_INCLUDE_DIR
