@@ -1,5 +1,3 @@
-#include <bbas/bxml/dll.h>
-
 #include <bbas/bxml/bxml_generic_ptr.h>
 #include <bbas/bxml/bxml_input_converter.h>
 #include <bbas/bxml/bxml_input_converter_sptr.h>
