@@ -1,9 +1,9 @@
-//:
-//  \file
-//  \brief Apply gradient operator to 2D planes of data
-//  \author Tim Cootes
-
+// This is mul/vil2/algo/vil2_sobel_3x3.cxx
 #include "vil2_sobel_3x3.h"
+//:
+// \file
+// \brief Apply gradient operator to 2D planes of data
+// \author Tim Cootes
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
 //  Computes both i and j gradients of an ni x nj plane of data
@@ -47,14 +47,14 @@ void vil2_sobel_3x3_1plane(const unsigned char* src,
   //  o1 o2 o3
   //  o4    o5
   //  o6 o7 o8
-  const int o1 = s_jstep - s_istep;
-  const int o2 = s_jstep;
-  const int o3 = s_istep + s_jstep;
-  const int o4 = -s_istep;
-  const int o5 = s_istep;
-  const int o6 = -s_istep - s_jstep;
-  const int o7 = -s_jstep;
-  const int o8 = s_istep - s_jstep;
+  const vcl_ptrdiff_t o1 = s_jstep - s_istep;
+  const vcl_ptrdiff_t o2 = s_jstep;
+  const vcl_ptrdiff_t o3 = s_istep + s_jstep;
+  const vcl_ptrdiff_t o4 = -s_istep;
+  const vcl_ptrdiff_t o5 = s_istep;
+  const vcl_ptrdiff_t o6 = -s_istep - s_jstep;
+  const vcl_ptrdiff_t o7 = -s_jstep;
+  const vcl_ptrdiff_t o8 = s_istep - s_jstep;
 
   const unsigned ni1 = ni-1;
   const unsigned nj1 = nj-1;
@@ -151,14 +151,14 @@ void vil2_sobel_3x3_1plane(const float* src,
   //  o1 o2 o3
   //  o4    o5
   //  o6 o7 o8
-  const int o1 = s_jstep - s_istep;
-  const int o2 = s_jstep;
-  const int o3 = s_istep + s_jstep;
-  const int o4 = -s_istep;
-  const int o5 = s_istep;
-  const int o6 = -s_istep - s_jstep;
-  const int o7 = -s_jstep;
-  const int o8 = s_istep - s_jstep;
+  const vcl_ptrdiff_t o1 = s_jstep - s_istep;
+  const vcl_ptrdiff_t o2 = s_jstep;
+  const vcl_ptrdiff_t o3 = s_istep + s_jstep;
+  const vcl_ptrdiff_t o4 = -s_istep;
+  const vcl_ptrdiff_t o5 = s_istep;
+  const vcl_ptrdiff_t o6 = -s_istep - s_jstep;
+  const vcl_ptrdiff_t o7 = -s_jstep;
+  const vcl_ptrdiff_t o8 = s_istep - s_jstep;
 
   const unsigned ni1 = ni-1;
   const unsigned nj1 = nj-1;
@@ -251,14 +251,14 @@ void vil2_sobel_3x3_1plane(const double* src,
   //  o1 o2 o3
   //  o4    o5
   //  o6 o7 o8
-  const int o1 = s_jstep - s_istep;
-  const int o2 = s_jstep;
-  const int o3 = s_istep + s_jstep;
-  const int o4 = -s_istep;
-  const int o5 = s_istep;
-  const int o6 = -s_istep - s_jstep;
-  const int o7 = -s_jstep;
-  const int o8 = s_istep - s_jstep;
+  const vcl_ptrdiff_t o1 = s_jstep - s_istep;
+  const vcl_ptrdiff_t o2 = s_jstep;
+  const vcl_ptrdiff_t o3 = s_istep + s_jstep;
+  const vcl_ptrdiff_t o4 = -s_istep;
+  const vcl_ptrdiff_t o5 = s_istep;
+  const vcl_ptrdiff_t o6 = -s_istep - s_jstep;
+  const vcl_ptrdiff_t o7 = -s_jstep;
+  const vcl_ptrdiff_t o8 = s_istep - s_jstep;
 
   const unsigned ni1 = ni-1;
   const unsigned nj1 = nj-1;
