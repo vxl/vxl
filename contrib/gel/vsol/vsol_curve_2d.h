@@ -66,9 +66,16 @@ public:
   //***************************************************************************
 
   //---------------------------------------------------------------------------
+  //: Return `this' if `this' is a curve, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual vsol_curve_2d *cast_to_curve(void) {return this;}
+  virtual const vsol_curve_2d *cast_to_curve(void) const {return this;}
+
+  //---------------------------------------------------------------------------
   //: Return `this' if `this' is an digital_curve, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vdgl_digital_curve *cast_to_digital_curve(void) {return NULL;}
+  virtual vdgl_digital_curve const*cast_to_digital_curve(void)const{return 0;}
+  virtual vdgl_digital_curve *cast_to_digital_curve(void) {return 0;}
 
   //---------------------------------------------------------------------------
   //: Return the first point of `this'

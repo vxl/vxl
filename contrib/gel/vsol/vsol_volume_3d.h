@@ -39,8 +39,8 @@ public:
   //***************************************************************************
   // Basic operations
   //***************************************************************************
-  vsol_volume_3d* cast_to_volume(void) { return this;}
-  vsol_volume_3d const* cast_to_volume() const { return this;}
+  virtual vsol_volume_3d* cast_to_volume(void) { return this;}
+  virtual vsol_volume_3d const* cast_to_volume() const { return this;}
 
   //---------------------------------------------------------------------------
   //: Is the point `p' inside `this' volume ?

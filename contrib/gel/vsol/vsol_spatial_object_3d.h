@@ -39,11 +39,10 @@ class vsol_spatial_object_3d;
 #include <vbl/vbl_ref_count.h>
 #include <vsol/vsol_box_3d.h>
 #include <vcl_vector.h>
-#include <vsol/vsol_group_3d_sptr.h>
-
+class vsol_curve_3d;
+class vsol_group_3d;
+class vsol_volume_3d;
 class vtol_topology_object;
-
-class vsol_spatial_object_3d;
 extern void iu_delete(vsol_spatial_object_3d *);
 
 
@@ -167,13 +166,6 @@ public:
 
   // inline void    SetFormat(char* f);
 
-  // virtual SpatialGroup *  CastToSpatialGroup()   { return NULL;}
-  // virtual SpatialGroup const* CastToSpatialGroup() const { return NULL;}
-
-  // for the moment topology object inherits off of spatial_object_3d
-  virtual vtol_topology_object* cast_to_topology_object() { return NULL;}
-
-  //virtual GeometryObject* CastToGeometryObject() { return NULL;}
 // Data Control--------------------------------------------------------------
 
 public:
@@ -303,7 +295,14 @@ public:
   //: The same behavior than dynamic_cast<>.
   // Needed because VXL is not compiled with -frtti :-(
   //---------------------------------------------------------------------------
-  virtual const vsol_group_3d *cast_to_group(void) const;
+  virtual vtol_topology_object* cast_to_topology_object() {return 0;}
+  virtual const vtol_topology_object* cast_to_topology_object()const{return 0;}
+  virtual vsol_group_3d *cast_to_group(void) {return 0;}
+  virtual const vsol_group_3d *cast_to_group(void) const {return 0;}
+  virtual vsol_curve_3d *cast_to_curve(void) {return 0;}
+  virtual const vsol_curve_3d *cast_to_curve(void) const {return 0;}
+  virtual vsol_volume_3d* cast_to_volume(void) { return 0;}
+  virtual vsol_volume_3d const* cast_to_volume() const { return 0;}
 
   inline virtual void print(vcl_ostream &strm=vcl_cout) const;
 
@@ -346,7 +345,7 @@ inline vsol_spatial_object_3d::vsol_spatial_object_3d(vsol_spatial_object_3d con
 
 inline void vsol_spatial_object_3d::compute_bounding_box(void)   //Does nothing in this case
 {
-  if(_bounding_box==0)
+  if (_bounding_box==0)
     _bounding_box=new vsol_box_3d();
   _bounding_box->touch();
 }
@@ -359,14 +358,14 @@ inline void vsol_spatial_object_3d::compute_bounding_box(void)   //Does nothing 
 
 inline void vsol_spatial_object_3d::check_update_bounding_box(void)  // Test consistency of bound
 {
-  if(_bounding_box==0)
+  if (_bounding_box==0)
     {
       _bounding_box=new vsol_box_3d;
       this->compute_bounding_box();
       _bounding_box->touch();
       return;
     }
-  if(_bounding_box->older(this))
+  if (_bounding_box->older(this))
     { // NOTE: first touch then compute, to avoid infinite loop!! - PVr
       _bounding_box->touch();
       this->compute_bounding_box();
@@ -431,35 +430,35 @@ inline float vsol_spatial_object_3d::get_max_z(void)
 
 inline void vsol_spatial_object_3d::set_min_x(float xmin)
 {
-  if(_bounding_box==0)
+  if (_bounding_box==0)
     _bounding_box=new vsol_box_3d();
   _bounding_box->set_min_x(xmin);
 }
 
 inline void vsol_spatial_object_3d::set_max_x(float xmax)
 {
-  if(_bounding_box==0)
+  if (_bounding_box==0)
     _bounding_box=new vsol_box_3d();
   _bounding_box->set_max_x(xmax);
 }
 
 inline void vsol_spatial_object_3d::set_min_y(float ymin)
 {
-  if(_bounding_box==0)
+  if (_bounding_box==0)
     _bounding_box=new vsol_box_3d();
   _bounding_box->set_min_y(ymin);
 }
 
 inline void vsol_spatial_object_3d::set_max_y(float ymax)
 {
-  if(_bounding_box==0)
+  if (_bounding_box==0)
     _bounding_box=new vsol_box_3d();
   _bounding_box->set_max_y(ymax);
 }
 
 inline void vsol_spatial_object_3d::set_min_z(float zmin)
 {
-  if(_bounding_box==0)
+  if (_bounding_box==0)
     _bounding_box=new vsol_box_3d();
   _bounding_box->set_min_z(zmin);
 }
@@ -467,7 +466,7 @@ inline void vsol_spatial_object_3d::set_min_z(float zmin)
 
 inline void vsol_spatial_object_3d::set_max_z(float zmax)
 {
-  if(_bounding_box==0)
+  if (_bounding_box==0)
     _bounding_box=new vsol_box_3d();
   _bounding_box->set_max_z(zmax);
 }

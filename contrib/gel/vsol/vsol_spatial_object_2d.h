@@ -2,7 +2,7 @@
 #define _vsol_spatial_object_2d_h_
 //-----------------------------------------------------------------------------
 //:
-//  \file
+// \file
 // \brief Base class of spatial entities Topology Geometry SpatialGroup
 //
 //   vsol_spatial_object_2d is the base class of all spatial entities: vtol, vsol.
@@ -39,9 +39,9 @@ class vsol_spatial_object_2d;
 #include <vbl/vbl_ref_count.h>
 #include <vsol/vsol_box_2d.h>
 #include <vcl_vector.h>
-#include <vsol/vsol_group_2d_sptr.h>
-
-class vtol_topology_object_2d;
+class vsol_curve_2d;
+class vsol_group_2d;
+class vtol_topology_object;
 extern void iu_delete(vsol_spatial_object_2d *);
 
 
@@ -154,9 +154,6 @@ public:
 
   // virtual SpatialGroup *  CastToSpatialGroup()   { return NULL;}
   // virtual SpatialGroup const* CastToSpatialGroup() const { return NULL;}
-
-  //: cast to topology object
-  virtual vtol_topology_object_2d* cast_to_topology_object_2d() { return NULL;}
 
   //virtual GeometryObject* CastToGeometryObject() { return NULL;}
 // Data Control--------------------------------------------------------------
@@ -287,7 +284,12 @@ public:
   //: The same behavior than dynamic_cast<>.
   // Needed because VXL is not compiled with -frtti :-(
   //---------------------------------------------------------------------------
-  virtual const vsol_group_2d *cast_to_group(void) const;
+  virtual vtol_topology_object* cast_to_topology_object() {return 0;}
+  virtual const vtol_topology_object* cast_to_topology_object()const{return 0;}
+  virtual vsol_group_2d *cast_to_group(void) {return 0;}
+  virtual const vsol_group_2d *cast_to_group(void) const {return 0;}
+  virtual vsol_curve_2d *cast_to_curve(void) {return 0;}
+  virtual const vsol_curve_2d *cast_to_curve(void) const {return 0;}
 
   inline virtual void print(vcl_ostream &strm=vcl_cout) const;
 
@@ -315,14 +317,14 @@ inline void vsol_spatial_object_2d::set_tag_id(int id)
 
 inline void vsol_spatial_object_2d::check_update_bounding_box(void)  // Test consistency of bound
 {
-  if(_bounding_box==0)
+  if (_bounding_box==0)
     {
       _bounding_box = new vsol_box_2d;
       this->compute_bounding_box();
       _bounding_box->touch();
       return;
     }
-  if(_bounding_box->older(this))
+  if (_bounding_box->older(this))
     { // NOTE: first touch then compute, to avoid infinite loop!! - PVr
       _bounding_box->touch();
       this->compute_bounding_box();
@@ -373,25 +375,25 @@ inline float vsol_spatial_object_2d::get_max_y(void)
 
 inline void vsol_spatial_object_2d::set_min_x(float xmin)
 {
-  if(!_bounding_box) _bounding_box = new vsol_box_2d;;
+  if (!_bounding_box) _bounding_box = new vsol_box_2d;;
   _bounding_box->set_min_x(xmin);
 }
 
 inline void vsol_spatial_object_2d::set_max_x(float xmax)
 {
-  if(!_bounding_box) _bounding_box = new vsol_box_2d;;
+  if (!_bounding_box) _bounding_box = new vsol_box_2d;;
   _bounding_box->set_max_x(xmax);
 }
 
 inline void vsol_spatial_object_2d::set_min_y(float ymin)
 {
-  if(!_bounding_box) _bounding_box = new vsol_box_2d;;
+  if (!_bounding_box) _bounding_box = new vsol_box_2d;;
   _bounding_box->set_min_y(ymin);
 }
 
 inline void vsol_spatial_object_2d::set_max_y(float ymax)
 {
-  if(!_bounding_box) _bounding_box = new vsol_box_2d;;
+  if (!_bounding_box) _bounding_box = new vsol_box_2d;;
   _bounding_box->set_max_y(ymax);
 }
 
@@ -462,7 +464,7 @@ inline vcl_ostream &operator<<(vcl_ostream &strm,
 inline vcl_ostream &operator<<(vcl_ostream &strm,
                            const vsol_spatial_object_2d *so)
 {
-  if(so!=0)
+  if (so!=0)
     ((vsol_spatial_object_2d const*)so)->print(strm);
   else
     strm << " NULL Spatial Object. ";
