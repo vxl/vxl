@@ -13,7 +13,7 @@ ADD_EXECUTABLE( rubberband rubberband.cxx )
 ADD_EXECUTABLE( printing_example printing_example.cxx )
 
 INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
-IF(GTK_FOUND)
+IF(GTK_GL_FOUND)
  INCLUDE_DIRECTORIES( ${GTK_INCLUDE_DIR} )
 
  ADD_EXECUTABLE( gtk-display-image gtk-display-image.cxx )
@@ -24,4 +24,4 @@ IF(GTK_FOUND)
 
  ADD_EXECUTABLE( vidl-demo vidl-demo.cxx )
  TARGET_LINK_LIBRARIES( vidl-demo vidl_vil1 ${GTK_LIBRARIES} )
-ENDIF(GTK_FOUND)
+ENDIF(GTK_GL_FOUND)
