@@ -35,7 +35,7 @@
  *   - native double is 8 bytes (floating point conversion)
  */
 
-#if defined(sun) || defined(sparc) || defined(stellar) || defined(MIPSEB) || defined(hpux) || defined(apollo) || defined(NeXT) || defined(_IBMR2)
+#if defined(sun)||defined(sparc)||defined(stellar)||defined(MIPSEB)||defined(hpux)||defined(apollo)||defined(NeXT)||defined(_IBMR2)
 #define BIGENDIAN 1
 #define IEEEFP
 #endif /* sun || sparc || stellar || MIPSEB || hpux || apollo || NeXT || _IBMR2 */
