@@ -27,7 +27,7 @@ else {
     exit 0;
   }
   $DIRS = `find \$VXLROOT/vcl \$VXLROOT/v3p \$VXLROOT/core \$VXLROOT/contrib  -type d \\\( -name xerces-c-src\\\* -prune -o -print \\\)`;
-  @DIRS = grep {!/(\/CVS|\.new(\/\S+)?|awfmfc|vgui_example_mfc)$/} sort split ' ', $DIRS;
+  @DIRS = grep {!/(\/CVS|awfmfc|vgui_example_mfc)$/} sort split ' ', $DIRS;
 }
 
 foreach $dir (@DIRS)
@@ -84,7 +84,7 @@ foreach $dir (@DIRS)
 
   # verify #includes in test_include.cxx
   if (-f "$dir/test_include.cxx" && $dir =~ m+^/+) {
-    if (opendir(UPDIR,"$dir/../algo")) {
+    if ($dir !~ m!/vil/tests$! && opendir(UPDIR,"$dir/../algo")) {
       @updir_files = readdir(UPDIR);
       closedir(UPDIR);
       map s/^/algo\//,@updir_files;
