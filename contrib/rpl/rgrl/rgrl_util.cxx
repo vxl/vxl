@@ -305,7 +305,7 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
       // new corner by adding r * dir, then add -r * dir to the
       // current vector.
 
-      vnl_vector<double> offset = basis_radii[i] * basis_dirs[i];
+      vnl_vector<double> offset = basis_dirs[i] * basis_radii[i];
       unsigned curr_size = corner_points.size();
       for ( unsigned int j=0; j<curr_size; ++j )
 	{

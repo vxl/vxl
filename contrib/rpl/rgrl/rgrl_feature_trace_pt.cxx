@@ -149,9 +149,9 @@ boundary_points(vnl_vector<double> const& in_direction) const
   //   tangent_ the same and no radius and length. 
   //
   feature_vector bdy_feature_points;
-  rgrl_feature_sptr bd_pt = new rgrl_feature_trace_pt( location_+radius_*normal, tangent_ ); 
+  rgrl_feature_sptr bd_pt = new rgrl_feature_trace_pt( location_+(normal*radius_), tangent_ ); 
   bdy_feature_points.push_back(bd_pt);
-  bd_pt = new rgrl_feature_trace_pt( location_-radius_*normal, tangent_ );
+  bd_pt = new rgrl_feature_trace_pt( location_-(normal*radius_), tangent_ );
   bdy_feature_points.push_back(bd_pt);
 
   return bdy_feature_points;
