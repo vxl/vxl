@@ -139,6 +139,25 @@ Always write the input and output code in tandem - the output should
 precisely mirror the input.
 @end quotation
 
+@subsection Which files do I need to include/link?
+
+In general the vsl_b_read and vsl_b_write functions use Koenig Lookup - that is the location
+of their declaration depends on their parameters.
+
+The @code{vsl_b_stream} objects and @code{vsl_b_write} and @code{vsl_b_read} functions
+for fundamental data types are declared in @code{<vsl/vsl_binary_io.h>}. If you want to
+load or save a @code{vcl_vector}, the appropriate @code{vsl_b_write} and @code{vsl_b_read}
+functions will be in @code{<vsl/vsl_vector_io.h>}. Likewise for most of the other vcl classes.
+The @code{vsl} library contains the implementation of all of this.
+
+If you want to load or save a @code{vgl_point_2d}, you will need to include
+@code{<vgl/io/vgl_io_point_2d.h>} and similarly for all other Level-1 VXL libraries. You
+will need to include the vgl_io library.
+For Level-2 libraries, the situation varies. If binary io has been defined at all for a
+level-2 library, it might be included in the library itself, e.g. the io functions for
+vpdfl_gaussian are declared in the same file as the gaussian, @code{vpdfl/vpdfl_gaussian.h>.
+Alternatively, it might be in a clip-on library in the same form as the Level-1 libraries
+above.
 
 @subsection Advanced Topics: Loading by baseclass pointer
 
@@ -162,6 +181,8 @@ libaries.
 @subsubsection IO provided within the class
 
 @example
+#include <vsl/vsl_binary_loader.h>
+
 class vxl_my_class : public vxl_baseclass
 @{
 // ...
@@ -416,14 +437,11 @@ you need to add the following functions to the class definition in the .h file.
 You will also need to add the following global scope helper function declarations to the .h file
 
 @example
-  //: Binary save vnl_my_class to stream.
+    //: Binary save vnl_my_class to stream.
   void vsl_b_write(vsl_b_ostream &os, const vnl_my_class & b);
 
-  //: Binary load vnl_my_class from stream.
+    //: Binary load vnl_my_class from stream.
   void vsl_b_read(vsl_b_istream &is, vnl_my_class & b);
-
-    //: Binary file stream output operator for class reference
-  void vsl_b_write(vsl_b_ostream &os, const vanyl_my_base_class* b);
 
     //: Allows derived class to be loaded by base-class pointer
     //  A loader object exists which is invoked by calls
@@ -686,19 +704,6 @@ The implementation code for functions to be added to base classes is as follows
 void vsl_add_to_binary_loader(const vanyl_my_base_class& b)
 @{
   vsl_binary_loader<vanyl_my_base_class>::instance().append(b);
-@}
-
-//==============================================
-//:  Binary output to stream by base class pointer
-void vsl_b_write(vsl_b_ostream &os, const vanyl_my_base_class* b)
-@{
-  if (b)
-  @{
-    vsl_b_write(os, b->is_a());  // write the objects actual name
-    b->b_write(os);
-  @}
-  else
-    vsl_b_write(os,vcl_string("VSL_NULL_PTR"));
 @}
 
 //==============================================
@@ -1790,6 +1795,8 @@ IO code is error prone for reasons often beyond the control of the programmer, t
 replaced with something more tolerant. The authors suggest that a suitable behaviour would be to print the
 error message, set the error flag on the stream, and return.
 @item Design a format for @code{long double} and add it @code{to vsl_binary_io.h}.
+@item Many of the function and file names do not conform to VXL standards - that each
+function and class should be named after the filestem that declares and defines it.
 @end enumerate
 
 @section Credits
