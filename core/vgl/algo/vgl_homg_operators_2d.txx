@@ -909,7 +909,6 @@ vgl_homg_point_2d<T> vgl_homg_operators_2d<T>::closest_point(vgl_homg_line_2d<T>
   if (l.a()*p.x()+l.b()*p.y()+l.c()*p.w() == 0) return p;
   // Otherwise, make sure that both l and p are not at infinity:
   assert(!l.ideal()); // should not be the line at infinity
-  assert(!p.ideal()); // point should not be at infinity
   // Line othogonal to l and through p is  bx-ay+d=0, with d = (a*py-b*px)/pw.
   vgl_homg_line_2d<T> o(l.b()*p.w(), -l.a()*p.w(), l.a()*p.y()-l.b()*p.x());
   // Finally return the intersection point of l with this orthogonal line:
