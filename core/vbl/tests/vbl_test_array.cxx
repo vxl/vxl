@@ -4,8 +4,8 @@
 #include <vcl_iostream.h>
 #define use_vbl 1
 #if use_vbl
-# include <vbl/vbl_array.h>
-# define container vbl_array
+# include <vbl/vbl_array_1d.h>
+# define container vbl_array_1d
 #else
 # include <vcl_vector.h>
 # define container vcl_vector
@@ -18,6 +18,7 @@ struct X
   X(float a, float b) : x(a + b) { }
   X(double a, double b) : x(a + b) { }
   void method() { vcl_cerr << '[' << x << ']' << vcl_flush;; }
+  bool operator==(X const& y) { return x == y.x; }
 private:
   double x;
 };
