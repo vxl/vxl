@@ -1,3 +1,5 @@
+#ifndef vnl_test_arithmetic_body_h_
+#define vnl_test_arithmetic_body_h_
 // See test_arithmetic.cxx for the actual test.
 
 // This is a "generic" test body. It expects the macros NewMat and
@@ -295,3 +297,5 @@
     TEST( "-m", -m1 == m_neg1 && m1 == m1_orig, true );
   }
 //}
+
+#endif // vnl_test_arithmetic_body_h_
