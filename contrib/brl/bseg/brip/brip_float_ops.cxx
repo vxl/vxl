@@ -752,6 +752,37 @@ brip_float_ops::convert_to_float(vil1_image const & image)
   }
   return fimg;
 }
+//-----------------------------------------------------------------
+// : convert a vil1_rgb<unsigned char> image to an unsigned_char image.
+vil1_memory_image_of<unsigned char>
+ brip_float_ops::convert_to_grey(vil1_image const& image)
+{
+  if(!image)
+    return image;
+
+  //Check if the image is a float
+  if(image.components()==1 &&
+     image.component_format()==VIL1_COMPONENT_FORMAT_IEEE_FLOAT)
+	 return brip_float_ops::convert_to_byte(vil1_memory_image_of<float>(image));
+
+  //Here we assume that the image is either unsigned char or unsigned short
+  //In this case we should just return it.
+  if(image.components()!=3)
+    return image;
+
+  // the image is color so we should convert it to greyscale
+  // Here we assume the color elements are unsigned char.
+  vil1_memory_image_of<vil1_rgb<unsigned char> > color_image(image);
+  int width = color_image.width(), height = color_image.height();
+  // the output image
+  vil1_memory_image_of<unsigned char> grey_image;
+  grey_image.resize(width, height);
+  for(int y = 0; y<height; y++)
+    for(int x = 0; x<width; x++)
+      grey_image(x,y) = color_image(x,y).grey();
+  return grey_image;
+}
+
 //--------------------------------------------------------------
 // Read a convolution kernel from file
 // Assumes a square kernel with odd dimensions, i.e., w,h = 2n+1

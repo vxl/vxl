@@ -34,7 +34,7 @@ class brip_float_ops
     convolve(vil1_memory_image_of<float> const & input,
              vbl_array_2d<float> const & kernel);
 
-  //: convolves with the specified kernel
+  //: convolves with a Gaussian kernel
   static vil1_memory_image_of<float>
     gaussian(vil1_memory_image_of<float> const & input, float sigma);
 
@@ -138,6 +138,9 @@ class brip_float_ops
   //: converts an RGB image to a float image
   static vil1_memory_image_of<float>
     convert_to_float(vil1_memory_image_of<vil1_rgb<unsigned char> > const& image);
+  //: converts a generic image to greyscale (RGB<unsigned char>)
+  static vil1_memory_image_of<unsigned char> 
+    convert_to_grey(vil1_image const& img);
 
   //: loads a 2n+1 x 2n+1 convolution kernel (see .cxx for file format)
   static vbl_array_2d<float> load_kernel(vcl_string const & file);
