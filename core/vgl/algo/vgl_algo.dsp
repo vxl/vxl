@@ -161,6 +161,9 @@ SOURCE=.\Templates/vgl_p_matrix+double-.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
+SOURCE=.\vgl_algo_fwd.h
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_homg_operators_1d.h
 # End Source File
 # Begin Source File
