@@ -1,39 +1,37 @@
 #
 # Find a ZLIB library
 #
+# This file is used to manage using either a natively provided ZLIB library or the one in v3p if provided.
+#
+#
+# As per the standard scheme the following definitions are used
+# ZLIB_INCLUDE_DIR - where to find zlib.h
+# ZLIB_LIBRARIES   - the set of libraries to include to use ZLIB.
+# ZLIB_FOUND       - TRUE, if available somewhere on the system.
 
-IF(NOT HAS_ZLIB)
+# Additionally
+# VXL_USING_NATIVE_ZLIB  - True if we are using a ZLIB library provided outside vxl (or v3p)
 
 
-  INCLUDE( ${MODULE_PATH}/FindNativeZLIB.cmake )
+INCLUDE( ${MODULE_PATH}/NewCMake/FindZLIB.cmake )
   
-  IF(NOT HAS_NATIVE_ZLIB)
-  
-    #
-    # At some point, in a "release" version, it is possible that someone
-    # will not have the v3p zlib library, so make sure the headers
-    # exist.
-    #
-  
-    FIND_PATH( ZLIB_INCLUDE_PATH zlib.h
-      ${allvxl_SOURCE_DIR}/v3p/zlib
-    )
-  
-    IF(ZLIB_INCLUDE_PATH)
-  
-      SET( HAS_ZLIB "YES" )
-      ADD_DEFINITIONS( -DHAS_ZLIB )
+IF(NOT ZLIB_FOUND)
 
-      SET(  ZLIB_LIBRARIES zlib )
+  #
+  # At some point, in a "release" version, it is possible that someone
+  # will not have the v3p ZLIB library, so make sure the headers
+  # exist.
+  #
   
-    ENDIF(ZLIB_INCLUDE_PATH)
+  IF(EXISTS ${allvxl_SOURCE_DIR}/v3p/zlib/zlib.h)
+
+    SET( ZLIB_FOUND "YES" )
+    SET( ZLIB_INCLUDE_DIR ${allvxl_SOURCE_DIR}/v3p/zlib)  
+    SET( ZLIB_LIBRARIES zlib )
   
-  ELSE(NOT HAS_NATIVE_ZLIB)
+  ENDIF(EXISTS ${allvxl_SOURCE_DIR}/v3p/zlib/zlib.h)
+ENDIF(NOT ZLIB_FOUND)
   
-    SET( HAS_ZLIB "YES" )
-    ADD_DEFINITIONS( -DHAS_ZLIB )
-    SET( ZLIB_INCLUDE_PATH ${NATIVE_ZLIB_INCLUDE_PATH} )
-    SET( ZLIB_LIBRARIES ${NATIVE_ZLIB_LIBRARIES} )
-  
-  ENDIF(NOT HAS_NATIVE_ZLIB)
-ENDIF(NOT HAS_ZLIB)
+IF(ZLIB_LIBRARY)
+  SET(VXL_USING_NATIVE_ZLIB "YES")
+ENDIF(ZLIB_LIBRARY)

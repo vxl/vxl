@@ -8,7 +8,7 @@
 # As per the standard scheme the following definitions are used
 # JPEG_INCLUDE_DIR - where to find jpeglib.h
 # JPEG_LIBRARIES   - the set of libraries to include to use JPEG.
-# JPEG_FOUND       - TRUE, if available someone one the system.
+# JPEG_FOUND       - TRUE, if available somewhere on the system.
 
 # Additionally
 # VXL_USING_NATIVE_JPEG  - True if we are using a JPEG library provided outside vxl (or v3p)

@@ -7,7 +7,7 @@
 # As per the standard scheme the following definitions are used
 # TIFF_INCLUDE_DIR - where to find tiff.h
 # TIFF_LIBRARIES   - the set of libraries to include to use TIFF.
-# TIFF_FOUND       - TRUE, if available someone one the system.
+# TIFF_FOUND       - TRUE, if available somewhere on the system.
 
 # Additionally
 # VXL_USING_NATIVE_TIFF  - True if we are using a TIFF library provided outside vxl (or v3p)
@@ -37,7 +37,3 @@ ENDIF(NOT TIFF_FOUND)
 IF(TIFF_LIBRARY)
   SET(VXL_USING_NATIVE_TIFF "YES")
 ENDIF(TIFF_LIBRARY)
-
-IF(TIFF_FOUND)
-  SET (TIFF_DEFINITIONS ${JPEG_DEFINITIONS} -DHAS_TIFF)
-ENDIF(TIFF_FOUND)

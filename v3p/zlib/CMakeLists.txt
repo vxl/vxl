@@ -1,8 +1,8 @@
 # v3p/zlib/CMakeLists.txt
 
-INCLUDE( ${MODULE_PATH}/FindNativeZLIB.cmake )
+INCLUDE(${MODULE_PATH}/FindZLIB.cmake)
 
-IF(NOT HAS_NATIVE_ZLIB)
+IF(NOT VXL_USING_NATIVE_ZLIB)
 
 SET( zlib_sources
   zlib.h
@@ -27,4 +27,5 @@ SET( zlib_sources
 
 ADD_LIBRARY( zlib ${zlib_sources} )
 
-ENDIF(NOT HAS_NATIVE_ZLIB)
+ENDIF(NOT VXL_USING_NATIVE_ZLIB)
+
