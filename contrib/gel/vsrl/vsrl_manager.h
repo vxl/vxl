@@ -20,7 +20,7 @@
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
-#include <vdgl/vdgl_intensity_face_sptr.h>
+#include <vtol/vtol_intensity_face_sptr.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 
@@ -47,7 +47,7 @@ class vsrl_manager : public vgui_wrapper_tableau
   bool put_lines();
   bool do_dense_matching();
   void find_regions();
-  void draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions, bool verts);
+  void draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions, bool verts);
   void set_params();
   void draw_north_arrow();
   void test_func();

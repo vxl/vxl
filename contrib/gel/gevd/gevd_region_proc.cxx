@@ -7,7 +7,7 @@
 #include <gevd/gevd_detector.h>
 #include <gevd/gevd_clean_edgels.h>
 #include <gevd/gevd_edgel_regions.h>
-#include <vdgl/vdgl_intensity_face.h>
+#include <vtol/vtol_intensity_face.h>
 
 #define ushortPixel(buf,x,y)  (*((unsigned short*)buf->GetElementAddr(x,y)))
 //---------------------------------------------------------------
@@ -206,7 +206,7 @@ void gevd_region_proc::extract_regions()
   //if (verbose_)
   //  er.SetVerbose();
 
-  vcl_vector<vdgl_intensity_face_sptr> faces;
+  vcl_vector<vtol_intensity_face_sptr> faces;
   //float xo = roi_proc_->get_xo(), yo = roi_proc_->get_yo();
   er.compute_edgel_regions(buf_, clean_edgels, faces);
 #if 0 // commented out
@@ -234,15 +234,15 @@ void gevd_region_proc::extract_regions()
     }
 #endif
   //Copy the faces to a vector
-  vcl_vector<vdgl_intensity_face_sptr>::iterator fit;
+  vcl_vector<vtol_intensity_face_sptr>::iterator fit;
   for ( fit = faces.begin(); fit != faces.end(); fit++)
     {
       //joe mod
-      //vdgl_intensity_face_ref ifr = (*fit);
+      //vtol_intensity_face_ref ifr = (*fit);
       //      if (!roi_proc_->inside_roi_mask(ifr))
       //if (!roi_proc_->inside_process_rois(ifr))
         continue; // hence this for loop is void! - PVr
-      //vdgl_intensity_face_sptr intf = (*fit);
+      //vtol_intensity_face_sptr intf = (*fit);
       //vcl_vector<OneChain*>* chains = intf->OneChains();
       //vdgl_digital_region * dr = intf->cast_to_digital_region();
       //vdgl_poly_intensity_face_ref rf = new vdgl_poly_intensity_face(chains, *dr);

@@ -23,7 +23,7 @@
 
 #include <vcl_vector.h>
 #include <sdet/sdet_fit_lines_params.h>
-#include <vdgl/vdgl_intensity_face_sptr.h>
+#include <vtol/vtol_intensity_face_sptr.h>
 #include <vifa/vifa_coll_lines_params.h>
 #include <vifa/vifa_group_pgram_params.h>
 #include <vifa/vifa_int_faces_attr.h>
@@ -40,7 +40,7 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
 
   bool            closure_valid_;
 
-  vdgl_intensity_face_sptr  seed_;
+  vtol_intensity_face_sptr  seed_;
   vifa_int_face_attr_sptr    seed_attr_;
   int              depth_;
   int              size_filter_;
@@ -58,7 +58,7 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
 
  public:
   vifa_int_faces_adj_attr();
-  vifa_int_faces_adj_attr(vdgl_intensity_face_sptr  seed,
+  vifa_int_faces_adj_attr(vtol_intensity_face_sptr  seed,
                           int              depth,
                           int              size_filter = -1,
                           sdet_fit_lines_params*    fitter_params = NULL,
@@ -70,7 +70,7 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
                           float          junk_area_percentage = 0.2
                          );
 
-  vifa_int_faces_adj_attr(vdgl_intensity_face_sptr  seed,
+  vifa_int_faces_adj_attr(vtol_intensity_face_sptr  seed,
                           int                       depth,
                           iface_list&               neighborhood,
                           int                       size_filter  =  -1,
@@ -91,9 +91,9 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
   static void    GetAttributeNames(vcl_vector<vcl_string>&  names);
   virtual bool  GetNativeAttributes(vcl_vector<float>&  attrs);
 
-  vdgl_intensity_face_sptr  GetSeed() const
+  vtol_intensity_face_sptr  GetSeed() const
     { return seed_; }
-  void            SetSeed(vdgl_intensity_face_sptr  seed);
+  void            SetSeed(vtol_intensity_face_sptr  seed);
 
   int    GetDepth() const
     { return depth_; }
@@ -125,20 +125,20 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
  protected:
   virtual void  init();
   bool  add_unique_face(iface_list&               facelist,
-                        vdgl_intensity_face_sptr  face,
+                        vtol_intensity_face_sptr  face,
                         int                       size_filter
                        );
   void  compute_closure_step(int                       current_depth,
-                             vdgl_intensity_face_sptr  seed
+                             vtol_intensity_face_sptr  seed
                             );
 
   // Retrieve the iface adjacent to a given iface at an edge (if available)
-  vdgl_intensity_face_sptr
-    get_adjacent_face_at_edge(vdgl_intensity_face_sptr&  known_face,
+  vtol_intensity_face_sptr
+    get_adjacent_face_at_edge(vtol_intensity_face_sptr&  known_face,
                               vtol_edge_2d*              e);
 
   // Retrieve all ifaces adjacent to a given face
-  iface_list*  get_adjacent_faces(vdgl_intensity_face_sptr&  known_face);
+  iface_list*  get_adjacent_faces(vtol_intensity_face_sptr&  known_face);
 };
 
 

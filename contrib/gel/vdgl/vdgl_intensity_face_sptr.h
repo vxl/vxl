@@ -1,10 +1,15 @@
-#ifndef vdgl_intensity_face_sptr_h
-#define vdgl_intensity_face_sptr_h
+#ifndef vtol_intensity_face_sptr_h_
+#define vtol_intensity_face_sptr_h_
 
-class vdgl_intensity_face;
+#include <vtol/vtol_intensity_face_sptr.h>
 
-#include <vbl/vbl_smart_ptr.h>
+// vtol_intensity_face has been renamed to vtol_intensity_face,
+// because that's where it properly belongs. Please include
+// <vtol/vtol_intensity_face.h> and replace all instances of
+// vtol_intensity_face with vtol_intensity_face
 
-typedef vbl_smart_ptr<vdgl_intensity_face> vdgl_intensity_face_sptr;
+#include <vcl_deprecated_header.h>
 
-#endif // vdgl_intensity_face_sptr_h
+typedef vtol_intensity_face_sptr vtol_intensity_face_sptr;
+
+#endif // vtol_intensity_face_sptr_h_

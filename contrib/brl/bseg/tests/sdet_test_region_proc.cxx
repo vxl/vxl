@@ -4,7 +4,7 @@
 #include <vcl_iostream.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_load.h>
-#include <vdgl/vdgl_intensity_face.h>
+#include <vtol/vtol_intensity_face.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <sdet/sdet_detector_params.h>
@@ -30,11 +30,11 @@ int main(int argc, char * argv[])
       sdet_region_proc rp(rpp);
       rp.set_image(image);
       rp.extract_regions();
-      vcl_vector<vdgl_intensity_face_sptr>& regions = rp.get_regions();
+      vcl_vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
       int n = regions.size();
       vcl_cout << "nregions = " << n << "\n";
       Assert(n==188 || n==189);
-      vdgl_intensity_face_sptr f = regions[0];
+      vtol_intensity_face_sptr f = regions[0];
       vcl_cout << "f->Npix() " << f->Npix() << "\n";
       Assert(f->Npix()==41121);
     }

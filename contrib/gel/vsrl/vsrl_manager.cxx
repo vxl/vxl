@@ -450,7 +450,7 @@ void vsrl_manager::find_regions()
     }
   if (!debug)
     {
-      vcl_vector<vdgl_intensity_face_sptr>& regions = rp.get_regions();
+      vcl_vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
       this->draw_regions(regions, true);
     }
   if (residual)
@@ -466,12 +466,12 @@ void vsrl_manager::find_regions()
     }
 }
 
-void vsrl_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions,
+void vsrl_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
                                 bool verts)
 {
   // This segment of code is ripped from various places in brl...bgui.
 
-   for (vcl_vector<vdgl_intensity_face_sptr>::iterator rit = regions.begin();
+   for (vcl_vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
         rit != regions.end(); rit++)
      {
        vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();

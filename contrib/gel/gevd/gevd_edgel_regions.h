@@ -51,7 +51,7 @@
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <gevd/gevd_region_edge.h>
 #include <gevd/gevd_bufferxy.h>
-#include <vdgl/vdgl_intensity_face_sptr.h>
+#include <vtol/vtol_intensity_face_sptr.h>
 #include <vil1/vil1_image.h>
 
 
@@ -65,11 +65,11 @@ public:
   //Main process method
   bool compute_edgel_regions(vil1_image* image,
                              vcl_vector<vtol_edge_2d_sptr>& sgrp,
-                             vcl_vector<vdgl_intensity_face_sptr>& faces);
+                             vcl_vector<vtol_intensity_face_sptr>& faces);
 
   bool compute_edgel_regions(gevd_bufferxy* buf,
                              vcl_vector<vtol_edge_2d_sptr>& sgrp,
-                             vcl_vector<vdgl_intensity_face_sptr>& faces);
+                             vcl_vector<vtol_intensity_face_sptr>& faces);
   //Acessors
   void SetVerbose() {verbose_ = true;}
   void ClearVerbose() {verbose_ = false;}
@@ -145,7 +145,7 @@ protected:
 
   //to be used after image or buf are set
   bool compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
-                             vcl_vector<vdgl_intensity_face_sptr>& faces);
+                             vcl_vector<vtol_intensity_face_sptr>& faces);
   //members
   bool verbose_;
   bool debug_;
@@ -172,9 +172,9 @@ protected:
   //hash table for Edge<->gevd_region_edge relationship
   vcl_map<int, gevd_region_edge*> region_edges_;
   vcl_map<unsigned int, vcl_vector<vtol_edge_2d_sptr>* > region_edge_adjacency_;
-  //Final output vdgl_intensity_face(s) and relation to corresponding region label
-  vcl_vector<vdgl_intensity_face_sptr>* faces_;
-  vdgl_intensity_face_sptr* intensity_face_index_;
+  //Final output vtol_intensity_face(s) and relation to corresponding region label
+  vcl_vector<vtol_intensity_face_sptr>* faces_;
+  vtol_intensity_face_sptr* intensity_face_index_;
   vcl_vector<vtol_edge_2d_sptr>** face_edge_index_;
   vcl_vector<vtol_edge_2d_sptr>* failed_insertions_; //Short edges that fail
 #if 0

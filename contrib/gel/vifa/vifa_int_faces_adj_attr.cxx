@@ -15,7 +15,7 @@ vifa_int_faces_adj_attr(void)
 }
 
 vifa_int_faces_adj_attr::
-vifa_int_faces_adj_attr(vdgl_intensity_face_sptr     seed,
+vifa_int_faces_adj_attr(vtol_intensity_face_sptr     seed,
                         int                          depth,
                         int                          size_filter,
                         sdet_fit_lines_params*       fitter_params,
@@ -39,7 +39,7 @@ vifa_int_faces_adj_attr(vdgl_intensity_face_sptr     seed,
 }
 
 vifa_int_faces_adj_attr::
-vifa_int_faces_adj_attr(vdgl_intensity_face_sptr     seed,
+vifa_int_faces_adj_attr(vtol_intensity_face_sptr     seed,
                         int                          depth,
                         iface_list&                  neighborhood,
                         int                          size_filter,
@@ -64,7 +64,7 @@ vifa_int_faces_adj_attr(vdgl_intensity_face_sptr     seed,
 }
 
 void vifa_int_faces_adj_attr::
-SetSeed(vdgl_intensity_face_sptr  seed)
+SetSeed(vtol_intensity_face_sptr  seed)
 {
   seed_ = seed;
   closure_valid_ = false;
@@ -338,7 +338,7 @@ init()
 
 bool vifa_int_faces_adj_attr::
 add_unique_face(iface_list&               facelist,
-                vdgl_intensity_face_sptr  face,
+                vtol_intensity_face_sptr  face,
                 int                       size_filter)
 {
   for (iface_iterator check = facelist.begin();
@@ -360,7 +360,7 @@ add_unique_face(iface_list&               facelist,
 
 void vifa_int_faces_adj_attr::
 compute_closure_step(int                       current_depth,
-                     vdgl_intensity_face_sptr  seed)
+                     vtol_intensity_face_sptr  seed)
 {
 #ifdef CCS_DEBUG
   vcl_cout << "ccs: depth " << current_depth << " of " << depth_;
@@ -391,7 +391,7 @@ compute_closure_step(int                       current_depth,
     iface_iterator fi = adj_faces->begin();
     for (; fi != adj_faces->end(); fi++)
     {
-      vdgl_intensity_face_sptr  adj_face_sptr = (*fi);
+      vtol_intensity_face_sptr  adj_face_sptr = (*fi);
 
       // Try to add the adjacent face to the master face list
       if (this->add_unique_face(faces_, adj_face_sptr, size_filter_))
@@ -407,11 +407,11 @@ compute_closure_step(int                       current_depth,
     vcl_cerr << "vifsaa::compute_closure_step(): No adj. faces found!\n";
 }
 
-vdgl_intensity_face_sptr vifa_int_faces_adj_attr::
-get_adjacent_face_at_edge(vdgl_intensity_face_sptr&  known_face,
+vtol_intensity_face_sptr vifa_int_faces_adj_attr::
+get_adjacent_face_at_edge(vtol_intensity_face_sptr&  known_face,
                           vtol_edge_2d*              e)
 {
-  vdgl_intensity_face_sptr  adj_face = 0;
+  vtol_intensity_face_sptr  adj_face = 0;
   face_list*          faces = e->faces();
 
   // Expect only one or two intensity faces for 2-D case
@@ -423,9 +423,9 @@ get_adjacent_face_at_edge(vdgl_intensity_face_sptr&  known_face,
       ((*faces)[1]->topology_type() ==
                   vtol_topology_object::INTENSITYFACE))
     {
-      vdgl_intensity_face_sptr    f1 = *((vdgl_intensity_face_sptr*)
+      vtol_intensity_face_sptr    f1 = *((vtol_intensity_face_sptr*)
                                         ((void *)&((*faces)[0])));
-      vdgl_intensity_face_sptr    f2 = *((vdgl_intensity_face_sptr*)
+      vtol_intensity_face_sptr    f2 = *((vtol_intensity_face_sptr*)
                                         ((void *)&((*faces)[1])));
 
       if (*known_face == *f1)
@@ -446,7 +446,7 @@ get_adjacent_face_at_edge(vdgl_intensity_face_sptr&  known_face,
 }
 
 iface_list* vifa_int_faces_adj_attr::
-get_adjacent_faces(vdgl_intensity_face_sptr&  known_face)
+get_adjacent_faces(vtol_intensity_face_sptr&  known_face)
 {
   iface_list*    faces = NULL;
 
@@ -464,7 +464,7 @@ get_adjacent_faces(vdgl_intensity_face_sptr&  known_face)
 
         if (e)
         {
-          vdgl_intensity_face_sptr  other_f =
+          vtol_intensity_face_sptr  other_f =
             this->get_adjacent_face_at_edge(known_face, e);
 
           if (other_f.ptr())

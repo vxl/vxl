@@ -16,7 +16,7 @@
 #include <vcl_vector.h>
 #include <vil1/vil1_image.h>
 #include <vtol/vtol_edge_2d_sptr.h>
-#include <vdgl/vdgl_intensity_face_sptr.h>
+#include <vtol/vtol_intensity_face_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_easy2D_tableau_sptr.h>
 #include <vgui/vgui_grid_tableau_sptr.h>

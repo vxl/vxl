@@ -8,7 +8,7 @@
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h> // for vcl_sort() and vcl_find()
 
-#include <vdgl/vdgl_intensity_face.h>
+#include <vtol/vtol_intensity_face.h>
 
 #include <vil1/vil1_byte.h>
 #include <vil1/vil1_memory_image_of.h>
@@ -125,11 +125,11 @@ void gevd_edgel_regions::print_base_equivalence()
 //Print the fitted intensity data for all faces
 void gevd_edgel_regions::print_intensity_data()
 {
-  for (vcl_vector<vdgl_intensity_face_sptr>::iterator fit =faces_->begin();
+  for (vcl_vector<vtol_intensity_face_sptr>::iterator fit =faces_->begin();
        fit != faces_->end(); fit++)
     {
 #if 0
-    vdgl_intensity_face* f = *fit;
+    vtol_intensity_face* f = *fit;
       vcl_cout << "IntFaceAt(" << f->Xo() << " " << f->Yo() << "):\n";
       f->PrintFit();
 #endif
@@ -186,7 +186,7 @@ gevd_edgel_regions::gevd_edgel_regions(bool debug)
   yend_ = 0;
   min_region_label_ = LABEL;
   max_region_label_ = LABEL;
-  faces_ = new vcl_vector<vdgl_intensity_face_sptr>;
+  faces_ = new vcl_vector<vtol_intensity_face_sptr>;
   face_edge_index_ = NULL;
   intensity_face_index_ = NULL;
   failed_insertions_ = new vcl_vector<vtol_edge_2d_sptr>;
@@ -263,7 +263,7 @@ gevd_edgel_regions::~gevd_edgel_regions()
 
 bool gevd_edgel_regions::compute_edgel_regions(gevd_bufferxy* buf,
                                                vcl_vector<vtol_edge_2d_sptr>& sgrp,
-                                               vcl_vector<vdgl_intensity_face_sptr>& faces)
+                                               vcl_vector<vtol_intensity_face_sptr>& faces)
 {
   buf_ = buf;
   image_= NULL;
@@ -276,11 +276,11 @@ bool gevd_edgel_regions::compute_edgel_regions(gevd_bufferxy* buf,
 //: The key process loop.
 //  Carries out the steps:
 //   1) Connected components 2)Edge-label assignment 3)Collect region
-//   boundaries 4) Construct vdgl_intensity_faces 5)Calculate intensity fit
+//   boundaries 4) Construct vtol_intensity_faces 5)Calculate intensity fit
 bool
 gevd_edgel_regions::compute_edgel_regions(vil1_image* image,
                                           vcl_vector<vtol_edge_2d_sptr>& sgrp,
-                                          vcl_vector<vdgl_intensity_face_sptr>& faces)
+                                          vcl_vector<vtol_intensity_face_sptr>& faces)
 {
   image_ = image;
   buf_ = NULL;
@@ -290,7 +290,7 @@ gevd_edgel_regions::compute_edgel_regions(vil1_image* image,
 }
 
 bool gevd_edgel_regions::compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
-                                               vcl_vector<vdgl_intensity_face_sptr>& faces)
+                                               vcl_vector<vtol_intensity_face_sptr>& faces)
 {
 //    corrupt_edges_.clear();
 //    corrupt_vertices_.clear();
@@ -340,7 +340,7 @@ bool gevd_edgel_regions::compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sg
   //Collect Face-Edge associations
   this->CollectFaceEdges();
 
-  //Construct vdgl_intensity_faces
+  //Construct vtol_intensity_faces
   this->ConstructFaces();
   if (!faces_||!faces_->size())
     return false;
@@ -352,7 +352,7 @@ bool gevd_edgel_regions::compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sg
     this->print_intensity_data();
   //Output the result
   faces.clear();
-  for (vcl_vector<vdgl_intensity_face_sptr>::iterator fit = faces_->begin();
+  for (vcl_vector<vtol_intensity_face_sptr>::iterator fit = faces_->begin();
        fit != faces_->end(); fit++)
       {
       faces.push_back(*fit);
@@ -770,7 +770,7 @@ bool gevd_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
         break;
       }
     default:
-      vcl_cout<<"In vdgl_intensity_face::get_intensity(): bytes/pixel not 1 or 2\n";
+      vcl_cout<<"In vtol_intensity_face::get_intensity(): bytes/pixel not 1 or 2\n";
     }
 
   //Initialize the arrays
@@ -1855,14 +1855,14 @@ void gevd_edgel_regions::CollectFaceEdges()
 //----------------------------------------------------------------
 //: Construct Face(s) from Edge(s) in the face_edge_index_ array.
 //    This method has been made virtual so that sub-classes of
-//    vdgl_intensity_face can be constructed by sub-classes of gevd_edgel_regions.
+//    vtol_intensity_face can be constructed by sub-classes of gevd_edgel_regions.
 void gevd_edgel_regions::ConstructFaces()
 {
   vul_timer t;
   unsigned int i;
   vcl_cout<<"Constructing Faces:";
   //Initialize the intensity_face_index_
-  intensity_face_index_ = new vdgl_intensity_face_sptr[max_region_label_];
+  intensity_face_index_ = new vtol_intensity_face_sptr[max_region_label_];
   for (i=0; i<max_region_label_; i++)
     intensity_face_index_[i] = NULL;
 
@@ -1872,7 +1872,7 @@ void gevd_edgel_regions::ConstructFaces()
       vcl_vector<vtol_edge_2d_sptr>* edge_list = face_edge_index_[i];
       if (!edge_list||!edge_list->size())
         continue;
-      //Make a new vdgl_intensity_face
+      //Make a new vtol_intensity_face
       vtol_cycle_processor cp(*edge_list);
       vcl_vector<vtol_one_chain_sptr> one_chains;
       cp.nested_one_cycles(one_chains, 0.5);
@@ -1883,8 +1883,8 @@ void gevd_edgel_regions::ConstructFaces()
           continue;
         }
 #endif
-      vdgl_intensity_face_sptr face = new vdgl_intensity_face(one_chains);
-      //vdgl_intensity_face_sptr face = new vdgl_intensity_face(edge_list);
+      vtol_intensity_face_sptr face = new vtol_intensity_face(one_chains);
+      //vtol_intensity_face_sptr face = new vtol_intensity_face(edge_list);
       //Check if the Face has valid Edges, since the Face
       //constructor can fail
       //looks like an expensive call
@@ -1969,7 +1969,7 @@ unsigned short gevd_edgel_regions::get_intensity(unsigned int x)
   return intensity;
 }
 //---------------------------------------------------------------------
-//: Accumulate intensity statistics from each region and update the vdgl_intensity_face parameters
+//: Accumulate intensity statistics from each region and update the vtol_intensity_face parameters
 void gevd_edgel_regions::AccumulateMeans()
 {
   vul_timer t;
@@ -2007,7 +2007,7 @@ void gevd_edgel_regions::AccumulateMeans()
 }
 
 //---------------------------------------------------------------------
-//: Insert region pixels into the vdgl_intensity_face arrays
+//: Insert region pixels into the vtol_intensity_face arrays
 //
 void gevd_edgel_regions::AccumulateRegionData()
 {
@@ -2030,7 +2030,7 @@ void gevd_edgel_regions::AccumulateRegionData()
           {
             unsigned short intensity= this->get_intensity(x);
             //Set face pixel arrays
-            vdgl_intensity_face_sptr f = intensity_face_index_[label];
+            vtol_intensity_face_sptr f = intensity_face_index_[label];
             float Ximg = float(x)+.5f;
             float Yimg = float(y)+.5f;
             f->InsertInPixelArrays(Ximg, Yimg, intensity);

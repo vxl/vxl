@@ -50,7 +50,7 @@ static void test_region_proc()
     iface_iterator  ifi = region_list.begin();
     for (int i=1; ifi != region_list.end(); ifi++, i++)
     {
-      vdgl_intensity_face_sptr  face = (*ifi);
+      vtol_intensity_face_sptr  face = (*ifi);
 
       vcl_cout << "  Intensity Face #" << i << ": " << (*face);
 

@@ -671,8 +671,8 @@ WeightedPerimeterLength()
         for (face_iterator fi = edge_faces->begin();
              fi != edge_faces->end(); fi++)
         {
-          vdgl_intensity_face*  int_f =
-            (vdgl_intensity_face*)((*fi).ptr());
+          vtol_intensity_face*  int_f =
+            (vtol_intensity_face*)((*fi).ptr());
 
           if (!int_f ||
               int_f->topology_type() != vtol_topology_object::INTENSITYFACE)
@@ -684,8 +684,8 @@ WeightedPerimeterLength()
             continue;
           }
 
-          vdgl_intensity_face_sptr  int_f_ref =
-            *((vdgl_intensity_face_sptr*)((void *)(&(*fi))));
+          vtol_intensity_face_sptr  int_f_ref =
+            *((vtol_intensity_face_sptr*)((void *)(&(*fi))));
           bool            in_face = false;
           for (iface_iterator f = faces_.begin();
                f != faces_.end(); ++f)
@@ -863,7 +863,7 @@ EightyPercentParallel()
 }
 
 vifa_int_face_attr_sptr vifa_int_faces_attr::
-factory_new_attr(vdgl_intensity_face_sptr face)
+factory_new_attr(vtol_intensity_face_sptr face)
 {
   if (factory_)
     return factory_->obtain_int_face_attr(face,

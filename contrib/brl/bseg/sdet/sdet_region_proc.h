@@ -19,7 +19,7 @@
 //-------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vil1/vil1_image.h>
-#include <vdgl/vdgl_intensity_face.h>
+#include <vtol/vtol_intensity_face.h>
 #include <sdet/sdet_region_proc_params.h>
 
 class sdet_region_proc : public sdet_region_proc_params
@@ -31,7 +31,7 @@ public:
   ~sdet_region_proc();
   //Accessors
   void set_image(vil1_image& image);
-  vcl_vector<vdgl_intensity_face_sptr>& get_regions(){return regions_;}
+  vcl_vector<vtol_intensity_face_sptr>& get_regions(){return regions_;}
 
   //Utility Methods
   void extract_regions();
@@ -46,6 +46,6 @@ protected:
   bool regions_valid_;      //process state flag
   vil1_image image_;  //input image
   vil1_image edge_image_;//debug
-  vcl_vector<vdgl_intensity_face_sptr> regions_; //resulting intensity faces
+  vcl_vector<vtol_intensity_face_sptr> regions_; //resulting intensity faces
 };
 #endif // sdet_region_proc_h_

@@ -32,7 +32,7 @@
 //   PTU may-2000 ported to vxl
 //   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
 //   9 Jan. 2003, Peter Vanroose - added pure virtual "copy_geometry()"
-//   5 Feb. 2003, Peter Vanroose - moved IsHoleP() here from vdgl_intensity_face
+//   5 Feb. 2003, Peter Vanroose - moved IsHoleP() here from vtol_intensity_face
 // \endverbatim
 
 #include <vtol/vtol_topology_object.h>

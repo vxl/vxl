@@ -47,14 +47,14 @@ vifa_parallel(iface_list&      faces,
 
           if (contrast_weighted)
           {
-            vdgl_intensity_face*  other_f =
+            vtol_intensity_face*  other_f =
               get_adjacent_iface((*ifi).ptr(), e);
 
             if (other_f &&
                 other_f->topology_type() == vtol_topology_object::INTENSITYFACE)
             {
-              vdgl_intensity_face*  other_int_f =
-                        (vdgl_intensity_face*)other_f;
+              vtol_intensity_face*  other_int_f =
+                        (vtol_intensity_face*)other_f;
               length *= vcl_fabs((*ifi)->Io() - other_int_f->Io());
             }
             else
@@ -431,11 +431,11 @@ find_peak(float&  max_value)
   return x_vals[max_index];
 }
 
-vdgl_intensity_face* vifa_parallel::
-get_adjacent_iface(vdgl_intensity_face*  known_face,
+vtol_intensity_face* vifa_parallel::
+get_adjacent_iface(vtol_intensity_face*  known_face,
                    vtol_edge_2d*         e)
 {
-  vdgl_intensity_face*  adj_face = 0;
+  vtol_intensity_face*  adj_face = 0;
   face_list*        faces = e->faces();
 
   // Expect only one or two intensity faces for 2-D case
@@ -443,9 +443,9 @@ get_adjacent_iface(vdgl_intensity_face*  known_face,
   {
     if (faces->size() == 2)
     {
-      vdgl_intensity_face*    f1 = (vdgl_intensity_face*)
+      vtol_intensity_face*    f1 = (vtol_intensity_face*)
                             ((*faces)[0].ptr());
-      vdgl_intensity_face*    f2 = (vdgl_intensity_face*)
+      vtol_intensity_face*    f2 = (vtol_intensity_face*)
                             ((*faces)[1].ptr());
 
       if (f1 && f2 &&

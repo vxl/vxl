@@ -1,7 +1,7 @@
 // This is gel/vifa/vifa_int_face_attr_common.cxx
 #include <sdet/sdet_fit_lines.h>
-#include <vdgl/vdgl_intensity_face.h>
-#include <vdgl/vdgl_intensity_face_sptr.h>
+#include <vtol/vtol_intensity_face.h>
+#include <vtol/vtol_intensity_face_sptr.h>
 #include <vgl/vgl_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_point_2d.h>
@@ -83,8 +83,8 @@ get_contrast_across_edge(vtol_edge_sptr  e, double dflt_cont)
   // Expect only one or two intensity faces for 2-D case
   if (faces && (faces->size() == 2))
   {
-    vdgl_intensity_face*  f1 = (vdgl_intensity_face*)((*faces)[0].ptr());
-    vdgl_intensity_face*  f2 = (vdgl_intensity_face*)((*faces)[1].ptr());
+    vtol_intensity_face*  f1 = (vtol_intensity_face*)((*faces)[0].ptr());
+    vtol_intensity_face*  f2 = (vtol_intensity_face*)((*faces)[1].ptr());
 
     if (f1 && f2 &&
         f1->topology_type() == vtol_topology_object::INTENSITYFACE &&

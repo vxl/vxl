@@ -1,5 +1,5 @@
 // This is gel/vifa/vifa_int_face_attr.cxx
-#include <vdgl/vdgl_intensity_face.h>
+#include <vtol/vtol_intensity_face.h>
 #include <vifa/vifa_int_face_attr.h>
 
 
@@ -19,7 +19,7 @@ vifa_int_face_attr(sdet_fit_lines_params*  fitter_params,
 }
 
 vifa_int_face_attr::
-vifa_int_face_attr(vdgl_intensity_face_sptr f,
+vifa_int_face_attr(vtol_intensity_face_sptr f,
                    sdet_fit_lines_params*  fitter_params,
                    vifa_group_pgram_params*  gpp,
                    vifa_group_pgram_params*  gpp_w,
@@ -50,7 +50,7 @@ vifa_int_face_attr::
 //
 
 void vifa_int_face_attr::
-SetFace(vdgl_intensity_face_sptr  f)
+SetFace(vtol_intensity_face_sptr  f)
 {
   face_ = f;
   delete npobj_;
@@ -373,7 +373,7 @@ SetNP()
     npobj_->reset();
   else
   {
-    vcl_vector<vdgl_intensity_face_sptr>  faces;
+    vcl_vector<vtol_intensity_face_sptr>  faces;
     faces.push_back(face_);
 
     const bool  contrast = true;

@@ -1,8 +1,8 @@
 #include <vcl_iostream.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vcl_vector.h>
-#include <vdgl/vdgl_intensity_face_sptr.h>
-#include <vdgl/vdgl_intensity_face.h>
+#include <vtol/vtol_intensity_face_sptr.h>
+#include <vtol/vtol_intensity_face.h>
 #include <sdet/sdet_region_proc.h>
 #include <vpro/vpro_region_process.h>
 
@@ -31,8 +31,8 @@ bool vpro_region_process::execute()
   sdet_region_proc rp(rpp);
   rp.set_image(img);
   rp.extract_regions();
-  vcl_vector<vdgl_intensity_face_sptr>& regions = rp.get_regions();
-  for (vcl_vector<vdgl_intensity_face_sptr>::iterator fit = regions.begin();
+  vcl_vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
+  for (vcl_vector<vtol_intensity_face_sptr>::iterator fit = regions.begin();
        fit != regions.end(); fit++)
     output_topo_objs_.push_back((*fit)->cast_to_topology_object());
   output_image_ = 0;

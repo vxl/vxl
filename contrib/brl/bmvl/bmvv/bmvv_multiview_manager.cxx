@@ -234,11 +234,11 @@ void bmvv_multiview_manager::clear_selected()
 //======================================================================
 //: Draw a set of intensity faces on the currently selected grid cell
 //======================================================================
-void bmvv_multiview_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions,
+void bmvv_multiview_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
                                           bool verts)
 {
   vcl_vector<vtol_face_2d_sptr> faces;
-  for (vcl_vector<vdgl_intensity_face_sptr>::iterator rit = regions.begin();
+  for (vcl_vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
        rit != regions.end(); rit++)
     faces.push_back((*rit)->cast_to_face_2d());
 
@@ -337,7 +337,7 @@ void bmvv_multiview_manager::regions()
       itab->set_image(ed_img);
       return;
     }
-  vcl_vector<vdgl_intensity_face_sptr>& regions = rp.get_regions();
+  vcl_vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
   this->draw_regions(regions, true);
 }
 

@@ -106,6 +106,7 @@ void segv_segmentation_manager::load_image()
     return;
   img_ = vil1_load(image_filename.c_str());
   t2D_->get_image_tableau()->set_image(img_);
+  t2D_->post_redraw();
 }
 
 //-----------------------------------------------------------------------------
@@ -181,10 +182,10 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines)
   t2D_->post_redraw();
 }
 
-void segv_segmentation_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions,
+void segv_segmentation_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
                                              bool verts)
 {
-  for (vcl_vector<vdgl_intensity_face_sptr>::iterator rit = regions.begin();
+  for (vcl_vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
        rit != regions.end(); rit++)
     {
       vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
@@ -201,6 +202,7 @@ void segv_segmentation_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr
           delete vts;
         }
     }
+  t2D_->post_redraw();
 }
 
 void segv_segmentation_manager::original_image()
@@ -407,10 +409,11 @@ void segv_segmentation_manager::regions()
           return;
         }
       itab->set_image(ed_img);
+      itab->post_redraw();
     }
   if (!debug)
     {
-      vcl_vector<vdgl_intensity_face_sptr>& regions = rp.get_regions();
+      vcl_vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
       this->draw_regions(regions, true);
     }
   if (residual)
@@ -423,6 +426,7 @@ void segv_segmentation_manager::regions()
           return;
         }
       itab->set_image(res_img);
+      itab->post_redraw();
     }
 }
 void segv_segmentation_manager::fit_lines()

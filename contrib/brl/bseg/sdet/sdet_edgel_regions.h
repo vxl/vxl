@@ -26,7 +26,7 @@
 //  The region edges are then used to collect the input edges which are
 //  adjacent to a given region.  The set of edges adjacent to a region
 //  are used to construct a multiply-connected sub-class of vtol_face_2d, the
-//  vdgl_intensity_face.  The vdgl_intensity_face contains a 
+//  vtol_intensity_face.  The vtol_intensity_face contains a 
 //  vdgl_digtial_region which holds arrays of pixel coordinates and values
 //  within the face boundaries.
 //
@@ -54,7 +54,7 @@
 #include <vil1/vil1_image.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <gevd/gevd_bufferxy.h>
-#include <vdgl/vdgl_intensity_face_sptr.h>
+#include <vtol/vtol_intensity_face_sptr.h>
 #include <sdet/sdet_region_edge_sptr.h>
 
 class sdet_edgel_regions
@@ -68,11 +68,11 @@ public:
   //Main process method
   bool compute_edgel_regions(vil1_image& image,
                              vcl_vector<vtol_edge_2d_sptr>& sgrp,
-                             vcl_vector<vdgl_intensity_face_sptr>& faces);
+                             vcl_vector<vtol_intensity_face_sptr>& faces);
 
   bool compute_edgel_regions(gevd_bufferxy* buf,
                              vcl_vector<vtol_edge_2d_sptr>& sgrp,
-                             vcl_vector<vdgl_intensity_face_sptr>& faces);
+                             vcl_vector<vtol_intensity_face_sptr>& faces);
   //Acessors
   void SetVerbose() {verbose_ = true;}
   void ClearVerbose() {verbose_ = false;}
@@ -146,7 +146,7 @@ protected:
 
   //to be used after image or buf are set
   bool compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
-                             vcl_vector<vdgl_intensity_face_sptr>& faces);
+                             vcl_vector<vtol_intensity_face_sptr>& faces);
 
   //members
   bool verbose_;
@@ -176,9 +176,9 @@ protected:
   //hash table for Edge<->sdet_region_edge relationship
   vcl_map<int, sdet_region_edge_sptr> region_edges_;
   vcl_map<unsigned int, vcl_vector<vtol_edge_2d_sptr>* > region_edge_adjacency_;
-  //Final output vdgl_intensity_face(s) and relation to corresponding region label
-  vcl_vector<vdgl_intensity_face_sptr>* faces_;
-  vdgl_intensity_face_sptr* intensity_face_index_;
+  //Final output vtol_intensity_face(s) and relation to corresponding region label
+  vcl_vector<vtol_intensity_face_sptr>* faces_;
+  vtol_intensity_face_sptr* intensity_face_index_;
   vcl_vector<vtol_edge_2d_sptr>** face_edge_index_;
   vcl_vector<vtol_edge_2d_sptr>* failed_insertions_; //Short edges that fail
 #if 0

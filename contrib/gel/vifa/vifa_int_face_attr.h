@@ -18,8 +18,8 @@
 #include <vcl_vector.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <sdet/sdet_fit_lines_params.h>
-#include <vdgl/vdgl_intensity_face.h>
-#include <vdgl/vdgl_intensity_face_sptr.h>
+#include <vtol/vtol_intensity_face.h>
+#include <vtol/vtol_intensity_face_sptr.h>
 #include <vifa/vifa_histogram.h>
 #include <vifa/vifa_int_face_attr_common.h>
 #include <vifa/vifa_parallel.h>
@@ -31,7 +31,7 @@ class vifa_int_face_attr: public vifa_int_face_attr_common
  protected:
 
   //: The face whose attributes we store
-  vdgl_intensity_face_sptr  face_;
+  vtol_intensity_face_sptr  face_;
 
   float            cached_min_;
   float            cached_max_;
@@ -49,7 +49,7 @@ class vifa_int_face_attr: public vifa_int_face_attr_common
                      vifa_group_pgram_params*  gpp_w = NULL,
                      vifa_norm_params*         np = NULL
                     );
-  vifa_int_face_attr(vdgl_intensity_face_sptr  f,
+  vifa_int_face_attr(vtol_intensity_face_sptr  f,
                      sdet_fit_lines_params*    fitter_params = NULL,
                      vifa_group_pgram_params*  gpp = NULL,
                      vifa_group_pgram_params*  gpp_w = NULL,
@@ -67,8 +67,8 @@ class vifa_int_face_attr: public vifa_int_face_attr_common
   bool         GetNativeAttributes(vcl_vector<float>&  attrs);
 
   // Data access for non-attributes
-  vdgl_intensity_face_sptr  GetFace() const { return face_; }
-  void                      SetFace(vdgl_intensity_face_sptr  f);
+  vtol_intensity_face_sptr  GetFace() const { return face_; }
+  void                      SetFace(vtol_intensity_face_sptr  f);
   edge_2d_list&             GetEdges();
 
   //: Centroid X

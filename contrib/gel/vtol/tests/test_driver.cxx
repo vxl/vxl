@@ -11,6 +11,8 @@ DECLARE(test_cycle_processor);
 DECLARE(vtol_test_refcounting);
 DECLARE(vtol_test_timing);
 
+DECLARE(test_extract_topology);
+
 void
 register_tests()
 {
@@ -24,6 +26,8 @@ register_tests()
   REGISTER(test_cycle_processor);
   REGISTER(vtol_test_refcounting);
   REGISTER(vtol_test_timing);
+
+  REGISTER(test_extract_topology);
 }
 
 DEFINE_MAIN;

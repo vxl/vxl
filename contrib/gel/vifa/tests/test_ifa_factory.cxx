@@ -1,4 +1,4 @@
-#include <vdgl/vdgl_intensity_face.h>
+#include <vtol/vtol_intensity_face.h>
 #include "test_ifa_factory.h"
 
 
@@ -22,7 +22,7 @@ reset()
 }
 
 vifa_int_face_attr_sptr test_ifa_factory::
-obtain_int_face_attr(vdgl_intensity_face_sptr  face)
+obtain_int_face_attr(vtol_intensity_face_sptr  face)
 {
   vcl_vector<ifp>::iterator  ifpi = table_->begin();
 
@@ -41,7 +41,7 @@ obtain_int_face_attr(vdgl_intensity_face_sptr  face)
 }
 
 vifa_int_face_attr_sptr test_ifa_factory::
-obtain_int_face_attr(vdgl_intensity_face_sptr  face,
+obtain_int_face_attr(vtol_intensity_face_sptr  face,
                      sdet_fit_lines_params*    fpp,
                      vifa_group_pgram_params*  gpp_s,
                      vifa_group_pgram_params*  gpp_w,

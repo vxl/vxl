@@ -5,14 +5,14 @@
 #include <vcl_vector.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <sdet/sdet_fit_lines_params.h>
-#include <vdgl/vdgl_intensity_face_sptr.h>
+#include <vtol/vtol_intensity_face_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_topology_object.h>
 #include <vifa/vifa_imp_line.h>
 
 
 // Intensity faces
-typedef vcl_vector<vdgl_intensity_face_sptr>  iface_list;
+typedef vcl_vector<vtol_intensity_face_sptr>  iface_list;
 typedef iface_list::iterator          iface_iterator;
 
 // Edges

@@ -6,7 +6,7 @@
 #include <vil1/vil1_memory_image_of.h>
 #include <gevd/gevd_float_operators.h>
 #include <sdet/sdet_edgel_regions.h>
-#include <vdgl/vdgl_intensity_face.h>
+#include <vtol/vtol_intensity_face.h>
 #include <sdet/sdet_detector.h>
 #include <sdet/sdet_region_proc.h>
 
@@ -43,7 +43,7 @@ void sdet_region_proc::set_image(vil1_image& image)
 }
 
 //--------------------------------------------------------------------------
-//: extract a set of vdgl_intensity_face(s)
+//: extract a set of vtol_intensity_face(s)
 void sdet_region_proc::extract_regions()
 {
   if (regions_valid_)
@@ -104,7 +104,7 @@ vil1_image sdet_region_proc::get_residual_image()
   vil1_memory_image_of<unsigned char> res_image(xsize, ysize);
   res_image.fill(0);
   float min_res = (float)vnl_numeric_traits<unsigned short>::maxval;
-  for (vcl_vector<vdgl_intensity_face_sptr>::iterator fit = regions_.begin();
+  for (vcl_vector<vtol_intensity_face_sptr>::iterator fit = regions_.begin();
        fit != regions_.end(); fit++)
     for ((*fit)->reset(); (*fit)->next();)
       {
@@ -113,7 +113,7 @@ vil1_image sdet_region_proc::get_residual_image()
           min_res = res;
       }
 
-  for (vcl_vector<vdgl_intensity_face_sptr>::iterator fit = regions_.begin();
+  for (vcl_vector<vtol_intensity_face_sptr>::iterator fit = regions_.begin();
        fit != regions_.end(); fit++)
     for ((*fit)->reset(); (*fit)->next();)
       {

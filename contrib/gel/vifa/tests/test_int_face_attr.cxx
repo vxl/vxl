@@ -69,7 +69,7 @@ static void test_int_face_attr()
     int  i = 1;
     for (; ifi != region_list.end(); ifi++, i++)
     {
-      vdgl_intensity_face_sptr  face = (*ifi);
+      vtol_intensity_face_sptr  face = (*ifi);
 
       vcl_cout << "  Intensity Face #" << i << " at ("
                << face->Xo() << ", " << face->Yo() << "): " << (*face);

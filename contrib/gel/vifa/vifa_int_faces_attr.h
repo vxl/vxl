@@ -21,7 +21,7 @@
 #include <vcl_vector.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <sdet/sdet_fit_lines_params.h>
-#include <vdgl/vdgl_intensity_face_sptr.h>
+#include <vtol/vtol_intensity_face_sptr.h>
 #include <vifa/vifa_histogram.h>
 #include <vifa/vifa_int_face_attr_common.h>
 #include <vifa/vifa_int_face_attr.h>
@@ -107,7 +107,7 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
 
   // hmm, need to think about this
 
-  vifa_int_face_attr_sptr factory_new_attr(vdgl_intensity_face_sptr face);
+  vifa_int_face_attr_sptr factory_new_attr(vtol_intensity_face_sptr face);
 
   //: centroid X
   float Xo();
