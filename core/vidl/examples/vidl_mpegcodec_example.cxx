@@ -6,6 +6,7 @@
 // load_mpegcodec_callback function !!
 
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
 #include <vil/vil_save.h>
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_mpegcodec.h>
@@ -64,4 +65,7 @@ int main(int argc, char* argv[])
   vil_save(im,"test.ppm");
 
   mpegcodec->close();
+
+  vcl_exit (0);
+  return 0;
 }
