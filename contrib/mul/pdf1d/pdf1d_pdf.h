@@ -70,7 +70,7 @@ class pdf1d_pdf
 
   //: The inverse cdf.
   // The value of x: P(x'<x) = P for x' drawn from distribution pdf.
-  // The default verson of this algorithm uses sampling if !cdf_is_analytic(),
+  // The default version of this algorithm uses sampling if !cdf_is_analytic(),
   // and Newton-Raphson root finding otherwise.
   virtual double inverse_cdf(double P) const;
 
