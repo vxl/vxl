@@ -1,7 +1,5 @@
 // This is brl/bseg/strk/strk_epipolar_grouper_process.cxx
 #include <vcl_iostream.h>
-#include <vsol/vsol_point_2d.h>
-#include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_polyline_2d.h>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_edge.h>
@@ -33,16 +31,16 @@ bool strk_epipolar_grouper_process::execute()
   }
   this->clear_output();
   if (first_frame_)
-    {
-      epipolar_grouper_.init(n_frames_);
-      first_frame_ = false;
-    }
+  {
+    epipolar_grouper_.init(n_frames_);
+    first_frame_ = false;
+  }
   //get the input edges
   if (this->get_N_input_images()!=1)
-    {
-      vcl_cout << "In vpro_edge_line_process::execute() - not exactly one input image\n";
-      return false;
-    }
+  {
+    vcl_cout << "In vpro_edge_line_process::execute() - not exactly one input image\n";
+    return false;
+  }
   vpro_edge_process ep(*((sdet_detector_params*)this));
   ep.add_input_image(this->get_input_image(0));
   if (!ep.execute())
@@ -50,39 +48,39 @@ bool strk_epipolar_grouper_process::execute()
     this->clear_input();
     return false;
   }
-  
+
   vcl_vector<vtol_topology_object_sptr> topo_objs=ep.get_output_topology();
-  if(!topo_objs.size())
+  if (!topo_objs.size())
     return false;
 
   vcl_vector<vtol_edge_2d_sptr> edges;
-  for(vcl_vector<vtol_topology_object_sptr>::iterator tob = topo_objs.begin();
-         tob != topo_objs.end(); tob++)
-    {
-      vtol_edge_sptr e = (*tob)->cast_to_edge();
-      if(!e)
-        continue;
-      vtol_edge_2d_sptr e2d = e->cast_to_edge_2d();
-      edges.push_back(e2d);
-    }
+  for (vcl_vector<vtol_topology_object_sptr>::iterator tob = topo_objs.begin();
+       tob != topo_objs.end(); tob++)
+  {
+    vtol_edge_sptr e = (*tob)->cast_to_edge();
+    if (!e)
+      continue;
+    vtol_edge_2d_sptr e2d = e->cast_to_edge_2d();
+    edges.push_back(e2d);
+  }
   ep.clear_output();
   //set the image and edges on the grouper and process intersections
-  vil1_memory_image_of<float> flt = 
+  vil1_memory_image_of<float> flt =
     brip_float_ops::convert_to_float(this->get_input_image(0));
   epipolar_grouper_.set_image(flt);
   epipolar_grouper_.set_edges(frame_index_, edges);
-  if(!epipolar_grouper_.group())
+  if (!epipolar_grouper_.group())
     return false;
-  vcl_vector<vsol_polyline_2d_sptr> polys = 
+  vcl_vector<vsol_polyline_2d_sptr> polys =
     epipolar_grouper_.display_segs(frame_index_);
-  for(vcl_vector<vsol_polyline_2d_sptr>::iterator pit = polys.begin();
-      pit != polys.end(); pit++)
-    {
-      vsol_spatial_object_2d_sptr so = (*pit)->cast_to_spatial_object_2d();
-      if(!so)
-        continue;
-      output_spat_objs_.push_back(so);
-    }
+  for (vcl_vector<vsol_polyline_2d_sptr>::iterator pit = polys.begin();
+       pit != polys.end(); pit++)
+  {
+    vsol_spatial_object_2d_sptr so = (*pit)->cast_to_spatial_object_2d();
+    if (!so)
+      continue;
+    output_spat_objs_.push_back(so);
+  }
   this->clear_input();
   return true;
 }
