@@ -15,12 +15,14 @@
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
+#include <vgui/vgui_soview2D.h>
 #include <vsrl/vsrl_parameters.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
+#include <vgl/vgl_vector_2d.h>
 
 #include "vsrl_point_picker.h"
 
@@ -47,7 +49,14 @@ public:
   void find_regions();
   void draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions, bool verts);
   void set_params();
+  void draw_north_arrow();
+  void test_func();
+  vgui_soview2D_lineseg* draw_vector_at(vgl_vector_2d<float>* vec, float x, float y, float theta);
   vil_image scale_image(vil_memory_image_of<unsigned char> img);
+  vil_image scale_image(vil_memory_image_of<double> img);
+  vil_image show_gradient_mag(vil_image* im_in);
+  vil_image show_gradient_dir(vil_memory_image_of<double> im_in);
+  vil_memory_image_of<double> make_3d();
 
 private:
   vsrl_manager();
@@ -58,13 +67,16 @@ private:
   vgui_grid_tableau_sptr grid_;
   vgui_image_tableau_sptr itabL_;
   vgui_image_tableau_sptr itabR_;
+  vgui_image_tableau_sptr dimg_tab_;
   vgui_easy2D_tableau_sptr e2d0_;
   vgui_easy2D_tableau_sptr e2d1_;
   vgui_easy2D_tableau_sptr e2d2_;
   vsrl_point_picker_sptr vpicker0_;
   vsrl_point_picker_sptr vpicker1_;
   vsrl_point_picker_sptr vpicker2_;
-  vgui_image_tableau_sptr dimg_tab_;
+  vgl_vector_2d<float> north_;  // North heading expressed as a vector
+  vgl_vector_2d<float> sun_az_; // sun angle expressed as a vector
+  vgl_vector_2d<float> sun_el_; // sun elevation expressed as a vector
   static vsrl_manager *instance_;
   int disparity_bias_;
   

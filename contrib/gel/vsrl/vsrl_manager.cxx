@@ -7,6 +7,7 @@
 // 02/13/03
 
 #include <vcl_cstdlib.h>
+#include <vnl/vnl_math.h>
 #include <vcl_iostream.h>
 #include <vil/vil_load.h>
 #include <vil/vil_scale_intensities.h>
@@ -20,18 +21,26 @@
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
+#include <vgui/vgui_dialog.h>
 #include <vsrl/vsrl_stereo_dense_matcher.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
+#include <vtol/vtol_one_chain_sptr.h>
+#include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_2d_sptr.h>
-#include "vsrl_menus.h"
-#include "vsrl_manager.h"
-#include "vsrl_point_picker.h"
+#include <vepl/vepl_gradient_dir.h>
+#include <vepl/vepl_gradient_mag.h>
+#include <vipl/vipl_gradient_dir.h>
+#include <vsrl/vsrl_menus.h>
+#include <vsrl/vsrl_manager.h>
+#include <vsrl/vsrl_point_picker.h>
+#include <vsrl/vsrl_results_dense_matcher.h>
+#include <vsrl/vsrl_3d_output.h>
 
 // static manager instance
 vsrl_manager* vsrl_manager::instance_=0;
@@ -39,7 +48,7 @@ vsrl_manager* vsrl_manager::instance_=0;
 //ensure only one instance is created
 vsrl_manager *vsrl_manager::instance()
 {
-  if (!instance_)
+  if(!instance_)
     {
       instance_ = new vsrl_manager();
       instance_->init();
@@ -53,9 +62,10 @@ vsrl_manager::~vsrl_manager(){}
 
 void vsrl_manager::init()
 {
+
   // Load the image tableaux
   itabL_ = vgui_image_tableau_new();
-  itabR_ = vgui_image_tableau_new();
+  itabR_ = vgui_image_tableau_new(); 
   dimg_tab_ = vgui_image_tableau_new();  // disparity image tableau
   disparity_bias_=0;
 
@@ -80,7 +90,7 @@ void vsrl_manager::init()
   vgui_viewer2D_tableau_sptr viewer1 = vgui_viewer2D_tableau_new(e2d1_);
   vgui_viewer2D_tableau_sptr viewer2 = vgui_viewer2D_tableau_new(e2d2_);
 
-  // Put the viewers into tableaus for picking points
+  // Put the viewers into tableaus for picking points 
   vpicker0_=new vsrl_point_picker(viewer0);
   vpicker1_=new vsrl_point_picker(viewer1);
   vpicker2_=new vsrl_point_picker(viewer2);
@@ -117,6 +127,7 @@ void vsrl_manager::load_left_image()
   if (!load_image_dlg.ask()) return;
   imgL_ = vil_load(image_filename.c_str());
   itabL_->set_image(imgL_);
+  this->post_redraw();
   return;
 }
 
@@ -129,6 +140,7 @@ void vsrl_manager::load_right_image()
   if (!load_image_dlg.ask()) return;
   imgR_ = vil_load(image_filename.c_str());
   itabR_->set_image(imgR_);
+  this->post_redraw();
   return;
 }
 
@@ -146,6 +158,7 @@ void vsrl_manager::load_disparity_image()
 
   // Display the scaled image
   dimg_tab_->set_image(scaled_image);
+  this->post_redraw();
 }
 
 void vsrl_manager::save_disparity_image()
@@ -157,7 +170,7 @@ void vsrl_manager::save_disparity_image()
   if (!save_image_dlg.ask()) return;
   vil_memory_image_of<unsigned char> disp(disp_img_);
   if (!vil_save(disp,image_filename.c_str())) {
-    vcl_cout << "Error saving disparity image!\n";
+    vcl_cout << "Error saving disparity image!" << vcl_endl;
   }
   return;
 }
@@ -183,7 +196,7 @@ void vsrl_manager::load_params_file()
 
 void vsrl_manager::point_pick()
 {
-  vcl_cerr << "vsrl_manager::point_pick() not yet implemented\n";
+  vcl_cerr << "vsrl_manager::point_pick() not yet implemented" << vcl_endl;
   return;
 }
 
@@ -198,16 +211,17 @@ void vsrl_manager::clear_all()
 
 bool vsrl_manager::handle(vgui_event const & event)
 {
+
   this->child.handle(event);
 
   if (event.type == vgui_BUTTON_DOWN &&
-      event.button == vgui_LEFT &&
+      event.button == vgui_LEFT && 
       !event.modifier)
     {
       put_points();
     }
   else if (event.type == vgui_BUTTON_DOWN &&
-           event.button == vgui_LEFT &&
+           event.button == vgui_LEFT && 
            event.modifier == vgui_SHIFT)
     {
       put_lines();
@@ -222,9 +236,10 @@ bool vsrl_manager::validate_point(vnl_vector<float>* pt)
       pt->x() > disp_img_.cols() ||
       pt->y() > disp_img_.rows() )
     {
-      vcl_cout << "Error: point out of range of disparity image.\n";
+      vcl_cout << "Error: point out of range of disparity image."
+                << vcl_endl;
       return false;
-    }
+    }  
   return true;
 }
 
@@ -235,11 +250,11 @@ int vsrl_manager::get_disparity(vnl_vector<float>* pt)
   pixel_val = disp(pt->x(),pt->y());
   if (pixel_val > 0) {
     // we subtract the disparity bias, plus 1 for the indexing offset
-    //    pixel_val -= (disparity_bias_ + 1);
-    pixel_val -= (params_->correlation_range + 1);
+    //    pixel_val -= (disparity_bias_ + 1); 
+    pixel_val -= (params_->correlation_range + 1); 
     vcl_cout << "Disparity: " << pixel_val << vcl_endl;
   }
-  if (pixel_val == 0) vcl_cout << "No disparity mapping found for this point!\n";
+  if (pixel_val == 0) vcl_cout << "No disparity mapping found for this point!" << vcl_endl;
   return pixel_val;
 }
 
@@ -247,7 +262,7 @@ bool vsrl_manager::put_points()
 {
   unsigned r=0, c=0;
   grid_->get_last_selected_position(&c, &r);
-
+  
   // determine which grids to update
   vnl_vector<float>* pos;
   // Point Picked in Left Pane
@@ -288,7 +303,7 @@ bool vsrl_manager::put_lines()
 {
   unsigned r=0, c=0;
   grid_->get_last_selected_position(&c, &r);
-
+  
   // determine which grids to update
   vnl_vector<float>* pos;
   // Point Picked in Left Pane
@@ -318,6 +333,7 @@ bool vsrl_manager::put_lines()
 
 bool vsrl_manager::do_dense_matching()
 {
+
   if (!imgL_ || !imgR_) return false;
 
   // The parameters used will be the default parameters or
@@ -327,7 +343,7 @@ bool vsrl_manager::do_dense_matching()
   vsrl_stereo_dense_matcher matcher(imgL_,imgR_);
   vcl_cout << "Setting Correlation Range...";
   matcher.set_correlation_range(params_->correlation_range);
-  vcl_cout << "Running Dense Matcher.\n";
+  vcl_cout << "Running Dense Matcher." << vcl_endl;
   // Run the dense matcher.
   matcher.execute();
 
@@ -354,8 +370,8 @@ bool vsrl_manager::do_dense_matching()
   disp_img_ = buffer;
   vil_image scaled_image = scale_image(buffer);
   dimg_tab_->set_image(scaled_image);
-
-  vcl_cout << "Dense Matcher complete.\n";
+  
+  vcl_cout << "Dense Matcher complete." << vcl_endl;
   this->post_redraw();
   return true;
 }
@@ -363,13 +379,41 @@ bool vsrl_manager::do_dense_matching()
 vil_image vsrl_manager::scale_image(vil_memory_image_of<unsigned char> img)
 {
   double maxval = 0;
+  double minval = 1e15;
   for (int x=0;x<img.width();x++) {
     for (int y=0;y<img.height();y++) {
       if (img(x,y) > maxval) {
         maxval = img(x,y);
       }
+      if (img(x,y) < minval) {
+        minval = img(x,y);
+      }
     }
   }
+  vcl_cout << "vsrl_manager::scale_image<unsigned char> - Max = " << maxval << "  Min = " << minval << vcl_endl;
+
+  double scale = 255.0/maxval;
+  double shift = 0;
+  vil_image scaled_image = vil_scale_intensities(img, scale, shift);
+  return scaled_image;
+}
+
+vil_image vsrl_manager::scale_image(vil_memory_image_of<double> img)
+{
+  double maxval = 0;
+  double minval = 1e15;
+  for (int x=0;x<img.width();x++) {
+    for (int y=0;y<img.height();y++) {
+      if (img(x,y) > maxval) {
+        maxval = img(x,y);
+      }
+      if (img(x,y) < minval) {
+        minval = img(x,y);
+      }
+    }
+  }
+  vcl_cout << "vsrl_manager::scale_image<double> - Max = " << maxval << "  Min = " << minval << vcl_endl;
+
   double scale = 255.0/maxval;
   double shift = 0;
   vil_image scaled_image = vil_scale_intensities(img, scale, shift);
@@ -398,7 +442,7 @@ void vsrl_manager::find_regions()
     dp.aggressive_junction_closure=1;
   else
     dp.aggressive_junction_closure=0;
-
+  
   sdet_region_proc_params rpp(dp, true, debug, 2);
   sdet_region_proc rp(rpp);
   rp.set_image(imgL_);
@@ -433,8 +477,9 @@ void vsrl_manager::find_regions()
 }
 
 void vsrl_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions,
-                                bool verts)
+                                             bool verts)
 {
+
   // This segment of code is ripped from various places in brl...bgui.
 
    for (vcl_vector<vdgl_intensity_face_sptr>::iterator rit = regions.begin();
@@ -454,7 +499,7 @@ void vsrl_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions,
          vsol_curve_2d_sptr c = e->curve();
 
          if (!c) {
-           vcl_cout << "vsrl_manager::draw_regions - null curve.\n";
+           vcl_cout << "vsrl_manager::draw_regions - null curve." << vcl_endl;
            return;
          }
          if (c->cast_to_digital_curve())
@@ -463,7 +508,7 @@ void vsrl_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions,
              //get the edgel chain
              vdgl_interpolator_sptr itrp = dc->get_interpolator();
              vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
-
+             
              //n, x, and y are in the parent class vgui_soview2D_linestrip
              e_line->n = ech->size();
              //offset the coordinates for display (may not be needed)
@@ -477,10 +522,11 @@ void vsrl_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions,
            }
          else {
            vcl_cout << "vsrl_manager::draw_regions -"
-                    << " attempt to draw an edge with unknown curve geometry\n";
+                    << " attempt to draw an edge with unknown curve geometry\n";           
          }
 
          vsovg->ls.push_back(e_line);
+
        }
 
        e2d0_->add(vsovg);
@@ -502,6 +548,7 @@ void vsrl_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions,
 void
 vsrl_manager::set_params()
 {
+
   // establish the variables.  Should already have instantiated params_
   int corr_range=params_->correlation_range;
   double inner_cost=params_->inner_cost;
@@ -535,4 +582,139 @@ vsrl_manager::set_params()
     params_->common_intensity_diff = common_intensity_diff;
   }
   return;
+
+}
+
+void vsrl_manager::draw_north_arrow()
+{
+  // use a vector of length 10 for the north arrow
+  north_.set(0.0,10.0);
+
+  // define the origin for the north vector
+  vgl_vector_2d<float>* origin = new vgl_vector_2d<float>(0.0,0.0);
+
+  vgui_soview2D_lineseg* line = draw_vector_at(&north_, origin->x(), origin->y(), 0.0);
+
+  this->post_redraw();
+  return;
+}
+
+//
+// Draw the given vector at the specified point with the specified rotation.
+// (x,y) = where to draw the vector
+// theta = the angle through which the vector is rotated before drawing.
+//
+vgui_soview2D_lineseg*
+vsrl_manager::draw_vector_at(vgl_vector_2d<float>* vec, float x, float y, float theta)
+{
+  // make the vector green
+  e2d0_->set_foreground(0,1,0);
+
+  // Apply rotation to get rot_vec
+  vgl_vector_2d<float> rot_vec;
+  rot_vec.x_ = (vec->x() * cos(theta)) + (vec->y() * sin(theta));
+  rot_vec.y_ = (-vec->x() * sin(theta)) + (vec->y() * cos(theta));
+
+  // Apply translation
+  float endx = rot_vec.x()+x;
+  float endy = rot_vec.y()+y;
+
+  // Create the lineseg & draw it
+  vgui_soview2D_lineseg* vector = new vgui_soview2D_lineseg(x,y,endx,endy);
+  e2d0_->add(vector);
+
+  e2d0_->set_foreground(1,0,0); 
+  this->post_redraw(); 
+  return vector;
+}
+
+// Calculate & Display Image Gradient magnitudes
+//
+vil_image
+vsrl_manager::show_gradient_mag(vil_image* im_in)
+{
+  vil_image im_out = vepl_gradient_mag(*im_in);
+  disp_img_ = im_out;  // this line let's us save out the image
+  vil_memory_image_of<unsigned char> tmp(im_out);
+  vil_image scaled_image = scale_image(tmp);
+  dimg_tab_->set_image(scaled_image);
+  this->post_redraw(); 
+  return im_out;
+}
+
+// Calculate & Display Image Gradient directions
+//
+vil_image
+vsrl_manager::show_gradient_dir(vil_memory_image_of<double> im_in)
+{
+  // calculate the gradient
+  // I prefer to implement my own gradient operation because I want to handle the edges
+  // more carefully and I want better control of what happens at inflection points of ATAN2.
+  // The scale (40) and offset (128) keep the range of the ATAN2 function within the range of
+  // the <unsigned char> image.
+  vcl_cout << "vsrl_manager::show_gradient_dir() - Begin" << vcl_endl;
+
+  vil_memory_image_of<double> im_out(im_in.width(),im_in.height());
+
+  double shift=128;
+  double scale=40;
+  register double dx, dy;
+  for (int x=0; x<im_out.width(); x++) {
+    for (int y=0; y<im_out.height(); y++) {
+      im_out(x,y) = 0.0; //make sure we start with a zero.
+      if (x==0) {
+        dx = im_in(x+1,y) - im_in(x,y); // image edge
+      }
+      else {
+        dx = im_in(x,y) - im_in(x-1,y);
+      }
+      if (y==0) {
+        dy = im_in(x,y+1) - im_in(x,y); // image edge
+      }
+      else {
+        dy = im_in(x,y) - im_in(x,y-1);
+      }
+      if (dx==0) {
+        im_out(x,y) = (vnl_math::pi_over_2) * (dy/fabs(dy));
+      }
+      else if (dy==0) {
+        im_out(x,y) = (dx>=0) ? 0 : (vnl_math::pi);
+      }
+      else {
+        im_out(x,y) = (vcl_atan2(dy,dx) * scale) + shift; 
+      }
+    }
+  }
+  
+  vil_image scaled_image = scale_image(im_out);
+  dimg_tab_->set_image(scaled_image);
+  this->post_redraw();
+  vcl_cout << "vsrl_manager::show_gradient_dir() - End" << vcl_endl;
+  return im_out;
+}
+
+// Generic function called by menu to make testing easier
+void
+vsrl_manager::test_func()
+{
+  vil_memory_image_of<double> img = make_3d();
+  show_gradient_dir(img);
+  return;
+}
+
+// Generate 3D output & display range image
+vil_memory_image_of<double>
+vsrl_manager::make_3d()
+{
+  // set up the dense matcher
+  vsrl_results_dense_matcher matcher(imgL_,disp_img_);
+  matcher.set_correlation_range(params_->correlation_range);
+  vsrl_3d_output output(imgL_,imgR_);
+  output.set_matcher(&matcher);
+  //  Write the 3D output & triangles to out.dat
+  output.write_output("out.dat");
+  vil_image scaled_image = scale_image(output.range_image_);
+  itabR_->set_image(scaled_image);  // put the image in the viewer
+  this->post_redraw();
+  return output.range_image_;
 }
