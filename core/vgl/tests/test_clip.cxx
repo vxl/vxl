@@ -23,10 +23,15 @@ static void test_union()
   {
     vgl_polygon<double> poly2;
 
-    testlib_test_begin("union with null polygon");
+    testlib_test_begin("union with null polygon 1");
     vgl_polygon<double> result = vgl_clip( poly1, poly2, vgl_clip_type_union );
     testlib_test_perform( result.num_sheets() == 1 &&
                           result.num_vertices() == 4 );
+
+    testlib_test_begin("union with null polygon 2");
+    vgl_polygon<double> result2 = vgl_clip( poly2, poly1, vgl_clip_type_union );
+    testlib_test_perform( result2.num_sheets() == 1 &&
+                          result2.num_vertices() == 4 );
   }
 
   {
@@ -61,10 +66,15 @@ static void test_intersection()
   {
     vgl_polygon<float> poly2;
 
-    testlib_test_begin("intersection with null polygon");
+    testlib_test_begin("intersection with null polygon 1");
     vgl_polygon<float> result = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
-    testlib_test_perform( result.num_sheets() == 1 &&
-                          result.num_vertices() == 4 );
+    testlib_test_perform( result.num_sheets() == 0 &&
+                          result.num_vertices() == 0 );
+
+    testlib_test_begin("intersection with null polygon 2");
+    vgl_polygon<float> result2 = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
+    testlib_test_perform( result2.num_sheets() == 0 &&
+                          result2.num_vertices() == 0 );
   }
 
   {

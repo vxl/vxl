@@ -139,10 +139,24 @@ vgl_polygon<T>
 vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type op )
 {
   // Check for the null case
-  if ( poly1.num_sheets() == 0 )
-    return poly2;
-  if ( poly2.num_sheets() == 0 )
-    return poly1;
+  if ( poly1.num_sheets() == 0 ) {
+    switch ( op )
+    {
+      case vgl_clip_type_intersect:    return poly1;
+      case vgl_clip_type_difference:   return poly1;
+      case vgl_clip_type_union:        return poly2;
+      case vgl_clip_type_xor:          return poly2;
+    }
+  }
+  if ( poly2.num_sheets() == 0 ) {
+    switch ( op )
+    {
+      case vgl_clip_type_intersect:    return poly2;
+      case vgl_clip_type_difference:   return poly1;
+      case vgl_clip_type_union:        return poly1;
+      case vgl_clip_type_xor:          return poly1;
+    }
+  }
 
   gpc_polygon p1 = vgl_to_gpc( poly1 );
   gpc_polygon p2 = vgl_to_gpc( poly2 );
