@@ -18,7 +18,7 @@ public:
   gmvl_image_node( vil_image image);
   ~gmvl_image_node();
 
-  vil_image get_image() const { return image_; }
+  vil_image image() const { return image_; }
 
 protected:
 

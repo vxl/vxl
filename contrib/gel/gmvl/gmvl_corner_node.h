@@ -17,6 +17,9 @@ public:
   gmvl_corner_node( double x, double y);
   ~gmvl_corner_node();
 
+  double x() const { return x_; }
+  double y() const { return y_; }
+
 protected:
 
   double x_;
