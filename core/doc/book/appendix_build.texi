@@ -261,9 +261,26 @@ code tree will make it easy for your tree to use VXL.
 
 # For applications not in the VXL source tree, you first need to
 # define where VXL is installed (the binary installation, not the
-# source).
+# source). The "best" way to do that is to introduce a cache
+# variable. This will cause the variable to appear when you run
+# CMakeSetup or ccmake or cmake -i or equivalent.
 
-SET( VXL_BINARY_PATH /usr/local/vxl-1.0-beta2/bin )
+SET( VXL_BINARY_PATH "" CACHE PATH "VXL build (binary) directory" )
+
+# Instead of a cache variable, you could rely on an environment
+# variable:
+#   SET( VXL_BINARY_PATH $ENV{VXLBIN} )
+# However, you must then make sure that VXLBIN is set correctly every
+# time that cmake is run. This is often a source of much frustration
+# and is not recommended.
+#
+# Another option is to set the path directly:
+#   SET( VXL_BINARY_PATH /usr/local/vxl-1.0-beta2/bin )
+# This has the drawback that the CMakeLists.txt file (this file) has
+# to be modified to suit your particular setup, which may cause
+# trouble. If this file is under CVS control, for example, you may
+# inadvertently commit it with your local setup hard-coded, thus
+# playing havoc with other users.
 
 # Your local source tree must have its own project name.
 
@@ -328,10 +345,11 @@ are in @file{$VXLSRC/config/cmake/Modules/}.
 
 @table @asis
 @item  @bullet{} CMake: @code{WIN32} (defined by CMake, not in a file)
-@itemx @bullet{} Preprocessor: @code{VCL_WIN32} (vcl_compiler.h, included by each vcl_*.h file)
+@itemx @bullet{} Preprocessor: @code{VCL_WIN32} (@file{vcl_compiler.h}, included by each @file{vcl_*.h} file)
 The Windows API is available.  Keep in mind that @code{WIN32} is
 defined under Cygwin, so it does not imply use of MSVC++.  Make sure
-you don't really want @code{HAS_MFC}, or @code{VCL_VC60} instead.
+you don't really want @code{HAS_MFC} or @code{VCL_VC} (or
+@code{VCL_VC60} or @code{VCL_VC70}) instead.
 
 @item  @bullet{} CMake: @code{UNIX} (defined by CMake, not in a file)
 @itemx @bullet{} Preprocessor: system dependent
