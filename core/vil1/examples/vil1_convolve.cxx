@@ -65,7 +65,7 @@ vil1_kernel_info kernels[] = {
   {"bar_y_5",     1, 5, &mask_bar_5[0][0]},
   {"gauss_x_17", 17, 1, &mask_gauss_17[0][0]},
   {"gauss_y_17", 1, 17, &mask_gauss_17[0][0]},
-  {0, 0}
+  {0, 0, 0, 0}
 };
 
 int main(int argc, char ** argv)

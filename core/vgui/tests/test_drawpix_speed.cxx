@@ -25,12 +25,12 @@ static int attribs[] = { GLX_RGBA,
 
 unsigned char data[512*512*4];
 
-#if 0
+#if 0 // unused static function
 static Bool WaitForNotify(Display *d, XEvent *e, char *arg)
 {
   return e->type == MapNotify && e->xmap.window == (Window)arg;
 }
-#endif
+#endif // 0
 
 double fps_gl (GLenum pack_type, GLenum pix_type)
 {
@@ -102,9 +102,11 @@ double fps_hermes_grey (float src_scale, float dest_scale, XImage* backbuffer)
   Hermes_FormatFree(dest_format);
   return draws * 1000.0 / elapsed;
 }
-#endif
 
-void pattern_grey (unsigned char* data) {
+#endif // HAS_HERMES
+
+void pattern_grey (unsigned char* data)
+{
   for (int y=0; y < 512; ++y) {
     for (int x=0; x < 256; ++x) {
       data[y*512 + 2*x] = x;
@@ -113,7 +115,8 @@ void pattern_grey (unsigned char* data) {
   }
 }
 
-void pattern_RGB16 (unsigned char* data, bool little_endian) {
+void pattern_RGB16 (unsigned char* data, bool little_endian)
+{
   unsigned short r,g,b;
   unsigned short* my_data = (unsigned short *)data;
   if (little_endian) {
@@ -135,8 +138,8 @@ void pattern_RGB16 (unsigned char* data, bool little_endian) {
   }
 }
 
-void pattern_RGB24 (unsigned char* data, bool /*little_endian*/) {
-
+void pattern_RGB24 (unsigned char* data, bool /*little_endian*/)
+{
   for (int n=0; n < 512*512*3; ++n) data[n] = 0;
 
   for (int y = 0; y < 512; ++y) {
@@ -148,7 +151,8 @@ void pattern_RGB24 (unsigned char* data, bool /*little_endian*/) {
   }
 }
 
-void pattern_RGB32 (unsigned char* data, bool little_endian) {
+void pattern_RGB32 (unsigned char* data, bool little_endian)
+{
   unsigned long r,g,b;
   unsigned long* my_data = (unsigned long *)data;
   if (little_endian) {
@@ -171,12 +175,13 @@ void pattern_RGB32 (unsigned char* data, bool little_endian) {
 
 
 // Try to do the #ifdef .. #endif madness once and for all here :
-static struct {
+static struct
+{
   GLenum format;
   GLenum type;
   char const *nfixed;
   char const *pretty;
-} ft_tab[]={
+} ft_tab[] = {
   {GL_LUMINANCE,GL_UNSIGNED_BYTE, "LUM   ", "8bit greyscale"},
   {GL_RGB,GL_UNSIGNED_BYTE,       "RGB   ", "24bit 888 RGB"},
   {GL_RGBA,GL_UNSIGNED_BYTE,      "RGBA  ", "32bit 8888 RGBA"},
@@ -188,12 +193,12 @@ static struct {
 #if defined(GL_ABGR_EXT) || defined(GL_EXT_abgr)
   {GLenum(GL_ABGR_EXT),GLenum(GL_UNSIGNED_BYTE),  "ABGR  ", "32bit ABGR"},
 #endif
-  {GL_NONE, GL_NONE, 0}
+  {GL_NONE, GL_NONE, 0, 0}
 };
 static const int ft_size = sizeof(ft_tab)/sizeof(ft_tab[0]) - 1;
 
 
-int main (int argc, char** argv)
+int main()
 {
   // GLX window code straight out of http://www.eecs.tulane.edu/www/graphics/doc/OpenGL-Man-Pages/glXIntro.html
   vcl_cerr << "Opening double-buffered, RGBA GLX context...\n\n";
@@ -217,14 +222,14 @@ int main (int argc, char** argv)
   bool little_endian = (ImageByteOrder(display) == LSBFirst);
   vcl_cerr << "GL_VERSION : " <<  (const char*) glGetString(GL_VERSION) << '\n'
            << "GL_RENDERER : " << (const char*) glGetString(GL_RENDERER)<< "\n\n"
-           << "X Display - \n"
+           << "X Display -\n"
            << "      byte-order : " << (little_endian ? "little" : "big") << "-endian\n\n"
-           << "XVisualInfo - \n"
+           << "XVisualInfo -\n"
            << "           depth : " << visualinfo->depth << vcl_endl
            << "        red-mask : " << vcl_hex << visualinfo->red_mask << '\n'
            << "      green-mask : " << vcl_hex << visualinfo->green_mask << '\n'
            << "       blue-mask : " << vcl_hex << visualinfo->blue_mask << "\n\n"
-           << "GL Gets - \n";
+           << "GL Gets -\n";
   GLint data_int;
   glGetIntegerv(GL_RED_BITS, &data_int);
   vcl_cerr << "        red-bits : " << data_int << vcl_endl;
@@ -244,7 +249,7 @@ int main (int argc, char** argv)
     XMesaGetBackBuffer(mesabuf, &p, &backbuffer);
 
     bool little_endian = (backbuffer->byte_order == LSBFirst);
-    vcl_cerr << "Mesa backbuffer XImage - \n"
+    vcl_cerr << "Mesa backbuffer XImage -\n"
              << "           depth : " << backbuffer->depth << vcl_endl
              << "  bits-per-pixel : " << backbuffer->bits_per_pixel << vcl_endl
              << "      byte_order : " << (little_endian ? "little" : "big") << "-endian\n"
@@ -318,10 +323,11 @@ int main (int argc, char** argv)
     vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
   {
-    vcl_cerr << "\nglDrawPixels - \n";
+    vcl_cerr << "\nglDrawPixels -\n";
     double fps;
     vcl_cerr << "source -";
-    for (int i=0; i<ft_size; ++i) vcl_cerr << "    " << ft_tab[i].nfixed;
+    for (int i=0; i<ft_size; ++i)
+      vcl_cerr << "    " << ft_tab[i].nfixed;
     vcl_cerr << vcl_endl
              << "source -    LUM       RGB565    RGB       BGR       RGBA      BGRA      ABGR\n"
              << "zoom 1.00x  ";
@@ -370,7 +376,7 @@ int main (int argc, char** argv)
     Hermes_ClearerReturn(clearer);
   }
   {
-    vcl_cerr << "\nHermesConverter - \n";
+    vcl_cerr << "\nHermesConverter -\n";
     HermesFormat* src_format;
     double fps;
     vcl_cerr <<"source -    LUM      OxRGB565 OxRGB    OxBGR    Ox_RGB   0x_BGR\n";
@@ -393,7 +399,7 @@ int main (int argc, char** argv)
     vcl_cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(32, 0xff, 0xff00, 0xff0000, 0, 0);
     fps = fps_hermes(1.0, 1.0, src_format, backbuffer);
-    vcl_cerr << 12*512*fps << "\n";
+    vcl_cerr << 12*512*fps << '\n';
 
     vcl_cerr << "zoom 1.90x  ";
     fps = fps_hermes_grey(0.526, 1.0, backbuffer);
@@ -413,7 +419,7 @@ int main (int argc, char** argv)
     vcl_cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(32, 0xff, 0xff00, 0xff0000, 0, 0);
     fps = fps_hermes(0.526, 1.0, src_format, backbuffer);
-    vcl_cerr << 12*512*fps << "\n";
+    vcl_cerr << 12*512*fps << '\n';
 
     vcl_cerr << "zoom 0.51x  ";
     fps = fps_hermes_grey(1.0, 0.51, backbuffer);
@@ -433,10 +439,11 @@ int main (int argc, char** argv)
     vcl_cerr << .51*0.51*512*512*fps << "  ";
     src_format = Hermes_FormatNew(32, 0xff, 0xff00, 0xff0000, 0, 0);
     fps = fps_hermes(1.0, 0.51, src_format, backbuffer);
-    vcl_cerr << .51*0.51*512*512*fps << "\n";
+    vcl_cerr << .51*0.51*512*512*fps << '\n';
   }
   Hermes_Done();
   }
 #endif
   vpl_sleep(5);
+  return 0;
 }
