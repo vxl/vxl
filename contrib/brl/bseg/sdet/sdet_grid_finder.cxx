@@ -561,7 +561,6 @@ bool sdet_grid_finder::compute_affine_homography()
       print_lines(grid_lines90);
     }
   vcl_vector<double> weight0, weight90, average_d0, average_d90;
-  double tx =0, ty = 0;
   if (!distance_index(spacing_, grid_lines0, average_d0, weight0, dindex0_))
     return false;
   else
