@@ -93,11 +93,11 @@ SOURCE=.\menu_hack_none.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\".\Templates\vcl_vector+vgui_glut_adaptor~-.cxx"
+SOURCE=.\Templates\vcl_vector+vgui_glut_adaptor~-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\".\Templates\vcl_vector+vgui_glut_menu_hack+-per_window_record~-.cxx"
+SOURCE=.\Templates\vcl_vector+vgui_glut_menu_hack+-per_window_record~-.cxx
 # End Source File
 # Begin Source File
 

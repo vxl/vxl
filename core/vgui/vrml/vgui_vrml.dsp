@@ -93,7 +93,7 @@ SOURCE=.\Templates\vcl_vector+QvNode~-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\".\Templates\vcl_vector+vgui_vrml_texture_map~-.cxx"
+SOURCE=.\Templates\vcl_vector+vgui_vrml_texture_map~-.cxx
 # End Source File
 # Begin Source File
 

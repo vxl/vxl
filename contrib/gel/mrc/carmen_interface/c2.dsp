@@ -92,7 +92,7 @@ SOURCE=.\carmen_interface.Cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\".\main.Cpp"
+SOURCE=.\main.Cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
