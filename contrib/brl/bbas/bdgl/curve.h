@@ -47,7 +47,7 @@ class Curve
     a=arcLength_[i]-arcLength_[ip];
   };
   void bendCost(int i, int ip, double &a){
-   a=angleDiff(angle_[i],angle_[ip]);
+    a=angleDiff(angle_[i],angle_[ip]); // defined in bdgl/utils.cxx
   };
 
   void computeProperties();
@@ -75,4 +75,3 @@ class Curve
 };
 
 #endif
-
