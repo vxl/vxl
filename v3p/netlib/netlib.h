@@ -582,19 +582,30 @@ double pythag_(const double *a, const double *b);
                dcmplx *work, const int *lwork, int *info);
 
   /* ITPACK functions from dsrc2c.f.  */
-  int jcg_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u, int *iwksp, int *nw, double *wksp, int *iparm, double *rparm, int *ierr);
-  int jsi_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u, int *iwksp, int *nw, double *wksp, int *iparm, double *rparm, int *ierr);
-  int sor_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u, int *iwksp, int *nw, double *wksp, int *iparm, double *rparm, int *ierr);
-  int ssorcg_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u, int *iwksp, int *nw, double *wksp, int *iparm, double *rparm, int *ierr);
-  int ssorsi_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u, int *iwksp, int *nw, double *wksp, int *iparm, double *rparm, int *ierr);
-  int rscg_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u, int *iwksp, int *nw, double *wksp, int *iparm, double *rparm, int *ierr);
-  int rssi_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u, int *iwksp, int *nw, double *wksp, int *iparm, double *rparm, int *ierr);
-  int itjcg_(int *nn, int *ia, int *ja, double *a, double *u, double *u1, double *d__, double *d1, double *dtwd, double *tri);
+  int jcg_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u,
+           int *iwksp, int *nw, double *wksp, int *iparm, double *rparm, int *ierr);
+  int jsi_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u,
+           int *iwksp, int *nw, double *wksp, int *iparm, double *rparm, int *ierr);
+  int sor_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u,
+           int *iwksp, int *nw, double *wksp, int *iparm, double *rparm, int *ierr);
+  int ssorcg_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u,
+              int *iwksp, int *nw, double *wksp, int *iparm, double *rparm, int *ierr);
+  int ssorsi_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u,
+              int *iwksp, int *nw, double *wksp, int *iparm, double *rparm, int *ierr);
+  int rscg_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u,
+            int *iwksp, int *nw, double *wksp, int *iparm, double *rparm, int *ierr);
+  int rssi_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u,
+            int *iwksp, int *nw, double *wksp, int *iparm, double *rparm, int *ierr);
+  int itjcg_(int *nn, int *ia, int *ja, double *a, double *u, double *u1,
+             double *d__, double *d1, double *dtwd, double *tri);
   int itjsi_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u, double *u1, double *d__, int *icnt);
   int itsor_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u, double *wk);
-  int itsrcg_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u, double *u1, double *c__, double *c1, double *d__, double *dl, double *wk, double *tri);
-  int itsrsi_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u, double *u1, double *c__, double *d__, double *ctwd, double *wk);
-  int itrscg_(int *n, int *nnb, int *ia, int *ja, double *a, double *ub, double *ub1, double *db, double *db1, double *wb, double *tri);
+  int itsrcg_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u, double *u1,
+              double *c__, double *c1, double *d__, double *dl, double *wk, double *tri);
+  int itsrsi_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u, double *u1,
+              double *c__, double *d__, double *ctwd, double *wk);
+  int itrscg_(int *n, int *nnb, int *ia, int *ja, double *a, double *ub, double *ub1,
+              double *db, double *db1, double *wb, double *tri);
   int itrssi_(int *n, int *nnb, int *ia, int *ja, double *a, double *rhs, double *ub, double *ub1, double *db);
   int bisrch_(int *n, int *k, int *l);
   double cheby_(double *qa, double *qt, double *rrr, int *ip, double *cme, double *sme);
@@ -636,10 +647,12 @@ double pythag_(const double *a, const double *b);
   double pvtbv_(int *n, int *ia, int *ja, double *a, double *v);
   int qsort_(int *nn, int *key, double *data, int *error);
   int sbagn_(int *n, int *nz, int *ia, int *ja, double *a, int *iwork, int *levell, int *noutt, int *ierr);
-  int sbelm_(int *nn, int *ia, int *ja, double *a, double *rhs, int *iw, double *rw, double *tol, int *isym, int *level, int *nout, int *ier);
+  int sbelm_(int *nn, int *ia, int *ja, double *a, double *rhs, int *iw, double *rw,
+             double *tol, int *isym, int *level, int *nout, int *ier);
   int sbend_(int *n, int *nz, int *ia, int *ja, double *a, int *iwork);
   int sbini_(int *n, int *nz, int *ia, int *ja, double *a, int *iwork);
-  int sbsij_(int *n, int *nz, int *ia, int *ja, double *a, int *iwork, int *ii, int *jj, double *vall, int *mode, int *levell, int *noutt, int *ierr);
+  int sbsij_(int *n, int *nz, int *ia, int *ja, double *a, int *iwork, int *ii, int *jj,
+             double *vall, int *mode, int *levell, int *noutt, int *ierr);
   int scal_(int *nn, int *ia, int *ja, double *a, double *rhs, double *u, double *d__, int *level, int *nout, int *ier);
   int sum3_(int *n, double *c1, double *x1, double *c2, double *x2, double *c3, double *x3);
   double tau_(int *ii);
