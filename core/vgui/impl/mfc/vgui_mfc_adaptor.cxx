@@ -356,6 +356,7 @@ void vgui_mfc_adaptor::service_redraws()
       RECT r;
       wnd->GetClientRect(&r);
       win_dc->BitBlt(0,0,r.right,r.bottom,vgui_mfc_adaptor_global_dc,0,0,SRCCOPY);
+	  wnd->ReleaseDC(win_dc);
     }
 
     swap_buffers();
