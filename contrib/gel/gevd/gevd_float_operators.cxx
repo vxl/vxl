@@ -37,6 +37,7 @@
 #include <vnl/vnl_vector.h>
 
 #include <vcl_cmath.h>
+#include <vcl_cstring.h>
 
 #include "gevd_pixel.h"
 #include "gevd_xpixel.h"

@@ -87,7 +87,7 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, char* imagename):
 {
   is_->ref();
   read_header();
-  strncpy(imagename_, imagename, 80);
+  vcl_strncpy(imagename_, imagename, 80);
 }
 
 char const* vil_iris_generic_image::file_format() const

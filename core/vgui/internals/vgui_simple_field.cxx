@@ -11,6 +11,7 @@
 
 #include "vgui_simple_field.h"
 
+#include <vcl_cstring.h>
 #include <vcl_strstream.h>
 
 
@@ -38,7 +39,7 @@ template <class T>
 bool vgui_simple_field<T>::update_value(const vcl_string &s)
 {
   char buf[1024];
-  strcpy(buf, s.c_str());
+  vcl_strcpy(buf, s.c_str());
   vcl_istrstream ss(buf);
   ss >> var;
   return (ss && ss.eof());

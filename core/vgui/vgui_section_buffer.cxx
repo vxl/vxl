@@ -594,7 +594,7 @@ bool vgui_section_buffer::load_image_as_textures()
 
       // copy into the sub_image buffer:
       for (int y = 0; y<resty; y++)
-        memmove(/* xxx */&sub_image[0] + 4*y*texture_size,
+        vcl_memmove(/* xxx */&sub_image[0] + 4*y*texture_size,
                 op_image         + 4*y*allocw, //4*texture_size*(countw-1)*y+4*restx*y,
                 4*restx);
       op_image += 4*restx;

@@ -8,6 +8,7 @@
 #include <vcl_fstream.h>
 #include <vcl_strstream.h>
 #include <vcl_cstdio.h>
+#include <vcl_cstring.h>
 
 #include <vbl/vbl_printf.h>
 #include <oxp/JPEG_Decompressor.h>
@@ -94,7 +95,7 @@ SGIMovieFilePrivates::SGIMovieFilePrivates(char const* fn):
   vcl_ifstream f(fn);
   char buf[4];
   f.read(buf,4);
-  if (strncmp(buf,"MOVI",4) != 0) {
+  if (vcl_strncmp(buf,"MOVI",4) != 0) {
     vbl_printf(vcl_cerr, "SGIMovieFile: Not a movie file, magic = [%c%c%c%c]\n", buf[0], buf[1], buf[2], buf[3]);
     version = 0;
     return;

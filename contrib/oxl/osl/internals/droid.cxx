@@ -266,7 +266,7 @@ float droid::compute_corner_min (float /*corner_min*/,
     bin_index,
     corner_count;
 
-  memset (bin_array, 0, sizeof (bin_array));
+  vcl_memset (bin_array, 0, sizeof (bin_array));
   corner_max_4throot = vcl_pow ((double) corner_max, 0.25);
 
   for (int row = window_str->row_start_index; row < window_str->row_end_index; row++) {

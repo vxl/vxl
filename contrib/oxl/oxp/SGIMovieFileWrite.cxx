@@ -5,6 +5,7 @@
 #include "SGIMovieFileWrite.h"
 
 #include <vcl_cstdio.h>
+#include <vcl_cstring.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 
@@ -43,11 +44,11 @@ struct Vars {
   }
 
   void add(char const* tag, int value) {
-    sprintf(buf, "%d", value);
+    vcl_sprintf(buf, "%d", value);
     add(tag, buf);
   }
   void add(char const* tag, double value) {
-    sprintf(buf, "%g", value);
+    vcl_sprintf(buf, "%g", value);
     add(tag, buf);
   }
 
@@ -58,7 +59,7 @@ struct Vars {
     for(unsigned i = 0; i < names.size(); ++i) {
       // Send name
       int l = names[i].size();
-      strncpy(buf, names[i].c_str(), l);
+      vcl_strncpy(buf, names[i].c_str(), l);
       while (l < 16) buf[l++] = 0;
       fwrite(buf, 16, 1, fp);
       // Send values
@@ -117,7 +118,7 @@ SGIMovieFileWriteData::SGIMovieFileWriteData(char const* filename,
   interlaced = true;
 
   // Write header
-  fprintf(fp, "MOVI");
+  vcl_fprintf(fp, "MOVI");
   send4(3);
   send4(0);
 

@@ -40,7 +40,7 @@ int main(int argc, char ** argv)
 {
   vil_file_image fim(argv[1]);
   vil_memory_image_of<byte> in(fim);
-  MedianReduceImage out(in, (argc < 2) ? 4 : atoi(argv[2]));
+  MedianReduceImage out(in, (argc < 2) ? 4 : vcl_atoi(argv[2]));
   out.save_pnm(vcl_cout);
 }
 #endif
