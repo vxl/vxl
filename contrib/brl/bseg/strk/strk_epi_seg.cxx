@@ -175,9 +175,9 @@ static double linear_interpolate(double xm, double xp, double ym,
 double strk_epi_seg::s(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
-  double last_a;
+  double last_a = 0.0; // dummy initialisation to avoid compiler warning
   int n = this->n_pts();
-  for (int i = 0; i<n; i++)
+  for (int i=0; i<n; i++)
   {
     double a = seg_[i]->alpha();
     if (a<alpha)
@@ -188,20 +188,22 @@ double strk_epi_seg::s(double alpha)
     if (a==alpha)
       return seg_[i]->s();
 
-    double s = linear_interpolate(last_a, a, seg_[i-1]->s(),
-                                  seg_[i]->s(), alpha);
-    return s;
+    assert(i>0);
+    return linear_interpolate(last_a, a,
+                              seg_[i-1]->s(),
+                              seg_[i]->s(), alpha);
   }
-  return 0;
+  return 0.0;
 }
+
 
 //: Tangent angle in image coordinates
 double strk_epi_seg::tan_ang(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
-  double last_a;
+  double last_a = 0.0; // dummy initialisation to avoid compiler warning
   int n = this->n_pts();
-  for (int i = 0; i<n; i++)
+  for (int i=0; i<n; i++)
   {
     double a = seg_[i]->alpha();
     if (a<alpha)
@@ -212,12 +214,12 @@ double strk_epi_seg::tan_ang(double alpha)
     if (a==alpha)
       return seg_[i]->tan_ang();
 
-    double ta = linear_interpolate(last_a, a,
-                                   seg_[i-1]->tan_ang(),
-                                   seg_[i]->tan_ang(), alpha);
-    return ta;
+    assert(i>0);
+    return linear_interpolate(last_a, a,
+                              seg_[i-1]->tan_ang(),
+                              seg_[i]->tan_ang(), alpha);
   }
-  return 0;
+  return 0.0;
 }
 
 
@@ -236,13 +238,13 @@ void strk_epi_seg::add_int_sample(const double alpha,
   int_valid_ = false;
 }
 
-//Linearly interpolate left interval length
+//: Linearly interpolate left interval length
 double strk_epi_seg::left_ds(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
-  double last_a;
+  double last_a = 0.0; // dummy initialisation to avoid compiler warning
   int n = int_alpha_.size();
-  for (int i = 0; i<n; i++)
+  for (int i=0; i<n; i++)
   {
     double a = int_alpha_[i];
     if (a<alpha)
@@ -252,23 +254,23 @@ double strk_epi_seg::left_ds(double alpha)
     }
     if (a==alpha)
       return left_ds_[i];
-    double lds = linear_interpolate(last_a, a,
-                                    left_ds_[i-1],
-                                    left_ds_[i], alpha);
-    return lds;
-  }
 
-  return -1;
+    assert(i>0);
+    return linear_interpolate(last_a, a,
+                              left_ds_[i-1],
+                              left_ds_[i], alpha);
+  }
+  return -1.0;
 }
 
 
-//Linearly interpolate left intensity
+//: Linearly interpolate left intensity
 double strk_epi_seg::left_int(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
-  double last_a;
+  double last_a = 0.0; // dummy initialisation to avoid compiler warning
   int n = int_alpha_.size();
-  for (int i = 0; i<n; i++)
+  for (int i=0; i<n; i++)
   {
     double a = int_alpha_[i];
     if (a<alpha)
@@ -278,22 +280,23 @@ double strk_epi_seg::left_int(double alpha)
     }
     if (a==alpha)
       return left_int_[i];
-    double li = linear_interpolate(last_a, a,
-                                   left_int_[i-1],
-                                   left_int_[i], alpha);
-    return li;
-  }
 
-  return -1;
+    assert(i>0);
+    return linear_interpolate(last_a, a,
+                              left_int_[i-1],
+                              left_int_[i], alpha);
+  }
+  return -1.0;
 }
 
-//Linearly interpolate left interval length
+
+//: Linearly interpolate left interval length
 double strk_epi_seg::right_ds(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
-  double last_a;
+  double last_a = 0.0; // dummy initialisation to avoid compiler warning
   int n = int_alpha_.size();
-  for (int i = 0; i<n; i++)
+  for (int i=0; i<n; i++)
   {
     double a = int_alpha_[i];
     if (a<alpha)
@@ -303,22 +306,23 @@ double strk_epi_seg::right_ds(double alpha)
     }
     if (a==alpha)
       return right_ds_[i];
-    double rds = linear_interpolate(last_a, a,
-                                    right_ds_[i-1],
-                                    right_ds_[i], alpha);
-    return rds;
-  }
 
-  return -1;
+    assert(i>0);
+    return linear_interpolate(last_a, a,
+                              right_ds_[i-1],
+                              right_ds_[i], alpha);
+  }
+  return -1.0;
 }
 
-//Linearly interpolate right intensity
+
+//: Linearly interpolate right intensity
 double strk_epi_seg::right_int(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
-  double last_a;
+  double last_a = 0.0; // dummy initialisation to avoid compiler warning
   int n = int_alpha_.size();
-  for (int i = 0; i<n; i++)
+  for (int i=0; i<n; i++)
   {
     double a = int_alpha_[i];
     if (a<alpha)
@@ -328,16 +332,17 @@ double strk_epi_seg::right_int(double alpha)
     }
     if (a==alpha)
       return right_int_[i];
-    double ri = linear_interpolate(last_a, a,
-                                   right_int_[i-1],
-                                   right_int_[i], alpha);
-    return ri;
+
+    assert(i>0);
+    return linear_interpolate(last_a, a,
+                              right_int_[i-1],
+                              right_int_[i], alpha);
   }
-  return -1;
+  return -1.0;
 }
 
 
-//Compute extremal intensity values and intensity statistics
+//: Compute extremal intensity values and intensity statistics
 void strk_epi_seg::compute_int_values()
 {
   int n = int_alpha_.size();
@@ -530,7 +535,7 @@ double strk_epi_seg::match(const double a,
   return tot;
 }
 
-vcl_ostream&  operator<<(vcl_ostream& s, strk_epi_seg const& epi_seg)
+vcl_ostream& operator<<(vcl_ostream& s, strk_epi_seg const& epi_seg)
 {
   int n = epi_seg.n_pts();
   strk_epi_seg& es = const_cast<strk_epi_seg &>(epi_seg);//cast away const
