@@ -176,7 +176,7 @@ static double linear_interpolate(double xm, double xp, double ym,
 double bmrf_epi_seg::s(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
-  double last_a;
+  double last_a = this->min_alpha();
   int n = this->n_pts();
   for (int i = 0; i<n; i++)
   {
@@ -186,7 +186,7 @@ double bmrf_epi_seg::s(double alpha)
       last_a = a;
       continue;
     }
-    if (a==alpha)
+    else if (a==alpha)
       return seg_[i]->s();
 
     double s = linear_interpolate(last_a, a, seg_[i-1]->s(),
@@ -200,7 +200,7 @@ double bmrf_epi_seg::s(double alpha)
 double bmrf_epi_seg::tan_ang(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
-  double last_a;
+  double last_a = this->min_alpha();
   int n = this->n_pts();
   for (int i = 0; i<n; i++)
   {
@@ -210,7 +210,7 @@ double bmrf_epi_seg::tan_ang(double alpha)
       last_a = a;
       continue;
     }
-    if (a==alpha)
+    else if (a==alpha)
       return seg_[i]->tan_ang();
 
     double ta = linear_interpolate(last_a, a,
@@ -241,7 +241,7 @@ void bmrf_epi_seg::add_int_sample(const double alpha,
 double bmrf_epi_seg::left_ds(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
-  double last_a;
+  double last_a = this->min_alpha();
   int n = int_alpha_.size();
   for (int i = 0; i<n; i++)
   {
@@ -251,7 +251,7 @@ double bmrf_epi_seg::left_ds(double alpha)
       last_a = a;
       continue;
     }
-    if (a==alpha)
+    else if (a==alpha)
       return left_ds_[i];
     double lds = linear_interpolate(last_a, a,
                                     left_ds_[i-1],
@@ -267,7 +267,7 @@ double bmrf_epi_seg::left_ds(double alpha)
 double bmrf_epi_seg::left_int(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
-  double last_a;
+  double last_a = this->min_alpha();
   int n = int_alpha_.size();
   for (int i = 0; i<n; i++)
   {
@@ -277,7 +277,7 @@ double bmrf_epi_seg::left_int(double alpha)
       last_a = a;
       continue;
     }
-    if (a==alpha)
+    else if (a==alpha)
       return left_int_[i];
     double li = linear_interpolate(last_a, a,
                                    left_int_[i-1],
@@ -292,7 +292,7 @@ double bmrf_epi_seg::left_int(double alpha)
 double bmrf_epi_seg::right_ds(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
-  double last_a;
+  double last_a = this->min_alpha();
   int n = int_alpha_.size();
   for (int i = 0; i<n; i++)
   {
@@ -302,7 +302,7 @@ double bmrf_epi_seg::right_ds(double alpha)
       last_a = a;
       continue;
     }
-    if (a==alpha)
+    else if (a==alpha)
       return right_ds_[i];
     double rds = linear_interpolate(last_a, a,
                                     right_ds_[i-1],
@@ -317,7 +317,7 @@ double bmrf_epi_seg::right_ds(double alpha)
 double bmrf_epi_seg::right_int(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
-  double last_a;
+  double last_a = this->min_alpha();
   int n = int_alpha_.size();
   for (int i = 0; i<n; i++)
   {
@@ -327,7 +327,7 @@ double bmrf_epi_seg::right_int(double alpha)
       last_a = a;
       continue;
     }
-    if (a==alpha)
+    else if (a==alpha)
       return right_int_[i];
     double ri = linear_interpolate(last_a, a,
                                    right_int_[i-1],
@@ -539,56 +539,58 @@ void bmrf_epi_seg::b_write(vsl_b_ostream &os) const
 
   int n = seg_.size();
   vsl_b_write(os, n);
-  for(int i = 0; i<n; i++)
+  for (int i = 0; i<n; i++)
     seg_[i]->b_write(os);
 
   int m = int_alpha_.size();
   vsl_b_write(os, m);
-  for(int i = 0; i<m; i++)
-    {
-      vsl_b_write(os, int_alpha_[i]);
-      vsl_b_write(os, left_ds_[i]);
-      vsl_b_write(os, left_int_[i]);
-      vsl_b_write(os, right_ds_[i]);
-      vsl_b_write(os, right_int_[i]);
-    }
+  for (int i = 0; i<m; i++)
+  {
+    vsl_b_write(os, int_alpha_[i]);
+    vsl_b_write(os, left_ds_[i]);
+    vsl_b_write(os, left_int_[i]);
+    vsl_b_write(os, right_ds_[i]);
+    vsl_b_write(os, right_int_[i]);
+  }
 }
 
 //: Binary load self from stream.
 void bmrf_epi_seg::b_read(vsl_b_istream &is)
 {
-  if(!is)
+  if (!is)
     return;
   short ver;
   vsl_b_read(is, ver);
   switch(ver)
   {
-  case 1:
+   case 1:
     {
       int n=0, m=0;
       vsl_b_read(is, n);
       seg_.clear();
-      for(int i = 0; i<n; i++)
-        {
-          bmrf_epi_point_sptr ep = new bmrf_epi_point();
-          ep->b_read(is);
-          this->seg_.push_back(ep);
-        }
+      for (int i=0; i<n; i++)
+      {
+        bmrf_epi_point_sptr ep = new bmrf_epi_point();
+        ep->b_read(is);
+        this->seg_.push_back(ep);
+      }
       vsl_b_read(is, m);
       this->int_alpha_.resize(m);
       this->left_ds_.resize(m);
       this->left_int_.resize(m);
       this->right_ds_.resize(m);
       this->right_int_.resize(m);
-      for(int i = 0; i<m; i++)
-        {
-          vsl_b_read(is, this->int_alpha_[i]);
-          vsl_b_read(is, this->left_ds_[i]);
-          vsl_b_read(is, this->left_int_[i]);
-          vsl_b_read(is, this->right_ds_[i]);
-          vsl_b_read(is, this->right_int_[i]);
-        }
+      for (int i=0; i<m; i++)
+      {
+        vsl_b_read(is, this->int_alpha_[i]);
+        vsl_b_read(is, this->left_ds_[i]);
+        vsl_b_read(is, this->left_int_[i]);
+        vsl_b_read(is, this->right_ds_[i]);
+        vsl_b_read(is, this->right_int_[i]);
+      }
     }
+   default:
+    assert(!"unknown version");
   }
 }
 //: Return IO version number;
