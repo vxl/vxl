@@ -5,7 +5,7 @@
 
 typedef vcl_multimap<int, double, vcl_less<int> > mymap;
 
-vcl_ostream &operator<<(vcl_ostream &s, mymap::value_type const &x) 
+vcl_ostream &operator<<(vcl_ostream &s, mymap::value_type const &x)
 {
   return s << '(' << x.first << ',' << x.second << ')';
 }
@@ -24,9 +24,9 @@ int main()
   vcl_cout << "the whole container:" << vcl_endl;
   for (mymap::iterator p = b; p != e; ++p)
     vcl_cout << *p << vcl_endl;
-  
+
   vcl_cout << "lower_bound() and upper_bound():" << vcl_endl;
-  for (int k=-1; k<=4; ++k) {  
+  for (int k=-1; k<=4; ++k) {
     vcl_cout << "k=" << k << vcl_endl;
 
     mymap::iterator lo = m.lower_bound(k);
@@ -43,6 +43,6 @@ int main()
     else vcl_cout << *hi;
     vcl_cout << vcl_endl;
   }
-  
+
   return 0;
 }

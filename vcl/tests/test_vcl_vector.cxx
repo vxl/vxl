@@ -20,7 +20,7 @@ int frurk(vcl_vector<int> const &a,
 }
 
 int main()
-{  
+{
   {
     typedef vcl_vector<int> container;
     container m;
