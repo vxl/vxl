@@ -12,17 +12,7 @@
 //
 // .SECTION Modifications
 //     000217 AWF Initial version.
-
-#ifndef vil_rgb_byte_dont_warn
-// this message may be a bit too loud...
-#ifdef __GNUC__
-# warning "*******************************************************************"
-# warning "*                                                                 *"
-# warning "* vil_rgb_byte is deprecated. Use vil_rgb<unsigned char> instead. *"
-# warning "*                                                                 *"
-# warning "*******************************************************************"
-#endif
-#endif
+//     001206 FSM make this identical to vil_rgb<vil_byte> to avoid confusion
 
 #include <vil/vil_byte.h>
 #include <vil/vil_rgb.h>
