@@ -32,11 +32,13 @@ class vil2_crop_image_data : public vil2_image_data
 
   virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, 
                                                   unsigned j0, unsigned nj) const {
-    return gi_->get_copy_view(i0+i0_, j0+j0_, ni, nj);
+    if (i0 + ni > ni_ || j0 + nj > nj_) return 0;
+    return gi_->get_copy_view(i0+i0_, ni, j0+j0_, nj);
   }
 
   virtual vil2_image_view_base_sptr get_view(unsigned i0, unsigned ni,
                                              unsigned j0, unsigned nj) const {
+    if (i0 + ni > ni_ || j0 + nj > nj_) return 0;
     return gi_->get_view(j0+j0_, ni, j0+j0_, nj);
   }
 
