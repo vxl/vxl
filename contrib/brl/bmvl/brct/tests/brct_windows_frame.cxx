@@ -26,7 +26,7 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vil1/vil1_load.h>
-
+#define JOE_RECON
 //static live_video_manager instance
 brct_windows_frame *brct_windows_frame::instance_ = 0;
 
@@ -112,8 +112,20 @@ void brct_windows_frame::init()
   this->add_child(shell);
 
   // set a kalman filter
-  data_file_name_ = "data/par.txt";
+  //data_file_name_ = "c:/videos/SUV2/track_data/par.txt";
+  //data_file_name_ = "c:/videos/SUV3/track_data/par.txt";
+  //  data_file_name_ = "c:/videos/VWBus/track_data/par.txt";
+  //data_file_name_ = "c:/videos/PoliceCar2/track_data/par.txt";
+  //  data_file_name_ = "c:/vxl/vxl/contrib/brl/bmvl/brct/tests/par.txt";
+  data_file_name_ = "";
+#ifdef JOE_RECON
+  kalman_ = 0;
+  epi_recon_ = new brct_epi_reconstructor(data_file_name_.c_str());
+#else
   kalman_ = new kalman_filter(data_file_name_.c_str());
+  epi_recon_ = 0;
+#endif
+  show_epipolar_lines_=false;
   e_ = 0;
 }
 
@@ -140,11 +152,15 @@ void brct_windows_frame::clean_up()
   if (kalman_)
     delete kalman_;
 
+  if (epi_recon_)
+    delete epi_recon_;
+
   if (e_)
     delete e_;
 }
 
-void brct_windows_frame::add_curve2d(vcl_vector<vgl_point_2d<double> > &pts)
+void brct_windows_frame::add_curve2d(vcl_vector<vgl_point_2d<double> > &pts,
+                                     float r, float g, float b)
 {
   int size = pts.size();
   assert(size > 1);
@@ -155,12 +171,16 @@ void brct_windows_frame::add_curve2d(vcl_vector<vgl_point_2d<double> > &pts)
     vgl_point_2d<double>& s = pts[i];
 #if 1
     vgui_soview2D *so = instance_->easy_2d_->add_point(s.x(), s.y());
+    so->set_point_size(5);
+    so->set_colour(r, g, b);
 #else
     vgl_point_2d<double>& e = i<size-1 ? pts[i+1] : pts[0];
     vgui_soview2D* so = instance_->easy_2d_->add_line(s.x(), s.y(), e.x(), e.y());
 #endif
+#if 0
     so->set_point_size(2);
     so->set_colour(1, 0, 0);
+#endif
     curves_2d_[i] = so;
   }
 
@@ -217,6 +237,27 @@ void brct_windows_frame::remove_curve3d()
   this->post_redraw();
 }
 
+
+void brct_windows_frame::
+show_epipolar_lines(vcl_vector<vgl_point_2d<double> > const& c2d)
+{
+  vgl_point_2d<double> e;
+  if(kalman_)
+    e = kalman_->get_cur_epipole();
+  else
+    e = epi_recon_->get_cur_epipole();
+  double ex = e.x(), ey = e.y();
+  int n =0;
+  for(vcl_vector<vgl_point_2d<double> >::const_iterator pit = c2d.begin();
+      pit != c2d.end(); pit++)
+    {
+      double px = (*pit).x(), py = (*pit).y();
+      easy_2d_->set_foreground(1, 1, 0);
+      easy_2d_->add_infinite_line( -(py-ey), px-ex, ex*py - px*ey);
+      easy_2d_->set_foreground(1, 0, 0);
+      n++;
+    }
+}
 void brct_windows_frame::init_kalman()
 {
   vcl_vector<vgl_point_2d<double> > c2d;
@@ -227,21 +268,41 @@ void brct_windows_frame::init_kalman()
     init_epipole();
   }
 
-  if (kalman_ == 0)
-    vcl_cout<<"brct_windows_frame::kalman_ not created yet\n";
-  else
+  if (!kalman_&&!epi_recon_)
+    {
+      vcl_cout<<"brct_windows_frame::kalman or recon not created yet\n";
+      return;
+    }
+  if(kalman_)
     kalman_->init();
+  else
+    epi_recon_->init();
 
   // add the curve in the first view
-  c2d = kalman_->get_pre_observes();
-  add_curve2d(c2d);
+  if(kalman_)
+    c2d = kalman_->get_pre_observes();
+  else
+    c2d = epi_recon_->get_joe_pre_observes();
+
+  add_curve2d(c2d, 0.0, 1.0, 0.0);
+  if(show_epipolar_lines_)
+    this->show_epipolar_lines(c2d);
 
   //update the display.
-  bugl_curve_3d c3d = kalman_->get_curve_3d();
+  bugl_curve_3d c3d;
+  if(kalman_)
+    c3d = kalman_->get_curve_3d();
+  else
+    c3d = epi_recon_->get_curve_3d();
+
   add_curve3d(c3d);
 
   // add the curve in the second view
-  c2d = kalman_->get_cur_observes();
+  if(kalman_)
+    c2d = kalman_->get_cur_observes();
+  else
+    c2d = epi_recon_->get_joe_cur_observes();
+
   add_curve2d(c2d);
 
   instance_->post_redraw();
@@ -250,14 +311,29 @@ void brct_windows_frame::init_kalman()
 void brct_windows_frame::go()
 {
   remove_curve3d();
-  kalman_->inc();
+  
 
   // add current data
-  vcl_vector<vgl_point_2d<double> > c2d = kalman_->get_cur_observes();
+  vcl_vector<vgl_point_2d<double> > c2d;
+  if(kalman_)
+  {
+    c2d = kalman_->get_cur_observes();
+	kalman_->inc();
+  }
+  else
+  {
+    c2d = epi_recon_->get_joe_cur_observes();
+    epi_recon_->inc();
+  }
   add_curve2d(c2d);
 
-  //add 3D resoult
-  bugl_curve_3d c3d = kalman_->get_curve_3d();
+  //add 3D result
+  bugl_curve_3d c3d;
+  if(kalman_)
+    c3d = kalman_->get_curve_3d();
+  else
+    c3d = epi_recon_->get_curve_3d();
+
   add_curve3d(c3d);
 
   show_epipole();
@@ -266,7 +342,12 @@ void brct_windows_frame::go()
 
 void brct_windows_frame::show_predicted_curve()
 {
-  vnl_matrix<double> pts = kalman_->get_predicted_curve();
+  vnl_matrix<double> pts;
+  if(kalman_)
+    pts = kalman_->get_predicted_curve();
+  else
+    pts = epi_recon_->get_predicted_curve();
+
   int num_points = pts.columns();
   vcl_vector<vgl_point_2d<double> > curve(num_points);
 
@@ -315,13 +396,23 @@ void brct_windows_frame::add_next_observes(vcl_vector<vgl_point_2d<double> >&pts
 
 void brct_windows_frame::show_next_observes()
 {
-  vcl_vector<vgl_point_2d<double> > c2d = kalman_->get_next_observes();
+  vcl_vector<vgl_point_2d<double> > c2d;
+  if(kalman_)
+    c2d = kalman_->get_next_observes();
+  else
+    c2d = epi_recon_->get_joe_next_observes();
+
   add_next_observes(c2d);
 }
 
 void brct_windows_frame::show_back_projection()
 {
-  vcl_vector<vnl_matrix<double> > c2d = kalman_->get_back_projection();
+  vcl_vector<vnl_matrix<double> > c2d;
+  if(kalman_)
+    c2d = kalman_->get_back_projection();
+  else
+    c2d = epi_recon_->get_back_projection();
+
   instance_->easy_2d_->set_foreground(0, 0, 1);
 
   int framenum = c2d.size();
@@ -350,6 +441,18 @@ void brct_windows_frame::show_back_projection()
   instance_->post_redraw();
 }
 
+void brct_windows_frame::print_motion_array()
+{
+  if(kalman_)
+  {
+	vcl_cout << "Not Implemented\n";
+    return;
+  }
+  else
+    epi_recon_->print_motion_array();
+
+}
+
 void brct_windows_frame::load_image()
 {
   bool greyscale = false;
@@ -375,7 +478,12 @@ void brct_windows_frame::load_image()
 void brct_windows_frame::show_epipole()
 {
   instance_->easy_2d_->set_foreground(1, 0, 0);
-  vgl_point_2d<double> e = kalman_->get_cur_epipole();
+  vgl_point_2d<double> e;
+  if(kalman_)
+    e = kalman_->get_cur_epipole();
+  else
+    e = epi_recon_->get_cur_epipole();
+
   vcl_cout<<"\n epipole ("<<e.x() <<'\t'<<e.y()<<")\n";
   instance_->easy_2d_->add_point(e.x(), e.y());
 }
@@ -393,7 +501,10 @@ void brct_windows_frame::init_epipole()
   vgl_point_2d<double> pt(epipole);
   e_ -> set(pt.x(), pt.y());
 
-  kalman_->init_epipole(pt.x(), pt.y());
+  if(kalman_)
+    kalman_->init_epipole(pt.x(), pt.y());
+  else
+    epi_recon_->init_epipole(pt.x(), pt.y());
 
   vcl_stringstream ss;
   ss<<pt.x()<<' '<<pt.y();
@@ -459,11 +570,72 @@ void brct_windows_frame::load_status()
       e_ = new vgl_point_2d<double>;
     e_ -> set(x, y);
 
+  if(kalman_)
     kalman_->init_epipole(x, y);
+  else
+    epi_recon_->init_epipole(x, y);
+
     vcl_stringstream ss;
     ss << x <<' '<<y;
     status_info_ += ss.str();
   }
+}
+
+static write_vrml_header(vcl_ofstream& str)
+{
+  str << "#VRML V2.0 utf8 \n";
+  str << "Background {  \n";
+  str << "  skyColor [ 1 1 1 ]\n";
+  str << "  groundColor [ 1 1 1 ]\n";
+  str << "}\n";
+  str << "PointLight {\n";
+  str << "  on FALSE\n";
+  str << "  intensity 1 \n";
+  str << "ambientIntensity 0 \n";
+  str << "color 1 1 1 \n";
+  str << "location 0 0 0\n"; 
+  str << "attenuation 1 0 0 \n";
+  str << "radius 100  \n";
+  str << "}\n";
+  str << "Shape {\n";
+  str << " #make the points white\n";
+  str << "  appearance Appearance {\n";
+  str << "   material Material { emissiveColor 1 0 0 }\n";
+  str << " } \n";
+  str << " geometry PointSet {\n";
+  str << "  coord Coordinate{\n";
+  str << "   point[\n";
+}
+static write_vrml_trailer(vcl_ofstream& str)
+{
+str << "  ] \n";
+str << "  }\n";
+str << "       color Color { color [ 1 1 1 ] }\n";
+str << "  }\n";
+str << " }\n";
+}
+
+void brct_windows_frame::write_results_file()
+{
+  vgui_dialog save_file_dlg("save vrml file");
+  static vcl_string filename = "";
+  static vcl_string ext = "*.*";
+  save_file_dlg.file("file name", ext, filename);
+
+  if(!save_file_dlg.ask())
+    return ;
+
+  if(filename == "")
+    return;
+	
+  if(kalman_)
+  { 
+	  vcl_cout << "Not Implemented\n";
+	  return;
+  }
+  else
+    epi_recon_->write_results(filename.c_str());
+
 }
 
 void brct_windows_frame::write_vrml_file()
@@ -476,46 +648,28 @@ void brct_windows_frame::write_vrml_file()
   if (!save_file_dlg.ask())
     return;
 
-  if (filename != "")
-  {
-    vcl_ofstream out(filename.c_str());
+  if(filename == "")
+    return;
+  
+  vcl_ofstream out(filename.c_str());
+  if(!out)
+    return;
+  write_vrml_header(out);
+ bugl_curve_3d c3d;
+  if(kalman_)
+   c3d = kalman_->get_curve_3d();
+  else
+    c3d = epi_recon_->get_curve_3d();
 
-    bugl_curve_3d c3d = kalman_->get_curve_3d();
-    int size = c3d.get_num_points();
-
-    //write to file
-    out <<  "#VRML V2.0 utf8\n"
-        <<  "Background {\n"
-        <<  "  skyColor [ 1 1 1 ]\n"
-        <<  "  groundColor [ 1 1 1 ]\n"
-        <<  "}\n"
-        <<  "PointLight {\n"
-        <<  "  on FALSE\n"
-        <<  "  intensity 1\n"
-        <<  "ambientIntensity 0\n"
-        <<  "color 1 1 1\n"
-        <<  "location 0 0 0\n"
-        <<  "attenuation 1 0 0\n"
-        <<  "radius 100\n"
-        <<  "}\n"
-        <<  "Shape {\n"
-        <<  " #make the points white\n"
-        <<  "  appearance Appearance {\n"
-        <<  "   material Material { emissiveColor 1 0 0 }\n"
-        <<  " }\n"
-        <<  " geometry PointSet {\n"
-        <<  "  coord Coordinate{\n"
-        <<  "   point[\n";
-
-    for (int i=0; i<size; i++) {
-      out<<"\t\t\t"<<c3d.get_point(i)->x()<<' '<<c3d.get_point(i)->y()<<' '<<c3d.get_point(i)->z()<<",\n";
+  int size = c3d.get_num_points();
+  vcl_vector<vgl_point_3d<double> > pts(size);
+    for(int i=0; i<size; i++){
+      if(!c3d.get_point(i)->exists())
+        continue;//JLM
+      pts[i].set(c3d.get_point(i)->x(), c3d.get_point(i)->y(), c3d.get_point(i)->z());
+      out << -pts[i].x() << " " << pts[i].y() << " " << pts[i].z() << "\n";
     }
-    out <<  "   ]\n"
-        <<  "  }\n"
-        <<  "      color Color { color [ 1 1 1 ] }\n"
-        <<  " }\n"
-        <<  "}\n";
-  }
-  return;
+    
+    write_vrml_trailer(out);
+    out.close();
 }
-

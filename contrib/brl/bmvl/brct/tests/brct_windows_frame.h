@@ -21,6 +21,7 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgui/vgui_soview2D.h>
 #include <bmvl/brct/kalman_filter.h>
+#include <bmvl/brct/brct_epi_reconstructor.h>
 #include <vil1/vil1_image.h>
 
 //: A manager for displaying segmentation results.
@@ -31,9 +32,11 @@ class brct_windows_frame : public vgui_wrapper_tableau
   void save_status();
   void load_status();
   void write_vrml_file();
+  void write_results_file();
 
   // methods for debug menu callbacks
   void show_epipole();
+  void display_epipolar_lines(){show_epipolar_lines_=true;}
   void load_image();
   void show_back_projection();
   void show_next_observes();
@@ -47,7 +50,8 @@ class brct_windows_frame : public vgui_wrapper_tableau
   // methods for run menu callbacks
   void creat_line();
   void quit();
-  void add_curve2d(vcl_vector<vgl_point_2d<double> > &pts);
+  void add_curve2d(vcl_vector<vgl_point_2d<double> > &pts, 
+                   float r = 1.0, float g = 0.0, float b = 0.0);
   void remove_curve2d();
   void remove_debug_info();
 
@@ -60,7 +64,8 @@ class brct_windows_frame : public vgui_wrapper_tableau
 
   //: the virtual handle function
   virtual bool handle(const vgui_event&);
-
+  //: quick kludge to see how grouping could work
+  void print_motion_array();
  protected:
   //internal utility methods
 
@@ -70,6 +75,8 @@ class brct_windows_frame : public vgui_wrapper_tableau
   //: it clean the memory allocated by init. it should be called by quit()
   void clean_up();
 
+  //:show all epipolar lines for a 2-d curve
+  void show_epipolar_lines(vcl_vector<vgl_point_2d<double> > const& c2d);
  private:
   //: get track of all the 3d points added into 3d tableau
   vcl_vector<vgui_soview3D* > curves_3d_;
@@ -88,6 +95,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
 
   //: kalman filter
   kalman_filter* kalman_;
+  brct_epi_reconstructor* epi_recon_;
   bgui_picker_tableau_sptr tab_picker_;
   vgui_composite_tableau_sptr tab_cps_;
   vgui_image_tableau_sptr img_2d_;
@@ -98,6 +106,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
   vgui_grid_tableau_sptr grid_;
   vcl_string data_file_name_;
 
+  bool show_epipolar_lines_;
   //: inital epipole
   vcl_vector<vgl_homg_line_2d<double> > lines_;
   vgl_point_2d<double> *e_;

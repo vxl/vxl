@@ -10,6 +10,7 @@ SET(brct_sources
     brct_algos.h    brct_algos.cpp
     kalman_filter.h kalman_filter.cpp
     brct_structure_estimator.h brct_structure_estimator.cxx
+    brct_epi_reconstructor.h brct_epi_reconstructor.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates brct_sources)

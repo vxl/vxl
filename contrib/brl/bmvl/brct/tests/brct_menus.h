@@ -20,13 +20,17 @@ class brct_menus
   static void write_vrml_file();
   static void create_line();
   static void show_epipole();
-  static void load_image();
+  static void display_epipolar_lines_callback();
+  static void load_image_callback();
   static void show_back_projection();
   static void remove_debug_info();
   static void show_next_observes();
   static void show_predicted_curves();
   static void init_kalman_callback();
   static void kalman_go_callback();
+  static void write_vrml_callback();
+  static void write_results_callback();
+  static void print_motion_array_callback();
   static void quit_callback();
   static vgui_menu get_menu();
  private:
