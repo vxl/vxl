@@ -31,7 +31,7 @@
 // @}
 
 bool
-PMatrixComputeLinear::compute (vcl_vector<HomgPoint2D>& points1, vcl_vector<HomgPoint3D>& points2, PMatrix *P)
+PMatrixComputeLinear::compute (vcl_vector<HomgPoint2D> const& points1, vcl_vector<HomgPoint3D> const& points2, PMatrix *P)
 {
   assert(points1.size() >= 6);
   assert(points2.size() == points1.size());
@@ -40,34 +40,34 @@ PMatrixComputeLinear::compute (vcl_vector<HomgPoint2D>& points1, vcl_vector<Homg
   vnl_matrix<double> a_matrix(npts * 2, 12);
 
   for (unsigned i = 0; i < npts; i++) {
-    const HomgPoint2D& u = points1[i];
-    const HomgPoint3D& X = points2[i];
+    HomgPoint2D const& u = points1[i];
+    HomgPoint3D const& X = points2[i];
     
     unsigned row_index = i * 2;
-    a_matrix(row_index, 0) = X.get_x() * u.get_w();
-    a_matrix(row_index, 1) = X.get_y() * u.get_w();
-    a_matrix(row_index, 2) = X.get_z() * u.get_w();
-    a_matrix(row_index, 3) = X.get_w() * u.get_w();
-    a_matrix(row_index, 4) = 0;
-    a_matrix(row_index, 5) = 0;
-    a_matrix(row_index, 6) = 0;
-    a_matrix(row_index, 7) = 0;
-    a_matrix(row_index, 8) = -X.get_x() * u.get_x();
-    a_matrix(row_index, 9) = -X.get_y() * u.get_x();
+    a_matrix(row_index,  0) = X.get_x() * u.get_w();
+    a_matrix(row_index,  1) = X.get_y() * u.get_w();
+    a_matrix(row_index,  2) = X.get_z() * u.get_w();
+    a_matrix(row_index,  3) = X.get_w() * u.get_w();
+    a_matrix(row_index,  4) = 0;
+    a_matrix(row_index,  5) = 0;
+    a_matrix(row_index,  6) = 0;
+    a_matrix(row_index,  7) = 0;
+    a_matrix(row_index,  8) = -X.get_x() * u.get_x();
+    a_matrix(row_index,  9) = -X.get_y() * u.get_x();
     a_matrix(row_index, 10) = -X.get_z() * u.get_x();
     a_matrix(row_index, 11) = -X.get_w() * u.get_x();
 
     row_index = i * 2 + 1;
-    a_matrix(row_index, 0) = 0;
-    a_matrix(row_index, 1) = 0;
-    a_matrix(row_index, 2) = 0;
-    a_matrix(row_index, 3) = 0;
-    a_matrix(row_index, 4) = X.get_x() * u.get_w();
-    a_matrix(row_index, 5) = X.get_y() * u.get_w();
-    a_matrix(row_index, 6) = X.get_z() * u.get_w();
-    a_matrix(row_index, 7) = X.get_w() * u.get_w();
-    a_matrix(row_index, 8) = -X.get_x() * u.get_y();
-    a_matrix(row_index, 9) = -X.get_y() * u.get_y();
+    a_matrix(row_index,  0) =  0;
+    a_matrix(row_index,  1) =  0;
+    a_matrix(row_index,  2) =  0;
+    a_matrix(row_index,  3) =  0;
+    a_matrix(row_index,  4) =  X.get_x() * u.get_w();
+    a_matrix(row_index,  5) =  X.get_y() * u.get_w();
+    a_matrix(row_index,  6) =  X.get_z() * u.get_w();
+    a_matrix(row_index,  7) =  X.get_w() * u.get_w();
+    a_matrix(row_index,  8) = -X.get_x() * u.get_y();
+    a_matrix(row_index,  9) = -X.get_y() * u.get_y();
     a_matrix(row_index, 10) = -X.get_z() * u.get_y();
     a_matrix(row_index, 11) = -X.get_w() * u.get_y();
   }
@@ -78,10 +78,4 @@ PMatrixComputeLinear::compute (vcl_vector<HomgPoint2D>& points1, vcl_vector<Homg
   P->set(svd.nullvector().data_block());
 
   return true;
-}
-
-bool PMatrixComputeLinear::compute (PMatrix *)
-{
-  assert(!"PMatrixComputeLinear::compute isn't a good interface\n");
-  return false;
 }
