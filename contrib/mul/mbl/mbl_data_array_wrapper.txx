@@ -19,6 +19,17 @@ mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const T* data, int n)
   set(data,n);
 }
 
+//: Constructor
+// Sets up object to wrap a vcl_vector.
+// The data must be kept in scope, this does not take a copy.
+template<class T>
+mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const vcl_vector<T > &data)
+{
+  set(&data[0], data.size());
+}
+
+
+
 //: Initialise to return elements from data[i]
 template<class T>
 void mbl_data_array_wrapper<T>::set(const T* data, int n)

@@ -5,6 +5,7 @@
 
 #include <vnl/vnl_test.h>
 #include <mbl/mbl_mz_random.h>
+#include <mbl/mbl_k_means.h>
 
 void test_mz_random()
 {

@@ -10,6 +10,7 @@
 // \brief A wrapper to provide access to C-arrays of objects
 
 #include <mbl/mbl_data_wrapper.h>
+#include <vcl_vector.h>
 
 //: A wrapper to provide access to C-arrays of objects
 template<class T>
@@ -26,6 +27,11 @@ public:
   // Sets up object to return n examples beginning at data[0].
   // The data must be kept in scope, this does not take a copy.
   mbl_data_array_wrapper(const T* data, int n);
+
+  //: Constructor
+  // Sets up object to wrap a vcl_vector.
+  // The data must be kept in scope, this does not take a copy.
+  mbl_data_array_wrapper(const vcl_vector<T > &data);
 
   //: Initialise to return elements from data[i]
   // Sets up object to return n examples beginning at data[0].

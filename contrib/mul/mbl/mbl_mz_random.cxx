@@ -201,13 +201,13 @@ int mbl_mz_random::lrand32(int lower, int upper, int &count)
     return lower + ran/denom;
   }
 
-double mbl_mz_random::drand32(double lower = 0.0, double upper = 1.0)
+double mbl_mz_random::drand32(double lower, double upper)
   {
     assert(lower < upper);
     return  (double(lrand32())/0xffffffff)*(upper-lower) + lower;
   }
 
-double mbl_mz_random::drand64(double lower = 0.0, double upper = 1.0)
+double mbl_mz_random::drand64(double lower, double upper)
   {
     assert(lower < upper);
     return  (double(lrand32())/0xffffffff + double(lrand32())/(double(0xffffffff)*double(0xffffffff)))*(upper-lower) + lower;

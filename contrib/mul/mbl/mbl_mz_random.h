@@ -90,22 +90,41 @@ class mbl_mz_random
       //  intialized it, or last called a 'reseed'.
     void restart();
 
-      //: Generates a random unsigned long.
+      //: Generates a random unsigned 32-bit number.
     unsigned long lrand32();
 
       //: Generates a random unsigned long in [a,b]
     int lrand32(int a, int b);
 
+    //: Generates a random unsigned long in [0,b]
+    int lrand32(int b) {return lrand32(0, b);}
+
       //: Generates a random unsigned long in [a,b]
     int lrand32(int a, int b, int&);
 
-      //:  Generates a random double in the range a <= x <= ba with 32 bit randomness.
+      //:  Generates a random double in the range a <= x <= b with 32 bit randomness.
       //   drand32(1,0) is random down to about the 10th decimal place.
     double drand32(double a, double b);
 
+      //:  Generates a random double in the range 0 <= x <= b with 32 bit randomness.
+      //   drand32(1.0) is random down to about the 10th decimal place.
+    double drand32(double b) {return drand32(0.0, b);}
+
+      //:  Generates a random double in the range 0 <= x <= 1 with 32 bit randomness.
+      //   drand32() is random down to about the 10th decimal place.
+    double drand32() {return drand32(0.0, 1.0);}
+
       //: Generates a random double in the range a <= x <= b with 64 bit randomness,
-      //  Completely random down to the accuracy of a double.
+      //  Completely random down to the accuracy of an IEEE double.
     double drand64(double a, double b);
+
+      //: Generates a random double in the range 0 <= x <= b with 64 bit randomness,
+      //  Completely random down to the accuracy of an IEEE double.
+    double drand64(double b) {return drand64(0.0, b);}
+
+      //: Generates a random double in the range 0 <= x <= 1 with 64 bit randomness,
+      //  Completely random down to the accuracy of an IEEE double.
+    double drand64() {return drand64(0.0, 1.0);}
 
       //: Random value from a unit normal distribution about zero
       // Uses a drand32() as its underlying generator.

@@ -147,6 +147,14 @@ SOURCE=.\mbl_data_array_wrapper.txx
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\mbl_data_collector+vnl_vector+double--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_data_collector_base.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\mbl_data_wrapper+vnl_vector+double--.cxx"
 # End Source File
 # Begin Source File
@@ -159,6 +167,10 @@ SOURCE=.\mbl_gamma.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\mbl_k_means.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\mbl_matrix_products.cxx
 # End Source File
 # Begin Source File
@@ -168,6 +180,10 @@ SOURCE=.\mbl_matxvec.cxx
 # Begin Source File
 
 SOURCE=.\mbl_mz_random.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_binary_loader+mbl_data_collector_base-.cxx"
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -183,11 +199,23 @@ SOURCE=.\mbl_data_array_wrapper.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\mbl_data_collector.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_data_collector_base.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\mbl_data_wrapper.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\mbl_gamma.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_k_means.h
 # End Source File
 # Begin Source File
 
