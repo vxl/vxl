@@ -401,7 +401,7 @@ void vnl_vector_test_conversion() {
     TEST ("(const int*) m.data_block", check, true);
 
     typedef int block [12];
-    block& v2 = *((block*) data);
+    const block& v2 = *((const block*) data);
     {
       check = true;
       for (i = 0; i < 12; i++)
