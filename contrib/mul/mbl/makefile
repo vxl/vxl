@@ -30,6 +30,7 @@ SOURCES += mbl_select_n_from_m.cxx
 SOURCES += mbl_parse_block.cxx
 SOURCES += mbl_correspond_points.cxx
 SOURCES += mbl_stats_nd.cxx
+SOURCES += mbl_table.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_data_array_ptr_wrapper.txx
