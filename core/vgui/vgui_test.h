@@ -15,7 +15,7 @@ class vgui_test_thingy2d : public vgui_tableau {
 public:
   vgui_test_thingy2d();
   bool handle(vgui_event const &);
-  vcl_string type_name() const { return "vgui_test::thingy2d"; }
+  vcl_string type_name() const { return "vgui_test_thingy2d"; }
 protected:
   ~vgui_test_thingy2d() { }
 };
@@ -31,7 +31,7 @@ class vgui_test_thingy3d : public vgui_tableau {
 public:
   vgui_test_thingy3d();
   bool handle(vgui_event const &);
-  vcl_string type_name() const { return "vgui_test::thingy3d"; }
+  vcl_string type_name() const { return "vgui_test_thingy3d"; }
 protected:
   ~vgui_test_thingy3d() { }
 };
@@ -43,11 +43,11 @@ struct vgui_test_thingy3d_new : public vgui_test_thingy3d_sptr {
 
 
 
-class vgui_test_credits : public vgui_text {
+class vgui_test_credits : public vgui_text_tableau {
 public:
   vgui_test_credits();
   bool handle(vgui_event const &);
-  vcl_string type_name() const { return "vgui_test::credits"; }
+  vcl_string type_name() const { return "vgui_test_credits"; }
 protected:
   ~vgui_test_credits() { }
 };
