@@ -11,6 +11,7 @@
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_edgel_chain.h>
 #include <vtol/vtol_edge_2d.h>
 #include <bmrf/bmrf_epi_point.h>
 #include <bmrf/bmrf_epi_seg.h>
@@ -142,40 +143,38 @@ static void alpha_segment(vcl_vector<bmrf_epi_point_sptr> const& samples,
   if (n<3)
     return;
   vcl_vector<bmrf_epi_seg_sptr> segs;
-  vcl_vector<bool> breaks;
-  breaks.resize(n, false);
-  double last_alpha = samples[1]->alpha();
-  double dir = last_alpha-samples[0]->alpha();
-  for (int i = 2; i<n; i++)
-  {
-    double alpha = samples[i]->alpha();
-    double temp = alpha-last_alpha;
-    last_alpha = alpha;
-    //check for break (a reversal in direction)
-    if (dir*temp<0)
-    {
-      dir = -dir;
-      breaks[i]=true;
-    }
-  }
   bmrf_epi_seg_sptr seg = new bmrf_epi_seg();
-  for (int i = 0; i<n; i++)
-    if (breaks[i])
-    {
+  int i=0;
+  double last_alpha = samples[0]->alpha();
+  // find the first differing alpha (usually i=1)
+  while( last_alpha == samples[++i]->alpha() );
+  bool dir = samples[i]->alpha() > last_alpha;
+  last_alpha = samples[i]->alpha();
+  seg->add_point(samples[i-1]);
+  seg->add_point(samples[i]);
+  for (i += 1; i<n; ++i){
+    double alpha = samples[i]->alpha();
+    if( alpha == last_alpha ){  
       segs.push_back(seg);
       seg = new bmrf_epi_seg();
-      seg->add_point(samples[i]);
     }
-    else
-      seg->add_point(samples[i]);
+    else if(dir != (alpha > last_alpha) ){
+      segs.push_back(seg);
+      seg = new bmrf_epi_seg();
+      seg->add_point(samples[i-1]);
+      dir = !dir;
+    }
+    seg->add_point(samples[i]);
+    last_alpha = alpha;
+  }
   segs.push_back(seg);
 
   //filter out short segments.
   //rectify the order
-  int min_length = 4;
+  int min_length = 3;
   for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = segs.begin();
        sit != segs.end(); sit++)
-    if ((*sit)->n_pts()>min_length)
+    if ((*sit)->n_pts()>=min_length)
     {
       rectify_order(*sit);
       epi_segs.push_back(*sit);
@@ -192,22 +191,23 @@ extract_alpha_segments(vdgl_digital_curve_sptr const & dc,
   if (!dc)
     return false;
   vcl_vector<bmrf_epi_point_sptr> samples;
-  // make the increment about 1 pixel on the curve
-  double dsp = 1.0/dc->length();
-  for (double sp = 0.0; sp<1.0; sp+=dsp)
-  {
-    double u = dc->get_x(sp), v = dc->get_y(sp), alpha = 0, s =0;
+
+  vdgl_edgel_chain_sptr ec = dc->get_interpolator()->get_edgel_chain(); 
+  for ( int i=0; i<ec->size(); ++i ){
+    const vdgl_edgel & edgel = ec->edgel(i);
+    double u = edgel.get_x(), v = edgel.get_y(), alpha=0.0, s=0.0;
     this->epi_coords(u, v, alpha, s);
     bmrf_epi_point_sptr ep =
       new bmrf_epi_point(u, v,
                          alpha,
                          s,
-                         dc->get_grad(sp),
-                         dc->get_theta(sp),
-                         dc->get_tangent_angle(sp)
+                         edgel.get_grad(),
+                         edgel.get_theta(),
+                         0.0 // tangent_angle is not used right now
                         );
     samples.push_back(ep);
   }
+
   //segment the samples into monotonic alpha segments
   alpha_segment(samples, epi_segs);
   return true;
