@@ -16,7 +16,7 @@ static void fill_rand(vnl_double_complex *b, vnl_double_complex *e) {
 // Driver
 void test_complex() {
   {
-    vnl_double_complex a, b, c;
+    vnl_double_complex a(-5), b(7,-1), c;
     c = a + b;
     c = a - b;
     c = a * b;
