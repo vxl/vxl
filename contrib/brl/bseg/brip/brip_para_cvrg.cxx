@@ -421,13 +421,12 @@ void brip_para_cvrg::non_maximum_supress(float* input_array, float* sup_array)
     vcl_cout << "In brip_para_cvrg::NonMaximumSupress(..) the kernel is too large\n";
   }
   float* tmp = this->make_float_vector(proj_n_);
-  int i;
-  for (i=0; i<proj_n_; i++)
+  for (int i=0; i<proj_n_; i++)
     tmp[i]=vcl_fabs(input_array[i]);
   //Get the counts array of "this"
   //Make a new Histogram for the suppressed
 
-  for ( i = sup_radius_; i < (proj_n_-sup_radius_); i++)
+  for (int i = sup_radius_; i < (proj_n_-sup_radius_); i++)
   {
     //find the maximum value in the current kernel
     float max_val = tmp[0];
@@ -438,8 +437,8 @@ void brip_para_cvrg::non_maximum_supress(float* input_array, float* sup_array)
         max_val = tmp[index];
     }
     //Is position i a local maximum?
-    if (vcl_fabs(max_val-tmp[i]<1e-03))
-     sup_array[i] = max_val;//Yes. So set the counts to the max value
+    if (vcl_fabs(max_val-tmp[i])<1e-03)
+     sup_array[i] = max_val; //Yes. So set the counts to the max value
   }
   this->remove_flat_peaks(proj_n_, sup_array);
 }
