@@ -26,6 +26,7 @@ MANPAGE_SOURCES += mil_gaussian_pyramid_builder_2d_general.txx
 SOURCES += mil_gaussian_pyramid_builder_2d.cxx
 MANPAGE_SOURCES += mil_gaussian_pyramid_builder_2d.txx
 SOURCES += mil_normalise_image_2d.cxx
+SOURCES += mil_invert_image_2d.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mil_all.h
