@@ -19,8 +19,8 @@
 
 #include <mvl/TriTensor.h>
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_rubberbander.h>
-#include <vgui/vgui_easy2D.h>
+#include <vgui/vgui_rubberband_tableau.h>
+#include <vgui/vgui_easy2D_tableau.h>
 #include "xcv_mview_manager.h"
 
 class vgui_event;
@@ -51,8 +51,8 @@ public:
 private:
   TriTensor* tri_tensor;
   vgui_tableau_sptr tabs[3];
-  vgui_rubberbander_sptr rubberbands[3];
-  vgui_easy2D_sptr easys[3];
+  vgui_rubberband_tableau_sptr rubberbands[3];
+  vgui_easy2D_tableau_sptr easys[3];
   bool tri_tensor_is_displayed;
 
   void draw_tri_tensor(vgui_event const& e, vgui_tableau_sptr const& child_tab, bool make_permanent);

@@ -15,9 +15,9 @@
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
-#include <vgui/vgui_easy2D.h>
+#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_text_tableau.h>
-#include <vgui/vgui_composite.h>
+#include <vgui/vgui_composite_tableau.h>
 
 //========================================================================
 //: Constructor takes all the labels used on the graph.
@@ -31,9 +31,9 @@ xcv_axes_tableau::xcv_axes_tableau(vcl_string heading, vcl_string x_axes_label,
   heading_ = heading;
   x_axes_label_ = x_axes_label;
   y_axes_label_ = y_axes_label;
-  easy_ = vgui_easy2D_new();
+  easy_ = vgui_easy2D_tableau_new();
   text_ = vgui_text_tableau_new();
-  comp_ = vgui_composite_new(easy_, text_);
+  comp_ = vgui_composite_tableau_new(easy_, text_);
 }
 
 //========================================================================

@@ -20,7 +20,7 @@
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_macro.h>
-#include <vgui/vgui_easy2D.h>
+#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_soview.h>
 
 #include <xcv/xcv_image_tableau.h>
@@ -30,7 +30,7 @@ vcl_list<osl_edge*> xcv_segmentation::detected_edges = vcl_list<osl_edge*>();
 extern void get_current(unsigned*, unsigned*);
 extern bool get_image_at(vil_image*, unsigned, unsigned);
 extern xcv_image_tableau_sptr get_image_tableau_at(unsigned,unsigned);
-extern vgui_easy2D_sptr get_easy2D_at(unsigned, unsigned);
+extern vgui_easy2D_tableau_sptr get_easy2D_at(unsigned, unsigned);
 extern void add_image(vil_image& img);
 
 //-----------------------------------------------------------------------------
@@ -60,7 +60,7 @@ void xcv_segmentation::perform_harris(osl_harris_params& params,
   bool image_ok = get_image_at(&img, col, row);
   if (image_ok == false)
     return;
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
   if (!easy_tab)
     return;
   osl_harris harris(params);
@@ -104,7 +104,7 @@ void xcv_segmentation::harris()
 void xcv_segmentation::draw_edges(vcl_list<osl_edge*> lines, unsigned col,
   unsigned row)
 {
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
   if (!easy_tab)
     return;
 
@@ -146,7 +146,7 @@ void xcv_segmentation::draw_edges(vcl_list<osl_edge*> lines, unsigned col,
 void xcv_segmentation::draw_straight_lines(vcl_vector<float> x1, vcl_vector<float> y1,
   vcl_vector<float> x2, vcl_vector<float> y2, unsigned col, unsigned row)
 {
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
   if (!easy_tab)
     return;
 

@@ -31,9 +31,9 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_find.h>
-#include <vgui/vgui_easy2D.h>
-#include <vgui/vgui_rubberbander.h>
-#include <vgui/vgui_viewer2D.h>
+#include <vgui/vgui_easy2D_tableau.h>
+#include <vgui/vgui_rubberband_tableau.h>
+#include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 
@@ -117,14 +117,15 @@ vcl_vector<xcv_image_tableau_sptr> get_image_list()
 //-----------------------------------------------------------------------------
 //: Gets the list of all easy2D tableaux in xcv.
 //-----------------------------------------------------------------------------
-vcl_vector<vgui_easy2D_sptr> get_easy2D_list()
+vcl_vector<vgui_easy2D_tableau_sptr> get_easy2D_list()
 {
-  vcl_vector<vgui_easy2D_sptr> easy_tabs;
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_tabs;
   vcl_vector<vgui_tableau_sptr> all_tabs = xcv_tab->get_tableau_list();
   for (unsigned i=0; i<all_tabs.size(); i++)
   {
-    vgui_easy2D_sptr easy = (vgui_easy2D*)vgui_find_below_by_type_name(
-      all_tabs[i], vcl_string("vgui_easy2D")).operator->();
+    vgui_easy2D_tableau_sptr easy 
+      = (vgui_easy2D_tableau*)vgui_find_below_by_type_name(
+      all_tabs[i], vcl_string("vgui_easy2D_tableau")).operator->();
     easy_tabs.push_back(easy);
   }
   return easy_tabs;
@@ -230,86 +231,86 @@ bool get_threeviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
 //: Return the underlying rubberbander from the tableau at the given position.
 //  This function returns NULL if it fails.
 //-----------------------------------------------------------------------------
-vgui_rubberbander_sptr get_rubberbander_at(unsigned col, unsigned row)
+vgui_rubberband_tableau_sptr get_rubberbander_at(unsigned col, unsigned row)
 {
   vgui_tableau_sptr top_tab = xcv_tab->get_tableau_at(col, row);
   if (top_tab)
   {
-    vcl_string type_name("vgui_rubberbander");
-    vgui_rubberbander_sptr tab;
+    vcl_string type_name("vgui_rubberband_tableau");
+    vgui_rubberband_tableau_sptr tab;
     tab.vertical_cast(vgui_find_below_by_type_name(top_tab, type_name));
     if (tab)
       return tab;
   }
   vgui_macro_warning << "Unable to get rubberbander tableau at (" << col
     <<", "<<row<<")"<<vcl_endl;
-  return vgui_rubberbander_sptr();
+  return vgui_rubberband_tableau_sptr();
 }
 
 //-----------------------------------------------------------------------------
 //: Return the underlying easy2D from the tableau at the given position.
 //  This function returns NULL if it fails.
 //-----------------------------------------------------------------------------
-vgui_easy2D_sptr get_easy2D_at(unsigned col, unsigned row)
+vgui_easy2D_tableau_sptr get_easy2D_at(unsigned col, unsigned row)
 {
   vgui_tableau_sptr top_tab = xcv_tab->get_tableau_at(col, row);
   if (top_tab)
   {
-    vcl_string type_name("vgui_easy2D");
-    vgui_easy2D_sptr tab;
+    vcl_string type_name("vgui_easy2D_tableau");
+    vgui_easy2D_tableau_sptr tab;
     tab.vertical_cast(vgui_find_below_by_type_name(top_tab, type_name));
     if (tab)
       return tab;
   }
   vgui_macro_warning << "Unable to get easy2D at (" << col << ", " << row
     << ")" << vcl_endl;
-  return vgui_easy2D_sptr();
+  return vgui_easy2D_tableau_sptr();
 }
 
 //-----------------------------------------------------------------------------
 //: Return the underlying easy2D from the tableau at the given position.
 //  This function returns NULL if it fails.
 //-----------------------------------------------------------------------------
-vgui_composite_sptr get_composite_at(unsigned col, unsigned row)
+vgui_composite_tableau_sptr get_composite_at(unsigned col, unsigned row)
 {
   vgui_tableau_sptr top_tab = xcv_tab->get_tableau_at(col, row);
   if (top_tab)
   {
-    vcl_string type_name("vgui_composite");
-    vgui_composite_sptr tab;
+    vcl_string type_name("vgui_composite_tableau");
+    vgui_composite_tableau_sptr tab;
     tab.vertical_cast(vgui_find_below_by_type_name(top_tab, type_name));
     if (tab)
       return tab;
   }
   vgui_macro_warning << "Unable to get composite at (" << col << ", "
     << row << ")" << vcl_endl;
-  return vgui_composite_sptr();
+  return vgui_composite_tableau_sptr();
 }
 
 //-----------------------------------------------------------------------------
 //: Return the viewer2D at the given position.
 //  This function returns NULL if it fails.
 //-----------------------------------------------------------------------------
-vgui_viewer2D_sptr get_viewer2D_at(unsigned col, unsigned row)
+vgui_viewer2D_tableau_sptr get_viewer2D_at(unsigned col, unsigned row)
 {
   vgui_tableau_sptr top_tab = xcv_tab->get_tableau_at(col, row);
   if (top_tab)
   {
-    vgui_viewer2D_sptr view;
-    view.vertical_cast(vgui_find_below_by_type_name(top_tab,
-      vcl_string("vgui_viewer2D")));
+    vgui_viewer2D_tableau_sptr view;
+    view.vertical_cast(vgui_find_below_by_type_name(top_tab, 
+      vcl_string("vgui_viewer2D_tableau")));
     if (view)
       return view;
   }
   vgui_macro_warning << "Unable to get viewer2D tableau at (" << col
     << ", " << row << ")" << vcl_endl;
-  return vgui_viewer2D_sptr();
+  return vgui_viewer2D_tableau_sptr();
 }
 
 //-----------------------------------------------------------------------------
 //: Return currently active easy2d
 //-----------------------------------------------------------------------------
-vgui_easy2D_sptr get_current_easy2D()
+vgui_easy2D_tableau_sptr get_current_easy2D()
 {
   unsigned i,j;
   get_current(&i,&j);
@@ -322,7 +323,7 @@ vgui_easy2D_sptr get_current_easy2D()
 //-----------------------------------------------------------------------------
 xcv_image_tableau_sptr get_image_tableau_at(unsigned col, unsigned row)
 {
-  vgui_easy2D_sptr tab = get_easy2D_at(col, row);
+  vgui_easy2D_tableau_sptr tab = get_easy2D_at(col, row);
   if (tab)
   {
     xcv_image_tableau_sptr tt;
@@ -378,12 +379,12 @@ bool get_image_at(vil_image* img, unsigned col, unsigned row)
 //-----------------------------------------------------------------------------
 vgui_tableau_sptr create_tableau(vil_image img)
 {
-  xcv_image_tableau_new   image (img);
-  vgui_easy2D_new         easy  (image);
-  vgui_rubberbander_new   rubber(new vgui_rubberbander_easy2D_client(easy));
-  vgui_composite_new      comp(easy,rubber);
-  xcv_picker_tableau_new  picker(comp);
-  vgui_viewer2D_new       view  (picker);
+  xcv_image_tableau_new       image (img);
+  vgui_easy2D_tableau_new     easy  (image);
+  vgui_rubberband_tableau_new rubber(new vgui_rubberband_easy2D_client(easy));
+  vgui_composite_tableau_new  comp(easy,rubber);
+  xcv_picker_tableau_new      picker(comp);
+  vgui_viewer2D_tableau_new   view  (picker);
   return view;
 }
 
@@ -593,7 +594,7 @@ int main(int argc, char** argv)
 
     for (unsigned int i=0; i<viewers.size(); ++i)
     {
-      vgui_viewer2D_sptr v; v.vertical_cast(viewers[i]);
+      vgui_viewer2D_tableau_sptr v; v.vertical_cast(viewers[i]);
       v->token.scaleX *= viewer_scale;
       v->token.scaleY *= viewer_scale;
     }

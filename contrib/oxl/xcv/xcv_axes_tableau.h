@@ -18,9 +18,9 @@
 
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_event.h>
-#include <vgui/vgui_easy2D_sptr.h>
+#include <vgui/vgui_easy2D_tableau_sptr.h>
 #include <vgui/vgui_text_tableau_sptr.h>
-#include <vgui/vgui_composite_sptr.h>
+#include <vgui/vgui_composite_tableau_sptr.h>
 
 #include <xcv/xcv_axes_limits.h>
 class vgui_tableau;
@@ -57,9 +57,9 @@ private:
   vcl_string heading_, x_axes_label_, y_axes_label_;
   //: List of points.
   vcl_vector<float> xpoints_, ypoints_;
-  vgui_easy2D_sptr easy_;
+  vgui_easy2D_tableau_sptr easy_;
   vgui_text_tableau_sptr text_;
-  vgui_composite_sptr comp_;
+  vgui_composite_tableau_sptr comp_;
 };
 
 

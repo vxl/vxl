@@ -20,8 +20,8 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
-#include <vgui/vgui_easy2D.h>
-#include <vgui/vgui_rubberbander.h>
+#include <vgui/vgui_easy2D_tableau.h>
+#include <vgui/vgui_rubberband_tableau.h>
 
 #include <xcv/xcv_image_tableau.h>
 
@@ -30,10 +30,10 @@ extern vcl_string* get_savefile();
 extern void get_current(unsigned*, unsigned*);
 extern void add_image_at(vcl_string, unsigned, unsigned);
 extern bool get_image_at(vil_image*, unsigned, unsigned);
-extern vgui_rubberbander_sptr get_rubberbander_at(unsigned, unsigned);
+extern vgui_rubberband_tableau_sptr get_rubberbander_at(unsigned, unsigned);
 extern vgui_tableau_sptr get_top(unsigned,unsigned);
 extern void remove_image_at(unsigned, unsigned);
-extern vgui_easy2D_sptr get_easy2D_at(unsigned, unsigned);
+extern vgui_easy2D_tableau_sptr get_easy2D_at(unsigned, unsigned);
 extern xcv_image_tableau_sptr get_image_tableau_at(unsigned col, unsigned row);
 
 //-----------------------------------------------------------------------------
@@ -110,9 +110,10 @@ void xcv_file::save_as_ps()
   if (ps_dl.ask())
   {
 #ifdef DEBUG
-    vcl_cerr << "Saving data to postscript file: " << image_filename << vcl_endl;
+    vcl_cerr << "Saving data to postscript file: " << image_filename 
+      << vcl_endl;
 #endif
-    vgui_easy2D_sptr easy = get_easy2D_at(col, row);
+    vgui_easy2D_tableau_sptr easy = get_easy2D_at(col, row);
     if (easy)
       easy->print_psfile(*image_filename, reduction_factor, save_objs);
   }

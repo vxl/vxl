@@ -13,7 +13,7 @@
 
 #include "xcv_image_tableau_sptr.h"
 #include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_rubberbander.h>
+#include <vgui/vgui_rubberband_tableau.h>
 
 class xcv_image_tableau : public vgui_image_tableau
 {
@@ -68,7 +68,7 @@ struct xcv_image_tableau_new : public xcv_image_tableau_sptr
   operator vgui_image_tableau_sptr () const { vgui_image_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
 };
 
-class vgui_roi_tableau_make_roi : public vgui_rubberbander_client
+class vgui_roi_tableau_make_roi : public vgui_rubberband_client
 {
   bool done_;
   xcv_image_tableau_sptr image_tableau_;

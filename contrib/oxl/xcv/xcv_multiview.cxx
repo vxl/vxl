@@ -32,27 +32,27 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
 #include <vgui/vgui_dialog.h>
-#include <vgui/vgui_easy2D.h>
-#include <vgui/vgui_rubberbander.h>
+#include <vgui/vgui_easy2D_tableau.h>
+#include <vgui/vgui_rubberband_tableau.h>
 #include <vgui/vgui_slot.h>
 #include <vgui/vgui_soview.h>
 #include <vgui/vgui_soview2D.h>
 
 vcl_vector<xcv_twoview_manager*> xcv_multiview::twoview_mgrs;
-vcl_vector<vgui_rubberbander_sptr> xcv_multiview::twoview_rubber0;
-vcl_vector<vgui_rubberbander_sptr> xcv_multiview::twoview_rubber1;
+vcl_vector<vgui_rubberband_tableau_sptr> xcv_multiview::twoview_rubber0;
+vcl_vector<vgui_rubberband_tableau_sptr> xcv_multiview::twoview_rubber1;
 vcl_vector<xcv_threeview_manager*> xcv_multiview::threeview_mgrs;
-vcl_vector<vgui_rubberbander_sptr> xcv_multiview::threeview_rubber0;
-vcl_vector<vgui_rubberbander_sptr> xcv_multiview::threeview_rubber1;
-vcl_vector<vgui_rubberbander_sptr> xcv_multiview::threeview_rubber2;
+vcl_vector<vgui_rubberband_tableau_sptr> xcv_multiview::threeview_rubber0;
+vcl_vector<vgui_rubberband_tableau_sptr> xcv_multiview::threeview_rubber1;
+vcl_vector<vgui_rubberband_tableau_sptr> xcv_multiview::threeview_rubber2;
 
 extern vcl_string* get_loadfile();
 extern vcl_string* get_savefile();
 extern void get_current(unsigned*, unsigned*);
 extern bool get_twoviews(vcl_vector<int>*, vcl_vector<int>*);
 extern bool get_threeviews(vcl_vector<int>*, vcl_vector<int>*);
-extern vgui_rubberbander_sptr get_rubberbander_at(unsigned, unsigned);
-extern vgui_easy2D_sptr get_easy2D_at(unsigned, unsigned);
+extern vgui_rubberband_tableau_sptr get_rubberbander_at(unsigned, unsigned);
+extern vgui_easy2D_tableau_sptr get_easy2D_at(unsigned, unsigned);
 extern bool get_image_at(vil_image*, unsigned, unsigned);
 
 //-----------------------------------------------------------------------------
@@ -63,7 +63,7 @@ extern bool get_image_at(vil_image*, unsigned, unsigned);
 xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos,
   vcl_vector<int>& row_pos)
 {
-  vgui_rubberbander_sptr rubbers[2];
+  vgui_rubberband_tableau_sptr rubbers[2];
   rubbers[0] = get_rubberbander_at(col_pos[0], row_pos[0]);
   rubbers[1] = get_rubberbander_at(col_pos[1], row_pos[1]);
   // First check to see if we already have a manager for these two tableaux:
@@ -111,7 +111,7 @@ xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos
 xcv_threeview_manager* xcv_multiview::get_threeview_manager(vcl_vector<int>& col_pos,
   vcl_vector<int>& row_pos)
 {
-  vgui_rubberbander_sptr rubbers[3];
+  vgui_rubberband_tableau_sptr rubbers[3];
   for (int i=0; i<3; i++)
     rubbers[i] = get_rubberbander_at(col_pos[i], row_pos[i]);
 
@@ -440,8 +440,8 @@ void xcv_multiview::display_corner_tracks()
     return;
   }
 
-  vgui_easy2D_sptr easy0 = get_easy2D_at(col_pos[0], row_pos[0]);
-  vgui_easy2D_sptr easy1 = get_easy2D_at(col_pos[1], row_pos[1]);
+  vgui_easy2D_tableau_sptr easy0 = get_easy2D_at(col_pos[0], row_pos[0]);
+  vgui_easy2D_tableau_sptr easy1 = get_easy2D_at(col_pos[1], row_pos[1]);
 
   vcl_vector<HomgPoint2D> points0, points1;
   corner_matches->extract_matches(points0, points1);
@@ -583,7 +583,7 @@ void xcv_multiview::transfer_point()
 
   // Go through the view and get the two selected points:
   vgui_soview2D_point* points[3];
-  vgui_easy2D_sptr easys[3];
+  vgui_easy2D_tableau_sptr easys[3];
   int point_count = 0;
   for (unsigned i=0; i<3; i++)
   {
@@ -671,7 +671,7 @@ void xcv_multiview::transfer_line()
 
   // Go through the views and get the two selected lines:
   vgui_soview2D_lineseg* lines[3];
-  vgui_easy2D_sptr easys[3];
+  vgui_easy2D_tableau_sptr easys[3];
   int line_count = 0;
   for (unsigned i=0; i<3; i++)
   {

@@ -16,9 +16,9 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
-#include <vgui/vgui_rubberbander.h>
+#include <vgui/vgui_rubberband_tableau.h>
 #include <vgui/vgui_color_text.h>
-#include <vgui/vgui_easy2D.h>
+#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_style.h>
 #include <vgui/vgui_macro.h>
@@ -26,10 +26,10 @@
 
 //static bool debug = true;
 extern void get_current(unsigned*, unsigned*);
-extern vcl_vector<vgui_easy2D_sptr> get_easy2D_list();
-extern vgui_rubberbander_sptr get_rubberbander_at(unsigned, unsigned);
-extern vgui_easy2D_sptr get_easy2D_at(unsigned, unsigned);
-extern vgui_easy2D_sptr get_current_easy2D();
+extern vcl_vector<vgui_easy2D_tableau_sptr> get_easy2D_list();
+extern vgui_rubberband_tableau_sptr get_rubberbander_at(unsigned, unsigned);
+extern vgui_easy2D_tableau_sptr get_easy2D_at(unsigned, unsigned);
+extern vgui_easy2D_tableau_sptr get_current_easy2D();
 
 // Filename for save and load
 static vcl_string filename = "/tmp/temp.gx";
@@ -42,7 +42,7 @@ void xcv_geometry::create_point()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_point();
 }
@@ -54,7 +54,7 @@ void xcv_geometry::create_line()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_line();
 }
@@ -66,7 +66,7 @@ void xcv_geometry::create_circle()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_circle();
 }
@@ -78,7 +78,7 @@ void xcv_geometry::create_polygon()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_polygon();
 }
@@ -89,7 +89,7 @@ void xcv_geometry::create_linestrip()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_linestrip();
 }
@@ -100,7 +100,7 @@ void xcv_geometry::create_infinite_line()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_infinite_line();
 }
@@ -115,7 +115,7 @@ void xcv_geometry::change_sel_color()
   if (!color_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
@@ -141,7 +141,7 @@ void xcv_geometry::change_sel_radius()
   if (!radius_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
@@ -167,7 +167,7 @@ void xcv_geometry::change_sel_width()
   if (!width_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
@@ -194,7 +194,7 @@ void xcv_geometry::delete_sel_objs()
   if (!del_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
@@ -217,7 +217,7 @@ void xcv_geometry::delete_all()
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete te objects\n";
@@ -245,7 +245,7 @@ void xcv_geometry::delete_points()
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete  points\n";
@@ -272,7 +272,7 @@ void xcv_geometry::delete_lines()
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete lines\n";
@@ -299,7 +299,7 @@ void xcv_geometry::delete_inf_lines()
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete infinite lines?\n";
@@ -326,7 +326,7 @@ void xcv_geometry::delete_circles()
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete circles?\n";
@@ -353,7 +353,7 @@ void xcv_geometry::delete_linestrips()
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete linestrips\n";
@@ -380,7 +380,7 @@ void xcv_geometry::change_default_color()
   if (!color_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     easy_list[i]->set_foreground(red_value(color_value),
@@ -402,7 +402,7 @@ void xcv_geometry::change_default_radius()
   if (!radius_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     easy_list[i]->set_point_radius(point_radius);
@@ -422,7 +422,7 @@ void xcv_geometry::change_default_width()
   if (!width_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
     easy_list[i]->set_line_width(line_width);
 }
@@ -433,7 +433,7 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
   vgui_dialog save_dl(dialog_name);
   save_dl.inline_file("Filename: ", regexp, filename);
   vcl_ofstream fs;
@@ -539,7 +539,7 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
   if (!easy_tab) return;
   vgui_dialog load_dl(dialog_name);
   load_dl.inline_file("Filename: ", regexp, filename);
@@ -643,7 +643,7 @@ static void add(vgl_polygon const& p)
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
 
   for (int i = 0; i < p.num_sheets(); ++i) {
     vgl_polygon_sheet_as_array sp(p[i]);
@@ -657,7 +657,7 @@ void xcv_geometry::polygon_intersect()
 {
   vcl_vector<vgl_polygon> all_polys;
 
-  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   vcl_vector<vgui_soview*> all_soviews;
   for (unsigned i=0; i<easy_list.size(); i++)
   {
@@ -701,7 +701,7 @@ static void xcv_geometry_explode_geometry()
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_sptr easy_tab = get_current_easy2D();
+  vgui_easy2D_tableau_sptr easy_tab = get_current_easy2D();
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete te objects\n";
@@ -751,7 +751,7 @@ void xcv_geometry::create_box()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_box();
 }

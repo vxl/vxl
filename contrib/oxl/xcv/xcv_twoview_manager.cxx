@@ -8,6 +8,8 @@
 
 #include <vcl_compiler.h>
 
+#include <vgui/vgui_easy2D_tableau.h>
+#include <vgui/vgui_rubberband_tableau.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_text_graph.h>
 #include <vgui/vgui_projection_inspector.h>

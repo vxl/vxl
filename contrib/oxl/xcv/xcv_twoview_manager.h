@@ -24,8 +24,8 @@
 #include <mvl/HMatrix2D.h>
 #include <mvl/PairMatchSetCorner.h>
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_rubberbander.h>
-#include <vgui/vgui_easy2D.h>
+#include <vgui/vgui_rubberband_tableau_sptr.h>
+#include <vgui/vgui_easy2D_tableau_sptr.h>
 #include "xcv_mview_manager.h"
 
 class vgui_event;
@@ -72,9 +72,9 @@ private:
   //: The two tableaux managed by this class.
   vgui_tableau_sptr tabs[2];
   //: Rubberbanders for the managed tableaux.
-  vgui_rubberbander_sptr rubberbands[2];
+  vgui_rubberband_tableau_sptr rubberbands[2];
   //: Easy2Ds for the managed tableaux.
-  vgui_easy2D_sptr easys[2];
+  vgui_easy2D_tableau_sptr easys[2];
   bool f_matrix_is_displayed;
   bool h_matrix_is_displayed;
   bool corner_matches_are_displayed;

@@ -29,11 +29,11 @@
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_dialog.h>
-#include <vgui/vgui_enhance.h>
-#include <vgui/vgui_easy2D.h>
-#include <vgui/vgui_viewer2D.h>
-#include <vgui/vgui_composite.h>
-#include <vgui/vgui_rubberbander.h>
+#include <vgui/vgui_enhance_tableau.h>
+#include <vgui/vgui_easy2D_tableau.h>
+#include <vgui/vgui_viewer2D_tableau.h>
+#include <vgui/vgui_composite_tableau.h>
+#include <vgui/vgui_rubberband_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_event_server.h>
 
@@ -45,12 +45,12 @@
 extern void post_to_status_bar(const char*);
 extern void get_current(unsigned*, unsigned*);
 extern vcl_vector<xcv_image_tableau_sptr> get_image_list();
-extern vgui_easy2D_sptr get_easy2D_at(unsigned, unsigned);
+extern vgui_easy2D_tableau_sptr get_easy2D_at(unsigned, unsigned);
 extern xcv_picker_tableau_sptr get_picker_tableau_at(unsigned, unsigned);
-extern vgui_composite_sptr get_composite_at(unsigned, unsigned);
-extern vgui_viewer2D_sptr get_viewer2D_at(unsigned, unsigned);
+extern vgui_composite_tableau_sptr get_composite_at(unsigned, unsigned);
+extern vgui_viewer2D_tableau_sptr get_viewer2D_at(unsigned, unsigned);
 extern xcv_image_tableau_sptr get_image_tableau_at(unsigned, unsigned);
-extern vgui_rubberbander_sptr get_rubberbander_at(unsigned, unsigned);
+extern vgui_rubberband_tableau_sptr get_rubberbander_at(unsigned, unsigned);
 extern vgui_tableau_sptr get_top(unsigned,unsigned);
 extern bool get_image_at(vil_image*, unsigned, unsigned);
 
@@ -58,10 +58,10 @@ extern bool get_image_at(vil_image*, unsigned, unsigned);
 static bool debug = true;
 static bool is_magnifying = false;
 static bool is_enhancing = false;
-static vgui_composite_sptr comp;
-static vgui_enhance_sptr enhance;
+static vgui_composite_tableau_sptr comp;
+static vgui_enhance_tableau_sptr enhance;
 static xcv_image_tableau_sptr img;
-static vgui_easy2D_sptr easy;
+static vgui_easy2D_tableau_sptr easy;
 
 //-----------------------------------------------------------------------------
 //: Centre the current image inside the frame.
@@ -70,7 +70,7 @@ void xcv_display::centre_image()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_viewer2D_sptr view = get_viewer2D_at(col, row);
+  vgui_viewer2D_tableau_sptr view = get_viewer2D_at(col, row);
 
   vil_image image;
   if (get_image_at(&image, col, row))
@@ -108,7 +108,7 @@ void xcv_display::toggle_enhance()
       return;
 
     // Replace the image with an enhance tableau containing the same image:
-    enhance = vgui_enhance_new(img, img_tabs[selected_image]);
+    enhance = vgui_enhance_tableau_new(img, img_tabs[selected_image]);
     easy->set_child(enhance);
 
     is_enhancing = true;
@@ -144,7 +144,7 @@ void xcv_display::toggle_magnify()
     comp = get_composite_at(col, row);
     if (!comp) return;
 
-    enhance = vgui_enhance_new();
+    enhance = vgui_enhance_tableau_new();
     vgui_slot::replace_child_everywhere(comp, enhance);
     enhance->set_child(comp);
 
@@ -156,7 +156,7 @@ void xcv_display::toggle_magnify()
 
     enhance->set_child(0);
     vgui_slot::replace_child_everywhere(enhance, comp);
-    enhance = vgui_enhance_sptr(); //0;
+    enhance = vgui_enhance_tableau_sptr(); //0;
     is_magnifying = false;
   }
 }
@@ -169,7 +169,7 @@ void xcv_display::make_roi()
 
   get_current(&col, &row);
   xcv_image_tableau_sptr imt = get_image_tableau_at(col,row);
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
   if (!rubber)
     return;
 
@@ -177,7 +177,7 @@ void xcv_display::make_roi()
   vgui_roi_tableau_make_roi roi_tableau_client_(imt);
 
   vgui_event_server *es = new vgui_event_server(imt);
-  vgui_rubberbander_client* old_client = rubber->get_client();  // save to put back in later
+  vgui_rubberband_client* old_client = rubber->get_client();  // save to put back in later
   rubber->set_client(&roi_tableau_client_);
   rubber->rubberband_box();
   while (!roi_tableau_client_.is_done())
@@ -195,7 +195,7 @@ void xcv_display::remove_roi()
   unsigned col, row;
   get_current(&col,&row);
 #if 0
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
 
   if (rubber)
   {
@@ -293,7 +293,7 @@ void xcv_display::show_line_slice()
   for (int i=0; i<num_points+1; i++)
     axes->add_point(x[i], val[i]);
   axes->compute_axes();
-  vgui_viewer2D_new viewer(axes);
+  vgui_viewer2D_tableau_new viewer(axes);
 
   vgui_dialog profile_dialog("Image Line Profile");
   profile_dialog.inline_tableau(vgui_shell_tableau_new(viewer), 700, 500);
