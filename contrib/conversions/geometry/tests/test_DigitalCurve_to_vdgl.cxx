@@ -2,7 +2,7 @@
 #include <DigitalGeometry/DigitalCurve.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vsol/vsol_point_2d.h>
-#include <vnl/vnl_test.h>
+#include <vgl/vgl_test.h>
 
 void test_DigitalCurve_to_vdgl() {
   DigitalCurve dc(7);
