@@ -27,7 +27,7 @@ struct vgl_window_scan_iterator : vgl_region_scan_iterator
 
   //: Define rectangular region to be [x-w, x+w] x [y-h, y+h]
   inline void set_window(float x, float y, float w, float h)
-    { set_window_corners(x - w, y - w, x + w, y + w); }
+    { set_window_corners(x - w, y - h, x + w, y + h); }
 
   //: Define rectangular region to be [x-r, x+r] x [y-r, y+r]
   inline void set_window(float x, float y, float r)
