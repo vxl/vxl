@@ -102,16 +102,10 @@ LIB32=link.exe -lib
 SOURCE=.\Templates/vcl_vector+bgui_vtol2D_tableau_sptr-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bgui_style-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_map+vcl_string.bgui_style_sptr-.cxx
+SOURCE=.\Templates/vcl_map+vcl_string.vgui_style_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bgui_image_tableau.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_style.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bgui_picker_tableau.cxx
@@ -130,21 +124,6 @@ SOURCE=.\bgui_vsol_soview2D.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bgui_vsol2D_tableau.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_displaybase_tableau.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_displaylist2D_tableau.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_easy2D_tableau.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_linked_vsol2D_tableau.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_linked_vsol_soview2D.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bgui_histogram_tableau.cxx
@@ -180,12 +159,6 @@ SOURCE=.\bgui_image_tableau.h
 SOURCE=.\bgui_image_tableau_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\bgui_style.h
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_style_sptr.h
-# End Source File
-# Begin Source File
 SOURCE=.\bgui_vsol_camera_tableau.h
 # End Source File
 # Begin Source File
@@ -199,33 +172,6 @@ SOURCE=.\bgui_vsol2D_tableau.h
 # End Source File
 # Begin Source File
 SOURCE=.\bgui_vsol2D_tableau_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_displaybase_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_displaybase_tableau_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_displaylist2D_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_displaylist2D_tableau_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_easy2D_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_easy2D_tableau_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_linked_vsol2D_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_linked_vsol2D_tableau_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_linked_vsol_soview2D.h
 # End Source File
 # Begin Source File
 SOURCE=.\bgui_histogram_tableau.h
