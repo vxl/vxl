@@ -176,7 +176,7 @@ void __make_heap(RandomAccessIterator first, RandomAccessIterator last, T*,
 }
 
 template <class RandomAccessIterator>
-inline void make_heap(RandomAccessIterator first, RandomAccessIterator last) {
+inline void vcl_make_heap(RandomAccessIterator first, RandomAccessIterator last) {
     __make_heap(first, last, value_type(first), distance_type(first));
 }
 
@@ -196,7 +196,7 @@ void __make_heap(RandomAccessIterator first, RandomAccessIterator last,
 }
 
 template <class RandomAccessIterator, class Compare>
-inline void make_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp) {
+inline void vcl_make_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp) {
     __make_heap(first, last, comp, value_type(first), distance_type(first));
 }
 

@@ -124,15 +124,15 @@ public:
     explicit vcl_priority_queue(const Compare& x) :  c(), comp(x) {}
     vcl_priority_queue(const value_type* first, const value_type* last,
                    const Compare& x = Compare()) : c(first, last), comp(x) {
-        make_heap(c.begin(), c.end(), comp);
+        vcl_make_heap(c.begin(), c.end(), comp);
     }
-/*
+#if 0
     template <class InputIterator>
     vcl_priority_queue(InputIterator first, InputIterator last,
                    const Compare& x = Compare()) : c(first, last), comp(x) {
-        make_heap(c.begin(), c.end(), comp);
+        vcl_make_heap(c.begin(), c.end(), comp);
     }
-*/
+#endif
     bool empty() const { return c.empty(); }
     size_type size() const { return c.size(); }
     const value_type& top() const { return c.front(); }

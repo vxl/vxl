@@ -1348,7 +1348,7 @@ template <class RandomAccessIterator, class T>
 IUEi_STL_INLINE
 void __partial_sort(RandomAccessIterator first, RandomAccessIterator middle,
                     RandomAccessIterator last, T*) {
-    make_heap(first, middle);
+    vcl_make_heap(first, middle);
     for (RandomAccessIterator i = middle; i < last; ++i)
         if (*i < *first)
             __pop_heap(first, middle, i, T(*i), distance_type(first));
@@ -1367,7 +1367,7 @@ template <class RandomAccessIterator, class T, class Compare>
 IUEi_STL_INLINE
 void __partial_sort(RandomAccessIterator first, RandomAccessIterator middle,
                     RandomAccessIterator last, T*, Compare comp) {
-    make_heap(first, middle, comp);
+    vcl_make_heap(first, middle, comp);
     for (RandomAccessIterator i = middle; i < last; ++i)
         if (comp(*i, *first))
             __pop_heap(first, middle, i, T(*i), comp, distance_type(first));
@@ -1393,7 +1393,7 @@ RandomAccessIterator __partial_sort_copy(InputIterator first,
     RandomAccessIterator result_real_last = result_first;
     for (; first != last && result_real_last != result_last; ++result_real_last,++first)
         *result_real_last = *first;
-    make_heap(result_first, result_real_last);
+    vcl_make_heap(result_first, result_real_last);
     while (first != last) {
         if (*first < *result_first)
             __adjust_heap(result_first, Distance(0),
@@ -1426,7 +1426,7 @@ RandomAccessIterator __partial_sort_copy(InputIterator first,
     RandomAccessIterator result_real_last = result_first;
     for (; first != last && result_real_last != result_last; ++result_real_last,++first)
         *result_real_last = *first;
-    make_heap(result_first, result_real_last, comp);
+    vcl_make_heap(result_first, result_real_last, comp);
     while (first != last) {
         if (comp(*first, *result_first))
             __adjust_heap(result_first, Distance(0),
