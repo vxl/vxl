@@ -1,9 +1,15 @@
 LINK_LIBRARIES( vil1 vpl vul vbl testlib )
 
-IF(HAS_IMAGE)
+SET(HAS_IMAGE "NO")
+IF(EXISTS ${vxl_SOURCE_DIR}/Image/CMakeLists.txt )
+  INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/Image)
+  INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/COOL)
+  INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/Numerics)
+  INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/GeneralUtility)
   LINK_DIRECTORIES( Image COOL Numerics GeneralUtility )
   LINK_LIBRARIES( ImageClasses Basics Numerics )
-ENDIF(HAS_IMAGE)
+  SET(HAS_IMAGE "YES")
+ENDIF(EXISTS ${vxl_SOURCE_DIR}/Image/CMakeLists.txt )
 
 IF(HAS_IMAGE)
   ADD_DEFINITIONS(-DHAS_IMAGE=1)
