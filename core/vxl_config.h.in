@@ -32,7 +32,8 @@
 // IEEE floating point types.
 #define vxl_ieee_32  @VXL_IEEE_32@
 #define vxl_ieee_64  @VXL_IEEE_64@
-//#define vxl_ieee_96 @VXL_IEEE_96@
+//#define vxl_ieee_96  @VXL_IEEE_96@
+//#define vxl_ieee_128 @VXL_IEEE_128@
 
 // -------------------- library quirks
 
