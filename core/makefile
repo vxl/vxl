@@ -17,17 +17,20 @@ SUBDIRS += vnl
 # geometry
 SUBDIRS += vgl
 
+# image
+SUBDIRS += vil
+
+# video
+SUBDIRS += vvl
+
+# segmentation
+SUBDIRS += vsl
+
 # spatial objects
 SUBDIRS += vsol
 
 # topology
 SUBDIRS += vtol
-
-# image
-SUBDIRS += vil
-
-# segmentation
-SUBDIRS += vsl
 
 ifeq (1,$(strip $(HAS_OPENGL)))
 # OpenGL ui library

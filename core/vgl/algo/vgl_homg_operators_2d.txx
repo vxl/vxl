@@ -9,7 +9,7 @@
 #include <vcl/vcl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_scatter_3x3.h>
+#include <vnl/algo/vnl_scatter_3x3.h>
 
 
 #include <vgl/vgl_homg_line_2d.h>

@@ -6,6 +6,7 @@ IUE_PACKAGE_LIBRARIES += -lvgl-algo -lvgl
 IUE_PACKAGE_LIBRARIES += -lvil
 
 # For libTIFF.so libJPEG.so and libnetlib.so
+# This is wrong if there are native versions of tiff and jpeg.
 LIBDIRS += $(wildcard $(IUELOCALROOT_libbase)/v3p/$(tj_libdir))
 
 IUE_PACKAGE_LIBRARIES += -lvnl-algo -lvnl -lnetlib

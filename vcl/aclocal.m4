@@ -327,6 +327,23 @@ public:
   T * &operator[](unsigned i) { return data[i]; }
   void slarf() { data[0] += (data[2] - data[1]); }
 };
+
+template <class A, class R>
+struct foo {
+  typedef A a;
+  typedef R r;
+};
+
+template <class T>
+struct foo<T *, T *> {
+  void bar() { }
+};
+
+template <class T>
+struct foo<int *, T> {
+  void baz() { }
+};
+
 ],,ac_cxx_can_do_partial_specialization=yes,ac_cxx_can_do_partial_specialization=no)
 AC_LANG_RESTORE
 ])
