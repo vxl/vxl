@@ -32,7 +32,11 @@ vpl_chdir( const char *dir )
 int
 vpl_unlink( const char *file )
 {
+#if defined(VCL_BORLAND)
+  return unlink( file );
+#else
   return _unlink( file );
+#endif
 }
 
 unsigned int
@@ -51,5 +55,9 @@ vpl_usleep( unsigned int t )
 
 int vpl_putenv ( const char * envvar )
 {
+#if defined(VCL_BORLAND)
+  return putenv(envvar);
+#else
   return _putenv(envvar);
+#endif
 }
