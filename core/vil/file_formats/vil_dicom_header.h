@@ -185,7 +185,7 @@ const vxl_uint_16 VIL_DICOM_HEADER_IMHIGHBIT                =0x0102; // US
 const vxl_uint_16 VIL_DICOM_HEADER_IMPIXELREPRESENTATION    =0x0103; // US
 const vxl_uint_16 VIL_DICOM_HEADER_IMSMALLIMPIXELVALUE      =0x0106; // US
 const vxl_uint_16 VIL_DICOM_HEADER_IMLARGEIMPIXELVALUE      =0x0107; // US
-const vxl_uint_16 VIL_DICOM_HEADER_IMPIXELPADDINGVALUE      =0x0120; // SS
+const vxl_uint_16 VIL_DICOM_HEADER_IMPIXELPADDINGVALUE      =0x0120; // US
 const vxl_uint_16 VIL_DICOM_HEADER_IMWINDOWCENTER           =0x1050; // DS
 const vxl_uint_16 VIL_DICOM_HEADER_IMWINDOWWIDTH            =0x1051; // DS
 const vxl_uint_16 VIL_DICOM_HEADER_IMRESCALEINTERCEPT       =0x1052; // DS
@@ -425,7 +425,7 @@ struct vil_dicom_header_info
   vil_dicom_header_type_of<vil_dicom_header_US>::type high_bit_;  /*< The bit used as the high bit */
   vil_dicom_header_type_of<vil_dicom_header_US>::type small_im_pix_val_;   /*< The smallest image pixel value */
   vil_dicom_header_type_of<vil_dicom_header_US>::type large_im_pix_val_;   /*< The largest image pixel value */
-  vil_dicom_header_type_of<vil_dicom_header_SS>::type pixel_padding_val_;  /*< The value used for padding pixels */
+  vil_dicom_header_type_of<vil_dicom_header_US>::type pixel_padding_val_;  /*< The value used for padding pixels */
   vil_dicom_header_type_of<vil_dicom_header_DS>::type window_centre_;      /*< The value of the image window's centre */
   vil_dicom_header_type_of<vil_dicom_header_DS>::type window_width_;       /*< The actual width of the image window */
 

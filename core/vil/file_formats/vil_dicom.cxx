@@ -752,7 +752,7 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
   try_set< ap_type(US) >::proc( f, group, ap_el(IMPIXELREPRESENTATION),i.pix_rep_ ); // It's the pixel representation
   try_set< ap_type(US) >::proc( f, group, ap_el(IMSMALLIMPIXELVALUE),  i.small_im_pix_val_ ); // It's the smallest image pixel value
   try_set< ap_type(US) >::proc( f, group, ap_el(IMLARGEIMPIXELVALUE),  i.large_im_pix_val_ ); // It's the largest image pixel value
-  try_set< ap_type(SS) >::proc( f, group, ap_el(IMPIXELPADDINGVALUE),  i.pixel_padding_val_ ); // It's the pixel padding value
+  try_set< ap_type(US) >::proc( f, group, ap_el(IMPIXELPADDINGVALUE),  i.pixel_padding_val_ ); // It's the pixel padding value
   try_set< ap_type(DS) >::proc( f, group, ap_el(IMWINDOWCENTER),       i.window_centre_ ); // It's the window centre
   try_set< ap_type(DS) >::proc( f, group, ap_el(IMWINDOWWIDTH),        i.window_width_ ); // It's the window width
   try_set< ap_type(DS) >::proc( f, group, ap_el(IMRESCALEINTERCEPT),   i.res_intercept_ ); // It's the rescale intercept
