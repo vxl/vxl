@@ -41,16 +41,12 @@ void test_matlab() {
   {
     char const *file = "/tmp/smoo.mat";
     { 
-      ofstream f(file);
+      vcl_ofstream f(file);
       vnl_matlab_write(f, v.begin(), v.size(), "v");
-#if defined(VCL_SGI_CC)
       vnl_matlab_write(f, (double const * const *)M.data_array(), M.rows(), M.cols(), (char const *)"M");
-#else
-      vnl_matlab_write(f, M.data_array(), M.rows(), M.cols(), "M");
-#endif
     }
     {
-      ifstream f(file);
+      vcl_ifstream f(file);
 
       vnl_matlab_readhdr vh(f);
       fsm_assert( vh);
