@@ -28,7 +28,7 @@ inline void vil_cartesian_differential_invariants_3_1plane(
   if (max_kernel_width!=0 && filt_n > max_kernel_width)
     filt_n = (max_kernel_width | 1); // make sure it is an odd number
 
-  const unsigned filt_c=filt_n/2;
+  const ptrdiff_t filt_c=filt_n/2;
 
   vcl_vector<double> filt_0(filt_n), filt_2(filt_n), filt_1(filt_n), filt_3(filt_n);
   vil_gauss_filter_gen_ntap(scale, 0, filt_0);
