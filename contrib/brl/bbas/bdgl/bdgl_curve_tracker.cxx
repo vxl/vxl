@@ -18,7 +18,6 @@
 #include <vcl_iostream.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
-//#include "bdgl_util.h" // nonexisting ?!
 
 
 //-----------------------------------------------------------------------------
@@ -27,9 +26,7 @@ void bdgl_curve_tracker::track()
   vcl_cout<<"-- testing batch tracking --\n";
   // for all images:
   for (unsigned int t=0;t<input_curve_.size();t++)
-  {
-  track_frame(t);
-  }
+    track_frame(t);
   return;
 }
 
@@ -46,8 +43,7 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
   vcl_vector< vcl_map< int,double> >          cost_table;
   vcl_vector< vcl_map< int,double> >          filtered_cost_table;
   vcl_map<int,double>:: iterator              iter;
-  int best_id;
-  double best_val, dist;
+  double dist;
 
   aspects.clear();
   vcl_vector<int> ctemp;
@@ -104,8 +100,8 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
     // take every primitive and find the best related curve
     for (unsigned int i=0;i<output_curve_[frame-1].size();i++)
     {
-      best_id = -1;
-      best_val = 1e6;
+//    int best_id = -1;
+//    double best_val = 1e6;
 #ifdef DEBUG
       vcl_cout<<'.';
 #endif
@@ -128,13 +124,11 @@ vcl_vector<vcl_map<int,double> > bdgl_curve_tracker::filter_top_ranks(vcl_vector
     {
       double min_cost=1e6;
       for (iter=cost_table[i].begin();iter!=cost_table[i].end();iter++)
-      {
         if (min_cost>(*iter).second)
         {
           min_cost=(*iter).second;
           min_cost_second_id=(*iter).first;
         }
-      }
       //vcl_cout<<"\n the cost is "<<min_cost;
       temp_list[min_cost_second_id]=min_cost;
       cost_table[i].erase(min_cost_second_id);
@@ -157,6 +151,7 @@ bdgl_tracking_feature::bdgl_tracking_feature(vdgl_digital_curve_sptr & edge)
   member_edge_=edge;
   //desc.init(member_edge_->get_interpolator()->get_edgel_chain());
 }
+
 int bdgl_tracking_feature::add_child(vdgl_digital_curve_sptr  c)
 {
   //for (int i=0;i<child_.size
@@ -189,15 +184,12 @@ void bdgl_curve_match_tracker::track_match()
   vcl_cout<<"-- testing batch tracking --\n";
   // for all images:
   for (unsigned int t=0;t<untracked_curve_.size();t++)
-  {
-  track_match_frame(t);
-  }
+    track_match_frame(t);
   return;
 }
 
 void bdgl_curve_match_tracker::track_match_frame(unsigned int frame)
 {
-
   vcl_vector< int >                           is_used;
   vcl_map<int,double>                         cost_map;
   vcl_vector< vcl_map< int,double> >          cost_table;
@@ -254,7 +246,7 @@ void bdgl_curve_match_tracker::track_match_frame(unsigned int frame)
 
         double coarse_cost=coarse_match(desc1,desc2);
         //tracked_curve_[frame][j].add_child(vdgl_digital_curve_sptr candidate_curve,coarse_cost)
-        vcl_cout<<"\n the lengths are "<< desc1.curvature_<<"\t"<<desc2.curvature_<<"\t"<<dist;
+        vcl_cout<<"\n the lengths are "<< desc1.curvature_<<'\t'<<desc2.curvature_<<'\t'<<dist;
       }
     }
   }
@@ -263,9 +255,9 @@ void bdgl_curve_match_tracker::track_match_frame(unsigned int frame)
     best_id = -1;
     best_val = 1e6;
 
-  cost_map.clear();
-  first_id[i]=0;
-  //no_of_candidates=0;
+    cost_map.clear();
+    first_id[i]=0;
+//  no_of_candidates=0;
     // look for curves in the neighborhood
     for (unsigned int j=0;j<input_curve_[frame].size();j++)
     {
@@ -297,88 +289,92 @@ void bdgl_curve_match_tracker::track_match_frame(unsigned int frame)
     vcl_cout<<'('<<i<<"->"<<best_id<<")->"<<best_val<<'\n';
 #endif
 
-  //running dp match on filtered results
-  for (unsigned int i=0;i<filtered_cost_table.size();i++)
+    //running dp match on filtered results
+    for (unsigned int i=0;i<filtered_cost_table.size();i++)
     {
-    first_id[i]=0;
-    cost_map.clear();
+      first_id[i]=0;
+      cost_map.clear();
       for (iter=filtered_cost_table[i].begin();iter!=filtered_cost_table[i].end();iter++)
       {
-       //no_of_candidates++;
-          matcher.init(output_curve_[frame-1][i], input_curve_[frame][(*iter).first]);
+        //no_of_candidates++;
+        matcher.init(output_curve_[frame-1][i], input_curve_[frame][(*iter).first]);
         matcher.match_DP();
-          //matcher.match();
-      cost_map[(*iter).first]=matcher.score();
+        //matcher.match();
+        cost_map[(*iter).first]=matcher.score();
       }
-   cost_table.push_back(cost_map);
-  }
+      cost_table.push_back(cost_map);
+    }
 
-  double min_cost=1e6;
-  int min_cost_first_id=-1;
-  int min_cost_second_id=-1;
-  vcl_vector< vcl_pair < int,double> > mincost;
-  vcl_vector<double> cost_vec;
-  vcl_pair<int,double> temp;
+    double min_cost=1e6;
+    int min_cost_first_id=-1;
+    int min_cost_second_id=-1;
+    vcl_vector< vcl_pair < int,double> > mincost;
+    vcl_vector<double> cost_vec;
+    vcl_pair<int,double> temp;
 
-  int cnt=1;
-  while (cnt<cost_table.size())
-  {
-  min_cost=1e9;
-  min_cost_first_id=-1;
-  min_cost_second_id=-1;
-
-  for (int i=0;i<cost_table.size();i++)
-  {
-  if (first_id[i]==0)
-  {
-  for (iter=cost_table[i].begin();iter!=cost_table[i].end();iter++)
-  {
-    if (second_id[(*iter).first]==0)
+    int cnt=1;
+    while (cnt<cost_table.size())
     {
-      if (min_cost>(*iter).second)
+      min_cost=1e9;
+      min_cost_first_id=-1;
+      min_cost_second_id=-1;
+
+      for (int i=0;i<cost_table.size();i++)
       {
-        min_cost=(*iter).second;
-        min_cost_second_id=(*iter).first;
-        min_cost_first_id=i;
+        if (first_id[i]==0)
+        {
+        for (iter=cost_table[i].begin();iter!=cost_table[i].end();iter++)
+        {
+          if (second_id[(*iter).first]==0)
+          {
+            if (min_cost>(*iter).second)
+            {
+              min_cost=(*iter).second;
+              min_cost_second_id=(*iter).first;
+              min_cost_first_id=i;
+            }
+          }
+        }
       }
     }
-  }
-  }
-  }
-  if (min_cost_first_id!=-1 || min_cost_second_id!=-1)
-  {
-    first_id[min_cost_first_id]=1;
-    second_id[min_cost_second_id]=1;
+    if (min_cost_first_id!=-1 || min_cost_second_id!=-1)
+    {
+      first_id[min_cost_first_id]=1;
+      second_id[min_cost_second_id]=1;
 
-    // fillin data to compute histogram;
-    cost_vec.push_back(min_cost);
+      // fillin data to compute histogram;
+      cost_vec.push_back(min_cost);
 
-   if ( min_cost_second_id == -1)
-   {
-     // do nothing: the primitive is not continued
-     output_curve_[frame-1][min_cost_first_id].next_num_ = -1;
-   } else {
-     // check if above a thresholded value
-     if (min_cost > 50) // params_.match_thres_)
-     {
-       // do nothing: the primitive is not continued
-       output_curve_[frame-1][min_cost_first_id].next_num_ = -1;
-     } else {
-       // if good, refine the primitive from it
-       primitive.init(output_curve_[frame-1][min_cost_first_id].get_id(), input_curve_[frame][min_cost_second_id]);
-       // update the ids
-       output_curve_[frame-1][min_cost_first_id].next_num_ = primitive_list.size();
-       primitive.prev_num_ = min_cost_first_id;
-       primitive.next_num_ = -1;
+      if ( min_cost_second_id == -1)
+      {
+        // do nothing: the primitive is not continued
+        output_curve_[frame-1][min_cost_first_id].next_num_ = -1;
+      }
+      else
+      {
+        // check if above a thresholded value
+        if (min_cost > 50) // params_.match_thres_)
+        {
+          // do nothing: the primitive is not continued
+          output_curve_[frame-1][min_cost_first_id].next_num_ = -1;
+        }
+        else
+        {
+          // if good, refine the primitive from it
+          primitive.init(output_curve_[frame-1][min_cost_first_id].get_id(), input_curve_[frame][min_cost_second_id]);
+          // update the ids
+          output_curve_[frame-1][min_cost_first_id].next_num_ = primitive_list.size();
+          primitive.prev_num_ = min_cost_first_id;
+          primitive.next_num_ = -1;
 
-       primitive_list.insert(primitive_list.end(), primitive);
-       is_used[best_id]=1;
+          primitive_list.insert(primitive_list.end(), primitive);
+          is_used[best_id]=1;
 #ifdef DEBUG
-       vcl_cout<<'.';
+          vcl_cout<<'.';
 #endif
-     }
-   }
- }
+        }
+      }
+    }
 #ifdef DEBUG
     vcl_cout<<"-unmatched primitives-\n";
 #endif
@@ -402,20 +398,20 @@ void bdgl_curve_match_tracker::track_match_frame(unsigned int frame)
 
 double bdgl_curve_match_tracker::coarse_match(bdgl_curve_description desc1,bdgl_curve_description desc2)
 {
-    double dist;
-    int image_scale=1;
-    double grad_scale=10;
-    double angle_scale=0.31412;
-    dist = 1.0*vcl_sqrt( vnl_math_sqr( (desc1.center_.x()-desc2.center_.x())/image_scale )
+  double dist;
+  int image_scale=1;
+  double grad_scale=10;
+  double angle_scale=0.31412;
+  dist = 1.0*vcl_sqrt( vnl_math_sqr( (desc1.center_.x()-desc2.center_.x())/image_scale )
                       +vnl_math_sqr( (desc1.center_.y()-desc2.center_.y())/image_scale ));
-    dist+= 0.5*vnl_math_abs( (desc1.length_-desc2.length_)/image_scale );
-    dist+= 0.5*vnl_math_abs( (desc1.curvature_-desc2.curvature_)/image_scale );
-    dist+= 1.0*vnl_math_abs( (desc1.gradient_mean_val_-desc2.gradient_mean_val_)/grad_scale );
-    dist+= 1.0*vnl_math_abs( (desc1.gradient_mean_dir_-desc2.gradient_mean_dir_)/angle_scale );
-    dist+= 1.0*vnl_math_abs( (desc1.gradient_std_val_-desc2.gradient_std_val_)/grad_scale );
-    dist+= 1.0*vnl_math_abs( (desc1.gradient_std_dir_-desc2.gradient_std_dir_)/angle_scale );
+  dist+= 0.5*vnl_math_abs( (desc1.length_-desc2.length_)/image_scale );
+  dist+= 0.5*vnl_math_abs( (desc1.curvature_-desc2.curvature_)/image_scale );
+  dist+= 1.0*vnl_math_abs( (desc1.gradient_mean_val_-desc2.gradient_mean_val_)/grad_scale );
+  dist+= 1.0*vnl_math_abs( (desc1.gradient_mean_dir_-desc2.gradient_mean_dir_)/angle_scale );
+  dist+= 1.0*vnl_math_abs( (desc1.gradient_std_val_-desc2.gradient_std_val_)/grad_scale );
+  dist+= 1.0*vnl_math_abs( (desc1.gradient_std_dir_-desc2.gradient_std_dir_)/angle_scale );
 
-    return dist;
+  return dist;
 }
 
 #endif // 0
