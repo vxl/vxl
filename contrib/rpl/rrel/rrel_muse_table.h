@@ -36,9 +36,14 @@ public:
   //  The value is retrieved from the lookup table when possible.
   double standard_dev_kth( unsigned int k, unsigned int n ) const;
 
-  //: The divisor.
+  //: The divisor for trimmed statistics.
   //  The value is retrieved from the lookup table when possible.
   double muset_divisor( unsigned int k, unsigned int n ) const;
+
+
+  //: The divisor for trimmed square statistics.
+  //  The value is retrieved from the lookup table when possible.
+  double muset_sq_divisor( unsigned int k, unsigned int n ) const;
 
 private:
   //: Expected value of the kth ordered residual from n samples.
@@ -49,9 +54,13 @@ private:
   //  The value is computed "from scratch".
   double calculate_standard_dev( unsigned int k, unsigned int n, double expected_kth ) const;
 
-  //: The divisor.
+  //: The divisor for trimmed statistics.
   //  The value is computed "from scratch".
   double calculate_divisor( unsigned int k, unsigned int n, double expected_kth ) const;
+
+  //: The divisor for trimmed squared statistics.
+  //  The value is computed "from scratch".
+  double calculate_sq_divisor( unsigned int k, unsigned int n, double expected_kth ) const;
 
 private:
   //: Size of the tables.
@@ -65,6 +74,9 @@ private:
 
   //: Table of divisors.
   vbl_array_2d<double> muse_t_divisor_;
+
+  //: Table of trimmed square statistics divisors.
+  vbl_array_2d<double> muse_t_sq_divisor_;
 };
 
 #endif

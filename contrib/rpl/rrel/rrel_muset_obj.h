@@ -47,6 +47,8 @@ class rrel_muse_table;
 //  scale structures.  In general it is safe to use this, and the
 //  constructor defaults to having it set.
 
+enum rrel_muse_type { RREL_MUSE_TRIMMED, RREL_MUSE_TRIMMED_SQUARE, RREL_MUSE_QUANTILE };
+
 class rrel_muset_obj : public rrel_objective {
 public:
   //: Constructor.
@@ -71,6 +73,14 @@ public:
   virtual double fcn( vect_const_iter begin, vect_const_iter end,
                       double = 0 /* scale is unused */,
                       vnl_vector<double>* = 0 /* param vector is unused */ ) const;
+
+  //: Computes the MUSE estimate and best value of k
+  //  \a begin and \a end give the residuals. \a objective is the
+  //  value of the objective function, \a sigma_est is an estimate
+  //  of the scale (and is the objective function), and \a best_k
+  //  is the value of k that produced the scale estimate.
+  void internal_fcn( vect_const_iter begin, vect_const_iter end,
+                     double& sigma_est, int& best_k ) const;
 
   //: False.
   //  This MUSE estimator is based on trimmed statistics, and does not
@@ -106,16 +116,17 @@ public:
   //: The search step for determining the inlier/outlier fraction.
   double inlier_fraction_increment() const { return frac_inc_; }
 
-private:
-  //: Computes the MUSE estimate
-  //  \a begin and \a end give the residuals. \a objective is the
-  //  value of the objective function, and \a sigma_est is an estimate
-  //  of the scale.
-  void internal_fcn( vect_const_iter begin, vect_const_iter end,
-                     double& sigma_est ) const;
+  //: Set the type of MUSE objective function
+  void set_muse_type( rrel_muse_type t = RREL_MUSE_TRIMMED )
+    { muse_type_ = t; }
+
+  //: Access the type of MUSE objective function
+  rrel_muse_type muse_type() const { return muse_type_; }
 
 protected:
   bool use_sk_refine_;
+  rrel_muse_type muse_type_;
+
   bool table_owned_;
   rrel_muse_table* table_;
   double min_frac_;

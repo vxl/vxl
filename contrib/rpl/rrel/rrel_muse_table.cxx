@@ -21,6 +21,7 @@ rrel_muse_table::rrel_muse_table( unsigned int max_n_stored )
   expected_.resize( max_n_stored_+1, max_n_stored_+1 );
   standard_dev_.resize( max_n_stored_+1, max_n_stored_+1 );
   muse_t_divisor_.resize( max_n_stored_+1, max_n_stored_+1 );
+  muse_t_sq_divisor_.resize( max_n_stored_+1, max_n_stored_+1 );
 
   unsigned int k,n;
   for ( n=1; n<=max_n_stored_; ++n )
@@ -28,6 +29,7 @@ rrel_muse_table::rrel_muse_table( unsigned int max_n_stored )
       expected_(k,n) = calculate_expected( k, n );
       standard_dev_(k,n) = calculate_standard_dev( k, n, expected_(k,n) );
       muse_t_divisor_(k,n) = calculate_divisor( k, n, expected_(k,n) );
+      muse_t_sq_divisor_(k,n) = calculate_sq_divisor( k, n, expected_(k,n) );
     }
 }
 
@@ -68,6 +70,18 @@ rrel_muse_table::muset_divisor( unsigned int k, unsigned int n ) const
 
 
 double
+rrel_muse_table::muset_sq_divisor( unsigned int k, unsigned int n ) const
+{
+  assert( 0<k && k<= n );
+  if ( n <= max_n_stored_ ) {
+    return muse_t_sq_divisor_(k,n);
+  } else {
+    return calculate_sq_divisor( k, n, calculate_expected(k,n) );
+  }
+}
+
+
+double
 rrel_muse_table::calculate_expected( unsigned int k, unsigned int n ) const
 {
   return rrel_misc_gaussian_cdf_inv(0.5*(1.0+((double)k / (double)(n+1))));
@@ -87,10 +101,15 @@ rrel_muse_table::calculate_standard_dev( unsigned int k, unsigned int n,
   Qk = expected_kth;  // ak(k, N);   // inverse cdf of absolute residuals
 
   // density of absolute residual evaluated at Qk
-  pQk = vcl_exp( -0.5 * Qk*Qk) / vcl_sqrt(2.0*vnl_math::pi);
+  pQk = vcl_exp( -0.5 * Qk*Qk) * vcl_sqrt(2.0 / vnl_math::pi);
 
   // first derivative of Qk
   Qk_prime = 1.0/pQk;
+
+  /*
+  //  Low order approximation
+  vrk = (pk*qk/(double)(n+2)) * Qk_prime*Qk_prime;
+  */
 
   // second derivative of Qk
   Qk_dprime = Qk/(pQk*pQk);
@@ -98,6 +117,7 @@ rrel_muse_table::calculate_standard_dev( unsigned int k, unsigned int n,
   // third derivative of Qk
   Qk_tprime = ( 1.0 + 2.0 * Qk*Qk ) / (pQk*pQk*pQk);
 
+  //  Higher order approximation
   vrk = (pk*qk/(double)(n+2)) * Qk_prime*Qk_prime
         + (pk*qk/((double)((n+2)*(n+2)))) * ( 2.0*(qk - pk)*Qk_prime*Qk_dprime
         + pk*qk*(Qk_prime*Qk_tprime + 0.5*Qk_dprime*Qk_dprime));
@@ -111,6 +131,14 @@ rrel_muse_table::calculate_divisor( unsigned int k, unsigned int n,
                                     double expected_kth ) const
 {
   return (n+1)*vcl_sqrt(2/vnl_math::pi)*(1.0-vcl_exp(-vnl_math_sqr(expected_kth)/2.0));
+}
+
+double
+rrel_muse_table::calculate_sq_divisor( unsigned int k, unsigned int n,
+                                       double expected_kth ) const
+{
+  return k - (n+1) * expected_kth * vcl_sqrt(2/vnl_math::pi)
+    * vcl_exp(-vnl_math_sqr(expected_kth)/2.0); 
 }
 
 #if 0
