@@ -14,8 +14,8 @@
 #include <vsl/vsl_binary_io.h>
 
 //=======================================================================
-//: Construct thin plate spline to map 2D to 2D
-// ie does some mapping (x',y') = f(x,y). (See Booksteins work, eg IPMI 1993)
+//: Construct thin plate spline to map 2D to 2D.
+// I.e. does some mapping (x',y') = f(x,y). (See Booksteins work, eg IPMI 1993)
 // The warp is `guided' by a set of
 // landmarks p(0) .. p(n-1) in the source plane which are to be
 // mapped to a (possibly deformed) set q(0)..q(n-1) in the destination.
