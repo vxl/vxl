@@ -63,7 +63,8 @@ void vpdfl_axis_gaussian_sampler::reseed(unsigned long seed)
 // Error check that it is an axis gaussian.
 void vpdfl_axis_gaussian_sampler::set_model(const vpdfl_pdf_base& model)
 {
-  assert(dynamic_cast<const vpdfl_axis_gaussian*>(&model));
+// rtti currently turned off
+//  assert(dynamic_cast<const vpdfl_axis_gaussian*>(&model));
   vpdfl_sampler_base::set_model(model);
 }
 
