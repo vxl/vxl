@@ -10,19 +10,19 @@
 #include <direct.h>
 #include <sys/timeb.h>
 #else
-#include <unistd.h>
+#include <vcl/vcl_unistd.h> // for struct timeval
 #endif
 
-#include <vcl/vcl_ctime.h>
-#include <vcl/vcl_sys/time.h>
+//#include <vcl/vcl_ctime.h> // for struct timezone
+#include <vcl/vcl_sys/time.h> // for gettimeofday()
 
 #ifndef WIN32
 // POSIX
 void vbl_get_timestamp(int &secs, int &msecs)
 {
   struct timeval  timestamp;
-  struct timezone dummy;
-  gettimeofday(&timestamp, &dummy);
+  void* dummy = 0;
+  gettimeofday(&timestamp, dummy);
 
   secs = timestamp.tv_sec;
   msecs = timestamp.tv_usec/1000;
