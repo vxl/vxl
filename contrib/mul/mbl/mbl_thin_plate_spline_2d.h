@@ -65,8 +65,8 @@ class mbl_thin_plate_spline_2d
 
    //: Compute spline-bending energy
   void compute_energy(vnl_vector<double>& W1,
-                  vnl_vector<double>& W2,
-                  const vnl_matrix<double>& L);
+                      vnl_vector<double>& W2,
+                      const vnl_matrix<double>& L);
 
  public:
 
@@ -78,8 +78,8 @@ class mbl_thin_plate_spline_2d
 
     //: Sets up internal transformation to map source_pts onto dest_pts
   void build(const vcl_vector<vgl_point_2d<double> >& source_pts,
-        const vcl_vector<vgl_point_2d<double> >& dest_pts,
-                   bool compute_the_energy=false);
+             const vcl_vector<vgl_point_2d<double> >& dest_pts,
+             bool compute_the_energy=false);
 
     //: Define source point positions
     //  Performs pre-computations so that build(dest_points) can be
