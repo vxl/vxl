@@ -25,6 +25,11 @@ TESTS += test_image_view_maths.cxx
 TESTS += test_memory_chunk.cxx
 TESTS += test_convert.cxx
 
+include ${IUEROOT}/config/identify-os.mk
+ifeq ($(OS),OSF1V4) # with optimisation, gcc 3.x runs out of memory
+FLAGS_test_algo_convolve_1d.cxx := -O0
+endif
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################
