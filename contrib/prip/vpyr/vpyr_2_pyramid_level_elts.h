@@ -133,9 +133,11 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:
   vpyr_2_pyramid_level_dart_base_iterator() {}
 
+#ifndef VCL_VC // already covered by the next, more general, copy constructor
   //:
   vpyr_2_pyramid_level_dart_base_iterator(const self_type &it)
     :element_type(it),it_(it.it_)                              {}
+#endif
 
   //:
   template< typename FDp, typename Refp, typename Ptrp, typename Itp >
