@@ -7,12 +7,12 @@
 // \date   Jan 14th, 1998
 //
 // \verbatim
-// Modifications
-// PDA (Manchester) 21/03/2001: Tidied up the documentation
-// IMS (Manchester) 21/10/2003: Deprecated - Decision at Providence 2002 Meeting.
-//                              Can be deleted after VXL-1.1
+//  Modifications
+//   PDA (Manchester) 21/03/2001: Tidied up the documentation
+//   IMS (Manchester) 21/10/2003: Deprecated - Decision at Providence 2002 Meeting.
+//                                Can be deleted after VXL-1.1
+//   Peter Vanroose 10 Sept 2004  Added initialiser for vbl_ref_count in copy constructor
 // \endverbatim
-
 
 #include <vcl_string.h>
 #include <vcl_hash_string.h>
@@ -95,7 +95,7 @@ class vbl_br_impl : public vbl_ref_count
   vbl_br_impl(const vcl_string& n) : name(n) {}
 
   //: Copy constructor.
-  vbl_br_impl(const vbl_br_impl<T1,T2,T3,T4,T5>& i) : name(i.name) {}
+  vbl_br_impl(const vbl_br_impl<T1,T2,T3,T4,T5>& i) : vbl_ref_count(), name(i.name) {}
 
   //: Destructor.
   virtual ~vbl_br_impl() {}
