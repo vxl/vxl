@@ -59,6 +59,7 @@ SOURCES += file_formats/vil_bmp_core_header.cxx
 SOURCES += file_formats/vil_bmp_info_header.cxx
 SOURCES += file_formats/vil_bmp.cxx
 SOURCES += file_formats/vil_gif.cxx
+SOURCES += file_formats/vil_ras.cxx
 ifeq ($(HAS_PNG),1)
 USE_PNG := 1
 SOURCES += file_formats/vil_png.cxx
