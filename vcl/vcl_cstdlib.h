@@ -22,6 +22,7 @@
 # define vcl_exit    exit
 # define vcl_abort   abort
 # define vcl_size_t  size_t
+# define vcl_atoi    atoi
 #else
 # include <vcl/iso/vcl_cstdlib.h>
 #endif
