@@ -19,7 +19,7 @@ static void test_image_tableau(int argc, char* argv[])
     testlib_test_begin( "Construct with filename" );
     vgui_image_tableau_new img_tab( input_file );
     vil1_image img2 = img_tab->get_image();
-    testlib_test_perform( img2 );
+    testlib_test_perform( img2!=0 );
 
     testlib_test_begin( "Size is correct" );
     testlib_test_perform( img.width()      == img2.width() &&

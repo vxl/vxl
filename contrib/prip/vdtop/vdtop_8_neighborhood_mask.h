@@ -3,7 +3,7 @@
 #define vdtop_8_neighborhood_mask_h_
 //:
 // \file
-// \brief gives functionalities for computing certain caracteritics of binary 8-neighborhoods.
+// \brief gives functionalities for computing certain characteritics of binary 8-neighborhoods.
 // \author Jocelyn Marchadier
 // \date 06/05/2004
 //
@@ -14,8 +14,8 @@
 #include <vxl_config.h>
 #include "vdtop_freeman_code.h"
 
-//: This class handles sets of points included in an 8 neighborhood.
-// A vdtop_8_neighborhood_mask can be viewed as a set of points arround a single point.
+//: This class handles sets of points included in an 8-neighborhood.
+// A vdtop_8_neighborhood_mask can be viewed as a set of points around a single point.
 //
 class vdtop_8_neighborhood_mask
 {
@@ -88,7 +88,7 @@ class vdtop_8_neighborhood_mask
   //: Returns true if the set includes the point in direction "arg" from the center.
   bool includes(vdtop_freeman_code arg) const
   {
-    return arg.mask() & mask_ ;
+    return (arg.mask() & mask_) != 0;
   }
 
   //: Returns the set complementary to this.
@@ -100,7 +100,7 @@ class vdtop_8_neighborhood_mask
   //: Returns true if the set is empty.
   bool empty() const
   {
-    return mask_==0 ;
+    return mask_==0;
   }
 
   //: Returns true if the set is equal to the complete neighborhood.
