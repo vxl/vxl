@@ -26,7 +26,29 @@ inline double sq_dist(vnl_vector<double> const& A,
                       vnl_vector<double> const& B)
 { return (B-A).squared_magnitude(); }
 
-#define APPROX(TXT, A, B) TEST(TXT, sq_dist(A,B) < 1e-6, true)
+#define EPS 1e-6
+
+#define APPROX(TXT, A, B) TEST(TXT, sq_dist(A,B) < EPS, true)
+
+bool approx_equal( vgl_conic<double>& c1, vgl_conic<double>& c2 )
+{
+  double k;  // multiplicative factor for coefficients
+
+  if     ( c1.a() != 0 && c2.a() != 0 )  k = c1.a() / c2.a();
+  else if( c1.b() != 0 && c2.b() != 0 )  k = c1.b() / c2.b();
+  else if( c1.c() != 0 && c2.c() != 0 )  k = c1.c() / c2.c();
+  else if( c1.d() != 0 && c2.d() != 0 )  k = c1.d() / c2.d();
+  else if( c1.e() != 0 && c2.e() != 0 )  k = c1.e() / c2.e();
+  else if( c1.f() != 0 && c2.f() != 0 )  k = c1.f() / c2.f();
+  else                   k = 1.0;
+
+  return (    vcl_abs( c1.a() - c2.a() * k ) < EPS
+           && vcl_abs( c1.b() - c2.b() * k ) < EPS
+           && vcl_abs( c1.c() - c2.c() * k ) < EPS
+           && vcl_abs( c1.d() - c2.d() * k ) < EPS
+           && vcl_abs( c1.e() - c2.e() * k ) < EPS
+           && vcl_abs( c1.f() - c2.f() * k ) < EPS );
+}
 
 void test_conic() {
   // 1. Test circle
@@ -70,7 +92,6 @@ void test_conic() {
   vcl_cout << c << '\n';
   TEST("conic is ellipse", c.real_type(), "real ellipse");
   TEST("centre", c.centre(), vgl_homg_point_2d<double>(centre));
-//TEST("conic equality", c, cc); // (approx)
   double factor = c.a()/cc.a();
   vnl_vector<double> v1 = vgl_homg_operators_2d<double>::get_vector(c);
   vnl_vector<double> v2 = vgl_homg_operators_2d<double>::get_vector(cc) * factor;
@@ -136,7 +157,6 @@ void test_conic() {
   vcl_cout << c << '\n';
   TEST("conic is hyperbola", c.real_type(), "hyperbola");
   TEST("centre is (1,2)", c.centre(), vgl_homg_point_2d<double>(centre));
-//TEST("conic equality", c, cc); // (approx)
   factor = c.a()/cc.a();
   v1 = vgl_homg_operators_2d<double>::get_vector(c);
   v2 = vgl_homg_operators_2d<double>::get_vector(cc) * factor;
@@ -383,6 +403,16 @@ void test_conic() {
   TEST("!contains (0,1)", c.contains(npt), false);
   lines = vgl_homg_operators_2d<double>::tangent_from(c, npt);
   TEST("tangent lines count from other point = 0", lines.size(), 0);
+
+  // 8. Test constructors
+  vcl_cout << "\n\t=== test constructors ===\n";
+  // ellipse, centre (1,2), axes lengths 10,5, rotated by pi/2.
+  cc = vgl_conic<double>(centre, 10,5 , vcl_atan2(0.0,1.0));
+  c  = vgl_conic<double>(centre, 5 ,10, vcl_atan2(1.0,0.0));
+  TEST("ellipse equality", approx_equal(cc,c), true);
+  cc = vgl_conic<double>(centre, 10,-5 , vcl_atan2(0.0,1.0));
+  c  = vgl_conic<double>(centre, -5 ,10, vcl_atan2(1.0,0.0));
+  TEST("hyperbola equality", approx_equal(cc,c), true);
 }
 
 TESTMAIN(test_conic);

@@ -138,16 +138,18 @@ public:
   vgl_conic(T const coeff[]);
 
   //: constructor using centre, signed radii, and angle
-  //  This constructor can only be used for non-degenerate, real conics:
-  //  If the centre point c is a finite point and rx and ry have the same sign,
-  //  an ellipse is defined (any ellipse can uniquely be specified this way);
-  //  rx is the length of one main axis, ry of the other axis.
-  //  Hyperbolas are obtained if rx and ry have opposite sign; the positive
-  //  one determines the distance from bots tops to the centre, and the other
-  //  one specified the 'minor' axis length.  A parabola is obtained
-  //  when the centre has w()=0, i.e., is a point at infinity. In
-  //  that case (rx,ry) is the top, and theta is an excentricity parameter
-  //  (since the centre already specifies the direction of the symmetry axis).
+  //  This constructor can only be used for non-degenerate, real
+  //  conics: If the centre point c is a finite point and rx and ry
+  //  have the same sign, an ellipse is defined (any ellipse can
+  //  uniquely be specified this way); rx is the length of one main
+  //  axis, ry of the other axis.  Hyperbolas are obtained if rx and
+  //  ry have opposite sign; the positive one determines the distance
+  //  from bots tops to the centre, and the other one specified the
+  //  'minor' axis length. The rotation is about the centre of the
+  //  ellipse or hyperbola. A parabola is obtained when the centre has
+  //  w()=0, i.e., is a point at infinity. In that case (rx,ry) is the
+  //  top, and theta is an excentricity parameter (since the centre
+  //  already specifies the direction of the symmetry axis).
   vgl_conic(vgl_homg_point_2d<T> const& c, T rx, T ry, T theta);
 
   //: set or reset the conic using polynomial coefficients.

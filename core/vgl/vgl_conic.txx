@@ -99,10 +99,10 @@ vgl_conic<T>::vgl_conic(T a, T b, T c, T d, T e, T f)
 template <class T>
 vgl_conic<T>::vgl_conic(vgl_homg_point_2d<T> const& c, T rx, T ry, T theta)
 {
-  rx = (rx < 0) ? (-1/(rx*rx)) : (rx > 0) ? (1/(rx*rx)) : 0;
-  ry = (ry < 0) ? (-1/(ry*ry)) : (ry > 0) ? (1/(ry*ry)) : 0;
-
   if (c.w() == 0) { // This is a parabola
+    rx = (rx < 0) ? (-1/(rx*rx)) : (rx > 0) ? (1/(rx*rx)) : 0;
+    ry = (ry < 0) ? (-1/(ry*ry)) : (ry > 0) ? (1/(ry*ry)) : 0;
+
     a_ = c.y()*c.y();
     b_ = -2*c.x()*c.y();
     c_ = c.x()*c.x();
@@ -116,18 +116,19 @@ vgl_conic<T>::vgl_conic(vgl_homg_point_2d<T> const& c, T rx, T ry, T theta)
     f_ = -a_*rx*rx-b_*rx*ry-c_*ry*ry-d_*rx-e_*ry;
   }
   else {
-    T cost = vcl_cos(-theta);
-    T sint = vcl_sin(-theta);
-    T cost2 = cost*cost;
-    T sint2 = sint*sint;
-    T cx = c.x()*cost - c.y()*sint;
-    T cy = c.x()*sint + c.y()*cost; // rotation
-    a_ = cost2*rx + sint2*ry;
-    b_ = 2*sint*cost*(ry-rx);
-    c_ = rx*sint2 + ry*cost2;
-    d_ = -2*rx*cost*cx - 2*ry*sint*cy;
-    e_ =  2*rx*sint*cx - 2*ry*cost*cy;
-    f_ = ry*cy*cy + rx*cx*cx - 1;
+    rx = (rx < 0) ? (-1*(rx*rx)) : (rx > 0) ? (rx*rx) : 0;
+    ry = (ry < 0) ? (-1*(ry*ry)) : (ry > 0) ? (ry*ry) : 0;
+
+    T ct = vcl_cos(-theta);
+    T st = vcl_sin(-theta);
+    T u = c.x();
+    T v = c.y();
+    a_ = rx*st*st + ry*ct*ct;
+    b_ = 2*(rx-ry)*ct*st;
+    c_ = rx*ct*ct + ry*st*st;
+    d_ = -2*(rx*st*st + ry*ct*ct)*u - 2*(rx-ry)*ct*st*v;
+    e_ = -2*(rx-ry)*ct*st*u - 2*(rx*ct*ct + ry*st*st)*v;
+    f_ = (rx*st*st +ry*ct*ct)*u*u + 2*(rx-ry)*ct*st*u*v + (rx*ct*ct + ry*st*st)*v*v - rx*ry;
   }
   set_type_from_equation();
 }
