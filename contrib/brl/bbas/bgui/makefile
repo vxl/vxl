@@ -24,6 +24,9 @@ SOURCES += bgui_displaylist2D_tableau.cxx
 MANPAGE_SOURCES += bgui_displaylist2D_tableau_sptr.h
 SOURCES += bgui_easy2D_tableau.cxx
 MANPAGE_SOURCES += bgui_easy2D_tableau_sptr.h
+SOURCES += bgui_linked_vsol2D_tableau.cxx
+MANPAGE_SOURCES += bgui_linked_vsol2D_tableau_sptr.h
+SOURCES += bgui_linked_vsol_soview2D.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
