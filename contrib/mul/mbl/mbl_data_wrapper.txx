@@ -22,7 +22,7 @@ mbl_data_wrapper<T>::~mbl_data_wrapper()
 template<class T>
 void mbl_data_wrapper<T>::set_index(unsigned n)
 {
-  if ((n<0) || (n>=size()))
+  if ((n>=size()))
   {
     vcl_cerr<<"TC_VectorDataBase::set_index(n) ";
     vcl_cerr<<"n = "<<n<<" not in range 0 <= n < "<<size()<<vcl_endl;
