@@ -13,7 +13,7 @@
 #include <vil/vil_image.h>
 
 #include <png.h>
-#include <vcl_cstdlib.h> // for exit()
+#include <vcl_cstdlib.h> // for vcl_exit()
 
 // http://www.mirror.ac.uk/sites/ftp.cdrom.com/pub/png/libpng.html
 
@@ -121,7 +121,7 @@ static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
     fprintf(stderr,
       "pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.\n");
     fflush(stderr);
-    exit(99);
+    vcl_exit(99);
   }
 
   longjmp(jmpbuf_ptr->jmpbuf, 1);

@@ -24,7 +24,7 @@ double f(double i, double j, int d)
   double out = 0;
   for (int m=0; m<=d; ++m)
     for (int n=0; n<=d; ++n)
-      out += taylor[m][n] * pow(i, m) * pow(j, n);
+      out += taylor[m][n] * vcl_pow(i, m) * vcl_pow(j, n);
 
   return out;
 }
@@ -43,8 +43,8 @@ int main(int, char **)
       for (int j=0; j<I.cols(); ++j)
         I[i][j] = f(i, j, d);
 
-#define dn(u) int(floor(u))
-#define up(u) int(ceil (u))
+#define dn(u) int(vcl_floor(u))
+#define up(u) int(vcl_ceil (u))
     vcl_cout << "  " << I[dn(r)][dn(c)] << ' ' << I[up(r)][dn(c)] << vcl_endl
              << "  " << I[dn(r)][up(c)] << ' ' << I[up(r)][up(c)] << vcl_endl;
 #undef dn

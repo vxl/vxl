@@ -156,7 +156,6 @@ static tsize_t vil_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
   int ret = p->vs->read(buf, n);
   trace << "readproc, n = " << n << ", ret = " << ret << "\n";
   return ret;
-
 }
 
 static tsize_t vil_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
@@ -338,13 +337,14 @@ bool vil_tiff_generic_image::read_header()
 #endif
         }
 
-      //SetColorNum(0);
-      //
-      //SetBandOrder("IMAGE", 0);
-      //SetBandOrder("RED",   0);
-      //SetBandOrder("GREEN", 0);
-      //SetBandOrder("BLUE",  0);
+#if 0 // commented out
+      SetColorNum(0);
 
+      SetBandOrder("IMAGE", 0);
+      SetBandOrder("RED",   0);
+      SetBandOrder("GREEN", 0);
+      SetBandOrder("BLUE",  0);
+#endif
     }
     break;
   case PHOTOMETRIC_MINISWHITE:
@@ -549,7 +549,7 @@ bool vil_tiff_generic_image::write_header()
 
   // TODO: fix date
 #if 0 // commented out
-  time_t clock;
+  vcl_time_t clock;
   struct tm *t_m;
   clock = time(NULL);
   t_m = localtime(&clock);

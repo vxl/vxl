@@ -5,7 +5,7 @@
 #include "vil_gen.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // abort()
+#include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_cstdio.h>  // sprintf()
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
@@ -67,7 +67,7 @@ vil_gen_generic_image::vil_gen_generic_image(vcl_string const& s,
                                              int bits_per_component,
                                              vil_component_format format)
 {
-  abort();
+  vcl_abort();
 }
 
 vil_gen_generic_image::~vil_gen_generic_image()
@@ -135,7 +135,6 @@ void vil_gen_generic_image::init(vcl_string const& s)
   } else {
     vcl_abort();
   }
-
 }
 
 bool vil_gen_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const

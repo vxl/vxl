@@ -188,7 +188,7 @@ bool vil_rgb<T>::operator== (vil_rgb<T> const& o) const
 
 template <class T>
 inline
-vil_rgb<T> max(vil_rgb<T> const& a, vil_rgb<T> const& b)
+vil_rgb<T> vcl_max(vil_rgb<T> const& a, vil_rgb<T> const& b)
 {
   return vil_rgb<T>((a.r>b.r)?a.r:b.r,
                 (a.g>b.g)?a.g:b.g,
@@ -197,7 +197,7 @@ vil_rgb<T> max(vil_rgb<T> const& a, vil_rgb<T> const& b)
 
 template <class T>
 inline
-vil_rgb<T> min(vil_rgb<T> const& a, vil_rgb<T> const& b)
+vil_rgb<T> vcl_min(vil_rgb<T> const& a, vil_rgb<T> const& b)
 {
   return vil_rgb<T>((a.r<b.r)?a.r:b.r,
                 (a.g<b.g)?a.g:b.g,

@@ -6,18 +6,19 @@
 #endif
 #include "vil_jpeg_source_mgr.h"
 #include <vcl_cassert.h>
+#include <vcl_cstddef.h> // for vcl_size_t
 #include <vcl_iostream.h>
 #include <vil/vil_stream.h>
 
 #define STATIC /*static*/
 
-// In ANSI C, and indeed any rational implementation, size_t is also the
+// In ANSI C, and indeed any rational implementation, vcl_size_t is also the
 // type returned by sizeof().  However, it seems there are some irrational
 // implementations out there, in which sizeof() returns an int even though
-// size_t is defined as long or unsigned long.  To ensure consistent results
+// vcl_size_t is defined as long or unsigned long.  To ensure consistent results
 // we always use this SIZEOF() macro in place of using sizeof() directly.
 //
-#define SIZEOF(object) ((size_t) sizeof(object))
+#define SIZEOF(object) ((vcl_size_t) sizeof(object))
 
 // Implement a jpeg_source_manager for vil_stream *.
 // Adapted by fsm from the FILE * version in jdatasrc.c
@@ -76,7 +77,7 @@ jpeg_boolean
 vil_jpeg_fill_input_buffer (j_decompress_ptr cinfo) {
   vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
 
-  size_t nbytes = src->stream->read(src->buffer, vil_jpeg_INPUT_BUF_SIZE);
+  vcl_size_t nbytes = src->stream->read(src->buffer, vil_jpeg_INPUT_BUF_SIZE);
 
   if (nbytes <= 0) {
     if (src->start_of_file) // Treat empty input file as fatal error
@@ -120,8 +121,8 @@ vil_jpeg_skip_input_data (j_decompress_ptr cinfo, long num_bytes) {
       // note we assume that fill_input_buffer will never return FALSE,
       // so suspension need not be handled.
     }
-    src->base.next_input_byte += (size_t) num_bytes;
-    src->base.bytes_in_buffer -= (size_t) num_bytes;
+    src->base.next_input_byte += (vcl_size_t) num_bytes;
+    src->base.bytes_in_buffer -= (vcl_size_t) num_bytes;
   }
 }
 

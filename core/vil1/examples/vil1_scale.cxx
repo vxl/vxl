@@ -1,7 +1,7 @@
 // Example: scaling.
 
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>    // sqrt()
+#include <vcl_cmath.h>    // vcl_sqrt()
 #include <vcl_cstdlib.h>  // atoi()
 
 #include <vil/vil_save.h>
@@ -47,7 +47,7 @@ struct pnmscale {
 
   void pm_error(char const* msg) {
     vcl_cerr <<"vil_scale: ERROR: " << msg << vcl_endl;
-    abort();
+    vcl_abort();
   }
 
   void set_xscale(double xscale) {
@@ -154,7 +154,7 @@ struct pnmscale {
       else
         {
           xscale = yscale =
-            sqrt( (float) newpixels / (float) cols / (float) rows );
+            vcl_sqrt( (float) newpixels / (float) cols / (float) rows );
           specxscale = specyscale = 1;
         }
 
@@ -199,7 +199,6 @@ struct pnmscale {
 
     sxscale = int(xscale * SCALE);
     syscale = int(yscale * SCALE);
-
   }
 };
 
@@ -212,7 +211,6 @@ struct pnmscaleT : public pnmscale {
   void pnm_writepnmrow(T* tempxelrow, int newcols) {
     out.put_section(tempxelrow, 0, current_outrow++, newcols, 1);
   }
-
 };
 
 template <class T, class longT>

@@ -1,7 +1,7 @@
 // Example: convolution
 
 #include <vcl_cstring.h>
-#include <vcl_cmath.h>   // fabs()
+#include <vcl_cmath.h>   // vcl_fabs()
 #include <vcl_iostream.h>
 
 #include <vbl/vbl_arg.h>
@@ -89,7 +89,7 @@ int main(int argc, char ** argv)
       double power = 0;
       for(int y = 0; y < kp->h; ++y)
         for(int x = 0; x < kp->w; ++x) {
-          power += fabs(*v);
+          power += vcl_fabs(*v);
           kernelimg[y][x] = *v;
           ++v;
         }
