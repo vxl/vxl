@@ -46,7 +46,7 @@ inline void vnl_sample_normal(I begin, I end, double mean, double sigma)
 
 //: handy function to fill a range of values.
 template <class I, class T>
-inline void vnl_sample_uniform(I begin, I end, double a, double b, T dummy)
+inline void vnl_sample_uniform(I begin, I end, double a, double b, T /*dummy*/)
 {
   for (I p=begin; p!=end; ++p)
     (*p) = T(vnl_sample_uniform(a, b));
@@ -54,7 +54,7 @@ inline void vnl_sample_uniform(I begin, I end, double a, double b, T dummy)
 
 //: handy function to fill a range of values.
 template <class I, class T>
-inline void vnl_sample_normal(I begin, I end, double mean, double sigma, T dummy)
+inline void vnl_sample_normal(I begin, I end, double mean, double sigma, T /*dummy*/)
 {
   for (I p=begin; p!=end; ++p)
     (*p) = T(vnl_sample_normal(mean, sigma));
