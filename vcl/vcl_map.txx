@@ -20,8 +20,6 @@
 # include "sgi/vcl_map.txx"
 #elif defined(VCL_VC60)
 # include "win32-vc60/vcl_map.txx"
-#elif defined(VCL_VC70)
-# include "win32-vc70/vcl_map.txx"
 #else
 # include "iso/vcl_map.txx"
 #endif

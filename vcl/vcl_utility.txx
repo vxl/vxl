@@ -20,8 +20,6 @@
 # include "sgi/vcl_utility.txx"
 #elif defined(VCL_VC60)
 # include "win32-vc60/vcl_utility.txx"
-#elif defined(VCL_VC70)
-# include "win32-vc70/vcl_utility.txx"
 #else
 # include "iso/vcl_utility.txx"
 #endif

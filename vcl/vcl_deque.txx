@@ -18,10 +18,6 @@
 # include "sunpro/vcl_deque.txx"
 #elif defined(VCL_SGI_CC)
 # include "sgi/vcl_deque.txx"
-#elif defined(VCL_VC60)
-# include "win32-vc60/vcl_deque.txx"
-#elif defined(VCL_VC70)
-# include "win32-vc70/vcl_deque.txx"
 #else
 # include "iso/vcl_deque.txx"
 #endif
