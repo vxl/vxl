@@ -165,7 +165,10 @@ union vnl_numeric_limits_double_inf {
   unsigned char x[8];
 
   vnl_numeric_limits_double_inf() {
-#if VXL_BIG_ENDIAN
+#ifdef __alpha__ // Alpha throws a floating exception when evaluating IEEE Inf
+    x[sizeof(long double)-1] = 0x7f; x[sizeof(long double)-2] = 0xef;
+    for (unsigned int i=0; i<sizeof(long double)-2; ++i) x[i] = 0xff;
+#elif VXL_BIG_ENDIAN
     x[0] = 0x7f; x[1] = 0xf0;
     x[2] = x[3] = x[4] = x[5] = x[6] = x[7] = 0x00;
 #else
@@ -215,6 +218,81 @@ const vnl_float_round_style vnl_numeric_limits<double>::round_style VCL_STATIC_C
 
 
 // ----------------------------------------------------------------------
+// Constants and functions for long double
+
+union vnl_numeric_limits_long_double_nan {
+  long double nan;
+  unsigned char x[sizeof(long double)];
+
+  vnl_numeric_limits_long_double_nan() {
+    for (unsigned int i=0; i<sizeof(long double); ++i) x[i] = 0xff;
+#if VXL_BIG_ENDIAN
+    x[0] = 0x7f;
+#else
+    x[sizeof(long double)-1] = 0x7f;
+#endif
+  }
+};
+static vnl_numeric_limits_long_double_nan ldnan;
+
+union vnl_numeric_limits_long_double_inf {
+  long double inf;
+  unsigned char x[sizeof(long double)];
+
+  vnl_numeric_limits_long_double_inf() {
+    for (unsigned int i=0; i<sizeof(long double); ++i) x[i] = 0x00;
+#ifdef __alpha__ // Alpha throws a floating exception when evaluating IEEE Inf
+    x[sizeof(long double)-1] = 0x7f; x[sizeof(long double)-2] = 0xef;
+    for (unsigned int i=0; i<sizeof(long double)-2; ++i) x[i] = 0xff;
+#elif VXL_BIG_ENDIAN
+    x[0] = 0x7f; x[1] = 0xf0;
+#else
+    x[sizeof(long double)-1] = 0x7f; x[sizeof(long double)-2] = 0xf0;
+#endif
+  }
+};
+static vnl_numeric_limits_long_double_inf ldinf;
+
+long double vnl_numeric_limits<long double>::infinity()
+{
+  return ldinf.inf;
+}
+
+long double vnl_numeric_limits<long double>::quiet_NaN()
+{
+  return ldnan.nan;
+}
+
+long double vnl_numeric_limits<long double>::signaling_NaN()
+{
+  return quiet_NaN();
+}
+
+const bool vnl_numeric_limits<long double>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const int  vnl_numeric_limits<long double>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(8*sizeof(long double)-11);
+const int  vnl_numeric_limits<long double>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN(2.5*sizeof(long double)-5);
+// this is 15, 25, and 35 for sizes 8, 12, and 16.
+const bool vnl_numeric_limits<long double>::is_signed  VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const bool vnl_numeric_limits<long double>::is_integer VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const bool vnl_numeric_limits<long double>::is_exact   VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const int  vnl_numeric_limits<long double>::radix VCL_STATIC_CONST_INIT_INT_DEFN(2);
+const int  vnl_numeric_limits<long double>::min_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(-1021);
+const int  vnl_numeric_limits<long double>::min_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(-307);
+const int  vnl_numeric_limits<long double>::max_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(1024);
+const int  vnl_numeric_limits<long double>::max_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(308);
+const bool vnl_numeric_limits<long double>::has_infinity      VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const bool vnl_numeric_limits<long double>::has_quiet_NaN     VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const bool vnl_numeric_limits<long double>::has_signaling_NaN VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const bool vnl_numeric_limits<long double>::has_denorm        VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const bool vnl_numeric_limits<long double>::is_iec559  VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const bool vnl_numeric_limits<long double>::is_bounded VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const bool vnl_numeric_limits<long double>::is_modulo  VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const bool vnl_numeric_limits<long double>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const bool vnl_numeric_limits<long double>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const vnl_float_round_style vnl_numeric_limits<long double>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vnl_round_to_nearest);
+
+
+// ----------------------------------------------------------------------
 // Constants and functions for float
 
 union vnl_numeric_limits_float_nan {
@@ -236,10 +314,12 @@ union vnl_numeric_limits_float_inf {
   unsigned char x[4];
 
   vnl_numeric_limits_float_inf() {
-#if VXL_BIG_ENDIAN
+#ifdef __alpha__ // Alpha throws a floating exception when evaluating IEEE Inf
+    x[3] = 0x7f; x[2] = 0x7f; x[1] = x[0] = 0xff;
+#elif VXL_BIG_ENDIAN
     x[0] = 0x7f; x[1] = 0x80; x[2] = x[3] = 0x00;
 #else
-    x[3] = 0x7f; x[2] = 0x80; x[0] = x[1] = 0x00;
+    x[3] = 0x7f; x[2] = 0x80; x[1] = x[0] = 0x00;
 #endif
   }
 };

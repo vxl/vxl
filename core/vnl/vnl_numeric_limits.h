@@ -378,8 +378,6 @@ class vnl_numeric_limits<short >
   static const vnl_float_round_style round_style VCL_STATIC_CONST_INIT_INT_DECL(vnl_round_toward_zero);
 };
 
-//-------------------- #include <vnl/vnl_numeric_limits_float.h>
-
 // IEEE 754 single precision
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_limits<float>
@@ -416,8 +414,6 @@ class vnl_numeric_limits<float>
   static const vnl_float_round_style round_style VCL_STATIC_CONST_INIT_INT_DECL(vnl_round_to_nearest);
 };
 
-//-------------------- #include <vnl/vnl_numeric_limits_double.h>
-
 // IEEE 754 double precision with denorm
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_limits<double>
@@ -446,6 +442,41 @@ class vnl_numeric_limits<double>
   static double quiet_NaN();
   static double signaling_NaN();
   inline static double denorm_min() { return /* 5e-324 */ min(); }
+  static const bool is_iec559  VCL_STATIC_CONST_INIT_INT_DECL(true);
+  static const bool is_bounded VCL_STATIC_CONST_INIT_INT_DECL(true);
+  static const bool is_modulo  VCL_STATIC_CONST_INIT_INT_DECL(false);
+  static const bool traps      VCL_STATIC_CONST_INIT_INT_DECL(true);
+  static const bool tinyness_before VCL_STATIC_CONST_INIT_INT_DECL(true);
+  static const vnl_float_round_style round_style VCL_STATIC_CONST_INIT_INT_DECL(vnl_round_to_nearest);
+};
+
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_limits<long double>
+{
+ public:
+  static const bool is_specialized VCL_STATIC_CONST_INIT_INT_DECL(true);
+  inline static long double max() { return 1.7976931348623157e+308; }
+  inline static long double min() { return 2.2250738585072014e-308; }
+  inline static long double denorm_min() { return min(); }
+  static const int digits   VCL_STATIC_CONST_INIT_INT_DECL(53);
+  static const int digits10 VCL_STATIC_CONST_INIT_INT_DECL(15);
+  static const bool is_signed  VCL_STATIC_CONST_INIT_INT_DECL(true);
+  static const bool is_integer VCL_STATIC_CONST_INIT_INT_DECL(false);
+  static const bool is_exact   VCL_STATIC_CONST_INIT_INT_DECL(false);
+  static const int radix VCL_STATIC_CONST_INIT_INT_DECL(2);
+  inline static long double epsilon() { return 2.220446049250313e-16; } // TODO: should become dependent of sizeof(long double)
+  inline static long double round_error() { return 0.5; }
+  static const int min_exponent   VCL_STATIC_CONST_INIT_INT_DECL(-1021);
+  static const int min_exponent10 VCL_STATIC_CONST_INIT_INT_DECL(-307);
+  static const int max_exponent   VCL_STATIC_CONST_INIT_INT_DECL(1024);
+  static const int max_exponent10 VCL_STATIC_CONST_INIT_INT_DECL(308);
+  static const bool has_infinity      VCL_STATIC_CONST_INIT_INT_DECL(true);
+  static const bool has_quiet_NaN     VCL_STATIC_CONST_INIT_INT_DECL(true);
+  static const bool has_signaling_NaN VCL_STATIC_CONST_INIT_INT_DECL(true);
+  static const bool has_denorm        VCL_STATIC_CONST_INIT_INT_DECL(false);
+  static long double infinity();
+  static long double quiet_NaN();
+  static long double signaling_NaN();
   static const bool is_iec559  VCL_STATIC_CONST_INIT_INT_DECL(true);
   static const bool is_bounded VCL_STATIC_CONST_INIT_INT_DECL(true);
   static const bool is_modulo  VCL_STATIC_CONST_INIT_INT_DECL(false);
