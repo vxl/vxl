@@ -117,7 +117,7 @@ save and restore an object just using a base class pointer to it.
 @code{vsl} provides facilities to do this.
 
 There are two cases to consider
-@itemize
+@itemize @bullet
 @item IO is provided by the class itself
 @item IO is provided by external `clip-on' classes.
 @end itemize
@@ -138,6 +138,7 @@ class vxl_my_class : public vxl_baseclass
   virtual void b_write(vsl_b_ostream&) const;
   virtual void b_read(vsl_b_ostream&);
   virtual vcl_string is_a() const;
+  virtual bool is_a(vcl_string const&) const;
   virtual vxl_baseclass* clone() const;
 @};
 
@@ -209,7 +210,7 @@ class vxl_my_class : public vxl_baseclass
 @};
 
 //: Provide IO for vxl_my_class
-class vxl_my_class : public vxl_baseclassIO {
+class vxl_my_class : public vxl_baseclassIO @{
 public:
   //: Constructor
   vxl_my_classIO();
@@ -233,10 +234,10 @@ public:
   virtual vcl_string target_classname() const;
 
     //: Return true if b is of class target_classname()
-    //  Typically this will just be "return b.is_a()==target_classname()"
+    //  Typically this will just be "return b.is_a(target_classname())"
     //  However, third party libraries may use a different system
   virtual bool is_io_for(const vxl_baseclass& b) const;
-};
+@};
 
 
 //: Provide IO class for each type of polymorphic object
@@ -328,6 +329,9 @@ you need to add the following functions to the class definition in the .h file.
   //: Return a platform independent string identifying the class
   const vcl_string is_a() const;
 
+  //: Return true if the argument matches the string identifying the class or any parent class
+  bool is_a(vcl_string const&) const;
+
 @end example
 You will also need to add the following global scope helper function
 declarations to the .h file
@@ -361,6 +365,9 @@ you need to add the following functions to the class definition in the .h file.
 
   //: Return a platform independent string identifying the class
   virtual const vcl_string is_a() const;
+
+  //: Return true if the argument matches the string identifying the class
+  virtual bool is_a(vcl_string const&) const;
 
   //: Create a copy of the object on the heap.
   // The caller is responsible for deletion
@@ -418,6 +425,9 @@ you need to add the following functions to the class definition in the .h file.
   virtual const vcl_string is_a() const;    // This function is not strictly necessary
                                             // if the class is not part of an inheritance
                                             // hierarchy
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  bool is_a(vcl_string const&) const;
 
   //: Create a copy of the object on the heap.
   // The caller is responsible for deletion
@@ -545,6 +555,13 @@ pointer, the @code{is_a()} method is not necessary and can be left out.
 const vcl_string vanyl_my_class::is_a() const
 @{
     return vcl_string("vanyl_my_class");
+@}
+
+//=======================================
+//: Return true if the argument matches the string identifying the class or any parent class
+bool vanyl_my_class::is_a(vcl_string const& s) const
+@{
+    return s=="vanyl_my_class" || vanyl_parent_class::is_a(s);
 @}
 @end example
 
@@ -693,15 +710,15 @@ the serialising code yourself. There is no language support for serialisation in
 (unlike Java), however the @code{vsl} library does provide some support.
 
 The basic algorithm performed by all of the owner objects during saving is
-@itemize
+@itemize @bullet
 @item If object B has not been saved before
-  @itemize
+  @itemize @bullet
   @item generate a unique serial number for object B
   @item save the serial number
   @item save object B
   @end itemize
 @item else if we have already saved B
-  @itemize
+  @itemize @bullet
   @item find unique serial number for object B
   @item save the serial number
   @end itemize
@@ -709,15 +726,15 @@ The basic algorithm performed by all of the owner objects during saving is
 @end itemize
 
 The basic algorithm performed by all of the owner objects during loading is
-@itemize
+@itemize @bullet
 @item load unique serial number
 @item if this is the first time we have seen this serial number
-  @itemize
+  @itemize @bullet
   @item load object B
   @item set my pointer to point to B
   @end itemize
 @item else if we have seen the serial number before
-  @itemize
+  @itemize @bullet
   @item find location in memory of object B with given serial number
   @item set my pointer to point to B
   @end itemize
@@ -740,7 +757,7 @@ objects they point to are the Bs.
 //: Binary save smart_ptr and serialised *smart_ptr to stream.
 template<class T>
 void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
-{
+@{
 
   // write version number
   const short io_version_no = 1;
@@ -752,7 +769,7 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
   // Find out if this is the first time the object being
   // pointed to is being saved
   if (id == 0)
-  {
+  @{
 
     // Store a record of the address of B and get a serial number
     id = os.add_serialisation_record(p.ptr());
@@ -764,48 +781,48 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
 // See the documentation in the .h file to see how to add it.
     vsl_b_write(os, p.ptr());  // Only save the actual object if
                                 // it hasn't been saved before to this stream
-  }
+  @}
   else
-  {
+  @{
     vsl_b_write(os, id);         // Save the serial number
-  }
+  @}
 
-}
+@}
 
 //=============================================================================
 //: Binary load self from stream.
 template<class T>
 void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
-{
+@{
   short ver;
   vsl_b_read(is, ver);
   switch(ver)
-  {
+  @{
   case 1:
-    {
+    @{
       unsigned long id; // Unique serial number indentifying object
       vsl_b_read(is, id);
 
       T * pointer = (T *) is.get_serialisation_pointer(id);
       if (pointer == 0) // Not loaded before
-      {
+      @{
 // If you get a compiler error in the next line, it could be because your type T
 // has no vsl_b_read(vsl_b_ostream&,T*&)  defined on it.
 // See the documentation in the .h file to see how to add it.
         vsl_b_read(is, pointer);                 // load object B
         is.add_serialisation_record(id, pointer); // remember location of B
-      }
+      @}
 
       p.set_ptr(pointer); // This operator method will set the internal
                           // pointer in vbl_smart_ptr.
-    }
+    @}
     break;
   default:
     vcl_cerr << "vbl_smart_ptr::b_read() Unknown version number "
              << ver << vcl_endl;
     vcl_abort();
-  }
-}
+  @}
+@}
 @end example
 
 You do not need to write any special code for the owned object, except
@@ -816,32 +833,32 @@ for the class of object B. If not, the following examples might help.
 @example
 // Save with base class pointers
 void vsl_b_read(vsl_b_istream& is, class_B * &p)
-{
+@{
   delete p;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr)
-  {
+  @{
     p = new class_B;
     vsl_b_read(is, *p);
-  }
+  @}
   else
     p = 0;
-}
+@} 
 
 template<class T>
 void vsl_b_write(vsl_b_ostream& os, const class_B *p)
-{
+@{
   if (p==0)
-  {
+  @{
     vsl_b_write(os, false); /* Indicate null pointer stored */
-  }
+  @}
   else
-  {
+  @{
     vsl_b_write(os,true); /* Indicate non-null pointer stored */
       vsl_b_write(os,*p);
-  }
-}
+  @}
+@}
 @end example
 
 The upshot of this is that serialisation can be tricky, but not
@@ -929,21 +946,21 @@ The implementation is
 //: Binary save vgl_point_2d to stream.
 template<class T>
 void vsl_b_write(vsl_b_ostream &os, const vgl_point_2d<T>& p)
-{
+@{
   vsl_b_write(os, p.version());
   vsl_b_write(os, v.x());
   vsl_b_write(os, v.y());
-}
+@}
 
 //==============================================================================
 //: Binary load vgl_point_2d from stream.
 template<class T>
 void vsl_b_read(vsl_b_istream &is, vgl_point_2d<T>& p)
-{
+@{
   short w;
   vsl_b_read(is, w);
   switch(w)
-  {
+  @{
   case 1:
     vsl_b_read(is, p.x());
     vsl_b_read(is, p.y());
@@ -953,22 +970,22 @@ void vsl_b_read(vsl_b_istream &is, vgl_point_2d<T>& p)
     vcl_cerr << "b_read(vsl_b_istream &, const vgl_point_2d<T>&)"
                  << " Unknown version number "<< v << vcl_endl;
     vcl_abort();
-  }
+  @}
 
-}
+@}
 
 
 //==============================================================================
 //: Output a human readable summary of a vgl_point_2d object to the stream
 template<class T>
 void vsl_print_summary(vcl_ostream &os, const vgl_point_2d<T>& p)
-{
+@{
     os<<"(";
     vsl_print_summary(p.x());
     os<<","
     vsl_print_summary(p.y());
     os<<")";
-}
+@}
 
 #define VGL_IO_LINE_2D_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, const vgl_point_2d<T >&); \
@@ -1003,7 +1020,7 @@ class BaseClass;
 // \author Tim Cootes
 
 //: Base for objects which provide IO for classes derived from BaseClass
-class BaseClassIO {
+class BaseClassIO @{
 public:
   //: Constructor
   BaseClassIO();
@@ -1027,10 +1044,10 @@ public:
   virtual vcl_string target_classname() const;
 
     //: Return true if b is of class target_classname()
-    //  Typically this will just be "return b.is_a()==target_classname()"
+    //  Typically this will just be "return b.is_a(target_classname())"
     //  However, third party libraries may use a different system
   virtual bool is_io_for(const BaseClass& b) const;
-};
+@};
 
 //: Add example object to list of those that can be loaded
 //  The vsl_binary_loader must see an example of each derived class
@@ -1074,70 +1091,70 @@ For a BaseClass, one creates @file{BaseClassIO.cxx} as follows
 
 //: Constructor
 BaseClassIO()::BaseClassIO()
-{
-}
+@{
+@}
 
 //: Destructor
 BaseClassIO()::~BaseClassIO()
-{
-}
+@{
+@}
 
 //: Create new object of type BaseClass on heap
 BaseClass* BaseClassIO()::new_object() const
-{
+@{
   return new BaseClass;
-}
+@}
 
 //: Write derived class to os using baseclass reference
 void BaseClassIO()::b_write_by_base(vsl_b_ostream& os, const BaseClass& base) const
-{
+@{
   vsl_b_write(os,base);
-}
+@}
 
 //: Write derived class to os using baseclass reference
 void BaseClassIO()::b_read_by_base(vsl_b_istream& is, BaseClass& base) const
-{
+@{
   vsl_b_read(is,base);
-}
+@}
 
 
 //: Copy this object onto the heap and return a pointer
 BaseClassIO* BaseClassIO()::clone() const
-{
+@{
   return new BaseClassIO(*this);
-}
+@}
 
 //: Return name of class for which this object provides IO
 vcl_string BaseClassIO()::target_classname() const
-{
+@{
   return string("BaseClass");
-}
+@}
 
 //: Return true if b is of class target_classname()
 bool BaseClassIO()::is_io_for(const BaseClass& b) const
-{
+@{
   return (b.is_a()==target_classname());
-}
+@}
 
 //====================================================================================
 //: Binary write to stream.
 void vsl_b_write(vsl_b_ostream &os, const BaseClass & p)
-{
+@{
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, p.x());
   vsl_b_write(os, p.y());
   ... Insert rest of xxxxxx code here
-}
+@}
 
 //====================================================================================
 //: Binary load from stream.
 void vsl_b_read(vsl_b_istream &is, BaseClass & p)
-{
+@{
   short v;
   vsl_b_read(is, v);
   switch(v)
-  {
+  @{
   case 1:
     vsl_b_read(is, p.x());
     vsl_b_read(is, p.y());
@@ -1147,40 +1164,40 @@ void vsl_b_read(vsl_b_istream &is, BaseClass & p)
   default:
     vcl_cerr << "vsl_b_read(is,BaseClass) Unknown version number "<< v << vcl_endl;
     vcl_abort();
-  }
+  @}
 
-}
+@}
 
 
 //====================================================================================
 //: Output a human readable summary to the stream
 void vsl_print_summary(vcl_ostream& os,const BaseClass & p)
-{
+@{
     os<<"("<<p.x()<<","<<p.y()<<")";
     ... Insert rest of xxxxxx code here
-}
+@}
 
 //: Add example object to list of those that can be loaded
 //  The vsl_binary_loader must see an example of each derived class
 //  before it knows how to deal with them.
 //  A clone is taken of b
 void vsl_add_to_binary_loader(const BaseClassIO& b)
-{
+@{
     vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance().add(b);
-}
+@}
 
 
 //: Binary save to stream by baseclass pointer
 void vsl_b_write(vsl_b_ostream &os, const BaseClass * b)
-{
+@{
     vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance().write_object(os,b);
-}
+@}
 
 //: Binary read from stream by baseclass pointer
 void vsl_b_read(vsl_b_istream &is, BaseClass* &b)
-{
+@{
     vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance().read_object(is,b);
-}
+@}
 
 
 // Explicitly instantiate loader
@@ -1211,7 +1228,7 @@ For a DerivedClass, one creates DerivedClassIO header as follows
 class DerivedClass;
 
 //: Provide IO for DerivedClass
-class DerivedClass : public BaseClassIO {
+class DerivedClass : public BaseClassIO @{
 public:
   //: Constructor
   DerivedClassIO();
@@ -1235,10 +1252,10 @@ public:
   virtual vcl_string target_classname() const;
 
     //: Return true if b is of class target_classname()
-    //  Typically this will just be "return b.is_a()==target_classname()"
+    //  Typically this will just be "return b.is_a(target_classname())"
     //  However, third party libraries may use a different system
   virtual bool is_io_for(const BaseClass& b) const;
-};
+@};
 
 //: Binary save vgl_my_class to stream.
 void vsl_b_write(vsl_b_ostream &os, const DerivedClass & b);
@@ -1271,70 +1288,70 @@ For a DerivedClass, one creates @file{DerivedClassIO.cxx} as follows
 
 //: Constructor
 DerivedClassIO()::DerivedClassIO()
-{
-}
+@{
+@}
 
 //: Destructor
 DerivedClassIO()::~DerivedClassIO()
-{
-}
+@{
+@}
 
 //: Create new object of type DerivedClass on heap
 BaseClass* DerivedClassIO()::new_object() const
-{
+@{
   return new DerivedClass;
-}
+@}
 
 //: Write derived class to os using baseclass reference
 void DerivedClassIO()::b_write_by_base(vsl_b_ostream& os, const BaseClass& base) const
-{
+@{
   vsl_b_write(os,base);
-}
+@}
 
 //: Write derived class to os using baseclass reference
 void DerivedClassIO()::b_read_by_base(vsl_b_istream& is, BaseClass& base) const
-{
+@{
   vsl_b_read(is,base);
-}
+@}
 
 
 //: Copy this object onto the heap and return a pointer
 BaseClassIO* DerivedClassIO()::clone() const
-{
+@{
   return new DerivedClassIO(*this);
-}
+@}
 
 //: Return name of class for which this object provides IO
 vcl_string DerivedClassIO()::target_classname() const
-{
+@{
   return vcl_string("DerivedClass");
-}
+@}
 
 //: Return true if b is of class target_classname()
 bool DerivedClassIO()::is_io_for(const BaseClass& b) const
-{
+@{
   return (b.is_a()==target_classname());
-}
+@}
 
 //====================================================================================
 //: Binary write to stream.
 void vsl_b_write(vsl_b_ostream &os, const DerivedClass & p)
-{
+@{
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, p.x());
   vsl_b_write(os, p.y());
   ... Insert rest of xxxxxx code here
-}
+@}
 
 //====================================================================================
 //: Binary load from stream.
 void vsl_b_read(vsl_b_istream &is, DerivedClass & p)
-{
+@{
   short v;
   vsl_b_read(is, v);
   switch(v)
-  {
+  @{
   case 1:
     vsl_b_read(is, p.x());
     vsl_b_read(is, p.y());
@@ -1344,9 +1361,9 @@ void vsl_b_read(vsl_b_istream &is, DerivedClass & p)
   default:
     vcl_cerr << "vsl_b_read(is,DerivedClass) Unknown version number "<< v << vcl_endl;
     vcl_abort();
-  }
+  @}
 
-}
+@}
 
 @end example
 
@@ -1508,7 +1525,6 @@ void test_point_2d_double_io()
     bfs_in.close();
 
 
-
     TEST ("p_out == p_in", p_out == p_in, true);
 
 
@@ -1538,7 +1554,7 @@ We must then add a call to this test to @file{test_vgl_io.cxx}:
 #include <vgl/tests/test_point_3d_io.cxx>
 
 #undef TESTMAIN
-#define TESTMAIN(x) int main() { vgl_test_start(#x); x(); return vgl_test_summary(); }
+#define TESTMAIN(x) int main() @{ vgl_test_start(#x); x(); return vgl_test_summary(); @}
 
 void run_test_vgl_io()
 @{
@@ -1575,7 +1591,7 @@ The original intention was that ALL classes with data should implement
 the external @code{vsl_b_write(os,object);} would be implemented using
 the member function.  The advantages of this scheme are that
 
-@itemize
+@itemize @bullet
 @item Member functions can save all the state of a class without making everything public
 @item Keeping the IO in the class makes it more likely that it will be kept up to date
 @end itemize
