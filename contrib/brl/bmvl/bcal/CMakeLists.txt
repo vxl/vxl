@@ -1,15 +1,10 @@
-# multi-view calibration library
-# brl/bmvl/bcal/CMakeLists.txt
+# brl\bmvl\bcal
 
-INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
+# camera model
+SUBDIRS(cam)
 
-SET(bcal_sources
+# calibration binary
+# SUBDIRS(cbin)
 
-)
-AUX_SOURCE_DIRECTORY(Templates bcal_sources)
-
-ADD_LIBRARY(bcal ${bcal_sources})
-
-TARGET_LINK_LIBRARIES(bcal vsol vnl vbl)
-
+# calibration tests
+#SUBDIRS(tests)
