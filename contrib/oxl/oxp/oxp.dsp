@@ -195,21 +195,6 @@ SOURCE=.\oxp_parse_seqname.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsl_conic_as_matrix.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vsl_conic_as_params.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vsl_conic_points.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\oxp_bunch_of_files.cxx
 
 # End Source File
@@ -334,21 +319,6 @@ SOURCE=.\oxp_vidl_moviefile.h
 # Begin Source File
 
 SOURCE=.\oxp_vidl_mpeg_codec.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vsl_conic_as_matrix.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vsl_conic_as_params.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vsl_conic_points.h
 
 # End Source File
 # Begin Source File
