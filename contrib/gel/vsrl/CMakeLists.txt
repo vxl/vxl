@@ -24,24 +24,24 @@ AUX_SOURCE_DIRECTORY(Templates vsrl_sources)
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
 INCLUDE_DIRECTORIES(${TBL_INCLUDE_DIR})
 
-# vsrl_manager depends on vgui and hence on OpenGL
-INCLUDE(${MODULE_PATH}/NewCMake/FindOpenGL.cmake)
+# vsrl_manager depends on vgui
+INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
 
-IF (OPENGL_FOUND)
+IF (HAS_VGUI)
 SET(vsrl_sources ${vsrl_sources}
  vsrl_point_picker.cxx          vsrl_point_picker.h
  vsrl_point_picker_sptr.h
  vsrl_manager.cxx               vsrl_manager.h
  vsrl_menus.h
 )
-ENDIF (OPENGL_FOUND)
+ENDIF (HAS_VGUI)
 
 ADD_LIBRARY(vsrl ${vsrl_sources})
 
 TARGET_LINK_LIBRARIES(vsrl sdet vtol vdgl vepl vgl vil vnl)
-IF (OPENGL_FOUND)
+IF (HAS_VGUI)
  TARGET_LINK_LIBRARIES(vsrl vgui)
-ENDIF (OPENGL_FOUND)
+ENDIF (HAS_VGUI)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)
