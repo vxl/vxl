@@ -173,7 +173,8 @@ void brct_epi_reconstructor::init_state_3d_estimation()
 
       //construct the corresponding point
       vgl_point_2d<double> p0(dc0->get_x(index),dc0->get_y(index));
-      vgl_homg_point_2d<double> p0h(p0.x(), p0.y());
+      //later we my use vgpl f matrix
+      //      vgl_homg_point_2d<double> p0h(p0.x(), p0.y());
       double angle0 = dc0->get_theta(index);
       vnl_double_2x2 sigma1;
       sigma1.set_identity();
