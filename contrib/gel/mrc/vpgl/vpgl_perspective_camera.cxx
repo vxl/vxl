@@ -106,9 +106,9 @@ void vpgl_perspective_camera::world_to_image(double x, double y, double z,
                                              double& ix, double& iy, double time)
 {
   vnl_vector<double> temp(3);
-  temp(1)=x;
-  temp(2)=y;
-  temp(3)=z;
+  temp(0)=x;
+  temp(1)=y;
+  temp(2)=z;
   vnl_vector<double> transformed=acs->from_local_to_cs(temp,lcs,time);
   _mat_cam->world_to_image(transformed, ix, iy, time);
 }
