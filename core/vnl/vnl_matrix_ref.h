@@ -71,16 +71,17 @@ private:
 //  void* operator new(size_t) { return 0; }
 //#endif
 
-
+private:
   //: Resizing is disallowed
-  bool resize (unsigned int, unsigned int) { return 0; }
+  bool resize (unsigned int, unsigned int) { return false; }
 
 
-  //: Copy constructor is disallowed
+  //: Copy constructor from vnl_matrix<T> is disallowed
   // because it would create a non-const alias to the Matrix
   vnl_matrix_ref(vnl_matrix<T> const &) {}
 
 
+  //: Copy constructor and assignment operator are disallowed.
   // You can't assign one of these from a matrix, cos' you don't have any space
   vnl_matrix_ref(vnl_matrix_ref<T> const &) {}
   vnl_matrix_ref<T>& operator=(vnl_matrix<T> const &) { return *this; }
