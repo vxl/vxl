@@ -355,9 +355,9 @@ bool bmrf_network_builder::image_coords(const double a, const double s,
   u += eu_; v += ev_;
   if (!image_)
     return false;
-  if (u<0||u>image_.ni())
+  if (u<0||u>=image_.ni()-0.5)
     return false;
-  if (v<0||v>image_.nj())
+  if (v<0||v>=image_.nj()-0.5)
     return false;
   return true;
 }
@@ -602,7 +602,7 @@ double bmrf_network_builder::scan_interval(const double a, const double sl,
     return 0;
   int n_samples = 0;
   double sum = 0;
-  for (double si = sl; si<=s; si+=ds(si), n_samples++)
+  for (double si = sl; si<=s; si+=ds(si))
   {
     double u, v;
     if (!image_coords(a, si, u, v))
@@ -612,6 +612,7 @@ double bmrf_network_builder::scan_interval(const double a, const double sl,
 #if 0
     sum += brip_float_ops::bilinear_interpolation(image_, u+0.5, v+0.5);//JLM
 #endif
+    ++n_samples;
   }
   if (!n_samples)
     return 0;
