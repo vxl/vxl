@@ -430,10 +430,18 @@ ENDIF (OPENGL_GLU_FOUND)
 ENDIF (OPENGL_FOUND)
 
 IF( NOT CAN_BUILD_VGUI )
-  MESSAGE(SEND_ERROR "vgui could not be built.\n"
+  # For the dashboard and other repository builds,
+  # this should be a warning, not an error. This way, machines
+  # with incomplete OpenGL can still continue to build everything
+  # else.
+  MESSAGE(           "vgui could not be built.\n"
                      "Make sure the OpenGL libraries "
                      "(GL and GLU) are specified correctly,\n"
                      "or set BUILD_VGUI to OFF." )
+  #  MESSAGE(SEND_ERROR "vgui could not be built.\n"
+  #                     "Make sure the OpenGL libraries "
+  #                     "(GL and GLU) are specified correctly,\n"
+  #                     "or set BUILD_VGUI to OFF." )
 ENDIF( NOT CAN_BUILD_VGUI )
 
 ENDIF( BUILD_VGUI )
