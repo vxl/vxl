@@ -4,7 +4,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// Author: awf@robots.ox.ac.uk
+//:
+// \file
+// \author awf@robots.ox.ac.uk
 // Created: 18 Dec 01
 
 #include <vcl_cstdio.h>
@@ -23,7 +25,7 @@ struct oxp_bunch_of_files {
   bool open(char const* fmt);
   void close();
 
-  void seek(offset_t to);
+  void seek(offset_t t);
   int tell() const;
   int read(void*, unsigned int);
   bool ok() { return current_file_index != -1; }
@@ -36,5 +38,4 @@ private:
   vcl_vector<offset_t> start_byte;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS oxp_oxp_bunch_of_files.
-
+#endif   // oxp_bunch_of_files_h_
