@@ -9,7 +9,7 @@ exec perl -I $IUEROOT/vxl/bin -x $0 ${1+"$@"}
 #
 # Modifications:
 # 13 May 2001 - Peter Vanroose - several minor fixes:
-#      unified search strings for different compilers; 
+#      unified search strings for different compilers;
 #      consequently removed specific computer names;
 #      ad-hoc fix for bug in ParseDate which does not recognise "DST" in date;
 #      simplified expressions, e.g. by replacing $currentline with $_;
@@ -204,30 +204,30 @@ while( <INFO>)
     elsif( m/$compilewarning/ || m/$linkwarning/)
       {
         $buildwarnings[$index]++;
-	$currentlineweb="<a name=\"WARNINGLINK$htmlwarninglink\">" .$currentlineweb;
+        $currentlineweb="<a name=\"WARNINGLINK$htmlwarninglink\">" .$currentlineweb;
         $currentlineweb="<font color=\"AA0000\">$currentlineweb</font>";
-	$htmlwarninglink++;
+        $htmlwarninglink++;
         $t_1link="\&nbsp\;<a href=\"\#WARNINGLINK" . ($htmlwarninglink-2);
         $t10link="\&nbsp\;<a href=\"\#WARNINGLINK" . ($htmlwarninglink+9);
         $t_10link="\&nbsp\;<a href=\"\#WARNINGLINK" . ($htmlwarninglink-11);
         $t100link="\&nbsp\;<a href=\"\#WARNINGLINK" . ($htmlwarninglink+99);
         $t_100link="\&nbsp\;<a href=\"\#WARNINGLINK" . ($htmlwarninglink-101);
         $fnt="<font size=-1 color=\"773333\">"; $efnt="</font></a>\n";
-	$currentlineweb.="<a href=\"\#WARNINGLINK$htmlwarninglink\">$fnt Jump to next warning$efnt";
+        $currentlineweb.="<a href=\"\#WARNINGLINK$htmlwarninglink\">$fnt Jump to next warning$efnt";
         $currentlineweb.="$t_1link\">$fnt -1$efnt" if ($htmlwarninglink > 1);
         $currentlineweb.="$t10link\">+$fnt 10$efnt";
         $currentlineweb.="$t_10link\">-$fnt 10$efnt" if ($htmlwarninglink > 10);
         $currentlineweb.="$t100link\">+$fnt 100$efnt";
         $currentlineweb.="$t_100link\">-$fnt 100$efnt" if ($htmlwarninglink > 100);
-	$currentlineweb.="<br>\n";
+        $currentlineweb.="<br>\n";
       }
     elsif( m/$gmake_errorintest/ || m/$gmake_errortestfail/)
       {
         $builderrors[$index]++;
-	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">" .$currentlineweb;
+        $currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">" .$currentlineweb;
         $currentlineweb.="<font color=red>$currentlineweb</font>";
-	$htmlerrorlink++;
-	$currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\"><font size=-1 color=\"CC3333\">Jump to next error</font></a><br>\n";
+        $htmlerrorlink++;
+        $currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\"><font size=-1 color=\"CC3333\">Jump to next error</font></a><br>\n";
       }
     elsif( m/$gmake_errorindirectory/)
       {
@@ -237,10 +237,10 @@ while( <INFO>)
     elsif( m/$gmake_error_segfault/ || m/$gmake_error_assert/ || m/$gmake_error/)
       {
         $builderrors[$index]++;
-	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">" .$currentlineweb;
+        $currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">" .$currentlineweb;
         $currentlineweb.="<font color=red>$currentlineweb</font>";
-	$htmlerrorlink++;
-	$currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\"><font size=-1 color=\"CC3333\">Jump to next error</font></a><br>\n";
+        $htmlerrorlink++;
+        $currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\"><font size=-1 color=\"CC3333\">Jump to next error</font></a><br>\n";
       }
     elsif( m/$testsummary/)
       {
@@ -338,7 +338,6 @@ for $buildit1 ( keys %allbuilds )
             $buildparent[$index]= $allbuilds{$buildit2};
           }
       }
-
   }
 
 ########################################
@@ -379,6 +378,7 @@ for $build ( keys %allbuilds )
 #print STDERR "Start time = $starttime\n";
 #print STDERR "End time   = $endtime\n";
 
+$Ms --;  $Me --;
 $as= timelocal( $ss, $ms, $hs, $ds, $Ms, $ys);
 $ae= timelocal( $se, $me, $he, $de, $Me, $ye);
 
@@ -417,7 +417,6 @@ else
   }
 
 
-
 FrostAPI::EndRunTestGroup();
 
 
@@ -436,12 +435,12 @@ if( $compress ne "")
     system( $compress);
 
     open( CP, $tmpfilename2);
-    
+
     $buffer= "";
 
     while( read( CP, $c, 1))
       {
-	$buffer.= $c;
+        $buffer.= $c;
       }
 
     print MIME::Base64::encode( $buffer);
@@ -597,7 +596,7 @@ sub XMLruntestgroup
         # warnings
         FrostAPI::RunMeasurement( "Warnings", ($buildwarnings[$index]+0));
 
-	# build log
+        # build log
 #        if ( $buildlogs[$index] ne "")
 #          {
 #            FrostAPI::RunMeasurementBase64( "BuildLog", $buildlogs[$index]);
@@ -628,4 +627,3 @@ sub XMLruntestgroup
 
     FrostAPI::EndRunTestGroup( $date);
   }
-
