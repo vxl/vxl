@@ -16,7 +16,7 @@ SOURCES += vidl_frame.cxx
 SOURCES += vidl_frame_as_image.cxx
 SOURCES += vidl_image_list_codec.cxx
 SOURCES += vidl_io.cxx
-SOURCES += vidl_test.cxx 
+SOURCES += vidl_test.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
@@ -27,8 +27,7 @@ include ${IUEROOT}/config/top-params.mk
 # do it, feel free to participate.
 ifeq ($(OS),win32)
 # avi codec which works under NT
-# should come soon
-#SOURCES += vidl_avicodec.cxx
+SOURCES += vidl_avicodec.cxx
 endif # win32
 
 ######################################
