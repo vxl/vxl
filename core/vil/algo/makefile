@@ -30,6 +30,7 @@ MANPAGE_SOURCES += vil2_normalised_correlation_2d.h
 MANPAGE_SOURCES += vil2_exp_grad_filter_1d.h
 MANPAGE_SOURCES += vil2_line_filter.txx
 MANPAGE_SOURCES += vil2_threshold.txx
+MANPAGE_SOURCES += vil2_grid_merge.h
 
 ################################
 include ${IUEROOT}/config/top.mk
