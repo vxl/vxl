@@ -590,6 +590,16 @@ SOURCE=.\Templates/vnl_sparse_matrix+float-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vnl_sym_matrix+double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_sym_matrix+int-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vnl_vector_fixed_ref+vnl_rational.3-.cxx
 
 # End Source File

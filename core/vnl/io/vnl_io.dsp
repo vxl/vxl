@@ -185,6 +185,16 @@ SOURCE=.\Templates/vnl_io_sparse_matrix+float-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vnl_io_sym_matrix+double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_io_sym_matrix+int-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vnl_io_vector+double-.cxx
 
 # End Source File
