@@ -96,8 +96,9 @@ bool vbl_big_sparse_array_3d<T>::fullp(unsigned i, unsigned j, unsigned k) const
 template <class T>
 bool vbl_big_sparse_array_3d<T>::put(unsigned i, unsigned j, unsigned k, T const& t)
 {
+  typedef typename Map::iterator iter;
   unsigned int v = bigencode(i,j,k);
-  vcl_pair<typename Map::iterator,bool> res = storage_.insert(Map::value_type(v,t));
+  vcl_pair<iter,bool> res = storage_.insert(Map::value_type(v,t));
 #ifdef DEBUG
   vcl_cout << "{vbl_big_sparse_array_3d::put(" << i << "," << j << "," << k << ") - "
            << res.second << "}\n";
