@@ -74,10 +74,8 @@ bool vul_arg_base::set() const
 
 static vul_arg_info_list& current_list() // instance "method"
 {
-  static vul_arg_info_list *list = 0;
-  if (!list)
-    list = new vul_arg_info_list;
-  return *list;
+  static vul_arg_info_list list;
+  return list;
 }
 
 //: Add another vul_arg_info_list to the current one.
