@@ -157,6 +157,8 @@ vpdfl_gaussian_builder builder;
 
 // Generate model to build
 vpdfl_pdf_base *model = builder.new_model();
+// I could have created it directly using
+// vpdfl_gaussian model;
 
 // Build the model from the data
 builder.build(*model, v_data);
