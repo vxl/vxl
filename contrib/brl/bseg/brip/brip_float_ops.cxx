@@ -1110,11 +1110,14 @@ fourier_transform(vil1_memory_image_of<float> const & input,
       vcl_complex<double> cv(input(x,y), 0.0);
       fft_matrix.put(y, x, cv);
     }
+#ifdef DEBUG
   for (int r = 0; r<h; r++)
     for (int c =0; c<w; c++)
     {
       vcl_complex<double> res = fft_matrix[r][c];
+      vcl_cout << res << '\n';
     }
+#endif
 
   brip_float_ops::fft_2d(fft_matrix, w, h, 1);
   brip_float_ops::ftt_fourier_2d_reorder(fft_matrix, fourier_matrix);
