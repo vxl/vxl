@@ -75,22 +75,25 @@ class Homg2D : public vnl_double_3, public Homg
   inline double x() const { return (*this)[0]; }
   //: Return reference to x
   inline double& x() { return (*this)[0]; }
-  //: deprecated
-  double get_x() const { return (*this)[0]; }
 
   //: Return y
   inline double y() const { return (*this)[1]; }
   //: Return reference to y
   inline double& y() { return (*this)[1]; }
-  //: deprecated
-  double get_y() const { return (*this)[1]; }
 
   //: Return w
   inline double w() const { return (*this)[2]; }
   //: Return reference to w
   inline double& w() { return (*this)[2]; }
+
+ private:
+  //: deprecated
+  double get_x() const { return (*this)[0]; }
+  //: deprecated
+  double get_y() const { return (*this)[1]; }
   //: deprecated
   double get_w() const { return (*this)[2]; }
+ public:
 
   //: Set x,y,w.
   void set(double px, double py, double pw)

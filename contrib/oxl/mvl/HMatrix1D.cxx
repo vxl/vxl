@@ -64,21 +64,6 @@ HMatrix1D::~HMatrix1D()
 
 // == OPERATIONS ==
 
-//-----------------------------------------------------------------------------
-//
-//: Return the transformed point given by $x_2 = {\tt H} x_1$
-vgl_homg_point_1d<double> HMatrix1D::transform_to_plane2(const vgl_homg_point_1d<double>& x1) const
-{
-  return (*this)(x1);
-}
-
-//
-//: Return the transformed point given by $x_1 = {\tt H}^{-1} x_2$
-vgl_homg_point_1d<double> HMatrix1D::transform_to_plane1(const vgl_homg_point_1d<double>& x2) const
-{
-  return this->preimage(x2);
-}
-
 vgl_homg_point_1d<double> HMatrix1D::operator()(const vgl_homg_point_1d<double>& x1) const
 {
   vnl_double_2 v = t12_matrix_ * vnl_double_2(x1.x(),x1.w());

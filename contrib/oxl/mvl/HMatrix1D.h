@@ -41,12 +41,20 @@ class HMatrix1D
 
   // Operations----------------------------------------------------------------
 
-  // deprecated. also misnomers :
-  vgl_homg_point_1d<double> transform_to_plane2(const vgl_homg_point_1d<double>& x1) const;
-  vgl_homg_point_1d<double> transform_to_plane1(const vgl_homg_point_1d<double>& x2) const;
-
+  //: Return the transformed point given by $x_2 = {\tt H} x_1$
   vgl_homg_point_1d<double> operator()(const vgl_homg_point_1d<double>& x1) const;
+  //: Return the transformed point given by $x_1 = {\tt H}^{-1} x_2$
   vgl_homg_point_1d<double> preimage(const vgl_homg_point_1d<double>& x2) const;
+
+  // deprecated. also misnomers :
+ private:
+  //: Return the transformed point given by $x_2 = {\tt H} x_1$
+  vgl_homg_point_1d<double> transform_to_plane2(const vgl_homg_point_1d<double>& x1) const
+  { return (*this)(x1); }
+  //: Return the transformed point given by $x_1 = {\tt H}^{-1} x_2$
+  vgl_homg_point_1d<double> transform_to_plane1(const vgl_homg_point_1d<double>& x2) const
+  { return this->preimage(x2); }
+ public:
 
   // Data Access---------------------------------------------------------------
 
