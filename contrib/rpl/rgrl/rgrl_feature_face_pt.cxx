@@ -110,6 +110,9 @@ double
 rgrl_feature_face_pt ::
 absolute_signature_weight( rgrl_feature_sptr other ) const
 {
+  //if other is invalid
+  if( !other )  return 0.0;
+
   rgrl_feature_face_pt* face_ptr = rgrl_cast<rgrl_feature_face_pt*>(other);
   assert( face_ptr );
   double dir_wgt = vcl_abs( dot_product( this->normal_, face_ptr->normal_ ) );

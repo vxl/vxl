@@ -102,6 +102,9 @@ double
 rgrl_feature_point ::
 absolute_signature_weight( rgrl_feature_sptr other ) const
 {
+  //if other is invalid
+  if( !other )  return 0.0;
+
   rgrl_feature_point* pt_ptr = rgrl_cast<rgrl_feature_point*>(other);
   assert( pt_ptr );
 
