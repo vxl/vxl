@@ -17,7 +17,10 @@
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_io.h>
 
-#ifdef HAS_MPEG
+#ifdef VCL_WIN32
+#include <vidl/vidl_avicodec.h>
+#endif
+#if HAS_MPEG
 #include <oxp/oxp_vidl_mpeg_codec.h>
 #endif
 
@@ -48,12 +51,10 @@ void ensure_initialized()
 
 oxp_vidl_moviefile::oxp_vidl_moviefile(char const* f)
 {
-
   ensure_initialized();
 
   p = new oxp_vidl_moviefile_privates;
   p->m = vidl_io::load_movie(f, 0, 9999, 1);
-
 }
 
 oxp_vidl_moviefile::~oxp_vidl_moviefile()
@@ -90,8 +91,11 @@ int oxp_vidl_moviefile::GetBitsPixel()
 bool oxp_vidl_moviefile::IsInterlaced()
 {
   assert(0);
-//   return p->interlaced != 0;
+#if 0
+  return p->m->interlaced != 0;
+#else
   return 0;
+#endif
 }
 
 bool oxp_vidl_moviefile::HasFrame(int frame_index)
