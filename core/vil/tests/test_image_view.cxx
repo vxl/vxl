@@ -374,6 +374,36 @@ static void test_complex_image_view()
   TEST("Conversion from complex<float> to planes and back", image_cf2, image_cf);
 }
 
+
+static void test_image_view_assignment_operator()
+{
+  // This test makes sure that the assignment operator does the
+  // correct thing w.r.t. reference counts and such. The test copies a
+  // temporary view to a existing view. If a bitwise copy is done, the
+  // existing view's reference count is overwritten, and the routine
+  // will segfault.
+
+  testlib_test_begin( "Assignment operator" );
+
+  typedef vil_image_view<vxl_byte> byte_view;
+
+  // Construct two views with non-zero reference counts
+  //
+  vil_image_view_base_sptr im1p = new byte_view( 5, 5 );
+  vil_image_view_base_sptr im2p = new byte_view( 5, 5 );
+
+  // Assign one to the other use a temporary (which has a reference
+  // count of zero).
+  byte_view& im2 = static_cast< byte_view& >( *im2p );
+  im2 = byte_view( im1p );
+
+  // If we get here, then all is well. We should check that the
+  // reference count is non-zero, but that's private information.
+  //
+  testlib_test_perform( true );
+}
+
+
 MAIN( test_image_view )
 {
   START( "vil_image_view" );
@@ -395,6 +425,7 @@ MAIN( test_image_view )
   test_image_view(vxl_uint_32(), "vxl_uint_32", float());
   test_contiguous();
   test_image_view_fill();
+  test_image_view_assignment_operator();
   test_complex_image_view();
 
   SUMMARY();

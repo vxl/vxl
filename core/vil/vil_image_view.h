@@ -82,6 +82,10 @@ class vil_image_view : public vil_image_view_base
                  const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
                  vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step);
 
+  //: Copy construct.
+  // The new object will point to the same underlying image as the rhs.
+  vil_image_view(const vil_image_view<T>& rhs);
+
   //: Construct from various vil_image_view types.
   // The new object will point to the same underlying image as the rhs
   // You can assign a vil_image_view<compound_type<T>> to a vil_image_view<T>
@@ -255,6 +259,9 @@ class vil_image_view : public vil_image_view_base
 
   //: Provides an ordering.
   inline bool operator<=(const vil_image_view_base & rhs) const { return !operator>(rhs); }
+
+  //: Copy a view. The rhs and lhs will point to the same image data.
+  const vil_image_view<T>& operator=(const vil_image_view<T>& rhs);
 
   //: Copy a view. The rhs and lhs will point to the same image data.
   // You can assign a vil_image_view<compound_type<T>> to a vil_image_view<T>
