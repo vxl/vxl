@@ -108,14 +108,12 @@ static void test_vertex_2d()
   TEST("vtol_vertex_2d::topology_type()", v1->topology_type(), vtol_topology_object::VERTEX);
 
   vtol_edge_sptr new_edge = v1->new_edge(v2);
-  edge_list* e_list=v1->edges();
-  TEST("vtol_vertex_2d::edges()", e_list->size(), 1);
-  TEST("vtol_vertex_2d::edges()", *((*e_list)[0]->v1()), *v1);
-  TEST("vtol_vertex_2d::edges()", *((*e_list)[0]->v2()), *v2);
-  delete e_list;
+  edge_list e_list; v1->edges(e_list);
+  TEST("vtol_vertex_2d::edges()", e_list.size(), 1);
+  TEST("vtol_vertex_2d::edges()", *(e_list[0]->v1()), *v1);
+  TEST("vtol_vertex_2d::edges()", *(e_list[0]->v2()), *v2);
 
-  vertex_list v_list;
-  v1->explore_vertex(v_list);
+  vertex_list v_list; v1->explore_vertex(v_list);
   vcl_cout << "List size: " << v_list.size() << vcl_endl;
   for (unsigned int i=0; i<v_list.size(); ++i)
     vcl_cout << *(v_list[i]) << vcl_endl;
@@ -148,8 +146,8 @@ static void test_vertex_2d()
   TEST("vtol_vertex::valid_inferior_type()", v1v->valid_inferior_type(new_edge->cast_to_topology_object()), false);
   TEST("vtol_edge::valid_inferior_type()", new_edge->valid_inferior_type(v1v->cast_to_topology_object()), false);
 
-  vcl_cout << "Testing superiors_list\n";
-  vcl_cout << "ve before superiors access " << *ve << vcl_endl;
+  vcl_cout << "Testing superiors_list\n"
+           << "ve before superiors access " << *ve << vcl_endl;
   const vcl_list<vtol_topology_object*>* sups = ve->superiors_list();
   TEST("vtol_vertex::superiors_list()", sups==0, false);
   for (vcl_list<vtol_topology_object*>::const_iterator sit = sups->begin();
@@ -157,9 +155,9 @@ static void test_vertex_2d()
   {
     vtol_zero_chain_sptr zc = (*sit)->cast_to_zero_chain();
     TEST("vtol_zero_chain::cast_to_zero_chain()", zc?true:false, true);
-    vertex_list* verts = zc->vertices();
+    vertex_list verts; zc->vertices(verts);
     bool found = false;
-    for (vertex_list::iterator vit = verts->begin(); vit!=verts->end(); vit++)
+    for (vertex_list::iterator vit = verts.begin(); vit!=verts.end(); vit++)
     {
       vcl_cout << **vit;
       found = ve==*vit;

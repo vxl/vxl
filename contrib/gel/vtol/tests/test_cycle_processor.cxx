@@ -26,11 +26,11 @@ static void test_cycle_processor()
     vtol_vertex_2d_sptr v0 = new vtol_vertex_2d(0.0, 0.0);
     vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(5.0, 0.0);
     vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(2.5, 2.5);
-    vtol_edge_2d_sptr e0 = new vtol_edge_2d(v0, v1);
-    vtol_edge_2d_sptr e1 = new vtol_edge_2d(v1, v2);
-    vtol_edge_2d_sptr e2 = new vtol_edge_2d(v2, v0);
-    vcl_cout << "edges:" << e0 << " " << e1 << " " << e2 << vcl_endl;
-    vcl_vector<vtol_edge_2d_sptr> edges;
+    vtol_edge_sptr e0 = new vtol_edge_2d(v0, v1);
+    vtol_edge_sptr e1 = new vtol_edge_2d(v1, v2);
+    vtol_edge_sptr e2 = new vtol_edge_2d(v2, v0);
+    vcl_cout << "edges:" << e0 << ' ' << e1 << ' ' << e2 << vcl_endl;
+    edge_list edges;
     edges.push_back(e0);     edges.push_back(e1);
     bool found = vcl_find(edges.begin(), edges.end(), e0) != edges.end();
     vcl_cout << "Found e0 " << found << vcl_endl;
@@ -38,24 +38,21 @@ static void test_cycle_processor()
     vcl_cout << "Found e2 " << found << vcl_endl;
 
     edges.push_back(e2);
-    vcl_vector<vtol_edge_2d_sptr>::iterator eit =
-      vcl_find(edges.begin(), edges.end(), e1);
+    edge_list::iterator eit = vcl_find(edges.begin(), edges.end(), e1);
     vcl_cout << "Edge found looking for e1 = " << *eit << vcl_endl;
     bool eequal = (*eit)==e1;
     vcl_cout << "Found edge == e1 " << eequal << vcl_endl;
 
     vcl_cout << "edges before erase\n";
-    for (vcl_vector<vtol_edge_2d_sptr>::iterator jit = edges.begin();
-         jit != edges.end(); jit++)
-      vcl_cout << *jit  << " " ;
+    for (edge_list::iterator jit = edges.begin(); jit != edges.end(); jit++)
+      vcl_cout << *jit  << ' ';
     vcl_cout << vcl_endl;
 
     edges.erase(eit);
     vcl_cout << "the erased edge " << *eit << **eit << vcl_endl
              << "edges after erase:\n";
-    for (vcl_vector<vtol_edge_2d_sptr>::iterator jit = edges.begin();
-         jit != edges.end(); jit++)
-      vcl_cout << " " << *jit;
+    for (edge_list::iterator jit = edges.begin(); jit != edges.end(); jit++)
+      vcl_cout << ' ' << *jit;
     vcl_cout << vcl_endl;
     TEST("edges content", edges.size()==2 && edges[0]==e0 && edges[1]==e2, true);
     //Check angle between edges
@@ -74,12 +71,12 @@ static void test_cycle_processor()
     vdgl_edgel_chain_sptr ec =intp->get_edgel_chain();
     for (unsigned int i=0; i<ec->size(); i++)
       vcl_cout << ec->edgel(i) << vcl_endl;
-    vtol_vertex_2d_sptr va = new vtol_vertex_2d(*pa);
-    vtol_vertex_2d_sptr vb = new vtol_vertex_2d(*pb);
-    vtol_vertex_2d_sptr vc = new vtol_vertex_2d(*pc);
-    vtol_vertex_2d_sptr vd = new vtol_vertex_2d(*pd);
-    vtol_vertex_2d_sptr ve = new vtol_vertex_2d(*pe);
-    vtol_vertex_2d_sptr vf = new vtol_vertex_2d(*pf);
+    vtol_vertex_sptr va = new vtol_vertex_2d(*pa);
+    vtol_vertex_sptr vb = new vtol_vertex_2d(*pb);
+    vtol_vertex_sptr vc = new vtol_vertex_2d(*pc);
+    vtol_vertex_sptr vd = new vtol_vertex_2d(*pd);
+    vtol_vertex_sptr ve = new vtol_vertex_2d(*pe);
+    vtol_vertex_sptr vf = new vtol_vertex_2d(*pf);
     vtol_edge_2d_sptr eef = new vtol_edge_2d(ve,vf, cef);
     vtol_edge_2d_sptr efa = new vtol_edge_2d(vf,va, cfa);
     vtol_edge_2d_sptr efb = new vtol_edge_2d(vf,vb, cfb);
@@ -87,22 +84,22 @@ static void test_cycle_processor()
     vtol_edge_2d_sptr efd = new vtol_edge_2d(vf,vd, cfd);
 
     double ang_ef_fa = vtol_cycle_processor::
-      angle_between_edges(eef,efa,(vf->cast_to_vertex()));
+      angle_between_edges(eef,efa,vf);
     vcl_cout << "Angle ef-fa = " << ang_ef_fa <<vcl_endl;
     TEST_NEAR("angle_between_edges()", ang_ef_fa,-45, 1e-3);
 
     double ang_ef_fb = vtol_cycle_processor::
-      angle_between_edges(eef,efb,(vf->cast_to_vertex()));
+      angle_between_edges(eef,efb,vf);
     vcl_cout << "Angle ef-fb = "  << ang_ef_fb << vcl_endl;
     TEST_NEAR("angle_between_edges()", ang_ef_fb,-30, 1e-3);
 
     double ang_ef_fc = vtol_cycle_processor::
-      angle_between_edges(eef,efc,(vf->cast_to_vertex()));
+      angle_between_edges(eef,efc,vf);
     vcl_cout << "Angle ef-fc = " << ang_ef_fc << vcl_endl;
     TEST_NEAR("angle_between_edges()", ang_ef_fc, 30, 1e-3);
 
     double ang_ef_fd = vtol_cycle_processor::
-      angle_between_edges(eef,efd,(vf->cast_to_vertex()));
+      angle_between_edges(eef,efd,vf);
     vcl_cout << "Angle ef-fd = " << ang_ef_fd << vcl_endl;
     TEST_NEAR("angle_between_edges()", ang_ef_fd, 45, 1e-3);
   }
@@ -126,23 +123,22 @@ static void test_cycle_processor()
     vtol_edge_2d_sptr e0 = new vtol_edge_2d(v0, v1, c0);
     vtol_edge_2d_sptr e1 = new vtol_edge_2d(v1, v2, c1);
     vtol_edge_2d_sptr e2 = new vtol_edge_2d(v2, v0, c2);
-    vcl_cout << "outside edges:" << e0 << " " << e1 << " " << e2 << vcl_endl;
+    vcl_cout << "outside edges:" << e0 << ' ' << e1 << ' ' << e2 << vcl_endl;
     vcl_vector<vtol_edge_2d_sptr> edges;
     edges.push_back(e0);     edges.push_back(e1);     edges.push_back(e2);
     vtol_cycle_processor cp(edges, true);
-    vcl_vector<vtol_one_chain_sptr> nested_chains;
+    one_chain_list nested_chains;
     cp.nested_one_cycles(nested_chains, 0.5);
     if (nested_chains.size())
-      for (vcl_vector<vtol_one_chain_sptr>::iterator cit = nested_chains.begin();
+      for (one_chain_list::iterator cit = nested_chains.begin();
            cit != nested_chains.end(); cit++)
       {
-        vcl_vector<vtol_edge_sptr>* cedges = (*cit)->edges();
+        edge_list cedges; (*cit)->edges(cedges);
         vcl_cout << "chain edges\n";
-        for (vcl_vector<vtol_edge_sptr>::iterator ceit = cedges->begin();
-             ceit != cedges->end(); ceit++)
+        for (edge_list::iterator ceit = cedges.begin();
+             ceit != cedges.end(); ceit++)
           vcl_cout << (*ceit)->cast_to_edge_2d() << vcl_endl;
         vcl_cout << vcl_endl;
-        delete cedges;
       }
     else
       vcl_cout << "No cycles were formed\n";
@@ -160,24 +156,23 @@ static void test_cycle_processor()
     vtol_edge_2d_sptr ei0 = new vtol_edge_2d(vi0, vi1, ci0);
     vtol_edge_2d_sptr ei1 = new vtol_edge_2d(vi1, vi2, ci1);
     vtol_edge_2d_sptr ei2 = new vtol_edge_2d(vi2, vi0, ci2);
-    vcl_cout << "hole edges:" << ei0 << " " << ei1 << " " << ei2 << vcl_endl;
+    vcl_cout << "hole edges:" << ei0 << ' ' << ei1 << ' ' << ei2 << vcl_endl;
     vcl_vector<vtol_edge_2d_sptr> edges2;
     edges2.push_back(e0);     edges2.push_back(e1);     edges2.push_back(e2);
-    edges2.push_back(ei0);     edges2.push_back(ei1);     edges2.push_back(ei2);
+    edges2.push_back(ei0);    edges2.push_back(ei1);    edges2.push_back(ei2);
     nested_chains.clear();
     vtol_cycle_processor cp2(edges2, true);
     cp2.nested_one_cycles(nested_chains, 0.5);
     if (nested_chains.size())
-      for (vcl_vector<vtol_one_chain_sptr>::iterator cit = nested_chains.begin();
+      for (one_chain_list::iterator cit = nested_chains.begin();
            cit != nested_chains.end(); cit++)
       {
-        vcl_vector<vtol_edge_sptr>* cedges = (*cit)->edges();
+        edge_list cedges; (*cit)->edges(cedges);
         vcl_cout << "chain edges\n";
-        for (vcl_vector<vtol_edge_sptr>::iterator ceit = cedges->begin();
-             ceit != cedges->end(); ceit++)
+        for (edge_list::iterator ceit = cedges.begin();
+             ceit != cedges.end(); ceit++)
           vcl_cout << (*ceit)->cast_to_edge_2d() << vcl_endl;
         vcl_cout << vcl_endl;
-        delete cedges;
       }
         TEST("nested_chains", nested_chains.size(), 2);
   }
@@ -197,7 +192,7 @@ static void test_cycle_processor()
     vtol_edge_sptr e3= new vtol_edge_2d(v3,v1);
     vtol_edge_sptr e4= new vtol_edge_2d(v1,v4);
     vtol_edge_sptr e5= new vtol_edge_2d(v4,v2);
-    vcl_vector<vtol_edge_sptr> s1, s2;
+    edge_list s1, s2;
     s1.push_back(e1);   s1.push_back(e2);   s1.push_back(e3);
     s2.push_back(e4);   s2.push_back(e5);   s2.push_back(e1);
     vcl_cout<< "e1 =" << e1 << vcl_endl
@@ -206,35 +201,29 @@ static void test_cycle_processor()
             << "e4 =" << e4 << vcl_endl
             << "e5 =" << e5 << vcl_endl;
     //Test set intersection
-    vcl_vector<vtol_edge_sptr> s1_and_s2;
+    edge_list s1_and_s2;
     vtol_cycle_processor::intersect_edges(s1, s2, s1_and_s2);
     vcl_cout << "\nvtol_edge_2ds in s1\n";
-    for (vcl_vector<vtol_edge_sptr>::iterator eit = s1.begin();
-         eit != s1.end(); eit++)
+    for (edge_list::iterator eit = s1.begin(); eit != s1.end(); eit++)
       vcl_cout << ' ' << *eit << vcl_endl;
     vcl_cout << "\nvtol_edge_2ds in s2\n";
-    for (vcl_vector<vtol_edge_sptr>::iterator eit = s2.begin();
-         eit != s2.end(); eit++)
+    for (edge_list::iterator eit = s2.begin(); eit != s2.end(); eit++)
       vcl_cout << ' ' << *eit << vcl_endl;
     vcl_cout << "\nvtol_edge_2ds in s1_and_s2\n";
-    for (vcl_vector<vtol_edge_sptr>::iterator eit = s1_and_s2.begin();
-         eit != s1_and_s2.end(); eit++)
+    for (edge_list::iterator eit = s1_and_s2.begin(); eit != s1_and_s2.end(); eit++)
       vcl_cout << ' ' << *eit << vcl_endl;
     TEST("vtol_cycle_processor::intersect_edges()", s1_and_s2[0], e1);
     //Test set difference
-    vcl_vector<vtol_edge_sptr> s1_diff_s2;
+    edge_list s1_diff_s2;
     vtol_cycle_processor::difference_edges(s1, s2, s1_diff_s2);
     vcl_cout<< "\nvtol_edge_2ds in s1\n";
-    for (vcl_vector<vtol_edge_sptr>::iterator eit = s1.begin();
-         eit != s1.end(); eit++)
+    for (edge_list::iterator eit = s1.begin(); eit != s1.end(); eit++)
       vcl_cout << ' ' << *eit << vcl_endl;
     vcl_cout<< "\nvtol_edge_2ds in s2\n";
-    for (vcl_vector<vtol_edge_sptr>::iterator eit = s2.begin();
-         eit != s2.end(); eit++)
+    for (edge_list::iterator eit = s2.begin(); eit != s2.end(); eit++)
       vcl_cout << ' ' << *eit << vcl_endl;
     vcl_cout<< "\nvtol_edge_2ds in s1_minus_s2\n";
-    for (vcl_vector<vtol_edge_sptr>::iterator eit = s1_diff_s2.begin();
-         eit != s1_diff_s2.end(); eit++)
+    for (edge_list::iterator eit = s1_diff_s2.begin(); eit != s1_diff_s2.end(); eit++)
       vcl_cout << ' ' << *eit << vcl_endl;
     TEST("vtol_cycle_processor::difference_edges() [0]", s1_diff_s2[0], e2);
     TEST("vtol_cycle_processor::difference_edges() [1]", s1_diff_s2[1], e3);
@@ -256,21 +245,21 @@ static void test_cycle_processor()
     vtol_edge_sptr e3= new vtol_edge_2d(v3,v1);
     vtol_edge_sptr e4= new vtol_edge_2d(v1,v4);
     vtol_edge_sptr e5= new vtol_edge_2d(v4,v2);
-    vcl_cout<< "e1 =" << e1 << vcl_endl;
-    vcl_cout<< "e2 =" << e2 << vcl_endl;
-    vcl_cout<< "e3 =" << e3 << vcl_endl;
-    vcl_cout<< "e4 =" << e4 << vcl_endl;
-    vcl_cout<< "e5 =" << e5 << vcl_endl;
-    vcl_vector<vtol_edge_sptr> f1_edges, f2_edges;
+    vcl_cout<< "e1 =" << e1 << vcl_endl
+            << "e2 =" << e2 << vcl_endl
+            << "e3 =" << e3 << vcl_endl
+            << "e4 =" << e4 << vcl_endl
+            << "e5 =" << e5 << vcl_endl;
+    edge_list f1_edges, f2_edges;
     f1_edges.push_back(e1);   f1_edges.push_back(e2);   f1_edges.push_back(e3);
     f2_edges.push_back(e4);   f2_edges.push_back(e5);   f2_edges.push_back(e1);
     vtol_one_chain_sptr onc_1 = new vtol_one_chain(f1_edges, true);
     vtol_one_chain_sptr onc_2 = new vtol_one_chain(f2_edges, true);
-    vcl_vector<vtol_one_chain_sptr> merged_cycles;
+    one_chain_list merged_cycles;
 #if 0 // not yet implemented; change this to "1" when merge_one_cycles() exists
     vtol_cycle_processor::merge_one_cycles(onc_1, onc_2, merged_cycles);
 #else
-    vcl_vector<vtol_edge_sptr> merged_edges;
+    edge_list merged_edges;
     merged_edges.push_back(onc_1->edge(1));
     merged_edges.push_back(onc_1->edge(2));
     merged_edges.push_back(onc_2->edge(0));
@@ -282,15 +271,14 @@ static void test_cycle_processor()
     vcl_cout<< "number of one_cycles = " << merged_cycles.size() << vcl_endl;
     if (merged_cycles.size() > 0)
     {
-      vcl_vector<vtol_edge_sptr>* outer_edges = merged_cycles[0]->edges();
+      edge_list outer_edges; merged_cycles[0]->edges(outer_edges);
       vcl_cout<< "edges in merged cycle\n";
-      for (vcl_vector<vtol_edge_sptr>::iterator eit = outer_edges->begin();
-           eit != outer_edges->end(); eit++)
+      for (edge_list::iterator eit = outer_edges.begin();
+           eit != outer_edges.end(); eit++)
         vcl_cout<< *eit << vcl_endl;
       TEST("vtol_cycle_processor::merge_one_cycles()",
-           (*outer_edges)[0]==e2 && (*outer_edges)[1]==e3
-         &&(*outer_edges)[2]==e4 && (*outer_edges)[3]==e5, true);
-      delete outer_edges;
+           outer_edges[0]==e2 && outer_edges[1]==e3 &&
+           outer_edges[2]==e4 && outer_edges[3]==e5, true);
     }
     vcl_cout << "Ending merge operation tests\n\n";
   }
