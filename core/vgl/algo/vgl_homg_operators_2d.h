@@ -17,11 +17,13 @@
 //   29-Aug-01 Peter Vanroose - added vgl_conic functions (ported from TargetJr)
 //    5-Oct-01 Peter Vanroose - added compute_bounding_box functions
 //   15-May-03 Peter Vanroose - added implementation for closest_point()
+//   22-Jun-03 Peter Vanroose - vcl_list replaced by vcl_vector in lines_to_point
 // \endverbatim
 
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_list.h>
+#include <vcl_vector.h>
 
 //: 2D homogeneous operations
 template <class T>
@@ -106,7 +108,7 @@ class vgl_homg_operators_2d
                                        const vgl_homg_point_2d<T>& p2);
 
   //: Intersect a set of 2D lines to find the least-square point of intersection.
-  static vgl_homg_point_2d<T> lines_to_point(const vcl_list<vgl_homg_line_2d<T> >& lines);
+  static vgl_homg_point_2d<T> lines_to_point(const vcl_vector<vgl_homg_line_2d<T> >& lines);
 
   //: cross ratio of four collinear points
   // This number is projectively invariant, and it is the coordinate of p4
@@ -141,10 +143,10 @@ class vgl_homg_operators_2d
                                         double cr = -1.0);
 
   //: compute most orthogonal vector with vnl_symmetric_eigensystem
-  static vnl_vector<T> most_orthogonal_vector(const vcl_list<vgl_homg_line_2d<T> >& lines);
+  static vnl_vector<T> most_orthogonal_vector(const vcl_vector<vgl_homg_line_2d<T> >& lines);
 
   //: compute most orthogonal vector with SVD
-  static vnl_vector<T> most_orthogonal_vector_svd(const vcl_list<vgl_homg_line_2d<T> >& lines);
+  static vnl_vector<T> most_orthogonal_vector_svd(const vcl_vector<vgl_homg_line_2d<T> >& lines);
 
   // coefficient <-> conic matrix conversion -------------------------
   static vgl_conic<T> vgl_conic_from_matrix(vnl_matrix_fixed<T,3,3> const& mat);

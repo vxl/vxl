@@ -76,8 +76,8 @@ static void test_homg_point_1d()
 
   p2.set(4,1);
   r = vgl_homg_operators_1d<float>::dot(p1,p2);
-  vcl_cout << "p1 = " << p1 << ", p2 = " << p2 << '\n';
-  vcl_cout << "dot(p1,p2) = " << r << '\n';
+  vcl_cout << "p1 = " << p1 << ", p2 = " << p2 << '\n'
+           << "dot(p1,p2) = " << r << '\n';
   TEST("dot", r, 27);
 
   r = vgl_homg_operators_1d<float>::cross(p1,p2);
@@ -301,7 +301,7 @@ static void test_homg_line_2d()
   bool b = concurrent(l1,l2,l3); // because they share the point (0,0)
   TEST("concurrent", b, true);
 
-  vcl_list<vgl_homg_line_2d<double> > lst;
+  vcl_vector<vgl_homg_line_2d<double> > lst;
   lst.push_back(l1); lst.push_back(l2); lst.push_back(l3);
   p = vgl_homg_operators_2d<double>::lines_to_point(lst);
   TEST("lines_to_point", p, vgl_homg_point_2d<double>(0,0,1));

@@ -105,7 +105,7 @@ void vgl_homg_operators_2d<T>::unitize(vgl_homg_point_2d<T>& a)
   double norm = vcl_sqrt (a.x()*a.x() + a.y()*a.y() + a.w()*a.w());
 
   if (norm == 0.0) {
-    vcl_cerr<< "vgl_homg_operators_2d<T>::unitize() -- Zero length vector\n";
+    vcl_cerr << "vgl_homg_operators_2d<T>::unitize() -- Zero length vector\n";
     return;
   }
   norm = 1.0/norm;
@@ -297,11 +297,11 @@ vgl_homg_operators_2d<T>::midpoint(const vgl_homg_point_2d<T>& p1,
 // - Kanatani sect 2.2.2.
 template <class T>
 vnl_vector<T>
-vgl_homg_operators_2d<T>::most_orthogonal_vector(const vcl_list<vgl_homg_line_2d<T> >& inpoints)
+vgl_homg_operators_2d<T>::most_orthogonal_vector(const vcl_vector<vgl_homg_line_2d<T> >& inpoints)
 {
   vnl_scatter_3x3<T> scatter_matrix;
 
-  for (typename vcl_list<vgl_homg_line_2d<T> >::const_iterator i = inpoints.begin();
+  for (typename vcl_vector<vgl_homg_line_2d<T> >::const_iterator i = inpoints.begin();
        i != inpoints.end(); ++i)
     scatter_matrix.add_outer_product(get_vector(*i));
 
@@ -312,11 +312,11 @@ vgl_homg_operators_2d<T>::most_orthogonal_vector(const vcl_list<vgl_homg_line_2d
 
 template <class T>
 vnl_vector<T>
-vgl_homg_operators_2d<T>::most_orthogonal_vector_svd(const vcl_list<vgl_homg_line_2d<T> >& lines)
+vgl_homg_operators_2d<T>::most_orthogonal_vector_svd(const vcl_vector<vgl_homg_line_2d<T> >& lines)
 {
   vnl_matrix<T> D(lines.size(), 3);
 
-  typename vcl_list<vgl_homg_line_2d<T> >::const_iterator i = lines.begin();
+  typename vcl_vector<vgl_homg_line_2d<T> >::const_iterator i = lines.begin();
   for (unsigned j = 0; i != lines.end(); ++i,++j)
     D.set_row(j, get_vector(*i));
 
@@ -334,7 +334,7 @@ vgl_homg_operators_2d<T>::most_orthogonal_vector_svd(const vcl_list<vgl_homg_lin
 // Numerics to accumulate and compute the nullspace of $\tt L^\top \tt L$.
 template <class T>
 vgl_homg_point_2d<T>
-vgl_homg_operators_2d<T>::lines_to_point(const vcl_list<vgl_homg_line_2d<T> >& lines)
+vgl_homg_operators_2d<T>::lines_to_point(const vcl_vector<vgl_homg_line_2d<T> >& lines)
 {
   // ho_triveccam_aspect_lines_to_point
   assert(lines.size() >= 2);
@@ -636,11 +636,11 @@ vcl_list<vgl_homg_point_2d<T> >
 vgl_homg_operators_2d<T>::intersection(vgl_conic<T> const& c,
                                        vgl_homg_line_2d<T> const& l)
 {
-  if (c.type()==vgl_conic<T>::no_type
-   || c.type()==vgl_conic<T>::complex_parallel_lines
-   || c.type()==vgl_conic<T>::complex_intersecting_lines
-   || c.type()==vgl_conic<T>::imaginary_ellipse
-   || c.type()==vgl_conic<T>::imaginary_circle)
+  if (c.type()==vgl_conic<T>::no_type ||
+      c.type()==vgl_conic<T>::complex_parallel_lines ||
+      c.type()==vgl_conic<T>::complex_intersecting_lines ||
+      c.type()==vgl_conic<T>::imaginary_ellipse ||
+      c.type()==vgl_conic<T>::imaginary_circle)
     return vcl_list<vgl_homg_point_2d<T> >(); // empty list
   // let's hope the intersection point of the two complex lines is not on the line..
 
@@ -777,7 +777,7 @@ vgl_homg_operators_2d<T>::closest_point(vgl_conic<T> const& c,
     // ==> degenerate hyperbola: line + line at infinity
     vgl_homg_line_2d<T> l(c.a()*pt.y()*2-c.b()*pt.x(),
                          -c.c()*pt.x()*2+c.b()*pt.y(),
-                          c.d()*pt.y()-c.e()*pt.x());
+                          c.d()*pt.y()  -c.e()*pt.x());
     candidates = intersection(c, l);
     if (candidates.size() == 0)
       return vgl_homg_point_2d<T>(0,0,0); // this cannot happen
@@ -796,7 +796,7 @@ vgl_homg_operators_2d<T>::closest_point(vgl_conic<T> const& c,
                       -pt.w()*c.b(),
                        pt.y()*c.a()*2-pt.x()*c.b()+pt.w()*c.e(),
                       -pt.x()*c.c()*2+pt.y()*c.b()-pt.w()*c.d(),
-                       pt.y()*c.d()-pt.x()*c.e());
+                       pt.y()*c.d()  -pt.x()*c.e());
     // Now it suffices to intersect the hyperbola with the given conic:
     candidates = intersection(c, conic);
   }
@@ -839,14 +839,14 @@ vgl_homg_operators_2d<T>::compute_bounding_box(vgl_conic<T> const& c)
     return vgl_box_2d<T>(vgl_point_2d<T>(pt), vgl_point_2d<T>(pt));
   }
 
-  if (c.real_type() == "invalid conic"
-   || c.real_type() == "imaginary ellipse"
-   || c.real_type() == "imaginary circle"
-   || c.real_type() == "complex parallel lines")
+  if (c.real_type() == "invalid conic" ||
+      c.real_type() == "imaginary ellipse" ||
+      c.real_type() == "imaginary circle" ||
+      c.real_type() == "complex parallel lines")
     return vgl_box_2d<T>(); // empty box
 
-  if (c.real_type() == "real parallel lines"
-   || c.real_type() == "coincident lines")
+  if (c.real_type() == "real parallel lines" ||
+      c.real_type() == "coincident lines")
   {
     // find out if these lines happen to be horizontal or vertical
     vcl_list<vgl_homg_line_2d<T> > l = c.components();
