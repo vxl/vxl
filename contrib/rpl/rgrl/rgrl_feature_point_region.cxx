@@ -4,6 +4,7 @@
 
 #include "rgrl_feature_point_region.h"
 #include <rgrl/rgrl_util.h>
+#include <rgrl/rgrl_transformation.h>
 
 rgrl_feature_point_region::
 rgrl_feature_point_region( vnl_vector<double> const& loc, double radius )
