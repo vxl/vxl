@@ -70,7 +70,7 @@ vnl_qr<T>::~vnl_qr()
   delete R_;
 }
 
-//: Return the determinant of M.  This is computed from M = vnl_qr as follows:
+//: Return the determinant of M.  This is computed from M = Q R as follows:
 // |M| = |Q| |R|
 // |R| is the product of the diagonal elements.
 // |Q| is (-1)^n as it is a product of Householder reflections.
@@ -130,8 +130,8 @@ vnl_matrix<T>& vnl_qr<T>::Q()
       // Premultiply emerging Q by house(v), noting that v[0..k-1] == 0.
       // Q_new = (1 - (2/v'*v) v v')Q
       // or Q -= (2/v'*v) v (v'Q)
-      if (sq > 0.0) {
-        abs_t scale = 2.0/sq;
+      if (sq > abs_t(0)) {
+        abs_t scale = abs_t(2)/sq;
         // w = (2/v'*v) v' Q
         for(int i = k; i < m; ++i) {
           w[i] = T(0);

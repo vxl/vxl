@@ -140,7 +140,7 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
     typedef typename vnl_numeric_traits<T>::abs_t abs_t;
     abs_t recomposition_residual = vcl_abs((recompose() - M).fro_norm());
     abs_t n = vcl_abs(M.fro_norm());
-    abs_t thresh = m_ * vnl_math::eps * n;
+    abs_t thresh = m_ * abs_t(vnl_math::eps) * n;
     if (recomposition_residual > thresh) {
       vcl_cerr << "vnl_svd<T>::vnl_svd<T>() -- Warning, recomposition_residual = "
                << recomposition_residual << vcl_endl
