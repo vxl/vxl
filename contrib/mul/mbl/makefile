@@ -16,6 +16,8 @@ SOURCES += mbl_sum_1d.cxx
 SOURCES += mbl_lda.cxx
 SOURCES += mbl_screen_counter.cxx
 SOURCES += mbl_rbf_network.cxx
+SOURCES += mbl_read_double.cxx
+SOURCES += mbl_read_int.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_data_array_wrapper.txx
