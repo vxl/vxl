@@ -1,5 +1,7 @@
 // Include system headers for UNIX-like operating system :
+#undef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 1 // necessary on alpha and on SGI since otherwise
+#undef _XOPEN_SOURCE_EXTENDED
 #define _XOPEN_SOURCE_EXTENDED 1 // usleep is not declared
 extern "C" {
 #include <unistd.h>
