@@ -57,7 +57,7 @@ void xcv_twoview_manager::set_tableau(vgui_tableau_ref const& tab, unsigned tab_
     return;
   }
   if (debug) vcl_cerr << "xcv_two_view_manager: Setting tab position [" << tab_nb 
-    << "] to tableau pointer: " << tab << vcl_endl;
+                      << "] to tableau pointer: " << tab << vcl_endl;
   tabs[tab_nb] = tab;
   rubberbands[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("vgui_rubberbander")));
   if (! rubberbands[tab_nb])
@@ -135,7 +135,7 @@ void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_ref co
   if (make_permanent)
   {
     if (debug) vcl_cerr << "Drawing the infinite line: " << hl[0] << "x + " 
-      << hl[1] << "y + " << hl[2] << " = 0." << vcl_endl;
+                        << hl[1] << "y + " << hl[2] << " = 0." << vcl_endl;
     if (easys[transfer_index])
       easys[transfer_index]->add_infinite_line(hl[0], hl[1], hl[2]);
     else
@@ -215,7 +215,7 @@ void xcv_twoview_manager::draw_h_matrix(
   if (make_permanent)
   {
     if (debug) vcl_cerr << "draw_h_matrix: Adding points at (" << px << ", " << py
-      << ") and (" << ix << ", " << iy << ")." << vcl_endl;
+                        << ") and (" << ix << ", " << iy << ")." << vcl_endl;
     easys[transfer_index]->add_point(px, py);
     easys[(transfer_index+1)%2]->add_point(ix, iy);
     easys[0]->post_redraw();
