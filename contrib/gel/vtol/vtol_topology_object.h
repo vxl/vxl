@@ -353,56 +353,56 @@ class vtol_topology_object : public vsol_spatial_object_2d
   void two_chains(two_chain_list &list) const;
   //: Get list of blocks
   void blocks(block_list &list) const;
-
+ private:
   //---------------------------------------------------------------------------
   //: Get list of vertices
   // returned list must be deleted after use.
-  // \deprecated
+  // \deprecated - use vertices(list) instead
   //---------------------------------------------------------------------------
   vertex_list *vertices() const;
 
   //---------------------------------------------------------------------------
   //: Get list of zero chains
   // returned list must be deleted after use.
-  // \deprecated
+  // \deprecated - use zero_chains(list) instead
   //---------------------------------------------------------------------------
   zero_chain_list *zero_chains() const;
 
   //---------------------------------------------------------------------------
   //: Get list of edges
   // returned list must be deleted after use.
-  // \deprecated
+  // \deprecated - use edges(list) instead
   //---------------------------------------------------------------------------
   edge_list *edges() const;
 
   //---------------------------------------------------------------------------
   //: Get list of one chains
   // returned list must be deleted after use.
-  // \deprecated
+  // \deprecated - use one_chains(list) instead
   //---------------------------------------------------------------------------
   one_chain_list *one_chains() const;
 
   //---------------------------------------------------------------------------
   //: Get list of faces
   // returned list must be deleted after use.
-  // \deprecated
+  // \deprecated - use faces(list) instead
   //---------------------------------------------------------------------------
   face_list *faces() const;
 
   //---------------------------------------------------------------------------
   //: Get list of two chains
   // returned list must be deleted after use.
-  // \deprecated
+  // \deprecated - use two_chains(list) instead
   //---------------------------------------------------------------------------
   two_chain_list *two_chains() const;
 
   //---------------------------------------------------------------------------
   //: Get list of blocks
   // returned list must be deleted after use.
-  // \deprecated
+  // \deprecated - use blocks(list) instead
   //---------------------------------------------------------------------------
   block_list *blocks() const;
-
+ public:
   //---------------------------------------------------------------------------
   //: print and describe the objects
   //---------------------------------------------------------------------------
