@@ -173,6 +173,10 @@ bool vil_rgb<T>::operator== (vil_rgb<T> const& o) const
   return r==o.r && g==o.g && b==o.b;
 }
 
+
+// the following cause compilation errors under Microsoft Visual C++
+// is there some conflict with min and max from the std library ? 
+#ifndef VCL_VC
 template <class T>
 inline
 vil_rgb<T> max(vil_rgb<T> const& a, vil_rgb<T> const& b)
@@ -190,6 +194,7 @@ vil_rgb<T> min(vil_rgb<T> const& a, vil_rgb<T> const& b)
                     (a.g<b.g)?a.g:b.g,
                     (a.b<b.b)?a.b:b.b);
 }
+#endif
 
 template <class T>
 inline
