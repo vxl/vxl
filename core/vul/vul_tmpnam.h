@@ -10,7 +10,7 @@
 // This is to avoid (GNU) linker warnings (and errors!) about calls to
 // tmpnam being unsafe.
 
-class vcl_string;
+#include <vcl_string.h>
 
 //: Generates a temporary filename.
 // \param filename is a pathname with a set of trailing X's. (For

@@ -23,11 +23,17 @@ int main()
       vpl_sleep( 1 );
       ++count;
     }
+
     vcl_ofstream ostr( filename.c_str() );
-
-    vul_test_perform( count<10 && bool(ostr) );
-
-    vpl_unlink( filename.c_str() );
+    bool status_good = ostr.good();
+    // Under Windows, an open file cannot be unlinked.
+    ostr.close();
+    if( vpl_unlink( filename.c_str() ) == -1) {
+      vcl_cerr << "Unlink failed!" << vcl_endl;
+      status_good=false;
+    }
+    
+    vul_test_perform( count<10 && status_good );
   }
 
   {
