@@ -11,7 +11,7 @@
 // A class for performing the AZ-standard version of Canny's edge detector.
 // The basic implementatation is similar to that described in Canny's thesis,
 // though sub-pixel interpolation of the final edge output has been included,
-// and there is patching of single pixel gaps in the edgel chains. 
+// and there is patching of single pixel gaps in the edgel chains.
 //
 // In order not to ignore a border of size _width (half the kernel size)
 // around the image, as is done in class Canny, this implementation
@@ -23,9 +23,9 @@
 //   Robotics Research Group, University of Oxford
 //
 // .SECTION Modifications
-// The original C implementation of this canny edge detector 
-// came from AIRUV at Sheffield. It was later modified by 
-// Charlie Rothwell, Nic Pillow and Sven Utcke. 
+// The original C implementation of this canny edge detector
+// came from AIRUV at Sheffield. It was later modified by
+// Charlie Rothwell, Nic Pillow and Sven Utcke.
 //
 //   Samer Abdallah - 18/05/96 - Cleared some compiler warnings
 //   Samer Abdallah - 24/05/96 - Fixed _theta[x][y] in Non_maximal_supressionOX
@@ -53,12 +53,12 @@ public:
 
 protected:
   osl_edgel_chain *Get_NMS_edgelsOX(int n_edgels_NMS, int *_x, int *_y);
-  
+
   // Functions used in performing the hysteresis part of canny
   int HysteresisOX(osl_edgel_chain *&, int *&);
   void Initial_followOX(int,int,osl_edgel_chain *&,osl_LINK *[],int *&,float);
-  void Add_linkOX(int,int,osl_LINK **);
-  void Link_edgelsOX(vcl_vector<unsigned> const &, vcl_vector<unsigned> const &,osl_LINK **);
+  void Add_linkOX(int,int,osl_LINK *[]);
+  void Link_edgelsOX(vcl_vector<unsigned> const &, vcl_vector<unsigned> const &,osl_LINK *[]);
   int Get_n_edgels_hysteresisOX(osl_edgel_chain *&,int *&);
   void Get_hysteresis_edgelsOX(osl_edgel_chain *&,int *&, osl_edgel_chain *&, int *_x, int *_y);
   void Delete_linksOX(osl_LINK **, int);
@@ -74,21 +74,18 @@ protected:
   // Functions used in locating junctions
   void Find_junctionsOX();
   void Find_junction_clustersOX();
-    
+
 protected:
   int _max_width_OX;       // The maximum smoothing kernel width
-  float *_sub_area_OX;     // Used in smoothing the image near the borders 
-
+  float *_sub_area_OX;     // Used in smoothing the image near the borders
 
   int _edge_min_OX;        // Minimum edge pixel intensity
-
-
 
   int _min_length_OX;      // Minimum number of pixels in a curve
   int _border_size_OX;     // Border size around the image to be set
   float _border_value_OX;  //   to _border_value_OX (usually 0) to ensure
                            //   follow won't overrun.
-  float _scale_OX;         // Value used in the follow part of canny to 
+  float _scale_OX;         // Value used in the follow part of canny to
                            //   scale image after the hysteresis part.
   int _follow_strategy_OX; // Flag used in the Final_followOX() to determined
                            //  the order of neighboring pixel checking
@@ -96,11 +93,10 @@ protected:
                            //  When equal to 0, only NMS and Hysteresis
                            //  are performed; FollowerOX is not performed.
                            //  Locating Junctions in not performed either.
-                           //  See Do_osl_canny_ox(...) 
+                           //  See Do_osl_canny_ox(...)
 
-  bool _join_flag_OX;      // True to enable pixel jumping  
+  bool _join_flag_OX;      // True to enable pixel jumping
   int _junction_option_OX; // True if we want to locate junctions
-
 };
 
 #endif // osl_canny_ox_h
