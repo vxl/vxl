@@ -204,6 +204,84 @@ SOURCE=.\Templates/vsl_vector_io+clsfy_classifier_1d~-.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\clsfy_binary_hyperplane.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_binary_hyperplane_ls_builder.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_binary_pdf_classifier.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_binary_threshold_1d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_builder_1d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_builder_base.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_classifier_1d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_classifier_base.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_k_nearest_neighbour.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_knn_builder.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_parzen_builder.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_random_builder.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_random_classifier.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_rbf_parzen.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_simple_adaboost.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

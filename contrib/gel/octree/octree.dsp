@@ -196,6 +196,44 @@ SOURCE=.\Templates/vcl_vector+vcl_vector+Voxel--.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\BaseCube.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\ConvexHull.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cube.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\OctreeLevel.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Voxel.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\VoxmapImagePoints.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\VoxmapPoints.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

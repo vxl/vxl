@@ -174,6 +174,69 @@ SOURCE=.\gmvl_topology_node.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\gmvl_connection.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gmvl_connection_cache.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gmvl_corner_node.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gmvl_database.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gmvl_helpers.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gmvl_image_node.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gmvl_node.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gmvl_node_cache.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gmvl_tag_node.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gmvl_topology_node.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gmvl_connection_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gmvl_node_sptr.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

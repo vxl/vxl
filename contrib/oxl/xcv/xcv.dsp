@@ -252,6 +252,94 @@ SOURCE=.\xcv_twoview_manager.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\xcv_axes_limits.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_axes_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_display.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_file.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_geometry.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_image_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_multiview.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_picker_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_processing.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_segmentation.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_threeview_manager.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_tjunction.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_twoview_manager.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_axes_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_image_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_mview_manager.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_picker_tableau_sptr.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

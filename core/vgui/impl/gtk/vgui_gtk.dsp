@@ -122,6 +122,30 @@ SOURCE=.\vgui_gtk_window.cxx
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\vgui_gtk.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_gtk_adaptor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_gtk_dialog_impl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_gtk_statusbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_gtk_utils.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_gtk_window.h
+# End Source File
 # End Group
 # End Target
 # End Project

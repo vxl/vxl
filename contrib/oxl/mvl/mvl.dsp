@@ -854,6 +854,509 @@ SOURCE=.\Templates/vbl_smart_ptr+PMatrix-.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\AffineMetric.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\ClosestImagePointFinder.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\ComputeGRIC.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FDesignMatrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMPlanarComputeNonLinear.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMPlanarNonLinFun.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FManifoldProject.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixAffine.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixCompute.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixCompute7Point.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixComputeLMedSq.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixComputeLinear.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixComputeMLESAC.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixComputeNonLinear.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixComputeRANSAC.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixComputeRobust.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixPlanar.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixSkew.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FileNameGenerator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FileNameGeneratorBase.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix1D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix1DCompute.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix1DCompute3Point.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix1DComputeDesign.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix1DComputeOptimize1.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix2DAffineCompute.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix2DCompute.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix2DCompute4Line.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix2DCompute4Point.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix2DComputeLinear.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix2DComputeMLESAC.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix2DComputeRobust.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix2DEuclideanCompute.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix2DSimilarityCompute.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix3D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Homg.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Homg1D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Homg2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Homg3D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgInterestPoint.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgInterestPointSet.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgLine2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgLine3D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgLineSeg2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgLineSeg3D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgMetric.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgNorm2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgOperator2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgOperator3D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgPlane3D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgPoint1D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgPoint2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgPoint3D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgPrettyPrint.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\ImageMetric.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\LineSegSet.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\MatchSet.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\NViewMatches.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PMatrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PMatrixAffine.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PMatrixCompute.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PMatrixComputeLinear.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PMatrixDec.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PMatrixDecompAa.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PMatrixDecompCR.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PMatrixEuclidean.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PairMatchMulti.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PairMatchMultiIterator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PairMatchSet.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PairMatchSet2D3D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PairMatchSetCorner.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PairMatchSetLineSeg.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PairSetCorner.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Probability.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\ProjStructure.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\ProjectiveBasis2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\RawPMatrixStore.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\SimilarityMetric.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\TriTensor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\TripleMatchSet.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\TripleMatchSetCorner.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\TripleMatchSetLineSeg.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mvl_five_point_camera_pencil.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mvl_multi_view_matches.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mvl_psi.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mvl_six_point_design_matrix_row.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mvl_three_view_six_point_structure.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMSkewComputeLinear.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixCompute8Point.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgMap2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgMatchPoint3D2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\LineSeg.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\ModifyHandle.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PMatrixCompute6Point.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PairMatchMultiStrength.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\PairMatchSetMulti.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\TriTensorCompute.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mvl_modify_handle.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

@@ -229,6 +229,159 @@ SOURCE=.\mbl_lda.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\mbl_data_array_wrapper.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_data_array_wrapper.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_data_collector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_data_collector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_data_collector_base.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_data_collector_list.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_data_collector_list.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_data_wrapper.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_data_wrapper.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_gamma.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_k_means.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_lda.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_matrix_products.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_matxvec.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_mz_random.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_rbf_network.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_read_double.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_read_int.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_read_props.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_screen_counter.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_stats_1d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_stochastic_data_collector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_stochastic_data_collector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_sum_1d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_chord.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_cloneable_ptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_index_sort.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_lru_cache.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_print.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_priority_bounded_queue.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

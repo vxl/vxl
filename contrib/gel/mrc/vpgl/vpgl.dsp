@@ -114,6 +114,34 @@ SOURCE=.\vpgl_perspective_camera.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\vpgl_basic_camera.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpgl_matrix_camera.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpgl_perspective_camera.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpgl_basic_camera_sptr.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpgl_matrix_camera_sptr.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpgl_perspective_camera_sptr.h
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

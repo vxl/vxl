@@ -314,6 +314,189 @@ SOURCE=.\osl_vertex.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\internals/droid.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/osl_reorder_chain.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_1d_half_kernel.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_1d_half_kernel.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_OrthogRegress.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_break_edge.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_canny_base.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_canny_gradient.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_canny_nms.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_canny_ox.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_canny_ox_params.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_canny_port.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_canny_rothwell.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_canny_rothwell_params.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_canny_smooth.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_canny_smooth.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_chamfer.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_convolve.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_easy_canny.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_edge.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_edge_detector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_edge_detector_params.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_edgel_chain.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_fit_circle.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_fit_lines.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_fit_lines_params.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_harris.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_harris_params.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_kernel.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_load_topology.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_ortho_regress.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_roi_window.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_save_topology.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_topology.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_vertex.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\osl_hacks.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

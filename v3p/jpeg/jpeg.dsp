@@ -329,6 +329,65 @@ SOURCE=.\jutils.c
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\jchuff.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\jconfig.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\jdct.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\jdhuff.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\jerror.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\jinclude.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\jmemsys.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\jmorecfg.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\jpegint.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\jpeglib.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\jversion.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

@@ -149,8 +149,46 @@ SOURCE=.\writeFeatures.c
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\base.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\convolve.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\error.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\klt.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\klt_util.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\pnmio.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\pyramid.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-

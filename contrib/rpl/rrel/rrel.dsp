@@ -204,6 +204,114 @@ SOURCE=.\Templates/rrel_util_vector+int-.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\rrel_cauchy_obj.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_estimation_problem.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_homography2d_est.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_irls.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_linear_regression.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_lms_obj.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_lts_obj.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_m_est_obj.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_misc.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_mlesac_obj.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_muse_table.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_muset_obj.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_orthogonal_regression.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_ran_sam_search.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_ransac_obj.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_trunc_quad_obj.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_tukey_obj.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_objective.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_util.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_util.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_wls_obj.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

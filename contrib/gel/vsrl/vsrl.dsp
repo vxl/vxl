@@ -189,6 +189,89 @@ SOURCE=.\vsrl_window_accumulator.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vsrl_3d_output.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsrl_dense_matcher.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsrl_diffusion.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsrl_dynamic_program.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsrl_image_correlation.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsrl_intensity_token.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsrl_null_token.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsrl_parameters.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsrl_raster_dp_setup.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsrl_results_dense_matcher.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsrl_saliency_diffusion.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsrl_step_diffusion.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsrl_stereo_dense_matcher.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsrl_token.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsrl_token_saliency.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsrl_window_accumulator.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

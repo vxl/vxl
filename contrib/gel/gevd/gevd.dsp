@@ -149,6 +149,69 @@ SOURCE=.\gevd_bufferxy.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\gevd_bufferxy.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_contour.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_detector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_detector_params.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_float_operators.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_memory_mixin.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_noise.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_param_mixin.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_status_mixin.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_step.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_pixel.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_xpixel.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

@@ -166,6 +166,69 @@ SOURCE=.\vgui_mfc_window.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vgui_mfc.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_mfc_adaptor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_mfc_app.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_mfc_app_init.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_mfc_dialog_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_mfc_doc.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_mfc_mainfrm.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_mfc_statusbar.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_mfc_util.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_mfc_utils.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_mfc_view.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_mfc_window.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

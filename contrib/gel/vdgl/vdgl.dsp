@@ -169,6 +169,74 @@ SOURCE=.\vdgl_ortho_regress.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vdgl_OrthogRegress.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_digital_curve.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_digital_region.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_edgel.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_edgel_chain.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_fit_line.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_interpolator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_interpolator_cubic.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_interpolator_linear.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_ortho_regress.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_digital_curve_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_edgel_chain_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_interpolator_sptr.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

@@ -145,6 +145,10 @@ SOURCE=.\vgui_glut_popup_impl.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vgui_glut_slab.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vgui_glut_window.h
 # End Source File
 # End Group

@@ -164,6 +164,74 @@ SOURCE=.\vmal_track_lines.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vmal_convert.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vmal_dense_matching.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vmal_homog2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vmal_kl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vmal_kl_params.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vmal_lines_correlation.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vmal_multi_view_data.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vmal_operators.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vmal_rectifier.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vmal_refine_lines.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vmal_track_lines.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vmal_multi_view_data_edge_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vmal_multi_view_data_vertex_sptr.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

@@ -359,6 +359,159 @@ SOURCE=.\vtol_zero_chain.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vtol_block.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_chain.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_edge.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_edge_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_face.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_face_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_list_functions.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_one_chain.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_topology_cache.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_topology_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_topology_object.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_two_chain.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_vertex.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_vertex_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_zero_chain.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_block_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_chain_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_dtd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_edge_2d_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_edge_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_face_2d_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_face_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_macros.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_one_chain_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_topology_cache_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_topology_object_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_two_chain_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_vertex_2d_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_vertex_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_zero_chain_sptr.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

@@ -259,6 +259,129 @@ SOURCE=.\vpdfl_resample.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vpdfl_axis_gaussian.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_axis_gaussian_builder.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_axis_gaussian_sampler.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_builder_base.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_calc_mean_var.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_gaussian.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_gaussian_builder.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_gaussian_kernel_pdf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_gaussian_kernel_pdf_builder.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_gaussian_kernel_pdf_sampler.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_gaussian_sampler.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_kernel_pdf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_kernel_pdf_builder.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_mixture.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_mixture_builder.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_mixture_sampler.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_pc_gaussian.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_pc_gaussian_builder.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_pc_gaussian_sampler.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_pdf_base.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_prob_chi2.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_resample.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_all.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_sampler_base.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

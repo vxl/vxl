@@ -264,6 +264,90 @@ SOURCE=.\tif_zip.c
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\format.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\machdep.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\port.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\prototypes.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\t4.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\tif_dir.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\tif_fax3.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\tif_predict.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiff.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiffcomp.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiffcompat.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiffconf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiffio.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\tiffiop.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\uvcode.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\version.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

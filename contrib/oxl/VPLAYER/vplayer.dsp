@@ -175,6 +175,39 @@ SOURCE=.\vplayer_video.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\easy2D_loader.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\easy2D_sequencer.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vplayer.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vplayer_file.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vplayer_geometry.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vplayer_video.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

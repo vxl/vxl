@@ -289,6 +289,124 @@ SOURCE=.\mil_transform_2d.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\mil_byte_image_2d_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_convert_image_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_gauss_reduce_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_gaussian_pyramid_builder_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_gaussian_pyramid_builder_2d_general.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_image.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_image_2d_of.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_image_data.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_image_io.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_image_pyramid.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_image_pyramid_builder.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_transform_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_all.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_bilin_interp_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_convert_vil.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_gaussian_pyramid_builder_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_gaussian_pyramid_builder_2d_general.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_image_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_image_2d_of.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_image_data.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_image_pyramid.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_sample_profile_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_sample_profile_2d.txx
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

@@ -134,6 +134,30 @@ SOURCE=.\vgui_qt_adaptor_mocced.cxx
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\vgui_qt.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_qt_adaptor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_qt_dialog_impl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_qt_menu.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_qt_statusbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_qt_window.h
+# End Source File
 # End Group
 # End Target
 # End Project

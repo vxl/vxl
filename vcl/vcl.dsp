@@ -679,6 +679,1644 @@ SOURCE=.\vcl_deprecated.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\egcs/vcl_algorithm.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\egcs/vcl_complex.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\egcs/vcl_deque.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\egcs/vcl_functional.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\egcs/vcl_iterator.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\egcs/vcl_list.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\egcs/vcl_map.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\egcs/vcl_set.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\egcs/vcl_string.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\egcs/vcl_utility.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\egcs/vcl_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_algorithm.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_algorithm.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_alloc.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_complex.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_complex.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_deque.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_deque.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_functional.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_functional.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_hash.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_hash_map.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_hash_map.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_hashtable.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_iterator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_iterator.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_list.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_list.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_map.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_map.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_multimap.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_multimap.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_rbtree.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_set.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_set.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_straits.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_string.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_string.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_utility.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_utility.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_vector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-295/vcl_algorithm.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-295/vcl_complex.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-295/vcl_deque.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-295/vcl_functional.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-295/vcl_iterator.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-295/vcl_list.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-295/vcl_map.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-295/vcl_set.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-295/vcl_string.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-295/vcl_utility.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-295/vcl_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-libstdcxx-v3/vcl_algorithm.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-libstdcxx-v3/vcl_deque.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-libstdcxx-v3/vcl_functional.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-libstdcxx-v3/vcl_iterator.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-libstdcxx-v3/vcl_list.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-libstdcxx-v3/vcl_map.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-libstdcxx-v3/vcl_set.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-libstdcxx-v3/vcl_string.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-libstdcxx-v3/vcl_utility.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-libstdcxx-v3/vcl_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_algorithm.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_algorithm.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_complex.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_complex.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_deque.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_deque.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_functional.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_functional.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_iterator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_iterator.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_list.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_list.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_map.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_map.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_set.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_set.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_string.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_string.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_utility.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_utility.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_vector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_algorithm.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_complex.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_complex.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_deque.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_functional.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_iterator.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_list.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_map.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_set.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_string.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_string.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_utility.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_algorithm.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_complex.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_complex.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_deque.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_functional.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_iterator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_iterator.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_list.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_map.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_map.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_set.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_utility.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_vector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_algorithm.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_algorithm.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_cassert.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_cmath.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_complex.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_complex.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_cstdlib.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_deprecated.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_deque.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_deque.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_functional.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_functional.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_iterator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_iterator.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_list.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_list.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_map.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_map.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_set.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_set.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_stack.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_stack.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_string.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_string.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_utility.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_utility.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_vector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_algorithm.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_complex.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_complex.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_deque.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_functional.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_iterator.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_list.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_map.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_set.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_string.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_string.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_utility.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_algobase.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_bool.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_bvector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_complex_fwd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_defalloc.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_functionx.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_hash_set.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_heap.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_multiset.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_new.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_pair.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_rel_ops.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_stack.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_stlconf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_stlfwd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_tempbuf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation/vcl_tree.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-295/vcl_iomanip.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-295/vcl_ios.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc-295/vcl_queue.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc/vcl_cmath.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gcc/vcl_cstdlib.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_algorithm.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_bitset.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_blah.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_cassert.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_cctype.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_cerrno.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_cfloat.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_ciso646.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_climits.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_clocale.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_cmath.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_complex.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_csetjmp.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_csignal.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_cstdarg.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_cstddef.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_cstdio.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_cstdlib.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_cstring.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_ctime.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_cwchar.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_cwctype.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_deque.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_exception.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_fstream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_functional.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_iomanip.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_ios.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_iosfwd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_iostream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_istream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_iterator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_limits.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_list.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_locale.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_map.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_memory.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_numeric.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_ostream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_queue.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_set.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_sstream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_stack.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_stdexcept.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_streambuf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_string.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_strstream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_typeinfo.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_utility.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_valarray.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic/vcl_vector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_bitset.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_cassert.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_cctype.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_cerrno.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_cfloat.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_ciso646.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_climits.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_clocale.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_cmath.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_csetjmp.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_csignal.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_cstdarg.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_cstddef.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_cstdio.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_cstdlib.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_cstring.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_ctime.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_cwchar.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_cwctype.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_exception.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_fstream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_iomanip.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_ios.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_iosfwd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_iostream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_istream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_limits.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_locale.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_memory.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_new.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_numeric.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_ostream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_queue.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_queue.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_sstream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_stack.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_stack.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_stdexcept.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_streambuf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_strstream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_typeinfo.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\iso/vcl_valarray.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_cmath.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_cstdlib.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_iomanip.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_ios.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sgi/vcl_iostream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_cmath.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_complex_fwd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_cstdlib.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\sunpro/vcl_stack.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_bitset.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_cctype.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_cerrno.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_cfloat.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_ciso646.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_climits.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_clocale.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_compiler.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_complex_fwd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_csetjmp.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_csignal.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_cstdarg.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_cstddef.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_cstdio.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_cstring.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_ctime.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_cwchar.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_cwctype.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_deprecated_header.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_exception.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_fstream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_iomanip.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_ios.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_iosfwd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_iostream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_istream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_limits.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_locale.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_memory.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_new.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_numeric.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_ostream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_queue.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_queue.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_rel_ops.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_sstream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_stdexcept.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_stlfwd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_streambuf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_strstream.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_sys/time.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_sys/types.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_typeinfo.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_valarray.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_cmath.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_complex_fwd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_cstdio.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_cstdlib.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_cstring.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\win32/vcl_ctime.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

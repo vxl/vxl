@@ -769,6 +769,709 @@ SOURCE=.\vrml/vgui_vrml_texture_map.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\internals/trackball.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_accelerate.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_accelerate_mfc.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_accelerate_x11.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_adaptor_mixin.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_adaptor_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_back_project.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_dialog_field.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_dialog_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_draw_line.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_file_field.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_invert_homg4x4.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_multiply_4x4.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_overlay_helper.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_rasterpos.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_simple_field.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_slot_data.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_string_field.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_transpose_4x4.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_un_project.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_active_visible.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_adaptor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_blackbox.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_button.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_cache_wizard.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_camera.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_clear_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_color.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_color_text.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_command.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_composite.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_debug_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_deck_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_dialog.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_displaybase.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_displaylist2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_displaylist3D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_drag_mixin.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_drag_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_easy2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_easy3D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_enhance.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_error_dialog.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_event.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_event_condition.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_event_loop.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_event_server.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_find.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_function_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_glut.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_grid_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_image_blender.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_image_renderer.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_image_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_key.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_listmanager2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_load.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_macro.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_matrix_state.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_menu.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_message.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_modifier.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_observable.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_observer.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_pixel.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_polytab.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_popup_params.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_projection_inspector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_quit_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_roi_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_rubberbander.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_satellite.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_satellite.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_section_buffer.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_section_buffer_of.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_section_render.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_shell_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_slab.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_slot.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_soview.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_soview2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_soview3D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_statusbar.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_statusbuf.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_style.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_style_factory.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_tag.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_test.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_text_graph.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_text_put.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_text_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_texture_hacks.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_toolkit.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_tview.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_tview_launcher.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_utils.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_viewer2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_viewer3D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_window.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_wrapper_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vrml/vgui_vrml_draw_visitor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vrml/vgui_vrml_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vrml/vgui_vrml_texture_map.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_active_visible_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_blackbox_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_clear_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_composite_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_debug_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_deck.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_deck_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_displaybase_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_displaylist2D_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_easy2D_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_easy3D_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_enhance_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_fwd.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_gl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_glu.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_glx.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_grid_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_image_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_linker_hack.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_listmanager2D_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_load_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_polytab_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_quit_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_roi_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_rubberbander_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_shell_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_test_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_text.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_text_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_tview_launcher_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_tview_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_viewer2D_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_viewer3D_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_wrapper_tableau_sptr.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

@@ -154,6 +154,49 @@ SOURCE=.\gst_vertex_2d.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\gst_edge_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gst_face_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gst_polygon_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gst_polygon_2d_operators.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gst_vertex_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gst_edge_2d_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gst_polygon_2d_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gst_vertex_2d_sptr.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
