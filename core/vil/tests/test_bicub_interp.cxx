@@ -18,30 +18,32 @@ static void test_bicub_interp_byte()
      for (unsigned int i=0;i<image0.ni();++i)
        image0(i,j) = i+j*10;
 
-  {
-    double v1 = vil_bicub_interp(image0,3,3);
-    TEST_NEAR("vil_bicub_interp at grid point",v1,33,1e-8);
-    double v2 = vil_bicub_interp(image0,2.4,3);
-    TEST_NEAR("vil_bicub_interp at off-grid point",v2,32.4,1e-8);
-    double v3 = vil_bicub_interp(image0,2.4,2.5);
-    TEST_NEAR("vil_bicub_interp at off-grid point",v3,27.4,1e-8);
-  }
+  double v;
 
-  {
-    double v1 = vil_bicub_interp_safe(image0,3,3);
-    TEST_NEAR("vil_bicub_interp_safe at grid point",v1,33,1e-8);
-    double v2 = vil_bicub_interp_safe(image0,2.4,3);
-    TEST_NEAR("vil_bicub_interp_safe at off-grid point",v2,32.4,1e-8);
-    double v3 = vil_bicub_interp_safe(image0,2.4,2.5);
-    TEST_NEAR("vil_bicub_interp_safe at off-grid point",v3,27.4,1e-8);
+  v = vil_bicub_interp(image0,3,3);
+  TEST_NEAR("vil_bicub_interp at grid point",v,33,1e-8);
+  v = vil_bicub_interp(image0,2.4,3);
+  TEST_NEAR("vil_bicub_interp at off-grid point",v,32.4,1e-8);
+  v = vil_bicub_interp(image0,2,1.6);
+  TEST_NEAR("vil_bicub_interp at off-grid point",v,18.0,1e-8);
+  v = vil_bicub_interp(image0,2.4,2.5);
+  TEST_NEAR("vil_bicub_interp at off-grid point",v,27.4,1e-8);
 
-    double v4 = vil_bicub_interp_safe(image0,5,2);
-    TEST_NEAR("vil_bicub_interp_safe outside image",v4,0,1e-8);
-    double v5 = vil_bicub_interp_safe(image0,4.001,1);
-    TEST_NEAR("vil_bicub_interp_safe outside image",v5,0,1e-8);
-    double v6 = vil_bicub_interp_safe(image0,1,4.001);
-    TEST_NEAR("vil_bicub_interp_safe outside image",v6,0,1e-8);
-  }
+  v = vil_bicub_interp_safe(image0,3,3);
+  TEST_NEAR("vil_bicub_interp_safe at grid point",v,33,1e-8);
+  v = vil_bicub_interp_safe(image0,2.4,3);
+  TEST_NEAR("vil_bicub_interp_safe at off-grid point",v,32.4,1e-8);
+  v = vil_bicub_interp_safe(image0,2,1.6);
+  TEST_NEAR("vil_bicub_interp_safe at off-grid point",v,18.0,1e-8);
+  v = vil_bicub_interp_safe(image0,2.4,2.5);
+  TEST_NEAR("vil_bicub_interp_safe at off-grid point",v,27.4,1e-8);
+
+  v = vil_bicub_interp_safe(image0,5,2);
+  TEST_NEAR("vil_bicub_interp_safe outside image",v,0,1e-8);
+  v = vil_bicub_interp_safe(image0,4.001,1);
+  TEST_NEAR("vil_bicub_interp_safe outside image",v,0,1e-8);
+  v = vil_bicub_interp_safe(image0,1,4.001);
+  TEST_NEAR("vil_bicub_interp_safe outside image",v,0,1e-8);
 }
 
 static void test_bicub_interp()
