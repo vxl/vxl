@@ -1585,7 +1585,6 @@ template vnl_matrix<T > element_product(vnl_matrix<T > const &, vnl_matrix<T > c
 template vnl_matrix<T > element_quotient(vnl_matrix<T > const &, vnl_matrix<T > const &); \
 template int vnl_inplace_transpose(T*, unsigned, unsigned, char*, unsigned); \
 template vcl_ostream & operator<<(vcl_ostream &, vnl_matrix<T > const &); \
-template vcl_istream & operator>>(vcl_istream &, vnl_matrix<T >       &); \
-VCL_INSTANTIATE_INLINE(bool operator!=(vnl_matrix<T > const &, vnl_matrix<T > const &))
+template vcl_istream & operator>>(vcl_istream &, vnl_matrix<T >       &);
 
 #endif // vnl_matrix_txx_
