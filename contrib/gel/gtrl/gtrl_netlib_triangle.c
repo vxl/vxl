@@ -203,7 +203,9 @@
 /* If yours is not a Unix system, define the NO_TIMER compiler switch to     */
 /*   remove the Unix-specific timing code.                                   */
 
-/* #define NO_TIMER */
+#ifndef unix
+#define NO_TIMER
+#endif
 
 /* To insert lots of self-checks for internal errors, define the SELF_CHECK  */
 /*   symbol.  This will slow down the program significantly.  It is best to  */
@@ -250,7 +252,7 @@
 /* Maximum number of characters in a line read from a file (including the    */
 /*   null).                                                                  */
 
-#define INPUTLINESIZE 512
+#define INPUTLINESIZE 4096
 
 /* For efficiency, a variety of data structures are allocated in bulk.  The  */
 /*   following constants determine how many of each structure is allocated   */
@@ -297,10 +299,6 @@
 /* Another fave.                                                             */
 
 #define SQUAREROOTTWO 1.4142135623730950488016887242096980785696718753769480732
-
-/* And here's one for those of you who are intimidated by math.              */
-
-#define ONETHIRD 0.333333333333333333333333333333333333333333333333333333333333
 
 #include <stdio.h>
 #include <string.h>
