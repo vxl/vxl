@@ -37,7 +37,8 @@ class vdgl_edgel_chain : public vul_timestamp,
   //  Useful for boundary filling and debugging
   vdgl_edgel_chain( const double x0, const double y0,
                     const double x1, const double y1);
-  vdgl_edgel_chain(vdgl_edgel_chain const& x) : vbl_ref_count(), es_(x.es_) {}
+  vdgl_edgel_chain(vdgl_edgel_chain const& x)
+    : vul_timestamp(), vbl_ref_count(), es_(x.es_) {}
   ~vdgl_edgel_chain();
 
   // Operators----------------------------------------------------------------
