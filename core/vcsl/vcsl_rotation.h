@@ -1,8 +1,8 @@
-#ifndef VCSL_ROTATION_H
-#define VCSL_ROTATION_H
+#ifndef vcsl_rotation_h
+#define vcsl_rotation_h
 
 //:
-// \file 
+// \file
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -39,7 +39,7 @@ public:
   //***************************************************************************
 
   //: Is `this' invertible at time `time'?
-  //: REQUIRE: valid_time(time)
+  //  REQUIRE: valid_time(time)
   virtual bool is_invertible(const double time) const;
 
   //: Is `this' correctly set ?
@@ -82,26 +82,26 @@ public:
   virtual list_of_scalars *angle(void) const;
 
   //: Set the direction vector variation along the time
-  //: REQUIRE: are_unit_vectors(new_vector)
+  //  REQUIRE: are_unit_vectors(new_vector)
   virtual void set_axis(list_of_vectors &new_axis);
 
   //: Return the direction variation along the time
   virtual list_of_vectors *axis(void) const;
-  
+
   //***************************************************************************
   // Basic operations
   //***************************************************************************
-  
+
   //: Image of `v' by `this'
-  //: REQUIRE: is_valid()
-  //: REQUIRE: (is_2d()&&v.size()==2)||(is_3d()&&v.size()==3)
+  //  REQUIRE: is_valid()
+  //  REQUIRE: (is_2d()&&v.size()==2)||(is_3d()&&v.size()==3)
   virtual vnl_vector<double> *execute(const vnl_vector<double> &v,
                                       const double time) const;
-  
+
   //: Image of `v' by the inverse of `this'
-  //: REQUIRE: is_valid()
-  //: REQUIRE: is_invertible(time)
-  //: REQUIRE (is_2d()&&v.size()==2)||(is_3d()&&v.size()==3)
+  //  REQUIRE: is_valid()
+  //  REQUIRE: is_invertible(time)
+  //  REQUIRE (is_2d()&&v.size()==2)||(is_3d()&&v.size()==3)
   virtual vnl_vector<double> *inverse(const vnl_vector<double> &v,
                                       const double time) const;
 
@@ -119,4 +119,4 @@ protected:
   list_of_vectors *axis_;
 };
 
-#endif // #ifndef VCSL_ROTATION_H
+#endif // vcsl_rotation_h

@@ -1,8 +1,8 @@
-#ifndef VCSL_CYLINDRICAL_TO_CARTESIAN_3D_H
-#define VCSL_CYLINDRICAL_TO_CARTESIAN_3D_H
+#ifndef vcsl_cylindrical_to_cartesian_3d_h
+#define vcsl_cylindrical_to_cartesian_3d_h
 
 //:
-// \file 
+// \file
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -24,16 +24,16 @@ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
-  
+
   //: Destructor
   virtual ~vcsl_cylindrical_to_cartesian_3d();
 
   //***************************************************************************
   // Status report
   //***************************************************************************
-  
+
   //: Is `this' invertible at time `time'?
-  //: REQUIRE: valid_time(time)
+  //  REQUIRE: valid_time(time)
   virtual bool is_invertible(const double time) const;
 
   //: Is `this' correctly set ?
@@ -44,15 +44,15 @@ public:
   //***************************************************************************
 
   //: Image of `v' by `this'
-  //: REQUIRE: is_valid()
-  //: REQUIRE: v.size()==3
+  //  REQUIRE: is_valid()
+  //  REQUIRE: v.size()==3
   virtual vnl_vector<double> *execute(const vnl_vector<double> &v,
                                       const double time) const;
 
   //: Image of `v' by the inverse of `this'
-  //: REQUIRE: is_valid()
-  //: REQUIRE: is_invertible(time)
-  //: REQUIRE: v.size()==3
+  //  REQUIRE: is_valid()
+  //  REQUIRE: is_invertible(time)
+  //  REQUIRE: v.size()==3
   virtual vnl_vector<double> *inverse(const vnl_vector<double> &v,
                                       const double time) const;
 
@@ -71,4 +71,4 @@ protected:
   static vcsl_cylindrical_to_cartesian_3d_sptr instance_;
 };
 
-#endif // #ifndef VCSL_CYLINDRICAL_TO_CARTESIAN_3D_H
+#endif // vcsl_cylindrical_to_cartesian_3d_h

@@ -1,8 +1,8 @@
-#ifndef VCSL_UNIT_H
-#define VCSL_UNIT_H
+#ifndef vcsl_unit_h
+#define vcsl_unit_h
 
 //:
-// \file 
+// \file
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -34,7 +34,7 @@ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
-  
+
   //: Default constructor
   explicit vcsl_unit(void);
 
@@ -45,15 +45,14 @@ public:
   // Status report
   //***************************************************************************
 
-  //: Are `this' and `other' compatible units ? (Are they associated to the
-  //: same dimension ?) 
+  //: Are `this' and `other' compatible units ?
+  // (Are they associated to the same dimension ?)
   virtual bool compatible_units(const vcsl_unit &other) const=0;
 
   //: Return the standard unit associated to the dimension of `this'
   virtual vcsl_unit_sptr standard_unit(void) const=0;
 
-  //: Returns the number of units of `this' equal of the standard_unit for
-  //: the dimension
+  //: Returns the number of units of `this' equal of the standard_unit for the dimension
   virtual double units_per_standard_unit(void) const=0;
 
   //***************************************************************************
@@ -62,7 +61,7 @@ public:
 
   virtual const vcsl_acceleration_unit *cast_to_acceleration_unit(void) const;
   virtual const vcsl_angle_unit *cast_to_angle_unit(void) const;
-  virtual const vcsl_charge_unit *cast_to_charge_unit(void) const;  
+  virtual const vcsl_charge_unit *cast_to_charge_unit(void) const;
   virtual const vcsl_length_unit *cast_to_length_unit(void) const;
   virtual const vcsl_mass_unit *cast_to_mass_unit(void) const;
   virtual const vcsl_temperature_unit *cast_to_temperature_unit(void) const;
@@ -70,4 +69,4 @@ public:
   virtual const vcsl_velocity_unit *cast_to_velocity_unit(void) const;
 };
 
-#endif // #ifndef VCSL_UNIT_H
+#endif // vcsl_unit_h

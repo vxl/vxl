@@ -1,8 +1,8 @@
-#ifndef VCSL_SPATIAL_TRANSFORMATION_H
-#define VCSL_SPATIAL_TRANSFORMATION_H
+#ifndef vcsl_spatial_transformation_h
+#define vcsl_spatial_transformation_h
 
 //:
-// \file 
+// \file
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -57,7 +57,7 @@ public:
   virtual bool valid_time(const double time) const;
 
   //: Is `this' invertible at time `time'?
-  //: REQUIRE: valid_time(time)
+  //  REQUIRE: valid_time(time)
   virtual bool is_invertible(const double time) const=0;
 
   //: Is `this' correctly set ?
@@ -68,25 +68,25 @@ public:
   //***************************************************************************
 
   //: Return the index of the beat inferior or equal to `time'
-  //: REQUIRE: valid_time(time)
+  //  REQUIRE: valid_time(time)
   virtual int matching_interval(const double time) const;
 
 
   //: Image of `v' by `this'
-  //: REQUIRE: is_valid()
+  //  REQUIRE: is_valid()
   virtual vnl_vector<double> *execute(const vnl_vector<double> &v,
                                       const double time) const=0;
 
   //: Image of `v' by the inverse of `this'
-  //: REQUIRE: is_invertible(time)
-  //: REQUIRE: is_valid()
+  //  REQUIRE: is_invertible(time)
+  //  REQUIRE: is_valid()
   virtual vnl_vector<double> *inverse(const vnl_vector<double> &v,
                                       const double time) const=0;
 
   //***************************************************************************
   // Status setting
   //***************************************************************************
- 
+
   //: Set the list of time clocks
   virtual void set_beat(vcl_vector<double> &new_beat);
 
@@ -122,4 +122,4 @@ protected:
   vcl_vector<vcsl_interpolator> *interpolator_;
 };
 
-#endif // #ifndef VCSL_SPATIAL_TRANSFORMATION_H
+#endif // vcsl_spatial_transformation_h

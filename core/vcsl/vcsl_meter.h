@@ -1,8 +1,8 @@
-#ifndef VCSL_METER_H
-#define VCSL_METER_H
+#ifndef vcsl_meter_h
+#define vcsl_meter_h
 
 //:
-// \file 
+// \file
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -29,9 +29,8 @@ public:
   //***************************************************************************
   // Status report
   //***************************************************************************
-  
-  //: Returns the number of units of `this' equal of the standard_unit for
-  //: the dimension
+
+  //: Returns the number of units of `this' equal of the standard_unit for the dimension
   virtual double units_per_standard_unit(void) const;
 
   //***************************************************************************
@@ -44,8 +43,9 @@ protected:
 
   //: Default constructor
   explicit vcsl_meter(void);
-  
+
   //: Reference to the unique vcsl_meter object
   static vcsl_meter_sptr instance_;
 };
-#endif // #ifndef VCSL_METER_H
+
+#endif // vcsl_meter_h

@@ -1,8 +1,8 @@
-#ifndef VCSL_DISPLACEMENT_H
-#define VCSL_DISPLACEMENT_H
+#ifndef vcsl_displacement_h
+#define vcsl_displacement_h
 
 //:
-// \file 
+// \file
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -50,19 +50,19 @@ public:
 
   //: Return the variation of the point of the axis along the time
   virtual list_of_vectors *point(void) const;
-  
+
   //***************************************************************************
   // Basic operations
   //***************************************************************************
 
   //: Image of `v' by `this'
-  //: REQUIRE: is_valid()
+  //  REQUIRE: is_valid()
   virtual vnl_vector<double> *execute(const vnl_vector<double> &v,
                                       const double time) const;
 
   //: Image of `v' by the inverse of `this'
-  //: REQUIRE: is_valid()
-  //: REQUIRE: is_invertible(time)
+  //  REQUIRE: is_valid()
+  //  REQUIRE: is_invertible(time)
   virtual vnl_vector<double> *inverse(const vnl_vector<double> &v,
                                       const double time) const;
 protected:
@@ -74,4 +74,4 @@ protected:
   list_of_vectors *point_;
 };
 
-#endif // #ifndef VCSL_DISPLACEMENT_H
+#endif // vcsl_displacement_h

@@ -1,8 +1,8 @@
-#ifndef VCSL_PERSPECTIVE_H
-#define VCSL_PERSPECTIVE_H
+#ifndef vcsl_perspective_h
+#define vcsl_perspective_h
 
 //:
-// \file 
+// \file
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -38,7 +38,7 @@ public:
   //***************************************************************************
 
   //: Is `this' invertible at time `time'? Never !
-  //: REQUIRE: valid_time(time)
+  //  REQUIRE: valid_time(time)
   virtual bool is_invertible(const double time) const;
 
   //: Is `this' correctly set ?
@@ -56,21 +56,21 @@ public:
 
   //: Return the focal variation along the time in meters
   virtual list_of_scalars *focal(void) const;
-  
+
   //***************************************************************************
   // Basic operations
   //***************************************************************************
-  
+
   //: Image of `v' by `this'
-  //: REQUIRE: is_valid()
-  //: REQUIRE: v.size()==3
+  //  REQUIRE: is_valid()
+  //  REQUIRE: v.size()==3
   virtual vnl_vector<double> *execute(const vnl_vector<double> &v,
                                       const double time) const;
 
   //: Image of `v' by the inverse of `this'
-  //: REQUIRE: is_valid()
-  //: REQUIRE: is_invertible(time) and v.size()==2
-  //: The first pre-condition is never true. You can not use this method
+  //  REQUIRE: is_valid()
+  //  REQUIRE: is_invertible(time) and v.size()==2
+  //  The first pre-condition is never true. You can not use this method
   virtual vnl_vector<double> *inverse(const vnl_vector<double> &v,
                                       const double time) const;
 
@@ -83,4 +83,4 @@ protected:
   list_of_scalars *focal_;
 };
 
-#endif // #ifndef VCSL_PERSPECTIVE_H
+#endif // vcsl_perspective_h

@@ -1,8 +1,8 @@
-#ifndef VCSL_COMPOSITION_H
-#define VCSL_COMPOSITION_H
+#ifndef vcsl_composition_h
+#define vcsl_composition_h
 
 //:
-// \file 
+// \file
 // \brief Descibes vcsl_composition - Composition of transformations
 // \author François BERTEL
 // Modifications
@@ -41,7 +41,7 @@ public:
   //***************************************************************************
 
   //: Is `this' invertible at time `time'?
-  //: REQUIRE: valid_time(time)
+  //  REQUIRE: valid_time(time)
   virtual bool is_invertible(const double time) const;
 
   //: Is `this' correctly set ?
@@ -55,7 +55,7 @@ public:
   //***************************************************************************
 
   //: Set the list of transformations of the composition
-  //: The transformations are performed in the order of the list
+  //  The transformations are performed in the order of the list
   virtual void
   set_composition(vcl_vector<vcsl_spatial_transformation_sptr> &new_transformations);
 
@@ -65,17 +65,17 @@ public:
   //***************************************************************************
 
   //: Image of `v' by `this'
-  //: REQUIRE: is_valid()
+  //  REQUIRE: is_valid()
   virtual vnl_vector<double> *execute(const vnl_vector<double> &v,
                                       const double time) const;
 
   //: Image of `v' by the inverse of `this'
-  //: REQUIRE: is_valid()
-  //: REQUIRE: is_invertible(time)
+  //  REQUIRE: is_valid()
+  //  REQUIRE: is_invertible(time)
   virtual vnl_vector<double> *inverse(const vnl_vector<double> &v,
                                       const double time) const;
 protected:
   vcl_vector<vcsl_spatial_transformation_sptr> *transformations_;
 };
 
-#endif // #ifndef VCSL_COMPOSITION_H
+#endif // vcsl_composition_h

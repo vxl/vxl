@@ -1,8 +1,8 @@
-#ifndef VCSL_GRAPH_H
-#define VCSL_GRAPH_H
+#ifndef vcsl_graph_h
+#define vcsl_graph_h
 
 //:
-// \file 
+// \file
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -33,11 +33,11 @@ public:
 
   //: Destructor
   virtual ~vcsl_graph();
-  
+
   //***************************************************************************
   // Measurement
   //***************************************************************************
-  
+
   //: Number of coordinate systems
   virtual int count(void) const;
 
@@ -56,15 +56,15 @@ public:
   //***************************************************************************
 
   //: Spatial coordinate system number `index'
-  //: REQUIRE: valid_index(index)
+  //  REQUIRE: valid_index(index)
   virtual vcsl_spatial_sptr item(const int index) const;
 
   //: Add `cs' in `this'
-  //: REQUIRE: !has(cs)
+  //  REQUIRE: !has(cs)
   virtual void put(const vcsl_spatial_sptr &cs);
 
   //: Remove `cs' from `this'
-  //: REQUIRE: has(cs)
+  //  REQUIRE: has(cs)
   virtual void remove(const vcsl_spatial_sptr &cs);
 
   //***************************************************************************
@@ -72,7 +72,7 @@ public:
   //***************************************************************************
 
   //: Set the flag `reached' to false for each spatial coordinate system.
-  //: Used by the search path algorithm
+  //  Used by the search path algorithm
   virtual void init_vertices(void) const;
 
 protected:
@@ -81,4 +81,4 @@ protected:
   vcl_vector<vcsl_spatial_sptr> *vertices_;
 };
 
-#endif // #ifndef VCSL_GRAPH_H
+#endif // vcsl_graph_h

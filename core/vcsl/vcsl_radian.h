@@ -1,8 +1,8 @@
-#ifndef VCSL_RADIAN_H
-#define VCSL_RADIAN_H
+#ifndef vcsl_radian_h
+#define vcsl_radian_h
 
 //:
-// \file 
+// \file
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -29,9 +29,8 @@ public:
   //***************************************************************************
   // Status report
   //***************************************************************************
-  
-  //: Returns the number of units of `this' equal of the standard_unit for
-  //: the dimension
+
+  //: Returns the number of units of `this' equal of the standard_unit for the dimension
   virtual double units_per_standard_unit(void) const;
 
   //***************************************************************************
@@ -44,8 +43,9 @@ protected:
 
   //: Default constructor
   explicit vcsl_radian(void);
-  
+
   //: Reference to the unique vcsl_radian object
   static vcsl_radian_sptr instance_;
 };
-#endif // #ifndef VCSL_RADIAN_H
+
+#endif // vcsl_radian_h

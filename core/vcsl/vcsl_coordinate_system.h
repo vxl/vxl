@@ -1,8 +1,8 @@
-#ifndef VCSL_COORDINATE_SYSTEM_H
-#define VCSL_COORDINATE_SYSTEM_H
+#ifndef vcsl_coordinate_system_h
+#define vcsl_coordinate_system_h
 
 //:
-// \file 
+// \file
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -50,7 +50,7 @@ public:
   virtual bool valid_axis(const int i) const;
 
   //: Return the axis `i'
-  //: REQUIRE: valid_axis(i)
+  //  REQUIRE: valid_axis(i)
   virtual vcsl_axis_sptr axis(const int i) const;
 
   //***************************************************************************
@@ -64,12 +64,12 @@ public:
   //***************************************************************************
 
   //: Convert `v', exprimed with cs units, to standard units
-  //: REQUIRE: v.size()==dimensionnality()
+  //  REQUIRE: v.size()==dimensionnality()
   vnl_vector<double> *
   from_cs_to_standard_units(const vnl_vector<double> &v) const;
 
   //: Convert `v', exprimed with standard units, to cs units
-  //: REQUIRE: v.size()==dimensionnality()
+  //  REQUIRE: v.size()==dimensionnality()
   vnl_vector<double> *
   from_standard_units_to_cs(const vnl_vector<double> &v) const;
 
@@ -82,4 +82,4 @@ protected:
   vcl_vector<vcsl_axis_sptr> axes_;
 };
 
-#endif // #ifndef VCSL_COORDINATE_SYSTEM_H
+#endif // vcsl_coordinate_system_h

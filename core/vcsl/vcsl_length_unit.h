@@ -1,8 +1,8 @@
-#ifndef VCSL_LENGTH_UNIT_H
-#define VCSL_LENGTH_UNIT_H
+#ifndef vcsl_length_unit_h
+#define vcsl_length_unit_h
 
 //:
-// \file 
+// \file
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -32,9 +32,9 @@ public:
   //***************************************************************************
   // Status report
   //***************************************************************************
-  
-  //: Are `this' and `other' compatible units ? (Are they associated to the
-  //: same dimension ?) 
+
+  //: Are `this' and `other' compatible units ?
+  // (Are they associated to the same dimension ?)
   virtual bool compatible_units(const vcsl_unit &other) const;
 
   //: Return the standard unit associated to the dimension of `this'
@@ -47,4 +47,4 @@ public:
   virtual const vcsl_length_unit *cast_to_length_unit(void) const;
 };
 
-#endif // #ifndef VCSL_LENGTH_UNIT_H
+#endif // vcsl_length_unit_h

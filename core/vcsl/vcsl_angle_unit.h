@@ -1,7 +1,7 @@
-#ifndef VCSL_ANGLE_UNIT_H
-#define VCSL_ANGLE_UNIT_H
+#ifndef vcsl_angle_unit_h
+#define vcsl_angle_unit_h
 //:
-// \file 
+// \file
 // \brief Descibes vcsl_angle_unit - Abstract unit associated to the angle dimension.
 // \author François BERTEL
 // Modifications
@@ -30,9 +30,9 @@ public:
   //***************************************************************************
   // Status report
   //***************************************************************************
-  
-  //: Are `this' and `other' compatible units ? (Are they associated to the
-  //: same dimension ?) 
+
+  //: Are `this' and `other' compatible units ?
+  // (Are they associated to the same dimension ?)
   virtual bool compatible_units(const vcsl_unit &other) const;
 
   //: Return the standard unit associated to the dimension of `this'
@@ -45,4 +45,4 @@ public:
   virtual const vcsl_angle_unit *cast_to_angle_unit(void) const;
 };
 
-#endif // #ifndef VCSL_ANGLE_UNIT_H
+#endif // vcsl_angle_unit_h

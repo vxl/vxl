@@ -1,7 +1,7 @@
-#ifndef VCSL_AXIS_H
-#define VCSL_AXIS_H
+#ifndef vcsl_axis_h
+#define vcsl_axis_h
 //:
-// \file 
+// \file
 // \brief Descibes vcsl_axis - Axis descriptor: a dimension, a unit, a label
 // \author François BERTEL
 // Modifications
@@ -35,7 +35,7 @@ public:
   explicit vcsl_axis(vcsl_dimension &new_dimension);
 
   //: Constructor from dimension and unit. Label is empty
-  //: REQUIRE: new_dimension.compatible_unit(new_unit)
+  //  REQUIRE: new_dimension.compatible_unit(new_unit)
   explicit vcsl_axis(vcsl_dimension &new_dimension,
                      vcsl_unit &new_unit);
 
@@ -43,7 +43,7 @@ public:
   explicit vcsl_axis(vcsl_dimension &new_dimension,
                      vcsl_unit &new_unit,
                      vcl_string &new_label);
-  
+
   //: Copy constructor
   vcsl_axis(const vcsl_axis &other);
 
@@ -71,12 +71,12 @@ public:
   virtual void set_dimension(vcsl_dimension &new_dimension);
 
   //: Set the dimension and the unit
-  //: REQUIRE: new_dimension.compatible_unit(new_unit)
+  //  REQUIRE: new_dimension.compatible_unit(new_unit)
   virtual void set_dimension_and_unit(vcsl_dimension &new_dimension,
                                       vcsl_unit &new_unit);
 
   //: Set the unit of the dimension
-  //: REQUIRE dimension()->compatible_unit(new_unit)
+  //  REQUIRE dimension()->compatible_unit(new_unit)
   virtual void set_unit(vcsl_unit &new_unit);
 
   //: Set the label
@@ -97,4 +97,4 @@ protected:
   vcl_string label_;
 };
 
-#endif // #ifndef VCSL_AXIS_H
+#endif // vcsl_axis_h

@@ -1,8 +1,8 @@
-#ifndef VCSL_DEGREE_H
-#define VCSL_DEGREE_H
+#ifndef vcsl_degree_h
+#define vcsl_degree_h
 
 //:
-// \file 
+// \file
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -28,9 +28,8 @@ public:
   //***************************************************************************
   // Status report
   //***************************************************************************
-  
-  //: Returns the number of units of `this' equal of the standard_unit for
-  //: the dimension
+
+  //: Returns the number of units of `this' equal of the standard_unit for the dimension
   virtual double units_per_standard_unit(void) const;
 
   //***************************************************************************
@@ -43,8 +42,9 @@ protected:
 
   //: Default constructor
   explicit vcsl_degree(void);
-  
+
   //: Reference to the unique vcsl_degree object
   static vcsl_degree_sptr instance_;
 };
-#endif // #ifndef VCSL_DEGREE_H
+
+#endif // #ifndef vcsl_degree_h
