@@ -20,7 +20,7 @@ include ${IUEROOT}/config/top-params.mk
 
 ifndef NOTEST
 SUBDIRS += tests
-SUBDIRS += examples
+SUBDIRS += examples/simple_segmentation
 endif
 
 ######################################
