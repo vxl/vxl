@@ -11,7 +11,7 @@ ENDIF(WIN32)
 
 SUBDIRS( testlib )
 SUBDIRS( vul vsl vbl vpl vil vnl vgl vidl )
-SUBDIRS( vcgl vcsl )
+SUBDIRS( vcsl )
 
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )

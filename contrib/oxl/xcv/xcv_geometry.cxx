@@ -13,7 +13,7 @@
 #include <vcl_cmath.h>
 
 #include <vgl/vgl_polygon.h>
-#include <vcgl/vcgl_polygon_clip.h>
+#include <vgl/vgl_clip.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
@@ -686,11 +686,11 @@ void xcv_geometry::polygon_intersect()
       easy_list[i]->remove(all_soviews[j]);
 
   // Intersect :  a and b
-  add(vcgl_polygon_clip_intersect(all_polys[0], all_polys[1]));
+  add(vgl_clip(all_polys[0], all_polys[1], vgl_clip_type_intersect));
 
   // a - b
-  add(vcgl_polygon_clip_subtract(all_polys[0], all_polys[1]));
-  add(vcgl_polygon_clip_subtract(all_polys[1], all_polys[0]));
+  add(vgl_clip(all_polys[0], all_polys[1], vgl_clip_type_difference));
+  add(vgl_clip(all_polys[1], all_polys[0], vgl_clip_type_difference));
 }
 
 //========================================================================

@@ -43,7 +43,6 @@ ENDIF(WIN32)
 INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake )
 
 # Immediate dependencies
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vcgl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/osl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/mvl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/CMakeListsLink.txt )
