@@ -1,4 +1,6 @@
 // This is vxl/vnl/vnl_vector.txx
+#ifndef vnl_vector_txx_
+#define vnl_vector_txx_
 
 //
 // Created: VDN 02/21/92 new lite version adapted from Matrix.h
@@ -111,7 +113,7 @@ template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, int n, T v00, ...)
 : num_elmts(len), data(vnl_c_vector<T>::allocate_T(len))
 {
-  cerr << "Please use automatic arrays instead variable arguments" << endl;
+  vcl_cerr << "Please use automatic arrays instead variable arguments\n";
   if (n > 0) {                               // If user specified values
     va_list argp;                            // Declare argument list
     va_start (argp, v00);                    // Initialize macro
@@ -128,7 +130,7 @@ template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, int n, T v00, ...)
 : num_elmts(len), data(vnl_c_vector<T>::allocate_T(len))
 {
-  cerr << "Please use automatic arrays instead variable arguments" << endl;
+  vcl_cerr << "Please use automatic arrays instead variable arguments\n";
   if (n > 0) {                                  // If user specified values
     va_list argp;                               // Declare argument list
     va_start (argp, v00);                       // Initialize macro
@@ -689,7 +691,7 @@ T cos_angle(vnl_vector<T> const& a, vnl_vector<T> const& b) {
   real_t ab = inner_product(a,b);
 #if defined(VCL_VC50x)
   x"I don't believe vc50 needs this -- can someone confirm?";
-  T a_b = sqrt( a.squared_magnitude() * b.squared_magnitude() );
+  T a_b = vcl_sqrt( a.squared_magnitude() * b.squared_magnitude() );
   return T(ab)/T(a_b);
 #else
   double/*abs_t*/ a_b = vcl_sqrt( double(a.squared_magnitude() * b.squared_magnitude()) );
@@ -807,3 +809,4 @@ template vnl_vector<T > cross_3d(vnl_vector<T > const &, vnl_vector<T > const &)
 template vcl_ostream & operator<<(vcl_ostream &, vnl_vector<T > const &); \
 template vcl_istream & operator>>(vcl_istream &, vnl_vector<T >       &)
 
+#endif // vnl_vector_txx_

@@ -1,5 +1,9 @@
+#ifndef vnl_svd_txx_
+#define vnl_svd_txx_
+
 #include "vnl_svd.h"
 
+#include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_cassert.h>
 #include <vcl_complex.h>
 #include <vcl_fstream.h>
@@ -45,7 +49,7 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
 {
   assert(m_ > 0);
   assert(n_ > 0);
-  
+
   {
     int n = M.rows();
     int p = M.columns();
@@ -128,20 +132,19 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
     zero_out_relative(-zero_out_tol);
 }
 
-
-
-// // Assignment
-// template <class T>
-// vnl_svd<T>& vnl_svd<T>::operator=(vnl_svd<T> const& that)
-// {
-//   U_ = that.U_;
-//   W_ = that.W_;
-//   Winverse_ = that.Winverse_;
-//   V_ = that.V_;
-//   rank_ = that.rank_;
-//   return *this;
-// }
-
+#if 0
+// Assignment
+template <class T>
+vnl_svd<T>& vnl_svd<T>::operator=(vnl_svd<T> const& that)
+{
+  U_ = that.U_;
+  W_ = that.W_;
+  Winverse_ = that.Winverse_;
+  V_ = that.V_;
+  rank_ = that.rank_;
+  return *this;
+}
+#endif
 
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, const vnl_svd<T>& svd)
@@ -242,7 +245,6 @@ vnl_matrix<T> vnl_svd<T>::pinverse()  const
 }
 
 
-
 //: Calculate inverse of transpose.
 template <class T>
 vnl_matrix<T> vnl_svd<T>::tinverse()  const
@@ -254,7 +256,6 @@ vnl_matrix<T> vnl_svd<T>::tinverse()  const
 
   return U_ * Winverse * V_.conjugate_transpose();
 }
-
 
 
 //: Solve the matrix equation M X = B, returning X
@@ -271,7 +272,7 @@ vnl_matrix<T> vnl_svd<T>::solve(vnl_matrix<T> const& B)  const
   unsigned long i, j;
   for (i = 0; i < x.rows(); i++) {                      // multiply with diagonal 1/W
     T weight = W_(i, i);
-    if (weight != vnl_numeric_traits<T>::zero)
+    if ( ! (weight == vnl_numeric_traits<T>::zero) )
       weight = T(1.0) / weight;
     for (j = 0; j < x.columns(); j++)
       x(i, j) *= weight;
@@ -311,7 +312,7 @@ vnl_vector<T> vnl_svd<T>::solve(vnl_vector<T> const& y)  const
 
   for (unsigned i = 0; i < x.size(); i++) {        // multiply with diagonal 1/W
     T weight = W_(i, i), zero_ = 0.0;
-    if (weight != zero_)
+    if ( ! (weight == zero_) )
       x[i] /= weight;
     else
       x[i] = zero_;
@@ -412,3 +413,5 @@ vnl_vector <T> vnl_svd<T>::left_nullvector()  const
 #define VNL_SVD_INSTANTIATE(T) \
 template class vnl_svd<T >; \
 template vcl_ostream& operator<<(vcl_ostream &, vnl_svd<T > const &)
+
+#endif // vnl_svd_txx_

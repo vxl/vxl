@@ -1,3 +1,6 @@
+#ifndef vnl_fft2d_txx_
+#define vnl_fft2d_txx_
+
 // -*- c++ -*-
 // vnl_fft2d
 // Author: Veit U.B. Schenk, Oxford RRG, 19 Mar 98
@@ -6,7 +9,7 @@
 
 #include "vnl_fft2d.h"
 
-#include <vcl_cstdlib.h>  // abort()
+#include <vcl_cstdlib.h>  // vcl_abort()
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_complex_ops.h>
@@ -16,7 +19,7 @@
 
 //: super-simple constructor: take vnl_matrix<float>, do the forward FFT
 // don't have to worry about the prime-factors
-template<class T> 
+template<class T>
 vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R) : base (R.rows(), R.columns())
 {
   vnl_complexify(R.data_block(),
@@ -26,7 +29,7 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R) : base (R.rows(), R.columns())
   vnl_fftxd_prime_factors<T> oPFy (R.cols ());
   if (!oPFx || !oPFy) {
     vcl_cerr << __FILE__ " : image dimensions not of form 2^P*3^Q*5^R" << vcl_endl;
-    abort();
+    vcl_abort();
   }
 
   doFFT (oPFx, oPFy, +1); // always forward
@@ -41,14 +44,14 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vcl_complex<T> > &Z, int dir) : base (
   vnl_fftxd_prime_factors<T> oPFy (Z.cols ());
   if (!oPFx || !oPFy) {
     vcl_cerr << __FILE__ " : image dimensions not of form 2^P*3^Q*5^R" << vcl_endl;
-    abort();
+    vcl_abort();
   }
 
   doFFT (oPFx, oPFy, dir);
 }
-  
+
 //: init with vnl_matrix R (default i=0.0)
-template<class T> 
+template<class T>
 vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R,
                          const vnl_fftxd_prime_factors<T> &oPFx,
                          const vnl_fftxd_prime_factors<T> &oPFy, int dir)
@@ -109,7 +112,7 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vcl_complex<T> > &C,
 }
 
 //: create new complex given 'raw' complex c(CData)
-template<class T> 
+template<class T>
 vnl_fft2d<T>::vnl_fft2d (const vcl_complex<T> *CData,
                          unsigned int iRows, unsigned int iCols, // dimensions
                          const vnl_fftxd_prime_factors<T> &oPFx,
@@ -120,12 +123,12 @@ vnl_fft2d<T>::vnl_fft2d (const vcl_complex<T> *CData,
 }
 #endif
 
-/************************************************************
-************************************************************
-* the actual call of the FFT routine
-*
-* the arguments to gpfa are:
-*
+//************************************************************
+//************************************************************
+// * the actual call of the FFT routine
+// *
+// * the arguments to gpfa are:
+// *
   // T *real-part
   // T *imag-part
   // const T *primefactors,
@@ -135,9 +138,9 @@ vnl_fft2d<T>::vnl_fft2d (const vcl_complex<T> *CData,
   //             ciSize = (2**IP) * (3**IQ) * (5**IR)
   // int NUMBER OF TRANSFORMS
   // int +1/-1 == direction (forward/backward)
-*
-************************************************************
-************************************************************/
+// *
+//************************************************************
+//************************************************************/
 
 // use C++ overloading to find correct FORTRAN routine
 
@@ -181,7 +184,7 @@ int vnl_fft2d<T>::doFFT_IP (vcl_complex<T> *cdata, unsigned int iRows,
 
   return info;
 }
-  
+
 //: calls the actual fft routine with correct stride for complex data
 // declared as 'private', since only called from within constructors
 
@@ -196,4 +199,6 @@ int vnl_fft2d<T>::doFFT (const vnl_fftxd_prime_factors<T> &oPFx,
 
 //--------------------------------------------------------------------------------
 
-#define VNL_FFT2D_INSTANTIATE(T) template class vnl_fft2d<T >;
+#define VNL_FFT2D_INSTANTIATE(T) template class vnl_fft2d<T >
+
+#endif // vnl_fft2d_txx_

@@ -1,4 +1,6 @@
 // This is vxl/vnl/vnl_sparse_matrix.txx
+#ifndef vnl_sparse_matrix_txx_
+#define vnl_sparse_matrix_txx_
 
 #include <vnl/vnl_sparse_matrix.h>
 #include <vcl_cassert.h>
@@ -30,7 +32,7 @@ vnl_sparse_matrix<T>::vnl_sparse_matrix(unsigned int m, unsigned int n)
 }
 
 //------------------------------------------------------------
-//: Construct an m*n Matrix and copy rhs into it.  
+//: Construct an m*n Matrix and copy rhs into it.
 template <class T>
 vnl_sparse_matrix<T>::vnl_sparse_matrix(const vnl_sparse_matrix<T>& rhs)
   : elements(rhs.elements), rs_(rhs.rs_), cs_(rhs.cs_)
@@ -241,7 +243,6 @@ void vnl_sparse_matrix<T>::mult(const vnl_vector<T>& rhs, vnl_vector<T>& result)
       result[ rhs_row_id ] += rhs[ lhs_col_id ] * entry.second;
     }
   }
-
 }
 
 //------------------------------------------------------------
@@ -458,7 +459,6 @@ vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::vcat(vnl_sparse_matrix<T> const& A)
 }
 
 
-
 //------------------------------------------------------------
 //: This is occasionally useful.  Sums a row of the matrix
 // efficiently.
@@ -491,11 +491,11 @@ template <class T>
 void vnl_sparse_matrix<T>::resize( int /*r*/, int /*c*/)
 {
   vcl_cerr << "Warning: vnl_sparse_matrix::resize not implemented.\n";
-  abort();
+  vcl_abort();
 }
 
 //------------------------------------------------------------
-//: Resets the internal iterator 
+//: Resets the internal iterator
 //
 template <class T>
 void vnl_sparse_matrix<T>::reset()
@@ -569,7 +569,7 @@ T vnl_sparse_matrix<T>::value()
 }
 
 
-
 #define VNL_SPARSE_MATRIX_INSTANTIATE(T) \
-template class vnl_sparse_matrix<T>; 
+template class vnl_sparse_matrix<T>
 
+#endif // vnl_sparse_matrix_txx_

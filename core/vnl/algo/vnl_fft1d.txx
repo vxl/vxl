@@ -1,3 +1,6 @@
+#ifndef vnl_fft1d_txx_
+#define vnl_fft1d_txx_
+
 // -*- c++ -*-
 // vnl_fft1d
 // Author: Veit U.B. Schenk, Oxford RRG, 19 Mar 98
@@ -6,7 +9,7 @@
 
 #include "vnl_fft1d.h"
 
-#include <vcl_cstdlib.h>    // abort() - PVr
+#include <vcl_cstdlib.h>    // vcl_abort() - PVr
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_complex_ops.h>
@@ -26,27 +29,27 @@ vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R) : base (R.size())
   if (!oPF) {
     vcl_cerr << "vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R): vector size (";
     vcl_cerr << R.size () << ") not of format 2^P*3^Q*5^R\n";
-    abort();
+    vcl_abort();
   }
   doFFT (oPF, +1);
 }
 
 //: super-easy constructor #2: take complex vector and direction
 //: don't worry about twiddle-factors, just lean back ....
-template<class T> 
+template<class T>
 vnl_fft1d<T>::vnl_fft1d (vnl_vector<vcl_complex<T> > const &Z, int dir) : base (Z)
 {
   vnl_fftxd_prime_factors<T> oPF (Z.size ());
   if (!oPF) {
     vcl_cerr << "vnl_fft1d<T>::vnl_fft1d (const vnl_vector<vcl_complex<T> > &Z): vector size (";
     vcl_cerr << Z.size () << ") not of format 2^P*3^Q*5^R\n";
-    abort();
+    vcl_abort();
   }
   doFFT (oPF, dir);
 }
-  
+
 //: create complex from vnl_vector R and i=0.0
-template<class T> 
+template<class T>
 vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R,
                          const vnl_fftxd_prime_factors<T> &oPF, int dir)
   : base(R.size ())
@@ -59,7 +62,7 @@ vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R,
 }
 
 //: create complex from vnl_vectors r,i
-template<class T> 
+template<class T>
 vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R, const vnl_vector<T> &I,
                          const vnl_fftxd_prime_factors<T> &oPF, int dir)
   : base(R.size ())
@@ -118,12 +121,12 @@ vnl_fft1d<T>::vnl_fft1d (vcl_complex<T> const *CData, unsigned iLen,
 }
 
 
-/************************************************************
-************************************************************
-* the actual call of the FFT routine
-*
-* the arguments to gpfa are:
-*
+//************************************************************
+//************************************************************
+// * the actual call of the FFT routine
+// *
+// * the arguments to gpfa are:
+// *
   // T *real-part
   // T *imag-part
   // const T *primefactors,
@@ -133,9 +136,9 @@ vnl_fft1d<T>::vnl_fft1d (vcl_complex<T> const *CData, unsigned iLen,
   //             ciSize = (2**IP) * (3**IQ) * (5**IR)
   // int NUMBER OF TRANSFORMS
   // int +1/-1 == direction (forward/backward)
-*
-************************************************************
-************************************************************/
+// *
+//************************************************************
+//************************************************************
 
 
 // use C++ overloading to find thecorrect FORTRAN routine
@@ -172,7 +175,7 @@ int vnl_fft1d<T>::doFFT_IP (vcl_complex<T> *cdata, unsigned iLen,
                2,0,iLen,1,iDirection,oPF.getPvnl_qr (),&info);
   return info;
 }
-  
+
 //: calls the actual fft routine with correct stride for complex data
 // declared as 'private', since only called from within constructors
 template<class T>
@@ -183,4 +186,6 @@ int vnl_fft1d<T>::doFFT (const vnl_fftxd_prime_factors<T> &oPF, int iDirection)
 
 //--------------------------------------------------------------------------------
 
-#define VNL_FFT1D_INSTANTIATE(T) template class vnl_fft1d<T >;
+#define VNL_FFT1D_INSTANTIATE(T) template class vnl_fft1d<T >
+
+#endif // vnl_fft1d_txx_

@@ -1,4 +1,6 @@
 // This is vxl/vnl/vnl_c_vector.txx
+#ifndef vnl_c_vector_txx_
+#define vnl_c_vector_txx_
 
 //-*- c++ -*-------------------------------------------------------------------
 //
@@ -9,7 +11,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_c_vector.h"
-#include <vcl_cmath.h>     // sqrt()
+#include <vcl_cmath.h>     // vcl_sqrt()
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_complex_traits.h>
@@ -30,7 +32,7 @@ void vnl_c_vector<T>::normalize(T* v, unsigned n)
   abs_t tot(0);
   for(unsigned i = 0; i < n; ++i)
     tot += vnl_math_squared_magnitude(v[i]);
-  tot = abs_t(1.0 / sqrt(double(tot)));
+  tot = abs_t(1.0 / vcl_sqrt(double(tot)));
   for(unsigned i = 0; i < n; ++i)
     v[i] *= tot;
 }
@@ -157,7 +159,7 @@ void vnl_c_vector<T>::reverse (T *x, unsigned n) {
 }
 
 // non-conjugating "dot" product.
-template<class T> 
+template<class T>
 T vnl_c_vector<T>::dot_product(T const *a, T const *b, unsigned n) {
   T ip(0);
   for (unsigned i=0; i<n; ++i)
@@ -166,7 +168,7 @@ T vnl_c_vector<T>::dot_product(T const *a, T const *b, unsigned n) {
 }
 
 // conjugating "dot" product.
-template<class T> 
+template<class T>
 T vnl_c_vector<T>::inner_product(T const *a, T const *b, unsigned n) {
   T ip(0);
   for (unsigned i=0; i<n; ++i)
@@ -175,7 +177,7 @@ T vnl_c_vector<T>::inner_product(T const *a, T const *b, unsigned n) {
 }
 
 // conjugates one block of data into another block.
-template<class T> 
+template<class T>
 void vnl_c_vector<T>::conjugate(T const *src, T *dst, unsigned n) {
   for (unsigned i=0; i<n; ++i)
     dst[i] = vnl_complex_traits<T>::conjugate( src[i] );
@@ -184,26 +186,26 @@ void vnl_c_vector<T>::conjugate(T const *src, T *dst, unsigned n) {
 //------------------------------------------------------------------------------
 
 //: Returns max value of the vector.
-template<class T> 
+template<class T>
 T vnl_c_vector<T>::max_value(T const *src, unsigned n) {
   T tmp = src[0];
-  
+
   for (unsigned i=1; i<n; ++i)
     if (src[i] > tmp)
       tmp = src[i];
-  
+
   return tmp;
 }
 
 //: Returns min value of the vector.
-template<class T> 
+template<class T>
 T vnl_c_vector<T>::min_value(T const *src, unsigned n) {
   T tmp = src[0];
-  
+
   for (unsigned i=1; i<n; ++i)
     if (src[i] < tmp)
       tmp = src[i];
-  
+
   return tmp;
 }
 
@@ -221,7 +223,7 @@ template <class T, class S>
 void vnl_c_vector_rms_norm(T const *p, unsigned n, S *out)
 {
   vnl_c_vector_two_norm_squared(p, n, out);
-  *out = S(sqrt(double(*out) / n));
+  *out = S(vcl_sqrt(double(*out) / n));
 }
 
 template <class T, class S>
@@ -236,7 +238,7 @@ template <class T, class S>
 void vnl_c_vector_two_norm(T const *p, unsigned n, S *out)
 {
   vnl_c_vector_two_norm_squared(p, n, out);
-  *out = S(sqrt(double(*out)));
+  *out = S(vcl_sqrt(double(*out)));
 }
 
 template <class T, class S>
@@ -265,18 +267,18 @@ inline void* vnl_c_vector_alloc(int n, int size)
   // native was:  return (T**)std::allocator<T*>().allocate(n, 0);
   // on windows, it just calls malloc, so is useless....
 #if vnl_c_vector_use_vnl_alloc
-  return vnl_alloc::allocate((n == 0) ? 8 : (n * size)); 
+  return vnl_alloc::allocate((n == 0) ? 8 : (n * size));
 #else
   return new char[n * size];
 #endif
-} 
+}
 
 inline void vnl_c_vector_dealloc(void* v, int n, int size)
-{ 
+{
   //vcl_cerr << "\ncall to vnl_c_vector_dealloc(" << v << ", " << n
   //         << ", " << size << ")\n";
 #if vnl_c_vector_use_vnl_alloc
-  if (v) 
+  if (v)
     vnl_alloc::deallocate(v, (n == 0) ? 8 : (n * size));
 #else
   delete [] static_cast<char*>(v);
@@ -285,25 +287,25 @@ inline void vnl_c_vector_dealloc(void* v, int n, int size)
 
 #undef vnl_c_vector_use_vnl_alloc
 
-template<class T> 
+template<class T>
 T** vnl_c_vector<T>::allocate_Tptr(int n)
 {
   return (T**)vnl_c_vector_alloc(n, sizeof (T*));
 }
 
-template<class T> 
+template<class T>
 T* vnl_c_vector<T>::allocate_T(int n)
 {
   return (T*)vnl_c_vector_alloc(n, sizeof (T));
 }
 
-template<class T> 
+template<class T>
 void vnl_c_vector<T>::deallocate(T** v, int n)
 {
   vnl_c_vector_dealloc(v, n, sizeof (T*));
 }
 
-template<class T> 
+template<class T>
 void vnl_c_vector<T>::deallocate(T* v, int n)
 {
   vnl_c_vector_dealloc(v, n, sizeof (T));
@@ -316,22 +318,24 @@ template void vnl_c_vector_two_norm_squared(T const *, unsigned, S *); \
 template void vnl_c_vector_rms_norm(T const *, unsigned, S *); \
 template void vnl_c_vector_one_norm(T const *, unsigned, S *); \
 template void vnl_c_vector_two_norm(T const *, unsigned, S *); \
-template void vnl_c_vector_inf_norm(T const *, unsigned, S *);
+template void vnl_c_vector_inf_norm(T const *, unsigned, S *)
 
 #undef VNL_C_VECTOR_INSTANTIATE_ordered
 #define VNL_C_VECTOR_INSTANTIATE_ordered(T) \
-VNL_C_VECTOR_INSTANTIATE_norm(T, vnl_c_vector<T >::abs_t) \
-template class vnl_c_vector<T >;
+VNL_C_VECTOR_INSTANTIATE_norm(T, vnl_c_vector<T >::abs_t); \
+template class vnl_c_vector<T >
 
 
 #undef VNL_C_VECTOR_INSTANTIATE_unordered
 #define VNL_C_VECTOR_INSTANTIATE_unordered(T) \
 VCL_DO_NOT_INSTANTIATE(T vnl_c_vector<T >::max_value(T const *, unsigned), T(0)); \
 VCL_DO_NOT_INSTANTIATE(T vnl_c_vector<T >::min_value(T const *, unsigned), T(0)); \
-VNL_C_VECTOR_INSTANTIATE_norm(T, vnl_c_vector<T >::abs_t) \
+VNL_C_VECTOR_INSTANTIATE_norm(T, vnl_c_vector<T >::abs_t); \
 template class vnl_c_vector<T >; \
 VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_vector<T >::max_value(T const *, unsigned)); \
-VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_vector<T >::min_value(T const *, unsigned));
+VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_vector<T >::min_value(T const *, unsigned))
 
 #undef VNL_C_VECTOR_INSTANTIATE
 #define VNL_C_VECTOR_INSTANTIATE(T) extern "no such macro"
+
+#endif // vnl_c_vector_txx_

@@ -1,4 +1,6 @@
 // This is vxl/vnl/vnl_quaternion.txx
+#ifndef vnl_quaternion_txx_
+#define vnl_quaternion_txx_
 
 //
 // Copyright (C) 1992 General Electric Company.
@@ -58,10 +60,10 @@ template <class T>
 vnl_quaternion<T>::vnl_quaternion (const vnl_vector<T>& axis, T angle)
 {
   double a = angle / 2.0;  // half angle
-  double s = sin(a);
-  for (int i = 0; i < 3; i++)           // imaginary vector is sin of
+  double s = vcl_sin(a);
+  for (int i = 0; i < 3; i++)           // imaginary vector is sine of
     this->operator()(i) = s * axis(i);  // half angle multiplied with axis
-  this->operator()(3) = cos(a);         // real part is cos of half angle
+  this->operator()(3) = vcl_cos(a);     // real part is cosine of half angle
 }
 
 // Quaternion -- Creates a quaternion from a vector. 2D or 3D vector  is
@@ -101,25 +103,25 @@ vnl_quaternion<T>::vnl_quaternion (const vnl_matrix<T>& transform)
   if (zz > max) max = zz;
 
   if (rr == max) {
-    double r4 = sqrt(rr * 4.0);
+    double r4 = vcl_sqrt(rr * 4.0);
     this->x() = (rot(1,2) - rot(2,1)) / r4;     // find other components from
     this->y() = (rot(2,0) - rot(0,2)) / r4;     // off diagonal terms of
     this->z() = (rot(0,1) - rot(1,0)) / r4;     // rotation matrix.
     this->r() = r4 / 4.0;
   } else if (xx == max) {
-    double x4 = sqrt(xx * 4.0);
+    double x4 = vcl_sqrt(xx * 4.0);
     this->x() = x4 / 4.0;
     this->y() = (rot(0,1) + rot(1,0)) / x4;
     this->z() = (rot(0,2) + rot(2,0)) / x4;
     this->r() = (rot(1,2) - rot(2,1)) / x4;
   } else if (yy == max) {
-    double y4 = sqrt(yy * 4.0);
+    double y4 = vcl_sqrt(yy * 4.0);
     this->x() = (rot(0,1) + rot(1,0)) / y4;
     this->y() =  y4 / 4.0;
     this->z() = (rot(1,2) + rot(2,1)) / y4;
     this->r() = (rot(2,0) - rot(0,2)) / y4;
   } else {
-    double z4 = sqrt(zz * 4.0);
+    double z4 = vcl_sqrt(zz * 4.0);
     this->x() = (rot(0,2) + rot(2,0)) / z4;
     this->y() = (rot(1,2) + rot(2,1)) / z4;
     this->z() =  z4 / 4.0;
@@ -131,9 +133,9 @@ vnl_quaternion<T>::vnl_quaternion (const vnl_matrix<T>& transform)
 
 template <class T>
 T vnl_quaternion<T>::angle () const {
-  return (2.0 *
-          atan2 (this->imaginary().magnitude(),
-                 this->real()));                // angle is always positive
+  return 2.0 *
+         vcl_atan2 (this->imaginary().magnitude(),
+                    this->real());                // angle is always positive
 }
 
 // axis -- Queries the angle and the  direction  of  the  rotation
@@ -221,10 +223,10 @@ vnl_quaternion<T> vnl_quaternion<T>::operator* (const vnl_quaternion<T>& rhs) co
   T r2 = rhs.real();
   vnl_vector<T> i1 = this->imaginary();
   vnl_vector<T> i2 = rhs.imaginary();
-  T real = (r1 * r2) - ::dot_product(i1, i2); // real&img of product q1*q2
+  T real_v = (r1 * r2) - ::dot_product(i1, i2); // real&img of product q1*q2
   vnl_vector<T> img = cross_3d(i1, i2);
   img += (i2 * r1) + (i1 * r2);
-  vnl_quaternion<T> prod(img.x(), img.y(), img.z(), real);
+  vnl_quaternion<T> prod(img.x(), img.y(), img.z(), real_v);
   return prod;
 }
 
@@ -245,5 +247,6 @@ vnl_vector<T> vnl_quaternion<T>::rotate (const vnl_vector<T>& v) const {
 #undef VNL_QUATERNION_INSTANTIATE
 #define VNL_QUATERNION_INSTANTIATE(T) \
 template class vnl_quaternion<T >;\
-VCL_INSTANTIATE_INLINE(vcl_ostream& operator<< (vcl_ostream&, const vnl_quaternion<T >&));
+VCL_INSTANTIATE_INLINE(vcl_ostream& operator<< (vcl_ostream&, const vnl_quaternion<T >&))
 
+#endif // vnl_quaternion_txx_

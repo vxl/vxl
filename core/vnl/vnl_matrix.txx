@@ -1,4 +1,6 @@
 // This is vxl/vnl/vnl_matrix.txx
+#ifndef vnl_matrix_txx_
+#define vnl_matrix_txx_
 
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
@@ -375,7 +377,6 @@ bool vnl_matrix<T>::resize (unsigned rowz, unsigned colz)
 
 //------------------------------------------------------------
 
-
 // fill -- Sets all elements of matrix to specified value. O(m*n).
 
 template<class T>
@@ -492,7 +493,6 @@ vnl_matrix<T>& vnl_matrix<T>::operator/= (T value) {
 }
 
 
-
 // operator+= -- Adds lhs matrix with rhs matrix, and stores in place in
 // lhs matrix. O(m*n). The dimensions of the two matrices must be identical.
 
@@ -598,8 +598,6 @@ vnl_matrix<T> vnl_matrix<T>::operator* (T const& value) const {
 }
 
 
-
-
 //: operator/
 // Returns new matrix with elements of lhs matrix divided by
 // value. O(m*n).
@@ -621,7 +619,7 @@ vnl_matrix<T> vnl_matrix<T>::apply(T (*f)(T const&)) const {
   return ret;
 }
 
-// --
+//: Return the matrix made by applying "f" to each element.
 template <class T>
 vnl_matrix<T> vnl_matrix<T>::apply(T (*f)(T)) const {
   vnl_matrix<T> ret(num_rows, num_cols);
@@ -724,7 +722,7 @@ T cos_angle (vnl_matrix<T> const& a, vnl_matrix<T> const& b) {
   //  Look, goddamit, abs_t is right.  If your compiler can't deal
   //  with it, ifdef that baby outta there.   My compiler is cleverer than
   //  yours, and can't handle that whole double thing.
-  abs_t a_b = (abs_t)sqrt( (double)vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
+  abs_t a_b = (abs_t)vcl_sqrt( (double)vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
 
   return T( ab / a_b);
 }
@@ -1442,3 +1440,5 @@ template int vnl_inplace_transpose(T*, unsigned, unsigned, char*, unsigned); \
 template vcl_ostream & operator<<(vcl_ostream &, vnl_matrix<T > const &); \
 template vcl_istream & operator>>(vcl_istream &, vnl_matrix<T >       &); \
 VCL_INSTANTIATE_INLINE(bool operator!=(vnl_matrix<T > const &, vnl_matrix<T > const &))
+
+#endif // vnl_matrix_txx_

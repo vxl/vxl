@@ -1,4 +1,6 @@
 // This is vxl/vnl/vnl_complex_ops.txx
+#ifndef vnl_complex_ops_txx_
+#define vnl_complex_ops_txx_
 
 /*
   fsm@robots.ox.ac.uk
@@ -6,6 +8,7 @@
 #include "vnl_complex_ops.h"
 
 #include <vcl_cassert.h>
+#include <vcl_cmath.h> // for vcl_atan2()
 
 //-----------------------------------------------------------------------
 
@@ -21,7 +24,7 @@ void vnl_complexify(T const *re, T const *im, vcl_complex<T> *dst, unsigned n) {
     dst[i] = vcl_complex<T>(re[i], im[i]);
 }
 
-template <class T> 
+template <class T>
 vnl_vector<vcl_complex<T> > vnl_complexify(vnl_vector<T> const &v) {
   vnl_vector<vcl_complex<T> > vc(v.size());
   vnl_complexify(v.begin(), vc.begin(), v.size());
@@ -55,7 +58,7 @@ vnl_matrix<vcl_complex<T> > vnl_complexify(vnl_matrix<T> const &re, vnl_matrix<T
 
 //: Vector of absolute values of vnl_complex_vector_t<REAL>.
 template <class T>
-vnl_vector<T> abs(vnl_vector<vcl_complex<T> > const & C)
+vnl_vector<T> vcl_abs(vnl_vector<vcl_complex<T> > const & C)
 {
   vnl_vector<T> ret(C.size());
   for (unsigned i = 0; i < C.size(); ++i)
@@ -65,33 +68,33 @@ vnl_vector<T> abs(vnl_vector<vcl_complex<T> > const & C)
 
 
 //: Vector of angles of vnl_vector<vcl_complex<T> >.
-// atan2(imag(C), real(C))
+// vcl_atan2(vcl_imag(C), vcl_real(C))
 template <class T>
-vnl_vector<T> angle(vnl_vector<vcl_complex<T> > const & C)
+vnl_vector<T> vcl_angle(vnl_vector<vcl_complex<T> > const & C)
 {
   vnl_vector<T> ret(C.size());
   for (unsigned i = 0; i < C.size(); ++i)
-    ret[i] = atan2(C[i].imag(), C[i].real());
+    ret[i] = vcl_atan2(vcl_imag(C[i]), vcl_real(C[i]));
   return ret;
 }
 
 //: Vector of real parts of vnl_vector<vcl_complex<T> >.
 template <class T>
-vnl_vector<T> real(vnl_vector<vcl_complex<T> > const & C)
+vnl_vector<T> vcl_real(vnl_vector<vcl_complex<T> > const & C)
 {
   vnl_vector<T> ret(C.size());
   for (unsigned i = 0; i < C.size(); ++i)
-    ret[i] = C[i].real();
+    ret[i] = vcl_real(C[i]);
   return ret;
 }
 
 //: Vector of imaginary parts of vnl_vector<vcl_complex<T> >.
 template <class T>
-vnl_vector<T> imag(vnl_vector<vcl_complex<T> > const & C)
+vnl_vector<T> vcl_imag(vnl_vector<vcl_complex<T> > const & C)
 {
   vnl_vector<T> ret(C.size());
   for (unsigned i = 0; i < C.size(); ++i)
-    ret[i] = C[i].imag();
+    ret[i] = vcl_imag(C[i]);
   return ret;
 }
 
@@ -99,7 +102,7 @@ vnl_vector<T> imag(vnl_vector<vcl_complex<T> > const & C)
 
 //: Matrix of absolute values of vnl_complex_matrix_t<REAL>.
 template <class T>
-vnl_matrix<T> abs(vnl_matrix<vcl_complex<T> > const& C)
+vnl_matrix<T> vcl_abs(vnl_matrix<vcl_complex<T> > const& C)
 {
   vnl_matrix<T> ret(C.rows(), C.columns());
   for(unsigned i = 0; i < C.rows(); ++i)
@@ -110,36 +113,36 @@ vnl_matrix<T> abs(vnl_matrix<vcl_complex<T> > const& C)
 
 
 //: Matrix of angles of vnl_complex_matrix_t<T>.
-// atan2(imag(C), real(C))
+// vcl_atan2(vcl_imag(C), vcl_real(C))
 template <class T>
-vnl_matrix<T> angle(vnl_matrix<vcl_complex<T> > const& C)
+vnl_matrix<T> vcl_angle(vnl_matrix<vcl_complex<T> > const& C)
 {
   vnl_matrix<T> ret(C.rows(), C.columns());
   for(unsigned i = 0; i < C.rows(); ++i)
     for(unsigned j = 0; j < C.columns(); ++j)
-      ret(i,j) = atan2(C(i,j).imag(), C(i,j).real());
+      ret(i,j) = vcl_atan2(vcl_imag(C(i,j)), vcl_real(C(i,j)));
   return ret;
 }
 
 //: Matrix of real parts of vnl_complex_matrix_t<T>.
 template <class T>
-vnl_matrix<T> real(vnl_matrix<vcl_complex<T> > const& C)
+vnl_matrix<T> vcl_real(vnl_matrix<vcl_complex<T> > const& C)
 {
   vnl_matrix<T> ret(C.rows(), C.columns());
   for(unsigned i = 0; i < C.rows(); ++i)
     for(unsigned j = 0; j < C.columns(); ++j)
-      ret(i,j) = C(i,j).real();
+      ret(i,j) = vcl_real(C(i,j));
   return ret;
 }
 
 //: Matrix of imaginary parts of vnl_complex_matrix_t<T>.
 template <class T>
-vnl_matrix<T> imag(vnl_matrix<vcl_complex<T> > const& C)
+vnl_matrix<T> vcl_imag(vnl_matrix<vcl_complex<T> > const& C)
 {
   vnl_matrix<T> ret(C.rows(), C.columns());
   for(unsigned i = 0; i < C.rows(); ++i)
     for(unsigned j = 0; j < C.columns(); ++j)
-      ret(i,j) = C(i,j).imag();
+      ret(i,j) = vcl_imag(C(i,j));
   return ret;
 }
 
@@ -154,12 +157,14 @@ template vnl_vector<vcl_complex<T > > vnl_complexify(vnl_vector<T > const &, vnl
 template vnl_matrix<vcl_complex<T > > vnl_complexify(vnl_matrix<T > const &); \
 template vnl_matrix<vcl_complex<T > > vnl_complexify(vnl_matrix<T > const &, vnl_matrix<T > const &); \
 \
-template vnl_vector<T> imag (vnl_vector<vcl_complex<T> > const &); \
-template vnl_vector<T> angle(vnl_vector<vcl_complex<T> > const &); \
-template vnl_vector<T> abs  (vnl_vector<vcl_complex<T> > const &); \
-template vnl_vector<T> real (vnl_vector<vcl_complex<T> > const &); \
+template vnl_vector<T> vcl_imag (vnl_vector<vcl_complex<T> > const &); \
+template vnl_vector<T> vcl_angle(vnl_vector<vcl_complex<T> > const &); \
+template vnl_vector<T> vcl_abs  (vnl_vector<vcl_complex<T> > const &); \
+template vnl_vector<T> vcl_real (vnl_vector<vcl_complex<T> > const &); \
 \
-template vnl_matrix<T> imag (vnl_matrix<vcl_complex<T> > const &); \
-template vnl_matrix<T> angle(vnl_matrix<vcl_complex<T> > const &); \
-template vnl_matrix<T> abs  (vnl_matrix<vcl_complex<T> > const &); \
-template vnl_matrix<T> real (vnl_matrix<vcl_complex<T> > const &)
+template vnl_matrix<T> vcl_imag (vnl_matrix<vcl_complex<T> > const &); \
+template vnl_matrix<T> vcl_angle(vnl_matrix<vcl_complex<T> > const &); \
+template vnl_matrix<T> vcl_abs  (vnl_matrix<vcl_complex<T> > const &); \
+template vnl_matrix<T> vcl_real (vnl_matrix<vcl_complex<T> > const &)
+
+#endif // vnl_complex_ops_txx_
