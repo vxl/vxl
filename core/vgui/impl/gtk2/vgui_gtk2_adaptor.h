@@ -47,6 +47,13 @@ class vgui_gtk2_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
 
   void draw();
   void reshape();
+  
+  // Do any idle processing that needs to be done.
+  // Return true if idle processing is not complete
+  bool do_idle();
+
+  //: Flags than a child requests idle processing
+  void post_idle_request();
 
   // Returns NULL if the empty constructor was used
   vgui_window* get_window() const;
@@ -60,11 +67,15 @@ class vgui_gtk2_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
 
   // idle callbacks which service pending redraw/destroy posts
   static gint idle_callback_for_redraw(gpointer data);
+  static gint idle_callback_for_tableaux(gpointer data);
   static gint idle_callback_for_destroy(gpointer data);
 
   // Flags to prevent queuing of multiple redraw/destroy callbacks
   bool redraw_requested;
   bool destroy_requested;
+
+  //: True while an idle time has been requested but not implemented.
+  bool idle_request_posted_;
 
   // pointer to the gtkglarea widget
   GtkWidget *widget;

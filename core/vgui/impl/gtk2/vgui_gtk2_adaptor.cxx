@@ -39,7 +39,8 @@ extern "C" {
 //--------------------------------------------------------------------------------
 //: Constructors
 vgui_gtk2_adaptor::vgui_gtk2_adaptor(vgui_gtk2_window* win)
-  : widget(0),
+  : idle_request_posted_(false),
+    widget(0),
     win_(win),
     ovl_helper(0),
     last_mouse_x(0),
@@ -156,6 +157,14 @@ void vgui_gtk2_adaptor::post_overlay_redraw()
   if (!ovl_helper)
     ovl_helper = new vgui_overlay_helper(this);
   ovl_helper->post_overlay_redraw();
+}
+
+void vgui_gtk2_adaptor::post_idle_request()
+{
+  if (!idle_request_posted_){
+    idle_request_posted_ = true;
+    g_idle_add(idle_callback_for_tableaux, this);
+  }
 }
 
 //: gtk will pass this structure to the timer callback.
@@ -351,6 +360,13 @@ void vgui_gtk2_adaptor::reshape()
   }
 }
 
+bool vgui_gtk2_adaptor::do_idle()
+{
+  if( idle_request_posted_ ) {
+    idle_request_posted_ =  dispatch_to_tableau( vgui_event( vgui_IDLE ) );
+  }
+  return idle_request_posted_;
+}
 
 //--------------------------------------------------------------------------------
 //: This is overriding the gtk draw() method.
@@ -369,6 +385,14 @@ void vgui_gtk2_adaptor::draw()
       swap_buffers();
     }
   }
+}
+
+
+gint vgui_gtk2_adaptor::idle_callback_for_tableaux(gpointer data)
+{
+  vgui_gtk2_adaptor *adaptor = static_cast<vgui_gtk2_adaptor*>(data);
+
+  return adaptor->do_idle();
 }
 
 
