@@ -12,4 +12,9 @@ inline T vcl_abs(std::complex<T> const &z) { return std::abs(z); }
 template <typename T>
 inline T vcl_log10(std::complex<T> const &z) { return ::log10(z); }
 
+# undef vcl_exp
+# define vcl_exp vcl_exp
+template <typename T>
+inline std::complex<T> vcl_exp(std::complex<T> const &z) { return vcl_polar(T(exp(z.real())), z.imag()); }
+
 #endif // vcl_sgi_complex_h_
