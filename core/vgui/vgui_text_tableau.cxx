@@ -3,9 +3,11 @@
 #pragma implementation
 #endif
 //
-// .NAME vgui_text_tableau
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 19 Oct 99
+// This is vgui/vgui_text_tableau.cxx
+// See vgui_text_tableau.h for a description of this file.
+//
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date 19 Oct 99
 //   
 //-----------------------------------------------------------------------------
 
@@ -14,7 +16,10 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_gl.h>
 
-vgui_text_tableau::vgui_text_tableau() : first_empty(0) { }
+vgui_text_tableau::vgui_text_tableau() : first_empty(0) {
+  // Default text colour is red:
+  r_ = 1; g_ = 0; b_ = 0;
+}
 
 vcl_string vgui_text_tableau::type_name() const { return "vgui_text_tableau"; }
 
@@ -61,6 +66,15 @@ void vgui_text_tableau::move(int handle, float nx, float ny) {
   xs[handle] = nx;
   ys[handle] = ny;
   post_redraw();
+}
+
+void vgui_text_tableau::set_colour(float r, float g, float b) {
+  if (0 <= r && r <= 1 && 0 <= g && g <= 1 && 0 <= b && b <= 1)
+  {
+    r_ = r;
+    g_ = g;
+    b_ = b;
+  } 
 }
 
 float vgui_text_tableau::get_posx(int handle) const {
@@ -114,7 +128,7 @@ bool vgui_text_tableau::handle(vgui_event const &e) {
   glDisable(GL_LIGHTING);
   glShadeModel(GL_FLAT);
   
-  glColor3f(1,0,0); // FIXME
+  glColor3f(r_,g_,b_); // FIXME
 
   for (unsigned i=0; i<size(); ++i) {
     if (xs[i] != -1) {
