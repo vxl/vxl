@@ -18,6 +18,10 @@ vtol_edge::vtol_edge(void)
 {
   _v1=0;
   _v2=0;
+  vtol_zero_chain_sptr c = new vtol_zero_chain();
+  // vtol_zero_chain c;
+  // link_inferior ( ( (vtol_topology_object*) new vtol_zero_chain) );
+  link_inferior ( *c );
 }
 
 

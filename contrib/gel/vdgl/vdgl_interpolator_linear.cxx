@@ -149,6 +149,11 @@ void vdgl_interpolator_linear::recompute_length()
 
 void vdgl_interpolator_linear::recompute_bbox()
 {
+  if ( chain_->size() == 0 )
+    {
+    minxcache_=  maxxcache_= minycache_= maxycache_ = 0.0;
+    return;
+    }    
   minxcache_= chain_->edgel( 0).get_x();
   maxxcache_= chain_->edgel( 0).get_x();
   minycache_= chain_->edgel( 0).get_y();

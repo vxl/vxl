@@ -1,6 +1,6 @@
 # ./oxl/vgui/impl/CMakeLists.txt
 
-INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake)
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake)
 
 IF(HAS_GLUT)
   SUBDIRS(glut)
@@ -10,7 +10,7 @@ IF(WIN32)
   SUBDIRS(mfc)
 ELSE(WIN32)
 
-  INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindGTK.cmake)
+  INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGTK.cmake)
 
   IF(HAS_X11)
     SUBDIRS(X)

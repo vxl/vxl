@@ -269,6 +269,10 @@ void vtol_topology_object::link_inferior(vtol_topology_object &inferior)
 {
   // require
   assert(valid_inferior_type(inferior));
+
+  // Is this true?
+  if ( is_inferior ( inferior ) ) { return; }
+  
   assert(!is_inferior(inferior));
 
   _inferiors.push_back(&inferior);

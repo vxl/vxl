@@ -121,7 +121,7 @@ class gevd_detector_params : public gevd_param_mixin
                  float maxgp = 2.23606, float minjmp = 1.0,
                  float contour_f = 1.0, float junction_f = 1.5,
                  bool recover_j = true, bool equal_spacing=true,
-                 bool follow_b = false,  float default_d = 0,
+                 bool follow_b = true,  float default_d = 0,
                  float ang = 10, float sep = 1, int min_corner_len = 5,
                  int cyc = 2, int ndim = 2);
 

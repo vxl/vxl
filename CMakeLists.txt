@@ -41,6 +41,8 @@ OPTION(BUILD_TBL "Should the TB Library be built?" YES)
 OPTION(BUILD_RPL "Should the RPI Library be built?" YES)
 OPTION(BUILD_CONVERSIONS "Should the Conversions Examples be built?" YES)
 
+
+
 IF(WARN_DEPRECATED)
   ADD_DEFINITIONS( -DVXL_WARN_DEPRECATED )
   IF(WARN_DEPRECATED_ONCE)
@@ -81,6 +83,8 @@ ENDIF(BUILD_CONVERSIONS)
 
 # For out of place builds, the configure generated headers are in the
 # binary directory
+SET (LIBRARY_OUTPUT_PATH ${allvxl_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
+SET (EXECUTABLE_OUTPUT_PATH ${allvxl_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
 INCLUDE_DIRECTORIES(${allvxl_BINARY_DIR}/vcl
                     ${allvxl_BINARY_DIR}/vxl)
 

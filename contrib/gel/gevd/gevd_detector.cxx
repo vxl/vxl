@@ -43,6 +43,7 @@
 #include "gevd_step.h"
 #include "gevd_bufferxy.h"
 #include "gevd_detector.h"
+#include "gevd_contour.h"
 
 //--------------------------------------------------------------------------------
 //
@@ -118,140 +119,8 @@ void gevd_detector::ClearData()
   delete edges;
 }
 
-#if 0 // commented out
-//--------------------------------------------------------------------------------
-//
-//: Detect step edges and put them to an edge list
-//
-void gevd_detector::DoContourDetector(CoolListP<Edge *> *the_edges)
-{
-  ClearData();
-  DoContour();
-
-  // copy to destination
-  the_edges->clear();
-  for(edges->reset(); edges->next();)
-    the_edges->push_end(edges->value());
-  this->UnProtectLists();
-}
-
-//--------------------------------------------------------------------------------
-//
-//: Detect step edges and put them to an EdgelGroup.
-//
-void gevd_detector::DoContourDetector(EdgelGroup* edgel_group)
-{
-  ClearData();
-  DoContour();
-
-  // copy to destination
-  for(edges->reset(); edges->next();)
-    edgel_group->Add(edges->value());
-  this->UnProtectLists();
-}
-//----------------------------------------------------------------------------
-//
-//: Detect step edges and return an EdgelGroup
-//
-EdgelGroup gevd_detector::DoContourDetector(Image* img)
-{
-  image = img;
-  ClearData();
-  DoContour();
-  EdgelGroup edgls(*edges);
-  this->UnProtectLists();
-  return edgls;
-}
-
-//----------------------------------------------------------------------------
-//
-//: Detect step edges and fill an existing EdgelGroup
-//
-void gevd_detector::DoContourDetector(Image* img, EdgelGroup& edgels)
-{
-  image = img;
-  ClearData();
-  DoContour();
-  edgels.Add(edges);
-  this->UnProtectLists();
-}
-
-//----------------------------------------------------------------------------
-//
-//: Detect step edges and fill an existing EdgelGroup
-//
-void gevd_detector::DoFoldContourDetector(Image* img, EdgelGroup& edgels)
-{
-  image = img;
-  ClearData();
-  DoFoldContour();
-  edgels.Add(edges);
-  this->UnProtectLists();
-  return;
-}
-
-//----------------------------------------------------------------------------
-//
-//: Detect edgels and then find all curvature corners and endpoints
-//
-void gevd_detector::DoCornerDetector(Image* img, IUPointGroup& corners)
-{
-  image = img;
-  ClearData();
-  DoContour();
-  //Get parameters from the parameter block
-  DoCorner(this->corner_angle, this->separation,
-           this->min_corner_length,
-           this->cycle, this->ndimension);
-  for(vertices->reset(); vertices->next();)
-    {
-      IUPoint* p = vertices->value()->GetPoint();
-      corners.Add(p);
-    }
-  this->UnProtectLists();
-}
-//--------------------------------------------------------------------------------
-//
-//: Delete corners, add ncorner new corners to the end of the "vertices" list.
-//
-bool gevd_detector::DoCorner( float corner_angle, // smallest angle at corner
-                         float separation,        // |mean1-mean2|/sigma
-                         int length,              // min length to find corners
-                         int cycle,               // number of corners in a cycle
-                         int ndimension           // number of dimension
-)
-{
-  if (!DoStep() || !DoContour()) {
-    vcl_cout << "***Fail on DoCorner.\n";
-    return false;
-  }
 
 
-  Corner corner(smooth, corner_angle,
-                separation, length,
-                cycle, ndimension);
-  int ncorner = corner.DetectCorners(*edges, *vertices);
-  vcl_cout << "Found " << ncorner << " corners.\n";
-  return true;
-}
-
-//--------------------------------------------------------------
-//: Take a input edgel group and detect corners on each edgel chain
-//    Note that here we don't have to unprotect the edges and vertices
-//    lists because we don't protect in the first place.
-void gevd_detector::DoBreakCorners(EdgelGroup& in_edgels, EdgelGroup& out_edgels)
-{
-  edges = Edges(&in_edgels);
-  CoolListP<Vertex*> vertices; //dummy argument
-  Corner corner(this->smooth,           // spatial smoothing [0.5 2.0]
-                this->corner_angle,     // minimum angle in degrees
-                this->separation,       // |mean1-mean2|/sigma threshold
-                this->min_corner_length,//minimum length before finding corners
-                this->cycle,            // minimum corners in a cycle
-                this->ndimension);      // 2-d or 3-d edgels
-  corner.DetectCorners(*edges, vertices);
-  out_edgels.Add(edges);
-}
 //-----------------------------------------------------------------------------
 //
 //: Detect the contour, a list of edges and vertices are genrated.
@@ -264,8 +133,8 @@ bool  gevd_detector::DoContour()
     vcl_cout << "***Fail on DoContour.\n";
     return false;
   }
-  Contour::ClearNetwork(edges, vertices);       // delete vertices/edges
-  Contour contour(this->hysteresisFactor*this->noiseThreshold, this->minLength,
+  gevd_contour::ClearNetwork(edges, vertices);       // delete vertices/edges
+  gevd_contour contour(this->hysteresisFactor*this->noiseThreshold, this->minLength,
                   this->minJump*this->noiseThreshold, this->maxGap);
   bool t  = contour.FindNetwork(*edgel, njunction, // first, find isolated
                                 junctionx, junctiony,   // chains/cycles
@@ -277,18 +146,18 @@ bool  gevd_detector::DoContour()
   contour.SubPixelAccuracy(*edges, *vertices, // insert subpixel
                            *locationx, *locationy); // accuracy
   if (this->spacingp)           // reduce zig-zags and space out pixels
-    Contour::EqualizeSpacing(*edges); // in chains
+    gevd_contour::EqualizeSpacing(*edges); // in chains
   if (this->borderp)            // insert a virtual contour to enforce
     contour.InsertBorder(*edges, *vertices); // closure at border
-  Contour::SetDepth(*edges, *vertices,
+  gevd_contour::SetDepth(*edges, *vertices,
                     this->depth);
   if(grad_mag&&angle)
-    Contour::SetEdgelData(*grad_mag, *angle, *edges); //Continous edgel orientation.
+    gevd_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continous edgel orientation.
 
-  const RectROI* roi = image->GetROI();
-  Contour::Translate(*edges, *vertices, // display location at center
-                     roi->GetOrigX()+0.5, // of pixel instead of
-                     roi->GetOrigY()+0.5); // upper-left corner
+//   const RectROI* roi = image->GetROI();
+//   gevd_contour::Translate(*edges, *vertices, // display location at center
+//                      roi->GetOrigX()+0.5, // of pixel instead of
+//                      roi->GetOrigY()+0.5); // upper-left corner
 
   return true;
 }
@@ -301,12 +170,12 @@ bool  gevd_detector::DoFoldContour()
 {
   if (edges && vertices) return true;
 
-  if (!DoFold()) {
-    vcl_cout << "***Fail on DoFoldContour.\n";
-    return false;
-  }
-  Contour::ClearNetwork(edges, vertices);       // delete vertices/edges
-  Contour contour(this->hysteresisFactor*this->noiseThreshold,
+//   if (!DoFold()) {
+//     vcl_cout << "***Fail on DoFoldContour.\n";
+//     return false;
+//   }
+  gevd_contour::ClearNetwork(edges, vertices);       // delete vertices/edges
+  gevd_contour contour(this->hysteresisFactor*this->noiseThreshold,
                   this->minLength, this->minJump*this->noiseThreshold,
                   this->maxGap);
 
@@ -320,22 +189,21 @@ bool  gevd_detector::DoFoldContour()
   contour.SubPixelAccuracy(*edges, *vertices, // insert subpixel
                            *locationx, *locationy); // accuracy
   if (this->spacingp)           // reduce zig-zags and space out pixels
-    Contour::EqualizeSpacing(*edges); // in chains
+    gevd_contour::EqualizeSpacing(*edges); // in chains
   if (this->borderp)            // insert a virtual contour to enforce
     contour.InsertBorder(*edges, *vertices); // closure at border
-  Contour::SetDepth(*edges, *vertices,
+  gevd_contour::SetDepth(*edges, *vertices,
                     this->depth);
   if(grad_mag&&angle)
-    Contour::SetEdgelData(*grad_mag, *angle, *edges); //Continous edgel orientation.
+    gevd_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continous edgel orientation.
 
-  const RectROI* roi = image->GetROI();
-  Contour::Translate(*edges, *vertices, // display location at center
-                     roi->GetOrigX()+0.5, // of pixel instead of
-                     roi->GetOrigY()+0.5); // upper-left corner
+//   const RectROI* roi = image->GetROI();
+//   gevd_contour::Translate(*edges, *vertices, // display location at center
+//                      roi->GetOrigX()+0.5, // of pixel instead of
+//                      roi->GetOrigY()+0.5); // upper-left corner
 
   return true;
 }
-#endif
 
 //---------------------------------------------------------------------------
 //

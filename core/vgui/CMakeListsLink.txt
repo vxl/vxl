@@ -1,5 +1,6 @@
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/impl/CMakeListsLink.txt )
 
+INCLUDE_DIRECTORIES ( ${allvxl_SOURCE_DIR}/oxl )
 LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/oxl/vgui )
 LINK_LIBRARIES( vgui )
 

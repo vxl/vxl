@@ -1,4 +1,5 @@
 LINK_LIBRARIES( vsol )
+LINK_DIRECTORIES ( ${allvxl_BINARY_DIR}/gel/vsol )
 
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vgl/algo/CMakeListsLink.txt )

@@ -1,4 +1,5 @@
 LINK_LIBRARIES( vtol )
+LINK_DIRECTORIES ( ${allvxl_BINARY_DIR}/gel/vtol )
 
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/gel/vsol/CMakeListsLink.txt )
