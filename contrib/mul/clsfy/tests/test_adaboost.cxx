@@ -16,6 +16,7 @@
 #include <clsfy/clsfy_binary_threshold_1d.h>
 #include <clsfy/clsfy_adaboost_trainer.h>
 #include <clsfy/clsfy_adaboost_sorted_trainer.h>
+#include <clsfy/clsfy_adaboost_sorted_trainer2.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 #include <mbl/mbl_data_array_wrapper.h>
@@ -131,7 +132,18 @@ void test_adaboost()
   pClassifier2->print_summary(vcl_cout);
 
 
-  // compare alpha values
+   // build clsfy_simple_adaboost using sorted method 2
+  vcl_cout<<"*************sorted classifier2************\n";
+  clsfy_simple_adaboost *pClassifier3 = new clsfy_simple_adaboost;
+  clsfy_binary_threshold_1d_sorted_builder b_thresh_sorted_builder3;
+  clsfy_adaboost_sorted_trainer2 adab_sorted_trainer3;
+  adab_sorted_trainer3.build_strong_classifier(*pClassifier3, n_rounds, b_thresh_sorted_builder3,
+                                          egs0, egs1, 2 );
+
+  pClassifier3->print_summary(vcl_cout);
+  
+
+  // compare alpha values for classifier2 (with classifier1)
   double diff=0;
   int na= vcl_min(pClassifier->alphas().size(), pClassifier2->alphas().size() );
   for (int k=0; k<na; ++k)
@@ -140,6 +152,19 @@ void test_adaboost()
   vcl_cout<<"diff= "<<diff<<vcl_endl;
 
   TEST( "sorted classifier == normal classifier",
+        diff< 0.001,
+        true );
+
+
+   // compare alpha values for classifier3 (with classifier1)
+  diff=0;
+  na= vcl_min(pClassifier->alphas().size(), pClassifier3->alphas().size() );
+  for (int k=0; k<na; ++k)
+    diff+= vcl_fabs( pClassifier->alphas()[k]-pClassifier3->alphas()[k] );
+
+  vcl_cout<<"diff= "<<diff<<vcl_endl;
+
+  TEST( "sorted classifier2 == normal classifier",
         diff< 0.001,
         true );
 
