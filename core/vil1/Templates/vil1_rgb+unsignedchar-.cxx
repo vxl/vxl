@@ -27,4 +27,4 @@ vcl_ostream& operator<<(vcl_ostream& s, const vil1_rgb<unsigned char>& rgb)
 }
 
 VIL1_RGB_INSTANTIATE(unsigned char);
-VIL1_RGB_INSTANTIATE_LS(unsigned char);
+// VIL1_RGB_INSTANTIATE_LS(unsigned char);
