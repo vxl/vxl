@@ -126,6 +126,14 @@ vcl_istream * vul_http_open(char const *url)
   hostent *hp = gethostbyname(host.c_str());
   if (! hp) {
     vcl_cerr << __FILE__ ": failed to lookup host" << vcl_endl;
+
+#ifdef VCL_WIN32
+    closesocket(tcp_socket);
+#else
+    close(tcp_socket);
+#endif
+
+    
     return 0;
   }
 
@@ -140,6 +148,13 @@ vcl_istream * vul_http_open(char const *url)
   if (connect(tcp_socket , (sockaddr *) &my_addr, sizeof my_addr) < 0) {
     vcl_cerr << __FILE__ ": failed to connect to host" << vcl_endl;
     //perror(__FILE__);
+
+#ifdef VCL_WIN32
+    closesocket(tcp_socket);
+#else
+    close(tcp_socket);
+#endif
+    
     return 0;
   }
 
@@ -160,6 +175,12 @@ vcl_istream * vul_http_open(char const *url)
   if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0) {
 #endif
     vcl_cerr << __FILE__ ": error sending HTTP request" << vcl_endl;
+
+#ifdef VCL_WIN32
+    closesocket(tcp_socket);
+#else
+    close(tcp_socket);
+#endif
     return 0;
   }
 

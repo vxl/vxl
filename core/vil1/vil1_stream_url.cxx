@@ -199,6 +199,11 @@ vil_stream_url::vil_stream_url(char const *url)
   hostent *hp = gethostbyname(host.c_str());
   if (! hp) {
     vcl_cerr << __FILE__ ": failed to lookup host" << vcl_endl;
+#ifdef VCL_WIN32
+    closesocket(tcp_socket);
+#else
+    close(tcp_socket);
+#endif
     return;
   }
 
@@ -212,6 +217,11 @@ vil_stream_url::vil_stream_url(char const *url)
   if (connect(tcp_socket , (sockaddr *) &my_addr, sizeof my_addr) < 0) {
     vcl_cerr << __FILE__ ": failed to connect to host" << vcl_endl;
     //perror(__FILE__);
+#ifdef VCL_WIN32
+    closesocket(tcp_socket);
+#else
+    close(tcp_socket);
+#endif
     return;
   }
 
@@ -231,6 +241,11 @@ vil_stream_url::vil_stream_url(char const *url)
 #endif
   {
     vcl_cerr << __FILE__ ": error sending HTTP request" << vcl_endl;
+#ifdef VCL_WIN32
+    closesocket(tcp_socket);
+#else
+    close(tcp_socket);
+#endif
     return;
   }
 
