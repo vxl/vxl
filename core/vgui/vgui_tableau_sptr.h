@@ -18,6 +18,8 @@ struct vgui_tableau_sptr : public vbl_smart_ptr<vgui_tableau> {
   void vertical_cast(vgui_tableau* t) { *this = t; }
 };
 
+// Stop doxygen documenting the B class
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class T, class B = vgui_tableau_sptr>
 struct vgui_tableau_sptr_t : public B {
   vgui_tableau_sptr_t(): B() {}
@@ -27,5 +29,6 @@ struct vgui_tableau_sptr_t : public B {
   T* operator->() const { return (T*)as_pointer(); }
   //  typedef vgui_tableau_sptr_t<T> self_or_base;
 };
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 #endif // vgui_tableau_sptr_h_
