@@ -30,4 +30,6 @@ SOURCE_FILES( vtol_sources
   vtol_vertex_sptr.h
   vtol_zero_chain.h
   vtol_zero_chain_sptr.h
+  ../vdgl/vdgl_intensity_face.h
+  ../vdgl/vdgl_intensity_face_sptr.h
 )
