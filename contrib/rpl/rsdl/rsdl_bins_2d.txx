@@ -592,7 +592,7 @@ template < class COORD_T, class VALUE_T >
 vcl_ostream& operator<< ( vcl_ostream& ostr,
                           const vcl_vector< rsdl_bins_2d_entry< COORD_T, VALUE_T > > & entries )
 {
-  for ( int i=0; i<entries.size(); ++ i )
+  for ( unsigned int i=0; i<entries.size(); ++ i )
     ostr << i << ":  point = " << entries[i].point_ << ", value = " << entries[i].value_ << "\n";
   return ostr;
 }

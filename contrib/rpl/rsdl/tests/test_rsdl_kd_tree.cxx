@@ -111,10 +111,9 @@ main()
   int num_tests = 20;
   const int n=5;
   mbl_mz_random mz_rand;
-  int i;
 
   // generate points
-  for ( i=0; i<M; ++i ) {
+  for ( int i=0; i<M; ++i ) {
     points[i].resize( Nc, Na );
     points[i].cartesian(0) = 6.5 * mz_rand.drand32() + 50;
     points[i].cartesian(1) = 6.5 * mz_rand.drand32() + 100;
@@ -137,7 +136,7 @@ main()
     query.angular(2) = 2*vnl_math::pi * mz_rand.drand32();
 
     // generate by exhaustive search
-    for ( i=0; i<M; ++i ) {
+    for ( int i=0; i<M; ++i ) {
       dist_pairs[i].first = rsdl_dist_sq( query, points[i] );
       dist_pairs[i].second = i;
     }
@@ -149,7 +148,7 @@ main()
 
     vnl_test_begin( "k-d tree vs. exhaustive (stack) ");
     ok = true;
-    for ( i=0; ok && i<n; ++i )
+    for ( int i=0; ok && i<n; ++i )
       ok = ok && cindices[i] == dist_pairs[i].second;
     vnl_test_perform( ok );
 
@@ -158,7 +157,7 @@ main()
     tree2.n_nearest( query, n, cpoints_heap, cindices_heap, use_heap );
 
     vnl_test_begin( "k-d tree vs. exhaustive (heap) ");
-    for ( i=0; ok && i<n; ++i )
+    for ( int i=0; ok && i<n; ++i )
       ok = ok && cindices_heap[i] == dist_pairs[i].second;
     vnl_test_perform( ok );
 
@@ -188,9 +187,9 @@ main()
     tree2.points_in_bounding_box( box, box_points, box_indices );
 
     // Exhaustively check each point and count the number inside
-    int inside_count = 0;
+    unsigned int inside_count = 0;
     vcl_vector< bool > pt_inside(M,false);
-    for ( i=0; i<M; ++i ) {
+    for ( int i=0; i<M; ++i ) {
       if ( rsdl_dist_point_in_box( points[i], box ) ){
         pt_inside[ i ] = true;
         inside_count ++ ;
@@ -206,7 +205,7 @@ main()
     vcl_cout << "\nNow checking each:\n";
 #endif
     int disagree_index = 0, disagree_pt = 0;
-    for ( i=0; i<box_points.size(); ++i ) {
+    for ( unsigned int i=0; i<box_points.size(); ++i ) {
       if ( ! pt_inside[ box_indices[i] ] )
         disagree_index ++ ;
       else if ( ! close( rsdl_dist( points[ box_indices[i] ], box_points[i] ), 0) )
@@ -234,7 +233,7 @@ main()
 
     //  Exhaustively gather info.
     inside_count = 0;
-    for ( i=0; i<M; ++i ) {
+    for ( int i=0; i<M; ++i ) {
       if ( rsdl_dist_sq( points[i], query ) <= radius*radius ){
         pt_inside[ i ] = true;
         inside_count ++ ;
@@ -252,7 +251,7 @@ main()
     vcl_cout << "\nNow checking each:\n";
 #endif
     disagree_index = 0; disagree_pt = 0;
-    for ( i=0; i<radius_points.size(); ++i ) {
+    for ( unsigned int i=0; i<radius_points.size(); ++i ) {
       if ( ! pt_inside[ radius_indices[i] ] )
         disagree_index ++ ;
       else if ( ! close( rsdl_dist( points[ radius_indices[i] ], radius_points[i] ), 0) )
@@ -281,7 +280,7 @@ main()
 
     //  Exhaustively gather info.
     inside_count = 0;
-    for ( i=0; i<M; ++i ) {
+    for ( int i=0; i<M; ++i ) {
       if ( rsdl_dist_sq( points[i], query ) <= radius*radius ){
         pt_inside[ i ] = true;
         inside_count ++ ;
@@ -299,7 +298,7 @@ main()
     vcl_cout << "\nNow checking each:\n";
 #endif
     disagree_index = 0; disagree_pt = 0;
-    for ( i=0; i<radius_points.size(); ++i ) {
+    for ( unsigned int i=0; i<radius_points.size(); ++i ) {
       if ( ! pt_inside[ radius_indices[i] ] )
         disagree_index ++ ;
       else if ( ! close( rsdl_dist( points[ radius_indices[i] ], radius_points[i] ), 0) )
