@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_sparse_symmetric_eigensystem.h
+// This is core/vnl/algo/vnl_sparse_symmetric_eigensystem.h
 #ifndef vnl_sparse_symmetric_eigensystem_h_
 #define vnl_sparse_symmetric_eigensystem_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -30,6 +30,7 @@ class vnl_sparse_symmetric_eigensystem
 {
  public:
   vnl_sparse_symmetric_eigensystem();
+ ~vnl_sparse_symmetric_eigensystem();
 
   // Find n eigenvalue/eigenvectors.  If smallest is true, will
   // calculate the n smallest eigenpairs, else the n largest.

@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_rnpoly_solve.cxx
+// This is core/vnl/algo/vnl_rnpoly_solve.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -693,6 +693,14 @@ int vnl_rnpoly_solve::Read_Input(int ideg[M], int terms[M],
   return n;
 }
 
+
+vnl_rnpoly_solve::~vnl_rnpoly_solve()
+{
+  while (r_.size() > 0)
+    { delete r_.back(); r_.pop_back(); }
+  while (i_.size() > 0)
+    { delete i_.back(); i_.pop_back(); }
+}
 
 bool vnl_rnpoly_solve::compute()
 {

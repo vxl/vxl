@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_sparse_symmetric_eigensystem.cxx
+// This is core/vnl/algo/vnl_sparse_symmetric_eigensystem.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -61,6 +61,15 @@ vnl_sparse_symmetric_eigensystem::vnl_sparse_symmetric_eigensystem()
 {
 }
 
+vnl_sparse_symmetric_eigensystem::~vnl_sparse_symmetric_eigensystem()
+{
+  delete[] vectors; vectors = 0;
+  delete[] values; values = 0;
+  for (unsigned i=0; i<temp_store.size(); ++i)
+    delete temp_store[i];
+  temp_store.clear();
+}
+
 //------------------------------------------------------------
 //: Here is where the fortran converted code gets called.
 // The sparse matrix M is assumed to be symmetric.  The n smallest
@@ -77,8 +86,8 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double>&
 
   // Clear current vectors.
   if (vectors) {
-    delete [] vectors;
-    delete [] values;
+    delete[] vectors; vectors = 0;
+    delete[] values; values = 0;
   }
   nvalues = 0;
 
@@ -262,12 +271,12 @@ int vnl_sparse_symmetric_eigensystem::RestoreVectors(int n, int m,
 //: Return a calculated eigenvector.
 vnl_vector<double> vnl_sparse_symmetric_eigensystem::get_eigenvector(int i) const
 {
-  assert(i<nvalues);
+  assert(i>=0 && i<nvalues);
   return vectors[i];
 }
 
 double vnl_sparse_symmetric_eigensystem::get_eigenvalue(int i) const
 {
-  assert(i<nvalues);
+  assert(i>=0 && i<nvalues);
   return values[i];
 }

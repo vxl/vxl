@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_rnpoly_solve.h
+// This is core/vnl/algo/vnl_rnpoly_solve.h
 #ifndef vnl_rnpoly_solve_h_
 #define vnl_rnpoly_solve_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -48,6 +48,10 @@ class vnl_rnpoly_solve
   //: The constructor already does all the calculations
   inline vnl_rnpoly_solve(vcl_vector<vnl_real_npolynomial*> const& ps)
     : ps_(ps) { compute(); }
+
+  // Destructor----------------------------------------------------------------
+
+ ~vnl_rnpoly_solve();
 
   // Operations----------------------------------------------------------------
 
