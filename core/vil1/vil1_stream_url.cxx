@@ -13,6 +13,8 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vil/vil_stream_core.h>
+#include <vcl_ios.h>
+#include <vcl_fstream.h>
 
 #if defined(unix)
 
@@ -239,6 +241,8 @@ vil_stream_url::vil_stream_url(char const *url)
   for (int i=0; i<4096; ++i) ::write(tcp_socket, "\n\n\n\n", 4);
 #endif
 
+//  vcl_ofstream test2("/test2.jpg", vcl_ios_binary);
+
   // read from socket into memory.
   underlying = new vil_stream_core;
   underlying->ref();
@@ -255,7 +259,10 @@ vil_stream_url::vil_stream_url(char const *url)
       // of the http response header
       assert (entity_marker < 5);
       if (entity_marker==4)
+      {
         underlying->write(buffer, n);
+//        test2.write(buffer, n);
+      }
       else
       {
         for (unsigned i=0; i<n; ++i)
@@ -266,6 +273,7 @@ vil_stream_url::vil_stream_url(char const *url)
           {
             entity_marker++;
             underlying->write(buffer+i+1, n-i-1);
+//            test2.write(buffer+i+1, n-i-1);
             break;
           }
           else entity_marker=0;
@@ -273,6 +281,16 @@ vil_stream_url::vil_stream_url(char const *url)
       }
     }
   }
+
+#if (0) // useful for figuring out where the error is
+  char btest[4096];
+  vcl_ofstream test("/test.jpg", vcl_ios_binary);
+  underlying->seek(0);
+  while(int bn = underlying->read(btest, 4096))
+    test.write(btest, bn);
+  test.close();
+#endif 
+
 
   // close connection to server.
 #ifdef VCL_WIN32

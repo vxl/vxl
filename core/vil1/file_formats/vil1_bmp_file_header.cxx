@@ -41,7 +41,7 @@ void vil_bmp_file_header::print(vcl_ostream &s) const
 
 void vil_bmp_file_header::read(vil_stream *s)
 {
-  s->read(&magic, sizeof(magic));
+  if (s->read(&magic, sizeof(magic)) == 0) {magic[0] = magic[1] = 0;}
   file_size = vil_32bit_read_little_endian(s);
   reserved1 = vil_16bit_read_little_endian(s);
   reserved2 = vil_16bit_read_little_endian(s);

@@ -23,7 +23,8 @@ vil_image_impl* vil_gen_file_format::make_input_image(vil_stream* vs)
   vcl_string s;
   for (;;) {
     char buf;
-    vs->read(&buf, 1);
+    if (vs->read(&buf, 1) == 0)
+      return 0;
     if (buf == 0)
       break;
     s += buf;

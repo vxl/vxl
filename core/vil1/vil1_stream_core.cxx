@@ -34,6 +34,7 @@ bool vil_stream_core::ok()
 int vil_stream_core::read (void       *buf, int n)
 {
   assert(n>=0);
+
   int rv = m_transfer((char*)buf, curpos, n, true );
   curpos += rv;
   return rv;
@@ -69,10 +70,24 @@ int vil_stream_core::m_transfer(char *buf, int pos, int n, bool read)
   assert(n>=0);
   assert(pos>=0);
 
-  // chunk up to the required size :
-  while (blocksize*block.size() < pos+n)
-    block.push_back(new char [blocksize]);
+  
+  if (read)
+  {
+    if (n+pos > tailpos)
+    {
+      if (pos > tailpos)
+        n = 0;
+      else
+        n = tailpos - pos;
+    }
+    if (n==0) return 0;
+  }
+  else
+    // chunk up to the required size :
+    while (blocksize*block.size() < pos+n)
+      block.push_back(new char [blocksize]);
 
+  int v = errno; // IMS tracking down errors
   // transfer data
   {
     char     *tbuf = buf;
@@ -81,17 +96,20 @@ int vil_stream_core::m_transfer(char *buf, int pos, int n, bool read)
     while (tn>0) {
       unsigned bl = tpos/blocksize;     // which block
       unsigned s = tpos - blocksize*bl; // start index in block
-      unsigned z = ((tn > blocksize) ? blocksize : tn); // number of bytes to write
+      unsigned z = ((tn > blocksize-s) ? blocksize-s : tn); // number of bytes to write
       char *tmp = block[bl];
       if (read)
         for (unsigned k=0; k<z; ++k)
           tbuf[k] = tmp[s+k]; // prefer memcpy ?
       else
+      {
+        assert (s+z <= blocksize);
         for (unsigned k=0; k<z; ++k)
           tmp[s+k] = tbuf[k]; // prefer memcpy ?
-
+      }
       tbuf += z;
       tn   -= z;
+      tpos += z;
     }
   }
 
