@@ -353,6 +353,8 @@ SOURCE=.\rgrl_est_homography2d.cxx
 # Begin Source File
 SOURCE=.\rgrl_trans_homography2d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\rgrl_est_homo2d_lm.cxx
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -628,6 +630,10 @@ SOURCE=.\rgrl_est_homography2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_trans_homography2d.h
+# End Source File
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_est_homo2d_lm.h
 # End Source File
 # End Group
 # End Target
