@@ -1,7 +1,7 @@
 #include <vcl_algorithm.txx>
 #include <vcl_cstddef.h> // for vcl_size_t
 
-typedef ushort unsigned short;
+typedef unsigned short ushort;
 
 VCL_SORT_INSTANTIATE(ushort*, ushort);
 VCL_FIND_INSTANTIATE(ushort*, ushort);
