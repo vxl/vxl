@@ -1,7 +1,5 @@
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-#include <vcl_cmath.h>
+#include <vcl_cstdlib.h> // for vcl_abs(int)
 #include <vil/vil_byte.h>
 #include <testlib/testlib_test.h>
 #include <mil/mil_byte_image_2d_io.h>
