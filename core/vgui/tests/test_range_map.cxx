@@ -108,7 +108,7 @@ static void test_range_map()
     map_good = true;
     for (int i = -offsh; i<=(offsh-1); ++i)
       if (i>=-128 && i<=127)
-        map_good = map_good&&mapsc[i+offsc]==(i+offsc);
+        map_good = map_good&&mapsh[i+offsh]==(i+offsh);
   }
   TEST("short values", valsh==128&&Lrmsh.offset()==32768&&map_good, true);
 
@@ -128,7 +128,7 @@ static void test_range_map()
     for (unsigned int i=0; i<sizeush && i<256; ++i)
       map_good = map_good && mapush[i]==i;
   }
-  TEST("unsigned short values", valsh==(vxl_byte)128&&offush==0&&map_good, true);
+  TEST("unsigned short values", valush==(vxl_byte)128&&offush==0&&map_good, true);
 
 //
 // float
