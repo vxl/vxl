@@ -105,6 +105,9 @@ SOURCE=.\brct_algos.cpp
 SOURCE=.\brct_structure_estimator.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\brct_epi_reconstructor.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\kalman_filter.cpp
 # End Source File
 # End Group
@@ -115,6 +118,9 @@ SOURCE=.\brct_algos.h
 # End Source File
 # Begin Source File
 SOURCE=.\brct_structure_estimator.h
+# End Source File
+# Begin Source File
+SOURCE=.\brct_epi_reconstructor.h
 # End Source File
 # Begin Source File
 SOURCE=.\kalman_filter.h
