@@ -4,12 +4,12 @@
 //: \file
 //  \brief Functions to smooth and sub-sample image in one direction
 //  \author Tim Cootes
-//  These are not templated because
+//  Some of these are not templated because
 //  - Each type tends to need a slightly different implementation
 //  - Let's not have too many templates.
 
-#include <vxl_config.h>
 #include <vil2/vil2_image_view.h>
+#include <vxl_config.h> // for vxl_byte
 
 //: Smooth and subsample src_im to produce dest_im
 //  Applies 1-5-8-5-1 smoothing filter in x and y, then samples every other pixel.
@@ -41,7 +41,7 @@ void vil2_algo_gauss_reduce_121(const vil2_image_view<T>& src,
 void vil2_algo_gauss_reduce(const vxl_byte* src_im,
                             int src_nx, int src_ny,
                             int s_x_step, int s_y_step,
-														vxl_byte* dest_im,
+                            vxl_byte* dest_im,
                             int d_x_step, int d_y_step);
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
@@ -56,7 +56,7 @@ void vil2_algo_gauss_reduce(const vxl_byte* src_im,
 void vil2_algo_gauss_reduce(const float* src_im,
                             int src_nx, int src_ny,
                             int s_x_step, int s_y_step,
-														float* dest_im,
+                            float* dest_im,
                             int d_x_step, int d_y_step);
 
 
@@ -72,23 +72,23 @@ void vil2_algo_gauss_reduce(const float* src_im,
 void vil2_algo_gauss_reduce(const int* src_im,
                             int src_nx, int src_ny,
                             int s_x_step, int s_y_step,
-														int* dest_im,
+                            int* dest_im,
                             int d_x_step, int d_y_step);
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smooths with a 3x3 filter and subsamples
 void vil2_algo_gauss_reduce_121(const vxl_byte* src_im,
-                               int src_nx, int src_ny,
-                               int s_x_step, int s_y_step,
-															 vxl_byte* dest_im,
-                               int d_x_step, int d_y_step);
+                                int src_nx, int src_ny,
+                                int s_x_step, int s_y_step,
+                                vxl_byte* dest_im,
+                                int d_x_step, int d_y_step);
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smooths with a 3x3 filter and subsamples
 void vil2_algo_gauss_reduce_121(const float* src_im,
                                 int src_nx, int src_ny,
                                 int s_x_step, int s_y_step,
-																float* dest_im,
+                                float* dest_im,
                                 int d_x_step, int d_y_step);
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
@@ -96,7 +96,7 @@ void vil2_algo_gauss_reduce_121(const float* src_im,
 void vil2_algo_gauss_reduce_121(const int* src_im,
                                 int src_nx, int src_ny,
                                 int s_x_step, int s_y_step,
-																int* dest_im,
+                                int* dest_im,
                                 int d_x_step, int d_y_step);
 
 #endif // vil2_algo_gauss_reduce_h_
