@@ -145,9 +145,9 @@ class vgl_homg_operators_2d
   static vnl_vector<T> most_orthogonal_vector_svd(const vcl_list<vgl_homg_line_2d<T> >& lines);
 
   // coefficient <-> conic matrix conversion -------------------------
-  static vgl_conic<T>  vgl_conic_from_matrix(vnl_matrix<T> const& mat);
-  static vnl_matrix<T> matrix_from_conic(vgl_conic<T> const&);
-  static vnl_matrix<T> matrix_from_dual_conic(vgl_conic<T> const&);
+  static vgl_conic<T> vgl_conic_from_matrix(vnl_matrix_fixed<T,3,3> const& mat);
+  static vnl_matrix_fixed<T,3,3> matrix_from_conic(vgl_conic<T> const&);
+  static vnl_matrix_fixed<T,3,3> matrix_from_dual_conic(vgl_conic<T> const&);
 
   //: Find all real intersection points of a conic and a line (between 0 and 2)
   static vcl_list<vgl_homg_point_2d<T> > intersection(vgl_conic<T> const& c,
