@@ -24,9 +24,6 @@
 //-----------------------------------------------------------------------------
 
 #include <mvl/PairMatchSet.h>
-#if defined(VCL_GCC_27)
-# include <mvl/HomgLineSeg2D.h> // for vcl_vector<> of undefined type.
-#endif
 
 class LineSegSet;
 class HomgLineSeg2D;
