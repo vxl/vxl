@@ -51,7 +51,7 @@
 #include <vtol/vtol_one_chain_sptr.h>
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_intensity_face.h>
-#include <brip/brip_float_ops.h>
+#include <brip/brip_vil1_float_ops.h>
 #include <bsol/bsol_hough_line_index.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
@@ -248,7 +248,7 @@ void segv_segmentation_manager::load_image()
   vil1_image temp = vil1_load(image_filename.c_str()), image;
 
   if (greyscale)
-    image = brip_float_ops::convert_to_grey(temp);
+    image = brip_vil1_float_ops::convert_to_grey(temp);
   else
     image = temp;
   if(first_)
@@ -505,9 +505,9 @@ void segv_segmentation_manager::gaussian()
   if (!gauss_dialog.ask())
     return;
   vil1_memory_image_of<float> input(img);
-  vil1_memory_image_of<float> smooth = brip_float_ops::gaussian(input, sigma);
+  vil1_memory_image_of<float> smooth = brip_vil1_float_ops::gaussian(input, sigma);
   vil1_memory_image_of<unsigned char> char_smooth =
-    brip_float_ops::convert_to_byte(smooth);
+    brip_vil1_float_ops::convert_to_byte(smooth);
   this->add_image(char_smooth);
 }
 
@@ -519,7 +519,7 @@ void segv_segmentation_manager::convolution()
   kernel_dlg.file("Kernel Filename:", ext, kernel_filename);
   if (!kernel_dlg.ask())
     return;
-  vbl_array_2d<float> kernel = brip_float_ops::load_kernel(kernel_filename);
+  vbl_array_2d<float> kernel = brip_vil1_float_ops::load_kernel(kernel_filename);
 
   //convert input image
   vil1_image img = selected_image();
@@ -529,14 +529,14 @@ void segv_segmentation_manager::convolution()
     return;
   }
   vil1_memory_image_of<unsigned char> temp(img);
-  vil1_memory_image_of<float> temp2 = brip_float_ops::convert_to_float(temp);
+  vil1_memory_image_of<float> temp2 = brip_vil1_float_ops::convert_to_float(temp);
 
   //convolve
-  vil1_memory_image_of<float> conv = brip_float_ops::convolve(temp2, kernel);
+  vil1_memory_image_of<float> conv = brip_vil1_float_ops::convolve(temp2, kernel);
 
   //convert back to unsigned char
   vil1_memory_image_of<unsigned char> char_conv =
-    brip_float_ops::convert_to_byte(conv);
+    brip_vil1_float_ops::convert_to_byte(conv);
 
   //display the image
    this->add_image(char_conv);
@@ -556,11 +556,11 @@ void segv_segmentation_manager::downsample()
   if (!downsample_dialog.ask())
     return;
   vil1_memory_image_of<unsigned char> input(img);
-  vil1_memory_image_of<float> inputf = brip_float_ops::convert_to_float(input);
+  vil1_memory_image_of<float> inputf = brip_vil1_float_ops::convert_to_float(input);
   vil1_memory_image_of<float> half_res =
-    brip_float_ops::half_resolution(inputf, filter_factor);
+    brip_vil1_float_ops::half_resolution(inputf, filter_factor);
   vil1_memory_image_of<unsigned char> char_half_res =
-    brip_float_ops::convert_to_byte(half_res);
+    brip_vil1_float_ops::convert_to_byte(half_res);
   this->add_image(char_half_res);
 }
 
@@ -616,14 +616,14 @@ void segv_segmentation_manager::beaudet_measure()
     return;
   int w = img.width(), h = img.height();
   vil1_memory_image_of<unsigned char> input(img);
-  vil1_memory_image_of<float> inputf = brip_float_ops::convert_to_float(input);
-  vil1_memory_image_of<float> smooth = brip_float_ops::gaussian(inputf, sigma);
+  vil1_memory_image_of<float> inputf = brip_vil1_float_ops::convert_to_float(input);
+  vil1_memory_image_of<float> smooth = brip_vil1_float_ops::gaussian(inputf, sigma);
   vil1_memory_image_of<float> Ixx, Ixy, Iyy, b;
   Ixx.resize(w,h);  Ixy.resize(w,h);   Iyy.resize(w,h);
-  brip_float_ops::hessian_3x3(smooth, Ixx, Ixy, Iyy);
-  b = brip_float_ops::beaudet(Ixx, Ixy, Iyy);
+  brip_vil1_float_ops::hessian_3x3(smooth, Ixx, Ixy, Iyy);
+  b = brip_vil1_float_ops::beaudet(Ixx, Ixy, Iyy);
   vil1_memory_image_of<unsigned char> uchar_b =
-    brip_float_ops::convert_to_byte(b,0.0f, cmax);
+    brip_vil1_float_ops::convert_to_byte(b,0.0f, cmax);
   this->add_image(uchar_b);
 }
 
@@ -1110,8 +1110,8 @@ void segv_segmentation_manager::display_IHS()
   vil1_memory_image_of<vil1_rgb<unsigned char> > in_image(img), out_image;
   if(!in_image)
   return;
-  brip_float_ops::convert_to_IHS(in_image, I, H, S);
-  brip_float_ops::display_IHS_as_RGB(I, H, S, out_image);
+  brip_vil1_float_ops::convert_to_IHS(in_image, I, H, S);
+  brip_vil1_float_ops::display_IHS_as_RGB(I, H, S, out_image);
   this->add_image(out_image);
 }
 
@@ -1157,7 +1157,7 @@ void segv_segmentation_manager::display_epi_region_image()
   strk_epipolar_grouper eg(egp);
   eg.init(1);//only one frame
   vil1_memory_image_of<float> flt = 
-    brip_float_ops::convert_to_float(img);
+    brip_vil1_float_ops::convert_to_float(img);
   eg.set_image(flt);
   eg.set_edges(0, *edges);
   eg.group();
@@ -1173,6 +1173,7 @@ void segv_segmentation_manager::compute_mutual_info()
   static strk_info_tracker_params tp;
   vgui_dialog tracker_dialog("Mutual Information");
   tracker_dialog.field("Min Gradient Magnitude", tp.min_gradient_);
+  tracker_dialog.field("Parzen Sigma", tp.parzen_sigma_);
   tracker_dialog.checkbox("Add Gradient Info", tp.gradient_info_);
   tracker_dialog.checkbox("Add Color Info", tp.color_info_);
   tracker_dialog.checkbox("Verbose", tp.verbose_);

@@ -1,5 +1,5 @@
 #include <vcl_iostream.h>
-#include <brip/brip_float_ops.h>
+#include <brip/brip_vil1_float_ops.h>
 #include <vpro/vpro_frame_diff_process.h>
 
 vpro_frame_diff_process::vpro_frame_diff_process(vpro_frame_diff_params fdp):
@@ -23,7 +23,7 @@ bool vpro_frame_diff_process::execute()
   vil1_image img = vpro_video_process::get_input_image(0);
   this->clear_input();
 
-  vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
+  vil1_memory_image_of<float> fimg = brip_vil1_float_ops::convert_to_float(img);
 
   //if first frame, just cache
   if (first_frame_)
@@ -34,14 +34,14 @@ bool vpro_frame_diff_process::execute()
     }
 
   //compute difference
-  vil1_memory_image_of<float> dif = brip_float_ops::difference(img0_,fimg);
+  vil1_memory_image_of<float> dif = brip_vil1_float_ops::difference(img0_,fimg);
 
     
   // push back buffer
     img0_=fimg;
 
   //convert output back to unsigned char
-  output_image_ = brip_float_ops::convert_to_byte(dif, -range_, range_);
+  output_image_ = brip_vil1_float_ops::convert_to_byte(dif, -range_, range_);
   return true;
 }
 

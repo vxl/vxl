@@ -1,7 +1,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vil1/vil1_rgb.h>
-#include <brip/brip_float_ops.h>
+#include <brip/brip_vil1_float_ops.h>
 #include <vpro/vpro_lucas_kanade_process.h>
 
 vpro_lucas_kanade_process::vpro_lucas_kanade_process(bool down_sample,
@@ -27,7 +27,7 @@ compute_lucas_kanade(vil1_memory_image_of<float>& image)
   vy.resize(w,h);
 
   vil1_memory_image_of<float> prev(queue_[0]);
-  brip_float_ops::Lucas_KanadeMotion(image, prev, window_size_, thresh_,
+  brip_vil1_float_ops::Lucas_KanadeMotion(image, prev, window_size_, thresh_,
                                      vx, vy);
   vil1_memory_image_of< vil1_rgb<unsigned char> > output;
   output.resize(w,h);
@@ -66,13 +66,13 @@ bool vpro_lucas_kanade_process::execute()
       return false;
     }
   vil1_image img = vpro_video_process::get_input_image(0);
-  vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
+  vil1_memory_image_of<float> fimg = brip_vil1_float_ops::convert_to_float(img);
   vil1_memory_image_of<float> temp2;
   if (downsample_)
-    temp2 = brip_float_ops::half_resolution(fimg);
+    temp2 = brip_vil1_float_ops::half_resolution(fimg);
   else
     temp2 = fimg;
-  vil1_memory_image_of<float> fsmooth = brip_float_ops::gaussian(temp2, 0.8f);
+  vil1_memory_image_of<float> fsmooth = brip_vil1_float_ops::gaussian(temp2, 0.8f);
   this->clear_input();
   switch(state_)
     {

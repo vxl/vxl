@@ -8,7 +8,7 @@
 //#include <bdgl/bdgl_curve_tracker.h>
 #include <bdgl/bdgl_curve_tracking.h>
 
-#include <brip/brip_float_ops.h>
+#include <brip/brip_vil1_float_ops.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
 #include <vtol/vtol_edge_2d_sptr.h>
@@ -46,10 +46,10 @@ bool vpro_curve_tracking_process::execute()
   vil1_memory_image_of<unsigned char> cimg;
   if (img.components()==3)
   {
-    vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
+    vil1_memory_image_of<float> fimg = brip_vil1_float_ops::convert_to_float(img);
     vpro_video_process::clear_input();//remove image from input
     //convert a color image to grey
-    cimg = brip_float_ops::convert_to_byte(fimg);
+    cimg = brip_vil1_float_ops::convert_to_byte(fimg);
   }
   else
     cimg = vil1_memory_image_of<unsigned char>(img);

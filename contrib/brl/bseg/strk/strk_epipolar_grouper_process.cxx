@@ -3,7 +3,7 @@
 #include <vsol/vsol_polyline_2d.h>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_edge.h>
-#include <brip/brip_float_ops.h>
+#include <brip/brip_vil1_float_ops.h>
 #include <vpro/vpro_edge_process.h>
 #include <strk/strk_epipolar_grouper.h>
 #include <strk/strk_epipolar_grouper_process.h>
@@ -66,7 +66,7 @@ bool strk_epipolar_grouper_process::execute()
   ep.clear_output();
   //set the image and edges on the grouper and process intersections
   vil1_memory_image_of<float> flt =
-    brip_float_ops::convert_to_float(this->get_input_image(0));
+    brip_vil1_float_ops::convert_to_float(this->get_input_image(0));
   epipolar_grouper_.set_image(flt);
   epipolar_grouper_.set_edges(frame_index_, edges);
   if (!epipolar_grouper_.group())

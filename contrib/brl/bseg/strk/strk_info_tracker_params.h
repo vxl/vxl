@@ -24,6 +24,7 @@ class strk_info_tracker_params : public gevd_param_mixin
                            const bool gradient_info = true,
                            const bool color_info = false,
                            const float min_gradient = 5,
+                           const float parzen_sigma = 1,
                            const bool verbose = false,
                            const bool debug = false
                           );
@@ -43,6 +44,7 @@ class strk_info_tracker_params : public gevd_param_mixin
                  bool gradient_info,
                  bool color_info,
                  float min_gradient,
+                 float parzen_sigma,
                  bool verbose,
                  bool debug
                 );
@@ -58,6 +60,7 @@ class strk_info_tracker_params : public gevd_param_mixin
   bool gradient_info_;     //!< Combine gradient and intensity info
   bool color_info_;        //!< Combine color and intensity info
   float min_gradient_;     //!< minimum gradient magnitude to be considered
+  float parzen_sigma_;     //!< smoothing for the histogram density
   bool verbose_;           //!< informative messages to cout
   bool debug_;             //!< informative debug messages to cout
 };

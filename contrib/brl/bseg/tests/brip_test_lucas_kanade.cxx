@@ -3,7 +3,7 @@
 #include <vcl_iomanip.h>
 #include <vnl/vnl_math.h>
 #include <vil1/vil1_memory_image_of.h>
-#include <brip/brip_float_ops.h>
+#include <brip/brip_vil1_float_ops.h>
 #include <testlib/testlib_test.h>
 
 static void brip_test_lucas_kanade()
@@ -27,9 +27,9 @@ static void brip_test_lucas_kanade()
   cur(11,10)=100.0; cur(12,16)=100.0; cur(10,21)=100.0; cur(9,26)=100.0;
   //180, 225, 270, 315
   cur(9,10)=100.0; cur(9,14)=100.0; cur(10,19)=100.0; cur(11,24)=100.0;
-  vil1_memory_image_of<float> gauss_cur = brip_float_ops::gaussian(cur, 1.0);
-  vil1_memory_image_of<float> gauss_prev = brip_float_ops::gaussian(prev, 1.0);
-  brip_float_ops::Lucas_KanadeMotion(gauss_cur, gauss_prev, 1, 500.0, vx, vy);
+  vil1_memory_image_of<float> gauss_cur = brip_vil1_float_ops::gaussian(cur, 1.0);
+  vil1_memory_image_of<float> gauss_prev = brip_vil1_float_ops::gaussian(prev, 1.0);
+  brip_vil1_float_ops::Lucas_KanadeMotion(gauss_cur, gauss_prev, 1, 500.0, vx, vy);
   for (int y =0; y<h; y++)
     for (int x = 0; x<w; x++)
       ang(x,y) = float(D_R*vcl_atan2(vy(x,y), vx(x,y)));

@@ -30,7 +30,7 @@
 #include <vgui/vgui_composite_tableau.h>
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_face_2d.h>
-#include <brip/brip_float_ops.h>
+#include <brip/brip_vil1_float_ops.h>
 #include <btol/btol_face_algs.h>
 #include <sdet/sdet_harris_detector_params.h>
 #include <sdet/sdet_detector_params.h>
@@ -784,6 +784,7 @@ void vvid_file_manager::compute_info_tracking()
   tracker_dialog.field("Scale Range (1+-s)", tp.scale_range_);
   tracker_dialog.field("Smooth Sigma", tp.sigma_);
   tracker_dialog.field("Min Gradient Mag", tp.min_gradient_);
+  tracker_dialog.field("Parzen Sigma", tp.parzen_sigma_);
   tracker_dialog.checkbox("Add Gradient Info", tp.gradient_info_);
   tracker_dialog.checkbox("Add Color Info", tp.color_info_);
   tracker_dialog.checkbox("Output Track Data", output_track);
@@ -996,7 +997,7 @@ void vvid_file_manager::exercise_art_model()
     faces.push_back(short_tip_);
     vil1_image img = itab0_->get_image();
     vil1_memory_image_of<float> image =
-      brip_float_ops::convert_to_float(img);
+      brip_vil1_float_ops::convert_to_float(img);
     art_model_ = new strk_art_info_model(faces, pivot, image);
 
     vcl_vector<vtol_face_2d_sptr> vtol_faces = art_model_->vtol_faces();

@@ -3,7 +3,7 @@
 #include <vcl_iostream.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_rgb.h>
-#include <brip/brip_float_ops.h>
+#include <brip/brip_vil1_float_ops.h>
 
 vpro_ihs_process::vpro_ihs_process()
 {
@@ -29,8 +29,8 @@ bool vpro_ihs_process::execute()
   vil1_memory_image_of<vil1_rgb<unsigned char> > in_image(this->get_input_image(0));
   vil1_memory_image_of<float> I,H,S;
   vil1_memory_image_of<vil1_rgb<unsigned char> > image;
-  brip_float_ops::convert_to_IHS(in_image, I, H, S);
-  brip_float_ops::display_IHS_as_RGB(I, H, S, image);
+  brip_vil1_float_ops::convert_to_IHS(in_image, I, H, S);
+  brip_vil1_float_ops::display_IHS_as_RGB(I, H, S, image);
   output_image_=image;
   input_images_.clear();
   return true;

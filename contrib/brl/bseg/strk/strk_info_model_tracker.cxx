@@ -7,7 +7,7 @@
 #include <vil1/vil1_memory_image_of.h>
 #include <vsol/vsol_point_2d.h>
 #include <btol/btol_face_algs.h>
-#include <brip/brip_float_ops.h>
+#include <brip/brip_vil1_float_ops.h>
 #include <strk/strk_art_info_model.h>
 #include <strk/strk_tracking_face_2d.h>
 
@@ -48,14 +48,14 @@ void strk_info_model_tracker::set_image_0(vil1_image& image)
       return;
     }
 
-  vil1_memory_image_of<float> flt=brip_float_ops::convert_to_float(image);
+  vil1_memory_image_of<float> flt=brip_vil1_float_ops::convert_to_float(image);
 
-  image_0_= brip_float_ops::gaussian(flt, sigma_);
+  image_0_= brip_vil1_float_ops::gaussian(flt, sigma_);
 
   int w = image_0_.width(), h = image_0_.height();
   Ix_0_.resize(w,h);
   Iy_0_.resize(w,h);
-  brip_float_ops::gradient_3x3(image_0_, Ix_0_, Iy_0_);
+  brip_vil1_float_ops::gradient_3x3(image_0_, Ix_0_, Iy_0_);
 }
 
 //-------------------------------------------------------------------------
@@ -69,13 +69,13 @@ void strk_info_model_tracker::set_image_i(vil1_image& image)
       return;
     }
 
-  vil1_memory_image_of<float> flt=brip_float_ops::convert_to_float(image);
+  vil1_memory_image_of<float> flt=brip_vil1_float_ops::convert_to_float(image);
 
-  image_i_ = brip_float_ops::gaussian(flt, sigma_);
+  image_i_ = brip_vil1_float_ops::gaussian(flt, sigma_);
   int w = image_i_.width(), h = image_i_.height();
   Ix_i_.resize(w,h);
   Iy_i_.resize(w,h);
-  brip_float_ops::gradient_3x3(image_i_, Ix_i_, Iy_i_);
+  brip_vil1_float_ops::gradient_3x3(image_i_, Ix_i_, Iy_i_);
 }
 
 

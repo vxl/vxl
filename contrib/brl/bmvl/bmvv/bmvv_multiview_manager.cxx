@@ -33,7 +33,7 @@
 #include <vgui/vgui_modifier.h>
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vtol/vtol_intensity_face.h>
-#include <brip/brip_float_ops.h>
+#include <brip/brip_vil1_float_ops.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 
@@ -199,7 +199,7 @@ void bmvv_multiview_manager::load_image()
   if (greyscale)
   {
     vil1_memory_image_of<unsigned char> temp1 =
-    brip_float_ops::convert_to_grey(temp);
+    brip_vil1_float_ops::convert_to_grey(temp);
     img_ = temp1;
   }
   else
@@ -509,9 +509,9 @@ void bmvv_multiview_manager::track_edges()
   vil1_memory_image_of<unsigned char> cimg;
   if (img.components()==3)
   {
-    vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
+    vil1_memory_image_of<float> fimg = brip_vil1_float_ops::convert_to_float(img);
     //convert a color image to grey
-    cimg = brip_float_ops::convert_to_byte(fimg);
+    cimg = brip_vil1_float_ops::convert_to_byte(fimg);
   }
   else
     cimg = vil1_memory_image_of<unsigned char>(img);
@@ -539,9 +539,9 @@ void bmvv_multiview_manager::track_edges()
   //img = vil1_load("c:\\data\\minivan\\00071.tiff");
   if (img.components()==3)
   {
-    vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
+    vil1_memory_image_of<float> fimg = brip_vil1_float_ops::convert_to_float(img);
     //convert a color image to grey
-    cimg = brip_float_ops::convert_to_byte(fimg);
+    cimg = brip_vil1_float_ops::convert_to_byte(fimg);
   }
   else
     cimg = vil1_memory_image_of<unsigned char>(img);

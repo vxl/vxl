@@ -23,6 +23,7 @@ strk_info_tracker_params(const strk_info_tracker_params& tp)
              tp.gradient_info_,
              tp.color_info_,
              tp.min_gradient_,
+             tp.parzen_sigma_,
              tp.verbose_,
              tp.debug_
              );
@@ -37,6 +38,7 @@ strk_info_tracker_params(const int n_samples,
                          const bool gradient_info,
                          const bool color_info,
                          const float min_gradient,
+                         const float parzen_sigma,
                          const bool verbose,
                          const bool debug)
 {
@@ -48,6 +50,7 @@ strk_info_tracker_params(const int n_samples,
              gradient_info,
              color_info,
              min_gradient,
+             parzen_sigma,
              verbose,
              debug);
 }
@@ -60,6 +63,7 @@ void strk_info_tracker_params::InitParams(int n_samples,
                                           bool gradient_info,
                                           bool color_info,
                                           float min_gradient,
+                                          float parzen_sigma,
                                           bool verbose,
                                           bool debug)
 {
@@ -71,6 +75,7 @@ void strk_info_tracker_params::InitParams(int n_samples,
   gradient_info_ = gradient_info;
   color_info_ = color_info;
   min_gradient_ = min_gradient;
+  parzen_sigma_ = parzen_sigma;
   verbose_ = verbose;
   debug_ = debug;
 }
@@ -103,6 +108,7 @@ vcl_ostream& operator << (vcl_ostream& os, const strk_info_tracker_params& tp)
   os << "gradient_info " << tp.gradient_info_ << vcl_endl;
   os << "color_info " << tp.color_info_ << vcl_endl;
   os << "min_gradient " << tp.min_gradient_ << vcl_endl;
+  os << "parzen_sigma " << tp.parzen_sigma_ << vcl_endl;
   os << "verbose " << tp.verbose_ << vcl_endl;
   os << "debug " << tp.debug_ << vcl_endl;
   os << "---]" << vcl_endl;

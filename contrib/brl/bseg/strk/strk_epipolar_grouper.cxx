@@ -14,7 +14,7 @@
 #include <vsol/vsol_polyline_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vtol/vtol_edge_2d.h>
-#include <brip/brip_float_ops.h>
+#include <brip/brip_vil1_float_ops.h>
 #include <strk/strk_epi_point.h>
 #include <strk/strk_epi_seg.h>
 
@@ -572,7 +572,7 @@ double strk_epipolar_grouper::scan_interval(const double a, const double sl,
     int ui = (int)(u+0.5), vi = (int)(v+0.5);
     sum+=image_(ui, vi);
 #if 0
-    sum += brip_float_ops::bilinear_interpolation(image_, u+0.5, v+0.5);//JLM
+    sum += brip_vil1_float_ops::bilinear_interpolation(image_, u+0.5, v+0.5);//JLM
 #endif
   }
   if (!n_samples)

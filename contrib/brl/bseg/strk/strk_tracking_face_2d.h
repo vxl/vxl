@@ -26,14 +26,18 @@
 #include<strk/strk_tracking_face_2d_sptr.h>
 
 //===================== HISTOGRAM DEFS ===================================
-template <class T> class strk_histf
+template <class T> class strk_hist
 {
  public:
-  strk_histf(T range = 255, unsigned int nbins = 16);
- ~strk_histf() {}
+  strk_hist(const T range = 360, const unsigned int nbins = 8);
+ ~strk_hist() {}
   unsigned int nbins() const { return nbins_; }
-  void upcount(T x);
+  void upcount(T dir, T mag);
+  void parzen(const T sigma);
+
   T p(unsigned int bin) const;
+  T area() const;
+
   void print() const;
  private:
   void compute_area() const; // mutable const
@@ -45,57 +49,26 @@ template <class T> class strk_histf
   vcl_vector<T> counts_;
 };
 
-template <class T> class strk_joint_histf
+template <class T> class strk_joint_hist
 {
  public:
-  strk_joint_histf(unsigned int nbins = 16);
- ~strk_joint_histf() {}
-  unsigned int nbins() const { return nbins_; }
-  void upcount(T a, T b);
-  T p(unsigned int a, unsigned int b) const;
-  void print() const;
- private:
-  void compute_volume() const; // mutable const
-  mutable bool volume_valid_;
-  mutable T volume_;
-  unsigned int nbins_;
-  T delta_;
-  vbl_array_2d<T> counts_;
-};
-
-template <class T> class strk_double_histf
-{
- public:
-  strk_double_histf(unsigned int nbins = 8);
- ~strk_double_histf() {}
-  unsigned int nbins() const { return nbins_; }
-  void upcount(T dir, T mag);
-  T p(unsigned int bin) const;
-  void print() const;
- private:
-  void compute_area() const; // mutable const
-  mutable bool area_valid_;
-  mutable T area_;
-  unsigned int nbins_;
-  T delta_;
-  vcl_vector<T> counts_;
-};
-
-template <class T> class strk_double_joint_histf
-{
- public:
-  strk_double_joint_histf(unsigned int nbins = 8);
- ~strk_double_joint_histf() {}
+  strk_joint_hist(const T range = 360, const unsigned int nbins = 8);
+ ~strk_joint_hist() {}
   unsigned int nbins() const { return nbins_; }
   void upcount(T a, T mag_a,
                T b, T mag_b);
+  void parzen(const T sigma);
+
   T p(unsigned int a, unsigned int b) const;
+  T volume() const;
+
   void print() const;
  private:
   void compute_volume() const; // mutable const
   mutable bool volume_valid_;
   mutable T volume_;
   unsigned int nbins_;
+  T range_;
   T delta_;
   vbl_array_2d<T> counts_;
 };
@@ -112,34 +85,42 @@ class strk_tracking_face_2d : public vbl_ref_count
                         vil1_memory_image_of<float> const& Iy,
                         vil1_memory_image_of<float> const& hue,
                         vil1_memory_image_of<float> const& sat,
-                        const float min_gradient);
+                        const float min_gradient,
+                        const float parzen_sigma                        
+                        );
 
   strk_tracking_face_2d(vtol_intensity_face_sptr const& intf);
   strk_tracking_face_2d(strk_tracking_face_2d_sptr const& tf);
   ~strk_tracking_face_2d();
   //:accessors
-  void set_min_gradient(const float min_gradient){min_gradient_=min_gradient;}
   vtol_intensity_face_sptr face() const { return intf_; }
   bool gradient_needed() const { return gradient_info_; }
   bool color_needed() const { return color_info_; }
-  unsigned int intensity_hist_bins() const { return intensity_hist_bins_; }
-  unsigned int gradient_dir_hist_bins() const { return gradient_dir_hist_bins_; }
-  unsigned int color_hist_bins() const { return color_hist_bins_; }
-  void set_int_mutual_info(float mi);
-  void set_grad_mutual_info(float mi);
-  void set_color_mutual_info(float mi);
   float Ix(int i) const { return Ix_[i]; }
   float Iy(int i) const { return Iy_[i]; }
-  void set_Ix(int i, float Ix) { Ix_[i] = Ix; }
-  void set_Iy(int i, float Iy) { Iy_[i] = Iy; }
   float hue(int i) const { return hue_[i]; }
   float sat(int i) const { return sat_[i]; }
-  void set_hue(int i, float Ix) { hue_[i] = Ix; }
-  void set_sat(int i, float Iy) { sat_[i] = Iy; }
   float int_mutual_info() const { return intensity_mi_; }
   float grad_mutual_info() const { return gradient_dir_mi_; }
   float color_mutual_info() const { return color_mi_; }
   float total_info() const { return total_info_; }
+
+  //:mutators
+  void set_min_gradient(const float min_gradient){min_gradient_=min_gradient;}
+  void set_parzen_sigma(const float parzen_sigma){parzen_sigma_=parzen_sigma;}
+  void set_Ix(int i, float Ix) { Ix_[i] = Ix; }
+  void set_Iy(int i, float Iy) { Iy_[i] = Iy; }
+  void set_hue(int i, float Ix) { hue_[i] = Ix; }
+  void set_sat(int i, float Iy) { sat_[i] = Iy; }
+  void set_int_mutual_info(float mi);
+  void set_grad_mutual_info(float mi);
+  void set_color_mutual_info(float mi);
+
+  //:histogram properties
+  unsigned int intensity_hist_bins() const { return intensity_hist_bins_;}
+  unsigned int gradient_dir_hist_bins() const {return gradient_dir_hist_bins_;}
+  unsigned int color_hist_bins() const { return color_hist_bins_; }
+
   //: internal entropies for debugging purposes
   float model_intensity_entropy(){return model_intensity_entropy_;}
   float intensity_entropy(){return intensity_entropy_;}
@@ -209,6 +190,7 @@ class strk_tracking_face_2d : public vbl_ref_count
 
   // members
   float min_gradient_;
+  float parzen_sigma_;
   vtol_intensity_face_sptr intf_;
   bool gradient_info_;
   bool color_info_;

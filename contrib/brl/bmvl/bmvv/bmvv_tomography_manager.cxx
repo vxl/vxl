@@ -28,7 +28,7 @@
 #include <vgui/vgui_modifier.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
-#include <brip/brip_float_ops.h>
+#include <brip/brip_vil1_float_ops.h>
 #include <btom/btom_slice_simulator.h>
 
 //static live_video_manager instance
@@ -241,9 +241,9 @@ void bmvv_tomography_manager::sinogram()
   vil1_memory_image_of<float> reconst;
   ss.gaussian_sinogram(sinogram, reconst);
   //vil1_memory_image_of<unsigned char> char_sinogram =
-  sino_= brip_float_ops::convert_to_byte(sinogram, 0.0, scale);
+  sino_= brip_vil1_float_ops::convert_to_byte(sinogram, 0.0, scale);
   //  vil1_memory_image_of<unsigned char> char_reconst =
-  img_ =  brip_float_ops::convert_to_byte(reconst);
+  img_ =  brip_vil1_float_ops::convert_to_byte(reconst);
   bgui_vtol2D_tableau_sptr btab0 = vtol_tabs_[0];
   bgui_vtol2D_tableau_sptr btab1 = vtol_tabs_[1];
   if (btab0)

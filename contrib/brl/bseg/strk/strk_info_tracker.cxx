@@ -6,7 +6,7 @@
 #include <vcl_cstdlib.h> // for rand()
 #include <vul/vul_timer.h>
 #include <vil1/vil1_memory_image_of.h>
-#include <brip/brip_float_ops.h>
+#include <brip/brip_vil1_float_ops.h>
 #include <strk/strk_tracking_face_2d.h>
 
 //Gives a sort on mutual information decreasing order
@@ -52,23 +52,23 @@ void strk_info_tracker::set_image_0(vil1_image& image)
 
   if(!color_info_||image.components()==1)
     {
-      vil1_memory_image_of<float> in=brip_float_ops::convert_to_float(image);
-      image_0_= brip_float_ops::gaussian(in, sigma_);
+      vil1_memory_image_of<float> in=brip_vil1_float_ops::convert_to_float(image);
+      image_0_= brip_vil1_float_ops::gaussian(in, sigma_);
     }
 
   if(color_info_&&image.components()==3)
     {
       vil1_memory_image_of<vil1_rgb<unsigned char> > temp(image);
-      brip_float_ops::convert_to_IHS(temp, in, hue, sat);
-      image_0_= brip_float_ops::gaussian(in, sigma_);
-      hue_0_ = brip_float_ops::gaussian(hue, sigma_);
-      sat_0_ = brip_float_ops::gaussian(sat, sigma_);
+      brip_vil1_float_ops::convert_to_IHS(temp, in, hue, sat);
+      image_0_= brip_vil1_float_ops::gaussian(in, sigma_);
+      hue_0_ = brip_vil1_float_ops::gaussian(hue, sigma_);
+      sat_0_ = brip_vil1_float_ops::gaussian(sat, sigma_);
     }
 
   if(gradient_info_){
   Ix_0_.resize(w,h);
   Iy_0_.resize(w,h);
-  brip_float_ops::gradient_3x3(image_0_, Ix_0_, Iy_0_);}
+  brip_vil1_float_ops::gradient_3x3(image_0_, Ix_0_, Iy_0_);}
 }
 
 //-------------------------------------------------------------------------
@@ -87,23 +87,23 @@ void strk_info_tracker::set_image_i(vil1_image& image)
 
   if(!color_info_||image.components()==1)
     {
-      vil1_memory_image_of<float> in=brip_float_ops::convert_to_float(image);
-      image_i_= brip_float_ops::gaussian(in, sigma_);
+      vil1_memory_image_of<float> in=brip_vil1_float_ops::convert_to_float(image);
+      image_i_= brip_vil1_float_ops::gaussian(in, sigma_);
     }
 
   if(color_info_&&image.components()==3)
     {
       vil1_memory_image_of<vil1_rgb<unsigned char> > temp(image);
-      brip_float_ops::convert_to_IHS(temp, in, hue, sat);
-      image_i_= brip_float_ops::gaussian(in, sigma_);
-      hue_i_ = brip_float_ops::gaussian(hue, sigma_);
-      sat_i_ = brip_float_ops::gaussian(sat, sigma_);
+      brip_vil1_float_ops::convert_to_IHS(temp, in, hue, sat);
+      image_i_= brip_vil1_float_ops::gaussian(in, sigma_);
+      hue_i_ = brip_vil1_float_ops::gaussian(hue, sigma_);
+      sat_i_ = brip_vil1_float_ops::gaussian(sat, sigma_);
     }
 
   if(gradient_info_){
   Ix_i_.resize(w,h);
   Iy_i_.resize(w,h);
-  brip_float_ops::gradient_3x3(image_i_, Ix_i_, Iy_i_);}
+  brip_vil1_float_ops::gradient_3x3(image_i_, Ix_i_, Iy_i_);}
 }
 
 //--------------------------------------------------------------------------
@@ -124,7 +124,8 @@ void strk_info_tracker::init()
   strk_tracking_face_2d_sptr tf;
   tf = new strk_tracking_face_2d(initial_model_, image_0_,
                                  Ix_0_, Iy_0_, hue_0_, sat_0_, 
-                                 min_gradient_);
+                                 min_gradient_,
+								 parzen_sigma_);
   current_samples_.push_back(tf);
  }
 
@@ -142,7 +143,6 @@ generate_randomly_positioned_sample(strk_tracking_face_2d_sptr const& seed)
   float s = (2.f*scale_range_)*float(vcl_rand()/(RAND_MAX+1.0)) - scale_range_;
   float scale = 1+s;
   strk_tracking_face_2d* tf = new strk_tracking_face_2d(seed);
-  tf->set_min_gradient(min_gradient_);
   tf->transform(tx, ty, theta, scale);
   return tf;
 }
@@ -185,7 +185,7 @@ clone_and_refresh_data(strk_tracking_face_2d_sptr const& sample)
     sample->face()->cast_to_face_2d();
   strk_tracking_face_2d_sptr tf;
   tf = new strk_tracking_face_2d(f, image_i_, Ix_i_, Iy_i_, hue_i_, sat_i_,
-                                 min_gradient_);
+                                 min_gradient_, parzen_sigma_);
   return tf;
 }
 
@@ -373,7 +373,8 @@ void strk_info_tracker::evaluate_info()
   strk_tracking_face_2d_sptr tf =
     new strk_tracking_face_2d(initial_model_, image_0_,
                               Ix_0_, Iy_0_, hue_0_, sat_0_,
-                              min_gradient_);
+                              min_gradient_,
+                              parzen_sigma_);
   if(!tf->compute_mutual_information(image_i_, Ix_i_, Iy_i_, hue_i_, sat_i_))
     return;
   
