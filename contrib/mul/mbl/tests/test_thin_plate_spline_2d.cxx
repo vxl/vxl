@@ -7,7 +7,7 @@
 
 void test_tps_at_fixed_points(int n_points)
 {
-  vcl_cout<<"Testing with "<<n_points<<vcl_endl;
+  vcl_cout<<"Testing with "<<n_points<<" points\n";
   vcl_vector<vgl_point_2d<double> > pts1(n_points),pts2(n_points);
 
   mbl_mz_random mz_random;
@@ -28,7 +28,7 @@ void test_tps_at_fixed_points(int n_points)
   for (int i=0;i<n_points;++i)
   {
     vcl_cout<<"Test point "<<i<<" : ";
-    TEST("Warped point = target point",vgl_distance(tps(pts1[i]),pts2[i])<1e-6,true);
+    TEST_NEAR("Warped point = target point",vgl_distance(tps(pts1[i]),pts2[i]),0.0,1e-6);
   }
 
   mbl_thin_plate_spline_2d tps2 = tps;
@@ -41,15 +41,15 @@ void test_tps_at_fixed_points(int n_points)
   for (int i=0;i<n_points;++i)
   {
     vcl_cout<<"Test point "<<i<<" : ";
-    TEST("Warped point = target point",vgl_distance(tps3(pts1[i]),pts2[i])<1e-6,true);
+    TEST_NEAR("Warped point = target point",vgl_distance(tps3(pts1[i]),pts2[i]),0.0,1e-6);
   }
 }
 
 void test_thin_plate_spline_2d()
 {
-  vcl_cout << "**********************************\n";
-  vcl_cout << " Testing mbl_thin_plate_spline_2d\n";
-  vcl_cout << "**********************************\n";
+  vcl_cout << "**********************************\n"
+           << " Testing mbl_thin_plate_spline_2d\n"
+           << "**********************************\n";
 
   for (int i=1;i<=5;++i)
     test_tps_at_fixed_points(i);

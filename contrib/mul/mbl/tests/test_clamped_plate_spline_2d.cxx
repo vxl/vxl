@@ -7,7 +7,7 @@
 
 void test_cps_at_fixed_points(int n_points)
 {
-  vcl_cout<<"Testing with "<<n_points<<vcl_endl;
+  vcl_cout<<"Testing with "<<n_points<<" points\n";
   vcl_vector<vgl_point_2d<double> > pts1(n_points),pts2(n_points);
 
   mbl_mz_random mz_random;
@@ -28,7 +28,7 @@ void test_cps_at_fixed_points(int n_points)
   for (int i=0;i<n_points;++i)
   {
     vcl_cout<<"Test point "<<i<<" : ";
-    TEST("Warped point = target",vgl_distance(cps(pts1[i]),pts2[i])<1e-6,true);
+    TEST_NEAR("Warped point = target",vgl_distance(cps(pts1[i]),pts2[i]),0.0,1e-6);
   }
 
   mbl_clamped_plate_spline_2d cps2 = cps;
@@ -41,24 +41,24 @@ void test_cps_at_fixed_points(int n_points)
   for (int i=0;i<n_points;++i)
   {
     vcl_cout<<"Test point "<<i<<" : ";
-    TEST("Warped point = target",vgl_distance(cps3(pts1[i]),pts2[i])<1e-6,true);
+    TEST_NEAR("Warped point = target",vgl_distance(cps3(pts1[i]),pts2[i]),0.0,1e-6);
   }
 
   vgl_point_2d<double> p1(0,1);
-  TEST("(0,1) unchanged",vgl_distance(cps3(p1),p1)<1e-6,true);
+  TEST_NEAR("(0,1) unchanged",vgl_distance(cps3(p1),p1),0.0,1e-6);
 
   vgl_point_2d<double> p2(0,-1);
-  TEST("(0,-1) unchanged",vgl_distance(cps3(p2),p2)<1e-6,true);
+  TEST_NEAR("(0,-1) unchanged",vgl_distance(cps3(p2),p2),0.0,1e-6);
 
   vgl_point_2d<double> p3(1,0);
-  TEST("(1,0) unchanged",vgl_distance(cps3(p3),p3)<1e-6,true);
+  TEST_NEAR("(1,0) unchanged",vgl_distance(cps3(p3),p3),0.0,1e-6);
 }
 
 void test_clamped_plate_spline_2d()
 {
-  vcl_cout << "**********************************\n";
-  vcl_cout << " Testing mbl_clamped_plate_spline_2d\n";
-  vcl_cout << "**********************************\n";
+  vcl_cout << "*************************************\n"
+           << " Testing mbl_clamped_plate_spline_2d\n"
+           << "*************************************\n";
 
   for (int i=1;i<=4;++i)
     test_cps_at_fixed_points(i);
