@@ -9,14 +9,17 @@
 // \file
 // \brief Save and load vcl_vector<T>s in binary format
 // \author fsm@robots.ox.ac.uk
+// \deprecated Use vsl instead
 //
 // \verbatim
 // Modifications
 // PDA (Manchester) 23/03/2001: Tidied up the documentation
+// IMS (Manchester) 25/06/2001: deprecated in favour of vsl
 // \endverbatim
 
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
+#include <vcl_deprecated.h>
 
 template </*typename*/class T> void vbl_binary_save(vcl_ostream &,
                                                     vcl_vector<T> const &);

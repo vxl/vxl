@@ -471,10 +471,6 @@ SOURCE=.\vbl_expand_path.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_clamp.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\vbl_file.h
 # End Source File
 # Begin Source File
@@ -527,14 +523,6 @@ SOURCE=.\vbl_reg_exp.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_rgb.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_rgba.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\vbl_sequence_filename_map.h
 # End Source File
 # Begin Source File
@@ -584,10 +572,6 @@ SOURCE=.\vbl_timestamp.h
 # Begin Source File
 
 SOURCE=.\vbl_trace.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_types.h
 # End Source File
 # Begin Source File
 

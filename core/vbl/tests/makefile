@@ -12,11 +12,9 @@ LIBRARY := vbl-test
 SOURCES += vbl_test_classes.cxx
 
 TESTS += vbl_test_all.cxx
-TESTS += vbl_test_arg.cxx
 TESTS += vbl_test_array.cxx
 TESTS += vbl_test_sparse_array_2d.cxx
 TESTS += vbl_test_sparse_array_3d.cxx
-TESTS += vbl_test_sprintf.cxx
 TESTS += vbl_test_smart_ptr.cxx
 #TESTS += vbl_test_basic_relation.cxx # FIXME - vcl_hash_map does not exist
 
