@@ -18,8 +18,16 @@
 #include <vil/vil_save.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
+#include <vil/vil_image_view.txx>
 
-typedef vil_rgb<vxl_byte> rgbcell;
+class rgbcell: public vil_rgb<vxl_byte>
+{
+public:
+  rgbcell() {};
+  rgbcell(double x): vil_rgb<vxl_byte>(vxl_byte(x)) {}
+};
+
+VIL_IMAGE_VIEW_INSTANTIATE(rgbcell);
 
 int
 main(int argc, char** argv)
