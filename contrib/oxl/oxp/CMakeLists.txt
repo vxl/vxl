@@ -27,8 +27,7 @@ IF (JPEG_FOUND)
 
   SET(oxp_sources ${oxp_sources}
    JPEG_Decompressor.cxx    JPEG_Decompressor.h
-   SGIMovieFile.cxx         SGIMovieFile.h
-   SGIMovieFilePrivates.cxx SGIMovieFilePrivates.h
+   SGIMovieFile.cxx         SGIMovieFile.h      SGIMovieFilePrivates.h
    SGIMovieFileWrite.cxx    SGIMovieFileWrite.h
   )
 
