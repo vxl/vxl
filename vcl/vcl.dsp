@@ -232,6 +232,10 @@ SOURCE=".\Templates\vcl_algorithm+unsigned-.cxx"
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vcl_algorithm+ushort-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=.\emulation\vcl_alloc.cxx
 # End Source File
 # Begin Source File
