@@ -34,6 +34,7 @@ macro(z, vcl_complex<double>);
 //--------------------------------------------------------------------------------
 
 static bool test_heavily = false;
+#include <vnl/vnl_matlab_print.h>
 
 template <class T>
 vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
@@ -104,7 +105,12 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
       // You may be able to diagnose the problem here by printing a warning message.
       vcl_cerr << __FILE__ ": suspicious return value (" << info << ") from SVDC\n"
                << __FILE__ ": M is " << M.rows() << 'x' << M.cols() << vcl_endl;
+      
+      vnl_matlab_print(vcl_cerr, M, "M", vnl_matlab_print_format_long);
+      valid_ = false;
     }
+    else
+      valid_ = true;
 
     // Copy fortran outputs into our storage
     {
@@ -259,6 +265,18 @@ vnl_matrix<T> vnl_svd<T>::pinverse()  const
   vnl_matrix<T> Winverse(Winverse_.rows(),Winverse_.columns());
   Winverse.fill(T(0));
   for (unsigned i=0;i<rank_;i++)
+    Winverse(i,i)=Winverse_(i,i);
+
+  return V_ * Winverse * U_.conjugate_transpose();
+}
+
+//: Calculate pseudo-inverse.
+template <class T>
+vnl_matrix<T> vnl_svd<T>::pinverse(int rank)  const
+{
+  vnl_matrix<T> Winverse(Winverse_.rows(),Winverse_.columns());
+  Winverse.fill(T(0));
+  for (unsigned i=0;i<rank;i++)
     Winverse(i,i)=Winverse_(i,i);
 
   return V_ * Winverse * U_.conjugate_transpose();

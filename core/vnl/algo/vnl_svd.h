@@ -133,6 +133,9 @@ public:
   //: pseudo-inverse (for non-square matrix).
   vnl_matrix<T> pinverse () const;
 
+  //: pseudo-inverse (for non-square matrix) of desired rank.
+  vnl_matrix<T> pinverse (int rank) const;
+
   //: Calculate inverse of transpose.
   vnl_matrix<T> tinverse () const;
 
@@ -171,6 +174,8 @@ public:
   //  Does not check to see whether or not the matrix actually was rank-deficient.
   vnl_vector<T> left_nullvector() const;
 
+  bool valid() const { return valid_; }
+
 private:
 
   int m_, n_;              // Size of M, local cache.
@@ -184,6 +189,7 @@ private:
   bool have_min_;
   singval_t min_;
   double last_tol_;
+  bool valid_;        // false if the NETLIB call failed.
 
   // Disallow assignment.
   vnl_svd(vnl_svd<T> const &) { }
