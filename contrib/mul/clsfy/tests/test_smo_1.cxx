@@ -1,3 +1,4 @@
+// This is mul/clsfy/tests/test_smo_1.cxx
 // Copyright: (C) 2001 British Telecommunications PLC
 
 //:
@@ -5,7 +6,6 @@
 // \brief Tests the Sequential minimum optimisation code.
 // \author Ian Scott
 
-#include <vcl_climits.h>
 #include <vcl_iostream.h>
 #include <vcl_ios.h>
 #include <vcl_iomanip.h>
@@ -196,4 +196,4 @@ void test_smo()
   vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
 }
 
-TESTLIB_DEFINE_MAIN(test_smo)
+TESTLIB_DEFINE_MAIN(test_smo);
