@@ -192,10 +192,14 @@ void vgui_displaybase::draw_soviews_select() {
   for (vcl_vector<vgui_soview*>::iterator so_iter=objects.begin();
        so_iter != objects.end(); ++so_iter) {
     
-    vgui_soview *so = *so_iter;
-    glPushName(so->get_id());
-    so->draw();
-    glPopName();
+    // only highlight if the so is selectable
+    if( so->get_selectable())
+      {
+	vgui_soview *so = *so_iter;
+	glPushName(so->get_id());
+	so->draw();
+	glPopName();
+      }
   }//  for all soviews
 
   // remove the name of the displaylist from the name stack
@@ -279,12 +283,16 @@ bool vgui_displaybase::select(unsigned id) {
 
     // notify so's observers
     vgui_soview* so = vgui_soview::id_to_object(id);
-    vgui_message msg;
-    //msg.text = "soview select";
-    msg.user = (void*) &vgui_soview::msg_select;
-    so->notify(msg);
 
-    if (cb_) cb_->select(id);
+    if( so->get_selectable())
+      {
+	vgui_message msg;
+	//msg.text = "soview select";
+	msg.user = (void*) &vgui_soview::msg_select;
+	so->notify(msg);
+
+	if (cb_) cb_->select(id);
+      }
   }
 
   return true;
