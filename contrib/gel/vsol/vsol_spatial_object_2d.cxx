@@ -5,6 +5,7 @@
 
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_loader.h>
+#include <vsol/vsol_box_2d.h>
 
 const float vsol_spatial_object_2d::eps=1.0e-3f;
 int vsol_spatial_object_2d::tagcount_=0;
@@ -19,6 +20,18 @@ const char * vsol_spatial_object_2d::SpatialTypes[] =
   "SPATIALGROUP        ",
   "NUM_SPATIALOBJECT_TYPES"
 };
+
+vsol_spatial_object_2d::vsol_spatial_object_2d()
+ : vul_timestamp(), vbl_ref_count(), bounding_box_(0), tag_(0), id_(0)
+{
+  set_tag_id(++tagcount_);
+}
+
+vsol_spatial_object_2d::vsol_spatial_object_2d(vsol_spatial_object_2d const& s)
+  : vul_timestamp(), vbl_ref_count(), bounding_box_(0), tag_(0), id_(s.get_id())
+{
+  set_tag_id(++tagcount_);
+}
 
 const char * vsol_spatial_object_2d::get_name() const
 {
@@ -38,37 +51,8 @@ void vsol_spatial_object_2d::protected_destroy()
   }
 }
 
-//: constructor initialize basic vsol_spatial_object_2d attributes.
-//   bounding_box is set to NULL.
-vsol_spatial_object_2d::vsol_spatial_object_2d(void)
-{
-  bounding_box_=0;
-  id_ = 0;
-  tag_ = 0;
-  ++vsol_spatial_object_2d::tagcount_;
-  set_tag_id(tagcount_);
-  touch();
-}
-
-
-vsol_spatial_object_2d::vsol_spatial_object_2d(const vsol_spatial_object_2d &other)
-  : vul_timestamp(), vbl_ref_count()
-{
-  bounding_box_=0;
-  id_=other.get_id();
-  tag_=0;
-  ++vsol_spatial_object_2d::tagcount_;
-  set_tag_id(tagcount_);
-}
-
 vsol_spatial_object_2d::~vsol_spatial_object_2d()
 {
-}
-
-void vsol_spatial_object_2d::not_applicable(const vcl_string &message) const
-{
-  vcl_cerr<<message<<"() function call not applicable\tfor spatial object "
-          <<get_name()<<" !\n";
 }
 
 void iu_delete(vsol_spatial_object_2d* so)
@@ -77,14 +61,19 @@ void iu_delete(vsol_spatial_object_2d* so)
     so->protected_destroy();
 }
 
-//---------------------------------------------------------------------------
-//: Compute bounding box, do nothing in this case except touching the box
-//---------------------------------------------------------------------------
-void vsol_spatial_object_2d::compute_bounding_box(void) const
+void vsol_spatial_object_2d::compute_bounding_box() const
 {
-  if (!bounding_box_)
-    bounding_box_ = new vsol_box_2d;
-  bounding_box_->touch();
+  if (!bounding_box_) bounding_box_=new vsol_box_2d; bounding_box_->touch();
+}
+
+void vsol_spatial_object_2d::set_bounding_box(double x, double y) const
+{
+  bounding_box_=new vsol_box_2d; bounding_box_->add_point(x,y);
+}
+
+void vsol_spatial_object_2d::add_to_bounding_box(double x, double y) const
+{
+  if (!bounding_box_) bounding_box_=new vsol_box_2d; bounding_box_->add_point(x,y);
 }
 
 void vsol_spatial_object_2d::grow_minmax_bounds(vsol_box_2d & comp_box) const
@@ -94,6 +83,47 @@ void vsol_spatial_object_2d::grow_minmax_bounds(vsol_box_2d & comp_box) const
   bounding_box_->grow_minmax_bounds(comp_box);
 }
 
+//: Bounds Accessors:
+// min_ and max_ are provided as methods on vsol_spatial_object_2d
+// to be consistent with the previous interface
+// Additional bounds accessors are available directly
+// on vsol_box_2d.  - JLM
+
+void vsol_spatial_object_2d::check_update_bounding_box() const
+{
+  if (!bounding_box_)
+  {
+    bounding_box_ = new vsol_box_2d;
+    this->compute_bounding_box();
+    bounding_box_->touch();
+    return;
+  }
+  if (bounding_box_->older(this))
+  { // NOTE: first touch then compute, to avoid infinite loop!! - PVr
+    bounding_box_->touch();
+    this->compute_bounding_box();
+  }
+}
+
+double vsol_spatial_object_2d::get_min_x() const
+{
+  check_update_bounding_box(); return bounding_box_->get_min_x();
+}
+
+double vsol_spatial_object_2d::get_max_x() const
+{
+  check_update_bounding_box(); return bounding_box_->get_max_x();
+}
+
+double vsol_spatial_object_2d::get_min_y() const
+{
+  check_update_bounding_box(); return bounding_box_->get_min_y();
+}
+
+double vsol_spatial_object_2d::get_max_y() const
+{
+  check_update_bounding_box(); return bounding_box_->get_max_y();
+}
 
 //: Return IO version number;
 short
@@ -101,7 +131,6 @@ vsol_spatial_object_2d::version() const
 {
   return 1;
 }
-
 
 //: Binary save self to stream.
 void
@@ -147,8 +176,7 @@ vsol_spatial_object_2d::b_read(vsl_b_istream &is)
 //  an instance of each derived class that might be
 //  found.  This function gives the model class to
 //  the appropriate loader.
-void vsl_add_to_binary_loader(const vsol_spatial_object_2d& b)
+void vsl_add_to_binary_loader(vsol_spatial_object_2d const& b)
 {
   vsl_binary_loader<vsol_spatial_object_2d>::instance().add(b);
 }
-
