@@ -25,8 +25,8 @@
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Aug 96
 //
 // \verbatim
-// Modifications
-//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+//  Modifications
+//   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
