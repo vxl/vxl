@@ -5,7 +5,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
 
-#include <vbl/vbl_file.h>
+#include <vul/vul_file.h>
 
 // Microsoft files
 #include <windows.h>
@@ -247,7 +247,7 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
 
   set_format('L');
   set_image_class('C');
-  set_name(vbl_file::basename(fname).c_str());
+  set_name(vul_file::basename(fname).c_str());
   set_description(fname);
 
   // Open the first frame to get the number of bits per pixel
