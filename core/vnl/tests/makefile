@@ -64,6 +64,6 @@ include ${IUEROOT}/config/static-tests.mk
 ifeq "$(TJ_GCC30)" "1"
 # gcc 3.0 needs too much virtual memory with optimisation
 FLAGS_test_rational.cxx := -O1
-FLAGS_test_bignum.cxx := -O1
+FLAGS_test_bignum.cxx := -O2
 FLAGS_test_finite.cxx := -O0
 endif
