@@ -18,7 +18,7 @@ static void create_image(const char* name)
 
 void test_image_conversions()
 {
-  char const* filename = vul_temp_filename();
+  char const* filename = vul_temp_filename().c_str();
   create_image(filename);
   vil_image im1 = vil_load(filename);
   TEST("image file", (bool)im1, true);
