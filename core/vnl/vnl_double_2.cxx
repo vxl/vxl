@@ -43,3 +43,11 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_double_2.h"
+#include <vcl/vcl_iostream.h>
+
+#ifdef VCL_GCC_27
+ostream& operator<< (ostream& s, vnl_double_2 const& a)
+{
+  return s << a[0] << ',' << a[1];
+}
+#endif

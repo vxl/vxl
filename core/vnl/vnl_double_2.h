@@ -73,7 +73,8 @@ inline bool operator==(const vnl_double_2& a, const vnl_double_2& b)
 {
   return *(vnl_vector<double> const*)&a == *(vnl_vector<double> const*)&b;
 }
-#endif
 
+ostream& operator<< (ostream& s, vnl_double_2 const& a);
+#endif
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_double_2.
