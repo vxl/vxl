@@ -5,6 +5,8 @@
 #
 
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
+# test_interpolate uses pow():
+LINK_LIBRARIES( m )
 
 ADD_EXECUTABLE( test_all             test_all.cxx )
 ADD_EXECUTABLE( test_assign          test_assign.cxx )
