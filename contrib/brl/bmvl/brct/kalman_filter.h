@@ -29,9 +29,9 @@ class kalman_filter
 {
  public:
 
-   //: get backprojection for debugging
-	 vgl_point_2d<double> get_cur_epipole() const;
-   vcl_vector<vnl_matrix<double> > kalman_filter::get_back_projection() const;
+  //: get backprojection for debugging
+  vgl_point_2d<double> get_cur_epipole() const;
+  vcl_vector<vnl_matrix<double> > kalman_filter::get_back_projection() const;
 
   //: predict next curve.
   vnl_matrix<double> get_predicted_curve();
