@@ -51,7 +51,7 @@ vxl_myclass my_object;
 
 // Fill my_object
 
-vsl_b_ostream bfs("my_object.bvl");
+vsl_b_ofstream bfs("my_object.bvl");
 if (!bfs)
 @{
     vcl_cerr<<"Failed to open my_object.bvl for output."<<vcl_endl;
@@ -68,7 +68,7 @@ To load/restore the object from a file:
 @example
 vxl_myclass my_new_object;
 
-vsl_b_istream bfs("my_object.bvl");
+vsl_b_ifstream bfs("my_object.bvl");
 if (!bfs)
 @{
     vcl_cerr<<"Failed to open my_object.bvl for input."<<vcl_endl;
