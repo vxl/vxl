@@ -245,7 +245,7 @@ void vul_arg_info_list::display_help( char const*progname)
 
   // Then others
   vul_printf(vcl_cerr, "Optional:\n");
-  vul_printf(vcl_cerr, fmtbuf, "Switch", "Type", "Help [value]") << vcl_endl << vcl_endl;
+  vul_printf(vcl_cerr, fmtbuf, "Switch", "Type", "Help [default value]") << vcl_endl << vcl_endl;
   for (int i=0; i< nargs; i++)
     if (args[i]->help_)
       if (args[i]->option() != 0) {
