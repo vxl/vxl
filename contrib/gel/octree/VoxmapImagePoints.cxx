@@ -16,7 +16,7 @@
 
 #include "VoxmapImagePoints.h"
 typedef PMatrix * PMatrix_ptr;
-typedef vbl_sparse_array_3d<vnl_double_2 *> * Array_ptr;
+typedef vbl_sparse_array_3d<vnl_double_2> * Array_ptr;
 
 // Default ctor
 VoxmapImagePoints::VoxmapImagePoints( int d, vnl_double_3 c, double s, int ims)
@@ -30,11 +30,11 @@ VoxmapImagePoints::VoxmapImagePoints( int d, vnl_double_3 c, double s, int ims)
 void VoxmapImagePoints::SetPMatrix( PMatrix &P, int im)
 {
   pmatrices[im]   = new PMatrix(P);
-  imagecorners[im]= new vbl_sparse_array_3d<vnl_double_2 *>;
-  imagecentres[im]= new vbl_sparse_array_3d<vnl_double_2 *>;
+  imagecorners[im]= new vbl_sparse_array_3d<vnl_double_2>;
+  imagecentres[im]= new vbl_sparse_array_3d<vnl_double_2>;
 }
 
-vnl_double_2 *VoxmapImagePoints::GetCentreImage( int x, int y, int z, int d, int im) const
+vnl_double_2 VoxmapImagePoints::GetCentreImage( int x, int y, int z, int d, int im) const
 {
   if( d!= depth)
     return GetCornerImage( x*2,y*2,z*2,1,1,1,d+1,im);
@@ -42,16 +42,16 @@ vnl_double_2 *VoxmapImagePoints::GetCentreImage( int x, int y, int z, int d, int
   if( imagecentres[im]->fullp(x,y,z))
     return (*imagecentres[im])(x,y,z);
 
-  vnl_double_3     *p= GetCentre( x,y,z,d);
-  HomgPoint2D ip( pmatrices[im]->project( HomgPoint3D( (*p)[0], (*p)[1], (*p)[2])));
-  vnl_double_2    *np= new vnl_double_2( ip.x()/ip.w(), ip.y()/ip.w());
+  vnl_double_3 p= GetCentre( x,y,z,d);
+  HomgPoint2D ip( pmatrices[im]->project( HomgPoint3D( p[0], p[1], p[2])));
+  vnl_double_2 np( ip.x()/ip.w(), ip.y()/ip.w());
 
   imagecentres[im]->put(x,y,z,np);
 
   return np;
 }
 
-vnl_double_2 *VoxmapImagePoints::GetCornerImage( int x, int y, int z, int dx, int dy, int dz, int d, int im) const
+vnl_double_2 VoxmapImagePoints::GetCornerImage( int x, int y, int z, int dx, int dy, int dz, int d, int im) const
 {
   //  cout << x << " " << y << " " << z << endl;
 
@@ -67,9 +67,9 @@ vnl_double_2 *VoxmapImagePoints::GetCornerImage( int x, int y, int z, int dx, in
   if( imagecorners[im]->fullp(ix,iy,iz))
     return (*imagecorners[im])(ix,iy,iz);
   
-  vnl_double_3     *p= GetCorner( x,y,z,dx,dy,dz,d);
-  HomgPoint2D ip( pmatrices[im]->project( HomgPoint3D( (*p)[0], (*p)[1], (*p)[2])));
-  vnl_double_2    *np= new vnl_double_2( ip.x()/ip.w(), ip.y()/ip.w());
+  vnl_double_3 p= GetCorner( x,y,z,dx,dy,dz,d);
+  HomgPoint2D ip( pmatrices[im]->project( HomgPoint3D( p[0], p[1], p[2])));
+  vnl_double_2 np( ip.x()/ip.w(), ip.y()/ip.w());
 
   imagecorners[im]->put(ix,iy,iz,np);
 
