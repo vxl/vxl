@@ -24,16 +24,17 @@ static void test_bins_2D()
   bin_sizes[0] = 6; bin_sizes[1] = 4;
 
   bin_type bins( min_pt, max_pt, bin_sizes );
-  double dist_tol = 0.0001;
+  const double dist_tol = 0.0001;
   bins.set_distance_tolerance( dist_tol );
   vnl_vector_fixed< double, 2 >  pt( 12.5, 3 );
-  int value = 0;
-  bins.add_point( pt, value ); // should be 1, 0
-
-  int stored_value;
+  int added_value = 0, stored_value;
+  testlib_test_begin( "adding point inside range" );
+  bins.add_point( pt, added_value );
+  testlib_test_perform( bins.get_value( pt, stored_value )
+                        && stored_value == added_value );
 
   pt[0] = 100; pt[1] = -30;
-  int added_value = 24;
+  added_value = 24;
   testlib_test_begin( "adding point outside range 1" );
   bins.add_point( pt, added_value );
   testlib_test_perform( bins.get_value( pt, stored_value )
@@ -169,22 +170,23 @@ static void test_bins_3D()
 
   {
     bin_type bins( min_pt, max_pt, bin_sizes );
-    double dist_tol = 0.0001;
+    const double dist_tol = 0.0001;
     bins.set_distance_tolerance( dist_tol );
     vnl_double_3  pt( 12.5, 3.0, -5.0 );
-    int value = 0;
-    bins.add_point( pt, value ); // should be 1, 0
-
-    int stored_value;
+    int added_value = 0, stored_value;
+    testlib_test_begin( "adding point inside range" );
+    bins.add_point( pt, added_value );
+    testlib_test_perform( bins.get_value( pt, stored_value )
+                          && stored_value == added_value );
 
     pt[0] = 100; pt[1] = -30; pt[2] = -50;
-    int added_value = 24;
+    added_value = 24;
     testlib_test_begin( "adding point outside range 1" );
     bins.add_point( pt, added_value );
     testlib_test_perform( bins.get_value( pt, stored_value )
                           && stored_value == added_value );
 
-    pt[0] = -50; pt[1] = 77.7; pt[3] = 0;
+    pt[0] = -50; pt[1] = 77.7; pt[2] = 0;
     added_value = 13;
     testlib_test_begin( "adding point outside range 2" );
     bins.add_point( pt, added_value );
