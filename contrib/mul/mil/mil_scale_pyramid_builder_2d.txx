@@ -14,7 +14,6 @@
 #include <mil/mil_bilin_interp_2d.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_image_pyramid.h>
-#include <mbl/mbl_gamma.h>
 #include <vsl/vsl_indent.h>
 #include <vcl_cmath.h>
 

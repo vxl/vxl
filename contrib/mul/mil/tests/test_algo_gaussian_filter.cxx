@@ -1,7 +1,6 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
-#include <vcl_vector.h>
 
 #include <vnl/vnl_test.h>
 #include <mil/algo/mil_algo_gaussian_filter.h>
@@ -68,9 +67,7 @@ void test_algo_gaussian_filter_byte_float()
   TEST("impulse response is contained", fail1, false);
   TEST("response is centre maximum", fail2, false);
   TEST("impulse response sums to input", vcl_fabs(sum-255.0f) < 0.001, true);
-
 }
-
 
 
 void test_algo_gaussian_filter()
