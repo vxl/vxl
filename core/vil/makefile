@@ -19,6 +19,7 @@ SOURCES += vil2_memory_image.cxx
 
 # file format readers/writers
 SOURCES += file_formats/vil2_pnm.cxx
+SOURCES += file_formats/vil2_ras.cxx
 ifeq ($(HAS_PNG),1)
 USE_PNG := 1
 SOURCES += file_formats/vil2_png.cxx
@@ -65,6 +66,10 @@ MANPAGE_SOURCES += vil2_bilin_interp.h
 MANPAGE_SOURCES += vil2_sample_profile_bilin.txx
 MANPAGE_SOURCES += vil2_sample_grid_bilin.txx
 MANPAGE_SOURCES += vil2_resample_bilin.txx
+MANPAGE_SOURCES += vil2_bicub_interp.h
+MANPAGE_SOURCES += vil2_sample_profile_bicub.txx
+MANPAGE_SOURCES += vil2_sample_grid_bicub.txx
+MANPAGE_SOURCES += vil2_resample_bicub.txx
 
 # Stuff
 MANPAGE_SOURCES += vil2_smart_ptr.txx
