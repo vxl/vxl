@@ -208,7 +208,6 @@ void osl_canny_smooth(T const * const * image_in, int xsize_, int ysize_,
 //--------------------------------------------------------------------------------
 
 #define OSL_CANNY_SMOOTH_INSTANTIATE(T) \
-VCL_INSTANTIATE_INLINE(float as_float(T const &)); \
 template void osl_canny_smooth_rothwell(T const * const *image_in, int xsize_, int ysize_, \
                                         float const *kernel_, int width_, int k_size_, \
                                         float * unpro_const *smooth_); \
@@ -219,5 +218,7 @@ template void osl_canny_smooth_rothwell_adaptive(T const * const *in, int xsize_
 template void osl_canny_smooth(T const * const *image_in, int xsize_, int ysize_, \
                                float const *kernel_, int width_, float const *sub_area_, \
                                float * unpro_const * image_out)
+
+//VCL_INSTANTIATE_INLINE(float as_float(T const &)); \
 
 #endif // osl_canny_smooth_txx_
