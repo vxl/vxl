@@ -359,7 +359,6 @@ void bsol_intrinsic_curve_2d::computeCurvatures()
       K=(d2y*cdx-d2x*cdy)/vcl_pow((vcl_pow(cdx,2)+vcl_pow(cdy,2)),3/2);
 #ifdef DEBUG
     vcl_cout << d2x << ' ' << d2y << ' ' << dL << ' ' << cdx << ' ' << cdy << ' ' << K << vcl_endl;
-    vcl_printf("%6.3f %6.3f %6.3f %6.3f %6.3f %6.3f\n",d2x,d2y,dL,cdx,cdy,K);
 #endif
     curvature_.push_back(K);
     totalCurvature_+=K;
