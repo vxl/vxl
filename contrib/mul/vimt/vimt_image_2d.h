@@ -26,6 +26,20 @@ class vimt_image_2d : public vimt_image {
   //: Destructor
   virtual ~vimt_image_2d() {};
 
+    //: Return dimensionality of image
+  virtual unsigned n_dims() const { return 2; }
+
+    //: Return vector indicating size of image in pixels
+    //  2D image is v[0] x v[1]
+    //  Somewhat inefficient: Only use when you absolutely have to.
+    //  Usually one only needs to know the size once one knows the exact type.
+  virtual vcl_vector<unsigned> image_size() const;
+
+    //: Return vectors defining bounding box containing image in world co-ords
+  virtual void world_bounds(vcl_vector<double>& b_lo,
+                            vcl_vector<double>& b_hi) const;
+
+
   //: Current world-to-image transformation
   const vimt_transform_2d& world2im() const { return world2im_; }
 

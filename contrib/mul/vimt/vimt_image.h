@@ -11,6 +11,7 @@
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
+#include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
 
 //: A base class for images of any dimension and type
@@ -25,6 +26,19 @@ public:
 
     //: Destructor
   virtual ~vimt_image() {}
+
+    //: Return dimensionality of image
+  virtual unsigned n_dims() const = 0;
+
+    //: Return vector indicating size of image in pixels
+    //  2D image is v[0] x v[1],  3D image is v[0] x v[1] x v[2]
+    //  Somewhat inefficient: Only use when you absolutely have to.
+    //  Usually one only needs to know the size once one knows the exact type.
+  virtual vcl_vector<unsigned> image_size() const = 0;
+
+    //: Return vectors defining bounding box containing image in world co-ords
+  virtual void world_bounds(vcl_vector<double>& b_lo,
+                            vcl_vector<double>& b_hi) const = 0;
 
     //: Version number for I/O
   short version_no() const;
