@@ -140,7 +140,7 @@ SOURCE=.\Templates/vgl_p_matrix+double-.cxx
 SOURCE=.\Templates/vgl_convex_hull_2d+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+vgl_h_matrix_2d-.cxx
+SOURCE=.\Templates/vcl_vector+vgl_h_matrix_2d+double--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vgl_norm_trans_3d+double-.cxx
