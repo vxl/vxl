@@ -28,9 +28,9 @@ void test_arbitrary_length_int_conversion_int()
 
   vcl_cout << " Starting encode\n";
 
-  t1 = clock();
+  t1 = vcl_clock();
   unsigned long len = vsl_convert_to_arbitrary_length(a, buf, 25000000);
-  t2 = clock();
+  t2 = vcl_clock();
 
   vcl_cout << " Required " << (double)(t2-t1) / CLOCKS_PER_SEC
            << " seconds to encode 25M ints.\n"
@@ -41,9 +41,9 @@ void test_arbitrary_length_int_conversion_int()
   TEST("Checking that the buffer didn't overflow", len < maxbuf, true);
 
   vcl_cout << " Starting decode\n";
-  t1 = clock();
+  t1 = vcl_clock();
   unsigned long len2 = vsl_convert_from_arbitrary_length(buf, b, 25000000);
-  t2 = clock();
+  t2 = vcl_clock();
   vcl_cout << " Required " << (double)(t2-t1) / CLOCKS_PER_SEC
            << " seconds to decode and test 25M ints.\n";
 
