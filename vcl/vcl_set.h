@@ -3,22 +3,30 @@
 
 #include <vcl/vcl_compiler.h>
 
-#define VCL_SET_INSTANTIATE extern "you must include vcl/vcl_set.txx first"
+// vcl_less<> is a default argument to vcl_set<> and vcl_multiset<>
+// so we need this for compilers where vcl_less is a macro.
+#include <vcl/vcl_functional.h>
 
+// -------------------- emulation
 #if !VCL_USE_NATIVE_STL
 # include <vcl/emulation/vcl_set.h>
 # include <vcl/emulation/vcl_multiset.h>
 
-#elif defined(VCL_GCC_WITH_LIBSTDCXX_V2)
-# include <set>
+// -------------------- gcc with old library
+#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
+# include <set.h>
 # include <multiset.h>
-# define vcl_set set
+# define vcl_set      set
 # define vcl_multiset multiset
 
+// -------------------- iso
 #else
 # include <set>
-# define vcl_set std::set
+# define vcl_set      std::set
 # define vcl_multiset std::multiset
 #endif
+
+#define VCL_SET_INSTANTIATE extern "you must include vcl/vcl_set.txx first"
+#define VCL_MULTISET_INSTANTIATE extern "you must include vcl/vcl_set.txx first"
 
 #endif
