@@ -1,0 +1,11 @@
+#
+# ./mul/vgl/io/CMakeListsLink.txt
+#
+#   Ian Scott
+#
+
+LINK_LIBRARIES( vgl_io )
+LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/mul/vgl/io )
+
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vgl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/mul/vsl/CMakeListsLink.txt )

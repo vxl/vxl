@@ -18,9 +18,9 @@
 #include <vbl/io/vbl_io_bounding_box.h>
 
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_string.h>
-#include <vcl/vcl_fstream.h>
+#include <vcl_cassert.h>
+#include <vcl_string.h>
+#include <vcl_fstream.h>
 
 //:
 // \file

@@ -1,0 +1,11 @@
+#
+# ./mul/vbl/io/CMakeListsLink.txt
+#
+#   Ian Scott
+#
+
+LINK_LIBRARIES( vbl_io )
+LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/mul/vbl/io )
+
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/mul/vsl/CMakeListsLink.txt )
