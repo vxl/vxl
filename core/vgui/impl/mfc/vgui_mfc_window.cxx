@@ -100,10 +100,14 @@ vgui_adaptor* vgui_mfc_window::get_adaptor()
 
 void vgui_mfc_window::show()
 {
+  CWnd *wnd = AfxGetApp()->GetMainWnd();
+  wnd->ShowWindow(SW_SHOWNORMAL);
 }
 
 void vgui_mfc_window::hide()
 {
+  CWnd *wnd = AfxGetApp()->GetMainWnd();
+  wnd->ShowWindow(SW_HIDE);
 }
 
 void vgui_mfc_window::enable_hscrollbar(bool show)
@@ -120,6 +124,8 @@ void vgui_mfc_window::enable_vscrollbar(bool show)
 
 void vgui_mfc_window::iconify()
 {
+  CWnd *wnd = AfxGetApp()->GetMainWnd();
+  wnd->ShowWindow(SW_MINIMIZE);
 }
 
 void vgui_mfc_window::reshape(unsigned w, unsigned h)
