@@ -75,20 +75,23 @@ public:
   static VNL_DLL_DATA const float    maxfloat;
 };
 
+// Note that the three template functions below should not be declared "inline"
+// since that would override the non-inline specialisations. - PVr.
+//
 // isnan
-template <class T> inline bool vnl_math_isnan(T ) { return false; }
+template <class T> bool vnl_math_isnan(T ) { return false; }
 bool vnl_math_isnan(float);
 bool vnl_math_isnan(double);
 bool vnl_math_isnan(long double);
 
 // isinf
-template <class T> inline bool vnl_math_isinf(T ) { return false; }
+template <class T> bool vnl_math_isinf(T ) { return false; }
 bool vnl_math_isinf(float);
 bool vnl_math_isinf(double);
 bool vnl_math_isinf(long double);
 
 // isfinite
-template <class T> inline bool vnl_math_isfinite(T ) { return true; }
+template <class T> bool vnl_math_isfinite(T ) { return true; }
 bool vnl_math_isfinite(float);
 bool vnl_math_isfinite(double);
 bool vnl_math_isfinite(long double);
