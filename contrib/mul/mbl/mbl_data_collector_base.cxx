@@ -38,7 +38,7 @@ mbl_data_collector_base::~mbl_data_collector_base()
 
 void vsl_add_to_binary_loader(const mbl_data_collector_base& b)
 {
-	vsl_binary_loader<mbl_data_collector_base>::instance().add(b);
+  vsl_binary_loader<mbl_data_collector_base>::instance().add(b);
 }
 
 //=======================================================================
@@ -58,13 +58,13 @@ vcl_string mbl_data_collector_base::is_a() const
 
 void vsl_b_write(vsl_b_ostream& bfs, const mbl_data_collector_base* b)
 {
-    if (b)
-	{
-	    vsl_b_write(bfs,b->is_a());
-		b->b_write(bfs);
-    }
-    else
-		vsl_b_write(bfs,vcl_string("VSL_NULL_PTR"));
+  if (b)
+  {
+    vsl_b_write(bfs,b->is_a());
+    b->b_write(bfs);
+  }
+  else
+    vsl_b_write(bfs,vcl_string("VSL_NULL_PTR"));
 }
 
 //=======================================================================
@@ -74,7 +74,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_data_collector_base* b)
 
 void vsl_b_write(vsl_b_ostream& bfs, const mbl_data_collector_base& b)
 {
-    b.b_write(bfs);
+  b.b_write(bfs);
 }
 
 //=======================================================================
@@ -84,7 +84,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_data_collector_base& b)
 
 void vsl_b_read(vsl_b_istream& bfs, mbl_data_collector_base& b)
 {
-    b.b_read(bfs);
+  b.b_read(bfs);
 }
 
 //=======================================================================
@@ -94,11 +94,11 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_data_collector_base& b)
 
 vcl_ostream& operator<<(vcl_ostream& os,const mbl_data_collector_base& b)
 {
-	os << b.is_a() << ": ";
-	vsl_inc_indent(os);
-	b.print_summary(os);
-	vsl_dec_indent(os);
-	return os;
+  os << b.is_a() << ": ";
+  vsl_inc_indent(os);
+  b.print_summary(os);
+  vsl_dec_indent(os);
+  return os;
 }
 
 //=======================================================================
@@ -107,8 +107,8 @@ vcl_ostream& operator<<(vcl_ostream& os,const mbl_data_collector_base& b)
 
 vcl_ostream& operator<<(vcl_ostream& os,const mbl_data_collector_base* b)
 {
-    if (b)
-		return os << *b;
-    else
-		return os << "No mbl_data_collector_base defined.";
+  if (b)
+    return os << *b;
+  else
+    return os << "No mbl_data_collector_base defined.";
 }
