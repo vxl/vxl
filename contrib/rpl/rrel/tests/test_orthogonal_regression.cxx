@@ -1,10 +1,8 @@
 #include <vcl_iostream.h>
 
-// #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>
-#include <vnl/algo/vnl_svd.h>
 
 #include <testlib/testlib_test.h>
 
@@ -22,7 +20,7 @@ MAIN( test_orthogonal_regression )
   true_params[1] =  a1;
   true_params[2] =  -1;
   true_params[3] =  a2;
-  vnl_vector<double> par(4); 
+  vnl_vector<double> par(4);
   vnl_vector<double> norm_vect(3);
   norm_vect[0] = true_params[0];
   norm_vect[1] = true_params[1];
@@ -69,7 +67,7 @@ MAIN( test_orthogonal_regression )
   p.x()= 5.0;   p.y()=-4.0; p.z() = a0 * p.x() + a1* p.y() + a2;
   p += error[5] * norm_vect;
   pts[5] = p;
- 
+
   p.x()= 3.0;   p.y()=-2.0; p.z() = a0 * p.x() + a1* p.y() + a2;
   p += error[6] * norm_vect;
   pts[6] = p;
@@ -81,16 +79,16 @@ MAIN( test_orthogonal_regression )
   rrel_estimation_problem * lr1 = new rrel_orthogonal_regression( pts );
   testlib_test_perform( lr1 != 0 );
 
-  
+
   testlib_test_begin( "num_points_to_instantiate (1)" );
   testlib_test_perform( lr1->num_samples_to_instantiate() == 3 );
   testlib_test_begin( "num_points_to_instantiate (3)" );
-  testlib_test_perform( lr1->num_samples() == num_pts );
+  testlib_test_perform( (int)lr1->num_samples() == num_pts );
   testlib_test_begin( "dtor (1)" );
   delete lr1;
   testlib_test_perform( true );
- 
- 
+
+
   //
   //  Test the residuals function.
   //
@@ -119,13 +117,15 @@ MAIN( test_orthogonal_regression )
     err = diff1.two_norm();
   else
     err = diff2.two_norm();
-  
+
   testlib_test_begin( "fit_from_minimal_set" );
-  testlib_test_perform( ok && err <1e-2 ); 
-//    vcl_cout << " estimated params: " << params << vcl_endl
-//             << " true params: " << true_params << vcl_endl
-//             << " error : " << err << vcl_endl;
- 
+  testlib_test_perform( ok && err <1e-2 );
+#if 0
+  vcl_cout << " estimated params: " << params << vcl_endl
+           << " true params: " << true_params << vcl_endl
+           << " error : " << err << vcl_endl;
+#endif
+
   //
   //  Test the weighted least squares function.
   //
@@ -133,7 +133,7 @@ MAIN( test_orthogonal_regression )
   vnl_matrix<double> cofact;
 
   // Make weights so that the estimation is singular.
-  wgts[0] = 0;   wgts[1] = 1;   wgts[2] = 0;    wgts[3] = 0;  
+  wgts[0] = 0;   wgts[1] = 1;   wgts[2] = 0;    wgts[3] = 0;
   wgts[4] = 0;   wgts[5] = 0;   wgts[6] = 0;
   testlib_test_begin( "weighted_least_squares_fit (singular)" );
   testlib_test_perform( !lr1->weighted_least_squares_fit( par, cofact, &wgts ) );
@@ -147,13 +147,15 @@ MAIN( test_orthogonal_regression )
     err = diff1.two_norm();
   else
     err = diff2.two_norm();
-  
+
   testlib_test_begin( "weighted_least_squares_fit (ok) ");
-  testlib_test_perform( ok && err <1e-2 ); 
-//    vcl_cout << " estimated params: " << par << vcl_endl
-//             << " true params: " << true_params << vcl_endl
-//             << " error : " << err << vcl_endl;
- 
+  testlib_test_perform( ok && err <1e-2 );
+#if 0
+  vcl_cout << " estimated params: " << par << vcl_endl
+           << " true params: " << true_params << vcl_endl
+           << " error : " << err << vcl_endl;
+#endif
+
   delete lr1;
 
   SUMMARY();
