@@ -11,7 +11,7 @@ SET(mil3d_sources
 AUX_SOURCE_DIRECTORY(Templates mil3d_sources)
 
 ADD_LIBRARY(mil3d ${mil3d_sources})
-TARGET_LINK_LIBRARIES(mil3d mil)
+TARGET_LINK_LIBRARIES(mil3d mil vbl_io vnl_io vil vgl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

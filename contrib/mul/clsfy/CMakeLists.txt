@@ -29,7 +29,7 @@ SET(clsfy_sources
 AUX_SOURCE_DIRECTORY(Templates clsfy_sources)
 
 ADD_LIBRARY(clsfy ${clsfy_sources})
-TARGET_LINK_LIBRARIES(clsfy vpdfl)
+TARGET_LINK_LIBRARIES(clsfy vpdfl mbl vnl_algo vnl_io vbl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

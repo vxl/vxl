@@ -31,7 +31,7 @@ SET(vpdfl_sources
 AUX_SOURCE_DIRECTORY(Templates vpdfl_sources)
 
 ADD_LIBRARY(vpdfl ${vpdfl_sources})
-TARGET_LINK_LIBRARIES(vpdfl vnl_algo vnl_io mbl)
+TARGET_LINK_LIBRARIES(vpdfl mbl vnl_algo vnl_io)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)
