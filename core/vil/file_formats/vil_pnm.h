@@ -32,8 +32,7 @@ class vil2_pnm_file_format : public vil2_file_format
                                             unsigned nx,
                                             unsigned ny,
                                             unsigned nplanes,
-                                            unsigned bits_per_component,
-                                            vil_component_format format);
+                                            vil2_pixel_format format);
 };
 
 
@@ -50,6 +49,9 @@ class vil2_pnm_image : public vil2_image_data
   unsigned ncomponents_;
   unsigned bits_per_component_;
 
+  //: Describe the format of each pixel.
+  enum vil2_pixel_format format_;
+
   bool read_header();
   bool write_header();
 
@@ -61,8 +63,7 @@ class vil2_pnm_image : public vil2_image_data
                  unsigned nx,
                  unsigned ny,
                  unsigned nplanes,
-                 unsigned bits_per_component,
-                 vil_component_format format);
+                 vil2_pixel_format format);
   ~vil2_pnm_image();
 
   //: Dimensions:  planes x width x height x components
@@ -70,8 +71,7 @@ class vil2_pnm_image : public vil2_image_data
   virtual unsigned nx() const { return nx_; }
   virtual unsigned ny() const { return ny_; }
 
-  virtual unsigned bits_per_component() const { return bits_per_component_; }
-  virtual enum vil_component_format component_format() const { return VIL_COMPONENT_FORMAT_UNSIGNED_INT; }
+  virtual enum vil2_pixel_format pixel_format() const {return format_; }
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.

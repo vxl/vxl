@@ -26,8 +26,7 @@ class vil2_crop_image_data : public vil2_image_data
   virtual unsigned nx() const { return nx_; }
   virtual unsigned ny() const { return ny_; }
 
-  virtual unsigned bits_per_component() const { return gi_->bits_per_component(); }
-  virtual enum vil_component_format component_format() const { return gi_->component_format(); }
+  virtual enum vil2_pixel_format pixel_format() const { return gi_->pixel_format(); }
 
 
   virtual vil2_image_view_base* get_copy_view(unsigned x0, unsigned y0,

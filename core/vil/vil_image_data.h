@@ -41,19 +41,10 @@ class vil2_image_data
   //: Dimensions:  Planes x W x H
   virtual unsigned ny() const = 0;
 
-
-  //: Number of bits per component.
-  // Size (in bits) for the smallest entity of the image.
-  virtual unsigned bits_per_component() const = 0;
-
   //: Format.
-  //  A standard RGB RGB RGB image has
-  // - components() == 3
-  // - bits_per_component() == 8
-  // - component_format() == VIL_COMPONENT_FORMAT_UNSIGNED_INT
-  // Use vil_print(fmt) to return a string description of the format fmt.
-  virtual enum vil_component_format component_format() const = 0;
-
+  //  A standard RGB RGB RGB of chars image has
+  // pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE
+  virtual enum vil2_pixel_format pixel_format() const = 0;
 
   //: Create a read/write view of the data.
   // Modifying this view might modify the actual data.

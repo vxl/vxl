@@ -39,8 +39,7 @@ class vil2_file_format
                                                unsigned nx,
                                                unsigned ny,
                                                unsigned nplanes,
-                                               unsigned bits_per_component,
-                                               enum vil_component_format) = 0;
+                                               enum vil2_pixel_format) = 0;
 
  public:
   static vil2_file_format** all();

@@ -52,10 +52,9 @@ vil2_image_data_sptr vil2_pnm_file_format::make_output_image(vil_stream* vs,
                                                        unsigned nx,
                                                        unsigned ny,
                                                        unsigned nplanes,
-                                                       unsigned bits_per_component,
-                                                       vil_component_format format)
+                                                       vil2_pixel_format format)
 {
-  return new vil2_pnm_image(vs, nx, ny, nplanes, bits_per_component, format);
+  return new vil2_pnm_image(vs, nx, ny, nplanes, format);
 }
 
 char const* vil2_pnm_file_format::tag() const
@@ -88,11 +87,8 @@ char const* vil2_pnm_image::file_format() const
   return vil2_pnm_format_tag;
 }
 
-vil2_pnm_image::vil2_pnm_image(vil_stream* vs, unsigned nplanes,
-                                             unsigned nx,
-                                             unsigned ny,
-                                             unsigned bits_per_component,
-                                             vil_component_format format):
+vil2_pnm_image::vil2_pnm_image(vil_stream* vs, unsigned nx, unsigned ny,
+                               unsigned nplanes, vil2_pixel_format format):
   vs_(vs)
 {
   vs_->ref();
@@ -100,7 +96,10 @@ vil2_pnm_image::vil2_pnm_image(vil_stream* vs, unsigned nplanes,
   ny_ = ny;
 
   ncomponents_ = nplanes;
-  bits_per_component_ = bits_per_component;
+  if (format==VIL2_PIXEL_FORMAT_BOOL)
+    bits_per_component_ = 1;
+  else
+    bits_per_component_ = 8*vil2_pixel_format_sizeof_components(format);
 
   if (ncomponents_ == 3) {
     magic_ = 6;
@@ -181,6 +180,8 @@ static void ConvertHostToMSB( void* buf, int num_words )
 }
 
 
+
+
 //: This method accepts any valid PNM file (first 3 bytes "P1\n" to "P6\n")
 bool vil2_pnm_image::read_header()
 {
@@ -242,6 +243,30 @@ bool vil2_pnm_image::read_header()
     else assert(!"vil2_pnm_image: maxval is too big");
   }
 
+  switch (magic_)
+  {
+  case 1:  // pbm format
+  case 4:
+    format_ = VIL2_PIXEL_FORMAT_BOOL;
+    break;
+  case 2:  // pgm format
+  case 5:
+    if (bits_per_component_ <= 8)
+      format_ = VIL2_PIXEL_FORMAT_BYTE;
+    else if (bits_per_component_ <= 16)
+      format_ = VIL2_PIXEL_FORMAT_UNSIGNED_SHORT;
+    else 
+      format_ = VIL2_PIXEL_FORMAT_UNSIGNED_INT;
+  case 3:  // ppm format
+  case 6:
+    if (bits_per_component_ <= 8)
+      format_ = VIL2_PIXEL_FORMAT_RGB_BYTE;
+    else if (bits_per_component_ <= 16)
+      format_ = VIL2_PIXEL_FORMAT_RGB_UNSIGNED_SHORT;
+    else 
+      format_ = VIL2_PIXEL_FORMAT_RGB_UNSIGNED_INT;
+  }
+
   return true;
 }
 
@@ -262,7 +287,7 @@ bool vil2_pnm_image::write_header()
   return true;
 }
 
-bool operator>>(vil_stream& vs, int& a)
+static bool operator>>(vil_stream& vs, int& a)
 {
   char c; vs.read(&c,1L);
   SkipSpaces(&vs,c);
@@ -388,7 +413,7 @@ vil2_image_view_base* vil2_pnm_image::get_copy_view(
 }
 
 
-void operator<<(vil_stream& vs, int a) {
+static void operator<<(vil_stream& vs, int a) {
   char buf[128]; vcl_sprintf(buf, " %d\n", a); vs.write(buf,vcl_strlen(buf));
 }
 
@@ -398,24 +423,32 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
   if (!view_fits(view, x0, y0, plane0)) return false;
 
 
-  if (view.is_a() == "vil2_image_view<int>" && bits_per_component_ < 32 ||
-      view.is_a() == "vil2_image_view<short>" && bits_per_component_ < 16 ||
-      view.is_a() == "vil2_image_view<uchar>" && bits_per_component_ < 8)
+  if (view.pixel_format() == VIL2_PIXEL_FORMAT_UNSIGNED_INT &&
+        bits_per_component_ <= 32 ||
+      view.pixel_format() == VIL2_PIXEL_FORMAT_UNSIGNED_SHORT &&
+        bits_per_component_ <= 16 ||
+      view.pixel_format() == VIL2_PIXEL_FORMAT_BYTE &&
+        bits_per_component_ <= 8 ||
+      view.pixel_format() == VIL2_PIXEL_FORMAT_BOOL &&
+        bits_per_component_ == 0)
   {
       vcl_cerr << "ERROR: " << __FILE__ << ":\n Can't fit view into pnm component size\n" << vcl_endl;
       return false;
   }
 
-  unsigned char const*  ob = 0;
-  unsigned short const* pb = 0;
-  unsigned int const*   qb = 0;
+  const vil2_image_view<bool>*  bb=0;
+  const vil2_image_view<unsigned char>*  ob = 0;
+  const vil2_image_view<unsigned short>* pb = 0;
+  const vil2_image_view<unsigned int>*   qb = 0;
 
-  if (view.is_a() == "vil2_image_view<uchar>")
-    ob = static_cast<const vil2_image_view<unsigned char>& >(view).top_left_ptr();
-  else if (view.is_a() == "vil2_image_view<short>")
-    pb = static_cast<const vil2_image_view<unsigned short>& >(view).top_left_ptr();
-  else if (view.is_a() == "vil2_image_view<int>")
-    qb = static_cast<const vil2_image_view<unsigned int>& >(view).top_left_ptr();
+  if (view.pixel_format() == VIL2_PIXEL_FORMAT_BYTE)
+    ob = &static_cast<const vil2_image_view<unsigned char>& >(view);
+  else if (view.pixel_format() == VIL2_PIXEL_FORMAT_UNSIGNED_SHORT)
+    pb = &static_cast<const vil2_image_view<unsigned short>& >(view);
+  else if (view.pixel_format() == VIL2_PIXEL_FORMAT_UNSIGNED_INT)
+    qb = &static_cast<const vil2_image_view<unsigned int>& >(view);
+  else if (view.pixel_format() == VIL2_PIXEL_FORMAT_BOOL)
+    bb = &static_cast<const vil2_image_view<bool>& >(view);
   else
   {
       vcl_cerr << "ERROR: " << __FILE__ << ":\n Do not support putting "
@@ -467,7 +500,7 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
       vs_->seek(byte_start);
       int s = x0&7; // = x0%8;
       int t = 0;
-      unsigned char a = 0, b = ob[y * byte_out_width];
+      unsigned char a = 0, b = (*ob)(0,y);
       if (s) {
         vs_->read(&a, 1L);
         vs_->seek(byte_start);
@@ -475,7 +508,7 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
       }
       for (int x = 0; x < view.nx(); ++x) {
         if (b&(1<<(7-t))) a |= 1<<(7-s); // single bit; high bit = first
-        if (t >= 7) { b = ob[y * byte_out_width + (x+1)/8]; t = 0; }
+        if (t >= 7) { b = (*ob)(x,y); t = 0; }
         else ++t;
         if (s >= 7) { vs_->write(&a, 1L); ++byte_start; s = 0; a = 0; }
         else ++s;
