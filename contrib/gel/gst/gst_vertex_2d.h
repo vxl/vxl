@@ -7,6 +7,7 @@
   crossge@crd.ge.com
 */
 
+#include <vcl/vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>
 
 class gst_vertex_2d : public vbl_ref_count
@@ -29,6 +30,9 @@ public:
   // operators
   friend bool operator==( const gst_vertex_2d& a, const gst_vertex_2d& b);
 
+  // output
+  friend ostream &operator <<( ostream &os, const gst_vertex_2d &v);
+
 protected:
 
   // members
@@ -36,5 +40,6 @@ protected:
 };
 
 bool operator==( const gst_vertex_2d& a, const gst_vertex_2d& b);
+ostream &operator <<( ostream &os, const gst_vertex_2d &v);
 
 #endif

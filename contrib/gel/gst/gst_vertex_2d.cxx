@@ -62,3 +62,9 @@ void gst_vertex_2d::set( const double x, const double y)
 bool operator==( const gst_vertex_2d& a, const gst_vertex_2d& b)
 { return ((a.x_== b.x_)&&(a.y_== b.y_)); }
 
+
+// output
+ostream &operator <<( ostream &os, const gst_vertex_2d &v)
+{
+  return os << v.x_ << " " << v.y_;
+}
