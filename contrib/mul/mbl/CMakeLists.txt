@@ -21,6 +21,8 @@ mbl_read_props.cxx
 mbl_lda.cxx
 mbl_screen_counter.cxx
 mbl_rbf_network.cxx
+mbl_read_int.cxx
+mbl_read_double.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
