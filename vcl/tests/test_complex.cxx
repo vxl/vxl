@@ -1,6 +1,10 @@
 // now #include the definition of vcl_complex<>
 // and define the doublify() function.
+
+
 #include <vcl_complex.h>
+
+
 vcl_complex<double> doublify(vcl_complex<float> const &z)
 {
   return vcl_complex<double>(vcl_real(z), vcl_imag(z));
@@ -37,5 +41,35 @@ int test_complex_main(int /*argc*/,char* /*argv*/[])
   vcl_complex<float>::value_type tmp = 1.0f;
   tmp += 2.0f; // to avoid unused variable warnings.
 
-  return 0;
+
+  // Test the vcl_pow functions
+
+  bool success = true;
+
+  const vcl_complex<double> neg1(-1.0, 0.0);
+  vcl_complex<double> sqrt_neg1 = vcl_pow(neg1, 0.5);
+  vcl_cout << "pow("<<neg1<<",0.5) = "<<sqrt_neg1<<" and should be (0,1)"<<vcl_endl;
+  if ( vcl_abs(sqrt_neg1-1.0) > 1e-6
+    || vcl_arg(sqrt_neg1) > 1.0e-4 || -vcl_arg(sqrt_neg1) > 1.0e-4) {} // Deal with NaN case
+  else
+  {
+    vcl_cout << "** FAILURE **" << vcl_endl;
+    success = false;
+  }
+
+  const vcl_complex<double> half(0.5,0.0);
+  sqrt_neg1 = vcl_pow(neg1, half);
+  vcl_cout << "pow("<<neg1<<",0.5) = "<<sqrt_neg1<<" and should be (0,1)"<<vcl_endl;
+  if ( vcl_abs(sqrt_neg1-1.0) > 1.0e-6
+    || vcl_arg(sqrt_neg1) > 1.0e-4 || -vcl_arg(sqrt_neg1) > 1.0e-4) {vcl_cout << "** SUCCESS **" << vcl_endl;}
+  else
+  {
+    vcl_cout << "** FAILURE **" << vcl_endl;
+    success = false;
+  }
+
+  vcl_complex<double> zero(0.0,0.0);
+  vcl_cout << "Implementation defines vcl_pow((0,0),(0,0)) = " << vcl_pow(zero, zero);
+
+  return success?0:1;
 }
