@@ -12,37 +12,37 @@ void test_parse_block()
            <<   "*************************\n";
 
   {
-    vcl_stringstream ss("{}");
+    vcl_istringstream ss("{}");
     TEST("Trivial case 1", mbl_parse_block(ss) == "{}" && !ss.fail(), true);
   }
 
   {
-    vcl_stringstream ss("}");
+    vcl_istringstream ss("}");
     TEST("Trivial case 2", mbl_parse_block(ss,true) == "{}" && !ss.fail(), true);
   }
 
   {
-    vcl_stringstream ss(" {}");
+    vcl_istringstream ss(" {}");
     TEST("Trivial case 3", mbl_parse_block(ss) == "{}" && !ss.fail(), true);
   }
 
   {
-    vcl_stringstream ss("{ abc }");
+    vcl_istringstream ss("{ abc }");
     TEST("Simple case 1", mbl_parse_block(ss) == "{ abc }" && !ss.fail(), true);
   }
 
   {
-    vcl_stringstream ss("{ a\n bc }");
+    vcl_istringstream ss("{ a\n bc }");
     TEST("Simple case 2", mbl_parse_block(ss) == "{ a\n bc }" && !ss.fail(), true);
   }
 
   {
-    vcl_stringstream ss("{ a\n {b}c }");
+    vcl_istringstream ss("{ a\n {b}c }");
     TEST("Multi-level case 1", mbl_parse_block(ss) == "{ a\n {b}c }" && !ss.fail(), true);
   }
 
   {
-    vcl_stringstream ss("{ a\n {b\n  // wibble } \n}c }");
+    vcl_istringstream ss("{ a\n {b\n  // wibble } \n}c }");
     TEST("Comment case 1", mbl_parse_block(ss) == "{ a\n {b\n}c }" && !ss.fail(), true);
   }
 
