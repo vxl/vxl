@@ -253,6 +253,16 @@ SOURCE=.\Templates/vsl_vector_io+mbl_chord-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vsl_vector_io+mbl_stats_1d-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_vector_io+mbl_sum_1d-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\mbl_data_collector_base.cxx
 
 # End Source File
