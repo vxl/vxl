@@ -223,7 +223,18 @@ nding
         b = 1.f;
         c = slamc3_(&a, &b);
 
-        while (c == a) {
+/* The next two lines of code were replaced by Ian Scott from the original line
+  > while (c==a) {
+  During a optimised build under MSVC, the compiler was using the value of 
+  C still in a register in while loop test. This is an 80-bit value rather than 
+  the 64 bit value it uses after saving and loading from memory.
+  So the 80 bit precision value was having 1 added, making it a different number
+  and so not executing the loop.
+  The call to slamc3_ in the loop condition forces the value to 64-bit precision
+  as during the previous calculation.
+*/
+        r__1 = -a;
+        while (slamc3_(&c, &r__1) == 0) {
             b *= 2;
             c = slamc3_(&a, &b);
         }
