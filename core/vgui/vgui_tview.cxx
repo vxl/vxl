@@ -249,7 +249,7 @@ vgui_tableau_sptr vgui_tview::find_closest_icon(vcl_vector<vgui_tview::icon> con
   for (vcl_vector<icon>::const_iterator i_iter = icons.begin();
        i_iter != icons.end(); ++i_iter) {
     icon i = *i_iter;
-    float dist = vcl_hypot(i.x - ix, i.y - iy);
+    float dist = hypot(i.x - ix, i.y - iy);
     if (!closest || dist < closest_dist) {
       closest_dist = dist;
       closest = i.tableau;

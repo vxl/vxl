@@ -95,9 +95,5 @@
 #ifndef vcl_tanh
 #define vcl_tanh vcl_generic_cmath_STD :: tanh
 #endif
-// hypot
-#ifndef vcl_hypot
-#define vcl_hypot vcl_generic_cmath_STD :: hypot
-#endif
 
 #endif // vcl_generic_cmath_h_
