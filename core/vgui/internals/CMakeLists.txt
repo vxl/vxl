@@ -9,7 +9,6 @@ ADD_LIBRARY(vgui_internals vgui_internals_sources)
 
 
 SOURCE_FILES(vgui_internals_sources
-vgui_accelerate_tag
 vgui_rasterpos
 trackball
 vgui_dialog_field
