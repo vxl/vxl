@@ -12,11 +12,10 @@ SET(bcal_sources
  bcal_zhang_camera_node.h        bcal_zhang_camera_node.cxx
  bcal_zhang_linear_calibrate.h   bcal_zhang_linear_calibrate.cxx
 )
-
 AUX_SOURCE_DIRECTORY(Templates bcal_sources)
 
 ADD_LIBRARY(bcal ${bcal_sources})
-TARGET_LINK_LIBRARIES(bcal vsol vnl vgl vgl_algo vbl vcsl)
+TARGET_LINK_LIBRARIES(bcal vsol vnl vgl vgl_algo vcsl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
