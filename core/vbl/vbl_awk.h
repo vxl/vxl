@@ -16,9 +16,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_string.h> // C++ specific includes first
-#include <vcl/vcl_iosfwd.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_string.h>
+#include <vcl_iosfwd.h>
+#include <vcl_vector.h>
 
 //: The core of awk
 // vbl_awk reads lines from an istream and breaks them into whitespace-separated

@@ -124,6 +124,9 @@ sub process_headers {
     # copy line from array to $_:
     $_ = $lines[$ii];
     
+    #---------------------------------------- old <vcl/vcl_blah> -> new <vcl_blah>
+    s/include\s+<vcl\/(.*)>/include <$1>/;
+    
     #---------------------------------------- Config-IUE -> vcl
     if ($vcl) {
       #-------------------- begin

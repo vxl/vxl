@@ -5,10 +5,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_string.h> // C++ specific includes first
-#include <vcl/vcl_list.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cstdio.h>
+#include <vcl_string.h>
+#include <vcl_list.h>
+#include <vcl_iostream.h>
+#include <vcl_cstdio.h>
 #include <vbl/vbl_basic_relation.h>
 
 

@@ -11,9 +11,9 @@
 
 #include "vbl_printf.h"
  
-#include <vcl/vcl_cstdarg.h>
-#include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cstdarg.h>
+#include <vcl_cstdio.h>
+#include <vcl_iostream.h>
  
 ostream& vbl_printf(ostream& s, const char * fmt, ...)
 {

@@ -15,7 +15,7 @@
 // .SECTION Author
 //  fsm@robots.ox.ac.uk
 
-#include <vcl/vcl_new.h>
+#include <vcl_new.h>
 
 template <class T>
 struct vbl_array

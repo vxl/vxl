@@ -10,7 +10,7 @@
 //  fsm@robots.ox.ac.uk
 //
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #define vbl_whereami (vcl_cerr << __FILE__ ", line " << __LINE__ << " : ")
 

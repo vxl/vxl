@@ -9,7 +9,7 @@
 // .INCLUDE vbl/vbl_bool_ostream.h
 // .FILE vbl_bool_ostream.cxx
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 class vbl_bool_ostream {
 public:

@@ -7,9 +7,9 @@
 //-----------------------------------------------------------------------------
 
 #include <vbl/vbl_arg.h>
-#include <vcl/vcl_cstring.h> // needed for strcmp()
-#include <vcl/vcl_list.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_cstring.h> // needed for strcmp()
+#include <vcl_list.h>
+#include <vcl_algorithm.h>
 
 void Assert(char const* msg, bool expr)
 {

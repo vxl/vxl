@@ -7,8 +7,8 @@
 //-----------------------------------------------------------------------------
 
 #include "vbl_sparse_array_3d.h"
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
 
 // Default ctor
 template <class T>

@@ -4,16 +4,16 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-#include <vcl/vcl_utility.h>
+#include <vcl_utility.h>
 #include "vbl_canonical_path.h"
 
 #ifdef VCL_WIN32
 vcl_string vbl_canonical_path(char const *path_) { return vcl_string(path_); }
 #else
 
-#include <vcl/vcl_functional.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_map.h>
+#include <vcl_functional.h>
+#include <vcl_vector.h>
+#include <vcl_map.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>

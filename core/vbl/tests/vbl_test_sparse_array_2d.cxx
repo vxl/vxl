@@ -1,4 +1,4 @@
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vbl/vbl_sparse_array_2d.h>
 
 extern "C"

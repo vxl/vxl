@@ -18,7 +18,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 //: Simplest possible 2D array
 //

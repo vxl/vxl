@@ -7,7 +7,7 @@
 // .INCLUDE vbl/vbl_string.h
 // .FILE vbl_string.cxx
 
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 
 // C string functions:
 extern char* vbl_string_c_upcase(char*);

@@ -6,8 +6,8 @@
 // .INCLUDE vbl/tests/vbl_test_classes.h
 // .FILE vbl_test_classes.cxx
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_list.h>
+#include <vcl_iostream.h>
+#include <vcl_list.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 

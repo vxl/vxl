@@ -5,7 +5,7 @@
 */
 #include "vbl_binary.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 // The function templates in this source file won't work specializations
 // of vcl_vector<>, e.g. vector<bool>. Declare specializations of the

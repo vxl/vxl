@@ -1,8 +1,8 @@
 #include "vbl_string.h"
 
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_cstring.h>
-#include <vcl/vcl_cctype.h>
+#include <vcl_cstdlib.h>
+#include <vcl_cstring.h>
+#include <vcl_cctype.h>
 
 #include <vbl/vbl_reg_exp.h>
 

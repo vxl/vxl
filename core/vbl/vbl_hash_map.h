@@ -10,10 +10,10 @@
 // .INCLUDE vbl/vbl_hash_map.h
 // .FILE vbl_hash_map.txx
 
-#include <vcl/vcl_iosfwd.h>
-#include <vcl/vcl_functional.h> // vcl_equal_to()
-#include <vcl/vcl_hash_map.h>
-#include <vcl/vcl_pair.h>
+#include <vcl_iosfwd.h>
+#include <vcl_functional.h> // vcl_equal_to()
+#include <vcl_hash_map.h>
+#include <vcl_pair.h>
 
 //: Simpler hashtable
 //

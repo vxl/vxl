@@ -18,8 +18,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cstdlib.h>
+#include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 
 #ifdef IUE_STL_USE_ABBREVS
 #define vbl_basic_optional vbl_bRo

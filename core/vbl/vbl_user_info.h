@@ -17,7 +17,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 
 //
 class vbl_user_info {

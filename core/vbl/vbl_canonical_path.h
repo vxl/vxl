@@ -23,7 +23,7 @@
 // query on the same path will be much faster and will not
 // involve any system calls.
 
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 
 vcl_string vbl_canonical_path/*cached*/(vcl_string path);
 vcl_string vbl_canonical_path_uncached (vcl_string path);

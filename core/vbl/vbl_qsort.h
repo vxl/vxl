@@ -17,12 +17,12 @@
 
 #include <vxl_config.h> // VXL_STDLIB_HAS_QSORT
 
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_cstdlib.h>
+#include <vcl_algorithm.h>
 #if !VXL_STDLIB_HAS_QSORT
-#include <vcl/vcl_functional.h>
+#include <vcl_functional.h>
 #endif
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 int vbl_qsort_double_ascending(double const&, double const&);
 int vbl_qsort_double_descending(double const&, double const&);

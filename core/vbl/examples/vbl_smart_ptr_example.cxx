@@ -1,6 +1,6 @@
 // fsm: sunpro needs template instantiations to go into Templates
 #include "vbl_smart_ptr_example.h"
-#include <vcl/vcl_list.h>
+#include <vcl_list.h>
 
 void main1()
 {

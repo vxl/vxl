@@ -40,7 +40,7 @@
 
 struct vbl_timer_data;
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 class vbl_timer {
 public:

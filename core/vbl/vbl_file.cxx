@@ -12,7 +12,7 @@
 #include "vbl_file.h"
 
 #include <sys/stat.h>
-#include <vcl/vcl_cstdlib.h>
+#include <vcl_cstdlib.h>
 
 #ifdef WIN32
 #include <direct.h> // for getcwd, mkdir

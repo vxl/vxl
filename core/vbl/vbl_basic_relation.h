@@ -17,10 +17,10 @@
 //     None Yet
 //
 //-----------------------------------------------------------------------------
-#include <vcl/vcl_string.h> // C++ specific includes first
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iosfwd.h>
-#include <vcl/vcl_functional.h>
+#include <vcl_string.h>
+#include <vcl_cassert.h>
+#include <vcl_iosfwd.h>
+#include <vcl_functional.h>
 #include <vbl/vbl_basic_optional.h>
 #include <vbl/vbl_basic_tuple.h>
 #include <vbl/vbl_br_impl.h>

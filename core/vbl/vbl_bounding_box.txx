@@ -8,7 +8,7 @@
 
 #include "vbl_bounding_box.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 template <class T, int DIM>
 ostream& vbl_bounding_box<T, DIM>::print(ostream& s) const

@@ -1,7 +1,7 @@
 
 #include "vbl_file_iterator.h"
-#include <vcl/vcl_string.h>
-#include <vcl/vcl_cassert.h>
+#include <vcl_string.h>
+#include <vcl_cassert.h>
 
 #include <vbl/vbl_file.h>
 

@@ -17,8 +17,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_cstdlib.h>
+#include <vcl_vector.h>
 
 //: Collection of common predicates for "C" library and COOL sort routines
 class vbl_sort {

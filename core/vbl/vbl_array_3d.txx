@@ -1,6 +1,6 @@
 #include "vbl_array_3d.h"
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 //--------------------------------------------------------------
 //
@@ -130,7 +130,7 @@ void vbl_array_3d<T>::fill(T const& value)
 
 //--------------------------------------------------------------------------------
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 template <class T>
 ostream & operator<<(ostream &os,const vbl_array_3d<T> & A)

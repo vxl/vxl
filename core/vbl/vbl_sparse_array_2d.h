@@ -23,7 +23,7 @@
 
 #include <vbl/vbl_sparse_array.h>
 #include <vbl/vbl_sparse_array_2d_base.h>
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 template <class T>
 class vbl_sparse_array_2d : private vbl_sparse_array<T>, public vbl_sparse_array_2d_base {

@@ -29,8 +29,8 @@
 
 #include "vbl_timer.h"
 
-#include <vcl/vcl_sys/time.h>
-#include <vcl/vcl_ctime.h>
+#include <vcl_sys/time.h>
+#include <vcl_ctime.h>
 
 struct vbl_timer_data
 {
@@ -45,10 +45,10 @@ struct vbl_timer_data
 
 #include <vxl_config.h> // VXL_TWO_ARG_GETTIME
 
-#include <vcl/vcl_climits.h>   // for CLK_TCK
-#include <vcl/vcl_ctime.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_sys/time.h>
+#include <vcl_climits.h>   // for CLK_TCK
+#include <vcl_ctime.h>
+#include <vcl_iostream.h>
+#include <vcl_sys/time.h>
 
 
 //#define CLK_TCK _sysconf(3) in <limits.h> has error

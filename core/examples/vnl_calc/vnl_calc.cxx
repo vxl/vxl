@@ -14,10 +14,10 @@
 // 
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_string.h> // C++ specific includes first
-#include <vcl/vcl_fstream.h>
-#include <vcl/vcl_iomanip.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_string.h>
+#include <vcl_fstream.h>
+#include <vcl_iomanip.h>
+#include <vcl_vector.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>

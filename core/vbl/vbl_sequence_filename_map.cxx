@@ -13,7 +13,7 @@
 
 #include <dirent.h>
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <vbl/vbl_sprintf.h>
 #include <vbl/vbl_file.h>

@@ -46,7 +46,7 @@
 // 2000.05.16 Peter Vanroose  Operators > < >= <= made const
 // 2000.09.13 fsm@robots      Added rationale for unprotect().
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 template <class T>
 class vbl_smart_ptr {

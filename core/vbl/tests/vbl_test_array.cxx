@@ -1,13 +1,13 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #define use_vbl 1
 #if use_vbl
 # include <vbl/vbl_array.h>
 # define container vbl_array
 #else
-# include <vcl/vcl_vector.h>
+# include <vcl_vector.h>
 # define container vcl_vector
 #endif
 

@@ -25,8 +25,8 @@
 #pragma warning(disable:4786)
 #endif // _MSC_VER
 
-#include <vcl/vcl_string.h> // C++ specific includes first
-#include <vcl/vcl_list.h>
+#include <vcl_string.h>
+#include <vcl_list.h>
 
 #include <vbl/vbl_br_impl.h>
 #include <vbl/vbl_basic_relation.h>

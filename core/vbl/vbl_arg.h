@@ -17,8 +17,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_string.h> // C++ specific includes first
-#include <vcl/vcl_iostream.h>
+#include <vcl_string.h>
+#include <vcl_iostream.h>
 
 //: forward declare all classes and their helper functions.
 class vbl_arg_info_list;
@@ -199,9 +199,9 @@ declare_specialization(unsigned);
 declare_specialization(char*);
 declare_specialization(char const*);
 declare_specialization(double);
-#include <vcl/vcl_list.h>
+#include <vcl_list.h>
 declare_specialization(vcl_list<int>);
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 declare_specialization(vcl_string);
 
 #undef declare_specialization

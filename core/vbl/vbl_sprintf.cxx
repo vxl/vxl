@@ -11,11 +11,11 @@
 
 #include "vbl_sprintf.h"
 
-#include <vcl/vcl_cstdarg.h>
-#include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_iomanip.h>
+#include <vcl_cstdarg.h>
+#include <vcl_cstdio.h>
+#include <vcl_iomanip.h>
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 const unsigned vbl_sprintf_BUFSIZE=16384;
 

@@ -11,8 +11,8 @@
 // .SECTION Author
 //  fsm@robots.ox.ac.uk
 
-#include <vcl/vcl_iosfwd.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_iosfwd.h>
+#include <vcl_vector.h>
 
 template </*typename*/class T> void vbl_binary_save(ostream &, vcl_vector<T> const &);
 template </*typename*/class T> void vbl_binary_load(istream &, vcl_vector<T> &);

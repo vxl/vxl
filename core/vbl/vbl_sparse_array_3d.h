@@ -21,10 +21,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_functional.h>
-#include <vcl/vcl_map.h>
-#include <vcl/vcl_utility.h>
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_functional.h>
+#include <vcl_map.h>
+#include <vcl_utility.h>
+#include <vcl_iosfwd.h>
 
 template <class T>
 class vbl_sparse_array_3d {

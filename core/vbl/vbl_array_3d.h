@@ -24,7 +24,7 @@
 #ifdef __OPTIMIZE__
 #define RANGECHECK(i,j,k) ((void)0)
 #else
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 #define RANGECHECK(i,j,k) assert(((i1 < row1_count_) && (i2 < row2_count_) && (i3 < row3_count_)) || !"vbl_array_3d Rangecheck")
 #endif
 
@@ -80,7 +80,7 @@ private:
 //
 // formatted I/O
 //
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 template <class T> ostream & operator<<(ostream &,const vbl_array_3d<T> &);
 template <class T> istream & operator>>(istream &,vbl_array_3d<T> &);
 

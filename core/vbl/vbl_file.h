@@ -16,7 +16,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 
 //: A collection of miscellaneous filesystem-type utilities
 //

@@ -15,7 +15,7 @@
 // .SECTION Modifications
 //     970807 AWF Initial version.
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 //: A class to hold and update a bounding box.
 //  Save valuable time not writing

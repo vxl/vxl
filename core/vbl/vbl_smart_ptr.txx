@@ -1,5 +1,5 @@
 #include "vbl_smart_ptr.h"
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 // Template definitions for ref() and unref().
 // The client can specialize them between including this file and

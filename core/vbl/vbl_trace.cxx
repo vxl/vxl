@@ -6,7 +6,7 @@
 #endif
 #include "vbl_trace.h"
 
-#include <vcl/vcl_cstdio.h>
+#include <vcl_cstdio.h>
 
 void vbl_trace_function(char const *file, int line) {
   fprintf(stderr, "[vbl_trace %s:%d]", file, line);

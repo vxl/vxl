@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 
-#include <vcl/vcl_compiler.h>
+#include <vcl_compiler.h>
 #if defined(VCL_SGI_CC)
 // urgh! there is no rdbuf() method for *setting* the
 // stream buffer.

@@ -1,9 +1,10 @@
 #
 # fsm@robots.ox.ac.uk
 #
-fmk_libdeps += lib_vcl:pkg_vxl
 
-fmk_libdeps += lib_vcl:lib_fmkC
+# FIXME
+fmk_libdeps += pkg_vxl:pkg_vcl
+
 fmk_libdeps += lib_vpl:lib_vcl
 fmk_libdeps += lib_vbl:lib_vcl
 fmk_libdeps += lib_vtl:lib_vcl
@@ -39,3 +40,5 @@ fmk_libdeps += lib_vgui-glX:lib_vgui,lib_vgui-X
 fmk_libdeps += lib_vgui-glut:lib_vgui,lib_glut
 fmk_libdeps += lib_vgui-gtk:lib_vgui,lib_gtkgl
 fmk_libdeps += lib_vgui-qt:lib_vgui,lib_qt
+
+fmk_libdeps += lib_vpl,lib_vbl,lib_vtl,lib_vgl,lib_vil,lib_vnl:pkg_vxl

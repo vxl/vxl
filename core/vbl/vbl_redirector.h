@@ -17,7 +17,7 @@
 // .SECTION Modifications:
 //   21-JUL-00  M.Bacic, Oxford RRG -- fixed 'pubsync' on gcc. 
 //               See vbl_redirector.cxx 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 struct vbl_redirector_data;
 

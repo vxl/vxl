@@ -7,7 +7,7 @@
 // Author: awf@robots.ox.ac.uk
 // Created: 27 Nov 00
 
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 
 struct vbl_file_iterator_data;
 

@@ -7,9 +7,9 @@
 // .INCLUDE vbl/vbl_psfile.h
 // .FILE vbl_psfile.cxx
 
-#include <vcl/vcl_string.h> // C++ specific includes first
-#include <vcl/vcl_fstream.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_string.h>
+#include <vcl_fstream.h>
+#include <vcl_iostream.h>
 
 class vbl_psfile: public vcl_ofstream
 {

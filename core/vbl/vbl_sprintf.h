@@ -30,8 +30,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_string.h> // C++ specific includes first
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 class vbl_sprintf : public vcl_string {
 public:

@@ -13,8 +13,8 @@
 #include <unistd.h> // for struct timeval
 #endif
 
-//#include <vcl/vcl_ctime.h> // for struct timezone
-#include <vcl/vcl_sys/time.h> // for gettimeofday()
+//#include <vcl_ctime.h> // for struct timezone
+#include <vcl_sys/time.h> // for gettimeofday()
 
 #ifndef WIN32
 // POSIX

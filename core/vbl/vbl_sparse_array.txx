@@ -8,9 +8,9 @@
 
 #include "vbl_sparse_array.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_utility.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
+#include <vcl_utility.h>
 
 // -- Return contents of (i).  Assertion failure if not yet filled.
 template <class T>

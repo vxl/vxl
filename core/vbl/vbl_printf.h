@@ -22,8 +22,8 @@
 //
 //-----------------------------------------------------------------------------
 
-//#include <vcl/vcl_cstdio.h> // just to ensure no clashes with weirdo stdios
-#include <vcl/vcl_iosfwd.h>
+//#include <vcl_cstdio.h> // just to ensure no clashes with weirdo stdios
+#include <vcl_iosfwd.h>
 
 // -- vbl_printf(cout, "%d\n", 12);
 vcl_ostream& vbl_printf(vcl_ostream&, char const* fmt, ...);

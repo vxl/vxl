@@ -1,5 +1,5 @@
 #include <vbl/vbl_sprintf.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 void Assert(char const* msg, bool expr)
 {

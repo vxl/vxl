@@ -19,7 +19,7 @@
 #include <pwd.h>
 #endif
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 // -- Lookup info from login name
 vbl_user_info::vbl_user_info(char const* name_)

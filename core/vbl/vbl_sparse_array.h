@@ -17,10 +17,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_functional.h>
-#include <vcl/vcl_map.h>
-#include <vcl/vcl_utility.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_functional.h>
+#include <vcl_map.h>
+#include <vcl_utility.h>
+#include <vcl_iostream.h>
 
 //
 template <class T>

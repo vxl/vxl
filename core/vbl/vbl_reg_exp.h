@@ -19,7 +19,7 @@
 #ifndef vbl_reg_exph
 #define vbl_reg_exph
 
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 
 const int NSUBEXP = 10;
 

@@ -1,6 +1,6 @@
 #include <vbl/vbl_br_impl.h>
 #include <vbl/vbl_br_default.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 //----------------------------------------------------------------------
 // -- Return the current factory for this class.

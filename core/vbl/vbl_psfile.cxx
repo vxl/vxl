@@ -1,8 +1,8 @@
 #include "vbl_psfile.h"
-#include <vcl/vcl_iomanip.h>
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_fstream.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_iomanip.h>
+#include <vcl_cmath.h>
+#include <vcl_fstream.h>
+#include <vcl_iostream.h>
 
 #include <vbl/vbl_printf.h>
 

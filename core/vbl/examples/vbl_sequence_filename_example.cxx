@@ -1,4 +1,4 @@
-#include <vcl/vcl_fstream.h>
+#include <vcl_fstream.h>
 #include <vbl/vbl_sequence_filename_map.h>
 
 int main (int argc, char** argv)
