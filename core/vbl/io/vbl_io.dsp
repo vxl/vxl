@@ -168,6 +168,11 @@ SOURCE=.\Templates/vbl_io_sparse_array+int.uint-.cxx
 SOURCE=.\Templates/vbl_io_sparse_array+int.vcl_pair+uint.uint--.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+vbl_triple+int.int.int---.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
