@@ -35,18 +35,23 @@ public:
                              vgl_point_2d<Type> const& p2)
     : point1_(p1), point2_(p2) {}
 
+  //: Destructor
   inline ~vgl_line_segment_2d() {}
 
+  //: One end-point of the line segment.
   inline vgl_point_2d<Type> point1() const { return point1_; } // return a copy
+
+  //: The other end-point of the line segment.
   inline vgl_point_2d<Type> point2() const { return point2_; } // return a copy
 
-  //: the comparison operator
+  //: The equality comparison operator
   inline bool operator==(vgl_line_segment_2d<Type> const& l) const {
     return (this==&l) || (point1() == l.point1() && point2() == l.point2()); }
 
+  //: The inequality comparison operator.
   inline bool operator!=(vgl_line_segment_2d<Type>const& other)const{return !operator==(other);}
 
-  //: assignment
+  //: Assignment
   inline void set(vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2) {
     point1_ = p1; point2_ = p2; }
 
