@@ -15,14 +15,14 @@
 
 static bool f_calling_compute;
 
-void vnl_cost_function::compute(const vnl_vector<double>& x, double *f, vnl_vector<double>* g)
+void vnl_cost_function::compute(vnl_vector<double> const& x, double *f, vnl_vector<double>* g)
 {
   if (f) *f = this->f(x);
   if (g) this->gradf(x, *g);
 }
 
 //: Default implementation of f is compute...
-double vnl_cost_function::f(const vnl_vector<double>& x)
+double vnl_cost_function::f(vnl_vector<double> const& x)
 {
   // if we get back here from compute, neither vf was implemented.
   if (f_calling_compute)
@@ -35,7 +35,7 @@ double vnl_cost_function::f(const vnl_vector<double>& x)
 }
 
 //: Default implementation of gradf is to call compute
-void vnl_cost_function::gradf(const vnl_vector<double>&x, vnl_vector<double>&g)
+void vnl_cost_function::gradf(vnl_vector<double> const& x, vnl_vector<double>& g)
 {
   if (f_calling_compute)
     assert(!"vnl_cost_function: RECURSION");
@@ -45,8 +45,8 @@ void vnl_cost_function::gradf(const vnl_vector<double>&x, vnl_vector<double>&g)
 }
 
 //: Compute fd gradient
-void vnl_cost_function::fdgradf(const vnl_vector<double>& x,
-                                vnl_vector<double>& gradient,
+void vnl_cost_function::fdgradf(vnl_vector<double> const& x,
+                                vnl_vector<double> &  gradient,
                                 double stepsize )
 {
   vnl_vector<double> tx = x;
@@ -66,14 +66,14 @@ void vnl_cost_function::fdgradf(const vnl_vector<double>& x,
   }
 }
 
-vnl_vector<double> vnl_cost_function::gradf(const vnl_vector<double>& x)
+vnl_vector<double> vnl_cost_function::gradf(vnl_vector<double> const& x)
 {
   vnl_vector<double> g(dim);
   this->gradf(x, g);
   return g;
 }
 
-vnl_vector<double> vnl_cost_function::fdgradf(const vnl_vector<double>& x)
+vnl_vector<double> vnl_cost_function::fdgradf(vnl_vector<double> const& x)
 {
   vnl_vector<double> g(dim);
   this->fdgradf(x, g);
