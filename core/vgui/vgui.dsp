@@ -117,7 +117,7 @@ SOURCE=.\Templates/vcl_list+vgui_event-.cxx
 SOURCE=.\Templates/vcl_map+vgui_style~.vgui_soview~-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+vcl_pair+vil_image.vcl_vector+GLuint-~-~-.cxx
+SOURCE=.\Templates/vcl_vector+vcl_pair+vil1_image.vcl_vector+GLuint-~-~-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vcl_vector+vgui_dialog_impl+-element-.cxx
@@ -615,139 +615,139 @@ SOURCE=.\vgui_loader_tableau.cxx
 SOURCE=.\vgui_viewer3D_tableau.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+byte-.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+double-.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+float-.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+int_16-.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+int_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+int_32-.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+int_32-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+sbyte-.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+sbyte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+uint_16-.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+uint_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+uint_32-.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+uint_32-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+vil2_rgb+byte--.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+vil_rgb+byte--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+vil2_rgb+double--.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+vil_rgb+double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+vil2_rgb+float--.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+vil_rgb+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+vil2_rgb+int_16--.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+vil_rgb+int_16--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+vil2_rgb+int_32--.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+vil_rgb+int_32--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+vil2_rgb+sbyte--.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+vil_rgb+sbyte--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+vil2_rgb+uint_16--.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+vil_rgb+uint_16--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+vil2_rgb+uint_32--.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+vil_rgb+uint_32--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+vil2_rgba+byte--.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+vil_rgba+byte--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_renderer+vil2_rgba+float--.cxx
+SOURCE=.\Templates/vgui_vil_image_renderer+vil_rgba+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+byte-.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+double-.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+float-.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+int_16-.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+int_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+int_32-.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+int_32-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+sbyte-.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+sbyte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+uint_16-.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+uint_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+uint_32-.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+uint_32-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+vil2_rgb+byte--.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+byte--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+vil2_rgb+double--.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+vil2_rgb+float--.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+vil2_rgb+int_16--.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+int_16--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+vil2_rgb+int_32--.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+int_32--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+vil2_rgb+sbyte--.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+sbyte--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+vil2_rgb+uint_16--.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+uint_16--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+vil2_rgb+uint_32--.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+uint_32--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+vil2_rgba+byte--.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgba+byte--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_image_tableau+vil2_rgba+float--.cxx
+SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgba+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+byte-.cxx
+SOURCE=.\Templates/vgui_vil_section_buffer_apply+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+double-.cxx
+SOURCE=.\Templates/vgui_vil_section_buffer_apply+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+float-.cxx
+SOURCE=.\Templates/vgui_vil_section_buffer_apply+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+int_16-.cxx
+SOURCE=.\Templates/vgui_vil_section_buffer_apply+int_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+int_32-.cxx
+SOURCE=.\Templates/vgui_vil_section_buffer_apply+int_32-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+sbyte-.cxx
+SOURCE=.\Templates/vgui_vil_section_buffer_apply+sbyte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+uint_16-.cxx
+SOURCE=.\Templates/vgui_vil_section_buffer_apply+uint_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+uint_32-.cxx
+SOURCE=.\Templates/vgui_vil_section_buffer_apply+uint_32-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vgui_vil2_section_buffer.cxx
+SOURCE=.\vgui_vil_section_buffer.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\impl/gtk2/vgui_gtk2.cxx
@@ -1272,28 +1272,28 @@ SOURCE=.\internals/vgui_parent_child_link_data.h
 SOURCE=.\internals/vgui_gl_selection_macros.h
 # End Source File
 # Begin Source File
-SOURCE=.\vgui_vil2_image_renderer.h
+SOURCE=.\vgui_vil_image_renderer.h
 # End Source File
 # Begin Source File
-SOURCE=.\vgui_vil2_image_renderer.txx
+SOURCE=.\vgui_vil_image_renderer.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vgui_vil2_image_tableau.h
+SOURCE=.\vgui_vil_image_tableau.h
 # End Source File
 # Begin Source File
-SOURCE=.\vgui_vil2_image_tableau.txx
+SOURCE=.\vgui_vil_image_tableau.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vgui_vil2_image_tableau_sptr.h
+SOURCE=.\vgui_vil_image_tableau_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\vgui_vil2_section_buffer.h
+SOURCE=.\vgui_vil_section_buffer.h
 # End Source File
 # Begin Source File
-SOURCE=.\vgui_vil2_section_buffer_apply.h
+SOURCE=.\vgui_vil_section_buffer_apply.h
 # End Source File
 # Begin Source File
-SOURCE=.\vgui_vil2_section_buffer_apply.txx
+SOURCE=.\vgui_vil_section_buffer_apply.txx
 # End Source File
 # Begin Source File
 SOURCE=.\impl/gtk2/vgui_gtk2.h
