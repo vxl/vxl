@@ -97,11 +97,8 @@ class vil_image_impl
   //: Dimensions:  Planes x W x H x Components
   virtual int components() const = 0;
 
-  //: Format.
-  //  A standard RGB RGB RGB image has
-  // - components() == 3
-  // - bits_per_component() == 8
-  // - component_format() == VIL_COMPONENT_FORMAT_UNSIGNED_INT
+  //: Number of bits per component.
+  // Size (in bits) for the smallest entity of the image.
   virtual int bits_per_component() const = 0;
 
   //: Format.
@@ -109,6 +106,7 @@ class vil_image_impl
   // - components() == 3
   // - bits_per_component() == 8
   // - component_format() == VIL_COMPONENT_FORMAT_UNSIGNED_INT
+  // Use vil_print(fmt) to return a string description of the format fmt.
   virtual enum vil_component_format component_format() const = 0;
 
   //: return the ith plane.
