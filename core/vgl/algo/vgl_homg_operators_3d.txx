@@ -143,8 +143,8 @@ vgl_homg_operators_3d<Type>::lines_to_point(const vcl_vector<vgl_homg_line_3d >&
 //
 template <class Type>
 double
-vgl_homg_operators_3d<Type>::perp_distance_squared(const vgl_homg_line_3d& l,
-                                                   const vgl_homg_point_3d<Type>& p)
+vgl_homg_operators_3d<Type>::perp_dist_squared(const vgl_homg_line_3d& l,
+                                               const vgl_homg_point_3d<Type>& p)
 {
   vgl_homg_point_3d<Type> q = vgl_homg_operators_3d<Type>::perp_projection(l, p); // foot point
   return vgl_homg_operators_3d<Type>::distance_squared(p,q);
@@ -307,9 +307,9 @@ vgl_homg_operators_3d<Type>::points_to_plane(const vcl_vector<vgl_homg_point_3d<
 
 template <class Type>
 vgl_homg_point_3d<Type>
-vgl_homg_operators_3d<Type>::intersection_point(const vgl_homg_plane_3d<Type>& plane1,
-                                                const vgl_homg_plane_3d<Type>& plane2,
-                                                const vgl_homg_plane_3d<Type>& plane3)
+vgl_homg_operators_3d<Type>::intersection(const vgl_homg_plane_3d<Type>& plane1,
+                                          const vgl_homg_plane_3d<Type>& plane2,
+                                          const vgl_homg_plane_3d<Type>& plane3)
 {
   vnl_matrix_fixed<Type,3,4> A;
   A(0,0) = plane1.nx();
@@ -333,7 +333,7 @@ vgl_homg_operators_3d<Type>::intersection_point(const vgl_homg_plane_3d<Type>& p
 
 template <class Type>
 vgl_homg_point_3d<Type>
-vgl_homg_operators_3d<Type>::intersection_point(const vcl_vector<vgl_homg_plane_3d<Type> >& planes)
+vgl_homg_operators_3d<Type>::intersection(const vcl_vector<vgl_homg_plane_3d<Type> >& planes)
 {
   int n = planes.size();
   vnl_matrix<Type> A(planes.size(), 4);
@@ -376,6 +376,49 @@ vnl_vector<Type> vgl_homg_operators_3d<Type>::get_vector(vgl_homg_plane_3d<Type>
   v.put(3,p.d());
 
   return v;
+}
+
+template <class Type>
+void vgl_homg_operators_3d<Type>::unitize(vgl_homg_point_3d<Type>& a)
+{
+  double norm = a.x()*a.x() + a.y()*a.y() + a.z()*a.z() + a.w()*a.w();
+
+  if (norm == 0.0) {
+    vcl_cerr << "vgl_homg_operators_3d<Type>::unitize() -- Zero length vector\n";
+    return;
+  }
+  norm = 1.0/vcl_sqrt(norm);
+  a.set(Type(a.x()*norm), Type(a.y()*norm), Type(a.z()*norm), Type(a.w()*norm));
+}
+
+//: Return the midpoint of the line joining two homogeneous points
+//  When one of the points is at infinity, that point is returned.
+//  When both points are at infinity, the invalid point (0,0,0,0) is returned.
+template <class Type>
+vgl_homg_point_3d<Type>
+vgl_homg_operators_3d<Type>::midpoint(const vgl_homg_point_3d<Type>& p1,
+                                      const vgl_homg_point_3d<Type>& p2)
+{
+  Type x = p1.x() * p2.w() + p2.x() * p1.w();
+  Type y = p1.y() * p2.w() + p2.y() * p1.w();
+  Type z = p1.z() * p2.w() + p2.z() * p1.w();
+  Type w = p1.w() * p2.w() + p2.w() * p1.w();
+
+  return vgl_homg_point_3d<Type>(x,y,z,w);
+}
+
+//: Intersect a set of 3D planes to find the least-square point of intersection.
+// This finds the point $\bf x$ that minimizes $\|\tt L \bf x\|$, where $\tt L$
+// is the matrix whose rows are the planes. The implementation uses vnl_svd
+// to accumulate and compute the nullspace of $\tt L^\top \tt L$.
+template <class Type>
+vgl_homg_point_3d<Type>
+vgl_homg_operators_3d<Type>::planes_to_point(const vcl_vector<vgl_homg_plane_3d<Type> >& planes)
+{
+  assert(planes.size() >= 3);
+
+  vnl_vector<Type> mov = most_orthogonal_vector_svd(planes);
+  return vgl_homg_point_3d<Type>(mov[0], mov[1], mov[2], mov[3]);
 }
 
 template <class Type>
@@ -426,6 +469,60 @@ double vgl_homg_operators_3d<Type>::cross_ratio(const vgl_homg_plane_3d<Type>& a
   return n/m;
 }
 
+//: Conjugate point of three given collinear points.
+// If cross ratio cr is given (default: -1), the generalized conjugate point
+// returned is such that ((x1,x2;x3,answer)) = cr.
+template <class T>
+vgl_homg_point_3d<T>
+vgl_homg_operators_3d<T>::conjugate(const vgl_homg_point_3d<T>& a,
+                                    const vgl_homg_point_3d<T>& b,
+                                    const vgl_homg_point_3d<T>& c,
+                                    double cr)
+// Default for cr is -1.
+{
+  T x1 = a.x(), y1 = a.y(), z1 = a.z(), w1 = a.w();
+  T x2 = b.x(), y2 = b.y(), z2 = b.z(), w2 = b.w();
+  T x3 = c.x(), y3 = c.y(), z3 = c.z(), w3 = c.w();
+  T kx = x1*w3 - x3*w1, mx = x2*w3 - x3*w2, nx = T(kx*w2-cr*mx*w1);
+  T ky = y1*w3 - y3*w1, my = y2*w3 - y3*w2, ny = T(ky*w2-cr*my*w1);
+  T kz = z1*w3 - z3*w1, mz = z2*w3 - z3*w2, nz = T(kz*w2-cr*mz*w1);
+  return vgl_homg_point_3d<T>(T(x2*kx-cr*x1*mx)*ny*nz,T(y2*ky-cr*y1*my)*nx*nz,T(z2*kz-cr*z1*mz)*nx*ny,nx*ny*nz);
+}
+
+template <class T>
+double
+vgl_homg_operators_3d<T>::perp_dist_squared(const vgl_homg_point_3d<T>& point,
+                                            const vgl_homg_plane_3d<T>& plane)
+{
+  if ((plane.a()==0 && plane.b()== 0 && plane.c()== 0) || point.w()==0) {
+    vcl_cerr << "vgl_homg_operators_3d<T>::perp_dist_squared() -- plane or point at infinity\n";
+    return 1e38;
+  }
+
+#define dot(p,q) p.a()*q.x()+p.b()*q.y()+p.c()*q.z()+p.d()*q.w()
+  double numerator = dot(plane,point) / point.w();
+#undef dot
+  if (numerator == 0) return 0.0;
+  double denominator = plane.a()*plane.a() + plane.b()*plane.b() + plane.c()*plane.c();
+  return numerator * numerator / denominator;
+}
+
+#include <vnl/algo/vnl_svd.h>
+
+template <class T>
+vnl_vector<T>
+vgl_homg_operators_3d<T>::most_orthogonal_vector_svd(const vcl_vector<vgl_homg_plane_3d<T> >& planes)
+{
+  vnl_matrix<T> D(planes.size(), 4);
+
+  typename vcl_vector<vgl_homg_plane_3d<T> >::const_iterator i = planes.begin();
+  for (unsigned j = 0; i != planes.end(); ++i,++j)
+    D.set_row(j, get_vector(*i));
+
+  vnl_svd<T> svd(D);
+  return svd.nullvector();
+}
+
 //: Homographic transformation of a 3D point through a 4x4 projective transformation matrix
 template <class T>
 vgl_homg_point_3d<T> operator*(vnl_matrix_fixed<T,4,4> const& m,
@@ -435,6 +532,17 @@ vgl_homg_point_3d<T> operator*(vnl_matrix_fixed<T,4,4> const& m,
                               m(1,0)*p.x()+m(1,1)*p.y()+m(1,2)*p.z()+m(1,3)*p.w(),
                               m(2,0)*p.x()+m(2,1)*p.y()+m(2,2)*p.z()+m(2,3)*p.w(),
                               m(3,0)*p.x()+m(3,1)*p.y()+m(3,2)*p.z()+m(3,3)*p.w());
+}
+
+//: Homographic transformation of a 3D plane through a 4x4 projective transformation matrix
+template <class T>
+vgl_homg_plane_3d<T> operator*(vnl_matrix_fixed<T,4,4> const& m,
+                               vgl_homg_plane_3d<T> const& p)
+{
+  return vgl_homg_plane_3d<T>(m(0,0)*p.a()+m(0,1)*p.b()+m(0,2)*p.c()+m(0,3)*p.d(),
+                              m(1,0)*p.a()+m(1,1)*p.b()+m(1,2)*p.c()+m(1,3)*p.d(),
+                              m(2,0)*p.a()+m(2,1)*p.b()+m(2,2)*p.c()+m(2,3)*p.d(),
+                              m(3,0)*p.a()+m(3,1)*p.b()+m(3,2)*p.c()+m(3,3)*p.d());
 }
 
 //: Project a 3D point to 2D through a 3x4 projective transformation matrix
@@ -463,6 +571,8 @@ vgl_homg_plane_3d<T> operator*(vnl_matrix_fixed<T,4,3> const& m,
   template class vgl_homg_operators_3d<T >; \
   template vgl_homg_point_3d<T > operator*(vnl_matrix_fixed<T,4,4> const&,\
                                            vgl_homg_point_3d<T > const&); \
+  template vgl_homg_plane_3d<T > operator*(vnl_matrix_fixed<T,4,4> const&,\
+                                           vgl_homg_plane_3d<T > const&); \
   template vgl_homg_point_2d<T > operator*(vnl_matrix_fixed<T,3,4> const&,\
                                            vgl_homg_point_3d<T > const&); \
   template vgl_homg_plane_3d<T > operator*(vnl_matrix_fixed<T,4,3> const&,\
