@@ -299,8 +299,8 @@ void vimt_scale_pyramid_builder_2d<T>::set_max_levels(int max_l)
 {
   if (max_l<1)
   {
-    vcl_cerr<<"vimt_gaussian_pyramid_builder_2d<T>::set_max_levels() ";
-    vcl_cerr<<"Must be >=1\n";
+    vcl_cerr << "vimt_gaussian_pyramid_builder_2d<T>::set_max_levels() "
+             << "Must be >=1, not " << max_l << '\n';
     vcl_abort();
   }
   max_levels_ = max_l;
@@ -362,7 +362,7 @@ vimt_image_pyramid_builder* vimt_scale_pyramid_builder_2d<T>::clone() const
 template <class T>
 void vimt_scale_pyramid_builder_2d<T>::print_summary(vcl_ostream& os) const
 {
-  vcl_cerr << "vimt_scale_pyramid_builder_2d<T>::print_summary() njI\n";
+  vcl_cerr << "vimt_scale_pyramid_builder_2d<T>::print_summary() NYI\n";
 }
 
 //=======================================================================
@@ -392,8 +392,8 @@ void vimt_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
     set_scale_step(scale);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vimt_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: vimt_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
