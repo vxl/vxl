@@ -23,41 +23,41 @@
 class FMatrixPlanar;
 class ImageMetric;
 
-class FMPlanarNonLinFun : public vnl_least_squares_function {
-public:
+class FMPlanarNonLinFun : public vnl_least_squares_function
+{
+  int data_size_;
 
-  //: Initialize object, will fit F to points1,2 using imagemetrics
-  //  rejecting points > outlier_distance_squared from epipolar lines
+  vcl_vector<HomgPoint2D>& points1_;
+  vcl_vector<HomgPoint2D>& points2_;
+
+  HomgNorm2D normalized_;
+
+  vnl_double_3x3 denorm_matrix_;
+  vnl_double_3x3 denorm_matrix_inv_;
+
+#if 0 // unused ?!
+  double outlier_distance_squared_;
+  int terminate_count_;
+#endif
+
+  HomgMetric image_metric1_;
+  HomgMetric image_metric2_;
+
+ public:
+  //: Initialize object, will fit F to points1,2 using imagemetrics.
+  //  Rejecting points > outlier_distance_squared from epipolar lines
   FMPlanarNonLinFun(const ImageMetric*, const ImageMetric*,
-                        double outlier_distance_squared,
-                        vcl_vector<HomgPoint2D>& points1,
-                        vcl_vector<HomgPoint2D>& points2);
+                    double outlier_distance_squared,
+                    vcl_vector<HomgPoint2D>& points1,
+                    vcl_vector<HomgPoint2D>& points2);
 
   bool compute(FMatrixPlanar* F);
 
   //: The virtual function from vnl_levenberg_marquardt
   void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
 
-private:
-  int _data_size;
-
-  vcl_vector<HomgPoint2D>& _points1;
-  vcl_vector<HomgPoint2D>& _points2;
-
-  HomgNorm2D _normalized;
-
-  vnl_double_3x3 _denorm_matrix;
-  vnl_double_3x3 _denorm_matrix_inv;
-
-
-  double _outlier_distance_squared;
-  int _terminate_count;
-
-  HomgMetric _image_metric1;
-  HomgMetric _image_metric2;
-
-
   // Helpers-------------------------------------------------------------------
+private:
   void fmatrix_to_params(const FMatrixPlanar& F, vnl_vector<double>& params);
   FMatrixPlanar params_to_fmatrix(const vnl_vector<double>& params);
 

@@ -139,6 +139,18 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
 }
 
 // Calculate all the residuals for a given relation
+vcl_vector<double> FMatrixComputeRobust::calculate_residuals(vcl_vector<vgl_homg_point_2d<double> >& one,
+                                                             vcl_vector<vgl_homg_point_2d<double> >& two,
+                                                             FMatrix* F) {
+  vcl_vector<double> ret(data_size_);
+  for (int i = 0; i < data_size_; i++) {
+    double val = calculate_residual(one[i], two[i], F);
+      ret[i] = val;
+  }
+  return ret;
+}
+
+// Calculate all the residuals for a given relation
 vcl_vector<double> FMatrixComputeRobust::calculate_residuals(vcl_vector<HomgPoint2D>& one,
                                                              vcl_vector<HomgPoint2D>& two,
                                                              FMatrix* F) {
@@ -167,6 +179,14 @@ double FMatrixComputeRobust::calculate_term(vcl_vector<double>& /*residuals*/,
                                             int& /*count*/) {
   vcl_cerr << "FMatrixComputeRobust::calculate_term() not yet implemented\n";
   return 10000.0;
+}
+
+// Implement Me!!! TODO
+double FMatrixComputeRobust::calculate_residual(vgl_homg_point_2d<double>& /*one*/,
+                                                vgl_homg_point_2d<double>& /*two*/,
+                                                FMatrix* /*F*/) {
+  vcl_cerr << "FMatrixComputeRobust::calculate_residual() not yet implemented\n";
+  return 100.0;
 }
 
 // Implement Me!!! TODO

@@ -17,7 +17,6 @@
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
 #include <mvl/HomgOperator2D.h>
-#include <mvl/HomgPoint2D.h>
 #include <mvl/FMatrix.h>
 
 //--------------------------------------------------------------
@@ -26,7 +25,7 @@
 
 FMatrixPlanar::FMatrixPlanar()
 {
-  _rank2_flag = true;
+  rank2_flag_ = true;
 }
 
 //--------------------------------------------------------------
@@ -35,7 +34,7 @@ FMatrixPlanar::FMatrixPlanar()
 
 FMatrixPlanar::FMatrixPlanar(const double* f_matrix)
 {
-  _rank2_flag = true;
+  rank2_flag_ = true;
   set(f_matrix);
 }
 
@@ -45,7 +44,7 @@ FMatrixPlanar::FMatrixPlanar(const double* f_matrix)
 
 FMatrixPlanar::FMatrixPlanar(const vnl_matrix<double>& f_matrix)
 {
-  _rank2_flag = true;
+  rank2_flag_ = true;
   set(f_matrix.data_block());
 }
 
@@ -142,8 +141,8 @@ FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
      for (row_index = 0; row_index < 3; row_index++)
           for (col_index = 0; col_index < 3; col_index++)
           {
-               _f_matrix. put (row_index, col_index,f_matrix.get(row_index,col_index));
-               _ft_matrix. put (col_index, row_index,f_matrix.get(row_index,col_index));
+               f_matrix_. put (row_index, col_index,f_matrix.get(row_index,col_index));
+               ft_matrix_. put (col_index, row_index,f_matrix.get(row_index,col_index));
           }
 
      // set rank flag true
@@ -156,7 +155,7 @@ FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
 
 //----------------------------------------------------------------
 //
-//: Returns the _rank2_flag which is always true for FMatrixPlanar.
+//: Returns the rank2_flag_ which is always true for FMatrixPlanar.
 
 inline bool
 FMatrixPlanar::get_rank2_flag (void) const
@@ -166,7 +165,7 @@ FMatrixPlanar::get_rank2_flag (void) const
 
 //----------------------------------------------------------------
 //
-//: Set the _rank2_flag. Null function as always set true.
+//: Set the rank2_flag_. Null function as always set true.
 
 inline void
 FMatrixPlanar::set_rank2_flag (bool) const

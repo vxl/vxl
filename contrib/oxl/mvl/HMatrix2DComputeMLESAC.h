@@ -17,6 +17,11 @@
 // \author
 //     David N. McKinnon, UQ I.R.I.S., 23.01.2001
 //
+// \verbatim
+// Modifications
+//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+// \endverbatim
+//
 //-----------------------------------------------------------------------------
 
 #include <mvl/HMatrix2DComputeRobust.h>
@@ -36,6 +41,9 @@ public:
                                 int& count);
   virtual double calculate_residual(HomgPoint2D& one,
                                     HomgPoint2D& two,
+                                    HMatrix2D* F);
+  virtual double calculate_residual(vgl_homg_point_2d<double>& one,
+                                    vgl_homg_point_2d<double>& two,
                                     HMatrix2D* F);
 };
 

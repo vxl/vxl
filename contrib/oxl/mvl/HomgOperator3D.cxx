@@ -28,7 +28,7 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
   HomgPoint3D finite_quadvec;
   for (int p_index = 0; p_index < n; p_index++) {
     HomgPoint3D* p = &points[p_index];
-    if (p->get_w() != 0) {
+    if (p->w() != 0) {
       ++num_finite;
       finite_quadvec = *p;
     }
@@ -47,7 +47,7 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
   HomgLine3D line;
   for (int p_index = 0; p_index < n; p_index++) {
     HomgPoint3D* p = &points[p_index];
-    if (p->get_w() != 0) {
+    if (p->w() != 0) {
       double distance = HomgOperator3D::distance_squared(finite_quadvec, *p);
       if (distance > distance_max) {
         distance_max = distance;
@@ -72,7 +72,7 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
 
   for (int p_index = 0; p_index < n; p_index++) {
     HomgPoint3D* p = &points[p_index];
-    if (p->get_w() != 0) {
+    if (p->w() != 0) {
       sort_table[p_index].first = (float)HomgOperator3D::distance_squared(faraway, *p);
       sort_table[p_index].second = p_index;
     }
@@ -279,20 +279,20 @@ HomgPoint3D
 HomgOperator3D::intersection_point (const HomgPlane3D& plane1, const HomgPlane3D& plane2, const HomgPlane3D& plane3)
 {
   vnl_matrix<double> A(3, 4);
-  A(0,0) = plane1.get_x();
-  A(0,1) = plane1.get_y();
-  A(0,2) = plane1.get_z();
-  A(0,3) = plane1.get_w();
+  A(0,0) = plane1.x();
+  A(0,1) = plane1.y();
+  A(0,2) = plane1.z();
+  A(0,3) = plane1.w();
 
-  A(1,0) = plane2.get_x();
-  A(1,1) = plane2.get_y();
-  A(1,2) = plane2.get_z();
-  A(1,3) = plane2.get_w();
+  A(1,0) = plane2.x();
+  A(1,1) = plane2.y();
+  A(1,2) = plane2.z();
+  A(1,3) = plane2.w();
 
-  A(2,0) = plane3.get_x();
-  A(2,1) = plane3.get_y();
-  A(2,2) = plane3.get_z();
-  A(2,3) = plane3.get_w();
+  A(2,0) = plane3.x();
+  A(2,1) = plane3.y();
+  A(2,2) = plane3.z();
+  A(2,3) = plane3.w();
 
   vnl_svd<double> svd(A);
   return HomgPoint3D(svd.nullvector());
@@ -305,10 +305,10 @@ HomgOperator3D::intersection_point (const vcl_vector<HomgPlane3D>& planes)
   vnl_matrix<double> A(planes.size(), 4);
 
   for (int i =0; i < n; ++i) {
-    A(i,0) = planes[i].get_x();
-    A(i,1) = planes[i].get_y();
-    A(i,2) = planes[i].get_z();
-    A(i,3) = planes[i].get_w();
+    A(i,0) = planes[i].x();
+    A(i,1) = planes[i].y();
+    A(i,2) = planes[i].z();
+    A(i,3) = planes[i].w();
   }
 
   vnl_svd<double> svd(A);
@@ -334,10 +334,10 @@ HomgOperator3D::intersection_point (const vcl_vector<HomgPlane3D>& planes)
 //
 double HomgOperator3D::CrossRatio(const Homg3D& a, const Homg3D& b, const Homg3D& c, const Homg3D& d)
 {
-  double x1 = a.get_x(), y1 = a.get_y(), z1 = a.get_z(), w1 = a.get_w();
-  double x2 = b.get_x(), y2 = b.get_y(), z2 = b.get_z(), w2 = b.get_w();
-  double x3 = c.get_x(), y3 = c.get_y(), z3 = c.get_z(), w3 = c.get_w();
-  double x4 = d.get_x(), y4 = d.get_y(), z4 = d.get_z(), w4 = d.get_w();
+  double x1 = a.x(), y1 = a.y(), z1 = a.z(), w1 = a.w();
+  double x2 = b.x(), y2 = b.y(), z2 = b.z(), w2 = b.w();
+  double x3 = c.x(), y3 = c.y(), z3 = c.z(), w3 = c.w();
+  double x4 = d.x(), y4 = d.y(), z4 = d.z(), w4 = d.w();
   double x = x1 - x2; if (x<0) x = -x; // assuming a != b ;-)
   double y = y1 - y2; if (y<0) y = -y;
   double z = z1 - z2; if (z<0) z = -z;

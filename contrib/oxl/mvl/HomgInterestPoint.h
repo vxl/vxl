@@ -15,11 +15,16 @@
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Aug 96
 //
+// \verbatim
+// Modifications:
+//   Peter Vanroose - 22 oct.02 - added vgl_homg_point_2d interface
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vcl_iosfwd.h>
 #include <vnl/vnl_int_2.h>
 #include <mvl/HomgPoint2D.h>
+#include <vgl/vgl_homg_point_2d.h>
 
 class HomgMetric;
 
@@ -37,6 +42,7 @@ class HomgInterestPoint
   HomgInterestPoint(double x, double y, float mean_intensity = 0.0F);
   HomgInterestPoint(double x, double y, const HomgMetric& c, float mean_intensity = 0.0F);
   HomgInterestPoint(const HomgPoint2D& h, const HomgMetric& c, float mean_intensity = 0.0F);
+  HomgInterestPoint(vgl_homg_point_2d<double> const& h, const HomgMetric& c, float mean_intensity = 0.0F);
   HomgInterestPoint(const HomgInterestPoint&); // copy constructor
   HomgInterestPoint& operator=(const HomgInterestPoint&); // assignment
   ~HomgInterestPoint();

@@ -19,18 +19,19 @@
 // \verbatim
 // Modifications:
 //   Peter Vanroose - 27 aug.97 - moved vcl_vector<HomgInterestPoint> instantiation to Templates
+//   Peter Vanroose - 22 oct.02 - added vgl_homg_point_2d interface
 // \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
 
 #include <vnl/vnl_double_2.h>
+#include <vgl/vgl_homg_point_2d.h>
 
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgMetric.h>
 
 class vil_image;
-class HomgPoint2D;
 class ImageMetric;
 class HomgInterestPointSetData;
 class HomgInterestPoint;
@@ -48,6 +49,7 @@ class HomgInterestPointSet
   HomgInterestPointSet(const HomgMetric&);
   HomgInterestPointSet(const char* filename, const HomgMetric& = 0);
   HomgInterestPointSet(const vcl_vector<HomgPoint2D>&, ImageMetric* conditioner);
+  HomgInterestPointSet(vcl_vector<vgl_homg_point_2d<double> > const&, ImageMetric* conditioner);
   HomgInterestPointSet(const HomgInterestPointSet& that);
  ~HomgInterestPointSet();
 
@@ -67,9 +69,11 @@ class HomgInterestPointSet
   vnl_double_2 const& get_2d(int i) const;
   vnl_vector_fixed<int,2> const& get_int(int i) const;
   HomgPoint2D const& get_homg(int i) const;
+  vgl_homg_point_2d<double> homg_point(int i) const;
   float              get_mean_intensity(int i) const;
 
   vcl_vector<HomgPoint2D> const & get_homg_points() const;
+  vcl_vector<vgl_homg_point_2d<double> > homg_points() const;
 
   const ImageMetric* get_conditioner() const { return (const ImageMetric*)conditioner_; }
   void set_conditioner(const HomgMetric& c);
@@ -77,8 +81,10 @@ class HomgInterestPointSet
   // Data Control--------------------------------------------------------------
   bool add(double x, double y); // image coordinates
   bool add(const HomgPoint2D&);
+  bool add(vgl_homg_point_2d<double> const&);
   bool add(const HomgInterestPoint&);
   bool add_preconditioned(const HomgPoint2D&);
+  bool add_preconditioned(vgl_homg_point_2d<double> const&);
   void set_image(vil_image const& image);
   void clear();
 

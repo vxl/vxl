@@ -25,6 +25,11 @@
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 21 Aug 96
 //
+// \verbatim
+// Modifications
+//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+// \endverbatim
+//
 //-----------------------------------------------------------------------------
 
 #include <mvl/FMatrixCompute.h>
@@ -32,6 +37,8 @@
 
 class FMatrixComputeLinear : public FMatrixCompute
 {
+  bool precondition_;
+  bool rank2_truncate_;
  public:
   //: Initialize FMatrixComputeLinear object.
   //  If precondition = false, points are not conditioned prior to computation.
@@ -52,16 +59,26 @@ class FMatrixComputeLinear : public FMatrixCompute
   //  Makes a PairMatchSetCorner, and then calls the compute method above.
   bool compute(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* F);
 
+  //: Interface to above using arrays of vgl_homg_point_2d.
+  //  Makes a PairMatchSetCorner, and then calls the compute method above.
+  bool compute(vcl_vector<vgl_homg_point_2d<double> >&,
+               vcl_vector<vgl_homg_point_2d<double> >&,
+               FMatrix* F);
+
   //: Interface to above using preconditioned points
   bool compute_preconditioned(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* F);
+
+  //: Interface to above using preconditioned points
+  bool compute_preconditioned(vcl_vector<vgl_homg_point_2d<double> >&,
+                              vcl_vector<vgl_homg_point_2d<double> >&,
+                              FMatrix* F);
 
   inline FMatrix compute(PairMatchSetCorner& p) { return FMatrixCompute::compute(p); }
   inline FMatrix compute(vcl_vector<HomgPoint2D>& p1, vcl_vector<HomgPoint2D>& p2)
     { return FMatrixCompute::compute(p1,p2); }
-
- private:
-  bool precondition_;
-  bool rank2_truncate_;
+  inline FMatrix compute(vcl_vector<vgl_homg_point_2d<double> >& p1,
+                         vcl_vector<vgl_homg_point_2d<double> >& p2)
+    { return FMatrixCompute::compute(p1,p2); }
 };
 
 #endif // FMatrixComputeLinear_h_

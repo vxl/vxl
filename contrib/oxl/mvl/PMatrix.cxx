@@ -15,6 +15,8 @@
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_qr.h>
+#include <vgl/vgl_homg_plane_3d.h>
+#include <vgl/vgl_point_3d.h>
 
 #include <mvl/HomgPrettyPrint.h>
 #include <mvl/HomgLine2D.h>
@@ -61,7 +63,7 @@ PMatrix::PMatrix (vcl_istream& i) :
 //
 //: Construct from 3x4 matrix
 
-PMatrix::PMatrix (const vnl_matrix<double>& pmatrix) :
+PMatrix::PMatrix (vnl_double_3x4 const& pmatrix) :
   p_matrix_ (pmatrix),
   svd_(0)
 {
@@ -128,24 +130,40 @@ HomgPoint2D PMatrix::project (const HomgPoint3D& X) const
 //-----------------------------------------------------------------------------
 //
 //: Return the image line which is the projection of the specified 3D line L
+vgl_homg_line_2d<double> PMatrix::project (const vgl_homg_line_3d_2_points<double>& L) const
+{
+  return vgl_homg_line_2d<double>(project(L.point_finite()), project(L.point_infinite()));
+}
+
 HomgLine2D PMatrix::project (const HomgLine3D& L) const
 {
   return HomgOperator2D::join(project(L.get_point_finite()), project(L.get_point_infinite()));
 }
 
+
 //-----------------------------------------------------------------------------
 //
 //: Return the image linesegment which is the projection of the specified 3D linesegment L
+vgl_line_segment_2d<double> PMatrix::project(vgl_line_segment_3d<double> const& L) const
+{
+  vgl_point_3d<double> p1 = L.point1(), p2 = L.point2();
+  vgl_homg_point_3d<double> q1 (p1.x(),p1.y(),p1.z()), q2 (p2.x(),p2.y(),p2.z());
+  return vgl_line_segment_2d<double>(project(q1), project(q2));
+}
 HomgLineSeg2D PMatrix::project (const HomgLineSeg3D& L) const
 {
   return HomgLineSeg2D(project(L.get_point1()), project(L.get_point2()));
 }
-
 //-----------------------------------------------------------------------------
 //
 //: Return the 3D point $\vec X$ which is $\vec X = P^+ \vec x$.
 // Equivalently, the 3D point of smallest norm such that $P \vec X = \vec x$.
 // Uses svd().
+vgl_homg_point_3d<double> PMatrix::backproject_pseudoinverse (const vgl_homg_point_2d<double>& x) const
+{
+  vnl_double_4 p = svd()->solve(vnl_double_3(x.x(),x.y(),x.w()));
+  return vgl_homg_point_3d<double>(p[0],p[1],p[2],p[3]);
+}
 
 HomgPoint3D PMatrix::backproject_pseudoinverse (const HomgPoint2D& x) const
 {
@@ -156,6 +174,10 @@ HomgPoint3D PMatrix::backproject_pseudoinverse (const HomgPoint2D& x) const
 //
 //: Return the 3D line which is the backprojection of the specified image point, x.
 // Uses svd().
+vgl_homg_line_3d_2_points<double> PMatrix::backproject (const vgl_homg_point_2d<double>& x) const
+{
+  return vgl_homg_line_3d_2_points<double>(get_focal(), backproject_pseudoinverse(x));
+}
 
 HomgLine3D PMatrix::backproject (const HomgPoint2D& x) const
 {
@@ -165,6 +187,11 @@ HomgLine3D PMatrix::backproject (const HomgPoint2D& x) const
 //-----------------------------------------------------------------------------
 //
 //: Return the 3D plane which is the backprojection of the specified line l in the image
+vgl_homg_plane_3d<double> PMatrix::backproject (const vgl_homg_line_2d<double>& l) const
+{
+  return p_matrix_.transpose() * l;
+}
+
 HomgPlane3D PMatrix::backproject (const HomgLine2D& l) const
 {
   return HomgPlane3D(p_matrix_.transpose() * l.get_vector());
@@ -175,7 +202,7 @@ HomgPlane3D PMatrix::backproject (const HomgLine2D& l) const
 vcl_ostream& operator<<(vcl_ostream& s, const PMatrix& p)
 {
   if (HomgPrettyPrint::pretty)
-    return vnl_matlab_print(s, p.get_matrix().as_ref(), "");
+    return vnl_matlab_print(s, p.get_matrix(), "");
   else
     return s << p.get_matrix();
 }
@@ -251,7 +278,7 @@ vnl_svd<double>* PMatrix::svd() const
 
 //: Discredit the cached svd.
 //  This is necessary only in order to recover the space used by it if the PMatrix is not being deleted.
-void PMatrix::clear_svd()
+void PMatrix::clear_svd() const
 {
   delete svd_; svd_ = 0;
 }
@@ -260,6 +287,20 @@ void PMatrix::clear_svd()
 //
 //: Return the 3D point representing the focal point of the camera.
 // Uses svd().
+vgl_homg_point_3d<double> PMatrix::get_focal() const
+{
+  if (svd()->singularities() > 1) {
+    vcl_cerr << "PMatrix::get_focal: "
+             << "  Nullspace dimension is " << svd()->singularities()
+             << "\n  Returning an invalid point (a vector of zeros)\n";
+    return vgl_homg_point_3d<double>(0,0,0,0);
+  }
+
+  vnl_matrix<double> ns = svd()->nullspace();
+
+  return vgl_homg_point_3d<double>(ns(0,0), ns(1,0), ns(2,0), ns(3,0));
+}
+
 HomgPoint3D PMatrix::get_focal_point() const
 {
   // From st_compute_focal_point
@@ -311,7 +352,7 @@ bool PMatrix::is_canonical(double tol) const
 //: Postmultiply PMatrix by HMatrix3D
 PMatrix operator*(const PMatrix& P, const HMatrix3D& H)
 {
-  return PMatrix(P.get_matrix() * H.get_matrix());
+  return PMatrix(P.get_matrix() * H);
 }
 
 // DATA ACCESS
@@ -340,7 +381,7 @@ PMatrix::get (double* c_matrix) const
 //
 //: Return the 3x4 projection matrix in the vnl_matrix<double>, p_matrix
 void
-PMatrix::get (vnl_matrix<double>* p_matrix) const
+PMatrix::get(vnl_double_3x4* p_matrix) const
 {
   *p_matrix = p_matrix_;
 }
@@ -349,7 +390,7 @@ PMatrix::get (vnl_matrix<double>* p_matrix) const
 //
 //: Return the 3x3 matrix and 3x1 column vector of P = [A a].
 void
-PMatrix::get (vnl_matrix<double>* A, vnl_vector<double>* a) const
+PMatrix::get(vnl_matrix<double>* A, vnl_vector<double>* a) const
 {
   A->put(0,0, p_matrix_(0,0));
   A->put(1,0, p_matrix_(1,0));
@@ -417,9 +458,9 @@ PMatrix::get_rows (vnl_vector<double>* a, vnl_vector<double>* b, vnl_vector<doub
 //
 //: Return the rows of P = [a b c]'.
 void
-PMatrix::get_rows (vnl_vector_fixed<double,4>* a, 
-	      vnl_vector_fixed<double,4>* b, 
-	      vnl_vector_fixed<double,4>* c) const
+PMatrix::get_rows(vnl_vector_fixed<double,4>* a, 
+                  vnl_vector_fixed<double,4>* b, 
+                  vnl_vector_fixed<double,4>* c) const
 {
   a->put(0, p_matrix_(0, 0));
   a->put(1, p_matrix_(0, 1));
@@ -466,7 +507,7 @@ PMatrix::set (const double *p)
 //
 //: Set the fundamental matrix using the vnl_matrix<double> p_matrix.
 void
-PMatrix::set (const vnl_matrix<double>& p_matrix)
+PMatrix::set (vnl_double_3x4 const& p_matrix)
 {
   p_matrix_ = p_matrix;
   clear_svd();
@@ -525,6 +566,16 @@ PMatrix::fix_cheirality()
 // This depends on the overall sign of the P matrix having been set correctly, a
 // la Hartley cheirality paper.
 bool
+PMatrix::is_behind_camera(const vgl_homg_point_3d<double>& hX)
+{
+  vnl_double_4 p = p_matrix_.get_row(2);
+  double dot = hX.x()*p[0]+hX.y()*p[1]+hX.z()*p[2]+hX.w()*p[3];
+  if (hX.w() < 0) dot = -dot;
+
+  return dot < 0;
+}
+
+bool
 PMatrix::is_behind_camera(const HomgPoint3D& hX)
 {
   vnl_double_4 X = hX.get_vector();
@@ -556,26 +607,14 @@ PMatrix::looks_conditioned()
   return cond < 100;
 }
 
-//: Apply 3-space homography to P.
-PMatrix PMatrix::postmultiply(const HMatrix3D& H) const
-{
-  return postmultiply(H.get_matrix());
-}
-
 //: Postmultiply by 4x4 matrix.
-PMatrix PMatrix::postmultiply(const vnl_matrix<double>& H) const
+PMatrix PMatrix::postmultiply(vnl_double_4x4 const& H) const
 {
   return PMatrix(p_matrix_ * H);
 }
 
-//: Apply 2-space homography to P.
-PMatrix PMatrix::premultiply(const HMatrix2D& H) const
-{
-  return premultiply(H.get_matrix());
-}
-
 //: Premultiply by 3x3 matrix.
-PMatrix PMatrix::premultiply(const vnl_matrix<double>& H) const
+PMatrix PMatrix::premultiply(vnl_double_3x3 const& H) const
 {
   return PMatrix(H * p_matrix_);
 }

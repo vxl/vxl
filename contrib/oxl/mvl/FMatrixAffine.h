@@ -15,8 +15,6 @@
 // inherited from the class FMatrix.
 //
 
-#include <mvl/HomgLine2D.h>
-#include <mvl/HomgPoint2D.h>
 #include <mvl/FMatrix.h>
 
 class FMatrixAffine : public FMatrix

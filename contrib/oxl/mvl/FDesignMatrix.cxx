@@ -30,20 +30,42 @@ FDesignMatrix::FDesignMatrix(vcl_vector<HomgPoint2D> const& points1,
                              vcl_vector<HomgPoint2D> const& points2):
   base(points1.size(), 9)
 {
-  int n = points1.size();
-  for (int row = 0; row < n; ++row) {
+  unsigned int n = points1.size();
+  for (unsigned int row = 0; row < n; ++row) {
     const HomgPoint2D& p1 = points1[row];
     const HomgPoint2D& p2 = points2[row];
 
     vnl_matrix<double>& D = *this;
-    D(row,0) = p1.get_x() * p2.get_x();
-    D(row,1) = p1.get_y() * p2.get_x();
-    D(row,2) = p1.get_w() * p2.get_x();
-    D(row,3) = p1.get_x() * p2.get_y();
-    D(row,4) = p1.get_y() * p2.get_y();
-    D(row,5) = p1.get_w() * p2.get_y();
-    D(row,6) = p1.get_x() * p2.get_w();
-    D(row,7) = p1.get_y() * p2.get_w();
-    D(row,8) = p1.get_w() * p2.get_w();
+    D(row,0) = p1.x() * p2.x();
+    D(row,1) = p1.y() * p2.x();
+    D(row,2) = p1.w() * p2.x();
+    D(row,3) = p1.x() * p2.y();
+    D(row,4) = p1.y() * p2.y();
+    D(row,5) = p1.w() * p2.y();
+    D(row,6) = p1.x() * p2.w();
+    D(row,7) = p1.y() * p2.w();
+    D(row,8) = p1.w() * p2.w();
+  }
+}
+
+FDesignMatrix::FDesignMatrix(vcl_vector<vgl_homg_point_2d<double> > const& points1,
+                             vcl_vector<vgl_homg_point_2d<double> > const& points2):
+  base(points1.size(), 9)
+{
+  unsigned int n = points1.size();
+  for (unsigned int row = 0; row < n; ++row) {
+    const vgl_homg_point_2d<double>& p1 = points1[row];
+    const vgl_homg_point_2d<double>& p2 = points2[row];
+
+    vnl_matrix<double>& D = *this;
+    D(row,0) = p1.x() * p2.x();
+    D(row,1) = p1.y() * p2.x();
+    D(row,2) = p1.w() * p2.x();
+    D(row,3) = p1.x() * p2.y();
+    D(row,4) = p1.y() * p2.y();
+    D(row,5) = p1.w() * p2.y();
+    D(row,6) = p1.x() * p2.w();
+    D(row,7) = p1.y() * p2.w();
+    D(row,8) = p1.w() * p2.w();
   }
 }

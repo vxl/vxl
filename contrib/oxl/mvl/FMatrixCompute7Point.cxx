@@ -45,6 +45,39 @@ bool FMatrixCompute7Point::compute(PairMatchSetCorner& matches, vcl_vector<FMatr
 }
 
 //-----------------------------------------------------------------------------
+bool FMatrixCompute7Point::compute (vcl_vector<vgl_homg_point_2d<double> >& points1,
+                                    vcl_vector<vgl_homg_point_2d<double> >& points2,
+                                    vcl_vector<FMatrix*>& F)
+{
+  if (points1.size() < 7 || points2.size() < 7) {
+    vcl_cerr << "FMatrixCompute7Point: Need at least 7 point pairs.\n";
+    vcl_cerr << "Number in each set: " << points1.size() << ", " << points2.size() << vcl_endl;
+    return false;
+  }
+
+  if (precondition_) {
+    // Condition points
+    HomgNorm2D conditioned1(points1);
+    HomgNorm2D conditioned2(points2);
+
+    // Compute F with preconditioned points
+    if (!compute_preconditioned(conditioned1.get_normalized_points(),
+                                conditioned2.get_normalized_points(), F))
+      return false;
+
+    // De-condition F
+    for (unsigned int i = 0; i < F.size(); i++) {
+      F[i] = new FMatrix(HomgMetric::homg_to_image_F(*F[i], &conditioned1,
+                                                            &conditioned2));
+    }
+  } else
+    if (!compute_preconditioned(points1, points2, F))
+      return false;
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
 bool FMatrixCompute7Point::compute (vcl_vector<HomgPoint2D>& points1,
                                     vcl_vector<HomgPoint2D>& points2,
                                     vcl_vector<FMatrix*>& F)
@@ -74,6 +107,47 @@ bool FMatrixCompute7Point::compute (vcl_vector<HomgPoint2D>& points1,
     if (!compute_preconditioned(points1, points2, F))
       return false;
 
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+bool FMatrixCompute7Point::compute_preconditioned(vcl_vector<vgl_homg_point_2d<double> >& points1,
+                                                  vcl_vector<vgl_homg_point_2d<double> >& points2,
+                                                  vcl_vector<FMatrix*>& F)
+{
+  // Create design matrix from conditioned points
+  FDesignMatrix design(points1, points2);
+
+  // Normalize rows for better conditioning
+  design.normalize_rows();
+
+  // Extract vnl_svd<double> of design matrix
+  vnl_svd<double> svd(design);
+
+  vnl_matrix<double> W = svd.nullspace();
+
+  // Take the first and second nullvectors from the nullspace
+  // Since rank 2 these should be the only associated with non-zero
+  // root (Probably need conditioning first to be actually rank 2)
+  FMatrix F1(vnl_double_3x3(W.get_column(0).data_block()));
+  FMatrix F2(vnl_double_3x3(W.get_column(1).data_block()));
+
+  // Using the fact that Det(alpha*F1 +(1 - alpha)*F2) == 0
+  // find the real roots of the cubic equation that satisfy
+  vcl_vector<double> a = FMatrixCompute7Point::GetCoef(F1, F2);
+  vcl_vector<double> roots = FMatrixCompute7Point::solve_cubic(a);
+
+  for (unsigned int i = 0; i < roots.size(); i++) {
+    vnl_matrix<double> F_temp =
+      F1.get_matrix()*roots[0] + F2.get_matrix()*(1 - roots[i]);
+    F.push_back(new FMatrix(F_temp));
+  }
+  // Rank-truncate F
+  if (rank2_truncate_) {
+    for (unsigned int h = 0; h < F.size(); ++h) {
+      F[h]->set_rank2_using_svd();
+    }
+  }
   return true;
 }
 

@@ -4,6 +4,7 @@
 #include <mvl/HomgOperator2D.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_2.h>
+#include <vgl/algo/vgl_homg_operators_2d.h>
 
 FMatrixComputeMLESAC::FMatrixComputeMLESAC(bool rank2_truncate, double std)
 {
@@ -32,8 +33,20 @@ double FMatrixComputeMLESAC::calculate_term(vcl_vector<double>& residuals, vcl_v
 
 // This Sampson Approximation to the full polynomial correction (Hartley).
 // (First Order Geometric Correction)!
-double FMatrixComputeMLESAC::calculate_residual(HomgPoint2D& one, HomgPoint2D& two, FMatrix* F) {
+double FMatrixComputeMLESAC::calculate_residual(vgl_homg_point_2d<double>& one,
+                                                vgl_homg_point_2d<double>& two,
+                                                FMatrix* F)
+{
+  vgl_homg_line_2d<double> l1 = F->image2_epipolar_line(one);
+  vgl_homg_line_2d<double> l2 = F->image1_epipolar_line(two);
+  return vgl_homg_operators_2d<double>::perp_dist_squared(two, l1)
+       + vgl_homg_operators_2d<double>::perp_dist_squared(one, l2);
+}
 
+// This Sampson Approximation to the full polynomial correction (Hartley).
+// (First Order Geometric Correction)!
+double FMatrixComputeMLESAC::calculate_residual(HomgPoint2D& one, HomgPoint2D& two, FMatrix* F)
+{
   // I've got some sampson's first order geometric approximation code here
   // that I have experimented with (ie. approximation to the full solution
   // Hartley 'Triangulation')

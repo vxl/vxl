@@ -11,6 +11,8 @@
 #include <vnl/vnl_math.h>
 
 #include <vnl/vnl_double_2.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/algo/vgl_homg_operators_2d.h>
 
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>
@@ -18,9 +20,7 @@
 #include <mvl/HomgOperator2D.h>
 
 //: Default constructor sets parameters for an identity transformation.
-SimilarityMetric::SimilarityMetric():
-  cond_matrix(3,3), 
-  inv_cond_matrix(3,3)
+SimilarityMetric::SimilarityMetric()
 {
   centre_x_ = 0;
   centre_y_ = 0;
@@ -31,9 +31,7 @@ SimilarityMetric::SimilarityMetric():
 }
 
 //: Create a SimilarityMetric that transforms according to (x,y) -> (x - cx, y - cy) * scale
-SimilarityMetric::SimilarityMetric(double cx, double cy, double scale):
-  cond_matrix(3,3), 
-  inv_cond_matrix(3,3)
+SimilarityMetric::SimilarityMetric(double cx, double cy, double scale)
 {
   centre_x_ = cx;
   centre_y_ = cy;
@@ -44,9 +42,7 @@ SimilarityMetric::SimilarityMetric(double cx, double cy, double scale):
 }
 
 //: Create a SimilarityMetric that transforms coordinates in the range (0..xsize, 0..ysize) to the square (-1..1, -1..1)
-SimilarityMetric::SimilarityMetric(int xsize, int ysize):
-  cond_matrix(3,3), 
-  inv_cond_matrix(3,3)
+SimilarityMetric::SimilarityMetric(int xsize, int ysize)
 {
   set_from_rectangle(xsize, ysize);
 }
@@ -150,6 +146,12 @@ HomgPoint2D SimilarityMetric::image_to_homg(const vnl_double_2& p) const
 }
 
 //: Transform homogeneous point to image coordinates, leaving it in homogeneous form.
+vgl_homg_point_2d<double> SimilarityMetric::homg_to_imagehomg(vgl_homg_point_2d<double> const& x) const
+{
+  return cond_matrix * x;
+}
+
+//: Transform homogeneous point to image coordinates, leaving it in homogeneous form.
 HomgPoint2D SimilarityMetric::homg_to_imagehomg(const HomgPoint2D& x) const
 {
   // ho_cam2std_aspect_point
@@ -157,6 +159,11 @@ HomgPoint2D SimilarityMetric::homg_to_imagehomg(const HomgPoint2D& x) const
 }
 
 //: Transform homogeneous point in image coordinates to conditioned coordinates.
+vgl_homg_point_2d<double> SimilarityMetric::imagehomg_to_homg(vgl_homg_point_2d<double> const& x) const
+{
+  // ho_std2cam_aspect_point
+  return inv_cond_matrix * x;
+}
 HomgPoint2D SimilarityMetric::imagehomg_to_homg(const HomgPoint2D& x) const
 {
   // ho_std2cam_aspect_point
@@ -167,11 +174,11 @@ HomgPoint2D SimilarityMetric::imagehomg_to_homg(const HomgPoint2D& x) const
 double SimilarityMetric::distance_squared(HomgPoint2D const& p1, HomgPoint2D const& p2) const
 {
   // ho_triveccam_noaspect_distance_squared
-  double x1 = p1.get_x() / p1.get_w();
-  double y1 = p1.get_y() / p1.get_w();
+  double x1 = p1.x() / p1.w();
+  double y1 = p1.y() / p1.w();
 
-  double x2 = p2.get_x() / p2.get_w();
-  double y2 = p2.get_y() / p2.get_w();
+  double x2 = p2.x() / p2.w();
+  double y2 = p2.y() / p2.w();
 
   return vnl_math_sqr (inv_scale_) * (vnl_math_sqr (x1 - x2) + vnl_math_sqr (y1 - y2));
 }
@@ -190,19 +197,19 @@ double SimilarityMetric::perp_dist_squared(HomgPoint2D const & p, HomgLine2D con
   // ho_triveccam_aspect_perpdistance_squared
 
   // pcp separated
-  if (p.check_infinity()) {
+  if (p.ideal()) {
     vcl_cerr << "ImageMetric::perp_dist_squared -- point at infinity\n";
     return Homg::infinity;
   }
 
-  if (l.check_infinity()) {
+  if (l.ideal()) {
     vcl_cerr << "ImageMetric::perp_dist_squared -- line at infinity\n";
     return Homg::infinity;
   }
 
   double numerator = vnl_math_sqr(HomgOperator2D::dot(l, p));
-  double denominator = (vnl_math_sqr(l.get_x()) + vnl_math_sqr(l.get_y()))
-    * vnl_math_sqr(p.get_w() * scale_);
+  double denominator = (vnl_math_sqr(l.x()) + vnl_math_sqr(l.y()))
+    * vnl_math_sqr(p.w() * scale_);
 
   return numerator / denominator;
 }

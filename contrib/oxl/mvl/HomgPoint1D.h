@@ -10,42 +10,32 @@
 //
 // HomgPoint1D represents a 1D point in homogeneous coordinates
 //
-// \author
-//     Andrew W. Fitzgibbon, Oxford RRG, 15 Oct 96
+// \author Peter Vanroose
+// \date   13 October 2002
 //
 // \verbatim
 //  Modifications:
-//     Peter Vanroose - 22 nov 98 - Constructor with 1/2 floats added
+//     Peter Vanroose - 13 Oct 2002 - now using vgl_homg_point_1d<double>
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
 
-#include <mvl/Homg1D.h>
+#include <vgl/vgl_homg_point_1d.h>
 
-class HomgPoint1D : public Homg1D
+class HomgPoint1D : public vgl_homg_point_1d<double>
 {
  public:
-  // Constructors/Destructors--------------------------------------------------
 
-//: constructors.
-  HomgPoint1D() {}
-  HomgPoint1D(const HomgPoint1D& that): Homg1D(that) {}
-  HomgPoint1D(double px, double pw=1.0) : Homg1D(px,pw) {}
-  HomgPoint1D(const vnl_vector<double>& vector_ptr): Homg1D(vector_ptr) {}
-
-//: Destructor
- ~HomgPoint1D() {}
-
-//: Assignment
-  HomgPoint1D& operator=(const HomgPoint1D& that) { Homg1D::operator=(that); return *this; }
+  // constructors.
+  HomgPoint1D() : vgl_homg_point_1d<double>() {}
+  HomgPoint1D(double px, double pw=1.0) : vgl_homg_point_1d<double>(px,pw) {}
 
   // Operations----------------------------------------------------------------
 
-//: @{ Return nonhomogeneous form $x/w$.   If $w < infinitesimal\_tol$, return false @}
-  bool get_nonhomogeneous(double& nonhomg) const;
-
-//: @{ Check $|w| < \mbox{tol} \times |x|$. @}
-  bool check_infinity(double tol = infinitesimal_tol) const;
+ private:
+  //: @{ Check $|w| < \mbox{tol} \times |x|$. @}
+  // Deprecated name; use ideal() instead.
+  bool check_infinity(double tol = 1e-12) const { return ideal(tol); }
 };
 
 #endif // HomgPoint1D_h_

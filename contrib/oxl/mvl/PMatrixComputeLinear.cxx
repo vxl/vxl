@@ -8,8 +8,6 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <mvl/HomgPoint2D.h>
-#include <mvl/HomgPoint3D.h>
 #include <mvl/PMatrix.h>
 
 //-----------------------------------------------------------------------------
@@ -33,10 +31,63 @@
 // \end{array}
 // \right)
 // \f]
+bool
+PMatrixComputeLinear::compute(vcl_vector<vgl_homg_point_2d<double> > const& points1,
+                              vcl_vector<vgl_homg_point_3d<double> > const& points2,
+                              PMatrix *P)
+{
+  assert(P);
+  assert(points1.size() >= 6);
+  assert(points2.size() == points1.size());
+
+  unsigned npts = points1.size();
+  vnl_matrix<double> a_matrix(npts * 2, 12);
+
+  for (unsigned i = 0; i < npts; i++) {
+    vgl_homg_point_2d<double> const& u = points1[i];
+    vgl_homg_point_3d<double> const& X = points2[i];
+
+    unsigned row_index = i * 2;
+    a_matrix(row_index,  0) =  X.x() * u.w();
+    a_matrix(row_index,  1) =  X.y() * u.w();
+    a_matrix(row_index,  2) =  X.z() * u.w();
+    a_matrix(row_index,  3) =  X.w() * u.w();
+    a_matrix(row_index,  4) =  0;
+    a_matrix(row_index,  5) =  0;
+    a_matrix(row_index,  6) =  0;
+    a_matrix(row_index,  7) =  0;
+    a_matrix(row_index,  8) = -X.x() * u.x();
+    a_matrix(row_index,  9) = -X.y() * u.x();
+    a_matrix(row_index, 10) = -X.z() * u.x();
+    a_matrix(row_index, 11) = -X.w() * u.x();
+
+    row_index = i * 2 + 1;
+    a_matrix(row_index,  0) =  0;
+    a_matrix(row_index,  1) =  0;
+    a_matrix(row_index,  2) =  0;
+    a_matrix(row_index,  3) =  0;
+    a_matrix(row_index,  4) =  X.x() * u.w();
+    a_matrix(row_index,  5) =  X.y() * u.w();
+    a_matrix(row_index,  6) =  X.z() * u.w();
+    a_matrix(row_index,  7) =  X.w() * u.w();
+    a_matrix(row_index,  8) = -X.x() * u.y();
+    a_matrix(row_index,  9) = -X.y() * u.y();
+    a_matrix(row_index, 10) = -X.z() * u.y();
+    a_matrix(row_index, 11) = -X.w() * u.y();
+  }
+
+  a_matrix.normalize_rows();
+  vnl_svd<double> svd(a_matrix);
+
+  P->set(svd.nullvector().data_block());
+
+  return true;
+}
 
 bool
 PMatrixComputeLinear::compute (vcl_vector<HomgPoint2D> const& points1, vcl_vector<HomgPoint3D> const& points2, PMatrix *P)
 {
+  assert(P);
   assert(points1.size() >= 6);
   assert(points2.size() == points1.size());
 
@@ -48,32 +99,32 @@ PMatrixComputeLinear::compute (vcl_vector<HomgPoint2D> const& points1, vcl_vecto
     HomgPoint3D const& X = points2[i];
 
     unsigned row_index = i * 2;
-    a_matrix(row_index,  0) = X.get_x() * u.get_w();
-    a_matrix(row_index,  1) = X.get_y() * u.get_w();
-    a_matrix(row_index,  2) = X.get_z() * u.get_w();
-    a_matrix(row_index,  3) = X.get_w() * u.get_w();
-    a_matrix(row_index,  4) = 0;
-    a_matrix(row_index,  5) = 0;
-    a_matrix(row_index,  6) = 0;
-    a_matrix(row_index,  7) = 0;
-    a_matrix(row_index,  8) = -X.get_x() * u.get_x();
-    a_matrix(row_index,  9) = -X.get_y() * u.get_x();
-    a_matrix(row_index, 10) = -X.get_z() * u.get_x();
-    a_matrix(row_index, 11) = -X.get_w() * u.get_x();
+    a_matrix(row_index,  0) =  X.x() * u.w();
+    a_matrix(row_index,  1) =  X.y() * u.w();
+    a_matrix(row_index,  2) =  X.z() * u.w();
+    a_matrix(row_index,  3) =  X.w() * u.w();
+    a_matrix(row_index,  4) =  0;
+    a_matrix(row_index,  5) =  0;
+    a_matrix(row_index,  6) =  0;
+    a_matrix(row_index,  7) =  0;
+    a_matrix(row_index,  8) = -X.x() * u.x();
+    a_matrix(row_index,  9) = -X.y() * u.x();
+    a_matrix(row_index, 10) = -X.z() * u.x();
+    a_matrix(row_index, 11) = -X.w() * u.x();
 
     row_index = i * 2 + 1;
     a_matrix(row_index,  0) =  0;
     a_matrix(row_index,  1) =  0;
     a_matrix(row_index,  2) =  0;
     a_matrix(row_index,  3) =  0;
-    a_matrix(row_index,  4) =  X.get_x() * u.get_w();
-    a_matrix(row_index,  5) =  X.get_y() * u.get_w();
-    a_matrix(row_index,  6) =  X.get_z() * u.get_w();
-    a_matrix(row_index,  7) =  X.get_w() * u.get_w();
-    a_matrix(row_index,  8) = -X.get_x() * u.get_y();
-    a_matrix(row_index,  9) = -X.get_y() * u.get_y();
-    a_matrix(row_index, 10) = -X.get_z() * u.get_y();
-    a_matrix(row_index, 11) = -X.get_w() * u.get_y();
+    a_matrix(row_index,  4) =  X.x() * u.w();
+    a_matrix(row_index,  5) =  X.y() * u.w();
+    a_matrix(row_index,  6) =  X.z() * u.w();
+    a_matrix(row_index,  7) =  X.w() * u.w();
+    a_matrix(row_index,  8) = -X.x() * u.y();
+    a_matrix(row_index,  9) = -X.y() * u.y();
+    a_matrix(row_index, 10) = -X.z() * u.y();
+    a_matrix(row_index, 11) = -X.w() * u.y();
   }
 
   a_matrix.normalize_rows();

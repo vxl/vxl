@@ -29,11 +29,12 @@ int main(int argc, char**argv)
     // Perform the fit using the non-normalized linear computor.
     FMatrixComputeLinear computor(false);
     FMatrix f = computor.compute(points1, points2);
+    f.set_rank2_using_svd();
 
     vcl_cout << "FMatrixComputeLinear:\nF = " << f << vcl_endl;
 
     double d = 0;
-    for(unsigned int i = 0; i < points1.size(); ++i)
+    for (unsigned int i = 0; i < points1.size(); ++i)
       d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }
@@ -44,11 +45,12 @@ int main(int argc, char**argv)
     FMatrix f;
     vcl_vector<FMatrix*> l; l.push_back(&f);
     computor.compute(points1, points2, l);
+    f.set_rank2_using_svd();
 
     vcl_cout << "FMatrixCompute7Point:\nF = " << f << vcl_endl;
 
     double d = 0;
-    for(unsigned int i = 0; i < points1.size(); ++i)
+    for (unsigned int i = 0; i < points1.size(); ++i)
       d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }
@@ -57,11 +59,12 @@ int main(int argc, char**argv)
     // Perform the fit using Phil Torr's Maximum Likelyhood Estimation.
     FMatrixComputeMLESAC computor(true,9);
     FMatrix f = computor.compute(points1, points2);
+    f.set_rank2_using_svd();
 
     vcl_cout << "FMatrixComputeMLESAC with rank truncation:\nF = " << f << vcl_endl;
 
     double d = 0;
-    for(unsigned int i = 0; i < points1.size(); ++i)
+    for (unsigned int i = 0; i < points1.size(); ++i)
       d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }
@@ -70,11 +73,12 @@ int main(int argc, char**argv)
     // Perform the fit using Phil Torr's Robust Sampling Concensus
     FMatrixComputeRANSAC computor(true,9);
     FMatrix f = computor.compute(points1, points2);
+    f.set_rank2_using_svd();
 
     vcl_cout << "FMatrixComputeRANSAC with rank truncation:\nF = " << f << vcl_endl;
 
     double d = 0;
-    for(unsigned int i = 0; i < points1.size(); ++i)
+    for (unsigned int i = 0; i < points1.size(); ++i)
       d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }
@@ -83,11 +87,12 @@ int main(int argc, char**argv)
     // Perform the fit using the normalized linear computor.
     FMatrixComputeLMedSq computor(true,8);
     FMatrix f = computor.compute(points1, points2);
+    f.set_rank2_using_svd();
 
     vcl_cout << "FMatrixComputeLMedSq with rank truncation:\nF = " << f << vcl_endl;
 
     double d = 0;
-    for(unsigned int i = 0; i < points1.size(); ++i)
+    for (unsigned int i = 0; i < points1.size(); ++i)
       d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }

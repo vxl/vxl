@@ -85,7 +85,7 @@ bool LineSegSet::load_ascii(vcl_istream& f, HomgMetric const& c)
     hlines_.push_back(c.image_to_homg_line(line));
   }
 
-  vcl_cerr << "Loaded " << hlines_.size() << " line segments\n";
+  vcl_cerr << "Loaded " << size() << " line segments\n";
   return true;
 }
 
@@ -94,24 +94,23 @@ int LineSegSet::FindNearestLineIndex(double x, double y)
   vcl_cerr <<"LineSegSet::FindNearestLineIndex AIIEEEEE\n";
   return -1;
 #if 0 // commented out
-  float mindist=100000000;
-  float dist;
+  double mindist=-1.0f;
   int mini=-1;
-  for (int i=0; i<int(size()); i++){
-    ImplicitLine* dl = get_iuline(i);
-    double t = ( dl->GetStartX() - P->x() ) * ( dl->GetEndX() - P->x() );
-    t +=       ( dl->GetStartY() - P->y() ) * ( dl->GetEndY() - P->y() );
-    t +=       ( dl->GetStartZ() - P->z() ) * ( dl->GetEndZ() - P->z() );
-    // i.e.: t = dot_product ( GetStartPoint() - (*p) , GetEndPoint() - (*p) ) ;
+  for (unsigned int i=0; i<size(); ++i)
+  {
+    HomgLineSeg2D& dl = get_homg(i);
+    double t = ( dl.get_point1().x() - x ) * ( dl.get_point2() - x )
+             + ( dl.get_point1().y() - y ) * ( dl.get_point2() - y );
+    // i.e.: t = dot_product ( startpt - pt , endpt - pt ) ;
 
+    double dist;
     if (t<0)     // P lies inbetween the two end points
-      dist = dl->IUPoint2CurveDistance(P->x(),P->y(),P->z());  // distance to the support line
+      dist = vgl_distance(dl.get_line(),vgl_point_2d<double>(x,y)); // distance to the support line
     else
-      dist = dl->EndPointsDistance(*P);   // closest distance with endpoints
-    if (dist<mindist){
-      mindist = dist;
-      mini = i;
-    }
+      dist = vcl_min(// closest distance with endpoints
+                     vgl_distance(dl.get_point1(),vgl_point_2d<double>(x,y)),
+                     vgl_distance(dl.get_point2(),vgl_point_2d<double>(x,y)));
+    if (mini<0 || dist<mindist){ mindist = dist; mini = i; }
   }
   return mini;
 #endif

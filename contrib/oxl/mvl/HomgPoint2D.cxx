@@ -7,17 +7,21 @@
 
 #include "HomgPoint2D.h"
 #include <vcl_iostream.h>
-#include <vnl/vnl_math.h>
+#include <vcl/vcl_cmath.h> // for fabs
 #include <vnl/vnl_double_2.h>
 
 //--------------------------------------------------------------
 //
 //: Return true if the point is at infinity (an ideal point).
-// The method checks that $|w| <= \mbox{infinitesimal\_tol} \times \mbox{max}\{|x|, |y|\}$
+// The method checks that $|w| <= \mbox{tol} \times \mbox{max}\{|x|, |y|\}$
 bool
 HomgPoint2D::check_infinity(double tol) const
 {
-  return vnl_math_abs(get_w()) <= tol * vnl_math_max(vnl_math_abs(get_x()), vnl_math_abs(get_y()));
+  // quick return if possible
+  if (tol==0.0) return w()==0;
+
+  return vcl_fabs(w()) <= tol * vcl_fabs(x())
+      || vcl_fabs(w()) <= tol * vcl_fabs(y());
 }
 
 //--------------------------------------------------------------
@@ -27,16 +31,18 @@ HomgPoint2D::check_infinity(double tol) const
 bool
 HomgPoint2D::get_nonhomogeneous(double& ex, double& ey) const
 {
-  double x = get_x();
-  double y = get_y();
-  double z = get_w();
+  double hx = x();
+  double hy = y();
+  double hz = w();
 
-  if (z == 0)
+  if (hz == 0)
+  {
+    ex = ey = Homg::infinity;
     return false;
+  }
 
-  // double scale = 1.0 / z;
-  ex = x / z;
-  ey = y / z;
+  ex = hx / hz;
+  ey = hy / hz;
   return true;
 }
 
@@ -54,19 +60,15 @@ vnl_double_2 HomgPoint2D::get_double2() const
 //: returns a unit-norm scaled copy of this.
 HomgPoint2D HomgPoint2D::get_unitized() const
 {
-  double x = get_x();
-  double y = get_y();
-  double z = get_w();
-
-  double norm = vcl_sqrt (vnl_math_sqr(x) + vnl_math_sqr(y) + vnl_math_sqr(z));
+  double norm = x()*x() + y()*y() + w()*w();
 
   if (norm == 0.0) {
     vcl_cerr << "HomgPoint2D::get_unitized() -- Zero length vector\n";
     return *this;
   }
 
-  norm = 1.0/norm;
-  return HomgPoint2D(x*norm, y*norm, z*norm);
+  norm = 1.0/vcl_sqrt(norm);
+  return HomgPoint2D(x()*norm, y()*norm, w()*norm);
 }
 
 //-----------------------------------------------------------------------------

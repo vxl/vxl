@@ -14,7 +14,6 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <mvl/HMatrix2D.h>
-#include <mvl/HomgPoint2D.h>
 #include <mvl/PairMatchSetCorner.h>
 #include <mvl/HMatrix2DAffineCompute.h>
 

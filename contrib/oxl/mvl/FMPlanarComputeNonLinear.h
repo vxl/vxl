@@ -49,10 +49,10 @@ class FMPlanarComputeNonLinear : public FMatrixCompute
 
  protected:
   // Data Members--------------------------------------------------------------
-  double _outlier_distance_squared;
+  double outlier_distance_squared_;
 
-  const ImageMetric* _image_metric1;
-  const ImageMetric* _image_metric2;
+  const ImageMetric* image_metric1_;
+  const ImageMetric* image_metric2_;
 };
 
 #endif // FMPlanarComputeNonLinear_h_

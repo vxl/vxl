@@ -228,8 +228,8 @@ void FMatrixComputeNonLinear::fmatrix_to_params(const FMatrix& F, vnl_vector<dou
   HomgPoint2D one, two;
   vnl_double_2 e1, e2;
   F.get_epipoles(&one, &two);
-  vnl_double_3 e1h(one.get_x(), one.get_y(), one.get_w());
-  vnl_double_3 e2h(two.get_x(), two.get_y(), two.get_w());
+  vnl_double_3 e1h(one.x(), one.y(), one.w());
+  vnl_double_3 e2h(two.x(), two.y(), two.w());
   e1h = e1h.normalize();
   e2h = e2h.normalize();
 

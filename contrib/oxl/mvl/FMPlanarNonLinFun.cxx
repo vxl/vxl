@@ -33,12 +33,12 @@ FMPlanarNonLinFun::FMPlanarNonLinFun(const ImageMetric* image_metric1,
                                      vcl_vector<HomgPoint2D>& points1,
                                      vcl_vector<HomgPoint2D>& points2):
    vnl_least_squares_function(FMPlanarNonLinFun_nparams, points1.size(), no_gradient),
-  _data_size(points1.size()),
-  _points1(points1),
-  _points2(points2),
-  _normalized(2*_data_size),
-  _image_metric1(image_metric1),
-  _image_metric2(image_metric2)
+  data_size_(points1.size()),
+  points1_(points1),
+  points2_(points2),
+  normalized_(2*data_size_),
+  image_metric1_(image_metric1),
+  image_metric2_(image_metric2)
 {
   // Form single array
   vcl_vector<HomgPoint2D> points(points1);
@@ -46,11 +46,11 @@ FMPlanarNonLinFun::FMPlanarNonLinFun(const ImageMetric* image_metric1,
     points.push_back(points2[i]);
 
   // Condition points
-  _normalized.normalize(points);
+  normalized_.normalize(points);
 
   // Set up contitioning matrices
-  _denorm_matrix     = _normalized.get_C();
-  _denorm_matrix_inv = _normalized.get_C_inverse();
+  denorm_matrix_     = normalized_.get_C();
+  denorm_matrix_inv_ = normalized_.get_C_inverse();
 }
 
 //-----------------------------------------------------------------------------
@@ -59,11 +59,11 @@ FMPlanarNonLinFun::FMPlanarNonLinFun(const ImageMetric* image_metric1,
 bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
 {
   // fm_fmatrix_nagmin
-  vcl_cerr << "FMPlanarNonLinFun: matches = "<<_data_size<<", using "<<FMPlanarNonLinFun_nparams<<" parameters \n";
+  vcl_cerr << "FMPlanarNonLinFun: matches = "<<data_size_<<", using "<<FMPlanarNonLinFun_nparams<<" parameters \n";
 
   /* transform F to well-conditioned frame. */
-  const vnl_matrix<double>& post = _denorm_matrix_inv;
-  const vnl_matrix<double>& pre  = _denorm_matrix_inv.transpose();
+  const vnl_matrix<double>& post = denorm_matrix_inv_;
+  const vnl_matrix<double>& pre  = denorm_matrix_inv_.transpose();
   FMatrixPlanar norm_F(pre * F->get_matrix() * post);
 
   /* parameterise it. */
@@ -75,17 +75,17 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
        return false;
 
   vcl_cerr<<"FMPlanarNonLinFun: minimisation start error "
-          << lm.get_start_error() / vcl_sqrt(double(_data_size))
+          << lm.get_start_error() / vcl_sqrt(double(data_size_))
           <<" end error "
-          << lm.get_end_error() / vcl_sqrt(double(_data_size))
+          << lm.get_end_error() / vcl_sqrt(double(data_size_))
           <<vcl_endl;
 
   norm_F = params_to_fmatrix (f_params);
 
-  F->set(_denorm_matrix.transpose() * norm_F.get_matrix() * _denorm_matrix);
+  F->set(denorm_matrix_.transpose() * norm_F.get_matrix() * denorm_matrix_);
 
-  vcl_cerr << "fm_fmatrix_nagmin: accepted " << _data_size << '/' << _data_size
-           << " rms point-epipolar error " << lm.get_end_error() / vcl_sqrt(double(_data_size))
+  vcl_cerr << "fm_fmatrix_nagmin: accepted " << data_size_ << '/' << data_size_
+           << " rms point-epipolar error " << lm.get_end_error() / vcl_sqrt(double(data_size_))
            << vcl_endl;;
 
   return true;
@@ -98,23 +98,23 @@ void FMPlanarNonLinFun::f(vnl_vector<double> const& f_params, vnl_vector<double>
 {
      FMatrixPlanar norm_F = params_to_fmatrix(f_params);
 
-     FMatrixPlanar F(_denorm_matrix.transpose() * norm_F.get_matrix() * _denorm_matrix);
+     FMatrixPlanar F(denorm_matrix_.transpose() * norm_F.get_matrix() * denorm_matrix_);
 
-     for (int i = 0; i < _data_size; ++i) {
-          const HomgPoint2D& p1 = _points1[i];
-          const HomgPoint2D& p2 = _points2[i];
+     for (int i = 0; i < data_size_; ++i) {
+          const HomgPoint2D& p1 = points1_[i];
+          const HomgPoint2D& p2 = points2_[i];
 
           HomgLine2D l12 = F.image2_epipolar_line(p1);
-          double r1 = _image_metric2.perp_dist_squared(p2, l12);
+          double r1 = image_metric2_.perp_dist_squared(p2, l12);
 
           HomgLine2D l21 = F.image1_epipolar_line(p2);
-          double r2 = _image_metric1.perp_dist_squared(p1, l21);
+          double r2 = image_metric1_.perp_dist_squared(p1, l21);
 
           fx[i] = vcl_sqrt((r1 + r2) / 2.0);
      }
-     // vcl_cerr << "Err = " << vcl_sqrt (distance_squared / (_data_size * 2)) << vcl_endl;
+     // vcl_cerr << "Err = " << vcl_sqrt (distance_squared / (data_size_ * 2)) << vcl_endl;
 
-//   return vcl_sqrt (distance_squared / (_data_size * 2)); // void function cannot return
+//   return vcl_sqrt (distance_squared / (data_size_ * 2)); // void function cannot return
 }
 
 void FMPlanarNonLinFun::fmatrix_to_params(const FMatrixPlanar& F,

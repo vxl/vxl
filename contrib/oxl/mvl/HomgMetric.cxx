@@ -11,6 +11,8 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/vnl_double_2.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_line_2d.h>
 
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>
@@ -47,6 +49,12 @@ vcl_ostream& HomgMetric::print(vcl_ostream & s) const
 }
 
 // ** Conversion to/from homogeneous coordinates
+vgl_homg_point_2d<double> HomgMetric::homg_to_image(vgl_homg_point_2d<double> const& p) const
+{
+  if (metric_) return metric_->homg_to_image(p);
+  return p;
+}
+
 vnl_double_2 HomgMetric::homg_to_image(const HomgPoint2D& p) const
 {
   if (metric_) return metric_->homg_to_image(p);
@@ -65,6 +73,24 @@ void HomgMetric::homg_to_image(const HomgPoint2D& homg, double* ix, double* iy) 
   } else {
     homg.get_nonhomogeneous(*ix, *iy);
   }
+}
+
+void HomgMetric::homg_to_image(vgl_homg_point_2d<double> const& homg, double& ix, double& iy) const
+{
+  if (metric_) {
+    vgl_homg_point_2d<double> p = metric_->homg_to_image(homg);
+    ix = p.x()/p.w(),
+    iy = p.y()/p.w();
+  } else {
+    ix = homg.x()/homg.w(),
+    iy = homg.y()/homg.w();
+  }
+}
+
+vgl_homg_point_2d<double> HomgMetric::homg_to_imagehomg(vgl_homg_point_2d<double> const& p) const
+{
+  if (metric_) return metric_->homg_to_imagehomg(p);
+  else return p;
 }
 
 HomgPoint2D HomgMetric::homg_to_imagehomg(const HomgPoint2D& p) const
@@ -86,6 +112,12 @@ HomgPoint2D HomgMetric::image_to_homg(double x, double y) const
   else return HomgPoint2D(x, y, 1.0);
 }
 
+vgl_homg_point_2d<double> HomgMetric::imagehomg_to_homg(vgl_homg_point_2d<double> const& p) const
+{
+  if (metric_) return metric_->imagehomg_to_homg(p);
+  else return p;
+}
+
 HomgPoint2D HomgMetric::imagehomg_to_homg(const HomgPoint2D& p) const
 {
   if (metric_) return metric_->imagehomg_to_homg(p);
@@ -93,9 +125,21 @@ HomgPoint2D HomgMetric::imagehomg_to_homg(const HomgPoint2D& p) const
 }
 
 
+vgl_homg_line_2d<double> HomgMetric::homg_to_image_line(vgl_homg_line_2d<double> const& l) const
+{
+  if (metric_) return metric_->homg_to_image_line(l);
+  else return l;
+}
+
 HomgLine2D HomgMetric::homg_to_image_line(const HomgLine2D& l) const
 {
   if (metric_) return metric_->homg_to_image_line(l);
+  else return l;
+}
+
+vgl_homg_line_2d<double> HomgMetric::image_to_homg_line(vgl_homg_line_2d<double> const& l) const
+{
+  if (metric_) return metric_->image_to_homg_line(l);
   else return l;
 }
 
@@ -118,16 +162,37 @@ HomgLineSeg2D HomgMetric::homg_line_to_image(const HomgLineSeg2D& l) const
 }
 
 // ** Measurements
+double HomgMetric::perp_dist_squared(vgl_homg_point_2d<double> const& p,
+                                     vgl_homg_line_2d<double> const& l) const
+{
+  if (metric_) return metric_->perp_dist_squared(p, l);
+  else return vgl_homg_operators_2d<double>::perp_dist_squared(p, l);
+}
+
 double HomgMetric::perp_dist_squared(const HomgPoint2D& p, const HomgLine2D& l) const
 {
   if (metric_) return metric_->perp_dist_squared(p, l);
   else return HomgOperator2D::perp_dist_squared(p, l);
 }
 
+vgl_homg_point_2d<double> HomgMetric::perp_projection(vgl_homg_line_2d<double> const& l,
+                                                      vgl_homg_point_2d<double> const& p) const
+{
+  if (metric_) return metric_->perp_projection(l, p);
+  else return vgl_homg_operators_2d<double>::perp_projection(l, p);
+}
+
 HomgPoint2D HomgMetric::perp_projection(const HomgLine2D& l, const HomgPoint2D& p) const
 {
   if (metric_) return metric_->perp_projection(l, p);
   else return HomgOperator2D::perp_projection(l, p);
+}
+
+double HomgMetric::distance_squared(vgl_homg_point_2d<double> const& p1,
+                                    vgl_homg_point_2d<double> const& p2) const
+{
+  if (metric_) return metric_->distance_squared(p1, p2);
+  else return vgl_homg_operators_2d<double>::distance_squared(p1, p2);
 }
 
 double HomgMetric::distance_squared(double x1, double y1, double x2, double y2) const
@@ -144,10 +209,29 @@ double HomgMetric::distance_squared(const HomgPoint2D& p1, const HomgPoint2D& p2
   else return HomgOperator2D::distance_squared(p1, p2);
 }
 
+double HomgMetric::distance_squared(vgl_line_segment_2d<double> const& segment,
+                                    vgl_homg_line_2d<double> const& line) const
+{
+  if (metric_) return metric_->distance_squared(segment, line);
+  else {
+    double r1 = vgl_homg_operators_2d<double>::perp_dist_squared(vgl_homg_point_2d<double>(segment.point1()), line),
+           r2 = vgl_homg_operators_2d<double>::perp_dist_squared(vgl_homg_point_2d<double>(segment.point2()), line);
+    return r1 > r2 ? r1 : r2;
+  }
+}
+
 double HomgMetric::distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line) const
 {
   if (metric_) return metric_->distance_squared(segment, line);
   else return HomgOperator2D::distance_squared(segment, line);
+}
+
+bool HomgMetric::is_within_distance(vgl_homg_point_2d<double> const& p1,
+                                    vgl_homg_point_2d<double> const& p2,
+                                    double distance) const
+{
+  if (metric_) return metric_->is_within_distance(p1, p2, distance);
+  else return vgl_homg_operators_2d<double>::is_within_distance(p1, p2, distance);
 }
 
 bool HomgMetric::is_within_distance(const HomgPoint2D& p1, const HomgPoint2D& p2, double distance) const
@@ -165,18 +249,18 @@ bool HomgMetric::is_linear() const
   else return true;
 }
 
-static vnl_identity_3x3 I;
-
 //: Return the planar homography C s.t. C x converts x from conditioned to image coordinates.
-vnl_matrix<double> HomgMetric::get_C() const
+vnl_double_3x3 HomgMetric::get_C() const
 {
+  static vnl_identity_3x3 I;
   if (metric_) return metric_->get_C();
   else return I;
 }
 
 //: Return $C^{-1}$.
-vnl_matrix<double> HomgMetric::get_C_inverse() const
+vnl_double_3x3 HomgMetric::get_C_inverse() const
 {
+  static vnl_identity_3x3 I;
   if (metric_) return metric_->get_C_inverse();
   else return I;
 }

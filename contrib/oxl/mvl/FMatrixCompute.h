@@ -26,9 +26,15 @@
 // - FMatrixComputeMLESAC    - Phil Torr's Maximum Likelyhood estimation
 // - FMatrixComputeRANSAC    - Phil Torr's Robust Sampling Concensus
 //
+// \verbatim
+// Modifications
+//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+// \endverbatim
+//
 
 #include <vcl_vector.h>
 #include <mvl/FMatrix.h>
+#include <vgl/vgl_homg_point_2d.h>
 class HomgPoint2D;
 class PairMatchSetCorner;
 
@@ -39,11 +45,14 @@ class FMatrixCompute
   virtual ~FMatrixCompute();
 
   //: This is the virtual compute interface
-  // Both functions are implemented in terms of each other,
+  // These 3 functions are implemented in terms of each other,
   // so it suffices to implement exactly one of them in a derived class,
-  // and implement the other one by calling this implementation.
-  virtual bool compute (PairMatchSetCorner& matched_points, FMatrix* f_matrix_ptr);
-  virtual bool compute (vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* f_matrix_ptr);
+  // and implement the other ones by calling this implementation.
+  virtual bool compute(PairMatchSetCorner& matched_points, FMatrix* f_matrix_ptr);
+  virtual bool compute(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* f_matrix_ptr);
+  virtual bool compute(vcl_vector<vgl_homg_point_2d<double> >&,
+                       vcl_vector<vgl_homg_point_2d<double> >&,
+                       FMatrix* f_matrix_ptr);
 
   //: Compute fundamental matrix using given matchlist and return an FMatrix object.
   //  This is implemented in terms of compute(MatchList*, FMatrix*)
@@ -51,6 +60,9 @@ class FMatrixCompute
     { FMatrix ret; compute(matched_points, &ret); return ret; }
 
   inline FMatrix compute(vcl_vector<HomgPoint2D>& pts1, vcl_vector<HomgPoint2D>& pts2)
+    { FMatrix ret; compute(pts1, pts2, &ret); return ret; }
+  inline FMatrix compute(vcl_vector<vgl_homg_point_2d<double> >& pts1,
+                         vcl_vector<vgl_homg_point_2d<double> >& pts2)
     { FMatrix ret; compute(pts1, pts2, &ret); return ret; }
 };
 

@@ -22,6 +22,7 @@
 #include <vnl/vnl_transpose.h>
 #include <vnl/vnl_cross_product_matrix.h>
 #include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_inverse.h>
 
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
@@ -321,7 +322,7 @@ TriTensor::image1_transfer (const HomgLine2D& line2, const HomgLine2D& line3) co
 HomgLine2D
 TriTensor::image2_transfer (const HomgLine2D& line1, const HomgLine2D& line3) const
 {
-  return HomgLine2D(vnl_svd<double>(dot3(line3.get_vector())).inverse() * line1.get_vector());
+  return HomgLine2D(vnl_inverse(dot3(line3.get_vector())) * line1.get_vector());
 }
 
 //-----------------------------------------------------------------------------
@@ -332,7 +333,7 @@ TriTensor::image2_transfer (const HomgLine2D& line1, const HomgLine2D& line3) co
 HomgLine2D
 TriTensor::image3_transfer (const HomgLine2D& line1, const HomgLine2D& line2) const
 {
-  return HomgLine2D(vnl_svd<double>(dot2(line2.get_vector())).inverse() * line1.get_vector());
+  return HomgLine2D(vnl_inverse(dot2(line2.get_vector())) * line1.get_vector());
 }
 
 // == HOMOGRAPHIES FROM LINES ==
@@ -591,13 +592,13 @@ void TriTensor::get_constraint_lines_image3(const HomgPoint2D& p1, const HomgPoi
 
   // use the same notation as the output of tr_hartley_equation.
 
-  double x1 = p1.get_x();
-  double y1 = p1.get_y();
-  double z1 = p1.get_w();
+  double x1 = p1.x();
+  double y1 = p1.y();
+  double z1 = p1.w();
 
-  double x2 = p2.get_x();
-  double y2 = p2.get_y();
-  double z2 = p2.get_w();
+  double x2 = p2.x();
+  double y2 = p2.y();
+  double z2 = p2.w();
 
   // vcl_cerr << "CLINES = [" << x1 << " " << y1 << " " << z1 << "; " << x2 << " " << y2 << " " << z2 << "];\n";
 
@@ -776,13 +777,13 @@ void TriTensor::get_constraint_lines_image3(const HomgPoint2D& p1, const HomgPoi
 
 void TriTensor::get_constraint_lines_image2(const HomgPoint2D& p1, const HomgPoint2D& p3, vcl_vector<HomgLine2D>* lines) const
 {
-  double x1 = p1.get_x();
-  double y1 = p1.get_y();
-  double z1 = p1.get_w();
+  double x1 = p1.x();
+  double y1 = p1.y();
+  double z1 = p1.w();
 
-  double x3 = p3.get_x();
-  double y3 = p3.get_y();
-  double z3 = p3.get_w();
+  double x3 = p3.x();
+  double y3 = p3.y();
+  double z3 = p3.w();
 
   lines->resize(0);
 
@@ -946,13 +947,13 @@ void TriTensor::get_constraint_lines_image1(const HomgPoint2D& p2, const HomgPoi
 {
   // use the same notation as the output of tr_hartley_equation.
 
-  double x2 = p2.get_x();
-  double y2 = p2.get_y();
-  double z2 = p2.get_w();
+  double x2 = p2.x();
+  double y2 = p2.y();
+  double z2 = p2.w();
 
-  double x3 = p3.get_x();
-  double y3 = p3.get_y();
-  double z3 = p3.get_w();
+  double x3 = p3.x();
+  double y3 = p3.y();
+  double z3 = p3.w();
 
   lines->resize(0);
 

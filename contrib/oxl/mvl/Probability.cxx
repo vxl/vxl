@@ -58,17 +58,17 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
 
   for (unsigned int i=0;i<index.size();i++)
   {
-    if ( points[i].get_x() > max_x )
-      max_x = points[i].get_x();
+    if ( points[i].x() > max_x )
+      max_x = points[i].x();
 
-    if ( points[i].get_y() > max_y )
-      max_y = points[i].get_y();
+    if ( points[i].y() > max_y )
+      max_y = points[i].y();
 
-    if ( points[i].get_x() < min_x )
-      min_x = points[i].get_x();
+    if ( points[i].x() < min_x )
+      min_x = points[i].x();
 
-    if ( points[i].get_y() < min_y )
-      min_y = points[i].get_y();
+    if ( points[i].y() < min_y )
+      min_y = points[i].y();
   }
 
   double center_x = ( max_x - min_x ) * 0.5;
@@ -128,7 +128,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
     }
 #if 0 // was:
     for (int j = 0; j < index.size(); j++) {
-      double x = points[j].get_x(), y = points[j].get_y(), w = points[j].get_w();
+      double x = points[j].x(), y = points[j].y(), w = points[j].w();
       if (w < 0) { x *= -1; y *= -1; w *= -1; }
       if (y >= row_check_lower*w && y < row_check_upper*w &&
           x >= col_check_lower*w && x < col_check_upper*w)
@@ -201,17 +201,17 @@ double Sampsons_MLE(HomgPoint2D x1, HomgPoint2D x2, FMatrix *F)
   double rX, rY, rX_dash, rY_dash, GRADr, r, dist;
   vnl_matrix<double> temp(3, 3);
   temp = (vnl_matrix<double>)F->get_matrix();
-  vcl_cerr << x2.get_x() << vcl_endl;
-  rX = temp.get(0, 0)*x2.get_x() + temp.get(1, 0)*x2.get_y() + temp.get(2, 0);
-  rY = F->get(0, 1)*x2.get_x() + F->get(1, 1)*x2.get_y() + F->get(2, 1);
-  rX_dash = F->get(0, 0)*x1.get_x() + F->get(0, 1)*x1.get_y() + F->get(0, 2);
-  rY_dash = F->get(1, 0)*x1.get_x() + F->get(1, 1)*x1.get_y() + F->get(1, 2);
+  vcl_cerr << x2.x() << vcl_endl;
+  rX = temp.get(0, 0)*x2.x() + temp.get(1, 0)*x2.y() + temp.get(2, 0);
+  rY = F->get(0, 1)*x2.x() + F->get(1, 1)*x2.y() + F->get(2, 1);
+  rX_dash = F->get(0, 0)*x1.x() + F->get(0, 1)*x1.y() + F->get(0, 2);
+  rY_dash = F->get(1, 0)*x1.x() + F->get(1, 1)*x1.y() + F->get(1, 2);
   vcl_cerr << "Points : " << rX << " " << rY << " " << rX_dash << " " << rY_dash << vcl_endl;
   GRADr = vnl_math_sqr(rX*rX + rY*rY + rX_dash*rX_dash + rY_dash*rY_dash);
   vcl_cerr << "1 : " << " " << GRADr << vcl_endl;
   // This is an annoying interface
-  HomgPoint2D *x1p = new HomgPoint2D(x1.get_x(), x1.get_y(), 1.0);
-  HomgPoint2D *x2p = new HomgPoint2D(x2.get_x(), x2.get_y(), 1.0);
+  HomgPoint2D *x1p = new HomgPoint2D(x1.x(), x1.y(), 1.0);
+  HomgPoint2D *x2p = new HomgPoint2D(x2.x(), x2.y(), 1.0);
   vcl_cerr << "2" << vcl_endl;
   r = F->image1_epipolar_distance_squared(x1p, x2p);
   vcl_cerr << "r " << r << vcl_endl;

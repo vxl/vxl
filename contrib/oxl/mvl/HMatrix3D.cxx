@@ -10,7 +10,9 @@
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_matlab_print.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_inverse.h>
+#include <vnl/vnl_double_3x3.h>
+#include <vnl/vnl_double_3.h>
 
 #include <mvl/HomgPrettyPrint.h>
 #include <mvl/HomgLine3D.h>
@@ -33,7 +35,7 @@ HMatrix3D::HMatrix3D(const HMatrix3D& M):
 //--------------------------------------------------------------
 //
 //: Constructor
-HMatrix3D::HMatrix3D(const vnl_matrix<double>& M):
+HMatrix3D::HMatrix3D(vnl_double_4x4 const& M):
   Base(M)
 {
 }
@@ -51,7 +53,7 @@ HMatrix3D::HMatrix3D(vcl_istream& s)
 //
 //: Construct an affine HMatrix3D from 3x3 M and 3x1 m.
 // \f[ H = \begin{array}{cc} M & m\\ 0 & 1 \end{array} \f]
-HMatrix3D::HMatrix3D(const vnl_matrix<double>& M, const vnl_vector<double>& m)
+HMatrix3D::HMatrix3D(vnl_double_3x3 const& M, vnl_double_3 const& m)
 {
   assert(M.rows() == 3);
   assert(M.columns() == 3);
@@ -110,9 +112,9 @@ HomgLine3D HMatrix3D::transform(const HomgLine3D& l1) const
 vcl_ostream& operator<<(vcl_ostream& s, const HMatrix3D& h)
 {
   if (HomgPrettyPrint::pretty)
-    return vnl_matlab_print(s, (vnl_matrix<double> const &/*2.7 needs*/) h.get_matrix(), "");
+    return vnl_matlab_print(s, (vnl_matrix<double> const&)h, "");
   else
-    return s << h.get_matrix();
+    return s << (vnl_matrix<double> const&)h;
 }
 
 //: Load H from ASCII file.
@@ -155,9 +157,8 @@ void HMatrix3D::get (vnl_matrix<double>* t_matrix) const
 }
 
 //-----------------------------------------------------------------------------
-//: Return the inverse of this HMatrix3D.  Computed using vnl_svd<double>.
-HMatrix3D HMatrix3D::Inverse () const
+//: Return the inverse of this HMatrix3D.  *Not* using vnl_svd.
+HMatrix3D HMatrix3D::get_inverse() const
 {
-  vnl_svd<double> svd(*this);
-  return svd.inverse();
+  return vnl_inverse(*this);
 }

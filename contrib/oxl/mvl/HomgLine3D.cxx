@@ -32,8 +32,8 @@ HomgLine3D::HomgLine3D (const HomgPoint3D& start,
                         const HomgPoint3D& end)
 {
   // ho_quadvecstd_points2_to_line
-  bool start_finite = start.get_w() != 0;
-  bool end_finite = end.get_w() != 0;
+  bool start_finite = start.w() != 0.0;
+  bool end_finite = end.w() != 0.0;
 
   if (start_finite && end_finite) {
     point_finite_ = start;

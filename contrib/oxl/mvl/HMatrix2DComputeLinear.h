@@ -1,7 +1,5 @@
 #ifndef _HMatrix2DComputeLinear_h
 #define _HMatrix2DComputeLinear_h
-
-//--------------------------------------------------------------
 //:
 // \file
 //
@@ -19,17 +17,16 @@
 
 #include "HMatrix2DCompute.h"
 
-class HMatrix2DComputeLinear : public HMatrix2DCompute {
-//--------------------------------------------------------------------------------=
-private:
-  bool _allow_ideal_points;
-//--------------------------------------------------------------------------------=
-protected:
+class HMatrix2DComputeLinear : public HMatrix2DCompute
+{
+  bool allow_ideal_points_;
+
+ protected:
   bool compute_p(PointArray const&,
                  PointArray const&,
                  HMatrix2D* H);
-//--------------------------------------------------------------------------------=
-public:
+
+ public:
   HMatrix2DComputeLinear(bool allow_ideal_points = false);
   int minimum_number_of_correspondences() const { return 4; }
 };

@@ -14,7 +14,7 @@
 //: Construct a HMatrix2DComputeLinear object.
 // The allow_ideal_points flag is described below.
 HMatrix2DComputeLinear::HMatrix2DComputeLinear(bool allow_ideal_points):
-  _allow_ideal_points(allow_ideal_points)
+  allow_ideal_points_(allow_ideal_points)
 {
 }
 
@@ -56,7 +56,7 @@ HMatrix2DComputeLinear::compute_p(PointArray const& inpoints1,
   assert(inpoints1.size() == inpoints2.size());
   int n = inpoints1.size();
 
-  int equ_count = n * (_allow_ideal_points ? 3 : 2);
+  int equ_count = n * (allow_ideal_points_ ? 3 : 2);
   if (n * 2 < TM_UNKNOWNS_COUNT - 1) {
     vcl_cerr << "HMatrix2DComputeLinear: Need at least 4 matches.\n";
     if (n == 0) vcl_cerr << "Could be vcl_vector setlength idiosyncrasies!\n";
@@ -73,35 +73,35 @@ HMatrix2DComputeLinear::compute_p(PointArray const& inpoints1,
     const HomgPoint2D& p1 = points1[i];
     const HomgPoint2D& p2 = points2[i];
 
-    D(row, 0) = p1.get_x() * p2.get_w();
-    D(row, 1) = p1.get_y() * p2.get_w();
-    D(row, 2) = p1.get_w() * p2.get_w();
+    D(row, 0) =  p1.x() * p2.w();
+    D(row, 1) =  p1.y() * p2.w();
+    D(row, 2) =  p1.w() * p2.w();
     D(row, 3) = 0;
     D(row, 4) = 0;
     D(row, 5) = 0;
-    D(row, 6) = -p1.get_x() * p2.get_x();
-    D(row, 7) = -p1.get_y() * p2.get_x();
-    D(row, 8) = -p1.get_w() * p2.get_x();
+    D(row, 6) = -p1.x() * p2.x();
+    D(row, 7) = -p1.y() * p2.x();
+    D(row, 8) = -p1.w() * p2.x();
     ++row;
 
     D(row, 0) = 0;
     D(row, 1) = 0;
     D(row, 2) = 0;
-    D(row, 3) = p1.get_x() * p2.get_w();
-    D(row, 4) = p1.get_y() * p2.get_w();
-    D(row, 5) = p1.get_w() * p2.get_w();
-    D(row, 6) = -p1.get_x() * p2.get_y();
-    D(row, 7) = -p1.get_y() * p2.get_y();
-    D(row, 8) = -p1.get_w() * p2.get_y();
+    D(row, 3) =  p1.x() * p2.w();
+    D(row, 4) =  p1.y() * p2.w();
+    D(row, 5) =  p1.w() * p2.w();
+    D(row, 6) = -p1.x() * p2.y();
+    D(row, 7) = -p1.y() * p2.y();
+    D(row, 8) = -p1.w() * p2.y();
     ++row;
 
-    if (_allow_ideal_points) {
-      D(row, 0) = p1.get_x() * p2.get_y();
-      D(row, 1) = p1.get_y() * p2.get_y();
-      D(row, 2) = p1.get_w() * p2.get_y();
-      D(row, 3) = -p1.get_x() * p2.get_x();
-      D(row, 4) = -p1.get_y() * p2.get_x();
-      D(row, 5) = -p1.get_w() * p2.get_x();
+    if (allow_ideal_points_) {
+      D(row, 0) =  p1.x() * p2.y();
+      D(row, 1) =  p1.y() * p2.y();
+      D(row, 2) =  p1.w() * p2.y();
+      D(row, 3) = -p1.x() * p2.x();
+      D(row, 4) = -p1.y() * p2.x();
+      D(row, 5) = -p1.w() * p2.x();
       D(row, 6) = 0;
       D(row, 7) = 0;
       D(row, 8) = 0;

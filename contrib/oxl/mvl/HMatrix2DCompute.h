@@ -1,6 +1,5 @@
 #ifndef HMatrix2DCompute_h_
 #define HMatrix2DCompute_h_
-
 //:
 // \file
 //

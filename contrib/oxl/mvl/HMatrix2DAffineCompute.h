@@ -19,27 +19,27 @@
 //                  taking PairMatchSet argument. Changed the remaining
 //                  compute method to take an HMatrix2D* argument instead
 //                  of returning an HMatrix2D.
+//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 // \endverbatim
 
 #include <mvl/HMatrix2DCompute.h>
 #include <mvl/HMatrix2D.h>
+#include <vgl/vgl_homg_point_2d.h>
 class HomgPoint2D;
 
 class HMatrix2DAffineCompute : public HMatrix2DCompute
 {
  protected:
-  bool compute_p(const PointArray &,
-                 const PointArray &,
+  bool compute_p(vcl_vector<HomgPoint2D> const&,
+                 vcl_vector<HomgPoint2D> const&,
                  HMatrix2D *);
  public:
-  // left in for capes :
-  static HMatrix2D compute (const PairMatchSetCorner &matches);
-  static HMatrix2D compute (const vcl_vector<HomgPoint2D>&p1, const vcl_vector<HomgPoint2D>&p2);
+  static HMatrix2D compute(const vcl_vector<HomgPoint2D>&p1, const vcl_vector<HomgPoint2D>&p2);
+  static HMatrix2D compute(vcl_vector<vgl_homg_point_2d<double> > const& p1,
+                           vcl_vector<vgl_homg_point_2d<double> > const& p2);
   int minimum_number_of_correspondences() const { return 3; }
- private:
-  static bool tmp_fun(const PointArray&,
-                      const PointArray&,
-                      HMatrix2D*);
+  // left in for capes :
+  static HMatrix2D compute(const PairMatchSetCorner &matches);
 };
 
 //--------------------------------------------------------------------------------
@@ -53,6 +53,7 @@ class HMatrix2DAffineCompute : public HMatrix2DCompute
 struct NonHomg : public vnl_matrix<double>
 {
   NonHomg(const vcl_vector<HomgPoint2D> &A);
+  NonHomg(vcl_vector<vgl_homg_point_2d<double> > const& A);
 };
 
 //

@@ -17,11 +17,16 @@
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 21 Aug 96
 //
+// \verbatim
+// Modifications
+//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
 #include <vcl_vector.h>
 #include <mvl/HomgPoint2D.h>
+#include <vgl/vgl_homg_point_2d.h>
 
 class FDesignMatrix : public vnl_matrix<double>
 {
@@ -31,6 +36,9 @@ class FDesignMatrix : public vnl_matrix<double>
 
   FDesignMatrix(vcl_vector<HomgPoint2D> const& points1,
                 vcl_vector<HomgPoint2D> const& points2);
+
+  FDesignMatrix(vcl_vector<vgl_homg_point_2d<double> > const& points1,
+                vcl_vector<vgl_homg_point_2d<double> > const& points2);
 };
 
 #endif // FDesignMatrix_h_

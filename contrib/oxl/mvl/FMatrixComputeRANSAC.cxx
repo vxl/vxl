@@ -4,6 +4,7 @@
 #include <mvl/HomgOperator2D.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_2.h>
+#include <vgl/algo/vgl_homg_operators_2d.h>
 
 FMatrixComputeRANSAC::FMatrixComputeRANSAC(bool rank2_truncate, double std)
 {
@@ -26,7 +27,18 @@ double FMatrixComputeRANSAC::calculate_term(vcl_vector<double>& residuals, vcl_v
   return (double)(residuals.size() - count);
 }
 
-double FMatrixComputeRANSAC::calculate_residual(HomgPoint2D& one, HomgPoint2D& two, FMatrix* F) {
+double FMatrixComputeRANSAC::calculate_residual(vgl_homg_point_2d<double>& one,
+                                                vgl_homg_point_2d<double>& two,
+                                                FMatrix* F)
+{
+  vgl_homg_line_2d<double> l1 = F->image2_epipolar_line(one);
+  vgl_homg_line_2d<double> l2 = F->image1_epipolar_line(two);
+  return vgl_homg_operators_2d<double>::perp_dist_squared(two, l1)
+       + vgl_homg_operators_2d<double>::perp_dist_squared(one, l2);
+}
+
+double FMatrixComputeRANSAC::calculate_residual(HomgPoint2D& one, HomgPoint2D& two, FMatrix* F)
+{
 #if 0
   double r = 0.0;
 

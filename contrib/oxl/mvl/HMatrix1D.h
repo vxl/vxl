@@ -10,6 +10,11 @@
 // A class to hold a line-to-line projective transformation matrix
 // and to perform common operations using it e.g. transfer point.
 //
+// \verbatim
+// Modifications
+//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+//    23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
+// \endverbatim
 
 #include <vnl/vnl_double_2x2.h>
 #include <mvl/HomgPoint1D.h>
@@ -27,7 +32,7 @@ class HMatrix1D
   HMatrix1D();
   HMatrix1D(const HMatrix1D& M);
   HMatrix1D(const HMatrix1D&,const HMatrix1D&);// product of two HMatrix1Ds
-  HMatrix1D(const vnl_matrix<double>& M);
+  HMatrix1D(vnl_double_2x2 const& M);
   HMatrix1D(const double* t_matrix);
   HMatrix1D(vcl_istream& s);
  ~HMatrix1D();
@@ -52,8 +57,8 @@ class HMatrix1D
   const vnl_double_2x2& get_inverse () const { return t21_matrix_; }
 
   void set (const double *t_matrix);
-  void set (const vnl_matrix<double>& t_matrix);
-  void set_inverse (const vnl_matrix<double>& t21_matrix);
+  void set (vnl_double_2x2 const& t_matrix);
+  void set_inverse (vnl_double_2x2 const& t21_matrix);
 };
 
 vcl_ostream& operator << (vcl_ostream& s, const HMatrix1D& H);

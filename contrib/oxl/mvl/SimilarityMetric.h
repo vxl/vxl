@@ -18,6 +18,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_double_3x3.h>
+#include <vgl/vgl_fwd.h>
 #include <mvl/ImageMetric.h>
 #include <vcl_iosfwd.h>
 class Image;
@@ -30,8 +31,8 @@ class SimilarityMetric : public ImageMetric
   double inv_scale_;
   double scale_;
 
-  vnl_matrix<double> cond_matrix;
-  vnl_matrix<double> inv_cond_matrix;
+  vnl_double_3x3 cond_matrix;
+  vnl_double_3x3 inv_cond_matrix;
 
  public:
   // Constructors/Destructors--------------------------------------------------
@@ -55,14 +56,16 @@ class SimilarityMetric : public ImageMetric
   virtual vnl_double_2 homg_to_image(const HomgPoint2D&) const;
   virtual HomgPoint2D imagehomg_to_homg(const HomgPoint2D&) const;
   virtual HomgPoint2D homg_to_imagehomg(const HomgPoint2D&) const;
+  virtual vgl_homg_point_2d<double> imagehomg_to_homg(vgl_homg_point_2d<double> const&) const;
+  virtual vgl_homg_point_2d<double> homg_to_imagehomg(vgl_homg_point_2d<double> const&) const;
 
   virtual double perp_dist_squared(HomgPoint2D const& p, HomgLine2D const& l) const;
   virtual double distance_squared(HomgPoint2D const&, HomgPoint2D const&) const;
   virtual double distance_squared(HomgLineSeg2D const& segment, HomgLine2D const& line) const;
 
   virtual bool is_linear() const { return true; }
-  virtual vnl_matrix<double> get_C() const { return cond_matrix; }
-  virtual vnl_matrix<double> get_C_inverse() const { return inv_cond_matrix; }
+  virtual vnl_double_3x3 get_C() const { return cond_matrix; }
+  virtual vnl_double_3x3 get_C_inverse() const { return inv_cond_matrix; }
 
   virtual bool can_invert_distance() const;
   virtual double image_to_homg_distance(double image_distance) const;

@@ -19,12 +19,17 @@
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 28 Jan 97
 //
+// \verbatim
+// Modifications
+//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+// \endverbatim
+//
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_fwd.h>
+#include <vgl/vgl_fwd.h>
 #include <vcl_iosfwd.h>
 
-class vnl_double_2;
 class ImageMetric;
 class HomgPoint2D;
 class HomgLine2D;
@@ -52,32 +57,52 @@ class HomgMetric
 
   // ** Conversion to/from homogeneous coordinates
   vnl_double_2 homg_to_image(const HomgPoint2D&) const;
+  vgl_homg_point_2d<double> homg_to_image(vgl_homg_point_2d<double> const&) const;
   void homg_to_image(const HomgPoint2D&, double* ix, double* iy) const;
+  void homg_to_image(vgl_homg_point_2d<double> const&, double& ix, double& iy) const;
   HomgPoint2D image_to_homg(const vnl_double_2&) const;
   HomgPoint2D image_to_homg(double x, double y) const;
 
   HomgPoint2D homg_to_imagehomg(const HomgPoint2D&) const;
   HomgPoint2D imagehomg_to_homg(const HomgPoint2D&) const;
 
+  vgl_homg_point_2d<double> homg_to_imagehomg(vgl_homg_point_2d<double> const&) const;
+  vgl_homg_point_2d<double> imagehomg_to_homg(vgl_homg_point_2d<double> const&) const;
+
   HomgLine2D homg_to_image_line(const HomgLine2D&) const;
   HomgLine2D image_to_homg_line(const HomgLine2D&) const;
+
+  vgl_homg_line_2d<double> homg_to_image_line(vgl_homg_line_2d<double> const&) const;
+  vgl_homg_line_2d<double> image_to_homg_line(vgl_homg_line_2d<double> const&) const;
 
   HomgLineSeg2D image_to_homg_line(const HomgLineSeg2D&) const;
   HomgLineSeg2D homg_line_to_image(const HomgLineSeg2D&) const;
 
   // ** Measurements
   double perp_dist_squared(const HomgPoint2D&, const HomgLine2D&) const;
+  double perp_dist_squared(vgl_homg_point_2d<double> const& p,
+                           vgl_homg_line_2d<double> const& l) const;
   HomgPoint2D perp_projection(const HomgLine2D& l, const HomgPoint2D& p) const;
+  vgl_homg_point_2d<double> perp_projection(vgl_homg_line_2d<double> const& l,
+                                            vgl_homg_point_2d<double> const& p) const;
+
   double distance_squared(double x1, double y1, double x2, double y2) const;
   double distance_squared(const HomgPoint2D&, const HomgPoint2D&) const;
+  double distance_squared(vgl_homg_point_2d<double> const&,
+                          vgl_homg_point_2d<double> const&) const;
   double distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line) const;
+  double distance_squared(vgl_line_segment_2d<double> const& segment,
+                          vgl_homg_line_2d<double> const& line) const;
 
   bool is_within_distance(const HomgPoint2D&, const HomgPoint2D&, double distance) const;
+  bool is_within_distance(vgl_homg_point_2d<double> const&,
+                          vgl_homg_point_2d<double> const&,
+                          double distance) const;
 
   // ** Speedups available for certain systems.
   bool is_linear() const;
-  vnl_matrix<double> get_C() const;
-  vnl_matrix<double> get_C_inverse() const;
+  vnl_double_3x3 get_C() const;
+  vnl_double_3x3 get_C_inverse() const;
 
   bool can_invert_distance() const;
   double image_to_homg_distance(double image_distance) const;

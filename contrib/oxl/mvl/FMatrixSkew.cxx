@@ -20,7 +20,7 @@
 
 FMatrixSkew::FMatrixSkew()
 {
-  _rank2_flag = true;
+  rank2_flag_ = true;
 }
 
 //--------------------------------------------------------------
@@ -29,7 +29,7 @@ FMatrixSkew::FMatrixSkew()
 
 FMatrixSkew::FMatrixSkew(const double* f_matrix)
 {
-  _rank2_flag = true;
+  rank2_flag_ = true;
   set(f_matrix);
 }
 
@@ -39,7 +39,7 @@ FMatrixSkew::FMatrixSkew(const double* f_matrix)
 
 FMatrixSkew::FMatrixSkew(const vnl_matrix<double>& f_matrix)
 {
-  _rank2_flag = true;
+  rank2_flag_ = true;
   set(f_matrix.data_block());
 }
 
@@ -59,15 +59,35 @@ FMatrixSkew::~FMatrixSkew()
 //  Returns true as FMatrixSkew is always Rank 2.
 
 bool
+FMatrixSkew::get_epipoles(vgl_homg_point_2d<double>& epipole1,
+                          vgl_homg_point_2d<double>& epipole2) const
+{
+     // fm_compute_epipoles
+     epipole1.set( f_matrix_.get(1,2),
+                  -f_matrix_.get(0,2),
+                   f_matrix_.get(0,1));
+     epipole2.set( f_matrix_.get(1,2),
+                  -f_matrix_.get(0,2),
+                   f_matrix_.get(0,1));
+     return true;
+}
+
+
+//--------------------------------------------------------------
+//
+//: Compute the epipole which is the same in each image.
+//  Returns true as FMatrixSkew is always Rank 2.
+
+bool
 FMatrixSkew::get_epipoles(HomgPoint2D *epipole1_ptr, HomgPoint2D *epipole2_ptr) const
 {
      // fm_compute_epipoles
-     epipole1_ptr->set( _f_matrix.get(1,2),
-                       -_f_matrix.get(0,2),
-                        _f_matrix.get(0,1));
-     epipole2_ptr->set( _f_matrix.get(1,2),
-                       -_f_matrix.get(0,2),
-                        _f_matrix.get(0,1));
+     epipole1_ptr->set( f_matrix_.get(1,2),
+                       -f_matrix_.get(0,2),
+                        f_matrix_.get(0,1));
+     epipole2_ptr->set( f_matrix_.get(1,2),
+                       -f_matrix_.get(0,2),
+                        f_matrix_.get(0,1));
      return true;
 }
 
@@ -116,20 +136,20 @@ FMatrixSkew::get_rank2_truncated()
 // can be used (see Armstrong Zisserman Beardsley, BMVC 94 ).
 
 void
-FMatrixSkew::find_nearest_perfect_match(const HomgPoint2D& point1,
-                                            const HomgPoint2D& point2,
-                                            HomgPoint2D *perfect_point1_ptr,
-                                            HomgPoint2D *perfect_point2_ptr) const
+FMatrixSkew::find_nearest_perfect_match(vgl_homg_point_2d<double> const& point1,
+                                        vgl_homg_point_2d<double> const& point2,
+                                        vgl_homg_point_2d<double>& perfect_point1,
+                                        vgl_homg_point_2d<double>& perfect_point2) const
 {
      // get the epipole
-     HomgPoint2D e1,e2;
-     get_epipoles(&e1,&e2);
+     vgl_homg_point_2d<double> e1,e2;
+     get_epipoles(e1,e2);
 
      // scale points if not already done and transform such that  e1->(0,0)
-     double u1 = point1.get_x()/point1.get_w() - e1.get_x()/e1.get_w();
-     double v1 = point1.get_y()/point1.get_w() - e1.get_y()/e1.get_w();
-     double u2 = point2.get_x()/point2.get_w() - e2.get_x()/e2.get_w();
-     double v2 = point2.get_y()/point2.get_w() - e2.get_y()/e2.get_w();
+     double u1 = point1.x()/point1.w() - e1.x()/e1.w();
+     double v1 = point1.y()/point1.w() - e1.y()/e1.w();
+     double u2 = point2.x()/point2.w() - e2.x()/e2.w();
+     double v2 = point2.y()/point2.w() - e2.y()/e2.w();
 
      // form quadratic equation
      double a_qd = (u1*v1 + u2*v2);
@@ -171,10 +191,81 @@ FMatrixSkew::find_nearest_perfect_match(const HomgPoint2D& point1,
      }
 
      // do with per_proj... in HomgOp2D::
-     perfect_point1_ptr->set(u1-dist11*stheta1+e1.get_x()/e1.get_w(),
-                             v1+dist11*ctheta1+e1.get_y()/e1.get_w(),1);
-     perfect_point2_ptr->set(u2-dist12*stheta1+e2.get_x()/e2.get_w(),
-                             v2+dist12*ctheta1+e2.get_y()/e2.get_w(),1);
+     perfect_point1.set(u1-dist11*stheta1+e1.x()/e1.w(),
+                        v1+dist11*ctheta1+e1.y()/e1.w(),1);
+     perfect_point2.set(u2-dist12*stheta1+e2.x()/e2.w(),
+                        v2+dist12*ctheta1+e2.y()/e2.w(),1);
+}
+
+//-----------------------------------------------------------------------------
+//
+//: Find nearest match which is in agreement with F.
+// For a specified pair of matching points, find the nearest (minimum sum
+// of squared image distances) match which is in perfect agreement with
+// the epipolar geometry of the F matrix.
+// For skew symmetric matrix a reduced form with only a quadratic equation
+// can be used (see Armstrong Zisserman Beardsley, BMVC 94 ).
+
+void
+FMatrixSkew::find_nearest_perfect_match(const HomgPoint2D& point1,
+                                            const HomgPoint2D& point2,
+                                            HomgPoint2D *perfect_point1_ptr,
+                                            HomgPoint2D *perfect_point2_ptr) const
+{
+     // get the epipole
+     HomgPoint2D e1,e2;
+     get_epipoles(&e1,&e2);
+
+     // scale points if not already done and transform such that  e1->(0,0)
+     double u1 = point1.x()/point1.w() - e1.x()/e1.w();
+     double v1 = point1.y()/point1.w() - e1.y()/e1.w();
+     double u2 = point2.x()/point2.w() - e2.x()/e2.w();
+     double v2 = point2.y()/point2.w() - e2.y()/e2.w();
+
+     // form quadratic equation
+     double a_qd = (u1*v1 + u2*v2);
+     double b_qd = u1*u1 + u2*u2 - v1*v1 - v2*v2;
+     double c_qd = -(u1*v1 + u2*v2);
+
+     // solve quadratic for two solutions
+     double temp = b_qd * b_qd - 4 * a_qd * c_qd;
+
+     if (temp < 0)
+     {
+          vcl_cerr << "Error in FMatrixSkew::find_nearest_perfect_match \n"
+                   << "Imaginary solution obtained\n"
+                   << "No solution returned\n";
+          return;
+     }
+
+     double ttheta1 = (-b_qd + vcl_sqrt(temp))/(2*a_qd);
+     double ttheta2 = (-b_qd - vcl_sqrt(temp))/(2*a_qd);
+
+     double theta1 = vcl_atan(ttheta1);
+     double theta2 = vcl_atan(ttheta2);
+
+     double ctheta1 = vcl_cos(theta1), stheta1 = vcl_sin(theta1);
+     double ctheta2 = vcl_cos(theta2), stheta2 = vcl_sin(theta2);
+
+     double dist11 = stheta1*u1 - ctheta1*v1;
+     double dist12 = stheta1*u2 - ctheta1*v2;
+     double dist21 = stheta2*u1 - ctheta2*v1;
+     double dist22 = stheta2*u2 - ctheta2*v2;
+
+     // find correct solution with minimum distance - set to theta1
+     if (vcl_fabs(dist11) + vcl_fabs(dist12) > vcl_fabs(dist21) + vcl_fabs(dist22))
+     {
+          stheta1 = stheta2;
+          ctheta1 = ctheta2;
+          dist11   = dist21;
+          dist12   = dist22;
+     }
+
+     // do with per_proj... in HomgOp2D::
+     perfect_point1_ptr->set(u1-dist11*stheta1+e1.x()/e1.w(),
+                             v1+dist11*ctheta1+e1.y()/e1.w(),1);
+     perfect_point2_ptr->set(u2-dist12*stheta1+e2.x()/e2.w(),
+                             v2+dist12*ctheta1+e2.y()/e2.w(),1);
 }
 
 
@@ -210,8 +301,8 @@ bool FMatrixSkew::set (const double* f_matrix )
           for (col_index = 0; col_index < 3; col_index++)
           {
                double v = *f_matrix++;
-               _f_matrix. put (row_index, col_index,v);
-               _ft_matrix. put (col_index, row_index,v);
+               f_matrix_. put (row_index, col_index,v);
+               ft_matrix_. put (col_index, row_index,v);
           }
 
      // set rank flag true
@@ -239,7 +330,7 @@ FMatrixSkew::set (const vnl_matrix<double>& f_matrix )
 
 //----------------------------------------------------------------
 //
-//: Returns the _rank2_flag which is always true for FMatrixSkew.
+//: Returns the rank2_flag_ which is always true for FMatrixSkew.
 
 inline bool
 FMatrixSkew::get_rank2_flag (void) const
@@ -249,7 +340,7 @@ FMatrixSkew::get_rank2_flag (void) const
 
 //----------------------------------------------------------------
 //
-//: Set the _rank2_flag. Null function as always set true.
+//: Set the rank2_flag_. Null function as always set true.
 
 inline void
 FMatrixSkew::set_rank2_flag (bool)

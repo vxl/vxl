@@ -6,10 +6,8 @@
 // \file
 
 #include "HMatrix2D.h"
-#include <mvl/HomgLine2D.h>
 #include <mvl/HomgOperator2D.h>
-#include <mvl/HomgPoint2D.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_inverse.h>
 #include <vcl_fstream.h>
 
 //--------------------------------------------------------------
@@ -45,7 +43,7 @@ HMatrix2D::HMatrix2D(char const* filename)
 //--------------------------------------------------------------
 //
 //: Constructor
-HMatrix2D::HMatrix2D(const vnl_matrix<double>& M):
+HMatrix2D::HMatrix2D(vnl_double_3x3 const& M):
   t12_matrix_ (M)
 {
 }
@@ -177,7 +175,7 @@ void HMatrix2D::set (const double *H)
 }
 
 //: Set to given vnl_matrix
-void HMatrix2D::set (const vnl_matrix<double>& H)
+void HMatrix2D::set (vnl_double_3x3 const& H)
 {
   t12_matrix_ = H;
 }
@@ -185,8 +183,7 @@ void HMatrix2D::set (const vnl_matrix<double>& H)
 //: Return inverse of this homography
 HMatrix2D HMatrix2D::get_inverse() const
 {
-  vnl_svd<double> svd(t12_matrix_);
-  return svd.inverse();
+  return vnl_inverse(t12_matrix_);
 }
 
 //: Return new axis-aligned bounding box after (x0,y0) -> (x1,y1) have been pre-multiplied by H.

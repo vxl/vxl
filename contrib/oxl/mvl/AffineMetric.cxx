@@ -10,34 +10,33 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_inverse.h>
 
 #include <mvl/HomgPoint2D.h>
 
 //: Construct and AffineMetric from the matrix A.
 // The last row of A should be (0,0,lambda).
-AffineMetric::AffineMetric():
-A_(3,3), A_inverse_(3,3)
+AffineMetric::AffineMetric()
 {
   A_.set_identity();
   A_inverse_.set_identity();
 }
 
 
-//: Construct and AffineMetric from the matrix A.
+//: Construct and AffineMetric from the 3x3 matrix A.
 // The last row of A should be (0,0,lambda).
-AffineMetric::AffineMetric(const vnl_matrix<double>& A):
+AffineMetric::AffineMetric(vnl_matrix_fixed<double,3,3> const& A):
   A_(A),
-  A_inverse_(vnl_svd<double>(A).inverse())
+  A_inverse_(vnl_inverse(A))
 {
   assert(A(2,0) == 0);
   assert(A(2,1) == 0);
 }
 
-void AffineMetric::set(vnl_matrix<double> const& A)
+void AffineMetric::set(vnl_matrix_fixed<double,3,3> const& A)
 {
   A_ = A;
-  A_inverse_ = vnl_svd<double>(A).inverse();
+  A_inverse_ = vnl_inverse(A);
   assert(A(2,0) == 0);
   assert(A(2,1) == 0);
 }
@@ -57,7 +56,7 @@ void AffineMetric::set(double a11, double a13,
   A_(2,1) =   0;
   A_(2,2) = a33;
 
-  A_inverse_ = vnl_svd<double>(A_).inverse();
+  A_inverse_ = vnl_inverse(A_);
 }
 
 // == Implementation of ImageMetric ==
@@ -97,28 +96,6 @@ vnl_double_2 AffineMetric::homg_to_image(const HomgPoint2D& p) const
 
   return vnl_double_2(x[0] * s, x[1] * s);
 }
-
-#if 0
-const vnl_matrix<double>& AffineMetric::get_C() const
-{
-  return A_;
-}
-
-const vnl_matrix<double>& AffineMetric::get_C_inverse() const
-{
-  return A_inverse_;
-}
-
- bool AffineMetric::is_linear() const
-{
-  return true;
-}
-
-bool AffineMetric::can_invert_distance() const
-{
-  return false;
-}
-#endif
 
 //: print to vcl_ostream
 vcl_ostream& AffineMetric::print(vcl_ostream& s) const

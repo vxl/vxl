@@ -18,9 +18,9 @@ FMPlanarComputeNonLinear::FMPlanarComputeNonLinear(const ImageMetric* image_metr
                                                    double outlier_threshold)
   : FMatrixCompute()
 {
-  _image_metric1 = image_metric1;
-  _image_metric2 = image_metric2;
-  _outlier_distance_squared = outlier_threshold * outlier_threshold;
+  image_metric1_ = image_metric1;
+  image_metric2_ = image_metric2;
+  outlier_distance_squared_ = outlier_threshold * outlier_threshold;
 }
 
 //: Compute from given PairMatchSetCorner
@@ -36,7 +36,7 @@ bool FMPlanarComputeNonLinear::compute_planar(vcl_vector<HomgPoint2D>& points1,
                                               FMatrixPlanar* F)
 {
   vcl_cerr << "FMPlanarComputeNonLinear: Fitting planar-motion F matrix [e1]_x [l]_x [e2]_x\n";
-  FMPlanarNonLinFun computor(_image_metric1, _image_metric2, _outlier_distance_squared, points1, points2);
+  FMPlanarNonLinFun computor(image_metric1_, image_metric2_, outlier_distance_squared_, points1, points2);
   return computor.compute(F);
 }
 

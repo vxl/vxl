@@ -8,8 +8,8 @@
 #include "HMatrix1D.h"
 #include <mvl/HomgPoint1D.h>
 #include <vcl_fstream.h>
-#include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_double_2.h>
+#include <vnl/vnl_inverse.h>
 
 //--------------------------------------------------------------
 //
@@ -25,22 +25,12 @@ HMatrix1D::HMatrix1D(const HMatrix1D& M)
 {
 }
 
-#if 0
-  //: Copy constructor
-  HMatrix1D::HMatrix1D(vcl_istream& s)
-  {
-  t12_matrix_.read_ascii(s);
-  vnl_svd<double> svd(t12_matrix_);
-  t21_matrix_ = svd.inverse();
-  }
-#endif
-
 //--------------------------------------------------------------
 //
 //: Constructor
-HMatrix1D::HMatrix1D(const vnl_matrix<double>& M)
+HMatrix1D::HMatrix1D(vnl_double_2x2 const& M)
   : t12_matrix_ (M)
-  , t21_matrix_(vnl_svd<double>(t12_matrix_).inverse())
+  , t21_matrix_(vnl_inverse(t12_matrix_))
 {
 }
 
@@ -58,15 +48,13 @@ HMatrix1D::HMatrix1D(const HMatrix1D&A,const HMatrix1D&B)
 HMatrix1D::HMatrix1D (const double* H)
   : t12_matrix_ (H)
 {
-  vnl_svd<double> svd(t12_matrix_);
-  t21_matrix_ = svd.inverse();
+  t21_matrix_ = vnl_inverse(t12_matrix_);
 }
 
 HMatrix1D::HMatrix1D (vcl_istream &is)
 {
   t12_matrix_.read_ascii(is);
-  vnl_svd<double> svd(t12_matrix_);
-  t21_matrix_ = svd.inverse();
+  t21_matrix_ = vnl_inverse(t12_matrix_);
 }
 
 //: Destructor
@@ -95,7 +83,7 @@ HomgPoint1D HMatrix1D::transform_to_plane1(const HomgPoint1D& x2) const
 
 HomgPoint1D HMatrix1D::operator()(const HomgPoint1D& x1) const
 {
-  vnl_double_2 v = t12_matrix_ * vnl_double_2(x1.x(),x1.get_w());
+  vnl_double_2 v = t12_matrix_ * vnl_double_2(x1.x(),x1.w());
   return HomgPoint1D(v[0], v[1]);
 }
 
@@ -104,7 +92,7 @@ HomgPoint1D HMatrix1D::operator()(const HomgPoint1D& x1) const
 
 HomgPoint1D HMatrix1D::preimage(const HomgPoint1D& x2) const
 {
-  vnl_double_2 v = t21_matrix_ * vnl_double_2(x2.x(),x2.get_w());
+  vnl_double_2 v = t21_matrix_ * vnl_double_2(x2.x(),x2.w());
   return HomgPoint1D(v[0], v[1]);
 }
 
@@ -168,25 +156,22 @@ void HMatrix1D::set (const double *H)
     for (int col_index = 0; col_index < 2; col_index++)
       t12_matrix_. put (row_index, col_index, *H++);
 
-  vnl_svd<double> svd(t12_matrix_);
-  t21_matrix_ = svd.inverse();
+  t21_matrix_ = vnl_inverse(t12_matrix_);
 }
 
 //: Set to given vnl_matrix, and cache inverse
-void HMatrix1D::set (const vnl_matrix<double>& H)
+void HMatrix1D::set (vnl_double_2x2 const& H)
 {
   t12_matrix_ = H;
 
-  vnl_svd<double> svd(t12_matrix_);
-  t21_matrix_ = svd.inverse();
+  t21_matrix_ = vnl_inverse(t12_matrix_);
 }
 
 //: Set to inverse of given vnl_matrix, and cache inverse.
-void HMatrix1D::set_inverse (const vnl_matrix<double>& H)
+void HMatrix1D::set_inverse (vnl_double_2x2 const& H)
 {
   t21_matrix_ = H;
-  vnl_svd<double> svd(H);
-  t12_matrix_ = svd.inverse();
+  t21_matrix_ = vnl_inverse(t12_matrix_);
 }
 
 //--------------------------------------------------------------------------------

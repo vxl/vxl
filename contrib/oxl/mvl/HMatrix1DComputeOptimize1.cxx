@@ -59,7 +59,7 @@ public:
 };
 
 static
-void foo(const vcl_vector<double> &z1,const vcl_vector<double> &z2,HMatrix1D &M)
+void do_compute(const vcl_vector<double> &z1,const vcl_vector<double> &z2,HMatrix1D &M)
 {
   //
   // **** minimise over the set of 2x2 matrices of the form [  1     x[0] ] ****
@@ -106,17 +106,15 @@ HMatrix1DComputeOptimize1::compute_cool_homg(const vcl_vector<HomgPoint1D>&p1,
 
   // map the points in p1 under M so that we are looking for a correction near the identity :
   for (unsigned i=0;i<N;i++) {
-    if (!M->transform_to_plane2(p1[i]).get_nonhomogeneous(z1[i])) return false;
-    if (!p2[i].get_nonhomogeneous(z2[i])) return false;
+    HomgPoint1D v = M->transform_to_plane2(p1[i]);
+    if (v.w() == 0.0) return false;
+    z1[i] = v.x()/v.w(); // make nonhomogeneous
+    if (p2[i].w()) return false;
+    z2[i] = p2[i].x()/p2[i].w(); // make nonhomogeneous
   }
 
-//  vcl_cerr << "z1  = " << z1 << vcl_endl;
-//  vcl_cerr << "z2  = " << z2 << vcl_endl;
-//  vcl_cerr << "M   = " << M << vcl_endl;
-//  vcl_cerr << "Mz1 = " << Mz1 << vcl_endl;
-
   HMatrix1D K;
-  foo(z1,z2,K);
+  do_compute(z1,z2,K);
   *M=HMatrix1D(K,*M);      // refine M using the correction K.
   return true;
 }

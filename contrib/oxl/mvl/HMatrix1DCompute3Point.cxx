@@ -43,11 +43,11 @@ HMatrix1DCompute3Point::compute_cool_homg(const vcl_vector<HomgPoint1D>& points1
   assert(points2.size() == 3);
   double T[2][2];
   direct_compute(T,
-                 points1[0].get_x() , points1[1].get_x() , points1[2].get_x(),
-                 points1[0].get_w() , points1[1].get_w() , points1[2].get_w(),
+                 points1[0].x() , points1[1].x() , points1[2].x(),
+                 points1[0].w() , points1[1].w() , points1[2].w(),
 
-                 points2[0].get_x() , points2[1].get_x() , points2[2].get_x(),
-                 points2[0].get_w() , points2[1].get_w() , points2[2].get_w());
+                 points2[0].x() , points2[1].x() , points2[2].x(),
+                 points2[0].w() , points2[1].w() , points2[2].w());
   H->set(&T[0][0]);
   return true;
 }

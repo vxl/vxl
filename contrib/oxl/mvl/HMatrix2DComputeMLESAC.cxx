@@ -1,7 +1,7 @@
 // This is oxl/mvl/HMatrix2DComputeMLESAC.cxx
 #include "HMatrix2DComputeMLESAC.h"
 #include <mvl/HomgOperator2D.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vnl/vnl_fastops.h>
 
 
@@ -27,7 +27,18 @@ double HMatrix2DComputeMLESAC::calculate_term(vcl_vector<double>& residuals, vcl
   return sse;
 }
 
-double HMatrix2DComputeMLESAC::calculate_residual(HomgPoint2D& one, HomgPoint2D& two, HMatrix2D* H) {
+double HMatrix2DComputeMLESAC::calculate_residual(vgl_homg_point_2d<double>& one,
+                                                  vgl_homg_point_2d<double>& two,
+                                                  HMatrix2D* H)
+{
+  vnl_double_2 r;
+  r[0] = vgl_homg_operators_2d<double>::distance_squared(H->transform_to_plane2(one), two);
+  r[1] = vgl_homg_operators_2d<double>::distance_squared(H->transform_to_plane1(two), one);
+  return r[0] + r[1];
+}
+
+double HMatrix2DComputeMLESAC::calculate_residual(HomgPoint2D& one, HomgPoint2D& two, HMatrix2D* H)
+{
   vnl_double_2 r;
   r[0] = HomgOperator2D::distance_squared(H->transform_to_plane2(one), two);
   r[1] = HomgOperator2D::distance_squared(H->transform_to_plane1(two), one);
@@ -59,8 +70,7 @@ double HMatrix2DComputeMLESAC::calculate_residual(HomgPoint2D& one, HomgPoint2D&
 
     vnl_matrix<double> res(2, 2, 0.0);
     vnl_fastops::AB(J, J.transpose(), &res);
-    vnl_svd<double> svd(res, 1e-12);
-    vnl_matrix<double> res1 = svd.inverse();
+    vnl_matrix<double> res1 = vnl_inverse(res);
     vnl_double_2 g = res1*r;
     double d = r[0]*g[0] + r[1]*g[1];
     return d;

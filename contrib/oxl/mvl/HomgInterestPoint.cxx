@@ -15,6 +15,22 @@ HomgInterestPoint::HomgInterestPoint()
 {
 }
 
+//: Create from vgl_homg_point_2d<double> in conditioned coordinates.
+// Using the given metric to convert back to image coordinates.
+HomgInterestPoint::HomgInterestPoint(const vgl_homg_point_2d<double>& h, const HomgMetric& metric, float mean_intensity):
+  homg_(h.x(),h.y(),h.w()),
+  double2_(0, 0),
+  int2_(0, 0), // will be set below
+  mean_intensity_(mean_intensity)
+{
+  double x, y;
+  metric.homg_to_image(homg_, &x, &y);
+  double2_[0] = x;
+  double2_[1] = y;
+  int2_[0]= vnl_math_rnd(x);
+  int2_[1]= vnl_math_rnd(y);
+}
+
 //: Create from HomgPoint2D in conditioned coordinates.
 // Using the given metric to convert back to image coordinates.
 HomgInterestPoint::HomgInterestPoint(const HomgPoint2D& h, const HomgMetric& metric, float mean_intensity):

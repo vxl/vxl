@@ -20,8 +20,6 @@
 
 #include <mvl/HMatrix2DCompute.h>
 
-class HomgPoint2D;
-
 class HMatrix2DSimilarityCompute : public HMatrix2DCompute
 {
  public:

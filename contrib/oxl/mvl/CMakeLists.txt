@@ -31,6 +31,8 @@ SET(mvl_sources
  Homg1D.cxx                             Homg1D.h
  Homg2D.cxx                             Homg2D.h
  Homg3D.cxx                             Homg3D.h
+ HomgPoint2D.cxx                        HomgPoint2D.h
+ HomgPoint3D.cxx                        HomgPoint3D.h
  HomgInterestPoint.cxx                  HomgInterestPoint.h
  HomgInterestPointSet.cxx               HomgInterestPointSet.h
  HomgLine2D.cxx                         HomgLine2D.h
@@ -42,9 +44,6 @@ SET(mvl_sources
  HomgOperator2D.cxx                     HomgOperator2D.h
  HomgOperator3D.cxx                     HomgOperator3D.h
  HomgPlane3D.cxx                        HomgPlane3D.h
- HomgPoint1D.cxx                        HomgPoint1D.h
- HomgPoint2D.cxx                        HomgPoint2D.h
- HomgPoint3D.cxx                        HomgPoint3D.h
  HomgPrettyPrint.cxx                    HomgPrettyPrint.h
  ImageMetric.cxx                        ImageMetric.h
  LineSegSet.cxx                         LineSegSet.h
@@ -109,7 +108,7 @@ SET(mvl_sources
 AUX_SOURCE_DIRECTORY(Templates mvl_sources)
 
 ADD_LIBRARY(mvl ${mvl_sources})
-TARGET_LINK_LIBRARIES(mvl vil vnl_algo vnl vbl vgl vul)
+TARGET_LINK_LIBRARIES(mvl vil vnl_algo vnl vbl vgl vgl_algo vul)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)

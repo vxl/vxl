@@ -10,7 +10,14 @@
 // A class to hold a 3D projective transformation matrix
 // and to perform common operations using it e.g. transfer point.
 //
+// \verbatim
+// Modifications
+//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+//    23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
+// \endverbatim
+
 #include <vnl/vnl_double_4x4.h>
+#include <vnl/vnl_fwd.h>
 #include <mvl/HomgPoint3D.h>
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgLineSeg3D.h>
@@ -23,8 +30,8 @@ class HMatrix3D : public vnl_double_4x4
  public:
   HMatrix3D();
   HMatrix3D(const HMatrix3D& M);
-  HMatrix3D(const vnl_matrix<double>& M);
-  HMatrix3D(const vnl_matrix<double>& M, const vnl_vector<double>& m);
+  HMatrix3D(vnl_double_4x4 const& M);
+  HMatrix3D(vnl_double_3x3 const& M, vnl_double_3 const& m);
   HMatrix3D(const double* t_matrix);
   HMatrix3D(vcl_istream&);
  ~HMatrix3D();
@@ -42,13 +49,14 @@ class HMatrix3D : public vnl_double_4x4
   void get (double *t_matrix) const;
   void get (vnl_matrix<double>* t_matrix) const;
 
+  HMatrix3D get_inverse() const;
+
+ private:
   // @deprecated
   vnl_double_4x4& asMatrix () { return *this; }
 
   // @deprecated
-  const vnl_double_4x4& get_matrix () const { return *this; }
-
-  HMatrix3D Inverse () const;
+  const vnl_double_4x4& get_matrix() const { return *this; }
 };
 
 PMatrix operator* (const PMatrix&, const HMatrix3D& H);

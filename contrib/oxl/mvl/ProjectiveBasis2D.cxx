@@ -5,14 +5,15 @@
 //:
 //  \file
 
+#include "ProjectiveBasis2D.h"
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
+#include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_svd.h>
-#include "ProjectiveBasis2D.h"
 
 static const int warn_ = false;
 static const int check_collinear = true;
@@ -94,6 +95,5 @@ void ProjectiveBasis2D::compute(const HomgPoint2D& p1, const HomgPoint2D& p2, co
     T_.set_identity(); collinear_ = true; return;
   }
 
-  vnl_svd<double> svd1(back_matrix);
-  T_.set(svd1.inverse());
+  T_.set(vnl_inverse(back_matrix));
 }

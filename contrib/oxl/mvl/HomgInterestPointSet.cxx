@@ -51,6 +51,22 @@ HomgInterestPointSet::HomgInterestPointSet(const char* filename, const HomgMetri
   init_conditioner(c);
 }
 
+//: Construct corner set from container of vgl_homg_point_2d<double>, and set the conditioner.
+// The vgl_homg_point_2ds are assumed to already be in conditioned coordinates.
+HomgInterestPointSet::HomgInterestPointSet(vcl_vector<vgl_homg_point_2d<double> > const& points, ImageMetric* conditioner)
+{
+  unsigned n = points.size();
+  if (n > 0)
+    data_ = new HomgInterestPointSetData(n);
+  else
+    data_ = new HomgInterestPointSetData();
+
+  for (unsigned i = 0; i < n; ++i)
+    (*data_)[i] = HomgInterestPoint(points[i], conditioner, 0.0f);
+
+  conditioner_ = conditioner;
+}
+
 //: Construct corner set from container of HomgPoint2D, and set the conditioner.
 // The HomgPoint2Ds are assumed to already be in conditioned coordinates.
 HomgInterestPointSet::HomgInterestPointSet(const vcl_vector<HomgPoint2D>& points, ImageMetric* conditioner)
@@ -132,6 +148,10 @@ HomgInterestPointSet::~HomgInterestPointSet()
 // Operations----------------------------------------------------------------
 //
 //: Add a corner to the end of the list
+bool HomgInterestPointSet::add(vgl_homg_point_2d<double> const& c)
+{
+  return add(c.x()/c.w(),c.y()/c.w());
+}
 bool HomgInterestPointSet::add(const HomgPoint2D& c)
 {
   double x, y;
@@ -151,6 +171,12 @@ bool HomgInterestPointSet::add(double x, double y)
 }
 
 //: Add a corner which has already been preconditioned by this cornerset's imagemetric.
+bool HomgInterestPointSet::add_preconditioned(vgl_homg_point_2d<double> const& h)
+{
+  double x, y;
+  conditioner_.homg_to_image(h, x, y);
+  return add(x, y);
+}
 bool HomgInterestPointSet::add_preconditioned(const HomgPoint2D& h)
 {
   double x, y;
@@ -187,6 +213,14 @@ vnl_double_2 const& HomgInterestPointSet::get_2d(int i) const
 vnl_vector_fixed<int,2> const& HomgInterestPointSet::get_int(int i) const
 {
   return (*data_)[i].int2_;
+}
+
+//: Return the i'th corner as a vgl_homg_point_2d<double>
+vgl_homg_point_2d<double> HomgInterestPointSet::homg_point(int i) const
+{
+  assert(i >= 0 && i < int(data_->size()));
+  HomgPoint2D& p = (*data_)[i].homg_;
+  return vgl_homg_point_2d<double>(p.x(),p.y(),p.w());
 }
 
 //: Return the i'th corner as a HomgPoint2D

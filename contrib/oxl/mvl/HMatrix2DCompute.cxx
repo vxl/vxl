@@ -4,8 +4,6 @@
 #include <vcl_iostream.h>
 
 #include <mvl/HMatrix2D.h>
-#include <mvl/HomgLine2D.h>
-#include <mvl/HomgPoint2D.h>
 #include <mvl/PairMatchSetCorner.h>
 #include <vcl_vector.h>
 

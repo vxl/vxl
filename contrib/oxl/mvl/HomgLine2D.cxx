@@ -25,16 +25,17 @@
 
 bool HomgLine2D::check_infinity() const
 {
-  return (get_x() == 0) && (get_y() == 0);
+  return (x() == 0) && (y() == 0);
 }
 
 //--------------------------------------------------------------
 //: Return true iff the line is the line at infinity.
-// This version checks $min(|x|,|y|) < \mbox{tol} \times |z|$
+// This version checks $min(|x|,|y|) <= \mbox{tol} \times |w|$
+// For tol==0, this coincides with check_infinity()
 
 bool HomgLine2D::check_infinity(double tol) const
 {
-  return vnl_math_min(vnl_math_abs(get_x()), vnl_math_abs(get_y())) < tol*vnl_math_abs(get_w());
+  return vnl_math_min(vnl_math_abs(x()), vnl_math_abs(y())) <= tol*vnl_math_abs(w());
 }
 
 //--------------------------------------------------------------

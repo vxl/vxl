@@ -7,11 +7,6 @@
 
 #include "FMatrixAffine.h"
 
-#include <mvl/HomgLine2D.h>
-#include <mvl/HomgOperator2D.h>
-#include <mvl/HomgPoint2D.h>
-#include <mvl/PMatrix.h>
-
 //--------------------------------------------------------------
 //
 //: Constructor
@@ -39,8 +34,8 @@ bool FMatrixAffine::set (const double* f_matrix)
   for (int row_index = 0; row_index < 3; row_index++)
   for (int col_index = 0; col_index < 3; col_index++)
   {
-    _f_matrix. put (row_index, col_index, *f_matrix);
-    _ft_matrix. put (col_index, row_index, *f_matrix++);
+    f_matrix_. put (row_index, col_index, *f_matrix);
+    ft_matrix_. put (col_index, row_index, *f_matrix++);
   }
 
   return true;

@@ -48,10 +48,13 @@ HomgPoint3D::~HomgPoint3D ()
 bool
 HomgPoint3D::check_infinity(double tol) const
 {
-  double hx = vcl_fabs(get_x());
-  double hy = vcl_fabs(get_y());
-  double hz = vcl_fabs(get_z());
-  double hw = vcl_fabs(get_w());
+  // quick return if possible
+  if (tol==0.0) return w()==0;
+
+  double hx = vcl_fabs(x());
+  double hy = vcl_fabs(y());
+  double hz = vcl_fabs(z());
+  double hw = vcl_fabs(w());
 
   double max = hx;
   if (hy > max) max = hy;
@@ -66,21 +69,21 @@ HomgPoint3D::check_infinity(double tol) const
 // If the point is at infinity, return false and set the
 // output values to Homg::infinity.
 bool
-HomgPoint3D::get_nonhomogeneous(double& x, double& y, double& z) const
+HomgPoint3D::get_nonhomogeneous(double& vx, double& vy, double& vz) const
 {
-  double hx = get_x();
-  double hy = get_y();
-  double hz = get_z();
-  double hw = get_w();
+  double hx = x();
+  double hy = y();
+  double hz = z();
+  double hw = w();
   if (hw == 0) {
-    x = y = z = Homg::infinity;
+    vx = vy = vz = Homg::infinity;
     return false;
   }
 
   hw = 1.0/hw;
-  x = hx * hw;
-  y = hy * hw;
-  z = hz * hw;
+  vx = hx * hw;
+  vy = hy * hw;
+  vz = hz * hw;
 
   return true;
 }
