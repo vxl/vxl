@@ -1,5 +1,6 @@
 USES += contrib/brl contrib/gel core
 include ../config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 TESTS += bcal_test.cxx
 

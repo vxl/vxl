@@ -7,6 +7,7 @@ include ${IUEROOT}/core/testlib/config.mk
 
 ifdef HAS_XERCES
 
+TESTMAIN := test_driver.cxx
 TESTS += bxml_test_map.cxx
 TESTS += bxml_test_vdgl_digital_curve_input_converter.cxx
 TESTS += bxml_test_vsol_point_2d_input_converter.cxx

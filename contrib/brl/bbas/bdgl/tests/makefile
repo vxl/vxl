@@ -3,6 +3,7 @@ include ../config.mk
 include ${IUEROOT}/contrib/gel/vdgl/config.mk
 include ${IUEROOT}/contrib/gel/vtol/config.mk
 include ${IUEROOT}/core/vnl/config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 TESTS += test_curve_algs.cxx
 
