@@ -20,7 +20,7 @@
 #include <vnl/vnl_vector.h>
 #include <vcl_vector.h>
 
-class FMatrixComputeRobust : FMatrixCompute {
+class FMatrixComputeRobust : public FMatrixCompute {
 public:
   FMatrixComputeRobust();
   virtual ~FMatrixComputeRobust();
