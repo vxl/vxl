@@ -24,9 +24,9 @@ vil1_image vepl_threshold(vil1_image const& image, double threshold, double belo
   else if (vil1_pixel_format(image) == VIL1_RGB_BYTE)
   {
     typedef unsigned char ubyte;
-    typedef vil1_rgb<ubyte> r_g_b;
-    vil1_memory_image_of<r_g_b> in(image); // load in memory to pass to filter
-    vil1_memory_image_of<r_g_b> out(image);
+#define r_g_b vil1_rgb<ubyte> // cannot use typedef since that may cause ambiguous overload problems
+    vil1_memory_image_of<r_g_b > in(image); // load in memory to pass to filter
+    vil1_memory_image_of<r_g_b > out(image);
     vil1_memory_image_of<ubyte> mem((ubyte*)(in.get_buffer()),3*in.width(),in.height()); // reinterpret as ubyte
     vil1_memory_image_of<ubyte> mout((ubyte*)(out.get_buffer()),3*in.width(),in.height());
     vipl_threshold<vil1_image,vil1_image,ubyte,ubyte> op((ubyte)(0.5+threshold), (ubyte)(0.5+below), (ubyte)(0.5+above));

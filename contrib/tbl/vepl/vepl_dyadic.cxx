@@ -7,7 +7,7 @@
 
 typedef unsigned char ubyte;
 typedef unsigned short ushort;
-typedef vil1_rgb<ubyte> r_g_b;
+#define r_g_b vil1_rgb<ubyte> // cannot use typedef since that may cause ambiguous overload problems
 void sum_ubyte(ubyte& a, ubyte const& b) { a += b; }
 void sum_ushort(ushort& a, ushort const& b) { a += b; }
 void sum_rgb(r_g_b& a, r_g_b const& b) { a.r += b.r; a.g += b.g; a.b += b.b; }
@@ -41,9 +41,9 @@ void vepl_dyadic_sum(vil1_image im_out, vil1_image const& image)
 
   // byte rgb
   else if (vil1_pixel_format(image) == VIL1_RGB_BYTE) {
-    vil1_memory_image_of<r_g_b> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<r_g_b > mem(image); // load in memory to pass to filter
     im_out = mem;
-    vipl_dyadic<vil1_image,vil1_image,r_g_b,r_g_b> op(sum_rgb);
+    vipl_dyadic<vil1_image,vil1_image,r_g_b,r_g_b > op(sum_rgb);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&im_out);
     op.filter();
@@ -100,9 +100,9 @@ void vepl_dyadic_dif(vil1_image im_out, vil1_image const& image)
 
   // byte rgb
   else if (vil1_pixel_format(image) == VIL1_RGB_BYTE) {
-    vil1_memory_image_of<r_g_b> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<r_g_b > mem(image); // load in memory to pass to filter
     im_out = mem;
-    vipl_dyadic<vil1_image,vil1_image,r_g_b,r_g_b> op(dif_rgb);
+    vipl_dyadic<vil1_image,vil1_image,r_g_b,r_g_b > op(dif_rgb);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&im_out);
     op.filter();

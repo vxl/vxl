@@ -7,7 +7,7 @@
 #include <vil/vil_rgb.h>
 #include <vxl_config.h> // for vxl_byte
 
-typedef vil_rgb<vxl_byte> r_g_b;
+#define r_g_b vil_rgb<vxl_byte> // cannot use typedef since that may cause ambiguous overload problems
 void sum_ubyte(vxl_byte& a, vxl_byte const& b) { a += b; }
 void sum_short(vxl_uint_16& a, vxl_uint_16 const& b) { a += b; }
 void sum_int(vxl_uint_32& a, vxl_uint_32 const& b) { a += b; }

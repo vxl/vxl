@@ -22,10 +22,10 @@ vil1_image vepl_x_gradient(vil1_image const& image, double scale, double shift)
   // byte rgb
   else if (vil1_pixel_format(image) == VIL1_RGB_BYTE) {
     typedef unsigned char ubyte;
-    typedef vil1_rgb<ubyte> r_g_b;
-    vil1_memory_image_of<r_g_b> mem(image); // load in memory to pass to filter
-    vil1_memory_image_of<r_g_b> out(image);
-    vipl_x_gradient<vil1_image,vil1_image,r_g_b,r_g_b> op(scale, r_g_b((ubyte)(shift+0.5)) );
+#define r_g_b vil1_rgb<ubyte> // cannot use typedef since that may cause ambiguous overload problems
+    vil1_memory_image_of<r_g_b > mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<r_g_b > out(image);
+    vipl_x_gradient<vil1_image,vil1_image,r_g_b,r_g_b > op(scale, r_g_b((ubyte)(shift+0.5)) );
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();

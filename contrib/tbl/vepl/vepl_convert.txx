@@ -26,8 +26,8 @@ vil1_image vepl_convert(vil1_image const& image, D /*dummy*/)
   // byte rgb
   else if (vil1_pixel_format(image) == VIL1_RGB_BYTE) {
     typedef unsigned char ubyte;
-    typedef vil1_rgb<ubyte> r_g_b;
-    vil1_memory_image_of<r_g_b> mem(image); // load in memory to pass to filter
+#define r_g_b vil1_rgb<ubyte> // cannot use typedef since that may cause ambiguous overload problems
+    vil1_memory_image_of<r_g_b > mem(image); // load in memory to pass to filter
     vil1_memory_image_of<D > out(image);
     vipl_convert<vil1_image,vil1_image,r_g_b,D> op;
     op.put_in_data_ptr(&mem);
