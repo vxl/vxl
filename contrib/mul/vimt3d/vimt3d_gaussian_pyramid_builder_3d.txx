@@ -218,11 +218,7 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::checkPyr(vimt_image_pyramid& im_pyr,
     return;
   }
 
-  im_pyr.data().resize(n_levels);
-  emptyPyr(im_pyr);
-
-  for (int i=0;i<n_levels;++i)
-    im_pyr.data()[i] = new vimt3d_image_3d_of<T>;
+  im_pyr.resize(n_levels,vimt3d_image_3d_of<T>());
 }
 
 //: Set the minimum size of the top layer of the pyramid
