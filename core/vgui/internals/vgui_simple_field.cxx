@@ -10,7 +10,6 @@
 
 #include "vgui_simple_field.h"
 
-#include <vcl_cstring.h>
 #include <vcl_sstream.h>
 
 
