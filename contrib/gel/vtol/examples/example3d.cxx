@@ -44,7 +44,7 @@ class example_edge_3d : public vtol_edge
 
   virtual void print(vcl_ostream &strm=vcl_cout) const { strm<<"<example_edge_3d> with id "<<get_id()<<'\n'; }
   virtual void describe(vcl_ostream &strm=vcl_cout,int b=0) const { print(strm); v1_->print(strm); v2_->print(strm); }
-  virtual bool compare_geometry(const vtol_edge &e) const { return e.cast_to_edge_2d() == 0 && operator==(*(T*)(&e)); }
+  virtual bool compare_geometry(const vtol_edge &e) const { return e.cast_to_edge_2d() == 0 && operator==(*(T const*)(&e)); }
 #undef T
 #undef V
 #undef W
@@ -85,8 +85,8 @@ class example_vertex_3d : public vtol_vertex
     return new example_edge_3d(*this,*(T*)(&v));
   }
   virtual vsol_spatial_object_2d_sptr clone() const {return new T(x(),y(),z()); }
-  virtual void copy_geometry(const vtol_vertex&v) { assert(v.cast_to_vertex_2d()==0); operator=(*(T*)(&v)); }
-  virtual bool compare_geometry(const vtol_vertex&v) const { return v.cast_to_vertex_2d()==0 && operator==(*(T*)(&v)); }
+  virtual void copy_geometry(const vtol_vertex&v) { assert(v.cast_to_vertex_2d()==0); operator=(*(T const*)(&v)); }
+  virtual bool compare_geometry(const vtol_vertex&v) const { return v.cast_to_vertex_2d()==0 && operator==(*(T const*)(&v)); }
 
   void print(vcl_ostream &strm=vcl_cout) const { strm<<"<vertex "<<x()<<","<<y()<<","<<z()<<"> with id "<<get_id()<<'\n'; }
   void describe(vcl_ostream &strm=vcl_cout,int b=0) const { print(strm);describe_inferiors(strm,b);describe_superiors(strm,b); }
@@ -118,7 +118,7 @@ class example_face_3d : public vtol_face
   bool operator==(T const& f) const { return false; }
   virtual void print(vcl_ostream &strm=vcl_cout) const { strm << "<example_face_3d>"; }
   virtual void describe(vcl_ostream &strm=vcl_cout, int=0) const { print(strm); }
-  virtual bool compare_geometry(vtol_face const& f) const { return f.cast_to_face_2d()==0 && operator==(*(T*)(&f)); }
+  virtual bool compare_geometry(vtol_face const& f) const { return f.cast_to_face_2d()==0 && operator==(*(T const*)(&f)); }
   virtual vtol_face* copy_with_arrays(topology_list& vl, topology_list& el) const { return new T(*this); } // NYI
   virtual vtol_face* shallow_copy_with_no_links() const { return new T(*this); }
 #undef T
