@@ -22,7 +22,7 @@
 #include <vcl_map.h>
 
 //: A 3D curve builder
-class bmrf_curve_3d_builder 
+class bmrf_curve_3d_builder
 {
  public:
   //: Constructor
@@ -51,14 +51,14 @@ class bmrf_curve_3d_builder
   void find_alpha_bounds();
 
   //: Build curvels by matching curves in all frames at \p alpha
-  //: curves with less than \p min projections are removed
+  //  Curves with less than \p min projections are removed
   vcl_list<bmrf_curvel_3d_sptr> build_curvels(double alpha, int min = 3);
 
   //: Find all curves that intersect \p alpha in \p frame
   vcl_map<double, bmrf_node_sptr> find_curves_at(double alpha, int frame = -1);
 
   //: return the curvel in \p list that best matches \p node at \p alpha
-  bmrf_curvel_3d_sptr best_match(const bmrf_node_sptr& node, 
+  bmrf_curvel_3d_sptr best_match(const bmrf_node_sptr& node,
                                  const vcl_list<bmrf_curvel_3d_sptr>& list,
                                  double alpha) const;
 
@@ -69,10 +69,10 @@ class bmrf_curve_3d_builder
   void reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve) const;
 
   //: Match the \p curvels to the ends of the \p growing_curves
-  void append_curvels(vcl_list<bmrf_curvel_3d_sptr> curvels, 
+  void append_curvels(vcl_list<bmrf_curvel_3d_sptr> curvels,
                       vcl_list<vcl_list<bmrf_curvel_3d_sptr>*>& growing_curves);\
 
-  //: Return true if \p new_c is a reasonable match to \p prev_c 
+  //: Return true if \p new_c is a reasonable match to \p prev_c
   bool append_correct(const bmrf_curvel_3d_sptr& new_c, const bmrf_curvel_3d_sptr& prev_c) const;
 
  protected:
