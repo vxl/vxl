@@ -10,9 +10,10 @@
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 #include <bdgl/bdgl_curve_description.h>
+#include <bdgl/curveMatch.h>
 #include <vcl_vector.h>
 #include <vcl_utility.h>
-#include "curveMatch.h"
+#include <vcl_cassert.h>
 
 void bdgl_curve_matcher::match()
 {
@@ -50,51 +51,53 @@ void bdgl_curve_matcher::match()
 
 void bdgl_curve_matcher::match_DP()
 {
-  vcl_pair<double,double> coordinate;
-  vcl_vector<vcl_pair<double,double> > v1,v2;
-  int i;
-
+  vcl_vector<vcl_pair<double,double> > v1;
   vdgl_edgel_chain_sptr  edge_primitive_curve = primitive_curve_.get_curve();
-  vdgl_edgel_chain_sptr  edge_image_curve = image_curve_;
+  //bdgl_curve_description desc1(edge_primitive_curve);
   int len_primitive_curve=edge_primitive_curve->size();
-  int len_image_curve=edge_image_curve->size();
-    //bdgl_curve_description desc1(edge_primitive_curve);
-    //bdgl_curve_description desc2(edge_image_curve);
-  for (i=0;i<len_primitive_curve;i++)
+  for (int i=0;i<len_primitive_curve;i++)
   {
+    vcl_pair<double,double> coordinate;
     coordinate.first=edge_primitive_curve->edgel(i).get_x();
     coordinate.second=edge_primitive_curve->edgel(i).get_y();
     v1.push_back(coordinate);
   }
-  for (i=0;i<len_image_curve;i++)
+
+  vcl_vector<vcl_pair<double,double> > v2;
+  vdgl_edgel_chain_sptr  edge_image_curve = image_curve_;
+  //bdgl_curve_description desc2(edge_image_curve);
+  int len_image_curve=edge_image_curve->size();
+  for (int i=0;i<len_image_curve;i++)
   {
+    vcl_pair<double,double> coordinate;
     coordinate.first=edge_image_curve->edgel(i).get_x();
     coordinate.second=edge_image_curve->edgel(i).get_y();
     v2.push_back(coordinate);
   }
+
   // writing curves to a file
-#if 0 // commented out
-  vcl_ofstream of1("c:\\curve1.con");
+#ifdef DEBUG
+  vcl_ofstream of1("curve1.con");
   of1<<"CONTOUR\nOPEN\n"<<v1.size()<<'\n';
-  for (i=0;i<v1.size();i++)
+  for (int i=0;i<v1.size();i++)
     of1<<v1[i].first<<'\t'<<v1[i].second<<'\t';
   of1.close();
   //reverse(v2.begin(),v2.end());
-  vcl_ofstream of2("C:\\curve2.con");
+  vcl_ofstream of2("curve2.con");
   of2<<"CONTOUR\nOPEN\n"<<v2.size()<<'\n';
-  for (i=0;i<v2.size();i++)
+  for (int i=0;i<v2.size();i++)
     of2<<v2[i].first<<'\t'<<v2[i].second<<'\t';
   of2.close();
-#endif // 0
+#endif // DEBUG
 
-  // deciding the orientation ofthe curves to be matched
+  // deciding the orientation of the curves to be matched
 
+#if 0 // curveMatch has changed API -- FIXME - TODO
   double e1=(v1[0].first -v2[0].first )*(v1[0].first -v2[0].first )
            +(v1[0].second-v2[0].second)*(v1[0].second-v2[0].second);
   double e2=(v1[0].first -v2[v2.size()-1].first )*(v1[0].first -v2[v2.size()-1].first )
            +(v1[0].second-v2[v2.size()-1].second)*(v1[0].second-v2[v2.size()-1].second);
 
-#if 0 // curveMatch has changed API -- FIXME - TODO
   if (e1<e2)
     matching_score_ = curveMatch(v1,v2,Tx_,Ty_,Rtheta_);
   else
@@ -102,5 +105,8 @@ void bdgl_curve_matcher::match_DP()
     reverse(v2.begin(),v2.end());
     matching_score_ = curveMatch(v1,v2,Tx_,Ty_,Rtheta_);
   }
+#else // 0
+  matching_score_ = -1.0;
+  assert(!"Using unimplemented bdgl_curve_matcher::match_DP()");
 #endif // 0
 }
