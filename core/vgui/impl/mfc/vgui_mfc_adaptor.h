@@ -2,8 +2,9 @@
 
 //:
 // \file
-// \author RRG Oxford
-// \brief  Specialization of vgui_adaptor for MFC.
+// \author RRG, Oxford University
+// \brief  Implementation of vgui_adaptor for MFC.
+//         Contains one class: vgui_mfc_adaptor
 //
 // \verbatim
 //  Modifications:
@@ -35,10 +36,10 @@ struct vgui_overlay_helper;
 
 //: Implementation of vgui_adaptor for MFC.
 //
-//  The adaptor allows you to draw an OpenGL area in your application.
+//  The adaptor allows you to draw an OpenGL area in your MFC application.
 //  If this adaptor is not being used inside the main window of the application
 //  then you will need to call setup_adaptor.  See vgui_mfc_dialog_impl where
-//  this is done when an OpenGL area is used in a dialog box.
+//  this is done, when an OpenGL area is used in a dialog box.
 class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_mixin
 {
 //protected:  - kym - changed to public so I can add adaptors to dialog boxes:
@@ -97,6 +98,8 @@ public:
   // kym stuff
   //----------
   //: If your adaptor is not in the main window of the application call this function.
+  //  The first parameter tells it which window this adaptor is associated with,
+  //  the other parameters are so we can go back to our old rendering context.
   void setup_adaptor(CWnd* this_cwnd, HDC OldDC, HGLRC oldContext);
 
 protected:
@@ -142,7 +145,9 @@ protected:
   static vgui_menu last_popup;
   //: Called by MFC when the application requests the creation of a window.
   afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-  //: Called by MFC when the window has been destroyed.
+  //: Called by MFC when the main window has been destroyed.
+  //  Note, this function is not called when your adaptor is destroyed
+  //  inside a non-main window (eg. a dialog box).
   afx_msg void OnDestroy();
   //: Called by MFC when the application requests part of the window is redrawn.
   afx_msg void OnPaint();

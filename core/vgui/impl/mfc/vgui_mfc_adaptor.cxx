@@ -1,8 +1,15 @@
 // This is ./oxl/vgui/impl/mfc/vgui_mfc_adaptor.cxx
 
 //:
-//  \file
-// See vgui_mfc_adaptor.h for a description of this file
+// \file
+// \author RRG, Oxford University
+// \brief  See vgui_mfc_adaptor.h for a description of this file.
+//
+// \verbatim
+//   Modifications:
+//     06-AUG-2002 K.Y.McGaul - Changed key returned by CTRL events.
+// \endverbatim
+
 
 #include "vgui_mfc_adaptor.h"
 
@@ -52,7 +59,7 @@ vgui_mfc_adaptor::~vgui_mfc_adaptor()
   if (FALSE == ::wglMakeCurrent(hOldDC, hOldRC))
     ::AfxMessageBox("wglMakeCurrent failed" );
 
-  // delete the RC
+  // Delete the RC
   if ( m_hRC && (FALSE == ::wglDeleteContext( m_hRC )) )
   {
     ::AfxMessageBox("wglDeleteContext failed.");
@@ -62,7 +69,7 @@ vgui_mfc_adaptor::~vgui_mfc_adaptor()
   HDC m_hgldc = ::GetDC(m_hWnd);
   ::ReleaseDC(m_hWnd, m_hgldc);
 
-  // delete the DC
+  // Delete the DC
   if ( m_pDC )
     delete m_pDC;
 }
@@ -314,7 +321,7 @@ BOOL vgui_mfc_adaptor::SetupPixelFormat()
   return TRUE;
 }
 
-//: Called by MFC when the window has been destroyed.
+//: Called by MFC when the main window has been destroyed.
 void vgui_mfc_adaptor::OnDestroy()
 {
   // kym - moved stuff to the destructor because this only seems
@@ -433,7 +440,8 @@ int mfc_key(UINT nChar, UINT nFlags)
 {
   if (nFlags & 256) {
     // Extended code
-    switch (nChar) {
+    switch (nChar) 
+    {
     case VK_NEXT: return vgui_PAGE_DOWN;
     case VK_PRIOR: return vgui_PAGE_UP;
     case VK_LEFT: return vgui_CURSOR_LEFT;
@@ -442,14 +450,21 @@ int mfc_key(UINT nChar, UINT nFlags)
     case VK_DOWN: return vgui_CURSOR_DOWN;
     default: return vgui_key(0);
     };
-  } else {
+  } 
+  else 
+  {
     unsigned short buf[1024];
     unsigned char lpKeyState[256];
     vcl_memset(lpKeyState, 0, 256);
     vcl_memset(buf, 0, 256);
 
     lpKeyState[VK_SHIFT] = GetKeyState(VK_SHIFT);
-    lpKeyState[VK_CONTROL] = GetKeyState(VK_CONTROL);
+    // kym - don't specify the CTRL key - this returns the wrong
+    // ASCII character.  On other toolkits we expect, for example,
+    // CTRL+j to produce: modifier=vgui_CTRL, key='j'.
+    // By adding CTRL here we get key='^J'.
+    //lpKeyState[VK_CONTROL] = GetKeyState(VK_CONTROL);
+
     int k= ToAscii(nChar, nFlags & 0xff, lpKeyState, buf, 0);
 
     int c = nChar;
@@ -468,6 +483,10 @@ vgui_event vgui_mfc_adaptor::generate_vgui_event(UINT nChar, UINT nRepCnt, UINT 
     evt.modifier = vgui_SHIFT;
   if (GetKeyState(VK_CONTROL) & 0x8000)
     evt.modifier = vgui_CTRL;
+  //if (GetKeyState(VK_MENU) & 0x8000)
+  //  evt.modifier = vgui_ALT;
+  // kym - VK_MENU (alt key) doesn't seem to reach here - it is used
+  // by the menu, so, it seems, there will be no vgui_ALT events for MFC.
 
   int k = mfc_key(nChar, nFlags);
   evt.key = vgui_key(k);
