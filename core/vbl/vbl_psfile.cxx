@@ -42,7 +42,7 @@ static const vcl_streampos HEADER_START(-1);
 //-----------------------------------------------------------------------------
 //: Default constructor.
 //-----------------------------------------------------------------------------
-vbl_psfile::vbl_psfile(const char* f) 
+vbl_psfile::vbl_psfile(char const* f) 
   : output_filestream(f) 
 {
   set_paper_orientation(vbl_psfile::PORTRAIT);
@@ -761,7 +761,7 @@ void vbl_psfile::reset_postscript_header()
 //-----------------------------------------------------------------------------
 // sobj_rgb_params() -- 
 //-----------------------------------------------------------------------------
-void vbl_psfile::sobj_rgb_params(const char* obj_str)
+void vbl_psfile::sobj_rgb_params(char const* obj_str)
 {
   print_graphics_prolog();
   output_filestream << "\nBegin %I " << obj_str << "\n";

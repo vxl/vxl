@@ -1074,7 +1074,7 @@ vnl_matrix<T> vnl_matrix<T>::read(istream& s)
 // char* CoolBaseMatrix::print_format = 0;
 
 template <class T>
-void vnl_matrix<T>::set_print_format(const char* x)
+void vnl_matrix<T>::set_print_format(char const* x)
 {
   delete [] print_format;
   print_format = strcpy(new char[strlen(x)+1], x);

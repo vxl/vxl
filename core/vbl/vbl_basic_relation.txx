@@ -28,7 +28,7 @@ vbl_basic_relation_iterator<T1,T2,T3,T4,T5>::vbl_basic_relation_iterator()
 //------------------------------------------------------------
 // -- Copy constructor.
 template <class T1, class T2, class T3, class T4, class T5>
-vbl_basic_relation_iterator<T1,T2,T3,T4,T5>::vbl_basic_relation_iterator(const vbl_basic_relation_iterator<T1,T2,T3,T4,T5>& it)
+vbl_basic_relation_iterator<T1,T2,T3,T4,T5>::vbl_basic_relation_iterator(vbl_basic_relation_iterator<T1,T2,T3,T4,T5> const& it)
   : impl(0)
 {
   if (it.impl) impl = it.impl->copy();
@@ -45,7 +45,7 @@ vbl_basic_relation_iterator<T1,T2,T3,T4,T5>::~vbl_basic_relation_iterator()
 //------------------------------------------------------------
 // -- Assignment operator.
 template <class T1, class T2, class T3, class T4, class T5>
-vbl_basic_relation_iterator<T1,T2,T3,T4,T5>& vbl_basic_relation_iterator<T1,T2,T3,T4,T5>::operator=(const vbl_basic_relation_iterator<T1,T2,T3,T4,T5>& it)
+vbl_basic_relation_iterator<T1,T2,T3,T4,T5>& vbl_basic_relation_iterator<T1,T2,T3,T4,T5>::operator=(vbl_basic_relation_iterator<T1,T2,T3,T4,T5> const& it)
 {
   if (&it == this) return *this;
   if (impl) delete impl;
@@ -71,7 +71,7 @@ vbl_basic_relation<T1,T2,T3,T4,T5>::vbl_basic_relation(const vcl_string& name)
 // the names are the same.  However the where clauses may be changed
 // independently.
 template <class T1, class T2, class T3, class T4, class T5>
-vbl_basic_relation<T1,T2,T3,T4,T5>::vbl_basic_relation(const vbl_basic_relation<T1,T2,T3,T4,T5>& erel)
+vbl_basic_relation<T1,T2,T3,T4,T5>::vbl_basic_relation(vbl_basic_relation<T1,T2,T3,T4,T5> const& erel)
   : impl(erel.impl), where(0)
 {
   if (!impl)

@@ -29,7 +29,7 @@ macro(z, vnl_netlib::doublecomplex);
 // a compact and time-efficient packed form, which is most easily used via the
 // "solve" and "determinant" methods.
 template <class T>
-vnl_qr<T>::vnl_qr(const vnl_matrix<T>& M):
+vnl_qr<T>::vnl_qr(vnl_matrix<T> const& M):
   qrdc_out_(M.columns(), M.rows(), 999),
   qraux_(M.columns(), 0),
   jpvt_(M.rows(), 1234),

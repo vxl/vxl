@@ -15,7 +15,7 @@
 
 // - @{ Solve real symmetric eigensystem $A x = \lambda x$ @}
 template <class T>
-vnl_symmetric_eigensystem<T>::vnl_symmetric_eigensystem(const vnl_matrix<T>& A)
+vnl_symmetric_eigensystem<T>::vnl_symmetric_eigensystem(vnl_matrix<T> const& A)
   : n_(A.rows()), V(n_, n_), D(n_)
 {
   vnl_vector<T> Dvec(n_);
@@ -40,7 +40,7 @@ T vnl_symmetric_eigensystem<T>::get_eigenvalue(int i) const
 }
 
 template <class T>
-bool vnl_symmetric_eigensystem<T>::compute(const vnl_matrix<T>& A, vnl_matrix<T>& V, vnl_vector<T>& D)
+bool vnl_symmetric_eigensystem<T>::compute(vnl_matrix<T> const& A, vnl_matrix<T>& V, vnl_vector<T>& D)
 {
   A.assert_finite();
 

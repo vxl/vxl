@@ -137,7 +137,7 @@ vnl_svd<T>::vnl_svd(vnl_svd<T> const& that)
 
 // Assignment
 template <class T>
-vnl_svd<T>& vnl_svd<T>::operator=(const vnl_svd<T>& that)
+vnl_svd<T>& vnl_svd<T>::operator=(vnl_svd<T> const& that)
 {
   U_ = that.U_;
   W_ = that.W_;
@@ -303,7 +303,7 @@ vnl_matrix<T> vnl_svd<T>::tinverse()  const
 
 // -- Solve the matrix equation M X = B, returning X
 template <class T>
-vnl_matrix<T> vnl_svd<T>::solve(const vnl_matrix<T>& B)  const
+vnl_matrix<T> vnl_svd<T>::solve(vnl_matrix<T> const& B)  const
 {
   vnl_matrix<T> x;                                      // solution matrix
   if (U_.rows() < U_.columns()) {                       // augment y with extra rows of
@@ -326,7 +326,7 @@ vnl_matrix<T> vnl_svd<T>::solve(const vnl_matrix<T>& B)  const
 
 // -- Solve the matrix-vector system M x = y, returning x.
 template <class T>
-vnl_vector<T> vnl_svd<T>::solve(const vnl_vector<T>& y)  const
+vnl_vector<T> vnl_svd<T>::solve(vnl_vector<T> const& y)  const
 {
   // fsm sanity check :
   if (y.size() != U_.rows()) {
@@ -370,7 +370,7 @@ void vnl_svd<T>::solve(T const *y, T *x) const {
 // -- Solve the matrix-vector system M x = y, assuming that
 // the singular values W have been preinverted by the caller.
 template <class T>
-void vnl_svd<T>::solve_preinverted(const vnl_vector<T>& y, vnl_vector<T>* x_out)  const
+void vnl_svd<T>::solve_preinverted(vnl_vector<T> const& y, vnl_vector<T>* x_out)  const
 {
   vnl_vector<T> x;              // solution matrix
   if (U_.rows() < U_.columns()) {               // augment y with extra rows of

@@ -17,7 +17,7 @@ vbl_br_default_iter<T1,T2,T3,T4,T5>::vbl_br_default_iter()
 // -- Constructor.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_default_iter<T1,T2,T3,T4,T5>::vbl_br_default_iter(vbl_br_default<T1,T2,T3,T4,T5>* impl,
-					     const vbl_basic_relation_where<T1,T2,T3,T4,T5>* w)
+					     vbl_basic_relation_where<T1,T2,T3,T4,T5> const* w)
   : vbl_br_iter_impl<T1,T2,T3,T4,T5>(), where(0), tlist(0)
 {
   assert((impl != 0) && (w != 0));
@@ -153,7 +153,7 @@ bool vbl_br_default_iter<T1,T2,T3,T4,T5>::AtEnd() const
 // -- Constructor.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::vbl_br_default_wild_iter(vbl_br_default<T1,T2,T3,T4,T5>* init_impl,
-						     const vbl_basic_relation_where<T1,T2,T3,T4,T5>* w)
+						     vbl_basic_relation_where<T1,T2,T3,T4,T5> const* w)
   : vbl_br_iter_impl<T1,T2,T3,T4,T5>()
 {
   if (w)
@@ -299,7 +299,7 @@ vbl_br_default<T1,T2,T3,T4,T5>::~vbl_br_default()
 //------------------------------------------------------------
 // -- Add a tuple.  Return false if tuple already in relation.
 template <class T1, class T2, class T3, class T4, class T5>
-bool vbl_br_default<T1,T2,T3,T4,T5>::Insert(const vbl_basic_tuple<T1,T2,T3,T4,T5>& t)
+bool vbl_br_default<T1,T2,T3,T4,T5>::Insert(vbl_basic_tuple<T1,T2,T3,T4,T5> const& t)
 {
   // Call the non-virtual method.
   return DoInsert(t);
@@ -308,7 +308,7 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::Insert(const vbl_basic_tuple<T1,T2,T3,T4,T5
 //------------------------------------------------------------
 // -- Remove a tuple.  Return true if tuple was in relation.
 template <class T1, class T2, class T3, class T4, class T5>
-bool vbl_br_default<T1,T2,T3,T4,T5>::Remove(const vbl_basic_tuple<T1,T2,T3,T4,T5>& t)
+bool vbl_br_default<T1,T2,T3,T4,T5>::Remove(vbl_basic_tuple<T1,T2,T3,T4,T5> const& t)
 {
   vbl_basic_tuple<T1,T2,T3,T4,T5>* found = 0;
   {
@@ -390,7 +390,7 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::Remove(const vbl_basic_tuple<T1,T2,T3,T4,T5
 // -- Remove the tuples matching a where clause.  This uses wild cards
 // to search.  Return true if at least one tuple removed.
 template <class T1, class T2, class T3, class T4, class T5>
-bool vbl_br_default<T1,T2,T3,T4,T5>::Remove(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w)
+bool vbl_br_default<T1,T2,T3,T4,T5>::Remove(vbl_basic_relation_where<T1,T2,T3,T4,T5> const& w)
 {
   bool removed_tuples = false;
 
@@ -419,7 +419,7 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::Remove(const vbl_basic_relation_where<T1,T2
 //------------------------------------------------------------
 // -- Get an iterator for a given where clause.
 template <class T1, class T2, class T3, class T4, class T5>
-vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default<T1,T2,T3,T4,T5>::begin(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w)
+vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default<T1,T2,T3,T4,T5>::begin(vbl_basic_relation_where<T1,T2,T3,T4,T5> const& w)
 {
   int key = w.PrimaryKey();
   if (key == 0)
@@ -431,7 +431,7 @@ vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default<T1,T2,T3,T4,T5>::begin(const vb
 //------------------------------------------------------------
 // -- Get an iterator for the end of a where clause.
 template <class T1, class T2, class T3, class T4, class T5>
-vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default<T1,T2,T3,T4,T5>::end(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&)
+vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default<T1,T2,T3,T4,T5>::end(vbl_basic_relation_where<T1,T2,T3,T4,T5> const&)
 {
   return new vbl_br_default_iter<T1,T2,T3,T4,T5>;
 }
@@ -440,7 +440,7 @@ vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default<T1,T2,T3,T4,T5>::end(const vbl_
 // -- Get the number of tuples in this relation which match the where
 // clause.
 template <class T1, class T2, class T3, class T4, class T5>
-int vbl_br_default<T1,T2,T3,T4,T5>::size(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w)
+int vbl_br_default<T1,T2,T3,T4,T5>::size(vbl_basic_relation_where<T1,T2,T3,T4,T5> const& w)
 {
   // Make an iterator.
   iterator* iter = begin(w);
@@ -461,7 +461,7 @@ int vbl_br_default<T1,T2,T3,T4,T5>::size(const vbl_basic_relation_where<T1,T2,T3
 //------------------------------------------------------------
 // -- Return true if no tuples match the where clause.
 template <class T1, class T2, class T3, class T4, class T5>
-bool vbl_br_default<T1,T2,T3,T4,T5>::empty(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w)
+bool vbl_br_default<T1,T2,T3,T4,T5>::empty(vbl_basic_relation_where<T1,T2,T3,T4,T5> const& w)
 {
   // Make an iterator.
   iterator* iter = begin(w);

@@ -146,7 +146,7 @@ vbl_reg_exp::vbl_reg_exp (const vbl_reg_exp& rxp) {
 // operator== -- Returns true if two regular expressions have the same
 // compiled program for pattern matching.
 
-bool vbl_reg_exp::operator== (const vbl_reg_exp& rxp) const {
+bool vbl_reg_exp::operator== (vbl_reg_exp const& rxp) const {
   if (this != &rxp) {				// Same address?
     int ind = this->progsize;			// Get regular expression size
     if (ind != rxp.progsize)			// If different size regexp
@@ -378,7 +378,7 @@ static int strcspn ();
 // compile -- compile a regular expression into internal code
 // for later pattern matching.
 
-void vbl_reg_exp::compile (const char* exp) {
+void vbl_reg_exp::compile (char const* exp) {
     register const char* scan;
     register const char* longest;
     register unsigned long len;
@@ -925,7 +925,7 @@ return find(s.c_str());
 // find -- Matches the regular expression to the given string.
 // Returns true if found, and sets start and end indexes accordingly.
 
-bool vbl_reg_exp::find (const char* string) {
+bool vbl_reg_exp::find (char const* string) {
     register const char* s;
 
     this->searchstring = string;

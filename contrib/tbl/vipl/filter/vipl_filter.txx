@@ -24,7 +24,7 @@ const VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>:
 // input (properly refcounted).
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int  Arity, class PixelItr>
   vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
-  ::vipl_filter( const ImgIn* src_img ,
+  ::vipl_filter( ImgIn const* src_img ,
                 ImgOut* dst_img ,
                 int ninputs,
                 int img_border ,
@@ -75,7 +75,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int  Arity, c
 // refcounted).
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
-  ::vipl_filter( const ImgIn** src_img ,
+  ::vipl_filter( ImgIn const** src_img ,
                 ImgOut* dst_img ,
                 int ninputs,
                 int img_border ,

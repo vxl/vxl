@@ -21,7 +21,7 @@ int vbl_sort::double_ascending(double const& a, double const& b)
 }
 
 // -- Predicate that will sort in descending order.
-int vbl_sort::double_descending(const double& a, const double& b)
+int vbl_sort::double_descending(double const& a, double const& b)
 {
   if (a < b)
     return 1;

@@ -155,7 +155,7 @@ inline long vbl_reg_exp::end () const {
 
 // operator!= 
 
-inline bool vbl_reg_exp::operator!= (const vbl_reg_exp& r) const {
+inline bool vbl_reg_exp::operator!= (vbl_reg_exp const& r) const {
   return(!(*this == r));
 }
 

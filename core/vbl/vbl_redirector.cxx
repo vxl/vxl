@@ -83,7 +83,7 @@ xsputn_sizet vbl_redirector_streambuf::xsputn (xsputn_const char* text, xsputn_s
 //////////////// Data for debugging
 
 
-vbl_redirector::vbl_redirector(ostream& s):
+vbl_redirector::vbl_redirector(vcl_ostream& s):
   p(new vbl_redirector_data)
 {
   p->owner = this;
@@ -126,13 +126,13 @@ int vbl_redirector::sync_passthru()
 #endif
 }
 
-int vbl_redirector::put_passthru(const char* buf, int n)
+int vbl_redirector::put_passthru(char const* buf, int n)
 {
   return p->old_cerrbuf->sputn(buf, n);
 }
 
 // -- Default action is just to pass text on the the old stream.
-int vbl_redirector::putchunk(const char* buf, int n)
+int vbl_redirector::putchunk(char const* buf, int n)
 {
   return put_passthru(buf, n);
 }

@@ -14,8 +14,8 @@
 // Constructors/Destructors--------------------------------------------------
 
 template <class Type>
-vgl_box_3d<Type>::vgl_box_3d(const Type min_position[3], 
-                             const Type max_position[3] )
+vgl_box_3d<Type>::vgl_box_3d(Type const min_position[3], 
+                             Type const max_position[3] )
 {
   min_pos_[0]=min_position[0];
   min_pos_[1]=min_position[1];
@@ -27,8 +27,8 @@ vgl_box_3d<Type>::vgl_box_3d(const Type min_position[3],
 }
 
 template <class Type>
-vgl_box_3d<Type>::vgl_box_3d(const vgl_point_3d<Type>& min_pos,
-                             const vgl_point_3d<Type>& max_pos)
+vgl_box_3d<Type>::vgl_box_3d(vgl_point_3d<Type> const& min_pos,
+                             vgl_point_3d<Type> const& max_pos)
 {
   min_pos_[0]=min_pos.x();
   min_pos_[1]=min_pos.y();
@@ -66,7 +66,7 @@ vgl_box_3d<Type>::vgl_box_3d(const Type centroid[3],
 }
 
 template <class Type>
-vgl_box_3d<Type>::vgl_box_3d(const vgl_point_3d<Type>& centroid,
+vgl_box_3d<Type>::vgl_box_3d(vgl_point_3d<Type> const& centroid,
                              Type width, Type height, Type depth)
 {
   min_pos_[0]=centroid.x()-0.5*width;

@@ -74,7 +74,7 @@ vtol_two_chain_2d::vtol_two_chain_2d(face_list_2d &faces,
 //---------------------------------------------------------------------------
 // Copy constructor
 //---------------------------------------------------------------------------
-vtol_two_chain_2d::vtol_two_chain_2d(const vtol_two_chain_2d &other)
+vtol_two_chain_2d::vtol_two_chain_2d(vtol_two_chain_2d const &other)
 {
   vtol_two_chain_2d *fl;
   edge_list_2d *edges;
@@ -456,7 +456,7 @@ vtol_two_chain_2d *vtol_two_chain_2d::cast_to_two_chain(void)
 // -- Is `inferior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
-vtol_two_chain_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) const
+vtol_two_chain_2d::valid_inferior_type(vtol_topology_object_2d const &inferior) const
 {
   return inferior.cast_to_face()!=0;
 }
@@ -465,7 +465,7 @@ vtol_two_chain_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) 
 // -- Is `superior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
-vtol_two_chain_2d::valid_superior_type(const vtol_topology_object_2d &superior) const
+vtol_two_chain_2d::valid_superior_type(vtol_topology_object_2d const &superior) const
 {
   return superior.cast_to_block()!=0;
 }
@@ -769,7 +769,7 @@ bool vtol_two_chain_2d::operator==(const vtol_two_chain_2d &other) const
 
 // -- spatial object equality
 
-bool vtol_two_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
+bool vtol_two_chain_2d::operator==(vsol_spatial_object_2d const& obj) const
 {
   return
    obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&

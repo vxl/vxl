@@ -176,7 +176,7 @@ vtol_one_chain_2d::topology_type(void) const
 }
 
 // -- Get the direction of the edge "e" in the onechain.
-signed char vtol_one_chain_2d::direction(const vtol_edge_2d &e) const
+signed char vtol_one_chain_2d::direction(vtol_edge_2d const &e) const
 {
   vcl_vector<signed char>::const_iterator dit;
   topology_list_2d::const_iterator toit;
@@ -220,7 +220,7 @@ vtol_one_chain_2d *vtol_one_chain_2d::cast_to_one_chain(void)
 // -- Is `inferior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
-vtol_one_chain_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) const
+vtol_one_chain_2d::valid_inferior_type(vtol_topology_object_2d const &inferior) const
 {
   return inferior.cast_to_edge();
 }
@@ -229,7 +229,7 @@ vtol_one_chain_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) 
 // -- Is `superior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
-vtol_one_chain_2d::valid_superior_type(const vtol_topology_object_2d &superior) const
+vtol_one_chain_2d::valid_superior_type(vtol_topology_object_2d const &superior) const
 {
   return superior.cast_to_face();
 }
@@ -238,7 +238,7 @@ vtol_one_chain_2d::valid_superior_type(const vtol_topology_object_2d &superior) 
 // -- Is `chain_inf_sup' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
-vtol_one_chain_2d::valid_chain_type(const vtol_chain_2d &chain_inf_sup) const
+vtol_one_chain_2d::valid_chain_type(vtol_chain_2d const &chain_inf_sup) const
 {
   return chain_inf_sup.cast_to_one_chain();
 }
@@ -763,7 +763,7 @@ void vtol_one_chain_2d::remove_edge(vtol_edge_2d &doomed_edge,
 
 // -- comparison operator
 
-bool vtol_one_chain_2d::operator==(const vtol_one_chain_2d &other) const
+bool vtol_one_chain_2d::operator==(vtol_one_chain_2d const &other) const
 {
   bool result;
 
@@ -888,7 +888,7 @@ void vtol_one_chain_2d::reverse_directions(void)
 
 // -- spatial object equality
 
-bool vtol_one_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
+bool vtol_one_chain_2d::operator==(vsol_spatial_object_2d const& obj) const
 {
   return
    obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
@@ -899,14 +899,14 @@ bool vtol_one_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
 
 // -- Print Methods
 
-void vtol_one_chain_2d::print(ostream &strm) const
+void vtol_one_chain_2d::print(vcl_ostream &strm) const
 {
   strm << "<one_chain_2d " << _inferiors.size() << "  " << (void *) this << ">"  << endl;
 }
 
 // -- Describe the directions
 
-void vtol_one_chain_2d::describe_directions(ostream &strm,
+void vtol_one_chain_2d::describe_directions(vcl_ostream &strm,
                                             int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
@@ -920,7 +920,7 @@ void vtol_one_chain_2d::describe_directions(ostream &strm,
 
 // -- Describe the one chain 
 
-void vtol_one_chain_2d::describe(ostream &strm,
+void vtol_one_chain_2d::describe(vcl_ostream &strm,
                                  int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';

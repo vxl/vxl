@@ -100,8 +100,8 @@ double vgl_homg_operators_2d<Type>::dot(const vgl_homg_point_2d<Type>& a, const 
 }
 
 template <class Type>
-double vgl_homg_operators_2d<Type>::dot(const vgl_homg_line_2d<Type>&l,
-  const vgl_homg_point_2d<Type>& p)
+double vgl_homg_operators_2d<Type>::dot(vgl_homg_line_2d<Type> const&l,
+  vgl_homg_point_2d<Type> const& p)
 {
   return l.a()*p.x() + l.b()+p.y() + l.c()*p.w();
 }

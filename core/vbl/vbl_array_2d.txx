@@ -28,7 +28,7 @@ vbl_array_2d<T>::vbl_array_2d(int num_rows, int num_cols)
 
 // -- Copy that
 template <class T>
-vbl_array_2d<T>::vbl_array_2d(const vbl_array_2d<T>& that)
+vbl_array_2d<T>::vbl_array_2d(vbl_array_2d<T> const& that)
 {
   create(that.num_rows_, that.num_cols_);
   for (int i=0;i<num_rows_;i++)
@@ -38,7 +38,7 @@ vbl_array_2d<T>::vbl_array_2d(const vbl_array_2d<T>& that)
 
 // -- Copy that
 template <class T>
-vbl_array_2d<T>& vbl_array_2d<T>::operator=(const vbl_array_2d<T>& that)
+vbl_array_2d<T>& vbl_array_2d<T>::operator=(vbl_array_2d<T> const& that)
 {
   if (num_rows_ != that.num_rows_ ||
       num_cols_ != that.num_cols_)

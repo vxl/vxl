@@ -26,7 +26,7 @@ vnl_matrix<double> vnl_matops::cat(vnl_matrix<double> const &A, vnl_matrix<doubl
   return M;
 }
 
-vnl_matrix<double> vnl_matops::cat(vnl_matrix<double> const &A, const vnl_vector<double> &B) {
+vnl_matrix<double> vnl_matops::cat(vnl_matrix<double> const &A, vnl_vector<double> const &B) {
   int rowsA = A.rows();
   int colsA = A.columns();
   int rowsB = B.size();

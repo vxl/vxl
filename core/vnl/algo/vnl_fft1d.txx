@@ -35,7 +35,7 @@ vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R) : base (R.size())
 // -- super-easy constructor #2: take complex vector and direction
 // -- don't worry about twiddle-factors, just lean back ....
 template<class T> 
-vnl_fft1d<T>::vnl_fft1d (const vnl_vector<vnl_complex<T> > &Z, int dir) : base (Z)
+vnl_fft1d<T>::vnl_fft1d (vnl_vector<vnl_complex<T> > const &Z, int dir) : base (Z)
 {
   vnl_fftxd_prime_factors<T> oPF (Z.size ());
   if (!oPF) {
@@ -101,8 +101,8 @@ vnl_fft1d<T>::vnl_fft1d (const T *RData, const T *IData, unsigned iLen,
 #ifndef VCL_WIN32
 // -- init to given complex vnl_vector
 template<class T> 
-vnl_fft1d<T>::vnl_fft1d (const vnl_vector<vnl_complex<T> > &C, 
-			 const vnl_fftxd_prime_factors<T> &oPF, int dir)
+vnl_fft1d<T>::vnl_fft1d (vnl_vector<vnl_complex<T> > const& C, 
+			 vnl_fftxd_prime_factors<T> const& oPF, int dir)
   : base(C)
 {
   doFFT (oPF, dir);
@@ -110,8 +110,8 @@ vnl_fft1d<T>::vnl_fft1d (const vnl_vector<vnl_complex<T> > &C,
 
 // -- create new complex given 'raw' complex c(CData)
 template<class T> 
-vnl_fft1d<T>::vnl_fft1d (const vnl_complex<T> *CData, unsigned iLen, 
-			 const vnl_fftxd_prime_factors<T> &oPF, int dir)
+vnl_fft1d<T>::vnl_fft1d (vnl_complex<T> const *CData, unsigned iLen, 
+			 vnl_fftxd_prime_factors<T> const &oPF, int dir)
   : base(CData,iLen)
 {
   doFFT (oPF, dir);
@@ -160,7 +160,7 @@ inline void cxx_gpfa(float  *a, float  *b, const float  *triggs,
 // called internally by all constructors
 template<class T> 
 int vnl_fft1d<T>::doFFT_IP (vnl_complex<T> *cdata, unsigned iLen, 
-			    const vnl_fftxd_prime_factors<T> &oPF, int iDirection)
+			    vnl_fftxd_prime_factors<T> const &oPF, int iDirection)
 {
   int info = 0; // return value (should really throw exceptions)
 
