@@ -16,6 +16,7 @@ MINI_PROG_SOURCES += basic11_display_3d.cxx
 MINI_PROG_SOURCES += example_blender_tableau.cxx
 MINI_PROG_SOURCES += example_display_pyramid.cxx
 MINI_PROG_SOURCES += example_draw_polygon.cxx
+MINI_PROG_SOURCES += example_enhance_tableau.cxx
 MINI_PROG_SOURCES += example_get_highlighted.cxx
 MINI_PROG_SOURCES += example_multiple_windows.cxx
 MINI_PROG_SOURCES += example_satellite_tableau.cxx
