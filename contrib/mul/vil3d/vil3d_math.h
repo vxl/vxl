@@ -7,6 +7,7 @@
 // \author Tim Cootes
 
 #include <vcl_cassert.h>
+#include <vcl_vector.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_plane.h>
 
