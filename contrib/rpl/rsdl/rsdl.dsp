@@ -99,92 +99,55 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\rsdl_bounding_box.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rsdl_dist.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rsdl_kd_tree.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rsdl_point.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/rsdl_bins_2d+double.int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/rsdl_borgefors+vnl_vector_fixed+double.2--.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+rsdl_kd_tree-.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\rsdl_bins_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rsdl_bins_2d.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rsdl_borgefors.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rsdl_borgefors.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rsdl_bounding_box.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rsdl_dist.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rsdl_kd_tree.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rsdl_point.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rsdl_fwd.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\rsdl_test.h
-
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
