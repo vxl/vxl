@@ -176,6 +176,12 @@ SOURCE=.\Templates/vimt_image_2d_of+int-.cxx
 # Begin Source File
 SOURCE=.\Templates/vimt_dog_pyramid_builder_2d+float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_sample_grid_bicub+byte.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_sample_grid_bicub+float.double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "txx;h"
@@ -253,6 +259,12 @@ SOURCE=.\vimt_dog_pyramid_builder_2d.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vimt_load_transform.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_sample_grid_bicub.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_sample_grid_bicub.txx
 # End Source File
 # End Group
 # End Target
