@@ -95,9 +95,8 @@ void vpgl_perspective_camera::world_to_image(vnl_vector<double> const& vect3d,
                                              double& imgu, double& imgv,
                                              double time)
 {
-  vnl_vector<double> * x = acs->from_local_to_cs(vect3d,lcs,time);
-  _mat_cam->world_to_image(*x, imgu, imgv, time);
-  delete x;
+  vnl_vector<double> x = acs->from_local_to_cs(vect3d,lcs,time);
+  _mat_cam->world_to_image(x, imgu, imgv, time);
 }
 
 //-------------------------------------------------------------------------------
@@ -107,13 +106,11 @@ void vpgl_perspective_camera::world_to_image(double x, double y, double z,
                                              double& ix, double& iy, double time)
 {
   vnl_vector<double> temp(3);
-  vnl_vector<double> *transformed;
   temp(1)=x;
   temp(2)=y;
   temp(3)=z;
-  transformed=acs->from_local_to_cs(temp,lcs,time);
-  _mat_cam->world_to_image(*transformed, ix, iy, time);
-  delete transformed;
+  vnl_vector<double> transformed=acs->from_local_to_cs(temp,lcs,time);
+  _mat_cam->world_to_image(transformed, ix, iy, time);
 }
 
 #if 0
