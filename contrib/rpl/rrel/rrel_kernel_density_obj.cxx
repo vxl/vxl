@@ -3,7 +3,6 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
 #include <vcl_algorithm.h>
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
 namespace {
@@ -68,7 +67,7 @@ rrel_kernel_density_obj::best_x(vect_const_iter res_begin,
   assert(h!=0);
 
   vcl_vector<double> sort_res( res_begin, res_end );
-  sort( sort_res.begin(), sort_res.end() );
+  vcl_sort( sort_res.begin(), sort_res.end() );
 
   unsigned int loc = 0;
   unsigned int i = 0;
