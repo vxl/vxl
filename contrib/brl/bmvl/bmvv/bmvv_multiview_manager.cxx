@@ -11,6 +11,7 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
+#include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vsol/vsol_curve_2d.h>
 #include <bxml/bxml_vtol_io.h>
@@ -546,17 +547,21 @@ void bmvv_multiview_manager::track_edges()
   // frame 0
   for (int i=0;i<tracker.get_output_size_at(0);++i) {
     //vcl_cout<<".";
-    draw_colored_edgel_chain(0,0, tracker.get_output_curve_at(0,i), tracker.get_output_id_at(0,i) );
+		vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( tracker.get_output_curve_at(0,i) );
+		vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
+    draw_colored_digital_curve(0,0, dc, tracker.get_output_id_at(0,i) );
   }
   // frame 1
-  for (int i=0;i<tracker.get_output_size_at(1);++i) {
+  for (unsigned int i=0;i<tracker.get_output_size_at(1);i++){
     //vcl_cout<<".";
-    draw_colored_edgel_chain(1,0, tracker.get_output_curve_at(1,i), tracker.get_output_id_at(1,i) );
+		vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( tracker.get_output_curve_at(1,i) );
+		vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
+    draw_colored_digital_curve(1,0, dc, tracker.get_output_id_at(1,i) );
   }
   return;
 }
 //-----------------------------------------------------------------------------
-void bmvv_multiview_manager::draw_colored_edgel_chain(unsigned col, unsigned row, vdgl_edgel_chain_sptr ec, int label)
+void bmvv_multiview_manager::draw_colored_digital_curve(unsigned col, unsigned row, vdgl_digital_curve_sptr dc, int label)
 {
   float r,g,b;
 
@@ -567,8 +572,8 @@ void bmvv_multiview_manager::draw_colored_edgel_chain(unsigned col, unsigned row
   } else {
     btab->disable_highlight();
     set_changing_colors( label, &r, &g, &b );
-    btab->set_edgel_chain_style(r, g, b, 3.0);
-    btab->add_edgel_chain( ec );
+    btab->set_digital_curve_style(r, g, b, 3.0);
+    btab->add_digital_curve( dc );
     btab->post_redraw();
   }
 
