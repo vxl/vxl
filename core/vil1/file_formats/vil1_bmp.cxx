@@ -322,7 +322,7 @@ bool vil_bmp_generic_image::get_section(void* ib, int x0, int y0, int w, int h) 
   // per image raster is divisible by four (because the file rasters are
   // padded at the ends).
   for (int i=0; i<h; ++i) {
-    is_->seek(bit_map_start + have_bytes_per_raster*i + x0*bytes_per_pixel);
+    is_->seek(bit_map_start + have_bytes_per_raster*(i+y0) + x0*bytes_per_pixel);
     is_->read(bp + want_bytes_per_raster*i, want_bytes_per_raster);
   }
 
