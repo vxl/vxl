@@ -19,6 +19,8 @@
 void
 HomgOperator3D::sort_points(HomgPoint3D* points, int n)
 {
+  if (n <= 0) return; // early return if possible
+
   // ho_quadvecstd_sort_quadvecs
 
   int num_finite = 0;
@@ -31,7 +33,8 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
     }
   }
   if (num_finite < n) {
-    vcl_cerr << "WARNING HomgOperator3D::sort_points -- " << (n - num_finite) << " at infinity\n";
+    vcl_cerr << "WARNING HomgOperator3D::sort_points -- "
+             << (n - num_finite) << " points at infinity\n";
   }
 
   if (num_finite == 0) {
