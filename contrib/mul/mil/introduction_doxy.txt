@@ -1,5 +1,10 @@
 // The following text is included in the main documentation page by doxygen
-/*! \mainpage mil : Manchester's Image Library
+/*! \mainpage (mil : Manchester's Image Library) - Now replaced by vil2 and vimt
+* The functionality of this library is now completely replaced by vil2 and vimt
+*
+* Please convert all your code to using vil2 and vimt instead.  mil will be 
+* removed from the repository after a suitable grace period.
+*
 * Provides a set of image classes, derived from mil_image, which can be used
 * as `views' on actual image data.
 *
