@@ -84,7 +84,7 @@ LIB32=link.exe -lib
 # Name "vbl - Win32 Debug"
 # Begin Group "Source Files"
 
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;txx"
 # Begin Source File
 
 SOURCE=.\vbl_arg.cxx
@@ -132,6 +132,10 @@ SOURCE=".\Templates\vbl_bounding_box+float-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vbl_bounding_box+int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_canonical_path.cxx
 # End Source File
 # Begin Source File
 
@@ -207,6 +211,10 @@ SOURCE=.\vbl_timestamp.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vbl_trace.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vbl_user_info.cxx
 # End Source File
 # End Group
@@ -215,7 +223,15 @@ SOURCE=.\vbl_user_info.cxx
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=.\dll.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vbl_arg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_array.h
 # End Source File
 # Begin Source File
 
@@ -268,6 +284,10 @@ SOURCE=.\vbl_br_default.h
 # Begin Source File
 
 SOURCE=.\vbl_br_impl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_canonical_path.h
 # End Source File
 # Begin Source File
 
@@ -327,6 +347,10 @@ SOURCE=.\vbl_rgba.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vbl_sequence_filename_map.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vbl_smart_ptr.h
 # End Source File
 # Begin Source File
@@ -364,6 +388,10 @@ SOURCE=.\vbl_timer.h
 # Begin Source File
 
 SOURCE=.\vbl_timestamp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_trace.h
 # End Source File
 # Begin Source File
 

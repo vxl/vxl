@@ -41,6 +41,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name vgui_mfc
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vvl
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -69,6 +72,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "canny"=.\canny\canny.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "example_mfc"=.\vgui\examples\vgui_example_mfc\example_mfc.dsp - Package Owner=<4>
 
 Package=<5>
@@ -91,6 +106,18 @@ Package=<4>
 ###############################################################################
 
 Project: "netlib"=..\v3p\netlib\netlib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "newovm"=.\newovm\newovm.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -131,6 +158,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name vil
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "tiff"=..\V3P\tiff\tiff.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
@@ -184,18 +223,6 @@ Package=<4>
 ###############################################################################
 
 Project: "vgui"=.\vgui\vgui.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vgui_example_mfc2"=.\VGUI\EXAMPLES\vgui_example_mfc2\vgui_example_mfc2.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -312,6 +339,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "vplayer"=.\vplayer\vplayer.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "vsl"=.\vsl\vsl.dsp - Package Owner=<4>
 
 Package=<5>
@@ -348,6 +387,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "vvl"=.\vvl\vvl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "xcv"=.\xcv\xcv.dsp - Package Owner=<4>
 
 Package=<5>
@@ -361,6 +412,12 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vgui_vrml
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui_mfc
     End Project Dependency
 }}}
 

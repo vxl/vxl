@@ -151,6 +151,10 @@ SOURCE=".\Templates\vcl_vector+vnl_vector+double-~-.cxx"
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vcl_vector+vnl_vector+double_complex--.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vcl_vector+vnl_vector+float--.cxx"
 # End Source File
 # Begin Source File
@@ -160,6 +164,10 @@ SOURCE=".\Templates\vcl_vector+vnl_vector+float-~-.cxx"
 # Begin Source File
 
 SOURCE=.\vnl_alloc.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_binary.cxx
 # End Source File
 # Begin Source File
 
@@ -299,6 +307,10 @@ SOURCE=.\vnl_float_3.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_float_4.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vnl_fortran_copy+double-.cxx"
 # End Source File
 # Begin Source File
@@ -344,6 +356,10 @@ SOURCE=.\vnl_least_squares_function.cxx
 # Begin Source File
 
 SOURCE=.\vnl_linear_operators_3.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_linear_system.cxx
 # End Source File
 # Begin Source File
 
@@ -420,6 +436,10 @@ SOURCE=".\Templates\vnl_matrix+uint-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vnl_matrix+ulong-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vnl_matrix_exp+double-.cxx"
 # End Source File
 # Begin Source File
 
@@ -535,7 +555,15 @@ SOURCE=.\Templates\vnl_sparse_matrix_instances.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_sparse_matrix_linear_system.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_test.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_trace.cxx
 # End Source File
 # Begin Source File
 
@@ -639,6 +667,10 @@ SOURCE=.\vnl_cross_product_matrix.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_determinant.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_diag_matrix.h
 # End Source File
 # Begin Source File
@@ -703,6 +735,10 @@ SOURCE=.\vnl_float_3.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_float_4.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_fortran_copy.h
 # End Source File
 # Begin Source File
@@ -747,6 +783,10 @@ SOURCE=.\vnl_linear_operators_3.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_linear_system.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_math.h
 # End Source File
 # Begin Source File
@@ -780,6 +820,10 @@ SOURCE=.\vnl_matops.h
 # Begin Source File
 
 SOURCE=.\vnl_matrix.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matrix_exp.h
 # End Source File
 # Begin Source File
 
@@ -855,7 +899,19 @@ SOURCE=.\vnl_sparse_matrix.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_sparse_matrix_linear_system.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_T_n.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_test.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_trace.h
 # End Source File
 # Begin Source File
 

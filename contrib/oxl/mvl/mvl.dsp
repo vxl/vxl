@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -623,32 +623,6 @@ SOURCE=".\Templates\vcl_vector+PMatrix~-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vcl_vector+TriTensor-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vcl_vector+vcl_map+int.int--.cxx"
-
-!IF  "$(CFG)" == "mvl - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "mvl - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vcl_vector+vcl_map+uint.uint--.cxx"
-
-!IF  "$(CFG)" == "mvl - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "mvl - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
