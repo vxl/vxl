@@ -1,4 +1,5 @@
 #include <vcl_new.h>
+#include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cstddef.h> // for vcl_size_t
 #include <vcl_iostream.h>
@@ -12,6 +13,16 @@
 bool verbose_malloc = false;
 int malloc_count = 0;
 
+// FIXME: Win32 will have different operator new in vnl dll from
+// the one generated here, so this test fails - RWMC.
+#ifndef WIN32
+# define reset_count malloc_count = 0
+# define check_count vnl_test_assert("mallocs", malloc_count <= 1)
+#else
+# define reset_count malloc_count = 0
+# define check_count /* */
+#endif
+
 void test_matrix_fixed()
 {
   verbose_malloc = true;
@@ -23,22 +34,23 @@ void test_matrix_fixed()
 
   vcl_cout << "Calling ctor -- should be no mallocs\n";
   //Refvnl_double_3x3 X(datablock);
-  malloc_count = 0;
+  reset_count;
   vnl_double_3x3 X(datablock);
+  check_count;
   vcl_cout << "X = [" << X << "]\n";
 
+  reset_count;
   vnl_double_3 v(10,11,12);
+  check_count;
   vcl_cout << "v = [ " << v << "]\n";
-
-  vcl_cout << "X v = " << X * (v + v) << vcl_endl;
+  
+  reset_count;
+  vnl_double_3 splork = X * (v + v);
+  check_count;
+  vcl_cout << "splork = " << splork << vcl_endl;
+  
   // This shouldn't compile...
   // vnl_matrix<double>* base = new vnl_double_3x3(datablock);
-
-  // FIXME: Win32 will have different operator new in vnl dll from
-  // the one generated here, so this test fails - RWMC.
-#ifndef WIN32
-  vnl_test_assert("mallocs", malloc_count <= 1);
-#endif
 
   vcl_cout << "Now watch them mallocs\n";
   vnl_matrix<double>& CX = X;
@@ -48,6 +60,8 @@ void test_matrix_fixed()
   verbose_malloc = false;
 }
 
+// with gcc 3.0, formatted stream output uses operator
+// new so printing to cout here causes stack overflow.
 
 void* operator new(vcl_size_t s)
   // [18.4.1] lib.new.delete
@@ -55,12 +69,12 @@ void* operator new(vcl_size_t s)
   throw (std::bad_alloc)
 #endif
 {
-  void *r = malloc(s);
+  void *r = vcl_malloc(s);
 
   ++malloc_count;
 
   if (verbose_malloc)
-    vcl_cout << "malloc: " << r << " for " << s << vcl_endl;
+    vcl_printf("malloc: %08X for %d\n", unsigned(r), int(s));
 
   return r;
 }
@@ -71,8 +85,9 @@ void operator delete(void* s)
 #endif
 {
   if (verbose_malloc)
-    vcl_cout << "delete: " << s << vcl_endl;
-  free(s);
+    vcl_printf("delete: %08X\n", unsigned(s));
+
+  vcl_free(s);
 }
 
 TESTMAIN(test_matrix_fixed);
