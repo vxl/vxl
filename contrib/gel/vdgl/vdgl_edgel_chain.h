@@ -53,6 +53,7 @@ class vdgl_edgel_chain : public vul_timestamp,
   // Data Access---------------------------------------------------------------
 
   int size() const { return es_.size(); }
+  vdgl_edgel& edgel( int i) { return es_[i]; }
   vdgl_edgel const& edgel( int i) const { return es_[i]; }
   vdgl_edgel& operator[]( int i) { return es_[i]; }
   vdgl_edgel const& operator[]( int i) const { return es_[i]; }
@@ -66,8 +67,8 @@ class vdgl_edgel_chain : public vul_timestamp,
   // Utility functions
 
   //: Advance along a line and generate contiguous pixels on the line.
-  bool line_gen(float xs, float ys, float xe, float ye,
-                bool& init, bool& done, float& x, float& y);
+  bool line_gen(double xs, double ys, double xe, double ye,
+                bool& init, bool& done, double& x, double& y);
 
   // Data Members--------------------------------------------------------------
 

@@ -24,7 +24,7 @@ vdgl_edgel_chain::vdgl_edgel_chain( const double x0, const double y0,
                                     const double x1, const double y1)
 {
   bool init = true, done = false;//should be internal statics but seems not to work
-  float x, y; // the intermediate pixels
+  double x, y; // the intermediate pixels
   while (this->line_gen(x0, y0, x1, y1, init, done, x, y))
       es_.push_back(vdgl_edgel( x, y));
 }
@@ -140,34 +140,34 @@ bool vdgl_edgel_chain::split( double x, double y,
 
 //: Advance along a line and generate contiguous pixels on the line.
 //
-bool vdgl_edgel_chain::line_gen(float xs, float ys, float xe, float ye,
+bool vdgl_edgel_chain::line_gen(double xs, double ys, double xe, double ye,
                                 bool& init, bool& done,
-                                float& x, float& y)
+                                double& x, double& y)
 {
-  assert(xs >= 0.0f); assert(ys >= 0.0f);
-  const float pix_edge = 1.0f; //We are working at scale = 1.0
-  static float xi=0, yi=0;
+  assert(xs >= 0.0); assert(ys >= 0.0);
+  const double pix_edge = 1.0; //We are working at scale = 1.0
+  static double xi=0.0, yi=0.0;
   if (init)
     {
       xi = xs;
       yi = ys;
-      x = (float)(unsigned int)(xi/pix_edge);
-      y = (float)(unsigned int)(yi/pix_edge);
+      x = (double)(unsigned int)(xi/pix_edge);
+      y = (double)(unsigned int)(yi/pix_edge);
       init = false;
       return true;
     }
   if (done) return false;
-  float dx = xe-xs;
-  float dy = ye-ys;
-  float mag = vcl_sqrt(dx*dx + dy*dy);
+  double dx = xe-xs;
+  double dy = ye-ys;
+  double mag = vcl_sqrt(dx*dx + dy*dy);
   if (mag<pix_edge)//Can't reach the next pixel under any circumstances
     {             //so just output the target, xe, ye.
-      x = (float)(unsigned int)xe;
-      y = (float)(unsigned int)ye;
+      x = (double)(unsigned int)xe;
+      y = (double)(unsigned int)ye;
       done = true;
       return true;
     }
-  float delta = (0.5f*pix_edge)/mag; //move in 1/2 pixel increments
+  double delta = (0.5*pix_edge)/mag; //move in 1/2 pixel increments
   //Previous pixel location
   int xp = int(xi/pix_edge);
   int yp = int(yi/pix_edge);
@@ -186,7 +186,7 @@ bool vdgl_edgel_chain::line_gen(float xs, float ys, float xe, float ye,
       //Check if we have advanced by more than .5 pixels
       x = (xi/pix_edge);
       y = (yi/pix_edge);
-      float dx1 = (float)(int(x)-xp), dy1 = (float)(int(y)-yp);
+      double dx1 = (double)(int(x)-xp), dy1 = (double)(int(y)-yp);
       if (vcl_abs(dx1)>(.5*pix_edge)||vcl_abs(dy1)>(.5*pix_edge))
         return true;
     }
