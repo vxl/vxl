@@ -37,7 +37,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_matrix_fixed<T,m,n> & p)
     break;
     
   default:
-    vcl_cerr << "vnl_matrix_fixed::b_read() Unknown version number "<< ver << vcl_endl;
+    vcl_cerr << "ERROR: vsl_b_read(s, vnl_matrix_fixed&): Unknown version number "<< ver << vcl_endl;
     vcl_abort();
   }
 }

@@ -14,6 +14,8 @@
 template <class Key, class T, class Compare>
 void vsl_b_write(vsl_b_ostream& s, const vcl_map<Key, T, Compare>& v)
 {
+  const short version_no = 1;
+  vsl_b_write(s, version_no);
   vsl_b_write(s, v.size());
   for (vcl_map<Key, T, Compare>::const_iterator iter = v.begin(); iter != v.end(); iter++)
   {
@@ -28,15 +30,25 @@ template <class Key, class T, class Compare>
 void vsl_b_read(vsl_b_istream& s, vcl_map<Key, T, Compare>& v)
 {
   unsigned map_size;
-  vsl_b_read(s, map_size);
-  for (unsigned i=0; i<map_size; i++)
+  short ver;
+  vsl_b_read(s, ver);
+  switch (ver)
   {
-    Key first_val;
-    T second_val;
-    vsl_b_read(s, first_val);
-    vsl_b_read(s, second_val);
-    v[first_val] = second_val;
-  } 
+  case 1:
+    vsl_b_read(s, map_size);
+    for (unsigned i=0; i<map_size; i++)
+    {
+      Key first_val;
+      T second_val;
+      vsl_b_read(s, first_val);
+      vsl_b_read(s, second_val);
+      v[first_val] = second_val;
+    } 
+    break;
+  default:
+    vcl_cerr << "vsl_b_read(s, vcl_map<>&) Unknown version number "<< ver << vcl_endl;
+    vcl_abort();
+  }
 }
 
 //====================================================================================

@@ -15,6 +15,8 @@
 template <class T>
 void vsl_b_write(vsl_b_ostream& s, const vcl_complex<T>& v)
 {
+  // Do not write a version number here for space efficiency reasons.
+  // There is no reason to expect the format to change
   vsl_b_write(s, v.real());
   vsl_b_write(s, v.imag());
 }

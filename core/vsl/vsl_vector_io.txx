@@ -10,16 +10,19 @@
 
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_iostream.h>
+#include <vsl/vsl_binary_explicit_io.h>
 
 //====================================================================================
 //: Write vector to binary stream
 template <class T>
 void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T>& v)
 {
-  int n = v.size();
+  const short version_no = 1;
+  vsl_b_write(s, version_no);
+  unsigned n = v.size();
   vsl_b_write(s,n);
-  for (int i=0;i<n;++i)
-    vsl_b_write(s,v[i]);
+  vsl_b_write_block(s, v.begin(), n);
 }
 
 //====================================================================================
@@ -27,11 +30,21 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T>& v)
 template <class T>
 void vsl_b_read(vsl_b_istream& s, vcl_vector<T>& v)
 {
-  int n;
-  vsl_b_read(s,n);
-  v.resize(n);
-  for (int i=0;i<n;++i)
-    vsl_b_read(s,v[i]);
+  unsigned n;
+  short ver;
+  vsl_b_read(s, ver);
+  switch (ver)
+  {
+  case 1:
+    vsl_b_read(s,n);
+    v.resize(n);
+    vsl_b_read_block(s, v.begin(), n);
+    break;
+  default:
+    vcl_cerr << "vsl_b_read(s, vcl_vector<T>&) Unknown version number "<< ver << vcl_endl;
+    vcl_abort();
+  }
+
 }
 
 //====================================================================================

@@ -14,7 +14,9 @@
 template <class T>
 void vsl_b_write(vsl_b_ostream& s, const vcl_basic_string<T>& v)
 {
-  int n = v.length();
+  const short version_no = 1;
+  vsl_b_write(s, version_no);
+  unsigned n = v.length();
   vsl_b_write(s,n);
   for (int i=0;i<n;++i)
     vsl_b_write(s,v[i]);
@@ -25,11 +27,21 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_basic_string<T>& v)
 template <class T>
 void vsl_b_read(vsl_b_istream& s, vcl_basic_string<T>& v)
 {
-  int n;
-  vsl_b_read(s,n);
-  v.resize(n);
-  for (int i=0;i<n;++i)
-    vsl_b_read(s,v[i]);
+  unsigned n;
+  short ver;
+  vsl_b_read(s, ver);
+  switch (ver)
+  {
+  case 1:
+    vsl_b_read(s,n);
+    v.resize(n);
+    for (int i=0;i<n;++i)
+      vsl_b_read(s,v[i]);
+    break;
+  default:
+    vcl_cerr << "vsl_b_read(s, vcl_basic_string<>&) Unknown version number "<< ver << vcl_endl;
+    vcl_abort();
+  }
 }
 
 #define VSL_STRING_INSTANTIATE(T) \

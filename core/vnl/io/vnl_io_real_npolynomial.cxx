@@ -35,7 +35,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_real_npolynomial & p)
     break;
 
   default:
-    vcl_cerr << "vnl_real_npolynomial::b_read() Unknown version number "
+    vcl_cerr << "ERROR: vsl_b_read(s, vnl_real_npolynomial&): Unknown version number "
             << ver << vcl_endl;
     abort();
   }

@@ -45,7 +45,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_polygon & p)
     break;
 
   default:
-    vcl_cerr << "vgl_polygon::b_read() Unknown version number "<< v << vcl_endl;
+    vcl_cerr << "ERROR: vsl_b_read(s, vgl_polygon&): Unknown version number "<< v << vcl_endl;
     abort();
   }
 

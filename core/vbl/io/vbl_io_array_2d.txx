@@ -51,7 +51,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_2d<T> &p)
 
   default:
 
-    vcl_cerr << "vbl_array_2d::b_read() Unknown version number "<< 
+    vcl_cerr << "ERROR: vsl_b_read(s, vbl_array_2d&): Unknown version number "<< 
                                                    ver << vcl_endl;
     abort();
   }

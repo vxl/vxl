@@ -16,6 +16,16 @@
 void golden_test_vnl_io(bool save_file=false);
 
 
+//:
+// \file 
+// \brief Read in a golden data file, and check the values are correct.
+// If you need to recreate the golden data file build this as a
+// standalone program, and run it with the single parameter create
+// \verbatim
+// golden_test_vnl_io create
+// \verbatim
+
+
 // This nasty macro stuff is to allow the program to be compiled as a stand
 // alone program or as part of a larger test program.
 #ifndef TESTMAIN
@@ -146,21 +156,17 @@ void golden_test_vnl_io(bool save_file)
   // Save if option set
   if (save_file)
   {
-  vsl_b_ofstream bfs_out("golden_test_vnl_io.bvl");
-  if (!bfs_out)
-    {
-    vcl_cerr<<"Problems opening file for output"<<vcl_endl;
-    exit(1);
-    }
-  vsl_b_write(bfs_out, v_out);
-  vsl_b_write(bfs_out, m_out);
-  vsl_b_write(bfs_out, diag_mat_out);
-  vsl_b_write(bfs_out, m_fixed_out);
-  vsl_b_write(bfs_out, polyn_out);
-  vsl_b_write(bfs_out, poly_out);
-  vsl_b_write(bfs_out, m_sparse_out);
-  vsl_b_write(bfs_out, v_fixed_out);
-  bfs_out.close();
+    vsl_b_ofstream bfs_out("golden_test_vnl_io.bvl");
+    TEST ("Opened golden_test_vnl_io.bvl for writing ", ! bfs_out, false);
+    vsl_b_write(bfs_out, v_out);
+    vsl_b_write(bfs_out, m_out);
+    vsl_b_write(bfs_out, diag_mat_out);
+    vsl_b_write(bfs_out, m_fixed_out);
+    vsl_b_write(bfs_out, polyn_out);
+    vsl_b_write(bfs_out, poly_out);
+    vsl_b_write(bfs_out, m_sparse_out);
+    vsl_b_write(bfs_out, v_fixed_out);
+    bfs_out.close();
   }
   
   // Read in file to each class in turn

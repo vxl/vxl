@@ -36,7 +36,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix_pair<T> & p)
     break;
     
   default:
-    vcl_cerr << "vnl_sparse_matrix_pair::b_read() Unknown version number "<< ver << vcl_endl;
+    vcl_cerr << "ERROR: vsl_b_read(s, vnl_sparse_matrix_pair&): Unknown version number "<< ver << vcl_endl;
     abort();
   }
   
@@ -143,7 +143,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix<T> & p)
     break;
     
   default:
-    vcl_cerr << "vnl_sparse_matrix::b_read() Unknown version number "<< ver << vcl_endl;
+    vcl_cerr << "ERROR: vsl_b_read(s, vnl_sparse_matrix&): Unknown version number "<< ver << vcl_endl;
     abort();
   }
   

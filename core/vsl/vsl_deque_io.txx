@@ -8,12 +8,15 @@
 
 #include <vsl/vsl_deque_io.h>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_iostream.h>
 
 //====================================================================================
 //: Write deque to binary stream
 template <class T>
 void vsl_b_write(vsl_b_ostream& s, const vcl_deque<T>& v)
 {
+  const short version_no = 1;
+  vsl_b_write(s, version_no);
   vsl_b_write(s, v.size());
   for (unsigned i=0; i<v.size(); i++)
     vsl_b_write(s,v[i]);
@@ -25,10 +28,20 @@ template <class T>
 void vsl_b_read(vsl_b_istream& s, vcl_deque<T>& v)
 {
   unsigned deque_size;
-  vsl_b_read(s, deque_size);
-  v.resize(deque_size);
-  for (unsigned i=0; i<deque_size; i++)
-    vsl_b_read(s,v[i]);
+  short ver;
+  vsl_b_read(s, ver);
+  switch (ver)
+  {
+  case 1:
+    vsl_b_read(s, deque_size);
+    v.resize(deque_size);
+    for (unsigned i=0; i<deque_size; i++)
+      vsl_b_read(s,v[i]);
+    break;
+  default:
+    vcl_cerr << "vsl_b_read(s, vcl_deque<T>&) Unknown version number "<< ver << vcl_endl;
+    vcl_abort();
+  }
 }
 
 //====================================================================================

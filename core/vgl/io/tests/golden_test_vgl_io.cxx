@@ -25,6 +25,14 @@
 #include <vgl/io/vgl_io_point_3d.h>
 #include <vgl/io/vgl_io_polygon.h>
 
+//:
+// \file
+// \brief Read in a golden data file, and check the values are correct.
+// If you need to recreate the golden data file build this as a
+// standalone program, and run it with the single parameter create
+// \verbatim
+// golden_test_vnl_io create
+// \verbatim
 
 void golden_test_vgl_io(bool save_file=false);
 

@@ -6,7 +6,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_indent.h>
-
+#include <vsl/vsl_binary_explicit_io.h>
 
 //=================================================================================
 //: Binary save self to stream.
@@ -16,8 +16,7 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_vector<T> & p)
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, p.size());
-  for (unsigned i=0; i < p.size(); ++i)
-    vsl_b_write(os, p[i]);
+  vsl_b_write_block(os, p.begin(), p.size());
 
 }
 
@@ -29,22 +28,17 @@ void vsl_b_read(vsl_b_istream &is, vnl_vector<T> & p)
 
   short ver;
   unsigned n;
-  T val;
   vsl_b_read(is, ver);
   switch(ver)
   {
   case 1:
     vsl_b_read(is, n);
     p.resize(n);
-    for (unsigned i=0; i<n; ++i)
-  {
-    vsl_b_read(is, val);
-    p.put(i, val);
-  }
+    vsl_b_read_block(is, p.begin(), n);
     break;
 
   default:
-    vcl_cerr << "vnl_vector::b_read() Unknown version number "<< ver << vcl_endl;
+    vcl_cerr << "ERROR: vsl_b_read(s, vnl_vector&): Unknown version number "<< ver << vcl_endl;
     vcl_abort();
   }
 

@@ -8,12 +8,15 @@
 
 #include <vsl/vsl_list_io.h>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_iostream.h>
 
 //====================================================================================
 //: Write list to binary stream
 template <class T>
 void vsl_b_write(vsl_b_ostream& s, const vcl_list<T>& v)
 {
+  const short version_no = 1;
+  vsl_b_write(s, version_no);
   vsl_b_write(s, v.size());
   for (vcl_list<T>::const_iterator iter = v.begin(); iter != v.end(); iter++)
     vsl_b_write(s,*iter);
@@ -25,13 +28,23 @@ template <class T>
 void vsl_b_read(vsl_b_istream& s, vcl_list<T>& v)
 {
   unsigned list_size;
-  vsl_b_read(s, list_size);
-  for (unsigned i=0; i<list_size; i++)
+  short ver;
+  vsl_b_read(s, ver);
+  switch (ver)
   {
-    T tmp;
-    vsl_b_read(s,tmp);
-    v.push_back(tmp);
-  } 
+  case 1:
+    vsl_b_read(s, list_size);
+    for (unsigned i=0; i<list_size; i++)
+    {
+      T tmp;
+      vsl_b_read(s,tmp);
+      v.push_back(tmp);
+    } 
+    break;
+  default:
+    vcl_cerr << "vsl_b_read(s, vcl_list<T>&) Unknown version number "<< ver << vcl_endl;
+    vcl_abort();
+  }
 }
 
 //====================================================================================

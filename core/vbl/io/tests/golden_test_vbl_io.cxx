@@ -22,6 +22,16 @@
 #include <vcl/vcl_string.h>
 #include <vcl/vcl_fstream.h>
 
+//:
+// \file
+// \brief Read in a golden data file, and check the values are correct.
+// If you need to recreate the golden data file build this as a
+// standalone program, and run it with the single parameter create
+// \verbatim
+// golden_test_vnl_io create
+// \verbatim
+
+
 void golden_test_vbl_io(bool save_file=false);
 
 // This nasty macro stuff is to allow the program to be compiled as a stand

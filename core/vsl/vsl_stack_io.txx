@@ -14,6 +14,8 @@
 template <class T>
 void vsl_b_write(vsl_b_ostream& s, const vcl_stack<T>& v)
 {
+  const short version_no = 1;
+  vsl_b_write(s, version_no);
   // Make a copy of v since we have to change a stack to get
   // the values out:
   vcl_stack<T> tmp_stack = v;
@@ -33,21 +35,31 @@ template <class T>
 void vsl_b_read(vsl_b_istream& s, vcl_stack<T>& v)
 {
   unsigned stack_size;
-  vsl_b_read(s, stack_size);
-
-  // We need to reverse the order of the values before we load them
-  // back into the stack, so use another temporary stack for this:
   vcl_stack<T> tmp_stack;
-  for (unsigned i=0; i<stack_size; i++)
+  short ver;
+  vsl_b_read(s, ver);
+  switch (ver)
   {
-    T tmp;
-    vsl_b_read(s,tmp);
-    tmp_stack.push(tmp);
-  }
-  for (unsigned i=0; i<stack_size; i++)
-  {
-    v.push(tmp_stack.top());
-    tmp_stack.pop();
+  case 1:
+    vsl_b_read(s, stack_size);
+
+    // We need to reverse the order of the values before we load them
+    // back into the stack, so use another temporary stack for this:
+    for (unsigned i=0; i<stack_size; i++)
+    {
+      T tmp;
+      vsl_b_read(s,tmp);
+      tmp_stack.push(tmp);
+    }
+    for (unsigned i=0; i<stack_size; i++)
+    {
+      v.push(tmp_stack.top());
+      tmp_stack.pop();
+    }
+    break;
+  default:
+    vcl_cerr << "vsl_b_read(s, vcl_stack<T>&) Unknown version number "<< ver << vcl_endl;
+    vcl_abort();
   }
 }
 

@@ -126,7 +126,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
     break;
   default:
 
-    vcl_cerr << "vbl_smart_ptr::b_read() Unknown version number "<< 
+    vcl_cerr << "ERROR: vsl_b_read(s, vbl_smart_ptr&): Unknown version number "<< 
     ver << vcl_endl;
     abort();
   }
