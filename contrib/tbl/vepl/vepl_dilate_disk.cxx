@@ -5,13 +5,22 @@
 #include <vil/vil_rgb.h>
 
 typedef unsigned char ubyte;
-static inline vil_rgb<ubyte> vcl_max(vil_rgb<ubyte> const& a, vil_rgb<ubyte> const& b)
+#if VCL_ALLOWS_NAMESPACE_STD
+namespace std { static inline vil_rgb<ubyte> max
+#else
+static inline vil_rgb<ubyte> vcl_max
+#endif
+(vil_rgb<ubyte> const& a, vil_rgb<ubyte> const& b)
   //recursive: { return vil_rgb<ubyte>(vcl_max(a.r,b.r), vcl_max(a.g,b.g), vcl_max(a.b,b.b)); }
 {
   return vil_rgb<ubyte>(a.r > b.r ? a.r : b.r,
                         a.g > b.g ? a.g : b.g,
                         a.b > b.b ? a.b : b.b);
 }
+#if VCL_ALLOWS_NAMESPACE_STD
+}
+#else
+#endif
 
 vil_image vepl_dilate_disk(vil_image const& image, float radius)
 {

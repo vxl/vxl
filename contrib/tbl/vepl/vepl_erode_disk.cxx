@@ -5,13 +5,22 @@
 #include <vil/vil_rgb.h>
 
 typedef unsigned char ubyte;
-static inline vil_rgb<ubyte> vcl_min(vil_rgb<ubyte> const& a, vil_rgb<ubyte> const& b)
+#if VCL_ALLOWS_NAMESPACE_STD
+namespace std { static inline vil_rgb<ubyte> min
+#else
+static inline vil_rgb<ubyte> vcl_min
+#endif
+(vil_rgb<ubyte> const& a, vil_rgb<ubyte> const& b)
   //recursive: { return vil_rgb<ubyte>(vcl_min(a.r,b.r), vcl_min(a.g,b.g), vcl_min(a.b,b.b)); }
 {
   return vil_rgb<ubyte>(a.r < b.r ? a.r : b.r,
                         a.g < b.g ? a.g : b.g,
                         a.b < b.b ? a.b : b.b);
 }
+#if VCL_ALLOWS_NAMESPACE_STD
+}
+#else
+#endif
 
 vil_image vepl_erode_disk(vil_image const& image, float radius)
 {
