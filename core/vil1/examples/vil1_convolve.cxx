@@ -4,7 +4,7 @@
 #include <vcl_cmath.h>   // vcl_fabs()
 #include <vcl_iostream.h>
 
-#include <vbl/vbl_arg.h>
+#include <vul/vul_arg.h>
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
@@ -70,10 +70,10 @@ vil_kernel_info kernels[] = {
 
 int main(int argc, char ** argv)
 {
-  vbl_arg<vcl_string> a_input_filename(0, "input");
-  vbl_arg<vcl_string> a_output_filename(0, "output");
-  vbl_arg<vcl_string> a_kernel(0, "kernel (choose from: sobel_x)", "sobel_x");
-  vbl_arg_parse(argc, argv);
+  vul_arg<vcl_string> a_input_filename(0, "input");
+  vul_arg<vcl_string> a_output_filename(0, "output");
+  vul_arg<vcl_string> a_kernel(0, "kernel (choose from: sobel_x)", "sobel_x");
+  vul_arg_parse(argc, argv);
 
   // Load from disk into memory "inimg"
   vil_image in = vil_load(a_input_filename().c_str());
