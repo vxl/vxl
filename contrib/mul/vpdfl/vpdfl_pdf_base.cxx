@@ -51,7 +51,7 @@ double vpdfl_pdf_base::log_prob_thresh(double pass_proportion) const
   // Increse the number for greater reliabililty
   const unsigned n_stat = 20;
 
-  double below, lP;
+  double /* above, */ below, lP;
   unsigned int nSamples, i;
   vnl_vector<double> x;
 
