@@ -44,7 +44,7 @@ vpgl_perspective_camera::~vpgl_perspective_camera()
 vcl_vector<double> vpgl_perspective_camera::get_params() {return _params;}
 
 //: Set parameter vector
-void vpgl_perspective_camera::set_params(vcl_vector<double> new_params, const vcsl_spatial_ref & acs)
+void vpgl_perspective_camera::set_params(vcl_vector<double> new_params, const vcsl_spatial_sptr & acs)
 {
   _params = new_params;
   update();
@@ -68,10 +68,10 @@ void vpgl_perspective_camera::update_intrinsic()
 }
 
 void vpgl_perspective_camera::update() {
-   matrix_param_ref trans_param;
-   vcsl_matrix_ref transformation;
+   vcsl_matrix_param_sptr trans_param;
+   vcsl_matrix_sptr transformation;
    //vcsl_translation a;
-  trans_param= new matrix_param;
+  trans_param= new vcsl_matrix_param;
   transformation = new vcsl_matrix;
 
 
@@ -179,18 +179,18 @@ void vpgl_perspective_camera::print_data(vcl_ostream &strm) const
   strm << "kappa = " << _params[kappa] << vcl_endl;
 }
 
-void vpgl_perspective_camera::set_lcs(const vcsl_spatial_ref & new_lcs){
+void vpgl_perspective_camera::set_lcs(const vcsl_spatial_sptr & new_lcs){
   lcs=new_lcs;
 }
 
-vcsl_spatial_ref  vpgl_perspective_camera::get_lcs() {
+vcsl_spatial_sptr  vpgl_perspective_camera::get_lcs() {
   return lcs;
 }
 
-void vpgl_perspective_camera::set_acs(const vcsl_spatial_ref &new_acs){
+void vpgl_perspective_camera::set_acs(const vcsl_spatial_sptr &new_acs){
   acs= new_acs;
 }
 
-vcsl_spatial_ref  vpgl_perspective_camera::get_acs() {
+vcsl_spatial_sptr  vpgl_perspective_camera::get_acs() {
   return acs;
 }

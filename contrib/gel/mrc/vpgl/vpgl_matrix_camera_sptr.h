@@ -1,5 +1,5 @@
-#ifndef VPGL_MATRIX_CAMERA_REF_H
-#define VPGL_MATRIX_CAMERA_REF_H
+#ifndef VPGL_MATRIX_CAMERA_SPTR_H
+#define VPGL_MATRIX_CAMERA_SPTR_H
 
 class vpgl_matrix_camera;
 
@@ -8,6 +8,6 @@ class vpgl_matrix_camera;
 //*****************************************************************************
 #include <vbl/vbl_smart_ptr.h>
 
-typedef vbl_smart_ptr<vpgl_matrix_camera> vpgl_matrix_camera_ref;
+typedef vbl_smart_ptr<vpgl_matrix_camera> vpgl_matrix_camera_sptr;
 
-#endif 
+#endif // VPGL_MATRIX_CAMERA_SPTR_H

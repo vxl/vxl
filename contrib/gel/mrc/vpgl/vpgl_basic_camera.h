@@ -59,7 +59,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>
-#include <vpgl/vpgl_basic_camera_ref.h>
+#include <vpgl/vpgl_basic_camera_sptr.h>
 
 class vpgl_graphics_camera;
 class vpgl_basic_camera;

@@ -28,10 +28,10 @@
 //-----------------------------------------------------------------------------
 
 #include <vpgl/vpgl_matrix_camera.h>
-#include <vpgl/vpgl_matrix_camera_ref.h>
+#include <vpgl/vpgl_matrix_camera_sptr.h>
 #include <vcsl/vcsl_matrix.h>
 #include <vcsl/vcsl_cartesian_3d.h>
-#include <vcsl/vcsl_graph_ref.h>
+#include <vcsl/vcsl_graph_sptr.h>
 
 class vpgl_perspective_camera : public vpgl_basic_camera
 {
@@ -54,21 +54,21 @@ public:
   void print_data(vcl_ostream &strm) const;
   double& operator() (PerspParams param_index);
   vcl_vector<double> get_params();
-  void set_params(vcl_vector<double> new_params,const vcsl_spatial_ref & acs);
+  void set_params(vcl_vector<double> new_params,const vcsl_spatial_sptr & acs);
   vnl_vector<double> get_position() const;
 
   void update_intrinsic();
   void update();
-  void set_lcs(const vcsl_spatial_ref & new_lcs);
-vcsl_spatial_ref  get_lcs();
-void set_acs(const vcsl_spatial_ref &new_acs);
-vcsl_spatial_ref  get_acs();
+  void set_lcs(const vcsl_spatial_sptr & new_lcs);
+vcsl_spatial_sptr  get_lcs();
+void set_acs(const vcsl_spatial_sptr &new_acs);
+vcsl_spatial_sptr  get_acs();
 protected:
 private:
   // Data Members--------------------------------------------------------------
 
   // Projection matrix from 3d to 2d
-  vpgl_matrix_camera_ref _mat_cam;
+  vpgl_matrix_camera_sptr _mat_cam;
   // Paramters of projection matrix
   vcl_vector<double> _mat_params;
 
@@ -78,10 +78,10 @@ protected:
    //Phsical properties which will be converted to projection matrix
   vcl_vector<double> _params;
    //Local coordinate system of the camera
-  vcsl_spatial_ref lcs;
+  vcsl_spatial_sptr lcs;
    //Absolute coordinate system.
-  vcsl_spatial_ref acs;
-  vcsl_graph_ref graph;
+  vcsl_spatial_sptr acs;
+  vcsl_graph_sptr graph;
 };
 
 #endif // _vpgl_perspective_camera_h
