@@ -7,10 +7,12 @@
 // \brief An image tableau with an associated region of interest.
 //
 // \verbatim
-//  Modifications:
-//    Marko Bacic   AUG-2000   Initial version.
-//    Joseph Mundy  DEC-2002   Copied to brl to serve as a basis for
-//                             extended functions
+//  Modifications
+//   Marko Bacic    AUG-2000  Initial version.
+//   K.Y.McGaul  05-AUG-2002  Print mouse position on status bar.
+//   K.Y.McGaul  06-AUG-2002  Print RGB value on status bar.
+//   Joseph Mundy   DEC-2002  Copied to brl to serve as a basis for extended functions
+//   Peter Vanroose AUG-2004  Moved bgui_roi_tableau_make_roi to separate file
 // \endverbatim
 
 #include "bgui_image_tableau_sptr.h"
@@ -65,16 +67,6 @@ struct bgui_image_tableau_new : public bgui_image_tableau_sptr
   bgui_image_tableau_new(vil1_image const &i) : base(new bgui_image_tableau(i)) { }
   bgui_image_tableau_new(char const *n) : base(new bgui_image_tableau(n)) { }
   operator vgui_image_tableau_sptr () const { vgui_image_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
-};
-
-class vgui_roi_tableau_make_roi : public vgui_rubberband_client
-{
-  bool done_;
-  bgui_image_tableau_sptr image_tableau_;
- public:
-  vgui_roi_tableau_make_roi(bgui_image_tableau_sptr const&);
-  void add_box(float,float,float,float);
-  bool is_done() { return done_; }
 };
 
 #endif // bgui_image_tableau_h_

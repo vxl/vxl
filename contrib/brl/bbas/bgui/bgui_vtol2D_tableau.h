@@ -5,8 +5,7 @@
 //:
 // \file
 // \brief A child tableau of bgui_vsol2D_tableau that knows how to display vtol objects.
-// \author
-//   J.L. Mundy
+// \author J.L. Mundy
 //
 //   Default styles are defined for each geometry and topology object soview.
 //   Users can change the default style by using the set_*_style commands,
@@ -15,32 +14,29 @@
 //   edge appearance will resume after being highlighted.
 //
 // \verbatim
-//  Modifications:
-//   J.L. Mundy November 28, 2002    Initial version.
-//   J.L. Mundy December 16, 2002    Added map between soviews and vtol objects
-//   J.L. Mundy March 22, 2003       Added set style commands
-//   Amir Tamrakar April 22, 2002    Removed the functions to display vsol objects
-//                                   to bgui_vsol2D_tableau and subclasses this
-//                                   from it instead
-//   Mark Johnson June 13, 2003      Stopped using interior class functions to
-//                                   highlight objects. Added support for
-//                                   specifying colors of individual objects.
+//  Modifications
+//   J.L. Mundy November 28, 2002  Initial version.
+//   J.L. Mundy December 16, 2002  Added map between soviews and vtol objects
+//   J.L. Mundy March 22, 2003     Added set style commands
+//   Amir Tamrakar April 22, 2002  Removed the functions to display vsol objects
+//                                 to bgui_vsol2D_tableau and subclasses this
+//                                 from it instead
+//   Mark Johnson June 13, 2003    Stopped using interior class functions to
+//                                 highlight objects. Added support for
+//                                 specifying colors of individual objects.
+//   Peter Vanroose  August 2004   Moved bgui_vtol2D_rubberband_client to separate file
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vcl_string.h>
 #include <vgui/vgui_style_sptr.h>
-#include <vtol/vtol_vertex_2d.h>
-#include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vtol/vtol_topology_object_sptr.h>
 #include <vgui/vgui_tableau_sptr.h>
 #include <vgui/vgui_image_tableau_sptr.h>
-#include <vgui/vgui_rubberband_tableau.h>
-#include <vgui/vgui_easy2D_tableau.h>
 #include <bgui/bgui_vsol2D_tableau.h>
 #include <bgui/bgui_vsol2D_tableau_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
@@ -140,43 +136,6 @@ struct bgui_vtol2D_tableau_new : public bgui_vtol2D_tableau_sptr
     :  base(new bgui_vtol2D_tableau(t, n)) { }
 
   operator bgui_vsol2D_tableau_sptr () const { bgui_vsol2D_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
-};
-
-//A client for rubberbanding stuff
-class bgui_vtol2D_rubberband_client : public vgui_rubberband_client
-{
- public:
-
-  bgui_vtol2D_tableau_sptr vtol2D_;
-
-  //:constructor - takes a pointer to a vtol2D tableau
-  bgui_vtol2D_rubberband_client(bgui_vtol2D_tableau_sptr const& vtol2D);
-
-    //: Called by vgui_rubberband_tableau when the user has selected a point.
-  virtual void add_point(float, float);
-
-  //: Called by vgui_rubberband_tableau when the user has selected a finite line.
-  virtual void add_line(float,float,float,float);
-
-  //: Called by vgui_rubberband_tableau when user has selected an infinite line.
-  virtual void add_infinite_line(float,float,float);
-
-  //: Called by vgui_rubberband_tableau when the user has selected a circle.
-  virtual void add_circle(float,float,float);
-
-  //: Called by vgui_rubberband_tableau when the user has selectd a linestrip.
-  virtual void add_linestrip(int n,float const *,float const *);
-
-  //: Called by vgui_rubberband_tableau when the user has selected a polygon.
-  virtual void add_polygon(int n,float const*,float const*);
-
-  //: Called by vgui_rubberband_tableau when user has selected a rectangular box
-  virtual void add_box(float,float,float,float);
-
-  //: Called by vgui_rubberband_tableau whenever mouse motion is captured.
-  //  This turns off the highlighting of geometry objects to eliminate
-  //  flickering highlights while drawing temporary objects.
-  void clear_highlight();
 };
 
 #endif // bgui_vtol2D_tableau_h_
