@@ -83,13 +83,13 @@ int main (int argc, char** argv)
       i2[i] = (int)(299*drand48());
 #else
       mvl_sample_seed = (mvl_sample_seed*16807)%2147483647L;
-      double u = double(mvl_sample_seed)/2147483711L;
+      double u = double(mvl_sample_seed)/2147483711UL;
       f[i] = (int)(498*u);
       mvl_sample_seed = (mvl_sample_seed*16807)%2147483647L;
-      u = double(mvl_sample_seed)/2147483711L;
+      u = double(mvl_sample_seed)/2147483711UL;
       i1[i] = (int)(299*u);
       mvl_sample_seed = (mvl_sample_seed*16807)%2147483647L;
-      u = double(mvl_sample_seed)/2147483711L;
+      u = double(mvl_sample_seed)/2147483711UL;
       i2[i] = (int)(299*u);
 #endif
     }
