@@ -11,7 +11,7 @@
 #ifdef _MSC_VER
   #include <Windows.h>
 #else
-#ifdef unix
+#if defined(unix) || defined(__unix)
   // Helper functions for Unix
 
   #include <stdio.h>  // for P_tmpdir
@@ -82,7 +82,7 @@ vul_temp_filename( )
     return "";
   return file;
 #else
-#ifdef unix
+#if defined(unix) || defined(__unix)
   // Don't use tmpnam, since it causes linker warnings (and sometimes
   // linker errors). Instead reimplement. Sigh.
   const unsigned int num_char_in_filename = 7+1; // should always be at least 1
