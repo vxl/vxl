@@ -14,7 +14,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_string.h>
-#include <vil/vil_image.h>
+#include <vil/vil_image.h> // for vil_component_format
 #include <vil2/vil2_smart_ptr.h>
 
 
@@ -95,13 +95,15 @@ class vil2_image_data
   // Modifying this view might modify the actual data.
   // If you want to modify this data in place, call put_view after you done, and 
   // it should work efficiently.
-  virtual bool get_view(vil2_image_view_base* im, unsigned x0, unsigned y0, unsigned plane0, unsigned width, unsigned height, unsigned nplanes) const = 0;
+  virtual bool get_view(vil2_image_view_base* im, unsigned x0, unsigned y0,
+                        unsigned plane0, unsigned width, unsigned height, unsigned nplanes) const = 0;
 
   //: Create a read/write view of a copy of this data.
   virtual bool get_copy_view(vil2_image_view_base* im, unsigned x0, unsigned y0, unsigned width, unsigned height) const = 0;
 
   //: Create a read/write view of a copy of this data.
-  virtual bool get_copy_view(vil2_image_view_base* im, unsigned x0, unsigned y0, unsigned plane0, unsigned width, unsigned height, unsigned nplanes) const = 0;
+  virtual bool get_copy_view(vil2_image_view_base* im, unsigned x0, unsigned y0,
+                             unsigned plane0, unsigned width, unsigned height, unsigned nplanes) const = 0;
 
   //: Put the data in this view back into the image source.
   virtual bool put_view(vil2_image_view_base* im, unsigned x0, unsigned y0, unsigned plane0 = 0) = 0;
