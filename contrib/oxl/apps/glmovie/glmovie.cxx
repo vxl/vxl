@@ -383,8 +383,9 @@ void idle()
   // Update frame counter
   frame += dir;
 
-  if(frame<0) frame=num_frames-1;
-  else frame = frame % num_frames;
+  
+  frame = frame % num_frames;
+  if(frame<0) frame+=num_frames;
 
   glutPostRedisplay();
 }
@@ -732,12 +733,23 @@ void keyboard(unsigned char key, int x, int y)
     break;
   }
 
+
+  case '[': {
+     frame = 0;
+     break;
+  }
+  case ']': {
+     frame = num_frames-1;
+     break;
+  }
+
   case 'q': {
     vcl_exit(0);
   }
   }
-  if(frame<0) frame=num_frames-1;
-  else frame = frame % num_frames;
+  frame = frame % num_frames;
+  if(frame<0) frame+=num_frames;
+
   glutPostRedisplay();
 }
 
