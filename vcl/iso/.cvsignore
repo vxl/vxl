@@ -45,3 +45,7 @@ vcl_typeinfo.h
 vcl_utility.h
 vcl_valarray.h
 vcl_vector.h
+vcl_cstdlib.h
+vcl_string.h
+vcl_cmath.h
+vcl_complex.h
