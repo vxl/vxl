@@ -18,8 +18,9 @@
 //
 // \verbatim
 //  Modifications
-//   5 June 2003 Peter Vanroose created from bits and pieces in vgl_distance
-//   5 June 2003 Brendan McCane added closest-point algo for 3D lines
+//    5 June 2003 Peter Vanroose created from bits and pieces in vgl_distance
+//    5 June 2003 Brendan McCane added closest-point algo for 3D lines
+//   11 June 2003 Peter Vanroose added closest-point on 3D line from point
 // \endverbatim
 
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
@@ -134,7 +135,15 @@ vgl_point_2d<Type> vgl_closest_point(vgl_point_2d<Type> const& point,
 
 template <class Type>
 vcl_pair<vgl_homg_point_3d<Type>, vgl_homg_point_3d<Type> >
-vgl_closest_points(const vgl_homg_line_3d_2_points<Type> &line1,
-                   const vgl_homg_line_3d_2_points<Type> &line2);
+vgl_closest_points(vgl_homg_line_3d_2_points<Type> const& line1,
+                   vgl_homg_line_3d_2_points<Type> const& line2);
+
+template <class Type>
+vgl_homg_point_3d<Type> vgl_closest_point(vgl_homg_line_3d_2_points<Type> const& p,
+                                          vgl_homg_point_3d<Type> const& l);
+
+template <class Type> inline
+vgl_homg_point_3d<Type> vgl_closest_point(vgl_homg_point_3d<Type> const& p,
+                                          vgl_homg_line_3d_2_points<Type> const& l) { return vgl_closest_point(l,p); }
 
 #endif // vgl_closest_point_h_

@@ -89,12 +89,18 @@ vgl_point_2d<Type> vgl_closest_point_origin(vgl_line_2d<Type> const& l)
   return vgl_point_2d<Type>(-l.a()*l.c()/d, -l.b()*l.c()/d);
 }
 
+template vgl_point_2d<float> vgl_closest_point_origin(vgl_line_2d<float> const& l);
+template vgl_point_2d<double> vgl_closest_point_origin(vgl_line_2d<double> const& l);
+
 template <class Type>
 vgl_homg_point_2d<Type> vgl_closest_point_origin(vgl_homg_line_2d<Type> const& l)
 {
   return vgl_homg_point_2d<Type>(l.a()*l.c(), l.b()*l.c(),
                                  -l.a()*l.a()-l.b()*l.b());
 }
+
+template vgl_homg_point_2d<float> vgl_closest_point_origin(vgl_homg_line_2d<float> const& l);
+template vgl_homg_point_2d<double> vgl_closest_point_origin(vgl_homg_line_2d<double> const& l);
 
 template <class Type>
 vgl_point_2d<Type> vgl_closest_point(vgl_line_2d<Type> const& l,
@@ -105,6 +111,11 @@ vgl_point_2d<Type> vgl_closest_point(vgl_line_2d<Type> const& l,
                             (l.a()*l.a()*p.y()-l.a()*l.b()*p.x()-l.b()*l.c())/d);
 }
 
+template vgl_point_2d<float> vgl_closest_point(vgl_line_2d<float> const&, vgl_point_2d<float> const&);
+template vgl_point_2d<double> vgl_closest_point(vgl_line_2d<double> const&, vgl_point_2d<double> const&);
+template vgl_point_2d<float> vgl_closest_point(vgl_point_2d<float> const&, vgl_line_2d<float> const&);
+template vgl_point_2d<double> vgl_closest_point(vgl_point_2d<double> const&, vgl_line_2d<double> const&);
+
 template <class Type>
 vgl_homg_point_2d<Type> vgl_closest_point(vgl_homg_line_2d<Type> const& l,
                                           vgl_homg_point_2d<Type> const& p)
@@ -113,6 +124,11 @@ vgl_homg_point_2d<Type> vgl_closest_point(vgl_homg_line_2d<Type> const& l,
                                  l.a()*l.a()*p.y()-l.a()*l.b()*p.x()-l.b()*l.c(),
                                  l.a()*l.a()+l.b()*l.b());
 }
+
+template vgl_homg_point_2d<float> vgl_closest_point(vgl_homg_line_2d<float> const&, vgl_homg_point_2d<float> const&);
+template vgl_homg_point_2d<double> vgl_closest_point(vgl_homg_line_2d<double> const&, vgl_homg_point_2d<double> const&);
+template vgl_homg_point_2d<float> vgl_closest_point(vgl_homg_point_2d<float> const&, vgl_homg_line_2d<float> const&);
+template vgl_homg_point_2d<double> vgl_closest_point(vgl_homg_point_2d<double> const&, vgl_homg_line_2d<double> const&);
 
 template <class Type>
 vgl_point_3d<Type> vgl_closest_point(vgl_plane_3d<Type> const& l,
@@ -127,6 +143,11 @@ vgl_point_3d<Type> vgl_closest_point(vgl_plane_3d<Type> const& l,
                             ((l.a()*l.a()+l.b()*l.b())*p.z()-l.a()*l.c()*p.x()-l.b()*l.c()*p.y()-l.c()*l.d())/d);
 }
 
+template vgl_point_3d<float> vgl_closest_point(vgl_plane_3d<float> const& l, vgl_point_3d<float> const& p);
+template vgl_point_3d<double> vgl_closest_point(vgl_plane_3d<double> const& l, vgl_point_3d<double> const& p);
+template vgl_point_3d<float> vgl_closest_point(vgl_point_3d<float> const& p, vgl_plane_3d<float> const& l);
+template vgl_point_3d<double> vgl_closest_point(vgl_point_3d<double> const& p, vgl_plane_3d<double> const& l);
+
 template <class Type>
 vgl_homg_point_3d<Type> vgl_closest_point(vgl_homg_plane_3d<Type> const& l,
                                           vgl_homg_point_3d<Type> const& p)
@@ -136,6 +157,11 @@ vgl_homg_point_3d<Type> vgl_closest_point(vgl_homg_plane_3d<Type> const& l,
                                  (l.a()*l.a()+l.b()*l.b())*p.z()-l.a()*l.c()*p.x()-l.b()*l.c()*p.y()-l.c()*l.d(),
                                  l.a()*l.a()+l.b()*l.b()+l.c()*l.c());
 }
+
+template vgl_homg_point_3d<float> vgl_closest_point(vgl_homg_plane_3d<float> const& l, vgl_homg_point_3d<float> const& p);
+template vgl_homg_point_3d<double> vgl_closest_point(vgl_homg_plane_3d<double> const& l, vgl_homg_point_3d<double> const& p);
+template vgl_homg_point_3d<float> vgl_closest_point(vgl_homg_point_3d<float> const& p, vgl_homg_plane_3d<float> const& l);
+template vgl_homg_point_3d<double> vgl_closest_point(vgl_homg_point_3d<double> const& p, vgl_homg_plane_3d<double> const& l);
 
 template <class Type>
 vgl_point_2d<Type> vgl_closest_point(vgl_polygon const& poly,
@@ -168,6 +194,9 @@ vgl_point_2d<Type> vgl_closest_point(vgl_polygon const& poly,
     vgl_closest_point_to_linesegment(ret_x,ret_y, poly[si][di].x(),poly[si][di].y(), poly[si][di+1].x(),poly[si][di+1].y(), x,y);
   return vgl_point_2d<Type>(Type(ret_x), Type(ret_y));
 }
+
+template vgl_point_2d<float> vgl_closest_point(vgl_polygon const&, vgl_point_2d<float> const&, bool);
+template vgl_point_2d<double> vgl_closest_point(vgl_polygon const&, vgl_point_2d<double> const&, bool);
 
 template <class Type>
 vcl_pair<vgl_homg_point_3d<Type>, vgl_homg_point_3d<Type> >
@@ -228,27 +257,28 @@ template vcl_pair<vgl_homg_point_3d<double>, vgl_homg_point_3d<double> >
   vgl_closest_points(vgl_homg_line_3d_2_points<double> const&,
                      vgl_homg_line_3d_2_points<double> const&);
 
-template vgl_point_2d<float> vgl_closest_point_origin(vgl_line_2d<float> const& l);
-template vgl_point_2d<double> vgl_closest_point_origin(vgl_line_2d<double> const& l);
-template vgl_homg_point_2d<float> vgl_closest_point_origin(vgl_homg_line_2d<float> const& l);
-template vgl_homg_point_2d<double> vgl_closest_point_origin(vgl_homg_line_2d<double> const& l);
+template <class Type>
+vgl_homg_point_3d<Type> vgl_closest_point(vgl_homg_line_3d_2_points<Type> const& l,
+                                          vgl_homg_point_3d<Type> const& p)
+{
+  // Invalid case: the given point is at infinity:
+  if (p.w() == 0) return l.point_infinite();
+  // The plane through p and orthogonal to l is a(x-px)+b(y-py)+c(z-pz)=0
+  // where (a,b,c,0) is the point at infinity of l.
+  Type a = l.point_infinite().x(), b = l.point_infinite().y(), c = l.point_infinite().z();
+  // The closest point is then the intersection of this plane with the line l.
+  // This point equals l.point_finite + lambda * l.direction, with lambda:
+  vgl_homg_point_3d<Type> const& q = l.point_finite();
+  vgl_vector_3d<Type> v = p-q;
+  Type lambda = (a*v.x()+b*v.y()+c*v.z())/(a*a+b*b+c*c);
+  return vgl_homg_point_3d<Type>(q.x()+lambda*a*q.w(), q.y()+lambda*b*q.w(), q.z()+lambda*c*q.w(), q.w());
+}
 
-template vgl_point_2d<float> vgl_closest_point(vgl_line_2d<float> const&, vgl_point_2d<float> const&);
-template vgl_point_2d<double> vgl_closest_point(vgl_line_2d<double> const&, vgl_point_2d<double> const&);
-template vgl_point_2d<float> vgl_closest_point(vgl_point_2d<float> const&, vgl_line_2d<float> const&);
-template vgl_point_2d<double> vgl_closest_point(vgl_point_2d<double> const&, vgl_line_2d<double> const&);
-template vgl_homg_point_2d<float> vgl_closest_point(vgl_homg_line_2d<float> const&, vgl_homg_point_2d<float> const&);
-template vgl_homg_point_2d<double> vgl_closest_point(vgl_homg_line_2d<double> const&, vgl_homg_point_2d<double> const&);
-template vgl_homg_point_2d<float> vgl_closest_point(vgl_homg_point_2d<float> const&, vgl_homg_line_2d<float> const&);
-template vgl_homg_point_2d<double> vgl_closest_point(vgl_homg_point_2d<double> const&, vgl_homg_line_2d<double> const&);
-template vgl_point_3d<float> vgl_closest_point(vgl_plane_3d<float> const& l, vgl_point_3d<float> const& p);
-template vgl_point_3d<double> vgl_closest_point(vgl_plane_3d<double> const& l, vgl_point_3d<double> const& p);
-template vgl_point_3d<float> vgl_closest_point(vgl_point_3d<float> const& p, vgl_plane_3d<float> const& l);
-template vgl_point_3d<double> vgl_closest_point(vgl_point_3d<double> const& p, vgl_plane_3d<double> const& l);
-template vgl_homg_point_3d<float> vgl_closest_point(vgl_homg_plane_3d<float> const& l, vgl_homg_point_3d<float> const& p);
-template vgl_homg_point_3d<double> vgl_closest_point(vgl_homg_plane_3d<double> const& l, vgl_homg_point_3d<double> const& p);
-template vgl_homg_point_3d<float> vgl_closest_point(vgl_homg_point_3d<float> const& p, vgl_homg_plane_3d<float> const& l);
-template vgl_homg_point_3d<double> vgl_closest_point(vgl_homg_point_3d<double> const& p, vgl_homg_plane_3d<double> const& l);
-
-template vgl_point_2d<float> vgl_closest_point(vgl_polygon const&, vgl_point_2d<float> const&, bool);
-template vgl_point_2d<double> vgl_closest_point(vgl_polygon const&, vgl_point_2d<double> const&, bool);
+template vgl_homg_point_3d<float> vgl_closest_point(vgl_homg_line_3d_2_points<float> const& l,
+                                                    vgl_homg_point_3d<float> const& p);
+template vgl_homg_point_3d<double> vgl_closest_point(vgl_homg_line_3d_2_points<double> const& l,
+                                                     vgl_homg_point_3d<double> const& p);
+template vgl_homg_point_3d<float> vgl_closest_point(vgl_homg_point_3d<float> const& p,
+                                                    vgl_homg_line_3d_2_points<float> const& l);
+template vgl_homg_point_3d<double> vgl_closest_point(vgl_homg_point_3d<double> const& p,
+                                                     vgl_homg_line_3d_2_points<double> const& l);
