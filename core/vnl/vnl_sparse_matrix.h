@@ -68,14 +68,14 @@ class vnl_sparse_matrix {
 public:
   typedef vnl_sparse_matrix_pair<T> pair_t;
 #if defined(VCL_GCC_295) || defined(VCL_EGCS) || defined(VCL_GCC_27) || defined(VCL_SGI_CC)// it barfs -- fsm
-  typedef vcl_vector < VCL_SUNPRO_ALLOCATOR_HACK(/*typename*/ pair_t ) > row ; 
-  typedef vcl_vector < VCL_SUNPRO_ALLOCATOR_HACK(/*typename*/ row ) > vnl_sparse_matrix_elements;
+  typedef vcl_vector < /*typename*/ pair_t > row ; 
+  typedef vcl_vector < /*typename*/ row > vnl_sparse_matrix_elements;
 #else
-  typedef vcl_vector < VCL_SUNPRO_ALLOCATOR_HACK( typename pair_t ) > row ; 
-  typedef vcl_vector < VCL_SUNPRO_ALLOCATOR_HACK( typename row ) > vnl_sparse_matrix_elements;
+  typedef vcl_vector < typename pair_t > row ; 
+  typedef vcl_vector < typename row > vnl_sparse_matrix_elements;
 #endif
 
-  // typedef vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(typename pair_t)> row;
+  // typedef vcl_vector<typename pair_t> row;
 
   //: Construct an empty matrix
   vnl_sparse_matrix();
@@ -116,8 +116,8 @@ public:
 
   //: Set a whole row at once. Much faster.
   void set_row(unsigned int r, 
-	       vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(int)> const& cols, 
-	       vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(T)> const& vals);
+	       vcl_vector<int> const& cols, 
+	       vcl_vector<T> const& vals);
 
   //: Laminate matrix A onto the bottom of this one
   vnl_sparse_matrix<T>& vcat(vnl_sparse_matrix<T> const& A);

@@ -9,6 +9,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_c_vector.h"
+#include <vcl/vcl_cmath.h>     // sqrt()
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/vnl_numeric_traits.h>
@@ -268,6 +269,13 @@ void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out)
 }
 
 template <class T, class S>
+void vnl_c_vector_rms_norm(T const *p, unsigned n, S *out)
+{
+  vnl_c_vector_two_norm_squared(p, n, out);
+  *out = S(sqrt(double(*out) / n));
+}
+
+template <class T, class S>
 void vnl_c_vector_one_norm(T const *p, unsigned n, S *out)
 {
   *out = 0;
@@ -297,6 +305,7 @@ void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out)
 
 #define VNL_C_VECTOR_INSTANTIATE_norm(T, S)\
 template void vnl_c_vector_two_norm_squared(T const *, unsigned, S *); \
+template void vnl_c_vector_rms_norm(T const *, unsigned, S *); \
 template void vnl_c_vector_one_norm(T const *, unsigned, S *); \
 template void vnl_c_vector_two_norm(T const *, unsigned, S *); \
 template void vnl_c_vector_inf_norm(T const *, unsigned, S *);

@@ -422,8 +422,8 @@ void vnl_sparse_matrix<T>::diag_AtA(vnl_vector<T> & result) const
 
 template <class T>
 void vnl_sparse_matrix<T>::set_row(unsigned int r,
-				   vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(int)> const& cols, 
-				   vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(T)> const& vals)
+				   vcl_vector<int> const& cols, 
+				   vcl_vector<T> const& vals)
 {
   assert (r < rows());
   assert (cols.size() == vals.size());

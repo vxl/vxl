@@ -20,14 +20,14 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_cmath.h>     // sqrt()
 #include <vnl/vnl_numeric_traits.h>
 
 // avoid messing about with aux_* functions for gcc 2.7 -- fsm
-template <class T, class S> void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out);
 template <class T, class S> void vnl_c_vector_one_norm(T const *p, unsigned n, S *out);
 template <class T, class S> void vnl_c_vector_two_norm(T const *p, unsigned n, S *out);
 template <class T, class S> void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out);
+template <class T, class S> void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out);
+template <class T, class S> void vnl_c_vector_rms_norm(T const *p, unsigned n, S *out);
 
 template <class T>
 class vnl_c_vector {
@@ -73,7 +73,7 @@ public:
   static inline abs_t two_nrm2(T const *p, unsigned n) 
     { abs_t val; vnl_c_vector_two_norm_squared(p, n, &val); return val; }
   static inline abs_t rms_norm(T const *p, unsigned n) 
-    { abs_t val; vnl_c_vector_two_norm_squared(p, n, &val); return abs_t(sqrt(val/n)); }
+    { abs_t val; vnl_c_vector_rms_norm(p, n, &val); return val; }
 
   // Memory allocation
   static T** allocate_Tptr(int n);
