@@ -16,6 +16,7 @@ ADD_EXECUTABLE( vil_test_all
   test_deep_copy_3_plane.cxx
   test_image_view_maths.cxx
   test_convert.cxx
+  test_rotate_image.cxx
 
   # Sampling Operations
   test_bilin_interp.cxx
@@ -69,6 +70,7 @@ ADD_TEST( vil_test_save_load_image         vil_test_all test_save_load_image)
 ADD_TEST( vil_test_deep_copy_3_plane       vil_test_all test_deep_copy_3_plane )
 ADD_TEST( vil_test_image_view_maths        vil_test_all test_image_view_maths)
 ADD_TEST( vil_test_convert                 vil_test_all test_convert ${VXLCORE_INCLUDE_DIR}/vil/tests/file_read_data)
+ADD_TEST( vil_test_rotate_image            vil_test_all test_rotate_image)
 
 # Sampling Operations
 ADD_TEST( vil_test_bilin_interp            vil_test_all test_bilin_interp)
