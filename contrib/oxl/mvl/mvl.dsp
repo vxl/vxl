@@ -853,6 +853,11 @@ SOURCE=.\RawPMatrixStore.cxx
 SOURCE=.\Templates/vbl_smart_ptr+PMatrix-.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\TriTensorCompute.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
