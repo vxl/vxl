@@ -38,7 +38,7 @@ class vgl_vector_2d
   inline vgl_vector_2d () : x_(0) , y_(0) {}
 
   //: Creates the vector \a (x,y).
-  inline vgl_vector_2d (T x, T y) : x_(x) , y_(y) {}
+  inline vgl_vector_2d (T vx, T vy) : x_(vx) , y_(vy) {}
 
 #if 0 // The defaults do exactly what they should do...
   //: Copy constructor
@@ -51,7 +51,7 @@ class vgl_vector_2d
 #endif
 
   //: Assignment
-  inline void set(T x, T y) { x_=x; y_=y; }
+  inline void set(T vx, T vy) { x_=vx; y_=vy; }
 
   //: Comparison
   inline bool operator==(vgl_vector_2d<T>const& v)const{return x_==v.x()&&y_==v.y();}

@@ -37,10 +37,10 @@ class vgl_vector_3d
   inline T z() const { return z_; }
 
   //: Creates the vector (0,0,0) of zero length.
-  inline vgl_vector_3d () : x_(0) , y_(0) , z_(0) {}
+  inline vgl_vector_3d() : x_(0) , y_(0) , z_(0) {}
 
-  //: Creates the vector \a (x,y,z).
-  inline vgl_vector_3d (T x, T y, T z) : x_(x) , y_(y) , z_(z) {}
+  //: Creates the vector \a (vx,vy,vz).
+  inline vgl_vector_3d(T vx, T vy, T vz) : x_(vx) , y_(vy) , z_(vz) {}
 
 #if 0 // The defaults do exactly what they should do...
   //: Copy constructor
@@ -53,7 +53,7 @@ class vgl_vector_3d
 #endif
 
   //: Assignment
-  inline void set(T x, T y, T z) { x_=x; y_=y; z_=z; }
+  inline void set(T vx, T vy, T vz) { x_=vx; y_=vy; z_=vz; }
 
   //: Comparison
   inline bool operator==(vgl_vector_3d<T>const& v) const {
