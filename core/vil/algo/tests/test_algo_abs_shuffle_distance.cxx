@@ -19,9 +19,9 @@ static void asd_fill_image(vil_image_view<vxl_byte>& image)
 
 static void test_algo_abs_shuffle_distance()
 {
-  vcl_cout << "*********************************\n"
+  vcl_cout << "**********************************\n"
            << " Testing vil_abs_shuffle_distance\n"
-           << "*********************************\n";
+           << "**********************************\n";
 
   const unsigned int ni = 30, nj = 40;
   vil_image_view<vxl_byte> image0(ni,nj);
@@ -45,14 +45,14 @@ static void test_algo_abs_shuffle_distance()
 
   TEST_NEAR("Shuffle dist to self, 2 pixel displacement",
             vil_abs_shuffle_distance(sub_im1,sub_im3,se,false),1.0,1e-6);
-            
+
   vcl_cout<<"Using larger radius: "<<vcl_endl;
   se.set_to_disk(2.5);
   vcl_cout<<"Structuring element: "<<se<<vcl_endl;
   TEST_NEAR("Shuffle dist to self, 2 pixel displacement",
             vil_abs_shuffle_distance(sub_im1,sub_im3,se,false),0.0,1e-6);
-            
-/*
+
+#if 0
   // Timing test
   image0.set_size(128,128);
   asd_fill_image(image0);
@@ -62,7 +62,7 @@ static void test_algo_abs_shuffle_distance()
   for (unsigned i=0;i<100;++i)
     sum+=vil_abs_shuffle_distance(image0,image0,se,false);
   vcl_cout<<"Stop."<<vcl_endl;
-*/
+#endif // 0
 }
 
 TESTMAIN(test_algo_abs_shuffle_distance);
