@@ -251,7 +251,7 @@ test_feature_face()
     // the normal.
 
     vnl_vector<double> x_nor( 2 );
-    xform.map_direction( loc2d, nor2d, x_nor );
+    xform.map_normal( loc2d, nor2d, x_nor );
 
     TEST_NEAR( "                        , error projector",
                ( result->error_projector() - outer_product( x_nor, x_nor ) ).absolute_value_max(), 0, 1e-6 );
