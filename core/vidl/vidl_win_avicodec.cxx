@@ -192,7 +192,7 @@ bool vidl_avicodec::probe(vcl_string const& fname)
 {
   int modenum = OF_READ | OF_SHARE_DENY_WRITE;
   AVIFileInit();
-  if (AVIFileOpen(&avi_file_, fname, modenum, 0L)==0)
+  if (AVIFileOpen(&avi_file_, fname.c_str(), modenum, 0L)==0)
   {
     // The file was opened with success
     // So, release it
