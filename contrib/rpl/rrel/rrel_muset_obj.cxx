@@ -217,8 +217,8 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     {
     // vcl_cout << "\nRREL_MUSE_QUANTILE\n";
     for ( double frac=min_frac_; frac<=max_frac_+0.00001; frac+=frac_inc_ ) {
-      unsigned int k = vnl_math_rnd( frac*num_residuals );
-      if ( k < 0 ) k=1;
+      int kk = vnl_math_rnd( frac*num_residuals );
+      unsigned int k = ( kk <= 0 )  ? 1 : kk;
       if( k>num_residuals ) k=num_residuals;
       if ( table_->expected_kth(k, num_residuals) / 
            table_->standard_dev_kth(k, num_residuals) < min_exp_kth_to_stddev_ratio )
