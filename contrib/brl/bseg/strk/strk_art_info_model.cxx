@@ -182,8 +182,8 @@ compute_mutual_information(vil1_memory_image_of<float> const& image)
   for (vcl_vector<strk_tracking_face_2d_sptr>::iterator fit =  faces_.begin();
        fit != faces_.end(); fit++)
   {
-    if (!(*fit)->compute_mutual_information(image, null_x, null_y));
-    continue;
+    if (!(*fit)->compute_mutual_information(image, null_x, null_y))
+      continue;
     model_info += (*fit)->total_info();
   }
   total_model_info_ = model_info;
