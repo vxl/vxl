@@ -77,8 +77,8 @@ bool bsol_point_index_2d::trans(const double x, const double y,
 {
 	if(!bsol_algs::in(b_box_, x, y))
     return false;
-  col = (int)(x-b_box_->get_min_x())/col_spacing_;
-  row = (int)(y-b_box_->get_min_y())/row_spacing_;
+  col = (int)((x-b_box_->get_min_x())/col_spacing_);
+  row = (int)((y-b_box_->get_min_y())/row_spacing_);
   return true;
 }
 
@@ -136,7 +136,8 @@ bool bsol_point_index_2d::in_radius(const double radius,
   int row = 0, col =0;
   this->trans(x, y, row, col);
   //get points from surrounding cells
-  int row_radius = radius/row_spacing_, col_radius = radius/col_spacing_;
+  int row_radius = (int)(radius/row_spacing_),
+    (int)(col_radius = radius/col_spacing_);
   //include points near cell boundaries
   row_radius++; col_radius++;
   for(int ro = -row_radius; ro<=row_radius; ro++)
@@ -219,7 +220,7 @@ vcl_vector<vsol_point_2d_sptr> bsol_point_index_2d::points()
   
 void bsol_point_index_2d::clear_marks()
 {
-  vcl_vector<vsol_point_2d_sptr>& pts = this->points();
+  vcl_vector<vsol_point_2d_sptr> pts = this->points();
   for(vcl_vector<vsol_point_2d_sptr>::iterator pit = pts.begin();
             pit!= pts.end(); pit++)
     clear_flag(*pit);

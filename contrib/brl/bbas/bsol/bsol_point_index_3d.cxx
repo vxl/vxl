@@ -140,9 +140,9 @@ bool bsol_point_index_3d::trans(const double x, const double y,
 {
 	if(!bsol_algs::in(b_box_, x, y, z))
     return false;
-  col = (int)(x-b_box_->get_min_x())/col_spacing_;
-  row = (int)(y-b_box_->get_min_y())/row_spacing_;
-  slab = (int)(z-b_box_->get_min_z())/slab_spacing_;
+  col = (int)((x-b_box_->get_min_x())/col_spacing_);
+  row = (int)((y-b_box_->get_min_y())/row_spacing_);
+  slab = (int)((z-b_box_->get_min_z())/slab_spacing_);
   return true;
 }
 
