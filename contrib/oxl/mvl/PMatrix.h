@@ -54,7 +54,7 @@ public:
   PMatrix(const PMatrix&);
  ~PMatrix();
 
-  static PMatrix read(char const* filename);
+  static PMatrix read(const char* filename);
   static PMatrix read(vcl_istream&);
 
   // Operations----------------------------------------------------------------

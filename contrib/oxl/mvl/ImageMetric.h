@@ -67,8 +67,8 @@ public:
   virtual HomgLineSeg2D image_to_homg(const HomgLineSeg2D&);
   virtual HomgLineSeg2D homg_to_image(const HomgLineSeg2D&);
 
-  virtual FMatrix image_to_homg_deprecated(const FMatrix&);
-  virtual FMatrix homg_to_image_deprecated(const FMatrix&);
+  virtual FMatrix image_to_homg_deprecated(FMatrix const&);
+  virtual FMatrix homg_to_image_deprecated(FMatrix const&);
 
   virtual double perp_dist_squared(const HomgPoint2D&, const HomgLine2D&);
   virtual HomgPoint2D perp_projection(const HomgLine2D & l, const HomgPoint2D & p);
