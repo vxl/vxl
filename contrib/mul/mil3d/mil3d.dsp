@@ -100,6 +100,16 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\Templates/mil3d_sample_profile_3d+float.double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil3d_sample_profile_3d+uchar.double-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/mil3d_image_3d_of+float-.cxx
 
 # End Source File
@@ -139,6 +149,21 @@ SOURCE=.\mil3d_transform_3d.cxx
 # Begin Source File
 
 SOURCE=.\mil3d_image_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil3d_trilin_interp_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil3d_sample_profile_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil3d_sample_profile_3d.txx
 
 # End Source File
 # Begin Source File
