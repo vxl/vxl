@@ -9,7 +9,7 @@ inline
 vcl_vector<T> CoolArray_to_vcl_vector(CoolArray<T> const& cl)
 {
   vcl_vector<T> l;
-  CoolArray<T>::const_iterator it = cl.begin();
+  typename CoolArray<T>::const_iterator it = cl.begin();
   for (; !(it == cl.end()); ++it)
     l.push_back(*it);
   return l;
@@ -20,7 +20,7 @@ inline
 vcl_vector<T> CoolArray_to_vcl_vector(CoolArrayP<T> const& cl)
 {
   vcl_vector<T> l;
-  CoolArrayP<T>::const_iterator it = cl.begin();
+  typename CoolArrayP<T>::const_iterator it = cl.begin();
   for (; !(it == cl.end()); ++it)
     l.push_back(*it);
   return l;
