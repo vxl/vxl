@@ -6,7 +6,22 @@
 #include <vpl/vpl.h>
 
 #include <bmrf/bmrf_node_sptr.h>
+#include <vbl/vbl_smart_ptr.h>
 #include <bmrf/bmrf_node.h>
+
+class bmrf_node_tester : public bmrf_node
+{
+public:
+  bool add_neighbor( bmrf_node *node, neighbor_type type );
+
+  bool remove_neighbor( bmrf_node *node, neighbor_type type = ALL);
+
+  void strip();
+
+  bool purge();
+};
+
+typedef vbl_smart_ptr<bmrf_node_tester> bmrf_node_tester_sptr;
 
 //: Test the node class
 void test_node()
@@ -14,26 +29,6 @@ void test_node()
   bmrf_node_sptr node_1 = new bmrf_node(NULL, 1, 0.5);
   bmrf_node_sptr node_2 = new bmrf_node(NULL, 2, 0.7);
   bmrf_node_sptr node_3 = new bmrf_node(NULL, 2, 0.2);
-
-  TEST("Testing add_neighbor()",
-       node_1->add_neighbor(node_2.ptr(), bmrf_node::TIME) &&
-       node_1->add_neighbor(node_3.ptr(), bmrf_node::TIME) &&
-       node_2->add_neighbor(node_3.ptr(), bmrf_node::SPACE) &&
-       node_2->add_neighbor(node_1.ptr(), bmrf_node::TIME) &&
-       node_2->add_neighbor(node_3.ptr(), bmrf_node::ALPHA) &&
-       node_2->add_neighbor(node_1.ptr(), bmrf_node::ALPHA) &&
-       !node_2->add_neighbor(node_1.ptr(), bmrf_node::ALPHA), // can't add the same thing twice
-       true);
-
-  TEST("Testing remove_neighbor()",
-       node_2->remove_neighbor(node_1.ptr(), bmrf_node::ALPHA) &&
-       !node_2->remove_neighbor(node_1.ptr(), bmrf_node::ALPHA), // can't remove twice
-       true);
-
-  int count = 0;
-  for (int i=0; i<bmrf_node::ALL; ++i)
-    count += node_2->num_neighbors(bmrf_node::neighbor_type(i));
-  TEST("Testing num_neighbors()", node_2->num_neighbors(), count );
 
   testlib_test_begin("Testing frame_num() ");
   testlib_test_perform( node_1->frame_num() == 1 &&
@@ -77,14 +72,6 @@ void test_node()
   // remove the temporary file
   vpl_unlink ("test_node_io.tmp");
 
-//----------------------------------------------------------------------------------------
-// Tests on data loaded from a file
-//----------------------------------------------------------------------------------------
-
-  TEST("Testing purge()",
-       node_in_1->purge() && // remove arcs to nodes that were not loaded
-       !node_in_1->purge(), // The first purge should catch all bad arcs
-       true);
 }
 
 
