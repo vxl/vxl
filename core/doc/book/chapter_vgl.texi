@@ -131,8 +131,8 @@ For sake of completeness, the following 1D representation classes are present:
 @end itemize
 
 A 1D basis is an arbitrary set of 3 (collinear) points.  One receives coordinate
-0 or (0,1), one has coordinate @infty or (1,0) and the unit point has coordinate
-1 or (1,1).  Such a set is an essential ingredient for any projective
+0 or (0,1), one has coordinate infinity or (1,0) and the unit point has
+coordinate 1 or (1,1).  Such a set is an essential ingredient for any projective
 transformation.
 
 @subsection 2D regions and iterators
