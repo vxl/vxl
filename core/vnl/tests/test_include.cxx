@@ -40,6 +40,7 @@
 #include <vnl/vnl_int_3.h>
 #include <vnl/vnl_int_4.h>
 #include <vnl/vnl_int_matrix.h>
+#include <vnl/vnl_inverse.h>
 #include <vnl/vnl_least_squares_cost_function.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/vnl_linear_operators_3.h>
