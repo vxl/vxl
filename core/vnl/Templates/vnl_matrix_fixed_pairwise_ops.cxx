@@ -1,6 +1,6 @@
 #include <vnl/vnl_matrix_fixed.txx>
 
-#if defined(WIN32) || defined(IUE_SUNPRO_CC)
+#if defined(VCL_WIN32) || defined(VCL_SUNPRO_CC)
 // don't do anything.
 #else
 VNL_MATRIX_FIXED_PAIR_INSTANTIATE(double, 2,2,2);
