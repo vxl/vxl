@@ -484,11 +484,11 @@ points_in_bounding_box_impl( point_type const& min_pt,
 //
 // This will scan the \a dim dimensional region bounded by
 // lo[dim..N-1] and hi[dim..N-1], boundary points inclusive. It
-// will return the indicies of the bins that fall within the scanned
+// will return the indices of the bins that fall within the scanned
 // region. The coordinates for the first dim-1 dimensions are given in
 // \a cur.
 //
-// It will add the append the bins to \a indicies. The return value is
+// It will add the append the bins to \a indices. The return value is
 // the total number of points in the bins that were appended.
 //
 // The routine will scan the \a dim dimensional equivalent of
