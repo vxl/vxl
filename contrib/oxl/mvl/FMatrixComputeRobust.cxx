@@ -50,7 +50,7 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
 
   FMatrix Fs, Fs_homg;
   double Ds = 1e+10;
-  int count;
+  int count = 0;
   vcl_vector<bool> inlier_list(data_size_, false);
   vcl_vector<double> residualsF(data_size_, 100.0);
 
