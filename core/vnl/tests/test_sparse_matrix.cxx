@@ -2,10 +2,10 @@
 #include <vcl/vcl_ctime.h>
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_iomanip.h>
+#include <vcl/vcl_cmath.h>
 
 #include <vnl/vnl_sparse_matrix.h>
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matops.h>
 #include <vnl/algo/vnl_sparse_symmetric_eigensystem.h>

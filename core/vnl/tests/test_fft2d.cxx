@@ -12,11 +12,11 @@
 //-----------------------------------------------------------------------------
 #include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_iostream.h>
+#include <vcl/vcl_cmath.h>
 
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_complex_ops.h>
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_fft2d.h>
 #include <vnl/algo/vnl_fftxd_prime_factors.h>
