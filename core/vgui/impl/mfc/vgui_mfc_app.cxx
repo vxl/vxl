@@ -24,6 +24,7 @@
   static char THIS_FILE[] = __FILE__;
   #endif
 #endif
+
 /////////////////////////////////////////////////////////////////////////////
 //: vgui_mfc_app construction
 vgui_mfc_app::vgui_mfc_app()
@@ -31,6 +32,7 @@ vgui_mfc_app::vgui_mfc_app()
   // TODO: add construction code here,
   // Place all significant initialization in InitInstance
 }
+
 /////////////////////////////////////////////////////////////////////////////
 //: The one and only vgui_mfc_app object
 class vgui_mfc_app_command_line_info : public CCommandLineInfo
@@ -80,7 +82,9 @@ BOOL vgui_mfc_app::InitInstance()
 
   // Parse command line for standard shell commands, DDE, file open
   vgui_mfc_app_command_line_info cmdInfo;
-//      ParseCommandLine(cmdInfo);
+#if 0
+  ParseCommandLine(cmdInfo);
+#endif
 
   // *** IMPORTANT STUFF (marko) ***
   CDocument *pDocument = pDocTemplate->CreateNewDocument();
@@ -93,8 +97,8 @@ BOOL vgui_mfc_app::InitInstance()
   context.m_pCurrentDoc = pDocument;
   context.m_pNewViewClass = RUNTIME_CLASS(vgui_mfc_view);
   context.m_pNewDocTemplate = pDocTemplate;
-  pFrame->Create(NULL, _T("VGUI"), WS_OVERLAPPEDWINDOW /*|WS_HSCROLL|WS_VSCROLL*/
-                , pFrame->rectDefault,NULL,NULL,0,&context);
+  pFrame->Create(NULL, _T("VGUI"), WS_OVERLAPPEDWINDOW /*|WS_HSCROLL|WS_VSCROLL*/,
+                 pFrame->rectDefault,NULL,NULL,0,&context);
   m_pMainWnd = pFrame;
   pDocTemplate->InitialUpdateFrame(pFrame,pDocument);
   // The one and only window has been initialized, so show and update it.
@@ -135,7 +139,7 @@ BOOL vgui_mfc_app::Run()
       MSG tmp_msg;
       if (::PeekMessage(&tmp_msg,NULL,NULL,NULL,PM_NOREMOVE))
       {
-        if (1)
+        if (true)
         {
           // Collapse multiple move events...
           while (tmp_msg.message == WM_MOVE)
@@ -185,6 +189,7 @@ BOOL vgui_mfc_app::Run()
   }
   ASSERT(FALSE);  // not reachable
 }
+
 /////////////////////////////////////////////////////////////////////////////
 //: vgui_mfc_app message handlers
 void f() {}
@@ -195,19 +200,22 @@ BOOL vgui_mfc_app::OnIdle( LONG lCount )
   // such. Process those first.
   //
   if (CWinApp::OnIdle(lCount))
-    return TRUE;   
+    return TRUE;
 
   // Send an idle event to each adaptor.
   POSITION tmpl_pos = this->GetFirstDocTemplatePosition();
-  while( tmpl_pos ) {
+  while ( tmpl_pos )
+  {
     CDocTemplate *tmpl = this->GetNextDocTemplate(tmpl_pos);
     POSITION doc_pos = tmpl->GetFirstDocPosition();
-    while( doc_pos ) {
+    while ( doc_pos )
+    {
       CDocument *pdoc = tmpl->GetNextDoc(doc_pos);
       POSITION view_pos = pdoc->GetFirstViewPosition();
-      while( view_pos ) {
+      while ( view_pos )
+      {
         vgui_mfc_adaptor *adaptor = (vgui_mfc_adaptor *)pdoc->GetNextView(view_pos);
-        if( adaptor->do_idle() ) {
+        if ( adaptor->do_idle() ) {
           return TRUE;
         }
       }
