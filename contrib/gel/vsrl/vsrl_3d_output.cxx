@@ -51,7 +51,7 @@ void vsrl_3d_output::set_projective_transform(vnl_matrix<double> &H)
 }
 
 
-void vsrl_3d_output::write_output(char *filename)
+void vsrl_3d_output::write_output(const char *filename)
 {
   // OK we are going to do several things
   // first we want a list of 3D points in space
@@ -277,7 +277,7 @@ void vsrl_3d_output::write_output(char *filename)
 }
 
 
-void vsrl_3d_output::read_projective_transform(char *filename)
+void vsrl_3d_output::read_projective_transform(const char *filename)
 {
   // since this is a projective transform from the RH point
   // of view. I am assuming that the data will be of the form
@@ -333,7 +333,7 @@ bool vsrl_3d_output::non_valid_point(int x, int y)
   return false;
 }
 
-void vsrl_3d_output::write_disparity_image(char *filename,vsrl_diffusion *diff)
+void vsrl_3d_output::write_disparity_image(const char *filename,vsrl_diffusion *diff)
 {
   // we want to write a disparity image
 

@@ -55,11 +55,11 @@ class vsrl_3d_output
 
   // read in the transform
 
-  void read_projective_transform(char *filename);
+  void read_projective_transform(const char *filename);
 
   // write the data
 
-  void write_output(char *filename);
+  void write_output(const char *filename);
 
   vil1_memory_image_of<double> get_double_range_image() { return range_image_;}
   vil1_memory_image_of<unsigned char> get_unsigned_range_image() { return rimage_;}
@@ -71,7 +71,7 @@ class vsrl_3d_output
 
   bool non_valid_point(int x, int y); // identifies non valid points
 
-  void  write_disparity_image(char *filename,vsrl_diffusion *diff);
+  void  write_disparity_image(const char *filename,vsrl_diffusion *diff);
 };
 
 #endif // vsrl_3d_output_h
