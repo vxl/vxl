@@ -663,6 +663,11 @@ SOURCE=.\vil_test.cxx
 SOURCE=.\vil_warp.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_ras.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -1119,6 +1124,11 @@ SOURCE=.\vil_jpeglib.h
 # Begin Source File
 
 SOURCE=.\vil_property.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_ras.h
 
 # End Source File
 # End Group
