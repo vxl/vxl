@@ -71,13 +71,13 @@ void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view)
 }
 
 // For things which must not be composites
-#define VIL_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_NON_COMP(T) \
+#define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_NON_COMP(T) \
 template vil2_image_view<T > vil2_view_as_planes(const vil2_image_view<vil_rgb<T > >&); \
 template vil2_image_view<vil_rgb<T > > vil2_view_as_rgb(const vil2_image_view<T >& plane_view); \
 template void vil2_print_value(vcl_ostream& os, const T& value)
 
 // For everything else
-#define VIL_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_2(T) \
+#define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_2(T) \
 template void vil2_print_all(vcl_ostream& os,const vil2_image_view<T >& view)
 
 #endif
