@@ -20,7 +20,7 @@
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>
 
-//: Represents a homogenious 3D point
+//: Represents a homogeneous 3D point
 template <class Type>
 class vgl_homg_point_3d
 {
