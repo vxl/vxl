@@ -727,8 +727,11 @@ template<class T>
 double angle (vnl_vector<T> const& a, vnl_vector<T> const& b) {
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
   typedef typename vnl_numeric_traits<abs_t>::real_t abs_r;
-
-  return vcl_acos( abs_r( cos_angle(a, b) ) );
+  const abs_r c = abs_r( cos_angle(a, b) );
+  // IMS: sometimes cos_angle returns 1+eps, which can mess up vcl_acos.
+  if (c > 1.0) return 0;
+  if (c < -1.0) return vnl_math::pi;
+  return vcl_acos( c );
 }
 
 template <class T>
