@@ -1,11 +1,10 @@
+// This is mul/mbl/mbl_lru_cache.h
 #ifndef mbl_lru_cache_h_
 #define mbl_lru_cache_h_
-
 //:
 // \file
 // \brief Least recently used cache.
 // \author Ian Scott
-
 
 #include <vcl_list.h>
 #include <vcl_map.h>
@@ -66,8 +65,10 @@ public:
 
   //: Insert this value into the cache.
   // For speed this method assumes that the index isn't already in the cache.
-  // \param dont_if_full If true, and the cache is full,
-  // then the cache will not be modified.
+  // \param dont_if_full
+  //     If true, and the cache is full, then the cache will not be modified.
+  // \param value The value to be inserted in the cache
+  // \param index Index to access the value
   void insert(const I& index, const V& value, bool dont_if_full=false)
   {
     assert (m_.size() == l_.size());

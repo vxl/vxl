@@ -33,12 +33,13 @@ public:
 
   //: Attempt to load image from named file. 
   // \param filetype  String hinting at what image format is
-  // \param colour define whether to load images as colour or grey-scale
+  // \param colour    define whether to load images as colour or grey-scale.
   //        Options are '' (ie rely on image), 'Grey' or 'RGB'
-  //!ret: true if successful
+  // \ret   true if successful
   virtual bool loadTheImage (mil_image_2d_of<vil_byte>& image, 
-      const vcl_string & path, const vcl_string & filetype, 
-      const vcl_string & colour);
+                             const vcl_string & path,
+                             const vcl_string & filetype, 
+                             const vcl_string & colour);
 
   //: Register a mil_byte_image_2d_io_plugin to the list of plugins
   static void register_plugin(mil_byte_image_2d_io_plugin* plugin);

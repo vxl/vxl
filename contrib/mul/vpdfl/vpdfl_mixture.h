@@ -25,12 +25,12 @@
 //=======================================================================
 
 //: Represents a mixture model (a set of individual pdfs + weights)
-class vpdfl_mixture : public vpdfl_pdf_base {
-private:
+class vpdfl_mixture : public vpdfl_pdf_base
+{
   vcl_vector<vpdfl_pdf_base*> component_;
   vcl_vector<double>          weight_;
 
-    //: Workspace so we don't have to keep creating vectors
+  //: Workspace so we don't have to keep creating vectors
   mutable vnl_vector<double> ws_;
 
   void delete_stuff();
@@ -63,6 +63,7 @@ public:
   //  If log_p(x)>log_p_min then x unchanged.  Otherwise x is moved
   //  (typically up the gradient) until log_p(x)>=log_p_min.
   // \param x This may be modified to the nearest plausible position.
+  // \param log_p_min lower threshold for log_p(x)
   virtual void nearest_plausible(vnl_vector<double>& x, double log_p_min) const;
 
   //: Initialise to use n components of type comp_type
@@ -131,7 +132,7 @@ public:
   //: Name of the class
   virtual vcl_string is_a() const;
 
-    //: Does the name of the class match the argument?
+  //: Does the name of the class match the argument?
   virtual bool is_class(vcl_string const& s) const;
 
   //: Create a copy on the heap and return base class pointer

@@ -22,6 +22,8 @@ protected:
   double C_;
 
 //: Attempt to jointly optimise lagrange multipliers i1, and i2.
+// \param i1 first lagrange multiplier.
+// \param i2 second lagrange multiplier.
 // \param E1 The amount by which i1 violates KKT conditions.
   virtual int take_step(int i1, int i2, double E1);
 

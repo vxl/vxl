@@ -190,8 +190,9 @@ public:
 
   //: Creates copy of a 2d slice from the 3d image.
   // The appropriate 2d transform is set up.
-  // \param axis:  axis through which slice is taken
-  // \param slice_number: slice_number on axis
+  // \param axis  axis through which slice is taken
+  // \param slice_number slice number on axis
+  // \param image_slice 2d image where the output slice is written into
   // \return true if slice_number is valid and slice is taken and
   // image2d is ZoomOnly or Identity, false otherwise
   bool deepSlice(Axis axis,int slice_number, mil_image_2d_of<T> &image_slice) const;

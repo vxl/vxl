@@ -3,7 +3,6 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Multi-variate gaussian PDF, with a diagonal covariance matrix
@@ -15,8 +14,8 @@
 // 20 April 2001 IMS - Implemented log_prob_thresh()
 // 20 April 2001 IMS - Implemented log_p_min in nearest_plausible
 // \endverbatim
-#include <vpdfl/vpdfl_pdf_base.h>
 
+#include <vpdfl/vpdfl_pdf_base.h>
 
 //: Multi-variate gaussian PDF, with a diagonal covariance matrix
 class vpdfl_axis_gaussian : public vpdfl_pdf_base {
@@ -62,6 +61,7 @@ public:
   //  If log_p(x)>log_p_min then x unchanged.  Otherwise x is moved
   //  (typically up the gradient) until log_p(x)>=log_p_min.
   // \param x This may be modified to the nearest plausible position.
+  // \param log_p_min lower threshold for log_p(x)
   virtual void nearest_plausible(vnl_vector<double>& x, double log_p_min) const;
 
   //: Version number for I/O

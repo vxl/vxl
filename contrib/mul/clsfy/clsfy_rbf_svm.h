@@ -59,18 +59,22 @@ public:
   // This are not strict probability values, since SVMs do not give Bayesian
   // outputs. However their properties fit the requirements of a probability.
   void virtual class_probabilities(vcl_vector<double> &outputs,
-    const vnl_vector<double> &input) const;
+                                   const vnl_vector<double> &input) const;
 
   //: Log likelyhood of being in class (binary classifiers only)
   // class probability = vcl_exp(logL) / (1+vcl_exp(logL)
   virtual double log_l(const vnl_vector<double> &input) const;
 
-  //: Set the internal values defining the classifier;
+  //: Set the internal values defining the classifier.
+  // \param supportVectors
+  // \param lagrangianAlphas
   // \param labels These should be 0 or 1.
+  // \param RBFWidth
+  // \param bias
   virtual void set( const vcl_vector<vnl_vector<double> > & supportVectors,
-    const vcl_vector<double> & lagrangianAlphas,
-    const vcl_vector<unsigned> &labels,
-    double RBFWidth, double bias);
+                    const vcl_vector<double> & lagrangianAlphas,
+                    const vcl_vector<unsigned> &labels,
+                    double RBFWidth, double bias);
 
   //: The 1st standard deviation width of the RBF kernel.
   // Really this could be better named as the RBF radius.

@@ -14,9 +14,8 @@
 
 //: Represents a mixture model (a set of individual pdfs + weights)
 class pdf1d_mixture : public pdf1d_pdf {
-private:
   vcl_vector<pdf1d_pdf*> component_;
-  vcl_vector<double>          weight_;
+  vcl_vector<double>     weight_;
 
   void init();
   void delete_stuff();
@@ -40,10 +39,10 @@ public:
   //: Log of probability density at x
   virtual double log_p(double x) const;
 
-    //: Cumulative Probability (P(x'<x) for x' drawn from the distribution)
+  //: Cumulative Probability (P(x'<x) for x' drawn from the distribution)
   virtual double cdf(double x) const;
 
-    //: Return true if cdf() uses an analytic implementation
+  //: Return true if cdf() uses an analytic implementation
   virtual bool cdf_is_analytic() const;
 
   //: Gradient of PDF at x
@@ -54,6 +53,7 @@ public:
   //  If log_p(x)>log_p_min then x unchanged.  Otherwise x is moved
   //  (typically up the gradient) until log_p(x)>=log_p_min.
   // \param x This may be modified to the nearest plausible position.
+  // \param log_p_min lower threshold for log_p(x)
   virtual double nearest_plausible(double x, double log_p_min) const;
 
   //: Initialise to use n components of type comp_type
@@ -118,7 +118,7 @@ public:
   //: Name of the class
   virtual vcl_string is_a() const;
 
-    //: Does the name of the class match the argument?
+  //: Does the name of the class match the argument?
   virtual bool is_class(vcl_string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
