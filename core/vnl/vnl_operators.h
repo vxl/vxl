@@ -60,4 +60,5 @@ bool operator<(vnl_matrix<T> const& lhs, vnl_matrix<T> const& rhs)
 
 
 
-#endif // vnl_operators_h_
+#endif
+// vnl_operators_h_
