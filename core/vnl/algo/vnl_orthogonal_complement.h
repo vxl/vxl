@@ -21,7 +21,7 @@ vnl_matrix<T> vnl_orthogonal_complement(vnl_vector<T> const &v);
 
 #if 0
 //: Return a matrix whose column span is the orthogonal complement of the column span of M.
-template <typename T>
+template <class T>
 vnl_matrix<T> vnl_orthogonal_complement(vnl_matrix<T> const &M);
 #endif
 

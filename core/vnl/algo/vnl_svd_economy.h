@@ -4,7 +4,6 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief SVD wrapper that doesn't compute the left singular vectors, U.
@@ -18,9 +17,10 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
-template <typename real_t>
-class vnl_svd_economy {
-public:
+template <class real_t>
+class vnl_svd_economy
+{
+ public:
   //: The singular values of a matrix of complex<T> are of type T, not complex<T>
   typedef typename vnl_numeric_traits<real_t>::abs_t singval_t;
 
@@ -37,12 +37,12 @@ public:
   //: Return the rightmost column of V.
   vnl_vector<real_t> nullvector();
 
-protected:
+ protected:
   int m_, n_;
   vnl_matrix<real_t>    V_;
   vnl_vector<singval_t> sv_;
 
-private:
+ private:
   vnl_svd_economy( vnl_svd_economy<real_t> const&) { }
   vnl_svd_economy<real_t>& operator=(vnl_svd_economy<real_t> const&) { return *this; }
 };

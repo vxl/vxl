@@ -21,7 +21,7 @@ macro(c, vcl_complex<float>);
 macro(z, vcl_complex<double>);
 #undef macro
 
-template <typename real_t>
+template <class real_t>
 vnl_svd_economy<real_t>::vnl_svd_economy( vnl_matrix<real_t> const& M ) :
   m_(M.rows()), n_(M.columns()),
   V_(n_,n_),
@@ -103,7 +103,7 @@ vnl_svd_economy<real_t>::vnl_svd_economy( vnl_matrix<real_t> const& M ) :
   }
 }
 
-template <typename real_t>
+template <class real_t>
 vnl_vector<real_t>
 vnl_svd_economy<real_t>::nullvector()
 {
