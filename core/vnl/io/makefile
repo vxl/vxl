@@ -19,6 +19,10 @@ MANPAGE_SOURCES += vnl_io_sparse_matrix.txx
 MANPAGE_SOURCES += vnl_io_sym_matrix.txx
 MANPAGE_SOURCES += vnl_io_vector.txx
 
+ifeq ($(COMPILER),gcc)
+FLAGS_Templates/vsl_vector_io+vcl_vector+vcl_vector+vnl_vector+double----.cxx += -ftemplate-depth-25
+endif
+
 ifndef NOTEST
 SUBDIRS += tests
 endif

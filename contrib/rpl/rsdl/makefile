@@ -1,7 +1,3 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
 USES += vxl rpl
 
 LIBRARY := rsdl
@@ -15,6 +11,14 @@ SOURCES += rsdl_kd_tree.cxx
 SOURCES += rsdl_point.cxx
 MANPAGE_SOURCES += rsdl_bins_2d.txx
 MANPAGE_SOURCES += rsdl_borgefors.txx
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifeq ($(OS),OSF1V4) # with optimisation, not enough virtual memory:
+FLAGS_Templates/rsdl_bins_2d+double.int-.cxx := -O1
+endif
 
 ifndef NOTEST
 SUBDIRS += tests
