@@ -9,9 +9,11 @@ SET(vgl_io_sources
   vgl_io_homg_line_2d.txx vgl_io_homg_line_2d.h
   vgl_io_homg_line_3d_2_points.txx vgl_io_homg_line_3d_2_points.h
   vgl_io_homg_plane_3d.txx vgl_io_homg_plane_3d.h
+  vgl_io_homg_point_1d.txx vgl_io_homg_point_1d.h
   vgl_io_homg_point_2d.txx vgl_io_homg_point_2d.h
   vgl_io_homg_point_3d.txx vgl_io_homg_point_3d.h
   vgl_io_line_2d.txx vgl_io_line_2d.h
+  vgl_io_line_3d_2_points.txx vgl_io_line_3d_2_points.h
   vgl_io_line_segment_2d.txx vgl_io_line_segment_2d.h
   vgl_io_line_segment_3d.txx vgl_io_line_segment_3d.h
   vgl_io_point_2d.txx vgl_io_point_2d.h
