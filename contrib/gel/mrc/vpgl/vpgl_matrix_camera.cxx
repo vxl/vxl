@@ -4,7 +4,7 @@
 //  \file
 
 #include <vnl/algo/vnl_svd.h>
-
+#include <vnl/vnl_math.h> // for vnl_huge_val()
 
 vpgl_matrix_camera::vpgl_matrix_camera():
   _matrix(3,3)
@@ -99,13 +99,13 @@ void vpgl_matrix_camera::image_to_world(
 
     vnl_svd svd(_general);
     vnl_vector<double> cproj = svd.nullvector();
-    for(int i = 0; i<3; i++)
+    for (int i = 0; i<3; i++)
       pos[i] = cproj[i]/cproj[3];
 
     //Modify the projection matrix according to the supplied image location
     vnl_matrix<double> P3X4(3,4,0.0);
-    for(int r = 0; r<3; r++)
-      for(int c = 0; c<3; c++)
+    for (int r = 0; r<3; r++)
+      for (int c = 0; c<3; c++)
         P3X4.put(r,c, _general.get(r,c));
     P3X4.put(0,3, -x);   P3X4.put(1,3,-y); P3X4.put(2,3,-1.0);
     //Get the ray as the nullvector of the modified projection matrix
@@ -122,7 +122,7 @@ void vpgl_matrix_camera::image_to_world(
     //Adjust the sense of the world ray
     double d = dot_product(ray, principal_ray);
     ray /=d;
-    for(int i = 0; i<3; i++)
+    for (int i = 0; i<3; i++)
       wray[i] = ray[i];
 }
 #endif
