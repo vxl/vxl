@@ -8,7 +8,7 @@ IF(HAS_OPENGL)
 
 ADD_EXECUTABLE( vxl_vrml_viewer vxl_vrml_viewer_sources )
 
-SOURCE_FILES( vxl_vrml_viewer_sources main )
+SOURCE_FILES( vxl_vrml_viewer_sources main.cxx )
 
 # Immediate dependencies:
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/osl/CMakeListsLink.txt )
