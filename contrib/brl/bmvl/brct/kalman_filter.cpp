@@ -49,7 +49,8 @@ void kalman_filter::init()
 
   // initialize the default queue size
   queue_size_ = 10;
-
+  observes_.resize(queue_size_);
+  
   init_transit_matrix();
 
   init_cam_intrinsic();
@@ -137,6 +138,9 @@ void kalman_filter::init_state_vector()
   int npts = 2* ((size0 < size1) ? size0 : size1); // interpolate 2 times more
 
   vcl_vector<vgl_point_3d<double> > pts_3d;
+  vcl_vector<vgl_point_2d<double> > c0; // matched point for the first view
+  vcl_vector<vgl_point_2d<double> > c1;
+  
   for (int i=0; i<npts; i++)
   {
     double index = i/double(npts);
@@ -181,16 +185,31 @@ void kalman_filter::init_state_vector()
       }
 
       if (flag) { // if have corresponding
-        vgl_point_2d<double> x2(p2);
-        vgl_point_3d<double> point_3d = brct_algos::triangulate_3d_point(x1, P1, x2, P2);
+       vgl_point_2d<double> x2(p2);
+       vgl_point_3d<double> point_3d = brct_algos::triangulate_3d_point(x1, P1, x2, P2);
         pts_3d.push_back(point_3d);
+        c0.push_back(x1);
+        c1.push_back(x2);
       }
     }
   }
 
   num_points_ = pts_3d.size();
 
-  //get center of the point
+  // get observes
+  vnl_matrix<double> t0(2, num_points_);
+  vnl_matrix<double> t1(2, num_points_);
+  for(int i=0; i<num_points_; i++){
+    t0[0][i] = c0[i].x();
+    t0[1][i] = c0[i].y(); 
+    t1[0][i] = c1[i].x();
+    t1[1][i] = c1[i].y(); 
+  }
+  
+  observes_[0] = t0;
+  observes_[1] = t1;
+
+  //get local coordinates
   double xc=0, yc=0, zc=0;
   for (int i=0; i<num_points_; i++) {
     xc += pts_3d[i].x();
@@ -368,6 +387,7 @@ void kalman_filter::inc()
   X_pred_ = A_*X_;
 
   vnl_double_3x4 P = get_projective_matrix(X_pred_);
+  update_observes(P);
 
   // adjustion
   vnl_matrix<double> & cur_measures = observes_[cur_pos_];
