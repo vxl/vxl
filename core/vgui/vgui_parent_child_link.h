@@ -157,6 +157,30 @@ struct vgui_parent_child_link
   vgui_parent_child_link_impl *pimpl;
 };
 
+// Work-around for Borland and safe_bool.
+#ifdef VCL_BORLAND
+inline
+bool operator&&(const vgui_parent_child_link& link, bool b)
+{
+  return b && (link?true:false);
+}
+inline
+bool operator&&(bool b, const vgui_parent_child_link& link)
+{
+  return b && (link?true:false);
+}
+inline
+bool operator||(const vgui_parent_child_link& link, bool b)
+{
+  return b || (link?true:false);
+}
+inline
+bool operator||(bool b, const vgui_parent_child_link& link)
+{
+  return b || (link?true:false);
+}
+#endif
+
 vcl_ostream & operator<<(vcl_ostream &, vgui_parent_child_link const &);
 
 #endif // vgui_parent_child_link_h_
