@@ -18,27 +18,53 @@
 
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
+#include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 
 #include <vgui/vgui_soview2D.h>
 
-#if 0 // commented out
-//: This view is essentially the same as a point, the only difference is style.
-// Probably move to a geometry tableau later
-class bgui_linked_vsol_soview2D_point : public vgui_soview2D_point
+#include <vsol/vsol_spatial_object_2d.h>
+#include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_line_2d.h>
+#include <vsol/vsol_polyline_2d.h>
+#include <vsol/vsol_polygon_2d.h>
+
+#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_interpolator.h>
+#include <vdgl/vdgl_edgel_chain.h>
+
+
+
+class bgui_linked_vsol_soview2D_point : public vgui_soview2D
 {
  public:
   //: Constructor - creates a default vsol_point_2d view
-  bgui_linked_vsol_soview2D_point(){}
+  bgui_linked_vsol_soview2D_point( vsol_point_2d_sptr const & pt){ sptr = pt; }
 
+  ~bgui_linked_vsol_soview2D_point() {};
+  
   //: Print details about this vtol_point to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
 
   //: Returns the type of this class ('bgui_linked_vsol_soview2D_point').
   vcl_string type_name() const { return "bgui_linked_vsol_soview2D_point"; }
+
+  //: Render this 2D digital_curve on the display.
+  void draw() const;
+
+  //: Returns the distance squared from this 2D digital_curve to the given position.
+  virtual float distance_squared(float x, float y) const;
+
+  //: Returns the centroid of this 2D digital_curve.
+  void get_centroid(float* x, float* y) const;
+
+  //: Translate this 2D digital_curve by the given x and y distances.
+  void translate(float x, float y);
+
+  //: Smart pointer to a vsol line
+  vsol_point_2d_sptr sptr;
 };
-#endif // 0
 
 //: vsol_line_2d
 class bgui_linked_vsol_soview2D_line_seg : public vgui_soview2D

@@ -28,6 +28,7 @@
 #include <vsol/vsol_polyline_2d_sptr.h>
 
 #include <vdgl/vdgl_digital_curve_sptr.h>
+#include <vdgl/vdgl_edgel_chain_sptr.h>
 
 #include <vgui/vgui_tableau_sptr.h>
 #include <vgui/vgui_image_tableau_sptr.h>

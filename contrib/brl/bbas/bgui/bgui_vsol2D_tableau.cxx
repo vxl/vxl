@@ -12,6 +12,9 @@
 #include <vsol/vsol_polyline_2d.h>
 
 #include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_interpolator.h>
+#include <vdgl/vdgl_edgel_chain.h>
+
 
 bgui_vsol2D_tableau::bgui_vsol2D_tableau(const char* n) :
   vgui_easy2D_tableau(n) { this->init(); }
