@@ -7,15 +7,14 @@
 // \date   28 Dec 99
 //-----------------------------------------------------------------------------
 
-#define private public
+#define private public // hack ...
 #include "vgui_gtk_dialog_impl.h"
 #undef private
-
-#include <vcl_iostream.h>
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_cstdio.h>
+#include <vcl_iostream.h>
 #include <vul/vul_sprintf.h>
 
 #include <vgui/vgui_gl.h>
@@ -477,9 +476,8 @@ bool vgui_gtk_dialog_impl::ask() {
       gtk_widget_show(hbox);
       wlist.push_back(widg);
     }
-    else {
-      vcl_cerr << "Unknown type = " << l.type << vcl_endl;
-    }
+    else
+      vcl_cerr << "Unknown type = " << int(l.type) << vcl_endl;
   }
 
   gtk_widget_show(dialog);
@@ -509,7 +507,7 @@ bool vgui_gtk_dialog_impl::ask() {
         GtkWidget *input = *w_iter;
         l.field->update_value(gtk_entry_get_text(GTK_ENTRY(input)));
       }
-      if(l.type == inline_file_bsr)
+      if (l.type == inline_file_bsr)
         l.field->update_value(gtk_file_selection_get_filename(GTK_FILE_SELECTION(filew)));
 
       if (l.type == bool_elem) {
