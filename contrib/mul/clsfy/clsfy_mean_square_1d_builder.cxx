@@ -9,6 +9,7 @@
 // Modifications
 // \endverbatim
 
+#include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
@@ -147,8 +148,8 @@ double clsfy_mean_square_1d_builder::build(clsfy_classifier_1d& classifier,
 
   }
 
-  assert( wt_pos == tot_pos_wts );
-  assert( wt_neg == tot_neg_wts );
+  assert( vcl_fabs (wt_pos - tot_pos_wts) < 1e-9 );
+  assert( vcl_fabs (wt_neg - tot_neg_wts) < 1e-9 );
   //vcl_cout<<"min_error= "<<min_error<<vcl_endl;
   //vcl_cout<<"min_thresh= "<<min_thresh<<vcl_endl;
 
@@ -262,8 +263,8 @@ double clsfy_mean_square_1d_builder::build(clsfy_classifier_1d& classifier,
 
   }
 
-  assert( wt_pos == tot_wts1 );
-  assert( wt_neg == tot_wts0 );
+  assert( vcl_fabs (wt_pos - tot_wts1) < 1e-9 );
+  assert( vcl_fabs (wt_neg - tot_wts0) < 1e-9 );
   vcl_cout<<"min_error= "<<min_error<<vcl_endl;
   vcl_cout<<"min_thresh= "<<min_thresh<<vcl_endl;
 
