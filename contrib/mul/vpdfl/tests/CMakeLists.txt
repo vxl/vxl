@@ -1,8 +1,5 @@
 # mul/vpdfl/tests/CMakeLists.txt
 
-
-
-
 ADD_EXECUTABLE( vpdfl_test_all
   test_driver.cxx
   test_axis_gaussian.cxx
@@ -11,7 +8,6 @@ ADD_EXECUTABLE( vpdfl_test_all
   test_pc_gaussian.cxx
   )
 TARGET_LINK_LIBRARIES( vpdfl_test_all vpdfl vpl testlib )
-
 
 ADD_TEST( vpdfl_test_axis_gaussian vpdfl_test_all test_axis_gaussian )
 ADD_TEST( vpdfl_test_gaussian vpdfl_test_all test_gaussian )
