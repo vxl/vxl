@@ -22,52 +22,54 @@ static void fill_rand(vcl_complex<double> *b, vcl_complex<double> *e, vnl_random
     (*p) = vcl_complex<double>( rng.drand64(-1.0, +1.0), rng.drand64(-1.0, +1.0) );
 }
 
-// Driver
-void test_complex() {
-  {
-    vcl_complex<double> a(-5), b(7,-1), c;
-    c = a + b;
-    c = a - b;
-    c = a * b;
-    c = a / b;
-    a += b;
-    a -= b;
-    a *= b;
-    a /= b;
-    vcl_cout << "a=" << a << '\n'
-             << "b=" << b << '\n'
-             << "c=" << c << '\n'
-             << '\n';
-  }
+static void test_operators()
+{
+  vcl_complex<double> a(-5), b(7,-1), c;
+  c = a + b;
+  c = a - b;
+  c = a * b;
+  c = a / b;
+  a += b;
+  a -= b;
+  a *= b;
+  a /= b;
+  vcl_cout << "a=" << a << '\n'
+           << "b=" << b << '\n'
+           << "c=" << c << '\n'
+           << '\n';
+}
 
-  {
-    vnl_random rng(9667566);
-    vnl_vector<vcl_complex<double> > a(5); fill_rand(a.begin(), a.end(), rng);
-    vnl_vector<vcl_complex<double> > b(5); fill_rand(b.begin(), b.end(), rng);
+static void test_vector()
+{
+  vnl_random rng(9667566);
+  vnl_vector<vcl_complex<double> > a(5); fill_rand(a.begin(), a.end(), rng);
+  vnl_vector<vcl_complex<double> > b(5); fill_rand(b.begin(), b.end(), rng);
 
-    vcl_cout << "a=" << a << '\n'
-             << "b=" << b << '\n';
+  vcl_cout << "a=" << a << '\n'
+           << "b=" << b << '\n';
 
-    vcl_complex<double> i(0,1);
+  vcl_complex<double> i(0,1);
 
-    vcl_cout << dot_product(a,b) << '\n';
-    testlib_test_assert_near("inner_product() conjugates correctly",
-                             inner_product(i*a,b), i*inner_product(a,b));
-    testlib_test_assert_near("inner_product() conjugates correctly",
-                             inner_product(a,i*b),-i*inner_product(a,b));
+  vcl_cout << dot_product(a,b) << '\n';
+  testlib_test_assert_near("inner_product() conjugates correctly",
+                           inner_product(i*a,b), i*inner_product(a,b));
+  testlib_test_assert_near("inner_product() conjugates correctly",
+                           inner_product(a,i*b),-i*inner_product(a,b));
 
-    testlib_test_assert_near("dot_product() does not conjugate",
-                             dot_product(i*a,b), i*dot_product(a,b));
-    testlib_test_assert_near("dot_product() does not conjugate",
-                             dot_product(a,i*b), i*dot_product(a,b));
+  testlib_test_assert_near("dot_product() does not conjugate",
+                           dot_product(i*a,b), i*dot_product(a,b));
+  testlib_test_assert_near("dot_product() does not conjugate",
+                           dot_product(a,i*b), i*dot_product(a,b));
 
-    double norma=0;
-    for (unsigned n=0; n<a.size(); ++n)
-      norma += vcl_real(a[n])*vcl_real(a[n]) + vcl_imag(a[n])*vcl_imag(a[n]);
-    norma = vcl_sqrt(norma);
-    testlib_test_assert_near("correct magnitude", norma, a.magnitude());
-  }
+  double norma=0;
+  for (unsigned n=0; n<a.size(); ++n)
+    norma += vcl_real(a[n])*vcl_real(a[n]) + vcl_imag(a[n])*vcl_imag(a[n]);
+  norma = vcl_sqrt(norma);
+  testlib_test_assert_near("correct magnitude", norma, a.magnitude());
+}
 
+static void test_cosine()
+{
   int seed = 12345;
   for (int i=0; i<20; ++i)
   {
@@ -82,6 +84,13 @@ void test_complex() {
     vcl_cout << c << ' ' << d << ' ' << e << '\n';
     testlib_test_assert_near("acos", c, e, 1e-12);
   }
+}
+
+void test_complex()
+{
+  test_operators();
+  test_vector();
+  test_cosine();
 }
 
 TESTMAIN(test_complex);
