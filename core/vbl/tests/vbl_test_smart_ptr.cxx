@@ -1,34 +1,6 @@
-#include "vbl_test_smart_ptr.h"
+#include "vbl_test_classes.h"
 #include <vcl/vcl_list.h>
 #include <vbl/vbl_smart_ptr.h>
-
-//----------------------------------------------------------------------
-
-base_impl::base_impl(int nn) : n(nn) {
-  reftotal++;
-  cout <<  "base_impl ctor : this=" << (void*)this << endl;
-}
-
-base_impl::base_impl() : n(7) {
-  reftotal++;
-  cout <<  "base_impl ctor : this=" << (void*)this << endl;
-}
-
-base_impl::~base_impl() {
-  reftotal--;
-  cout <<  "base_impl dtor : this=" << (void*)this << endl;
-}
-
-void base_impl::Print (ostream &str) {
-  str << "base_impl(" << n << ") ";
-}
-  
-void base_impl::checkcount () {
-  if (reftotal == 0)
-    cout << "base_impl : PASSED" << endl;
-  else
-    cout << "base_impl : FAILED : count = " << reftotal << endl;
-} 
 
 //----------------------------------------------------------------------
 
