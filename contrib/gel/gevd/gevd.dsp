@@ -221,6 +221,21 @@ SOURCE=.\gevd_xpixel.h
 SOURCE=.\gevd_clean_edgels.h
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\gevd_edgel_regions.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_intensity_face.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_region_edge.h
+
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
