@@ -268,7 +268,7 @@ bool vimt_gaussian_pyramid_builder_2d<T>::is_class(vcl_string const& s) const
 template<class T>
 short vimt_gaussian_pyramid_builder_2d<T>::version_no() const
 {
-  return 1;
+  return 2;
 }
 
 //=======================================================================
@@ -307,7 +307,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,version);
   switch (version)
   {
-  case (1):
+  case (2):
     vsl_b_read(bfs,max_levels_);
     vsl_b_read(bfs,filter_width_);
     break;
