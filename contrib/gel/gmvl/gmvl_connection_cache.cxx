@@ -163,7 +163,5 @@ ostream &operator<<( ostream &os, const gmvl_connection_cache &c)
       os << ">";
     }
 
-  os << endl << c.cachebool_ << endl;
-
   return os;
 }

@@ -6,12 +6,23 @@
 #endif
 #include "gmvl_helpers.h"
 
+#include <vcl/vcl_iostream.h>
 #include <vcl/vcl_fstream.h>
 #include <vil/vil_image.h>
 #include <vil/vil_load.h>
 #include <gmvl/gmvl_corner_node.h>
 #include <gmvl/gmvl_image_node.h>
 
+
+// input output
+ostream &operator<<( ostream &os, const vcl_vector<gmvl_node_ref> &r)
+{
+  for( int i=0; i< r.size(); i++) os << *r[i];
+  return os;
+}
+
+
+// loaders and savers
 
 vcl_vector<gmvl_node_ref> gmvl_load_raw_corners( const vcl_string filename)
 {
@@ -27,15 +38,21 @@ vcl_vector<gmvl_node_ref> gmvl_load_raw_corners( const vcl_string filename)
       
       if( fin.good()) corners.push_back( new gmvl_corner_node( x, y));
     }
+
+  cerr << "gmvl_load_raw_corners: loaded " << corners.size() << " corners from " << filename << endl;
   
   return corners;
 }
-
 
 gmvl_node_ref gmvl_load_image( const vcl_string filename)
 {
   vil_image image= vil_load( filename.c_str());
   gmvl_image_node *node= new gmvl_image_node( image);
+
+  if( image)
+    cerr << "gmvl_load_image: load image from " << filename << endl;
+  else
+    cerr << "gmvl_load_image: failed to load image from " << filename << endl;
 
   return gmvl_node_ref( node);
 }

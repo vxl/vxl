@@ -18,9 +18,6 @@ class gmvl_database
 {
 public:
 
-  // methods on database node to node connections
-
-
   // methods on database nodes
   void add_node( const gmvl_node_ref node);
   void remove_node( const gmvl_node_ref node);
@@ -36,8 +33,11 @@ public:
   vcl_vector<gmvl_node_ref> get_connected_nodes( const gmvl_node_ref node1, const gmvl_node_ref node2, const gmvl_node_ref node3) const;
   vcl_vector<gmvl_node_ref> get_connected_nodes( const vcl_vector<gmvl_node_ref> nodes) const;
 
+  // lookup a particular tag (returns null if not found)
+  gmvl_node_ref find_tag( const vcl_string &string) const;
+
   // output
-  friend ostream &operator<<( ostream &os, const gmvl_database db);
+  friend ostream &operator<<( ostream &os, const gmvl_database &db);
 
 protected:
 
@@ -45,7 +45,7 @@ protected:
   gmvl_connection_cache connectioncache_;
 };
 
-ostream &operator<<( ostream &os, const gmvl_database db);
+ostream &operator<<( ostream &os, const gmvl_database &db);
 
 
 #endif

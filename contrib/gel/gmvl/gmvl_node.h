@@ -28,6 +28,9 @@ public:
   gmvl_node();
   virtual ~gmvl_node();
 
+  // getter
+  vcl_string &type() { return type_; }
+
   // input output
   friend ostream &operator<<( ostream &os, gmvl_node &node);
 

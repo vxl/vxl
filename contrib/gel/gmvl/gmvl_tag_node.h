@@ -17,6 +17,9 @@ public:
   gmvl_tag_node( const vcl_string name);
   ~gmvl_tag_node();
 
+  // accessor
+  vcl_string &get() { return name_; }
+
 protected:
 
   vcl_string name_;

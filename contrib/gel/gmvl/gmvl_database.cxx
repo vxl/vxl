@@ -7,6 +7,8 @@
 #include "gmvl_database.h"
 
 
+#include <gmvl/gmvl_tag_node.h>
+
 
 // specific node references
 
@@ -19,6 +21,21 @@ void gmvl_database::remove_node( const gmvl_node_ref node)
 {
   nodecache_.remove( node);
   connectioncache_.rebuild();
+}
+
+gmvl_node_ref gmvl_database::find_tag( const vcl_string &string) const
+{
+  vcl_vector<gmvl_node_ref> tags= nodecache_.get( "gmvl_tag_node");
+
+  for( int i=0; i< tags.size(); i++)
+    {
+      gmvl_node *ptr= tags[i].ptr();
+
+      if( (( gmvl_tag_node *) ptr)->get()== string)
+	return tags[i];
+    }
+
+  return gmvl_node_ref(0);
 }
 
 // specific connection references
@@ -111,7 +128,7 @@ vcl_vector<gmvl_node_ref> gmvl_database::get_connected_nodes( const vcl_vector<g
 
 // input / output
 
-ostream &operator<<( ostream &os, const gmvl_database db)
+ostream &operator<<( ostream &os, const gmvl_database &db)
 {
   os << "gmvl_database:" << endl;
 
