@@ -29,8 +29,8 @@
 
 #include <vcl_new.h>
 #include <vcl_cstddef.h>
-#include <vcl_cstdlib.h>
-#include <vcl_climits.h>
+//#include <vcl_cstdlib.h>
+//#include <vcl_climits.h>
 #include "vcl_alloc.h"
 #include "vcl_algobase.h"
 

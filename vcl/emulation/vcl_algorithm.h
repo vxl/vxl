@@ -51,8 +51,8 @@
  *
  */
 
-#include <vcl_cstdlib.h>
-#include <vcl_climits.h>
+//#include <vcl_cstdlib.h>
+//#include <vcl_climits.h>
 #include "vcl_algobase.h"
 #include "vcl_heap.h"
 #include "vcl_tempbuf.h"

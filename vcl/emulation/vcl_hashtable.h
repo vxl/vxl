@@ -1,3 +1,4 @@
+// This is vcl/emulation/vcl_hashtable.h
 //
 // Copyright (c) 1996
 // Silicon Graphics Computer Systems, Inc.
@@ -46,8 +47,6 @@
 // representations about the suitability of this software for any
 // purpose.  It is provided "as is" without express or implied warranty.
 //
-
-
 #ifndef vcl_emulation_hashtable_h
 #define vcl_emulation_hashtable_h
 
@@ -55,16 +54,15 @@
 // vcl_hash_set, vcl_hash_map, vcl_hash_multiset, and vcl_hash_multimap.
 
 
-#include <vcl_cstdlib.h>
+//#include <vcl_cstdlib.h>
 
 #include "vcl_alloc.h"
 #include <vcl_algorithm.h>
 #include <vcl_iterator.h>
-#include <vcl_functional.h>
 #include <vcl_vector.h>
 #include "vcl_pair.h"
 #include <vcl_exception.h>
-#include <vcl_memory.h>
+//#include <vcl_memory.h>
 
 #if defined ( __STL_USE_ABBREVS )
 # define vcl_hashtable_iterator         hTIt

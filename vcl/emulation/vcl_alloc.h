@@ -49,7 +49,7 @@
 #endif
 
 #include <vcl_cstddef.h>
-#include <vcl_cstdlib.h>
+//#include <vcl_cstdlib.h>
 //#include "vcl_string.h"
 #include <vcl_cstring.h>
 #include <vcl_cassert.h>

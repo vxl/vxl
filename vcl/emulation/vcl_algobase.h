@@ -54,7 +54,7 @@
 
 //#include "vcl_string.h"
 #include <vcl_cstring.h>
-#include <vcl_climits.h>
+//#include <vcl_climits.h>
 #include "vcl_functional.h"
 #include "vcl_pair.h"
 #include "vcl_iterator.h"

@@ -1,5 +1,5 @@
+// This is vcl/tests/test_vector.cxx
 #include <vcl_iostream.h>
-#include <vcl_algorithm.h>
 #include <vcl_iterator.h>
 #include <vcl_vector.h>
 

@@ -49,9 +49,9 @@
  *
  */
 
-#include <vcl_climits.h>
 #include <vcl_cstddef.h>
-#include <vcl_cstdlib.h>
+//#include <vcl_climits.h>
+//#include <vcl_cstdlib.h>
 #include "vcl_pair.h"
 
 template <class T>

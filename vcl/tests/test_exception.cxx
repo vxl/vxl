@@ -1,6 +1,6 @@
+// This is vcl/tests/test_exception.cxx
 #include <vcl_exception.h>
 #include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
 
 int test_exception_main(int /*argc*/,char* /*argv*/[])
 {

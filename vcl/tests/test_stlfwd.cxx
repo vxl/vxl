@@ -1,5 +1,5 @@
+// This is vcl/tests/test_stlfwd.cxx
 #include <vcl_functional.h>
-#include <vcl_utility.h>
 #include <vcl_string.h> // C++ specific includes first
 
 #if TEST == 1
