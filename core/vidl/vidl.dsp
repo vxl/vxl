@@ -132,6 +132,8 @@ SOURCE=.\Templates/vcl_list+vbl_smart_ptr+vidl_codec--.cxx
 SOURCE=.\Templates/vcl_vector+vbl_smart_ptr+vidl_frame--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vidl_codec.cxx
+# Begin Source File
 SOURCE=.\vidl_win_avicodec.cxx
 # End Source File
 # Begin Source File
