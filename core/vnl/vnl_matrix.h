@@ -97,8 +97,8 @@ class vnl_matrix
 
   //: Construct a matrix of size r rows by c columns, with a special type
   // Contents are specified by t
-   // Complexity $O(r.c)$
- vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t);        // r rows, c cols, special type
+  // Complexity $O(r.c)$
+  vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t);        // r rows, c cols, special type
 
   //: Construct a matrix of size r rows by c columns, initialised by an automatic array
   // The first n elements, are initialised row-wise, to values.
@@ -111,7 +111,7 @@ class vnl_matrix
   vnl_matrix(T const* data_block, unsigned r, unsigned c);      // fill row-wise.
 
   //: Copy construct a matrix
-   // Complexity $O(r.c)$
+  // Complexity $O(r.c)$
   vnl_matrix(vnl_matrix<T> const&);                             // from another matrix.
 
 #ifndef VXL_DOXYGEN_SHOULD_SKIP_THIS
@@ -144,11 +144,10 @@ class vnl_matrix
 
   //: Return number of columns
    // A synonym for cols()
- unsigned columns () const { return num_cols; }
+ unsigned columns ()  const { return num_cols; }
 
   //: Return number of columns
   // A synonym for columns()
-
   unsigned cols ()    const { return num_cols; }
 
   //: Return number of elements
@@ -451,7 +450,7 @@ class vnl_matrix
 
   ////----------------------- Input/Output ----------------------------
 
-  // : Read a vnl_matrix from an ascii vcl_istream, automatically
+  //: Read a vnl_matrix from an ascii vcl_istream, automatically
   // determining file size if the input matrix has zero size.
   static vnl_matrix<T> read(vcl_istream& s);
 
