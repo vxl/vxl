@@ -1,11 +1,9 @@
 // This is core/vcsl/vcsl_graph.h
-#ifndef vcsl_graph_h
-#define vcsl_graph_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
+#ifndef vcsl_graph_h_
+#define vcsl_graph_h_
 //:
 // \file
+// \brief Spatial coordinate system transformation graph
 // \author François BERTEL
 //
 // \verbatim
@@ -14,14 +12,15 @@
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 //   2002/01/28 Peter Vanroose - vcl_vector member vertices_ changed to non-ptr
 //   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
+//   2004/09/17 Peter Vanroose - made count() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim
 
-#include <vcsl/vcsl_graph_sptr.h>
-
 #include <vbl/vbl_ref_count.h>
-#include <vcl_vector.h>
+#include <vcsl/vcsl_graph_sptr.h>
 #include <vcsl/vcsl_spatial_sptr.h>
-//: Spatial coordinate system graph
+#include <vcl_vector.h>
+
+//: Spatial coordinate system transformation graph
 // Graph where nodes are spatial coordinate systems and arrows are
 // transformations. Only the nodes are in the graph class. The transformations
 // are in the spatial coordinates systems
@@ -33,31 +32,31 @@ class vcsl_graph
   // Constructors/Destructor
   //***************************************************************************
 
-  //: Default constructor
-  explicit vcsl_graph(void) {}
+  // Default constructor
+  vcsl_graph() {}
 
   // Copy constructor
   vcsl_graph(vcsl_graph const& x) : vbl_ref_count(), vertices_(x.vertices_) {}
 
-  //: Destructor
-  virtual ~vcsl_graph() {}
+  // Destructor
+  ~vcsl_graph() {}
 
   //***************************************************************************
   // Measurement
   //***************************************************************************
 
   //: Number of coordinate systems
-  virtual int count(void) const;
+  unsigned int count() const { return vertices_.size(); }
 
   //***************************************************************************
   // Status report
   //***************************************************************************
 
   //: Has `this' `cs' as node ?
-  virtual bool has(const vcsl_spatial_sptr &cs) const;
+  bool has(const vcsl_spatial_sptr &cs) const;
 
   //: Is `index' valid in the list of the spatial coordinate systems ?
-  virtual bool valid_index(int index) const;
+  bool valid_index(unsigned int index) const { return index < count(); }
 
   //***************************************************************************
   // Access
@@ -65,15 +64,15 @@ class vcsl_graph
 
   //: Spatial coordinate system number `index'
   //  REQUIRE: valid_index(index)
-  virtual vcsl_spatial_sptr item(int index) const;
+  vcsl_spatial_sptr item(unsigned int index) const;
 
   //: Add `cs' in `this'
   //  REQUIRE: !has(cs)
-  virtual void put(const vcsl_spatial_sptr &cs);
+  void put(const vcsl_spatial_sptr &cs);
 
   //: Remove `cs' from `this'
   //  REQUIRE: has(cs)
-  virtual void remove(const vcsl_spatial_sptr &cs);
+  void remove(const vcsl_spatial_sptr &cs);
 
   //***************************************************************************
   // Basic operations
@@ -81,7 +80,7 @@ class vcsl_graph
 
   //: Set the flag `reached' to false for each spatial coordinate system.
   //  Used by the search path algorithm
-  virtual void init_vertices(void) const;
+  void init_vertices() const;
 
  protected:
 
@@ -89,4 +88,4 @@ class vcsl_graph
   vcl_vector<vcsl_spatial_sptr> vertices_;
 };
 
-#endif // vcsl_graph_h
+#endif // vcsl_graph_h_

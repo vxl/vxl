@@ -1,28 +1,7 @@
 // This is core/vcsl/vcsl_graph.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 #include "vcsl_graph.h"
-
 #include <vcl_cassert.h>
-
 #include <vcsl/vcsl_spatial.h>
-
-//***************************************************************************
-// Measurement
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-// Number of coordinate systems
-//---------------------------------------------------------------------------
-int vcsl_graph::count(void) const
-{
-  return vertices_.size();
-}
-
-//***************************************************************************
-// Status report
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Has `this' `cs' as node ?
@@ -41,22 +20,10 @@ bool vcsl_graph::has(const vcsl_spatial_sptr &cs) const
 }
 
 //---------------------------------------------------------------------------
-// Is `index' valid in the list of the spatial coordinate systems ?
-//---------------------------------------------------------------------------
-bool vcsl_graph::valid_index(int index) const
-{
-  return (index>=0)&&(index<count());
-}
-
-//***************************************************************************
-// Access
-//***************************************************************************
-
-//---------------------------------------------------------------------------
 // Spatial coordinate system number `index'
 // REQUIRE: valid_index(index)
 //---------------------------------------------------------------------------
-vcsl_spatial_sptr vcsl_graph::item(int index) const
+vcsl_spatial_sptr vcsl_graph::item(unsigned int index) const
 {
   // require
   assert(valid_index(index));
@@ -92,13 +59,9 @@ void vcsl_graph::remove(const vcsl_spatial_sptr &cs)
   vertices_.erase(i);
 }
 
-//***************************************************************************
-// Basic operations
-//***************************************************************************
-
 // Set the flag `reached' to false for each spatial coordinate system
 // Used by the search path algorithm
-void vcsl_graph::init_vertices(void) const
+void vcsl_graph::init_vertices() const
 {
   vcl_vector<vcsl_spatial_sptr>::const_iterator i;
 
