@@ -559,7 +559,7 @@ bool bmrf_network_builder::add_frame_nodes()
     bmrf_epi_seg_sptr seg = nit->second->epi_seg();
     double min_s = seg->min_s();
     double max_s = seg->max_s();
-    for (double s = min_s; s<max_s; s=1.0/(1.0/s - max_delta_recip_s_/2.0))
+    for (double s = min_s; s<max_s; s+=5.0)
       s_node_map_.insert(vcl_pair<double,bmrf_node_sptr>(s, nit->second));
 
     s_node_map_.insert(vcl_pair<double,bmrf_node_sptr>(max_s, nit->second));
@@ -632,7 +632,7 @@ bool bmrf_network_builder::assign_neighbors()
       bmrf_arc_sptr temp_arc = new bmrf_arc(nit->second, *nnit);
       double total_error = temp_arc->induced_match_error()/2.0
                           +temp_arc->avg_intensity_error()/(2.0*int_var);
-      if (total_error < 10.0){
+      if (total_error < 100.0){
         network_->add_arc(temp_arc,            bmrf_node::TIME);
         network_->add_arc(temp_arc->reverse(), bmrf_node::TIME);
       }
