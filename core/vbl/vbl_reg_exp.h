@@ -12,8 +12,8 @@
 // .LIBRARY vbl
 // .HEADER Basics Package
 // .INCLUDE vbl/vbl_reg_exp.h
-// .FILE vbl/vbl_reg_exp.cxx
-// .EXAMPLE vbl/examples/vbl_reg_exp_example.cxx
+// .FILE vbl_reg_exp.cxx
+// .EXAMPLE examples/vbl_reg_exp_example.cxx
 //
 #ifndef vbl_reg_exph
 #define vbl_reg_exph

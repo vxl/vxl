@@ -15,8 +15,8 @@
 // .LIBRARY vbl
 // .HEADER Basics package
 // .INCLUDE vbl/vbl_timer.h
-// .FILE vbl/vbl_timer.cxx
-// .EXAMPLE vbl/examples/vbl_timer.cxx
+// .FILE vbl_timer.cxx
+// .EXAMPLE examples/vbl_timer.cxx
 //
 //
 // .SECTION Description
