@@ -117,6 +117,9 @@ SOURCE=.\Templates/vnl_convolve+int.double-.cxx
 SOURCE=.\Templates/vnl_convolve+int.int-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_determinant.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_determinant+double-.cxx
 # End Source File
 # Begin Source File

@@ -104,6 +104,9 @@ SOURCE=.\vil_io_memory_chunk.cxx
 # Begin Source File
 SOURCE=.\Templates/vil_io_smart_ptr+vil_memory_chunk-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vil_image_view+float--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
