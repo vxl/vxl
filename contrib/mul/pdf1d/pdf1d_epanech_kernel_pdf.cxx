@@ -141,11 +141,11 @@ double pdf1d_epanech_kernel_pdf::gradient(double x0,
 
 //=======================================================================
 
-double pdf1d_epanech_kernel_pdf::nearest_plausible(double x, double log_p_min) const
+double pdf1d_epanech_kernel_pdf::nearest_plausible(double /*x*/, double /*log_p_min*/) const
 {
-  vcl_cerr<<"pdf1d_epanech_kernel_pdf::nearest_plausible() Not yet implemented.\n";
+  vcl_cerr<<"pdf1d_epanech_kernel_pdf::nearest_plausible() not yet implemented.\n";
   vcl_abort();
-  return 0;
+  return 0.0;
 }
 
 //=======================================================================

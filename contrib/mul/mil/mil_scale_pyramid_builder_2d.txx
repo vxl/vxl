@@ -2,9 +2,9 @@
 #ifndef mil_scale_pyramid_builder_2d_txx_
 #define mil_scale_pyramid_builder_2d_txx_
 //:
-//  \file
-//  \brief Build Gaussian image pyramids at any scale separation
-//  \author Ian Scott
+// \file
+// \brief Build Gaussian image pyramids at any scale separation
+// \author Ian Scott
 
 #include "mil_scale_pyramid_builder_2d.h"
 #include <vcl_cstdlib.h>
@@ -301,8 +301,8 @@ void mil_scale_pyramid_builder_2d<T>::setMaxLevels(int max_l)
 {
   if (max_l<1)
   {
-    vcl_cerr<<"mil_gaussian_pyramid_builder_2d<T>::setMaxLevels() ";
-    vcl_cerr<<"Must be >=1\n";
+    vcl_cerr<<"mil_scale_pyramid_builder_2d<T>::setMaxLevels() "
+            <<"parameter must be >=1\n";
     vcl_abort();
   }
   max_levels_ = max_l;
@@ -362,7 +362,7 @@ mil_image_pyramid_builder* mil_scale_pyramid_builder_2d<T>::clone() const
 //=======================================================================
 
 template <class T>
-void mil_scale_pyramid_builder_2d<T>::print_summary(vcl_ostream& os) const
+void mil_scale_pyramid_builder_2d<T>::print_summary(vcl_ostream& /*os*/) const
 {
   vcl_cerr << "mil_scale_pyramid_builder_2d<T>::print_summary() NYI\n";
 }
@@ -394,8 +394,8 @@ void mil_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
     set_scale_step(scale);
     break;
   default:
-    vcl_cerr << "I/O ERROR: mil_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: mil_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

@@ -38,22 +38,24 @@ vcl_string mbl_ar_process<T>::is_a() const
 
 //: Print class to os
 template<class T>
-void mbl_ar_process<T>::print_summary(vcl_ostream& os) const
+void mbl_ar_process<T>::print_summary(vcl_ostream& /*os*/) const
 {
-    // os << data_; // example of data output
+#if 0
+    os << data_; // example of data output
+#endif
     vcl_cerr << "mbl_ar_process<T>::print_summary() is NYI\n";
 }
 
 //: Save class to binary file stream
 template  <class T>
-void mbl_ar_process<T>::b_write(vsl_b_ostream& bfs) const
+void mbl_ar_process<T>::b_write(vsl_b_ostream& /*bfs*/) const
 {
   vcl_cout<<"mbl_ar_process<T>::b_write - NYI !\n";
 }
 
 //: Load class from binary file stream
 template  <class T>
-void mbl_ar_process<T>::b_read(vsl_b_istream& bfs)
+void mbl_ar_process<T>::b_read(vsl_b_istream& /*bfs*/)
 {
   vcl_cout<<"mbl_ar_process<T>::b_read - NYI !\n";
 }
@@ -125,10 +127,7 @@ void mbl_ar_process<T>::learn_burg(vcl_vector<vnl_vector<T> >& data)
 
     E=dot_product(Ef,Ef)/((T)dim);
 
-    vnl_vector<T> a(3);
-    a[0]=(T)1.0;
-    a[1]=(T)0.0;
-    a[2]=(T)0.0;
+    vnl_vector<T> a(3, T(1),T(0),T(0));
     T km;
     for (unsigned int i=0;i<2;i++)
     {

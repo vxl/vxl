@@ -360,7 +360,7 @@ vimt_image_pyramid_builder* vimt_scale_pyramid_builder_2d<T>::clone() const
 //=======================================================================
 
 template <class T>
-void vimt_scale_pyramid_builder_2d<T>::print_summary(vcl_ostream& os) const
+void vimt_scale_pyramid_builder_2d<T>::print_summary(vcl_ostream& /*os*/) const
 {
   vcl_cerr << "vimt_scale_pyramid_builder_2d<T>::print_summary() NYI\n";
 }

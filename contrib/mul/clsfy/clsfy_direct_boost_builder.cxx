@@ -14,9 +14,6 @@
 //  classifiers one at a time, choosing the best at each step.
 //  The classifiers are trained to distinguish the examples mis-classified
 //  by the currently selected classifiers.
-// \verbatim
-// Modifications
-// \endverbatim
 
 #include "clsfy_direct_boost_builder.h"
 #include "clsfy_direct_boost.h"
@@ -471,10 +468,12 @@ clsfy_builder_base* clsfy_direct_boost_builder::clone() const
 //=======================================================================
 
 // required if data is present in this base class
-void clsfy_direct_boost_builder::print_summary(vcl_ostream& os) const
+void clsfy_direct_boost_builder::print_summary(vcl_ostream& /*os*/) const
 {
-  // clsfy_builder_base::print_summary(os); // Uncomment this line if it has one.
-  // vsl_print_summary(os, data_); // Example of data output
+#if 0
+  clsfy_builder_base::print_summary(os); // Uncomment this line if it has one.
+  vsl_print_summary(os, data_); // Example of data output
+#endif
 
   vcl_cerr << "clsfy_direct_boost_builder::print_summary() NYI\n";
 }
@@ -482,18 +481,20 @@ void clsfy_direct_boost_builder::print_summary(vcl_ostream& os) const
 //=======================================================================
 
 // required if data is present in this base class
-void clsfy_direct_boost_builder::b_write(vsl_b_ostream& bfs) const
+void clsfy_direct_boost_builder::b_write(vsl_b_ostream& /*bfs*/) const
 {
-  //vsl_b_write(bfs, version_no());
-  //clsfy_builder_base::b_write(bfs);  // Needed if base has any data
-  //vsl_b_write(bfs, data_);
+#if 0
+  vsl_b_write(bfs, version_no());
+  clsfy_builder_base::b_write(bfs);  // Needed if base has any data
+  vsl_b_write(bfs, data_);
+#endif
   vcl_cerr << "clsfy_direct_boost_builder::b_write() NYI\n";
 }
 
 //=======================================================================
 
 // required if data is present in this base class
-void clsfy_direct_boost_builder::b_read(vsl_b_istream& bfs)
+void clsfy_direct_boost_builder::b_read(vsl_b_istream& /*bfs*/)
 {
   vcl_cerr << "clsfy_direct_boost_builder::b_read() NYI\n";
 #if 0
@@ -508,8 +509,8 @@ void clsfy_direct_boost_builder::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,data_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_direct_boost_builder&) \n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_direct_boost_builder&) \n"
+             << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

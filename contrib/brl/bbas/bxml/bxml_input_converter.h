@@ -1,20 +1,19 @@
 #ifndef bxml_input_converter_h_
 #define bxml_input_converter_h_
-
 //-----------------------------------------------------------------------------
 //:
 // \file
 // \author J.L. Mundy
 // \brief The base class for xml input conversion.
 //
-// \verbatim
 // The current clear operation explicitly uses vsol_spatial_object_2d
 // class methods.  These clear operations should be lower in the
 // class hierarchies.  When more class roots are needed the clear should
 // be abstracted.
 //
-// Initial version December 07, 2002
-// Based on the TargetJr design by R. Kaucic
+// \verbatim
+//  Initial version December 07, 2002
+//  Based on the TargetJr design by R. Kaucic
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -51,9 +50,9 @@ class bxml_input_converter : public vbl_ref_count
   bool   get_bool_attr(DOM_Node& node,vcl_string attr_name);
 
   //:basic conversion methods
-  virtual bool extract_ref_object_atrs(DOM_Node& node){return false;}
-  virtual bool extract_object_atrs(DOM_Node& node){return false;}
-  virtual bool extract_from_dom(DOM_Node& node) = 0;
+  virtual bool extract_ref_object_atrs(DOM_Node& /*node*/){return false;}
+  virtual bool extract_object_atrs(DOM_Node& /*node*/){return false;}
+  virtual bool extract_from_dom(DOM_Node& /*node*/) = 0;
   virtual bxml_generic_ptr construct_object()=0;
   //:utilities
   void set_debug(bool debug){debug_=debug;}

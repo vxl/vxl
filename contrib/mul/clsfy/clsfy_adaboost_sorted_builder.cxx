@@ -421,10 +421,12 @@ clsfy_builder_base* clsfy_adaboost_sorted_builder::clone() const
 //=======================================================================
 
     // required if data is present in this base class
-void clsfy_adaboost_sorted_builder::print_summary(vcl_ostream& os) const
+void clsfy_adaboost_sorted_builder::print_summary(vcl_ostream& /*os*/) const
 {
-  // clsfy_builder_base::print_summary(os); // Uncomment this line if it has one.
-  // vsl_print_summary(os, data_); // Example of data output
+#if 0
+  clsfy_builder_base::print_summary(os); // Uncomment this line if it has one.
+  vsl_print_summary(os, data_); // Example of data output
+#endif
 
   vcl_cerr << "clsfy_adaboost_sorted_builder::print_summary() NYI\n";
 }
@@ -432,18 +434,20 @@ void clsfy_adaboost_sorted_builder::print_summary(vcl_ostream& os) const
 //=======================================================================
 
   // required if data is present in this base class
-void clsfy_adaboost_sorted_builder::b_write(vsl_b_ostream& bfs) const
+void clsfy_adaboost_sorted_builder::b_write(vsl_b_ostream& /*bfs*/) const
 {
-  //vsl_b_write(bfs, version_no());
-  //clsfy_builder_base::b_write(bfs);  // Needed if base has any data
-  //vsl_b_write(bfs, data_);
+#if 0
+  vsl_b_write(bfs, version_no());
+  clsfy_builder_base::b_write(bfs);  // Needed if base has any data
+  vsl_b_write(bfs, data_);
+#endif
   vcl_cerr << "clsfy_adaboost_sorted_builder::b_write() NYI\n";
 }
 
 //=======================================================================
 
   // required if data is present in this base class
-void clsfy_adaboost_sorted_builder::b_read(vsl_b_istream& bfs)
+void clsfy_adaboost_sorted_builder::b_read(vsl_b_istream& /*bfs*/)
 {
   vcl_cerr << "clsfy_adaboost_sorted_builder::b_read() NYI\n";
 #if 0

@@ -159,7 +159,7 @@ void pdf1d_kernel_pdf_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>&
 
 void pdf1d_kernel_pdf_builder::weighted_build(pdf1d_pdf& model,
                                               mbl_data_wrapper<double>& data,
-                                              const vcl_vector<double>& wts) const
+                                              const vcl_vector<double>& /*wts*/) const
 {
   vcl_cerr<<"pdf1d_kernel_pdf_builder::weighted_build() Ignoring weights.\n";
   build(model,data);

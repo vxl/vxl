@@ -88,7 +88,7 @@ pdf1d_builder* pdf1d_gaussian_kernel_pdf_builder::clone() const
 // Method: print
 //=======================================================================
 
-void pdf1d_gaussian_kernel_pdf_builder::print_summary(vcl_ostream& os) const
+void pdf1d_gaussian_kernel_pdf_builder::print_summary(vcl_ostream& /*os*/) const
 {
   vcl_cerr << "pdf1d_gaussian_kernel_pdf_builder::print_summary() NYI\n";
 }

@@ -588,13 +588,13 @@ void gevd_edgel_regions::GrowEquivalenceClasses()
 //------------------------------------------------------------
 //: Check if the SpatialGroup contains Edge(s)
 //
-bool gevd_edgel_regions::GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& sg)
+bool gevd_edgel_regions::GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& /*sg*/)
 {
   vcl_cerr << "gevd_edgel_regions::GroupContainsEdges() not yet implemented\n";
 #if 0
-  CoolString type(sg.GetSpatialGroupName());
-  return type == CoolString("EdgelGroup") ||
-         type == CoolString("FittedEdgeGroup");
+  vcl_string type(sg.GetSpatialGroupName());
+  return type == vcl_string("EdgelGroup") ||
+         type == vcl_string("FittedEdgeGroup");
 #endif
   return true; // TODO
 }

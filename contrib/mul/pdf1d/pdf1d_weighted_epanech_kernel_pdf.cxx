@@ -120,7 +120,7 @@ bool pdf1d_weighted_epanech_kernel_pdf::cdf_is_analytic() const
 //=======================================================================
 
 double pdf1d_weighted_epanech_kernel_pdf::gradient(double x0,
-                                double& p) const
+                                                   double& p) const
 {
   const double* x = x_.data_block();
   const double* w = width_.data_block();
@@ -150,11 +150,11 @@ double pdf1d_weighted_epanech_kernel_pdf::gradient(double x0,
 
 //=======================================================================
 
-double pdf1d_weighted_epanech_kernel_pdf::nearest_plausible(double x, double log_p_min) const
+double pdf1d_weighted_epanech_kernel_pdf::nearest_plausible(double /*x*/, double /*log_p_min*/) const
 {
-  vcl_cerr<<"pdf1d_weighted_epanech_kernel_pdf::nearest_plausible() Not yet implemented.\n";
+  vcl_cerr<<"pdf1d_weighted_epanech_kernel_pdf::nearest_plausible() not yet implemented.\n";
   vcl_abort();
-  return 0;
+  return 0.0;
 }
 
 //=======================================================================

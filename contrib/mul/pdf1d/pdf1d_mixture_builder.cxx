@@ -135,9 +135,9 @@ double pdf1d_mixture_builder::min_var() const
 //=======================================================================
 
 //: Build default model with given mean
-void pdf1d_mixture_builder::build(pdf1d_pdf& model, double mean) const
+void pdf1d_mixture_builder::build(pdf1d_pdf& /*model*/, double /*mean*/) const
 {
-  vcl_cerr<<"pdf1d_mixture_builder::build(model,mean) Not yet implemented.\n";
+  vcl_cerr<<"pdf1d_mixture_builder::build(model,mean) not yet implemented.\n";
   vcl_abort();
 }
 

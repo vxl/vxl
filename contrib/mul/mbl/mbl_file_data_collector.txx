@@ -178,13 +178,13 @@ void mbl_file_data_collector<T>::print_summary(vcl_ostream& os) const
 }
 
 template <class T>
-void mbl_file_data_collector<T>::b_write(vsl_b_ostream& bfs) const
+void mbl_file_data_collector<T>::b_write(vsl_b_ostream& /*bfs*/) const
 {
   vcl_cout<<"mbl_file_data_collector<T>::b_write - Can't save collector!\n";
 }
 
 template <class T>
-void mbl_file_data_collector<T>::b_read(vsl_b_istream& bfs)
+void mbl_file_data_collector<T>::b_read(vsl_b_istream& /*bfs*/)
 {
   vcl_cout<<"mbl_file_data_collector<T>::b_read - Can't load collector!\n";
 }

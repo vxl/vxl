@@ -23,9 +23,9 @@
 
 static bool verbose = false;
 
-static bool near_equal(vdgl_digital_curve_sptr dc1, vdgl_digital_curve_sptr dc2, float tolerance)
+static bool near_equal(vdgl_digital_curve_sptr /*dc1*/, vdgl_digital_curve_sptr /*dc2*/, float /*tolerance*/)
 {
-  vcl_cerr << __FILE__ << ": near_equal() not yet implemented\n";
+  vcl_cerr << __FILE__ << ": near_equal(dc1,dc2) not yet implemented\n";
   return false; // TODO
 #if 0
   if (!(dc1&&dc2))
