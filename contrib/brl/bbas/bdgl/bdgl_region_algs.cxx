@@ -151,22 +151,21 @@ bdgl_region_algs::earth_mover_distance(vdgl_digital_region_sptr const& r1,
   //Match up the smallest intensities in the smaller region with
   //the largest intensities in the larger region.  This provides a
   //measure of the distance between the two regions
-
-  float sum = 0;
+  double sum = 0;
   unsigned int n_smaller = n1; if (n2<n_smaller) n_smaller=n2;
   for (unsigned int i = 0; i<n_smaller; ++i)
   {
-    float d = I1[i] - I2[i];
+    double d = double(I1[i]) - double(I2[i]);
     sum += vcl_sqrt(d*d);
   }
   delete[] I1; delete[] I2;
   sum /= n_smaller;
 #ifdef DEBUG
   vcl_cout << "EarthMover Max Distance||(" << r1->Npix()
-           << ")(Xo:" << r1->Xo() << " Yo:" << r1 ->Yo()
-           << " Io:" << r1 ->Io() << ")::(" << r2->Npix()
-           << " Xo:" << r2->Xo() << " Yo:" << r2 ->Yo()
-           << " Io:" << r2 ->Io() <<")||= " << sum << vcl_endl;
+           << ")(Xo:"<< r1->Xo() << " Yo:" << r1->Yo()
+           << " Io:" << r1->Io() << ")::(" << r2->Npix()
+           << " Xo:" << r2->Xo() << " Yo:" << r2->Yo()
+           << " Io:" << r2->Io() << ")||= "<< sum << vcl_endl;
 #endif
-  return sum;
+  return float(sum);
 }
