@@ -1,6 +1,8 @@
 #include "QvInput.h"
 #include <vcl_cctype.h>
 #include <vcl_cstdlib.h>
+#undef sprintf // to circumvent a bug in libintl.h
+#undef fprintf
 #include <vcl_cstdio.h>
 #include "QvDebugError.h"
 #include "QvReadError.h"

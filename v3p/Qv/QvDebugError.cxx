@@ -2,6 +2,7 @@
 #include "QvDebugError.h"
 #include <vcl_iostream.h>
 #include <vcl_cstdarg.h>
+#undef vsprintf // to circumvent a bug in libintl.h
 #include <vcl_cstdio.h>
 
 QvDebugErrorCallback QvDebugError::callback_ = 0;  // mpichler, 19950713

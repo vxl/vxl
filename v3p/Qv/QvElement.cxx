@@ -1,4 +1,5 @@
 #include "QvElement.h"
+#include <vcl_iostream.h>
 
 const char *QvElement::nodeTypeNames[QvElement::NumNodeTypes] = {
     "Unknown",
@@ -34,5 +35,5 @@ QvElement::~QvElement()
 void
 QvElement::print()
 {
-  vcl_printf("\t\tElement of type %s\n", nodeTypeNames[type]);
+  vcl_cout << "\t\tElement of type " << nodeTypeNames[type] << '\n';
 }

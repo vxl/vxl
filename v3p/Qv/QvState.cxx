@@ -1,4 +1,5 @@
 #include "QvState.h"
+#include <vcl_iostream.h>
 
 const char *QvState::stackNames[QvState::NumStacks] = {
     "Camera",
@@ -73,15 +74,14 @@ QvState::popElement(StackIndex stackIndex)
 void
 QvState::print()
 {
-    vcl_printf("Traversal state:\n");
+    vcl_cout << "Traversal state:\n";
 
-    for (int i = 0; i < NumStacks; i++) {
-
-        vcl_printf("\tStack [%2d] (%s):\n", i, stackNames[i]);
+    for (int i = 0; i < NumStacks; i++)
+    {
+        vcl_cout << "\tStack [" << i << "] (" << stackNames[i] << "):\n";
 
         if (stacks[i] == NULL)
-            vcl_printf("\t\tNULL\n");
-
+            vcl_cout << "\t\tNULL\n";
         else
             for (QvElement *elt = stacks[i]; elt != NULL; elt = elt->next)
                 elt->print();
