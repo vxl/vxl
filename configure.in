@@ -379,6 +379,8 @@ else
 fi
 
 # fsm@robots
+AC_CHECK_HEADER(pthread.h,[VXL_HAS_PTHREAD_H=1],[VXL_HAS_PTHREAD_H=0])
+AC_CHECK_HEADER(semaphore.h,[VXL_HAS_SEMAPHORE_H=1],[VXL_HAS_SEMAPHORE_H=0])
 VXL_CXX_UNISTD
 VXL_CXX_WORDS
 VXL_CXX_HAS_QSORT
@@ -386,6 +388,7 @@ AC_CHECK_HEADER(ieeefp.h,[VXL_HAS_IEEEFP_H=1],[VXL_HAS_IEEEFP_H=0])
 VXL_CXX_MATH_HAS_FINITE
 VXL_CXX_IEEEFP_HAS_FINITE
 VXL_CXX_STDLIB_RAND48
+
 
 
 # check for bigendian
@@ -400,6 +403,10 @@ fi
 
 #--------------------------------------------------------------------------------
 # complete list of substitutions:
+
+# ...
+AC_SUBST(VXL_HAS_PTHREAD_H)
+AC_SUBST(VXL_HAS_SEMAPHORE_H)
 
 # libraries
 AC_SUBST(VXL_UNISTD_HAS_USECONDS_T)
@@ -436,10 +443,10 @@ TXXFLAGS=$given_TXXFLAGS
 
 
 AC_OUTPUT(
-vcl/vcl_config_manual.h~:../vcl/vcl_config_manual.h.in
-vcl/vcl_config_compiler.h~:../vcl/vcl_config_compiler.h.in
-vcl/vcl_config_headers.h~:../vcl/vcl_config_headers.h.in
-vxl/vxl_config.h~:../vxl/vxl_config.h.in
+vcl/vcl_config_manual.h~:vcl/vcl_config_manual.h.in
+vcl/vcl_config_compiler.h~:vcl/vcl_config_compiler.h.in
+vcl/vcl_config_headers.h~:vcl/vcl_config_headers.h.in
+vxl/vxl_config.h~:vxl/vxl_config.h.in
 )
 
 # only touch files that actually change.
