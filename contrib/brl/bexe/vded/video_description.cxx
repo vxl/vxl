@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vul/vul_arg.h>
 #include <vidl/vidl_io.h>
-#include <vidl/vidl_movie_sptr.h>
+#include <vidl/vidl_frame.h>
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_image_list_codec.h>
 
@@ -26,6 +26,7 @@
 //   vertical_resolution="768" bytes_pixel="3" />
 //  </vxl>
 //---------------------------------------------------------------------
+
 int main(int argc, char** argv)
 {
   // Register video codecs
