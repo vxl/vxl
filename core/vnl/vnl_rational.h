@@ -421,6 +421,10 @@ public:
   typedef double real_t;
 };
 
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<vnl_rational const> : public vnl_numeric_traits<vnl_rational> {
+};
+
 #include <vcl_complex.h>
 
 inline vnl_rational vnl_math_squared_magnitude(vcl_complex<vnl_rational> const& z) { return vcl_norm(z); }
@@ -453,6 +457,10 @@ public:
   typedef vcl_complex<vnl_rational> double_t;
   //: Name of type which results from multiplying this type with a double
   typedef vcl_complex<vnl_rational> real_t; // should be vcl_complex<double>, but that gives casting problems
+};
+
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<vcl_complex<vnl_rational> const> : public vnl_numeric_traits<vcl_complex<vnl_rational> > {
 };
 
 #endif // vnl_rational_h_
