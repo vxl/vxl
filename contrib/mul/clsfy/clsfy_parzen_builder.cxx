@@ -45,6 +45,14 @@ vcl_string clsfy_parzen_builder::is_a() const
 
 //=======================================================================
 
+bool clsfy_parzen_builder::is_class(vcl_string const& s) const
+{
+  static const vcl_string s_ = "clsfy_parzen_builder";
+  return s == s_ || clsfy_builder_base::is_class(s);
+}
+
+//=======================================================================
+
 clsfy_builder_base* clsfy_parzen_builder::clone() const
 {
   return new clsfy_parzen_builder(*this);
@@ -99,7 +107,12 @@ double clsfy_parzen_builder::build(clsfy_classifier_base& model,
                                    const vcl_vector<unsigned> &outputs) const
 {
   const unsigned n = inputs.size();
+  // cannot use dynamic_cast<> without rtti, which vxl doesn't enforce - PVr
+#if 0
   assert(dynamic_cast<clsfy_rbf_parzen *> (&model) != 0);
+#else
+  assert(model.is_class("clsfy_rbf_parzen"));
+#endif
   assert(n==outputs.size());
 
   clsfy_rbf_parzen &parzen = (clsfy_rbf_parzen&) model;

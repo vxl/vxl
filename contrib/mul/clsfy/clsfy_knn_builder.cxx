@@ -45,6 +45,14 @@ vcl_string clsfy_knn_builder::is_a() const
 
 //=======================================================================
 
+bool clsfy_knn_builder::is_class(vcl_string const& s) const
+{
+  static const vcl_string s_ = "clsfy_knn_builder";
+  return s == s_ || clsfy_builder_base::is_class(s);
+}
+
+//=======================================================================
+
 clsfy_builder_base* clsfy_knn_builder::clone() const
 {
   return new clsfy_knn_builder(*this);
@@ -98,7 +106,12 @@ double clsfy_knn_builder::build(clsfy_classifier_base& model,
                                 const vcl_vector<unsigned> &outputs) const
 {
   const unsigned n = inputs.size();
+  // cannot use dynamic_cast<> without rtti, which vxl doesn't enforce - PVr
+#if 0
   assert(dynamic_cast<clsfy_k_nearest_neighbour *> (&model) != 0);
+#else
+  assert(model.is_class("clsfy_k_nearest_neighbour"));
+#endif
   assert(n==outputs.size());
 
   clsfy_k_nearest_neighbour &knn = (clsfy_k_nearest_neighbour&) model;

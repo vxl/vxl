@@ -1,6 +1,4 @@
-
 //  Copyright: (C) 2001 British Telecommunications plc.
-  
 
 //:
 // \file
@@ -20,8 +18,8 @@
 #include <vcl_limits.h>
 #include <vcl_queue.h>
 #include <vcl_algorithm.h>
-#include <vnl/vnl_cost_function.h> 
-#include <vnl/algo/vnl_brent.h> 
+#include <vnl/vnl_cost_function.h>
+#include <vnl/algo/vnl_brent.h>
 
 #include <vsl/vsl_indent.h>
 #include <mbl/mbl_data_wrapper.h>
@@ -29,10 +27,10 @@
 #include <vnl/vnl_matrix.h>
 #include <vcl_vector.h>
 #include <mbl/mbl_mz_random.h>
-#include <vcl_cassert.h> 
-
+#include <vcl_cassert.h>
 
 #include <mbl/mbl_data_array_wrapper.h>
+
 //=======================================================================
 
 clsfy_rbf_svm_smo_1_builder::clsfy_rbf_svm_smo_1_builder()
@@ -58,26 +56,25 @@ double clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base& classifier,
   const int nSamples = inputs.size();
   assert(outputs.size() == nSamples);
   assert(*vcl_max_element(outputs.begin(), outputs.end()) <= 1);
-  
+
   assert(classifier.is_a() == "clsfy_rbf_svm");
-  clsfy_rbf_svm &svm = dynamic_cast<clsfy_rbf_svm &>(classifier);
-  
-  
+  clsfy_rbf_svm &svm = static_cast<clsfy_rbf_svm &>(classifier);
+
   clsfy_smo_1_rbf svAPI;
   vcl_vector<int> targets(nSamples);
   vcl_transform(outputs.begin(), outputs.end(),
     targets.begin(), class_to_svm_target);
-  
+
   svAPI.set_data(inputs, targets);
-    
-  
+
+
   // Set the SVM solver parameters
   svAPI.set_C(boundC_);
   svAPI.set_gamma(1.0/(2.0*rbf_width_*rbf_width_));
   // Solve the SVM
   svAPI.calc();
-  
-  
+
+
   // Get the SVM description, and build an SVM machine
   double sumAlphas = 0.0;
   {
@@ -94,12 +91,9 @@ double clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base& classifier,
         supportVectors.push_back(inputs.current());
       }
     svm.set(supportVectors, alphas, labels, rbf_width_, svAPI.bias());
-    
   }
-  
+
   return svAPI.error_rate();
-  
-  
 }
 
 //=======================================================================
@@ -133,6 +127,14 @@ void clsfy_rbf_svm_smo_1_builder::set_rbf_width(double rbf_width)
 vcl_string clsfy_rbf_svm_smo_1_builder::is_a() const
 {
   return vcl_string("clsfy_rbf_svm_smo_1_builder");
+}
+
+//=======================================================================
+
+bool clsfy_rbf_svm_smo_1_builder::is_class(vcl_string const& s) const
+{
+  static const vcl_string s_ = "clsfy_rbf_svm_smo_1_builder";
+  return s == s_ || clsfy_builder_base::is_class(s);
 }
 
 //=======================================================================
@@ -186,4 +188,3 @@ void clsfy_rbf_svm_smo_1_builder::b_read(vsl_b_istream& bfs)
     return;
   }
 }
-

@@ -172,8 +172,13 @@ void test_pc_gaussian()
     true);
 
   const vpdfl_pc_gaussian_builder *chooser =
+  // cannot use dynamic_cast<> without rtti, which vxl doesn't enforce - PVr
+#if 0
     dynamic_cast<const vpdfl_pc_gaussian_builder *>(pdf_in2.partition_chooser());
-
+#else
+    pdf_in2.partition_chooser()->is_class("vpdfl_pc_gaussian_builder") ?
+    static_cast<const vpdfl_pc_gaussian_builder *>(pdf_in2.partition_chooser()) : 0;
+#endif
 
   //vcl_cout << "Chooser " << *chooser <<vcl_endl;
 

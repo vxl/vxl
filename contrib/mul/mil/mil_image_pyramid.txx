@@ -13,7 +13,12 @@ template <class T> void mil_image_pyramid_flatten(T& out, const mil_image_pyrami
   assert (n_levels > 0);
   assert (out.is_a() == in(0).is_a());
 
+  // cannot use dynamic_cast<> without rtti, which vxl doesn't enforce - PVr
+#if 0
   if (dynamic_cast<mil_image_2d *>(&out))
+#else
+  if (out.is_class("mil_image_2d"))
+#endif
   {
     int width = 0;
     const int n_planes = in(0).n_planes();
@@ -38,7 +43,7 @@ template <class T> void mil_image_pyramid_flatten(T& out, const mil_image_pyrami
   }
   else 
   {
-    vcl_cerr << "ERROR: mil_image flatten(const mil_image_pyramid &)\n"
+    vcl_cerr << "ERROR: mil_image_pyramid_flatten(const mil_image_pyramid &)\n"
              << "Don't know how to deal with image type " << in(0).is_a()
              << vcl_endl;
     vcl_abort();
