@@ -53,3 +53,10 @@ MANPAGE_SOURCES += vnl_orthogonal_complement.txx
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
+
+## never mind this.
+ifneq (,$(strip $(wildcard $(HOME)/source_root0/tinker/fsm_pack)))
+INCDIRS += $(HOME)/source_root0/tinker
+DEFINES += -DHAS_FSM_PACK
+FLAGS_Templates/fsm_pack.cxx += -O3 -fstrict-aliasing -fstrength-reduce -ffast-math -fgcse -march=pentiumpro
+endif
