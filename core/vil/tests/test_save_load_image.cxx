@@ -38,6 +38,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_print.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_image_resource.h>
 #include <vil/vil_pixel_format.h>
 
 #ifndef LEAVE_IMAGES_BEHIND
@@ -94,12 +95,12 @@ bool test_image_equal(char const* type_name,
   vcl_cout << "istep()=" << image2.istep() << ", jstep()=" << image2.jstep()
            << ", planestep()=" << image2.planestep() << '\n' << vcl_flush;
   TEST("istep is non-zero", image2.istep()==0, false);
-  TEST("|istep| is at most 3xheight",  3*sizey2+image2.istep()>=0 && 3*sizey2-image2.istep()>=0, true);
+  TEST("|istep| is at most 3 x height",  3*sizey2+image2.istep()>=0 && 3*sizey2-image2.istep()>=0, true);
   TEST("jstep is non-zero", image2.jstep()==0, false);
-  TEST("|jstep| is at most 3xwidth", 3+3*sizex2+image2.jstep()>=0 && 3+3*sizex2-image2.jstep()>=0, true);
+  TEST("|jstep| is at most 3 x width", 3+3*sizex2+image2.jstep()>=0 && 3+3*sizex2-image2.jstep()>=0, true);
   // The "+3" is there to allow for "row word alignment", e.g. with the BMP format.
   TEST("planestep is non-zero", image2.planestep()==0, false);
-  TEST("|planestep| is at most widthxheight",
+  TEST("|planestep| is at most width x height",
        (3+sizex2)*sizey2+image2.planestep()>=0 && (3+sizex2)*sizey2-image2.planestep()>=0, true);
 
   if (100*sizex2+image2.jstep()<0 || 100*sizex2-image2.jstep()<0)
@@ -265,18 +266,27 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   }
 
   // STEP 2) Read the image that was just saved to file
-  {
-    vil_image_view_base_sptr image2 = vil_load(fname.c_str());
-    TEST("load image", !image2, false);
-    if (!image2)
-    {
-      return; // fatal error
-    }
+  vil_image_view_base_sptr image2 = vil_load(fname.c_str());
+  TEST("load image", !image2, false);
+  if (!image2)
+    return; // fatal error
 
-    test_image_equal(type_name, image, image2, exact);
-  }
+  // STEP 3) Sanity check on the image that was read in
+  test_image_equal(type_name, image, image2, exact);
+
+  // STEP 4) Load image as vil_image_resource + sanity check
+  vil_image_resource_sptr image3 = vil_load_image_resource(fname.c_str());
+  TEST("get_property(\"memory\")", image3->get_property("memory"), false);
+  TEST("get_property(\"read-only\")", image3->get_property("read-only"), false);
+  TEST("get_property(\"offset\")", image3->get_property("offset"), false);
+  unsigned int qd=0, depth = image2->pixel_format()==VIL_PIXEL_FORMAT_BOOL ? 1 : 8*sizeof(T);
+  bool qdr = image3->get_property("quantisation_depth", &qd);
+  if (qdr) vcl_cout << "quantisation depth = " << qd << ", should be " << depth << '\n';
+  else     depth = 0;
+  TEST("get_property(\"quantisation_depth\")", qd, depth);
 
 #if !LEAVE_IMAGES_BEHIND
+  // STEP 5) Remove the temporarily written file
   vpl_unlink(fname.c_str());
 #endif
 }
@@ -478,8 +488,8 @@ static void test_save_load_image()
   // TIFF
   vil_test_image_type("tiff", image8);
   vil_test_image_type("tiff", image3p);
+  vil_test_image_type("tiff", image1); // boolean works now! - PVr, Dec. 2003
 #if 0
-  vil_test_image_type("tiff", image1, true, true); // Test that boolean doesn't work
   // Test that >1 byte pixels don't work yet:
   vil_test_image_type("tiff", image16, true, true);
   vil_test_image_type("tiff", image32, true, true);
