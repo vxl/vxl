@@ -93,6 +93,16 @@ bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr const& dc)
   return;
 }
 
+
+bgui_vtol_soview2D_line_seg::
+bgui_vtol_soview2D_line_seg(vgl_line_segment_2d<double> const& seg)
+{
+  vgl_point_2d<double> p1 = seg.point1();
+  vgl_point_2d<double> p2 = seg.point2();
+  x0=p1.x(); y0 = p1.y();
+  x1=p2.x(); y1 = p2.y();
+}
+
 //--------------------------------------------------------------------------
 //: vtol_vertex_2d view
 //--------------------------------------------------------------------------

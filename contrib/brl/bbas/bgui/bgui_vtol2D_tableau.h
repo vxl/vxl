@@ -24,6 +24,7 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vgui/vgui_style.h>
+#include <vgl/vgl_line_segment_2d.h>
 #include <vsol/vsol_spatial_object_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
@@ -43,6 +44,7 @@
 class bgui_vtol_soview2D_point;
 class bgui_vtol_soview2D_digital_curve;
 class bgui_vtol_soview2D_dotted_digital_curve;
+class bgui_vtol_soview2D_line_seg;
 class bgui_vtol_soview2D_vertex;
 class bgui_vtol_soview2D_edge;
 class bgui_vtol_soview2D_edge_group;
@@ -75,6 +77,10 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
   //: display for digital_curve (not vtol but often useful)
   bgui_vtol_soview2D_dotted_digital_curve*
     add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc);
+
+  //: display for vgl_line_segment_2d
+  bgui_vtol_soview2D_line_seg* 
+    add_line_segment(vgl_line_segment_2d<double> const& seg);
 
   //: the vtol display methods for individual topology classes
   bgui_vtol_soview2D_vertex* add_vertex(vtol_vertex_2d_sptr const& v);
@@ -114,6 +120,8 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
   void set_vsol_point_2d_style(const float r, const float g, const float b,
                                const float point_radius);
   void set_digital_curve_style(const float r, const float g, const float b,
+                               const float line_width);
+  void set_line_segment_style(const float r, const float g, const float b,
                                const float line_width);
   void set_dotted_digital_curve_style(const float r, const float g, const float b,
                                       const float point_radius, const float line_width);

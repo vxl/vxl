@@ -15,6 +15,7 @@
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
+#include <vgl/vgl_line_segment_2d.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vtol/vtol_edge_2d.h>
@@ -90,6 +91,19 @@ class bgui_vtol_soview2D_vertex : public vgui_soview2D_point
   //: Returns the type of this class ('bgui_vtol_soview2D_vertex').
   vcl_string type_name() const { return "bgui_vtol_soview2D_vertex"; }
 
+};
+
+class bgui_vtol_soview2D_line_seg : public vgui_soview2D_lineseg
+{
+ public:
+  //: Constructor - creates a default edge_2d view
+  bgui_vtol_soview2D_line_seg() {}
+
+  //: Constructor - creates a view of a given vtol_edge_2d
+  bgui_vtol_soview2D_line_seg(vgl_line_segment_2d<double> const& seg);
+
+  //: Returns the type of this class ('bgui_vtol_soview2D_edge').
+  vcl_string type_name() const { return "bgui_vtol_soview2D_line_seg"; }
 };
 
 class bgui_vtol_soview2D_edge : public vgui_soview2D_linestrip
