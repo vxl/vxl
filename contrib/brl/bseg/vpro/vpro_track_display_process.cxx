@@ -77,7 +77,7 @@ bool vpro_track_display_process::execute()
     first_frame_ = false;
 
     vcl_ifstream str(track_file_.c_str());
-    if (!str.is_open())
+    if (!str)
     {
       vcl_cout << "In vpro_track_display_process::execute() -"
                << " could not open file " << track_file_ << '\n';
@@ -108,7 +108,7 @@ bool vpro_track_display_process::set_input_file(vcl_string const& file_name)
 {
   track_file_ = file_name;
   vcl_ifstream str(track_file_.c_str());
-  if (!str.is_open())
+  if (!str)
   {
     vcl_cout << "In vpro_track_display_process::set_input_file() -"
              << " could not open file " << track_file_ << '\n';
