@@ -5,6 +5,8 @@
 // \brief Function to return root directory (ie the one just below vcl).
 // \author Tim Cootes
 
+// There is no such thing as std::root_dir()
+
 #include <vcl_string.h>
 
 //: Return source root directory (ie the one just below vcl).
