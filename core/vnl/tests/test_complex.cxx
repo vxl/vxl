@@ -40,6 +40,7 @@ void test_complex() {
 
     vcl_complex<double> i(0,1);
 
+    vcl_cout << dot_product(a,b) << vcl_endl;
     vnl_test_assert("inner_product() conjugates correctly",
                     vcl_abs(inner_product(i*a,b)-i*inner_product(a,b))<1e-12 &&
                     vcl_abs(inner_product(a,i*b)+i*inner_product(a,b))<1e-12 );

@@ -12,6 +12,7 @@ IF(BUILD_GEL)
   INCLUDE( ${allvxl_SOURCE_DIR}/oxl/osl/CMakeListsLink.txt )
 
   ADD_EXECUTABLE( test_osl_to_vdgl test_osl_to_vdgl.cxx )
+  ADD_TEST( conversions_test_osl_to_vdgl test_osl_to_vdgl )
  ENDIF(BUILD_OXL)
 ENDIF(BUILD_GEL)
 
@@ -19,4 +20,5 @@ IF(HAS_SPATIALOBJECTS)
   LINK_DIRECTORIES( COOL GeneralUtility SpatialObjects Numerics )
   LINK_LIBRARIES( DigitalGeometry CompGeom Topology Groups Geometry SpatialBasics Basics Solver Numerics )
   ADD_EXECUTABLE( test_DigitalCurve_to_vdgl test_DigitalCurve_to_vdgl.cxx )
+  ADD_TEST( conversions_test_DigitalCurve_to_vdgl test_DigitalCurve_to_vdgl )
 ENDIF(HAS_SPATIALOBJECTS)

@@ -323,6 +323,7 @@ void vnl_vector_test_float() {
     TEST("v.set_z(3) and v[2]", (v[2] == 3), true);
     vnl_vector<float> v1((float)1, (float)0, (float)0);
     vnl_vector<float> v2((float)0, (float)1, (float)0);
+    vnl_vector<float> v3((float)-0.5, (float)0, (float)0.5);
     vcl_cout << "v1 - v2 = " << v1 - v2 << vcl_endl;
     vcl_cout << "angle(v1,v2) = " << angle(v1,v2) << vcl_endl;
     float ang = angle(v1,v2) * (360/(2*vnl_math::pi));
@@ -330,6 +331,10 @@ void vnl_vector_test_float() {
     vcl_cout << "cross_2d(v1,v2) = " << cross_2d(v1,v2) << vcl_endl;
     vcl_cout << "cross_3d(v1,v2) = " << cross_3d(v1,v2) << vcl_endl;
     TEST("angle", (ang == 90.0f), true);
+    vcl_cout << "angle(v1,v3) = " << angle(v1,v3) << vcl_endl;
+    float ang2 = angle(v1,v3) * (360/(2*vnl_math::pi));
+    vcl_cout << "angle(v1,v3) in degrees = " << ang2 << vcl_endl;
+    TEST("angle 2", (ang2 == 135.0f), true);
 //    TEST("squared_distance_2d", (squared_distance_2d(v1,v2) == 2), true);
 //    TEST("squared_distance_3d", (squared_distance_3d(v1,v2) == 2), true);
   }

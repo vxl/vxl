@@ -9,3 +9,4 @@ INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
 
 
 ADD_EXECUTABLE( test_vil_io test_vil_io.cxx)
+ADD_TEST( vil_test_vil_io test_vil_io)

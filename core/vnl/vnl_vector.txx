@@ -698,8 +698,8 @@ double angle (vnl_vector<T> const& a, vnl_vector<T> const& b) {
   typedef typename vnl_numeric_traits<T>::real_t real_t;
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
   typedef typename vnl_numeric_traits<abs_t>::real_t abs_r;
-  abs_t cosine = vnl_math_abs( cos_angle(a, b) );
-  return vcl_acos(abs_r(cosine));
+
+  return vcl_acos( vnl_math_abs( cos_angle(a, b) ) );
 }
 
 //
