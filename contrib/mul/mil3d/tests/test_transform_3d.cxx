@@ -55,6 +55,10 @@ void test_the_transform(mil3d_transform_3d& t)
    vgl_point_3d<double> p0(5,7,0);
    vgl_point_3d<double> p1 = t(p0);
    TEST_NEAR("Inverse correct",vgl_distance(t_inv(p1),p0),0.0,1e-6);
+   vgl_point_3d<double> q0(7,3,-4);
+   vgl_point_3d<double> q1 = t(q0);
+   vgl_vector_3d<double> delta = t.delta(p0, q0-p0);
+   TEST_NEAR("delta correct",(q1-p1-delta).sqr_length(),0.0,1e-6);
 
    vnl_matrix<double> I = t.matrix() * t_inv.matrix();
    vnl_matrix<double> I0(4,4);
@@ -101,6 +105,10 @@ void test_transform_3d()
   test_the_transform(trans0);
 
    vcl_cout<<"== Testing Affine ==\n";
+   trans0.set_affine(0.2,-0.3,4,2,1,4,5,0.1,-0.21);
+   test_the_transform(trans0);
+
+   vcl_cout<<"== Testing Projective ==\n";
    trans0.set_affine(0.2,-0.3,4,2,1,4,5,0.1,-0.21);
    test_the_transform(trans0);
 
