@@ -56,7 +56,7 @@ template<class T>
 void vsl_print_summary(vcl_ostream& os,const vgl_box_2d<T> & p)
 {
   os<<"2d Box with opposite corners at (" <<p.min_x() << "," <<
-    p.get_min_y();
+    p.min_y();
   os<<") and (" << p.max_x() << "," << p.max_y() << ")";
 }
 
