@@ -121,7 +121,7 @@
 
 #include "vul_reg_exp.h"
 #include <vcl_iostream.h>
-#include <vcl_cstring.h>
+#include <vcl_cstring.h> // for strcspn()
 
 //: Copies the given regular expression.
 
@@ -346,10 +346,6 @@ static void        regc (unsigned char);
 static void        reginsert (char, char*);
 static void        regtail (char*, const char*);
 static void        regoptail (char*, const char*);
-
-#ifdef STRCSPN
-static int strcspn ();
-#endif
 
 
 //
