@@ -1,6 +1,11 @@
 USES += contrib/brl contrib/gel contrib/oxl core
 include ../config.mk
 
+LIBRARY := bcrt_test
+SOURCES += brct_windows_frame.cxx
+SOURCES += brct_menus.cxx
+
+IULIBS += -lbcrt_test
 TESTS += test_brct_kalman.cxx
 
 #########################################
