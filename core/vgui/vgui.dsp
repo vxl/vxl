@@ -354,6 +354,45 @@ SOURCE=.\impl/glut/vgui_glut_window.cxx
 SOURCE=.\Templates/vbl_smart_ptr+vgui_style-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vgui_range_map_params-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgui_range_map+char-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgui_range_map+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgui_range_map+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgui_range_map+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgui_range_map+long-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgui_range_map+long_double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgui_range_map+short-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgui_range_map+signed_char-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgui_range_map+unsigned_int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgui_range_map+unsigned_long-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgui_range_map+vxl_byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgui_range_map+vxl_uint_16-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\impl/gtk/vgui_gtk.cxx
 # End Source File
 # Begin Source File
@@ -1039,6 +1078,18 @@ SOURCE=.\impl/gtk2/vgui_gtk2_utils.h
 # End Source File
 # Begin Source File
 SOURCE=.\impl/gtk2/vgui_gtk2_window.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_range_map.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_range_map.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_range_map_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_range_map_params_sptr.h
 # End Source File
 # End Group
 # End Target
