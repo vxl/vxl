@@ -390,9 +390,6 @@ SOURCE=.\Templates/vipl_add_random_noise+vil_image.vil_image.double.double-.cxx
 SOURCE=.\Templates/vipl_add_random_noise+vil_image.vil_image.float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_add_random_noise+vil_image.vil_image.vil_rgb+uchar-.vil_rgb+uchar--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vipl_convert+vil_image.vil_image.double.double--.cxx
 # End Source File
 # Begin Source File
