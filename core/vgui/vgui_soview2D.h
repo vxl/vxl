@@ -98,15 +98,14 @@ class vgui_soview2D_lineseg : public vgui_soview2D
 {
  public:
   //: Constructor - create a default 2D line segment.
-  vgui_soview2D_lineseg() :
-    x0(0), y0(0), x1(0), y1(0) {}
+  vgui_soview2D_lineseg() : x0(0), y0(0), x1(0), y1(0) {}
 
   //: Constructor - create a 2D line segment with given start and end points.
   vgui_soview2D_lineseg(float x0_, float y0_, float x1_, float y1_) :
     x0(x0_), y0(y0_), x1(x1_), y1(y1_) {}
 
   //: Constructor - create a 2D line segment same as the given 2D line segment.
-  vgui_soview2D_lineseg( vgui_soview2D_lineseg &l_) { x0= l_.x0; y0= l_.y0; x1= l_.x1; y1= l_.y1; }
+  vgui_soview2D_lineseg( vgui_soview2D_lineseg &l_) : x0(l_.x0), y0(l_.y0), x1(l_.x1), y1(l_.y1) {}
 
   //: Render this 2D line segment on the display.
   virtual void draw() const;
@@ -145,8 +144,7 @@ class vgui_soview2D_group : public vgui_soview2D
   vgui_soview2D_group() {}
 
   //: Constructor - creates a 2D soview group containing the given 2D soviews.
-  vgui_soview2D_group( vcl_vector<vgui_soview2D *> ls_) :
-    ls( ls_) {}
+  vgui_soview2D_group( vcl_vector<vgui_soview2D *> ls_) : ls(ls_) {}
 
   //: Set the style (colour, line width, etc) for this 2D soview group.
   virtual void set_style(vgui_style*);
