@@ -327,13 +327,13 @@ void vtol_face_2d::describe(vcl_ostream &strm,
                             int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
-  print();
+  print(strm);
   for (unsigned int i=0;i<inferiors()->size();++i)
     {
       if ((inferiors_[i])->cast_to_one_chain()!=0)
         (inferiors_[i])->cast_to_one_chain()->describe(strm,blanking);
       else
-        vcl_cout << "*** Odd inferior for a face\n";
+        strm << "*** Odd inferior for a face\n";
     }
 }
 
