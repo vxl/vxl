@@ -4,6 +4,7 @@
 // \file
 #include <vnl/vnl_numeric_traits.h>
 #include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_vil.h>
 #include <brip/brip_roi.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <sdet/sdet_edgel_regions.h>
@@ -243,6 +244,15 @@ vil_image_view<float> sdet_region_proc::get_residual_image_view()
     }
   return null;
 }
+
+//: Returns a vil_image_resource_sptr of the edge image
+vil_image_resource_sptr
+sdet_region_proc::get_edge_image_resource()
+{
+  vil_image_resource_sptr virs = vil1_to_vil_image_resource(edge_image_);
+  return virs;
+}
+
 #if 0
 //: If a clip has been used we have to transform the regions back into the image coordinates.
 bool sdet_region_proc::transform_regions()
