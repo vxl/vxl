@@ -21,7 +21,7 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_list<T>& v)
   const short version_no = 1;
   vsl_b_write(s, version_no);
   vsl_b_write(s, v.size());
-  for (vcl_list<T>::const_iterator iter = v.begin(); iter != v.end(); iter++)
+  for (typename vcl_list<T>::const_iterator iter = v.begin(); iter != v.end(); iter++)
     vsl_b_write(s,*iter);
 }
 
@@ -62,7 +62,7 @@ void vsl_print_summary(vcl_ostream& os, const vcl_list<T> &v)
 {
   unsigned i=0;
   os << "List length: " << v.size() << vcl_endl;
-  for (vcl_list<T>::const_iterator iter = v.begin();
+  for (typename vcl_list<T>::const_iterator iter = v.begin();
        iter != v.end() && i<5; ++iter,++i)
   {
     os << " " << i << ": ";

@@ -23,7 +23,7 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_map<Key, T, Compare>& v)
   const short version_no = 1;
   vsl_b_write(s, version_no);
   vsl_b_write(s, v.size());
-  for (vcl_map<Key, T, Compare>::const_iterator iter = v.begin(); iter != v.end(); iter++)
+  for (typename vcl_map<Key, T, Compare>::const_iterator iter = v.begin(); iter != v.end(); iter++)
   {
     vsl_b_write(s,(*iter).first);
     vsl_b_write(s,(*iter).second);
@@ -69,7 +69,7 @@ void vsl_print_summary(vcl_ostream& os, const vcl_map<Key, T, Compare> &v)
 {
   os << "Map size: " << v.size() << vcl_endl;
   unsigned i=0;
-  for (vcl_map<Key, T, Compare>::const_iterator iter = v.begin();
+  for (typename vcl_map<Key, T, Compare>::const_iterator iter = v.begin();
        iter != v.end() && i< 5; ++iter,++i)
   {
     os << " " << i << ": ";
@@ -96,7 +96,8 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_multimap<Key, T, Compare>& v)
   const short version_no = 1;
   vsl_b_write(s, version_no);
   vsl_b_write(s, v.size());
-  for (vcl_multimap<Key, T, Compare>::const_iterator iter = v.begin(); iter != v.end(); iter++)
+  for (typename vcl_multimap<Key, T, Compare>::const_iterator iter = v.begin();
+       iter != v.end(); iter++)
   {
     vsl_b_write(s,(*iter).first);
     vsl_b_write(s,(*iter).second);
@@ -142,7 +143,7 @@ void vsl_print_summary(vcl_ostream& os, const vcl_multimap<Key, T, Compare> &v)
 {
   os << "multimap size: " << v.size() << vcl_endl;
   unsigned i=0;
-  for (vcl_multimap<Key, T, Compare>::const_iterator iter = v.begin();
+  for (typename vcl_multimap<Key, T, Compare>::const_iterator iter = v.begin();
        iter != v.end() && i< 5; ++iter,++i)
   {
     os << " " << i << ": ";

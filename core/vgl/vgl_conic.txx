@@ -33,9 +33,9 @@ template <class T>
 vcl_string vgl_conic<T>::real_type() const { return vgl_conic_name[(int)type_]; }
 
 template <class T>
-vgl_conic<T>::vgl_conic_type vgl_conic<T>::type_by_name(vcl_string const& name)
+typename vgl_conic<T>::vgl_conic_type vgl_conic<T>::type_by_name(vcl_string const& name)
 {
-  for(int i = (int)no_type; i < num_conic_types; i++)
+  for (int i = (int)no_type; i < num_conic_types; i++)
     if (name == vgl_conic_name[i])
       return (vgl_conic<T>::vgl_conic_type)i;
   return no_type; // should never reach this point
@@ -54,21 +54,21 @@ template <class T>
 bool vgl_conic<T>::operator==(vgl_conic<T> const& that) const
 {
   if ( type() != that.type() ) return false;
-  return ( (a()*that.b() == b()*that.a())
-        && (a()*that.c() == c()*that.a())
-        && (a()*that.d() == d()*that.a())
-        && (a()*that.e() == e()*that.a())
-        && (a()*that.f() == f()*that.a())
-        && (b()*that.c() == c()*that.b())
-        && (b()*that.d() == d()*that.b())
-        && (b()*that.e() == e()*that.b())
-        && (b()*that.f() == f()*that.b())
-        && (c()*that.d() == d()*that.c())
-        && (c()*that.e() == e()*that.c())
-        && (c()*that.f() == f()*that.c())
-        && (d()*that.e() == e()*that.d())
-        && (d()*that.f() == f()*that.d())
-        && (e()*that.f() == f()*that.e()) );
+  return   a()*that.b() == b()*that.a()
+        && a()*that.c() == c()*that.a()
+        && a()*that.d() == d()*that.a()
+        && a()*that.e() == e()*that.a()
+        && a()*that.f() == f()*that.a()
+        && b()*that.c() == c()*that.b()
+        && b()*that.d() == d()*that.b()
+        && b()*that.e() == e()*that.b()
+        && b()*that.f() == f()*that.b()
+        && c()*that.d() == d()*that.c()
+        && c()*that.e() == e()*that.c()
+        && c()*that.f() == f()*that.c()
+        && d()*that.e() == e()*that.d()
+        && d()*that.f() == f()*that.d()
+        && e()*that.f() == f()*that.e());
 }
 
 //-------------------------------------------------------------
@@ -189,7 +189,7 @@ bool vgl_conic<T>::is_degenerate() const
 {
   T A = a_, B = b_/2, C = c_, D = d_/2, E = e_/2, F = f_;
   T det = A*(C*F - E*E) - B*(B*F - D*E) + D*(B*E - C*D);
-  return (det == 0);
+  return det == 0;
 }
 
 //: Returns the list of component lines, when degenerate and real components.

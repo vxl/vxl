@@ -129,8 +129,8 @@ vgl_homg_operators_2d<T>::distance_squared(
   double scale1 = 1.0/p1.w();
   double scale2 = 1.0/p2.w();
 
-  return (vnl_math_sqr (p1.x() * scale1 - p2.x() * scale2) +
-          vnl_math_sqr (p1.y() * scale1 - p2.y() * scale2));
+  return vnl_math_sqr (p1.x() * scale1 - p2.x() * scale2) +
+         vnl_math_sqr (p1.y() * scale1 - p2.y() * scale2);
 }
 
 //: Get the square of the perpendicular distance to a line.
@@ -320,7 +320,7 @@ vgl_homg_operators_2d<T>::most_orthogonal_vector(const vcl_list<vgl_homg_line_2d
 {
   vnl_scatter_3x3<T> scatter_matrix;
 
-  for (vcl_list<vgl_homg_line_2d<T> >::const_iterator i = inpoints.begin();
+  for (typename vcl_list<vgl_homg_line_2d<T> >::const_iterator i = inpoints.begin();
        i != inpoints.end(); ++i)
     scatter_matrix.add_outer_product(get_vector(*i));
 
@@ -335,7 +335,7 @@ vgl_homg_operators_2d<T>::most_orthogonal_vector_svd(const vcl_list<vgl_homg_lin
 {
   vnl_matrix<T> D(lines.size(), 3);
 
-  vcl_list<vgl_homg_line_2d<T> >::const_iterator i = lines.begin();
+  typename vcl_list<vgl_homg_line_2d<T> >::const_iterator i = lines.begin();
   for (unsigned j = 0; i != lines.end(); ++i,++j)
     D.set_row(j, get_vector(*i));
 
@@ -536,7 +536,7 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
     vnl_diag_matrix<vcl_complex<double> >  polysolutions = eig.D;
     vcl_list<vgl_homg_point_2d<T> > solutions;
     for (int i=0;i<3;i++)
-      if(vcl_abs(vcl_imag(polysolutions(i))) < 1e-7) {// only want the real solutions
+      if (vcl_abs(vcl_imag(polysolutions(i))) < 1e-7) {// only want the real solutions
         double y = vcl_real(polysolutions(i));
         double x = -(y*y*ac+y*ae+af)/(y*ab+ad);
         solutions.push_back(vgl_homg_point_2d<T>(x,y,1));
@@ -557,7 +557,7 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
   vcl_list<vgl_homg_point_2d<T> > solutions;
 
   for (int i=0;i<4;i++)
-    if(vcl_abs(vcl_imag(polysolutions(i))) < 1e-7) { // only want the real solutions
+    if (vcl_abs(vcl_imag(polysolutions(i))) < 1e-7) { // only want the real solutions
       double y = vcl_real(polysolutions(i));
       double x = -(y*y*ac+y*ae+af)/(y*ab+ad);
       solutions.push_back(vgl_homg_point_2d<T>(x,y,1));
@@ -726,7 +726,7 @@ vgl_homg_operators_2d<T>::tangent_from(vgl_conic<T> const& c,
   vgl_homg_line_2d<T>  l(p.x(),p.y(),p.w()); // dual line
   vcl_list<vgl_homg_point_2d<T> > dualpts = intersection(C,l);
   vcl_list<vgl_homg_line_2d<T> > v;
-  vcl_list<vgl_homg_point_2d<T> >::iterator it = dualpts.begin();
+  typename vcl_list<vgl_homg_point_2d<T> >::iterator it = dualpts.begin();
   for (; !(it == dualpts.end()); ++it)
     v.push_back(vgl_homg_line_2d<T>((*it).x(), (*it).y(), (*it).w()));
   return v;
@@ -749,7 +749,7 @@ vgl_homg_operators_2d<T>::common_tangents(vgl_conic<T> const& c1,
   vgl_conic<T> C2 = c2.dual_conic();
   vcl_list<vgl_homg_point_2d<T> > dualpts = intersection(C1,C2);
   vcl_list<vgl_homg_line_2d<T> > v;
-  vcl_list<vgl_homg_point_2d<T> >::iterator it = dualpts.begin();
+  typename vcl_list<vgl_homg_point_2d<T> >::iterator it = dualpts.begin();
   for (; !(it == dualpts.end()); ++it)
     v.push_back(vgl_homg_line_2d<T>((*it).x(), (*it).y(), (*it).w()));
   return v;
@@ -801,7 +801,7 @@ vgl_homg_operators_2d<T>::closest_point(vgl_conic<T> const& c,
   // And find the intersection point closest to the given location:
   vgl_homg_point_2d<T> p = candidates.front();
   double dist = 1e31; // vnl_numeric_limits<T>::infinity();
-  vcl_list<vgl_homg_point_2d<T> >::iterator it = candidates.begin();
+  typename vcl_list<vgl_homg_point_2d<T> >::iterator it = candidates.begin();
   for (; it != candidates.end(); ++it) {
     if ((*it).w() == 0) continue;
     double d = vgl_homg_operators_2d<T>::distance_squared(*it,pt);
