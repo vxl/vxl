@@ -11,7 +11,7 @@ vil_image vepl_y_gradient(vil_image const& image, double scale, double shift)
     typedef unsigned char ubyte;
     vil_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
     vil_memory_image_of<ubyte> out(image);
-    vipl_y_gradient<vil_image,vil_image,ubyte,ubyte,vipl_trivial_pixeliter> op(scale, shift);
+    vipl_y_gradient<vil_image,vil_image,ubyte,ubyte,vipl_trivial_pixeliter> op(scale, (ubyte)(shift+0.5));
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
