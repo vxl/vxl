@@ -37,10 +37,8 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
   const double EPS = 0.01;
 
   //EM algorithm to get outlier_frac, the mixing parameter
-  int j=0;
   while ( new_inlier_frac > EPS && vcl_abs((new_inlier_frac - inlier_frac) / inlier_frac) > EPS) {
     begin = begin0;
-    j++;
     inlier_frac = new_inlier_frac;
     new_inlier_frac = 0;
     for  (; begin != end; ++begin, ++scale) {
@@ -84,10 +82,8 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
   const double EPS = 0.01;
 
   //EM algorithm to get outlier_frac, the mixing parameter
-  int j=0;
   while ( new_inlier_frac > EPS && vcl_abs((new_inlier_frac - inlier_frac) / inlier_frac) > EPS) {
     begin = begin0;
-    j++;
     inlier_frac = new_inlier_frac;
     new_inlier_frac = 0;
     for  (; begin != end; ++begin) {
