@@ -23,6 +23,7 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
+#include <vcl_cstring.h> // memcpy()
 #include <vcl_cassert.h>
 #include <vcl_iosfwd.h>
 
@@ -864,7 +865,7 @@ vcl_istream& operator>> (vcl_istream& is, vnl_matrix_fixed<T,m,n>& mat)
 }
 
 
-#define VNL_MATRIX_FIXED_PAIR_INSTANTIATE(T, M, N, O) \
+#define VNL_MATRIX_FIXED_INSTANTIATE(T, M, N) \
 extern "please include vnl/vnl_matrix_fixed.txx instead"
 
 #endif // vnl_matrix_fixed_h_
