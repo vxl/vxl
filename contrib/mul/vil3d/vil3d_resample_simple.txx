@@ -25,11 +25,13 @@ void vil3d_resample_simple(const vil3d_image_view< T >& src_image,
   const unsigned sni = src_image.ni();
   const unsigned snj = src_image.nj();
   const unsigned snk = src_image.nk();
+#if 0 // these 5 variables are not used:
   const vcl_ptrdiff_t s_istep = src_image.istep();
   const vcl_ptrdiff_t s_jstep = src_image.jstep();
   const vcl_ptrdiff_t s_kstep = src_image.kstep();
   const vcl_ptrdiff_t s_pstep = src_image.planestep();
   const T* s_plane = src_image.origin_ptr();
+#endif // 0
 
   const unsigned dni = sni*dx;
   const unsigned dnj = snj*dy;
