@@ -128,9 +128,9 @@ void test_rational() {
   }
   {
     vnl_rational d(16,9);
-    TEST("sqrt", sqrt(d), vnl_rational(4,3));
-    d = sqrt(vnl_rational(2L));
-    double sqrt2 = sqrt(2.0), sqrt_2 = double(d);
+    TEST("sqrt", vcl_sqrt(d), vnl_rational(4,3));
+    d = vcl_sqrt(vnl_rational(2L));
+    double sqrt2 = vcl_sqrt(2.0), sqrt_2 = double(d);
     vcl_cout << "Best rational approximation of sqrt(2): " << d << " = "
              << sqrt_2 << vcl_endl
              << "Compare this with sqrt(2) in 20 decimals:                     "

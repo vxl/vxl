@@ -448,8 +448,8 @@ static void run_multiplication_tests() {
   TEST("-b1000000*b1000000*b1000000 == -zillion", -b1000000*b1000000*b1000000, -zillion);
   TEST("zillion*-b1000 == b1000*-zillion", zillion*-b1000, b1000*-zillion);
 
-  TEST("sqrt(b1000000) == 1000", (vnl_bignum)vcl_sqrt(b1000000), b1000);
-  TEST("sqrt(zillion) == b1000*b1000000", (vnl_bignum)vcl_sqrt(zillion), b1000*b1000000);
+  TEST("sqrt(b1000000) == 1000", vcl_sqrt(b1000000), b1000);
+  TEST("sqrt(zillion) == b1000*b1000000", vcl_sqrt(zillion), b1000*b1000000);
 }
 
 static void run_left_shift_tests() {
