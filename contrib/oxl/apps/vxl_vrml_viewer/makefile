@@ -1,4 +1,4 @@
-USES = vxl oxl
+USES = vxl oxl v3p
 USE_OPENGL := 1
 USE_NETLIB := 1
 include ${IUELOCALROOT}/oxl/vgui/easy-client.mk

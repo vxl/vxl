@@ -2,7 +2,7 @@
 include $(IUEROOT)/oxl/vgui/easy-client.mk
 ##########################################
 
-USES += vxl oxl
+USES += vxl oxl v3p
 
 PROGRAM = xcv
 ald_libs += mvl osl vcgl
