@@ -13,7 +13,7 @@
 * The core class is vil2_image_view<T> which gives a view of an image in memory.
 * The only way to get at the pixel data in an image is through a vil2_image_view<T>.
 *
-* Large images (in files) can be accessed through the vil2_file_image class, but
+* Large images (in files) can be accessed through the vil2_image_data class, but
 * one can only get at the data by asking for a view of it, which loads the
 * requested section into memory and creates a suitable vil2_image_view<T>.
 *
