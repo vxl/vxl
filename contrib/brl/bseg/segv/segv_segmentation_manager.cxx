@@ -69,6 +69,7 @@
 #include <sdet/sdet_region_proc.h>
 #include <strk/strk_region_info_params.h>
 #include <strk/strk_region_info.h>
+#include <strk/strk_io.h>
 
 segv_segmentation_manager *segv_segmentation_manager::instance_ = 0;
 
@@ -1398,71 +1399,28 @@ void segv_segmentation_manager::find_vehicle()
     }
   t2D->post_redraw();
 }
-static  
-bool parse_histogram_file(vcl_string const& filename,
-                          vil1_memory_image_of<unsigned char> & image)
-{
-  vcl_ifstream hist_instr(filename.c_str());
-  if(!hist_instr)
-    return false;
-  vcl_string key;
-  unsigned int start_frame = 0, n_frames=0, npix = 0, ibins = 0 , gbins = 0 , cbins = 0;
-  float dia=1, ratio=1;
-  // read number of points
-  hist_instr >> key;
-  if(key!="START_FRAME:")
-    return false;
-  hist_instr >> start_frame;
-  hist_instr >> key;
-  if(key!="N_FRAMES:")
-    return false;
-  hist_instr >> n_frames;
-  hist_instr >> key;
-  if(key!="N_PIXELS:")
-    return false;
-  hist_instr >> npix;
-  hist_instr >> key;
-  if(key!="DIAMETER:")
-    return false;
-  hist_instr >> dia;
-  hist_instr >> key;
-  if(key!="ASPECT_RATIO:")
-    return false;
-  hist_instr >> ratio;
-  hist_instr >> key;
-  if(key!="N_INTENSITY_BINS:")
-    return false;
-  hist_instr >> ibins;
-  hist_instr >> key;
-  if(key!="N_GRADIENT_DIR_BINS:")
-    return false;
-  hist_instr >> gbins;
-  hist_instr >> key;
-  if(key!="N_COLOR_BINS:")
-    return false;
-  hist_instr >> cbins;
-  hist_instr >> key;
-  if(key!="HISTOGRAMS:")
-    return false;
-  unsigned int nbins = ibins + gbins + cbins;
-  vnl_matrix<float> hist_track(n_frames,nbins);
-  hist_instr >> hist_track;
-  vil1_memory_image_of<float> temp = 
-    brip_vil1_float_ops::convert_to_float(hist_track);
-  image = brip_vil1_float_ops::convert_to_byte(temp);
-  return true;
-}
 
 void segv_segmentation_manager::display_histogram_track()
 {
   vgui_dialog hist_dlg("Histogram Track File");
   static vcl_string hist_filename = "";
   static vcl_string ext = "*.*";
-  hist_dlg.file("HistTrack filename:", ext, hist_filename);
+  hist_dlg.file("Tracked Histogram filename:", ext, hist_filename);
   if (!hist_dlg.ask())
     return;
-  vil1_memory_image_of<unsigned char> image;
-  if(!parse_histogram_file(hist_filename, image))
+  vcl_ifstream hist_instr(hist_filename.c_str());
+  unsigned int start_frame, n_frames, n_pixels;
+  unsigned int n_int_bins, n_grad_dir_bins, n_color_bins;
+  float diameter, aspect_ratio;
+  vnl_matrix<float> hist_data;
+  if(!strk_io::read_histogram_data(hist_instr, start_frame, n_frames,
+                                   n_pixels, diameter, aspect_ratio,
+                                   n_int_bins, n_grad_dir_bins, n_color_bins,
+                                   hist_data))
     return;
+  vil1_memory_image_of<float> temp = 
+    brip_vil1_float_ops::convert_to_float(hist_data);
+  vil1_memory_image_of<unsigned char> image = 
+    brip_vil1_float_ops::convert_to_byte(temp);
   this->add_image(image);
 }
