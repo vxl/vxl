@@ -30,31 +30,26 @@ void vil_copy(vil_image const& in, vil_image& out)
 #undef assert_dimension_equal
   assert((in.components() * in.planes()) == (out.components() * out.planes()));
 
-  // int planes = in.planes();
   int height = in.height();
   int width = in.width();
   int components = in.components();
   int bits_per_component = in.bits_per_component();
   
   int rowsize_bits = bits_per_component * components * width;
-  int rowsize_bytes = rowsize_bits / CHAR_BIT;
-  assert(rowsize_bytes * CHAR_BIT == rowsize_bits); // think again
-  // int numchunks = planes * height;
+  int rowsize_bytes = (rowsize_bits+CHAR_BIT-1) / CHAR_BIT;
+//assert(rowsize_bytes * CHAR_BIT == rowsize_bits); // not for e.g. 1-bit pixels
 
-#if 0
-  // Simple implementation copies one row at a time.
-  vcl_vector<unsigned char> buf(rowsize_bytes);
-  for (int y = 0; y < height; ++y) {
-    in .get_section(/* xxx */&buf[0], 0, y, width, 1);   // 0 was p
-    out.put_section(/* xxx */&buf[0], 0, y, width, 1);  // 0 was p
-  }
-#else
   // Simple implementation copies the whole buffer at once
   vcl_vector<unsigned char> buf(rowsize_bytes*height);
-  //cerr << "...vil_copy() doing get_section()" << endl;
+#ifdef DEBUG
+  vcl_cerr << "...vil_copy() doing get_section()" << endl;
+#endif
   in .get_section(/* xxx */&buf[0], 0, 0, width, height);
-  //cerr << "...vil_copy() doing put_section()" << endl;
+#ifdef DEBUG
+  vcl_cerr << "...vil_copy() doing put_section()" << endl;
+#endif
   out.put_section(/* xxx */&buf[0], 0, 0, width, height);
-  //cerr << "...vil_copy() done" << endl;
+#ifdef DEBUG
+  vcl_cerr << "...vil_copy() done" << endl;
 #endif
 }
