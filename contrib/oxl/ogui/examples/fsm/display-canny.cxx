@@ -2,7 +2,7 @@
 //  \file
 
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include <vcl_iostream.h>
 

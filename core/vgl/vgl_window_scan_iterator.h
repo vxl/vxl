@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief Iterator to scan rectangular windows
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_cmath.h>
 #include <vgl/vgl_region_scan_iterator.h>

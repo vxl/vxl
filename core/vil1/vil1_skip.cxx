@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vil_skip.h"
 #include <vil/vil_skip_image_impl.h>

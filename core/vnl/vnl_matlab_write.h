@@ -14,11 +14,11 @@
 // NB. with these functions, the variable name *must* be a non-null and
 // point to a zero-terminated string. otherwise the code will segfault.
 //
-//  \author fsm@robots.ox.ac.uk
+//  \author fsm
 //
 // \verbatim
 //  Modifications
-// 09 Mar 2000 fsm@robots. changed order of arguments for consistency with vnl_matlab_read.
+// 09 Mar 2000 fsm. changed order of arguments for consistency with vnl_matlab_read.
 // LSB (Manchester) 23/3/01 Tided documentation
 // \endverbatim
 

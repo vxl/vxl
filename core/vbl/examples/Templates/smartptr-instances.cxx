@@ -1,5 +1,5 @@
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "../vbl_smart_ptr_example.h"
 #include <vbl/vbl_smart_ptr.txx>

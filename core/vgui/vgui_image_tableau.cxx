@@ -2,7 +2,7 @@
 #include "vgui_image_tableau.h"
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  See vgui_image_tableau.h for a description of this file.
 //
 // \verbatim
@@ -149,7 +149,7 @@ bool vgui_image_tableau::handle(vgui_event const &e)
     // when rendering an image. So, we turn off blending before calling
     // the renderer. In cases where two images are to be blended, a
     // special tableau should be written, eg. vgui_blender_tableau.
-    // fsm@robots.ox.ac.uk
+    // fsm
     GLboolean blend_on;
     glGetBooleanv(GL_BLEND, &blend_on);
     if (blend_on)

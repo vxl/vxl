@@ -2,7 +2,7 @@
 #include "vgui_image_renderer.h"
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  See vgui_image_renderer.h for a description of this file.
 //
 // \verbatim

@@ -1,7 +1,7 @@
 #ifndef vbl_shared_pointer_txx_
 #define vbl_shared_pointer_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vbl_shared_pointer.h"
 

@@ -3,7 +3,7 @@
 #define vgui_menu_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Representation of menus and menu items for pop-up and menubar menus.
 //
 //  Contains classes:  vgui_menu_item  vgui_menu

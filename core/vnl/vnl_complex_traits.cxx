@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author F. Schaffalitzky, Oxford RRG
+// \author fsm, Oxford RRG
 // \date   26 Mar 1999
 //
 //-----------------------------------------------------------------------------

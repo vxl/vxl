@@ -1,5 +1,5 @@
 #
-# fsm@robots.ox.ac.uk
+# fsm
 #
 
 BLAH := $(wildcard vcl_*.hhh)

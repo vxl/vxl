@@ -1,5 +1,5 @@
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vgui_glut_impl.h"
 #include "vgui_glut_window.h"
@@ -129,7 +129,7 @@ void internal_run_till_idle()
   // If we get here, it means glutMainLoop()
   // returned, which it should never do.
   vgui_macro_warning << "internal error in internal_run_till_idle_wrapped()" << vcl_endl;
-  vgui_macro_warning << "please report to fsm@robots.ox.ac.uk" << vcl_endl;
+  vgui_macro_warning << "please report to fsm" << vcl_endl;
   vcl_abort();
 }
 

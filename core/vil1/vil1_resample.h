@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief Returns an image adaptor which will resample the original image.
 // Note hat resampling will happen only at the point when get_section()
 // is called on the returned image, and only on that (sub)section of the image.

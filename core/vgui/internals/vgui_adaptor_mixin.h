@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Holds the dimensions of the adaptor and the event causing popup menus.
 
 #include <vgui/vgui_button.h>

@@ -44,7 +44,7 @@
 //
 // \verbatim
 // Modifications
-//  fsm@robots, 5 March 2000: templated
+//  fsm, 5 March 2000: templated
 //  dac (Manchester) 28/03/2001: tidied up documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim

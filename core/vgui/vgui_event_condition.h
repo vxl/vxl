@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Represent and recognise simple event conditions.
 //
 //  Contains classes: vgui_event_condition

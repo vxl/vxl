@@ -1,7 +1,7 @@
 #ifndef xcv_image_tableau_sptr_h_
 #define xcv_image_tableau_sptr_h_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 // .NAME    xcv_image_tableau_sptr
 // .INCLUDE xcv/xcv_image_tableau_sptr.h

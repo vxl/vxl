@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vil/vil_image.h>
 #include <vcl_string.h>

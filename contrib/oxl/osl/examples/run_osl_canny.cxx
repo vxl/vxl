@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>

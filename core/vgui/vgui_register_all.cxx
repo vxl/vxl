@@ -2,7 +2,7 @@
 
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 //
 // Toolkits are registered by registering a "tag function" at
 // library initialization time. That usually works fine with

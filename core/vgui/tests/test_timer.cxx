@@ -1,6 +1,6 @@
 // This is oxl/vgui/tests/test_timer.cxx
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include <vcl_cmath.h>
 #include <vgui/vgui.h>

@@ -12170,7 +12170,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
 
-# fsm@robots. after running glimpse, I can't find anywhere but
+# fsm. after running glimpse, I can't find anywhere but
 # vxl/vbl/vbl_timer.cxx which uses TWO_ARG_GETTIME. Can someone
 # confirm that?
 # If so, that would mean we can remove the makefile -D flags
@@ -12181,7 +12181,7 @@ else
   VXL_TWO_ARG_GETTIME="0"
 fi
 
-# fsm@robots
+# fsm
 if test "${ac_cv_header_pthread_h+set}" = set; then
   echo "$as_me:$LINENO: checking for pthread.h" >&5
 echo $ECHO_N "checking for pthread.h... $ECHO_C" >&6

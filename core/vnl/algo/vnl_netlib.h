@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief Declare in a central place the list of symbols from netlib
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 //
 // Declare in a central place the list of symbols from netlib referenced from vnl-algo.
 // This list was auto-generated, so it is exhaustive as of 16 March 2000 (10pm).

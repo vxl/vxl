@@ -1,5 +1,5 @@
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include <vcl_iterator.h>
 

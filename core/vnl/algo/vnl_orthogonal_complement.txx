@@ -2,7 +2,7 @@
 #ifndef vnl_orthogonal_complement_txx_
 #define vnl_orthogonal_complement_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vnl_orthogonal_complement.h"
 #include <vnl/algo/vnl_svd.h>

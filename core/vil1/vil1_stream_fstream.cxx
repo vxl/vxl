@@ -89,7 +89,7 @@ vil_streampos vil_stream_fstream::read(void* buf, vil_streampos n)
   xerr << "read " << n << vcl_endl;
   f_.read((char *)buf, n);
 
-  // fsm@robots  This is for gcc 2.95 :
+  // fsm  This is for gcc 2.95 :
   // If we try to read more data than is in the file, the good()
   // function will return false even though bad() returns false
   // too. The stream is actually fine but we need to clear the

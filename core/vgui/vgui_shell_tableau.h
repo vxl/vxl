@@ -3,7 +3,7 @@
 #define vgui_shell_tableau_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Tableau to go at the top of one's tableau hierarchy.
 //
 //  Contains classes:  vgui_shell_tableau  vgui_shell_tableau_new

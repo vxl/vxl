@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 //: compute x,y-derivatives and absolute value of gradient.
 // xsize_ is the number of rows [sic] and

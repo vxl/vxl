@@ -2,7 +2,7 @@
 #include "vgui_glut.h"
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_cstdlib.h>
 

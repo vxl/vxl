@@ -11,7 +11,7 @@
 // Functions to convert between different colour spaces.
 // See Foley and van Dam, "Computer Graphics, Principles and Practice".
 //
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 //: Linear transformation from RGB to YIQ colour spaces
 template <class T>

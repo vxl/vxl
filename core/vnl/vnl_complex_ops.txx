@@ -3,7 +3,7 @@
 #define vnl_complex_ops_txx_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // This is the implementation file for the following three header files:
 // vnl_complexify.h vnl_real.h vnl_complex.h
 

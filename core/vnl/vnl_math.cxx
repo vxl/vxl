@@ -114,7 +114,7 @@ bool vnl_math_isnan(long double x) {
 }
 #endif
 
-// fsm@robots.ox.ac.uk
+// fsm
 // On linux noshared builds, with optimisation on, calling 'finite' within the
 // scope of vnl_math causes vnl_math_isinf to be called. This blows the stack.
 // Plausible theory : 'finite' is a preprocessor macro, defined in terms of a

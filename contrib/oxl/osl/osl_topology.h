@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 //
 // *** This is a permanent conversion hack ***
 // Do not expect that future Canny's will provide output in this form.

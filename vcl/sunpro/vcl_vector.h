@@ -1,7 +1,7 @@
 #ifndef vcl_sunpro_vector_h_
 #define vcl_sunpro_vector_h_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 #include <vector>

@@ -70,7 +70,7 @@
 // - " 0" if there is no preferred direction.
 // - "+1" if the preferred direction is increasing.
 //
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 
 //: Indicate whether this is an in-memory image or an on-disk image
 #define vil_property_memory "memory"

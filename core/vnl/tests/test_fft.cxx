@@ -1,6 +1,6 @@
 // This is vxl/vnl/tests/test_fft.cxx
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include <vcl_iostream.h>
 

@@ -20,7 +20,7 @@
 // and new child and the viewport must be set correctly before dispatching these
 // events.
 //
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vgui_poly_tableau.h"
 

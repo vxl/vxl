@@ -2,7 +2,7 @@
 
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>

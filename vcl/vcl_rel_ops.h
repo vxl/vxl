@@ -1,7 +1,7 @@
 #ifndef vcl_rel_ops_h_
 #define vcl_rel_ops_h_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 // Purpose: To provide a portable way of getting inline

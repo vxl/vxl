@@ -1,7 +1,7 @@
 #ifndef vcl_cerrno_h_
 #define vcl_cerrno_h_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 #include "vcl_compiler.h"

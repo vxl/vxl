@@ -3,7 +3,7 @@
 #ifndef vnl_matlab_print_txx_
 #define vnl_matlab_print_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 // Adapted from awf's MatOps class.
 

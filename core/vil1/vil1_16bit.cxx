@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vil_16bit.h"
 #include <vil/vil_stream.h>

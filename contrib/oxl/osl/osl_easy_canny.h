@@ -7,7 +7,7 @@
 // .NAME osl_easy_canny
 // .INCLUDE osl/osl_easy_canny.h
 // .FILE osl_easy_canny.cxx
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_list.h>
 class osl_edge;

@@ -1,6 +1,6 @@
 // This is vxl/vnl/algo/vnl_complex_eigensystem.cxx
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vnl_complex_eigensystem.h"
 

@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vnl_sample.h"
 #include <vnl/vnl_math.h>

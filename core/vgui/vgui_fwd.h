@@ -3,7 +3,7 @@
 #define vgui_fwd_h_
 //:
 // \file
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 // \brief   Forward declaration of classes in vgui.
 
 class vgui_tableau;

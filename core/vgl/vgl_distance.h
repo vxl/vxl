@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief Set of distance functions
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 //
 // Note that these functions return double, not the template parameter Type,
 // since e.g. the distance between two vgl_point_2d<int> is not always an int.

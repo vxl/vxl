@@ -11,7 +11,7 @@
 // Modifications
 // 2000.05.15 François BERTEL Added some missing <T>
 // 2000.05.16 Peter Vanroose  Operators > < >= <= made const
-// 2000.09.13 fsm@robots      Added rationale for unprotect().
+// 2000.09.13 fsm      Added rationale for unprotect().
 // PDA (Manchester) 23/03/2001: Tidied up the documentation
 // Peter Vanroose   27/05/2001: Corrected the documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line

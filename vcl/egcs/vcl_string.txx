@@ -1,7 +1,7 @@
 #ifndef vcl_egcs_string_txx_
 #define vcl_egcs_string_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 #include <vcl_string.h>

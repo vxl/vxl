@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "osl_ortho_regress.h"
 #include <vcl_cmath.h>

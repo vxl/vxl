@@ -19,7 +19,7 @@
 //
 // \verbatim
 //  Modifications
-//    10 Feb 2000 fsm@robots - removed dependency on MultiView
+//    10 Feb 2000 fsm - removed dependency on MultiView
 //    04 Jul 2000 Marko Bacic - Fixed vgui_soview2D_circle
 // \endverbatim
 

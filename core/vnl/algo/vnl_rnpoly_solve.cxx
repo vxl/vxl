@@ -13,7 +13,7 @@
 
 #include "vnl_rnpoly_solve.h"
 
-// fsm@robots: moved ::M and ::T into the namespace of vnl_rnpoly_solve, as they
+// fsm: moved ::M and ::T into the namespace of vnl_rnpoly_solve, as they
 // were causing multiply defined symbols for static builds. if your compiler cannot
 // cope with the next two lines, replace them with #defines.
 static const unsigned int M = vnl_rnpoly_solve::M;

@@ -3,7 +3,7 @@
 #define vgui_quit_tableau_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  A tableau which quits the application on receiving 'q' or ESC
 //
 //  Contains classes:  vgui_quit_tableau  vgui_quit_tableau_new

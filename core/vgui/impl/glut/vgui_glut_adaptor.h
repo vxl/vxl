@@ -3,7 +3,7 @@
 #define vgui_glut_adaptor_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  The GLUT (OpenGL Utility Toolkit) implementation of vgui_adaptor.
 //
 //  Contains classes: vgui_glut_adaptor

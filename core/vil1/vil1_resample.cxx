@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vil_resample.h"
 #include <vil/vil_resample_image_impl.h>

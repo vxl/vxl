@@ -3,7 +3,7 @@
 #define vgui_satellite_tableau_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Tableau to turn a non-tableau into a multi-tableau.
 //
 //  Contains classes: vgui_satellite_tableau_t  vgui_satellite_tableau

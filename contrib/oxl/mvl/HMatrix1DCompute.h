@@ -6,8 +6,7 @@
 // Base class of classes to generate a line-to-line projectivity matrix from
 // a set of matched points.
 //
-// \author
-//  Frederik Schaffalitzky , Robotic Research Group
+// \author fsm
 //
 
 class HMatrix1D;

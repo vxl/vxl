@@ -2,7 +2,7 @@
 
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Tableau which renders its children in sub-rectangles of its viewport.
 //
 //  Contains classes: vgui_poly_tableau  vgui_poly_tableau_new

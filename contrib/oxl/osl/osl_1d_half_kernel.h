@@ -6,7 +6,7 @@
 #endif
 //:
 //  \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 //: This structure holds half of a symmetric convolution kernel.
 // The centre of the kernel is array[0].

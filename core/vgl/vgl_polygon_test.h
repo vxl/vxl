@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 //: return true iff (x, y) is inside (or on boundary of) the given n-gon.
 // \relates vgl_polygon

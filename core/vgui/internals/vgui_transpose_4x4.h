@@ -7,7 +7,7 @@
 // .NAME vgui_transpose_4x4
 // .INCLUDE vgui/internals/vgui_transpose_4x4.h
 // .FILE internals/vgui_transpose_4x4.cxx
-// @author fsm@robots.ox.ac.uk
+// @author fsm
 
 void vgui_transpose_4x4(double A[4][4]);
 

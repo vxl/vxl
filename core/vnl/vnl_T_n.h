@@ -3,7 +3,7 @@
 #define vnl_T_n_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 //
 // Purpose: the vnl_vector_fixed<T,n> template class provides
 // non-mallocing vectors of given size, but it has no constructor

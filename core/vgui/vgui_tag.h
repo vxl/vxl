@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Allow clients to register 'tag functions' which are called later.
 //
 // Purpose: allow clients to register 'tag functions' which will be

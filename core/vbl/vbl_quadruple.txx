@@ -1,7 +1,7 @@
 #ifndef vbl_quadruple_txx_
 #define vbl_quadruple_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vbl_quadruple.h"
 

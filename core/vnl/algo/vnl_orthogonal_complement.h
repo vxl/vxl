@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief For computing the orthogonal complement to a linear subspace.
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 //
 // \verbatim
 // Modifications

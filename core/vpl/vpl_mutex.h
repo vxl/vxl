@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author F. Schaffalitzky, Oxford RRG
+// \author fsm, Oxford RRG
 // \date   08 Dec 2001
 //
 // \verbatim

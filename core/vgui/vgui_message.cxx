@@ -2,7 +2,7 @@
 #include "vgui_message.h"
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  See vgui_message.h for a description of this file.
 
 vgui_message::vgui_message()

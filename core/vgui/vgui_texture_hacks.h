@@ -6,12 +6,12 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
-// \brief  Ask fsm@robots.ox.ac.uk about these hacks.
+// \author fsm
+// \brief  Ask fsm about these hacks.
 
 #include <vgui/vgui_gl.h>
 
-// ask fsm@robots.ox.ac.uk about these hacks.
+// ask fsm about these hacks.
 #if defined(__sun__) && defined(__gl_h_)
 # define fsm_fake_gl_texture_calls
 GLboolean urgh_glAreTexturesResident(GLsizei, GLuint const *, GLboolean *);

@@ -1,5 +1,5 @@
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vgui_qt.h"
 #include <vgui/vgui_tag.h>

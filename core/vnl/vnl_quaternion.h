@@ -12,7 +12,7 @@
 //
 // \verbatim
 //  Modifications
-//  20-05-2000 fsm@robots. changed FLOAT to T since gcc will barf at
+//  20-05-2000 fsm. changed FLOAT to T since gcc will barf at
 //            the very reasonable forward declaration
 //            template <class T> class vnl_quaternion;
 //  LSB (Manchester) 23/3/01 Tidied documentation

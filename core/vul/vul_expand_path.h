@@ -19,7 +19,7 @@
 // query on the same path will be much faster and will not
 // involve any system calls.
 //
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 //
 // \verbatim
 // Modifications

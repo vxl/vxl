@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Propagates tableau posts to an adaptor.
 
 #include <vgui/vgui_tableau.h>

@@ -1,7 +1,7 @@
 #ifndef vcl_emulation_complex_fwd_h_
 #define vcl_emulation_complex_fwd_h_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 template <class T> class vcl_complex;

@@ -1,6 +1,6 @@
 // This is vxl/vnl/tests/test_matlab.cxx
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include <vcl_cstring.h>
 #include <vcl_fstream.h>

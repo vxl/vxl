@@ -4,7 +4,7 @@
 // .LIBRARY vgui-glut
 // .INCLUDE vgui/impl/glut/vgui_glut.h
 // .FILE vgui_glut.cxx
-// @author fsm@robots.ox.ac.uk
+// @author fsm
 
 #include <vgui/vgui_toolkit.h>
 

@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief Adaptor which produces a new image by skipping rows and columns
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>

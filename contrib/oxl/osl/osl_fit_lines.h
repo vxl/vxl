@@ -61,7 +61,7 @@ public:
   inline void SetIgnoreEndEdgels(int ignore) {ignore_end_edgels_ = ignore; }
 
   // NB. these have the undesirable behaviour of deleting the given edges.
-  // beware of future changes. use at own risk. complain to fsm@robots.ox.ac.uk
+  // beware of future changes. use at own risk. complain to fsm
   void incremental_fit_to_list(vcl_list<osl_edge *> *in,
                                vcl_list<osl_edge *> *out);
   void simple_fit_to_list(vcl_list<osl_edge *> *in,

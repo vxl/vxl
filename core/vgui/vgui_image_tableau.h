@@ -3,7 +3,7 @@
 #define vgui_image_tableau_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Tableau which renders the given image using an image_renderer.
 //
 //  Contains classes:  vgui_image_tableau  vgui_image_tableau_new

@@ -7,7 +7,7 @@
 //:
 //  \file
 //  \brief
-//  \author fsm@robots.ox.ac.uk
+//  \author fsm
 
 //
 extern void vnl_error_vector_index (const char* fcn, int index);

@@ -3,7 +3,7 @@
 cvs=/data/target/46/objects/cvs-1.10-hacked-solaris-build/bin/cvs
 
 #
-# fsm@robots.ox.ac.uk
+# fsm
 #
 
 for d in $@; do

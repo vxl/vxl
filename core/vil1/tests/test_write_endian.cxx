@@ -1,5 +1,5 @@
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include <vpl/vpl.h>
 #include <vul/vul_temp_filename.h>

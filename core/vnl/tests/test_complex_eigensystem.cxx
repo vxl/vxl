@@ -1,6 +1,6 @@
 //:
 // \file
-// \author F. Schaffalitzky, Oxford RRG
+// \author fsm, Oxford RRG
 // \date    7 September 1999
 #include <vcl_complex.h>
 #include <vcl_iostream.h>

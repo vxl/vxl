@@ -1,4 +1,4 @@
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 // \brief   Example using vgui_satellite_tableau.
 
 #include <vcl_iostream.h>

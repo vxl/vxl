@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief Obtains time elapsed since 1 Jan 1970, in seconds and milliseconds
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 //
 // \verbatim
 // Modifications

@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief A reference-counted image object.
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_iosfwd.h>
 #include <vil/vil_image_impl.h>

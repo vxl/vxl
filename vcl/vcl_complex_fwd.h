@@ -3,7 +3,7 @@
 #define vcl_complex_fwd_h_
 
 /*
-  fsm@robots.ox.ac.uk \and awf@robots.ox.ac.uk
+  fsm \and awf@robots.ox.ac.uk
 */
 
 // Purpose: Forward declare the template class known

@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief Read from MATLAB files
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 //
 // \verbatim
 // Modifications

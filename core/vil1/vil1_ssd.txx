@@ -3,7 +3,7 @@
 #define vil_ssd_txx_
 
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vil_ssd.h"
 #include <vcl_cassert.h>

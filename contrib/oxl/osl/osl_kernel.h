@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 //: Compute one half of the 1st Derivative Of a Gaussian.
 // 'k_size_' is the actual size of the array pointed to by 'kernel_'.

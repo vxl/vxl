@@ -1,7 +1,7 @@
 #ifndef vcl_sgi_iostream_h_
 #define vcl_sgi_iostream_h_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 #include <iostream.h>

@@ -715,7 +715,7 @@ void vnl_vector<T>::swap(vnl_vector<T> &that)
 
 //--------------------------------------------------------------------------------
 
-// fsm@robots : cos_angle should return a T, or a double-precision extension
+// fsm : cos_angle should return a T, or a double-precision extension
 // of T. "double" is wrong since it won't work if T is complex.
 template <class T>
 T cos_angle(vnl_vector<T> const& a, vnl_vector<T> const& b) {

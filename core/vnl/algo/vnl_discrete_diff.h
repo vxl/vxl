@@ -19,7 +19,7 @@
 // J    mxn     jacobian of the function at x.
 // \endverbatim
 //
-//  \author fsm@robots.ox.ac.uk
+//  \author fsm
 //
 // \verbatim
 // Modifications

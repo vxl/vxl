@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vil_jpeg_compressor.h"
 #include "vil_jpeg_destination_mgr.h"

@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Helper class to emulate overlays using an auxilary buffer.
 
 class vgui_event;

@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief provide easy, efficient and type-safe section buffers
 
 #include <vgui/vgui_pixel.h>

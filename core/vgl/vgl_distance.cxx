@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vgl_distance.h"
 #include <vgl/vgl_line_2d.h>

@@ -149,7 +149,7 @@ void vgui_Xm_adaptor::input_cb(Widget w, XtPointer client_data, XtPointer call)
     params.y = e.wy;
 
     adaptor->xpopup = XmCreatePopupMenu(adaptor->widget,"menubar",NULL, 0);
-    adaptor->last_popup = adaptor->get_total_popup(params); // fsm@robots
+    adaptor->last_popup = adaptor->get_total_popup(params); // fsm
     vgui_Xm_utils::set_menu(adaptor->xpopup, adaptor->last_popup);
 
     XButtonEvent *be = (XButtonEvent*)xev;

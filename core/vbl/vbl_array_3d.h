@@ -14,7 +14,7 @@
 // Modifications
 // 960926 AWF Converted to non-fascist C++ :-)
 // 970218 AWF Templated
-// 01 Mar 2001 fsm@robots. Converted to fascist C++
+// 01 Mar 2001 fsm. Converted to fascist C++
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
 

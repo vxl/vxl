@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief a templated 3-tuple
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_compiler.h>
 

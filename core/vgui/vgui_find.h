@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 // \brief   Functions to search for tableaux in the tableau hierachy.
 
 #include <vcl_string.h>

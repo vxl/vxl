@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk and pcp@robots.ox.ac.uk
+// \author fsm and pcp@robots.ox.ac.uk
 // \brief  Defines the abstract interface to commands.
 //
 // \verbatim

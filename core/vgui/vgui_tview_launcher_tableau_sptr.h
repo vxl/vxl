@@ -3,7 +3,7 @@
 #define vgui_tview_launcher_tableau_sptr_h_
 //:
 // \file
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 // \brief   Smart-pointer to vgui_tview_launcher_tableau tableau.
 
 #include <vgui/vgui_tableau_sptr.h>

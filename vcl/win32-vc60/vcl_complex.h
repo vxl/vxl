@@ -1,7 +1,7 @@
 #ifndef vcl_win32_vc60_complex_h_
 #define vcl_win32_vc60_complex_h_
 
-// fsm@robots: complex<T> is derived from _Complex_base<T>, which is not
+// fsm: complex<T> is derived from _Complex_base<T>, which is not
 // declared with __declspec(dllimport). So complex<T> shouldn't be either
 // (else the compiler will emit an error). Whether or not it is depends on
 // the value of _CRTIMP being set, e.g. in <math.h>

@@ -1,7 +1,7 @@
 #ifndef vcl_bitset_h_
 #define vcl_bitset_h_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 #include "vcl_compiler.h"

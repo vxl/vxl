@@ -2,7 +2,7 @@
 
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vcl_cmath.h"
 

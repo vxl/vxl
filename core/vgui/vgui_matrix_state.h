@@ -3,7 +3,7 @@
 #define vgui_matrix_state_h_
 //:
 // \file
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 // \brief   Stores and retrieves the current projection and modelview matrices.
 //
 //  Contains classes:  vgui_matrix_state

@@ -3,7 +3,7 @@
 #define vgui_loader_tableau_sptr_h_
 //:
 // \file
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 // \brief   Smart-pointer to a vgui_loader_tableau tableau.
 
 

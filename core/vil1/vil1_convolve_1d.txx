@@ -3,7 +3,7 @@
 #define vil_convolve_1d_txx_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vil_convolve.h"
 

@@ -1,5 +1,5 @@
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vnl_cpoly_roots.h"
 #include <vcl_cassert.h>

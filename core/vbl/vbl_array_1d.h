@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief A simple container.
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 //
 // \verbatim
 // Modifications

@@ -21,7 +21,7 @@
 // and change the value of vgl_polygon_scan_iterator_offset back to 0.5
 // for that class.
 //
-// fsm@robots.ox.ac.uk
+// fsm
 //
 
 //static const float vgl_polygon_scan_iterator_offset = 0.5f;

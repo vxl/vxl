@@ -1,5 +1,5 @@
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vgui_Fl.h"
 #include <vul/vul_trace.h>

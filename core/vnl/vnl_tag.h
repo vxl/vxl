@@ -3,7 +3,7 @@
 #define vnl_tag_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 struct vnl_tag_add { };
 struct vnl_tag_sub { };

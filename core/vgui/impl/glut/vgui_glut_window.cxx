@@ -1,5 +1,5 @@
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vgui_glut_window.h"
 #include "vgui_glut_adaptor.h"

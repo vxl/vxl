@@ -1,10 +1,10 @@
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "menu_hack.h"
 
 // without X11, I don't know how to do this.
-// fsm@robots
+// fsm
 
 void vgui_glut_menu_hack::bind(int button, int mods, int menu_id) { }
 

@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 //: A, B are 4x4 matrices.
 bool vgui_invert_homg4x4(double const * const *A, double **B);

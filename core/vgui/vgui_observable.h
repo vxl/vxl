@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Base class for classes that want to broadcast messages to observers.
 //
 //  Contains classes:  vgui_observable.

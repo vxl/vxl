@@ -1,5 +1,5 @@
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>

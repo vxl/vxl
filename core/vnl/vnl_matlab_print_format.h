@@ -1,7 +1,7 @@
 #ifndef vnl_matlab_print_format_h_
 #define vnl_matlab_print_format_h_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 //:

@@ -4,7 +4,7 @@
 
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_iostream.h>
 

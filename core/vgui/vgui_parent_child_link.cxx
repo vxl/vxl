@@ -2,7 +2,7 @@
 #include "vgui_parent_child_link.h"
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  See vgui_parent_child_link.h for a description of this file.
 //
 

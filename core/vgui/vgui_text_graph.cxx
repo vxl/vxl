@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  See vgui_text_graph.h for a description of this file.
 
 #include "vgui_text_graph.h"

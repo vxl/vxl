@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 // \brief   See vgui_color.h for a description of this file.
 
 #include "vgui_color.h"

@@ -7,7 +7,7 @@
 //:
 //  \file
 //  \brief Print matrices and vectors in nice MATLAB format.
-//  \author fsm@robots.ox.ac.uk, from awf's MatOps code.
+//  \author fsm, from awf's MatOps code.
 
 #include <vcl_iosfwd.h>
 #include <vnl/vnl_fwd.h>

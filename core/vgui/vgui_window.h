@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  An abstract representation of a system window.
 //
 //  Contains classes: vgui_window.

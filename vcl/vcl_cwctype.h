@@ -1,7 +1,7 @@
 #ifndef vcl_cwctype_h_
 #define vcl_cwctype_h_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 #include "vcl_compiler.h"

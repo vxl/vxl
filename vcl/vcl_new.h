@@ -1,7 +1,7 @@
 #ifndef vcl_new_h_
 #define vcl_new_h_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 #include "vcl_compiler.h"

@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vgui_rasterpos.h"
 #include <vnl/vnl_vector_fixed.h>

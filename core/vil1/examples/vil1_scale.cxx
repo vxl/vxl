@@ -354,7 +354,7 @@ void pnmscaleT<T, longT>::go()
 template struct pnmscaleT<unsigned char, long>;
 
 #if defined(VCL_SGI_CC)
-// fsm@robots
+// fsm
 // "vil_scale.cxx", line 263: error(1324): more than one operator "*" matches
 //           these operands:
 //             built-in operator "arithmetic * arithmetic"

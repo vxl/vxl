@@ -2,7 +2,7 @@
 
 //:
 // \file
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 // \brief   See vgui_matrix_state.h for a description of this file.
 
 

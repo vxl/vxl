@@ -11,7 +11,7 @@
 //
 //\verbatim
 //  Modifications
-// 27 May 2000 fsm@robots.ox.ac.uk Numerous endianness and structure-packing bugs fixed.
+// 27 May 2000 fsm Numerous endianness and structure-packing bugs fixed.
 //  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
 //\endverbatim
 

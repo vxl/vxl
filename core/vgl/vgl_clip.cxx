@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vgl_clip.h"
 #include <vcl_cstdlib.h> // for vcl_malloc() and vcl_free()

@@ -2,7 +2,7 @@
 #include "vgui_menu.h"
 //: 
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  See vgui_menu.h for a description of this file.
 
 #include <vcl_iostream.h>

@@ -7,7 +7,7 @@ exec perl -w -x $0 ${1+"$@"}
 # in a consistent way.
 
 #
-# fsm@robots.ox.ac.uk
+# fsm
 #
 
 my $program = "vxl_make_dll_h.pl";

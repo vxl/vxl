@@ -20,7 +20,7 @@
 // There is no need to store any fitting costs, "current
 // fit" etc on this object.
 //
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 class osl_ortho_regress
 {

@@ -3,7 +3,7 @@
 #define vcl_sunpro_iterator_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <iterator>
 

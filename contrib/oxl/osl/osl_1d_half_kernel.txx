@@ -3,7 +3,7 @@
 #define osl_1d_half_kernel_txx_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "osl_1d_half_kernel.h"
 #include <vcl_iostream.h>

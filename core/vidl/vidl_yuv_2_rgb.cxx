@@ -4,6 +4,6 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vidl_yuv_2_rgb.h"

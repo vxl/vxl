@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief writes out file, line to stderr.
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 //
 
 //: writes out file, line to stderr and flushes.

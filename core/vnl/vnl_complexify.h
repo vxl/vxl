@@ -4,7 +4,7 @@
 //:
 //  \file
 //  \brief Functions to create complex vectors and matrices from real ones
-//  \author fsm@robots.ox.ac.uk
+//  \author fsm
 //
 // \verbatim
 // Modifications

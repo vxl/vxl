@@ -7,7 +7,7 @@
 // .NAME osl_reorder_chain
 // .INCLUDE osl/internals/osl_reorder_chain.h
 // .FILE internals/osl_reorder_chain.cxx
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 struct osl_edgel_chain;
 

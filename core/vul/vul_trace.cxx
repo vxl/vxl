@@ -1,7 +1,7 @@
 // This is vxl/vul/vul_trace.cxx
 
 //
-//  fsm@robots.ox.ac.uk
+//  fsm
 //
 
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

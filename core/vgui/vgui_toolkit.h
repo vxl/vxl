@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Base class for toolkit implementations.
 //
 //  Contains classes:  vgui_toolkit

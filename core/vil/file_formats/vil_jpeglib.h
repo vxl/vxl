@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief Stuff for jpeg I/O
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_cstdio.h> // for FILE, used in jpeglib.h !!
 #include <vcl_cstddef.h> // for size_t, used in jpeglib.h !!

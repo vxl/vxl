@@ -2,7 +2,7 @@
 #include "vgui_quit_tableau.h"
 //:
 // \file
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 // \brief   See vgui_quit_tableau.h for a description of this file.
 
 #include <vgui/vgui.h>

@@ -3,7 +3,7 @@
 #define vcl_cctype_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vcl_compiler.h"
 

@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief Set of vil_image_as functions
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vil/vil_image.h>
 

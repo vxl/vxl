@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vil2_bmp_file_header.h"
 #include <vcl_iomanip.h> // for vcl_hex, vcl_dec

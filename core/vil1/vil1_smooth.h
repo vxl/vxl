@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief Functions to convolve a vil_image with a smoothing kernel
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vil/vil_image.h>
 

@@ -3,7 +3,7 @@
 #define vcl_ios_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vcl_compiler.h"
 

@@ -1,7 +1,7 @@
 #ifndef vcl_gcc_libstdcxx_v3_functional_cxx_
 #define vcl_gcc_libstdcxx_v3_functional_cxx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include <vcl_functional.h>
 

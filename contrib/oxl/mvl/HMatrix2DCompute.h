@@ -30,7 +30,7 @@ public:
   // set this to true for verbose run-time information
   void verbose(bool v) { verbose_ = v; }
 
-  // fsm@robots.ox.ac.uk
+  // fsm
   virtual int minimum_number_of_correspondences() const = 0;
 
   // these reduce the size of the method signatures somewhat.

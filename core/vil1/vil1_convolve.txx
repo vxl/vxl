@@ -2,7 +2,7 @@
 #ifndef vil_convolve_txx_
 #define vil_convolve_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vil_convolve.h"
 #include <vcl_iostream.h>

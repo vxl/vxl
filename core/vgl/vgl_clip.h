@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \verbatim
 // Modifications
 // 29 Apr 2002: Amitha Perera: added a polygon clipper (a wrap around for

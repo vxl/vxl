@@ -3,7 +3,7 @@
 #define vgui_glut_window_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  The GLUT (OpenGL Utility Toolkit) implementation of vgui_window.
 //
 //  Contains classes:  vgui_glut_window

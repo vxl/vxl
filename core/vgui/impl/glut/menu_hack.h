@@ -2,7 +2,7 @@
 #define vgui_glut_menu_hack_h_
 // .LIBRARY vgui-glut
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 struct vgui_glut_menu_hack

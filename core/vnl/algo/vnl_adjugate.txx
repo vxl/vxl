@@ -1,7 +1,7 @@
 #ifndef vnl_adjugate_txx_
 #define vnl_adjugate_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vnl_adjugate.h"
 #include <vnl/vnl_matrix.h>

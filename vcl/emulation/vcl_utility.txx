@@ -6,7 +6,7 @@
 #include "vcl_pair.h"
 #include "vcl_algorithm.txx"
 
-// fsm@robots: what's this CONTAINABLE0 thing? I commented it out
+// fsm: what's this CONTAINABLE0 thing? I commented it out
 // in favour of CONTAINABLE.
 
 #undef VCL_PAIR_INSTANTIATE

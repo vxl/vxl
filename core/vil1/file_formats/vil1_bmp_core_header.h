@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \verbatim
 //  Modifications
 //   Nick Costen added Manchester IO 16/3/01

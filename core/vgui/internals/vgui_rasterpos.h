@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 void vgui_rasterpos4dv(double const X[4]);
 void vgui_rasterpos2f(float x, float y);

@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Some handy preprocessor macros commonly used in vgui
 //
 // Do not include <vcl_iostream.h> from this file.

@@ -12,13 +12,13 @@
 //
 // \verbatim
 // Modifications:
-// 16-Sep-1999  fsm@robots. various.
-//  5-Oct-1999  fsm@robots. replaced (x,y) by (wx,wy) and (ux,uy).
+// 16-Sep-1999  fsm. various.
+//  5-Oct-1999  fsm. replaced (x,y) by (wx,wy) and (ux,uy).
 // 10-Oct-1999  pcp         added timestamp
 // 20-Oct-1999  awf         Changed timestamp to int.
-// 19-Oct-1999  fsm@robots. added pointer to adaptor.
-//  1-Nov-1999  fsm@robots. events now use viewport, not window coordinates.
-// 28-Nov-1999  fsm@robots. added vcl_string event.
+// 19-Oct-1999  fsm. added pointer to adaptor.
+//  1-Nov-1999  fsm. events now use viewport, not window coordinates.
+// 28-Nov-1999  fsm. added vcl_string event.
 // 22-Aug-2000  Marko Bacic. added support for scroll bar events
 // 04-Oct-2002  K.Y.McGaul - Added set_key() to make sure vgui_key is now
 //                           always lower case to save confusion.

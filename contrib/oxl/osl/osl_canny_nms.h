@@ -7,7 +7,7 @@
 // .NAME osl_canny_nms
 // .INCLUDE osl/osl_canny_nms.h
 // .FILE osl_canny_nms.cxx
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 
 unsigned int osl_canny_nms(int xsize_, int ysize_,

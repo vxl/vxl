@@ -6,8 +6,7 @@
 // HMatrix1DComputeLinear contains a method to calculate
 // the line projectivity which relates three 1D point correspondences.
 //
-// \author
-// F. Schaffalitzky, RRG
+// \author fsm
 //
 
 #include "HMatrix1DCompute.h"

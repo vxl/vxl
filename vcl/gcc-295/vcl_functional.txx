@@ -2,7 +2,7 @@
 #define vcl_gcc_295_functional_txx_
 
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include <vcl_functional.h>
 

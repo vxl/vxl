@@ -1,7 +1,7 @@
 #ifndef vcl_win32_vc60_string_h_
 #define vcl_win32_vc60_string_h_
 /* This is only for Visual Studio 6.
-   fsm@robots.ox.ac.uk
+   fsm
 */
 
 #include <string>
@@ -15,7 +15,7 @@
 #define vcl_getline  std::getline
 #endif
 
-//fsm@robots: for some reason, vc60 crashes if vnl_fwd.h is used in conjunction
+//fsm: for some reason, vc60 crashes if vnl_fwd.h is used in conjunction
 //with this #define. using a typedef seems to fix it.
 //#define vcl_string        std::string
 typedef std::string vcl_string;

@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \date   17 Feb 2000
 
 #include "vil_jpeg.h"

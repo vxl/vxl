@@ -4,7 +4,7 @@
 // .NAME osl_hacks
 // .INCLUDE osl/osl_hacks.h
 // .FILE osl_hacks.cxx
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 // FIXME FIXME FIXME FIXME FIXME
 #define osl_IUDelete(p) /* delete p */

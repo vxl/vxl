@@ -1,7 +1,7 @@
 #ifndef vnl_fft_base_txx_
 #define vnl_fft_base_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vnl_fft_base.h"
 #include <vnl/algo/vnl_fft.h>

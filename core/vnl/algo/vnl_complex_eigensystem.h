@@ -3,7 +3,7 @@
 //:
 //  \file
 //  \brief  Calculates eigenvalues and eigenvectors of a square complex matrix
-//  \author fsm@robots.ox.ac.uk
+//  \author fsm
 //
 //  \verbatim
 //  Modifications

@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vgl_polygon_test.h"
 #include <vgl/vgl_lineseg_test.h>

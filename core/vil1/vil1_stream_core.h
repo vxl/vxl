@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief An in-core vil_stream implementation
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 
 #include <vcl_vector.h>
 #include <vil/vil_stream.h>

@@ -8,7 +8,7 @@
 // .LIBRARY vgui-glut
 // .INCLUDE vgui/impl/glut/vgui_glut_popup_impl.h
 // .FILE vgui_glut_popup_impl.cxx
-// @author fsm@robots.ox.ac.uk
+// @author fsm
 
 #include <vgui/vgui_menu.h>
 

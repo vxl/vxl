@@ -10,7 +10,7 @@ exec perl -w -x $0 ${1+"$@"}
 #          day it is I who will be expected to maintain this script
 #          so I don't think I'm being unfair.
 #
-# Author: fsm@robots.ox.ac.uk
+# Author: fsm
 #
 # Usage: PROGRAM [options] name_of_class [headerfile]
 #

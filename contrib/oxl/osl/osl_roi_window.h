@@ -7,7 +7,7 @@
 // .NAME osl_roi_window
 // .INCLUDE osl/osl_roi_window.h
 // .FILE osl_roi_window.cxx
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 // some sort of bounding box.
 struct osl_roi_window

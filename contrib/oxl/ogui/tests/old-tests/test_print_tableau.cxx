@@ -1,5 +1,5 @@
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include <vgui/vgui.h>
 #include <vgui/vgui_deck_tableau.h>

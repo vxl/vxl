@@ -1,7 +1,7 @@
 #ifndef vbl_array_1d_txx_
 #define vbl_array_1d_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vbl_array_1d.h"
 

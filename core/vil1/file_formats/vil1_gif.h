@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 //
 // This is an ad hoc hack. If you write a better one, you are most
 // welcome to replace mine with yours.

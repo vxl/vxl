@@ -12,7 +12,7 @@
 //
 // \verbatim
 //  Modifications
-// F. Schaffalitzky, Oxford IESRG, 26 Mar 1999
+// fsm, Oxford IESRG, 26 Mar 1999
 //     1. The singular values are now stored as reals (not complexes) when T is complex.
 //     2. Fixed bug : for complex T, matrices have to be conjugated as well as transposed.
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line

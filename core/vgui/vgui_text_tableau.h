@@ -15,7 +15,7 @@
 // \verbatim
 //  Modifications:
 //   19-OCT-1999 P.Pritchett - Initial version.
-//   30 Dec 1999 fsm@robots. modified to render arbitrary text.
+//   30 Dec 1999 fsm. modified to render arbitrary text.
 //   23-FEB-2000 K.Y.McGaul - Handle now remains constant when text is removed,
 //                            this means the vector will never get smaller.
 //   06-AUG-2002 K.Y.McGaul - Changed to and added Doxygen comments.

@@ -364,7 +364,7 @@ AC_SUBST(VCL_CXX_HAS_HEADER_STRSTREAM)
 
 
 
-# fsm@robots. after running glimpse, I can't find anywhere but 
+# fsm. after running glimpse, I can't find anywhere but 
 # vxl/vbl/vbl_timer.cxx which uses TWO_ARG_GETTIME. Can someone
 # confirm that?
 # If so, that would mean we can remove the makefile -D flags
@@ -375,7 +375,7 @@ else
   VXL_TWO_ARG_GETTIME="0"
 fi
 
-# fsm@robots
+# fsm
 AC_CHECK_HEADER(pthread.h,[VXL_HAS_PTHREAD_H=1],[VXL_HAS_PTHREAD_H=0])
 AC_CHECK_HEADER(semaphore.h,[VXL_HAS_SEMAPHORE_H=1],[VXL_HAS_SEMAPHORE_H=0])
 VXL_CXX_UNISTD

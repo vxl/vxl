@@ -399,7 +399,7 @@ void vgui_Fl_adaptor::draw()
 void vgui_Fl_adaptor::draw_overlay()
 {
 #if 1
-  // fsm@robots: It seems that the fltk code which is calling draw_overlay()
+  // fsm: It seems that the fltk code which is calling draw_overlay()
   // performs an invalid operation. So we discard any GL errors stored up
   // till now. That doesn't fix the overlay bug, though, it just quells the
   // warning messages from vgui_macro_report_errors

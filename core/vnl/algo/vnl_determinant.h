@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief calculates the determinant of a matrix
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 //
 //  Evaluation of determinants of any size. For small
 //  matrices, will use the direct routines (no netlib)

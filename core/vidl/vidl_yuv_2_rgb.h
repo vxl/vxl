@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 //
 // this file has been copied over from oxl/oxp and optimized a little bit.
 // i experimented with  a vul_timer to shave as many milliseconds off as possible.

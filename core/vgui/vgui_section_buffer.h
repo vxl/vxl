@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Holds a section of a GL image with given OpenGL buffer format and types.
 //
 //  Contains classes:  vgui_section_buffer

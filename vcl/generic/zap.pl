@@ -5,7 +5,7 @@ exec perl -w -x $0 ${1+"$@"}
 #line 6
 
 #
-# fsm@robots.ox.ac.uk
+# fsm
 #
 # Usage: zap.pl blah
 #

@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vgui_glut_popup_impl.h"
 #include "vgui_glut_adaptor.h"

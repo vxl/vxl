@@ -7,8 +7,7 @@
 // HMatrix2DCompute4Line computes the homography relating
 // two sets of four homogeneous lines in general position.
 //
-// \author
-//     Frederik Schaffalitzky, Oxford RRG, 8 February 1998
+// \author fsm, Oxford RRG, 8 February 1998
 
 #include "HMatrix2DCompute.h"
 

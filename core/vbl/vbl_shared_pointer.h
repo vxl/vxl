@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief Non-intrusive smart pointers
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_compiler.h>
 

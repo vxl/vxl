@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // Code for computing projective structure from 3 views of 6 points.
 //
 // The six points are assumed to be:

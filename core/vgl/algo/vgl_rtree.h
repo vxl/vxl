@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief Templated rtree class and associated classes and functions
 //--------------------------------------------------------------------------------
 

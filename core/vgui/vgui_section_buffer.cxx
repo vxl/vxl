@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  See vgui_section_buffer.h for a description of this file.
 //
 // \verbatim
@@ -16,7 +16,7 @@
 //               image is rendered by tiling together several textures containing
 //               different parts of it.
 //
-//  the_same_day F. Schaffalitzky
+//  the_same_day fsm
 //               Imposed my rigid ways on Marko's changes.
 //               Fixes for SolarisGL.
 // \endverbatim

@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  See vgui_adaptor_tableau.h for a description of this file.
 
 #include "vgui_adaptor_tableau.h"

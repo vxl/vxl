@@ -7,7 +7,7 @@
 //:
 //   \file
 //   \brief Easy conversion between vectors and matrices templated over different types.
-//   \author fsm@robots.ox.ac.uk
+//   \author fsm
 //
 // \verbatim
 // Modifications

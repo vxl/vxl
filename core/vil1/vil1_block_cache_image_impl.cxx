@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vil_block_cache_image_impl.h"
 #include <vcl_cstring.h>  // strcmp()

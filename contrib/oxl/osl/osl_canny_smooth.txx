@@ -9,7 +9,7 @@
 //    instantiate symbols whose signatures contain a parameter of
 //    the form "type * const *". hence the 'unpro_const' macro. fsm.
 //
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "osl_canny_smooth.h"
 #include <vcl_cmath.h>

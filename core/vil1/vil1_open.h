@@ -8,7 +8,7 @@
 // \file
 // \brief make a vil_stream from a filename, an URL, etc.
 //
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 //
 // \verbatim
 //  Modifications

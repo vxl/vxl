@@ -15,9 +15,9 @@
 // \verbatim
 //  Modifications:
 //   03-Nov-1999 Geoff Initial version.
-//   04-Jan-2000 fsm@robots. added set_ortho(), thereby obsoleting
+//   04-Jan-2000 fsm. added set_ortho(), thereby obsoleting
 //                           view_section and view_volume.
-//   05-Jan-2000 fsm@robots. added set_identity(), thereby obsoleting
+//   05-Jan-2000 fsm. added set_identity(), thereby obsoleting
 //                           reset_matrix_state.
 //   14-Aug-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
 //   01-OCT-2002 K.Y.McGaul - Moved vgui_load to vgui_loader_tableau.

@@ -1,7 +1,7 @@
 #ifndef vnl_fft_prime_factors_txx_
 #define vnl_fft_prime_factors_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vnl_fft_prime_factors.h"
 #include <vnl/algo/vnl_fft.h>

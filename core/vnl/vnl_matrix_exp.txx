@@ -2,7 +2,7 @@
 #ifndef vnl_matrix_exp_txx_
 #define vnl_matrix_exp_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vnl_matrix_exp.h"
 #include <vcl_cassert.h>

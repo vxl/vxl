@@ -3,7 +3,7 @@
 #define vgui_message_h_
 //:
 // \file
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 // \brief   Used to send messages from observables to observers.
 //
 //  Contains classes:  vgui_message

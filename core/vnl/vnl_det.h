@@ -4,7 +4,7 @@
 //:
 //  \file
 //  \brief Direct evaluation of 2x2, 3x3 and 4x4 determinants.
-//  \author fsm@robots.ox.ac.uk
+//  \author fsm
 //
 // \verbatim
 //  Modifications

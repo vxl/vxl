@@ -2,7 +2,7 @@
 #include "vnl_binary.h"
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_iostream.h>
 

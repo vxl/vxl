@@ -25,7 +25,7 @@
 //   vnl_matlab_print(vcl_cerr, foo, 0, vnl_matlab_fmt_long);
 // \endcode
 //
-//  \author fsm@robots.ox.ac.uk
+//  \author fsm
 
 #include <vnl/vnl_matlab_print.h>
 

@@ -2,7 +2,7 @@
 #define vgui_parent_child_link_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Describes the relationship between a parent and child tableau.
 // 
 //  Contains classes:  vgui_parent_child_link

@@ -4,7 +4,7 @@
 //:
 //  \file
 //  \brief  finds roots of a univariate polynomial with complex coefficients
-//  \author fsm@robots.ox.ac.uk
+//  \author fsm
 //
 // \verbatim
 // Modifications

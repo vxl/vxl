@@ -2,7 +2,7 @@
 #include "vgui_adaptor.h"
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  See vgui_adaptor.h for a description of this file.
 
 #include <vcl_cassert.h>

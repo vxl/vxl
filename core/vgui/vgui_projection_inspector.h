@@ -3,7 +3,7 @@
 #define vgui_projection_inspector_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief
 //
 //  Contains classes:  vgui_projection_inspector

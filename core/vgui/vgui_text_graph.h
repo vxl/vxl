@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Text descriptions of the tableau heirachy.
 
 #include <vcl_iosfwd.h>

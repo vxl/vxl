@@ -1,7 +1,7 @@
 #ifndef vcl_fstream_h_
 #define vcl_fstream_h_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 // this is to get the vcl_ios_* macros.

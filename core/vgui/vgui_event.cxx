@@ -153,7 +153,7 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_event const& e)
 //: Returns true if events are the same.
 //  Isn't this what the compiler would have generated anyway?
 //  moreover, the compiler-generated one wouldn't need to be
-//  updated when the fields are changed. fsm@robots.
+//  updated when the fields are changed. fsm.
 bool operator==(vgui_event const& a, vgui_event const& b)
 {
   return  a.type    == b.type &&

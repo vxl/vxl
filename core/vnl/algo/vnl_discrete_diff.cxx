@@ -2,7 +2,7 @@
 #include <vnl/vnl_least_squares_function.h>
 #include <vcl_cassert.h>
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 bool vnl_discrete_diff_fwd(vnl_least_squares_function *lsf,

@@ -47,4 +47,4 @@ always post an overlay redraw() upon receiving a vgui_DRAW, even if the tableau
 performs no normal drawing. Because if the normal frame buffer is rerendered, 
 e.g. due to a zoom, the overlays probably have to be rerendered too.
 
-fsm@robots.ox.ac.uk
+fsm

@@ -4,6 +4,6 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "oxp_yuv_to_rgb.h"

@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // This class is best accessed through the external function vil_resample().
 
 #include <vil/vil_image_impl.h>

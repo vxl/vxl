@@ -1,7 +1,7 @@
 #ifndef vcl_strstream_h_
 #define vcl_strstream_h_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 // <strstream> is deprecated in favour of <sstream>, i.e. it is normative

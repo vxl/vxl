@@ -4,7 +4,7 @@
 
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 template <class T> struct vnl_complex_traits;
 template <class T> class vnl_numeric_traits;

@@ -20,7 +20,7 @@ void z_sqrt(doublecomplex *ret_value, const doublecomplex *z)
   return;
 
 #if 0
-  /* was: (fsm@robots.ox.ac.uk) */
+  /* was: (fsm) */
   doublereal a = z->r;
   doublereal b = z->i;
   doublereal r = hypot(a,b);

@@ -7,7 +7,7 @@
 // .NAME osl_edgel_chain
 // .INCLUDE osl/osl_edgel_chain.h
 // .FILE osl_edgel_chain.cxx
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_iosfwd.h>
 

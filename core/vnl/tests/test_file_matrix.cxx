@@ -1,5 +1,5 @@
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include <vcl_iostream.h>
 #include <testlib/testlib_root_dir.h>

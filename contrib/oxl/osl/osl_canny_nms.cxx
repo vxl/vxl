@@ -4,7 +4,7 @@
 #endif
 //:
 //  \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "osl_canny_nms.h"
 #include <vcl_cmath.h>

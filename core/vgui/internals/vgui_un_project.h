@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 //: Compute the preimage Y of a point X under a 4x4 homography H.
 bool vgui_un_project(double const * const *H, double const X[4], double Y[4]);

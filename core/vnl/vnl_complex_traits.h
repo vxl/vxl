@@ -7,7 +7,7 @@
 //:
 //  \file
 //  \brief To allow templated algorithms to determine appropriate actions of conjugation, complexification etc.
-//  \author F. Schaffalitzky, Oxford RRG, 26 Mar 1999
+//  \author fsm, Oxford RRG, 26 Mar 1999
 //
 // \verbatim
 // Modifications:

@@ -2,7 +2,7 @@
 #include "vgui_glut_adaptor.h"
 //:
 //  \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vgui_glut_window.h"
 #include "vgui_glut_popup_impl.h"

@@ -1,7 +1,7 @@
 #ifndef vcl_gcc_libstdcxx_v3_string_txx_
 #define vcl_gcc_libstdcxx_v3_string_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 #undef VCL_BASIC_STRING_INSTANTIATE

@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief In-place n-D fast fourier transform
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_complex.h>
 #include <vnl/algo/vnl_fft_prime_factors.h>

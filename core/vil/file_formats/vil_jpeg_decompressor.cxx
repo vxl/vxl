@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \verbatim
 //  Modifications
 //     11 Oct 2002 Ian Scott - converted to vil22

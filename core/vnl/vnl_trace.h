@@ -7,7 +7,7 @@
 //:
 //  \file
 //  \brief Calculate trace of a matrix
-//  \author fsm@robots.ox.ac.uk
+//  \author fsm
 //
 // \verbatim
 // Modifications

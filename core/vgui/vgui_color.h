@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Easy functions which attempt to set the current color in both RGBA and color index mode
 
 #define vgui_color_WHITE  1, 1, 1

@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 //: Chamfer transform routines taken from osl_edge_detector.
 void osl_chamfer_Forward (int,int,int**,float**);

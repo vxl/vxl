@@ -7,7 +7,7 @@
 // .NAME osl_load_topology
 // .INCLUDE osl/osl_load_topology.h
 // .FILE osl_load_topology.cxx
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_iosfwd.h>
 #include <osl/osl_edge.h>

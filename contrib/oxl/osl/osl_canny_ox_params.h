@@ -7,7 +7,7 @@
 // .NAME osl_canny_ox_params
 // .INCLUDE osl/osl_canny_ox_params.h
 // .FILE osl_canny_ox_params.cxx
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 class osl_canny_ox_params
 {

@@ -3,7 +3,7 @@
 #define vnl_adjugate_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 template <class T> class vnl_matrix;
 

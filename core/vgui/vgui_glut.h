@@ -11,7 +11,7 @@
 # define VGUI_GLUT_PRESENT 0
 #else
 # define VGUI_GLUT_PRESENT 1
-# if 0 // fsm@robots
+# if 0 // fsm
 // It seems that this hack is no longer necessary. For Glut 3.7(.2) under
 // Windows, the comments indicate that they do a work around for the exit
 // fiasco. The hack seems to be unnecessary for new Linux boxen, and is

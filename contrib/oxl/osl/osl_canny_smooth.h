@@ -8,7 +8,7 @@
 // .INCLUDE osl/osl_canny_smooth.h
 // .FILE osl_canny_smooth.cxx
 // .FILE osl_canny_smooth.txx
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vil/vil_image.h>
 

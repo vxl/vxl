@@ -1,7 +1,7 @@
 #ifndef bgui_image_tableau_sptr_h_
 #define bgui_image_tableau_sptr_h_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 // .NAME    bgui_image_tableau_sptr
 // .INCLUDE bgui/bgui_image_tableau_sptr.h

@@ -1,5 +1,5 @@
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vgui_glut_impl.h"
 #include <vgui/vgui_tag.h>

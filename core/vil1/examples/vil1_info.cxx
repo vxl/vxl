@@ -1,6 +1,6 @@
 // This is vxl/vil/examples/vil_info.cxx
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include <vcl_iostream.h>
 #include <vil/vil_image.h>

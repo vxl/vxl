@@ -1,7 +1,7 @@
 #ifndef vcl_sunpro_deque_txx_
 #define vcl_sunpro_deque_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 #include <vcl_deque.h>

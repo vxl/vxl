@@ -148,7 +148,7 @@ vidl_clip_sptr  vidl_io::load_clip(
           // So, we will process all the files in this directory
           // as images making the video.
           return 0;
-#if 0 // avoid warnings about unreachable code - fsm@robots.ox.ac.uk
+#if 0 // avoid warnings about unreachable code - fsm
           Dir dir(fname);
           if (!dir.IsOpen())
              return 0;

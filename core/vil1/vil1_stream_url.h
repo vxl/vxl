@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief open an URL
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 
 #include <vil/vil_stream.h>
 

@@ -1,7 +1,7 @@
 #ifndef vcl_sunpro_map_h_
 #define vcl_sunpro_map_h_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 #include <map>

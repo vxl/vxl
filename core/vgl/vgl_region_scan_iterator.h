@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 //: Abstract base class for iterating over the pixels in a pseudo-convex region of an image.
 struct vgl_region_scan_iterator

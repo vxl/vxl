@@ -1,7 +1,7 @@
 #ifndef vnl_algo_determinant_txx_
 #define vnl_algo_determinant_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vnl_determinant.h"
 

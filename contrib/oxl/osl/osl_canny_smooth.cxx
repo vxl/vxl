@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // see osl_canny_smooth.txx for template functions.
 
 #include "osl_canny_smooth.h"

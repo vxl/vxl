@@ -3,7 +3,7 @@
 #define vgui_adaptor_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Provides an abstract interface to an OpenGL rendering state.
 //
 //  Contains classes: vgui_adaptor.
@@ -11,13 +11,13 @@
 // \verbatim
 // Modifications
 // 20 October  1999 pcp@robots. removed derivation from tableau.
-// 20 Octover  1999 fsm@robots. detach()ed the adaptor from the tableau in
+// 20 Octover  1999 fsm. detach()ed the adaptor from the tableau in
 //                  the destuctor to avoid leaving a dangling pointer in the
 //                  tableau.
-// 28 October  1999 fsm@robots. added more menu support (as agreed with pcp).
-//  7 January  1999 fsm@robots. new observer/observable method of getting
+// 28 October  1999 fsm. added more menu support (as agreed with pcp).
+//  7 January  1999 fsm. new observer/observable method of getting
 //                  redraw from tableau to adaptor.
-//  2 February 1999 fsm@robots. more overlay documentation.
+//  2 February 1999 fsm. more overlay documentation.
 // 23-AUG-2000      Marko Bacic,Oxford RRG - Added post_message
 // 31 August   2000 u97mb@robots. Support for mfc acceleration
 // 07-SEP-2000      Marko Bacic,Oxford RRG - Added pure virtual method "draw"

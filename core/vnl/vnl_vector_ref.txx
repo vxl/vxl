@@ -3,7 +3,7 @@
 #define vnl_vector_ref_txx_
 
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vnl_vector_ref.h"
 

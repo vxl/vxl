@@ -7,7 +7,7 @@
 // .NAME vdgl_OrthogRegress
 // .INCLUDE vdgl/vdgl_OrthogRegress.h
 // .FILE vdgl_OrthogRegress.cxx
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_cmath.h>
 #include <vdgl/vdgl_ortho_regress.h>

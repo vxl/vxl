@@ -3,7 +3,7 @@
 #define vgui_shell_tableau_sptr_h_
 //:
 // \file
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 // \brief   Smart-pointer to a vgui_shell_tableau.
 
 #include <vgui/vgui_tableau_sptr.h>

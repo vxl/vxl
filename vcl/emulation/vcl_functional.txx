@@ -1,7 +1,7 @@
 #ifndef vcl_emulation_functional_txx_
 #define vcl_emulation_functional_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include <vcl_functional.h>
 

@@ -122,7 +122,7 @@ vgui_Xm_window::vgui_Xm_window(int w, int h, const vgui_menu& menu, const char* 
 void vgui_Xm_window::set_menubar(const vgui_menu &menu)
 {
   use_menubar = true;
-  *last_menubar = menu; // fsm@robots
+  *last_menubar = menu; // fsm
 
   menubar = XmCreateMenuBar(form,"menubar",NULL, 0);
   XtVaSetValues(menubar,

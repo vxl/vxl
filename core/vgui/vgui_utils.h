@@ -2,7 +2,7 @@
 #define vgui_utils_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Useful static functions for vgui.
 //
 // \verbatim

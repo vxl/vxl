@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vil_flipud_impl.h"
 #include <vcl_climits.h> // for CHAR_BIT

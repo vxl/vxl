@@ -2,7 +2,7 @@
 
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  See vgui_projection_inspector.h for a description of this file.
 
 #include "vgui_projection_inspector.h"

@@ -3,7 +3,7 @@
 #define vgui_wrapper_tableau_h_
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Base class tableau for tableau who want only a single child.
 //
 //  Contains classes: vgui_wrapper_tableau  vgui_wrapper_tableau_new

@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \brief  Cache of parents of a tableau (makes posting redraws more efficient).
 
 #include <vcl_vector.h>

@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief Routines to compute sum of squared differences between two images
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 
 #include <vil/vil_memory_image_of.h>
 

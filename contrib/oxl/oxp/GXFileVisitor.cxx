@@ -152,7 +152,7 @@ bool GXFileVisitor::visit(vcl_istream& s)
         for (unsigned i = 0; i < sizeof colors / sizeof colors[0]; ++i)
           if (vcl_strcmp(colors[i].s, cs) == 0) {
             //was : color = colors[i].c;
-            // fsm@robots. some compilers (SGI native) don't
+            // fsm. some compilers (SGI native) don't
             // like assignment from float [3] to float [3].
 #if 0
             color = colors[i].c;

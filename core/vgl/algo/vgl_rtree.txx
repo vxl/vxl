@@ -1,7 +1,7 @@
 #ifndef vgl_rtree_txx_
 #define vgl_rtree_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 #include "vgl_rtree.h"
 #include <vcl_cassert.h>

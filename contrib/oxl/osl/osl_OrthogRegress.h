@@ -7,7 +7,7 @@
 // .NAME osl_OrthogRegress
 // .INCLUDE osl/osl_OrthogRegress.h
 // .FILE osl_OrthogRegress.cxx
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vcl_cmath.h>
 #include <osl/osl_hacks.h>

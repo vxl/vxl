@@ -1,7 +1,7 @@
 #ifndef vcl_sunpro_utility_txx_
 #define vcl_sunpro_utility_txx_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 #include <vcl_utility.h>

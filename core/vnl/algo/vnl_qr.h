@@ -17,7 +17,7 @@
 //  200897 AWF Added determinant().
 //  071097 AWF Added Q(), R().
 //  Christian Stoecklin, ETH Zurich, added QtB(v)
-//  31-mar-2000 fsm@robots.ox.ac.uk: templated
+//  31-mar-2000 fsm: templated
 //  dac (Manchester) 28/03/2001: tidied up documentation
 // \endverbatim
 

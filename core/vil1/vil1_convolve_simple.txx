@@ -4,7 +4,7 @@
 //:
 // \file
 // \author
-// fsm@robots.ox.ac.uk
+// fsm
 
 #include "vil_convolve_simple.h"
 
@@ -21,7 +21,7 @@
 
 //--------------------------------------------------------------------------------
 
-// fsm@robots: With 2.7 the assembler complains that this symbol is defined
+// fsm: With 2.7 the assembler complains that this symbol is defined
 // twice. Moreover, it *is* defined twice (both .weak), even if we don't
 // explicitly instantiate it. If explicitly instantiated, it is defined once
 // .global and once .weak. Presumably, the compiler incorrectly thinks it needs

@@ -1,6 +1,6 @@
 // This is contrib/mul/vil2/vil2_stream_core.cxx
 
-// @author fsm@robots.ox.ac.uk
+// @author fsm
 
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation

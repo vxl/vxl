@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief make a section of a vil_stream behave like a vil_stream
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 
 #include <vil/vil_stream.h>
 

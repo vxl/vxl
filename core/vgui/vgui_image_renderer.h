@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief OpenGL utility to render a vil_image.
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 //
 
 #include <vil/vil_image.h>

@@ -30,7 +30,7 @@
 // not to clutter it. All property tags described in this file should
 // begin with "vil2_property_" and that chunk of the namespace is reserved.
 //
-// \author  fsm@robots.ox.ac.uk
+// \author  fsm
 
 //: Indicate whether this is an in-memory image or an on-disk image
 #define vil2_property_memory "memory"

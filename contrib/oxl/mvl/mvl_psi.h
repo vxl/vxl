@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // You don't need to know what these functions are for.
 
 #define mvl_typename class

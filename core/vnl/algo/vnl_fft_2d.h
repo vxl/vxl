@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief In-place 2D fast fourier transform
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_fft_base.h>

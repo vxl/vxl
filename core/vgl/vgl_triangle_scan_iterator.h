@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief Optimized polygon scan iterator for triangles
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include <vgl/vgl_region_scan_iterator.h>
 

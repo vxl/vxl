@@ -2,7 +2,7 @@
 #include "vgui_utils.h"
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 // \date   Oct 99
 // \brief  See vgui_utils.h for a description of this file.
 

@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
+// \author fsm
 
 #include "vgui_section_render.h"
 
@@ -94,7 +94,7 @@ bool vgui_section_render(void const *pixels,
     // New way, as worked out by pcp. This is much simpler, but the sub-pixel rendering
     // seems to be broken for some GLs (Solaris OpenGL 1.1) : the image cannot be rendered
     // at non-integer pixel locations. The result is that the image doesn't pan smoothly.
-    // fsm@robots
+    // fsm
     vgui_rasterpos2f(0, 0); // set raster position
     assert(vgui_rasterpos_valid());
     glPixelZoom( zoomx, zoomy );

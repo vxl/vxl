@@ -7,7 +7,7 @@
 //:
 //  \file
 //  \brief MATLAB header structure
-//  \author fsm@robots.ox.ac.uk
+//  \author fsm
 
 struct vnl_matlab_header
 {

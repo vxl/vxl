@@ -1,7 +1,7 @@
 #ifndef vnl_matlab_print_scalar_h_
 #define vnl_matlab_print_scalar_h_
 /*
-  fsm@robots.ox.ac.uk
+  fsm
 */
 
 //:
