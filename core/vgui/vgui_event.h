@@ -11,7 +11,7 @@
 // \brief  vgui_event class encapsulates the events handled by the vgui system.
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   16-Sep-1999  fsm. various.
 //    5-Oct-1999  fsm. replaced (x,y) by (wx,wy) and (ux,uy).
 //   10-Oct-1999  pcp         added timestamp
@@ -115,8 +115,8 @@ class vgui_event
   //  An event of type vgui_STRING implies that
   //  this field contains some sort of textual message. The exact
   //  encoding of these messages is unspecified; the sender and the
-  //  receiver may use any protocal they like. Caveat : as a
-  //  corollary there is no guarantee that one protocal will not
+  //  receiver may use any protocol they like. Caveat : as a
+  //  corollary there is no guarantee that one protocol will not
   //  clash with another.
   vcl_string str;
 
