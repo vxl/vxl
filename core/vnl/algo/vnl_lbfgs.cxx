@@ -100,9 +100,10 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
 
   vnl_vector<double> w(n * (2*m+1)+2*m);
 
-  vcl_cerr << "vnl_lbfgs: n = "<< n <<", memory = "<< m <<", Workspace = "<< w.size()
-       << "[ "<< ( w.size() / 128.0 / 1024.0) <<" MB], ErrorScale = "
-       << f_->reported_error(1) <<", xnorm = "<< x.magnitude() << vcl_endl;
+  if (verbose_)
+    vcl_cerr << "vnl_lbfgs: n = "<< n <<", memory = "<< m <<", Workspace = "
+      << w.size() << "[ "<< ( w.size() / 128.0 / 1024.0) <<" MB], ErrorScale = "
+      << f_->reported_error(1) <<", xnorm = "<< x.magnitude() << vcl_endl;
 
   bool we_trace = (verbose_ && !trace);
 
@@ -114,6 +115,7 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
 
   bool ok = true;
   this->num_evaluations_ = 0;
+  this->num_iterations_ = 0;
   int iflag = 0;
   for(;;) {
     // We do not wish to provide the diagonal matrices Hk0, and therefore set DIAGCO to FALSE.
@@ -139,24 +141,28 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
 #define print_(i,a,b,c,d) vcl_cerr<<vcl_setw(6)<<i<<' '<<vcl_setw(20)<<a<<' '\
            <<vcl_setw(20)<<b<<' '<<vcl_setw(20)<<c<<' '<<vcl_setw(20)<<d<<'\n'
 
-    if (verbose_ && check_derivatives_) {
+    if (check_derivatives_)
+    {
       vcl_cerr << "vnl_lbfgs: f = " << f_->reported_error(f) << ", computing FD gradient\n";
       vnl_vector<double> fdg = f_->fdgradf(x);
-      int l = n;
-      int limit = 100;
-      int limit_tail = 10;
-      if (l > limit + limit_tail) {
-        vcl_cerr << " [ Showing only first " <<limit<< " components ]\n";
-        l = limit;
-      }
-      print_("i","x","g","fdg","dg");
-      print_("-","-","-","---","--");
-      for(int i = 0; i < l; ++i)
-        print_(i, x[i], g[i], fdg[i], g[i]-fdg[i]);
-      if (n > limit) {
-        vcl_cerr << "   ...\n";
-        for(int i = n - limit_tail; i < n; ++i)
+      if (verbose_)
+      {
+        int l = n;
+        int limit = 100;
+        int limit_tail = 10;
+        if (l > limit + limit_tail) {
+          vcl_cerr << " [ Showing only first " <<limit<< " components ]\n";
+          l = limit;
+        }
+        print_("i","x","g","fdg","dg");
+        print_("-","-","-","---","--");
+        for(int i = 0; i < l; ++i)
           print_(i, x[i], g[i], fdg[i], g[i]-fdg[i]);
+        if (n > limit) {
+          vcl_cerr << "   ...\n";
+          for(int i = n - limit_tail; i < n; ++i)
+            print_(i, x[i], g[i], fdg[i], g[i]-fdg[i]);
+        }
       }
       vcl_cerr << "   ERROR = " << (fdg - g).squared_magnitude() / vcl_sqrt(double(n)) << "\n";
     }
@@ -165,6 +171,7 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
     iprint[1] = 0; // 1 prints X and G
     lbfgs_(&n, &m, x.data_block(), &f, g.data_block(), &diagco, diag.data_block(),
            iprint, &eps, &local_xtol, w.data_block(), &iflag);
+    ++this->num_iterations_;
 
     if (we_trace)
       vcl_cerr << iflag << ":" << f_->reported_error(f) << " ";

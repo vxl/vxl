@@ -34,8 +34,9 @@
 // Unlike Newton's method, it doesn't need 2nd derivatives of f(x),
 // has superlinear rather than quadratic convergence and is
 // better behaved away from minima. 2 ranks of this matrix are updated at each
-// step. In order to limit memory use, this limited memory version of BFGS,
-// only maintains a certain number of ranks of the inverse hessian estimate.
+// step. In order to reduce memory and time requirements, this limited memory
+// version of BFGS only maintains a certain number of vector corrections
+// to a diagonal estimate of the inverse hessian estimate.
 
 class vnl_lbfgs : public vnl_nonlinear_minimizer {
 public:
@@ -44,13 +45,14 @@ public:
 
   bool minimize(vnl_vector<double>& x);
 
-  //: Number of direction vectors to keep.
-  // Effectively the number of ranks of the inverse hessian estimate that
-  // are kept. Sensible values are start from about 5.
-  // It rarely worth using a value much larger than the dimensionality of
-  // the parameter x.
+  //: Step accuracy/speed tradeoff.
+  // Effectively the number of correction vectors to the diagonal approximation
+  // of the inverse hessian estimate that are kept.
   //
-  // Memory requirements will be roughly Const+sizeof(element)*dim(X)*memory;
+  // Large values of M will result in excessive computing time.
+  // 3<= memory <=7 is recommended.
+  // Memory requirements will be roughly Const+sizeof(element)*dim(X)*memory.
+  // Default is 5.
   int memory;
 
   //: Accuracy of line search.
