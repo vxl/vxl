@@ -1,10 +1,9 @@
-// This is vxl/vnl/vnl_matrix_fixed.h
+// This is core/vnl/vnl_matrix_fixed.h
 #ifndef vnl_matrix_fixed_h_
 #define vnl_matrix_fixed_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief fixed size matrix
@@ -102,13 +101,13 @@ class vnl_matrix_fixed_fake_base
 template <class T, unsigned int num_rows, unsigned int num_cols>
 class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
 {
-public:
+ public:
   typedef unsigned int size_type;
 
-private:
+ private:
   T data_[num_rows][num_cols]; // Local storage
 
-public:
+ public:
 
   //: Construct an empty num_rows*num_cols matrix
   vnl_matrix_fixed() {}
@@ -310,6 +309,22 @@ public:
     vnl_matrix_fixed r;
     sub( T(0), data_block(), r.data_block() );
     return r;
+  }
+
+  //:
+  vnl_matrix_fixed& operator*= (vnl_matrix_fixed const& s)
+  {
+    assert(num_rows == num_cols); // operator*= only works for square matrices
+    vnl_matrix_fixed<T, num_rows, num_rows> out;
+    for (unsigned i = 0; i < num_rows; ++i)
+      for (unsigned j = 0; j < num_rows; ++j)
+      {
+        T accum = this->data_[i][0] * s(0,j);
+        for (unsigned k = 1; k < num_rows; ++k)
+          accum += this->data_[i][k] * s(k,j);
+        out(i,j) = accum;
+      }
+    return *this = out;
   }
 
 #if VCL_VC60
@@ -586,7 +601,7 @@ public:
 
   static bool equal( const T* a, const T* b );
 
-private:
+ private:
   void assert_finite_internal() const;
 
   void assert_size_internal(unsigned, unsigned) const;
