@@ -13,7 +13,7 @@ AUX_SOURCE_DIRECTORY(Templates vil2_algo_sources)
 
 ADD_LIBRARY(vil2_algo ${vil2_algo_sources})
 
-TARGET_LINK_LIBRARIES( vil2_algo vil2 vil vcl )
+TARGET_LINK_LIBRARIES( vil2_algo vil2 vil vnl vcl )
 
 
 #IF( BUILD_EXAMPLES )
