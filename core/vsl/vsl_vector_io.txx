@@ -19,8 +19,6 @@
 // Some old code to support backwards compatibility for reading existing files
 
 
-
-
 //====================================================================================
 //: Write vector to binary stream
 template <class T>

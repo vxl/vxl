@@ -531,8 +531,6 @@ vcl_istream & vsl_b_istream::is() const
 }
 
 
-
-
 //: Return the version number of the IO format of the file being read.
 unsigned short vsl_b_istream::version_no() const
 {

@@ -54,7 +54,6 @@ vxl_uint_32 vil2_stream_read_little_endian_uint_32(vil2_stream *s)
 }
 
 
-
 // The following function should be moved to relevant places in vil2 soon
 static void swap16(char *a, unsigned n)
 {
@@ -102,5 +101,4 @@ void vil2_stream_read_big_endian_int_16(vil2_stream* is,
   swap16((char*)data,n);
 #endif
 }
-
 

@@ -375,5 +375,4 @@ inline void vsl_print_summary(vcl_ostream& os, double n )
 { os << n; }
 
 
-
 #endif // vsl_binary_io_h_
