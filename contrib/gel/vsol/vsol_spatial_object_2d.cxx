@@ -24,16 +24,16 @@ const char * vsol_spatial_object_2d::SpatialTypes[] =
 vsol_spatial_object_2d::vsol_spatial_object_2d()
   : bounding_box_(0)
 {
-	this->tag_ = 0;
-	this->id_ = 0;
+  this->tag_ = 0;
+  this->id_ = 0;
   set_tag_id(++tagcount_);
 }
 
 vsol_spatial_object_2d::vsol_spatial_object_2d(vsol_spatial_object_2d const& s)
   : bounding_box_(0)
 {
-	this->tag_ = 0;
-	this->id_ = s.get_id();
+  this->tag_ = 0;
+  this->id_ = s.get_id();
   set_tag_id(++tagcount_);
 }
 
