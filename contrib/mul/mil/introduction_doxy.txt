@@ -7,8 +7,8 @@
 * to the start of each plane, and integers indicating how to get to neighbours in
 * the x, y (and z) directions.
 *
-* The most commonly used class is likely to be mil_image_2d_of<T>, a templated
-* multi-plane image.
+* The most commonly used classes are likely to be mil_image_2d_of<T> and
+* mil_image_3d_of<T> templated multi-plane images.
 *
 * The advantages of this approach are
 * - It is actually faster than pointer indirection on most architectures
