@@ -1,4 +1,4 @@
-// This is ./oxl/xcv/xcv.cxx
+// This is oxl/xcv/xcv.cxx
 
 //:
 // \file
@@ -43,7 +43,7 @@
 #include "xcv_segmentation.h"
 #include "xcv_multiview.h"
 #include "xcv_image_tableau.h"
-#include "xcv/xcv_picker_tableau.h"
+#include "xcv_picker_tableau.h"
 
 #include <vgui/vgui_linker_hack.h>
 
@@ -412,9 +412,11 @@ void xcv_window_size_traditional(int rows, int cols,
                                  unsigned *window_w, unsigned *window_h,
                                  double *viewer_scale)
 {
-  // kym - don't add the assert below - it OK for xcv to
+  // kym - don't add the assert below - it is OK for xcv to
   // start empty (eg. to load images from the menu bar):
-  // assert(rows > 0 && cols > 0);
+#if 0
+  assert(rows > 0 && cols > 0);
+#endif
 
   assert(window_w && window_h && viewer_scale);
   *window_w = 0;
