@@ -62,7 +62,7 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
           else
             {
               scores1to2.put( i, j, NO_SCORE);
-              scores2to1.put( i, j, NO_SCORE);
+              scores2to1.put( j, i, NO_SCORE);
             }
         }
     }
@@ -125,6 +125,8 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
   // and check that the best match from image 1 to 2 is the
   //  same as the best match from image 2 to 1
 
+  vcl_vector< vcl_pair<int,int> > l;
+
   for( unsigned int i=0; i< corners1_.size(); i++)
     {
       int a= bestimage1match[i];
@@ -135,14 +137,13 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
           vcl_cerr << i << " " << a << vcl_endl;
           vcl_cout << corners1_[i].first << " " << corners1_[i].second << " "
                    << corners2_[a].first << " " << corners2_[a].second << vcl_endl;
+          l.push_back( vcl_pair<int,int>(i,a) );
         }
     }
 
   //  vcl_cerr << bestimage1match << vcl_endl;
   //  vcl_cerr << bestimage2match << vcl_endl;
 
-  // dummy return value for the moment
-  vcl_vector< vcl_pair<int,int> > l;
   return l;
 }
 
