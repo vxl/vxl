@@ -139,8 +139,8 @@ $htmlwarninglink= 0;
 @buildchildrenwarnings = [];
 @buildchildrenerrors   = [];
 @buildlogs= [];
-$fullbuildlog="<a href=\"\#ERRORLINK$htmlerrorlink\"><font size=-1 color=\"101010\">Jump to first error</font></a><br>\n";
-$fullbuildlog.="<a href=\"\#WARNINGLINK$htmlwarninglink\"><font size=-1 color=\"101010\">Jump to first warning</font></a><br>\n";
+$fullbuildlog="<a href=\"\#ERRORLINK$htmlerrorlink\"><font size=-1 color=\"CC3333\">Jump to first error</font></a><br>\n";
+$fullbuildlog.="<a href=\"\#WARNINGLINK$htmlwarninglink\"><font size=-1 color=\"773333\">Jump to first warning</font></a><br>\n";
 #%buildtime = ();
 
 ########################
@@ -201,21 +201,25 @@ while( <INFO>)
       {
 #       print "so file: $1\n";
       }
-    elsif( m/$compilewarning/)
+    elsif( m/$compilewarning/ || m/$linkwarning/)
       {
         $buildwarnings[$index]++;
 	$currentlineweb="<a name=\"WARNINGLINK$htmlwarninglink\">" .$currentlineweb;
         $currentlineweb="<font color=\"AA0000\">$currentlineweb</font>";
 	$htmlwarninglink++;
-	$currentlineweb.="<a href=\"\#WARNINGLINK$htmlwarninglink\"><font size=-1 color=\"101010\">Jump to next warning</font></a><br>\n";
-      }
-    elsif( m/$linkwarning/)
-      {
-        $buildwarnings[$index]++;
-	$currentlineweb="<a name=\"WARNINGLINK$htmlwarninglink\">" .$currentlineweb;
-        $currentlineweb="<font color=\"AA0000\">$currentlineweb</font>";
-	$htmlwarninglink++;
-	$currentlineweb.="<a href=\"\#WARNINGLINK$htmlwarninglink\"><font size=-1 color=\"101010\">Jump to next warning</font></a><br>\n";
+        $t_1link="\&nbsp\;<a href=\"\#WARNINGLINK" . ($htmlwarninglink-2);
+        $t10link="\&nbsp\;<a href=\"\#WARNINGLINK" . ($htmlwarninglink+9);
+        $t_10link="\&nbsp\;<a href=\"\#WARNINGLINK" . ($htmlwarninglink-11);
+        $t100link="\&nbsp\;<a href=\"\#WARNINGLINK" . ($htmlwarninglink+99);
+        $t_100link="\&nbsp\;<a href=\"\#WARNINGLINK" . ($htmlwarninglink-101);
+        $fnt="<font size=-1 color=\"773333\">"; $efnt="</font></a>\n";
+	$currentlineweb.="<a href=\"\#WARNINGLINK$htmlwarninglink\">$fnt Jump to next warning$efnt";
+        $currentlineweb.="$t_1link\">$fnt -1$efnt" if ($htmlwarninglink > 1);
+        $currentlineweb.="$t10link\">+$fnt 10$efnt";
+        $currentlineweb.="$t_10link\">-$fnt 10$efnt" if ($htmlwarninglink > 10);
+        $currentlineweb.="$t100link\">+$fnt 100$efnt";
+        $currentlineweb.="$t_100link\">-$fnt 100$efnt" if ($htmlwarninglink > 100);
+	$currentlineweb.="<br>\n";
       }
     elsif( m/$gmake_errorintest/ || m/$gmake_errortestfail/)
       {
@@ -223,7 +227,7 @@ while( <INFO>)
 	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">" .$currentlineweb;
         $currentlineweb.="<font color=red>$currentlineweb</font>";
 	$htmlerrorlink++;
-	$currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\"><font size=-1 color=\"101010\">Jump to next error</font></a><br>\n";
+	$currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\"><font size=-1 color=\"CC3333\">Jump to next error</font></a><br>\n";
       }
     elsif( m/$gmake_errorindirectory/)
       {
@@ -236,7 +240,7 @@ while( <INFO>)
 	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">" .$currentlineweb;
         $currentlineweb.="<font color=red>$currentlineweb</font>";
 	$htmlerrorlink++;
-	$currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\"><font size=-1 color=\"101010\">Jump to next error</font></a><br>\n";
+	$currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\"><font size=-1 color=\"CC3333\">Jump to next error</font></a><br>\n";
       }
     elsif( m/$testsummary/)
       {
@@ -271,9 +275,18 @@ while( <INFO>)
     $fullbuildlog.= $currentlineweb;
   }
 
-$fullbuildlog.="<a name=\"WARNINGLINK$htmlwarninglink\"><a name=\"ERRORLINK$htmlerrorlink\">";
-$fullbuildlog.="<a href=\"\#ERRORLINK0\"><font size=-1 color=\"101010\">No more errors.</font></a><br>\n";
-
+$t_1link="\&nbsp\;<a href=\"\#WARNINGLINK" . ($htmlwarninglink-1);
+$t_10link="\&nbsp\;<a href=\"\#WARNINGLINK" . ($htmlwarninglink-10);
+$t_100link="\&nbsp\;<a href=\"\#WARNINGLINK" . ($htmlwarninglink-100);
+$fnt="<font size=-1 color=\"773333\">"; $efnt="</font></a>\n";
+$fullbuildlog.="<a name=\"ERRORLINK$htmlerrorlink\"><a href=\"\#ERRORLINK0\">"
+             . "<font size=-1 color=\"CC3333\">No more errors.</font></a><br>\n"
+             . "<a name=\"WARNINGLINK$htmlwarninglink\"><a href=\"\#WARNINGLINK0\">"
+             . "$fnt Jump to first warning$efnt";
+$fullbuildlog.="$t_1link\">$fnt -1$efnt" if ($htmlwarninglink > 0);
+$fullbuildlog.="$t_10link\">-$fnt 10$efnt" if ($htmlwarninglink > 9);
+$fullbuildlog.="$t_100link\">-$fnt 100$efnt" if ($htmlwarninglink > 99);
+$fullbuildlog.="<br>\n";
 
 ##############################################
 # find the common sub-directory for each build
