@@ -32,13 +32,13 @@ static void test_point_2d()
   vgl_point_2d<int> p1(3,7), p2(d), p3(-1,-8);
   vcl_cout << p3;
 
-  TEST("inequality", p1 != p3, true);
+  TEST("inequality", (p1 != p3), true);
 
   p3.set(3,7);
-  TEST("equality", p1 == p3, true);
+  TEST("equality", (p1 == p3), true);
 
   vgl_vector_2d<int> d1 = p1 - p2;
-  TEST("sum; difference", p2+d1, p1);
+  TEST("sum; difference", (p2+d1), p1);
 
   TEST("+=", (p2+=d1), p1);
   TEST("+=", p2, p1);
@@ -72,13 +72,13 @@ static void test_point_3d()
   vgl_point_3d<int> p1(3,7,-1), p2(d), p3(-1,-8,7);
   vcl_cout << p3;
 
-  TEST("inequality", p1 != p3, true);
+  TEST("inequality", (p1 != p3), true);
 
   p3.set(3,7,-1);
-  TEST("equality", p1 == p3, true);
+  TEST("equality", (p1 == p3), true);
 
   vgl_vector_3d<int> d1 = p1 - p2;
-  TEST("sum; difference", p2+d1, p1);
+  TEST("sum; difference", (p2+d1), p1);
 
   TEST("+=", (p2+=d1), p1);
   TEST("+=", p2, p1);
@@ -106,14 +106,6 @@ static void test_point_3d()
   TEST("intersection", pi, pp);
 }
 
-static void test_homg_point_2d()
-{
-}
-
-static void test_homg_point_3d()
-{
-}
-
 static void test_vector_2d()
 {
 }
@@ -125,8 +117,6 @@ static void test_vector_3d()
 void test_cartesian() {
   test_point_2d();
   test_point_3d();
-  test_homg_point_2d();
-  test_homg_point_3d();
   test_vector_2d();
   test_vector_3d();
 }
