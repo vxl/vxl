@@ -68,7 +68,7 @@ static void hedphelym(const void* const_data)
 static void ptolemy()
 {
   vgui_text_tableau_new text_tab;
-  text_tab->add(100,100,vul_sprintf("%i",window_count));
+  text_tab->add(256,256,vul_sprintf("This is view %i",window_count));
 
   example_flim_tableau_new flim_tab;
 
@@ -106,8 +106,9 @@ int main (int argc, char** argv) {
   vgui_image_tableau_new img_tab(img);
   global_viewer_tab = vgui_viewer2D_tableau_new(img_tab);
 
+  int wd=img.width(), ht=img.height();
   vgui_text_tableau_new text_tab;
-  text_tab->add(100,100,vul_sprintf("%i",window_count));
+  text_tab->add(wd/2-100,ht/2,vul_sprintf("This is view %i",window_count));
 
   example_flim_tableau_new flim_tab;
 
@@ -117,7 +118,7 @@ int main (int argc, char** argv) {
   vgui_menu menu;
   menu.add("Add new view", ptolemy);
 
-  vgui_window* main_window = vgui::produce_window(512, 512, menu);
+  vgui_window* main_window = vgui::produce_window(wd, ht, menu);
   main_window->get_adaptor()->set_tableau(shell_tab);
   main_window->show();
 
