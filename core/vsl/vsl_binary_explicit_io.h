@@ -605,7 +605,6 @@ inline void vsl_b_read_int_16(vsl_b_istream& is, long& n )
 
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
-
 //: Write a block of doubles to a vsl_b_ostream
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the size of the

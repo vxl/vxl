@@ -3,6 +3,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
 #include <testlib/testlib_test.h>
+#include <testlib/testlib_root_dir.h>
 #include <vpl/vpl.h>
 
 void test_vector_io()
@@ -48,6 +49,26 @@ void test_vector_io()
   vsl_print_summary(vcl_cout, v_int_in);
   vsl_print_summary(vcl_cout, v_float_in); 
   vcl_cout << vcl_endl;
+
+  vcl_string gold_path=testlib_root_dir()+"/core/vsl/tests/golden_vector_io_test.bvl";
+  vsl_b_ifstream bfs_in2(gold_path.c_str());
+
+  // If this test fails, it could be due to a missing golden file, or one
+  // which has got corrupted.
+  TEST("Opened golden_test_binary_io.bvl for reading", (!bfs_in2), false);
+  if (!(!bfs_in2))
+  {
+    TEST("vcl_vector<bool> out == vcl_vector<bool> in", v_bool_out, v_bool_in);
+    TEST("vcl_vector<int> out == vcl_vector<int> in", v_int_out, v_int_in);
+    TEST("vcl_vector<float> out == vcl_vector<float> in", v_float_out,v_float_in);
+
+    vsl_print_summary(vcl_cout, v_bool_in);
+    vsl_print_summary(vcl_cout, v_int_in);
+    vsl_print_summary(vcl_cout, v_float_in); 
+    vcl_cout << vcl_endl;
+  }
+
+
 }
 
 TESTMAIN(test_vector_io);
