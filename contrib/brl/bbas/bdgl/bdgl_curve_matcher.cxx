@@ -40,14 +40,16 @@ void bdgl_curve_matcher::match()
 
   matching_score_ = dist;
   matching_flag_ = 1;
- Tx_= desc2.center_.x()-desc1.center_.x();
- Ty_= desc2.center_.y()-desc1.center_.y();
- Rtheta_=0;
+#if 0 // these data members no longer exist ?! -- FIXME - TODO
+  Tx_= desc2.center_.x()-desc1.center_.x();
+  Ty_= desc2.center_.y()-desc1.center_.y();
+  Rtheta_=0;
+#endif // 0
   return;
 }
+
 void bdgl_curve_matcher::match_DP()
 {
-
   vcl_pair<double,double> coordinate;
   vcl_vector<vcl_pair<double,double> > v1,v2;
   int i;
@@ -73,24 +75,15 @@ void bdgl_curve_matcher::match_DP()
   // writing curves to a file
 #if 0 // commented out
   vcl_ofstream of1("c:\\curve1.con");
-  of1<<"CONTOUR";
-  of1<<"\nOPEN";
-  of1<<"\n"<<v1.size()<<"\n";
+  of1<<"CONTOUR\nOPEN\n"<<v1.size()<<'\n';
   for (i=0;i<v1.size();i++)
-  {
-    of1<<v1[i].first<<"\t"<<v1[i].second<<"\t";
-
-  }
+    of1<<v1[i].first<<'\t'<<v1[i].second<<'\t';
   of1.close();
   //reverse(v2.begin(),v2.end());
   vcl_ofstream of2("C:\\curve2.con");
-  of2<<"CONTOUR";
-  of2<<"\nOPEN";
-  of2<<"\n"<<v2.size()<<"\n";
+  of2<<"CONTOUR\nOPEN\n"<<v2.size()<<'\n';
   for (i=0;i<v2.size();i++)
-  {
-    of2<<v2[i].first<<"\t"<<v2[i].second<<"\t";
-  }
+    of2<<v2[i].first<<'\t'<<v2[i].second<<'\t';
   of2.close();
 #endif // 0
 
@@ -101,6 +94,7 @@ void bdgl_curve_matcher::match_DP()
   double e2=(v1[0].first -v2[v2.size()-1].first )*(v1[0].first -v2[v2.size()-1].first )
            +(v1[0].second-v2[v2.size()-1].second)*(v1[0].second-v2[v2.size()-1].second);
 
+#if 0 // curveMatch has changed API -- FIXME - TODO
   if (e1<e2)
     matching_score_ = curveMatch(v1,v2,Tx_,Ty_,Rtheta_);
   else
@@ -108,4 +102,5 @@ void bdgl_curve_matcher::match_DP()
     reverse(v2.begin(),v2.end());
     matching_score_ = curveMatch(v1,v2,Tx_,Ty_,Rtheta_);
   }
+#endif // 0
 }
