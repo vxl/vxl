@@ -1,4 +1,4 @@
-USES += contrib/brl contrib/brl/bbas core
+USES += contrib/brl core
 
 LIBRARY := bcal
 VERSION := 1.0

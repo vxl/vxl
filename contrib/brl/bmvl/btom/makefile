@@ -1,4 +1,4 @@
-USES += contrib/brl contrib/brl/bbas contrib/brl/bseg contrib/brl/bmvl contrib/gel core
+USES += contrib/brl contrib/brl/bmvl contrib/gel core
 
 LIBRARY := btom
 VERSION := 1.0

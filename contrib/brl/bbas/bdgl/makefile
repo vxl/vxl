@@ -1,4 +1,4 @@
-USES += contrib/brl contrib/brl/bbas contrib/gel contrib/mul contrib/oxl core
+USES += contrib/brl contrib/brl/bbas contrib/gel core
 
 LIBRARY := bdgl
 VERSION := 1.0
