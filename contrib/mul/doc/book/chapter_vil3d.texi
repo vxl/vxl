@@ -1,0 +1,179 @@
+@chapsummary
+Load images using @code{vil3d_load}. Access them
+ using a @code{vil3d_image_view<T>}.
+@endchapsummary
+
+The 3d image library has been built on top of the new @vxl{} imaging library
+vil. vil3d behaves just like vil and offers a similar range of services.
+Indeed vil3d uses large parts of vil to provide data management, pixel type,
+and other aspects of the API.
+
+@section Loading and saving
+Let's look at an example of vil3d in use.  This program makes an image from a
+disk file, copies it into memory, and prints the pixel at
+100,100,100.
+
+@example
+#include <vcl_iostream.h>
+#include <vxl_config.h>
+#include <vil3d/vil3d_load.h>
+#include <vil3d/vil3d_image_view.h>
+
+int main()
+@{
+  vil3d_image_view<vxl_byte> img;
+  img = vil3d_load("foo.gipl");
+  vcl_cerr << "Pixel 100,100,100 = " << img(100,100,100) << vcl_endl;
+@}
+@end example
+
+The first interesting line declares img to be an image. vil3d_image_view
+is the basic image type. It represents an image in memory about
+whose structure, size and pixel type we know everything.
+Hence we need to specify the pixel type at this point.
+
+Now let's skip to the end to explain the pixel access method.
+@example
+  img(100,100,100)
+@end example
+This looks up the pixel at position 100,100,100 and returns its value. The
+pixel type was defined on the first line to be a byte, and
+that is what will be displayed.
+@example
+128
+@end example
+Where it matters (such as when loading
+an image in from disk) it is assumed that the image origin is at the
+front top left of the image.
+
+Finally lets look at the middle line. This consists of two parts.
+The @code{vil3d_load} function does a lot of work behind the scenes
+to determine what the image type is, and then load that image into
+memory. The second part is the assignment which has several special properties.
+@itemize @bullet
+@item It does not copy the actual image data. A @code{vil3d_image_view} object
+is really a view of some underlying data. The view understands where the
+real image data is in memory and how to interpret it. When you copy
+a view, you merely copy this interpretation information, not the actual
+image data. This is important, because 3d images are very big, and
+copying is expensive. The underlying image is managed with smart pointers
+so when the last view to the underlying data is destroyed, the image data
+will be too.
+@item It checks that the assignment is valid. vil3d_load can return an
+image of any pixel type. The assignment checks that the image is actually
+of the correct pixel type. If not, img will be set to the null (empty) image.
+You may ask how we know what pixel type to assign out loaded image to. In
+general we can query the image before assigment, or force it by conversion
+into a desired type. In the example, however, we know that foo.gipl contains
+a byte image.
+
+
+@section Copying an image
+@cindex images, copying
+You should know by now that copying @code{vil3d_image_view} objects does not
+duplicate the data they point to.  This allows images to be passed into and
+out of functions efficiently.  It also means that modifying the data in one
+@code{vil3d_image_view} might change that in another.  Take this example
+@example
+...
+vil3d_image_view<float> a( vil3d_load("x") );
+vil3d_image_view<float> b = a;
+b(100,100,100) = 12;
+...
+@end example
+After the assignment in line 3, both @var{a(100,100,100)} and @var{b(100,100,100)}
+are set to the value 12.  On the other hand, if we had used
+@code{vil3d_copy_deep}, thus:
+@example
+...
+vil3d_image_view<float> a( vil3d_load("x") );
+vil3d_copy_deep(a, b);
+b(100,100,100) = 12;
+...
+@end example
+or
+@example
+...
+vil3d_image_view<float> a( vil3d_load("x") );
+vil3d_image_view<float> b( vil3d_copy_deep(a) );
+b(100,100,100) = 12;
+...
+@end example
+then @var{a} is unchanged after the assignment to @var{b(100,100,100)}.
+Note again that the actual copying is done in @code{vil3d_copy_deep}; when the
+return value is assigned to @var{b}, there is an efficient view copy.
+
+@section Large images
+
+Broadly there are two sorts of image one is interested in - images
+in memory (all parts of which can be accessed directly) and
+external images (eg in files) which can only be accessed
+indirectly. As we have seen those images in memory are represented
+by @code{vil3d_image_view}. For some very large 3d images it is not
+possible or desirable to load them into memory. In this case it is
+useful to be able to load in a sub-section of the image,
+and manipulate it. vil3d supports this
+approach using @code{vil3d_image_resource}. There are several types of
+image resource, described below. You cannot create an image
+resource object directly, instead you use a creation function
+which returns a smart pointer to the base class
+@code{vil3d_image_resource_sptr}.
+
+@itemize @bullet
+@item Representing an image in a file: e.g. @code{vil3d_gipl_image},
+@code{vil3d_gipl_image}. These are created using
+@code{vil3d_load_image_data()},
+and @code{vil3d_new_image_resource()}.
+
+@item @code{vil3d_memory_image}: Representing an image in memory
+(essentially a
+wrapper around a view.) This is created using
+@code{vil3d_new_image_resource()}.
+
+@item Representing a filtered version of an
+image in a file (without loading in memory): e.g.
+@code{vil3d_crop_image_resource} and
+@code{vil3d_decimate_image_resource}. These
+are created using the equivalent functions: @code{vil3d_crop()},
+@code{vil3d_decimate()}, etc.
+
+@item Representing the outcome of an image
+processing algorithm (see next section) e.g.
+@code{vil3d_convolve_1d_resource}.
+These are creates using the equivalent
+functions e.g. @code{vil3d_convolve_1d()}.
+
+@end itemize
+
+To actually get some image pixels you call the resource's
+@code{get_view(..)} or @code{get_copy_view(..)} method.
+The @code{vil3d_load(..)} function works by creating
+a @code{vil3d_image_resource}, and then calling @code{get_view(..)}
+for the whole image.
+@example
+vil3d_image_view_base_sptr vil3d_load(const char *file)
+@{
+  vil3d_image_resource_sptr data = vil3d_load_image_resource(file);
+  if (!data) return 0;
+  return data -> get_view(0, data->ni(), 0, data->nj());
+@}
+@end example
+
+@section Planes, components and stepping.
+@cindex image layout
+@cindex planes
+@cindex components
+
+@code{vil3d_image_view}
+uses a pointer arithmetic style of indexing.
+The image data is assumed to be a regularly arranged set of
+pixels in memory. The view keeps a pointer to the pixel
+at the origin. It also keeps the pointer difference to
+get to the next pixel to the right, the next pixel down,
+and the next pixel back.same pixel in the next plane.
+
+@cindex view manipulations
+This image view scheme makes it easy and cheap to perform
+a range of image manipulations. These
+include @code{vil3d_slice()}, @code{vil3d_crop()}.
+

@@ -23,7 +23,7 @@ MAKEINFOFLAGS=-Dmakeinfo --no-validate
 SOURCEFILES=book.texi \
             chapter_mbl.texi \
             chapter_clsfy.texi \
-            chapter_mil.texi \
+            chapter_vil3d.texi \
             chapter_vpdfl.texi
 
 all: book.html book.dvi

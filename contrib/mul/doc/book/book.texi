@@ -145,7 +145,7 @@ Copyright @copyright{} 2001 Victoria University of Manchester
 @menu
 * Introduction::
 * mbl::
-* mil::
+* vil3d::
 * vpdfl::
 * clsfy::
 * Index::
@@ -244,7 +244,7 @@ Manchester. Tim Cootes and Ian Scott were principally responsible for this
 conversion and the design of the rest.
 
 @comment ------------------------------------------------------------------
-@node    mbl, mil, Introduction, Top
+@node    mbl, vil3d, Introduction, Top
 @comment node-name, next, previous,     up
 @chapter mbl: Manchester basics library.
 @cindex mbl
@@ -253,15 +253,15 @@ conversion and the design of the rest.
 @include chapter_mbl.texi
 
 @comment ------------------------------------------------------------------
-@node    mil, vpdfl, mbl, Top
+@node    vil3d, vpdfl, mbl, Top
 @comment node-name, next, previous,     up
-@chapter mil and mil3d: Manchester Image library.
-@cindex mil
+@chapter vil3d: 3d Image library.
+@cindex vil3d
 
-@include chapter_mil.texi
+@include chapter_vil3d.texi
 
 @comment ------------------------------------------------------------------
-@node    vpdfl, clsfy, mbl, Top
+@node    vpdfl, clsfy, vil3d, Top
 @comment node-name, next, previous,     up
 @chapter vpdfl: Multivariate Probability Density Modelling
 @cindex probability
@@ -291,7 +291,7 @@ The directory structure of mul is below
           /vxl
           /mul
               /mbl
-              /mil
+              /vil3d
               /vpdfl
               /clsfy
 @end example

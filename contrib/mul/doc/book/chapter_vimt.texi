@@ -1,0 +1,15 @@
+@chapsummary
+Polymorphic image + transform library
+@endchapsummary
+
+The vimt classes provide two things.
+@itemize @bullet
+
+@item A polymorphic base image class vimt_image, that is good for any number
+of dimensions.
+@item World to image transforms. These can be used to easily allow
+non-zero-based images
+
+
+
+
