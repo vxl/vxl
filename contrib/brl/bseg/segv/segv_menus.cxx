@@ -166,10 +166,8 @@ vgui_menu segv_menus::get_menu()
   //file menu entries
   menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
   menufile.add( "Load Image", load_image_callback,(vgui_key)'l', vgui_CTRL);
-#if 0
-#ifdef HAS_XERCES
+#if 0 // was: #if HAS_XERCES
   menufile.add( "Load XML Edges", read_xml_edges_callback);
-#endif
 #endif
   //view menu entries
   menuview.add("Original Image", original_image_callback);
@@ -196,7 +194,8 @@ vgui_menu segv_menus::get_menu()
   menuedit.add("Compute Mutual Info",compute_mutual_info_callback);
 
 
-  menuedit.add("Compute Fore/Background entropy",compute_background_info_callback);  menuedit.add("Set Background Face", set_background_face_callback);
+  menuedit.add("Compute Fore/Background entropy",compute_background_info_callback);
+  menuedit.add("Set Background Face", set_background_face_callback);
 
   menuedit.add("Set Foreground Face", set_foreground_face_callback);
   menuedit.add("Compute parallel coverage",compute_parallel_coverage_callback);
