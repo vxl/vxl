@@ -1417,20 +1417,21 @@ cat > check_vxl_words.cc <<EOF
 // by configure, but we dont care about that.
 #define QUOTE 34
 
-#define macro(NAME, n, cand) \
+#define macro(NAME, n, cand, cnd2) \
+  printf(#NAME "=%c" "void" "%c;\n", QUOTE, QUOTE); \
   if (CHAR_BIT==8 && sizeof(cand)==n) \
     printf(#NAME "=%c" #cand "%c;\n", QUOTE, QUOTE); \
-  else \
-    printf(#NAME "=%c" "void" "%c;\n", QUOTE, QUOTE); \
-  printf("export " #NAME ";\n");
+  if (CHAR_BIT==8 && sizeof(cnd2)==n) \
+    printf(#NAME "=%c" #cnd2 "%c;\n", QUOTE, QUOTE); \
+  printf("export " #NAME ";\n")
 
 int main(int, char **) {
-  macro(VXL_INT_8, 1, char);
-  macro(VXL_INT_16, 2, short);
-  macro(VXL_INT_32, 4, int);
-  macro(VXL_INT_64, 8, long long);
+  macro(VXL_INT_8, 1, char, short);
+  macro(VXL_INT_16, 2, short, int);
+  macro(VXL_INT_32, 4, long, int);
+  macro(VXL_INT_64, 8, long long, long);
   macro(VXL_IEEE_32, 4, float);
-  macro(VXL_IEEE_64, 8, double);
+  macro(VXL_IEEE_64, 8, long double, double);
 //  macro(VXL_IEEE_96, 12, long double);  // x86
 //  macro(VXL_IEEE_128, 16, long double); // sparc, mips
   return 0;
