@@ -241,6 +241,28 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
 
     return tab_mono;
   }
+  else if (vil1_pixel_format(image)==VIL1_RGB_UINT16)
+  {
+    int w=image.width();
+    int h=image.height();
+    KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
+    vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl
+             << "pixel type: uint_16\n";
+
+    vil1_memory_image_of<vxl_uint_16> ima_mono;
+    ima_mono.resize(w,h);
+
+    vil1_image_as_uint16(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
+    vxl_uint_16* p=ima_mono.get_buffer();
+
+    for (int i=0;i<w;i++)
+      for (int j=0;j<h;j++)
+      {
+        tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
+      }
+
+    return tab_mono;
+  }
   else
   {
       vcl_cerr << "Error: Cannot convert pixel type: "
