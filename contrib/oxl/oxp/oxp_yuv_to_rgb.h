@@ -42,11 +42,11 @@ unsigned char oxp_yuv_to_rgb_byte_clamp(int x)
 inline
 void oxp_yuv_to_rgb(unsigned char y, unsigned char u, unsigned char v, unsigned char* rgb)
 {
-  const int c1164 = 1.164 * 1024;
-  const int c1596 = 1.596 * 1024;
-  const int c0813 = 0.813 * 1024;
-  const int c0391 = 0.391 * 1024;
-  const int c2018 = 2.018 * 1024;
+  const int c1164 = int(1.164 * 1024);
+  const int c1596 = int(1.596 * 1024);
+  const int c0813 = int(0.813 * 1024);
+  const int c0391 = int(0.391 * 1024);
+  const int c2018 = int(2.018 * 1024);
   rgb[0] = oxp_yuv_to_rgb_byte_clamp(c1164 * (y - 16) + c1596 * (v - 128));
   rgb[1] = oxp_yuv_to_rgb_byte_clamp(c1164 * (y - 16) - c0813 * (v - 128) - c0391 * (u - 128));
   rgb[2] = oxp_yuv_to_rgb_byte_clamp(c1164 * (y - 16) + c2018 * (u - 128));
