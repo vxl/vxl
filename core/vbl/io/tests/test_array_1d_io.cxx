@@ -1,15 +1,13 @@
+// This is vxl/vbl/io/tests/test_array_1d_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vbl/io/vbl_io_array_1d.h>
+#include <testlib/testlib_test.h>
 
 void test_array_1d_io()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing vbl_array_1d<float> io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "******************************\n"
+           << "Testing vbl_array_1d<float> io\n"
+           << "******************************\n";
 
   //// test constructors, accessors
   const int n = 50;
@@ -18,7 +16,7 @@ void test_array_1d_io()
   v_out.reserve(n+10);
   for (int i=0; i<n; i++)
   {
-    v_out.push_back(i*i);
+    v_out.push_back(0.1f*i*i);
   }
 
   vsl_b_ofstream bfs_out("vbl_array_1d_test_io.bvl.tmp");
