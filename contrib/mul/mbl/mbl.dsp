@@ -143,6 +143,10 @@ SOURCE=".\Templates\mbl_data_array_wrapper+vnl_vector+double--.cxx"
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\mbl_data_collector_list+vnl_vector+double--.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\mbl_data_collector+vnl_vector+double--.cxx"
 # End Source File
 # Begin Source File
@@ -175,7 +179,23 @@ SOURCE=.\mbl_mz_random.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\mbl_read_props.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_stats_1d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\mbl_stochastic_data_collector+vnl_vector+double--.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vsl_binary_loader+mbl_data_collector_base-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_vector_io+mbl_chord-.cxx"
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -228,6 +248,30 @@ SOURCE=.\mbl_matxvec.h
 # Begin Source File
 
 SOURCE=.\mbl_mz_random.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_chord.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_data_collector_list.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_print.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_read_props.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_stats_1d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_stochastic_data_collector.h
 # End Source File
 # End Group
 # End Target
