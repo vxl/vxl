@@ -103,8 +103,8 @@ void jvx_manager::load_video_file()
    
    if(inc>60)
      inc = 40;
-   for(int j = 0; j<=_height; j+=inc)
-     for(int k=0; k<=_width; k+=inc)
+   for(unsigned int j = 0; j<=_height; j+=inc)
+     for(unsigned int k=0; k<=_width; k+=inc)
        easy2D->add_point(k,j);
    
    ++pframe;//next video frame
