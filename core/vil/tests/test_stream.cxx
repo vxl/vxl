@@ -11,7 +11,7 @@ test_stream_main( int argc, char* argv[] )
   if( argc < 2 ) {
     vcl_cout << "Supply file_read_data directory as the first argument"
              << vcl_endl;
-    return 0;
+    return 1;
   }
 
   testlib_test_start(" stream");
