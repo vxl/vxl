@@ -21,8 +21,7 @@
 
 class PMatrixComputeLinear : public PMatrixCompute {
 public:
-  bool compute (PMatrix *t_matrix_ptr);
-  bool compute (vcl_vector<HomgPoint2D>& points1, vcl_vector<HomgPoint3D>& points2, PMatrix *P);
+  bool compute(vcl_vector<HomgPoint2D> const& points1, vcl_vector<HomgPoint3D> const& points2, PMatrix *P);
 };
 
 #endif // _PMatrixComputeLinear_h
