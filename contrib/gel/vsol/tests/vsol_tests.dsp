@@ -183,6 +183,9 @@ SOURCE=.\test_vsol_io.cxx
 # Begin Source File
 SOURCE=.\test_vsol_digital_curve_2d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_vsol_digital_curve_3d.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
