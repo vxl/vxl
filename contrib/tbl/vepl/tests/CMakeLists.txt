@@ -1,7 +1,7 @@
 # ./tbl/vepl/tests/CMakeLists.txt
 
 ADD_EXECUTABLE( vepl_test_driver
-  test_driver.cxx
+  test_driver.cxx        test_driver.h
 
   vepl_test_threshold.cxx
   vepl_test_erode_disk.cxx

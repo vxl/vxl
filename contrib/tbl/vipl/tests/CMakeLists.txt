@@ -1,7 +1,7 @@
 # ./tbl/vipl/tests/CMakeLists.txt
 
 ADD_EXECUTABLE( vipl_test_driver
-  test_driver.cxx
+  test_driver.cxx        test_driver.h
 
   vipl_test_threshold.cxx
   vipl_test_erode_disk.cxx
