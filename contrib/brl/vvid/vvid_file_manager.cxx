@@ -382,7 +382,6 @@ void vvid_file_manager::un_cached_play()
     vcl_cout << "No movie has been loaded\n";
     return;
   }
-  // int nframes = my_movie_->length();
   if (video_process_)
     video_process_->set_n_frames(my_movie_->length());
   for (vidl_vil1_movie::frame_iterator pframe=my_movie_->begin();
@@ -780,11 +779,11 @@ void vvid_file_manager::compute_info_tracking()
   static strk_info_tracker_params tp;
   vgui_dialog tracker_dialog("Mutual Information Tracker V1.5");
   tracker_dialog.field("Number of Samples", tp.n_samples_);
-  tracker_dialog.field("Fraction of Samples Refreshed", tp.frac_time_samples_);
   tracker_dialog.field("Search Radius", tp.search_radius_);
   tracker_dialog.field("Angle Range (radians)", tp.angle_range_);
   tracker_dialog.field("Scale Range (1+-s)", tp.scale_range_);
   tracker_dialog.field("Smooth Sigma", tp.sigma_);
+  tracker_dialog.field("Min Gradient Mag", tp.min_gradient_);
   tracker_dialog.checkbox("Add Gradient Info", tp.gradient_info_);
   tracker_dialog.checkbox("Add Color Info", tp.color_info_);
   tracker_dialog.checkbox("Output Track Data", output_track);
