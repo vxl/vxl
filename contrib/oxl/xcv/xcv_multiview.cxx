@@ -9,7 +9,7 @@
 //
 // \verbatim
 //  Modifications:
-//    K.Y.McGaul     27-JAN-2000  Initial version.
+//   K.Y.McGaul     27-JAN-2000  Initial version.
 // \endverbatim
 
 #include "xcv_multiview.h"
@@ -22,7 +22,6 @@
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
 #include <vil1/vil1_image.h>
-#include <osl/osl_harris_params.h>
 
 #include <mvl/HomgInterestPointSet.h>
 #include <mvl/TripleMatchSetCorner.h>
@@ -94,8 +93,8 @@ xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos
 #if 0 // fsm changed. it was probably broken as a result of the easy2D changes.
     vgui_tableau_sptr old = rubbers[j];
 #else
-    vgui_tableau_sptr old = vgui_find_above_by_type_name(rubbers[j], 
-      "vgui_composite_tableau");
+    vgui_tableau_sptr old = vgui_find_above_by_type_name(rubbers[j],
+                                                         "vgui_composite_tableau");
 #endif
     vgui_parent_child_link::replace_child_everywhere(old, tee);
     tee->set_child(old);
@@ -118,55 +117,60 @@ xcv_threeview_manager* xcv_multiview::get_threeview_manager(vcl_vector<int>& col
 
   int col0 = col_pos[0], col1 = col_pos[1], col2 = col_pos[2];
   int row0 = row_pos[0], row1 = row_pos[1], row2 = row_pos[2];
-  // Check to see if we already have a manager for these three views (in any
-  // order):
+  // Check to see if we already have a manager for these three views (in any order):
   for (unsigned i=0; i<threeview_rubber0.size(); i++)
   {
-    if (rubbers[0] == threeview_rubber0[i] && rubbers[1] == threeview_rubber1[i]
-     && rubbers[2] == threeview_rubber2[i])
+    if (rubbers[0] == threeview_rubber0[i] &&
+        rubbers[1] == threeview_rubber1[i] &&
+        rubbers[2] == threeview_rubber2[i])
     {
       return threeview_mgrs[i];
     }
-    if (rubbers[0] == threeview_rubber0[i] && rubbers[1] == threeview_rubber2[i]
-     && rubbers[2] == threeview_rubber1[i])
+    if (rubbers[0] == threeview_rubber0[i] &&
+        rubbers[1] == threeview_rubber2[i] &&
+        rubbers[2] == threeview_rubber1[i])
     {
       // Put the vectors of column and row positions into the original order:
       col_pos[1] = col2; row_pos[1] = row2;
       col_pos[2] = col1; row_pos[2] = row1;
       return threeview_mgrs[i];
     }
-    if (rubbers[0] == threeview_rubber1[i] && rubbers[1] == threeview_rubber0[i]
-      && rubbers[2] == threeview_rubber2[i])
+    if (rubbers[0] == threeview_rubber1[i] &&
+        rubbers[1] == threeview_rubber0[i] &&
+        rubbers[2] == threeview_rubber2[i])
     {
       col_pos[0] = col1; row_pos[0] = row1;
       col_pos[1] = col0; row_pos[1] = row0;
       return threeview_mgrs[i];
     }
-    if (rubbers[0] == threeview_rubber1[i] && rubbers[1] == threeview_rubber2[i]
-      && rubbers[2] == threeview_rubber0[i])
+    if (rubbers[0] == threeview_rubber1[i] &&
+        rubbers[1] == threeview_rubber2[i] &&
+        rubbers[2] == threeview_rubber0[i])
     {
       col_pos[0] = col1; row_pos[0] = row1;
       col_pos[1] = col2; row_pos[1] = row2;
       col_pos[2] = col0; row_pos[2] = row0;
       return threeview_mgrs[i];
     }
-    if (rubbers[0] == threeview_rubber2[i] && rubbers[1] == threeview_rubber0[i]
-      && rubbers[2] == threeview_rubber1[i])
+    if (rubbers[0] == threeview_rubber2[i] &&
+        rubbers[1] == threeview_rubber0[i] &&
+        rubbers[2] == threeview_rubber1[i])
     {
       col_pos[0] = col2; row_pos[0] = row2;
       col_pos[1] = col0; row_pos[1] = row0;
       col_pos[2] = col1; row_pos[2] = row1;
       return threeview_mgrs[i];
     }
-    if (rubbers[0] == threeview_rubber2[i] && rubbers[1] == threeview_rubber1[i]
-      && rubbers[2] == threeview_rubber0[i])
+    if (rubbers[0] == threeview_rubber2[i] &&
+        rubbers[1] == threeview_rubber1[i] &&
+        rubbers[2] == threeview_rubber0[i])
     {
       col_pos[0] = col2; row_pos[0] = row2;
       col_pos[2] = col0; row_pos[2] = row0;
       return threeview_mgrs[i];
     }
   }
-
+  // No manager yet for these three views:
   xcv_threeview_manager *mgr = new xcv_threeview_manager;
   threeview_rubber0.push_back(rubbers[0]);
   threeview_rubber1.push_back(rubbers[1]);
@@ -583,7 +587,7 @@ void xcv_multiview::transfer_point()
   xcv_threeview_manager* mgr = get_threeview_manager(col_pos, row_pos);
 
   // Go through the view and get the two selected points:
-  vgui_soview2D_point* points[3];
+  vgui_soview2D_point* points[3]; points[0]=points[1]=points[2]=0;
   vgui_easy2D_tableau_sptr easys[3];
   int point_count = 0;
   for (unsigned i=0; i<3; i++)
@@ -592,19 +596,14 @@ void xcv_multiview::transfer_point()
     if (! easys[i])
       return;
     vcl_vector<vgui_soview*> sel_objs = easys[i]->get_selected_soviews();
-    unsigned j = 0;
-    while (j != sel_objs.size()
-    && sel_objs[j]->type_name() != "vgui_soview2D_point")
-    {
-      j++;
-    }
-    if (j<sel_objs.size())
-    {
-      points[i]=(vgui_soview2D_point*)sel_objs[j];
-      point_count++;
-    }
-    else
-      points[i]= 0;
+
+    for (unsigned int j=0; j<sel_objs.size(); ++j)
+      if (sel_objs[j]->type_name() == "vgui_soview2D_point")
+      {
+        points[i]=static_cast<vgui_soview2D_point*>(sel_objs[j]);
+        ++point_count;
+        break;
+      }
   }
   if (point_count != 2)
   {
@@ -671,7 +670,7 @@ void xcv_multiview::transfer_line()
   xcv_threeview_manager* mgr = get_threeview_manager(col_pos, row_pos);
 
   // Go through the views and get the two selected lines:
-  vgui_soview2D_lineseg* lines[3];
+  vgui_soview2D_lineseg* lines[3]; lines[0]=lines[1]=lines[2]=0;
   vgui_easy2D_tableau_sptr easys[3];
   int line_count = 0;
   for (unsigned i=0; i<3; i++)
@@ -680,19 +679,13 @@ void xcv_multiview::transfer_line()
     if (! easys[i])
       return;
     vcl_vector<vgui_soview*> sel_objs = easys[i]->get_selected_soviews();
-    unsigned j = 0;
-    while (j != sel_objs.size()
-    && sel_objs[j]->type_name() != "vgui_soview2D_lineseg")
-    {
-      j++;
-    }
-    if (j<sel_objs.size())
-    {
-      lines[i]=(vgui_soview2D_lineseg*)sel_objs[j];
-      line_count++;
-    }
-    else
-      lines[i]= 0;
+    for (unsigned int j=0; j<sel_objs.size(); ++j)
+      if (sel_objs[j]->type_name() == "vgui_soview2D_lineseg")
+      {
+        lines[i]=static_cast<vgui_soview2D_lineseg*>(sel_objs[j]);
+        ++line_count;
+        break;
+      }
   }
   if (line_count != 2)
   {

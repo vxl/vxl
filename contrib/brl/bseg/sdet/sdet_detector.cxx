@@ -1,6 +1,5 @@
 // This is brl/bseg/sdet/sdet_detector.cxx
 #include "sdet_detector.h"
-#include "sdet_contour.h"
 //:
 // \file
 // see sdet_detector.h
@@ -9,10 +8,10 @@
 
 #include <vil1/vil1_image.h>
 
-#include <gevd/gevd_pixel.h>
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_step.h>
 #include <gevd/gevd_bufferxy.h>
+#include <sdet/sdet_contour.h>
 
 //--------------------------------------------------------------------------------
 //
@@ -144,8 +143,8 @@ bool  sdet_detector::DoFoldContour()
 #endif
   sdet_contour::ClearNetwork(edges, vertices);       // delete vertices/edges
   sdet_contour contour(this->hysteresisFactor*this->noiseThreshold,
-                  this->minLength, this->minJump*this->noiseThreshold,
-                  this->maxGap);
+                       this->minLength, this->minJump*this->noiseThreshold,
+                       this->maxGap);
 
   // first, find isolated  chains/cycles
   bool t  = contour.FindNetwork(*edgel, junctionp,
@@ -264,7 +263,7 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
   if (image.components()!=1)
     {
       vcl_cout << "In sdet_detector::GetBufferFromImage()"
-               << " - not exactly one component \n";
+               << " - not exactly one component\n";
       return 0;
     }
 

@@ -14,8 +14,6 @@
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
-#include <vdgl/vdgl_digital_curve_sptr.h>
-#include <bdgl/bdgl_curve_region.h>
 #include <bdgl/bdgl_curve_matcher.h>
 #include <bdgl/bdgl_curve_tracker_primitive.h>
 

@@ -5,8 +5,6 @@
 
 #include <vcl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vdgl/vdgl_digital_curve.h>
-#include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_digital_region.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_curve_2d_sptr.h>

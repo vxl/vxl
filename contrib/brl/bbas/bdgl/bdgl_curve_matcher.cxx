@@ -3,14 +3,13 @@
 // \file
 // \author P.L. Bazin
 //-----------------------------------------------------------------------------
-#include <bdgl/bdgl_curve_matcher.h>
+
+#include "bdgl_curve_matcher.h"
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
-#include <bdgl/bdgl_curve_tracker.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 #include <bdgl/bdgl_curve_description.h>
-
 
 void bdgl_curve_matcher::match()
 {

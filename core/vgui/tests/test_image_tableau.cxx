@@ -5,8 +5,6 @@
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_load.h>
 
-#include <vxl_config.h>
-
 MAIN( test_image_tableau )
 {
   // Supply a test image as the first argument
@@ -18,8 +16,8 @@ MAIN( test_image_tableau )
   // older code.
   //
   vil1_image img = vil1_load( argv[1] );
-  if( !img ) {
-    vcl_cout << "Couldn't load test image \"" << argv[1] << "\"" << vcl_endl;
+  if ( !img ) {
+    vcl_cout << "Couldn't load test image \"" << argv[1] << "\"\n";
   } else {
     testlib_test_begin( "Construct with filename" );
     vgui_image_tableau_new img_tab( argv[1] );
@@ -30,9 +28,9 @@ MAIN( test_image_tableau )
     testlib_test_perform( img.width()      == img2.width() &&
                           img.height()     == img2.height() &&
                           img.components() == img2.components() &&
-                          img.planes()     == img2.planes() && 
+                          img.planes()     == img2.planes() &&
                           img.bits_per_component() == img2.bits_per_component() );
- 
+
     testlib_test_begin( "Contents are correct" );
     unsigned buf_size = img.width() * img.height() *
                         img.planes() * img.components() *
@@ -42,17 +40,17 @@ MAIN( test_image_tableau )
 
     bool okay = true;
 
-    if( !img.get_section( img1_buf, 0, 0, img.width(), img.height() ) ) {
-      vcl_cout << "Couldn't read from img1" << vcl_endl;
+    if ( !img.get_section( img1_buf, 0, 0, img.width(), img.height() ) ) {
+      vcl_cout << "Couldn't read from img1\n";
       okay = false;
     }
-    if( !img2.get_section( img2_buf, 0, 0, img2.width(), img2.height() ) ) {
-      vcl_cout << "Couldn't read from img2" << vcl_endl;
+    if ( !img2.get_section( img2_buf, 0, 0, img2.width(), img2.height() ) ) {
+      vcl_cout << "Couldn't read from img2\n";
       okay = false;
     }
 
-    for( unsigned i = 0; i < buf_size; ++i ) {
-      if( img1_buf[i] != img2_buf[i] ) {
+    for ( unsigned i = 0; i < buf_size; ++i ) {
+      if ( img1_buf[i] != img2_buf[i] ) {
         okay = false;
         break;
       }
@@ -60,9 +58,9 @@ MAIN( test_image_tableau )
 
     delete img1_buf;
     delete img2_buf;
-  
+
     testlib_test_perform( okay );
   }
-  
+
   SUMMARY();
 }

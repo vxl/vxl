@@ -8,9 +8,6 @@
 #include <vcl_iostream.h>
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_save.h>
-#include <vdgl/vdgl_digital_curve.h>
-#include <vdgl/vdgl_interpolator.h>
-#include <vdgl/vdgl_edgel_chain.h>
 #include <bxml/bxml_vtol_io.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
@@ -27,10 +24,8 @@
 #include <bgui/bgui_picker_tableau.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
-#include <gevd/gevd_clean_edgels.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
-#include <gevd/gevd_float_operators.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <brip/brip_float_ops.h>

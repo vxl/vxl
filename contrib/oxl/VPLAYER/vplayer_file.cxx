@@ -1,7 +1,7 @@
 // This is oxl/VPLAYER/vplayer_file.cxx
 #include "vplayer_file.h"
 //:
-//  \file
+// \file
 
 #include "vplayer.h"
 #include "easy2D_sequencer.h"
@@ -20,7 +20,6 @@
 #include <vgui/vgui_rubberband_tableau.h>
 
 #include <vidl/vidl_io.h>
-#include <vidl/vidl_frame.h>
 #include <vidl/vidl_movie.h>
 
 vidl_movie_sptr my_movie;

@@ -15,7 +15,6 @@
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
-#include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_pixel.h>
 
 const int INVALID = -1;
@@ -984,7 +983,7 @@ MergeEndPtTouchingEndPt(vtol_vertex_2d& end1, vtol_vertex_2d& end2,
 // Update global maps.
 void
 MergeEndPtTouchingJunction(vtol_vertex_2d &endpt, vtol_vertex_2d& junction,
-                            vbl_array_2d<vtol_edge_2d_sptr>& edgeMap, vbl_array_2d<vtol_vertex_2d_sptr>&vertexMap)
+                           vbl_array_2d<vtol_edge_2d_sptr>& edgeMap, vbl_array_2d<vtol_vertex_2d_sptr>&vertexMap)
 {
   vcl_vector<vtol_edge_sptr>* edges = endpt.edges();
   vtol_edge_2d_sptr edge = (*edges)[0]->cast_to_edge_2d(); // dangling edge terminating at end pt
@@ -1708,8 +1707,8 @@ gevd_contour::EqualizeSpacing(vcl_vector<vtol_edge_2d_sptr>& chains)
 // instead of upper-left corner.
 void
 gevd_contour::Translate(vcl_vector<vtol_edge_2d_sptr>& edges, // translate loc to center
-                   vcl_vector<vtol_vertex_2d_sptr >& vertices,
-                   const float tx, const float ty, const float tz)
+                        vcl_vector<vtol_vertex_2d_sptr >& vertices,
+                        const float tx, const float ty, const float tz)
 {
 #ifdef DEBUG
   vul_timer t;
@@ -1768,7 +1767,7 @@ gevd_contour::Translate(vcl_vector<vtol_edge_2d_sptr>& edges, // translate loc t
 // Edges and vertices are removed with UnProtect().
 void
 gevd_contour::ClearNetwork(vcl_vector<vtol_edge_2d_sptr>*& edges,
-                      vcl_vector<vtol_vertex_2d_sptr >*& vertices)
+                           vcl_vector<vtol_vertex_2d_sptr >*& vertices)
 {
   if (edges) {
     for ( unsigned int i=0; i< edges->size(); i++) {
@@ -1800,9 +1799,9 @@ gevd_contour::ClearNetwork(vcl_vector<vtol_edge_2d_sptr>*& edges,
 // mask array, using AND operation, for ROI with arbitrary shapes.
 void
 gevd_contour::MaskEdgels(const gevd_bufferxy& mask,
-                    gevd_bufferxy& edgels, // edge elements AND with mask
-                    int& njunction, // junctions AND with mask
-                    int* junctionx, int* junctiony)
+                         gevd_bufferxy& edgels, // edge elements AND with mask
+                         int& njunction, // junctions AND with mask
+                         int* junctionx, int* junctiony)
 {
   int x, y;
   for (y = 0; y < edgels.GetSizeY(); y++)
@@ -1911,7 +1910,7 @@ gevd_contour::CreateLookupTable(vcl_vector<vtol_vertex_2d_sptr >& set)
 // using Id and dynamic array. Protect it in the network.
 void
 gevd_contour::LookupTableInsert(vcl_vector<vtol_edge_2d_sptr>& set,
-                           vtol_edge_2d_sptr elmt)
+                                vtol_edge_2d_sptr elmt)
 {
   elmt->set_id(set.size());     // index in global array
   set.push_back(elmt);          // push_back at end of array
@@ -1921,7 +1920,7 @@ gevd_contour::LookupTableInsert(vcl_vector<vtol_edge_2d_sptr>& set,
 //: As above for vertices.
 void
 gevd_contour::LookupTableInsert(vcl_vector<vtol_vertex_2d_sptr >& set,
-                           vtol_vertex_2d_sptr  elmt)
+                                vtol_vertex_2d_sptr  elmt)
 {
   elmt->set_id(set.size());     // index in global array
   set.push_back(elmt);          // push at end of array
@@ -1932,7 +1931,7 @@ gevd_contour::LookupTableInsert(vcl_vector<vtol_vertex_2d_sptr >& set,
 // Also remove object from the network.
 void
 gevd_contour::LookupTableReplace(vcl_vector<vtol_edge_2d_sptr>& set,
-                            vtol_edge_2d_sptr deleted, vtol_edge_2d_sptr inserted)
+                                 vtol_edge_2d_sptr deleted, vtol_edge_2d_sptr inserted)
 {
   const int i = deleted->get_id();
   inserted->set_id(i);
@@ -1946,7 +1945,7 @@ gevd_contour::LookupTableReplace(vcl_vector<vtol_edge_2d_sptr>& set,
 //: As above for vertices.
 void
 gevd_contour::LookupTableReplace(vcl_vector<vtol_vertex_2d_sptr >& set,
-                            vtol_vertex_2d_sptr  deleted, vtol_vertex_2d_sptr  inserted)
+                                 vtol_vertex_2d_sptr  deleted, vtol_vertex_2d_sptr  inserted)
 {
   const int i = deleted->get_id();
   inserted->set_id(i);
@@ -1958,7 +1957,7 @@ gevd_contour::LookupTableReplace(vcl_vector<vtol_vertex_2d_sptr >& set,
 // Also remove object from the network.
 void
 gevd_contour::LookupTableRemove(vcl_vector<vtol_edge_2d_sptr>& set,
-                           vtol_edge_2d_sptr elmt)
+                                vtol_edge_2d_sptr elmt)
 {
   set[elmt->get_id()] = NULL;   // remove from global array
 }
@@ -1967,7 +1966,7 @@ gevd_contour::LookupTableRemove(vcl_vector<vtol_edge_2d_sptr>& set,
 //: As above for vertices.
 void
 gevd_contour::LookupTableRemove(vcl_vector<vtol_vertex_2d_sptr >& set,
-                           vtol_vertex_2d_sptr  elmt)
+                                vtol_vertex_2d_sptr  elmt)
 {
   set[elmt->get_id()] = NULL;   // remove from global array
 }
@@ -2031,7 +2030,7 @@ gevd_contour::LookupTableCompress(vcl_vector<vtol_vertex_2d_sptr >& set)
 //    lengths >= 3.
 int
 gevd_contour::CheckInvariants(vcl_vector<vtol_edge_2d_sptr>& edges,
-                         vcl_vector<vtol_vertex_2d_sptr >& vertices)
+                              vcl_vector<vtol_vertex_2d_sptr >& vertices)
 {
   int nerror = 0;
 

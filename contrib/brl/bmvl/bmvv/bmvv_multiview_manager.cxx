@@ -30,19 +30,16 @@
 #include <bgui/bgui_picker_tableau.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
-#include <gevd/gevd_clean_edgels.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vtol/vtol_intensity_face.h>
-#include <gevd/gevd_float_operators.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 
 // pilou's line
 #include <bdgl/bdgl_curve_description.h>
 #include <bdgl/bdgl_curve_tracker.h>
-#include <bdgl/bdgl_curve_tracker_primitive.h>
 #include <bdgl/bdgl_curve_matcher.h>
 
 //static live_video_manager instance

@@ -8,14 +8,6 @@
 #include <vpgl/vpgl_matrix_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
-#include <vcsl/vcsl_spatial.h>
-#include <vcsl/vcsl_unit.h>
-#include <vcsl/vcsl_graph.h>
-#include <vcsl/vcsl_axis.h>
-#include <vcsl/vcsl_dimension.h>
-#include <vcsl/vcsl_meter.h>
-#include <vcsl/vcsl_length.h>
-
 int get_int_random ()
 {
   int temp= rand();
@@ -60,8 +52,8 @@ int main(int argc, char ** argv)
 
     double ix,iy;
     pers.world_to_image(rnd_x,rnd_y,rnd_z,ix,iy,0);
-    output << "CORRESP: 1 "<<i <<" "<< rnd_x <<" "<< rnd_y << " " << rnd_z
-           << " " << (float) ix << " " << (float) iy << vcl_endl;
+    output << "CORRESP: 1 "<<i <<' '<< rnd_x <<' '<< rnd_y << ' ' << rnd_z
+           << ' ' << (float) ix << ' ' << (float) iy << vcl_endl;
   }
 
   output.close();
@@ -73,7 +65,7 @@ int main(int argc, char ** argv)
   if (!instr)
   {
     vcl_cout <<"In carmen_interface::load_correspondence_file()"
-             <<" - can't open file  " <<vcl_endl;
+             <<" - can't open file\n";
     return false;
   }
   char buf[100];
@@ -84,7 +76,7 @@ int main(int argc, char ** argv)
     instr >> npts;
   else
   {
-    vcl_cout << "bad file " << vcl_endl;
+    vcl_cout << "bad file\n";
     return false;
   }
   int view_no=0, point_id=0;
@@ -96,12 +88,12 @@ int main(int argc, char ** argv)
 
     if (vcl_strcmp("CORRESP:",buf))
     {
-      vcl_cout << "wrong number of correspondences " << vcl_endl;
+      vcl_cout << "wrong number of correspondences\n";
       return false;
     }
     instr >> view_no >> point_id >> x >> y >> z >> u >> v;
-    vcl_cout << "Corr: " <<  view_no << " " << point_id << " " << x << " " <<  y
-             << " " << z << " " <<  u << " " << v << vcl_endl;
+    vcl_cout << "Corr: " <<  view_no << ' ' << point_id << ' ' << x << ' ' <<  y
+             << ' ' << z << ' ' <<  u << ' ' << v << vcl_endl;
   }
 #endif
   return 0;

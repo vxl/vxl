@@ -3,12 +3,10 @@
 //:
 // \file
 
-#include <vcsl/vcsl_cartesian_3d.h>
 #include <vcsl/vcsl_graph.h>
 #include <vcsl/vcsl_matrix.h>
 #include <vcsl/vcsl_spatial.h>
 #include <vnl/vnl_math.h>
-
 
 vpgl_perspective_camera::vpgl_perspective_camera():
   _mat_cam(NULL),  _params(12)
@@ -69,12 +67,8 @@ void vpgl_perspective_camera::update_intrinsic()
 }
 
 void vpgl_perspective_camera::update() {
-   vcsl_matrix_param_sptr trans_param;
-   vcsl_matrix_sptr transformation;
-   //vcsl_translation a;
-  trans_param= new vcsl_matrix_param;
-  transformation = new vcsl_matrix;
-
+   vcsl_matrix_param_sptr trans_param= new vcsl_matrix_param;
+   vcsl_matrix_sptr transformation = new vcsl_matrix;
 
   // Create a camera if it doesn't exist
   if (_mat_cam==(vpgl_matrix_camera *)NULL) _mat_cam = new vpgl_matrix_camera();

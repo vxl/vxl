@@ -1,10 +1,9 @@
-//this-sets-emacs-to-*-c++-*-mode
-
+// This is brl/vvid/vvid_live_stereo_manager.cxx
+#include "vvid_live_stereo_manager.h"
 //:
 // \file
 // \author J.L. Mundy
 
-#include "vvid_live_stereo_manager.h"
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
 #include <vil1/vil1_memory_image_of.h>
@@ -25,7 +24,6 @@
 
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
-#include <gevd/gevd_float_operators.h>
 #include <vvid/cmu_1394_camera_params.h>
 #include <vpro/vpro_video_process.h>
 #include <vpro/vpro_epipolar_space_process.h>
@@ -73,8 +71,8 @@ void vvid_live_stereo_manager::set_camera_params()
 {
   if (!vframes_.size())
     {
-      vcl_cout << "in vvid_live_stereo_manager::set_camera_params() - no live"
-               << " video frames\n";
+      vcl_cout << "in vvid_live_stereo_manager::set_camera_params() -"
+               << " no live video frames\n";
       return;
     }
   vgui_dialog cam_dlg("Camera Parameters");
@@ -111,8 +109,8 @@ void vvid_live_stereo_manager::setup_views()
       init_successful_ = init_successful_&&vf->attach_live_video();
       if (!init_successful_)
         {
-          vcl_cout << "In vvid_live_stereo_manager::setup_views() - bad camera"
-                   << " initialization\n";
+          vcl_cout << "In vvid_live_stereo_manager::setup_views() -"
+                   << " bad camera initialization\n";
           return;
         }
 //       //Experimental Kludge

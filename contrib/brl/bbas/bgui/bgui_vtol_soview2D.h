@@ -17,7 +17,6 @@
 #include <vcl_iosfwd.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
-#include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_face_2d_sptr.h>
@@ -27,7 +26,7 @@
 //: vsol_point_2d
 // This view is essentially the same as a point the only difference
 // is style. Probably move to a geometry tableau later
-class bgui_vtol_soview2D_point : public vgui_soview2D_point 
+class bgui_vtol_soview2D_point : public vgui_soview2D_point
 {
  public:
   //: Constructor - creates a default vsol_point_2d view
@@ -38,12 +37,11 @@ class bgui_vtol_soview2D_point : public vgui_soview2D_point
 
   //: Returns the type of this class ('bgui_vtol_soview2D_point').
   vcl_string type_name() const { return "bgui_vtol_soview2D_point"; }
-
 };
 
 //: vdgl_dotted_digital_curve (maybe later move to a geometry tableau)
 // This one displays points
-class bgui_vtol_soview2D_dotted_digital_curve : public vgui_soview2D_group 
+class bgui_vtol_soview2D_dotted_digital_curve : public vgui_soview2D_group
 {
  public:
   //: Constructor - creates a default vdgl_digital_curve view
@@ -79,7 +77,7 @@ class bgui_vtol_soview2D_digital_curve : public vgui_soview2D_linestrip
 //: vtol_vertex_2d
 // This view is essentially the same as a point the only difference
 // would be style, which we will tackle later
-class bgui_vtol_soview2D_vertex : public vgui_soview2D_point 
+class bgui_vtol_soview2D_vertex : public vgui_soview2D_point
 {
  public:
   //: Constructor - creates a default vertex_2d view
@@ -90,7 +88,6 @@ class bgui_vtol_soview2D_vertex : public vgui_soview2D_point
 
   //: Returns the type of this class ('bgui_vtol_soview2D_vertex').
   vcl_string type_name() const { return "bgui_vtol_soview2D_vertex"; }
-
 };
 
 class bgui_vtol_soview2D_line_seg : public vgui_soview2D_lineseg
@@ -136,7 +133,6 @@ class bgui_vtol_soview2D_edge_group : public vgui_soview2D_group
 
   //: Returns the type of this class ('bgui_vtol_soview2D_edge_group').
   vcl_string type_name() const { return "bgui_vtol_soview2D_edge_group"; }
-
 };
 
 class bgui_vtol_soview2D_face : public vgui_soview2D_group
@@ -153,7 +149,6 @@ class bgui_vtol_soview2D_face : public vgui_soview2D_group
 
   //: Returns the type of this class ('bgui_vtol_soview2D_face').
   vcl_string type_name() const { return "bgui_vtol_soview2D_face"; }
-
 };
 
 #endif // bgui_vtol_soview2D_h_

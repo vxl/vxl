@@ -1,8 +1,7 @@
 //:
 // \file
 #include "sdet_edge_champher.h"
-#include <gevd/gevd_pixel.h>
-//:
+
 //--------------------------------------------------------------
 //
 // Constructor and Destructor Functions
@@ -30,10 +29,9 @@ sdet_edge_champher::~sdet_edge_champher()
 }
 
 
-//:
 //-----------------------------------------------------------------------------
 //
-//  Copies the edge array and sets the distance at each edge location to 0
+//: Copies the edge array and sets the distance at each edge location to 0
 //   Note that vbl_array has r, c -> y, x  index order
 //-----------------------------------------------------------------------------
 void
@@ -61,10 +59,9 @@ void sdet_edge_champher::chamfer_34()
   this->compute_real_distances();
 }
 
-//:
 //-----------------------------------------------------------------------------
 //
-// Determines the minimum of five ints.
+//: Determines the minimum of five ints.
 //
 //-----------------------------------------------------------------------------
 int sdet_edge_champher::minimum_5(int a, int b, int c, int d, int e)
@@ -81,10 +78,9 @@ int sdet_edge_champher::minimum_5(int a, int b, int c, int d, int e)
     return 5;
 }
 
-//:
 //-----------------------------------------------------------------------------
 //
-// Performs a forward chamfer convolution on the distance_ and _edge images
+//: Performs a forward chamfer convolution on the distance_ and _edge images
 //
 //-----------------------------------------------------------------------------
 void sdet_edge_champher::forward_chamfer()
@@ -126,10 +122,9 @@ void sdet_edge_champher::forward_chamfer()
       }
 }
 
-//:
 //-----------------------------------------------------------------------------
 //
-// Performs a backward chamfer convolution on the distance_ and _edge images
+//: Performs a backward chamfer convolution on the distance_ and edges_ images
 //
 //-----------------------------------------------------------------------------
 void sdet_edge_champher::backward_chamfer()

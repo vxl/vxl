@@ -30,7 +30,6 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vgui/vgui_style.h>
-#include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
@@ -64,13 +63,13 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
 
   //: the vtol display methods for individual topology classes
   bgui_vtol_soview2D_vertex* add_vertex(vtol_vertex_2d_sptr const& v);
-  
+
   bgui_vtol_soview2D_vertex* add_vertex(vtol_vertex_2d_sptr const& v,
                                         const float r,
                                         const float g,
                                         const float b,
                                         const float point_radius );
-  
+
   bgui_vtol_soview2D_edge* add_edge(vtol_edge_2d_sptr const& e);
 
   bgui_vtol_soview2D_edge* add_edge(vtol_edge_2d_sptr const& e,
@@ -96,17 +95,17 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
                                     const float g,
                                     const float b,
                                     const float line_width);
-  
+
   //: display methods for vectors of topology classes (not grouped)
   void add_topology_object(vtol_topology_object_sptr const& tos);
-  
+
   void add_topology_object(vtol_topology_object_sptr const& tos,
                            const float r,
                            const float g,
                            const float b,
                            const float line_width,
                            const float point_radius);
-  
+
   void add_topology_objects(vcl_vector<vtol_topology_object_sptr> const& tos);
 
   void add_topology_objects(vcl_vector<vtol_topology_object_sptr> const& tos,
@@ -115,7 +114,7 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
                             const float b,
                             const float line_width,
                             const float point_radius);
-  
+
   void add_edges(vcl_vector<vtol_edge_2d_sptr> const & edges,
                  bool verts=false);
 
@@ -135,7 +134,7 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
                  const float b,
                  const float line_width,
                  const float point_radius);
-  
+
   //: clear the tableau including the highlight map
   void clear_all();
 

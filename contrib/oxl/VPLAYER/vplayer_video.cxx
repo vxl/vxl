@@ -1,7 +1,7 @@
 // This is oxl/VPLAYER/vplayer_video.cxx
 #include "vplayer_video.h"
 //:
-//  \file
+// \file
 
 #include "vplayer.h"
 
@@ -16,8 +16,6 @@
 #include <vgui/vgui_rubberband_tableau.h>
 #include <vgui/vgui_dialog.h>
 
-#include <vidl/vidl_io.h>
-#include <vidl/vidl_frame.h>
 #include <vidl/vidl_movie.h>
 
 static vgui_adaptor* the_adaptor = 0;

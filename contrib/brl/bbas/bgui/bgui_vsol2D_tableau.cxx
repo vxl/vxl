@@ -12,9 +12,6 @@
 #include <vsol/vsol_polyline_2d.h>
 
 #include <vdgl/vdgl_digital_curve.h>
-#include <vdgl/vdgl_interpolator.h>
-#include <vdgl/vdgl_edgel_chain.h>
-
 
 bgui_vsol2D_tableau::bgui_vsol2D_tableau(const char* n) :
   vgui_easy2D_tableau(n) { this->init(); }
@@ -61,8 +58,8 @@ void bgui_vsol2D_tableau::init()
 // since June 13, 2003 - mrj
 // ***********************************************************
 //
-// switched to bgui_displaylist2D and bgui_displaybase, which 
-// have been altered to make highlighting objects work like 
+// switched to bgui_displaylist2D and bgui_displaybase, which
+// have been altered to make highlighting objects work like
 // selecting objects, hopefully rendering the below highlighting
 // technique unnecessary
 
@@ -123,8 +120,8 @@ bgui_vsol_soview2D_point*
 bgui_vsol2D_tableau::add_vsol_point_2d(vsol_point_2d_sptr const& p)
 {
   return add_vsol_point_2d( p ,  point_style_.r ,
-                                 point_style_.g , 
-                                 point_style_.b , 
+                                 point_style_.g ,
+                                 point_style_.b ,
                                  point_style_.point_radius);
 }
 
@@ -145,9 +142,9 @@ bgui_vsol2D_tableau::add_vsol_line_2d(vsol_line_2d_sptr const& line,
 bgui_vsol_soview2D_line_seg*
 bgui_vsol2D_tableau::add_vsol_line_2d(vsol_line_2d_sptr const& line)
 {
-  return add_vsol_line_2d( line , line_style_.r , 
-                                  line_style_.g , 
-                                  line_style_.b , 
+  return add_vsol_line_2d( line , line_style_.r ,
+                                  line_style_.g ,
+                                  line_style_.b ,
                                   line_style_.line_width );
 }
 
@@ -168,9 +165,9 @@ bgui_vsol2D_tableau::add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pline,
 bgui_vsol_soview2D_polyline*
 bgui_vsol2D_tableau::add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pline)
 {
-  return add_vsol_polyline_2d( pline , polyline_style_.r , 
-                                       polyline_style_.g , 
-                                       polyline_style_.b , 
+  return add_vsol_polyline_2d( pline , polyline_style_.r ,
+                                       polyline_style_.g ,
+                                       polyline_style_.b ,
                                        polyline_style_.line_width );
 }
 
@@ -191,9 +188,9 @@ bgui_vsol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr const& dc,
 bgui_vsol_soview2D_digital_curve*
 bgui_vsol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr const& dc)
 {
-  return add_digital_curve( dc , digital_curve_style_.r , 
-                                 digital_curve_style_.g , 
-                                 digital_curve_style_.b , 
+  return add_digital_curve( dc , digital_curve_style_.r ,
+                                 digital_curve_style_.g ,
+                                 digital_curve_style_.b ,
                                  digital_curve_style_.line_width );
 }
 
@@ -215,10 +212,10 @@ bgui_vsol2D_tableau::add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc,
 bgui_vsol_soview2D_dotted_digital_curve*
 bgui_vsol2D_tableau::add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc)
 {
-  return add_dotted_digital_curve( dc , dotted_digital_curve_style_.r , 
-                                        dotted_digital_curve_style_.g , 
-                                        dotted_digital_curve_style_.b , 
-                                        dotted_digital_curve_style_.point_radius , 
+  return add_dotted_digital_curve( dc , dotted_digital_curve_style_.r ,
+                                        dotted_digital_curve_style_.g ,
+                                        dotted_digital_curve_style_.b ,
+                                        dotted_digital_curve_style_.point_radius ,
                                         dotted_digital_curve_style_.line_width );
 }
 

@@ -21,7 +21,7 @@
 #include <btol/btol_vertex_algs.h>
 #include <btol/btol_edge_algs.h>
 #include <bdgl/bdgl_curve_algs.h>
-#include <gevd/gevd_float_operators.h>
+#include <gevd/gevd_bufferxy.h>
 #include <gevd/gevd_pixel.h>
 
 bool sdet_contour::talkative_ = false;    // By default contour is not silent.
@@ -1427,7 +1427,7 @@ sdet_contour::MergeEndPtTouchingEndPt(vtol_vertex_2d_sptr const& end1,
     if (edge1->v2()->cast_to_vertex_2d() == end1)
     {
       if (sdet_contour::debug_)
-        vcl_cout << "Case a \n";
+        vcl_cout << "Case a\n";
       for (int i = 0; i < l1; i++)
       {
         cxy->add_edgel ( (*cxy1)[i] );
@@ -1441,7 +1441,7 @@ sdet_contour::MergeEndPtTouchingEndPt(vtol_vertex_2d_sptr const& end1,
     if (edge1->v1()->cast_to_vertex_2d() == end1)
     {
       if (sdet_contour::debug_)
-        vcl_cout << "Case b \n";
+        vcl_cout << "Case b\n";
       for (int i = l1-1; i >= 0; i--)
       {
         cxy->add_edgel((*cxy1)[i]);
@@ -1466,7 +1466,7 @@ sdet_contour::MergeEndPtTouchingEndPt(vtol_vertex_2d_sptr const& end1,
     if (edge2->v1()->cast_to_vertex_2d() == end2)
     {
       if (sdet_contour::debug_)
-        vcl_cout << "Case c \n";
+        vcl_cout << "Case c\n";
       for (int i = 1; i < l2; i++)//don't need edge2->v1() i=1
       {
         cxy->add_edgel ( (*cxy2)[i] );
@@ -1480,7 +1480,7 @@ sdet_contour::MergeEndPtTouchingEndPt(vtol_vertex_2d_sptr const& end1,
     if (edge2->v2()->cast_to_vertex_2d() == end2)
     {
       if (sdet_contour::debug_)
-        vcl_cout << "Case d \n";
+        vcl_cout << "Case d\n";
       for (int i = l2-2; i >= 0; i--)// don't need edge2->v2() i = l2-2
       {
         cxy->add_edgel ( (*cxy2)[i] );
@@ -1557,7 +1557,7 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
     if (old_edge->v2()->cast_to_vertex_2d() == endpt)
     {
       if (sdet_contour::debug_)
-        vcl_cout << "Case ja \n";
+        vcl_cout << "Case ja\n";
       for (int i = 0; i < N-1; i++)
       {
         cxy->add_edgel ( (*old_cxy)[i] );
@@ -1579,7 +1579,7 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
     if (old_edge->v1()->cast_to_vertex_2d() == endpt)
     {
       if (sdet_contour::debug_)
-        vcl_cout << "Case jb \n";
+        vcl_cout << "Case jb\n";
       for (int i = N-1; i >=0; i--)
       {
         cxy->add_edgel((*old_cxy)[i]);
@@ -1818,9 +1818,8 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
 
   if (talkative_)
     vcl_cout << "Find junctions with "
-             << jcycle << " cycles and " << jchain << " chains,"
-             << " with jump > " << minJump << " and maxSpiral " << maxSpiral
-             << vcl_endl;
+             << jcycle << " cycles and " << jchain << " chains, with jump > "
+             << minJump << " and maxSpiral " << maxSpiral << vcl_endl;
   // 3. Merge touching end points, into a larger junction/chain.
   int dendpt = 0, dchain = 0;   // number of deleted endpt/chain
 
@@ -2375,7 +2374,7 @@ sdet_contour::EqualizeSpacing(vcl_vector<vtol_edge_2d_sptr>& chains)
   vul_timer t;
 
   if (talkative_)
-    vcl_cout << "Equalize the spacing between pixels in chains";
+    vcl_cout << "Equalize the spacing between pixels in chains\n";
 
   for ( unsigned int i= 0; i< chains.size(); i++)
   {

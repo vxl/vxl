@@ -4,18 +4,13 @@
 // \author P.L. Bazin
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
-#include <bdgl/bdgl_curve_tracker.h>
-#include <vdgl/vdgl_edgel_chain_sptr.h>
+#include "bdgl_curve_tracker.h"
 #include <bdgl/bdgl_curve_matcher.h>
 #include <bdgl/bdgl_curve_tracker_primitive.h>
 #include <bdgl/bdgl_curve_region.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
-#include <vdgl/vdgl_digital_curve.h>
-#include <vdgl/vdgl_interpolator.h>
-#include <vdgl/vdgl_interpolator_linear.h>
-
+#include <vcl_vector.h>
 
 //-----------------------------------------------------------------------------
 void bdgl_curve_tracker::track()
@@ -43,10 +38,14 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
   int best_id;
   double best_val, dist;
 
-  //vcl_cout<<"-- tracking frame "<<frame<<" --\n";
+#ifdef DEBUG
+  vcl_cout<<"-- tracking frame "<<frame<<" --\n";
+#endif
 
   if (input_curve_.size()<frame) return;
-  //vcl_cout<<input_curve_[frame].size()<<" curves on image "<<frame<<"\n";
+#ifdef DEBUG
+  vcl_cout<<input_curve_[frame].size()<<" curves on image "<<frame<<'\n';
+#endif
 
   // init : copy the first curves
   if (frame==0){
@@ -66,7 +65,9 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
       is_used.insert(is_used.end(), 0);
 
     // compute regions
-    //vcl_cout<<"-> compute regions\n";
+#ifdef DEBUG
+    vcl_cout<<"-> compute regions\n";
+#endif
 
     regions.clear();
     for (unsigned int j=0;j<input_curve_[frame].size();j++){
@@ -79,7 +80,9 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
     {
       best_id = -1;
       best_val = 1e6;
-      //vcl_cout<<".";
+#ifdef DEBUG
+      vcl_cout<<'.';
+#endif
 
       // look for curves in the neighborhood
       for (unsigned int j=0;j<input_curve_[frame].size();j++){
@@ -90,10 +93,14 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
                         *(regions[j].y()- output_curve_[frame-1][i].region_.y()) );
 
         if (dist < regions[j].r() + output_curve_[frame-1][i].region_.r() ){
-          //vcl_cout<<"try ("<<i<<"->"<<j<<")";
+#ifdef DEBUG
+          vcl_cout<<"try ("<<i<<"->"<<j<<')';
+#endif
           matcher.init(output_curve_[frame-1][i], input_curve_[frame][j]);
           matcher.match();
-          //vcl_cout<<"->"<<matcher.score()<<"\n";
+#ifdef DEBUG
+          vcl_cout<<"->"<<matcher.score()<<'\n';
+#endif
 
           // no handling of multiple curve matching : to do
           if (matcher.score() < best_val){
@@ -102,8 +109,9 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
           }
         }
       }
-      //vcl_cout<<"("<<i<<"->"<<best_id<<")";
-      //vcl_cout<<"->"<<best_val<<"\n";
+#ifdef DEBUG
+      vcl_cout<<'('<<i<<"->"<<best_id<<")->"<<best_val<<'\n';
+#endif
 
       // if none, suppress the primitive
       if (best_id == -1){
@@ -124,16 +132,20 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
 
           primitive_list.insert(primitive_list.end(), primitive);
           is_used[best_id]=1;
-          //vcl_cout<<".";
+#ifdef DEBUG
+          vcl_cout<<'.';
+#endif
         }
       }
     }
-    //vcl_cout<<"-unmatched primitives-\n";
+#ifdef DEBUG
+    vcl_cout<<"-unmatched primitives-\n";
+#endif
     // take every curve left, and build a primitive for it
     for (unsigned int j=0;j<input_curve_[frame].size();j++){
       if (!is_used[j]){
         primitive.init(primitive_list[primitive_list.size()-1].get_id()+1,
-                        input_curve_[frame][j]);
+                       input_curve_[frame][j]);
         primitive_list.insert(primitive_list.end(), primitive);
       }
     }

@@ -1,11 +1,8 @@
 //:
-// \file 
+// \file
 // \brief a graph with source
 // \author Kongbin Kang (Kongbin_Kang@Brown.edu)
 // \date   4/3/2003
-// \verbatim
-//  Modifications
-// \endverbatim
 
 #ifndef AFX_CAMERAGRAPH_H__8810B4C3_E6C7_42CE_8C7F_D9F8F201F6F6__INCLUDED_
 #define AFX_CAMERAGRAPH_H__8810B4C3_E6C7_42CE_8C7F_D9F8F201F6F6__INCLUDED_
@@ -17,10 +14,6 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vcsl/vcsl_spatial.h>
-#include <vcsl/vcsl_spatial_sptr.h>
-#include <vcsl/vcsl_spatial_transformation_sptr.h>
-
 
 template<class S, class V, class E>
 class bcal_camera_graph
@@ -156,10 +149,10 @@ class bcal_camera_graph
   S* get_source() {  return source_;}
   int get_source_id() { return 0;}
 
-  // get vertex at position of 
-  V* get_vertex_from_pos(int pos) 
-  { 
-    assert(num_vertice_ > pos); 
+  // get vertex at position of
+  V* get_vertex_from_pos(int pos)
+  {
+    assert(num_vertice_ > pos);
     return vertice_[pos + 1]->v_;
   }
 
@@ -170,9 +163,9 @@ class bcal_camera_graph
   }
 
   // return a id of vertex at position pos;
-  int get_vertex_id(int pos) 
-  { 
-    assert(pos >= 0 && pos < num_vertice_); 
+  int get_vertex_id(int pos)
+  {
+    assert(pos >= 0 && pos < num_vertice_);
     return pos + 1;
   }
 

@@ -2,8 +2,6 @@
 // \file
 
 #include <vdgl/vdgl_edgel_chain.h>
-#include <vdgl/vdgl_interpolator_cubic.h>
-#include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_fit_line.h>
 #include <vsol/vsol_line_2d.h>
 #include <vcl_iostream.h>

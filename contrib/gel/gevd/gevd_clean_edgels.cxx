@@ -18,8 +18,6 @@
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_2d.h>
-#include <gevd/gevd_float_operators.h>
-#include <gevd/gevd_pixel.h>
 
 static bool verbose = false;
 

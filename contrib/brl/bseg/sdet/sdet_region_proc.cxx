@@ -1,16 +1,13 @@
 // This is brl/bseg/sdet/sdet_region_proc.cxx
-
+#include "sdet_region_proc.h"
 //:
 // \file
 #include <vnl/vnl_numeric_traits.h>
 #include <vil1/vil1_memory_image_of.h>
-#include <gevd/gevd_float_operators.h>
 #include <sdet/sdet_edgel_regions.h>
 #include <vtol/vtol_intensity_face.h>
 #include <sdet/sdet_detector.h>
-#include <sdet/sdet_region_proc.h>
 
-#define ushortPixel(buf,x,y)  (*((unsigned short*)buf->GetElementAddr(x,y)))
 //---------------------------------------------------------------
 // Constructors
 //
@@ -70,7 +67,7 @@ void sdet_region_proc::extract_regions()
 
   if (!edges||!edges->size())
     {
-      vcl_cout << "In sdet_region_proc::extract_regions()- "
+      vcl_cout << "In sdet_region_proc::extract_regions() -"
                << " No Edgels were computed\n";
       return;
     }

@@ -11,8 +11,6 @@
 #include <vil1/vil1_memory_image_of.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
-#include <vdgl/vdgl_interpolator.h>
-#include <vdgl/vdgl_edgel_chain.h>
 #ifdef HAS_XERCES
 #include <bxml/bxml_vtol_io.h>
 #endif
@@ -24,7 +22,6 @@
 #include <sdet/sdet_fit_lines.h>
 #include <sdet/sdet_grid_finder_params.h>
 #include <sdet/sdet_grid_finder.h>
-#include <gevd/gevd_clean_edgels.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
 #include <vgui/vgui.h>
@@ -48,7 +45,6 @@
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_intensity_face.h>
 #include <bgui/bgui_vtol2D_tableau.h>
-#include <gevd/gevd_float_operators.h>
 #include <brip/brip_float_ops.h>
 #include <bsol/bsol_hough_line_index.h>
 #include <sdet/sdet_region_proc_params.h>
@@ -457,7 +453,7 @@ void segv_segmentation_manager::fit_lines()
   vd_dialog.checkbox("Detect Grid", detect_grid);
   vd_dialog.checkbox("Grid Debug Output", gfp.verbose_);
   vd_dialog.checkbox("Matched Lines", matched_lines);
-  vd_dialog.choice("Choose Debug Line Display", choices, gfp.debug_state_); 
+  vd_dialog.choice("Choose Debug Line Display", choices, gfp.debug_state_);
   if (!vd_dialog.ask())
     return;
   dp.noise_multiplier=nm;

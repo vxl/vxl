@@ -12,8 +12,6 @@
 
 #include <vdgl/vdgl_edgel_chain.h>
 #include  <vsol/vsol_line_2d_sptr.h>
-#include <vdgl/vdgl_ortho_regress.h>
-#include  <vdgl/vdgl_OrthogRegress.h>
 
 vsol_line_2d_sptr vdgl_fit_line(vdgl_edgel_chain &chain);
 

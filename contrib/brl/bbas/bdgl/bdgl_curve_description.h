@@ -13,7 +13,6 @@
 //
 //-----------------------------------------------------------------------------
 #include <vdgl/vdgl_edgel_chain_sptr.h>
-#include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vgl/vgl_point_2d.h>
 
 class bdgl_curve_description

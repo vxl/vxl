@@ -1,6 +1,5 @@
 #ifndef vtol_extract_topology_h_
 #define vtol_extract_topology_h_
-
 //:
 // \file
 // \author Amitha Perera
@@ -8,14 +7,12 @@
 //
 
 #include <vxl_config.h>
-
 #include <vcl_vector.h>
 
 #include <vil/vil_image_view.h>
 
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_intensity_face_sptr.h>
-#include <vdgl/vdgl_edgel_chain_sptr.h>
 
 // A class in the test harness that will test some of the internal
 // methods
