@@ -49,9 +49,12 @@ vil_stream_fstream
 vil_stream_section
 vil_stream_url
 vil_warp
+vil_test
 )
 
 
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
 
 SUBDIRS(file_formats)
+SUBDIRS(tests)
+

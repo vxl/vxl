@@ -1,0 +1,10 @@
+LINK_LIBRARIES( vil )
+LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vil )
+
+LINK_LIBRARIES( vil_file_formats )
+LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vil/file_formats )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/file_formats/CMakeListsLink.txt )
+
+LINK_LIBRARIES( vpl )
+LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vpl )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )

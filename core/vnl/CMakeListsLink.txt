@@ -1,0 +1,7 @@
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt )
+
+LINK_LIBRARIES( vnl )
+LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vnl )
+
+INCLUDE( ${allvxl_SOURCE_DIR}/v3p/netlib/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
