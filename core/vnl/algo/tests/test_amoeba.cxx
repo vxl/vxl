@@ -29,16 +29,16 @@ struct testlib_test_amoeba_cost1 : public vnl_cost_function {
 
 void test_amoeba()
 {
-  vcl_cout<<" ================== test_amoeba ===============\n";
+  vcl_cout<<" ================== test_amoeba ===============\n"
 
-  vcl_cout<<"Testing on 1D cubic\n";
+          <<"Testing on 1D cubic\n";
   testlib_test_amoeba_cubic c;
   vnl_amoeba amoeba1(c);
   vnl_vector<double> x(1);
   x[0]=77;
   vcl_cout << "amoeba1: ";
   amoeba1.minimize(x);
-  TEST("amoeba1", vcl_fabs(x[0] - 2) < 1e-5, true);
+  TEST_NEAR("amoeba1", x[0], 2, 1e-5);
 
   int n = 4;
   vcl_cout<<"Testing on "<<n<<"-D quadratic\n";
@@ -50,7 +50,7 @@ void test_amoeba()
 
   double err=0;
   for (int i=0;i<n;++i) err+=vcl_fabs(x[i]-i);
-  TEST("Quadratic, starting at (1,1,1...)",err<1e-5,true);
+  TEST_NEAR("Quadratic, starting at (1,1,1...)", err, 0.0, 1e-5);
   vcl_cout<<"Number of evaluations: "<<amoeba2.get_num_evaluations()<<vcl_endl;
 
   x.fill(0);
@@ -58,7 +58,7 @@ void test_amoeba()
   amoeba2.minimize(x);
   err=0;
   for (int i=0;i<n;++i) err+=vcl_fabs(x[i]-i);
-  TEST("Quadratic, starting at (0,0,0...)",err<1e-5,true);
+  TEST_NEAR("Quadratic, starting at (0,0,0...)", err, 0.0, 1e-5);
   vcl_cout<<"Number of evaluations: "<<amoeba2.get_num_evaluations()<<vcl_endl;
 
   vnl_vector<double> dx(n);
@@ -67,15 +67,15 @@ void test_amoeba()
   amoeba2.minimize(x,dx);
   err=0;
   for (int i=0;i<n;++i) err+=vcl_fabs(x[i]-i);
-  TEST("Quadratic, starting at (0,0,0...) using minimise(x,dx)",err<1e-5,true);
-  vcl_cout<<"Number of evaluations: "<<amoeba2.get_num_evaluations()<<vcl_endl;
+  TEST_NEAR("Quadratic, starting at (0,0,0...) using minimise(x,dx)",err,0,1e-5);
+  vcl_cout<<"Number of evaluations: "<<amoeba2.get_num_evaluations()<<vcl_endl
 
-  vcl_cout<<"Test static functions\n";
+          <<"Test static functions\n";
   x.fill(0);
   vnl_amoeba::minimize(cost1,x,dx);
   err=0;
   for (int i=0;i<n;++i) err+=vcl_fabs(x[i]-i);
-  TEST("Quadratic, starting at (0,0,0...) using minimise(x,dx)",err<1e-5,true);
+  TEST_NEAR("Quadratic, starting at (0,0,0...) using minimise(x,dx)",err,0,1e-5);
 }
 
 TESTMAIN(test_amoeba);

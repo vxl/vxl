@@ -96,13 +96,12 @@ bool test_image_equal(char const* type_name,
   vcl_cout << "istep()=" << image2.istep() << ", jstep()=" << image2.jstep()
            << ", planestep()=" << image2.planestep() << '\n' << vcl_flush;
   TEST("istep is non-zero", image2.istep()==0, false);
-  TEST("|istep| is at most 3 x height",  3*sizey2+image2.istep()>=0 && 3*sizey2-image2.istep()>=0, true);
+  TEST_NEAR("|istep| is at most 3 x height", image2.istep(), 0.0, 3*sizey2);
   TEST("jstep is non-zero", image2.jstep()==0, false);
-  TEST("|jstep| is at most 3 x width", 3+3*sizex2+image2.jstep()>=0 && 3+3*sizex2-image2.jstep()>=0, true);
+  TEST_NEAR("|jstep| is at most 3 x width",  image2.jstep(), 0.0, 3+3*sizex2);
   // The "+3" is there to allow for "row word alignment", e.g. with the BMP format.
   TEST("planestep is non-zero", image2.planestep()==0, false);
-  TEST("|planestep| is at most width x height",
-       (3+sizex2)*sizey2+image2.planestep()>=0 && (3+sizex2)*sizey2-image2.planestep()>=0, true);
+  TEST_NEAR("|planestep| is at most width x height", image2.planestep(), 0.0, (3+sizex2)*sizey2);
 
   if (100*sizex2+image2.jstep()<0 || 100*sizex2-image2.jstep()<0)
   {

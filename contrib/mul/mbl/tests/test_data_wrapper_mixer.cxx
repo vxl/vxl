@@ -1,6 +1,5 @@
 // This is mul/mbl/tests/test_data_wrapper_mixer.cxx
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
 #include <mbl/mbl_data_wrapper_mixer.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vnl/vnl_vector.h>
@@ -35,14 +34,14 @@ void test_data_wrapper_pair_mixer(unsigned n1, unsigned n2)
   TEST("Size",mixer.size(),(n1+n2));
   TEST("Initial index",mixer.index(),0);
   mixer.next();
-  TEST("Second element",vcl_fabs(mixer.current()[0]-1.0)<1e-6,true);
+  TEST_NEAR("Second element",mixer.current()[0], 1.0, 1e-6);
   mixer.next();
-  TEST("Third element",vcl_fabs(mixer.current()[0]-2.0)<1e-6,true);
+  TEST_NEAR("Third element", mixer.current()[0], 2.0, 1e-6);
 
   if (n2>0)
   {
     mixer.set_index(n1+1);
-    TEST("n+1-th element",vcl_fabs(mixer.current()[0]-n1-1)<1e-6,true);
+    TEST_NEAR("n+1-th element", mixer.current()[0], n1+1, 1e-6);
   }
 
   unsigned n=1;

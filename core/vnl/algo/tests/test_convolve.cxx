@@ -33,10 +33,10 @@ void test_convolve()
   TEST("vnl_convolve() commutativity", r4, r2);
   vnl_vector<double> r7 = vnl_convolve(b, k1, (double*)0, 1);
   vcl_cout << r7 << vcl_endl;
-  TEST("vnl_convolve() with_fft(7)", (r7-r1).two_norm() < 1e-6, true);
+  TEST_NEAR("vnl_convolve() with_fft(7)", (r7-r1).two_norm(), 0.0, 1e-6);
   vnl_vector<double> r8 = vnl_convolve(b, k1, (double*)0, 8);
   vcl_cout << r8 << vcl_endl;
-  TEST("vnl_convolve() with_fft(8)", (r8-r1).two_norm() < 1e-6, true);
+  TEST_NEAR("vnl_convolve() with_fft(8)", (r8-r1).two_norm(), 0.0, 1e-6);
 
   // TIMING TEST on a very long convolution:
   vnl_vector<double> l(10000), k3(2000);
@@ -56,7 +56,7 @@ void test_convolve()
   for (unsigned i=0; i < ntimes; ++i)
     r10 = vnl_convolve(l, k3, 16384);
   int ms2 = timer.user();
-  TEST("vnl_convolve() with_fft(16384)", (r9-r10).two_norm() < 1e-6, true);
+  TEST_NEAR("vnl_convolve() with_fft(16384)", (r9-r10).two_norm(), 0.0, 1e-6);
   vcl_cout << "Done FFT-2-based 10000x2000 convolution in " << ms2/double(ntimes) << " milliseconds\n";
   TEST("vnl_convolve() timing: should be at least 2.5x faster", 5*ms2 < 2*ms1, true);
 
@@ -65,7 +65,7 @@ void test_convolve()
   for (unsigned i=0; i < ntimes; ++i)
     r11 = vnl_convolve(l, k3, 12800);
   int ms3 = timer.user();
-  TEST("vnl_convolve() with_fft(12800)", (r9-r11).two_norm() < 1e-6, true);
+  TEST_NEAR("vnl_convolve() with_fft(12800)", (r9-r11).two_norm(), 0.0, 1e-6);
   vcl_cout << "Done FFT-2,5-based 10000x2000 convolution in " << ms3/double(ntimes) << " milliseconds\n";
   TEST("vnl_convolve() timing: should even be faster", ms3 < ms2, true);
 
@@ -74,7 +74,7 @@ void test_convolve()
   for (unsigned i=0; i < ntimes; ++i)
     r12 = vnl_convolve(l, k3, 27648);
   int ms4 = timer.user();
-  TEST("vnl_convolve() with_fft(27648)", (r9-r12).two_norm() < 1e-6, true);
+  TEST_NEAR("vnl_convolve() with_fft(27648)", (r9-r12).two_norm(), 0.0, 1e-6);
   vcl_cout << "Done FFT-2,3-based 10000x2000 convolution in " << ms4/double(ntimes) << " milliseconds\n";
   TEST("vnl_convolve() timing: should be slower", ms4 > ms2, true);
 
@@ -89,7 +89,7 @@ void test_convolve()
        r5[0]==5 && r5[1]==-13 && r5[2]==-19 && r5[3]==-13 && r5[4]==5 && r5[5]==35);
   vnl_vector<double> r6 = vnl_convolve_cyclic(c1, c2, (double*)0, true);
   vcl_cout << r6 << vcl_endl;
-  TEST("vnl_convolve_cyclic() with_fft", (r6-r5).two_norm() < 1e-6, true);
+  TEST_NEAR("vnl_convolve_cyclic() with_fft", (r6-r5).two_norm(), 0.0, 1e-6);
 }
 
 TESTMAIN(test_convolve);

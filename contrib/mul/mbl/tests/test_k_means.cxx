@@ -106,8 +106,7 @@ void test_k_means()
   vcl_cout << "\nClosest cluster centres are on average " << bestDistMean
            << " apart\n\twith a s.d. of " << bestDistSD << vcl_endl;
 
-  TEST("Cluster centres are further than 0.2 apart",
-       bestDistMean - bestDistSD > 0.2, true);
+  TEST_FAR("Cluster centres are further than 0.2 apart", bestDistMean, bestDistSD, 0.2);
 
   vcl_vector<unsigned> clusters2;
 

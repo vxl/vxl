@@ -88,8 +88,7 @@ static void test_sample_grid_trilin()
     {
         vnl_vector<double> sample;
         vimt3d_sample_grid_trilin(sample,image,p,u,v,w,nx-1,ny-1,nz-1);
-        double diff= vcl_fabs(sample.sum()-running_total);
-        TEST("Grid sample == explicitly calculated sample 1",bool(diff<1e-6),true);
+        TEST_NEAR("Grid sample == explicitly calculated sample 1",sample.sum(),running_total,1e-6);
 
         // try writing the grid sample onto a blank image
         vimt3d_image_3d_of<vxl_int_32> recon_image;
@@ -102,8 +101,8 @@ static void test_sample_grid_trilin()
     {
         vnl_vector<double> sample;
         vimt3d_sample_grid_trilin(sample,image,p,v,u,w,ny-1,nx-1,nz-1);
-        double diff= vcl_fabs(sample.sum()-running_total);
-        TEST("Grid sample == explicitly calculated sample 2",bool(diff<1e-6),true);
+
+        TEST_NEAR("Grid sample == explicitly calculated sample 2",sample.sum(),running_total,1e-6);
 
         vimt3d_image_3d_of<vxl_int_32> recon_image;
         recon_image.deep_copy(image);
@@ -115,8 +114,8 @@ static void test_sample_grid_trilin()
     {
         vnl_vector<double> sample;
         vimt3d_sample_grid_trilin(sample,image,p,v,w,u,ny-1,nz-1,nx-1);
-        double diff= vcl_fabs(sample.sum()-running_total);
-        TEST("Grid sample == explicitly calculated sample 3",bool(diff<1e-6),true);
+
+        TEST_NEAR("Grid sample == explicitly calculated sample 3",sample.sum(),running_total,1e-6);
 
         vimt3d_image_3d_of<vxl_int_32> recon_image;
         recon_image.deep_copy(image);

@@ -10,7 +10,6 @@
 #include <pdf1d/pdf1d_weighted_epanech_kernel_sampler.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
-#include <vcl_cmath.h> // for vcl_fabs()
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/vnl_math.h>
@@ -109,8 +108,8 @@ void test_weighted_epanech_kernel_pdf()
 
 // Test the IO ================================================
 
-  TEST("Mean of built model",vcl_fabs(datagen.mean()-p_pdf_built->mean())<0.1,true);
-  TEST("Variances",vcl_fabs(datagen.variance()-p_pdf_built->variance())<0.1,true);
+  TEST_NEAR("Mean of built model", datagen.mean(), p_pdf_built->mean(), 0.1);
+  TEST_NEAR("Variances", datagen.variance(), p_pdf_built->variance(), 0.1);
 
   vcl_cout<<"\n\n=================Testing I/O:\nSaving data...\n";
   vsl_b_ofstream bfs_out("test_gaussian_kernel_pdf.bvl.tmp");

@@ -1,6 +1,5 @@
 // This is mul/mbl/tests/test_histogram.cxx
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
 #include <mbl/mbl_histogram.h>
 #include <testlib/testlib_test.h>
 
@@ -12,12 +11,12 @@ void test_histogram()
 
   mbl_histogram histo;
 
-  TEST("Empty N.obs",histo.n_obs()==0,true);
+  TEST("Empty N.obs",histo.n_obs(), 0);
 
   histo.set_bins(1,4,3);
-  TEST("n_bins()=3",histo.n_bins()==3,true);
-  TEST("Lowest bin",vcl_fabs(histo.bins()[0]-1)<1e-6,true);
-  TEST("Highest bin",vcl_fabs(histo.bins()[3]-4)<1e-6,true);
+  TEST("n_bins()=3",histo.n_bins(), 3);
+  TEST_NEAR("Lowest bin", histo.bins()[0], 1, 1e-6);
+  TEST_NEAR("Highest bin", histo.bins()[3], 4, 1e-6);
 
   for (int i=0;i<10;++i)
   {
@@ -25,15 +24,15 @@ void test_histogram()
     histo.obs(v);
   }
 
-  TEST("n_below()",histo.n_below()==2,true);
-  TEST("n_above()",histo.n_above()==2,true);
-  TEST("n_obs()",histo.n_obs()==10,true);
-  TEST("bin 1",histo.frequency()[0]==2,true);
+  TEST("n_below()",histo.n_below(), 2);
+  TEST("n_above()",histo.n_above(), 2);
+  TEST("n_obs()",histo.n_obs(), 10);
+  TEST("bin 1",histo.frequency()[0], 2);
 
   vcl_cout<<histo<<vcl_endl;
 
   mbl_histogram histo2 = histo;
-  TEST("Equality operator",histo==histo2,true);
+  TEST("Equality operator",histo, histo2);
 }
 
 TESTMAIN(test_histogram);

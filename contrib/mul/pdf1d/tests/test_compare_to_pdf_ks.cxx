@@ -4,8 +4,6 @@
 // \brief test pdf1d_compare_to_pdf_ks
 
 #include <vcl_iostream.h>
-#include <vcl_cmath.h> // for vcl_fabs()
-
 #include <pdf1d/pdf1d_compare_to_pdf_ks.h>
 #include <pdf1d/pdf1d_gaussian.h>
 #include <pdf1d/pdf1d_sampler.h>
@@ -39,16 +37,16 @@ void test_compare_to_pdf_ks()
     p_sampler->get_samples(data);
 
     double P = comparator.compare(data.data_block(),n_samples,gauss);
-    vcl_cout<<"Testing "<<n_samples<<" samples drawn from Gaussian with unit Gaussian\n";
-    vcl_cout<<"Prob = "<<P<<vcl_endl;
+    vcl_cout<<"Testing "<<n_samples<<" samples drawn from Gaussian with unit Gaussian\n"
+            <<"Prob = "<<P<<vcl_endl;
 
     double mean,var;
     pdf1d_calc_mean_var(mean,var,data);
     vcl_cout<<"Sample Mean: "<<mean<<" Variance: "<<var<<vcl_endl;
   }
 
-  TEST("pdf1d_prob_ks(0)~=1",vcl_fabs(pdf1d_prob_ks(0)-1.0)<1e-8, true);
-  TEST("pdf1d_prob_ks(inf)~=0",vcl_fabs(pdf1d_prob_ks(9e9))<1e-8, true);
+  TEST_NEAR("pdf1d_prob_ks(0)",  pdf1d_prob_ks(0),   1.0, 1e-8);
+  TEST_NEAR("pdf1d_prob_ks(inf)",pdf1d_prob_ks(9e9), 0.0, 1e-8);
 
   delete p_sampler;
 }

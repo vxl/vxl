@@ -110,9 +110,8 @@ void test_ar_process()
            << "\ndm="<<dm<<"\nds="<<ds<<'\n'
            << "\n||dm||="<<dm.inf_norm()<<"\n||ds||="<<ds.inf_norm()<<'\n';
 #endif
-  TEST("Similar mean for burg algorithm",dm.inf_norm()<0.1,true);
-  TEST("Similar variances on each axis for burg algorithm",
-       ds.inf_norm()<0.4,true);
+  TEST_NEAR("Similar mean for burg algorithm",dm.inf_norm(), 0.0, 0.1);
+  TEST_NEAR("Similar variances on each axis for burg algorithm", ds.inf_norm(), 0.0, 0.4);
 
   arp.learn(vlist);
 
@@ -134,8 +133,8 @@ void test_ar_process()
            << "\ndm="<<dm<<"\ndC="<<dC<<'\n'
            << "\n||dm||="<<dm.inf_norm()<<"\n||dC||="<<dC.array_inf_norm()<<'\n';
 #endif
-  TEST("Similar mean",dm.inf_norm()<0.1,true);
-  TEST("Similar covariance matrix",dC.array_inf_norm()<0.1,true);
+  TEST_NEAR("Similar mean",dm.inf_norm(), 0.0, 0.1);
+  TEST_NEAR("Similar covariance matrix",dC.array_inf_norm(), 0.0, 0.1);
 }
 
 TESTMAIN(test_ar_process);

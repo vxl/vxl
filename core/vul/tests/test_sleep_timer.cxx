@@ -13,8 +13,7 @@ void test_sleep_timer()
   double t = tic.real() / 1000.0;
 
   vcl_cout << "vul_timer: sleep lasted " << t << " seconds, expected 1.0\n";
-
-  TEST("Sleep for between 0.5 and 3 seconds", t> 0.5 && t < 3.0, true);
+  TEST_NEAR_REL("Sleep for between 0.4 and 2.5 seconds", t, 1.0, 0.6);
 }
 
 TESTMAIN(test_sleep_timer);

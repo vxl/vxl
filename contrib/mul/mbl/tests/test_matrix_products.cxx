@@ -24,11 +24,11 @@ void test_matrix_products()
   mbl_matrix_product_at_b(AtB,A,B);
 
   vnl_matrix<double> dAtB = AtB - A.transpose() * B;
-  TEST("mbl_matrix_product_at_b",dAtB.absolute_value_max()<1e-6,true);
+  TEST_NEAR("mbl_matrix_product_at_b",dAtB.absolute_value_max(), 0.0, 1e-6);
 
   mbl_matrix_product(AtB,A.transpose(),B);
   dAtB = AtB - A.transpose() * B;
-  TEST("mbl_matrix_productb",dAtB.absolute_value_max()<1e-6,true);
+  TEST_NEAR("mbl_matrix_productb",dAtB.absolute_value_max(), 0.0, 1e-6);
 
 
   vnl_matrix<double> C = A.transpose();
@@ -36,7 +36,7 @@ void test_matrix_products()
   vnl_matrix<double> CDt;
   mbl_matrix_product_a_bt(CDt,C,D);
   vnl_matrix<double> dCDt = CDt - C * D.transpose();
-  TEST("mbl_matrix_product_a_bt",dCDt.absolute_value_max()<1e-6,true);
+  TEST_NEAR("mbl_matrix_product_a_bt",dCDt.absolute_value_max(), 0.0, 1e-6);
 
   vnl_vector<double> d(4);
   vnl_matrix<double> W(4,4);
@@ -46,7 +46,7 @@ void test_matrix_products()
   vnl_matrix<double> CWB;
   mbl_matrix_product_adb(CWB,C,d,B);
   vnl_matrix<double> dCWB = CWB - C * W * B;
-  TEST("mbl_matrix_product_adb",dCWB.absolute_value_max()<1e-6,true);
+  TEST_NEAR("mbl_matrix_product_adb",dCWB.absolute_value_max(), 0.0, 1e-6);
 }
 
 TESTMAIN(test_matrix_products);

@@ -57,7 +57,7 @@ void test_byte_image_2d_io()
   vcl_cout<<"diff1= "<<diff1<<vcl_endl;
 #endif
 
-  TEST("loaded vs saved image",diff1<1e-6,true);
+  TEST_NEAR("loaded vs saved image",diff1, 0.0, 1e-6);
 }
 
 TESTLIB_DEFINE_MAIN(test_byte_image_2d_io);

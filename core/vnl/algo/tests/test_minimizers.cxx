@@ -1,5 +1,4 @@
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_brent.h>
 
@@ -22,12 +21,12 @@ void test_minimizers()
   vcl_cout << "brent1: ";
   b.minimize_given_bounds(-100, x, 100, 1e-6, &x);
   vcl_cout << vcl_endl;
-  TEST("brent1", vcl_fabs(x - 2) < 1e-5, true);
+  TEST_NEAR("brent1", x, 2, 1e-5);
   vcl_cout << "brent2: ";
   x = 77;
   x = b.minimize(x);
   vcl_cout << vcl_endl;
-  TEST("brent2", vcl_fabs(x - 2) < 1e-5, true);
+  TEST_NEAR("brent2", x, 2, 1e-5);
 }
 
 TESTMAIN(test_minimizers);

@@ -90,8 +90,7 @@ void test_binary_hyperplane()
   clsfy_k_nearest_neighbour knn;
   knn.set(trainingVectors, labels);
   knn.set_k(3);
-  vcl_cout << vcl_endl << "KNN output\n"
-           << vcl_setprecision(4);
+  vcl_cout << vcl_endl << "KNN output\n" << vcl_setprecision(4);
   for (x(0) = 2; x(0) >= -2 ; x(0) -= 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
@@ -116,8 +115,8 @@ void test_binary_hyperplane()
   win.set_rbf_width(0.2);
   win.set_power(10);
   vcl_cout << "x(2) varies across from -2 to +2\n"
-           << "x(1) varies down from    2 to -2\n"
-           << vcl_endl << "Training data distribution\n"
+           << "x(1) varies down from    2 to -2\n\n"
+           << "Training data distribution\n"
            << vcl_setprecision(1);
   for (x(0) = 2; x(0) >= -2 ; x(0) -= 0.25)
   {
@@ -132,10 +131,7 @@ void test_binary_hyperplane()
     vcl_cout << vcl_endl;
   }
 #endif
-  vcl_cout<<"======== TESTING BUILDING ===========\n";
-
-
-  vcl_cout << vcl_setprecision(6);
+  vcl_cout<<"======== TESTING BUILDING ===========\n" << vcl_setprecision(6);
 
   clsfy_binary_hyperplane_ls_builder builder;
 
@@ -146,7 +142,7 @@ void test_binary_hyperplane()
   vcl_cout << "Error on Training set ";
   double train_error = builder.build(*pClassifier, training_set, labels);
   vcl_cout << train_error << vcl_endl;
-  TEST("Train error on classifier is good enough", train_error < 0.05, true);
+  TEST_NEAR("Train error on classifier is good enough", train_error, 0.0, 0.05);
 
   vcl_cout << "****************Testing over test set**************\n";
 
@@ -155,15 +151,13 @@ void test_binary_hyperplane()
   double test_error = clsfy_test_error(*pClassifier, test_set_inputs, testLabels);
   vcl_cout << "Error on Testing set " << test_error << vcl_endl;
 
-  TEST("Test error on classifier is good enough", test_error < 0.1, true);
+  TEST_NEAR("Test error on classifier is good enough", test_error, 0.0, 0.1);
 
   // print input, print output
 
   x.fill(0.0);
   vcl_cout << "x(2) varies across from -2 to +2\n"
-           << "x(1) varies down from    2 to -2\n";
-
-  vcl_cout << vcl_setprecision(4);
+           << "x(1) varies down from    2 to -2\n" << vcl_setprecision(4);
   for (x(0) = 2; x(0) >= -2 ; x(0) -= 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
@@ -214,6 +208,7 @@ void test_binary_hyperplane()
   TEST_NEAR("saved classifier(x) = loaded classifier(x)",
             pClassifier->log_l(vnl_vector<double>(nDims, 0.25)),
             classifier_in.log_l(vnl_vector<double>(nDims, 0.25)), 1.0e-10);
+
   vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
 
   delete pClassifier;

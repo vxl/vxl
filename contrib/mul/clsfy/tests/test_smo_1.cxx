@@ -24,12 +24,12 @@
 
 void test_smo()
 {
-  vcl_cout << "\n\n\n";
-  vcl_cout << "*************************\n";
-  vcl_cout << " Testing clsfy_smo_1_rbf\n";
-  vcl_cout << "*************************\n\n";
+  vcl_cout << "\n\n\n"
+           << "*************************\n"
+           << " Testing clsfy_smo_1_rbf\n"
+           << "*************************\n\n"
 
-  vcl_cout<<"======== TESTING BUILDING ===========\n";
+           <<"======== TESTING BUILDING ===========\n";
 
   vcl_vector<vpdfl_axis_gaussian_sampler *> generator(4);//
   const unsigned nDims = 2;
@@ -87,7 +87,7 @@ void test_smo()
     labelcount[c] ++;
     generator[c]->sample(s);
 #if 0
-    svmtest << s << " " << svlabels[i] << vcl_endl;
+    svmtest << s << ' ' << svlabels[i] << vcl_endl;
 #endif
     data[i] = s;
   }
@@ -99,21 +99,23 @@ void test_smo()
 
   mbl_data_array_wrapper<vnl_vector<double> > trainingVectors(data);
 
-  vcl_cout << "****************The Training set****************\n";
-  vcl_cout << "The number of labels from each generators are respectively ";
-  vcl_cout << labelcount[0] << ' ' << labelcount[1] << ' ' << labelcount[2] << ' ' << labelcount[3] <<  vcl_endl;
+  vcl_cout << "****************The Training set****************\n"
+           << "The number of labels from each generators are respectively "
+           << labelcount[0] << ' '
+           << labelcount[1] << ' '
+           << labelcount[2] << ' '
+           << labelcount[3] << vcl_endl;
 
   vnl_vector<double> x(nDims);
   vcl_vector<double> out(1);
   x.fill(0.0);
-  vcl_cout << "x(2) varies across from -2 to + 2\n";
-  vcl_cout << "x(1) varies down from -2 to + 2\n";
+  vcl_cout << "x(2) varies across from -2 to + 2\n"
+           << "x(1) varies down from -2 to + 2\n";
 
   clsfy_k_nearest_neighbour knn;
   knn.set(data, labels);
   knn.set_k(3);
-  vcl_cout  << vcl_endl << "KNN output\n";
-  vcl_cout << vcl_setprecision(4);
+  vcl_cout << vcl_endl << "KNN output\n" << vcl_setprecision(4);
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
@@ -137,8 +139,8 @@ void test_smo()
   win.set(data, labels);
   win.set_rbf_width(0.14);
   win.set_power(10);
-  vcl_cout << vcl_endl << "Training data distribution\n";
-  vcl_cout << vcl_setprecision(1);
+  vcl_cout << vcl_endl << "Training data distribution\n"
+           << vcl_setprecision(1);
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
@@ -154,8 +156,8 @@ void test_smo()
 
   mbl_data_wrapper<vnl_vector<double> > &inputs = trainingVectors;
 
-  vcl_cout << "****************Testing SVM on Training set**************\n";
-  vcl_cout << vcl_setprecision(8) << vcl_resetiosflags(vcl_ios_floatfield);
+  vcl_cout << "****************Testing SVM on Training set**************\n"
+           << vcl_setprecision(8) << vcl_resetiosflags(vcl_ios_floatfield);
 
   clsfy_smo_1_rbf svAPI;
   svAPI.set_gamma( (1.0/(2.0*0.2*0.2)));
@@ -174,24 +176,16 @@ void test_smo()
     {
       nSupports++;
       inputs.set_index(i);
-      vcl_cout << i << " " << vcl_fabs(svAPI.lagrange_mults()(i)) << " ";
+      vcl_cout << i << ' ' << vcl_fabs(svAPI.lagrange_mults()(i)) << ' ';
       for (unsigned int j=0; j<nDims; j++)
-        vcl_cout << inputs.current().operator()(j) << " ";
+        vcl_cout << inputs.current().operator()(j) << ' ';
       vcl_cout << labels[i] <<vcl_endl;
     }
   }
-
-  vcl_cout << "\n\n" << "Number of support vectors = " << nSupports << vcl_endl;
-  TEST("Number of support vectors ~= 29",
-       nSupports >= 26 && nSupports <= 32, true);
-
-  vcl_cout << "\n\n" << "Bias = " << svAPI.bias() << vcl_endl;
-  TEST("Bias ~= -0.064",
-       vnl_math_sqr(svAPI.bias()+0.064) < 1.0e-3, true);
-
-  vcl_cout << "\n\n" << "Error = " << svAPI.error() << vcl_endl;
-  TEST("Error = 0.0",
-       svAPI.error() == 0.0, true);
+  vcl_cout << "\n\n";
+  TEST_NEAR("Number of support vectors", nSupports, 29, 3);
+  TEST_NEAR("Bias", svAPI.bias(), -0.064, 0.03);
+  TEST_NEAR("Error", svAPI.error(), 0.0, 0.0);
 
   vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
 }
