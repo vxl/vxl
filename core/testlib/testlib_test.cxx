@@ -128,3 +128,13 @@ void testlib_test_assert_far(const vcl_string& msg, vcl_complex<double> expr, vc
     vcl_cout << "difference " << diff << ", ";
   testlib_test_perform(diff > tol);
 }
+
+void testlib_test_assert_equal(const vcl_string& msg, long expr, long target)
+{
+  vcl_cout << msg << " should be " << target << ", is " << expr << ", ";
+  long diff = vcl_abs(expr - target);
+  if (target != 0 && diff != 0)
+    vcl_cout << "difference " << diff << ", ";
+  testlib_test_perform(diff == 0);
+}
+

@@ -37,6 +37,8 @@ void testlib_test_assert_far(const vcl_string& msg, double expr,
 //: output msg, then perform test to see if expr is not within tol of target
 void testlib_test_assert_far(const vcl_string& msg, vcl_complex<double> expr,
                              vcl_complex<double> target, double tol = 1e-12);
+//: output msg, then perform test to see if expr is equal to target
+void testlib_test_assert_equal(const vcl_string& msg, long expr, long target);
 
 #define Assert testlib_test_assert
 #define AssertNear testlib_test_assert_near
@@ -50,6 +52,13 @@ void testlib_test_assert_far(const vcl_string& msg, vcl_complex<double> expr,
 do { \
   testlib_test_begin(s); \
   testlib_test_perform((p)==(v)); \
+} while (0)
+
+//: TEST function, s is message, test to see if p==v for integral values
+#define TEST_EQUAL(s,p,v) \
+do { \
+  testlib_test_begin(s); \
+  testlib_test_assert_equal("",p,v); \
 } while (0)
 
 //: TEST function, s is message, test to see if p is close to v, tolerance t
