@@ -1478,7 +1478,7 @@ bilinear_interpolation(vil1_memory_image_of<float> const & input,
   return s00+s01+s10+s11;
 }
 
-
+#if 0 // unused static function
 static bool clip_box(vsol_box_2d_sptr const& box, vsol_box_2d_sptr& clip)
 {
   clip = new vsol_box_2d();
@@ -1501,6 +1501,8 @@ static bool clip_box(vsol_box_2d_sptr const& box, vsol_box_2d_sptr& clip)
   clip->add_point(xmax, ymax);
   return true;
 }
+#endif // 0
+
 //: Transform the input to the output by a homography.
 //  if the output size is fixed then only the corresponding
 //  region of input image space is transformed.
@@ -1539,7 +1541,7 @@ bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
     if (!bsol_algs::homography(input_poly, H, output_poly))
       return false;
     vsol_box_2d_sptr temp = output_poly->get_bounding_box();
-    output.resize(temp->width(), temp->height());
+    output.resize(int(temp->width()), int(temp->height())); // round down to nearest int
     for (int x = 0; x<output.width(); x++)
       for (int y = 0; y<output.height(); y++)
         output(x,y) = 0;
@@ -1587,16 +1589,16 @@ bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
   //get the value of each output pixel
 
   // Dimensions of the input image
-  int ailow  = input_roi->get_min_x();
-  int aihigh = input_roi->get_max_x();
-  int ajlow  = input_roi->get_min_y();
-  int ajhigh = input_roi->get_max_y();
+  int ailow  = int(input_roi->get_min_x()+0.9999); // round up to nearest int
+  int aihigh = int(input_roi->get_max_x());      // round down to nearest int
+  int ajlow  = int(input_roi->get_min_y()+0.9999);
+  int ajhigh = int(input_roi->get_max_y());
 
   // Dimensions of the output image
-  int bilow  = output_roi->get_min_x();
-  int bihigh = output_roi->get_max_x();
-  int bjlow  = output_roi->get_min_y();
-  int bjhigh = output_roi->get_max_y();
+  int bilow  = int(output_roi->get_min_x()+0.9999);
+  int bihigh = int(output_roi->get_max_x());
+  int bjlow  = int(output_roi->get_min_y()+0.9999);
+  int bjhigh = int(output_roi->get_max_y());
 
   /* The inverse transform is used to map backwards from the output */
   const vnl_matrix_fixed<double,3,3>& Minv = Hinv.get_matrix();
@@ -1658,7 +1660,6 @@ brip_vil1_float_ops::rotate(vil1_memory_image_of<float> const & input,
   vil1_memory_image_of<float> out;
   if (!input)
     return out;
-  int w = input.width(), h = input.height();
   double ang = theta_deg;
   //map theta_deg to [0 360]
   while (ang>360)
