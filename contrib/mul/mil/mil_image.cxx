@@ -83,5 +83,5 @@ vcl_ostream& operator<<(vcl_ostream& os,const mil_image* b)
 
 void vsl_add_to_binary_loader(const mil_image& b)
 {
-	vsl_binary_loader<mil_image>::instance().add(b);
+    vsl_binary_loader<mil_image>::instance().add(b);
 }
