@@ -466,22 +466,22 @@ bool vil2_png_image::put_view(const vil2_image_view_base &view,
   if (!rows) return false;
 
   int bit_depth = png_get_bit_depth(p_->png_ptr,p_->info_ptr);
-  int bytes_per_pixel = bit_depth  * p_->channels / 8;
-  int bytes_per_row_dst = view.ni()*bytes_per_pixel;
+  // int bytes_per_pixel = bit_depth  * p_->channels / 8;
+  // int bytes_per_row_dst = view.ni()*bytes_per_pixel;
   if (bit_depth == 8)
   {
     if (view.pixel_format() != VIL2_PIXEL_FORMAT_BYTE) return false;
     const vil2_image_view<vxl_byte> &view2 = static_cast<const vil2_image_view<vxl_byte>&>(view);
     if (nplanes()==1)
     {
-      for (int y = 0; y < view.nj(); ++y)
+      for (unsigned y = 0; y < view.nj(); ++y)
         for (unsigned x=0; x < view.ni(); ++x)
           rows[y0+y][x0+x] = view2(x,y);
     }
     else
     {
       assert(nplanes() == 3);
-      for (int y = 0; y < view.nj(); ++y)
+      for (unsigned y = 0; y < view.nj(); ++y)
         for (unsigned x=0; x < view.ni(); ++x)
         {
           rows[y0+y][(x0+x)*3] = view2(x,y,0);
@@ -496,14 +496,14 @@ bool vil2_png_image::put_view(const vil2_image_view_base &view,
     const vil2_image_view<vxl_uint_16> &view2 = static_cast<const vil2_image_view<vxl_uint_16>&>(view);
     if (nplanes()==1)
     {
-      for (int y = 0; y < view.nj(); ++y)
+      for (unsigned y = 0; y < view.nj(); ++y)
         for (unsigned x=0; x < view.ni(); ++x)
           *(vxl_uint_16*)&rows[y0+y][(x0+x)*2] = view2(x,y);
     }
     else
     {
       assert(nplanes() == 3);
-      for (int y = 0; y < view.nj(); ++y)
+      for (unsigned y = 0; y < view.nj(); ++y)
         for (unsigned x=0; x < view.ni(); ++x)
         {
           *(vxl_uint_16*)&rows[y0+y][(x0+x)*6] = view2(x,y,0);
