@@ -292,6 +292,14 @@ inline bool operator> (long r1, vnl_bignum const& r2) { return r2< r1; }
 inline bool operator<=(long r1, vnl_bignum const& r2) { return r2>=r1; }
 inline bool operator>=(long r1, vnl_bignum const& r2) { return r2<=r1; }
 
+#if defined(VCL_SUNPRO_CC) || defined(VCL_SGI_CC) || !VCL_USE_NATIVE_COMPLEX
+inline vnl_bignum vcl_sqrt(vnl_bignum const& x) { return vnl_bignum(vcl_sqrt(double(x))); }
+#else
+namespace std {
+  inline vnl_bignum sqrt(vnl_bignum const& x) { return vnl_bignum(vcl_sqrt(double(x))); }
+}
+#endif
+
 #if defined(VCL_SGI_CC_720) || defined(VCL_SUNPRO_CC)
 inline vnl_bignum vcl_abs(vnl_bignum const& x) { return x.abs(); }
 #else
@@ -331,7 +339,7 @@ public:
 #include <vcl_complex.h>
 
 inline vnl_bignum vnl_math_squared_magnitude(vcl_complex<vnl_bignum> const& z) { return vcl_norm(z); }
-inline vnl_bignum vnl_math_abs(vcl_complex<vnl_bignum> const& z) { return vnl_bignum(vcl_sqrt(double(vcl_norm(z)))); }
+inline vnl_bignum vnl_math_abs(vcl_complex<vnl_bignum> const& z) { return vcl_sqrt(vcl_norm(z)); }
 inline vcl_complex<vnl_bignum> vnl_math_sqr(vcl_complex<vnl_bignum> const& z) { return z*z; }
 inline vcl_ostream& operator<<(vcl_ostream& s, vcl_complex<vnl_bignum> const& z) {
   return s << '(' << z.real() << "," << z.imag() << ')'; }
