@@ -9,6 +9,8 @@
 // \history Adapted from the original Texas Instruments COOL test suite,
 //          but with lots of tests added.
 
+#include <vcl_iostream.h>
+
 void test_regexp()
 {
   vcl_cout << "\n\tGENERAL TESTS OF MEMBER FUNCTIONS FOR REGEXP CLASS.\n";
