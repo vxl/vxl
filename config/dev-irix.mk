@@ -245,7 +245,7 @@ ifeq ($(ABI), new)
 LINKER = /usr/lib/ld -call_shared -init _main -fini _fini -no_unresolved -rdata_shared \
 	 -transitive_link -demangle -elf -_SYSTYPE_SVR4 \
 	 -multigot -LANG:exceptions=OFF -LANG:ansi-for-init-scope=ON -cxx \
-	 -wall -woff 1 -woff 15 -woff 56 -woff 84 -woff 85 -woff 134 \
+	 -wall -woff 1 -woff 15 -woff 56 -woff 84 -woff 85 -woff 107 -woff 134 \
 	 -nocount $(COMPILER_FLAG) $(mach_link_start) -count
 
 LDOPTS = $(mach_link_path) -lm -lc -nocount -dont_warn_unused \
@@ -431,7 +431,8 @@ endif
 # ld: WARNING 1: Unknown option: fullwarn (ignored).
 # ld: WARNING 15: multiply defined: (symb_name) in f1.o and f2.o (2nd definition ignored).
 # ld: WARNING 56: Invalid warning number (3108).
-# ld: WARNING 84: /homes/az/pcp/work/lib/irix6-CC-o32/libTestLib.so is not used for resolving any symbol.
+# ld: WARNING 84: /PATH/libTestLib.so is not used for resolving any symbol.
 # ld: WARNING 85: definition of _calloc in /usr/lib/libc.so preempts that definition in /usr/lib/libmalloc.so.
+# ld: WARNING 107: floating-point parameters for __q_le (used/defined) in /usr/lib32/libm.so do not match the ones (used/defined) in f1.o
 # ld: WARNING 127: Two shared objects with the same soname, /usr/lib32/mips3/libm.so and /usr/lib32/libm.so, have been been linked.
 # ld: WARNING 134: weak definition of memalign in /usr/lib/libc.so preempts that weak definition in /usr/lib/libmalloc.so

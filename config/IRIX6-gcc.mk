@@ -11,7 +11,7 @@ RPATHLIBDIRS = $(strip $(filter-out %.noshared,$(LIBDIRS)))
 endif
 rpath = -Wl,-rpath,$(subst $(spc),:,$(RPATHLIBDIRS))
 
-LDFLAGS += -Wl,-woff,134,-woff,1,-woff,56,-woff,84,-woff,85
+LDFLAGS += -Wl,-woff,1,-woff,15,-woff,56,-woff,84,-woff,85,-woff,107,-woff,134
 
 # include generic gcc stuff that works for any system with gcc
 include $(configdir)/generic-gcc.mk
