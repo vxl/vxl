@@ -33,21 +33,21 @@ IF (JPEG_FOUND)
   )
 ENDIF (JPEG_FOUND)
 
-INCLUDE(${MODULE_PATH}/NewCMake/FindMPEG.cmake)
-IF (MPEG_FOUND)
-  INCLUDE_DIRECTORIES(${MPEG_INCLUDE_DIR})
-  ADD_DEFINITIONS(-DHAS_MPEG)
+INCLUDE(${MODULE_PATH}/NewCMake/FindMPEG2.cmake)
+IF (MPEG2_FOUND)
+  INCLUDE_DIRECTORIES(${MPEG2_INCLUDE_DIR})
+  ADD_DEFINITIONS(-DHAS_MPEG2)
   SET(oxp_sources ${oxp_sources}
    oxp_mpeg_codec.cxx      oxp_mpeg_codec.h
    oxp_vidl_mpeg_codec.cxx oxp_vidl_mpeg_codec.h
   )
-ENDIF (MPEG_FOUND)
+ENDIF (MPEG2_FOUND)
 
 
 AUX_SOURCE_DIRECTORY(Templates oxp_sources)
 
 ADD_LIBRARY(oxp ${oxp_sources})
 TARGET_LINK_LIBRARIES(oxp vidl vnl vil vul vbl)
-IF (MPEG_FOUND)
-  TARGET_LINK_LIBRARIES(oxp ${MPEG_LIBRARIES})
-ENDIF (MPEG_FOUND)
+IF (MPEG2_FOUND)
+  TARGET_LINK_LIBRARIES(oxp ${MPEG2_LIBRARIES})
+ENDIF (MPEG2_FOUND)

@@ -19,7 +19,7 @@
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 #include <vidl/vidl_avicodec.h>
 #endif
-#if HAS_MPEG
+#if HAS_MPEG2
 #include <oxp/oxp_vidl_mpeg_codec.h>
 #endif
 
@@ -39,7 +39,7 @@ void ensure_initialized()
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   vidl_io::register_codec(new vidl_avicodec);
 #endif
-#if HAS_MPEG
+#if HAS_MPEG2
   vidl_io::register_codec(new oxp_vidl_mpeg_codec);
 #endif
   init = true;
