@@ -6,22 +6,26 @@
 #include <bxml/bxml_vsol_point_2d_input_converter.h>
 
 
-bxml_vsol_point_2d_input_converter::bxml_vsol_point_2d_input_converter() {
+bxml_vsol_point_2d_input_converter::bxml_vsol_point_2d_input_converter()
+{
   class_name_ = "vsol_point_2d";
   tag_name_ = "point_3d";
   ref_tag_name_ = "point_3d_ref";
 }
 
-bxml_vsol_point_2d_input_converter::~bxml_vsol_point_2d_input_converter() {
+bxml_vsol_point_2d_input_converter::~bxml_vsol_point_2d_input_converter()
+{
 }
 
-bool bxml_vsol_point_2d_input_converter::extract_ref_object_atrs(DOM_Node& node) {
+bool bxml_vsol_point_2d_input_converter::extract_ref_object_atrs(DOM_Node& node)
+{
   id_ = get_string_attr(node,"id");
 
   return true;
 }
 
-bool bxml_vsol_point_2d_input_converter::extract_object_atrs(DOM_Node& node) {
+bool bxml_vsol_point_2d_input_converter::extract_object_atrs(DOM_Node& node)
+{
   x_  = get_double_attr(node,"x");
   y_  = get_double_attr(node,"y");
   id_ = get_string_attr(node,"id");
@@ -29,7 +33,8 @@ bool bxml_vsol_point_2d_input_converter::extract_object_atrs(DOM_Node& node) {
   return true;
 }
 
-bool bxml_vsol_point_2d_input_converter::extract_from_dom(DOM_Node& node) {
+bool bxml_vsol_point_2d_input_converter::extract_from_dom(DOM_Node& node)
+{
   new_or_ref = check_tag(node);
 
   if (new_or_ref == 0) {
@@ -40,10 +45,8 @@ bool bxml_vsol_point_2d_input_converter::extract_from_dom(DOM_Node& node) {
     return extract_ref_object_atrs(node);
   }
   else {
-    extract_object_atrs(node);
+    return extract_object_atrs(node);
   }
-
-  return true;
 }
 
 //:
