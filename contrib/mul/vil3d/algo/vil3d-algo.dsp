@@ -194,6 +194,9 @@ SOURCE=.\vil3d_distance_transform.h
 # Begin Source File
 SOURCE=.\vil3d_fill_boundary.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil3d_anisotropic_filter.h
+# End Source File
 # End Group
 # End Target
 # End Project
