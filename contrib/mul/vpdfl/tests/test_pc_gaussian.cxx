@@ -3,11 +3,8 @@
 // \author Ian Scott
 // \brief test vpdfl_pc_gaussian, building, sampling, saving etc.
 
-// inclusions
-
 #include <vcl_iostream.h>
 #include <vcl_ctime.h>
-#include <vcl_cmath.h> // for vcl_fabs()
 
 #include <vpdfl/vpdfl_pc_gaussian.h>
 #include <vpdfl/vpdfl_pc_gaussian_builder.h>
@@ -49,8 +46,8 @@ void test_pc_gaussian()
     evecs(i,i) = 1.0;
   }
 
-  vcl_cout<<"Setting evecs:\n"<<evecs<<vcl_endl;
-  vcl_cout<<"Setting evals: "<<evals<<vcl_endl;
+  vcl_cout<<"Setting evecs:\n"<<evecs<<vcl_endl
+          <<"Setting evals: "<<evals<<vcl_endl;
 
   pdf.set(mean,evecs,evals,1.5);
 
@@ -72,10 +69,10 @@ void test_pc_gaussian()
 
   builder.build(*p_pdf_built, data_array);
 
-  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, pdf); vcl_cout<<vcl_endl;
-  vcl_cout<<"Rebuilt PDF: "; vsl_print_summary(vcl_cout, p_pdf_built); vcl_cout<<vcl_endl;
+  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, pdf);
+  vcl_cout<<"\nRebuilt PDF: "; vsl_print_summary(vcl_cout, p_pdf_built);
+  vcl_cout<<"\n\nPDF sampler: "; vsl_print_summary(vcl_cout, p_sampler);
   vcl_cout<<vcl_endl;
-  vcl_cout<<"PDF sampler: "; vsl_print_summary(vcl_cout, p_sampler); vcl_cout<<vcl_endl;
 
 // Test the IO ================================================
   vpdfl_builder_base* p_builder = & builder;
@@ -83,11 +80,12 @@ void test_pc_gaussian()
 
   TEST("mean of built model",vnl_vector_ssd(pdf.mean(), p_pdf_built->mean())<0.1,true);
 
-  vcl_cout<<vcl_endl<<"=================Testing Fast log_p():\n";
+  vcl_cout<<"\n=================Testing Fast log_p():\n";
 
   vnl_vector<double> x;
   p_sampler->sample(x);
-  vcl_cout << "Fast log_p() = "<<pdf.log_p(x)<<"\tSlow log_p() = "<<pdf.vpdfl_gaussian::log_p(x)<<vcl_endl;
+  vcl_cout << "Fast log_p() = "<<pdf.log_p(x)
+           <<"\tSlow log_p() = "<<pdf.vpdfl_gaussian::log_p(x)<<vcl_endl;
 
 #ifdef TEST_RELATIVE_SPEEDS_OF_FASTER_LOGP
   double v;
@@ -104,10 +102,10 @@ void test_pc_gaussian()
   vcl_cout <<"Time for slow log_p(): " << (t1-t0)/(10.0*double(CLOCKS_PER_SEC)) << "ms\n";
 #endif
 
-  vcl_cout<<vcl_endl<<"=================Testing I/O:\n";
+  vcl_cout<<"\n=================Testing I/O:\n";
   vsl_b_ofstream bfs_out("test_pc_gaussian.bvl.tmp");
   TEST ("Created test_pc_gaussian.bvl.tmp for writing",
-             (!bfs_out), false);
+        (!bfs_out), false);
   vsl_b_write(bfs_out,pdf);
   vsl_b_write(bfs_out,builder);
   vsl_b_write(bfs_out,p_pdf);
@@ -134,40 +132,40 @@ void test_pc_gaussian()
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, pdf); vcl_cout<<vcl_endl;
-  vcl_cout<<"Original builder: "; vsl_print_summary(vcl_cout, builder); vcl_cout<<vcl_endl;
+  vcl_cout<<"\nOriginal PDF: "; vsl_print_summary(vcl_cout, pdf);
+  vcl_cout<<"\nOriginal builder: "; vsl_print_summary(vcl_cout, builder);
   vcl_cout<<vcl_endl;
 
-  vcl_cout<<"Loaded PDF: "; vsl_print_summary(vcl_cout, pdf_in); vcl_cout<<vcl_endl;
-  vcl_cout<<"Loaded builder: "; vsl_print_summary(vcl_cout, builder_in); vcl_cout<<vcl_endl;
-  vcl_cout<<vcl_endl;
+  vcl_cout<<"\nLoaded PDF: "; vsl_print_summary(vcl_cout, pdf_in);
+  vcl_cout<<"\nLoaded builder: "; vsl_print_summary(vcl_cout, builder_in);
+  vcl_cout<<vcl_endl<<vcl_endl;
 
 
   TEST("Original Model == Loaded model",
-    pdf.mean()==pdf_in.mean() &&
-    pdf.variance()==pdf_in.variance() &&
-    pdf.eigenvals() == pdf_in.eigenvals() &&
-    pdf.eigenvecs() == pdf_in.eigenvecs() &&
-    pdf.log_k() == pdf_in.log_k() &&
-    pdf.log_k_principal() == pdf_in.log_k_principal() &&
-    pdf.n_principal_components() == pdf_in.n_principal_components() &&
-    !pdf_in.partition_chooser(),
-    true);
+       pdf.mean()==pdf_in.mean() &&
+       pdf.variance()==pdf_in.variance() &&
+       pdf.eigenvals() == pdf_in.eigenvals() &&
+       pdf.eigenvecs() == pdf_in.eigenvecs() &&
+       pdf.log_k() == pdf_in.log_k() &&
+       pdf.log_k_principal() == pdf_in.log_k_principal() &&
+       pdf.n_principal_components() == pdf_in.n_principal_components() &&
+       !pdf_in.partition_chooser(),
+       true);
   TEST("Original Model == model loaded by base ptr",
-    pdf.mean()==p_base_pdf_in->mean() &&
-    pdf.variance()==p_base_pdf_in->variance() &&
-    pdf.is_a()==p_base_pdf_in->is_a(),
-    true);
+       pdf.mean()==p_base_pdf_in->mean() &&
+       pdf.variance()==p_base_pdf_in->variance() &&
+       pdf.is_a()==p_base_pdf_in->is_a(),
+       true);
   TEST("Original Builder == Loaded builder",
-    builder.min_var()==builder_in.min_var() &&
-    builder.partition_method() == builder_in.partition_method() &&
-    builder.fixed_partition()==builder_in.fixed_partition() &&
-    builder.partition_method() == builder_in.partition_method(),
-    true);
+       builder.min_var()==builder_in.min_var() &&
+       builder.partition_method() == builder_in.partition_method() &&
+       builder.fixed_partition()==builder_in.fixed_partition() &&
+       builder.partition_method() == builder_in.partition_method(),
+       true);
   TEST("Original Builder == Builder loaded by base ptr",
-    builder.min_var()==p_base_builder_in->min_var() &&
-    builder.is_a()==p_base_builder_in->is_a(),
-    true);
+       builder.min_var()==p_base_builder_in->min_var() &&
+       builder.is_a()==p_base_builder_in->is_a(),
+       true);
 
   const vpdfl_pc_gaussian_builder *chooser =
   // cannot use dynamic_cast<> without rtti, which vxl doesn't enforce - PVr
@@ -181,18 +179,18 @@ void test_pc_gaussian()
   //vcl_cout << "Chooser " << *chooser <<vcl_endl;
 
   TEST("Loaded Model partition chooser == Original Builder",
-    chooser &&
-    builder.min_var()==chooser->min_var() &&
-    builder.fixed_partition()==chooser->fixed_partition() &&
-    builder.partition_method() == chooser->partition_method(),
-    true);
+       chooser &&
+       builder.min_var()==chooser->min_var() &&
+       builder.fixed_partition()==chooser->fixed_partition() &&
+       builder.partition_method() == chooser->partition_method(),
+       true);
 
 
   vcl_cout << "========Testing PDF Thresholds==========";
   vpdfl_sampler_base *p_sampler2 = p_pdf_built->new_sampler();
   unsigned pass=0, fail=0;
   double thresh = p_pdf_built->log_prob_thresh(0.9);
-  vcl_cout << vcl_endl << "log density threshold for passing 90%: " << thresh << vcl_endl;
+  vcl_cout << "\nlog density threshold for passing 90%: " << thresh << '\n';
   for (unsigned i=0; i < 1000; i++)
   {
     p_sampler2->sample(x);
@@ -205,7 +203,7 @@ void test_pc_gaussian()
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
   pass=0; fail=0;
   thresh = p_pdf_built->log_prob_thresh(0.1);
-  vcl_cout << vcl_endl << vcl_endl << "log density threshold for passing 10%: " << thresh << vcl_endl;
+  vcl_cout << "\n\nlog density threshold for passing 10%: " << thresh << '\n';
   for (unsigned i=0; i < 1000; i++)
   {
     p_sampler2->sample(x);

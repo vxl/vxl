@@ -2,7 +2,6 @@
 #include "vidl_mpegcodec_helper.h"
 #include "vidl_file_sequence.h"
 #include <vcl_iostream.h>
-#include <vcl_cstdio.h> // for fopen(), fclose()
 #include <vcl_cstring.h> // for memcpy
 #include <vcl_cstdlib.h> // for exit()
 
@@ -35,9 +34,9 @@ vidl_mpegcodec_helper::vidl_mpegcodec_helper(vo_open_t * vopen,
 
 vidl_mpegcodec_helper::~vidl_mpegcodec_helper()
 {
-  vcl_cout << "vidl_mpegcodec_helper::~vidl_mpegcodec_helper. entering." << vcl_endl;
+  vcl_cout << "vidl_mpegcodec_helper::~vidl_mpegcodec_helper. entering.\n";
   vo_close (output_);
-  if(in_file_) 
+  if (in_file_) 
     {
       in_file_->close();
       delete in_file_;
@@ -45,7 +44,7 @@ vidl_mpegcodec_helper::~vidl_mpegcodec_helper()
   //mpeg2_close (mpeg2dec_);
   delete mpeg2dec_;
 
-  vcl_cout << "vidl_mpegcodec_helper::~vidl_mpegcodec_helper. exiting." << vcl_endl;
+  vcl_cout << "vidl_mpegcodec_helper::~vidl_mpegcodec_helper. exiting.\n";
 }
 
 bool
@@ -144,21 +143,19 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
     0, 0, 4, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   };
 
-    /*
-     * the demuxer keeps some state between calls:
-     * if "state" = DEMUX_HEADER, then "head_buf" contains the first
-     *     "bytes" bytes from some header.
-     * if "state" == DEMUX_DATA, then we need to copy "bytes" bytes
-     *     of ES data before the next header.
-     * if "state" == DEMUX_SKIP, then we need to skip "bytes" bytes
-     *     of data before the next header.
-     *
-     * NEEDBYTES makes sure we have the requested number of bytes for a
-     * header. If we dont, it copies what we have into head_buf and returns,
-     * so that when we come back with more data we finish decoding this header.
-     *
-     * DONEBYTES updates "buf" to point after the header we just parsed.
-     */
+    // the demuxer keeps some state between calls:
+    // if "state" = DEMUX_HEADER, then "head_buf" contains the first
+    //     "bytes" bytes from some header.
+    // if "state" == DEMUX_DATA, then we need to copy "bytes" bytes
+    //     of ES data before the next header.
+    // if "state" == DEMUX_SKIP, then we need to skip "bytes" bytes
+    //     of data before the next header.
+    //
+    // NEEDBYTES makes sure we have the requested number of bytes for a
+    // header. If we dont, it copies what we have into head_buf and returns,
+    // so that when we come back with more data we finish decoding this header.
+    //
+    // DONEBYTES updates "buf" to point after the header we just parsed.
 
 #define DEMUX_HEADER 0
 #define DEMUX_DATA 1
@@ -256,27 +253,25 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
         if (demux_pid_) {
             if ((header[3] >= 0xe0) && (header[3] <= 0xef))
                 goto pes;
-            vcl_cerr << "bad stream id : " << header[3] << vcl_endl;
+            vcl_cerr << "bad stream id : " << header[3] << '\n';
             vcl_exit(1);
         }
         switch (header[3]) {
-        case 0xb9: /* program end code */
-            /* DONEBYTES (4); */
-            /* break;         */
+        case 0xb9: // program end code
             return 1;
-        case 0xba: /* pack header */
+        case 0xba: // pack header
             NEEDBYTES (12);
-            if ((header[4] & 0xc0) == 0x40) { /* mpeg2 */
+            if ((header[4] & 0xc0) == 0x40) { // mpeg2
                 NEEDBYTES (14);
                 len = 14 + (header[13] & 7);
                 NEEDBYTES (len);
                 DONEBYTES (len);
-                /* header points to the mpeg2 pack header */
-            } else if ((header[4] & 0xf0) == 0x20) { /* mpeg1 */
+                // header points to the mpeg2 pack header
+            } else if ((header[4] & 0xf0) == 0x20) { // mpeg1
                 DONEBYTES (12);
-                /* header points to the mpeg1 pack header */
+                // header points to the mpeg1 pack header
             } else {
-                vcl_cerr << "weird pack header" << vcl_endl;
+                vcl_cerr << "weird pack header\n";
                 vcl_exit(1);
             }
             break;
@@ -284,11 +279,11 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
             if (header[3] == demux_track_) {
             pes:
                 NEEDBYTES (7);
-                if ((header[6] & 0xc0) == 0x80) { /* mpeg2 */
+                if ((header[6] & 0xc0) == 0x80) { // mpeg2
                     NEEDBYTES (9);
                     len = 9 + header[8];
                     NEEDBYTES (len);
-                    /* header points to the mpeg2 pes header */
+                    // header points to the mpeg2 pes header
                     if (header[7] & 0x80) {
                         uint32_t pts;
 
@@ -297,7 +292,7 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
                                (buf[12] << 7) | (buf[13] >> 1));
                         mpeg2_pts (mpeg2dec_, pts);
                     }
-                } else { /* mpeg1 */
+                } else { // mpeg1
                     int len_skip;
                     uint8_t * ptsbuf;
 
@@ -306,7 +301,7 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
                         len++;
                         NEEDBYTES (len);
                         if (len == 23) {
-                            vcl_cerr << "too much stuffing." << vcl_endl;
+                            vcl_cerr << "too much stuffing.\n";
                             break;
                         }
                     }
@@ -317,7 +312,7 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
                     len_skip = len;
                     len += mpeg1_skip_table[header[len - 1] >> 4];
                     NEEDBYTES (len);
-                    /* header points to the mpeg1 pes header */
+                    // header points to the mpeg1 pes header
                     ptsbuf = header + len_skip;
                     if (ptsbuf[-1] & 0x20) {
                         uint32_t pts;
@@ -340,7 +335,7 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
                     buf += bytes;
                 }
             } else if (header[3] < 0xb9) {
-                vcl_cerr << "looks like a video stream, not system stream" << vcl_endl;
+                vcl_cerr << "looks like a video stream, not system stream\n";
                 vcl_exit(1);
             } else {
                 NEEDBYTES (6);
@@ -372,27 +367,27 @@ vidl_mpegcodec_helper::decode_ts(int packets)
   int pid;
 
   for (int i = 0; i < packets; i++)
+  {
+    buf = buffer_ + i * 188;
+    end = buf + 188;
+    if (buf[0] != 0x47)
     {
-      buf = buffer_ + i * 188;
-      end = buf + 188;
-      if (buf[0] != 0x47)
-        {
-          vcl_cerr << "bad sync byte" << vcl_endl;
-          return false;
-        }
-      pid = ((buf[1] << 8) + buf[2]) & 0x1fff;
-      if (pid != demux_pid_)
-        continue;
-      data = buf + 4;
-      if (buf[3] & 0x20)
-        { /* buf contains an adaptation field */
-          data = buf + 5 + buf[4];
-          if (data > end)
-            continue;
-        }
-      if (buf[3] & 0x10)
-        demux (data, end, (buf[1] & 0x40) ? DEMUX_PAYLOAD_START : 0);
+      vcl_cerr << "bad sync byte\n";
+      return false;
     }
+    pid = ((buf[1] << 8) + buf[2]) & 0x1fff;
+    if (pid != demux_pid_)
+      continue;
+    data = buf + 4;
+    if (buf[3] & 0x20)
+    { // buf contains an adaptation field
+      data = buf + 5 + buf[4];
+      if (data > end)
+        continue;
+    }
+    if (buf[3] & 0x10)
+      demux (data, end, (buf[1] & 0x40) ? DEMUX_PAYLOAD_START : 0);
+  }
   return true;
 }
 
@@ -406,8 +401,8 @@ vidl_mpegcodec_helper::decode_es(int reads)
 void
 vidl_mpegcodec_helper::print()
 {
-  vcl_cout << "about to print out decoder members." << vcl_endl;
-  vcl_cout << "frmt is: " << int(this->get_format()) << vcl_endl;
-  vcl_cout << "the last frame decoded is: " << output_->last_frame_decoded << vcl_endl;
-  vcl_cout << "vidl_mpegcodec_helper::print. end." << vcl_endl;
+  vcl_cout << "about to print out decoder members.\n"
+           << "frmt is: " << int(this->get_format()) << '\n'
+           << "the last frame decoded is: " << output_->last_frame_decoded
+           << "\nvidl_mpegcodec_helper::print. end.\n";
 }

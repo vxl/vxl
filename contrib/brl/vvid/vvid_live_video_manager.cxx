@@ -8,8 +8,7 @@
 #include <math.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
-#include <vil/vil_image.h>
-#include <vil/vil_pixel.h>
+#include <vil/vil_memory_image_of.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
 #include <vgui/vgui.h>
@@ -76,7 +75,7 @@ void vvid_live_video_manager::set_camera_params()
   if (!_vframes.size())
     {
       vcl_cout << "in vvid_live_video_manager::set_camera_params() - no live"
-               << " video frames " << vcl_endl;
+               << " video frames\n";
       return;
     }
   vgui_dialog cam_dlg("Camera Parameters");

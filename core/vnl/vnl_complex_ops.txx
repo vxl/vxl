@@ -12,7 +12,6 @@
 #include "vnl_imag.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for vcl_atan2()
 
 //-----------------------------------------------------------------------
 

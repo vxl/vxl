@@ -1,5 +1,4 @@
 #include <vcl_algorithm.txx>
-#include <vcl_cstddef.h> // for vcl_size_t
 
 VCL_SORT_INSTANTIATE(unsigned*, unsigned);
 VCL_FIND_INSTANTIATE(unsigned*, unsigned);

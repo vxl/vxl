@@ -14,14 +14,15 @@
 #include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
-#include <vcl_functional.h>
 
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vpdfl/vpdfl_kernel_pdf.h>
 #include <vnl/vnl_vector.h>
-#include <mbl/mbl_priority_bounded_queue.h>
 #include <vpdfl/vpdfl_calc_mean_var.h>
+#if 0
+#include <mbl/mbl_priority_bounded_queue.h>
+#endif
 
 //=======================================================================
 // Dflt ctor
@@ -212,9 +213,11 @@ void vpdfl_kernel_pdf_builder::build_width_from_separation(vpdfl_kernel_pdf& kpd
   //const unsigned k = 2;  // Second nearest neighbour
   for (int i=0;i<n;++i)
   {
-    //mbl_priority_bounded_queue<double,vcl_vector<double>,vcl_less<double> > d_sq(k);
+#if 0
+    mbl_priority_bounded_queue<double,vcl_vector<double>,vcl_less<double> > d_sq(k);
+#endif
 
-      // Number of repeats of the point
+    // Number of repeats of the point
     // If resampling used, some points will be present several times
     int n_repeats=0;
     double min_d2= -1.0;
@@ -228,12 +231,16 @@ void vpdfl_kernel_pdf_builder::build_width_from_separation(vpdfl_kernel_pdf& kpd
           n_repeats++;
         else
           if (d2<min_d2 || min_d2<0) min_d2=d2;
-        //d_sq.push(d2);
+#if 0
+        d_sq.push(d2);
+#endif
       }
     }
 
     // Width set to distance to k-th nearest neighbour
-    // w[i] = vcl_sqrt(d_sq.top());
+#if 0
+    w[i] = vcl_sqrt(d_sq.top());
+#endif
 
     //: Width to nearest neighbour, allowing for repeats
     if (min_d2<min_var_) min_d2=min_var_;

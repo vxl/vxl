@@ -8,7 +8,6 @@
 
 #include "vnl_generalized_schur.h"
 
-#include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
@@ -38,7 +37,7 @@ bool vnl_generalized_schur(vnl_matrix<double> *A,
 
   int sdim = 0;
   int lwork = 1000 + (8*n + 16);
-  double *work = new double[lwork]; //vcl_vector<double> work(lwork);
+  double *work = new double[lwork];
   int info = 0;
   A->inplace_transpose();
   B->inplace_transpose();

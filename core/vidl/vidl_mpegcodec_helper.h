@@ -24,7 +24,6 @@
 #include <vcl_string.h>
 #include <vcl_map.h>
 #include <vcl_iostream.h>
-#include <vcl_cstdio.h>
 
 #define BUFFER_SIZE 4096
 #define DEMUX_PAYLOAD_START 1
@@ -82,12 +81,12 @@ class frame_buffer
 
   ~frame_buffer()
     {
-      vcl_cout << "frame_buffer DTOR. entering." << vcl_endl;
+      vcl_cout << "frame_buffer DTOR. entering.\n";
       vcl_map<int,unsigned char *>::iterator vmiuit = buffers_->begin();
       for (;vmiuit != buffers_->end(); vmiuit++)
         delete[] (*vmiuit).second;
       delete buffers_;
-      vcl_cout << "frame_buffer DTOR. exiting." << vcl_endl;
+      vcl_cout << "frame_buffer DTOR. exiting.\n";
     }
 
   unsigned char * get_buff(int i) {return (*buffers_)[i];}

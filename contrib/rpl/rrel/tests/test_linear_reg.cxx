@@ -1,5 +1,4 @@
 #include <vcl_cmath.h>
-#include <vcl_iostream.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -66,14 +65,18 @@ MAIN( test_linear_reg )
   testlib_test_begin( "ctor 1" );
   rrel_linear_regression * lr1 = new rrel_linear_regression( pts, true );
   testlib_test_perform( lr1 != 0 );
-  // vcl_cout << "\nPoints with intercept...\n";
-  // lr1->print_points();
+#if 0
+  vcl_cout << "\nPoints with intercept...\n";
+  lr1->print_points();
+#endif
 
   testlib_test_begin( "ctor 2" );
   rrel_linear_regression * lr2 = new rrel_linear_regression( pts, false );
   testlib_test_perform( lr2 != 0 );
-  // vcl_cout << "\nPoints without intercept...\n";
-  // lr2->print_points();
+#if 0
+  vcl_cout << "\nPoints without intercept...\n";
+  lr2->print_points();
+#endif
 
   testlib_test_begin( "num_samples_to_instantiate (1)" );
   testlib_test_perform( lr1->num_samples_to_instantiate() == 3 );
@@ -143,10 +146,12 @@ MAIN( test_linear_reg )
   vnl_svd<double> svd_cof( cofact*scale*scale );
   testlib_test_begin( "weighted_least_squares_fit (ok) ");
   double err = vcl_sqrt(dot_product( diff * svd_cof.inverse(), diff )); // standardized error
-  //  vcl_cout << "estimated params: " << par
-  //           << ";  true params: " << true_params << vcl_endl
-  //           << "cofactor matrix:\n" << cofact
-  //           << " error : " << err << vcl_endl;
+#if 0
+  vcl_cout << "estimated params: " << par
+           << ";  true params: " << true_params << vcl_endl
+           << "cofactor matrix:\n" << cofact
+           << " error : " << err << vcl_endl;
+#endif
   testlib_test_perform( ok && err <2.5 );
 
   delete lr3;

@@ -1,6 +1,5 @@
 // This is mul/mbl/tests/test_matrix_products.cxx
 #include <vcl_iostream.h>
-#include <vcl_cmath.h> // for vcl_sqrt()
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mbl/mbl_matrix_products.h>
@@ -8,9 +7,9 @@
 
 void test_matrix_products()
 {
-  vcl_cout << "******************************" << vcl_endl;
-  vcl_cout << " Testing mbl_matrix_products " << vcl_endl;
-  vcl_cout << "*****************************" << vcl_endl;
+  vcl_cout << "*****************************\n"
+           << " Testing mbl_matrix_products\n"
+           << "*****************************\n";
 
   vnl_matrix<double> A(4,5),B(4,6);
   for (unsigned int i=0;i<A.rows();++i)

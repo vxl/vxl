@@ -1,24 +1,18 @@
 // This is mul/vil2/vil2_vil1.cxx
+#include "vil2_vil1.h"
 //:
 // \file
 // \brief Provide vil2 wrappers of vil1 and vice-versa.
 //
- 
-#include "vil2_vil1.h"
 
-#include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil2/vil2_memory_chunk.h>
 
 //: Create a vil2_image_resource from a vil1 vil_image.
 vil2_image_resource_sptr vil2_vil1_to_image_resource(const vil_image &vil1_im)
 {
   return new vil2_vil1_image_resource(vil1_im);
 }
-
-
-
-
 
 vil2_vil1_image_resource::vil2_vil1_image_resource(const vil_image &src):
 src_(src)
@@ -124,7 +118,6 @@ vil2_image_view_base_sptr vil2_vil1_image_resource::get_copy_view(unsigned i0,
 }
 
 
-
 bool vil2_vil1_image_resource::put_view (const vil2_image_view_base &im, unsigned i0, unsigned j0)
 {
   if (!view_fits(im, i0, j0)) return false;
@@ -151,5 +144,3 @@ bool vil2_vil1_image_resource::put_view (const vil2_image_view_base &im, unsigne
   default: return false;
   }
 }
-    
-    

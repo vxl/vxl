@@ -9,7 +9,6 @@
 #include "vil2_io_smart_ptr.h"
 #include <vsl/vsl_binary_io.h>
 #include <vil2/vil2_smart_ptr.h>
-#include <vcl_cstdlib.h> // vcl_abort()
 
 //=========================================================================
 //: Binary save self to stream.

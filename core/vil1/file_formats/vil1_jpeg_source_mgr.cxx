@@ -9,7 +9,6 @@
 #include "vil_jpeg_source_mgr.h"
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h> // for vcl_size_t
-#include <vcl_iostream.h>
 #include <vil/vil_stream.h>
 
 #define STATIC /*static*/
@@ -33,7 +32,8 @@ typedef vil_jpeg_stream_source_mgr *vil_jpeg_srcptr;
 // * before any data is actually read.
 STATIC
 void
-vil_jpeg_init_source (j_decompress_ptr cinfo) {
+vil_jpeg_init_source (j_decompress_ptr cinfo)
+{
   //vcl_cerr << "vil_jpeg_init_source()\n";
 
   vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
@@ -76,7 +76,8 @@ vil_jpeg_init_source (j_decompress_ptr cinfo) {
 //  * the front of the buffer rather than discarding it.
 STATIC
 jpeg_boolean
-vil_jpeg_fill_input_buffer (j_decompress_ptr cinfo) {
+vil_jpeg_fill_input_buffer (j_decompress_ptr cinfo)
+{
   vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
 
   int nbytes = src->stream->read(src->buffer, vil_jpeg_INPUT_BUF_SIZE);
@@ -109,7 +110,8 @@ vil_jpeg_fill_input_buffer (j_decompress_ptr cinfo) {
 //  * buffer is the application writer's problem.
 STATIC
 void
-vil_jpeg_skip_input_data (j_decompress_ptr cinfo, long num_bytes) {
+vil_jpeg_skip_input_data (j_decompress_ptr cinfo, long num_bytes)
+{
   vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
 
   // Just a dumb implementation for now.  Could use fseek() except
@@ -137,13 +139,15 @@ vil_jpeg_skip_input_data (j_decompress_ptr cinfo, long num_bytes) {
 //  * for error exit.
 STATIC
 void
-vil_jpeg_term_source (j_decompress_ptr /*cinfo*/) {
+vil_jpeg_term_source (j_decompress_ptr /*cinfo*/)
+{
   // no work necessary here
 }
 
 STATIC
 void
-vil_jpeg_stream_src_set (j_decompress_ptr cinfo, vil_stream *vs) {
+vil_jpeg_stream_src_set (j_decompress_ptr cinfo, vil_stream *vs)
+{
   // The source object and input buffer are made permanent so that a series
   // of JPEG images can be read from the same file by calling vil_jpeg_stream_src
   // only before the first one.  (If we discarded the buffer at the end of
@@ -183,7 +187,8 @@ vil_jpeg_stream_src_set (j_decompress_ptr cinfo, vil_stream *vs) {
 
 STATIC
 void
-vil_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil_stream *vs) {
+vil_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil_stream *vs)
+{
   { // verify
     vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
     assert(src != 0);

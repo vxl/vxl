@@ -6,7 +6,6 @@
 //  \author Tim Cootes
 
 #include <vcl_string.h>
-#include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vil2/vil2_print.h>

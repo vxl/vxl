@@ -7,7 +7,6 @@
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
-#include <vcl_iterator.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_math.h>
 

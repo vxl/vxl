@@ -7,7 +7,6 @@
 #include "vnl_diag_matrix.h"
 
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
 
 
 //: Return inv(D) * b.

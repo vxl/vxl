@@ -9,7 +9,6 @@
 //-----------------------------------------------------------------------------
 
 #include "vil2_decimate.h"
-#include <vcl_cstring.h>
 #include <vcl_cassert.h>
 #include <vil2/vil2_property.h>
 #include <vil2/vil2_copy.h>
@@ -35,8 +34,8 @@ vil2_decimate_image_resource::vil2_decimate_image_resource(vil2_image_resource_s
 }
 
 
-vil2_image_view_base_sptr vil2_decimate_image_resource::get_copy_view(unsigned i0, unsigned ni, 
-                                                unsigned j0, unsigned nj) const
+vil2_image_view_base_sptr vil2_decimate_image_resource::get_copy_view(unsigned i0, unsigned ni,
+                                                                      unsigned j0, unsigned nj) const
 {
   if ((unsigned long)i_factor_ * (unsigned long)ni *
     (unsigned long)j_factor_ * (unsigned long)nj < large_image_limit)
@@ -50,7 +49,7 @@ vil2_image_view_base_sptr vil2_decimate_image_resource::get_copy_view(unsigned i
   #define macro( F , T ) \
     case F : \
       return new vil2_image_view<T >(vil2_decimate(static_cast<vil2_image_view<T >&>(*vs), \
-        i_factor_, j_factor_)); 
+        i_factor_, j_factor_));
 
         macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
         macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
@@ -97,18 +96,15 @@ vil2_image_view_base_sptr vil2_decimate_image_resource::get_copy_view(unsigned i
 
     default: return 0;
     }
-    
   }
-
 }
 
-vil2_image_view_base_sptr vil2_decimate_image_resource::get_view(unsigned i0, unsigned ni, 
-                                                unsigned j0, unsigned nj) const
+vil2_image_view_base_sptr vil2_decimate_image_resource::get_view(unsigned i0, unsigned ni,
+                                                                 unsigned j0, unsigned nj) const
 {
   if ((unsigned long)i_factor_ * (unsigned long)ni *
     (unsigned long)j_factor_ * (unsigned long)nj < large_image_limit)
   {
-
     vil2_image_view_base_sptr vs = src_->get_view(i0*i_factor_, ni*i_factor_,
       j0 * j_factor_, nj * j_factor_);
     if (!vs) return 0;
@@ -118,7 +114,7 @@ vil2_image_view_base_sptr vil2_decimate_image_resource::get_view(unsigned i0, un
 #define macro( F , T ) \
     case F : \
       return new vil2_image_view<T >(vil2_decimate(static_cast<vil2_image_view<T >&>(*vs), \
-        i_factor_, j_factor_)); 
+        i_factor_, j_factor_));
 
         macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
         macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
@@ -196,18 +192,17 @@ bool vil2_decimate_image_resource::put_view(const vil2_image_view_base& im, unsi
               return false; } \
         return true; }
 
-        macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
-        macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-        macro(VIL2_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-        macro(VIL2_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+        macro(VIL2_PIXEL_FORMAT_BYTE ,   vxl_byte )
+        macro(VIL2_PIXEL_FORMAT_SBYTE ,  vxl_sbyte )
+        macro(VIL2_PIXEL_FORMAT_UINT_32 ,vxl_uint_32 )
+        macro(VIL2_PIXEL_FORMAT_UINT_16 ,vxl_uint_16 )
         macro(VIL2_PIXEL_FORMAT_INT_32 , vxl_int_32 )
         macro(VIL2_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-        macro(VIL2_PIXEL_FORMAT_FLOAT , float )
+        macro(VIL2_PIXEL_FORMAT_FLOAT ,  float )
         macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
     default: return false;
     }
-    
   }
 }
 

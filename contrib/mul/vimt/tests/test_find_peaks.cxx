@@ -1,6 +1,5 @@
 // This is mul/vimy/tests/test_find_peaks.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vimt/algo/vimt_find_peaks.h>

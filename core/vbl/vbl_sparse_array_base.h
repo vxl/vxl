@@ -12,7 +12,6 @@
 
 #include <vcl_functional.h>
 #include <vcl_map.h>
-#include <vcl_utility.h>
 
 
 //: A fully featured sparse array which devolves indexing to its templated type

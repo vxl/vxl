@@ -6,7 +6,6 @@
 #include "vpdfl_gaussian_kernel_pdf_builder.h"
 
 #include <vcl_string.h>
-#include <vcl_cstdlib.h> // vcl_abort()
 
 #include <vpdfl/vpdfl_gaussian_kernel_pdf.h>
 

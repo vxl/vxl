@@ -7,7 +7,6 @@
 
 //=======================================================================
 
-#include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
 #include <vcl_complex.h>

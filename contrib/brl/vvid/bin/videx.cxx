@@ -1,5 +1,3 @@
-#include <vcl_cstdlib.h> // for vcl_exit()
-
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>

@@ -20,7 +20,6 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vcl_iostream.h>
-#include <vcl_cmath.h> // for vcl_sqrt()
 
 typedef unsigned char ubyte;
 

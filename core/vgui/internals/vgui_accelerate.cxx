@@ -8,8 +8,6 @@
 // \date   01 Apr 2000
 // \brief  See vgui_accelerate.h for a description of this file.
 
-#include <vcl_iostream.h>
-
 #ifdef HAS_MFC
 #include <vgui/impl/mfc/StdAfx.h>
 extern CDC *vgui_mfc_adaptor_global_dc;

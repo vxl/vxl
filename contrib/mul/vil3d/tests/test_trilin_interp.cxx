@@ -1,15 +1,14 @@
 // This is mul/vil2/tests/test_image_view.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
-#include <vcl_functional.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_trilin_interp.h>
 
 void test_trilin_interp_float()
 {
-  vcl_cout << "*****************************\n";
-  vcl_cout << " Testing vil3d_trilin_interp\n";
-  vcl_cout << "*****************************\n";
+  vcl_cout << "*****************************\n"
+           << " Testing vil3d_trilin_interp\n"
+           << "*****************************\n";
 
   int ni = 5;
   int nj = 5;

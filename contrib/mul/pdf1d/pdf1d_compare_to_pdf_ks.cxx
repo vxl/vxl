@@ -11,7 +11,6 @@
 
 #include <vcl_string.h>
 #include <vcl_cmath.h>
-#include <vcl_cstdlib.h> // vcl_abort()
 #include <vbl/vbl_qsort.h>
 #include <vnl/vnl_vector.h>
 

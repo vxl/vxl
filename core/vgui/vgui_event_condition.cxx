@@ -11,13 +11,12 @@
 #include "vgui_event_condition.h"
 
 #include <vcl_sstream.h>
-#include <vcl_iostream.h>
 #include <vgui/vgui_event.h>
 
 //----------------------------------------------------------------------------
 // Initialise event condition and check for impossible events.
-void vgui_event_condition::init(vgui_key k, vgui_button b, vgui_modifier m,  
-  bool p, bool is_on)
+void vgui_event_condition::init(vgui_key k, vgui_button b, vgui_modifier m,
+                                bool p, bool is_on)
 {
   on = is_on;
   key = k;
@@ -26,7 +25,7 @@ void vgui_event_condition::init(vgui_key k, vgui_button b, vgui_modifier m,
   pressed = p;
 
   // key should always be lower case.
-  if (k > 0 && k < 32) 
+  if (k > 0 && k < 32)
   {
     // Convert control character to lower case and force the control
     // modifier.
@@ -39,9 +38,9 @@ void vgui_event_condition::init(vgui_key k, vgui_button b, vgui_modifier m,
     // Convert upper to lower case and force the shift modifier.
     key = vgui_key(k + 'a' - 'A');
     modifier = vgui_SHIFT;
-  } 
+  }
 }
- 
+
 //----------------------------------------------------------------------------
 //: Default constructor.
 vgui_event_condition::vgui_event_condition()
@@ -52,14 +51,14 @@ vgui_event_condition::vgui_event_condition()
 //----------------------------------------------------------------------------
 //: Constructor for a key press event condition.
 vgui_event_condition::vgui_event_condition(vgui_key k, vgui_modifier m, bool p)
-{ 
+{
   init(k, vgui_BUTTON_NULL, m, p, true);
 }
 
 //----------------------------------------------------------------------------
 //: Constructor for a mouse button press event condition.
-vgui_event_condition::vgui_event_condition(vgui_button b, vgui_modifier m, 
-  bool p)
+vgui_event_condition::vgui_event_condition(vgui_button b, vgui_modifier m,
+                                           bool p)
 {
   init(vgui_KEY_NULL, b, m, p, true);
 }

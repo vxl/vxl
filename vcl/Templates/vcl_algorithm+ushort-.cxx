@@ -1,5 +1,4 @@
 #include <vcl_algorithm.txx>
-#include <vcl_cstddef.h> // for vcl_size_t
 
 typedef unsigned short ushort;
 

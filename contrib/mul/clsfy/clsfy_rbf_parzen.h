@@ -1,11 +1,9 @@
+// Copyright: (C) 2000 British Telecommunications plc.
 #ifndef clsfy_rbf_parzen_h_
 #define clsfy_rbf_parzen_h_
-
-// Copyright: (C) 2000 British Telecommunications plc.
-
 //:
 // \file
-// \brief Describe an Parzen window classifier
+// \brief Describe a Parzen window classifier
 // \author Ian Scott
 // \date 2000/05/10
 // \verbatim
@@ -13,10 +11,7 @@
 //  2 May 2001 IMS Converted to VXL
 // \endverbatim
 
-
 #include <clsfy/clsfy_classifier_base.h>
-#include <vcl_cmath.h>
-
 
 //: A Parzen binary classifier using an RBF Window
 // A given vector, x0, is classified, by placing a window defined by w = exp(-1/(2*sigma^p) * |x-x0|^p),
@@ -26,11 +21,12 @@ class clsfy_rbf_parzen : public clsfy_classifier_base
   //: Workspace value which is cached for speed.
   // Inversely proportional to width of the RBF window function.  Default value is -0.5.
   //
-  // width = 1/vcl_sqrt(-2.0*gamma_)
+  // width_ = 1/sqrt(-2*gamma_)
   double gamma_; 
 
   //: Width of the rbf window function.
   // Default value is 1.0.
+  // width_ = 1/sqrt(-2*gamma_)
   double width_;
 
   //: The power, p, in the window function. Default value is 2.0.

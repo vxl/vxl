@@ -12,7 +12,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_string.h>
-#include <vcl_cstdlib.h> // vcl_abort()
 
 #include <pdf1d/pdf1d_epanech_kernel_pdf.h>
 #include <pdf1d/pdf1d_calc_mean_var.h>

@@ -7,11 +7,9 @@
 //:
 // \file
 // \author Ian Scott.
+
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_view.h>
-#include <vcl_cassert.h>
-
-
 
 
 //: Create a view which is a decimated version of src.
@@ -35,7 +33,7 @@ inline vil2_image_view<T> vil2_decimate(const vil2_image_view<T> &im, unsigned i
 vil2_image_resource_sptr vil2_decimate(const vil2_image_resource_sptr &src,
                                        unsigned i_factor, unsigned j_factor=0);
 
-//: A generic_image adaptor that behaves like a decimateped version of its input
+//: A generic_image adaptor that behaves like a decimated version of its input
 class vil2_decimate_image_resource : public vil2_image_resource
 {
  public:
