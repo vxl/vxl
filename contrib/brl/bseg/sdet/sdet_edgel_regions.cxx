@@ -842,6 +842,7 @@ bool sdet_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
       //      float * ex = dc->GetX();
       //      float * ey = dc->GetY();
       vdgl_edgel_chain_sptr xy= dc->get_interpolator()->get_edgel_chain();
+
       int n_edgels = xy->size();
 
       //Insert the vertices at the ends of the edge
@@ -1697,13 +1698,13 @@ void sdet_edgel_regions::CollectFaceEdges()
                 {
                   vcl_cout << "Region [" << i << "] is corrupt\n";
                   vcl_cout << "Bad Vertices\n";
-                  for (vcl_vector<vtol_vertex_sptr>::iterator vit = bad_verts.begin();
-                       vit != bad_verts.end(); vit++)
-                    if (!(*vit)->get_user_flag(VSOL_FLAG1))
-                      vcl_cout << *(*vit);
-                  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin();
-                       eit != edges->end(); eit++)
-                    vcl_cout << "\nEdge(\n" << *((*eit)->v1()) << *((*eit)->v2()) <<")\n";
+                  for (vcl_vector<vtol_vertex_sptr>::iterator vit =
+                         bad_verts.begin(); vit != bad_verts.end(); vit++)
+                    vcl_cout << *(*vit);
+                  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit =
+                         edges->begin(); eit != edges->end(); eit++)
+                    vcl_cout << "\n Bad Edge(\n" << *((*eit)->v1()) 
+                             << *((*eit)->v2()) <<")\n";
                 }
 #if 0
               if (debug_data_)
@@ -1723,7 +1724,7 @@ void sdet_edgel_regions::CollectFaceEdges()
         {
           vtol_edge_2d_sptr e = (*edges)[j];
           if (verbose_)
-            vcl_cout << "Edge(" << e->v1() <<  " " << e->v2() << vcl_endl;
+            vcl_cout << "Edge(" << *(e->v1()) <<  " " << *(e->v2()) << vcl_endl;
           EdgeSet.push_back ( e );
         }
       vcl_vector<vtol_edge_2d_sptr>* edge_list = new vcl_vector<vtol_edge_2d_sptr>;

@@ -1469,21 +1469,11 @@ sdet_contour::SubPixelAccuracy(vcl_vector<vtol_edge_2d_sptr>& edges,
 //:
 //  Generate an Edge with a vdgl_digital_curve representing a straight line
 //  between the specified vertices.
-static vtol_edge_2d_sptr DigitalEdge(vtol_vertex_2d_sptr  vs, vtol_vertex_2d_sptr  ve)
+static vtol_edge_2d_sptr DigitalEdge(vtol_vertex_2d_sptr const& vs,
+                                     vtol_vertex_2d_sptr const& ve)
 {
-  double xs= vs->x();
-  double ys= vs->y();
-  double xe= ve->x();
-  double ye= ve->y();
-
-  vdgl_edgel_chain *es= new vdgl_edgel_chain;
-  vdgl_interpolator *it= new vdgl_interpolator_linear( es);
-  vdgl_digital_curve *dc= new vdgl_digital_curve( it);
-
-  es->add_edgel( vdgl_edgel( xs, ys));
-  es->add_edgel( vdgl_edgel( xe, ye));
-
-  vtol_edge_2d_sptr e = new vtol_edge_2d(*vs, *ve, vsol_curve_2d_sptr( dc));
+  vsol_curve_2d_sptr dc= new vdgl_digital_curve(vs->point(), ve->point());
+  vtol_edge_2d_sptr e = new vtol_edge_2d(*vs, *ve, dc);
   return e;
 }
 
