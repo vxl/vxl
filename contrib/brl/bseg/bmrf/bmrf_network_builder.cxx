@@ -17,6 +17,7 @@
 #include <bmrf/bmrf_epi_seg.h>
 #include <bmrf/bmrf_node.h>
 #include <bmrf/bmrf_network.h>
+#include <bmrf/bmrf_epipole.h>
 
 
 //---------------------------------------------------------------
@@ -36,7 +37,7 @@ bmrf_network_builder::bmrf_network_builder(bmrf_network_builder_params& tp)
   alpha_min_ = vcl_atan2((double)(elv_min_-ev_), (double)du_);
   double alpha_max = vcl_atan2((double)(elv_max_-ev_), (double)du_);
   double temp = alpha_max-alpha_min_;
-  alpha_inv_ = 1.0/temp;
+  alpha_inv_ = 1.0; // 1.0/temp; <- TEMPORARY CHANGE
 
   //maximum s (distance from epipole).
   smax_ = vcl_sqrt(du_*du_+(elv_max_-ev_)*(elv_max_-ev_));
@@ -87,7 +88,7 @@ void bmrf_network_builder::epi_coords(const double u, const double v,
   //intersection with x = elu line
   vgl_vector_2d<double> dir = el.direction();
   double ang = vcl_atan2(dir.y(), dir.x());
-  alpha = (ang-alpha_min_)*alpha_inv_;
+  alpha = ang; // (ang-alpha_min_)*alpha_inv_;  <- TEMPORARY CHANGE
   s = line_distance(el, p);
 }
 
@@ -110,6 +111,7 @@ void bmrf_network_builder::set_edges(int frame,
 void bmrf_network_builder::init()
 {
   network_ = new bmrf_network();
+  network_->set_epipole(bmrf_epipole(epi_),0);
 }
 
 //: insure that the knots are stored in alpha increasing order.
@@ -347,7 +349,7 @@ bool bmrf_network_builder::image_coords(const double a, const double s,
 {
   u = 0; v = 0;
   //unscale alpha
-  double A = a/alpha_inv_ + alpha_min_;
+  double A = a; // a/alpha_inv_ + alpha_min_; <- TEMPORARY CHANGE
   //get  u,v relative to the epipole
   u = s*vcl_cos(A); v = s*vcl_sin(A);
   //add the epipole position
