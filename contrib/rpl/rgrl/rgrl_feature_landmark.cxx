@@ -200,7 +200,7 @@ read( vcl_istream& is, bool skip_tag )
 
   outgoing_directions_.reserve( num );
   vnl_vector<double> one( dim );
-  for (unsigned i=0; i<num; ++i) {
+  for (int i=0; i<num; ++i) {
     is >> one;
     if ( !is )
       return false;
