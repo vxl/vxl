@@ -1,19 +1,16 @@
 #ifndef vcl_iso_csignal_h_
 #define vcl_iso_csignal_h_
 
+// This is a generated file. DO NOT EDIT! Not even a little bit.
+
 #include <csignal>
 
-// sig_atomic_t
-#ifndef vcl_sig_atomic_t
-#define vcl_sig_atomic_t std::sig_atomic_t
-#endif
-// raise
-#ifndef vcl_raise
-#define vcl_raise std::raise
-#endif
-// signal
-#ifndef vcl_signal
-#define vcl_signal std::signal
+#ifdef vcl_generic_csignal_STD
+  ** error **
+#else
+# define vcl_generic_csignal_STD std
 #endif
 
-endif // vcl_iso_csignal_h_
+#include "../generic/vcl_csignal.h"
+
+#endif // vcl_iso_csignal_h_
