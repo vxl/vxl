@@ -8,9 +8,13 @@ ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
 IF(NOT UNIX)
   LINK_LIBRARIES( vfw32 )
 ENDIF(NOT UNIX)
+
+INCLUDE(${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt)
+INCLUDE(${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt)
 INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
 
-
 IF (WIN32)
-  LINK_LIBRARIES(vfw32.lib)
+  IF (NOT CYGWIN)
+    LINK_LIBRARIES(vfw32.lib)
+  ENDIF (NOT CYGWIN)
 ENDIF (WIN32)
