@@ -17,7 +17,7 @@
 #include <vepl2/vepl2_dyadic.h>
 
 // for I/O:
-#include <vil2/vil2_image_view.h>
+#include <vil2/vil2_image_view_base.h>
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_save.h>
 #include <vcl_iostream.h>
