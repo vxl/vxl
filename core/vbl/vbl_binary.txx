@@ -7,16 +7,6 @@
 
 #include <vcl_iostream.h>
 
-// The function templates in this source file won't work specializations
-// of vcl_vector<>, e.g. vector<bool>. Declare specializations of the
-// functions here, to stop people instantiating them explicitly.
-#define poison(T) \
-VCL_DEFINE_SPECIALIZATION void vbl_binary_save(vcl_ostream &, vcl_vector<T > const &); \
-VCL_DEFINE_SPECIALIZATION void vbl_binary_load(vcl_istream &, vcl_vector<T > &)
-//heh heh. I actually *want* to do this -- fsm. poison(bool);
-#undef poison
-
-
 template </*typename*/class T>
 void vbl_binary_save(vcl_ostream &f, vcl_vector<T> const &v)
 {
