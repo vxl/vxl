@@ -7,7 +7,9 @@
 
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
+#include <vcl_functional.h>
 
+//: Implementation class - Do No Use.
 template <class T>
 struct mbl_index_sort_cmp1
 {
@@ -32,6 +34,7 @@ void mbl_index_sort(const T* data, int n, vcl_vector<int>& index)
   vcl_sort(index.begin(), index.end(), c);
 }
 
+//: Implementation class - Do No Use.
 template <class T>
 struct mbl_index_sort_cmp2
 {
@@ -56,5 +59,29 @@ void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<int>& index)
 
   vcl_sort(index.begin(), index.end(), c);
 }
+
+//: A comparator for general index sorting.
+// It will take any type of index on to any sort of container
+// so long as T container.operator[](index) const is defined.
+// 
+// For example, a simple index sort can be done as follows.
+// \verbatim
+//  vcl_vector data<double> (n);
+//  vcl_vector index<unsigned> (n/2);
+//  ...
+//  vcl_sort(index.begin(), index.end(), mbl_index_sort_cmp<double>(data));
+// \endverbatim
+template <class T, class INDEX=unsigned, class CONT = vcl_vector<T>,
+  class CMP=vcl_less<T> >
+struct mbl_index_sort_cmp
+{
+  explicit mbl_index_sort_cmp(const CONT &data, const CMP &c = CMP()):
+    data_(data), cmp_(c) {}
+  const CONT &data_;
+  const CMP &cmp_;
+  bool operator () (const INDEX &a, const INDEX &b) const
+  {  return cmp_(data_[a], data_[b]); } 
+};
+
 
 #endif // mbl_index_sort_h_
