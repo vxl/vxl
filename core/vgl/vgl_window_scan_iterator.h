@@ -19,10 +19,10 @@ struct vgl_window_scan_iterator : vgl_region_scan_iterator
 
   // [x1, x2] x [y1, y2]
   void set_window_corners(float x1_, float y1_, float x2_, float y2_) {
-    x1 = (int) ceil (x1_);
-    y1 = (int) ceil (y1_);
-    x2 = (int) floor(x2_);
-    y2 = (int) floor(y2_);
+    x1 = (int) vcl_ceil (x1_);
+    y1 = (int) vcl_ceil (y1_);
+    x2 = (int) vcl_floor(x2_);
+    y2 = (int) vcl_floor(y2_);
   }
 
   // [x-w, x+w] x [y-h, y+h]

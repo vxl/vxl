@@ -70,8 +70,8 @@ vcsl_cylindrical_to_cartesian_3d::execute(const vnl_vector<double> &v,
   theta=v.get(1);
   z=v.get(2);
 
-  x=rho*cos(theta);
-  y=rho*sin(theta);
+  x=rho*vcl_cos(theta);
+  y=rho*vcl_sin(theta);
   
   result->put(0,x);
   result->put(1,y);
@@ -108,8 +108,8 @@ vcsl_cylindrical_to_cartesian_3d::inverse(const vnl_vector<double> &v,
   y=v.get(1);
   z=v.get(2);
 
-  rho=sqrt(x*x+y*y);
-  theta=atan2(y,x);
+  rho=vcl_sqrt(x*x+y*y);
+  theta=vcl_atan2(y,x);
 
   result->put(0,rho);
   result->put(1,theta);

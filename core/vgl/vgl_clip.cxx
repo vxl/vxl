@@ -44,7 +44,7 @@ bool vgl_clip_line_to_box(double a, double b, double c, // coefficients.
     vcl_swap(y1,y2);
 
   // I guess this is not really necessary.
-  double r = sqrt(a*a + b*b);
+  double r = vcl_sqrt(a*a + b*b);
   if (r == 0)
     return false;
   a /= r;

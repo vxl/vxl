@@ -142,7 +142,7 @@ void vcsl_spheroid::set_from_std(const vcsl_std_spheroid new_std_spheroid)
     }
 
   f_=(a_-b_)/a_;
-  e_=sqrt(2*f_-f_*f_);
+  e_=vcl_sqrt(2*f_-f_*f_);
 }
 
 //---------------------------------------------------------------------------

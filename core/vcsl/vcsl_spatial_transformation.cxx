@@ -206,10 +206,10 @@ vcsl_spatial_transformation::lqi(const vnl_quaternion<double> &v0,
     vnl_vector<double> const &v1_ = v1;
     cosangle=dot_product(v0_, v1_);
   }
-  angle=acos(cosangle);
-  invsin=1/sin(angle);
-  coef1=sin((1-t)*angle)*invsin;
-  coef2=sin(t*angle)*invsin;
+  angle=vcl_acos(cosangle);
+  invsin=1/vcl_sin(angle);
+  coef1=vcl_sin((1-t)*angle)*invsin;
+  coef2=vcl_sin(t*angle)*invsin;
 
   result=new vnl_quaternion<double>(v0.x()*coef1+v1.x()*coef2,
                                     v0.y()*coef1+v1.y()*coef2,
