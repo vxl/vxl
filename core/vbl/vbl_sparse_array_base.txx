@@ -14,6 +14,7 @@
 #include <vcl_iostream.h>
 #include <vcl_utility.h>
 
+#if 0
 //: DEPRECATED Return contents of (i).  Assertion failure if not yet filled.
 // Use operator () instead.
 template <class T, class Index>
@@ -25,7 +26,7 @@ T const & vbl_sparse_array_base<T, Index>::operator [] (Index i) const
 
   return (*p).second;
 }
-
+#endif
 
 //: Empty the sparse matrix.
 template <class T, class Index>

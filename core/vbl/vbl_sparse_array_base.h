@@ -24,10 +24,10 @@
 //
 // The sparse array design has as much of the code as possible in this
 // templated base class. This allows us to code harden this class
-// while leaving the the three derived classes in vbl, simple, easy to
+// while leaving the three derived classes in vbl, simple, easy to
 // understand and use.
-// I rejected to use of templating over the number of dimensions because
-// This can lead into recursive templating which is in theory very nice,
+// I rejected to use templating over the number of dimensions because
+// this can lead into recursive templating which is in theory very nice,
 // but in practice very horrible. It also makes the interface rather
 // unintuitive.
 // If you are worried about the speed aspects of using a pair of integers
@@ -90,6 +90,7 @@ public:
     //: A bidirectional iterator pointing just beyond last non-empty element.
   const_iterator end() const { return storage_.end(); }
 
+#if 0
     //: DEPRECATED Return contents at (i)
     // use operator () instead
     //
@@ -105,6 +106,7 @@ public:
     // because the interface does not generalise to more than one
     // dimension. e.g. array[i,j] will not compile.
   T const& operator [] (Index i) const;
+#endif
 };
 
 #endif // vbl_sparse_array_base_h_
