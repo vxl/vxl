@@ -67,7 +67,7 @@ template void vil3d_resample_simple(const vil3d_image_view< T >& src_image, \
                                     vil3d_image_view< T >& dst_image, \
                                     const unsigned dx, \
                                     const unsigned dy, \
-                                    const unsigned dz);
+                                    const unsigned dz)
 
 
 #endif // vil3d_resample_simple_txx_
