@@ -1,13 +1,13 @@
-//--*-c++-*---
 // This is brl/bbas/bvgl/bvgl_h_matrix_3d.txx
+#ifndef bvgl_h_matrix_3d_txx_
+#define bvgl_h_matrix_3d_txx_
 //:
 // \file
-#include "bvgl_h_matrix_3d.h"
 
+#include "bvgl_h_matrix_3d.h"
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
-#include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
 
@@ -15,22 +15,22 @@
 //
 //: Default constructor
 template <class T>
-bvgl_h_matrix_3d<T>::bvgl_h_matrix_3d<T>()	
+bvgl_h_matrix_3d<T>::bvgl_h_matrix_3d()
 {
 }
 
 //: Copy constructor
 template <class T>
-bvgl_h_matrix_3d<T>::bvgl_h_matrix_3d<T>(const bvgl_h_matrix_3d<T>& M)
+bvgl_h_matrix_3d<T>::bvgl_h_matrix_3d(const bvgl_h_matrix_3d<T>& M)
 {
-	  t12_matrix_ = M.t12_matrix_;	
+  t12_matrix_ = M.t12_matrix_;
 }
 
 //--------------------------------------------------------------
 //
 //: Constructor
 template <class T>
-bvgl_h_matrix_3d<T>::bvgl_h_matrix_3d<T>(vnl_matrix_fixed<T, 4, 4> const& M)
+bvgl_h_matrix_3d<T>::bvgl_h_matrix_3d(vnl_matrix_fixed<T, 4, 4> const& M)
 {
   t12_matrix_ = M;
 }
@@ -39,7 +39,7 @@ bvgl_h_matrix_3d<T>::bvgl_h_matrix_3d<T>(vnl_matrix_fixed<T, 4, 4> const& M)
 //
 //: Load H from ASCII vcl_istream.
 template <class T>
-bvgl_h_matrix_3d<T>::bvgl_h_matrix_3d<T>(vcl_istream& s)
+bvgl_h_matrix_3d<T>::bvgl_h_matrix_3d(vcl_istream& s)
 {
   read(s);
 }
@@ -50,8 +50,8 @@ bvgl_h_matrix_3d<T>::bvgl_h_matrix_3d<T>(vcl_istream& s)
 //: Construct an affine bvgl_h_matrix_3d from 3x3 M and 3x1 m.
 //
 template <class T>
-bvgl_h_matrix_3d<T>::bvgl_h_matrix_3d<T>(vnl_matrix_fixed<T,3, 3> const& M,
-                                         vnl_vector_fixed<T, 3> const& m)
+bvgl_h_matrix_3d<T>::bvgl_h_matrix_3d(vnl_matrix_fixed<T,3, 3> const& M,
+                                      vnl_vector_fixed<T, 3> const& m)
 {
   assert(M.rows() == 3);
   assert(M.columns() == 3);
@@ -71,14 +71,14 @@ bvgl_h_matrix_3d<T>::bvgl_h_matrix_3d<T>(vnl_matrix_fixed<T,3, 3> const& M,
 //
 //: Construct from a 16-element row-storage array of double.
 template <class T>
-bvgl_h_matrix_3d<T>::bvgl_h_matrix_3d<T> (const T* t_matrix) 
+bvgl_h_matrix_3d<T>::bvgl_h_matrix_3d (const T* t_matrix)
   : t12_matrix_ (t_matrix)
 {
 }
 
 //: Destructor
 template <class T>
-bvgl_h_matrix_3d<T>::~bvgl_h_matrix_3d<T>()
+bvgl_h_matrix_3d<T>::~bvgl_h_matrix_3d()
 {
 }
 
@@ -87,7 +87,7 @@ bvgl_h_matrix_3d<T>::~bvgl_h_matrix_3d<T>()
 //-----------------------------------------------------------------------------
 //:return the transformed point
 template <class T>
-vgl_homg_point_3d<T> 
+vgl_homg_point_3d<T>
 bvgl_h_matrix_3d<T>::operator()(vgl_homg_point_3d<T> const & x) const
 {
   vnl_vector_fixed<T, 4> v;
@@ -101,7 +101,7 @@ bvgl_h_matrix_3d<T>::operator()(vgl_homg_point_3d<T> const & x) const
 //: Return the preimage of a transformed plane
 
 template <class T>
-vgl_homg_plane_3d<T> 
+vgl_homg_plane_3d<T>
 bvgl_h_matrix_3d<T>::preimage(vgl_homg_plane_3d<T> const& p)
 {
   vnl_vector_fixed<T, 4> v;
@@ -114,7 +114,7 @@ bvgl_h_matrix_3d<T>::preimage(vgl_homg_plane_3d<T> const& p)
 //
 //: Return the preimage of a transformed point (requires an inverse)
 template <class T>
-vgl_homg_point_3d<T> 
+vgl_homg_point_3d<T>
 bvgl_h_matrix_3d<T>::preimage(vgl_homg_point_3d<T> const& x) const
 {
   vnl_vector_fixed<T, 4> v;
@@ -189,7 +189,7 @@ void bvgl_h_matrix_3d<T>::get (vnl_matrix_fixed<T, 4, 4>* t_matrix) const
 }
 
 //-----------------------------------------------------------------------------
-//: Return the inverse of this bvgl_h_matrix_3d<T>. 
+//: Return the inverse of this bvgl_h_matrix_3d<T>.
 template <class T>
 bvgl_h_matrix_3d<T> bvgl_h_matrix_3d<T>::get_inverse() const
 {
@@ -223,6 +223,8 @@ void bvgl_h_matrix_3d<T>::set (vnl_matrix_fixed<T,4,4> const& H)
 //----------------------------------------------------------------------------
 #undef BVGL_H_MATRIX_3D_INSTANTIATE
 #define BVGL_H_MATRIX_3D_INSTANTIATE(T) \
-template class bvgl_h_matrix_3d<T>; \
+template class bvgl_h_matrix_3d<T >; \
 template vcl_ostream& operator << (vcl_ostream& s, const bvgl_h_matrix_3d<T >& h); \
-template vcl_istream& operator >> (vcl_istream& s, bvgl_h_matrix_3d<T >& h);
+template vcl_istream& operator >> (vcl_istream& s, bvgl_h_matrix_3d<T >& h)
+
+#endif // bvgl_h_matrix_3d_txx_
