@@ -24,6 +24,16 @@
 #include <vcsl/vcsl_spatial_transformation_sptr.h>
 #include <vcsl/vcsl_graph_sptr.h>
 
+#include <vcl_compiler.h>
+#ifdef VCL_ICC
+// This is needed for icc-7.0 to solve a link problem.  There is some
+// indication from the Intel web site that this is due to a known and
+// fixed compiler bug.  Hopefully the next release will have the fix.
+#define VCSL_SPATIAL_VECTOR_BOOL vcl_vector<int>
+#else
+#define VCSL_SPATIAL_VECTOR_BOOL vcl_vector<bool>
+#endif
+
 // Because VXL does not use dynamic_cast<> :-(
 
 class vcsl_cartesian_2d;
@@ -154,7 +164,7 @@ class vcsl_spatial
   path_from_local_to_cs(const vcsl_spatial_sptr &other,
                         double time,
                         vcl_vector<vcsl_spatial_transformation_sptr> &path,
-                        vcl_vector<bool> &sens);
+                        VCSL_SPATIAL_VECTOR_BOOL &sens);
 
   //: Find the sequence of transformations from `this' to `other'
   //  Called only by path_from_local_to_cs()
@@ -162,7 +172,7 @@ class vcsl_spatial
   recursive_path_from_local_to_cs(const vcsl_spatial_sptr &other,
                                   double time,
                                   vcl_vector<vcsl_spatial_transformation_sptr> &path,
-                                  vcl_vector<bool> &sens);
+                                  VCSL_SPATIAL_VECTOR_BOOL &sens);
 
   //: successive parents of `this' along the time
   vcl_vector<vcsl_spatial_sptr> parent_;

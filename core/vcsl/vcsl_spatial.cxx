@@ -205,7 +205,7 @@ bool vcsl_spatial::recursive_path_from_local_to_cs_exists(const vcsl_spatial_spt
 void vcsl_spatial::path_from_local_to_cs(const vcsl_spatial_sptr &other,
                                          double time,
                                          vcl_vector<vcsl_spatial_transformation_sptr> &path,
-                                         vcl_vector<bool> &sens)
+                                         VCSL_SPATIAL_VECTOR_BOOL &sens)
 {
   // require
   assert(path.size()==0);
@@ -226,7 +226,7 @@ bool
 vcsl_spatial::recursive_path_from_local_to_cs(const vcsl_spatial_sptr &other,
                                               double time,
                                               vcl_vector<vcsl_spatial_transformation_sptr> &path,
-                                              vcl_vector<bool> &sens)
+                                              VCSL_SPATIAL_VECTOR_BOOL &sens)
 {
   bool result;
   int i = -1; // dummy initialisation to avoid compiler warning
@@ -335,10 +335,10 @@ vcsl_spatial::from_local_to_cs(const vnl_vector<double> &v,
   assert(path_from_local_to_cs_exists(other,time));
 
   vcl_vector<vcsl_spatial_transformation_sptr> path;
-  vcl_vector<bool> sens;
+  VCSL_SPATIAL_VECTOR_BOOL sens;
 
   vcl_vector<vcsl_spatial_transformation_sptr>::const_iterator i;
-  vcl_vector<bool>::const_iterator j;
+  VCSL_SPATIAL_VECTOR_BOOL::const_iterator j;
 
   path_from_local_to_cs(other,time,path,sens);
 
