@@ -12,7 +12,7 @@
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vcl_math.h> // for hypot()
+#include <vcl_cmath.h> // for hypot()
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event.h>
