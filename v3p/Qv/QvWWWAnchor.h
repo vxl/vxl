@@ -5,7 +5,7 @@
 #include "QvSFString.h"
 #include "QvGroup.h"
 
-#include <Qv/vectors.h>
+#include "vectors.h"
 
 class QvWWWAnchor : public QvGroup {
 

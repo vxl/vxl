@@ -1,4 +1,4 @@
-#include <QvNormalBinding.h>
+#include "QvNormalBinding.h"
 
 QV_NODE_SOURCE(QvNormalBinding);
 

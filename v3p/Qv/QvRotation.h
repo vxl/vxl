@@ -4,7 +4,7 @@
 #include "QvSFRotation.h"
 #include "QvSubNode.h"
 
-#include <Qv/vectors.h>
+#include "vectors.h"
 
 class QvRotation : public QvNode {
 

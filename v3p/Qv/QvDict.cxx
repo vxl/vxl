@@ -1,4 +1,4 @@
-#include <QvDict.h>
+#include "QvDict.h"
 
 struct QvDictListThing {
     QvPList	*keyList;

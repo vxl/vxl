@@ -1,6 +1,6 @@
 // Georg Meszaros, 19960314
 
-#include <QvMFFace.h>
+#include "QvMFFace.h"
 class Face;
 
 QV_MFIELD_SOURCE(QvMFFace, Face*, 1, FALSE);

@@ -1,8 +1,8 @@
-#include <QvDB.h>
-#include <QvInput.h>
-#include <QvReadError.h>
-#include <QvNode.h>
-#include <QvGroup.h>
+#include "QvDB.h"
+#include "QvInput.h"
+#include "QvReadError.h"
+#include "QvNode.h"
+#include "QvGroup.h"
 
 const char *QvDB::versionString = "Reference VRML Parser 1.0";
 int QvDB::warn_ignorechar = 1;

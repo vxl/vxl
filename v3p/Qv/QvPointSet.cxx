@@ -1,4 +1,4 @@
-#include <QvPointSet.h>
+#include "QvPointSet.h"
 
 QV_NODE_SOURCE(QvPointSet);
 

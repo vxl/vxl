@@ -1,4 +1,4 @@
-#include <QvUnknownNode.h>
+#include "QvUnknownNode.h"
 
 QV_NODE_SOURCE(QvUnknownNode);
 

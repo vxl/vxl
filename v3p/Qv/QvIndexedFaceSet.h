@@ -5,8 +5,8 @@
 #include "QvSubNode.h"
 #include "QvMFVec3f.h"  /* rpersche 19960519 */
 
-#include <Qv/vectors.h>
-#include <Qv/mtl.h>
+#include "vectors.h"
+#include "mtl.h"
 
 #define QV_END_FACE_INDEX	(-1)
 

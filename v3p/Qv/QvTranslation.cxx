@@ -1,4 +1,4 @@
-#include <QvTranslation.h>
+#include "QvTranslation.h"
 
 QV_NODE_SOURCE(QvTranslation);
 

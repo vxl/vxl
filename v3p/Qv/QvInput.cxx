@@ -1,10 +1,10 @@
 #include <vcl/vcl_cctype.h>
 #include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_cstdio.h>
-#include <QvInput.h>
-#include <QvDebugError.h>
-#include <QvReadError.h>
-#include <QvNode.h>
+#include "QvInput.h"
+#include "QvDebugError.h"
+#include "QvReadError.h"
+#include "QvNode.h"
 
 #define CURVERSION 1.0 			/* Current version of file format */
 #define COMMENT_CHAR '#'

@@ -1,4 +1,4 @@
-#include <QvTextureCoordinate2.h>
+#include "QvTextureCoordinate2.h"
 
 QV_NODE_SOURCE(QvTextureCoordinate2);
 

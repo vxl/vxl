@@ -1,4 +1,4 @@
-#include <QvShapeHints.h>
+#include "QvShapeHints.h"
 
 QV_NODE_SOURCE(QvShapeHints);
 

@@ -1,4 +1,4 @@
-#include <QvSphere.h>
+#include "QvSphere.h"
 
 QV_NODE_SOURCE(QvSphere);
 

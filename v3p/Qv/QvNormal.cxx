@@ -1,4 +1,4 @@
-#include <QvNormal.h>
+#include "QvNormal.h"
 
 QV_NODE_SOURCE(QvNormal);
 

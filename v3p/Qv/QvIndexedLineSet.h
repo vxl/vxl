@@ -4,7 +4,7 @@
 #include "QvMFLong.h"
 #include "QvSubNode.h"
 
-#include <Qv/vectors.h>
+#include "vectors.h"
 
 #define QV_END_LINE_INDEX	(-1)
 

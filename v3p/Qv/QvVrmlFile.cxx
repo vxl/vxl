@@ -18,15 +18,15 @@
 #include <vcl/vcl_vector.h>
 #include <vcl/vcl_iostream.h>
 
-#include <Qv/QvVisitor.h>
-#include <Qv/QvString.h>
-#include <Qv/QvInput.h>
-#include <Qv/QvState.h>
-#include <Qv/QvNode.h>
+#include "QvVisitor.h"
+#include "QvString.h"
+#include "QvInput.h"
+#include "QvState.h"
+#include "QvNode.h"
 
-#include <Qv/QvGroup.h>
-#include <Qv/QvSeparator.h>
-#include <Qv/QvSwitch.h>
+#include "QvGroup.h"
+#include "QvSeparator.h"
+#include "QvSwitch.h"
 
 //#include <vbl/vbl_printf.h>
 //#include <vbl/vbl_file.h>
@@ -94,9 +94,9 @@ void QvVrmlFile::traverse(QvVisitor* visitor)
 #include <vcl/vcl_vector.txx>
 VCL_VECTOR_INSTANTIATE(QvNode*);
 
-#include <Qv/QvPointSet.h>
-#include <Qv/QvIndexedLineSet.h>
-#include <Qv/QvIndexedFaceSet.h>
+#include "QvPointSet.h"
+#include "QvIndexedLineSet.h"
+#include "QvIndexedFaceSet.h"
 
 struct VrmlCentroidVisitor : public QvVisitor {
   float centroid[3];

@@ -1,4 +1,4 @@
-#include <QvTexture2.h>
+#include "QvTexture2.h"
 
 #include <vcl/vcl_iostream.h>
 

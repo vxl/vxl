@@ -1,4 +1,4 @@
-#include <QvPList.h>
+#include "QvPList.h"
 
 #define DEFAULT_INITIAL_SIZE	4
 

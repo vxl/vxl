@@ -1,5 +1,5 @@
-#include <QvOrthographicCamera.h>
-#include <QvSwitch.h>
+#include "QvOrthographicCamera.h"
+#include "QvSwitch.h"
 
 QV_NODE_SOURCE(QvOrthographicCamera);
 

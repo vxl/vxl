@@ -1,4 +1,4 @@
-#include <QvSFMatrix.h>
+#include "QvSFMatrix.h"
 
 QV_SFIELD_SOURCE(QvSFMatrix);
 

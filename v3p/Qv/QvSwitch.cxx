@@ -1,4 +1,4 @@
-#include <QvSwitch.h>
+#include "QvSwitch.h"
 
 QV_NODE_SOURCE(QvSwitch);
 

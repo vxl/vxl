@@ -1,4 +1,4 @@
-#include <QvSFVec3f.h>
+#include "QvSFVec3f.h"
 
 QV_SFIELD_SOURCE(QvSFVec3f);
 

@@ -8,15 +8,15 @@
 # endif
 #endif
 
-#include <QvString.h>
-#include <QvInput.h>
+#include "QvString.h"
+#include "QvInput.h"
 
 // changed Gerbert Orasche 260695
 #ifdef __PC__
 #include "stdafx.h"
 #endif
 
-#include <QvReadError.h>
+#include "QvReadError.h"
 
 QvReadErrorCallback QvReadError::callback_ = 0;  // mpichler, 19950713
 

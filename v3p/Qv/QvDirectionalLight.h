@@ -7,8 +7,8 @@
 #include "QvSFVec3f.h"
 #include "QvSubNode.h"
 
-#include <Qv/vectors.h>
-#include <Qv/color.h>
+#include "vectors.h"
+#include "color.h"
 
 class QvDirectionalLight : public QvNode {
 

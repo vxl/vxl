@@ -4,7 +4,7 @@
 #include "QvMFVec3f.h"
 #include "QvSubNode.h"
 
-#include <Qv/vectors.h>
+#include "vectors.h"
 
 class QvCoordinate3 : public QvNode {
 

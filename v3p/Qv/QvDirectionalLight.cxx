@@ -1,4 +1,4 @@
-#include <QvDirectionalLight.h>
+#include "QvDirectionalLight.h"
 
 QV_NODE_SOURCE(QvDirectionalLight);
 

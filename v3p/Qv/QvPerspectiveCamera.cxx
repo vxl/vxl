@@ -1,5 +1,5 @@
-#include <QvPerspectiveCamera.h>
-#include <QvSwitch.h>
+#include "QvPerspectiveCamera.h"
+#include "QvSwitch.h"
 
 #include <vcl/vcl_cmath.h>  /* mpichler, 19950616 */
 

@@ -1,4 +1,4 @@
-#include <QvLOD.h>
+#include "QvLOD.h"
 
 QV_NODE_SOURCE(QvLOD);
 

@@ -1,4 +1,4 @@
-#include <QvCylinder.h>
+#include "QvCylinder.h"
 
 QV_NODE_SOURCE(QvCylinder);
 

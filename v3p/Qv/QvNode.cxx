@@ -1,14 +1,14 @@
 #include <vcl/vcl_cctype.h>
-#include <QvDB.h>
-#include <QvInput.h>
-#include <QvDebugError.h>
-#include <QvReadError.h>
-#include <QvField.h>
-#include <QvFieldData.h>
-#include <QvNodes.h>
-#include <QvUnknownNode.h>
+#include "QvDB.h"
+#include "QvInput.h"
+#include "QvDebugError.h"
+#include "QvReadError.h"
+#include "QvField.h"
+#include "QvFieldData.h"
+#include "QvNodes.h"
+#include "QvUnknownNode.h"
 #ifdef VRMLEXTENSIONS
-#include <QvExtensions.h>
+#include "QvExtensions.h"
 #endif
 
 // mpichler, 19950504 - 19960326

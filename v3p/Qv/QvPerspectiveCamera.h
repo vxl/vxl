@@ -7,7 +7,7 @@
 #include "QvSubNode.h"
 
 class QvSwitch;
-#include <Qv/vectors.h>
+#include "vectors.h"
 
 class QvPerspectiveCamera : public QvNode {
 

@@ -5,7 +5,7 @@
 #include "QvGroup.h"
 #include "QvSFVec3f.h"
 
-#include <Qv/vectors.h>
+#include "vectors.h"
 
 class QvLOD : public QvGroup {
 

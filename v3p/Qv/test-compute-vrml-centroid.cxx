@@ -15,7 +15,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <Qv/QvVrmlFile.h>
+#include "QvVrmlFile.h"
 
 int main(int argc, char ** argv)
 {

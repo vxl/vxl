@@ -1,4 +1,4 @@
-#include <QvSeparator.h>
+#include "QvSeparator.h"
 
 QV_NODE_SOURCE(QvSeparator);
 

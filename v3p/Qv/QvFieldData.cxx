@@ -1,8 +1,8 @@
-#include <QvInput.h>
-#include <QvReadError.h>
-#include <QvField.h>
-#include <QvFieldData.h>
-#include <QvUnknownNode.h>
+#include "QvInput.h"
+#include "QvReadError.h"
+#include "QvField.h"
+#include "QvFieldData.h"
+#include "QvUnknownNode.h"
 
 #define OPEN_BRACE_CHAR		'['
 #define CLOSE_BRACE_CHAR	']'

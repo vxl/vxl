@@ -46,12 +46,12 @@ enum Binding { goofyBinding };  // cfront confused about QvMaterialBinding/QvNor
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_cmath.h>
 
-#include <Qv/QvElement.h>
-#include <Qv/QvNodes.h>
-#include <Qv/QvExtensions.h>
-#include <Qv/QvUnknownNode.h>
-#include <Qv/QvDebugError.h>
-#include <Qv/QvState.h>
+#include "QvElement.h"
+#include "QvNodes.h"
+#include "QvExtensions.h"
+#include "QvUnknownNode.h"
+#include "QvDebugError.h"
+#include "QvState.h"
 
 #include "vecutil.h"
 

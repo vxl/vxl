@@ -8,14 +8,14 @@
 # endif
 #endif
 
-#include <QvString.h>
+#include "QvString.h"
 
 // changed Gerbert Orasche 260695
 #ifdef __PC__
 #include "stdafx.h"
 #endif
 
-#include <QvDebugError.h>
+#include "QvDebugError.h"
 
 QvDebugErrorCallback QvDebugError::callback_ = 0;  // mpichler, 19950713
 

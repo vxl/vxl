@@ -5,7 +5,7 @@
 #include "QvMFFloat.h"
 #include "QvSubNode.h"
 
-#include <Qv/mtl.h>
+#include "mtl.h"
 
 class QvMaterial : public QvNode {
 

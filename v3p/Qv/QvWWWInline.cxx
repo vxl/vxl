@@ -1,4 +1,4 @@
-#include <QvWWWInline.h>
+#include "QvWWWInline.h"
 
 QV_NODE_SOURCE(QvWWWInline)
 

@@ -1,4 +1,4 @@
-#include <QvString.h>
+#include "QvString.h"
 
 QvString::~QvString()
 {

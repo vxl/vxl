@@ -1,4 +1,4 @@
-#include <QvCube.h>
+#include "QvCube.h"
 
 QV_NODE_SOURCE(QvCube);
 

@@ -19,7 +19,7 @@
 
 #include <vcl/vcl_iosfwd.h>
 
-#include <Qv/vectors.h>
+#include "vectors.h"
 
 class QvChildList;
 class QvDict;
