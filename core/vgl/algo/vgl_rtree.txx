@@ -337,7 +337,7 @@ void vgl_rtree_iterator_base<V, B, C>::operator_pp() {
 }
 
 template <class V, class B, class C>
-void vgl_rtree_iterator_base<V, B, C>::operator_mm() { vcl_abort(); }
+void vgl_rtree_iterator_base<V, B, C>::operator_mm() { assert(false); }
 
 template <class V, class B, class C>
 bool operator==(vgl_rtree_iterator_base<V, B, C> const &a,
