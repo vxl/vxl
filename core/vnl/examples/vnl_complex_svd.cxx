@@ -28,21 +28,21 @@ int main()
     6,     5,     4
   };
 
-  vcl_double_complex cmplx[12];
-  for (int k=0; k<12; ++k) cmplx[k] = vcl_double_complex(r[k],i[k]);
+  vcl_complex<double> cmplx[12];
+  for (int k=0; k<12; ++k) cmplx[k] = vcl_complex<double>(r[k],i[k]);
 
-  vnl_matrix<vcl_double_complex> C(cmplx, 4, 3);
+  vnl_matrix<vcl_complex<double> > C(cmplx, 4, 3);
   
   vcl_cout << "C = " << C << vcl_endl;
 
-  vnl_svd<vcl_double_complex> C_svd(C);
+  vnl_svd<vcl_complex<double> > C_svd(C);
 
   vnl_matlab_print(vcl_cout, C_svd.U(), "U");
   vnl_matlab_print(vcl_cout, C_svd.W().asMatrix(), "W");
   vnl_matlab_print(vcl_cout, C_svd.V(), "V");
-
-  vnl_double_complex rhs[4]; rhs[0]=3; rhs[1]=9; rhs[2]=-2; rhs[3]=-8;
-  vnl_vector<vcl_double_complex> b(rhs, 4);
+  
+  vcl_complex<double> rhs[4]; rhs[0]=3; rhs[1]=9; rhs[2]=-2; rhs[3]=-8;
+  vnl_vector<vcl_complex<double> > b(rhs, 4);
 
   // From "C x = b" find x:
   vcl_cout << "x = " << C_svd.solve(b) << vcl_endl;
