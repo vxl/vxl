@@ -3,7 +3,6 @@
 #include <bdgl/bdgl_curve_clustering.h>
 #include <vcl_cmath.h>
 #include <vcl_map.h>
-#include <mbl/mbl_histogram.h>
 #include <vcl_algorithm.h>
 
 

@@ -8,7 +8,6 @@
 
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
-#include <mbl/mbl_histogram.h>
 #include <bdgl/bdgl_curve_matching.h>
 #include <bdgl/bdgl_tracker_curve_sptr.h>
 #include <bdgl/bdgl_tracker_curve.h>
