@@ -63,6 +63,6 @@ using std::rel_ops::operator>=;
 VCL_INSTANTIATE_INLINE(bool operator!=(T const &, T const &)); \
 VCL_INSTANTIATE_INLINE(bool operator> (T const &, T const &)); \
 VCL_INSTANTIATE_INLINE(bool operator<=(T const &, T const &)); \
-VCL_INSTANTIATE_INLINE(bool operator>=(T const &, T const &));
+VCL_INSTANTIATE_INLINE(bool operator>=(T const &, T const &))
 
 #endif // vcl_rel_ops_h_

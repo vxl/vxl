@@ -66,10 +66,10 @@ public:
   vcl_dynamic_cast(const void*) {}
   operator T () { return 0; }
 };
-#define VCL_DYNAMIC_CAST_INSTANTIATE(X) template class vcl_dynamic_cast<X*>;
+#define VCL_DYNAMIC_CAST_INSTANTIATE(X) template class vcl_dynamic_cast<X*>
 
 #else
-#define VCL_DYNAMIC_CAST_INSTANTIATE(X) 
+#define VCL_DYNAMIC_CAST_INSTANTIATE(X) /* */
 #endif
 
 //
@@ -81,4 +81,4 @@ struct vcl_dummy_typeid {
 #define typeid(x) vcl_dummy_typeid()
 #endif
 
-#endif // vcl_typeinfo_h_ 
+#endif // vcl_typeinfo_h_
