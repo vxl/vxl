@@ -1,10 +1,8 @@
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
+// This is mul/vil2/tests/test_image_view.cxx
 #include <vil2/vil2_image_view.h>
 #include <vil/vil_byte.h>
+#include <vcl_iostream.h>
+#include <testlib/testlib_test.h>
 
 bool Equal(const vil2_image_view<vil_byte>& im0,
            const vil2_image_view<vil_byte>& im1)
@@ -97,7 +95,7 @@ void test_image_view_byte()
   TEST("is_a() specialisation for vil_byte",image0.is_a(),"vil2_image_view<vil2_byte>");
 }
 
-/*
+#if 0 // commented out
 void test_image_2d_byte_io()
 {
   // -------- Test the binary I/O --------
@@ -136,15 +134,13 @@ void test_image_2d_byte_io()
   image_in0(3,4,1)=17;
   TEST("Data connected correctly",image_in1(3,4,1),17);
 }
-*/
+#endif // 0
+
 MAIN( test_image_view )
 {
   START( "vil2_image_view" );
-
   test_image_view_byte();
-//  test_image_2d_byte_io();
-
+//test_image_2d_byte_io();
 
   SUMMARY();
-
 }

@@ -1,19 +1,17 @@
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
-#include <vnl/vnl_vector.h>
+// This is mul/vil2/tests/test_sample_grid_bilin.cxx
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_sample_grid_bilin.h>
 #include <vil/vil_byte.h>
+#include <vcl_iostream.h>
 #include <vcl_vector.h>
+
+#include <testlib/testlib_test.h>
 
 void test_sample_grid_bilin_byte()
 {
-  vcl_cout << "*******************************\n";
-  vcl_cout << " Testing vil2_sample_grid_bilin\n";
-  vcl_cout << "*******************************\n";
+  vcl_cout << "*******************************\n"
+           << " Testing vil2_sample_grid_bilin\n"
+           << "*******************************\n";
 
   vil2_image_view<vil_byte> image0;
   image0.resize(10,10);
@@ -22,9 +20,7 @@ void test_sample_grid_bilin_byte()
 
   for (int y=0;y<image0.nj();++y)
      for (int x=0;x<image0.ni();++x)
-     {
        image0(x,y) = x+y*10;
-     }
 
   double x0 = 5.0, y0= 5.0;
   double dx1 = 1.0, dy1 = 0.0;
@@ -71,7 +67,6 @@ void test_sample_grid_bilin_byte()
   vil2_sample_grid_bilin(&vec2[0],image0,x0,y0,dx1,dy1,dx2,dy2,4,3);
   TEST_NEAR("First value",vec2[0],58,1e-6);
   TEST_NEAR("Last value",vec2[23],0,1e-6);
-
 }
 
 MAIN( test_sample_grid_bilin )
@@ -81,5 +76,4 @@ MAIN( test_sample_grid_bilin )
   test_sample_grid_bilin_byte();
 
   SUMMARY();
-
 }
