@@ -89,7 +89,7 @@ static void user_flush_data(png_structp png_ptr)
 
 struct vil_jmpbuf_wrapper {
   jmp_buf jmpbuf;
-} jmpbuf_wrapper;
+};
 static vil_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
 static bool jmpbuf_ok = false;
 
