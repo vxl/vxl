@@ -42,7 +42,7 @@
 // #include <cool/ArrayP.h>
 // #include <cool/ListP.h>
 // #include <iostream.h>
-// #include <math.h>
+#include <vcl_cmath.h> // for fabs()
 
 #include <vil/vil_byte.h>
 
@@ -190,7 +190,7 @@ gevd_contour::FindNetwork(gevd_bufferxy& edgels,
   edgeMap->Clear();
 
   // 2. Collect 4/8-connected pixels into chains
-  int n = max(10*njunction, // preallocated size from junctions or
+  int n = vcl_max(10*njunction, // preallocated size from junctions or
 	      edgels.GetSizeX()*edgels.GetSizeY()/100); // image size
   vcl_vector<vtol_edge_2d *> edges2(n);
   //  edges2.set_growth_ratio(2);
@@ -242,7 +242,7 @@ gevd_contour::FindNetwork(gevd_bufferxy& edgels,
 bool
 Ongevd_contour(const gevd_bufferxy& edgels, const int i, const int j)
 {
-  float pix = (1 + sqrt(2)) * floatPixel(edgels, i, j); // fuzzy threshold
+  float pix = (1 + vcl_sqrt(2.0)) * floatPixel(edgels, i, j); // fuzzy threshold
   for (vil_byte dir = 0; dir < TWOPI; dir += HALFPI) // 4-connected only
     if (floatPixel(edgels, i+DIS[dir], j+DJS[dir]) > pix)
       return false;		// should choose neighbor instead
@@ -475,7 +475,7 @@ DetectJunction(vtol_vertex_2d& end, int& index,
   //  const float *cx = dc->GetX(), *cy = dc->GetY();
 
   // 1. Mark off pixels at end pt to find junction of a contour to itself
-  const int rfuzz = min(len, 3*MINLENGTH);
+  const int rfuzz = vcl_min(len, 3*MINLENGTH);
   vtol_edge_2d** labels = new vtol_edge_2d*[rfuzz];
   if (&end == weaker->v1())
     for (int r = 0; r < rfuzz; r++) {
@@ -675,7 +675,7 @@ ConfirmJunctionOnChain(int index, float threshold,
   const int radius = 3;		// gap < 3, around junction pixel
   //  const float *cx = dc->GetX(), *cy = dc->GetY();
 
-  for (int n = max(index-radius, fuzz); n <= min(index+radius,len-1-fuzz); n++)
+  for (int n = vcl_max(index-radius, fuzz); n <= vcl_min(index+radius,len-1-fuzz); n++)
     {
       vdgl_edgel cp1= dc->get_interpolator()->get_edgel_chain()->edgel(n+1);
       vdgl_edgel cm1= dc->get_interpolator()->get_edgel_chain()->edgel(n-1);

@@ -2464,7 +2464,7 @@ gevd_float_operators::WaveletTransformStep(float* array, const int n,
 	wksp[ii] += lo_filter[k] * array[j]; // lo-filter results
 	wksp[ii+nmid] += hi_filter[k] * array[j]; // hi-filter results
       }
-    float scale = max(lo_filter[ncof], hi_filter[ncof]);
+    float scale = vcl_max(lo_filter[ncof], hi_filter[ncof]);
     {for (int j = 0; j < nmod; j++)		// normalize results.
       wksp[j] /= scale;
     }
@@ -2481,7 +2481,7 @@ gevd_float_operators::WaveletTransformStep(float* array, const int n,
 		    hi_filter[k] * hi);
       }
     }
-    float scale = max(lo_filter[ncof], hi_filter[ncof]);
+    float scale = vcl_max(lo_filter[ncof], hi_filter[ncof]);
     for (int j = 0; j < nmod; j++)		// unnormalize results.
       wksp[j] *= scale;
   }
@@ -2709,14 +2709,14 @@ gevd_float_operators::CopyNdRecursive(const float* from_array,
 				const bool fullp)
 {
   if (ndim == 1) {                              // end of recursion
-    int size = min(from_size, to_size);
+    int size = vcl_min(from_size, to_size);
     for (int i = 0; i < size; i++)		// copy 1d array for
       to_array[i] = from_array[i];		// common indices only
   } else {
     int from_n = from_dims[0], to_n = to_dims[0];
     int from_nsize = from_size / from_n;
     int to_nsize = to_size / to_n;
-    int n = min(from_n, to_n);
+    int n = vcl_min(from_n, to_n);
     for (int i = 0; i < n; i++) {               // copy n common subarrays
       CopyNdRecursive (from_array, from_nsize, from_dims+1,
 		       to_array, to_nsize, to_dims+1,
@@ -2725,7 +2725,7 @@ gevd_float_operators::CopyNdRecursive(const float* from_array,
 	from_array += from_nsize;
 	to_array += to_nsize;
       } else {
-	int block_size = max(from_nsize, to_nsize);
+	int block_size = vcl_max(from_nsize, to_nsize);
 	from_array += block_size;		// inc pointer of arrays
 	to_array += block_size;			// to next block
       }
