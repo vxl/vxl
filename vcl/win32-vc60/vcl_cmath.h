@@ -1,5 +1,5 @@
-#ifndef vcl_win32_cmath_h_
-#define vcl_win32_cmath_h_
+#ifndef vcl_win32_vc60_cmath_h_
+#define vcl_win32_vc60_cmath_h_
 
 #include <cmath>
 
@@ -13,5 +13,4 @@ inline long double  sqrt(long double f) { return (long double)(::sqrt(double(f))
 
 #include "../generic/vcl_cmath.h"
 
-#endif // vcl_cmath_h_
-
+#endif // vcl_win32_vc60_cmath_h_

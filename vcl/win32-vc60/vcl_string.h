@@ -1,5 +1,5 @@
-#ifndef vcl_vc_string_h_
-#define vcl_vc_string_h_
+#ifndef vcl_win32_vc60_string_h_
+#define vcl_win32_vc60_string_h_
 /* This is only for Visual Studio 6.
    fsm@robots.ox.ac.uk
 */
@@ -20,13 +20,11 @@
 //#define vcl_string        std::string
 typedef std::string vcl_string;
 
-#if defined(VCL_VC60)
 # include <vcl_iostream.h>
 
 inline vcl_ostream& operator<<(vcl_ostream& os, vcl_string const& s)
 {
   return os << s.c_str();
 }
-#endif
 
-#endif // vcl_vc_string_h_
+#endif // vcl_win32_vc60_string_h_

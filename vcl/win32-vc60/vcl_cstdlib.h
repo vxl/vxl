@@ -1,5 +1,5 @@
-#ifndef vcl_vc_cstdlib_h_
-#define vcl_vc_cstdlib_h_
+#ifndef vcl_win32_vc60_cstdlib_h_
+#define vcl_win32_vc60_cstdlib_h_
 
 #include <cstdlib>
 
@@ -9,4 +9,4 @@ inline long abs(long x) { return x >= 0 ? x : -x; }
 
 #include "../generic/vcl_cstdlib.h"
 
-#endif // vcl_cstdlib_h_
+#endif // vcl_win32_vc60_cstdlib_h_

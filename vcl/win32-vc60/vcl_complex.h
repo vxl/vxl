@@ -1,5 +1,5 @@
-#ifndef vcl_win32_complex_h_
-#define vcl_win32_complex_h_
+#ifndef vcl_win32_vc60_complex_h_
+#define vcl_win32_vc60_complex_h_
 
 // fsm@robots: complex<T> is derived from _Complex_base<T>, which is not
 // declared with __declspec(dllimport). So complex<T> shouldn't be either
@@ -100,4 +100,4 @@ inline std :: complex<double> pow(double z, std :: complex<double> const& y) { r
 inline std :: complex<float> pow(float z, std :: complex<float> const& y) { return std :: pow( z , y ); }
 
 
-#endif // vcl_win32_complex_h_
+#endif // vcl_win32_vc60_complex_h_

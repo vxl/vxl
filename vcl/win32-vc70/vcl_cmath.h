@@ -1,5 +1,5 @@
-#ifndef vcl_win32_cmath_h_
-#define vcl_win32_cmath_h_
+#ifndef vcl_win32_vc70_cmath_h_
+#define vcl_win32_vc70_cmath_h_
 
 #include <cmath>
 
@@ -15,5 +15,4 @@ namespace std {
 
 #include "../generic/vcl_cmath.h"
 
-#endif // vcl_cmath_h_
-
+#endif // vcl_win32_vc70_cmath_h_
