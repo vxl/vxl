@@ -16,9 +16,9 @@
 
 class vidl_vil1_file_sequence
 {
-#ifdef vxl_int_64
+#if VXL_HAS_INT_64
   typedef vxl_int_64 offset_t;
-#else // vcl_int_64 is typedef'd to void
+#else // vcl_int_64 is #defined to void
   typedef long offset_t;
 #endif
  public:
