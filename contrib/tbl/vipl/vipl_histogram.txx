@@ -51,8 +51,8 @@ bool vipl_histogram <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_histogram <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_preop(){
-  vcl_fill(out_data_ptr()->begin(), out_data_ptr()->end(), DataOut());
- /* const ImgIn &in = in_data(0);
+/*  vcl_fill(out_data_ptr()->begin(), out_data_ptr()->end(), DataOut());
+  const ImgIn &in = in_data(0);
   DataIn dummy = DataIn(); // dummy initialization to avoid compiler warning
   ImgOut &out = *out_data_ptr();
   int index = indexout();
