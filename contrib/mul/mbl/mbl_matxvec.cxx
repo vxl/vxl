@@ -468,64 +468,7 @@ void TC_Product(vnl_matrix<double>& AB,
 		}
 	}
 }
-#endif  //0 -- long part commented out
 
-//=======================================================================
-
-
-void mbl_matxvec_prod_adb(vnl_matrix<double>& ADB,
-				                  const vnl_matrix<double>& A,
-				                  const vnl_vector<double>& d,
-			                  	const vnl_matrix<double>& B)
-// Returns ADB = A * D * B
-// where D is diagonal with elements d
-{
-   int nr1 = A.rows();
-   int nc1 = A.cols();
-   int nr2 = B.rows();
-   int nc2 = B.cols();
-
-   assert ( nr2 == nc1 ); //Product : B.nrows != A.ncols
-
-   assert ( nr2 == d.size() ); // Product : d.nelems != A.ncols
-
-   if ( (ADB.rows()!=nr1) || (ADB.cols()!= nc2) )
-		ADB.resize( nr1, nc2 ) ;
-
-	const double * const* AData = A.data_array();
-	const double * const* BData = B.data_array();
-	const double *  d_data = d.data_block();
-	double ** ADBdata = ADB.data_array();
-
-	// Zero the elements of R
-	for (int r=0;r<nr1;r++)
-	{
-		double *ADB_row = ADBdata[r];
-		int c=nc2;
-		while (c--) { ADB_row[c] = 0.0; }
-	}
-
-	for(int r=0; r < nr1; ++r)
-	{
-		const double* A_row = AData[r];
-		double* ADB_row = ADBdata[r];
-		for(int c=0; c < nc1 ; ++c )
-		{
-			double ad = A_row[c] * d_data[c];
-			if (ad==0.0) continue;
-
-			const double* B_row = BData[c];
-			int i = nc2;
-			while (i--)
-			{
-				ADB_row[i] += ad * B_row[i];
-			}
-		}
-	}
-}
-
-//=======================================================================
-#if 0 // long part commented out
 //: Computes MD where D is diagonal with elememts d(i)
 void TC_ProductMD(vnl_matrix<double>& MD,
                   const vnl_matrix<double>& M,

@@ -77,23 +77,9 @@ void mbl_matxvec_add_prod_vm(const vnl_vector<double>& V,
 
 #if 0 // commented out
 
-void TC_ProductABt(vnl_matrix<double>& ABt, const vnl_matrix<double>& A,
-                   const vnl_matrix<double>& B);
-void TC_ProductAtB(vnl_matrix<double>& AtB, const vnl_matrix<double>& A,
-                   const vnl_matrix<double>& B);
 void TC_Product(vnl_matrix<double>& AB, const vnl_matrix<double>& A,
                 const vnl_matrix<double>& B);
-#endif // commented out
 
-//: ADB = A * D * B where D is diagonal with elements d
-// A, d, and B should be compatible sizes, ADB will
-// be resized to fit.
-
-void mbl_matxvec_prod_adb(vnl_matrix<double>& ADB,
-                             const vnl_matrix<double>& A,
-                             const vnl_vector<double>& d,
-                             const vnl_matrix<double>& B);
-#if 0 // commented out
 //: Computes MD where D is diagonal with elememts d(i)
 void TC_ProductMD(vnl_matrix<double>& MD, const vnl_matrix<double>& M, const vnl_vector<double>& d);
 
