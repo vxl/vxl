@@ -134,7 +134,9 @@ bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr co
 
   int ret = 0;
   // run over all pixels except for an outer border of 1 pixel:
-#define DIFF(T) {\
+  // The ABSX parameter is used to suppress compiler warnings by not computing
+  // the absolute value of unsigned types.
+#define DIFF(T, ABSX) {\
   T r = (T)0; \
   vil2_image_view<T >& v1 = (vil2_image_view<T >&)(*a); \
   vil2_image_view<T >& v2 = (vil2_image_view<T >&)(*b); \
@@ -145,16 +147,16 @@ bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr co
       for (unsigned int i=1; i+1<sx; ++i) { \
         T x = (*(it1+i*v1.istep()+j*v1.jstep()+p*v1.planestep())) \
              -(*(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep())); \
-        r += x<0 ? -x : x; \
+        r += ABSX; \
       } \
   ret = (int)(r+0.5); \
 }
-  if (a->pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) { DIFF(float); }
-  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) { DIFF(double); }
-  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_BOOL) { DIFF(bool); }
-  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_BYTE) { DIFF(vxl_byte); }
-  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) { DIFF(vxl_uint_16); }
-  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) { DIFF(vxl_uint_32); }
+  if (a->pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) { DIFF(float, x<0?-x:x ); }
+  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) { DIFF(double, x<0?-x:x ); }
+  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_BOOL) { DIFF(bool, x); }
+  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_BYTE) { DIFF(vxl_byte, x); }
+  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) { DIFF(vxl_uint_16, x); }
+  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) { DIFF(vxl_uint_32, x); }
   vcl_cout<<m<<": expected "<<v<<", found "<<ret<<'\n';
   TEST(m.c_str(), ret, v);
   return v!=ret;
