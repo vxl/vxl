@@ -8,7 +8,6 @@
 // \file
 // \brief Representation of a generic image source or destination.
 //
-//
 // \author Ian Scott
 // \date 20 Sep 2002
 
@@ -58,9 +57,8 @@ class vil2_image_view_base;
 class vil2_image_data
 {
  public:
-  vil2_image_data::vil2_image_data();
-
-  vil2_image_data::~vil2_image_data();
+  vil2_image_data();
+ ~vil2_image_data();
 
   //: Dimensions:  Planes x W x H x Components
   virtual int planes() const = 0;
@@ -122,11 +120,10 @@ class vil2_image_data
   //: Return true if the name of the class matches the argument
   virtual bool is_class(vcl_string const&) const;
 
-
  private:
   // You probably should not use a vil2_image_data in a vbl_smart_ptr, so the
   // ref functions are private
-  friend vil2_smart_ptr<vil2_image_data>;
+  friend class vil2_smart_ptr<vil2_image_data>;
   void ref() { ++reference_count_; }
   void unref() {
     assert(reference_count_>0);
