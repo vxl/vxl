@@ -15,6 +15,7 @@
 //   01-APR-2000   initial version
 //   10-JUL-2000   Marko Bacic, Oxford RRG - Speeded up rendering on Mesa by using GL_RGB instead of GL_RGBA
 //   Feb.2002    - Peter Vanroose - brief doxygen comment placed on single line
+//   July 2003   - Mark Johnson - set vgui_mvc_acceleration to false by default; conflicts with overlays
 // \endverbatim
 
 #include <vgui/vgui_gl.h>

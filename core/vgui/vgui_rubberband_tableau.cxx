@@ -55,6 +55,10 @@ void vgui_rubberband_client::add_box(float,float,float,float)
 {
   vcl_cerr << function_macro << " not implemented!\n";
 }
+void vgui_rubberband_client::clear_highlight()
+{
+  vcl_cerr << function_macro << " not implemented!\n";
+}
 #undef function_macro
 
 
@@ -126,6 +130,13 @@ add_box(float x0, float y0, float x1, float y1)
   this->add_polygon( 4, x, y );
 }
 
+
+void
+vgui_rubberband_easy2D_client::
+clear_highlight()
+{
+  easy->highlight(0);
+}
 
 //---------------------------------------------------------------------------
 //                                                    vgui_rubberband_tableau
@@ -528,13 +539,15 @@ bool vgui_rubberband_tableau::handle(vgui_event const &e)
     {
       active = true;
       if (use_overlays) post_overlay_redraw(); else post_redraw();
-
+      client_->clear_highlight();
+      
       lastx = ix;
       lasty = iy;
       x_coords.clear();
       y_coords.clear();
       x_coords.push_back(ix);
       y_coords.push_back(iy);
+  
       return true;
     }
     else
@@ -546,7 +559,8 @@ bool vgui_rubberband_tableau::handle(vgui_event const &e)
     lastx = ix;
     lasty = iy;
     if (use_overlays) post_overlay_redraw(); else post_redraw();
-
+    client_->clear_highlight();
+    
     return true;
   }
 

@@ -17,15 +17,15 @@
 
 
 bgui_vsol2D_tableau::bgui_vsol2D_tableau(const char* n) :
-  bgui_easy2D_tableau(n) { this->init(); }
+  vgui_easy2D_tableau(n) { this->init(); }
 
 bgui_vsol2D_tableau::bgui_vsol2D_tableau(vgui_image_tableau_sptr const& it,
                                          const char* n) :
-  bgui_easy2D_tableau(it, n) { this->init(); }
+  vgui_easy2D_tableau(it, n) { this->init(); }
 
 bgui_vsol2D_tableau::bgui_vsol2D_tableau(vgui_tableau_sptr const& t,
                                          const char* n) :
-  bgui_easy2D_tableau(t, n) { this->init(); }
+  vgui_easy2D_tableau(t, n) { this->init(); }
 
 bgui_vsol2D_tableau::~bgui_vsol2D_tableau()
 {
@@ -100,7 +100,7 @@ bool bgui_vsol2D_tableau::handle(vgui_event const &e)
     } */
 #endif // 0
   // We aren't interested in other events so pass them to the base class.
-  return bgui_easy2D_tableau::handle(e);
+  return vgui_easy2D_tableau::handle(e);
 }
 
 bgui_vsol_soview2D_point*
@@ -322,7 +322,7 @@ void bgui_vsol2D_tableau::clear_all()
 {
 //  bool temp = highlight_;
 //  highlight_ = false;//in case of event interrupts during the clear
-  bgui_easy2D_tableau::clear();
+  vgui_easy2D_tableau::clear();
 //  old_id_ = 0;
 //  highlight_ = temp;
   this->post_redraw();

@@ -40,7 +40,7 @@
 
 #include <vgui/vgui_tableau_sptr.h>
 #include <vgui/vgui_image_tableau_sptr.h>
-#include <bgui/bgui_easy2D_tableau.h>
+#include <vgui/vgui_easy2D_tableau.h>
 #include <bgui/bgui_linked_vsol2D_tableau_sptr.h>
 #include <bgui/bgui_linked_vsol_soview2D.h>
 
@@ -50,7 +50,7 @@ class bgui_vsol_soview2D_polyline;
 class bgui_vsol_soview2D_digital_curve;
 class bgui_vsol_soview2D_dotted_digital_curve;
 
-class bgui_linked_vsol2D_tableau : public bgui_easy2D_tableau
+class bgui_linked_vsol2D_tableau : public vgui_easy2D_tableau
 {
  public:
   bgui_linked_vsol2D_tableau(const char* n="unnamed");
@@ -209,7 +209,7 @@ struct bgui_linked_vsol2D_tableau_new : public bgui_linked_vsol2D_tableau_sptr
   bgui_linked_vsol2D_tableau_new(vgui_tableau_sptr const& t, const char* n="unnamed")
     :  base(new bgui_linked_vsol2D_tableau(t, n)) { }
 
-  operator bgui_easy2D_tableau_sptr () const { bgui_easy2D_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
+  operator vgui_easy2D_tableau_sptr () const { vgui_easy2D_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
 };
 
 #endif // bgui_linked_vsol2D_tableau_h_

@@ -22,6 +22,7 @@
 //   14-AUG-2000 FSM - Fixed so that it works with Windows
 //   17-SEP-2002 K.Y.McGaul - Added doxygen style comments.
 //   01-OCT-2002 K.Y.McGaul - Moved vgui_rubberbander to vgui_rubberband_tableau
+//   26-JUN-2003 Mark Johnson - Added clear_highlight method to client
 // \endverbatim
 
 
@@ -57,6 +58,9 @@ class vgui_rubberband_client
 
   //: Called by vgui_rubberband_tableau when user has selected a rectangular box
   virtual void add_box(float,float,float,float);
+
+  //: Called by vgui_rubberband_tableau whenever mouse motion is captured
+  virtual void clear_highlight();
 };
 
 //-----------------------------------------------------------------------------
@@ -101,6 +105,11 @@ class vgui_rubberband_easy2D_client : public vgui_rubberband_client
   //  Since vgui_easy2D_tableau doesn't have a rectangular box object, this
   //  add an equivalent 4 point polygon instead.
   void add_box(float x0, float y0, float x1, float y1);
+
+  //: Called by vgui_rubberband_tableau whenever mouse motion is captured.
+  //  This turns off the highlighting of geometry objects to eliminate
+  //  flickering highlights while drawing temporary objects.
+  void clear_highlight();
 };
 
 //-----------------------------------------------------------------------------

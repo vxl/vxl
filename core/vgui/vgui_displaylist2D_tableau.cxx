@@ -23,8 +23,7 @@
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_style.h>
 
-vgui_displaylist2D_tableau::vgui_displaylist2D_tableau() :
-  posted_redraw_(false)
+vgui_displaylist2D_tableau::vgui_displaylist2D_tableau()
 {
 }
 
@@ -41,33 +40,24 @@ bool vgui_displaylist2D_tableau::handle(const vgui_event& e) {
   // if mouse leaves the context then unhighlight
   // the highlit object
   if (e.type == vgui_LEAVE) {
-
-    vgui_utils::begin_sw_overlay();
-
+    this->highlight(0);
+    post_overlay_redraw();
+  }
+  
+  if (e.type == vgui_OVERLAY_DRAW) {
     unsigned highlighted = this->get_highlighted();
-
     if (highlighted) {
-
-      //vcl_cerr << "unhighlighting : " << highlighted << vcl_endl;
+      vgui_utils::begin_sw_overlay();
       vgui_soview* so = vgui_soview::id_to_object(highlighted);
       vgui_style* style = so->get_style();
       glPointSize(style->point_size);
       glLineWidth(style->line_width);
-
-      if (this->is_selected(highlighted))
-        glColor3f(1.0, 0.0, 0.0);
-      else
-        glColor3f(style->rgba[0],style->rgba[1],style->rgba[2]);
-
+      glColor3f(0.0,0.0,1.0);
       so->draw();
+      vgui_utils::end_sw_overlay();
     }
-
-    vgui_utils::end_sw_overlay();
-
-    this->highlight(0);
-    return true;
   }
-
+  
   return vgui_displaybase_tableau::handle(e);
 }
 
@@ -138,49 +128,13 @@ bool vgui_displaylist2D_tableau::motion(int x, int y) {
   get_hits(x,y,hits);
   unsigned closest_id = find_closest(ix,iy,hits);
 
-
-  if (closest_id == this->get_highlighted() && !posted_redraw_) {
-    return false;
-  }
-
-  posted_redraw_ = false;
-
-  vgui_utils::begin_sw_overlay();
-
-  unsigned highlighted = this->get_highlighted();
-
-  if (highlighted) {
-    //vcl_cerr << "unhighlighting : " << highlighted << vcl_endl;
-    vgui_soview* so = vgui_soview::id_to_object(highlighted);
-    vgui_style* style = so->get_style();
-    glPointSize(style->point_size);
-    glLineWidth(style->line_width);
-    //    vgui::out << vcl_endl << *so;
-    if (this->is_selected(highlighted))
-      glColor3f(1.0, 0.0, 0.0);
-    else {
-      glColor3f(style->rgba[0],style->rgba[1],style->rgba[2]);
-    }
-    so->draw();
-  }
-
-  if (closest_id) {
-    //vcl_cerr << "highlighting : " << closest_id << vcl_endl;
-
-    vgui_soview* so = vgui_soview::id_to_object(closest_id);
-    vgui_style* style = so->get_style();
-    glPointSize(style->point_size);
-    glLineWidth(style->line_width);
-    glColor3f(0.0,0.0,1.0);
-    so->draw();
-    //    vgui::out<<vcl_endl<<*so;
-  }
-  //  else
-  //    vgui::out<<vcl_endl;
-  vgui_utils::end_sw_overlay();
-  this->highlight(closest_id);
+  if( closest_id != this->get_highlighted() ) {
+    this->highlight( closest_id );
+    post_overlay_redraw();
+  }// end if
 
   return false;
+
 }
 
 bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_modifier modifier)
@@ -200,7 +154,6 @@ bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vg
     if (closest_id) {
       this->select(closest_id);
       this->post_redraw();
-      posted_redraw_ = true;
       return true;
     }
 
@@ -216,7 +169,6 @@ bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vg
 #endif
       this->deselect_all();
       this->post_redraw();
-      posted_redraw_ = true;
       return false;
     }
 
@@ -230,7 +182,6 @@ bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vg
     if (closest_id) {
       this->deselect(closest_id);
       this->post_redraw();
-      posted_redraw_ = true;
       return true;
     }
 

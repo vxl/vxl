@@ -14,6 +14,7 @@
 //  Modifications
 //   01-SEP-2000 Marko Bacic,Oxford RRG - Added displaying of object information
 //   01-OCT-2002 K.Y.McGaul - Moved displaylist2D to displaylist2D_tableau.
+//   26-JUN-2003 Mark Johnson - Fixed overlay highlighting.
 // \endverbatim
 
 #include "vgui_displaybase_tableau.h"
@@ -35,8 +36,6 @@ class vgui_displaylist2D_tableau : public vgui_displaybase_tableau
  private:
   void get_hits(float x, float y, vcl_vector<unsigned>& my_hits);
   unsigned find_closest(float x, float y, vcl_vector<unsigned>& hits);
-
-  bool posted_redraw_;
 };
 
 //: Create a smart-pointer to a vgui_displaylist2D_tableau.
