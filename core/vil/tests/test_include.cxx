@@ -10,6 +10,8 @@
 #include <vil/algo/vil_correlate_1d.h>
 #include <vil/algo/vil_correlate_2d.h>
 #include <vil/algo/vil_distance_transform.h>
+#include <vil/algo/vil_dog_filter_5tap.h>
+#include <vil/algo/vil_dog_pyramid.h>
 #include <vil/algo/vil_exp_filter_1d.h>
 #include <vil/algo/vil_exp_filter_2d.h>
 #include <vil/algo/vil_exp_grad_filter_1d.h>
