@@ -1,0 +1,31 @@
+// This is core/vil/vil_config.h.in
+#ifndef vil_config_h_
+#define vil_config_h_
+
+//:
+// \file
+// This source file is configured from vxl/core/vil/vil_config.h.in to
+// vxl-build/core/vil/vil_config.h by vxl's configuration process.
+
+
+// Lists the image types that are compiled into vil
+
+// These are coded directly into vil
+#define HAS_PNM   1
+#define HAS_VIFF  1
+#define HAS_IRIS  1
+#define HAS_MIT   1
+#define HAS_BMP   1
+#define HAS_RAS   1
+#define HAS_DICOM 1
+#define HAS_NITF  1
+
+// These formats are supported using external libraries, and hence may
+// not be present in a given build.
+
+#define HAS_JPEG  @HAS_JPEG@
+#define HAS_PNG   @HAS_PNG@
+#define HAS_TIFF  @HAS_TIFF@
+#define HAS_DCMTK @HAS_DCMTK@
+
+#endif // vil_config_h_

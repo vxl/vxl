@@ -37,6 +37,8 @@ struct vil_stream_section : public vil_stream
   vil_streampos  tell() { return current_; } // regardless of what the underlying stream is doing.
   void seek(vil_streampos position);
 
+  vil_streampos file_size();
+
  protected:
   ~vil_stream_section();
 

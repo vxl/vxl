@@ -117,11 +117,11 @@ void imageSwap(char* in_im, int num_bytes,
   if ( bSwap || bShiftNeeded)
   {
     // Read two bytes at a time, swapping and/or shifting unused bits away
-    for (int i=0; i<dhi.dimy_; i++)
+    for (int i=0; i<dhi.size_y_; i++)
     {
-      row_num = (dhi.dimx_*num_bytes)*i;
+      row_num = (dhi.size_x_*num_bytes)*i;
 
-      for (int j=0; j<dhi.dimx_*num_bytes; j+=num_bytes)
+      for (int j=0; j<dhi.size_x_*num_bytes; j+=num_bytes)
       {
         if (bShiftReqSwap) //Ensure Little-Endian while we shift
         {
@@ -171,20 +171,20 @@ void imageSwap(char* in_im, int num_bytes,
 char* convert12to16(char* im, vil_dicom_header_info dhi,
                     bool del_old=true)
 {
-  int new_im_size=(dhi.dimx_*2) * dhi.dimy_;
+  int new_im_size=(dhi.size_x_*2) * dhi.size_y_;
   char* new_im=new char[new_im_size];
-  int rowstep = dhi.dimx_*2;
+  int rowstep = dhi.size_x_*2;
   int curr_row;
 
   if (new_im)
   {
     // Count through the image converting three 16 bit values
     // to four 12 bit values
-    for (int i=0; i<dhi.dimy_; i++)
+    for (int i=0; i<dhi.size_y_; i++)
     {
       curr_row = i*rowstep;
 
-      for (int k=0, j=0; k<2*dhi.dimx_; j+=3)
+      for (int k=0, j=0; k<2*dhi.size_x_; j+=3)
       {
         new_im[curr_row+k] = im[curr_row+j];
         k++;
@@ -285,8 +285,8 @@ bool vil_dicom_image::get_property(char const* tag, void* value) const
   if (vcl_strcmp(vil_property_pixel_size, tag)==0 && value!=0)
   {
     float *pixel_size = static_cast<float*>(value);
-    pixel_size[0] = header_.xsize_ / 1000.0f;
-    pixel_size[0] = header_.ysize_ / 1000.0f;
+    pixel_size[0] = header_.spacing_x_ / 1000.0f;
+    pixel_size[0] = header_.spacing_y_ / 1000.0f;
     return true;
   }
 
@@ -308,9 +308,9 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs, unsigned ni, unsigned nj,
   vs_->ref();
 
   assert(nplanes == 1 && format == VIL_PIXEL_FORMAT_INT_32);
-  header_.dimx_=ni;
-  header_.dimy_=nj;
-  header_.dimz_=1;
+  header_.size_x_=ni;
+  header_.size_y_=nj;
+  header_.size_z_=1;
 }
 
 vil_dicom_image::~vil_dicom_image()
@@ -372,8 +372,8 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
   }
 
   // Get the number of rows and columns to read
-  int cols=header_.dimx_;
-  int rows=header_.dimy_;
+  int cols=header_.size_x_;
+  int rows=header_.size_y_;
 
   // The number of bytes to read at a time depends on the
   // allocated bits. If 16 or 12 are allocated, then two bytes
@@ -416,7 +416,7 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
         vil_image_view<vxl_uint_16> view(nx, ny);
         for (unsigned i=y0; i<(y0+ny); ++i)
         {
-          int next_row = header_.dimx_*i;
+          int next_row = header_.size_x_*i;
           for (unsigned j=x0; j<(x0+nx); ++j)
             view(j-x0,i-y0) = static_cast<vxl_uint_16*>(void_im)[next_row+j];
         }
@@ -428,7 +428,7 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
         vil_image_view<vxl_byte> view(nx, ny);
         for (unsigned i=y0; i<ny; i++)
         {
-          int next_row = header_.dimx_*i;
+          int next_row = header_.size_x_*i;
           for (unsigned j=x0; j<nx; j++)
             view(j-x0,i-y0) = static_cast<vxl_byte*>(void_im)[next_row+j];
         }
@@ -441,7 +441,7 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
         vil_image_view<vxl_int_16> view(nx, ny);
         for (unsigned i=y0; i<ny; i++)
         {
-          int next_row = header_.dimx_*i;
+          int next_row = header_.size_x_*i;
           for (unsigned j=x0; j<nx; j++)
             view(j-x0,i-y0) = static_cast<vxl_int_16*>(void_im)[next_row+j];
         }
@@ -453,7 +453,7 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
         vil_image_view<vxl_sbyte> view(nx, ny);
         for (unsigned i=y0; i<ny; i++)
         {
-          int next_row = header_.dimx_*i;
+          int next_row = header_.size_x_*i;
           for (unsigned j=x0; j<nx; j++)
             view(j-x0,i-y0) = static_cast<vxl_sbyte*>(void_im)[next_row+j];
         }
@@ -466,7 +466,7 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
     float f;
     for (unsigned i=y0; i<ny; i++)
     {
-      int next_row = header_.dimx_*i;
+      int next_row = header_.size_x_*i;
       for (unsigned j=x0; j<nx; j++)
       {
         if (header_.pix_rep_ == 0) // unsigned data
@@ -535,8 +535,8 @@ bool vil_dicom_image::readEncapsulatedData(vimt_image_2d_of<vxl_int_32>&im,
   // so we're sure all the data will fit to save constant resizing
 
   // Get the number of rows and columns to read
-  int cols=head_info.dimx_;
-  int rows=head_info.dimy_;
+  int cols=head_info.size_x_;
+  int rows=head_info.size_y_;
 
   // The size of the finished data has to be multiplied by
   // the number of bytes - just to make sure.

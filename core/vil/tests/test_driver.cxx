@@ -4,6 +4,7 @@ DECLARE( test_convert );
 DECLARE( test_file_format_read );
 DECLARE( test_pixel_format );
 DECLARE( test_save_load_image );
+DECLARE( test_stream );
 DECLARE( test_image_view );
 DECLARE( test_image_resource );
 DECLARE( test_bilin_interp );
@@ -57,6 +58,7 @@ register_tests()
   REGISTER( test_pixel_format );
   REGISTER( test_save_load_image );
   REGISTER( test_file_format_read );
+  REGISTER( test_stream );
   REGISTER( test_image_view );
   REGISTER( test_image_resource );
   REGISTER( test_bilin_interp );

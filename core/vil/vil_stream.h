@@ -34,6 +34,9 @@ class vil_stream
   //: Goto file pointer
   virtual void seek(vil_streampos position) = 0;
 
+  //: Amount of data in the stream
+  virtual vil_streampos file_size() = 0;
+
   //: up/down the reference count
   void ref();
   void unref();

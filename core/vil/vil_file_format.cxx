@@ -10,20 +10,8 @@ vil_file_format::~vil_file_format()
 {
 }
 
-#define HAS_PNM   1
-#define HAS_VIFF  1
-#define HAS_IRIS  1
-#define HAS_MIT   1
-#define HAS_BMP   1
-#define HAS_GIF   0
-// These will be defined "outside" if there really is a JPEG (PNG, TIFF) library
-// #define HAS_JPEG
-// #define HAS_PNG
-// #define HAS_TIFF
-#define HAS_RAS   1
-#define HAS_GEN   0
-#define HAS_DICOM 1
-#define HAS_NITF 1
+
+#include <vil/vil_config.h> // for list of configured file formats
 
 #if HAS_PNM
 #include <vil/file_formats/vil_pnm.h>
@@ -77,6 +65,10 @@ vil_file_format::~vil_file_format()
 #include <vil/file_formats/vil_nitf.h>
 #endif
 
+#if HAS_DCMTK
+#include <vil/file_formats/vil_dicom2.h>
+#endif
+
 //: Local class to hold file format list
 // Clears list on deletion.
 struct vil_file_format_storage
@@ -120,6 +112,11 @@ struct vil_file_format_storage
 #endif
 #if HAS_GEN
     l[c++] = new vil_gen_file_format;
+#endif
+// the DCMTK based reader is more complete, so use try that
+// before the vil implementation
+#if HAS_DCMTK
+    l[c++] = new vil_dicom2_file_format;
 #endif
 #if HAS_DICOM
     l[c++] = new vil_dicom_file_format;

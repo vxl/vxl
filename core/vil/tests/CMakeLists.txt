@@ -11,6 +11,7 @@ ADD_EXECUTABLE( vil_test_all
   # file format readers/writers
   test_file_format_read.cxx
   test_save_load_image.cxx
+  test_stream.cxx
 
   # image operations
   test_deep_copy_3_plane.cxx

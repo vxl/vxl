@@ -26,6 +26,8 @@ class vil_stream_fstream : public vil_stream
   vil_streampos tell();
   void seek(vil_streampos position);
 
+  vil_streampos file_size();
+
  protected:
   ~vil_stream_fstream();
 
@@ -33,6 +35,7 @@ class vil_stream_fstream : public vil_stream
   vcl_ios_openmode flags_;
   vcl_fstream f_;
   int id_;
+  vil_streampos end_;
 };
 
 #endif // vil_stream_fstream_h_

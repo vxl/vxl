@@ -29,6 +29,8 @@ class vil_stream_url : public vil_stream
   vil_streampos read(void *buf, vil_streampos n) { return u_ ? u_->read(buf, n) : 0L; }
   vil_streampos tell() { return u_ ? u_->tell() : (vil_streampos)(-1L); }
   void seek(vil_streampos position) { if (u_) u_->seek(position); }
+
+  vil_streampos file_size() { return u_ ? u_->file_size() : 0L; }
 };
 
 #endif // vil_stream_url_h_

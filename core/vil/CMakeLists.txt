@@ -3,18 +3,18 @@
 INCLUDE(${MODULE_PATH}/FindPNG.cmake)
 IF(PNG_FOUND)
   INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})
-  ADD_DEFINITIONS( ${PNG_DEFINITIONS}  -DHAS_PNG=1 )
+  SET( HAS_PNG 1 )
   SET( vil_sources ${vil_sources}
     file_formats/vil_png.cxx file_formats/vil_png.h
   )
 ELSE(PNG_FOUND)
-  ADD_DEFINITIONS( -DHAS_PNG=0 )
+  SET( HAS_PNG 0 )
 ENDIF(PNG_FOUND)
 
 INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
 IF(JPEG_FOUND)
   INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_DIR} )
-  ADD_DEFINITIONS( ${JPEG_DEFINITIONS} -DHAS_JPEG=1 )
+  SET( HAS_JPEG 1 )
   SET( vil_sources ${vil_sources}
     file_formats/vil_jpeglib.h
     file_formats/vil_jpeg.cxx                 file_formats/vil_jpeg.h
@@ -24,19 +24,36 @@ IF(JPEG_FOUND)
     file_formats/vil_jpeg_compressor.cxx      file_formats/vil_jpeg_compressor.h
   )
 ELSE(JPEG_FOUND)
-  ADD_DEFINITIONS( -DHAS_JPEG=0 )
+  SET( HAS_JPEG 0 )
 ENDIF(JPEG_FOUND)
 
 INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
 IF(TIFF_FOUND)
   INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-  ADD_DEFINITIONS( ${TIFF_DEFINITIONS} -DHAS_TIFF=1 )
+  SET( HAS_TIFF 1 )
   SET( vil_sources ${vil_sources}
     file_formats/vil_tiff.cxx file_formats/vil_tiff.h
   )
 ELSE(TIFF_FOUND)
-  ADD_DEFINITIONS( -DHAS_TIFF=0 )
+  SET( HAS_TIFF 0 )
 ENDIF(TIFF_FOUND)
+
+INCLUDE(${MODULE_PATH}/FindDCMTK.cmake)
+IF(DCMTK_FOUND)
+  INCLUDE_DIRECTORIES(${DCMTK_INCLUDE_DIR})
+  SET( HAS_DCMTK 1 )
+  SET( vil_sources ${vil_sources}
+    file_formats/vil_dicom2.cxx        file_formats/vil_dicom2.h
+    file_formats/vil_dicom2_stream.cxx file_formats/vil_dicom2_stream.h
+  )
+ELSE(DCMTK_FOUND)
+  SET( HAS_DCMTK 0 )
+ENDIF(DCMTK_FOUND)
+
+# Store the external library configurations in to the config file
+CONFIGURE_FILE( ${vxl_SOURCE_DIR}/core/vil/vil_config.h.in
+                ${vxl_BINARY_DIR}/core/vil/vil_config.h @ONLY IMMEDIATE )
+  
 
 SET( vil_sources ${vil_sources}
 
@@ -182,6 +199,9 @@ ENDIF(TIFF_FOUND)
 IF(PNG_FOUND)
   TARGET_LINK_LIBRARIES( vil ${PNG_LIBRARIES} )
 ENDIF(PNG_FOUND)
+IF(DCMTK_FOUND)
+  TARGET_LINK_LIBRARIES( vil ${DCMTK_LIBRARIES} )
+ENDIF(DCMTK_FOUND)
 
 TARGET_LINK_LIBRARIES( vil vcl )
 

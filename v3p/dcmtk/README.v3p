@@ -1,0 +1,7 @@
+This is just a subset of the full DCMTK. I extracted only the source
+files and header files that were necessary to build the dcmimgle library.
+I converted the configure tests into CMake try compile tests, with the
+resulting configuration header generated from
+config/include/osconfig_cmake.h.in.
+
+Amitha Perera.

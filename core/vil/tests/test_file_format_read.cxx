@@ -12,6 +12,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_print.h>
+#include <vil/vil_config.h>
 
 #define DEBUG
 
@@ -379,6 +380,15 @@ test_file_format_read_main( int argc, char* argv[] )
   vcl_cout << "DICOM [dcm]\n";
   testlib_test_begin( "  16-bit greyscale uncompressed" );
   testlib_test_perform( test( "ff_grey16bit_true_for_dicom.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed.dcm" ) ) );
+  // These only pass if the DCMTK-based DICOM loader is available
+#if HAS_DCMTK
+  testlib_test_begin( "  16-bit greyscale uncompressed 2" );
+  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed2.dcm" ) ) );
+  testlib_test_begin( "  16-bit greyscale uncompressed 3" );
+  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed3.dcm" ) ) );
+  testlib_test_begin( "  8-bit greyscale uncompressed" );
+  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_uncompressed.dcm" ) ) );
+#endif // HAS_DCMTK
 
   vcl_cout << "NITF [NITF v2.0]\n";
   testlib_test_begin( "  8-bit grey" );

@@ -6,6 +6,7 @@
 #include "vil_stream_fstream.h"
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
+#include <vcl_ios.h>
 
 static vcl_ios_openmode modeflags(char const* mode)
 {
@@ -36,7 +37,8 @@ static int id = 0;
 
 vil_stream_fstream::vil_stream_fstream(char const* fn, char const* mode):
   flags_(modeflags(mode)),
-  f_(fn, flags_ | vcl_ios_binary) // need ios::binary on windows.
+  f_(fn, flags_ | vcl_ios_binary), // need ios::binary on windows.
+  end_( -1 )
 {
   id_ = ++id;
   xerr << "vil_stream_fstream(\"" << fn << "\", \""<<mode<<"\") = " << id_ << "\n";
@@ -49,7 +51,8 @@ vil_stream_fstream::vil_stream_fstream(char const* fn, char const* mode):
 
 #if 0
 vil_stream_fstream::vil_stream_fstream(vcl_fstream& f):
-  f_(f.rdbuf()->fd())
+  f_(f.rdbuf()->fd()),
+  end_( -1 )
 {
 }
 #endif // 0
@@ -159,4 +162,17 @@ void vil_stream_fstream::seek(vil_streampos position)
   }
   else
     assert(false); // did you get here? use at least one of vcl_ios_in, vcl_ios_out.
+}
+
+vil_streampos vil_stream_fstream::file_size()
+{
+  // if not already computed, do so
+  if( end_ == -1 ) {
+    vcl_streampos curr = f_.tellg();
+    f_.seekg( 0, vcl_ios_end );
+    end_ = f_.tellg();
+    f_.seekg( curr );
+  }
+
+  return end_;
 }

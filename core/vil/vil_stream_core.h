@@ -41,6 +41,8 @@ class vil_stream_core : public vil_stream
   vil_streampos tell()              { return curpos_; }
   void seek(vil_streampos position) { curpos_ = position; }
 
+  vil_streampos file_size() { return tailpos_; }
+
  protected:
   ~vil_stream_core();
 };

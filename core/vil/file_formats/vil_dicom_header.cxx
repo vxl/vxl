@@ -14,6 +14,119 @@
 #include <vcl_cstdlib.h>
 
 //================================================================
+
+void
+vil_dicom_header_info_clear( vil_dicom_header_info& info )
+{
+  // Clear all the elements of the info structure
+
+  // Identity info
+  info.file_type_ = VIL_DICOM_HEADER_DTUNKNOWN;
+  info.file_endian_ = VIL_DICOM_HEADER_DEUNKNOWN;
+  info.sys_endian_ = VIL_DICOM_HEADER_DEUNKNOWN;
+  info.image_type_ = VIL_DICOM_HEADER_DITUNKNOWN;
+  info.image_id_type_ = "";
+  info.sop_cl_uid_ = "";
+  info.sop_in_uid_ = "";
+  info.study_date_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.series_date_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.acquisition_date_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.image_date_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.study_time_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.series_time_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.acquisition_time_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.image_time_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.accession_number_ = "";
+  info.modality_ = "";
+  info.manufacturer_ = "";
+  info.institution_name_ = "";
+  info.institution_addr_ = "";
+  info.ref_phys_name_ = "";
+  info.station_name_ = "";
+  info.study_desc_ = "";
+  info.att_phys_name_ = "";
+  info.operator_name_ = "";
+  info.model_name_ = "";
+
+  // Patient info
+  info.patient_name_ = "";
+  info.patient_id_ = "";
+  info.patient_dob_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.patient_sex_ = "";
+  info.patient_age_ = "";
+  info.patient_weight_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.patient_hist_ = "";
+
+  // Acquisition info
+  info.scanning_seq_ = "";
+  info.sequence_var_ = "";
+  info.scan_options_ = "";
+  info.mr_acq_type_ = "";
+  info.sequence_name_ = "";
+  info.angio_flag_ = "";
+  info.slice_thickness_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.repetition_time_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.echo_time_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.inversion_time_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.number_of_averages_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.echo_numbers_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.mag_field_strength_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.echo_train_length_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.pixel_bandwidth_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.software_vers_ = "";
+  info.protocol_name_ = "";
+  info.heart_rate_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.card_num_images_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.trigger_window_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.reconst_diameter_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.receiving_coil_ = "";
+  info.phase_enc_dir_ = "";
+  info.flip_angle_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.sar_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.patient_pos_ = "";
+
+  // Relationship info
+  info.stud_ins_uid_= "";
+  info.ser_ins_uid_ = "";
+  info.study_id_ = "";
+  info.series_number_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.acquisition_number_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.image_number_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.pat_orient_ = "";
+  info.image_pos_ = 0;
+  info.image_orient_ = 0;
+  info.frame_of_ref_ = "";
+  info.images_in_acq_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.pos_ref_ind_ = "";
+  info.slice_location_ = VIL_DICOM_HEADER_UNSPECIFIED;
+
+  // Image info
+  info.pix_samps_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
+  info.photo_interp_ = "";
+  info.size_x_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
+  info.size_y_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
+  info.size_z_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
+  info.high_bit_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
+  info.small_im_pix_val_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.large_im_pix_val_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.pixel_padding_val_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.window_centre_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.window_width_ = VIL_DICOM_HEADER_UNSPECIFIED;
+
+  // Info for loading image
+  info.spacing_x_ = VIL_DICOM_HEADER_DEFAULTSIZE_FLOAT;
+  info.spacing_y_ = VIL_DICOM_HEADER_DEFAULTSIZE_FLOAT;
+  info.spacing_slice_ = VIL_DICOM_HEADER_DEFAULTSIZE_FLOAT;
+  info.res_intercept_ = VIL_DICOM_HEADER_DEFAULTINTERCEPT;
+  info.res_slope_ = VIL_DICOM_HEADER_DEFAULTSLOPE;
+  info.pix_rep_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
+  info.stored_bits_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.allocated_bits_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
+}
+
+
+
+//================================================================
 // Default constructor
 //================================================================
 vil_dicom_header_format::vil_dicom_header_format() :
@@ -462,8 +575,8 @@ void vil_dicom_header_format::readAcquisitionElements(short element,
    CASE(VIL_DICOM_HEADER_AQNUMBEROFAVERAGES,      number_of_averages_,(float)vcl_atof); // It's the number of averages
    CASE(VIL_DICOM_HEADER_AQECHONUMBERS,           echo_numbers_,vcl_atoi); // It's the echo numbers
    CASE(VIL_DICOM_HEADER_AQMAGNETICFIELDSTRENGTH, mag_field_strength_,(float)vcl_atof); // It's the magnetic field strength
-   CASE(VIL_DICOM_HEADER_AQSLICESPACING,          slice_spacing_,(float)vcl_atof); // It's the slice spacing
-   CASE(VIL_DICOM_HEADER_AQECHOTRAINLENGTH,       echo_train_length_,vcl_atoi); // It's the echo train length
+   CASE(VIL_DICOM_HEADER_AQSLICESPACING,          spacing_slice_,(float)vcl_atof); // It's the slice spacing
+   CASE(VIL_DICOM_HEADER_AQECHOTRAINLENGTH,       echo_train_length_,(float)vcl_atof); // It's the echo train length
    CASE(VIL_DICOM_HEADER_AQPIXELBANDWIDTH,        pixel_bandwidth_,(float)vcl_atof); // It's the pixel bandwidth
    CASE(VIL_DICOM_HEADER_AQSOFTWAREVERSION,       software_vers_, (char *)); // It's the scanner software version
    CASE(VIL_DICOM_HEADER_AQPROTOCOLNAME,          protocol_name_, (char *)); // It's the protocol name
@@ -503,8 +616,8 @@ void vil_dicom_header_format::readRelationshipElements(short element,
    CASE(VIL_DICOM_HEADER_RSAQUISITIONNUMBER,   acquisition_number_,vcl_atoi); // It's the acqusition number
    CASE(VIL_DICOM_HEADER_RSIMAGENUMBER,        image_number_,vcl_atoi); // It's the image number
    CASE(VIL_DICOM_HEADER_RSPATIENTORIENTATION, pat_orient_, (char *)); // It's the patient orientation
-   CASE(VIL_DICOM_HEADER_RSIMAGEPOSITION,      image_pos_, (char *)); // It's the image position
-   CASE(VIL_DICOM_HEADER_RSIMAGEORIENTATION,   image_orient_, (char *)); // It's the image orientation
+   CASE(VIL_DICOM_HEADER_RSIMAGEPOSITION,      image_pos_, (float)vcl_atof); // It's the image position
+   CASE(VIL_DICOM_HEADER_RSIMAGEORIENTATION,   image_orient_, (float)vcl_atof); // It's the image orientation
    CASE(VIL_DICOM_HEADER_RSFRAMEOFREFERENCEUID,frame_of_ref_, (char *)); // It's the frame of reference uid
    CASE(VIL_DICOM_HEADER_RSIMAGESINACQUISITION,images_in_acq_,vcl_atoi); // It's the number of images in the acquisition
    CASE(VIL_DICOM_HEADER_RSPOSITIONREFERENCE,  pos_ref_ind_, (char *)); // It's the position reference
@@ -532,9 +645,9 @@ void vil_dicom_header_format::readImageElements(short element,
   {
    CASE_SWP(VIL_DICOM_HEADER_IMSAMPLESPERPIXEL,    pix_samps_); // It's the samples per pixel
    CASE(VIL_DICOM_HEADER_IMPHOTOMETRICINTERP,      photo_interp_, (char *)); // It's the photometric interpretation
-   CASE_SWP(VIL_DICOM_HEADER_IMROWS,               dimy_); // It's the rows
-   CASE_SWP(VIL_DICOM_HEADER_IMCOLUMNS,            dimx_); // It's the columns
-   CASE_SWP(VIL_DICOM_HEADER_IMPLANES,             dimz_); // It's the planes
+   CASE_SWP(VIL_DICOM_HEADER_IMROWS,               size_y_); // It's the rows
+   CASE_SWP(VIL_DICOM_HEADER_IMCOLUMNS,            size_x_); // It's the columns
+   CASE_SWP(VIL_DICOM_HEADER_IMPLANES,             size_z_); // It's the planes
    CASE_SWP(VIL_DICOM_HEADER_IMBITSALLOCATED,      allocated_bits_); // It's the allocated bits
    CASE_SWP(VIL_DICOM_HEADER_IMBITSSTORED,         stored_bits_); // It's the stored bits info
    CASE_SWP(VIL_DICOM_HEADER_IMHIGHBIT,            high_bit_); // It's the high bit
@@ -552,7 +665,7 @@ void vil_dicom_header_format::readImageElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.xsize_ = (float) vcl_atof(data_p);
+      last_read_.spacing_x_ = (float) vcl_atof(data_p);
 
       // The y size should come after a '\'
       // If only a 0 is found, ysize = xsize
@@ -564,9 +677,9 @@ void vil_dicom_header_format::readImageElements(short element,
           data_p[i] = data_p[i+1];
       }
       if (gone == '\\')
-        last_read_.ysize_ = (float) vcl_atof(data_p);
+        last_read_.spacing_y_ = (float) vcl_atof(data_p);
       else
-        last_read_.ysize_ = (float) last_read_.xsize_;
+        last_read_.spacing_y_ = (float) last_read_.spacing_x_;
     }
     break;
 
@@ -744,110 +857,7 @@ bool vil_dicom_header_format::pixelDataFound(short group, short element)
 
 void vil_dicom_header_format::clearInfo(void)
 {
-  // Clear all the elements of the info structure
-
-  // Identity info
-  last_read_.file_type_ = VIL_DICOM_HEADER_DTUNKNOWN;
-  last_read_.file_endian_ = VIL_DICOM_HEADER_DEUNKNOWN;
-  last_read_.sys_endian_ = VIL_DICOM_HEADER_DEUNKNOWN;
-  last_read_.image_type_ = VIL_DICOM_HEADER_DITUNKNOWN;
-  last_read_.image_id_type_ = "";
-  last_read_.sop_cl_uid_ = "";
-  last_read_.sop_in_uid_ = "";
-  last_read_.study_date_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.series_date_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.acquisition_date_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.image_date_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.study_time_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.series_time_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.acquisition_time_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.image_time_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.accession_number_ = "";
-  last_read_.modality_ = "";
-  last_read_.manufacturer_ = "";
-  last_read_.institution_name_ = "";
-  last_read_.institution_addr_ = "";
-  last_read_.ref_phys_name_ = "";
-  last_read_.station_name_ = "";
-  last_read_.study_desc_ = "";
-  last_read_.att_phys_name_ = "";
-  last_read_.operator_name_ = "";
-  last_read_.model_name_ = "";
-
-  // Patient info
-  last_read_.patient_name_ = "";
-  last_read_.patient_id_ = "";
-  last_read_.patient_dob_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.patient_sex_ = "";
-  last_read_.patient_age_ = "";
-  last_read_.patient_weight_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.patient_hist_ = "";
-
-  // Acquisition info
-  last_read_.scanning_seq_ = "";
-  last_read_.sequence_var_ = "";
-  last_read_.scan_options_ = "";
-  last_read_.mr_acq_type_ = "";
-  last_read_.sequence_name_ = "";
-  last_read_.angio_flag_ = "";
-  last_read_.slice_thickness_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.repetition_time_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.echo_time_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.inversion_time_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.number_of_averages_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.echo_numbers_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.mag_field_strength_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.echo_train_length_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.pixel_bandwidth_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.software_vers_ = "";
-  last_read_.protocol_name_ = "";
-  last_read_.heart_rate_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.card_num_images_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.trigger_window_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.reconst_diameter_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.receiving_coil_ = "";
-  last_read_.phase_enc_dir_ = "";
-  last_read_.flip_angle_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.sar_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.patient_pos_ = "";
-
-  // Relationship info
-  last_read_.stud_ins_uid_= "";
-  last_read_.ser_ins_uid_ = "";
-  last_read_.study_id_ = "";
-  last_read_.series_number_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.acquisition_number_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.image_number_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.pat_orient_ = "";
-  last_read_.image_pos_ = "";
-  last_read_.image_orient_ = "";
-  last_read_.frame_of_ref_ = "";
-  last_read_.images_in_acq_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.pos_ref_ind_ = "";
-  last_read_.slice_location_ = VIL_DICOM_HEADER_UNSPECIFIED;
-
-  // Image info
-  last_read_.pix_samps_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
-  last_read_.photo_interp_ = "";
-  last_read_.dimx_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
-  last_read_.dimy_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
-  last_read_.dimz_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
-  last_read_.high_bit_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
-  last_read_.small_im_pix_val_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.large_im_pix_val_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.pixel_padding_val_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.window_centre_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.window_width_ = VIL_DICOM_HEADER_UNSPECIFIED;
-
-  // Info for loading image
-  last_read_.xsize_ = VIL_DICOM_HEADER_DEFAULTSIZE_FLOAT;
-  last_read_.ysize_ = VIL_DICOM_HEADER_DEFAULTSIZE_FLOAT;
-  last_read_.slice_spacing_ = VIL_DICOM_HEADER_DEFAULTSIZE_FLOAT;
-  last_read_.res_intercept_ = VIL_DICOM_HEADER_DEFAULTINTERCEPT;
-  last_read_.res_slope_ = VIL_DICOM_HEADER_DEFAULTSLOPE;
-  last_read_.pix_rep_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
-  last_read_.stored_bits_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.allocated_bits_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
+  vil_dicom_header_info_clear( last_read_ );
 
   // And make it invalid
   info_valid_ = false;
@@ -1210,9 +1220,9 @@ void vil_dicom_header_print(vcl_ostream &os, const vil_dicom_header_info &s)
      << "\n\nImage info\n"
      << " pix_samps        The number of samples per pixel: " << s.pix_samps_ << vcl_endl
      << " photo_interp     The photometric interpretation: " << s.photo_interp_ << vcl_endl
-     << " dimx             The number of columns: " << s.dimx_ << vcl_endl
-     << " dimy             The number of rows: " << s.dimy_ << vcl_endl
-     << " dimz             The number of planes: " << s.dimz_ << vcl_endl
+     << " size_x           The number of columns: " << s.size_x_ << vcl_endl
+     << " size_y           The number of rows: " << s.size_y_ << vcl_endl
+     << " size_z           The number of planes: " << s.size_z_ << vcl_endl
      << " high_bit         The bit used as the high bit: " << s.high_bit_ << vcl_endl
      << " small_im_pix_val The smallest image pixel value: " << s.small_im_pix_val_ << vcl_endl
      << " large_im_pix_val The largest image pixel value: " << s.large_im_pix_val_ << vcl_endl
@@ -1221,9 +1231,9 @@ void vil_dicom_header_print(vcl_ostream &os, const vil_dicom_header_info &s)
      << " window_width     The actual width of the image window: " << s.window_width_ << vcl_endl
 
      << "\n\nInfo from the tags specifically for reading the image data\n"
-     << " xsize            The pixel spacing in x: " << s.xsize_ << vcl_endl
-     << " ysize            The pixel spacing in y: " << s.ysize_ << vcl_endl
-     << " slice_spacing    The pixel spacing in z: " << s.slice_spacing_ << vcl_endl
+     << " spaxing_x        The pixel spacing in x: " << s.spacing_x_ << vcl_endl
+     << " spacing_y        The pixel spacing in y: " << s.spacing_y_ << vcl_endl
+     << " spacing_slice    The pixel spacing in z: " << s.spacing_slice_ << vcl_endl
      << " res_intercept    The image rescale intercept: " << s.res_intercept_ << vcl_endl
      << " res_slope        The image rescale slope: " << s.res_slope_ << vcl_endl
      << " pix_rep          The pixel representation (+/-): " << s.pix_rep_ << vcl_endl

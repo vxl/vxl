@@ -49,8 +49,8 @@ class vil_dicom_image : public vil_image_resource
   ~vil_dicom_image();
 
   virtual unsigned nplanes() const {return 1;}
-  virtual unsigned ni() const {return header_.dimx_;}
-  virtual unsigned nj() const {return header_.dimy_;}
+  virtual unsigned ni() const {return header_.size_x_;}
+  virtual unsigned nj() const {return header_.size_y_;}
 
   virtual enum vil_pixel_format pixel_format() const;
 
