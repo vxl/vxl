@@ -5,7 +5,7 @@ INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 SET(brct_sources
     brct_algos.h
-    kalman_filter.h
+    kalman_filter.h kalman_filter.cpp
 )
 AUX_SOURCE_DIRECTORY(Templates brct_sources)
 
