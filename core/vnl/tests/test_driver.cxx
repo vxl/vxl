@@ -44,6 +44,7 @@ DECLARE( test_transpose );
 DECLARE( test_vector );
 DECLARE( test_vector_fixed_ref );
 DECLARE( test_gamma );
+DECLARE( test_random );
 DECLARE( test_arithmetic );
 DECLARE( test_algo );
 
@@ -94,6 +95,7 @@ register_tests()
   REGISTER( test_vector );
   REGISTER( test_vector_fixed_ref );
   REGISTER( test_gamma );
+  REGISTER( test_random );
   REGISTER( test_arithmetic );
   REGISTER( test_algo );
 }

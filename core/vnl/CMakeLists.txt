@@ -165,6 +165,7 @@ SET( vnl_sources
   vnl_sample.cxx               vnl_sample.h
   vnl_unary_function.txx       vnl_unary_function.h
   vnl_identity.h
+  vnl_random.cxx               vnl_random.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vnl_sources)

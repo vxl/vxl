@@ -57,6 +57,7 @@ IF(NETLIB_FOUND)
     test_transpose.cxx
     test_vector.cxx
     test_gamma.cxx
+	test_random.cxx
     test_arithmetic.cxx  test_arithmetic_body.h
     test_algo.cxx
   )
