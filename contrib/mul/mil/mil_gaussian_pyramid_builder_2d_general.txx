@@ -139,11 +139,8 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
     const T* src_col1  = src_col3 - 2;
     const T* src_col4  = src_col3 + 1;
     const T* src_col5  = src_col3 + 2;
+
     int x;
-    for (x=0;x<src_nx;++x)
-      if (src_col3[x] > 0 && src_col3[x] < 1e-32) // only makes sense for T == float, of course
-        vcl_cout << "This should not happen - pyramid image plane to be smoothed is probably not initialised\n"
-                 << " x=" << x << ", y=" << y << "\n";
     int nx2 = src_nx-2;
     for (x=2;x<nx2;x++)
       worka_row[x] = l_round(  filt2_ * src_col1[x]
