@@ -26,7 +26,7 @@ protected:
                  HMatrix2D *);
 //--------------------------------------------------------------------------------
 public:
-
+  int minimum_number_of_correspondences() const { return 4; }
 };
 
 #endif // _HMatrix2DCompute4Line_
