@@ -108,11 +108,16 @@ SOURCE_FILES(vgui_sources
  internals/vgui_draw_line
  internals/vgui_accelerate
  internals/vgui_accelerate_tag
+ vrml/vgui_vrml_draw_visitor
+ vrml/vgui_vrml_tableau
+ vrml/vgui_vrml_texture_map
 )
 
 INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake )
 INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake )
 INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindX11.cmake )
+# Qv needed by vrml
+INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindQv.cmake )
 
 IF(WIN32)
   SOURCE_FILES(vgui_sources
@@ -127,6 +132,7 @@ IF(HAS_X11)
 ENDIF(HAS_X11)
 
 AUX_SOURCE_DIRECTORY(Templates vgui_sources)
+AUX_SOURCE_DIRECTORY(vrml/Templates vgui_sources)
 
 SUBDIRS(impl) 
 IF(BUILD_TESTS)
