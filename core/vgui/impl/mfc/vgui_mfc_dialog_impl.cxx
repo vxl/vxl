@@ -79,14 +79,14 @@ void* vgui_mfc_dialog_impl::choice_field_widget(const char* /*txt*/,
 struct vgui_mfc_dialog_inline_tab
 {
   vgui_tableau_sptr tab;
-  float height;
-  float width;
+  unsigned height;
+  unsigned width;
 };
 
 //------------------------------------------------------------------------------
 //: Make a tableau widget.
 void* vgui_mfc_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
-                                                  float width, float height)
+                                                  unsigned width, unsigned height)
 {
   vgui_mfc_dialog_inline_tab* tab_data = new vgui_mfc_dialog_inline_tab;
   tab_data->tab = tab;
