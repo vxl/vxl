@@ -23,7 +23,8 @@ pdf1d_mixture_sampler::pdf1d_mixture_sampler():
   init();
 }
 
-pdf1d_mixture_sampler::pdf1d_mixture_sampler(const pdf1d_mixture_sampler& m)
+pdf1d_mixture_sampler::pdf1d_mixture_sampler(const pdf1d_mixture_sampler& m):
+  pdf1d_sampler()
 {
   init();
   *this = m;

@@ -37,7 +37,8 @@ pdf1d_mixture_builder::pdf1d_mixture_builder()
 }
 
 //=======================================================================
-pdf1d_mixture_builder::pdf1d_mixture_builder(const pdf1d_mixture_builder& b)
+pdf1d_mixture_builder::pdf1d_mixture_builder(const pdf1d_mixture_builder& b):
+  pdf1d_builder()
 {
   init();
   *this = b;

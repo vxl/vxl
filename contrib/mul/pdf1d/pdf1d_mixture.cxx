@@ -28,7 +28,8 @@ pdf1d_mixture::pdf1d_mixture()
   init();
 }
 
-pdf1d_mixture::pdf1d_mixture(const pdf1d_mixture& m)
+pdf1d_mixture::pdf1d_mixture(const pdf1d_mixture& m):
+  pdf1d_pdf()
 {
   init();
   *this = m;

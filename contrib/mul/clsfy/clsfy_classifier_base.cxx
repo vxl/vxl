@@ -19,18 +19,6 @@
 
 //=======================================================================
 
-clsfy_classifier_base::clsfy_classifier_base()
-{
-}
-
-//=======================================================================
-
-clsfy_classifier_base::~clsfy_classifier_base()
-{
-}
-
-//=======================================================================
-
 unsigned clsfy_classifier_base::classify(const vnl_vector<double> &input) const
 {
   unsigned N = n_classes();

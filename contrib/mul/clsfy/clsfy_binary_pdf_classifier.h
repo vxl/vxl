@@ -117,7 +117,7 @@ class clsfy_binary_pdf_classifier : public clsfy_classifier_base
 
   // Copy constructor
   clsfy_binary_pdf_classifier( const clsfy_binary_pdf_classifier& b ):
-      pdf_(0), log_prob_limit_(0.0) { *this = b; }
+    clsfy_classifier_base(), pdf_(0), log_prob_limit_(0.0) { *this = b; }
 
   //:Assignment operator
   clsfy_binary_pdf_classifier& operator=(const clsfy_binary_pdf_classifier& classifier);

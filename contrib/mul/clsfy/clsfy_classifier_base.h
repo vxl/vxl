@@ -30,11 +30,10 @@ class clsfy_classifier_base
  public:
 
   // Dflt constructor
-  clsfy_classifier_base();
+   clsfy_classifier_base() {}
 
   // Destructor
-  virtual ~clsfy_classifier_base();
-  // this is virtual in case it is referenced via a base class ptr e.g.  "delete ptr"
+   virtual ~clsfy_classifier_base() {}
 
   //: Classify the input vector
   // returns a number between 0 and nClasses-1 inclusive to represent the most likely class
