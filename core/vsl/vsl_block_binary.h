@@ -26,24 +26,24 @@ inline void vsl_block_binary_read_confirm_specialisation(vsl_b_istream &is,
   vsl_b_read(is, b);
   if (b != specialised)
   {
-    vcl_cerr << "I/O ERROR: vsl_block_binary_read()";
+    vcl_cerr << "I/O ERROR: vsl_block_binary_read()\n";
     if (specialised)
-      vcl_cerr << "\n           Data was saved using unspecialised slow form and "
-               << "is being loaded\n           using specialised fast form.\n\n";
+      vcl_cerr << "           Data was saved using unspecialised slow form and is being loaded\n"
+               << "           using specialised fast form.\n\n";
     else
-      vcl_cerr << "\n           Data was saved using specialised fast form and "
-               << "is being loaded\n           using unspecialised slow form.\n\n";
+      vcl_cerr << "           Data was saved using specialised fast form and is being loaded\n"
+               << "           using unspecialised slow form.\n\n";
 
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
 
 
-//: Write a block of values to a vsl_b_ostream, potetially very efficiently for fundamental types.
+//: Write a block of values to a vsl_b_ostream, potentially very efficiently for fundamental types.
 template <class T>
 inline void vsl_block_binary_write(vsl_b_ostream &os, const T* begin, unsigned nelems);
 
-//: Read a block of values from a vsl_b_ostream, potetially very efficiently for fundamental types.
+//: Read a block of values from a vsl_b_ostream, potentially very efficiently for fundamental types.
 template <class T>
 inline void vsl_block_binary_read(vsl_b_istream &is, T* begin, unsigned nelems);
 
