@@ -14,6 +14,8 @@ list_test_names( vcl_ostream& ostr )
   for( unsigned int i = 0; i < testlib_test_name_.size(); ++i ) {
     ostr << "   " << testlib_test_name_[i] << "\n";
   }
+  ostr << "\n\nOmitting a test name, or specifying the name \"all\"\n"
+       << "will run all the tests.\n";
 }
 
 int
@@ -25,16 +27,25 @@ testlib_main( int argc, char* argv[] )
   // vector<TestMainFunction> are the same.
   typedef vcl_vector<vcl_string>::size_type vec_size_t;
 
+  // Error check.
+  if( testlib_test_func_.size() != testlib_test_name_.size() ) {
+    vcl_cerr << "Error: " << testlib_test_func_.size() << " test functions are registered, but "
+             << testlib_test_name_.size() << " test names are registered." << vcl_endl;
+    return 1;
+  }
+
+
   // If a test name is given, try to run it. Otherwise, try to run all
   // the tests. The first argument, if available, is assumed to be a
-  // test name.
+  // test name. The special test name "all" can be used to run all the tests
+  // with the subsequent arguments passed to each test.
+
+  if( argc >= 2 && vcl_string("all") == argv[1] ) {
+    --argc;
+    ++argv;
+  }
 
   if( argc >= 2 ) {
-    if( testlib_test_func_.size() != testlib_test_name_.size() ) {
-      vcl_cerr << "Error: " << testlib_test_func_.size() << " test functions are registered, but "
-               << testlib_test_name_.size() << " test names are registered." << vcl_endl;
-      return 1;
-    }
 
     for( vec_size_t i = 0; i < testlib_test_name_.size(); ++i ) {
       if( testlib_test_name_[i] == argv[1] ) {
@@ -59,7 +70,8 @@ testlib_main( int argc, char* argv[] )
       all_pass &= (result == 0);
     }
 
-    vcl_cout << "\n\nCombined result: " << ( all_pass?"PASS":"FAIL" ) << vcl_endl;
+    vcl_cout << "\n\nCombined result of " << testlib_test_name_.size() << " tests: "
+             << ( all_pass?"PASS":"FAIL" ) << vcl_endl;
     return all_pass ? 0 : 1;
   }
 
