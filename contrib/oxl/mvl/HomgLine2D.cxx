@@ -9,40 +9,16 @@
 
 #include <vcl_iostream.h>
 
-#include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 
 #include <mvl/Homg2D.h>
 #include <mvl/HomgLineSeg2D.h>
 #include <mvl/HomgOperator2D.h>
 
-////////////////#include <Geometry/IUPoint.h>
-////////////////#include <Geometry/ImplicitLine.h>
-
-//--------------------------------------------------------------
-//: Return true iff the line is the line at infinity.
-// This version assumes x,y will be exactly 0 in this case.
-
-bool HomgLine2D::check_infinity() const
-{
-  return (x() == 0) && (y() == 0);
-}
-
-//--------------------------------------------------------------
-//: Return true iff the line is the line at infinity.
-// This version checks $min(|x|,|y|) <= \mbox{tol} \times |w|$
-// For tol==0, this coincides with check_infinity()
-
-bool HomgLine2D::check_infinity(double tol) const
-{
-  return vnl_math_min(vnl_math_abs(x()), vnl_math_abs(y())) <= tol*vnl_math_abs(w());
-}
-
 //--------------------------------------------------------------
 //
 //: Construct an ImplicitLine by clipping against the given bounding rectangle.
 //  The return line has been allocated using new.
-
 HomgLineSeg2D HomgLine2D::clip(int rect1_x, int rect1_y, int rect2_x, int rect2_y) const
 {
   return HomgOperator2D::clip_line_to_lineseg(*this, rect1_x, rect1_y, rect2_x, rect2_y);

@@ -11,7 +11,7 @@
 // A class to hold a homogeneous 4-vector for a 3D point.
 //
 // \verbatim
-// Modifications:
+//  Modifications:
 //   Peter Vanroose - 11 Mar 97 - added operator==
 // \endverbatim
 
@@ -34,8 +34,19 @@ class HomgPoint3D : public Homg3D
 
   // Data Access-------------------------------------------------------------
 
-  bool check_infinity(double tol=1e-12) const;
-  inline bool ideal(double tol = 1e-12) const { return check_infinity(tol); }
+  //: Return true iff the point is the point at infinity.
+  //  If tol == 0, w() must be exactly 0.
+  //  Otherwise, tol is used as tolerance value (default: 1e-12),
+  //  and $|w| <= \mbox{tol} \times min(|x|,|y|,|z|)$ is checked.
+  inline bool ideal(double tol = 1e-12) const {
+#define mvl_abs(x) ((x)<0?-(x):(x))
+    return mvl_abs(w()) <= tol*mvl_abs(x()) && mvl_abs(w()) <= tol*mvl_abs(y()) && mvl_abs(w()) <= tol*mvl_abs(z());
+#undef mvl_abs
+  }
+ private:
+  // Deprecated form of ideal()
+  bool check_infinity(double tol = 1e-12) const { return ideal(tol); }
+ public:
   bool get_nonhomogeneous(double& x, double& y, double& z) const;
   vnl_double_3 get_double3() const;
   double radius() const { return get_double3().magnitude(); }

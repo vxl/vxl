@@ -3,26 +3,12 @@
 #pragma implementation
 #endif
 //:
-//  \file
+// \file
 
 #include "HomgPoint2D.h"
 #include <vcl_iostream.h>
-#include <vcl_cmath.h> // for fabs
 #include <vnl/vnl_double_2.h>
-
-//--------------------------------------------------------------
-//
-//: Return true if the point is at infinity (an ideal point).
-// The method checks that $|w| <= \mbox{tol} \times \mbox{max}\{|x|, |y|\}$
-bool
-HomgPoint2D::check_infinity(double tol) const
-{
-  // quick return if possible
-  if (tol==0.0) return w()==0;
-
-  return vcl_fabs(w()) <= tol * vcl_fabs(x())
-      || vcl_fabs(w()) <= tol * vcl_fabs(y());
-}
+#include <vcl_cmath.h> // for sqrt()
 
 //--------------------------------------------------------------
 //

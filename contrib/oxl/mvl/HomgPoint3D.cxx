@@ -3,36 +3,10 @@
 #pragma implementation
 #endif
 //:
-//  \file
+// \file
 
 #include "HomgPoint3D.h"
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
-
-//--------------------------------------------------------------
-//
-//: Return true if the point is at infinity
-//--------------------------------------------------------------
-//
-//: Return true if the point is at infinity.
-// Check that |w| <= max(|x|, |y|, |z|) * tol
-bool
-HomgPoint3D::check_infinity(double tol) const
-{
-  // quick return if possible
-  if (tol==0.0) return w()==0;
-
-  double hx = vcl_fabs(x());
-  double hy = vcl_fabs(y());
-  double hz = vcl_fabs(z());
-  double hw = vcl_fabs(w());
-
-  double max = hx;
-  if (hy > max) max = hy;
-  if (hz > max) max = hz;
-
-  return hw <= tol * max;
-}
 
 //--------------------------------------------------------------
 //

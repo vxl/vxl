@@ -13,7 +13,7 @@
 // A class to hold a homogeneous 3-vector for a 2D line.
 //
 // \verbatim
-// Modifications:
+//  Modifications:
 //   Peter Vanroose - 11 Mar 97 - added operator==
 // \endverbatim
 
@@ -39,14 +39,20 @@ class HomgLine2D : public Homg2D
     return *this;
   }
 
-  // Return true if exactly at infinity
-  bool check_infinity() const;
-
-  // Return true if $min(|x|,|y|) < \mbox{tol} \times |z|$.
-  bool check_infinity(double tol) const;
-
-  inline bool ideal(double tol = 1e-12) const { return check_infinity(tol); }
-
+  //: Return true iff the line is the line at infinity.
+  //  If tol == 0, x() and y() must be exactly 0.
+  //  Otherwise, tol is used as tolerance value (default: 1e-12),
+  //  and $max(|x|,|y|) <= \mbox{tol} \times |w|$ is checked.
+  inline bool ideal(double tol = 1e-12) const {
+#define mvl_abs(x) ((x)<0?-(x):(x))
+    return mvl_abs(x()) <= tol*mvl_abs(w()) && mvl_abs(y()) <= tol*mvl_abs(w());
+#undef mvl_abs
+  }
+ private:
+  // Deprecated form of ideal()
+  bool check_infinity() const { return ideal(0.0); }
+  bool check_infinity(double tol) const { return ideal(tol); }
+ public:
   // Clip the infinite line to the given bounding box and return
   HomgLineSeg2D clip(int x0, int y0, int x1, int y1) const;
 
