@@ -37,7 +37,6 @@ class kalman_filter
   //: initialize the kalman filter states
   void init();
   void inc();
-  void update_covariant();
   vnl_double_2 projection(const vnl_double_3x4 &P, const vnl_double_3 &X);
   void prediction();
 
@@ -51,10 +50,9 @@ class kalman_filter
   //: update the matched points in the next frame using closest neighbour.
   void update_observes(const vnl_double_3x4 &P, int iframe);
   void init_velocity();
-  void adjust_state_vector(vnl_double_2 const& pred, vnl_double_2 const& meas, double confidence);
 
   //: set linearized observation matrix
-  void set_H_matrix(vnl_double_3x4 &P, vnl_double_3 &X);
+  vnl_matrix_fixed<double, 2, 6> get_H_matrix(vnl_double_3x4 &P, vnl_double_3 &Y);
 
   //: computer projective matrix from predicted position
   vnl_double_3x4 get_projective_matrix(vnl_double_3 &v);
@@ -92,14 +90,8 @@ class kalman_filter
   //: state vector
   vnl_vector_fixed<double, 6> X_;
 
-  //: state vector predicted
-  vnl_vector_fixed<double, 6> X_pred_;
-
-  //: linearized stat vector projective matrix
-  vnl_matrix_fixed<double, 2, 6> H_;
-
   //: covariant matrix of state vector
-  vnl_matrix_fixed<double, 6, 6> P_;
+  vnl_matrix_fixed<double, 6, 6> Q_;
 
   //: constrain weighting matrix
   vnl_matrix_fixed<double, 6, 2> K_;
@@ -108,7 +100,7 @@ class kalman_filter
   vnl_matrix_fixed<double, 2, 2> R_;
 
   //: covariant matrix of 2D projection
-  vnl_matrix_fixed<double, 6, 6> Q_;
+  vnl_matrix_fixed<double, 6, 6> Q0_;
 
   //: camera intrinsic parameters
   vnl_double_3x3 M_in_;

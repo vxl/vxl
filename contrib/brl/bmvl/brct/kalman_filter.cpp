@@ -273,18 +273,18 @@ void kalman_filter::init_covariant_matrix()
   // initialize P
   for (int i=0; i<6; i++)
     for (int j=0; j<6; j++)
-      P_[i][j] = 0.0;
+      Q_[i][j] = 0.0;
 
-  for (int i=3; i<6; i++)
-    P_[i][i] = 1;
+  for (int i=0; i<3; i++)
+    Q_[i][i] = 1;
 
   // initialize Q
   for (int i=0; i<6; i++)
     for (int j=0; j<6; j++)
-      Q_[i][j] = 0.0;
+      Q0_[i][j] = 0.0;
 
-  for (int i=3; i<6; i++)
-    Q_[i][i] = 1;
+  for (int i=0; i<3; i++)
+    Q0_[i][i] = 1;
 
   // initialize R
   for (int i=0; i<2; i++)
@@ -325,9 +325,11 @@ vnl_double_3x4 kalman_filter::get_projective_matrix(vnl_double_3& v )
   return M_in_*M_ex;
 }
 
-void kalman_filter::set_H_matrix(vnl_double_3x4 &P, vnl_double_3 &X)
+vnl_matrix_fixed<double, 2, 6> kalman_filter::get_H_matrix(vnl_double_3x4 &P, vnl_double_3 &X)
 {
   // compute \sum {P_{4k} X_k } + P_{44}
+  vnl_matrix_fixed<double, 2, 6> H;
+
   double temp = 0;
   for (int k = 0; k<3; k++)
     temp += P[3][k]*X[k];
@@ -342,11 +344,13 @@ void kalman_filter::set_H_matrix(vnl_double_3x4 &P, vnl_double_3 &X)
     t += P[i][3];
 
     for (int j=0; j<3; j++)
-      H_[i][j] = P[i][j] / temp - t * P[3][j] / (temp*temp);
+      H[i][j] = P[i][j] / temp - t * P[3][j] / (temp*temp);
 
     for (int j=3; j<6; j++)
-        H_[i][j] = 0;
+        H[i][j] = 0;
   }
+
+  return H;
 }
 
 vnl_double_2 kalman_filter::projection(const vnl_double_3x4 &P, const vnl_double_3 &X)
@@ -385,23 +389,17 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
   observes_[iframe] = t;
 }
 
-void kalman_filter::update_covariant()
-{
-  P_ = A_*P_*A_.transpose() + Q_;
-  K_ = P_*H_.transpose()*(H_*P_*H_.transpose()+R_);
-}
-
 void kalman_filter::inc()
 {
   //
   // prediction step:
   //
-  X_pred_ = A_*X_;
+  vnl_vector_fixed<double, 6> Xpred = A_*X_;
 
   vnl_double_3 camCenter;
-  camCenter[0] = X_pred_[0];
-  camCenter[1] = X_pred_[1];
-  camCenter[2] = X_pred_[2];
+  camCenter[0] = Xpred[0];
+  camCenter[1] = Xpred[1];
+  camCenter[2] = Xpred[2];
   
   vnl_double_3x4 P = get_projective_matrix(camCenter);
   update_observes(P, cur_pos_+1);
@@ -416,31 +414,59 @@ void kalman_filter::inc()
     for (int j=0; j<3; j++)
       X[j] = Xl_[j][i] + X_[j];
 
-    set_H_matrix(P, X);
-
-    update_covariant();
-
+    vnl_matrix_fixed<double, 2, 6> H = get_H_matrix(P, X);
+    
+    vnl_matrix_fixed<double, 6, 6> Qpred = A_*Q_*A_.transpose() + Q0_;
+    
+    vcl_cout<<"P is \n";
+    for(int i=0; i<6; i++){
+      for(int j=0; j<6; j++)
+        vcl_cout<<Qpred[i][j]<<" ";
+      vcl_cout<<"\n";
+    }
+    
+    K_ = Qpred*H.transpose()*vnl_inverse(H*Qpred*H.transpose()+R_);
+    
+    vcl_cout<<"K is \n";
+    for(int i=0; i<6; i++){
+      for(int j=0; j<2; j++)
+        vcl_cout<<Qpred[i][j]<<" ";
+      vcl_cout<<"\n";
+    }
+    
     vnl_double_2 z;
-
+    
     for (int j=0; j<2; j++)
       z[j] = cur_measures[j][i];
 
     vnl_double_2 z_pred = projection(P,X);
-    adjust_state_vector(z_pred, z, prob_[i]);
+
+    //
+    // go to the correction step
+    //
+    Xpred = Xpred +  K_*(z - z_pred)*prob_[i];
+
+    vnl_matrix_fixed<double, 6, 6> I;
+    I.set_identity();
+    Q_ = (I - K_*H)*Qpred;
+
 
   }
 
-#if 0
-  v[0] = X_pred_[0] - X_[0];
-  v[1] = X_pred_[1] - X_[1];
-  v[2] = X_pred_[2] - X_[2];
+
+  Xpred[3] = Xpred[0] - X_[0];
+  Xpred[4] = Xpred[1] - X_[1];
+  Xpred[5] = Xpred[2] - X_[2];
 
   cur_pos_ = (cur_pos_+1) % queue_size_;
-  motions_[cur_pos_+1] = get_next_motion(v);
-#endif
+  vnl_double_3 xNew(Xpred[0], Xpred[1], Xpred[2]);
+
+  motions_[cur_pos_] = xNew;
+
+
   
   // store the history
-  X_ = X_pred_;
+  X_ = Xpred;
 
   if (memory_size_ < queue_size_)
     memory_size_++;
@@ -487,11 +513,6 @@ void kalman_filter::inc()
     Xl_[i][1] -= yc;
     Xl_[i][2] -= zc;
   }
-}
-
-void kalman_filter::adjust_state_vector(vnl_double_2 const& pred, vnl_double_2 const& meas, double confidence)
-{
-  X_pred_ += K_*(meas - pred)*confidence;
 }
 
 void kalman_filter::read_data(char *fname)
