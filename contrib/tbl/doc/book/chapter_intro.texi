@@ -23,11 +23,11 @@ tree.
 
 @item vipl: The Templated Image Processing Library.
 
-vipl is provides core filtering classes which can be used with almost any input or
+vipl provides filtering classes which can be used with almost any input or
 output image type, any pixel type, and any region of interest. It deals with images
-that are two large to fit in memory, loading and processing them in sections.
-It provides this efficiently by being heavily templated. This can be somewhat
-intimidating, and so there is an alternative library the ...
+that are too large to fit in memory, loading and processing them in sections.
+It provides all this efficiently by being heavily templated. This can be somewhat
+intimidating, and so there is an alternative library ...
 
 @item vepl: The Easy Image Processing Library
 
