@@ -53,9 +53,20 @@ inst;
 # endif
 #endif
 
-#if defined(VCL_SGI_CC) && VCL_USE_NATIVE_STL
+#if defined(VCL_SGI_CC)
+# if VCL_USE_NATIVE_STL
 template class std::__string_base<char,std::__default_alloc_template<true,0> >;
 //template class std::basic_string<char,std::char_traits<char>,std::alloc>;
 template class std::basic_string<char,std::char_traits<char>,std::__default_alloc_template<true,0> >;
 template vcl_ostream& std::operator<<(vcl_ostream&,const std::basic_string<char,std::char_traits<char>,std::alloc>&);
+# else
+#  undef bs
+#  define bs vcl_basic_string<char, vcl_char_traits<char> >
+#   if 0 // already explicitly instantiated elsewhere ?! but needed on julia?
+template bs &bs::replace(vcl_size_t, vcl_size_t, char const*, vcl_size_t);
+template bs &bs::replace(vcl_size_t, vcl_size_t, vcl_size_t, char);
+template int bs::compare(char const*, vcl_size_t, vcl_size_t) const;
+template int bs::compare(bs const&, vcl_size_t, vcl_size_t) const;
+#   endif
+# endif
 #endif
