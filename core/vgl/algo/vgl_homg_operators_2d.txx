@@ -4,9 +4,9 @@
 //: 2D homogeneous operations
 
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
+#include <vcl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_scatter_3x3.h> // used in most_orthogonal_vector()

@@ -6,7 +6,7 @@
 // awf@robots.ox.ac.uk
 // Created: 02 Apr 00
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vgl/vgl_point_2d.h>
 
 //: Store a polygon.

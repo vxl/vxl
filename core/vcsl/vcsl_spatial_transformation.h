@@ -21,7 +21,7 @@
 #include <vcsl/vcsl_spatial_transformation_ref.h>
 
 #include <vbl/vbl_ref_count.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_quaternion.h>
 

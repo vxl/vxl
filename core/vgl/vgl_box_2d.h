@@ -31,7 +31,7 @@
 //    Don Hamilton, Peter Tu
 // Created: Feb 15 2000
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 template <class Type>
 class vgl_point_2d;

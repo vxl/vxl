@@ -10,7 +10,7 @@
 //  fsm@robots.ox.ac.uk
 //
 
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 #include <vgl/vgl_region_scan_iterator.h>
 
 struct vgl_window_scan_iterator : vgl_region_scan_iterator

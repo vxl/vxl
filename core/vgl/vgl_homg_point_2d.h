@@ -14,9 +14,9 @@
 //  Peter Vanroose,  9 May 2000: added intersection constructor
 //  Peter Vanroose, 29 Feb 2000: several minor fixes and additions
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_algorithm.h>
-#include <vcl/vcl_cmath.h> // for vcl_abs()
+#include <vcl_iostream.h>
+#include <vcl_algorithm.h>
+#include <vcl_cmath.h> // for vcl_abs()
 
 template <class Type>
 class vgl_point_2d;

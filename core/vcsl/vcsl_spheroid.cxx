@@ -1,7 +1,7 @@
 #include <vcsl/vcsl_spheroid.h>
-#include <vcl/vcl_cmath.h> // for sqrt()
+#include <vcl_cmath.h> // for sqrt()
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 //***************************************************************************
 // Constructors/Destructor

@@ -2,7 +2,7 @@
 
 #include "vgl_line_segment_2d.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 template <class Type> 
 vgl_line_segment_2d<Type>::vgl_line_segment_2d(vgl_line_segment_2d<Type> const& that)

@@ -13,7 +13,7 @@
 // Created: 19 Mar 00
 // Created: Feb 15 2000
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 #include <vgl/vgl_point_3d.h>
 

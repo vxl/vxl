@@ -13,7 +13,7 @@
 //    mccane@cs.otago.ac.nz: but copied from vgl_line_segment_3d
 // Created: Dec 5 2000
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 #include <vgl/vgl_point_2d.h>
 

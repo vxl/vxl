@@ -13,7 +13,7 @@
 // .SECTION Modifications
 //   31-oct-00 Peter Vanroose - implementations fixed, and vgl_homg_line_3d typedef'd
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 

@@ -19,7 +19,7 @@
 
 #include <vcsl/vcsl_coordinate_system.h>
 #include <vnl/vnl_vector.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vcsl/vcsl_spatial_transformation_ref.h>
 #include <vcsl/vcsl_graph_ref.h>
 

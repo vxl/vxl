@@ -1,7 +1,7 @@
 
 #include "vgl_line_segment_3d.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 template <class Type> 
 vgl_line_segment_3d<Type>::vgl_line_segment_3d(vgl_line_segment_3d<Type> const& that)

@@ -27,7 +27,7 @@
 #pragma interface
 #endif
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vgl/vgl_homg_point_3d.h>
 
 template <class Type>

@@ -28,8 +28,8 @@
 template <class Type>
 class vgl_line_2d;
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cmath.h> // for sqrt()
+#include <vcl_iostream.h>
+#include <vcl_cmath.h> // for sqrt()
 
 template <class Type>
 class vgl_point_2d;

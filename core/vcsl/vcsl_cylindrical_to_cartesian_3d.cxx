@@ -1,5 +1,5 @@
 #include <vcsl/vcsl_cylindrical_to_cartesian_3d.h>
-#include <vcl/vcl_cmath.h> // for sqrt(), cos(), sin()
+#include <vcl_cmath.h> // for sqrt(), cos(), sin()
 
 #include <vcsl/vcsl_spatial.h>
 

@@ -6,10 +6,10 @@
 #endif
 #include "vgl_triangle_scan_iterator.h"
 
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_cstdlib.h>
+#include <vcl_cmath.h>
+#include <vcl_cstdlib.h>
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 template </*typename*/class T>
 static inline 

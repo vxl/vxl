@@ -24,7 +24,7 @@
 #include <vcsl/vcsl_graph_ref.h>
 
 #include <vbl/vbl_ref_count.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vcsl/vcsl_spatial_ref.h>
 
 class vcsl_graph

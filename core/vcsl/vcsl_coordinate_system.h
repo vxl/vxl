@@ -27,7 +27,7 @@
 #include <vbl/vbl_ref_count.h>
 
 #include <vcsl/vcsl_axis_ref.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
 
 // Because VXL does not use dynamic_cast<> :-(

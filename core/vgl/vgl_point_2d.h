@@ -15,7 +15,7 @@
 //  Peter Vanroose, May  9 2000: implemented intersection constructor
 //  Peter Vanroose, Feb 28 2000: lots of minor corrections
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 template <class Type>
 class vgl_homg_point_2d;

@@ -1,7 +1,7 @@
 #include <vcsl/vcsl_spatial_transformation.h>
-#include <vcl/vcl_cmath.h> // for acos(), sin()
+#include <vcl_cmath.h> // for acos(), sin()
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 //***************************************************************************
 // Constructors/Destructor

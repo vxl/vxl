@@ -21,7 +21,7 @@
 
 #include <vcsl/vcsl_spatial_transformation.h>
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
 
 class vcsl_translation

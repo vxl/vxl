@@ -25,7 +25,7 @@
 // External declarations
 //*****************************************************************************
 #include <vcsl/vcsl_spatial_transformation.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 class vcsl_composition
   :public vcsl_spatial_transformation

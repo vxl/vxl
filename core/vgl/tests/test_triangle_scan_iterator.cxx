@@ -1,4 +1,4 @@
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <vgl/vgl_triangle_scan_iterator.h>
 #include <vgl/vgl_polygon_scan_iterator.h>

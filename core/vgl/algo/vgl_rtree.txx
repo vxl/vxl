@@ -5,10 +5,10 @@
 */
 #include "vgl_rtree.h"
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 #define safety_assert(x) assert(x)
 
-//#include <vcl/vcl_iostream.h>
+//#include <vcl_iostream.h>
 //#define trace(str) { cerr << str << endl; }
 
 //--------------------------------------------------------------------------------

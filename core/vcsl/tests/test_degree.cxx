@@ -9,8 +9,8 @@
 // 1.0     |2000/06/28| François BERTEL          |Creation
 //*****************************************************************************
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cassert.h>
+#include <vcl_iostream.h>
+#include <vcl_cassert.h>
 #include <vcsl/vcsl_degree.h>
 
 //-----------------------------------------------------------------------------

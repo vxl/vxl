@@ -16,9 +16,9 @@
 //  Peter Vanroose, Feb 28 2000: lots of minor corrections
 //  Peter Vanroose, Dec 1 2000: moved dist_origin() to vgl_distance.h
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_algorithm.h> // for vcl_min
-#include <vcl/vcl_cmath.h> // for vcl_abs
+#include <vcl_iostream.h>
+#include <vcl_algorithm.h> // for vcl_min
+#include <vcl_cmath.h> // for vcl_abs
 
 template <class Type>
 class vgl_homg_point_2d;

@@ -1,6 +1,6 @@
 #include <vcsl/vcsl_axis.h>
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 #include <vcsl/vcsl_dimension.h>
 #include <vcsl/vcsl_length.h>

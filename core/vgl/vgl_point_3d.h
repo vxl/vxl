@@ -13,7 +13,7 @@
 // .SECTION Modifications
 //  Peter Vanroose, Dec  1 2000: moved distance() to vgl_distance.h
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 template <class Type>
 class vgl_plane_3d;

@@ -22,9 +22,9 @@
 template <class Type>
 class vgl_point_3d;
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_algorithm.h>
-#include <vcl/vcl_cmath.h> // for vcl_abs()
+#include <vcl_iostream.h>
+#include <vcl_algorithm.h>
+#include <vcl_cmath.h> // for vcl_abs()
 
 template <class Type>
 class vgl_homg_point_3d

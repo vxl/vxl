@@ -13,10 +13,10 @@
 // .SECTION Modifications:
 //  Peter Vanroose, 29 Feb 2000: several minor fixes and additions
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_algorithm.h>
-#include <vcl/vcl_cmath.h>   // vcl_abs()
-#include <vcl/vcl_cstdlib.h> // vcl_abs()
+#include <vcl_iostream.h>
+#include <vcl_algorithm.h>
+#include <vcl_cmath.h>   // vcl_abs()
+#include <vcl_cstdlib.h> // vcl_abs()
 
 template <class Type>
 class vgl_plane_3d;

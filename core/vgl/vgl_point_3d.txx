@@ -1,6 +1,6 @@
 #include <vgl/vgl_point_3d.h>
 
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 
 template <class Type>
 bool vgl_point_3d<Type>::operator==(const vgl_point_3d &other) const

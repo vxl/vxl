@@ -12,8 +12,8 @@
 
 #include "vgl_box_2d.h"
 
-#include <vcl/vcl_algorithm.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_algorithm.h>
+#include <vcl_cmath.h>
 #include <vgl/vgl_point_2d.h> 
 
 // Constructors/Destructors--------------------------------------------------

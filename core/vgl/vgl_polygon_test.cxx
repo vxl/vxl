@@ -5,7 +5,7 @@
 #pragma implementation
 #endif
 #include "vgl_polygon_test.h"
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 #include <vgl/vgl_lineseg_test.h>
 
 template <class T>

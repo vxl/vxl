@@ -3,7 +3,7 @@
 #endif
 
 #include "vgl_polygon.h"
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 vgl_polygon::vgl_polygon()
 {

@@ -64,7 +64,7 @@
 
 //--------------------------------------------------------------------------------
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 // forward declare all classes.
 template <class V, class B, class C> class vgl_rtree_probe;
 template <class V, class B, class C> class vgl_rtree_node;

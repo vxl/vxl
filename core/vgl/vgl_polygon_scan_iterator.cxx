@@ -1,11 +1,11 @@
 #include "vgl_polygon_scan_iterator.h"
 
-#include <vcl/vcl_list.h>
-#include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_cstring.h>
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cstdlib.h>
+#include <vcl_list.h>
+#include <vcl_cstdio.h>
+#include <vcl_cstring.h>
+#include <vcl_cmath.h>
+#include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 
 #include <vgl/vgl_box_2d.h>
 

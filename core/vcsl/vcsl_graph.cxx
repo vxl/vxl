@@ -1,6 +1,6 @@
 #include <vcsl/vcsl_graph.h>
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 #include <vcsl/vcsl_spatial.h>
 

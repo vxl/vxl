@@ -17,7 +17,7 @@
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 //*****************************************************************************
 
-#include <vcl/vcl_string.h> // C++ specific includes first
+#include <vcl_string.h>
 #include <vcsl/vcsl_axis_ref.h>
 
 //*****************************************************************************

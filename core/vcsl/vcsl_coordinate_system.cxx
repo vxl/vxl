@@ -1,6 +1,6 @@
 #include <vcsl/vcsl_coordinate_system.h>
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 #include <vcsl/vcsl_axis.h>
 #include <vcsl/vcsl_unit.h>
