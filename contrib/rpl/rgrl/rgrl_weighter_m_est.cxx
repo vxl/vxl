@@ -174,8 +174,16 @@ aux_sum_rho_values( rgrl_scale const&  scale,
         //  for each match with a "to" image feature
         rgrl_feature_sptr to_feature = titr.to_feature();
         double geometric_err = to_feature->geometric_error( *mapped_from );
-        
-        sum_rho += m_est_->rho(geometric_err, scale.geometric_scale());
+
+        // signature weight
+        //
+        double signature_wgt = 1.0;
+        if ( signature_precomputed_ ) {
+          signature_wgt = titr . signature_weight( );
+        }
+
+        // sum of rho is weighted by signature
+        sum_rho += signature_wgt * m_est_->rho(geometric_err, scale.geometric_scale());
       }
   }
   
@@ -200,6 +208,7 @@ aux_neg_log_likelihood( rgrl_scale const&  scale,
     }
 
   double sum_rho_values = aux_sum_rho_values(scale, match_set, xform);
-  double geometric_scale = scale.geometric_scale();
+  const double geometric_scale = scale.geometric_scale();
+  //vcl_cout << "    rho_value: " << sum_rho_values << vcl_endl;
   return n*vcl_log(geometric_scale) + sum_rho_values;
 }
