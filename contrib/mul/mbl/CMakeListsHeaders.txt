@@ -24,7 +24,6 @@ SOURCE_FILES(mbl_sources
   mbl_read_int.h
   mbl_read_double.h
   mbl_lru_cache.h
-  mbl_functions.h
 
   mbl_data_array_wrapper.txx
   mbl_data_collector.txx
