@@ -26,6 +26,7 @@ SOURCE_FILES(vpdfl_sources
   vpdfl_gaussian_kernel_pdf.cxx
   vpdfl_gaussian_kernel_pdf_sampler.cxx
   vpdfl_gaussian_kernel_pdf_builder.cxx
+  vpdfl_add_all_binary_loaders.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpdfl_sources)

@@ -23,4 +23,5 @@ SOURCE_FILES(vpdfl_sources
   vpdfl_kernel_pdf.h
   vpdfl_kernel_pdf_builder.h
   vpdfl_resample.h
+  vpdfl_add_all_binary_loaders.h
 )
