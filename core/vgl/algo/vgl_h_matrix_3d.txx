@@ -212,9 +212,9 @@ void vgl_h_matrix_3d<T>::set (vnl_matrix_fixed<T,4,4> const& H)
 //: Compute transform to projective basis given five points, no 4 coplanar
 template <class T>
 bool vgl_h_matrix_3d<T>::
-projective_basis(vcl_vector<vgl_homg_point_3d<T> > const & five_points)
+projective_basis(vcl_vector<vgl_homg_point_3d<T> > const & /*five_points*/)
 {
-  //not yet implemented
+  vcl_cerr << "vgl_h_matrix_3d<T>::projective_basis(5pts) not yet implemented\n";
   return false;
 }
 
