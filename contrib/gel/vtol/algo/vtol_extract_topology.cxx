@@ -696,14 +696,9 @@ trace_face_boundary( vcl_vector<unsigned>& markers,
                      int& region_label ) const
 {
   unsigned start_index = index;
-  unsigned start_dir = dir;
   int start_left;
   edge_labels( node(index).i, node(index).j, dir,
                start_left, region_label );
-
-//   vcl_vector< vtol_edge_sptr > edges;
-
-//   vcl_cout << "\ntrace face bdy ind="<<index<<"; dir="<<dir<<vcl_endl;
 
   // Find an interior point of this face basd on the first edge we
   // encounter. The vertex (i,j) corresponds to pixel-coordinate-space
@@ -720,8 +715,6 @@ trace_face_boundary( vcl_vector<unsigned>& markers,
     // Mark the current direction of the current node as travelled,
     // and go to the next node and find the outgoing direction there.
 
-//     vcl_cout << "   at ind="<<index<<", dir="<<dir<<" ("<<node(index).i<<","<<node(index).j<<")"<<vcl_endl;
-    
     assert( ! is_marked( markers[index], dir ) );
     set_mark( markers[index], dir );
     chain_list.push_back( node(index).edgel_chain[dir] );
@@ -757,12 +750,9 @@ trace_face_boundary( vcl_vector<unsigned>& markers,
       DEBUG( assert( dir != old_dir ) );
 
       edge_labels( i, j, dir, left, right );
-//       vcl_cout << "      looking " << dir << "; nbrs="<<left<<","<<right<< vcl_endl;
     } while( left == right || right != region_label );
     
   } while( index != start_index );
-
-//  chain = new vtol_one_chain( edges, /*is_cycle=*/ true );
 }
 
 
@@ -784,10 +774,6 @@ compute_faces( vcl_vector< region_type_sptr > const& chains,
   for( unsigned i = 0; i < chains.size(); ++i ) {
     universe.add( chains[i] );
   }
-
-//   vcl_cout << "Tree:\n";
-//   universe.print( vcl_cout, 5 );
-//   vcl_cout.flush();
 
   add_faces( faces, &universe );
 }
