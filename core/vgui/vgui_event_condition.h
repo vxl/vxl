@@ -96,18 +96,18 @@ struct vgui_event_condition
     vgui_modifier m, bool is_pressed, bool is_on, event_types use_event);
 
   //: Constructor - create a default event condition.
+  // This type of event condition will never be triggered.
   vgui_event_condition();
 
   //: Constructor for a key press event condition (using ascii char).
   vgui_event_condition(vgui_key ascii_code, bool is_pressed = true);
 
   //: Constructor for a key press event condition (using key and modifier).
-  vgui_event_condition(vgui_key k, vgui_modifier m, 
-  bool is_pressed = true);
+  vgui_event_condition(vgui_key k, vgui_modifier m,  bool is_pressed = true);
 
   //: Constructor for a mouse button press event condition.
   vgui_event_condition(vgui_button b, vgui_modifier m = vgui_MODIFIER_NULL, 
-    bool is_pressed = true);
+                       bool is_pressed = true);
 
   void enable(bool v = true) { on = v; }
   void disable(bool v = true) { on = !v; }

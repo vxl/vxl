@@ -16,10 +16,65 @@
 // \endverbatim
 
 #include "vgui_shell_tableau_sptr.h"
+
 #include <vgui/vgui_composite_tableau.h>
 #include <vgui/vgui_clear_tableau_sptr.h>
 #include <vgui/vgui_tview_launcher_tableau_sptr.h>
-//class vgui_quit_tableau;
+#include <vgui/vgui_event_condition.h>
+
+
+//: Key bindings for vgui_shell_tableau
+//
+// The events are
+//
+// - quit (Alt-Q), which exits the application
+//
+// - close (Alt-W), which closes the window (and exits the application
+//   if there is only one window)
+//
+// The set_default_* member functions can be used to change the
+// default bindings for all *future* shell tableaux. It will not
+// change the bindings of already created tableaux.
+//
+class vgui_shell_tableau_bindings
+{
+public:
+  //:
+  vgui_shell_tableau_bindings()
+    : quit( default_quit ), close( default_close ), graph( default_graph )
+    { }
+
+  //:
+  vgui_shell_tableau_bindings& set_quit( vgui_event_condition cond )
+    { quit = cond; return *this; }
+
+  //:
+  vgui_shell_tableau_bindings& set_close( vgui_event_condition cond )
+    { close = cond; return *this; }
+
+  vgui_shell_tableau_bindings& set_graph( vgui_event_condition cond )
+    { graph = cond; return *this; }
+
+  //:
+  static void set_default_quit( vgui_event_condition cond )
+    { default_quit = cond; }
+
+  //:
+  static void set_default_close( vgui_event_condition cond )
+    { default_close = cond; }
+
+  //:
+  static void set_default_graph( vgui_event_condition cond )
+    { default_graph = cond; }
+
+  vgui_event_condition quit;
+  vgui_event_condition close;
+  vgui_event_condition graph;
+
+  static vgui_event_condition default_quit;
+  static vgui_event_condition default_close;
+  static vgui_event_condition default_graph;
+};
 
 
 //:  Tableau to go at the top of one's tableau hierarchy.
@@ -39,8 +94,11 @@
 // \endverbatim
 class vgui_shell_tableau : public vgui_composite_tableau
 {
+  typedef vgui_shell_tableau_bindings key_bindings_type;
+
   bool do_quit;
   bool enable_key_bindings;
+  key_bindings_type bindings;
   vgui_clear_tableau_sptr clear;
   vgui_tview_launcher_tableau_sptr graph;
  public:
@@ -60,8 +118,8 @@ class vgui_shell_tableau : public vgui_composite_tableau
   vcl_string type_name() const;
 
   void get_popup(vgui_popup_params const &, vgui_menu &);
-  void set_quit(bool on) { do_quit = on; }
-  void set_enable_key_bindings(bool on) { enable_key_bindings = on; }
+  void set_quit(bool on);
+  void set_enable_key_bindings(bool on);
 
   vgui_clear_tableau_sptr get_clear() const { return clear; }
   vgui_tview_launcher_tableau_sptr get_graph() const { return graph; }

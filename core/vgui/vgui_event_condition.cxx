@@ -48,7 +48,7 @@ void vgui_event_condition::init(vgui_key k, vgui_key a,
 vgui_event_condition::vgui_event_condition()
 { 
   init(vgui_KEY_NULL, vgui_KEY_NULL, vgui_BUTTON_NULL, vgui_MODIFIER_NULL, 
-  false, false, null_event);
+       false, false, null_event);
 }
 
 //----------------------------------------------------------------------------
@@ -57,7 +57,7 @@ vgui_event_condition::vgui_event_condition(vgui_key ascii_code,
   bool is_pressed)
 {
   init (vgui_KEY_NULL, ascii_code, vgui_BUTTON_NULL, vgui_MODIFIER_NULL,
-    is_pressed, true, ascii_char_event);
+        is_pressed, true, ascii_char_event);
 }
 //----------------------------------------------------------------------------
 //: Constructor for a key press event condition (using key and modifier).
