@@ -1,9 +1,9 @@
-#ifndef easy2D_sequencer_h_
+#ifndef easy2D_sequencer_h
 #define easy2D_sequencer_h
 //--------------------------------------------------------------------------------
 // .NAME easy2D_sequencer
 // .SECTION Description:
-//   Holds sequences of geometry. 
+//   Holds sequences of geometry.
 // .SECTION Author
 //   Marko Bacic, Oxford RRG
 // .SECTION Modifications:
