@@ -30,18 +30,6 @@ const int RDS[] = {0,-1, 1,-2, 2,-3, 3,-4, 4,-5, 5}; // radial search
 // const byte DIR0 = 8, DIR1 = 9, DIR2 = 10, DIR3 = 11;
 const int FRAME = 4; // 3 for NMS and extension, 4 for contour
 
-//: Save parameters and create workspace for detecting fold profiles.
-// High frequency features are smoothed away by smooth_sigma.
-// Texture or white noise less than noise_sigma are not detected.
-// smooth_sigma = 0.5-2.0, 1.0 insures separation of independent folds >= 2.
-// noise_sigma = is standard deviation of intensity, in a uniform region.
-// Optionally estimate sensor/texture sigma, if given noise sigma
-// is a negative factor -k between -[0 1]. In this case,
-// noise_sigma = (1-k)*sensor_sigma + k*texture_sigma.
-// Response of white noise to the filter ddG is computed, and
-// then multiplied by contour_factor/junction_factor to obtain
-// thresholds for detecting contour/junction edges.
-//
 gevd_fold::gevd_fold(float smooth_sigma, // width of filter dG
                      float noise_sigma,   // sensor/texture intensity noise -[0 1]
                      float contour_factor, float junction_factor)
@@ -65,30 +53,11 @@ gevd_fold::gevd_fold(float smooth_sigma, // width of filter dG
 }
 
 
-//: Free space allocated for detecting fold profiles.  Does nothing.
-gevd_fold::~gevd_fold() {}
-
-//: Detect fold profiles with ddG edge detector.
-// The image is convolved with a Gaussian to smooth away
-// high frequency noise, and insure separation of fold responses.
-// Then the largest absolute eigenvalue, and corresponding eigenvector
-// of the local Hessian are computed
-// using second difference [+1 -2 +1].
-// Optionally estimate sensor/texture sigma and set threshold.
-// Finally, non maximum suppression is done to find strict
-// local maxima of curvature.
-// The edge detector finds elongated contours only.
-// These contours are typically broken at junctions because non
-// maximum suppression is done along only the strongest direction.
-// Return contour (float), direction (byte), location (float) images.
-// Return true if no exception.
-// J. Canny, A Computational Approach to Edge Detection,
-// IEEE Trans on PAMI, vol 8, no 6, Nov 1986.
 bool
 gevd_fold::DetectEdgels(const gevd_bufferxy& image,
                         gevd_bufferxy*& contour, gevd_bufferxy*& direction,
                         gevd_bufferxy*& locationx, gevd_bufferxy*& locationy,
-                        bool peaks_only, 
+                        bool peaks_only,
                         bool valleys_only,
                         bool transfer, //compute mag and angle? default=false
                         gevd_bufferxy*& mag, gevd_bufferxy*& angle)
@@ -111,7 +80,7 @@ gevd_fold::DetectEdgels(const gevd_bufferxy& image,
 
   // 2. Use 2nd-difference to estimate local curvature, filter is ddG.
   gevd_bufferxy *curvature = NULL;
-  // need to make new arrays since later NonMaximumSupression clears 
+  // need to make new arrays since later NonMaximumSupression clears
   // locationx locationy
   gevd_bufferxy *dirx = gevd_float_operators::SimilarBuffer(image);
   gevd_bufferxy *diry = gevd_float_operators::SimilarBuffer(image);
@@ -120,29 +89,29 @@ gevd_fold::DetectEdgels(const gevd_bufferxy& image,
   //If only peaks or valleys are asked for
   for (int j = 0; j < image.GetSizeY(); j++)
     for (int i = 0; i < image.GetSizeX(); i++)
-      if( (peaks_only && floatPixel(*diry, i, j)<0) ||
-          (valleys_only && floatPixel(*diry, i, j)>0)
-          )
+      if ( (peaks_only   && floatPixel(*diry, i, j)<0) ||
+           (valleys_only && floatPixel(*diry, i, j)>0)
+         )
         floatPixel(*curvature, i, j) = 0;
 
   delete smooth;
 
   // 2.5 JLM - Fill the theta array for use in outputting continuous digital curve
   //           directions later.  The angle definition here is consistent with
-  //           EdgeDetector, i.e. angle = (180/M_PI)*vcl_atan2(dI/dy, dI/dx);
-  if(transfer) //Fill magnitude and angle arrays needed by EdgelChain const.
-    {
-      mag = gevd_float_operators::SimilarBuffer(image);
-      angle = gevd_float_operators::SimilarBuffer(image);
-      const float kdeg = 180.0/vnl_math::pi;
-      for (int j = 0; j < image.GetSizeY(); j++)
-        for (int i = 0; i < image.GetSizeX(); i++)
-          if ((floatPixel(*mag, i, j) = floatPixel(*curvature, i, j)))
-              floatPixel(*angle, i, j) = kdeg*atan2(floatPixel(*diry, i, j),
-                                                    floatPixel(*dirx, i, j));
-            else
-              floatPixel(*angle, i, j) = 0;
-    }
+  //           EdgeDetector, i.e. angle = (180/PI)*atan2(dI/dy, dI/dx);
+  if (transfer) //Fill magnitude and angle arrays needed by EdgelChain const.
+  {
+    mag = gevd_float_operators::SimilarBuffer(image);
+    angle = gevd_float_operators::SimilarBuffer(image);
+    const float kdeg = 180.0/vnl_math::pi;
+    for (int j = 0; j < image.GetSizeY(); j++)
+      for (int i = 0; i < image.GetSizeX(); i++)
+        if ((floatPixel(*mag, i, j) = floatPixel(*curvature, i, j)))
+            floatPixel(*angle, i, j) = kdeg*vcl_atan2(floatPixel(*diry, i, j),
+                                                      floatPixel(*dirx, i, j));
+          else
+            floatPixel(*angle, i, j) = 0;
+  }
 
 
   // 3. Estimate sensor/texture sigmas from histogram of weak step edgels
@@ -206,7 +175,7 @@ gevd_fold::DetectEdgels(const gevd_bufferxy& image,
 static int
 LeftXorRightEnd(const gevd_bufferxy& contour,
                 int i, int j, // pixel on contour
-                const int dir) // normal to contour
+                int dir) // normal to contour
 {
   int di = DIS[dir], dj = DJS[dir];
   bool normalp = (floatPixel(contour, i - di, j - dj) ||
@@ -240,9 +209,9 @@ LeftXorRightEnd(const gevd_bufferxy& contour,
 //
 static float
 BestFoldExtension(const gevd_bufferxy& smooth,
-                  const int i, const int j,
-                  const int ndir, // tangential dir to neighbor
-                  const float threshold,
+                  int i, int j,
+                  int ndir, // tangential dir to neighbor
+                  float threshold,
                   int& best_i, int& best_j, // pixel
                   int& best_d, float& best_l) // direction + subloc
 {
@@ -264,7 +233,7 @@ BestFoldExtension(const gevd_bufferxy& smooth,
       if (curvature > max_s) {      // find best strength
         int di2 = 2*di;
         int dj2 = 2*dj;
-        if (curvature > vcl_fabs(pix + floatPixel(smooth, ni-di2, nj-dj2) 
+        if (curvature > vcl_fabs(pix + floatPixel(smooth, ni-di2, nj-dj2)
                                  - 2 * pix_m) &&
             curvature > vcl_fabs(pix + floatPixel(smooth, ni+di2, nj+dj2)
                                  - 2 * pix_p)) {
@@ -295,15 +264,6 @@ BestFoldExtension(const gevd_bufferxy& smooth,
 }
 
 
-//:
-// Find junctions by searching for extensions of contours from
-// their dangling end points. Non maximum suppression insures that
-// contours have width < 2, and so we can find the left/right neighbors,
-// and deduce end points. By using a minimally smoothed image,
-// we find fold profiles up to joining with a stronger contour, thus
-// recovering the missing junction caused by NMS along only 1 direction.
-// The junctions are returned but are not set in the contour image,
-// to prevent incorrect tracing of stronger contours first.
 int
 gevd_fold::RecoverJunctions(const gevd_bufferxy& image,
                             gevd_bufferxy& contour, gevd_bufferxy& direction,
@@ -419,10 +379,6 @@ gevd_fold::RecoverJunctions(const gevd_bufferxy& image,
 }
 
 
-//:
-// Return the standard deviation of raw noise, in the original image,
-// either estimated or given by the user. If the noise has not been
-// estimated, return 0.
 float
 gevd_fold::NoiseSigma() const
 {
@@ -430,10 +386,6 @@ gevd_fold::NoiseSigma() const
 }
 
 
-//:
-// Compute response of white noise through the filter ddG, or
-// second-derivative of the Gaussian. Using a threshold of 3 times
-// this noise response would eliminate 99% of the noise edges.
 float
 gevd_fold::NoiseResponse() const
 {
@@ -442,15 +394,6 @@ gevd_fold::NoiseResponse() const
 }
 
 
-//:
-// Return threshold for detecting contour or junction,
-// which is response of white gaussian noise, noise_sigma,
-// to fold edge detector, i.e. second-order derivative of Gaussian,
-// smooth_sigma.
-// noise_sigma can be estimated by finding the standard deviation
-// in a region of constant intensity, and no texture patterns.
-// Use short_factor*noise_sigma and smooth_sigma/2, when detecting
-// junctions, to account for multiple responses to fold edge detector.
 float
 gevd_fold::NoiseThreshold(bool shortp) const
 {
@@ -461,14 +404,10 @@ gevd_fold::NoiseThreshold(bool shortp) const
 }
 
 
-//:
-// Compute response of white noise through the filter ddG, or
-// second-derivative of the Gaussian. Using a threshold of 3 times
-// this noise response would eliminate 99% of the noise edges.
 float
-gevd_fold::NoiseResponseToFilter(const float noiseSigma,
-                                 const float smoothSigma,
-                                 const float filterFactor)
+gevd_fold::NoiseResponseToFilter(float noiseSigma,
+                                 float smoothSigma,
+                                 float filterFactor)
 {
   return noiseSigma /          // white noise
          (float)vcl_pow((double)smoothSigma, 2.5) * // size of filter ddG
