@@ -24,7 +24,7 @@ void test_memory_image_impl_io()
   // Image set-up and construction
   int planes = 1;
   int height = 3;
-  int width = 3;
+  int width = 4;
   vil_memory_image_of_format<int> format;
 
   // We need an image_of<foo> to get a sensible buffer
@@ -37,13 +37,16 @@ void test_memory_image_impl_io()
        val++;
     }
   vil_memory_image_impl p_out(planes,height,width,
-    format.components,format.bits_per_component,format.component_format);
+                              format.components,
+                              format.bits_per_component,
+                              format.component_format);
   p_out.put_section(imageof.get_buffer(), 0, 0, width, height);
-
 
   vil_memory_image_of_format<int> format2;
   vil_memory_image_impl p_in(0,0,0,
-    format2.components,format2.bits_per_component,format2.component_format);
+                             format2.components,
+                             format2.bits_per_component,
+                             format2.component_format);
 
   // Construct the loader object
   vil_io_memory_image_impl io_impl;
@@ -52,28 +55,27 @@ void test_memory_image_impl_io()
 
   // Test the save
   vsl_b_ofstream bfs_out("vil_memory_image_impl_io.bvl.tmp");
-  TEST ("Created vil_memory_image_imple_io.bvl.tmp for writing", 
-    (!bfs_out), false);
+  TEST ("Created vil_memory_image_imple_io.bvl.tmp for writing",
+        (!bfs_out), false);
   io_impl.b_write_by_base(bfs_out,p_out);
   bfs_out.close();
 
   // And the load
   vsl_b_ifstream bfs_in("vil_memory_image_impl_io.bvl.tmp");
-  TEST ("Opened vil_memory_image_impl_io.bvl.tmp for reading", 
-    (!bfs_in), false);
+  TEST ("Opened vil_memory_image_impl_io.bvl.tmp for reading",
+        (!bfs_in), false);
   io_impl.b_read_by_base(bfs_in,p_in);
   bfs_in.close();
 
 
-
   // Compare the images' size and so on
   TEST ("p_out == p_in (structure)",
-    p_out.planes() == p_in.planes() && 
-    p_out.height() == p_in.height() &&
-    p_out.width() == p_in.width() &&
-    p_out.components() == p_in.components() &&
-    p_out.bits_per_component() == p_in.bits_per_component() &&
-    p_out.component_format() == p_in.component_format(), true);
+        p_out.planes() == p_in.planes() &&
+        p_out.height() == p_in.height() &&
+        p_out.width() == p_in.width() &&
+        p_out.components() == p_in.components() &&
+        p_out.bits_per_component() == p_in.bits_per_component() &&
+        p_out.component_format() == p_in.component_format(), true);
 
    // Now get the data and compare them
   vcl_vector<int> buf1(imageof.size());
@@ -88,9 +90,7 @@ void test_memory_image_impl_io()
   // And have a look at the summary
   vsl_print_summary(vcl_cout, p_in);
   vcl_cout << vcl_endl;
-
 }
-
 
 void test_memory_image_impl_prime()
 {
