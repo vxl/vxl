@@ -324,6 +324,7 @@ bool bmrf_network_builder::compute_segments()
       max_segments.push_back(*sit);
     }
   }
+
   //sort the segments according to min epipolar distance
   vcl_sort(min_segments.begin(),
            min_segments.end(),
@@ -396,10 +397,35 @@ intensity_candidates(bmrf_epi_seg_sptr const& seg,
   int n = min_segs.size();//same set as max_segs_, different order
   if (n<2)
     return false;//can't get bounds with only one seg
-  vcl_vector<bmrf_epi_seg_sptr> left_temp, right_temp;
+  
   double a_min = seg->min_alpha(), a_max = seg->max_alpha();
   double s_min = seg->min_s(), s_max = seg->max_s();
   double r = radius(s_min);//scaled region radius
+
+
+  //scan the array for suitable candidates
+  for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = min_segs.begin();
+       sit != min_segs.end(); ++sit)
+  {
+    bmrf_epi_seg_sptr curr_seg = *sit;
+    // Check the candidate for alpha range
+    if ( curr_seg->min_alpha()<a_max && 
+         curr_seg->max_alpha()> a_min )
+    {
+      // Check the candidate for the right s range
+      if ( curr_seg->max_s() > s_min &&
+           curr_seg->min_s() < s_max+r )
+        right_cand.push_back(curr_seg);
+      // Check the candidate for the left s range
+      if( curr_seg->min_s() < s_max &&
+          curr_seg->max_s() > s_min-r )
+        left_cand.push_back(curr_seg);
+    }
+  }
+
+#if 0 // -- This code is not used for now -- 
+  vcl_set<bmrf_epi_seg_sptr> left_temp, right_temp; 
+
   //check bounds
   int min_index = seg->min_index();
   int max_index = seg->max_index();
@@ -408,96 +434,54 @@ intensity_candidates(bmrf_epi_seg_sptr const& seg,
   if (max_index<0||max_index>=n)
     return false;
 
-  //scan the sorted arrays for suitable candidates
-  //scan the min index to the left
-  bool some_candidates = false;
-  bool found_something = true;
-  for (int im = min_index-1&&found_something; im>=0; im--)
-  {
-    if (min_segs[im]->min_s()< s_max-r)
-    {
-      left_temp.push_back(min_segs[im]);
-      continue;
-    }
-    if (min_segs[im]->min_s() < s_max + r)
-    {
-      right_temp.push_back(min_segs[im]);
-      continue;
-    }
-    found_something = false;
-  }
-  some_candidates = some_candidates || found_something;
   //scan the min index to the right
-  found_something = true;
-  for (unsigned int im = min_index+1; im<min_segs.size()&&found_something; ++im)
+  for (int im = min_index+1; im<min_segs.size(); ++im)
   {
-    if (min_segs[im]->min_s()< s_max-r)
-    {
-      left_temp.push_back(min_segs[im]);
-      continue;
-    }
+    if (min_segs[im]->min_s() < s_max)
+      left_temp.insert(min_segs[im]);
+    else
+      break;
+  }
+  for (int im = min_index+1; im<min_segs.size(); ++im)
+  {
     if (min_segs[im]->min_s() < s_max + r)
-    {
-      right_temp.push_back(min_segs[im]);
-      continue;
-    }
-    found_something = false;
+      right_temp.insert(min_segs[im]);
+    else
+      break;
   }
-  some_candidates = some_candidates || found_something;
+
   //scan the max index to the left
-  found_something = true;
-  for (int im = max_index-1&&found_something; im>=0; im--)
+  for (int im = max_index-1; im>=0; --im)
   {
-    if (max_segs[im]->max_s()< s_min-r)
-    {
-      left_temp.push_back(max_segs[im]);
-      continue;
-    }
-    if (max_segs[im]->max_s() < s_min + r)
-    {
-      right_temp.push_back(min_segs[im]);
-      continue;
-    }
-    found_something = false;
+    if (max_segs[im]->max_s() > s_min-r)
+      left_temp.insert(max_segs[im]);
+    else
+      break;
   }
-  some_candidates = some_candidates || found_something;
-  //scan the max index to the right
-  found_something = true;
-  for (unsigned int im = max_index+1; im<max_segs.size()&&found_something; --im)
+  for (int im = max_index-1; im>=0; --im)
   {
-    if (max_segs[im]->max_s()< s_min-r)
-    {
-      left_temp.push_back(max_segs[im]);
-      continue;
-    }
-    if (max_segs[im]->max_s() < s_min + r)
-    {
-      right_temp.push_back(min_segs[im]);
-      continue;
-    }
-    found_something = false;
+    if (max_segs[im]->max_s() > s_min)
+      right_temp.insert(max_segs[im]);
+    else
+      break;
   }
-  some_candidates = some_candidates || found_something;
+
   // At this point we have found all the viable candidates based on the
   // s dimension. Next we pass candidates based on the alpha range
   // x_alpha_min < alpha_max and x_alpha_max > alpha_min
-  bool found_alpha = false;
-  for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = left_temp.begin();
-       sit != left_temp.end(); sit++)
+  for (vcl_set<bmrf_epi_seg_sptr>::iterator sit = left_temp.begin();
+       sit != left_temp.end(); ++sit)
     if ((*sit)->min_alpha()<a_max && (*sit)->max_alpha()> a_min)
-    {
-      found_alpha = true;
       left_cand.push_back(*sit);
-    }
-  for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = right_temp.begin();
-       sit != right_temp.end(); sit++)
+  for (vcl_set<bmrf_epi_seg_sptr>::iterator sit = right_temp.begin();
+       sit != right_temp.end(); ++sit)
     if ((*sit)->min_alpha()<a_max && (*sit)->max_alpha()> a_min)
-    {
-      found_alpha = true;
       right_cand.push_back(*sit);
-    }
-  return some_candidates&&found_alpha;
+#endif
+
+  return !right_cand.empty() || !left_cand.empty();
 }
+
 
 //: the radius for intensity sampling
 double bmrf_network_builder::radius(const double s)
@@ -505,32 +489,6 @@ double bmrf_network_builder::radius(const double s)
   return (Ns_*s)/smax_;
 }
 
-#if 0 // This function is not being used
-//=====================================================================
-//: Tests if a segment has an alpha range that intersects [min_a, max_a]
-//  Also returns the bounds of the intersection, [as, ae].
-//=====================================================================
-static bool inside_range(const double min_a, const double max_a,
-                         bmrf_epi_seg_sptr const& seg,
-                         double& as, double& ae)
-{
-  if (!seg)
-    return false;
-  double seg_min_a = seg->min_alpha(), seg_max_a = seg->max_alpha();
-  //test for inclusion
-  if (seg_max_a < min_a)
-    return false;
-  if (seg_min_a > max_a)
-    return false;
-  //intersect segment alpha limits
-  as = min_a; ae = max_a;
-  if (as<seg_min_a)
-    as = seg_min_a;
-  if (ae>seg_max_a)
-    ae = seg_max_a;
-  return true;
-}
-#endif // 0
 
 //:find the closest left bounding segment s value
 double bmrf_network_builder::
