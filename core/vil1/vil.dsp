@@ -167,6 +167,10 @@ SOURCE=".\Templates\vil_interpolate+float.double-.cxx"
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vil_interpolate+uchar.double-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vil_interpolate+uchar.uchar-.cxx"
 # End Source File
 # Begin Source File
@@ -291,6 +295,10 @@ SOURCE=.\vil_skip_image_impl.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vil_smooth.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vil_ssd+byte.byte.int-.cxx"
 # End Source File
 # Begin Source File
@@ -300,10 +308,6 @@ SOURCE=.\vil_stream.cxx
 # Begin Source File
 
 SOURCE=.\vil_stream_core.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\vil_stream_FILE_ptr.cxx
 # End Source File
 # Begin Source File
 

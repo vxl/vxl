@@ -4,9 +4,10 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
 #include "vil_32bit.h"
 #include <vil/vil_stream.h>
-#include <vxl_misc_config.h>
+#include <vxl_config.h>
 
 typedef vxl_uint8  word8;
 typedef vxl_uint32 word32;

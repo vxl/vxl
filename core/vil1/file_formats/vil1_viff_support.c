@@ -79,6 +79,7 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
 * ROUTINES CALLED: 
 *
 **************************************************************/
+
 struct vil_viff_xvimage *
 vil_viff_createimage(col_size, row_size, data_storage_type, num_of_images,
 		num_data_bands, comment, map_row_size, map_col_size,
