@@ -136,7 +136,6 @@ static void test_irls()
   int dof = lr->param_dof();
   rrel_wls_obj * m_est = new rrel_tukey_obj( dof );
   int max_iterations = 50;
-  int trace_level=0;
   testlib_test_begin( "ctor" );
   rrel_irls * irls = new rrel_irls( max_iterations );
   testlib_test_perform( irls != 0 );
@@ -195,9 +194,8 @@ static void test_irls()
   testlib_test_begin( "iterations used" );
   testlib_test_perform( irls->iterations_used() == max_iterations );
 
-
   //  onto irls from matches
-  trace_level = 0;
+  int trace_level = 0;
   vnl_vector<double> params(4, 1.2,0.3,15.0,-4.0);
   vcl_vector< image_point_match > matches;
   sigma = 0.25;
