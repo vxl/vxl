@@ -17,8 +17,6 @@
 //   Peter Vanroose - Aug.2000 - converted to vxl
 // \endverbatim
 
-#include <vipl/filter/vipl_trivial_pixeliter.h>
-
 #ifndef FILTER_IMPTR_DEC_REFCOUNT
 #define FILTER_IMPTR_DEC_REFCOUNT(v) ((v)->dec_refcount(),(v)=0)
 #endif
