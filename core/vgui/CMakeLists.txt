@@ -15,7 +15,7 @@ INCLUDE(${MODULE_PATH}/FindGLUT.cmake)
 # The following are for the optional toolkit
 # implementations
 INCLUDE(${MODULE_PATH}/NewCMake/FindQt.cmake)
-INCLUDE(${MODULE_PATH}/FindGTK.cmake)
+INCLUDE(${MODULE_PATH}/NewCMake/FindGTK.cmake)
 INCLUDE(${MODULE_PATH}/NewCMake/FindFltk.cmake)
 
 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
@@ -263,7 +263,7 @@ IF (QT_WRAP_CPP)
       impl/qt/vgui_qt_menu.cxx        impl/qt/vgui_qt_menu.h
     )
 
-    QT_WRAP_CPP(vgui_qt vgui_qt_moc_files
+    QT_WRAP_CPP(vgui vgui_qt_moc_files
       impl/qt/vgui_qt_adaptor.h
       impl/qt/vgui_qt_statusbar.h
       impl/qt/vgui_qt_dialog_impl.h
@@ -373,7 +373,7 @@ ENDIF (HAS_GLX)
 # GTK
 ##################################################
 
-IF (HAS_GTK)
+IF (GTK_FOUND)
 
   OPTION(VGUI_USE_GTK "Should GTK support be compiled into vgui?" YES)
 
@@ -381,7 +381,7 @@ IF (HAS_GTK)
 
     ADD_DEFINITIONS( "-DVGUI_USE_GTK" )
 
-    INCLUDE_DIRECTORIES(${GTK_INCLUDE_PATH})
+    INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIR})
 
     SET(vgui_gtk_sources
       impl/gtk/vgui_gtk.cxx             impl/gtk/vgui_gtk.h
@@ -399,7 +399,7 @@ IF (HAS_GTK)
 
   ENDIF(VGUI_USE_GTK)
 
-ENDIF (HAS_GTK)
+ENDIF (GTK_FOUND)
 
 
 ##################################################
