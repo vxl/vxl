@@ -25,7 +25,7 @@
 
 class vgui_active_visible : public vgui_wrapper_tableau {
 public:
-  vgui_active_visible(vgui_tableau_sptr const &);
+  vgui_active_visible(vgui_tableau_sptr const &, bool name_in_menu = false);
 
   vcl_string type_name() const;
 
@@ -44,11 +44,13 @@ protected:
  ~vgui_active_visible();
   bool active_;
   bool visible_;
+  bool name_in_menu_;
 };
 
 struct vgui_active_visible_new : public vgui_active_visible_sptr {
   typedef vgui_active_visible_sptr base;
-  vgui_active_visible_new(vgui_tableau_sptr const &a) : base(new vgui_active_visible(a)) { }
+  vgui_active_visible_new(vgui_tableau_sptr const &a, bool name=false)
+    : base(new vgui_active_visible(a,name)) { }
 };
 
 #endif // vgui_active_visible_h_

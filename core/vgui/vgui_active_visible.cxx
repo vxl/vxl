@@ -14,10 +14,11 @@
 #include "vgui_command.h"
 #include "vgui_menu.h"
 
-vgui_active_visible::vgui_active_visible(vgui_tableau_sptr const & t)
+vgui_active_visible::vgui_active_visible(vgui_tableau_sptr const & t, bool name_in_menu )
   : vgui_wrapper_tableau(t)
   , active_(true)
   , visible_(true)
+  , name_in_menu_( name_in_menu )
 {
 }
 
@@ -45,21 +46,28 @@ bool vgui_active_visible::handle(const vgui_event &e) {
 
 void vgui_active_visible::add_popup(vgui_menu& menu) {
 
+  vgui_menu popup;
+
   vcl_string active_label("Toggle active ");
   if (active_) active_label+="[on]";
   else active_label+="[off]";
 
-  menu.add(active_label.c_str(),
-           new vgui_command_simple<vgui_active_visible>(this, &vgui_active_visible::toggle_active));
+  popup.add(active_label.c_str(),
+            new vgui_command_simple<vgui_active_visible>(this, &vgui_active_visible::toggle_active));
 
 
   vcl_string visible_label("Toggle visible ");
   if (visible_) visible_label+="[on]";
   else visible_label+="[off]";
 
-  menu.add(visible_label.c_str(),
-           new vgui_command_simple<vgui_active_visible>(this, &vgui_active_visible::toggle_visible));
+  popup.add(visible_label.c_str(),
+            new vgui_command_simple<vgui_active_visible>(this, &vgui_active_visible::toggle_visible));
 
+  if (!name_in_menu_) {
+    menu.include( popup );
+  } else {
+    menu.add( name(), popup );
+  }
 }
 
 
