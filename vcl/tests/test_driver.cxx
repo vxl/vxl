@@ -20,6 +20,7 @@ int test_headers_main(int, char**); // need not be called: just a compiler test
 int test_iostream_main(int, char*[]);
 int test_iterator_main(int, char*[]);
 int test_list_main(int, char*[]);
+int test_limits_main(int, char*[]);
 int test_map_main(int, char*[]);
 int test_multimap_main(int, char*[]);
 int test_new_main(int, char*[]);
@@ -95,6 +96,8 @@ int main( int argc, char* argv[] )
 
   DO_TEST( list );
 
+  DO_TEST( limits );
+
   DO_TEST( map );
 
   DO_TEST( multimap );
@@ -113,6 +116,7 @@ int main( int argc, char* argv[] )
   {
     vcl_cout << "Unsupported test " << name
              << "; should first be added to test_driver.cxx\n";
+    failed = true;
   }
 
   vcl_cout << "Test Summary: ";

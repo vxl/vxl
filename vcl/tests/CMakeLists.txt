@@ -20,6 +20,7 @@ ADD_EXECUTABLE( vcl_test_all
      test_iostream.cxx
      test_iterator.cxx
      test_list.cxx
+     test_limits.cxx
      test_map.cxx
      test_multimap.cxx
      test_new.cxx
@@ -43,6 +44,7 @@ ADD_TEST( vcl_test_fstream     vcl_test_all test_fstream )
 ADD_TEST( vcl_test_iostream    vcl_test_all test_iostream )
 ADD_TEST( vcl_test_iterator    vcl_test_all test_iterator )
 ADD_TEST( vcl_test_list        vcl_test_all test_list )
+ADD_TEST( vcl_test_limits      vcl_test_all test_limits )
 ADD_TEST( vcl_test_map         vcl_test_all test_map )
 ADD_TEST( vcl_test_multimap    vcl_test_all test_multimap )
 ADD_TEST( vcl_test_new         vcl_test_all test_new )
