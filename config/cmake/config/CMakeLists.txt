@@ -4,6 +4,10 @@
 PROJECT(vxl_config)
 CMAKE_MINIMUM_REQUIRED(VERSION 1.8)
 
+# When adding new configuration tests that cache results, please make
+# sure they honour VXL_UPDATE_CONFIGURATION: if this variable is ON,
+# redo the test and update the cached value.
+
 #
 # The tests results will be cached. Allow the user to re-run the tests
 # if necessary This flag will be reset to "OFF" every time, so that
@@ -11,8 +15,26 @@ CMAKE_MINIMUM_REQUIRED(VERSION 1.8)
 # machine's configuration if you believe the test results are stale or
 # wrong.
 #
-OPTION( VXL_UPDATE_CONFIGURATION "Re-run the configuration tests?" "OFF" )
+OPTION( VXL_UPDATE_CONFIGURATION "Re-run the configuration tests to update cached results?" "OFF" )
 MARK_AS_ADVANCED( VXL_UPDATE_CONFIGURATION )
+
+# The serial number below will allow the maintainers to force builds
+# to update cached results. Whenever you make a change that makes it
+# necessary for cached values to be updated, increment the serial
+# number. The format follows a DNS-style numbering: the current date
+# followed by a modification time within the day.
+#
+SET( VXL_CONFIG_SERIAL_CURRENT "2004-01-16-000" )
+
+IF( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
+  # The configuration is current
+ELSE( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
+  SET( VXL_UPDATE_CONFIGURATION "ON" )
+  # Record that we've done the new config.
+  SET( VXL_CONFIG_SERIAL_LAST ${VXL_CONFIG_SERIAL_CURRENT} CACHE INTERNAL "Serial number of last configuration" )
+ENDIF( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
+
+
 
 #
 # Include necessary modules
@@ -28,7 +50,6 @@ INCLUDE (${vxl_SOURCE_DIR}/config/cmake/config/vxl_config_macros.cmake)
 # Perform all the specific tests
 #
 
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx MY_NEW_TEST)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_BOOL)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_TYPENAME)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_EXPORT)

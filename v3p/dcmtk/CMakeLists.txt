@@ -15,6 +15,117 @@ IF( VXL_BUILD_DCMTK )
 # ---------------------------------------------------------------------------
 # Configuration
 
+# When adding a new check whose result will be cached, it is important
+# to add that variable to the "clear list" below, so that it can be
+# forcibly recomputed when necessary.
+
+# Updating this serial number will cause the configuration variables
+# to be recomputed. This is useful if you make a change to a test, and
+# you want to ensure that the builds don't use old, invalid cached
+# values of the results. The number should be incremented to indicate
+# change. The format follows a DNS-style numbering: the current date
+# followed by a modification time within the day.
+#
+SET( DCMTK_CONFIG_SERIAL_CURRENT "2004-01-16-000" )
+
+IF( ${DCMTK_CONFIG_SERIAL_CURRENT} MATCHES "^${DCMTK_CONFIG_SERIAL_LAST}$" )
+  # The configuration is current
+ELSE( ${DCMTK_CONFIG_SERIAL_CURRENT} MATCHES "^${DCMTK_CONFIG_SERIAL_LAST}$" )
+  # The configuration has changed, so reset the stored variables to
+  # force them to be recomputed
+  #
+  FOREACH( VAR
+        DCMTK_DCM_DICT_DEFAULT_PATH
+        DCMTK_ENVIRONMENT_PATH_SEPARATOR
+        DCMTK_HAVE_ACCESS
+        DCMTK_HAVE_ARPA_INET_H
+        DCMTK_HAVE_ASSERT_H
+        DCMTK_HAVE_BCMP
+        DCMTK_HAVE_BCOPY
+        DCMTK_HAVE_BZERO
+        DCMTK_HAVE_CTYPE_H
+        DCMTK_HAVE_CUSERID
+        DCMTK_HAVE_DIRENT_H
+        DCMTK_HAVE_ERRNO_H
+        DCMTK_HAVE_FLOAT_H
+        DCMTK_HAVE_GETENV
+        DCMTK_HAVE_GETHOSTBYNAME
+        DCMTK_HAVE_GETHOSTID
+        DCMTK_HAVE_GETHOSTNAME
+        DCMTK_HAVE_GETLOGIN
+        DCMTK_HAVE_GETPID
+        DCMTK_HAVE_INDEX
+        DCMTK_HAVE_IO_H
+        DCMTK_HAVE_ISO646_H
+        DCMTK_HAVE_ITOA
+        DCMTK_HAVE_LIBC_H
+        DCMTK_HAVE_LIMITS_H
+        DCMTK_HAVE_LOCALE_H
+        DCMTK_HAVE_MATH_H
+        DCMTK_HAVE_MEMCMP
+        DCMTK_HAVE_MEMCPY
+        DCMTK_HAVE_MEMMOVE
+        DCMTK_HAVE_MEMSET
+        DCMTK_HAVE_MKTEMP
+        DCMTK_HAVE_NDIR_H
+        DCMTK_HAVE_NETDB_H
+        DCMTK_HAVE_NETINET_IN_H
+        DCMTK_HAVE_PROTOTYPE_BZERO
+        DCMTK_HAVE_PROTOTYPE_GETHOSTID
+        DCMTK_HAVE_PROTOTYPE_GETTIMEOFDAY
+        DCMTK_HAVE_PROTOTYPE_MKTEMP
+        DCMTK_HAVE_PTHREAD_H
+        DCMTK_HAVE_SEMAPHORE_H
+        DCMTK_HAVE_SETJMP_H
+        DCMTK_HAVE_SIGNAL_H
+        DCMTK_HAVE_SSTREAM
+        DCMTK_HAVE_SSTREAM_H
+        DCMTK_HAVE_STAT
+        DCMTK_HAVE_STDARG_H
+        DCMTK_HAVE_STDDEF_H
+        DCMTK_HAVE_STDIO_H
+        DCMTK_HAVE_STDLIB_H
+        DCMTK_HAVE_STD_NAMESPACE
+        DCMTK_HAVE_STRCHR
+        DCMTK_HAVE_STRINGS_H
+        DCMTK_HAVE_STRING_H
+        DCMTK_HAVE_STRLCAT
+        DCMTK_HAVE_STRLCPY
+        DCMTK_HAVE_STRSTR
+        DCMTK_HAVE_STRSTREAM
+        DCMTK_HAVE_STRSTREAM_H
+        DCMTK_HAVE_STRSTREA_H
+        DCMTK_HAVE_STRTOUL
+        DCMTK_HAVE_SYNCH_H
+        DCMTK_HAVE_SYSINFO
+        DCMTK_HAVE_SYS_DIR_H
+        DCMTK_HAVE_SYS_NDIR_H
+        DCMTK_HAVE_SYS_SOCKET_H
+        DCMTK_HAVE_SYS_STAT_H
+        DCMTK_HAVE_SYS_TIME_H
+        DCMTK_HAVE_SYS_TYPES_H
+        DCMTK_HAVE_SYS_UTSNAME_H
+        DCMTK_HAVE_THREAD_H
+        DCMTK_HAVE_TIME_H
+        DCMTK_HAVE_UNAME
+        DCMTK_HAVE_UNISTD_H
+        DCMTK_HAVE_UNIX_H
+        DCMTK_HAVE_WCTYPE_H
+        DCMTK_HAVE_ZLIB
+        DCMTK_INCLUDE_MATH_H_AS_CXX
+        DCMTK_PATH_SEPARATOR
+        DCMTK_SIZEOF_LONG
+        HAVE_DCMTK_SIZEOF_LONG )  # Created indirectly by CHECK_TYPE_SIZE
+    SET( ${VAR} ${VAR} )
+  ENDFOREACH( VAR )
+
+  # Record that we've done the new config.
+  SET( DCMTK_CONFIG_SERIAL_LAST ${DCMTK_CONFIG_SERIAL_CURRENT} CACHE INTERNAL "Serial number of last configuration" )
+  
+ENDIF( ${DCMTK_CONFIG_SERIAL_CURRENT} MATCHES "^${DCMTK_CONFIG_SERIAL_LAST}$" )
+
+
+
 
 INCLUDE( ${CMAKE_ROOT}/Modules/CheckFunctionExists.cmake )
 INCLUDE( ${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake )

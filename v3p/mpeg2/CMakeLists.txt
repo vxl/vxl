@@ -25,6 +25,29 @@ IF( VXL_MPEG_USE_CONFIGURE )
 
 ELSE( VXL_MPEG_USE_CONFIGURE )
 
+  # Please make sure that any tests you add here honour
+  # VXL_UPDATE_CONFIGURATION to force cached test results to be
+  # updated. (All the VXL check functions do.)
+
+  # The serial number below will allow the maintainers to force builds
+  # to update cached results. Whenever you make a change that makes it
+  # necessary for cached values to be updated, increment the serial
+  # number. The format follows a DNS-style numbering: the current date
+  # followed by a modification time within the day.
+  #
+  SET( VXL_MPEG_CONFIG_SERIAL_CURRENT "2004-01-16-000" )
+
+  IF( ${VXL_MPEG_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_MPEG_CONFIG_SERIAL_LAST}$" )
+    # The configuration is current
+  ELSE( ${VXL_MPEG_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_MPEG_CONFIG_SERIAL_LAST}$" )
+    # Since the tests use the VXL-specific macros that honour
+    # VXL_UPDATE_CONFIGURATION, we can just use that to force the update.
+    SET( VXL_UPDATE_CONFIGURATION "ON" )
+    # Record that we've done the new config.
+    SET( VXL_MPEG_CONFIG_SERIAL_LAST ${VXL_MPEG_CONFIG_SERIAL_CURRENT} CACHE INTERNAL "Serial number of last configuration" )
+  ENDIF( ${VXL_MPEG_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_MPEG_CONFIG_SERIAL_LAST}$" )
+
+
   INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFileCXX.cmake)
   INCLUDE (${CMAKE_ROOT}/Modules/CheckSymbolExists.cmake)
   INCLUDE (${vxl_SOURCE_DIR}/config/cmake/config/vxl_config_macros.cmake)
