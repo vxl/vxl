@@ -307,9 +307,9 @@ bool vul_http_exists(char const *url)
 
   // create socket endpoint.
   SOCKET tcp_socket = socket(PF_INET,      // IPv4 protocols.
-                          SOCK_STREAM,  // two-way, reliable,
-                              // connection-based stream socket.
-                          PF_UNSPEC);   // protocol number.
+                             SOCK_STREAM,  // two-way, reliable,
+                                           // connection-based stream socket.
+                             PF_UNSPEC);   // protocol number.
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (tcp_socket == INVALID_SOCKET) {

@@ -33,7 +33,7 @@ class vul_arg_base
 {
  public:
   static void parse_deprecated(int& argc, char **& argv,
-               bool warn_about_unrecognized_arguments = true);
+                               bool warn_about_unrecognized_arguments = true);
   static void include_deprecated(vul_arg_info_list& l);
 
   static void add_to_current(vul_arg_base* a);

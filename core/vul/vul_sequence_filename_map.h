@@ -40,11 +40,11 @@ class vul_sequence_filename_map
  public:
   vul_sequence_filename_map ();
   vul_sequence_filename_map (vcl_string const & seq_template,
-    vcl_vector<int> const & indices);
+                             vcl_vector<int> const & indices);
   vul_sequence_filename_map (vcl_string const & seq_template,
-    int start, int end, int step = 1);
+                             int start, int end, int step = 1);
   vul_sequence_filename_map (vcl_string const & seq_template,
-    int step = 1);
+                             int step = 1);
   ~vul_sequence_filename_map ();
 
   //: returns frame name with no extension, e.g. "img.003", "img.003.004"
