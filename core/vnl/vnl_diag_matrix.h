@@ -115,6 +115,9 @@ class vnl_diag_matrix
 
   inline vnl_matrix<T> as_ref() const { return asMatrix(); }
 
+  // This is as good as a vnl_diag_matrix ctor for vnl_matrix:
+  inline operator vnl_matrix<T> () const { return asMatrix(); }
+
   void resize(int n) { diagonal_.resize(n); }
   void clear() { diagonal_.clear(); }
   void fill(T const &x) { diagonal_.fill(x); }
