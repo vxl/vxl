@@ -81,45 +81,26 @@ int main( int argc, char* argv[] )
   _control87(MCW_EM, MCW_EM);  
 #endif // defined(VCL_BORLAND)
 
-  DO_TEST( algorithm );
-
-  DO_TEST( cctype );
-
-  DO_TEST( cmath );
-
-  DO_TEST( compiler );
-
-  DO_TEST( complex );
-
-  DO_TEST( cstdio );
-
-  DO_TEST( deque );
-
-  DO_TEST( exception );
-
-  DO_TEST( fstream );
-
-  DO_TEST( iostream );
-
-  DO_TEST( iterator );
-
-  DO_TEST( list );
-
-  DO_TEST( limits );
-
-  DO_TEST( map );
-
-  DO_TEST( multimap );
-
-  DO_TEST( new );
-
-  DO_TEST( set );
-
-  DO_TEST( string );
-
-  DO_TEST( sstream );
-
-  DO_TEST( vector );
+  DO_TEST(algorithm);
+  DO_TEST(cctype);
+  DO_TEST(cmath);
+  DO_TEST(compiler);
+  DO_TEST(complex);
+  DO_TEST(cstdio);
+  DO_TEST(deque);
+  DO_TEST(exception);
+  DO_TEST(fstream);
+  DO_TEST(iostream);
+  DO_TEST(iterator);
+  DO_TEST(list);
+  DO_TEST(limits);
+  DO_TEST(map);
+  DO_TEST(multimap);
+  DO_TEST(new);
+  DO_TEST(set);
+  DO_TEST(string);
+  DO_TEST(sstream);
+  DO_TEST(vector);
 
   if (test_run == 0)
   {
@@ -128,7 +109,7 @@ int main( int argc, char* argv[] )
     failed = true;
   }
 
-  vcl_cout << "Test Summary: ";
+  vcl_cout << name << " Test Summary: ";
   if (failed > 0)
     vcl_cout<<passed<<" tests succeeded, "<<failed<<" tests failed\t\t\t*****";
   else if (passed > 1)
