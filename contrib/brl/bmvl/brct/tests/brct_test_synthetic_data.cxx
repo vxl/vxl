@@ -3,7 +3,6 @@
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
-#include <vcl_where_root_dir.h>
 #include <vil1/vil1_save.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vdgl/vdgl_edgel_chain.h>
@@ -12,11 +11,6 @@
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vsol/vsol_point_2d.h>
 #include "../brct_epi_reconstructor.h"
-
-#define Assert(x) { vcl_cout << #x "\t\t\t test "; \
-  if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
-
-bool near_eq(double x, double y){return vcl_fabs(x-y)<0.1;}
 
 static double x1(double t)
 {
@@ -155,9 +149,9 @@ write_track_to_file(vcl_vector<vdgl_digital_curve_sptr> const& track,
   str.close();
 }
 
-int main()
+int main(int argc, char* argv[])
 {
-  vcl_string path = VCL_SOURCE_ROOT_DIR "/contrib/brl/bmvl/brct/tests/";
+  vcl_string path = argc<2 ? "" : vcl_string(argv[1]) + "/";
   int success=0, failures=0;
   brct_epi_reconstructor kf;
   vnl_double_3x4 P = generate_P(generate_K());
@@ -170,12 +164,9 @@ int main()
     kf.add_track(*trit);
     write_track_to_image(*trit, track_image);
   }
-  vcl_string image_file = path + "tracks.tif";
-  vil1_save(track_image, image_file.c_str(), "tiff");
-  vcl_string track_file = path + "track0.txt";
-  write_track_to_file(tracks[0], track_file);
-  track_file = path + "track1.txt";
-  write_track_to_file(tracks[1], track_file);
+  vil1_save(track_image, (path+"tracks.tif").c_str(), "tiff");
+  write_track_to_file(tracks[0], path+"track0.txt");
+  write_track_to_file(tracks[1], path+"track1.txt");
 
   vcl_cout << "Test Summary: " << success << " tests succeeded, "
            << failures << " tests failed" << (failures?"\t***\n":"\n");
