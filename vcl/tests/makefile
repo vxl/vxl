@@ -24,5 +24,3 @@ IULIBS = -lvcl
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################
-
-STRIP = echo # There are problems running stripped versions of test_vcl_iterator.exe and test_vcl_rel_ops.exe on SGI
