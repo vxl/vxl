@@ -1,7 +1,6 @@
+// This is vxl/vbl/vbl_basic_optional.h
 #ifndef vbl_basic_optional_h
 #define vbl_basic_optional_h
-
-// This is vxl/vbl/vbl_basic_optional.h
 
 //:
 // \file
@@ -69,7 +68,7 @@ inline bool operator!=(const vbl_basic_optional&, const vbl_basic_optional&)
   return false;
 }
 
-#include <vbl/vbl_hash_map.h>
+#include <vcl_hash.h>
 struct vcl_hash<vbl_basic_optional> {
   vcl_size_t operator()(const vbl_basic_optional& /*s*/) const { return 0; }
 };
