@@ -345,10 +345,10 @@ void vsol_conic_2d::ellipse_parameters(double &cx,
 // Require: is_hyperbola()
 //---------------------------------------------------------------------------
 void vsol_conic_2d::hyperbola_parameters(double &cx,
-                                       double &cy,
-                                       double &phi,
-                                       double &width,
-                                       double &height) const
+                                         double &cy,
+                                         double &phi,
+                                         double &width,
+                                         double &height) const
 {
   // require
   assert(is_hyperbola());
