@@ -410,7 +410,7 @@ brip_float_ops::beaudet(vil1_memory_image_of<float> const & Ixx,
       //compute eigenvalues for experimentation
       float det = xx*yy-xy*xy;
       float tr = xx+yy;
-      float arg = tr*tr-4.0*det, lambda0 = 0, lambda1=0;
+      float arg = tr*tr-4.f*det, lambda0 = 0, lambda1=0;
       if (arg>0)
       {
         lambda0 = tr+vcl_sqrt(arg);
@@ -1223,7 +1223,7 @@ float brip_float_ops::gaussian_blocking_filter(const float dir_fx,
   float mag = vcl_sqrt(dir_fx*dir_fx + dir_fy*dir_fy);
   if (!mag)
     return 0;
-  float r2 = 2.0*radius*radius;
+  float r2 = 2.f*radius*radius;
   float dx = dir_fx/mag, dy = dir_fy/mag;
   // compute the centers of each lobe
   float fx0p = dx*f0, fy0p = dy*f0;
@@ -1236,7 +1236,7 @@ float brip_float_ops::gaussian_blocking_filter(const float dir_fx,
   if (d2m<d2p)
     d = d2m;
   // the gaussian blocking function
-  float gb = 1.0-vcl_exp(-d/r2);
+  float gb = 1.f-(float)vcl_exp(-d/r2);
   return gb;
 }
 
@@ -1257,7 +1257,7 @@ spatial_frequency_filter(vil1_memory_image_of<float> const & input,
   bmag.resize(Nfx, Nfy);
 
   //filter the magnitude function
-  float Ofx = Nfx/2, Ofy = Nfy/2;
+  float Ofx = Nfx*0.5f, Ofy = Nfy*0.5f;
   for (int fy =0; fy<Nfy; fy++)
     for (int fx =0; fx<Nfx; fx++)
     {
