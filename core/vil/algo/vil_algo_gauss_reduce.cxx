@@ -12,7 +12,7 @@
 void vil2_algo_gauss_reduce(const vxl_byte* src_im,
                             int src_ni, int src_nj,
                             int s_x_step, int s_y_step,
-														vxl_byte* dest_im,
+                            vxl_byte* dest_im,
                             int d_x_step, int d_y_step)
 {
     vxl_byte* d_row = dest_im;
@@ -49,7 +49,7 @@ void vil2_algo_gauss_reduce(const vxl_byte* src_im,
 void vil2_algo_gauss_reduce(const float* src_im,
                             int src_ni, int src_nj,
                             int s_x_step, int s_y_step,
-														float* dest_im,int d_x_step, int d_y_step)
+                            float* dest_im,int d_x_step, int d_y_step)
 {
     float* d_row = dest_im;
     const float* s_row = src_im;
@@ -85,7 +85,7 @@ void vil2_algo_gauss_reduce(const float* src_im,
 void vil2_algo_gauss_reduce(const int* src_im,
                             int src_ni, int src_nj,
                             int s_x_step, int s_y_step,
-														int* dest_im,
+                            int* dest_im,
                             int d_x_step, int d_y_step)
 {
     int* d_row = dest_im;
@@ -122,7 +122,7 @@ void vil2_algo_gauss_reduce(const int* src_im,
 void vil2_algo_gauss_reduce_121(const vxl_byte* src_im,
                                 int src_ni, int src_nj,
                                 int s_x_step, int s_y_step,
-																vxl_byte* dest_im,int d_x_step, int d_y_step)
+                                vxl_byte* dest_im,int d_x_step, int d_y_step)
 {
   int sxs2 = s_x_step*2;
   int sys2 = s_y_step*2;
@@ -192,7 +192,7 @@ void vil2_algo_gauss_reduce_121(const vxl_byte* src_im,
 void vil2_algo_gauss_reduce_121(const float* src_im,
                                 int src_ni, int src_nj,
                                 int s_x_step, int s_y_step,
-																float* dest_im,
+                                float* dest_im,
                                 int d_x_step, int d_y_step)
 {
   int sxs2 = s_x_step*2;
@@ -263,7 +263,7 @@ void vil2_algo_gauss_reduce_121(const float* src_im,
 void vil2_algo_gauss_reduce_121(const int* src_im,
                                 int src_ni, int src_nj,
                                 int s_x_step, int s_y_step,
-																int* dest_im,
+                                int* dest_im,
                                 int d_x_step, int d_y_step)
 {
   int sxs2 = s_x_step*2;

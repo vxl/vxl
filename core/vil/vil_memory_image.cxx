@@ -9,7 +9,7 @@
 #include "vil2_memory_image.h"
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
-#include <vxl_config.h>
+#include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_copy.h>
 #include <vil2/vil2_pixel_format.h>
@@ -19,8 +19,7 @@ class vil2_image_view_base;
 vil2_memory_image::vil2_memory_image():
    view_(new vil2_image_view<vxl_byte>()) {}
 
-vil2_memory_image::vil2_memory_image(unsigned ni,
-  unsigned nj, unsigned nplanes, vil2_pixel_format format)
+vil2_memory_image::vil2_memory_image(unsigned ni, unsigned nj, unsigned nplanes, vil2_pixel_format format)
 {
   // format should be a scalar type
   assert (vil2_pixel_format_num_components(format)==1);
@@ -60,8 +59,8 @@ vil2_image_view_base_sptr vil2_memory_image::get_copy_view(unsigned i0, unsigned
       const vil2_image_view< T > &v = \
         static_cast<const vil2_image_view< T > &>(*view_); \
       vil2_image_view< T > w(v.memory_chunk(), &v(i0,j0), \
-                                   ni, nj, v.nplanes(), \
-                                   v.istep(), v.jstep(), v.planestep()); \
+                             ni, nj, v.nplanes(), \
+                             v.istep(), v.jstep(), v.planestep()); \
       return new vil2_image_view< T >(vil2_copy_deep(w)); }
 macro(VIL2_PIXEL_FORMAT_BYTE, vxl_byte )
 macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
@@ -90,8 +89,8 @@ vil2_image_view_base_sptr vil2_memory_image::get_view(unsigned i0, unsigned ni,
       const vil2_image_view< T > &v = \
         static_cast<const vil2_image_view< T > &>(*view_); \
       return new vil2_image_view< T >(v.memory_chunk(), &v(i0,j0), \
-                                            ni, nj, v.nplanes(), \
-                                            v.istep(), v.jstep(), v.planestep()); }
+                                      ni, nj, v.nplanes(), \
+                                      v.istep(), v.jstep(), v.planestep()); }
 macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
 macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 macro(VIL2_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
@@ -118,7 +117,6 @@ bool vil2_memory_image::put_view(const vil2_image_view_base& im,unsigned i0, uns
 
   switch(view_->pixel_format())
   {
-
 #define macro( F , T ) \
   case  F : { \
       vil2_image_view< T > &v = \
@@ -130,7 +128,7 @@ bool vil2_memory_image::put_view(const vil2_image_view_base& im,unsigned i0, uns
         if (&v(i0,j0) != w.top_left_ptr()) \
           assert("ERROR: vil2_memory_image::put_view()\n" \
                  "different window from that used in get_view()"); \
-        else return true; /* The user has already modified the data in place.*/ \
+        else return true; /* The user has already modified the data in place. */ \
       } \
       vil2_copy_to_window(w, v, i0, j0); \
       return true; }
@@ -144,13 +142,12 @@ macro(VIL2_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL2_PIXEL_FORMAT_BOOL , bool )
 macro(VIL2_PIXEL_FORMAT_FLOAT , float )
 macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
-
 #undef macro
+
   default:
     vcl_cerr << "WARNING: vil2_memory_image::put_view()\n"
                 "\t Unexpected pixel type" << view_->pixel_format() << vcl_endl;
     return 0;
   }
-
 }
 

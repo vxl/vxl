@@ -15,7 +15,7 @@ static unsigned component_size[]={
   sizeof(vxl_int_32),  //  VIL2_PIXEL_FORMAT_INT_32
   sizeof(vxl_uint_16), //  VIL2_PIXEL_FORMAT_UINT_16
   sizeof(vxl_int_16),  //  VIL2_PIXEL_FORMAT_INT_16
-  sizeof(vxl_byte),   //  VIL2_PIXEL_FORMAT_BYTE
+  sizeof(vxl_byte),    //  VIL2_PIXEL_FORMAT_BYTE
   sizeof(vxl_sbyte),   //  VIL2_PIXEL_FORMAT_SBYTE
   sizeof(float),       //  VIL2_PIXEL_FORMAT_FLOAT
   sizeof(double),      //  VIL2_PIXEL_FORMAT_DOUBLE
@@ -28,7 +28,7 @@ static unsigned component_size[]={
   sizeof(vxl_int_32),  //  VIL2_PIXEL_FORMAT_RGB_INT_32
   sizeof(vxl_uint_16), //  VIL2_PIXEL_FORMAT_RGB_UINT_16
   sizeof(vxl_int_16),  //  VIL2_PIXEL_FORMAT_RGB_INT_16
-  sizeof(vxl_byte),   //  VIL2_PIXEL_FORMAT_RGB_BYTE
+  sizeof(vxl_byte),    //  VIL2_PIXEL_FORMAT_RGB_BYTE
   sizeof(vxl_sbyte),   //  VIL2_PIXEL_FORMAT_RGB_SBYTE
   sizeof(float),       //  VIL2_PIXEL_FORMAT_RGB_FLOAT
   sizeof(double),      //  VIL2_PIXEL_FORMAT_RGB_DOUBLE
@@ -40,7 +40,7 @@ static unsigned component_size[]={
   sizeof(vxl_int_32),  //  VIL2_PIXEL_FORMAT_RGBA_INT_32
   sizeof(vxl_uint_16), //  VIL2_PIXEL_FORMAT_RGBA_UINT_16
   sizeof(vxl_int_16),  //  VIL2_PIXEL_FORMAT_RGBA_INT_16
-  sizeof(vxl_byte),   //  VIL2_PIXEL_FORMAT_RGBA_BYTE
+  sizeof(vxl_byte),    //  VIL2_PIXEL_FORMAT_RGBA_BYTE
   sizeof(vxl_sbyte),   //  VIL2_PIXEL_FORMAT_RGBA_SBYTE
   sizeof(float),       //  VIL2_PIXEL_FORMAT_RGBA_FLOAT
   0,                   //  VIL2_PIXEL_FORMAT_RGBA_LONG_DOUBLE

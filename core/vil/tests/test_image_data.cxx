@@ -1,11 +1,10 @@
 // This is mul/vil2/tests/test_image_data.cxx
-#include <vcl_iostream.h>
-#include <testlib/testlib_test.h>
 #include <vil2/vil2_image_data.h>
 #include <vil2/vil2_image_view_functions.h>
 #include <vil2/vil2_new.h>
 #include <vil2/vil2_crop.h>
-
+#include <vcl_iostream.h>
+#include <testlib/testlib_test.h>
 
 
 void test_image_data_1()
@@ -18,25 +17,25 @@ void test_image_data_1()
 //  vil2_memory_image mem(10,8,1,VIL2_PIXEL_FORMAT_FLOAT);
 
   TEST("vil2_new_image_data", mem, true);
-  
+
   vil2_image_view<float> view1 = mem->get_view(0, mem->ni(), 0, mem->nj());
   TEST("vil2_memory_image::get_view()", view1 && view1.ni()==10 && view1.nj()==8
     && view1.nplanes()==1, true );
 
   view1.fill(0);
-  
+
   TEST("vil2_memory_image::put_view()", mem->put_view(view1,0,0), true);
 
   vil2_image_data_sptr crop = vil2_crop(mem, 2, 6, 2, 4);
-  
+
   TEST("vil2_crop(image_data)", crop, true);
 
   vil2_image_view<float> view2 = crop->get_copy_view(0, crop->ni(), 0, crop->nj());
-  TEST("vil2_memory_image::get_copy_view()", view2 && view2.ni()==6 && view2.nj()==4
-    && view2.nplanes()==1, true );
+  TEST("vil2_memory_image::get_copy_view()",
+       view2 && view2.ni()==6 && view2.nj()==4 && view2.nplanes()==1, true );
 
   view2.fill(10.0);
-  
+
   TEST("vil2_memory_image::put_view(copy)", crop->put_view(view2,0,0), true);
 
   view1 = mem->get_view(0, mem->ni(), 0, mem->nj());
@@ -63,14 +62,14 @@ void test_image_data_1()
     image1 = image0;
 
     TEST("Shallow copy (size)",image0.ni()==image1.ni() && image0.nj()==image1.nj()
-                        && image0.nplanes()==image1.nplanes(), true);
+         && image0.nplanes()==image1.nplanes(), true);
 
     image0(4,6)=127;
     TEST("Shallow copy (values)",image1(4,6),image0(4,6));
   }
 
 
-   vil2_image_view<vxl_byte> image2;
+  vil2_image_view<vxl_byte> image2;
   {
     // Check data remains valid if a copy taken
     vil2_image_view<vxl_byte> image3;
@@ -105,8 +104,8 @@ void test_image_data_1()
   vil2_image_view<vxl_byte> image_win;
   image_win.set_to_window(image0,2,4,3,4);
   TEST("set_to_window size",
-        image_win.ni()==4 && image_win.nj()==4
-        && image_win.nplanes()==image0.nplanes(),true);
+       image_win.ni()==4 && image_win.nj()==4 &&
+       image_win.nplanes()==image0.nplanes(),true);
 
   image0(2,3)=222;
   TEST("set_to_window is shallow copy",image_win(0,0),222);

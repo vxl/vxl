@@ -6,9 +6,9 @@
 //  \brief 2D Convolution
 //  \author Tim Cootes
 
+#include <vil2/algo/vil2_algo_convolve_1d.h>
 #include <vcl_compiler.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
-#include <vil2/algo/vil2_algo_convolve_1d.h>
 
 
 //: Evaluate dot product between kernel and src_im
@@ -16,34 +16,34 @@
 // \relates vil2_image_view
 template <class srcT, class kernelT, class accumT>
 inline accumT vil2_algo_convolve_2d_at_pt(const srcT *src_im,
-                                  int s_istep, int s_jstep, int s_pstep,
-                                  const vil2_image_view<kernelT>& kernel,
-                                  accumT)
+                                          int s_istep, int s_jstep, int s_pstep,
+                                          const vil2_image_view<kernelT>& kernel,
+                                          accumT)
 {
   unsigned ni = kernel.ni();
   unsigned nj = kernel.nj();
-	unsigned np = kernel.nplanes();
+  unsigned np = kernel.nplanes();
 
   int k_istep = kernel.istep(), k_jstep = kernel.jstep();
 
-	accumT sum=0;
-	for (unsigned p = 0; p<np; ++p)
-	{
+  accumT sum=0;
+  for (unsigned p = 0; p<np; ++p)
+  {
     // Select first row of p-th plane
     const srcT*  src_row  = src_im + p*s_pstep;
     const kernelT* k_row =  kernel.top_left_ptr() + p*kernel.planestep();
 
     for (int j=0;j<nj;++j,src_row+=s_jstep,k_row+=k_jstep)
-	  {
-	    const srcT* sp = src_row;
+    {
+      const srcT* sp = src_row;
       const kernelT* kp = k_row;
-			// Sum over j-th row
-	    for (int i=0;i<ni;++i, sp += s_istep, kp += k_istep)
-			  sum += accumT(*sp)*accumT(*kp);
+      // Sum over j-th row
+      for (int i=0;i<ni;++i, sp += s_istep, kp += k_istep)
+        sum += accumT(*sp)*accumT(*kp);
     }
   }
 
-	return sum;
+  return sum;
 }
 
 
@@ -61,7 +61,7 @@ inline void vil2_algo_convolve_2d(const vil2_image_view<srcT>& src_im,
   unsigned ni = 1+src_im.ni()-kernel.ni();
   unsigned nj = 1+src_im.nj()-kernel.nj();
   int s_istep = src_im.istep(), s_jstep = src_im.jstep();
-	int s_pstep = src_im.planestep();
+  int s_pstep = src_im.planestep();
 
   dest_im.resize(ni,nj,1);
   int d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
@@ -71,12 +71,12 @@ inline void vil2_algo_convolve_2d(const vil2_image_view<srcT>& src_im,
   destT* dest_row = dest_im.top_left_ptr();
 
   for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
-	{
-	  const srcT* sp = src_row;
+  {
+    const srcT* sp = src_row;
     destT* dp = dest_row;
-	  for (int i=0;i<ni;++i, sp += s_istep, dp += d_istep)
+    for (int i=0;i<ni;++i, sp += s_istep, dp += d_istep)
       *dp = (destT) vil2_algo_convolve_2d_at_pt(sp,s_istep,s_jstep,s_pstep,kernel,accumT());
-			 // Convolve at src(i,j)
+      // Convolve at src(i,j)
   }
 }
 

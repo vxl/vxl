@@ -5,9 +5,9 @@
 // \file
 // \author Ian Scott.
 
-#include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>
+#include <vxl_config.h> // for vxl_uint_32 etc.
 
 //: Describes the type of the concrete data.
 enum vil2_pixel_format {
@@ -61,13 +61,13 @@ inline vil2_pixel_format vil2_pixel_format_of(T dummy) { return VIL2_PIXEL_FORMA
 
 //: Get the vil2_pixel_format value for a given type.
 #define vil2_pixel_format_macro(T,V)\
-VCL_DEFINE_SPECIALIZATION inline vil2_pixel_format vil2_pixel_format_of(T dummy) { return V; }
+VCL_DEFINE_SPECIALIZATION inline vil2_pixel_format vil2_pixel_format_of(T /*dummy*/) { return V; }
 
 vil2_pixel_format_macro(vxl_uint_32, VIL2_PIXEL_FORMAT_UINT_32)
 vil2_pixel_format_macro(vxl_int_32,  VIL2_PIXEL_FORMAT_INT_32)
 vil2_pixel_format_macro(vxl_uint_16, VIL2_PIXEL_FORMAT_UINT_16)
 vil2_pixel_format_macro(vxl_int_16,  VIL2_PIXEL_FORMAT_INT_16)
-vil2_pixel_format_macro(vxl_byte,   VIL2_PIXEL_FORMAT_BYTE)
+vil2_pixel_format_macro(vxl_byte,    VIL2_PIXEL_FORMAT_BYTE)
 vil2_pixel_format_macro(vxl_sbyte,   VIL2_PIXEL_FORMAT_SBYTE)
 vil2_pixel_format_macro(float,       VIL2_PIXEL_FORMAT_FLOAT)
 vil2_pixel_format_macro(double,      VIL2_PIXEL_FORMAT_DOUBLE)
@@ -77,7 +77,7 @@ vil2_pixel_format_macro(vil_rgb<vxl_uint_32>, VIL2_PIXEL_FORMAT_RGB_UINT_32)
 vil2_pixel_format_macro(vil_rgb<vxl_int_32>,  VIL2_PIXEL_FORMAT_RGB_INT_32)
 vil2_pixel_format_macro(vil_rgb<vxl_uint_16>, VIL2_PIXEL_FORMAT_RGB_UINT_16)
 vil2_pixel_format_macro(vil_rgb<vxl_int_16>,  VIL2_PIXEL_FORMAT_RGB_INT_16)
-vil2_pixel_format_macro(vil_rgb<vxl_byte>,   VIL2_PIXEL_FORMAT_RGB_BYTE)
+vil2_pixel_format_macro(vil_rgb<vxl_byte>,    VIL2_PIXEL_FORMAT_RGB_BYTE)
 vil2_pixel_format_macro(vil_rgb<vxl_sbyte>,   VIL2_PIXEL_FORMAT_RGB_SBYTE)
 vil2_pixel_format_macro(vil_rgb<float>,       VIL2_PIXEL_FORMAT_RGB_FLOAT)
 vil2_pixel_format_macro(vil_rgb<double>,      VIL2_PIXEL_FORMAT_RGB_DOUBLE)
@@ -86,7 +86,7 @@ vil2_pixel_format_macro(vil_rgba<vxl_uint_32>, VIL2_PIXEL_FORMAT_RGBA_UINT_32)
 vil2_pixel_format_macro(vil_rgba<vxl_int_32>,  VIL2_PIXEL_FORMAT_RGBA_INT_32)
 vil2_pixel_format_macro(vil_rgba<vxl_uint_16>, VIL2_PIXEL_FORMAT_RGBA_UINT_16)
 vil2_pixel_format_macro(vil_rgba<vxl_int_16>,  VIL2_PIXEL_FORMAT_RGBA_INT_16)
-vil2_pixel_format_macro(vil_rgba<vxl_byte>,   VIL2_PIXEL_FORMAT_RGBA_BYTE)
+vil2_pixel_format_macro(vil_rgba<vxl_byte>,    VIL2_PIXEL_FORMAT_RGBA_BYTE)
 vil2_pixel_format_macro(vil_rgba<vxl_sbyte>,   VIL2_PIXEL_FORMAT_RGBA_SBYTE)
 vil2_pixel_format_macro(vil_rgba<float>,       VIL2_PIXEL_FORMAT_RGBA_FLOAT)
 vil2_pixel_format_macro(vil_rgba<double>,      VIL2_PIXEL_FORMAT_RGBA_DOUBLE)
