@@ -6,6 +6,7 @@
 //  \author Tim Cootes
 
 #include "vil2_gauss_reduce.h"
+#include <vcl_cassert.h>
 #include <vil2/vil2_bilin_interp.h>
 //: Smooth and subsample src_im to produce dest_im
 //  Applies filter in x and y, then samples every other pixel.
@@ -15,13 +16,13 @@ void vil2_gauss_reduce(const vil2_image_view<T>& src_im,
                             vil2_image_view<T>& dest_im,
                             vil2_image_view<T>& work_im)
 {
-  unsigned int ni = src_im.ni();
-  unsigned int nj = src_im.nj();
-  unsigned int n_planes = src_im.nplanes();
+  unsigned unsigned ni = src_im.ni();
+  unsigned unsigned nj = src_im.nj();
+  unsigned unsigned n_planes = src_im.nplanes();
 
   // Output image size
-  unsigned int ni2 = (ni+1)/2;
-  unsigned int nj2 = (nj+1)/2;
+  unsigned unsigned ni2 = (ni+1)/2;
+  unsigned unsigned nj2 = (nj+1)/2;
 
   dest_im.resize(ni2,nj2,n_planes);
 
@@ -119,27 +120,20 @@ void gauss_reduce_general_plane(const vil2_image_view<T>& src,
                           vil2_image_view<T>& workb,
                           const vil2_gauss_reduce_params &params)
 {
+  assert(src.ni() >= 5 && src.nj() >= 5);
   // Convolve src with a 5 x 1 gaussian filter,
   // placing result in worka
 
   // First perform horizontal smoothing
-  for (int y=0;y<src.nj();y++)
+  for (unsigned y=0;y<src.nj();y++)
   {
-/*    T* worka_row = worka_im + y*work_jstep;
-    const T* src_col3  = src_im + y*src_jstep;
-    const T* src_col2  = src_col3 - 1;
-    const T* src_col1  = src_col3 - 2;
-    const T* src_col4  = src_col3 + 1;
-    const T* src_col5  = src_col3 + 2;
-*/
-    int x;
-    int ni2 = src.ni()-2;
+    unsigned x;
+    unsigned ni2 = src.ni()-2;
     for (x=2;x<ni2;x++)
-      worka(x,y) = l_round(  params.filt2() * src(x-2,y)
-                           + params.filt1() * src(x-1,y)
-                           + params.filt0() * src(x  ,y)
-                           + params.filt1() * src(x+1,y)
-                           + params.filt2() * src(x+2,y), (T)0);
+      worka(x,y) = l_round(  params.filt2() * (src(x-2,y) + src(x+2,y))
+                           + params.filt1() * (src(x-1,y) + src(x+1,y))
+                           + params.filt0() *  src(x  ,y),
+                           (T)0);
 
     // Now deal with edge effects :
     worka(0,y) = l_round( params.filt_edge0() * src(0,y)
@@ -166,40 +160,16 @@ void gauss_reduce_general_plane(const vil2_image_view<T>& src,
   // Now perform vertical smoothing
   for (int y=2;y<src.nj()-2;y++)
   {
-/*    T* workb_row = workb_im + y*work_jstep;
-
-    const T* worka_row3  = worka_im + y*work_jstep;
-    const T* worka_row2  = worka_row3 - work_jstep;
-    const T* worka_row1  = worka_row3 - 2 * work_jstep;
-    const T* worka_row4  = worka_row3 + work_jstep;
-    const T* worka_row5  = worka_row3 + 2 * work_jstep;
-*/
     for (int x=0; x<src.ni(); x++)
-      workb(x,y) = l_round(  params.filt2() * worka(x,y-2)
-                           + params.filt1() * worka(x,y-1)
-                           + params.filt0() * worka(x,  y)
-                           + params.filt1() * worka(x,y+1)
-                           + params.filt2() * worka(x,y+2), (T)0);
+      workb(x,y) = l_round(  params.filt2() *(worka(x,y-2) + worka(x,y+2))
+                           + params.filt1() *(worka(x,y-1) + worka(x,y+1))
+                           + params.filt0() * worka(x,  y),
+                           (T)0);
   }
 
   // Now deal with edge effects :
   //
-/*  const T* worka_row_bottom_1 = worka_im;
-  const T* worka_row_bottom_2 = worka_row_bottom_1 + work_jstep;
-  const T* worka_row_bottom_3 = worka_row_bottom_1 + 2 * work_jstep;
-  const T* worka_row_bottom_4 = worka_row_bottom_1 + 3 * work_jstep;
-
-  const T* worka_row_top_5  = worka_im + (src.nj()-1) * work_jstep;
-  const T* worka_row_top_4  = worka_row_top_5 - work_jstep;
-  const T* worka_row_top_3  = worka_row_top_5 - 2 * work_jstep;
-  const T* worka_row_top_2  = worka_row_top_5 - 3 * work_jstep;
-
-  T* workb_row_top      = workb_im + (src.nj()-1) * work_jstep;
-  T* workb_row_next_top  = workb_row_top - work_jstep;
-  T* workb_row_bottom    = workb_im;
-  T* workb_row_next_bottom  = workb_row_bottom + work_jstep;
-*/
-  for (int x=0;x<src.ni();x++)
+  for (unsigned x=0;x<src.ni();x++)
   {
     workb(x,src.nj()-1) = l_round( params.filt_edge0() * worka(x,src.nj()-1)
                                  + params.filt_edge1() * worka(x,src.nj()-2)
@@ -222,7 +192,6 @@ void gauss_reduce_general_plane(const vil2_image_view<T>& src,
 
 //  workb_.print_all(vcl_cout);
 
- // T* dest_row = dest_im;
 
 //  assert (dest_ni*scale_step() <= src.ni() && dest_nj*scale_step() <= src.nj());
 
@@ -248,19 +217,13 @@ void gauss_reduce_general(const vil2_image_view<T>& src_im,
                           vil2_image_view<T>& workb,
                           const vil2_gauss_reduce_params &params)
 {
-  int src_ni = src_im.ni();
-  int src_nj = src_im.nj();
-  int dest_ni = dest_im.ni();
-  int dest_nj = dest_im.nj();
-  int jstep = src_im.jstep();
-  int n_planes = src_im.nplanes();
 
 
   // Reduce plane-by-plane
 
 
 
-  for (int p=0;p<n_planes;++p)
+  for (unsigned p=0;p<src_im.nplanes();++p)
     gauss_reduce_general_plane(src_im, dest_im, worka, workb, params);
 #if 0
   vsl_indent_inc(vcl_cout);

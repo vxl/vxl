@@ -30,7 +30,7 @@ void test_algo_gauss_reduce_byte(int nx)
 
   TEST("First element",reduced_x(0,1),image0(0,1));
   TEST("Next element", reduced_x(1,1),image0(2,1));
-  int L = (nx-1)/2;
+  unsigned L = (nx-1)/2;
   TEST("Last element", reduced_x(L,1),image0(2*L,1));
 
   vil2_image_view<vxl_byte> test2;
@@ -87,7 +87,7 @@ void test_algo_gauss_reduce_float(int nx)
 
   TEST_NEAR("First element",reduced_x(0,1),image0(0,1),1e-6);
   TEST_NEAR("Next element",reduced_x(1,1),image0(2,1),1e-6);
-  int L = (nx-1)/2;
+  unsigned L = (nx-1)/2;
   TEST_NEAR("Last element",reduced_x(L,1),image0(2*L,1),1e-6);
 
 
@@ -100,7 +100,7 @@ void test_algo_gauss_reduce_float(int nx)
   TEST_NEAR("No overrun",test2(L+1,1),22.2f,1e-6);
 }
 
-void test_algo_gauss_reduce_121_byte(int nx, int ny)
+void test_algo_gauss_reduce_121_byte(unsigned nx, unsigned ny)
 {
   vcl_cout << "*******************************************************\n"
            << " Testing vil2_algo_gauss_reduce_121 (byte)(nx="<<nx<<", ny="<<ny<<")\n"
@@ -124,8 +124,8 @@ void test_algo_gauss_reduce_121_byte(int nx, int ny)
 
   TEST("First element",reduced_x(0,1),image0(0,2));
   TEST("Next element",reduced_x(1,1),image0(2,2));
-  int Lx = (nx+1)/2;
-  int Ly = (ny+1)/2;
+  unsigned Lx = (nx+1)/2;
+  unsigned Ly = (ny+1)/2;
   TEST("Last element in x",reduced_x(Lx-1,1),image0(2*(Lx-1),2));
   TEST("Last element in y",reduced_x(1,Ly-1),image0(2,2*(Ly-1)));
 
@@ -146,7 +146,7 @@ void test_algo_gauss_reduce_121_byte(int nx, int ny)
   vcl_cout<<"Value at (1,1):"<<int(test2(1,1))<<vcl_endl;
 }
 
-void test_algo_gauss_reduce_121_float(int nx, int ny)
+void test_algo_gauss_reduce_121_float(unsigned nx, unsigned ny)
 {
   vcl_cout << "********************************************************\n"
            << " Testing vil2_algo_gauss_reduce_121 (float)(nx="<<nx<<", ny="<<ny<<")\n"
@@ -170,8 +170,8 @@ void test_algo_gauss_reduce_121_float(int nx, int ny)
 
   TEST_NEAR("First element",reduced_x(0,1),image0(0,2),1e-6);
   TEST_NEAR("Next element",reduced_x(1,1),image0(2,2),1e-6);
-  int Lx = (nx+1)/2;
-  int Ly = (ny+1)/2;
+  unsigned Lx = (nx+1)/2;
+  unsigned Ly = (ny+1)/2;
   TEST_NEAR("Last element in x",reduced_x(Lx-1,1),image0(2*(Lx-1),2),1e-6);
   TEST_NEAR("Last element in y",reduced_x(1,Ly-1),image0(2,2*(Ly-1)),1e-6);
 
@@ -195,7 +195,7 @@ void test_algo_gauss_reduce_121_float(int nx, int ny)
 void test_algo_gauss_reduce_byte_2d()
 {
   vcl_cout<<"Testing reduction in 2D"<<vcl_endl;
-  int ni = 20, nj = 20;
+  unsigned ni = 20, nj = 20;
 
   vil2_image_view<vxl_byte> image0(ni,nj),image1,work_im;
 
@@ -204,8 +204,8 @@ void test_algo_gauss_reduce_byte_2d()
       image0(x,y) = x+y*10;
 
   vil2_gauss_reduce(image0,image1,work_im);
-  int ni2 = (ni+1)/2;
-  int nj2 = (nj+1)/2;
+  unsigned ni2 = (ni+1)/2;
+  unsigned nj2 = (nj+1)/2;
 	TEST("Level 1 size x",image1.ni(),(ni+1)/2);
   TEST("Level 1 size y",image1.nj(),(nj+1)/2);
   TEST("Pixel (0,0)",image0(0,0),image1(0,0));
