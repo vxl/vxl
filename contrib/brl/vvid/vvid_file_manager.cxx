@@ -153,7 +153,9 @@ void vvid_file_manager::display_spatial_objects()
       } else {
         for (unsigned int i=0;i<sos.size();i++) {
           set_changing_colors( sos[i]->get_tag_id() , &r, &g, &b );
-          //vcl_cout<<"("<<sos[i]->get_tag_id()<<")\n";
+#ifdef DEBUG
+          vcl_cout<<'('<<sos[i]->get_tag_id()<<")\n";
+#endif
           easy0_->set_vsol_spatial_object_2d_style(sos[i], r, g, b, 1.0, 2.0 );
           easy0_->add_spatial_object(sos[i]);
         }
@@ -192,7 +194,9 @@ void vvid_file_manager::set_changing_colors(int num, float *r, float *g, float *
     case 5 : (*r) = s; (*g) = 0; (*b) = s; break;
     default: (*r) = 0; (*g) = 0; (*b) = 0; break; // this will never happen
   }
-  //vcl_cout<<"color : "<<(*r)<<" : "<<(*g)<<" : "<<(*b)<<'\n';
+#ifdef DEBUG
+  vcl_cout<<"color : "<<(*r)<<" : "<<(*g)<<" : "<<(*b)<<'\n';
+#endif
 
   return;
 }
@@ -679,8 +683,7 @@ void vvid_file_manager::compute_curve_tracking()
 
 void vvid_file_manager::compute_corr_tracking()
 {
-  static bool new_box = true;
-  static sdet_tracker_params tp;  
+  static sdet_tracker_params tp;
   vgui_dialog tracker_dialog("Mutual Information Tracker");
   tracker_dialog.field("Number of Samples", tp.n_samples_);
   tracker_dialog.field("Search Radius", tp.search_radius_);
@@ -690,7 +693,7 @@ void vvid_file_manager::compute_corr_tracking()
   tracker_dialog.checkbox("Add Gradient Info", tp.gradient_info_);
   if (!tracker_dialog.ask())
     return;
-  vcl_cout << tp << "\n";
+  vcl_cout << tp << '\n';
   vtol_topology_object_sptr to = easy0_->get_temp();
   if (!to)
     vcl_cout << "In vvid_file_manager::compute_corr_tracking() - no model\n";
