@@ -29,9 +29,14 @@ inline vil2_image_view<typename T::value_type> vil2_view_as_planes(const vil2_im
   const unsigned ncomponents = sizeof(T) / sizeof(T::value_type);
 
   // Image is RGBRGBRGB so i step = 3ncomponents*v.istep(), jstep=ncomponents*v.jstep()
-  return vil2_image_view<T::value_type>(v.memory_chunk(),(T::value_type const*) v.top_left_ptr(),
-                            v.ni(),v.nj(),ncomponents,
-                            v.istep()*ncomponents,v.jstep()*ncomponents,1);
+#if VCL_VC60 || !VCL_HAS_TYPENAME
+  return vil2_image_view<T::value_type>(
+#else
+  return vil2_image_view<typename T::value_type>(
+#endif
+    v.memory_chunk(),(T::value_type const*) v.top_left_ptr(),
+    v.ni(),v.nj(),ncomponents,
+    v.istep()*ncomponents,v.jstep()*ncomponents,1);
 }
 
 //: Return an RGB component view of a 3-plane image.

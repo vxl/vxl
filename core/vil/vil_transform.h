@@ -15,7 +15,7 @@
 
 //: Apply a unary operation to each pixel in src to get dest.
 template <class inP, class outP, class Op >
-inline void vil2_transform(vil2_image_view<inP >&src, vil2_image_view<outP >&dest, Op functor)
+inline void vil2_transform(const vil2_image_view<inP >&src, vil2_image_view<outP >&dest, Op functor)
 {
   dest.resize(src.ni(), src.nj(), src.nplanes());
   for (unsigned p = 0; p < src.nplanes(); ++p)
@@ -26,10 +26,10 @@ inline void vil2_transform(vil2_image_view<inP >&src, vil2_image_view<outP >&des
 
 //: Apply a binary operation to each pixel in srcA and srcB to get dest.
 template <class inA, class inB, class outP, class BinOp >
-inline void vil2_transform(vil2_image_view<inA >&srcA,
-                       vil2_image_view<inB >&srcB,
-                       vil2_image_view<outP >&dest,
-                       BinOp functor)
+inline void vil2_transform(const vil2_image_view<inA >&srcA,
+                           const vil2_image_view<inB >&srcB,
+                           vil2_image_view<outP >&dest,
+                           BinOp functor)
 {
   assert(srcB.ni() == srcA.ni() && srcA.nj() == srcB.nj()
     && srcA.nplanes() == srcB.nplanes());

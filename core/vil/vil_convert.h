@@ -77,7 +77,7 @@ inline vxl_int_32 vil2_convert_cast_pixel<double, vxl_int_32>::operator () (doub
 // There must be a cast operator from inP to outP
 // \relates vil2_image_view
 template <class inP, class outP>
-inline void vil2_convert_cast(vil2_image_view<inP >&src, vil2_image_view<outP >&dest)
+inline void vil2_convert_cast(const vil2_image_view<inP >&src, vil2_image_view<outP >&dest)
 {
   vil2_transform(src, dest, vil2_convert_cast_pixel<inP, outP>());
 }
@@ -106,13 +106,17 @@ public:
 // modern monitor.  See Charles Pontyon's Colour FAQ
 // http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
 template <class rgbP, class outP>
-inline void vil2_convert_rgb_to_grey(vil2_image_view<rgbP >&src, vil2_image_view<outP >&dest,
+inline void vil2_convert_rgb_to_grey(const vil2_image_view<rgbP >&src, vil2_image_view<outP >&dest,
                                      double rw=0.2125, double gw=0.7154, double bw = 0.0721)
 {
+#if VCL_VC60 || !VCL_HAS_TYPENAME
   vil2_convert_rgb_to_grey_pixel<rgbP::value_type, outP> func(rw, gw, bw);
+#else
+  vil2_convert_rgb_to_grey_pixel<typename rgbP::value_type, outP> func(rw, gw, bw);
+#endif
   assert(src.nplanes() == 1);
   vil2_transform(src, dest, func);
-}
+}  
 
 template <class inP, class outP>
 struct vil2_convert_grey_to_rgb_pixel
@@ -131,7 +135,7 @@ struct vil2_convert_grey_to_rgba_pixel
 //: Convert grey images to rgb.
 // Component types can be different. Rounding will take place if appropriate.
 template <class inP, class outP >
-inline void vil2_convert_grey_to_rgb(vil2_image_view<inP >&src, vil2_image_view<vil_rgb<outP> >&dest)
+inline void vil2_convert_grey_to_rgb(const vil2_image_view<inP >&src, vil2_image_view<vil_rgb<outP> >&dest)
 {
   assert(src.nplanes() == 1);
   vil2_transform(src, dest, vil2_convert_grey_to_rgb_pixel<inP, outP>());
@@ -140,7 +144,7 @@ inline void vil2_convert_grey_to_rgb(vil2_image_view<inP >&src, vil2_image_view<
 //: Convert grey images to rgba.
 // Component types can be different. Rounding will take place if appropriate.
 template <class inP, class outP>
-inline void vil2_convert_grey_to_rgba(vil2_image_view<inP >&src, vil2_image_view<vil_rgba<outP> >&dest)
+inline void vil2_convert_grey_to_rgba(const vil2_image_view<inP >&src, vil2_image_view<vil_rgba<outP> >&dest)
 {
   assert(src.nplanes() == 1);
   vil2_transform(src, dest, vil2_convert_grey_to_rgba_pixel<inP, outP>());
