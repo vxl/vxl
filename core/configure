@@ -1617,7 +1617,7 @@ export VXL_MATH_HAS_FINITE
 
 
 echo $ac_n "checking whether <ieeefp.h> provides finite()""... $ac_c" 1>&6
-echo "configure:1581: checking whether <ieeefp.h> provides finite()" >&5
+echo "configure:1621: checking whether <ieeefp.h> provides finite()" >&5
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -1626,7 +1626,7 @@ ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_cxx_cross
 
 cat > conftest.$ac_ext <<EOF
-#line 1590 "configure"
+#line 1630 "configure"
 #include "confdefs.h"
 
 #include <ieeefp.h>
@@ -1636,7 +1636,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1600: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1640: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VXL_IEEEFP_HAS_FINITE=1
@@ -1665,9 +1665,9 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 
 echo $ac_n "checking whether <stdlib.h> provides lrand48()""... $ac_c" 1>&6
-echo "configure:1629: checking whether <stdlib.h> provides lrand48()" >&5
+echo "configure:1669: checking whether <stdlib.h> provides lrand48()" >&5
 cat > conftest.$ac_ext <<EOF
-#line 1631 "configure"
+#line 1671 "configure"
 #include "confdefs.h"
 
 #include <stdlib.h>
@@ -1677,7 +1677,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1641: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1681: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VXL_STDLIB_HAS_LRAND48=1
@@ -1696,9 +1696,9 @@ rm -f conftest*
 export VXL_STDLIB_HAS_LRAND48
 
 echo $ac_n "checking whether <stdlib.h> provides drand48()""... $ac_c" 1>&6
-echo "configure:1660: checking whether <stdlib.h> provides drand48()" >&5
+echo "configure:1700: checking whether <stdlib.h> provides drand48()" >&5
 cat > conftest.$ac_ext <<EOF
-#line 1662 "configure"
+#line 1702 "configure"
 #include "confdefs.h"
 
 #include <stdlib.h>
@@ -1708,7 +1708,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1672: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1712: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VXL_STDLIB_HAS_DRAND48=1
@@ -1732,14 +1732,14 @@ export VXL_STDLIB_HAS_DRAND48
 
 # check for bigendian
 echo $ac_n "checking whether byte ordering is bigendian""... $ac_c" 1>&6
-echo "configure:1696: checking whether byte ordering is bigendian" >&5
+echo "configure:1736: checking whether byte ordering is bigendian" >&5
 if eval "test \"`echo '$''{'ac_cv_c_bigendian'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   ac_cv_c_bigendian=unknown
 # See if sys/param.h defines the BYTE_ORDER macro.
 cat > conftest.$ac_ext <<EOF
-#line 1703 "configure"
+#line 1743 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #include <sys/param.h>
@@ -1750,11 +1750,11 @@ int main() {
 #endif
 ; return 0; }
 EOF
-if { (eval echo configure:1714: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1754: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   # It does; now see whether it defined to BIG_ENDIAN or not.
 cat > conftest.$ac_ext <<EOF
-#line 1718 "configure"
+#line 1758 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #include <sys/param.h>
@@ -1765,7 +1765,7 @@ int main() {
 #endif
 ; return 0; }
 EOF
-if { (eval echo configure:1729: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1769: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_c_bigendian=yes
 else
@@ -1785,7 +1785,7 @@ if test "$cross_compiling" = yes; then
     { echo "configure: error: can not run test program while cross compiling" 1>&2; exit 1; }
 else
   cat > conftest.$ac_ext <<EOF
-#line 1749 "configure"
+#line 1789 "configure"
 #include "confdefs.h"
 #ifdef __cplusplus
 extern "C" void exit(int);
@@ -1801,7 +1801,7 @@ main () {
   exit (u.c[sizeof (long) - 1] == 1);
 }
 EOF
-if { (eval echo configure:1765: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:1805: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest && (./conftest; exit) 2>/dev/null
 then
   ac_cv_c_bigendian=no
 else
@@ -1836,6 +1836,7 @@ fi
 # complete list of substitutions:
 
 # libraries
+
 
 
 
