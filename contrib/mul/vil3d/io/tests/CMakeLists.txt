@@ -6,7 +6,7 @@ ADD_EXECUTABLE( vil3d_io_test_all
 )
 TARGET_LINK_LIBRARIES( vil3d_io_test_all vil3d_io vpl testlib )
 
-ADD_TEST( vil3d_image_view_io  vil3d_io_test_all test_image_view_io )
+ADD_TEST( vil3d_io_test_image_view_io  vil3d_io_test_all test_image_view_io )
 
 ADD_EXECUTABLE( vil3d_io_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vil3d_io_test_include vil3d_io )
