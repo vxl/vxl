@@ -131,6 +131,16 @@ void vidfpl_menus::compute_curve_tracking_callback()
   vvid_file_manager::instance()->compute_curve_tracking();
 }
 
+void vidfpl_menus::compute_corr_tracking_callback()
+{
+  vvid_file_manager::instance()->compute_corr_tracking();
+}
+
+void vidfpl_menus::create_box_callback()
+{
+  vvid_file_manager::instance()->create_box();
+}
+
 void vidfpl_menus::quit_callback()
 {
   vcl_exit(1);
@@ -165,6 +175,8 @@ vgui_menu vidfpl_menus::get_menu()
   menuedit.add( "Compute Line Fit", compute_line_fit_callback);
   menuedit.add( "Compute Grid Match", compute_grid_match_callback);
   menuedit.add( "Compute Curve Tracking", compute_curve_tracking_callback);
+  menuedit.add( "Compute Corr Tracking", compute_corr_tracking_callback);
+  menuedit.add( "Create Box", create_box_callback);
 
   //Top level menu layout
   menubar.add( "File", menufile);

@@ -17,6 +17,7 @@
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_image_tableau_sptr.h>
+#include <vgui/vgui_rubberband_tableau_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <vpro/vpro_video_process_sptr.h>
@@ -47,6 +48,7 @@
 //  - There is a continuous gl error stream from vgui_adaptor. Something to
 //    do with "setting draw buffer to back"
 //
+
 class vvid_file_manager : public vgui_wrapper_tableau
 {
  public:
@@ -109,11 +111,17 @@ class vvid_file_manager : public vgui_wrapper_tableau
   //: show curve tracking
   void compute_curve_tracking();
 
-  //: shown fit lines
+  //: show fit lines
   void compute_line_fit();
 
-  //: shown fit lines
+  //: show matches of calibration grid
   void compute_grid_match();
+
+  //: show correlation tracking
+  void compute_corr_tracking();
+
+  //: create a box by rubberbanding
+  void create_box();
 
   //: get the window of this player
   vgui_window* get_window() { return win_; }
@@ -155,6 +163,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   bgui_vtol2D_tableau_sptr easy0_;
   bgui_vtol2D_tableau_sptr easy1_;
   vgui_image_tableau_sptr itab0_;
+  vgui_rubberband_tableau_sptr rubber0_;
   vgui_image_tableau_sptr itab1_;
   vpro_video_process_sptr video_process_;
   vgui_grid_tableau_sptr grid_;

@@ -20,10 +20,15 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_image_tableau.h>
+#include <vgui/vgui_rubberband_tableau.h>
+#include <vgui/vgui_composite_tableau.h>
 #include <sdet/sdet_harris_detector_params.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_grid_finder_params.h>
+#include <sdet/sdet_tracker_params.h>
+#include <bdgl/bdgl_curve_tracker.h>
+#include <bdgl/bdgl_curve_matcher.h>
 #include <bdgl/bdgl_curve_tracking.h>
 
 #include <vidl/vidl_io.h>
@@ -36,6 +41,7 @@
 #include <vpro/vpro_edge_line_process.h>
 #include <vpro/vpro_grid_finder_process.h>
 #include <vpro/vpro_curve_tracking_process.h>
+#include <vpro/vpro_corr_tracker_process.h>
 
 //static manager instance
 vvid_file_manager *vvid_file_manager::instance_ = 0;
@@ -62,7 +68,11 @@ void vvid_file_manager::init()
   itab0_ = vgui_image_tableau_new();
   easy0_ = bgui_vtol2D_tableau_new(itab0_);
   easy0_->disable_highlight();
-  v2D0_ = vgui_viewer2D_tableau_new(easy0_);
+  bgui_vtol2D_rubberband_client* cl0 =  new bgui_vtol2D_rubberband_client(easy0_);
+
+  rubber0_ = vgui_rubberband_tableau_new(cl0);
+  vgui_composite_tableau_new comp0(easy0_,rubber0_);
+  v2D0_ = vgui_viewer2D_tableau_new(comp0);
   grid_->add_at(v2D0_, 0,0);
 
   itab1_ = vgui_image_tableau_new();
@@ -269,11 +279,11 @@ void vvid_file_manager::load_video_file()
     itab1_->set_image(tabs_[0]->get_image_tableau()->get_image());
   }
   else
-  {
-    itab0_->set_image(second);
-    v2D0_->child.assign(easy0_);
-    itab1_->set_image(second);
-  }
+    {
+      itab0_->set_image(second);
+      //v2D0_->child.assign(easy0_);
+      itab1_->set_image(second);
+    }
   grid_->post_redraw();
   vgui::run_till_idle();
 }
@@ -451,7 +461,15 @@ void vvid_file_manager::difference_frames()
 
 void vvid_file_manager::compute_motion()
 {
-  video_process_ = new vpro_motion_process();
+  static vpro_motion_params vmp;
+  vgui_dialog motion_dialog("Motion Params");
+  motion_dialog.field("Low Range", vmp.low_range_);
+  motion_dialog.field("High Range", vmp.high_range_);
+  motion_dialog.field("Smooth Sigma", vmp.smooth_sigma_);
+  if (!motion_dialog.ask())
+    return;
+
+  video_process_ = new vpro_motion_process(vmp);
 }
 
 void vvid_file_manager::compute_lucas_kanade()
@@ -659,4 +677,29 @@ void vvid_file_manager::compute_curve_tracking()
     frame_trail_.clear();
     frame_trail_.set_window(track_window);
   }
+}
+
+void vvid_file_manager::compute_corr_tracking()
+{
+  static bool new_box = true;
+  static sdet_tracker_params tp;  
+  vgui_dialog tracker_dialog("Correlation Tracker");
+  tracker_dialog.field("Number of Samples", tp.n_samples_);
+  tracker_dialog.field("Search Radius", tp.search_radius_);
+  tracker_dialog.field("Match Threshold", tp.match_thresh_);
+  if (!tracker_dialog.ask())
+    return;
+  vtol_topology_object_sptr to = easy0_->get_temp();
+  if(!to)
+    {
+      vcl_cout << "In vvid_file_manager::compute_corr_tracker() - no model\n";
+      return;
+    }
+  video_process_ = new vpro_corr_tracker_process(tp);
+  video_process_->add_input_topology_object(to);
+}
+  
+void vvid_file_manager::create_box()
+{
+  rubber0_->rubberband_box();
 }
