@@ -19,6 +19,21 @@
 # include <cstdio>
 # define vcl_generic_cstdio_STD /* */
 # include "generic/vcl_cstdio.h"
+#elif defined(VCL_GCC_295)
+# include <cstdio>
+   /* gcc 2.95 seems implement these with a macro */
+# ifdef getchar
+#   undef vcl_getchar
+    inline int vcl_getchar() { return getchar(); }
+#   define vcl_getchar vcl_getchar
+# endif
+# ifdef getc
+#   undef vcl_getc
+    inline int vcl_getc(FILE *stream) { return getc(stream); }
+#   define vcl_getc vcl_getc
+# endif
+# define vcl_generic_cstdio_STD /* */
+# include "generic/vcl_cstdio.h"
 #else
 # include "vcl_cstddef.h" // for size_t
 # include "iso/vcl_cstdio.h"

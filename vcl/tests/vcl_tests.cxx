@@ -26,6 +26,7 @@ int test_vcl_set_main();
 int test_vcl_stlfwd_main();
 int test_vcl_string_main();
 int test_vcl_vector_main();
+int test_vcl_cstdio_main( const char* );
 
 int result;
 
@@ -45,7 +46,7 @@ void testresult( int testresult )
   }
 }
 
-int main(int argc, char* argv[])
+int main( int argc, char* argv[] )
 {
   result = 0;
 
@@ -105,6 +106,14 @@ int main(int argc, char* argv[])
 
   testname( "test_vcl_vector" );
   testresult( test_vcl_vector_main() );
+
+  testname( "test_vcl_cstdio" );
+  if( argc < 2 ) {
+    vcl_cout << "No input file given for test_vcl_cstdio" << vcl_endl;
+    testresult( 1 );
+  } else {
+    testresult( test_vcl_cstdio_main( argv[1] ) );
+  }
 
   return result;
 }

@@ -28,8 +28,9 @@ ADD_EXECUTABLE( vcl_tests
      test_vcl_stlfwd.cxx
      test_vcl_string.cxx
      test_vcl_vector.cxx
+     test_vcl_cstdio.cxx
 )
 TARGET_LINK_LIBRARIES( vcl_tests vcl )
 
 
-ADD_TEST( vcl_tests vcl_tests)
+ADD_TEST( vcl_tests vcl_tests ${allvxl_SOURCE_DIR}/vcl/tests/test_vcl_cstdio.txt )
