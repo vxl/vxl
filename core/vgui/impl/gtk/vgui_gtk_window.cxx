@@ -45,6 +45,7 @@ static gint delete_event_callback(GtkWidget* w, GdkEvent* e, gpointer data)
 vgui_gtk_window::vgui_gtk_window(int w, int h, const char* title)
   : use_menubar(false)
   , use_statusbar(true)
+  , statusbar(new vgui_gtk_statusbar)
   , last_menubar(new vgui_menu)
 {
   if (debug) vcl_cerr << "vgui_gtk_window::vgui_gtk_window\n";
@@ -56,10 +57,12 @@ vgui_gtk_window::vgui_gtk_window(int w, int h, const char* title)
   adaptor = new vgui_gtk_adaptor(this);
 
 #ifndef __SGI_CC // SGI's iostream does not allow re-initialising
-  vgui::out.rdbuf(statusbar.statusbuf);
+  vgui::out.rdbuf(static_cast<vgui_gtk_statusbar*>(statusbar)->statusbuf);
 #endif
 
-  gtk_signal_connect(GTK_OBJECT(window), "delete_event", GTK_SIGNAL_FUNC(delete_event_callback), adaptor);
+  gtk_signal_connect(GTK_OBJECT(window), "delete_event",
+                     GTK_SIGNAL_FUNC(delete_event_callback),
+                     static_cast<vgui_gtk_adaptor*>(adaptor));
 }
 
 
@@ -68,6 +71,7 @@ vgui_gtk_window::vgui_gtk_window(int w, int h, const char* title)
 vgui_gtk_window::vgui_gtk_window(int w, int h, const vgui_menu& menu, const char* title)
   : use_menubar(true)
   , use_statusbar(true)
+  , statusbar(new vgui_gtk_statusbar)
   , last_menubar(new vgui_menu)
 {
   if (debug) vcl_cerr << "vgui_gtk_window::vgui_gtk_window\n";
@@ -81,10 +85,12 @@ vgui_gtk_window::vgui_gtk_window(int w, int h, const vgui_menu& menu, const char
   set_menubar(menu);
 
 #ifndef __SGI_CC // SGI's iostream does not allow re-initialising
-  vgui::out.rdbuf(statusbar.statusbuf);
+  vgui::out.rdbuf(static_cast<vgui_gtk_statusbar*>(statusbar)->statusbuf);
 #endif
 
-  gtk_signal_connect(GTK_OBJECT(window), "delete_event", GTK_SIGNAL_FUNC(delete_event_callback), adaptor);
+  gtk_signal_connect(GTK_OBJECT(window), "delete_event",
+                     GTK_SIGNAL_FUNC(delete_event_callback),
+                     static_cast<vgui_gtk_adaptor*>(adaptor));
 }
 
 
@@ -94,6 +100,7 @@ vgui_gtk_window::~vgui_gtk_window()
 {
   gtk_widget_destroy(window);
   delete last_menubar;
+  delete statusbar;
 }
 
 
@@ -110,7 +117,7 @@ void vgui_gtk_window::init()
   }
 
   // place glarea inside a frame
-  GtkWidget *frame = gtk_frame_new(0/*NULL*/);
+  GtkWidget *frame = gtk_frame_new(0);
   gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_NONE);
   gtk_container_set_border_width(GTK_CONTAINER(frame), 2);
 
@@ -120,14 +127,14 @@ void vgui_gtk_window::init()
 
   // This re-parents the glarea widget, so the adaptor should yield
   // ownership.
-  GtkWidget *glarea = adaptor->get_glarea_widget();
+  GtkWidget *glarea = (static_cast<vgui_gtk_adaptor*>(adaptor))->get_glarea_widget();
   gtk_container_add(GTK_CONTAINER(frame), glarea);
   gtk_widget_show(glarea);
 
   if (use_statusbar) {
-    statusbar.widget = gtk_statusbar_new();
-    gtk_box_pack_start(GTK_BOX(box), statusbar.widget, FALSE, TRUE, 0);
-    gtk_widget_show(statusbar.widget);
+    static_cast<vgui_gtk_statusbar*>(statusbar)->widget = gtk_statusbar_new();
+    gtk_box_pack_start(GTK_BOX(box), static_cast<vgui_gtk_statusbar*>(statusbar)->widget, FALSE, TRUE, 0);
+    gtk_widget_show(static_cast<vgui_gtk_statusbar*>(statusbar)->widget);
   }
 
   gtk_widget_show(box);
@@ -154,18 +161,6 @@ void vgui_gtk_window::set_menubar(const vgui_menu &menu)
   vgui_gtk_utils::set_menu(menubar, *last_menubar, true);
 }
 
-
-void vgui_gtk_window::set_adaptor(vgui_adaptor* a)
-{
-  adaptor = static_cast<vgui_gtk_adaptor*>(a);
-}
-
-
-//: Returns the current adaptor (OpenGL widget holder).
-vgui_adaptor* vgui_gtk_window::get_adaptor()
-{
-  return adaptor;
-}
 
 void vgui_gtk_window::show()
 {

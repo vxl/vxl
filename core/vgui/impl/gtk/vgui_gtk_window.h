@@ -28,7 +28,6 @@
 
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_menu.h>
-class vgui_gtk_adaptor;
 
 #include <gtk/gtk.h>
 #include "vgui_gtk_statusbar.h"
@@ -53,15 +52,15 @@ class vgui_gtk_window : public vgui_window
   void set_title(vcl_string const &);
 
   void set_menubar(const vgui_menu &menu);
+  //: Returns the current adaptor (OpenGL widget holder).
+  vgui_adaptor* get_adaptor() { return adaptor; }
+  void set_adaptor(vgui_adaptor* a) {adaptor=a;}
+  vgui_statusbar* get_statusbar() { return statusbar; }
   void set_statusbar(bool) {}
 
-  void set_adaptor(vgui_adaptor*);
-  vgui_adaptor* get_adaptor();
-  vgui_statusbar* get_statusbar() { return &statusbar; }
-
   // gtk specific
-  vgui_gtk_adaptor *adaptor;
-  vgui_gtk_statusbar statusbar;
+  vgui_adaptor *adaptor;
+  vgui_statusbar* statusbar;
 
   GtkWidget *window;
   GtkWidget *box;
