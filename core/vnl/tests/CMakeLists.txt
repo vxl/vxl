@@ -1,10 +1,4 @@
 # ./vxl/vnl/tests/CMakeLists.txt
-#
-
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
 
 ADD_EXECUTABLE(vnl_test_all                  vnl_test_all.cxx                )
 ADD_EXECUTABLE(test_fft                      test_fft.cxx                    )
@@ -77,6 +71,13 @@ ADD_TEST( vnl_test_transpose                test_transpose              )
 ADD_TEST( vnl_test_levenberg_marquardt      test_levenberg_marquardt    )
 #ADD_TEST( vnl_test_tensor                   test_tensor                 )
 ADD_TEST( vnl_test_minimizers               test_minimizers             )
+ADD_TEST( vnl_test_amoeba                   test_amoeba                 )
 ADD_TEST( vnl_test_rational                 test_rational               )
 ADD_TEST( vnl_test_convolve                 test_convolve               )
 ADD_TEST( vnl_test_real_polynomial          test_real_polynomial        )
+
+# Immediate dependencies
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
