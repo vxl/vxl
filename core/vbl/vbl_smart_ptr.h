@@ -118,7 +118,7 @@ public:
     protected_ = false;
   }
 
-  //  //: If a T_ref is converted to a pointer then back to a T_ref,
+  //  //: If a T_sptr is converted to a pointer then back to a T_sptr,
   //  // you'll need to call this
   //  void protect() { ref(); }
 

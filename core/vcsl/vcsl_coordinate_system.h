@@ -19,14 +19,14 @@
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 //*****************************************************************************
 
-#include <vcsl/vcsl_coordinate_system_ref.h>
+#include <vcsl/vcsl_coordinate_system_sptr.h>
 
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
 #include <vbl/vbl_ref_count.h>
 
-#include <vcsl/vcsl_axis_ref.h>
+#include <vcsl/vcsl_axis_sptr.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
 
@@ -60,7 +60,7 @@ public:
 
   //: Return the axis `i'
   //: REQUIRE: valid_axis(i)
-  virtual vcsl_axis_ref axis(const int i) const;
+  virtual vcsl_axis_sptr axis(const int i) const;
 
   //***************************************************************************
   // Because VXL does not use dynamic_cast<> :-(
@@ -88,7 +88,7 @@ protected:
   //***************************************************************************
 
   //: List of axes
-  vcl_vector<vcsl_axis_ref> axes_;
+  vcl_vector<vcsl_axis_sptr> axes_;
 };
 
 #endif // #ifndef VCSL_COORDINATE_SYSTEM_H

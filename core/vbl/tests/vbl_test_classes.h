@@ -32,7 +32,7 @@ class derived_impl : public base_impl
 
 //======================================================================
 
-typedef vbl_smart_ptr<base_impl> base_ref;
-typedef vbl_smart_ptr<derived_impl> derived_ref;
+typedef vbl_smart_ptr<base_impl> base_sptr;
+typedef vbl_smart_ptr<derived_impl> derived_sptr;
 
 #endif // vbl_test_smart_ptr_h_

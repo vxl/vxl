@@ -29,7 +29,7 @@ public:
     return os;
   }
 };
-typedef vbl_smart_ptr<example_sp> example_sp_ref;
+typedef vbl_smart_ptr<example_sp> example_sp_sptr;
 
 // Here is another example.
 

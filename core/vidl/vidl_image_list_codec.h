@@ -26,7 +26,7 @@
 
 #include <vcl_string.h>
 #include <vbl/vbl_ref_count.h>
-#include <vidl/vidl_image_list_codec_ref.h>
+#include <vidl/vidl_image_list_codec_sptr.h>
 #include <vidl/vidl_codec.h>
 #include <vil/vil_image.h> 
 #include <vcl_list.h>  
@@ -52,9 +52,9 @@ public:
   virtual bool get_section(int position, void* ib, int x0, int y0, int w, int h) const;
   virtual int put_section(int position, void* ib, int x0, int y0, int w, int h);
   // IO
-  virtual vidl_codec_ref load(const char* fname, char mode = 'r' );
-  virtual vidl_codec_ref load(const vcl_list<vcl_string> &fnames, char mode = 'r');
-  virtual vidl_codec_ref load(const vcl_vector<vcl_string> &fnames, char mode = 'r');
+  virtual vidl_codec_sptr load(const char* fname, char mode = 'r' );
+  virtual vidl_codec_sptr load(const vcl_list<vcl_string> &fnames, char mode = 'r');
+  virtual vidl_codec_sptr load(const vcl_vector<vcl_string> &fnames, char mode = 'r');
   virtual bool save(vidl_movie* movie, const char* fname);
   virtual bool save(vidl_movie* movie, const char* fname, const char* type);
   virtual bool probe(const char* fname);

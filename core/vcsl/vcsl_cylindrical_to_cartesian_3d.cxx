@@ -123,7 +123,7 @@ vcsl_cylindrical_to_cartesian_3d::inverse(const vnl_vector<double> &v,
 //***************************************************************************
 
 //: Return the reference to the unique vcsl_length object
-vcsl_cylindrical_to_cartesian_3d_ref
+vcsl_cylindrical_to_cartesian_3d_sptr
 vcsl_cylindrical_to_cartesian_3d::instance(void)
 {
   if(instance_.ptr()==0)
@@ -141,5 +141,5 @@ vcsl_cylindrical_to_cartesian_3d::vcsl_cylindrical_to_cartesian_3d(void)
 //---------------------------------------------------------------------------
 // Reference to the unique vcsl_cylindrical_to_cartesian_3d object
 //---------------------------------------------------------------------------
-vcsl_cylindrical_to_cartesian_3d_ref
+vcsl_cylindrical_to_cartesian_3d_sptr
 vcsl_cylindrical_to_cartesian_3d::instance_=0;

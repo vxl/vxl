@@ -20,7 +20,7 @@
 // 2000/06/30 François BERTEL Creation. Adapted from IUE
 //*****************************************************************************
 
-#include <vcsl/vcsl_lambertian_ref.h>
+#include <vcsl/vcsl_lambertian_sptr.h>
 
 //*****************************************************************************
 // External declarations for values

@@ -33,7 +33,7 @@ bool vcsl_composition::is_invertible(const double time) const
 
   bool result;
 
-  vcl_vector<vcsl_spatial_transformation_ref>::const_iterator i;
+  vcl_vector<vcsl_spatial_transformation_sptr>::const_iterator i;
 
   result=true;
   for(i=transformations_->begin();i!=transformations_->end()&&result;++i)
@@ -49,7 +49,7 @@ bool vcsl_composition::is_valid(void) const
 {
   bool result;
 
-  vcl_vector<vcsl_spatial_transformation_ref>::const_iterator i;
+  vcl_vector<vcsl_spatial_transformation_sptr>::const_iterator i;
 
   result=true;
   for(i=transformations_->begin();i!=transformations_->end()&&result;++i)
@@ -61,7 +61,7 @@ bool vcsl_composition::is_valid(void) const
 //---------------------------------------------------------------------------
 // Return the list of transformations
 //---------------------------------------------------------------------------
-vcl_vector<vcsl_spatial_transformation_ref> *
+vcl_vector<vcsl_spatial_transformation_sptr> *
 vcsl_composition::composition(void) const
 {
   return transformations_;
@@ -76,7 +76,7 @@ vcsl_composition::composition(void) const
 // The transformations are performed in the order of the list
 //---------------------------------------------------------------------------
 void
-vcsl_composition::set_composition(vcl_vector<vcsl_spatial_transformation_ref> &new_transformations)
+vcsl_composition::set_composition(vcl_vector<vcsl_spatial_transformation_sptr> &new_transformations)
 {
   transformations_=&new_transformations;
 }
@@ -98,7 +98,7 @@ vnl_vector<double> *vcsl_composition::execute(const vnl_vector<double> &v,
   vnl_vector<double> *result;
   const vnl_vector<double> *tmp2;
   vnl_vector<double> *tmp;
-  vcl_vector<vcsl_spatial_transformation_ref>::const_iterator i;
+  vcl_vector<vcsl_spatial_transformation_sptr>::const_iterator i;
   
   tmp2=&v;
   for(i=transformations_->begin();i!=transformations_->end();++i)
@@ -128,7 +128,7 @@ vnl_vector<double> *vcsl_composition::inverse(const vnl_vector<double> &v,
   vnl_vector<double> *result;
   const vnl_vector<double> *tmp2;
   vnl_vector<double> *tmp;
-  vcl_vector<vcsl_spatial_transformation_ref>::reverse_iterator i;
+  vcl_vector<vcsl_spatial_transformation_sptr>::reverse_iterator i;
   
   tmp2=&v;
 

@@ -23,7 +23,7 @@ int main(int argc,
 
   result=0;
 
-  vcsl_radian_ref r;
+  vcsl_radian_sptr r;
   r=vcsl_radian::instance();
 
   return result;

@@ -19,7 +19,7 @@
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 //*****************************************************************************
 
-#include <vcsl/vcsl_cartesian_ref.h>
+#include <vcsl/vcsl_cartesian_sptr.h>
 
 //*****************************************************************************
 // External declarations

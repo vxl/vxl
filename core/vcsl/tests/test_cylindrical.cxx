@@ -23,7 +23,7 @@ int main(int argc,
 
   result=0;
 
-  vcsl_cylindrical_ref p;
+  vcsl_cylindrical_sptr p;
   p=new vcsl_cylindrical;
 
   return result;

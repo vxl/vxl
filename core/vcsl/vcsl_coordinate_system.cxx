@@ -48,7 +48,7 @@ bool vcsl_coordinate_system::valid_axis(const int i) const
 // Return the axis `i'
 // REQUIRE: valid_axis(i)
 //---------------------------------------------------------------------------
-vcsl_axis_ref vcsl_coordinate_system::axis(const int i) const
+vcsl_axis_sptr vcsl_coordinate_system::axis(const int i) const
 {
   // require
   assert(valid_axis(i));
@@ -77,7 +77,7 @@ vnl_vector<double> *
 vcsl_coordinate_system::from_cs_to_standard_units(const vnl_vector<double> &v) const
 {
   vnl_vector<double> *result;
-  vcl_vector<vcsl_axis_ref>::const_iterator i;
+  vcl_vector<vcsl_axis_sptr>::const_iterator i;
   int j;
   
   result=new vnl_vector<double>(v.size());
@@ -100,7 +100,7 @@ vnl_vector<double> *
 vcsl_coordinate_system::from_standard_units_to_cs(const vnl_vector<double> &v) const
 {
   vnl_vector<double> *result;
-  vcl_vector<vcsl_axis_ref>::const_iterator i;
+  vcl_vector<vcsl_axis_sptr>::const_iterator i;
   int j;
 
   result=new vnl_vector<double>(v.size());

@@ -23,19 +23,19 @@ int main(int argc,
 {
   int result;
 
-  vcsl_graph_ref graph;
-  vcsl_spatial_ref csa;
-  vcsl_spatial_ref cs0;
-  vcsl_spatial_ref cs1;
+  vcsl_graph_sptr graph;
+  vcsl_spatial_sptr csa;
+  vcsl_spatial_sptr cs0;
+  vcsl_spatial_sptr cs1;
   vcl_vector<double> *beat;
   vcl_vector<double> *tr0_beat;
-  vcl_vector<vcsl_spatial_ref> *parent;
-  vcl_vector<vcsl_spatial_transformation_ref> *motion;
+  vcl_vector<vcsl_spatial_sptr> *parent;
+  vcl_vector<vcsl_spatial_transformation_sptr> *motion;
   vcl_vector<double> *scale_values;
   vcl_vector<vcsl_interpolator> *scale_interpolators;
   vnl_vector<double> *p;
   vnl_vector<double> *q;
-  vcsl_scale_ref scale;
+  vcsl_scale_sptr scale;
 
   result=0;
   vcl_cout<<"Creation of graph..."<< vcl_flush;
@@ -81,7 +81,7 @@ int main(int argc,
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of parent..."<< vcl_flush;
-  parent=new vcl_vector<vcsl_spatial_ref>;
+  parent=new vcl_vector<vcsl_spatial_sptr>;
   assert(parent!=0);
   vcl_cout<<"done"<<vcl_endl;
 
@@ -95,7 +95,7 @@ int main(int argc,
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of motion..."<< vcl_flush;
-  motion=new vcl_vector<vcsl_spatial_transformation_ref>;
+  motion=new vcl_vector<vcsl_spatial_transformation_sptr>;
   assert(motion!=0);
   vcl_cout<<"done"<<vcl_endl;
 

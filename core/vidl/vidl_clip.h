@@ -30,9 +30,9 @@
 
 
 #include <vbl/vbl_ref_count.h>
-#include <vidl/vidl_clip_ref.h>
-#include <vidl/vidl_frame_ref.h>
-#include <vidl/vidl_codec_ref.h>
+#include <vidl/vidl_clip_sptr.h>
+#include <vidl/vidl_frame_sptr.h>
+#include <vidl/vidl_codec_sptr.h>
 #include <vil/vil_image.h>
 
 #include <vcl_vector.h>
@@ -45,7 +45,7 @@ public:
   
   // Constructors
   vidl_clip(
-	vidl_codec_ref codec, 
+	vidl_codec_sptr codec, 
 	int start = 0, 
 	int end = 0, 
 	int increment = 1
@@ -69,24 +69,24 @@ public:
   ~vidl_clip();
   
   // Data Access
-  vidl_frame_ref get_frame(int n);
+  vidl_frame_sptr get_frame(int n);
   int length();
   
   // Get the size in pixels
   int width() const ;
   int height() const ;
   
-  vidl_codec_ref get_codec();
+  vidl_codec_sptr get_codec();
   
 protected:
   void init(int start, int end, int increment);
   
   // Data Members
-  vcl_vector<vidl_frame_ref> frames_; // Where are stored the frames
+  vcl_vector<vidl_frame_sptr> frames_; // Where are stored the frames
   int startframe_;               // The clip begins at startframe_ 
   int endframe_;                 // The clip ends at startframe_ 
   int increment_;                // The clip use 1 frame every "increment_" 
   double frame_rate_;            // 1 frame every ?? secs
-  vidl_codec_ref coder_;          // video codec used for storage
+  vidl_codec_sptr coder_;          // video codec used for storage
 };
 #endif // vidl_clip_h

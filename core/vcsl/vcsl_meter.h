@@ -15,7 +15,7 @@
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 //*****************************************************************************
 
-#include <vcsl/vcsl_meter_ref.h>
+#include <vcsl/vcsl_meter_sptr.h>
 
 #include <vcsl/vcsl_length_unit.h>
 
@@ -43,13 +43,13 @@ public:
   //***************************************************************************
 
   //: Return the reference to the unique vcsl_meter object
-  static vcsl_meter_ref instance(void);
+  static vcsl_meter_sptr instance(void);
 protected:
 
   //: Default constructor
   explicit vcsl_meter(void);
   
   //: Reference to the unique vcsl_meter object
-  static vcsl_meter_ref instance_;
+  static vcsl_meter_sptr instance_;
 };
 #endif // #ifndef VCSL_METER_H

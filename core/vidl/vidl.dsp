@@ -159,7 +159,7 @@ SOURCE=.\vidl_avicodec.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vidl_avicodec_ref.h
+SOURCE=.\vidl_avicodec_sptr.h
 # End Source File
 # Begin Source File
 
@@ -167,7 +167,7 @@ SOURCE=.\vidl_clip.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vidl_clip_ref.h
+SOURCE=.\vidl_clip_sptr.h
 # End Source File
 # Begin Source File
 
@@ -175,7 +175,7 @@ SOURCE=.\vidl_codec.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vidl_codec_ref.h
+SOURCE=.\vidl_codec_sptr.h
 # End Source File
 # Begin Source File
 
@@ -187,11 +187,11 @@ SOURCE=.\vidl_frame_as_image.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vidl_frame_as_image_ref.h
+SOURCE=.\vidl_frame_as_image_sptr.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vidl_frame_ref.h
+SOURCE=.\vidl_frame_sptr.h
 # End Source File
 # Begin Source File
 
@@ -199,7 +199,7 @@ SOURCE=.\vidl_image_list_codec.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vidl_image_list_codec_ref.h
+SOURCE=.\vidl_image_list_codec_sptr.h
 # End Source File
 # Begin Source File
 
@@ -211,7 +211,7 @@ SOURCE=.\vidl_movie.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vidl_movie_ref.h
+SOURCE=.\vidl_movie_sptr.h
 # End Source File
 # End Group
 # End Target

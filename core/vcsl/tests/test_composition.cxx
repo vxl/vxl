@@ -25,19 +25,19 @@ int main(int argc,
 {
   int result;
 
-  vcsl_graph_ref graph;
-  vcsl_spatial_ref csa;
-  vcsl_spatial_ref cs0;
-  vcl_vector<vcsl_spatial_ref> *parent;
+  vcsl_graph_sptr graph;
+  vcsl_spatial_sptr csa;
+  vcsl_spatial_sptr cs0;
+  vcl_vector<vcsl_spatial_sptr> *parent;
   vcl_vector<double> *cs0_beat;
   vcl_vector<double> *tr_beat;
-  vcl_vector<vcsl_spatial_transformation_ref> *motion;
-  vcsl_translation_ref tr;
-  vcsl_scale_ref scale;
-  vcsl_composition_ref composition;
+  vcl_vector<vcsl_spatial_transformation_sptr> *motion;
+  vcsl_translation_sptr tr;
+  vcsl_scale_sptr scale;
+  vcsl_composition_sptr composition;
   vcl_vector<vcsl_interpolator> *interpolators;
   vcl_vector<vnl_vector<double> *> *vectors;
-  vcl_vector<vcsl_spatial_transformation_ref> *transfo;
+  vcl_vector<vcsl_spatial_transformation_sptr> *transfo;
   vcl_vector<double> *scale_values;
   vnl_vector<double> *v0;
   vnl_vector<double> *v1;
@@ -53,7 +53,7 @@ int main(int argc,
   cs0=new vcsl_cartesian_3d;
   cs0->set_graph(graph);
 
-  parent=new vcl_vector<vcsl_spatial_ref>;
+  parent=new vcl_vector<vcsl_spatial_sptr>;
   parent->push_back(csa);
   cs0->set_parent(*parent);
 
@@ -63,7 +63,7 @@ int main(int argc,
   cs0_beat->push_back(1);
   cs0->set_beat(*cs0_beat);
 
-  motion=new vcl_vector<vcsl_spatial_transformation_ref>;
+  motion=new vcl_vector<vcsl_spatial_transformation_sptr>;
 
   tr=new vcsl_translation;
   tr_beat=new vcl_vector<double>;
@@ -106,7 +106,7 @@ int main(int argc,
   scale->set_scale(*scale_values);
 
   composition=new vcsl_composition;
-  transfo=new vcl_vector<vcsl_spatial_transformation_ref>;
+  transfo=new vcl_vector<vcsl_spatial_transformation_sptr>;
   transfo->push_back(tr.ptr());
   transfo->push_back(scale.ptr());
   composition->set_composition(*transfo);

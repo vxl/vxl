@@ -36,7 +36,7 @@ bool vcsl_angle_unit::compatible_units(const vcsl_unit &other) const
 //---------------------------------------------------------------------------
 // Return the standard unit associated to the dimension of `this'
 //---------------------------------------------------------------------------
-vcsl_unit_ref vcsl_angle_unit::standard_unit(void) const
+vcsl_unit_sptr vcsl_angle_unit::standard_unit(void) const
 {
   return vcsl_radian::instance().ptr();
 }

@@ -18,14 +18,14 @@
 //*****************************************************************************
 
 #include <vcl_string.h>
-#include <vcsl/vcsl_axis_ref.h>
+#include <vcsl/vcsl_axis_sptr.h>
 
 //*****************************************************************************
 // External declarations
 //*****************************************************************************
 #include <vbl/vbl_ref_count.h>
-#include <vcsl/vcsl_dimension_ref.h>
-#include <vcsl/vcsl_unit_ref.h>
+#include <vcsl/vcsl_dimension_sptr.h>
+#include <vcsl/vcsl_unit_sptr.h>
 
 class vcsl_axis
   : public vbl_ref_count
@@ -62,10 +62,10 @@ public:
   //***************************************************************************
 
   //: Return the dimension
-  virtual const vcsl_dimension_ref dimension(void) const;
+  virtual const vcsl_dimension_sptr dimension(void) const;
 
   //: Return the unit of the dimension
-  virtual const vcsl_unit_ref unit(void) const;
+  virtual const vcsl_unit_sptr unit(void) const;
 
   //: Return the label of the axis
   virtual const vcl_string label(void) const;
@@ -95,10 +95,10 @@ protected:
   //***************************************************************************
 
   //: Dimension
-  vcsl_dimension_ref dimension_;
+  vcsl_dimension_sptr dimension_;
 
   //: Unit of the dimension
-  vcsl_unit_ref unit_;
+  vcsl_unit_sptr unit_;
 
   //: Label of the axis
   vcl_string label_;

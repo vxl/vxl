@@ -5,13 +5,13 @@
 
 void main1()
 {
-  vcl_list<example_sp_ref> l;
+  vcl_list<example_sp_sptr> l;
 
   vcl_cout << "example_sp starts" << vcl_endl;
   example_sp* ptr;
   {
-    example_sp_ref sp; // refcount not incremented: no assignment yet
-    vcl_cout << "example_sp_ref created" << vcl_endl;
+    example_sp_sptr sp; // refcount not incremented: no assignment yet
+    vcl_cout << "example_sp_sptr created" << vcl_endl;
     {
       ptr = new example_sp; // refcount not incremented: no smart pointer
       vcl_cout << *ptr << " created" << vcl_endl;
@@ -22,7 +22,7 @@ void main1()
       l.push_back(sp); // refcount incremented (assignment to list entry)
       vcl_cout << *sp << " put on list" << vcl_endl;
 
-      example_sp_ref sp2 = sp; // copy constructor: refcount incremented
+      example_sp_sptr sp2 = sp; // copy constructor: refcount incremented
       vcl_cout << *sp << " copied to sp2" << vcl_endl;
 
     } // sp2 goes out of scope: refcount goes down

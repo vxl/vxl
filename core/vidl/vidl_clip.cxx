@@ -16,7 +16,7 @@
 // -- Constructor. Takes a vidl_codec, start, end and increment
 // frames are optional
 vidl_clip::vidl_clip(
-	vidl_codec_ref codec, 
+	vidl_codec_sptr codec, 
 	int start, 
 	int end, 
 	int increment) : frames_(codec->length())
@@ -40,11 +40,11 @@ vidl_clip::vidl_clip(
 {
   int position = 0; // Could not cast the iterator i into (int)
                     // but that would be better
-  vidl_image_list_codec_ref codec = new vidl_image_list_codec(images);
+  vidl_image_list_codec_sptr codec = new vidl_image_list_codec(images);
 
   for (vcl_vector<vil_image>::iterator i=images.begin(); i!= images.end(); ++i)
     {
-      vidl_frame_ref f = new vidl_frame(position, codec.ptr());
+      vidl_frame_sptr f = new vidl_frame(position, codec.ptr());
       frames_.push_back(f);
       position++;
     }  
@@ -65,11 +65,11 @@ vidl_clip::vidl_clip(
 {
   int position = 0; // Could not cast the iterator i into (int)
                     // but that would be better
-  vidl_image_list_codec_ref codec = new vidl_image_list_codec(images);
+  vidl_image_list_codec_sptr codec = new vidl_image_list_codec(images);
 
   for (vcl_list<vil_image>::iterator i=images.begin(); i!= images.end(); ++i)
     {
-      vidl_frame_ref f = new vidl_frame(position, codec.ptr());
+      vidl_frame_sptr f = new vidl_frame(position, codec.ptr());
       frames_.push_back(f);
       position++;
     }  
@@ -121,7 +121,7 @@ vidl_clip::~vidl_clip()
 // -- Get the frame numbered n inside the range 
 // defined by startframe, endframe and increment.
 // So, the returned frame is startframe_+n*increment_
-vidl_frame_ref vidl_clip::get_frame(int n)
+vidl_frame_sptr vidl_clip::get_frame(int n)
 {
   // Check that the asked frame is in the clip
   if (n>=length())
@@ -149,6 +149,6 @@ int vidl_clip::height() const
 { return coder_->height(); }
 
 // -- Return the codec.
-vidl_codec_ref vidl_clip::get_codec()
+vidl_codec_sptr vidl_clip::get_codec()
 { return coder_; }
 

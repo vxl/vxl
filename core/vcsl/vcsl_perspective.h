@@ -21,7 +21,7 @@
 // 2000/08/23 François BERTEL Creation.
 //*****************************************************************************
 
-#include <vcsl/vcsl_perspective_ref.h>
+#include <vcsl/vcsl_perspective_sptr.h>
 
 #include <vcsl/vcsl_spatial_transformation.h>
 

@@ -16,7 +16,7 @@
 vidl_movie::vidl_movie() {}
 
 // -- Constructor, build a movie with the single given clip
-vidl_movie::vidl_movie(vidl_clip_ref clip)
+vidl_movie::vidl_movie(vidl_clip_sptr clip)
 {
   // Check validity of initialisation
   if (!clip_.empty())
@@ -32,11 +32,11 @@ vidl_movie::~vidl_movie()
 }
 
 // -- Get the frame numbered n (frames are numbered from 0 to total-1)
-vidl_frame_ref vidl_movie::get_frame(int n)
+vidl_frame_sptr vidl_movie::get_frame(int n)
 {
-  vidl_frame_ref ret_frame = NULL;
+  vidl_frame_sptr ret_frame = NULL;
 
-  vcl_list<vidl_clip_ref>::iterator i = clip_.begin();
+  vcl_list<vidl_clip_sptr>::iterator i = clip_.begin();
 
   while ((i!=clip_.end()) && 
          (!(ret_frame=(*i)->get_frame(n))))
@@ -52,7 +52,7 @@ vidl_frame_ref vidl_movie::get_frame(int n)
 }
 
 // -- Add a clip at the end of the movie
-void vidl_movie::add_clip(vidl_clip_ref clip)
+void vidl_movie::add_clip(vidl_clip_sptr clip)
 {
   clip_.push_back(clip);
 }
@@ -62,7 +62,7 @@ void vidl_movie::add_clip(vidl_clip_ref clip)
 int vidl_movie::length() const
 {
   int number = 0; 
-  for (vcl_list<vidl_clip_ref>::const_iterator i=clip_.begin(); i!= clip_.end(); ++i)
+  for (vcl_list<vidl_clip_sptr>::const_iterator i=clip_.begin(); i!= clip_.end(); ++i)
     number += (*i)->length();
 
   return number;
@@ -75,7 +75,7 @@ int vidl_movie::width() const
 { 
   // Get the size X of the first clip
   int sizeX = 0;
-  vcl_list<vidl_clip_ref>::const_iterator i=clip_.begin();
+  vcl_list<vidl_clip_sptr>::const_iterator i=clip_.begin();
   sizeX = (*i)->width();
 
   // Check that the (eventually) other clips have the same size
@@ -99,7 +99,7 @@ int vidl_movie::height() const
 { 
   // Get the size Y of the first clip
   int sizeY = 0;
-  vcl_list<vidl_clip_ref>::const_iterator i = clip_.begin();
+  vcl_list<vidl_clip_sptr>::const_iterator i = clip_.begin();
   sizeY = (*i)->height();
 
   // Check that the (eventually) other clips have the same size

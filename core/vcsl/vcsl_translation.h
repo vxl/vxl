@@ -17,7 +17,7 @@
 // 2000/08/04 François BERTEL Creation.
 //*****************************************************************************
 
-#include <vcsl/vcsl_translation_ref.h>
+#include <vcsl/vcsl_translation_sptr.h>
 
 #include <vcsl/vcsl_spatial_transformation.h>
 

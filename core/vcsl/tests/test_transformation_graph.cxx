@@ -32,34 +32,34 @@ static void test1(void);
 //-----------------------------------------------------------------------------
 static void test1(void)
 {
-  vcsl_graph_ref graph;
-  vcsl_spatial_ref csa;
-  vcsl_spatial_ref cs1;
+  vcsl_graph_sptr graph;
+  vcsl_spatial_sptr csa;
+  vcsl_spatial_sptr cs1;
   vcl_vector<double> *cs1_beat;
-  vcl_vector<vcsl_spatial_transformation_ref> *motion1;
-  vcl_vector<vcsl_spatial_ref> *parent1;
+  vcl_vector<vcsl_spatial_transformation_sptr> *motion1;
+  vcl_vector<vcsl_spatial_sptr> *parent1;
 
-  vcsl_spatial_ref cs2;
+  vcsl_spatial_sptr cs2;
   vcl_vector<double> *cs2_beat;
-  vcl_vector<vcsl_spatial_transformation_ref> *motion2;
-  vcl_vector<vcsl_spatial_ref> *parent2;
+  vcl_vector<vcsl_spatial_transformation_sptr> *motion2;
+  vcl_vector<vcsl_spatial_sptr> *parent2;
   
-  vcsl_spatial_ref cs3;
+  vcsl_spatial_sptr cs3;
   vcl_vector<double> *cs3_beat;
-  vcl_vector<vcsl_spatial_transformation_ref> *motion3;
-  vcl_vector<vcsl_spatial_ref> *parent3;
+  vcl_vector<vcsl_spatial_transformation_sptr> *motion3;
+  vcl_vector<vcsl_spatial_sptr> *parent3;
 
-  vcsl_scale_ref scale1;
+  vcsl_scale_sptr scale1;
   vcl_vector<double> *beat1;
   vcl_vector<double> *scale1_values;
   vcl_vector<vcsl_interpolator> *interpolators1;
 
-  vcsl_scale_ref scale2;
+  vcsl_scale_sptr scale2;
   vcl_vector<double> *beat2;
   vcl_vector<double> *scale2_values;
   vcl_vector<vcsl_interpolator> *interpolators2;
 
-  vcsl_scale_ref scale3;
+  vcsl_scale_sptr scale3;
   vcl_vector<double> *beat3;
   vcl_vector<double> *scale3_values;
   vcl_vector<vcsl_interpolator> *interpolators3;
@@ -104,11 +104,11 @@ static void test1(void)
   interpolators1->push_back(vcsl_linear);
   scale1->set_interpolators(*interpolators1);
 
-  motion1=new vcl_vector<vcsl_spatial_transformation_ref>;
+  motion1=new vcl_vector<vcsl_spatial_transformation_sptr>;
   motion1->push_back(scale1.ptr());
   cs1->set_motion(*motion1);
 
-  parent1=new vcl_vector<vcsl_spatial_ref>;
+  parent1=new vcl_vector<vcsl_spatial_sptr>;
   parent1->push_back(csa);
   cs1->set_parent(*parent1);
 
@@ -133,11 +133,11 @@ static void test1(void)
   interpolators2->push_back(vcsl_linear);
   scale2->set_interpolators(*interpolators2);
 
-  motion2=new vcl_vector<vcsl_spatial_transformation_ref>;
+  motion2=new vcl_vector<vcsl_spatial_transformation_sptr>;
   motion2->push_back(scale2.ptr());
   cs2->set_motion(*motion2);
 
-  parent2=new vcl_vector<vcsl_spatial_ref>;
+  parent2=new vcl_vector<vcsl_spatial_sptr>;
   parent2->push_back(cs1);
   cs2->set_parent(*parent2);
 
@@ -161,11 +161,11 @@ static void test1(void)
   interpolators3->push_back(vcsl_linear);
   scale3->set_interpolators(*interpolators3);
 
-  motion3=new vcl_vector<vcsl_spatial_transformation_ref>;
+  motion3=new vcl_vector<vcsl_spatial_transformation_sptr>;
   motion3->push_back(scale3.ptr());
   cs3->set_motion(*motion3);
 
-  parent3=new vcl_vector<vcsl_spatial_ref>;
+  parent3=new vcl_vector<vcsl_spatial_sptr>;
   parent3->push_back(csa);
   cs3->set_parent(*parent3);
 

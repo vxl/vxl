@@ -78,7 +78,7 @@ vcsl_axis::~vcsl_axis()
 //---------------------------------------------------------------------------
 // Return the dimension
 //---------------------------------------------------------------------------
-const vcsl_dimension_ref vcsl_axis::dimension(void) const
+const vcsl_dimension_sptr vcsl_axis::dimension(void) const
 {
   return dimension_;
 }
@@ -86,7 +86,7 @@ const vcsl_dimension_ref vcsl_axis::dimension(void) const
 //---------------------------------------------------------------------------
 // Return the unit of the dimension
 //---------------------------------------------------------------------------
-const vcsl_unit_ref vcsl_axis::unit(void) const
+const vcsl_unit_sptr vcsl_axis::unit(void) const
 {
   return unit_;
 }

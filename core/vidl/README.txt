@@ -12,6 +12,6 @@ int main(int argc, char** argv)
   // Register video codec
   vidl_io::register_codec(new vidl_avicodec);
 
-  vidl_movie_ref movie = vidl_io::load_movie(argv[1]);
+  vidl_movie_sptr movie = vidl_io::load_movie(argv[1]);
   cerr << "Length = " << movie->length() << endl;
 }

@@ -12,7 +12,7 @@
 
 // -- Constructor, needs the frame position in the clip
 // and the coder used.
-vidl_frame::vidl_frame(int position, vidl_codec_ref coder) : 
+vidl_frame::vidl_frame(int position, vidl_codec_sptr coder) : 
 position_(position), coder_(coder)
 {
   

@@ -23,14 +23,14 @@ int main(int argc,
 {
   int result;
 
-  vcsl_graph_ref graph;
-  vcsl_spatial_ref csa;
-  vcsl_spatial_ref cs0;
-  vcl_vector<vcsl_spatial_ref> *parent;
+  vcsl_graph_sptr graph;
+  vcsl_spatial_sptr csa;
+  vcsl_spatial_sptr cs0;
+  vcl_vector<vcsl_spatial_sptr> *parent;
   vcl_vector<double> *cs0_beat;
   vcl_vector<double> *rot_beat;
-  vcl_vector<vcsl_spatial_transformation_ref> *motion;
-  vcsl_rotation_ref rot;
+  vcl_vector<vcsl_spatial_transformation_sptr> *motion;
+  vcsl_rotation_sptr rot;
   vcl_vector<vcsl_interpolator> *interpolators;
   vcl_vector<vnl_vector<double> *> *axis;
   vcl_vector<double> *angles;
@@ -48,7 +48,7 @@ int main(int argc,
   cs0=new vcsl_cartesian_3d;
   cs0->set_graph(graph);
 
-  parent=new vcl_vector<vcsl_spatial_ref>;
+  parent=new vcl_vector<vcsl_spatial_sptr>;
   parent->push_back(csa);
   cs0->set_parent(*parent);
 
@@ -58,7 +58,7 @@ int main(int argc,
   cs0_beat->push_back(1);
   cs0->set_beat(*cs0_beat);
 
-  motion=new vcl_vector<vcsl_spatial_transformation_ref>;
+  motion=new vcl_vector<vcsl_spatial_transformation_sptr>;
 
   rot=new vcsl_rotation;
   rot_beat=new vcl_vector<double>;

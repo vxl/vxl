@@ -214,7 +214,7 @@ bool vidl_avicodec::probe(const char* fname)
   return false;
 }
 
-vidl_codec_ref vidl_avicodec::load(const char* fname, char mode) 
+vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode) 
 {
   int modenum;
   DWORD videostreamcode = 0x73646976; // corresponds to char string "vids"
@@ -435,7 +435,7 @@ bool vidl_avicodec::save(vidl_movie* movie, const char* fname)
 
 // -- Create a DIB (Device Independant Bitmap) from a frame
 // (Note : make_dib is not guaranteed to work with bits!=24 for the moment)
-HANDLE  vidl_avicodec::make_dib(vidl_frame_ref frame, UINT bits)
+HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
 {
   // 1st, Get the datas from the video frame
   byte* TjSection = (byte*) frame->get_section(NULL, 0, 0, frame->width(), frame->height());

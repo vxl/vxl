@@ -15,7 +15,7 @@
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 //*****************************************************************************
 
-#include <vcsl/vcsl_cartesian_3d_ref.h>
+#include <vcsl/vcsl_cartesian_3d_sptr.h>
 
 //*****************************************************************************
 // External declarations for values

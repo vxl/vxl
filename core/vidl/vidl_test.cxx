@@ -8,7 +8,7 @@ void tryit ()
        pframe != movie.end();
        ++pframe)
     {
-    vidl_frame_ref frame = pframe;
+    vidl_frame_sptr frame = pframe;
     }
 
   // A better way to do it

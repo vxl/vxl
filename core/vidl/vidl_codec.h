@@ -26,7 +26,7 @@
 
 
 #include <vcl_string.h>
-#include <vidl/vidl_codec_ref.h>
+#include <vidl/vidl_codec_sptr.h>
 #include <vbl/vbl_ref_count.h>
 
 class vidl_movie;
@@ -94,7 +94,7 @@ public:
   virtual const char* type() = 0;
 
   // IO
-  virtual vidl_codec_ref load(const char* fname, char mode = 'r' ) = 0;
+  virtual vidl_codec_sptr load(const char* fname, char mode = 'r' ) = 0;
   virtual bool save(vidl_movie* movie, const char* fname) = 0;
   virtual bool probe(const char* fname) = 0;
   

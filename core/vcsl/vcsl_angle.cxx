@@ -28,7 +28,7 @@ bool vcsl_angle::compatible_unit(const vcsl_unit &new_unit) const
 //---------------------------------------------------------------------------
 // Return the standard unit associated to the dimension
 //---------------------------------------------------------------------------
-vcsl_unit_ref vcsl_angle::standard_unit(void) const
+vcsl_unit_sptr vcsl_angle::standard_unit(void) const
 {
   return vcsl_radian::instance().ptr();
 }
@@ -40,7 +40,7 @@ vcsl_unit_ref vcsl_angle::standard_unit(void) const
 //---------------------------------------------------------------------------
 // Return the reference to the unique vcsl_angle object
 //---------------------------------------------------------------------------
-vcsl_angle_ref vcsl_angle::instance(void)
+vcsl_angle_sptr vcsl_angle::instance(void)
 {
   if(instance_.ptr()==0)
     instance_=new vcsl_angle;
@@ -57,4 +57,4 @@ vcsl_angle::vcsl_angle(void)
 //---------------------------------------------------------------------------
 // Reference to the unique vcsl_angle object
 //---------------------------------------------------------------------------
-vcsl_angle_ref vcsl_angle::instance_=0;
+vcsl_angle_sptr vcsl_angle::instance_=0;

@@ -26,14 +26,14 @@
 //     Ported from TargetJr
 //-----------------------------------------------------------------------------
 
-#include <vidl/vidl_avicodec_ref.h>
+#include <vidl/vidl_avicodec_sptr.h>
 #include <vbl/vbl_ref_count.h>
 
 #include <windows.h>
 #include <vfw.h>
 
 #include <vidl/vidl_codec.h>
-#include <vidl/vidl_frame_ref.h>
+#include <vidl/vidl_frame_sptr.h>
 
 
 //=============================================================================
@@ -50,7 +50,7 @@ public:
 
   //-----------------------------------------------------
   virtual bool probe(const char* fname);
-  virtual vidl_codec_ref load(const char* fname, char mode = 'r' );
+  virtual vidl_codec_sptr load(const char* fname, char mode = 'r' );
   virtual bool save(vidl_movie* movie, const char* fname);
   virtual  const char* type() {return "AVI";}
 
@@ -63,7 +63,7 @@ private:
    AVISTREAMINFO avi_stream_info_;
 
   // Helpers
-  HANDLE  make_dib(vidl_frame_ref frame, UINT bits);
+  HANDLE  make_dib(vidl_frame_sptr frame, UINT bits);
 
 protected:
    bool read_header();

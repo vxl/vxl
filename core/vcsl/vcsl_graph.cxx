@@ -13,7 +13,7 @@
 //---------------------------------------------------------------------------
 vcsl_graph::vcsl_graph(void)
 {
-  vertices_=new vcl_vector<vcsl_spatial_ref>;
+  vertices_=new vcl_vector<vcsl_spatial_sptr>;
 }
 
 //---------------------------------------------------------------------------
@@ -43,11 +43,11 @@ int vcsl_graph::count(void) const
 //---------------------------------------------------------------------------
 // Has `this' `cs' as node ?
 //---------------------------------------------------------------------------
-bool vcsl_graph::has(const vcsl_spatial_ref &cs) const
+bool vcsl_graph::has(const vcsl_spatial_sptr &cs) const
 {
   bool result;
 
-  vcl_vector<vcsl_spatial_ref>::const_iterator i;
+  vcl_vector<vcsl_spatial_sptr>::const_iterator i;
 
   result=false;
   for(i=vertices_->begin();i!=vertices_->end()&&!result;++i)
@@ -72,7 +72,7 @@ bool vcsl_graph::valid_index(const int index) const
 // Spatial coordinate system number `index'
 // REQUIRE: valid_index(index)
 //---------------------------------------------------------------------------
-vcsl_spatial_ref vcsl_graph::item(const int index) const
+vcsl_spatial_sptr vcsl_graph::item(const int index) const
 {
   // require
   assert(valid_index(index));
@@ -84,7 +84,7 @@ vcsl_spatial_ref vcsl_graph::item(const int index) const
 // Add `cs' in `this'
 // REQUIRE: !has(cs)
 //---------------------------------------------------------------------------
-void vcsl_graph::put(const vcsl_spatial_ref &cs)
+void vcsl_graph::put(const vcsl_spatial_sptr &cs)
 {
   // require
   assert(!has(cs));
@@ -96,12 +96,12 @@ void vcsl_graph::put(const vcsl_spatial_ref &cs)
 // Remove `cs' from `this'
 // REQUIRE: has(cs)
 //---------------------------------------------------------------------------
-void vcsl_graph::remove(const vcsl_spatial_ref &cs)
+void vcsl_graph::remove(const vcsl_spatial_sptr &cs)
 {
   // require
   assert(has(cs));
   
-  vcl_vector<vcsl_spatial_ref>::iterator i;
+  vcl_vector<vcsl_spatial_sptr>::iterator i;
 
   for(i=vertices_->begin();i!=vertices_->end()&&((*i)!=cs);++i)
     ;
@@ -116,7 +116,7 @@ void vcsl_graph::remove(const vcsl_spatial_ref &cs)
 // Used by the search path algorithm
 void vcsl_graph::init_vertices(void) const
 {
-  vcl_vector<vcsl_spatial_ref>::iterator i;
+  vcl_vector<vcsl_spatial_sptr>::iterator i;
 
   for(i=vertices_->begin();i!=vertices_->end();++i)
     (*i)->set_reached(false);

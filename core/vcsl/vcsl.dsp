@@ -219,7 +219,7 @@ SOURCE=.\Templates\vbl_smart_ptr+vcsl_utm.cxx
 # Begin Source File
 
 # End Source File
-SOURCE=.\Templates\vcl_vector+vcsl_axis_ref.cxx
+SOURCE=.\Templates\vcl_vector+vcsl_axis_sptr.cxx
 # Begin Source File
 
 # End Source File
@@ -227,11 +227,11 @@ SOURCE=.\Templates\vcl_vector+vcsl_interpolator.cxx
 # Begin Source File
 
 # End Source File
-SOURCE=.\Templates\vcl_vector+vcsl_spatial_ref.cxx
+SOURCE=.\Templates\vcl_vector+vcsl_spatial_sptr.cxx
 # Begin Source File
 
 # End Source File
-SOURCE=.\Templates\vcl_vector+vcsl_spatial_transformation_ref.cxx
+SOURCE=.\Templates\vcl_vector+vcsl_spatial_transformation_sptr.cxx
 # Begin Source File
 
 # End Source File

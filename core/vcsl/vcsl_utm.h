@@ -20,7 +20,7 @@
 // 2000/06/29 François BERTEL Creation. Adapted from IUE
 //*****************************************************************************
 
-#include <vcsl/vcsl_utm_ref.h>
+#include <vcsl/vcsl_utm_sptr.h>
 
 //*****************************************************************************
 // External declarations for values

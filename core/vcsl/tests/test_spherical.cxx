@@ -23,7 +23,7 @@ int main(int argc,
 
   result=0;
 
-  vcsl_spherical_ref p;
+  vcsl_spherical_sptr p;
   p=new vcsl_spherical;
 
   return result;

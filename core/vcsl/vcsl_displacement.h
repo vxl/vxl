@@ -19,7 +19,7 @@
 // 2000/08/06 François BERTEL Creation.
 //*****************************************************************************
 
-#include <vcsl/vcsl_displacement_ref.h>
+#include <vcsl/vcsl_displacement_sptr.h>
 #include <vcsl/vcsl_rotation.h>
 
 #include <vnl/vnl_quaternion.h>

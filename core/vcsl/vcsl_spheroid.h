@@ -24,7 +24,7 @@
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 //*****************************************************************************
 
-#include <vcsl/vcsl_spheroid_ref.h>
+#include <vcsl/vcsl_spheroid_sptr.h>
 
 #include <vbl/vbl_ref_count.h>
 

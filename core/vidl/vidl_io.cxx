@@ -21,7 +21,7 @@
 #include <vcl_list.h>
 #include <vcl_vector.h>
 
-vcl_list<vidl_codec_ref> vidl_io::supported_types_;
+vcl_list<vidl_codec_sptr> vidl_io::supported_types_;
 
 #if 0
 // Constructor does nothing.
@@ -39,7 +39,7 @@ vidl_io::~vidl_io()
 
 // -- Load a movie, takes a file name and return the created movie.
 // A starting frame, ending frame and increment number are optionals
-vidl_movie_ref vidl_io::load_movie(
+vidl_movie_sptr vidl_io::load_movie(
 	const char* fname, 
        	int start, 
        	int end, 
@@ -47,20 +47,20 @@ vidl_movie_ref vidl_io::load_movie(
        	char mode
 	)
 {
-  vidl_clip_ref clip = load_clip(fname, start, end, increment, mode);
+  vidl_clip_sptr clip = load_clip(fname, start, end, increment, mode);
 
   // Stop here if the clip was not created
   if (!clip)
     return 0;
 
-  vidl_movie_ref movie = new vidl_movie(clip);
+  vidl_movie_sptr movie = new vidl_movie(clip);
 
   return movie;
 }
 
 // -- Loads and creates movie from a list of image file names.
 // A starting frame, ending frame and increment number are optionals
-vidl_movie_ref  vidl_io::load_movie(
+vidl_movie_sptr  vidl_io::load_movie(
 	const vcl_list<vcl_string> &fnames, 
         int start, 
         int end, 
@@ -68,20 +68,20 @@ vidl_movie_ref  vidl_io::load_movie(
         char mode
 	)
 {
-  vidl_clip_ref clip = load_clip(fnames, start, end, increment, mode);
+  vidl_clip_sptr clip = load_clip(fnames, start, end, increment, mode);
   
   // Stop here if the clip was not created
   if (!clip)
     return 0;
   
-  vidl_movie_ref movie = new vidl_movie(clip);
+  vidl_movie_sptr movie = new vidl_movie(clip);
   
   return movie;
 }
 
 // -- Loads and creates movie from a vector of image file names.
 // A starting frame, ending frame and increment number are optionals
-vidl_movie_ref  vidl_io::load_movie(
+vidl_movie_sptr  vidl_io::load_movie(
 	const vcl_vector<vcl_string> &fnames, 
         int start, 
         int end, 
@@ -89,23 +89,23 @@ vidl_movie_ref  vidl_io::load_movie(
         char mode
 	)
 {
-  vidl_clip_ref clip = load_clip(fnames, start, end, increment, mode);
+  vidl_clip_sptr clip = load_clip(fnames, start, end, increment, mode);
   
   // Stop here if the clip was not created
   if (!clip)
     return 0;
   
-  vidl_movie_ref movie = new vidl_movie(clip);
+  vidl_movie_sptr movie = new vidl_movie(clip);
   
   return movie;
 }
 
 static bool looks_like_a_file_list(char const* fname);
-static vidl_clip_ref load_from_file_list(char const* fname);
+static vidl_clip_sptr load_from_file_list(char const* fname);
 
 // -- Load a clip, takes a file name and return the created clip.
 // A starting frame, ending frame and increment number are optionals
-vidl_clip_ref  vidl_io::load_clip(
+vidl_clip_sptr  vidl_io::load_clip(
 	const char* fname, 
         int start,
         int end,
@@ -151,7 +151,7 @@ vidl_clip_ref  vidl_io::load_clip(
   // The file is not a directory,
   // Let us try all the known video formats,
   // hoping to find the good one
-  vcl_list<vidl_codec_ref>::iterator i = supported_types_.begin(); 
+  vcl_list<vidl_codec_sptr>::iterator i = supported_types_.begin(); 
   if (i == supported_types_.end())
     vcl_cerr << "vidl_io: warning: no codecs installed\n";
 
@@ -159,10 +159,10 @@ vidl_clip_ref  vidl_io::load_clip(
   {
     if ((*i)->probe(fname))
       {
-        vidl_codec_ref codec = (*i)->load(fname, mode);
+        vidl_codec_sptr codec = (*i)->load(fname, mode);
         if (!codec)
           return 0;
-        vidl_clip_ref clip = new vidl_clip(codec, start, end, increment);
+        vidl_clip_sptr clip = new vidl_clip(codec, start, end, increment);
         return clip;
       }
     
@@ -178,7 +178,7 @@ vidl_clip_ref  vidl_io::load_clip(
 
 // -- Loads and creates clip from a list of image file names.
 // A starting frame, ending frame and increment number are optionals
-vidl_clip_ref vidl_io::load_clip(
+vidl_clip_sptr vidl_io::load_clip(
 	const vcl_list<vcl_string> &fnames, 
         int start, 
         int end, 
@@ -200,7 +200,7 @@ vidl_clip_ref vidl_io::load_clip(
 
 // -- Loads and creates clip from a list of image file names.
 // A starting frame, ending frame and increment number are optionals
-vidl_clip_ref  vidl_io::load_clip(
+vidl_clip_sptr  vidl_io::load_clip(
 	const vcl_vector<vcl_string> &fnames, 
         int start, 
         int end, 
@@ -223,7 +223,7 @@ vidl_clip_ref  vidl_io::load_clip(
 // -- load a list of images as a clip.
 // This function should not be called unless
 // you are sure you are dealing with images
-vidl_clip_ref  vidl_io::load_images(
+vidl_clip_sptr  vidl_io::load_images(
 	const vcl_list<vcl_string> &fnames, 
         int start,
         int end,
@@ -232,19 +232,19 @@ vidl_clip_ref  vidl_io::load_images(
 	)
 {
   // This should be a video represented by a set of images
-  vidl_image_list_codec_ref ImCodec = new vidl_image_list_codec();
+  vidl_image_list_codec_sptr ImCodec = new vidl_image_list_codec();
 
-  vidl_codec_ref codec = ImCodec->load(fnames, mode);
+  vidl_codec_sptr codec = ImCodec->load(fnames, mode);
   if (!codec)
     return 0;
-  vidl_clip_ref clip = new vidl_clip(codec, start, end, increment);
+  vidl_clip_sptr clip = new vidl_clip(codec, start, end, increment);
   return clip;
 }
 
 // -- load a vector of images as a clip.
 // This function should not be called unless
 // you are sure you are dealing with images
-vidl_clip_ref  vidl_io::load_images(
+vidl_clip_sptr  vidl_io::load_images(
 	const vcl_vector<vcl_string> &fnames, 
         int start,
         int end,
@@ -253,12 +253,12 @@ vidl_clip_ref  vidl_io::load_images(
 	)
 {
   // This should be a video represented by a set of images
-  vidl_image_list_codec_ref ImCodec = new vidl_image_list_codec();
+  vidl_image_list_codec_sptr ImCodec = new vidl_image_list_codec();
 
-  vidl_codec_ref codec = ImCodec->load(fnames, mode);
+  vidl_codec_sptr codec = ImCodec->load(fnames, mode);
   if (!codec)
     return 0;
-  vidl_clip_ref clip = new vidl_clip(codec, start, end, increment);
+  vidl_clip_sptr clip = new vidl_clip(codec, start, end, increment);
   return clip;
 }
 
@@ -268,7 +268,7 @@ bool vidl_io::save(vidl_movie* movie, const char* fname, const char* type)
 
   // Go along the vcl_list of supported videoCODECs,
   // find the one of the type asked if it does exist.
-  vcl_list<vidl_codec_ref>::iterator i = supported_types_.begin();
+  vcl_list<vidl_codec_sptr>::iterator i = supported_types_.begin();
 
   while ((i != supported_types_.end()) && (strcmp((*i)->type(), type)))
     {
@@ -306,7 +306,7 @@ vcl_list<vcl_string> vidl_io::supported_types()
 {
   // Create the vcl_list with type() for all the codecs
   vcl_list<vcl_string> ret;
-  for (vcl_list<vidl_codec_ref>::iterator i=supported_types_.begin(); i!=supported_types_.end(); ++i)
+  for (vcl_list<vidl_codec_sptr>::iterator i=supported_types_.begin(); i!=supported_types_.end(); ++i)
     ret.push_back((*i)->type());
 
   // Return the vcl_list of type supported codecs
@@ -329,7 +329,7 @@ static bool looks_like_a_file_list(char const* fname)
   return false;
 }
 
-static vidl_clip_ref load_from_file_list(char const* fname)
+static vidl_clip_sptr load_from_file_list(char const* fname)
 {
   // Declare the vcl_list of image filenames
   vcl_list<vcl_string> filenames;

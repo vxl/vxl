@@ -23,7 +23,7 @@ int main(int argc,
 
   result=0;
 
-  vcsl_cartesian_2d_ref c;
+  vcsl_cartesian_2d_sptr c;
   c=new vcsl_cartesian_2d;
 
   return result;

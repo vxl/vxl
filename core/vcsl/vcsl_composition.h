@@ -19,7 +19,7 @@
 // 2000/08/08 François BERTEL Creation.
 //*****************************************************************************
 
-#include <vcsl/vcsl_composition_ref.h>
+#include <vcsl/vcsl_composition_sptr.h>
 
 //*****************************************************************************
 // External declarations
@@ -53,7 +53,7 @@ public:
   virtual bool is_valid(void) const;
 
   //: Return the list of transformations
-  virtual vcl_vector<vcsl_spatial_transformation_ref> *composition(void) const;
+  virtual vcl_vector<vcsl_spatial_transformation_sptr> *composition(void) const;
 
   //***************************************************************************
   // Status setting
@@ -62,7 +62,7 @@ public:
   //: Set the list of transformations of the composition
   //: The transformations are performed in the order of the list
   virtual void
-  set_composition(vcl_vector<vcsl_spatial_transformation_ref> &new_transformations);
+  set_composition(vcl_vector<vcsl_spatial_transformation_sptr> &new_transformations);
 
 
   //***************************************************************************
@@ -80,7 +80,7 @@ public:
   virtual vnl_vector<double> *inverse(const vnl_vector<double> &v,
                                       const double time) const;
 protected:
-  vcl_vector<vcsl_spatial_transformation_ref> *transformations_;
+  vcl_vector<vcsl_spatial_transformation_sptr> *transformations_;
 };
 
 #endif // #ifndef VCSL_COMPOSITION_H

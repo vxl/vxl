@@ -103,7 +103,7 @@ int vidl_image_list_codec::put_section(int position, void* ib, int x0, int y0, i
 }
 
 // -- load from a file name
-vidl_codec_ref vidl_image_list_codec::load(const char* fname, char mode)
+vidl_codec_sptr vidl_image_list_codec::load(const char* fname, char mode)
 {
   // will try and load as many images as possible starting with 
   //   index 0 and stopping when we run out of images
@@ -131,7 +131,7 @@ vidl_codec_ref vidl_image_list_codec::load(const char* fname, char mode)
 }
 
 // -- load a 'movie' from a list of filenames, return a codec
-vidl_codec_ref vidl_image_list_codec::load(const vcl_list<vcl_string> &fnames, char mode)
+vidl_codec_sptr vidl_image_list_codec::load(const vcl_list<vcl_string> &fnames, char mode)
 {
   // Makes sure image loaders are registered
   //register_image_loaders();
@@ -160,7 +160,7 @@ vidl_codec_ref vidl_image_list_codec::load(const vcl_list<vcl_string> &fnames, c
 }
 
 // -- load a 'movie' from a vector of filenames, return a codec
-vidl_codec_ref vidl_image_list_codec::load(const vcl_vector<vcl_string> &fnames, char mode)
+vidl_codec_sptr vidl_image_list_codec::load(const vcl_vector<vcl_string> &fnames, char mode)
 {
   // Make sure image loaders are registered
   //register_image_loaders();

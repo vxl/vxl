@@ -23,7 +23,7 @@ int main(int argc,
 
   result=0;
 
-  vcsl_degree_ref r;
+  vcsl_degree_sptr r;
   r=vcsl_degree::instance();
 
   return result;

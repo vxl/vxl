@@ -12,7 +12,7 @@
 //---------------------------------------------------------------------------
 vcsl_polar::vcsl_polar(void)
 {
-  vcsl_axis_ref a;
+  vcsl_axis_sptr a;
   a=new vcsl_axis;
   axes_.push_back(a);
   a=new vcsl_axis(*(vcsl_angle::instance().ptr()));

@@ -26,8 +26,8 @@
 
 
 #include <vil/vil_image_impl.h>
-#include <vidl/vidl_frame_as_image_ref.h>
-#include <vidl/vidl_frame_ref.h>
+#include <vidl/vidl_frame_as_image_sptr.h>
+#include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_frame.h>
 
 class vidl_frame_as_image : public vil_image_impl

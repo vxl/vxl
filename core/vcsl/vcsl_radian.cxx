@@ -31,7 +31,7 @@ double vcsl_radian::units_per_standard_unit(void) const
 //---------------------------------------------------------------------------
 // Return the reference to the unique vcsl_radian object
 //---------------------------------------------------------------------------
-vcsl_radian_ref vcsl_radian::instance(void)
+vcsl_radian_sptr vcsl_radian::instance(void)
 {
   if(instance_.ptr()==0)
     instance_=new vcsl_radian;
@@ -48,4 +48,4 @@ vcsl_radian::vcsl_radian(void)
 //---------------------------------------------------------------------------
 // Reference to the unique vcsl_radian object
 //---------------------------------------------------------------------------
-vcsl_radian_ref vcsl_radian::instance_=0;
+vcsl_radian_sptr vcsl_radian::instance_=0;

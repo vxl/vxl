@@ -23,13 +23,13 @@
 // 2000/06/29 François BERTEL Creation. Adapted from IUE
 //*****************************************************************************
 
-#include <vcsl/vcsl_geographic_ref.h>
+#include <vcsl/vcsl_geographic_sptr.h>
 
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
 #include <vcsl/vcsl_spatial.h>
-#include <vcsl/vcsl_spheroid_ref.h>
+#include <vcsl/vcsl_spheroid_sptr.h>
 
 class vcsl_geographic
   :public vcsl_spatial
@@ -50,7 +50,7 @@ public:
   //***************************************************************************
 
   //: Return the spheroid
-  virtual vcsl_spheroid_ref spheroid(void) const;
+  virtual vcsl_spheroid_sptr spheroid(void) const;
 
   //***************************************************************************
   // Status setting
@@ -65,7 +65,7 @@ protected:
   //***************************************************************************
   
   //: Spheroid
-  vcsl_spheroid_ref spheroid_;
+  vcsl_spheroid_sptr spheroid_;
 };
 
 #endif // #ifndef VCSL_GEOGRAPHIC_H

@@ -28,9 +28,9 @@
 
 #include <vcl_string.h>
 #include <vbl/vbl_ref_count.h>
-#include <vidl/vidl_clip_ref.h>
-#include <vidl/vidl_movie_ref.h>
-#include <vidl/vidl_codec_ref.h>
+#include <vidl/vidl_clip_sptr.h>
+#include <vidl/vidl_movie_sptr.h>
+#include <vidl/vidl_codec_sptr.h>
 #include <vcl_vector.h>
 #include <vcl_list.h>
 
@@ -47,14 +47,14 @@ public:
   // 			LoadMovie
   //---------------------------------------------------------
 
-  static vidl_movie_ref load_movie(
+  static vidl_movie_sptr load_movie(
 	const char* fname,
         int start, int end, 
 	int increment, 
 	char mode = 'r'
 	);
 
-  static vidl_movie_ref load_movie(
+  static vidl_movie_sptr load_movie(
 	const vcl_list<vcl_string> &fnames,
         int start, 
 	int end, 
@@ -62,7 +62,7 @@ public:
 	char mode = 'r'
 	);
 
-  static vidl_movie_ref load_movie(
+  static vidl_movie_sptr load_movie(
 	const vcl_vector<vcl_string> &fnames,
         int start, 
 	int end, 
@@ -70,17 +70,17 @@ public:
 	char mode = 'r'
 	);
 
-  static vidl_movie_ref load_movie(
+  static vidl_movie_sptr load_movie(
 	const char* fname, 
 	char mode = 'r'
 	) { return load_movie(fname, 0, 0, 1, mode); }
 
-  static vidl_movie_ref load_movie( 
+  static vidl_movie_sptr load_movie( 
 	const vcl_list<vcl_string> &fnames, 
 	char mode = 'r'
 	) { return load_movie(fnames, 0, 0, 1, mode); }
 
-  static vidl_movie_ref load_movie( 
+  static vidl_movie_sptr load_movie( 
 	const vcl_vector<vcl_string> &fnames, 
 	char mode = 'r'
 	) { return load_movie(fnames, 0, 0, 1, mode); }
@@ -89,7 +89,7 @@ public:
   // 			LoadClip
   //---------------------------------------------------------
 
-  static vidl_clip_ref load_clip(
+  static vidl_clip_sptr load_clip(
 	const char* fname,
         int start, 
 	int end, 
@@ -97,31 +97,31 @@ public:
 	char mode = 'r'
 	); 
 
-  static vidl_clip_ref load_clip(
+  static vidl_clip_sptr load_clip(
 	const vcl_list<vcl_string> &fnames, 
         int start, int end, 
 	int increment, 
 	char mode = 'r'
 	); 
 
-  static vidl_clip_ref load_clip(
+  static vidl_clip_sptr load_clip(
 	const vcl_vector<vcl_string> &fnames, 
         int start, int end, 
 	int increment, 
 	char mode = 'r'
 	); 
 
-  static vidl_clip_ref load_clip( 
+  static vidl_clip_sptr load_clip( 
 	const char* fname, 
 	char mode = 'r'
 	) { return load_clip(fname, 0, 0, 1, mode); }
 
-  static vidl_clip_ref load_clip(
+  static vidl_clip_sptr load_clip(
 	const vcl_list<vcl_string> &fnames, 
 	char mode = 'r'
 	) { return load_clip(fnames, 0, 0, 1, mode); }
 
-  static vidl_clip_ref load_clip(
+  static vidl_clip_sptr load_clip(
 	const vcl_vector<vcl_string> &fnames, 
 	char mode = 'r'
 	) { return load_clip(fnames, 0, 0, 1, mode); }
@@ -141,7 +141,7 @@ public:
 
 public:
   
-  static vcl_list<vidl_codec_ref> supported_types_;
+  static vcl_list<vidl_codec_sptr> supported_types_;
 
   // Helpers-------------------------------------------------------------------
 
@@ -149,7 +149,7 @@ public:
   // This may go in the public area if some people know 
   // they are dealing with images
 
-  static vidl_clip_ref load_images(
+  static vidl_clip_sptr load_images(
 	const vcl_list<vcl_string> &fnames,
         int start, 
 	int, 
@@ -157,7 +157,7 @@ public:
 	char mode = 'r'
 	);
 
-  static vidl_clip_ref load_images(
+  static vidl_clip_sptr load_images(
 	const vcl_vector<vcl_string> &fnames,
         int start, 
 	int, 
@@ -165,7 +165,7 @@ public:
 	char mode = 'r'
 	);
 
-  static vidl_clip_ref load_images(
+  static vidl_clip_sptr load_images(
 	const vcl_list<vcl_string> &fnames, 
 	char mode = 'r'
 	)
@@ -173,7 +173,7 @@ public:
 	return load_images(fnames, 0, 0, 1, mode);
 	}
 
-  static vidl_clip_ref load_images(
+  static vidl_clip_sptr load_images(
 	const vcl_vector<vcl_string> &fnames, 
 	char mode = 'r'
 	)

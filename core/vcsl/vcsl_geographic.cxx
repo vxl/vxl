@@ -28,7 +28,7 @@ vcsl_geographic::~vcsl_geographic()
 //---------------------------------------------------------------------------
 // Return the spheroid
 //---------------------------------------------------------------------------
-vcsl_spheroid_ref vcsl_geographic::spheroid(void) const
+vcsl_spheroid_sptr vcsl_geographic::spheroid(void) const
 {
   return spheroid_;
 }

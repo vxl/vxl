@@ -15,7 +15,7 @@
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 //*****************************************************************************
 
-#include <vcsl/vcsl_angle_unit_ref.h>
+#include <vcsl/vcsl_angle_unit_sptr.h>
 
 #include <vcsl/vcsl_unit.h>
  
@@ -42,7 +42,7 @@ public:
   virtual bool compatible_units(const vcsl_unit &other) const;
 
   //: Return the standard unit associated to the dimension of `this'
-  virtual vcsl_unit_ref standard_unit(void) const;
+  virtual vcsl_unit_sptr standard_unit(void) const;
 
   //***************************************************************************
   // Because VXL does not use dynamic_cast<> :-(

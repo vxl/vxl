@@ -28,7 +28,7 @@ bool vcsl_length::compatible_unit(const vcsl_unit &new_unit) const
 //---------------------------------------------------------------------------
 // Return the standard unit associated to the dimension
 //---------------------------------------------------------------------------
-vcsl_unit_ref vcsl_length::standard_unit(void) const
+vcsl_unit_sptr vcsl_length::standard_unit(void) const
 {
   return vcsl_meter::instance().ptr();
 }
@@ -40,7 +40,7 @@ vcsl_unit_ref vcsl_length::standard_unit(void) const
 //---------------------------------------------------------------------------
 // Return the reference to the unique vcsl_length object
 //---------------------------------------------------------------------------
-vcsl_length_ref vcsl_length::instance(void)
+vcsl_length_sptr vcsl_length::instance(void)
 {
   if(instance_.ptr()==0)
     instance_=new vcsl_length;
@@ -57,4 +57,4 @@ vcsl_length::vcsl_length(void)
 //---------------------------------------------------------------------------
 // Reference to the unique vcsl_length object
 //---------------------------------------------------------------------------
-vcsl_length_ref vcsl_length::instance_=0;
+vcsl_length_sptr vcsl_length::instance_=0;

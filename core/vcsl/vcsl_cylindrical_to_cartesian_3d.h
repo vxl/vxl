@@ -18,7 +18,7 @@
 // 2000/08/08 François BERTEL Creation.
 //*****************************************************************************
 
-#include <vcsl/vcsl_cylindrical_to_cartesian_3d_ref.h>
+#include <vcsl/vcsl_cylindrical_to_cartesian_3d_sptr.h>
 
 //*****************************************************************************
 // External declarations
@@ -69,14 +69,14 @@ public:
   //***************************************************************************
 
   //: Return the reference to the unique vcsl_length object
-  static vcsl_cylindrical_to_cartesian_3d_ref instance(void);
+  static vcsl_cylindrical_to_cartesian_3d_sptr instance(void);
 
 protected:
   //: Default constructor
   explicit vcsl_cylindrical_to_cartesian_3d(void);
 
   //: Reference to the unique vcsl_cylindrical_to_cartesian_3d object
-  static vcsl_cylindrical_to_cartesian_3d_ref instance_;
+  static vcsl_cylindrical_to_cartesian_3d_sptr instance_;
 };
 
 #endif // #ifndef VCSL_CYLINDRICAL_TO_CARTESIAN_3D_H

@@ -23,7 +23,7 @@ int main(int argc,
 
   result=0;
 
-  vcsl_meter_ref m;
+  vcsl_meter_sptr m;
   m=vcsl_meter::instance();
 
 

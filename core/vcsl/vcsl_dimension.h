@@ -18,11 +18,11 @@
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 //*****************************************************************************
 
-#include <vcsl/vcsl_dimension_ref.h>
+#include <vcsl/vcsl_dimension_sptr.h>
 
 #include <vbl/vbl_ref_count.h>
 
-#include <vcsl/vcsl_unit_ref.h>
+#include <vcsl/vcsl_unit_sptr.h>
 
 class vcsl_dimension
   : public vbl_ref_count
@@ -46,7 +46,7 @@ public:
   virtual bool compatible_unit(const vcsl_unit &new_unit) const=0;
 
   //: Return the standard unit associated to the dimension
-  virtual vcsl_unit_ref standard_unit(void) const=0;
+  virtual vcsl_unit_sptr standard_unit(void) const=0;
 };
 
 #endif // #ifndef VCSL_DIMENSION_H

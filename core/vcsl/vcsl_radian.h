@@ -15,7 +15,7 @@
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 //*****************************************************************************
 
-#include <vcsl/vcsl_radian_ref.h>
+#include <vcsl/vcsl_radian_sptr.h>
 
 #include <vcsl/vcsl_angle_unit.h>
 
@@ -43,13 +43,13 @@ public:
   //***************************************************************************
 
   //: Return the reference to the unique vcsl_radian object
-  static vcsl_radian_ref instance(void);
+  static vcsl_radian_sptr instance(void);
 protected:
 
   //: Default constructor
   explicit vcsl_radian(void);
   
   //: Reference to the unique vcsl_radian object
-  static vcsl_radian_ref instance_;
+  static vcsl_radian_sptr instance_;
 };
 #endif // #ifndef VCSL_RADIAN_H

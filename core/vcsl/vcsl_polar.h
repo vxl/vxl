@@ -15,7 +15,7 @@
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 //*****************************************************************************
 
-#include <vcsl/vcsl_polar_ref.h>
+#include <vcsl/vcsl_polar_sptr.h>
 
 //*****************************************************************************
 // External declarations for values

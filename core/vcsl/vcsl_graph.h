@@ -21,11 +21,11 @@
 // 2000/08/01 François BERTEL Creation.
 //*****************************************************************************
 
-#include <vcsl/vcsl_graph_ref.h>
+#include <vcsl/vcsl_graph_sptr.h>
 
 #include <vbl/vbl_ref_count.h>
 #include <vcl_vector.h>
-#include <vcsl/vcsl_spatial_ref.h>
+#include <vcsl/vcsl_spatial_sptr.h>
 
 class vcsl_graph
   :public vbl_ref_count
@@ -53,7 +53,7 @@ public:
   //***************************************************************************
 
   //: Has `this' `cs' as node ?
-  virtual bool has(const vcsl_spatial_ref &cs) const;
+  virtual bool has(const vcsl_spatial_sptr &cs) const;
 
   //: Is `index' valid in the list of the spatial coordinate systems ?
   virtual bool valid_index(const int index) const;
@@ -64,15 +64,15 @@ public:
 
   //: Spatial coordinate system number `index'
   //: REQUIRE: valid_index(index)
-  virtual vcsl_spatial_ref item(const int index) const;
+  virtual vcsl_spatial_sptr item(const int index) const;
 
   //: Add `cs' in `this'
   //: REQUIRE: !has(cs)
-  virtual void put(const vcsl_spatial_ref &cs);
+  virtual void put(const vcsl_spatial_sptr &cs);
 
   //: Remove `cs' from `this'
   //: REQUIRE: has(cs)
-  virtual void remove(const vcsl_spatial_ref &cs);
+  virtual void remove(const vcsl_spatial_sptr &cs);
 
   //***************************************************************************
   // Basic operations
@@ -85,7 +85,7 @@ public:
 protected:
 
   //: Vertices of the graph: all the spatial coordinate systems
-  vcl_vector<vcsl_spatial_ref> *vertices_;
+  vcl_vector<vcsl_spatial_sptr> *vertices_;
 };
 
 #endif // #ifndef VCSL_GRAPH_H

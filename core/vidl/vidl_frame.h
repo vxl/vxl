@@ -26,7 +26,7 @@
 
 #include <vbl/vbl_ref_count.h>
 #include <vil/vil_image.h>
-#include <vidl/vidl_frame_ref.h>
+#include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_codec.h>
 
 class vidl_frame : public vbl_ref_count
@@ -35,14 +35,14 @@ class vidl_frame : public vbl_ref_count
    public:
 
      	// Constructors/Initializers/Destructors
-     	vidl_frame(int position, vidl_codec_ref coder);
+     	vidl_frame(int position, vidl_codec_sptr coder);
      	~vidl_frame();
 
      	vil_image get_image();
      	virtual bool get_section(
 		void* ib, int x0, int y0, int width, int heigth) const;
 
-     	vidl_codec_ref get_codec() {return coder_;}
+     	vidl_codec_sptr get_codec() {return coder_;}
 
      	inline char get_image_class()const { return(coder_->get_image_class()); } 
      	inline char get_format() const     { return(coder_->get_format()); }
@@ -58,7 +58,7 @@ class vidl_frame : public vbl_ref_count
 
      	// Data Members
      	const int position_;
-     	vidl_codec_ref coder_;
+     	vidl_codec_sptr coder_;
         vil_image image_;
    };
 #endif // vidl_frame_h

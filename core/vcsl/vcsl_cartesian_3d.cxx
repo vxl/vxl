@@ -11,7 +11,7 @@
 //---------------------------------------------------------------------------
 vcsl_cartesian_3d::vcsl_cartesian_3d(void)
 {
-  vcsl_axis_ref a;
+  vcsl_axis_sptr a;
   a=new vcsl_axis;
   axes_.push_back(a);
   a=new vcsl_axis(*(a.ptr()));

@@ -28,9 +28,9 @@
 
 
 #include <vbl/vbl_ref_count.h>
-#include <vidl/vidl_movie_ref.h>
+#include <vidl/vidl_movie_sptr.h>
 #include <vidl/vidl_frame.h>
-#include <vidl/vidl_frame_ref.h>
+#include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_clip.h>
 #include <vil/vil_image.h>
 #include <vcl_list.h>
@@ -42,7 +42,7 @@ public:
 
   // Constructors/Initializers/Destructors
   vidl_movie ();
-  vidl_movie(vidl_clip_ref clip);
+  vidl_movie(vidl_clip_sptr clip);
   ~vidl_movie();
   vidl_movie(const vidl_movie&);
 
@@ -50,21 +50,21 @@ public:
   vidl_movie& operator=(const vidl_movie&);
 
   // Data Access
-  vidl_frame_ref get_frame(int n);
+  vidl_frame_sptr get_frame(int n);
   int length() const;
 
-  vcl_list<vidl_clip_ref> get_clips() const {return clip_;}
+  vcl_list<vidl_clip_sptr> get_clips() const {return clip_;}
 
   int width() const;
   int height() const;
  
   // Data Control
-  void add_clip(vidl_clip_ref  clip);
+  void add_clip(vidl_clip_sptr  clip);
 
 
 protected:
   // Data Members
-  vcl_list<vidl_clip_ref> clip_; 
+  vcl_list<vidl_clip_sptr> clip_; 
 
 
   //----------------------------
@@ -93,15 +93,15 @@ public :
      // Also look at test.C for other examples
 
      private :
-        vidl_movie_ref movie_;
+        vidl_movie_sptr movie_;
         int frame_number_;
 
      public :
 	// Constructors / destructors
-        frame_iterator (vidl_movie_ref movie, int frame_number) :
+        frame_iterator (vidl_movie_sptr movie, int frame_number) :
 	   movie_(movie), frame_number_(frame_number) {}
 
-        frame_iterator (vidl_movie_ref movie) :
+        frame_iterator (vidl_movie_sptr movie) :
 	   movie_(movie), frame_number_(0) {}
 
 	frame_iterator (const frame_iterator &fr) :
@@ -151,16 +151,16 @@ public :
 	   return *this;
 	   }
 
-	// Treating as a vidl_frame_ref
-	operator vidl_frame_ref ()
+	// Treating as a vidl_frame_sptr
+	operator vidl_frame_sptr ()
 	   {
 	   if (frame_number_ < 0 || frame_number_ >= movie_->length())
-	      return vidl_frame_ref(0);
-	   vidl_frame_ref frame = movie_->get_frame(frame_number_);
+	      return vidl_frame_sptr(0);
+	   vidl_frame_sptr frame = movie_->get_frame(frame_number_);
   	   return frame;
 	   }
 
- 	vidl_frame_ref operator -> () { return (vidl_frame_ref) *this; }
+ 	vidl_frame_sptr operator -> () { return (vidl_frame_sptr) *this; }
 
 	// Comparison against other iterators
 	friend bool operator == (const frame_iterator &fr1,
@@ -207,7 +207,7 @@ public :
 
 	// Data member access
 	int current_frame_number () { return frame_number_; }
-	vidl_movie_ref get_movie ()  { return movie_; }
+	vidl_movie_sptr get_movie ()  { return movie_; }
      };
 
    //---------------------------------------------------------------------

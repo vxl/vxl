@@ -15,7 +15,7 @@
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 //*****************************************************************************
 
-#include <vcsl/vcsl_angle_ref.h>
+#include <vcsl/vcsl_angle_sptr.h>
 
 #include <vcsl/vcsl_dimension.h>
 
@@ -38,20 +38,20 @@ public:
   virtual bool compatible_unit(const vcsl_unit &new_unit) const;
 
   //: Return the standard unit associated to the dimension
-  virtual vcsl_unit_ref standard_unit(void) const;
+  virtual vcsl_unit_sptr standard_unit(void) const;
 
   //***************************************************************************
   // Singleton pattern
   //***************************************************************************
 
   //: Return the reference to the unique vcsl_angle object
-  static vcsl_angle_ref instance(void);
+  static vcsl_angle_sptr instance(void);
 
 protected:
   //: Default constructor
   explicit vcsl_angle(void);
 
   //: Reference to the unique vcsl_angle object
-  static vcsl_angle_ref instance_;
+  static vcsl_angle_sptr instance_;
 };
 #endif // VCSL_ANGLE_H

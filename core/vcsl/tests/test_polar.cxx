@@ -23,7 +23,7 @@ int main(int argc,
 
   result=0;
 
-  vcsl_polar_ref p;
+  vcsl_polar_sptr p;
   p=new vcsl_polar;
 
   return result;
