@@ -158,6 +158,11 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\Templates/vgl_homg_operators_1d+double-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vgl_homg_operators_2d+double-.cxx
 
 # End Source File

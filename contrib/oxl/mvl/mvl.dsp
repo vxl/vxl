@@ -308,11 +308,6 @@ SOURCE=.\Homg3D.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\HomgConic.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\HomgInterestPoint.cxx
 
 # End Source File
@@ -353,11 +348,6 @@ SOURCE=.\HomgNorm2D.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\HomgOperator1D.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\HomgOperator2D.cxx
 
 # End Source File
@@ -394,11 +384,6 @@ SOURCE=.\HomgPrettyPrint.cxx
 # Begin Source File
 
 SOURCE=.\ImageMetric.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\LineSeg.cxx
 
 # End Source File
 # Begin Source File

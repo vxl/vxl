@@ -243,6 +243,11 @@ SOURCE=.\Templates/vgl_box_3d+int-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vgl_homg.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vgl_homg_line_2d+double-.cxx
 
 # End Source File
