@@ -15,6 +15,29 @@ entry in the CHANGES.txt file as well.
 
 ############################################################################
 
+* upgrade netlib to use LAPACK instead of LINPACK
+
+vnl_algo uses the netlib library to provide good numerical algorithms. At
+the time, it was though that the much newer LAPACK was better than the
+LINPACK library. However, it was faster to get something working with
+LINPACK, since it had less dependencies than LAPACK. Now, LAPACK's
+superiority is undisputed. LAPACK is faster, and more accurate.
+
+Note that vnl does not use BLAS, but does its own vector and matrix
+multiplications. The speed of the MKL (An Intel supplied/optimised copy
+of BLAS) was compared with gcc's compilation of VNL, and gcc/VNL won.
+gcc/VNL was faster even on the matrix-matrix operations, although the
+difference was more marked on the matrix-vector and vector-vector
+operations. However, LAPACK and LINPACK both need a BLAS, and the MKL 
+was definitely faster than the gcc-compiled version of the default BLAS
+currently in netlib. So it would be worth providing an option to use an
+external BLAS for vnl_algo/netlib.
+Ian Scott.
+
+
+
+############################################################################
+
 * vnl specializations for char
 
 From Brad King: There no specializations for char types in vnl.
