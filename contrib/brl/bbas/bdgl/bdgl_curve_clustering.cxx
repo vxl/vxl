@@ -1,9 +1,10 @@
 //bdgl_curve_clustering.cxx : implementation of bdgl_curve_clustering class
 
-#include <bdgl/bdgl_curve_clustering.h>
+#include "bdgl_curve_clustering.h"
+#include <bdgl/bdgl_tracker_curve.h>
 #include <vcl_cmath.h>
-#include <vcl_map.h>
 #include <vcl_algorithm.h>
+#include <vgl/vgl_point_2d.h>
 
 
 bdgl_curve_cluster::bdgl_curve_cluster()
@@ -22,7 +23,7 @@ void bdgl_curve_clustering::compute_transformation
   vcl_vector<double> x;
   vcl_vector<double> y;
 
-  for (int i=0;i<orig_curve.size();i++)
+  for (unsigned int i=0; i<orig_curve.size(); ++i)
   {
     x.push_back(orig_curve[i].x());
     y.push_back(orig_curve[i].y());
@@ -31,7 +32,7 @@ void bdgl_curve_clustering::compute_transformation
   double x_cen=compute_mean(x);
   double y_cen=compute_mean(y);
 
-  for (int i=0;i<orig_curve.size();i++)
+  for (unsigned int i=0; i<orig_curve.size(); ++i)
   {
     double tempx=orig_curve[i].x()-x_cen;
     double tempy=orig_curve[i].y()-y_cen;
@@ -48,16 +49,11 @@ double bdgl_curve_clustering::compute_euclidean_dist(int i,int j)
 {
   // computing the euclidean distance
   // by transforming j using transformation of i
-  vnl_matrix<double> Ri,Ti;
-  Ri=clusters_[i].get_R();
-  Ti=clusters_[i].get_T();
-  double si=clusters_[i].get_scale();
-  double x2,y2;
-  double cost=0;
-  vcl_map<int,int>::iterator iter;
+  vnl_matrix<double> Ri=clusters_[i].get_R();
+  vnl_matrix<double> Ti=clusters_[i].get_T();
   vcl_vector<vgl_point_2d<double> > curve1;
-  vcl_vector<vgl_point_2d<double> > tcurve1;
   vcl_vector<vgl_point_2d<double> > curve2;
+  vcl_map<int,int>::iterator iter;
   for (iter=clusters_[j].prototype->get_best_match_prev()->mapping_.begin();
       iter!=clusters_[j].prototype->get_best_match_prev()->mapping_.end();
       iter++)
@@ -71,13 +67,15 @@ double bdgl_curve_clustering::compute_euclidean_dist(int i,int j)
     vgl_point_2d<double> point2(tempx2,tempy2);
     curve2.push_back(point2);
   }
+  double si=clusters_[i].get_scale();
+  vcl_vector<vgl_point_2d<double> > tcurve1;
   compute_transformation(curve1,tcurve1,Ri,Ti,si);
-  for (int i=0;i<tcurve1.size();i++)
+  double cost=0;
+  for (unsigned int i=0; i<tcurve1.size(); ++i)
   {
     double dist=vcl_sqrt((tcurve1[i].x()-curve2[i].x())*(tcurve1[i].x()-curve2[i].x())
                         +(tcurve1[i].y()-curve2[i].y())*(tcurve1[i].y()-curve2[i].y()));
     cost+=dist;
-
   }
   cost/=clusters_[j].prototype->get_best_match_prev()->mapping_.size();
   return cost;
@@ -94,10 +92,10 @@ double bdgl_curve_clustering::compute_cluster_dist(int i,int j)
   vcl_vector<double> inter;
   vcl_vector<double> intra;
   inter.clear();
-  for (int k=0;k<clusters_[i].curve_cluster_.size();k++)
+  for (unsigned int k=0; k<clusters_[i].curve_cluster_.size(); ++k)
   {
     intra.clear();
-    for (int l=0;l<clusters_[j].curve_cluster_.size();l++)
+    for (unsigned int l=0; l<clusters_[j].curve_cluster_.size(); ++l)
     {
       p.first=clusters_[i].curve_cluster_[k];
       p.second=clusters_[j].curve_cluster_[l];
@@ -119,7 +117,7 @@ double bdgl_curve_clustering::compute_cluster_dist(int i,int j)
 //initialize the clusters
 void bdgl_curve_clustering::init_clusters(vcl_vector<bdgl_tracker_curve_sptr> * curve_sets)
 {
-  for (int i=0;i<(*curve_sets).size();i++)
+  for (unsigned int i=0; i<(*curve_sets).size(); ++i)
   {
     bdgl_curve_cluster temp_cluster;
     if ((*curve_sets)[i]->get_best_match_prev())
@@ -154,9 +152,9 @@ void bdgl_curve_clustering::clustering()
 {
   // computing distance betwen each pair of curve using their effect of transforms
   distance_table.clear();
-  for (int i=0;i<clusters_.size();i++)
+  for (unsigned int i=0; i<clusters_.size(); ++i)
   {
-    for (int j=0;j<clusters_.size();j++)
+    for (unsigned int j=0; j<clusters_.size(); ++j)
     {
       double cost=compute_euclidean_dist(i,j);
       vcl_pair<bdgl_tracker_curve_sptr,bdgl_tracker_curve_sptr> p;
@@ -165,22 +163,19 @@ void bdgl_curve_clustering::clustering()
       distance_table[p]=cost;
     }
   }
-  // some temporary variables
-  double min_cost=0;
-  int mini,minj;
-
-  int clustering_=1;
-  while (clusters_.size()>no_of_clusters_ && clustering_)
+  bool clustering=true;
+  while (clusters_.size()>no_of_clusters_ && clustering)
   {
-    min_cost=1e6;
-    for (int i=0;i<clusters_.size();i++)
+    int mini=-1,minj=-1;
+    double min_cost=-1;
+    for (unsigned int i=0; i<clusters_.size(); ++i)
     {
-      for (int j=i;j<clusters_.size();j++)
+      for (unsigned int j=i; j<clusters_.size(); ++j)
       {
         if (i!=j)
         {
           double cost1=compute_cluster_dist(i,j);
-          if (min_cost>cost1)
+          if (min_cost>cost1 || min_cost<0)
           {
             min_cost=cost1;
             mini=i;
@@ -192,16 +187,16 @@ void bdgl_curve_clustering::clustering()
     if (min_cost<min_cost_threshold_)
       merge_clusters(mini,minj);
     else
-      clustering_=0;
+      clustering=false;
   }
   // assigning new ids and filtering out groups with one member
-  for (int i=0;i<clusters_.size();i++)
+  for (unsigned int i=0; i<clusters_.size(); ++i)
   {
     if (clusters_[i].curve_cluster_.size()==1)
       clusters_[i].curve_cluster_[0]->group_id_=-1;
     else
     {
-      for (int j=0;j<clusters_[i].curve_cluster_.size();j++)
+      for (unsigned int j=0; j<clusters_[i].curve_cluster_.size(); ++j)
       {
         clusters_[i].curve_cluster_[j]->group_id_=i;
       }
@@ -211,19 +206,19 @@ void bdgl_curve_clustering::clustering()
 
 double bdgl_curve_clustering::median(vcl_vector<double> vec)
 {
-   int size = vec.size();
+   unsigned int size = vec.size();
    if (size == 0 )
-     vcl_cout<<"median of an empty vector";
+   { vcl_cout<<"median of an empty vector"; return -1; }
    vcl_sort(vec.begin(), vec.end());
-   int mid = (int)size/2;
+   unsigned int mid = size/2;
    return size % 2 == 0 ? (vec[mid] + vec[mid-1]) / 2 : vec[mid];
 }
 
 double bdgl_curve_clustering::min(vcl_vector<double> vec)
 {
-   int size = vec.size();
+   unsigned int size = vec.size();
    if (size == 0 )
-   {vcl_cout<<"median of an empty vector";return -1;}
+   { vcl_cout<<"minimum of an empty vector"; return -1; }
    vcl_sort(vec.begin(), vec.end());
    return vec[0];
 }
@@ -231,7 +226,7 @@ double bdgl_curve_clustering::min(vcl_vector<double> vec)
 double bdgl_curve_clustering::compute_mean(vcl_vector<double> t)
 {
   double sum=0;
-  for (int i=0;i<t.size();i++)
+  for (unsigned int i=0; i<t.size(); ++i)
   {
     sum+=t[i];
   }
@@ -243,12 +238,12 @@ double bdgl_curve_clustering::compute_std(vcl_vector<double> t)
 {
   double sum=0;
   double std=0;
-  for (int i=0;i<t.size();i++)
+  for (unsigned int i=0; i<t.size(); ++i)
   {
     sum+=t[i];
   }
   sum=sum/t.size();
-  for (int i=0;i<t.size();i++)
+  for (unsigned int i=0; i<t.size(); ++i)
   {
     std+=(t[i]-sum)*(t[i]-sum);
   }
@@ -259,20 +254,15 @@ double bdgl_curve_clustering::compute_std(vcl_vector<double> t)
 // merge cluster j into i
 void bdgl_curve_clustering::merge_clusters(int i,int j)
 {
-  int sizeofi,sizeofj;
-  vcl_vector<bdgl_tracker_curve_sptr>::iterator iter;
-  vcl_vector<bdgl_tracker_curve_sptr>::iterator citer;
+  unsigned int sizeofi=clusters_[i].curve_cluster_.size();
+  unsigned int sizeofj=clusters_[j].curve_cluster_.size();
 
+  for (unsigned int k=0; k<sizeofi; ++ k)
+  { clusters_[i].curve_cluster_[k]->group_id_=i; }
 
-  sizeofi=clusters_[i].curve_cluster_.size();
-  sizeofj=clusters_[j].curve_cluster_.size();
-
-  for (int k=0;k<sizeofi;k++)
-  {clusters_[i].curve_cluster_[k]->group_id_=i;}
-
-  for (int k=0;k<sizeofj;k++)
+  for (unsigned int k=0; k<sizeofj; ++k)
   {
-    clusters_[j].curve_cluster_[k]->group_id_=i;//clusters_[i].prototype->group_id_;
+    clusters_[j].curve_cluster_[k]->group_id_=i; //clusters_[i].prototype->group_id_;
     clusters_[i].curve_cluster_.push_back(clusters_[j].curve_cluster_[k]);
   }
 
@@ -282,12 +272,12 @@ void bdgl_curve_clustering::merge_clusters(int i,int j)
 //  function to obtain curves on the moving object
 void bdgl_curve_clustering::get_moving_objects(int frame_no,vcl_vector<vcl_vector<bdgl_tracker_curve_sptr> > & curves_on_objects)
 {
-  for (int i=0;i<clusters_.size();i++)
+  for (unsigned int i=0; i<clusters_.size(); ++i)
   {
     double sum=0,std=0;
     if (clusters_[i].curve_cluster_.size()>1)
     {
-      for (int j=0;j<clusters_[i].curve_cluster_.size();j++)
+      for (unsigned int j=0; j<clusters_[i].curve_cluster_.size(); ++j)
       {
         vnl_matrix<double> T=clusters_[i].curve_cluster_[j]->get_best_match_prev()->Tbar;
         double tx=T(0,0);
@@ -297,7 +287,7 @@ void bdgl_curve_clustering::get_moving_objects(int frame_no,vcl_vector<vcl_vecto
       }
       sum/=clusters_[i].curve_cluster_.size();
 
-      for (int j=0;j<clusters_[i].curve_cluster_.size();j++)
+      for (unsigned int j=0; j<clusters_[i].curve_cluster_.size(); ++j)
       {
         vnl_matrix<double> T=clusters_[i].curve_cluster_[j]->get_best_match_prev()->T_;
         double tx=T(0,0);
@@ -309,7 +299,7 @@ void bdgl_curve_clustering::get_moving_objects(int frame_no,vcl_vector<vcl_vecto
       if (sum>foreg_backg_threshold_ && sum-std > 0)
       {
         vcl_vector<bdgl_tracker_curve_sptr> temp;
-        for (int j=0;j<clusters_[i].curve_cluster_.size();j++)
+        for (unsigned int j=0; j<clusters_[i].curve_cluster_.size(); ++j)
         {
           clusters_[i].curve_cluster_[j]->group_id_=i;
           temp.push_back(clusters_[i].curve_cluster_[j]);
