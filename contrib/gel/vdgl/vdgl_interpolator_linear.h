@@ -4,16 +4,11 @@
 #pragma interface
 #endif
 
-// .NAME vdgl_interpolator_linear - Represents a 2D interpolator_linear for a vdgl_edgel_chain
-// .INCLUDE vgl/vdgl_interpolator_linear.h
-// .FILE vdgl_interpolator_linear.txx
-//
-// .SECTION Description
-//  A 2d edgel chain interpolator_linear
-//
-// .SECTION Author
-//    Geoff Cross
-// Created: xxx xx xxxx
+//:
+// \file
+// \brief Represents a linear 2D interpolator for a vdgl_edgel_chain
+//  A 2d linear edgel chain interpolator
+//  \authorGeoff Cross
 
 #include <vdgl/vdgl_interpolator.h>
 
@@ -28,20 +23,20 @@ public:
 
   // Operators----------------------------------------------------------------
 
-  // interpolation 0th degree
+  //: interpolation 0th degree
   double get_x( const double index);
   double get_y( const double index);
 
-  // interpolation 1st degree
+  //: interpolation 1st degree
   double get_theta( const double index);
 
-  // interpolation 2nd degree
+  //: interpolation 2nd degree
   double get_curvature( const double index);
 
-  // integral
+  //: integral
   double get_length();
 
-  // bounding box
+  //: bounding box
   double get_min_x();
   double get_max_x();
   double get_min_y();
@@ -49,12 +44,6 @@ public:
 
   // closest point
   vsol_point_2d_sptr closest_point_on_curve ( vsol_point_2d_sptr p );
-  
-  // Data Access---------------------------------------------------------------
-
-  // Data Control--------------------------------------------------------------
-
-  // Computations--------------------------------------------------------------
 
   // INTERNALS-----------------------------------------------------------------
 protected:
@@ -72,8 +61,6 @@ private:
   void recompute_all();
   void recompute_length();
   void recompute_bbox();
-
 };
 
-
-#endif // _vdgl_interpolator_linear_h
+#endif // vdgl_interpolator_linear_h
