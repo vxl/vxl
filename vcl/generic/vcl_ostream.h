@@ -15,5 +15,17 @@
 #ifndef vcl_wostream
 #define vcl_wostream vcl_generic_ostream_STD :: wostream
 #endif
+// endl
+#ifndef vcl_endl
+#define vcl_endl vcl_generic_ostream_STD :: endl
+#endif
+// ends
+#ifndef vcl_ends
+#define vcl_ends vcl_generic_ostream_STD :: ends
+#endif
+// flush
+#ifndef vcl_flush
+#define vcl_flush vcl_generic_ostream_STD :: flush
+#endif
 
 #endif // vcl_generic_ostream_h_
