@@ -255,6 +255,9 @@ sub run_recursive
   my $dir = "$base_dir/$rel_dir";
   if (!$rel_dir) { $dir = $base_dir; }
 
+  # don't follow softlinks
+  if (-l $dir) { return;}
+
   if ($depth == 0)
   {
     print "Got to $dir\n";
