@@ -69,7 +69,7 @@ public:
         form_(Identity),inv_uptodate_(0) {};
 
 
-    bool isIdentity() const { return (form_==Identity); };
+    bool is_identity() const { return (form_==Identity); };
     Form form() const { return form_; };
     vnl_matrix<double> matrix() const;
     void matrix(vnl_matrix<double>&) const;
