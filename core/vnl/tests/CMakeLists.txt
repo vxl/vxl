@@ -6,7 +6,7 @@ INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
 
-ADD_EXECUTABLE(test_all                      test_all.cxx                    )
+ADD_EXECUTABLE(vnl_test_all                  vnl_test_all.cxx                )
 ADD_EXECUTABLE(test_fft                      test_fft.cxx                    )
 ADD_EXECUTABLE(test_fft1d                    test_fft1d.cxx                  )
 ADD_EXECUTABLE(test_fft2d                    test_fft2d.cxx                  )
