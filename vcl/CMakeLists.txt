@@ -13,7 +13,7 @@ SET( vcl_sources
   vcl_deprecated.cxx     vcl_deprecated.h
 
   vcl_where_root_dir.h.in
-  vcl_config_compiler.h.in vcl_config_compiler_cmake.h.in
+  vcl_config_compiler.h.in
   vcl_config_headers.h.in
   vcl_config_manual.h.in
 
