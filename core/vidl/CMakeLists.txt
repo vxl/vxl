@@ -2,6 +2,8 @@
 
 ADD_LIBRARY(vidl vidl_sources)
 
+INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindMPEG.cmake )
+
 SOURCE_FILES(vidl_sources
   vidl_test.cxx
 
@@ -11,6 +13,9 @@ SOURCE_FILES(vidl_sources
   vidl_frame.cxx vidl_frame.h vidl_frame_sptr.h
   vidl_frame_as_image.cxx vidl_frame_as_image.h vidl_frame_as_image_sptr.h
   vidl_image_list_codec.cxx vidl_image_list_codec.h vidl_image_list_codec_sptr.h
+  vidl_mpegcodec.cxx vidl_mpegcodec.h vidl_mpegcodec_sptr.h
+  vidl_mpegcodec_helper.cxx vidl_mpegcodec_helper.h	
+  vidl_yuv_2_rgb.cxx vidl_yuv_2_rgb.h
   vidl_io.cxx vidl_io.h
 )
 

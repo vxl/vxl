@@ -19,6 +19,7 @@
 
 class vidl_movie;
 class vidl_image_list_codec;
+class vidl_mpegcodec;
 
 //: Base for video coder/decoder
 //   A vidl_codec is a pure virtual class defining the codecs of video
@@ -34,7 +35,8 @@ public:
   //=====================================================
   // Casting methods -- lets use a standard form for these, namely
   // CastToXXX, where XXX is the subclass
-  virtual vidl_image_list_codec* castto_vidl_image_list_codec() { return NULL; }
+  virtual vidl_image_list_codec* castto_vidl_image_list_codec() { return 0; }
+  virtual vidl_mpegcodec* castto_vidl_mpegcodec(){return 0;}
 
   // Data Control--------------------------------------------------------------
 
