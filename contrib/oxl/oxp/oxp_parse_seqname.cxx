@@ -43,8 +43,8 @@ void oxp_parse_seqname::parse(char const* s)
     filename_ = filename_.substr(0,last);
 
     vul_printf(vcl_cerr, "oxp_parse_seqname: %s [%s:%s:%s]  -> ",
-           filename_.c_str(),
-           match_start.c_str(), match_step.c_str()+1, match_end.c_str());
+               filename_.c_str(),
+               match_start.c_str(), match_step.c_str()+1, match_end.c_str());
 
 
     if (match_start.length() > 0)

@@ -79,7 +79,7 @@ FMatrixSkew::get_epipoles(HomgPoint2D *epipole1_ptr, HomgPoint2D *epipole2_ptr) 
 
 void
 FMatrixSkew::decompose_to_skew_rank3(vnl_matrix<double> *skew_matrix_ptr,
-                                         vnl_matrix<double> *rank3_matrix_ptr) const
+                                     vnl_matrix<double> *rank3_matrix_ptr) const
 {
      *skew_matrix_ptr = this->get_matrix();
      rank3_matrix_ptr->fill(0.0);
