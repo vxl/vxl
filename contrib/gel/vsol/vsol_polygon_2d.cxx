@@ -204,3 +204,8 @@ bool vsol_polygon_2d::is_convex(void) const
 vsol_polygon_2d::vsol_polygon_2d(void)
 {
 }
+
+bool vsol_polygon_2d::valid_vertices(const vcl_vector<vsol_point_2d_sptr> ) const
+{
+  return true;
+}

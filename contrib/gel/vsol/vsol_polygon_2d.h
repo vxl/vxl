@@ -127,7 +127,7 @@ class vsol_polygon_2d : public vsol_region_2d
   //: Are `new_vertices' valid vertices to build a polygon of the current type?
   //  All vertex sets are valid for a general polygon.
   //---------------------------------------------------------------------------
-  virtual bool valid_vertices(const vcl_vector<vsol_point_2d_sptr> new_vertices) const { return true; }
+  virtual bool valid_vertices(const vcl_vector<vsol_point_2d_sptr> ) const;
 
   //***************************************************************************
   // Implementation
