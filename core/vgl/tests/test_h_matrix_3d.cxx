@@ -34,7 +34,7 @@ static void test_perspective_transform()
   vgl_homg_point_3d<double> p(3,2,1), pp, ppp;
   M.put(0,0,1);    M.put(0,1,2);  M.put(0,2,1),    M.put(0,3,1.25);
   M.put(1,0,0.5);  M.put(1,1,-2); M.put(1,2,1.5),  M.put(1,3,2.25);
-  M.put(2,0,0.25); M.put(2,1,3);  M.put(2,2,1.75), M.put(1,3,5.1);
+  M.put(2,0,0.25); M.put(2,1,3);  M.put(2,2,1.75), M.put(2,3,5.1);
   M.put(3,0,0.15); M.put(3,1,4);  M.put(3,2,8.5),  M.put(3,3,10);
   vgl_h_matrix_3d<double> Tproj(M);
   pp = Tproj(p);
