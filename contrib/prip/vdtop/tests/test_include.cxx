@@ -19,6 +19,5 @@
 #include <vdtop/vdtop_set_structure_from_digital_graph.h>
 #include <vdtop/vdtop_well_composed_lower_leveling_kernel.h>
 #include <vdtop/vil_canny_deriche_grad_filter.h>
-#include <vdtop/vil_clamp.h>
 
 int main() { return 0; }
