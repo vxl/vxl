@@ -39,7 +39,7 @@
 
 struct vul_timer_data
 {
-#ifndef VCL_WIN32
+#if !defined(VCL_WIN32) || defined(__CYGWIN__)
   tms usage0;                    // usage mark.
   struct timeval real0;          // wall clock mark.
 #else
@@ -56,7 +56,7 @@ struct vul_timer_data
 
 //#define CLK_TCK _sysconf(3) in <limits.h> has error
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
 #include <direct.h> // for sysconf()
 #else
 #include <unistd.h>
@@ -80,7 +80,7 @@ vul_timer::~vul_timer()
 
 void vul_timer::mark()
 {
-#ifndef VCL_WIN32
+#if !defined(VCL_WIN32) || defined(__CYGWIN__)
   times(&data->usage0);  // user/system time
 #ifndef SYSV
   struct timezone tz;
@@ -105,7 +105,7 @@ long vul_timer::real()
 {
  long s;
 
-#ifndef VCL_WIN32
+#if !defined(VCL_WIN32) || defined(__CYGWIN__)
  struct timeval  real;    // new real time
 #ifndef SYSV
  struct timezone tz;
@@ -144,7 +144,7 @@ long vul_timer::real()
 
 long vul_timer::user()
 {
-#ifndef VCL_WIN32
+#if !defined(VCL_WIN32) || defined(__CYGWIN__)
   tms usage;
   times(&usage);  // new user/system time
   return (usage.tms_utime - data->usage0.tms_utime) * 1000 / CLK_TCK;
@@ -158,7 +158,7 @@ long vul_timer::user()
 
 long vul_timer::system()
 {
-#ifndef VCL_WIN32
+#if !defined(VCL_WIN32) || defined(__CYGWIN__)
   tms usage;
   times(&usage);  // new user/system time
   return (usage.tms_stime - data->usage0.tms_stime) * 1000 / CLK_TCK;
@@ -172,7 +172,7 @@ long vul_timer::system()
 
 long vul_timer::all()
 {
-#ifndef VCL_WIN32
+#if !defined(VCL_WIN32) || defined(__CYGWIN__)
   tms usage;
   times(&usage);  // new user/system time
   return (usage.tms_utime + usage.tms_stime -

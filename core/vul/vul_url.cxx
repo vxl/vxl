@@ -28,14 +28,14 @@
 # endif
 # define SOCKET int
 
-#elif defined (VCL_WIN32)
+#elif defined (VCL_WIN32) && !defined(__CYGWIN__)
 
 # include <winsock2.h>
 
 #endif
 
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
 // So that we don't call WSAStartup more than we need to
 static int called_WSAStartup = 0;
 #endif
@@ -98,7 +98,7 @@ vcl_istream * vul_http_open(char const *url)
            << "port = " << port << vcl_endl;
 #endif
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (called_WSAStartup==0)
   {
     WORD wVersionRequested;
@@ -116,7 +116,7 @@ vcl_istream * vul_http_open(char const *url)
                           SOCK_STREAM,  // two-way, reliable,
                                  // connection-based stream socket.
                           PF_UNSPEC);   // protocol number.
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (tcp_socket == INVALID_SOCKET) {
 # ifndef NDEBUG
     vcl_cerr << "error code : " << WSAGetLastError() << vcl_endl;
@@ -137,7 +137,7 @@ vcl_istream * vul_http_open(char const *url)
   if (! hp) {
     vcl_cerr << __FILE__ ": failed to lookup host" << vcl_endl;
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
@@ -158,7 +158,7 @@ vcl_istream * vul_http_open(char const *url)
     vcl_cerr << __FILE__ ": failed to connect to host" << vcl_endl;
     //perror(__FILE__);
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
@@ -178,14 +178,14 @@ vcl_istream * vul_http_open(char const *url)
      "Authorization: Basic %s\n",
      vul_url::encode_base64(auth).c_str());
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0) {
 #else
   if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0) {
 #endif
     vcl_cerr << __FILE__ ": error sending HTTP request" << vcl_endl;
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
@@ -204,7 +204,7 @@ vcl_istream * vul_http_open(char const *url)
   vcl_string contents;
   {
     int n;
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
     while ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0) {
 #else
     while ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0) {
@@ -215,7 +215,7 @@ vcl_istream * vul_http_open(char const *url)
   }
 
   // close connection to server.
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   closesocket(tcp_socket);
 #else
   close(tcp_socket);
@@ -292,7 +292,7 @@ bool vul_http_exists(char const *url)
            << "port = " << port << vcl_endl;
 #endif
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (called_WSAStartup==0)
   {
     WORD wVersionRequested;
@@ -311,7 +311,7 @@ bool vul_http_exists(char const *url)
                               // connection-based stream socket.
                           PF_UNSPEC);   // protocol number.
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (tcp_socket == INVALID_SOCKET) {
 # ifndef NDEBUG
     vcl_cerr << "error code : " << WSAGetLastError() << vcl_endl;
@@ -346,7 +346,7 @@ bool vul_http_exists(char const *url)
   {
     vcl_cerr << __FILE__ ": failed to connect to host" << vcl_endl;
     //perror(__FILE__);
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
@@ -365,14 +365,14 @@ bool vul_http_exists(char const *url)
       "Authorization: Basic %s\n",
       vul_url::encode_base64(auth).c_str());
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0) {
 #else
   if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0) {
 #endif
     vcl_cerr << __FILE__ ": error sending HTTP request" << vcl_endl;
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
@@ -391,7 +391,7 @@ bool vul_http_exists(char const *url)
   vcl_string contents;
   {
     int n;
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
     if ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0) {
 #else
     if ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0) {
@@ -401,7 +401,7 @@ bool vul_http_exists(char const *url)
     }
     else
     {
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
       closesocket(tcp_socket);
 #else
       close(tcp_socket);
@@ -411,7 +411,7 @@ bool vul_http_exists(char const *url)
   }
 
   // close connection to server.
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   closesocket(tcp_socket);
 #else
   close(tcp_socket);

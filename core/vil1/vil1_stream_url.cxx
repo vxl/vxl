@@ -26,7 +26,7 @@
 #  include <fp.h>           // htons() [ on e.g. DEC alpha, htons is in machine/endian.h]
 # endif
 # define SOCKET int
-#elif defined (VCL_WIN32)
+#elif defined (VCL_WIN32) && !defined(__CYGWIN__)
 # include <winsock2.h>
 #endif
 
@@ -159,7 +159,7 @@ vil_stream_url::vil_stream_url(char const *url)
            << "port = " << port << vcl_endl;
 #endif
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   static int called_WSAStartup;
   if (called_WSAStartup==0)
   {
@@ -178,7 +178,7 @@ vil_stream_url::vil_stream_url(char const *url)
                              SOCK_STREAM,  // two-way, reliable, connection-based stream socket.
                              PF_UNSPEC);   // protocol number.
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (tcp_socket == INVALID_SOCKET) {
     vcl_cerr << __FILE__ ": failed to create socket." << vcl_endl;
 # ifndef NDEBUG
@@ -199,7 +199,7 @@ vil_stream_url::vil_stream_url(char const *url)
   hostent *hp = gethostbyname(host.c_str());
   if (! hp) {
     vcl_cerr << __FILE__ ": failed to lookup host" << vcl_endl;
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
@@ -217,7 +217,7 @@ vil_stream_url::vil_stream_url(char const *url)
   if (connect(tcp_socket , (sockaddr *) &my_addr, sizeof my_addr) < 0) {
     vcl_cerr << __FILE__ ": failed to connect to host" << vcl_endl;
     //perror(__FILE__);
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
@@ -234,14 +234,14 @@ vil_stream_url::vil_stream_url(char const *url)
     vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  Basic %s\n", encode_base64(auth).c_str());
 //    vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  user  testuser:testuser\n");
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0)
 #else
   if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0)
 #endif
   {
     vcl_cerr << __FILE__ ": error sending HTTP request" << vcl_endl;
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
@@ -264,7 +264,7 @@ vil_stream_url::vil_stream_url(char const *url)
   {
     unsigned entity_marker = 0; // count end of header CR and LFs
     vil_streampos n;
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
     while ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0L)
 #else
     while ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0L)
@@ -308,7 +308,7 @@ vil_stream_url::vil_stream_url(char const *url)
 
 
   // close connection to server.
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   closesocket(tcp_socket);
 #else
   close(tcp_socket);

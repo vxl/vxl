@@ -11,7 +11,7 @@
 
 // Declare pimpl, reset, and iteration routines
 // for each OS
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
 #include <io.h>
 struct vul_file_iterator_data {
   vcl_string original;
