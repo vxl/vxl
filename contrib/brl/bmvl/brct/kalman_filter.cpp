@@ -122,7 +122,7 @@ void kalman_filter::init_state_vector()
 
   FMatrix FM(F);
 
-  // point matcher using epiplar geometry
+  // point matcher using epipolar geometry
   assert(curves_.size()>=2);
   vdgl_digital_curve_sptr dc0 = curves_[0];
   vdgl_interpolator_sptr interp0 = dc0->get_interpolator();
@@ -341,17 +341,16 @@ vnl_double_2 kalman_filter::projection(const vnl_double_3x4 &P, const vnl_double
 
 void kalman_filter::update_observes(const vnl_double_3x4 &P)
 {
-  
   vnl_matrix<double> t(2, num_points_);
-  for(int i=0; i<num_points_; i++){
+  for (int i=0; i<num_points_; i++){
    vgl_point_3d<double> X(Xl_[0][i], Xl_[1][i], Xl_[2][i]);
    vgl_point_2d<double> x = brct_algos::projection_3d_point(X, P);
    vgl_point_2d<double> u = brct_algos::closest_point(curves_[cur_pos_], x);
-   
+
    t[0][i] = u.x();
    t[1][i] = u.y();
   }
-  
+
   observes_[cur_pos_] = t;
 }
 
@@ -400,7 +399,7 @@ void kalman_filter::inc()
   X_ = X_pred_;
 
   motions_[cur_pos_] = get_projective_matrix(X_);
-  
+
   if (memory_size_ < queue_size_)
     memory_size_++;
 
