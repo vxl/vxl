@@ -334,17 +334,14 @@ bdgl_curve_algs::match_intersection(vdgl_digital_curve_sptr const& dc,
                                     double ref_gradient_angle,
                                     vgl_point_2d<double>& point)
 {
-  double angle_thresh = 7.0;
-  if (!dc)
+
+  double angle_thresh = 7.0;//epipolar angle threshold
+  double angle_tol = 12.5;//gradient angle threshold
+  if(!dc)
     return false;
   double la = line.slope_degrees();
   if (la<0)
     la+=180;
-#ifdef DEBUG
-  vcl_cout << "line_tang:(" << la << '\n';
-#endif
-  double angle_tol = 12.5;
-  double dist_thresh = 0; // was: 5.0
   vcl_vector<double> indices;
   if (!bdgl_curve_algs::intersect_line(dc, line, indices))
     return false;
@@ -360,26 +357,12 @@ bdgl_curve_algs::match_intersection(vdgl_digital_curve_sptr const& dc,
       double ca = dc->get_tangent_angle(*iit);
       if (ca<0)
         ca+=180;
-#ifdef DEBUG //JLM
-      vcl_cout << "grad[" << *iit << "](ra, a): (" << ref_gradient_angle
-               << ' ' << grad_angle << ")\n";
-#endif
       double delt = vcl_fabs(180*vcl_sin(vcl_fabs(vnl_math::pi*(ca-la)/180.0))/vnl_math::pi);
-#ifdef DEBUG //JLM
-      vcl_cout << "cang("<< delt <<") " << ca << '\n';
-#endif
       if (delt<angle_thresh)
         continue;
-      //remove stationary curve points
       vgl_homg_point_2d<double> ph(dc->get_x(*iit), dc->get_y(*iit));
       double d = vgl_homg_operators_2d<double>::distance_squared(rph, ph);
       d = vcl_sqrt(d);
-#ifdef DEBUG //JLM
-      vcl_cout << "dist = " << d << vcl_endl;
-#endif
-      if (d<dist_thresh)
-        continue;
-      //end JLM
       found_valid_intersection = true;
       if (d<dist)
       {
@@ -389,10 +372,6 @@ bdgl_curve_algs::match_intersection(vdgl_digital_curve_sptr const& dc,
         point = vgl_point_2d<double>(dc->get_x(*iit), dc->get_y(*iit));
       }
     }
-#ifdef DEBUG
-  if (best_ind)
-    vcl_cout << "Epipole Tangent Error " << best_delt << '\n';
-#endif
   return found_valid_intersection;
 }
 
