@@ -1,7 +1,42 @@
-// fsm: sunpro needs template instantiations to go into Templates
-#include "vbl_smart_ptr_example.h"
 #include <vcl_iostream.h>
 #include <vcl_list.h>
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
+
+// The code parts below are normally put into several files, as indicated by
+// the "start of" and "end of" lines.  Here, for this example, everything is
+// put in a single file, which is a perfectly valid (but less standard) way.
+
+//== start of example_sp.h ==//
+
+//: An example of how to make a smart pointer class.
+// A smart pointer can be made from any class that defines the methods ref()
+// and unref(), e.g., because it is derived from vbl_ref_count.
+class example_sp : public vbl_ref_count {
+public:
+  example_sp() { vcl_cout << "example_sp constructor, refcount=" 
+                          << get_references() << vcl_endl; }
+
+ ~example_sp() { vcl_cout << "example_sp destructor, refcount=" 
+                          << get_references() << vcl_endl; }
+
+  example_sp(example_sp const&) {
+                 vcl_cout << "example_sp copy constructor, refcount="
+                          << get_references() << vcl_endl; }
+
+  friend vcl_ostream& operator<<(vcl_ostream& os, example_sp const& e) {
+    int p = e.get_references(); 
+    if (p < 1000) os << "example_sp, refcount=" << p;
+    else          os << "example_sp, invalid";
+    return os;
+  }
+};
+
+typedef vbl_smart_ptr<example_sp> example_sp_sptr;
+
+//== end of example_sp.h ==//
+
+//== start of first main program ==//
 
 void main1()
 {
@@ -38,20 +73,46 @@ void main1()
   vcl_cout << "List copy of " << *ptr << " has been removed, ptr freed" << vcl_endl;
 }
 
+//== end of first main program ==//
+
 //--------------------------------------------------------------------------------
 
-void main2() {
+//== start of bigmatrix.h ==//
+
+class bigmatrix_impl : public vbl_ref_count {
+public:
+  double data[256][256];
+  bigmatrix_impl() { vcl_cout << "bigmatrix_impl ctor" << vcl_endl; }
+  ~bigmatrix_impl() { vcl_cout << "bigmatrix_impl dtor" << vcl_endl; }
+};
+
+class bigmatrix {
+public:
+  double * operator[](unsigned i) { return impl->data[i]; }
+private:
+  vbl_smart_ptr<bigmatrix_impl> impl;
+};
+
+//== end of bigmatrix.h ==//
+
+//== start of second main program ==//
+
+void main2()
+{
   bigmatrix A, B, C;
 
-  vcl_cerr << "one million swaps..." << vcl_flush;
+  vcl_cout << "one million swaps..." << vcl_flush;
   for (unsigned i=0; i<1000000; ++i) {
     C = A;
     A = B;
     B = C;
   }
-  vcl_cerr << "done" << vcl_endl;
+  vcl_cout << "done" << vcl_endl;
 }
+
+//== end of second main program ==//
 
 //--------------------------------------------------------------------------------
 
 int main() { main1(); main2(); return 0; }
+// fsm: sunpro needs template instantiations to go into Templates
