@@ -12,7 +12,7 @@
 #include "vgui_text_put.h"
 #include <vgui/vgui_gl.h>
 
-#ifdef HAS_GLUT
+#if defined(HAS_GLUT) && defined(VGUI_USE_GLUT)
 #include <vgui/vgui_glut.h>
 void vgui_text_put(char const *str, unsigned size)
 {
