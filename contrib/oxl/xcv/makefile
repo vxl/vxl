@@ -23,6 +23,10 @@ SOURCES += xcv_tjunction.cxx
 
 SOURCES += xcv.cxx
 
+ifeq "$(IU_COMPILER)" "gcc-2.95"
+FLAGS_xcv_geometry.cxx += -ftemplate-depth-100
+endif
+
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
