@@ -242,7 +242,7 @@ void vgui_section_buffer::apply(vil_image const &image) {
   // They could be coalesced to reduce code maintenance.
 
   // 8bit greyscale
-  if (vil_pixel_type(image) == VIL_BYTE) {
+  if (vil_pixel_format(image) == VIL_BYTE) {
     fsm_macro_begin(GLubyte, "8 bit greyscale");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
@@ -259,7 +259,7 @@ void vgui_section_buffer::apply(vil_image const &image) {
   }
   
   // 24bit rgb
-  else if (vil_pixel_type(image) == VIL_RGB_BYTE) {
+  else if (vil_pixel_format(image) == VIL_RGB_BYTE) {
     fsm_macro_begin(vgui_pixel_rgb888, "24 bit RGB");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
@@ -276,7 +276,7 @@ void vgui_section_buffer::apply(vil_image const &image) {
   }
 
   // 32bit rgba
-  else if (vil_pixel_type(image) == VIL_RGBA_BYTE) {
+  else if (vil_pixel_format(image) == VIL_RGBA_BYTE) {
     fsm_macro_begin(vgui_pixel_rgba8888, "32 bit RGBA");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
@@ -293,7 +293,7 @@ void vgui_section_buffer::apply(vil_image const &image) {
   }
 
   // 32bit float
-  else if (vil_pixel_type(image) == VIL_FLOAT) {
+  else if (vil_pixel_format(image) == VIL_FLOAT) {
     vcl_cerr << " hey \n";
     fsm_macro_begin(float, "32 bit float");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
