@@ -50,7 +50,7 @@ int vipl_test_histogram() {
 
     // check that final bin has correct number.
     bool test_pass = byte_out(byte_out.size()-1) + ((expected_n-2)*(expected_n-1))/2
-                     == byte_img.width() * byte_img.height();
+                     == (unsigned int)(byte_img.width() * byte_img.height());
 
     // check that rest of bins are correct
     for (unsigned int i=0; i+2<byte_out.size(); ++i)
@@ -65,7 +65,7 @@ int vipl_test_histogram() {
 
     // check that final bin has correct number.
     bool test_pass = byte_out.back() + ((byte_out.size()-2)*(byte_out.size()-1))/2
-                     == byte_img.width() * byte_img.height();
+                     == (unsigned int)(byte_img.width() * byte_img.height());
 
     // check that rest of bins are correct
     for (unsigned int i=0; i+1<byte_out.size(); ++i)
