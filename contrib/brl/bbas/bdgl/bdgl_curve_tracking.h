@@ -35,7 +35,7 @@ class bdgl_curve_tracking_params
 class bdgl_curve_tracking
 {
  public:
-   // Input : for each image, for each
+  // Input : for each image, for each
   bdgl_curve_tracking(){}
   bdgl_curve_tracking(bdgl_curve_tracking_params &tp);
   ~bdgl_curve_tracking(){}
@@ -47,11 +47,11 @@ class bdgl_curve_tracking
   // Output to compute transitive closure
   vcl_vector<vcl_vector<bdgl_tracker_curve_sptr > > output_curves_tc_;
 
+#if 0
   // Params
-  //bdgl_tracker_params params_;
-
- // bdgl_curve_tracking(bdgl_curve_tracker_params p){ params_ = p; }
-
+  bdgl_curve_tracker_params params_;
+  bdgl_curve_tracking(bdgl_curve_tracker_params p){ params_ = p; }
+#endif // 0
 
   vcl_vector<vcl_vector<vtol_edge_2d_sptr > > * get_input(){ return & input_curves_; }
   void set_input(vcl_vector< vcl_vector< vtol_edge_2d_sptr > > curve){ input_curves_=curve; }
@@ -60,14 +60,13 @@ class bdgl_curve_tracking
   void set_output(vcl_vector< vcl_vector< bdgl_tracker_curve_sptr > > curve){ output_curves_=curve; }
 
   // returns no of curves in the given frame
-  int get_output_size_at(int frame)
+  int get_output_size_at(unsigned int frame)
   {
-    if (frame>output_curves_.size())
-    return -1;
+    if (frame>=output_curves_.size())
+      return -1;
     else
-    {return output_curves_[frame].size();}
+      return output_curves_[frame].size();
   }
-
 
   vcl_vector< bdgl_tracker_curve_sptr> *get_output_curves(int frame_no);
   bdgl_tracker_curve_sptr get_output_curve(int frame_no, int set_id);
