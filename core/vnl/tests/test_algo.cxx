@@ -23,9 +23,11 @@
 // \author Peter Vanroose, KULeuven/ESAT.
 // \date 20 September 2003
 
-#ifdef VXL_VC60 
-# include <vcl_limits> // The order of some vcl_files can cause problems: IMS
+#include <vcl_compiler.h>
+#ifdef VCL_VC60
+#include <vcl_limits.h> // The order of some vcl_files can cause problems: IMS
 #endif
+
 #include <vcl_complex.h>
 #include <testlib/testlib_test.h>
 

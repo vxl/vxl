@@ -8,6 +8,10 @@
 // \date   23 Oct 97
 //-----------------------------------------------------------------------------
 
+#include <vcl_compiler.h>
+#ifdef VCL_VC60
+#include <vcl_limits.h> // The order of some vcl_files can cause problems: IMS
+#endif
 #include "vnl_amoeba.h"
 
 #include <vcl_cstdio.h> // for sprintf()
