@@ -830,7 +830,7 @@ rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::operator=
 
 
 template <class Key, class Value, class KeyOfValue, class Compare, class Alloc>
-__iterator__
+typename __iterator__
 rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::__insert(__base_ptr__ x_,
                                                           __base_ptr__ y_,
                                                           const __value_type__& v) {
@@ -877,7 +877,7 @@ rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::erase(__iterator__
 }
 
 template <class Key, class Value, class KeyOfValue, class Compare, class Alloc>
-__size_type__
+typename __size_type__
 rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::erase(const __key_type__& x) {
     vcl_pair<iterator,iterator> p = equal_range(x);
     size_type n = 0;
@@ -961,7 +961,7 @@ void rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::erase(const Key* first,
 }
 
 template <class Key, class Value, class KeyOfValue, class Compare, class Alloc>
-__iterator__
+typename __iterator__
 rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::find(const __key_type__& k) {
    link_type y = header; /* Last node which is not vcl_less than k. */
    link_type x = root(); /* Current node. */
@@ -976,7 +976,7 @@ rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::find(const __key_type__& k) {
 }
 
 template <class Key, class Value, class KeyOfValue, class Compare, class Alloc>
-__const_iterator__
+typename __const_iterator__
 rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::find(const __key_type__& k) const {
    link_type y = header; /* Last node which is not vcl_less than k. */
    link_type x = root(); /* Current node. */
@@ -991,7 +991,7 @@ rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::find(const __key_type__& k) con
 }
 
 template <class Key, class Value, class KeyOfValue, class Compare, class Alloc>
-__size_type__
+typename __size_type__
 rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::count(const __key_type__& k) const {
     vcl_pair<const_iterator, const_iterator> p = equal_range(k);
     size_type n = 0;
@@ -1000,7 +1000,7 @@ rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::count(const __key_type__& k) co
 }
 
 template <class Key, class Value, class KeyOfValue, class Compare, class Alloc>
-__iterator__
+typename __iterator__
 rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::lower_bound(const __key_type__& k) {
    link_type y = header; /* Last node which is not vcl_less than k. */
    link_type x = root(); /* Current node. */
@@ -1015,7 +1015,7 @@ rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::lower_bound(const __key_type__&
 }
 
 template <class Key, class Value, class KeyOfValue, class Compare, class Alloc>
-__const_iterator__
+typename __const_iterator__
 rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::lower_bound(const __key_type__& k) const {
    link_type y = header; /* Last node which is not vcl_less than k. */
    link_type x = root(); /* Current node. */
@@ -1030,7 +1030,7 @@ rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::lower_bound(const __key_type__&
 }
 
 template <class Key, class Value, class KeyOfValue, class Compare, class Alloc>
-__iterator__
+typename __iterator__
 rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::upper_bound(const __key_type__& k) {
   link_type y = header; /* Last node which is vcl_greater than k. */
   link_type x = root(); /* Current node. */
@@ -1045,7 +1045,7 @@ rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::upper_bound(const __key_type__&
 }
 
 template <class Key, class Value, class KeyOfValue, class Compare, class Alloc>
-__const_iterator__
+typename __const_iterator__
 rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::upper_bound(const __key_type__& k) const {
   link_type y = header; /* Last node which is vcl_greater than k. */
   link_type x = root(); /* Current node. */
@@ -1060,13 +1060,13 @@ rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::upper_bound(const __key_type__&
 }
 
 template <class Key, class Value, class KeyOfValue, class Compare, class Alloc>
-inline vcl_pair<__iterator__,__iterator__>
+inline vcl_pair<typename __iterator__,typename __iterator__>
 rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::equal_range(const __key_type__& k) {
     return vcl_pair<iterator, iterator>(lower_bound(k), upper_bound(k));
 }
 
 template <class Key, class Value, class KeyOfValue, class Compare, class Alloc>
-inline vcl_pair<__const_iterator__,__const_iterator__>
+inline vcl_pair<typename __const_iterator__,typename __const_iterator__>
 rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::equal_range(const __key_type__& k) const {
     return vcl_pair<const_iterator,const_iterator>(lower_bound(k), upper_bound(k));
 }

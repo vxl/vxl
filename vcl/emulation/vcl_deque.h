@@ -73,9 +73,9 @@ template <class T> struct __deque_data;
 template <class T>
 struct __deque_iterator_base
 {
-private:
+ private:
   typedef __deque_iterator_base<T> self;
-public:
+ public:
   typedef T value_type;
   typedef value_type* pointer;
   typedef value_type& reference;
@@ -138,7 +138,8 @@ public:
       : -((-offset + (difference_type)buffer_size() - 1) / (difference_type)buffer_size());
     if (num_node_to_jump == 0)
       current += n;
-    else {
+    else
+    {
       node = node + num_node_to_jump;
       first = *node;
       last = first + buffer_size();
@@ -163,208 +164,147 @@ public:
 template <class T>
 struct __deque_iterator : public __deque_iterator_base<T>
 {
-private:
+ private:
   typedef __deque_iterator_base<T> super;
-public:
+ public:
   typedef __deque_iterator<T> iterator;
   typedef __deque_const_iterator<T> const_iterator;
   __deque_iterator() {}
-    __deque_iterator(pointer x, map_pointer y) : super(x,y) {}
+  __deque_iterator(typename pointer x, typename map_pointer y) : super(x,y) {}
   // <awf>
   __IMPORT_CONTAINER_TYPEDEFS(super)
   // </awf>
 
-  value_type& operator*() const
-  {
-    __stl_debug_check(__check_dereferenceable(*this));
-    return *current;
-  }
-  difference_type operator-(const iterator& x) const
-  {
-    return super::operator-(x);
-  }
-  iterator& operator++()
-  {
-    super::operator++();
-    return *this;
-  }
-  iterator operator++(int)
-  {
-    iterator tmp = *this;
-    ++*this;
-    return tmp;
-  }
-  iterator& operator--() {
-    super::operator--();
-    return *this;
-  }
-  iterator operator--(int) {
-    iterator tmp = *this;
-    --*this;
-    return tmp;
-  }
-  iterator& operator+=(difference_type n) {
-    super::operator+=(n);
-    return *this;
-  }
+  value_type& operator*() const { __stl_debug_check(__check_dereferenceable(*this)); return *current; }
+  difference_type operator-(const iterator& x) const { return super::operator-(x); }
+  iterator& operator++() { super::operator++(); return *this; }
+  iterator operator++(int) { iterator tmp = *this; ++*this; return tmp; }
+  iterator& operator--() { super::operator--(); return *this; }
+  iterator operator--(int) { iterator tmp = *this; --*this; return tmp; }
+  iterator& operator+=(difference_type n) { super::operator+=(n); return *this; }
   iterator& operator-=(difference_type n) { return *this += -n; }
-  iterator operator+(difference_type n) const {
-    iterator tmp = *this;
-    return tmp += n;
-  }
-  iterator operator-(difference_type n) const {
-    iterator tmp = *this;
-    return tmp -= n;
-  }
+  iterator operator+(difference_type n) const { iterator tmp = *this; return tmp += n; }
+  iterator operator-(difference_type n) const { iterator tmp = *this; return tmp -= n; }
   reference operator[](difference_type n) const { return *(*this + n); }
-  bool operator==(const iterator& x) const {
-      return super::operator==(x);
-  }
+  bool operator==(const iterator& x) const { return super::operator==(x); }
   bool operator!=(const iterator& x) const { return !(*this == x); }
-  bool operator<(const iterator& x) const {
-     return super::operator<(x);
-  }
+  bool operator<(const iterator& x) const { return super::operator<(x); }
 };
 
 
 template <class T>
-struct __deque_const_iterator : public __deque_iterator_base<T> {
-private:
-    typedef __deque_iterator_base<T> super;
-public:
+struct __deque_const_iterator : public __deque_iterator_base<T>
+{
+ private:
+  typedef __deque_iterator_base<T> super;
+ public:
   typedef __deque_iterator<T> iterator;
   typedef __deque_const_iterator<T> const_iterator;
   __deque_const_iterator() {}
-  __deque_const_iterator(pointer x, map_pointer y) : super(x,y) {}
+  __deque_const_iterator(typename pointer x, typename map_pointer y) : super(x,y) {}
   __deque_const_iterator(const iterator& x) : super(x) {}
-  const_reference operator*() const {
-    return *current;
-  }
-  difference_type operator-(const const_iterator& x) const {
-      return super::operator-(x);
-  }
-  const_iterator& operator++() {
-    super::operator++();
-    return *this;
-  }
-  const_iterator operator++(int)  {
-    const_iterator tmp = *this;
-    ++*this;
-    return tmp;
-  }
-  const_iterator& operator--() {
-    super::operator--();
-    return *this;
-  }
-  const_iterator operator--(int) {
-    const_iterator tmp = *this;
-    --*this;
-    return tmp;
-  }
-  const_iterator& operator+=(difference_type n) {
-    super::operator+=(n);
-    return *this;
-  }
-  const_iterator& operator-=(difference_type n) { return *this += -n; }
-  const_iterator operator+(difference_type n) const {
-    const_iterator tmp = *this;
-    return tmp += n;
-  }
-  const_iterator operator-(difference_type n) const {
-    const_iterator tmp = *this;
-    return tmp -= n;
-  }
-  const_reference operator[](difference_type n) const { return *(*this + n); }
-  bool operator==(const const_iterator& x) const {
-      return super::operator==(x);
-  }
+  typename const_reference operator*() const { return *current; }
+  typename difference_type operator-(const const_iterator& x) const { return super::operator-(x); }
+  const_iterator& operator++() { super::operator++(); return *this; }
+  const_iterator operator++(int)  { const_iterator tmp = *this; ++*this; return tmp; }
+  const_iterator& operator--() { super::operator--(); return *this; }
+  const_iterator operator--(int) { const_iterator tmp = *this; --*this; return tmp; }
+  const_iterator& operator+=(typename difference_type n) { super::operator+=(n); return *this; }
+  const_iterator& operator-=(typename difference_type n) { return *this += -n; }
+  const_iterator operator+(typename difference_type n) const { const_iterator tmp = *this; return tmp += n; }
+  const_iterator operator-(typename difference_type n) const { const_iterator tmp = *this; return tmp -= n; }
+  typename const_reference operator[](typename difference_type n) const { return *(*this + n); }
+  bool operator==(const const_iterator& x) const { return super::operator==(x); }
   bool operator!=(const const_iterator& x) const {return !(*this == x); }
-  bool operator<(const const_iterator& x) const {
-      return super::operator<(x);
-  }
+  bool operator<(const const_iterator& x) const { return super::operator<(x); }
 };
-
 
 template <class T>
 inline vcl_random_access_iterator_tag
-iterator_category(const __deque_iterator<T>&) {
+iterator_category(const __deque_iterator<T>&)
+{
   return vcl_random_access_iterator_tag();
 }
 
 template <class T>
 inline T*
-value_type(const __deque_iterator<T>&) {
+value_type(const __deque_iterator<T>&)
+{
   return (T*) 0;
 }
 
 template <class T>
 inline vcl_ptrdiff_t*
-distance_type(const __deque_iterator<T>&) {
+distance_type(const __deque_iterator<T>&)
+{
   return (vcl_ptrdiff_t*) 0;
 }
 
 template <class T>
 inline vcl_random_access_iterator_tag
-iterator_category(const __deque_const_iterator<T>&) {
+iterator_category(const __deque_const_iterator<T>&)
+{
   return vcl_random_access_iterator_tag();
 }
 
 template <class T>
 inline T*
-value_type(const __deque_const_iterator<T>&) {
+value_type(const __deque_const_iterator<T>&)
+{
   return (T*) 0;
 }
 
 template <class T>
 inline vcl_ptrdiff_t*
-distance_type(const __deque_const_iterator<T>&) {
+distance_type(const __deque_const_iterator<T>&)
+{
   return (vcl_ptrdiff_t*) 0;
 }
 
 template <class T>
 struct __deque_data
 {
-    typedef T value_type;
-    typedef vcl_size_t size_type;
-    typedef vcl_ptrdiff_t difference_type;
-    typedef T** map_pointer;
-protected:
-    __deque_iterator<T> start;
-    __deque_iterator<T> finish;
-    size_type length;
-    map_pointer map;
-    size_type map_size;
-public:
-    __deque_data() : start(), finish(), length(0), map(0), map_size(0) {
-            __stl_debug_do(safe_init(this));
-            __stl_debug_do(start.safe_init(this));
-            __stl_debug_do(finish.safe_init(this));
-    }
-    ~__deque_data() {
-        __stl_debug_do(invalidate()); __stl_debug_do(start.invalidate());
-        __stl_debug_do(finish.invalidate());
-    }
+  typedef T value_type;
+  typedef vcl_size_t size_type;
+  typedef vcl_ptrdiff_t difference_type;
+  typedef T** map_pointer;
+ protected:
+  __deque_iterator<T> start;
+  __deque_iterator<T> finish;
+  size_type length;
+  map_pointer map;
+  size_type map_size;
+ public:
+  __deque_data() : start(), finish(), length(0), map(0), map_size(0) {
+          __stl_debug_do(safe_init(this));
+          __stl_debug_do(start.safe_init(this));
+          __stl_debug_do(finish.safe_init(this));
+  }
+  ~__deque_data() {
+      __stl_debug_do(invalidate()); __stl_debug_do(start.invalidate());
+      __stl_debug_do(finish.invalidate());
+  }
 };
 
 template <class T, class Alloc>
 class __deque_base : public __deque_data <T> {
   typedef __deque_base<T,Alloc> self;
-public:
+ public:
   typedef T value_type;
   typedef value_type* pointer;
   typedef vcl_size_t size_type;
   typedef Alloc allocator_type;
-protected:
+ protected:
   static size_type buffer_size() {
     return __deque_buf_size(sizeof(value_type)); }
   static size_type init_map_size() {
     return __deque_buf_size(sizeof(pointer)); }
   inline void deallocate_at_begin();
-public:
+ public:
   typedef vcl_simple_alloc<value_type*, allocator_type> map_allocator;
   typedef vcl_simple_alloc<value_type, allocator_type> data_allocator;
   __deque_base() {}
-  ~__deque_base() { clear(); }
+ ~__deque_base() { clear(); }
   void pop_front() {
     vcl_destroy(start.current);
     ++start.current;
@@ -384,7 +324,8 @@ void __deque_base<T, Alloc>::deallocate_at_begin() {
     start.construct();
     finish.construct();
     map_allocator::deallocate(__deque_data<T>::map, map_size);
-  } else
+  }
+  else
     start.construct(*start.node, start.node);
 }
 
@@ -392,10 +333,11 @@ __BEGIN_STL_FULL_NAMESPACE
 #  define vcl_deque __WORKAROUND_RENAME(vcl_deque)
 
 template <class T, VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) >
-class vcl_deque : public __deque_base<T,Alloc> {
+class vcl_deque : public __deque_base<T,Alloc>
+{
   typedef __deque_base<T, Alloc> super;
   typedef vcl_deque<T, Alloc> self;
-public:
+ public:
   typedef T value_type;
   typedef vcl_size_t size_type;
   typedef value_type* pointer;
@@ -409,25 +351,21 @@ public:
                                difference_type>  const_reverse_iterator;
   typedef vcl_reverse_iterator<iterator, value_type, reference, difference_type>
           reverse_iterator;
-protected:
+ protected:
   typedef pointer* map_pointer;
   inline void allocate_at_begin();
   inline void allocate_at_end();
   inline void deallocate_at_end();
-public:
+ public:
   vcl_deque() { }
   iterator begin() { return start; }
   const_iterator begin() const { return start; }
   iterator end() { return finish; }
   const_iterator end() const { return finish; }
   reverse_iterator rbegin() { return reverse_iterator(end()); }
-  const_reverse_iterator rbegin() const {
-    return const_reverse_iterator(end());
-  }
+  const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
   reverse_iterator rend() { return reverse_iterator(begin()); }
-  const_reverse_iterator rend() const {
-    return const_reverse_iterator(begin());
-  }
+  const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
   bool empty() const { return length == 0; }
   size_type size() const { return length; }
   size_type max_size() const { return size_type(-1); }
@@ -437,7 +375,7 @@ public:
   const_reference front() const { return *begin(); }
   reference back() { return *(end() - 1); }
   const_reference back() const { return *(end() - 1); }
-private:
+ private:
 
 #  if defined (__STL_USE_EXCEPTIONS)
   inline void push_back_cleanup(int steps_remaining);
@@ -449,15 +387,12 @@ private:
     typedef vcl_deque<T,Alloc> deque_type;
     deque_type *container;
     int steps_remaining;
-  public:
+   public:
     push_back_protector(deque_type* d) : container(d), steps_remaining(2) {}
-    ~push_back_protector() {
-      if (steps_remaining)
-        container->push_back_cleanup(steps_remaining);
-    }
+   ~push_back_protector() { if (steps_remaining) container->push_back_cleanup(steps_remaining); }
     void constructed() { steps_remaining = 1; }
     void done() { steps_remaining = 0; }
-};
+  };
 
   class push_front_protector;
   friend class push_front_protector;
@@ -467,31 +402,28 @@ private:
     deque_type *container;
     int steps_remaining;
     bool allocated_at_begin;
-  public:
+   public:
     push_front_protector(deque_type* d, bool alloc_at_begin)
       : container(d), steps_remaining(2), allocated_at_begin(alloc_at_begin) {}
-    ~push_front_protector() {
-      if (steps_remaining )
-        container->push_front_cleanup(steps_remaining, allocated_at_begin);
-    }
+   ~push_front_protector() { if (steps_remaining ) container->push_front_cleanup(steps_remaining, allocated_at_begin); }
     void constructed() { steps_remaining = 1; }
     void done() { steps_remaining = 0; }
   };
 #  else
-  class push_front_protector;
   class push_front_protector
   {
-  public:
+   public:
     push_front_protector(void*, bool=bool()){}
-    ~push_front_protector() {}
+   ~push_front_protector() {}
     void constructed() {}
     void done() {}
   };
   typedef push_front_protector push_back_protector;
 #  endif
 
-public:
-  void push_back(const T& x) {
+ public:
+  void push_back(const T& x)
+  {
     if (empty()) allocate_at_end();
     push_back_protector protector(this);
     vcl_construct(finish.current, x);
@@ -502,7 +434,8 @@ public:
     protector.done();
     __stl_debug_do(invalidate_all());
   }
-  void push_front(const T& x) {
+  void push_front(const T& x)
+  {
     bool alloc_at_begin = empty() || start.current == start.first;
     if (alloc_at_begin) allocate_at_begin();
     push_front_protector protector(this, alloc_at_begin);
@@ -514,11 +447,13 @@ public:
     protector.done();
     __stl_debug_do(invalidate_all());
   }
-  void pop_front() {
+  void pop_front()
+  {
     __stl_debug_do(invalidate_iterator(start));
     super::pop_front();
   }
-  void pop_back() {
+  void pop_back()
+  {
     __stl_debug_do(invalidate_iterator(finish));
     if (finish.current == finish.first) deallocate_at_end();
     --finish.current;
@@ -526,7 +461,8 @@ public:
     --length;
     if (empty()) deallocate_at_end();
   }
-  void swap(vcl_deque<T, Alloc>& x) {
+  void swap(vcl_deque<T, Alloc>& x)
+  {
     vcl_swap(start, x.start);
     vcl_swap(finish, x.finish);
     vcl_swap(length, x.length);
@@ -543,31 +479,23 @@ public:
   inline void insert(iterator position, const_iterator first, const_iterator last);
   inline void erase(iterator position);
   inline void erase(iterator first, iterator last);
-  void resize(size_type new_size, const T& x) {
+  void resize(size_type new_size, const T& x)
+  {
     if (new_size < size())
       erase(begin() + new_size, end());
     else
       insert(end(), new_size - size(), x);
   }
   void resize(size_type new_size) { resize(new_size, T()); }
-public:
-  vcl_deque(size_type n, const T& value) {
-    insert(begin(), n, value);
-  }
-  explicit vcl_deque(size_type n) {
-    insert(begin(), n, T());
-  }
+ public:
+  vcl_deque(size_type n, const T& value) { insert(begin(), n, value); }
+  explicit vcl_deque(size_type n) { insert(begin(), n, T()); }
 //template <class Iterator> vcl_deque(Iterator first, Iterator last);
-  vcl_deque(const T* first, const T* last) {
-    vcl_copy(first, last, vcl_back_inserter(*this));
-  }
-  vcl_deque(const_iterator first, const_iterator last) {
-    vcl_copy(first, last, vcl_back_inserter(*this));
-  }
-  vcl_deque(const self& x)  {
-    vcl_copy(x.begin(), x.end(), vcl_back_inserter(*this));
-  }
-  self& operator=(const self& x) {
+  vcl_deque(const T* first, const T* last) { vcl_copy(first, last, vcl_back_inserter(*this)); }
+  vcl_deque(const_iterator first, const_iterator last) { vcl_copy(first, last, vcl_back_inserter(*this)); }
+  vcl_deque(const self& x)  { vcl_copy(x.begin(), x.end(), vcl_back_inserter(*this)); }
+  self& operator=(const self& x)
+  {
     if (this != &x) {
       if (size() >= x.size())
         erase(vcl_copy(x.begin(), x.end(), begin()), end());
@@ -619,12 +547,15 @@ vcl_deque<T, Alloc>::push_back_cleanup(int steps_remaining)
 #  endif
 
 template <class T , class Alloc>
-void vcl_deque<T, Alloc>::allocate_at_begin() {
-//typedef typename self::map_allocator map_allocator;
+void vcl_deque<T, Alloc>::allocate_at_begin()
+{
   pointer p = data_allocator::allocate(buffer_size());
-  IUEg__TRY {
-    if (!empty()) {
-      if (start.node == __deque_data<T>::map) {
+  IUEg__TRY
+  {
+    if (!empty())
+    {
+      if (start.node == __deque_data<T>::map)
+      {
         difference_type i = finish.node - start.node;
         size_type old_map_size = map_size;
         map_pointer tmp = map_allocator::allocate((i+1)*2);
@@ -636,11 +567,15 @@ void vcl_deque<T, Alloc>::allocate_at_begin() {
         __deque_data<T>::map[map_size / 4] = p;
         start.construct(p + buffer_size(), __deque_data<T>::map + map_size / 4);
         finish.construct(finish.current, __deque_data<T>::map + map_size / 4 + i + 1);
-      } else {
+      }
+      else
+      {
         *--start.node = p;
         start.construct(p + buffer_size(), start.node);
       }
-    } else {
+    }
+    else
+    {
       size_type new_map_size = init_map_size();
       __deque_data<T>::map = map_allocator::allocate(new_map_size);
       map_size = new_map_size;
@@ -650,7 +585,8 @@ void vcl_deque<T, Alloc>::allocate_at_begin() {
     }
   }
 #if defined (__STL_USE_EXCEPTIONS)
-  catch(...) {
+  catch(...)
+  {
     data_allocator::deallocate(p, buffer_size());
     throw;
   }
@@ -658,12 +594,15 @@ void vcl_deque<T, Alloc>::allocate_at_begin() {
 }
 
 template <class T , class Alloc>
-void vcl_deque<T, Alloc>::allocate_at_end() {
-//typedef typename self::map_allocator map_allocator;
+void vcl_deque<T, Alloc>::allocate_at_end()
+{
   pointer p = data_allocator::allocate(buffer_size());
-  IUEg__TRY {
-    if (!empty()) {
-      if (finish.node == __deque_data<T>::map + map_size - 1) {
+  IUEg__TRY
+  {
+    if (!empty())
+    {
+      if (finish.node == __deque_data<T>::map + map_size - 1)
+      {
         difference_type i = finish.node - start.node;
         size_type old_map_size = map_size;
         map_pointer tmp = map_allocator::allocate((i + 1) * 2);
@@ -674,11 +613,15 @@ void vcl_deque<T, Alloc>::allocate_at_end() {
         __deque_data<T>::map[map_size / 4 + i + 1] = p;
         start.construct(start.current, __deque_data<T>::map + map_size / 4);
         finish.construct(p, __deque_data<T>::map + map_size / 4 + i + 1);
-      } else {
+      }
+      else
+      {
         *++finish.node = p;
         finish.construct(p, finish.node);
       }
-    } else {
+    }
+    else
+    {
       size_type new_map_size = init_map_size();
       __deque_data<T>::map = map_allocator::allocate(new_map_size);
       map_size = new_map_size;
@@ -688,7 +631,8 @@ void vcl_deque<T, Alloc>::allocate_at_end() {
     }
   }
 #  if defined (__STL_USE_EXCEPTIONS)
-  catch(...) {
+  catch(...)
+  {
     data_allocator::deallocate(p, buffer_size());
     throw;
   }
@@ -696,9 +640,11 @@ void vcl_deque<T, Alloc>::allocate_at_end() {
 }
 
 template <class T , class Alloc>
-void vcl_deque<T, Alloc>::deallocate_at_end() {
+void vcl_deque<T, Alloc>::deallocate_at_end()
+{
   data_allocator::deallocate(*finish.node--, buffer_size());
-  if (empty()) {
+  if (empty())
+  {
     start.construct();
     finish.construct();
     map_allocator::deallocate(__deque_data<T>::map, map_size);
@@ -708,8 +654,9 @@ void vcl_deque<T, Alloc>::deallocate_at_end() {
 }
 
 template <class T , class Alloc>
-__iterator__
-vcl_deque<T, Alloc>::insert(iterator position, const T& x) {
+typename __iterator__
+vcl_deque<T, Alloc>::insert(iterator position, const T& x)
+{
   __stl_verbose_assert(position.owner()==this,__STL_MSG_NOT_OWNER);
   if (position == begin()) {
     push_front(x);
@@ -733,72 +680,91 @@ vcl_deque<T, Alloc>::insert(iterator position, const T& x) {
 }
 
 template <class T , class Alloc>
-void vcl_deque<T, Alloc>::insert(iterator position, size_type n, const T& x) {
+void vcl_deque<T, Alloc>::insert(iterator position, size_type n, const T& x)
+{
   __stl_verbose_assert(position.owner()==this,__STL_MSG_NOT_OWNER);
   difference_type index = position - begin();
   difference_type remainder = length - index;
-  if (remainder > index) {
-    if (n > (size_type)index) {
+  if (remainder > index)
+  {
+    if (n > (size_type)index)
+    {
       difference_type m = n - index;
       while (m-- > 0) push_front(x);
       difference_type i = index;
       while (i--) push_front(*(begin() + n - 1));
       vcl_fill(begin() + n, begin() + n + index, x);
     }
-    else {
+    else
+    {
       difference_type i = n;
       while (i--) push_front(*(begin() + n - 1));
       vcl_copy(begin() + n + n, begin() + n + index, begin() + n);
       vcl_fill(begin() + index, begin() + n + index, x);
     }
-  } else {
+  }
+  else
+  {
     difference_type orig_len = index + remainder;
-    if (n > (size_type)remainder) {
+    if (n > (size_type)remainder)
+    {
       difference_type m = n - remainder;
       while (m-- > 0) push_back(x);
       difference_type i = 0;
       while (i < remainder) push_back(*(begin() + index + i++));
       vcl_fill(begin() + index, begin() + orig_len, x);
-    } else {
+    }
+    else
+    {
       difference_type i = 0;
       while ((size_type)i < n) push_back(*(begin() + orig_len - n + i++));
       vcl_copy_backward(begin() + index, begin() + orig_len - n,
                         begin() + orig_len);
       vcl_fill(begin() + index, begin() + index + n, x);
-  }
+    }
   }
 }
 
 template <class T , class Alloc>
-void vcl_deque<T, Alloc>::insert(iterator position, const T* first, const T* last) {
+void vcl_deque<T, Alloc>::insert(iterator position, const T* first, const T* last)
+{
   __stl_verbose_assert(position.owner()==this,__STL_MSG_NOT_OWNER);
   __stl_debug_check(__check_range(first,last));
   difference_type index = position - begin();
   difference_type remainder = length - index;
   size_type n = 0;
   vcl_distance(first, last, n);
-  if (remainder > index) {
-    if (n > (size_type)index) {
+  if (remainder > index)
+  {
+    if (n > (size_type)index)
+    {
       const T* m = last - index;
       while (m != first) push_front(*--m);
       difference_type i = index;
       while (i--) push_front(*(begin() + n - 1));
       vcl_copy(last - index, last, begin() + n);
-    } else {
+    }
+    else
+    {
       difference_type i = n;
       while (i--) push_front(*(begin() + n - 1));
       vcl_copy(begin() + n + n, begin() + n + index, begin() + n);
       vcl_copy(first, last, begin() + index);
     }
-  } else {
+  }
+  else
+  {
     difference_type orig_len = index + remainder;
-    if (n > (size_type)remainder) {
+    if (n > (size_type)remainder)
+    {
       const T* m = first + remainder;
       while (m != last) push_back(*m++);
       difference_type i = 0;
       while (i < remainder) push_back(*(begin() + index + i++));
       vcl_copy(first, first + remainder, begin() + index);
-    } else {
+    }
+    else
+    {
       difference_type i = 0;
       while ((size_type)i < n) push_back(*(begin() + orig_len - n + i++));
       vcl_copy_backward(begin() + index, begin() + orig_len - n,
@@ -809,35 +775,45 @@ void vcl_deque<T, Alloc>::insert(iterator position, const T* first, const T* las
 }
 
 template <class T , class Alloc>
-void vcl_deque<T, Alloc>::insert(iterator position, const_iterator first, const_iterator last) {
+void vcl_deque<T, Alloc>::insert(iterator position, const_iterator first, const_iterator last)
+{
   __stl_verbose_assert(position.owner()==this,__STL_MSG_NOT_OWNER);
   __stl_debug_check(__check_range(first,last));
   difference_type index = position - begin();
   difference_type remainder = length - index;
   size_type n = 0;
   vcl_distance(first, last, n);
-  if (remainder > index) {
-    if (n > (size_type)index) {
+  if (remainder > index)
+  {
+    if (n > (size_type)index)
+    {
       const_iterator m = last - index;
       while (m != first) push_front(*--m);
       difference_type i = index;
       while (i--) push_front(*(begin() + n - 1));
       vcl_copy(last - index, last, begin() + n);
-    } else {
+    }
+    else
+    {
       difference_type i = n;
       while (i--) push_front(*(begin() + n - 1));
       vcl_copy(begin() + n + n, begin() + n + index, begin() + n);
       vcl_copy(first, last, begin() + index);
     }
-  } else {
+  }
+  else
+  {
     difference_type orig_len = index + remainder;
-    if (n > (size_type)remainder) {
+    if (n > (size_type)remainder)
+    {
       const_iterator m = first + remainder;
       while (m != last) push_back(*m++);
       difference_type i = 0;
       while (i < remainder) push_back(*(begin() + index + i++));
       vcl_copy(first, first + remainder, begin() + index);
-    } else {
+    }
+    else
+    {
       difference_type i = 0;
       while ((size_type)i < n) push_back(*(begin() + orig_len - n + i++));
       vcl_copy_backward(begin() + index, begin() + orig_len - n,
@@ -848,7 +824,8 @@ void vcl_deque<T, Alloc>::insert(iterator position, const_iterator first, const_
 }
 
 template <class T , class Alloc>
-void vcl_deque<T, Alloc>::erase(iterator position) {
+void vcl_deque<T, Alloc>::erase(iterator position)
+{
   __stl_debug_check(__check_range(position,begin(), end()-1));
   if (end() - position > position - begin()) {
     vcl_copy_backward(begin(), position, position + 1);
@@ -860,7 +837,8 @@ void vcl_deque<T, Alloc>::erase(iterator position) {
 }
 
 template <class T , class Alloc>
-void vcl_deque<T, Alloc>::erase(iterator first, iterator last) {
+void vcl_deque<T, Alloc>::erase(iterator first, iterator last)
+{
   __stl_debug_check(__check_range(first,last, start, finish));
   difference_type n = last - first;
   if (end() - last > first - begin()) {
@@ -890,7 +868,7 @@ template <class T>
 class vcl_deque : public __deque__<T,vcl_alloc>
 {
   typedef vcl_deque<T> self;
-public:
+ public:
   typedef __deque__<T,vcl_alloc> super;
   __CONTAINER_SUPER_TYPEDEFS
   __IMPORT_SUPER_COPY_ASSIGNMENT(vcl_deque)
@@ -905,14 +883,16 @@ public:
 #  if defined (__STL_BASE_MATCH_BUG)
 template <class T>
 inline bool
-operator==(const vcl_deque<T>& x, const vcl_deque<T>& y) {
+operator==(const vcl_deque<T>& x, const vcl_deque<T>& y)
+{
     typedef typename vcl_deque<T>::super super;
     return operator == ((const super&)x,(const super&)y);
 }
 
 template <class T>
 inline bool
-operator<(const vcl_deque<T>& x, const vcl_deque<T>& y) {
+operator<(const vcl_deque<T>& x, const vcl_deque<T>& y)
+{
   typedef typename vcl_deque<T>::super super;
   return operator < ((const super&)x,(const super&)y);
 }
@@ -921,13 +901,15 @@ operator<(const vcl_deque<T>& x, const vcl_deque<T>& y) {
 
 template <class T, class Alloc>
 inline
-bool operator==(const __deque__<T, Alloc>& x, const __deque__<T, Alloc>& y) {
+bool operator==(const __deque__<T, Alloc>& x, const __deque__<T, Alloc>& y)
+{
   return x.size() == y.size() && vcl_equal(x.begin(), x.end(), y.begin());
 }
 
 template <class T, class Alloc>
 inline
-bool operator<(const __deque__<T, Alloc>& x, const __deque__<T, Alloc>& y) {
+bool operator<(const __deque__<T, Alloc>& x, const __deque__<T, Alloc>& y)
+{
   return lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
 }
 
