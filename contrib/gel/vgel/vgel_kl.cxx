@@ -63,9 +63,9 @@ void vgel_kl::match_sequence(vcl_vector<vil1_image> &image_list,vgel_multi_view_
     // Store the values
     KLTStoreFeatureList(fl, ft, i);
 
-	// MPP 9/24/2003
-	// We're done with the image -- plug memory leak!
-	delete img2;
+    // MPP 9/24/2003
+    // We're done with the image -- plug memory leak!
+    delete img2;
   }
 
   // MPP 9/24/2003
@@ -116,9 +116,10 @@ void vgel_kl::match_sequence(vcl_vector<vil1_image> &image_list,vgel_multi_view_
         }
       }
     }
+#if 0
   // Finally, renumber the matches
-//   matches.renumber();
-
+  matches.renumber();
+#endif
   // MPP 9/24/2003
   // We're done with the feature list & feature table -- plug memory leaks!
   KLTFreeFeatureList(fl);
@@ -172,13 +173,13 @@ vcl_vector<vtol_vertex_2d_sptr>* vgel_kl::extract_points(vil1_image & image)
 
   for (int i=0 ; i< fl->nFeatures ; i++)
   {
-     // Change the point into an IUPoint -- offset by ilow, jlow
-     float x = fl->feature[i]->x;
-     float y = fl->feature[i]->y;
-     //HomgPoint2D *point = new HomgPoint2D (x, y,1.0)
-      vtol_vertex_2d_sptr point=new vtol_vertex_2d(x,y);
-     // Put the point in the backup list
-     grp->push_back(point);
+    // Change the point into an IUPoint -- offset by ilow, jlow
+    float x = fl->feature[i]->x;
+    float y = fl->feature[i]->y;
+    //HomgPoint2D *point = new HomgPoint2D(x, y,1.0)
+    vtol_vertex_2d_sptr point=new vtol_vertex_2d(x,y);
+    // Put the point in the backup list
+    grp->push_back(point);
   }
 
   // !!
@@ -198,8 +199,7 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
     int w=image.width();
     int h=image.height();
     KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
-    vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl
-             << "pixel type: byte\n";
+    vcl_cerr << "width: " <<w<< "  height: "<<h<< "  pixel type: byte\n";
 
     vil1_memory_image_of<vil1_byte> ima_mono;
     ima_mono.resize(w,h);
@@ -209,9 +209,8 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
 
     for (int i=0;i<w;i++)
       for (int j=0;j<h;j++)
-      {
         tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
-      }
+
     return tab_mono;
   }
   else if (vil1_pixel_format(image)==VIL1_BYTE)
@@ -219,8 +218,7 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
     int w=image.width();
     int h=image.height();
     KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
-    vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl
-             << "pixel type: byte\n";
+    vcl_cerr << "width: " <<w<< "  height: "<<h<< "  pixel type: byte\n";
 
     vil1_memory_image_of<vil1_byte> ima_mono;
     ima_mono.resize(w,h);
@@ -230,9 +228,7 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
 
     for (int i=0;i<w;i++)
       for (int j=0;j<h;j++)
-      {
         tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
-      }
 
     return tab_mono;
   }
@@ -241,8 +237,7 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
     int w=image.width();
     int h=image.height();
     KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
-    vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl
-             << "pixel type: uint_16\n";
+    vcl_cerr << "width: " <<w<< "  height: "<<h<< "  pixel type: uint_16\n";
 
     vil1_memory_image_of<vxl_uint_16> ima_mono;
     ima_mono.resize(w,h);
@@ -252,9 +247,7 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
 
     for (int i=0;i<w;i++)
       for (int j=0;j<h;j++)
-      {
         tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
-      }
 
     return tab_mono;
   }
@@ -263,8 +256,7 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
     int w=image.width();
     int h=image.height();
     KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
-    vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl
-             << "pixel type: uint_16\n";
+    vcl_cerr << "width: " <<w<< "  height: "<<h<< "  pixel type: uint_16\n";
 
     vil1_memory_image_of<vxl_uint_16> ima_mono;
     ima_mono.resize(w,h);
@@ -274,23 +266,21 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
 
     for (int i=0;i<w;i++)
       for (int j=0;j<h;j++)
-      {
         tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
-      }
 
     return tab_mono;
   }
   else
   {
-      vcl_cerr << "Error: Cannot convert pixel type: "
-               << vil1_print(vil1_pixel_format(image)) << vcl_endl;
-      return NULL;
+    vcl_cerr << "Error: Cannot convert pixel type: "
+             << vil1_print(vil1_pixel_format(image)) << vcl_endl;
+    return NULL;
   }
 }
 
 void vgel_kl::set_tracking_context( KLT_TrackingContext tc)
 {
-  /* Set values to values derived from the parameters */
+  // Set values to values derived from the parameters
   tc->mindist               = params_.mindist;
   tc->window_width          = params_.window_width;
   tc->window_height         = params_.window_height;
