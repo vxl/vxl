@@ -1,17 +1,16 @@
 // This is mul/vil2/vil2_copy.txx
-#ifndef vil2_smart_ptr_txx_
-#define vil2_smart_ptr_txx_
+#ifndef vil2_copy_txx_
+#define vil2_copy_txx_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Ian Scott, ISBE, Manchester
 // \date   4 Oct 2002
 
-
 #include "vil2_copy.h"
+#include <vcl_cassert.h>
 
 //: Create a copy of the data viewed by this, and return a view of copy.
 template<class T>
@@ -24,7 +23,7 @@ vil2_image_view<T> vil2_copy_deep(const vil2_image_view<T> &src)
 
 
 //: Copy src to dest, without changing dest's view parameters.
-// This is useful if you want to copy on image into a window on another image.
+// This is useful if you want to copy an image into a window on another image.
 // src and dest must have identical sizes, and types.
 template<class T>
 void vil2_copy_reformat(const vil2_image_view<T> &src, vil2_image_view<T> &dest)
@@ -60,8 +59,8 @@ void vil2_copy_to_window(const vil2_image_view<T> &src, vil2_image_view<T> &dest
 // For everything else
 #define VIL2_COPY_INSTANTIATE(T) \
 template void vil2_copy_to_window(const vil2_image_view<T > &src, vil2_image_view<T > &dest, \
-  unsigned i0, unsigned j0); \
+                                  unsigned i0, unsigned j0); \
 template void vil2_copy_reformat(const vil2_image_view<T > &src, vil2_image_view<T > &dest); \
-template vil2_image_view<T > vil2_copy_deep(const vil2_image_view<T > &rhs);
+template vil2_image_view<T > vil2_copy_deep(const vil2_image_view<T > &rhs)
 
-#endif // vil2_smart_ptr_txx_
+#endif // vil2_copy_txx_
