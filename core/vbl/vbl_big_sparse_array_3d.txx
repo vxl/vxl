@@ -6,38 +6,11 @@
 #include <vcl_cassert.h>
 #include <vcl_utility.h> // for vcl_pair<T,bool>
 
-// Default ctor
-template <class T>
-vbl_big_sparse_array_3d<T>::vbl_big_sparse_array_3d()
-{
-}
-
-// Copy ctor
-template <class T>
-vbl_big_sparse_array_3d<T>::vbl_big_sparse_array_3d(vbl_big_sparse_array_3d<T> const& that)
-: storage_(that.storage_)
-{
-}
-
-// Assignment
-template <class T>
-vbl_big_sparse_array_3d<T>& vbl_big_sparse_array_3d<T>::operator=(vbl_big_sparse_array_3d<T> const& that)
-{
-  storage_ = that.storage_;
-  return *this;
-}
-
-// Destructor
-template <class T>
-vbl_big_sparse_array_3d<T>::~vbl_big_sparse_array_3d()
-{
-}
-
 // locals
 inline ulonglong bigencode(unsigned i, unsigned j, unsigned k)
 {
   // Use a map of tuples if you need bigger sparse arrays
-#if VCL_HAS_LONG_LONG
+#if VXL_HAS_INT_64
   assert( i <= 0x3fffff && j <= 0x1fffff && k <= 0x1fffff );
   return (((ulonglong)i) << 42) |
          (((ulonglong)j) << 21) |
@@ -52,7 +25,7 @@ inline ulonglong bigencode(unsigned i, unsigned j, unsigned k)
 
 inline void bigdecode(ulonglong v, unsigned& i, unsigned& j, unsigned& k)
 {
-#if VCL_HAS_LONG_LONG
+#if VXL_HAS_INT_64
   k = v & 0x1fffff; // 21 lowest bits
   j = (v >> 21) & 0x1fffff; // "middle" 21 bits
   i = (v >> 42) & 0x3fffff; // 22 highest bits

@@ -45,10 +45,8 @@
 #include <vxl_config.h>
 
 #if VXL_HAS_INT_64
-# define VCL_HAS_LONG_LONG 1
 typedef vxl_uint_64 ulonglong;
 #elif VXL_HAS_INT_32
-# define VCL_HAS_LONG_LONG 0
 typedef vxl_uint_32 ulonglong;
 #else
 # error "only implemented with 32 and 64-bit ints"
@@ -61,17 +59,23 @@ typedef vxl_uint_32 ulonglong;
 template <class T>
 class vbl_big_sparse_array_3d
 {
+ protected:
+  // Data Members--------------------------------------------------------------
+  typedef vcl_map<ulonglong, T, vcl_less<ulonglong> > Map;
+  Map storage_;
+
  public:
   // Constructors/Destructor---------------------------------------------------
 
   //: Construct a vbl_big_sparse_array_3d
-  vbl_big_sparse_array_3d();
- ~vbl_big_sparse_array_3d();
+  vbl_big_sparse_array_3d() {}
+ ~vbl_big_sparse_array_3d() {}
 
   // Potentially clunky copy constructor
-  vbl_big_sparse_array_3d(vbl_big_sparse_array_3d<T> const&);
+  vbl_big_sparse_array_3d(vbl_big_sparse_array_3d<T> const& b) : storage_(b.storage_) {}
   // Potentially clunky assignment operator
-  vbl_big_sparse_array_3d& operator=(vbl_big_sparse_array_3d<T> const&);
+  vbl_big_sparse_array_3d<T>& operator=(vbl_big_sparse_array_3d<T> const& b)
+  { storage_ = b.storage_; return *this; }
 
   // Operations----------------------------------------------------------------
   T      & operator() (unsigned, unsigned, unsigned);
@@ -87,11 +91,6 @@ class vbl_big_sparse_array_3d
 
   // Data Control--------------------------------------------------------------
   vcl_ostream& print(vcl_ostream&) const;
-
- protected:
-  // Data Members--------------------------------------------------------------
-  typedef vcl_map<ulonglong, T, vcl_less<ulonglong> > Map;
-  Map storage_;
 };
 
 template <class T>
