@@ -119,7 +119,7 @@ vsol_box_3d_sptr brct_algos::get_bounding_box(vcl_vector<vgl_point_3d<double> > 
   return box;
 }
 
-void brct_algos::add_box_vrml(double xmin, double ymin, double zmin, double xmax, double ymax, double zmax)
+void brct_algos::add_box_vrml(double /*xmin*/, double /*ymin*/, double /*zmin*/, double /*xmax*/, double /*ymax*/, double /*zmax*/)
 {
   vcl_cerr << "brct_algos::add_box_vrml() NYI\n"; // TODO
 }
