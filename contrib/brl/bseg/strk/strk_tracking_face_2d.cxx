@@ -1076,9 +1076,8 @@ intensity_mutual_info_diff(vcl_vector<strk_tracking_face_2d_sptr> const& others,
     Hob_avg/=n_others;
     mi_diff_avg/=n_others;
   }
-  //  if (verbose)
-  if (true)
-  {
+  if (verbose)
+    {
     vcl_cout << "background entropy = " << Hb_avg
              << "\nmodel entropy = " << Hm
              << "\nobs entropy = " << Ho
@@ -1295,7 +1294,6 @@ color_histogram(vil1_memory_image_of<float> const& hue,
   int width = hue.width(), height = hue.height();
   if (intf_->Npix() == 0)
     return color_hist;
-  int i = 0;
   for (intf_->reset(); intf_->next(); ++i)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
