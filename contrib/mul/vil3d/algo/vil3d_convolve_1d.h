@@ -18,7 +18,7 @@
 
 
 //: Convolve kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
-// On exit dest_im(i,j) = sum src(i-x,j)*kernel(x)  (x=k_lo..k_hi)
+// On exit dest_im(i,j) = sum src_m(i-x,j)*kernel(x)  (x=k_lo..k_hi)
 // \note  This function reverses the kernel. If you don't want the
 // kernel reversed, use vil_correlate_1d instead. The kernel must
 // not be larger than src_im.ni()
@@ -27,15 +27,15 @@
 //
 // If you want to convolve in all three directions, use the following approach:
 // verbatim
-  vil3d_convolve_1d(                             src, smoothed1, ... );
-
-  vil3d_convolve_1d(vil3d_switch_axes_jki(smoothed1), smoothed2, ... );
-  smoothed2_im = vil3d_switch_axes_kij(smoothed2);
-  
-  vil3d_convolve_1d(vil3d_switch_axes_kij(smoothed2), smoothed3, ... );
-  smoothed3_im = vil3d_switch_axes_jki(smoothed3);
-
-  // \endverbatim
+//  vil3d_convolve_1d(                             src, smoothed1, ... );
+//
+//  vil3d_convolve_1d(vil3d_switch_axes_jki(smoothed1), smoothed2, ... );
+//  smoothed2_im = vil3d_switch_axes_kij(smoothed2);
+//  
+//  vil3d_convolve_1d(vil3d_switch_axes_kij(smoothed2), smoothed3, ... );
+//  smoothed3_im = vil3d_switch_axes_jki(smoothed3);
+//
+// \endverbatim
 // \relates vil3d_image_view
 
 template <class srcT, class destT, class kernelT, class accumT>
