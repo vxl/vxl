@@ -13,15 +13,14 @@
 //  Modifications
 //   2000/05/04 François BERTEL Creation
 //   2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
+//   2004/09/06 Peter Vanroose  Added safe cast methods to region_3d
 // \endverbatim
 //*****************************************************************************
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vgl/vgl_vector_3d.h>
+class vsol_region_3d;
 
 class vsol_surface_3d : public vsol_spatial_object_3d
 {
@@ -34,6 +33,16 @@ class vsol_surface_3d : public vsol_spatial_object_3d
   //: Destructor
   //---------------------------------------------------------------------------
   virtual ~vsol_surface_3d();
+
+  //***************************************************************************
+  // virtuals of vsol_spatial_object_3d
+  //***************************************************************************
+
+  virtual vsol_surface_3d* cast_to_surface(void) { return this; }
+  virtual vsol_surface_3d const* cast_to_surface(void) const { return this; }
+
+  virtual vsol_region_3d *cast_to_region(void) {return 0;}
+  virtual vsol_region_3d const* cast_to_region(void) const {return 0;}
 
   //***************************************************************************
   // Basic operations
