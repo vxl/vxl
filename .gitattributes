@@ -1,9 +1,12 @@
 .git*            export-ignore
 
+*.bmp           -crlf
 *.dsp           -crlf
 *.dsptemplate   -crlf
 *.pl             crlf=input
+*.png           -crlf
 *.sh             crlf=input
+*.tif           -crlf
 check_dsp        crlf=input
 check_syntax     crlf=input
 configure        crlf=input

@@ -16,6 +16,7 @@ ADD_EXECUTABLE( vil_test_save_load_image test_save_load_image.cxx )
 ADD_EXECUTABLE( vil_test_write_endian    test_write_endian.cxx )
 ADD_EXECUTABLE( vil_test_colour_space    test_colour_space.cxx )
 ADD_EXECUTABLE( vil_test_copy            test_copy.cxx )
+ADD_EXECUTABLE( vil_test_file_format_read    test_file_format_read.cxx )
 
 ADD_TEST( vil_test_all         	         vil_test_all )
 ADD_TEST( vil_test_flipud                vil_test_flipud )
@@ -28,4 +29,5 @@ ADD_TEST( vil_test_save_load_image       vil_test_save_load_image )
 ADD_TEST( vil_test_write_endian          vil_test_write_endian )
 ADD_TEST( vil_test_colour_space          vil_test_colour_space )
 ADD_TEST( vil_test_copy                  vil_test_copy ${allvxl_SOURCE_DIR}/vxl/vil/tests/square.pgm )
+ADD_TEST( vil_test_file_format_read      vil_test_file_format_read ${allvxl_SOURCE_DIR}/vxl/vil/tests/file_read_data )
 
