@@ -12,16 +12,16 @@ void test_simple_polygon()
   // Simple triangle
   vgl_polygon p;
   p.new_sheet();
-  p.push_back( 0.0, 0.0 );
-  p.push_back( 5.0, 0.0 );
-  p.push_back( 5.0, 1.0 );
+  p.push_back( 0.0f, 0.0f );
+  p.push_back( 5.0f, 0.0f );
+  p.push_back( 5.0f, 1.0f );
 
-  TEST("inside", p.contains(  2.5,  0.3 ), true );
-  TEST("oustide (1)", p.contains(  2.5,  0.6 ), false );
-  TEST("outside (2)", p.contains(  5.1,  0.1 ), false );
-  TEST("outside (3)", p.contains(  5.1,  0.0 ), false );
-  TEST("outside (4)", p.contains(  2.0, -1.0 ), false );
-  TEST("outside (5)", p.contains( -2.5, -0.5 ), false );
+  TEST("inside",      p.contains(  2.5f,  0.3f ), true );
+  TEST("outside (1)", p.contains(  2.5f,  0.6f ), false );
+  TEST("outside (2)", p.contains(  5.1f,  0.1f ), false );
+  TEST("outside (3)", p.contains(  5.1f,  0.0f ), false );
+  TEST("outside (4)", p.contains(  2.0f, -1.0f ), false );
+  TEST("outside (5)", p.contains( -2.5f, -0.5f ), false );
 }
 
 
@@ -32,25 +32,25 @@ void test_disjoint_polygon()
   // Simple triangle
   vgl_polygon p;
   p.new_sheet();
-  p.push_back( 0.0, 0.0 );
-  p.push_back( 5.0, 0.0 );
-  p.push_back( 5.0, 1.0 );
+  p.push_back( 0.0f, 0.0f );
+  p.push_back( 5.0f, 0.0f );
+  p.push_back( 5.0f, 1.0f );
 
   // Another disjoint triangle
   p.new_sheet();
-  p.push_back( 10.0, 10.0 );
-  p.push_back( 15.0, 10.0 );
-  p.push_back( 15.0, 11.0 );
+  p.push_back( 10.0f, 10.0f );
+  p.push_back( 15.0f, 10.0f );
+  p.push_back( 15.0f, 11.0f );
 
-  TEST("inside poly 1", p.contains(  2.5,  0.3 ), true );
-  TEST("inside poly 2", p.contains( 12.5, 10.3 ), true );
-  TEST("oustide (1)", p.contains(  2.5,  0.6 ), false );
-  TEST("outside (2)", p.contains(  5.1,  0.1 ), false );
-  TEST("outside (3)", p.contains(  5.1,  0.0 ), false );
-  TEST("outside (4)", p.contains(  2.0, -1.0 ), false );
-  TEST("outside (5)", p.contains( -2.5, -0.5 ), false );
-  TEST("oustide (6)", p.contains( 12.5, 10.6 ), false );
-  TEST("outside (7)", p.contains( 15.1, 10.0 ), false );
+  TEST("inside poly1",p.contains(  2.5f,  0.3f ), true );
+  TEST("inside poly2",p.contains( 12.5f, 10.3f ), true );
+  TEST("outside (1)", p.contains(  2.5f,  0.6f ), false );
+  TEST("outside (2)", p.contains(  5.1f,  0.1f ), false );
+  TEST("outside (3)", p.contains(  5.1f,  0.0f ), false );
+  TEST("outside (4)", p.contains(  2.0f, -1.0f ), false );
+  TEST("outside (5)", p.contains( -2.5f, -0.5f ), false );
+  TEST("oustide (6)", p.contains( 12.5f, 10.6f ), false );
+  TEST("outside (7)", p.contains( 15.1f, 10.0f ), false );
 }
 
 void test_holey_polygon()
@@ -60,25 +60,24 @@ void test_holey_polygon()
   // Simple triangle
   vgl_polygon p;
   p.new_sheet();
-  p.push_back( 0.0, 0.0 );
-  p.push_back( 5.0, 0.0 );
-  p.push_back( 5.0, 1.0 );
+  p.push_back( 0.0f, 0.0f );
+  p.push_back( 5.0f, 0.0f );
+  p.push_back( 5.0f, 1.0f );
 
   // A hole
   p.new_sheet();
-  p.push_back( 3.0, 0.5 );
-  p.push_back( 4.0, 0.5 );
-  p.push_back( 4.0, 0.1 );
+  p.push_back( 3.0f, 0.5f );
+  p.push_back( 4.0f, 0.5f );
+  p.push_back( 4.0f, 0.1f );
 
-  TEST("inside", p.contains(  2.5,  0.3 ), true );
-  TEST("oustide (1)", p.contains(  2.5,  0.6 ), false );
-  TEST("outside (2)", p.contains(  5.1,  0.1 ), false );
-  TEST("outside (3)", p.contains(  5.1,  0.0 ), false );
-  TEST("outside (4)", p.contains(  2.0, -1.0 ), false );
-  TEST("outside (5)", p.contains( -2.5, -0.5 ), false );
-  TEST("oustide (6)", p.contains(  3.9,  0.4 ), false );
+  TEST("inside",      p.contains(  2.5f,  0.3f ), true );
+  TEST("oustide (1)", p.contains(  2.5f,  0.6f ), false );
+  TEST("outside (2)", p.contains(  5.1f,  0.1f ), false );
+  TEST("outside (3)", p.contains(  5.1f,  0.0f ), false );
+  TEST("outside (4)", p.contains(  2.0f, -1.0f ), false );
+  TEST("outside (5)", p.contains( -2.5f, -0.5f ), false );
+  TEST("oustide (6)", p.contains(  3.9f,  0.4f ), false );
 }
-
 
 
 int
