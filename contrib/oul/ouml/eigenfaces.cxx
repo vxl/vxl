@@ -3,7 +3,9 @@
 #include "eigenfaces.h"
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vil/vil_save.h>
+#include <vcl_queue.h>
 #include <vcl_cstring.h>
+#include <vcl_cassert.h>
 
 
 //----------------------------------------------------------------------
@@ -27,8 +29,7 @@ EigenFace::~EigenFace()
     delete *iter;
 
   // delete contents of the eigenvectors
-  for (iter=eigenvectors.begin(); iter!=eigenvectors.end();
-     iter++)
+  for (iter=eigenvectors.begin(); iter!=eigenvectors.end(); iter++)
     delete *iter;
 
   // delete contents of the encoded_training_images
@@ -268,8 +269,7 @@ bool EigenFace::check_eigenvectors()
 
   vcl_cout << "Eigenvalues are: " ;
   vcl_vector<double>::iterator val_iter;
-  for (val_iter=eigenvalues.begin(); val_iter!=eigenvalues.end();
-     val_iter++)
+  for (val_iter=eigenvalues.begin(); val_iter!=eigenvalues.end(); val_iter++)
     vcl_cout << *val_iter << " ";
   vcl_cout << vcl_endl;
   vcl_vector<vnl_vector<double> *>::iterator iter1, iter2;
@@ -412,17 +412,15 @@ vnl_vector<double>* EigenFace::decode(vnl_vector<double> *wts)
 //
 // Try to classify the given image using k-nearest neighbours
 //
-// \param Image *im: the image to classify
+// \param im        the image to classify
 //
-// \param int k: the number of nearest neighbours to use
+// \param k         the number of nearest neighbours to use
 //
-// \param int dim: the number of dimensions of the eigenvectors to use
+// \param dim       the number of dimensions of the eigenvectors to use
 //
-// \param double threshold: distances above this threshold are treated
-// as not recognised.
+// \param threshold distances above this threshold are treated as not recognised
 //
-// \ret char *: the label of the recognised image or NULL if
-// unsuccessful
+// \ret the label of the recognised image or NULL if unsuccessful
 //
 //.status under development
 //.author Brendan McCane
@@ -496,7 +494,7 @@ char *EigenFace::classify(Image *im, double threshold, int k, int dim)
 //
 // Output the data into xgobi format files
 //
-// \param char *basefile: the basename of the files
+// \param basefile  the basename of the files
 //
 //.status under development
 //.author Brendan McCane
