@@ -22,6 +22,7 @@ class segv_menus
   SEGV_DLL_DATA static void load_image_callback();
   SEGV_DLL_DATA static void clear_display_callback();
   SEGV_DLL_DATA static void original_image_callback();
+  SEGV_DLL_DATA static void roi_callback();
   SEGV_DLL_DATA static void gaussian_callback();
   SEGV_DLL_DATA static void downsample_callback();
   SEGV_DLL_DATA static void convolution_callback();
@@ -30,6 +31,7 @@ class segv_menus
   SEGV_DLL_DATA static void vd_edges_callback();
   SEGV_DLL_DATA static void regions_callback();
   SEGV_DLL_DATA static void fit_lines_callback();
+  SEGV_DLL_DATA static void test_camera_parms_callback();
   SEGV_DLL_DATA static void read_xml_edges_callback();
   SEGV_DLL_DATA static void test_face_callback();
   SEGV_DLL_DATA static void test_digital_lines_callback();

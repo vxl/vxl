@@ -28,6 +28,11 @@ void segv_menus::original_image_callback()
   segv_segmentation_manager::instance()->original_image();
 }
 
+void segv_menus::roi_callback()
+{
+  segv_segmentation_manager::instance()->roi();
+}
+
 void segv_menus::gaussian_callback()
 {
   segv_segmentation_manager::instance()->gaussian();
@@ -68,6 +73,10 @@ void segv_menus::fit_lines_callback()
   segv_segmentation_manager::instance()->fit_lines();
 }
 
+void segv_menus::test_camera_parms_callback()
+{
+  segv_segmentation_manager::instance()->test_camera_parms();
+}
 #ifdef HAS_XERCES
 void segv_menus::read_xml_edges_callback()
 {
@@ -102,6 +111,7 @@ vgui_menu segv_menus::get_menu()
   menuview.add("Original Image", original_image_callback);
   menuview.add("Clear Display", clear_display_callback);
   //edit menu entries
+  menuedit.add("Region Of Interest", roi_callback);
   menuedit.add("Gaussian", gaussian_callback);
   menuedit.add("Downsample", downsample_callback);
   menuedit.add("Convolution", convolution_callback);
@@ -112,6 +122,7 @@ vgui_menu segv_menus::get_menu()
   menuedit.add("Line Segments", fit_lines_callback);
   menuedit.add("TestFace", test_face_callback);
   menuedit.add("TestDigitalCurves", test_digital_lines_callback);
+  menuedit.add("Test Camera Parms",test_camera_parms_callback);
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);
