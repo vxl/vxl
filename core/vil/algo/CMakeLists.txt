@@ -17,6 +17,7 @@ SET( vil2_algo_sources
                                vil2_binary_closing.h
                                vil2_convolve_1d.h
                                vil2_convolve_2d.h
+                               vil2_correlate_1d.h
                                vil2_exp_filter_1d.h
                                vil2_normalised_correlation_2d.h
                                vil2_exp_grad_filter_1d.h
@@ -29,11 +30,3 @@ AUX_SOURCE_DIRECTORY(Templates vil2_algo_sources)
 ADD_LIBRARY(vil2_algo ${vil2_algo_sources})
 
 TARGET_LINK_LIBRARIES( vil2_algo vil2 vil vnl vcl )
-
-
-#IF( BUILD_EXAMPLES )
-#  SUBDIRS( examples )
-#ENDIF( BUILD_EXAMPLES )
-#IF( BUILD_TESTING )
-#  SUBDIRS(tests)
-#ENDIF( BUILD_TESTING )
