@@ -11,7 +11,6 @@
 #define Assert(x) { vcl_cout << #x "\t\t\t test "; \
   if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
-
 int main(int, char **)
 {
   int success=0, failures=0;
@@ -53,9 +52,11 @@ int main(int, char **)
 
   vtol_two_chain_sptr tc1 = new vtol_two_chain(f_list1);
   vtol_two_chain_sptr tc1_copy = new vtol_two_chain(f_list1);
+  tc1->describe();
 
   Assert(*tc1 == *tc1_copy);
   vtol_block_sptr b1 = new vtol_block(*tc1);
+  b1->describe();
 
   vcl_vector<signed char> dirs;
 
@@ -65,6 +66,7 @@ int main(int, char **)
   vtol_two_chain_sptr tc2 = new vtol_two_chain(f_list1,dirs);
 
   vtol_block_sptr b3 = new vtol_block(f_list1);
+  b3->describe();
 
   Assert(b1->get_boundary_cycle() == tc1.ptr());
 
@@ -73,6 +75,7 @@ int main(int, char **)
   Assert(*b3 == *b1);
 
   vtol_block_sptr b1_copy = new vtol_block(*b1);
+  b1_copy->describe();
 
   Assert(b1->get_boundary_cycle()!=0);
   Assert(b1->get_boundary_cycle()!=0);

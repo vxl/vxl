@@ -12,7 +12,6 @@
 #define Assert(x) { vcl_cout << #x "\t\t\t test "; \
   if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
-
 int main(int, char **)
 {
   int success=0, failures=0;
@@ -32,6 +31,7 @@ int main(int, char **)
   v_list.push_back(v4->cast_to_vertex());
 
   vtol_face_2d_sptr f1 = new vtol_face_2d(v_list);
+  f1->describe();
 
   vtol_edge_sptr e12 = new vtol_edge_2d(*v1,*v2);
   vtol_edge_sptr e23 = new vtol_edge_2d(*v2,*v3);
@@ -51,6 +51,7 @@ int main(int, char **)
   oc_list.push_back(oc1);
 
   vtol_face_2d_sptr f2 = new vtol_face_2d(oc_list);
+  f2->describe();
 
   Assert(f2->get_one_chain()==oc1.ptr());
   Assert(f2->get_boundary_cycle()==oc1.ptr());
@@ -73,12 +74,15 @@ int main(int, char **)
   delete holes;
 
   vtol_face_2d_sptr f3 = new vtol_face_2d(*oc1);
+  f3->describe();
 
   Assert(*f1 != *f3);
+  Assert(*f1->cast_to_face() != *f3->cast_to_face());
 
   vtol_face_2d_sptr f1_copy = new vtol_face_2d(*f1);
 
   Assert(*f1 == *f1_copy);
+  Assert(*f1->cast_to_face() == *f1_copy->cast_to_face());
 
   vsol_spatial_object_2d_sptr f1_clone = f1->clone();
   Assert(*f1 == *f1_clone);
