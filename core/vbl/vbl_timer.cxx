@@ -30,24 +30,20 @@
 #include "vbl_timer.h"
 
 #include <vcl/vcl_climits.h>   // for CLK_TCK
+#include <vcl/vcl_ctime.h>
 #include <vcl/vcl_iostream.h>
+#include <vcl/vcl_sys/time.h>
 
-#if !defined(VCL_NO_SYS_TIME_H) && !defined(VCL_WIN32)
-#include <sys/time.h>
-#else
-#ifdef SYSV
-extern "C" int gettimeofday(struct timeval *tp);
-#else
-extern "C" int gettimeofday(struct timeval*, struct timezone*);
-#endif
-#endif
 
-#ifndef WIN32
 //#define CLK_TCK _sysconf(3) in <limits.h> has error
-#include <unistd.h> // for sysconf. vcl_unistd.h won't do.
+
+#ifdef WIN32
+#include <direct.h> // for sysconf()
+#else
+#include <unistd.h>
+#endif
 #undef CLK_TCK
 #define CLK_TCK sysconf(_SC_CLK_TCK)
-#endif
 
 // -- Sets the reference time to now.
 

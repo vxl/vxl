@@ -1,13 +1,20 @@
 #ifndef vcl_sys_time_h_
 #define vcl_sys_time_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-/*
-  fsm@robots.ox.ac.uk
-*/
 
+#if defined(VCL_WIN32)
+#include <sys/timeb.h>
+extern "C" int gettimeofday(struct timeval*, struct timezone*);
+#else
+#if !defined(VCL_NO_SYS_TIME_H)
 #include <sys/time.h>
+#else
+#ifdef SYSV
+extern "C" int gettimeofday(struct timeval *tp);
+#else
+extern "C" int gettimeofday(struct timeval*, struct timezone*);
+#endif
+#endif
+#endif
 
 //struct timeval:
 // time_t         tv_sec      seconds

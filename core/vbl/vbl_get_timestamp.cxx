@@ -6,10 +6,18 @@
 #endif
 #include "vbl_get_timestamp.h"
 
+#ifdef WIN32
+#include <direct.h>
+#include <sys/timeb.h>
+#else
+#include <unistd.h>
+#endif
+
+#include <vcl/vcl_ctime.h>
+#include <vcl/vcl_sys/time.h>
+
 #ifndef WIN32
 // POSIX
-#include <sys/time.h>
-#include <unistd.h>
 void vbl_get_timestamp(int &secs, int &msecs)
 {
   struct timeval  timestamp;
@@ -21,8 +29,6 @@ void vbl_get_timestamp(int &secs, int &msecs)
 }
 #else
 // WIN32
-#include <vcl/vcl_ctime.h>
-#include <sys/timeb.h>
 void vbl_get_timestamp(int &secs, int &msecs)
 {
   struct _timeb real;

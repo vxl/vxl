@@ -39,13 +39,8 @@
 #ifndef vbl_timer_h
 #define vbl_timer_h
 
-#ifndef WIN32
-# include <sys/times.h>               // system/user times with times()
-# include <sys/time.h>                // real time through ftime() system call
-#else
-# include <vcl/vcl_ctime.h>
-# include <sys/timeb.h>
-#endif
+#include <vcl/vcl_sys/time.h>
+#include <vcl/vcl_ctime.h>
 
 #include <vcl/vcl_iosfwd.h>
 
