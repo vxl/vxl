@@ -1,1 +1,0 @@
-IULIBS += -lvgui-mfc
