@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/qt/vgui_qt_dialog_impl.cxx
+// This is core/vgui/impl/qt/vgui_qt_dialog_impl.cxx
 #include "vgui_qt_dialog_impl.h"
 
 #include <vcl_vector.h>
@@ -301,7 +301,7 @@ void vgui_qt_colorchooser_impl::get_a_color()
    QColor c = QColorDialog::getColor(QColor(value_.c_str()));
    if (c.isValid())
    {
-      value_ = c.name();
+      value_ = (QString)(c.name());
       frame_->setBackgroundColor(c);
    }
 }
