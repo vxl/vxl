@@ -259,18 +259,18 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
   for(int i=0;i<numlines;i++)
   {
 
-    int_line0p[0]=round(lines0_p[i][0]);
-    int_line0p[1]=round(lines0_p[i][1]);
+    int_line0p[0]=vmal_round(lines0_p[i][0]);
+    int_line0p[1]=vmal_round(lines0_p[i][1]);
     int_line0p[2]=1.0;
-    int_line0q[0]=round(lines0_q[i][0]);
-    int_line0q[1]=round(lines0_q[i][1]);
+    int_line0q[0]=vmal_round(lines0_q[i][0]);
+    int_line0q[1]=vmal_round(lines0_q[i][1]);
     int_line0q[2]=1.0;
 
-    int_line1p[0]=round(lines1_p[i][0]);
-    int_line1p[1]=round(lines1_p[i][1]);
+    int_line1p[0]=vmal_round(lines1_p[i][0]);
+    int_line1p[1]=vmal_round(lines1_p[i][1]);
     int_line1p[2]=1.0;
-    int_line1q[0]=round(lines1_q[i][0]);
-    int_line1q[1]=round(lines1_q[i][1]);
+    int_line1q[0]=vmal_round(lines1_q[i][0]);
+    int_line1q[1]=vmal_round(lines1_q[i][1]);
     int_line1q[2]=1.0;
 
     double num0=int_line0p[0]-int_line0q[0];
@@ -322,14 +322,14 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
 
       t_point0=_H0*point0;
       t_point1=_H1*point1;
-      int_t_point0[0]=(int)round(t_point0[0]/t_point0[2]);
-      int_t_point0[1]=(int)round(t_point0[1]/t_point0[2]);
-      int_t_point1[0]=(int)round(t_point1[0]/t_point1[2]);
-      int_t_point1[1]=(int)round(t_point1[1]/t_point1[2]);
+      int_t_point0[0]=(int)vmal_round(t_point0[0]/t_point0[2]);
+      int_t_point0[1]=(int)vmal_round(t_point0[1]/t_point0[2]);
+      int_t_point1[0]=(int)vmal_round(t_point1[0]/t_point1[2]);
+      int_t_point1[1]=(int)vmal_round(t_point1[1]/t_point1[2]);
 
-      //disparity=round_int(int_t_point1[1]-int_t_point0[1]);
+      //disparity=vmal_round_int(int_t_point1[1]-int_t_point0[1]);
       disparity=1;
-      map(round_int(point0[0]),round_int(point0[1]))=disparity;
+      map(vmal_round_int(point0[0]),vmal_round_int(point0[1]))=disparity;
       if (disparity<min_disparity)
         min_disparity=disparity;
       if (disparity>max_disparity)
@@ -347,7 +347,7 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
     for(int j=0; j<w; j++)
     {
 
-      int value=round_int((map(j,i)-min_disparity)*255/max_disparity);
+      int value=vmal_round_int((map(j,i)-min_disparity)*255/max_disparity);
       buf[i*w+j]=(unsigned char)value;
     }
   }
@@ -357,7 +357,7 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
 }
 
 
-double round(double a)
+double vmal_round(double a)
 {
   int b=(int) a;
   if((a-(double)b)<0.5)
@@ -366,7 +366,7 @@ double round(double a)
     return ((double)b+1);
 }
 
-int round_int(double a)
+int vmal_round_int(double a)
 {
   int b=(int) a;
   if((a-(double)b)<0.5)

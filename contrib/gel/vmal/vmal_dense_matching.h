@@ -16,8 +16,8 @@
 #include <vmal/vmal_multi_view_data_edge_sptr.h>
 #include <vnl/vnl_double_3x3.h>
 
-double round(double a);
-int round_int(double a);
+double vmal_round(double a);
+int vmal_round_int(double a);
 
 class vmal_dense_matching
 {

@@ -38,7 +38,7 @@ double vmal_operators::project_point(double x0,double y0,
       *x=resx;
       *y=resy;
     }
-      return sqrtf((resx-x0)*(resx-x0)+(resy-y0)*(resy-y0));
+      return vcl_sqrt((resx-x0)*(resx-x0)+(resy-y0)*(resy-y0));
   }
 
   return -1;

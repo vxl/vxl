@@ -302,27 +302,27 @@ double vmal_track_lines::dist(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
     {
       dist=dist3+vcl_min(dist1,dist2);
       if (dist1<dist2)
-      distover=sqrtf((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))+
-             sqrtf((x3-fl1x)*(x3-fl1x)+(y3-fl1y)*(y3-fl1y));
+      distover=vcl_sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))+
+             vcl_sqrt((x3-fl1x)*(x3-fl1x)+(y3-fl1y)*(y3-fl1y));
       else
-      distover=sqrtf((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))+
-             sqrtf((x3-fl2x)*(x3-fl2x)+(y3-fl2y)*(y3-fl2y));
+      distover=vcl_sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))+
+             vcl_sqrt((x3-fl2x)*(x3-fl2x)+(y3-fl2y)*(y3-fl2y));
     }
     else if (x4!=-1)
     {
       dist=dist4+vcl_min(dist1,dist2);
       if (dist1<dist2)
-      distover=sqrtf((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))+
-             sqrtf((x4-fl1x)*(x4-fl1x)+(y4-fl1y)*(y4-fl1y));
+      distover=vcl_sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))+
+             vcl_sqrt((x4-fl1x)*(x4-fl1x)+(y4-fl1y)*(y4-fl1y));
       else
-      distover=sqrtf((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))+
-             sqrtf((x4-fl2x)*(x4-fl2x)+(y4-fl2y)*(y4-fl2y));
+      distover=vcl_sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))+
+             vcl_sqrt((x4-fl2x)*(x4-fl2x)+(y4-fl2y)*(y4-fl2y));
     }
     else
     {
       dist=dist1+dist2;
-      distover=sqrtf((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))+
-             sqrtf((fl1x-fl2x)*(fl1x-fl2x)+(fl1y-fl2y)*(fl1y-fl2y));
+      distover=vcl_sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))+
+             vcl_sqrt((fl1x-fl2x)*(fl1x-fl2x)+(fl1y-fl2y)*(fl1y-fl2y));
     }
   }
   else if(x1!=-1) //case 2
@@ -333,29 +333,29 @@ double vmal_track_lines::dist(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
     {
       dist+=vcl_min(dist3,dist4);
       if (dist3<dist4)
-      distover=sqrtf((x3-fl1x)*(x3-fl1x)+(y3-fl1y)*(y3-fl1y))+
-             sqrtf((x1-tl1x)*(x1-tl1x)+(y1-tl1y)*(y1-tl1y));
+      distover=vcl_sqrt((x3-fl1x)*(x3-fl1x)+(y3-fl1y)*(y3-fl1y))+
+             vcl_sqrt((x1-tl1x)*(x1-tl1x)+(y1-tl1y)*(y1-tl1y));
       else
-      distover=sqrtf((x4-fl1x)*(x4-fl1x)+(y4-fl1y)*(y4-fl1y))+
-             sqrtf((x1-tl2x)*(x1-tl2x)+(y1-tl2y)*(y1-tl2y));
+      distover=vcl_sqrt((x4-fl1x)*(x4-fl1x)+(y4-fl1y)*(y4-fl1y))+
+             vcl_sqrt((x1-tl2x)*(x1-tl2x)+(y1-tl2y)*(y1-tl2y));
     }
     else if(x3!=-1)
     {
       dist+=dist3;
-      distover=sqrtf((x3-fl1x)*(x3-fl1x)+(y3-fl1y)*(y3-fl1y))+
-             sqrtf((x1-tl1x)*(x1-tl1x)+(y1-tl1y)*(y1-tl1y));
+      distover=vcl_sqrt((x3-fl1x)*(x3-fl1x)+(y3-fl1y)*(y3-fl1y))+
+             vcl_sqrt((x1-tl1x)*(x1-tl1x)+(y1-tl1y)*(y1-tl1y));
     }
     else if(x4!=-1)
     {
       dist+=dist4;
-      distover=sqrtf((x4-fl1x)*(x4-fl1x)+(y4-fl1y)*(y4-fl1y))+
-             sqrtf((x1-tl2x)*(x1-tl2x)+(y1-tl2y)*(y1-tl2y));
+      distover=vcl_sqrt((x4-fl1x)*(x4-fl1x)+(y4-fl1y)*(y4-fl1y))+
+             vcl_sqrt((x1-tl2x)*(x1-tl2x)+(y1-tl2y)*(y1-tl2y));
     }
     else
     {
     // dist=2*dist;
-    // distover=vcl_min(sqrtf((x1-tl2x)*(x1-tl2x)+(y1-tl2y)*(y1-tl2y)),
-          // sqrtf((x1-tl1x)*(x1-tl1x)+(y1-tl1y)*(y1-tl1y)));
+    // distover=vcl_min(vcl_sqrt((x1-tl2x)*(x1-tl2x)+(y1-tl2y)*(y1-tl2y)),
+          // vcl_sqrt((x1-tl1x)*(x1-tl1x)+(y1-tl1y)*(y1-tl1y)));
       dist=-1;
       distover=1;
     }
@@ -368,23 +368,23 @@ double vmal_track_lines::dist(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
     {
       dist+=vcl_min(dist3,dist4);
       if (dist3<dist4)
-      distover=sqrtf((x3-fl2x)*(x3-fl2x)+(y3-fl2y)*(y3-fl2y))+
-             sqrtf((x2-tl1x)*(x2-tl1x)+(y2-tl1y)*(y2-tl1y));
+      distover=vcl_sqrt((x3-fl2x)*(x3-fl2x)+(y3-fl2y)*(y3-fl2y))+
+             vcl_sqrt((x2-tl1x)*(x2-tl1x)+(y2-tl1y)*(y2-tl1y));
       else
-      distover=sqrtf((x4-fl2x)*(x4-fl2x)+(y4-fl2y)*(y4-fl2y))+
-             sqrtf((x2-tl2x)*(x2-tl2x)+(y2-tl2y)*(y2-tl2y));
+      distover=vcl_sqrt((x4-fl2x)*(x4-fl2x)+(y4-fl2y)*(y4-fl2y))+
+             vcl_sqrt((x2-tl2x)*(x2-tl2x)+(y2-tl2y)*(y2-tl2y));
     }
     else if(x3!=-1)
     {
       dist+=dist3;
-      distover=sqrtf((x3-fl2x)*(x3-fl2x)+(y3-fl2y)*(y3-fl2y))+
-             sqrtf((x2-tl1x)*(x2-tl1x)+(y2-tl1y)*(y2-tl1y));
+      distover=vcl_sqrt((x3-fl2x)*(x3-fl2x)+(y3-fl2y)*(y3-fl2y))+
+             vcl_sqrt((x2-tl1x)*(x2-tl1x)+(y2-tl1y)*(y2-tl1y));
     }
     else if (x4!=-1)
     {
       dist+=dist4;
-      distover=sqrtf((x4-fl2x)*(x4-fl2x)+(y4-fl2y)*(y4-fl2y))+
-             sqrtf((x2-tl2x)*(x2-tl2x)+(y2-tl2y)*(y2-tl2y));
+      distover=vcl_sqrt((x4-fl2x)*(x4-fl2x)+(y4-fl2y)*(y4-fl2y))+
+             vcl_sqrt((x2-tl2x)*(x2-tl2x)+(y2-tl2y)*(y2-tl2y));
     }
     else
     {
@@ -395,13 +395,13 @@ double vmal_track_lines::dist(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
   else
   {
     dist=dist3+dist4;
-    distover=sqrtf((x3-x4)*(x3-x4)+(y3-y4)*(y3-y4))+
-         sqrtf((tl1x-tl2x)*(tl1x-tl2x)+(tl1y-tl2y)*(tl1y-tl2y));
+    distover=vcl_sqrt((x3-x4)*(x3-x4)+(y3-y4)*(y3-y4))+
+         vcl_sqrt((tl1x-tl2x)*(tl1x-tl2x)+(tl1y-tl2y)*(tl1y-tl2y));
   }
 
 
-  //double length=sqrtf((tl1x-tl2x)*(tl1x-tl2x)+(tl1y-tl2y)*(tl1y-tl2y))+
-//        sqrtf((fl1x-fl2x)*(fl1x-fl2x)+(fl1y-fl2y)*(fl1y-fl2y));
+  //double length=vcl_sqrt((tl1x-tl2x)*(tl1x-tl2x)+(tl1y-tl2y)*(tl1y-tl2y))+
+//        vcl_sqrt((fl1x-fl2x)*(fl1x-fl2x)+(fl1y-fl2y)*(fl1y-fl2y));
 
   return (dist/distover);
 }
