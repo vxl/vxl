@@ -12,15 +12,15 @@ void test_gauss_reduce_float()
   vcl_cout << "*****************************\n";
 
   int ni = 20, nj = 20, nk = 20;
-  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" z "<<nk<<vcl_endl;
+  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" k "<<nk<<vcl_endl;
 
   vil3d_image_view<float> image0;
   image0.resize(ni,nj,nk);
 
-  for (int z=0;z<image0.nk();++z)
-    for (int y=0;y<image0.nj();++y)
-      for (int x=0;x<image0.ni();++x)
-        image0(x,y,z) = x*0.1f+y+z*10;
+  for (int k=0;k<image0.nk();++k)
+    for (int j=0;j<image0.nj();++j)
+      for (int i=0;i<image0.ni();++i)
+        image0(i,j,k) = i*0.1f+j+k*10;
 
 
   int ni2 = (ni+1)/2;
@@ -28,19 +28,111 @@ void test_gauss_reduce_float()
   int nk2 = (nk+1)/2;
   vil3d_image_view<float> image1,work_im1,work_im2;
   vil3d_gauss_reduce(image0,image1,work_im1,work_im2);
-  TEST("size x",image1.ni(),(ni+1)/2);
-  TEST("size y",image1.nj(),(nj+1)/2);
-  TEST("size z",image1.nk(),(nk+1)/2);
+  TEST("size i",image1.ni(),(ni+1)/2);
+  TEST("size j",image1.nj(),(nj+1)/2);
+  TEST("size k",image1.nk(),(nk+1)/2);
   TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
   TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,1,1),1e-6);
   TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),66.4f,1e-6);
   TEST_NEAR("Corner pixel",image0(ni2*2-2,nj2*2-2,nk2*2-2),image1(ni2-1,nj2-1,nk2-1),1e-6);
 }
 
+// Check in-homogeneous smoothing option (ie onlj smooth in i,j but not k on some levels)
+void test_gauss_reduce_ij()
+{
+  vcl_cout<<"test_gauss_reduce_ij()"<<vcl_endl;
+  int ni = 20, nj = 20, nk = 10;
+
+  vil3d_image_view<float> image0;
+  image0.resize(ni,nj,nk);
+
+  for (int k=0;k<image0.nk();++k)
+    for (int j=0;j<image0.nj();++j)
+      for (int i=0;i<image0.ni();++i)
+        image0(i,j,k) = i*0.1f+j+k*10;
+
+  int ni2 = (ni+1)/2;
+  int nj2 = (nj+1)/2;
+  int nk2 = nk;  // Shouldn't change first level
+
+  vil3d_image_view<float> image1, work_im;
+  vil3d_gauss_reduce_ij(image0,image1,work_im);
+
+  TEST("Level 1 size i",image1.ni(),ni2);
+  TEST("Level 1 size j",image1.nj(),nj2);
+  TEST("Level 1 size k",image1.nk(),ni2);
+  TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
+  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,1,2),1e-6);
+  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),36.4f,1e-6);
+  TEST_NEAR("Corner pixel",image0(ni2*2-2,nj2*2-2,nk2-1),image1(ni2-1,nj2-1,nk2-1),1e-6);
+}
+
+// Check in-homogeneous smoothing option (ie onlj smooth in i,k but not j on some levels)
+void test_gauss_reduce_ik()
+{
+  vcl_cout<<"test_gauss_reduce_ik()"<<vcl_endl;
+  int ni = 20, nj = 10, nk = 20;
+
+  vil3d_image_view<float> image0;
+  image0.resize(ni,nj,nk);
+
+  for (int k=0;k<image0.nk();++k)
+    for (int j=0;j<image0.nj();++j)
+      for (int i=0;i<image0.ni();++i)
+        image0(i,j,k) = i*0.1f+j+k*10;
+
+  vil3d_image_view<float> image1, work_im;
+  vil3d_gauss_reduce_ik(image0,image1,work_im);
+
+  int ni2 = (ni+1)/2;
+  int nj2 = nj;   // Shouldn't change first level
+  int nk2 = (nk+1)/2;
+  TEST("Level 1 size i",image1.ni(),ni2);
+  TEST("Level 1 size j",image1.nj(),nj2);
+  TEST("Level 1 size k",image1.nk(),ni2);
+  TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
+  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,2,1),1e-6);
+  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),63.4f,1e-6);
+  TEST_NEAR("Corner pixel",image0(ni2*2-2,nj2-1,nk2*2-2),image1(ni2-1,nj2-1,nk2-1),1e-6);
+}
+
+// Check in-homogeneous smoothing option (ie onlj smooth in j,k but not i on some levels)
+void test_gauss_reduce_jk()
+{
+  vcl_cout<<"test_gauss_reduce_jk()"<<vcl_endl;
+  int ni = 10, nj = 20, nk = 20;
+
+  vil3d_image_view<float> image0;
+  image0.resize(ni,nj,nk);
+
+  for (int k=0;k<image0.nk();++k)
+    for (int j=0;j<image0.nj();++j)
+      for (int i=0;i<image0.ni();++i)
+        image0(i,j,k) = i*0.1f+j+k*10;
+
+  vil3d_image_view<float> image1, work_im;
+  vil3d_gauss_reduce_jk(image0,image1,work_im);
+
+  int ni2 = ni;    // Shouldn't change first level
+  int nj2 = (nj+1)/2;
+  int nk2 = (nk+1)/2;
+  TEST("Level 1 size i",image1.ni(),ni2);
+  TEST("Level 1 size j",image1.nj(),nj2);
+  TEST("Level 1 size k",image1.nk(),ni2);
+  TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
+  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(2,1,1),1e-6);
+  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),66.2f,1e-6);
+  TEST_NEAR("Corner pixel",image0(ni2-1,nj2*2-2,nk2*2-2),image1(ni2-1,nj2-1,nk2-1),1e-6);
+}
+
+
 MAIN( test_gauss_reduce )
 {
   START( "vil3d_gauss_reduce" );
   test_gauss_reduce_float();
+  test_gauss_reduce_ij();
+  test_gauss_reduce_ik();
+  test_gauss_reduce_jk();
 
   SUMMARY();
 }
