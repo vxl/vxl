@@ -152,7 +152,7 @@ MAIN( test_irls )
   testlib_test_perform( irls != 0 );
 
   //  Setting max iteration parameters.
-  max_iterations = 15;
+  max_iterations = 25;
   irls->set_max_iterations( max_iterations );
 
   //  Setting scale estimation parameters.
