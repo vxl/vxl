@@ -33,7 +33,8 @@
 #include <vcl/vcl_iosfwd.h>
 
 struct JPEG_DecompressorPrivates;
-struct JPEG_Decompressor {
+class JPEG_Decompressor {
+public:
   JPEG_Decompressor(ifstream& s);
   JPEG_Decompressor(int fd);
   ~JPEG_Decompressor();
