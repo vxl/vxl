@@ -96,8 +96,7 @@ proposal - IMS.
 *** Configuration - How do people structure their internal private code that uses VXL?
 Remove this line to "second" this item if you think this is something we should discuss.
 
-*** Language - Is anyone interested in TCL/Python bindings
-Remove this line to "second" this item if you think this is something we should discuss.
+*** Language - Is anyone interested in TCL/Python/Matlab bindings
 
 *** V3P - NEW: Move netlib from LINPACK to LAPACK
 Any volunteers?
