@@ -68,6 +68,13 @@ public:
     return (i > j) ? index_[i][j] : index_[j][i];
   }
 
+  //: Access a half-row of data.
+  // Only the first i+1 values from this pointer are valid.
+  const T* operator [] (unsigned i) const {
+    assert (i < nn_);
+    return index_[i];
+  }
+
   //: fast access, however i >= j
   T fast (unsigned i, unsigned j) const {
     assert (i >= j);
