@@ -16,15 +16,16 @@ inline istream& operator>>(istream& s, signed char& c)
   return s;
 }
 
-// This is not there.
+// This is not provided in the compiler headers.
 #undef  vcl_streamsize
 #define vcl_streamsize   unsigned
 
-// ios::openmode is a bitmap (but possibly implemented as an enum).
-// On SGI it's called ios::open_mode.
-// The SGI compiler thinks that "enum | enum" is an int,
-// while the standard says that "bitmap | bitmap" is a bitmap.
-// So we don't use ios::open_mode but define or own:
+// The type std::ios_base::openmode is required to be a "bitmask
+// type" (a technical concept [27.2.1.4] which includes enums).
+// For the SGI streams the equivalent type is called ios::open_mode.
+// Moreover, the SGI compiler thinks that "enum | enum" is an int,
+// while the standard says [17.3.2.1.2] that "bitmask | bitmask" is
+// a bitmask type. So we don't use ios::open_mode but define or own:
 #undef  vcl_ios_openmode
 #define vcl_ios_openmode vcl_ios_openmode
 struct vcl_ios_openmode
