@@ -15,6 +15,7 @@ SET(oxp_sources
  oxp_bunch_of_files.cxx     oxp_bunch_of_files.h
  oxp_yuv_to_rgb.cxx         oxp_yuv_to_rgb.h
  oxp_vidl_moviefile.cxx     oxp_vidl_moviefile.h
+ oxp_vob_frame_index.cxx    oxp_vob_frame_index.h
 
  ImageWarp.txx              ImageWarp.h
  MapInverter.h
