@@ -39,6 +39,7 @@ bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vcl_vector<vsol_point_2d_
 // Copy constructor
 //---------------------------------------------------------------------------
 bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const bsol_intrinsic_curve_2d &other)
+  : vsol_curve_2d(other)
 {
   storage_=new vcl_vector<vsol_point_2d_sptr>(*other.storage_);
   for (unsigned int i=0;i<storage_->size();++i)
@@ -59,7 +60,7 @@ bsol_intrinsic_curve_2d::~bsol_intrinsic_curve_2d()
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr bsol_intrinsic_curve_2d::clone(void) const
 {
-  return new bsol_intrinsic_curve_2d (*this);
+  return new bsol_intrinsic_curve_2d(*this);
 }
 
 //***************************************************************************
@@ -123,14 +124,14 @@ bool bsol_intrinsic_curve_2d::operator==(const vsol_spatial_object_2d& obj) cons
   return
     obj.spatial_type() == vsol_spatial_object_2d::CURVE &&
     ((vsol_curve_2d const&)obj).curve_type() == vsol_curve_2d::POLYLINE
-    ? *this == (bsol_intrinsic_curve_2d const&) (bsol_intrinsic_curve_2d const&) obj
+    ? operator==(static_cast<bsol_intrinsic_curve_2d const&>(static_cast<bsol_intrinsic_curve_2d const&>(obj)))
     : false;
 }
 
 //***************************************************************************
 // Internal status setting functions
 //***************************************************************************
-void bsol_intrinsic_curve_2d::clear (void)
+void bsol_intrinsic_curve_2d::clear(void)
 {
   s_.clear();
   arcLength_.clear();
@@ -158,7 +159,7 @@ bsol_intrinsic_curve_2d::spatial_type(void) const
 //---------------------------------------------------------------------------
 //: Return the curvature of the vertex `i'
 //---------------------------------------------------------------------------
-double bsol_intrinsic_curve_2d::curvature (const int i) const
+double bsol_intrinsic_curve_2d::curvature(const int i) const
 {
   assert(valid_index(i));
   return curvature_[i];
@@ -167,7 +168,7 @@ double bsol_intrinsic_curve_2d::curvature (const int i) const
 //---------------------------------------------------------------------------
 //: Return the angle of the vertex `i'
 //---------------------------------------------------------------------------
-double bsol_intrinsic_curve_2d::angle (const int i) const
+double bsol_intrinsic_curve_2d::angle(const int i) const
 {
   assert(valid_index(i));
   return angle_[i];
@@ -211,38 +212,42 @@ void bsol_intrinsic_curve_2d::set_p1(const vsol_point_2d_sptr &new_p1)
 //---------------------------------------------------------------------------
 //: Add another point to the curve
 //---------------------------------------------------------------------------
-void bsol_intrinsic_curve_2d::add_vertex(const vsol_point_2d_sptr &new_p, bool bRecomputeProterties)
+void bsol_intrinsic_curve_2d::add_vertex(const vsol_point_2d_sptr &new_p, bool bRecomputeProperties)
 {
   storage_->push_back(new_p);
+  if (bRecomputeProperties) computeProperties();
 }
 
 //---------------------------------------------------------------------------
 //: Remove one vertex from the intrinsic curve
 //---------------------------------------------------------------------------
-void bsol_intrinsic_curve_2d::remove_vertex(const int i, bool bRecomputeProterties)
+void bsol_intrinsic_curve_2d::remove_vertex(const int i, bool bRecomputeProperties)
 {
   assert (valid_index(i));
-  storage_->erase (storage_->begin() + i);
+  storage_->erase(storage_->begin() + i);
+  if (bRecomputeProperties) computeProperties();
 }
 
-void bsol_intrinsic_curve_2d::modify_vertex (const int i, double x, double y, bool bRecomputeProterties)
+void bsol_intrinsic_curve_2d::modify_vertex(const int i, double x, double y, bool bRecomputeProperties)
 {
   assert (valid_index(i));
-  (*storage_)[i]->set_x (x);
-  (*storage_)[i]->set_y (y);
+  (*storage_)[i]->set_x(x);
+  (*storage_)[i]->set_y(y);
+  if (bRecomputeProperties) computeProperties();
 }
 
 //: insert into i-1
-void bsol_intrinsic_curve_2d::insert_vertex (const int i, double x, double y, bool bRecomputeProterties)
+void bsol_intrinsic_curve_2d::insert_vertex(const int i, double x, double y, bool bRecomputeProperties)
 {
   assert (valid_index(i));
-  vsol_point_2d_sptr pt = new vsol_point_2d (x,y);
-  vcl_vector< vsol_point_2d_sptr >::iterator it = storage_->begin();
+  vsol_point_2d_sptr pt = new vsol_point_2d(x,y);
+  vcl_vector<vsol_point_2d_sptr>::iterator it = storage_->begin();
   it += i;
-  storage_->insert (it, pt);
+  storage_->insert(it, pt);
+  if (bRecomputeProperties) computeProperties();
 }
 
-void bsol_intrinsic_curve_2d::readCONFromFile (vcl_string fileName)
+void bsol_intrinsic_curve_2d::readCONFromFile(vcl_string fileName)
 {
   double x, y;
   char buffer[2000];
@@ -260,14 +265,14 @@ void bsol_intrinsic_curve_2d::readCONFromFile (vcl_string fileName)
   }
 
   //2)Read in file header.
-  fp.getline (buffer,2000); //CONTOUR
-  fp.getline (buffer,2000); //OPEN/CLOSE
+  fp.getline(buffer,2000); //CONTOUR
+  fp.getline(buffer,2000); //OPEN/CLOSE
   fp >> nPoints;
   vcl_cout << "Number of Points from Contour:" << nPoints << vcl_endl;
 
   for (int i=0;i<nPoints;i++) {
     fp >> x >> y;
-    add_vertex (x,y);
+    add_vertex(x,y);
   }
 
   fp.close();
@@ -291,7 +296,7 @@ void bsol_intrinsic_curve_2d::computeArcLength()
   {
     double cx=(*storage_)[i]->x();
     double cy=(*storage_)[i]->y();
-    double dL = vnl_math_hypot (cx-px,cy-py);
+    double dL = vnl_math_hypot(cx-px,cy-py);
     length_ += dL;
     arcLength_.push_back(length_);
     s_.push_back(dL);
@@ -543,7 +548,7 @@ bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const bsol_intrinsic_curve_2d &
 }
 
 // '=' Assignment operator
-bsol_intrinsic_curve_2d& bsol_intrinsic_curve_2d::operator= (const bsol_intrinsic_curve_2d &rhs)
+bsol_intrinsic_curve_2d& bsol_intrinsic_curve_2d::operator=(const bsol_intrinsic_curve_2d &rhs)
 {
   if (this != &rhs) {
     (*storage_)    = rhs.(*storage_);
@@ -568,7 +573,7 @@ bsol_intrinsic_curve_2d& bsol_intrinsic_curve_2d::operator= (const bsol_intrinsi
 
 
 template <class double,class double>
-void bsol_intrinsic_curve_2d<double,double>::readDataFromFile (vcl_string fileName)
+void bsol_intrinsic_curve_2d<double,double>::readDataFromFile(vcl_string fileName)
 {
 }
 
@@ -581,7 +586,7 @@ OPEN (or CLOSE)
 20 (numPoints)
 x1 y1 x2 y2 x3 y3 ....
 */
-void bsol_intrinsic_curve_2d::readDataFromFile (vcl_string fileName)
+void bsol_intrinsic_curve_2d::readDataFromFile(vcl_string fileName)
 {
   //clear the existing curve data
   if (size() !=0)
@@ -627,7 +632,7 @@ void bsol_intrinsic_curve_2d::readDataFromFile (vcl_string fileName)
   computeProperties();
 }
 
-void bsol_intrinsic_curve_2d::readDataFromVector (vcl_vector<vcl_pair<double,double> > v)
+void bsol_intrinsic_curve_2d::readDataFromVector(vcl_vector<vcl_pair<double,double> > v)
 {
   unsigned int numOfPoints=v.size();
 
