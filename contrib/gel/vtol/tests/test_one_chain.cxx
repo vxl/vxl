@@ -1,4 +1,6 @@
 // This is gel/vtol/tests/test_one_chain.cxx
+#include <vsol/vsol_point_2d.h>
+#include <vdgl/vdgl_digital_curve.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
@@ -139,7 +141,28 @@ int main(int, char **)
   Assert(*oc1 == *oc1_clone);
   Assert(!(*oc1 == *och1));
   Assert(oc1->topology_type()==vtol_topology_object::ONECHAIN);
-
+  //==========================================================================
+  // JLM add a test for the bounding box method use a digital_curve and several
+  // line segments as the geometry - note that this test covers edge and vertex
+  // bounding box methods as well
+  //==========================================================================
+  // construct a digital_curve
+  vsol_point_2d_sptr p0  = new vsol_point_2d(1, 1); 
+  vsol_point_2d_sptr p1  = new vsol_point_2d(5, 5);
+  vsol_curve_2d_sptr dc  = new vdgl_digital_curve(p0, p1);
+  vtol_vertex_2d_sptr vd0 = new vtol_vertex_2d(*p0);
+  vtol_vertex_2d_sptr vd1 = new vtol_vertex_2d(*p1);
+  vtol_edge_sptr e0   = new vtol_edge_2d(*vd0, *vd1, dc);
+  //complete the triangle
+  vtol_vertex_2d_sptr vd2 = new vtol_vertex_2d(0, 4);
+  vtol_edge_sptr e1   = new vtol_edge_2d(*vd1, *vd2);
+  vtol_edge_sptr e2   = new vtol_edge_2d(*vd2, *vd0);
+  vcl_vector<vtol_edge_sptr> edges;
+  edges.push_back(e0);   edges.push_back(e1);   edges.push_back(e2);
+  vtol_one_chain_sptr onch = new vtol_one_chain(edges, true);
+  vcl_cout << "one chain bounds (" << onch->get_min_x() << " " << onch->get_min_y()
+       << "|" << onch->get_max_x() << " " << onch->get_max_y() << ")" << vcl_endl;
+  Assert(onch->get_max_x()==5&&onch->get_max_y()==5);
   vcl_cout << "Finished testing one chain\n\n";
   vcl_cout << "Test Summary: " << success << " tests succeeded, "
            << failures << " tests failed" << (failures?"\t***\n":"\n");
