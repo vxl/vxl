@@ -5,8 +5,8 @@
 
 PROJECT(allvxl)
 
-OPTION(BUILD_TESTS "Should the tests be built?" NO)
-OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" NO)
+OPTION(BUILD_TESTS "Should the tests be built?" YES)
+OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" YES)
 OPTION(WARN_DEPRECATED "Enable runtime warnings for deprecated functions?" YES)
 OPTION(WARN_DEPRECATED_ONCE "Only warn once per function (if runtime warnings are enabled)?" YES)
 OPTION(WARN_DEPRECATED_ABORT "Abort on executing a deprecated function (if runtime warnings are enabled)?" NO)
