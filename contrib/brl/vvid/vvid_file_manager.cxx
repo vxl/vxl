@@ -185,7 +185,7 @@ void vvid_file_manager::set_changing_colors(int num, float *r, float *g, float *
     case 5 : (*r) = s; (*g) = 0; (*b) = s; break;
     default: (*r) = 0; (*g) = 0; (*b) = 0; break; // this will never happen
   }
-  //vcl_cout<<"color : "<<(*r)<<" : "<<(*g)<<" : "<<(*b)<<"\n";
+  //vcl_cout<<"color : "<<(*r)<<" : "<<(*g)<<" : "<<(*b)<<'\n';
 
   return;
 }
@@ -242,10 +242,9 @@ void vvid_file_manager::load_video_file()
   }
   tabs_.clear();
 
-  vidl_movie::frame_iterator pframe(my_movie_);
-  pframe = my_movie_->first();
+  vidl_movie::frame_iterator pframe = my_movie_->first();
   vil1_image img = pframe->get_image();
-  vil1_image second = (my_movie_->first()+1)->get_image();
+  vil1_image second = (++pframe)->get_image();
   height_ = img.height();
   width_ = img.width();
   vcl_cout << "Video Height " << height_ << vcl_endl
@@ -256,14 +255,13 @@ void vvid_file_manager::load_video_file()
   int inc = 40;
   if (cache_frames_)
     {
-      while (pframe!=my_movie_->last())
+      for (pframe = my_movie_->first(); pframe!=my_movie_->last(); ++pframe)
         {
           vil1_image img = pframe->get_image();
           vgui_image_tableau_sptr itab = vgui_image_tableau_new(img);
           bgui_vtol2D_tableau_new  e(itab);
           tabs_.push_back(e);
-          ++pframe;//next video frame
-          vcl_cout << "Loading Frame[" << i << "]:(" <<width_ <<" "<<height_ << ")\n";
+          vcl_cout << "Loading Frame [" << i << "]: (" <<width_ <<'x'<<height_ << ")\n";
           ++inc;
           ++i;
         }
@@ -322,47 +320,46 @@ void vvid_file_manager::un_cached_play()
     vcl_cout << "No movie has been loaded\n";
     return;
   }
-  vidl_movie::frame_iterator pframe(my_movie_);
-  for (pframe=my_movie_->first(); pframe!=my_movie_->last()&&play_video_;
+  for (vidl_movie::frame_iterator pframe=my_movie_->begin();
+       pframe!=my_movie_->end() && play_video_;
        ++pframe)
+  {
+    vgui::out << "frame["<< pframe->get_real_frame_index()<<"]\n";
+    vil1_image img = pframe->get_image();
+    itab0_->set_image(img);
+    // pause by repeating the same frame
+    if (pause_video_)
     {
-      //pause by repeating the same frame
-      if (pause_video_&&play_video_)
-        {
-          if (next_frame_&&pframe!=my_movie_->last()-2)
-            {
-              ++pframe;
-              next_frame_ = false;
-            }
-          if (prev_frame_&&pframe!=my_movie_->first()+2)
-            {
-              --pframe;
-              prev_frame_ = false;
-            }
-          --pframe;
-        }
-      vil1_image img = pframe->get_image();
-      itab0_->set_image(img);
-      if (video_process_&&!pause_video_)
-        {
-          vil1_memory_image_of<unsigned char> image(img);
-          video_process_->add_input_image(image);
-          if (video_process_->execute())
-            {
-              if (video_process_->get_output_type()==vpro_video_process::IMAGE)
-                display_image();
-              if (video_process_->get_output_type()==
-                  vpro_video_process::SPATIAL_OBJECT)
-                display_spatial_objects();
-              if (video_process_->get_output_type()==
-                  vpro_video_process::TOPOLOGY)
-                display_topology();
-            }
-        }
-      vgui::out << "frame["<< pframe->get_real_frame_index()<<"]\n";
-      grid_->post_redraw();
-      vgui::run_till_idle();
+      if (next_frame_)
+      {
+        if (pframe!=my_movie_->last()) ++pframe;
+        next_frame_ = false;
+      }
+      if (prev_frame_)
+      {
+        if (pframe!=my_movie_->first()) --pframe;
+        prev_frame_ = false;
+      }
+      // repeat the same frame by undoing the subsequent ++pframe of the iteration
+      --pframe;
     }
+    else if (video_process_)
+    {
+      vil1_memory_image_of<unsigned char> image(img);
+      video_process_->add_input_image(image);
+      if (video_process_->execute())
+      {
+        if (video_process_->get_output_type()==vpro_video_process::SPATIAL_OBJECT)
+          display_spatial_objects();
+        else if (video_process_->get_output_type()==vpro_video_process::IMAGE)
+          display_image();
+        else if (video_process_->get_output_type()==vpro_video_process::TOPOLOGY)
+          display_topology();
+      }
+    }
+    grid_->post_redraw();
+    vgui::run_till_idle();
+  }
 }
 
 void vvid_file_manager::play_video()
