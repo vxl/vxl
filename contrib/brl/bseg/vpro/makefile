@@ -21,9 +21,12 @@ SOURCES += vpro_harris_corner_process.cxx
 SOURCES += vpro_line_fit_process.cxx
 SOURCES += vpro_edge_line_process.cxx
 SOURCES += vpro_grid_finder_process.cxx
-SOURCES += vpro_corr_tracker_process.cxx
-SOURCES += vpro_info_tracker_process.cxx
-SOURCES += vpro_track_display_process.cxx
+SOURCES += vpro_basis_generator_process.cxx
+SOURCES += vpro_fourier_params.cxx
+SOURCES += vpro_fourier_process.cxx
+SOURCES += vpro_frame_diff_params.cxx
+SOURCES += vpro_spatial_filter_params.cxx
+SOURCES += vpro_spatial_filter_process.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk

@@ -7,6 +7,12 @@ SUBDIRS += sdet
 # video processors
 SUBDIRS += vpro
 
+# tracking
+SUBDIRS += strk
+
+# misc 
+#SUBDIRS += bcons
+
 # segmentation view library
 SUBDIRS += segv
 
