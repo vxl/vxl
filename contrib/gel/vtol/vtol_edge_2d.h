@@ -44,7 +44,6 @@
 #include <vcl_vector.h>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_vertex_2d.h>
-#include <vsol/vsol_curve_2d_sptr.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vtol/vtol_edge.h>
 
