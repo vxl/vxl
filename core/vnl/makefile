@@ -106,3 +106,7 @@ FLAGS_Templates/vnl_c_vector+double_complex-.cxx += $(optimize_for_all_builds)
 include ${IUEROOT}/config/top-rules.mk
 ################################
 
+# on HP unix, this library has become too big, so it needs -fPIC
+ifeq "hpux" "$(findstring hpux,$(OS))"
+pic = $(PIC)
+endif
