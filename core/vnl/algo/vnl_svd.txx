@@ -72,12 +72,21 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
 
     // Error return?
     if (info != 0) {
+      // If info is non-zero, it contains the number of singular values
+      // for this the SVD algorithm failed to converge. The condition is
+      // not bogus. Even if the returned singular values are sensible, 
+      // the singular vectors can be utterly wrong.
+      
+      // It is possible the failure was due to NaNs or infinities in the
+      // matrix. Check for that now.
       M.assert_finite();
-//       *** this warning is bogus! the singular values are OK!
-//       and the matrix is close to identity, most of the times.
-//       cerr << "*** Warning vnl_svd<T>::vnl_svd<T>() ***\n";
-//       cerr << " About " << info << " singular values are wrong\n";
-//       MatOps::matlab_print(cerr, M, "M");
+      
+      // If we get here it might be because the scalar type has such 
+      // extreme precision that too few iterations were performed to
+      // converge to within machine precision (that is the svdc criterion).
+      // The only solution to that is to increase the maximum number of
+      // iterations in the netlib code. Diagnose the problem here by
+      // printing a warning message.
       vcl_cerr << __FILE__ ": suspicious return value (" << info << ") from SVDC" << vcl_endl;
     }
 
