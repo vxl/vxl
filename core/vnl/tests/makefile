@@ -1,5 +1,6 @@
 USES := vxl
 include ${IUEROOT}/vxl/vnl/algo/config.mk
+USE_SOCKETS := 1 # for libvul
 
 TESTS += vnl_test_all.cxx
 TESTS += test_fft.cxx

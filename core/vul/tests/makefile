@@ -1,4 +1,5 @@
 USES = vxl
+USE_SOCKETS := 1 # for libvul
 
 TESTS += vul_test_all.cxx
 TESTS += vul_test_arg.cxx

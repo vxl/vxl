@@ -1,5 +1,6 @@
 USES += vxl
-IULIBS := -lvsl
+USE_SOCKETS := 1 # for libvul
+IULIBS := -lvsl -lvul
 
 TESTS += test_indent.cxx
 TESTS += test_vsl_io.cxx
@@ -22,7 +23,7 @@ include ${IUEROOT}/config/top-params.mk
 #######################################
 
 ifeq "$(TJ_GCC30)" "1" # otherwise gcc 3.0 needs too much virtual memory
-FLAGS_test_vsl_io.cxx += -O1
+FLAGS_test_vsl_io.cxx += -O0
 FLAGS_test_map_io.cxx += -O0
 endif
 
