@@ -33,7 +33,7 @@ int main(int argc, char** argv)
     {
       vil_byte* p = row;
       for (int x=0;x<nx;++x,p+=image.xstep())
-	    *p = vil_byte(x+10*y+100*i);
+        *p = vil_byte(x+10*y+100*i);
     }
   }
 
