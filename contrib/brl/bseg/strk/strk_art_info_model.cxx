@@ -139,8 +139,7 @@ bool strk_art_info_model::transform(const double stem_tx,
 
   stem_pivot_ = btol_face_algs::centroid(faces_[STEM]->face()->cast_to_face_2d());
 #ifdef DEBUG
-  vcl_cout << "Stem Pivot (" << stem_pivot_->x() << " " << stem_pivot_->y()
-           << ") Stem COG(" << cog->x() << " " << cog->y() << ")\n";
+  vcl_cout << "Stem Pivot (" << stem_pivot_->x() << ' ' << stem_pivot_->y() << ")\n";
 #endif
 
  //pivot the tips by the same stem angle
