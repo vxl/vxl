@@ -1,14 +1,16 @@
-#
 # ./oxl/apps/vxl_vrml_viewer/CMakeLists.txt
-#
+
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindQv.cmake)
+
+# Build here only if OpenGL is available:
+IF(HAS_OPENGL)
 
 ADD_EXECUTABLE( vxl_vrml_viewer vxl_vrml_viewer_sources )
 
 SOURCE_FILES( vxl_vrml_viewer_sources main )
 
-INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake )
-INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindQv.cmake )
-
+# Immediate dependencies:
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/osl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/mvl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/CMakeListsLink.txt )
@@ -21,3 +23,4 @@ INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vrml/CMakeListsLink.txt )
 
+ENDIF(HAS_OPENGL)
