@@ -155,9 +155,6 @@ vtol_face_2d::vtol_face_2d(vertex_list &verts)
   // require
   assert(verts.size()>2);
 
-  vsol_point_2d_sptr p0;
-  vsol_point_2d_sptr p1;
-  vsol_point_2d_sptr p2;
   double xmin=0;
   double ymin=0;
   double xmax=1;
@@ -230,7 +227,6 @@ vtol_face_2d::vtol_face_2d(one_chain_list &onechs)
   // 2) This constructor will assume that the
   // surface is an ImplicitPlane().
 
-   vsol_point_2d_sptr p0,p1,p2;
   double xmin=0;
   double ymin=0;
   double xmax=1;
@@ -255,11 +251,9 @@ vtol_face_2d::vtol_face_2d(vtol_one_chain &edgeloop)
 {
   link_inferior(edgeloop);
   topology_list faces;
-  vtol_face_2d* f = (vtol_face_2d*) this;
-  faces.push_back(f);
+  faces.push_back(this);
 
   // big todo
-   vsol_point_2d_sptr p0,p1,p2;
   double xmin=0;
   double ymin=0;
   double xmax=1;
