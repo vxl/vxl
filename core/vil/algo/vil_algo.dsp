@@ -203,6 +203,9 @@ SOURCE=.\vil_blob_finder.cxx
 # Begin Source File
 SOURCE=.\vil_trace_4con_boundary.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vil_trace_8con_boundary.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -334,6 +337,9 @@ SOURCE=.\vil_blob_finder.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_trace_4con_boundary.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_trace_8con_boundary.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
