@@ -16,11 +16,16 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
 
+// Whilst this file should not be used by users, it will likely never be deleted,
+// and will remain in use by a number of files in vsl and vnl/io to provide
+// backwards compatibility. If any of the functions are actually used, a
+// deprecation warning will be sent to cerr.
+
+#include <vcl_deprecated.h>
+
 // The next declaration should be kept with its non-specialist definition.
 // It was this mistake that lead to the full replacement of vsl_b_read_block
 // and vsl_b_write_block with vsl_block_binary_{read,write}.
-#include <vcl_deprecated.h>
-#include <vcl_deprecated_header.h>
 
 //: Read a block of values from a vsl_b_istream
 // If you want to output a block of fundamental data types very efficiently,
