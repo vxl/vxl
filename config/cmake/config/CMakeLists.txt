@@ -12,6 +12,7 @@ INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFileCXX.cmake)
 INCLUDE (${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
 INCLUDE (${CMAKE_ROOT}/Modules/CheckTypeSize.cmake)
 INCLUDE (${CMAKE_ROOT}/Modules/CheckFunctionExists.cmake)
+INCLUDE (${CMAKE_ROOT}/Modules/CheckSymbolExists.cmake)
 
 #
 # Perform the VXL specific test with status output
@@ -35,7 +36,7 @@ MACRO(PERFORM_CMAKE_TEST FILE TEST)
       "${TEST_ADD_LIBRARIES}"
       OUTPUT_VARIABLE OUTPUT)
     IF(${TEST})
-      SET(${TEST} 1 CACHE INTERNAL "Curl test ${FUNCTION}")
+      SET(${TEST} 1 CACHE INTERNAL "VXL test ${FUNCTION}")
       MESSAGE(STATUS "Performing Test ${TEST} - Success")
     ELSE(${TEST})
       MESSAGE(STATUS "Performing Test ${TEST} - Failed")
@@ -134,7 +135,7 @@ MACRO(CHECK_TYPE_EXISTS TYPE FILES VARIABLE)
       FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeError.log 
         "Determining if the ${TYPE} "
         "exist failed with the following output:\n"
-        "${OUTPUT}\nFile ${CMAKE_BINARY_DIR}/CMakeTmp/CheckSymbolExists.c:\n"
+        "${OUTPUT}\nFile ${CMAKE_BINARY_DIR}/CMakeTmp/CheckTypeExists.c:\n"
         "${CHECK_TYPE_EXISTS_CONTENT}\n")
     ENDIF(${VARIABLE})
   ENDIF("${VARIABLE}" MATCHES "^${VARIABLE}$")
@@ -289,6 +290,8 @@ PERFORM_CHECK_HEADER(semaphore.h VXL_HAS_SEMAPHORE_H)
 PERFORM_CHECK_HEADER(ieeefp.h VXL_HAS_IEEEFP_H)
 
 #
+
+CHECK_SYMBOL_EXISTS(sqrtf "math.h" VXL_C_MATH_HAS_SQRTF)
 
 TEST_BIG_ENDIAN(VXL_BIG_ENDIAN)
 
