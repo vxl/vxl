@@ -1,4 +1,4 @@
-//--*-c++-*---this tells emacs to use c++-----
+// This is brl/bseg/sdet/sdet_harris_detector.h
 #ifndef sdet_harris_detector_h_
 #define sdet_harris_detector_h_
 //---------------------------------------------------------------------
@@ -9,15 +9,16 @@
 //  The Harris Corner is defined as a local maximum of 
 //   Det(A)-k*Trace^2(A)
 //  where 
-//                         _                           _
+// \verbatim
+//                        _                           _
 //                       | (dI/dx)^2    (dI/dx)(dI/dy) |
 //                       |                             |
 //  A = Sum(neighborhood)|                             |
 //                       |(dI/dx)(dI/dy)   (dI/dx)^2   |
 //                       |_                           _|
-//
-// over a a 2n+1 x 2n+1 neigborhood
-//  The value of k is typically 0.04 as originally recommended by Harris
+// \endverbatim
+//  over a 2n+1 x 2n+1 neigborhood.
+//  The value of k is typically 0.04 as originally recommended by Harris.
 //
 // Note:
 //  There is a version in osl, but the plan is to build a suite of
@@ -29,7 +30,8 @@
 //  J.L. Mundy - February 26, 2003
 //
 // \verbatim
-// Modifications <none>
+//  Modifications
+//   <none>
 // \endverbatim
 //
 //-------------------------------------------------------------------------
@@ -40,7 +42,7 @@
 
 class sdet_harris_detector : public sdet_harris_detector_params
 {
-public:
+ public:
   //Constructors/destructor
   sdet_harris_detector(sdet_harris_detector_params& rpp);
 
@@ -53,7 +55,7 @@ public:
   void extract_corners();
   void clear();
 
-protected:
+ protected:
   //protected methods
 
   //members
@@ -61,4 +63,5 @@ protected:
   vil1_image image_;  //input image
   vcl_vector<vsol_point_2d_sptr> points_; //resulting corners
 };
+
 #endif // sdet_harris_detector_h_
