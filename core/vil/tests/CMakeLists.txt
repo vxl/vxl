@@ -33,6 +33,7 @@ ADD_EXECUTABLE( vil2_test_driver
   test_algo_threshold.cxx
   test_deep_copy_3_plane.cxx
   test_algo_grid_merge.cxx
+  test_algo_find_4con_boundary.cxx
 )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -71,6 +72,7 @@ ADD_TEST( vil2_test_algo_line_filter  vil2_test_driver test_algo_line_filter)
 ADD_TEST( vil2_test_algo_threshold    vil2_test_driver test_algo_threshold)
 ADD_TEST( vil2_test_deep_copy_3_plane      vil2_test_driver test_deep_copy_3_plane )
 ADD_TEST( vil2_test_algo_grid_merge      vil2_test_driver test_algo_grid_merge )
+ADD_TEST( vil2_test_algo_find_4con_boundary      vil2_test_driver test_algo_find_4con_boundary )
 
 
 # To run timing tests

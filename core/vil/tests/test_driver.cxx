@@ -30,6 +30,7 @@ DECLARE( test_algo_line_filter );
 DECLARE( test_algo_threshold );
 DECLARE( test_deep_copy_3_plane );
 DECLARE( test_algo_grid_merge );
+DECLARE( test_algo_find_4con_boundary );
 
 void
 register_tests()
@@ -64,6 +65,7 @@ register_tests()
   REGISTER( test_algo_threshold );
   REGISTER( test_deep_copy_3_plane );
   REGISTER( test_algo_grid_merge );
+  REGISTER( test_algo_find_4con_boundary );
 }
 
 DEFINE_MAIN;

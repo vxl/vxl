@@ -260,6 +260,13 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_sample_profile_bilin : Sample values along a line (using bilin. interpolation)
 * - vil2_sample_grid_bilin : Sample values over a grid (using bilin. interpolation)
 *
+* \subsection regions Region finding
+* The boundaries of thresholded regions can be found using
+* - vil2_find_4con_boundary_above_threshold
+* - vil2_find_4con_boundary_below_threshold
+* (Given a point inside a closed, 4-connected region defined by a threshold,
+*  these functions find the 4-connected boundary pixels of the region)
+*
 * \subsection conventions Parameter Conventions
 * For your ease of use, all vil2 functions and methods adhere to the following
 * parameter conventions:
