@@ -88,11 +88,11 @@ vmal_rectifier::vmal_rectifier(vcl_vector< vnl_vector<double> >* pts0,
   vcl_vector< vnl_vector<double> >::iterator vit1 = pts1->begin();
   for (int i=0; i<numpoints_; ++i,++vit0,++vit1)
   {
-    points0_[i][0] = (*vit0).x(); // .y()
-    points0_[i][1] = (*vit0).y(); // .x()
+    points0_[i][0] = (*vit0)[0]; // [1]
+    points0_[i][1] = (*vit0)[1]; // [0]
     points0_[i][2] = 1.0;
-    points1_[i][0] = (*vit1).x(); // .y()
-    points1_[i][1] = (*vit1).y(); // .x()
+    points1_[i][0] = (*vit1)[0]; // [1]
+    points1_[i][1] = (*vit1)[1]; // [0]
     points1_[i][2] = 1.0;
   }
 }
