@@ -7,10 +7,13 @@
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
+// \brief Returns an image adaptor which will resample the original image.
+// Note hat resampling will happen only at the point when get_section()
+// is called on the returned image, and only on that (sub)section of the image.
 
 #include <vil/vil_image.h>
 
 //:
-vil_image vil_resample(vil_image const &, unsigned new_width, unsigned new_height);
+vil_image vil_resample(vil_image const &, int new_width, int new_height);
 
 #endif // vil_resample_h_
