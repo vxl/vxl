@@ -97,15 +97,16 @@ void vidl_player_manager::load_video_file()
 
   pframe_ = my_movie_->first();
   vil_image_view_base_sptr img_view = pframe_->get_view();
+  if (img_view) {
+    height_ = img_view->nj();
+    width_ = img_view->ni();
+    vcl_cout << "Video Height " << height_ << vcl_endl
+             << " Video Width " << width_ << vcl_endl;
+    if (win_)
+      win_->reshape(width_, height_);
 
-  height_ = img_view->nj();
-  width_ = img_view->ni();
-  vcl_cout << "Video Height " << height_ << vcl_endl
-           << " Video Width " << width_ << vcl_endl;
-  if (win_)
-    win_->reshape(width_, height_);
-
-  itab_->set_image_view(*img_view);
+    itab_->set_image_view(*img_view);
+  }
 
   if (preload_frames_) {
     vidl_movie::frame_iterator pf = my_movie_->first();
