@@ -71,8 +71,23 @@ void test_gaussian_pyramid_builder_2d_general()
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 9);
 
-  
-  
+  mil_image_2d_of<float> image2(200, 200, 255);
+  mil_image_pyramid image_pyr2;
+  mil_gaussian_pyramid_builder_2d_general<float> builder2;
+  builder2.set_scale_step(1.2);
+  builder2.build(image_pyr2, image2);
+  bool all_less_than_256 = true;
+  bool all_more_than_254 = true;
+  for (int y=0;y<image0.ny();++y)
+     for (int x=0;x<image0.nx();++x)
+     {
+       if (image0(x,y) > 255.01) all_less_than_256 = false;
+       if (image0(x,y) < 254.99) all_more_than_254 = false;
+     }
+
+  TEST("No drift upwards in a float pyramid", all_less_than_256, true);
+  TEST("No drift downwards in a float pyramid", all_less_than_256, true);
+
   vcl_cout<<"\n\n======== TESTING I/O ==========="<<vcl_endl;
 
   vsl_add_to_binary_loader(mil_gaussian_pyramid_builder_2d_general<vil_byte>());
