@@ -185,9 +185,25 @@ bool strk_art_model_display_process::execute()
     n_models = tracked_models_.size();
     if (!n_models)
     {
-      vcl_cout << "In strk_art_model_display_process::execute() -"
-               << " no models found in track file\n";
-      failure_ = true;
+      first_frame_ = false;
+      const char* file = track_file_.c_str();
+      vcl_ifstream str = vcl_ifstream(file);
+      if(!str.is_open())
+        {
+          vcl_cout << "In strk_art_model_display_process::execute() -"
+                   << " could not open file " << track_file_ << "\n";
+          failure_ = true;
+          return false;
+        }
+        
+      this->input_tracked_models(str);
+      n_models = tracked_models_.size();
+      if(!n_models)
+        {
+          vcl_cout << "In strk_art_model_display_process::execute() -"
+                   << " no models found in track file\n";
+          failure_ = true;
+        }
     }
   }
   int frame_index = this->frame_index();
