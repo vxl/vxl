@@ -752,6 +752,7 @@ void vnl_bignum::dump (vcl_ostream& os) const
 
 int vnl_bignum::dtoBigNum (const char *s)
 {
+  this->resize(0); sign = 1;            // Reset number to 0. 
   Counter len = 0;                      // No chars converted yet
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
   if (s[0] == '-' || s[0] == '+') len++;// Skip over leading +,-
@@ -792,6 +793,7 @@ unsigned int ctox (int c)
 
 void vnl_bignum::xtoBigNum (const char *s)
 {
+  this->resize(0); sign = 1;            // Reset number to 0. 
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
   Counter size = vcl_strlen(s);
   Counter len = 2;                      // skip leading "0x"
@@ -806,6 +808,7 @@ void vnl_bignum::xtoBigNum (const char *s)
 
 void vnl_bignum::otoBigNum (const char *s)
 {
+  this->resize(0); sign = 1;           // Reset number to 0. 
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
   Counter size = vcl_strlen(s);
   Counter len = 0;                      // No chars converted yet
