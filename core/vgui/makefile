@@ -8,6 +8,7 @@ IMMEDIATE_LIBS += -lvil -lvbl -lvnl-algo -lvnl -lvul
 
 # basic classes
 SOURCES += vgui.cxx
+SOURCES += vgui_register_all.cxx
 SOURCES += vgui_toolkit.cxx
 SOURCES += vgui_tag.cxx
 SOURCES += vgui_window.cxx
