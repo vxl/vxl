@@ -20,6 +20,7 @@ MANPAGE_SOURCES += vimt_sample_profile_bilin.txx
 MANPAGE_SOURCES += vimt_bilin_interp.h
 MANPAGE_SOURCES += vimt_resample_bilin.h
 MANPAGE_SOURCES += vimt_sample_grid_bilin.txx
+MANPAGE_SOURCES += vimt_sample_grid_bicub.txx
 MANPAGE_SOURCES += vimt_crop.h
 
 SUBDIRS += algo
