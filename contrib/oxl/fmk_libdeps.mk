@@ -2,6 +2,8 @@
 # fsm@robots.ox.ac.uk
 #
 
+fmk_libdeps += lib_vsl:lib_vil,lib_vbl,lib_vnl-algo,pkg_oxl
+
 fmk_libdeps += lib_mvox:lib_mvl
 fmk_libdeps += lib_oxp:lib_vbl,lib_vil,lib_vnl-algo
 fmk_libdeps += lib_mvl:lib_vnl-algo,lib_vgl,lib_vbl,lib_vil
