@@ -31,14 +31,17 @@ ifeq ("$(HAS_JPEG)-$(HAS_BROKEN_AS)","1-")
 SOURCES += SGIMovieFile.cxx
 SOURCES += SGIMovieFilePrivates.cxx
 SOURCES += SGIMovieFileWrite.cxx
+ifeq "$(TJ_GCC30)" "1"
+FLAGS_SGIMovieFile.cxx += -O1 # otherwise gcc 3.0 needs too much virtual memory
+endif
 else
 TEMPLATE_SOURCES := $(subst Templates/vector+SGIMV_Variables-.cxx,,$(TEMPLATE_SOURCES))
 endif
 SOURCES += ImageSequenceMovieFile.cxx
 
-SOURCES += vsl_conic_as_params.cxx
-SOURCES += vsl_conic_as_matrix.cxx
-SOURCES += vsl_conic_points.cxx
+#SOURCES += vsl_conic_as_params.cxx
+#SOURCES += vsl_conic_as_matrix.cxx
+#SOURCES += vsl_conic_points.cxx
 
 SOURCES += oxp_bunch_of_files.cxx
 SOURCES += oxp_vidl_moviefile.cxx
