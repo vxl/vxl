@@ -1,9 +1,10 @@
+// This is mul/vil2/algo/vil2_sobel_3x3.h
 #ifndef vil2_sobel_3x3_h_
 #define vil2_sobel_3x3_h_
 //:
-//  \file
-//  \brief Apply 3x3 sobel operator to image data
-//  \author Tim Cootes
+// \file
+// \brief Apply 3x3 sobel operator to image data
+// \author Tim Cootes
 
 #include <vil2/vil2_image_view.h>
 
