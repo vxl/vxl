@@ -734,7 +734,7 @@ void vnl_bignum::dump (vcl_ostream& os) const
   //  format_str[2] = char(2*2 + '0');
   if (this->count > 0) { // output data array
     for (Counter i = this->count; i > 1; i--)
-      os << (this->data[i - 1]) << ",";
+      os << (this->data[i - 1]) << ',';
     os << (this->data[0]);
   }
   os << "}}\n";                         // close brackets
@@ -1128,7 +1128,7 @@ Data multiply_subtract (vnl_bignum& u, const vnl_bignum& v, Data q_hat, Counter 
 
 
 //: divide b2 into b1, getting quotient q and remainder r.
-// (Refer to Knuth, V.2, Seciton 4.3.1, Algorithm D for details.
+// (Refer to Knuth, V.2, Section 4.3.1, Algorithm D for details.
 //  This function implements Algorithm D.)
 // - Inputs:  references to a vnl_bignum dividend b1, divisor b2, quotient q, and
 //            remainder r.
