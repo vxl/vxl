@@ -2,7 +2,7 @@
 // \author Peter.Vanroose@esat.kuleuven.ac.be
 // \date  4 July, 2001
 
-#include <vgl/vgl_test.h>
+#include <testlib/testlib_test.h>
 #define APPROX(a,b,c) TEST(a,((b)-(c)<1e-6 && (c)-(b)<1e-6),true)
 #include <vcl_iostream.h>
 
@@ -375,7 +375,9 @@ static void test_box_3d()
   TEST("box has no volume", b.volume(), 0.0);
 }
 
-void test_cartesian() {
+MAIN( test_cartesian )
+{
+  START( "test cartesian" );
   vcl_cout << "--- test_vector_2d ---\n";
   test_vector_2d();
   vcl_cout << "--- test_vector_3d ---\n";
@@ -392,6 +394,5 @@ void test_cartesian() {
   test_box_2d();
   vcl_cout << "--- test_box_3d ---\n";
   test_box_3d();
+  SUMMARY();
 }
-
-TESTMAIN(test_cartesian);

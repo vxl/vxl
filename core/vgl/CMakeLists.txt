@@ -3,33 +3,52 @@
 ADD_LIBRARY(vgl vgl_sources)
 
 SOURCE_FILES( vgl_sources
-  vgl_clip.cxx
-  vgl_distance.cxx
-  vgl_polygon.cxx
+  vgl_fwd.h
 
-  vgl_polygon_test.cxx
-  vgl_lineseg_test.cxx
-  vgl_triangle_test.cxx
+  vgl_clip.h                     vgl_clip.cxx
+  vgl_area.h                     vgl_area.cxx
+  vgl_distance.h                 vgl_distance.cxx
 
-  vgl_region_scan_iterator.cxx
-  vgl_polygon_scan_iterator.cxx
-  vgl_triangle_scan_iterator.cxx
-  vgl_ellipse_scan_iterator.cxx
+  vgl_polygon.h                  vgl_polygon.cxx
 
-  vgl_test.cxx
-  vgl_window_scan_iterator.cxx
-  vgl_1d_basis.cxx
+  vgl_polygon_test.h             vgl_polygon_test.cxx
+  vgl_lineseg_test.h             vgl_lineseg_test.cxx
+  vgl_triangle_test.h            vgl_triangle_test.cxx
 
-  vgl_homg.cxx
+  vgl_region_scan_iterator.h     vgl_region_scan_iterator.cxx
+  vgl_polygon_scan_iterator.h    vgl_polygon_scan_iterator.cxx
+  vgl_triangle_scan_iterator.h   vgl_triangle_scan_iterator.cxx
+  vgl_ellipse_scan_iterator.h    vgl_ellipse_scan_iterator.cxx
+
+  vgl_window_scan_iterator.h     vgl_window_scan_iterator.cxx
+  vgl_1d_basis.h                 vgl_1d_basis.cxx  vgl_1d_basis.txx
+
+  vgl_homg.h                     vgl_homg.cxx
+  vgl_homg_1d.h                  vgl_homg_1d.txx
+  vgl_homg_line_2d.h             vgl_homg_line_2d.txx
+  vgl_homg_line_3d_2_points.h    vgl_homg_line_3d_2_points.txx
+  vgl_homg_plane_3d.h            vgl_homg_plane_3d.txx
+  vgl_homg_point_1d.h            vgl_homg_point_1d.txx
+  vgl_homg_point_2d.h            vgl_homg_point_2d.txx
+  vgl_homg_point_3d.h            vgl_homg_point_3d.txx
+  vgl_line_2d.h                  vgl_line_2d.txx
+  vgl_line_segment_2d.h          vgl_line_segment_2d.txx
+  vgl_line_segment_3d.h          vgl_line_segment_3d.txx
+  vgl_plane_3d.h                 vgl_plane_3d.txx
+  vgl_point_2d.h                 vgl_point_2d.txx
+  vgl_point_3d.h                 vgl_point_3d.txx
+
+  vgl_vector_2d.h                vgl_vector_2d.txx
+  vgl_vector_3d.h                vgl_vector_3d.txx
+
+  vgl_box_2d.h                   vgl_box_2d.txx
+  vgl_box_3d.h                   vgl_box_3d.txx
+  vgl_conic.h                    vgl_conic.txx
+
+  internals/gpc.h                internals/gpc.c
 )
 
 AUX_SOURCE_DIRECTORY(Templates vgl_sources)
-
-IF (WIN32)
-  IF (NOT CYGWIN)
-    INCLUDE(${allvxl_SOURCE_DIR}/vxl/vgl/CMakeListsHeaders.txt)
-  ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
 
 SUBDIRS( algo )
 SUBDIRS( io )

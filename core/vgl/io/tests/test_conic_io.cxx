@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vgl/vgl_test.h>
+#include <testlib/testlib_test.h>
 #include <vgl/io/vgl_io_conic.h>
 
 void test_conic_double_io()

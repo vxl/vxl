@@ -1,4 +1,4 @@
-#include <vgl/vgl_test.h>
+#include <testlib/testlib_test.h>
 
 #include <vgl/vgl_ellipse_scan_iterator.h>
 
@@ -78,14 +78,14 @@ test_degenerate()
   TEST("point at non-integer coordinates", ellipse5.count(), 0 );
 }
 
-int main()
+MAIN( test_ellipse_scan_iterator )
 {
-  vgl_test_start("Ellipse scan iterator");
+  START("Ellipse scan iterator");
 
   test_circle();
   test_ellipse();
   test_sliver();
   test_degenerate();
 
-  return vgl_test_summary();
+  SUMMARY();
 }

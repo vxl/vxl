@@ -1,3 +1,5 @@
+#include <testlib/testlib_test.h>
+
 #include <vgl/io/vgl_io_box_2d.h>
 #include <vgl/io/vgl_io_box_3d.h>
 #include <vgl/io/vgl_io_conic.h>
@@ -15,4 +17,7 @@
 #include <vgl/io/vgl_io_vector_2d.h>
 #include <vgl/io/vgl_io_vector_3d.h>
 
-int main() { return 0; }
+MAIN( test_includes )
+{
+  return 0;
+}

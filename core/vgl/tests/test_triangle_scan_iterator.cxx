@@ -1,10 +1,14 @@
+#include <testlib/testlib_test.h>
+
 #include <vcl_iostream.h>
 
 #include <vgl/vgl_triangle_scan_iterator.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 
-int main(int, char **)
+MAIN( test_triangle_scan_iterator )
 {
+  vcl_cout << "Test triangle scan iterator" << vcl_endl;
+
   float x[3] = { 10.23f, 20.12f, 30.73f };
   float y[3] = { 20.54f, 10.39f, 30.11f };
 
@@ -29,7 +33,7 @@ int main(int, char **)
   if( ti_more != pi.next() ) failed = true;
 
   if( failed ) {
-    vcl_cout << "Triangle scan iterator != polygon scan iterator -> FAILED\n";
+    vcl_cout << "Triangle scan iterator != polygon scan iterator -> **FAILED**\n";
   } else {
     vcl_cout << "Triangle scan iterator = polygon scan iterator  -> PASSED\n";
   }

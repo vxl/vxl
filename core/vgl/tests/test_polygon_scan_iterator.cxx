@@ -1,7 +1,7 @@
 // Polygon scan iterator tests
 // Amitha Perera, Apr 2002
 
-#include <vgl/vgl_test.h>
+#include <testlib/testlib_test.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 
@@ -21,7 +21,7 @@ test_basic_iteration()
   poly.push_back( Point_type( 2.3f, 2.6f) );
   poly.push_back( Point_type( 2.3f,-0.4f) );
 
-  vgl_test_begin("iteration");
+  testlib_test_begin("iteration");
   unsigned int count=0;
   Polygon_scan scan_itr(poly);
   for( scan_itr.reset(); scan_itr.next(); ) {
@@ -32,7 +32,7 @@ test_basic_iteration()
   // graphics derivation. I haven't done a detailed analysis of the
   // algorithm to determine what the correct count should be, so I'll
   // just leave it at non-zero is good.
-  vgl_test_perform( count != 0 );
+  testlib_test_perform( count != 0 );
 }
 
 
@@ -47,7 +47,7 @@ test_denegrate_polygon()
     poly.push_back( Point_type( 39, 39) );
     poly.push_back( Point_type( 10, 10) );
 
-    vgl_test_begin("zero-lengthed edges");
+    testlib_test_begin("zero-lengthed edges");
     Polygon_scan scan_itr( poly );
     unsigned int count=0;
     for( scan_itr.reset(); scan_itr.next(); ) {
@@ -56,27 +56,29 @@ test_denegrate_polygon()
     // See comment above. True count should be 465. Current
     // implementation returns 464, probably because the singleton point
     // at the top isn't being counted.
-    vgl_test_perform( count > 460 );
+    testlib_test_perform( count > 460 );
   }
 
   {
     Polygon_type poly;
 
-    vgl_test_begin("empty polygon");
+    testlib_test_begin("empty polygon");
     Polygon_scan scan_itr( poly );
     unsigned int count=0;
     for( scan_itr.reset(); scan_itr.next(); ) {
       count += scan_itr.endx() - scan_itr.startx() + 1;
     }
-    vgl_test_perform( count == 0 );
+    testlib_test_perform( count == 0 );
   }
 }
 
 
-int main()
+MAIN( test_polygon_scan_iterator )
 {
-  vgl_test_start("vgl_polygon_scan_iterator");
+  START("vgl_polygon_scan_iterator");
+
   test_basic_iteration();
   test_denegrate_polygon();
-  return vgl_test_summary();
+
+  SUMMARY();
 }

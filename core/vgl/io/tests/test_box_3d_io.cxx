@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vgl/vgl_test.h>
+#include <testlib/testlib_test.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/io/vgl_io_box_3d.h>
 
@@ -34,9 +34,9 @@ void test_box_3d_double_io()
   vcl_cout << vcl_endl;
 }
 
-void test_box_3d_prime()
+MAIN( test_box_3d_io )
 {
+  START( "test box_3d IO" );
   test_box_3d_double_io();
+  SUMMARY();
 }
-
-TESTMAIN(test_box_3d_prime);

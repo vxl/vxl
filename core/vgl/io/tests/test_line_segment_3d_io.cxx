@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vgl/vgl_test.h>
+#include <testlib/testlib_test.h>
 #include <vgl/io/vgl_io_line_segment_3d.h>
 
 void test_line_segment_3d_double_io()
@@ -35,9 +35,9 @@ void test_line_segment_3d_double_io()
   vcl_cout << vcl_endl;
 }
 
-void test_line_segment_3d_prime()
+void test_line_segment_3d_io()
 {
   test_line_segment_3d_double_io();
 }
 
-TESTMAIN(test_line_segment_3d_prime);
+TESTMAIN(test_line_segment_3d_io);

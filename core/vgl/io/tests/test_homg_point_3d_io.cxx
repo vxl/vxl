@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vgl/vgl_test.h>
+#include <testlib/testlib_test.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/io/vgl_io_homg_point_3d.h>
 
@@ -34,9 +34,9 @@ void test_homg_point_3d_double_io()
   vcl_cout << vcl_endl;
 }
 
-void test_homg_point_3d_prime()
+void test_homg_point_3d_io()
 {
   test_homg_point_3d_double_io();
 }
 
-TESTMAIN(test_homg_point_3d_prime);
+TESTMAIN(test_homg_point_3d_io);

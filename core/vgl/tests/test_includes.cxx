@@ -1,3 +1,5 @@
+#include <testlib/testlib_test.h>
+
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_1d_basis.h>
 #include <vgl/vgl_box_2d.h>
@@ -25,7 +27,6 @@
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vgl/vgl_polygon_test.h>
 #include <vgl/vgl_region_scan_iterator.h>
-#include <vgl/vgl_test.h>
 #include <vgl/vgl_triangle_scan_iterator.h>
 #include <vgl/vgl_triangle_test.h>
 #include <vgl/vgl_vector_2d.h>
@@ -36,4 +37,7 @@
 #include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vgl/algo/vgl_rtree.h>
 
-int main() { return 0; }
+MAIN( test_includes )
+{
+  return 0;
+}

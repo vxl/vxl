@@ -2,7 +2,7 @@
 // \author Peter.Vanroose@esat.kuleuven.ac.be
 // \date  4 July, 2001
 
-#include <vgl/vgl_test.h>
+#include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 
 #include <vgl/vgl_homg_point_1d.h>
@@ -243,13 +243,16 @@ static void test_homg_plane_3d()
   TEST("ideal", pp.ideal(), true);
 }
 
-void test_homg() {
+MAIN( test_homg )
+{
+  START( "Test homg" );
+
   test_homg_point_1d();
   test_homg_point_2d();
   test_homg_point_3d();
   test_homg_line_2d();
   test_homg_line_3d();
   test_homg_plane_3d();
-}
 
-TESTMAIN(test_homg);
+  SUMMARY();
+}

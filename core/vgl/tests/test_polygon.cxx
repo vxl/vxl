@@ -1,6 +1,6 @@
 // Some tests for vgl_polygon
 // Amitha Perera, Sep 2001.
-#include <vgl/vgl_test.h>
+#include <testlib/testlib_test.h>
 #include <vgl/vgl_polygon.h>
 #include <vcl_iostream.h>
 
@@ -80,12 +80,13 @@ void test_holey_polygon()
 }
 
 
-int
-main()
+MAIN( test_polygon )
 {
-  vgl_test_start("vgl_polygon");
+  START( "test polygon" );
+
   test_simple_polygon();
   test_disjoint_polygon();
   test_holey_polygon();
-  return vgl_test_summary();
+
+  SUMMARY();
 }

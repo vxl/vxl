@@ -38,11 +38,11 @@ void golden_test_vgl_io(bool save_file=false);
 
 // This nasty macro stuff is to allow the program to be compiled as a stand
 // alone program or as part of a larger test program.
-#ifndef TESTMAIN
-  #include <vgl/vgl_test.h>
-  int main( int argc, char* argv[] )
+#ifndef MAIN
+  #include <testlib/testlib_test.h>
+  MAIN( golden_test_vgl_io )
   {
-    vgl_test_start("golden_test_all_vgl_io");
+    START("golden_test_all_vgl_io");
     bool save_file=false;
 
     if (argc==2)
@@ -55,10 +55,10 @@ void golden_test_vgl_io(bool save_file=false);
       }
     }
     golden_test_vgl_io(save_file);
-    return vgl_test_summary();
+    SUMMARY();
   }
 #else
-  #include <vgl/vgl_test.h>
+  #include <testlib/testlib_test.h>
 #endif
 
 float epsilon(float)

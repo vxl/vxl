@@ -1,6 +1,6 @@
 // This is an extensive test suite for vgl_conic,
 // written by Peter Vanroose, ESAT, K.U.Leuven, Belgium, 30 August 2001.
-#include <vgl/vgl_test.h>
+#include <testlib/testlib_test.h>
 #include <vgl/vgl_conic.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -57,8 +57,10 @@ bool approx_equal( vgl_conic<double>& c1, vgl_conic<double>& c2 )
            && vcl_abs( c1.f() - c2.f() * k ) < EPS );
 }
 
-void test_conic()
+MAIN( test_conic )
 {
+  START( "test conic" );
+
   // "global" variables, actually constants
   vgl_homg_point_2d<double> const centre(1,2,1);
   vgl_homg_point_2d<double> const direction(4,-3,0);
@@ -447,6 +449,6 @@ void test_conic()
   TEST("!contains (0,1)", c.contains(npt), false);
   lines = vgl_homg_operators_2d<double>::tangent_from(c, npt);
   TEST("tangent lines count from other point = 0", lines.size(), 0);
-}
 
-TESTMAIN(test_conic);
+  SUMMARY();
+}
