@@ -12,6 +12,7 @@ DECLARE( test_orthogonal_regression );
 DECLARE( test_ran_sam_search );
 DECLARE( test_ransac_obj );
 DECLARE( test_robust_util );
+DECLARE( test_muse_table );
 
 void
 register_tests()
@@ -27,6 +28,7 @@ register_tests()
   REGISTER( test_ran_sam_search );
   REGISTER( test_ransac_obj );
   REGISTER( test_robust_util );
+  REGISTER( test_muse_table );
 }
 
 DEFINE_MAIN;

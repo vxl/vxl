@@ -14,6 +14,7 @@ SET(rrel_sources
 
  rrel_misc.cxx                  rrel_misc.h
  rrel_muse_table.cxx            rrel_muse_table.h
+ rrel_muse_table_old.cxx        rrel_muse_table_old.h
 
  rrel_estimation_problem.cxx    rrel_estimation_problem.h
  rrel_linear_regression.cxx     rrel_linear_regression.h

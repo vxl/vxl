@@ -7,80 +7,68 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
-static const unsigned int max_allowed_to_store = 1000;
-
-rrel_muse_table::rrel_muse_table( unsigned int max_n_stored )
+bool operator< ( rrel_muse_key_type const& left, rrel_muse_key_type const& right )
 {
-  if ( max_n_stored > max_allowed_to_store ) {
-    //WARNING: Requested rrel_muse_table size is larger than max
-    //allowed. Larger entries will be not be precomputed.
-    max_n_stored_ = max_allowed_to_store;
-  }
-  else
-    max_n_stored_ = max_n_stored;
-
-  expected_.resize( max_n_stored_+1, max_n_stored_+1 );
-  standard_dev_.resize( max_n_stored_+1, max_n_stored_+1 );
-  muse_t_divisor_.resize( max_n_stored_+1, max_n_stored_+1 );
-  muse_t_sq_divisor_.resize( max_n_stored_+1, max_n_stored_+1 );
-
-  unsigned int k,n;
-  for ( n=1; n<=max_n_stored_; ++n )
-    for ( k=1; k<=n; ++k ) {
-      expected_(k,n) = calculate_expected( k, n );
-      standard_dev_(k,n) = calculate_standard_dev( k, n, expected_(k,n) );
-      muse_t_divisor_(k,n) = calculate_divisor( k, n, expected_(k,n) );
-      muse_t_sq_divisor_(k,n) = calculate_sq_divisor( k, n, expected_(k,n) );
-    }
+  return left.n_ < right.n_ 
+    || ( left.n_ == right.n_ && left.k_ < right.k_ );
 }
 
-
 double
-rrel_muse_table::expected_kth( unsigned int k, unsigned int n ) const
+rrel_muse_table::expected_kth( unsigned int k, unsigned int n )
 {
   assert( 0<k && k<= n );
-  if ( n <= max_n_stored_ ) {
-    return expected_(k,n);
-  } else {
-    return calculate_expected( k, n );
-  }
+  rrel_muse_key_type key(k,n);
+  rrel_muse_table_entry& entry = table_[key];
+  if ( ! entry . initialized_ )
+    calculate_all( k, n, entry );
+  return entry . expected_;
 }
 
-
 double
-rrel_muse_table::standard_dev_kth( unsigned int k, unsigned int n ) const
+rrel_muse_table::standard_dev_kth( unsigned int k, unsigned int n )
 {
   assert( 0<k && k<=n );
-  if ( n <= max_n_stored_ ) {
-    return standard_dev_(k,n);
-  } else {
-    return calculate_standard_dev( k, n, calculate_expected(k,n) );
-  }
+  rrel_muse_key_type key(k,n);
+  rrel_muse_table_entry& entry = table_[key];
+  if ( ! entry . initialized_ )
+    calculate_all( k, n, entry );
+  return entry . standard_dev_;
 }
 
 double
-rrel_muse_table::muset_divisor( unsigned int k, unsigned int n ) const
+rrel_muse_table::muset_divisor( unsigned int k, unsigned int n )
 {
   assert( 0<k && k<= n );
-  if ( n <= max_n_stored_ ) {
-    return muse_t_divisor_(k,n);
-  } else {
-    return calculate_divisor( k, n, calculate_expected(k,n) );
-  }
+  rrel_muse_key_type key(k,n);
+  rrel_muse_table_entry& entry = table_[key];
+  if ( ! entry . initialized_ )
+    calculate_all( k, n, entry );
+  return entry . muse_t_divisor_;
 }
 
 
 double
-rrel_muse_table::muset_sq_divisor( unsigned int k, unsigned int n ) const
+rrel_muse_table::muset_sq_divisor( unsigned int k, unsigned int n )
 {
   assert( 0<k && k<= n );
-  if ( n <= max_n_stored_ ) {
-    return muse_t_sq_divisor_(k,n);
-  } else {
-    return calculate_sq_divisor( k, n, calculate_expected(k,n) );
-  }
+  rrel_muse_key_type key(k,n);
+  rrel_muse_table_entry& entry = table_[key];
+  if ( ! entry . initialized_ )
+    calculate_all( k, n, entry );
+  return entry . muse_t_sq_divisor_;
 }
 
+void
+rrel_muse_table::calculate_all( unsigned int k, unsigned int n, 
+				rrel_muse_table_entry & entry )
+{
+  vcl_cout << "rrel_muse_table::calculate_all" << vcl_endl;
+  entry . initialized_ = true;
+  entry . expected_ = calculate_expected( k, n );
+  entry . standard_dev_ = calculate_standard_dev( k, n, entry . expected_ );
+  entry . muse_t_divisor_ = calculate_divisor( k, n, entry . expected_ );
+  entry . muse_t_sq_divisor_ = calculate_sq_divisor( k, n, entry . expected_ );
+}
 
 double
 rrel_muse_table::calculate_expected( unsigned int k, unsigned int n ) const
@@ -142,27 +130,3 @@ rrel_muse_table::calculate_sq_divisor( unsigned int k, unsigned int n,
     * vcl_exp(-vnl_math_sqr(expected_kth)/2.0); 
 }
 
-#if 0
-void
-rrel_muse_table_print( vcl_ostream& ostr,
-                       const rrel_muse_table& table )
-{
-  ostr << "rrel_muse_table:\n";
-  for ( int n=2; n<=table.get_max_stored(); ++n ) {
-    rrel_muse_table_print( ostr, table, n );
-  }
-}
-
-
-void
-rrel_muse_table_print( vcl_ostream& ostr,
-                       const rrel_muse_table& table,
-                       unsigned int n )
-{
-  for ( unsigned int k=1; k<n; ++k ) {
-    ostr << k << " " << n << ":  " << table.expected_kth( k, n)
-         << ", " << table.standard_dev_kth( k, n )
-         << ", " << table.muset_divisor( k, n ) << "\n";
-  }
-}
-#endif
