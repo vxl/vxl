@@ -1,13 +1,11 @@
 // This is vxl/vidl/vidl_vob_frame_index.cxx
+#include "vidl_vob_frame_index.h"
 //
-// this file has been copied from oxp/oxl
+// this file has been copied from oxl/oxp
 // author:  AWF
 // copied by l.e.galup
 // 10-18-02
-//
-//
 
-#include "vidl_vob_frame_index.h"
 #include <vcl_cassert.h>
 #include <vcl_cstdio.h>
 #include <vcl_fstream.h>
@@ -22,18 +20,36 @@ bool vidl_vob_frame_index::load(char const* filename)
     vcl_cerr << "vidl_vob_frame_index: Cannot read IDX file ["<< filename <<"]\n";
     return false;
   }
-  for (vul_awk awk(f); awk; ++awk) {
+  vul_awk awk(f);
+  vcl_string tag(awk[0]);
+  const int MPEG_IDX = 1;
+  const int LBA = 2;
+  int idx_type = 0;
+  if (tag == "MPEG_IDX") 
+    idx_type = MPEG_IDX;
+  else if (tag == "LBA")
+    idx_type = LBA;
+  else
+    vcl_cerr << "vidl_vob_frame_index: WARNING: unknown type [" << awk[0] << "]\n";
+
+  for (int frame=0; awk; ++awk, ++frame) {
     // Skip comment and ----- lines
     vidl_vob_frame_index_entry e;
-    if (vcl_sscanf(awk.line(), " %x | %d", &e.lba, &e.frame) == 2)
+    if (idx_type == LBA && vcl_sscanf(awk.line(), " %x | %d", &e.lba, &e.frame) == 2)
       tmp.push_back(e);
+    int dummy;
+    if (idx_type == MPEG_IDX && vcl_sscanf(awk.line(), " %x %x", &e.lba, &dummy) == 2)
+    {
+      e.frame = frame;
+      tmp.push_back(e);
+    }
   }
   l = tmp;
 
   // assert that l is sorted by frame
   for (unsigned int i = 0; i+1 < l.size(); ++i)
     assert(l[i+1].frame > l[i].frame);
-  vcl_fprintf(stderr, "Loaded %ld entries from [%s]\n", l.size(), filename);
+  vcl_fprintf(stderr, "Loaded %d entries from [%s]\n", l.size(), filename);
   if (l.size() == 0) {
     vcl_fprintf(stderr, "WARNING: No index entries -- all seeks from start\n");
   }
@@ -44,7 +60,7 @@ int vidl_vob_frame_index::frame_to_lba_of_prev_I_frame(int f, int* f_actual)
 {
   int lo = 0;
   int hi = l.size()-1;
-  if (f < l[lo].frame || f > l[hi].frame) {
+  if (hi < 0 || f < l[lo].frame || f > l[hi].frame) {
     vcl_cerr << "urk: frame " << f << " out of IDX range\n";
     return -1;
   }
