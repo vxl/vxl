@@ -2,6 +2,7 @@
 
 #include <vcl_fstream.h>
 #include <vcl_cstdlib.h> // abort()
+#include <vcl_rel_ops.h> // operator!=(complex)
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h>
