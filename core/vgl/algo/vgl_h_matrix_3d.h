@@ -31,7 +31,8 @@ class vgl_h_matrix_3d
  protected:
   vnl_matrix_fixed<T,4,4> t12_matrix_;
  public:
-  vgl_h_matrix_3d();
+  vgl_h_matrix_3d() {}
+ ~vgl_h_matrix_3d() {}
   vgl_h_matrix_3d(const vgl_h_matrix_3d& M);
   vgl_h_matrix_3d(vnl_matrix_fixed<T,4,4> const& M);
   vgl_h_matrix_3d(vnl_matrix_fixed<T,3,3> const& M,
@@ -39,7 +40,8 @@ class vgl_h_matrix_3d
   vgl_h_matrix_3d(const T* t_matrix);
   vgl_h_matrix_3d(vcl_istream&);
   vgl_h_matrix_3d(char const* filename);
- ~vgl_h_matrix_3d();
+  vgl_h_matrix_3d(vcl_vector<vgl_homg_point_3d<T> > const &points1, 
+                  vcl_vector<vgl_homg_point_3d<T> > const &points2);
 
   // Operations----------------------------------------------------------------
 
