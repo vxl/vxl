@@ -3,7 +3,6 @@
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 
-#include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_double_2.h>
@@ -32,8 +31,8 @@ map_inhomo_point( vnl_double_2& mapped, vnl_matrix_fixed<double, 3, 3> const& H,
 //: Return the jacobian of the transform.
 static
 void
-homo_wrt_loc( vnl_matrix_fixed<double, 2, 2>&        jac_loc, 
-              vnl_matrix_fixed<double, 3, 3> const&  H, 
+homo_wrt_loc( vnl_matrix_fixed<double, 2, 2>&        jac_loc,
+              vnl_matrix_fixed<double, 3, 3> const&  H,
               vnl_vector_fixed<double, 2>    const&  from_loc )
 {
   // The jacobian is a 2x2 matrix with entries
@@ -48,15 +47,15 @@ homo_wrt_loc( vnl_matrix_fixed<double, 2, 2>&        jac_loc,
   // w/ respect to y
   jac_loc(0,1) = H(0,1)*( H(2,0)*from_loc[0]+H(2,2) ) - H(2,1)*( H(0,0)*from_loc[0] + H(0,2) );
   jac_loc(1,1) = H(1,1)*( H(2,0)*from_loc[0]+H(2,2) ) - H(2,1)*( H(1,0)*from_loc[0] + H(1,2) );
-  
+
   jac_loc *= (1/(mapped_w*mapped_w));
 }
 
 
 static
 void
-homo_wrt_h( vnl_matrix_fixed<double, 2, 9>&        jac_h, 
-            vnl_matrix_fixed<double, 3, 3> const&  H, 
+homo_wrt_h( vnl_matrix_fixed<double, 2, 9>&        jac_h,
+            vnl_matrix_fixed<double, 3, 3> const&  H,
             vnl_vector_fixed<double, 2>    const&  from_loc )
 {
   vnl_matrix_fixed<double, 3, 9 > jf(0.0); // homogeneous coordinate
@@ -79,12 +78,11 @@ homo_wrt_h( vnl_matrix_fixed<double, 2, 9>&        jac_h,
 
   // Apply chain rule: Jab_g(f(p)) = Jac_g * Jac_f
   jac_h = jg * jf;
-
-}  
+}
 
 // distort image coordinate
 static
-inline 
+inline
 void
 distort( vnl_double_2& dis_loc, vnl_double_2 const& true_loc, double k1 )
 {
@@ -92,16 +90,17 @@ distort( vnl_double_2& dis_loc, vnl_double_2 const& true_loc, double k1 )
   dis_loc = c * true_loc;
 }
 
+#if 0 // ***This is incorrect implementation***
 // undistort image coordinate
-// ***This is incorrect implementation***
 static
-inline 
-void 
+inline
+void
 undistort( vnl_double_2& true_loc, vnl_double_2 const& dis_loc, double k1 )
 {
   const double c = 1 + k1 * dis_loc.squared_magnitude();
   true_loc = dis_loc;
 }
+#endif // 0
 
 // jacobian w.r.t k1 parameter
 static
@@ -114,14 +113,14 @@ distort_wrt_k1( vnl_double_2& jac_k1, vnl_double_2 const& true_loc )
 }
 
 
-// jacobian w.r.t location 
+// jacobian w.r.t location
 static
 inline
 void
 distort_wrt_loc( vnl_double_2x2& jac_loc, vnl_double_2 const& true_loc, double k1 )
 {
   const double c = 1 + k1 * true_loc.squared_magnitude();
-  
+
   jac_loc(0,0) = c + 2*k1*vnl_math_sqr(true_loc[0]);
   jac_loc(1,1) = c + 2*k1*vnl_math_sqr(true_loc[1]);
   jac_loc(0,1) = jac_loc(1,0) = 2 * k1 * true_loc[0] * true_loc[1];
@@ -139,7 +138,7 @@ rgrl_trans_rad_dis_homo2d()
 
 rgrl_trans_rad_dis_homo2d::
 rgrl_trans_rad_dis_homo2d( vnl_matrix<double> const& H,
-                           double k1_from, 
+                           double k1_from,
                            double k1_to,
                            vnl_vector<double> const& from_centre,
                            vnl_vector<double> const& to_centre )
@@ -152,7 +151,7 @@ rgrl_trans_rad_dis_homo2d( vnl_matrix<double> const& H,
 
 rgrl_trans_rad_dis_homo2d::
 rgrl_trans_rad_dis_homo2d( vnl_matrix<double> const& H,
-                           double k1_from, 
+                           double k1_from,
                            double k1_to,
                            vnl_matrix<double> const& covar,
                            vnl_vector<double> const& from_centre,
@@ -190,13 +189,13 @@ transfer_error_covar( vnl_vector<double> const& from  ) const
   // Step 1. undistorted from coordinate and compute apu/apd
   vnl_double_2 dis_from_loc( from[0]-from_centre_[0], from[1]-from_centre_[1] );
   vnl_double_2 true_from_loc;
-  // make the trick: *distort* 
+  // make the trick: *distort*
   distort( true_from_loc, dis_from_loc, k1_from_ );
-  vnl_double_2x2 pu_pd; 
+  vnl_double_2x2 pu_pd;
   distort_wrt_loc( pu_pd, dis_from_loc, k1_from_ );
   vnl_double_2 pu_k1_from;
   distort_wrt_k1( pu_k1_from, dis_from_loc );
-  
+
   // Step 2. homography transformation
   vnl_double_2 true_to_loc;
   map_inhomo_point( true_to_loc, H_, true_from_loc );
@@ -204,34 +203,33 @@ transfer_error_covar( vnl_vector<double> const& from  ) const
   homo_wrt_loc( qu_pu, H_, true_from_loc );
   vnl_matrix_fixed<double, 2, 9> qu_h;
   homo_wrt_h( qu_h, H_, true_from_loc );
-  
+
   // Step 3. distorted To coodinates
   vnl_double_2x2 qd_qu;
   distort_wrt_loc( qd_qu, true_to_loc, k1_to_ );
   vnl_double_2 qd_k1_to;
   distort_wrt_k1( qd_k1_to, true_to_loc );
-  
+
   // Steop 4. apply chain rule
   vnl_matrix_fixed<double, 2, 9> qd_h = qd_qu * qu_h;
   vnl_double_2  qd_k1_from = qd_qu * qu_pu * pu_k1_from;
-  
+
   // assemble jacobian matrix
   vnl_matrix<double> jac(2, 11, 0.0);
   // wrt. k1_from
   jac(0,9) = qd_k1_from[0];
   jac(1,9) = qd_k1_from[1];
-  
+
   // wrt. k1_to
   jac(0,10) = qd_k1_to[0];
   jac(1,10) = qd_k1_to[1];
-  
+
   // wrt. H
-  for( unsigned i=0; i<2; ++i )
-    for( unsigned j=0; j<9; ++j )
+  for ( unsigned i=0; i<2; ++i )
+    for ( unsigned j=0; j<9; ++j )
       jac(i, j) = qd_h(i,j);
 
   return jac * covar_ * vnl_transpose( jac );
-    
 }
 
 //: Inverse map using pseudo-inverse of H_.
@@ -251,31 +249,30 @@ jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from ) cons
   // using chain rule:
   // aqd/apd = aqd/aqu * aqu/apu * apu/apd
   //
-  
+
   jac.set_size(2, 2);
 
   // Step 1. undistorted from coordinate and compute apu/apd
   vnl_double_2 dis_from_loc( from[0]-from_centre_[0], from[1]-from_centre_[1] );
   vnl_double_2 true_from_loc;
-  // make the trick: *distort* 
+  // make the trick: *distort*
   distort( true_from_loc, dis_from_loc, k1_from_ );
-  vnl_double_2x2 pu_pd; 
+  vnl_double_2x2 pu_pd;
   distort_wrt_loc( pu_pd, dis_from_loc, k1_from_ );
-  
-  
+
+
   // Step 2. homography transformation
   vnl_double_2 true_to_loc;
   map_inhomo_point( true_to_loc, H_, true_from_loc );
   vnl_double_2x2 qu_pu;
   homo_wrt_loc( qu_pu, H_, true_from_loc );
-  
+
   // Step 3. distorted To coodinates
   vnl_double_2x2 qd_qu;
   distort_wrt_loc( qd_qu, true_to_loc, k1_to_ );
-  
+
   // Steop 4. put them together
   jac = qd_qu * qu_pu * pu_pd;
-
 }
 
 void
@@ -288,9 +285,9 @@ map_loc( vnl_vector<double> const& from,
   // Step 1. undistorted from coordinate
   vnl_double_2 dis_from_loc( from[0]-from_centre_[0], from[1]-from_centre_[1] );
   vnl_double_2 true_from_loc;
-  // make the trick: *distort* 
+  // make the trick: *distort*
   distort( true_from_loc, dis_from_loc, k1_from_ );
-  
+
   // Step 2. homography transformation
   vnl_double_2 true_to_loc;
   map_inhomo_point( true_to_loc, H_, true_from_loc );
@@ -298,10 +295,10 @@ map_loc( vnl_vector<double> const& from,
   // Step 3. distorted To coodinates
   vnl_double_2 dis_to_loc;
   distort( dis_to_loc, true_to_loc, k1_to_ );
-  
+
   // add center back
-  to = dis_to_loc + to_centre_;   
-} 
+  to = dis_to_loc + to_centre_;
+}
 
 void
 rgrl_trans_rad_dis_homo2d::
@@ -341,14 +338,14 @@ rgrl_trans_rad_dis_homo2d::
 write(vcl_ostream& os ) const
 {
   //vnl_vector<double> origin(from_centre_.size(), 0.0);
-  
+
   // tag
   os << "HOMOGRAPHY2D_WITH_RADIAL_DISTORTION\n"
   // parameters
      << 2 << vcl_endl
-     << H_ 
-     << from_centre_ << "  " << to_centre_ << "\n"
-     << k1_from_ << "  " <<  k1_to_ 
+     << H_
+     << from_centre_ << "  " << to_centre_ << '\n'
+     << k1_from_ << "  " <<  k1_to_
      << vcl_endl;
 
   // parent
