@@ -9,6 +9,7 @@ vbl_sort
 vbl_test
 vbl_qsort
 vbl_shared_pointer
+vbl_bit_array_2d
 vbl_bit_array_3d
 )
 
