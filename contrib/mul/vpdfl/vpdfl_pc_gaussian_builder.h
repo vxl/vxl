@@ -88,7 +88,7 @@ public:
   virtual unsigned decide_partition(const vnl_vector<double>& eVals,
                                     unsigned nSamples=0, double noise=0.0) const;
 
-    //: Return the number of principle compoents when using fixed partition.
+    //: Return the number of principle components when using fixed partition.
   int fixed_partition() const
   {
     if (partitionMethod_ == vpdfl_pc_gaussian_builder::fixed) return fixed_partition_;
