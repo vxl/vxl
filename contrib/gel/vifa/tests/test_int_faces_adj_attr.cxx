@@ -6,6 +6,7 @@
 #include <sdet/sdet_region_proc.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <vifa/vifa_int_faces_adj_attr.h>
+#include <vtol/vtol_intensity_face_sptr.h> // added in order to compile for MS C++ .NET 2003
 #include <vifa/vifa_typedefs.h>
 #include <vifa/tests/test_ifa_factory.h>
 #include <vil/vil_image_view.h>
