@@ -168,3 +168,7 @@ void vgui_gtk_window::show() {
 void vgui_gtk_window::hide() {
   if (debug) vcl_cerr << "vgui_gtk_window::hide" << vcl_endl;
 }
+
+void vgui_gtk_window::set_title(vcl_string const &title) {
+  gtk_window_set_title(GTK_WINDOW(window), title.c_str());
+}
