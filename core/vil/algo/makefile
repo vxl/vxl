@@ -49,6 +49,7 @@ MANPAGE_SOURCES += vil_dog_filter_5tap.h
 MANPAGE_SOURCES += vil_dog_pyramid.h
 MANPAGE_SOURCES += vil_tile_images.h
 SOURCES += vil_orientations.cxx
+SOURCES += vil_colour_space.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
