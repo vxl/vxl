@@ -20,7 +20,7 @@
 #include <vbl/vbl_ref_count.h>
 
 #include "vdgl_edgel_chain_sptr.h"
-#include "vdgl_edgel.h"
+#include <vdgl/vdgl_edgel.h>
 
 class vdgl_edgel_chain : public vul_timestamp,
                          public vbl_ref_count
