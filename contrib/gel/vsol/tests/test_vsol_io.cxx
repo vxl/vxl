@@ -1,5 +1,5 @@
 //*****************************************************************************
-// File name: test_io.cxx
+// File name: test_vsol_io.cxx
 // Description: Test binary I/O
 //-----------------------------------------------------------------------------
 // Language: C++
@@ -8,6 +8,9 @@
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2004/05/08| Joseph Mundy             |Creation
 //*****************************************************************************
+
+//:
+// \file
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vpl/vpl.h>
@@ -15,8 +18,6 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsl/vsl_vector_io.h>
 #include <testlib/testlib_test.h>
-//:
-// \file
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
@@ -30,7 +31,7 @@ void test_vsol_io()
 
   vsol_point_2d_sptr p=new vsol_point_2d(1.1,2.2);
   vsol_point_2d_sptr pa=new vsol_point_2d(3.3,4.4);
-  vcl_cout << "testing on points" << *p << *pa <<"\n";
+  vcl_cout << "testing on points" << *p << *pa << '\n';
 
   vsl_b_ofstream bp_out("test_point_2d_io.tmp");
   TEST("Created test_point_2d_io.tmp for writing",(!bp_out), false);
@@ -49,10 +50,10 @@ void test_vsol_io()
   p_ina->b_read(bp_in);
   bp_in.close();
 
-  vcl_cout << "Recovered point" << *p_in << '\n';
-  vcl_cout << "Recovered point" << *p_ina << '\n';
+  vcl_cout << "Recovered point" << *p_in << '\n'
+           << "Recovered point" << *p_ina << '\n';
 
-  TEST("Testing point io", 
+  TEST("Testing point io",
        p_in && p_ina &&
        p->x()==p_in->x() && p->y()==p_in->y() &&
        pa->x()==p_ina->x() && pa->y()==p_ina->y(),
@@ -62,30 +63,30 @@ void test_vsol_io()
   vsl_b_ofstream bpv_out("test_point_2d_vec_io.tmp");
   vcl_vector<vsol_point_2d_sptr> points, points_in;
   vcl_cout << "Created the point vector ";
-  for(int i = 0; i<3; i++)
-    {
-      vsol_point_2d_sptr p = new vsol_point_2d(i, i);
-      vcl_cout << *p << ' ';
-      points.push_back(p);
-    }
+  for (int i = 0; i<3; i++)
+  {
+    vsol_point_2d_sptr p = new vsol_point_2d(i, i);
+    vcl_cout << *p << ' ';
+    points.push_back(p);
+  }
   vcl_cout << '\n';
- vsl_b_write(bpv_out, points);
- bpv_out.close();  
+  vsl_b_write(bpv_out, points);
+  bpv_out.close();
 
- //open the points file
- vsl_b_ifstream bpv_in("test_point_2d_vec_io.tmp");
- vsl_b_read(bpv_in, points_in);
- vcl_cout << "Read the point vector ";
- int k = 0;
- bool good = true;
- for(vcl_vector<vsol_point_2d_sptr>::iterator pit = points_in.begin();
-     pit != points_in.end(); pit++, k++)
-   {
-      vcl_cout << *(*pit) << ' ';
-      good = good && k == (int)(*pit)->x();
-   }
- vcl_cout << '\n';	
- TEST("Testing point vector io", good, true);
+  //open the points file
+  vsl_b_ifstream bpv_in("test_point_2d_vec_io.tmp");
+  vsl_b_read(bpv_in, points_in);
+  vcl_cout << "Read the point vector ";
+  int k = 0;
+  bool good = true;
+  for (vcl_vector<vsol_point_2d_sptr>::iterator pit = points_in.begin();
+       pit != points_in.end(); pit++, k++)
+  {
+     vcl_cout << *(*pit) << ' ';
+     good = good && k == (int)(*pit)->x();
+  }
+  vcl_cout << '\n';
+  TEST("Testing point vector io", good, true);
 
   // remove the temporary file
   vpl_unlink ("test_point_2d_vec_io.tmp");
@@ -122,7 +123,7 @@ void test_vsol_io()
 
   TEST("Testing line io",
        l_in && l_ina &&
-       *(l->p0())==*(l_in->p0()) && 
+       *(l->p0())==*(l_in->p0()) &&
        *(l->p1())==*(l_in->p1()) &&
        *(la->p0())==*(l_ina->p0()) &&
        *(la->p1())==*(l_ina->p1()),
@@ -141,7 +142,7 @@ void test_vsol_io()
   vcl_cout << "Writing polyline " << *poly << '\n';
   vsl_b_write(ply_out, poly);
   ply_out.close();
-  
+
   vsl_b_ifstream ply_in("test_polyline_2d_io.tmp");
   TEST("Created test_polyline_2d_io.tmp for reading",(!ply_in), false);
   vsol_polyline_2d_sptr poly_in;
@@ -162,7 +163,7 @@ void test_vsol_io()
   vcl_cout << "Writing polygon " << *polyg << '\n';
   vsl_b_write(pgy_out, polyg);
   pgy_out.close();
-  
+
   vsl_b_ifstream pgy_in("test_polygon_2d_io.tmp");
   TEST("Created test_polygon_2d_io.tmp for reading",(!pgy_in), false);
   vsol_polygon_2d_sptr polyg_in;
@@ -172,9 +173,6 @@ void test_vsol_io()
        polyg && polyg_in &&
        *polyg == *polyg_in,
        true);
-
-
 }
-
 
 TESTMAIN(test_vsol_io);
