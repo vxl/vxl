@@ -24,6 +24,13 @@ IF( NOT BUILDING_IN_VXL_TREE )
         SITE
         BUILDNAME
         DART_ROOT
+        DROP_SITE
+        DROP_LOCATION
+        DROP_SITE_USER
+        DROP_SITE_PASSWORD
+        TRIGGER_SITE
+        NIGHTLY_START_TIME
+        DROP_METHOD
       INCLUDE_INTERNALS
         allvxl_SOURCE_DIR
         allvxl_BINARY_DIR
