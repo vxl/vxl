@@ -4,6 +4,7 @@
 #include <vsol/vsol_curve_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_vertex_2d.h>
+#include <vtol/vtol_intensity_face.h>
 #include <vifa/vifa_gaussian.h>
 #include <vifa/vifa_parallel.h>
 
@@ -18,7 +19,7 @@ const float n_sigma = 2.0;  // on either side of center
 
 
 vifa_parallel::
-vifa_parallel(iface_list&      faces,
+vifa_parallel(iface_list&   faces,
               bool          contrast_weighted,
               vifa_parallel_params*  params) :
   vifa_parallel_params(params)
@@ -28,82 +29,68 @@ vifa_parallel(iface_list&      faces,
 
   for (iface_iterator ifi = faces.begin(); ifi != faces.end(); ++ifi)
   {
-    edge_list*  edges = (*ifi)->edges();
+    edge_list edges; (*ifi)->edges(edges);
 
-    if (edges)
+    for (edge_iterator ei = edges.begin(); ei != edges.end(); ei++)
     {
-      for (edge_iterator ei = edges->begin(); ei != edges->end(); ei++)
+      vtol_edge_2d* e = (*ei)->cast_to_edge_2d();
+
+      if (e)
       {
-        vtol_edge_2d* e = (*ei)->cast_to_edge_2d();
-
-        if (e)
-        {
 #ifdef OLD_LINE_APPROX
-          const vtol_vertex_2d*  v1 = e->v1()->cast_to_vertex_2d();
-          const vtol_vertex_2d*  v2 = e->v2()->cast_to_vertex_2d();
-          double  dy = v1->y() - v2->y();
-          double  dx = v1->x() - v2->x();
-          double  length = vcl_sqrt((dx * dx) + (dy * dy));
+        const vtol_vertex_2d*  v1 = e->v1()->cast_to_vertex_2d();
+        const vtol_vertex_2d*  v2 = e->v2()->cast_to_vertex_2d();
+        double dy = v1->y() - v2->y();
+        double dx = v1->x() - v2->x();
+        double length = 0.0;
 
-          if (contrast_weighted)
-          {
-            vtol_intensity_face*  other_f =
-              get_adjacent_iface((*ifi).ptr(), e);
+        if (contrast_weighted)
+        {
+          vtol_intensity_face_sptr other_f = get_adjacent_iface(*ifi, e);
 
-            if (other_f &&
-                other_f->topology_type() == vtol_topology_object::INTENSITYFACE)
-            {
-              vtol_intensity_face*  other_int_f =
-                        (vtol_intensity_face*)other_f;
-              length *= vcl_fabs((*ifi)->Io() - other_int_f->Io());
-            }
-            else
-            {
-              length = 0.0;  // handles edge-on-ROI problem!
-            }
-          }
-
-          double  orientation = vcl_atan2(dy, dx);
-          if (orientation < 0)
-            orientation += vnl_math::pi;
-
-          float  theta = map_x(float(orientation * 180.0 / vnl_math::pi));
-          raw_h_->SetCount(theta, raw_h_->GetCount(theta) + float(length));
-#else
-          vsol_curve_2d_sptr  c = e->curve();
-
-          if (c)
-          {
-            vdgl_digital_curve*  dc = c->cast_to_digital_curve();
-
-            if (dc)
-            {
-              double l = dc->length();
-
-              for (int i = 0; i < l; i++)
-              {
-                // Use parametric index representation (0 -- 1)
-                double theta = dc->get_theta(i / l);
-#ifdef DEBUG
-                vcl_cout << "raw theta: " << theta;
-#endif
-                while (theta < min_angle)
-                  theta += range;
-
-                while (theta > max_angle)
-                  theta -= range;
-#ifdef DEBUG
-                vcl_cout << " to " << theta << vcl_endl;
-#endif
-                raw_h_->UpCount(float(theta));
-              }
-            }
-          }
-#endif  // OLD_LINE_APPROX
+          if (other_f)
+            length = vcl_sqrt((dx * dx) + (dy * dy))
+                   * vcl_fabs((*ifi)->Io() - other_f->Io());
         }
-      }
 
-      delete edges;
+        double  orientation = vcl_atan2(dy, dx) * 180.0 / vnl_math::pi;
+        if (orientation < 0)
+          orientation += 180.0;
+
+        float  theta = map_x(float(orientation));
+        raw_h_->SetCount(theta, raw_h_->GetCount(theta) + float(length));
+#else
+        vsol_curve_2d_sptr  c = e->curve();
+
+        if (c)
+        {
+          vdgl_digital_curve*  dc = c->cast_to_digital_curve();
+
+          if (dc)
+          {
+            double l = dc->length();
+
+            for (int i = 0; i < l; i++)
+            {
+              // Use parametric index representation (0 -- 1)
+              double theta = dc->get_theta(i / l);
+#ifdef DEBUG
+              vcl_cout << "raw theta: " << theta;
+#endif
+              while (theta < min_angle)
+                theta += range;
+
+              while (theta > max_angle)
+                theta -= range;
+#ifdef DEBUG
+              vcl_cout << " to " << theta << vcl_endl;
+#endif
+              raw_h_->UpCount(float(theta));
+            }
+          }
+        }
+#endif  // OLD_LINE_APPROX
+      }
     }
   }
 
@@ -421,45 +408,35 @@ find_peak(float&  max_value)
   return x_vals[max_index];
 }
 
-vtol_intensity_face* vifa_parallel::
-get_adjacent_iface(vtol_intensity_face*  known_face,
+vtol_intensity_face_sptr vifa_parallel::
+get_adjacent_iface(vtol_intensity_face_sptr  known_face,
                    vtol_edge_2d*         e)
 {
-  vtol_intensity_face*  adj_face = 0;
-  face_list*        faces = e->faces();
+  vtol_intensity_face_sptr  adj_face = 0;
+  face_list faces; e->faces(faces);
 
-  // Expect only one or two intensity faces for 2-D case
-  if (faces)
+  // Expect only two intensity faces for 2-D case
+  if (faces.size() == 2)
   {
-    if (faces->size() == 2)
-    {
-      vtol_intensity_face*    f1 = (vtol_intensity_face*)
-                            ((*faces)[0].ptr());
-      vtol_intensity_face*    f2 = (vtol_intensity_face*)
-                            ((*faces)[1].ptr());
+    vtol_intensity_face* f1 = faces[0]->cast_to_intensity_face();
+    vtol_intensity_face* f2 = faces[1]->cast_to_intensity_face();
 
-      if (f1 && f2 &&
-          f1->topology_type() == vtol_topology_object::INTENSITYFACE &&
-          f2->topology_type() == vtol_topology_object::INTENSITYFACE)
+    if (f1 && f2)
+    {
+      if (*known_face == *f1)
       {
-        if (*known_face == *f1)
-        {
-          adj_face = f2;
-        }
-        else if (*known_face == *f2)
-        {
-          adj_face = f1;
-        }
-        else
-        {
-          // Known face does not contain the
-          // given edge -- leave result NULL
-        }
+        adj_face = f2;
+      }
+      else if (*known_face == *f2)
+      {
+        adj_face = f1;
+      }
+      else
+      {
+        // Known face does not contain the
+        // given edge -- leave result NULL
       }
     }
-
-    delete faces;
   }
-
   return adj_face;
 }
