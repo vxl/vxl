@@ -108,7 +108,7 @@ class vgl_homg_operators_2d
   //: Intersect a set of 2D lines to find the least-square point of intersection.
   static vgl_homg_point_2d<T> lines_to_point(const vcl_list<vgl_homg_line_2d<T> >& lines);
 
-  //: cross ratio of four colinear points
+  //: cross ratio of four collinear points
   // This number is projectively invariant, and it is the coordinate of p4
   // in the reference frame where p2 is the origin (coordinate 0), p3 is
   // the unity (coordinate 1) and p1 is the point at infinity.
