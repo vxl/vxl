@@ -271,7 +271,7 @@ by 200 pixels:
 main()
 @{
    vil1_image img = vil1_load("theimage.pgm");
-   vil1_byte value; // buffer into which value will be read
+   vxl_byte value; // buffer into which value will be read
    img.get_section(&value, 100, 200, 1, 1);
    vcl_cerr << "val(100,200) = " << int(value) << vcl_endl;
 @}

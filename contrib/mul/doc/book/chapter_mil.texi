@@ -75,7 +75,7 @@ This represents a 2D image of type T, allowing access through pointers to the da
 
 As an example of usage (a single plane grey-scale image)
 @example
-  mil_image_2d_of<vil1_byte> image0;
+  mil_image_2d_of<vxl_byte> image0;
   // Default is a single plane image
   image0.resize(10,8);
 
@@ -91,7 +91,7 @@ As an example of usage (a single plane grey-scale image)
 
 Multiple plane images can be easily created
 @example
-  mil_image_2d_of<vil1_byte> image0;
+  mil_image_2d_of<vxl_byte> image0;
   image0.setNPlanes(3);
   image0.resize(10,8);
 
@@ -145,16 +145,16 @@ something is looking at it.
 
 Thus the following will work efficiently
 @example
-mil_image_2d_of<vil1_byte> CreateImage()
+mil_image_2d_of<vxl_byte> CreateImage()
 {
-  mil_image_2d_of<vil1_byte> image(100,100);
+  mil_image_2d_of<vxl_byte> image(100,100);
   image.fill(17);
   return image;
 }
 
 void my_function()
 {
-  mil_image_2d_of<vil1_byte> image = CreateImage();
+  mil_image_2d_of<vxl_byte> image = CreateImage();
 
   // ...
 }
@@ -163,7 +163,7 @@ void my_function()
 To perform a deep copy of an image use the deepCopy() function:
 
 @example
-  mil_image_2d_of<vil1_byte> new_image;
+  mil_image_2d_of<vxl_byte> new_image;
   new_image.deepCopy(old_image);
 @end example
 
@@ -174,9 +174,9 @@ of old_image into it.
 The following will create a sub-image which is a view of a region of the original
 image.
 @smallexample
-  mil_image_2d_of<vil1_byte> full_image(100,100);
+  mil_image_2d_of<vxl_byte> full_image(100,100);
 
-  mil_image_2d_of<vil1_byte> window;
+  mil_image_2d_of<vxl_byte> window;
   window.setToWindow(full_image,5,10,  8,32);
 @end smallexample
 
@@ -196,7 +196,7 @@ Their design and use is exactly equivalent to the 2D images described above.
 To sample along a profile (points p+i.u, where i=[0..n-1]) use
 
 @smallexample
-  mil_image_2d_of<vil1_byte> image(100,100);
+  mil_image_2d_of<vxl_byte> image(100,100);
   vnl_vector<double> vec;
   vgl_point_2d<double> p;
   vgl_vector_2d<double> u;

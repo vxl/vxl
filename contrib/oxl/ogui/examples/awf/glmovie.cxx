@@ -225,11 +225,11 @@ bool drawframe(int frame)
 
     glRasterPos2f(rx,ry);
     if (moviefile->GetBitsPixel() == 8) {
-      vil1_memory_image_of<vil1_byte> img(image_w, image_h);
+      vil1_memory_image_of<vxl_byte> img(image_w, image_h);
       moviefile->GetFrame(frame, img);
       glDrawPixels(rw, rh, GL_LUMINANCE, GL_UNSIGNED_BYTE, img.get_buffer());
     } else {
-      vil1_memory_image_of<vil1_rgb<vil1_byte> > img(image_w, image_h);
+      vil1_memory_image_of<vil1_rgb<vxl_byte> > img(image_w, image_h);
       moviefile->GetFrame(frame, img);
       glDrawPixels(rw, rh, GL_RGB,       GL_UNSIGNED_BYTE, img.get_buffer());
     }
@@ -694,7 +694,7 @@ int main(int argc, char ** argv)
 
   if (a_gx_file()) {
     gx_basename = new ImageSequenceName(a_gx_file(), a_start_frame(), dir, "r", ".gx");
-    vcl_cerr << "glmovie: Getting gx from " << *gx_basename << "\n";
+    vcl_cerr << "glmovie: Getting gx from " << *gx_basename << '\n';
   } else {
     gx_basename = 0;
   }

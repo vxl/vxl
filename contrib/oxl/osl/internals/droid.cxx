@@ -11,10 +11,10 @@
 // Computes gradient at each pixel.
 // Uses the convolution mask [ 2  1 0 -1 -2].
 //
-void droid::compute_gradx_grady (osl_roi_window      *window_str,
-                                 vil1_memory_image_of<vil1_byte>    *image_ptr,
-                                 vil1_memory_image_of<int>   *image_gradx_ptr,
-                                 vil1_memory_image_of<int>   *image_grady_ptr)
+void droid::compute_gradx_grady (osl_roi_window                 *window_str,
+                                 vil1_memory_image_of<vxl_byte>  *image_ptr,
+                                 vil1_memory_image_of<int> *image_gradx_ptr,
+                                 vil1_memory_image_of<int> *image_grady_ptr)
 
 {
   int row_start = window_str->row_start_index;
@@ -53,7 +53,7 @@ void droid::compute_gradx_grady (osl_roi_window      *window_str,
 //     2     1     0    -1    -2
 //     2     1     0    -1    -2
 //
-void droid::compute_fxx_fxy_fyy (osl_roi_window      *window_str,
+void droid::compute_fxx_fxy_fyy (osl_roi_window              *window_str,
                                  vil1_memory_image_of<int>   *image_gradx_ptr,
                                  vil1_memory_image_of<int>   *image_grady_ptr,
                                  vil1_memory_image_of<float> *image_fxx_ptr,
@@ -95,7 +95,7 @@ void droid::compute_fxx_fxy_fyy (osl_roi_window      *window_str,
 // Computes the cornerness for each pixel.
 // Returns the maximum overall cornerness.
 //
-float droid::compute_cornerness (osl_roi_window      *window_str,
+float droid::compute_cornerness (osl_roi_window              *window_str,
                                  vil1_memory_image_of<float> *image_fxx_ptr,
                                  vil1_memory_image_of<float> *image_fxy_ptr,
                                  vil1_memory_image_of<float> *image_fyy_ptr,
@@ -141,7 +141,7 @@ float droid::compute_cornerness (osl_roi_window      *window_str,
 // image_corner_max_ptr to true.
 //
 int droid::find_corner_maxima (float corner_min,
-                               osl_roi_window      *window_str,
+                               osl_roi_window              *window_str,
                                vil1_memory_image_of<float> *pixel_cornerness,
                                vil1_memory_image_of<bool>  *image_corner_max_ptr)
 {
@@ -249,7 +249,7 @@ int droid::find_corner_maxima (float corner_min,
 float droid::compute_corner_min (float /*corner_min*/,
                                  float corner_max,
                                  int corner_count_max,
-                                 osl_roi_window      *window_str,
+                                 osl_roi_window              *window_str,
                                  vil1_memory_image_of<float> *pixel_cornerness,
                                  vil1_memory_image_of<bool>  *image_corner_max_ptr)
 {

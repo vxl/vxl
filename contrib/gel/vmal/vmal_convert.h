@@ -20,10 +20,10 @@
 #include <vnl/vnl_double_3.h>
 
 #include <vil1/vil1_image.h>
-#include <vil1/vil1_byte.h>
 #include <vil1/vil1_memory_image_of.h>
 
 #include <vcl_vector.h>
+#include <vxl_config.h>
 
 vtol_vertex_2d_sptr convert_vertex_2d(osl_vertex & in);
 
@@ -63,6 +63,6 @@ void convert_point_double_3(vtol_vertex_2d_sptr in,
                             vnl_double_3 &out);
 
 void convert_grey_memory_image(const vil1_image & image,
-                               vil1_memory_image_of<vil1_byte> &ima_mono);
+                               vil1_memory_image_of<vxl_byte> &ima_mono);
 
 #endif // vmal_convert_h_

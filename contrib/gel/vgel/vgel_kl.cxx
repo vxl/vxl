@@ -2,7 +2,6 @@
 #include "vgel_kl.h"
 
 #include <vxl_config.h>
-#include <vil1/vil1_byte.h>
 #include <vil1/vil1_pixel.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_image_as.h>
@@ -217,8 +216,8 @@ void vgel_kl::match_sequence(vcl_vector<vil1_image>&            image_list,
   KLTFreeFeatureTable(ft);
 }
 
-void vgel_kl::matches_from_feature_table(KLT_FeatureTable   ft,
-                         vgel_multi_view_data_vertex_sptr   matches)
+void vgel_kl::matches_from_feature_table(KLT_FeatureTable                 ft,
+                                         vgel_multi_view_data_vertex_sptr matches)
 {
     int matchnum = -1;
     int pointnum;
@@ -349,11 +348,11 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
     KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
     vcl_cerr << "width: " <<w<< "  height: "<<h<< "  pixel type: byte\n";
 
-    vil1_memory_image_of<vil1_byte> ima_mono;
+    vil1_memory_image_of<vxl_byte> ima_mono;
     ima_mono.resize(w,h);
 
     vil1_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
-    vil1_byte* p=ima_mono.get_buffer();
+    vxl_byte* p=ima_mono.get_buffer();
 
     for (int i=0;i<w;i++)
       for (int j=0;j<h;j++)
@@ -367,11 +366,11 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
     KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
     vcl_cerr << "width: " <<w<< "  height: "<<h<< "  pixel type: byte\n";
 
-    vil1_memory_image_of<vil1_byte> ima_mono;
+    vil1_memory_image_of<vxl_byte> ima_mono;
     ima_mono.resize(w,h);
 
     vil1_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
-    vil1_byte* p=ima_mono.get_buffer();
+    vxl_byte* p=ima_mono.get_buffer();
 
     for (int i=0;i<w;i++)
       for (int j=0;j<h;j++)

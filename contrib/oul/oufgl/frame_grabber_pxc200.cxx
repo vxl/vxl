@@ -69,7 +69,7 @@ FrameGrabberPxc200RGB::~FrameGrabberPxc200RGB()
 void FrameGrabberPxc200RGB::acquire_frame_synch()
 {
   current = (current+1)%2;
-  aio->read(contents[current], width*height*sizeof(vil1_rgb<vil1_byte>));
+  aio->read(contents[current], width*height*sizeof(vil1_rgb<vxl_byte>));
   aio->wait_for_completion();
   flip_current();
 }
@@ -90,7 +90,7 @@ void FrameGrabberPxc200RGB::acquire_frame_asynch()
   // first need to wait for any previous acquire to finish
   aio->wait_for_completion();
   // now start reading the next one
-  aio->read(contents[current], width*height*sizeof(vil1_rgb<vil1_byte>));
+  aio->read(contents[current], width*height*sizeof(vil1_rgb<vxl_byte>));
   // move the current frame to the frame previously completed
   current = (current+1)%2;
   // now need to flip the image so that it is the right way up

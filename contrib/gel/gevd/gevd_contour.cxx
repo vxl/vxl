@@ -7,7 +7,7 @@
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h> // for vcl_max()
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include <vnl/vnl_math.h> // for sqrt(2)
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel_chain.h>
@@ -21,8 +21,8 @@ const int INVALID = -1;
 
 // Use 8 directions, with 45 degree angle in between them.
 
-const vil1_byte TWOPI = 8, /* FULLPI = 4, */ HALFPI = 2 /* , QUARTERPI = 1 */;
-//const vil1_byte DIR0 = 8, DIR1 = 9, DIR2 = 10, DIR3 = 11;
+const vxl_byte TWOPI = 8, /* FULLPI = 4, */ HALFPI = 2 /* , QUARTERPI = 1 */;
+//const vxl_byte DIR0 = 8, DIR1 = 9, DIR2 = 10, DIR3 = 11;
 const int DIS[] = { 1, 1, 0,-1,-1,-1, 0, 1, // 8-connected neighbors
                     1, 1, 0,-1,-1,-1, 0, 1, // wrapped by 2PI to
                     1, 1, 0,-1,-1,-1, 0, 1};// avoid modulo operations.
@@ -192,7 +192,7 @@ bool
 on_contour(const gevd_bufferxy& edgels, const int i, const int j)
 {
   double pix = (1 + vnl_math::sqrt2) * floatPixel(edgels, i, j); // fuzzy threshold
-  for (vil1_byte dir = 0; dir < TWOPI; dir += HALFPI) // 4-connected only
+  for (vxl_byte dir = 0; dir < TWOPI; dir += HALFPI) // 4-connected only
     if (floatPixel(edgels, i+DIS[dir], j+DJS[dir]) > pix)
       return false;             // should choose neighbor instead
   return true;
@@ -1132,8 +1132,8 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
   }
 #if 0
   vcl_cout << "Find junctions with "
-           << jcycle << " cycles and " << jchain << " chains,"
-           << " with jump > " << minJump << vcl_endl;
+           << jcycle << " cycles and " << jchain << " chains, with jump > "
+           << minJump << vcl_endl;
 #endif
 
   // 3. Merge touching end points, into a larger junction/chain.

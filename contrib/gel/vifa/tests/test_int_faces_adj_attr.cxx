@@ -1,5 +1,6 @@
 // This is gel/vifa/tests/test_int_faces_adj_attr.cxx
 #include <vcl_ostream.h>
+#include <vxl_config.h>
 #include <testlib/testlib_test.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_fit_lines_params.h>
@@ -10,7 +11,6 @@
 #include <vifa/vifa_typedefs.h>
 #include <vifa/tests/test_ifa_factory.h>
 #include <vil/vil_image_view.h>
-#include <vil1/vil1_byte.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_image_as.h>
 #include <vil1/vil1_memory_image_of.h>
@@ -30,9 +30,9 @@ static void test_int_faces_adj_attr(int argc, char* argv[])
 
     // Get a vil-compatible version of the greyscale image
     // (for normalization)
-    vil1_memory_image_of<vil1_byte>  test_img_mem(test_img);
+    vil1_memory_image_of<vxl_byte>  test_img_mem(test_img);
     vil_image_view_base* vil_test_img
-      = new vil_image_view<vil1_byte>(vil1_to_vil_image_view(test_img_mem));
+      = new vil_image_view<vxl_byte>(vil1_to_vil_image_view(test_img_mem));
 
     // Set up the image's normalization
     vifa_norm_params  np(0, 0.05f, 0, 0.95f);

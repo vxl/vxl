@@ -13,7 +13,7 @@
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_save.h>
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include <vil1/vil1_rgb.h>
 #include <vidl_vil1/vidl_vil1_io.h>
 #include <vidl_vil1/vidl_vil1_frame.h>
@@ -222,7 +222,7 @@ main (int argc, char **argv)
               "video frames must have 3 components" );
       CHECKE( 8 == frame0.bits_per_component(),
               "video frames must have 8 bits per component" );
-      vil1_memory_image_of<vil1_rgb<vil1_byte> > frame (frame0);
+      vil1_memory_image_of<vil1_rgb<vxl_byte> > frame (frame0);
       if (oifnt()) {
         vcl_string fn = vul_sprintf (oifnt(), i);
         V2( "writing frame to file " << fn );

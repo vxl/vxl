@@ -16,9 +16,9 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_string.h>
+#include <vxl_config.h>
 
 #include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_byte.h>
 #include <vil1/vil1_rgb.h>
 
 struct MovieFileInterface;
@@ -44,10 +44,10 @@ class MovieFile
 
   bool HasFrame(int frame_index);
   void GetFrame(int frame_index, vil1_rgb<unsigned char> * frame);
-  void GetFrame(int frame_index, vil1_byte* frame);
+  void GetFrame(int frame_index, vxl_byte* frame);
   void GetFrame(int frame_index, vil1_memory_image_of<vil1_rgb<unsigned char> >& frame);
-  void GetFrame(int frame_index, vil1_memory_image_of<vil1_byte>& frame);
-  void GetFrameRGB(int frame_index, vil1_byte* frame);
+  void GetFrame(int frame_index, vil1_memory_image_of<vxl_byte>& frame);
+  void GetFrameRGB(int frame_index, vxl_byte* frame);
 
   bool ok() { return qt != 0; }
 

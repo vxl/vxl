@@ -13,7 +13,7 @@
 #include <vcl_vector.h>
 #include <vcl_utility.h>
 
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include <vil1/vil1_memory_image_of.h>
 
 class geml_matcher
@@ -21,8 +21,8 @@ class geml_matcher
  public:
   // Constructors/Destructors--------------------------------------------------
 
-  geml_matcher( const vil1_memory_image_of<vil1_byte> image1,
-                const vil1_memory_image_of<vil1_byte> image2,
+  geml_matcher( const vil1_memory_image_of<vxl_byte> image1,
+                const vil1_memory_image_of<vxl_byte> image2,
                 const vcl_vector< vcl_pair<float,float> > &corners1,
                 const vcl_vector< vcl_pair<float,float> > &corners2);
 
@@ -35,8 +35,8 @@ class geml_matcher
  protected:
   // Data Members--------------------------------------------------------------
 
-  vil1_memory_image_of<vil1_byte> im1_;
-  vil1_memory_image_of<vil1_byte> im2_;
+  vil1_memory_image_of<vxl_byte> im1_;
+  vil1_memory_image_of<vxl_byte> im2_;
   vcl_vector< vcl_pair<float,float> > corners1_;
   vcl_vector< vcl_pair<float,float> > corners2_;
 };

@@ -28,14 +28,15 @@
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 #include <vcl_utility.h>
+#include <vxl_config.h>
 #include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_byte.h>
 #include <osl/osl_harris_params.h>
 #include <osl/osl_roi_window.h>
 
 //: A osl_harris object stores the internal buffers used by the harris corner detector.
-class osl_harris {
-public:
+class osl_harris
+{
+ public:
   osl_harris(osl_harris_params const & params) : image_w(0), image_h(0), params_(params) { }
 
   void compute(vil1_image const &image) {
@@ -56,7 +57,7 @@ public:
   int image_w, image_h;
 
   // the input image, as a monochrome byte bitmap.
-  vil1_memory_image_of<vil1_byte> image_buf;
+  vil1_memory_image_of<vxl_byte> image_buf;
 
   // gradient bitmaps.
   vil1_memory_image_of<int>      image_gradx_buf;
@@ -86,10 +87,10 @@ public:
   void compute_cornerness();
   void compute_corners();
 
-protected:
+ protected:
   osl_harris_params params_;
   vcl_vector<vcl_pair<float, float> > cc; // corners
-private:
+ private:
   // these routines called by compute() :
   void do_non_adaptive(double *corner_min);
   void do_adaptive();

@@ -7,7 +7,7 @@
 #include <vcl_algorithm.h> // vcl_find()
 #include <vbl/vbl_qsort.h> //for sorting labels
 
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vul/vul_timer.h>
 
@@ -399,7 +399,7 @@ vil1_image sdet_edgel_regions::GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& sg)
   if (!this->InitRegionArray(sg)) return NULL;
   unsigned char no_edge = 0, edge = 255;
 
-  vil1_memory_image_of<vil1_byte> image(xs_,ys_);
+  vil1_memory_image_of<vxl_byte> image(xs_,ys_);
 
   for (unsigned int y = 0; y<ys_; y++)
     for (unsigned int x = 0; x<xs_; x++)

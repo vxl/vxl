@@ -11,7 +11,7 @@
 #include "vgui_vrml_texture_map.h"
 #include <vul/vul_file.h>
 #include <vil1/vil1_rgb.h>
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include <vil1/vil1_file_image.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vcl_iostream.h>
@@ -67,7 +67,7 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
 
   bool need_rescale = (tex_w != w) || (tex_h != h);
   if (need_rescale)
-    vcl_cerr << "Rescale from "<<w<<"x"<<h<<" to "<<tex_w<<"x"<<tex_h<<", ";
+    vcl_cerr << "Rescale from "<<w<<'x'<<h<<" to "<<tex_w<<'x'<<tex_h<<", ";
 
   // Rescale and flip Y
   if (vil1_pixel_format(fileimage) == VIL1_RGB_BYTE) {
@@ -84,7 +84,7 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
   } else if (vil1_pixel_format(fileimage) == VIL1_BYTE) {
     vgui_vrml_texture_map* newmap = new vgui_vrml_texture_map(filename, tex_w, tex_h);
     //vil1_memory_image_of<byte> gray( fileimage.get_image_ptr() ); //im8);
-    vil1_memory_image_of<vil1_byte> gray(fileimage.width(), fileimage.height());
+    vil1_memory_image_of<vxl_byte> gray(fileimage.width(), fileimage.height());
     fileimage.get_section(gray.get_buffer(), 0,0, fileimage.width(), fileimage.height());
     for (int y = 0; y < tex_h; ++y) {
       int orig_y = y * h / tex_h;

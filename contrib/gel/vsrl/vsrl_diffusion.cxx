@@ -2,7 +2,7 @@
 #include "vsrl_diffusion.h"
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h> // for std::sprintf()
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_save.h>
 #include <vsrl/vsrl_parameters.h>
@@ -65,12 +65,11 @@ void vsrl_diffusion::write_image(char *file_name,vnl_matrix<double> *mat)
 
   vcl_cout << "Writing file " << file_name << vcl_endl;
 
-  vil1_memory_image_of<vil1_byte> buffer(get_width(),get_height());
+  vil1_memory_image_of<vxl_byte> buffer(get_width(),get_height());
 
   int x,y;
   int disparity;
   int value;
-
 
   for (x=0;x<buffer.width();x++){
     for (y=0;y<buffer.height();y++){

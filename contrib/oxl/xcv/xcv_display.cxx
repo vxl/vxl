@@ -17,10 +17,10 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
+#include <vxl_config.h>
 
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_image_as.h>
-#include <vil1/vil1_byte.h>
 #include <vnl/vnl_math.h>
 
 #include <vgui/vgui.h>
@@ -217,7 +217,7 @@ void xcv_display::remove_roi()
 //  containing the intensity values along the line.
 //-----------------------------------------------------------------------------
 void xcv_display::line_profile(const vil1_image& src, float x0, float y0, float x1,float y1,
-  int num_points, float* xvals, float* yvals, float* ivals)
+                               int num_points, float* xvals, float* yvals, float* ivals)
 {
   int sdepth = src.bits_per_component();
 
@@ -231,8 +231,8 @@ void xcv_display::line_profile(const vil1_image& src, float x0, float y0, float 
   float y_step = (y1 - y0)/(num_points-1);
 
   // copy input image to byte buffer
-  //vil1_memory_image_of<vil1_byte> memimg(src);
-  vil1_memory_image_of<vil1_byte> memimg;
+  //vil1_memory_image_of<vxl_byte> memimg(src);
+  vil1_memory_image_of<vxl_byte> memimg;
   memimg.resize(src.width(), src.height());
   vil1_image_as_byte(src).get_section(memimg.get_buffer(), 0, 0, src.width(), src.height());
 
@@ -262,14 +262,14 @@ void xcv_display::show_line_slice()
   unsigned col, row;
   get_current(&col, &row);
   xcv_picker_tableau_sptr picker = get_picker_tableau_at(col, row);
-  if (!picker) 
+  if (!picker)
     return;
 
   float fx0,fy0,fx1,fy1;
   picker->pick_line(&fx0, &fy0, &fx1, &fy1);
 
   vil1_image img;
-  if (!get_image_at(&img, col, row)) 
+  if (!get_image_at(&img, col, row))
     return;
 
   int num_points
@@ -286,9 +286,9 @@ void xcv_display::show_line_slice()
   line_profile(img, fx0, fy0, fx1, fy1, num_points+1, x, y, val);
 
   char tmp_heading[200];
-  vcl_sprintf(tmp_heading, 
-    "Image Intensity Profile across (%.0f, %.0f) to (%.0f, %.0f)", 
-    fx0, fy0, fx1, fy1);
+  vcl_sprintf(tmp_heading,
+              "Image Intensity Profile across (%.0f, %.0f) to (%.0f, %.0f)",
+              fx0, fy0, fx1, fy1);
 
   xcv_axes_tableau_new axes(tmp_heading, "X", "Intensity");
   for (int i=0; i<num_points+1; i++)
@@ -301,7 +301,7 @@ void xcv_display::show_line_slice()
   profile_dialog.set_ok_button("close");
   profile_dialog.set_cancel_button(0);
   profile_dialog.ask();
-  
+
   delete [] x;
   delete [] y;
   delete [] val;

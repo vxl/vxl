@@ -68,7 +68,7 @@ vcl_vector<vcl_vector<vtol_edge_2d_sptr>*>* convert_array_edge_2d(vcl_list<vcl_l
 }
 
 void convert_pointarray(vcl_vector<vtol_vertex_2d_sptr>& in,
-              vcl_vector<HomgPoint2D> & out)
+                        vcl_vector<HomgPoint2D> & out)
 {
   vcl_vector<vtol_vertex_2d_sptr>::iterator iter;
   for (iter=in.begin();iter!=in.end();iter++)
@@ -159,7 +159,7 @@ void convert_point_double_3(vtol_vertex_2d_sptr in,
 }
 
 void convert_grey_memory_image(const vil1_image & image,
-                               vil1_memory_image_of<vil1_byte> &ima_mono)
+                               vil1_memory_image_of<vxl_byte> &ima_mono)
 {
   int w=image.width();
   int h=image.height();

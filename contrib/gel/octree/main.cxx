@@ -13,6 +13,7 @@
 #include <vcl_fstream.h>
 #include <vcl_list.h>
 #include <vcl_vector.h>
+#include <vxl_config.h>
 
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_sparse_array_1d.h>
@@ -27,7 +28,6 @@
 #include <vgl/vgl_polygon_scan_iterator.h>
 
 #include <vil1/vil1_load.h>
-#include <vil1/vil1_byte.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
 
@@ -41,10 +41,10 @@
 
 #define MAXIMAGES 500
 
-vil1_memory_image_of<vil1_byte> *imagestore[MAXIMAGES];
-PMatrix                         *pmatrixstore[MAXIMAGES];
-vbl_array_2d<short>             *distancestore[MAXIMAGES];
-int                             updatecounter= 0;
+vil1_memory_image_of<vxl_byte> *imagestore[MAXIMAGES];
+PMatrix                        *pmatrixstore[MAXIMAGES];
+vbl_array_2d<short>            *distancestore[MAXIMAGES];
+int                            updatecounter= 0;
 
 enum cubetest_t
 { outsideimage, surface, inside, outside };
@@ -97,7 +97,7 @@ void computeborgefors( const vbl_array_2d<bool> &edges, vbl_array_2d<short> &dis
 
 
 ///////////////////////////////////////////////////////////////////
-void computeedgemap( vil1_memory_image_of<vil1_byte> imbuf, vbl_array_2d<bool> &edges)
+void computeedgemap( vil1_memory_image_of<vxl_byte> imbuf, vbl_array_2d<bool> &edges)
 {
   int r = edges.rows(), c = edges.columns();
   assert( r == int(imbuf.width()));
@@ -110,9 +110,9 @@ void computeedgemap( vil1_memory_image_of<vil1_byte> imbuf, vbl_array_2d<bool> &
     for (int j=1; j<c-1; j++)
     {
       if (!imbuf(i,j) &&
-          ( imbuf(i-1,j-1) || imbuf(i,j-1) || imbuf(i+1,j-1) ||
-            imbuf(i-1,j  )                 || imbuf(i+1,j) ||
-            imbuf(i-1,j+1) || imbuf(i,j+1) || imbuf(i+1,j+1)))
+          (imbuf(i-1,j-1) || imbuf(i,j-1) || imbuf(i+1,j-1) ||
+           imbuf(i-1,j  )                 || imbuf(i+1,j  ) ||
+           imbuf(i-1,j+1) || imbuf(i,j+1) || imbuf(i+1,j+1)))
         edges(i,j)= true;
     }
   }
@@ -193,7 +193,7 @@ cubetest_t DoScan( VoxmapImagePoints const& voxmap, Voxel &voxel, int imageindex
 
     for (int x=polyscan.startx(); x <= polyscan.endx() && expecting != 3; ++x)
     {
-      vil1_byte pix= (*imagestore[imageindex])(int(x),int(y));
+      vxl_byte pix= (*imagestore[imageindex])(int(x),int(y));
       int t;
       if (pix) t= 1;
       else t= 2;
@@ -269,7 +269,7 @@ int main(int argc, char ** argv)
 
     // load all images and pmatrices
     vil1_image image= vil1_load( vul_sprintf(( char *) imagefilename(), *it));
-    imagestore[*it]= new vil1_memory_image_of<vil1_byte>( image);
+    imagestore[*it]= new vil1_memory_image_of<vxl_byte>( image);
     assert( *imagestore[*it]);
 
     vcl_ifstream pmatrixin( vul_sprintf(( char *) pmatrixfilename(), *it));
@@ -348,13 +348,13 @@ int main(int argc, char ** argv)
 
     for (vcl_list<int>::iterator it= imagenumbers.begin(); it!= imagenumbers.end(); ++it)
     {
-      vcl_cerr << *it << " ";
+      vcl_cerr << *it << ' ';
 
       if (fout)
       {
         if (colorimagefilename())
         {
-          (*fout) << "i" << vul_sprintf( ( char *) colorimagefilename(), *it) << "\nu\n";
+          (*fout) << 'i' << vul_sprintf( ( char *) colorimagefilename(), *it) << "\nu\n";
         }
       }
 
@@ -528,7 +528,7 @@ int main(int argc, char ** argv)
     }
 
     vcl_ofstream fout(( char *) voxmapfilename());
-    fout << double(ss()) << " " << double(sx()) << " " << double(sy()) << " " << double(sz()) << vcl_endl
+    fout << double(ss()) << ' ' << double(sx()) << ' ' << double(sy()) << ' ' << double(sz()) << vcl_endl
          << size << vcl_endl;
 
     for (int x=0; x< size; x++)
@@ -773,8 +773,8 @@ int main(int argc, char ** argv)
 
   for (unsigned int i=0; i< points.size(); i++)
   {
-    vfout << points[i][0] << " "
-          << points[i][1] << " "
+    vfout << points[i][0] << ' '
+          << points[i][1] << ' '
           << points[i][2] << ",\n";
   }
 

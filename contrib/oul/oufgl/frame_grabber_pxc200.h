@@ -14,7 +14,7 @@
 #include <vil1/vil1_memory_image.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_rgb.h>
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include "pxc200.h"
 #include "asyncio.h"
 #include "frame_grabber.h"
@@ -34,7 +34,7 @@
 class FrameGrabberPxc200RGB : public FrameGrabber
 {
  public:
-  typedef vil1_rgb<vil1_byte> ImageContents; 
+  typedef vil1_rgb<vxl_byte> ImageContents; 
   typedef vil1_memory_image_of< ImageContents > ImageRGB;
 
  private:

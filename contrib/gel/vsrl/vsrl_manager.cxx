@@ -432,7 +432,7 @@ vil1_image vsrl_manager::scale_image(vil1_memory_image_of<unsigned char> img)
     }
   }
   vcl_cout << "vsrl_manager::scale_image<unsigned char> - Max = " << maxval
-           << "  Min = " << minval << vcl_endl;
+           << ", Min = " << minval << vcl_endl;
 
   double scale = 255.0/maxval;
   double shift = 0;
@@ -455,7 +455,7 @@ vil1_image vsrl_manager::scale_image(vil1_memory_image_of<double> img)
     }
   }
   vcl_cout << "vsrl_manager::scale_image<double> - Max = " << maxval
-           << "  Min = " << minval << vcl_endl;
+           << ", Min = " << minval << vcl_endl;
 
   double scale = 255.0/maxval;
   double shift = 0;
@@ -565,8 +565,7 @@ void vsrl_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
         }
       }
       else
-        vcl_cout << "vsrl_manager::draw_regions -"
-                 << " attempt to draw an edge with unknown curve geometry\n";
+        vcl_cout << "vsrl_manager::draw_regions - attempt to draw an edge with unknown curve geometry\n";
 
       vsovg->ls.push_back(e_line);
     }
@@ -1262,8 +1261,7 @@ void vsrl_manager::region_disparity()
 
   dimg_tab_->set_image(scale_image(disp));
 #else
-  vcl_cout << "vsrl_manager::region_disparity: Error - JSEG package required "
-           << "but not included in this compilation.\n"
+  vcl_cout << "vsrl_manager::region_disparity: Error - JSEG package required but not included in this compilation.\n"
            << "Compilation flag INCLUDE_JSEG not set.\n";
 #endif
 
@@ -1337,7 +1335,7 @@ void vsrl_manager::corner_method()
     y1 = tmp.y();
     d = x1 - x0; // Disparity
     // stuff the disparity into the right place in the image buffer
-    disp(int(x0),int(y0)) = vil1_byte(d + zero_disp); // Add in the "0" offset.
+    disp(int(x0),int(y0)) = vxl_byte(d + zero_disp); // Add in the "0" offset.
     vnl_vector<double> v_cart(2,x0,y0);
     rsdl_point rpt(v_cart,v_ang); // make the rsdl point
     rsdlvec.push_back(rpt);  // add the point to the list for the kd_tree
@@ -1367,7 +1365,7 @@ void vsrl_manager::corner_method()
         rsdl_point& nn = neighbors.front();  // This should be the nearest neighbor pt.
         xd = int(nn.cartesian(0));
         yd = int(nn.cartesian(1));
-        //        vcl_cout << "X,Y: " << x << "," << y << "\tXD,YD: " << xd << "," << yd << vcl_endl;
+        //        vcl_cout << "X,Y: " << x << ',' << y << "\tXD,YD: " << xd << ',' << yd << vcl_endl;
         disp(x,y) = disp(xd,yd); // assign disparity to nearest neighbor's value
         if (disp(xd,yd) < min_disp) min_disp = disp(xd,yd);
       }

@@ -10,7 +10,7 @@
 
 #include <vtol/vtol_intensity_face.h>
 
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vcl_cmath.h>     // for sqrt()
 #include <vul/vul_timer.h>
@@ -410,7 +410,7 @@ vil1_image* gevd_edgel_regions::GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& sg)
       else
         image->PutPixel(&no_edge, x, y);
 #endif
-  vil1_memory_image_of<vil1_byte> * image = new vil1_memory_image_of<vil1_byte>(sizex,sizey);
+  vil1_memory_image_of<vxl_byte> * image = new vil1_memory_image_of<vxl_byte>(sizex,sizey);
 
   for (int y = 0; y<sizey; y++)
     for (int x = 0; x<sizex; x++)

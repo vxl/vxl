@@ -4,11 +4,11 @@
 //:
 // \file
 
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vnl/vnl_matrix.h>
 
-typedef vil1_memory_image_of<vil1_byte> vil1_byte_buffer;
+typedef vil1_memory_image_of<vxl_byte> vil1_byte_buffer;
 
 class vil1_image;
 

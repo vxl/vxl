@@ -113,15 +113,15 @@ void MovieFile::GetFrame(int frame_index, vil1_memory_image_of<vil1_rgb<unsigned
   GetFrame(frame_index, (vil1_rgb<unsigned char> *)frame.get_buffer());
 }
 
-void MovieFile::GetFrame(int frame_index, vil1_memory_image_of<vil1_byte>& frame)
+void MovieFile::GetFrame(int frame_index, vil1_memory_image_of<vxl_byte>& frame)
 {
   int sx = GetSizeX(frame_index);
   int sy = GetSizeY(frame_index);
   frame.resize(sx,sy);
-  GetFrame(frame_index, (vil1_byte*)frame.get_buffer());
+  GetFrame(frame_index, (vxl_byte*)frame.get_buffer());
 }
 
-void MovieFile::GetFrameRGB(int frame_index, vil1_byte* frame)
+void MovieFile::GetFrameRGB(int frame_index, vxl_byte* frame)
 {
   GetFrame(frame_index, (vil1_rgb<unsigned char> *)frame);
 }
@@ -136,9 +136,9 @@ void MovieFile::GetFrame(int frame_index, vil1_rgb<unsigned char> * frame)
     int sx = GetSizeX((frame_index));
     int sy = GetSizeY((frame_index));
     int size = sx * sy;
-    vil1_byte* base = (vil1_byte*)frame;
-    vil1_byte* rgb_ptr = base + size*3;
-    vil1_byte* gray_ptr = base + size;
+    vxl_byte* base = (vxl_byte*)frame;
+    vxl_byte* rgb_ptr = base + size*3;
+    vxl_byte* gray_ptr = base + size;
     do {
       --gray_ptr;
       *--rgb_ptr = *gray_ptr;
@@ -148,7 +148,7 @@ void MovieFile::GetFrame(int frame_index, vil1_rgb<unsigned char> * frame)
   }
 }
 
-void MovieFile::GetFrame(int frame_index, vil1_byte* frame)
+void MovieFile::GetFrame(int frame_index, vxl_byte* frame)
 {
   if (qt->GetBitsPixel() == 8) {
     // Grab gray directly
@@ -163,10 +163,10 @@ void MovieFile::GetFrame(int frame_index, vil1_byte* frame)
     else
       tmp_buf_->resize(sx, sy);
 
-    qt->GetFrame(index(frame_index), (vil1_byte*)tmp_buf_->get_buffer());
+    qt->GetFrame(index(frame_index), (vxl_byte*)tmp_buf_->get_buffer());
     int size = sx * sy;
     vil1_rgb<unsigned char> * rgb_ptr = (vil1_rgb<unsigned char> *)tmp_buf_->get_buffer();
-    vil1_byte* gray_ptr = frame;
+    vxl_byte* gray_ptr = frame;
     for (int i = 0; i < size; ++i)
       *gray_ptr++ = rgb_ptr++->grey();
   }

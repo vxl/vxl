@@ -76,11 +76,11 @@ void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr
               //int size=(*fit_lines)[view_num]->size();
               vtol_edge_2d_sptr pred_fl=(*(*fit_lines)[view_num])[match_line];
               cost_function(pred_fl,
-                      cur_tl,
-                      cur_fl,
-                      images[view_num],
-                      images[view_num+1],
-                      homo[view_num], cur_dist);
+                            cur_tl,
+                            cur_fl,
+                            images[view_num],
+                            images[view_num+1],
+                            homo[view_num], cur_dist);
               if (min_dist==-1)//Initial value
                 min_dist=cur_dist;
               if ((cur_dist<=min_dist) && (cur_dist!=-1))
@@ -94,11 +94,11 @@ void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr
                   vtol_edge_2d_sptr t_other_match=find_transfo(other_match,*(*fit_lines)[view_num],*(*transformed_lines)[view_num]);
                   double other_dist;
                   cost_function(other_match,
-                              t_other_match,
-                              cur_fl,
-                              images[view_num],
-                              images[view_num+1],
-                          homo[view_num], other_dist);
+                                t_other_match,
+                                cur_fl,
+                                images[view_num],
+                                images[view_num+1],
+                                homo[view_num], other_dist);
                   //double ol1x=t_other_match->v1()->cast_to_vertex_2d()->x();
                   //double ol2x=t_other_match->v2()->cast_to_vertex_2d()->x();
                   //double ol1y=t_other_match->v1()->cast_to_vertex_2d()->y();
@@ -438,9 +438,9 @@ int vmal_track_lines::is_cur_best(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr
 }
 
 vtol_edge_2d_sptr vmal_track_lines::find_transfo(vtol_edge_2d_sptr line,
-                         vcl_vector<vtol_edge_2d_sptr>& fit_lines,
-                         const vcl_vector<vtol_edge_2d_sptr>& transformed_lines
-                         )
+                                                 vcl_vector<vtol_edge_2d_sptr>& fit_lines,
+                                                 const vcl_vector<vtol_edge_2d_sptr>& transformed_lines
+                                                )
 {
   vcl_vector<vtol_edge_2d_sptr>::iterator iter;
   int i=0;
@@ -454,7 +454,7 @@ vtol_edge_2d_sptr vmal_track_lines::find_transfo(vtol_edge_2d_sptr line,
 }
 
 void vmal_track_lines::sort_lines(vmal_multi_view_data_edge_sptr matches,
-                  vmal_multi_view_data_edge_sptr sorted_matches)
+                                  vmal_multi_view_data_edge_sptr sorted_matches)
 {
   bool still_track;
   vcl_map<int,vtol_edge_2d_sptr,vcl_less<int> > track;
@@ -487,9 +487,9 @@ void vmal_track_lines::sort_lines(vmal_multi_view_data_edge_sptr matches,
 }
 
 void vmal_track_lines::sort_a_pair_of_line(vtol_edge_2d_sptr line0,
-                       vtol_edge_2d_sptr line1,
-                       vtol_edge_2d_sptr &new_line0,
-                       vtol_edge_2d_sptr &new_line1)
+                                           vtol_edge_2d_sptr line1,
+                                           vtol_edge_2d_sptr &new_line0,
+                                           vtol_edge_2d_sptr &new_line1)
 {
   double cur_1x=line0->v1()->cast_to_vertex_2d()->x();
   double cur_2x=line0->v2()->cast_to_vertex_2d()->x();
@@ -517,10 +517,10 @@ void vmal_track_lines::sort_a_pair_of_line(vtol_edge_2d_sptr line0,
 
 
 double vmal_track_lines::lines_correlation(vtol_edge_2d_sptr line0,
-                           vtol_edge_2d_sptr line1,
-                           const vnl_double_3x3 & H,
-                           vil1_memory_image_of<vil1_byte> &image0,
-                       vil1_memory_image_of<vil1_byte> &image1)
+                                           vtol_edge_2d_sptr line1,
+                                           const vnl_double_3x3 & H,
+                                           vil1_memory_image_of<vxl_byte> &image0,
+                                           vil1_memory_image_of<vxl_byte> &image1)
 {
   vtol_edge_2d_sptr s_line0;
   vtol_edge_2d_sptr s_line1;
@@ -539,18 +539,18 @@ double vmal_track_lines::lines_correlation(vtol_edge_2d_sptr line0,
   // refine the lines so that their lenght are the same
   vmal_refine_lines ref;
   ref.refine_lines_min_h(s_line0_p, s_line0_q,
-                 s_line1_p, s_line1_q,
-                 H,
-                 r_line0_p, r_line0_q,
-                 r_line1_p, r_line1_q);
+                         s_line1_p, s_line1_q,
+                         H,
+                         r_line0_p, r_line0_q,
+                         r_line1_p, r_line1_q);
 
   vmal_lines_correlation correl;
   vnl_double_3 trans;
   double res;
   res=correl.find_min_corr(r_line0_p, r_line0_q,
-                   r_line1_p, r_line1_q,
-                   image0, image1,
-                   trans);
+                           r_line1_p, r_line1_q,
+                           image0, image1,
+                           trans);
   return res;
 }
 
@@ -563,8 +563,8 @@ void vmal_track_lines::cost_function(vtol_edge_2d_sptr line0,
                                      const vnl_double_3x3 homo,
                                      double &result)
 {
-  vil1_memory_image_of<vil1_byte> i0;
-  vil1_memory_image_of<vil1_byte> i1;
+  vil1_memory_image_of<vxl_byte> i0;
+  vil1_memory_image_of<vxl_byte> i1;
   convert_grey_memory_image(image0,i0);
   convert_grey_memory_image(image1,i1);
   result=lines_correlation(line0, line1, homo, i0, i1);

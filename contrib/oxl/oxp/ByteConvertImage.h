@@ -13,9 +13,9 @@
 #include <vcl_iostream.h>
 
 #include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 
-class ByteConvertImage : public vil1_memory_image_of<vil1_byte>
+class ByteConvertImage : public vil1_memory_image_of<vxl_byte>
 {
   bool ignore_zero_;
   float min_;
@@ -23,7 +23,7 @@ class ByteConvertImage : public vil1_memory_image_of<vil1_byte>
   void filter(vil1_memory_image_of<float> const&);
   void filter(vil1_memory_image_of<double> const&);
  public:
-  typedef vil1_memory_image_of<vil1_byte> base;
+  typedef vil1_memory_image_of<vxl_byte> base;
 
   ByteConvertImage(vil1_memory_image_of<float> const& in, bool ignore_zero = false);
   ByteConvertImage(vil1_memory_image_of<float> const& in, float min, float max);

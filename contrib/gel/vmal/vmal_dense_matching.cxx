@@ -336,7 +336,7 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
       buf[i*w+j]=(unsigned char)value;
     }
   }
-  vil1_memory_image_of<vil1_byte> ima(buf, w, h);
+  vil1_memory_image_of<vxl_byte> ima(buf, w, h);
   vil1_save(ima, "lolo.pgm");
   delete [] buf;
 }

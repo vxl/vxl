@@ -10,8 +10,8 @@
 #include "osl_canny_smooth.h"
 #include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_iostream.h>
+#include <vxl_config.h>
 #include <vil1/vil1_rgb.h>
-#include <vil1/vil1_byte.h>
 #include <vil1/vil1_pixel.h>
 #include <vil1/vil1_memory_image_of.h>
 
@@ -44,7 +44,7 @@ void osl_canny_smooth_rothwell(vil1_image const &image_in,
     osl_canny_smooth_rothwell(const_cast<st const *const*>(sec.row_array()), sec.height(), sec.width(), \
                               kernel_, width_, k_size_, smooth_); \
   }
-  macro(VIL1_BYTE, vil1_byte)
+  macro(VIL1_BYTE, vxl_byte)
   macro(VIL1_UINT16, unsigned short)
   macro(VIL1_RGB_BYTE, vil1_rgb<unsigned char>)
   macro(VIL1_FLOAT, float)
@@ -67,7 +67,7 @@ void osl_canny_smooth_rothwell_adaptive(vil1_image const &image_in,
     osl_canny_smooth_rothwell_adaptive(const_cast<st const * const *>(sec.row_array()), sec.height(), sec.width(), \
                                        x0, y0, image_size, kernel_, width_, k_size_, dx, dy, grad); \
   }
-  macro(VIL1_BYTE, vil1_byte)
+  macro(VIL1_BYTE, vxl_byte)
   macro(VIL1_UINT16, unsigned short)
   macro(VIL1_RGB_BYTE, vil1_rgb<unsigned char>)
   macro(VIL1_FLOAT, float)
@@ -89,7 +89,7 @@ void osl_canny_smooth(vil1_image const &image_in,
     osl_canny_smooth(const_cast<st const * const *>(sec.row_array()), sec.height(), sec.width(), \
                      kernel_, width_, sub_area_OX_, image_out); \
   }
-  macro(VIL1_BYTE, vil1_byte)
+  macro(VIL1_BYTE, vxl_byte)
   macro(VIL1_UINT16, unsigned short)
   macro(VIL1_RGB_BYTE, vil1_rgb<unsigned char>)
   macro(VIL1_FLOAT, float)
