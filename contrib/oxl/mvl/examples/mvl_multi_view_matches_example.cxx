@@ -16,15 +16,14 @@ void make_match(int* track, vcl_vector<int>& views, vcl_vector<int>& indices)
 {
   views.clear();
   indices.clear();
-  for (int i=0; i < 10; ++i) {
+  for (int i=0; i < 10; ++i)
     if (track[i] != W) {
       views.push_back(my_views[i]);
       indices.push_back(track[i]);
     }
-  }
 }
 
-int main (int argc, char** argv)
+int main ()
 {
   // Test the insert and consistency check operations
   {
@@ -38,36 +37,36 @@ int main (int argc, char** argv)
     vcl_vector<int> indx;
 
     // add track1
-    vcl_cerr << "Adding Track 1" << vcl_endl;
+    vcl_cerr << "Adding Track 1\n";
     make_match(track1, v, indx);
     mvm.add_track(v, indx);
     vcl_cerr << mvm << vcl_endl;
     // add track2 (no overlap with track 1)
-    vcl_cerr << "Adding Track 2" << vcl_endl;
+    vcl_cerr << "Adding Track 2\n";
     make_match(track2, v, indx);
     mvm.add_track(v, indx);
     vcl_cerr << mvm << vcl_endl;
     // add track3 (overlaps 1 and 2, all merged into track 1)
-    vcl_cerr << "Adding Track 3" << vcl_endl;
+    vcl_cerr << "Adding Track 3\n";
     make_match(track3, v, indx);
     mvm.add_track(v, indx);
     vcl_cerr << mvm << vcl_endl;
     // add track1 again
-    vcl_cerr << "Adding Track 1" << vcl_endl;
+    vcl_cerr << "Adding Track 1\n";
     make_match(track1, v, indx);
     mvm.add_track(v, indx);
     vcl_cerr << mvm << vcl_endl;
     // add track4 (inconsistent, all deleted)
-    vcl_cerr << "Adding Track 4" << vcl_endl;
+    vcl_cerr << "Adding Track 4\n";
     make_match(track4, v, indx);
     mvm.add_track(v, indx);
     vcl_cerr << mvm << vcl_endl;
   }
   // Now for the speed test
   {
-    vcl_cerr << "Setting up 500 view multi_view_matches..." << vcl_endl;
+    vcl_cerr << "Setting up 500 view multi_view_matches...\n";
     mvl_multi_view_matches mvm(500);
-    vcl_cerr << "Adding 50000 random pair-wise matches..." << vcl_endl;
+    vcl_cerr << "Adding 50000 random pair-wise matches...\n";
 
     int f[50000];
     int i1[50000];
@@ -98,8 +97,8 @@ int main (int argc, char** argv)
     for (int i=0; i < 50000; ++i) {
       mvm.add_pair(f[i], i1[i], f[i]+1, i2[i]);
     }
-    vcl_cerr << timer.user()  << " msec" << vcl_endl;
-    vcl_cerr << mvm.num_tracks() << " distinct tracks" << vcl_endl;
+    vcl_cerr << timer.user()  << " msec\n"
+             << mvm.num_tracks() << " distinct tracks\n";
   }
   return 0;
 }

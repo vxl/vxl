@@ -19,7 +19,7 @@
 #include <rrel/rrel_muset_obj.h>
 
 int
-main( int argc, char** argv )
+main()
 {
   //
   // Read in the data.
@@ -66,8 +66,8 @@ main( int argc, char** argv )
     if ( !ransam->estimate( hg, lms ) )
       vcl_cout << "LMS failed!!\n";
     else {
-      vcl_cout << "LMS succeeded.\n";
-      vcl_cout << "estimate = " << ransam->params() << vcl_endl
+      vcl_cout << "LMS succeeded.\n"
+               << "estimate = " << ransam->params() << vcl_endl
                << "scale = " << ransam->scale() << vcl_endl;
     }
     vcl_cout << vcl_endl;
@@ -89,8 +89,8 @@ main( int argc, char** argv )
     if ( !ransam->estimate( hg, ransac ) )
       vcl_cout << "RANSAC failed!!\n";
     else {
-      vcl_cout << "RANSAC succeeded.\n";
-      vcl_cout << "estimate = " << ransam->params() << vcl_endl
+      vcl_cout << "RANSAC succeeded.\n"
+               << "estimate = " << ransam->params() << vcl_endl
                << "scale = " << ransam->scale() << vcl_endl;
     }
     vcl_cout << vcl_endl;
@@ -110,8 +110,8 @@ main( int argc, char** argv )
     if ( !ransam->estimate( hg, msac ) )
       vcl_cout << "MSAC failed!!\n";
     else {
-      vcl_cout << "MSAC succeeded.\n";
-      vcl_cout << "estimate = " << ransam->params() << vcl_endl
+      vcl_cout << "MSAC succeeded.\n"
+               << "estimate = " << ransam->params() << vcl_endl
                << "scale = " << ransam->scale() << vcl_endl;
     }
     vcl_cout << vcl_endl;
@@ -135,8 +135,8 @@ main( int argc, char** argv )
     if ( !ransam->estimate( hg, mlesac ) )
       vcl_cout << "MLESAC failed!!\n";
     else {
-      vcl_cout << "MLESAC succeeded.\n";
-      vcl_cout << "estimate = " << ransam->params() << vcl_endl
+      vcl_cout << "MLESAC succeeded.\n"
+               << "estimate = " << ransam->params() << vcl_endl
                << "scale = " << ransam->scale() << vcl_endl;
     }
     vcl_cout << vcl_endl;
@@ -160,8 +160,8 @@ main( int argc, char** argv )
     if ( !ransam->estimate( hg, muset ) )
       vcl_cout << "MUSE failed!!\n";
     else {
-      vcl_cout << "MUSE succeeded.\n";
-      vcl_cout << "estimate = " << ransam->params() << vcl_endl
+      vcl_cout << "MUSE succeeded.\n"
+               << "estimate = " << ransam->params() << vcl_endl
                << "scale = " << ransam->scale() << vcl_endl;
     }
     vcl_cout << vcl_endl;

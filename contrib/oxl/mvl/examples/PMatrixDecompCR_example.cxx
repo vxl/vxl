@@ -8,7 +8,7 @@
 #include <mvl/PMatrix.h>
 #include <mvl/PMatrixDecompCR.h>
 
-int main(int argc, char**argv)
+int main()
 {
   vnl_double_3x4 m;
   m(0,0)= -568.051; m(1,0)=  83.1082; m(2,0)=  0.274578;
