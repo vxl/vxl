@@ -13,9 +13,9 @@ IF(BUILD_VGUI)
     # affects the vgui dependencies: the libraries get re-ordered
     # incorrectly. This is a work-around until that gets fixed.
     INCLUDE(${MODULE_PATH}/NewCMake/FindGTK.cmake)
-    IF (GTK_FOUND)
+    IF(VGUI_USE_GTK)
       LINK_LIBRARIES( ${GTK_LIBRARIES} ${OPENGL_LIBRARIES} )
-    ENDIF (GTK_FOUND)
+    ENDIF(VGUI_USE_GTK)
 
   ENDIF (OPENGL_GLU_FOUND)
   ENDIF (OPENGL_FOUND)
