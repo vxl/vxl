@@ -234,7 +234,7 @@ vtol_one_chain *vtol_one_chain::cast_to_one_chain(void)
 bool
 vtol_one_chain::valid_inferior_type(vtol_topology_object const &inferior) const
 {
-  return inferior.cast_to_edge();
+  return bool(inferior.cast_to_edge());
 }
 
 //---------------------------------------------------------------------------
@@ -243,7 +243,7 @@ vtol_one_chain::valid_inferior_type(vtol_topology_object const &inferior) const
 bool
 vtol_one_chain::valid_superior_type(vtol_topology_object const &superior) const
 {
-  return superior.cast_to_face();
+  return bool(superior.cast_to_face());
 }
 
 //---------------------------------------------------------------------------
@@ -252,7 +252,7 @@ vtol_one_chain::valid_superior_type(vtol_topology_object const &superior) const
 bool
 vtol_one_chain::valid_chain_type(vtol_chain const &chain_inf_sup) const
 {
-  return chain_inf_sup.cast_to_one_chain();
+  return bool(chain_inf_sup.cast_to_one_chain());
 }
 
 

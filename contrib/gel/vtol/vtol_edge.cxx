@@ -203,7 +203,7 @@ vtol_edge * vtol_edge::cast_to_edge(void)
 bool
 vtol_edge::valid_inferior_type(const vtol_topology_object &inferior) const
 {
-  return inferior.cast_to_zero_chain();
+  return bool(inferior.cast_to_zero_chain());
 }
 
 //---------------------------------------------------------------------------
@@ -212,7 +212,7 @@ vtol_edge::valid_inferior_type(const vtol_topology_object &inferior) const
 bool
 vtol_edge::valid_superior_type(const vtol_topology_object &superior) const
 {
-  return superior.cast_to_one_chain();
+  return bool(superior.cast_to_one_chain());
 }
 
 // ******************************************************
