@@ -36,11 +36,15 @@ void test_convolve_2d_byte()
   vimt_resample_bilin(image0,sample_im,vgl_point_2d<double>(3,0),
                       vgl_vector_2d<double>(0.7,0.7),vgl_vector_2d<double>(-0.7,0.7),8,8);
 
-//  sample_im.print_all(vcl_cout);
+#ifdef DEBUG
+  sample_im.print_all(vcl_cout);
+#endif
 
   vimt_convolve_2d(sample_im,fit_image,kernel,kernel_ref_pt,float());
 
-//  fit_image.print_all(vcl_cout);
+#ifdef DEBUG
+  fit_image.print_all(vcl_cout);
+#endif
 
   TEST("Fits width",fit_image.image().ni(),6);
   TEST("Fits height",fit_image.image().nj(),6);
@@ -57,8 +61,6 @@ void test_convolve_2d_byte()
 MAIN( test_convolve_2d )
 {
   START( "vimt_convolve_2d" );
-
   test_convolve_2d_byte();
-
   SUMMARY();
 }
