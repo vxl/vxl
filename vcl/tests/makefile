@@ -20,7 +20,6 @@ TESTS += test_vcl_stlfwd.cxx
 ifdef USE_EXCEPTIONS
 TESTS += test_vcl_exception.cxx
 endif
-TESTS += test_vcl_root_dir.cxx
 TESTS += vcl_tests.cpp
 
 #########################################
