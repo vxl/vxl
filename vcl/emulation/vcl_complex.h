@@ -170,7 +170,7 @@ operator * (FLOAT x, const vcl_complex<FLOAT>& y)
   return vcl_complex<FLOAT> (x * y.real(), x * y.imag());
 }
 
-template <class FLOAT> vcl_complex<FLOAT>
+template <class FLOAT> inline vcl_complex<FLOAT>
 operator / (const vcl_complex<FLOAT>& x, FLOAT y)
 {
   return vcl_complex<FLOAT> (x.real() / y, x.imag() / y);
@@ -254,7 +254,7 @@ norm (const vcl_complex<FLOAT>& x)
   return x.real() * x.real() + x.imag() * x.imag();
 }
 
-template <class FLOAT> vcl_complex<FLOAT>
+template <class FLOAT> inline vcl_complex<FLOAT>
 cos (const vcl_complex<FLOAT>& x)
 {
   return vcl_complex<FLOAT> (cos (x.real()) * cosh (x.imag()),
