@@ -61,7 +61,10 @@ void mil_var_norm_image_2d(mil_image_2d_of<float>& dest,
 
       for (int x=0;x<nx;++x)
       {
-        *d = ( (*s)-mean(i) )*1.0/std(i);
+        if ( std(i)==0 )
+          *d = 0;
+        else
+          *d = ( (*s)-mean(i) )*1.0/std(i);
         s+=sxstep;
         d+=dxstep;
       }
@@ -71,6 +74,9 @@ void mil_var_norm_image_2d(mil_image_2d_of<float>& dest,
     }
   }
   dest.setWorld2im(src.world2im());
+
+  //vcl_cout<<"dest= "<<vcl_endl;
+  //dest.print_messy_all(vcl_cout);
 }
 
 //: creates a mean normalised version of an input image
