@@ -145,7 +145,6 @@ vil2_rgb_call(macro)
 #undef vil2_rgb_call
 
 
-
 template <class T>
 inline
 vcl_ostream& operator<<(vcl_ostream& s, vil2_rgb<T> const& rgb)
@@ -162,29 +161,6 @@ bool vil2_rgb<T>::operator== (vil2_rgb<T> const& o) const
 {
   return r==o.r && g==o.g && b==o.b;
 }
-
-
-// the following cause compilation errors under Microsoft Visual C++
-// is there some conflict with min and max from the std library ? 
-#if 0
-template <class T>
-inline
-vil2_rgb<T> max(vil2_rgb<T> const& a, vil2_rgb<T> const& b)
-{
-  return vil2_rgb<T>((a.r>b.r)?a.r:b.r,
-                    (a.g>b.g)?a.g:b.g,
-                    (a.b>b.b)?a.b:b.b);
-}
-
-template <class T>
-inline
-vil2_rgb<T> min(vil2_rgb<T> const& a, vil2_rgb<T> const& b)
-{
-  return vil2_rgb<T>((a.r<b.r)?a.r:b.r,
-                    (a.g<b.g)?a.g:b.g,
-                    (a.b<b.b)?a.b:b.b);
-}
-#endif
 
 template <class T>
 inline
