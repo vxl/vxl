@@ -71,6 +71,21 @@ SET( vil_sources ${vil_sources}
   file_formats/vil_viff_support.c       file_formats/vil_viff_support.h
   file_formats/vil_viffheader.h
 
+  file_formats/vil_nitf.cxx		file_formats/vil_nitf.h
+  file_formats/vil_nitf_blocking_info.h
+  file_formats/vil_nitf_extended_header.cxx  file_formats/vil_nitf_extended_header.h
+  file_formats/vil_nitf_header.cxx	      file_formats/vil_nitf_header.h
+  file_formats/vil_nitf_header_v20.h
+  file_formats/vil_nitf_image_subheader.cxx	file_formats/vil_nitf_image_subheader.h
+  file_formats/vil_nitf_image_subheader_v20.cxx	file_formats/vil_nitf_image_subheader_v20.h
+  file_formats/vil_nitf_message_header.cxx		file_formats/vil_nitf_message_header.h
+  file_formats/vil_nitf_message_header_v20.cxx		file_formats/vil_nitf_message_header_v20.h
+  file_formats/vil_nitf_version.cxx			file_formats/vil_nitf_version.h
+  file_formats/vil_nitf_version_v20.cxx		file_formats/vil_nitf_version_v20.h
+  file_formats/vil_nitf_macro_defs.h
+  file_formats/vil_nitf_typeinfo.h
+  file_formats/vil_nitf_util.cxx	file_formats/vil_nitf_util.h
+
   # image operations
   vil_crop.cxx                          vil_crop.h
   vil_clamp.cxx                         vil_clamp.h
