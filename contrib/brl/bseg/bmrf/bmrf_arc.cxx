@@ -11,7 +11,7 @@
 
 //: Constructor
 bmrf_arc::bmrf_arc()
-  : from_(NULL), to_(NULL), probability_(0.0),
+  : from_(NULL), to_(NULL), probability_(-1.0),
     min_alpha_(0.0), max_alpha_(0.0), avg_intensity_error_(0.0)
 {
 }
@@ -19,7 +19,7 @@ bmrf_arc::bmrf_arc()
 
 //: Constructor
 bmrf_arc::bmrf_arc( const bmrf_node_sptr& f, const bmrf_node_sptr& t)
-  : from_(f.ptr()), to_(t.ptr()), probability_(0.0),
+  : from_(f.ptr()), to_(t.ptr()), probability_(-1.0),
     min_alpha_(0.0), max_alpha_(0.0), avg_intensity_error_(0.0)
 {
   if ( from_ && to_ ) {
@@ -27,6 +27,16 @@ bmrf_arc::bmrf_arc( const bmrf_node_sptr& f, const bmrf_node_sptr& t)
       time_init();
   }
 }
+
+//: Return the probability of this arc
+double 
+bmrf_arc::probability()
+{
+  if(probability_ < 0.0)
+    from_->compute_probability();
+  return probability_;
+}
+
 
 //: Binary save bmrf_arc to stream.
 void

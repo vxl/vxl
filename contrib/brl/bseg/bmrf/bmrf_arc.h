@@ -37,7 +37,8 @@ class bmrf_arc : public vbl_ref_count
   //: Binary load self from stream.
   void b_read(vsl_b_istream &is);
 
-  double probability() { return probability_; }
+  //: Return the probability of this arc
+  double probability();
 
   double avg_intensity_error() { return avg_intensity_error_; }
 

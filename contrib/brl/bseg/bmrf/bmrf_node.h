@@ -31,6 +31,7 @@ class bmrf_node : public vbl_ref_count
  public:
 
   friend class bmrf_network;
+  friend class bmrf_arc;
 
   //: iterator over neighboring nodes
   typedef vcl_list<bmrf_arc_sptr>::iterator arc_iterator;
