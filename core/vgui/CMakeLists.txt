@@ -342,7 +342,7 @@ ENDIF (MFC_FOUND)
 # GTK
 ##################################################
 
-IF (GTK_FOUND)
+IF (GTK_GL_FOUND)
 
   OPTION(VGUI_USE_GTK "Should GTK support be compiled into vgui?" YES)
 
@@ -368,7 +368,7 @@ IF (GTK_FOUND)
 
   ENDIF(VGUI_USE_GTK)
 
-ENDIF (GTK_FOUND)
+ENDIF (GTK_GL_FOUND)
 
 
 ##################################################
