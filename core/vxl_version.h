@@ -15,7 +15,7 @@
 //: Minor version number.
 // This increments between versions. There is no
 // "even = release, odd = developement" pattern, or anything like that.
-#define VXL_VERSION_MINOR 0
+#define VXL_VERSION_MINOR 1
 
 //: Patch number.
 // This is only likely to be non-zero if an serious bug is found soon after the
@@ -28,10 +28,10 @@
 // Formats are year=CCYY, month=MM, day=DD
 #define VXL_VERSION_DATE_YEAR 2004
 #define VXL_VERSION_DATE_MONTH 05
-#define VXL_VERSION_DATE_DAY 20
+#define VXL_VERSION_DATE_DAY 23
 
 //: This can either be "RELEASE" or "CVS"
-#define VXL_SOURCE "CVS"
+#define VXL_SOURCE "RELEASE"
 
 //: Helper macros to create strings with the preprocessor.
 #define VXL_VERSION_TO_STRING(s) VXL_VERSION_TO_STRING0(s)
