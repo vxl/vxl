@@ -19,6 +19,7 @@ exec perl -I $IUEROOT/vxl/bin -x $0 ${1+"$@"}
 #      happens in the most awkward places.
 # 17 Jun 2001 - Peter Vanroose - added test failures as errors,
 #      but now ignoring "error in subdirs" messages.
+# 18 Jun 2001 - Peter Vanroose - added hyperlinks to warnings.
 #
 
 # global modules from CPAN
@@ -99,13 +100,14 @@ $gmake_error = q/^g?make(\[\d+\])?: \*\*\* \[/;
 #  "rpoly.c", line 111: warning(1194): floating-point value does not fit in
 #  ld: WARNING 127:
 
-$compilingcpp   = q/^[cg]?[+cC][+cC]\s.*\s\-o\s(\S+\.o)/;
-$compilingc     = q/^g?cc\s.*\s\-o\s(\S+\.o)/;
-$linkingso      = q/^[cg]?[+Cc][+Cc]\s.*\s\-o\s(\S+\.so)/;
-$compilewarning = q/[^:]+:\d+: [Ww]arning/;
+$compilingcpp   = q/^[cg]?[+cC][+cC]\s.*\s\-o\s(\S+\.o)\b/;
+$compilingc     = q/^g?cc\s.*\s\-o\s(\S+\.o)\b/;
+$linkingso      = q/^[cg]?[+Cc][+Cc]\s.*\s\-o\s(\S+\.s[ol])\b/;
+$compilewarning = q/^[^:]+:?(, line )?\d+: [Ww]arning\b/;
 $sgi_linkwarning= q/ld: WARNING \d+:/;
 #$sgi_compilewarning = q/^\".+?\", line \d+: warning/;
 $linkwarning    = $sgi_linkwarning;
+$testsummary    = q/ Test Summary: /;
 $iueroot = $ENV{"IUEROOT"};
 
 ###############
@@ -119,6 +121,7 @@ $endtime="";
 $index= 0;
 $nextindex= 0;
 $htmlerrorlink= 0;
+$htmlwarninglink= 0;
 
 ### build stats
 %allbuilds = ();
@@ -130,11 +133,12 @@ $htmlerrorlink= 0;
 @buildchildrenwarnings = [];
 @buildchildrenerrors   = [];
 @buildlogs= [];
-$fullbuildlog="<a href=\"\#ERRORLINK$htmlerrorlink\">Jump to first error</a><br>\n";
+$fullbuildlog="<a href=\"\#ERRORLINK$htmlerrorlink\"><font size=-1 color=\"101010\">Jump to first error</font></a><br>\n";
+$fullbuildlog.="<a href=\"\#WARNINGLINK$htmlwarninglink\"><font size=-1 color=\"101010\">Jump to first warning</font></a><br>\n";
 #%buildtime = ();
 
 ########################
-# get the current machine ...
+# get the current machine name ...
 @uname = split(/\s/,<INFO>);
 $machine = $uname[1];
 $machine =~ s/\..*//;
@@ -145,12 +149,11 @@ $machine =~ s/\..*//;
 ############
 # main loop
 
-while( $in=<INFO>)
+while( <INFO>)
   {
-    $_ = "$in";
     # patch together multi-lines
     $_ .= <INFO> while( s/\\\s*$//);
-    s/$iueroot//g if( $iueroot);
+    s/$iueroot\//\//g if( $iueroot);
 
     $currentlineweb= webify_string($_);
 
@@ -195,12 +198,18 @@ while( $in=<INFO>)
     elsif( m/$compilewarning/)
       {
         $buildwarnings[$index]++;
+	$currentlineweb="<a name=\"WARNINGLINK$htmlwarninglink\">" .$currentlineweb;
         $currentlineweb="<font color=\"AA0000\">$currentlineweb</font>";
+	$htmlwarninglink++;
+	$currentlineweb.="<a href=\"\#WARNINGLINK$htmlwarninglink\"><font size=-1 color=\"101010\">Jump to next warning</font></a><br>\n";
       }
     elsif( m/$linkwarning/)
       {
         $buildwarnings[$index]++;
+	$currentlineweb="<a name=\"WARNINGLINK$htmlwarninglink\">" .$currentlineweb;
         $currentlineweb="<font color=\"AA0000\">$currentlineweb</font>";
+	$htmlwarninglink++;
+	$currentlineweb.="<a href=\"\#WARNINGLINK$htmlwarninglink\"><font size=-1 color=\"101010\">Jump to next warning</font></a><br>\n";
       }
     elsif( m/$gmake_errorintest/ || m/$gmake_errortestfail/)
       {
@@ -208,7 +217,7 @@ while( $in=<INFO>)
 	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">" .$currentlineweb;
         $currentlineweb.="<font color=red>$currentlineweb</font>";
 	$htmlerrorlink++;
-	$currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\">Jump to next error</a><br>\n";
+	$currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\"><font size=-1 color=\"101010\">Jump to next error</font></a><br>\n";
       }
     elsif( m/$gmake_errorindirectory/)
       {
@@ -221,7 +230,11 @@ while( $in=<INFO>)
 	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">" .$currentlineweb;
         $currentlineweb.="<font color=red>$currentlineweb</font>";
 	$htmlerrorlink++;
-	$currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\">Jump to next error</a><br>\n";
+	$currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\"><font size=-1 color=\"101010\">Jump to next error</font></a><br>\n";
+      }
+    elsif( m/$testsummary/)
+      {
+        $currentlineweb="<font color=\"00AA00\">$currentlineweb</font>";
       }
     elsif( m/Beginning TargetJr make:\s*(.*)$/)
       {
@@ -244,7 +257,8 @@ while( $in=<INFO>)
     $fullbuildlog.= $currentlineweb;
   }
 
-$fullbuildlog.="<a name=\"ERRORLINK$htmlerrorlink\">No more errors.<br>\n";
+$fullbuildlog.="<a name=\"WARNINGLINK$htmlwarninglink\"><a name=\"ERRORLINK$htmlerrorlink\">";
+$fullbuildlog.="<a href=\"\#ERRORLINK0\"><font size=-1 color=\"101010\">No more errors.</font></a><br>\n";
 
 
 ##############################################
@@ -432,25 +446,29 @@ sub webify_string
       {
         $c= substr($string,$i,1);
 
-        if ( $c eq "\n")
+        if ( $c eq "\r")
+          {
+            $c= "";
+          }
+        elsif ( $c eq "\n")
           {
             $c= "<br>\n";
           }
 #        elsif( $c eq  "\"")
 #          {
-#            $c= "&quot";
+#            $c= "&quot;";
 #          }
         elsif( $c eq  "&")
           {
-            $c= "&amp";
+            $c= "&amp;";
           }
         elsif( $c eq  "<")
           {
-            $c= "&lt";
+            $c= "&lt;";
           }
         elsif( $c eq  ">")
           {
-            $c= "&gt";
+            $c= "&gt;";
           }
 
         $n.= $c;
