@@ -77,7 +77,7 @@ SET( vil1_sources
   vil1_crop.cxx                              vil1_crop.h
   vil1_skip.cxx                              vil1_skip.h
   vil1_resample.cxx                          vil1_resample.h
-  vil1_warp.txx  vil1_warp.cxx                vil1_warp.h
+  vil1_warp.txx  vil1_warp.cxx               vil1_warp.h
   vil1_flipud.cxx                            vil1_flipud.h
   vil1_flip_components.cxx                   vil1_flip_components.h
   vil1_smooth.cxx                            vil1_smooth.h

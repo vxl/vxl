@@ -324,7 +324,6 @@ the pattern @code{[^ab1-9]} says to match any character sequence that does
 not begin with the characters "ab" followed by numbers in the series 1-9.
 
 
-
 @section Loading files using Internet protocols: @code{vul_url}
 @cindex HTTP
 @cindex vul_url
