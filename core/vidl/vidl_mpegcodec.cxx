@@ -32,7 +32,6 @@ static void internal_draw_frame (vidl_mpegcodec_data * instance,
 
   int c = 0;
   int w = instance->width;
-  int h = instance->height;
 
   int roix = p->x0;
   int roiy = p->y0;
@@ -79,8 +78,6 @@ static int internal_setup (vo_instance_t * instance_,
   instance->get_frame = libvo_common_get_frame;
   instance->width = width;
   instance->height = height;
-  int wh = width>>1;
-  int hh = height>>1;
 
   //sanity check.
   //i am assuming here that pending_decode has already been set
@@ -88,7 +85,8 @@ static int internal_setup (vo_instance_t * instance_,
   if ((p->x0+p->w)>width) p->w = width - p->x0;
   if ((p->y0+p->h)>height) p->h = height - p->y0;
 
-  vcl_sprintf(instance->header, "P5\n\n%d %d\n255\n", width, height * 3 / 2);
+  int hh = height>>1;
+  vcl_sprintf(instance->header, "P5\n\n%d %d\n255\n", width, hh * 3);
   return libvo_common_alloc_frames ((vo_instance_t *) instance,
                                     width,
                                     height,

@@ -27,7 +27,7 @@ rrel_kernel_density_obj::rrel_kernel_density_obj(rrel_kernel_scale_type scale_ty
 }
 
 double
-rrel_kernel_density_obj::fcn( vect_const_iter res_begin, vect_const_iter res_end,
+rrel_kernel_density_obj::fcn(vect_const_iter res_begin, vect_const_iter res_end,
                              vect_const_iter scale_begin,
                              vnl_vector<double>* param_vector ) const
 {
@@ -40,14 +40,10 @@ rrel_kernel_density_obj::fcn(vect_const_iter res_begin, vect_const_iter res_end,
                              double prior_scale,
                              vnl_vector<double>* ) const
 {
-  unsigned n = res_end - res_begin;
-  double h = bandwidth ( res_begin, res_end, prior_scale ); 
+  double h = bandwidth ( res_begin, res_end, prior_scale );
   assert(h!=0);
-  double f = 0;
-
   double x = best_x ( res_begin, res_end, prior_scale );
-
-  f = kernel_density( res_begin, res_end, x, h );
+  double f = kernel_density( res_begin, res_end, x, h );
   return -f;
 }
 
@@ -62,7 +58,7 @@ rrel_kernel_density_obj::best_x(vect_const_iter res_begin, vect_const_iter res_e
   double tol = 1.0e-9;
 
   unsigned int n = res_end - res_begin;
-  double h = bandwidth(res_begin, res_end, prior_scale); 
+  double h = bandwidth(res_begin, res_end, prior_scale);
   assert(h!=0);
 
   vect_const_iter mloc = vcl_min_element(res_begin, res_end);
@@ -103,24 +99,81 @@ rrel_kernel_density_obj::best_x(vect_const_iter res_begin, vect_const_iter res_e
     return x2;
 }
 
-double 
-rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter res_end,
-         double prior_scale) const
+#if 0 // commented out
 {
   unsigned int n = res_end - res_begin;
-  double scale;
+  double h = bandwidth(res_begin, res_end, prior_scale);
+  assert(h!=0);
+
+  const unsigned int IMAX = 100;
+  const double eps = 1.0e-09;
+  unsigned int count = 0;
+
+  vect_const_iter mloc = vcl_min_element(res_begin, res_end);
+  double min = *mloc - h;
+  mloc = vcl_max_element(res_begin, res_end);
+  double max = *mloc + h;
+  vcl_vector<double> res(res_begin, res_end);
+  vcl_vector<double>::iterator loc = res.begin() + n / 2;
+  vcl_nth_element(res.begin(), loc, res.end());
+  double median = *loc;
+
+  //initial guess
+  double x = median;
+  double dx = 0;
+
+  double rtn;
+  while ( count < IMAX ) {
+    ++count;
+    double f = 0;
+    double f_prime = 0;
+    double f_double_prime = 0;
+    for ( vect_const_iter begin=res_begin; begin != res_end; ++begin ) {
+      f += kernel_function ( ( *begin - x ) / h );
+      f_prime += kernel_prime ( ( *begin - x ) / h , h );
+      f_double_prime += kernel_double_prime ( ( *begin - x ) / h , h );
+    }
+
+    if (f_double_prime == 0) {
+      vcl_cerr << "f_double_prime=0, x=" << x << ", min=" << min << ", max=" << max << vcl_endl;
+    }
+    if (f > max_f) {
+      max_f = f;
+      rtn = x;
+    }
+    assert(f_double_prime!=0);
+    //maximize f
+    dx = f_prime / vnl_math_abs(f_double_prime);
+    if (vnl_math_abs(dx) < eps) return x;
+    x += dx;
+
+    // Out of the range [min, max], f, f_prime, and f_double_prime are zero.
+    if (x > max)  { vcl_cerr << x << " > " << max << vcl_endl; x = 0.5*(min+median); }
+    if (x < min)  { vcl_cerr << x << " < " << min << vcl_endl; x = 0.5*(max+median); }
+  }
+  vcl_cerr << "Warning : rrel_kernel_density_obj : maximum number of iterations exceeded. " << vcl_endl;
+  return x;
+}
+#endif
+
+double
+rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter res_end,
+                                   double prior_scale) const
+{
+  unsigned int n = res_end - res_begin;
+  double scale = 1.0;
 
   switch ( scale_type_ ) {
   case RREL_KERNEL_MAD: {
     //A median absolute deviations (MAD) scale estimate.
 
-    //Here I avoid using rrel_util_median_abs_dev_scale 
+    //Here I avoid using rrel_util_median_abs_dev_scale
     //because it assumes residuals are zero-based and have a Gaussian distribution.
 
     vcl_vector<double> residuals(res_begin, res_end);
     vcl_vector<double>::iterator loc = residuals.begin() + n / 2;
     vcl_nth_element( residuals.begin(), loc, residuals.end() );
-    
+
     double res_median = *loc;
     vcl_vector<double> abs_res_median;
     abs_res_median.reserve( n );
@@ -134,16 +187,14 @@ rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
     break;
   }
 
-  case RREL_KERNEL_PRIOR: {
+  case RREL_KERNEL_PRIOR:
     scale = prior_scale;
     break;
-  }
 
-  case RREL_KERNEL_MUSE: {
+  case RREL_KERNEL_MUSE:
     rrel_muset_obj muse(n);
     scale = muse.fcn( res_begin, res_end );
     break;
-  }
   }
 
   // h = [243 * R(K) / 35 / Mu(K)^2 / n]^0.2 * scale
@@ -155,7 +206,7 @@ rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
 
 double
 rrel_kernel_density_obj::kernel_density(vect_const_iter res_begin, vect_const_iter res_end,
-         double x, double h) const
+                                        double x, double h) const
 {
   double f=0;
   unsigned int n = res_end - res_begin;
@@ -166,7 +217,7 @@ rrel_kernel_density_obj::kernel_density(vect_const_iter res_begin, vect_const_it
   return f;
 }
 
-double 
+double
 rrel_kernel_density_obj::kernel_function(double u) const
 {
   if (vnl_math_abs(u) > 1)
