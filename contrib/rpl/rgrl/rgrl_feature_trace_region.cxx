@@ -116,7 +116,7 @@ transform_region( rgrl_transformation const& xform ) const
 
   for( unsigned int i=0; i < this -> location_ . size() - 1; ++i )
   {
-    point_along_dir = this -> location_;
+    point_along_dir = this -> location();
     point_along_dir += this -> region_radius_ * nullspace . get_column( i );
     xform . map_location( point_along_dir, end_point );
     sum_radii += ( end_point - trace_ptr -> location_ ) . magnitude();
