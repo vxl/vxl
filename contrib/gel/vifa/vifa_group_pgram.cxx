@@ -95,7 +95,7 @@ Clear()
 vifa_histogram_sptr vifa_group_pgram::
 GetCoverageHist(void)
 {
-  vifa_histogram_sptr  h = new vifa_histogram(th_dim_, 0.0f, angle_range_);
+  vifa_histogram_sptr  h = new vifa_histogram(th_dim_, 0.0f, float(angle_range_));
 
   float*  cnts = h->GetCounts();
   for (int i = 0; i < th_dim_; i++)
@@ -133,7 +133,6 @@ GetLineCover(int  angle_bin)
                             bx, by, ex, ey))
   {
     vcl_cerr << "In vifa_group_pgram::GetLineCover(): No intersection found\n";
-
     return NULL;
   }
 

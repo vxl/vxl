@@ -706,7 +706,9 @@ float vifa_histogram::GetMean()
     float area = ComputeArea(vmin, vmax);
     if (area <= 0.0f)
     {
-      //vcl_cerr << "vifa_histogram : Area <= 0.0\n";
+#ifdef DEBUG
+      vcl_cerr << "vifa_histogram::GetMean() : Area <= 0.0\n\n";
+#endif
       return 0.0f;
     }
     else
@@ -721,7 +723,7 @@ float vifa_histogram::GetMean()
 float vifa_histogram::GetStandardDev()
 {
   float sum = 0.0f;
-  double bucket_size = (double)this->GetBucketSize();
+  float bucket_size = this->GetBucketSize();
 
   if (SD_FLAG & stats_consistent)
     return standard_dev;
@@ -744,7 +746,9 @@ float vifa_histogram::GetStandardDev()
     float area = ComputeArea(vmin, vmax);
     if (area <= 0.0f)
     {
-      // vcl_cerr << "vifa_histogram : Area <= 0.0\n\n";
+#ifdef DEBUG
+      vcl_cerr << "vifa_histogram::GetStandardDev() : Area <= 0.0\n\n";
+#endif
       return 0.0f;
     }
     else

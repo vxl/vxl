@@ -41,9 +41,9 @@ vifa_parallel(iface_list&      faces,
 #ifdef OLD_LINE_APPROX
           const vtol_vertex_2d*  v1 = e->v1()->cast_to_vertex_2d();
           const vtol_vertex_2d*  v2 = e->v2()->cast_to_vertex_2d();
-          float  dy = v1->y() - v2->y();
-          float  dx = v1->x() - v2->x();
-          float  length = vcl_sqrt((dx * dx) + (dy * dy));
+          double  dy = v1->y() - v2->y();
+          double  dx = v1->x() - v2->x();
+          double  length = vcl_sqrt((dx * dx) + (dy * dy));
 
           if (contrast_weighted)
           {
@@ -59,19 +59,16 @@ vifa_parallel(iface_list&      faces,
             }
             else
             {
-              length = 0;  // handles edge-on-ROI problem!
+              length = 0.0;  // handles edge-on-ROI problem!
             }
           }
 
-          float  orientation = vcl_atan2(dy, dx);
+          double  orientation = vcl_atan2(dy, dx);
           if (orientation < 0)
-          {
             orientation += vnl_math::pi;
-          }
 
-          float  theta = orientation * 180.0 / vnl_math::pi;
-          theta = map_x(theta);
-          raw_h_->SetCount(theta, raw_h_->GetCount(theta) + length);
+          float  theta = map_x(float(orientation * 180.0 / vnl_math::pi));
+          raw_h_->SetCount(theta, raw_h_->GetCount(theta) + float(length));
 #else
           vsol_curve_2d_sptr  c = e->curve();
 
@@ -81,28 +78,24 @@ vifa_parallel(iface_list&      faces,
 
             if (dc)
             {
-              float l = dc->length();
+              double l = dc->length();
 
               for (int i = 0; i < l; i++)
               {
                 // Use parametric index representation (0 -- 1)
-                float theta = dc->get_theta(i / l);
-
-//                vcl_cout << "raw theta: " << theta;
-
+                double theta = dc->get_theta(i / l);
+#ifdef DEBUG
+                vcl_cout << "raw theta: " << theta;
+#endif
                 while (theta < min_angle)
-                {
                   theta += range;
-                }
 
                 while (theta > max_angle)
-                {
                   theta -= range;
-                }
-
-//                vcl_cout << " to " << theta << vcl_endl;
-
-                raw_h_->UpCount(theta);
+#ifdef DEBUG
+                vcl_cout << " to " << theta << vcl_endl;
+#endif
+                raw_h_->UpCount(float(theta));
               }
             }
           }
@@ -238,8 +231,8 @@ map_gaussian(float&  max_angle,
         float  sample_sum = 0.0;
 
         for (float  dx = (-n_sigma * local_std_dev);
-            dx <= (n_sigma * local_std_dev);
-            dx += norm_h_->GetBucketSize())
+             dx <= (n_sigma * local_std_dev);
+             dx += norm_h_->GetBucketSize())
         {
           float  vx = new_center + dx;
           float  e = g.pdf(vx) * local_scale;
@@ -301,8 +294,8 @@ remove_gaussian(float  max_angle,
   {
     vifa_gaussian  g(max_angle, std_dev);
     for (float  dx = (-n_sigma * std_dev);
-        dx <= (n_sigma * std_dev);
-        dx += norm_h_->GetBucketSize())
+         dx <= (n_sigma * std_dev);
+         dx += norm_h_->GetBucketSize())
     {
       float  vx = max_angle + dx;
       float  e = g.pdf(vx) * scale;
