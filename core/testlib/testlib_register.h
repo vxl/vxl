@@ -25,7 +25,7 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
-#ifdef VCL_VC
+#if 0 // ifdef VCL_VC - gives compiler errors - PVr
 typedef int ( (__cdecl *const) TestMainFunction)( int, char*[] );
 #else
 typedef int (*TestMainFunction)( int, char*[] );
