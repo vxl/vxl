@@ -234,7 +234,7 @@ class A {
   static const bool y = false;
 };
 
-int main() { return A::x == 27 && !y ? 0 : 1; }
+int main() { return A::x == 27 && !A::y ? 0 : 1; }
 #endif // VCL_STATIC_CONST_INIT_INT
 
 //-------------------------------------
@@ -266,7 +266,7 @@ class A {
   static const double y = 27.0;
 };
 
-int main() { return 0; }
+int main() { return A::x == 27.0f && A::y == 27.0 ? 0 : 1; }
 #endif // VCL_STATIC_CONST_INIT_FLOAT
 
 //-------------------------------------
