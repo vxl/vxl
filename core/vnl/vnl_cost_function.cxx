@@ -25,7 +25,7 @@ double vnl_cost_function::f(const vnl_vector<double>& x)
 {
   // if we get back here from compute, neither vf was implemented.
   if (f_calling_compute)
-    assert("vnl_cost_function: RECURSION");
+    assert(!"vnl_cost_function: RECURSION");
   double f;
   f_calling_compute = true;
   this->compute(x, &f, 0);
@@ -37,7 +37,7 @@ double vnl_cost_function::f(const vnl_vector<double>& x)
 void vnl_cost_function::gradf(const vnl_vector<double>& x, vnl_vector<double>& g)
 {
   if (f_calling_compute)
-    assert("vnl_cost_function: RECURSION");
+    assert(!"vnl_cost_function: RECURSION");
   f_calling_compute = true;
   this->compute(x, 0, &g);
   f_calling_compute = false;
