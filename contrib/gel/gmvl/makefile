@@ -1,5 +1,3 @@
-SUBDIRS := examples # tests
-
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################
@@ -24,6 +22,10 @@ SOURCES += gmvl_tag_node.cxx
 
 # helpers
 SOURCES += gmvl_helpers.cxx
+
+ifndef NOTEST
+SUBDIRS := examples # tests
+endif
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk
