@@ -30,12 +30,12 @@ int main (int argc, char** argv)
     vcl_vector<int> view_indices;
     for (int i=0; i < 10; ++i)
       view_indices.push_back(my_views[i]);
-    
+
     mvl_multi_view_matches mvm(view_indices);
-    
+
     vcl_vector<int> v;
     vcl_vector<int> indx;
-    
+
     // add track1
     vcl_cerr << "Adding Track 1" << vcl_endl;
     make_match(track1, v, indx);
@@ -64,11 +64,10 @@ int main (int argc, char** argv)
   }
   // Now for the speed test
   {
-    
-    vcl_cerr << "Setting up 500 view multi_view_matches..." << vcl_endl;    
+    vcl_cerr << "Setting up 500 view multi_view_matches..." << vcl_endl;
     mvl_multi_view_matches mvm(500);
     vcl_cerr << "Adding 50000 random pair-wise matches..." << vcl_endl;
-    
+
     int f[50000];
     int i1[50000];
     int i2[50000];

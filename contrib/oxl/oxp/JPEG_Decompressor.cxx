@@ -33,7 +33,7 @@ void JPEG_Decompressor::init(int fd)
 
   // setup the standard error handler in the jpeg library
   pd->jinfo.err = jpeg_std_error( &pd->jerr);
-    
+
   // create the decompression object
   jpeg_create_decompress( &pd->jinfo);
 
@@ -45,7 +45,7 @@ void JPEG_Decompressor::init(int fd)
 
   // JSAMPLEs per row in output buffer
   unsigned long row_stride = pd->jinfo.output_width * pd->jinfo.output_components;
-    
+
   // Make a one-row-high sample array that will go away when done with image
   pd->buffer = (*pd->jinfo.mem->alloc_sarray) ((j_common_ptr) &pd->jinfo, JPOOL_IMAGE, row_stride, 1);
 }
@@ -54,7 +54,7 @@ void JPEG_Decompressor::StartNextJPEG()
 {
   // shut down the decompression object
   jpeg_finish_decompress( &pd->jinfo);
-  
+
   // free the scanline that we created
   (*pd->jinfo.mem->free_pool) ((j_common_ptr) &pd->jinfo, JPOOL_IMAGE);
 
@@ -63,7 +63,7 @@ void JPEG_Decompressor::StartNextJPEG()
 
   // JSAMPLEs per row in output buffer
   unsigned long row_stride = pd->jinfo.output_width * pd->jinfo.output_components;
-    
+
   // Make a one-row-high sample array that will go away when done with image
   pd->buffer = (*pd->jinfo.mem->alloc_sarray) ((j_common_ptr) &pd->jinfo, JPOOL_IMAGE, row_stride, 1);
 }
@@ -79,10 +79,10 @@ JPEG_Decompressor::~JPEG_Decompressor()
 {
   // shut down the decompression object
   jpeg_abort_decompress( &pd->jinfo);
-  
+
   // free the scanline that we created
   (*pd->jinfo.mem->free_pool) ((j_common_ptr) &pd->jinfo, JPOOL_IMAGE);
-  
+
   delete pd;
 }
 
@@ -98,7 +98,7 @@ int JPEG_Decompressor::width()
 }
 
 int JPEG_Decompressor::GetBitsPixel()
-{    
+{
   return pd->jinfo.output_components;
 }
 
@@ -118,7 +118,7 @@ unsigned long jpeg_stdio_ftell(j_decompress_ptr cinfo)
   my_source_mgr* src = (my_source_mgr *) (cinfo->src);
   if (src->pub.next_input_byte)
     return ftell(src->infile) - src->pub.bytes_in_buffer;
-  else 
+  else
     return 0;
 }
 

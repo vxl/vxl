@@ -333,7 +333,7 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
         GLint unpack_alignment;
         glGetIntegerv (GL_UNPACK_ALIGNMENT, &unpack_alignment);
         int src_pitch = (int)vcl_ceil(double(row_length) * (src_format->bits >> 3) / unpack_alignment);
-        
+
         // Now choose a renderer depending on the sign of pixel_zoom_y
         if (pixel_zoom_y > 0) {
 

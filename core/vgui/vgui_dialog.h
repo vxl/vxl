@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_dialog - Abstract dialog class
 // .LIBRARY vgui
 // .HEADER vxl Package
@@ -13,7 +13,7 @@
 // .SECTION Description
 //
 // vgui_dialog allows the user to build a dialog from a collection of fields.
-// A field in this context consists of a vcl_string label and a variable. 
+// A field in this context consists of a vcl_string label and a variable.
 // The dialog is then posted using the ask() method. If ask returns true then any changes
 // to the fields in the dialog are used to update the variables.
 // Each vgui_dialog contains an instance of a concrete subclass of vgui_dialog_impl.
@@ -48,10 +48,10 @@
 //class vgui_dialog_field;
 class vgui_dialog_impl;
 
-class vgui_dialog 
+class vgui_dialog
 {
 public:
-    
+
   vgui_dialog(const char* name);
  ~vgui_dialog();
 
@@ -90,7 +90,7 @@ public:
   void set_cancel_button(const char* label);
   void set_ok_button(const char* label);
 
-  // A "modal" dialog captures all events sent to the 
+  // A "modal" dialog captures all events sent to the
   // application.
   void set_modal(const bool);
 

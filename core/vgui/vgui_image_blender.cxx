@@ -27,14 +27,14 @@
 # define debug vcl_cerr
 #endif
 
-vgui_image_blender::vgui_image_blender(char const* file, float a) 
+vgui_image_blender::vgui_image_blender(char const* file, float a)
   : alpha(a)
 {
   renderer = new vgui_image_renderer;
   renderer->set_image(vil_load(file));
 }
 
-vgui_image_blender::vgui_image_blender(vil_image const& img, float a) 
+vgui_image_blender::vgui_image_blender(vil_image const& img, float a)
   : alpha(a)
 {
   renderer = new vgui_image_renderer;
@@ -60,40 +60,39 @@ void vgui_image_blender::reread_image()
 }
 
 bool vgui_image_blender::handle(vgui_event const &e) {
-  
+
   if (vgui_matrix_state::gl_matrices_are_cleared()) {
     GLint vp[4];
     glGetIntegerv(GL_VIEWPORT, vp);
     int width = vp[2];
     int height = vp[3];
-    
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0, width, 0, height);
-    
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glScalef(1.0,-1.0,1.0);
     glTranslatef(0.0, -height, 0.0);
   }
-  
+
   if (e.type == vgui_DRAW) {
-    
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPixelTransferf(GL_ALPHA_SCALE, alpha);
-    
+
     renderer->render();
-    
+
     glPixelTransferf(GL_ALPHA_SCALE, 1.0);
     glBlendFunc(GL_ONE, GL_ZERO);
     glDisable(GL_BLEND);
-    
+
     return true;
   }
-  
+
   if (e.type == vgui_KEY_PRESS) {
-    
     switch(e.key) {
     case '_':
       alpha -= 0.1f;
@@ -114,5 +113,3 @@ bool vgui_image_blender::handle(vgui_event const &e) {
   }
   return false;
 }
-
-

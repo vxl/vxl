@@ -19,12 +19,12 @@
 // fake X button event back onto the event stream.
 //
 // This works with both shared and non-shared GLUT libraries,
-// but it may break when linked against with newer versions of 
+// but it may break when linked against with newer versions of
 // GLUT.
 
 //--------------------------------------------------------------------------------
 
-// see glutint.h (taken from glut source distribution) for the 
+// see glutint.h (taken from glut source distribution) for the
 // rest of this structure.
 struct GLUTwindow
 {
@@ -53,7 +53,7 @@ void (*vgui_glut_menu_hack::last_minute_change_callback)(int menu_id) = 0;
 //--------------------------------------------------------------------------------
 
 struct vgui_glut_menu_hack_bind_entry
-{ 
+{
   int button;
   int mods;
   int menu_id;
@@ -88,18 +88,18 @@ struct vgui_glut_menu_hack::per_window_record
 static vgui_glut_menu_hack::per_window_record * get_current_record()
 {
   static vcl_vector<vgui_glut_menu_hack::per_window_record *> records;
-  
+
   unsigned win = glutGetWindow();
   if (win == 0)
     return 0;
   while (win >= records.size())
     records.push_back( (vgui_glut_menu_hack::per_window_record*)0 ); // gcc 2.7 needs this cast
-  
+
   if (records[win] == 0) {
     //vcl_cerr << __FILE__ " : create record for window " << win << vcl_endl;
     records[win] = new vgui_glut_menu_hack::per_window_record;
   }
-  
+
   return records[win];
 }
 
@@ -121,11 +121,11 @@ bool vgui_glut_menu_hack::mouse(int button, int state, int x, int y)
 {
   if (state != GLUT_DOWN)
     return false;
-  
+
   int mods = glutGetModifiers();
-  
+
   int index = find_index(button, mods);
-  
+
   if (index<0)
     return false; // invalid modifier combination.
 
@@ -135,15 +135,15 @@ bool vgui_glut_menu_hack::mouse(int button, int state, int x, int y)
 
   if (rec->entries[index].menu_id==0)
     return false; // no menu bound.
-  
+
   // allow client to change the menu if desired :
   if (last_minute_change_callback)
     last_minute_change_callback(rec->entries[index].menu_id);
-  
+
   active = true;
   glut_button = button;
   //vcl_cerr << "active" << vcl_endl;
-  
+
   // attach the required button to the menu
   {
     int old_id = glutGetMenu();
@@ -153,8 +153,7 @@ bool vgui_glut_menu_hack::mouse(int button, int state, int x, int y)
     if (old_id)
       glutSetMenu(old_id);
   }
-  
-  
+
   { // push another button press onto the event stream :
     static XEvent event;
     event.xbutton.type = ButtonPress;
@@ -177,7 +176,7 @@ bool vgui_glut_menu_hack::mouse(int button, int state, int x, int y)
     if (glut_button == GLUT_RIGHT_BUTTON)
       event.xbutton.button = Button3;
     event.xbutton.same_screen = 1; // ?
-    
+
     XPutBackEvent(__glutDisplay, &event);
   }
   // the button press we pushed should bring up the menu.

@@ -23,7 +23,7 @@
 
 class vgui_gtk_adaptor;
 
-class vgui_qt_window : 
+class vgui_qt_window :
    public QMainWindow,
    public vgui_window
 {
@@ -44,7 +44,7 @@ public:
 
    vgui_qt_adaptor*  adaptor ;
    vgui_qt_statusbar statusbar;
-   
+
    bool use_menubar;
    bool use_statusbar;
 

@@ -22,10 +22,10 @@ void osl_load_topology(char const *f, vcl_list<osl_edge*> &e, vcl_list<osl_verte
 void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_vertex*> &vs) {
   es.clear();
   vs.clear();
-  
+
   char buf[1024]; // line buffer
   char tmp[1024];
-  
+
   // check version string
   f >> vcl_ws;
   f.getline(buf, sizeof(buf));
@@ -42,7 +42,7 @@ void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_ver
   if (sscanf(buf, "%d%[ ]vertices", &numverts, tmp) != 2) {
     vcl_cerr << __FILE__ ": error reading number of vertices" << vcl_endl;
     return;
-  } 
+  }
   assert(numverts >= 0);
   streamok;
   // read vertices :
@@ -59,7 +59,7 @@ void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_ver
     vs.push_front(vert[stashid]);
   }
   streamok;
-  
+
   // read number of edges :
   f >> vcl_ws;
   f.getline(buf, sizeof(buf));
@@ -77,13 +77,13 @@ void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_ver
     f >> vcl_ws >> stashid1 >> stashid2;
     assert(stashid1<vert.size() && vert[stashid1]);
     assert(stashid2<vert.size() && vert[stashid2]);
-    
+
     int id; // edge id
     f >> vcl_ws >> id;
-    
+
     osl_edge *e = new osl_edge(2/*dummy*/, vert[stashid1], vert[stashid2]);
     e->SetId(id);
-    
+
     e->read_ascii(f);
 
     es.push_front(e);

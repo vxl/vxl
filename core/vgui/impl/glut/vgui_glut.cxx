@@ -156,24 +156,24 @@ void vgui_glut_process_command_queue()
     // remove from front of queue.
     vcl_pair<void *, void *> p = vgui_glut_command_queue.front();
     vgui_glut_command_queue.pop_front();
-    
+
     // a bit of casting.
     vgui_glut_adaptor *a = static_cast<vgui_glut_adaptor *>(p.first );
     vgui_command      *c = static_cast<vgui_command *>(p.second);
-    
+
     // switch to the relevant GL context.
     int old_win = glutGetWindow();
     if (old_win != a->get_id())
       glutSetWindow(a->get_id());
-    
+
     // execute the command.
     //vcl_cerr << "cmnd = " << (void*)vgui_glut_adaptor_menu_command << vcl_endl;
     c->execute();
     //vcl_cerr << "returned successfully" << vcl_endl;
-    
+
     // this matches ref() in vgui_glut_queue_command()
     c->unref();
-    
+
     // switch back to the old GL context.
     if (old_win != 0 && old_win != a->get_id())
       glutSetWindow(old_win);

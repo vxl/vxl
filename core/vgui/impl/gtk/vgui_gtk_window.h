@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_gtk_window - specialization of vgui_window for GTK
 // .LIBRARY vgui-gtk
 // .HEADER vxl Package
@@ -39,7 +39,7 @@ class vgui_gtk_adaptor;
 class vgui_gtk_window : public vgui_window
 {
 public:
-    
+
   vgui_gtk_window(int w, int h, const vgui_menu& menu, const char* title);
   vgui_gtk_window(int w, int h, const char* title);
  ~vgui_gtk_window();
@@ -48,14 +48,14 @@ public:
   bool use_statusbar;
 
   void init();
-  
+
   void show();
   void hide();
   void set_title(vcl_string const &);
 
   void set_menubar(const vgui_menu &menu);
   void set_statusbar(bool) {}
-  
+
   void set_adaptor(vgui_adaptor*);
   vgui_adaptor* get_adaptor();
   vgui_statusbar* get_statusbar() { return &statusbar; }

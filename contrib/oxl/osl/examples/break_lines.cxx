@@ -14,7 +14,7 @@ int main(int argc, char **argv)
   vul_arg<vcl_string> out("-out", "output file (default is stdout)", "");
   vul_arg<double> thresh ("-thresh", "threshold", 0.2);
   vul_arg_parse(argc, argv);
-    
+
   //
   vcl_cerr << "loading topology" << vcl_endl;
   vcl_list<osl_edge*> edges;
@@ -27,13 +27,13 @@ int main(int argc, char **argv)
   //
   osl_topology_ref(edges);
   osl_topology_ref(vertices);
-  
+
   //
   vcl_list<osl_edge*> broken;
   for (vcl_list<osl_edge*>::iterator i=edges.begin(); i!=edges.end(); ++i)
     osl_break_edge(*i, &broken);
   osl_topology_ref(broken);
-  
+
   //
   vcl_cerr << "saving topology" << vcl_endl;
   if (out() == "")

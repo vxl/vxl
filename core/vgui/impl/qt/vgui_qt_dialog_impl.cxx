@@ -24,7 +24,7 @@ static bool is_modal = true;
 
 //-----------------------------------------------------------------------------
 vgui_qt_dialog_impl::vgui_qt_dialog_impl(const char* name)
-:  QDialog(0, name, is_modal), vgui_dialog_impl(name) 
+:  QDialog(0, name, is_modal), vgui_dialog_impl(name)
 {
    setCaption(name);
 }
@@ -38,30 +38,29 @@ void vgui_qt_dialog_impl::modal(const bool m)
 
 
 //-----------------------------------------------------------------------------
-bool vgui_qt_dialog_impl::ask() 
+bool vgui_qt_dialog_impl::ask()
 {
    QPushButton *ok, *cancel;
    ok = new QPushButton( ok_button_text_.c_str(), this );
    connect( ok, SIGNAL(clicked()), SLOT(accept()) );
    cancel = new QPushButton( cancel_button_text_.c_str(), this );
-   connect( cancel, SIGNAL(clicked()), SLOT(reject()) ); 
+   connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
 
    ok->setMinimumSize(cancel->width(), cancel->height());
    ok->setMaximumSize(cancel->width(), cancel->height());
-   
 
    QVBoxLayout* total = new QVBoxLayout(this, 10, -1, "totallayout");
    QVBoxLayout* layout = new QVBoxLayout(total, -1, "vboxlayout");
    QHBoxLayout* lower = new QHBoxLayout(total, -1, "buttonslayout");
-   
+
    lower->addStretch(1);
    lower->addWidget(ok, 0);
    lower->addStretch(1);
    lower->addWidget(cancel, 0);
    lower->addStretch(1);
 
-   for (vcl_vector<element>::iterator ei = elements.begin(); 
-        ei != elements.end(); ++ei) 
+   for (vcl_vector<element>::iterator ei = elements.begin();
+        ei != elements.end(); ++ei)
    {
       element l = (*ei);
       QWidget* widget = static_cast<QWidget*>(l.widget);
@@ -74,7 +73,7 @@ bool vgui_qt_dialog_impl::ask()
              l.type == double_elem ||
              l.type == string_elem ||
              l.type == bool_elem   ||
-             l.type == choice_elem) 
+             l.type == choice_elem)
          {
             QHBoxLayout* hbox = new QHBoxLayout(layout, -1);
             QLabel* label = new QLabel(widget, l.field->label.c_str(), this);
@@ -106,7 +105,7 @@ bool vgui_qt_dialog_impl::ask()
    }
 
    bool result = exec();
-   
+
    if (result == true)
    {
       for (vcl_vector<element>::iterator ei = elements.begin();
@@ -116,7 +115,7 @@ bool vgui_qt_dialog_impl::ask()
          if (l.type == long_elem ||
              l.type == float_elem ||
              l.type == double_elem ||
-             l.type == string_elem) 
+             l.type == string_elem)
          {
             QLineEdit* input = static_cast<QLineEdit*>(l.widget);
             l.field->update_value(input->text().ascii());
@@ -150,7 +149,7 @@ bool vgui_qt_dialog_impl::ask()
          }
       }
    }
-   
+
    delete ok;
    delete cancel;
    return result;
@@ -170,7 +169,7 @@ void* vgui_qt_dialog_impl::int_field_widget(const char* txt, int& v)
 {
    QSpinBox* widget = new QSpinBox(-65000, 65000, 1, this);
    widget->setValue(v);
-   return widget;   
+   return widget;
 }
 
 
@@ -300,7 +299,7 @@ vgui_qt_colorchooser_impl::vgui_qt_colorchooser_impl(QWidget* parent, const char
 void vgui_qt_colorchooser_impl::get_a_color()
 {
    QColor c = QColorDialog::getColor(QColor(value_.c_str()));
-   if (c.isValid()) 
+   if (c.isValid())
    {
       value_ = c.name();
       frame_->setBackgroundColor(c);
