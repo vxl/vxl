@@ -49,48 +49,13 @@ void vsol_box_3d::add_point(double x, double y, double z)
   box_.update(x, y, z);
 }
 
-void vsol_box_3d::set_min_x(const double& v)
-{
-  (box_.min())[0]=v;
-}
-
-void vsol_box_3d::set_max_x(const double& v)
-{
-  (box_.max())[0]=v;
-}
-
-void vsol_box_3d::set_min_y(const double& v)
-{
-  (box_.min())[1]=v;
-}
-
-void vsol_box_3d::set_max_y(const double& v)
-{
-  (box_.max())[1]=v;
-}
-
-void vsol_box_3d::set_min_z(const double& v)
-{
-  (box_.min())[2]=v;
-}
-
-void vsol_box_3d::set_max_z(const double& v)
-{
-  (box_.max())[2]=v;
-}
-
-
 //: compare mins and maxs between this and the comp_box, grow to the bounding box
 void vsol_box_3d::grow_minmax_bounds(vsol_box_3d & comp_box)
 {
   if (comp_box.box_.empty()) return;
   if (box_.empty()) { operator=(comp_box); return; }
-  if (comp_box.get_min_x() < get_min_x()) set_min_x(comp_box.get_min_x());
-  if (comp_box.get_max_x() > get_max_x()) set_max_x(comp_box.get_max_x());
-  if (comp_box.get_min_y() < get_min_y()) set_min_y(comp_box.get_min_y());
-  if (comp_box.get_max_y() > get_max_y()) set_max_y(comp_box.get_max_y());
-  if (comp_box.get_min_z() < get_min_z()) set_min_z(comp_box.get_min_z());
-  if (comp_box.get_max_z() > get_max_z()) set_max_z(comp_box.get_max_z());
+  box_.update(comp_box.get_min_x(),comp_box.get_min_y(),comp_box.get_min_z());
+  box_.update(comp_box.get_max_x(),comp_box.get_max_y(),comp_box.get_max_z());
 }
 
 //-------------------------------------------------------------------

@@ -5,12 +5,12 @@
 // \file
 // \brief A bounding box
 //
-//   Note that the definition of width, depth and
-//   height are such that the X-Y plane is considered
-//   as a Rectangle with a "width" and "height"
-//   according to the usual definition. The figure
-//   shows a right-handed coordinate system, but there
-//   is no commitment to that in the definitions
+//  Note that the definition of width, depth and
+//  height are such that the X-Y plane is considered
+//  as a Rectangle with a "width" and "height"
+//  according to the usual definition. The figure
+//  shows a right-handed coordinate system, but there
+//  is no commitment to that in the definitions
 // \verbatim
 //                       |<--width-->|
 //                 Z     O-----------O  ---
@@ -64,18 +64,6 @@ class vsol_box_3d : public vbl_ref_count , public vul_timestamp
   //: enlarge the bounding box by adding the point (x,y,z) & taking convex hull
   void add_point(double x, double y, double z);
 
-  // deprecated interface:
- private:
-  void set_min_x(const double& v);
-  void set_max_x(const double& v);
-
-  void set_min_y(const double& v);
-  void set_max_y(const double& v);
-
-  void set_min_z(const double& v);
-  void set_max_z(const double& v);
-
- public:
   //: Compare this' bounds to comp_box and grow to the maximum bounding box
   void grow_minmax_bounds(vsol_box_3d & comp_box);
 

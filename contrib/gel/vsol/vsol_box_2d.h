@@ -1,8 +1,10 @@
+// This is gel/vsol/vsol_box_2d.h
 #ifndef vsol_box_2d_h_
 #define vsol_box_2d_h_
 //:
 // \file
 // \brief A bounding box
+//
 // This is a time stamped and refcounted interface to vbl_box<double,2>
 //
 // \verbatim
@@ -45,15 +47,6 @@ class vsol_box_2d : public vbl_ref_count, public vul_timestamp
   //: enlarge the bounding box by adding the point (x,y) and taking convex hull
   void add_point(double x, double y);
 
-  // deprecated interface:
- private:
-  void set_min_x(const double &v);
-  void set_max_x(const double &v);
-
-  void set_min_y(const double &v);
-  void set_max_y(const double &v);
-
- public:
   //: Compare this' bounds to comp_box and grow to the maximum bounding box.
   //  I.e., take the convex union of this and comp_box
   void grow_minmax_bounds(vsol_box_2d & comp_box);
