@@ -33,5 +33,9 @@ int test_complex_main(int /*argc*/,char* /*argv*/[])
   // In particular, complex numbers written with operator<< can be read again with
   // operator>>.
 
+  // complex should have a type called value_type;
+  vcl_complex<float>::value_type tmp = 1.0f;
+  tmp += 2.0f; // to avoid unused variable warnings.
+
   return 0;
 }

@@ -38,6 +38,10 @@
 #elif defined(VCL_METRO_WERKS)
 #include  "mwerks/vcl_complex.h"
 
+// ---------- GCC 2.95
+#elif defined(VCL_GCC_295)
+#include  "gcc-295/vcl_complex.h"
+
 // ---------- ISO
 #else
 # include "iso/vcl_complex.h"
