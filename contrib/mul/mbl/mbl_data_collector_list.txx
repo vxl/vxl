@@ -28,7 +28,7 @@ mbl_data_collector_list<T>::~mbl_data_collector_list()
 
 //: Clear any stored data
 template<class T>
-void mbl_data_collector_list<T>::clean()
+void mbl_data_collector_list<T>::clear()
 {
   data_.resize(0);
 }

@@ -39,7 +39,7 @@ void test_stochastic_data_collector()
   const int n_expts = 50;
   for (int i=0;i<n_expts;++i)
   {
-    collector.clean();
+    collector.clear();
     for (v(0) = 0.0; v(0) < 5000.0; v(0)++)
     {
       if (collector.store_next()) collector.force_record(v);

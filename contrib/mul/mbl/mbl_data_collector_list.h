@@ -26,7 +26,7 @@ public:
   virtual ~mbl_data_collector_list();
 
   //: Clear any stored data
-  virtual void clean();
+  virtual void clear();
 
   //: Hint about how many examples to expect
   virtual void set_n_samples(int n);

@@ -62,7 +62,7 @@ public:
   virtual ~mbl_stochastic_data_collector();
 
     //: Clear any stored data
-  virtual void clean();
+  virtual void clear();
 
     //: Set number of samples to be stored
     // If not set, the value defaults to 1000.

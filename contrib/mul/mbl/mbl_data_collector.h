@@ -32,7 +32,7 @@ public:
   virtual ~mbl_data_collector();
 
   //: Clear any stored data
-  virtual void clean() =0;
+  virtual void clear() =0;
 
   //: Hint about how many examples to expect
   virtual void set_n_samples(int n) = 0;

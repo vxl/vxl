@@ -35,7 +35,7 @@ mbl_stochastic_data_collector<T>::
 
 //: Clear any stored data
 template <class T>
-void mbl_stochastic_data_collector<T>::clean()
+void mbl_stochastic_data_collector<T>::clear()
 {
   nPresented_ = 0;
 }
