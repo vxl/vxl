@@ -50,15 +50,15 @@ public:
   vcl_string image_name(int frame) { return image_dir_ + name(frame) + image_extension_; }
 
   // returns the image directory e.g. "pgm/"
-  vcl_string get_image_dir() { return image_dir_; }
+  vcl_string get_image_dir() const { return image_dir_; }
 
   // returns the image extension e.g. ".pgm"
-  vcl_string get_image_extension() { return image_extension_; }
+  vcl_string get_image_extension() const { return image_extension_; }
 
-  int get_real_index(int frame) { return indices_[frame]; }
-  vcl_vector<int> const& get_real_indices() { return indices_; }
+  int get_real_index(int frame) const { return indices_[frame]; }
+  vcl_vector<int> const& get_real_indices() const { return indices_; }
 
-  int get_nviews() { return indices_.size(); }
+  int get_nviews() const { return indices_.size(); }
 
 
   // pretty print
