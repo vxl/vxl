@@ -32,7 +32,7 @@ void vsl_register_new_loader_clear_func(void (*func)());
 
 //: Deletes all the loaders derived from this class
 //  Deletes every loader for which register_this() has been called
-//  This is mainly called when tidying up the heap to ensure memory
+//  This is automatically called on program exit to ensure memory
 //  leak detectors don't throw up false positives.  In that spirit,
 //  this also calls vsl_indent_clear_all_data() to remove another
 //  potential leak.
