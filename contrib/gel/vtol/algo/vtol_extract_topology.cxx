@@ -1,5 +1,5 @@
+// This is gel/vtol/algo/vtol_extract_topology.cxx
 #include "vtol_extract_topology.h"
-
 //:
 // \file
 // \author Amitha Perera
@@ -8,14 +8,10 @@
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>
 
-#include <vil/vil_image_view.h>
 #include <vil/algo/vil_region_finder.h>
-
-#include <vbl/vbl_ref_count.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
-#include <vgl/vgl_line_2d.h>
 #include <vgl/algo/vgl_line_2d_regression.h>
 
 #include <vtol/vtol_vertex_2d.h>
@@ -66,7 +62,6 @@ typedef vil_region_finder< vtol_extract_topology::data_pixel_type > finder_type;
 //
 struct chain_tree_node
 {
-
   // The region for the current node. Can be null only for the root
   // node. The root node represents the universe. All regions are
   // contained in the universe.
@@ -200,7 +195,6 @@ vcl_vector< vtol_intensity_face_sptr >
 vtol_extract_topology::
 faces( data_image_type const& data_img ) const
 {
-
   region_collection region_list;
   collect_regions( region_list );
 
@@ -208,8 +202,8 @@ faces( data_image_type const& data_img ) const
   // than one face based on containment, etc.
   //
   vcl_vector< vtol_intensity_face_sptr > faces;
-  for( unsigned i = 0; i < region_list.size(); ++i ) {
-    if( ! region_list[i].empty() ) {
+  for ( unsigned i = 0; i < region_list.size(); ++i ) {
+    if ( ! region_list[i].empty() ) {
       compute_faces( region_list[i], faces, &data_img );
     }
   }
@@ -222,7 +216,6 @@ vcl_vector< vtol_intensity_face_sptr >
 vtol_extract_topology::
 faces( ) const
 {
-
   region_collection region_list;
   collect_regions( region_list );
 
@@ -230,8 +223,8 @@ faces( ) const
   // than one face based on containment, etc.
   //
   vcl_vector< vtol_intensity_face_sptr > faces;
-  for( unsigned i = 0; i < region_list.size(); ++i ) {
-    if( ! region_list[i].empty() ) {
+  for ( unsigned i = 0; i < region_list.size(); ++i ) {
+    if ( ! region_list[i].empty() ) {
       compute_faces( region_list[i], faces, 0 );
     }
   }
@@ -253,11 +246,11 @@ compute_label_range()
   //
   min_label_ = img_(0,0);
   max_label_ = min_label_;
-  for( unsigned j = 0; j < img_.nj(); ++j ) {
-    for( unsigned i = 0; i < img_.ni(); ++i ) {
-      if( min_label_ > img_(i,j) )
+  for ( unsigned j = 0; j < img_.nj(); ++j ) {
+    for ( unsigned i = 0; i < img_.ni(); ++i ) {
+      if ( min_label_ > img_(i,j) )
         min_label_ = img_(i,j);
-      if( max_label_ < img_(i,j) )
+      if ( max_label_ < img_(i,j) )
         max_label_ = img_(i,j);
     }
   }
@@ -487,8 +480,8 @@ trace_edge_chain( unsigned i, unsigned j, unsigned dir )
   chain->add_edgel( vdgl_edgel( i-0.5, j-0.5, -1, dir*90 ) );
   move( dir, i, j );
 
-  while ( vertex_index( i, j ) == null_index ) {
-
+  while ( vertex_index( i, j ) == null_index )
+  {
     set_vertex_index( i, j, done_index );
 
     chain->add_edgel( vdgl_edgel( i-0.5, j-0.5, -1, dir*90 ) );
@@ -596,8 +589,8 @@ construct_topology( )
   for ( unsigned j = 0; j <= img_.nj(); ++j ) {
     for ( unsigned i = 0; i <= img_.ni(); ++i ) {
       if ( vertex_index( i, j ) == null_index &&
-           is_boundary_vertex( i, j ) ) {
-
+           is_boundary_vertex( i, j ) )
+      {
         // Find the two outgoing directions
         //
         unsigned dir = 0;
@@ -671,7 +664,7 @@ trace_face_boundary( vcl_vector<unsigned>& markers,
   edge_labels( node(index).i, node(index).j, dir,
                start_left, region_label );
 
-  if( region_label == min_label_ - 1 )
+  if ( region_label + 1 == min_label_ )
     return false;
 
   // Find an interior pixel of this face basd on the first edge we
@@ -727,9 +720,9 @@ trace_face_boundary( vcl_vector<unsigned>& markers,
       DEBUG( assert( dir != old_dir ) );
 
       edge_labels( i, j, dir, left, right );
-    } while( left == right || right != region_label );
-    
-  } while( index != start_index );
+    } while ( left == right || right != region_label );
+
+  } while ( index != start_index );
 
   return true;
 }
@@ -751,13 +744,13 @@ collect_regions( region_collection& region_list ) const
 
   // Process each vertex, generating the boundary chains
   //
-  for( unsigned i = 0; i < node_list_.size(); ++i ) {
-    for( unsigned dir = 0; dir < 4; ++dir ) {
-      if( ! is_marked( markers[i], dir ) &&
+  for ( unsigned i = 0; i < node_list_.size(); ++i ) {
+    for ( unsigned dir = 0; dir < 4; ++dir ) {
+      if ( ! is_marked( markers[i], dir ) &&
           node(i).link[dir] != null_index ) {
         region_type_sptr chain = new region_type;
         int label;
-        if( trace_face_boundary( markers, i, dir, *chain, label ) ) {
+        if ( trace_face_boundary( markers, i, dir, *chain, label ) ) {
           assert( label >= min_label_ );
           region_list[ label - min_label_ ].push_back( chain );
         }
@@ -771,8 +764,8 @@ collect_regions( region_collection& region_list ) const
   // counter-clockwise chain at the boundary (which is the border of
   // the "outside" region).
   //
-  for( unsigned i = 0; i < node_list_.size(); ++i ) {
-    for( unsigned dir = 0; dir < 4; ++dir ) {
+  for ( unsigned i = 0; i < node_list_.size(); ++i ) {
+    for ( unsigned dir = 0; dir < 4; ++dir ) {
       assert( node(i).link[dir] == null_index ||
               ( dir==0 && node(i).j==img_.nj() ) ||
               ( dir==1 && node(i).i==0 ) ||
@@ -808,7 +801,7 @@ compute_faces( vcl_vector< region_type_sptr > const& chains,
   // If we have a data image, use it to add digital region information
   // to the face
   //
-  if( data_img ) {
+  if ( data_img ) {
     finder_type* finder = new finder_type( img_, vil_region_finder_4_conn );
     add_faces( faces, finder, data_img, &universe );
     delete finder;
@@ -821,7 +814,6 @@ compute_faces( vcl_vector< region_type_sptr > const& chains,
 // =============================================================================
 //                                                                   VERTEX NODE
 // =============================================================================
-
 
 
 // ---------------------------------------------------------------------------
@@ -987,7 +979,7 @@ make_face( finder_type* find, data_image_type const* img ) const
   for ( unsigned i = 0; i < children.size(); ++i ) {
     face_chains.push_back( children[i]->region->make_one_chain() );
   }
-  if( find ) {
+  if ( find ) {
     assert( img );
 
     vcl_vector<unsigned> ri, rj;
@@ -996,7 +988,7 @@ make_face( finder_type* find, data_image_type const* img ) const
 
     vcl_vector<float> x, y;
     vcl_vector<unsigned short> intensity;
-    for( unsigned c = 0; c < ri.size(); ++c ) {
+    for ( unsigned c = 0; c < ri.size(); ++c ) {
       x.push_back( static_cast<float>(ri[c]) );
       y.push_back( static_cast<float>(rj[c]) );
       intensity.push_back( (*img)( ri[c], rj[c] ) );
@@ -1037,7 +1029,6 @@ print( vcl_ostream& ostr, unsigned indent ) const
 } // end anonymous namespace
 
 
-
 // =============================================================================
 //                                                          NON-MEMBER FUNCTIONS
 // =============================================================================
@@ -1054,10 +1045,10 @@ add_faces( vcl_vector<vtol_intensity_face_sptr>& faces,
            chain_tree_node* node,
            bool even_level )
 {
-  if( even_level ) {
+  if ( even_level ) {
     faces.push_back( node->make_face( find, img ) );
   }
-  for( unsigned i = 0; i < node->children.size(); ++i ) {
+  for ( unsigned i = 0; i < node->children.size(); ++i ) {
     add_faces( faces, find, img, node->children[i], !even_level );
   }
 }
@@ -1076,7 +1067,7 @@ contains( region_type_sptr a, region_type_sptr b )
     // Odd number of crossings => inside.
     //
     unsigned num_crossings = 0;
-    for( unsigned i = 0; i < a->size(); ++i ) {
+    for ( unsigned i = 0; i < a->size(); ++i ) {
       num_crossings += num_crosses_x_pos_ray( b->i, b->j, *(*a)[i] );
     }
     return ( num_crossings % 2 ) == 1;
@@ -1098,7 +1089,7 @@ num_crosses_x_pos_ray( double x, double y, vdgl_edgel_chain const& chain )
   // cross on a vertex.
   //
   unsigned count = 0;
-  for ( int i = 0; i < chain.size()-1; ++i ) {
+  for ( unsigned int i = 0; i+1 < chain.size(); ++i ) {
     vdgl_edgel const* e0 = &chain[i];
     vdgl_edgel const* e1 = &chain[i+1];
     assert( e0->y() != y && e1->y() != y );
@@ -1124,19 +1115,19 @@ smooth_chain( vdgl_edgel_chain_sptr chain,
               unsigned int num_pts )
 {
   // Can't smooth over more points than we have
-  if( (int)num_pts > chain->size() ) {
+  if ( num_pts > chain->size() ) {
     num_pts = chain->size();
   }
 
   // Need at least two points to fit a line
-  if( num_pts < 2)
+  if ( num_pts < 2)
     return chain;
 
   vdgl_edgel_chain_sptr new_chain = new vdgl_edgel_chain;
 
   vgl_line_2d_regression<double> reg;
 
-  // These store the indicies of the edgel points used to estimate the
+  // These store the indices of the edgel points used to estimate the
   // line. The points in [fit_start,fit_end) are used.
   //
   unsigned fit_start;
@@ -1156,12 +1147,12 @@ smooth_chain( vdgl_edgel_chain_sptr chain,
   // pass through it. This will make sure that the vertices don't move
   // because of the smoothing.
   //
-  for( fit_end = 1; fit_end < num_pts; ++fit_end ) {
+  for ( fit_end = 1; fit_end < num_pts; ++fit_end ) {
     reg.increment_partial_sums( chain->edgel(fit_end).x(),
                                 chain->edgel(fit_end).y() );
   }
-  assert( reg.get_n_pts() == num_pts-1 );
-  if( !reg.fit_constrained( chain->edgel(0).x(), chain->edgel(0).y() ) ) {
+  assert( reg.get_n_pts() + 1 == num_pts );
+  if ( !reg.fit_constrained( chain->edgel(0).x(), chain->edgel(0).y() ) ) {
     vcl_cerr << "line fit failed at start\n";
   }
 
@@ -1171,7 +1162,7 @@ smooth_chain( vdgl_edgel_chain_sptr chain,
   reg.get_line().get_two_points( pt1, pt2 );
   dir = reg.get_line().direction();
   slope = reg.get_line().slope_degrees();
-  for( ; curr_ind < (fit_end+1)/2; ++curr_ind ) {
+  for ( ; curr_ind < (fit_end+1)/2; ++curr_ind ) {
     pt2.set( chain->edgel(curr_ind).x(), chain->edgel(curr_ind).y() );
     pt2 = pt1 + dot_product( pt2-pt1, dir ) * dir;
     new_chain->add_edgel( vdgl_edgel( pt2.x(), pt2.y(), -1, slope ) );
@@ -1181,7 +1172,7 @@ smooth_chain( vdgl_edgel_chain_sptr chain,
   //
   fit_start = 1;
 
-  while( (int)fit_end < chain->size()-1 ) {
+  while ( fit_end + 1 < chain->size() ) {
     // Add one more point to get num_pts points
     //
     reg.increment_partial_sums( chain->edgel(fit_end).x(),
@@ -1192,8 +1183,8 @@ smooth_chain( vdgl_edgel_chain_sptr chain,
 
     // Estimate a new line
     //
-    if( !reg.fit() ) {
-      vcl_cerr << "line fit failed at " << fit_start << "-" << fit_end << "\n";
+    if ( !reg.fit() ) {
+      vcl_cerr << "line fit failed at " << fit_start << '-' << fit_end << '\n';
     }
 
     // Project the current point onto the line to get the smoothed position
@@ -1213,7 +1204,7 @@ smooth_chain( vdgl_edgel_chain_sptr chain,
     ++fit_start;
   }
 
-  assert( reg.get_n_pts() == num_pts-1 );
+  assert( reg.get_n_pts() + 1 == num_pts );
 
   // The special case when we are using all the points to fit a line,
   // the end point is already in the regression object when it
@@ -1221,10 +1212,10 @@ smooth_chain( vdgl_edgel_chain_sptr chain,
   // point (which is not in the regression object) so we can do a
   // constrained fit.
   //
-  if( num_pts == chain->size() ) {
+  if ( num_pts == chain->size() ) {
     assert( fit_end == chain->size() );
     assert( fit_start == 1 );
-    fit_end = chain->size()-1;
+    --fit_end;
     reg.decrement_partial_sums( chain->edgel(fit_end).x(),
                                 chain->edgel(fit_end).y() );
     reg.increment_partial_sums( chain->edgel(0).x(),
@@ -1235,7 +1226,7 @@ smooth_chain( vdgl_edgel_chain_sptr chain,
   // constrainted fit to make sure we interpolate the end vertex, and
   // use this line for the final few edgel points.
   //
-  if( !reg.fit_constrained( chain->edgel(fit_end).x(),
+  if ( !reg.fit_constrained( chain->edgel(fit_end).x(),
                             chain->edgel(fit_end).y() ) ) {
     vcl_cerr << "line fit failed at end\n";
   }
@@ -1243,7 +1234,7 @@ smooth_chain( vdgl_edgel_chain_sptr chain,
   dir = reg.get_line().direction();
   reg.get_line().get_two_points( pt1, pt2 );
   slope = reg.get_line().slope_degrees();
-  for( ; curr_ind <= fit_end; ++curr_ind ) {
+  for ( ; curr_ind <= fit_end; ++curr_ind ) {
     pt2.set( chain->edgel(curr_ind).x(), chain->edgel(curr_ind).y() );
     pt2 = pt1 + dot_product( pt2-pt1, dir )*dir;
     new_chain->add_edgel( vdgl_edgel( pt2.x(), pt2.y(), -1, slope ) );
