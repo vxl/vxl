@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_qr.txx
+// This is core/vnl/algo/vnl_qr.txx
 #ifndef vnl_qr_txx_
 #define vnl_qr_txx_
 //:
@@ -7,6 +7,7 @@
 // \date   08 Dec 96
 
 #include "vnl_qr.h"
+#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_complex.h>
 #include <vnl/vnl_math.h>
