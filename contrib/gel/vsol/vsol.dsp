@@ -213,6 +213,36 @@ SOURCE=.\Templates/vcl_algorithm+vsol_spatial_object_2d~-.cxx
 SOURCE=.\Templates/vsl_vector_io+vsol_point_2d_sptr-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsol_box_2d_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsol_line_2d_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsol_polygon_2d_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsol_polyline_2d_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+vsol_line_2d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+vsol_point_2d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+vsol_polygon_2d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+vsol_polyline_2d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+vsol_spatial_object_2d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+vsol_spatial_object_2d-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsol_box_2d.cxx
 # End Source File
 # Begin Source File
