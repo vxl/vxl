@@ -22,7 +22,6 @@
 
 //typedef vbl_smart_ptr<vmal_multi_view_data<>> vmal_multi_view_data_sptr;
 
-
 typedef vmal_multi_view_data<vtol_vertex_2d_sptr> vmal_mvd_vertex;
 
 typedef vbl_smart_ptr<vmal_mvd_vertex> vmal_multi_view_data_vertex_sptr;

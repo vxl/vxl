@@ -4,14 +4,14 @@
 #pragma interface
 #endif
 //--------------------------------------------------------------------------------
-// .NAME	vmal_multi_view_point_data
-// .INCLUDE	vmal/vmal_multi_view_point_data
-// .FILE	vmal_multi_view_point_data.cxx
+// .NAME        vmal_multi_view_data
+// .INCLUDE     vmal/vmal_multi_view_data
+// .FILE        vmal_multi_view_data.cxx
 // .SECTION Description:
 //   Class to hold the matched points through mutli views
 // .SECTION Author
 //   L. Guichard
-// .SECTION Modifications:   
+// .SECTION Modifications:
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_map.h>
@@ -24,43 +24,43 @@ template <class T>
 class vmal_multi_view_data: public vbl_ref_count {
 
 public:
-	vmal_multi_view_data();
-	vmal_multi_view_data(int nbviews);
-	~vmal_multi_view_data();
-	
-	void new_track();
-	void close_track();
+  vmal_multi_view_data();
+  vmal_multi_view_data(int nbviews);
+  ~vmal_multi_view_data();
 
-	bool get_first_track(vcl_map<int,T> & track);
-	bool get_next_track(vcl_map<int,T> & track);
+  void new_track();
+  void close_track();
 
-	void set_params(int nbviews);
-	void set(int view_num,int matchnum,T);
-	void set(int view_num,T);
+  bool get_first_track(vcl_map<int,T> & track);
+  bool get_next_track(vcl_map<int,T> & track);
 
-	void get(int, vcl_vector<T> &);
-	void get(int, int, vcl_vector<T> &,
-			           vcl_vector<T> &);
-	void get(int, int, int, vcl_vector<T> &,
-							vcl_vector<T> &,
-							vcl_vector<T> &);
-	
-	bool get_pred_match(int view_num,T obj,T & res);
-	int get_nb_views(){return _nbviews;}; 
+  void set_params(int nbviews);
+  void set(int view_num,int matchnum,T);
+  void set(int view_num,T);
 
-	void remove(int view_num, T match);
-	
-	vcl_ostream& print(vcl_ostream& str);
+  void get(int, vcl_vector<T> &);
+  void get(int, int, vcl_vector<T> &,
+                 vcl_vector<T> &);
+  void get(int, int, int, vcl_vector<T> &,
+              vcl_vector<T> &,
+              vcl_vector<T> &);
+
+  bool get_pred_match(int view_num,T obj,T & res);
+  int get_nb_views(){return _nbviews;};
+
+  void remove(int view_num, T match);
+
+  vcl_ostream& print(vcl_ostream& str);
 
 private:
-	int _nbviews;
-	int _nbfeatures; //number of features wishing to be detected 
-	int _size_vect_ft;//the number of features in all images
-	int _matchnum; //the number of tracks
-	bool _closed_track;
+  int _nbviews;
+  int _nbfeatures; //number of features wishing to be detected
+  int _size_vect_ft;//the number of features in all images
+  int _matchnum; //the number of tracks
+  bool _closed_track;
 
-	NViewMatches MVM;
-	vcl_vector<T> all_pts;
-
+  NViewMatches MVM;
+  vcl_vector<T> all_pts;
 };
+
 #endif

@@ -4,42 +4,41 @@
 
 vmal_kl_params::vmal_kl_params()
 {
-	set_defaults();
+  set_defaults();
 }
 
 vmal_kl_params::~vmal_kl_params()
 {
 }
 
-vmal_kl_params::vmal_kl_params(const vmal_kl_params & params) 
+vmal_kl_params::vmal_kl_params(const vmal_kl_params & params)
 {
-	// A faire
-	numpoints =params.numpoints;
-	search_range = params.search_range ;
+  // A faire
+  numpoints =params.numpoints;
+  search_range = params.search_range ;
 
-	mindist = params.mindist; 
-	window_width = params.window_width;
-	window_height = params.window_height;
-	min_eigenvalue = params.min_eigenvalue;
-	min_determinant = params.min_determinant;
-	min_displacement = params.min_displacement;
-	max_iterations = params.max_iterations;
-	max_residue = params.max_residue;
-	grad_sigma = params.grad_sigma;
-	smooth_sigma_fact = params.smooth_sigma_fact;
-	pyramid_sigma_fact = params.pyramid_sigma_fact;
-	replaceLostPoints = params.replaceLostPoints;
-	sequentialMode = params.sequentialMode;
-	smoothBeforeSelecting = params.smoothBeforeSelecting;
-	writeInternalImages = params.writeInternalImages;
-	nSkippedPixels = params.nSkippedPixels;
-	verbose = params.verbose;	
+  mindist = params.mindist;
+  window_width = params.window_width;
+  window_height = params.window_height;
+  min_eigenvalue = params.min_eigenvalue;
+  min_determinant = params.min_determinant;
+  min_displacement = params.min_displacement;
+  max_iterations = params.max_iterations;
+  max_residue = params.max_residue;
+  grad_sigma = params.grad_sigma;
+  smooth_sigma_fact = params.smooth_sigma_fact;
+  pyramid_sigma_fact = params.pyramid_sigma_fact;
+  replaceLostPoints = params.replaceLostPoints;
+  sequentialMode = params.sequentialMode;
+  smoothBeforeSelecting = params.smoothBeforeSelecting;
+  writeInternalImages = params.writeInternalImages;
+  nSkippedPixels = params.nSkippedPixels;
+  verbose = params.verbose;
 }
 
 
 void vmal_kl_params::set_defaults()
 {
-
   numpoints = 100;
   search_range = 15;
 
@@ -62,5 +61,3 @@ void vmal_kl_params::set_defaults()
   verbose = true;
 }
 
-
- 
