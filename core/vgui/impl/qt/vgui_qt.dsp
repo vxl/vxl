@@ -114,6 +114,22 @@ SOURCE=.\vgui_qt_tag.cxx
 
 SOURCE=.\vgui_qt_window.cxx
 # End Source File
+# Begin Source File
+
+SOURCE=.\vgui_qt_statusbar_mocced.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_qt_menu_mocced.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_qt_dialog_impl_mocced.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_qt_adaptor_mocced.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
