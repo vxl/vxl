@@ -1,4 +1,4 @@
-// This is mul/vil2/io/vil2_io_memory_chunk.h
+// This is core/vil2/io/vil2_io_memory_chunk.h
 #ifndef vil2_io_memory_chunk_h_
 #define vil2_io_memory_chunk_h_
 //:
@@ -7,6 +7,7 @@
 
 #include <vil2/vil2_memory_chunk.h>
 #include <vsl/vsl_binary_io.h>
+#include <vil2/io/vil2_io_smart_ptr.h> // for vsl_b_read(is, vil2_memory_chunk_sptr)
 
 //: Binary save vil2_memory_chunk to stream.
 void vsl_b_write(vsl_b_ostream &os, const vil2_memory_chunk& chunk);
