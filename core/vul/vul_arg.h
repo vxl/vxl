@@ -200,7 +200,7 @@ class vul_arg_info_list
   void operator=(vul_arg_info_list const &) { }
 };
 
-#if defined(VCL_KAI) || defined(VCL_COMO)
+#if defined(VCL_KAI) || defined(VCL_COMO) || defined(VCL_ICC)
 #define declare_specialization(T) \
 template<> void settype(vul_arg<T > &); \
 template<> void print_value(vcl_ostream &, vul_arg<T > const &); \
@@ -211,8 +211,12 @@ declare_specialization(int);
 declare_specialization(unsigned);
 declare_specialization(char*);
 declare_specialization(char const*);
+declare_specialization(float);
 declare_specialization(double);
 declare_specialization(vcl_list<int>);
+declare_specialization(vcl_vector<int>);
+declare_specialization(vcl_vector<unsigned>);
+declare_specialization(vcl_vector<double>);
 declare_specialization(vcl_string);
 
 #undef declare_specialization
