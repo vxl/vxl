@@ -4,7 +4,9 @@ exec perl -w -x $0 ${1+"$@"}
 #line 5
 
 # Purpose: list all files in the vxl source tree that have tab characters
-# (and that shouldn't have them because vxl c++ source files shouldn't).
+# (and that shouldn't have them because vxl C++ source files shouldn't).
+# There are a few other "inconsistencies" which are also mentioned, some of
+# these optionally, unless "-f" is specified on the command line.
 
 undef $/;
 $full = "";
@@ -28,13 +30,13 @@ if (defined($ARGV[0]))
 }
 else
 {
-  $IUEROOT = $ENV{IUEROOT};
-  unless (defined($IUEROOT))
+  $VXLROOT = $ENV{VXLROOT};
+  unless (defined($VXLROOT))
   {
-    print STDERR "IUEROOT is not defined, and no command line arguments were given\n";
+    print STDERR "VXLROOT is not defined, and no command line arguments were given\n";
     exit 0;
   }
-  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/core $IUEROOT/contrib -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/\.v.ol\\.new/|grep -v v3p/xerces-c-src1_4_0/`;
+  $FILES = `find $VXLROOT/config $VXLROOT/vcl $VXLROOT/v3p $VXLROOT/core $VXLROOT/contrib -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/\.v.ol\\.new/|grep -v v3p/xerces-c-src1_4_0/`;
   @FILES = split(' ', $FILES);
 }
 
@@ -431,7 +433,7 @@ foreach $f (@FILES)
     $printed = 1;
   }
   #typos
-  if ($file =~ m/\b(octover|milisecond|destuct[a-z]*|constuct[a-z]*|detruct[a-z]*|contruct[a-z]*|continou[a-z]*|defaut|condtion|intial[a-z]*|hierach[a-z]*|implemen[^t][a-z]*|ouput|outputing|supres[a-z]*|judicous|posible|begining|decend[a-z]*|verticies|matricies|vertexes|assignement|auxiliar\b|distingish|documenation|Eucl[ie]dian|independant|initialli\S+|initili\S+|measurment|miscelaneous|receipe|(re)?determing|retreive|seciton|thse|utilitites|accomodate|accpet|accurary|adaptative|addresss|alement|alife|anj\b|appication|arangement|arbitar\S+|aready|argree|assembing|authentification|auxilary|auxillary|aynchronous|azimutha|blted|bondary|borgefor\b|chaching|changeble|cicurmstance|cirle|coefficent|coeficient|colinear|colum\b|columnn|comparision|compatibilty|compilant|conjuction|continguous|controled|coordiate|corespondence|decompostion|desctruction|despatch|difuse|difusion|digtial|dimensinal|dimensionnal|documenation|doen|efficents|eigenvale|elment|elminate|encapsuate|encounterd|enquiries|eqivalence|estiamte|expalin|exression|filname|fomatted|fractino|frequence|functon|gettt\S+|graident|hasnt|highlighed|homegenous|homogaphy|homogenious|homogenous|idential|implementatation|incredibably|indentical|indicies|inherance|inhert|initilization|intepolat\S*|intitial|lable|magnitde|maxium|minimially|mininated|neccessary|necesary|nonhomogenous|objet|occured|occurence|oor|openned|orientarion|parallal|parameteric|parametesr|paramters|parapraph|parbolic|perimit|posistion|potetially|preceeding|prefered|progam\S*|protocal|refernce|regualr|reponsib\S+|represet|repsonsib\S+|rreuiqred|samping|severla|simulataneously|singlton|staight|subsitution|succesful\b|suppy|symetric|symmetic|sytem|tableaus|tableax|tableu|talbeau|techinques|tesselate|tesselation|toggeling|tolerence|tranform|tranpose|traveral|unecess\S+|verfication|verson|vlolume|whan|whould|wil\b|wraping|writted|yeild|bandwith|comare|containins|contrain|contor|corrdinate|dependant|dependending|exprimed|hight|heirachy|interator|labled|likelyhood|liklihood|maximun|messsage|minmum|objects\'s|perfrom|polyon|postion|repending|seting|singletion|substract|tablea\b|transfrom|valuse|wether)/i)
+  if ($file =~ m/\b(octover|milisecond|destuct[a-z]*|constuct[a-z]*|detruct[a-z]*|contruct[a-z]*|continou[a-z]*|defaut|condtion|intial[a-z]*|hierach[a-z]*|implemen[^t][a-z]*|ouput|outputing|supres[a-z]*|judicous|posible|begining|decend[a-z]*|verticies|matricies|vertexes|assignement|auxiliar\b|distingish|documenation|Eucl[ie]dian|independant|initialli\S+|initili\S+|measurment|miscelaneous|receipe|(re)?determing|retreive|seciton|thse|utilitites|accomodate|accpet|accurary|adaptative|addresss|alement|alife|anj\b|appication|arangement|arbitar\S+|aready|argree|assembing|authentification|auxilary|auxillary|aynchronous|azimutha|blted|bondary|borgefor\b|chaching|changeble|cicurmstance|cirle|coefficent|coeficient|colinear|colum\b|columnn|comparision|compatibilty|compilant|conjuction|continguous|controled|coordiate|corespondence|decompostion|desctruction|despatch|difuse|difusion|digtial|dimensinal|dimensionnal|documenation|doen|efficents|eigenvale|elment|elminate|encapsuate|encounterd|enquiries|eqivalence|estiamte|expalin|exression|filname|fomatted|fractino|frequence|functon|gettt\S+|graident|hasnt|highlighed|homegenous|homogaphy|homogenious|homogenous|idential|implementatation|incredibably|indentical|indicies|inherance|inhert|initilization|intepolat\S*|intitial|lable|magnitde|maxium|minimially|mininated|neccessary|necesary|nonhomogenous|objet|occured|occurence|oor|openned|orientarion|parallal|parameteric|parametesr|paramters|parapraph|parbolic|perimit|posistion|potetially|preceeding|prefered|progam\S*|protocal|refernce|regualr|reponsib\S+|represet|repsonsib\S+|rreuiqred|samping|severla|simulataneously|singlton|staight|subsitution|succesful\b|suppy|symetric|symmetic|sytem|tableaus|tableax|tableu|talbeau|techinques|tesselate|tesselation|toggeling|tolerence|tranform|tranpose|traveral|unecess\S+|verfication|verson|vlolume|whan|whould|wil\b|wraping|writted|yeild|bandwith|comare|containins|contrain|contor|corrdinate|dependant|dependending|exprimed|hight|heirachy|interator|labled|likelyhood|liklihood|maximun|messsage|minmum|objects\'s|perfrom|polyon|postion|repending|seting|singletion|substract|tablea\b|transfrom|valuse|wether|argumement)/i)
   {
     print "$f\t\# probably a mistyping: $1\n";
   }
@@ -758,18 +760,22 @@ foreach $f (@FILES)
     if ($printed && $file =~ m/\n\n[ \t]*\};*\s*\n/);
   print "$f\t\# has empty lines after opening brace\n"
     if ($printed && $file =~ m/\n[ \t]*\{\s*\n\n/);
-  if ($printed && $file =~ m/\n([^()\'\";\n]*\( *)([^();\n]+)\n( +)/)
+  $f_=$file;
+  while ($printed && $f_ =~ s/\n([^()\'\";\n]*\( *)([^();\n]+(\([^();\n]*\)[^();\n]*)*)\n( +)//)
   {
-    $line="$1$2"; $pre="$1"; $post="$3"; $pre =~ s/./ /g;
+    $line="$1$2"; $pre="$1"; $post="$4"; $pre =~ s/./ /g;
     print "$f\t\# incorrect indentation in line following: $line\n"
       unless ($pre eq $post || $line =~ m/_INSTANTIATE_/ || $line =~ m!^\s*//! || $line =~ m/\<\</);
   }
-  if ($printed && $file =~ m/\n([^<;\'\"\n]*)(\<\<[^;\n]*)\n( +)\<\</)
+  $f_=$file; $f_ =~ s/\"[^\n\"]*\"/Q/g; $f_ =~ s/\'\\?.\'/Q/g; $f_ =~ s/\<\</\007/g;
+  while ($printed && $f_ =~ s/\n([^\007;{}\#\n]*)(\007[^;\n]*)\n( +)\007/\n$3\007/)
   {
-    $line="$1$2"; $pre="$1"; $post="$3"; $pre =~ s/./ /g;
+    $line="$1$2"; $pre="$1"; $post="$3"; next if ($pre =~ m/^\s*$/);
+    $line =~ s/\007/\<\</g; $pre =~ s/./ /g;
     print "$f\t\# incorrect indentation in line following: $line\n"
       unless ($pre eq $post);
   }
+  undef($f_);
   print "$f\t\# $1 not preceded by space\n"
     if ($printed && $file =~ m/\n(public|private|protected)\s*\:/);
   print "$f\t\# $1 preceded by more than one space\n"
