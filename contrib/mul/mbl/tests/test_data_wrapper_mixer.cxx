@@ -22,12 +22,9 @@ void test_data_wrapper_pair_mixer(unsigned n1, unsigned n2)
     data2[i][0] = i+n1;
   }
 
-  mbl_data_array_wrapper<vnl_vector<double> > w1(data1);
-  mbl_data_array_wrapper<vnl_vector<double> > w2(data2);
-
   vcl_vector<mbl_data_wrapper<vnl_vector<double> >*> wrappers(2);
-  wrappers[0] = &w1;
-  wrappers[1] = &w2;
+  wrappers[0] = new mbl_data_array_wrapper<vnl_vector<double> >(data1);
+  wrappers[1] = new mbl_data_array_wrapper<vnl_vector<double> >(data2);
 
   mbl_data_wrapper_mixer<vnl_vector<double> > mixer(wrappers);
 
@@ -48,6 +45,7 @@ void test_data_wrapper_pair_mixer(unsigned n1, unsigned n2)
   mixer.reset();
   while (mixer.next()) ++n;
   TEST("Correct number of valid elements in loop",n,n1+n2);
+  delete wrappers[0]; delete wrappers[1];
 }
 
 void test_data_wrapper_mixer()
