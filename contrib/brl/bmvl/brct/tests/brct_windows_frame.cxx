@@ -6,6 +6,7 @@
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
+#include <vcl_fstream.h>
 #include <vcl_cassert.h>
 #include <vul/vul_file.h>
 #include <vgui/vgui.h>
