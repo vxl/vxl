@@ -36,6 +36,8 @@
 #include <vgui/vgui_style_factory.h>
 #include <vgui/vgui_style.h>
 
+#include <vil/vil_save.h>
+
 static bool debug = false;
 
 vgui_easy2D_tableau::vgui_easy2D_tableau(const char* n):
@@ -403,7 +405,9 @@ vgui_soview2D_image* vgui_easy2D_tableau::add_image( float x, float y,
   if( format == GL_RGB ) {
     img = vil_image_view<vxl_byte>( reinterpret_cast<vxl_byte*>(data), w, h, 3, 3, w*3, 1 );
   } else if( format == GL_RGBA ) {
-    img = vil_image_view<vxl_byte>( reinterpret_cast<vxl_byte*>(data), w, h, 3, 3, w*3, 1 );
+	  // inserted debugging jr 10/24/2003	  
+    img = vil_image_view<vxl_byte>( reinterpret_cast<vxl_byte*>(data), w, h, 4, 4, w*4, 1 );
+   // vil_save(img, "tmp_image", "jpeg");
   } else {
     vcl_cerr << "Don't know how to handle format " << format << " with old interface\n";
     vcl_abort();
