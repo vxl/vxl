@@ -323,10 +323,10 @@ void vmap_2_tmap< V,E,F,D >::write_structure(vcl_ostream & stream) const
 template <class V, class E, class F, class D>
 void vmap_2_tmap< V,E,F,D >::removal(dart_iterator & arg)
 {
-  vmap_2_tmap_dart* d=&*arg,
-        a=vmap_2_map_alpha(d) ;
-  vmap_2_tmap_face * v=d->get_face_pointer(),
-            * ov=a->get_face_pointer() ;
+  vmap_2_tmap_dart * d = &*arg,
+                   * a = vmap_2_map_alpha(d) ;
+  vmap_2_tmap_face * v = d->get_face_pointer(),
+                   * ov = a->get_face_pointer() ;
   if (v!=ov)
   {
     dart_iterator i=arg ; i.phi() ;
