@@ -227,7 +227,7 @@ SET( vcl_sources
   gcc/vcl_cmath.h
   gcc/vcl_cstdlib.h
   gcc-295/vcl_algorithm.txx
-  gcc-295/vcl_complex.txx
+  gcc-295/vcl_complex.h gcc-295/vcl_complex.txx
   gcc-295/vcl_deque.txx
   gcc-295/vcl_functional.txx
   gcc-295/vcl_iterator.txx
