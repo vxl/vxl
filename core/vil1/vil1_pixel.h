@@ -27,6 +27,26 @@ enum vil_pixel_format_t {
   VIL_COMPLEX     /*!< 1 x W x H x 1 of COMPLEX x 64*/
 };
 
+inline
+const char* vil_print(vil_pixel_format_t f)
+{
+  switch(f) {
+    case VIL_PIXEL_FORMAT_UNKNOWN: return "VIL_PIXEL_FORMAT_UNKNOWN";
+    case VIL_BYTE: return "VIL_BYTE";
+    case VIL_RGB_BYTE: return "VIL_RGB_BYTE";
+    case VIL_RGBA_BYTE: return "VIL_RGBA_BYTE";
+    case VIL_RGB_UINT16: return "VIL_RGB_UINT16";
+    case VIL_RGB_FLOAT: return "VIL_RGB_FLOAT";
+    case VIL_RGB_DOUBLE: return "VIL_RGB_DOUBLE";
+    case VIL_UINT16: return "VIL_UINT16";
+    case VIL_UINT32: return "VIL_UINT32";
+    case VIL_FLOAT: return "VIL_FLOAT";
+    case VIL_DOUBLE: return "VIL_DOUBLE";
+    case VIL_COMPLEX: return "VIL_COMPLEX";
+    default: return "VIL_PIXEL_FORMAT_INVALID";
+  }
+}
+
 class vil_image;
 
 //: Returns one of the `vil_pixel_format's.
