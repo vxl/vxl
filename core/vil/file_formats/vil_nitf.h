@@ -96,7 +96,7 @@ class vil_nitf_image : public vil_image_resource
       vil_streampos image_data_offset = 0);
   vil_nitf_image(vil_stream* is, unsigned ni,
                  unsigned nj, unsigned nplanes, vil_pixel_format format);
-  ~vil_nitf_image();
+  virtual ~vil_nitf_image();
 
   //: Dimensions:  planes x width x height x planes
   virtual unsigned nplanes() const { return nplanes_; }
