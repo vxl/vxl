@@ -3,11 +3,9 @@
 //:
 // \file
 
-#include <vcl_cstdio.h>
 #include <vcl_cstring.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
 
 // It used to be necessary to add 0.5 to the scanline coordinates
 // obtained from a vgl_polygon_scan_iterator. Presumably this had
@@ -20,23 +18,22 @@
 // If you cannot live without a polygon_scan_iterator which offsets
 // things by 0.5, make a new class called something like
 //   vgl_polygon_scan_iterator_which_adds_one_half
-// and change the value of fsm_OFFSET back to 0.5 for that class.
+// and change the value of vgl_polygon_scan_iterator_offset back to 0.5
+// for that class.
 //
 // fsm@robots.ox.ac.uk
 //
 
-//#define fsm_OFFSET 0.5
-#define fsm_OFFSET 0.0
+//static const float vgl_polygon_scan_iterator_offset = 0.5f;
+static const float vgl_polygon_scan_iterator_offset = 0.0f;
 
 // find minimum of a and b
-#ifndef MIN
+#undef MIN
 #define MIN(a,b) (((a)<(b))?(a):(b))
-#endif
 
 // find maximum of a and b
-#ifndef MAX
+#undef MAX
 #define MAX(a,b) (((a)>(b))?(a):(b))
-#endif
 
 //JLM Dec. 95: Changed name to avoid conflict with defintion in Basics/types.h
 typedef int (* Callback2)(void const*, void const*);
@@ -152,26 +149,26 @@ void vgl_polygon_scan_iterator::init()
   if (have_window)
   {
       if (boundp)
-        y0 = (int)MAX(win.min_y(), vcl_floor( miny - fsm_OFFSET));
+        y0 = (int)MAX(win.min_y(), vcl_floor( miny - vgl_polygon_scan_iterator_offset));
       else
-        y0 = (int)MAX(win.min_y(), vcl_ceil( miny - fsm_OFFSET));
+        y0 = (int)MAX(win.min_y(), vcl_ceil( miny - vgl_polygon_scan_iterator_offset));
 
       if (boundp)
-        y1 = (int)MIN(win.max_y()-1, vcl_ceil( maxy - fsm_OFFSET));
+        y1 = (int)MIN(win.max_y()-1, vcl_ceil( maxy - vgl_polygon_scan_iterator_offset));
       else
-        y1 = (int)MIN(win.max_y()-1, vcl_floor( maxy - fsm_OFFSET));
+        y1 = (int)MIN(win.max_y()-1, vcl_floor( maxy - vgl_polygon_scan_iterator_offset));
   }
   else
   {
       if (boundp)
-        y0 = (int)vcl_floor( miny - fsm_OFFSET);
+        y0 = (int)vcl_floor( miny - vgl_polygon_scan_iterator_offset);
       else
-        y0 = (int)vcl_ceil( miny - fsm_OFFSET);
+        y0 = (int)vcl_ceil( miny - vgl_polygon_scan_iterator_offset);
 
       if (boundp)
-        y1 = (int)vcl_ceil( maxy - fsm_OFFSET);
+        y1 = (int)vcl_ceil( maxy - vgl_polygon_scan_iterator_offset);
       else
-        y1 = (int)vcl_floor(  maxy - fsm_OFFSET);
+        y1 = (int)vcl_floor(  maxy - vgl_polygon_scan_iterator_offset);
   }
 }
 
@@ -216,7 +213,7 @@ void vgl_polygon_scan_iterator::insert_edge( vertind v )
 
      // initialize x position at intersection of edge with scanline y
      crossedges[numcrossedges].dx = dx = (q.x() - p.x()) / (q.y() - p.y());
-     crossedges[numcrossedges].x = dx * ( fy + fsm_OFFSET - p.y() ) + p.x();
+     crossedges[numcrossedges].x = dx * ( fy + vgl_polygon_scan_iterator_offset - p.y() ) + p.x();
      crossedges[numcrossedges].v = v;
      numcrossedges++;
 }
@@ -247,7 +244,7 @@ static inline int irnd(double x)
 
 //===============================================================
 // Moves iterator to the next scan segment.
-// Scanline y is at y+fsm_OFFSET.
+// Scanline y is at y+vgl_polygon_scan_iterator_offset.
 //
 //??? Check vertices between previous scanline and current one, if any to simplify.
 //??? If pt.y=y+0.5,  pretend it's above invariant: y-0.5 < pt[i].y <= y+.5.
@@ -261,10 +258,10 @@ bool vgl_polygon_scan_iterator::next( )
       fxr = crossedges[curcrossedge+1].x;
       if (boundp)
         // left end of span with boundary
-        xl = (int)vcl_floor( crossedges[curcrossedge].x - fsm_OFFSET);
+        xl = (int)vcl_floor( crossedges[curcrossedge].x - vgl_polygon_scan_iterator_offset);
       else
         // left end of span without boundary
-        xl = (int)vcl_ceil( crossedges[curcrossedge].x - fsm_OFFSET);
+        xl = (int)vcl_ceil( crossedges[curcrossedge].x - vgl_polygon_scan_iterator_offset);
 
       if ( have_window && xl < irnd(win.min_x()) )
         {
@@ -274,10 +271,10 @@ bool vgl_polygon_scan_iterator::next( )
 
       if ( boundp )
         //right end of span with boundary
-        xr = (int)vcl_ceil( crossedges[curcrossedge+1].x - fsm_OFFSET);
+        xr = (int)vcl_ceil( crossedges[curcrossedge+1].x - vgl_polygon_scan_iterator_offset);
       else
         // right end of span without boundary
-        xr = (int)vcl_floor( crossedges[curcrossedge+1].x - fsm_OFFSET);
+        xr = (int)vcl_floor( crossedges[curcrossedge+1].x - vgl_polygon_scan_iterator_offset);
 
       if ( have_window && xr >= irnd(win.max_x()) )
         {
@@ -302,7 +299,7 @@ bool vgl_polygon_scan_iterator::next( )
   if ( y <= y1 )
     {
       fy = (float)y;
-      for (; k<numverts && get_y(yverts[k]) <= (fy+fsm_OFFSET); k++)
+      for (; k<numverts && get_y(yverts[k]) <= (fy+vgl_polygon_scan_iterator_offset); k++)
       {
           curvert = yverts[ k ];
 
@@ -310,16 +307,16 @@ bool vgl_polygon_scan_iterator::next( )
           // from crossedges list if they cross scanline y
           get_prev_vert( curvert, prevvert );
 
-          if ( get_y( prevvert ) <= (fy-fsm_OFFSET))  // old edge, remove from active list
+          if ( get_y( prevvert ) <= (fy-vgl_polygon_scan_iterator_offset))  // old edge, remove from active list
             delete_edge( prevvert );
-          else if ( get_y( prevvert ) > (fy+fsm_OFFSET))  // new edge, add to active list
+          else if ( get_y( prevvert ) > (fy+vgl_polygon_scan_iterator_offset))  // new edge, add to active list
             insert_edge( prevvert );
 
           get_next_vert( curvert, nextvert );
 
-          if ( get_y( nextvert ) <= (fy-fsm_OFFSET))  // old edge, remove from active list
+          if ( get_y( nextvert ) <= (fy-vgl_polygon_scan_iterator_offset))  // old edge, remove from active list
             delete_edge( curvert );
-          else if ( get_y( nextvert ) > (fy+fsm_OFFSET))  // new edge, add to active list
+          else if ( get_y( nextvert ) > (fy+vgl_polygon_scan_iterator_offset))  // new edge, add to active list
             insert_edge( curvert );
       }
 
