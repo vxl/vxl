@@ -66,7 +66,7 @@ SET(vgui_sources
   vgui_message.cxx              vgui_message.h
   vgui_observer.cxx             vgui_observer.h
   vgui_observable.cxx           vgui_observable.h
-  vgui_satellite_tableau.txx    vgui_satellite_tableau.h
+  vgui_satellite_tableau.txx vgui_satellite_tableau.h 
 
   # utility
   vgui_find.cxx                 vgui_find.h
@@ -92,51 +92,52 @@ SET(vgui_sources
   vgui_blender_tableau.cxx      vgui_blender_tableau.h    vgui_blender_tableau_sptr.h
 
   # vil2 support
-  vgui_vil2_image_tableau.txx        vgui_vil2_image_tableau.h    vgui_vil2_image_tableau_sptr.h
-  vgui_vil2_image_renderer.txx       vgui_vil2_image_renderer.h
-  vgui_vil2_section_buffer.cxx       vgui_vil2_section_buffer.h
-  vgui_vil2_section_buffer_apply.txx vgui_vil2_section_buffer_apply.h
+  vgui_vil2_image_tableau.txx         vgui_vil2_image_tableau.h         vgui_vil2_image_tableau_sptr.h
+  vgui_vil2_image_renderer.txx        vgui_vil2_image_renderer.h
+  vgui_vil2_section_buffer.cxx        vgui_vil2_section_buffer.h
+  vgui_vil2_section_buffer_apply.txx  vgui_vil2_section_buffer_apply.h
 
   # tableau mixins and miscellaneous
-  vgui_wrapper_tableau.cxx        vgui_wrapper_tableau.h        vgui_wrapper_tableau_sptr.h
-  vgui_deck_tableau.cxx           vgui_deck_tableau.h           vgui_deck_tableau_sptr.h
-  vgui_composite_tableau.cxx      vgui_composite_tableau.h      vgui_composite_tableau_sptr.h
-  vgui_poly_tableau.cxx           vgui_poly_tableau.h           vgui_poly_tableau_sptr.h
-  vgui_grid_tableau.cxx           vgui_grid_tableau.h           vgui_grid_tableau_sptr.h
-  vgui_drag_mixin.cxx             vgui_drag_mixin.h
-  vgui_active_tableau.cxx         vgui_active_tableau.h         vgui_active_tableau_sptr.h
-  vgui_drag_tableau.cxx           vgui_drag_tableau.h           vgui_drag_tableau_sptr.h
-  vgui_clear_tableau.cxx          vgui_clear_tableau.h          vgui_clear_tableau_sptr.h
-  vgui_debug_tableau.cxx          vgui_debug_tableau.h          vgui_debug_tableau_sptr.h
-  vgui_quit_tableau.cxx           vgui_quit_tableau.h           vgui_quit_tableau_sptr.h
+  vgui_wrapper_tableau.cxx      vgui_wrapper_tableau.h    vgui_wrapper_tableau_sptr.h
+  vgui_deck_tableau.cxx         vgui_deck_tableau.h       vgui_deck_tableau_sptr.h
+  vgui_composite_tableau.cxx    vgui_composite_tableau.h  vgui_composite_tableau_sptr.h
+  vgui_poly_tableau.cxx         vgui_poly_tableau.h       vgui_poly_tableau_sptr.h
+  vgui_grid_tableau.cxx         vgui_grid_tableau.h       vgui_grid_tableau_sptr.h
+  vgui_drag_mixin.cxx           vgui_drag_mixin.h
+  vgui_active_tableau.cxx       vgui_active_tableau.h     vgui_active_tableau_sptr.h
+  vgui_drag_tableau.cxx         vgui_drag_tableau.h       vgui_drag_tableau_sptr.h
+  vgui_clear_tableau.cxx        vgui_clear_tableau.h      vgui_clear_tableau_sptr.h
+  vgui_debug_tableau.cxx        vgui_debug_tableau.h      vgui_debug_tableau_sptr.h
+  vgui_quit_tableau.cxx         vgui_quit_tableau.h       vgui_quit_tableau_sptr.h
   vgui_tview_launcher_tableau.cxx vgui_tview_launcher_tableau.h vgui_tview_launcher_tableau_sptr.h
-  vgui_shell_tableau.cxx          vgui_shell_tableau.h          vgui_shell_tableau_sptr.h
-  vgui_text_tableau.cxx           vgui_text_tableau.h           vgui_text_tableau_sptr.h
-  vgui_blackbox_tableau.cxx       vgui_blackbox_tableau.h       vgui_blackbox_tableau_sptr.h
-  vgui_enhance_tableau.cxx        vgui_enhance_tableau.h        vgui_enhance_tableau_sptr.h
-  vgui_tview_tableau.cxx          vgui_tview_tableau.h          vgui_tview_tableau_sptr.h
-  vgui_function_tableau.cxx       vgui_function_tableau.h       vgui_function_tableau_sptr.h
-  vgui_roi_tableau.cxx            vgui_roi_tableau.h            vgui_roi_tableau_sptr.h
-  vgui_rubberband_tableau.cxx     vgui_rubberband_tableau.h     vgui_rubberband_tableau_sptr.h
-  vgui_loader_tableau.cxx         vgui_loader_tableau.h         vgui_loader_tableau_sptr.h
-  vgui_color_text.cxx             vgui_color_text.h
-  vgui_event_server.cxx           vgui_event_server.h
-  vgui_error_dialog.cxx           vgui_error_dialog.h
+  vgui_shell_tableau.cxx        vgui_shell_tableau.h      vgui_shell_tableau_sptr.h
+  vgui_text_put.cxx             vgui_text_put.h
+  vgui_text_tableau.cxx         vgui_text_tableau.h       vgui_text_tableau_sptr.h
+  vgui_blackbox_tableau.cxx     vgui_blackbox_tableau.h   vgui_blackbox_tableau_sptr.h
+  vgui_enhance_tableau.cxx      vgui_enhance_tableau.h    vgui_enhance_tableau_sptr.h
+  vgui_tview_tableau.cxx        vgui_tview_tableau.h      vgui_tview_tableau_sptr.h
+  vgui_function_tableau.cxx     vgui_function_tableau.h   vgui_function_tableau_sptr.h
+  vgui_roi_tableau.cxx          vgui_roi_tableau.h        vgui_roi_tableau_sptr.h
+  vgui_rubberband_tableau.cxx   vgui_rubberband_tableau.h vgui_rubberband_tableau_sptr.h
+  vgui_loader_tableau.cxx       vgui_loader_tableau.h     vgui_loader_tableau_sptr.h
+  vgui_color_text.cxx           vgui_color_text.h
+  vgui_event_server.cxx         vgui_event_server.h
+  vgui_error_dialog.cxx         vgui_error_dialog.h
 
-  vgui_soview.cxx                 vgui_soview.h
-  vgui_soview2D.cxx               vgui_soview2D.h
-  vgui_soview3D.cxx               vgui_soview3D.h
-  vgui_style.cxx                  vgui_style.h
-  vgui_style_factory.cxx          vgui_style_factory.h
-  vgui_displaybase_tableau.cxx    vgui_displaybase_tableau.h    vgui_displaybase_tableau_sptr.h
-  vgui_displaylist2D_tableau.cxx  vgui_displaylist2D_tableau.h  vgui_displaylist2D_tableau_sptr.h
-  vgui_displaylist3D_tableau.cxx  vgui_displaylist3D_tableau.h  vgui_displaylist3D_tableau_sptr.h
-  vgui_easy2D_tableau.cxx         vgui_easy2D_tableau.h         vgui_easy2D_tableau_sptr.h
-  vgui_easy3D_tableau.cxx         vgui_easy3D_tableau.h         vgui_easy3D_tableau_sptr.h
+  vgui_soview.cxx               vgui_soview.h
+  vgui_soview2D.cxx             vgui_soview2D.h
+  vgui_soview3D.cxx             vgui_soview3D.h
+  vgui_style.cxx                vgui_style.h
+  vgui_style_factory.cxx        vgui_style_factory.h
+  vgui_displaybase_tableau.cxx  vgui_displaybase_tableau.h  vgui_displaybase_tableau_sptr.h
+  vgui_displaylist2D_tableau.cxx  vgui_displaylist2D_tableau.h vgui_displaylist2D_tableau_sptr.h
+  vgui_displaylist3D_tableau.cxx  vgui_displaylist3D_tableau.h vgui_displaylist3D_tableau_sptr.h
+  vgui_easy2D_tableau.cxx       vgui_easy2D_tableau.h       vgui_easy2D_tableau_sptr.h
+  vgui_easy3D_tableau.cxx       vgui_easy3D_tableau.h       vgui_easy3D_tableau_sptr.h
   vgui_listmanager2D_tableau.cxx  vgui_listmanager2D_tableau.h  vgui_listmanager2D_tableau_sptr.h
-  vgui_viewer2D_tableau.cxx       vgui_viewer2D_tableau.h       vgui_viewer2D_tableau_sptr.h
-  vgui_viewer3D_tableau.cxx       vgui_viewer3D_tableau.h       vgui_viewer3D_tableau_sptr.h
-  internals/trackball.c           internals/trackball.h
+  vgui_viewer2D_tableau.cxx vgui_viewer2D_tableau.h         vgui_viewer2D_tableau_sptr.h
+  vgui_viewer3D_tableau.cxx vgui_viewer3D_tableau.h         vgui_viewer3D_tableau_sptr.h
+  internals/trackball.c              internals/trackball.h
 
   # dialog classes
   vgui_dialog.cxx                    vgui_dialog.h
@@ -156,26 +157,25 @@ SET(vgui_sources
   vgui_glx.h
 
   # internals
-  internals/vgui_invert_homg4x4.cxx          internals/vgui_invert_homg4x4.h
-  internals/vgui_back_project.cxx            internals/vgui_back_project.h
-  internals/vgui_un_project.cxx              internals/vgui_un_project.h
-  internals/vgui_adaptor_tableau.cxx         internals/vgui_adaptor_tableau.h
-  internals/vgui_parent_child_link_data.cxx  internals/vgui_parent_child_link_data.h
-  internals/vgui_adaptor_mixin.cxx           internals/vgui_adaptor_mixin.h
-  internals/vgui_overlay_helper.cxx          internals/vgui_overlay_helper.h
-  internals/vgui_multiply_4x4.cxx            internals/vgui_multiply_4x4.h
-  internals/vgui_transpose_4x4.cxx           internals/vgui_transpose_4x4.h
-  internals/vgui_draw_line.cxx               internals/vgui_draw_line.h
+  internals/vgui_invert_homg4x4.cxx  internals/vgui_invert_homg4x4.h
+  internals/vgui_back_project.cxx    internals/vgui_back_project.h
+  internals/vgui_un_project.cxx      internals/vgui_un_project.h
+  internals/vgui_adaptor_tableau.cxx internals/vgui_adaptor_tableau.h
+  internals/vgui_parent_child_link_data.cxx       internals/vgui_parent_child_link_data.h
+  internals/vgui_adaptor_mixin.cxx   internals/vgui_adaptor_mixin.h
+  internals/vgui_overlay_helper.cxx  internals/vgui_overlay_helper.h
+  internals/vgui_multiply_4x4.cxx    internals/vgui_multiply_4x4.h
+  internals/vgui_transpose_4x4.cxx   internals/vgui_transpose_4x4.h
+  internals/vgui_draw_line.cxx       internals/vgui_draw_line.h
   # Mesa-X11-mfc accelerated functions using Hermes
-  internals/vgui_accelerate.cxx              internals/vgui_accelerate.h
+  internals/vgui_accelerate.cxx      internals/vgui_accelerate.h
   internals/vgui_accelerate_tag.cxx
   internals/vgui_gl_selection_macros.h
 )
 
 IF( GLUT_FOUND )
   SET(vgui_sources ${vgui_sources}
-    vgui_glut.cxx                 vgui_glut.h
-    vgui_text_put.cxx             vgui_text_put.h
+    vgui_glut.cxx                    vgui_glut.h
   )
 ENDIF( GLUT_FOUND )
 
