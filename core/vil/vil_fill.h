@@ -9,7 +9,6 @@
 #include <vcl_cassert.h>
 #include <vil2/vil2_image_view.h>
 
-
 //: Fill view with given value
 //  O(size).
 // \relates vil2_image_view
@@ -47,9 +46,9 @@ void vil2_fill_line(T* data, unsigned n, vcl_ptrdiff_t step, T value)
 template<class T>
 void vil2_fill_row(vil2_image_view<T>& view, unsigned j, T value)
 {
-  unsigned ni = view.ni(), istep=view.istep();
-  unsigned nj = view.nj(), jstep=view.jstep();
-  unsigned np = view.nplanes(), pstep = view.planestep();
+  unsigned ni = view.ni(); vcl_ptrdiff_t istep=view.istep();
+  unsigned nj = view.nj(); vcl_ptrdiff_t jstep=view.jstep();
+  unsigned np = view.nplanes(); vcl_ptrdiff_t pstep = view.planestep();
 
   assert(j<nj);
 
@@ -64,9 +63,9 @@ void vil2_fill_row(vil2_image_view<T>& view, unsigned j, T value)
 template<class T>
 void vil2_fill_col(vil2_image_view<T>& view, unsigned i, T value)
 {
-  unsigned ni = view.ni(), istep=view.istep();
-  unsigned nj = view.nj(), jstep=view.jstep();
-  unsigned np = view.nplanes(), pstep = view.planestep();
+  unsigned ni = view.ni(); vcl_ptrdiff_t istep=view.istep();
+  unsigned nj = view.nj(); vcl_ptrdiff_t jstep=view.jstep();
+  unsigned np = view.nplanes(); vcl_ptrdiff_t pstep = view.planestep();
 
   assert(i<ni);
   T* col_top = view.top_left_ptr() + i*istep;
