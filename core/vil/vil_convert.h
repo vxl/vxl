@@ -12,14 +12,17 @@
 #include <vcl_cassert.h>
 #include <vil2/vil2_transform.h>
 #include <vil2/vil2_math.h>
+#include <vil2/vil2_pixel_traits.h>
 
 //: Performs conversion between different pixel types.
 // For floating point types to integers it performs rounding.
 template <class In, class Out>
 class vil2_convert_cast_pixel
 {
+  typedef typename vil2_pixel_traits<Out>::component_type component_type;
   public:
-  void operator () (In v, Out &d) const { d = (Out)v; }
+    void operator () (In v, Out &d) const { 
+      d = static_cast<Out>(static_cast<component_type>(v)); }
 };
 
 
