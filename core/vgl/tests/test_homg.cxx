@@ -149,6 +149,7 @@ static void test_homg_point_2d()
   TEST("vgl_homg_operators_2d<double>::perp_line_through_point", l1, vgl_homg_line_2d<double>(1,-1,4));
 
   q4 = vgl_homg_operators_2d<double>::perp_projection(l3,q1);
+  vcl_cout << "l3 = " << l3 << ", q1 = " << q1 << ", q4 = " << q4 << '\n';
   TEST("vgl_homg_operators_2d<double>::perp_projection", q4, vgl_homg_point_2d<double>(-5,3,2));
 
   r = vgl_homg_operators_2d<double>::perp_distance_squared(l3,q1);
