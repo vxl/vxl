@@ -51,8 +51,8 @@ public:
   virtual vcl_string type_name() const;
   
   // style
-  void set_style(vgui_style*);
-  vgui_style* get_style();
+  virtual void set_style(vgui_style*);
+  virtual vgui_style* get_style();
 
   void set_colour(float r, float g, float b);
   void set_point_size(float s);
@@ -75,8 +75,13 @@ public:
 
   static unsigned create_id();
 
+  // decide if it is possible to select this object
+  bool get_selectable() const { return selectable; } 
+  void set_selectable( bool s) { selectable= s; }
+
 protected:
   unsigned id;
+  bool selectable;
   vgui_style* style;
 
 private:

@@ -23,12 +23,12 @@
 /// .EXAMPLE vtol_vertex_2d.example
 #include <vtol/vtol_vertex_2d_ref.h>
 
-#include <vtol/vtol_topology_object_2d.h>
 #include <vnl/vnl_double_2.h>
 #include <vsol/vsol_point_2d_ref.h>
+#include <vtol/vtol_vertex.h>
 
 class vtol_vertex_2d
-  : public vtol_topology_object_2d
+  : public vtol_vertex
 {
 public:
   //***************************************************************************
@@ -71,16 +71,9 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_ref clone(void) const;
-
- //  explicit vtol_vertex_2d(const vsol_point_2d &);   // for some peculiar cases.
+  virtual vsol_spatial_object_3d_ref clone(void) const;
 
   // Accessors
-
-  //---------------------------------------------------------------------------
-  //: Return the topology type
-  //---------------------------------------------------------------------------
-  virtual vtol_topology_object_2d_type topology_type(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the point
@@ -94,7 +87,7 @@ public:
   virtual void set_point(vsol_point_2d &new_point);
  
 
-  virtual void explore_vertex(vertex_list_2d &);
+
   // Methods called on Vertex
   // for vsol_point_2d.   These are here
   // during the transition period.
@@ -124,7 +117,7 @@ public:
   //: Is `this' has the same coordinates for its point than `other' ?
   //---------------------------------------------------------------------------
   virtual bool operator==(const vtol_vertex_2d &other) const;
-  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_2d
 
   //---------------------------------------------------------------------------
   //: Assignment of `this' with `other' (copy the point not the links)
@@ -138,50 +131,26 @@ public:
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_vertex_2d *cast_to_vertex(void) const;
+  virtual const vtol_vertex_2d *cast_to_vertex_2d(void) const;
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_2d *cast_to_vertex(void);
-
-  //***************************************************************************
-  // Status report
-  //***************************************************************************
-
-  //---------------------------------------------------------------------------
-  //: Is `inferior' type valid for `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool
-  valid_inferior_type(const vtol_topology_object_2d &inferior) const;
-
-  //---------------------------------------------------------------------------
-  //: Is `superior' type valid for `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool
-  valid_superior_type(const vtol_topology_object_2d &superior) const;
-
-  //---------------------------------------------------------------------------
-  //: Is `this' connected with `v2' ?
-  //: ie has a superior of `this' `v2' as inferior ?
-  //---------------------------------------------------------------------------
-  virtual bool is_connected(const vtol_vertex_2d &v2);
+  virtual vtol_vertex_2d *cast_to_vertex_2d(void);
 
   //---------------------------------------------------------------------------
   //: Create a line edge from `this' and `other' only if this edge does not
   //: exist. Otherwise it just returns the existing edge
   //: REQUIRE: other.ptr()!=0 and other.ptr()!=this
   //---------------------------------------------------------------------------
-  virtual vtol_edge_2d *new_edge(vtol_vertex_2d &other);
+ 
+  virtual vtol_edge *new_edge(vtol_vertex &other);
 
-  vtol_vertex_2d *vertex_diff (vtol_vertex_2d &);
-  bool is_endpointp (const vtol_edge_2d &);
+ 
   double distance_from(const vnl_double_2 &);
+
   double euclidean_distance(vtol_vertex_2d &v); //actual distance, not squared - JLM
-  //  void merge_references(vtol_vertex_2d &);
-  //  void calculate_average_normal(IUE_vector<double>&);
-
-
+  
   void print(vcl_ostream &strm=vcl_cout) const;
   void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
@@ -191,17 +160,15 @@ protected:
   //---------------------------------------------------------------------------
   vsol_point_2d_ref _point;
 
+   //:  copy the geometry
 
-public:
-  
-  // : Warning - should not be used by clients
-  virtual vcl_vector<vtol_vertex_2d*> *compute_vertices(void);
-  virtual vcl_vector<vtol_edge_2d*> *compute_edges(void);
-  virtual vcl_vector<vtol_zero_chain_2d*> *compute_zero_chains(void);
-  virtual vcl_vector<vtol_one_chain_2d*> *compute_one_chains(void);
-  virtual vcl_vector<vtol_face_2d*> *compute_faces(void);
-  virtual vcl_vector<vtol_two_chain_2d*> *compute_two_chains(void);
-  virtual vcl_vector<vtol_block_2d*> *compute_blocks(void);
+  virtual void copy_geometry(const vtol_vertex &other);
+
+  // : compare the geometry 
+
+  virtual bool compare_geometry(const vtol_vertex &other) const;
+
+
 };
 
 #endif

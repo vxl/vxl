@@ -10,33 +10,24 @@ IMMEDIATE_LIBS += -lvsol -lvbl
 LIBRARY := vtol
 VERSION := 1.0
 
-SOURCES += vtol_topology_object_2d.cxx
-SOURCES += vtol_topology_cache_2d.cxx
-# SOURCES += vtol_topology_hierarchy_node_2d.cxx
-SOURCES += vtol_list_functions_2d.cxx
-# SOURCES += vtol_hierarchy_node_2d.cxx
-SOURCES += vtol_chain_2d.cxx
-SOURCES += vtol_two_chain_2d.cxx
-SOURCES += vtol_one_chain_2d.cxx
-SOURCES += vtol_zero_chain_2d.cxx
+
+SOURCES += vtol_topology_object.cxx
+SOURCES += vtol_topology_cache.cxx
+SOURCES += vtol_list_functions.cxx
+SOURCES += vtol_chain.cxx
+SOURCES += vtol_two_chain.cxx
+SOURCES += vtol_one_chain.cxx
+SOURCES += vtol_zero_chain.cxx
+SOURCES += vtol_edge.cxx
+SOURCES += vtol_block.cxx
+SOURCES += vtol_face.cxx
+SOURCES += vtol_vertex.cxx
+
 SOURCES += vtol_edge_2d.cxx
-SOURCES += vtol_block_2d.cxx
 SOURCES += vtol_face_2d.cxx
 SOURCES += vtol_vertex_2d.cxx
 
-
-SOURCES += vtol_topology_object_3d.cxx
-SOURCES += vtol_topology_cache_3d.cxx
-SOURCES += vtol_topology_hierarchy_node_3d.cxx
-SOURCES += vtol_list_functions_3d.cxx
-SOURCES += vtol_hierarchy_node_3d.cxx
-SOURCES += vtol_two_chain_3d.cxx
-SOURCES += vtol_one_chain_3d.cxx
-SOURCES += vtol_zero_chain_3d.cxx
-SOURCES += vtol_edge_3d.cxx
-SOURCES += vtol_block_3d.cxx
-SOURCES += vtol_face_3d.cxx
-SOURCES += vtol_vertex_3d.cxx
+SOURCES += vtol_topology_io.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk

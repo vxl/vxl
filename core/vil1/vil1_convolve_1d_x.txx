@@ -4,6 +4,7 @@ croak
 
 // include for abort
 #include <vcl_cstdlib.h>
+#include <vcl_iostream.h>
 
 
 template <class I1, class I2, class AC, class O>
@@ -102,7 +103,12 @@ void vil_convolve_1d_x(vil_convolve_signal_1d<I1 const> const &kernel,
 	  wt += kval;
 	}
       }
-      
+
+      if ( x==230 && y==190 )
+	vcl_cout << "(230,190):  input " << AC(value2d(input, x, y))
+		 << ", ac = " << ac << ", wt = " << wt << ", total_weight "
+		 << total_weight << ", output " << ac * total_weight / wt << "\n";
+
       // compute and store final value.
       if (zero)
 	value2d(output, x, y) = AC(0);

@@ -83,6 +83,7 @@ public:
   vgui_soview2D_group( vcl_vector<vgui_soview2D *> ls_) :
     ls( ls_) {}
 
+  virtual void set_style(vgui_style*);
   virtual void draw();
   virtual vcl_ostream& print(vcl_ostream&) const;
   virtual float distance_squared(float x, float y);
