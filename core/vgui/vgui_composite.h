@@ -61,6 +61,7 @@ public:
 
   void add(vgui_tableau_sptr const&);
   void remove(vgui_tableau_sptr const&);
+  void clear();
 
   bool toggle(int);
   bool is_active(int);
