@@ -16,6 +16,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb_byte.h>
+#include <mil/mil_convert_vil.h>
 
 //=======================================================================
 
@@ -94,49 +95,7 @@ vcl_string mil_byte_image_2d_io::guessFileType(const vcl_string& path) const
   return "Unknown";
 }
 
-void mil_byte_image_2d_io::copyAsGrey(vil_image& img)
-{
-  int nx = img.width();
-  int ny = img.height();
-  vil_memory_image_of<vil_byte> buf(img);
-  image_.set_n_planes(1);
-  image_.resize(nx,ny);
-  // Inefficient copy
-  for (int y=0;y<ny;++y)
-    for (int x=0;x<nx;++x)
-    image_(x,y)=buf(x,y);
-}
 
-void mil_byte_image_2d_io::copyAsRGB(vil_image& img)
-{
-   int nx = img.width();
-   int ny = img.height();
-   vil_memory_image_of<vil_rgb_byte> buf(img);
-    image_.set_n_planes(3);
-  image_.resize(nx,ny);
-  // Inefficient copy
-  for (int y=0;y<ny;++y)
-    for (int x=0;x<nx;++x)
-    {
-      image_(x,y,0)=buf(x,y).R();
-      image_(x,y,1)=buf(x,y).G();
-      image_(x,y,2)=buf(x,y).B();
-    }
-}
-
-void mil_byte_image_2d_io::copyGreyToRGB(vil_image& img)
-{
-  int nx = img.width();
-  int ny = img.height();
-  // Assume it is a colour image - copy to greyscale image
-  vil_memory_image_of<vil_rgb_byte> buf(img);
-  image_.set_n_planes(1);
-  image_.resize(nx,ny);
-    // Inefficient copy, using a `weighting' on RGB to get the grey-scale
-  for (int y=0;y<ny;++y)
-    for (int x=0;x<nx;++x)
-      image_(x,y)=buf(x,y).grey();
-}
 
 //: Attempt to load image from named file
 // \param filetype  String hinting at what image format is
@@ -155,19 +114,54 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
 
   if (colour_=="Grey")   // ie make a grey image whatever image is loaded
   {
+    // wish to load a grey image
     if (img_is_grey)
-      copyAsGrey(img);
+    {
+      // convert grey to grey
+      vil_memory_image_of<vil_byte> buf(img);
+      mil_gvil2gmil(image_,buf);
+    }
     else
-      copyGreyToRGB(img);
+    {
+      // convert colour image to grey
+      vil_memory_image_of<vil_rgb_byte> buf(img);
+      mil_cvil2gmil(image_,buf);
+    }
+     
   }
   else if (colour_=="RGB")
-    copyAsRGB(img);
-  else    // ie colour_="" => rely on image
+  {
+    // wish to load a colour image
     if (img_is_grey)
-      copyAsGrey(img);  //copy grey image as grey
+    {
+      //problem
+      vcl_cerr<<"require a colour image, image attempting to load is grey"<<vcl_endl;
+      return false;
+    }
     else
-      copyAsRGB(img);   //ie copy colour image as colour
-
+    {
+      //ie copy colour image as colour   
+      vil_memory_image_of<vil_rgb_byte> buf(img);
+      mil_cvil2cmil(image_,buf);
+    }
+  }
+  else
+  {  
+    // ie colour_="" => rely on image
+    if (img_is_grey)
+    {
+      //copy grey image as grey
+      vil_memory_image_of<vil_byte> buf(img);
+      mil_gvil2gmil(image_,buf);
+    }
+    else
+    {
+      //ie copy colour image as colour   
+      vil_memory_image_of<vil_rgb_byte> buf(img);
+      mil_cvil2cmil(image_,buf);
+    }
+  }
+  
   image=image_;
   return true;
 }
@@ -195,8 +189,10 @@ bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil_byte>& image,
   //then use vil_save with appropriate "filetype"
 
   bool image_is_grey=false,image_is_colour=false;
-  if (image.n_planes()==1) image_is_grey=true;
-  else if (image.n_planes()==3) image_is_colour=true;
+  if (image.n_planes()==1) 
+    image_is_grey=true;
+  else if (image.n_planes()==3) 
+    image_is_colour=true;
   else
   {
     vcl_cerr<<"Failed to save: number of planes = "<<image.n_planes()<<" ??, require 1 or 3"<<vcl_endl;
@@ -208,32 +204,17 @@ bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil_byte>& image,
 
   if (image_is_grey)
   {
-    vil_memory_image_of<vil_byte> buf(nx,ny);
-    // Inefficient copy
-    for (int y=0;y<ny;++y)
-      for (int x=0;x<nx;++x)
-        buf(x,y)= image(x,y);
-
+    vil_memory_image_of<vil_byte> buf;
+    mil_gmil2gvil(buf,image);
     vil_save(buf,path.c_str(),filetype.c_str());
-    //vil_save(buf,path.c_str());
     return true;
   }
 
   else if (image_is_colour)
   {
-    vil_memory_image_of<vil_rgb_byte> buf(nx,ny);
-    vil_byte red,green,blue;
-    // Inefficient copy
-    for (int y=0;y<ny;++y)
-      for (int x=0;x<nx;++x)
-      {
-        red=image(x,y,0);
-        green=image(x,y,1);
-        blue=image(x,y,2);
-        buf(x,y)=vil_rgb_byte(red,green,blue);
-      }
+    vil_memory_image_of<vil_rgb_byte> buf;
+    mil_cmil2cvil(buf,image);
     vil_save(buf,path.c_str(),filetype.c_str());
-    //vil_save(buf,path.c_str());
     return true;
   }
   else

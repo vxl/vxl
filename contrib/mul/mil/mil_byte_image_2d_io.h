@@ -29,9 +29,6 @@ private:
 
   vcl_string guessFileType(const vcl_string& path) const;
 
-  void copyAsGrey(vil_image&);
-  void copyGreyToRGB(vil_image&);
-  void copyAsRGB(vil_image&);
 public:
 
   //: Dflt ctor
