@@ -1,5 +1,9 @@
 # v3p/CMakeLists.txt
 
+PROJECT( vthreep )
+
+SET( VTHREEP_INCLUDE_DIR ${vthreep_SOURCE_DIR} CACHE STATIC "v3p include files" )
+
 SUBDIRS(netlib)
 
 SUBDIRS(Qv)

@@ -1,6 +1,6 @@
 # oxl/VPLAYER/CMakeLists.txt
 
-INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/UseVGUI.cmake )
+INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
 
 IF (HAS_VGUI)
  IF (WIN32)

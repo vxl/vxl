@@ -1,7 +1,10 @@
 # vxl/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
+PROJECT( vxlcore )
+
+SET( VXLCORE_INCLUDE_DIR ${vxlcore_SOURCE_DIR} CACHE STATIC "Core VXL include files" )
+
+INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
 
 SET(global_sources
  vxl_copyright.h
@@ -37,6 +40,9 @@ SUBDIRS(vidl)
 
 # coordinate systems
 SUBDIRS(vcsl)
+
+# multi-platform GUI toolkit
+SUBDIRS(vgui)
 
 IF(BUILD_EXAMPLES)
   SUBDIRS(examples)

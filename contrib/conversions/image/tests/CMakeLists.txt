@@ -1,4 +1,4 @@
-INCLUDE( ${allvxl_SOURCE_DIR}/conversions/image/CMakeListsLink.txt )
+INCLUDE( ${CONVERSIONS_INCLUDE_DIR}/image/CMakeListsLink.txt )
 LINK_LIBRARIES( testlib )
 
 IF(HAS_IMAGE)

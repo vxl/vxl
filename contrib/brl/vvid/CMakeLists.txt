@@ -1,16 +1,16 @@
 # brl/vvid/CMakeLists.txt
 
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/brl )
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/gel )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 # find the path to the cmu camera libraries and includes
-INCLUDE(${allvxl_SOURCE_DIR}/brl/vvid/find_cmu_camera.cmake)
+INCLUDE(${BRL_INCLUDE_DIR}/vvid/find_cmu_camera.cmake)
 
 # determines if vgui is built and opengl is available
-INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/UseVGUI.cmake )
+INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
  
 IF(HAS_VGUI)
 # we have vgui enabled so ..
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/oxl )
+INCLUDE_DIRECTORIES( ${OXL_INCLUDE_DIR} )
 
 # sources that don't depend on the camera being present
 SOURCE_FILES(vvid_sources

@@ -1,10 +1,10 @@
 # ./gel/jvid/CMakeLists.txt
 
-INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/UseVGUI.cmake )
+INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
  
 IF(HAS_VGUI)
 
-  INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/oxl )
+  INCLUDE_DIRECTORIES( ${OXL_INCLUDE_DIR} )
 
   INCLUDE(${MODULE_PATH}/FindMPEG2.cmake)  
   IF(MPEG2_FOUND)

@@ -6,19 +6,19 @@ IF( NOT VXL_USING_NATIVE_MPEG2 )
 
 # If RUN_CONFIGURE is used here, configure is not run when cmake is first run.
 IF( UNIX )
-  EXEC_PROGRAM( ${allvxl_SOURCE_DIR}/v3p/mpeg2/configure
-                ${allvxl_BINARY_DIR}/v3p/mpeg2 )
+  EXEC_PROGRAM( ${vthreep_SOURCE_DIR}/mpeg2/configure
+                ${vthreep_BINARY_DIR}/mpeg2 )
 ENDIF( UNIX )
 
 IF( UNIX )
   # this is where autoconf will put config.h and inttypes.h
-  INCLUDE_DIRECTORIES( ${allvxl_BINARY_DIR}/v3p/mpeg2/include )
+  INCLUDE_DIRECTORIES( ${vthreep_BINARY_DIR}/mpeg2/include )
 ELSE( UNIX )
   # location of handwritten config.h and inttypes.h for windows
-  INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/v3p/mpeg2/win32 )
+  INCLUDE_DIRECTORIES( ${vthreep_SOURCE_DIR}/mpeg2/win32 )
 ENDIF( UNIX )
 
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/v3p/mpeg2/include/mpeg2dec )
+INCLUDE_DIRECTORIES( ${vthreep_SOURCE_DIR}/mpeg2/include/mpeg2dec )
 
 SET( mpeg2_sources
   libmpeg2/decode.c

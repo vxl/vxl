@@ -1,6 +1,6 @@
 # gel/mrc/vpgl/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/gel/mrc)
+INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR}/mrc)
 
 SET(vpgl_sources
  vpgl_basic_camera.cxx       vpgl_basic_camera.h       vpgl_basic_camera_sptr.h

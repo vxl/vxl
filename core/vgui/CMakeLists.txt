@@ -1,10 +1,17 @@
 # oxl/vgui/CMakeLists.txt
 
+OPTION( BUILD_VGUI "Build VGUI" "YES" )
+
+IF( BUILD_VGUI )
+
 INCLUDE(${MODULE_PATH}/NewCMake/FindOpenGL.cmake)
 
 # Build here only if OpenGL is available:
 IF (OPENGL_FOUND)
 IF (OPENGL_GLU_FOUND)
+
+  # For (not) reporting an error below
+  SET( CAN_BUILD_VGUI "YES" )
 
   INCLUDE(${MODULE_PATH}/NewCMake/FindX11.cmake)
   # Qv needed by vrml only
@@ -17,7 +24,6 @@ IF (OPENGL_GLU_FOUND)
   # implementations
   INCLUDE(${MODULE_PATH}/NewCMake/FindQt.cmake)
   INCLUDE(${MODULE_PATH}/NewCMake/FindGTK.cmake)
-  INCLUDE(${MODULE_PATH}/NewCMake/FindFLTK.cmake)
   INCLUDE(${MODULE_PATH}/NewCMake/FindMFC.cmake)
 
   ADD_DEFINITIONS( -DHAS_OPENGL)
@@ -76,32 +82,32 @@ SET(vgui_sources
   vgui_texture_hacks.cxx        vgui_texture_hacks.h
   vgui_cache_wizard.cxx         vgui_cache_wizard.h
   vgui_image_renderer.cxx       vgui_image_renderer.h
-  vgui_image_tableau.cxx        vgui_image_tableau.h    vgui_image_tableau_sptr.h
-  vgui_blender_tableau.cxx   vgui_blender_tableau.h vgui_blender_tableau_sptr.h
+  vgui_image_tableau.cxx        vgui_image_tableau.h      vgui_image_tableau_sptr.h
+  vgui_blender_tableau.cxx      vgui_blender_tableau.h    vgui_blender_tableau_sptr.h
 
   # tableau mixins and miscellaneous
-  vgui_wrapper_tableau.cxx      vgui_wrapper_tableau.h  vgui_wrapper_tableau_sptr.h
-  vgui_deck_tableau.cxx         vgui_deck_tableau.h     vgui_deck_tableau_sptr.h
-  vgui_composite_tableau.cxx            vgui_composite_tableau.h        vgui_composite_tableau_sptr.h
-  vgui_poly_tableau.cxx      vgui_poly_tableau.h  vgui_poly_tableau_sptr.h
-  vgui_grid_tableau.cxx         vgui_grid_tableau.h     vgui_grid_tableau_sptr.h
+  vgui_wrapper_tableau.cxx      vgui_wrapper_tableau.h    vgui_wrapper_tableau_sptr.h
+  vgui_deck_tableau.cxx         vgui_deck_tableau.h       vgui_deck_tableau_sptr.h
+  vgui_composite_tableau.cxx    vgui_composite_tableau.h  vgui_composite_tableau_sptr.h
+  vgui_poly_tableau.cxx         vgui_poly_tableau.h       vgui_poly_tableau_sptr.h
+  vgui_grid_tableau.cxx         vgui_grid_tableau.h       vgui_grid_tableau_sptr.h
   vgui_drag_mixin.cxx           vgui_drag_mixin.h
-  vgui_active_tableau.cxx       vgui_active_tableau.h   vgui_active_tableau_sptr.h
-  vgui_drag_tableau.cxx         vgui_drag_tableau.h  vgui_drag_tableau_sptr.h
-  vgui_clear_tableau.cxx        vgui_clear_tableau.h    vgui_clear_tableau_sptr.h
-  vgui_debug_tableau.cxx        vgui_debug_tableau.h    vgui_debug_tableau_sptr.h
-  vgui_quit_tableau.cxx         vgui_quit_tableau.h     vgui_quit_tableau_sptr.h
+  vgui_active_tableau.cxx       vgui_active_tableau.h     vgui_active_tableau_sptr.h
+  vgui_drag_tableau.cxx         vgui_drag_tableau.h       vgui_drag_tableau_sptr.h
+  vgui_clear_tableau.cxx        vgui_clear_tableau.h      vgui_clear_tableau_sptr.h
+  vgui_debug_tableau.cxx        vgui_debug_tableau.h      vgui_debug_tableau_sptr.h
+  vgui_quit_tableau.cxx         vgui_quit_tableau.h       vgui_quit_tableau_sptr.h
   vgui_tview_launcher_tableau.cxx vgui_tview_launcher_tableau.h vgui_tview_launcher_tableau_sptr.h
-  vgui_shell_tableau.cxx        vgui_shell_tableau.h    vgui_shell_tableau_sptr.h
+  vgui_shell_tableau.cxx        vgui_shell_tableau.h      vgui_shell_tableau_sptr.h
   vgui_text_put.cxx             vgui_text_put.h
-  vgui_text_tableau.cxx         vgui_text_tableau.h     vgui_text_tableau_sptr.h
-  vgui_blackbox_tableau.cxx vgui_blackbox_tableau.h vgui_blackbox_tableau_sptr.h
-  vgui_enhance_tableau.cxx  vgui_enhance_tableau.h vgui_enhance_tableau_sptr.h
-  vgui_tview_tableau.cxx        vgui_tview_tableau.h   vgui_tview_tableau_sptr.h
-  vgui_function_tableau.cxx vgui_function_tableau.h vgui_function_tableau_sptr.h
-  vgui_roi_tableau.cxx          vgui_roi_tableau.h      vgui_roi_tableau_sptr.h
-  vgui_rubberband_tableau.cxx vgui_rubberband_tableau.h vgui_rubberband_tableau_sptr.h
-  vgui_loader_tableau.cxx    vgui_loader_tableau.h   vgui_loader_tableau_sptr.h
+  vgui_text_tableau.cxx         vgui_text_tableau.h       vgui_text_tableau_sptr.h
+  vgui_blackbox_tableau.cxx     vgui_blackbox_tableau.h   vgui_blackbox_tableau_sptr.h
+  vgui_enhance_tableau.cxx      vgui_enhance_tableau.h    vgui_enhance_tableau_sptr.h
+  vgui_tview_tableau.cxx        vgui_tview_tableau.h      vgui_tview_tableau_sptr.h
+  vgui_function_tableau.cxx     vgui_function_tableau.h   vgui_function_tableau_sptr.h
+  vgui_roi_tableau.cxx          vgui_roi_tableau.h        vgui_roi_tableau_sptr.h
+  vgui_rubberband_tableau.cxx   vgui_rubberband_tableau.h vgui_rubberband_tableau_sptr.h
+  vgui_loader_tableau.cxx       vgui_loader_tableau.h     vgui_loader_tableau_sptr.h
   vgui_color_text.cxx           vgui_color_text.h
   vgui_event_server.cxx         vgui_event_server.h
   vgui_error_dialog.cxx         vgui_error_dialog.h
@@ -111,15 +117,15 @@ SET(vgui_sources
   vgui_soview3D.cxx             vgui_soview3D.h
   vgui_style.cxx                vgui_style.h
   vgui_style_factory.cxx        vgui_style_factory.h
-  vgui_displaybase_tableau.cxx  vgui_displaybase_tableau.h vgui_displaybase_tableau_sptr.h
+  vgui_displaybase_tableau.cxx  vgui_displaybase_tableau.h  vgui_displaybase_tableau_sptr.h
   vgui_displaylist2D_tableau.cxx  vgui_displaylist2D_tableau.h vgui_displaylist2D_tableau_sptr.h
   vgui_displaylist3D_tableau.cxx  vgui_displaylist3D_tableau.h vgui_displaylist3D_tableau_sptr.h
-  vgui_easy2D_tableau.cxx      vgui_easy2D_tableau.h  vgui_easy2D_tableau_sptr.h
-  vgui_easy3D_tableau.cxx      vgui_easy3D_tableau.h  vgui_easy3D_tableau_sptr.h
-  vgui_listmanager2D_tableau.cxx   vgui_listmanager2D_tableau.h  vgui_listmanager2D_tableau_sptr.h
-  vgui_viewer2D_tableau.cxx vgui_viewer2D_tableau.h vgui_viewer2D_tableau_sptr.h
-  internals/trackball.c         internals/trackball.h
-  vgui_viewer3D_tableau.cxx vgui_viewer3D_tableau.h vgui_viewer3D_tableau_sptr.h
+  vgui_easy2D_tableau.cxx       vgui_easy2D_tableau.h       vgui_easy2D_tableau_sptr.h
+  vgui_easy3D_tableau.cxx       vgui_easy3D_tableau.h       vgui_easy3D_tableau_sptr.h
+  vgui_listmanager2D_tableau.cxx  vgui_listmanager2D_tableau.h  vgui_listmanager2D_tableau_sptr.h
+  vgui_viewer2D_tableau.cxx vgui_viewer2D_tableau.h         vgui_viewer2D_tableau_sptr.h
+  vgui_viewer3D_tableau.cxx vgui_viewer3D_tableau.h         vgui_viewer3D_tableau_sptr.h
+  internals/trackball.c              internals/trackball.h
 
   # dialog classes
   vgui_dialog.cxx                    vgui_dialog.h
@@ -365,30 +371,12 @@ SET( vgui_sources ${vgui_sources}
 
 ADD_LIBRARY(vgui ${vgui_sources})
 
-# Basic vgui dependencies
-
-TARGET_LINK_LIBRARIES(vgui vnl_algo vnl vil vgl vpl vbl vul)
-IF (GLUT_FOUND)
-  TARGET_LINK_LIBRARIES(vgui ${GLUT_LIBRARIES})
-ENDIF (GLUT_FOUND)
-IF (QV_FOUND)
-  TARGET_LINK_LIBRARIES(vgui ${QV_LIBRARIES})
-ENDIF (QV_FOUND)
-
-TARGET_LINK_LIBRARIES(vgui ${OPENGL_LIBRARIES})
-
-IF (X11_FOUND)
-  TARGET_LINK_LIBRARIES(vgui ${X11_LIBRARIES})
-ENDIF (X11_FOUND)
 
 
 # Dependencies created by the toolkit implementations
 
 IF (VGUI_USE_GLUT)
   TARGET_LINK_LIBRARIES(vgui vil vul ${GLUT_LIBRARIES})
-  IF (X11_FOUND)
-    TARGET_LINK_LIBRARIES(vgui ${X11_LIBRARIES})
-  ENDIF (X11_FOUND)
 ENDIF (VGUI_USE_GLUT)
 IF (VGUI_USE_QT)
   TARGET_LINK_LIBRARIES(vgui vul vbl ${QT_LIBRARIES})
@@ -411,10 +399,24 @@ ENDIF (VGUI_USE_SDL)
 IF (VGUI_USE_XM)
   TARGET_LINK_LIBRARIES(vgui vul)
 ENDIF (VGUI_USE_XM)
-IF (VGUI_USE_FL)
-  TARGET_LINK_LIBRARIES(vgui vul ${FLTK_LIBRARIES} ${X11_LIBRARIES})
-ENDIF (VGUI_USE_FL)
 
+# Basic vgui dependencies.
+# These should appear after the above, because most of
+# the toolkits depend on OpenGL.
+
+TARGET_LINK_LIBRARIES(vgui vnl_algo vnl vil vgl vpl vbl vul)
+IF (GLUT_FOUND)
+  TARGET_LINK_LIBRARIES(vgui ${GLUT_LIBRARIES})
+ENDIF (GLUT_FOUND)
+IF (QV_FOUND)
+  TARGET_LINK_LIBRARIES(vgui ${QV_LIBRARIES})
+ENDIF (QV_FOUND)
+
+TARGET_LINK_LIBRARIES(vgui ${OPENGL_LIBRARIES})
+
+IF (X11_FOUND)
+  TARGET_LINK_LIBRARIES(vgui ${X11_LIBRARIES})
+ENDIF (X11_FOUND)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)
@@ -426,3 +428,12 @@ ENDIF (BUILD_TESTING)
 
 ENDIF (OPENGL_GLU_FOUND)
 ENDIF (OPENGL_FOUND)
+
+IF( NOT CAN_BUILD_VGUI )
+  MESSAGE(SEND_ERROR "vgui could not be built.\n"
+                     "Make sure the OpenGL libraries "
+                     "(GL and GLU) are specified correctly,\n"
+                     "or set BUILD_VGUI to OFF." )
+ENDIF( NOT CAN_BUILD_VGUI )
+
+ENDIF( BUILD_VGUI )

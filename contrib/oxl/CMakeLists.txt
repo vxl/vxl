@@ -1,17 +1,18 @@
 # ./oxl/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
+PROJECT( oxl )
+
+SET( OXL_INCLUDE_DIR ${oxl_SOURCE_DIR} CACHE STATIC "Oxford University package include files" )
+
+INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
 
 OPTION(BUILD_VGUI "Should the VGUI user interface be built?" YES)
 
 SUBDIRS(mvl oxp vrml osl)
 
-IF(BUILD_VGUI)
-  # using OpenGL:
-  SUBDIRS(vgui xcv VPLAYER apps)
-ENDIF(BUILD_VGUI)
+# using vgui:
+SUBDIRS(xcv VPLAYER apps)
 
 IF(BUILD_TESTING)
   SUBDIRS(oxltest)

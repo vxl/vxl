@@ -1,6 +1,6 @@
 # brl/vvid/bin/CMakeLists.txt
 
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
+INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 
 SOURCE_FILES(vidfpl_sources vidfpl_menus.cxx vidfpl_menus.h)
 ADD_EXECUTABLE (vidfpl vidfpl.cxx vidfpl_sources)

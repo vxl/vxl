@@ -1,6 +1,6 @@
 # gel/octree/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
+INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
 
 SET(octree_sources
  BaseCube.cxx          BaseCube.h

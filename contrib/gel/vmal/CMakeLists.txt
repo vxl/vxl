@@ -1,6 +1,6 @@
 # gel/vmal/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
+INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
 
 SET(vmal_sources
  vmal_convert.cxx           vmal_convert.h

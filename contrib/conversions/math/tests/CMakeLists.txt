@@ -1,4 +1,4 @@
-INCLUDE( ${allvxl_SOURCE_DIR}/conversions/math/CMakeListsLink.txt )
+INCLUDE( ${CONVERSIONS_INCLUDE_DIR}/math/CMakeListsLink.txt )
 LINK_LIBRARIES( testlib )
 
 IF(HAS_COOL)

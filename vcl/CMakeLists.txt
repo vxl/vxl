@@ -1,9 +1,13 @@
 # vcl/CMakeLists.txt
 
+PROJECT( vcl )
+
+SET( VCL_INCLUDE_DIR ${VCL_SOURCE_DIR} CACHE STATIC "VCL include files" )
+
 # Set up vcl_where_root_dir.h to have a macro set to $VCL_SOURCE_ROOT_DIR
 CONFIGURE_FILE(
-      ${allvxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in
-      ${allvxl_BINARY_DIR}/vcl/vcl_where_root_dir.h ESCAPE_QUOTES
+      ${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in
+      ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h ESCAPE_QUOTES
 )
 
 SET( vcl_sources

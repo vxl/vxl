@@ -1,4 +1,4 @@
-INCLUDE( ${allvxl_SOURCE_DIR}/conversions/geometry/CMakeListsLink.txt )
+INCLUDE( ${CONVERSIONS_INCLUDE_DIR}/geometry/CMakeListsLink.txt )
 LINK_LIBRARIES( testlib )
 
 IF(HAS_SPATIALOBJECTS)

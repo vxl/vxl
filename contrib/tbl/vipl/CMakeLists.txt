@@ -56,7 +56,7 @@ AUX_SOURCE_DIRECTORY(vipl_with_vnl_matrix/Templates vipl_sources)
 AUX_SOURCE_DIRECTORY(vipl_with_section/Templates vipl_sources)
 AUX_SOURCE_DIRECTORY(vipl_with_mil/Templates vipl_sources)
 # and for the latter, we need mul:
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/mul)
+INCLUDE_DIRECTORIES(${MUL_INCLUDE_DIR})
 
 ADD_LIBRARY(vipl ${vipl_sources})
 TARGET_LINK_LIBRARIES(vipl vil)

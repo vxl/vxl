@@ -1,3 +1,7 @@
+INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
+
+IF( HAS_VGUI )
+
 LINK_LIBRARIES( vgui vidl vul vbl )
 
 ADD_EXECUTABLE( basic01_display_image basic01_display_image.cxx)
@@ -54,3 +58,5 @@ INCLUDE(${MODULE_PATH}/NewCMake/FindMFC.cmake)
 IF(MFC_FOUND)
    SUBDIRS( mfc_example )
 ENDIF(MFC_FOUND)
+
+ENDIF( HAS_VGUI )

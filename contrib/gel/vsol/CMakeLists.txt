@@ -28,7 +28,7 @@ SET(vsol_sources
  vsol_tetrahedron.cxx       vsol_tetrahedron.h       vsol_tetrahedron_sptr.h
 )
 
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
+INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
 
 AUX_SOURCE_DIRECTORY(Templates vsol_sources)
 

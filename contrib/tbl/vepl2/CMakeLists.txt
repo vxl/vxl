@@ -1,6 +1,6 @@
 # tbl/vepl2/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/mul)
+INCLUDE_DIRECTORIES(${MUL_INCLUDE_DIR})
 
 SET(vepl2_sources
  vepl2_threshold.cxx            vepl2_threshold.h

@@ -1,6 +1,6 @@
 # gel/gkll/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
+INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
 
 SET(gkll_sources
  gkll_kl.cxx              gkll_kl.h

@@ -1,4 +1,4 @@
-INCLUDE( ${allvxl_SOURCE_DIR}/conversions/container/CMakeListsLink.txt )
+INCLUDE( ${CONVERSIONS_INCLUDE_DIR}/container/CMakeListsLink.txt )
 
 LINK_LIBRARIES( testlib )
 

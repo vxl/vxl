@@ -12,7 +12,7 @@ AUX_SOURCE_DIRECTORY(Templates vgel_sources)
 ADD_LIBRARY(vgel ${vgel_sources})
 TARGET_LINK_LIBRARIES(vgel vgel_kl vtol vil vidl mvl)
 
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
+INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
 
 SUBDIRS(kl)
 IF (BUILD_EXAMPLES)

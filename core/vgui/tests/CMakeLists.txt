@@ -1,5 +1,9 @@
 # ./oxl/vgui/test/CMakeLists.txt
 
+INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
+
+IF( HAS_VGUI )
+
 LINK_LIBRARIES( vgui )
 
 ADD_EXECUTABLE( vgui_test_popup test_popup.cxx )
@@ -18,3 +22,5 @@ IF(X11_FOUND)
  ADD_EXECUTABLE( vgui_test_acceleration test_acceleration.cxx )
 #ADD_TEST( vgui_test_acceleration vgui_test_acceleration )
 ENDIF(X11_FOUND)
+
+ENDIF( HAS_VGUI )

@@ -1,7 +1,7 @@
 # ./gel/jvid/bin/CMakeLists.txt
 
 
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )	
+INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )	
 
 ADD_EXECUTABLE (jplayer jplayer.cxx)
 

@@ -1,6 +1,6 @@
 LINK_LIBRARIES( rsdl mbl testlib )
 
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/mul )
+INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 
 ADD_EXECUTABLE( rsdl_test_driver
   test_driver.cxx
