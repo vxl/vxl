@@ -258,7 +258,7 @@ sub process_headers {
       s/<IUE_iosfwd\.h>/<vcl_iosfwd.h>/;
       s/<IUE_complex\.h>/<vcl_complex.h>/;
       s/<IUE_cmath\.h>/<vcl_cmath.h>/;
-      s/\bIUE_long_double\b/vcl_long_double/;
+      s/\bIUE_long_double\b/long double/g;
       $saw_stlfwd = 1 if s!^\#include.*<IUE_stlfwd\.h>!//$&!;
       
       # non-standard STL headers which can be fixed.
