@@ -1,0 +1,5 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage vidl_vil1 : Video Sequence library (Old implementation relying on vil1)
+* This library has been renamed from vidl.  vidl will be modified to use the vil library
+* instead of vil1).
+*/
