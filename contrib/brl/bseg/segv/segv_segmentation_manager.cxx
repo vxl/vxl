@@ -110,7 +110,7 @@ void segv_segmentation_manager::load_image()
 
   if(greyscale)
     {
-      vil1_memory_image_of<unsigned char> temp1 = 
+      vil1_memory_image_of<unsigned char> temp1 =
       brip_float_ops::convert_to_grey(temp);
       img_ = temp1;
     }
@@ -197,8 +197,8 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines)
 //: Draw line segments on the tableau
 //-----------------------------------------------------------------------------
 void segv_segmentation_manager::
-draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines, 
-	   float r, float g, float b, int width)
+draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
+           float r, float g, float b, int width)
 {
   if (!t2D_)
     return;
@@ -244,7 +244,7 @@ draw_points(vcl_vector<vsol_point_2d_sptr> const& points, float r, float g, floa
 }
 
 void segv_segmentation_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
-					     bool verts)
+                                             bool verts)
 {
   for (vcl_vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
        rit != regions.end(); rit++)
@@ -278,7 +278,7 @@ void segv_segmentation_manager::original_image()
 void segv_segmentation_manager::roi()
 {
   float x0=0, y0=0, x1=0, y1=0;
- 
+
   vcl_cout << "Choose upper left corner of ROI.\n";
   picktab_->pick_point(&x0,&y0);
   vcl_cout << "picked (x="<<x0<<", y="<<y0<<")\n";
@@ -286,21 +286,21 @@ void segv_segmentation_manager::roi()
   picktab_->pick_point(&x1,&y1);
   vcl_cout << "picked (x="<<x1<<", y="<<y1<<")\n";
   if( (x1 > x0) && (y1 > y0) )
+  {
+    int w = int(x1 - x0);
+    int h = int(y1 - y0);
+    vil1_image cropped = vil1_crop(img_,int(x0),int(y0),w,h);
+    cout << "cropped x=" <<x0<<" y=" <<y0<< " w=" <<w<<" h=" <<h<< "\n";
+    if (cropped)
     {
-      int w = int(x1 - x0);
-      int h = int(y1 - y0);
-      vil1_image cropped = vil1_crop(img_,int(x0),int(y0),w,h);
-      cout << "cropped x=" <<x0<<" y=" <<y0<< " w=" <<w<<" h=" <<h<< "\n";
-      if (cropped)
-	{
-	  img_ = cropped;
-	  t2D_->get_image_tableau()->set_image(cropped);
-	  t2D_->post_redraw();
-	  return;
-	}
-      cout << "crop failed.\n";
+      img_ = cropped;
+      t2D_->get_image_tableau()->set_image(cropped);
+      t2D_->post_redraw();
       return;
     }
+    cout << "crop failed.\n";
+    return;
+  }
   cout << "invalid ROI\n";
   return;
 }
@@ -524,8 +524,8 @@ void segv_segmentation_manager::regions()
 // Test calculated camera parameter matrices (K and M) by reading from a file.
 // file should be in the following format:
 // K n_views M1, M2, M3... Mn_views
-// where K is the 3x3 intrinsic parameter matrix, 
-// n_views is an integer value > 0, 
+// where K is the 3x3 intrinsic parameter matrix,
+// n_views is an integer value > 0,
 // and M1 - Mn_views are the 4x4 homogeneous extrinsic parameter matrices.
 void segv_segmentation_manager::test_camera_parms()
 {
@@ -551,53 +551,53 @@ void segv_segmentation_manager::test_camera_parms()
       // read K
       vnl_matrix_fixed<double,3,3> K;
       vcl_ifstream parms_instream(camera_parms_filename.c_str());
-      
+
       double k_values[9];
       for (int i=0; i < 9; i++)
-	{
-	  parms_instream >> k_values[i];
-	  //vcl_cout << "k_values["<<i<<"] = "<<k_values[i] << "\n";
-	}
+      {
+        parms_instream >> k_values[i];
+        //vcl_cout << "k_values["<<i<<"] = "<<k_values[i] << "\n";
+      }
       K.put(0,0,k_values[0]); K.put(0,1,k_values[1]); K.put(0,2,k_values[2]);
       K.put(1,0,k_values[3]); K.put(1,1,k_values[4]); K.put(1,2,k_values[5]);
       K.put(2,0,k_values[6]); K.put(2,1,k_values[7]); K.put(2,2,k_values[8]);
-      
+
       vcl_cout << "K = \n" << K << "\n";
 
       // read number of views
       int n_views = 0;
       parms_instream >> n_views;
-      
+
       // read M
       vnl_matrix_fixed<double,3,4> M;
-      
+
       double m_values[12];
       double dummy;
       for (int v = 1; v <= view_num; v++)
-	{
-	  if (v > n_views)
-	    {
-	      vcl_cout << "error: view number > n_views\n";
-	      break;
-	    }
-	  for (int i=0; i < 12; i++)
-	    {
-	      parms_instream >> m_values[i];
-	      //vcl_cout << "m_values["<<i<<"] = "<<m_values[i] << "\n";
-	    }
-	  // read 4th row, should just be [0 0 0 1]
-	  for (int i=0; i < 4; i++)
-	    {
-	      parms_instream >> dummy;
-	    }
-	  
-	}
+      {
+        if (v > n_views)
+          {
+            vcl_cout << "error: view number > n_views\n";
+            break;
+          }
+        for (int i=0; i < 12; i++)
+          {
+            parms_instream >> m_values[i];
+            //vcl_cout << "m_values["<<i<<"] = "<<m_values[i] << "\n";
+          }
+        // read 4th row, should just be [0 0 0 1]
+        for (int i=0; i < 4; i++)
+          {
+            parms_instream >> dummy;
+          }
+
+      }
       parms_instream.close();
-      
+
       M.put(0,0,m_values[0]); M.put(0,1,m_values[1]); M.put(0,2,m_values[2]);  M.put(0,3,m_values[3]);
       M.put(1,0,m_values[4]); M.put(1,1,m_values[5]); M.put(1,2,m_values[6]);  M.put(1,3,m_values[7]);
       M.put(2,0,m_values[8]); M.put(2,1,m_values[9]); M.put(2,2,m_values[10]); M.put(2,3,m_values[11]);
-  
+
       vcl_cout << "M = \n" << M << "\n";
 
       //transform the grid points to the image
@@ -605,7 +605,7 @@ void segv_segmentation_manager::test_camera_parms()
       sdet_grid_finder gf(gfp);
       vcl_vector<vsol_point_2d_sptr> calculated_points;
       gf.transform_grid_points(K,M,calculated_points);
-      
+
       // draw points on image
       this->draw_points(calculated_points,1.0f,0.0f,0.0f,5);
     }
@@ -621,10 +621,10 @@ void segv_segmentation_manager::test_camera_parms()
       double points_x[n_points];
       double points_y[n_points];
       for (int i = 0; i < n_points; i++)
-	{
-	  points_instream >> dummy; //x
-	  points_instream >> dummy; //y
-	}
+      {
+        points_instream >> dummy; //x
+        points_instream >> dummy; //y
+      }
 
       // read number of views
       int n_views = 0;
@@ -632,25 +632,25 @@ void segv_segmentation_manager::test_camera_parms()
 
       // read grid points for view number
       for (int v = 1; v <= view_num; v++)
-	{
-	  if (v > n_views) 
-	    {
-	      vcl_cout << "error: view number > n_views\n";
-	      break;
-	    }
-	  for (int i = 0; i < n_points; i++)
-	    {
-	      points_instream >> points_x[i];
-	      points_instream >> points_y[i];
-	    }
-	}
+      {
+        if (v > n_views)
+        {
+          vcl_cout << "error: view number > n_views\n";
+          break;
+        }
+        for (int i = 0; i < n_points; i++)
+        {
+          points_instream >> points_x[i];
+          points_instream >> points_y[i];
+        }
+      }
       for (int i = 0; i < n_points; i++)
-	{
-	  vsol_point_2d_sptr point = new vsol_point_2d(points_x[i],points_y[i]);
-	  input_points.push_back(point);
-	}
+      {
+        vsol_point_2d_sptr point = new vsol_point_2d(points_x[i],points_y[i]);
+        input_points.push_back(point);
+      }
       this->draw_points(input_points,0.0f,1.0f,0.0f,4);
-    }  
+    }
   return;
 }
 
@@ -683,7 +683,7 @@ void segv_segmentation_manager::fit_lines()
   vd_dialog.checkbox("Grid Debug Output", gfp.verbose_);
   vd_dialog.checkbox("Matched Lines", matched_lines);
   vd_dialog.checkbox("Use Manual Point Selection",manual_pt_selection);
-  vd_dialog.choice("Choose Debug Line Display", choices, gfp.debug_state_); 
+  vd_dialog.choice("Choose Debug Line Display", choices, gfp.debug_state_);
 
   if (!vd_dialog.ask())
     return;
@@ -718,47 +718,46 @@ void segv_segmentation_manager::fit_lines()
       vcl_vector<vsol_line_2d_sptr> mapped_lines;
       vcl_vector<vsol_line_2d_sptr> mapped_grid_lines;
       if (manual_pt_selection)
-	{
-	  vsol_point_2d_sptr corners[4];
-	  vcl_cout << "Select the four corners of the grid, starting with " 
-		   << "the upper left and moving clockwise.\n";
-	  for (int p=0; p<4; p++) 
-	    {
-	      float x=0, y=0;
-	      picktab_->pick_point(&x,&y);
-	      vcl_cout << "corner "<< p <<" (x=" << x << ", y=" << y <<")\n";
-	      corners[p] = new vsol_point_2d(x,y);
-	    }
-	  gf.compute_manual_homography(corners[0],corners[1],
-				       corners[2],corners[3]);
-	  if(!gfp.debug_state_)
-	    //gf.get_mapped_lines(mapped_lines);
-	    gf.get_backprojected_grid(mapped_lines);
-	  else
-	      gf.get_debug_lines(mapped_lines);
-	  
-	  this->draw_lines(mapped_lines);
-	  return;
-	}
+      {
+        vsol_point_2d_sptr corners[4];
+        vcl_cout << "Select the four corners of the grid, starting with "
+                 << "the upper left and moving clockwise.\n";
+        for (int p=0; p<4; p++)
+        {
+          float x=0, y=0;
+          picktab_->pick_point(&x,&y);
+          vcl_cout << "corner "<< p <<" (x=" << x << ", y=" << y <<")\n";
+          corners[p] = new vsol_point_2d(x,y);
+        }
+        gf.compute_manual_homography(corners[0],corners[1],
+                                     corners[2],corners[3]);
+        if (!gfp.debug_state_)
+          //gf.get_mapped_lines(mapped_lines);
+          gf.get_backprojected_grid(mapped_lines);
+        else
+          gf.get_debug_lines(mapped_lines);
 
-   
+        this->draw_lines(mapped_lines);
+        return;
+      }
+
       gf.compute_homography();
       // double-check grid match
       if (!gf.check_grid_match(img_))
-	{
-	  /* for now just display message - if this was a video process
-	   * we would want to disregard this homography and move on */
-	  vcl_cout << "warning: grid match failed double-check\n";
-	}
+      {
+        /* for now just display message - if this was a video process
+         * we would want to disregard this homography and move on */
+        vcl_cout << "warning: grid match failed double-check\n";
+      }
       if(!gfp.debug_state_)
-	//gf.get_mapped_lines(mapped_lines);
-	gf.get_backprojected_grid(mapped_lines);
-      else 
-	{
-	  gf.get_debug_lines(mapped_lines);
-	  gf.get_debug_grid_lines(mapped_grid_lines);
-	  this->draw_lines(mapped_grid_lines,1.0f,0.0f,0.0f,1);
-	}
+        //gf.get_mapped_lines(mapped_lines);
+        gf.get_backprojected_grid(mapped_lines);
+      else
+      {
+        gf.get_debug_lines(mapped_lines);
+        gf.get_debug_grid_lines(mapped_grid_lines);
+        this->draw_lines(mapped_grid_lines,1.0f,0.0f,0.0f,1);
+      }
       this->draw_lines(mapped_lines);
       return;
     }

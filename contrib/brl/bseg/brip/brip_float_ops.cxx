@@ -757,17 +757,17 @@ brip_float_ops::convert_to_float(vil1_image const & image)
 vil1_memory_image_of<unsigned char>
  brip_float_ops::convert_to_grey(vil1_image const& image)
 {
-  if(!image)
+  if (!image)
     return vil1_memory_image_of<unsigned char>();
 
   //Check if the image is a float
-  if(image.components()==1 &&
-     image.component_format()==VIL1_COMPONENT_FORMAT_IEEE_FLOAT)
-	 return brip_float_ops::convert_to_byte(vil1_memory_image_of<float>(image));
+  if (image.components()==1 &&
+      image.component_format()==VIL1_COMPONENT_FORMAT_IEEE_FLOAT)
+    return brip_float_ops::convert_to_byte(vil1_memory_image_of<float>(image));
 
-  //Here we assume that the image is an unsigned char 
+  //Here we assume that the image is an unsigned char
   //In this case we should just return it.
-  if(image.components()!=3)
+  if (image.components()!=3)
     return vil1_memory_image_of<unsigned char>(image);
 
   // the image is color so we should convert it to greyscale
