@@ -21,6 +21,7 @@
 
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
@@ -38,6 +39,8 @@
 #include <vsol/vsol_group_2d.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d.h>
+#include <vsol/vsol_digital_curve_3d_sptr.h>
+#include <vsol/vsol_digital_curve_3d.h>
 
 void test_vsol_io()
 {
@@ -50,6 +53,7 @@ void test_vsol_io()
   vsl_add_to_binary_loader(vsol_triangle_2d());
   vsl_add_to_binary_loader(vsol_group_2d());
   vsl_add_to_binary_loader(vsol_digital_curve_2d());
+  vsl_add_to_binary_loader(vsol_digital_curve_3d());
 
   //vsol_point_2d I/O
   vcl_cout << "Testing I/O for vsol_point_2d\n";
@@ -252,55 +256,117 @@ void test_vsol_io()
   vpl_unlink ("test_polyline_2d_io.tmp");
 
 
-    //vsol_digital_curve_2d I/O
+  //vsol_digital_curve_2d I/O
   vcl_cout << "\nTesting I/O for vsol_digital_curve_2d\n";
 
-  vsl_b_ofstream dc_out("test_digital_curve_2d_io.tmp");
-  TEST("Created test_digital_curve_2d_io.tmp for writing",(!dc_out), false);
+  vsl_b_ofstream dc2_out("test_digital_curve_2d_io.tmp");
+  TEST("Created test_digital_curve_2d_io.tmp for writing",(!dc2_out), false);
 
-  vsol_digital_curve_2d_sptr dcrv = new vsol_digital_curve_2d(points);
-  vcl_cout << "Writing digital curve " << *dcrv;
-  vsl_b_write(dc_out, dcrv);
-  dc_out.close();
+  vsol_digital_curve_2d_sptr dc2rv = new vsol_digital_curve_2d(points);
+  vcl_cout << "Writing digital curve " << *dc2rv;
+  vsl_b_write(dc2_out, dc2rv);
+  dc2_out.close();
 
-  vsl_b_ifstream dc_in("test_digital_curve_2d_io.tmp");
-  TEST("Created test_digital_curve_2d_io.tmp for reading",(!dc_in), false);
-  vsol_digital_curve_2d_sptr dcrv_in;
-  vsl_b_read(dc_in, dcrv_in);
-  if (dcrv_in)
-    vcl_cout << "Read digital curve " << *dcrv_in << '\n';
-  if (dcrv_in)
-    TEST("Testing digital curve io", *dcrv, *dcrv_in);
+  vsl_b_ifstream dc2_in("test_digital_curve_2d_io.tmp");
+  TEST("Created test_digital_curve_2d_io.tmp for reading",(!dc2_in), false);
+  vsol_digital_curve_2d_sptr dc2rv_in;
+  vsl_b_read(dc2_in, dc2rv_in);
+  if (dc2rv_in)
+    vcl_cout << "Read digital curve " << *dc2rv_in << '\n';
+  if (dc2rv_in)
+    TEST("Testing digital curve io", *dc2rv, *dc2rv_in);
 
-  vsol_digital_curve_2d_sptr dcrvb = new vsol_digital_curve_2d(pointsb);
-  vcl_vector<vsol_digital_curve_2d_sptr> dcs, dcs_in;
-  dcs.push_back(dcrv); dcs.push_back(dcrvb);
-  vsl_b_ofstream bdcv_out("test_digital_curve_2d_io.tmp");
-  vsl_b_write(bdcv_out, dcs);
-  bdcv_out.close();
+  vsol_digital_curve_2d_sptr dc2rvb = new vsol_digital_curve_2d(pointsb);
+  vcl_vector<vsol_digital_curve_2d_sptr> dc2s, dc2s_in;
+  dc2s.push_back(dc2rv); dc2s.push_back(dc2rvb);
+  vsl_b_ofstream bdc2v_out("test_digital_curve_2d_io.tmp");
+  vsl_b_write(bdc2v_out, dc2s);
+  bdc2v_out.close();
 
-  vsl_b_ifstream bdcv_in("test_digital_curve_2d_io.tmp");
-  vsl_b_read(bdcv_in, dcs_in);
-  bdcv_in.close();
+  vsl_b_ifstream bdc2v_in("test_digital_curve_2d_io.tmp");
+  vsl_b_read(bdc2v_in, dc2s_in);
+  bdc2v_in.close();
   good = true;
   k = 0;
-  for (vcl_vector<vsol_digital_curve_2d_sptr>::iterator dcit = dcs_in.begin();
-       dcit != dcs_in.end(); dcit++, k++)
+  for (vcl_vector<vsol_digital_curve_2d_sptr>::iterator dc2it = dc2s_in.begin();
+       dc2it != dc2s_in.end(); dc2it++, k++)
   {
-    if (! *dcit)
+    if (! *dc2it)
     {
       good = false;
       continue;
     }
-    vcl_cout << "Saved digital curve " << *dcs[k] << '\n'
-             << "Read digital curve " << *(*dcit) << '\n';
-    good = good && *(*dcit) == *dcs[k];
+    vcl_cout << "Saved digital curve " << *dc2s[k] << '\n'
+             << "Read digital curve " << *(*dc2it) << '\n';
+    good = good && *(*dc2it) == *dc2s[k];
   }
 
-  TEST("Testing digital curve vector io", good, true);
+  TEST("Testing 2d digital curve vector io", good, true);
 
   // remove the temporary file
   vpl_unlink ("test_digital_curve_2d_io.tmp");
+
+
+  //vsol_digital_curve_3d I/O
+  vcl_cout << "\nTesting I/O for vsol_digital_curve_3d\n";
+
+  vsl_b_ofstream dc3_out("test_digital_curve_3d_io.tmp");
+  TEST("Created test_digital_curve_3d_io.tmp for writing",(!dc3_out), false);
+
+  vcl_vector<vsol_point_3d_sptr> points3d;
+  for (int i = 0; i<3; i++)
+  {
+    vsol_point_3d_sptr p = new vsol_point_3d(i, i, -i);
+    points3d.push_back(p);
+  }
+  vsol_digital_curve_3d_sptr dc3rv = new vsol_digital_curve_3d(points3d);
+  vcl_cout << "Writing digital curve " << *dc3rv;
+  vsl_b_write(dc3_out, dc3rv);
+  dc3_out.close();
+
+  vsl_b_ifstream dc3_in("test_digital_curve_3d_io.tmp");
+  TEST("Created test_digital_curve_3d_io.tmp for reading",(!dc3_in), false);
+  vsol_digital_curve_3d_sptr dc3rv_in;
+  vsl_b_read(dc3_in, dc3rv_in);
+  if (dc3rv_in)
+    vcl_cout << "Read digital curve " << *dc3rv_in << '\n';
+  if (dc3rv_in)
+    TEST("Testing digital curve io", *dc3rv, *dc3rv_in);
+
+  vsol_point_3d_sptr pw1 = new vsol_point_3d(1.1, 2.2, 3.3);
+  vsol_point_3d_sptr pw2 = new vsol_point_3d(4.4, 5.5, 6.6);
+  vsol_point_3d_sptr pw3 = new vsol_point_3d(7.7, 8.8, 9.9);
+  vcl_vector<vsol_point_3d_sptr> pointsw;
+  pointsw.push_back(pw1); pointsw.push_back(pw2); pointsw.push_back(pw3);
+  vsol_digital_curve_3d_sptr dc3rvb = new vsol_digital_curve_3d(pointsw);
+  vcl_vector<vsol_digital_curve_3d_sptr> dc3s, dc3s_in;
+  dc3s.push_back(dc3rv); dc3s.push_back(dc3rvb);
+  vsl_b_ofstream bdc3v_out("test_digital_curve_3d_io.tmp");
+  vsl_b_write(bdc3v_out, dc3s);
+  bdc3v_out.close();
+
+  vsl_b_ifstream bdc3v_in("test_digital_curve_3d_io.tmp");
+  vsl_b_read(bdc3v_in, dc3s_in);
+  bdc3v_in.close();
+  good = true;
+  k = 0;
+  for (vcl_vector<vsol_digital_curve_3d_sptr>::iterator dc3it = dc3s_in.begin();
+       dc3it != dc3s_in.end(); dc3it++, ++k)
+  {
+    if (! *dc3it)
+    {
+      good = false;
+      continue;
+    }
+    vcl_cout << "Saved digital curve " << *dc3s[k] << '\n'
+             << "Read digital curve " << *(*dc3it) << '\n';
+    good = good && *(*dc3it) == *dc3s[k];
+  }
+
+  TEST("Testing 3d digital curve vector io", good, true);
+
+  // remove the temporary file
+  vpl_unlink ("test_digital_curve_3d_io.tmp");
 
 
   //vsol_polygon_2d I/O
@@ -625,7 +691,7 @@ void test_vsol_io()
   vsol_spatial_object_2d_sptr obj2 = l.ptr();    // A line
   vsol_spatial_object_2d_sptr obj3 = poly.ptr(); // A polyline
   vsol_spatial_object_2d_sptr obj4 = polyg.ptr();// A polygon
-  vsol_spatial_object_2d_sptr obj5 = dcrv.ptr(); // A digital curve
+  vsol_spatial_object_2d_sptr obj5 = dc2rv.ptr(); // A 2d digital curve
 
   vsl_b_ofstream bpm_out("test_polymorph_io.tmp");
   TEST("Created test_polymorph_io.tmp for writing",(!bpm_out), false);
