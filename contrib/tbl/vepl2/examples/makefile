@@ -39,5 +39,5 @@ include ${IUEROOT}/config/top.mk
 ifeq "$(TJ_GCC30)" "1"
 # gcc 3.0 needs too much virtual memory with -O2
 FLAGS_example_convert.cxx += -O0
-FLAGS_example_std_dev.cxx += -O1
+FLAGS_example_std_dev.cxx += -O0
 endif
