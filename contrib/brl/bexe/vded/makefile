@@ -1,10 +1,5 @@
 USES += contrib/brl contrib/brl/bseg
-TRY_AVI := 1
-TRY_MPEG2 := 1
-include ${IUELOCALROOT}/core/vidl_vil1/config.mk
-include ${IUELOCALROOT}/core/vil1/config.mk
 include ${IUELOCALROOT}/core/vul/config.mk
-# for motion_test.cxx:
 include ${IUELOCALROOT}/core/vidl/config.mk
 include ${IUELOCALROOT}/core/vil/algo/config.mk
 
