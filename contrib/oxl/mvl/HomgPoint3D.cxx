@@ -41,16 +41,10 @@ HomgPoint3D::~HomgPoint3D ()
 //--------------------------------------------------------------
 //
 //: Return true if the point is at infinity
-bool
-HomgPoint3D::check_infinity(void) const
-{
-  return get_w() == 0;
-}
-
 //--------------------------------------------------------------
 //
 //: Return true if the point is at infinity.
-// Check that max(|x|, |y|, |z|) < tol * |w|
+// Check that |w| <= max(|x|, |y|, |z|) * tol
 bool
 HomgPoint3D::check_infinity(double tol) const
 {
@@ -63,7 +57,7 @@ HomgPoint3D::check_infinity(double tol) const
   if (hy > max) max = hy;
   if (hz > max) max = hz;
 
-  return max < tol * hw;
+  return hw <= tol * max;
 }
 
 //--------------------------------------------------------------

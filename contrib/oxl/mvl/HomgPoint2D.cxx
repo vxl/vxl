@@ -13,11 +13,11 @@
 //--------------------------------------------------------------
 //
 //: Return true if the point is at infinity (an ideal point).
-// The method checks that $|w| < \mbox{infinitesimal\_tol} \times \mbox{min}\{|x|, |y|\}$
+// The method checks that $|w| <= \mbox{infinitesimal\_tol} \times \mbox{max}\{|x|, |y|\}$
 bool
 HomgPoint2D::check_infinity(double tol) const
 {
-  return vnl_math_abs(get_w()) < tol * vnl_math_min(vnl_math_abs(get_x()), vnl_math_abs(get_y()));
+  return vnl_math_abs(get_w()) <= tol * vnl_math_max(vnl_math_abs(get_x()), vnl_math_abs(get_y()));
 }
 
 //--------------------------------------------------------------
