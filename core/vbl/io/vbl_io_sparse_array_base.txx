@@ -1,7 +1,8 @@
+#ifndef vbl_io_sparse_array_base_txx_
+#define vbl_io_sparse_array_base_txx_
 // This is vxl/vbl/io/vbl_io_sparse_array_base.txx
 
-#include <vbl/vbl_sparse_array_base.h>
-#include <vsl/vsl_binary_io.h>
+#include "vbl_io_sparse_array_base.h"
 #include <vsl/vsl_pair_io.h>
 //============================================================================
 //: Binary save self to stream.
@@ -13,7 +14,9 @@ void vsl_b_write(vsl_b_ostream &os, const vbl_sparse_array_base<T, Index> & p)
   
   vsl_b_write(os, p.count_nonempty());
   for(vbl_sparse_array_base<T, Index>::const_iterator s = p.begin(); s != p.end(); ++s){
-    vsl_b_write(os, *s);
+    // the value_type of a map<Key, T> is "pair<Key const, T>", not "pair<Key, T>".
+    vcl_pair<Index, T> tt((*s).first, (*s).second);
+    vsl_b_write(os, tt);
   }
   
 }
@@ -41,7 +44,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_sparse_array_base<T, Index> & p)
     
   default:
     vcl_cerr << "vsl_b_read() Unknown version number "<< v << vcl_endl;
-    abort();
+    vcl_abort();
   }
   
 }
@@ -75,3 +78,5 @@ void vsl_print_summary(vcl_ostream& os,const vbl_sparse_array_base<T, Index> & p
   template void vsl_b_read(vsl_b_istream &, vbl_sparse_array_base<T , I > &); \
   template void vsl_b_write(vsl_b_ostream &, const vbl_sparse_array_base<T , I > &); \
 ;
+
+#endif
