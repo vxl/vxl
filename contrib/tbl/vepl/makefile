@@ -53,6 +53,7 @@ FLAGS_vepl_erode_disk.cxx += -O1
 FLAGS_vepl_median.cxx += -O1
 FLAGS_vepl_moment.cxx += -O1
 FLAGS_vepl_histogram.cxx += -O1
+FLAGS_Templates/vepl_convert+uchar-.cxx += -O1
 FLAGS_Templates/vepl_convert+short-.cxx += -O1
 FLAGS_Templates/vepl_convert+vil_rgb+uchar--.cxx += -O1
 endif
