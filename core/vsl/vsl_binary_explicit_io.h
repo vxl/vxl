@@ -665,7 +665,7 @@ inline void vsl_b_write_int_16(vsl_b_ostream& os, long n )
 inline void vsl_b_read_int_16(vsl_b_istream& is, long& n )
 {
   is.is().read( ( char* )&n, 2 );
-  if (*(((unsigned char*)&n)+1) & 128 == 1)
+  if ((*(((unsigned char*)&n)+1) & 128) == 1)
   {
     vsl_swap_bytes(( char* )&n, sizeof(long) );
     n |= -65536l;
