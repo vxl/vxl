@@ -140,7 +140,7 @@ bool vnl_vector<T>::read_ascii(istream& s)
 {
   bool size_known = (this->size() != 0);
   if (size_known) {
-    for(int i = 0; i < this->size(); ++i)
+    for(unsigned i = 0; i < this->size(); ++i)
       s >> (*this)(i);
     return s.good() || s.eof();
   }

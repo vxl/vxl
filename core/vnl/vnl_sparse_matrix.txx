@@ -228,7 +228,7 @@ void vnl_sparse_matrix<T>::mult(const vnl_vector<T>& , vnl_vector<T>& )
 template <class T>
 void vnl_sparse_matrix<T>::pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& result)
 {
-  assert(lhs.size() == (int)rows());
+  assert(lhs.size() == rows());
 
   // Resize and clear result vector
   vnl_vector<T> tmp( columns() );

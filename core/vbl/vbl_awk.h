@@ -44,7 +44,7 @@ public:
 
 // -- Return field i.  Counting starts at 0.
   char const* operator[] (int i) {
-    if (i < fields_.size())
+    if (i >= 0 && i < int(fields_.size()))
       return fields_[i];
     else
       return 0;

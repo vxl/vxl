@@ -46,7 +46,7 @@ FMPlanarNonLinFun::FMPlanarNonLinFun(const ImageMetric* image_metric1,
 {
   // Form single array
   vcl_vector<HomgPoint2D> points(points1);
-  for(int i = 0; i < points2.size(); ++i)
+  for(unsigned i = 0; i < points2.size(); ++i)
     points.push_back(points2[i]);
 
   // Condition points

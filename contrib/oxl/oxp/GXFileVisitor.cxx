@@ -151,7 +151,7 @@ bool GXFileVisitor::visit(istream& s)
 	};
 	vcl_string colour = awk[1];
 	char const* cs = colour.c_str();
-	for(int i = 0; i < sizeof colors / sizeof colors[0]; ++i)
+	for(unsigned i = 0; i < sizeof colors / sizeof colors[0]; ++i)
 	  if (strcmp(colors[i].s, cs) == 0) {
 	    //was : color = colors[i].c;
 	    // fsm@robots. some compilers (SGI native) don't

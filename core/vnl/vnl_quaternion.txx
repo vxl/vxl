@@ -71,7 +71,7 @@ vnl_quaternion<FLOAT>::vnl_quaternion (const vnl_vector<FLOAT>& axis, FLOAT angl
 template <class FLOAT>
 vnl_quaternion<FLOAT>::vnl_quaternion (const vnl_vector<FLOAT>& vec)
 {			
-  int i = 0;
+  unsigned i = 0;
   for (; i < vec.size(); i++)	// 1-1 layout between vector & quaternion
     this->operator()(i) = vec.get(i);
   for (; i < 4; i++)

@@ -569,7 +569,7 @@ bool vil_jpeg_generic_image::compress_section(void const *buf, int x0, int y0, i
   // Relaxed slightly.. awf.
   // It will work if you send entire scan lines sequentially
 
-  if (x0 != 0 || w != cinfo_c.image_width) {
+  if (x0 != 0 || w != int(cinfo_c.image_width)) {
     cerr << __FILE__ << " : Can only compress complete scanlines, sent sequentially " << endl;
     return false;
   }
@@ -619,7 +619,7 @@ bool vil_jpeg_generic_image::compress_section(void const *buf, int x0, int y0, i
   // delete array again
   //deletXe [] rasters;
 
-  if (y0 + h == cinfo_c.image_height) {
+  if (y0 + h == int(cinfo_c.image_height)) {
     // Finish when the last scanline was written
     jpeg_finish_compress(&cinfo_c);
   }

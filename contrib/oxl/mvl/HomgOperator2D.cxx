@@ -342,12 +342,12 @@ HomgLine2D HomgOperator2D::join_oriented (const HomgPoint2D& point1, const HomgP
   double x1 = point1.get_x();
   double y1 = point1.get_y();
   double w1 = point1.get_w();
-  int s1 = w1 < 0;
+  bool s1 = w1 < 0;
   
   double x2 = point2.get_x();
   double y2 = point2.get_y();
   double w2 = point2.get_w();
-  int s2 = w2 < 0;
+  bool s2 = w2 < 0;
 
   if (s1 ^ s2)
     return HomgLine2D(-y1 * w2 + w1 * y2, -w1 * x2 + x1 * w2, -x1 * y2 + y1 * x2);
@@ -417,7 +417,7 @@ static vnl_vector<double> most_orthogonal_vector(const vcl_vector<HomgLine2D>& i
 {
   vnl_scatter_3x3<double> scatter_matrix;
 
-  for (int i = 0; i < inpoints.size(); i++)
+  for (unsigned i = 0; i < inpoints.size(); i++)
     scatter_matrix.add_outer_product(inpoints[i].get_vector());
 
   //return scatter_matrix.minimum_eigenvector();
@@ -431,7 +431,7 @@ static vnl_vector<double> most_orthogonal_vector_svd(const vcl_vector<HomgLine2D
 {
   vnl_matrix<double> D(lines.size(), 3);
 
-  for (int i = 0; i < lines.size(); i++)
+  for (unsigned i = 0; i < lines.size(); i++)
     D.set_row(i, lines[i].get_vector());
   
   vnl_svd<double> svd(D);

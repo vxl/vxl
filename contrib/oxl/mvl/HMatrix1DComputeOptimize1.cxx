@@ -18,7 +18,7 @@
 class XXX : public vnl_least_squares_function 
 { 
 private:
-  int N;
+  unsigned N;
   const vcl_vector<double> &z1,z2;
 public: 
   XXX(const vcl_vector<double> &z1_,const vcl_vector<double> &z2_)
@@ -37,7 +37,7 @@ public:
     int f=cout.flags();
     cout.flags(ios::fixed | ios::showpos);
     double z,y;
-    for (int i=0;i<N;i++) {
+    for (unsigned i=0;i<N;i++) {
       z=z1[i];
       y=(z+x[0])/(x[1]*z+1+x[2]);
       cout << z << ' ' << y << '[' << z2[i] << ']' << endl;
@@ -51,7 +51,7 @@ public:
     assert(x.size()==3);
     assert(fx.size()==N);
     double z,y;
-    for (int k=0;k<N;k++) {
+    for (unsigned k=0;k<N;k++) {
       z=z1[k];
       y=(z+x[0])/(x[1]*z+1+x[2]);
       fx[k]=z2[k]-y;
@@ -97,7 +97,7 @@ HMatrix1DComputeOptimize1::compute_cool_homg(const vcl_vector<HomgPoint1D>&p1,
 					     const vcl_vector<HomgPoint1D>&p2,
 					     HMatrix1D *M)
 {
-  int N=p1.size();
+  unsigned N=p1.size();
   assert(N==p2.size());
   if (N<3) return false;
 
@@ -106,7 +106,7 @@ HMatrix1DComputeOptimize1::compute_cool_homg(const vcl_vector<HomgPoint1D>&p1,
   C.compute(p1,p2,M);
 
   // map the points in p1 under M so that we are looking for a correction near the identity :
-  for (int i=0;i<N;i++) {
+  for (unsigned i=0;i<N;i++) {
     if (!M->transform_to_plane2(p1[i]).get_nonhomogeneous(z1[i])) return false;
     if (!p2[i].get_nonhomogeneous(z2[i])) return false;
   }

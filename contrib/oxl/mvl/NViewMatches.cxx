@@ -60,7 +60,7 @@
 
 ostream& operator<<(ostream& s, const NViewMatch& c)
 {
-  for(int i = 0; i < c.size(); ++i)
+  for(unsigned i = 0; i < c.size(); ++i)
     vbl_printf(s, "%-4d ", c[i]);
   
   return s;
@@ -71,7 +71,7 @@ ostream& operator<<(ostream& s, const NViewMatch& c)
 // requires that they share at least min_overlap non-wildcard positions.
 bool NViewMatch::matches(const NViewMatch& b, int min_overlap) const
 {
-  int l = size();
+  unsigned l = size();
 
   if (l != b.size()) {
     cerr << "NViewMatch::matches(B): matching vectors of different lengths\n";
@@ -79,7 +79,7 @@ bool NViewMatch::matches(const NViewMatch& b, int min_overlap) const
   }
   
   int overlap = 0;
-  for(int i = 0; i < l; ++i)
+  for(unsigned i = 0; i < l; ++i)
     if ((*this)[i] != NViewMatch::nomatch && b[i] != NViewMatch::nomatch) {
       if ((*this)[i] != b[i])
 	return false;
@@ -91,8 +91,8 @@ bool NViewMatch::matches(const NViewMatch& b, int min_overlap) const
 // -- Fill any wildcard positions with the corresponding position in B.
 void NViewMatch::incorporate(const NViewMatch& b)
 {
-  int l = size();
-  for(int i = 0; i < l; ++i)
+  unsigned l = size();
+  for(unsigned i = 0; i < l; ++i)
     if ((*this)[i] == NViewMatch::nomatch)
       (*this)[i] = b[i];
 }
@@ -100,8 +100,8 @@ void NViewMatch::incorporate(const NViewMatch& b)
 // -- Check for any inconsistencies between matches
 bool NViewMatch::is_consistent(const NViewMatch& b) const
 {
-  int l = size();
-  for(int i = 0; i < l; ++i)
+  unsigned l = size();
+  for(unsigned i = 0; i < l; ++i)
     if ((*this)[i] != NViewMatch::nomatch && b[i] != NViewMatch::nomatch)
       if ((*this)[i] != b[i])
 	return false;
@@ -111,9 +111,9 @@ bool NViewMatch::is_consistent(const NViewMatch& b) const
 // -- Count how many non-wildcard entries are in this NViewMatch
 int NViewMatch::count_observations() const
 {
-  int l = size();
+  unsigned l = size();
   int c = 0;
-  for (int i = 0; i < l; ++i)
+  for (unsigned i = 0; i < l; ++i)
     if ((*this)[i] != NViewMatch::nomatch)
       ++c;
   return c;
@@ -194,7 +194,7 @@ bool NViewMatches::load(istream& s)
 
 bool NViewMatches::save(ostream& s)
 {
-  for(int i = 0; i < size(); ++i)
+  for(unsigned i = 0; i < size(); ++i)
     s << (*this)[i] << "\n";
   return s.good() != 0;
 }
@@ -209,7 +209,7 @@ bool NViewMatches::save(const char* filename)
 int NViewMatches::count_matches(const NViewMatch& match)
 {
   int nmatches = 0;
-  for(int i = 0; i < size(); ++i)
+  for(unsigned i = 0; i < size(); ++i)
     if ((*this)[i].matches(match,_min_overlap))
       ++nmatches;
   return nmatches;
@@ -219,7 +219,7 @@ int NViewMatches::count_matches(const NViewMatch& match)
 vcl_vector<int> NViewMatches::get_matches(const NViewMatch& match)
 {
   vcl_vector<int> ret;
-  for(int i = 0; i < size(); ++i)
+  for(unsigned i = 0; i < size(); ++i)
     if (operator[](i).matches(match,_min_overlap))
       ret.push_back(i);
   return ret;

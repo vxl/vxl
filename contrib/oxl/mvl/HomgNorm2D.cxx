@@ -70,7 +70,7 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
   // from ho_trivechomg_normalise
   _normalized.resize(points.size());
   
-  //for(int i = 0; i < points.size(); ++i)
+  //for(unsigned i = 0; i < points.size(); ++i)
   // cout << points[i].get_vector() << endl;
 
   double cx, cy;
@@ -90,7 +90,7 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
   //cout << "NORM = " << _norm_matrix << endl;
   if (paranoid) {
     SimilarityMetric::scale_matrices(1/diameter);
-    for(int i = 0; i < points.size(); ++i) {
+    for(unsigned i = 0; i < points.size(); ++i) {
       vnl_double_3 ni = _normalized[i].get_vector();
       vnl_double_3 mi = SimilarityMetric::imagehomg_to_homg(points[i]).get_vector();
       vnl_double_3 residual = ni - mi;
@@ -109,7 +109,7 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
   
   if (_unit_omega) {
     /* homogeneous scale factor is normally undetermined - set it here though. */
-    for (int i = 0; i < _normalized.size(); ++i) {
+    for (unsigned i = 0; i < _normalized.size(); ++i) {
       HomgPoint2D& p = _normalized[i];
       double x = p.x();
       double y = p.y();
@@ -195,7 +195,7 @@ static double scale_xyroot2(const vcl_vector<HomgPoint2D>& in,
 {
   double magnitude = 0;
   unsigned numfinite = 0;
-  for (int i = 0; i < in.size(); ++i) {
+  for (unsigned i = 0; i < in.size(); ++i) {
     const HomgPoint2D& p = in[i];
     double x,y;
     if (p.get_nonhomogeneous(x, y)) {
@@ -213,14 +213,14 @@ static double scale_xyroot2(const vcl_vector<HomgPoint2D>& in,
 
   // Scale the points
   {
-    for (int i = 0; i < in.size(); ++i)
+    for (unsigned i = 0; i < in.size(); ++i)
       out[i].set(in[i].x(), in[i].y(), in[i].w() * diameter);
   }
   
   if (paranoid) {
     magnitude = 0;
     numfinite = 0;
-    for (int i = 0; i < in.size(); ++i) {
+    for (unsigned i = 0; i < in.size(); ++i) {
       const HomgPoint2D& p = out[i];
       double x,y;
       if (p.get_nonhomogeneous(x, y)) {

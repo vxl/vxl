@@ -92,13 +92,13 @@ HomgInterestPointSet::HomgInterestPointSet(const char* filename, const HomgMetri
 // The HomgPoint2Ds are assumed to already be in conditioned coordinates.
 HomgInterestPointSet::HomgInterestPointSet(const vcl_vector<HomgPoint2D>& points, ImageMetric* conditioner)
 {
-  int n = points.size();
-  if (n)
+  unsigned n = points.size();
+  if (n > 0)
     _data = new HomgInterestPointSetData(n);
   else
     _data = new HomgInterestPointSetData();
   
-  for(int i = 0; i < points.size(); ++i)
+  for(unsigned i = 0; i < n; ++i)
     (*_data)[i] = HomgInterestPoint(points[i], conditioner, 0.0f);
   
   _conditioner = conditioner;
@@ -107,30 +107,29 @@ HomgInterestPointSet::HomgInterestPointSet(const vcl_vector<HomgPoint2D>& points
 // - Untested
 HomgInterestPointSet::HomgInterestPointSet(const HomgInterestPointSet& that)
 {
-  int n = that._data->size();
-  if (n)
+  unsigned n = that._data->size();
+  if (n > 0)
     _data = new HomgInterestPointSetData(n);
   else
     _data = new HomgInterestPointSetData();
 
-  if (n > 0) {
-    cerr << "HomgInterestPointSet::copy ctor: size " << n << endl;
-    for (int i = 0; i < n; ++i)
-      (*_data)[i] = (*that._data)[i];
-  }
+  cerr << "HomgInterestPointSet::copy ctor: size " << n << endl;
+
+  for (unsigned i = 0; i < n; ++i)
+    (*_data)[i] = (*that._data)[i];
   _conditioner = that._conditioner;
 }
 
 // - Untested
 HomgInterestPointSet& HomgInterestPointSet::operator=(const HomgInterestPointSet& that)
 {
-  int n = that._data->size();
+  unsigned n = that._data->size();
   delete _data;
-  if (n)
+  if (n > 0)
     _data = new HomgInterestPointSetData(n);
   else
     _data = new HomgInterestPointSetData();
-  for(int i = 0; i < n; ++i) {
+  for(unsigned i = 0; i < n; ++i) {
     (*_data)[i] = (*that._data)[i];
   }
   _conditioner = that._conditioner;
@@ -231,13 +230,14 @@ vnl_vector_fixed<int,2> const& HomgInterestPointSet::get_int(int i) const
 // -- Return the i'th corner as a HomgPoint2D
 const HomgPoint2D& HomgInterestPointSet::get_homg(int i) const
 {
-  assert(i < _data->size());
+  assert(i >= 0 && i < int(_data->size()));
   return (*_data)[i]._homg;
 }
 
 // -- Return the i'th mean intensity
 float HomgInterestPointSet::get_mean_intensity(int i) const
 {
+  assert(i >= 0 && i < int(_data->size()));
   float v = (*_data)[i]._mean_intensity;
   if (v == 0.0F) {
     cerr << "HomgInterestPointSet: WARNING mean_intensity["<<i<<"] = 0\n";
@@ -295,8 +295,9 @@ bool HomgInterestPointSet::read(const char* filename, vil_image const& src, cons
     return false;
 
   //cerr << "HomgInterestPointSet: Computing mean intensities\n";
+  cerr << "HomgInterestPointSet::read() not fully implemented\n";
   vil_memory_image_of<unsigned char> imbuf(src);
-  for (int i=0; i< (int)size(); i++) {
+  for (unsigned i=0; i< size(); i++) {
     // ImageWindowOps winops(imbuf, get_int(i), 3);
     // (*_data)[i]._mean_intensity = winops.mean_intensity();
     // if ((*_data)[i]._mean_intensity == 0.0F) {

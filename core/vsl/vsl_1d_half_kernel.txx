@@ -27,7 +27,7 @@ void vsl_create_gaussian (T gauss_sigma, vsl_1d_half_kernel<T> *mask_ptr) {
   // stop adding entries to the Gauss mask when the size of an entry is less than this : */
   float const CN_GAUSS_CUTOFF_VALUE = 0.02;
   
-  int mask_index = 0;
+  unsigned mask_index = 0;
 
   float gauss_weight = compute_gauss_weight (gauss_sigma, mask_index);
   while (gauss_weight > CN_GAUSS_CUTOFF_VALUE) {

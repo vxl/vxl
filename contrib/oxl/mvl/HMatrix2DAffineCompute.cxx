@@ -130,11 +130,11 @@ vnl_double_2 mean2(const vnl_matrix<double> &A) {
 }
 
 vnl_matrix<double>& sub_rows(vnl_matrix<double> &A, const vnl_double_2 a) {
-  int c = A.columns();
-  int r = A.rows();
+  unsigned c = A.columns();
+  unsigned r = A.rows();
   assert(c == a.size());
-  for (int j=0; j < c; ++j)
-    for (int i=0; i < r; ++i)
+  for (unsigned j=0; j < c; ++j)
+    for (unsigned i=0; i < r; ++i)
       A(i,j) -= a[j];
 
   return A;

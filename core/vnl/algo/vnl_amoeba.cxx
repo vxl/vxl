@@ -86,7 +86,7 @@ void sort_simplex(vcl_vector<SimplexCorner>& simplex)
 double maxabsdiff(const vnl_vector<double>& a, const vnl_vector<double>& b)
 {
   double v = 0;
-  for(int i = 0; i < a.size(); ++i) {
+  for(unsigned i = 0; i < a.size(); ++i) {
     double ad = vnl_math_abs(a[i] - b[i]);
     if (ad > v)
       v = ad;

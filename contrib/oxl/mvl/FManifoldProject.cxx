@@ -213,7 +213,7 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
   vnl_vector<double> realroots = roots.realroots(1e-8);
   int errs = 0;
   bool got_one = false;
-  for(int i = 0; i < realroots.size(); ++i) {
+  for(unsigned i = 0; i < realroots.size(); ++i) {
     double lambda = realroots[i];
     
     // Some roots to the multiplied out poly are not roots to the rational polynomial.

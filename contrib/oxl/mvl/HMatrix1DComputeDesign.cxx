@@ -23,10 +23,10 @@ HMatrix1DComputeDesign::compute_cool_homg(const vcl_vector<HomgPoint1D>&P,
 					  const vcl_vector<HomgPoint1D>&Q,
 					  HMatrix1D *M)
 {
-  int N=P.size(); assert(N==Q.size());
+  unsigned N=P.size(); assert(N==Q.size());
   vnl_matrix<double> D(N,4);
   vnl_double_2 p,q;
-  for (int i=0;i<N;i++) {
+  for (unsigned i=0;i<N;i++) {
     p=P[i].get_vector();
     q=Q[i].get_vector();
     D(i,0)=p(0)*q(1); D(i,1)=p(1)*q(1); D(i,2)=-p(0)*q(0); D(i,3)=-p(1)*q(0);

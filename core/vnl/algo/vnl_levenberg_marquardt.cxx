@@ -159,8 +159,8 @@ bool vnl_levenberg_marquardt::minimize(vnl_vector<double>& x)
   }
 
   // e04fcf
-  int m = f_->get_number_of_residuals();        // I     Number of residuals, must be > #unknowns
-  int n = f_->get_number_of_unknowns();         // I     Number of unknowns
+  unsigned m = f_->get_number_of_residuals();        // I     Number of residuals, must be > #unknowns
+  unsigned n = f_->get_number_of_unknowns();         // I     Number of unknowns
 
   if (m < n) {
     cerr << "vnl_levenberg_marquardt: Number of unknowns("<<n<<") greater than number of data ("<<m<<")\n";

@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
   unsigned h = atoi(argv[5]);
   
   cerr << "image is " << I.width() << 'x' << I.height() << endl;
-  assert(0<=x0 && 0<=y0 && x0+w<=I.width() && y0+h<=I.height());
+  assert(0<=x0 && 0<=y0 && x0+w<=int(I.width()) && y0+h<=int(I.height()));
   
   typedef unsigned char byte;
   if (I.planes()==1 && I.components()==3 && I.bits_per_component()==8) {

@@ -351,7 +351,7 @@ vnl_vector<T> vnl_svd<T>::solve(const vnl_vector<T>& y)  const
   else
     x = U_.conjugate_transpose() * y;
 
-  for (int i = 0; i < x.size(); i++) {        // multiply with diagonal 1/W
+  for (unsigned i = 0; i < x.size(); i++) {        // multiply with diagonal 1/W
     T weight = W_(i, i), zero_ = 0.0;
     if (! (weight == zero_))
       weight = T(1.0) / weight;
@@ -373,7 +373,7 @@ void vnl_svd<T>::solve_preinverted(const vnl_vector<T>& y, vnl_vector<T>* x_out)
     x = U_.conjugate_transpose() * yy;
   } else
     x = U_.conjugate_transpose() * y;
-  for (int i = 0; i < x.size(); i++)  // multiply with diagonal W, assumed inverted
+  for (unsigned i = 0; i < x.size(); i++)  // multiply with diagonal W, assumed inverted
     x[i] *= W_(i, i);
   
   *x_out = V_ * x;                                      // premultiply with v.

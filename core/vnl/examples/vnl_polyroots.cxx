@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
   
   cout << "Coefficients = [ " << pts << " ]\n";
   cout << "Polynomial = ";
-  for (int i=0; i<pts.size()-2; ++i) if (pts[i] != 0)
+  for (unsigned i=0; i+2<pts.size(); ++i) if (pts[i] != 0)
     cout << pts[i] << " X^" << pts.size()-i-1 << " + ";
   cout << pts[pts.size()-2] << " X + " << pts[pts.size()-1] << endl;
   

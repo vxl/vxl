@@ -47,7 +47,7 @@ vil_stream_FILE_ptr::vil_stream_FILE_ptr(vil_stream *vs) : fp(0) {
     if (w != r) 
       cerr << __FILE__ ":" << __LINE__ << " : urgh!  r=" << r << " w=" << w << endl;
 
-    if (r < N)
+    if (r < int(N))
       break;
   }
   // we don't need the vil_stream any more :

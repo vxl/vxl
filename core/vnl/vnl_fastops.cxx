@@ -119,7 +119,7 @@ void vnl_fastops::AtB(const vnl_matrix<double>& A, const vnl_vector<double>& B, 
   }
 
   // Verify output is the right size
-  if (out_ptr->size() != (int)n) {
+  if (out_ptr->size() != n) {
     cerr << "vnl_fastops::AtA: Output vector wrong size.  Is " << out_ptr->size() << ", should be " << n << endl;
     abort();
   }

@@ -69,7 +69,7 @@ void test_do_vbl_arg()
   Assert("int2", int2() == 2);
   Assert("filename == f", !strcmp(filename1(), "f"));
 
-  int true_list_length = sizeof list_contents / sizeof list_contents[0];
+  unsigned true_list_length = sizeof list_contents / sizeof list_contents[0];
   vcl_list<int> l = list1();
   Assert("list length", l.size() == true_list_length);
   bool ok = true;
