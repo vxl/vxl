@@ -118,14 +118,11 @@ public:
   virtual void set_vertices_from_zero_chains(void);
 
   //---------------------------------------------------------------------------
-  //: Set the first and last endpoints
-  //: REQUIRE: vertex_of_edge(new_v1) and vertex_of_edge(new_v2)
+  //: replace the current end point
   //---------------------------------------------------------------------------
-  virtual void set_end_points(vtol_vertex &new_v1,
-                              vtol_vertex &new_v2);
 
-  virtual void replace_end_point(vtol_vertex &,
-                                 vtol_vertex &);
+  virtual void replace_end_point(vtol_vertex &current_end_point,
+                                 vtol_vertex &new_end_point);
  
   virtual bool operator==(const vtol_edge &other) const;
   bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object

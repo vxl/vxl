@@ -175,8 +175,9 @@ vtol_topology_object::is_inferior(const vtol_topology_object &inferior) const
   for (i=_inferiors.begin(); i!=_inferiors.end(); ++i){
 
     
-    // if((*i).ptr()== &inferior){
-    if (*(*i) == inferior){
+    if((*i).ptr()== &inferior){
+    
+      // if (*(*i) == inferior){
 
       
       return true;
@@ -194,11 +195,18 @@ vtol_topology_object::is_inferior(const vtol_topology_object &inferior) const
 bool
 vtol_topology_object::is_superior(const vtol_topology_object &superior) const
 {
+ 
+  
   vcl_list<vtol_topology_object_ref>::const_iterator i;
-  for (i=_superiors.begin(); i!=_superiors.end(); ++i)
-    if ( *(*i) == superior)
-      // if ((*i).ptr() == &superior)
+  for (i=_superiors.begin(); i!=_superiors.end(); ++i){
+    // if ( *(*i) == superior){
+    
+      
+    if ((*i).ptr() == &superior){
       return true;
+    }
+   
+  }
   return false;
 }
 
@@ -317,7 +325,9 @@ void vtol_topology_object::unlink_inferior(vtol_topology_object &inferior)
   
   vcl_vector<vtol_topology_object_ref>::iterator i;
   
-  for(i=_inferiors.begin();(i!=_inferiors.end())&&(*(*i)!=inferior); ++i)
+  // for(i=_inferiors.begin();(i!=_inferiors.end())&&(*(*i)!=inferior); ++i);
+  for(i=_inferiors.begin();(i!=_inferiors.end())&&
+	((*i).ptr()!=&inferior); ++i);
     ;
   inferior.unlink_superior(*this);
   _inferiors.erase(i);
@@ -386,7 +396,9 @@ void vtol_topology_object::unlink_superior(vtol_topology_object &superior)
 
   vcl_list<vtol_topology_object_ref>::iterator i;
 
- for(i=_superiors.begin();(i!=_superiors.end())&&(*(*i)!=superior); ++i)
+  // for(i=_superiors.begin();(i!=_superiors.end())&&(*(*i)!=superior); ++i)
+  for(i=_superiors.begin();(i!=_superiors.end())&&
+	((*i).ptr()!=&superior); ++i)
    ;
   // check
   assert(*(*i)==superior);
@@ -551,6 +563,7 @@ void vtol_topology_object::describe_superiors(vcl_ostream &strm,
   else
     strm<<"**SUPERIORS:"<<vcl_endl;
   
+ 
   for(i=_superiors.begin();i!= _superiors.end();++i) {
     for (int n=0; n<blanking; ++n) strm << ' ';
     (*i)->print();
@@ -635,40 +648,6 @@ vcl_vector<vtol_block *> *vtol_topology_object::compute_blocks(void)
   vcl_cout << "Compute blocks" << vcl_endl;
   return 0;
 }
-
-#if 0
-vertex_list *vtol_topology_object::vertices(void)
-{
-  vertex_list *result;
-  vertex_list *sublist;
-
-  result=new vcl_vector<vtol_vertex_ref>();
-
-  if(topology_type()<VERTEX)
-    {
-      vcl_vector<vtol_topology_object_ref>::const_iterator i;
-      for(i=_inferiors.begin();i!=_inferiors.end();++i)
-        {
-          sublist=(*i)->vertices();
-          result->insert(result->end(),sublist()->begin(),sublist()->end());
-          unique(result);
-        }
-    }
-  else if(topology_type()==VERTEX)
-    result->push_back(this);
-  else
-    {
-      vcl_vector<vtol_topology_object_ref>::const_iterator i;
-      for(i=_superiors.begin();i!=_superiors.end();++i)
-        {
-          sublist=(*i)->vertices();
-          result->insert(result->end(),sublist()->begin(),sublist()->end());
-          unique(result);
-        }
-    }
-  return result;
-}
-#endif
 
 //#include <vcl_rel_ops.h> // gcc 2.7
 //VCL_INSTANTIATE_INLINE(bool operator!=(vtol_topology_object const &, vtol_topology_object const &));

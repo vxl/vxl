@@ -68,29 +68,6 @@ void vtol_edge::set_v2(vtol_vertex *new_v2)
 // Require: vertex_of_edge(new_v1) and vertex_of_edge(new_v2)
 //---------------------------------------------------------------------------
 
-// --
-//  This function sets the edge endpoints to endpt1 and endpt2.  
-//  Both endp1 and endpt2 must be vertices on the edge.
-//
-void vtol_edge::set_end_points(vtol_vertex &endpt1,
-                                  vtol_vertex &endpt2)
-{
-#if 0
-  vtol_zero_chain *zc=get_zero_chain();
-  vcl_vector<vtol_vertex*> *verts=zc->vertices();
-  
-  if((vcl_find(verts->begin(),verts->end(),endpt1)==verts->end())||
-     (vcl_find(verts->begin(),verts->end(),endpt2)==verts->end()))
-    {
-      vcl_cerr << "Error in vtol_edge::set_end_points(): both endpoints must be on this vtol_edge.\n";
-      delete verts;
-    }
-  _v1=endpt1;
-  _v2=endpt2;
-  delete verts;
-
-#endif
-}
 
 // --
 //     This function removes curendpt from the edge and replaces it with

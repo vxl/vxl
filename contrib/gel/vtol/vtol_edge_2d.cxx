@@ -80,7 +80,8 @@ vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
   set_vertices_from_zero_chains();
   if (other._curve)
     {
-      _curve=(vsol_curve_2d *)(other._curve->clone().ptr());
+      vsol_spatial_object_2d_ref sr = other._curve->clone();
+      _curve=(vsol_curve_2d *)(sr.ptr());
       // make sure the geometry and Topology are in sync
       if (_v1)
 	{

@@ -783,23 +783,7 @@ bool vtol_one_chain::operator==(vtol_one_chain const &other) const
   if(!result)
     {
       // Check to see if the number of vertices is the same
-      
-      /* this should not be necessary - if the inferiors are the
-         same then the vertices should be the same */
-      /*
-        const vcl_vector<vtol_vertex*>* verts1 = this->vertices();
-        const vcl_vector<vtol_vertex*>* verts2 = ch.vertices();
-        if(verts1->size() != verts2->size())
-        {
-        delete verts1;
-        delete verts2;
-        return false;
-        }
-        delete verts1;
-        delete verts2;
-        
-      */
-      
+            
       result=inf1->size()==inf2->size();
      
       if(result)
@@ -839,6 +823,7 @@ bool vtol_one_chain::operator==(vtol_one_chain const &other) const
               if( *(*r) != *(*l))
                 return false;
           }
+	  return true;
         }
       return false;
     }

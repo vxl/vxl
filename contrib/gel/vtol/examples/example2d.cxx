@@ -29,27 +29,6 @@ static void test_topology_2d(void);
 
 static void test_topology_2d(void)
 {
-  // OK we want to make two faces and put them into a block
-  
-
-  
-  vtol_vertex_2d_ref ve1 = new vtol_vertex_2d(0.0,0.0);
-  vtol_vertex_2d_ref ve2 = new vtol_vertex_2d(1.0,1.0);
-  vtol_vertex_2d_ref ve3 = new vtol_vertex_2d(2.0,2.0);
-  vtol_vertex_2d_ref ve4 = new vtol_vertex_2d(3.0,3.0);
- 
- 
- 
-  vtol_edge_2d_ref ee1= new vtol_edge_2d(*ve1,*ve2);
-
-  ee1->set_v1(ve3->cast_to_vertex());
-  ee1->set_v2(ve4->cast_to_vertex());
-
-  vcl_cerr << "testing edge 2d" << endl;
-
-  return;
-
-
 
   vcl_cout << "Creating vertices" << vcl_endl;
 
