@@ -41,6 +41,9 @@ TESTS += test_sample_profile_bicub.cxx
 TESTS += test_sample_grid_bicub.cxx
 TESTS += test_resample_bicub.cxx
 
+# Math
+TESTS += test_math_value_range.cxx
+
 #MINI_PROG_SOURCES += vil_test_access_timings.cxx
 #MINI_PROG_SOURCES += vil_test_random_access_timings.cxx
 #MINI_PROG_SOURCES += vil_test_access_timings_noplanes.cxx
