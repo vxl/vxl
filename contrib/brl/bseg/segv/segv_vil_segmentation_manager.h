@@ -1,5 +1,5 @@
-#ifndef segv_segmentation_manager_h_
-#define segv_segmentation_manager_h_
+#ifndef segv_vil_segmentation_manager_h_
+#define segv_vil_segmentation_manager_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
@@ -13,7 +13,7 @@
 // \endverbatim
 //---------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vil1/vil1_image.h>
+#include <vil/vil_image_resource.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
@@ -28,51 +28,27 @@
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <bgui/bgui_image_tableau_sptr.h>
 #include <bgui/bgui_bargraph_clipon_tableau_sptr.h>
-
 class vgui_window;
 
-class segv_segmentation_manager : public vgui_wrapper_tableau
+class segv_vil_segmentation_manager : public vgui_wrapper_tableau
 {
  public:
-  segv_segmentation_manager();
-  ~segv_segmentation_manager();
-  static segv_segmentation_manager *instance();
+  segv_vil_segmentation_manager();
+  ~segv_vil_segmentation_manager();
+  static segv_vil_segmentation_manager *instance();
   void quit();
   void load_image();
-  void clear_display();
-  void original_image();
-  void roi();
-  void gaussian();
-  void convolution();
-  void downsample();
-  void harris_measure();
-  void beaudet_measure();
-  void vd_edges();
-  void regions();
-  void test_camera_parms();
-  void fit_lines();
-  void test_face();
-  void test_digital_lines();
-  void display_IHS();
-  void rotate_image();
-  void compute_mutual_info();
-  void create_box();
-  void create_polygon();
-  void compute_background_info();
-  void set_foreground_face();
-  void set_background_face();
-  void compute_parallel_coverage();
-  void compute_watershed_regions();
-  void find_vehicle();
-  void display_histogram_track();
   void set_range_params();
-  void test_inline_viewer();
-#if 0
-#ifdef HAS_XERCES
-  void read_xml_edges();
-#endif
-#endif
+  void harris_corners();
+  void vd_edges();
+  void fit_lines();
+  void regions();
 
+  //: tests and development only
+    void test_inline_viewer();
+
+  //:internals
+  void clear_display();
   void init();
 
   //: access to the window
@@ -89,12 +65,12 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   void draw_points(vcl_vector<vsol_point_2d_sptr> const & points,
                    const vgui_style_sptr& style);
 
-  void set_selected_grid_image(vil1_image& image);
-  void add_image(vil1_image& image);
-  vil1_image selected_image();
-  vil1_image image_at(const unsigned col, const unsigned row);
+  void set_selected_grid_image(vil_image_resource_sptr const& image);
+  void add_image(vil_image_resource_sptr const& image);
+  vil_image_resource_sptr selected_image();
+  vil_image_resource_sptr image_at(const unsigned col, const unsigned row);
   bool
-  set_image_at(const unsigned col, const unsigned row, vil1_image& image);
+  set_image_at(const unsigned col, const unsigned row, vil_image_resource_sptr const& image);
   bgui_image_tableau_sptr selected_image_tab();
   bgui_vtol2D_tableau_sptr selected_vtol2D_tab();
   bgui_picker_tableau_sptr selected_picker_tab();
@@ -109,7 +85,7 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   vtol_face_2d_sptr foreground_face_;
   vtol_face_2d_sptr background_face_;
   bgui_bargraph_clipon_tableau_sptr bargraph_;
-  static segv_segmentation_manager *instance_;
+  static segv_vil_segmentation_manager *instance_;
 };
 
-#endif // segv_segmentation_manager_h_
+#endif // segv_vil_segmentation_manager_h_

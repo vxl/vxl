@@ -12,9 +12,14 @@ IF( HAS_VGUI )
   ADD_DEFINITIONS(-DHAS_XERCES)
  ENDIF(HAS_XERCES)
 
- ADD_EXECUTABLE (seg seg.cxx)
- #                   segv_menus.cxx segv_menus.h
+SET(seg_sources seg.cxx )	
 
- TARGET_LINK_LIBRARIES(seg segv vgui)
+SET(seg_vil_sources seg_vil.cxx )	
+
+ADD_EXECUTABLE (seg ${seg_sources})
+ADD_EXECUTABLE (seg_vil ${seg_vil_sources})
+
+TARGET_LINK_LIBRARIES(seg segv vgui)
+TARGET_LINK_LIBRARIES(seg_vil segv vgui)
 
 ENDIF( HAS_VGUI )

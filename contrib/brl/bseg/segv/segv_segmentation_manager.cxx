@@ -34,11 +34,13 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_style_sptr.h>
 #include <vgui/vgui_style.h>
+#include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_rubberband_tableau.h>
+#include <vgui/vgui_range_map_params.h>
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vtol2D_tableau.h>
 #include <bgui/bgui_vtol2D_rubberband_client.h>
@@ -127,7 +129,7 @@ void segv_segmentation_manager::set_selected_grid_image(vil1_image& image)
 //: Add an image to the currently selected grid cell
 void segv_segmentation_manager::add_image(vil1_image& image)
 {
-  vgui_image_tableau_sptr itab = bgui_image_tableau_new(image);
+  bgui_image_tableau_sptr itab = bgui_image_tableau_new(image);
   bgui_vtol2D_tableau_sptr t2D = bgui_vtol2D_tableau_new(itab);
   bgui_vtol2D_rubberband_client* rcl =  new bgui_vtol2D_rubberband_client(t2D);
   vgui_rubberband_tableau_sptr rubber = vgui_rubberband_tableau_new(rcl);
@@ -1423,4 +1425,56 @@ void segv_segmentation_manager::display_histogram_track()
   vil1_memory_image_of<unsigned char> image = 
     brip_vil1_float_ops::convert_to_byte(temp);
   this->add_image(image);
+}
+
+void segv_segmentation_manager::set_range_params()
+{
+  bgui_image_tableau_sptr itab = this->selected_image_tab();
+  if (!itab)
+    return;
+  static double min = 0.0, max = 255;
+  static float gamma = 1.0;
+  static bool invert = false;
+  vgui_dialog range_dlg("Set Range Map Params");
+  range_dlg.field("Range min:", min);
+  range_dlg.field("Range max:", max);
+  range_dlg.field("Gamma:", gamma);
+  range_dlg.checkbox("Invert:", invert);
+  if (!range_dlg.ask())
+    return;
+
+  vgui_range_map_params_sptr rmps = new vgui_range_map_params(min,
+                                                              max,
+                                                              gamma,
+                                                              invert);
+
+  itab->set_mapping(rmps);
+}
+
+void segv_segmentation_manager::test_inline_viewer()
+{
+
+  vgui_easy2D_tableau_sptr e2d = vgui_easy2D_tableau_new();
+  vgui_viewer2D_tableau_sptr v2D = vgui_viewer2D_tableau_new(e2d);
+  
+  e2d->set_line_width(2.0);
+  for(int i = 50; i<350; i+=3)
+    e2d->add_line(i,0,i,250);
+  static float val=0;
+  static bool test = false;
+  vgui_dialog test_inline("Inline Tableau");
+  test_inline.inline_tableau(v2D, 400, 300);
+  //test_inline.field("Value:", val);
+  //test_inline.checkbox("Test:", test);
+  if (!test_inline.ask())
+    return;
+  vcl_vector<vgui_soview*> so_views =  e2d->get_selected_soviews();
+  for(vcl_vector<vgui_soview*>::iterator sit = so_views.begin();
+      sit != so_views.end(); sit++)
+    {
+      vgui_soview2D* s2d = (vgui_soview2D*)(*sit);
+      vgui_soview2D_lineseg* sl = (vgui_soview2D_lineseg*)(s2d);
+      if(sl)
+        vcl_cout << "p "  << sl->x0 << '\n';
+    }
 }
