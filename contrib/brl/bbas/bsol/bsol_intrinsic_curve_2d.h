@@ -18,6 +18,9 @@
 // \verbatim
 //  Modifications
 //   2003/11/14 Modified from the code of Thomas Sebastian
+//  \author Ozge Can Ozcanli  
+//			2004/10/25 Modified to add close curve support
+//			2004/11/01 Added method upsample that interpolates new samples linearly according to arclength
 // \endverbatim
 //*****************************************************************************
 
@@ -67,6 +70,8 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   //: Total angle change of the intrinsic curve
   double totalAngleChange_;
 
+  bool _isOpen; // true - open, false - closed
+
  public:
   //***************************************************************************
   // Initialization
@@ -89,6 +94,7 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   //***************************************************************************
   // Access
 
+  bool isOpen(void) { return _isOpen; }
   //: Return the first point of `this';  pure virtual of vsol_curve_2d
   virtual vsol_point_2d_sptr p0() const { return p0_; }
   //: Return the last point of `this';   pure virtual of vsol_curve_2d
@@ -160,15 +166,17 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   // Internal status setting functions
 
   //: Computing the properties of the curve.
-  void computeArcLength();
   void computeDerivatives();
   void computeCurvatures();
+  void computeArcLength();
   void computeAngles();
-
+ 
  public:
 
   //***************************************************************************
   // Status setting
+
+  void setOpen(bool flag) { _isOpen = flag; }
 
   //: Set the first point of the curve
   virtual void set_p0 (const vsol_point_2d_sptr &new_p0);
@@ -179,6 +187,7 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   //  flag bRecomputeProperties set to false, remember to call this function
   //  to recompute intrinsic properties of this curve.
   void computeProperties();
+  
   //: Delete all points of the intrinsic curve
   void clear();
   //: Add another point to the end of the intrinsic curve
@@ -197,6 +206,9 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   void insert_vertex (int i, double x, double y, bool bRecomputeProterties=false);
 
   void readCONFromFile(vcl_string fileName);
+
+  //: Added by Ozge Can Ozcanli to upsample the curve
+  bool upsample(int new_size);
 
   //***************************************************************************
   // Basic operations

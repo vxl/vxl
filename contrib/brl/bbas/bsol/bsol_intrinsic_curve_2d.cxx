@@ -3,10 +3,13 @@
 //:
 // \file
 #include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_digital_curve_2d.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_fstream.h>
 #include <vnl/vnl_math.h>
+
+#include <vcl_string.h>
 
 //***************************************************************************
 // Initialization
@@ -18,6 +21,7 @@
 bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d()
 {
   storage_=new vcl_vector<vsol_point_2d_sptr>();
+  _isOpen=true;
 }
 
 //---------------------------------------------------------------------------
@@ -27,6 +31,7 @@ bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d()
 bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vcl_vector<vsol_point_2d_sptr> &new_vertices)
 {
   storage_=new vcl_vector<vsol_point_2d_sptr>(new_vertices);
+  _isOpen=true;
 }
 
 //---------------------------------------------------------------------------
@@ -38,6 +43,8 @@ bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const bsol_intrinsic_curve_2d &
   storage_=new vcl_vector<vsol_point_2d_sptr>(*other.storage_);
   for (unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_2d(*((*other.storage_)[i]));
+
+  _isOpen = other._isOpen;
 }
 
 //---------------------------------------------------------------------------
@@ -228,9 +235,27 @@ void bsol_intrinsic_curve_2d::readCONFromFile(vcl_string fileName)
 
   //2)Read in file header.
   fp.getline(buffer,2000); //CONTOUR
-  fp.getline(buffer,2000); //OPEN/CLOSE
+  
+  
+  //fp.getline(buffer,2000); //OPEN/CLOSE
+  //char openFlag[2000];
+  vcl_string openFlag;
+  //fp.getline(openFlag,2000);
+  vcl_getline(fp, openFlag);
+  //if (!vcl_Strncmp(openFlag,"OPEN",4))
+  if (openFlag.find("OPEN",0) != vcl_string::npos)
+    _isOpen = true;
+  //else if (!vcl_Strncmp(openFlag,"CLOSE",5))
+  else if (openFlag.find("CLOSE",0) != vcl_string::npos)
+    _isOpen = false;
+  else{
+    vcl_cerr << "Invalid File " << fileName.c_str() << vcl_endl
+             << "Should be OPEN/CLOSE " << openFlag << vcl_endl;
+    return;
+  }
+
   fp >> nPoints;
-  vcl_cout << "Number of Points from Contour:" << nPoints << vcl_endl;
+  vcl_cout << "Number of Points from Contour:" << nPoints << "Contour flag is: " << _isOpen << " (1 for open, 0 for close)" << vcl_endl;
 
   for (int i=0;i<nPoints;i++) {
     fp >> x >> y;
@@ -239,6 +264,7 @@ void bsol_intrinsic_curve_2d::readCONFromFile(vcl_string fileName)
 
   fp.close();
   computeProperties();
+
 }
 
 
@@ -268,14 +294,16 @@ void bsol_intrinsic_curve_2d::computeArcLength()
 
   assert (s_.size()==arcLength_.size());
 
+//: original code of TBS in /vision/projects/kimia/curve-matching/CurveMatch/CODE/CODE-IRIX6.5/Matching-Tek/c
+//  treats the starting point in no special way for closed curves, its arclength is simply 0 which is correct
 #if 0 // commented out
   //Deal with the last point for a closed curve separately.
-  if (!isOpen_)
+  if (!_isOpen)
   {
-    px=(*storage_)[size()-1].x();
-    py=(*storage_)[size()-1].y();
-    double cx=(*storage_)[0].x();
-    double cy=(*storage_)[0].y();
+    px=(*storage_)[size()-1]->x();
+    py=(*storage_)[size()-1]->y();
+    double cx=(*storage_)[0]->x();
+    double cy=(*storage_)[0]->y();
     double dL=vcl_sqrt(vcl_pow(cx-px,2)+vcl_pow(cy-py,2));
     length_ += dL;
     arcLength_[0]=length_;
@@ -286,6 +314,16 @@ void bsol_intrinsic_curve_2d::computeArcLength()
   normArcLength_.clear();
   for (int i=0;i<size();i++)
     normArcLength_.push_back(arcLength_[i]/length_);
+
+#ifdef DEBUG
+  vcl_cout << "Norm arc length values: \n";
+  for (int i = 0; i<size(); i++)
+	  vcl_cout << "normArcLength_[" << i << "]: " << normArcLength_[i] << vcl_endl;
+
+  vcl_cout << "arc length values: \n";
+  for (int i = 0; i<size(); i++)
+	  vcl_cout << "arcLength_[" << i << "]: " << arcLength_[i] << vcl_endl;
+#endif
 }
 
 //: Compute curvature. Assumes derivative computation has been done.
@@ -318,22 +356,24 @@ void bsol_intrinsic_curve_2d::computeCurvatures()
     totalCurvature_+=K;
   }
 
-#if 0 // commented out
+#if 1 // commented out
   // Deal with the last point for a closed curve separately.
-  if (!isOpen_)
+  if (!_isOpen)
   {
     double pdx=dx_[size()-1];
     double pdy=dy_[size()-1];
     double cdx=dx_[0];
     double cdy=dy_[0];
     double dL=arcLength_[0]-arcLength_[size()-1];
+	double d2x, d2y;
     if (dL > ZERO_TOLERANCE ) {
       d2x=(cdx-pdx)/dL;
       d2y=(cdy-pdy)/dL;
     }
     else
       d2x=d2y=0;
-    if (vcl_fabs(cdx) < ZERO_TOLERANCE && vcl_fabs(cdy) < ZERO_TOLERANCE)
+    double K;
+	if (vcl_fabs(cdx) < ZERO_TOLERANCE && vcl_fabs(cdy) < ZERO_TOLERANCE)
       K=0;
     else
       K=(d2y*cdx-d2x*cdy)/vcl_pow((vcl_pow(cdx,2)+vcl_pow(cdy,2)),3/2);
@@ -370,14 +410,14 @@ void bsol_intrinsic_curve_2d::computeDerivatives()
     py=cy;
   }
 
-#if 0 // commented out
+#if 1 // commented out
   //Deal with the last point for a closed curve separately.
-  if (!isOpen_)
+  if (!_isOpen)
   {
-    double px=(*storage_)[size()-1].x();
-    double py=(*storage_)[size()-1].y();
-    double cx=(*storage_)[0].x();
-    double cy=(*storage_)[0].y();
+    double px=(*storage_)[size()-1]->x();
+    double py=(*storage_)[size()-1]->y();
+    double cx=(*storage_)[0]->x();
+    double cy=(*storage_)[0]->y();
     double dL=vcl_sqrt(vcl_pow(cx-px,2)+vcl_pow(cy-py,2));
     dx_[0]=(cx-px)/dL;
     dy_[0]=(cy-py)/dL;
@@ -403,18 +443,6 @@ void bsol_intrinsic_curve_2d::computeAngles()
     px=cx;
     py=cy;
   }
-#if 0 // commented out
-  //Deal with the last point for a closed curve separately.
-  if (!isOpen_)
-  {
-    double px=(*storage_)[size()-1]->x();
-    double py=(*storage_)[size()-1]->y();
-    double cx=(*storage_)[0]->x();
-    double cy=(*storage_)[0]->y();
-    double theta=vcl_atan2(cy-py,cx-px);
-    angle_[0]=theta;
-  }
-#endif
 
   if (size()>2) {
     angle_[0]=angle_[1];
@@ -425,6 +453,31 @@ void bsol_intrinsic_curve_2d::computeAngles()
       totalAngleChange_ += vcl_fabs(angle_[i]-angle_[i-1]);
     }
   }
+
+//: IMPORTANT NOTE: in open curve matching giving the inputs as
+//  OPEN curves or CLOSE curves (i.e. in .con file)
+//  changes the cost computation 
+//  due to the following operation
+//  In closed curve matching, input curves should always be given 
+//  as CLOSE curves.
+#if 1
+  //Deal with the last point for a closed curve separately.
+  if (!_isOpen)
+  {
+    double px=(*storage_)[size()-1]->x();
+    double py=(*storage_)[size()-1]->y();
+    double cx=(*storage_)[0]->x();
+    double cy=(*storage_)[0]->y();
+    double theta=vcl_atan2(cy-py,cx-px);
+    angle_[0]=theta;
+
+    /*
+    //: TBS source code tests the distance between first and last points!!
+    if (sqrt(pow(cx-px,2.0)+pow(cy-py,2.0))<2)
+      c->angle[0]=atan2(cy-py,cx-px);
+    */
+  }
+#endif
 }
 
 //: Public function that calls the private functions to compute the various curve properties.
@@ -439,7 +492,45 @@ void bsol_intrinsic_curve_2d::computeProperties()
   computeAngles();
 }
 
+//: Public function to upsample the current curve, it uses vsol_digital_curve and its interpolator 
+bool bsol_intrinsic_curve_2d::upsample(int new_size) 
+{
+  if (size() >= new_size) {
+    vcl_cout << "In bsol_intrinsic_curve_2d::upsample method: Curve size is larger than or equal to new_size already, exiting!";
+    return true;
+  }
 
+  vsol_digital_curve_2d_sptr dc = new vsol_digital_curve_2d(*storage_);
+  
+  //: if curve is closed sample the portion between last point and first point
+  if (!isOpen()) {
+    dc->add_vertex((*storage_)[0]);
+  }
+
+  clear();
+  storage_->clear();
+  
+  double T = dc->length()/new_size;
+  vcl_cout << "T value for new_size is: " << T << vcl_endl;
+
+  for (int i=1; i<dc->size(); i++) {
+    double len = ((dc->point(i))->get_p()-(dc->point(i-1))->get_p()).length();
+    //: start with actual curve point
+    storage_->push_back(dc->point(i-1));
+    //: add first point with length T apart 
+    int j = 0;
+    while (len - j*T >= (T+(T/2))) {
+      vcl_cout << "i: " << i << " interpolating " << (i-1)+(j+1)*T/len << vcl_endl;
+      storage_->push_back(new vsol_point_2d(dc->interp((i-1)+(j+1)*T/len)));
+      j++;
+    }
+  }
+
+  vcl_cout << "after upsampling bsol curve size: " << size() << " (should be " << new_size << ")\n";
+  return true;
+}
+
+/*
 #if 0 // rest of file commented out
 
 //: Default Constructor:
@@ -546,7 +637,7 @@ CONTOUR
 OPEN (or CLOSE)
 20 (numPoints)
 x1 y1 x2 y2 x3 y3 ....
-*/
+
 void bsol_intrinsic_curve_2d::readDataFromFile(vcl_string fileName)
 {
   //clear the existing curve data
@@ -609,3 +700,4 @@ void bsol_intrinsic_curve_2d::readDataFromVector(vcl_vector<vcl_pair<double,doub
 }
 
 #endif // 0
+*/
