@@ -34,7 +34,7 @@ rgrl_trans_affine( vnl_matrix<double> const& in_A,
 {
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
-  if( is_covar_set() ) {
+  if ( is_covar_set() ) {
     assert ( covar_.rows() == covar_.cols() );
     assert ( covar_.rows() == A_.rows()* (A_.rows()+1) );
   }
@@ -47,8 +47,6 @@ rgrl_trans_affine( vnl_matrix<double> const& in_A,
     trans_( in_trans ),
     from_centre_( in_trans.size(), 0.0 )
 {
-  int dim = in_trans.size();
-
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
 }
@@ -67,7 +65,7 @@ rgrl_trans_affine( vnl_matrix<double> const& in_A,
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
   assert ( from_centre_.size() == trans_.size() );
-  if( is_covar_set() ) {
+  if ( is_covar_set() ) {
     assert ( covar_.rows() == covar_.cols() );
     assert ( covar_.rows() == A_.rows()* (A_.rows()+1) );
   }
@@ -102,7 +100,7 @@ rgrl_trans_affine::
 transfer_error_covar( vnl_vector<double> const& p  ) const
 {
   unsigned const m = A_.rows();
-  
+
   assert ( is_covar_set() );
   assert ( p.size() == m );
 
@@ -168,7 +166,7 @@ inv_map( const vnl_vector<double>& to,
   from = svd.inverse()*to - svd.inverse()*trans_ + from_centre_;
 }
 
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_affine::
 inverse_transform( ) const
 {
@@ -177,9 +175,9 @@ inverse_transform( ) const
   rgrl_transformation_sptr result = new rgrl_trans_affine( invA, -invA * t() );
 
   const unsigned m = scaling_factors_.size();
-  if( m > 0 ) {
+  if ( m > 0 ) {
     vnl_vector<double> scaling( m );
-    for( unsigned int i=0; i<m; ++i )
+    for ( unsigned int i=0; i<m; ++i )
       scaling[i] = 1.0 / scaling_factors_[i];
     result->set_scaling_factors( scaling );
   }
@@ -221,8 +219,6 @@ void
 rgrl_trans_affine::
 read( vcl_istream& is )
 {
-  int dim;
-
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
 
@@ -235,7 +231,7 @@ read( vcl_istream& is )
   }
 
   // input global xform
-  dim=-1;
+  int dim=-1;
   is >> dim;
   if ( dim > 0 ) {
     A_.set_size( dim, dim );
