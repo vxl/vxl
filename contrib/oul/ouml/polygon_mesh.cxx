@@ -1,3 +1,5 @@
+// This is oul/ouml/polygon_mesh.cxx
+#include "polygon_mesh.h"
 //:
 // \file
 // \brief polygon_mesh.cc: a class for polygon meshes
@@ -7,9 +9,7 @@
 // file.
 //----------------------------------------------------------------------
 
-#include "polygon_mesh.h"
 #include <vcl_cstdio.h> // for fscanf()
-#include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
