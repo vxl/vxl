@@ -96,14 +96,22 @@ SOURCES += vnl_double_3.cxx
 SOURCES += vnl_double_4.cxx
 MANPAGE_SOURCES += vnl_double_5.h
 
+MANPAGE_SOURCES += vnl_float_1x3.h
+MANPAGE_SOURCES += vnl_double_1x3.h
+MANPAGE_SOURCES += vnl_float_3x1.h
+MANPAGE_SOURCES += vnl_double_3x1.h
 MANPAGE_SOURCES += vnl_int_2x2.h
 MANPAGE_SOURCES += vnl_float_2x2.h
 MANPAGE_SOURCES += vnl_double_2x2.h
 SOURCES += vnl_double_2x3.cxx
 SOURCES += vnl_double_3x2.cxx
+MANPAGE_SOURCES += vnl_float_3x3.h
 MANPAGE_SOURCES += vnl_double_3x3.h
+MANPAGE_SOURCES += vnl_float_3x4.h
 MANPAGE_SOURCES += vnl_double_3x4.h
+MANPAGE_SOURCES += vnl_float_4x3.h
 MANPAGE_SOURCES += vnl_double_4x3.h
+MANPAGE_SOURCES += vnl_float_4x4.h
 MANPAGE_SOURCES += vnl_double_4x4.h
 
 # optimization
