@@ -11,6 +11,7 @@ SOURCES += vnl_io_nonlinear_minimizer.cxx
 SOURCES += vnl_io_real_polynomial.cxx
 SOURCES += vnl_io_real_npolynomial.cxx
 SOURCES += vnl_io_rational.cxx
+SOURCES += vnl_io_bignum.cxx
 
 MANPAGE_SOURCES += vnl_io_matrix.txx
 MANPAGE_SOURCES += vnl_io_diag_matrix.txx
