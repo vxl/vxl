@@ -7,6 +7,8 @@ C
 C     Algorithm 7.5 (Adaptive Quadrature Using Simpson's Rule).
 C     Section 7.4, Adaptive Quadrature, Page 389
 C
+
+C     add missing variable F in Refine subrutine.
       SUBROUTINE AdaptQuad(F,A,B,Tol,SRmat,Integral,ErrBdd,M,State)
       INTEGER M,State
       REAL A,B,Tol,SRmat,Integral,ErrBdd
@@ -25,7 +27,7 @@ C
       DO WHILE (State .EQ. Iterating)
         N = M
         DO J=N,1,-1
-          CALL Refine(J,SRmat,M,State)
+          CALL Refine(F,J,SRmat,M,State)
         ENDDO
       ENDDO
       Sum1 = 0
@@ -39,7 +41,7 @@ C
       RETURN
       END
 
-      SUBROUTINE Refine(P,SRmat,M,State)
+      SUBROUTINE Refine(F, P,SRmat,M,State)
       INTEGER P,M,State
       REAL SRmat
       INTEGER J,K,Iterating,Done
