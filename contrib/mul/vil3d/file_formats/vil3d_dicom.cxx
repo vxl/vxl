@@ -13,6 +13,8 @@
 #include <vil3d/vil3d_image_view.h>
 #include <vil/file_formats/vil_dicom_header.h>
 
+#if 0
+
 vil3d_dicom_format::vil3d_dicom_format() {}
 
 vil3d_dicom_format::~vil3d_dicom_format() {}
@@ -20,19 +22,23 @@ vil3d_dicom_format::~vil3d_dicom_format() {}
 
 vil3d_image_resource_sptr vil3d_dicom_format::make_input_image(const char * filename) const
 {
-  if (!vul_file::exists(filename))
+  vil2_smart_ptr<vil2_stream> is = vil2_open(filename);
+  if (!is || !is->ok())
     return 0;
 
-  vil_dicom_header_format dhf;  // Header format for reading
-  vil_dicom_header_info dhi;    // Info held in the header
-  vil_stream_fstream *is = new vil_stream_fstream(filename, "r");
-  is->ref();
-  dhi = dhf.readHeader(*is);
-  is->unref();
-#if 0 // TODO
-  if (dhf.headerValid())
-    return new vil3d_dicom_image(filename);
-#endif // 0
+  vil_dicom_format dicom_reader;
+  vil_image_resource_sptr im = dicom_reader.make_input_image(is.as_pointer());
+  if (!im) return 0;
+
+
+
+
+
+  // Now deduce filename numbering format.
+  // start at the front and find all continuous groups of numeric characters.
+  // For each group, search for all contiguously numbered files
+  // Try and load each group of contiguously
+
 
   return 0;
 }
@@ -50,4 +56,6 @@ vil3d_image_resource_sptr vil3d_dicom_format::make_output_image
   vcl_abort();
   return 0;
 }
+
+#endif
 
