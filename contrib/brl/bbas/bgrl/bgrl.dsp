@@ -117,12 +117,6 @@ SOURCE=.\Templates/vbl_smart_ptr+bgrl_graph-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+bgrl_vertex-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_set+bgrl_edge_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_set+bgrl_vertex_sptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vsl_set_io+bgrl_edge_sptr-.cxx
 # End Source File
 # Begin Source File

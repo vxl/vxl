@@ -99,81 +99,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\Templates/vcl_list+vnl_double_4-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vcl_vector+vnl_double_3x4--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vcl_vector+vnl_float_2--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vcl_vector+vnl_sparse_matrix_pair+double---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vcl_vector+vnl_sparse_matrix_pair+float---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_double_2-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_double_3-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_double_3x3-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_double_4-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_float_2-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_float_3-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_int_3-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_matrix+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_matrix+double-~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_matrix+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_matrix_fixed+double.3.4--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_matrix_fixed+float.3.4--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_real_npolynomial~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_sparse_matrix_pair+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_sparse_matrix_pair+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_vector+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_vector+double-~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_vector+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_vector+float-~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_vector+vcl_complex+double---.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vnl_c_vector+double-.cxx
 # End Source File
 # Begin Source File
@@ -519,16 +444,7 @@ SOURCE=.\Templates/vnl_det+double-.cxx
 SOURCE=.\Templates/vnl_c_vector+vnl_rational-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_rational~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_rational-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vcl_complex+vnl_rational-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_algorithm+vnl_rational-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_vector+double-.cxx
@@ -706,15 +622,6 @@ SOURCE=.\Templates/vnl_identity+int-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_unary_function+double.vnl_vector+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_algorithm+vnl_bignum-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_bignum-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_bignum~-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_c_vector+vnl_bignum-.cxx

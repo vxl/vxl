@@ -99,12 +99,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "c;cxx"
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+bgui_vtol2D_tableau_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_map+vcl_string.vgui_style_sptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bgui_image_tableau.cxx
 # End Source File
 # Begin Source File

@@ -123,15 +123,6 @@ SOURCE=.\Templates/vbl_smart_ptr+vidl_image_list_codec-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+vidl_movie-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_list+vbl_smart_ptr+vidl_clip--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_list+vbl_smart_ptr+vidl_codec--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vbl_smart_ptr+vidl_frame--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vidl_codec.cxx
 # Begin Source File
 SOURCE=.\vidl_win_avicodec.cxx
@@ -228,4 +219,3 @@ SOURCE=.\vidl_vob_frame_index.h
 # End Group
 # End Target
 # End Project
-

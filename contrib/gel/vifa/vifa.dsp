@@ -132,21 +132,6 @@ SOURCE=.\Templates/vbl_smart_ptr+vifa_line_cover-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+vifa_norm_params-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+imp_line_list~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+imp_line_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vifa_coll_lines_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vifa_incr_var_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vifa_int_face_attr_sptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vifa_imp_line+double-.cxx
 # End Source File
 # Begin Source File

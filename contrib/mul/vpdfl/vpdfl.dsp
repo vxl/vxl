@@ -9,7 +9,7 @@
 # already been used, so do not edit here...
 
 # variables to REPLACE
-# 
+#
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
@@ -20,16 +20,16 @@
 CFG=vpdfl - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "vpdfl.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "vpdfl.mak" CFG="vpdfl - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "vpdfl - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "vpdfl - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
@@ -89,7 +89,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -99,297 +99,172 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\Templates/mbl_cloneable_ptr+vpdfl_builder_base-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_cloneable_ptr+vpdfl_pdf_base-.cxx
-
 # End Source File
 # Begin Source File
-
-SOURCE=.\Templates/vcl_vector+vpdfl_builder_base~-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vcl_vector+vpdfl_pdf_base~-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vcl_vector+vpdfl_sampler_base~-.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\Templates/vsl_binary_loader+vpdfl_builder_base-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_binary_loader+vpdfl_pdf_base-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_vector_io+vpdfl_builder_base~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_vector_io+vpdfl_pdf_base~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_axis_gaussian.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_axis_gaussian_builder.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_axis_gaussian_sampler.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_builder_base.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_gaussian.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_gaussian_builder.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_gaussian_sampler.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_mixture.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_mixture_builder.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_mixture_sampler.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_pc_gaussian.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_pc_gaussian_builder.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_pc_gaussian_sampler.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_pdf_base.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_prob_chi2.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_sampler_base.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_calc_mean_var.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_gaussian_kernel_pdf.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_gaussian_kernel_pdf_builder.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_gaussian_kernel_pdf_sampler.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_kernel_pdf.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_kernel_pdf_builder.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_resample.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_add_all_binary_loaders.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\vpdfl_axis_gaussian.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_axis_gaussian_builder.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_axis_gaussian_sampler.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_builder_base.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_calc_mean_var.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_gaussian.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_gaussian_builder.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_gaussian_kernel_pdf.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_gaussian_kernel_pdf_builder.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_gaussian_kernel_pdf_sampler.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_gaussian_sampler.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_kernel_pdf.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_kernel_pdf_builder.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_mixture.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_mixture_builder.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_mixture_sampler.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_pc_gaussian.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_pc_gaussian_builder.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_pc_gaussian_sampler.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_pdf_base.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_prob_chi2.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_resample.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_all.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_sampler_base.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpdfl_add_all_binary_loaders.h
-
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

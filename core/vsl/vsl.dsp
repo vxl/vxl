@@ -108,9 +108,6 @@ SOURCE=.\Templates/vsl_set_io+int-.cxx
 SOURCE=.\Templates/vsl_deque_io+int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+vsl_binary_loader_base~-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vsl_map_io+int.int-.cxx
 # End Source File
 # Begin Source File

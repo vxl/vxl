@@ -13,9 +13,6 @@ SOURCE=.\cmu_1394_camera.cxx
 SOURCE=.\cmu_1394_camera_params.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+vvid_live_video_tableau_sptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vvid_file_manager.cxx
 # End Source File
 # Begin Source File

@@ -140,15 +140,6 @@ SOURCE=.\Templates/vbl_smart_ptr+brip_region_pixel-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+brip_roi-.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+brip_region_pixel_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_priority_queue+vcl_vector+brip_region_pixel_sptr--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_queue+brip_region_pixel_sptr-.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

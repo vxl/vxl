@@ -111,9 +111,6 @@ SOURCE=.\brct_epi_reconstructor.cxx
 SOURCE=.\Templates/vbl_smart_ptr+brct_corr-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+brct_corr_sptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\brct_corr.cxx
 # End Source File
 # Begin Source File

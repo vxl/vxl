@@ -120,12 +120,6 @@ SOURCE=.\Templates/vbl_smart_ptr+bmrf_network-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+bmrf_node-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+bmrf_epi_point_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+bmrf_epi_seg_sptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bmrf_network-.cxx
 # End Source File
 # Begin Source File

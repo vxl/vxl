@@ -129,9 +129,6 @@ SOURCE=.\mbl_rbf_network.cxx
 SOURCE=.\Templates/mbl_stochastic_data_collector+vnl_vector+double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+mbl_data_collector_base~-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vsl_binary_loader+mbl_data_collector_base-.cxx
 # End Source File
 # Begin Source File

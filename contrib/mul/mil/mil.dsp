@@ -159,15 +159,6 @@ SOURCE=.\Templates/vbl_smart_ptr+mil_image_data+float--.cxx
 SOURCE=.\Templates/vbl_smart_ptr+mil_image_data+byte--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+mil_image_io~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+mil_image_pyramid_builder~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+mil_image~-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vsl_binary_loader+mil_image-.cxx
 # End Source File
 # Begin Source File

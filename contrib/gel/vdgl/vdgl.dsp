@@ -111,16 +111,10 @@ SOURCE=.\Templates/vbl_smart_ptr+vdgl_fit_lines_params-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+vdgl_interpolator-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+vdgl_edgel-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+vdgl_digital_curve-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+vdgl_edgel_chain-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vdgl_digital_curve_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vdgl_digital_curve_sptr-.cxx

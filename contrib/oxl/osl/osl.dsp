@@ -114,24 +114,6 @@ SOURCE=.\Templates/osl_canny_smooth+byte-.cxx
 SOURCE=.\Templates/osl_canny_smooth+vil1_rgb+uchar--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_list+osl_edgel_chain~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_list+osl_edge~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_list+osl_vertex~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+osl_LINK~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+osl_edge~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+osl_vertex~-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\internals/droid.cxx
 # End Source File
 # Begin Source File

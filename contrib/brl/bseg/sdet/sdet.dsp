@@ -147,12 +147,6 @@ SOURCE=.\sdet_grid_finder_params.cxx
 SOURCE=.\Templates/vbl_smart_ptr+sdet_region-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_map+sdet_region_sptr,vcl_vector+sdet_region_sptr-~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+sdet_region_sptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\sdet_region.cxx
 # End Source File
 # Begin Source File

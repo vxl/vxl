@@ -105,15 +105,6 @@ SOURCE=.\Templates/mbl_cloneable_ptr+pdf1d_builder-.cxx
 SOURCE=.\Templates/mbl_cloneable_ptr+pdf1d_pdf-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+pdf1d_builder~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+pdf1d_pdf~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+pdf1d_sampler~-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vsl_binary_loader+pdf1d_builder-.cxx
 # End Source File
 # Begin Source File

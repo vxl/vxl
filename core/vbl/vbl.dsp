@@ -9,7 +9,7 @@
 # already been used, so do not edit here...
 
 # variables to REPLACE
-# 
+#
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
@@ -20,16 +20,16 @@
 CFG=vbl - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "vbl.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "vbl.mak" CFG="vbl - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "vbl - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "vbl - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
@@ -89,7 +89,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -99,410 +99,240 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\Templates/vbl_array_1d+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_array_1d+float-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_array_2d+bool-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_array_2d+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_array_2d+int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_array_2d+short-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_array_2d+unsigned-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_array_2d+unsignedchar-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_array_3d+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_array_3d+int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_array_3d+uchar-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_array_3d+uint-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_array_3d+void~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_bit_array_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_bit_array_3d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_bounding_box+double.2-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_bounding_box+float.2-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_bounding_box+int.2-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_quadruple+int.int.int.int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_shared_pointer+int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_sparse_array_1d+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_sparse_array_1d+int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_sparse_array_2d+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_sparse_array_2d+int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_big_sparse_array_3d+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_sparse_array_3d+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_sparse_array_3d+int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_sparse_array_3d+void~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_triple+double.int.int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_triple+float.float.float-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_triple+int.int.int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_triple+uint.uint.uint-.cxx
-
 # End Source File
 # Begin Source File
-
-SOURCE=.\Templates/vcl_map+vbl_triple+uint.uint.uint-.double-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vcl_map+vbl_triple+uint.uint.uint-.int-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vcl_vector+vbl_triple+double.int.int--.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vbl_bool_ostream.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_qsort.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_ref_count.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_shared_pointer.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_sort.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\vbl_array_1d.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_array_2d.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_array_3d.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_big_sparse_array_3d.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_bounding_box.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_protection_traits.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_quadruple.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_shared_pointer.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_smart_ptr.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_sort.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_sparse_array_1d.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_sparse_array_2d.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_sparse_array_3d.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_sparse_array_base.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_triple.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_basic_optional.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_basic_relation_type.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_basic_relation_where.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_basic_tuple.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_bit_array_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_bit_array_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_bool_ostream.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_fwd.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_qsort.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_ref_count.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_array_1d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_array_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_array_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_big_sparse_array_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_bounding_box.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_protection_traits.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_quadruple.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_shared_pointer.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_smart_ptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_sort.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_sparse_array_1d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_sparse_array_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_sparse_array_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_sparse_array_base.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_triple.h
-
 # End Source File
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-

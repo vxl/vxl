@@ -110,9 +110,6 @@ SOURCE=.\btom_slice_simulator_params.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+btom_gauss_cylinder-.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+btom_gauss_cylinder_sptr-.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

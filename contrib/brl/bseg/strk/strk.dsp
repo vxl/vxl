@@ -111,12 +111,6 @@ SOURCE=.\Templates/vbl_smart_ptr+strk_epi_point-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+strk_epi_seg-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+strk_epi_point_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+strk_epi_seg_sptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\strk_art_model_display_process.cxx
 # End Source File
 # Begin Source File

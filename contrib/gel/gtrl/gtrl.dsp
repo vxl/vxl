@@ -9,7 +9,7 @@
 # already been used, so do not edit here...
 
 # variables to REPLACE
-# 
+#
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/gel" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
 #  == override in output directory
@@ -20,16 +20,16 @@
 CFG=gtrl - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "gtrl.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "gtrl.mak" CFG="gtrl - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "gtrl - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "gtrl - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
@@ -89,7 +89,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -99,71 +99,40 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+gtrl_triangle-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+gtrl_vertex-.cxx
-
 # End Source File
 # Begin Source File
-
-SOURCE=.\Templates/vcl_vector+gtrl_triangle_sptr-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vcl_vector+gtrl_vertex_sptr-.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\gtrl_polygon.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gtrl_triangle.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gtrl_triangulation.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gtrl_vertex.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\gtrl_polygon.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gtrl_triangle.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gtrl_triangulation.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gtrl_vertex.h
-
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-

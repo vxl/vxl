@@ -99,18 +99,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+vil1_image-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vil1_memory_image_of+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vil1_memory_image_of+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vil1_memory_image_of+uchar--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vil1_clamp+vil1_rgb+double-.cxx
 # End Source File
 # Begin Source File
@@ -265,9 +253,6 @@ SOURCE=.\Templates/vil1_ssd+float.float.double-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil1_ssd+uchar.uchar.int-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_list+vil1_image-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil1_bmp.cxx

@@ -99,12 +99,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx;c"
 # Begin Source File
-SOURCE=.\Templates/vcl_map+int.vcl_vector+vtol_edge_2d_sptr-~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_map+int.vtol_topology_object_sptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vtol_block-.cxx
 # End Source File
 # Begin Source File
@@ -139,81 +133,6 @@ SOURCE=.\Templates/vbl_smart_ptr+vtol_vertex_2d-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vtol_zero_chain-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_list+vtol_chain_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_list+vtol_topology_object_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_block_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_block~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_chain_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_edge_2d_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_edge_2d~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_edge_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_edge~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_face_2d_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_face_2d~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_face_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_face~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_one_chain_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_one_chain~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_topology_object_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_topology_object~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_two_chain_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_two_chain~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_vertex_2d_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_vertex_2d~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_vertex_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_vertex~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_zero_chain_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vtol_zero_chain~-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vtol_block.cxx
@@ -313,9 +232,6 @@ SOURCE=.\Templates/vtol_list_functions+vtol_vertex~-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vtol_list_functions+vtol_zero_chain~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_deque+vcl_vector+vtol_topology_object_sptr--.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

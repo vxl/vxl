@@ -147,9 +147,6 @@ SOURCE=.\clsfy_simple_adaboost.cxx
 SOURCE=.\clsfy_adaboost_sorted_builder.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+clsfy_classifier_1d~-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vsl_binary_loader+clsfy_builder_base-.cxx
 # End Source File
 # Begin Source File

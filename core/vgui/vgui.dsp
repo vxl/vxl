@@ -108,66 +108,6 @@ SOURCE=.\Templates/vbl_smart_ptr+vgui_command-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+vgui_tableau-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_algorithm+vgui_style_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_list+vgui_event-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vcl_pair+vil1_image.vcl_vector+GLuint-~-~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_dialog_impl+-element-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_event-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_image_tableau~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_menu_item-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_observer~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_poly_tableau+-item-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_rubberband_tableau_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_parent_child_link-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_soview2D_lineseg~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_soview2D~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_soview3D~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_soview~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_style~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_tableau_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_tableau~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_toolkit~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_tview_tableau+-icon-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vgui_command_simple+vgui_active_tableau-.cxx
 # End Source File
 # Begin Source File
@@ -402,12 +342,6 @@ SOURCE=.\vgui_window.cxx
 SOURCE=.\vgui_wrapper_tableau.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vrml/Templates/vcl_vector+vgui_vrml_tableau_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vrml/Templates/vcl_vector+vgui_vrml_texture_map~-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vrml/vgui_vrml_draw_visitor.cxx
 # End Source File
 # Begin Source File
@@ -418,12 +352,6 @@ SOURCE=.\vrml/vgui_vrml_texture_map.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_register_all.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\impl/glut/Templates/vcl_vector+vgui_glut_adaptor~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\impl/glut/Templates/vcl_vector+vgui_glut_menu_hack+-per_window_record~-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\impl/glut/menu_hack_X11.cxx
@@ -445,12 +373,6 @@ SOURCE=.\impl/glut/vgui_glut_tag.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\impl/glut/vgui_glut_window.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_algorithm+vgui_rubberband_tableau_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgui_easy2D_tableau_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vgui_style-.cxx

@@ -171,43 +171,10 @@ SOURCE=.\Templates/vbl_smart_ptr+vsol_triangle_2d-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+vsol_triangle_3d-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_list+vsol_point_2d_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_list+vsol_spatial_object_2d_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_list+vsol_spatial_object_3d_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vsol_point_2d_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vsol_point_3d_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vsol_spatial_object_2d~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vsol_spatial_object_3d~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_deque+vcl_vector+vsol_spatial_object_2d_sptr--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vcl_vector+vsol_line_2d_sptr--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vsol_line_2d_sptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vsol_polyline_2d-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vsol_polyhedron-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_algorithm+vsol_spatial_object_2d~-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vsol_point_2d_sptr-.cxx

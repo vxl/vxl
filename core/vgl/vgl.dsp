@@ -99,42 +99,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+vcl_vector+vgl_point_2d+float---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgl_homg_point_1d+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgl_homg_point_2d+int--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgl_homg_point_3d+int--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgl_point_2d+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgl_point_2d+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgl_point_2d+int--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgl_point_3d+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgl_point_3d+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgl_point_3d+int--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgl_polygon+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgl_polygon+float--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vgl_area+double-.cxx
 # End Source File
 # Begin Source File
@@ -309,25 +273,7 @@ SOURCE=.\Templates/vgl_conic+float-.cxx
 SOURCE=.\Templates/vgl_conic+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_list+vgl_homg_point_2d+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_list+vgl_homg_point_2d+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_list+vgl_homg_line_2d+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_list+vgl_homg_line_2d+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_list+vgl_point_2d+double--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vgl_vector_2d+uint-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vgl_homg_point_2d+double--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vgl_ellipse_scan_iterator+double-.cxx

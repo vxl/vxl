@@ -99,12 +99,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+vsrl_intensity_token~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vsrl_token~-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vsrl_3d_output.cxx
 # End Source File
 # Begin Source File

@@ -99,9 +99,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+vnl_amoeba_SimplexCorner-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vnl_adjugate+double-.cxx
 # End Source File
 # Begin Source File

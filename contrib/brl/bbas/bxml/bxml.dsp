@@ -102,12 +102,6 @@ LIB32=link.exe -lib
 SOURCE=.\Templates/vbl_smart_ptr+bxml_input_converter-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_map+vcl_string.bxml_generic_ptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+bxml_generic_ptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bxml_vtol_zero_chain_2d_input_converter.cxx
 # End Source File
 # Begin Source File

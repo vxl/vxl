@@ -99,106 +99,58 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+gst_edge_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+gst_polygon_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+gst_vertex_2d-.cxx
-
 # End Source File
 # Begin Source File
-
-SOURCE=.\Templates/vcl_vector+gst_edge_2d_sptr-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vcl_vector+gst_polygon_2d_sptr-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vcl_vector+gst_vertex_2d_sptr-.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\gst_edge_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gst_face_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gst_polygon_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gst_polygon_2d_operators.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gst_vertex_2d.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\gst_edge_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gst_face_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gst_polygon_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gst_polygon_2d_operators.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gst_vertex_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gst_edge_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gst_polygon_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gst_vertex_2d_sptr.h
-
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-
