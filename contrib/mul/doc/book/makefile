@@ -27,20 +27,15 @@ all: book.html book.dvi
 thelot: book.info book.html book.dvi book.hpj 
 
 ifdef aaa
-book.html: book.texi rosenbrock.png
+book.html: book.texi
 	$(MAKEINFO) $(MAKEINFOFLAGS) book.texi --html -o $@ --number-sections
 else
-book.html: book.texi rosenbrock.png
+book.html: book.texi
 	$(TEXI2HTML) book.texi \
               -expand info \
               -number -split chapter -no-section_navigation -frames
 endif
 
-# Generate figure for HTML
-rosenbrock.png: rosenbrock.eps
-	$(GS) -sDEVICE=png16m -sOutputFile=tmp.png -dQUIET -dNOPAUSE rosenbrock.eps -c showpage -c quit
-	$(PNGTOPNM) tmp.png | $(PNMCROP) | $(PNMTOPNG) > $@
-	rm tmp.png
 
 # TeX for paper printing
 book.dvi: book.texi atexinfo.tex
@@ -55,9 +50,6 @@ book.hpj book.rtf: book.texi
 book.info: book.texi
 	$(MAKEINFO) $(MAKEINFOFLAGS) book --force -o book.info
 
-## awf private
-publish:
-	 rcp index.html book*.html volumnia.robots.ox.ac.uk.awf:WWW/vxl/book
 
 ## for debugging makefile
 echo-%:
