@@ -2,6 +2,11 @@
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+# do this now, as dependencies are done before the
+# rule in vxl/vcl/makefile can be updated.
+xall::
+	cd ./vcl/iso && $(MAKE)
+
 # standard C/C++
 SUBDIRS += vcl
 
