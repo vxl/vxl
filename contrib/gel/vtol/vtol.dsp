@@ -511,6 +511,36 @@ SOURCE=.\vtol_vertex_sptr.h
 SOURCE=.\vtol_zero_chain_sptr.h
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\vtol_edge_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_face_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_topology_cache_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_topology_object_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_two_chain_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_vertex_3d.h
+
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group

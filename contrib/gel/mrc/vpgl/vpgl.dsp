@@ -113,6 +113,21 @@ SOURCE=.\vpgl_matrix_camera.cxx
 SOURCE=.\vpgl_perspective_camera.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vbl_smart_ptr+vpgl_basic_camera-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vbl_smart_ptr+vpgl_matrix_camera-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vbl_smart_ptr+vpgl_perspective_camera-.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 

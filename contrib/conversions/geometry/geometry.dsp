@@ -81,6 +81,11 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\osl_to_vdgl.h
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\DigitalCurve_to_vdgl.h
 
 # End Source File

@@ -731,6 +731,16 @@ SOURCE=.\vgl_window_scan_iterator.h
 SOURCE=.\vgl_fwd.h
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_1d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_1d.txx
+
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group

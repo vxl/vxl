@@ -200,6 +200,11 @@ SOURCE=.\Templates/vbl_smart_ptr+vcsl_length_unit-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_matrix-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vbl_smart_ptr+vcsl_matrix_param-.cxx
 
 # End Source File

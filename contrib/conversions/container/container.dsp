@@ -139,6 +139,16 @@ SOURCE=.\vcl_vector_to_CoolList.h
 SOURCE=.\vcl_vector_to_vcl_list.h
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\vcl_vector_to_vnl_vector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_vector_to_vcl_vector.h
+
+# End Source File
 # End Group
 # End Target
 # End Project
