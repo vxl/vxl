@@ -14,6 +14,7 @@
 // Modifications
 //  990822 AWF Initial version.
 //  dac (Manchester) 28/03/2001: tidied up documentation
+//  scottim 4/02/2002: Added a better description
 // \endverbatim
 //
 
@@ -23,10 +24,13 @@
 //: Limited memory Broyden Fletcher Goldfarb Shannon minimization
 // Considered to be the best optimisation algorithm for functions 
 // which are well behaved (i.e. locally smooth
-// without too many local minima,) and have 1st derivatives available. 
+// without too many local minima,) have 1st derivatives available,
+// and do not have a structure that makes them suitable for alternative
+// methods (e.g. if f(x) is a sum of squared terms you should use
+// vnl_levenberg_marquardt.)
 //
-// This limited-memory rank-2 quasi-newton optimisation method
-// maintains an estimate of (the inverse of) the Hessian matrix of f(x).
+// This limited-memory rank-2 quasi-newton method
+// maintains an estimate of (the inverse of) the Hessian matrix of f at x.
 // Unlike Newton's method, it doesn't need 2nd derivatives of f(x),
 // has superlinear rather than quadratic convergence and is
 // better behaved away from minima. 2 ranks of this matrix are updated at each

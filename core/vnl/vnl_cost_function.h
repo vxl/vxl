@@ -34,7 +34,7 @@ public:
 // value of f(x).
   virtual double f(const vnl_vector<double>& x);
 
-//:  Calculate the Jacobian, given the parameter vector x.
+//:  Calculate the gradient of f at parameter vector x.
   virtual void gradf(const vnl_vector<double>& x, vnl_vector<double>& gradient);
 
 //:  Compute one or both of f and g.  Normally implemented in terms of the above two,
