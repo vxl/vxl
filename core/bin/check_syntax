@@ -333,6 +333,7 @@ foreach $f (@FILES)
     elsif ($j eq "vnl/vnl_gamma.h") { $i="vnl_((log_)?gamma(_[pq])?|erf|cum_prob_chi2)"; }
     elsif ($j eq "vnl/vnl_math.h") { $i="vnl_(math(|_[a-z_]+)|huge_val)"; }
     elsif ($j eq "vnl/vnl_matlab_print.h") { $i="($i|MATLABPRINT)"; }
+    elsif ($j eq "vnl/vnl_matlab_print2.h") { $i="($i|VNL_MATLAB_PRINT2_INSTANTIATE)"; }
     elsif ($j eq "vnl/vnl_matlab_read.h") { $i="$i(|hdr)"; }
     elsif ($j eq "vnl/vnl_sparse_matrix.h") { $i="$i(|_pair)"; }
     elsif ($j eq "vnl/vnl_T_n.h") { $i="($i)_[a-z_]*"; }
