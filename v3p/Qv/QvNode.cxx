@@ -274,7 +274,7 @@ QvNode::readNode(QvInput *in, QvName &className, QvNode *&node)
     QvBool      gotChar;
     QvName      refName;
     char        c;
-    QvBool      ret = TRUE, flush = FALSE;
+    QvBool      ret = TRUE, Flush = FALSE;
 
     node = NULL;
 
@@ -312,7 +312,7 @@ QvNode::readNode(QvInput *in, QvName &className, QvNode *&node)
             ret = readNodeInstance(in, className, refName, node);
 
             if (! ret)
-                flush = TRUE;
+                Flush = TRUE;
 
             else if (! (gotChar = in->read(c)) || c != CLOSE_BRACE) {
                 if (gotChar)
@@ -326,7 +326,7 @@ QvNode::readNode(QvInput *in, QvName &className, QvNode *&node)
         }
     }
 
-    if (! ret && flush)
+    if (! ret && Flush)
         flushInput(in);
 
     if (node)           // mpichler, 19950707

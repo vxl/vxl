@@ -178,9 +178,9 @@ ftnlen diag_len;
         if (lsame_(uplo, "U", 1L, 1L)) {
             if (*incx == 1) {
                 for (j = 0; j < *n; ++j) {
-                    
+
                     if (x[j].r != 0. || x[j].i != 0.) {
-                        
+
                         temp.r = x[j].r, temp.i = x[j].i;
                         for (i = 0; i < j; ++i) {
                             i__1 = i + j * *lda;
@@ -220,9 +220,9 @@ ftnlen diag_len;
         } else {
             if (*incx == 1) {
                 for (j = *n - 1; j >= 0; --j) {
-                    
+
                     if (x[j].r != 0. || x[j].i != 0.) {
-                        
+
                         temp.r = x[j].r, temp.i = x[j].i;
                         for (i = *n - 1; i > j; --i) {
                             i__1 = i + j * *lda;
@@ -267,7 +267,7 @@ ftnlen diag_len;
         if (lsame_(uplo, "U", 1L, 1L)) {
             if (*incx == 1) {
                 for (j = *n - 1; j >= 0; --j) {
-                    
+
                     temp.r = x[j].r, temp.i = x[j].i;
                     if (noconj) {
                         if (nounit) {
@@ -294,7 +294,7 @@ ftnlen diag_len;
                             temp.i += a[i__1].r * x[i].i - a[i__1].i * x[i].r;
                         }
                     }
-                    
+
                     x[j].r = temp.r, x[j].i = temp.i;
                 }
             } else {
@@ -362,7 +362,7 @@ ftnlen diag_len;
                             temp.i += a[i__1].r * x[i].i - a[i__1].i * x[i].r;
                         }
                     }
-                    
+
                     x[j].r = temp.r, x[j].i = temp.i;
                 }
             } else {

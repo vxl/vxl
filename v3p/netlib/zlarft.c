@@ -132,7 +132,7 @@ ftnlen storev_len;
 /*  ===================================================================== */
 
     /* Function Body */
-    
+
 /*     Quick return if possible */
     if (*n == 0) {
         return;
