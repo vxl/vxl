@@ -8,7 +8,8 @@
 // \file
 // \author fsm
 
-#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_double_3x4.h>
+#include <vnl/vnl_double_4.h>
 
 //:
 // Given 5 image points, compute the pencil of
@@ -26,16 +27,16 @@
 
 bool mvl_five_point_camera_pencil(double const xs[5],
                                   double const ys[5],
-                                  vnl_matrix<double> *A,
-                                  vnl_matrix<double> *B);
+                                  vnl_double_3x4 *A,
+                                  vnl_double_3x4 *B);
 
 //:
 // Return the pair (s, t) such that the reprojection of X under
 // P = s A + t B is closest to (u, v) in image coordinates. The
 // image residuals are returned in res[].
-bool mvl_five_point_camera_pencil_parameters(vnl_matrix<double> const &A,
-                                             vnl_matrix<double> const &B,
-                                             vnl_vector<double> const &X,
+bool mvl_five_point_camera_pencil_parameters(vnl_double_3x4 const &A,
+                                             vnl_double_3x4 const &B,
+                                             vnl_double_4 const &X,
                                              double u, double v,
                                              double st[2],
                                              double res[2]);

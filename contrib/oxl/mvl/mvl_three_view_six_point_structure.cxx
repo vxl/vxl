@@ -26,19 +26,17 @@ mvl_three_view_six_point_structure::mvl_three_view_six_point_structure()
 
 bool mvl_three_view_six_point_structure::compute()
 {
-  vnl_matrix<double> A[3];
-  vnl_matrix<double> B[3];
+  vnl_double_3x4 A[3];
+  vnl_double_3x4 B[3];
   vnl_matrix<double> design(3, 5);
 
   for (int i=0; i<3; ++i) {
     // compute camera pencils.
-    A[i].set_size(3, 4);
-    B[i].set_size(3, 4);
     if (! mvl_five_point_camera_pencil(u[i], v[i], &A[i], &B[i]))
       return false;
 
     // fill out design matrix.
-    mvl_six_point_design_matrix_row(A[i], B[i], u[i][5], v[i][5], design[i]);
+    mvl_six_point_design_matrix_row(A[i].as_matrix(), B[i].as_matrix(), u[i][5], v[i][5], design[i]);
   }
 
   // compute pencil of solutions.
