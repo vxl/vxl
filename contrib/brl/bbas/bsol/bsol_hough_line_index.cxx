@@ -4,22 +4,21 @@
 // Modifications : see bsol_hough_line_index.h
 //
 //-----------------------------------------------------------------------------
+#include "bsol_hough_line_index.h"
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h> // vcl_find()
 #include <vnl/vnl_math.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
-#include <bsol/bsol_hough_line_index.h>
-#ifndef DEGTORAD
-#define DEGTORAD vnl_math::pi/180
-#endif
+#undef DEGTORAD
+#define DEGTORAD 0.017453293f // = float(vnl_math::pi/180)
 
 class nlines
 {
  public:
-  bool operator ()(const vcl_vector<vsol_line_2d_sptr> & v1,
-                   const vcl_vector<vsol_line_2d_sptr> & v2)
+  bool operator()(const vcl_vector<vsol_line_2d_sptr> & v1,
+                  const vcl_vector<vsol_line_2d_sptr> & v2)
   {
     return v1.size() > v2.size();
   }
@@ -116,7 +115,7 @@ void bsol_hough_line_index::array_loc(vsol_line_2d_sptr const& line,
 
   theta = angle;
 
-  float angrad = float(DEGTORAD*angle);
+  float angrad = DEGTORAD*angle;
 
   //Compute distance indices
   vsol_point_2d_sptr mid = line->middle();
@@ -154,7 +153,7 @@ int bsol_hough_line_index::trans_loc(const int transx, const int transy,
                                      const int r, const int theta)
 {
   float angle = angle_increment_*theta;
-  float angrad = float(DEGTORAD*angle);
+  float angrad = DEGTORAD*angle;
   int new_cx = -int(transx*vcl_sin(angrad));
   int new_cy =  int(transy*vcl_cos(angrad));
   int newr = new_cx + new_cy;
@@ -704,11 +703,11 @@ bsol_hough_line_index::non_maximum_suppress(const int radius,
 {
   int num = bins.size();
   vcl_vector<int> out(num);
-  if ((2*radius +1)> num/2)
+  if (4*radius +2 > num)
   {
     vcl_cout << "bsol_hough_line_index::non_maximum_suppress(..) - radius is too large\n";
     return out;
-    }
+  }
 
   //Clear the output
   for (int indx =0; indx < num; indx++)
@@ -768,11 +767,11 @@ dominant_line_groups(const int thresh, const float angle_tol,
     return 0;
   for (int gi = 0; gi<n_groups; gi++)
   {
-     vcl_vector<vsol_line_2d_sptr> lines;
-     float angle = dirs[gi]*angle_increment_;
-     this->parallel_lines(angle, angle_tol, lines);
-     groups.push_back(lines);
-     }
+    vcl_vector<vsol_line_2d_sptr> lines;
+    float angle = dirs[gi]*angle_increment_;
+    this->parallel_lines(angle, angle_tol, lines);
+    groups.push_back(lines);
+  }
   vcl_sort(groups.begin(), groups.end(), nlines());
   return n_groups;
 }
