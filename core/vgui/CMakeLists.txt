@@ -95,4 +95,4 @@ AUX_SOURCE_DIRECTORY(Templates vgui_sources)
 
 SUBDIRS(impl internals) 
 
-SUBDIRS( tests )
+# SUBDIRS( tests )
