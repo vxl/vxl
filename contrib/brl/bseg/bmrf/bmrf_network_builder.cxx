@@ -777,9 +777,8 @@ bool bmrf_network_builder::assign_neighbors()
       for(vcl_vector<bmrf_node_sptr>::iterator nnit = neighbors.begin();
           nnit != neighbors.end(); nnit++)
         {
-          //It is scary to reveil the bare pointer
-          (*nit)->add_neighbor((*nnit).ptr(), bmrf_node::TIME);
-          (*nnit)->add_neighbor((*nit).ptr(), bmrf_node::TIME);
+          network_->add_arc(*nit, *nnit, bmrf_node::TIME);
+          network_->add_arc(*nnit, *nit, bmrf_node::TIME);
         }
     }
   return true;
