@@ -13,8 +13,8 @@ static integer c__1 = 1;
         integer *jpvt, real *tau, real *work, integer *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    real r__1, r__2;
+    integer a_dim1, a_offset, i__1, i__2;
+    real r__1;
 
     /* Builtin functions */
     double sqrt(doublereal);
@@ -158,8 +158,7 @@ static integer c__1 = 1;
 /*     Move initial columns up front */
 
     itemp = 1;
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= *n; ++i) {
         if (jpvt[i] != 0) {
             if (i != itemp) {
                 sswap_(m, &a[i * a_dim1 + 1], &c__1, &a[itemp * a_dim1 + 1], &
@@ -195,27 +194,24 @@ static integer c__1 = 1;
 /*        Initialize partial column norms. The first n elements of */
 /*        work store the exact column norms. */
 
-        i__1 = *n;
-        for (i = itemp + 1; i <= i__1; ++i) {
-            i__2 = *m - itemp;
-            work[i] = snrm2_(&i__2, &a[itemp + 1 + i * a_dim1], &c__1);
+        for (i = itemp + 1; i <= *n; ++i) {
+            i__1 = *m - itemp;
+            work[i] = snrm2_(&i__1, &a[itemp + 1 + i * a_dim1], &c__1);
             work[*n + i] = work[i];
 /* L20: */
         }
 
 /*        Compute factorization */
 
-        i__1 = mn;
-        for (i = itemp + 1; i <= i__1; ++i) {
+        for (i = itemp + 1; i <= mn; ++i) {
 
 /*           Determine ith pivot column and swap if necessary */
 
-            i__2 = *n - i + 1;
-            pvt = i - 1 + isamax_(&i__2, &work[i], &c__1);
+            i__1 = *n - i + 1;
+            pvt = i - 1 + isamax_(&i__1, &work[i], &c__1);
 
             if (pvt != i) {
-                sswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i * a_dim1 + 1], &
-                        c__1);
+                sswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i * a_dim1 + 1], &c__1);
                 itemp = jpvt[pvt];
                 jpvt[pvt] = jpvt[i];
                 jpvt[i] = itemp;
@@ -226,12 +222,10 @@ static integer c__1 = 1;
 /*           Generate elementary reflector H(i) */
 
             if (i < *m) {
-                i__2 = *m - i + 1;
-                slarfg_(&i__2, &a[i + i * a_dim1], &a[i + 1 + i * a_dim1], &
-                        c__1, &tau[i]);
+                i__1 = *m - i + 1;
+                slarfg_(&i__1, &a[i + i * a_dim1], &a[i + 1 + i * a_dim1], &c__1, &tau[i]);
             } else {
-                slarfg_(&c__1, &a[*m + *m * a_dim1], &a[*m + *m * a_dim1], &
-                        c__1, &tau[*m]);
+                slarfg_(&c__1, &a[*m + *m * a_dim1], &a[*m + *m * a_dim1], &c__1, &tau[*m]);
             }
 
             if (i < *n) {
@@ -240,31 +234,26 @@ static integer c__1 = 1;
 
                 aii = a[i + i * a_dim1];
                 a[i + i * a_dim1] = 1.f;
-                i__2 = *m - i + 1;
-                i__3 = *n - i;
-                slarf_("LEFT", &i__2, &i__3, &a[i + i * a_dim1], &c__1, &tau[
-                        i], &a[i + (i + 1) * a_dim1], lda, &work[(*n << 1) +
-                        1], 4L);
+                i__1 = *m - i + 1;
+                i__2 = *n - i;
+                slarf_("LEFT", &i__1, &i__2, &a[i + i * a_dim1], &c__1, &tau[i],
+                       &a[i + (i + 1) * a_dim1], lda, &work[(*n << 1) + 1], 4L);
                 a[i + i * a_dim1] = aii;
             }
 
 /*           Update partial column norms */
 
-            i__2 = *n;
-            for (j = i + 1; j <= i__2; ++j) {
+            for (j = i + 1; j <= *n; ++j) {
                 if (work[j] != 0.f) {
-/* Computing 2nd power */
-                    r__2 = (r__1 = a[i + j * a_dim1], abs(r__1)) / work[j];
-                    temp = 1.f - r__2 * r__2;
+                    r__1 = abs(a[i + j * a_dim1]) / work[j];
+                    temp = 1.f - r__1 * r__1;
                     temp = max(temp,0.f);
-/* Computing 2nd power */
                     r__1 = work[j] / work[*n + j];
                     temp2 = temp * .05f * (r__1 * r__1) + 1.f;
                     if (temp2 == 1.f) {
                         if (*m - i > 0) {
-                            i__3 = *m - i;
-                            work[j] = snrm2_(&i__3, &a[i + 1 + j * a_dim1], &
-                                    c__1);
+                            i__2 = *m - i;
+                            work[j] = snrm2_(&i__2, &a[i + 1 + j * a_dim1], &c__1);
                             work[*n + j] = work[j];
                         } else {
                             work[j] = 0.f;
