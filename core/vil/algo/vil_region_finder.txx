@@ -7,7 +7,7 @@
 //                                                                 constructor
 
 template <class pix_type, class predicate_type>
-vil_region_finder<pix_type>::
+vil_region_finder<pix_type, predicate_type>::
 vil_region_finder( image_view const& in_image,
                    vil_region_finder_connectivity conn )
   : image_( in_image ),
@@ -22,7 +22,7 @@ vil_region_finder( image_view const& in_image,
 
 template <class pix_type, class predicate_type>
 void
-vil_region_finder<pix_type>::
+vil_region_finder<pix_type, predicate_type>::
 init( vil_region_finder_connectivity conn )
 {
   static int const nbrs4_delta[4][2] = { { 1, 0}, { 0,-1}, {-1, 0}, { 0, 1} };
@@ -47,7 +47,7 @@ init( vil_region_finder_connectivity conn )
 
 template <class pix_type, class predicate_type>
 void
-vil_region_finder<pix_type>::
+vil_region_finder<pix_type, predicate_type>::
 same_int_region( unsigned i, unsigned j,
                  vcl_vector<unsigned>& ri,
                  vcl_vector<unsigned>& rj )
@@ -80,7 +80,7 @@ same_int_region( unsigned i, unsigned j,
 
 template <class pix_type, class predicate_type>
 void
-vil_region_finder<pix_type>::
+vil_region_finder<pix_type, predicate_type>::
 same_int_region( unsigned i, unsigned j, pix_type p,
                  vcl_vector<unsigned>& ri,
                  vcl_vector<unsigned>& rj )
@@ -111,8 +111,8 @@ same_int_region( unsigned i, unsigned j, pix_type p,
 //                                                                       image
 
 template <class pix_type, class predicate_type>
-typename vil_region_finder<pix_type>::image_view const&
-vil_region_finder<pix_type>::
+typename vil_region_finder<pix_type, predicate_type>::image_view const&
+vil_region_finder<pix_type, predicate_type>::
 image() const
 {
   return image_;
