@@ -166,7 +166,7 @@ png_text_compress(png_structp png_ptr,
    if (compression == PNG_TEXT_COMPRESSION_NONE)
    {
        comp->input = text;
-       comp->input_len = text_len;
+       comp->input_len = (int)text_len;
        return((int)text_len);
    }
 

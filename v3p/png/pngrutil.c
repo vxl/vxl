@@ -1108,7 +1108,7 @@ png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
 
    new_palette.depth = *entry_start++;
    entry_size = (new_palette.depth == 8 ? 6 : 10);
-   data_length = (slength - (entry_start - chunkdata));
+   data_length = (int)(slength - (entry_start - chunkdata));
 
    /* integrity-check the data length */
    if (data_length % entry_size)

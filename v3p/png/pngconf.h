@@ -883,7 +883,11 @@ defined(PNG_WRITE_USER_TRANSFORM_SUPPORTED)
  * want to have unsigned int for png_uint_32 instead of unsigned long.
  */
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+typedef unsigned __w64 long png_uint_32;
+#else
 typedef unsigned long png_uint_32;
+#endif
 typedef long png_int_32;
 typedef unsigned short png_uint_16;
 typedef short png_int_16;

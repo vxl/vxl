@@ -21,8 +21,8 @@ uLong ZEXPORT adler32(adler, buf, len)
     const Bytef *buf;
     uInt len;
 {
-    unsigned long s1 = adler & 0xffff;
-    unsigned long s2 = (adler >> 16) & 0xffff;
+    uLong s1 = adler & 0xffff;
+    uLong s2 = (adler >> 16) & 0xffff;
     int k;
 
     if (buf == Z_NULL) return 1L;
