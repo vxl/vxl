@@ -155,6 +155,12 @@ SOURCE=.\Templates/vimt_sample_profile_bilin+byte.double-.cxx
 # Begin Source File
 SOURCE=.\Templates/vimt_sample_profile_bilin+float.double-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_scale_pyramid_builder_2d+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_scale_pyramid_builder_2d+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -214,6 +220,12 @@ SOURCE=.\vimt_sample_grid_bilin.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vimt_crop.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_scale_pyramid_builder_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_scale_pyramid_builder_2d.txx
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

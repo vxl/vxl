@@ -204,6 +204,9 @@ SOURCE=.\vil2_convolve_1d.h
 SOURCE=.\vil2_convolve_2d.h
 # End Source File
 # Begin Source File
+SOURCE=.\vil2_correlate_1d.h
+# End Source File
+# Begin Source File
 SOURCE=.\vil2_exp_filter_1d.h
 # End Source File
 # Begin Source File

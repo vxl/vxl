@@ -207,9 +207,6 @@ SOURCE=.\Templates/vil2_copy+bool-.cxx
 SOURCE=.\Templates/vil2_copy+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_copy+rgb+byte--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vil2_copy+double-.cxx
 # End Source File
 # Begin Source File
@@ -229,6 +226,9 @@ SOURCE=.\Templates/vil2_copy+uint_16-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil2_copy+uint_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_copy+vil_rgb+byte--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil2_image_view+sbyte-.cxx
@@ -449,13 +449,16 @@ SOURCE=.\file_formats/vil2_bmp_file_header.h
 # Begin Source File
 SOURCE=.\file_formats/vil2_bmp_info_header.h
 # End Source File
-# End Group
+# Begin Source File
 SOURCE=.\file_formats/vil2_png.h
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil2_tiff.h
 # End Source File
 # Begin Source File
+SOURCE=.\vil2_pixel_traits.h
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
