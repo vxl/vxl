@@ -28,7 +28,7 @@
 //==========================================================
 # if defined ( BYPASS_AUTOCONF_SETTINGS ) || ! defined (__AUTO_CONFIGURED)
 // per-version compiler features recognition
-#  include <config/stlcomp.h>
+#  include <stlcomp.h>
 # else
 // auto-configured section
 

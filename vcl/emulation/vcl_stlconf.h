@@ -36,7 +36,7 @@
 #      include "sun-CC5.0-stlconf.h"
 #    endif
 #   else
-#    include "config/stlconf.h"
+#    error "Please create an appropriate stlconf.h file"
 #   endif
 #  endif
 # endif
