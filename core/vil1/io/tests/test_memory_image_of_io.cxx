@@ -3,12 +3,14 @@
 #include <vcl_utility.h>
 #include <vcl_vector.h>
 
-#include <vil/vil_test.h>
+#include <testlib/testlib_test.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/io/vil_io_memory_image_of.h>
+#include <vil/io/vil_io_image_impl.h>
+#include <vil/io/vil_io_memory_image_impl.h>
 
 
 void test_memory_image_of_io()
@@ -71,10 +73,8 @@ void test_memory_image_of_io()
 }
 
 
-void test_memory_image_of_prime()
+MAIN( test_memory_image_of_io )
 {
   test_memory_image_of_io();
+  SUMMARY();
 }
-
-
-TESTMAIN(test_memory_image_of_prime);

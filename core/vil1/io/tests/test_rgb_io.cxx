@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vil/vil_test.h>
+#include <testlib/testlib_test.h>
 #include <vil/io/vil_io_rgb.h>
 
 
@@ -42,10 +42,8 @@ void test_rgb_double_io()
 }
 
 
-void test_rgb_prime()
+MAIN( test_rgb_io )
 {
   test_rgb_double_io();
+  SUMMARY();
 }
-
-
-TESTMAIN(test_rgb_prime);

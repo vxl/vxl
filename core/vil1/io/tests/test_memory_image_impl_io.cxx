@@ -3,7 +3,7 @@
 #include <vcl_utility.h>
 #include <vcl_vector.h>
 
-#include <vil/vil_test.h>
+#include <testlib/testlib_test.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -93,10 +93,8 @@ void test_memory_image_impl_io()
   vcl_cout << vcl_endl;
 }
 
-void test_memory_image_impl_prime()
+MAIN( test_memory_image_impl_io )
 {
   test_memory_image_impl_io();
+  SUMMARY();
 }
-
-
-TESTMAIN(test_memory_image_impl_prime);

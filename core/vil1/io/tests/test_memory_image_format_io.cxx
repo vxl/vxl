@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vil/vil_test.h>
+#include <testlib/testlib_test.h>
 #include <vil/io/vil_io_memory_image_format.h>
 
 
@@ -42,10 +42,8 @@ void test_memory_image_format_double_io()
 }
 
 
-void test_memory_image_format_prime()
+MAIN( test_memory_image_format_io )
 {
   test_memory_image_format_double_io();
+  SUMMARY();
 }
-
-
-TESTMAIN(test_memory_image_format_prime);
