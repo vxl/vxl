@@ -56,7 +56,7 @@
 // reference  to  a vul_reg_exp  object    as an  argument    and creates an object
 // initialized with the information from the given vul_reg_exp object.
 //
-// The  find  member function  finds   the  first  occurence   of  the regualr
+// The  find  member function  finds   the  first  occurrence   of  the regular
 // expression of that object in the string given to find as an argument.  Find
 // returns a boolean, and  if true,  mutates  the private  data appropriately.
 // Find sets pointers to the beginning and end of  the thing last  found, they
@@ -68,7 +68,7 @@
 // the  to see  if   the compiled  regular  expression   is the same, and  the
 // deep_equal functions also checks  to see if the  start and end pointers are
 // the same.  The is_valid  function returns false if  program is set to NULL,
-// (i.e. there is no valid compiled exression).  The set_invalid function sets
+// (i.e. there is no valid compiled expression). The set_invalid function sets
 // the  program to NULL  (Warning: this deletes the compiled  expression). The
 // following examples may help clarify regular expression usage:
 //
@@ -108,13 +108,13 @@
 //
 //   *  The regular expression "(..p)b" matches  something ending with pb
 //      and beginning with whatever the two characters before the first p
-//      encounterd in the line were.  It would find  "repb" in "rep drepa
+//      encountered in the line were. It would find  "repb" in "rep drepa
 //      qrepb".  The regular expression "(..p)a"  would find "repa qrepb"
 //      in "rep drepa qrepb"
 //
 //   *  The regular expression "d(..p)" matches something ending  with p,
 //      beginning with d, and having  two characters  in between that are
-//      the same as the two characters before  the first p  encounterd in
+//      the same as the two characters before  the first p encountered in
 //      the line.  It would match "drepa qrepb" in "rep drepa qrepb".
 
 #include <vcl_iostream.h>
