@@ -243,6 +243,9 @@ SOURCE=.\vil3d_load.h
 SOURCE=.\vil3d_transform.h
 # End Source File
 # Begin Source File
+SOURCE=.\vil3d_convert.h
+# End Source File
+# Begin Source File
 SOURCE=.\vil3d_copy.h
 # End Source File
 # Begin Source File

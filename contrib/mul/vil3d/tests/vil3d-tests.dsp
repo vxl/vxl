@@ -283,6 +283,9 @@ SOURCE=.\test_algo_normalised_correlation_3d.cxx
 # Begin Source File
 SOURCE=.\test_file_format_read.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_convert.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
