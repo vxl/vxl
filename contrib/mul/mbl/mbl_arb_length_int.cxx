@@ -27,9 +27,10 @@ bool mbl_arb_length_int::operator== (unsigned long rhs) const
 {
   if (val_.size() > sizeof(long)) return false;
   if (!sign_) return false;
-  unsigned i = sizeof(long);
-  while (i-->0)
-    if ( ((val_.size() <= i)?0:val_[i]) != ((rhs>>(i*8))&0xff)) return false;
+  unsigned long i = sizeof(long);
+  while (i--!=0L)
+    if ( ((val_.size() <= i)?0:val_[i]) != (unsigned char)((rhs>>(i*8))&0xff))
+      return false;
   return true;
 }
 
