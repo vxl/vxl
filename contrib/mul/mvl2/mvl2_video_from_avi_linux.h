@@ -7,7 +7,7 @@
 
 #include <vcl_string.h>
 
-//#include <avifile/avifile.h>
+#include <avifile/avifile.h>
 //#include <avifile/videodecoder.h>
 //#include <avifile/infotypes.h>
 //#include <avifile/except.h>
@@ -18,8 +18,9 @@
 #include <vil2/vil2_image_view.h>
 #include <mvl2/mvl2_video_reader.h>
 
-class IAviReadFile;
-class IAviReadStream;
+// Cannot forward declare these, since they are typedefs (defined in avifile.h)
+//class IAviReadFile;
+//class IAviReadStream;
 
 //: A class to get video input from avi file
 class mvl2_video_from_avi: public mvl2_video_reader
@@ -74,7 +75,7 @@ class mvl2_video_from_avi: public mvl2_video_reader
 
   //: Move frame counter on to given frame if relevant
   //  Use only when necessary, because it's slow.
-  virtual int seek(int frame_number);
+  virtual int seek(unsigned int frame_number);
 
  private:
 
