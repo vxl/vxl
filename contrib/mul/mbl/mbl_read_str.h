@@ -1,10 +1,16 @@
 #ifndef mbl_read_str_h_
 #define mbl_read_str_h_
-
 //:
 // \file
 // \brief  Asks question and waits for an answer.
 // \author Tim
+// \date Based on code written 7-May-92
+//
+// \verbatim 
+// Modifications
+//   1.1   Tim   New version 4-Nov-98
+// Converted to vxl by gvw, soblamemewhydontcha!
+// \endverbatim
 
 //: Asks question and waits for an answer from standard input.
 //       If the answer is a non-empty string, returns it.
@@ -15,7 +21,7 @@
 // \param q_str A question 
 // \param default_str Default answer
 // \return reply: The answer or a default
-
+//
 //   Example: 
 // \verbatim 
 // a)
@@ -31,13 +37,6 @@
 // char* Name[N_max_len];
 // strcpy(Name,"Freddy");
 // mbl_read_str(Name,N_max_len,"Enter Name",Name);
-// \endverbatim
-//
-// Modifications
-// \verbatim 
-//   1.1   Tim   New version 4-Nov-98
-//
-// Converted to vxl by gvw, soblamemewhydontcha!
 // \endverbatim
 
 char* mbl_read_str(char *reply, int max_str_len, 
