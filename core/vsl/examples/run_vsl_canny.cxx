@@ -16,14 +16,24 @@
 int main(int argc, char **argv) {
   //cerr << "this is " __FILE__ << endl;
   vbl_arg<int>        canny("-canny", "which canny? (0:oxford, 1:rothwell1, 2:rothwell2)", 0);
-  vbl_arg<vcl_string> in   ("-in", "input image", "/users/fsm/images/pig-grey.jpg");
+  vbl_arg<vcl_string> in   ("-in", "input image", "");
   vbl_arg<vcl_string> out  ("-out", "output file (default is stdout)", "");
   vbl_arg_parse(argc, argv);
 
-  vil_image image = vil_load(in().c_str());
+  vcl_string* in_file = new vcl_string(in());
+  if (*in_file == "") {
+    cout << "input image file: ";
+    char tmp[1024];
+    cin >> tmp;
+    delete in_file;
+    in_file = new vcl_string(tmp);
+  }
+  assert(*in_file != "");
+
+  vil_image image = vil_load(in_file->c_str());
   if (!image)
     return 1;
-  cerr << in() << " : " << image << endl;
+  cerr << in_file << " : " << image << endl;
 
   vcl_list<vsl_Edge*> edges;
   vsl_easy_canny(canny(), image, &edges);
