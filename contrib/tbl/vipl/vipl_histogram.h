@@ -5,11 +5,25 @@
 // \file
 // \brief pixel value histogram of 2D image
 //
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   15 November 1997.
+//
+// \verbatim
+// Modifications:
+//   Terry Boult - December 1997 - remark added to documentation
+//   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
+//
+// \example examples/example_histogram.cxx
+
+#include <vipl/filter/vipl_filter_2d.h> // parent class
+
+//: Pixel value histogram of 2D image.
 //   This image processing class creates a pixel value histogram of a 2D image
 //   and writes it into a "1D" image (actually a row of a 2D image).
 //   It is implemented using the vipl filters,
-//   which means that it can be used with any image class (IUE or not,
-//   TargetJr or not, vil or not) of any pixel data type.
+//   which means that it can be used with any image class (vxl or not)
+//   of any pixel data type.
 //
 //   The constructor takes three (defaulted) arguments:
 //   the scaling SI to be applied to the input pixel values,
@@ -57,20 +71,6 @@
 //   consistency and allow one to chose which "column" in the 2D output image
 //   was used to store the histogram.
 //
-// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
-// \date   15 November 1997.
-//
-// \verbatim
-// Modifications:
-//   Terry Boult - December 1997 - remark added to documentation
-//   Peter Vanroose, Aug.2000 - adapted to vxl
-// \endverbatim
-//
-// \example examples/example_histogram.cxx
-
-#include <vipl/filter/vipl_filter_2d.h> // parent class
-
-//: pixel value histogram of 2D image
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_histogram : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 {

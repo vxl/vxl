@@ -10,7 +10,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, VCL_DFL_TYPE_
 
  public:
 
- // Main constructor for this abstract class. If dst_image
+ //: Main constructor for this abstract class.
+ // If dst_image
  // (by default) the output will be generated automatically when
  // filtering is about to proceed. (Either way, the filter
  // decrements the refcount of the output when it is destroyed.)
@@ -28,7 +29,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, VCL_DFL_TYPE_
                 int img_border=0 ,
                 DataOut fill_val=0);
 
- // Secondary constructor for this class. If dst_img
+ //: Secondary constructor for this class.
+ // If dst_img
  // is null (by default), the output will be generated
  // automatically when filtering is about to proceed. The filter
  // decrements the refcount of the output when it is
@@ -49,20 +51,20 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, VCL_DFL_TYPE_
   vipl_filter_2d() {} // argless ctor
   ~vipl_filter_2d() {} // (virtual) destructor
 
-  //user accessed low_level c++ copy constructor
-  // note this does NOT copy input/output image pointers!!!
+  //: User accessed low_level c++ copy constructor.
+  // note this does NOT copy input/output image pointers.
   vipl_filter_2d(const vipl_filter_2d< ImgIn, ImgOut, DataIn, DataOut, PixelItr > &);
 
  protected:
 
-  // This is the method that walks over the sections calling
-  // section_applyop. Now that we know the dim we can write the
-  // loop...
+  //: This walks over the sections calling section_applyop.
+  // Now that we know the dim we can write the
+  // loop.
   virtual bool applyop();
- // The main filtering method, use must supply it
+ //: The main filtering method, derived class must supply it.
   virtual bool section_applyop() = 0;
 
-}; // end of class definition
+};
 
 #ifdef INSTANTIATE_TEMPLATES
 #include "vipl_filter_2d.txx"
