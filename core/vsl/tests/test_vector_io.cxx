@@ -34,11 +34,12 @@ void test_vector_io()
   bfs_in.close();
   
   TEST ("vcl_vector<int> out == vcl_vector<int> in",
-    v_int_out == v_int_in, true);
+        v_int_out == v_int_in, true);
   TEST ("vcl_vector<float> out == vcl_vector<float> in",
-    v_float_out == v_float_in, true);
+        v_float_out == v_float_in, true);
 
   vsl_print_summary(vcl_cout, v_int_in);
+  vsl_print_summary(vcl_cout, v_float_in);
   vcl_cout << vcl_endl;
 }
 
