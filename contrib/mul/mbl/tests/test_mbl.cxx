@@ -30,7 +30,6 @@ void run_test_mbl()
 {
 
   test_file_data_wrapper();
-/*
   test_selected_data_wrapper();
   test_priority_bounded_queue();
   test_stochastic_data_collector();
@@ -47,7 +46,7 @@ void run_test_mbl()
   test_clamped_plate_spline_2d();
   test_histogram();
   test_data_wrapper_mixer();
-*/
+
 
 }
 
