@@ -12,9 +12,8 @@
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
-#ifdef HAS_XERCES
-# include <bxml/bxml_vtol_io.h>
-#endif
+#include <vsol/vsol_curve_2d.h>
+#include <bxml/bxml_vtol_io.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
 #include <gevd/gevd_clean_edgels.h>
@@ -110,13 +109,13 @@ bmvv_multiview_manager::get_picker_tableau_at(unsigned col, unsigned row)
 {
   vgui_tableau_sptr top_tab = this->get_tableau_at(col, row);
   if (top_tab)
-  {
-    bgui_picker_tableau_sptr tt;
-    tt.vertical_cast(vgui_find_below_by_type_name(top_tab,
-      vcl_string("bgui_picker_tableau")));
-    if (tt)
-      return tt;
-  }
+    {
+      bgui_picker_tableau_sptr tt;
+      tt.vertical_cast(vgui_find_below_by_type_name(top_tab,
+                                                    vcl_string("bgui_picker_tableau")));
+      if (tt)
+        return tt;
+    }
   vgui_macro_warning << "Unable to get bgui_picker_tableau at (" << col << ", "
                      << row << ")\n";
   return 0;
@@ -142,10 +141,10 @@ bgui_vtol2D_tableau_sptr bmvv_multiview_manager::get_vtol2D_tableau_at(unsigned 
 {
   if (row!=0)
     return 0;
- bgui_vtol2D_tableau_sptr btab = 0;
- if (col==0||col==1)
-   btab = vtol_tabs_[col];
- return btab;
+  bgui_vtol2D_tableau_sptr btab = 0;
+  if(col==0||col==1)
+    btab = vtol_tabs_[col];
+  return btab;
 }
 
 //=================================================================
@@ -201,6 +200,18 @@ void bmvv_multiview_manager::clear_display()
     vcl_cout << "In bmvv_multiview_manager::clear_display() - null tableau\n";
 }
 
+//===================================================================
+//: clear all selections in both panes
+//===================================================================
+void bmvv_multiview_manager::clear_selected()
+{
+  for(vcl_vector<bgui_vtol2D_tableau_sptr>::iterator bit = vtol_tabs_.begin();
+      bit != vtol_tabs_.end(); bit++)
+    if(*bit)
+      (*bit)->deselect_all();
+}
+
+
 //======================================================================
 //: Draw a set of intensity faces on the currently selected grid cell
 //======================================================================
@@ -208,9 +219,9 @@ void bmvv_multiview_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr>& 
                                           bool verts)
 {
   vcl_vector<vtol_face_2d_sptr> faces;
-   for (vcl_vector<vdgl_intensity_face_sptr>::iterator rit = regions.begin();
-        rit != regions.end(); rit++)
-     faces.push_back((*rit)->cast_to_face_2d());
+  for (vcl_vector<vdgl_intensity_face_sptr>::iterator rit = regions.begin();
+       rit != regions.end(); rit++)
+    faces.push_back((*rit)->cast_to_face_2d());
 
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
   if (btab)
@@ -258,7 +269,7 @@ void bmvv_multiview_manager::vd_edges()
   vcl_vector<vtol_vertex_2d_sptr> test_verts = det.get_test_verts();
   btab->set_foreground(0.0,1.0,0.0);
   for (vcl_vector<vtol_vertex_2d_sptr>::iterator vit = test_verts.begin();
-      vit != test_verts.end(); vit++)
+       vit != test_verts.end(); vit++)
     if ((*vit))
       btab->add_vertex(*vit);
 }
@@ -298,14 +309,14 @@ void bmvv_multiview_manager::regions()
       vil_image ed_img = rp.get_edge_image();
       vgui_image_tableau_sptr itab =  btab->get_image_tableau();
       if (!itab)
-      {
+        {
           vcl_cout << "In bmvv_multiview_manager::regions() - "
                    << "null image tableau\n";
           return;
-      }
+        }
       itab->set_image(ed_img);
       return;
-   }
+    }
   vcl_vector<vdgl_intensity_face_sptr>& regions = rp.get_regions();
   this->draw_regions(regions, true);
 }
@@ -378,7 +389,31 @@ void bmvv_multiview_manager::show_epipolar_line()
   //end test
   if (v2D)
     {
-     v2D->add_infinite_line(lr.a(), lr.b(), lr.c());
+      v2D->add_infinite_line(lr.a(), lr.b(), lr.c());
       v2D->post_redraw();
     }
+}
+//===================================================================
+//: capture corresponding curves in left and right image
+//===================================================================
+void bmvv_multiview_manager::select_curve_corres()
+{
+  for(vcl_vector<bgui_vtol2D_tableau_sptr>::iterator bit = vtol_tabs_.begin();
+      bit != vtol_tabs_.end(); bit++)
+    if(*bit)
+      {
+        vcl_vector<vgui_soview*> sovs = (*bit)->get_selected_soviews();
+        for(int i = 0; i<sovs.size(); i++)
+          {
+            vgui_soview* sov = sovs[i];
+            int id = sov->get_id();
+            vcl_cout << "id = " << id << "\n";
+            vtol_edge_2d_sptr e = (*bit)->get_mapped_edge(id);
+            vsol_curve_2d_sptr c = e->curve();
+            vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+            if(dc)
+              (*bit)->add_digital_curve(dc);
+          }
+      }
+  this->clear_selected();
 }

@@ -39,13 +39,14 @@ class bmvv_multiview_manager : public vgui_grid_tableau
   void quit();
   void load_image();
   void clear_display();
+  void clear_selected();
   void vd_edges();
   void regions();
 #ifdef HAS_XERCES
   void read_xml_edges();
 #endif
   void show_epipolar_line();
-
+  void select_curve_corres();
   //: access to the window
   vgui_window* get_window(){return win_;}
   void set_window(vgui_window* win){win_=win;}
@@ -68,7 +69,8 @@ class bmvv_multiview_manager : public vgui_grid_tableau
   bool tabs_init_;
   vil_image img_;
   vgui_window* win_;
-  vcl_vector<bgui_vtol2D_tableau_sptr> vtol_tabs_;//left image
+  vcl_vector<bgui_vtol2D_tableau_sptr> vtol_tabs_;
+  vcl_vector<vtol_edge_2d_sptr> selected_curves_;
   static bmvv_multiview_manager *instance_;
 };
 

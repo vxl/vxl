@@ -23,6 +23,11 @@ void bmvv_menus::clear_display_callback()
   bmvv_multiview_manager::instance()->clear_display();
 }
 
+void bmvv_menus::clear_selected_callback()
+{
+  bmvv_multiview_manager::instance()->clear_selected();
+}
+
 void bmvv_menus::vd_edges_callback()
 {
   bmvv_multiview_manager::instance()->vd_edges();
@@ -40,6 +45,11 @@ void bmvv_menus::show_epipolar_line_callback()
   bmvv_multiview_manager::instance()->show_epipolar_line();
 }
 
+void bmvv_menus::select_curve_corres_callback()
+{
+  bmvv_multiview_manager::instance()->select_curve_corres();
+}
+
 //bmvv_menus definition
 vgui_menu bmvv_menus::get_menu()
 {
@@ -55,11 +65,12 @@ vgui_menu bmvv_menus::get_menu()
 #endif
   //view menu entries
   menuview.add("Clear Display", clear_display_callback);
+  menuview.add("Clear Selected", clear_selected_callback);
   menuview.add( "Epipolar Line", show_epipolar_line_callback,
                 (vgui_key)'e', vgui_CTRL);
   //edit menu entries
   menuedit.add("VD Edges", vd_edges_callback);
-
+  menuedit.add("Select Edges", select_curve_corres_callback);
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);
