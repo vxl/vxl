@@ -60,7 +60,7 @@ inline float epsilon(float) { return 1e-5f; }
 inline double epsilon(double) { return 1e-14f; }
 
 template <class T>
-bool almost_equal(const T& real1, const T& real2)
+bool almost_equal_helper(const T& real1, const T& real2)
 {
   bool result;
   T max,min,factor;
@@ -84,8 +84,14 @@ bool almost_equal(const T& real1, const T& real2)
   return result;
 }
 
-template bool almost_equal(const double&, const double&);
-template bool almost_equal(const float&, const float&);
+bool almost_equal(const double& a, const double& b)
+{
+  return almost_equal_helper(a, b);
+}
+bool almost_equal(const float& a, const float& b)
+{
+  return almost_equal_helper(a, b);
+}
 
 template <class T>
 inline bool almost_equal(const vgl_point_2d<T>& p1, const vgl_point_2d<T>& p2)
