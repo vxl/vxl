@@ -58,35 +58,37 @@ class vsol_line_3d : public vsol_curve_3d
   //: Constructor from the first and the last point of the straight line
   //---------------------------------------------------------------------------
   vsol_line_3d(vsol_point_3d_sptr const& new_p0,
-               vsol_point_3d_sptr const& new_p1);
+               vsol_point_3d_sptr const& new_p1)
+    : p0_(new_p0), p1_(new_p1) {}
 
   //---------------------------------------------------------------------------
   //: Copy constructor
   //  no duplication of the points
   //---------------------------------------------------------------------------
-  vsol_line_3d(vsol_line_3d const& other);
+  vsol_line_3d(vsol_line_3d const& other)
+  : vsol_curve_3d(other), p0_(other.p0_), p1_(other.p1_) {}
 
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_line_3d();
+  virtual ~vsol_line_3d() {}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a line_3d, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_line_3d const*cast_to_line(void)const{return this;}
-  virtual vsol_line_3d *cast_to_line(void) {return this;}
+  virtual vsol_line_3d const*cast_to_line()const{return this;}
+  virtual vsol_line_3d *cast_to_line() {return this;}
 
   //---------------------------------------------------------------------------
   //: Return the curve type
   //---------------------------------------------------------------------------
-  virtual vsol_curve_3d_type curve_type(void) const { return vsol_curve_3d::LINE; }
+  virtual vsol_curve_3d_type curve_type() const { return vsol_curve_3d::LINE; }
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d* clone(void) const;
+  virtual vsol_spatial_object_3d* clone() const;
 
   //***************************************************************************
   // Access
@@ -95,22 +97,22 @@ class vsol_line_3d : public vsol_curve_3d
   //---------------------------------------------------------------------------
   //: Middle point of the straight line segment
   //---------------------------------------------------------------------------
-  vsol_point_3d_sptr middle(void) const;
+  vsol_point_3d_sptr middle() const;
 
   //---------------------------------------------------------------------------
   //: direction of the straight line segment.
   //---------------------------------------------------------------------------
-  vgl_vector_3d<double> direction(void) const;
+  vgl_vector_3d<double> direction() const;
 
   //---------------------------------------------------------------------------
-  //: First point of the straight line segment
+  //: First point of the straight line segment; pure virtual of vsol_curve_3d
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_sptr p0(void) const;
+  virtual vsol_point_3d_sptr p0() const { return p0_; }
 
   //---------------------------------------------------------------------------
-  //: Last point of the straight line segment
+  //: Last point of the straight line segment; pure virtual of vsol_curve_3d
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_sptr p1(void) const;
+  virtual vsol_point_3d_sptr p1() const { return p1_; }
 
   //***************************************************************************
   // Comparison
@@ -132,19 +134,14 @@ class vsol_line_3d : public vsol_curve_3d
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Return the real type of a line. It is a CURVE
-  //---------------------------------------------------------------------------
-  vsol_spatial_object_3d_type spatial_type(void) const;
-
-  //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box(void) const;
+  virtual void compute_bounding_box() const;
 
   //---------------------------------------------------------------------------
   //: Return the length of `this'
   //---------------------------------------------------------------------------
-  virtual double length(void) const;
+  virtual double length() const;
 
   //***************************************************************************
   // Status setting
@@ -200,7 +197,7 @@ class vsol_line_3d : public vsol_curve_3d
   vcl_string is_a() const { return vcl_string("vsol_line_3d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  bool is_class(vcl_string const& cls) const { return cls==is_a(); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
