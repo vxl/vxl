@@ -11,5 +11,6 @@ namespace std
 #endif
 
 VCL_SWAP_INSTANTIATE(double);
+VCL_UNIQUE_INSTANTIATE(double *);
 VCL_SORT_INSTANTIATE(double*, double);
 VCL_SORT_INSTANTIATE(double**, double*);
