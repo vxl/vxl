@@ -71,7 +71,7 @@ main()
   p.x()= 5.0;   p.y()=-4.0; p.z() = a0 * p.x() + a1* p.y() + a2;
   p += error[5] * norm_vect;
   pts[5] = p;
-
+ 
   p.x()= 3.0;   p.y()=-2.0; p.z() = a0 * p.x() + a1* p.y() + a2;
   p += error[6] * norm_vect;
   pts[6] = p;
@@ -106,6 +106,29 @@ main()
   vbl_test_perform( ok );
 
   //
+  //  Test the fit from minimal set function.
+  //
+  vcl_vector< int > pts_indices(3);
+  pts_indices[0] = 1;
+  pts_indices[1] = 2;
+  pts_indices[2] = 3;
+  vnl_vector<double> params;
+  ok = lr1->fit_from_minimal_set( pts_indices, params );
+  vnl_vector<double> diff1( params - true_params );
+  vnl_vector<double> diff2( params + true_params );
+  double err;
+  if ( diff1.two_norm() < diff2.two_norm() )
+    err = diff1.two_norm();
+  else
+    err = diff2.two_norm();
+  
+  vbl_test_begin( "fit_from_minimal_set" );
+  vbl_test_perform( ok && err <1e-2 ); 
+//    vcl_cout << " estimated params: " << params << vcl_endl
+//             << " true params: " << true_params << vcl_endl
+//             << " error : " << err << vcl_endl;
+ 
+  //
   //  Test the weighted least squares function.
   //
   vcl_vector<double> wgts( num_pts );
@@ -119,23 +142,19 @@ main()
 
   // Ok.  This one should work.
   ok = lr1->weighted_least_squares_fit( par, cofact );
-  // vcl_cout << "true_params = " << true_params
-  //          << "\nest_params = " << par << vcl_endl;
 
-  vnl_vector<double> diff1( par - true_params );
-  vnl_vector<double> diff2( par + true_params );
-  double err;
+  diff1 = par - true_params;
+  diff2 = par + true_params;
   if ( diff1.two_norm() < diff2.two_norm() )
     err = diff1.two_norm();
   else
     err = diff2.two_norm();
-
   
   vbl_test_begin( "weighted_least_squares_fit (ok) ");
   vbl_test_perform( ok && err <1e-2 ); 
-  vcl_cout << " estimated params: " << par << vcl_endl
-           << " true params: " << true_params << vcl_endl
-           << " error : " << err << vcl_endl;
+//    vcl_cout << " estimated params: " << par << vcl_endl
+//             << " true params: " << true_params << vcl_endl
+//             << " error : " << err << vcl_endl;
  
   delete lr1;
   vbl_test_summary();
