@@ -55,7 +55,7 @@ vgl_polygon::vgl_polygon(vcl_pair<double, double> const p[], int n):
   sheets_(1, sheet_t(n))
 {
   for (int i = 0; i < n; ++i)
-    sheets_[0][i].set(p[i].first, p[i].second);
+    sheets_[0][i].set(float(p[i].first), float(p[i].second));
 }
 
 //---------------------------------------------------------------------------
