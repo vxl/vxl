@@ -6,6 +6,7 @@
 // \author fsm
 
 #include <vcl_compiler.h>
+#include <vil1/vil1_memory_image_of.h>
 
 //: Available options for boundary behavior
 // When convolving a finite signal the boundaries may be
@@ -112,7 +113,18 @@ void vil1_convolve_1d_y(vil1_convolve_signal_1d<I1 const> const &kernel,
                         vil1_convolve_boundary_option b,
                         vil1_convolve_boundary_option e);
 
-// *** the following are not yet implemented.
+template <class I1, class I2, class AC, class O>
+void vil1_convolve_separable(I1 const kernel[], unsigned N,
+                             vil1_memory_image_of<I2>& buf,
+                             vil1_memory_image_of<AC>& tmp,
+                             vil1_memory_image_of<O>& out);
+
+template <class I1, class I2, class AC, class O>
+vil1_image vil1_convolve_separable(vil1_image const& in,
+                                   I1 const* kernel,
+                                   int N, I2*, AC*, O*);
+
+// *** the following function is implemented in vil1_convolve_1d_x.txx
 
 //: Convolution in x-direction, using a symmetric kernel.
 template <class I1, class I2, class AC, class O>
@@ -122,6 +134,8 @@ void vil1_convolve_1d_x(I1 const *half_kernel, unsigned kernel_size,
                         vil1_convolve_signal_2d<O> const &output,
                         vil1_convolve_boundary_option b,
                         vil1_convolve_boundary_option e);
+
+// *** the following function is implemented in vil1_convolve_1d_y.txx
 
 //: Convolution in y-direction, using a symmetric kernel.
 template <class I1, class I2, class AC, class O>
