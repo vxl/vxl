@@ -347,6 +347,12 @@ SOURCE=.\Templates/vbl_smart_ptr+rgrl_view-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+rgrl_weighter-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\rgrl_est_homography2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_trans_homography2d.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -616,6 +622,12 @@ SOURCE=.\rgrl_feature_set_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_scale_estimator_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_est_homography2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_trans_homography2d.h
 # End Source File
 # End Group
 # End Target
