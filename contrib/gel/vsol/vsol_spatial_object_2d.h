@@ -35,13 +35,16 @@
 //                                Remove the postfix _2d _3d from the cast_to functions.
 //   2004/09/27 Peter Vanroose added empty_bounding_box(), set_bounding_box(box)
 //                             and add_to_bounding_box(box)
+//   2004/11/15 H.Can Aras added inheritance from vsol_spatial_object, which introduces
+//                         inheritance from vul_timestamp, ref_count and vsol_flags_id
+//                         classes. members related to id, flags and tag are moved to
+//                         newly-created vsol_flags_id class.
 // \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vul/vul_timestamp.h>
-#include <vbl/vbl_ref_count.h>
+#include <vsol/vsol_spatial_object.h>
 #include <vsl/vsl_fwd.h>
 #include <vsol/vsol_spatial_object_2d_sptr.h>
 #include <vsol/vsol_box_2d_sptr.h>
@@ -52,33 +55,11 @@ class vsol_curve_2d;
 class vsol_region_2d;
 class vsol_group_2d;
 
-#ifndef vsol_spatial_object_flags_
-#define vsol_spatial_object_flags_
-
-// system flags
-const unsigned int VSOL_UNIONBIT       = 0x80000000;
-const unsigned int VSOL_SYSTEM_FLAG1   = 0x01000000;
-// user flags
-const unsigned int VSOL_FLAG1          = 0x40000000;
-const unsigned int VSOL_FLAG2          = 0x20000000;
-const unsigned int VSOL_FLAG3          = 0x1000000;
-const unsigned int VSOL_FLAG4          = 0x08000000;
-const unsigned int VSOL_FLAG5          = 0x04000000;
-const unsigned int VSOL_FLAG6          = 0x02000000;
-
-// mask for last three bytes of tag field
-const unsigned int VSOL_DEXID_BITS     = 0x00FFFFFF;
-const unsigned int VSOL_FLAG_BITS      = 0xFF000000;
-
-#endif // vsol_spatial_object_flags_
-
-class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
+class vsol_spatial_object_2d : public vsol_spatial_object
 {
  protected:
   // Data Members--------------------------------------------------------------
-  unsigned int tag_;
-  int id_;
-  static int tagcount_;// global count of all spatial objects.
+  
  private:
   mutable vsol_box_2d_sptr bounding_box_; // rectangular bounding area
 
@@ -120,11 +101,6 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
 
   const char *get_name() const; // derived from spatial_type()
 
-  //: get id of object
-  int get_id() const { return id_; }
-  //: set id of object
-  void set_id(int i) { id_ = i; }
-
   //: unprotect the object
   void un_protect() { this->unref(); }
 
@@ -147,18 +123,6 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
 
   //: Binary load self from stream.
   virtual void b_read(vsl_b_istream &is);
-
-  // Tag Flag and ID methods
-
-  //: set user flag 1-6
-  inline void set_user_flag(unsigned int flag);
-  inline bool get_user_flag(unsigned int flag);
-  inline void unset_user_flag(unsigned int flag);
-  inline void set_tagged_union_flag();
-  inline bool get_tagged_union_flag();
-  inline void unset_tagged_union_flag();
-  inline int get_tag_id();
-  inline void set_tag_id(int id);
 
   virtual void print(vcl_ostream &strm=vcl_cout) const { describe(strm); }
   virtual void describe(vcl_ostream& =vcl_cout, int /*blanking*/=0) const { not_applicable("describe"); }
@@ -225,53 +189,6 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
 };
 
 // inline member functions
-
-inline void vsol_spatial_object_2d::set_tag_id(int id)
-{
-  //     ( set the new id bits)  or (save just the flag bits from the tag_)
-  tag_ = ( (id & VSOL_DEXID_BITS)     |  ( tag_ & VSOL_FLAG_BITS ));
-}
-
-//: set a flag for a spatial object; flag can be VSOL_FLAG[1-6]
-inline void vsol_spatial_object_2d::set_user_flag(unsigned int flag)
-{
-  tag_ =  (tag_ | flag);
-}
-
-//: check if a flag is set for a spatial object; flag can be VSOL_FLAG[1-6]
-inline bool vsol_spatial_object_2d::get_user_flag(unsigned int flag)
-{
-  return (tag_ & flag) != 0;
-}
-
-//: un-set a flag for a spatial object; flag can be VSOL_FLAG[1-6]
-inline void vsol_spatial_object_2d::unset_user_flag(unsigned int flag)
-{
-  tag_ = ( tag_ & (~flag) );
-}
-
-//: set the flag used by TAGGED_UNION.
-inline void vsol_spatial_object_2d::set_tagged_union_flag()
-{
-  set_user_flag(VSOL_UNIONBIT);
-}
-
-//: check if the flag used by TAGGED_UNION is set.
-inline bool vsol_spatial_object_2d::get_tagged_union_flag()
-{
-  return get_user_flag(VSOL_UNIONBIT);
-}
-
-//: un-set the flag used by TAGGED_UNION.
-inline void vsol_spatial_object_2d::unset_tagged_union_flag()
-{
-  unset_user_flag(VSOL_UNIONBIT);
-}
-
-inline int vsol_spatial_object_2d::get_tag_id()
-{
-  return tag_ & VSOL_DEXID_BITS;
-}
 
 inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_2d const& so)
 {

@@ -69,8 +69,8 @@ vsol_point_2d_sptr vsol_digital_curve_2d::p0(void) const
 {
   if ( samples_.empty() )
     return NULL;
-  else
-    return samples_.front();
+
+  return samples_.front();
 }
 
 //---------------------------------------------------------------------------
@@ -80,18 +80,19 @@ vsol_point_2d_sptr vsol_digital_curve_2d::p1(void) const
 {
   if ( samples_.empty() )
     return NULL;
-  else
-    return samples_.back();
+
+  return samples_.back();
 }
 
 //---------------------------------------------------------------------------
 //: Return point `i'
 //  REQUIRE: valid_index(i)
 //---------------------------------------------------------------------------
-vsol_point_2d_sptr vsol_digital_curve_2d::point(unsigned int i) const
+vsol_point_2d_sptr vsol_digital_curve_2d::point(const int i) const
 {
   // require
   assert(valid_index(i));
+
   return samples_[i];
 }
 
@@ -123,7 +124,7 @@ vsol_digital_curve_2d::interp(double index) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Has `this' the same points than `other' and in the same order ?
+//: Has `this' the same points than `other' in the same order ?
 //---------------------------------------------------------------------------
 bool vsol_digital_curve_2d::operator==(const vsol_digital_curve_2d &other) const
 {
@@ -325,14 +326,14 @@ bool split(const vsol_digital_curve_2d_sptr &input,
            vsol_digital_curve_2d_sptr &output1,
            vsol_digital_curve_2d_sptr &output2)
 {
-  const unsigned int n = input->size();
-  if (index <= 0.0 || index+1.0 >= double(n))
+  const int n = input->size();
+  if (index <= 0.0 || index >= double(n-1))
     return false;
 
   vcl_vector<vsol_point_2d_sptr> vec1, vec2;
   vgl_point_2d<double> break_point = input->interp(index);
   vec2.push_back(new vsol_point_2d(break_point));
-  for (unsigned int i=0; i<n; ++i) {
+  for (int i=0; i<n; ++i) {
     if ( double(i) < index )
       vec1.push_back(input->point(i));
     if ( double(i) > index )

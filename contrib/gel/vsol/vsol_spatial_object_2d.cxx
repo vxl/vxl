@@ -8,7 +8,7 @@
 #include <vsl/vsl_binary_loader.h>
 
 const float vsol_spatial_object_2d::eps=1.0e-3f;
-int vsol_spatial_object_2d::tagcount_=0;
+//int vsol_spatial_object_2d::tagcount_=0;
 
 const char * vsol_spatial_object_2d::SpatialTypes[] =
 {
@@ -22,14 +22,18 @@ const char * vsol_spatial_object_2d::SpatialTypes[] =
 };
 
 vsol_spatial_object_2d::vsol_spatial_object_2d()
-  : vul_timestamp(), vbl_ref_count(), tag_(0), id_(0), bounding_box_(0)
+  : bounding_box_(0)
 {
+	this->tag_ = 0;
+	this->id_ = 0;
   set_tag_id(++tagcount_);
 }
 
 vsol_spatial_object_2d::vsol_spatial_object_2d(vsol_spatial_object_2d const& s)
-  : vul_timestamp(), vbl_ref_count(), tag_(0), id_(s.get_id()), bounding_box_(0)
+  : bounding_box_(0)
 {
+	this->tag_ = 0;
+	this->id_ = s.get_id();
   set_tag_id(++tagcount_);
 }
 

@@ -61,8 +61,7 @@ void test_vsol_rectangle_2d()
   double half_width = 0.5, half_height = 0.5, angle = 45.0;
   vsol_rectangle_2d_sptr t2=
     new vsol_rectangle_2d(center, half_width, half_height, angle, true);
-  // using vnl_math::sqrt1_2 here causes a link error on Solaris gcc 3.0.4 with static libraries.
-  double m = vcl_sqrt(0.5);
+  double m = vnl_math::sqrt1_2;
   vsol_point_2d_sptr q0 = new vsol_point_2d(0.5,0.5-m);
   vsol_point_2d_sptr q1 =new vsol_point_2d(0.5+m,0.5);
   vsol_point_2d_sptr q2 =new vsol_point_2d(0.5,0.5+m);

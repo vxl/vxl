@@ -10,7 +10,6 @@ DECLARE(test_vsol_point_3d);
 DECLARE(test_vsol_polygon_2d);
 DECLARE(test_vsol_polygon_3d);
 DECLARE(test_vsol_digital_curve_2d);
-DECLARE(test_vsol_digital_curve_3d);
 DECLARE(test_vsol_rectangle_2d);
 DECLARE(test_vsol_rectangle_3d);
 DECLARE(test_vsol_tetrahedron);
@@ -31,7 +30,6 @@ register_tests()
   REGISTER(test_vsol_polygon_2d);
   REGISTER(test_vsol_polygon_3d);
   REGISTER(test_vsol_digital_curve_2d);
-  REGISTER(test_vsol_digital_curve_3d);
   REGISTER(test_vsol_rectangle_2d);
   REGISTER(test_vsol_rectangle_3d);
   REGISTER(test_vsol_tetrahedron);

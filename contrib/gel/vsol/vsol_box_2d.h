@@ -14,8 +14,10 @@
 //   2004/05/10 Joseph Mundy   added binary I/O methods
 //   2004/05/10 Joseph Mundy   changed bounds access methods to const
 //   2004/09/27 Peter Vanroose grow_minmax_bounds() now takes smart pointer arg
+//   2004/11/15 H.Can Aras     added inheritance from vsol_box
 // \endverbatim
 
+#include <vsol/vsol_box.h>
 #include <vsl/vsl_binary_io.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
@@ -24,7 +26,7 @@
 
 //: A bounding box for 2d spatial objects
 
-class vsol_box_2d : public vbl_ref_count, public vul_timestamp
+class vsol_box_2d : public vsol_box, public vbl_ref_count, public vul_timestamp
 {
  protected:
   vbl_bounding_box<double,2> box_;

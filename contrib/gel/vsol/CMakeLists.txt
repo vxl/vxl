@@ -1,6 +1,12 @@
 # gel/vsol/CMakeLists.txt
 
 SET(vsol_sources
+ # adding generic vsol_spatial_object class
+ vsol_spatial_object.cxx vsol_spatial_object.h vsol_spatial_object_sptr.h
+ vsol_flags_id.cxx vsol_flags_id.h vsol_flags_id_sptr.h
+ #adding generic vsol_box class
+ vsol_box.cxx vsol_box.h vsol_box_sptr.h
+
  # embedding dimension 2
  vsol_spatial_object_2d.cxx vsol_spatial_object_2d.h vsol_spatial_object_2d_sptr.h
  vsol_box_2d.cxx            vsol_box_2d.h            vsol_box_2d_sptr.h
@@ -30,6 +36,7 @@ SET(vsol_sources
  vsol_line_3d.cxx           vsol_line_3d.h           vsol_line_3d_sptr.h
  vsol_polyline_3d.cxx       vsol_polyline_3d.h       vsol_polyline_3d_sptr.h
  vsol_digital_curve_3d.cxx  vsol_digital_curve_3d.h  vsol_digital_curve_3d_sptr.h
+
  # 2-D
                             vsol_surface_3d.h        vsol_surface_3d_sptr.h
                             vsol_region_3d.h         vsol_region_3d_sptr.h

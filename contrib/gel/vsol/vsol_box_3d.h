@@ -31,8 +31,10 @@
 //                             more safe add_point()
 //   2004/09/25 Peter Vanroose added binary I/O
 //   2004/09/27 Peter Vanroose grow_minmax_bounds() now takes smart pointer arg
+//   2004/11/15 H.Can Aras     added inheritance from vsol_box
 // \endverbatim
 
+#include <vsol/vsol_box.h>
 #include <vsl/vsl_binary_io.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
@@ -41,7 +43,7 @@
 
 //: A bounding box for 3d spatial objects
 
-class vsol_box_3d : public vbl_ref_count , public vul_timestamp
+class vsol_box_3d : public vsol_box, public vbl_ref_count , public vul_timestamp
 {
  protected:
   vbl_bounding_box<double,3> box_;

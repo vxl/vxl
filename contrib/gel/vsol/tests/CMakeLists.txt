@@ -12,7 +12,6 @@ ADD_EXECUTABLE( vsol_test_all
   test_vsol_rectangle_2d.cxx
   test_vsol_polygon_2d.cxx
   test_vsol_digital_curve_2d.cxx
-  test_vsol_digital_curve_3d.cxx
   test_vsol_point_3d.cxx
   test_vsol_group_3d.cxx
   test_vsol_line_3d.cxx
@@ -31,7 +30,6 @@ ADD_TEST(vsol_test_triangle_2d        vsol_test_all test_vsol_triangle_2d)
 ADD_TEST(vsol_test_rectangle_2d       vsol_test_all test_vsol_rectangle_2d)
 ADD_TEST(vsol_test_polygon_2d         vsol_test_all test_vsol_polygon_2d)
 ADD_TEST(vsol_test_digital_curve_2d   vsol_test_all test_vsol_digital_curve_2d)
-ADD_TEST(vsol_test_digital_curve_3d   vsol_test_all test_vsol_digital_curve_3d)
 ADD_TEST(vsol_test_point_3d           vsol_test_all test_vsol_point_3d)
 ADD_TEST(vsol_test_group_3d           vsol_test_all test_vsol_group_3d)
 ADD_TEST(vsol_test_line_3d            vsol_test_all test_vsol_line_3d)
