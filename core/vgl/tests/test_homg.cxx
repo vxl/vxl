@@ -17,6 +17,9 @@
 #include <vgl/algo/vgl_homg_operators_1d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_vector.h>
+#include <vnl/vnl_float_2x2.h>
+#include <vnl/vnl_double_3x3.h>
 
 static void test_homg_point_1d()
 {
@@ -34,6 +37,11 @@ static void test_homg_point_1d()
 
   TEST("+=", (p2+=d1), p1);
   TEST("+=", p2, p1);
+
+  float dd[] = { 1,5, -3,7};
+  vnl_float_2x2 mm(dd);
+  p2 = mm * p1; // homography
+  TEST("matrix * point", p2, vgl_homg_point_1d<float>(7));
 
   p2.set(4,1);
   p3.set(-13,-2);
@@ -104,6 +112,19 @@ static void test_homg_point_2d()
   p3.set(-6,-14,-2);
   TEST("equality", (p1 == p3), true);
 
+  vgl_homg_point_2d<double> u(0,-3,4);
+  vgl_homg_operators_2d<double>::unitize(u);
+  TEST("unitize: x", u.x(), 0);
+  TEST_NEAR("unitize: y", u.y(), -0.6, 1e-12);
+  TEST_NEAR("unitize: w", u.w(), 0.8, 1e-12);
+
+  vnl_vector<double> v = vgl_homg_operators_2d<double>::get_vector(u);
+  TEST_NEAR("get_vector", v.two_norm(), 1.0, 1e-12);
+  double dd[] = { 1,0,0, 0,2,0, 1,1,3};
+  vnl_double_3x3 mm(dd);
+  vgl_homg_point_2d<double> pt = mm*vgl_homg_point_2d<double>(3,7,1); // homography
+  TEST("matrix*point", pt, vgl_homg_point_2d<double>(3,14,13));
+
   vgl_vector_2d<int> d1 = p1 - p2;
   TEST("sum; difference", (p2+d1), p1);
 
@@ -136,6 +157,8 @@ static void test_homg_point_2d()
 
   vgl_homg_point_2d<double> q1(3,7,1), q2(5,6,1), q3(7,5,1), q4(-1,9,1);
 
+  TEST("midpoint", vgl_homg_operators_2d<double>::midpoint(q1,q3), q2);
+
   r = vgl_homg_operators_2d<double>::distance_squared(q1,q2);
   TEST("vgl_homg_operators_2d<double>::distance_squared", r, 5);
 
@@ -148,16 +171,25 @@ static void test_homg_point_2d()
   q4 = vgl_homg_operators_2d<double>::conjugate(q1,q2,q3,3);
   TEST("vgl_homg_operators_2d<double>::conjugate", q4, vgl_homg_point_2d<double>(-1,9,1));
 
+  {
+    vgl_homg_line_2d<double> l = vgl_homg_operators_2d<double>::join_oriented(q1,q2);
+    TEST("vgl_homg_operators_2d<double>::join_oriented", l, vgl_homg_line_2d<double>(1,2,-17));
+  }
+
   vgl_homg_line_2d<double> l1(0,0,1), l2(0,1,0), l3(1,1,1); // l1 = line at inf
   {
    vgl_homg_point_2d<double> pi(l1,l2); // intersection
    TEST("intersection", pi, vgl_homg_point_2d<double>(1,0,0));
    TEST("ideal", pi.ideal(), true);
+   vgl_homg_point_2d<double> pj = vgl_homg_operators_2d<double>::intersection(l1,l2);
+   TEST("intersection", pj, pi);
   }
   {
    vgl_homg_point_2d<double> pi(l2,l3); // intersection
    TEST("intersection", pi, vgl_homg_point_2d<double>(-1,0,1));
    TEST("is_ideal", is_ideal(pi), false);
+   vgl_homg_point_2d<double> pj = vgl_homg_operators_2d<double>::intersection(l2,l3);
+   TEST("intersection", pj, pi);
   }
 
   l1 = vgl_homg_operators_2d<double>::perp_line_through_point(l3,q1);
@@ -167,8 +199,8 @@ static void test_homg_point_2d()
   vcl_cout << "l3 = " << l3 << ", q1 = " << q1 << ", q4 = " << q4 << '\n';
   TEST("vgl_homg_operators_2d<double>::perp_projection", q4, vgl_homg_point_2d<double>(-5,3,2));
 
-  r = vgl_homg_operators_2d<double>::perp_distance_squared(l3,q1);
-  TEST_NEAR("vgl_homg_operators_2d<double>::perp_distance_squared", r, 60.5, 1e-12);
+  r = vgl_homg_operators_2d<double>::perp_dist_squared(l3,q1);
+  TEST_NEAR("vgl_homg_operators_2d<double>::perp_dist_squared", r, 60.5, 1e-12);
 
   r = vgl_homg_operators_2d<double>::perp_dist_squared(q1,l3);
   TEST_NEAR("vgl_homg_operators_2d<double>::perp_dist_squared", r, 60.5, 1e-12);
@@ -252,6 +284,13 @@ static void test_homg_line_2d()
   l3.set(3,7,0);
   TEST("equality", (l1 == l3), true);
 
+  vnl_vector<double> v = vgl_homg_operators_2d<double>::get_vector(l2);
+  TEST("get_vector", v, vnl_vector<double>(d,3));
+  double dd[] = { 1,0,0, 0,2,0, 1,1,3};
+  vnl_double_3x3 mm(dd);
+  vgl_homg_line_2d<double> l = mm*vgl_homg_line_2d<double>(3,7,1); // homography
+  TEST("matrix*line", l, vgl_homg_line_2d<double>(3,14,13));
+
   vgl_homg_point_2d<double> p, q;
   l2.get_two_points(p,q);
   TEST("get_two_points()", p, vgl_homg_point_2d<double>(0,1,5));
@@ -261,6 +300,15 @@ static void test_homg_line_2d()
   l3.set(7,-1,0);
   bool b = concurrent(l1,l2,l3); // because they share the point (0,0)
   TEST("concurrent", b, true);
+
+  vcl_list<vgl_homg_line_2d<double> > lst;
+  lst.push_back(l1); lst.push_back(l2); lst.push_back(l3);
+  p = vgl_homg_operators_2d<double>::lines_to_point(lst);
+  TEST("lines_to_point", p, vgl_homg_point_2d<double>(0,0,1));
+  v = vgl_homg_operators_2d<double>::most_orthogonal_vector(lst);
+  TEST("most_orthogonal_vector", v[0]==0&&v[1]==0&&v[2]==1, true);
+  v = vgl_homg_operators_2d<double>::most_orthogonal_vector_svd(lst);
+  TEST("most_orthogonal_vector_svd", v[0]==0&&v[1]==0&&v[2]==1, true);
 
   vgl_homg_point_2d<double> p1(1,0), p2(0,1);
   vgl_homg_line_2d<double> li(p1,p2); // line through these two points
