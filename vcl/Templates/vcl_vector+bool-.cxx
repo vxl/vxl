@@ -9,6 +9,7 @@ namespace {
   }
 }
 # ifdef VCL_GCC_295
+#include <bvector.h>
 template void fill<_Bit_iterator, bool>(_Bit_iterator, _Bit_iterator, bool const &);
 template _Bit_iterator fill_n<_Bit_iterator, unsigned int, bool>(_Bit_iterator, unsigned int, bool const &);
 # endif
