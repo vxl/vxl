@@ -419,7 +419,7 @@ void vul_psfile::print_color_image(unsigned char* data, int sizex, int sizey)
 }
 
 //-----------------------------------------------------------------------------
-//: Set graphic coordiate (translate and rotate to local coordinate).
+//: Set graphic coordinate (translate and rotate to local coordinate).
 //-----------------------------------------------------------------------------
 void vul_psfile::graphic_header()
 {

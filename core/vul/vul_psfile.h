@@ -18,7 +18,7 @@
 //: Write a PostScript file
 class vul_psfile: public vcl_ofstream
 {
-public:
+ public:
   enum paper_type {
     US_NORMAL,
     A4,
@@ -66,7 +66,7 @@ public:
   //: Add a circle with the given centre point and radius to the Postscript file.
   void circle(float x, float y, float radius);
 
-protected:
+ protected:
   void set_min_max_xy(float x, float y);
   void set_min_max_xy(int x, int y);
   bool set_parameters(int sizex, int sizey);
@@ -74,14 +74,14 @@ protected:
   //: PostScript file header.  Automatically called by the constructor.
   void postscript_header();
 
-  //: Set graphic coordiate (translate and rotate to local coordinate).
+  //: Set graphic coordinate (translate and rotate to local coordinate).
   void graphic_header();
   //: Utility program used in point(), line(), ellipse() and circle()
   void sobj_rgb_params(char const* str, bool filled);
   //: the defined procedure for PostScript script use.
   void print_graphics_prolog();
 
-private:
+ private:
   void compute_bounding_box();
   void reset_bounding_box();
   void reset_postscript_header();
@@ -110,7 +110,7 @@ private:
   int max_x, max_y;
   int box_width, box_height;
 
-private: /*even more*/
+ private: /*even more*/
 
   vcl_streampos translate_pos;
   vcl_streampos sobj_t_pos;
