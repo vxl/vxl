@@ -103,7 +103,11 @@ for (int i=0;i<nplanes;++i)
 * Note that if the resize does not change the image size, then nothing is done and the view
 * remains unchanged.
 *
-* Notice that one can obtain a transposed view of an image simply by swapping nx-ny and
+* \subsection view_manipulation Manipulating Views
+* There are a variety of ways one can view the same data, allowing one to appear to
+* change the data simply by changing ones view of it.
+*
+* For instance one can obtain a transposed view of an image simply by swapping nx-ny and
 * xstep-ystep.  This is particularly useful when implementing decomposable filters, as
 * one need only write it for one direction, then can apply it to the original image and
 * its transpose.
@@ -120,6 +124,21 @@ vil2_image_view<vil2_byte> filtered_image = vil2_transpose(tmp_image2);
 // and disconnected from filtered_image itself, which would remain unchanged.
 \endverbatim
 *
+* View manipulations include:
+* - vil2_transpose : Return transposed view
+* - vil2_reflect_x : View which reflects along x (ie x -> (nx-1)-x) (left/right)
+* - vil2_reflect_y : View which reflects along y (ie y -> (ny-1)-y) (up/down)
+* - vil2_view_as_planes : View rgb<T> data as planes of T
+* - vil2_view_as_rgb : View plane data as rgb<T> pixels
+*
+* \subsection view_ops Operations on Views
+* Useful simple operations on views include
+* - vil2_print_all(os,view) : Prints out view in a grid
+* - vil2_fill(view,value)   : Fills view with value
+* - vil2_fill_row(view,y,value) : Fills row y with value
+* - vil2_fill_col(view,x,value) : Fills col x with value
+* - vil2_value_range(minv,maxv,view) : Gets range of values in view
+*
 * \section image_src Image sources
 * The vil2_image_data class is an abstract base class for image data, views of which can be
 * obtained (or changed) with the get_view()/set_view() functions.
@@ -129,6 +148,11 @@ vil2_image_view<vil2_byte> filtered_image = vil2_transpose(tmp_image2);
 *
 * Most instances of vil2_image_data objecst will be through smart pointers. So expect to see
 * lots of references to vil2_image_data_sptr types.
+*
+* \section algo Algorithms and Image Process
+* Some simple algorithms for manipulation images are included in the algo sub-directory.
+* Examples include
+* - vil2_algo_sobel_3x3 - to generate X/Y gradient images using 3x3 Sobel operators
 *
 * \section reg_im Registered images
 * These meet two needs, a common base class for 2D and 3D images, and a means of
