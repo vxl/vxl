@@ -19,9 +19,6 @@
 #include <vgui/vgui_section_buffer.h>
 #include <vgui/vgui_projection_inspector.h>
 
-// Only check-in false:
-static bool debug = false;
-
 //-----------------------------------------------------------------------------
 //: Constructor - create an empty image renderer.
 vgui_image_renderer::vgui_image_renderer()
