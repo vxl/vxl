@@ -28,9 +28,9 @@ inline void vil_next_4con_boundary_point(int& i,int& j,int& dir, const bool* &p,
   }
 }
 
-inline int vil_first_direction(int i, int j, const vil_image_view<bool>& image)
+static inline int vil_first_direction(unsigned int i, unsigned int j, const vil_image_view<bool>& image)
 {
-  if (!image(i,j)) return -1;
+  if (i>=image.ni() || j>=image.nj() || !image(i,j)) return -1;
 
   // Find first neighbour outside
   if (i+1>=image.ni() || !image(i+1,j)) return 0;
@@ -51,8 +51,8 @@ void vil_trace_4con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj,
                              int i0, int j0)
 {
   bi.resize(0); bj.resize(0);
-  int ni1 = image.ni()-1;
-  int nj1 = image.nj()-1;
+  unsigned int ni1 = image.ni()-1;
+  unsigned int nj1 = image.nj()-1;
   vcl_ptrdiff_t istep = image.istep(), jstep=image.jstep();
 
   int i = i0, j = j0;

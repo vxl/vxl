@@ -8,7 +8,7 @@
 
 //: Default constructor
 vil_blob_finder::vil_blob_finder()
-  : i_(-1),j_(-1) {}
+  : i_((unsigned int)(-1)),j_((unsigned int)(-1)) {} // certainly outside image
 
 //: Construct to work on image (takes deep copy)
 vil_blob_finder::vil_blob_finder(const vil_image_view<bool>& image)
@@ -43,12 +43,12 @@ void delete_blob(vil_image_view<bool>& image,
     int j = bj[k];
 
     // Delete all neighbours to the right
-    int i = bi[k];
-    while (i<ni && image(i,j)) { image(i,j)=false; ++i; }
+    unsigned int i = bi[k];
+    while (i<ni && image(i,j)) image(i++,j)=false;
 
     // Delete all neighbours to the left
-    i=bi[k]-1;
-    while (i>=0 && image(i,j)) { image(i,j)=false; --i; }
+    i=bi[k];
+    while (i>0 && image(i-1,j)) image(--i,j)=false;
   }
 }
 

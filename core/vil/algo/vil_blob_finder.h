@@ -37,7 +37,7 @@ class vil_blob_finder
   vil_image_view<bool> image_;
 
   //: Current point of interest
-  int i_,j_;
+  unsigned int i_,j_;
 
  public:
   //: Default constructor
