@@ -196,6 +196,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   int window_;//frame trail time window
   bool color_label_;//display with a different color for different labels
   float time_interval_;
+  int display_frame_repeat_;//insert duplicate frames to slow playback
   unsigned width_;
   unsigned height_;
   vidl_vil1_movie_sptr my_movie_;

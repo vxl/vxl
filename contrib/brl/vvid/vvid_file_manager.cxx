@@ -21,6 +21,7 @@
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_dialog.h>
+#include <vgui/vgui_utils.h>
 #include <bgui/bgui_vtol2D_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -102,6 +103,7 @@ void vvid_file_manager::init()
   long_tip_ =0;
   short_tip_=0;
   art_model_=0;
+  display_frame_repeat_=1;
 }
 
 //-----------------------------------------------------------
@@ -128,6 +130,7 @@ vvid_file_manager::vvid_file_manager(): vgui_wrapper_tableau()
   time_interval_ = 10.0;
   video_process_ = 0;
   art_model_ = 0;
+  display_frame_repeat_=1;
 }
 
 vvid_file_manager::~vvid_file_manager()
@@ -405,8 +408,10 @@ void vvid_file_manager::un_cached_play()
     this->save_display(frame_index);
   }
 
-  if (video_process_)
-    video_process_->finish();
+  if(video_process_)
+	  video_process_->finish();
+  if(save_display_)
+    this->end_save_display();
   save_display_ = false;
 }
 
@@ -786,27 +791,18 @@ void vvid_file_manager::save_display(int frame)
 {
   if (!save_display_)
     return;
-  if (!overlay_pane_)
-  {
-    vil1_image image = itab1_->get_image();
-    display_output_frames_.push_back(image);
-    return;
-  }
-  vcl_string temp = display_output_file_;
-  vcl_string ps = temp + ".temp.ps ";
-  vcl_string tif = temp + ".temp.tif ";
-  easy0_->print_psfile(ps, 1, true);
-  vcl_string command = "mconvert ";
-  command += ps;
-  command += tif;
-  vcl_system(command.c_str());
-  vil1_image image = vil1_load(tif.c_str());
-  //load into memory
-  vil1_memory_image_of<vil1_rgb<unsigned char> > tif_image(image);
-  itab1_->set_image(tif_image);
-  display_output_frames_.push_back(tif_image);
-  vcl_system("rm *.temp.ps");
-  vcl_system("rm *.temp.tif");
+  if(!overlay_pane_)
+    {
+      vil1_image image = itab1_->get_image();
+      if(!image)
+        return;
+      display_output_frames_.push_back(image);
+      return;
+    }
+  vil1_memory_image_of<vil1_rgb<unsigned char> > temp =  
+  vgui_utils::colour_buffer_to_image();
+  for(int i = 0; i<display_frame_repeat_; i++)
+    display_output_frames_.push_back(temp);
 }
 
 void vvid_file_manager::display_poly_track()
@@ -875,6 +871,7 @@ void vvid_file_manager::start_save_display()
   vgui_dialog output_dialog("Display Movie Output");
   static vcl_string ext = "avi";
   output_dialog.file("Movie File:", ext, display_output_file_);
+  output_dialog.field("# Frame Repeats ", display_frame_repeat_);
   output_dialog.checkbox("Save Overlay Pane (left) (or Image Pane (right))", overlay_pane_);
   if (!output_dialog.ask())
     return;
@@ -889,6 +886,7 @@ void vvid_file_manager::end_save_display()
   vidl_vil1_movie_sptr mov= new vidl_vil1_movie();
   mov->add_clip(clip);
   vidl_vil1_io::save(mov.ptr(), display_output_file_.c_str(), "AVI");
+  display_output_frames_.clear();
 }
 
 void vvid_file_manager::create_stem()
