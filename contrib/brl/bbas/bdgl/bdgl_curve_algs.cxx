@@ -7,6 +7,7 @@
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
+#include <vnl/vnl_math.h> // for pi
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -26,14 +27,15 @@ const double bdgl_curve_algs::synthetic = 0;//Indicates synthetic edgel
 bdgl_curve_algs::~bdgl_curve_algs()
 {
 }
+
 //:
 //--------------------------------------------------------------------------
-// Finds the index (on the interval [0.0 1.0]) on a digital curve closest 
-// to the given point (x, y). 
+// Finds the index (on the interval [0.0 1.0]) on a digital curve closest
+// to the given point (x, y).
 //--------------------------------------------------------------------------
 
 double bdgl_curve_algs::closest_point(vdgl_digital_curve_sptr const& dc,
-                                   const double x, const double y)
+                                      const double x, const double y)
 {
   if (!dc)
   {
@@ -47,7 +49,6 @@ double bdgl_curve_algs::closest_point(vdgl_digital_curve_sptr const& dc,
   double parm = index/ec->size();
   return parm;
 }
-
 
 //:
 //-----------------------------------------------------------------------------
@@ -105,8 +106,8 @@ bool bdgl_curve_algs::closest_point(vdgl_digital_curve_sptr const& dc,
   return true;
 }
 
-//:Interpolates between p0 and p1 finding the closest point to p.
-// Returns the parameter t on [0, 1] -> [p0, p1].
+//: Interpolates between p0 and p1 finding the closest point to p.
+//  Returns the parameter t on [0, 1] -> [p0, p1].
 static double interpolate_segment(vnl_double_2& p0,
                                   vnl_double_2& p1,
                                    vnl_double_2& p,
@@ -205,7 +206,7 @@ static bool intersect_crossing(vnl_double_3& line_coefs,
 
 //-------------------------------------------------------------
 //: intersect an infinite line with the digital curve.
-//  If there is no intersection return false. Note that the line 
+//  If there is no intersection return false. Note that the line
 //  can intersect multiple times. All the intersections are returned.
 bool bdgl_curve_algs::intersect_line(vdgl_digital_curve_sptr const& dc,
                                      vgl_line_2d<double>& line,
@@ -249,20 +250,22 @@ bool bdgl_curve_algs::intersect_line(vdgl_digital_curve_sptr const& dc,
   }
   return intersection;
 }
+
 //------------------------------------------------------------------
-//:Given a line segment and a point interior to the line segment
+//:
+// Given a line segment and a point interior to the line segment
 // find the intermediate line parameter value for the point. t0 and t1
 // are the line parameter values for p0 and p1 respectively.
-static double interpolate_parameter(const double t0, const double t1, 
+static double interpolate_parameter(const double t0, const double t1,
                                     vnl_double_3& p0,
                                     vnl_double_3& p1,
                                     vnl_double_3& pt)
 {
-  if(vcl_fabs(p0[2])<bdgl_curve_algs::tol)
+  if (vcl_fabs(p0[2])<bdgl_curve_algs::tol)
     return t0;
-  if(vcl_fabs(p1[2])<bdgl_curve_algs::tol)
+  if (vcl_fabs(p1[2])<bdgl_curve_algs::tol)
     return t0;
-  if(vcl_fabs(pt[2])<bdgl_curve_algs::tol)
+  if (vcl_fabs(pt[2])<bdgl_curve_algs::tol)
     return t0;
   double x0 = p0[0]/p0[2], y0 = p0[1]/p0[2];
   double x1 = p1[0]/p1[2], y1 = p1[1]/p1[2];
@@ -273,9 +276,10 @@ static double interpolate_parameter(const double t0, const double t1,
   double dt = t1-t0;
   return t0 + r*dt;
 }
+
 //-------------------------------------------------------------
 //: intersect an infinite line with the digital curve.
-//  If there is no intersection return false. Note that the line 
+//  If there is no intersection return false. Note that the line
 //  can intersect multiple times. The curve parameter indices at
 //  the intersection points are returned
 bool bdgl_curve_algs::intersect_line(vdgl_digital_curve_sptr const& dc,
@@ -321,10 +325,9 @@ bool bdgl_curve_algs::intersect_line(vdgl_digital_curve_sptr const& dc,
   return intersection;
 }
 
-  
-//:Intersect a curve and find the closest point to ref_point with
-// a compatible gradient angle
-bool 
+
+//:Intersect a curve and find the closest point to \a ref_point with a compatible gradient angle
+bool
 bdgl_curve_algs::match_intersection(vdgl_digital_curve_sptr const& dc,
                                     vgl_line_2d<double>& line,
                                     vgl_point_2d<double> const& ref_point,
@@ -332,56 +335,64 @@ bdgl_curve_algs::match_intersection(vdgl_digital_curve_sptr const& dc,
                                     vgl_point_2d<double>& point)
 {
   double angle_thresh = 7.0;
-  if(!dc)
+  if (!dc)
     return false;
-  double la = line.slope_degrees(); 
-  if(la<0)
+  double la = line.slope_degrees();
+  if (la<0)
     la+=180;
-  //  vcl_cout << "line_tang:(" << la << "\n";
+#ifdef DEBUG
+  vcl_cout << "line_tang:(" << la << '\n';
+#endif
   double angle_tol = 12.5;
-  //  double dist_thresh = 5.0;
-  double dist_thresh = 0;
+  double dist_thresh = 0; // was: 5.0
   vcl_vector<double> indices;
-  if(!bdgl_curve_algs::intersect_line(dc, line, indices))
+  if (!bdgl_curve_algs::intersect_line(dc, line, indices))
     return false;
   vgl_homg_point_2d<double> rph(ref_point.x(), ref_point.y());
   double dist = 1e10, best_ind = 0, best_delt=0;
   bool found_valid_intersection = false;
-  for(vcl_vector<double>::iterator iit = indices.begin();
-      iit != indices.end(); iit++)
+  for (vcl_vector<double>::iterator iit = indices.begin();
+       iit != indices.end(); iit++)
     {
       double grad_angle = dc->get_theta(*iit);
-      if(vcl_fabs(ref_gradient_angle-grad_angle)>angle_tol)
+      if (vcl_fabs(ref_gradient_angle-grad_angle)>angle_tol)
         continue;
       double ca = dc->get_tangent_angle(*iit);
-      if(ca<0)
+      if (ca<0)
         ca+=180;
-      //JLM Debug
-      //      vcl_cout << "grad[" << *iit << "](ra, a):(" << ref_gradient_angle 
-      //               << " " << grad_angle << ")\n";
-      double delt = vcl_fabs(180*vcl_sin(vcl_fabs(3.14159*(ca-la)/180.0))/3.14159);
-      //      vcl_cout << "cang("<< delt <<") " << ca << "\n";
-      if(delt<angle_thresh)
+#ifdef DEBUG //JLM
+      vcl_cout << "grad[" << *iit << "](ra, a): (" << ref_gradient_angle
+               << ' ' << grad_angle << ")\n";
+#endif
+      double delt = vcl_fabs(180*vcl_sin(vcl_fabs(vnl_math::pi*(ca-la)/180.0))/vnl_math::pi);
+#ifdef DEBUG //JLM
+      vcl_cout << "cang("<< delt <<") " << ca << '\n';
+#endif
+      if (delt<angle_thresh)
         continue;
       //remove stationary curve points
       vgl_homg_point_2d<double> ph(dc->get_x(*iit), dc->get_y(*iit));
       double d = vgl_homg_operators_2d<double>::distance_squared(rph, ph);
       d = vcl_sqrt(d);
-      //      vcl_cout << "dist = " << d << vcl_endl;
-      if(d<dist_thresh)
+#ifdef DEBUG //JLM
+      vcl_cout << "dist = " << d << vcl_endl;
+#endif
+      if (d<dist_thresh)
         continue;
       //end JLM
       found_valid_intersection = true;
-      if(d<dist)
-        {
-          best_delt = delt;
-          best_ind = *iit;
-          dist = d;
-          point = vgl_point_2d<double>(dc->get_x(*iit), dc->get_y(*iit));
-        }
+      if (d<dist)
+      {
+        best_delt = delt;
+        best_ind = *iit;
+        dist = d;
+        point = vgl_point_2d<double>(dc->get_x(*iit), dc->get_y(*iit));
+      }
     }
-//   if(best_ind)
-//     vcl_cout << "Epipole Tangent Error " << best_delt << "\n";
+#ifdef DEBUG
+  if (best_ind)
+    vcl_cout << "Epipole Tangent Error " << best_delt << '\n';
+#endif
   return found_valid_intersection;
 }
 
