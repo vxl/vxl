@@ -1,8 +1,23 @@
+#ifdef GNU_LIBSTDCXX_V3
+// FIXME
+# include <vnl/vnl_vector.h>
+# include <vnl/vnl_diag_matrix.h>
+# define hack_(T, L) \
+struct foo##L : vnl_vector<T > { foo##L() { } }; \
+struct boo##L : vnl_diag_matrix<T > { boo##L() { } };
+# define hack(T, L) hack_(T, L)
+hack(float, __LINE__)
+hack(double, __LINE__)
+hack(vcl_complex<float>, __LINE__)
+hack(vcl_complex<double>, __LINE__)
+#endif
+
 #include "vnl_svd.h"
 
 #include <vcl/vcl_fstream.h>
 #include <vcl/vcl_cstdlib.h> // abort()
 
+#include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/algo/vnl_netlib.h>
@@ -11,10 +26,10 @@
 #define macro(p, T) \
 static inline int vnl_linpack_svd(vnl_netlib_svd_proto(T)) \
 { return p##svdc_(vnl_netlib_svd_params); }
-macro(s, vnl_netlib::real);
-macro(d, vnl_netlib::doublereal);
-macro(c, vnl_netlib::complex);
-macro(z, vnl_netlib::doublecomplex);
+macro(s, vnl_netlib::real_t);
+macro(d, vnl_netlib::doublereal_t);
+macro(c, vnl_netlib::complex_t);
+macro(z, vnl_netlib::doublecomplex_t);
 #undef macro
 
 //--------------------------------------------------------------------------------
@@ -243,14 +258,19 @@ vnl_svd<T>::singval_t vnl_svd<T>::well_condition () const
 
 // -- Calculate determinant as product of diagonals in W.
 template <class T>
-void vnl_svd<T>::determinant_magnitude_aux () const
+vnl_svd<T>::singval_t vnl_svd<T>::determinant_magnitude() const
 {
   singval_t product = W_(0, 0);
   for (unsigned long k = 1; k < W_.columns(); k++)
     product *= W_(k, k);
 
-  ((vnl_svd<T>*)this)->temp_value_for_gcc_hack=product; 
-  //return vnl_math_abs(product);
+  return product;
+}
+
+template <class T>
+vnl_svd<T>::singval_t vnl_svd<T>::norm() const
+{
+  return vnl_math_abs(sigma_max());
 }
 
 // -- Recompose SVD to U*W*V'
