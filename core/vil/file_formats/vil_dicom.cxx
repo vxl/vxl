@@ -122,6 +122,9 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   DcmDataset& dset = *ffmt.getDataset();
 
   read_header( &dset, header_ );
+  
+  //correct known manufacturers' drop-offs in header data!
+  correct_manufacturer_discrepancies(); 
 
   // I don't know (yet) how to deal with look up tables. (Without the
   // tables, the pixel values represent actual measurements.)
@@ -228,7 +231,7 @@ bool vil_dicom_image::get_property(char const* tag, void* value) const
   {
     float *pixel_size = static_cast<float*>(value);
     pixel_size[0] = header_.spacing_x_ / 1000.0f;
-    pixel_size[0] = header_.spacing_y_ / 1000.0f;
+    pixel_size[1] = header_.spacing_y_ / 1000.0f;
     return true;
   }
 
@@ -304,6 +307,97 @@ bool vil_dicom_image::put_view(const vil_image_view_base& view,
     return false;
   }
   return false;
+}
+
+// ===========================================================================
+//MANUFACTURER SPECIFIC TWEAKS
+//--- Add any further manufacturer specific tweaks in this section,
+// but if it all gets out of hand, then we will need some derived classes which should attempt to read first
+// ===========================================================================
+
+//:correct known manufacturers drop-offs in header data!
+//For example Hologic encode pixel-size in the imageComment!
+//NB if this section starts bloating, use derived classes which override correct_manufacturer_discrepancies
+void vil_dicom_image::correct_manufacturer_discrepancies()
+{
+    if( ( (header_.manufacturer_ == "HOLOGIC") || (header_.manufacturer_ == "Hologic") ) &&
+          (header_.model_name_.find("QDR") != header_.model_name_.npos ) )
+    {
+        //Hologic QDR Bone Densitometry source - set (default) pixel spacing from private format image comments
+      float xPixelSize=1.0;
+      float yPixelSize=1.0;
+      if(interpret_hologic_header(xPixelSize,yPixelSize))
+      {
+        header_.spacing_x_ = xPixelSize;
+           header_.spacing_y_ = yPixelSize;
+       }
+    }
+}
+
+//:try and interpret the Hologic comments section to extract pixel size
+bool vil_dicom_image::interpret_hologic_header(float& xpixSize, float& ypixSize)
+{
+  //The magic internal Hologic tags used within their vast "Image Comments"
+  //which is used as a cop-out from sensible DICOM conformance
+  static const vcl_string HOLOGIC_PixelXSizeMM = "<PixelXSizeMM>";
+  static const vcl_string HOLOGIC_PixelXSizeMM_END = "</PixelXSizeMM>";
+  static const vcl_string HOLOGIC_PixelYSizeMM = "<PixelYSizeMM>";
+  static const vcl_string HOLOGIC_PixelYSizeMM_END = "</PixelYSizeMM>";
+    
+  vcl_string src = header_.image_comments_;
+  //Find start of x pixel size sub-text
+  unsigned ipxStart = src.find(HOLOGIC_PixelXSizeMM);
+  if(ipxStart==src.npos) return false;
+    
+  //Find end of x pixel size sub-text
+  unsigned ipxEnd = src.find(HOLOGIC_PixelXSizeMM_END,ipxStart);
+  if(ipxEnd==src.npos) return false;
+    
+  //Extract just the numerical part of the text
+  vcl_string strPixelXSizeMM="";
+  ipxStart+= HOLOGIC_PixelXSizeMM.size();
+  strPixelXSizeMM.append(src,ipxStart, ipxEnd-ipxStart);
+
+  if(strPixelXSizeMM.size()>0)
+  {
+    //Translate string to number
+    vcl_stringstream  translate_is(strPixelXSizeMM,vcl_stringstream::in);
+    translate_is>>xpixSize;
+    if(!translate_is) return false;
+    if(xpixSize<=0.0 || xpixSize>=1.0E6) return false; //Don't believe crazy values
+  }
+  else
+  {
+    return false; //No x pixel value present between the tags
+  }
+    
+  //Find start of y pixel size sub-text
+  unsigned ipyStart = src.find(HOLOGIC_PixelYSizeMM);
+  if(ipyStart==src.npos) return false;
+    
+  //Find end of y pixel size sub-text
+  unsigned ipyEnd = src.find(HOLOGIC_PixelYSizeMM_END,ipyStart);
+  if(ipyEnd==src.npos) return false;
+    
+  //Extract just the numerical part of the text    
+  vcl_string strPixelYSizeMM="";
+  ipyStart+= HOLOGIC_PixelYSizeMM.size();
+  strPixelYSizeMM.append(src,ipyStart, ipyEnd-ipyStart);
+
+  if(strPixelYSizeMM.size()>0)
+  {
+    //Translate string to number
+    vcl_stringstream  translate_is(strPixelYSizeMM,vcl_stringstream::in);
+    translate_is>>ypixSize;
+    if(!translate_is) return false;
+    if(ypixSize<=0.0 || ypixSize>=1.0E6) return false; //Don't believe crazy values
+  }
+  else
+  {
+    return false; //No y pixel value present between the tags
+  }
+
+  return true;    //It all worked 
 }
 
 
