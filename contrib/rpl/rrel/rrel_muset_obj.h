@@ -10,6 +10,8 @@
 
 class rrel_muse_table;
 
+enum rrel_muse_type { RREL_MUSE_TRIMMED, RREL_MUSE_TRIMMED_SQUARE, RREL_MUSE_QUANTILE };
+
 //: The MUSET (MUSE trimmed) objective function, which should be used instead of LMS.
 //  MUSE is a robust objective function in the spirit of LMS/LTS
 //  (least-median-of-squares / least-trimmed-squares).  In fact, it
@@ -46,8 +48,6 @@ class rrel_muse_table;
 //  refinement, which increases its ability to distinguish small
 //  scale structures.  In general it is safe to use this, and the
 //  constructor defaults to having it set.
-
-enum rrel_muse_type { RREL_MUSE_TRIMMED, RREL_MUSE_TRIMMED_SQUARE, RREL_MUSE_QUANTILE };
 
 class rrel_muset_obj : public rrel_objective {
 public:
