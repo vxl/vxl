@@ -24,10 +24,11 @@
 /// .EXAMPLE vtol_vertex_3d.example
 
 
+class vtol_vertex_3d;
+
+#include <vtol/vtol_vertex_3d_ref.h>
 #include <vtol/vtol_topology_object_3d.h>
-// #include <vsol/vsol_point_3d.h>
 #include <vnl/vnl_double_2.h>
-//#include <vtol/sol_stubs.h>
 #include <vsol/vsol_point_3d_ref.h>
 
 typedef vnl_double_2  vector_3d;

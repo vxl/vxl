@@ -451,16 +451,12 @@ void vtol_vertex_3d::merge_references(vtol_vertex_3d *v2)
 // TO DO
 vtol_vertex_3d* min_z_vertex(vertex_list_3d* Verts)
 {
-  vtol_vertex_3d* min_vertex;
-  if (Verts->size() > 0) min_vertex = ((*Verts)[0])->cast_to_vertex_3d(); // Get first element.
-  else min_vertex = 0;
-  vtol_vertex_3d* tVert;
-  double min_z = fabs(min_vertex->z());
-  double tz;
-  for(int i = 1; i < Verts->size();++i) 
+  vtol_vertex_3d* min_vertex = 0;
+  double min_z = 1e32;
+  for(int i = 0; i < Verts->size();++i) 
     {
-      tVert = Verts[i];
-      tz = fabs(tVert->z());
+      vtol_vertex_3d* tVert = (*Verts)[i];
+      double tz = fabs(tVert->z());
       if (tz < min_z) 
 	{
 	  min_vertex = tVert;
