@@ -6,6 +6,7 @@
 //
 //-----------------------------------------------------------------------------
 #ifdef __GNUC__
+// this is a bit of a hack...
 #pragma implementation "vul_arg.h"
 #endif
 
@@ -61,7 +62,7 @@ void test_do_vul_arg()
   char **my_argv = (char**) my_argv_1;
 
   vul_arg_parse(my_argc, my_argv);
-  
+
   bool b = int1() == 3;
   TEST("int1", b, true);
   TEST("int2", int2(), 2);
