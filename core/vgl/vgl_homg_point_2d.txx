@@ -17,3 +17,8 @@ vgl_homg_point_2d<Type>::vgl_homg_point_2d (vgl_homg_line_2d<Type> const& l1,
       l1.a()*l2.b()-l1.b()*l2.a());
 }
 
+#define VGL_HOMG_POINT_2D_INSTANTIATE(T) \
+template class vgl_homg_point_2d<T>; \
+template ostream& operator<<(ostream&, vgl_homg_point_2d<T>const&); \
+template istream& operator>>(istream&, vgl_homg_point_2d<T>&)
+

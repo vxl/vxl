@@ -38,14 +38,6 @@
 //    return normal;
 //  }
 
-//: find the distance of the line to the origin
-template <class Type>
-Type vgl_homg_line_2d<Type>::dist_origin() const
-{
-  return this->c() / sqrt( this->a()*this->a() + this->b()*this->b() );
-}
-
-
 //: get two points on the line.  These two points are normally the intersections
 // with the Y axis and X axis, respectively.  When the line is parallel to one
 // of these, the point with y=1 or x=1, resp. are taken.  When the line goes

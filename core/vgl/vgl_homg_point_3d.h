@@ -88,21 +88,14 @@ public:
   // Data Access
   //***************************************************************************
 
-  inline Type x(void) const
-  {
-    return data_[0];
-  }
-  inline Type y(void) const
-  {
-    return data_[1];
-  }
-  inline Type z(void) const
-  {
-    return data_[2];
-  }
-  inline Type w(void) const {
-    return data_[3];
-  }
+  inline Type x() const { return data_[0]; }
+  inline Type y() const { return data_[1]; }
+  inline Type z() const { return data_[2]; }
+  inline Type w() const { return data_[3]; } 
+  inline Type& x() { return data_[0]; }
+  inline Type& y() { return data_[1]; }
+  inline Type& z() { return data_[2]; }
+  inline Type& w() { return data_[3]; } 
 
   // Set x,y,z,w
   inline void set(Type px,
@@ -139,15 +132,15 @@ ostream &operator<<(ostream &s,
                     const vgl_homg_point_3d<Type> &p)
 {
   return s << " <vgl_homg_point_3d ("
-           << p->data_[0] << "," << p->data_[1] << ","
-           << p->data_[2] << "," << p->data_[3] << ") >";
+           << p.x() << "," << p.y() << ","
+           << p.z() << "," << p.w() << ") >";
 }
 
 template <class Type>
 istream &operator>>(istream &is,
                     vgl_homg_point_3d<Type> &p)
 {
-  return is >> p->data_[0] >> p->data_[1] >> p->data_[2] >> p->data_[3];
+  return is >> p.x() >> p.y() >> p.z() >> p.w();
 }
 
 #endif // #ifndef vgl_homg_point_3d_h_

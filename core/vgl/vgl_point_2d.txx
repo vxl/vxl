@@ -45,10 +45,8 @@ vgl_point_2d<Type> vgl_point_2d<Type>::operator-(const vgl_point_2d<Type>& that)
    return result;
 }	
 
-template <class Type>
-Type vgl_point_2d<Type>::distance(const vgl_point_2d<Type>& p) const
-{	
-  vgl_point_2d<Type> dif= (*this)-p;
-  Type dist = sqrt(dif.x()*dif.x() + dif.y()*dif.y());
-  return dist;
-}
+#define VGL_POINT_2D_INSTANTIATE(T) \
+template class vgl_point_2d<T>; \
+template ostream& operator<<(ostream&, const vgl_point_2d<T>&); \
+template istream& operator>>(istream&, vgl_point_2d<T>&)
+

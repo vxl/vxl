@@ -14,6 +14,7 @@
 //  Peter Vanroose, May  9 2000: implemented dist_origin() and get_two_points()
 //                               and added constructor from two points
 //  Peter Vanroose, Feb 28 2000: lots of minor corrections
+//  Peter Vanroose, Dec 1 2000: moved dist_origin() to vgl_distance.h
 
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_algorithm.h> // for vcl_min
@@ -86,9 +87,6 @@ public:
   //    This version checks (min(|a|,|b|) < tol * c
 //win32 fails  bool ideal(Type tol) const { return vcl_min(vcl_abs(a()),vcl_abs(b())) < tol * vcl_abs(c()); }   
   
-  // find the distance of the line to the origin
-  Type dist_origin() const;
-
   // get two points on the line 
   
   void get_two_points(vgl_homg_point_2d<Type> &p1, vgl_homg_point_2d<Type> &p2);

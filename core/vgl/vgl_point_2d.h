@@ -11,6 +11,7 @@
 //    Don Hamilton, Peter Tu
 // Created: Feb 15 2000
 // .SECTION Modifications:
+//  Peter Vanroose, Dec  1 2000: moved distance() to vgl_distance.h
 //  Peter Vanroose, May  9 2000: implemented intersection constructor
 //  Peter Vanroose, Feb 28 2000: lots of minor corrections
 
@@ -80,9 +81,6 @@ public:
   vgl_point_2d<Type> operator+(const vgl_point_2d<Type>& that) const;
   vgl_point_2d<Type> operator-(const vgl_point_2d<Type>& that) const;
   
-  Type distance(const vgl_point_2d<Type>& that) const;
-
-  
   // the == operator
   bool operator==(const vgl_point_2d &other) const;
   
@@ -91,6 +89,8 @@ public:
 
   inline Type x() const {return data_[0];}
   inline Type y() const {return data_[1];}
+  inline Type& x() {return data_[0];}
+  inline Type& y() {return data_[1];}
 
   // -- Set x,y.
   inline void set (Type px, Type py){ data_[0] = px; data_[1] = py; }
@@ -109,12 +109,12 @@ protected:
 
 template <class Type>
 ostream&  operator<<(ostream& s, const vgl_point_2d<Type>& p) {
-  return s << "<vgl_point_2d " << p->data_[0] << " " << p->data_[1] << ">";
+  return s << "<vgl_point_2d " << p.x() << "," << p.y() << ">";
 }
 
 template <class Type>
 istream&  operator>>(istream& is,  vgl_point_2d<Type>& p) {
-  return is >> p->data_[0] >> p->data_[1];
+  return is >> p.x() >> p.y();
 }
 
 #endif // vgl_point_2d_h

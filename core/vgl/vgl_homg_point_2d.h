@@ -71,6 +71,9 @@ public:
   inline Type x() const {return data_[0];}
   inline Type y() const {return data_[1];}
   inline Type w() const {return data_[2];}
+  inline Type& x() {return data_[0];}
+  inline Type& y() {return data_[1];}
+  inline Type& w() {return data_[2];}
 
   // -- Set x,y,w.
   void set (Type px, Type py, Type pw = (Type)1) {
@@ -96,12 +99,12 @@ protected:
 template <class Type>
 ostream&  operator<<(ostream& s, const vgl_homg_point_2d<Type>& p) {
   return s << " <vgl_homg_point_2d ("
-           << p->data_[0] << "," << p->data_[1] << "," << p->data_[2] << ") >";
+           << p.x() << "," << p.y() << "," << p.w() << ") >";
 }
 
 template <class Type>
 istream&  operator>>(istream& is,  vgl_homg_point_2d<Type>& p) {
-  return is >> p->data_[0] >> p->data_[1] >> p->data_[2] ;
+  return is >> p.x() >> p.y() >> p.w() ;
 }
 
 #endif // vgl_homg_point_2d_h
