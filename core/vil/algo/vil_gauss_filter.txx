@@ -11,7 +11,6 @@
 #include <vil/algo/vil_convolve_1d.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vsl/vsl_indent.h>
 
 //=======================================================================
 
