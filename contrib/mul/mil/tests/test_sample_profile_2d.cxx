@@ -45,7 +45,7 @@ void test_sample_profile_2d_byte()
 
   for (int y=0;y<image3.ny();++y)
      for (int x=0;x<image3.nx();++x)
-	   for (int k=0;k<3;++k)
+       for (int k=0;k<3;++k)
        {
          image3(x,y,k) = x+y*10+100*k;
        }
