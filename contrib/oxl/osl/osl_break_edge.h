@@ -1,6 +1,7 @@
+// This is oxl/osl/osl_break_edge.h
 #ifndef osl_break_edge_h_
 #define osl_break_edge_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

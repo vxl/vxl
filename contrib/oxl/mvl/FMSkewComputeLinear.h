@@ -1,6 +1,7 @@
+// This is oxl/mvl/FMSkewComputeLinear.h
 #ifndef FMSkewComputeLinear_h_
 #define FMSkewComputeLinear_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -35,7 +36,7 @@ class FMatrixSkew;
 
 class FMSkewComputeLinear : public FMatrixCompute
 {
-public:
+ public:
   //: Initialize FMSkewComputeLinear object.
   //  If precondition = false, points are not conditioned prior to computation.
   FMSkewComputeLinear(bool precondition = true);
@@ -47,7 +48,7 @@ public:
   // matches in the list.
   bool compute(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrixSkew* F);
 
-private:
+ private:
   bool _precondition;
   bool compute_preconditioned(vcl_vector<HomgPoint2D>& points1,
                               vcl_vector<HomgPoint2D>& points2,

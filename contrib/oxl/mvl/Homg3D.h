@@ -1,6 +1,7 @@
+// This is oxl/mvl/Homg3D.h
 #ifndef _Homg3D_h
 #define _Homg3D_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -24,11 +25,9 @@
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_vector.h>
 
-class Homg3D : public Homg {
-
-  // PUBLIC INTERFACE----------------------------------------------------------
-
-public:
+class Homg3D : public Homg
+{
+ public:
 
   // Constructors/Initializers/Destructors-------------------------------------
 
@@ -82,7 +81,7 @@ public:
   bool operator== (Homg3D const& p) const { return _homg_vector == p.get_vector(); }
 
   // INTERNALS-----------------------------------------------------------------
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   vnl_double_4 _homg_vector;
 };

@@ -1,6 +1,7 @@
+// This is oxl/mvl/HomgPlane3D.h
 #ifndef HomgPlane3D_h_
 #define HomgPlane3D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

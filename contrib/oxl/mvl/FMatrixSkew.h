@@ -1,6 +1,7 @@
+// This is oxl/mvl/FMatrixSkew.h
 #ifndef FMatrixSkew_h_
 #define FMatrixSkew_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //--------------------------------------------------------------
@@ -21,7 +22,7 @@
 
 class FMatrixSkew : public FMatrix
 {
-public:
+ public:
 
   // Constructors/Initializers/Destructors----------------------------------
 

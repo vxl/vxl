@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/mvl/PairMatchSet2D3D.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -58,13 +59,12 @@ void PairMatchSet2D3D::set_from(const PairMatchSet2D3D& otherframe_to_3d, const 
   set_size(otherframe_to_this.size());
 
   clear();
-  for(PairMatchSetCorner::iterator match = otherframe_to_this; match; match.next()) {
+  for (PairMatchSetCorner::iterator match = otherframe_to_this; match; match.next()) {
     int corner1 = match.get_i1();
     int corner2 = match.get_i2();
     int structure1 = otherframe_to_3d.get_match_12(corner1);
     add_match(corner2, structure1);
   }
-
 }
 
 HomgMetric PairMatchSet2D3D::get_conditioner() const

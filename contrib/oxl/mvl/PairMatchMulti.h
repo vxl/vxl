@@ -1,6 +1,7 @@
+// This is oxl/mvl/PairMatchMulti.h
 #ifndef PairMatchMulti_h_
 #define PairMatchMulti_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -30,9 +31,10 @@
 #include <vcl_iosfwd.h>
 
 // conceptually a list of tuples (index1, index2, strength)
-class vcl_multimap_uint_uint : public vcl_multimap<unsigned,unsigned, vcl_less<unsigned> > {
+class vcl_multimap_uint_uint : public vcl_multimap<unsigned,unsigned, vcl_less<unsigned> >
+{
   typedef vcl_multimap<unsigned, unsigned, vcl_less<unsigned> > base;
-public:
+ public:
   iterator insert(unsigned int key, unsigned int value);
   void clear();
 };
@@ -41,8 +43,9 @@ template <class T> class vbl_sparse_array_2d;
 
 class PairMatchSet;
 
-class PairMatchMulti {
-public:
+class PairMatchMulti
+{
+ public:
   friend class PairMatchMultiIterator;
 
   // Constructors/Destructors--------------------------------------------------
@@ -56,20 +59,20 @@ public:
 
   // Operations----------------------------------------------------------------
 
-//: Add a match $(i_1, i_2)$ to the set
+  //: Add a match $(i_1, i_2)$ to the set
   void add_match(int i1, int i2) {
     _matches12.insert(i1, i2);
   }
 
   bool contains(int i1, int i2) const;
 
-//: Add a match $(i_1, i_2)$ to the set
+  //: Add a match $(i_1, i_2)$ to the set
   void add_match(int i1, int i2, double score);
 
   double get_score(int i1, int i2) const;
   void set_score(int i1, int i2, double score);
 
-//: Clear all matches
+  //: Clear all matches
   void clear() {
     _matches12.erase(_matches12.begin(), _matches12.end());
   }
@@ -98,15 +101,10 @@ public:
   bool load(char const* filename);
   bool read_ascii(vcl_istream& s);
 
-  // Data Control--------------------------------------------------------------
-
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   vcl_multimap_uint_uint _matches12;
   vbl_sparse_array_2d<double> *_scores;
-
-private:
-  // Helpers-------------------------------------------------------------------
 };
 
 #include "PairMatchMultiIterator.h"
@@ -114,7 +112,7 @@ private:
 //: Return an iterator which will run through the list of matches for feature index i1.
 //  Example usage: to print all matches for "target"
 // <verb>
-//   for(PairMatchMultiIterator p = mm.get_match_12(target); !p.done(); p.next())
+//   for (PairMatchMultiIterator p = mm.get_match_12(target); !p.done(); p.next())
 //     vcl_cout << p.get_i1() << " " << p.get_i2() << vcl_endl;
 // </verb>
 // Complexity is O(log n).

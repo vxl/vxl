@@ -1,6 +1,7 @@
+// This is oxl/oxp/oxp_yuv_to_rgb.h
 #ifndef oxp_yuv_to_rgb_h_
 #define oxp_yuv_to_rgb_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -55,4 +56,4 @@ void oxp_yuv_to_rgb(unsigned char y, unsigned char u, unsigned char v, unsigned 
   rgb[2] = oxp_yuv_to_rgb_byte_clamp(c1164 * (y - 16) + c2018 * (u - 128));
 }
 
-#endif
+#endif // oxp_yuv_to_rgb_h_

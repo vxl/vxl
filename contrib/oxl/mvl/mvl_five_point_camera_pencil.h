@@ -1,14 +1,12 @@
+// This is oxl/mvl/mvl_five_point_camera_pencil.h
 #ifndef mvl_five_point_camera_pencil_h_
 #define mvl_five_point_camera_pencil_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
 //:
-//  \file
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vnl/vnl_matrix.h>
 
@@ -31,6 +29,7 @@ bool mvl_five_point_camera_pencil(double const xs[5],
                                   vnl_matrix<double> *A,
                                   vnl_matrix<double> *B);
 
+//:
 // Return the pair (s, t) such that the reprojection of X under
 // P = s A + t B is closest to (u, v) in image coordinates. The
 // image residuals are returned in res[].
@@ -41,4 +40,4 @@ bool mvl_five_point_camera_pencil_parameters(vnl_matrix<double> const &A,
                                              double st[2],
                                              double res[2]);
 
-#endif
+#endif // mvl_five_point_camera_pencil_h_

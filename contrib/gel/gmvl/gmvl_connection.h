@@ -1,11 +1,12 @@
+// This is gel/gmvl/gmvl_connection.h
 #ifndef gmvl_connection_h_
 #define gmvl_connection_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  crossge@crd.ge.com
-*/
+//:
+// \file
+// \author crossge@crd.ge.com
 
 #include <vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>
@@ -13,8 +14,7 @@
 
 class gmvl_connection : public vbl_ref_count
 {
-public:
-
+ public:
   // constructors / destructors
 
   gmvl_connection( const gmvl_node_sptr node1, const gmvl_node_sptr node2);
@@ -27,12 +27,10 @@ public:
 
   friend vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection &c);
 
-protected:
-
+ protected:
   gmvl_node_sptr n1_, n2_;
-
 };
 
 vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection &c);
 
-#endif
+#endif // gmvl_connection_h_

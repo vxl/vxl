@@ -1,13 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-
-//:
-//  \file
-
-#ifdef __GNUC__
+// This is oxl/osl/osl_ortho_regress.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "osl_ortho_regress.h"
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>

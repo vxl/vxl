@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/vgui/impl/gtk/vgui_gtk_dialog_impl.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -94,14 +95,14 @@ static int loop_flag = 0;
 static
 void accept_cb(GtkWidget* /*widget*/,
                gpointer /*data*/) {
-  if (debug) vcl_cerr << "accept" << vcl_endl;
+  if (debug) vcl_cerr << "accept\n";
   loop_flag = 2;
 }
 
 static
 void cancel_cb(GtkWidget* /*widget*/,
                gpointer /*data*/) {
-  if (debug) vcl_cerr << "cancel" << vcl_endl;
+  if (debug) vcl_cerr << "cancel\n";
   loop_flag = 1;
 }
 

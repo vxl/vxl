@@ -1,6 +1,7 @@
+// This is oxl/mvl/PairMatchMultiStrength.h
 #ifndef PairMatchMultiStrength_h_
 #define PairMatchMultiStrength_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -11,8 +12,9 @@
 
 //: not implemented
 
-class PairMatchMultiStrength : public PairMatchMulti {
-public:
+class PairMatchMultiStrength : public PairMatchMulti
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   PairMatchMultiStrength();

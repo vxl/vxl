@@ -1,15 +1,12 @@
+// This is gel/gmvl/gmvl_node.h
 #ifndef gmvl_node_h_
 #define gmvl_node_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
-//  \file
-
-/*
-  crossge@crd.ge.com
-*/
+// \file
+// \author crossge@crd.ge.com
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
@@ -27,7 +24,7 @@ class gmvl_connection_cache;
 
 class gmvl_node : public vbl_ref_count
 {
-public:
+ public:
 
   gmvl_node();
   virtual ~gmvl_node();
@@ -42,7 +39,7 @@ public:
   friend class gmvl_node_cache;
   friend class gmvl_connection_cache;
 
-protected:
+ protected:
 
   // type name (name of class)
   vcl_string type_;
@@ -53,4 +50,4 @@ protected:
 
 vcl_ostream &operator<<( vcl_ostream &os, gmvl_node &node);
 
-#endif
+#endif // gmvl_node_h_

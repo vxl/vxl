@@ -1,7 +1,7 @@
 // This is mul/mbl/mbl_lda.h
 #ifndef mbl_lda_h_
 #define mbl_lda_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -43,7 +43,7 @@ class mbl_lda
   void build(const vnl_vector<double>* v, const int* label, int n,
              const vnl_matrix<double>& wS, bool compute_wS);
 
-public:
+ public:
 
   //: Dflt ctor
   mbl_lda();

@@ -1,6 +1,7 @@
+// This is oxl/oxp/MovieFile.h
 #ifndef MovieFile_h_
 #define MovieFile_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -23,8 +24,9 @@
 struct MovieFileInterface;
 
 //: an interface to movie files and image sequences.  It is currently read-only
-class MovieFile {
-public:
+class MovieFile
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   MovieFile(char const * filename, int start = 0, int step = 1, int end = -1);
@@ -49,7 +51,7 @@ public:
 
   bool ok() { return qt != 0; }
 
-protected:
+ protected:
   vcl_string filename_;
   int start_, step_, end_;
   MovieFileInterface* qt;

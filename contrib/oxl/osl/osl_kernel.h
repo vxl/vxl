@@ -1,6 +1,7 @@
+// This is oxl/osl/osl_kernel.h
 #ifndef osl_kernel_h_
 #define osl_kernel_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

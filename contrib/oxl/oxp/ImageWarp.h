@@ -1,6 +1,7 @@
+// This is oxl/oxp/ImageWarp.h
 #ifndef ImageWarp_h_
 #define ImageWarp_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -18,8 +19,9 @@
 #include <oxp/Mapping_2d_2d.h>
 
 template <class PixelType>
-class ImageWarp {
-public:
+class ImageWarp
+{
+ public:
   //:
   // The type of the return value of "bilinear" and "bicubic", which
   // will be a floating point version of the pixel type.

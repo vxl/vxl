@@ -1,8 +1,7 @@
-//
 // This is vgui/impl/mfc/vgui_mfc_app_init.cxx
 // See vgui_mfc_app_init.h for a description of this file.
 //
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 #include "vgui_mfc_app_init.h"

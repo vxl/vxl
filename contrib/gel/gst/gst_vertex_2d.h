@@ -1,18 +1,19 @@
+// This is gel/gst/gst_vertex_2d.h
 #ifndef gst_vertex_2d_h_
 #define gst_vertex_2d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  crossge@crd.ge.com
-*/
+//:
+// \file
+// \author crossge@crd.ge.com
 
 #include <vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>
 
 class gst_vertex_2d : public vbl_ref_count
 {
-public:
+ public:
 
   // constructors and destructors
   gst_vertex_2d();
@@ -33,7 +34,7 @@ public:
   // output
   friend vcl_ostream &operator <<( vcl_ostream &os, const gst_vertex_2d &v);
 
-protected:
+ protected:
 
   // members
   double x_, y_;

@@ -1,6 +1,7 @@
+// This is oxl/mvl/mvl_multi_view_matches.h
 #ifndef mvl_multi_view_matches_h_
 #define mvl_multi_view_matches_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -26,8 +27,9 @@
 #include <vcl_iosfwd.h>
 #include <vcl_map.h>
 
-class mvl_multi_view_matches {
-public:
+class mvl_multi_view_matches
+{
+ public:
   typedef vcl_map<unsigned int, unsigned int, vcl_less<unsigned int> > Map;
 
   mvl_multi_view_matches(char const* filename);
@@ -67,7 +69,7 @@ public:
   void read(char const* file);
   void write(char const* file) const;
 
-protected:
+ protected:
   vcl_vector<int> views_;                 // maps internal frame index to real view indices
   Map view_to_internal_map_;              // maps real view indices to internal frame index
   vcl_vector<Map> tracks_;                // one map<internal_frame, corner> per track

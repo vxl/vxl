@@ -1,9 +1,10 @@
+// This is oxl/vgui/impl/gtk/vgui_gtk_statusbar.h
 #ifndef vgui_gtk_statusbar_h_
 #define vgui_gtk_statusbar_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_gtk_statusbar - Undocumented class FIXME
 // .LIBRARY vgui-gtk
 // .HEADER vxl Package
@@ -29,11 +30,12 @@
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>
 
-class vgui_gtk_statusbar : public vgui_statusbar {
-public:
-  
+class vgui_gtk_statusbar : public vgui_statusbar
+{
+ public:
+
   // Constructors/Destructors--------------------------------------------------
-  
+
   vgui_gtk_statusbar();
  ~vgui_gtk_statusbar();
 
@@ -43,7 +45,7 @@ public:
   GtkWidget *widget;
   vcl_string linebuffer;
   vgui_statusbuf* statusbuf;
-  vcl_ostream out;  
+  vcl_ostream out;
 };
 
 #endif // vgui_gtk_statusbar_h_

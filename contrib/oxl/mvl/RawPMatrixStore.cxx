@@ -1,5 +1,5 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is oxl/mvl/RawPMatrixStore.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -32,14 +32,14 @@ bool RawPMatrixStore::Load(int image_index)
 
   if (!fin.good())
     {
-      vcl_cerr << "Read PMatrix [" << filename << "] failed" << vcl_endl;
+      vcl_cerr << "Read PMatrix [" << filename << "] failed\n";
       return false;
     }
 
   pmatrix_[image_index]= new PMatrix;
   pmatrix_[image_index]->read_ascii(fin);
 
-  vcl_cerr << "Read PMatrix [" << filename << "]" << vcl_endl;
+  vcl_cerr << "Read PMatrix [" << filename << "]\n";
 
   return true;
 }

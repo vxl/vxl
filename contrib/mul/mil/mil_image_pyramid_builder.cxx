@@ -1,8 +1,9 @@
-#ifdef __GNUC__
+// This is mul/mil/mil_image_pyramid_builder.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
-//: \file
+//:
+//  \file
 //  \brief Class to load and save images from named files
 //  \author Tim Cootes
 

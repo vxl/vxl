@@ -1,6 +1,7 @@
+// This is oxl/mvl/PairMatchSetLineSeg.h
 #ifndef PairMatchSetLineSeg_h_
 #define PairMatchSetLineSeg_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

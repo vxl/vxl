@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is gel/vdgl/vdgl_digital_curve.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -63,14 +64,14 @@ double vdgl_digital_curve::length() const
 
 void vdgl_digital_curve::set_p0(const vsol_point_2d_sptr &p)
 {
-  vcl_cerr << "vdgl_digital_curve::set_p0() not allowed and ignored..." << vcl_endl;
+  vcl_cerr << "vdgl_digital_curve::set_p0() not allowed and ignored...\n";
   int i = 0;
   interpolator_->get_edgel_chain()->set_edgel(i, vdgl_edgel ( p->x(), p->y() ) );
 }
 
 void vdgl_digital_curve::set_p1(const vsol_point_2d_sptr &p )
 {
-  vcl_cerr << "vdgl_digital_curve::set_p1() not allowed and ignored..." << vcl_endl;
+  vcl_cerr << "vdgl_digital_curve::set_p1() not allowed and ignored...\n";
   int i = interpolator_->get_edgel_chain()->size() - 1;
   interpolator_->get_edgel_chain()->set_edgel(i, vdgl_edgel ( p->x(), p->y() ) );
 }

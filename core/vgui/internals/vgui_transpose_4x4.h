@@ -1,6 +1,7 @@
+// This is oxl/vgui/internals/vgui_transpose_4x4.h
 #ifndef vgui_transpose_4x4_h_
 #define vgui_transpose_4x4_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 // .NAME vgui_transpose_4x4

@@ -1,7 +1,4 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_mainfrm.cxx
-#ifdef __GNUC__
-#pragma implementation
-#endif
+// This is oxl/vgui/impl/mfc/vgui_mfc_mainfrm.cxx
 
 //:
 //  \file
@@ -55,7 +52,7 @@ vgui_mfc_mainfrm::~vgui_mfc_mainfrm()
 //  Returns non-zero value to indicate creation should continue.
 BOOL vgui_mfc_mainfrm::PreCreateWindow(CREATESTRUCT& cs)
 {
-        if( !CFrameWnd::PreCreateWindow(cs) )
+        if ( !CFrameWnd::PreCreateWindow(cs) )
                 return FALSE;
         // TODO: Modify the Window class or styles here by modifying
         //  the CREATESTRUCT cs

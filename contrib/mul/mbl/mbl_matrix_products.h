@@ -1,9 +1,6 @@
+// This is mul/mbl/mbl_matrix_products.h
 #ifndef mbl_matrix_product_h
 #define mbl_matrix_product_h
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 //:
 // \file
 // \author Tim Cootes

@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/mvl/HomgPoint1D.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -8,7 +9,7 @@ bool HomgPoint1D::get_nonhomogeneous(double& out) const
 {
   if (check_infinity())
     return false;
-  
+
   out = get_x() / get_w();
   return true;
 }

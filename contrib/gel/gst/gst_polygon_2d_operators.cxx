@@ -1,10 +1,11 @@
+// This is gel/gst/gst_polygon_2d_operators.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author crossge@crd.ge.com
 
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "gst_polygon_2d_operators.h"
 
 vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d( const vcl_vector<gst_edge_2d_sptr> edges)
@@ -117,7 +118,7 @@ vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const vcl_vecto
               if (edges[j]->get_start().ptr()== end.ptr() && !used[j])
                 {
 #if 0
-                  vcl_cerr << "Found unflip-necessary edge..." << vcl_endl;
+                  vcl_cerr << "Found unflip-necessary edge...\n";
                   vcl_cerr << *edges[j] << vcl_endl;
 #endif
                   thispoly->add( edges[j]);
@@ -137,7 +138,7 @@ vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const vcl_vecto
               else if (edges[j]->get_end().ptr()== end.ptr() && !used[j])
                 {
 #if 0
-                  vcl_cerr << "Found flip-necessary edge..." << vcl_endl;
+                  vcl_cerr << "Found flip-necessary edge...\n";
                   vcl_cerr << *edges[j] << " -- ";
 #endif
                   edges[j]->flip();

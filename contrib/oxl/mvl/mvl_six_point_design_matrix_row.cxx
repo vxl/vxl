@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/mvl/mvl_six_point_design_matrix_row.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "mvl_six_point_design_matrix_row.h"
 
 #include <vcl_cmath.h>

@@ -1,9 +1,5 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is gel/vdgl/vdgl_OrthogRegress.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 #include "vdgl_OrthogRegress.h"
-
-//#pragma drop_virtuals_here

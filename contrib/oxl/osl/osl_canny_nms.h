@@ -1,6 +1,7 @@
+// This is oxl/osl/osl_canny_nms.h
 #ifndef osl_canny_nms_h_
 #define osl_canny_nms_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 // .NAME osl_canny_nms

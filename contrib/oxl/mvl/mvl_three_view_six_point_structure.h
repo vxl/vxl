@@ -1,16 +1,12 @@
+// This is oxl/mvl/mvl_three_view_six_point_structure.h
 #ifndef mvl_three_view_six_point_structure_h_
 #define mvl_three_view_six_point_structure_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
 //:
-//  \file
-
-//:
+// \file
+// \author fsm@robots.ox.ac.uk
 // Code for computing projective structure from 3 views of 6 points.
 //
 // The six points are assumed to be:
@@ -41,11 +37,12 @@ struct mvl_three_view_six_point_structure
   bool compute();
 
   // output data.
-  struct solution_t {
+  struct solution_t
+  {
     bool valid;
     vnl_matrix<double> P[3]; // camera matrices.
     vnl_vector<double> Q;    // last world point.
   } solution[3];
 };
 
-#endif
+#endif // mvl_three_view_six_point_structure_h_

@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/mvl/TripleMatchSetLineSeg.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -58,7 +59,7 @@ void TripleMatchSetLineSeg::extract_matches(vcl_vector<HomgLineSeg2D> &linesegs1
   indices3.resize(n);
 
   int i = 0;
-  for(iterator p = begin(); p; ++p, ++i) {
+  for (iterator p = begin(); p; ++p, ++i) {
     indices1[i] = p.get_i1();
     indices2[i] = p.get_i2();
     indices3[i] = p.get_i3();

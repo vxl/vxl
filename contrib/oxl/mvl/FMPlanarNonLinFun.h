@@ -1,6 +1,7 @@
+// This is oxl/mvl/FMPlanarNonLinFun.h
 #ifndef FMPlanarNonLinFun_h_
 #define FMPlanarNonLinFun_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -42,7 +43,7 @@ class FMPlanarNonLinFun : public vnl_least_squares_function
   HomgMetric _image_metric1;
   HomgMetric _image_metric2;
 
-public:
+ public:
 
   // Constructors/Destructors--------------------------------------------------
   FMPlanarNonLinFun(const ImageMetric*, const ImageMetric*,
@@ -57,7 +58,7 @@ public:
   // The virtual function from vnl_levenberg_marquardt
   void f(const vnl_vector<double>& x, vnl_vector<double>& fx);
 
-private:
+ private:
   // Helpers-------------------------------------------------------------------
   void fmatrix_to_params(const FMatrixPlanar& F, vnl_vector<double>& params);
   FMatrixPlanar params_to_fmatrix(const vnl_vector<double>& params);

@@ -1,6 +1,7 @@
+// This is oxl/mvl/FManifoldProject.h
 #ifndef FManifoldProject_h_
 #define FManifoldProject_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -46,7 +47,7 @@ class FManifoldProject
 
   bool affine_F_;
 
-public:
+ public:
   FManifoldProject();
   FManifoldProject(const FMatrix& F);
 

@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is mul/pdf1d/pdf1d_pdf.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Tim Cootes
@@ -384,7 +384,7 @@ double pdf1d_pdf::inverse_cdf(double P) const
       else
         x_above=x_middle;
     }
-    vcl_cerr << "ERROR: pdf1d_pdf::inverse_cdf() failed to converge." << vcl_endl;
+    vcl_cerr << "ERROR: pdf1d_pdf::inverse_cdf() failed to converge.\n";
     vcl_abort();
     return 0.0; // dummy return
   }

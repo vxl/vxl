@@ -1,7 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is gel/octree/BaseCube.h
 #ifndef BaseCube_h_
 #define BaseCube_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -11,13 +11,14 @@
 //
 //-----------------------------------------------------------------------------
 
-class BaseCube {
-public:
+class BaseCube
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   BaseCube( double, double, double, double);
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
 
   double bases;

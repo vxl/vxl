@@ -1,6 +1,5 @@
-#ifdef __GNUC__
-#pragma implementation
-#endif
+// This is oxl/vgui/impl/mfc/vgui_mfc_app.cxx
+
 //:
 // \file
 // \author  Marko Bacic, Oxford RRG
@@ -135,12 +134,12 @@ BOOL vgui_mfc_app::Run()
     do
     {
       MSG tmp_msg;
-      if(::PeekMessage(&tmp_msg,NULL,NULL,NULL,PM_NOREMOVE))
+      if (::PeekMessage(&tmp_msg,NULL,NULL,NULL,PM_NOREMOVE))
       {
         if (1) 
         {
           // Collapse multiple move events...
-          while(tmp_msg.message == WM_MOVE)
+          while (tmp_msg.message == WM_MOVE)
           {
             // Remove the message from the queue
             ::PeekMessage(&tmp_msg,NULL,NULL,NULL,PM_REMOVE);

@@ -1,15 +1,12 @@
+// This is gel/gmvl/gmvl_helpers.h
 #ifndef gmvl_helpers_h_
 #define gmvl_helpers_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
-//  \file
-
-/*
-  crossge@crd.ge.com
-*/
+// \file
+// \author crossge@crd.ge.com
 
 #include <vcl_vector.h>
 #include <vcl_string.h>
@@ -24,4 +21,4 @@ vcl_ostream &operator<<( vcl_ostream &os, const vcl_vector<gmvl_node_sptr> &r);
 vcl_vector<gmvl_node_sptr> gmvl_load_raw_corners( const vcl_string filename);
 gmvl_node_sptr gmvl_load_image( const vcl_string filename);
 
-#endif
+#endif // gmvl_helpers_h_

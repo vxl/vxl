@@ -1,9 +1,9 @@
+// This is mul/pdf1d/pdf1d_kernel_pdf.h
 #ifndef pdf1d_kernel_pdf_h
 #define pdf1d_kernel_pdf_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Univariate kernel_pdf PDF
@@ -22,8 +22,9 @@
 //  possibly a different width b) every component has the same weight
 //  c) Usually one uses different training algorithms.
 //  Mixture models are more general.
-class pdf1d_kernel_pdf : public pdf1d_pdf {
-protected:
+class pdf1d_kernel_pdf : public pdf1d_pdf
+{
+ protected:
   //: Position of kernel centres
   vnl_vector<double> x_;
 
@@ -37,17 +38,17 @@ protected:
   //: True if all kernels have the same width
   bool all_same_width_;
 
-public:
-    //: Dflt ctor
+ public:
+  //: Dflt ctor
   pdf1d_kernel_pdf();
 
-    //: Destructor
+  //: Destructor
   virtual ~pdf1d_kernel_pdf();
 
-    //: Initialise so all kernels have the same width
+  //: Initialise so all kernels have the same width
   virtual void set_centres(const vnl_vector<double>& x, double width);
 
-    //: Initialise so all kernels have given width
+  //: Initialise so all kernels have given width
   virtual void set_centres(const vnl_vector<double>& x,
                    const vnl_vector<double>& width);
 
@@ -65,22 +66,22 @@ public:
   // Uses Newton-Raphson.
   virtual double inverse_cdf(double P) const;
 
-    //: Version number for I/O
+  //: Version number for I/O
   short version_no() const;
 
-    //: Name of the class
+  //: Name of the class
   virtual vcl_string is_a() const;
 
-    //: Does the name of the class match the argument?
+  //: Does the name of the class match the argument?
   virtual bool is_class(vcl_string const& s) const;
 
-    //: Print class to os
+  //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
 
-    //: Save class to binary file stream
+  //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-    //: Load class from binary file stream
+  //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 };
 

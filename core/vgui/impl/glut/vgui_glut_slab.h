@@ -1,15 +1,12 @@
+// This is oxl/vgui/impl/glut/vgui_glut_slab.h
 #ifndef vgui_glut_slab_h_
 #define vgui_glut_slab_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-// .NAME vgui_glut_slab
-// .LIBRARY vgui-glut
-// .INCLUDE vgui/impl/glut/vgui_glut_slab.h
-// .FILE vgui_glut_slab.cxx
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl_list.h>
 #include <vgui/vgui_glut.h>
@@ -19,7 +16,7 @@
 struct vgui_glut_slab : public vgui_slab
 {
   int window;
-  
+
   vgui_glut_slab(int w);
   ~vgui_glut_slab();
 
@@ -31,20 +28,20 @@ struct vgui_glut_slab : public vgui_slab
 
   void swap_buffers();
   void make_current();
-  
+
   //void overlay_enter ();
   //bool overlay_active() const;
   //void overlay_leave ();
-  
+
   //void draw_begin();
   //void draw_end  ();
-  
+
   bool queue_empty() const;
   bool queue_peek (vgui_event *, int);
   bool queue_pop  ();
   bool queue_push (vgui_event const &);
 
-private:
+ private:
   int old_window;
   void enter() const;
   void leave() const;

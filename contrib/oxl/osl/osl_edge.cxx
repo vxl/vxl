@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/osl/osl_edge.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "osl_edge.h"
 
 #include <osl/osl_hacks.h>

@@ -1,9 +1,8 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is gel/geml/geml_matcher.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //
-// .NAME geml_matcher
 // Author: Geoffrey Cross, Oxford RRG
 // Created: ${DATE}
 // .SECTION Modifications:

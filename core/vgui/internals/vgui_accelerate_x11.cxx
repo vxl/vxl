@@ -1,5 +1,5 @@
 // This is oxl/vgui/internals/vgui_accelerate_x11.cxx
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:

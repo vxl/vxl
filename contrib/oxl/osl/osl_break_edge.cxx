@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/osl/osl_break_edge.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "osl_break_edge.h"
 
 #include <vcl_cassert.h>
@@ -76,19 +78,6 @@ void osl_break_edge(osl_edge const *in,
 }
 
 //--------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // defunct
 #if 0

@@ -1,13 +1,14 @@
+// This is oxl/mvl/FMatrixComputeNonLinear.h
 #ifndef FMatrixComputeNonLinear_h_
 #define FMatrixComputeNonLinear_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
 // \file
 //    FMatrixComputeNonLinear is a class that contains the functions required for
-//  two differing Non-Linear minimisations of the F Matrix.
-//  - Zhengyou Zhang's 36 different rank-2 parametrisations of the F Matrix
+//  two differing Non-Linear minimisations of the F Matrix:
+//  - Zhengyou Zhang's 36 different rank 2 parametrisations of the F Matrix
 //  - Phil Torr's augmentation of a given 7 points basis
 //
 // \author
@@ -28,7 +29,7 @@
 
 class FMatrixComputeNonLinear : public vnl_least_squares_function
 {
-public:
+ public:
 
   // Constructors/Destructors--------------------------------------------------
   FMatrixComputeNonLinear(PairMatchSetCorner* matches);
@@ -42,7 +43,7 @@ public:
   // The virtual function from vnl_levenberg_marquardt
   void f(const vnl_vector<double>& x, vnl_vector<double>& fx);
 
-private:
+ private:
   // Data Members--------------------------------------------------------------
   int data_size_;
   int terminate_count_;

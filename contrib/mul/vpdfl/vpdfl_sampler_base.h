@@ -1,6 +1,7 @@
+// This is mul/vpdfl/vpdfl_sampler_base.h
 #ifndef vpdfl_sampler_base_h
 #define vpdfl_sampler_base_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -25,9 +26,9 @@ class vpdfl_pdf_base;
 
 class vpdfl_sampler_base
 {
-protected:
+ protected:
   const vpdfl_pdf_base *pdf_model_;
-public:
+ public:
 
   // Dflt ctor
   vpdfl_sampler_base();

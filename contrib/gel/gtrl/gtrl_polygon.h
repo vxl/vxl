@@ -1,18 +1,19 @@
+// This is gel/gtrl/gtrl_polygon.h
 #ifndef gtrl_polygon_h_
 #define gtrl_polygon_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  crossge@crd.ge.com
-*/
+//:
+// \file
+// \author crossge@crd.ge.com
 
 #include <vcl_vector.h>
 #include <gtrl/gtrl_vertex.h>
 
 class gtrl_polygon
 {
-public:
+ public:
   gtrl_polygon( const vcl_vector<gtrl_vertex_sptr> ps);
 
   int size() const { return ps_.size(); }
@@ -21,9 +22,8 @@ public:
   // computations
   bool inside( const gtrl_vertex_sptr point) const;
 
-protected:
+ protected:
   vcl_vector<gtrl_vertex_sptr> ps_;
 };
 
-
-#endif
+#endif // gtrl_polygon_h_

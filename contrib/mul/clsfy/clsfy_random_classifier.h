@@ -1,7 +1,8 @@
+// This is mul/clsfy/clsfy_random_classifier.h
 #ifndef clsfy_random_classifier_h_
 #define clsfy_random_classifier_h_
 // Copyright: (C) 2001 Britsh Telecommunications plc
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -29,7 +30,7 @@
 
 class clsfy_random_classifier : public clsfy_classifier_base
 {
-public:
+ public:
   // Dflt constructor
   clsfy_random_classifier();
 
@@ -100,7 +101,7 @@ public:
   // \endcode
   virtual void reseed(unsigned long);
 
-private:
+ private:
   //: Calculate the minimum value each class probability needs to be biased by to win
   void calc_min_to_win();
 

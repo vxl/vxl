@@ -1,7 +1,7 @@
 // This is gel/octree/ConvexHull.h
 #ifndef ConvexHull_h_
 #define ConvexHull_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -11,8 +11,9 @@
 //
 //-----------------------------------------------------------------------------
 
-class ConvexHull {
-public:
+class ConvexHull
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   ConvexHull( int npoints);
@@ -28,7 +29,7 @@ public:
   double get_pointy( int n) { return P[n][1]; }
   inline int get_npoints() { return hullsize; }
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
 
   int numberofpoints;

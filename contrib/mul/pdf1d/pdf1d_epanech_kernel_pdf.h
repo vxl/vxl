@@ -1,6 +1,7 @@
+// This is mul/pdf1d/pdf1d_epanech_kernel_pdf.h
 #ifndef pdf1d_epanech_kernel_pdf_h
 #define pdf1d_epanech_kernel_pdf_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -12,8 +13,9 @@
 #include <pdf1d/pdf1d_kernel_pdf.h>
 
 //: Univariate Epanechnikov kernel PDF $k(x)=0.75(1-0.2x^2)/ \sqrt{5}$
-class pdf1d_epanech_kernel_pdf : public pdf1d_kernel_pdf {
-public:
+class pdf1d_epanech_kernel_pdf : public pdf1d_kernel_pdf
+{
+ public:
   //: Dflt ctor
   pdf1d_epanech_kernel_pdf();
 

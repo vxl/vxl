@@ -1,5 +1,5 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is gel/octree/OctreeLevel.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -42,11 +42,13 @@ OctreeLevel::OctreeLevel( OctreeLevel *p) :
 
 void OctreeLevel::InheritFromAbove()
 {
-  if( !prev)
+  if (!prev)
     {
+      // TODO
     }
   else
     {
+      // TODO
     }
 }
 

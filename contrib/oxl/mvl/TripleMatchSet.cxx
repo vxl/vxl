@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/mvl/TripleMatchSet.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -57,7 +58,7 @@ void TripleMatchSet::set_from_pairwise_matches(const PairMatchSet& matches12,
     if (matchp(i3))
       add_match(p12.get_i1(), p12.get_i2(), i3);
   }
-  vcl_cerr << "TripleMatchSet: " << count() << " triplet matches." << vcl_endl;
+  vcl_cerr << "TripleMatchSet: " << count() << " triplet matches.\n";
 }
 
 //: Write as three ascii columns.
@@ -106,7 +107,7 @@ bool TripleMatchSet::read_ascii(vcl_istream& s)
 //: Write to vcl_ostream with header
 vcl_ostream& operator << (vcl_ostream& s, const TripleMatchSet& matches)
 {
-  s << "# TripleMatchSet: " << matches.count() << " triplet matches." << vcl_endl;
+  s << "# TripleMatchSet: " << matches.count() << " triplet matches.\n";
   matches.write_ascii(s);
   return s;
 }

@@ -1,4 +1,5 @@
-#ifdef __GNUG__
+// This is oxl/mvl/TriTensor.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -337,11 +338,13 @@ TriTensor::image3_transfer (const HomgLine2D& line1, const HomgLine2D& line2) co
 
 // == HOMOGRAPHIES FROM LINES ==
 
-//HMatrix2D TriTensor::get_hmatrix_23(const HomgLine2D& line1)
-//{
-//  assert(!"implemented");
-//  return HMatrix2D(dot1(line1.get_vector()));
-//}
+#if 0
+HMatrix2D TriTensor::get_hmatrix_23(const HomgLine2D& line1)
+{
+  assert(!"implemented");
+  return HMatrix2D(dot1(line1.get_vector()));
+}
+#endif
 
 //: Return the planar homography between views 3 and 1 induced by line 2
 HMatrix2D TriTensor::get_hmatrix_31(const HomgLine2D& line2) const
@@ -1420,8 +1423,8 @@ static bool check_same(const TriTensor& T1, const TriTensor& T2) {
 
   if (rms > 1e-15) {
     vcl_cerr << "check_same: different TriTensors\n";
-    vcl_cerr << "T1 = " << vcl_endl << T1;
-    vcl_cerr << "T2 = " << vcl_endl << T2;
+    vcl_cerr << "T1 = \n" << T1;
+    vcl_cerr << "T2 = \n" << T2;
     return false;
   }
 

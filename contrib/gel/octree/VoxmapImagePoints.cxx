@@ -1,5 +1,5 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is gel/octree/VoxmapImagePoints.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation "VoxmapImagePoints.h"
 #endif
 //
@@ -36,10 +36,10 @@ void VoxmapImagePoints::SetPMatrix( PMatrix &P, int im)
 
 vnl_double_2 VoxmapImagePoints::GetCentreImage( int x, int y, int z, int d, int im) const
 {
-  if( d!= depth)
+  if (d!= depth)
     return GetCornerImage( x*2,y*2,z*2,1,1,1,d+1,im);
 
-  if( imagecentres[im]->fullp(x,y,z))
+  if (imagecentres[im]->fullp(x,y,z))
     return (*imagecentres[im])(x,y,z);
 
   vnl_double_3 p= GetCentre( x,y,z,d);
@@ -55,7 +55,7 @@ vnl_double_2 VoxmapImagePoints::GetCornerImage( int x, int y, int z, int dx, int
 {
   //  cout << x << " " << y << " " << z << endl;
 
-  //  if( d!= depth)
+  //  if (d!= depth)
   //    return GetCornerImage( (x+dx)*2, (y+dy)*2, (z+dz)*2, 0, 0, 0, d+1, im);
 
   int dd= 1<<(depth-d);
@@ -64,9 +64,9 @@ vnl_double_2 VoxmapImagePoints::GetCornerImage( int x, int y, int z, int dx, int
   int iy= (y+dy)*dd;
   int iz= (z+dz)*dd;
 
-  if( imagecorners[im]->fullp(ix,iy,iz))
+  if (imagecorners[im]->fullp(ix,iy,iz))
     return (*imagecorners[im])(ix,iy,iz);
-  
+
   vnl_double_3 p= GetCorner( x,y,z,dx,dy,dz,d);
   HomgPoint2D ip( pmatrices[im]->project( HomgPoint3D( p[0], p[1], p[2])));
   vnl_double_2 np( ip.x()/ip.w(), ip.y()/ip.w());

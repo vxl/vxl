@@ -1,6 +1,7 @@
+// This is oxl/vgui/internals/vgui_invert_homg4x4.h
 #ifndef vgui_invert_homg4x4_h_
 #define vgui_invert_homg4x4_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

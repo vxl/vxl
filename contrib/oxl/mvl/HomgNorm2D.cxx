@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/mvl/HomgNorm2D.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -31,8 +32,10 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
   // from ho_trivechomg_normalise
   _normalized.resize(points.size());
 
-  //for(unsigned i = 0; i < points.size(); ++i)
-  // vcl_cerr << points[i].get_vector() << vcl_endl;
+#if 0
+  for (unsigned i = 0; i < points.size(); ++i)
+    vcl_cerr << points[i].get_vector() << vcl_endl;
+#endif
 
   double cx, cy;
   centre(points, _normalized, &cx, &cy);
@@ -51,7 +54,7 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
   //vcl_cerr << "NORM = " << _norm_matrix << vcl_endl;
   if (paranoid) {
     SimilarityMetric::scale_matrices(1/diameter);
-    for(unsigned i = 0; i < points.size(); ++i) {
+    for (unsigned i = 0; i < points.size(); ++i) {
       vnl_double_3 ni = _normalized[i].get_vector();
       vnl_double_3 mi = SimilarityMetric::imagehomg_to_homg(points[i]).get_vector();
       vnl_double_3 residual = ni - mi;
@@ -59,11 +62,11 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
       if (l > 1e-12) {
      // vcl_cerr << "\n\n";
         vcl_cerr << "HomgNorm2D: "
-             << "d = " << diameter
-             << "ni = " << ni
-             << "mi = " << mi
-             << "Residual = " << residual
-             << " mag = " << l << vcl_endl;
+                 << "d = " << diameter
+                 << "ni = " << ni
+                 << "mi = " << mi
+                 << "Residual = " << residual
+                 << " mag = " << l << vcl_endl;
       }
     }
   }
@@ -101,7 +104,7 @@ static void centre (const vcl_vector<HomgPoint2D>& in,
   double cog_y = 0;
   unsigned cog_count = 0;
   unsigned n = in.size();
-  for(unsigned i = 0; i < n; ++i) {
+  for (unsigned i = 0; i < n; ++i) {
     const HomgPoint2D& p = in[i];
     double x,y;
     if (p.get_nonhomogeneous(x, y)) {
@@ -127,7 +130,7 @@ static void centre (const vcl_vector<HomgPoint2D>& in,
 
   // Transform points
   {
-    for(unsigned i = 0; i < n; ++i)
+    for (unsigned i = 0; i < n; ++i)
       out[i].set(C * in[i].get_vector());
   }
 

@@ -1,10 +1,6 @@
+// This is mul/mbl/mbl_matxvec.h
 #ifndef mbl_matxvec_h
 #define mbl_matxvec_h
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-
 //:
 // \file
 // \brief Various specialised versions of simple linear algebra operators.

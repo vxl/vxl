@@ -1,6 +1,7 @@
+// This is oxl/mvl/HomgPoint2D.h
 #ifndef HomgPoint2D_h_
 #define HomgPoint2D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

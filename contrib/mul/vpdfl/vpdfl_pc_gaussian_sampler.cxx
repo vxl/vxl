@@ -1,3 +1,7 @@
+// This is mul/vpdfl/vpdfl_pc_gaussian_sampler.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author Ian Scott
@@ -5,9 +9,6 @@
 // \brief Interface for Multi-variate principal Component gaussian PDF sampler.
 // Modifications
 // 23 April 2001 IMS - Ported to VXL
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 #include "vpdfl_pc_gaussian_sampler.h"
 

@@ -1,6 +1,7 @@
+// This is oxl/mvl/TriTensorCompute.h
 #ifndef BaseTriTensorCompute_h_
 #define BaseTriTensorCompute_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -22,10 +23,9 @@ class HomgMatchLineSeg2D2D2D;
 class HomgMatchPoint2D2D2D;
 class TriTensor;
 
-class BaseTriTensorCompute {
-
-  // PUBLIC INTERFACE------------------------------------------------------
-public:
+class BaseTriTensorCompute
+{
+ public:
 
   // Constructors/Initializers/Destructors---------------------------------
 
@@ -43,7 +43,7 @@ public:
 
   // INTERNALS-------------------------------------------------------------
 
-protected:
+ protected:
   // Data Members----------------------------------------------------------
 
   // the matched points.

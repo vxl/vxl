@@ -1,9 +1,9 @@
+// This is mul/mbl/mbl_data_collector_base.h
 #ifndef mbl_data_collector_base_h_
 #define mbl_data_collector_base_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Tim Cootes
@@ -16,8 +16,9 @@
 //: Non-templated base class for mbl_data_collector<T>
 // Provided mainly because the Visual C++ compiler can't cope with
 // the double template instantiation for the binary IO
-class mbl_data_collector_base {
-public:
+class mbl_data_collector_base
+{
+ public:
 
   //: Dflt ctor
   mbl_data_collector_base();

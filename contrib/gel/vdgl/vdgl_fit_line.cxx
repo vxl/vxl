@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is gel/vdgl/vdgl_fit_line.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -21,7 +22,7 @@ vsol_line_2d_sptr vdgl_fit_line(vdgl_edgel_chain &chain)
    vnl_vector<double>  x(SIZE);
    vnl_vector<double>  y(SIZE);
 
-   for(int i=0;i<SIZE;i++)
+   for (int i=0;i<SIZE;i++)
    {
       ed = chain.edgel(i);
           x(i) = ed.get_x();
@@ -35,7 +36,7 @@ vsol_line_2d_sptr vdgl_fit_line(vdgl_edgel_chain &chain)
 
    S_x=S_y=S_xx=S_yy=S_xy=0;
 
-   for(int i=0;i<SIZE;i++)
+   for (int i=0;i<SIZE;i++)
    {
      S_x   = S_x + x(i) ;
      S_y   = S_y + y(i) ;

@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is oxl/mvl/LineSegSet.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 
@@ -68,16 +68,17 @@ bool LineSegSet::load_ascii(vcl_istream& f, HomgMetric const& c)
     double y1 = L(i,1);
     double x2 = L(i,2);
     double y2 = L(i,3);
-//  double theta;
-//  double avemag;
-//  if (cols == 6) {
-//    theta = L(i,4);
-//    avemag = L(i,5);
-//  } else {
-//    theta = 0;
-//    avemag = 0;
-//  }
-
+#if 0
+    double theta;
+    double avemag;
+    if (cols == 6) {
+      theta = L(i,4);
+      avemag = L(i,5);
+    } else {
+      theta = 0;
+      avemag = 0;
+    }
+#endif
     HomgPoint2D p1(x1, y1);
     HomgPoint2D p2(x2, y2);
     HomgLineSeg2D line(p1, p2);

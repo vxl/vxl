@@ -1,6 +1,7 @@
+// This is oxl/mvl/PMatrixDec.h
 #ifndef PMatrixDec_h_
 #define PMatrixDec_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -65,7 +66,7 @@ class PMatrixDec : public PMatrix
   friend vcl_ostream& operator<<(vcl_ostream& s, const PMatrixDec& P);
 
   // INTERNALS---------------------------------------------------------------
-private:
+ private:
   void Init();
 };
 

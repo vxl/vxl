@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/vgui/internals/vgui_transpose_4x4.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vgui_transpose_4x4.h"
 
 void vgui_transpose_4x4(double A[4][4])

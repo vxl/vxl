@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/osl/osl_load_topology.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "osl_load_topology.h"
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
@@ -17,7 +19,7 @@ void osl_load_topology(char const *f, vcl_list<osl_edge*> &e, vcl_list<osl_verte
 }
 
 #define streamok \
-{ if (f.bad()) { vcl_cerr << __FILE__ ":" << __LINE__ << " stream bad at this point" << vcl_endl; return; } }
+{ if (f.bad()) { vcl_cerr << __FILE__ ":" << __LINE__ << " stream bad at this point\n"; return; } }
 
 void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_vertex*> &vs) {
   es.clear();
@@ -30,7 +32,7 @@ void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_ver
   f >> vcl_ws;
   f.getline(buf, sizeof(buf));
   if (vcl_strcmp("osl_save_topology 1.0", buf) != 0) {
-    vcl_cerr << __FILE__ ": version string mismatch" << vcl_endl;
+    vcl_cerr << __FILE__ ": version string mismatch\n";
     return;
   }
   streamok;
@@ -40,13 +42,13 @@ void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_ver
   f.getline(buf, sizeof(buf));
   int numverts = -1;
   if (vcl_sscanf(buf, "%d%[ ]vertices", &numverts, tmp) != 2) {
-    vcl_cerr << __FILE__ ": error reading number of vertices" << vcl_endl;
+    vcl_cerr << __FILE__ ": error reading number of vertices\n";
     return;
   }
   assert(numverts >= 0);
   streamok;
   // read vertices :
-  vcl_cerr << "reading " << numverts << " vertices..." << vcl_endl;
+  vcl_cerr << "reading " << numverts << " vertices...\n";
   vcl_vector<osl_vertex*> vert(numverts+1, (osl_vertex*)0);
   for (int i=0; i<numverts; ++i) {
     unsigned int stashid;
@@ -65,13 +67,13 @@ void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_ver
   f.getline(buf, sizeof(buf));
   int numedges = -1;
   if (vcl_sscanf(buf, "%d%[ ]edges", &numedges, tmp) != 2) {
-    vcl_cerr << __FILE__ ": error reading number of edges" << vcl_endl;
+    vcl_cerr << __FILE__ ": error reading number of edges\n";
     return;
   }
   assert(numedges >= 0);
   streamok;
   // read edges :
-  vcl_cerr << "reading " << numedges << " edges..." << vcl_endl;
+  vcl_cerr << "reading " << numedges << " edges...\n";
   for (int i=0; i<numedges; ++i) {
     unsigned int stashid1 = vert.size(), stashid2 = vert.size();
     f >> vcl_ws >> stashid1 >> stashid2;

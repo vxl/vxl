@@ -1,6 +1,7 @@
+// This is oxl/mvl/HMatrix2DAffineCompute.h
 #ifndef HMatrix2DAffineCompute_h_
 #define HMatrix2DAffineCompute_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -24,17 +25,18 @@
 #include <mvl/HMatrix2D.h>
 class HomgPoint2D;
 
-class HMatrix2DAffineCompute : public HMatrix2DCompute {
-protected:
+class HMatrix2DAffineCompute : public HMatrix2DCompute
+{
+ protected:
   bool compute_p(const PointArray &,
                  const PointArray &,
                  HMatrix2D *);
-public:
+ public:
   // left in for capes :
   static HMatrix2D compute (const PairMatchSetCorner &matches);
   static HMatrix2D compute (const vcl_vector<HomgPoint2D>&p1, const vcl_vector<HomgPoint2D>&p2);
   int minimum_number_of_correspondences() const { return 3; }
-private:
+ private:
   static bool tmp_fun(const PointArray&,
                       const PointArray&,
                       HMatrix2D*);
@@ -48,7 +50,8 @@ private:
 // an n-by-2 matrix whose ith row contains the inhomogeneous
 // coordinates of the ith homogeneous point.
 //
-struct NonHomg : public vnl_matrix<double> {
+struct NonHomg : public vnl_matrix<double>
+{
   NonHomg(const vcl_vector<HomgPoint2D> &A);
 };
 

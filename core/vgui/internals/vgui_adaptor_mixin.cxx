@@ -1,12 +1,11 @@
-// This is ./oxl/vgui/internals/vgui_adaptor_mixin.cxx
-
+// This is oxl/vgui/internals/vgui_adaptor_mixin.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "vgui_adaptor_mixin.h"
 
 vgui_adaptor_mixin::vgui_adaptor_mixin()

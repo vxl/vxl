@@ -1,10 +1,11 @@
+// This is oxl/osl/osl_canny_gradient.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "osl_canny_gradient.h"
 #include <vcl_cmath.h>
 

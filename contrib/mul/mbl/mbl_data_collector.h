@@ -1,7 +1,7 @@
 // This is mul/mbl/mbl_data_collector.h
 #ifndef mbl_data_collector_h_
 #define mbl_data_collector_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -23,7 +23,7 @@
 template<class T>
 class mbl_data_collector : public mbl_data_collector_base
 {
-public:
+ public:
   //: Dflt ctor
   mbl_data_collector();
 

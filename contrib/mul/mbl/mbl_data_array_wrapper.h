@@ -1,9 +1,9 @@
+// This is mul/mbl/mbl_data_array_wrapper.h
 #ifndef mbl_data_array_wrapper_h
 #define mbl_data_array_wrapper_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Tim Cootes
@@ -14,12 +14,12 @@
 
 //: A wrapper to provide access to C-arrays of objects
 template<class T>
-class mbl_data_array_wrapper : public mbl_data_wrapper<T> {
-private:
+class mbl_data_array_wrapper : public mbl_data_wrapper<T>
+{
   const T* data_;
   unsigned long n_;
   unsigned long index_;
-public:
+ public:
   //: Default constructor
   mbl_data_array_wrapper();
 

@@ -1,6 +1,7 @@
+// This is oxl/mvl/FDesignMatrix.h
 #ifndef FDesignMatrix_h_
 #define FDesignMatrix_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -25,7 +26,7 @@
 class FDesignMatrix : public vnl_matrix<double>
 {
   typedef vnl_matrix<double> base;
-public:
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   FDesignMatrix(vcl_vector<HomgPoint2D> const& points1,

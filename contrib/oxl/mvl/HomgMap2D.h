@@ -1,6 +1,7 @@
+// This is oxl/mvl/HomgMap2D.h
 #ifndef HomgMap2D_h_
 #define HomgMap2D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -15,8 +16,9 @@
 //     Andrew W. Fitzgibbon, Oxford RRG, 06 Nov 96
 //-----------------------------------------------------------------------------
 
-class HomgMap2D {
-public:
+class HomgMap2D
+{
+ public:
   virtual ~HomgMap2D() = 0;
 //: Transform a point from space 1 to space 2.
   virtual HomgPoint2D transform(const HomgPoint2D& p) = 0;

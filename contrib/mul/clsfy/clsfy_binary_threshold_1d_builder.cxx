@@ -1,6 +1,4 @@
-#ifdef __GNUC__
-#pragma implementation
-#endif
+// This is mul/clsfy/clsfy_binary_threshold_1d_builder.cxx
 
 //:
 // \file
@@ -40,7 +38,6 @@ short clsfy_binary_threshold_1d_builder::version_no() const
 {
   return 1;
 }
-
 
 //: Create empty classifier
 // Caller is responsible for deletion
@@ -85,13 +82,12 @@ double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
     t.third = wts1[i];
     data.push_back(t);
   }
-
-  //vcl_cout<<"tot_wts0= "<<tot_wts0<<vcl_endl;
-  //vcl_cout<<"tot_wts1= "<<tot_wts1<<vcl_endl;
-
+#if 0
+  vcl_cout<<"tot_wts0= "<<tot_wts0<<vcl_endl;
+  vcl_cout<<"tot_wts1= "<<tot_wts1<<vcl_endl;
+#endif
   return build(classifier,&data[0],n0+n1,tot_wts0, tot_wts1);
 }
-
 
 //: Train classifier, returning weighted error
 //   Assumes two classes

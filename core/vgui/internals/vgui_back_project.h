@@ -1,15 +1,13 @@
-// This is ./oxl/vgui/internals/vgui_back_project.h
-
+// This is oxl/vgui/internals/vgui_back_project.h
+#ifndef vgui_back_project_h_
+#define vgui_back_project_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author fsm@robts.ox.ac.uk
 // \brief  Given a 3x4 camera, project a point x back onto a plane pi.
-
-#ifndef vgui_back_project_h_
-#define vgui_back_project_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 //: Given a 3x4 camera, project a point x back onto a plane pi.
 // The given point x is in normalize device coordinates.

@@ -1,6 +1,7 @@
+// This is oxl/osl/osl_easy_canny.h
 #ifndef osl_easy_canny_h_
 #define osl_easy_canny_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 // .NAME osl_easy_canny

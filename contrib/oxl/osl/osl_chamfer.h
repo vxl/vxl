@@ -1,6 +1,7 @@
+// This is oxl/osl/osl_chamfer.h
 #ifndef osl_chamfer_h_
 #define osl_chamfer_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

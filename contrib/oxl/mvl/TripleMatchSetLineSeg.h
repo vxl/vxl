@@ -1,6 +1,7 @@
+// This is oxl/mvl/TripleMatchSetLineSeg.h
 #ifndef TripleMatchSetLineSeg_h_
 #define TripleMatchSetLineSeg_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

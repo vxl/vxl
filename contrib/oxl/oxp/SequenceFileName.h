@@ -1,6 +1,7 @@
+// This is oxl/oxp/SequenceFileName.h
 #ifndef SequenceFileName_h_
 #define SequenceFileName_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -12,8 +13,9 @@
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
 
-class SequenceFileName {
-public:
+class SequenceFileName
+{
+ public:
 
   // Initialize and infer start and step from any ",1:2:100" in the filename
   SequenceFileName(char const* s, char const* read_or_write = "r");
@@ -39,7 +41,7 @@ public:
     n_ = (end_ - start_frame_) / step_ + 1;
   }
 
-public:
+ public:
 
   vcl_string fmt_;
   bool ok_;
@@ -49,7 +51,7 @@ public:
   int end_;
   int n_;
 
-protected:
+ protected:
   void init(char const* s, int start_frame, int step, char const* read_or_write = "r");
   static bool exists(const vcl_string& fmt, const char* extension, int real_frame_index);
 };

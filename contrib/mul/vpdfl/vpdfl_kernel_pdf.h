@@ -1,9 +1,9 @@
+// This is mul/vpdfl/vpdfl_kernel_pdf.h
 #ifndef vpdfl_kernel_pdf_h
 #define vpdfl_kernel_pdf_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Multi-variate kernel PDF
@@ -20,8 +20,9 @@
 //  the former in that a) every component has the same shape, though
 //  possibly a different width b) every component has the same weight
 //  c) Usually one uses different training algorithms.
-class vpdfl_kernel_pdf : public vpdfl_pdf_base {
-protected:
+class vpdfl_kernel_pdf : public vpdfl_pdf_base
+{
+ protected:
   //: Position of kernel centres
   vcl_vector<vnl_vector<double> > x_;
 
@@ -34,7 +35,7 @@ protected:
   //: Compute mean/variance given current centres and widths
   void calc_mean_var();
 
-public:
+ public:
 
   //: Dflt ctor
   vpdfl_kernel_pdf();
@@ -43,11 +44,11 @@ public:
   virtual ~vpdfl_kernel_pdf();
 
   //: Initialise so all kernels have the same width.
-    //  width is essentially the sd on the kernels
+  //  width is essentially the sd on the kernels
   void set_centres(const vnl_vector<double>* x, int n, double width);
 
   //: Initialise so all kernels have given width.
-    //  width[i] is essentially the sd on kernel i
+  //  width[i] is essentially the sd on kernel i
   void set_centres(const vnl_vector<double>* x, int n,
                    const vnl_vector<double>& width);
 

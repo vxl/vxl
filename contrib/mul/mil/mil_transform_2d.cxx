@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is mul/mil/mil_transform_2d.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 
@@ -295,7 +295,7 @@ void mil_transform_2d::set_affine(const vnl_matrix<double>& M23)  // 2x3 matrix
     if (m_data[0][0]*m_data[1][1] - m_data[0][1]*m_data[1][0] < 0)
     {
         vcl_cerr << "mil_transform_2d::affine : "
-             << "sub (2x2) matrix should have +ve |det|" << vcl_endl;
+                 << "sub (2x2) matrix should have +ve |det|\n";
         vcl_abort();
     }
 
@@ -431,7 +431,7 @@ void mil_transform_2d::calcInverse()  const
             double det = xx_*yy_-xy_*yx_;
             if (det==0)
             {
-                  vcl_cerr<<"SM_Transform2D::inverse() : No inverse exists for this affine transform (det==0)"<<vcl_endl;
+                  vcl_cerr<<"SM_Transform2D::inverse() : No inverse exists for this affine transform (det==0)\n";
                   vcl_abort();
             }
             xx2_=yy_/det;   xy2_=-xy_/det;
@@ -624,13 +624,13 @@ void mil_transform_2d::print_summary(vcl_ostream& o) const
             break;
 
         case ZoomOnly:
-            o << "ZoomOnly" << vcl_endl;
-            o << vsl_indent()<< "scale factor = (" << xx_ << "," << yy_ << ")" << vcl_endl;
+            o << "ZoomOnly\n";
+            o << vsl_indent()<< "scale factor = (" << xx_ << "," << yy_ << ")\n";
             o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
             break;
 
         case RigidBody:
-            o << "RigidBody" << vcl_endl;
+            o << "RigidBody\n";
             o << vsl_indent()<< "angle = " << vcl_atan2(yx_,xx_) << vcl_endl;
             o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
             break;
@@ -643,21 +643,21 @@ void mil_transform_2d::print_summary(vcl_ostream& o) const
             break;
 
         case Reflection:
-            o << "Reflection" << vcl_endl;
+            o << "Reflection\n";
             o << vsl_indent()<< xx_ << " " << xy_ << vcl_endl;
             o << vsl_indent()<< yx_ << " " << yy_ << vcl_endl;
             o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
             break;
 
         case Affine:
-            o << "Affine" << vcl_endl;
+            o << "Affine\n";
             o << vsl_indent()<< xx_ << " " << xy_ << vcl_endl;
             o << vsl_indent()<< yx_ << " " << yy_ << vcl_endl;
             o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
             break;
 
         case Projective:
-            o << "Projective"<<vcl_endl;
+            o << "Projective\n";
             o << vsl_indent()<< xx_ << " " << xy_ << " " << xt_ << vcl_endl;
             o << vsl_indent()<< yx_ << " " << yy_ << " " << yt_ << vcl_endl;
             o << vsl_indent()<< tx_ << " " << ty_ << " " << tt_;
@@ -668,7 +668,7 @@ void mil_transform_2d::print_summary(vcl_ostream& o) const
 
 vcl_ostream& operator<<( vcl_ostream& os, const mil_transform_2d& t )
 {
-    os << "mil_transform_2d:"<<vcl_endl;
+    os << "mil_transform_2d:\n";
     vsl_indent_inc(os);
     t.print_summary(os);
     vsl_indent_dec(os);

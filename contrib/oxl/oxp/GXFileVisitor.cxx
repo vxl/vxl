@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is oxl/oxp/GXFileVisitor.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 
@@ -63,7 +63,7 @@ struct StringToFloat {
 bool GXFileVisitor::visit(vcl_istream& s)
 {
   vul_reg_exp re("^t +[-+.0-9e]+ +[-+.0-9e]+ +(.+)$");
-  for(vul_awk awk(s); awk; ++awk) {
+  for (vul_awk awk(s); awk; ++awk) {
     int NF = awk.NF();
     if (NF == 0)
       continue;
@@ -107,7 +107,7 @@ bool GXFileVisitor::visit(vcl_istream& s)
 
       float x[1024];
       float y[1024];
-      for(int i = 0; i < npoints; ++i) {
+      for (int i = 0; i < npoints; ++i) {
         x[i] = vcl_atof(awk[i*2 + 0 + base]);
         y[i] = vcl_atof(awk[i*2 + 1 + base]);
       }
@@ -151,7 +151,7 @@ bool GXFileVisitor::visit(vcl_istream& s)
         };
         vcl_string colour = awk[1];
         char const* cs = colour.c_str();
-        for(unsigned i = 0; i < sizeof colors / sizeof colors[0]; ++i)
+        for (unsigned i = 0; i < sizeof colors / sizeof colors[0]; ++i)
           if (vcl_strcmp(colors[i].s, cs) == 0) {
             //was : color = colors[i].c;
             // fsm@robots. some compilers (SGI native) don't

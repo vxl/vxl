@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/internals/vgui_accelerate.h
-
+// This is oxl/vgui/internals/vgui_accelerate.h
+#ifndef vgui_accelerate_h_
+#define vgui_accelerate_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author David Capel, Robotics Research Group, University of Oxford
@@ -13,17 +17,12 @@
 //   Feb.2002    - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-#ifndef vgui_accelerate_h_
-#define vgui_accelerate_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 #include <vgui/vgui_gl.h>
 
 //: (Potentially) Accelerated functions
-class vgui_accelerate {
-public:
+class vgui_accelerate
+{
+ public:
   static bool vgui_no_acceleration;
   static bool vgui_mfc_acceleration;
 
@@ -46,7 +45,7 @@ public:
 
   static void register_accelerator (vgui_accelerate* p, int level);
 
-protected:
+ protected:
   vgui_accelerate();
 };
 

@@ -1,9 +1,10 @@
+// This is oxl/vgui/impl/gtk/vgui_gtk_dialog_impl.h
 #ifndef vgui_gtk_dialog_impl_h_
 #define vgui_gtk_dialog_impl_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_gtk_dialog_impl - Undocumented class FIXME
 // .LIBRARY vgui-gtk
 // .HEADER vxl Package
@@ -23,7 +24,7 @@
 //                          Added choice_field_widget function.
 //   Marko Bacic 11-JUL-00  Added support for inline file dialog box
 //   Marko Bacic 12-JUL-00  Added support for inline color chooser box
-//   Marko Bacic 14-JUL-00  Fixed misalignment of entry boxes 
+//   Marko Bacic 14-JUL-00  Fixed misalignment of entry boxes
 //   Marko Bacic 20-JUL-00  Fixed bug in inline file dialog box. Now returns
 //                          the full pathname
 //   K.Y.McGaul  31-MAY-01  Added set_ok/cancel_button.
@@ -33,24 +34,24 @@
 #include <gtk/gtk.h>
 class vgui_tableau_sptr;
 
-class vgui_gtk_dialog_impl : public vgui_dialog_impl {
-public:
+class vgui_gtk_dialog_impl : public vgui_dialog_impl
+{
+ public:
   vgui_gtk_dialog_impl(const char* name);
   ~vgui_gtk_dialog_impl();
-  
+
   void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
   void* inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height);
 
   void modal(const bool);
   void set_ok_button(const char* txt);
   void set_cancel_button(const char* txt);
-  
+
   bool ask();
- 
-private:
+
+ private:
   GtkWidget* dialog_window;
   GtkWidget* vbox;
-
 };
 
 #endif // vgui_gtk_dialog_impl_h_

@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is oxl/mvl/PMatrixDecompCR.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 
@@ -41,8 +41,8 @@ void PMatrixDecompCR::compute(const vnl_matrix<double>& p, bool scale_C)
   //
   vnl_double_3x3 PermHtPerm;
 
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 3; ++j)
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
       PermHtPerm(i,j) = p(2-j,2-i);
 
   vnl_qr<double> qr(PermHtPerm);
@@ -64,18 +64,18 @@ void PMatrixDecompCR::compute(const vnl_matrix<double>& p, bool scale_C)
   int d = r0pos * 2 + r2pos;
   double* diag = &diags[d][0];
 
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 3; ++j) {
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j) {
       C(j,i)  = diag[2-i] * R(2-i,2-j);
       Po(j,i) = diag[2-j] * Q(2-i,2-j);
     }
 
   // Compute t' = inv(C) t
   vnl_double_3 t;
-  for(int i = 0; i < 3; ++i)
+  for (int i = 0; i < 3; ++i)
     t[i] = p(i,3);
   UtSolve(C, t);
-  for(int i = 0; i < 3; ++i)
+  for (int i = 0; i < 3; ++i)
     Po(i,3) = t[i];
 
   if (((C * Po - p).fro_norm() > 1e-4) ||

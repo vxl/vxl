@@ -1,9 +1,6 @@
+// This is mul/mil3d/mil3d_gaussian_pyramid_builder_3d.h
 #ifndef mil3d_gaussian_pyramid_builder_3d_h_
 #define mil3d_gaussian_pyramid_builder_3d_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 //:
 //  \file
 //  \brief Build gaussian pyramids of mil3d_image_3d_of<T>
@@ -19,8 +16,8 @@
 //  and subsample so that image at level i-1 is half the
 //  size of that at level i
 template <class T>
-class mil3d_gaussian_pyramid_builder_3d : public mil_image_pyramid_builder {
-private:
+class mil3d_gaussian_pyramid_builder_3d : public mil_image_pyramid_builder
+{
   int max_levels_;
 
   mutable mil3d_image_3d_of<T> work_im1_,work_im2_;
@@ -37,7 +34,7 @@ private:
   //:Minimum size in Z direction of top layer of pyramid.
   unsigned min_z_size_;
 
-protected:
+ protected:
   //: Checks pyramid has at least n levels of correct type
   void checkPyr(mil_image_pyramid& im_pyr,  int n_levels) const;
 
@@ -49,7 +46,7 @@ protected:
   void gauss_reduce_15851(mil3d_image_3d_of<T>& dest_im,
                     const mil3d_image_3d_of<T>& src_im) const;
 
-public:
+ public:
   //: Dflt ctor
   mil3d_gaussian_pyramid_builder_3d();
 

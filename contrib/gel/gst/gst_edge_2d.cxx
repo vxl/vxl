@@ -1,11 +1,12 @@
-/*
-  crossge@crd.ge.com
-*/
-#ifdef __GNUC__
+// This is gel/gst/gst_edge_2d.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-#include "gst_edge_2d.h"
+//:
+// \file
+// \author crossge@crd.ge.com
 
+#include "gst_edge_2d.h"
 
 // constructor
 gst_edge_2d::gst_edge_2d( const gst_vertex_2d_sptr start, const gst_vertex_2d_sptr end)

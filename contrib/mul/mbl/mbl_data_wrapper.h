@@ -1,9 +1,9 @@
+// This is mul/mbl/mbl_data_wrapper.h
 #ifndef mbl_data_wrapper_h
 #define mbl_data_wrapper_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Tim Cootes
@@ -38,8 +38,9 @@
 #include <vcl_string.h>
 
 template<class T>
-class mbl_data_wrapper {
-public:
+class mbl_data_wrapper
+{
+ public:
   //: Default constructor
   mbl_data_wrapper();
 

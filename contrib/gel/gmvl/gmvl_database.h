@@ -1,12 +1,12 @@
+// This is gel/gmvl/gmvl_database.h
 #ifndef gmvl_database_h_
 #define gmvl_database_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  crossge@crd.ge.com
-*/
-
+//:
+// \file
+// \author crossge@crd.ge.com
 // this provides a (not necessary fast or efficient) multi-access database.
 //   only dependency is on 'tag' nodes, although tag nodes are in all other
 //   sense identical to other nodes.
@@ -20,7 +20,7 @@
 
 class gmvl_database
 {
-public:
+ public:
 
   // methods on database nodes
   void add_node( const gmvl_node_sptr node);
@@ -54,7 +54,7 @@ public:
   // output
   friend vcl_ostream &operator<<( vcl_ostream &os, const gmvl_database &db);
 
-protected:
+ protected:
 
   gmvl_node_cache nodecache_;
   gmvl_connection_cache connectioncache_;
@@ -62,4 +62,4 @@ protected:
 
 vcl_ostream &operator<<( vcl_ostream &os, const gmvl_database &db);
 
-#endif
+#endif // gmvl_database_h_

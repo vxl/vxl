@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/internals/vgui_dialog_impl.h
-
+// This is oxl/vgui/internals/vgui_dialog_impl.h
+#ifndef vgui_dialog_impl_h_
+#define vgui_dialog_impl_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
@@ -18,12 +22,6 @@
 //   K.Y.McGaul  22-MAY-01    Added tableau field.
 // \endverbatim
 
-#ifndef vgui_dialog_impl_h_
-#define vgui_dialog_impl_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vgui/vgui_tableau.h>
@@ -39,7 +37,7 @@ class vgui_dialog_field;
 //  information/class to the element.
 class vgui_dialog_impl
 {
-public:
+ public:
   vgui_dialog_impl(const char* dialog_name);
   virtual ~vgui_dialog_impl();
 
@@ -82,13 +80,14 @@ public:
                      file_bsr, color_csr,inline_file_bsr,inline_color_csr,
                      inline_tabl};
 
-  struct element {
+  struct element
+  {
     element_type type;
     void *widget;
     vgui_dialog_field *field;
   };
 
-protected:
+ protected:
   vcl_string name;
   vcl_vector<element> elements;
   vcl_string cancel_button_text_;

@@ -1,6 +1,7 @@
+// This is oxl/mvl/PairMatchMultiIterator.h
 #ifndef PairMatchMultiIterator_h_
 #define PairMatchMultiIterator_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -18,10 +19,11 @@
 #include <vcl_cstdlib.h> // for vcl_abort()
 
 class PairMatchMulti;
-class PairMatchMultiIterator {
+class PairMatchMultiIterator
+{
   vcl_multimap_uint_uint::const_iterator _first;
   vcl_multimap_uint_uint::const_iterator _last;
-public:
+ public:
 //: Construct a PairMatchMultiIterator from two multimap iterators
   PairMatchMultiIterator(const vcl_multimap_uint_uint::iterator& first,
                          const vcl_multimap_uint_uint::iterator& last):
@@ -49,7 +51,7 @@ public:
 //: Return the second component of the match pointed to by the iterator.
   int get_i2() const { return (*_first).second; }
 
-private:
+ private:
   PairMatchMultiIterator& operator ++ (int /*postfix*/) {vcl_abort(); return *this;}
 };
 

@@ -1,6 +1,7 @@
+// This is oxl/mvl/HMatrix1D.h
 #ifndef HMatrix1D_h_
 #define HMatrix1D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

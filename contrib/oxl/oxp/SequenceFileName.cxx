@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/oxp/SequenceFileName.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -54,7 +55,7 @@ void SequenceFileName::init(char const* s, int start_frame, int step, char const
     if (i != vcl_string::npos) {
       vcl_string dir = fmt_.substr(0, i);
       if (!vul_file::exists(dir.c_str())) {
-        vcl_cerr << "SequenceFileName: ** Image directory [" << dir << "] does not exist" << vcl_endl;
+        vcl_cerr << "SequenceFileName: ** Image directory [" << dir << "] does not exist\n";
         return;
         // vcl_cerr << "SequenceFileName: ** Making directory " << dir << vcl_endl;
         // if (!vul_file::make_directory(dir.c_str())) {
@@ -64,7 +65,7 @@ void SequenceFileName::init(char const* s, int start_frame, int step, char const
       } else
         if (!vul_file::is_directory(dir.c_str()))
           vcl_cerr << "SequenceFileName: WARNING: Inferred subdir [" << dir << "]"
-               << " exists and is not already a directory\n";
+                   << " exists and is not already a directory\n";
     }
   }
 

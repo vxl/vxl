@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is mul/pdf1d/pdf1d_exponential_builder.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -80,7 +81,7 @@ void pdf1d_exponential_builder::build_from_array(pdf1d_pdf& model, const double*
   if (n<2)
   {
     vcl_cerr<<"pdf1d_exponential_builder::build_from_array()";
-    vcl_cerr<<" Too few examples available."<<vcl_endl;
+    vcl_cerr<<" Too few examples available.\n";
     vcl_abort();
   }
 
@@ -100,7 +101,7 @@ void pdf1d_exponential_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>
 
   if (n_samples<2)
   {
-    vcl_cerr<<"pdf1d_exponential_builder::build() Too few examples available."<<vcl_endl;
+    vcl_cerr<<"pdf1d_exponential_builder::build() Too few examples available.\n";
     vcl_abort();
   }
 
@@ -139,7 +140,7 @@ void pdf1d_exponential_builder::weighted_build(pdf1d_pdf& model,
 
   if (n_samples<2)
   {
-    vcl_cerr<<"pdf1d_exponential_builder::build() Too few examples available."<<vcl_endl;
+    vcl_cerr<<"pdf1d_exponential_builder::build() Too few examples available.\n";
     vcl_abort();
   }
 

@@ -1,9 +1,6 @@
+// This is mul/mbl/mbl_cloneable_ptr.h
 #ifndef mbl_cloneable_ptr_h
 #define mbl_cloneable_ptr_h
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 //:
 //  \file
 
@@ -18,25 +15,23 @@
 //  When written or read to/from binary streams,
 //  suitable polymorphic I/O is invoked.
 template <class BaseClass>
-class mbl_cloneable_ptr {
-private:
+class mbl_cloneable_ptr
+{
   BaseClass* ptr_;
-public:
-    //: Default constructor (zeros pointer)
+ public:
+  //: Default constructor (zeros pointer)
   mbl_cloneable_ptr() : ptr_(0) {}
 
-    //: Delete object pointed to and set pointer to zero
-  void deleteObject()
-    { delete ptr_; ptr_=0; }
+  //: Delete object pointed to and set pointer to zero
+  void deleteObject() { delete ptr_; ptr_=0; }
 
-    //: Destructor
+  //: Destructor
   ~mbl_cloneable_ptr() { deleteObject(); }
 
-    //: Copy constructor
-  mbl_cloneable_ptr(const mbl_cloneable_ptr<BaseClass>& p)
-    : ptr_(0) { *this = p; }
+  //: Copy constructor
+  mbl_cloneable_ptr(const mbl_cloneable_ptr<BaseClass>& p) : ptr_(0) { *this = p; }
 
-    //: Copy operator
+  //: Copy operator
   mbl_cloneable_ptr<BaseClass>& operator=(const mbl_cloneable_ptr<BaseClass>& p)
   {
     if (this==&p) return *this;
@@ -44,7 +39,7 @@ public:
     return *this;
   }
 
-    //: Copy operator - takes clone of p
+  //: Copy operator - takes clone of p
   mbl_cloneable_ptr<BaseClass>& operator=(const BaseClass& p)
   {
     if (ptr_==&p) return *this;
@@ -53,9 +48,9 @@ public:
     return *this;
   }
 
-    //: Copy operator - takes responsibility for *p
-    //  Sets internal pointer to p, and takes responsibility
-    //  for deleting *p
+  //: Copy operator - takes responsibility for *p
+  //  Sets internal pointer to p, and takes responsibility
+  //  for deleting *p
   mbl_cloneable_ptr<BaseClass>& operator=(BaseClass* p)
   {
     if (ptr_==p) return *this;
@@ -64,31 +59,31 @@ public:
     return *this;
   }
 
-    //: Return true if pointer defined
-  bool isDefined() const { return (ptr_!=0); }
+  //: Return true if pointer defined
+  bool isDefined() const { return ptr_!=0; }
 
-    //: Make object behave like pointer to BaseClass
+  //: Make object behave like pointer to BaseClass
   const BaseClass* operator->() const { return ptr_; }
 
-    //: Make object behave like pointer to BaseClass
+  //: Make object behave like pointer to BaseClass
   BaseClass* operator->() { return ptr_; }
 
-    //: Return actual pointer
+  //: Return actual pointer
   const BaseClass* ptr() const { return ptr_; }
 
-    //: Cast to allow object to look like thing pointed to
+  //: Cast to allow object to look like thing pointed to
   operator BaseClass&() { assert(ptr_!=0); return *ptr_; }
 
-    //: Cast to allow object to look like thing pointed to
+  //: Cast to allow object to look like thing pointed to
   operator const BaseClass&() const { assert(ptr_!=0); return *ptr_; }
 
-    //: Save to binary stream
+  //: Save to binary stream
   void b_write(vsl_b_ostream& bfs) const
   {
     vsl_b_write(bfs,ptr_);
   }
 
-    //: Load fron binary stream
+  //: Load fron binary stream
   void b_read(vsl_b_istream& bfs)
   {
     deleteObject();

@@ -1,11 +1,11 @@
+// This is mul/vpdfl/vpdfl_kernel_pdf_builder.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author Tim Cootes
 // \brief Initialises kernel pdfs
-
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 #include <vcl_cassert.h>
 #include <vcl_string.h>

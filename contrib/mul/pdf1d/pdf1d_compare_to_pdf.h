@@ -1,9 +1,9 @@
+// This is mul/pdf1d/pdf1d_compare_to_pdf.h
 #ifndef pdf1d_compare_to_pdf_h
 #define pdf1d_compare_to_pdf_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Base for classes with test whether data could come from a given pdf.
@@ -22,11 +22,12 @@
 // Functions are available to test whether a set of samples are likely
 // to have been drawn from either a particular distribution or a given
 // form of distribution.
-class pdf1d_compare_to_pdf {
-protected:
+class pdf1d_compare_to_pdf
+{
+ protected:
   //: Workspace for PDFs
   mbl_cloneable_ptr<pdf1d_pdf> pdf_;
-public:
+ public:
 
   //: Dflt ctor
   pdf1d_compare_to_pdf();

@@ -1,6 +1,7 @@
+// This is oxl/mvl/LineSegSet.h
 #ifndef LineSegSet_h_
 #define LineSegSet_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //

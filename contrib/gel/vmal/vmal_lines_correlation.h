@@ -1,8 +1,6 @@
+// This is gel/vmal/vmal_lines_correlation.h
 #ifndef vmal_lines_corrletation_h_
 #define vmal_lines_corrletation_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 //--------------------------------------------------------------------------------
 // .NAME        vmal_lines_correlation
 // .INCLUDE     vmal/vmal_lines_correlation
@@ -33,7 +31,7 @@
 
 class vmal_lines_correlation
 {
-public:
+ public:
   vmal_lines_correlation();
 
   vmal_lines_correlation(int, double);
@@ -57,7 +55,7 @@ public:
             vil_memory_image_of<vil_byte> &image1,
             unsigned char &value0, unsigned char &value1);
 
-private:
+ private:
   int _delta;
   double _radius;
 };

@@ -1,6 +1,7 @@
+// This is oxl/mvl/HomgLine3D.h
 #ifndef HomgLine3D_h_
 #define HomgLine3D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -24,7 +25,7 @@ class HomgLine3D
   HomgPoint3D point_finite_; //!< any finite point on the line
   HomgPoint3D point_infinite_;
 
-public:
+ public:
   // Constructors/Initializers/Destructors-----------------------------------
 
   HomgLine3D();

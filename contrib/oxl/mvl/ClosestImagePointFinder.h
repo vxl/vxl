@@ -1,6 +1,7 @@
+// This is oxl/mvl/ClosestImagePointFinder.h
 #ifndef ClosestImagePointFinder_h_
 #define ClosestImagePointFinder_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -23,7 +24,7 @@ class HomgPoint2D;
 
 class ClosestImagePointFinder
 {
-public:
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   ClosestImagePointFinder(const HomgInterestPointSet& corners);
@@ -47,7 +48,7 @@ public:
   double get_last_x() const { return px_[_last_index]; }
   double get_last_y() const { return py_[_last_index]; }
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
 
   int get_closest_within_region(double cx, double cy, double w, double h, int* out_index, double mindist_sq);

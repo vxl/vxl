@@ -1,6 +1,7 @@
+// This is oxl/mvl/ProjectiveBasis2D.h
 #ifndef ProjectiveBasis2D_h_
 #define ProjectiveBasis2D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -29,8 +30,9 @@
 #include <vcl_vector.h>
 class HomgPoint2D;
 
-class ProjectiveBasis2D {
-public:
+class ProjectiveBasis2D
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   // tm_get_canonical_proj
@@ -54,7 +56,7 @@ public:
 
   // Data Control--------------------------------------------------------------
 
-protected:
+ protected:
   // Computations--------------------------------------------------------------
   void compute(const HomgPoint2D&, const HomgPoint2D&, const HomgPoint2D&, const HomgPoint2D&);
 
@@ -62,7 +64,7 @@ protected:
   HMatrix2D T_;
   bool collinear_;
 
-private:
+ private:
   // Helpers-------------------------------------------------------------------
 };
 

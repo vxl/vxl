@@ -1,9 +1,9 @@
+// This is mul/mbl/mbl_mz_random.h
 #ifndef mbl_mz_random_h
 #define mbl_mz_random_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Aaron Kotcheff
@@ -27,7 +27,7 @@ const int mbl_mz_array_size = 37;
 // \author Aaron Kotcheff
 class mbl_mz_random
 {
-  private:
+ private:
     enum {linear_congruential_multiplier = 1664525, mz_previous1 = 24};
     unsigned long linear_congruential_previous;
     unsigned long mz_seed_array[mbl_mz_array_size];
@@ -39,7 +39,7 @@ class mbl_mz_random
     double mz_previous_normal;
     int mz_previous_normal_flag;
 
-  public:
+ public:
     //: Default constructor.
     // Initializes the random number generator non-deterministically.
     // i.e. it will generate a different series of random numbers each

@@ -1,9 +1,11 @@
-/*
-  crossge@crd.ge.com
-*/
-#ifdef __GNUC__
+// This is gel/gtrl/gtrl_triangle.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author crossge@crd.ge.com
+
 #include "gtrl_triangle.h"
 
 gtrl_triangle::gtrl_triangle( gtrl_vertex_sptr p1, gtrl_vertex_sptr p2, gtrl_vertex_sptr p3)

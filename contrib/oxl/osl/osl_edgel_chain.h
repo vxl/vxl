@@ -1,6 +1,7 @@
+// This is oxl/osl/osl_edgel_chain.h
 #ifndef osl_edgel_chain_h_
 #define osl_edgel_chain_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 // .NAME osl_edgel_chain
@@ -14,14 +15,14 @@ struct osl_edgel_chain
 {
   int n;
   float *x, *y, *grad, *theta;
-  
+
   osl_edgel_chain();
   osl_edgel_chain(int n_);
   osl_edgel_chain(osl_edgel_chain const &);
   void operator=(osl_edgel_chain const &);
   ~osl_edgel_chain();
   void SetLength(int);
-  
+
   float  GetGrad(int i) const;
   float *GetGrad() const;
   float  GetTheta(int i) const;

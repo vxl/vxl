@@ -1,7 +1,7 @@
-#ifdef __GNUG__
+// This is oxl/mvl/HomgPlane3D.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 

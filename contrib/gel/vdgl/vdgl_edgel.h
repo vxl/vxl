@@ -1,6 +1,7 @@
+// This is gel/vdgl/vdgl_edgel.h
 #ifndef vdgl_edgel_h
 #define vdgl_edgel_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 
@@ -18,9 +19,9 @@
 #include <vcl_iostream.h>
 #include <vgl/vgl_point_2d.h>
 
-class vdgl_edgel {
-   // PUBLIC INTERFACE---------------------------------------------------------
-public:
+class vdgl_edgel
+{
+ public:
 
   // Constructors/Destructor---------------------------------------------------
   vdgl_edgel() {}
@@ -52,7 +53,7 @@ public:
   inline void set_theta( const double theta) { theta_= theta; }
 
   // INTERNALS-----------------------------------------------------------------
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
 
   vgl_point_2d<double> p_;

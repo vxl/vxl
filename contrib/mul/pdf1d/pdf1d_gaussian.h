@@ -1,9 +1,9 @@
+// This is mul/pdf1d/pdf1d_gaussian.h
 #ifndef pdf1d_gaussian_h
 #define pdf1d_gaussian_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Univariate gaussian PDF
@@ -12,14 +12,14 @@
 #include <pdf1d/pdf1d_pdf.h>
 
 //: Class for univariate gaussian.
-class pdf1d_gaussian : public pdf1d_pdf {
-private:
+class pdf1d_gaussian : public pdf1d_pdf
+{
   double sd_;
   double k_;
   double log_k_;
   void calc_log_k();
 
-public:
+ public:
   //: Dflt ctor (creates unit gaussian centred at zero)
   pdf1d_gaussian();
 

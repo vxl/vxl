@@ -1,9 +1,9 @@
+// This is mul/mil/algo/mil_algo_grad_filter_2d.h
 #ifndef mil_algo_grad_filter_2d_h_
 #define mil_algo_grad_filter_2d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 //  \file
 //  \brief Apply various gradient filters to a 2D image
@@ -18,7 +18,7 @@ class vsl_b_istream;
 template<class srcT, class destT>
 class mil_algo_grad_filter_2d
 {
-public:
+ public:
   //: Apply Sobel 3x3 gradient filter to 2D image.
   //  dest has twice as many planes as src, with dest plane (2i) being the x-gradient
   //  of source plane i and dest plane (2i+1) being the y-gradient.

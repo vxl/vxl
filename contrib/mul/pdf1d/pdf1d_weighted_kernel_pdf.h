@@ -1,9 +1,9 @@
+// This is mul/pdf1d/pdf1d_weighted_kernel_pdf.h
 #ifndef pdf1d_weighted_kernel_pdf_h
 #define pdf1d_weighted_kernel_pdf_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Univariate weighted kernel_pdf PDF
@@ -25,11 +25,11 @@
 //  set the weights seperately.
 class pdf1d_weighted_kernel_pdf : public pdf1d_kernel_pdf
 {
-protected:
+ protected:
   //: Weight of each kernel
   vnl_vector<double> weight_;
   double sum_weights_;
-public:
+ public:
 
   //:calc the weighted mean and var of kernels.
   // w is expected to sum to n.

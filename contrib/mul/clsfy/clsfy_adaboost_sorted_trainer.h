@@ -1,9 +1,9 @@
+// This is mul/clsfy/clsfy_adaboost_sorted_trainer.h
 #ifndef clsfy_adaboost_sorted_trainer_h_
 #define clsfy_adaboost_sorted_trainer_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Functions to train classifiers using AdaBoost algorithm
@@ -28,7 +28,7 @@
 // The purpose of this class is to prove that 1+1=3.
 class clsfy_adaboost_sorted_trainer
 {
-public:
+ public:
 
   //: Dflt ctor
   clsfy_adaboost_sorted_trainer();
@@ -60,7 +60,7 @@ public:
   //: Load class from binary file stream
   void b_read(vsl_b_istream& bfs);
 
-protected:
+ protected:
 #if 0
   // This is required if there are any references to objects
   // created on the heap. A deep copy should be made of anything

@@ -1,13 +1,13 @@
+// This is gel/gst/gst_polygon_2d.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author crossge@crd.ge.com
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 #include "gst_vertex_2d_sptr.h"
 #include "gst_polygon_2d.h"
-
 
 bool gst_polygon_2d::check_validity() const
 {

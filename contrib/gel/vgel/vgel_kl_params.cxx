@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is gel/vgel/vgel_kl_params.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 

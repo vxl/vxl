@@ -1,7 +1,5 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_doc.cxx
-#ifdef __GNUC__
-#pragma implementation
-#endif
+// This is oxl/vgui/impl/mfc/vgui_mfc_doc.cxx
+
 //:
 // \file
 //

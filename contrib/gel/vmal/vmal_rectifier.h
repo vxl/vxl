@@ -1,8 +1,6 @@
+// This is gel/vmal/vmal_rectifier.h
 #ifndef vmal_rectifier_h_
 #define vmal_rectifier_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 //--------------------------------------------------------------------------------
 //:
 //  \file
@@ -30,7 +28,7 @@
 
 class vmal_rectifier
 {
-public:
+ public:
 
 //---------------------------------------------------------------------------
 //: Default constructor.
@@ -102,7 +100,7 @@ public:
     vnl_double_3x3 &H0,
     vnl_double_3x3 &H1);
 
-private:
+ private:
 
   vnl_double_3* _lines0_p;
   vnl_double_3* _lines0_q;

@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/osl/osl_edgel_chain.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "osl_edgel_chain.h"
 
 #include <vcl_cstdlib.h>
@@ -40,7 +42,7 @@ osl_edgel_chain::osl_edgel_chain(osl_edgel_chain const &that)
   }
 }
 void osl_edgel_chain::operator=(osl_edgel_chain const &that) {
-  vcl_cerr << __FILE__ ": assignment to osl_edgel_chain" << vcl_endl;
+  vcl_cerr << __FILE__ ": assignment to osl_edgel_chain\n";
   if (this != &that) {
     this->~osl_edgel_chain();
     new (this) osl_edgel_chain(that);
@@ -87,7 +89,7 @@ void osl_edgel_chain::read_ascii(vcl_istream &is) {
     int n_ = -1;
     is >> vcl_ws >> n_;
     if (n_<0 || is.bad()) {
-      vcl_cerr << __FILE__ ": failed to read length of osl_edgel_chain" << vcl_endl;
+      vcl_cerr << __FILE__ ": failed to read length of osl_edgel_chain\n";
       return;
     }
     //SetLength(n_);
@@ -98,7 +100,7 @@ void osl_edgel_chain::read_ascii(vcl_istream &is) {
   for (int i=0; i<n; ++i)
     is >> vcl_ws >> x[i] >> y[i] >> grad[i] >> theta[i];
   if (is.bad()) {
-    vcl_cerr << __FILE__ ": stream bad before end of osl_edgel_chain" << vcl_endl;
+    vcl_cerr << __FILE__ ": stream bad before end of osl_edgel_chain\n";
     return;
   }
 

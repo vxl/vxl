@@ -1,6 +1,7 @@
+// This is oxl/mvl/Homg2D.h
 #ifndef _Homg2D_h
 #define _Homg2D_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -24,10 +25,9 @@
 #include <vnl/vnl_double_3.h>
 #include <mvl/Homg.h>
 
-class Homg2D : public vnl_double_3, public Homg {
-
-  // PUBLIC INTERFACE--------------------------------------------------------
-public:
+class Homg2D : public vnl_double_3, public Homg
+{
+ public:
 
   // Constructors/Initializers/Destructors-----------------------------------
 

@@ -1,6 +1,7 @@
+// This is oxl/osl/osl_edge.h
 #ifndef osl_edge_h_
 #define osl_edge_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 // .NAME osl_edge

@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/vgui/internals/vgui_invert_homg4x4.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vgui_invert_homg4x4.h"
 
 
@@ -17,10 +19,10 @@ static bool is_diagonal(double const * const *M) {
 
 // Translation plus scale
 static bool is_trans_scale(double const * const *M) {
-  return (                M[0][1] == 0 && M[0][2] == 0 &&
+  return                  M[0][1] == 0 && M[0][2] == 0 &&
           M[1][0] == 0 &&                 M[1][2] == 0 &&
           M[2][0] == 0 && M[2][1] == 0 &&
-          M[3][0] == 0 && M[3][1] == 0 && M[3][2] == 0);
+          M[3][0] == 0 && M[3][1] == 0 && M[3][2] == 0;
 }
 
 #define use_svd 0

@@ -1,6 +1,7 @@
+// This is oxl/mvl/HomgPrettyPrint.h
 #ifndef HomgPrettyPrint_h_
 #define HomgPrettyPrint_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

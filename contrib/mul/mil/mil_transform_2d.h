@@ -1,9 +1,9 @@
+// This is mul/mil/mil_transform_2d.h
 #ifndef mil_transform_2d_h_
 #define mil_transform_2d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Tim Cootes
@@ -51,8 +51,9 @@
 //
 // mil_transform_2d T_inverse = T3.inverse();
 // \endcode
-class mil_transform_2d {
-public:
+class mil_transform_2d
+{
+ public:
     //: Defines form of transformation
     enum Form { Identity,
                 Translation,
@@ -70,7 +71,7 @@ public:
         form_(Identity),inv_uptodate_(0) {};
 
 
-    bool is_identity() const { return (form_==Identity); };
+    bool is_identity() const { return form_==Identity; };
     Form form() const { return form_; };
     vnl_matrix<double> matrix() const;
     void matrix(vnl_matrix<double>&) const;
@@ -156,7 +157,7 @@ public:
     //: True if t is the same as this
     bool operator==(const mil_transform_2d& t) const;
 
-private:
+ private:
 
     double xx_,xy_,xt_,yx_,yy_,yt_,tx_,ty_,tt_;
     Form form_;

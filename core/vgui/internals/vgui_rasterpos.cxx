@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/vgui/internals/vgui_rasterpos.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vgui_rasterpos.h"
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

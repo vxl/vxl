@@ -1,12 +1,12 @@
+// This is mul/clsfy/clsfy_parzen_builder.h
 #ifndef clsfy_parzen_builder_h_
 #define clsfy_parzen_builder_h_
 
 // Copyright: (C) 2001 Britsh Telecommunications plc
 
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Describe a parzen window classifier builder
@@ -33,7 +33,7 @@ class clsfy_parzen_builder : public clsfy_builder_base
   //: The power, p, in the window function.  Default value is 2.0.
   double power_; 
 
-public:
+ public:
   // Dflt ctor
   clsfy_parzen_builder();
 

@@ -1,9 +1,9 @@
+// This is mul/mbl/mbl_data_array_ptr_wrapper.h
 #ifndef mbl_data_array_ptr_wrapper_h
 #define mbl_data_array_ptr_wrapper_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Tim Cootes
@@ -14,12 +14,12 @@
 
 //: A wrapper to provide access to objects through C-arrays of pointers
 template<class T>
-class mbl_data_array_ptr_wrapper : public mbl_data_wrapper<T> {
-private:
+class mbl_data_array_ptr_wrapper : public mbl_data_wrapper<T>
+{
   const T*const* data_;
   unsigned long n_;
   unsigned long index_;
-public:
+ public:
   //: Default constructor
   mbl_data_array_ptr_wrapper();
 
@@ -71,5 +71,4 @@ public:
   virtual vcl_string is_a() const;
 };
 
-#endif
-
+#endif // mbl_data_array_ptr_wrapper_h

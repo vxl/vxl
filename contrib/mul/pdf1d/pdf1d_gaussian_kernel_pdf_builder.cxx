@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is mul/pdf1d/pdf1d_gaussian_kernel_pdf_builder.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 

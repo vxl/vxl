@@ -1,9 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/oxp/oxp_bunch_of_files.h
 #ifndef oxp_bunch_of_files_h_
 #define oxp_bunch_of_files_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 //:
 // \file
 // \author awf@robots.ox.ac.uk
@@ -15,7 +12,8 @@
 
 #include <vxl_config.h> // for vxl_int_64
 
-struct oxp_bunch_of_files {
+struct oxp_bunch_of_files
+{
 #ifdef vxl_int_64
   typedef vxl_int_64 offset_t;
 #else // vcl_int_64 is typedef'd to void
@@ -34,7 +32,7 @@ struct oxp_bunch_of_files {
   int read(void*, unsigned int);
   bool ok() { return current_file_index != -1; }
 
-private:
+ private:
   int current_file_index;
   vcl_vector<vcl_string> filenames;
   vcl_vector<FILE*> fps;

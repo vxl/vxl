@@ -1,6 +1,7 @@
+// This is gel/vgel/vgel_kl_params.h
 #ifndef vgel_kl_params_h_
 #define vgel_kl_params_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //--------------------------------------------------------------------------------
@@ -12,9 +13,9 @@
 //--------------------------------------------------------------------------------
 #include <vgel/kl/klt.h>
 
-class vgel_kl_params {
-
-public:
+class vgel_kl_params
+{
+ public:
 
 //***************************************************************************
 // Initialization

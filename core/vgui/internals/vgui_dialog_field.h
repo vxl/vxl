@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/internals/vgui_dialog_field.h
-
+// This is oxl/vgui/internals/vgui_dialog_field.h
+#ifndef vgui_dialog_field_h_
+#define vgui_dialog_field_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -11,12 +15,6 @@
 //    23-OCT-1999 P.Pritchett - Initial version.
 // \endverbatim
 
-#ifndef vgui_dialog_field_h_
-#define vgui_dialog_field_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 #include <vcl_string.h>
 
 //: Represents a field in a dialog.
@@ -26,7 +24,7 @@
 //  stored value with a vcl_string
 class vgui_dialog_field
 {
-public:
+ public:
   vcl_string label;
   // Constructors/Destructors--------------------------------------------------
 

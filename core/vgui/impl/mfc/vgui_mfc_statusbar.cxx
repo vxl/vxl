@@ -1,8 +1,7 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_statusbar.cxx
-#ifdef __GNUC__
+// This is oxl/vgui/impl/mfc/vgui_mfc_statusbar.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author  Marko Bacic, RRG, University of Oxford
@@ -56,7 +55,7 @@ void vgui_mfc_statusbar::update()
 //: Append given text (of given length) to the status bar
 int vgui_mfc_statusbar::write(const char* text, int n) {
   static bool start_new = false;
-  if(n == 1) {
+  if (n == 1) {
     if (text[0] == '\n') {
       // We are at the end of the message. Set a bool so we know next time
       // to clear the buffer before we start a new message.

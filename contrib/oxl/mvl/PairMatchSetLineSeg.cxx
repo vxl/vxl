@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is oxl/mvl/PairMatchSetLineSeg.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 
@@ -37,7 +37,7 @@ void PairMatchSetLineSeg::extract_matches(vcl_vector <HomgLineSeg2D>& linesegs1,
   linesegs1.resize(n);
   linesegs2.resize(n);
   int i = 0;
-  for(iterator match = *this; match; match.next()) {
+  for (iterator match = *this; match; match.next()) {
     linesegs1[i] = _linesegs1->get_homg(match.get_i1());
     linesegs2[i] = _linesegs2->get_homg(match.get_i2());
     ++i;

@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is mul/clsfy/clsfy_adaboost_trainer.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \brief Functions to train classifiers using AdaBoost algorithm
@@ -130,7 +130,7 @@ void clsfy_adaboost_trainer::build_strong_classifier(
 
     if (min_error<1e-10)  // Hooray!
     {
-      vcl_cout<<"min_error<1e-10 !!!"<<vcl_endl;
+      vcl_cout<<"min_error<1e-10 !!!\n";
       alpha  = vcl_log(2.0*(n0+n1));   //is this appropriate???
       strong_classifier.add_classifier( best_c1d, alpha, best_j);
 
@@ -143,7 +143,7 @@ void clsfy_adaboost_trainer::build_strong_classifier(
 
     if (0.5-min_error<1e-10) // Oh dear, no further improvement possible
     {
-      vcl_cout<<"min_error => 0.5 !!!" <<vcl_endl;
+      vcl_cout<<"min_error => 0.5 !!!\n";
       beta=1.0;
 
       // delete classifiers on heap, cos clones taken by strong_classifier
@@ -226,7 +226,7 @@ clsfy_adaboost_trainer& clsfy_adaboost_trainer::operator=(const clsfy_adaboost_t
 void clsfy_adaboost_trainer::print_summary(vcl_ostream& /*os*/) const
 {
     // os << data_; // example of data output
-    vcl_cerr << "clsfy_adaboost_trainer::print_summary() NYI" << vcl_endl;
+    vcl_cerr << "clsfy_adaboost_trainer::print_summary() NYI\n";
 }
 
 //=======================================================================
@@ -236,7 +236,7 @@ void clsfy_adaboost_trainer::b_write(vsl_b_ostream& /*bfs*/) const
 {
   //vsl_b_write(bfs, version_no());
   //vsl_b_write(bfs, data_);
-  vcl_cerr << "clsfy_adaboost_trainer::b_write() NYI" << vcl_endl;
+  vcl_cerr << "clsfy_adaboost_trainer::b_write() NYI\n";
 }
 
 //=======================================================================
@@ -244,7 +244,7 @@ void clsfy_adaboost_trainer::b_write(vsl_b_ostream& /*bfs*/) const
   // required if data is present in this class
 void clsfy_adaboost_trainer::b_read(vsl_b_istream& /*bfs*/)
 {
-  vcl_cerr << "clsfy_adaboost_trainer::b_read() NYI" << vcl_endl;
+  vcl_cerr << "clsfy_adaboost_trainer::b_read() NYI\n";
 #if 0
   if (!bfs) return;
 

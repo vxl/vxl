@@ -1,6 +1,7 @@
+// This is oxl/oxp/RadialLensCorrection.h
 #ifndef RadialLensCorrection_h_
 #define RadialLensCorrection_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -13,19 +14,17 @@
 
 class RadialLensCorrection : public Mapping_2d_2d
 {
-public:
+ public:
   RadialLensCorrection(double cx, double cy, double sx, double sy, double k2, double k4 = 0);
   RadialLensCorrection(double k2);
   RadialLensCorrection(int w, int h, double k2);
 
-protected: // implementation of Mapping_2d_2d
+ protected: // implementation of Mapping_2d_2d
   virtual void implement_map(double x1, double y1, double* x2, double* y2);
   virtual void implement_inverse_map(double x2, double y2, double* x1, double* y1);
 
-protected:
   void init(double cx, double cy, double sx, double sy, double k2, double k4);
 
-protected:
   double _cx;
   double _cy;
   double _sx;

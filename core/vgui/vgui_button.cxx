@@ -1,8 +1,7 @@
-// This is ./oxl/vgui/vgui_button.cxx
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_button.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \brief See vgui_button.h for a description of this file.

@@ -1,11 +1,11 @@
+// This is mul/pdf1d/pdf1d_weighted_epanech_kernel_pdf.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \brief Univariate Weighted Epanechnikov kernel PDF
 // \author Ian Scott
-
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 #include "pdf1d_weighted_epanech_kernel_pdf.h"
 
@@ -152,7 +152,7 @@ double pdf1d_weighted_epanech_kernel_pdf::gradient(double x0,
 
 double pdf1d_weighted_epanech_kernel_pdf::nearest_plausible(double x, double log_p_min) const
 {
-  vcl_cerr<<"pdf1d_weighted_epanech_kernel_pdf::nearest_plausible() Not yet implemented."<<vcl_endl;
+  vcl_cerr<<"pdf1d_weighted_epanech_kernel_pdf::nearest_plausible() Not yet implemented.\n";
   vcl_abort();
   return 0;
 }

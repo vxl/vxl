@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is gel/vdgl/vdgl_interpolator_cubic.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -37,13 +38,13 @@ double vdgl_interpolator_cubic::get_x( const double index)
   vnl_matrix<double> A(4,1);
   vnl_matrix<double> M(4,4);
 
-        A(0,0) = ae.get_x(); A(1,0) = be.get_x();
-        A(2,0) = ce.get_x(); A(3,0) = de.get_x();
+  A(0,0) = ae.get_x(); A(1,0) = be.get_x();
+  A(2,0) = ce.get_x(); A(3,0) = de.get_x();
 
-        M(0,0)=  a*a*a; M(0,1)= a*a; M(0,2)= a; M(0,3)= 1;
-        M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
-        M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
-        M(3,0)=  d*d*d; M(3,1)= d*d; M(3,2)= d; M(3,3)= 1;
+  M(0,0)=  a*a*a; M(0,1)= a*a; M(0,2)= a; M(0,3)= 1;
+  M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
+  M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
+  M(3,0)=  d*d*d; M(3,1)= d*d; M(3,2)= d; M(3,3)= 1;
 
 
   vnl_svd<double> svd_of_M(M);
@@ -55,9 +56,7 @@ double vdgl_interpolator_cubic::get_x( const double index)
 
   vnl_matrix<double> P = svd_of_M.solve(A);
 
-        double x_new= P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
-
-  return (x_new);
+  return P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
 }
 
 
@@ -88,9 +87,7 @@ double vdgl_interpolator_cubic::get_y( const double index)
 
   vnl_matrix<double> P = svd.solve(A);
 
-  double y_new= P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
-
-  return (y_new);
+  return P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
 }
 
 
@@ -120,9 +117,7 @@ double vdgl_interpolator_cubic::get_theta( const double index)
   vnl_svd<double> svd(M);
   vnl_matrix<double> P = svd.solve(A);
 
-  double theta_new= P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
-
-  return (theta_new);
+  return P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
 }
 
 
@@ -157,9 +152,7 @@ double vdgl_interpolator_cubic::get_curvature( const double index)
 
   double t2 = 3 * P(0,0) * x_new * x_new + 2 * P(0,1) * x_new + P(0,2);
   double t3 = 1 + t2 * t2;
-  double curvature = t2/t3/vcl_sqrt(t3);
-
- return(curvature);
+  return t2/t3/vcl_sqrt(t3);
 }
 
 
@@ -222,7 +215,7 @@ void vdgl_interpolator_cubic::recompute_length()
 {
   lengthcache_= 0;
 
-  for( int i=0; i< chain_->size(); i++)
+  for (int i=0; i< chain_->size(); i++)
   {
     int j = i==0 ? chain_->size()-1 : i-1;
     vgl_point_2d<double> p1= chain_->edgel(j).get_pt();
@@ -242,7 +235,7 @@ void vdgl_interpolator_cubic::recompute_bbox()
   minycache_= chain_->edgel( 0).get_y();
   maxycache_= chain_->edgel( 0).get_y();
 
-  for( int i=1; i< chain_->size(); i++)
+  for (int i=1; i< chain_->size(); i++)
     {
       if ( chain_->edgel( i).get_x()< minxcache_) minxcache_= chain_->edgel( i).get_x();
       if ( chain_->edgel( i).get_x()> maxxcache_) maxxcache_= chain_->edgel( i).get_x();

@@ -1,10 +1,11 @@
+// This is mul/mil/mil_image.h
 #ifndef mil_image_h_
 #define mil_image_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-//: \file
+//:
+//  \file
 //  \brief A base class for images of any dimension and type
 //  \author Tim Cootes
 
@@ -18,9 +19,9 @@
 //  external data.
 //
 //  The existing vil_image does not suffice in this respect.
-class mil_image {
-
-public:
+class mil_image
+{
+ public:
 
     //: Dflt ctor
     mil_image() {}
@@ -94,4 +95,4 @@ vcl_ostream& operator<<(vcl_ostream& os,const mil_image* b);
 //: Print class to os
 void vsl_print_summary(vcl_ostream& os, const mil_image& im);
 
-#endif
+#endif // mil_image_h_

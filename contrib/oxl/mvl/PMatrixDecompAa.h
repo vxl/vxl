@@ -1,6 +1,7 @@
+// This is oxl/mvl/PMatrixDecompAa.h
 #ifndef PMatrixDecompAa_h_
 #define PMatrixDecompAa_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -16,8 +17,9 @@
 #include <vnl/vnl_double_3.h>
 #include <mvl/PMatrix.h>
 
-class PMatrixDecompAa {
-public:
+class PMatrixDecompAa
+{
+ public:
 
 //: Public data members for A and a.
   vnl_double_3x3 A;

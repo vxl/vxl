@@ -1,6 +1,7 @@
+// This is mul/vpdfl/vpdfl_pdf_base.h
 #ifndef vpdfl_pdf_base_h
 #define vpdfl_pdf_base_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -29,10 +30,10 @@ class vpdfl_pdf_base
 {
   vnl_vector<double> mean_;
   vnl_vector<double> var_;
-protected:
+ protected:
   void set_mean(const vnl_vector<double>& m) { mean_ = m; }
   void set_variance(const vnl_vector<double>& v) { var_ = v; }
-public:
+ public:
 
   //: Dflt ctor
   vpdfl_pdf_base();

@@ -1,6 +1,7 @@
+// This is oxl/mvl/ImageMetric.h
 #ifndef ImageMetric_h_
 #define ImageMetric_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

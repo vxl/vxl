@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/mvl/FMatrixComputeLinear.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -50,7 +51,7 @@ bool FMatrixComputeLinear::compute (vcl_vector<HomgPoint2D>& points1,
                                     vcl_vector<HomgPoint2D>& points2, FMatrix *F)
 {
   if (points1.size() < 8 || points2.size() < 8) {
-    vcl_cerr << "FMatrixComputeLinear: Need at least 8 point pairs." << vcl_endl;
+    vcl_cerr << "FMatrixComputeLinear: Need at least 8 point pairs.\n";
     vcl_cerr << "Number in each set: " << points1.size() << ", " << points2.size() << vcl_endl;
     return false;
   }

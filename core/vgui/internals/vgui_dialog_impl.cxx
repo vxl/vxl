@@ -1,8 +1,7 @@
-// This is ./oxl/vgui/internals/vgui_dialog_impl.cxx
-#ifdef __GNUC__
+// This is oxl/vgui/internals/vgui_dialog_impl.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 // See vgui_dialog_impl.h for a description of this file
@@ -244,7 +243,7 @@ void* vgui_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
 // (i.e. the dialog 'grabs' all events), this is the default.
 // False makes the dialog non-modal.
 void vgui_dialog_impl::modal(const bool) {
-  vcl_cerr << "No function defined to change dialog modality, by default dialogs are modal" << vcl_endl;
+  vcl_cerr << "No function defined to change dialog modality, by default dialogs are modal\n";
 }
 
 void vgui_dialog_impl::set_cancel_button(const char* txt)

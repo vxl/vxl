@@ -1,9 +1,11 @@
-/*
-  crossge@crd.ge.com
-*/
-#ifdef __GNUC__
+// This is gel/gtrl/gtrl_polygon.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author crossge@crd.ge.com
+
 #include "gtrl_polygon.h"
 
 gtrl_polygon::gtrl_polygon( const vcl_vector<gtrl_vertex_sptr> ps)

@@ -1,6 +1,7 @@
+// This is oxl/mvl/HMatrix3D.h
 #ifndef HMatrix3D_h_
 #define HMatrix3D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -19,7 +20,7 @@ class PMatrix;
 class HMatrix3D : public vnl_double_4x4
 {
   typedef vnl_double_4x4 Base;
-public:
+ public:
   HMatrix3D();
   HMatrix3D(const HMatrix3D& M);
   HMatrix3D(const vnl_matrix<double>& M);

@@ -1,6 +1,7 @@
+// This is gel/vdgl/vdgl_interpolator_cubic.h
 #ifndef vdgl_interpolator_cubic_h
 #define vdgl_interpolator_cubic_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 
@@ -17,9 +18,9 @@
 
 #include <vdgl/vdgl_interpolator.h>
 
-class vdgl_interpolator_cubic : public vdgl_interpolator {
-   // PUBLIC INTERFACE----------------------------------------------------------
-public:
+class vdgl_interpolator_cubic : public vdgl_interpolator
+{
+ public:
 
   // Constructors/Destructors--------------------------------------------------
 
@@ -47,14 +48,8 @@ public:
   double get_min_y();
   double get_max_y();
 
-  // Data Access---------------------------------------------------------------
-
-  // Data Control--------------------------------------------------------------
-
-  // Computations--------------------------------------------------------------
-
   // INTERNALS-----------------------------------------------------------------
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
 
   double lengthcache_;
@@ -63,14 +58,12 @@ protected:
   double minycache_;
   double maxycache_;
 
-private:
+ private:
   // Helpers-------------------------------------------------------------------
 
   void recompute_all();
   void recompute_length();
   void recompute_bbox();
-
 };
-
 
 #endif // _vdgl_interpolator_cubic_h

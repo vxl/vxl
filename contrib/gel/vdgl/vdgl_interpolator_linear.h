@@ -1,9 +1,9 @@
+// This is gel/vdgl/vdgl_interpolator_linear.h
 #ifndef vdgl_interpolator_linear_h
 #define vdgl_interpolator_linear_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Represents a linear 2D interpolator for a vdgl_edgel_chain
@@ -12,9 +12,9 @@
 
 #include <vdgl/vdgl_interpolator.h>
 
-class vdgl_interpolator_linear : public vdgl_interpolator {
-   // PUBLIC INTERFACE----------------------------------------------------------
-public:
+class vdgl_interpolator_linear : public vdgl_interpolator
+{
+ public:
 
   // Constructors/Destructors--------------------------------------------------
 
@@ -46,7 +46,7 @@ public:
   vsol_point_2d_sptr closest_point_on_curve ( vsol_point_2d_sptr p );
 
   // INTERNALS-----------------------------------------------------------------
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
 
   double lengthcache_;
@@ -55,7 +55,7 @@ protected:
   double minycache_;
   double maxycache_;
 
-private:
+ private:
   // Helpers-------------------------------------------------------------------
 
   void recompute_all();

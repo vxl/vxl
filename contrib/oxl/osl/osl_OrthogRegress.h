@@ -1,6 +1,7 @@
+// This is oxl/osl/osl_OrthogRegress.h
 #ifndef osl_OrthogRegress_h_
 #define osl_OrthogRegress_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 // .NAME osl_OrthogRegress
@@ -12,8 +13,9 @@
 #include <osl/osl_hacks.h>
 #include <osl/osl_ortho_regress.h>
 
-class osl_OrthogRegress : public osl_ortho_regress {
-public:
+class osl_OrthogRegress : public osl_ortho_regress
+{
+ public:
   typedef osl_ortho_regress base;
   osl_OrthogRegress() { }
   osl_OrthogRegress(double, double, double) { } // FIXME
@@ -28,7 +30,7 @@ public:
   void SetEstCost(double v) { est_ = v; }
   void Reset() { base::reset(); }
 
-private:
+ private:
   double a_, b_, c_;
   double est_;
 };

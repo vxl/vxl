@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is mul/mbl/mbl_mz_random.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:

@@ -1,8 +1,9 @@
-#ifdef __GNUC__
+// This is mul/mil/mil_byte_image_2d_io.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
-//: \file
+//:
+//  \file
 //  \brief Load and save mil_image_2d_of<vil_byte> from named files.
 //  \author Tim Cootes
 
@@ -39,12 +40,12 @@ void mil_byte_image_2d_io::setColour(const vcl_string& c)
 //  colour_ = c;
   if ( c == "" )
   {
-    colour_code_ = mil_byte_image_2d_io_depth_image;  
+    colour_code_ = mil_byte_image_2d_io_depth_image;
     return;
   }
   else if ( c == "Grey" )
   {
-    colour_code_ = mil_byte_image_2d_io_depth_grey; 
+    colour_code_ = mil_byte_image_2d_io_depth_grey;
     return;
   }
   else if ( c == "RGB" )
@@ -53,7 +54,7 @@ void mil_byte_image_2d_io::setColour(const vcl_string& c)
     return;
   }
 
-  vcl_cerr << " mil_byte_image_2d_io::set_colour(int); colour depth string " << c << " not supported" << vcl_endl;
+  vcl_cerr << " mil_byte_image_2d_io::set_colour(int); colour depth string " << c << " not supported\n";
 }
 
 //: Set the colour by the depth or using the standard code in the header
@@ -61,7 +62,7 @@ void mil_byte_image_2d_io::setColour(const vcl_string& c)
 //  Returns false if the depth is not suipported
 bool mil_byte_image_2d_io::set_colour_depth( int new_depth )
 {
-  if ( new_depth == mil_byte_image_2d_io_depth_image || 
+  if ( new_depth == mil_byte_image_2d_io_depth_image ||
        new_depth == mil_byte_image_2d_io_depth_grey  ||
        new_depth == mil_byte_image_2d_io_depth_rgb )
   {
@@ -69,8 +70,8 @@ bool mil_byte_image_2d_io::set_colour_depth( int new_depth )
     return true;
   }
 
-  vcl_cerr << " mil_byte_image_2d_io::set_colour(int); colour depth code " << new_depth 
-    << " not supported - NON FATAL ERROR" << vcl_endl;
+  vcl_cerr << " mil_byte_image_2d_io::set_colour(int); colour depth code " << new_depth
+           << " not supported - NON FATAL ERROR\n";
   return false;
 }
 
@@ -90,8 +91,8 @@ vcl_string mil_byte_image_2d_io::colour() const
     return vcl_string("RGB");
   }
 
-  vcl_cerr << " mil_byte_image_2d_io::set_colour(int); colour code " << colour_code_ 
-    << " not found in standard list - NON FATAL ERROR" << vcl_endl;
+  vcl_cerr << " mil_byte_image_2d_io::set_colour(int); colour code " << (int)colour_code_
+           << " not found in standard list - NON FATAL ERROR\n";
 
   return vcl_string("Bugger");
 }
@@ -171,7 +172,7 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
   {
     return true;
   }
- 
+
   vil_image img = vil_load(path.c_str());  // ie f_type is ignored here !!
   int nx = img.width();
   int ny = img.height();
@@ -206,7 +207,7 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
     if (img_is_grey)
     {
       //problem
-      vcl_cerr<<"require a colour image, image attempting to load is grey"<<vcl_endl;
+      vcl_cerr<<"require a colour image, image attempting to load is grey\n";
       image_.resize(0,0);
       image = image_;
       return false;
@@ -236,8 +237,8 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
   }
   else
   {
-    vcl_cerr << "mil_byte_image_2d_io::loadTheImage(); colour_depth() " << colour_depth() 
-      << " not supported - NON FATAL ERROR" << vcl_endl;
+    vcl_cerr << "mil_byte_image_2d_io::loadTheImage(); colour_depth() " << colour_depth()
+             << " not supported - NON FATAL ERROR\n";
     return false;
   }
 
@@ -258,7 +259,7 @@ bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil_byte>& image,
 
   if (filetype=="Unknown")
   {
-    vcl_cerr<<"File type for "<<path<<" unknown"<<vcl_endl;
+    vcl_cerr<<"File type for "<<path<<" unknown\n";
     return false;
   }
 
@@ -274,7 +275,7 @@ bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil_byte>& image,
     image_is_colour=true;
   else
   {
-    vcl_cerr<<"Failed to save: number of planes = "<<image.n_planes()<<" ??, require 1 or 3"<<vcl_endl;
+    vcl_cerr<<"Failed to save: number of planes = "<<image.n_planes()<<" ??, require 1 or 3\n";
     return false;
   }
 

@@ -1,6 +1,4 @@
-#ifdef __GNUC__
-#pragma implementation
-#endif
+// This is oxl/mvl/LineSeg.cxx
 
 //:
 //  \file

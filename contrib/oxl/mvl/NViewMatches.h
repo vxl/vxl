@@ -1,6 +1,7 @@
+// This is oxl/mvl/NViewMatches.h
 #ifndef NViewMatches_h_
 #define NViewMatches_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -92,7 +93,7 @@ class NViewMatches : public vcl_vector<NViewMatch>
 class OffsetNViewMatch : public NViewMatch
 {
   int min_view_;
-public:
+ public:
   OffsetNViewMatch(int min_view, int max_view):
     NViewMatch(max_view - min_view + 1),
     min_view_(min_view)

@@ -1,6 +1,7 @@
+// This is mul/mbl/mbl_read_int.h
 #ifndef mbl_read_int_h_
 #define mbl_read_int_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

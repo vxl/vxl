@@ -1,9 +1,9 @@
+// This is mul/vpdfl/vpdfl_kernel_pdf_builder.h
 #ifndef vpdfl_kernel_pdf_builder_h
 #define vpdfl_kernel_pdf_builder_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Tim Cootes
@@ -27,50 +27,51 @@ class vpdfl_kernel_pdf;
 //
 //  See book on Density Estimation by B.W.Silverman (Pub. Chapman and Hall, 1986)
 //  for details.
-class vpdfl_kernel_pdf_builder : public vpdfl_builder_base {
-public:
+class vpdfl_kernel_pdf_builder : public vpdfl_builder_base
+{
+ public:
   enum build_type { fixed_width, select_equal, width_from_sep, adaptive };
-private:
-    //: Minimum variance of whole model
+ private:
+  //: Minimum variance of whole model
   double min_var_;
 
-    //: Type of building to be performed
+  //: Type of building to be performed
   build_type build_type_;
 
-    //: Width set if fixed_width option on build used
+  //: Width set if fixed_width option on build used
   double fixed_width_;
 
   vpdfl_kernel_pdf& kernel_pdf(vpdfl_pdf_base& model) const;
-public:
+ public:
 
-    //: Dflt ctor
+  //: Dflt ctor
   vpdfl_kernel_pdf_builder();
 
-    //: Destructor
+  //: Destructor
   virtual ~vpdfl_kernel_pdf_builder();
 
-    //: Use fixed width kernels of given width when building.
+  //: Use fixed width kernels of given width when building.
   void set_use_fixed_width(double width);
 
-    //: Use equal width kernels of width depending on number of samples.
+  //: Use equal width kernels of width depending on number of samples.
   void set_use_equal_width();
 
-    //: Kernel width proportional to distance to nearby samples.
+  //: Kernel width proportional to distance to nearby samples.
   void set_use_width_from_separation();
 
-    //: Build adaptive kernel estimate.
+  //: Build adaptive kernel estimate.
   void set_use_adaptive();
 
-    //: Define lower threshold on variance for built models
+  //: Define lower threshold on variance for built models
   virtual void set_min_var(double min_var);
 
-    //: Get lower threshold on variance for built models
+  //: Get lower threshold on variance for built models
   virtual double min_var() const;
 
-    //: Build default model with given mean
+  //: Build default model with given mean
   virtual void build(vpdfl_pdf_base& model, const vnl_vector<double>& mean) const;
 
-    //: Build model from data
+  //: Build model from data
   virtual void build(vpdfl_pdf_base& model,
                      mbl_data_wrapper<vnl_vector<double> >& data) const;
 
@@ -78,48 +79,48 @@ public:
   void build_from_array(vpdfl_pdf_base& model,
                         const vnl_vector<double>* data, int n) const;
 
-    //: Build model from weighted data
+  //: Build model from weighted data
   virtual void weighted_build(vpdfl_pdf_base& model,
                               mbl_data_wrapper<vnl_vector<double> >& data,
                               const vcl_vector<double>& wts) const;
 
-    //: Build from n elements in data[i].  Fixed kernel width.
+  //: Build from n elements in data[i].  Fixed kernel width.
   void build_fixed_width(vpdfl_kernel_pdf& kpdf,
                          const vnl_vector<double>* data, int n, double width) const;
 
-    //: Build from n elements in data[i].  Chooses width.
-    //  Same width selected for all points, using
-    //  $w=(4/(2n+d.n)^{1/(d+4)}\sigma$, as suggested by Silverman
-    //  Note: This value only suitable for gaussian kernels!
+  //: Build from n elements in data[i].  Chooses width.
+  //  Same width selected for all points, using
+  //  $w=(4/(2n+d.n)^{1/(d+4)}\sigma$, as suggested by Silverman
+  //  Note: This value only suitable for gaussian kernels!
   void build_select_equal_width(vpdfl_kernel_pdf& kpdf,
                                  const vnl_vector<double>* data, int n) const;
 
-    //: Kernel width proportional to distance to nearby samples.
+  //: Kernel width proportional to distance to nearby samples.
   void build_width_from_separation(vpdfl_kernel_pdf& kpdf,
                                    const vnl_vector<double>* data, int n) const;
 
-    //: Build adaptive kernel estimate.
-    //  Use equal widths to create a pilot estimate, then use the prob at each
-    //  data point to modify the widths
+  //: Build adaptive kernel estimate.
+  //  Use equal widths to create a pilot estimate, then use the prob at each
+  //  data point to modify the widths
   void build_adaptive(vpdfl_kernel_pdf& kpdf,
                       const vnl_vector<double>* data, int n) const;
 
-    //: Version number for I/O
+  //: Version number for I/O
   short version_no() const;
 
-    //: Name of the class
+  //: Name of the class
   virtual vcl_string is_a() const;
 
-    //: Does the name of the class match the argument?
+  //: Does the name of the class match the argument?
   virtual bool is_class(vcl_string const& s) const;
 
-    //: Print class to os
+  //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
 
-    //: Save class to binary file stream
+  //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-    //: Load class from binary file stream
+  //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 };
 

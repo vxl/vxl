@@ -1,3 +1,7 @@
+// This is mul/vpdfl/vpdfl_gaussian_builder.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \brief Multi-variate gaussian PDF with arbitrary axes.
@@ -8,10 +12,6 @@
 // \verbatim
 //    IMS   Converted to VXL 18 April 2000
 // \endverbatim
-
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 //=======================================================================
 // inclusions

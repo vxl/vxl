@@ -1,6 +1,7 @@
+// This is oxl/mvl/PairMatchSetMulti.h
 #ifndef PairMatchSetMulti_h_
 #define PairMatchSetMulti_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

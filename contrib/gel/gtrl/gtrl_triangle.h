@@ -1,11 +1,12 @@
+// This is gel/gtrl/gtrl_triangle.h
 #ifndef gtrl_triangle_h_
 #define gtrl_triangle_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  crossge@crd.ge.com
-*/
+//:
+// \file
+// \author crossge@crd.ge.com
 
 #include <vbl/vbl_smart_ptr.h>
 #include <vbl/vbl_ref_count.h>
@@ -14,7 +15,7 @@
 
 class gtrl_triangle : public vbl_ref_count
 {
-public:
+ public:
   gtrl_triangle( gtrl_vertex_sptr p1, gtrl_vertex_sptr p2, gtrl_vertex_sptr p3);
 
   gtrl_vertex_sptr p1() const { return p1_; }
@@ -22,7 +23,7 @@ public:
   gtrl_vertex_sptr p3() const { return p3_; }
   gtrl_vertex_sptr mid_point() const { return midpoint_; }
 
-protected:
+ protected:
   gtrl_vertex_sptr p1_;
   gtrl_vertex_sptr p2_;
   gtrl_vertex_sptr p3_;
@@ -32,4 +33,4 @@ protected:
 
 typedef vbl_smart_ptr<gtrl_triangle> gtrl_triangle_sptr;
 
-#endif
+#endif // gtrl_triangle_h_

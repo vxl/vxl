@@ -1,15 +1,13 @@
+// This is gel/gst/gst_face_2d.h
 #ifndef gst_face_2d_h_
 #define gst_face_2d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
-//  \file
+// \file
+// \author crossge@crd.ge.com
 
-/*
-  crossge@crd.ge.com
-*/
 #include <vcl_vector.h>
 #include "gst_polygon_2d_sptr.h"
 
@@ -19,13 +17,13 @@
 
 class gst_face_2d
 {
-public:
+ public:
 
   gst_face_2d( gst_polygon_2d_sptr polygon);
   gst_face_2d( gst_polygon_2d_sptr polygon, const vcl_vector<gst_polygon_2d_sptr> &holes);
   ~gst_face_2d();
 
-protected:
+ protected:
 
   // outside edge list
   gst_polygon_2d_sptr outside_;
@@ -34,5 +32,4 @@ protected:
   vcl_vector<gst_polygon_2d_sptr> holes_;
 };
 
-
-#endif
+#endif // gst_face_2d_h_

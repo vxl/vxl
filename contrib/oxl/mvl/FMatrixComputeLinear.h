@@ -1,6 +1,7 @@
+// This is oxl/mvl/FMatrixComputeLinear.h
 #ifndef FMatrixComputeLinear_h_
 #define FMatrixComputeLinear_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -29,8 +30,9 @@
 #include <mvl/FMatrixCompute.h>
 #include <mvl/FMatrix.h>
 
-class FMatrixComputeLinear : public FMatrixCompute {
-public:
+class FMatrixComputeLinear : public FMatrixCompute
+{
+ public:
 //: Initialize FMatrixComputeLinear object.
 //  If precondition = false, points are not conditioned prior to computation.
 // If rank2_truncate = false, the resulting solution is not forced to rank 2
@@ -59,7 +61,7 @@ public:
     return FMatrixCompute::compute(points1, points2);
   }
 
-private:
+ private:
   bool _precondition;
   bool _rank2_truncate;
 };

@@ -1,16 +1,15 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is oxl/vgui/impl/gtk/vgui_gtk_statusbar.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //
-// .NAME vgui_gtk_statusbar
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 21 Nov 99
 //
 //-----------------------------------------------------------------------------
 
 #include "vgui_gtk_statusbar.h"
- 
+
 vgui_gtk_statusbar::vgui_gtk_statusbar()
   : statusbuf(new vgui_statusbuf(this))
   , out(statusbuf)
@@ -28,7 +27,7 @@ vgui_gtk_statusbar::~vgui_gtk_statusbar()
 static int context_id = 1;
 
 int vgui_gtk_statusbar::write(const char* text, int n) {
-  if(n == 1) {
+  if (n == 1) {
     if (text[0] == '\n') {
       gtk_statusbar_pop(GTK_STATUSBAR(widget), context_id);
       gtk_statusbar_push(GTK_STATUSBAR(widget), context_id, linebuffer.c_str() );
@@ -45,12 +44,12 @@ int vgui_gtk_statusbar::write(const char* text, int n) {
       linebuffer = "";
     }
   }
-  return n;  
+  return n;
 }
 
 
 int vgui_gtk_statusbar::write(const char* text) {
-  
+
   gtk_statusbar_pop(GTK_STATUSBAR(widget), context_id);
   gtk_statusbar_push(GTK_STATUSBAR(widget), context_id, text );
   return 1;

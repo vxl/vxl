@@ -1,6 +1,7 @@
+// This is oxl/mvl/HomgMetric.h
 #ifndef HomgMetric_h_
 #define HomgMetric_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -37,7 +38,7 @@ class HomgMetric
 {
   // Data Members--------------------------------------------------------------
   const ImageMetric* metric_;
-public:
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   HomgMetric() : metric_(0) {}

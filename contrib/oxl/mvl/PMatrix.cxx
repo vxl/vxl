@@ -1,7 +1,7 @@
-#ifdef __GNUG__
+// This is oxl/mvl/PMatrix.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 

@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is mul/vpdfl/vpdfl_kernel_pdf.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \brief Multi-variate kernel PDF

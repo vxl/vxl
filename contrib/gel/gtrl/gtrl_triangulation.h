@@ -1,15 +1,12 @@
+// This is gel/gtrl/gtrl_triangulation.h
 #ifndef gtrl_triangulation_h_
 #define gtrl_triangulation_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
-//  \file
-
-/*
-  crossge@crd.ge.com
-*/
+// \file
+// \author crossge@crd.ge.com
 
 #include <gtrl/gtrl_polygon.h>
 #include <gtrl/gtrl_triangle.h>
@@ -18,7 +15,7 @@
 
 class gtrl_triangulation
 {
-public:
+ public:
   // constructors / destructors
   gtrl_triangulation( gtrl_polygon poly);
 
@@ -27,11 +24,11 @@ public:
   vcl_vector<gtrl_triangle_sptr> get_triangles() const { return tris_; }
   vcl_vector<gtrl_vertex_sptr> get_points() const { return pts_; }
 
-protected:
+ protected:
   gtrl_polygon poly_;
 
   vcl_vector<gtrl_triangle_sptr> tris_;
   vcl_vector<gtrl_vertex_sptr>   pts_;
 };
 
-#endif
+#endif // gtrl_triangulation_h_

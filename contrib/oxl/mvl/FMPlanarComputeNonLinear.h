@@ -1,6 +1,7 @@
+// This is oxl/mvl/FMPlanarComputeNonLinear.h
 #ifndef FMPlanarComputeNonLinear_h_
 #define FMPlanarComputeNonLinear_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -28,8 +29,9 @@ class ImageMetric;
 class PairMatchSetCorner;
 class FMatrixPlanar;
 
-class FMPlanarComputeNonLinear : public FMatrixCompute {
-public:
+class FMPlanarComputeNonLinear : public FMatrixCompute
+{
+ public:
 
   // Constructors/Destructors--------------------------------------------------
   FMPlanarComputeNonLinear(const ImageMetric*, const ImageMetric*, double outlier_threshold = 0);
@@ -45,7 +47,7 @@ public:
   bool compute(PairMatchSetCorner& matches, FMatrix* F);
   bool compute(vcl_vector<HomgPoint2D>& points1, vcl_vector<HomgPoint2D>& points2, FMatrix* F);
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   double _outlier_distance_squared;
 

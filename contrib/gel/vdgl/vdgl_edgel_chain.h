@@ -1,9 +1,9 @@
+// This is gel/vdgl/vdgl_edgel_chain.h
 #ifndef vdgl_edgel_chain_h
 #define vdgl_edgel_chain_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Represents an edgel list
@@ -26,7 +26,7 @@
 class vdgl_edgel_chain : public vul_timestamp,
                          public vbl_ref_count {
    // PUBLIC INTERFACE----------------------------------------------------------
-public:
+ public:
 
   // Constructors/Destructors--------------------------------------------------
   vdgl_edgel_chain();
@@ -57,7 +57,7 @@ public:
   void notify_change();
 
   // INTERNALS-----------------------------------------------------------------
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
 
   vcl_vector<vdgl_edgel> es_;

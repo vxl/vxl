@@ -1,6 +1,7 @@
+// This is oxl/mvl/PairMatchSetCorner.h
 #ifndef PairMatchSetCorner_h_
 #define PairMatchSetCorner_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -25,8 +26,9 @@
 #include "PairMatchSet.h"
 
 class HomgInterestPointSet;
-class PairMatchSetCorner : public PairMatchSet {
-public:
+class PairMatchSetCorner : public PairMatchSet
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   PairMatchSetCorner();
@@ -58,7 +60,7 @@ public:
 //: Return the set of corners within which the i2 indices point
   HomgInterestPointSet const* get_corners2() const { return _corners2; }
 
-private:
+ private:
   HomgInterestPointSet const* _corners1;
   HomgInterestPointSet const* _corners2;
 };

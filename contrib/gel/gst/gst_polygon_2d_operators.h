@@ -1,15 +1,12 @@
+// This is gel/gst/gst_polygon_2d_operators.h
 #ifndef gst_polygon_2d_operators_h_
 #define gst_polygon_2d_operators_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
-//  \file
-
-/*
-  crossge@crd.ge.com
-*/
+// \file
+// \author crossge@crd.ge.com
 
 #include <vcl_vector.h>
 

@@ -1,3 +1,7 @@
+// This is mul/vpdfl/vpdfl_pc_gaussian.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \brief Implementation of Multi-variate principal Component gaussian PDF.
@@ -8,10 +12,6 @@
 // \verbatim
 //    IMS   Converted to VXL 23 April 2000
 // \endverbatim
-
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 #include "vpdfl_pc_gaussian.h"
 #include <vcl_string.h>

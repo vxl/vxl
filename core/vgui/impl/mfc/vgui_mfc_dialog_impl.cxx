@@ -1,8 +1,7 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_dialog_impl.cxx
-#ifdef __GNUC__
+// This is oxl/vgui/impl/mfc/vgui_mfc_dialog_impl.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Marko Bacic, Oxford RRG
@@ -187,11 +186,11 @@ bool vgui_mfc_dialog_impl::ask()
     element l = *e_iter1;
     vgui_dialog_field *field = l.field;
 
-    if(l.type == bool_elem)
+    if (l.type == bool_elem)
     {
       vgui_bool_field *field = static_cast<vgui_bool_field*>(l.field);
       int field_length = vcl_strlen(field->label.c_str());
-      if(max_length<field_length)
+      if (max_length<field_length)
         max_length = field_length;
       height += 45;
     }
@@ -202,10 +201,10 @@ bool vgui_mfc_dialog_impl::ask()
         max_length = tab_data->width/8 + 5;
       height += tab_data->height + 20;
     }
-    else if(l.type == text_msg)
+    else if (l.type == text_msg)
     {
       vgui_int_field *field = static_cast<vgui_int_field*>(l.field);
-      if(max_length<field->label.size()+field->current_value().size())
+      if (max_length<field->label.size()+field->current_value().size())
         max_length = field->label.size()+field->current_value().size();
       height += 45;
     }
@@ -214,13 +213,13 @@ bool vgui_mfc_dialog_impl::ask()
       // Add 40 extra characters to the length to leave space for
       // the user response box:
       int field_length = vcl_strlen(field->label.c_str()) + 40;
-      if(max_length<field_length)
+      if (max_length<field_length)
         max_length = field_length;
       height += 45;
     }
 
-    if(l.type == file_bsr || l.type == inline_file_bsr ||
-       l.type == color_csr || l.type == inline_color_csr)
+    if (l.type == file_bsr || l.type == inline_file_bsr ||
+        l.type == color_csr || l.type == inline_color_csr)
     {
       fbsr_count++;
       height += 45;
@@ -343,7 +342,7 @@ bool vgui_mfc_dialog_impl::ask()
       awlist.push_back(edit);
       wlist.push_back(edit);
     }
-    else if(l.type == bool_elem)
+    else if (l.type == bool_elem)
     {
       r.left = 2*4;
       r.top+=5*8;
@@ -360,7 +359,7 @@ bool vgui_mfc_dialog_impl::ask()
       awlist.push_back(checkbox);
       wlist.push_back(checkbox);
     }
-    else if(l.type == choice_elem)
+    else if (l.type == choice_elem)
     {
       vgui_int_field *field = static_cast<vgui_int_field*>(l.field);
       r.left = 2*4;
@@ -395,7 +394,7 @@ bool vgui_mfc_dialog_impl::ask()
       awlist.push_back(combobox);
       wlist.push_back(combobox);
     }
-    else if(l.type == text_msg)
+    else if (l.type == text_msg)
     {
       r.left = 2*4;
       r.top+=5*8;
@@ -408,7 +407,7 @@ bool vgui_mfc_dialog_impl::ask()
       awlist.push_back(text);
       wlist.push_back(text);
     }
-    else if(l.type == file_bsr || l.type == inline_file_bsr)
+    else if (l.type == file_bsr || l.type == inline_file_bsr)
     {
       r.left = 2*4;
       r.top+=4*8;
@@ -453,7 +452,7 @@ bool vgui_mfc_dialog_impl::ask()
       awlist.push_back(button);
       wlist.push_back(edit);
     }
-    else if(l.type == color_csr || l.type == inline_color_csr)
+    else if (l.type == color_csr || l.type == inline_color_csr)
     {
       r.left = 2*4;
       r.top+=4*8;
@@ -567,10 +566,9 @@ bool vgui_mfc_dialog_impl::ask()
     }
   }
   // Remove all the created objects from the heap
-  for(vcl_vector<CWnd *>::iterator w_iter = awlist.begin();w_iter!=awlist.end();++w_iter)
+  for (vcl_vector<CWnd *>::iterator w_iter = awlist.begin();w_iter!=awlist.end();++w_iter)
     delete (*w_iter);
-  for (vcl_vector<element>::iterator e_iter4 = elements.begin(); e_iter4 != elements.end();
-    ++e_iter4)
+  for (vcl_vector<element>::iterator e_iter4 = elements.begin(); e_iter4 != elements.end(); ++e_iter4)
   {
     element l = *e_iter4;
     delete l.field;

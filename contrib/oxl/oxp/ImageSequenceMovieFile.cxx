@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is oxl/oxp/ImageSequenceMovieFile.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 

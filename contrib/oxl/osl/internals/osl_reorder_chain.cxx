@@ -1,13 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-
-//:
-//  \file
-
-#ifdef __GNUC__
+// This is oxl/osl/internals/osl_reorder_chain.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "osl_reorder_chain.h"
 
 #include <vcl_vector.h>

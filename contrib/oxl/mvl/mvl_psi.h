@@ -1,12 +1,12 @@
+// This is oxl/mvl/mvl_psi.h
 #ifndef mvl_psi_h_
 #define mvl_psi_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 // You don't need to know what these functions are for.
 
 #define mvl_typename class
@@ -32,4 +32,4 @@ void psi_invert_design(U const abcde[5], U XYZT[4]);
 template <mvl_typename U>
 void mvl_psi_invert(U const abcde[5], U XYZT[4]);
 
-#endif
+#endif // mvl_psi_h_

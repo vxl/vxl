@@ -1,9 +1,8 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is oxl/vgui/internals/vgui_dialog_field.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //
-// .NAME vgui_dialog_field
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 23 Oct 99
 //

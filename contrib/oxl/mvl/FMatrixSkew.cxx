@@ -1,7 +1,7 @@
-#ifdef __GNUG__
+// This is oxl/mvl/FMatrixSkew.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 
@@ -142,9 +142,9 @@ FMatrixSkew::find_nearest_perfect_match(const HomgPoint2D& point1,
 
      if (temp < 0)
      {
-          vcl_cerr << "Error in FMatrixSkew::find_nearest_perfect_match " << vcl_endl
-               << "Imaginary solution obtained" << vcl_endl
-               << "No solution returned" << vcl_endl;
+          vcl_cerr << "Error in FMatrixSkew::find_nearest_perfect_match \n"
+                   << "Imaginary solution obtained\n"
+                   << "No solution returned\n";
           return;
      }
 

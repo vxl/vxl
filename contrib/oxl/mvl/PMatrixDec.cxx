@@ -1,7 +1,7 @@
-#ifdef __GNUG__
+// This is oxl/mvl/PMatrixDec.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 
@@ -18,7 +18,7 @@ PMatrixDec::PMatrixDec(const vnl_matrix<double>& p_matrix)
   : PMatrix(p_matrix), _j_matrix(3,3), _d_matrix(4,4)
 {
   if (!((p_matrix.rows() == 3) && (p_matrix.columns() == 4)))
-    vcl_cerr << "PMatrixDec WARNING: Incorrect size of matrix" << vcl_endl;
+    vcl_cerr << "PMatrixDec WARNING: Incorrect size of matrix\n";
   Init();
 }
 
@@ -50,7 +50,7 @@ void PMatrixDec::Init()
     a_u = a_u-u0*u0;
     a_v = a_v-v0*v0;
     if ((a_u <= 0.0) || (a_v <= 0.0))
-      vcl_cerr << "PMatrixDec WARNING: Incorrect projection matrix" << vcl_endl;
+      vcl_cerr << "PMatrixDec WARNING: Incorrect projection matrix\n";
     else
     {
       a_u = vcl_sqrt(a_u);
@@ -97,10 +97,10 @@ void PMatrixDec::Init()
 //: Print to vcl_ostream
 vcl_ostream& operator<<(vcl_ostream& s, const PMatrixDec& P)
 {
-  s << "PROJECTION MATRIX = [" << vcl_endl << P.get_matrix() << "]" << vcl_endl
-    << "DECOMPOSITION: " << vcl_endl
-    << "Intrinsic Parameters = [" << vcl_endl << P._j_matrix << "]" << vcl_endl
-    << "Extrinsic Parameters = [" << vcl_endl << P._d_matrix << "]" << vcl_endl;
+  s << "PROJECTION MATRIX = [\n" << P.get_matrix() << "]\n"
+    << "DECOMPOSITION: \n"
+    << "Intrinsic Parameters = [\n" << P._j_matrix << "]\n"
+    << "Extrinsic Parameters = [\n" << P._d_matrix << "]\n";
   return s;
 }
 
@@ -116,7 +116,7 @@ void PMatrixDec::Test()
   matrix1(0,2)= 552.506; matrix1(1,2)= 194.806; matrix1(2,2)= 0.960472;
   matrix1(0,3)= -596.353;matrix1(1,3)= 92.4159; matrix1(2,3)= 0.228363;
 
-  vcl_cerr << "Correct Matrix: " << vcl_endl;
+  vcl_cerr << "Correct Matrix: \n";
   vcl_cerr << matrix1 << vcl_endl;
   PMatrixDec pmat1(matrix1);
   vcl_cerr << pmat1;
@@ -125,8 +125,8 @@ void PMatrixDec::Test()
   J(0,3) = 0.0; // Last column = 0
   J(1,3) = 0.0;
   J(2,3) = 0.0;
-  vcl_cerr << "P = [J O_3]*D = [" << vcl_endl
-       << J * pmat1.ExtrinsicParameters() << "]" << vcl_endl;
+  vcl_cerr << "P = [J O_3]*D = [\n"
+           << J * pmat1.ExtrinsicParameters() << "]\n";
   vcl_cerr << "AlphaU=" << pmat1.GetAlphaU() << vcl_endl;
   vcl_cerr << "AlphaV=" << pmat1.GetAlphaV() << vcl_endl;
   vcl_cerr << "U0=" << pmat1.GetU0() << vcl_endl;
@@ -138,7 +138,7 @@ void PMatrixDec::Test()
     for (i=0; i<4; i++)
       matrix2(i,j)= 1.0;
 
-  vcl_cerr << "Another Incorrect Matrix: " << vcl_endl;
+  vcl_cerr << "Another Incorrect Matrix: \n";
   vcl_cerr << matrix2 << vcl_endl;
   PMatrixDec pmat2(matrix2);
   vcl_cerr << pmat2;
@@ -148,7 +148,7 @@ void PMatrixDec::Test()
     for (i=0; i<2; i++)
       matrix3(i,j)= 2.0;
 
-  vcl_cerr << "Incorrect Matrix: " << vcl_endl;
+  vcl_cerr << "Incorrect Matrix: \n";
   vcl_cerr << matrix3 << vcl_endl;
   PMatrixDec pmat3(matrix3);
   vcl_cerr << pmat3;

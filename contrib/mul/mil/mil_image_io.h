@@ -1,17 +1,15 @@
+// This is mul/mil/mil_image_io.h
 #ifndef mil_image_io_h_
 #define mil_image_io_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //: \file
 //  \brief Class to load and save images from named files
 //  \author Tim Cootes
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
-
-
 class mil_image;
 
 //: Class to load and save images from named files
@@ -22,9 +20,10 @@ class mil_image;
 //  Derived classes will store the image which has been loaded by a
 //  call to loadImage(filename,filetype).  It can then be accessed
 //  by a call to image()
-class mil_image_io {
 
-public:
+class mil_image_io
+{
+ public:
 
     //: Dflt ctor
     mil_image_io();
@@ -71,27 +70,27 @@ public:
     virtual void b_read(vsl_b_istream& bfs) = 0;
 };
 
-    //: Allows derived class to be loaded by base-class pointer
-    //  A loader object exists which is invoked by calls
-    //  of the form "vsl_b_read(bfs,base_ptr);".  This loads derived class
-    //  objects from the disk, places them on the heap and
-    //  returns a base class pointer.
-    //  In order to work the loader object requires
-    //  an instance of each derived class that might be
-    //  found.  This function gives the model class to
-    //  the appropriate loader.
+//: Allows derived class to be loaded by base-class pointer
+//  A loader object exists which is invoked by calls
+//  of the form "vsl_b_read(bfs,base_ptr);".  This loads derived class
+//  objects from the disk, places them on the heap and
+//  returns a base class pointer.
+//  In order to work the loader object requires
+//  an instance of each derived class that might be
+//  found.  This function gives the model class to
+//  the appropriate loader.
 void vsl_add_to_binary_loader(const mil_image_io& b);
 
-    //: Binary file stream output operator for class reference
+//: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mil_image_io& b);
 
-    //: Binary file stream input operator for class reference
+//: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mil_image_io& b);
 
-    //: Stream output operator for class reference
+//: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const mil_image_io& b);
 
-    //: Stream output operator for class pointer
+//: Stream output operator for class pointer
 vcl_ostream& operator<<(vcl_ostream& os,const mil_image_io* b);
 
 #endif // mil_image_io_h_

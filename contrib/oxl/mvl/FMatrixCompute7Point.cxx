@@ -1,6 +1,4 @@
-#ifdef __GNUC__
-#pragma implementation
-#endif
+// This is oxl/mvl/FMatrixCompute7Point.cxx
 
 //:
 //  \file
@@ -53,7 +51,7 @@ bool FMatrixCompute7Point::compute (vcl_vector<HomgPoint2D>& points1,
                                     vcl_vector<FMatrix*>& F)
 {
   if (points1.size() < 7 || points2.size() < 7) {
-    vcl_cerr << "FMatrixCompute7Point: Need at least 7 point pairs." << vcl_endl;
+    vcl_cerr << "FMatrixCompute7Point: Need at least 7 point pairs.\n";
     vcl_cerr << "Number in each set: " << points1.size() << ", " << points2.size() << vcl_endl;
     return false;
   }

@@ -1,9 +1,9 @@
+// This is mul/pdf1d/pdf1d_builder.h
 #ifndef pdf1d_builder_h
 #define pdf1d_builder_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Tim Cootes
@@ -28,9 +28,9 @@ class pdf1d_pdf;
 // by builder, for efficiency when used in mixture models.
 // (During building they'd have to be recreated at every
 // iteration, which is expensive).
-class pdf1d_builder {
-
-public:
+class pdf1d_builder
+{
+ public:
   //: Dflt ctor
   pdf1d_builder();
 

@@ -1,6 +1,7 @@
+// This is oxl/mvl/HomgLine2D.h
 #ifndef HomgLine2D_h_
 #define HomgLine2D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 
@@ -24,7 +25,7 @@ class HomgPoint2D;
 
 class HomgLine2D : public Homg2D
 {
-public:
+ public:
 
   HomgLine2D () {}
   HomgLine2D (const HomgLine2D& that): Homg2D(that) {}

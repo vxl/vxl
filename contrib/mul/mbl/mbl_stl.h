@@ -1,9 +1,6 @@
+// This is mul/mbl/mbl_stl.h
 #ifndef mbl_stl_h_
 #define mbl_stl_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 //:
 // \file
 // \brief Useful things missing from vcl_algorithm, etc.

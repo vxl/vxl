@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui.h
-
+// This is oxl/vgui/vgui.h
+#ifndef vgui_h_
+#define vgui_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -13,13 +17,6 @@
 //   30-AUG-2000  Marko Bacic, Oxford RRG -- Added flags to support MFC accel.
 //   26-APR-2002  K.Y.McGaul - Added some doxygen style comments.
 // \endverbatim
-
-//-*- c++ -*-------------------------------------------------------------------
-#ifndef vgui_h_
-#define vgui_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 #include "dll.h"
 #include <vcl_string.h>
@@ -58,8 +55,9 @@ struct vgui_tableau_sptr;
 //    the init() function will try to choose one for you based on the
 //    given command line.
 
-class vgui {
-public:
+class vgui
+{
+ public:
   //: Method for determining if a given toolkit is available.
   static bool exists(char const *toolkit);
 
@@ -123,7 +121,7 @@ public:
   //: Needed for statusbar.
   static vgui_DLLDATA vcl_ostream out;
 
-private:
+ private:
   //: Selected toolkit instance.
   static vgui_DLLDATA vgui_toolkit* instance_;
   //:

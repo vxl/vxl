@@ -1,6 +1,7 @@
+// This is oxl/mvl/PairSetCorner.h
 #ifndef PairSetCorner_h_
 #define PairSetCorner_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

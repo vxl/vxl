@@ -1,10 +1,10 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/osl/osl_canny_smooth.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 // see osl_canny_smooth.txx for template functions.
 
 #include "osl_canny_smooth.h"
@@ -51,7 +51,7 @@ void osl_canny_smooth_rothwell(vil_image const &image_in,
   macro(VIL_FLOAT, float)
 #undef macro
   else {
-    vcl_cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT." << vcl_endl;
+    vcl_cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT.\n";
     vcl_abort();
   }
 }
@@ -74,7 +74,7 @@ void osl_canny_smooth_rothwell_adaptive(vil_image const &image_in,
   macro(VIL_FLOAT, float)
 #undef macro
   else {
-    vcl_cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT." << vcl_endl;
+    vcl_cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT.\n";
     vcl_abort();
   }
 }
@@ -96,7 +96,7 @@ void osl_canny_smooth(vil_image const &image_in,
   macro(VIL_FLOAT, float)
 #undef macro
   else {
-    vcl_cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT." << vcl_endl;
+    vcl_cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT.\n";
     vcl_abort();
   }
 }

@@ -1,7 +1,7 @@
 // This is oxl/mvl/PMatrix.h
 #ifndef PMatrix_h_
 #define PMatrix_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -39,8 +39,9 @@ class HomgLineSeg3D;
 class HMatrix3D;
 class HMatrix2D;
 
-class PMatrix : public vbl_ref_count {
-public:
+class PMatrix : public vbl_ref_count
+{
+ public:
 
   // Constructors/Initializers/Destructors-------------------------------------
 
@@ -110,7 +111,7 @@ public:
   bool read_ascii(vcl_istream& f);
 
   // Data Members--------------------------------------------------------------
-protected:
+ protected:
   vnl_double_3x4 p_matrix_;
   mutable vnl_svd<double>* svd_;
 };

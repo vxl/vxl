@@ -1,15 +1,12 @@
+// This is gel/gst/gst_polygon_2d.h
 #ifndef gst_polygon_2d_h_
 #define gst_polygon_2d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
-//  \file
-
-/*
-  crossge@crd.ge.com
-*/
+// \file
+// \author crossge@crd.ge.com
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -18,7 +15,7 @@
 
 class gst_polygon_2d : public vbl_ref_count
 {
-public:
+ public:
 
   // constructors and destructors
   gst_polygon_2d() {}
@@ -46,7 +43,7 @@ public:
   // output
   friend vcl_ostream &operator<<( vcl_ostream &os, gst_polygon_2d &p);
 
-protected:
+ protected:
 
   //: unordered, but oriented, list of edges
   vcl_vector<gst_edge_2d_sptr> edges_;
@@ -54,4 +51,4 @@ protected:
 
 vcl_ostream &operator<<( vcl_ostream &os, gst_polygon_2d &p);
 
-#endif
+#endif // gst_polygon_2d_h_

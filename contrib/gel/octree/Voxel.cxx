@@ -1,5 +1,5 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is gel/octree/Voxel.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:

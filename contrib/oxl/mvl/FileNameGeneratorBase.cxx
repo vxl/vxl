@@ -1,12 +1,9 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is oxl/mvl/FileNameGeneratorBase.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-//
-//-----------------------------------------------------------------------------
-
 //:
-//  \file
+// \file
 
 #include "FileNameGeneratorBase.h"
 

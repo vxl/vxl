@@ -1,9 +1,9 @@
+// This is mul/pdf1d/pdf1d_exponential.h
 #ifndef pdf1d_exponential_h
 #define pdf1d_exponential_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Univariate exponential PDF
@@ -13,12 +13,12 @@
 
 //: Class for exponential distributions
 //  $p(x)=\lambda exp(-\lambda x)$
-class pdf1d_exponential : public pdf1d_pdf {
-private:
+class pdf1d_exponential : public pdf1d_pdf
+{
   double lambda_;
   double log_lambda_;
 
-public:
+ public:
   //: Dflt ctor (creates exponential distribution in range [0,1])
   pdf1d_exponential();
 

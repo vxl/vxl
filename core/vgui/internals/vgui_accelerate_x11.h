@@ -1,14 +1,12 @@
-// This is ./oxl/vgui/internals/vgui_accelerate_x11.h
-
+// This is oxl/vgui/internals/vgui_accelerate_x11.h
+#ifndef vgui_accelerate_x11_h_
+#define vgui_accelerate_x11_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author VGG, Oxford
-
-#ifndef vgui_accelerate_x11_h_
-#define vgui_accelerate_x11_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 #include <vgui/vgui_gl.h>
 #include <vgui/internals/vgui_accelerate.h>
@@ -21,8 +19,9 @@
 #  include <Hermes/Hermes.h>
 #endif
 
-class vgui_accelerate_x11 : public vgui_accelerate {
-public:
+class vgui_accelerate_x11 : public vgui_accelerate
+{
+ public:
   vgui_accelerate_x11();
   virtual ~vgui_accelerate_x11();
  
@@ -31,7 +30,7 @@ public:
   virtual bool vgui_choose_cache_format( GLenum* format, GLenum* type);
   virtual bool vgui_copy_aux_to_back();
   virtual bool vgui_copy_back_to_aux();
-protected:
+ protected:
   char* aux_buffer;
   int aux_buffer_size;
 

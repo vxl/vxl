@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is mul/mbl/mbl_lda.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \brief  Class to perform linear discriminant analysis

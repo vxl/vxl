@@ -1,17 +1,18 @@
+// This is gel/gmvl/gmvl_corner_node.h
 #ifndef gmvl_corner_node_h_
 #define gmvl_corner_node_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  crossge@crd.ge.com
-*/
+//:
+// \file
+// \author crossge@crd.ge.com
 
 #include <gmvl/gmvl_node.h>
 
 class gmvl_corner_node : public gmvl_node
 {
-public:
+ public:
 
   gmvl_corner_node( double x, double y);
   ~gmvl_corner_node();
@@ -19,7 +20,7 @@ public:
   double x() const { return x_; }
   double y() const { return y_; }
 
-protected:
+ protected:
 
   double x_;
   double y_;

@@ -1,9 +1,11 @@
-/*
-  crossge@crd.ge.com
-*/
-#ifdef __GNUC__
+// This is gel/gmvl/gmvl_connection_cache.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author crossge@crd.ge.com
+
 #include "gmvl_connection_cache.h"
 
 #include <vcl_cassert.h>

@@ -1,6 +1,7 @@
+// This is oxl/mvl/HMatrix2DSimilarityCompute.h
 #ifndef HMatrix2DSimilarityCompute_h_
 #define HMatrix2DSimilarityCompute_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -23,7 +24,7 @@ class HomgPoint2D;
 
 class HMatrix2DSimilarityCompute : public HMatrix2DCompute
 {
-public:
+ public:
   HMatrix2DSimilarityCompute(void);
   ~HMatrix2DSimilarityCompute();
 
@@ -31,9 +32,9 @@ public:
   static HMatrix2D compute(PairMatchSetCorner const& matches);
   static HMatrix2D compute(PointArray const& p1, PointArray const& p2);
   int minimum_number_of_correspondences() const { return 2; }
-protected:
+ protected:
   bool compute_p(PointArray const&, PointArray const&, HMatrix2D *);
-private:
+ private:
   static bool tmp_fun(PointArray const&, PointArray const&, HMatrix2D*);
 };
 

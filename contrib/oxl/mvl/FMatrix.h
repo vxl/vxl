@@ -1,6 +1,7 @@
+// This is oxl/mvl/FMatrix.h
 #ifndef _FMatrix_h
 #define _FMatrix_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -21,10 +22,9 @@ class PMatrix;
 //:
 // A class to hold a Fundamental Matrix of the general form and to
 // perform common operations e.g. generate epipolar lines
-class FMatrix {
-
-  // PUBLIC INTERFACE-------------------------------------------------------
-public:
+class FMatrix
+{
+ public:
 
   // Constructors/Initializers/Destructors----------------------------------
 
@@ -93,13 +93,9 @@ friend vcl_istream& operator>>(vcl_istream& s, FMatrix& F);
 
   // INTERNALS---------------------------------------------------------------
 
-protected:
-
-private:
-
     // Data Members------------------------------------------------------------
 
-protected:
+ protected:
 
   // Fundamental matrix
   vnl_double_3x3 _f_matrix;

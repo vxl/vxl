@@ -1,6 +1,7 @@
+// This is mul/mil/mil_byte_image_2d_io_plugin.h
 #ifndef mil_byte_image_2d_io_plugin_h_
 #define mil_byte_image_2d_io_plugin_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -20,7 +21,7 @@
 // This class provides an interface for loading images in new formats
 class mil_byte_image_2d_io_plugin
 {
-public:
+ public:
 
   //: Default constructor
   mil_byte_image_2d_io_plugin();

@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_window.h
-
+// This is oxl/vgui/impl/mfc/vgui_mfc_window.h
+#ifndef vgui_mfc_window_h_
+#define vgui_mfc_window_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author  Marko Bacic, Oxford RRG
@@ -16,12 +20,6 @@
 //                             functionality from all constructors.
 // \endverbatim
 
-#ifndef vgui_mfc_window_h_
-#define vgui_mfc_window_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 class vgui_mfc_adaptor;
 class vgui_mfc_statusbar;
 
@@ -31,8 +29,9 @@ class vgui_mfc_statusbar;
 
 //: MFC implementation of vgui_window.
 //  Based on vgui_glut_win.
-class vgui_mfc_window : public vgui_window {
-public:
+class vgui_mfc_window : public vgui_window
+{
+ public:
   //: Initialise window - common functionality called by all constructors.
   init_window(char const *title, vgui_menu const &menubar, bool has_menu, unsigned width, unsigned height,
                int posx, int posy);

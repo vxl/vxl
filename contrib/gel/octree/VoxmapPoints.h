@@ -1,7 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is gel/octree/VoxmapPoints.h
 #ifndef VoxmapPoints_h_
 #define VoxmapPoints_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -15,8 +15,9 @@
 #include <vnl/vnl_double_3.h>
 #include <vcl_vector.h>
 
-class VoxmapPoints {
-public:
+class VoxmapPoints
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   VoxmapPoints( int, vnl_double_3, double);
@@ -35,7 +36,7 @@ public:
   vnl_double_3 GetCorner( int x, int y, int z, int dx, int dy, int dz, int d) const;
   int GetCornerIndex( int x, int y, int z, int dx, int dy, int dz, int d) const;
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
 
   int depth;
@@ -45,7 +46,7 @@ protected:
   vnl_double_3 centre;
   double  size;
 
-private:
+ private:
 
   mutable vcl_vector<vnl_double_3> cornerpoints;
   mutable vbl_sparse_array_3d<int> corners;

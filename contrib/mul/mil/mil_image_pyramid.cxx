@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is mul/mil/mil_image_pyramid.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 

@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/vgui/impl/gtk/vgui_gtk_adaptor.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:

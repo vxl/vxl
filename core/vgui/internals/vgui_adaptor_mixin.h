@@ -1,7 +1,7 @@
 // This is oxl/vgui/internals/vgui_adaptor_mixin.h
 #ifndef vgui_adaptor_mixin_h_
 #define vgui_adaptor_mixin_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -13,8 +13,9 @@
 #include <vgui/vgui_modifier.h>
 
 //: Holds the dimensions of the adaptor and the event causing popup menus.
-class vgui_adaptor_mixin {
-public:
+class vgui_adaptor_mixin
+{
+ public:
   vgui_adaptor_mixin();
   ~vgui_adaptor_mixin();
 

@@ -1,6 +1,7 @@
+// This is oxl/oxp/JPEG_Decompressor.h
 #ifndef JPEG_Decompressor_h_
 #define JPEG_Decompressor_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //
@@ -30,8 +31,9 @@
 #include <vcl_iosfwd.h>
 
 struct JPEG_DecompressorPrivates;
-class JPEG_Decompressor {
-public:
+class JPEG_Decompressor
+{
+ public:
 #if defined(VCL_SGI_CC) || defined(VCL_SUNPRO_CC) || (defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3))
   JPEG_Decompressor(vcl_ifstream& s);
 #endif
@@ -48,7 +50,7 @@ public:
 
   void StartNextJPEG();
 
-private:
+ private:
   JPEG_DecompressorPrivates* pd;
   void init(int fd);
 };

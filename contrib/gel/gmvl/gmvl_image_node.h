@@ -1,25 +1,26 @@
+// This is gel/gmvl/gmvl_image_node.h
 #ifndef gmvl_image_node_h_
 #define gmvl_image_node_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  crossge@crd.ge.com
-*/
+//:
+// \file
+// \author crossge@crd.ge.com
 
 #include <vil/vil_image.h>
 #include <gmvl/gmvl_node.h>
 
 class gmvl_image_node : public gmvl_node
 {
-public:
+ public:
 
   gmvl_image_node( vil_image image);
   ~gmvl_image_node();
 
   vil_image image() const { return image_; }
 
-protected:
+ protected:
 
   vil_image image_;
 };

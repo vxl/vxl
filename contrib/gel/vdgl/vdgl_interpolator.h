@@ -1,9 +1,9 @@
+// This is gel/vdgl/vdgl_interpolator.h
 #ifndef vdgl_interpolator_h_
 #define vdgl_interpolator_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Represents a 2D interpolator for a vdgl_edgel_chain
@@ -19,7 +19,7 @@ class vdgl_interpolator : public vul_timestamp,
                           public vbl_ref_count
 {
    // PUBLIC INTERFACE----------------------------------------------------------
-public:
+ public:
 
   // Constructors/Destructors--------------------------------------------------
 
@@ -56,7 +56,7 @@ public:
   vdgl_edgel_chain_sptr get_edgel_chain() const { return chain_; }
 
   // INTERNALS-----------------------------------------------------------------
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
 
   vdgl_edgel_chain_sptr chain_;

@@ -1,9 +1,9 @@
+// This is gel/vdgl/vdgl_digital_curve.h
 #ifndef vdgl_digital_curve_h
 #define vdgl_digital_curve_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Represents a 2D digital_curve
@@ -20,9 +20,9 @@
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vdgl/vdgl_interpolator_sptr.h>
 
-class vdgl_digital_curve : public vsol_curve_2d {
-   // PUBLIC INTERFACE----------------------------------------------------------
-public:
+class vdgl_digital_curve : public vsol_curve_2d
+{
+ public:
 
   // Constructors/Destructors--------------------------------------------------
   vdgl_digital_curve( vdgl_interpolator_sptr interpolator);
@@ -65,7 +65,7 @@ public:
   virtual vdgl_digital_curve *cast_to_digital_curve(void) {return this;}
 
   // INTERNALS-----------------------------------------------------------------
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
 
   vdgl_interpolator_sptr interpolator_;

@@ -1,8 +1,7 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc.cxx
-#ifdef __GNUC__
+// This is oxl/vgui/impl/mfc/vgui_mfc.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 // See vgui_mfc.h for a description of this file.
@@ -68,7 +67,7 @@ vcl_string vgui_mfc::name() const { return "mfc"; }
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui - initialise the implementation of vgui.
 void vgui_mfc::init(int &argc, char **argv) {
-  if (debug) vcl_cerr << "vgui_mfc::init()" << vcl_endl;
+  if (debug) vcl_cerr << "vgui_mfc::init()\n";
 
   //: Initialise MFC foundation classes
   if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), SW_SHOW))
@@ -84,7 +83,7 @@ void vgui_mfc::init(int &argc, char **argv) {
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui - runs the event loop.
 void vgui_mfc::run() {
-  if (debug) vcl_cerr << "vgui_mfc::run()" << vcl_endl;
+  if (debug) vcl_cerr << "vgui_mfc::run()\n";
 
   //: Start the main thread
   AfxGetThread()->Run();

@@ -1,5 +1,5 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is gel/octree/ConvexHull.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation "ConvexHull.h"
 #endif
 //
@@ -38,16 +38,15 @@ void ConvexHull::set_point( int n, double x, double y)
 }
 
 
-
-int ConvexHull::cmpl(const void *a, const void *b) 
+int ConvexHull::cmpl(const void *a, const void *b)
 {
-  double v; 
+  double v;
   CMPM(0,a,b);
   CMPM(1,b,a);
   return 0;
 }
 
-int ConvexHull::cmph(const void *a, const void *b) 
+int ConvexHull::cmph(const void *a, const void *b)
 {
   return cmpl(b,a);
 }
@@ -57,7 +56,7 @@ int ConvexHull::make_chain(double** V, int n, int (*cmp)(const void*, const void
 {
   int i, j, s = 1;
   double* t;
-  
+
   qsort(V, n, sizeof(double*), cmp);
   for (i=2; i<n; i++) {
     for (j=s; j>=1 && ccw(V, i, j, j-1); j--){}
@@ -76,7 +75,7 @@ int ConvexHull::ccw(double **P, int i, int j, int k) {
 }
 
 
-int ConvexHull::ch2d()  
+int ConvexHull::ch2d()
 {
   int u = make_chain(P, numberofpoints, cmpl);         /* make lower hull */
   if (!numberofpoints) return 0;

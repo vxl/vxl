@@ -1,6 +1,7 @@
+// This is oxl/oxp/Mapping_2d_2d.h
 #ifndef Mapping_2d_2d_h_
 #define Mapping_2d_2d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -19,7 +20,8 @@
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_double_2.h>
-struct Mapping_2d_2d {
+struct Mapping_2d_2d
+{
   virtual ~Mapping_2d_2d();
 
   //: Map (x1, y1) to (x2, y2)
@@ -46,7 +48,7 @@ struct Mapping_2d_2d {
     return ret;
   }
 
-public:
+ public:
   virtual void implement_map(double x1, double y1, double* x2, double* y2) = 0;
   virtual void implement_inverse_map(double x2, double y2, double* x1, double* y1) = 0;
 };

@@ -1,7 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is gel/octree/OctreeLevel.h
 #ifndef OctreeLevel_h_
 #define OctreeLevel_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -13,8 +13,9 @@
 
 #include <vbl/vbl_array_3d.h>
 
-class OctreeLevel {
-public:
+class OctreeLevel
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   OctreeLevel( const int = 0);
@@ -29,7 +30,7 @@ public:
 
   void InheritFromAbove();
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
 
   int depth;

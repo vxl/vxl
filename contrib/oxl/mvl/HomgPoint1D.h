@@ -1,6 +1,7 @@
+// This is oxl/mvl/HomgPoint1D.h
 #ifndef HomgPoint1D_h_
 #define HomgPoint1D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -21,8 +22,9 @@
 
 #include <mvl/Homg1D.h>
 
-class HomgPoint1D : public Homg1D {
-public:
+class HomgPoint1D : public Homg1D
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
 //: constructors.

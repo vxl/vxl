@@ -1,8 +1,6 @@
+// This is oxl/osl/osl_hacks.h
 #ifndef osl_hacks_h_
 #define osl_hacks_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 // .NAME osl_hacks
 // .INCLUDE osl/osl_hacks.h
 // .FILE osl_hacks.cxx

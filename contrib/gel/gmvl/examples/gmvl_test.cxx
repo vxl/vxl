@@ -1,9 +1,8 @@
-/*
-  crossge@crd.ge.com
-*/
-#ifdef __GNUC__
-#pragma implementation "main"
-#endif
+// This is gel/gmvl/examples/gmvl_test.cxx
+
+//:
+// \file
+// \author crossge@crd.ge.com
 
 #include <vcl_fstream.h>
 

@@ -1,6 +1,7 @@
+// This is oxl/oxp/SGIMovieFilePrivates.h
 #ifndef SGIMovieFilePrivates_h_
 #define SGIMovieFilePrivates_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -20,8 +21,8 @@
 
 #include <vcl_iosfwd.h>
 
-struct SGIMV_Variables {
-
+struct SGIMV_Variables
+{
   typedef vcl_map<vcl_string, vcl_string, vcl_less<vcl_string> > VarData;
   VarData data;
 
@@ -40,17 +41,20 @@ struct SGIMV_Variables {
   vcl_ostream& print(vcl_ostream& s) const;
 };
 
-struct SGIMV_FrameIndex {
+struct SGIMV_FrameIndex
+{
   int offset;
   int size;
 };
 
-struct SGIMV_FrameIndexArray : public vcl_vector<SGIMV_FrameIndex> {
+struct SGIMV_FrameIndexArray : public vcl_vector<SGIMV_FrameIndex>
+{
   SGIMV_FrameIndexArray(vcl_istream& f, int n);
   SGIMV_FrameIndexArray() {}
 };
 
-struct  SGIMovieFilePrivates {
+struct  SGIMovieFilePrivates
+{
   SGIMovieFilePrivates(char const* f);
   ~SGIMovieFilePrivates() {
     delete glob;

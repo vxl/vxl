@@ -1,6 +1,7 @@
+// This is oxl/osl/osl_ortho_regress.h
 #ifndef osl_ortho_regress_h_
 #define osl_ortho_regress_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 // .NAME osl_ortho_regress
@@ -21,8 +22,9 @@
 //
 // \author fsm@robots.ox.ac.uk
 
-class osl_ortho_regress {
-public:
+class osl_ortho_regress
+{
+ public:
   unsigned S1;                  // S_00
   double Sx, Sy;                // S_10, S_01
   double Sxx, Sxy, Syy;         // S_20, S_11, S_02
@@ -32,7 +34,7 @@ public:
     Sx = Sy = 0;
     Sxx = Sxy = Syy =0;
   }
-  
+
   osl_ortho_regress() { reset(); }
 
   ~osl_ortho_regress() { }
@@ -62,7 +64,7 @@ public:
   bool fit_constrained(double x, double y, double *a, double *b, double *c) const
     { return fit_constrained(x, y, *a, *b, *c); }
 
-protected:
+ protected:
   // by reference
   bool fit(double &a, double &b, double &c) const;
   bool fit_constrained(double x, double y, double &a, double &b, double &c) const;

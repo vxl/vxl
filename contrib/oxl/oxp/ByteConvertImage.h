@@ -1,6 +1,7 @@
+// This is oxl/oxp/ByteConvertImage.h
 #ifndef ByteConvertImage_h_
 #define ByteConvertImage_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //
@@ -19,7 +20,8 @@
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_byte.h>
 
-struct ByteConvertImage : public vil_memory_image_of<vil_byte> {
+struct ByteConvertImage : public vil_memory_image_of<vil_byte>
+{
   typedef vil_memory_image_of<vil_byte> base;
 
   ByteConvertImage(vil_memory_image_of<float> const& in, bool ignore_zero = false);
@@ -29,7 +31,7 @@ struct ByteConvertImage : public vil_memory_image_of<vil_byte> {
 
   void print(vcl_ostream&) const;
 
-private:
+ private:
   bool ignore_zero_;
   float min_;
   float max_;

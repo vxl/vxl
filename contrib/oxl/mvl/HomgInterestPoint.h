@@ -1,6 +1,7 @@
+// This is oxl/mvl/HomgInterestPoint.h
 #ifndef HomgInterestPoint_h_
 #define HomgInterestPoint_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

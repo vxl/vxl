@@ -1,11 +1,12 @@
+// This is oxl/vgui/internals/vgui_rasterpos.h
 #ifndef vgui_rasterpos_h_
 #define vgui_rasterpos_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 void vgui_rasterpos4dv(double const X[4]);
 void vgui_rasterpos2f(float x, float y);

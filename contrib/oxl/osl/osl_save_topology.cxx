@@ -1,13 +1,15 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/osl/osl_save_topology.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "osl_save_topology.h"
 #include <vcl_fstream.h>
 
-void osl_save_topology(vcl_ostream &f, vcl_list<osl_edge*> const &es, vcl_list<osl_vertex*> const &vs) 
+void osl_save_topology(vcl_ostream &f, vcl_list<osl_edge*> const &es, vcl_list<osl_vertex*> const &vs)
 {
   unsigned vid = 0;
   char const *name = "fred";
@@ -33,13 +35,12 @@ void osl_save_topology(vcl_ostream &f, vcl_list<osl_edge*> const &es, vcl_list<o
       stashed.push_front(e->GetV2());
     }
   }
-  
+
   // version string
-  f << "osl_save_topology 1.0" << vcl_endl
-    << vcl_endl;
-  
+  f << "osl_save_topology 1.0\n\n";
+
   // write the vertices :
-  f << stashed.size() << " vertices" << vcl_endl;
+  f << stashed.size() << " vertices\n";
   for (vcl_list<osl_vertex*>::iterator i=stashed.begin(); i!=stashed.end(); ++i) {
     int stashid = (int) (*i)->stash_retrieve(name);
     f << stashid << ' ' << (*i)->GetId() << ' ' << (*i)->GetX() << ' ' << (*i)->GetY() << vcl_endl;
@@ -47,7 +48,7 @@ void osl_save_topology(vcl_ostream &f, vcl_list<osl_edge*> const &es, vcl_list<o
   f << vcl_endl;
 
   // write the edges :
-  f << es.size() << " edges" << vcl_endl;
+  f << es.size() << " edges\n";
   for (vcl_list<osl_edge*>::const_iterator i=es.begin(); i!=es.end(); ++i) {
     int stashid1 = (int) (*i)->GetV1()->stash_retrieve(name);
     int stashid2 = (int) (*i)->GetV2()->stash_retrieve(name);
@@ -59,11 +60,11 @@ void osl_save_topology(vcl_ostream &f, vcl_list<osl_edge*> const &es, vcl_list<o
   // remove the stashes :
   for (vcl_list<osl_vertex*>::iterator i=stashed.begin(); i!=stashed.end(); ++i)
     (*i)->stash_remove(name);
-  
+
   // done
 }
 
-void osl_save_topology(char const *f, vcl_list<osl_edge*> const &e, vcl_list<osl_vertex*> const &v) 
+void osl_save_topology(char const *f, vcl_list<osl_edge*> const &e, vcl_list<osl_vertex*> const &v)
 {
   vcl_ofstream file(f);
   osl_save_topology(file, e, v);

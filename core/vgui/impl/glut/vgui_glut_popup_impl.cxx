@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/vgui/impl/glut/vgui_glut_popup_impl.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vgui_glut_popup_impl.h"
 #include "vgui_glut_adaptor.h"
 #include <vcl_iostream.h>
@@ -12,34 +14,34 @@
 #include <vgui/vgui_glut.h>
 
 vgui_glut_popup_impl::vgui_glut_popup_impl() {
-  //vcl_cerr << "popup_impl ctor" << vcl_endl;
+  //vcl_cerr << "popup_impl ctor\n";
   int old_id = glutGetMenu();
   menu_id = glutCreateMenu(command_func);
   //vcl_cerr << "created menu_id = " << menu_id << vcl_endl;
 
-  //vgui_macro_warning << "before" << vcl_endl;
+  //vgui_macro_warning << "before\n";
   if (old_id)
     glutSetMenu(old_id);
-  //vgui_macro_warning << "after" << vcl_endl;
+  //vgui_macro_warning << "after\n";
 }
 
 
 void vgui_glut_popup_impl::clear() {
-  //vcl_cerr << "popup_impl::clear()" << vcl_endl;
+  //vcl_cerr << "popup_impl::clear()\n";
   int old_id = glutGetMenu();
   glutSetMenu(menu_id);
 
   //
   unsigned n = glutGet(GLenum(GLUT_MENU_NUM_ITEMS));
-  //vcl_cerr << "removing " << n << " items in menu" << vcl_endl;
+  //vcl_cerr << "removing " << n << " items in menu\n";
   for (int i=n; i>=1; --i)
     glutRemoveMenuItem(i);
 
   //
-  //vgui_macro_warning << "before" << vcl_endl;
+  //vgui_macro_warning << "before\n";
   if (old_id)
     glutSetMenu(old_id);
-  //vgui_macro_warning << "after" << vcl_endl;
+  //vgui_macro_warning << "after\n";
 
   //
   for (unsigned i=0; i<subs.size(); ++i)
@@ -49,7 +51,7 @@ void vgui_glut_popup_impl::clear() {
 
 
 vgui_glut_popup_impl::~vgui_glut_popup_impl() {
-  //vcl_cerr << "popup_impl dtor" << vcl_endl;
+  //vcl_cerr << "popup_impl dtor\n";
   clear();
   glutDestroyMenu( menu_id );
   menu_id = 0;
@@ -62,15 +64,15 @@ void vgui_glut_popup_impl::build(vgui_menu const &m) {
   // given menu stay alive while the popup menu is active :
   tmp_menu = m;
 
-  //vcl_cerr << "popup_impl::build : m = " << vcl_endl << m << vcl_endl;
+  //vcl_cerr << "popup_impl::build : m = \n" << m << vcl_endl;
   this->build_internal(m);
 }
 
 void vgui_glut_popup_impl::build_internal(vgui_menu const &m) {
   int old_id = glutGetMenu();
-  //vgui_macro_warning << "before" << vcl_endl;
+  //vgui_macro_warning << "before\n";
   glutSetMenu(menu_id);
-  //vgui_macro_warning << "after" << vcl_endl;
+  //vgui_macro_warning << "after\n";
 
   for (unsigned i=0; i<m.size(); ++i) {
     if (m[i].is_command())
@@ -88,7 +90,6 @@ void vgui_glut_popup_impl::build_internal(vgui_menu const &m) {
       vgui_command_toggle *c = static_cast<vgui_command_toggle*>( m[i].cmnd.as_pointer() );
       glutAddMenuEntry( (m[i].name + (c->state ? " (on)":" (off)")).c_str(),
                         reinterpret_cast<long>(m[i].cmnd.as_pointer()));
-
     }
 
     else if (m[i].is_separator()) {
@@ -98,15 +99,15 @@ void vgui_glut_popup_impl::build_internal(vgui_menu const &m) {
     }
 
     else {
-      vgui_macro_warning << "unknown menu item" << vcl_endl;
-      vgui_macro_warning << "menu = " << vcl_endl << m << vcl_endl;
+      vgui_macro_warning << "unknown menu item\n";
+      vgui_macro_warning << "menu = \n" << m << vcl_endl;
     }
   }
 
-  //vgui_macro_warning << "before" << vcl_endl;
+  //vgui_macro_warning << "before\n";
   if (old_id)
     glutSetMenu(old_id); // restore
-  //vgui_macro_warning << "after" << vcl_endl;
+  //vgui_macro_warning << "after\n";
 }
 
 // When a menu item is selected, glut may have upset its internal
@@ -121,9 +122,9 @@ void vgui_glut_popup_impl::build_internal(vgui_menu const &m) {
 void vgui_glut_popup_impl::command_func(int value)
 {
   if (value == 0)
-    vgui_macro_warning << "null command" << vcl_endl;
+    vgui_macro_warning << "null command\n";
   else if (value == 1)
-    vcl_cerr << "[that's a separator]" << vcl_endl;
+    vcl_cerr << "[that's a separator]\n";
   else {
     int win = glutGetWindow();
     vgui_glut_adaptor *a = vgui_glut_adaptor::get_adaptor(win);

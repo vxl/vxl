@@ -1,10 +1,11 @@
+// This is oxl/osl/osl_canny_nms.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 //  \file
 // \author fsm@robots.ox.ac.uk
 
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "osl_canny_nms.h"
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>

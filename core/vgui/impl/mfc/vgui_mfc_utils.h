@@ -1,7 +1,7 @@
 // This is oxl/vgui/impl/mfc/vgui_mfc_utils.h
 #ifndef vgui_mfc_utils_h_
 #define vgui_mfc_utils_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -41,7 +41,7 @@ class vgui_mfc_utils
   //: Add keyboard shortcut for this menu item to our accelerator table (accels).
   void add_menu_accelerator(const vgui_menu_item item, const WORD function_id, vcl_string& the_menu_name);
 
-public:
+ public:
   //: (Create if necessary and) return singleton instance of this class.
   static vgui_mfc_utils *instance();
   //: Constructor.
@@ -59,7 +59,7 @@ public:
   //: Menu accelerator table - this defines menu shortcuts
   HACCEL AccelTable;
 
-private:
+ private:
   //: List of menus to be deleted when we are finished:
   vcl_vector<CMenu*> menus_to_be_deleted;
 };

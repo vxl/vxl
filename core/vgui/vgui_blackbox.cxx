@@ -1,5 +1,7 @@
-// This is ./oxl/vgui/vgui_blackbox.cxx
-
+// This is oxl/vgui/vgui_blackbox.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
@@ -11,10 +13,6 @@
 //    13-OCT-1999 P.Pritchett - Initial version
 // \endverbatim
 
-
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 #include "vgui_blackbox.h"
 
@@ -43,14 +41,14 @@ vcl_string vgui_blackbox::type_name() const { return "vgui_blackbox"; }
 
 static void help() {
   vcl_cerr << vcl_endl;
-  vcl_cerr << "-- vgui_blackbox ---------" << vcl_endl;
-  vcl_cerr << "|     keys               |"  << vcl_endl;
-  vcl_cerr << "| `,'  start/stop record |"  << vcl_endl;
-  vcl_cerr << "| `.'           playback |"  << vcl_endl;
-  vcl_cerr << "| `s'   playback w. dump |"  << vcl_endl;
-  vcl_cerr << "| `/'       print events |"  << vcl_endl;
-  vcl_cerr << "| `#'       clear events |"  << vcl_endl;
-  vcl_cerr << "--------------------------" << vcl_endl;
+  vcl_cerr << "-- vgui_blackbox ---------\n";
+  vcl_cerr << "|     keys               |\n";
+  vcl_cerr << "| `,'  start/stop record |\n";
+  vcl_cerr << "| `.'           playback |\n";
+  vcl_cerr << "| `s'   playback w. dump |\n";
+  vcl_cerr << "| `/'       print events |\n";
+  vcl_cerr << "| `#'       clear events |\n";
+  vcl_cerr << "--------------------------\n";
   vcl_cerr << vcl_endl;
 }
 
@@ -63,12 +61,12 @@ bool vgui_blackbox::handle(const vgui_event& event) {
     case ',':
       recording = !recording;
       if (recording) {
-        vgui::out << "blackbox: starting record" << vcl_endl;
+        vgui::out << "blackbox: starting record\n";
         //vgui_event start_e;
         //events.push_back(start_e);
       }
       else {
-        vgui::out << "blackbox: ending record" << vcl_endl;
+        vgui::out << "blackbox: ending record\n";
       }
       return true;
 
@@ -78,9 +76,9 @@ bool vgui_blackbox::handle(const vgui_event& event) {
 
     case '.':
       if (recording) {
-        vgui::out << "blackbox: stop recording before playback..." << vcl_endl;
+        vgui::out << "blackbox: stop recording before playback...\n";
       } else {
-        vgui::out << "blackbox: starting playback" << vcl_endl;
+        vgui::out << "blackbox: starting playback\n";
         if (child) {
           vgui_event *old_e = 0;
           int frame_number = 0;
@@ -127,13 +125,13 @@ bool vgui_blackbox::handle(const vgui_event& event) {
             }
           }
         }
-        vgui::out << "blackbox: ending playback" << vcl_endl;
+        vgui::out << "blackbox: ending playback\n";
       }
       return true;
 
     case '/':
       if (!recording) {
-        vcl_cerr << "vgui_blackbox EVENTS" << vcl_endl;
+        vcl_cerr << "vgui_blackbox EVENTS\n";
         for (vcl_vector<vgui_event>::iterator e_iter=events.begin();
              e_iter != events.end(); ++e_iter) {
           vcl_cerr << *e_iter << vcl_endl;
@@ -144,7 +142,7 @@ bool vgui_blackbox::handle(const vgui_event& event) {
 
     case '#':
       if (!recording) {
-        vgui::out << "blackbox: clearing events" << vcl_endl;
+        vgui::out << "blackbox: clearing events\n";
         events.clear();
         return true;
       }

@@ -1,6 +1,7 @@
+// This is gel/vdgl/vdgl_OrthogRegress.h
 #ifndef vdgl_OrthogRegress_h_
 #define vdgl_OrthogRegress_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 // .NAME vdgl_OrthogRegress
@@ -11,8 +12,9 @@
 #include <vcl_cmath.h>
 #include <vdgl/vdgl_ortho_regress.h>
 
-class vdgl_OrthogRegress : public vdgl_ortho_regress {
-public:
+class vdgl_OrthogRegress : public vdgl_ortho_regress
+{
+ public:
   typedef vdgl_ortho_regress base;
   vdgl_OrthogRegress() { }
   vdgl_OrthogRegress(double, double, double) { } // FIXME
@@ -27,7 +29,7 @@ public:
   void SetEstCost(double v) { est_ = v; }
   void Reset() { base::reset(); }
 
-private:
+ private:
   double a_, b_, c_;
   double est_;
 };

@@ -1,6 +1,7 @@
+// This is oxl/mvl/HomgNorm2D.h
 #ifndef HomgNorm2D_h_
 #define HomgNorm2D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -27,8 +28,9 @@
 #include <mvl/HomgPoint2D.h>
 #include <mvl/SimilarityMetric.h>
 
-class HomgNorm2D : public SimilarityMetric {
-public:
+class HomgNorm2D : public SimilarityMetric
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
 //: Construct a HomgNorm2D that will hold n normalized points.
@@ -75,7 +77,7 @@ public:
 //: Return the i'th normalized point.
   HomgPoint2D& get (int i) { return _normalized[i]; }
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   vcl_vector<HomgPoint2D> _normalized;
   bool _unit_omega;

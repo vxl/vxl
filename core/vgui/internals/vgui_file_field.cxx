@@ -1,13 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is oxl/vgui/internals/vgui_file_field.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-//
-// .NAME vgui_file_field
-// Author: 
-// Created: 
-//
-//-----------------------------------------------------------------------------
 
 #include "vgui_file_field.h"
 

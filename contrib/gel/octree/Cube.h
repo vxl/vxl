@@ -1,7 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is gel/octree/Cube.h
 #ifndef Cube_h_
 #define Cube_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -11,8 +11,9 @@
 //
 //-----------------------------------------------------------------------------
 
-class Cube {
-public:
+class Cube
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   Cube();

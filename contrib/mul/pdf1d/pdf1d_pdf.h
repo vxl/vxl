@@ -1,9 +1,9 @@
+// This is mul/pdf1d/pdf1d_pdf.h
 #ifndef pdf1d_pdf_h
 #define pdf1d_pdf_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Base class for Univariate Probability Density Function classes.
@@ -25,14 +25,14 @@ class pdf1d_sampler;
 // centres of each peak can be recorded.
 // This is particularly useful for non-linear and mixture model
 // representations of the parameter distributions.
-class pdf1d_pdf {
-private:
+class pdf1d_pdf
+{
   double mean_;
   double var_;
-protected:
+ protected:
   void set_mean(double m) { mean_ = m; }
   void set_variance(double v) { var_ = v; }
-public:
+ public:
 
   //: Dflt ctor
   pdf1d_pdf();

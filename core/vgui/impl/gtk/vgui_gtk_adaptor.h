@@ -1,7 +1,7 @@
 // This is oxl/vgui/impl/gtk/vgui_gtk_adaptor.h
 #ifndef vgui_gtk_adaptor_h_
 #define vgui_gtk_adaptor_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -28,7 +28,7 @@ class vgui_gtk_window;
 
 class vgui_gtk_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
 {
-public:
+ public:
   typedef vgui_adaptor_mixin mixin;
 
   vgui_gtk_adaptor(vgui_gtk_window* win = 0);
@@ -61,7 +61,7 @@ public:
   // gtk stuff
   GtkWidget *get_glarea_widget() { return widget; }
 
-private:
+ private:
   // main GDK-to-vgui event despatcher
   static gint handle(GtkWidget *, GdkEvent *, gpointer);
   int event_handler_id;

@@ -1,6 +1,7 @@
+// This is oxl/mvl/MatchSet.h
 #ifndef MatchSet_h_
 #define MatchSet_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -18,8 +19,9 @@
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
 //-----------------------------------------------------------------------------
 
-class MatchSet {
-public:
+class MatchSet
+{
+ public:
   enum { NoMatch = -1 };
 
 //: Return true if i is not the "NoMatch" value.

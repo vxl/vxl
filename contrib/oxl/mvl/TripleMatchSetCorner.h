@@ -1,6 +1,7 @@
+// This is oxl/mvl/TripleMatchSetCorner.h
 #ifndef TripleMatchSetCorner_h_
 #define TripleMatchSetCorner_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

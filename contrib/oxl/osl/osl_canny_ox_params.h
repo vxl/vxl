@@ -1,6 +1,7 @@
+// This is oxl/osl/osl_canny_ox_params.h
 #ifndef osl_canny_ox_params_h_
 #define osl_canny_ox_params_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 // .NAME osl_canny_ox_params
@@ -8,8 +9,9 @@
 // .FILE osl_canny_ox_params.cxx
 // \author fsm@robots.ox.ac.uk
 
-class osl_canny_ox_params {
-public:
+class osl_canny_ox_params
+{
+ public:
   osl_canny_ox_params();
   ~osl_canny_ox_params();
 

@@ -1,4 +1,5 @@
-#ifdef __GNUG__
+// This is oxl/mvl/HomgOperator2D.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -472,7 +473,7 @@ double HomgOperator2D::CrossRatio(const Homg2D& a, const Homg2D& b, const Homg2D
   double n = (x>y) ? (x1*w3-x3*w1)*(x2*w4-x4*w2) : (y1*w3-y3*w1)*(y2*w4-y4*w2);
   double m = (x>y) ? (x1*w4-x4*w1)*(x2*w3-x3*w2) : (y1*w4-y4*w1)*(y2*w3-y3*w2);
   if (n == 0 && m == 0)
-    vcl_cerr << "CrossRatio not defined: three of the given points coincide" << vcl_endl;
+    vcl_cerr << "CrossRatio not defined: three of the given points coincide\n";
   return n/m;
 }
 

@@ -1,6 +1,7 @@
+// This is oxl/mvl/Homg1D.h
 #ifndef Homg1D_h_
 #define Homg1D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -16,8 +17,9 @@
 #include <mvl/Homg.h>
 #include <vnl/vnl_double_2.h>
 
-class Homg1D : public vnl_double_2 , public Homg {
-public:
+class Homg1D : public vnl_double_2 , public Homg
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
 //: Default constructor

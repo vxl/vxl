@@ -1,8 +1,7 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_utils.cxx
-#ifdef __GNUC__
+// This is oxl/vgui/impl/mfc/vgui_mfc_utils.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 // See vgui_mfc_utils.h for a description of this file.
@@ -33,7 +32,7 @@ void vgui_mfc_utils::menu_dispatcher(UINT nID)
 //: (Create if necessary and) return singleton instance of this class.
 vgui_mfc_utils *vgui_mfc_utils::instance()
 {
-  if(!instance_)
+  if (!instance_)
     instance_= new vgui_mfc_utils;
   return instance_;
 }
@@ -96,18 +95,18 @@ HMENU vgui_mfc_utils::add_submenu(const vgui_menu& menu)
   {
     if (menu[i].is_separator())
     {
-      if (debug) vcl_cerr << " <separator> " << vcl_endl;
+      if (debug) vcl_cerr << " <separator> \n";
         popdown_menu->AppendMenu(MF_SEPARATOR);
     }
     else if (menu[i].is_command())
     {
-      if (debug) vcl_cerr << " <command>" << vcl_endl;
+      if (debug) vcl_cerr << " <command>\n";
       int the_menu_id = ID_MENU_ITEMS+item_count++;
       vcl_string the_menu_name = menu[i].name;
 
       // Add menu accelerators:
-      if(menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
-        menu[i].short_cut.key!=vgui_KEY_NULL)
+      if (menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
+          menu[i].short_cut.key!=vgui_KEY_NULL)
          add_menu_accelerator(menu[i], the_menu_id, the_menu_name);
 
       popdown_menu->AppendMenu(MF_STRING,the_menu_id,the_menu_name.c_str());
@@ -116,7 +115,7 @@ HMENU vgui_mfc_utils::add_submenu(const vgui_menu& menu)
       callbacks.push_back(cmnd);
     }
     else if (menu[i].is_submenu()) {
-      if (debug) vcl_cerr << " <submenu>" << vcl_endl;
+      if (debug) vcl_cerr << " <submenu>\n";
       popdown_menu->AppendMenu(MF_POPUP,(UINT)add_submenu(*menu[i].menu),menu[i].name.c_str());
     }
   }
@@ -133,7 +132,7 @@ void vgui_mfc_utils::set_menu(const vgui_menu& menu)
   // Obtain the main window associated with it
   CWnd *window = theapp->GetMainWnd();
   // See whether the application window already has a menu associated with it
-  if(window->GetMenu() == NULL)
+  if (window->GetMenu() == NULL)
   {
     menu_bar = new CMenu();
     menus_to_be_deleted.push_back(menu_bar);
@@ -144,7 +143,7 @@ void vgui_mfc_utils::set_menu(const vgui_menu& menu)
   {
     if (menu[i].is_separator())
     {
-      if (debug) vcl_cerr << " <separator> " << vcl_endl;
+      if (debug) vcl_cerr << " <separator> \n";
       menu_bar->AppendMenu(MF_SEPARATOR);
     }
     else if (menu[i].is_command())
@@ -153,8 +152,8 @@ void vgui_mfc_utils::set_menu(const vgui_menu& menu)
       vcl_string the_menu_name = menu[i].name;
 
       // Add menu accelerators
-      if(menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
-        menu[i].short_cut.key!=vgui_KEY_NULL)
+      if (menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
+          menu[i].short_cut.key!=vgui_KEY_NULL)
           add_menu_accelerator(menu[i], the_menu_id, the_menu_name);
 
       if (debug) vcl_cerr << " <command> " << menu[i].name << vcl_endl;
@@ -188,18 +187,18 @@ CMenu *vgui_mfc_utils::set_popup_menu(const vgui_menu &menu)
   {
     if (menu[i].is_separator())
     {
-      if (debug) vcl_cerr << " <separator> " << vcl_endl;
+      if (debug) vcl_cerr << " <separator> \n";
           pop_up->AppendMenu(MF_SEPARATOR);
     }
     else if (menu[i].is_command())
     {
-      if (debug) vcl_cerr << " <command>" << vcl_endl;
+      if (debug) vcl_cerr << " <command>\n";
       int the_menu_id = ID_MENU_ITEMS+item_count++;
       vcl_string the_menu_name = menu[i].name;
 
       // Add menu accelerators:
-      if(menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
-        menu[i].short_cut.key!=vgui_KEY_NULL)
+      if (menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
+          menu[i].short_cut.key!=vgui_KEY_NULL)
           add_menu_accelerator(menu[i], the_menu_id, the_menu_name);
 
       pop_up->AppendMenu(MF_STRING,the_menu_id,menu[i].name.c_str());
@@ -209,7 +208,7 @@ CMenu *vgui_mfc_utils::set_popup_menu(const vgui_menu &menu)
     }
     else if (menu[i].is_submenu())
     {
-      if (debug) vcl_cerr << " <submenu>" << vcl_endl;
+      if (debug) vcl_cerr << " <submenu>\n";
         pop_up->AppendMenu(MF_POPUP,(UINT)add_submenu(*menu[i].menu),menu[i].name.c_str());
     }
   }

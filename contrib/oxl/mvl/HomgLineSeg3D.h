@@ -1,6 +1,7 @@
+// This is oxl/mvl/HomgLineSeg3D.h
 #ifndef HomgLineSeg3D_h_
 #define HomgLineSeg3D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -25,7 +26,7 @@ class HomgLineSeg3D : public HomgLine3D
   HomgPoint3D _point1;
   HomgPoint3D _point2;
 
-public:
+ public:
   // Constructors/Initializers/Destructors-------------------------------------
 
   HomgLineSeg3D ();

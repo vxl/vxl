@@ -1,9 +1,10 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/osl/examples/run_osl_canny.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>

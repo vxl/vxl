@@ -1,9 +1,6 @@
+// This is mul/mil3d/mil3d_image_3d_of.h
 #ifndef mil3d_image_3d_of_h_
 #define mil3d_image_3d_of_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 //:
 //  \file
 //  \brief Represent 3D images of one or more planes of type T.
@@ -42,7 +39,7 @@
 template<class T>
 class mil3d_image_3d_of : public mil3d_image_3d
 {
-private:
+ private:
   //: Pointer to image data
   vbl_smart_ptr<mil_image_data<T> > data_;
 
@@ -60,7 +57,7 @@ private:
   //: Resize to n_planes of [0..nx-1][0..ny-1][0..nz-1]
   virtual void resize3(int nx, int ny, int nz, int n_planes);
 
-public:
+ public:
 
   //: Dflt ctor
   //  Creates an empty one plane image.

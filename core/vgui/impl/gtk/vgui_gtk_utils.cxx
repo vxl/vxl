@@ -1,9 +1,8 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is oxl/vgui/impl/gtk/vgui_gtk_utils.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //
-// .NAME vgui_gtk_utils
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 19 Dec 99
 //
@@ -103,7 +102,7 @@ bool vgui_gtk_utils::is_modifier(GdkEvent const *gev)
 #endif
     // - u97mb
     // GDK_MOD1_MASK corresponds to META key(at least on Sun Solaris)
-    if(e->state & GDK_CONTROL_MASK ||
+    if (e->state & GDK_CONTROL_MASK ||
        e->state & GDK_SHIFT_MASK ||
        e->state & GDK_MOD1_MASK)
       return true;
@@ -125,7 +124,7 @@ void vgui_gtk_utils::add_submenu(GtkWidget *widget, const vgui_menu& menu)
   {
     if (menu[i].is_separator())
     {
-      if (debug) vcl_cerr << " <separator> " << vcl_endl;
+      if (debug) vcl_cerr << " <separator> \n";
       GtkWidget* item = gtk_menu_item_new();
       gtk_menu_append(GTK_MENU(widget), item);
       gtk_widget_show(item);
@@ -133,7 +132,7 @@ void vgui_gtk_utils::add_submenu(GtkWidget *widget, const vgui_menu& menu)
 
     else if (menu[i].is_command())
     {
-      if (debug) vcl_cerr << " <command>" << vcl_endl;
+      if (debug) vcl_cerr << " <command>\n";
       GtkWidget* item = gtk_menu_item_new_with_label(menu[i].name.c_str());
       gtk_signal_connect(GTK_OBJECT(item), "activate",
                          GTK_SIGNAL_FUNC(execute_command),
@@ -142,19 +141,19 @@ void vgui_gtk_utils::add_submenu(GtkWidget *widget, const vgui_menu& menu)
       gtk_menu_append(GTK_MENU(widget), item);
 
       gtk_widget_show(item);
-      if(menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
+      if (menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
          menu[i].short_cut.key!=vgui_KEY_NULL)
         {
           gint mask = 0;
           // Health warning - It seems that GDK_MOD1_MASK corresponds
           // to META on Solaris and ALT has no correspondance
-          if(menu[i].short_cut.mod & vgui_CTRL)
+          if (menu[i].short_cut.mod & vgui_CTRL)
             mask|=GDK_CONTROL_MASK;
-          if(menu[i].short_cut.mod & vgui_META)
+          if (menu[i].short_cut.mod & vgui_META)
             mask|=GDK_MOD1_MASK;
-          if(menu[i].short_cut.mod & vgui_SHIFT)
+          if (menu[i].short_cut.mod & vgui_SHIFT)
             mask|=GDK_SHIFT_MASK;
-          if(menu[i].short_cut.mod & vgui_ALT)
+          if (menu[i].short_cut.mod & vgui_ALT)
             mask|=GDK_MOD2_MASK;
           gtk_widget_add_accelerator (item,
                                       "activate",
@@ -166,7 +165,7 @@ void vgui_gtk_utils::add_submenu(GtkWidget *widget, const vgui_menu& menu)
     }
     else if (menu[i].is_submenu())
     {
-      if (debug) vcl_cerr << " <submenu>" << vcl_endl;
+      if (debug) vcl_cerr << " <submenu>\n";
       GtkWidget* item = gtk_menu_item_new_with_label(menu[i].name.c_str());
       GtkWidget* submenu = gtk_menu_new();
 
@@ -185,7 +184,7 @@ void vgui_gtk_utils::set_menu(GtkWidget *widget, const vgui_menu& menu, bool is_
   {
     if (menu[i].is_separator())
     {
-      if (debug) vcl_cerr << " <separator> " << vcl_endl;
+      if (debug) vcl_cerr << " <separator> \n";
       GtkWidget* item = gtk_menu_item_new();
       if (!is_menubar)
         gtk_menu_append(GTK_MENU(widget), item);
@@ -200,19 +199,19 @@ void vgui_gtk_utils::set_menu(GtkWidget *widget, const vgui_menu& menu, bool is_
         gtk_menu_bar_append(GTK_MENU_BAR(widget), item);
       else
       {
-        if(menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
+        if (menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
            menu[i].short_cut.key!=vgui_KEY_NULL)
           {
             gint mask = 0;
             // Health warning - It seems that GDK_MOD1_MASK corresponds
             // to META on Solaris and ALT has no correspondance
-            if(menu[i].short_cut.mod & vgui_CTRL)
+            if (menu[i].short_cut.mod & vgui_CTRL)
               mask|=GDK_CONTROL_MASK;
-            if(menu[i].short_cut.mod & vgui_META)
+            if (menu[i].short_cut.mod & vgui_META)
               mask|=GDK_MOD1_MASK;
-            if(menu[i].short_cut.mod & vgui_SHIFT)
+            if (menu[i].short_cut.mod & vgui_SHIFT)
               mask|=GDK_SHIFT_MASK;
-            if(menu[i].short_cut.mod & vgui_ALT)
+            if (menu[i].short_cut.mod & vgui_ALT)
               mask|=GDK_MOD2_MASK;
             gtk_widget_add_accelerator (item,
                                         "activate",

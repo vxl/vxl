@@ -1,6 +1,7 @@
+// This is oxl/mvl/PairMatchSet2D3D.h
 #ifndef PairMatchSet2D3D_h_
 #define PairMatchSet2D3D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -18,8 +19,9 @@ class HomgPoint2D;
 class HomgPoint3D;
 class PairMatchSetCorner;
 
-class PairMatchSet2D3D : public PairMatchSet {
-public:
+class PairMatchSet2D3D : public PairMatchSet
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   PairMatchSet2D3D();
@@ -51,7 +53,7 @@ public:
 //: Return the projective structure within which the i2 indices point
   vcl_vector<HomgPoint3D>* get_structure() const { return _structure; }
 
-private:
+ private:
   const HomgInterestPointSet* _corners;
   vcl_vector<HomgPoint3D>* _structure;
 };

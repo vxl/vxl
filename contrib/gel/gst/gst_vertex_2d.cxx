@@ -1,13 +1,12 @@
-/*
-  crossge@crd.ge.com
-*/
-#ifdef __GNUC__
+// This is gel/gst/gst_vertex_2d.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
+//:
+// \file
+// \author crossge@crd.ge.com
 
 #include "gst_vertex_2d.h"
-
 
 // default constructor
 gst_vertex_2d::gst_vertex_2d()
@@ -60,7 +59,7 @@ void gst_vertex_2d::set( const double x, const double y)
 
 // operators
 bool operator==( const gst_vertex_2d& a, const gst_vertex_2d& b)
-{ return ((a.x_== b.x_)&&(a.y_== b.y_)); }
+{ return a.x_== b.x_ && a.y_== b.y_; }
 
 
 // output

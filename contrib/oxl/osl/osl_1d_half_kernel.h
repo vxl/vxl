@@ -1,6 +1,7 @@
+// This is oxl/osl/osl_1d_half_kernel.h
 #ifndef osl_1d_half_kernel_h_
 #define osl_1d_half_kernel_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -10,7 +11,8 @@
 //: This structure holds half of a symmetric convolution kernel.
 // The centre of the kernel is array[0].
 template <class T>
-struct osl_1d_half_kernel {
+struct osl_1d_half_kernel
+{
   osl_1d_half_kernel(unsigned capacity_ =40)
     : capacity(capacity_)
     , count(0)

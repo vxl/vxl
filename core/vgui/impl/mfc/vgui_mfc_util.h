@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_util.h
-
+// This is oxl/vgui/impl/mfc/vgui_mfc_util.h
+#ifndef vgui_mfc_util_h_
+#define vgui_mfc_util_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Marko Bacic
@@ -10,12 +14,6 @@
 //  Modifications:
 //    04-AUG-2000 Marko Bacic - Initial version.
 // \endverbatim
-
-#ifndef vgui_mfc_util_h_
-#define vgui_mfc_util_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>
@@ -28,8 +26,9 @@ typedef double gdouble;
 typedef unsigned int guint;
 
 //: Provides support for menus.
-class vgui_mfc_util {
-public:
+class vgui_mfc_util
+{
+ public:
   static vgui_button translate_button(int button);
   static vgui_key translate_key(GdkEventKey const *gev);
   static void set_coordinates(vgui_event &e, const gdouble x, const gdouble y);

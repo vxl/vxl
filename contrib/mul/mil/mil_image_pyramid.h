@@ -1,9 +1,9 @@
+// This is mul/mil/mil_image_pyramid.h
 #ifndef mil_image_pyramid_h_
 #define mil_image_pyramid_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 //  \file
 //  \brief Pyramid of images of arbitrary type
@@ -22,7 +22,7 @@ class mil_image_pyramid
   double scale_step_;
 
   void deleteImages();
-public:
+ public:
   //: Dflt ctor
   mil_image_pyramid();
 

@@ -1,12 +1,12 @@
-/*
-  crossge@crd.ge.com
-*/
-#ifdef __GNUC__
+// This is gel/gmvl/gmvl_connection.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author crossge@crd.ge.com
+
 #include "gmvl_connection.h"
-
-
 
 gmvl_connection::gmvl_connection( const gmvl_node_sptr node1, const gmvl_node_sptr node2)
   : n1_( node1), n2_( node2)

@@ -1,11 +1,12 @@
-/*
-  crossge@crd.ge.com
-*/
-#ifdef __GNUC__
+// This is gel/gtrl/gtrl_triangulation.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-#include "gtrl_triangulation.h"
+//:
+// \file
+// \author crossge@crd.ge.com
 
+#include "gtrl_triangulation.h"
 #include <vcl_compiler.h>
 
 // UNIX specific timer close
@@ -41,7 +42,7 @@ void gtrl_triangulation::run()
 
   vcl_vector<gtrl_vertex_sptr> pointlist;
 
-  for( int i=0; i< poly_.size(); i++)
+  for (int i=0; i< poly_.size(); i++)
     {
       gtrl_vertex_sptr p= poly_[i];
       pointlist.push_back( p);
@@ -73,9 +74,9 @@ void gtrl_triangulation::run()
   triangulate( "-z -i -q", &in, &out, 0);
 
   // create any new points that are necessary
-  for( int i=0; i< out.numberofpoints; i++)
+  for (int i=0; i< out.numberofpoints; i++)
     {
-      if( out.pointmarkerlist[i]< offset)
+      if (out.pointmarkerlist[i]< offset)
         {
           pointlist.push_back( new gtrl_vertex( out.pointlist[i*2],
                                                 out.pointlist[i*2+1]));
@@ -88,7 +89,7 @@ void gtrl_triangulation::run()
   tris_.clear();
 
   // create the triangles
-  for( int i=0; i< out.numberoftriangles; i++)
+  for (int i=0; i< out.numberoftriangles; i++)
     {
       gtrl_triangle_sptr triangle= new gtrl_triangle( pointlist[ out.pointmarkerlist[ out.trianglelist[i*3]]- offset],
                                                      pointlist[ out.pointmarkerlist[ out.trianglelist[i*3+1]]- offset],

@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/vgui/internals/vgui_overlay_helper.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vgui_overlay_helper.h"
 
 #include <vcl_cassert.h>
@@ -17,22 +19,22 @@
 
 #define trace if (true) { } else vcl_cerr
 
-vgui_overlay_helper::vgui_overlay_helper(vgui_adaptor *a) 
-  : adaptor(a) 
+vgui_overlay_helper::vgui_overlay_helper(vgui_adaptor *a)
+  : adaptor(a)
   //, aux_buffer_is_back_buffer(true)
   , last_draw_was_overlay(false)
   , overlay_redraw_posted(false)
 {
-  trace << "vgui_overlay_helper created" << vcl_endl;
+  trace << "vgui_overlay_helper created\n";
   assert(adaptor);
-  
+
   // check that this GL state is double buffered :
   adaptor->make_current();
   {
     GLboolean isdouble = 0;
     glGetBooleanv(GL_DOUBLEBUFFER, &isdouble);
     if (!isdouble) {
-      vgui_macro_warning << "current GL state is not double buffered" << vcl_endl;
+      vgui_macro_warning << "current GL state is not double buffered\n";
       return;
     }
   }
@@ -48,10 +50,10 @@ vgui_overlay_helper::~vgui_overlay_helper() {
 bool vgui_overlay_helper::dispatch(vgui_event const &e) {
   if (e.type == vgui_DRAW)
     return dispatch_draw(e);
-  
+
   else if (e.type == vgui_DRAW_OVERLAY)
     return dispatch_overlay_draw(e);
-  
+
   else
     return dispatch_other(e);
 }
@@ -64,15 +66,15 @@ bool vgui_overlay_helper::dispatch_draw(vgui_event const &e) {
   last_draw_was_overlay = false;
   bool f = adaptor->dispatch_to_tableau(e);
   adaptor->swap_buffers(); // should this be moved further down?
-  
-  // It is up to tableaux to post overlay redraws when receiving 
-  // vgui_DRAW events, so if any overlays need to be drawn, we 
+
+  // It is up to tableaux to post overlay redraws when receiving
+  // vgui_DRAW events, so if any overlays need to be drawn, we
   // should know at this point.
   if (overlay_redraw_posted) {
     vgui_event oe(vgui_DRAW_OVERLAY);
     f = dispatch_overlay_draw(oe);
   }
-  
+
   return f;
 }
 
@@ -88,7 +90,7 @@ bool vgui_overlay_helper::dispatch_other(vgui_event const &e) {
     vgui_event oe(vgui_DRAW_OVERLAY);
     f = dispatch_overlay_draw(oe);
   }
-  
+
   return f;
 }
 
@@ -99,7 +101,7 @@ bool vgui_overlay_helper::dispatch_overlay_draw(vgui_event const &e) {
   // If the last draw was a normal draw we need to snapshot the
   // frame buffer before drawing the overlays.
   if (!last_draw_was_overlay) {
-    trace << "snapshot" << vcl_endl;
+    trace << "snapshot\n";
     if (vgui_accelerate::instance()->vgui_copy_back_to_aux())
       aux_buffer_is_back_buffer = false;
     else {
@@ -107,23 +109,23 @@ bool vgui_overlay_helper::dispatch_overlay_draw(vgui_event const &e) {
       aux_buffer_is_back_buffer = true;
     }
   }
-  // Else, the last draw was an overlay draw, so we need to repair 
+  // Else, the last draw was an overlay draw, so we need to repair
   // the damage before drawing the new overlays.
   else {
-    trace << "revert" << vcl_endl;
+    trace << "revert\n";
     if (!aux_buffer_is_back_buffer)
       vgui_accelerate::instance()->vgui_copy_aux_to_back();
     else
       vgui_utils::copy_back_to_front();
   }
 
-  
+
   // enter "overlay mode"
   if (!aux_buffer_is_back_buffer)
     glDrawBuffer(GL_BACK);
   else
     glDrawBuffer(GL_FRONT);
-  
+
 
   // get tableau to draw its overlays.
   bool f = adaptor->dispatch_to_tableau(e);
@@ -131,7 +133,7 @@ bool vgui_overlay_helper::dispatch_overlay_draw(vgui_event const &e) {
 
   // With an auxiliary buffer (Mesa), we now need to blit the overlays
   // rendered in the back buffer onto the screen.
-  if (!aux_buffer_is_back_buffer) 
+  if (!aux_buffer_is_back_buffer)
     adaptor->swap_buffers();
 
 
@@ -143,7 +145,7 @@ bool vgui_overlay_helper::dispatch_overlay_draw(vgui_event const &e) {
   // leave "overlay mode"
   if (aux_buffer_is_back_buffer)
     glDrawBuffer(GL_BACK);
-  
+
   return f;
 }
 

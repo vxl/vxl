@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_blackbox.h
-
+// This is oxl/vgui/vgui_blackbox.h
+#ifndef vgui_blackbox_h_
+#define vgui_blackbox_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -12,12 +16,6 @@
 //    13-OCT-1999  P.Pritchett - Initial version.
 //    26-APR-2002  K.Y.McGaul - Converted to and added doxygen style comments.
 // \endverbatim.
-
-#ifndef vgui_blackbox_h_
-#define vgui_blackbox_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 #include "vgui_blackbox_sptr.h"
 #include <vgui/vgui_wrapper_tableau.h>
@@ -33,7 +31,7 @@
 // - `#'       clear events 
 class vgui_blackbox : public vgui_wrapper_tableau
 {
-public:
+ public:
   //: Constructor - don't use this, use vgui_blackbox_new.
   vgui_blackbox(vgui_tableau_sptr const&);
 
@@ -47,7 +45,7 @@ public:
   //: Return the name of this tableau ('vgui_blackbox').
   virtual vcl_string type_name() const;
 
-protected:
+ protected:
   //: Destructor - called by smart-pointer vgui_blackbox_sprt.
  ~vgui_blackbox();
   //: True if events are being recorded.
@@ -60,7 +58,8 @@ protected:
 };
 
 //: Create a pointer to a vgui_blackbox.
-struct vgui_blackbox_new : public vgui_blackbox_sptr {
+struct vgui_blackbox_new : public vgui_blackbox_sptr
+{
   typedef vgui_blackbox_sptr base;
   vgui_blackbox_new(vgui_tableau_sptr const& a) : base(new vgui_blackbox(a)) { }
 };

@@ -1,3 +1,7 @@
+// This is mul/vpdfl/vpdfl_gaussian.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \brief Multi-variate gaussian PDF with arbitrary axes.
@@ -8,10 +12,6 @@
 // \verbatim
 //    IMS   Converted to VXL 18 April 2000
 // \endverbatim
-
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
@@ -369,12 +369,12 @@ static void ShowStartVec(vcl_ostream& os, const vnl_vector<double>& v)
   os<<"(";
   for (int i=0;i<n;++i) os<<v(i)<<" ";
   if (v.size()>n) os<<"...";
-  os<<")"<<vcl_endl;
+  os<<")\n";
 }
 
 static void ShowStartMat(vcl_ostream& os, const vnl_matrix<double>& A)
 {
-  os << A.rows() << " by " << A.cols() << " Matrix" << vcl_endl;
+  os << A.rows() << " by " << A.cols() << " Matrix\n";
 
   int m = 3, n= 3;
   if (m>A.rows()) m=A.rows();
@@ -388,9 +388,9 @@ static void ShowStartMat(vcl_ostream& os, const vnl_matrix<double>& A)
     for ( int j=0; j<n; ++j)
       os<<A(i,j)<<" ";
     if (A.cols()>n) os<<"...";
-    os<<")"<<vcl_endl;
+    os<<")\n";
   }
-  if (A.rows()>m) os <<vsl_indent()<<"(..." <<vcl_endl;
+  if (A.rows()>m) os <<vsl_indent()<<"(...\n";
 
   vsl_indent_dec(os);
 }

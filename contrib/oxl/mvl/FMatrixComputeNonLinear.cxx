@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is oxl/mvl/FMatrixComputeNonLinear.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 
@@ -71,7 +71,7 @@ bool FMatrixComputeNonLinear::compute_basis(FMatrix* F, vcl_vector<int> basis) {
   for (int i = 0; i < 7; i++) {
     int other = matches_.get_match_12(basis[i]);
     if (other == -1)
-      vcl_cerr << "The basis index doesn't include a match for " << i << "." << vcl_endl;
+      vcl_cerr << "The basis index doesn't include a match for " << i << ".\n";
     else {
       vnl_double_2 p1 = matches_.get_corners1()->get_2d(basis[i]);
       vnl_double_2 p2 = matches_.get_corners2()->get_2d(other);
@@ -356,7 +356,7 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
     FMatrixCompute7Point* computor = new FMatrixCompute7Point(true, true);
     vcl_vector<FMatrix*> ref;
     if (!computor->compute(new_points1, basis2_, ref))
-      vcl_cerr << "FMatrixCompute7Point Failure" << vcl_endl;
+      vcl_cerr << "FMatrixCompute7Point Failure\n";
     double final = 0.0;
     unsigned int num = 0;
     for (unsigned int l = 0; l < ref.size(); l++) {

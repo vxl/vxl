@@ -1,8 +1,6 @@
+// This is gel/vmal/vmal_track_lines.h
 #ifndef vmal_track_lines_h_
 #define vmal_track_lines_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 //--------------------------------------------------------------------------------
 //:
 //  \file
@@ -29,7 +27,7 @@
 
 class vmal_track_lines
 {
-public:
+ public:
 
 //***************************************************************************
 // Initialization
@@ -71,7 +69,7 @@ public:
                  vil_memory_image_of<vil_byte> &image0,
                  vil_memory_image_of<vil_byte> &image1);
 
-private:
+ private:
 
   double seg_angle(vtol_edge_2d_sptr, vtol_edge_2d_sptr);
   bool belong(vtol_edge_2d_sptr, vtol_edge_2d_sptr);

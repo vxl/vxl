@@ -1,6 +1,7 @@
+// This is oxl/mvl/FMatrixCompute8Point.h
 #ifndef FMatrixCompute8Point_h_
 #define FMatrixCompute8Point_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //-----------------------------------------------------------------------------
@@ -20,8 +21,9 @@
 #include <mvl/FMatrix.h>
 #include <mvl/FMatrixCompute.h>
 
-class FMatrixCompute8Point : public FMatrixCompute {
-public:
+class FMatrixCompute8Point : public FMatrixCompute
+{
+ public:
   // Implement FMatrixCompute interface
   bool compute();
 };

@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/vgui/impl/glut/vgui_glut_slab.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vgui_glut_slab.h"
 
 #include <vcl_csetjmp.h>
@@ -70,12 +72,12 @@ void vgui_glut_slab::make_current()
   glutSetWindow(window);
 }
 
-//void overlay_enter ();
-//bool overlay_active() const;
-//void overlay_leave ();
+//void vgui_glut_slab::overlay_enter () {}
+//bool vgui_glut_slab::overlay_active() const {return false;}
+//void vgui_glut_slab::overlay_leave () {}
 
-//void draw_begin();
-//void draw_end  ();
+//void vgui_glut_slab::draw_begin() {}
+//void vgui_glut_slab::draw_end  () {}
 
 //------------------------------------------------------------
 
@@ -229,7 +231,7 @@ void vgui_glut_slab::glut_insert(vgui_event const &e)
 void vgui_glut_slab::display()
 {
   if (glutLayerGet(GLenum(GLUT_LAYER_IN_USE)) != GLUT_NORMAL)
-    vgui_macro_warning << "*** current layer is overlay" << vcl_endl;
+    vgui_macro_warning << "*** current layer is overlay\n";
 
   // normal draw.
   vgui_event e(vgui_DRAW);
@@ -239,13 +241,13 @@ void vgui_glut_slab::display()
 void vgui_glut_slab::overlay_display()
 {
   if (glutLayerGet(GLenum(GLUT_LAYER_IN_USE)) != GLUT_OVERLAY)
-    vgui_macro_warning << "*** current layer is normal" << vcl_endl;
+    vgui_macro_warning << "*** current layer is normal\n";
 
   {
     GLint isdouble=0;
     glGetIntegerv(GL_DOUBLEBUFFER, &isdouble);
     if (isdouble) // looks suspicious.....
-      vgui_macro_warning << "overlay plane is double buffered" << vcl_endl;
+      vgui_macro_warning << "overlay plane is double buffered\n";
   }
 
   // overlay draw.
@@ -332,15 +334,17 @@ void vgui_glut_slab::reshape(int width,int height)
   e.type = vgui_RESHAPE;
   glut_insert(e);
 
-//   bool f=glut_insert(e);
-//   if (!f)
-//     glViewport(0, 0, width, height);
+#if 0
+  bool f=glut_insert(e);
+  if (!f)
+    glViewport(0, 0, width, height);
 
-//   // call reshape on the sub-contexts :
-//   for (unsigned i=0;i<sub_contexts.size();i++) {
-//     // FIXME
-//     vgui_macro_warning << "subcontext reshape not implemented" << endl;
-//   }
+  // call reshape on the sub-contexts :
+  for (unsigned i=0;i<sub_contexts.size();i++) {
+    // FIXME
+    vgui_macro_warning << "subcontext reshape not implemented" << endl;
+  }
+#endif
 }
 
 void vgui_glut_slab::passive_motion(int x,int y)

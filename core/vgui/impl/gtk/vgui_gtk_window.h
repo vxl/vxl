@@ -1,6 +1,7 @@
+// This is oxl/vgui/impl/gtk/vgui_gtk_window.h
 #ifndef vgui_gtk_window_h_
 #define vgui_gtk_window_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //
@@ -38,7 +39,7 @@ class vgui_gtk_adaptor;
 
 class vgui_gtk_window : public vgui_window
 {
-public:
+ public:
 
   vgui_gtk_window(int w, int h, const vgui_menu& menu, const char* title);
   vgui_gtk_window(int w, int h, const char* title);
@@ -68,7 +69,7 @@ public:
   GtkWidget *box;
   GtkWidget *menubar;
 
-private:
+ private:
   // This is a place to store any menu passed in, so that it doesn't go out of scope
   // while the popup is on screen.
   vgui_menu* last_menubar; // <-- ask fsm about this.

@@ -1,11 +1,12 @@
+// This is gel/gmvl/gmvl_node_cache.h
 #ifndef gmvl_node_cache_h_
 #define gmvl_node_cache_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  crossge@crd.ge.com
-*/
+//:
+// \file
+// \author crossge@crd.ge.com
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -15,7 +16,7 @@
 
 class gmvl_node_cache
 {
-public:
+ public:
 
   // constructors and destructors
   gmvl_node_cache();
@@ -34,7 +35,7 @@ public:
   // input / output
   friend vcl_ostream &operator<<( vcl_ostream &os, const gmvl_node_cache &c);
 
-protected:
+ protected:
 
   vcl_vector<gmvl_node_sptr> nodes_;
 
@@ -46,4 +47,4 @@ protected:
 
 vcl_ostream &operator<<( vcl_ostream &os, const gmvl_node_cache &c);
 
-#endif
+#endif // gmvl_node_cache_h_

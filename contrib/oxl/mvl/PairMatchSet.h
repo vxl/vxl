@@ -1,6 +1,7 @@
+// This is oxl/mvl/PairMatchSet.h
 #ifndef PairMatchSet_h_
 #define PairMatchSet_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -72,7 +73,8 @@ class PairMatchSet : public MatchSet
   // Data Access---------------------------------------------------------------
 
   // ******* ITERATOR
-  class iterator {
+  class iterator
+  {
     const PairMatchSet* c_;
     int match_index_;
     int i1, i2;

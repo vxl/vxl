@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is mul/mil/mil_byte_image_2d_io_plugin.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:

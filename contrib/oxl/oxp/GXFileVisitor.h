@@ -1,6 +1,7 @@
+// This is oxl/oxp/GXFileVisitor.h
 #ifndef GXFileVisitor_h_
 #define GXFileVisitor_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //
@@ -16,8 +17,9 @@
 
 #include <vcl_iosfwd.h>
 
-class GXFileVisitor {
-public:
+class GXFileVisitor
+{
+ public:
   GXFileVisitor();
 
   virtual ~GXFileVisitor() {}

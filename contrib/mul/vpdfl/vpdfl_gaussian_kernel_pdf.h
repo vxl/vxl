@@ -1,6 +1,7 @@
+// This is mul/vpdfl/vpdfl_gaussian_kernel_pdf.h
 #ifndef vpdfl_gaussian_kernel_pdf_h
 #define vpdfl_gaussian_kernel_pdf_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -13,7 +14,7 @@
 //: Multi-variate spherical gaussian kernel PDF.
 class vpdfl_gaussian_kernel_pdf : public vpdfl_kernel_pdf
 {
-public:
+ public:
   //: Dflt ctor
   vpdfl_gaussian_kernel_pdf();
 

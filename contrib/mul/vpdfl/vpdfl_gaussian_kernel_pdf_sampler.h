@@ -1,6 +1,7 @@
+// This is mul/vpdfl/vpdfl_gaussian_kernel_pdf_sampler.h
 #ifndef vpdfl_gaussian_kernel_pdf_sampler_h
 #define vpdfl_gaussian_kernel_pdf_sampler_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -20,10 +21,10 @@ class vpdfl_gaussian_kernel_pdf;
 //: Samples from an axis aligned Gaussian PDF
 class vpdfl_gaussian_kernel_pdf_sampler :public vpdfl_sampler_base
 {
-protected:
+ protected:
   //: The random number generator
   mbl_mz_random rng_; 
-public:
+ public:
 
   // Dflt ctor
   vpdfl_gaussian_kernel_pdf_sampler();

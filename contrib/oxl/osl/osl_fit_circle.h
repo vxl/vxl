@@ -2,10 +2,9 @@
 #ifndef osl_fit_circle_h_
 #define osl_fit_circle_h_
 
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief  least-squares fit of N points to a circle
@@ -26,7 +25,7 @@
 
 class osl_fit_circle
 {
-public:
+ public:
     //: Construct from list of 2d points of double
     osl_fit_circle(const vcl_list<vgl_point_2d<double> > &points);
 
@@ -53,7 +52,7 @@ public:
     // (average of length of tangents from points to circle)
     double avg_diff() const { return avg_diff_; }
 
-protected:
+ protected:
     void calculate(const vcl_list<vgl_point_2d<double> > &points);
 
     bool error_; // error flag

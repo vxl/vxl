@@ -1,6 +1,7 @@
+// This is oxl/mvl/SimilarityMetric.h
 #ifndef SimilarityMetric_h_
 #define SimilarityMetric_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -74,7 +75,7 @@ class SimilarityMetric : public ImageMetric
   void print() const;
   void print(char* msg) const;
 
-private:
+ private:
   // Helpers-------------------------------------------------------------------
   void make_matrices();
 };

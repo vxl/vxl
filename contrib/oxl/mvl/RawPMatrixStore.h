@@ -1,7 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/mvl/RawPMatrixStore.h
 #ifndef RawPMatrixStore_h_
 #define RawPMatrixStore_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -23,8 +23,9 @@
 
 #include <mvl/PMatrix_sptr.h>
 
-class RawPMatrixStore {
-public:
+class RawPMatrixStore
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   //: Construct a PMatrix store given a FileNameGenerator
@@ -38,7 +39,7 @@ public:
 
   void AddExtension(char const*);
 
-protected:
+ protected:
 
   // Data Members--------------------------------------------------------------
   vcl_vector<PMatrix_sptr> pmatrix_;

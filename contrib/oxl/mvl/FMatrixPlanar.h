@@ -1,6 +1,7 @@
+// This is oxl/mvl/FMatrixPlanar.h
 #ifndef FMatrixPlanar_h_
 #define FMatrixPlanar_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 
@@ -23,7 +24,7 @@
 
 class FMatrixPlanar : public FMatrix
 {
-public:
+ public:
   FMatrixPlanar();
   FMatrixPlanar(const double* f_matrix);
   FMatrixPlanar(const vnl_matrix<double>& f_matrix);

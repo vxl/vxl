@@ -1,6 +1,7 @@
+// This is oxl/mvl/Homg.h
 #ifndef Homg_h_
 #define Homg_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -23,7 +24,7 @@
 
 class Homg
 {
-public:
+ public:
 
   //: Standard placeholder for methods that wish to return infinity.
   static double infinity;

@@ -1,6 +1,7 @@
+// This is oxl/mvl/PMatrixEuclidean.h
 #ifndef PMatrixEuclidean_h_
 #define PMatrixEuclidean_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

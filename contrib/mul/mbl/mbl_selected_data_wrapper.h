@@ -1,9 +1,9 @@
+// This is mul/mbl/mbl_selected_data_wrapper.h
 #ifndef mbl_selected_data_wrapper_h
 #define mbl_selected_data_wrapper_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Ian Scott
@@ -22,11 +22,10 @@
 template <class T>
 class mbl_selected_data_wrapper: public mbl_data_wrapper<T>
 {
-private:
   mbl_data_wrapper<T> *data_;
   vcl_vector<unsigned> selection_;
   unsigned index_;
-public:
+ public:
   //: Copy constructor.
   mbl_selected_data_wrapper(const mbl_selected_data_wrapper<T>& p);
 
@@ -79,7 +78,6 @@ public:
 
   //: Name of the class.
   virtual vcl_string is_a() const;
-
 };
 
 #endif // mbl_selected_data_wrapper_h

@@ -1,10 +1,8 @@
+// This is mul/mil/mil_image_data.h
 #ifndef mil_image_data_h_
 #define mil_image_data_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-//: \file
+//:
+//  \file
 //  \brief Ref. counted block of data on the heap
 //  \author Tim Cootes
 
@@ -17,8 +15,8 @@ class vsl_b_istream;
 //: Ref. counted block of data on the heap
 //  Image data block used by mil_image_2d_of<T>.
 template<class T>
-class mil_image_data {
-private:
+class mil_image_data
+{
     //: Data
     T *data_;
 
@@ -28,7 +26,7 @@ private:
     //: Reference count
     int ref_count_;
 
-public:
+ public:
     //: Dflt ctor
     mil_image_data();
 

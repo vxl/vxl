@@ -1,6 +1,7 @@
+// This is gel/vgel/vgel_multi_view_data.h
 #ifndef vgel_multi_view_data_
 #define vgel_multi_view_data_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //--------------------------------------------------------------------------------
@@ -15,9 +16,9 @@
 #include <vbl/vbl_ref_count.h>
 
 template <class T>
-class vgel_multi_view_data: public vbl_ref_count {
-
-public:
+class vgel_multi_view_data: public vbl_ref_count
+{
+ public:
   vgel_multi_view_data();
   vgel_multi_view_data(int nbviews);
   ~vgel_multi_view_data();
@@ -43,7 +44,7 @@ public:
 
   vcl_ostream& print(vcl_ostream& str);
 
-private:
+ private:
   int nbviews_;
   int nbfeatures_; //number of features wishing to be detected
   int size_vect_ft_;//the number of features in all images
@@ -54,4 +55,4 @@ private:
   vcl_vector<T> all_pts;
 };
 
-#endif
+#endif // vgel_multi_view_data_

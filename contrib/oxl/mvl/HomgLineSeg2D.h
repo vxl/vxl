@@ -1,6 +1,7 @@
+// This is oxl/mvl/HomgLineSeg2D.h
 #ifndef _HomgLineSeg2D_h
 #define _HomgLineSeg2D_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -19,10 +20,9 @@
 #include <mvl/HomgPoint2D.h>
 #include <vcl_iosfwd.h>
 
-class HomgLineSeg2D : public HomgLine2D {
-
-  // PUBLIC INTERFACE----------------------------------------------------------
-public:
+class HomgLineSeg2D : public HomgLine2D
+{
+ public:
 
   // Constructors/Initializers/Destructors-------------------------------------
 
@@ -42,7 +42,7 @@ public:
 
   double picking_distance(const HomgPoint2D& point1) const;
 
-private:
+ private:
   HomgPoint2D _point1;
   HomgPoint2D _point2;
 };

@@ -1,6 +1,7 @@
+// This is oxl/mvl/FMatrixAffine.h
 #ifndef FMatrixAffine_h_
 #define FMatrixAffine_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 
@@ -20,7 +21,7 @@
 
 class FMatrixAffine : public FMatrix
 {
-public:
+ public:
 
   FMatrixAffine();
   ~FMatrixAffine();

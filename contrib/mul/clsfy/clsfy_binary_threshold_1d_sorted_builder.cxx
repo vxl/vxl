@@ -1,6 +1,4 @@
-#ifdef __GNUC__
-#pragma implementation
-#endif
+// This is mul/clsfy/clsfy_binary_threshold_1d_sorted_builder.cxx
 
 //:
 // \file
@@ -86,19 +84,20 @@ double clsfy_binary_threshold_1d_sorted_builder::build(clsfy_classifier_1d& clas
   }
 
   int n=n0+n1;
-  //vcl_cout<<"n= "<<n<<vcl_endl;
-  //vcl_cout<<"data.size()= "<<data.size()<<vcl_endl;
-
+#if 0
+  vcl_cout<<"n= "<<n<<vcl_endl;
+  vcl_cout<<"data.size()= "<<data.size()<<vcl_endl;
+#endif
   vbl_triple<double,int,int> *data_ptr=&data[0];
   vcl_sort(data_ptr,data_ptr+n);
+#if 0
+  vcl_cout<<"data.size()= "<<data.size()<<vcl_endl;
 
-  //vcl_cout<<"data.size()= "<<data.size()<<vcl_endl;
-
-  //vcl_cout<<"tot_wts0= "<<tot_wts0<<vcl_endl;
-  //vcl_cout<<"tot_wts1= "<<tot_wts1<<vcl_endl;
-  //for (int i=0;i<data.size(); ++i)
-  //  vcl_cout<<"data["<<i<<"]="<<data[i].first<<vcl_endl;
-
+  vcl_cout<<"tot_wts0= "<<tot_wts0<<vcl_endl;
+  vcl_cout<<"tot_wts1= "<<tot_wts1<<vcl_endl;
+  for (int i=0;i<data.size(); ++i)
+    vcl_cout<<"data["<<i<<"]="<<data[i].first<<vcl_endl;
+#endif
   return build(classifier,&data[0], wts);
 }
 

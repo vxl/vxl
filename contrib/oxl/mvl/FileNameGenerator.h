@@ -1,7 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/mvl/FileNameGenerator.h
 #ifndef FileNameGenerator_h_
 #define FileNameGenerator_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //
@@ -19,13 +19,14 @@
 
 #include <mvl/FileNameGeneratorBase.h>
 
-class FileNameGenerator {
+class FileNameGenerator
+{
   FileNameGeneratorBase* fng_;
   vcl_string subdir_;
   vcl_string suffix_;
 
   // default copy ctor OK
-public:
+ public:
   FileNameGenerator(FileNameGeneratorBase* fng,
                     vcl_string const& suffix)
   : fng_(fng), subdir_(), suffix_(suffix)

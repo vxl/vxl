@@ -1,6 +1,7 @@
+// This is oxl/mvl/FileNameGeneratorBase.h
 #ifndef FileNameGeneratorBase_h_
 #define FileNameGeneratorBase_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //
@@ -17,9 +18,9 @@
 #include <vnl/vnl_unary_function.h>
 #include <vcl_string.h>
 
-class FileNameGeneratorBase {
-protected:
-public:
+class FileNameGeneratorBase
+{
+ public:
   typedef vnl_unary_function<int,int> Indexer;
 
   // Constructors/Destructors--------------------------------------------------
@@ -52,7 +53,7 @@ public:
 
   bool use_subdirs;
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   Indexer* indexer_;
 };

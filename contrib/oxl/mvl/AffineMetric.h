@@ -1,6 +1,7 @@
+// This is oxl/mvl/AffineMetric.h
 #ifndef AffineMetric_h_
 #define AffineMetric_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -19,7 +20,7 @@ class AffineMetric : public ImageMetric
   // Data Members--------------------------------------------------------------
   vnl_double_3x3 A_;
   vnl_double_3x3 A_inverse_;
-public:
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   AffineMetric();

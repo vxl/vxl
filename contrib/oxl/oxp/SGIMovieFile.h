@@ -1,6 +1,7 @@
+// This is oxl/oxp/SGIMovieFile.h
 #ifndef SGIMovieFile_h_
 #define SGIMovieFile_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -23,7 +24,7 @@ struct SGIMovieFilePrivates;
 class SGIMovieFile : public MovieFileInterface
 {
   SGIMovieFilePrivates* p;
-public:
+ public:
   SGIMovieFile(char const* filename);
   ~SGIMovieFile();
 

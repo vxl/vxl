@@ -1,6 +1,7 @@
+// This is oxl/oxp/ImageSequenceName.h
 #ifndef ImageSequenceName_h_
 #define ImageSequenceName_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //
@@ -16,7 +17,8 @@
 
 #include "SequenceFileName.h"
 
-struct ImageSequenceName : public SequenceFileName {
+struct ImageSequenceName : public SequenceFileName
+{
   ImageSequenceName(char const* s, char const* read_or_write = "r", char const* default_extension = 0);
   ImageSequenceName(char const* s, int start_frame, int step, char const* read_or_write = "r", char const* default_extension = 0);
   void init(char const* read_or_write = "r", char const* default_extension = 0);

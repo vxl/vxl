@@ -1,5 +1,5 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is oxl/vgui/internals/vgui_accelerate.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //
@@ -43,12 +43,12 @@ void vgui_accelerate::register_accelerator(vgui_accelerate* p, int level)
 
 vgui_accelerate::vgui_accelerate()
 {
-  //  vcl_cerr << __FILE__ ": vgui_accelerate::vgui_accelerate()" << vcl_endl;
+  //  vcl_cerr << __FILE__ ": vgui_accelerate::vgui_accelerate()\n";
 }
 
 vgui_accelerate::~vgui_accelerate()
 {
-  //  vcl_cerr << __FILE__ ": vgui_accelerate::~vgui_accelerate()" << vcl_endl;
+  //  vcl_cerr << __FILE__ ": vgui_accelerate::~vgui_accelerate()\n";
 }
 
 bool

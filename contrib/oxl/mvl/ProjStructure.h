@@ -1,6 +1,7 @@
+// This is oxl/mvl/ProjStructure.h
 #ifndef ProjStructure_h_
 #define ProjStructure_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -18,8 +19,9 @@
 class HomgInterestPointSet;
 
 //: Not documented FIXME
-class ProjStructure {
-public:
+class ProjStructure
+{
+ public:
 
   vcl_vector<HomgInterestPointSet*> points_2d_;
   vcl_vector<PMatrix> P_;

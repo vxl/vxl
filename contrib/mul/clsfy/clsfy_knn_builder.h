@@ -1,12 +1,12 @@
+// This is mul/clsfy/clsfy_knn_builder.h
 #ifndef clsfy_knn_builder_h_
 #define clsfy_knn_builder_h_
 
 // Copyright: (C) 2001 Britsh Telecommunications plc
 
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Describe a knn classifier builder
@@ -30,7 +30,7 @@ class clsfy_knn_builder : public clsfy_builder_base
   //: The number of nearest neighbours to look for.
   unsigned k_;
 
-public:
+ public:
   // Dflt ctor
   clsfy_knn_builder();
 

@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is mul/pdf1d/pdf1d_kernel_pdf_builder.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -95,7 +96,7 @@ void pdf1d_kernel_pdf_builder::build_from_array(pdf1d_pdf& model,
 
   if (n<1)
   {
-    vcl_cerr<<"pdf1d_kernel_pdf_builder::build() No examples available."<<vcl_endl;
+    vcl_cerr<<"pdf1d_kernel_pdf_builder::build() No examples available.\n";
     vcl_abort();
   }
 
@@ -119,7 +120,7 @@ void pdf1d_kernel_pdf_builder::build_from_array(pdf1d_pdf& model,
     build_adaptive(kpdf,data,n);
     break;
     default:
-    vcl_cerr<<"pdf1d_kernel_pdf_builder::build() Unknown build type."<<vcl_endl;
+    vcl_cerr<<"pdf1d_kernel_pdf_builder::build() Unknown build type.\n";
     vcl_abort();
   }
 }
@@ -132,7 +133,7 @@ void pdf1d_kernel_pdf_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>&
 
   if (n<1)
   {
-    vcl_cerr<<"pdf1d_kernel_pdf_builder::build() No examples available."<<vcl_endl;
+    vcl_cerr<<"pdf1d_kernel_pdf_builder::build() No examples available.\n";
     vcl_abort();
   }
 
@@ -160,7 +161,7 @@ void pdf1d_kernel_pdf_builder::weighted_build(pdf1d_pdf& model,
                                               mbl_data_wrapper<double>& data,
                                               const vcl_vector<double>& wts) const
 {
-  vcl_cerr<<"pdf1d_kernel_pdf_builder::weighted_build() Ignoring weights."<<vcl_endl;
+  vcl_cerr<<"pdf1d_kernel_pdf_builder::weighted_build() Ignoring weights.\n";
   build(model,data);
 }
 

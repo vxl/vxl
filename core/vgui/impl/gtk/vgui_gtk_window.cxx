@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/vgui/impl/gtk/vgui_gtk_window.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -41,7 +42,7 @@ vgui_gtk_window::vgui_gtk_window(int w, int h, const char* title)
   , use_statusbar(true)
   , last_menubar(new vgui_menu)
 {
-  if (debug) vcl_cerr << "vgui_gtk_window::vgui_gtk_window" << vcl_endl;
+  if (debug) vcl_cerr << "vgui_gtk_window::vgui_gtk_window\n";
 
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(window), title);
@@ -64,7 +65,7 @@ vgui_gtk_window::vgui_gtk_window(int w, int h, const vgui_menu& menu, const char
   , use_statusbar(true)
   , last_menubar(new vgui_menu)
 {
-  if (debug) vcl_cerr << "vgui_gtk_window::vgui_gtk_window" << vcl_endl;
+  if (debug) vcl_cerr << "vgui_gtk_window::vgui_gtk_window\n";
 
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(window), title);
@@ -128,7 +129,7 @@ void vgui_gtk_window::init() {
 
 //: Puts the given menubar onto the window.
 void vgui_gtk_window::set_menubar(const vgui_menu &menu) {
-  if (debug) vcl_cerr << "vgui_gtk_window::set_menubar" << vcl_endl;
+  if (debug) vcl_cerr << "vgui_gtk_window::set_menubar\n";
 
   use_menubar = true;
 
@@ -137,7 +138,7 @@ void vgui_gtk_window::set_menubar(const vgui_menu &menu) {
   *last_menubar = menu;
 
   menubar = gtk_menu_bar_new();
-  if(vgui_gtk_utils::accel_group == NULL)
+  if (vgui_gtk_utils::accel_group == NULL)
     {
       vgui_gtk_utils::accel_group = gtk_accel_group_get_default();
       gtk_accel_group_attach(vgui_gtk_utils::accel_group,GTK_OBJECT(window));
@@ -159,12 +160,12 @@ vgui_adaptor* vgui_gtk_window::get_adaptor() {
 void vgui_gtk_window::show() {
   init();
 
-  if (debug) vcl_cerr << "vgui_gtk_window::show" << vcl_endl;
+  if (debug) vcl_cerr << "vgui_gtk_window::show\n";
   gtk_widget_show(window);
 }
 
 void vgui_gtk_window::hide() {
-  if (debug) vcl_cerr << "vgui_gtk_window::hide" << vcl_endl;
+  if (debug) vcl_cerr << "vgui_gtk_window::hide\n";
 }
 
 void vgui_gtk_window::set_title(vcl_string const &title) {

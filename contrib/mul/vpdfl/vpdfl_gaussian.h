@@ -1,6 +1,7 @@
+// This is mul/vpdfl/vpdfl_gaussian.h
 #ifndef vpdfl_gaussian_h
 #define vpdfl_gaussian_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -18,13 +19,14 @@
 
 //: Class for multi-variate gaussians with arbitrary axes.
 //  Covariance matrix is represented by its eigenvectors and values
-class vpdfl_gaussian : public vpdfl_pdf_base {
+class vpdfl_gaussian : public vpdfl_pdf_base
+{
   vnl_matrix<double> evecs_;
   vnl_vector<double> evals_;
   double log_k_;
   void calcLogK();
 
-protected: // Workspace may be accessed by sub-classes
+ protected: // Workspace may be accessed by sub-classes
   //: Workspace
   // The difference between an input vector an the mean
   mutable vnl_vector<double> dx_;
@@ -32,7 +34,7 @@ protected: // Workspace may be accessed by sub-classes
   // Usually the input vector after normalisation.
   mutable vnl_vector<double> b_;
 
-public:
+ public:
   //: Dflt ctor
   vpdfl_gaussian();
 

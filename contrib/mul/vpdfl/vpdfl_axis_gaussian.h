@@ -1,6 +1,7 @@
+// This is mul/vpdfl/vpdfl_axis_gaussian.h
 #ifndef vpdfl_axis_gaussian_h
 #define vpdfl_axis_gaussian_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -18,14 +19,15 @@
 #include <vpdfl/vpdfl_pdf_base.h>
 
 //: Multi-variate gaussian PDF, with a diagonal covariance matrix
-class vpdfl_axis_gaussian : public vpdfl_pdf_base {
+class vpdfl_axis_gaussian : public vpdfl_pdf_base
+{
   double log_k_;
   vnl_vector<double> sd_;
 
   void calcLogK();
   void calcSD();
 
-public:
+ public:
 
   // Dflt ctor
   vpdfl_axis_gaussian();

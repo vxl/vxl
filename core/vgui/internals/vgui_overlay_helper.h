@@ -1,14 +1,15 @@
+// This is oxl/vgui/internals/vgui_overlay_helper.h
 #ifndef vgui_overlay_helper_h_
 #define vgui_overlay_helper_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+//
 // A helper class which emulates overlays using an auxiliary buffer.
-// The auxiliary buffer may be an OpenGL "aux buffer", the OpenGL 
+// The auxiliary buffer may be an OpenGL "aux buffer", the OpenGL
 // back buffer, a Mesa pixmap or some other resource.
 
 // To use it, the adaptor must relinquish control of event dispatch
@@ -23,12 +24,12 @@ struct vgui_overlay_helper
 {
   vgui_overlay_helper(vgui_adaptor *);
   ~vgui_overlay_helper();
-  
+
   // client methods
   void post_overlay_redraw() { overlay_redraw_posted = true; }
   bool dispatch(vgui_event const &e);
 
-private:
+ private:
   vgui_adaptor *adaptor;
   bool aux_buffer_is_back_buffer;
   bool last_draw_was_overlay;

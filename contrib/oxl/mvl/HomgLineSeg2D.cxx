@@ -1,9 +1,9 @@
-#ifdef __GNUG__
+// This is oxl/mvl/HomgLineSeg2D.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
-//  \file
+// \file
 
 #include <vcl_iostream.h>
 

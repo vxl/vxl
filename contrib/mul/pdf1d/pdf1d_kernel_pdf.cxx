@@ -1,3 +1,7 @@
+// This is mul/pdf1d/pdf1d_kernel_pdf.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \brief Base class for kernel PDFs.
@@ -5,9 +9,6 @@
 // Modifications
 // \verbatim
 // IMS 28 Feb 2002 Added inverse CDF.
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 #include "pdf1d_kernel_pdf.h"
 #include <vcl_cstdlib.h>

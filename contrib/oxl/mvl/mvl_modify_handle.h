@@ -1,6 +1,7 @@
+// This is oxl/mvl/mvl_modify_handle.h
 #ifndef mvl_modify_handle_h_
 #define mvl_modify_handle_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -20,7 +21,7 @@ class mvl_modify_handle
 {
   T  _oldvalue;
   T* _place;
-public:
+ public:
   mvl_modify_handle(T* place) { _place = place; _oldvalue = *place; }
   ~mvl_modify_handle() { *_place = _oldvalue; }
   operator T* () { return _place; }

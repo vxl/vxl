@@ -1,16 +1,13 @@
-// This is ./oxl/vgui/internals/vgui_adaptor_tableau.cxx
-
+// This is oxl/vgui/internals/vgui_adaptor_tableau.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "vgui_adaptor_tableau.h"
-
 #include <vcl_iostream.h>
-
 #include <vgui/vgui_adaptor.h>
 
 //:
@@ -26,7 +23,7 @@ vgui_adaptor_tableau::vgui_adaptor_tableau(vgui_adaptor *a)
 
 vgui_adaptor_tableau::~vgui_adaptor_tableau() 
 {
-  vcl_cerr << "~vgui_adaptor_tableau(this = " << (void*)this << ")" << vcl_endl;
+  vcl_cerr << "~vgui_adaptor_tableau(this = " << (void*)this << ")\n";
 }
 
 void vgui_adaptor_tableau::post_message(char const *msg, void const *data) 

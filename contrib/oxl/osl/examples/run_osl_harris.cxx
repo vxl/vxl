@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/osl/examples/run_osl_harris.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
 #endif
 
@@ -26,9 +27,9 @@ int main(int argc,char **argv)
   // load image
   vil_image I;
   if (infile() == "-") {
-    //vcl_cerr << "reading image from stdin" << vcl_endl;
+    //vcl_cerr << "reading image from stdin\n";
     //I = vil_load(cin);
-    vcl_cerr << "cannot read from stdin yet" << vcl_endl;
+    vcl_cerr << "cannot read from stdin yet\n";
     return 1;
   }
   else
@@ -49,7 +50,7 @@ int main(int argc,char **argv)
 
   // save
   if (outfile() == "") {
-    vcl_cerr << "writing image to stdout" << vcl_endl;
+    vcl_cerr << "writing image to stdout\n";
     H.save_corners(vcl_cout);
   }
   else

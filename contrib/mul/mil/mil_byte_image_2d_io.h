@@ -1,10 +1,11 @@
+// This is mul/mil/mil_byte_image_2d_io.h
 #ifndef mil_byte_image_2d_io_h_
 #define mil_byte_image_2d_io_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-//: \file
+//:
+//  \file
 //  \brief Load and save mil_image_2d_of<vil_byte> from named files.
 //  \author Tim Cootes
 
@@ -24,8 +25,8 @@ enum mil_byte_image_2d_io_std_depths
 };
 
 //: Load and save mil_image_2d_of<vil_byte> from named files.
-class mil_byte_image_2d_io : public mil_image_io {
-private:
+class mil_byte_image_2d_io : public mil_image_io
+{
   //: Current image object
   //  image() returns a reference to this
   mil_image_2d_of<vil_byte> image_;
@@ -41,7 +42,7 @@ private:
 
   static vcl_string guessFileType(const vcl_string& path);
 
-public:
+ public:
 
   //: Dflt ctor
   mil_byte_image_2d_io();

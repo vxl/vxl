@@ -1,9 +1,9 @@
+// This is oxl/oxp/MovieFileInterface.h
 #ifndef MovieFileInterface_h_
 #define MovieFileInterface_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 //  \file
 //
@@ -14,7 +14,8 @@
 
 #include <vil/vil_image.h>
 
-struct MovieFileInterface {
+struct MovieFileInterface
+{
   virtual ~MovieFileInterface();
 
   //: Return length of movie in frames

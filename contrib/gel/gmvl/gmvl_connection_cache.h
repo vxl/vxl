@@ -1,11 +1,12 @@
+// This is gel/gmvl/gmvl_connection_cache.h
 #ifndef gmvl_connection_cache_h_
 #define gmvl_connection_cache_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  crossge@crd.ge.com
-*/
+//:
+// \file
+// \author crossge@crd.ge.com
 
 #include <vcl_vector.h>
 
@@ -14,7 +15,7 @@
 
 class gmvl_connection_cache
 {
-public:
+ public:
 
   // constructors / destructors
   gmvl_connection_cache();
@@ -37,7 +38,7 @@ public:
   // input output
   friend vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection_cache &c);
 
-protected:
+ protected:
 
   // raw connections
   vcl_vector<gmvl_connection_sptr> connections_;
@@ -51,4 +52,4 @@ protected:
 
 vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection_cache &c);
 
-#endif
+#endif // gmvl_connection_cache_h_

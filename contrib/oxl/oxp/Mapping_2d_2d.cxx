@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/oxp/Mapping_2d_2d.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 

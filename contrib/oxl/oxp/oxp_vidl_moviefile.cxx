@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/oxp/oxp_vidl_moviefile.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 

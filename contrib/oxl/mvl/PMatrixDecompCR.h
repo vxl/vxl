@@ -1,6 +1,7 @@
+// This is oxl/mvl/PMatrixDecompCR.h
 #ifndef PMatrixDecompCR_h_
 #define PMatrixDecompCR_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

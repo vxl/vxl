@@ -1,7 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/oxp/oxp_vidl_moviefile.h
 #ifndef oxp_vidl_moviefile_h_
 #define oxp_vidl_moviefile_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -18,7 +18,7 @@ struct oxp_vidl_moviefile_privates;
 class oxp_vidl_moviefile : public MovieFileInterface
 {
   oxp_vidl_moviefile_privates* p;
-public:
+ public:
   oxp_vidl_moviefile(char const* filename);
   ~oxp_vidl_moviefile();
 

@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is oxl/mvl/FMPlanarNonLinFun.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 
@@ -77,18 +77,18 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
        return false;
 
   vcl_cerr<<"FMPlanarNonLinFun: minimisation start error "
-      << lm.get_start_error() / vcl_sqrt(double(_data_size))
-      <<" end error "
-      << lm.get_end_error() / vcl_sqrt(double(_data_size))
-      <<vcl_endl;
+          << lm.get_start_error() / vcl_sqrt(double(_data_size))
+          <<" end error "
+          << lm.get_end_error() / vcl_sqrt(double(_data_size))
+          <<vcl_endl;
 
   norm_F = params_to_fmatrix (f_params);
 
   F->set(_denorm_matrix.transpose() * norm_F.get_matrix() * _denorm_matrix);
 
   vcl_cerr << "fm_fmatrix_nagmin: accepted " << _data_size << '/' << _data_size
-       << " rms point-epipolar error " << lm.get_end_error() / vcl_sqrt(double(_data_size))
-       << vcl_endl;;
+           << " rms point-epipolar error " << lm.get_end_error() / vcl_sqrt(double(_data_size))
+           << vcl_endl;;
 
   return true;
 }

@@ -1,6 +1,7 @@
+// This is oxl/oxp/MedianReduceImage.h
 #ifndef MedianReduceImage_h_
 #define MedianReduceImage_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //
@@ -19,7 +20,8 @@
 
 #include <vil/vil_memory_image_of.h>
 
-struct MedianReduceImage : public vil_memory_image_of<unsigned char> {
+struct MedianReduceImage : public vil_memory_image_of<unsigned char>
+{
   MedianReduceImage(vil_memory_image_of<unsigned char> const& in, int SCALE);
 };
 

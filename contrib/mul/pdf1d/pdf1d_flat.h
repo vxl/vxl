@@ -1,6 +1,7 @@
+// This is mul/pdf1d/pdf1d_flat.h
 #ifndef pdf1d_flat_h
 #define pdf1d_flat_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -13,12 +14,13 @@
 
 //: Class for univariate flat distributions: p(x)=1/(hi-lo) in [lo,hi]
 //  In range [lo,hi] p(x)=1/(hi-lo)
-class pdf1d_flat : public pdf1d_pdf {
+class pdf1d_flat : public pdf1d_pdf
+{
   double lo_,hi_;
   double p_;
   double log_p_;
 
-public:
+ public:
   //: Dflt ctor (creates flat distribution in range [0,1])
   pdf1d_flat();
 

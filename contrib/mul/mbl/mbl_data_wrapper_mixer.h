@@ -1,9 +1,9 @@
+// This is mul/mbl/mbl_data_wrapper_mixer.h
 #ifndef mbl_data_wrapper_mixer_h
 #define mbl_data_wrapper_mixer_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Tim Cootes
@@ -14,13 +14,13 @@
 
 //: Concatenate together data in two or more mbl_data_wrapper objects
 template<class T>
-class mbl_data_wrapper_mixer : public mbl_data_wrapper<T> {
-private:
+class mbl_data_wrapper_mixer : public mbl_data_wrapper<T>
+{
   vcl_vector<mbl_data_wrapper<T> *> wrapper_;
   unsigned long n_;
   unsigned long index_;
   unsigned long current_wrapper_;
-public:
+ public:
   //: Default constructor
   mbl_data_wrapper_mixer();
 

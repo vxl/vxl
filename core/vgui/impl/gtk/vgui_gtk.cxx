@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/vgui/impl/gtk/vgui_gtk.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -39,7 +40,7 @@ vcl_string vgui_gtk::name() const { return "gtk"; }
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui.  Initialise the implementation of vgui.
 void vgui_gtk::init(int &argc, char **argv) {
-  if (debug) vcl_cerr << "vgui_gtk::init()" << vcl_endl;
+  if (debug) vcl_cerr << "vgui_gtk::init()\n";
   gtk_init(&argc, &argv);
 }
 
@@ -47,7 +48,7 @@ void vgui_gtk::init(int &argc, char **argv) {
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui.   Runs the event loop.
 void vgui_gtk::run() {
-  if (debug) vcl_cerr << "vgui_gtk::run()" << vcl_endl;
+  if (debug) vcl_cerr << "vgui_gtk::run()\n";
   gtk_main();
 }
 
@@ -68,7 +69,7 @@ void vgui_gtk::flush() {
 }
 
 void vgui_gtk::quit() {
-  vcl_cerr << __FILE__ " : terminating GTK+ event loop" << vcl_endl;
+  vcl_cerr << __FILE__ " : terminating GTK+ event loop\n";
   gtk_main_quit(); // capes@robots -- causes the gtk event loop to return
 }
 

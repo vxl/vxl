@@ -1,10 +1,9 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_dialog_impl.h
+// This is oxl/vgui/impl/mfc/vgui_mfc_dialog_impl.h
 #ifndef vgui_mfc_dialog_impl_h_
 #define vgui_mfc_dialog_impl_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author  Marko Bacic, RRG, University of Oxford
@@ -35,8 +34,9 @@ class CFont;
 // 
 //  Specialization of vgui_dialog_impl for mfc. Creates a mfc dialog box.
 //  Based on vgui_gtk_dialog_impl
-class vgui_mfc_dialog_impl : public CWnd,public vgui_dialog_impl {
-public:
+class vgui_mfc_dialog_impl : public CWnd,public vgui_dialog_impl
+{
+ public:
   vgui_mfc_dialog_impl(const char* name);
   ~vgui_mfc_dialog_impl();
 
@@ -46,7 +46,7 @@ public:
   void modal(const bool);
   //: Display the dialog box.
   bool ask();
-protected:
+ protected:
   LOGFONT m_logfont;
   //: Called by MFC when the user clicks the OK button.
   virtual void OnOk();
@@ -58,7 +58,7 @@ protected:
   virtual void OnChooseColour(UINT uID);
   //: Called by MFC when the appication is about to terminate.
   afx_msg void OnClose();
-private:
+ private:
   int nResult;
   //: File browser counter.
   int count_fbsr;

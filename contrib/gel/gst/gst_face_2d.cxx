@@ -1,11 +1,12 @@
-/*
-  crossge@crd.ge.com
-*/
-#ifdef __GNUC__
+// This is gel/gst/gst_face_2d.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-#include "gst_face_2d.h"
+//:
+// \file
+// \author crossge@crd.ge.com
 
+#include "gst_face_2d.h"
 
 gst_face_2d::gst_face_2d( gst_polygon_2d_sptr polygon)
   : outside_( polygon)

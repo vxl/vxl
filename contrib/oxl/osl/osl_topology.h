@@ -1,6 +1,7 @@
+// This is oxl/osl/osl_topology.h
 #ifndef osl_topology_h_
 #define osl_topology_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -42,7 +43,7 @@ struct osl_topology_base : public vbl_ref_count
   void *stash_retrieve(char const *name) const;
   // remove first stash with given name. the dtor is *not* called.
   void *stash_remove  (char const *name);
-private:
+ private:
   osl_stash_link *stash_head;
 };
 

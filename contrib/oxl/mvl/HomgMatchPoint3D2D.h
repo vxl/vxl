@@ -1,6 +1,7 @@
+// This is oxl/mvl/HomgMatchPoint3D2D.h
 #ifndef HomgMatchPoint3D2D_h_
 #define HomgMatchPoint3D2D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -19,7 +20,7 @@ class HomgMatchPoint3D2D
     HomgPoint2D _point2D;
     HomgPoint3D _point3D;
 
-public:
+ public:
   // Constructors/Initializers/Destructors-----------------------------------
 
   HomgMatchPoint3D2D ();

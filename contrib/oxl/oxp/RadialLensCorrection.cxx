@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/oxp/RadialLensCorrection.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -104,8 +105,10 @@ void RadialLensCorrection::implement_inverse_map(double x2, double y2, double* x
       r = 0;
     else
       r = t + Q / t;
-    //vcl_cerr <<  "+RES = " << (r*(1 + _k2 * r * r) - rc) << " "
-    //   << (vcl_fabs(t*t*t) - (vcl_fabs(R)  + vcl_sqrt(DELTA))) << vcl_endl;
+#if 0
+    vcl_cerr <<  "+RES = " << (r*(1 + _k2 * r * r) - rc) << " "
+             << (vcl_fabs(t*t*t) - (vcl_fabs(R)  + vcl_sqrt(DELTA))) << vcl_endl;
+#endif
   }
   // end D & F
 

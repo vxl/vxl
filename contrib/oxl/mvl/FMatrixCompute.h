@@ -1,6 +1,7 @@
+// This is oxl/mvl/FMatrixCompute.h
 #ifndef _FMatrixCompute_h
 #define _FMatrixCompute_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -27,8 +28,9 @@ class FMatrix;
 class HomgPoint2D;
 class PairMatchSetCorner;
 
-class FMatrixCompute {
-public:
+class FMatrixCompute
+{
+ public:
   // Constructors/Initializers/Destructors----------------------------------
   FMatrixCompute();
   virtual ~FMatrixCompute();

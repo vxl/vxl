@@ -1,10 +1,9 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_statusbar.h
+// This is oxl/vgui/impl/mfc/vgui_mfc_statusbar.h
 #ifndef vgui_mfc_statusbar_h_
 #define vgui_mfc_statusbar_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author   Marko Bacic, Oxford RRG
@@ -25,8 +24,9 @@
 #include "StdAfx.h"
 
 //: Status bar for the main window of the application.
-class vgui_mfc_statusbar : public vgui_statusbar {
-public:
+class vgui_mfc_statusbar : public vgui_statusbar
+{
+ public:
 
   //: Constructor, creates an MFC status bar object and displays it.
   vgui_mfc_statusbar();

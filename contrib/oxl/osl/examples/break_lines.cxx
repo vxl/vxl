@@ -1,9 +1,10 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/osl/examples/break_lines.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vul/vul_arg.h>
 
@@ -20,7 +21,7 @@ int main(int argc, char **argv)
   vul_arg_parse(argc, argv);
 
   //
-  vcl_cerr << "loading topology" << vcl_endl;
+  vcl_cerr << "loading topology\n";
   vcl_list<osl_edge*> edges;
   vcl_list<osl_vertex*> vertices;
   if (in() == "")
@@ -39,7 +40,7 @@ int main(int argc, char **argv)
   osl_topology_ref(broken);
 
   //
-  vcl_cerr << "saving topology" << vcl_endl;
+  vcl_cerr << "saving topology\n";
   if (out() == "")
     osl_save_topology(vcl_cout, broken);
   else

@@ -1,8 +1,6 @@
+// This is gel/vmal/vmal_operators.h
 #ifndef vmal_operators_h_
 #define vmal_operators_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 //--------------------------------------------------------------------------------
 //:
 //  \file
@@ -18,7 +16,7 @@
 
 class vmal_operators
 {
-public:
+ public:
 
   vmal_operators();
 

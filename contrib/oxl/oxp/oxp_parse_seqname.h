@@ -1,6 +1,7 @@
+// This is oxl/oxp/oxp_parse_seqname.h
 #ifndef oxp_parse_seqname_h_
 #define oxp_parse_seqname_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -12,8 +13,9 @@
 
 //: Match optional ,1:2:40 at end of filename and strip it.
 // Fields are -1 if not matched.
-class oxp_parse_seqname {
-public:
+class oxp_parse_seqname
+{
+ public:
   vcl_string filename_;
   int start_;
   int step_;

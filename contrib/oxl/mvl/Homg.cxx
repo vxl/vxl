@@ -1,4 +1,5 @@
-#ifdef __GNUG__
+// This is oxl/mvl/Homg.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 

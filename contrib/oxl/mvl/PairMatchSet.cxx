@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/mvl/PairMatchSet.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -211,7 +212,7 @@ bool PairMatchSet::read_ascii(vcl_istream& s)
 
     // Sanity check
     if (i1 < 0 || i2 < 0 || i1 >= (int)matches_.size()) {
-      vcl_cerr << "PairMatchSet::read_ascii -- Pair " << i1 << "-" << i2 << " is outside the valid range." << vcl_endl;
+      vcl_cerr << "PairMatchSet::read_ascii -- Pair " << i1 << "-" << i2 << " is outside the valid range.\n";
       clear();
       return false;
     }

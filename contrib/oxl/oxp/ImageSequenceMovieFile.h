@@ -1,6 +1,7 @@
+// This is oxl/oxp/ImageSequenceMovieFile.h
 #ifndef ImageSequenceMovieFile_h_
 #define ImageSequenceMovieFile_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -21,7 +22,7 @@ struct ImageSequenceMovieFilePrivates;
 class ImageSequenceMovieFile : public MovieFileInterface
 {
   ImageSequenceMovieFilePrivates* p;
-public:
+ public:
   ImageSequenceMovieFile(char const* filepattern, int frame_index_to_search_for_extension);
   ~ImageSequenceMovieFile();
 

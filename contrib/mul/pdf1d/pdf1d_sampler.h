@@ -1,6 +1,7 @@
+// This is mul/pdf1d/pdf1d_sampler.h
 #ifndef pdf1d_sampler_h
 #define pdf1d_sampler_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -20,10 +21,11 @@ class pdf1d_pdf;
 // Sampler objects should only exist as long as their pdf object,
 // and are not meant to be persistent.
 
-class pdf1d_sampler {
-protected:
+class pdf1d_sampler
+{
+ protected:
   const pdf1d_pdf *pdf_model_;
-public:
+ public:
 
   //: Dflt ctor
   pdf1d_sampler();

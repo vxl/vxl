@@ -1,11 +1,11 @@
+// This is mul/pdf1d/pdf1d_flat.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \brief Univariate flat PDF.
 // \author Tim Cootes
-
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 #include "pdf1d_flat.h"
 

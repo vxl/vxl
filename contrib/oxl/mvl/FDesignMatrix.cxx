@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is oxl/mvl/FDesignMatrix.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 
@@ -31,7 +31,7 @@ FDesignMatrix::FDesignMatrix(vcl_vector<HomgPoint2D> const& points1,
   base(points1.size(), 9)
 {
   int n = points1.size();
-  for(int row = 0; row < n; ++row) {
+  for (int row = 0; row < n; ++row) {
     const HomgPoint2D& p1 = points1[row];
     const HomgPoint2D& p2 = points2[row];
 

@@ -1,8 +1,6 @@
+// This is gel/vmal/vmal_multi_view_data.h
 #ifndef vmal_multi_view_data_
 #define vmal_multi_view_data_
-#ifdef __GNUC__
-#pragma interface
-#endif
 //--------------------------------------------------------------------------------
 //:
 // \file
@@ -18,7 +16,7 @@
 template <class T>
 class vmal_multi_view_data: public vbl_ref_count
 {
-public:
+ public:
   vmal_multi_view_data();
   vmal_multi_view_data(int nbviews);
   ~vmal_multi_view_data();
@@ -47,7 +45,7 @@ public:
 
   vcl_ostream& print(vcl_ostream& str);
 
-private:
+ private:
   int nbviews_;
   int nbfeatures_; //number of features wishing to be detected
   int size_vect_ft_;//the number of features in all images

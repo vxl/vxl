@@ -1,7 +1,7 @@
 // This is oxl/vgui/impl/gtk/vgui_gtk.h
 #ifndef vgui_gtk_h_
 #define vgui_gtk_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -31,12 +31,13 @@ class vgui_gtk_adaptor;
 class vgui_gtk_window;
 
 
-class vgui_gtk : public vgui_toolkit {
-public:
+class vgui_gtk : public vgui_toolkit
+{
+ public:
   // singleton method
   static vgui_gtk* instance();
 
-protected:
+ protected:
   virtual vcl_string name() const;
 
   virtual void run();
@@ -53,7 +54,7 @@ protected:
 
   virtual vgui_dialog_impl* produce_dialog(const char* name);
 
-protected:
+ protected:
   vgui_gtk();
   void init(int &, char **);
   static vgui_gtk* instance_;

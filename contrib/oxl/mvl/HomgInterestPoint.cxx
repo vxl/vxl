@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is oxl/mvl/HomgInterestPoint.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 

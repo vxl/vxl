@@ -1,6 +1,7 @@
+// This is oxl/mvl/TriTensor.h
 #ifndef _TriTensor_h
 #define _TriTensor_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

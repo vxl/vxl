@@ -1,12 +1,12 @@
+// This is mul/clsfy/clsfy_random_builder.h
 #ifndef clsfy_random_builder_h_
 #define clsfy_random_builder_h_
 
 // Copyright: (C) 2001 Britsh Telecommunications plc
 
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Describe a random classifier builder
@@ -31,7 +31,7 @@ class clsfy_random_builder : public clsfy_builder_base
   //: Standard deviation of confidence noise added to class probabilities
   double confidence_; 
 
-public:
+ public:
   // Dflt ctor
   clsfy_random_builder();
 
