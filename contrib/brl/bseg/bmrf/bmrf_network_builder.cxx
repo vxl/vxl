@@ -20,7 +20,7 @@
 #include <bmrf/bmrf_network.h>
 #include <bmrf/bmrf_epipole.h>
 
-#include <vul/vul_timer.h>
+
 //---------------------------------------------------------------
 // Constructors
 //
@@ -399,7 +399,7 @@ intensity_candidates(bmrf_epi_seg_sptr const& seg,
   vcl_vector<bmrf_epi_seg_sptr> left_temp, right_temp;
   double a_min = seg->min_alpha(), a_max = seg->max_alpha();
   double s_min = seg->min_s(), s_max = seg->max_s();
-  double r = s_min*Ns_;//scaled region radius
+  double r = radius(s_min);//scaled region radius
   //check bounds
   int min_index = seg->min_index();
   int max_index = seg->max_index();
@@ -651,8 +651,7 @@ bool bmrf_network_builder::fill_intensity_values(bmrf_epi_seg_sptr& seg)
 #endif
   //the potential bounding segments
   vcl_vector<bmrf_epi_seg_sptr> left_cand, right_cand;
-  //----this->intensity_candidates(seg, left_cand, right_cand);
-  //----vcl_cout << "cands left = " << left_cand.size() << " right = " << right_cand.size() << vcl_endl;
+  this->intensity_candidates(seg, left_cand, right_cand);
   //scan the segment
   double min_a = seg->min_alpha(), max_a = seg->max_alpha();
   for (double a = min_a; a<=max_a; a+=da_)
@@ -800,16 +799,12 @@ bool bmrf_network_builder::build_network()
 //=============================================================
 bool bmrf_network_builder::build()
 {
-  vul_timer t;
   if (!this->compute_segments())
     return false;
-  vcl_cout << "compute time = " << t.user() << vcl_endl; t.mark();
   if (!this->set_intensity_info())
     return false;
-  vcl_cout << "stats time = " << t.user() << vcl_endl; t.mark();
   if (!this->build_network())
     return false;
-  vcl_cout << "build time = " << t.user() << vcl_endl; t.mark();
   return true;
 }
 
