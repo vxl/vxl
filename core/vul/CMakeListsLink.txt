@@ -4,3 +4,5 @@ LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vul )
 IF (WIN32)
   LINK_LIBRARIES(ws2_32.lib)
 ENDIF (WIN32)
+
+INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )

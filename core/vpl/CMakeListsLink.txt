@@ -1,2 +1,4 @@
 LINK_LIBRARIES( vpl )
 LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vpl )
+
+INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
