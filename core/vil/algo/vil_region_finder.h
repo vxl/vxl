@@ -22,7 +22,7 @@ enum vil_region_finder_connectivity {
 // between calls to the region extraction routine, so each region can
 // be extracted only once.
 //
-template<typename pix_type>
+template <class pix_type>
 class vil_region_finder
 {
  public:

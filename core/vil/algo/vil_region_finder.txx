@@ -6,7 +6,7 @@
 // ---------------------------------------------------------------------------
 //                                                                 constructor
 
-template<typename pix_type>
+template <class pix_type>
 vil_region_finder<pix_type>::
 vil_region_finder( image_view const& in_image,
                    vil_region_finder_connectivity conn )
@@ -20,7 +20,7 @@ vil_region_finder( image_view const& in_image,
 // ---------------------------------------------------------------------------
 //                                                                        init
 
-template<typename pix_type>
+template <class pix_type>
 void
 vil_region_finder<pix_type>::
 init( vil_region_finder_connectivity conn )
@@ -45,7 +45,7 @@ init( vil_region_finder_connectivity conn )
 // ---------------------------------------------------------------------------
 //                                                             same int region
 
-template<typename pix_type>
+template <class pix_type>
 void
 vil_region_finder<pix_type>::
 same_int_region( unsigned i, unsigned j,
@@ -78,7 +78,7 @@ same_int_region( unsigned i, unsigned j,
 // ---------------------------------------------------------------------------
 //                                                                       image
 
-template<typename pix_type>
+template <class pix_type>
 typename vil_region_finder<pix_type>::image_view const&
 vil_region_finder<pix_type>::
 image() const
