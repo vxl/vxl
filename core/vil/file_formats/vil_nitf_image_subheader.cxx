@@ -759,8 +759,8 @@ void vil_nitf_image_subheader::EncodeICHIPB (
   SCANBLK_NUM = 0;
   OP_ROW_11 = 0.5;
   OP_COL_11 = 0.5;
-  float ncols = 0.5 + (max_x - min_x) + 1;
-  float nrows = 0.5 + (max_y - min_y) + 1;
+  float ncols = 0.5f + (max_x - min_x) + 1;
+  float nrows = 0.5f + (max_y - min_y) + 1;
   OP_ROW_12 = 0.5;
   OP_COL_12 = ncols;
 
@@ -770,10 +770,10 @@ void vil_nitf_image_subheader::EncodeICHIPB (
   OP_ROW_22 = nrows;
   OP_COL_22 = ncols;
 
-  float first_col = 0.5 + min_x;
-  float first_row = 0.5 + min_y;
-  float last_col = 0.5 + max_x;
-  float last_row = 0.5 + max_y;
+  float first_col = 0.5f + min_x;
+  float first_row = 0.5f + min_y;
+  float last_col = 0.5f + max_x;
+  float last_row = 0.5f + max_y;
 
   FI_ROW_11 = first_row;
   FI_COL_11 = first_col;

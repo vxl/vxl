@@ -183,7 +183,7 @@ int geostr_to_double(const char* string, double* val, geopt_coord lat_lon_flag)
 {
   int length;
   int deg, min;
-  float fsec;
+  double fsec;
   const char* orig = string;
 
   //here are lat/lon dependent variables
