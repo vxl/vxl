@@ -78,7 +78,7 @@
 /* #  undef __STL_WCHAR_T */
 #  define __STL_LONG_LONG 1
 #  define __STL_LONG_DOUBLE 1
-/* #  undef __STL_MUTABLE */
+#  define __STL_MUTABLE 1
 /* #  undef __STL_FULL_SPEC_SYNTAX */
 /* #  undef __STL_BAD_ALLOC_DEFINED */
 /* #  undef __STL_DEBUG_ALLOC */
