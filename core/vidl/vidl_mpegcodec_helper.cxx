@@ -289,9 +289,7 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
                         pts = (((buf[9] >> 1) << 30) |
                                (buf[10] << 22) | ((buf[11] >> 1) << 15) |
                                (buf[12] << 7) | (buf[13] >> 1));
-#ifdef HAS_MPEG2_PTS
                         mpeg2_pts (mpeg2dec_, pts);
-#endif
                     }
                 } else { /* mpeg1 */
                     int len_skip;
@@ -321,9 +319,7 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
                         pts = (((ptsbuf[-1] >> 1) << 30) |
                                (ptsbuf[0] << 22) | ((ptsbuf[1] >> 1) << 15) |
                                (ptsbuf[2] << 7) | (ptsbuf[3] >> 1));
-#ifdef HAS_MPEG2_PTS
                         mpeg2_pts (mpeg2dec_, pts);
-#endif
                     }
                 }
                 DONEBYTES (len);
