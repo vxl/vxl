@@ -83,15 +83,15 @@ export VCL_USE_IMPLICIT_TEMPLATES
 #
 AC_MSG_CHECKING("the C++ compiler type")
 
-if   ( $CXX -v < /dev/null 2>&1 | grep "gcc version" > /dev/null 2>&1); then
+if   ( $CXX -v < /dev/null 2>&1 | grep 'gcc version' > /dev/null 2>&1); then
   compiler=gcc
-  version=`$CXX -v < /dev/null 2>&1 | awk '{if(/gcc version/){print $3}}'`
-elif ( $CXX -V < /dev/null 2>&1 | grep "WorkShop" > /dev/null ); then
+  version=`$CXX -v < /dev/null 2>&1 | grep 'gcc version' | awk '{print $3}'`
+elif ( $CXX -V < /dev/null 2>&1 | grep 'WorkShop' > /dev/null ); then
   compiler=workshop
-  version=`$CXX -V < /dev/null 2>&1 | awk '{if(/WorkShop/){print $4}}'`
-elif ( $CXX -version < /dev/null 2>&1 | grep "MIPSpro" > /dev/null ); then
+  version=`$CXX -V < /dev/null 2>&1 | grep 'WorkShop' | awk '{print $4}'`
+elif ( $CXX -version < /dev/null 2>&1 | grep 'MIPSpro' > /dev/null ); then
   compiler=mipspro
-  version=`$CXX -version < /dev/null 2>&1 | awk '{if(/MIPSpro/){print $4}}'`
+  version=`$CXX -version < /dev/null 2>&1 | grep 'MIPSpro' | awk '{print $4}'`
 else
   compiler=unknown
   version=unknown
