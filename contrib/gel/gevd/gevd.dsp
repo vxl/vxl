@@ -153,6 +153,21 @@ SOURCE=.\gevd_bufferxy.cxx
 SOURCE=.\gevd_clean_edgels.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\gevd_edgel_regions.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_intensity_face.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_region_edge.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
