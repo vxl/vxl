@@ -38,6 +38,7 @@ protected:
 //--------------------------------------------------------------------------------=
 public:
   HMatrix2DComputeLinear(bool allow_ideal_points = false);
+  int minimum_number_of_correspondences() const { return 4; }
 };
 
 #endif // _HMatrix2DComputeLinear_h
