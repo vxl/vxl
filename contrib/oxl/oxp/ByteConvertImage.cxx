@@ -18,6 +18,7 @@
 #include <vil/vil_clamp.h>
 
 ByteConvertImage::ByteConvertImage(vil_memory_image_of<float> const& in, bool ignore_zero):
+  vil_image_inhibit_derivation(0),
   base(in.width(), in.height())
 {
   ignore_zero_ = ignore_zero;
@@ -37,6 +38,7 @@ ByteConvertImage::ByteConvertImage(vil_memory_image_of<float> const& in, bool ig
 }
 
 ByteConvertImage::ByteConvertImage(vil_memory_image_of<float> const& in, float min, float max):
+  vil_image_inhibit_derivation(0),
   base(in.width(), in.height())
 {
   //vil_memory_image_of<vil_byte>& outbuf = *this;
@@ -49,6 +51,7 @@ ByteConvertImage::ByteConvertImage(vil_memory_image_of<float> const& in, float m
 }
 
 ByteConvertImage::ByteConvertImage(vil_memory_image_of<double> const& in, bool ignore_zero):
+  vil_image_inhibit_derivation(0),
   base(in.width(), in.height())
 {
   ignore_zero_ = ignore_zero;
@@ -68,6 +71,7 @@ ByteConvertImage::ByteConvertImage(vil_memory_image_of<double> const& in, bool i
 }
 
 ByteConvertImage::ByteConvertImage(vil_memory_image_of<double> const& in, double min, double max):
+  vil_image_inhibit_derivation(0),
   base(in.width(), in.height())
 {
   //vil_memory_image_of<vil_byte>& outbuf = *this;

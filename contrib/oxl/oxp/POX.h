@@ -2,7 +2,7 @@
 #ifndef POX_h_
 #define POX_h_
 #ifdef __GNUC__
-#pragma interface
+#pragma interface "POX.h"
 #endif
 //
 // Class : POX

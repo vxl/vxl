@@ -8,6 +8,9 @@
 //
 //-----------------------------------------------------------------------------
 
+#ifdef __GNUC__
+#pragma implementation "POX.h"
+#endif
 #include "POX.h"
 
 #include <vcl/vcl_vector.h>
@@ -20,6 +23,7 @@ typedef unsigned char byte;
 // where each output pixel O(x,y) is the median of values in the SCALE * SCALE
 // window with top left corner at I(x*SCALE, y*SCALE).
 MedianReduceImage::MedianReduceImage(vil_memory_image_of<byte> const& in, int SCALE):
+  vil_image_inhibit_derivation(0),
   vil_memory_image_of<byte>(in.width() / SCALE, in.height() / SCALE)
 {
   int w= in.width();
