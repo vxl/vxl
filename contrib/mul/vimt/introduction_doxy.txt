@@ -1,16 +1,15 @@
 // The following text is included in the main documentation page by doxygen
 /*! \mainpage vimt : Polymorphic image + transform library
 * Provides a set of image classes, derived from vimt_image, which can be used
-* as `views' on actual image data.
+* as `registered views' on actual image data.
 *
-* The images use pointer arithmetic to get at the pixel values, so store pointers
-* to the start of each plane, and integers indicating how to get to neighbours in
-* the x, y (and z) directions.  See vil2_image_view.
+* The vimt classes use vil2_image_view to provide that actual 2d images, and
+* a vimt_transform_2d object to provide the registration.
 *
 * The most commonly used classes are likely to be vimt_image_2d_of<T> and
-* vimt_image_3d_of<T> templated multi-plane images.
-**
-* \subsection pyr Image Pyramids
+* vimt3d_image_3d_of<T> templated multi-plane images.
+*
+* \section pyr Image Pyramids
 * Image pyramids (vimt_image_pyramid) are stacks of images, assumed to have lower
 * resolution as one goes up the stack.
 *
@@ -18,7 +17,14 @@
 * - vimt_gaussian_pyramid_builder_2d
 * - vimt_gaussian_pyramid_builder_2d_general
 *
-* \subsection Sampling Sampling
+* \section Sampling Sampling
 * Profiles can be sampled using vimt_sample_profile_bilin
 *
+* \section Expansion Expansion
+* There is nothing to stop you using the basic vimt_image class to provide
+* your own 2d image class. Two possible reasons for this would be to use a
+* much more general transform type, or to use a vil2_image_resource as 
+* the underlying image type.
+
+
 */
