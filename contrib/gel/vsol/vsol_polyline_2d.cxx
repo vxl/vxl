@@ -1,4 +1,5 @@
 // This is gel/vsol/vsol_polyline_2d.cxx
+#include <vsl/vsl_vector_io.h>
 #include "vsol_polyline_2d.h"
 //:
 // \file
@@ -20,6 +21,8 @@
 vsol_polyline_2d::vsol_polyline_2d()
 {
   storage_=new vcl_vector<vsol_point_2d_sptr>();
+  p0_ = 0;
+  p1_ = 0;
 }
 
 //---------------------------------------------------------------------------
@@ -29,8 +32,16 @@ vsol_polyline_2d::vsol_polyline_2d()
 vsol_polyline_2d::vsol_polyline_2d(const vcl_vector<vsol_point_2d_sptr> &new_vertices)
 {
   storage_=new vcl_vector<vsol_point_2d_sptr>(new_vertices);
+  int n = storage_->size();
+  if(n<2)
+    {
+      p0_ = 0;
+      p1_ = 0;
+      return;
+    }
+  p0_ = (*storage_)[0];
+  p1_ = (*storage_)[n-1];
 }
-
 //---------------------------------------------------------------------------
 // Copy constructor
 //---------------------------------------------------------------------------
@@ -39,6 +50,8 @@ vsol_polyline_2d::vsol_polyline_2d(const vsol_polyline_2d &other)
   storage_=new vcl_vector<vsol_point_2d_sptr>(*other.storage_);
   for (unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_2d(*((*other.storage_)[i]));
+  p0_ = other.p0_;
+  p1_ = other.p1_;
 }
 
 //---------------------------------------------------------------------------
@@ -208,3 +221,124 @@ void vsol_polyline_2d::add_vertex(const vsol_point_2d_sptr &new_p)
 {
   storage_->push_back(new_p);
 }
+
+//----------------------------------------------------------------
+// ================   Binary I/O Methods ========================
+//----------------------------------------------------------------
+
+//: Binary save self to stream.
+void vsol_polyline_2d::b_write(vsl_b_ostream &os) const
+{
+  if(!storage_)
+    vsl_b_write(os, false); // Indicate null pointer stored
+  else
+    {
+      vsl_b_write(os, true); // Indicate non-null pointer stored
+      vsl_b_write(os, version());
+      vsl_b_write(os, *storage_);
+    }
+}
+//: Binary load self from stream (not typically used)
+void vsol_polyline_2d::b_read(vsl_b_istream &is)
+{
+  if(!is)
+    return;
+  delete storage_;
+  storage_ = new vcl_vector<vsol_point_2d_sptr>();
+  p0_=0;
+  p1_=0;
+  bool null_ptr;
+  vsl_b_read(is, null_ptr);
+  if(!null_ptr)
+    return;
+  short ver;
+  vsl_b_read(is, ver);
+  switch(ver)
+  {
+  case 1:
+    {
+      vsl_b_read(is, *storage_);
+      int n = storage_->size();
+      if(n<2)
+        break;
+      p0_=(*storage_)[0];
+      p1_=(*storage_)[n-1];
+    }
+  }
+}
+//: Return IO version number;
+short vsol_polyline_2d::version() const
+{
+  return 1;
+}
+
+//: Print an ascii summary to the stream
+void vsol_polyline_2d::print_summary(vcl_ostream &os) const
+{
+  os << *this;
+}
+
+  //: Return a platform independent string identifying the class
+vcl_string vsol_polyline_2d::is_a() const
+{
+  return vcl_string("vsol_polyline_2d");
+}
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+bool vsol_polyline_2d::is_class(const vcl_string& cls) const
+{
+  return cls==vsol_polyline_2d::is_a();
+}
+
+//external functions
+//just print the endpoints 
+vcl_ostream& operator<<(vcl_ostream& s, vsol_polyline_2d const& p)
+{
+  vsol_point_2d_sptr p0 = p.p0(), p1 = p.p1();
+  if(!p0||!p1)
+    {
+      s << "[null]";
+      return s;      
+    }
+  s << '[' << *(p.p0()) << ' ' << *(p.p1()) << ']';
+  return s;
+}
+
+//: Binary save vsol_polyline_2d_sptr to stream.
+void
+vsl_b_write(vsl_b_ostream &os, vsol_polyline_2d_sptr const& p)
+{
+  if (!p){
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    //non-null pointer will be written if internals of p are ok
+    p->b_write(os);
+  }
+}
+
+//: Binary load vsol_polyline_2d_sptr from stream.
+void
+vsl_b_read(vsl_b_istream &is, vsol_polyline_2d_sptr &p)
+{
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr)
+    {
+      short ver;
+      vsl_b_read(is, ver);
+      switch(ver)
+        {
+        case 1:
+          {
+            vcl_vector<vsol_point_2d_sptr> points;
+            vsl_b_read(is, points);
+            p = new vsol_polyline_2d(points);
+            break;
+          }
+        default:
+          p = 0;
+        }
+    }
+}
+

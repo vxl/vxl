@@ -9,15 +9,19 @@
 // 1.0     |2004/05/08| Joseph Mundy             |Creation
 //*****************************************************************************
 #include <vcl_iostream.h>
+#include <vcl_vector.h>
 #include <vpl/vpl.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
+#include <vsl/vsl_vector_io.h>
 #include <testlib/testlib_test.h>
 //:
 // \file
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
+#include <vsol/vsol_polyline_2d.h>
+#include <vsol/vsol_polygon_2d.h>
 
 void test_vsol_io()
 {
@@ -54,8 +58,37 @@ void test_vsol_io()
        pa->x()==p_ina->x() && pa->y()==p_ina->y(),
        true);
 
+  // Test vector I/O
+  vsl_b_ofstream bpv_out("test_point_2d_vec_io.tmp");
+  vcl_vector<vsol_point_2d_sptr> points, points_in;
+  vcl_cout << "Created the point vector ";
+  for(int i = 0; i<3; i++)
+    {
+      vsol_point_2d_sptr p = new vsol_point_2d(i, i);
+      vcl_cout << *p << ' ';
+      points.push_back(p);
+    }
+  vcl_cout << '\n';
+ vsl_b_write(bpv_out, points);
+ bpv_out.close();  
+
+ //open the points file
+ vsl_b_ifstream bpv_in("test_point_2d_vec_io.tmp");
+ vsl_b_read(bpv_in, points_in);
+ vcl_cout << "Read the point vector ";
+ int k = 0;
+ bool good = true;
+ for(vcl_vector<vsol_point_2d_sptr>::iterator pit = points_in.begin();
+     pit != points_in.end(); pit++, k++)
+   {
+      vcl_cout << *(*pit) << ' ';
+      good = good && k == (int)(*pit)->x();
+   }
+ vcl_cout << '\n';	
+ TEST("Testing point vector io", good, true);
+
   // remove the temporary file
-  vpl_unlink ("test_point_2d_io.tmp");
+  vpl_unlink ("test_point_2d_vec_io.tmp");
 
 
   //vsol_line_2d I/O
@@ -97,6 +130,50 @@ void test_vsol_io()
 
   // remove the temporary file
   vpl_unlink ("test_line_2d_io.tmp");
+
+  //vsol_polyline_2d I/O
+  vcl_cout << "\nTesting I/O for vsol_polyline_2d\n";
+
+  vsl_b_ofstream ply_out("test_polyline_2d_io.tmp");
+  TEST("Created test_polyline_2d_io.tmp for writing",(!ply_out), false);
+
+  vsol_polyline_2d_sptr poly = new vsol_polyline_2d(points);
+  vcl_cout << "Writing polyline " << *poly << '\n';
+  vsl_b_write(ply_out, poly);
+  ply_out.close();
+  
+  vsl_b_ifstream ply_in("test_polyline_2d_io.tmp");
+  TEST("Created test_polyline_2d_io.tmp for reading",(!ply_in), false);
+  vsol_polyline_2d_sptr poly_in;
+  vsl_b_read(ply_in, poly_in);
+  vcl_cout << "Read polyline " << *poly_in << '\n';
+  TEST("Testing polyline io",
+       poly && poly_in &&
+       *poly == *poly_in,
+       true);
+
+  //vsol_polygon_2d I/O
+  vcl_cout << "\nTesting I/O for vsol_polygon_2d\n";
+  points.push_back(points[0]);//close the polygon
+  vsl_b_ofstream pgy_out("test_polygon_2d_io.tmp");
+  TEST("Created test_polygon_2d_io.tmp for writing",(!pgy_out), false);
+
+  vsol_polygon_2d_sptr polyg = new vsol_polygon_2d(points);
+  vcl_cout << "Writing polygon " << *polyg << '\n';
+  vsl_b_write(pgy_out, polyg);
+  pgy_out.close();
+  
+  vsl_b_ifstream pgy_in("test_polygon_2d_io.tmp");
+  TEST("Created test_polygon_2d_io.tmp for reading",(!pgy_in), false);
+  vsol_polygon_2d_sptr polyg_in;
+  vsl_b_read(pgy_in, polyg_in);
+  vcl_cout << "Read polygon " << *polyg_in << '\n';
+  TEST("Testing polygon io",
+       polyg && polyg_in &&
+       *polyg == *polyg_in,
+       true);
+
+
 }
 
 

@@ -14,6 +14,7 @@
 // \verbatim
 //  Modifications
 //   2002/04/22 Amir Tamrakar Creation
+//   2004/05/09 Joseph Mundy Added Binary I/O
 // \endverbatim
 //*****************************************************************************
 
@@ -21,7 +22,7 @@
 // External declarations for values
 //*****************************************************************************
 #include <vgl/vgl_fwd.h>
-
+#include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vcl_vector.h>
@@ -190,8 +191,37 @@ class vsol_polyline_2d : public vsol_curve_2d
   inline void describe(vcl_ostream &strm, int blanking=0) const
   {
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
-    //strm << static_cast<vgl_conic<double> >(*this) << '\n';
+    strm << *this << '\n';
   }
+
+  // ==== Binary IO methods ======
+
+  //: Binary save self to stream.
+  void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  void b_read(vsl_b_istream &is);
+
+  //: Return IO version number;
+  short version() const;
+
+  //: Print an ascii summary to the stream
+  void print_summary(vcl_ostream &os) const;
+
+  //: Return a platform independent string identifying the class
+  vcl_string is_a() const;
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  bool is_class(const vcl_string& cls) const;
 };
+#include "vsol_polyline_2d_sptr.h"
+//: Stream operator
+vcl_ostream&  operator<<(vcl_ostream& s, vsol_polyline_2d const& p);
+
+//: Binary save vsol_polyline_2d* to stream.
+void vsl_b_write(vsl_b_ostream &os, vsol_polyline_2d_sptr const& p);
+
+//: Binary load vsol_polyline_2d* from stream.
+void vsl_b_read(vsl_b_istream &is, vsol_polyline_2d_sptr &p);
 
 #endif // vsol_polyline_2d_h_

@@ -17,6 +17,7 @@
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 //   2001/07/03 Peter Vanroose  Corrected the implementation of is_convex()
 //   2003/11/05 Amir Tamrakar   Added Safe casting methods
+//   2004/05/00 Joseph Mundy    Added binary I/O
 // \endverbatim
 //*****************************************************************************
 
@@ -26,6 +27,7 @@
 #include <vsol/vsol_region_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vcl_vector.h>
+#include <vsl/vsl_binary_io.h>
 
 class vsol_polygon_2d : public vsol_region_2d
 {
@@ -137,6 +139,27 @@ class vsol_polygon_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   virtual bool valid_vertices(const vcl_vector<vsol_point_2d_sptr> ) const;
 
+
+  // ==== Binary IO methods ======
+
+  //: Binary save self to stream.
+  void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  void b_read(vsl_b_istream &is);
+
+  //: Return IO version number;
+  short version() const;
+
+  //: Print an ascii summary to the stream
+  void print_summary(vcl_ostream &os) const;
+
+  //: Return a platform independent string identifying the class
+  vcl_string is_a() const;
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  bool is_class(const vcl_string& cls) const;
+
   //***************************************************************************
   // Implementation
   //***************************************************************************
@@ -146,5 +169,14 @@ class vsol_polygon_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   vsol_polygon_2d(void);
 };
+#include "vsol_polygon_2d_sptr.h"
+//: Stream operator
+vcl_ostream&  operator<<(vcl_ostream& s, vsol_polygon_2d const& p);
+
+//: Binary save vsol_polygon_2d* to stream.
+void vsl_b_write(vsl_b_ostream &os, vsol_polygon_2d_sptr const& p);
+
+//: Binary load vsol_polygon_2d* from stream.
+void vsl_b_read(vsl_b_istream &is, vsol_polygon_2d_sptr &p);
 
 #endif // vsol_polygon_2d_h_
