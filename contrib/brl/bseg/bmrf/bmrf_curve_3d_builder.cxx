@@ -37,15 +37,17 @@ bmrf_curve_3d_builder::build()
   vcl_set<vcl_list<bmrf_curvel_3d_sptr> > curves;
   vcl_cout << "Building curves" << vcl_endl;
   vcl_list<bmrf_curvel_3d_sptr> c1, c2;
-  c1.push_back( new bmrf_curvel_3d(10.0, 10.0, 10.0, vnl_identity_3x3()) );
-  c1.push_back( new bmrf_curvel_3d(5.0, 15.0, 10.0, vnl_identity_3x3()) );
-  c1.push_back( new bmrf_curvel_3d(0.0, 15.0, 20.0, vnl_identity_3x3()) );
+
+  vnl_double_3x3 I = vnl_identity_3x3();
+  c1.push_back( new bmrf_curvel_3d(10.0, 10.0, 10.0, I) );
+  c1.push_back( new bmrf_curvel_3d(5.0, 15.0, 10.0, I) );
+  c1.push_back( new bmrf_curvel_3d(0.0, 15.0, 20.0, I) );
   curves.insert(c1);
 
-  c2.push_back( new bmrf_curvel_3d(5.0, 15.0, 30.0, vnl_identity_3x3()) );
-  c2.push_back( new bmrf_curvel_3d(10.0, 15.0, 40.0, vnl_identity_3x3()) );
-  c2.push_back( new bmrf_curvel_3d(15.0, 10.0, 40.0, vnl_identity_3x3()) );
-  c2.push_back( new bmrf_curvel_3d(20.0, 10.0, 40.0, vnl_identity_3x3()) );
+  c2.push_back( new bmrf_curvel_3d(5.0, 15.0, 30.0, I) );
+  c2.push_back( new bmrf_curvel_3d(10.0, 15.0, 40.0, I) );
+  c2.push_back( new bmrf_curvel_3d(15.0, 10.0, 40.0, I) );
+  c2.push_back( new bmrf_curvel_3d(20.0, 10.0, 40.0, I) );
   curves.insert(c2);
 
   return curves;
