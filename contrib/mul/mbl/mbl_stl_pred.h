@@ -92,6 +92,25 @@ struct mbl_stl_pred_pair_iter_value_order : public vcl_binary_function<PairIter,
   }
 };
 
+//
+//////////////////////////////////////////////////////////////////////////
+//Order a collection of pairs
+//First is the primary key, second is the secondary key
+//NB assumes both the pair types supports operator<
+template <class T1, class T2>
+struct mbl_stl_pred_pair_order : public vcl_binary_function<vcl_pair<T1,T2>,vcl_pair<T1,T2>, bool>
+{
+  inline bool  operator()(const vcl_pair<T1,T2>& pair1, const vcl_pair<T1,T2>& pair2 ) const
+  {
+      if(pair1.first < pair2.first)
+          return true;
+      else if(pair1.first > pair2.first)
+          return false;
+      else
+          return pair1.second < pair2.second; //Primaries are equal so order on secondary
+  }
+};
+
 //See if a test pointer is the class type required
 //Note the template type T would normally be of pointer type but might also be
 //something supporting operator->() in a pointer like way 
