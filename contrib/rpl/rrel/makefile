@@ -7,6 +7,7 @@ USES += vxl rpl mul
 LIBRARY := rrel
 VERSION := 1.0
 
+SOURCES += rrel_cauchy_obj.cxx
 SOURCES += rrel_estimation_problem.cxx
 SOURCES += rrel_homography2d_est.cxx
 SOURCES += rrel_irls.cxx
@@ -26,6 +27,7 @@ SOURCES += rrel_tukey_obj.cxx
 
 ifndef NOTEST
 SUBDIRS += tests
+SUBDIRS += examples
 endif
 
 ######################################

@@ -7,6 +7,7 @@ USES += vxl rpl
 LIBRARY := rsdl
 VERSION := 1.0
 
+SOURCES += rsdl_bounding_box.cxx
 SOURCES += rsdl_dist.cxx
 SOURCES += rsdl_kd_tree.cxx
 SOURCES += rsdl_point.cxx
