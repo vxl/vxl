@@ -568,6 +568,16 @@ SOURCE=.\vipl_with_mil/Templates/vipl_gaussian_convolution+mil_image_2d_of+short
 SOURCE=.\vipl_with_mil/Templates/vipl_gaussian_convolution+mil_image_2d_of+uchar-.mil_image_2d_of+uchar-.uchar.uchar-.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/Templates/vipl_filter_2d+section+uchar.2-.vcl_vector+uint-.uchar.uint-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/Templates/vipl_histogram+section+uchar.2-.vcl_vector+uint-.uchar.uint-.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
