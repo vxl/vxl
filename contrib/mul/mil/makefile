@@ -33,6 +33,8 @@ MANPAGE_SOURCES += mil_convert_vil.h
 MANPAGE_SOURCES += mil_image_2d.h
 MANPAGE_SOURCES += mil_sample_profile_2d.txx
 
+SUBDIRS += algo
+
 ifndef NOTEST
  SUBDIRS += tests
 endif
