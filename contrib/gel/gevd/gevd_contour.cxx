@@ -30,18 +30,24 @@
 //
 // ---------------------------------------------------------------------------
 // <end copyright notice>
-// #include <Detection/gevd_contour.h>
-// #include <ImageProcessing/FloatOperators.h>
-// #include <ImageProcessing/pixel.h>
+#if 0 // This are the old TargetJr includes
+#include <Detection/gevd_contour.h>
+#include <ImageProcessing/FloatOperators.h>
+#include <ImageProcessing/pixel.h>
 
-// #include <Topology/Vertex.h>
-// #include <Topology/vtol_edge_2d.h>
-// #include <DigitalGeometry/DigitalCurve.h>
+#include <Topology/Vertex.h>
+#include <Topology/vtol_edge_2d.h>
+#include <DigitalGeometry/DigitalCurve.h>
 
-// #include <cool/Timer.h>
-// #include <cool/ArrayP.h>
-// #include <cool/ListP.h>
-// #include <iostream.h>
+#include <cool/Timer.h>
+#include <cool/ArrayP.h>
+#include <cool/ListP.h>
+#endif
+#ifdef DEBUG
+#include <vul/vul_timer.h>
+#endif
+
+#include <vcl_iostream.h>
 #include <vcl_cstdlib.h>   // for vcl_abs(int)
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
@@ -65,7 +71,9 @@ const int INVALID = -1;
 // Use 8 directions, with 45 degree angle in between them.
 
 const vil_byte TWOPI = 8, /* FULLPI = 4, */ HALFPI = 2 /* , QUARTERPI = 1 */;
-// const vil_byte DIR0 = 8, DIR1 = 9, DIR2 = 10, DIR3 = 11;
+#if 0
+const vil_byte DIR0 = 8, DIR1 = 9, DIR2 = 10, DIR3 = 11;
+#endif
 const int DIS[] = { 1, 1, 0,-1,-1,-1, 0, 1, // 8-connected neighbors
                     1, 1, 0,-1,-1,-1, 0, 1, // wrapped by 2PI to
                     1, 1, 0,-1,-1,-1, 0, 1};// avoid modulo operations.
@@ -73,7 +81,9 @@ const int DJS[] = { 0, 1, 1, 1, 0,-1,-1,-1,
                     0, 1, 1, 1, 0,-1,-1,-1,
                     0, 1, 1, 1, 0,-1,-1,-1};
 
-// const int RDS[] = {0,-1, 1,-2, 2,-3, 3,-4, 4,-5, 5}; // radial search
+#if 0
+const int RDS[] = {0,-1, 1,-2, 2,-3, 3,-4, 4,-5, 5}; // radial search
+#endif
 const int RIS[] = { 1, 0,-1, 0, // spiral search for 4/8-connected
                     1,-1,-1, 1, // neighbors
                     2, 0,-2, 0,
@@ -196,7 +206,9 @@ gevd_contour::FindNetwork(gevd_bufferxy& edgels,
   int n = vcl_max(10*njunction, // preallocated size from junctions or
                   edgels.GetSizeX()*edgels.GetSizeY()/100); // image size
   vcl_vector<vtol_edge_2d *> edges2(n);
-//edges2.set_growth_ratio(2);
+#if 0
+  edges2.set_growth_ratio(2);
+#endif
   n = this->FindChains(edgels, // link pixels into chains
                        njunction, // also use junction pixels
                        junctionx, junctiony,
@@ -205,32 +217,39 @@ gevd_contour::FindNetwork(gevd_bufferxy& edgels,
     return false;               // empty network
 
   // 3. Sort chains longest first.
-  // GEOFF: Can ignore for the moment
-//if (edges2.size() < 1000)     // avoid O(nlogn) for very large n
-//  edges2.sort(&gevd_contour::LengthCmp); // sort longest/strongest first
+#if 0 //GEOFF: Can ignore for the moment
+  if (edges2.size() < 1000)     // avoid O(nlogn) for very large n
+    edges2.sort(&gevd_contour::LengthCmp); // sort longest/strongest first
 
-//int i = 0;                    // renumber with order in array
-//for (edges2.reset(); edges2.next(); i++)
-//  edges2.value()->set_id(i);
+  int i = 0;                    // renumber with order in array
+  for (edges2.reset(); edges2.next(); i++)
+    edges2.value()->set_id(i);
+#endif
 
   for ( int i= 0; i< edges2.size(); i++)
     edges2[i]->set_id(i);
 
   // 4. Split/Merge chains from touching end points
   vcl_vector<vtol_vertex_2d *> vertices2(2*n);
-//vertices2.set_growth_ratio(1.5);
+#if 0
+  vertices2.set_growth_ratio(1.5);
+#endif
   this->FindJunctions(edgels, // break/merge at junctions of
                       edges2, vertices2); // distinct chains
 
   // 5. Copy back results into global lists
-//for (edges2.reset(); edges2.next(); )
-//  edges->push_end(edges2.value());
+#if 0
+  for (edges2.reset(); edges2.next(); )
+    edges->push_end(edges2.value());
+#endif
 
   for ( int i= 0; i< edges2.size(); i++)
     edges->push_back( edges2[i]);
 
-//for (vertices2.reset(); vertices2.next(); )
-//  vertices->push_end(vertices2.value());
+#if 0
+  for (vertices2.reset(); vertices2.next(); )
+    vertices->push_end(vertices2.value());
+#endif
 
   for ( int i=0; i< vertices2.size(); i++)
     vertices->push_back( vertices2[i]);
@@ -239,7 +258,7 @@ gevd_contour::FindNetwork(gevd_bufferxy& edgels,
 }
 
 
-// // Return TRUE if pixel is a local maximum,
+//: Return TRUE if pixel is a local maximum,
 // and so is right on top of contour.
 
 bool
@@ -303,7 +322,9 @@ gevd_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
                          const int* junctionx, const int* junctiony,
                          vcl_vector<vtol_edge_2d *>& edges)
 {
-//CoolTimer t;
+#ifdef DEBUG
+  vul_timer t;
+#endif
 
   // 1. Save away detected junctions from extending at end points of
   // contours, without linking these contours up. This avoids random
@@ -318,7 +339,9 @@ gevd_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
   const int xmax = edgels.GetSizeX()-rmax-1;
   const int ymax = edgels.GetSizeY()-rmax-1;
   vcl_vector<int> xloc(xmax+ymax), yloc(xmax+ymax); // work space for
-//xloc.set_growth_ratio(2); yloc.set_growth_ratio(2); // collection
+#if 0
+  xloc.set_growth_ratio(2); yloc.set_growth_ratio(2); // collection
+#endif
   for (int j = rmax; j <= ymax; j++)
     for (int i = rmax; i <= xmax; i++)
     {
@@ -372,11 +395,12 @@ gevd_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
           x = xloc[0], y = yloc[0]; // start again from first pixel
 
 
-//        xloc.reverse(), yloc.reverse(); // reverse collected pixels
+#if 0
+          xloc.reverse(), yloc.reverse(); // reverse collected pixels
+#endif
           vcl_vector<int> xloctemp( xloc.size()), yloctemp( yloc.size());
           for ( int iii=0; iii< xloc.size(); iii++) xloctemp[iii]= xloc[xloc.size()-1-iii];
           for ( int jjj=0; jjj< yloc.size(); jjj++) yloctemp[jjj]= yloc[yloc.size()-1-jjj];
-          //
 
           while (NextPixel(x, y, edgels)) // trace along other dir
             RecordPixel(x, y, edgels, xloc, yloc);
@@ -418,7 +442,7 @@ gevd_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
 
         edge->set_curve(*dc);
 
-#if 0 // commented out
+#if 0 // This is old TargetJr code, not (yet) converted
         float *cx = dc->GetX(), *cy = dc->GetY();
         for (int k = 0; k < len; k++) { // collect interior pixels
           x = xloc[k], y = yloc[k]; // and at 2 end points
@@ -443,7 +467,9 @@ gevd_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
     vcl_cout << "Find " << edges.size()
              << " chains/cycles, with pixels > " << minLength
              << " and strength > " << minStrength
-//           << ", in " << t.real() << " msecs."
+#ifdef DEBUG
+             << ", in " << t.real() << " msecs."
+#endif
              << vcl_endl;
   return edges.size();  // number of chains found so far
 }
@@ -469,10 +495,14 @@ DetectJunction(vtol_vertex_2d& end, int& index,
   delete edges;
   vdgl_digital_curve * dc = (vdgl_digital_curve*)weaker->curve().ptr();
 
-//const int len = dc->size();
+#if 0
+  const int len = dc->size();
+#endif
   const int len = dc->get_interpolator()->get_edgel_chain()->size();
 
-//const float *cx = dc->GetX(), *cy = dc->GetY();
+#if 0
+  const float *cx = dc->GetX(), *cy = dc->GetY();
+#endif
 
   // 1. Mark off pixels at end pt to find junction of a contour to itself
   const int rfuzz = vcl_min(len, 3*MINLENGTH);
@@ -480,7 +510,9 @@ DetectJunction(vtol_vertex_2d& end, int& index,
   if (&end == weaker->v1()->cast_to_vertex_2d())
     for (int r = 0; r < rfuzz; r++) {
       vdgl_edgel edgel= dc->get_interpolator()->get_edgel_chain()->edgel( r);
-//    labels[r] = edgePtr(edgeMap, int(edgel.get_x()), int(edgel.get_y()));
+#if 0
+      labels[r] = edgePtr(edgeMap, int(edgel.get_x()), int(edgel.get_y()));
+#endif
       labels[r] = edgePtr(edgeMap, 2, 3);
       edgePtr(edgeMap, int(edgel.get_x()), int(edgel.get_y())) = NULL;
     }
@@ -516,12 +548,16 @@ DetectJunction(vtol_vertex_2d& end, int& index,
       edgePtr( edgeMap, int( edge.get_x()), int( edge.get_y()))= labels[r];
     }
 
-//  for (int r = 0; r < rfuzz; r++)
-//    edgePtr(edgeMap, int(cx[r]), int(cy[r])) = labels[r];
+#if 0
+    for (int r = 0; r < rfuzz; r++)
+      edgePtr(edgeMap, int(cx[r]), int(cy[r])) = labels[r];
+#endif
   else
   {
-//  for (int r = 0; r < rfuzz; r++)
-//    edgePtr(edgeMap, int(cx[len-1-r]), int(cy[len-1-r])) = labels[r];
+#if 0
+    for (int r = 0; r < rfuzz; r++)
+      edgePtr(edgeMap, int(cx[len-1-r]), int(cy[len-1-r])) = labels[r];
+#endif
 
     for ( int r=0; r< rfuzz; r++)
     {
@@ -538,12 +574,16 @@ DetectJunction(vtol_vertex_2d& end, int& index,
 
   vdgl_digital_curve * dc2 = (vdgl_digital_curve*) (stronger->curve().ptr());
 
-//const float *cx2 = dc2->GetX(), *cy2 = dc2->GetY();
+#if 0
+  const float *cx2 = dc2->GetX(), *cy2 = dc2->GetY();
+#endif
   for (int n = 0; n < dc2->get_interpolator()->get_edgel_chain()->size(); n++)  // find corresponding index on contour
   {
     vdgl_edgel edgel= dc2->get_interpolator()->get_edgel_chain()->edgel(n);
 
-//  if (int(cx2[n]) == jx && int(cy2[n]) == jy)
+#if 0
+    if (int(cx2[n]) == jx && int(cy2[n]) == jy)
+#endif
     if ( int( edgel.get_x())== jx && int( edgel.get_y())== jy)
     {
       index = n;
@@ -554,9 +594,11 @@ DetectJunction(vtol_vertex_2d& end, int& index,
 #ifdef TRACE_DEBUG
   if (index == INVALID) {
     vcl_cerr << "Fail to find index on 1-chain: " << jx << "," << jy << vcl_endl;
-//  for (int n = 0; n < dc2->size(); n++)
-//    vcl_cerr << cx2[n] << "," << cy2[n] << vcl_endl;
-//  vcl_cerr << "End point: " << end.GetX() << "," << end.GetY() << vcl_endl;
+#if 0
+    for (int n = 0; n < dc2->size(); n++)
+      vcl_cerr << cx2[n] << "," << cy2[n] << vcl_endl;
+    vcl_cerr << "End point: " << end.GetX() << "," << end.GetY() << vcl_endl;
+#endif
     return false;
   }
 #endif
@@ -564,7 +606,7 @@ DetectJunction(vtol_vertex_2d& end, int& index,
   return true;
 }
 
-// // Confirm there is a strong jump in response near a junction.
+//: Confirm there is a strong jump in response near a junction.
 // The location of this jump is however inaccurate, and so junctions
 // can not be localized accurately along the stronger cycle.
 
@@ -576,7 +618,9 @@ ConfirmJunctionOnCycle(int index, float threshold,
   const int len = dc->get_interpolator()->get_edgel_chain()->size();
   const int wrap = 10*len;      // for positive index
   const int radius = 3;         // gap < 3, around junction pixel
-//const float *cx = dc->GetX(), *cy = dc->GetY();
+#if 0
+  const float *cx = dc->GetX(), *cy = dc->GetY();
+#endif
 
   for (int n = index-radius; n <= index+radius; n++)
   {
@@ -594,7 +638,7 @@ ConfirmJunctionOnCycle(int index, float threshold,
   return false;
 }
 
-// // Break the cycle at given index, and create new cycle from/to
+//: Break the cycle at given index, and create new cycle from/to
 // and not including index pixel. Update the chain map accordingly.
 
 void
@@ -603,7 +647,9 @@ BreakCycle(vtol_vertex_2d& junction, const int index,
            gevd_bufferxy& edgeMap, gevd_bufferxy& vertexMap)
 {
   vdgl_digital_curve * dc = (vdgl_digital_curve*) (stronger.curve().ptr());
-//const float *cx = dc->GetX(), *cy = dc->GetY();
+#if 0
+  const float *cx = dc->GetX(), *cy = dc->GetY();
+#endif
   const int len = dc->get_interpolator()->get_edgel_chain()->size();
 
   // 1. Move location of junction
@@ -625,7 +671,9 @@ BreakCycle(vtol_vertex_2d& junction, const int index,
 
   split->set_curve(*( vsol_curve_2d *) ds);
 
-//float *sx = ds->GetX(), *sy = ds->GetY();
+#if 0
+  float *sx = ds->GetX(), *sy = ds->GetY();
+#endif
   int i=0;
   for (int k = index; k < len; i++,k++) {
     vdgl_edgel e= dc->get_interpolator()->get_edgel_chain()->edgel( k);
@@ -634,7 +682,9 @@ BreakCycle(vtol_vertex_2d& junction, const int index,
   }
   for (int k = 0; i < len; i++,k++) {
     vdgl_edgel c= dc->get_interpolator()->get_edgel_chain()->edgel( k);
-//  sx[i] = cx[k], sy[i] = cy[k];
+#if 0
+    sx[i] = cx[k], sy[i] = cy[k];
+#endif
     es->add_edgel( c);
     edgePtr(edgeMap, int(c.x()), int(c.y())) = split;
   }
@@ -643,7 +693,7 @@ BreakCycle(vtol_vertex_2d& junction, const int index,
   split->set_v2(&junction);
 }
 
-// // Confirm there is a strong jump in response near a junction.
+//: Confirm there is a strong jump in response near a junction.
 // The location of this jump is however inaccurate, and so junctions
 // can not be localized accurately along the stronger chain.
 
@@ -659,7 +709,9 @@ ConfirmJunctionOnChain(int index, float threshold,
 
   const int fuzz = MINLENGTH-1; // from min length of broken chains
   const int radius = 3;         // gap < 3, around junction pixel
-//const float *cx = dc->GetX(), *cy = dc->GetY();
+#if 0
+  const float *cx = dc->GetX(), *cy = dc->GetY();
+#endif
 
   for (int n = vcl_max(index-radius, fuzz); n <= vcl_min(index+radius,len-1-fuzz); n++)
   {
@@ -678,7 +730,7 @@ ConfirmJunctionOnChain(int index, float threshold,
 }
 
 
-// // Break the edge at given index, and create two subchains from it.
+//: Break the edge at given index, and create two subchains from it.
 // Update the chain map accordingly.
 
 void
@@ -690,7 +742,9 @@ BreakChain(vtol_vertex_2d& junction, const int index,
   vdgl_digital_curve *dc = (vdgl_digital_curve*) stronger.curve().ptr();
   vdgl_edgel_chain *cxy= dc->get_interpolator()->get_edgel_chain().ptr();
 
-//const float *cx = dc->GetX(), *cy = dc->GetY();
+#if 0
+  const float *cx = dc->GetX(), *cy = dc->GetY();
+#endif
   const int l0 = dc->get_interpolator()->get_edgel_chain()->size();
   const int l1 = index+1, l2 = l0-index;
 
@@ -713,7 +767,9 @@ BreakChain(vtol_vertex_2d& junction, const int index,
   edge1->set_curve(*dc1);
 
   vdgl_edgel_chain *cxy1= ec;
-//float *cx1 = dc1->GetX(), *cy1 = dc1->GetY();
+#if 0
+  float *cx1 = dc1->GetX(), *cy1 = dc1->GetY();
+#endif
 
   for (int k = 0; k < l1; k++)
   {
@@ -739,13 +795,17 @@ BreakChain(vtol_vertex_2d& junction, const int index,
 
   vdgl_edgel_chain *cxy2= ec2;
 
-//float *cx2 = dc2->GetX(), *cy2 = dc2->GetY();
-//const float *dx = cx + index, *dy = cy + index; // after junction
+#if 0
+  float *cx2 = dc2->GetX(), *cy2 = dc2->GetY();
+  const float *dx = cx + index, *dy = cy + index; // after junction
+#endif
 
   for (int k = 0; k < l2; k++)
   {
     cxy2->add_edgel( cxy->edgel( k+index));
-//  cxy2[k] = dx[k], cy2[k] = dy[k];
+#if 0
+    cxy2[k] = dx[k], cy2[k] = dy[k];
+#endif
     edgePtr(edgeMap, int((*cxy2)[k].x()), int((*cxy2)[k].y())) = edge2;
   }
 
@@ -764,7 +824,7 @@ BreakChain(vtol_vertex_2d& junction, const int index,
 }
 
 
-// // Break the chain at given index, and create a loop.
+//: Break the chain at given index, and create a loop.
 // Update the chain map accordingly.
 
 void
@@ -776,7 +836,9 @@ LoopChain(vtol_vertex_2d& junction, const int index,
   vdgl_digital_curve * dc = (vdgl_digital_curve*) chain.curve().ptr();
 
   vdgl_edgel_chain *cxy= dc->get_interpolator()->get_edgel_chain().ptr();
-//const float *cx = dc->GetX(), *cy = dc->GetY();
+#if 0
+  const float *cx = dc->GetX(), *cy = dc->GetY();
+#endif
   const int l0 = cxy->size();
 
   // 1. Move location of junction
@@ -797,11 +859,15 @@ LoopChain(vtol_vertex_2d& junction, const int index,
     vdgl_interpolator *it= new vdgl_interpolator_linear( ec);
     vdgl_digital_curve *c= new vdgl_digital_curve( it);
 
-//  vdgl_digital_curve *c = new vdgl_digital_curve(l1);
+#if 0
+    vdgl_digital_curve *c = new vdgl_digital_curve(l1);
+#endif
     curled->set_curve(*c);
 
     vdgl_edgel_chain *xy= ec;
-//  float *x = c->GetX(), *y = c->GetY();
+#if 0
+    float *x = c->GetX(), *y = c->GetY();
+#endif
     for (int k = 0; k < l1; k++)
     {
       (*xy)[k] = (*cxy)[k];//, y[k] = cy[k];
@@ -811,7 +877,9 @@ LoopChain(vtol_vertex_2d& junction, const int index,
     curled->set_v1(&junction);
     curled->set_v2(&junction);
 
-//  const float *dx = cx + index, *dy = cy + index; // after junction
+#if 0
+    const float *dx = cx + index, *dy = cy + index; // after junction
+#endif
 
     ec= new vdgl_edgel_chain;
     it= new vdgl_interpolator_linear( ec);
@@ -820,7 +888,9 @@ LoopChain(vtol_vertex_2d& junction, const int index,
     straight->set_curve(*c);
 
     xy= ec;
-//  x = c->GetX(), y = c->GetY();
+#if 0
+    x = c->GetX(), y = c->GetY();
+#endif
 
     for (int k = 0; k < l2; k++)
     {
@@ -844,7 +914,9 @@ LoopChain(vtol_vertex_2d& junction, const int index,
 
     straight->set_curve(*c);
 
-//  float *x = c->GetX(), *y = c->GetY();
+#if 0
+    float *x = c->GetX(), *y = c->GetY();
+#endif
 
     vdgl_edgel_chain *xy= ec;
 
@@ -862,7 +934,9 @@ LoopChain(vtol_vertex_2d& junction, const int index,
     straight->set_v1(chain.v1().ptr());
     straight->set_v2(&junction);
 
-//  const float *dx = cx + index, *dy = cy + index; // after junction
+#if 0
+    const float *dx = cx + index, *dy = cy + index; // after junction
+#endif
 
     ec= new vdgl_edgel_chain;
     it= new vdgl_interpolator_linear( ec);
@@ -882,14 +956,16 @@ LoopChain(vtol_vertex_2d& junction, const int index,
   }
 }
 
-// // Find number of rays connected to a vertex.
+//: Find number of rays connected to a vertex.
 
 int
 NumConnectedRays(vtol_vertex_2d& v)
 {
   int nray = 0;
   vcl_vector<vtol_edge *>* segs = v.compute_edges();
-//for (segs->reset(); segs->next(); )
+#if 0
+  for (segs->reset(); segs->next(); )
+#endif
   for ( int i=0; i< segs->size(); i++)
   {
     if ((*segs)[i]->v1()->cast_to_vertex_2d() == &v) nray++; // 1 for 1-chain
@@ -901,7 +977,7 @@ NumConnectedRays(vtol_vertex_2d& v)
 }
 
 
-// // Detect touching another junction or end point,
+//: Detect touching another junction or end point,
 // from an end point of a dangling chain.
 
 vtol_vertex_2d *
@@ -926,7 +1002,7 @@ DetectTouch(const vtol_vertex_2d& end, const int maxSpiral,
   return NULL;
 }
 
-// // Find dangling edges connected to vertex
+//: Find dangling edges connected to vertex
 
 vtol_edge_2d *
 DanglingEdge(vtol_vertex_2d& v)
@@ -941,7 +1017,7 @@ DanglingEdge(vtol_vertex_2d& v)
   return e->cast_to_edge_2d();
 }
 
-// // Merge 2 end points of a same chain.
+//: Merge 2 end points of a same chain.
 // Update global maps.
 
 void
@@ -957,7 +1033,7 @@ MergeEndPtsOfChain(vtol_vertex_2d& endpt, vtol_vertex_2d& other, vtol_edge_2d& c
     common.set_v2(&endpt);
 }
 
-// // Merge 2 touching chains into 1, deleting the 2 touching end points
+//: Merge 2 touching chains into 1, deleting the 2 touching end points
 // and their chains. Smooth away short kinks is delayed for later.
 // Update global maps.
 
@@ -990,12 +1066,16 @@ MergeEndPtTouchingEndPt(vtol_vertex_2d& end1, vtol_vertex_2d& end2,
   merge->set_curve(*dc);
 
   vdgl_edgel_chain *cxy= ec;
-//float *cx = dc->GetX(), *cy = dc->GetY();
+#if 0
+  float *cx = dc->GetX(), *cy = dc->GetY();
+#endif
   vtol_vertex_2d *v1, *v2;      // vertices of merge edge
   int k = 0;                    // index in merge array
 
   vdgl_edgel_chain *cxy1= dc1->get_interpolator()->get_edgel_chain().ptr();
-//const float *cx1 = dc1->GetX(), *cy1 = dc1->GetY();
+#if 0
+  const float *cx1 = dc1->GetX(), *cy1 = dc1->GetY();
+#endif
   if (edge1->v2() == &end1) {
     for (int i = 0; i < l1; i++, k++)
       (*cxy)[k] = (*cxy1)[i];//, cy[k] = cy1[i];
@@ -1008,7 +1088,9 @@ MergeEndPtTouchingEndPt(vtol_vertex_2d& end1, vtol_vertex_2d& end2,
   merge->set_v1(v1);
 
   vdgl_edgel_chain *cxy2= dc2->get_interpolator()->get_edgel_chain().ptr();
-//const float *cx2 = dc2->GetX(), *cy2 = dc2->GetY();
+#if 0
+  const float *cx2 = dc2->GetX(), *cy2 = dc2->GetY();
+#endif
   if (edge2->v1() == &end2) {
     for (int i = 0; i < l2; i++, k++)
       (*cxy)[k] = (*cxy2)[i];//, cy[k] = cy2[i];
@@ -1037,7 +1119,7 @@ MergeEndPtTouchingEndPt(vtol_vertex_2d& end1, vtol_vertex_2d& end2,
     longer = edge2, shorter = edge1;
 }
 
-// // Merge an end point into a touching junction.
+//: Merge an end point into a touching junction.
 // Update global maps.
 
 void
@@ -1072,7 +1154,9 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
                             vcl_vector<vtol_edge_2d *>& edges,
                             vcl_vector<vtol_vertex_2d *>& vertices)
 {
-//CoolTimer t;
+#ifdef DEBUG
+  vul_timer t;
+#endif
   if (!edges.size())
   {
     vcl_cerr << "gevd_contour::FindChains must precede gevd_contour::FindJunctions.\n";
@@ -1082,14 +1166,18 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
   // 1. Create end points or junctions, for all 1-chains.
   const float connect_fuzz = 2;
 
-//for (edges.reset(); edges.next(); )
+#if 0
+  for (edges.reset(); edges.next(); )
+#endif
   for ( int i=0; i< edges.size(); i++)
   {
     vtol_edge_2d * edge = edges[i];
     vdgl_digital_curve * dc = (vdgl_digital_curve*) edge->curve().ptr();
 
     vdgl_edgel_chain *cxy= dc->get_interpolator()->get_edgel_chain().ptr();
-//  const float *cx = dc->GetX(), *cy = dc->GetY();
+#if 0
+    const float *cx = dc->GetX(), *cy = dc->GetY();
+#endif
     const int last = cxy->size()-1;
     if (vcl_fabs((*cxy)[0].x()-(*cxy)[last].x()) > connect_fuzz || // disjoint first/last pixel
         vcl_fabs((*cxy)[0].y()-(*cxy)[last].y()) > connect_fuzz)
@@ -1128,14 +1216,18 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
     }
   }
 
-//vcl_cout << "Create " << vertices.size()
-//         << " end points/junctions for chains only.\n";
+#if 0
+  vcl_cout << "Create " << vertices.size()
+           << " end points/junctions for chains only.\n";
+#endif
 
   // 2. Localize a junction, when an end point of a dangling contour
   // touches another contour or itself at an interior point.
   int jcycle = 0, jchain = 0;   // number of junctions with cycle/chain
 
-//for (vertices.reset(); vertices.next(); )
+#if 0
+  for (vertices.reset(); vertices.next(); )
+#endif
   for ( int i=0; i< vertices.size(); i++)
   {
     vtol_vertex_2d * end = vertices[i];
@@ -1181,58 +1273,70 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
       }
     }
   }
-//vcl_cout << "Find junctions with "
-//         << jcycle << " cycles and " << jchain << " chains,"
-//         << " with jump > " << minJump << vcl_endl;
+#if 0
+  vcl_cout << "Find junctions with "
+           << jcycle << " cycles and " << jchain << " chains,"
+           << " with jump > " << minJump << vcl_endl;
+#endif
 
   // 3. Merge touching end points, into a larger junction/chain.
   int dendpt = 0, dchain = 0;   // number of deleted endpt/chain
 
-//for (vertices.reset(); vertices.next(); )
+#if 0
+  for (vertices.reset(); vertices.next(); )
+#endif
   for ( int i=0; i< vertices.size(); i++){
-    vtol_vertex_2d * end = vertices[i]; // search from dangling end pt only
-    if (end != NULL &&          // skip deleted vertices
-        NumConnectedRays(*end) == 1) { // end point of dangling 1-chain
-      vtol_vertex_2d * end2 = DetectTouch(*end, maxSpiral, *vertexMap);
+    vtol_vertex_2d * end1 = vertices[i]; // search from dangling end pt only
+    if (end1 != NULL &&          // skip deleted vertices
+        NumConnectedRays(*end1) == 1) { // end point of dangling 1-chain
+      vtol_vertex_2d * end2 = DetectTouch(*end1, maxSpiral, *vertexMap);
       if (end2 != NULL) {       // find end points nearby
         if (NumConnectedRays(*end2) == 1) { // found another dangling end point
-          vtol_edge_2d * seg = DanglingEdge(*end);
+          vtol_edge_2d * seg = DanglingEdge(*end1);
           if (seg == DanglingEdge(*end2)) { // end points of 1-cycle
-            MergeEndPtsOfChain(*end, *end2, *seg,
+            MergeEndPtsOfChain(*end1, *end2, *seg,
                                *edgeMap, *vertexMap);
             LookupTableRemove(vertices, end2);
             dendpt++;
           } else {              // end points of 2 distinct 1-chains
-//          vcl_cout << "end=" << *end << vcl_endl
-//                   << "endpt2=" << *end2 << vcl_endl;
+#if 0
+            vcl_cout << "endpt1=" << *end1 << vcl_endl
+                     << "endpt2=" << *end2 << vcl_endl;
+#endif
             vtol_edge_2d *merge=NULL, *longer=NULL, *shorter=NULL; // merge 2 different edges
-            MergeEndPtTouchingEndPt(*end, *end2, // merge 2 subchains
+            MergeEndPtTouchingEndPt(*end1, *end2, // merge 2 subchains
                                     merge, longer, shorter, // deleting
                                     *edgeMap, *vertexMap); // end points
-//          vcl_cout << "merge=" << *merge << vcl_endl
-//                   << "longer=" << *longer << vcl_endl
-//                   << "shorter=" << *shorter << vcl_endl;
-//          vcl_cout << "merge.v1=" << *merge->v1() << vcl_endl
-//                   << "merge.v2=" << *merge->v2() << vcl_endl;
+#if 0
+            vcl_cout << "merge=" << *merge << vcl_endl
+                     << "longer=" << *longer << vcl_endl
+                     << "shorter=" << *shorter << vcl_endl
+                     << "merge.v1=" << *merge->v1() << vcl_endl
+                     << "merge.v2=" << *merge->v2() << vcl_endl;
+#endif
             LookupTableReplace(edges, longer, merge);
             LookupTableRemove(edges, shorter);
-            LookupTableRemove(vertices, end);
+            LookupTableRemove(vertices, end1);
             LookupTableRemove(vertices, end2);
             dendpt += 2, dchain += 1;
           }
         } else {                // merge into another junction
-//        vcl_cout << "end=" << *end << vcl_endl
-//                 << "junction2=" << *end2 << vcl_endl;
-          MergeEndPtTouchingJunction(*end, *end2,
+#if 0
+          vcl_cout << "endpt1=" << *end1 << vcl_endl
+                   << "junction2=" << *end2 << vcl_endl;
+#endif
+          MergeEndPtTouchingJunction(*end1, *end2,
                                      *edgeMap, *vertexMap);
-          LookupTableRemove(vertices, end);
+          LookupTableRemove(vertices, end1);
           dendpt++;
         }
       }
     }
   }
-//vcl_cout << "Merge and delete " << dendpt
-//         << " end points and " << dchain << " edges" << vcl_endl;
+#if 0
+  vcl_cout << "Merge and delete " << dendpt
+           << " end points and " << dchain << " edges" << vcl_endl;
+#endif
   if (dchain)                   // eliminate holes in global arrays
     LookupTableCompress(edges);
   if (dendpt)
@@ -1240,7 +1344,9 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
 
   // 4. Insert virtual junction for isolated 1-cycles
   int ncycle = 0;
-//for (edges.reset(); edges.next(); ) {
+#if 0
+  for (edges.reset(); edges.next(); ) {
+#endif
   for ( int i=0; i< edges.size(); i++)
   {
     vtol_edge_2d * edge = edges[i];
@@ -1248,7 +1354,9 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
       vdgl_digital_curve * dc = (vdgl_digital_curve*) edge->curve().ptr();
       vdgl_edgel_chain *cxy= dc->get_interpolator()->get_edgel_chain().ptr();
 
-//    const float *cx = dc->GetX(), *cy = dc->GetY();
+#if 0
+      const float *cx = dc->GetX(), *cy = dc->GetY();
+#endif
       const int last = cxy->size()-1;
       vtol_vertex_2d * v = new vtol_vertex_2d(((*cxy)[0].x()+(*cxy)[last].x())/2, ((*cxy)[0].y()+(*cxy)[last].y())/2);
       edge->set_v1(v); edge->set_v2(v); // link both directions v-e
@@ -1257,10 +1365,14 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
       ncycle++;
     }
   }
-//vcl_cout << "Create " << ncycle
-//         << " virtual end points for isolated cycles." << vcl_endl;
-//if (talkative)
-//  vcl_cout << "All junctions found in " << t.real() << " msecs." << vcl_endl;
+#if 0
+  vcl_cout << "Create " << ncycle
+           << " virtual end points for isolated cycles." << vcl_endl;
+#endif
+#ifdef DEBUG
+  if (talkative)
+    vcl_cout << "All junctions found in " << t.real() << " msecs." << vcl_endl;
+#endif
   return vertices.size();
 }
 
@@ -1276,12 +1388,16 @@ gevd_contour::SubPixelAccuracy(vcl_vector<vtol_edge_2d *>& edges,
                                const gevd_bufferxy& locationx,
                                const gevd_bufferxy& locationy)
 {
-  //CoolTimer t;
+#ifdef DEBUG
+  vul_timer t;
+#endif
   if (talkative)
     vcl_cout << "Insert subpixel accuracy into edges/vertices";
 
   // 1. Subpixel accurary for end points
-//for (vertices.reset(); vertices.next(); )
+#if 0
+  for (vertices.reset(); vertices.next(); )
+#endif
   for ( int i=0; i< vertices.size(); i++)
   {
     vtol_vertex_2d * vert = vertices[i];
@@ -1291,13 +1407,17 @@ gevd_contour::SubPixelAccuracy(vcl_vector<vtol_edge_2d *>& edges,
   }
 
   // 2. Subpixel accurary for chain pixels
-//for (edges.reset(); edges.next(); )
+#if 0
+  for (edges.reset(); edges.next(); )
+#endif
   for ( int i=0; i< edges.size(); i++)
   {
     vtol_edge_2d * edge = edges[i];
     vdgl_digital_curve * dc = (vdgl_digital_curve*) edge->curve().ptr();
     vdgl_edgel_chain *cxy= dc->get_interpolator()->get_edgel_chain().ptr();
-//  float *cx = dc->GetX(), *cy = dc->GetY();
+#if 0
+    float *cx = dc->GetX(), *cy = dc->GetY();
+#endif
     int x, y;
     for (int k = 0; k < cxy->size(); k++) {
       x = int((*cxy)[k].x()), y = int((*cxy)[k].y());
@@ -1315,8 +1435,10 @@ gevd_contour::SubPixelAccuracy(vcl_vector<vtol_edge_2d *>& edges,
   // and large shifts for subpixel locations.
   // Implement only if experiments prove zig-zags are excessive
 
-//if (talkative)
-//  vcl_cout << ", in " << t.real() << " msecs." << vcl_endl;
+#ifdef DEBUG
+  if (talkative)
+    vcl_cout << ", in " << t.real() << " msecs." << vcl_endl;
+#endif
 }
 //------------------------------------------------------------
 //: Generate an Edge with a vdgl_digital_curve representing a straight line
@@ -1324,8 +1446,10 @@ gevd_contour::SubPixelAccuracy(vcl_vector<vtol_edge_2d *>& edges,
 //
 static vtol_edge_2d * DigitalEdge(vtol_vertex_2d * vs, vtol_vertex_2d * ve)
 {
-  //IUPoint* ps = vs->GetPoint();
-  //IUPoint* pe = ve->GetPoint();
+#if 0
+  IUPoint* ps = vs->GetPoint();
+  IUPoint* pe = ve->GetPoint();
+#endif
   double xs= vs->x();
   double ys= vs->y();
   double xe= ve->x();
@@ -1338,7 +1462,9 @@ static vtol_edge_2d * DigitalEdge(vtol_vertex_2d * vs, vtol_vertex_2d * ve)
   es->add_edgel( vdgl_edgel( xs, ys));
   es->add_edgel( vdgl_edgel( xe, ye));
 
-//vdgl_digital_curve * dc = new vdgl_digital_curve(ps, pe);
+#if 0
+  vdgl_digital_curve * dc = new vdgl_digital_curve(ps, pe);
+#endif
   vtol_edge_2d * e = new vtol_edge_2d(*vs, *ve, vsol_curve_2d_sptr( dc));
   return e;
 }
@@ -1357,18 +1483,22 @@ void
 gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
                            vcl_vector<vtol_vertex_2d *>& vertices)
 {
-//CoolTimer t;
+#ifdef DEBUG
+  vul_timer t;
+#endif
   //1.00 Save Edges along the border
   vcl_vector<vtol_vertex_2d *> xmin_verts;
   vcl_vector<vtol_vertex_2d *> xmax_verts;
   vcl_vector<vtol_vertex_2d *> ymin_verts;
   vcl_vector<vtol_vertex_2d *> ymax_verts;
-//vcl_vector<Edge*> edge_extensions;
+#if 0
+  vcl_vector<Edge*> edge_extensions;
+#endif
 
   if (talkative)
     vcl_cout << "Insert virtual border to enforce closure";
 
-  // 1. Create 4 corners vertices
+  // 0. Create 4 corners vertices
   const int rmax = FRAME;       // border of image
   const int xmax = vertexMap->GetSizeX()-rmax-1;
   const int ymax = vertexMap->GetSizeY()-rmax-1;
@@ -1439,8 +1569,12 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
     int pre_x = int(pre_v->x());
     if ((x-pre_x)<3)
     {
-//GEOFF  merge_references(pre_v,v);
-//    (*verts).remove(v);
+#if 0 //GEOFF
+      merge_references(pre_v,v);
+#endif
+#if 0
+      (*verts).remove(v);
+#endif
       for ( vcl_vector<vtol_vertex_2d *>::iterator it= verts->begin(); it!= verts->end(); ++it)
       {
         if ( *it== v)
@@ -1450,7 +1584,9 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
         }
       }
 
-//    vertices.remove(v);
+#if 0
+      vertices.remove(v);
+#endif
       for ( vcl_vector<vtol_vertex_2d *>::iterator it= vertices.begin(); it!= vertices.end(); ++it)
       {
         if ( *it== v)
@@ -1460,7 +1596,9 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
         }
       }
 
-//    v->UnProtect();
+#if 0
+      v->UnProtect();
+#endif
       len--;
     }
     //potential merge at xmax
@@ -1469,9 +1607,13 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
     pre_x = int(pre_v->x());
     if ((xmax+rmax-pre_x)<3)
     {
-      //GEOFF merge_references(v,pre_v);
+#if 0 //GEOFF
+      merge_references(v,pre_v);
+#endif
 
-//    (*verts).remove(pre_v);
+#if 0
+      (*verts).remove(pre_v);
+#endif
       for ( vcl_vector<vtol_vertex_2d *>::iterator it= verts->begin(); it!= verts->end(); ++it)
       {
         if ( *it== pre_v)
@@ -1481,7 +1623,9 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
         }
       }
 
-//    vertices.remove(pre_v);
+#if 0
+      vertices.remove(pre_v);
+#endif
       for ( vcl_vector<vtol_vertex_2d *>::iterator it= vertices.begin(); it!= vertices.end(); ++it)
       {
         if ( *it== pre_v)
@@ -1491,7 +1635,9 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
         }
       }
 
-//    pre_v->UnProtect();
+#if 0
+      pre_v->UnProtect();
+#endif
       len--;
     }
   }
@@ -1512,9 +1658,13 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
     int y = int(v->y()), pre_y = int(pre_v->y());
     if ((y-pre_y)<3)
     {
-      //GEOFF merge_references(pre_v,v);
+#if 0 //GEOFF
+      merge_references(pre_v,v);
+#endif
 
-//    (*verts).remove(v);
+#if 0
+      (*verts).remove(v);
+#endif
       for ( vcl_vector<vtol_vertex_2d *>::iterator it= verts->begin(); it!= verts->end(); ++it)
       {
         if ( *it== v)
@@ -1524,7 +1674,9 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
         }
       }
 
-//    vertices.remove(v);
+#if 0
+      vertices.remove(v);
+#endif
       for ( vcl_vector<vtol_vertex_2d *>::iterator it= vertices.begin(); it!= vertices.end(); ++it)
       {
         if ( *it== v)
@@ -1534,7 +1686,9 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
         }
       }
 
-//    v->UnProtect();
+#if 0
+      v->UnProtect();
+#endif
       len--;
     }
     //potential merge at ymax
@@ -1543,9 +1697,13 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
     pre_y = int(pre_v->y());
     if ((ymax+rmax-pre_y)<3)
     {
-      //GEOFF merge_references(v,pre_v);
+#if 0 //GEOFF
+      merge_references(v,pre_v);
+#endif
 
-//    (*verts).remove(pre_v);
+#if 0
+      (*verts).remove(pre_v);
+#endif
       for ( vcl_vector<vtol_vertex_2d *>::iterator it= verts->begin(); it!= verts->end(); ++it)
       {
         if ( *it== pre_v)
@@ -1555,7 +1713,9 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
         }
       }
 
-//    vertices.remove(pre_v);
+#if 0
+      vertices.remove(pre_v);
+#endif
       for ( vcl_vector<vtol_vertex_2d *>::iterator it= vertices.begin(); it!= vertices.end(); ++it)
       {
         if ( *it== pre_v)
@@ -1565,7 +1725,9 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
         }
       }
 
-//    pre_v->UnProtect();
+#if 0
+      pre_v->UnProtect();
+#endif
       len--;
     }
   }
@@ -1576,8 +1738,10 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
   for (iv=1; iv<len-1; iv++)
   {
     vtol_vertex_2d * v = xmin_verts[iv];
-//  IUPoint* p = new IUPoint(*(v->GetPoint()));
-//  p->set_x(xmi);
+#if 0
+    IUPoint* p = new IUPoint(*(v->GetPoint()));
+    p->set_x(xmi);
+#endif
     vtol_vertex_2d * vp = new vtol_vertex_2d(xmi, v->y());
     vertices.push_back(vp);// vp->Protect();
     xmin_verts[iv] = vp;
@@ -1593,8 +1757,10 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
     vtol_vertex_2d * v = xmax_verts[iv];
     if (iv!=0&&iv!=(len-1))
     {
-//    IUPoint* p = new IUPoint(*(v->GetPoint()));
-//    p->set_x(xmx);
+#if 0
+      IUPoint* p = new IUPoint(*(v->GetPoint()));
+      p->set_x(xmx);
+#endif
       vtol_vertex_2d * vp = new vtol_vertex_2d( xmx, v->y());
       vertices.push_back(vp); // vp->Protect();
       xmax_verts[iv] = vp;
@@ -1608,8 +1774,10 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
     vtol_vertex_2d * v = ymin_verts[iv];
     if (iv!=0&&iv!=(len-1))
     {
-//    IUPoint* p = new IUPoint(*(v->GetPoint()));
-//    p->set_y(ymi);
+#if 0
+      IUPoint* p = new IUPoint(*(v->GetPoint()));
+      p->set_y(ymi);
+#endif
       vtol_vertex_2d * vp = new vtol_vertex_2d(v->x(), ymi);
       vertices.push_back(vp); // vp->Protect();
       ymin_verts[iv] = vp;
@@ -1623,8 +1791,10 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
     vtol_vertex_2d * v = ymax_verts[iv];
     if (iv!=0&&iv!=(len-1))
     {
-//    IUPoint* p = new IUPoint(*(v->GetPoint()));
-//    p->set_y(ymx);
+#if 0
+      IUPoint* p = new IUPoint(*(v->GetPoint()));
+      p->set_y(ymx);
+#endif
       vtol_vertex_2d * vp = new vtol_vertex_2d( v->x(), ymx);
       vertices.push_back(vp); // vp->Protect();
       ymax_verts[iv] = vp;
@@ -1633,13 +1803,21 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
     }
   }
   V00->set_x(0);  V00->set_y(0); vertices.push_back(V00);
-//V00->Protect();
+#if 0
+  V00->Protect();
+#endif
   V01->set_x(0);  V01->set_y(ymax+rmax); vertices.push_back(V01);
-//V01->Protect();
+#if 0
+  V01->Protect();
+#endif
   V10->set_x(xmax+rmax);  V10->set_y(0); vertices.push_back(V10);
-//V10->Protect();
+#if 0
+  V10->Protect();
+#endif
   V11->set_x(xmax+rmax);  V11->set_y(ymax+rmax); vertices.push_back(V11);
-//V11->Protect();
+#if 0
+  V11->Protect();
+#endif
   //4.0 Now we have properly placed vertices.  Next we scan and generate
   //edges. along the border.
   //4.1 along ymin and ymax
@@ -1665,7 +1843,6 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
   //4.2 along xmin and xmax
   for (d = 0; d < 2; d++)
   {
-//  int x;
     vcl_vector<vtol_vertex_2d *>* verts = &xmin_verts;
     if (d)
       verts = &xmax_verts;
@@ -1683,11 +1860,13 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d *>& edges,
       edges.push_back(e); // e->Protect();
     }
   }
-//if (talkative)
-//  vcl_cout << ", in " << t.real() << " msecs.\n";
+#ifdef DEBUG
+  if (talkative)
+    vcl_cout << ", in " << t.real() << " msecs.\n";
+#endif
 }
 
-// // Convolve array elements with [1 0 1]/2, replacing
+//: Convolve array elements with [1 0 1]/2, replacing
 // center pixel by average of 2 neighbors.
 // This will make the spacing between pixels almost equal
 // and prune away small zig-zags.
@@ -1719,10 +1898,14 @@ EqualizeElements(float* elmts, const int n,
 void
 gevd_contour::EqualizeSpacing(vcl_vector<vtol_edge_2d *>& chains)
 {
-//CoolTimer t;
+#ifdef DEBUG
+  vul_timer t;
+#endif
   if (talkative)
     vcl_cout << "Equalize the spacing between pixels in chains";
-//for (chains.reset(); chains.next(); )
+#if 0
+  for (chains.reset(); chains.next(); )
+#endif
   for ( int i= 0; i< chains.size(); i++)
   {
     vtol_edge_2d * e = chains[i];
@@ -1752,8 +1935,10 @@ gevd_contour::EqualizeSpacing(vcl_vector<vtol_edge_2d *>& chains)
       }
     }
   }
-//if (talkative)
-//  vcl_cout << ", in " << t.real() << " msecs.\n";
+#ifdef DEBUG
+  if (talkative)
+    vcl_cout << ", in " << t.real() << " msecs.\n";
+#endif
 }
 
 //: Set depth for intensity images, default to 0.
@@ -1763,27 +1948,37 @@ gevd_contour::SetDepth(vcl_vector<vtol_edge_2d *>& edges,
                   vcl_vector<vtol_vertex_2d *>& vertices,
                   float depth)
 {
-//CoolTimer t;
+#ifdef DEBUG
+  vul_timer t;
+#endif
   if (talkative)
     vcl_cout << "Set depth for all pixels in edges/vertices to " << depth;
-//for (vertices.reset(); vertices.next(); )
+#if 0
+  for (vertices.reset(); vertices.next(); )
+#endif
 
-//for ( int i=0; i< vertices.size(); i++)
-//  vertices[i]->set_z(depth);
+#if 0
+  for ( int i=0; i< vertices.size(); i++)
+    vertices[i]->set_z(depth);
+#endif
 
   assert( false);
 
-//for (edges.reset(); edges.next(); ) {
-//  for ( int i=0; i< edges.size(); i++)
-//  {
-//    vdgl_digital_curve * dc = (vdgl_digital_curve*) edges[i]->curve().ptr();
-//    float *cz = dc->GetZ();
-//    for (int k = 0; k < dc->size(); k++)
-//    cz[k] = depth;
-//  }
-//}
-//if (talkative)
-//  vcl_cout << ", in " << t.real() << " msecs.\n";
+#if 0
+  for (edges.reset(); edges.next(); ) {
+    for ( int i=0; i< edges.size(); i++)
+    {
+      vdgl_digital_curve * dc = (vdgl_digital_curve*) edges[i]->curve().ptr();
+      float *cz = dc->GetZ();
+      for (int k = 0; k < dc->size(); k++)
+      cz[k] = depth;
+    }
+  }
+#endif
+#ifdef DEBUG
+  if (talkative)
+    vcl_cout << ", in " << t.real() << " msecs.\n";
+#endif
 }
 
 
@@ -1796,20 +1991,24 @@ gevd_contour::InterpolateDepth(vcl_vector<vtol_edge_2d *>& edges,
                           vcl_vector<vtol_vertex_2d *>& vertices,
                           const gevd_bufferxy& image)
 {
-//CoolTimer t;
+#ifdef DEBUG
+  vul_timer t;
+#endif
   if (talkative)
     vcl_cout << "Interpolate depth for all edges/vertices";
 
-#if 1
-  assert(false);
-#else // commented out
-//for (vertices.reset(); vertices.next(); )
+#if 0 // commented out
+#if 0
+  for (vertices.reset(); vertices.next(); )
+#endif
   for ( int i=0; i< vertices.size(); i++)
   {
     vtol_vertex_2d * v = vertices[i];
     v->SetZ(floatPixel(image, int(v->x()), int(v->y())));
   }
-//for (edges.reset(); edges.next(); ) {
+#if 0
+  for (edges.reset(); edges.next(); ) {
+#endif
   for ( int i=0; i< edges.size(); i++)
   {
     vdgl_digital_curve * dc = (vdgl_digital_curve*) edges[i]->curve().ptr();
@@ -1818,8 +2017,12 @@ gevd_contour::InterpolateDepth(vcl_vector<vtol_edge_2d *>& edges,
     cz[k] = floatPixel(image, int(cx[k]), int(cy[k]));
   }
 
+#ifdef DEBUG
   if (talkative)
     vcl_cout << ", in " << t.real() << " msecs.\n";
+#endif
+#else
+  assert(false);
 #endif
 }
 
@@ -1835,22 +2038,30 @@ gevd_contour::Translate(vcl_vector<vtol_edge_2d *>& edges, // translate loc to c
                    vcl_vector<vtol_vertex_2d *>& vertices,
                    const float tx, const float ty, const float tz)
 {
-//CoolTimer t;
+#ifdef DEBUG
+  vul_timer t;
+#endif
   if (talkative)
     vcl_cout << "Translate edges/vertices";
-//for (vertices.reset(); vertices.next(); ) {
+#if 0
+  for (vertices.reset(); vertices.next(); ) {
+#endif
   for ( int i=0; i< vertices.size(); i++) {
     vtol_vertex_2d * vert = vertices[i];
     vert->set_x(vert->x() + tx);
     vert->set_y(vert->y() + ty);
   }
-//for (edges.reset(); edges.next(); ) {
+#if 0
+  for (edges.reset(); edges.next(); ) {
+#endif
   for ( int i=0; i< edges.size(); i++) {
     vtol_edge_2d * edge = edges[i];
     vdgl_digital_curve * dc = (vdgl_digital_curve*) edge->curve().ptr();
 
     vdgl_edgel_chain *cxy= dc->get_interpolator()->get_edgel_chain().ptr();
-//  float *cx = dc->GetX(), *cy = dc->GetY();
+#if 0
+    float *cx = dc->GetX(), *cy = dc->GetY();
+#endif
     for (int k = 0; k < cxy->size(); k++) {
       vdgl_edgel e= (*cxy)[k];
 
@@ -1858,22 +2069,26 @@ gevd_contour::Translate(vcl_vector<vtol_edge_2d *>& edges, // translate loc to c
       e.set_y( e.y()+ty);
 
       cxy->set_edgel( k, e);
-//    cx[k] += tx;
-//    cy[k] += ty;
+#if 0
+      cx[k] += tx;
+      cy[k] += ty;
+#endif
     }
   }
 
   if (tz != 0) {
-#if 1
-    assert( false);
-#else // commented out
-//  for (vertices.reset(); vertices.next(); )
+#if 0 // commented out
+#if 0
+    for (vertices.reset(); vertices.next(); )
+#endif
     for ( int i=0; i< vertices.size(); i++)
     {
       vtol_vertex_2d * vert = vertices[i];
       vert->SetZ(vert->GetZ() + tz);
     }
-//  for (edges.reset(); edges.next(); )
+#if 0
+    for (edges.reset(); edges.next(); )
+#endif
     for ( int i=0; i< edges.size(); i++)
     {
       vtol_edge_2d * edge = edges[i];
@@ -1882,10 +2097,14 @@ gevd_contour::Translate(vcl_vector<vtol_edge_2d *>& edges, // translate loc to c
       for (int k = 0; k < dc->size(); k++)
         cz[k] += tz;
     }
+#else
+    assert( false);
 #endif
   }
-//if (talkative)
-//  vcl_cout << ", in " << t.real() << " msecs.\n";
+#ifdef DEBUG
+  if (talkative)
+    vcl_cout << ", in " << t.real() << " msecs.\n";
+#endif
 }
 
 //: Remove and delete all elements in global lists, and set
@@ -1897,13 +2116,17 @@ gevd_contour::ClearNetwork(vcl_vector<vtol_edge_2d *>*& edges,
                       vcl_vector<vtol_vertex_2d *>*& vertices)
 {
   if (edges) {
-//  for (edges->reset(); edges->next(); ) {
+#if 0
+    for (edges->reset(); edges->next(); ) {
+#endif
     for ( int i=0; i< edges->size(); i++) {
 #if 0 // not (yet) converted
       vtol_edge_2d * edge = (*edges)[i];
       Curve* dc = NULL;        // retrieve digital chain dc
       vsol_curve_2d *dc= 0;
-//GEOFF edge->set_curve(0); // and remove it from edge
+#if 0 //GEOFF
+      edge->set_curve(0); // and remove it from edge
+#endif
       edge->UnProtect();        // delete edge
       delete ((vdgl_digital_curve *) dc); // delete dc
 #endif
@@ -1911,9 +2134,11 @@ gevd_contour::ClearNetwork(vcl_vector<vtol_edge_2d *>*& edges,
     delete edges; edges = NULL;
   }
   if (vertices) {
-//  for (vertices->reset(); vertices->next(); )
-//  for ( int i=0; i< vertices->size(); i++)
-//    vertices[i]->UnProtect();
+#if 0
+    for (vertices->reset(); vertices->next(); )
+    for ( int i=0; i< vertices->size(); i++)
+      vertices[i]->UnProtect();
+#endif
     delete vertices; vertices = NULL;
   }
 }
@@ -1927,13 +2152,17 @@ gevd_contour::CreateEdgeMap(vcl_vector<vtol_edge_2d *>& edges,
 {
   gevd_bufferxy* map = new gevd_bufferxy(sizex, sizey, bits_per_ptr);
   map->Clear();
-//for (edges.reset(); edges.next(); ) {
+#if 0
+  for (edges.reset(); edges.next(); ) {
+#endif
   for ( int i= 0; i< edges.size(); i++) {
     vtol_edge_2d * e = edges[i];
     vdgl_digital_curve * dc = (vdgl_digital_curve*) e->curve().ptr();
     vdgl_edgel_chain * xy= dc->get_interpolator()->get_edgel_chain().ptr();
 
-//  const float *x = dc->GetX(), *y = dc->GetY();
+#if 0
+    const float *x = dc->GetX(), *y = dc->GetY();
+#endif
     for (int i = 0; i < xy->size(); i++)
       ptrPixel(*map, int((*xy)[i].x()+0.5), int((*xy)[i].y()+0.5)) = e;
   }
@@ -1967,7 +2196,7 @@ gevd_contour::MaskEdgels(const gevd_bufferxy& mask,
 }
 
 
-// Set the orientation at each edgel on all digital curves to a continous
+//: Set the orientation at each edgel on all digital curves to a continous
 // orientation value, which is consistent with C. Rothwell's EdgeDetector.
 // That is theta = (180/M_PI)*atan2(dI/dy, dI/dx)
 //
@@ -1975,11 +2204,15 @@ gevd_contour::MaskEdgels(const gevd_bufferxy& mask,
 void
 gevd_contour::SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle, vcl_vector<vtol_edge_2d *>& edges)
 {
-//for (edges.reset(); edges.next();)
+#if 0
+  for (edges.reset(); edges.next();)
+#endif
   for ( int i=0; i< edges.size(); i++)
   {
     vtol_edge_2d * e = edges[i];
-//  vdgl_digital_curve * dc = (e->curve())->CastTovdgl_digital_curve().ptr();
+#if 0
+    vdgl_digital_curve * dc = (e->curve())->CastTovdgl_digital_curve().ptr();
+#endif
     vdgl_digital_curve *dc= ( vdgl_digital_curve *) e->curve().ptr();
 
     if (dc)
@@ -1987,10 +2220,12 @@ gevd_contour::SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle, vcl_ve
       vdgl_edgel_chain *xypos= dc->get_interpolator()->get_edgel_chain().ptr();
 
       int len = xypos->size();
-//    float* xpos = dc->GetX();
-//    float* ypos = dc->GetY();
-//    float* th = dc->GetTheta();
-//    float* gr = dc->GetGrad();
+#if 0
+      float* xpos = dc->GetX();
+      float* ypos = dc->GetY();
+      float* th = dc->GetTheta();
+      float* gr = dc->GetGrad();
+#endif
 
       for (int i = 0; i < len; i++)
       {
@@ -2015,8 +2250,10 @@ gevd_contour::SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle, vcl_ve
         edgel.set_grad( floatPixel( grad_mag, ix, iy));
         edgel.set_theta( floatPixel( angle, ix, iy));
 
-//      gr[i] = floatPixel(grad_mag, ix, iy);
-//      th[i] = floatPixel(angle, ix, iy);
+#if 0
+        gr[i] = floatPixel(grad_mag, ix, iy);
+        th[i] = floatPixel(angle, ix, iy);
+#endif
       }
     }
   }
@@ -2056,8 +2293,10 @@ gevd_contour::CreateLookupTable(vcl_vector<vtol_edge_2d *>& set)
 {
   vcl_vector<vtol_edge_2d *>* set2 =
     new vcl_vector<vtol_edge_2d *>(2*set.size()); // preallocate space
-//set2->set_growth_ratio(1.5);  // growth ratio for table
-//for (set.reset(); set.next(); )
+#if 0
+  set2->set_growth_ratio(1.5);  // growth ratio for table
+  for (set.reset(); set.next(); )
+#endif
   for ( int i=0; i< set.size(); i++)
     gevd_contour::LookupTableInsert(*set2, set[i]);
   return set2;
@@ -2070,8 +2309,10 @@ gevd_contour::CreateLookupTable(vcl_vector<vtol_vertex_2d *>& set)
 {
   vcl_vector<vtol_vertex_2d *>* set2 =
     new vcl_vector<vtol_vertex_2d *>(2*set.size()); // preallocate space
-//set2->set_growth_ratio(1.5);  // growth ratio for table
-//for (set.reset(); set.next(); )
+#if 0
+  set2->set_growth_ratio(1.5);  // growth ratio for table
+  for (set.reset(); set.next(); )
+#endif
   for ( int i=0; i< set.size(); i++)
     gevd_contour::LookupTableInsert(*set2, set[i]);
   return set2;
@@ -2084,7 +2325,9 @@ void
 gevd_contour::LookupTableInsert(vcl_vector<vtol_edge_2d *>& set,
                            vtol_edge_2d * elmt)
 {
-//elmt->Protect();              // reference count
+#if 0
+  elmt->Protect();              // reference count
+#endif
   elmt->set_id(set.size());     // index in global array
   set.push_back(elmt);          // push_back at end of array
 }
@@ -2095,7 +2338,9 @@ void
 gevd_contour::LookupTableInsert(vcl_vector<vtol_vertex_2d *>& set,
                            vtol_vertex_2d * elmt)
 {
-//elmt->Protect();              // reference count
+#if 0
+  elmt->Protect();              // reference count
+#endif
   elmt->set_id(set.size());     // index in global array
   set.push_back(elmt);          // push at end of array
 }
@@ -2107,12 +2352,18 @@ void
 gevd_contour::LookupTableReplace(vcl_vector<vtol_edge_2d *>& set,
                             vtol_edge_2d * deleted, vtol_edge_2d * inserted)
 {
-//inserted->Protect();
+#if 0
+  inserted->Protect();
+#endif
   const int i = deleted->get_id();
   inserted->set_id(i);
   set[i] = inserted;            // replace in global array
-//GEOFF  deleted->unlink_all_inferiors_twoway(deleted);
-//deleted->UnProtect();         // reference count
+#if 0 //GEOFF
+  deleted->unlink_all_inferiors_twoway(deleted);
+#endif
+#if 0
+  deleted->UnProtect();         // reference count
+#endif
 }
 
 //: As above for vertices.
@@ -2121,14 +2372,20 @@ void
 gevd_contour::LookupTableReplace(vcl_vector<vtol_vertex_2d *>& set,
                             vtol_vertex_2d * deleted, vtol_vertex_2d * inserted)
 {
-//inserted->Protect();
+#if 0
+  inserted->Protect();
+#endif
   const int i = deleted->get_id();
   inserted->set_id(i);
 
-  //GEOFF  set.put(inserted, i);
+#if 0 //GEOFF
+  set.put(inserted, i);
+#endif
 
   set[i] = inserted;            // replace in global array
-//deleted->UnProtect();         // reference count
+#if 0
+  deleted->UnProtect();         // reference count
+#endif
 }
 
 //: Remove topology object from 2-way lookup table
@@ -2139,7 +2396,9 @@ gevd_contour::LookupTableRemove(vcl_vector<vtol_edge_2d *>& set,
                            vtol_edge_2d * elmt)
 {
   set[elmt->get_id()] = NULL;   // remove from global array
-//elmt->UnProtect();            // reference count
+#if 0
+  elmt->UnProtect();            // reference count
+#endif
 }
 
 //: As above for vertices.
@@ -2149,7 +2408,9 @@ gevd_contour::LookupTableRemove(vcl_vector<vtol_vertex_2d *>& set,
                            vtol_vertex_2d * elmt)
 {
   set[elmt->get_id()] = NULL;   // remove from global array
-//elmt->UnProtect();            // reference count
+#if 0
+  elmt->UnProtect();            // reference count
+#endif
 }
 
 //: Eliminate empty holes in the lookup table.
@@ -2172,7 +2433,9 @@ gevd_contour::LookupTableCompress(vcl_vector<vtol_edge_2d *>& set)
       } else
         break;                  // no more elements
     }
-//  set.set_length(i);          // reset the length
+#if 0
+    set.set_length(i);          // reset the length
+#endif
 }
 
 //: As above for vertices.
@@ -2195,7 +2458,9 @@ gevd_contour::LookupTableCompress(vcl_vector<vtol_vertex_2d *>& set)
       } else
         break;                  // no more elements
     }
-//  set.set_length(i);          // reset the length
+#if 0
+    set.set_length(i);          // reset the length
+#endif
 }
 
 //: Check a few obvious invariants, and return number of errors.
@@ -2218,13 +2483,19 @@ gevd_contour::CheckInvariants(vcl_vector<vtol_edge_2d *>& edges,
 
   // 0. Check that vertices of all edges have been listed
   const int unmark = -1;
-//for (edges.reset(); edges.next(); ) // unmark all network
+#if 0
+  for (edges.reset(); edges.next(); ) // unmark all network
+#endif
   for ( int i=0; i< edges.size(); i++)
     edges[i]->set_id(unmark);
-//for (vertices.reset(); vertices.next(); )
+#if 0
+  for (vertices.reset(); vertices.next(); )
+#endif
   for ( int i=0; i< edges.size(); i++)
     vertices[i]->set_id(unmark);
-//for (edges.reset(); edges.next(); )   // check vs of all edges
+#if 0
+  for (edges.reset(); edges.next(); )   // check vs of all edges
+#endif
   for ( int i=0; i< edges.size(); i++) {
     vtol_edge_2d * e = edges[i];
     vtol_vertex * v1 = e->v1().ptr();
@@ -2238,10 +2509,14 @@ gevd_contour::CheckInvariants(vcl_vector<vtol_edge_2d *>& edges,
       nerror++;
     }
   }
-//for (vertices.reset(); vertices.next(); )     // check es of all vertices
+#if 0
+  for (vertices.reset(); vertices.next(); )     // check es of all vertices
+#endif
   for ( int i=0; i< vertices.size(); i++) {
     vcl_vector<vtol_edge *>* es = vertices[i]->compute_edges();
-//  for (es->reset(); es->next(); )
+#if 0
+    for (es->reset(); es->next(); )
+#endif
     for ( int j=0; j< es->size(); j++)
       if ((*es)[j]->get_id() != unmark) {
         vcl_cout << (*es)[j] << ": e is not in edge list\n";
@@ -2249,10 +2524,14 @@ gevd_contour::CheckInvariants(vcl_vector<vtol_edge_2d *>& edges,
       }
   }
   // mark id with index in global list
-//for (edges.reset(), id = 0; edges.next(); id++) // mark all network
+#if 0
+  for (edges.reset(), id = 0; edges.next(); id++) // mark all network
+#endif
   for ( int id=0; id< edges.size(); id++)
     edges[id]->set_id(id);
-//for (vertices.reset(), id = 0; vertices.next(); id++)
+#if 0
+  for (vertices.reset(), id = 0; vertices.next(); id++)
+#endif
   for ( int id=0; id< vertices.size(); id++)
     vertices[id]->set_id(id);
 
