@@ -18,7 +18,13 @@ extern "C" {
 #else
 #define cmplx complex
 #define dcmplx doublecomplex
-#define sqrtf(f) ((float)sqrt((double)(f)))
+#endif
+
+#include <vxl_config.h>
+#if VXL_MATH_HAS_SQRTF
+  float sqrtf(float);
+#else
+# define sqrtf(f) ((float)sqrt((double)(f)))
 #endif
 
   char * F77_aloc(int Len, char *whence);
