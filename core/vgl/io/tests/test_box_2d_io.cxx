@@ -17,14 +17,14 @@ void test_box_2d_double_io()
     vgl_box_2d<double> p_out(min_pos,max_pos), p_in;
 
     vsl_b_ofstream bfs_out("vgl_box_2d_test_double_io.bvl.tmp",
-                           vcl_ios::out | vcl_ios_binary);
+                           vcl_ios_out | vcl_ios_binary);
     TEST ("Created vgl_box_2d_test_double_io.bvl.tmp for writing",
                           (!bfs_out), false);
     vsl_b_write(bfs_out, p_out);
     bfs_out.close();
 
     vsl_b_ifstream bfs_in("vgl_box_2d_test_double_io.bvl.tmp",
-                         vcl_ios::in | vcl_ios_binary);
+                         vcl_ios_in | vcl_ios_binary);
     TEST ("Opened vgl_box_2d_test_double_io.bvl.tmp for reading",
                          (!bfs_in), false);
     vsl_b_read(bfs_in, p_in);
