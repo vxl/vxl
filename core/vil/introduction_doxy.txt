@@ -212,6 +212,7 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_correlate_2d   - Similar to vil2_convolve_2d but with reversing the kernel
 * - vil2_exp_filter_i - Apply exponential filter along i axis (fast recursive method)
 * - vil2_exp_filter_j - Apply exponential filter along j axis (fast recursive method)
+* - vil2_exp_filter_2d - Apply exponential filter along i and j (fast recursive method)
 * - vil2_exp_grad_filter_i - Apply exponential gradient filter along i axis (fast recursive method)
 * - vil2_exp_grad_filter_j - Apply exponential gradient filter along j axis (fast recursive method)
 * - vil2_sobel_3x3     - to generate X/Y gradient images using 3x3 Sobel operators
