@@ -62,7 +62,7 @@ vgl_p_matrix<T>::vgl_p_matrix(vnl_matrix_fixed<T, 3, 4> const& pmatrix) :
 //
 //: Construct from 3x3 matrix A and vector a. P = [A a].
 template <class T>
-vgl_p_matrix<T>::vgl_p_matrix<T> (const vnl_matrix<T>& A, const vnl_vector<T>& a) :
+vgl_p_matrix<T>::vgl_p_matrix(const vnl_matrix<T>& A, const vnl_vector<T>& a) :
   svd_(0)
 {
   set(A,a);
