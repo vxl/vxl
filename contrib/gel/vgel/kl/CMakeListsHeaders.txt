@@ -1,9 +1,0 @@
-SOURCE_FILES(vgel_kl_sources
-  base.h
-  convolve.h
-  error.h
-  klt.h
-  klt_util.h
-  pnmio.h
-  pyramid.h
-)

@@ -1,6 +1,0 @@
-SOURCE_FILES(mil3d_sources
-  mil3d_image_3d.h
-  mil3d_image_3d_of.h
-  mil3d_image_3d_of.txx
-  mil3d_transform_3d.h
-)

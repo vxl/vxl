@@ -1,7 +1,0 @@
-SOURCE_FILES( gtrl_sources
-  gtrl_netlib_triangle.h
-  gtrl_polygon.h
-  gtrl_triangle.h
-  gtrl_triangulation.h
-  gtrl_vertex.h
-)

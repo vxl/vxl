@@ -1,8 +1,0 @@
-SOURCE_FILES( VPLAYER_sources
-  easy2D_loader.h
-  easy2D_sequencer.h
-  vplayer.h
-  vplayer_file.h
-  vplayer_geometry.h
-  vplayer_video.h
-)

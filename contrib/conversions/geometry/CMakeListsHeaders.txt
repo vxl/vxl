@@ -1,4 +1,0 @@
-SOURCE_FILES( geometry_sources
- osl_to_vdgl.h
- DigitalCurve_to_vdgl.h
-)

@@ -1,8 +1,0 @@
-SOURCE_FILES(vgui_qt_sources
-  vgui_qt.h
-  vgui_qt_adaptor.h
-  vgui_qt_dialog_impl.h
-  vgui_qt_menu.h
-  vgui_qt_statusbar.h
-  vgui_qt_window.h
-)

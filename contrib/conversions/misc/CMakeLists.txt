@@ -1,9 +1,12 @@
-IF(BUILD_TESTING)
-  SUBDIRS(tests)
-ENDIF(BUILD_TESTING)
+# conversions/misc/CMakeLists.txt
 
-IF (WIN32)
-  IF (NOT CYGWIN)
-    INCLUDE(${allvxl_SOURCE_DIR}/conversions/misc/CMakeListsHeaders.txt)
-  ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
+IF (BUILD_TESTING)
+  SUBDIRS(tests)
+ENDIF (BUILD_TESTING)
+
+# These are the source files in this directory.
+# Note that these are all header files, so no library is built here.
+
+SOURCE_FILES(misc_sources
+# none yet
+)

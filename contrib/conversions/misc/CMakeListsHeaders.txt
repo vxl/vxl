@@ -1,3 +1,0 @@
-SOURCE_FILES( misc_sources
-# none yet
-)

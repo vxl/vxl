@@ -1,8 +1,0 @@
-SOURCE_FILES(vgui_glut_sources
-  menu_hack.h
-  vgui_glut_impl.h
-  vgui_glut_adaptor.h
-  vgui_glut_popup_impl.h
-  vgui_glut_slab.h
-  vgui_glut_window.h
-)

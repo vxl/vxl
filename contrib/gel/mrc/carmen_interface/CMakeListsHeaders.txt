@@ -1,3 +1,0 @@
-SOURCE_FILES( carmen_interface_sources
-  carmen_interface.h
-)

@@ -1,9 +1,0 @@
-SOURCE_FILES(octree_sources
-  BaseCube.h
-  ConvexHull.h
-  Cube.h
-  OctreeLevel.h
-  Voxel.h
-  VoxmapImagePoints.h
-  VoxmapPoints.h
-)

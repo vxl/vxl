@@ -1,8 +1,0 @@
-SOURCE_FILES( vpgl_sources
-  vpgl_basic_camera.h
-  vpgl_basic_camera_sptr.h
-  vpgl_matrix_camera.h
-  vpgl_matrix_camera_sptr.h
-  vpgl_perspective_camera.h
-  vpgl_perspective_camera_sptr.h
-)

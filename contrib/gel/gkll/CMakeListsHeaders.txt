@@ -1,6 +1,0 @@
-SOURCE_FILES( gkll_sources
-  gkll_kl.h
-  gkll_kl_params.h
-  gkll_multi_view_data.h
-  gkll_multi_view_data_vertex_sptr.h
-)

@@ -1,9 +1,15 @@
-IF(BUILD_TESTING)
-  SUBDIRS(tests)
-ENDIF(BUILD_TESTING)
+# conversions/image/CMakeLists.txt
 
-IF (WIN32)
-  IF (NOT CYGWIN)
-    INCLUDE(${allvxl_SOURCE_DIR}/conversions/image/CMakeListsHeaders.txt)
-  ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
+IF (BUILD_TESTING)
+  SUBDIRS(tests)
+ENDIF (BUILD_TESTING)
+
+# These are the source files in this directory.
+# Note that these are all header files, so no library is built here.
+
+SOURCE_FILES(image_sources
+ Image_to_vil.h
+ vbl_array_to_vil.h
+ vil_to_Image.h
+ vil_to_vbl_array.h
+)

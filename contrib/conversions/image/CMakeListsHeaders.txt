@@ -1,6 +1,0 @@
-SOURCE_FILES( image_sources
- Image_to_vil.h
- vbl_array_to_vil.h
- vil_to_Image.h
- vil_to_vbl_array.h
-)

@@ -1,8 +1,0 @@
-SOURCE_FILES(vgui_gtk_sources
-  vgui_gtk.h
-  vgui_gtk_adaptor.h
-  vgui_gtk_dialog_impl.h
-  vgui_gtk_statusbar.h
-  vgui_gtk_utils.h
-  vgui_gtk_window.h
-)

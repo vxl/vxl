@@ -1,8 +1,0 @@
-SOURCE_FILES(vgel_sources
-  vgel_kl.h
-  vgel_kl_params.h
-  vgel_multi_view_data.h
-  vgel_multi_view_data_vertex_sptr.h
-
-  vgel_multi_view_data.txx
-)

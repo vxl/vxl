@@ -1,41 +1,37 @@
-# ./gel/vtol/CMakeLists.txt
+# gel/vtol/CMakeLists.txt
 
-ADD_LIBRARY( vtol vtol_sources )
+ADD_LIBRARY(vtol vtol_sources)
 
-SOURCE_FILES( vtol_sources
-  vtol_topology_object.cxx
-  vtol_topology_cache.cxx
-  vtol_list_functions.cxx
-  vtol_chain.cxx
-  vtol_two_chain.cxx
-  vtol_one_chain.cxx
-  vtol_zero_chain.cxx
-  vtol_edge.cxx
-  vtol_block.cxx
-  vtol_face.cxx
-  vtol_vertex.cxx
-  vtol_edge_2d.cxx
-  vtol_face_2d.cxx
-  vtol_vertex_2d.cxx
-  vtol_topology_io.cxx
-  vtol_cycle_processor.cxx
-  ../vdgl/vdgl_intensity_face.cxx
+SOURCE_FILES(vtol_sources
+ vtol_topology_object.cxx vtol_topology_object.h vtol_topology_object_sptr.h
+ vtol_topology_cache.cxx  vtol_topology_cache.h  vtol_topology_cache_sptr.h
+ vtol_list_functions.cxx  vtol_list_functions.h
+ vtol_chain.cxx           vtol_chain.h           vtol_chain_sptr.h
+ vtol_two_chain.cxx       vtol_two_chain.h       vtol_two_chain_sptr.h
+ vtol_one_chain.cxx       vtol_one_chain.h       vtol_one_chain_sptr.h
+ vtol_zero_chain.cxx      vtol_zero_chain.h      vtol_zero_chain_sptr.h
+ vtol_edge.cxx            vtol_edge.h            vtol_edge_sptr.h
+ vtol_block.cxx           vtol_block.h           vtol_block_sptr.h
+ vtol_face.cxx            vtol_face.h            vtol_face_sptr.h
+ vtol_vertex.cxx          vtol_vertex.h          vtol_vertex_sptr.h
+ vtol_edge_2d.cxx         vtol_edge_2d.h         vtol_edge_2d_sptr.h
+ vtol_face_2d.cxx         vtol_face_2d.h         vtol_face_2d_sptr.h
+ vtol_vertex_2d.cxx       vtol_vertex_2d.h       vtol_vertex_2d_sptr.h
+ vtol_topology_io.cxx     vtol_topology_io.h
+ vtol_cycle_processor.cxx vtol_cycle_processor.h
+ ../vdgl/vdgl_intensity_face.cxx ../vdgl/vdgl_intensity_face.h ../vdgl/vdgl_intensity_face_sptr.h
+ vtol_dtd.h
+ vtol_macros.h
 )
 
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
+AUX_SOURCE_DIRECTORY(Templates vtol_sources)
 
-AUX_SOURCE_DIRECTORY( Templates vtol_sources )
+INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 
-IF (WIN32)
-  IF (NOT CYGWIN)
-    INCLUDE(${allvxl_SOURCE_DIR}/gel/vtol/CMakeListsHeaders.txt)
-  ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
+IF (BUILD_EXAMPLES)
+  SUBDIRS(examples)
+ENDIF (BUILD_EXAMPLES)
 
-IF( BUILD_EXAMPLES )
-  SUBDIRS( examples )
-ENDIF( BUILD_EXAMPLES )
-
-IF( BUILD_TESTING )
+IF (BUILD_TESTING)
   SUBDIRS(tests)
-ENDIF( BUILD_TESTING )
+ENDIF (BUILD_TESTING)

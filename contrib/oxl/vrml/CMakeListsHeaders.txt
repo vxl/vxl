@@ -1,3 +1,0 @@
-SOURCE_FILES(vrml_sources
-  vrml_out.h
-)
