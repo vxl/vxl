@@ -45,9 +45,11 @@ public:
   void post_overlay_redraw();
   void post_timer(float,int);
   void post_destroy();  // schedules destruction of parent vgui_window
-
+  
   unsigned get_width() const {return mixin::width;}
   unsigned get_height() const {return mixin::height;}
+  void bind_popups(vgui_modifier m, vgui_button b)
+    { mixin::popup_modifier = m; mixin::popup_button = b; }
   void get_popup_bindings(vgui_modifier &m, vgui_button &b) const
     { m = mixin::popup_modifier; b = mixin::popup_button; }
 
