@@ -15,7 +15,8 @@ SET(cl_grid_finder_sources command_line_grid_finder.cxx)
 ADD_EXECUTABLE (vidfpl ${vidfpl_sources})
 ADD_EXECUTABLE (cl_grid_finder ${cl_grid_finder_sources})
 
-TARGET_LINK_LIBRARIES(vidfpl brip  vvid vidl_vil1 vgui )
+TARGET_LINK_LIBRARIES(vidfpl vvid vidl_vil1 vgui )
+TARGET_LINK_LIBRARIES(cl_grid_finder sdet vpro vvid vul )
 
 IF(HAS_CMU1394CAMERA)
  SET(vidster_sources vidster.cxx vidster_menus.cxx vidster_menus.h)
