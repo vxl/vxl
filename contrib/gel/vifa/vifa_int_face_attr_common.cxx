@@ -77,22 +77,17 @@ double vifa_int_face_attr_common::
 get_contrast_across_edge(vtol_edge_sptr  e, double dflt_cont)
 {
   double    cont = dflt_cont;
-  face_list*  faces = e->faces();
+  face_list faces; e->faces(faces);
 
   // Expect only one or two intensity faces for 2-D case
-  if (faces && (faces->size() == 2))
+  if (faces.size() == 2)
   {
-    vtol_intensity_face*  f1 = (vtol_intensity_face*)((*faces)[0].ptr());
-    vtol_intensity_face*  f2 = (vtol_intensity_face*)((*faces)[1].ptr());
+    vtol_intensity_face*  f1 = faces[0]->cast_to_intensity_face();
+    vtol_intensity_face*  f2 = faces[1]->cast_to_intensity_face();
 
-    if (f1 && f2 &&
-        f1->topology_type() == vtol_topology_object::INTENSITYFACE &&
-        f2->topology_type() == vtol_topology_object::INTENSITYFACE)
+    if (f1 && f2)
       cont = vcl_fabs(f1->Io() - f2->Io());
-
-    delete faces;
   }
-
   return cont;
 }
 

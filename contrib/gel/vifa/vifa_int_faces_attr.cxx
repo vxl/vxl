@@ -662,44 +662,36 @@ WeightedPerimeterLength()
 
       if (e)
       {
-        face_list*  edge_faces = e->faces();
+        face_list edge_faces; e->faces(edge_faces);
         iface_list  in_faces;
         iface_list  out_faces;
 
 //        vcl_cout << edge_faces->size() << " faces found" << endl;
 
-        for (face_iterator fi = edge_faces->begin();
-             fi != edge_faces->end(); fi++)
+        for (face_iterator fi=edge_faces.begin(); fi != edge_faces.end(); ++fi)
         {
-          vtol_intensity_face*  int_f =
-            (vtol_intensity_face*)((*fi).ptr());
+          vtol_intensity_face*  int_f = (*fi)->cast_to_intensity_face();
 
-          if (!int_f ||
-              int_f->topology_type() != vtol_topology_object::INTENSITYFACE)
+          if (!int_f)
           {
-            vcl_cerr << "vifsa::GetWeightedPerimeter(): Face topo. type is "
-                     << int_f->topology_type() << ", not "
-                     << vtol_topology_object::INTENSITYFACE << vcl_endl;
-
+            vcl_cerr << "vifa_int_faces_attr::WeightedPerimeterLength() -"
+                     << " Face is not an intensity face\n";
             continue;
           }
 
-          vtol_intensity_face_sptr  int_f_ref =
-            *((vtol_intensity_face_sptr*)((void *)(&(*fi))));
-          bool            in_face = false;
-          for (iface_iterator f = faces_.begin();
-               f != faces_.end(); ++f)
+          bool in_face = false;
+          for (iface_iterator f = faces_.begin(); f != faces_.end(); ++f)
           {
             if (**f == *int_f)
             {
               in_face = true;
-              in_faces.push_back(int_f_ref);
+              in_faces.push_back(int_f);
               break;
             }
           }
 
           if (!in_face)
-            out_faces.push_back(int_f_ref);
+            out_faces.push_back(int_f);
         }
 
 //        vcl_cout << in_faces.size() << " in_faces, " << out_faces.size()
@@ -709,8 +701,7 @@ WeightedPerimeterLength()
 
         float  i_intensity_sum = 0;
         float  i_area_sum = 0;
-        for (iface_iterator f = in_faces.begin();
-             f != in_faces.end(); ++f)
+        for (iface_iterator f = in_faces.begin(); f != in_faces.end(); ++f)
         {
           i_intensity_sum += ((*f)->Io() * (*f)->Npix());
           i_area_sum += (*f)->Npix();

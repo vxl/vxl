@@ -410,34 +410,23 @@ get_adjacent_face_at_edge(vtol_intensity_face_sptr&  known_face,
                           vtol_edge_2d*              e)
 {
   vtol_intensity_face_sptr  adj_face = 0;
-  face_list*          faces = e->faces();
+  face_list faces; e->faces(faces);
 
   // Expect only one or two intensity faces for 2-D case
-  if (faces)
+  if (faces.size() == 2)
   {
-    if ((faces->size() == 2) &&
-      ((*faces)[0]->topology_type() ==
-       vtol_topology_object::INTENSITYFACE) &&
-      ((*faces)[1]->topology_type() ==
-       vtol_topology_object::INTENSITYFACE))
+    vtol_intensity_face*  f1 = faces[0]->cast_to_intensity_face();
+    vtol_intensity_face*  f2 = faces[1]->cast_to_intensity_face();
+
+    if (f1 && f2 && *known_face == *f1)
+      adj_face = f2;
+    else if (f1 && f2 && *known_face == *f2)
+      adj_face = f1;
+    else
     {
-      vtol_intensity_face_sptr    f1 = *((vtol_intensity_face_sptr*)
-                                        ((void *)&((*faces)[0])));
-      vtol_intensity_face_sptr    f2 = *((vtol_intensity_face_sptr*)
-                                        ((void *)&((*faces)[1])));
-
-      if (*known_face == *f1)
-        adj_face = f2;
-      else if (*known_face == *f2)
-        adj_face = f1;
-      else
-      {
-        // Known face does not contain the
-        // given edge -- leave result NULL
-      }
+      // Known face does not contain the
+      // given edge -- leave result NULL
     }
-
-    delete faces;
   }
 
   return adj_face;
