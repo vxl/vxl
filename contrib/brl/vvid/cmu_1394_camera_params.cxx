@@ -165,7 +165,7 @@ video_configuration(const int video_format, const int video_mode) const
      default:
       return "";
     }
-  else if (video_format==2);
+  else if (video_format==2)
     switch (video_mode)
     {
      case 0:
