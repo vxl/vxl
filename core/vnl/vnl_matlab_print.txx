@@ -1,10 +1,8 @@
-// This is vxl/vnl/vnl_matlab_print.txx
-// It is different from vxl/vnl/vnl_matlab_print.cxx
+// This is core/vnl/vnl_matlab_print.txx
+// It is different from vnl_matlab_print.cxx
 #ifndef vnl_matlab_print_txx_
 #define vnl_matlab_print_txx_
-/*
-  fsm
-*/
+// \author fsm
 // Adapted from awf's MatOps class.
 
 #include "vnl_matlab_print.h"

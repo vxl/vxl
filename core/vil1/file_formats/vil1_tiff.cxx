@@ -1,4 +1,4 @@
-// This is vxl/vil/file_formats/vil_tiff.cxx
+// This is core/vil/file_formats/vil_tiff.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -619,7 +619,7 @@ bool vil_tiff_generic_image::write_header()
   p->compressed = (p->compression != COMPRESSION_NONE);
 
   // TIFFSetField(p->tif, TIFFTAG_IMAGEDESCRIPTION, GetDescription());
-  TIFFSetField(p->tif, TIFFTAG_SOFTWARE, "vxl/vil/file_formats/vil_tiff.cxx");
+  TIFFSetField(p->tif, TIFFTAG_SOFTWARE, "VXL core/vil/file_formats/vil_tiff.cxx");
 
   p->numberofstrips = TIFFNumberOfStrips(p->tif);
   p->scanlinesize = width_ * bitspersample * samplesperpixel / 8;
