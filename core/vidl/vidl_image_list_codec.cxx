@@ -98,7 +98,7 @@ bool vidl_image_list_codec::get_section(int position, void* ib, int x0, int y0, 
 }
 
 //: Put a section of pixels in function of the frame number, position and size.
-int vidl_image_list_codec::put_section(int position, void* ib, int x0, int y0, int w, int h)
+int vidl_image_list_codec::put_section(int /*position*/, void* /*ib*/, int /*x0*/, int /*y0*/, int /*w*/, int /*h*/)
 {
   vcl_cerr << "vidl_image_list_codec::put_section not implemented" << vcl_endl;
   return 0;
@@ -109,6 +109,7 @@ vidl_codec_sptr vidl_image_list_codec::load(const char* fname, char mode)
 {
   // will try and load as many images as possible starting with
   //   index 0 and stopping when we run out of images
+  assert(mode == 'r');
 
   for( int i=0; true; i++)
     {
@@ -135,6 +136,7 @@ vidl_codec_sptr vidl_image_list_codec::load(const vcl_list<vcl_string> &fnames, 
 {
   // Makes sure image loaders are registered
   //register_image_loaders();
+  assert(mode == 'r');
 
   for (vcl_list<vcl_string>::const_iterator i = fnames.begin(); i!=fnames.end(); ++i)
     {
@@ -163,6 +165,7 @@ vidl_codec_sptr vidl_image_list_codec::load(const vcl_vector<vcl_string> &fnames
 {
   // Make sure image loaders are registered
   //register_image_loaders();
+  assert(mode == 'r');
 
   for (vcl_vector<vcl_string>::const_iterator i = fnames.begin(); i!=fnames.end(); ++i)
     {

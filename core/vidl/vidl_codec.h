@@ -13,7 +13,7 @@
 // \endverbatim
 
 
-#include <vcl_string.h>
+#include <vcl_cstring.h>
 #include <vidl/vidl_codec_sptr.h>
 #include <vbl/vbl_ref_count.h>
 
@@ -39,8 +39,9 @@ public:
   // Data Control--------------------------------------------------------------
 
   inline void set_number_frames(int n = 0) { numberframes = n;}
-  inline void set_name(const char* n = "") {  }
-  inline void set_description(const char* d = "") { }
+  inline void set_name(const char* n = "") { delete[] name;name=new char[vcl_strlen(n)+1];vcl_strcpy(name,n); }
+  inline void set_description(const char* d = "")
+    { delete[] description;description=new char[vcl_strlen(d)+1];vcl_strcpy(description,d); }
   inline void set_format(char f = '\0') { format = f; }
   inline void set_image_class(char t = 'M') { Class = t; }
   inline void set_bits_pixel(int d = 0) { B = d; }
