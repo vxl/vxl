@@ -1,4 +1,4 @@
-// This is brl/bseg/bgui/bgui_vtol2D_tableau.h
+// This is brl/bbas/bgui/bgui_vtol2D_tableau.h
 #ifndef bgui_vtol2D_tableau_h_
 #define bgui_vtol2D_tableau_h_
 //--------------------------------------------------------------------------------
