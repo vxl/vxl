@@ -210,7 +210,8 @@ static bool create_grey_gif(const char* filename)
 template<class T>
 void vil2_test_image_type(char const* type_name, // type for image to read and write
                          vil2_image_view<T> const & image, // test image to save and restore
-                         bool exact = true) // require read back image identical
+                         bool exact = true,  // require read back image identical
+                         bool fail_save = false) // expect fail on save if true
 {
   vcl_cout << "=== Start testing " << type_name << " ===\n" << vcl_flush;
 
@@ -221,7 +222,8 @@ void vil2_test_image_type(char const* type_name, // type for image to read and w
   fname += ".";
   if (type_name) fname += type_name;
 
-  vcl_cout << "vil2_test_image_type: Save to [" << fname << "]\n" << vcl_flush;
+  vcl_cout << "vil2_test_image_type: Save " << image.is_a() <<
+              " to [" << fname << "]\n" << vcl_flush;
 
   // Write image to disk
   if (vcl_strcmp(type_name, "gif") == 0 &&
@@ -238,8 +240,8 @@ void vil2_test_image_type(char const* type_name, // type for image to read and w
   else
   {
     bool tst = vil2_save(image, fname.c_str(), type_name);
-    TEST("write image to disk", tst, true);
-    if (!tst) return; // fatal error
+    TEST("write image to disk", tst, !fail_save);
+    if (!tst) return;
   }
 
   // STEP 2) Read the image that was just saved to file
@@ -357,8 +359,19 @@ MAIN( test_save_load_image )
 #endif
   vil2_image_view<vxl_uint_32>         image32 = CreateTest32bitImage(sizex, sizey);
   vil2_image_view<vxl_byte>            image3p = CreateTest3planeImage(sizex, sizey);
-#if 0 // no float image support available yet
+#if 1 // no float image support available yet
   vil2_image_view<float>               imagefloat = CreateTestfloatImage(sizex, sizey);
+#endif
+
+
+  // TIFF
+  vil2_test_image_type("tiff", image1, true, true); // Test that boolean doesn't work
+#if 1
+  vil2_test_image_type("tiff", image8);
+  vil2_test_image_type("tiff", image16, true, true); // Test that boolean doesn't work
+  vil2_test_image_type("tiff", image32, true, true); // Test that boolean doesn't work
+  vil2_test_image_type("tiff", image3p);
+  vil2_test_image_type("tiff", imagefloat, true, true); // Test that boolean doesn't work
 #endif
 
 
@@ -385,7 +398,7 @@ MAIN( test_save_load_image )
     vil2_image_view<vxl_byte> small_greyscale_image(ni,nj);
     for (unsigned j=0;j<nj;++j)
       for (unsigned i=0;i<ni;++i) small_greyscale_image(i,j)=(i+j)*4;
-    vil2_print_all(vcl_cout, small_greyscale_image);
+//    vil2_print_all(vcl_cout, small_greyscale_image);
     vil2_test_image_type("jpeg", small_greyscale_image, false);
     vcl_string out_path("test_save_load_jpeg.jpg");
     TEST("Saving JPEG",vil2_save(small_greyscale_image, out_path.c_str()),true);
@@ -428,17 +441,6 @@ MAIN( test_save_load_image )
   vil2_test_image_type("viff", image32);
   vil2_test_image_type("viff", image3p);
   vil2_test_image_type("viff", imagefloat);
-#endif
-
-
-  // TIFF
-#if 0
-  vil2_test_image_type("tiff", image1);
-  vil2_test_image_type("tiff", image8);
-  vil2_test_image_type("tiff", image16);
-  vil2_test_image_type("tiff", image32);
-  vil2_test_image_type("tiff", image3p);
-  vil2_test_image_type("tiff", imagefloat);
 #endif
 
 

@@ -277,6 +277,12 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  8-bit RGB compressed" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_compressed.png" ) ) );
 
+  vcl_cout << "TIFF [tiff]\n";
+  testlib_test_begin( "  8-bit RGB uncompressed" );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_uncompressed.tif" ) ) );
+  testlib_test_begin( "  8-bit RGB packbits" );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_packbits.tif" ) ) );
+
 #if 0
   testlib_test_begin( "  8-bit indexed RGB" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_indexed.ras" ) ) );
@@ -289,12 +295,6 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_raw.ras" ) ) );
   testlib_test_begin( "  8-bit indexed RGB" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_indexed.ras" ) ) );
-
-  vcl_cout << "TIFF [tiff]\n";
-  testlib_test_begin( "  8-bit RGB uncompressed" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_uncompressed.tif" ) ) );
-  testlib_test_begin( "  8-bit RGB packbits" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_packbits.tif" ) ) );
 
    vcl_cout << "SGI IRIS [iris]\n";
    testlib_test_begin( "  8-bit RGB rle" );
