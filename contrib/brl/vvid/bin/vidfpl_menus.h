@@ -63,6 +63,7 @@ class vidfpl_menus
   static void create_c_and_g_tracking_face_callback();
   static void display_tracked_hist_data_callback();
   static void capture_feature_data_callback();
+  static void capture_snippets_callback();
   static void quit_callback();
   static vgui_menu get_menu();
  private:

@@ -59,6 +59,7 @@
 #include <strk/strk_info_tracker_process.h>
 #include <strk/strk_track_display_process.h>
 #include <strk/strk_feature_capture_process.h>
+#include <strk/strk_snippet_extractor_process.h>
 #include <vpro/vpro_basis_generator_process.h>
 #include <vpro/vpro_fourier_process.h>
 #include <vpro/vpro_spatial_filter_process.h>
@@ -331,6 +332,7 @@ void vvid_file_manager::load_video_file()
   }
   tabs_.clear();
   int n_frames = my_movie_->length();
+  start_frame_ = 0;
   end_frame_ = n_frames-1;
   vidl_vil1_movie::frame_iterator pframe = my_movie_->first();
   vil1_image img = pframe->get_image();
@@ -1242,4 +1244,25 @@ void vvid_file_manager::capture_feature_data()
   fcp->set_output_file(hist_file);
   start_frame_ = fcp->start_frame();
   end_frame_ = fcp->end_frame();
+}
+// capture a set of image snippets enclosing the vehicle in each frame
+void vvid_file_manager::capture_snippets()
+{
+  vgui_dialog file_dialog("Snippet Capture From Track");
+  static vcl_string track_file;
+  static vcl_string snip_dir;
+  static vcl_string trk_ext = "trk", snip_ext = "";
+  static double frac = 0.1;
+  file_dialog.file("Track File(input):", trk_ext, track_file);
+  file_dialog.file("Snippet Directory(output):", snip_ext, snip_dir);
+  file_dialog.field("Snippet ROI Margin (fraction of Bounding Box diameter)", frac);
+  if (!file_dialog.ask())
+    return;
+  strk_snippet_extractor_process* sep = new strk_snippet_extractor_process();
+  video_process_ = sep;
+  sep->set_margin_fraction(frac);
+  sep->set_input_file(track_file);
+  sep->set_snippet_directory(snip_dir);
+  start_frame_ = sep->start_frame();
+  end_frame_ = sep->end_frame();
 }

@@ -185,6 +185,9 @@ class vvid_file_manager : public vgui_wrapper_tableau
   //: capture feature data from stored track
   void capture_feature_data();
 
+  //: capture snippets
+  void capture_snippets();
+
   //: get the window of this player
   vgui_window* get_window() { return win_; }
 

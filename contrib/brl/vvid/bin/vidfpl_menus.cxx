@@ -255,6 +255,10 @@ void vidfpl_menus::capture_feature_data_callback()
   vvid_file_manager::instance()->capture_feature_data();
 }
 
+void vidfpl_menus::capture_snippets_callback()
+{
+ vvid_file_manager::instance()->capture_snippets();
+}
 
 void vidfpl_menus::quit_callback()
 {
@@ -281,6 +285,7 @@ vgui_menu vidfpl_menus::get_menu()
                 (vgui_key)'e', vgui_CTRL);
   menufile.add( "Save Current Frame", save_frame_callback);
   menufile.add( "Save Half Resolution Video", save_half_res_callback);
+  menufile.add( "Capture Snippets from Track", capture_snippets_callback);
 
   //view menu entries
 

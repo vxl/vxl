@@ -34,7 +34,7 @@ int main(int argc, char** argv)
   vgui_menu menubar = vidfpl_menus::get_menu();
   unsigned w = 400, h = 340;
 
-  vcl_string title = "Video File Player 1.7";
+  vcl_string title = "Video File Player 1.8";
   vgui_window* win = vgui::produce_window(w, h, menubar, title);
   win->get_adaptor()->set_tableau(vvid_file_manager::instance());
   win->set_statusbar(true);
