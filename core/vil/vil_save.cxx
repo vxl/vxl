@@ -13,6 +13,7 @@
 
 #include <vil/vil_open.h>
 #include <vil/vil_new.h>
+#include <vil/vil_copy.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
@@ -27,8 +28,8 @@ bool vil_save(const vil_image_view_base &im, char const* filename, char const* f
     return false;
   }
   vil_image_resource_sptr out = vil_new_image_resource(os, im.ni(), im.nj(),
-                                                       im.nplanes() * vil_pixel_format_num_components(im.pixel_format()),
-                                                       im.pixel_format(), file_format);
+    im.nplanes() * vil_pixel_format_num_components(im.pixel_format()),
+    im.pixel_format(), file_format);
   if (!out) {
     vcl_cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
     return false;
@@ -110,3 +111,29 @@ bool vil_save(const vil_image_view_base & i, char const* filename)
   return vil_save(i, filename, guess_file_format(filename));
 }
 
+
+
+//: Send vil_image to disk.
+bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* filename,
+  char const* file_format)
+{
+  vil_stream* os = vil_open(filename, "w");
+  if (!os || !os->ok()) {
+    vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
+    return false;
+  }
+  vil_image_resource_sptr out = vil_new_image_resource(os, ir->ni(), ir->nj(),
+    ir->nplanes(),
+    ir->pixel_format(), file_format);
+  if (!out) {
+    vcl_cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
+    return false;
+  }
+  return vil_copy_deep(ir, out);
+}
+
+//: save to file, deducing format from filename.
+bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* filename)
+{
+  return vil_save_image_resource(ir, filename, guess_file_format(filename));
+}

@@ -8,7 +8,7 @@
 // \file
 // \author    Ian Scott
 
-#include <vil/vil_image_view_base.h>
+#include <vil/vil_fwd.h>
 
 //: Send a vil_image_view to disk, deducing format from filename
 // \relates vil_image_view
@@ -17,5 +17,13 @@ bool vil_save(const vil_image_view_base &, char const* filename);
 //: Send a vil_image_view to disk, given filename
 // \relates vil_image_view
 bool vil_save(const vil_image_view_base &, char const* filename, char const* file_format);
+
+
+//: Send vil_image to disk.
+bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* filename,
+  char const* file_format);
+
+//: save to file, deducing format from filename.
+bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* filename);
 
 #endif // vil_save_h_

@@ -33,6 +33,7 @@
 #include <vul/vul_temp_filename.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
+#include <vil/vil_new.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vil/vil_print.h>
@@ -355,9 +356,28 @@ vil_image_view<double> CreateTestdoubleImage(int wd, int ht)
   return image;
 }
 
+
+void test_vil_save_image_resource()
+{
+  vil_image_view<vxl_byte> view = CreateTest8bitImage(251, 153);
+  vil_image_resource_sptr mem = vil_new_image_resource_of_view(view);
+  const char* out_path ="test_save_image_resource.pgm";
+  TEST("Saving image resource",vil_save_image_resource(mem, out_path), true);
+  vil_image_view<vxl_byte> loaded_view = vil_load(out_path);
+  TEST("Loaded correct image", vil_image_view_deep_equality(view, loaded_view),true);
+#if !LEAVE_IMAGES_BEHIND
+    vpl_unlink(out_path);
+#endif
+}
+
+
+
+
+
 MAIN( test_save_load_image )
 {
   START( "save/load" );
+
   // create test images
   int sizex = 253;
   int sizey = 155;
@@ -482,6 +502,12 @@ MAIN( test_save_load_image )
   vil_test_image_type("mit", image16);
   vil_test_image_type("mit", image32);
   vil_test_image_type("mit", image3p);
+#endif
+
+
+  // requires rnm support
+#if 1
+  test_vil_save_image_resource();
 #endif
 
   SUMMARY();

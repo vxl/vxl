@@ -11,6 +11,7 @@
 
 #include "vil_copy.h"
 #include <vcl_cassert.h>
+#include <vil/vil_image_view.h>
 
 //: Create a copy of the data viewed by this, and return a view of copy.
 template<class T>
