@@ -14,20 +14,7 @@
 
 // This header 
 
-//: Convert a span of pixels from one format to another.
-// The template is specialized for combinations of these
-// sources and dests:
-//
-//  unsigned char  8bit
-//  rgb565         16bit
-//  rgb888         24bit
-//  rgba8888       32bit
-//  abgr8888
-//  bgra8888
-//  float src is clamped to 0..255.
-template <class S, class D>
-void vgui_pixel_convert_span(S const *src, D *dst, unsigned size);
-
+//: Now we define a bunch of pixel-type structs
 // These are *empty* templates. only the specializations make sense.
 template <int r, int g, int b> struct vgui_pixel_rgb;
 template <int b, int g, int r> struct vgui_pixel_bgr;
@@ -85,6 +72,15 @@ struct vgui_pixel_bgr<8,8,8> {
 typedef vgui_pixel_bgr<8,8,8> vgui_pixel_bgr888;
 
 VCL_DEFINE_SPECIALIZATION
+struct vgui_pixel_rgba<5,5,5,1> {
+  GLushort B:5;
+  GLushort G:5;
+  GLushort R:5;
+  GLushort A:1;
+};
+typedef vgui_pixel_rgba<5,5,5,1> vgui_pixel_bgra5551;
+
+VCL_DEFINE_SPECIALIZATION
 struct vgui_pixel_rgba<8,8,8,8> {
   GLubyte R;
   GLubyte G;
@@ -110,5 +106,41 @@ struct vgui_pixel_bgra<8,8,8,8> {
   GLubyte A;
 };
 typedef vgui_pixel_bgra<8,8,8,8> vgui_pixel_bgra8888;
+
+
+//: Convert a span of pixels from one format to another.
+// In general, the input range is assumed to be 0..255, so bitfields
+// narrower than 8 bits need to be shifted.  Floats are clamped to 0..255
+void vgui_pixel_convert_span(GLubyte const *, vgui_pixel_rgb888 *, unsigned size);
+void vgui_pixel_convert_span(GLubyte const *, vgui_pixel_bgr888 *, unsigned size);
+void vgui_pixel_convert_span(GLubyte const *, vgui_pixel_rgb565 *, unsigned size);
+void vgui_pixel_convert_span(GLubyte const *, vgui_pixel_bgra5551 *, unsigned size);
+void vgui_pixel_convert_span(GLubyte const *, vgui_pixel_rgba8888 *, unsigned size);
+void vgui_pixel_convert_span(GLubyte const *, vgui_pixel_abgr8888 *, unsigned size);
+void vgui_pixel_convert_span(GLubyte const *, vgui_pixel_bgra8888 *, unsigned size);
+
+void vgui_pixel_convert_span(GLfloat const *, vgui_pixel_rgb888 *, unsigned size);
+void vgui_pixel_convert_span(GLfloat const *, vgui_pixel_bgr888 *, unsigned size);
+void vgui_pixel_convert_span(GLfloat const *, vgui_pixel_rgb565 *, unsigned size);
+void vgui_pixel_convert_span(GLfloat const *, vgui_pixel_bgra5551 *, unsigned size);
+void vgui_pixel_convert_span(GLfloat const *, vgui_pixel_rgba8888 *, unsigned size);
+void vgui_pixel_convert_span(GLfloat const *, vgui_pixel_abgr8888 *, unsigned size);
+void vgui_pixel_convert_span(GLfloat const *, vgui_pixel_bgra8888 *, unsigned size);
+
+void vgui_pixel_convert_span(vgui_pixel_rgb888 const *, vgui_pixel_rgb888 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgb888 const *, vgui_pixel_bgr888 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgb888 const *, vgui_pixel_rgb565 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgb888 const *, vgui_pixel_bgra5551 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgb888 const *, vgui_pixel_rgba8888 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgb888 const *, vgui_pixel_abgr8888 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgb888 const *, vgui_pixel_bgra8888 *, unsigned size);
+
+void vgui_pixel_convert_span(vgui_pixel_rgba8888 const *, vgui_pixel_rgb888 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgba8888 const *, vgui_pixel_bgr888 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgba8888 const *, vgui_pixel_rgb565 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgba8888 const *, vgui_pixel_bgra5551 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgba8888 const *, vgui_pixel_rgba8888 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgba8888 const *, vgui_pixel_abgr8888 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgba8888 const *, vgui_pixel_bgra8888 *, unsigned size);
 
 #endif // vgui_pixel_h_
