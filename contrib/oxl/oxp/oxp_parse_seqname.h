@@ -4,7 +4,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// Author: awf@robots.ox.ac.uk
+// .NAME oxp_parse_seqname
+// .INCLUDE oxp/oxp_parse_seqname.h
+// .FILE oxp_parse_seqname.cxx
+// @author awf@robots.ox.ac.uk
 // Created: 22 Jul 00
 
 #include <vcl/vcl_string.h>
