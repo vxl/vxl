@@ -291,13 +291,13 @@ void vtol_edge_2d::compute_bounding_box(void)
 {
   if (!this->bounding_box_)
     {
-      vcl_cout << "In void vtol_edge_2d::compute_bounding_box() - shouldn't happen\n"
+      vcl_cout << "In void vtol_edge_2d::compute_bounding_box() - shouldn't happen\n";
       return;
     }
   vsol_curve_2d_sptr c = this->curve();
   if (!c)
     {
-      vcl_cout << "In vtol_edge_2d::compute_bounding_box() - null curve\n"
+      vcl_cout << "In vtol_edge_2d::compute_bounding_box() - null curve\n";
       vtol_topology_object::compute_bounding_box();
       return;
     }
