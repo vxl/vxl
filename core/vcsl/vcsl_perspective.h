@@ -1,25 +1,23 @@
 // This is core/vcsl/vcsl_perspective.h
-#ifndef vcsl_perspective_h
-#define vcsl_perspective_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
+#ifndef vcsl_perspective_h_
+#define vcsl_perspective_h_
 //:
 // \file
+// \brief Perspective projection transformation
 // \author François BERTEL
 //
 // \verbatim
-// Modifications
-// 2000/08/23 François BERTEL Creation.
-// 2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
-// 2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
-// 2002/01/28 Peter Vanroose - vcl_vector member focal_ changed to non-ptr
+//  Modifications
+//   2000/08/23 François BERTEL Creation.
+//   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
+//   2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
+//   2002/01/28 Peter Vanroose - vcl_vector member focal_ changed to non-ptr
+//   2004/09/17 Peter Vanroose - made focal() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim
 
-
+#include <vcsl/vcsl_spatial_transformation.h>
 #include <vcsl/vcsl_perspective_sptr.h>
 
-#include <vcsl/vcsl_spatial_transformation.h>
 //: Perspective projection transformation
 // This is a perspective projection from a 3D cartesian coordinate system to a
 // 2D cartesian coordinate system, parametrized by the focal expressed in
@@ -28,15 +26,15 @@
 class vcsl_perspective
   :public vcsl_spatial_transformation
 {
- public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
-  //: Default constructor.
-  explicit vcsl_perspective(void) {}
+  // Default constructor
+  vcsl_perspective() {}
 
-  //: Destructor
+ public:
+  // Destructor
   virtual ~vcsl_perspective() {}
 
   //***************************************************************************
@@ -45,10 +43,15 @@ class vcsl_perspective
 
   //: Is `this' invertible at time `time'? Never !
   //  REQUIRE: valid_time(time)
+  // Pure virtual function of vcsl_spatial_transformation
   virtual bool is_invertible(double time) const;
 
   //: Is `this' correctly set ?
-  virtual bool is_valid(void) const;
+  // Virtual function of vcsl_spatial_transformation
+  virtual bool is_valid() const
+  { return vcsl_spatial_transformation::is_valid() &&
+           (this->duration()==0&&focal_.size()==1 ||
+            this->duration()==focal_.size()); }
 
   //***************************************************************************
   // Transformation parameters
@@ -58,10 +61,10 @@ class vcsl_perspective
   void set_static(double new_focal);
 
   //: Set the focal variation along the time in meters
-  virtual void set_focal(list_of_scalars const& new_focal);
+  void set_focal(list_of_scalars const& new_focal) { focal_=new_focal; }
 
   //: Return the focal variation along the time in meters
-  virtual list_of_scalars focal(void) const { return focal_; }
+  list_of_scalars focal() const { return focal_; }
 
   //***************************************************************************
   // Basic operations
@@ -70,6 +73,7 @@ class vcsl_perspective
   //: Image of `v' by `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: v.size()==3
+  // Pure virtual function of vcsl_spatial_transformation
   virtual vnl_vector<double> execute(const vnl_vector<double> &v,
                                      double time) const;
 
@@ -77,16 +81,17 @@ class vcsl_perspective
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time) and v.size()==2
   //  The first pre-condition is never true. You can not use this method
+  // Pure virtual function of vcsl_spatial_transformation
   virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
                                      double time) const;
 
  protected:
 
   //: Compute the parameter at time `time'
-  virtual double focal_value(double time) const;
+  double focal_value(double time) const;
 
   //: Angle variation along the time
   list_of_scalars focal_;
 };
 
-#endif // vcsl_perspective_h
+#endif // vcsl_perspective_h_
