@@ -33,11 +33,15 @@ ADD_LIBRARY( mpeg2 ${mpeg2_sources} )
 
 SET( vo_sources
   libvo/video_out.c
-  libvo/video_out_x11.c
-  libvo/video_out_sdl.c
+
+  # not needed in VXL
+  # libvo/video_out_x11.c
+  # libvo/video_out_sdl.c
+  # libvo/video_out_mga.c
+
   libvo/video_out_null.c
   libvo/video_out_pgm.c
-  libvo/video_out_mga.c
+
   libvo/yuv2rgb.c
   libvo/yuv2rgb_mlib.c
   libvo/yuv2rgb_mmx.c 
