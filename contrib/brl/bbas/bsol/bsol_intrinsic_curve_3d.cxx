@@ -414,7 +414,7 @@ void bsol_intrinsic_curve_3d::clear(void)
 
 bool bsol_intrinsic_curve_3d::LoadCON3File(vcl_string fileName)
 {
-  FILE* fp;
+  vcl_FILE* fp;
   char buffer[128];
 
   if ((fp = vcl_fopen(fileName.c_str(), "r")) == NULL) {
@@ -450,7 +450,7 @@ bool bsol_intrinsic_curve_3d::LoadCON3File(vcl_string fileName)
 
 bool bsol_intrinsic_curve_3d::SaveCON3File(vcl_string fileName)
 {
-  FILE* fp;
+  vcl_FILE* fp;
 
   if ((fp = vcl_fopen(fileName.c_str(), "w")) == NULL) {
     vcl_fprintf(stderr, "ERROR( bsol_intrinsic_curve_3d::SaveCON3File): Can't open output .con3 file %s.\n", fileName.c_str());
