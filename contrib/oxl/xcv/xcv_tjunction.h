@@ -14,7 +14,6 @@
 //   K.Y.McGaul     05-MAY-2000    Initial version.
 //   Marko Bacic    15-AUG-2000    Reversed the order in 'handle'
 // \endverbatim
-//
 
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_parent_child_link.h>
@@ -26,7 +25,7 @@
 
 class xcv_tjunction : public vgui_tableau
 {
-public:
+ public:
   xcv_tjunction(xcv_mview_manager* the_manager);
   ~xcv_tjunction();
 
@@ -38,7 +37,7 @@ public:
   //: Handle events by passing them to the manager and the child tableau.
   bool handle(const vgui_event&);
 
-private:
+ private:
   xcv_mview_manager* xcv_mgr;
   vgui_parent_child_link child_tab;
 };

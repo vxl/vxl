@@ -114,9 +114,9 @@ gevd_step::~gevd_step() {}
 // IEEE Trans on PAMI, vol 8, no 6, Nov 1986.
 bool
 gevd_step::DetectEdgels(const gevd_bufferxy& image,
-                   gevd_bufferxy*& contour, gevd_bufferxy*& direction,
-                   gevd_bufferxy*& locationx, gevd_bufferxy*& locationy,
-                   gevd_bufferxy*& grad_mag, gevd_bufferxy*& angle)
+                        gevd_bufferxy*& contour, gevd_bufferxy*& direction,
+                        gevd_bufferxy*& locationx, gevd_bufferxy*& locationy,
+                        gevd_bufferxy*& grad_mag, gevd_bufferxy*& angle)
 {
   //vcl_cout << "*** Detect step profiles with first-derivative of Gaussian"
   //         << *this
@@ -132,12 +132,12 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
   gevd_bufferxy* smooth = NULL;      // Gaussian smoothed image
   // use float to avoid overflow/truncation
   filterFactor = gevd_float_operators::Gaussian((gevd_bufferxy&)image, // well-condition before
-                              smooth, smoothSigma); // 1st-difference
+                                                smooth, smoothSigma); // 1st-difference
 
   // 2. Use 1st-difference to estimate local slope, filter is dG.
   gevd_bufferxy *slope = NULL, *dirx=NULL, *diry=NULL;
   filterFactor *= gevd_float_operators::Gradient(*smooth, // directional 1st-difference
-                               slope, dirx, diry); // mult factor returned
+                                                 slope, dirx, diry); // mult factor returned
   delete smooth;
 
   // 2.5 JLM - Fill the theta array for use in outputting continuous digital curve
@@ -160,7 +160,7 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
   if (noiseSigma <= 0)  {
     int nedgel = 0;             // all edgels in ROI at center of image
     float* edgels = gevd_noise::EdgelsInCenteredROI(*slope, *dirx, *diry,
-                                               nedgel);
+                                                    nedgel);
     if ((edgels) && (nedgel > 0 )) {
       gevd_noise noise(edgels, nedgel); // histogram of weak edgels only
       delete [] edgels;
@@ -203,9 +203,9 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
   // -----------------------------------------------------------------
 
   gevd_float_operators::NonMaximumSuppression(*slope, *dirx, *diry,
-                            NoiseThreshold(), // above noise
-                            contour, direction,
-                            locationx, locationy);
+                                              NoiseThreshold(), // above noise
+                                              contour, direction,
+                                              locationx, locationy);
   delete slope; delete dirx; delete diry;
   gevd_float_operators::FillFrameX(*contour, 0, FRAME); // erase pixels in frame border
   gevd_float_operators::FillFrameY(*contour, 0, FRAME);
@@ -250,7 +250,7 @@ LeftXorRightEnd(const gevd_bufferxy& contour,
 {
   int di = DIS[dir], dj = DJS[dir];
   bool normalp = (floatPixel(contour, i - di, j - dj) ||
-                     floatPixel(contour, i + di, j + dj));
+                  floatPixel(contour, i + di, j + dj));
   if (normalp)                  // Substitute neighbor
     return 0;                   // for left or right side.
   bool leftp = false;
@@ -345,9 +345,9 @@ BestStepExtension(const gevd_bufferxy& smooth,
 // 4*smoothSigma + 2.
 int
 gevd_step::RecoverJunctions(const gevd_bufferxy& image,
-                       gevd_bufferxy& contour, gevd_bufferxy& direction,
-                       gevd_bufferxy& locationx, gevd_bufferxy& locationy,
-                       int*& junctionx, int*& junctiony)
+                            gevd_bufferxy& contour, gevd_bufferxy& direction,
+                            gevd_bufferxy& locationx, gevd_bufferxy& locationy,
+                            int*& junctionx, int*& junctiony)
 {
 #if DEBUG
   vul_timer t;
@@ -360,27 +360,23 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
   const int kmax = int(4 * smoothSigma + 0.5) + 2; // gap = 2
   const int xmax = image.GetSizeX()-rmax-1; // fill step direction
   const int ymax = image.GetSizeY()-rmax-1;
-
-  //vcl_cout << "RecoverJunctions: rmax, kmax, xmax, ymax:" << rmax << " " << kmax << " " << xmax << " " << ymax << "\n";
-
+#ifdef DEBUG
+  vcl_cout << "RecoverJunctions: rmax, kmax, xmax, ymax:" << rmax << ' ' << kmax << ' ' << xmax << ' ' << ymax << '\n';
+#endif
   // 1. Find end points of dangling contours
   //const int length0 = xmax/kmax*ymax/kmax/4;// 25% size
   //const float growth = 2;     // growth ratio of the arrays
-
-  vcl_vector<int> ndir;
-  //  CoolArray<int> ndir(length0);
-  vcl_vector<int> xloc;
-  vcl_vector<int> yloc;
-  //  CoolArray<int> xloc(length0), yloc(length0);
-  //  ndir.set_growth_ratio(growth);
-  //  xloc.set_growth_ratio(growth); // dynamic array instead of long lists
-  //  yloc.set_growth_ratio(growth);
-  int x, y, xdir, dir;
-  for (y = rmax; y <= ymax; y++) // find end points of long contours
-    for (x = rmax; x <= xmax; x++) // inside image border - rmax
+ 
+  vcl_vector<int> ndir; //  ndir.set_growth_ratio(growth);
+  vcl_vector<int> xloc; //  xloc.set_growth_ratio(growth); // dynamic array instead of long lists
+  vcl_vector<int> yloc; //  yloc.set_growth_ratio(growth);
+  int xdir;
+  for (int y = rmax; y <= ymax; y++) // find end points of long contours
+    for (int x = rmax; x <= xmax; x++) // inside image border - rmax
       if (floatPixel(contour, x, y) && // on contour
           (xdir = LeftXorRightEnd(contour, x, y, // left xor right neighbor
-                                  bytePixel(direction, x, y)))) {
+                                  bytePixel(direction, x, y))) != 0)
+      {
         ndir.push_back(xdir);   // save end point of elongated contours
         xloc.push_back(x);
         yloc.push_back(y);
@@ -400,9 +396,10 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
   for (int r = 1; r <= kmax; r++) { // breadth-first extension
     int ntouch = 0, nextension = 0;
     for (int i = 0; i < length; i++)
-      if ((xdir = ndir[i]) && (xdir != TWOPI)) { // still extension?
-        x = xloc[i], y = yloc[i];
-        dir = bytePixel(direction, x, y); // direction of step
+      if ((xdir = ndir[i]) != 0 && xdir != TWOPI) // still extension?
+      {
+        int x = xloc[i], y = yloc[i];
+        int dir = bytePixel(direction, x, y); // direction of step
         slope = BestStepExtension(*smooth,
                                   x, y, dir + xdir,     // current end pt
                                   threshold,
@@ -413,19 +410,19 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
                                  x, y, dir); // another contour is reached,
                                              // indicated by xdir==0.
           if (xdir)
-            {
-              if (x < rmax || x > xmax || // check for reaching border
-                  y < rmax || y > ymax)
-                xdir = 0;               // junction with virtual border
-              else
-                nextension++;
-              floatPixel(contour, x, y) = slope; // still disconnected
-            }
+          {
+            if (x < rmax || x > xmax || // check for reaching border
+                y < rmax || y > ymax)
+              xdir = 0;               // junction with virtual border
+            else
+              nextension++;
+            floatPixel(contour, x, y) = slope; // still disconnected
+          }
           else
-            {           // touching another contour
-              ntouch++;
-              xdir = TWOPI;     // mark junction, without linking chains
-            }
+          {           // touching another contour
+            ntouch++;
+            xdir = TWOPI;     // mark junction, without linking chains
+          }
           ndir[i] = xdir;
           bytePixel(direction, x, y) = byte(dir);
           floatPixel(locationx, x, y) = loc*DIS[dir];

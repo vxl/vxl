@@ -89,8 +89,8 @@ double pdf1d_compare_to_pdf_bhat::compare(const double* data, int n,
 
 //: Test whether data has form of the given distribution
 double pdf1d_compare_to_pdf_bhat::bootstrap_compare_form(vnl_vector<double>& B,
-                              const double* data, int n,
-                              const pdf1d_builder& builder2, int n_trials)
+                                                         const double* data, int n,
+                                                         const pdf1d_builder& builder2, int n_trials)
 {
   // Fit a general PDF (typically a kernel pdf) to the data and
   // sample from it to get samples x and associated prob.s p

@@ -273,8 +273,8 @@ void vgui_grid_tableau::remove_at(unsigned col_pos, unsigned row_pos)
 //------------------------------------------------------------------------------
 vgui_tableau_sptr vgui_grid_tableau::get_tableau_at(unsigned col_pos, unsigned row_pos)
 {
-  if (col_pos < nb_cols && row_pos < nb_rows
-  && grid_pos(col_pos, row_pos).is_default == false)
+  if (col_pos < nb_cols && row_pos < nb_rows &&
+      grid_pos(col_pos, row_pos).is_default == false)
     return this->get(grid_pos(col_pos, row_pos).handle);
 
   if (col_pos >= nb_cols)

@@ -62,7 +62,7 @@ template < class DataType >
   if (ref_container()) FILTER_IMPTR_DEC_REFCOUNT(ref_container());
   if (ref_real_descriptor()) FILTER_IMPTR_DEC_REFCOUNT(ref_real_descriptor());
 #if 0
-  vcl_cerr << "Warning: called unimplemented destructor\n";
+  vcl_cerr << "Warning: called unimplemented vipl_section_iterator destructor\n";
 #endif
 }
 
@@ -138,7 +138,7 @@ template < class DataType >
   else if ((! real_descriptor()) ^ (! p.real_descriptor()))
     return false;
   if (*p.container() == *container() &&
-    p.incr_count() == incr_count()) return true;
+      p.incr_count() == incr_count()) return true;
   return false;
 }
 

@@ -33,10 +33,10 @@ const VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>:
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int  Arity, class PixelItr>
   vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
   ::vipl_filter( ImgIn const* src_img ,
-                ImgOut* dst_img ,
-                int ninputs,
-                int img_border ,
-                DataOut fill_val )
+                 ImgOut* dst_img ,
+                 int ninputs,
+                 int img_border ,
+                 DataOut fill_val )
   : hsimage_border_size(img_border),
     hsdef_fill_value( fill_val ),
     hsinput_state(Ready),
@@ -92,10 +92,10 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int  Arity, c
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
   ::vipl_filter( ImgIn const** src_img ,
-                ImgOut* dst_img ,
-                int ninputs,
-                int img_border ,
-                DataOut fill_val)
+                 ImgOut* dst_img ,
+                 int ninputs,
+                 int img_border ,
+                 DataOut fill_val)
   : hsimage_border_size(img_border),
     hsdef_fill_value( fill_val ),
     hsinput_state(Ready),
@@ -133,7 +133,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   }
   for (int i=0; i< ninputs; i++, src_img++) {
     if (src_img == 0)
-      vcl_cerr << "filter ctor passed vector will null src_img pointers, ignored them watch out." << vcl_endl;
+      vcl_cerr << "filter ctor passed vector will null src_img pointers, ignored them watch out.\n";
     else
       ref_inf()[i] = *src_img;
 #if 0

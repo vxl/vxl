@@ -29,7 +29,7 @@ class vipl_section_descriptor
  protected:
   //: Assigns the pointers directly. Does not attempt to deep copy them.
   vipl_section_descriptor( vipl_section_descriptor< DataType >* desc ,
-                          vipl_section_container< DataType >* container) ;
+                           vipl_section_container< DataType >* container) ;
 
   //: Deep-copies the pointers
   vipl_section_descriptor(

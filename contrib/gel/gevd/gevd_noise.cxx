@@ -21,7 +21,7 @@ const int KRADIUS = 10; // smooth raw histogram
 //: Generate the histogram curve at low responses to estimate the sensor/texture noise in data.
 
 gevd_noise::gevd_noise(const float* data, const int n, // data in typical region
-             const int number_of_bins) // granularity of histogram
+                       const int number_of_bins) // granularity of histogram
   : hist(new float[number_of_bins]),
     nbin(number_of_bins)
 {
@@ -76,7 +76,7 @@ gevd_noise::gevd_noise(const float* data, const int n, // data in typical region
   gevd_float_operators::RunningSum(hist, hist, nbin, KRADIUS); // smooth by default
 #ifdef TRACE_DEBUG
   for (i = 0; i < nbin; i++)    // points of smoothed h(x)
-    vcl_cout << hist[i] << " ";
+    vcl_cout << hist[i] << ' ';
   vcl_cout << vcl_endl << vcl_endl;
 #endif
 }
@@ -95,12 +95,12 @@ gevd_noise::~gevd_noise()
 
 float*
 gevd_noise::EdgelsInCenteredROI(const gevd_bufferxy& magnitude,
-                           const gevd_bufferxy& dirx, const gevd_bufferxy& diry,
-                           int& nedgel, const int
+                                const gevd_bufferxy& dirx, const gevd_bufferxy& diry,
+                                int& nedgel, const int
 #ifdef MINROI
-                           roiArea
+                                roiArea
 #endif
-                           )
+                               )
 {
   nedgel = 0;
 #ifdef MINROI
@@ -184,20 +184,20 @@ gevd_noise::EstimateSensorTexture(float& sensor, float& texture) const
   mag *= gevd_float_operators::RunningSum(dhist, dhist, nbin, KRADIUS);
 #ifdef TRACE_DEBUG
   for (int i = 0; i < nbin; i++)        // points of smoothed dh(x)
-    vcl_cout << dhist[i]/mag << " ";
+    vcl_cout << dhist[i]/mag << ' ';
   vcl_cout << vcl_endl << vcl_endl;
 #endif
 
   // 2. Estimate sensor from first downward slope of dh(x)
   if (!WouldBeZeroCrossing(dhist, nbin, sensor)) {
-    vcl_cerr << "Can not estimate sensor" << vcl_endl;
+    vcl_cerr << "Can not estimate sensor\n";
     return false;
   }
   sensor *= binsize;
 
   // 3. Find texture as zero-crossing of dh(x)
   if (!RealZeroCrossing(dhist, nbin, texture)) {
-    vcl_cerr << "Can not estimate texture" << vcl_endl;
+    vcl_cerr << "Can not estimate texture\n";
     return false;
   }
   texture *= binsize;
@@ -216,7 +216,7 @@ gevd_noise::EstimateSensorTexture(float& sensor, float& texture) const
 
 bool
 gevd_noise::WouldBeZeroCrossing(const float* dhist, const int nbin,
-                           float& index)
+                                float& index)
 {
   int imax=INVALID, i1=INVALID, i2=INVALID, i;// x-coord of downward slope
   float maxdh = 0, dh1 = 0, dh2 = 0; // y-coord

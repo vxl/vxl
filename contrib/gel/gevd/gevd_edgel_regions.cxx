@@ -76,11 +76,11 @@ void gevd_edgel_regions::print_region_array()
       vcl_cout << vcl_endl; // << setw(2);
       for (unsigned int x = xo_; x<=xend_; x++)
         if (region_label_array_[Y(y)][X(x)]==EDGE
-           //&&edge_boundary_array_[Y(y)][X(x)]->IsVertex()
+            //&&edge_boundary_array_[Y(y)][X(x)]->IsVertex()
            )
           vcl_cout << "* ";
         else
-          vcl_cout << region_label_array_[Y(y)][X(x)] << " ";
+          vcl_cout << region_label_array_[Y(y)][X(x)] << ' ';
     }
   vcl_cout << "\n\n\n";
 }
@@ -130,7 +130,7 @@ void gevd_edgel_regions::print_intensity_data()
     {
 #if 0
     vtol_intensity_face* f = *fit;
-      vcl_cout << "IntFaceAt(" << f->Xo() << " " << f->Yo() << "):\n";
+      vcl_cout << "IntFaceAt(" << f->Xo() << ' ' << f->Yo() << "):\n";
       f->PrintFit();
 #endif
     }
@@ -667,7 +667,7 @@ bool gevd_edgel_regions::insert_edgel(float pre_x, float pre_y,
       if (out_of_bounds(X(xinterp), Y(yinterp)))
         {
           vcl_cout << "In gevd_edgel_regions::insert_edgel - out of bounds "
-                   << "at (" << xinterp << " " << yinterp << ")\n";
+                   << "at (" << xinterp << ' ' << yinterp << ")\n";
           continue;
         }
 
@@ -858,7 +858,7 @@ bool gevd_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
         }
       if (!edge_insert)
         {
-          vcl_cout << "Edge Insert Failed for (" << e->v1() << " "
+          vcl_cout << "Edge Insert Failed for (" << e->v1() << ' '
                    << e->v2() << ")N: "<< n_edgels << vcl_endl;
           failed_insertions_->push_back(e);
         }
@@ -1008,7 +1008,6 @@ void gevd_edgel_regions::insert_equivalence(unsigned int ll, unsigned int ur, un
 //    Note that the 2x2 neighborhood is encoded as uchar = [ul|ur|ll|lr]
 //                                                          2  2  2  2  bits
 void gevd_edgel_regions::UpdateConnectedNeighborhood(unsigned int x, unsigned int y)
-
 {
   unsigned int ul = region_label_array_[y][x];
   unsigned int ur = region_label_array_[y][x+1];
@@ -1230,11 +1229,11 @@ static bool reg_edges_neq(gevd_region_edge* r1, gevd_region_edge* r2)
 //definition is at pixel granularity.  The edge collison causes a needed
 //edge to be superseeded.
 void gevd_edgel_regions::print_edge_colis(unsigned int x, unsigned int y,
-                                    gevd_region_edge* r1, gevd_region_edge* r2)
+                                          gevd_region_edge* r1, gevd_region_edge* r2)
 {
   if (reg_edges_neq(r1, r2))
     if (verbose_)
-      vcl_cout << "Collision at (" << x+xo_ << " " << y+yo_ << ")\n";
+      vcl_cout << "Collision at (" << x+xo_ << ' ' << y+yo_ << ")\n";
 }
 
 //----------------------------------------------------------
@@ -1399,7 +1398,7 @@ bool gevd_edgel_regions::remove_hairs(vcl_vector<vtol_edge_2d_sptr>& edges)
 //   vertices in the input array, "edges".
 //
 bool gevd_edgel_regions::connect_ends(vcl_vector<vtol_edge_2d_sptr>& edges,
-                                vcl_vector<vtol_vertex_sptr>& bad_verts)
+                                      vcl_vector<vtol_vertex_sptr>& bad_verts)
 {
   bool all_ends_connected = true;
   if (!bad_verts.size())
@@ -1501,7 +1500,7 @@ bool gevd_edgel_regions::connect_ends(vcl_vector<vtol_edge_2d_sptr>& edges,
 //    un-attached vertex and look for a match in the failed edge insertion
 //    array. If an edge can be attached, do so.
 void gevd_edgel_regions::repair_failed_insertions(vcl_vector<vtol_edge_2d_sptr>& edges,
-                                            vcl_vector<vtol_vertex_sptr>& bad_verts)
+                                                  vcl_vector<vtol_vertex_sptr>& bad_verts)
 {
   vcl_vector<vtol_vertex_sptr> temp1, temp2;
   for (vcl_vector<vtol_vertex_sptr>::iterator vit = bad_verts.begin();
@@ -1541,7 +1540,6 @@ void gevd_edgel_regions::repair_failed_insertions(vcl_vector<vtol_edge_2d_sptr>&
 //    Note that the 2x2 neighborhood is encoded as uchar = [ul|ur|ll|lr]
 //                                                          2  2  2  2  bits
 void gevd_edgel_regions::AssignEdgeLabels(unsigned int x, unsigned int y)
-
 {
   unsigned int ul = region_label_array_[y][x];
   unsigned int ur = region_label_array_[y][x+1];
@@ -1761,12 +1759,12 @@ void gevd_edgel_regions::CollectEdges()
       gevd_region_edge* re = reit->second;
       vtol_edge_2d_sptr e = re->get_edge();
       if (verbose_)
-        vcl_cout << "\nEdge:" << e << "(" << e->v1() <<  " " << e->v2() <<"):(";
+        vcl_cout << "\nEdge:" << e << '(' << e->v1() <<  ' ' << e->v2() <<"):(";
       for (unsigned int i = 0; i<re->NumLabels(); i++)
         {
           unsigned int l = re->GetLabel(i);
           if (verbose_)
-            vcl_cout << "l[" << i << "]:" << l << " ";
+            vcl_cout << "l[" << i << "]:" << l << ' ';
           if (l!=0)
             insert_adjacency(l, e);
         }
@@ -1839,7 +1837,7 @@ void gevd_edgel_regions::CollectFaceEdges()
         {
           vtol_edge_2d_sptr e = (*edges)[j];
           if (verbose_)
-            vcl_cout << "Edge(" << e->v1() <<  " " << e->v2() << vcl_endl;
+            vcl_cout << "Edge(" << e->v1() <<  ' ' << e->v2() << vcl_endl;
           EdgeSet.push_back ( e );
         }
       vcl_vector<vtol_edge_2d_sptr>* edge_list = new vcl_vector<vtol_edge_2d_sptr>;
