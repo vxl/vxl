@@ -43,6 +43,7 @@ MINI_PROG_SOURCES += vil2_test_access_timings.cxx
 MINI_PROG_SOURCES += vil2_test_random_access_timings.cxx
 MINI_PROG_SOURCES += vil2_test_access_timings_noplanes.cxx
 MINI_PROG_SOURCES += vil2_test_pair_access_timings.cxx
+MINI_PROG_SOURCES += vil2_vil_compare_function_timings.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
