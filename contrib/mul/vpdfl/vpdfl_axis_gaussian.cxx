@@ -8,8 +8,8 @@
 // \date 12-Apr-2001
 // \brief Multi-variate gaussian PDF, with a diagonal covariance matrix
 
-#include <math.h>
-#include <cstdlib>
+#include <vcl_cmath.h>
+#include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vsl/vsl_indent.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
@@ -77,7 +77,7 @@ double vpdfl_axis_gaussian::log_p(const vnl_vector<double>& x)
   {
     vcl_cerr<<"vpdfl_axis_gaussian::log_p: Target vector has "
       <<n<<" dimensions, not the required "<<n_dims()<<vcl_endl;
-    abort();
+    vcl_abort();
   }
 #endif
 
@@ -258,7 +258,7 @@ void vpdfl_axis_gaussian::b_read(vsl_b_istream& bfs)
     default:
       vcl_cerr << "vpdfl_axis_gaussian::b_read() ";
       vcl_cerr << "Unexpected version number " << version << vcl_endl;
-      abort();
+      vcl_abort();
   }
 
   calcLogK();

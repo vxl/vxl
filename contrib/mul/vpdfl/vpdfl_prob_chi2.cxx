@@ -1,4 +1,5 @@
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vpdfl/vpdfl_prob_chi2.h>
 #include <mbl/mbl_gamma.h>
 
@@ -7,7 +8,7 @@ double vpdfl_chi2_for_cum_prob(double p, int n_dof, double tol)
   if ((p<0) | (p>=1.0))
   {
     vcl_cerr<<"vpdfl_chi2_for_cum_prob : Illegal value for probability. (Outside range [0,1) )"<<vcl_endl;
-    abort();
+    vcl_abort();
   }
 
   if (p==0) return 0;

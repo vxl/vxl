@@ -104,9 +104,9 @@ void vpdfl_pdf_base::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,var_);
       break;
     default:
-      cerr << "vpdfl_pdf_base::b_read() ";
-      cerr << "Unexpected version number " << version << endl;
-      abort();
+      vcl_cerr << "vpdfl_pdf_base::b_read() ";
+      vcl_cerr << "Unexpected version number " << version << vcl_endl;
+      vcl_abort();
   }
 }
 
