@@ -63,6 +63,11 @@ if ( -f "/tmp/iup_opt/bin/gzip" )
 
 # get current date and time
 $date= localtime;
+# patch for daylight saving time (DST) which is not correctly recognised:
+$date =~ s/( ?DST )/ /;
+if ($1) {
+  $date =~ m/\s(\d\d):/; $hr = $1 - 1; $date =~ s/\s\d\d:/ $hr:/;
+}
 
 ############
 # gmake 3.79
@@ -238,13 +243,21 @@ while( <INFO>)
       }
     elsif( m/Beginning TargetJr make:\s*(.*)$/)
       {
-        $f = $1; $f =~ s/ ?DST / /;
+        $f = $1; $f =~ s/( ?DST )/ /;
+        if ($1) {
+          $f =~ m/\s(\d\d):/; $hr = $1 - 1; $f =~ s/\s\d\d:/ $hr:/;
+          $currentlineweb =~ s/ ?DST / /;
+        }
         @thisdate= ParseDate( $f);
         $starttime= UnixDate( @thisdate, "%a %b %e %H:%M:%S %z %Y") unless ($starttime);
       }
     elsif( m/Done TargetJr make:\s*(.*)$/)
       {
-        $f = $1; $f =~ s/ ?DST / /;
+        $f = $1; $f =~ s/( ?DST )/ /;
+        if ($1) {
+          $f =~ m/\s(\d\d):/; $hr = $1 - 1; $f =~ s/\s\d\d:/ $hr:/;
+          $currentlineweb =~ s/ ?DST / /;
+        }
         @thisdate= ParseDate( $f);
         $endtime= UnixDate( @thisdate, "%a %b %e %H:%M:%S %z %Y");
       }
