@@ -95,6 +95,8 @@ class vgui_soview
   // fsm. new old message model
   static vgui_DLLDATA const void * const msg_select;
   static vgui_DLLDATA const void * const msg_deselect;
+  static vgui_DLLDATA const void * const msg_highlight;
+  static vgui_DLLDATA const void * const msg_unhighlight;
 
   //: Returns the ID of this soview.
   virtual unsigned get_id() const {return id;}

@@ -143,8 +143,10 @@ void vgui_soview::set_line_width(float w)
 
 
 //
-const void * const vgui_soview::msg_select="x";
-const void * const vgui_soview::msg_deselect="x";
+const void * const vgui_soview::msg_select="select";
+const void * const vgui_soview::msg_deselect="deselect";
+const void * const vgui_soview::msg_highlight="highlight";
+const void * const vgui_soview::msg_unhighlight="unhighlight";
 
 
 //--------------------------------------------------------------------------------
