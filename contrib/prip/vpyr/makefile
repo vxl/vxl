@@ -1,0 +1,28 @@
+USES += contrib/prip core
+
+LIBRARY := vpyr
+VERSION := 1.0
+
+SOURCES += vpyr_2_pyramid_base.cxx
+SOURCES += vpyr_2_pyramid_level_elts.cxx
+SOURCES += vpyr_2_tpyramid_base.cxx
+MANPAGE_SOURCES += vpyr_2_pyramid.txx
+MANPAGE_SOURCES += vpyr_2_pyramid_level.txx
+MANPAGE_SOURCES += vpyr_2_tpyramid.txx
+MANPAGE_SOURCES += vpyr_2_tpyramid_level.txx
+MANPAGE_SOURCES += vpyr_2_tpyramid_level_elts.h
+MANPAGE_SOURCES += vpyr_2_tpyramid_builder.h
+MANPAGE_SOURCES += vpyr_top_tmap.txx
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+SUBDIRS += examples
+endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
