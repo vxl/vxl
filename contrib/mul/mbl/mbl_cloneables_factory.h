@@ -74,16 +74,17 @@ class mbl_cloneables_factory
   // otherwise behaviour is undefined.
   static BASE* get(const vcl_string & name)
   {
-    typename MAP::iterator found = objects().lower_bound(name);
+    typedef MAP::const_iterator IT;
 
+    IT found = objects().lower_bound(name);
     if (found == objects().end())
     {
       vcl_ostringstream ss;
-      typename MAP::const_iterator it = objects().begin();
+      typename IT it = objects().begin();
       if (!objects().empty())
       {
         ss << it->first;
-        const typename MAP::const_iterator end = objects().end();
+        const IT end = objects().end();
         while ( ++it != end)
           ss << it->first << ", ";
       }
@@ -98,8 +99,8 @@ class mbl_cloneables_factory
 #define MBL_CLONEABLES_FACTORY_INSTANTIATE(T) \
 template class mbl_cloneables_factory< T >; \
 template <class BASE > \
-vcl_auto_ptr<typename mbl_cloneables_factory<BASE >::MAP > \
+vcl_auto_ptr<mbl_cloneables_factory<BASE >::MAP > \
   mbl_cloneables_factory<BASE >::objects_ =  \
-    vcl_auto_ptr<typename mbl_cloneables_factory<BASE >::MAP >(0)
+    vcl_auto_ptr<mbl_cloneables_factory<BASE >::MAP >(0);
 
 #endif  // mbl_cloneables_factory_h
