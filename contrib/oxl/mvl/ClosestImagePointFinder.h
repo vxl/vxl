@@ -27,7 +27,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matlab_print.h>
 
-#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_fwd.h> // for vgl_box_2d
 
 class HomgInterestPointSet;
 class vcl_multimap_double_int;

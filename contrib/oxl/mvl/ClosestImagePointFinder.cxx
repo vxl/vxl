@@ -8,6 +8,7 @@
 #include <vcl_functional.h>
 #include <vcl_utility.h>
 
+#include <vgl/vgl_box_2d.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matlab_print.h>
 
