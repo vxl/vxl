@@ -40,6 +40,16 @@ void mil_convert_image_2d(mil_image_2d_of<float>& dest,
   dest.setWorld2im(src.world2im());
 }
 
+
+//: Converts float plane image to vil_byte and stretches to 0-255 range
+void mil_convert_image_2d_stretch(mil_image_2d_of<vil_byte>& dest,
+                          const mil_image_2d_of<float>& src)
+{
+  float min, max;
+  src.getRange(min,max);
+  mil_convert_image_2d(dest,src,255/(max-min),-min);  
+}
+
 //: Copys src_im (of float) into dest_im (of byte)
 void mil_convert_image_2d(mil_image_2d_of<vil_byte>& dest,
                           const mil_image_2d_of<float>& src)
@@ -73,7 +83,8 @@ void mil_convert_image_2d(mil_image_2d_of<vil_byte>& dest,
 
       for (int x=0;x<nx;++x)
       {
-        *d = vil_byte(*s * scale + offset);
+        *d = vil_byte( (*s + offset)* scale );
+        //*d = vil_byte(*s * scale + offset);
         s+=sxstep;
         d+=dxstep;
       }
