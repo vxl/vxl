@@ -64,6 +64,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> status_block_file(arg_list,"-S","status block file","");
   vul_arg<vcl_string> performance_output_file(arg_list,"-P","performance output file","");
   vul_arg<vcl_string> output_directory(arg_list,"-O","output directory","");
+  vul_arg<vcl_string> output_video_directory(arg_list,"-R","results video directory","");
   vul_arg<bool> print_params_only(arg_list,"-print_params_only",
                                            "print xml paramter file and exit",false);
   vul_arg_include(arg_list);
@@ -84,7 +85,7 @@ int main(int argc, char** argv)
     return -1;
   }
 
-  bool make_output_video = (output_directory() != "") && (!no_output());
+  bool make_output_video = (output_video_directory() != "") && (!no_output());
 
 
   // create a gaussian filter with sigma()
@@ -149,7 +150,7 @@ int main(int argc, char** argv)
 
   if ( make_output_video ){
     vidl_movie_sptr result_movie = new vidl_movie(new vidl_clip(results, 0, results.size()));
-    vcl_string output_name = output_directory()+"/output";
+    vcl_string output_name = output_video_directory()+"/output";
     vidl_io::save(result_movie.ptr(), output_name.c_str(), "ImageList");
   }
 
@@ -239,7 +240,9 @@ bool print_xml_params( vcl_string output_file,
     if (command == "-V")
       outstream << " System_info=\"INPUT_VIDEO\"";
     if (command == "-O")
-      outstream << " System_info=\"OUTPUT_DIRECTORY\"";
+      outstream << " System_info=\"OUTPUT\"";
+    if (command == "-R")
+      outstream << " System_info=\"OUTPUT_VIDEO\"";
     if (command == "-S")
       outstream << " System_info=\"STATUS_BLOCK\"";
     if (command == "-P")
