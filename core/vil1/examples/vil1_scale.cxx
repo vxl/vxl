@@ -3,7 +3,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>    // vcl_sqrt()
-#include <vcl_cstdlib.h>  // atoi()
+#include <vcl_cstdlib.h>  // vcl_atoi()
 
 #include <vil1/vil1_new.h>
 #include <vil1/vil1_load.h>
@@ -17,8 +17,8 @@ int main(int argc, char ** argv)
     vcl_cerr << "usage: vil1_scale w h in out format\n";
     return -1;
   }
-  int w = atoi(argv[1]);
-  int h = atoi(argv[2]);
+  int w = vcl_atoi(argv[1]);
+  int h = vcl_atoi(argv[2]);
   char const* input_filename = argv[3];
   char const* output_filename = argv[4];
   char const* output_format = argv[5];

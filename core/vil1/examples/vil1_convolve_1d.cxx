@@ -60,18 +60,20 @@ int main(int argc, char **argv) {
     vil1_memory_image_of<float> tmp   (w, h);
     vil1_memory_image_of<float> smooth(w, h);
     vil1_convolve_signal_1d<float const> K(kernel, 0, N, 2*N+1);
+    vil1_memory_image_of<float> const& tmpc = tmp;
+    vil1_memory_image_of<vil1_byte> const& bytesc = bytes;
 
     for (unsigned j=0; j<sizeof(option)/sizeof(option[0]); ++j) {
       vcl_cerr << "convolve x..." << vcl_flush;
       vil1_convolve_1d_x(K,
-                         vil1_convolve_signal_2d<vil1_byte const>(bytes.row_array(), 0, 0, w,  0, 0, h),
+                         vil1_convolve_signal_2d<vil1_byte const>(bytesc.row_array(), 0, 0, w,  0, 0, h),
                          (float*)0,
-                         vil1_convolve_signal_2d<float          >(tmp  .row_array(), 0, 0, w,  0, 0, h),
+                         vil1_convolve_signal_2d<float          >(tmp   .row_array(), 0, 0, w,  0, 0, h),
                          option[j], option[j]);
       vcl_cerr << "done\n"
                << "convolve y..." << vcl_flush;
       vil1_convolve_1d_y(K,
-                         vil1_convolve_signal_2d<float const>(tmp   .row_array(), 0, 0, w,  0, 0, h),
+                         vil1_convolve_signal_2d<float const>(tmpc  .row_array(), 0, 0, w,  0, 0, h),
                          (float*)0,
                          vil1_convolve_signal_2d<float      >(smooth.row_array(), 0, 0, w,  0, 0, h),
                          option[j], option[j]);

@@ -23,9 +23,9 @@ int
 test_memory_image_main(int, char*[])
 {
   vcl_string tmp_nam = vul_temp_filename();
-  vcl_string file1 = tmp_nam!="" ? tmp_nam + ".pgm" : "vil1_test_memory_image_1.pgm";
+  vcl_string file1 = tmp_nam!="" ? tmp_nam + ".pgm" : vcl_string("vil1_test_memory_image_1.pgm");
   tmp_nam = vul_temp_filename();
-  vcl_string file2 = tmp_nam!="" ? tmp_nam + ".pgm" : "vil1_test_memory_image_2.pgm";
+  vcl_string file2 = tmp_nam!="" ? tmp_nam + ".pgm" : vcl_string("vil1_test_memory_image_2.pgm");
 
   {
     vil1_memory_image m(3, 2, VIL1_BYTE);
