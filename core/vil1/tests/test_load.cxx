@@ -10,15 +10,17 @@
 
 static void test(char const* magic, int comps, int bits)
 {
-  char const* TMPNAM = vul_temp_filename().c_str();
-  char const* FNAME = TMPNAM ? TMPNAM : "/tmp/t.pgm";
+  vcl_string tmp_nam = vul_temp_filename();
+  char const *file = tmp_nam!="" ? tmp_nam.c_str() : "t.pgm";
   {
-    vcl_ofstream f(FNAME);
-    // reference to rvalue not allowed.
+    vcl_ofstream f(file);
+#ifdef LEAVE_IMAGES_BEHIND
+      vpl_chmod(file, 0666); // -rw-rw-rw-
+#endif
     f << magic << "\n2\n3\n255\nABCDEF";
   }
 
-  vil_image i = vil_load(FNAME);
+  vil_image i = vil_load(file);
 
   vcl_cout <<
     "vil_image_impl: size " << i.width() << "x" << i.height() <<
@@ -29,7 +31,9 @@ static void test(char const* magic, int comps, int bits)
   TEST("components", i.components(), comps);
   TEST("bits per component", i.bits_per_component(), bits);
 
-  vpl_unlink(FNAME);
+#ifndef LEAVE_IMAGES_BEHIND
+  vpl_unlink(file);
+#endif
 }
 
 void test_load_pnm()

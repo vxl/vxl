@@ -43,9 +43,12 @@ void test_matlab() {
   // vnl_matlab_write, vnl_matlab_read
   {
     vcl_string tmp_nam = vul_temp_filename();
-    char const *file = tmp_nam!="" ? tmp_nam.c_str() : "/tmp/smoo.mat";
+    char const *file = tmp_nam!="" ? tmp_nam.c_str() : "smoo.mat";
     {
       vcl_ofstream f(file);
+#ifdef LEAVE_IMAGES_BEHIND
+      vpl_chmod(file, 0666); // -rw-rw-rw-
+#endif
       vnl_matlab_write(f, v.begin(), v.size(), "v");
       vnl_matlab_write(f, (double const * const *)M.data_array(), M.rows(), M.cols(), (char const *)"M");
     }
@@ -77,7 +80,9 @@ void test_matlab() {
       //vnl_matlab_print(cout, M, "M");
       //vnl_matlab_print(cout, M_, "M_");
     }
+#ifndef LEAVE_IMAGES_BEHIND
     vpl_unlink(file);
+#endif
   }
 }
 

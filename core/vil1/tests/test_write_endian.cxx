@@ -11,13 +11,16 @@
 
 void test_write_endian()
 {
-  char const *TMPNAM = vul_temp_filename().c_str();
-  char const *file = TMPNAM ? TMPNAM : "/tmp/smoo";
+  vcl_string tmp_nam = vul_temp_filename();
+  char const *file = tmp_nam!="" ? tmp_nam.c_str() : "smoo.bin";
   vil_stream *s = 0;
 
   // write bytes
   s = new vil_stream_fstream(file, "w");
   s->ref();
+#ifdef LEAVE_IMAGES_BEHIND
+  vpl_chmod(file, 0666); // -rw-rw-rw-
+#endif
 
   // the bytes written should be 0x02 0x01 0x03 0x04, in that
   // order, on all architectures.
@@ -38,7 +41,9 @@ void test_write_endian()
   s->unref();
 
   // clean up.
+#ifndef LEAVE_IMAGES_BEHIND
   vpl_unlink(file);
+#endif
 
   TEST ("byte values",
         bytes[0] == 0x02 &&

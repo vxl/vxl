@@ -14,8 +14,8 @@ const int H = 256;
 
 void test_vil_memory_image_of()
 {
-  char const* TMPNAM2 = vul_temp_filename().c_str();
-  char const* file_name_2 = TMPNAM2 ? TMPNAM2 : "/tmp/vil_test_memory_image_of.pgm";
+  vcl_string tmp_nam = vul_temp_filename();
+  char const *file_name_2 = tmp_nam!="" ? tmp_nam.c_str() : "vil_test_memory_image_of.pgm";
   {
     vcl_cout << "unsigned char" << vcl_endl;
     vil_memory_image_of<unsigned char> image(W,H);
@@ -26,15 +26,19 @@ void test_vil_memory_image_of()
       }
     vil_save(image, file_name_2);
     vcl_cout << "Saved image to " << file_name_2 << vcl_endl;
+#ifdef LEAVE_IMAGES_BEHIND
+    vpl_chmod(file_name_2, 0666); // -rw-rw-rw-
+#endif
   }
 
-  // Don't leave the images behind by default. If you need to debug, comment
-  // these out temporarily and make sure you put them back in before committing
-  // your changes.
+  // Don't leave the images behind by default.
+  // If you need to debug, use -DLEAVE_IMAGES_BEHIND on the compile line
+#ifndef LEAVE_IMAGES_BEHIND
   vpl_unlink(file_name_2);
+#endif
 
-  char const* TMPNAM1 = vul_temp_filename().c_str();
-  char const* file_name_1 = TMPNAM1 ? TMPNAM1 : "/tmp/vil_test_memory_image_of.ppm";
+  tmp_nam = vul_temp_filename();
+  char const* file_name_1 = tmp_nam!="" ? tmp_nam.c_str() : "vil_test_memory_image_of.ppm";
 
   {
     vcl_cout << "vil_rgb_byte" << vcl_endl;
@@ -49,13 +53,15 @@ void test_vil_memory_image_of()
       }
     vil_save(image, file_name_1);
     vcl_cout << "Saved image to " << file_name_1 << vcl_endl;
+#ifdef LEAVE_IMAGES_BEHIND
+    vpl_chmod(file_name_1, 0666); // -rw-rw-rw-
+#endif
   }
 
-  // Don't leave the images behind by default. If you need to debug, comment
-  // these out temporarily and make sure you put them back in before committing
-  // your changes.
+  // Don't leave the images behind by default.
+#ifndef LEAVE_IMAGES_BEHIND
   vpl_unlink(file_name_1);
-
+#endif
 
   {
     vcl_cout << "bool" << vcl_endl;
