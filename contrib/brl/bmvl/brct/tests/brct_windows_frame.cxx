@@ -154,6 +154,23 @@ void brct_windows_frame::add_curve3d(vcl_vector<vgl_point_3d<double> >& pts)
   instance_->post_redraw();
 }
 
+void brct_windows_frame::remove_debug_info()
+{
+  int size = predicted_curves_2d_.size();
+  for(int i=0; i<size; i++){
+    instance_->tab_2d_->remove(predicted_curves_2d_[i]);
+  }
+  predicted_curves_2d_.size();
+
+  size = debug_curves_2d_.size();
+  for(int i=0; i<size; i++){
+    instance_->tab_2d_->remove(debug_curves_2d_[i]);
+  }
+  predicted_curves_2d_.size();
+
+  this->post_redraw();
+}
+
 void brct_windows_frame::remove_curve3d()
 {
   int size = curves_3d_.size();
@@ -236,4 +253,27 @@ void brct_windows_frame::add_predicted_curve2d(vcl_vector<vgl_point_2d<double> >
   }
 
   instance_->post_redraw();
+}
+
+void brct_windows_frame::add_next_observes(vcl_vector<vgl_point_2d<double> > &pts)
+{
+  int size = pts.size();
+  assert(size > 1);
+  debug_curves_2d_.resize(size-1);
+  instance_->tab_2d_->set_foreground(0, 0, 1);
+  for (int i=0; i<size-1; i++) {
+    vgl_point_2d<double>& s = pts[i];
+    vgl_point_2d<double>& e = pts[i+1];
+    vgui_soview2D_lineseg* l = instance_->tab_2d_->add_line(s.x(), s.y(), e.x(), e.y());
+    debug_curves_2d_[i] = l;
+  }
+
+  instance_->post_redraw();
+
+}
+
+void brct_windows_frame::show_next_observes()
+{
+  vcl_vector<vgl_point_2d<double> > c2d = kalman_->get_next_observes();
+  add_next_observes(c2d);
 }

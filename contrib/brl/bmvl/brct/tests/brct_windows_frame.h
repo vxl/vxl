@@ -3,7 +3,7 @@
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief Manager for multiview gui applications
+// \brief Manager for multiview 3d reconstruction gui applications
 // \author
 //   Kongbin Kang
 //
@@ -29,8 +29,9 @@ class vgui_window;
 class brct_windows_frame : public vgui_wrapper_tableau
 {
  public:
-	 void add_predicted_curve2d(vcl_vector<vgl_point_2d<double> > &pts);
-	 void show_predicted_curve();
+  void show_next_observes();
+  void add_predicted_curve2d(vcl_vector<vgl_point_2d<double> > &pts);
+  void show_predicted_curve();
   void go();
   brct_windows_frame();
   ~brct_windows_frame();
@@ -40,7 +41,10 @@ class brct_windows_frame : public vgui_wrapper_tableau
   void quit();
   void add_curve2d(vcl_vector<vgl_point_2d<double> > &pts);
   void remove_curve2d();
+  void remove_debug_info();
+
   void add_curve3d(vcl_vector<vgl_point_3d<double> > &pts);
+  void add_next_observes(vcl_vector<vgl_point_2d<double> > &pts);
   void remove_curve3d();
   void init_kalman();
 
@@ -62,6 +66,9 @@ class brct_windows_frame : public vgui_wrapper_tableau
   //: get predicted curves 2d
   vcl_vector<vgui_soview2D_point* > predicted_curves_2d_;
 
+  //: 2d curve for the next frame, which is used for debugging
+  vcl_vector<vgui_soview2D_lineseg* > debug_curves_2d_;
+  
   //: 2d curve at time t
   vcl_vector<vgui_soview2D_lineseg* > curves_2d_;
 

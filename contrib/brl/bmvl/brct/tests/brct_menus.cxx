@@ -24,13 +24,18 @@ vgui_menu brct_menus::get_menu()
   vgui_menu menu_bar;
   vgui_menu file_menu;
   vgui_menu action_menu;
+  vgui_menu debug_menu;
 
   file_menu.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
+  
   action_menu.add("init", init_kalman_callback, (vgui_key)'i', vgui_CTRL);
   action_menu.add("go", kalman_go_callback, (vgui_key)'g', vgui_CTRL);
-  action_menu.add("show prediction", show_predicted_curves, (vgui_key)'p', vgui_CTRL);
+  debug_menu.add("show prediction", show_predicted_curves, (vgui_key)'p', vgui_CTRL);
+  debug_menu.add("show next observes", show_next_observes, (vgui_key)'o', vgui_CTRL);
+  debug_menu.add("remove debug info", remove_debug_info, (vgui_key)'r', vgui_CTRL);
   menu_bar.add("file", file_menu);
   menu_bar.add("action", action_menu);
+  menu_bar.add("debug", debug_menu);
   return menu_bar;
 }
 
@@ -44,4 +49,14 @@ void brct_menus::show_predicted_curves()
 {
   vcl_cerr<<"goes into predicted_curves\n";
   brct_windows_frame::instance()->show_predicted_curve();
+}
+
+void brct_menus::show_next_observes()
+{
+  brct_windows_frame::instance()->show_next_observes();
+}
+
+void brct_menus::remove_debug_info()
+{
+  brct_windows_frame::instance()->remove_debug_info();
 }
