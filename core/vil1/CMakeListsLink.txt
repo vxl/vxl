@@ -1,8 +1,5 @@
-
 LINK_LIBRARIES( vil )
 LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vil )
-
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
 
 INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindJPEG.cmake )
 INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindPNG.cmake )

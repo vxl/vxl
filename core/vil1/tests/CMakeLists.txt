@@ -5,6 +5,8 @@
 #
 
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
+
 # test_interpolate uses pow():
 IF(UNIX)
   LINK_LIBRARIES( m )
