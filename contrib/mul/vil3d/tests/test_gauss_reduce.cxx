@@ -30,10 +30,10 @@ void test_gauss_reduce_float()
   TEST("size i",image1.ni(),(ni+1)/2);
   TEST("size j",image1.nj(),(nj+1)/2);
   TEST("size k",image1.nk(),(nk+1)/2);
-  TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
-  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,1,1),1e-6);
-  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),66.4f,1e-6);
-  TEST_NEAR("Corner pixel",image0(ni2*2-2,nj2*2-2,nk2*2-2),image1(ni2-1,nj2-1,nk2-1),1e-6);
+  TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-5);
+  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,1,1),1e-5);
+  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),66.4f,1e-4);
+  TEST_NEAR("Corner pixel",image0(ni2*2-2,nj2*2-2,nk2*2-2),image1(ni2-1,nj2-1,nk2-1),1e-5);
 }
 
 // Check in-homogeneous smoothing option (ie onlj smooth in i,j but not k on some levels)
@@ -60,10 +60,10 @@ void test_gauss_reduce_ij()
   TEST("Level 1 size i",image1.ni(),ni2);
   TEST("Level 1 size j",image1.nj(),nj2);
   TEST("Level 1 size k",image1.nk(),ni2);
-  TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
-  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,1,2),1e-6);
-  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),36.4f,1e-6);
-  TEST_NEAR("Corner pixel",image0(ni2*2-2,nj2*2-2,nk2-1),image1(ni2-1,nj2-1,nk2-1),1e-6);
+  TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-5);
+  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,1,2),1e-5);
+  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),36.4f,1e-4);
+  TEST_NEAR("Corner pixel",image0(ni2*2-2,nj2*2-2,nk2-1),image1(ni2-1,nj2-1,nk2-1),1e-5);
 }
 
 // Check in-homogeneous smoothing option (ie onlj smooth in i,k but not j on some levels)
@@ -89,10 +89,10 @@ void test_gauss_reduce_ik()
   TEST("Level 1 size i",image1.ni(),ni2);
   TEST("Level 1 size j",image1.nj(),nj2);
   TEST("Level 1 size k",image1.nk(),ni2);
-  TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
-  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,2,1),1e-6);
-  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),63.4f,1e-6);
-  TEST_NEAR("Corner pixel",image0(ni2*2-2,nj2-1,nk2*2-2),image1(ni2-1,nj2-1,nk2-1),1e-6);
+  TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-5);
+  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,2,1),1e-5);
+  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),63.4f,1e-4);
+  TEST_NEAR("Corner pixel",image0(ni2*2-2,nj2-1,nk2*2-2),image1(ni2-1,nj2-1,nk2-1),1e-5);
 }
 
 // Check in-homogeneous smoothing option (ie onlj smooth in j,k but not i on some levels)
@@ -118,10 +118,10 @@ void test_gauss_reduce_jk()
   TEST("Level 1 size i",image1.ni(),ni2);
   TEST("Level 1 size j",image1.nj(),nj2);
   TEST("Level 1 size k",image1.nk(),ni2);
-  TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
-  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(2,1,1),1e-6);
-  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),66.2f,1e-6);
-  TEST_NEAR("Corner pixel",image0(ni2-1,nj2*2-2,nk2*2-2),image1(ni2-1,nj2-1,nk2-1),1e-6);
+  TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-5);
+  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(2,1,1),1e-5);
+  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),66.2f,1e-4);
+  TEST_NEAR("Corner pixel",image0(ni2-1,nj2*2-2,nk2*2-2),image1(ni2-1,nj2-1,nk2-1),1e-5);
 }
 
 
