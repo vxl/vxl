@@ -1,1 +1,127 @@
-/*  fsm@robots.ox.ac.uk*/#ifdef __GNUC__#pragma implementation#endif#include "vgui_glut_popup_impl.h"#include "vgui_glut_adaptor.h"#include <vcl_iostream.h>#include <vgui/vgui_macro.h>#include <vgui/vgui_command.h>#include <vgui/vgui_glut.h>vgui_glut_popup_impl::vgui_glut_popup_impl() {  //cerr << "popup_impl ctor" << endl;  int old_id = glutGetMenu();  menu_id = glutCreateMenu(command_func);  //cerr << "created menu_id = " << menu_id << endl;  //vgui_macro_warning << "before" << endl;  if (old_id)    glutSetMenu(old_id);  //vgui_macro_warning << "after" << endl;}void vgui_glut_popup_impl::clear() {  //cerr << "popup_impl::clear()" << endl;  int old_id = glutGetMenu();  glutSetMenu(menu_id);  //  unsigned n = glutGet(GLenum(GLUT_MENU_NUM_ITEMS));  //cerr << "removing " << n << " items in menu" << endl;  for (int i=n; i>=1; --i)    glutRemoveMenuItem(i);  //  //vgui_macro_warning << "before" << endl;  if (old_id)    glutSetMenu(old_id);  //vgui_macro_warning << "after" << endl;  //  for (unsigned i=0; i<subs.size(); ++i)    delete static_cast<vgui_glut_popup_impl*>( subs[i] );  subs.clear();}vgui_glut_popup_impl::~vgui_glut_popup_impl() {  //cerr << "popup_impl dtor" << endl;  clear();  glutDestroyMenu( menu_id );  menu_id = 0;}void vgui_glut_popup_impl::build(vgui_menu const &m) {  //clear();  // FIXME - this line here is to make sure the commands in the  // given menu stay alive while the popup menu is active :  tmp_menu = m;  //cerr << "popup_impl::build : m = " << endl << m << endl;  this->build_internal(m);}void vgui_glut_popup_impl::build_internal(vgui_menu const &m) {  int old_id = glutGetMenu();  //vgui_macro_warning << "before" << endl;  glutSetMenu(menu_id);  //vgui_macro_warning << "after" << endl;  for (unsigned i=0; i<m.size(); ++i) {    if (m[i].is_command())      glutAddMenuEntry( m[i].name.c_str(),                        reinterpret_cast<long>(m[i].cmnd.as_pointer()));    else if (m[i].is_submenu()) {      vgui_glut_popup_impl *sub = new vgui_glut_popup_impl;      sub->build_internal( * m[i].menu );      glutAddSubMenu  (m[i].name.c_str(), sub->menu_id);      subs.push_back(sub);    }    else if (m[i].is_toggle_button()) {      vgui_command_toggle *c = static_cast<vgui_command_toggle*>( m[i].cmnd.as_pointer() );      glutAddMenuEntry( (m[i].name + (c->state ? " (on)":" (off)")).c_str(),                        reinterpret_cast<long>(m[i].cmnd.as_pointer()));    }    else if (m[i].is_separator()) {      // do glut menus have real separators?      if (0<i && i<m.size()-1) // ignore separators at start and end.        glutAddMenuEntry( "----------------", 1);    }    else {      vgui_macro_warning << "unknown menu item" << vcl_endl;      vgui_macro_warning << "menu = " << vcl_endl << m << vcl_endl;    }  }  //vgui_macro_warning << "before" << endl;  if (old_id)    glutSetMenu(old_id); // restore  //vgui_macro_warning << "after" << endl;}// When a menu item is selected, glut may have upset its internal// state considerably and so it is advisable to wait for the next// idle event before invoking the vgui_command. E.g. if the command// were to start run_one_event()ing, heap corruption often results.// To accomplish that, the action of selecting a menu item just// queues the command on the adaptor.void vgui_glut_popup_impl::command_func(int value) {  if (value == 0)    vgui_macro_warning << "null command" << vcl_endl;  else if (value == 1)    vcl_cerr << "[that's a separator]" << vcl_endl;  else    vgui_glut_adaptor::queue_command(reinterpret_cast<vgui_command *>(value));}
+/*
+  fsm@robots.ox.ac.uk
+*/
+#ifdef __GNUC__
+#pragma implementation
+#endif
+#include "vgui_glut_popup_impl.h"
+#include "vgui_glut_adaptor.h"
+#include <vcl_iostream.h>
+#include <vgui/vgui_macro.h>
+#include <vgui/vgui_command.h>
+#include <vgui/vgui_glut.h>
+
+vgui_glut_popup_impl::vgui_glut_popup_impl() {
+  //cerr << "popup_impl ctor" << endl;
+  int old_id = glutGetMenu();
+  menu_id = glutCreateMenu(command_func);
+  //cerr << "created menu_id = " << menu_id << endl;
+
+  //vgui_macro_warning << "before" << endl;
+  if (old_id)
+    glutSetMenu(old_id);
+  //vgui_macro_warning << "after" << endl;
+}
+
+
+void vgui_glut_popup_impl::clear() {
+  //cerr << "popup_impl::clear()" << endl;
+  int old_id = glutGetMenu();
+  glutSetMenu(menu_id);
+
+  //
+  unsigned n = glutGet(GLenum(GLUT_MENU_NUM_ITEMS));
+  //cerr << "removing " << n << " items in menu" << endl;
+  for (int i=n; i>=1; --i)
+    glutRemoveMenuItem(i);
+
+  //
+  //vgui_macro_warning << "before" << endl;
+  if (old_id)
+    glutSetMenu(old_id);
+  //vgui_macro_warning << "after" << endl;
+
+  //
+  for (unsigned i=0; i<subs.size(); ++i)
+    delete static_cast<vgui_glut_popup_impl*>( subs[i] );
+  subs.clear();
+}
+
+
+vgui_glut_popup_impl::~vgui_glut_popup_impl() {
+  //cerr << "popup_impl dtor" << endl;
+  clear();
+  glutDestroyMenu( menu_id );
+  menu_id = 0;
+}
+
+void vgui_glut_popup_impl::build(vgui_menu const &m) {
+  //clear();
+
+  // FIXME - this line here is to make sure the commands in the
+  // given menu stay alive while the popup menu is active :
+  tmp_menu = m;
+
+  //cerr << "popup_impl::build : m = " << endl << m << endl;
+  this->build_internal(m);
+}
+
+void vgui_glut_popup_impl::build_internal(vgui_menu const &m) {
+  int old_id = glutGetMenu();
+  //vgui_macro_warning << "before" << endl;
+  glutSetMenu(menu_id);
+  //vgui_macro_warning << "after" << endl;
+
+  for (unsigned i=0; i<m.size(); ++i) {
+    if (m[i].is_command())
+      glutAddMenuEntry( m[i].name.c_str(),
+                        reinterpret_cast<long>(m[i].cmnd.as_pointer()));
+
+    else if (m[i].is_submenu()) {
+      vgui_glut_popup_impl *sub = new vgui_glut_popup_impl;
+      sub->build_internal( * m[i].menu );
+      glutAddSubMenu  (m[i].name.c_str(), sub->menu_id);
+      subs.push_back(sub);
+    }
+
+    else if (m[i].is_toggle_button()) {
+      vgui_command_toggle *c = static_cast<vgui_command_toggle*>( m[i].cmnd.as_pointer() );
+      glutAddMenuEntry( (m[i].name + (c->state ? " (on)":" (off)")).c_str(),
+                        reinterpret_cast<long>(m[i].cmnd.as_pointer()));
+
+    }
+
+    else if (m[i].is_separator()) {
+      // do glut menus have real separators?
+      if (0<i && i<m.size()-1) // ignore separators at start and end.
+        glutAddMenuEntry( "----------------", 1);
+    }
+
+    else {
+      vgui_macro_warning << "unknown menu item" << vcl_endl;
+      vgui_macro_warning << "menu = " << vcl_endl << m << vcl_endl;
+    }
+  }
+
+  //vgui_macro_warning << "before" << endl;
+  if (old_id)
+    glutSetMenu(old_id); // restore
+  //vgui_macro_warning << "after" << endl;
+}
+
+// When a menu item is selected, glut may have upset its internal
+// state considerably and so it is advisable to wait for the next
+// idle event before invoking the vgui_command. E.g. if the command
+// were to start run_one_event()ing, heap corruption often results.
+// To accomplish that, the action of selecting a menu item just
+// queues the command on the adaptor.
+
+void vgui_glut_popup_impl::command_func(int value) {
+  if (value == 0)
+    vgui_macro_warning << "null command" << vcl_endl;
+  else if (value == 1)
+    vcl_cerr << "[that's a separator]" << vcl_endl;
+  else
+    vgui_glut_adaptor::queue_command(reinterpret_cast<vgui_command *>(value));
+}
+
