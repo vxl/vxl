@@ -82,7 +82,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @chapter vcl: C++ compatibility
 @cindex vcl
 @cindex ANSI/ISO C++
-@cindex SCL
+@cindex STL
 @cindex Standard C++ library
 
 @include chapter_vcl.texi
