@@ -502,14 +502,9 @@ vtol_edge_sptr vtol_cycle_processor::search_for_next_edge(vcl_vector<vtol_edge_s
 {
   while(edges_at_last.size())
     {
-      vtol_edge_sptr temp = NULL;
-      temp = ccw_edge(_l, _last, edges_at_last);
-      bool assign = assignable(temp, _last);
-      if(!temp||assign)
-        {
-          return temp;
-          break;
-        }
+      vtol_edge_sptr temp = ccw_edge(_l, _last, edges_at_last);
+      if (!temp || assignable(temp, _last))
+        return temp;
       edges_at_last.erase(vcl_find(edges_at_last.begin(), edges_at_last.end(),temp));
     }
   return NULL;
