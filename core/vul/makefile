@@ -33,7 +33,7 @@ SOURCES += vul_deprecated.cxx
 # debugging
 SOURCES += vul_trace.cxx
 
-DEFINES += -DBUILDING_vul_DLL
+DEFINES += -DBUILDING_VUL_DLL
 
 ifndef NOTEST
 SUBDIRS += tests
