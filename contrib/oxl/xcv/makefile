@@ -7,6 +7,11 @@ USES += vxl oxl
 PROGRAM = xcv
 ald_libs += mvl osl vcgl
 
+
+
+
+
+
 SOURCES += xcv_image_tableau.cxx
 
 SOURCES += xcv_file.cxx
@@ -16,12 +21,16 @@ SOURCES += xcv_geometry.cxx
 SOURCES += xcv_segmentation.cxx
 
 SOURCES += xcv_multiview.cxx
-SOURCES += xcv_multiview_create_multiview_menu.cxx
 SOURCES += xcv_twoview_manager.cxx
 SOURCES += xcv_threeview_manager.cxx
 SOURCES += xcv_tjunction.cxx
 
 SOURCES += xcv.cxx
+
+SOURCES += xcv_multiview_create_multiview_menu.cxx
+SOURCES += xcv_picker_tableau.cxx
+SOURCES += xcv_axes_tableau.cxx
+SOURCES += xcv_axes_limits.cxx
 
 ifeq "$(IU_COMPILER)" "egcs"
 FLAGS_xcv_geometry.cxx += -ftemplate-depth-100
