@@ -280,7 +280,7 @@ void pnmscaleT<T, longT>::go()
                 longT g = gs[col] + fracrowtofill * *xP;
                 g /= SCALE;
 
-                *nxP = g;
+                *nxP = (T)g;
                 gs[col] = longT(HALFSCALE);
               }
           }
@@ -318,7 +318,7 @@ void pnmscaleT<T, longT>::go()
                     }
                   g += fraccoltofill * *xP;
                   g /= SCALE;
-                  *nxP = g;
+                  *nxP = (T)g;
 
                   fraccolleft -= fraccoltofill;
                   fraccoltofill = SCALE;
@@ -344,7 +344,7 @@ void pnmscaleT<T, longT>::go()
           if ( ! needcol )
             {
               g /= SCALE;
-              *nxP = g;
+              *nxP = (T)g;
             }
           pnm_writepnmrow(newxelrow, newcols);
         }
