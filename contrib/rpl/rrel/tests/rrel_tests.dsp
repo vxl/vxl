@@ -236,6 +236,9 @@ SOURCE=.\test_lms_lts.cxx
 SOURCE=.\test_m_est_obj.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_muse_table.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_orthogonal_regression.cxx
 # End Source File
 # Begin Source File
