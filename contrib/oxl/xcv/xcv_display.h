@@ -16,6 +16,7 @@
 //   Marko Bacic    19-JUL-2000    Added support for region of interest
 // \endverbatim
 
+#include <vil/vil_image.h>
 class vgui_menu;
 class vgui_roi_tableau_make_roi;
 
@@ -44,4 +45,4 @@ private:
   static vgui_roi_tableau_make_roi *roi_tableau_client_;
 };
 
-#endif // xcv_display_
+#endif // xcv_display_h_
