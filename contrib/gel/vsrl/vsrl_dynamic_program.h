@@ -47,7 +47,7 @@ class vsrl_dynamic_program
  // this structure will keep track of posible assignments
   struct assignment_node{
     int index1; // the first token of this assignment
-    int index2; // the second token of this assigment
+    int index2; // the second token of this assignment
     int prior_index1; // the first token of the prior assignment
     int prior_index2; // the second token of the prior assignment
     double cost; // the cost of this assignment

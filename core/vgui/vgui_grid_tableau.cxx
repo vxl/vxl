@@ -186,7 +186,7 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
   //if (uses_plus_minus_events == true)
 
   // kym: only because you gave it that funny name!!!  I'm putting this back in here
-  // (with its original name) because I think it is needed. Events are handled seperately
+  // (with its original name) because I think it is needed. Events are handled separately
   if (grid_size_changeable == true)
   {
     // If we have got here then there are no free spaces in the grid.

@@ -149,7 +149,7 @@ doublereal *x, *sdiag, *wa;
             qtbpj = -sin_ * wa[k] + cos_ * qtbpj;
             wa[k] = temp;
 
-/*           accumulate the tranformation in the row of s. */
+/*           accumulate the transformation in the row of s. */
 
             for (i = k+1; i < *n; ++i) {
                 temp = cos_ * r[i + k * *ldr] + sin_ * sdiag[i];

@@ -75,7 +75,7 @@ class HomgInterestPointSet
   void set_conditioner(const HomgMetric& c);
 
   // Data Control--------------------------------------------------------------
-  bool add(double x, double y); // image coords
+  bool add(double x, double y); // image coordinates
   bool add(const HomgPoint2D&);
   bool add(const HomgInterestPoint&);
   bool add_preconditioned(const HomgPoint2D&);

@@ -54,7 +54,7 @@ class vgui_function_tableau : public vgui_tableau
   //: Call the given function when a key is pressed by the user.
   void key_press(function f) {key_press_ = f;}
 
-  //: Call the given funtion when the '?' or 'help' key is pressed by the user.
+  //: Call the given function when the '?' or 'help' key is pressed by the user.
   void help(function f) {help_ = f;}
 
   static vgui_DLLDATA bool redraw;

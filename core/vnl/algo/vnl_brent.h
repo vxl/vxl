@@ -33,7 +33,7 @@ class vnl_brent : public vnl_nonlinear_minimizer
   double minimize(double ax);
 
   //: Find the minimum value of f(x) within a<= x <= c.
-  // The minimum value is the return value, and *xmin the relevent value of x.
+  // The minimum value is the return value, and *xmin the relevant value of x.
   // You need to provide a bracket for the minimum
   // Also returns fa = f(a), etc.
   double minimize_given_bounds(double ax, double bx, double cx,

@@ -14,10 +14,10 @@
 #define trace if (true) { } else vcl_cerr
 
 //: using jpeg decompressor objects :
-// -# supply an error manager, eg with jpeg_std_err().
+// -# supply an error manager, e.g. with jpeg_std_err().
 //    this *must* be done before initializing the object.
 // -# initialize with jpeg_create_decompress().
-// -# supply a data stream, eg with jpeg_std_source().
+// -# supply a data stream, e.g. with jpeg_std_source().
 // -# call jpeg_read_header() to start reading the data stream. this will read
 //    to the start of the compressed data and store various tables and parameters.
 //    if you just want the image parameters and not the data, it's ok to stop

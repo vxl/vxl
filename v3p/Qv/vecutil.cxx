@@ -415,7 +415,7 @@ void multiplyQuaternions (
   const vector3D& v0, float s0, const vector3D& v1, float s1,
   vector3D& v, float& s)
 {
-  // be aware of v or s refering to v[01] or s[01]
+  // be aware of v or s referring to v[01] or s[01]
   vector3D vtmp;
   float stmp;
   multiply_quaternions (v0, s0, v1, s1, vtmp, stmp);

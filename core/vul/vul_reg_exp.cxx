@@ -61,7 +61,7 @@
 // returns a boolean, and  if true,  mutates  the private  data appropriately.
 // Find sets pointers to the beginning and end of  the thing last  found, they
 // are pointers into the actual string  that was searched.   The start and end
-// member functions return indicies  into the searched string that  correspond
+// member functions  return indices  into the searched string that  correspond
 // to the beginning   and  end pointers  respectively.   The    compile member
 // function takes a char* and puts the  compiled version of the char* argument
 // into the object's private data fields.  The == and  != operators only check

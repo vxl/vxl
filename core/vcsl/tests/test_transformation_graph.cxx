@@ -1,5 +1,5 @@
 //*****************************************************************************
-// File name: test_tranformation_graph.cxx
+// File name: test_transformation_graph.cxx
 // Description: Test the search of a path from a coordinate system to another
 //              one
 //-----------------------------------------------------------------------------

@@ -59,7 +59,7 @@ class vgl_homg_operators_2d
   static double perp_dist_squared (const vgl_homg_point_2d<T>& point,
                                    const vgl_homg_line_2d<T>& line);
 
-  //: True if the points are closer than euclidean distance d.
+  //: True if the points are closer than Euclidean distance d.
   static bool is_within_distance(const vgl_homg_point_2d<T>& p1,
                                  const vgl_homg_point_2d<T>& p2, double d)
   {

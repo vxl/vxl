@@ -49,7 +49,7 @@ enum vil_convolve_boundary_option {
 
   // This one is slightly different. The input signal is not
   // extended in any way, but the kernel is trimmed to allow
-  // convolution to proceed up to the boundary and reweighted
+  // convolution to proceed up to the boundary and reweighed
   // to keep the total area the same.
   // *** may not work with kernels which take negative values.
   vil_convolve_trim

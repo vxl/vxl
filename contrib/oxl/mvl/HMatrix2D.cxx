@@ -189,7 +189,7 @@ HMatrix2D HMatrix2D::get_inverse() const
   return svd.inverse();
 }
 
-//: Return new axis-aligned bounding box after (x0,y0) -> (x1,y1) have been premultiplied by H.
+//: Return new axis-aligned bounding box after (x0,y0) -> (x1,y1) have been pre-multiplied by H.
 vnl_double_4 HMatrix2D::transform_bounding_box(double /*x0*/, double /*y0*/, double /*x1*/, double /*y1*/)
 {
   vcl_cerr << "FIXME: HMatrix2D::transform_bounding_box() is not yet implemented\n";

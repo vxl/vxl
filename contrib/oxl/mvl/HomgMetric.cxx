@@ -220,7 +220,7 @@ static vcl_ostream& warning(char const * fn) {
 
 // Static functions to condition/decondition image relations-----------------
 
-//: Convert a P matrix to image coords if possible.
+//: Convert a P matrix to image coordinates if possible.
 PMatrix HomgMetric::homg_to_image_P(const PMatrix& P, const HomgMetric& c)
 {
   if (!c.is_linear()) warning("homg_to_image_P") << "ImageMetric for image 1 is nonlinear\n";

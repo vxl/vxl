@@ -45,11 +45,11 @@ class vgui_viewer2D_tableau : public vgui_wrapper_tableau, public vgui_drag_mixi
   void setup_gl_matrices();
 
   //: Modify the token to zoom in by the given factor, about the given (x,y).
-  //  (x, y) are in viewport coords.
+  //  (x, y) are in viewport coordinates.
   void zoomin(float zoom_factor, int x, int y);
 
   //: Modify the token to zoom out by the given factor, about the given (x,y).
-  //  (x, y) are in viewport coords.
+  //  (x, y) are in viewport coordinates.
   void zoomout(float zoom_factor, int x, int y);
 
   //: Centre the image with the given width and height inside the tableau.

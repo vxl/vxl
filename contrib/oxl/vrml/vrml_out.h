@@ -99,7 +99,7 @@ class vrml_out
 class vrml_out_vertex_to_texture
 {
  public:
-  // Store image size for conversion from image to texture coords.
+  // Store image size for conversion from image to texture coordinates.
   int image_xsize;
   int image_ysize;
 

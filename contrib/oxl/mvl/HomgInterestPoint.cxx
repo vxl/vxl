@@ -16,7 +16,7 @@ HomgInterestPoint::HomgInterestPoint()
 }
 
 //: Create from HomgPoint2D in conditioned coordinates.
-// Using the given metric to convert back to image coords.
+// Using the given metric to convert back to image coordinates.
 HomgInterestPoint::HomgInterestPoint(const HomgPoint2D& h, const HomgMetric& metric, float mean_intensity):
   homg_(h),
   double2_(0, 0),

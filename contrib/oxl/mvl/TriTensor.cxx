@@ -584,7 +584,7 @@ TriTensor TriTensor::decondition(const vnl_matrix<double>& line_1_norm,
 void TriTensor::get_constraint_lines_image3(const HomgPoint2D& p1, const HomgPoint2D& p2, vcl_vector<HomgLine2D>* lines) const
 {
   // tr_get_constraint_lines_image3
-// Old code assumed points were in image coords and conditioned them,
+// Old code assumed points were in image coordinates and conditioned them,
 // deconditioning the lines on return.
   //ma2_static_multiply_3x3_trivec (tritensor_ptr-> corner1_norm_matrix, trivec1_ptr, &mapped_trivec1);
   //ma2_static_multiply_3x3_trivec (tritensor_ptr-> corner2_norm_matrix, trivec2_ptr, &mapped_trivec2);

@@ -229,7 +229,7 @@ void vrml_out::write_faces_textured(
   }
   end_pointset();
 
-  // Send texture coords
+  // Send texture coordinates
   int xsize = v2t.image_xsize;
   int ysize = v2t.image_ysize;
 

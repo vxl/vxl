@@ -202,7 +202,7 @@ typedef unsigned int VIPL_FILTER_STATE;
 #define IMB_BOTTOM(D,C) ((D).curr_sec_start(Y_Axis()) == (C).image_start(Y_Axis()))
 
 // the macro CONVOL_PREAMBLE is for use in an another macro to define useful values
-// section start and end coords - short
+// section start and end coordinates - short
 
 #define CONVOL_PREAMBLE(CONTAINER, DESCRIPTOR) \
   const vipl_section_container<DataTypeOut> &C=(CONTAINER);\

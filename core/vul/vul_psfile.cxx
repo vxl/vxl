@@ -614,7 +614,7 @@ void vul_psfile::image_translate_and_scale()
              << ", scale_max_y = " << scale_max_y << vcl_endl;
 
   vul_printf(output_filestream, "%d %d translate\n", ox - scale_min_x, oy + scale_max_y - scale_height);
-  vul_printf(output_filestream, "\n%% size of image (on paper, in 1/72inch coords)\n");
+  vul_printf(output_filestream, "\n%% size of image (on paper, in 1/72inch coordinates)\n");
   vul_printf(output_filestream, "%g %g scale\n\n", iwf, ihf);
 }
 
@@ -756,10 +756,10 @@ void vul_psfile::reset_postscript_header()
   if (printer_paper_orientation == vul_psfile::LANDSCAPE)
   {
     vul_printf(output_filestream, "%4d %4d %4d %4d\n",
-        (int) (pos_iny * PIX2INCH + 0.5),
-        (int) (pos_inx * PIX2INCH + 0.5),
-        (int) (pos_iny * PIX2INCH + 0.5) + ih,
-        (int) (pos_inx * PIX2INCH + 0.5) + iw);
+               (int) (pos_iny * PIX2INCH + 0.5),
+               (int) (pos_inx * PIX2INCH + 0.5),
+               (int) (pos_iny * PIX2INCH + 0.5) + ih,
+               (int) (pos_inx * PIX2INCH + 0.5) + iw);
   }
   else
   {

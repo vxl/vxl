@@ -261,9 +261,9 @@ void vgui_projection_inspector::image_to_window_coordinates(float ix,float iy,fl
 //      translation and scaling along the axis. but I don't understand
 //      if I'm supposed to apply the scaling first, then the translation
 //      or vice versa. as for the method, exactly which coordinate
-//      tranformation does it compute? that's what I wanted to know.
+//      transformation does it compute? that's what I wanted to know.
 // pcp: what am i ? a mind reader ? here's what you wanted
-//      to transform from window coords (x,y) to image coords (ix,iy)
+//      to transform from window coordinates (x,y) to image coordinates (ix,iy)
 //
 //        ix = (x - token.offsetX) / token.scaleX;
 //        iy = (y - token.offsetY) / token.scaleY;

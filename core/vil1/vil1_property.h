@@ -21,7 +21,7 @@
 // A true return value means it does understand the property and has
 // used the supplied data according to the relevant protocol.
 // Passing a null pointer as the second argument can be useful for
-// protocols for manipulating boolean properties (i.e when there is
+// protocols for manipulating boolean properties (i.e. when there is
 // no data to be passed).
 //
 // To make this work in practice, it is necessary to avoid name clashes

@@ -24,7 +24,7 @@
 #include <vgui/vgui_utils.h>
 #include <vgui/vgui_image_tableau.h> // for centering
 
-// to transform from window coords (x,y) to image coords (ix,iy)
+// to transform from window coordinates (x,y) to image coordinates (ix,iy)
 //
 //   ix = (x - token.offsetX) / token.scaleX;
 //   iy = (y - token.offsetY) / token.scaleY;
@@ -72,7 +72,7 @@ void vgui_viewer2D_tableau::setup_gl_matrices()
           height, 0, // bottom, top
           -1,+1);    // near, far
 
-  // the modelview matrix applies a tranformation
+  // the modelview matrix applies a transformation
   // to incoming coordinates before they reach the
   // projection matrix. in this case, it consists
   // of anisotropic scaling about (0,0) followed
@@ -86,7 +86,7 @@ void vgui_viewer2D_tableau::setup_gl_matrices()
 
 // this routine will modify the token in such a way as to
 // effect a zoom about the point (x, y) by the given factor.
-// (x, y) are in viewport coords.
+// (x, y) are in viewport coordinates.
 void vgui_viewer2D_tableau::zoomin(float zoom_factor, int x, int y)
 {
   // this bit is easy.
@@ -462,26 +462,19 @@ bool vgui_viewer2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, vgui_m
 #ifdef DEBUG
   vcl_cerr << "vgui_viewer2D_tableau_handler::key_press " << key << '\n';
 #endif
+  if (modifier & vgui_CTRL) vgui::out << "CTRL+" << char(key) << " pressed: CTRL ignored\n";
   switch(key) {
   case 'x':
-    //if ((modifier & vgui_CTRL))
-    {
-      vgui::out << "viewer2D : resizing image\n";
-      this->token.scaleX = 1;
-      this->token.scaleY = 1;
-      center_event();
-      this->post_redraw();
-      return true;
-    }
-    /* else return false; */
+    vgui::out << "viewer2D : resizing image\n";
+    this->token.scaleX = 1;
+    this->token.scaleY = 1;
+    center_event();
+    this->post_redraw();
+    return true;
   case 'c':
-    //if ((modifier & vgui_CTRL))
-    {
-      vgui::out << "viewer2D : centering image\n";
-      center_event();
-      return true;
-    }
-    /* else return false; */
+    vgui::out << "viewer2D : centering image\n";
+    center_event();
+    return true;
   case '-':
     zoom_factor -= 0.1f;
     vgui::out << "viewer2D : zoom_factor = " << zoom_factor << '\n';
@@ -498,18 +491,18 @@ bool vgui_viewer2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, vgui_m
     this->post_redraw();
     return true;
   case 'd':
-    sweep_next = true;;
+    sweep_next = true;
     return true;
   case 'z':
     if (this->zoom_type == vgui_viewer2D_tableau::normal_zoom)
     {
       this->zoom_type = vgui_viewer2D_tableau::smooth_zoom;
-      vgui::out << "viewer2D : smooth\n";
+      vgui::out << "viewer2D : smooth zoom\n";
     }
     else
     {
       this->zoom_type = vgui_viewer2D_tableau::normal_zoom;
-      vgui::out << "viewer2D : normal\n";
+      vgui::out << "viewer2D : normal zoom\n";
     }
     return true;
   default:
