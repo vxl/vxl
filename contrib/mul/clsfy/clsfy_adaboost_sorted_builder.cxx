@@ -2,13 +2,12 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
-
 //:
 // \file
 // \brief Functions to train classifiers using AdaBoost algorithm
 // \author dac
 // \date   Fri Mar  1 23:49:39 2002
+//
 //  Functions to train classifiers using AdaBoost algorithm
 //  AdaBoost combines a set of (usually simple, weak) classifiers into
 //  a more powerful single classifier.  Essentially it selects the
@@ -19,13 +18,12 @@
 // Modifications
 // \endverbatim
 
-
 #include "clsfy_adaboost_sorted_builder.h"
 #include "clsfy_simple_adaboost.h"
 #include "clsfy_builder_1d.h"
 
 #include <vcl_iostream.h>
-#include <vsl/vsl_indent.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 #include <vcl_ctime.h>
@@ -34,8 +32,6 @@
 #include <vbl/vbl_triple.h>
 #include <mbl/mbl_file_data_collector.h>
 #include <mbl/mbl_data_collector_list.h>
-
-
 
 //=======================================================================
 
@@ -79,8 +75,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   assert( model.is_class("clsfy_simple_adaboost") );
   clsfy_simple_adaboost &strong_classifier = (clsfy_simple_adaboost&) model;
 
-  
-  
+
   // check parameters are OK
   if ( max_n_clfrs_ < 0 )
   {
@@ -118,15 +113,14 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   }
   else
   {
-    vcl_cout<<"Batch size when sorting data ="
-        <<bs_<<vcl_endl;
+    vcl_cout<<"Batch size when sorting data =" <<bs_<<vcl_endl;
   }
 
 
   assert(bs_>0);
-  assert(bs_!=1); 
+  assert(bs_!=1);
   assert (max_n_clfrs_ >= 0);
-  
+
   // first arrange the data in the form
   // vcl_vector< < vcl_vector< vtl_triple<double,int,int> > > > data
   // + vnl_vector wts
@@ -140,22 +134,22 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   inputs.reset();
   int d = inputs.current().size();
 
-  //need file data wrapper instead of old vector 
+  //need file data wrapper instead of old vector
   //data stored on disk NOT ram
   //vcl_vector< vcl_vector<vbl_triple<double,int,int> > > data(d);
 
   vcl_string temp_path= "temp.dat";
-  mbl_file_data_collector< 
-      vcl_vector< vbl_triple<double,int,int> > 
-                         > 
+  mbl_file_data_collector<
+      vcl_vector< vbl_triple<double,int,int> >
+                         >
               file_collector( temp_path );
 
   mbl_data_collector_list<
-      vcl_vector< vbl_triple<double,int,int> > 
+      vcl_vector< vbl_triple<double,int,int> >
                          >
               ram_collector;
-  
-  mbl_data_collector<vcl_vector< vbl_triple<double,int,int> > 
+
+  mbl_data_collector<vcl_vector< vbl_triple<double,int,int> >
                          >*  collector;
 
   if (save_data_to_disk_)
@@ -174,7 +168,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   // far too slow at present
   // say load in and sort 100 at once?????
   // ie 100 features at once!
-  
+
   //int bs= 100; //batch size
   vcl_vector< vcl_vector< vbl_triple<double,int,int> > >vec(bs_);
   vbl_triple<double,int,int> t;
@@ -183,14 +177,13 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   int b=0;
   while ( b<(d-1) )
   {
-
     int r= vcl_min ( bs_, (d-b) );
     assert(r>0);
 
     vcl_cout<<"sorting weak classifiers = "<<b<<" to "
                           <<(b+r)-1<<" of "<<d<<vcl_endl;
 
-   
+
     // have to resize all vectors
     for (unsigned int i=0; i< bs_; ++i)
       vec[i].resize(0);
@@ -199,10 +192,8 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
     inputs.reset();
     for (unsigned int j=0;j<n;++j)
     {
-
       for (unsigned int i=0; i< r; ++i)
       {
-  
         t.first=inputs.current()[b+i];
         t.second=outputs[j];
         t.third = j;
@@ -211,27 +202,24 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
       inputs.next();
     }
 
-    
+
     for (unsigned int i=0; i< r; ++i)
     {
-
       // sort training data for each individual weak classifier
       assert (vec[i].size() == n);
       assert (n != 0);
-    
+
       vcl_sort(vec[i].begin(), vec[i].end() );
 
       // store sorted vector of responses for each individual weak classifier
       collector->record(vec[i]);
-
     }
 
     b+=bs_;
-
   }
 
 
-  mbl_data_wrapper< vcl_vector< vbl_triple<double,int,int> > >& 
+  mbl_data_wrapper< vcl_vector< vbl_triple<double,int,int> > >&
               wrapper=collector->data_wrapper();
 
 
@@ -239,14 +227,14 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   wrapper.reset();
   assert ( wrapper.current().size() == n );
   assert ( d == wrapper.size() );
-  
+
 
    // initialize weights
   unsigned n0=0;
   unsigned n1=0;
   for (unsigned int i=0;i<n;++i)
   {
-    if ( outputs[i] == 0 ) 
+    if ( outputs[i] == 0 )
       n0++;
     else if ( outputs[i] == 1 )
       n1++;
@@ -273,9 +261,8 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
       vcl_cout<<"unrecognised output value : outputs["<<i<<"]= "<<outputs[i]<<vcl_endl;
       vcl_abort();
     }
-
   }
-   
+
 
   strong_classifier.clear();
   strong_classifier.set_n_dims(d);
@@ -291,10 +278,10 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   for (unsigned int r=0;r<(unsigned)max_n_clfrs_;++r)
   {
     vcl_cout<<"adaboost training round = "<<r<<vcl_endl;
-    
+
     new_time = vcl_clock();
-    
-    if(r>0)
+
+    if (r>0)
     {
       double dt = (1.0*(new_time-old_time))/CLOCKS_PER_SEC;
       vcl_cout<<"Time for AdaBoost round: "<<vnl_math_rnd(dt)<<"secs"<<vcl_endl;
@@ -306,16 +293,15 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
 
     //vcl_cout<<"wts0= "<<wts0<<vcl_endl;
     //vcl_cout<<"wts1= "<<wts1<<vcl_endl;
-   
+
 
     int best_i=-1;
     double min_error= 100000;
     wrapper.reset();  // make sure pointing to first data vector
     for (int i=0;i<d;++i)
     {
-      
       const vcl_vector< vbl_triple<double,int,int> >& vec = wrapper.current();
-   
+
       double error = weak_builder_->build_from_sorted_data(*c1d,&vec[0],wts);
       if (i==0 || error<min_error)
       {
@@ -361,10 +347,9 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
     alpha  = -1.0*vcl_log(beta);
     strong_classifier.add_classifier( best_c1d, alpha, best_i);
 
-    
-    if (r+1<n)  // ie round number less than number of examples used 
-    {
 
+    if (r+1<n)  // ie round number less than number of examples used
+    {
       // extract the best weak classifier results
       wrapper.set_index(best_i);
       const vcl_vector< vbl_triple<double,int,int> >& vec = wrapper.current();
