@@ -42,6 +42,7 @@ public:
   vcl_auto_ptr(auto_ptr_ref<X> r) throw(): x_(r.p_.release()) {}
   template <class Y> operator auto_ptr_ref<Y>() throw() { return *this; }
   template <class Y> operator vcl_auto_ptr<Y>() throw() { return release(); }
+  vcl_auto_ptr& operator=(auto_ptr_ref<X> r) throw() { x_ = r.p_.release(); return *this; }
 };
 
 #endif
