@@ -47,7 +47,7 @@ test_similarity_from_matches()
   to_loc.x() += -30;  to_loc.y() += 40;  // dist = 50
   id = 1;
   matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 2 - id 1 - bad
-  
+
   to_loc = A*from_loc + t;
   id = 1;
   matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 3 - id 1 - good
@@ -55,7 +55,7 @@ test_similarity_from_matches()
   id = 1;
   to_loc.x() += -6; to_loc.y() += 8;   // dist = 10
   matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 4 - id 1 - bad
-  
+
   id = 2;
   from_loc.x() += 5; from_loc.y() += -3;
   to_loc = A*from_loc + t;
@@ -66,8 +66,8 @@ test_similarity_from_matches()
   vbl_test_begin( "ctor" );
   similarity_from_matches sim( matches );
   vbl_test_perform( true );
-  
-  vbl_test_begin( "num to instantiate" ); 
+
+  vbl_test_begin( "num to instantiate" );
   vbl_test_perform( sim.num_samples_to_instantiate() == 2 );
 
   vbl_test_begin( "num_unique_samples" );
@@ -76,7 +76,7 @@ test_similarity_from_matches()
   vcl_cout << " num = " << sim.num_samples() << vcl_endl;
   vbl_test_begin( "num_samples" );
   vbl_test_perform( sim.num_samples() == 6 );
-  
+
   vnl_vector<double> est_params(4);
   vbl_test_begin( "fit_from_minimal_sample -- degenerate" );
   vcl_vector<int> indices(2);  indices[0] = 4;  indices[1] = 3;
@@ -93,21 +93,21 @@ test_similarity_from_matches()
   vcl_vector<double> residuals;
   vbl_test_begin( "compute_residuals" );
   sim.compute_residuals( params, residuals );
-  vbl_test_perform( residuals.size() == 6 
+  vbl_test_perform( residuals.size() == 6
                     && close( residuals[0],  0 )
                     && close( residuals[1],  5 )
                     && close( residuals[2], 50 )
                     && close( residuals[3],  0 )
                     && close( residuals[4], 10 )
                     && close( residuals[5],  0.5 ) );
-  
+
   vcl_vector<double> temp_res(6);
   vcl_vector<double> weights;
   null_m_est obj;
-  temp_res[0] = 1;  temp_res[1] = 0.1; 
+  temp_res[0] = 1;  temp_res[1] = 0.1;
   temp_res[2] = 0.02; temp_res[3] = 1; temp_res[4] = 0.12;
   temp_res[5] = 0.9;
-  
+
   vbl_test_begin( "compute_weights" );
   sim.compute_weights( temp_res, &obj, 1.0, weights );
   vbl_test_perform( close( weights[0], 1.0 * 1.0 / 1.1 )
@@ -147,14 +147,14 @@ generate_similarity_matches( const vnl_vector<double>& params,
   to_loc.y() += noise( sigma );
   id = 0;
   matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 1 - id 0 - good
-  
+
   from_loc.x() = 80;  from_loc.y() = -20;
   to_loc = A*from_loc + t;
   to_loc.x() += noise( sigma );
   to_loc.y() += noise( sigma );
   id = 1;
   matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 2 - id 1 - good
-  
+
   from_loc.x() = -50;  from_loc.y() = 84;
   to_loc = A*from_loc + t;
   to_loc.x() += noise( sigma );
@@ -167,7 +167,7 @@ generate_similarity_matches( const vnl_vector<double>& params,
   to_loc.y() += noise( 20 * sigma );
   id = 2;
   matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 4 - id 2 - bad
-  
+
   from_loc.x() = 75;  from_loc.y() = 62;
   to_loc = A*from_loc + t;
   to_loc.x() += noise( 20 * sigma );

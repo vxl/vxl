@@ -5,7 +5,7 @@
 //  \author Chuck Stewart
 //  \date   Summer 2001
 //  \brief  Look-up table for the normalization terms used in the MUSE objective function.
-//   
+//
 
 #include <vbl/vbl_array_2d.h>
 

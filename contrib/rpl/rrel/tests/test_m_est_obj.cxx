@@ -44,7 +44,7 @@ main()
 
 
   //
-  //  Test the MEstimator functions 
+  //  Test the MEstimator functions
   //
   vcl_vector<double> res;
   res.push_back(1.0);
@@ -65,7 +65,7 @@ main()
   vcl_vector<double> weights(num_res);
   vbl_test_begin( "Computing all weights --- single scale" );
   m_est->wgt( res.begin(), res.end(), sigma, weights.begin() );
-  vbl_test_perform(     
+  vbl_test_perform(
     close( m_est->wgt( res[0],sigma ), weights[0] ) &&
     close( m_est->wgt( res[1],sigma ), weights[1] ) &&
     close( m_est->wgt( res[2],sigma ), weights[2] ) &&
@@ -75,7 +75,7 @@ main()
 
   vbl_test_begin( "Computing all weights --- individual scales" );
   vcl_vector<double> scales(num_res);
-  scales[0] = 1.0; 
+  scales[0] = 1.0;
   scales[1] = 2.0;
   scales[2] = 1.0;
   scales[3] = 1.5;

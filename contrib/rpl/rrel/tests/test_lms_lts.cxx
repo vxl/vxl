@@ -14,7 +14,7 @@ main()
 {
   vbl_test_start( "LMS and LTS objective functions");
 
-  //  
+  //
   //  Testing the LMS objective functions
   //
   int dof = 3;
@@ -50,13 +50,13 @@ main()
   obj = lms2->fcn( test_lms.begin(), test_lms.end(), 0.0, 0 );
   vbl_test_perform( close( obj, corr_obj) );
 
-  //  
+  //
   //  Testing the LTS objective function
   //
   dof = 3;
   frac = 0.5;
   rrel_objective * lts1 = new rrel_lts_obj( dof, frac );
-  vcl_vector<double> test_lts; 
+  vcl_vector<double> test_lts;
   test_lts.push_back( -1.0 );
   test_lts.push_back( -2.0 );
   test_lts.push_back( 1.2 );
@@ -65,7 +65,7 @@ main()
   test_lts.push_back( -11.0 );
   test_lts.push_back( 14.1 );
   test_lts.push_back( 2.2 );
-  test_lts.push_back( -56.0 ); 
+  test_lts.push_back( -56.0 );
   test_lts.push_back( -2.4 );
   test_lts.push_back( 3.1 );
   test_lts.push_back( 1.1 );
@@ -91,6 +91,3 @@ main()
   vbl_test_summary();
   return 0;
 }
-  
-  
-  
