@@ -51,7 +51,7 @@ private:
   vnl_matrix<T>* Q_;
   vnl_matrix<T>* R_;
   
-  // Disallow assignment until I decide whether its a good idea
+  // Disallow assignment until I decide whether it's a good idea
   vnl_qr(const vnl_qr<T> & that);
   vnl_qr& operator=(const vnl_qr<T> & that);
 };
