@@ -16,5 +16,5 @@ ${allvxl_BINARY_DIR}/gel/vdgl
 ${allvxl_BINARY_DIR}/gel/vsrl
 ${allvxl_BINARY_DIR}/gel/vgel
 ${allvxl_BINARY_DIR}/gel/vgel
-${allvxl_BINARY_DIR}/gel/vgel_kl
+${allvxl_BINARY_DIR}/gel/vgel/kl
 )

@@ -1,5 +1,5 @@
 #
-# ./vxl/vnl/CMakeLists.txt
+# vxl/vnl/CMakeLists.txt
 #
 #   geoff.cross@crd.ge.com
 #
@@ -57,8 +57,6 @@ vnl_sample
 vnl_unary_function
 vnl_transpose
 )
-
-
 
 AUX_SOURCE_DIRECTORY(Templates vnl_sources)
 

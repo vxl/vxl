@@ -1,5 +1,5 @@
 #
-# ./gel/vtol/CMakeLists.txt
+# gel/vtol/CMakeLists.txt
 #
 #   geoff.cross@crd.ge.com
 #
