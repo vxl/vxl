@@ -49,7 +49,7 @@ void vimt_transform_2d::params(vnl_vector<double>& v) const
             break;
         case (RigidBody):
             v.set_size(3);
-            v(0)=vcl_atan2(xy_,xx_); // Angle
+            v(0)=vcl_atan2(-xy_,xx_); // Angle
             v(1)=xt_; v(2)=yt_;
             break;
         case (Reflection):
