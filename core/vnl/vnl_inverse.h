@@ -6,8 +6,14 @@
 // \brief Calculates inverse of a small vnl_matrix_fixed (not using svd)
 // \author Peter Vanroose
 // \date   22 October 2002
+//
+// \verbatim
+//  Modifications
+//   19 April 2003 - PVr - added interface for vnl_matrix<T>
+// \endverbatim
 
 #include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_matrix.h>
 #include <vnl/vnl_det.h>
 #include <vcl_cassert.h>
 
@@ -106,6 +112,21 @@ vnl_matrix_fixed<T,4,4> vnl_inverse(vnl_matrix_fixed<T,4,4> const& m)
     assert(!"Cannot invert 4x4 matrix with zero determinant");
     return vnl_matrix_fixed<T,4,4>();
   }
+}
+
+template <class T>
+vnl_matrix<T> vnl_inverse(vnl_matrix<T> const& m)
+{
+  assert(m.rows() == m.columns());
+  assert(m.rows() <= 4);
+  if (m.rows() == 1)
+    return vnl_matrix<T>(1,1, T(1)/m(0,0));
+  else if (m.rows() == 2)
+    return vnl_matrix<T>(vnl_inverse(vnl_matrix_fixed<T,2,2>(m)));
+  else if (m.rows() == 3)
+    return vnl_matrix<T>(vnl_inverse(vnl_matrix_fixed<T,3,3>(m)));
+  else
+    return vnl_matrix<T>(vnl_inverse(vnl_matrix_fixed<T,4,4>(m)));
 }
 
 #endif // vnl_inverse_h_
