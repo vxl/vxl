@@ -2,7 +2,8 @@
 
 # This module defines
 # QT_INCLUDE_DIR, where to find qt.h, etc.
-# QT_QT_LIBRARY, where to find the qt library.
+# QT_LIBRARIES, the libraries to link against to use Qt.
+# QT_DEFINITIONS, definitions to use when compiling code that uses Qt.
 # QT_MOC_EXECUTABLE, where to find the moc tool.
 # QT_UIC_EXECUTABLE, where to find the uic tool.
 # QT_WRAP_CPP, If false, don't use QT_WRAP_CPP command.
@@ -89,7 +90,7 @@ IF(QT_INCLUDE_DIR)
       SET (QT_LIBRARIES ${QT_QT_LIBRARY} )
     ENDIF (WIN32)
 
-# Backwards compatibility with CMake1.4
+# Backwards compatibility for CMake1.4 and 1.2
     SET (QT_MOC_EXE ${QT_MOC_EXECUTABLE} )
     SET (QT_UIC_EXE ${QT_UIC_EXECUTABLE} )
 
