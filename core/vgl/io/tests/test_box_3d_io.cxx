@@ -27,12 +27,12 @@ void test_box_3d_double_io()
   vsl_b_read(bfs_in, p_in);
   bfs_in.close();
 
-  TEST ("p_out==p_in",p_out.get_min_x() == p_in.get_min_x()
-                   && p_out.get_min_y() == p_in.get_min_y()
-                   && p_out.get_min_z() == p_in.get_min_z()
-                   && p_out.get_max_x() == p_in.get_max_x()
-                   && p_out.get_max_y() == p_in.get_max_y()
-                   && p_out.get_max_z() == p_in.get_max_z(), true);
+  TEST ("p_out==p_in",p_out.min_x() == p_in.min_x()
+                   && p_out.min_y() == p_in.min_y()
+                   && p_out.min_z() == p_in.min_z()
+                   && p_out.max_x() == p_in.max_x()
+                   && p_out.max_y() == p_in.max_y()
+                   && p_out.max_z() == p_in.max_z(), true);
 
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;

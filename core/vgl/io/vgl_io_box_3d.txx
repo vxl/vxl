@@ -12,12 +12,12 @@ void vsl_b_write(vsl_b_ostream &os, const vgl_box_3d<T> & p)
 {
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
-  vsl_b_write(os, p.get_min_x());
-  vsl_b_write(os, p.get_min_y());
-  vsl_b_write(os, p.get_min_z());
-  vsl_b_write(os, p.get_max_x());
-  vsl_b_write(os, p.get_max_y());
-  vsl_b_write(os, p.get_max_z());
+  vsl_b_write(os, p.min_x());
+  vsl_b_write(os, p.min_y());
+  vsl_b_write(os, p.min_z());
+  vsl_b_write(os, p.max_x());
+  vsl_b_write(os, p.max_y());
+  vsl_b_write(os, p.max_z());
 }
 
 //============================================================================
@@ -54,10 +54,10 @@ void vsl_b_read(vsl_b_istream &is, vgl_box_3d<T> & p)
 template<class T>
 void vsl_print_summary(vcl_ostream& os,const vgl_box_3d<T> & p)
 {
-  os<<"3d Box with opposite corners at (" <<p.get_min_x() << "," <<
-    p.get_min_y() << "," << p.get_min_z() <<")" <<vcl_endl;
-  os<<"and (" << p.get_max_x() << "," << p.get_max_y() << ","
-    << p.get_max_z() << ")" <<vcl_endl;
+  os<<"3d Box with opposite corners at (" <<p.min_x() << "," <<
+    p.min_y() << "," << p.min_z() <<")" <<vcl_endl;
+  os<<"and (" << p.max_x() << "," << p.max_y() << ","
+    << p.max_z() << ")" <<vcl_endl;
 }
 
 #define VGL_IO_BOX_3D_INSTANTIATE(T) \

@@ -543,32 +543,32 @@ void golden_test_vgl_io(bool save_file)
           float_line_segment_3d_in.point2().z()),
         true);
   TEST ("double_box_2d_out == double_box_2d_in",
-        almost_equal(double_box_2d_out.get_min_x(), double_box_2d_in.get_min_x()) &&
-        almost_equal(double_box_2d_out.get_min_y(), double_box_2d_in.get_min_y()) &&
-        almost_equal(double_box_2d_out.get_max_x(), double_box_2d_in.get_max_x()) &&
-        almost_equal(double_box_2d_out.get_max_y(), double_box_2d_in.get_max_y()),
+        almost_equal(double_box_2d_out.min_x(), double_box_2d_in.min_x()) &&
+        almost_equal(double_box_2d_out.min_y(), double_box_2d_in.min_y()) &&
+        almost_equal(double_box_2d_out.max_x(), double_box_2d_in.max_x()) &&
+        almost_equal(double_box_2d_out.max_y(), double_box_2d_in.max_y()),
         true);
   TEST ("float_box_2d_out == float_box_2d_in",
-        almost_equal(float_box_2d_out.get_min_x(), float_box_2d_in.get_min_x()) &&
-        almost_equal(float_box_2d_out.get_min_y(), float_box_2d_in.get_min_y()) &&
-        almost_equal(float_box_2d_out.get_max_x(), float_box_2d_in.get_max_x()) &&
-        almost_equal(float_box_2d_out.get_max_y(), float_box_2d_in.get_max_y()),
+        almost_equal(float_box_2d_out.min_x(), float_box_2d_in.min_x()) &&
+        almost_equal(float_box_2d_out.min_y(), float_box_2d_in.min_y()) &&
+        almost_equal(float_box_2d_out.max_x(), float_box_2d_in.max_x()) &&
+        almost_equal(float_box_2d_out.max_y(), float_box_2d_in.max_y()),
         true);
   TEST ("double_box_3d_out == double_box_3d_in",
-        almost_equal(double_box_3d_out.get_min_x(), double_box_3d_in.get_min_x()) &&
-        almost_equal(double_box_3d_out.get_max_x(), double_box_3d_in.get_max_x()) &&
-        almost_equal(double_box_3d_out.get_min_y(), double_box_3d_in.get_min_y()) &&
-        almost_equal(double_box_3d_out.get_max_y(), double_box_3d_in.get_max_y()) &&
-        almost_equal(double_box_3d_out.get_min_z(), double_box_3d_in.get_min_z()) &&
-        almost_equal(double_box_3d_out.get_max_z(), double_box_3d_in.get_max_z()),
+        almost_equal(double_box_3d_out.min_x(), double_box_3d_in.min_x()) &&
+        almost_equal(double_box_3d_out.max_x(), double_box_3d_in.max_x()) &&
+        almost_equal(double_box_3d_out.min_y(), double_box_3d_in.min_y()) &&
+        almost_equal(double_box_3d_out.max_y(), double_box_3d_in.max_y()) &&
+        almost_equal(double_box_3d_out.min_z(), double_box_3d_in.min_z()) &&
+        almost_equal(double_box_3d_out.max_z(), double_box_3d_in.max_z()),
         true);
   TEST ("float_box_3d_out == float_box_3d_in",
-        almost_equal(float_box_3d_out.get_min_x(), float_box_3d_in.get_min_x()) &&
-        almost_equal(float_box_3d_out.get_max_x(), float_box_3d_in.get_max_x()) &&
-        almost_equal(float_box_3d_out.get_min_y(), float_box_3d_in.get_min_y()) &&
-        almost_equal(float_box_3d_out.get_max_y(), float_box_3d_in.get_max_y()) &&
-        almost_equal(float_box_3d_out.get_min_z(), float_box_3d_in.get_min_z()) &&
-        almost_equal(float_box_3d_out.get_max_z(), float_box_3d_in.get_max_z()),
+        almost_equal(float_box_3d_out.min_x(), float_box_3d_in.min_x()) &&
+        almost_equal(float_box_3d_out.max_x(), float_box_3d_in.max_x()) &&
+        almost_equal(float_box_3d_out.min_y(), float_box_3d_in.min_y()) &&
+        almost_equal(float_box_3d_out.max_y(), float_box_3d_in.max_y()) &&
+        almost_equal(float_box_3d_out.min_z(), float_box_3d_in.min_z()) &&
+        almost_equal(float_box_3d_out.max_z(), float_box_3d_in.max_z()),
         true);
   TEST ("double_homg_plane_3d_out == double_homg_plane_3d_in",
         almost_equal(double_homg_plane_3d_out.nx()*double_homg_plane_3d_in.d(),

@@ -29,8 +29,8 @@ void test_box_2d_double_io()
   vsl_b_read(bfs_in, p_in);
   bfs_in.close();
 
-  TEST ("p_out == p_in", p_out.get_min_point() == p_in.get_min_point()
-                      && p_out.get_max_point() == p_in.get_max_point(), true);
+  TEST ("p_out == p_in", p_out.min_point() == p_in.min_point()
+                      && p_out.max_point() == p_in.max_point(), true);
 
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;

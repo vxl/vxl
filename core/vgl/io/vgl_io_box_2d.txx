@@ -12,10 +12,10 @@ void vsl_b_write(vsl_b_ostream &os, const vgl_box_2d<T> & p)
 {
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
-  vsl_b_write(os, p.get_min_x());
-  vsl_b_write(os, p.get_min_y());
-  vsl_b_write(os, p.get_max_x());
-  vsl_b_write(os, p.get_max_y());
+  vsl_b_write(os, p.min_x());
+  vsl_b_write(os, p.min_y());
+  vsl_b_write(os, p.max_x());
+  vsl_b_write(os, p.max_y());
 }
 
 //============================================================================
@@ -55,9 +55,9 @@ void vsl_b_read(vsl_b_istream &is, vgl_box_2d<T> & p)
 template<class T>
 void vsl_print_summary(vcl_ostream& os,const vgl_box_2d<T> & p)
 {
-  os<<"2d Box with opposite corners at (" <<p.get_min_x() << "," <<
+  os<<"2d Box with opposite corners at (" <<p.min_x() << "," <<
     p.get_min_y();
-  os<<") and (" << p.get_max_x() << "," << p.get_max_y() << ")";
+  os<<") and (" << p.max_x() << "," << p.max_y() << ")";
 }
 
 #define VGL_IO_BOX_2D_INSTANTIATE(T) \
