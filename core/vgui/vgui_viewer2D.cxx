@@ -18,6 +18,7 @@
 #include <vgui/vgui_glu.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_event.h>
+#include <vgui/vgui_event_condition.h>
 #include <vgui/vgui_drag_mixin.h>
 #include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_find.h>
@@ -45,6 +46,8 @@ static bool debug=false;
 
 const void * const vgui_viewer2D::CENTER_EVENT="x";
 
+// vgui_event_condition c_pan(vgui_MIDDLE, vgui_CTRL);
+vgui_event_condition c_pan(vgui_LEFT, vgui_modifier(vgui_CTRL + vgui_SHIFT));
 
 vgui_viewer2D::vgui_viewer2D(vgui_tableau_ref const& s) : 
   vgui_wrapper_tableau(s),
@@ -219,7 +222,7 @@ bool vgui_viewer2D::mouse_down(int x, int y, vgui_button button, vgui_modifier m
 
   // Middle mouse button press.  Update last seen mouse position. And set
   //  "panning" true since button is pressed.
-  if (button == vgui_MIDDLE && (modifier & vgui_CTRL)) {
+  if (c_pan(button, modifier)) {
     if (debug) vcl_cerr << "vgui_viewer2D_handler::middle " << vcl_endl;
       
     prev_x = x;
@@ -407,7 +410,7 @@ bool vgui_viewer2D::mouse_up(int /*x*/, int /*y*/,  vgui_button button, vgui_mod
     smooth_zooming = false;
   }
     
-  if (panning && button == vgui_MIDDLE) {
+  if (panning && button == c_pan.button) {
     panning = false;
   }
 
