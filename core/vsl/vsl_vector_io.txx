@@ -53,7 +53,10 @@ void vsl_b_read(vsl_b_istream& s, vcl_vector<T>& v)
     // Check this assumption holds.
     assert(v.size() == 0|| &v[v.size() - 1] - &v[0] + 1 == v.size());
 
-    vsl_b_read_block(s, &v[0], n);
+    if (v.size())
+    {
+      vsl_b_read_block(s, &v[0], n);
+    }
     break;
   default:
     vcl_cerr << "vsl_b_read(s, vcl_vector<T>&) Unknown version number "<< ver << vcl_endl;

@@ -28,6 +28,7 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_set<T>& v)
 template <class T>
 void vsl_b_read(vsl_b_istream& s, vcl_set<T>& v)
 {
+  v.clear();
   unsigned set_size;
   short ver;
   vsl_b_read(s, ver);

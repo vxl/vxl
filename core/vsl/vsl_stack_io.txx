@@ -36,6 +36,8 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_stack<T>& v)
 template <class T>
 void vsl_b_read(vsl_b_istream& s, vcl_stack<T>& v)
 {
+  while (!v.empty()) v.pop(); // clear stack, which has no clear() member
+
   unsigned stack_size;
   vcl_stack<T> tmp_stack;
   short ver;

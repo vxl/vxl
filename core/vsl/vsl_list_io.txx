@@ -29,6 +29,7 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_list<T>& v)
 template <class T>
 void vsl_b_read(vsl_b_istream& s, vcl_list<T>& v)
 {
+  v.clear();
   unsigned list_size;
   short ver;
   vsl_b_read(s, ver);
