@@ -18,6 +18,8 @@
 // \endverbatim
 
 
+#include <vcl_cstdio.h>
+#include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <vcl_iomanip.h>
@@ -27,7 +29,7 @@
 #include <vnl/algo/vnl_svd.h>
 
 template <class T>
-class mystack : public vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(T)> {
+class mystack : public vcl_vector<T> {
 public:
   void push(const T& t) {
     push_back(t);
@@ -37,7 +39,7 @@ public:
     int n = size();
     if (n == 0) {
       vcl_cerr <<  "ZOKS: Stack underflow\n";
-      exit(1);
+      vcl_exit(1);
     }
     T tmp = (*this)[n-1];
     pop_back();
@@ -55,19 +57,41 @@ public:
 void cantshift(const vcl_string& arg)
 {
   vcl_cerr << "matcalc: Missing argument after \"" << arg << "\".\n";
-  exit (-1);
+  vcl_exit (-1);
 }
 
 typedef vnl_matrix<double> Matrix;
 
 template class mystack<Matrix>;
 
+void print(mystack<Matrix> const &stack, char const *fmt)
+{
+  char buf[4096];
+  for (int k=0; k<stack.size(); ++k) {
+    Matrix const& M = stack[k];
+    for (int i=0; i<M.rows(); ++i) {
+      for (int j=0; j<M.cols(); ++j) {
+        vcl_sprintf(buf, fmt, M[i][j]);
+        vcl_cout << ' ' << buf;
+      }
+      vcl_cout << vcl_endl;
+    }
+    vcl_cout << vcl_endl;
+  }
+}
+
+void print(mystack<Matrix> const &stack, vcl_string const& fmt)
+{
+  print(stack, fmt.c_str());
+}
+
 int main(int argc, char ** argv)
 {
   mystack<Matrix> stack;
   int cout_precision = 0;
-
-  Matrix::set_print_format("%20.16e");
+  
+  //Matrix::set_print_format("%20.16e");
+  vcl_string print_format = "%20.16e";
 
   for(int i = 1; i < argc; ++i) {
     vcl_string arg = argv[i];
@@ -83,6 +107,7 @@ int main(int argc, char ** argv)
     } else if (arg == "*" || arg == "x") {
       POP2(a*b);
     } else if (arg == "/") {
+
       POP2(element_quotient(a,b));
 
     } else if (arg == "svd") {
@@ -113,11 +138,13 @@ int main(int argc, char ** argv)
 
       // Printing:
     } else if (arg == "p") {
-      stack.print();
+      //stack.print();
+      print(stack, print_format.c_str());
 
     } else if (arg == "fmt") {
       SHIFT;
-      Matrix::set_print_format(arg.c_str());
+      //Matrix::set_print_format(arg.c_str());
+      print_format = arg;
 
     } else if (arg == "setp") {
       Matrix a = stack.pop();
@@ -127,8 +154,8 @@ int main(int argc, char ** argv)
       char t[] = "%20.16e";
       t[4]='0'+cout_precision/10;
       t[5]='0'+cout_precision%10;
-      Matrix::set_print_format(t);
-
+      //Matrix::set_print_format(t);
+      print_format = t;
     } else { // Load from file
       Matrix m;
       vcl_ifstream f(arg.c_str());
@@ -139,8 +166,8 @@ int main(int argc, char ** argv)
       stack.push(m);
     }
   }
-  stack.print();
+  //stack.print();
+  print(stack, print_format);
 
   return 0;
 }
-
