@@ -21,6 +21,7 @@ IF (UNIX)
 
   FIND_PATH(QT_INCLUDE_DIR qt.h
     $ENV{QTDIR}/include
+    /usr/lib/qt3/include
     /usr/local/qt/include
     /usr/local/include
     /usr/include
@@ -28,6 +29,7 @@ IF (UNIX)
 
   FIND_LIBRARY(QT_QT_LIBRARY qt
     $ENV{QTDIR}/lib
+    /usr/lib/qt3/lib
     /usr/local/qt/lib
     /usr/local/lib
     /usr/lib
@@ -35,10 +37,12 @@ IF (UNIX)
 
   FIND_FILE(QT_MOC_EXECUTABLE moc
     $ENV{QTDIR}/bin
+    /usr/lib/qt3/bin
   )
 
   FIND_FILE(QT_UIC_EXECUTABLE uic
     $ENV{QTDIR}/bin
+    /usr/lib/qt3/bin
   )
 
 ENDIF (UNIX)
