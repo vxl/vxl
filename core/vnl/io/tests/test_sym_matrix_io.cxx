@@ -53,10 +53,10 @@ void test_sym_matrix_double_io()
 }
 
 
-void test_sym_matrix_prime()
+void test_sym_matrix_io()
 {
   test_sym_matrix_double_io();
 }
 
 
-TESTMAIN(test_sym_matrix_prime);
+TESTMAIN(test_sym_matrix_io);
