@@ -254,3 +254,29 @@ void vgui_utils::process_hits(int num_hits, GLuint* ptr, vcl_vector<vcl_vector<u
    if (debug) vcl_cerr << "hits.size() " << hits.size() << vcl_endl;
 }
 
+
+int
+vgui_utils::bits_per_pixel(GLenum format, GLenum type)
+{
+#define M(f, t, size) if (format == f && type == t) return size;
+  M(GL_RGB,      GL_UNSIGNED_BYTE,          24);
+  M(GL_BGR,      GL_UNSIGNED_BYTE,          24);
+  M(GL_RGBA,     GL_UNSIGNED_BYTE,          32);
+#if defined(GL_UNSIGNED_SHORT_5_6_5)
+  M(GL_RGB,      GL_UNSIGNED_SHORT_5_6_5,   16);
+#endif
+#if defined(GL_UNSIGNED_SHORT_5_5_5_1)
+  M(GL_RGB,      GL_UNSIGNED_SHORT_5_5_5_1, 16);
+#endif
+#if defined(GL_BGRA)
+  M(GL_BGRA,     GL_UNSIGNED_BYTE,          32);
+#endif
+#if defined(GL_EXT_abgr) || defined(GL_ABGR_EXT)
+  M(GL_ABGR_EXT, GL_UNSIGNED_BYTE,          32);
+#endif
+#undef M
+
+  vcl_cerr << "vgui_utils::bits_per_pixel: UNKNOWN COMBO, format = " << format << ", type = " << type << vcl_endl;
+  vcl_abort();
+  return 0;
+}
