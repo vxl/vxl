@@ -128,7 +128,7 @@ inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, int nbyt
 
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
-
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( T ) \
 inline const char * vsl_type_string(T /*dummy*/) { return #T; }
 macro (short);
@@ -144,6 +144,7 @@ macro(vcl_ptrdiff_t);
 macro(vcl_size_t);
 #endif
 #undef macro
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 //: The maximum length of buffer to use with arbitrary length integers
 // This macro tells you the size of buffer you need when using

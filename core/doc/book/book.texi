@@ -17,7 +17,7 @@
 @ifinfo
 This documents the VXL collection of C++ libraries.
 
-Copyright 2000 The TargetJr Consortium
+Copyright 2000-3 The TargetJr Consortium
 
 Permission is granted to copy and distribute, retaining this
 original copyright notice.

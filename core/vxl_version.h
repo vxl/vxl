@@ -7,18 +7,21 @@
 // This version number applies to the whole vxl tree, not just the
 // core libraries.
 
-//: Major version number
+//: Major version number.
 // This will only increase after major changes, or an large accumulation of 
 // significant smaller ones.
 #define VXL_VERSION_MAJOR 1
 
-//: Minor version number
+//: Minor version number.
 // This increments between versions. There is no 
 // "even = release, odd = developement" pattern, or anything like that.
 #define VXL_VERSION_MINOR 0
 
-//: This patch number only applies to Packaged vxl releases.
-// If you have downloaded the latest CVS version, you should use VXL_VERSION_DATE.
+//: Patch number.
+// This is only likely to be non-zero if an serious bug is found soon after the
+// release of x.y.0. The VXL-maintainers do not usually distinguish between bug fixes
+// and feature improvements, so the fix for most known bugs will first be released
+// in x.(y+1).0
 #define VXL_VERSION_PATCH 0
 
 
