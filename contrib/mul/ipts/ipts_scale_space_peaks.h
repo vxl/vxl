@@ -2,9 +2,9 @@
 #ifndef ipts_scale_space_peaks_h_
 #define ipts_scale_space_peaks_h_
 //:
-//  \file
-//  \brief Find peaks in scale-space
-//  \author Tim Cootes
+// \file
+// \brief Find peaks in scale-space
+// \author Tim Cootes
 
 #include <vimt/algo/vimt_find_peaks.h>
 #include <vgl/vgl_point_3d.h>
@@ -31,10 +31,10 @@ inline bool ipts_is_above_3x3(T value, const T* im,
 //  Points returned in a 3D point, given world coords + scale value
 template<class T>
 void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
-                            const vimt_image_2d_of<T>& image_below,
-                            const vimt_image_2d_of<T>& image,
-                            const vimt_image_2d_of<T>& image_above,
-                            bool clear_list = true)
+                               const vimt_image_2d_of<T>& image_below,
+                               const vimt_image_2d_of<T>& image,
+                               const vimt_image_2d_of<T>& image_above,
+                               bool clear_list = true)
 {
   if (clear_list) { peak_pts.resize(0); }
   unsigned ni=image.image().ni(),nj=image.image().nj();
@@ -53,7 +53,7 @@ void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
   dw = image.world2im().delta(vgl_point_2d<double>(0,0),dx);
   double scale = 1.0/vcl_sqrt(dw.x()*dw.x()+dw.y()*dw.y());
 
-  // Allow 3 pixel border to ensure avoid problems when 
+  // Allow 3 pixel border to ensure avoid problems when
   // testing level above
   for (unsigned j=3;j<nj-3;++j,row+=jstep)
   {
@@ -91,11 +91,11 @@ void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
 //  vimt_image_2d_of<T> - dummy indicates the typing.
 template<class T>
 void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
-                            const vimt_image_pyramid& image_pyr,
-                            T dummy)
+                               const vimt_image_pyramid& image_pyr,
+                               T dummy)
 {
   peak_pts.resize(0);
-  for (unsigned L=image_pyr.lo()+1;L<image_pyr.hi();++L)
+  for (int L=image_pyr.lo()+1;L<image_pyr.hi();++L)
   {
     const vimt_image_2d_of<T>& im_below =
                 dynamic_cast<const vimt_image_2d_of<T>&>(image_pyr(L-1));
@@ -108,5 +108,4 @@ void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
   }
 }
 
-#endif
-
+#endif // ipts_scale_space_peaks_h_
