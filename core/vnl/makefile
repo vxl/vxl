@@ -25,7 +25,6 @@ MANPAGE_SOURCES += vnl_matrix_exp.txx
 MANPAGE_SOURCES += vnl_file_matrix.txx
 
 MANPAGE_SOURCES += vnl_fortran_copy.txx
-MANPAGE_SOURCES += vnl_resize.txx
 MANPAGE_SOURCES += vnl_determinant.txx
 MANPAGE_SOURCES += vnl_quaternion.txx
 MANPAGE_SOURCES += vnl_scalar_join_iterator.txx
