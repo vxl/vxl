@@ -83,6 +83,8 @@ class bmrf_epi_seg :  public vbl_ref_count
 
   //: interpolated values
   double s(double alpha);
+  double x(double alpha);
+  double y(double alpha);
   double tan_ang(double alpha);
   double left_ds(double alpha);
   double left_int(double alpha);

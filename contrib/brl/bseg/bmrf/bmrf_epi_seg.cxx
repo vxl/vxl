@@ -199,6 +199,60 @@ double bmrf_epi_seg::s(double alpha)
   return 0;
 }
 
+
+//: point location in x
+double bmrf_epi_seg::x(double alpha)
+{
+  assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
+  double last_a = this->min_alpha();
+  int n = this->n_pts();
+  for (int i = 0; i<n; i++)
+  {
+    double a = seg_[i]->alpha();
+    if (a<alpha)
+    {
+      last_a = a;
+      continue;
+    }
+    else if (a==alpha)
+      return seg_[i]->x();
+
+    double x = linear_interpolate(last_a, a, seg_[i-1]->x(),
+                                  seg_[i]->x(), alpha);
+    return x;
+  }
+  // execution should never reach this point
+  assert(false);
+  return 0;
+}
+
+//:point location in y
+double bmrf_epi_seg::y(double alpha)
+{
+  assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
+  double last_a = this->min_alpha();
+  int n = this->n_pts();
+  for (int i = 0; i<n; i++)
+  {
+    double a = seg_[i]->alpha();
+    if (a<alpha)
+    {
+      last_a = a;
+      continue;
+    }
+    else if (a==alpha)
+      return seg_[i]->y();
+
+    double y = linear_interpolate(last_a, a, seg_[i-1]->y(),
+                                  seg_[i]->y(), alpha);
+    return y;
+  }
+  // execution should never reach this point
+  assert(false);
+  return 0;
+}
+
+
 //: Tangent angle in image coordinates
 double bmrf_epi_seg::tan_ang(double alpha)
 {
