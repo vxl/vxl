@@ -28,7 +28,7 @@
 // ---------- emulation
 #if !VCL_USE_NATIVE_STL
 # include "emulation/vcl_iterator.h"
-# define vcl_iterator forward_iterator
+# define vcl_iterator vcl_forward_iterator
 
 
 // ---------- later versions of gcc, e.g. egcs and 2.95
@@ -58,14 +58,6 @@
 # include "iso/vcl_iterator.h"
 // SUNPRO 5 has no reverse_bidirectional_iterator
 // vc has no raw_storage_iterator
-// using std::raw_storage_iterator;
-// #define vcl_reverse_bidirectional_iterator reverse_bidirectional_iterator
-// #define vcl_raw_storage_iterator raw_storage_iterator
-#endif
-
-// Needed for emulation STL with WinNT?
-#ifdef VCL_WIN32
-# define vcl_iterator_category_Iter_cat
 #endif
 
 #endif // vcl_iterator_h_
