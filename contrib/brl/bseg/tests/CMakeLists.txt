@@ -21,4 +21,3 @@ ADD_TEST(brip_test_fourier      bseg_test_all brip_test_fourier)
 ADD_TEST(brip_test_homography   bseg_test_all brip_test_homography)
 
 ADD_EXECUTABLE( bseg_test_include test_include.cxx)
-TARGET_LINK_LIBRARIES( bseg_test_include bmrf brip sdet segv strk vpro)
