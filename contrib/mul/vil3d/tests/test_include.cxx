@@ -5,6 +5,7 @@
 #include <vil3d/algo/vil3d_exp_filter.h>
 #include <vil3d/algo/vil3d_gauss_reduce.h>
 #include <vil3d/algo/vil3d_grad_1x3.h>
+#include <vil3d/algo/vil3d_normalised_correlation_3d.h>
 #include <vil3d/algo/vil3d_structuring_element.h>
 #include <vil3d/algo/vil3d_threshold.h>
 #include <vil3d/vil3d_copy.h>
