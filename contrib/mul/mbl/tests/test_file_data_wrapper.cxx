@@ -79,6 +79,8 @@ void test_file_data_wrapper()
   vcl_cout<<"current element= "<<wrapper.current()<<vcl_endl;
   TEST("testing wrapper3, should be set to first element",wrapper3.current(),v1);
 
+  collector.delete_stuff();
+
 #if !LEAVE_FILES_BEHIND
   vpl_unlink(path.c_str());
 #endif
