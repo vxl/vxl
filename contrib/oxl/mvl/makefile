@@ -6,7 +6,16 @@ VERSION := 1.0
 
 IMMEDIATE_LIBS += -lvnl-algo -lvnl -lvbl -lvcl
 
-SUBDIRS = examples
+SUBDIRS = tests examples
+
+# 0. stuff written in C++
+
+SOURCES += mvl_five_point_camera_pencil.cxx
+SOURCES += mvl_psi.cxx
+SOURCES += mvl_six_point_design_matrix_row.cxx
+SOURCES += mvl_three_view_six_point_structure.cxx
+SOURCES += $(wildcard mvl_mview_six_point_structure.cxx)
+SOURCES += $(wildcard mvl_image_point_conditioner.cxx)
 
 # 1. Homogeneous objects  
 
