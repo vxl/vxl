@@ -326,6 +326,7 @@ and much more.
 
 
 @section Optimising Image Processing Algorithms
+
 The design of vil2_image_view (being more flexible than the design of vil,)
 and the state of modern optimising compilers (no near as good as they
 could be,) means that naive use of vil2 images may not be as fast as it
@@ -345,10 +346,6 @@ void vil2_image_view<T>::fill(T value)
 @end example
 This implementation has the advantage of being simple, and easy to test.
 
-
-
-The first rule of optimisation is to concentrate your effort where most
-time is spent, in this case the inner-most loop.
 
 In an ideal world the compiler would realise that it doesn't
 have to recalculate the location of each pixel each step. (Of course, in
@@ -378,7 +375,7 @@ This can halve the run time on some compilers.
 One important approach in code optimisation is to observe how the code
 behaves in real life, and concentrate your efforts on where the code
 spends most of its time. In our example, this means the inner most loop
-It turns out that in many cases, @code{istep_==1}, because of the
+Now, it turns out that in many cases, @code{istep_==1}, because of the
 default image layout in memory. Because of this common case it would
 be worth having the compiler generate machine-code for the inner-most
 loop in this special case. We can do this by explicitly testing for
