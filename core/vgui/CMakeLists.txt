@@ -262,7 +262,6 @@ ENDIF (GLUT_FOUND)
 ##################################################
 
 IF (QT_FOUND)
-IF (QT_WRAP_CPP)
 
   OPTION(VGUI_USE_QT "Should Qt support be compiled into vgui?" YES)
 
@@ -298,7 +297,6 @@ IF (QT_WRAP_CPP)
 
   ENDIF(VGUI_USE_QT)
 
-ENDIF (QT_WRAP_CPP)
 ENDIF (QT_FOUND)
 
 ##################################################
