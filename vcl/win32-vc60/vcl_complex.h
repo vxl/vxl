@@ -11,10 +11,9 @@
 // errors may appear if they aren't here. IMS
 // It seems that these includes must appear for the first time before
 // _CRTIMP is modified below.  Otherwise, basic_filebuf (and others?)
-// member functions get defined more than once.  It is possible that
-// other stream headers should be included here as well. FWW
-# include <vcl_iostream.h>      // don't remove
+// member functions get defined more than once. FWW
 # include <vcl_fstream.h>       // don't remove
+# include <vcl_sstream.h>       // don't remove
 
 # include <vcl_cmath.h>
 # pragma warning (push)
