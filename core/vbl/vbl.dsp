@@ -353,6 +353,11 @@ SOURCE=.\Templates/vcl_map+vbl_triple+uint.uint.uint-.double-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vcl_map+vbl_triple+uint.uint.uint-.int-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vcl_vector+vbl_triple+double.int.int--.cxx
 
 # End Source File
