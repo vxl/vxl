@@ -1,7 +1,8 @@
 // This is mul/vil3d/vil3d_sample_profile_trilin.txx
 #ifndef vil3d_sample_profile_trilin_txx_
 #define vil3d_sample_profile_trilin_txx_
-//: \file
+//:
+//  \file
 //  \brief Profile sampling functions for 3D images
 //  \author Tim Cootes
 
@@ -9,8 +10,8 @@
 #include <vil3d/vil3d_trilin_interp.h>
 
 inline bool vil3d_profile_in_image(double x0, double y0, double z0,
-                                  double x1, double y1,double z1,
-                                  const vil3d_image_view_base& image)
+                                   double x1, double y1,double z1,
+                                   const vil3d_image_view_base& image)
 {
   if (x0<1) return false;
   if (y0<1) return false;
@@ -35,13 +36,14 @@ inline bool vil3d_profile_in_image(double x0, double y0, double z0,
 //  Points outside image return zero.
 template <class imType, class vecType>
 void vil3d_sample_profile_trilin(vecType* v,
-                               const vil3d_image_view<imType>& image,
-                               double x0, double y0, double z0,
-															 double dx, double dy, double dz,
-                               int n)
+                                 const vil3d_image_view<imType>& image,
+                                 double x0, double y0, double z0,
+                                 double dx, double dy, double dz,
+                                 int n)
 {
   bool all_in_image = vil3d_profile_in_image(x0,y0,z0,
-	                                   x0+(n-1)*dx,y0+(n-1)*dy,z0+(n-1)*dz,image);
+                                             x0+(n-1)*dx,y0+(n-1)*dy,z0+(n-1)*dz,
+                                             image);
 
   const unsigned ni = image.ni();
   const unsigned nj = image.nj();

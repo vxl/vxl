@@ -1,6 +1,7 @@
 #ifndef vil2_binary_dilate_h_
 #define vil2_binary_dilate_h_
-//: \file
+//:
+//  \file
 //  \brief Perform binary dilation on images
 //  \author Tim Cootes
 
@@ -18,14 +19,15 @@ inline bool vil2_binary_dilate(const bool* im, const int* offset, unsigned n)
 //: Return true if any image pixel under element centred at (i0,j0) is non-zero
 //  Checks boundary overlap
 inline bool vil2_binary_dilate(const vil2_image_view<bool>& image, unsigned plane,
-                        const vil2_structuring_element& element, int i0, int j0)
+                               const vil2_structuring_element& element, int i0, int j0)
 {
   unsigned n = element.p_i().size();
   for (int k=0;k<n;++k)
   {
     int i = i0+element.p_i()[k];
     int j = j0+element.p_j()[k];
-	if (i>=0 && i<image.ni() && j>=0 && j<image.nj() && image(i,j,plane)) return true;
+    if (i>=0 && i<image.ni() && j>=0 && j<image.nj() && image(i,j,plane))
+      return true;
   }
   return false;
 }
@@ -38,4 +40,4 @@ void vil2_binary_dilate(const vil2_image_view<bool>& src_image,
                         const vil2_structuring_element& element);
 
 
-#endif
+#endif // vil2_binary_dilate_h_
