@@ -43,7 +43,7 @@ IF (WIN32)
     mil_transform_2d.h
     )
   ENDIF (NOT CYGWIN)
-ENDIF(WIN32 && !CYGWIN)
+ENDIF(WIN32)
 
 
 AUX_SOURCE_DIRECTORY(Templates mil_sources )
