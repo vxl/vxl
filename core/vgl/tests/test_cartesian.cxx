@@ -257,18 +257,20 @@ static void test_line_2d()
   TEST("join", li, ll);
 
   vgl_line_segment_2d<double> ls(p1,p2); // line segment through these two points
+  vcl_cout << ls << '\n';
   TEST("line segment", ls.point1(), p1);
   TEST("line segment", ls.point2(), p2);
 
   vgl_line_segment_2d<double> ls2(p2,p1); // inverse line segment through these points
-  TEST("line segment intersection", vgl_lineseg_test(ls,ls2), true); // should be more extensively tested - TODO
+  vcl_cout << ls2 << '\n';
+  TEST("line segment intersection", vgl_lineseg_test(ls,ls2), true);
+  // should be more extensively tested - TODO
 
-  vgl_box_2d<double> bx(0,0,2,3);
+  vgl_box_2d<double> bx(0,2,0,3);
   vgl_line_segment_2d<double> ls3 = vgl_clip_line_to_box(li,bx);
-#if 0 // does not seem to work - TODO
+  vcl_cout << ls3 << '\n';
   TEST("line segment equality", ls3, ls);
   TEST("line segment equality", ls3, ls2);
-#endif
 }
 
 static void test_line_3d()
