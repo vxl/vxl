@@ -25,7 +25,7 @@ class vgui_vil2_section_buffer;
 // \relates vgui_vil2_section_buffer
 template<typename T>
 void
-vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& buf,
+vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& sec_buf,
                                 vil2_image_view<T> const& );
 
 #define sba_macro(T) \
