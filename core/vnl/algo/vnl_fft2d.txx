@@ -9,7 +9,6 @@
 #include <vcl/vcl_cstdlib.h>  // abort()
 #include <vcl/vcl_iostream.h>
 
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_complex_ops.h>
 #include <vnl/algo/vnl_netlib.h> // dgpfa_(), gpfa_()
 
