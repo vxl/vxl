@@ -16,7 +16,7 @@ int main()
     vcl_cout << (*p).first << " " << (*p).second << vcl_endl;
 
   mymap::iterator i = m.find(3);
-  okay = okay && (i == m.end());
+  okay = okay && (i == m.end()); // not found (=OK)
   i = m.find(2);
   okay = okay && (i != m.end()) && (i->second == 3141);
 
