@@ -104,7 +104,7 @@ add_feature_and_matches( rgrl_feature_sptr                      from_feature,
   matches_and_weights_.push_back( blank );
   for ( to_itr = matching_to.begin(); to_itr != matching_to.end(); ++to_itr )
   {
-    double sig_wgt = from_feature->absolute_signature_weight( *to_itr );
+    double sig_wgt = (*to_itr)->absolute_signature_weight( mapped_feature );
     matches_and_weights_.back().push_back( match_info( *to_itr, sig_wgt ));
   }
 }
