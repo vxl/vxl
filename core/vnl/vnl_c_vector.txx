@@ -35,7 +35,7 @@ void vnl_c_vector<T>::normalize(T* v, unsigned n)
     tmp += vnl_math_squared_magnitude(v[i]);
   tmp = real_t(1) / vcl_sqrt(tmp);
   for(unsigned i = 0; i < n; ++i)
-    v[i] *= tmp;
+    v[i] = (T)(tmp*v[i]);
 }
 
 template <class T>
