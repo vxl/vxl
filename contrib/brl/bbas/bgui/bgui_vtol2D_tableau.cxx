@@ -546,7 +546,12 @@ void
 bgui_vtol2D_rubberband_client::
 add_polygon(int n, float const* x, float const* y)
 {
-  vtol2D_->add_polygon(n, x, y);
+  vcl_vector<vtol_vertex_sptr> verts;
+  for(int i =0; i<n-1; i++)
+    verts.push_back(new vtol_vertex_2d(x[i], y[i]));
+  vtol_face_2d_sptr f2d = new vtol_face_2d(verts);
+  vtol2D_->add_face(f2d);
+  vtol2D_->set_temp(f2d->cast_to_face());
 }
 
 
