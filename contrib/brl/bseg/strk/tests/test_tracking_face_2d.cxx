@@ -186,7 +186,7 @@ static void test_tracking_face_2d(int argc, char* argv[])
                                    model_image_uni,
                                    null, null,
                                    null, null,
-                                   0, 0.5);
+                                   0, 0.5, 0,0,0);
     vcl_cout << "Parzen Sigma = 1\n";
     tf->compute_mutual_information(obs_image_uni, null, null, null, null);
     double jent1 = tf->intensity_entropy();
