@@ -1,7 +1,6 @@
-// This is ./vxl/vnl/vnl_rational.h
+// This is vxl/vnl/vnl_rational.h
 #ifndef vnl_rational_h_
 #define vnl_rational_h_
-
 //:
 // \file
 // \brief Infinite precision rational numbers
@@ -46,7 +45,6 @@
 
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for sqrt
 
 //: Infinite precision rational numbers
 //
@@ -380,100 +378,10 @@ inline long floor (vnl_rational const& r) { return r.floor(); }
 inline long ceil (vnl_rational const& r) { return r.ceil(); }
 inline long round (vnl_rational const& r) { return r.round(); }
 
-#if defined(VCL_SUNPRO_CC) || !VCL_USE_NATIVE_COMPLEX
-inline vnl_rational vcl_abs (vnl_rational const& x) { return x.abs(); }
-#else
-namespace std {
-  inline vnl_rational abs (vnl_rational const& x) { return x.abs(); }
-}
-#endif
-#if defined(VCL_SUNPRO_CC) || defined(VCL_SGI_CC) || !VCL_USE_NATIVE_COMPLEX
-inline vnl_rational vcl_sqrt(vnl_rational const& x) { return vnl_rational(vcl_sqrt(double(x))); }
-#elif defined (VCL_VC)
-inline vnl_rational sqrt(vnl_rational const& x) { return vnl_rational(sqrt(double(x))); }
-#else
-namespace std {
-  inline vnl_rational sqrt(vnl_rational const& x) { return vnl_rational(vcl_sqrt(double(x))); }
-}
-#endif
-
 inline vnl_rational vnl_math_abs(vnl_rational const& x) { return x<0L ? -x : x; }
 inline vnl_rational vnl_math_squared_magnitude(vnl_rational const& x) { return x*x; }
 inline vnl_rational vnl_math_sqr(vnl_rational const& x) { return x*x; }
 inline bool vnl_math_isnan(vnl_rational const& ){return false;}
 inline bool vnl_math_isfinite(vnl_rational const& x){return x.denominator() != 0L;} 
-
-#include <vnl/vnl_complex_traits.h>
-
-VCL_DEFINE_SPECIALIZATION
-struct vnl_complex_traits<vnl_rational>
-{
-  enum { isreal = true };
-  static vnl_rational conjugate(vnl_rational x) { return x; }
-  static vcl_complex<vnl_rational> complexify(vnl_rational x) { return vcl_complex<vnl_rational>(x, vnl_rational(0,1)); }
-};
-
-#include <vnl/vnl_numeric_traits.h>
-
-VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vnl_rational> {
-public:
-  //: Additive identity
-  static const vnl_rational zero; // = 0L
-  //: Multiplicative identity
-  static const vnl_rational one; // = 1L
-  //: Return value of abs()
-  typedef vnl_rational abs_t;
-  //: Name of a type twice as long as this one for accumulators and products.
-  typedef vnl_rational double_t;
-  //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
-};
-
-VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vnl_rational const> : public vnl_numeric_traits<vnl_rational> {
-};
-
-#include <vcl_complex.h>
-
-inline bool vnl_math_isnan(vcl_complex<vnl_rational> const& z)
-  { return vnl_math_isnan(vcl_real(z)) || vnl_math_isnan(vcl_imag(z)); }
-inline bool vnl_math_isfinite(vcl_complex<vnl_rational> const& z)
-  { return vnl_math_isfinite(vcl_real(z)) && vnl_math_isfinite(vcl_imag(z)); }
-inline vnl_rational vnl_math_squared_magnitude(vcl_complex<vnl_rational> const& z) { return vcl_norm(z); }
-inline vnl_rational vnl_math_abs(vcl_complex<vnl_rational> const& z) { return vcl_sqrt(vcl_norm(z)); }
-inline vcl_complex<vnl_rational> vnl_math_sqr(vcl_complex<vnl_rational> const& z) { return z*z; }
-inline vcl_ostream& operator<< (vcl_ostream& s, vcl_complex<vnl_rational> const& z) {
-  return s << '(' << z.real() << "," << z.imag() << ')'; }
-inline vcl_istream& operator>> (vcl_istream& s, vcl_complex<vnl_rational>& z) {
-  vnl_rational r, i; s >> r >> i; z=vcl_complex<vnl_rational>(r,i); return s; }
-
-
-VCL_DEFINE_SPECIALIZATION
-struct vnl_complex_traits<vcl_complex<vnl_rational> >
-{
-  enum { isreal = false };
-  static vcl_complex<vnl_rational> conjugate(vcl_complex<vnl_rational> x) {return vcl_complex<vnl_rational>(x.real(),-x.imag());}
-  static vcl_complex<vnl_rational> complexify(vcl_complex<vnl_rational> x) { return x; }
-};
-
-VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vcl_complex<vnl_rational> > {
-public:
-  //: Additive identity
-  static const vcl_complex<vnl_rational> zero; // = vcl_complex<vnl_rational>(0L,0L)
-  //: Multiplicative identity
-  static const vcl_complex<vnl_rational> one; // = vcl_complex<vnl_rational>(1L,0L)
-  //: Return value of abs()
-  typedef vnl_rational abs_t;
-  //: Name of a type twice as long as this one for accumulators and products.
-  typedef vcl_complex<vnl_rational> double_t;
-  //: Name of type which results from multiplying this type with a double
-  typedef vcl_complex<vnl_rational> real_t; // should be vcl_complex<double>, but that gives casting problems
-};
-
-VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vcl_complex<vnl_rational> const> : public vnl_numeric_traits<vcl_complex<vnl_rational> > {
-};
 
 #endif // vnl_rational_h_
