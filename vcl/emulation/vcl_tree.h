@@ -257,10 +257,10 @@ inline bool operator==(const __rb_tree_base_iterator& x,
   return x.node == y.node;
 }
 
-//inline bool operator!=(const __rb_tree_base_iterator& x,
-//                       const __rb_tree_base_iterator& y) {
-//  return x.node != y.node;
-//}
+inline bool operator!=(const __rb_tree_base_iterator& x,
+                       const __rb_tree_base_iterator& y) {
+  return x.node != y.node;
+}
 
 inline bidirectional_iterator_tag 
 iterator_category(const __rb_tree_base_iterator&) {

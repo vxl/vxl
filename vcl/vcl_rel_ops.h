@@ -7,19 +7,18 @@
 // Purpose: To provide a portable way of getting inline
 // function templates
 //      operator!=      ... !(x == y)
-//      operator>       ...  (y < x)
-//      operator<=      ... !(y < x)
-//      operator>=      ... !(x < y)
+//      operator>       ...  (y <  x)
+//      operator<=      ... !(y <  x)
+//      operator>=      ... !(x <  y)
 // For ISO compilers, these live in namespace std::rel_op.
 
 #include <vcl/vcl_compiler.h>
 
 #if !VCL_USE_NATIVE_STL
-// this header is wrong, but bear with it for now.
-# include <vcl/vcl_functional.h>
+# include <vcl/emulation/vcl_rel_ops.h>
 
 #elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
-// also wrong.
+// this header is wrong. v2 of the GNU library is wrong wrong wrong.
 # include <vcl/vcl_functional.h>
 
 #else // -------------------- ISO

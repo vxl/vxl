@@ -1,7 +1,8 @@
 /*
   fsm@robots.ox.ac.uk
 */
-struct X {
+struct X
+{
   int x;
   X(int x_) : x(x_) { }
   bool operator==(X const &that) const { return x == that.x; }

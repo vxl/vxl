@@ -11,12 +11,15 @@ template ostream & operator<<(ostream &, smanip<int> const &);
 
 #if defined(VCL_GCC_295)
 # if defined(GNU_LIBSTDCXX_V3)
+#  include <bits/ostream.tcc>
 // for some reason these templates aren't in libstdc++ (yet).
 template class std::basic_fstream<char, std::char_traits<char> >;
 template class std::basic_ifstream<char, std::char_traits<char> >;
 //template class std::basic_ofstream<char, std::char_traits<char> >;
 namespace {
   void tic(std::ostream &s, int x) { s << std::setw(14) << x; }
+  void toc(std::basic_ostream<char, std::char_traits<char> > &s,
+	   std::fpos<__mbstate_t> x) { s.seekp(x); }
 }
 # else
 #  if !VCL_HAS_TEMPLATE_SYMBOLS

@@ -51,6 +51,9 @@
 # include <math.h>
 #elif defined(VCL_EGCS) || (defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3))
 # include <cmath> // got the right prototypes, but not in namespace std::
+#elif defined(VCL_CXX_HAS_HEADER_CMATH) && !VCL_CXX_HAS_HEADER_CMATH
+# include <math.h> // e.g. SGI CC 7.30
+# define vcl_cmath_std
 #else // iso
 # include <vcl/iso/vcl_cmath.h>
 # define vcl_cmath_std
@@ -87,7 +90,7 @@ inline double      vcl_abs (double x) { return fabs (x); }
 inline long double vcl_abs (long double x) { return fabs (x); }
 
 # else
-#  define vcl_abs vcl_cmath_std abs
+#  define vcl_abs std:: abs
 # endif
 #endif
 

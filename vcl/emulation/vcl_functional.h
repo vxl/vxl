@@ -44,7 +44,9 @@
 #include <vcl/vcl_cstddef.h>
 #include <vcl/emulation/vcl_bool.h>
 
-//namespace std { namespace rel_ops {
+#if 0
+// fsm: these function templates are non-standard, or rather, the
+// standard ones live in namespace std::rel_ops.
 template <class T>
 inline bool operator!=(const T& x, const T& y) { return !(x == y); }
 
@@ -56,7 +58,7 @@ inline bool operator<=(const T& x, const T& y) { return !(y < x); }
 
 template <class T>
 inline bool operator>=(const T& x, const T& y) { return !(x < y); }
-//} }
+#endif
 
 template <class Arg, class Result>
 struct vcl_unary_function
