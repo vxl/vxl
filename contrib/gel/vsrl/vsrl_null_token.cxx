@@ -14,17 +14,17 @@ vsrl_null_token::~vsrl_null_token()
 double vsrl_null_token::cost(vsrl_token *tok)
 {
   // this is a null assignment
-  return _cost;
+  return cost_;
 }
 
 void vsrl_null_token::set_cost(double cost)
 {
   // set the cost
-  _cost=cost;
+  cost_=cost;
 }
 
 double vsrl_null_token::get_cost()
 {
   // get the cost
-  return _cost;
+  return cost_;
 }
