@@ -29,7 +29,7 @@
 //=======================================================================
 static bool inline almostEqualsOne(double value);
 static bool columnsAreUnitNorm(const vnl_matrix<double>& vecs);
-static bool vectorHasDescendingOrder(const vnl_vector<double>& v);
+// static bool vectorHasDescendingOrder(const vnl_vector<double>& v);
 
 
 //=======================================================================
@@ -155,8 +155,6 @@ static bool columnsAreUnitNorm(const vnl_matrix<double>& vecs)
 {
   const int m = vecs.rows();
   const int n = vecs.cols();
-  const double upper = 1 + 1e-06;
-  const double lower = 1 - 1e-06;
   for (int j=0; j<n; j++)
   {
     double sumsq = 0.0;
@@ -168,13 +166,13 @@ static bool columnsAreUnitNorm(const vnl_matrix<double>& vecs)
 }
 //=======================================================================
 
-static bool vectorHasDescendingOrder(const vnl_vector<double>& v)
-{
-  int n = v.size();
-  for (int i = 1; i < n; i++)
-    if (v(i-1) < v(i)) return false;
-  return true;
-}
+// static bool vectorHasDescendingOrder(const vnl_vector<double>& v)
+// {
+//   int n = v.size();
+//   for (int i = 1; i < n; i++)
+//     if (v(i-1) < v(i)) return false;
+//   return true;
+// }
 
 //=======================================================================
 
