@@ -48,6 +48,28 @@ vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& v)
                                    v.ystep(),v.xstep(),v.planestep());
 }
 
+//: Create a reflected view in which x -> (nx-1)-x
+//  i.e vil2_reflect_x(view)(x,y,p) = view(nx-1-x,y,p)
+template<class T>
+vil2_image_view<T> vil2_reflect_x(const vil2_image_view<T>& v)
+{
+  return vil2_image_view<T>(v.memory_chunk(),
+                            v.top_left_ptr()+(v.nx()-1)*v.xstep(),
+                            v.nx(),v.ny(),v.nplanes(),
+                            -v.xstep(),v.ystep(),v.planestep());
+}
+
+//: Create a reflected view in which y -> (ny-1)-y
+//  i.e vil2_reflect_y(view)(x,y,p) = view(x,ny-1-y,p)
+template<class T>
+vil2_image_view<T> vil2_reflect_y(const vil2_image_view<T>& v)
+{
+  return vil2_image_view<T>(v.memory_chunk(),
+                            v.top_left_ptr()+(v.ny()-1)*v.ystep(),
+                            v.nx(),v.ny(),v.nplanes(),
+                            v.xstep(),-v.ystep(),v.planestep());
+}
+
 //: Compute minimum and maximum values over view
 template<class T>
 void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T>& view)
@@ -182,6 +204,8 @@ template void vil2_print_value(vcl_ostream& os, const T& value)
 // For everything else
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE(T) \
 template vil2_image_view<T > vil2_transpose(const vil2_image_view<T >& v); \
+template vil2_image_view<T > vil2_reflect_x(const vil2_image_view<T >& view); \
+template vil2_image_view<T > vil2_reflect_y(const vil2_image_view<T >& view); \
 template void vil2_print_all(vcl_ostream& os,const vil2_image_view<T >& view); \
 template void vil2_fill(vil2_image_view<T >& view, T value); \
 template void vil2_fill_line(T * data, unsigned n, int step, T value); \

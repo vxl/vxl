@@ -23,6 +23,16 @@ vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& plane_vi
 template<class T>
 vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& view);
 
+//: Create a reflected view in which x -> (nx-1)-x
+//  i.e vil2_reflect_x(view)(x,y,p) = view(nx-1-x,y,p)
+template<class T>
+vil2_image_view<T> vil2_reflect_x(const vil2_image_view<T>& view);
+
+//: Create a reflected view in which y -> (ny-1)-y
+//  i.e vil2_reflect_y(view)(x,y,p) = view(x,ny-1-y,p)
+template<class T>
+vil2_image_view<T> vil2_reflect_y(const vil2_image_view<T>& view);
+
 //: Fill view with given value
 template<class T>
 void vil2_fill(vil2_image_view<T>& view, T value);
