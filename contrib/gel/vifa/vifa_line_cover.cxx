@@ -11,27 +11,27 @@
 vifa_line_cover::
 vifa_line_cover()
 {
-  _line = NULL;
-  _index = NULL;
-  _max_extent = NULL;
-  _min_extent = NULL;
-  _dim =0;
+  line_ = NULL;
+  index_ = NULL;
+  max_extent_ = NULL;
+  min_extent_ = NULL;
+  dim_ =0;
 }
 
 vifa_line_cover::
 vifa_line_cover(imp_line_sptr  prototype_line,
-                int            _indexdimension)
+                int            indexdimension)
 {
-  _line = prototype_line;
-  _dim = _indexdimension;
-  _index = new int[_dim];
-  _max_extent = new double[_dim];
-  _min_extent = new double[_dim];
-  for (int i = 0; i < _dim; i++)
+  line_ = prototype_line;
+  dim_ = indexdimension;
+  index_ = new int[dim_];
+  max_extent_ = new double[dim_];
+  min_extent_ = new double[dim_];
+  for (int i = 0; i < dim_; i++)
   {
-    _index[i] = 0;
-    _max_extent[i] = -1E6;
-    _min_extent[i] = 1E6;
+    index_[i] = 0;
+    max_extent_[i] = -1E6;
+    min_extent_[i] = 1E6;
   }
 }
 
@@ -40,9 +40,9 @@ vifa_line_cover(imp_line_sptr  prototype_line,
 vifa_line_cover::
 ~vifa_line_cover()
 {
-  delete [] _index;
-  delete [] _max_extent;
-  delete [] _min_extent;
+  delete [] index_;
+  delete [] max_extent_;
+  delete [] min_extent_;
 }
 
 //------------------------------------------------------------
@@ -50,7 +50,7 @@ vifa_line_cover::
 void vifa_line_cover::
 InsertLine(imp_line_sptr  l)
 {
-  int  rdim1 = _dim - 1;
+  int  rdim1 = dim_ - 1;
 
   // Find the 2-D projection of l onto the prototype line
   // That is, find the parameter bounds
@@ -58,8 +58,8 @@ InsertLine(imp_line_sptr  l)
   vgl_point_2d<double>  ep;
   sp = l->point1();
   ep = l->point2();
-  double  ts = _line->find_t(sp);
-  double  te = _line->find_t(ep);
+  double  ts = line_->find_t(sp);
+  double  te = line_->find_t(ep);
 
   // Get properly ordered and limited parameter bounds
   int ist = 0;
@@ -67,13 +67,9 @@ InsertLine(imp_line_sptr  l)
   if (ts < te)
   {
     if (ts < 0)
-    {
       ts = 0;
-    }
     if (te > 1.0)
-    {
       te = 1.0;
-    }
 
     ist = (int)(rdim1 * ts);
     iend = (int)(rdim1 * te);
@@ -81,13 +77,9 @@ InsertLine(imp_line_sptr  l)
   else
   {
     if (te < 0)
-    {
       te = 0;
-    }
     if (ts > 1.0)
-    {
       ts = 1.0;
-    }
 
     ist = (int)(rdim1 * te);
     iend = (int)(rdim1 * ts);
@@ -96,15 +88,15 @@ InsertLine(imp_line_sptr  l)
   // Next accumulate the bins for each line coverage
   for (int i = ist; i <= iend; i++)
   {
-    _index[i]++;
+    index_[i]++;
     double          t = (double)i / (double)rdim1;
-    vgl_point_2d<double>  pos = _line->find_at_t(t);
+    vgl_point_2d<double>  pos = line_->find_at_t(t);
 
     vgl_point_2d<double>  p = l->project_2d_pt(pos);
     double          d = this->get_signed_distance(p);
 
-    _min_extent[i] = vcl_min(_min_extent[i], d);
-    _max_extent[i] = vcl_max(_max_extent[i], d);
+    min_extent_[i] = vcl_min(min_extent_[i], d);
+    max_extent_[i] = vcl_max(max_extent_[i], d);
   }
 }
 
@@ -116,16 +108,14 @@ double vifa_line_cover::
 GetCoverage()
 {
   int  sum = 0;
-  for (int i = 0; i < _dim; i++)
+  for (int i = 0; i < dim_; i++)
   {
-    int  nlines = _index[i];
+    int  nlines = index_[i];
     if (nlines > 1)
-    {
       sum += (nlines - 1);
-    }
   }
 
-  return (double)sum / _dim;
+  return (double)sum / dim_;
 }
 
 //---------------------------------------------------------------
@@ -137,13 +127,9 @@ GetDenseCoverage()
   double  cov = this->GetCoverage();
   double  cover_extent = double(this->get_index_max() - this->get_index_min());
   if (cover_extent <= 0)
-  {
     return 0.0;
-  }
   else
-  {
-    return (_dim * cov) / cover_extent;
-  }
+    return (dim_ * cov) / cover_extent;
 }
 
 
@@ -153,15 +139,11 @@ GetDenseCoverage()
 double vifa_line_cover::
 GetCustomCoverage(const double  norm)
 {
-  double  total_cover = this->GetCoverage() * _dim;
+  double  total_cover = this->GetCoverage() * dim_;
   if (norm <= 0)
-  {
     return 0.0;
-  }
   else
-  {
     return total_cover / norm;
-  }
 }
 //---------------------------------------------------------------
 //: Get extent of image space where parallel lines overlap under projection onto the prototype.
@@ -169,7 +151,7 @@ void vifa_line_cover::
 GetExtent(imp_line_sptr&  lmin,
           imp_line_sptr&  lmax)
 {
-  if (!_line)
+  if (!line_)
   {
     lmin = NULL;
     lmax = NULL;
@@ -184,8 +166,8 @@ GetExtent(imp_line_sptr&  lmin,
   // Scan for the max and min lateral extents
   for (int i = st; i <= en; i++)
   {
-    min_ex = vcl_min(_min_extent[i], min_ex);
-    max_ex = vcl_max(_max_extent[i], max_ex);
+    min_ex = vcl_min(min_extent_[i], min_ex);
+    max_ex = vcl_max(max_extent_[i], max_ex);
   }
 
   // Construct min and max bounding lines
@@ -196,12 +178,10 @@ GetExtent(imp_line_sptr&  lmin,
 int vifa_line_cover::
 get_index_min()
 {
-  for (int i = 1; (i < _dim); i++)
+  for (int i = 1; (i < dim_); i++)
   {
-    if (_index[i] > 1)
-    {
+    if (index_[i] > 1)
       return i;
-    }
   }
 
   return 0;
@@ -210,12 +190,10 @@ get_index_min()
 int vifa_line_cover::
 get_index_max()
 {
-  for (int i =_dim - 1; i > 0; i--)
+  for (int i = dim_ - 1; i > 0; --i)
   {
-    if (_index[i] > 1)
-    {
+    if (index_[i] > 1)
       return i;
-    }
   }
   return 0;
 }
@@ -224,7 +202,7 @@ get_index_max()
 double vifa_line_cover::
 get_signed_distance(vgl_point_2d<double> const &  p)
 {
-  double  a = _line->a(), b = _line->b(), c = _line->c();
+  double  a = line_->a(), b = line_->b(), c = line_->c();
   double  d = a * p.x() + b * p.y() + c;
   return d;
 }
@@ -237,13 +215,13 @@ get_offset_line(int    start,
                 double d)
 {
   // The normal vector
-  vgl_vector_2d<double>  n = _line->normal();
+  vgl_vector_2d<double>  n = line_->normal();
 
   // The end points on the prototype line
-  double          ts = (double)start / (double)(_dim - 1);
-  vgl_point_2d<double>  ps = _line->find_at_t(ts);
-  double          te = (double)end / (double)(_dim - 1);
-  vgl_point_2d<double>  pe = _line->find_at_t(te);
+  double  ts = (double)start / double(dim_ - 1);
+  vgl_point_2d<double>  ps = line_->find_at_t(ts);
+  double  te = (double)end / double(dim_ - 1);
+  vgl_point_2d<double>  pe = line_->find_at_t(te);
 
   n *= d; // Extend the normal
   ps += n; // The offset start point

@@ -25,11 +25,11 @@ vifa_int_face_attr_common_params(sdet_fit_lines_params*    fitter_params,
 vifa_int_face_attr_common_params::
 vifa_int_face_attr_common_params(const vifa_int_face_attr_common_params&  ifap)
 {
-  init_params(ifap._fitter_params.ptr(),
-              ifap._gpp_s.ptr(),
-              ifap._gpp_w.ptr(),
-              ifap._cpp.ptr(),
-              ifap._np.ptr());
+  init_params(ifap.fitter_params_.ptr(),
+              ifap.gpp_s_.ptr(),
+              ifap.gpp_w_.ptr(),
+              ifap.cpp_.ptr(),
+              ifap.np_.ptr());
 }
 
 vifa_int_face_attr_common_params::
@@ -42,11 +42,11 @@ vifa_int_face_attr_common_params::
 void vifa_int_face_attr_common_params::
 set_params(const vifa_int_face_attr_common_params&  ifap)
 {
-  init_params(ifap._fitter_params.ptr(),
-              ifap._gpp_s.ptr(),
-              ifap._gpp_w.ptr(),
-              ifap._cpp.ptr(),
-              ifap._np.ptr());
+  init_params(ifap.fitter_params_.ptr(),
+              ifap.gpp_s_.ptr(),
+              ifap.gpp_w_.ptr(),
+              ifap.cpp_.ptr(),
+              ifap.np_.ptr());
 }
 
 //: Checks that parameters are within acceptable bounds
@@ -55,10 +55,10 @@ bool vifa_int_face_attr_common_params::SanityCheck()
   vcl_stringstream  msg;
   bool        valid = true;
 
-  if (!_fitter_params.ptr() ||
-      !_gpp_s.ptr() ||
-      !_gpp_w.ptr() ||
-      !_cpp.ptr())
+  if (!fitter_params_.ptr() ||
+      !gpp_s_.ptr() ||
+      !gpp_w_.ptr() ||
+      !cpp_.ptr())
   {
     msg << "ERROR: {FitLines, GroupParallelogram, CollinearLines} params not set." << vcl_ends;
     valid = false;
@@ -66,10 +66,10 @@ bool vifa_int_face_attr_common_params::SanityCheck()
   else
   {
     // Result is result of contained parameters' SanityCheck()'s
-    valid = _fitter_params->SanityCheck() &&
-        _gpp_s->SanityCheck() &&
-        _gpp_w->SanityCheck() &&
-        _cpp->SanityCheck();
+    valid = fitter_params_->SanityCheck() &&
+            gpp_s_->SanityCheck() &&
+            gpp_w_->SanityCheck() &&
+            cpp_->SanityCheck();
   }
 
   SetErrorMsg(msg.str().c_str());
@@ -81,50 +81,30 @@ print_info(void)
 {
   vcl_cout << "vifa_int_face_attr_common_params:\n"
            << "  line fitting params: ";
-  if (_fitter_params.ptr())
-  {
-    vcl_cout << *_fitter_params;
-  }
+  if (fitter_params_.ptr())
+    vcl_cout << *fitter_params_;
   else
-  {
     vcl_cout << "NULL\n";
-  }
   vcl_cout << "  strong group parallelogram params: ";
-  if (_gpp_s.ptr())
-  {
-    _gpp_s->print_info();
-  }
+  if (gpp_s_.ptr())
+    gpp_s_->print_info();
   else
-  {
     vcl_cout << "NULL\n";
-  }
   vcl_cout << "  weak group parallelogram params: ";
-  if (_gpp_w.ptr())
-  {
-    _gpp_w->print_info();
-  }
+  if (gpp_w_.ptr())
+    gpp_w_->print_info();
   else
-  {
     vcl_cout << "NULL\n";
-  }
   vcl_cout << "  collinear lines params: ";
-  if (_cpp.ptr())
-  {
-    _cpp->print_info();
-  }
+  if (cpp_.ptr())
+    cpp_->print_info();
   else
-  {
     vcl_cout << "NULL\n";
-  }
   vcl_cout << "  normalization params: ";
-  if (_np.ptr())
-  {
-    _np->print_info();
-  }
+  if (np_.ptr())
+    np_->print_info();
   else
-  {
     vcl_cout << "NULL\n";
-  }
 }
 
 //: Assign internal parameter blocks
@@ -137,63 +117,40 @@ init_params(sdet_fit_lines_params*    fitter_params,
            )
 {
   if (fitter_params)
-  {
-    _fitter_params = new sdet_fit_lines_params(*fitter_params);
-  }
+    fitter_params_ = new sdet_fit_lines_params(*fitter_params);
   else
-  {
-    const int  min_fit_length = 6;
-    _fitter_params = new sdet_fit_lines_params(min_fit_length);
-  }
+    fitter_params_ = new sdet_fit_lines_params(/*min_fit_length=*/ 6);
   if (gpp_s)
-  {
-    _gpp_s = new vifa_group_pgram_params(*gpp_s);
-  }
+    gpp_s_ = new vifa_group_pgram_params(*gpp_s);
   else
-  {
-    const float  angle_increment = 5.0;
-    _gpp_s = new vifa_group_pgram_params(angle_increment);
-  }
+    gpp_s_ = new vifa_group_pgram_params(/*angle_increment=*/ 5.0);
   if (gpp_w)
-  {
-    _gpp_w = new vifa_group_pgram_params(*gpp_w);
-  }
+    gpp_w_ = new vifa_group_pgram_params(*gpp_w);
   else
-  {
-    const float  angle_increment = 20.0;
-    _gpp_w = new vifa_group_pgram_params(angle_increment);
-  }
+    gpp_w_ = new vifa_group_pgram_params(/*angle_increment=*/ 20.0);
   if (cpp)
-  {
-    _cpp = new vifa_coll_lines_params(*cpp);
-  }
+    cpp_ = new vifa_coll_lines_params(*cpp);
   else
-  {
-    _cpp = new vifa_coll_lines_params();
-  }
+    cpp_ = new vifa_coll_lines_params();
   if (np)
-  {
-    _np = new vifa_norm_params(*np);
-  }
+    np_ = new vifa_norm_params(*np);
   else
-  {
-    _np = new vifa_norm_params();
-  }
+    np_ = new vifa_norm_params();
 }
 
 
 //: Assign internal parameter blocks
 void vifa_int_face_attr_common_params::
-init_params(const sdet_fit_lines_params&  fitter_params,
-            const vifa_group_pgram_params&  gpp_s,
-            const vifa_group_pgram_params&  gpp_w,
+init_params(const sdet_fit_lines_params&   fitter_params,
+            const vifa_group_pgram_params& gpp_s,
+            const vifa_group_pgram_params& gpp_w,
             const vifa_coll_lines_params&  cpp,
-            const vifa_norm_params&      np
+            const vifa_norm_params&        np
            )
 {
-  _fitter_params = new sdet_fit_lines_params(fitter_params);
-  _gpp_s = new vifa_group_pgram_params(gpp_s);
-  _gpp_w = new vifa_group_pgram_params(gpp_w);
-  _cpp = new vifa_coll_lines_params(cpp);
-  _np = new vifa_norm_params(np);
+  fitter_params_ = new sdet_fit_lines_params(fitter_params);
+  gpp_s_ = new vifa_group_pgram_params(gpp_s);
+  gpp_w_ = new vifa_group_pgram_params(gpp_w);
+  cpp_ = new vifa_coll_lines_params(cpp);
+  np_ = new vifa_norm_params(np);
 }

@@ -29,21 +29,21 @@
 
 class vifa_group_pgram : public vifa_group_pgram_params
 {
-  int         _th_dim;
-  double      _angle_range;
+  int         th_dim_;
+  double      angle_range_;
 
   //: Array of dominant theta indices
-  vcl_vector<int>  _dominant_dirs;
+  vcl_vector<int>  dominant_dirs_;
 
-  vifa_bbox_sptr  _bb;
-  imp_line_table  _curves;
-  double          _tmp1;
+  vifa_bbox_sptr  bb_;
+  imp_line_table  curves_;
+  double          tmp1_;
 
  public:
   // Constructors and Destructors
-  vifa_group_pgram(imp_line_list&          lg,
+  vifa_group_pgram(imp_line_list&                 lg,
                    const vifa_group_pgram_params& old_params,
-                   double              angle_range = 180.0
+                   double                         angle_range = 180.0
                   );
   ~vifa_group_pgram();
 
@@ -60,8 +60,7 @@ class vifa_group_pgram : public vifa_group_pgram_params
                                       imp_line_list&  lg
                                      );
   vifa_bbox_sptr GetBoundingBox(void);
-  void           SetTemp1(const double  tmp)
-  { _tmp1 = tmp; }
+  void           SetTemp1(const double  tmp) { tmp1_ = tmp; }
   double         GetAdjacentPerimeter(int  bin);
   double         norm_parallel_line_length(void);
 
@@ -77,24 +76,22 @@ class vifa_group_pgram : public vifa_group_pgram_params
 inline void vifa_group_pgram::
 CheckUpdateBoundingBox(void)
 {
-  if (!_bb )
+  if (!bb_ )
   {
-    _bb = new vifa_bbox;
+    bb_ = new vifa_bbox;
     this->ComputeBoundingBox();
     return;
   }
 
-  if (_bb->older(this))
-  {
+  if (bb_->older(this))
     this->ComputeBoundingBox();
-  }
 }
 
 inline vifa_bbox_sptr vifa_group_pgram::
 GetBoundingBox(void)
 {
   this->CheckUpdateBoundingBox();
-  return _bb;
+  return bb_;
 }
 
 

@@ -16,14 +16,14 @@ vifa_norm_params(float  IntLow,
                  float  ProbLow,
                  float  IntHigh,
                  float  ProbHigh) :
-  _ilow(IntLow),
-  _plow(ProbLow),
-  _ihigh(IntHigh),
-  _phigh(ProbHigh),
-  _imin(0.0),
-  _imax(0.0),
-  _slope(0.0),
-  _b(0.0)
+  ilow(IntLow),
+  plow(ProbLow),
+  ihigh(IntHigh),
+  phigh(ProbHigh),
+  imin_(0.0),
+  imax_(0.0),
+  slope_(0.0),
+  b_(0.0)
 {
   calculate_clip_points();
 }
@@ -31,10 +31,10 @@ vifa_norm_params(float  IntLow,
 vifa_norm_params::
 vifa_norm_params(const vifa_norm_params&  old_params)
 {
-  _ilow = old_params._ilow;
-  _plow = old_params._plow;
-  _ihigh = old_params._ihigh;
-  _phigh = old_params._phigh;
+  ilow = old_params.ilow;
+  plow = old_params.plow;
+  ihigh = old_params.ihigh;
+  phigh = old_params.phigh;
   calculate_clip_points();
 }
 
@@ -47,22 +47,16 @@ recompute(void)
 float vifa_norm_params::
 normalize(float raw_intensity)
 {
-  if (_imin == _imax)
-  {
+  if (imin_ == imax_)
     return raw_intensity;
-  }
 
-  if (raw_intensity <= _imin)
-  {
+  if (raw_intensity <= imin_)
     return 0.0;
-  }
 
-  if (raw_intensity >= _imax)
-  {
+  if (raw_intensity >= imax_)
     return 1.0;
-  }
 
-  return raw_intensity * _slope + _b;
+  return raw_intensity * slope_ + b_;
 }
 
 bool vifa_norm_params::
@@ -93,9 +87,8 @@ get_norm_bounds(vil_image_view_base*  img,
       temp_roi = new RectROI(startx, starty, roi_sizex, roi_sizey);
     }
     else
-    {
       temp_roi = new RectROI(0, 0, xsize, ysize);
-    }
+
     img->SetROI(temp_roi);
 #endif  // ROI_SUPPORTED
 
@@ -111,51 +104,45 @@ get_norm_bounds(vil_image_view_base*  img,
     return true;
   }
   else
-  {
     return false;
-  }
 }
 
 void vifa_norm_params::
 print_info(void)
 {
   vcl_cout << "vifa_norm_params:\n"
-           << "  low % thresh    = " << _plow << vcl_endl
-           << "  high % thresh   = " << _phigh << vcl_endl
-           << "  low int thresh  = " << _ilow << vcl_endl
-           << "  high int thresh = " << _ihigh << vcl_endl
-           << "  int min         = " << _imin << vcl_endl
-           << "  int max         = " << _imax << vcl_endl;
+           << "  low % thresh    = " << plow << vcl_endl
+           << "  high % thresh   = " << phigh << vcl_endl
+           << "  low int thresh  = " << ilow << vcl_endl
+           << "  high int thresh = " << ihigh << vcl_endl
+           << "  int min         = " << imin_ << vcl_endl
+           << "  int max         = " << imax_ << vcl_endl;
 }
 
 void vifa_norm_params::
 calculate_clip_points(void)
 {
-  _imin = 0.0;
-  _imax = 0.0;
+  imin_ = 0.0;
+  imax_ = 0.0;
 
-  float int_range = _ihigh - _ilow;
-  if (int_range < 1.0e-04)
-  {
+  float int_range = ihigh - ilow;
+  if (int_range < 1e-4)
     return;
-  }
 
-  float p_range = _phigh - _plow;
-  if (p_range < 1.0e-06)
-  {
+  float p_range = phigh - plow;
+  if (p_range < 1e-6)
     return;
-  }
 
   // find m and b in y=mx+b
 
-  _slope = p_range / int_range;
-  _b = (_plow - (_slope * _ilow));
+  slope_ = p_range / int_range;
+  b_ = (plow - (slope_ * ilow));
 
   // solve for x when y=0, y=1
 
-  _imin = (0.0 - _b) / _slope;
-  _imax = (1.0 - _b) / _slope;
+  imin_ = (0.0 - b_) / slope_;
+  imax_ = (1.0 - b_) / slope_;
 
-  //  vcl_cout << "slope: " << _slope << " b: " << _b << " imin: " << _imin
-  //           << " imax " << _imax << vcl_endl;
+  //  vcl_cout << "slope: " << slope_ << " b: " << b_ << " imin: " << imin_
+  //           << " imax " << imax_ << vcl_endl;
 }

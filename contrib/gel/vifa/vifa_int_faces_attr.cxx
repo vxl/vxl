@@ -84,11 +84,11 @@ init()
   weighted_perimeter_ = -1;
   // attr_map_ is allocated in ComputeSingleFaceAttributes.
 
-  _cached_2_parallel = -1;
-  _cached_4_parallel = -1;
-  _cached_80_parallel = -1;
+  cached_2_parallel_ = -1;
+  cached_4_parallel_ = -1;
+  cached_80_parallel_ = -1;
 
-  _npobj = 0;
+  npobj_ = 0;
 
   attr_vec_.reserve(NumHistAttributes());
   for (int i=0; i < NumHistAttributes(); i++)
@@ -110,7 +110,7 @@ vifa_int_faces_attr(sdet_fit_lines_params*    fitter_params,
   : vifa_int_face_attr_common(fitter_params, gpp_s, gpp_w, cpp, np)
 {
   this->init();
-  _factory = factory;
+  factory_ = factory;
 }
 
 vifa_int_faces_attr::
@@ -125,14 +125,14 @@ vifa_int_faces_attr(iface_list&          v,
     faces_(v)
 {
   this->init();
-  _factory = factory;
-  _attributes_valid = this->ComputeAttributes();
+  factory_ = factory;
+  attributes_valid_ = this->ComputeAttributes();
 }
 
 vifa_int_faces_attr::
 ~vifa_int_faces_attr()
 {
-  delete _npobj;
+  delete npobj_;
 }
 
 // ----------------------------------------------------------------
@@ -153,33 +153,31 @@ SetFaces(iface_list& v)
   faces_ = v;
 
   // Reset everything
-  delete _npobj;
+  delete npobj_;
   this->init();
 
   // Recompute the attributes
-  _attributes_valid = this->ComputeAttributes();
+  attributes_valid_ = this->ComputeAttributes();
 }
 
 edge_2d_list& vifa_int_faces_attr::
 GetEdges()
 {
   // don't compute again if already there
-  if (!_edges.empty())
-  {
-    return _edges;
-  }
+  if (!edges_.empty())
+    return edges_;
 
   if (faces_.empty())
   {
     vcl_cerr << "vifa_int_faces_attr::GetEdges: faces_ is not set\n";
-    return _edges;
+    return edges_;
   }
 
   // Get edges from all faces, remove duplicates
   for (iface_iterator f = faces_.begin(); f != faces_.end(); ++f)
   {
     edge_list*      fedges = (*f)->edges();
-    edge_2d_iterator  _edges_pos;
+    edge_2d_iterator  edges_pos_;
     for (edge_iterator ei = fedges->begin(); ei != fedges->end(); ei++)
     {
       vtol_edge_2d*  e_ptr = (*ei)->cast_to_edge_2d();
@@ -188,18 +186,16 @@ GetEdges()
       {
         vtol_edge_2d_sptr  e = vtol_edge_2d_sptr(e_ptr);
 
-        _edges_pos = vcl_find(_edges.begin(), _edges.end(), e);
-        if (_edges_pos == _edges.end())
-        {
-          _edges.push_back(e);
-        }
+        edges_pos_ = vcl_find(edges_.begin(), edges_.end(), e);
+        if (edges_pos_ == edges_.end())
+          edges_.push_back(e);
       }
     }
 
     delete fedges;
   }
 
-  return _edges;
+  return edges_;
 }
 
 
@@ -224,9 +220,7 @@ ComputeCentroid()
     }
 
     if (!area_sum)
-    {
       return;
-    }
 
     centroid_[0] = x_area_sum / area_sum;
     centroid_[1] = y_area_sum / area_sum;
@@ -238,9 +232,7 @@ float vifa_int_faces_attr::
 Xo()
 {
   if ((centroid_[0] < 0) && !attr_map_.empty())
-  {
     this->ComputeCentroid();
-  }
 
   return centroid_[0];
 }
@@ -250,9 +242,7 @@ float vifa_int_faces_attr::
 Yo()
 {
   if ((centroid_[1] < 0) && !attr_map_.empty())
-  {
     this->ComputeCentroid();
-  }
 
   return centroid_[1];
 }
@@ -266,10 +256,8 @@ Yo()
 bool vifa_int_faces_attr::
 ComputeSingleFaceAttributes(bool forceP)
 {
-  if (!forceP && _attributes_valid)
-  {
+  if (!forceP && attributes_valid_)
     return true;
-  }
 
   attr_map_.clear();
   for (iface_iterator f = faces_.begin(); f != faces_.end(); ++f)
@@ -277,9 +265,7 @@ ComputeSingleFaceAttributes(bool forceP)
     vifa_int_face_attr_sptr fattr = factory_new_attr(*f);
 
     if (!(fattr->valid_p()))
-    {
       return false;
-    }
 
     attr_map_.push_back(fattr);
   }
@@ -291,19 +277,15 @@ bool vifa_int_faces_attr::
 ComputeAttributes()
 {
   if (!this->ComputeSingleFaceAttributes(true))
-  {
-    _attributes_valid = false;
-  }
+    attributes_valid_ = false;
   else
   {
     // Compute histogrammed attributes, including generation of
     // histograms
     for (int i = 0; i < NumHistAttributes(); i++)
-    {
       this->GetMeanAttr(i);
-    }
 
-    _attributes_valid = true;
+    attributes_valid_ = true;
   }
 
   return valid_p();
@@ -342,14 +324,10 @@ GetNativeAttributes(vcl_vector<float>& attrs)
   attrs.push_back(this->EightyPercentParallel());
 
   for (int i = 0; i < this->NumHistAttributes(); i++)
-  {
     attrs.push_back(this->GetMeanAttr(i));
-  }
 
   for (int i = 0; i < this->NumHistAttributes(); i++)
-  {
     attrs.push_back(this->GetSDAttr(i));
-  }
 
   return true;
 }
@@ -404,19 +382,15 @@ MakeAttrHist(vcl_vector<float>& attr_vals)
   float  max_val = 0;
   float  min_val = 1000000;
   for (vcl_vector<float>::iterator vali = attr_vals.begin();
-    vali != attr_vals.end(); ++vali)
+       vali != attr_vals.end(); ++vali)
   {
     float val = *vali;
 
     if (val > max_val)
-    {
       max_val = val;
-    }
 
     if (val < min_val)
-    {
       min_val = val;
-    }
   }
 
   // Create empty histogram
@@ -426,10 +400,8 @@ MakeAttrHist(vcl_vector<float>& attr_vals)
 
   // Populate histogram
   for (vcl_vector<float>::iterator vali = attr_vals.begin();
-    vali != attr_vals.end(); ++vali)
-  {
+       vali != attr_vals.end(); ++vali)
     val_hist->UpCount(*vali);
-  }
 
   return val_hist;
 }
@@ -449,7 +421,7 @@ GetMeanAttr(int attr_index)
       vcl_vector<float>  vals(attr_map_.size());
       int          index = 0;
       for (attr_iterator ai = attr_map_.begin();
-          ai != attr_map_.end(); ++ai, ++index)
+           ai != attr_map_.end(); ++ai, ++index)
       {
         vifa_int_face_attr_sptr  attr_ptr = *ai;
         vals[index] = CallAttrFunction(attr_ptr.ptr(), attr_index);
@@ -504,9 +476,7 @@ GetMinAttr(int attr_index)
     return attr_vec_[attr_index]->get_min();
   }
   else
-  {
     return -1;
-  }
 }
 
 // Get or compute max value of an vifa_int_face_attr attribute.
@@ -525,9 +495,7 @@ GetMaxAttr(int attr_index)
     return attr_vec_[attr_index]->get_max();
   }
   else
-  {
     return -1;
-  }
 }
 
 // ---------------------------------------------------------------------
@@ -539,17 +507,14 @@ Area()
 {
   if (!attr_map_.empty())
   {
-    _area = 0;
-    for (attr_iterator ai = attr_map_.begin(); ai != attr_map_.end();
-      ++ai)
-    {
-      _area += (*ai)->Area();
-    }
+    area_ = 0;
+    for (attr_iterator ai = attr_map_.begin(); ai != attr_map_.end(); ++ai)
+      area_ += (*ai)->Area();
 
-    return _area;
+    return area_;
   }
-
-  return 0.0;
+  else
+    return 0.0;
 }
 
 // ratio of major moments of union of all faces
@@ -594,13 +559,9 @@ GetPerimeterEdges()
       int  count;
       edge_count_pos = edge_count.find(e_id);
       if (edge_count_pos == edge_count.end())
-      {
         count = 1;
-      }
       else
-      {
         count = edge_count_pos->second + 1;
-      }
 
       edge_count.insert(vcl_pair<int, int>(e_id, count));
     }
@@ -628,9 +589,7 @@ GetPerimeterEdges()
         continue;
       }
       else
-      {
         count = edge_count_pos->second;
-      }
 
       if (count == 1)
       {
@@ -670,9 +629,7 @@ PerimeterLength()
       vtol_edge_2d*  e = (*eit)->cast_to_edge_2d();
 
       if (e)
-      {
         perimeter_ += e->curve()->length();
-      }
     }
 
     delete p_edges;
@@ -685,9 +642,7 @@ float vifa_int_faces_attr::
 WeightedPerimeterLength()
 {
   if (weighted_perimeter_ >= 0)
-  {
     return weighted_perimeter_;
-  }
 
 //  vcl_cout << "In vifsa::WeightedPerimeterSum()...\n";
 
@@ -744,9 +699,7 @@ WeightedPerimeterLength()
           }
 
           if (!in_face)
-          {
             out_faces.push_back(int_f_ref);
-          }
         }
 
 //        vcl_cout << in_faces.size() << " in_faces, " << out_faces.size()
@@ -796,9 +749,7 @@ WeightedPerimeterLength()
         contrast_sum += intensity_gradient;
       }
       else
-      {
         vcl_cerr << "(*eit)->cast_to_edge_2d() returned NULL\n";
-      }
     }
 
 //    vcl_cout << "weighted_perimeter_sum = " << weighted_perimeter_sum
@@ -818,12 +769,10 @@ float vifa_int_faces_attr::
 Complexity()
 {
   if (this->Area() <= 0)
-  {
     return 0.0;
-  }
 
   float  p = this->PerimeterLength();
-  return (p * p) / this->Area();
+  return p * p / this->Area();
 }
 
 
@@ -831,32 +780,25 @@ float vifa_int_faces_attr::
 WeightedComplexity()
 {
   if (this->Area() <= 0)
-  {
     return 0.0;
-  }
 
   float  wp = this->WeightedPerimeterLength();
-  return (wp * wp) / this->Area();
+  return wp * wp / this->Area();
 }
 
 void vifa_int_faces_attr::
 SetNP()
 {
-  if (_npobj)
-  {
-    _npobj->reset();
-  }
+  if (npobj_)
+    npobj_->reset();
   else
-  {
-    const bool  cont = true;
-    _npobj = new vifa_parallel(faces_, cont);
-  }
+    npobj_ = new vifa_parallel(faces_, true);
 }
 
 float vifa_int_faces_attr::
 TwoPeakParallel()
 {
-  if (_cached_2_parallel < 0)
+  if (cached_2_parallel_ < 0)
   {
     SetNP();
     float  max_angle;
@@ -865,20 +807,20 @@ TwoPeakParallel()
 
     for (int i=0; i<1; i++)
     {
-      _npobj->map_gaussian(max_angle, std_dev, scale);
-      _npobj->remove_gaussian(max_angle, std_dev, scale);
+      npobj_->map_gaussian(max_angle, std_dev, scale);
+      npobj_->remove_gaussian(max_angle, std_dev, scale);
     }
 
-    _cached_2_parallel = _npobj->area();
+    cached_2_parallel_ = npobj_->area();
   }
 
-  return _cached_2_parallel;
+  return cached_2_parallel_;
 }
 
 float vifa_int_faces_attr::
 FourPeakParallel()
 {
-  if (_cached_4_parallel < 0)
+  if (cached_4_parallel_ < 0)
   {
     SetNP();
     float  max_angle;
@@ -887,20 +829,20 @@ FourPeakParallel()
 
     for (int i=0; i<3; i++)
     {
-      _npobj->map_gaussian(max_angle, std_dev, scale);
-      _npobj->remove_gaussian(max_angle, std_dev, scale);
+      npobj_->map_gaussian(max_angle, std_dev, scale);
+      npobj_->remove_gaussian(max_angle, std_dev, scale);
     }
 
-    _cached_4_parallel = _npobj->area();
+    cached_4_parallel_ = npobj_->area();
   }
 
-  return _cached_4_parallel;
+  return cached_4_parallel_;
 }
 
 float vifa_int_faces_attr::
 EightyPercentParallel()
 {
-  if (_cached_80_parallel < 0)
+  if (cached_80_parallel_ < 0)
   {
     SetNP();
     float  max_angle;
@@ -908,36 +850,31 @@ EightyPercentParallel()
     float  scale;
     int    i = 0;
 
-    while ((i < 20) && (_npobj->area() > 0.3))
+    for (; i < 20 && npobj_->area() > 0.3; ++i)
     {
-      i++;
-      _npobj->map_gaussian(max_angle, std_dev, scale);
-      _npobj->remove_gaussian(max_angle, std_dev, scale);
+      npobj_->map_gaussian(max_angle, std_dev, scale);
+      npobj_->remove_gaussian(max_angle, std_dev, scale);
     }
 
-    _cached_80_parallel = i;
+    cached_80_parallel_ = i;
   }
 
-  return _cached_80_parallel;
+  return cached_80_parallel_;
 }
 
 vifa_int_face_attr_sptr vifa_int_faces_attr::
 factory_new_attr(vdgl_intensity_face_sptr face)
 {
-  if (_factory)
-  {
-    return _factory->obtain_int_face_attr(face,
-                                          _fitter_params.ptr(),
-                                          _gpp_s.ptr(),
-                                          _gpp_w.ptr(),
-                                          _np.ptr());
-  }
+  if (factory_)
+    return factory_->obtain_int_face_attr(face,
+                                          fitter_params_.ptr(),
+                                          gpp_s_.ptr(),
+                                          gpp_w_.ptr(),
+                                          np_.ptr());
   else
-  {
     return new vifa_int_face_attr(face,
-                                  _fitter_params.ptr(),
-                                  _gpp_s.ptr(),
-                                  _gpp_w.ptr(),
-                                  _np.ptr());
-  }
+                                  fitter_params_.ptr(),
+                                  gpp_s_.ptr(),
+                                  gpp_w_.ptr(),
+                                  np_.ptr());
 }

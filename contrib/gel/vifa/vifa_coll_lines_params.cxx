@@ -9,10 +9,10 @@ vifa_coll_lines_params(float midpt_distance,
                        float angle_tolerance,
                        float discard_threshold,
                        float endpt_distance) :
-  _midpt_distance(midpt_distance),
-  _angle_tolerance(angle_tolerance),
-  _discard_threshold(discard_threshold),
-  _endpt_distance(endpt_distance)
+  midpt_distance_(midpt_distance),
+  angle_tolerance_(angle_tolerance),
+  discard_threshold_(discard_threshold),
+  endpt_distance_(endpt_distance)
 {
   // Do nothing
 }
@@ -20,18 +20,18 @@ vifa_coll_lines_params(float midpt_distance,
 vifa_coll_lines_params::
 vifa_coll_lines_params(const vifa_coll_lines_params& old_params)
 {
-  _midpt_distance = old_params._midpt_distance;
-  _angle_tolerance = old_params._angle_tolerance;
-  _discard_threshold = old_params._discard_threshold;
-  _endpt_distance = old_params._endpt_distance;
+  midpt_distance_ = old_params.midpt_distance_;
+  angle_tolerance_ = old_params.angle_tolerance_;
+  discard_threshold_ = old_params.discard_threshold_;
+  endpt_distance_ = old_params.endpt_distance_;
 }
 
 void vifa_coll_lines_params::
 print_info(void)
 {
   vcl_cout << "vifa_coll_lines_params:\n"
-           << "  midpoint distance = " << _midpt_distance << vcl_endl
-           << "  angle tolerance   = " << _angle_tolerance << vcl_endl
-           << "  discard threshold = " << _discard_threshold << vcl_endl
-           << "  endpoint distance = " << _endpt_distance << vcl_endl;
+           << "  midpoint distance = " << midpt_distance_ << vcl_endl
+           << "  angle tolerance   = " << angle_tolerance_ << vcl_endl
+           << "  discard threshold = " << discard_threshold_ << vcl_endl
+           << "  endpoint distance = " << endpt_distance_ << vcl_endl;
 }

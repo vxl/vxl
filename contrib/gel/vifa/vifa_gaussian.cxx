@@ -1,28 +1,20 @@
 #include <vcl_cmath.h>
 #include <vifa/vifa_gaussian.h>
 
-vifa_gaussian::vifa_gaussian(float  mu,
-                             float  sigma)
-{
-  _mu = mu;
-  _sigma = sigma;
-}
-
-
 float vifa_gaussian::pdf(float  x)
 {
-  if (_sigma < StatEPSILON)
+  if (sigma_ < StatEPSILON)
   {
     // Degenerate distribution:
     // The variance is zero, so the pdf is a unit impulse at the mean.
     // Return 1.0 if x == mean, and 0.0 otherwise.
 
-    return vcl_fabs(x - _mu) < StatEPSILON ? 1.0 : 0.0;
+    return vcl_fabs(x - mu_) < StatEPSILON ? 1.0 : 0.0;
   }
   else
   {
-    float  xp = (x - _mu) / _sigma;
-    return norm_dens(xp) / _sigma;
+    float  xp = (x - mu_) / sigma_;
+    return norm_dens(xp) / sigma_;
   }
 }
 

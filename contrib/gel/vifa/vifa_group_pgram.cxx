@@ -12,20 +12,20 @@
 
 
 vifa_group_pgram::
-vifa_group_pgram(imp_line_list&          lg,
+vifa_group_pgram(imp_line_list&                  lg,
                  const vifa_group_pgram_params&  old_params,
-                 double              angle_range)
+                 double                          angle_range)
   : vifa_group_pgram_params(old_params)
 {
-  _angle_range = angle_range;
-  _th_dim = (int)vcl_ceil(_angle_range/_angle_increment);
-  _th_dim++; //Include both 0 and _angle_range
-  _bb = new vifa_bbox;
+  angle_range_ = angle_range;
+  th_dim_ = (int)vcl_ceil(angle_range_/angle_increment());
+  th_dim_++; //Include both 0 and angle_range_
+  bb_ = new vifa_bbox;
 
-  for (int i = 0; i < _th_dim; i++)
+  for (int i = 0; i < th_dim_; i++)
   {
     imp_line_list*  illp = new imp_line_list;
-    _curves.push_back(illp);
+    curves_.push_back(illp);
   }
   this->Index(lg);
 }
@@ -35,7 +35,7 @@ vifa_group_pgram(imp_line_list&          lg,
 vifa_group_pgram::
 ~vifa_group_pgram()
 {
-  for (imp_line_table::iterator ilti = _curves.begin(); ilti != _curves.end();
+  for (imp_line_table::iterator ilti = curves_.begin(); ilti != curves_.end();
        ilti++)
   {
     imp_line_list*  illp = (*ilti);
@@ -54,7 +54,7 @@ void vifa_group_pgram::
 Index(imp_line_sptr il)
 {
   int  ang_bin = this->AngleLoc(il);
-  _curves[ang_bin]->push_back(il);
+  curves_[ang_bin]->push_back(il);
 
   this->touch();
 }
@@ -73,14 +73,12 @@ Index(imp_line_list& lg)
 void vifa_group_pgram::
 Clear()
 {
-  for (imp_line_table::iterator ilti = _curves.begin(); ilti != _curves.end();
+  for (imp_line_table::iterator ilti = curves_.begin(); ilti != curves_.end();
        ilti++)
   {
     imp_line_list*  illp = (*ilti);
     for (imp_line_iterator ili = illp->begin(); ili != illp->end(); ili++)
-    {
       (*ili) = 0;
-    }
 
     delete illp;
     (*ilti) = new imp_line_list;
@@ -95,13 +93,11 @@ Clear()
 vifa_histogram_sptr vifa_group_pgram::
 GetCoverageHist(void)
 {
-  vifa_histogram_sptr  h = new vifa_histogram(_th_dim, 0.0, _angle_range);
+  vifa_histogram_sptr  h = new vifa_histogram(th_dim_, 0.0, angle_range_);
 
   float*  cnts = h->GetCounts();
-  for (int i = 0; i < _th_dim; i++)
-  {
+  for (int i = 0; i < th_dim_; i++)
     cnts[i] = this->LineCoverage(i);
-  }
   return h;
 }
 
@@ -130,9 +126,9 @@ GetLineCover(int  angle_bin)
   double  ey;
   this->CheckUpdateBoundingBox();
   if (!vgl_clip_line_to_box(il->a(), il->b(), il->c(),
-                _bb->min_x(), _bb->min_y(),
-                _bb->max_x(), _bb->max_y(),
-                bx, by, ex, ey))
+                            bb_->min_x(), bb_->min_y(),
+                            bb_->max_x(), bb_->max_y(),
+                            bx, by, ex, ey))
   {
     vcl_cerr << "In vifa_group_pgram::GetLineCover(): No intersection found\n";
 
@@ -167,9 +163,7 @@ double vifa_group_pgram::
 LineCoverage(int  angle_bin)
 {
   vifa_line_cover_sptr  lc = this->GetLineCover(angle_bin);
-  double          coverage = (lc ? lc->GetCoverage() : 0.0);
-
-  return coverage;
+  return lc ? lc->GetCoverage() : 0.0;
 }
 
 //--------------------------------------------------------------
@@ -179,43 +173,41 @@ void vifa_group_pgram::
 CollectAdjacentLines(int             angle_bin,
                      imp_line_list&  lg)
 {
-  if ((angle_bin >= 0) && (angle_bin <= (_th_dim - 1)))
+  if (angle_bin >= 0 && angle_bin < th_dim_)
   {
     if (angle_bin == 0)
     {
       // Case I - At the beginning of the array
-      lg.insert(lg.end(), _curves[_th_dim - 1]->begin(),
-                _curves[_th_dim - 1]->end());
-      lg.insert(lg.end(), _curves[0]->begin(),
-                _curves[0]->end());
-      lg.insert(lg.end(), _curves[1]->begin(),
-                _curves[1]->end());
+      lg.insert(lg.end(), curves_[th_dim_ - 1]->begin(),
+                curves_[th_dim_ - 1]->end());
+      lg.insert(lg.end(), curves_[0]->begin(),
+                curves_[0]->end());
+      lg.insert(lg.end(), curves_[1]->begin(),
+                curves_[1]->end());
     }
-    else if (angle_bin == _th_dim - 1)
+    else if (angle_bin == th_dim_ - 1)
     {
       // Case II - At the end of the array
-      lg.insert(lg.end(), _curves[_th_dim - 2]->begin(),
-                _curves[_th_dim - 2]->end());
-      lg.insert(lg.end(), _curves[_th_dim - 1]->begin(),
-                _curves[_th_dim - 1]->end());
-      lg.insert(lg.end(), _curves[0]->begin(),
-                _curves[0]->end());
+      lg.insert(lg.end(), curves_[th_dim_ - 2]->begin(),
+                curves_[th_dim_ - 2]->end());
+      lg.insert(lg.end(), curves_[th_dim_ - 1]->begin(),
+                curves_[th_dim_ - 1]->end());
+      lg.insert(lg.end(), curves_[0]->begin(),
+                curves_[0]->end());
     }
     else
     {
       // Case III - not near ends of the array
-      lg.insert(lg.end(), _curves[angle_bin - 1]->begin(),
-                _curves[angle_bin - 1]->end());
-      lg.insert(lg.end(), _curves[angle_bin]->begin(),
-                _curves[angle_bin]->end());
-      lg.insert(lg.end(), _curves[angle_bin + 1]->begin(),
-                _curves[angle_bin + 1]->end());
+      lg.insert(lg.end(), curves_[angle_bin - 1]->begin(),
+                curves_[angle_bin - 1]->end());
+      lg.insert(lg.end(), curves_[angle_bin]->begin(),
+                curves_[angle_bin]->end());
+      lg.insert(lg.end(), curves_[angle_bin + 1]->begin(),
+                curves_[angle_bin + 1]->end());
     }
   }
   else
-  {
     vcl_cerr << "vifa_group_pgram::CollectAdjacentLines(): bad angle_bin\n";
-  }
 }
 
 //------------------------------------------------------------------
@@ -243,7 +235,7 @@ double vifa_group_pgram::
 norm_parallel_line_length(void)
 {
   this->ComputeDominantDirs();
-  if (_dominant_dirs.size() < 1)
+  if (dominant_dirs_.size() < 1)
   {
     // No basis
     return 0;
@@ -251,8 +243,8 @@ norm_parallel_line_length(void)
 
   double            max_cover = 0.0;
   int              max_dir = 0;
-  vcl_vector<int>::iterator  iit = _dominant_dirs.begin();
-  for (; iit != _dominant_dirs.end(); iit++)
+  vcl_vector<int>::iterator  iit = dominant_dirs_.begin();
+  for (; iit != dominant_dirs_.end(); iit++)
   {
     int            dir = (*iit);
     vifa_line_cover_sptr  lc = this->GetLineCover(dir);
@@ -278,9 +270,9 @@ norm_parallel_line_length(void)
   double  per = this->GetAdjacentPerimeter(max_dir);
 
 //  vcl_cout << "vgg::norm_parallel_line_length(): per = " << per
-//           << ", _tmp1 = " << _tmp1 << vcl_endl;
+//           << ", tmp1_ = " << tmp1_ << vcl_endl;
 
-  return 1.5 * per / _tmp1;
+  return 1.5 * per / tmp1_;
 }
 
 //---------------------------------------------------------
@@ -291,23 +283,19 @@ AngleLoc(imp_line_sptr  il)
   // Compute angle index
   double  angle = il->slope_degrees();
   while (angle < 0.0)
-  {
     angle += 180.0;
-  }
-  while (angle > 180.0)
-  {
+  while (angle >= 180.0)
     angle -= 180.0;
-  }
 
-  if (angle > _angle_range)
+  if (angle > angle_range_)
   {
     vcl_cerr << "In vifa_group_pgram::AngleLoc(): angle " << angle
-             << " was outside the angle range " << _angle_range << vcl_endl;
+             << " was outside the angle range " << angle_range_ << vcl_endl;
 
     return 0;
   }
 
-  return (int)(vcl_floor(angle / _angle_increment));
+  return (int)(vcl_floor(angle / angle_increment()));
 }
 
 //--------------------------------------------------------------
@@ -316,12 +304,12 @@ imp_line_sptr vifa_group_pgram::
 LineAtAngle(int  angle_bin)
 {
   // Get the new line's direction unit vector
-  double          ang_rad = DEGTORAD * angle_bin * _angle_increment;
+  double          ang_rad = DEGTORAD * angle_bin * angle_increment();
   vgl_vector_2d<double>  d(vcl_cos(ang_rad), vcl_sin(ang_rad));
 
   // Get the new line's midpoint (bounding box centroid)
   this->CheckUpdateBoundingBox();
-  vgl_point_2d<double>  m = _bb->centroid();
+  vgl_point_2d<double>  m = bb_->centroid();
 
   // Return a new line
   imp_line_sptr      il = new imp_line(d, m);
@@ -335,23 +323,23 @@ void vifa_group_pgram::
 ComputeBoundingBox(void)
 {
   // Reset the bounding box
-  _bb->empty();
+  bb_->empty();
 
-  for (imp_line_table::iterator ilti = _curves.begin(); ilti != _curves.end();
-    ilti++)
+  for (imp_line_table::iterator ilti = curves_.begin(); ilti != curves_.end();
+       ilti++)
   {
     imp_line_list*  illp = (*ilti);
     for (imp_line_iterator ili = illp->begin(); ili != illp->end(); ili++)
     {
       imp_line_sptr  il = (*ili);
 
-      _bb->add(il->point1());
-      _bb->add(il->point2());
+      bb_->add(il->point1());
+      bb_->add(il->point2());
     }
   }
 
   // Update the bounding box timestamp
-  _bb->touch();
+  bb_->touch();
 }
 
 //---------------------------------------------------------
@@ -361,23 +349,19 @@ ComputeBoundingBox(void)
 void vifa_group_pgram::
 ComputeDominantDirs(void)
 {
-  _dominant_dirs.clear();
+  dominant_dirs_.clear();
 
   // Get the coverage histogram and do find local maxima.
   vifa_histogram_sptr  h = this->GetCoverageHist();
-  vifa_histogram_sptr  h_sup = h->NonMaximumSupress(this->_max_suppress_radius, true);
-  float*        cnts = h_sup->GetCounts();
-  int          max_idx = h_sup->GetRes();
+  vifa_histogram_sptr  h_sup = h->NonMaximumSupress(max_suppress_radius(), true);
+  float*               cnts = h_sup->GetCounts();
+  int                  max_idx = h_sup->GetRes();
 
   // Rebuild the dominant direction array
   for (int i = 0; i < max_idx; i++)
-  {
     if (cnts[i] > 0)
-    {
-      _dominant_dirs.push_back(i);
-    }
-  }
+      dominant_dirs_.push_back(i);
 
 //  vcl_cout << "vgg::ComputeDominantDirs(): max_idx = " << max_idx << ", "
-//           << _dominant_dirs.size() << " dominant directions found\n";
+//           << dominant_dirs_.size() << " dominant directions found\n";
 }

@@ -34,46 +34,46 @@ class vifa_int_face_attr_common : public vifa_int_face_attr_common_params
 {
  protected:
   //: Have the attributes been computed?
-  bool      _attributes_valid;
+  bool      attributes_valid_;
 
   //: Cache of all edges from face(s).
-  edge_2d_list  _edges;
+  edge_2d_list  edges_;
 
   //: Cache of fitted line segments.
-  edge_2d_list  _fitted_edges;
+  edge_2d_list  fitted_edges_;
 
   //: Statistics about fitted edges in cache.
-  vifa_incr_var  _fitted_edges_stats;
+  vifa_incr_var  fitted_edges_stats_;
 
   //: Cache of collinear lines.
-  coll_list    _collinear_lines;
-  vifa_incr_var  _col_span;
-  vifa_incr_var  _col_support;
-  vifa_incr_var  _col_contrib;
+  coll_list    collinear_lines_;
+  vifa_incr_var  col_span_;
+  vifa_incr_var  col_support_;
+  vifa_incr_var  col_contrib_;
 
   //: Face area, in pixels.
-  float      _area;
+  float      area_;
 
   //: Ratio of major face moments.
-  float      _aspect_ratio;
+  float      aspect_ratio_;
 
   //: Edge length^2 / detection area.
-  float      _complexity;
+  float      complexity_;
 
   //: Weighted complexity measure.
-  float      _weighted_complexity;
+  float      weighted_complexity_;
 
   //: Length of boundary.
-  float      _peri_length;
+  float      peri_length_;
 
   //: Weighted length of boundary.
-  float      _weighted_peri_length;
+  float      weighted_peri_length_;
 
   // Projective parallelism of face boundary.
-  float      _para_sal_strong;
+  float      para_sal_strong_;
 
   // "Weak" projective parallelism of face boundary.
-  float      _para_sal_weak;
+  float      para_sal_weak_;
 
  public:
   //: Default constructor
@@ -96,49 +96,36 @@ class vifa_int_face_attr_common : public vifa_int_face_attr_common_params
   virtual bool  ComputeAttributes() = 0;
   virtual bool  GetAttributes(vcl_vector<float>&  attrs) = 0;
   virtual bool  GetNativeAttributes(vcl_vector<float>&  attrs) = 0;
-  virtual bool  valid_p() const
-    { return _attributes_valid; }
+  virtual bool  valid_p() const { return attributes_valid_; }
 
   // Data access for non-attributes
   virtual edge_2d_list&  GetEdges() = 0;
-  edge_2d_list&      GetFittedEdges();
-  double    fitted_max()
-    { return _fitted_edges_stats.get_max(); }
-  double    fitted_min()
-    { return _fitted_edges_stats.get_min(); }
-  double    fitted_var()
-    { return _fitted_edges_stats.get_var(); }
-  double    fitted_mean()
-    { return _fitted_edges_stats.get_mean(); }
+  edge_2d_list&          GetFittedEdges();
+  double fitted_max() { return fitted_edges_stats_.get_max(); }
+  double fitted_min() { return fitted_edges_stats_.get_min(); }
+  double fitted_var() { return fitted_edges_stats_.get_var(); }
+  double fitted_mean() { return fitted_edges_stats_.get_mean(); }
 
   coll_list&  get_collinear_lines();
-  double    col_span_mean()
-    { return _col_span.get_mean(); }
-  double    col_span_var()
-    { return _col_span.get_var(); }
-  double    col_support_mean()
-    { return _col_support.get_mean(); }
-  double    col_support_var()
-    { return _col_support.get_var(); }
-  double    col_contrib_mean()
-    { return _col_contrib.get_mean(); }
-  double    col_contrib_var()
-    { return _col_contrib.get_var(); }
-  double    col_collapse();
+  double col_span_mean() { return col_span_.get_mean(); }
+  double col_span_var() { return col_span_.get_var(); }
+  double col_support_mean() { return col_support_.get_mean(); }
+  double col_support_var() { return col_support_.get_var(); }
+  double col_contrib_mean() { return col_contrib_.get_mean(); }
+  double col_contrib_var() { return col_contrib_.get_var(); }
+  double col_collapse();
 
-  vifa_group_pgram_params_sptr  get_strong_group_pgram_params()
-    { return _gpp_s; }
-  vifa_group_pgram_params_sptr  get_weak_group_pgram_params()
-    { return _gpp_w; }
+  vifa_group_pgram_params_sptr get_strong_group_pgram_params() {return gpp_s_;}
+  vifa_group_pgram_params_sptr get_weak_group_pgram_params() { return gpp_w_; }
   void  set_strong_group_pgram_params(const vifa_group_pgram_params&  gp)
-    { _gpp_s = new vifa_group_pgram_params(gp); }
+    { gpp_s_ = new vifa_group_pgram_params(gp); }
   void  set_weak_group_pgram_params(const vifa_group_pgram_params&  gp)
-    { _gpp_w = new vifa_group_pgram_params(gp); }
+    { gpp_w_ = new vifa_group_pgram_params(gp); }
 
   void  set_norm_params(const vifa_norm_params&  np)
-    { _np = new vifa_norm_params(np); }
+    { np_ = new vifa_norm_params(np); }
   float  normalize_intensity(float  raw_intensity)
-    { return (_np) ? _np->normalize(raw_intensity) : raw_intensity; }
+    { return np_ ? np_->normalize(raw_intensity) : raw_intensity; }
 
   double      get_contrast_across_edge(vtol_edge_sptr  e,
                                        double          dflt_cont = 0.0);

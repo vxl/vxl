@@ -28,22 +28,27 @@ class vifa_group_pgram_params : public gevd_param_mixin,
                                 public vul_timestamp,
                                 public vbl_ref_count
 {
+  float  angle_increment_;
+  int    max_suppress_radius_;
+  float  length_ratio_;
+
  public:
   //: Granularity in the angle bins.
-  float  _angle_increment;
+  float  angle_increment() { return angle_increment_; }
 
   //: Radius of maximum suppression kernel.
-  int    _max_suppress_radius;
+  int    max_suppress_radius() { return max_suppress_radius_; }
 
   //: Relative length of sorter side of parallelogram.
-  float  _length_ratio;
+  float  length_ratio() { return length_ratio_; }
 
- public:
   //: Default constructor.
   vifa_group_pgram_params(float  angle_increment = 5.0,
                           int    max_suppress_radius = 2,
                           float  length_ratio = .1
-                         );
+                         )
+    { init_params(angle_increment, max_suppress_radius, length_ratio); }
+
 
   //: Copy constructor.
   vifa_group_pgram_params(const vifa_group_pgram_params&  old_params);
@@ -57,9 +62,13 @@ class vifa_group_pgram_params : public gevd_param_mixin,
  protected:
   //: Assign internal parameter blocks.
   void  init_params(float  angle_increment,
-                    int    max_supress_radius,
+                    int    max_suppress_radius,
                     float  length_ratio
-                   );
+                   )
+  { angle_increment_ = angle_increment;
+    max_suppress_radius_ = max_suppress_radius;
+    length_ratio_ = length_ratio;
+  }
 };
 
 typedef vbl_smart_ptr<vifa_group_pgram_params>  vifa_group_pgram_params_sptr;

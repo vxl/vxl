@@ -35,28 +35,22 @@ vifa_int_face_attr_common::
 edge_2d_list& vifa_int_face_attr_common::
 GetFittedEdges()
 {
-  if (!_fitted_edges.size())
-  {
+  if (!fitted_edges_.size())
     this->fit_lines();
-  }
 
-  return _fitted_edges;
+  return fitted_edges_;
 }
 
 coll_list& vifa_int_face_attr_common::
 get_collinear_lines()
 {
-  if (!_cpp)
-  {
-    _cpp = new vifa_coll_lines_params;
-  }
+  if (!cpp_)
+    cpp_ = new vifa_coll_lines_params;
 
-  if (!_collinear_lines.size())
-  {
+  if (!collinear_lines_.size())
     this->find_collinear_lines();
-  }
 
-  return _collinear_lines;
+  return collinear_lines_;
 }
 
 double vifa_int_face_attr_common::
@@ -65,21 +59,17 @@ col_collapse()
   double  collapsed_count = 0;
   double  total_count = 0;
 
-  for (coll_iterator c = _collinear_lines.begin();
-      c != _collinear_lines.end(); ++c)
+  for (coll_iterator c = collinear_lines_.begin();
+      c != collinear_lines_.end(); ++c)
   {
     total_count++;
 
     if ((*c)->get_discard_flag())
-    {
       collapsed_count++;
-    }
   }
 
   if (total_count == 0)
-  {
     return 0;
-  }
 
   return collapsed_count / total_count;
 }
@@ -99,9 +89,7 @@ get_contrast_across_edge(vtol_edge_sptr  e, double dflt_cont)
     if (f1 && f2 &&
         f1->topology_type() == vtol_topology_object::INTENSITYFACE &&
         f2->topology_type() == vtol_topology_object::INTENSITYFACE)
-    {
       cont = vcl_fabs(f1->Io() - f2->Io());
-    }
 
     delete faces;
   }
@@ -116,8 +104,8 @@ get_line_along_edge(vtol_edge* edge)
   vtol_vertex_sptr    ev1 = edge->v1();
   vtol_vertex_sptr    ev2 = edge->v2();
 
-  for (coll_iterator c = _collinear_lines.begin();
-      c != _collinear_lines.end(); ++c)
+  for (coll_iterator c = collinear_lines_.begin();
+      c != collinear_lines_.end(); ++c)
   {
     edge_2d_list&  c_edges = (*c)->get_contributors();
 
@@ -127,10 +115,8 @@ get_line_along_edge(vtol_edge* edge)
       vtol_vertex_sptr  v2 = (*e)->v2();
 
       if (((*ev1 == *v1) && (*ev2 == *v2)) ||
-        ((*ev1 == *v2) && (*ev2 == *v1)))
-      {
+          ((*ev1 == *v2) && (*ev2 == *v1)))
         ret = *c;
-      }
     }
   }
 
@@ -144,39 +130,39 @@ get_line_along_edge(vtol_edge* edge)
 
 
 // Compute measure of projective parallelism, ratio of edges that have some
-// projective overlap to total edge length.  Computes _fitted_edges if needed.
+// projective overlap to total edge length.  Computes fitted_edges_ if needed.
 float vifa_int_face_attr_common::
 StrongParallelSal()
 {
-  if (_para_sal_strong < 0)
+  if (para_sal_strong_ < 0)
   {
-    if (!_gpp_s.ptr())
+    if (!gpp_s_.ptr())
     {
       const float  angle_increment = 5.0;
-      _gpp_s = new vifa_group_pgram_params(angle_increment);
+      gpp_s_ = new vifa_group_pgram_params(angle_increment);
     }
 
-    _para_sal_strong = this->compute_parallel_sal(_gpp_s);
+    para_sal_strong_ = this->compute_parallel_sal(gpp_s_);
   }
 
-  return _para_sal_strong;
+  return para_sal_strong_;
 }
 
 float vifa_int_face_attr_common::
 WeakParallelSal()
 {
-  if (_para_sal_weak < 0)
+  if (para_sal_weak_ < 0)
   {
-    if (!_gpp_w.ptr())
+    if (!gpp_w_.ptr())
     {
       const float  angle_increment = 20.0;
-      _gpp_w = new vifa_group_pgram_params(angle_increment);
+      gpp_w_ = new vifa_group_pgram_params(angle_increment);
     }
 
-    _para_sal_weak = this->compute_parallel_sal(_gpp_w);
+    para_sal_weak_ = this->compute_parallel_sal(gpp_w_);
   }
 
-  return _para_sal_weak;
+  return para_sal_weak_;
 }
 
 
@@ -188,19 +174,19 @@ WeakParallelSal()
 void vifa_int_face_attr_common::
 init()
 {
-  _attributes_valid    = false;
-  _complexity        = -1;
-  _weighted_complexity  = -1;
-  _aspect_ratio      = -1;
-  _peri_length      = -1;
-  _weighted_peri_length  = -1;
-  _para_sal_weak      = -1;
-  _para_sal_strong    = -1;
+  attributes_valid_    = false;
+  complexity_        = -1;
+  weighted_complexity_  = -1;
+  aspect_ratio_      = -1;
+  peri_length_      = -1;
+  weighted_peri_length_  = -1;
+  para_sal_weak_      = -1;
+  para_sal_strong_    = -1;
 }
 
-// Fit edges of _face with straight lines, but only if cached versions
-// are not available.  Sets _fitter_params with defaults if empty.
-// Results are added to _fitted_edges.
+// Fit edges of face_ with straight lines, but only if cached versions
+// are not available.  Sets fitter_params_ with defaults if empty.
+// Results are added to fitted_edges_.
 void vifa_int_face_attr_common::
 fit_lines()
 {
@@ -211,25 +197,23 @@ fit_lines()
 
   if (!edges_in_vect.size())
   {
-    vcl_cerr << "vifa_int_face_attr_common::fit_lines: _face is not set\n";
+    vcl_cerr << "vifa_int_face_attr_common::fit_lines: face_ is not set\n";
     return;
   }
 
   edge_2d_list  edges_in;
   for (edge_2d_iterator ei = edges_in_vect.begin();
-      ei != edges_in_vect.end(); ei++)
-  {
+       ei != edges_in_vect.end(); ei++)
     edges_in.push_back(*ei);
-  }
 
-  if (!_fitter_params.ptr())
+  if (!fitter_params_.ptr())
   {
     const int  fit_length = 6;
-    _fitter_params = new sdet_fit_lines_params(fit_length);
+    fitter_params_ = new sdet_fit_lines_params(fit_length);
   }
 
   // Call the line fitting routine (thanks Joe!)
-  sdet_fit_lines  fitter(*(_fitter_params.ptr()));
+  sdet_fit_lines  fitter(*(fitter_params_.ptr()));
   fitter.set_edges(edges_in);
   fitter.fit_lines();
   vcl_vector<vsol_line_2d_sptr>&  segs = fitter.get_line_segs();
@@ -244,10 +228,10 @@ fit_lines()
     vtol_vertex_2d_sptr  v1 = new vtol_vertex_2d(*(seg->p0()));
     vtol_vertex_2d_sptr  v2 = new vtol_vertex_2d(*(seg->p1()));
     vtol_edge_2d_sptr  e = new vtol_edge_2d(v1, v2);
-    _fitted_edges.push_back(e);
+    fitted_edges_.push_back(e);
 
     // Update statistics
-    _fitted_edges_stats.add_sample(seg->length());
+    fitted_edges_stats_.add_sample(seg->length());
   }
 }
 
@@ -262,17 +246,12 @@ find_collinear_lines()
   {
     double        len = (*e)->curve()->length();
     edge_2d_iterator  slot = f_edges.begin();
-    while (slot != f_edges.end())
-    {
+    for (; slot != f_edges.end(); ++slot)
       if ((*slot)->curve()->length() < len)
       {
+        f_edges.insert(slot, *e);
         break;
       }
-
-      ++slot;
-    }
-
-    f_edges.insert(slot, *e);
   }
 
   // build up a list of collinear line buckets
@@ -289,19 +268,17 @@ find_collinear_lines()
 
     bool  match_flag = find_collinear_match(*e,
                                             unfiltered_lines,
-                                            _cpp->_midpt_distance,
+                                            cpp_->midpt_distance(),
                                             match);
 
     if (!match_flag)
     {
-      vifa_coll_lines_sptr  cl(new vifa_coll_lines(*e, _cpp->_angle_tolerance));
+      vifa_coll_lines_sptr  cl(new vifa_coll_lines(*e, cpp_->angle_tolerance()));
 
       unfiltered_lines.push_back(cl);
     }
     else
-    {
       (*match)->add_and_update(*e);
-    }
   }
 
 //  vcl_cout << vcl_endl;
@@ -314,12 +291,12 @@ find_collinear_lines()
     double  span = (*c)->spanning_length();
     double  support = (*c)->support_length();
 
-    if ((support/span) >= _cpp->_discard_threshold)
+    if ((support/span) >= cpp_->discard_threshold())
     {
-      _collinear_lines.push_back(*c);
-      _col_span.add_sample(span);
-      _col_support.add_sample(support);
-      _col_contrib.add_sample((*c)->get_contributors().size());
+      collinear_lines_.push_back(*c);
+      col_span_.add_sample(span);
+      col_support_.add_sample(support);
+      col_contrib_.add_sample((*c)->get_contributors().size());
     }
     else
     {
@@ -328,19 +305,19 @@ find_collinear_lines()
       for (edge_2d_iterator e = contrib.begin(); e != contrib.end(); ++e)
       {
         vifa_coll_lines_sptr  cl(new vifa_coll_lines(*e,
-                                                     _cpp->_angle_tolerance,
-                                                     _cpp->_endpt_distance,
+                                                     cpp_->angle_tolerance(),
+                                                     cpp_->endpt_distance(),
                                                      true)
                                 );
 
-        _collinear_lines.push_back(cl);
+        collinear_lines_.push_back(cl);
 
         double  span = cl->spanning_length();
         double  support = cl->support_length();
 
-        _col_span.add_sample(span);
-        _col_support.add_sample(support);
-        _col_contrib.add_sample(cl->get_contributors().size());
+        col_span_.add_sample(span);
+        col_support_.add_sample(support);
+        col_contrib_.add_sample(cl->get_contributors().size());
         unwind_count++;
       }
     }
@@ -348,8 +325,8 @@ find_collinear_lines()
 
 //  vcl_cout << unfiltered_lines.size() << " raw collinear lines; "
 //           << unwind_count << " lines from unsupported lines; "
-//           << _collinear_lines.size() << " lines above discard threshold "
-//           << _cpp->_discard_threshold << vcl_endl;
+//           << collinear_lines_.size() << " lines above discard threshold "
+//           << cpp_->discard_threshold_ << vcl_endl;
 }
 
 bool vifa_int_face_attr_common::
@@ -390,7 +367,7 @@ compute_parallel_sal(vifa_group_pgram_params_sptr  gpp)
 
   if (fedges.size())
   {
-//    vcl_cout << (*_fitter_params);
+//    vcl_cout << (*fitter_params_);
 
     float        total_len = 0.0;
     int          nlines = 0;
@@ -405,7 +382,7 @@ compute_parallel_sal(vifa_group_pgram_params_sptr  gpp)
 
 //      vcl_cout << "  edge #" << i << " curve length: " << len << vcl_endl;
 
-      if (len >= _fitter_params->min_fit_length_)
+      if (len >= fitter_params_->min_fit_length_)
       {
         const vgl_point_2d<double>&  p1 = cur->p0()->get_p();
         const vgl_point_2d<double>&  p2 = cur->p1()->get_p();

@@ -25,18 +25,18 @@
 class vifa_image_histogram : public vifa_histogram
 {
  protected:
-  enum vil_pixel_format  _form;
-  unsigned int      _byte_depth;
+  enum vil_pixel_format  form_;
+  unsigned int      byte_depth_;
 
  public:
   vifa_image_histogram(vil_image_view_base_sptr  image,
-                       double            percent = 100.0
+                       double                    percentage = 100.0
                       );
 
  protected:
   void init(void);
   void fill_histogram(vil_image_view_base_sptr  src_buf,
-                      double          percentage = 100.0
+                      double                    percentage = 100.0
                      );
 };
 

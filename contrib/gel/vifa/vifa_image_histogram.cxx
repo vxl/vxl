@@ -5,34 +5,28 @@
 
 vifa_image_histogram::
 vifa_image_histogram(vil_image_view_base_sptr  image,
-                     double            percent)
+                     double                    percentage)
 {
   // Compute max. # of pixel intensities
-  _form = image->pixel_format();
-  _byte_depth = vil_pixel_format_sizeof_components(_form) *
-          vil_pixel_format_num_components(_form);
+  form_ = image->pixel_format();
+  byte_depth_ = vil_pixel_format_sizeof_components(form_) *
+                vil_pixel_format_num_components(form_);
 
   // Initialize the underlying histogram, based on the image pixel format
   init();
 
   // Fill the histogram
-  fill_histogram(image, percent);
+  fill_histogram(image, percentage);
 }
 
 void vifa_image_histogram::
 init(void)
 {
-  num = 1 << (_byte_depth * 8);
+  num = 1 << (byte_depth_ * 8);
 
   // Delete these because they have already been allocated by base constructor
-  if (vals)
-  {
-    delete [] vals;
-  }
-  if (counts)
-  {
-    delete [] counts;
-  }
+  delete [] vals;
+  delete [] counts;
 
   vals = new float [num];
   counts = new float [num];
@@ -84,7 +78,7 @@ fill_histogram(vil_image_view_base_sptr  image,
   // Get the base histogram's array of counts
   float*  counts = this->GetCounts();
 
-  switch (_form)
+  switch (form_)
   {
     case VIL_PIXEL_FORMAT_BYTE:
     case VIL_PIXEL_FORMAT_SBYTE:
@@ -113,12 +107,8 @@ fill_histogram(vil_image_view_base_sptr  image,
         unsigned int  max_i = img->ni();
 
         for (unsigned int j = 0; j < max_j; j++)
-        {
           for (unsigned int i = 0; i < max_i; i++)
-          {
             counts[(*img)(i, j)]++;
-          }
-        }
       }
 
       break;
@@ -151,12 +141,8 @@ fill_histogram(vil_image_view_base_sptr  image,
         unsigned int  max_i = img->ni();
 
         for (unsigned int j = 0; j < max_j; j++)
-        {
           for (unsigned int i = 0; i < max_i; i++)
-          {
             counts[(*img)(i, j)]++;
-          }
-        }
       }
 
       break;

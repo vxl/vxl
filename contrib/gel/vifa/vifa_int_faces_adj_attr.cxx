@@ -106,9 +106,7 @@ bool vifa_int_faces_adj_attr::
 ComputeAttributes()
 {
   if (!closure_valid_)
-  {
     this->compute_closure();
-  }
 
   if (vifa_int_faces_attr::ComputeAttributes())
   {
@@ -125,20 +123,16 @@ ComputeAttributes()
 
       float  hist_mean = GetMeanAttr(i);
       if (hist_mean < attr_min_vals[i])
-      {
         hist_mean = attr_min_vals[i];
-      }
       mean_ratios_[i] = (seed_val + 1) / (hist_mean + 1);
 
       float  hist_min = GetMinAttr(i);
       if (hist_min < attr_min_vals[i])
-      {
         hist_min = attr_min_vals[i];
-      }
       min_ratios_[i] = (seed_val + 1) / (hist_min + 1);
     }
 
-    _attributes_valid = true;
+    attributes_valid_ = true;
   }
 
   return valid_p();
@@ -156,11 +150,9 @@ bool vifa_int_faces_adj_attr::
 GetAttributes(vcl_vector<float>& attrs)
 {
   if (vifa_int_faces_attr::GetAttributes(attrs))
-  {
     return this->vifa_int_faces_adj_attr::GetNativeAttributes(attrs);
-  }
-
-  return false;
+  else
+    return false;
 }
 
 // Append the attribute names to a vector in the same order as
@@ -247,9 +239,7 @@ compute_closure()
       original_area += (*f)->Npix();
 
       if ((*f)->Npix() >= area_threshold)
-      {
         keep_faces.push_back(*f);
-      }
       else
       {
         junk_count_++;
@@ -269,10 +259,8 @@ compute_closure()
   vcl_cout << "Final faces_: " << faces_.size() << vcl_endl;
 
   for (iface_iterator f = faces_.begin(); f != faces_.end(); ++f)
-  {
     vcl_cout << "  (" << (*f)->Xo() << ", " << (*f)->Yo() << "), "
              << (*f)->Npix() << " pixels\n";
-  }
 #endif
 
 //  vcl_cout << "Leaving ifsaa::compute_closure()\n";
@@ -313,9 +301,7 @@ Collinearity()
     delete edges;
 
     if (u_len > 0.0)
-    {
       coll = w_len / u_len;
-    }
   }
 
   return coll;
@@ -347,10 +333,7 @@ init()
 
   // initialize to -1.
   for (int i = 0; i < n; i++)
-  {
-    mean_ratios_[i] = -1;
-    min_ratios_[i] = -1;
-  }
+    mean_ratios_[i] = min_ratios_[i] = -1;
 }
 
 bool vifa_int_faces_adj_attr::
@@ -362,10 +345,8 @@ add_unique_face(iface_list&               facelist,
       check != facelist.end(); ++check)
   {
     if ((check->ptr()->Xo() == face->Xo()) &&
-      (check->ptr()->Yo() == face->Yo()))
-    {
+        (check->ptr()->Yo() == face->Yo()))
       return false;
-    }
   }
 
   if (face->Npix() >= size_filter)
@@ -385,13 +366,9 @@ compute_closure_step(int                       current_depth,
   vcl_cout << "ccs: depth " << current_depth << " of " << depth_;
 
   if (seed)
-  {
     vcl_cout << " at seed " << seed->Xo() << ", " << seed->Yo();
-  }
   else
-  {
     vcl_cout << " with null seed";
-  }
 #endif
 
   if ((current_depth >= depth_) || (!seed))
@@ -403,9 +380,7 @@ compute_closure_step(int                       current_depth,
   }
 #ifdef CCS_DEBUG
   else
-  {
     vcl_cout << vcl_endl;
-  }
 #endif
 
   // Get all the faces adjacent to the seed face
@@ -429,9 +404,7 @@ compute_closure_step(int                       current_depth,
     delete adj_faces;
   }
   else
-  {
     vcl_cerr << "vifsaa::compute_closure_step(): No adj. faces found!\n";
-  }
 }
 
 vdgl_intensity_face_sptr vifa_int_faces_adj_attr::
@@ -451,18 +424,14 @@ get_adjacent_face_at_edge(vdgl_intensity_face_sptr&  known_face,
                   vtol_topology_object::INTENSITYFACE))
     {
       vdgl_intensity_face_sptr    f1 = *((vdgl_intensity_face_sptr*)
-                          ((void *)&((*faces)[0])));
+                                        ((void *)&((*faces)[0])));
       vdgl_intensity_face_sptr    f2 = *((vdgl_intensity_face_sptr*)
-                          ((void *)&((*faces)[1])));
+                                        ((void *)&((*faces)[1])));
 
       if (*known_face == *f1)
-      {
         adj_face = f2;
-      }
       else if (*known_face == *f2)
-      {
         adj_face = f1;
-      }
       else
       {
         // Known face does not contain the
@@ -499,9 +468,7 @@ get_adjacent_faces(vdgl_intensity_face_sptr&  known_face)
             this->get_adjacent_face_at_edge(known_face, e);
 
           if (other_f.ptr())
-          {
             this->add_unique_face(*faces, other_f, 0);
-          }
         }
       }
 

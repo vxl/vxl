@@ -31,86 +31,77 @@ class vifa_int_face_attr: public vifa_int_face_attr_common
  protected:
 
   //: The face whose attributes we store
-  vdgl_intensity_face_sptr  _face;
+  vdgl_intensity_face_sptr  face_;
 
-  float            _cached_min;
-  float            _cached_max;
-  float            _cached_mean;
-  float            _cached_var;
-  float            _cached_2_parallel;
-  float            _cached_4_parallel;
-  int              _cached_80_parallel;
-  vifa_parallel*        _npobj;
+  float            cached_min_;
+  float            cached_max_;
+  float            cached_mean_;
+  float            cached_var_;
+  float            cached_2_parallel_;
+  float            cached_4_parallel_;
+  int              cached_80_parallel_;
+  vifa_parallel*   npobj_;
 
  public:
 
-  vifa_int_face_attr(sdet_fit_lines_params*  fitter_params = NULL,
+  vifa_int_face_attr(sdet_fit_lines_params*    fitter_params = NULL,
                      vifa_group_pgram_params*  gpp = NULL,
                      vifa_group_pgram_params*  gpp_w = NULL,
-                     vifa_norm_params*    np = NULL
+                     vifa_norm_params*         np = NULL
                     );
   vifa_int_face_attr(vdgl_intensity_face_sptr  f,
-                     sdet_fit_lines_params*  fitter_params = NULL,
+                     sdet_fit_lines_params*    fitter_params = NULL,
                      vifa_group_pgram_params*  gpp = NULL,
                      vifa_group_pgram_params*  gpp_w = NULL,
-                     vifa_norm_params*    np = NULL
-            );
+                     vifa_norm_params*         np = NULL
+                    );
   virtual ~vifa_int_face_attr();
 
   // ---
   // Public functional methods
   // ---
 
-  bool    ComputeAttributes();
-  bool    GetAttributes(vcl_vector<float>&  attrs);
+  bool         ComputeAttributes();
+  bool         GetAttributes(vcl_vector<float>&  attrs);
   static void  GetAttributeNames(vcl_vector<vcl_string>&  names);
-  bool    GetNativeAttributes(vcl_vector<float>&  attrs);
+  bool         GetNativeAttributes(vcl_vector<float>&  attrs);
 
   // Data access for non-attributes
-  vdgl_intensity_face_sptr  GetFace() const
-    { return _face; }
-  void            SetFace(vdgl_intensity_face_sptr  f);
-  edge_2d_list&        GetEdges();
+  vdgl_intensity_face_sptr  GetFace() const { return face_; }
+  void                      SetFace(vdgl_intensity_face_sptr  f);
+  edge_2d_list&             GetEdges();
 
   //: Centroid X
-  float            Xo()
-    { return _face->Xo(); }
+  float  Xo() { return face_->Xo(); }
 
   //: Centroid Y
-  float            Yo()
-    { return _face->Yo(); }
+  float  Yo() { return face_->Yo(); }
 
   //: Centroid Z
-  float            Zo()
-    { return _face->Zo(); }
+  float  Zo() { return face_->Zo(); }
 
   // ---
   // Intensity attribute computations
   // ---
 
   //: Min intensity
-  float  IntMin()
-    { return _cached_min; }
+  float  IntMin() { return cached_min_; }
 
   //: Max intensity
-  float  IntMax()
-    { return _cached_max; }
+  float  IntMax() { return cached_max_; }
 
   //: Mean intensity
-  float  IntMean()
-    { return _cached_mean; };
+  float  IntMean() { return cached_mean_; };
 
   //: Intensity variance
-  float  IntVar()
-    { return _cached_var; }
+  float  IntVar() { return cached_var_; }
 
   // ---
   // Geometric attribute computations
   // ---
 
   //: Area
-  float  Area()
-    { return (float)(GetFace() ? _face->Npix() : -1); }
+  float  Area() { return (float)(GetFace() ? face_->Npix() : -1); }
 
   //: Ratio of major moments
   float  AspectRatio();
@@ -136,7 +127,7 @@ class vifa_int_face_attr: public vifa_int_face_attr_common
 
 typedef vbl_smart_ptr<vifa_int_face_attr>  vifa_int_face_attr_sptr;
 
-typedef vcl_vector<vifa_int_face_attr_sptr>        attr_list;
+typedef vcl_vector<vifa_int_face_attr_sptr>            attr_list;
 typedef vcl_vector<vifa_int_face_attr_sptr>::iterator  attr_iterator;
 
 

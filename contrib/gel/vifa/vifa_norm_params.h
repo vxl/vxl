@@ -12,7 +12,7 @@
 // and the normalized range is the y-axis, then two points, "high" and "low",
 // are given.  A line is fit to these two points, and the two x-coordinates
 // where y==0 and y==1 are the intensity minimum and maximum clip points,
-// _imin and _imax.  The context is that the y-coordinates of high and low
+// imin_ and imax_.  The context is that the y-coordinates of high and low
 // points are found by histogramming the source image, and picking the (say)
 // 5% and 95% points.
 //
@@ -42,29 +42,29 @@ class vifa_norm_params : public gevd_param_mixin,
 {
  public:
   //: x-coordinate of low point (i == intensity)
-  float  _ilow;
+  float  ilow;
 
   //: y-coordinate of low point (p == percentage)
-  float  _plow;
+  float  plow;
 
   //: x-coordinate of high point
-  float  _ihigh;
+  float  ihigh;
 
   //: y-coordinate of high point
-  float  _phigh;
+  float  phigh;
 
  private:
   //: Calculated x-coord of y == 0 [low intensity clip point]
-  float  _imin;
+  float  imin_;
 
   //: Calculated x-coord of y == 1 [high intensity clip point]
-  float  _imax;
+  float  imax_;
 
   //: Computed slope of line connecting high & low points
-  float  _slope;
+  float  slope_;
 
   //: Computed y-intercept of line connecting high & low points
-  float  _b;
+  float  b_;
 
  public:
   //: Default constructor

@@ -35,29 +35,36 @@ class vifa_int_face_attr_common_params : public gevd_param_mixin,
                      public vul_timestamp,
                      public vbl_ref_count
 {
+ protected:
+  sdet_fit_lines_params_sptr    fitter_params_;
+  vifa_group_pgram_params_sptr  gpp_s_;
+  vifa_group_pgram_params_sptr  gpp_w_;
+  vifa_coll_lines_params_sptr   cpp_;
+  vifa_norm_params_sptr         np_;
+
  public:
   //: Line fitting parameters (incl. fit_length).
-  sdet_fit_lines_params_sptr    _fitter_params;
+  sdet_fit_lines_params_sptr    fitter_params() { return fitter_params_; }
 
   //: Strong projected parallelism parameters.
-  vifa_group_pgram_params_sptr  _gpp_s;
+  vifa_group_pgram_params_sptr  gpp_s() { return gpp_s_; }
 
   //: Weak projected parallelism parameters.
-  vifa_group_pgram_params_sptr  _gpp_w;
+  vifa_group_pgram_params_sptr  gpp_w() { return gpp_w_; }
 
   //: Collinearization parameters.
-  vifa_coll_lines_params_sptr    _cpp;
+  vifa_coll_lines_params_sptr   cpp() { return cpp_; }
 
   //: Pixel normalization parameters.
-  vifa_norm_params_sptr      _np;
+  vifa_norm_params_sptr         np() { return np_; }
 
  public:
   //: Default constructor.
-  vifa_int_face_attr_common_params(sdet_fit_lines_params*    fitter_params = NULL,
+  vifa_int_face_attr_common_params(sdet_fit_lines_params*    fitter_params = 0,
                                    vifa_group_pgram_params*  gpp_s = NULL,
                                    vifa_group_pgram_params*  gpp_w = NULL,
-                                   vifa_coll_lines_params*  cpp = NULL,
-                                   vifa_norm_params*      np = NULL
+                                   vifa_coll_lines_params*   cpp = NULL,
+                                   vifa_norm_params*         np = NULL
                                   );
 
   //: Copy constructor.
@@ -83,13 +90,12 @@ class vifa_int_face_attr_common_params : public gevd_param_mixin,
                     vifa_coll_lines_params*   cpp,
                     vifa_norm_params*         np
                    );
-  void  init_params(const sdet_fit_lines_params&  fitter_params,
+  void  init_params(const sdet_fit_lines_params&    fitter_params,
                     const vifa_group_pgram_params&  gpp_s,
                     const vifa_group_pgram_params&  gpp_w,
                     const vifa_coll_lines_params&   cpp,
                     const vifa_norm_params&         np
                    );
 };
-
 
 #endif  // VIFA_INT_FACE_ATTR_COMMON_PARAMS_H

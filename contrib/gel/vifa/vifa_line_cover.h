@@ -31,12 +31,11 @@
 
 class vifa_line_cover : public vbl_ref_count
 {
- private:
-  int        _dim;
-  int*      _index;
-  double*      _max_extent;
-  double*      _min_extent;
-  imp_line_sptr  _line;
+  int           dim_;
+  int*          index_;
+  double*       max_extent_;
+  double*       min_extent_;
+  imp_line_sptr line_;
 
  public:
   // Constructors and Destructors

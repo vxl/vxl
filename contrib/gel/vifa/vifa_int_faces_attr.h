@@ -41,15 +41,15 @@ typedef float (vifa_int_face_attr::*AttrFuncPtr)();
 class vifa_int_faces_attr : public vifa_int_face_attr_common
 {
  protected:
-  iface_list      faces_;
+  iface_list     faces_;
 
   // should be a map, but until operator<() is const in smart_ptr.h...
   //  map<vifa_intensity_face_sptr, vifa_int_face_attr_sptr, less<vifa_intensity_face_sptr> > attr_map_;
   attr_list      attr_map_;
 
   vcl_vector<float>  centroid_;      // cache for region group center-of-mass
-  float        perimeter_;
-  float        weighted_perimeter_;
+  float          perimeter_;
+  float          weighted_perimeter_;
 
   // Vector of vifa_int_face_attr methods to get an attribute val for one
   // face.  Defines the histogrammed attribute vector.  Length must be
@@ -66,25 +66,25 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
   //vcl_vector<vifa_histogram_sptr> attr_hists_;
   incr_var_list  attr_vec_;
 
-  float _cached_2_parallel;
-  float _cached_4_parallel;
-  float _cached_80_parallel;
-  vifa_parallel* _npobj;
-  vifa_int_face_attr_factory* _factory;
+  float cached_2_parallel_;
+  float cached_4_parallel_;
+  float cached_80_parallel_;
+  vifa_parallel* npobj_;
+  vifa_int_face_attr_factory* factory_;
  public:
-  vifa_int_faces_attr(sdet_fit_lines_params*    fitter_params = NULL,
-                      vifa_group_pgram_params*  gpp_s = NULL,
-                      vifa_group_pgram_params*  gpp_w = NULL,
-                      vifa_coll_lines_params*    cpp = NULL,
-                      vifa_norm_params*      np = NULL,
+  vifa_int_faces_attr(sdet_fit_lines_params*       fitter_params = NULL,
+                      vifa_group_pgram_params*     gpp_s = NULL,
+                      vifa_group_pgram_params*     gpp_w = NULL,
+                      vifa_coll_lines_params*      cpp = NULL,
+                      vifa_norm_params*            np = NULL,
                       vifa_int_face_attr_factory*  factory = NULL
                      );
-  vifa_int_faces_attr(iface_list&          v,
-                      sdet_fit_lines_params*    fitter_params = NULL,
-                      vifa_group_pgram_params*  gpp_s = NULL,
-                      vifa_group_pgram_params*  gpp_w = NULL,
-                      vifa_coll_lines_params*    cpp = NULL,
-                      vifa_norm_params*      np = NULL,
+  vifa_int_faces_attr(iface_list&                  v,
+                      sdet_fit_lines_params*       fitter_params = NULL,
+                      vifa_group_pgram_params*     gpp_s = NULL,
+                      vifa_group_pgram_params*     gpp_w = NULL,
+                      vifa_coll_lines_params*      cpp = NULL,
+                      vifa_norm_params*            np = NULL,
                       vifa_int_face_attr_factory*  factory = NULL
                      );
 
@@ -109,8 +109,10 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
 
   vifa_int_face_attr_sptr factory_new_attr(vdgl_intensity_face_sptr face);
 
-  float Xo();                   // centroid X
-  float Yo();                   // centroid Y
+  //: centroid X
+  float Xo();
+  //: centroid Y
+  float Yo();
 
   // ---
   // Attribute computation
@@ -144,12 +146,12 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
 
  protected:
   virtual void  init();
-  void      SetNP();
-  void      ComputeCentroid();
+  void          SetNP();
+  void          ComputeCentroid();
   virtual bool  ComputeSingleFaceAttributes(bool forceP=false);
 
   // Caller must delete returned edge_list when done
-  edge_list*      GetPerimeterEdges();
+  edge_list*    GetPerimeterEdges();
   vifa_histogram_sptr  MakeAttrHist(vcl_vector<float>& attr_vals);
 };
 

@@ -24,13 +24,12 @@
 class vifa_gaussian
 {
  protected:
-  float  _mu;
-  float  _sigma;
+  float  mu_;
+  float  sigma_;
 
  public:
-  vifa_gaussian(float  mu,
-                float  sigma
-               );
+  vifa_gaussian(float  mu, float  sigma) : mu_(mu), sigma_(sigma) {}
+
   virtual ~vifa_gaussian(void) {}
 
   float  pdf(float  x);
