@@ -188,12 +188,12 @@ template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, 
 template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, float*,double*);
 template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, double*,double*);
 
-//template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, vil_byte*,unsigned char* );
+template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, vil_byte*,unsigned char* );
 template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, vxl_uint_16*,unsigned char* );
 template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, vxl_uint_32*,unsigned char* );
 template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, float*,unsigned char* );
 template bool convert_grey_to_rgb( const vil_image&, void*, int, int, int, int, double*,unsigned char* );
-template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, vil_byte*,unsigned char* );
+//template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, vil_byte*,unsigned char* );
 template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, vxl_uint_16*,unsigned char* );
 template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, float*,unsigned char* );
 template bool convert_rgb_to_rgb( const vil_image&, void*, int, int, int, int, double*,unsigned char* );
@@ -412,7 +412,7 @@ bool vil_image_as_impl<double>::get_section(void *buf, int x0, int y0, int width
   case VIL_FLOAT:
     return convert_grey_to_grey( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0);
   case VIL_DOUBLE:
-    return convert_grey_to_grey( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
+    return image.get_section( buf, x0, y0, width, height );
   case VIL_RGB_BYTE:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
   case VIL_RGB_UINT16:
@@ -420,7 +420,7 @@ bool vil_image_as_impl<double>::get_section(void *buf, int x0, int y0, int width
   case VIL_RGB_FLOAT:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0);
   case VIL_RGB_DOUBLE:
-    return image.get_section( buf, x0, y0, width, height );
+    return convert_rgb_to_grey( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
   default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
