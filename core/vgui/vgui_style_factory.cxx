@@ -129,8 +129,9 @@ void vgui_style_factory::change_style_impl(vgui_soview* so, vgui_style* st_new, 
   // It doesn't make sense for a single view to be associated with two
   // styles, so delete all old associations before inserting a new
   // one.
-
-  remove_style( so );
+  // Only remove style when st_old is NOT null
+  if( st_old )
+    remove_style( so );
 
   // add tuple of <st_new, so> to multimap
   styles_map.insert(MultiMap_styles::value_type(st_new, so));
