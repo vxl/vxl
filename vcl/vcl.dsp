@@ -635,6 +635,11 @@ SOURCE=.\Templates/vcl_vector+void~-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vcl_vector+vcl_vector+vcl_pair+uint.uint---.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\emulation/vcl_alloc.cxx
 
 # End Source File

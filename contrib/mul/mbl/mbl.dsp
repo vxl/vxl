@@ -105,6 +105,11 @@ SOURCE=.\mbl_screen_counter.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\mbl_arb_length_int.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/mbl_data_wrapper+double-.cxx
 
 # End Source File
@@ -171,6 +176,16 @@ SOURCE=.\Templates/vsl_vector_io+mbl_sum_1d-.cxx
 # Begin Source File
 
 SOURCE=.\Templates/mbl_data_array_ptr_wrapper+vnl_vector+double--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mbl_selected_data_wrapper+double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mbl_selected_data_wrapper+vnl_vector+double--.cxx
 
 # End Source File
 # Begin Source File
@@ -399,6 +414,21 @@ SOURCE=.\mbl_data_array_ptr_wrapper.txx
 # Begin Source File
 
 SOURCE=.\mbl_stl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_arb_length_int.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_selected_data_wrapper.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_selected_data_wrapper.txx
 
 # End Source File
 # End Group
