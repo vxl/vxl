@@ -6,6 +6,7 @@
 // \author Ian Scott
 // Test construction, IO etc.
 
+#include <vcl_vector.h>
 #include <vcl_limits.h>
 #include <vcl_iostream.h>
 #include <vcl_strstream.h>
