@@ -13,6 +13,7 @@
 #include <vil/vil_stream_fstream.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_new.h>
+#include <vil3d/vil3d_property.h>
 
 // GIPL magic number
 const unsigned GIPL_MAGIC = 719555000;
@@ -285,6 +286,25 @@ vil3d_image_view_base_sptr vil3d_gipl_image::get_copy_view(
 //: Get the properties (of the first slice)
 bool vil3d_gipl_image::get_property(char const *key, void * value) const
 {
+  if (strcmp(vil3d_property_voxel_size, key)==0)
+  {
+    float* array =  static_cast<float*>(value);
+    // gipl stores data in mm
+    array[0] = vox_width1_ / 1000.0f;
+    array[1] = vox_width2_ / 1000.0f;
+    array[2] = vox_width3_ / 1000.0f;
+    return true;
+  }
+
+  if (strcmp(vil3d_property_origin_offset, key)==0)
+  {
+    float* array =  static_cast<float*>(value);
+    array[0] = (float)dim1_ * 0.5;
+    array[1] = (float)dim2_ * 0.5;
+    array[2] = (float)dim3_ * 0.5;
+    return true;
+  }
+
   return false;
 }
 
