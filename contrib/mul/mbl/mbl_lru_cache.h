@@ -43,7 +43,7 @@ public:
   // \return 0 if not in the cache.
   const V* lookup(const I& index)
   {
-    assert (m_.size() = l_.size());
+    assert (m_.size() == l_.size());
     map_type::iterator it= m_.find(index);
     if (it != m_.end())
     {
@@ -62,7 +62,7 @@ public:
   // then the cache will not be modified.
   void insert(const I& index, const V& value, bool dont_if_full=false)
   {
-    assert (m_.size() = l_.size());
+    assert (m_.size() == l_.size());
     assert (m_.find(index) == m_.end());
 
     if (m_.size() < n_)
@@ -92,8 +92,6 @@ public:
     }
     n_=n;
   }
-
-
 };
 
-#endif
+#endif // mbl_lru_cache_h_
