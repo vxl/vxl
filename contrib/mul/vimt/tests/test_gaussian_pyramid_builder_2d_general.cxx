@@ -103,9 +103,9 @@ void test_gaussian_pyramid_builder_2d_general_a()
   builder.build(image_pyr, col_im);
   vil2_image_view<vxl_byte > view_l1 = static_cast<vimt_image_2d_of<vxl_byte>&>(image_pyr(1)).image();
   TEST("Check a colour image pyramid doesn't distort colour",
-       all_pixels_equal_to(vil2_plane(view_l1,0), 10) &&
-       all_pixels_equal_to(vil2_plane(view_l1,1), 20) &&
-       all_pixels_equal_to(vil2_plane(view_l1,2), 200), true);
+       all_pixels_equal_to(vil2_plane(view_l1,0), vxl_byte(10)) &&
+       all_pixels_equal_to(vil2_plane(view_l1,1), vxl_byte(20)) &&
+       all_pixels_equal_to(vil2_plane(view_l1,2), vxl_byte(200)), true);
 
   image_pyr.print_all(vcl_cout);
 
