@@ -88,107 +88,107 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\vcl_tests.cxx
+SOURCE=.\test_driver.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_algorithm.cxx
+SOURCE=.\test_algorithm.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_cctype.cxx
+SOURCE=.\test_cctype.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_cmath.cxx
+SOURCE=.\test_cmath.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_compiler.cxx
+SOURCE=.\test_compiler.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_complex.cxx
+SOURCE=.\test_complex.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_deque.cxx
+SOURCE=.\test_deque.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_exception.cxx
+SOURCE=.\test_exception.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_fstream.cxx
+SOURCE=.\test_fstream.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_headers.cxx
+SOURCE=.\test_headers.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_iostream.cxx
+SOURCE=.\test_iostream.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_iterator.cxx
+SOURCE=.\test_iterator.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_list.cxx
+SOURCE=.\test_list.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_map.cxx
+SOURCE=.\test_map.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_multimap.cxx
+SOURCE=.\test_multimap.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_new.cxx
+SOURCE=.\test_new.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_set.cxx
+SOURCE=.\test_set.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_stlfwd.cxx
+SOURCE=.\test_stlfwd.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_string.cxx
+SOURCE=.\test_string.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_vector.cxx
+SOURCE=.\test_vector.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_cstdio.cxx
+SOURCE=.\test_cstdio.cxx
 
 # End Source File
 # End Group
