@@ -39,12 +39,12 @@ bool vil_block_cache_image_impl::get_property(char const *tag,
     return true;
   
   if (strcmp(tag, "block_size_x") == 0) {
-    *(unsigned *)out = block_size_x;
+    if (out) *(unsigned *)out = block_size_x;
     return true;
   }
   
   if (strcmp(tag, "block_size_y") == 0) {
-    *(unsigned *)out = block_size_y;
+    if (out) *(unsigned *)out = block_size_y;
     return true;
   }
   
