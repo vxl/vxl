@@ -2,10 +2,10 @@
 #pragma implementation
 #endif
 
-#include <vsol/vsol_point_2d.h>
-
 #include "vdgl_digital_curve.h"
-
+#include <vsol/vsol_point_2d.h>
+#include <vdgl/vdgl_edgel_chain.h>
+#include <vdgl/vdgl_interpolator_linear.h>
 
 vdgl_digital_curve::vdgl_digital_curve( vdgl_interpolator_sptr interpolator)
   : interpolator_( interpolator)
@@ -60,7 +60,6 @@ double vdgl_digital_curve::length() const
 
 void vdgl_digital_curve::set_p0(const vsol_point_2d_sptr &p)
 {
-  
   vcl_cerr << "vdgl_digital_curve::set_p0() not allowed and ignored..." << vcl_endl;
   int i = 0;
   interpolator_->get_edgel_chain()->set_edgel(i, vdgl_edgel ( p->x(), p->y() ) );
@@ -71,6 +70,16 @@ void vdgl_digital_curve::set_p1(const vsol_point_2d_sptr &p )
   vcl_cerr << "vdgl_digital_curve::set_p1() not allowed and ignored..." << vcl_endl;
   int i = interpolator_->get_edgel_chain()->size() - 1;
   interpolator_->get_edgel_chain()->set_edgel(i, vdgl_edgel ( p->x(), p->y() ) );
-
 }
 
+bool vdgl_digital_curve::split(vsol_point_2d_sptr const& v,
+                               vdgl_digital_curve_sptr& dc1,
+                               vdgl_digital_curve_sptr& dc2)
+{
+  vdgl_edgel_chain_sptr ec = interpolator_->get_edgel_chain();
+  vdgl_edgel_chain_sptr ec1, ec2;
+  if (! ec->split(v->x(), v->y(), ec1, ec2)) return false;
+  dc1 = new vdgl_digital_curve(new vdgl_interpolator_linear(ec1));
+  dc2 = new vdgl_digital_curve(new vdgl_interpolator_linear(ec2));
+  return true;
+}

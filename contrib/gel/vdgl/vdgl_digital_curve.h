@@ -4,19 +4,20 @@
 #pragma interface
 #endif
 
-// .NAME vdgl_digital_curve - Represents a 2D digital_curve
-// .INCLUDE vgl/vdgl_digital_curve.h
-// .FILE vdgl_digital_curve.txx
+//:
+// \file
+// \brief Represents a 2D digital_curve
 //
-// .SECTION Description
-//  A 2d image digital_curve
+// \author  Geoff Cross
 //
-// .SECTION Author
-//    Geoff Cross
-// Created: xxx xx xxxx
+// \verbatim
+// Modifications:
+//  10-Apr-2002 Peter Vanroose - Implemented split()
+// \endverbatim
 
+#include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vsol/vsol_curve_2d.h>
-#include <vtol/vtol_vertex_2d.h>
+#include <vsol/vsol_point_2d_sptr.h>
 #include <vdgl/vdgl_interpolator_sptr.h>
 
 class vdgl_digital_curve : public vsol_curve_2d {
@@ -37,8 +38,12 @@ public:
   void set_p0(const vsol_point_2d_sptr &);
   void set_p1(const vsol_point_2d_sptr &);
 
-  // Split
-  bool split ( vtol_vertex_2d* v, vdgl_digital_curve*& dc1, vdgl_digital_curve*& dc2 ); 
+  //: Split a digital curve into two pieces at the given point.
+  //  If the location is not on the curve, the nearest point which does lie on
+  //  the curve is selected.  If the point is outside the curve bounds, then
+  //  only dc1 is returned, as the entire curve. dc2 is NULL.
+  bool split(vsol_point_2d_sptr const& v,
+             vdgl_digital_curve_sptr& dc1, vdgl_digital_curve_sptr& dc2); 
 
   // Data Access---------------------------------------------------------------
 
@@ -49,28 +54,20 @@ public:
 
   vdgl_interpolator_sptr get_interpolator() { return interpolator_; }
 
-
   //***************************************************************************
   // Replaces dynamic_cast<T>
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an digital_curve, 0 otherwise
+  //: Return `this' if `this' is a digital_curve, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vdgl_digital_curve *cast_to_digital_curve(void) {return this;}
-
-  // Data Control--------------------------------------------------------------
-
-  // Computations--------------------------------------------------------------
 
   // INTERNALS-----------------------------------------------------------------
 protected:
   // Data Members--------------------------------------------------------------
 
   vdgl_interpolator_sptr interpolator_;
-
-private:
-  // Helpers-------------------------------------------------------------------
 };
 
-#endif // _vdgl_digital_curve_h
+#endif // vdgl_digital_curve_h
