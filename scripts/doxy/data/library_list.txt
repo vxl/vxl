@@ -24,6 +24,9 @@ vxl vidl vidl_ build
 vxl vcgl vcgl_ build
 vxl vcsl vcsl_ build
 
+package: vxl Test Framework
+vxl testlib testlib_ build
+
 package: mul Manchester University Libraries
 mul mbl   mbl_   build
 mul mil   mil_   build
