@@ -552,7 +552,7 @@ sub scan_for_hints {
            0) {
          $string_is_typename = 0;
          $string_is_identifier = 1;
-         print STDERR "[WARNING: 'string' being used as identifier]\n";
+         print STDERR "[WARNING: 'string' being used as identifier]"; # no \n, please
        }
       }
     }
