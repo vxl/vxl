@@ -7,6 +7,7 @@
 #include "vil_gif.h"
 
 #include <vcl/vcl_iostream.h>
+#include <vcl/vcl_iomanip.h>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_16bit.h>
@@ -56,46 +57,85 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_)
   
   unsigned char b;
   
-  s->read(&b, 1);
-  if (b & 0x80) {
-    int bits = 1 + ((b & 0x70)>>4) /* why ?? */ + 1;
-    global_color_map = new vil_gif_color_map( 0x1 << bits );
-    cerr << "global colour map has size " << global_color_map->size << endl;
-  }
-  else
-    global_color_map = 0;
+  // ---------- read screen descriptor
 
-  if (b & 0x07 != 7) {
-    // cannot cope unless there are 8 bits per pixel.
-    assert(false);
-  }
-  
-  s->read(&b, 1);
-  background_index = b;
-  cerr << "background has colour index " << background_index << endl;
+  {
+    s->read(&b, 1);
+    cerr << "b = 0x" << hex << int(b) << dec << endl;
 
-  s->read(&b, 1); // zero
+    int bits_of_colour_res;
+    if (b & 0x80) {
+      cerr << "screen has global colour map" << endl;
+      bits_of_colour_res = 1 + ((b & 0x70)>>4);
+      cerr << "screen has " << bits_of_colour_res << " bits of colour resolution" << endl;
+    }
+    else
+      bits_of_colour_res = 0;
+
+    // bit 3 should be zero    
+    if (b & 0x08) {
+      cerr << "bit 3 is not zero" << endl;
+      assert(false);
+    }
+    
+    int bits_per_pixel = 1 + (b & 0x07);
+    cerr << "screen has " << bits_per_pixel << " bits per pixel" << endl;
+    if (bits_per_pixel != 8) {
+      cerr << "cannot read GIF with != 8 bits per pixel." << endl;
+      assert(false);
+    }
+
+    // create global colour map, if needed.
+    if (bits_of_colour_res > 0) {
+      global_color_map = new vil_gif_color_map( 0x1 << bits_per_pixel );
+      cerr << "global colour map has size " << global_color_map->size << endl;
+    }
+    
+    // colour index of background.
+    s->read(&b, 1);
+    background_index = b;
+    cerr << "background has colour index " << background_index << endl;
+    
+    // should be zero
+    s->read(&b, 1);
+    if (b) {
+      cerr << "not zero" << endl;
+      assert(false);
+    }
+  }
+
+  // ---------- read global colourmap
   
   cerr << "position is 0x" << hex << s->tell() << dec << endl;
   if (global_color_map) {
     cerr << "read global colour map" << endl;
     s->read(global_color_map->cmap, 3*global_color_map->size);
-  }
 
-  // read image descriptors
+    for (int i=0; i<16; ++i)
+      cerr << setw(3) << i << ' ' 
+	   << int((unsigned char) global_color_map->cmap[3*i+0]) << ' '
+	   << int((unsigned char) global_color_map->cmap[3*i+1]) << ' '
+	   << int((unsigned char) global_color_map->cmap[3*i+2]) << endl;
+  }
+  
+  // ---------- read image descriptors
+  
   while (true) {
     int offset = s->tell();
     cerr << "position is 0x" << hex << offset << dec << endl;
 
+    // read image separator or GIF terminator
     s->read(&b, 1);
-    if (b == ';')
-      break; // GIF terminator
-    if (b != ',') { // image separator
+    if (b == ';')   // terminator
+      break; 
+    if (b != ',') { // separator
       cerr << "unexpected character \'" << char(b) << "\' (0x" << hex << int(b) << dec << ") in GIF stream" << endl;
       assert(false);
     }
+    
     vil_gif_image_record *ir = new vil_gif_image_record;
     ir->offset = offset;
+
     ir->x0 = vil_16bit_read_little_endian(s);
     ir->y0 = vil_16bit_read_little_endian(s);
     ir->w  = vil_16bit_read_little_endian(s);
@@ -108,7 +148,8 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_)
     cerr << "b = 0x" << hex << int(b) << dec << endl;
 
     cerr << "position is 0x" << hex << s->tell() << dec << endl;
-    if (b & 0x80) {
+    if (b & 0x80) { // local colour map?
+      cerr << "image has local colour map" << endl;
       int bits = 1 + (b & 0x07);
       cerr << "read local colour map (" << bits << " bits per pixel)" << endl;
       ir->color_map = new vil_gif_color_map(0x1 << bits);
@@ -120,9 +161,33 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_)
     }
     cerr << "position is 0x" << hex << s->tell() << dec << endl;
     
+    // interlaced or sequential?
     ir->interlaced = b & 0x40;
-    cerr << (ir->interlaced ? "interlaced" : "sequential") << endl;
+    cerr << "image is " << (ir->interlaced ? "interlaced" : "sequential") << endl;
+    if (ir->interlaced) {
+      cerr << "can't read interlaced GIFs yet" << endl;
+      assert(false);
+    }
 
+    // bits 543 should be zero
+    if (b & 0x38) {
+      cerr << "bits 543 are not zero" << endl;
+      assert(false);
+    }
+
+    //
+    if (ir->color_map) {
+      ir->bits_per_pixel = 1 + (b & 0x07);
+      cerr << "image has " << ir->bits_per_pixel << " bits per pixel" << endl;
+      if (ir->bits_per_pixel != 8) {
+	cerr << "cannot cope with that" << endl;
+	assert(false);
+      }
+    }
+    else
+      ir->bits_per_pixel = 0;
+
+    //
     ir->bitmap_start = s->tell();
     
     // seek to end of raster data
@@ -131,7 +196,9 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_)
     images.push_back(ir);
     break;
   }
+
   cerr << "read " << images.size() << " image descriptors" << endl;
+  cerr << "------------ done : position = " << hex << s->tell() << dec << endl;
 }
 
 vil_gif_loader_saver::~vil_gif_loader_saver()
@@ -180,6 +247,9 @@ bool vil_gif_loader_saver::put_section(void const *buf, int x0, int y0, int w, i
 
 bool vil_gif_loader_saver::get_section(int image, void* buf, int x0, int y0, int w, int h) const
 {
+#if 1
+  // Damn! Have to implement LZW decompression here. Maybe some other day.
+#else
   assert(0<=image && image<images.size());
   char *char_buf = (char*) buf;
 
@@ -208,6 +278,6 @@ bool vil_gif_loader_saver::get_section(int image, void* buf, int x0, int y0, int
   
   delete [] tmp;
 #endif
-  
+#endif 
   return true;
 }
