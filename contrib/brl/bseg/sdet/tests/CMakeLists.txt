@@ -15,3 +15,4 @@ ADD_TEST(sdet_test_detector    sdet_test_all test_detector ${CMAKE_CURRENT_SOURC
 ADD_TEST(sdet_test_region_proc sdet_test_all test_region_proc ${CMAKE_CURRENT_SOURCE_DIR}/jar-closeup.tif)
 
 ADD_EXECUTABLE(sdet_test_include test_include.cxx)
+TARGET_LINK_LIBRARIES(sdet_test_include sdet)
