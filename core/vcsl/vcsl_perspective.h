@@ -22,7 +22,7 @@
 #include <vcsl/vcsl_spatial_transformation.h>
 //: Perspective projection transformation
 // This is a perspective projection from a 3D cartesian coordinate system to a
-// 2D cartesian coordinate system, parametrized by the focal exprimed in
+// 2D cartesian coordinate system, parametrized by the focal expressed in
 // meters. The projection is along the z axis. The center of the projection is
 // the origin of the 3D frame. The projection plane is in the half-space z<0.
 class vcsl_perspective

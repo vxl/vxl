@@ -133,7 +133,7 @@ class vcsl_spatial
   virtual bool is_absolute(double time) const;
 
 
-  //: Return v but exprimed in the spatial coordinate system `other'
+  //: Return v but expressed in the spatial coordinate system `other'
   //  REQUIRE: path_from_local_to_cs_exists(other,time)
   virtual vnl_vector<double> from_local_to_cs(const vnl_vector<double> &v,
                                               const vcsl_spatial_sptr &other,

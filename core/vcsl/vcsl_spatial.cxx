@@ -322,8 +322,8 @@ bool vcsl_spatial::is_absolute(double time) const
 }
 
 //---------------------------------------------------------------------------
-// From a vector `v' exprimed in `this',
-// return a vector exprimed in the spatial coordinate system `other'
+// From a vector `v' expressed in `this',
+// return a vector expressed in the spatial coordinate system `other'
 // REQUIRE: path_from_local_to_cs_exists(other,time)
 //---------------------------------------------------------------------------
 vnl_vector<double>
