@@ -109,11 +109,11 @@ public:
   vnl_matrix<T>& operator= (T const&v) { fill(v); return *this; } 
   vnl_matrix<T>& operator= (vnl_matrix<T> const&);
   
-  // arithmetic  
-  vnl_matrix<T>& operator+= (T const&);
-  vnl_matrix<T>& operator*= (T const&);
-  vnl_matrix<T>& operator/= (T const&);
-  vnl_matrix<T>& operator-= (T const&);
+  // arithmetic
+  vnl_matrix<T>& operator+= (T value);
+  vnl_matrix<T>& operator*= (T value);
+  vnl_matrix<T>& operator/= (T value);
+  vnl_matrix<T>& operator-= (T value);
   
   vnl_matrix<T>& operator+= (vnl_matrix<T> const&);
   vnl_matrix<T>& operator-= (vnl_matrix<T> const&);
@@ -289,14 +289,6 @@ inline void vnl_matrix<T>::put (unsigned row, unsigned column, T const& value) {
   this->data[row][column] = value;              // Assign data value
 }
 
-
-// operator-= -- Mutates lhs matrix to substracts in place,
-// its elements with value. O(m*n).
-
-template<class T> 
-inline vnl_matrix<T>& vnl_matrix<T>::operator-= (T const& value) {
-  return *this += (- value);
-}
 
 // operator- -- Returns new matrix with elements of lhs matrix substacted
 // with value. O(m*n).

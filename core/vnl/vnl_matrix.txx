@@ -302,36 +302,40 @@ istream& operator>>(istream& s, vnl_matrix<T>& M) {
 }
 
 
-  
-// operator+= -- Mutates lhs matrix to add all elements with value. O(m*n).
 
 template<class T> 
-vnl_matrix<T>& vnl_matrix<T>::operator+= (T const& value) {
-  for (unsigned i = 0; i < this->num_rows; i++)    // For each row
-    for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
-      this->data[i][j] += value;                // Add scalar
+vnl_matrix<T>& vnl_matrix<T>::operator+= (T value) {
+  for (unsigned i = 0; i < this->num_rows; i++)
+    for (unsigned j = 0; j < this->num_cols; j++)
+      this->data[i][j] += value;
   return *this;
 }
 
-// operator*= -- Mutates lhs matrix to multiply all elements by value. O(m*n).
-
 template<class T> 
-vnl_matrix<T>& vnl_matrix<T>::operator*= (T const& value) {
-  for (unsigned i = 0; i < this->num_rows; i++)    // For each row
-    for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
-      this->data[i][j] *= value;                // Multiply by scalar
+vnl_matrix<T>& vnl_matrix<T>::operator-= (T value) {
+  for (unsigned i = 0; i < this->num_rows; i++)
+    for (unsigned j = 0; j < this->num_cols; j++)
+      this->data[i][j] -= value;
   return *this;
 }
 
-// operator/= --  Mutates lhs matrix to divide all elements by value. O(m*n).
-
 template<class T> 
-vnl_matrix<T>& vnl_matrix<T>::operator/= (T const& value) {
-  for (unsigned i = 0; i < this->num_rows; i++)    // For each row
-    for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
-      this->data[i][j] /= value;                // division by scalar
+vnl_matrix<T>& vnl_matrix<T>::operator*= (T value) {
+  for (unsigned i = 0; i < this->num_rows; i++)
+    for (unsigned j = 0; j < this->num_cols; j++)
+      this->data[i][j] *= value;
   return *this;
 }
+
+template<class T> 
+vnl_matrix<T>& vnl_matrix<T>::operator/= (T value) {
+  for (unsigned i = 0; i < this->num_rows; i++)
+    for (unsigned j = 0; j < this->num_cols; j++)
+      this->data[i][j] /= value;
+  return *this;
+}
+
+
 
 template<class T>
 vnl_matrix<T> operator- (T const& value, vnl_matrix<T> const& m) {
