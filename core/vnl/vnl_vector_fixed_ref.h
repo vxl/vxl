@@ -15,7 +15,7 @@
 // \author Paul P. Smyth, Vicon Motion Systems Ltd. 
 // \date 02 May 2001
 
-#include <cassert>
+#include <vcl_cassert.h>
 #include <vnl/vnl_vector_ref.h>
 
 template <class T, int n>
