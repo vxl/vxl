@@ -121,4 +121,4 @@ private:
   //Histogram* _ghist;
 };
 
-#endif
+#endif // _vsl_edge_detector_h

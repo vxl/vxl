@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_rgb_h_
 #define vil_rgb_h_
 #ifdef __GNUC__
@@ -253,4 +252,4 @@ extern "you must include vil/vil_rgb.txx first."
 #define VIL_RGB_INSTANTIATE_LS(T) \
 extern "you must include vil/vil_rgb.txx first."
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_rgb<>.
+#endif // vil_rgb_h_

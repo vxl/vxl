@@ -1,14 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_vector_ref_h_
 #define vnl_vector_ref_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vnl_vector_ref - vnl_vector using user-supplied storage
-// .LIBRARY     vnl
-// .INCLUDE     vnl/vnl_vector_ref.h
-// .FILE        vnl/vnl_vector_ref.cxx
+// .NAME	vnl_vector_ref - vnl_vector using user-supplied storage
+// .LIBRARY	vnl
+// .HEADER	vxl package
+// .INCLUDE	vnl/vnl_vector_ref.h
+// .FILE	vnl_vector_ref.cxx
 //
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
@@ -53,4 +53,4 @@ public:
   //void* operator new(size_t, void* space) { return space; }
 };
 
-#endif
+#endif // vnl_vector_ref_h_

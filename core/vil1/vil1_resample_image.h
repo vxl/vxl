@@ -12,4 +12,4 @@ bool vil_resample_image(vil_image const &base, unsigned new_width, unsigned new_
                   T *buf, A *dummy,
                   int x0, int y0, int w, int h);
 
-#endif
+#endif // vil_resample_image_h_

@@ -399,4 +399,3 @@ examples of proper use.  */
 #define number_of_cols row_size
 
 #endif /* _viff_h_ */
-/* Don't add after the endif */

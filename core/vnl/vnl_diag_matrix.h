@@ -5,8 +5,8 @@
 #endif
 
 //----------------------------------------------------------------------
-// .NAME        vnl_diag_matrix - Time/space efficient diagonal matrix
-// .FILE        vnl_diag_matrix.txx
+// .NAME	vnl_diag_matrix - Time/space efficient diagonal matrix
+// .FILE	vnl_diag_matrix.txx
 //
 // .SECTION Description
 //    vnl_diag_matrix stores a diagonal matrix for time and space efficiency.
@@ -20,21 +20,11 @@
 // .SECTION Modifications:
 //     <none yet>
 //
-//.cg_iue
-//.cg_dexable
-//
-//.cg_tdataInstMacro	VNL_DIAG_MATRIX_INSTANTIATE(T)
-//.cg_tdataDeclPost
-//// Include _Helper file in template instance files
-//#include <MathDex/vnl_diag_matrix_Helper.h>
-//.cg_tdataImplPost
-//// Include _Helper file in template instance files
-//#include <MathDex/vnl_diag_matrix_Helper.h>
 //-----------------------------------------------------------------------------
 
 // forward declare friend functions
 //template <class T> class vnl_diag_matrix;
-//template<class T> bool epsilon_equals 
+//template<class T> bool epsilon_equals
 //        (vnl_diag_matrix<T> const& m1, vnl_diag_matrix<T> const& m2, double alt_epsilon = 0);
 
 #include <vcl/vcl_cassert.h>
@@ -66,7 +56,7 @@ public:
 // -- In-place arithmetic operations
   vnl_diag_matrix<T>& operator*=(T const& v) { diagonal_ *= v; return *this; }
   vnl_diag_matrix<T>& operator/=(T const& v) { diagonal_ /= v; return *this; }
-  
+
   // Computations--------------------------------------------------------------
   void invert_in_place();
   T determinant() const;
@@ -102,12 +92,12 @@ public:
   // Return pointer to the diagonal elements as a contiguous 1D C array;
   T*       data_block()       { return diagonal_.data_block(); }
   T const* data_block() const { return diagonal_.data_block(); }
-  
+
   vnl_vector<T> const& diagonal() const { return diagonal_; }
 
 protected:
   vnl_vector<T> diagonal_;
-  
+
 private:
   // This is private because it's not really a matrix operation.
   T operator()(unsigned i) const {
@@ -251,4 +241,4 @@ inline vnl_vector<T> operator* (vnl_vector<T> const& A, vnl_diag_matrix<T> const
 // #endif
 
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_diag_matrix.
+#endif // vnl_diag_matrix_h_

@@ -13,4 +13,4 @@ template <class T> void vnl_resize(vnl_vector<T> &v, unsigned newsize);
 template <class T> void vnl_resize(vnl_matrix<T> &M, unsigned newrows, unsigned newcols);
 template <class T> void vnl_resize(vnl_diag_matrix<T> &D, unsigned newsize);
 
-#endif
+#endif // vnl_resize_h_

@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_double_3
-// .LIBRARY     vnl
+// .NAME	vnl_double_3
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_double_3.h
-// .FILE        vnl/vnl_double_3.cxx
+// .INCLUDE	vnl/vnl_double_3.h
+// .FILE	vnl_double_3.cxx
 //
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 31 Dec 96
@@ -20,4 +20,4 @@
 //: class vnl_double_3 : a vnl_vector of 3 doubles.
 vnl_T_n_impl(double,3);
 
-#endif
+#endif // vnl_double_3_h_

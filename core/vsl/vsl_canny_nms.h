@@ -13,4 +13,4 @@ int vsl_canny_nms(int _xsize, int _ysize,
 		  float * const * _dx, float * const * _dy, float const * const * _grad,
 		  float * const *_thick, float * const * _theta);
 
-#endif
+#endif // vsl_canny_nms_h_

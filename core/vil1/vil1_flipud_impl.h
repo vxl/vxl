@@ -29,4 +29,4 @@ private:
   vil_image base;
 };
 
-#endif
+#endif // vil_flipud_impl_h_

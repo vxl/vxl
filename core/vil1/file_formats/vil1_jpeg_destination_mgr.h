@@ -34,4 +34,4 @@ vil_jpeg_stream_dst_set (j_compress_ptr cinfo, vil_stream *vs);
 void 
 vil_jpeg_stream_dst_rewind(j_compress_ptr cinfo, vil_stream *vs);
 
-#endif
+#endif // vil_jpeg_destination_mgr_h_

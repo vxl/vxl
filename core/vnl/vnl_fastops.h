@@ -3,10 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_fastops
-// .LIBRARY     vnl
-// .INCLUDE     vnl/vnl_fastops.h
-// .FILE        vnl/vnl_fastops.cxx
+// .NAME	vnl_fastops
+// .LIBRARY	vnl
+// .HEADER	vxl package
+// .INCLUDE	vnl/vnl_fastops.h
+// .FILE	vnl_fastops.cxx
 //
 // .SECTION Description
 //    vnl_fastops is a collection of C-style matrix functions for the most
@@ -41,5 +42,4 @@ public:
   static double dot(const double* a, const double* b, int n);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_fastops.
-
+#endif // vnl_fastops_h_

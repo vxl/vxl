@@ -1,15 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_nonlinear_minimizer_h_
 #define vnl_nonlinear_minimizer_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vnl_nonlinear_minimizer - Base class for nonlinear optimization
-// .LIBRARY     vnl
+// .NAME	vnl_nonlinear_minimizer - Base class for nonlinear optimization
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_nonlinear_minimizer.h
-// .FILE        vnl/vnl_nonlinear_minimizer.cxx
+// .INCLUDE	vnl/vnl_nonlinear_minimizer.h
+// .FILE	vnl_nonlinear_minimizer.cxx
 //
 // .SECTION Description
 //    vnl_nonlinear_minimizer is a base class for nonlinear optimization.
@@ -30,7 +29,7 @@ public:
   vnl_nonlinear_minimizer();
 
   virtual ~vnl_nonlinear_minimizer();
-  
+
 // -- Set the convergence tolerance on F (sum of squared residuals).  When the
 // differences in successive RMS errors is less than this, the routine
 // terminates.  So this is effectively the desired precision of your
@@ -49,7 +48,7 @@ public:
     epsfcn = xtol * 0.001;
   }
   double get_x_tolerance() const { return xtol; }
-  
+
 // -- Set the convergence tolerance on Grad(F)' * F.
   void set_g_tolerance(double v) { gtol = v; }
   double get_g_tolerance() const { return gtol; }
@@ -66,7 +65,7 @@ public:
 // -- Turn on per-iteration printouts.
   void set_trace(bool on) { trace = on; }
   double get_trace() const { return trace; }
-  
+
 // -- Set verbose flag
   void set_verbose(bool verb) { verbose_ = verb; }
   double get_verbose() const { return verbose_; }
@@ -138,5 +137,4 @@ protected:
 
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_nonlinear_minimizer.
-
+#endif // vnl_nonlinear_minimizer_h_

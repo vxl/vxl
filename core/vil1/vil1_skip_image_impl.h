@@ -36,4 +36,4 @@ private:
   unsigned skipx, skipy;
 };
 
-#endif
+#endif // vil_skip_image_h_

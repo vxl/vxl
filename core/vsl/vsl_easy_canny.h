@@ -20,4 +20,4 @@ void vsl_easy_canny(int which_canny,
 		    vcl_list<vsl_edge*> *edges,
 		    double sigma = 0);
 
-#endif
+#endif // vsl_easy_canny_h_

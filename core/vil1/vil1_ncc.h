@@ -27,4 +27,4 @@ A vil_ncc(T1 const * const *I1, int x1, int y1,
 	  T2 const * const *I2, int x2, int y2,
 	  int n, A *);
 
-#endif
+#endif // vil_ncc_h_

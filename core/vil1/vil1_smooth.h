@@ -3,9 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vil_smooth
+// .INCLUDE vil/vil_smooth
+// .FILE vil_smooth.cxx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
 
 #include <vil/vil_image.h>
 
@@ -16,4 +19,4 @@ vil_image vil_smooth_byte_separable_symmetric(float const kernel[], unsigned N, 
 //: Gaussian smooth an image.
 vil_image vil_smooth_gaussian(vil_image const &, double sigma);
 
-#endif
+#endif // vil_smooth_h_

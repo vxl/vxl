@@ -17,4 +17,4 @@ void vsl_kernel_DOG(float *_kernel, float *_sub_area_OX, int &_k_size,
 		    float _sigma, float _gauss_tail,
 		    int _max_width_OX, int &_width);
 
-#endif
+#endif // vsl_kernel_h_

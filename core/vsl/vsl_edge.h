@@ -48,4 +48,4 @@ public:
 // urgh
 typedef vsl_edge vsl_Edge;
 
-#endif
+#endif // vsl_edge_h_

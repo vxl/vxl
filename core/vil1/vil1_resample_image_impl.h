@@ -37,4 +37,4 @@ private:
   unsigned new_width, new_height;
 };
 
-#endif
+#endif // vil_resample_image_impl_h_

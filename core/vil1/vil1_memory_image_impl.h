@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_memory_image_impl_h_
 #define vil_memory_image_impl_h_
 #ifdef __GNUC__
@@ -59,5 +58,4 @@ protected:
   void*** rows_;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_memory_image_impl.
-
+#endif // vil_memory_image_impl_h_

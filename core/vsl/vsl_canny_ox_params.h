@@ -43,4 +43,4 @@ public:
   bool verbose;
 };
 
-#endif
+#endif // vsl_canny_ox_params_h_

@@ -20,4 +20,4 @@ private:
   vil_image_proxy(vil_image_proxy const &) { }
 };
 
-#endif
+#endif // vil_image_proxy_h_

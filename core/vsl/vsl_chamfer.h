@@ -17,4 +17,4 @@ void vsl_chamfer_Alt2(int,int,int**,float**);
 // don't use this.
 int vsl_Minimum4(int, int, int, int);
 
-#endif
+#endif // vsl_chamfer_h_

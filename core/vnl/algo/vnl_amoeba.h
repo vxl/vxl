@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_amoeba_h_
 #define vnl_amoeba_h_
 #ifdef __GNUC__
@@ -67,4 +66,4 @@ struct vnl_amoeba_SimplexCorner {
   static int compare(const vnl_amoeba_SimplexCorner & s1, const vnl_amoeba_SimplexCorner &s2);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_amoeba.
+#endif // vnl_amoeba_h_

@@ -4,16 +4,16 @@
 #pragma interface
 #endif
 //
-// .NAME        vnl_cross_product_matrix - 3x3 cross-product matrix of vector
-// .LIBRARY     vnl
+// .NAME	vnl_cross_product_matrix - 3x3 cross-product matrix of vector
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_cross_product_matrix.h
-// .FILE        vnl/vnl_cross_product_matrix.cxx
+// .INCLUDE	vnl/vnl_cross_product_matrix.h
+// .FILE	vnl_cross_product_matrix.cxx
 //
 // .SECTION Description
 //    @{ vnl_cross_product_matrix forms the $3 \times 3$ skew symmetric cross product
 //    matrix from a vector.
-//    
+//
 //    \noindent {\tt vnl_cross_product_matrix(e)} is the matrix $[e]_\times$:
 //   \[
 //   \left( \begin{array}{ccc}
@@ -22,7 +22,7 @@
 //       -e_2  &  e_1  &  0
 //   \end{array} \right)
 //   \]@}
-//      
+//
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 19 Sep 96
 //
@@ -36,7 +36,7 @@
 class vnl_cross_product_matrix : public vnl_double_3x3 {
 public:
   typedef vnl_double_3x3 base;
-  
+
   vnl_cross_product_matrix(const vnl_vector<double>& v) { set(v.data_block()); }
   vnl_cross_product_matrix(const double* v) { set(v); }
   vnl_cross_product_matrix(const vnl_cross_product_matrix& that): base(that) {}
@@ -50,5 +50,4 @@ public:
   void set(const double* v); // override method in vnl_vector
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_cross_product_matrix.
-
+#endif // vnl_cross_product_matrix_h_

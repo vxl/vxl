@@ -20,4 +20,4 @@ O vil_ssd(vil_memory_image_of<I1> const &,
 	  vil_memory_image_of<I2> const &,
 	  O * /*dummy*/);
 
-#endif
+#endif // vil_ssd_h_

@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_stream_fstream_h_
 #define vil_stream_fstream_h_
 #ifdef __GNUC__
@@ -32,4 +31,4 @@ private:
   int id_;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_stream_fstream.
+#endif // vil_stream_fstream_h_

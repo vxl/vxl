@@ -27,4 +27,4 @@ public :
   bool _verbose;               // output debug messages
 };
 
-#endif
+#endif // _vsl_edge_detector_params_h_

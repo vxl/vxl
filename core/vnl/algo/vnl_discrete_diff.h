@@ -69,4 +69,4 @@ public:
 
 };
 
-#endif
+#endif // vnl_discrete_diff_h_

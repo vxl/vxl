@@ -1,7 +1,7 @@
 #ifndef vnl_adjugate_h_
 #define vnl_adjugate_h_
 #ifdef __GNUC__
-#pragma interface "vnl_adjugate"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk
@@ -18,4 +18,4 @@ void vnl_adjugate(vnl_matrix<T> const &A, vnl_matrix<T> *out);
 template <class T>
 vnl_matrix<T> vnl_adjugate(vnl_matrix<T> const &A);
 
-#endif
+#endif // vnl_adjugate_h_

@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_double_2x3
-// .LIBRARY     vnl
+// .NAME	vnl_double_2x3
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_double_2x3.h
-// .FILE        vnl/vnl_double_2x3.cxx
+// .INCLUDE	vnl/vnl_double_2x3.h
+// .FILE	vnl_double_2x3.cxx
 //
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 23 Dec 96
@@ -40,5 +40,4 @@ public:
   }
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_double_2x3.
-
+#endif // vnl_double_2x3_h_

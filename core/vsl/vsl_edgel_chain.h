@@ -43,4 +43,4 @@ public:
 // urgh
 typedef vsl_edgel_chain vsl_EdgelChain;
 
-#endif
+#endif // vsl_edgel_chain_h_

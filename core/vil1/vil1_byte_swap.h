@@ -3,13 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vil_byte_swap
+// .INCLUDE vil/vil_byte_swap
+// .FILE vil_byte_swap.cxx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
 
 void vil_byte_swap(void *, void *);
 
 template <class T>
 inline void vil_byte_swap(T &x) { vil_byte_swap(&x, &x + 1); }
 
-#endif
+#endif // vil_byte_swap_h_

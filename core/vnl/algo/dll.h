@@ -12,4 +12,4 @@
 # endif // BUILD_DLL
 #endif // WIN32 and !Building_*_dll
 
-#endif
+#endif // vnl_algo_dll_h_

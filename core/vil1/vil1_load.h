@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_load_h_
 #define vil_load_h_
 #ifdef __GNUC__
@@ -28,4 +27,4 @@ vil_image vil_load_raw(vil_stream *);
 //: Load raw from file (convenience).
 vil_image vil_load_raw(char const *);
 
-#endif
+#endif // vil_load_h_

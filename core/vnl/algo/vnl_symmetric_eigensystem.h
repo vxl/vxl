@@ -3,9 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_symmetric_eigensystem - Solve $A x = \lambda x$ using vnl_qr.
-// .INCLUDE     vnl/algo/vnl_symmetric_eigensystem.h
-// .FILE        vnl_symmetric_eigensystem.cxx
+// .NAME	vnl_symmetric_eigensystem - Solve $A x = \lambda x$ using vnl_qr
+// .INCLUDE	vnl/algo/vnl_symmetric_eigensystem.h
+// .FILE	vnl_symmetric_eigensystem.cxx
 //
 // .SECTION Description
 // @{
@@ -14,13 +14,13 @@
 //    so V.column(0) is the eigenvector corresponding to the smallest
 //    eigenvalue.
 //
-//    As a matrix decomposition, this is A = V D V^t
+//    As a matrix decomposition, this is $A = V D V^t$
 //
 //    Uses the EISPACK routine RS, which in turn calls TRED2 to reduce A
 //    to tridiagonal form, followed by TQL2, to find the eigensystem.
 //    This is summarized in Golub and van Loan, \S8.2.  The following are
 //    the original subroutine headers:
-// 
+//
 // \begin{quote}\small
 //    TRED2 is a translation of the Algol procedure tred2,
 //     Num. Math. 11, 181-195(1968) by Martin, Reinsch, and Wilkinson.
@@ -55,7 +55,7 @@ class vnl_symmetric_eigensystem {
 public:
   //: @{ Solve real symmetric eigensystem $A x = \lambda x$ @}
   vnl_symmetric_eigensystem(vnl_matrix<T> const & M);
-  
+
 protected:
   // need this here to get inits in correct order, but still keep gentex
   // in the right order.
@@ -78,10 +78,10 @@ public:
   //: Recover specified eigenvalue after computation.
   T             get_eigenvalue(int i) const;
 
-  //: Convenience method to get least-squares nullvector. 
+  //: Convenience method to get least-squares nullvector.
   // It is deliberate that the signature is the same as on vnl_svd<T>.
   vnl_vector<T> nullvector() const { return get_eigenvector(0); }
-  
+
   //: @{ Return the matrix $V  D  V^\top$.  This can be useful if you've
   // modified $D$.  So an inverse is obtained using
   // \begin{alltt}
@@ -103,11 +103,11 @@ public:
 
   //: Solve LS problem M x = b
   vnl_vector<T> solve(vnl_vector<T> const & b);
-  
+
   //: Solve LS problem M x = b
   void solve(vnl_vector<T> const & b, vnl_vector<T> * x);
-  
+
   static bool compute(vnl_matrix<T> const & in, vnl_matrix<T> & V, vnl_vector<T> & D);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_symmetric_eigensystem.
+#endif // vnl_symmetric_eigensystem_h_

@@ -13,4 +13,4 @@
 //:
 vil_image vil_resample(vil_image const &, unsigned new_width, unsigned new_height);
 
-#endif
+#endif // vil_resample_h_

@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_matrix_fixed<T,m,n> - Fixed size matrix
-// .LIBRARY     vnl
+// .NAME	vnl_matrix_fixed<T,m,n> - Fixed size matrix
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_matrix_fixed.h
-// .FILE        vnl_matrix_fixed.txx
+// .INCLUDE	vnl/vnl_matrix_fixed.h
+// .FILE	vnl_matrix_fixed.txx
 //
 // .SECTION Description
 //    vnl_matrix_fixed<T,m,n> - Fixed size matrix.  A subclass of vnl_matrix_fixed_ref,
@@ -34,11 +34,11 @@ public:
 
 // -- Construct an m*n matrix and fill with value
   vnl_matrix_fixed(const T& value):vnl_matrix_fixed_ref<T,m,n>(space) {
-    int i = m*n; 
+    int i = m*n;
     while (i--)
       space[i] = value;
   }
-  
+
 // -- Construct an m*n Matrix and copy data into it row-wise.
   vnl_matrix_fixed(const T* datablck) : vnl_matrix_fixed_ref<T,m,n>(space) {
     memcpy(space, datablck, m*n*sizeof(T));

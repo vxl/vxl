@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME        vnl_matrix_fixed_ref - Fixed size stack-stored vnl_matrix.
-// .LIBRARY     vnl
+// .NAME	vnl_matrix_fixed_ref - Fixed size stack-stored vnl_matrix
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_matrix_fixed_ref.h
-// .FILE        vnl/vnl_matrix_fixed_ref.cxx
+// .INCLUDE	vnl/vnl_matrix_fixed_ref.h
+// .FILE	vnl_matrix_fixed_ref.cxx
 //
 // .SECTION Description
 //    vnl_matrix_fixed_ref is a fixed-size vnl_matrix for which the data space
@@ -93,6 +93,5 @@ private:
   vnl_matrix_fixed_ref(const vnl_matrix<T>&) {}
   vnl_matrix_fixed_ref(const vnl_matrix_fixed_ref<T,m,n>&) {}
 };
- 
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_matrix_fixed_ref.
+#endif // vnl_matrix_fixed_ref_h_

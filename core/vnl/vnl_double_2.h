@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_double_2
-// .LIBRARY     vnl
+// .NAME	vnl_double_2
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_double_2.h
-// .FILE        vnl/vnl_double_2.cxx
+// .INCLUDE	vnl/vnl_double_2.h
+// .FILE	vnl_double_2.cxx
 //
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 31 Dec 96
@@ -23,4 +23,4 @@ vnl_T_n_impl(double,2);
 // Karen is right: there should not be any inline functions defined
 // here. they are provided in vnl_T_n.h in a generic way. fsm
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_double_2.
+#endif // vnl_double_2_h_

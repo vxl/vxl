@@ -1,15 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_matrix_ref_h_
 #define vnl_matrix_ref_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vnl_matrix_ref - vnl_matrix reference to user-supplied storage
-// .LIBRARY     vnl
+// .NAME	vnl_matrix_ref - vnl_matrix reference to user-supplied storage
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_matrix_ref.h
-// .FILE        vnl/vnl_matrix_ref.cxx
+// .INCLUDE	vnl/vnl_matrix_ref.h
+// .FILE	vnl_matrix_ref.cxx
 //
 // .SECTION Description
 //    vnl_matrix_ref is a vnl_matrix for which the data space has been
@@ -78,4 +77,4 @@ private:
   vnl_matrix_ref<T>& operator=(const vnl_matrix<T>&) { return *this; }
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_matrix_ref.
+#endif // vnl_matrix_ref_h_

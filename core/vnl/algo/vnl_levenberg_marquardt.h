@@ -82,5 +82,4 @@ protected:
   static int lmder_lsqfun(int* m, int* n, const double* x, double* fx, double* fJ, int&, int* iflag);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_levenberg_marquardt.
-
+#endif // vnl_levenberg_marquardt_h_

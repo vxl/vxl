@@ -9,4 +9,4 @@ class vil_image;
 class vil_memory_image;
 template <class T> class vil_memory_image_of;
 
-#endif
+#endif // vil_fwd_h_

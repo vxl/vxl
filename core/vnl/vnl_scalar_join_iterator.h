@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_scalar_join_iterator - Database join on matrix columns.
-// .LIBRARY     vnl
+// .NAME	vnl_scalar_join_iterator - Database join on matrix columns
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_scalar_join_iterator.h
-// .FILE        vnl_scalar_join_iterator.txx
+// .INCLUDE	vnl/vnl_scalar_join_iterator.h
+// .FILE	vnl_scalar_join_iterator.txx
 //
 // .SECTION Description
 //    vnl_scalar_join_iterator implements a fast database join on columns
@@ -96,13 +96,13 @@ struct vnl_scalar_join_iterator_indexed_pair {
 public:
   const T* object;
   int original_index;
-  
+
   vnl_scalar_join_iterator_indexed_pair() {}
   vnl_scalar_join_iterator_indexed_pair(const T* object_, int original_index_):object(object_), original_index(original_index_) {}
 
   bool operator == (const vnl_scalar_join_iterator_indexed_pair<T>& that) const;
   bool operator <  (const vnl_scalar_join_iterator_indexed_pair<T>& that) const;
-  
+
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_scalar_join_iterator.
+#endif // vnl_scalar_join_iterator_h_

@@ -28,4 +28,4 @@ bool operator==(vsl_vertex const &a, vsl_vertex const &b);
 // urgh
 typedef vsl_vertex vsl_Vertex;
 
-#endif
+#endif // vsl_vertex_h_

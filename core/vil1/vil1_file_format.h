@@ -47,4 +47,4 @@ public:
   static vil_file_format** all();
 };
 
-#endif
+#endif // vil_file_format_h_

@@ -1,15 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_least_squares_cost_function_h_
 #define vnl_least_squares_cost_function_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vnl_least_squares_cost_function - vnl_least_squares_function -> vnl_cost_function adaptor
-// .LIBRARY     vnl
+// .NAME	vnl_least_squares_cost_function - vnl_least_squares_function -> vnl_cost_function adaptor
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_least_squares_cost_function.h
-// .FILE        vnl/vnl_least_squares_cost_function.cxx
+// .INCLUDE	vnl/vnl_least_squares_cost_function.h
+// .FILE	vnl_least_squares_cost_function.cxx
 //
 // .SECTION Description
 //    An adaptor that converts a vnl_least_squares_function to a vnl_cost_function
@@ -39,5 +38,4 @@ protected:
   vnl_least_squares_function* f_;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_least_squares_cost_function.
-
+#endif // vnl_least_squares_cost_function_h_

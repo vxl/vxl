@@ -75,4 +75,4 @@ private:
   void read_hdr(); // internal work routine
 };
 
-#endif
+#endif // vnl_matlab_read_h_

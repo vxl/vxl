@@ -27,4 +27,4 @@ struct vil_bmp_info_header
   void print(ostream &) const;
 };
 
-#endif
+#endif // vil_bmp_info_header_h_

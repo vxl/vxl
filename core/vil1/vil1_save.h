@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_save_h_
 #define vil_save_h_
 #ifdef __GNUC__
@@ -26,4 +25,4 @@ bool vil_save(vil_image const&, char const* filename, char const* file_format);
 //: Send vil_image_impl to outstream
 bool vil_save(vil_image const &, vil_stream* outstream, char const* file_format = "pnm");
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_save.
+#endif // vil_save_h_

@@ -73,4 +73,4 @@ protected:
   float _dummy;       // A dummy intensity step value
 };
 
-#endif
+#endif // _vsl_canny_rothwell_h

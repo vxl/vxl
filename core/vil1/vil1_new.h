@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_new_h_
 #define vil_new_h_
 #ifdef __GNUC__
@@ -43,5 +42,4 @@ vil_image vil_new(vil_stream* os,
 		      vil_image const& prototype, 
 		      char const* file_format = 0);
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_new.
-
+#endif // vil_new_h_

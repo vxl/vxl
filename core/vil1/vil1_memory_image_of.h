@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_memory_image_of_h_
 #define vil_memory_image_of_h_
 #ifdef __GNUC__
@@ -113,4 +112,4 @@ public:
   void fill(T const& );
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_memory_image_of.
+#endif // vil_memory_image_of_h_

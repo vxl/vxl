@@ -33,4 +33,4 @@ private:
   double shift_;
 };
 
-#endif
+#endif // vil_scale_intensities_image_impl_h_

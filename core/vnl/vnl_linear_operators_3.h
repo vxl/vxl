@@ -1,15 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_linear_operators_3_h_
 #define vnl_linear_operators_3_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vnl_linear_operators_3 - 3D linear algebra operations
-// .LIBRARY     vnl
+// .NAME	vnl_linear_operators_3 - 3D linear algebra operations
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_linear_operators_3.h
-// .FILE        vnl/vnl_linear_operators_3.cxx
+// .INCLUDE	vnl/vnl_linear_operators_3.h
+// .FILE	vnl_linear_operators_3.cxx
 //
 // .SECTION Description
 //    Specialized linear operators for 3D vectors and matrices.

@@ -151,4 +151,4 @@ ostream& operator<<(ostream& s, vil_image const& i) {
   return i.print(s);
 }
 
-#endif
+#endif // vil_image_h_

@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_lbfgs_h_
 #define vnl_lbfgs_h_
 #ifdef __GNUC__
@@ -55,4 +54,4 @@ private:
   // does too.  Can set values for parameters.
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_lbfgs.
+#endif // vnl_lbfgs_h_

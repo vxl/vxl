@@ -36,4 +36,3 @@ public:
 };
 
 #endif // vnl_real_eigensystem_h_
-

@@ -87,4 +87,4 @@ declare_specialization(std::complex<double>);
 #undef declare_specialization
 #endif
 
-#endif
+#endif // vnl_matlab_print_h_

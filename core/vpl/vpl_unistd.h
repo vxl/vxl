@@ -160,4 +160,4 @@ int             vpl_usleep(vpl_useconds_t);
 vpl_pid_t       vpl_vfork(void);
 vpl_ssize_t     vpl_write(int, const void *, vpl_size_t);
 
-#endif
+#endif // vpl_unistd_h_

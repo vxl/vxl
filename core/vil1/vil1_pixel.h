@@ -29,4 +29,4 @@ class vil_image;
 // A standard RGB RGB RGB image has pixel_type() == VIL_RGB_BYTE
 vil_pixel_format vil_pixel_type(vil_image const &);
 
-#endif
+#endif // vil_pixel_h_

@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_conjugate_gradient_h_
 #define vnl_conjugate_gradient_h_
 #ifdef __GNUC__
@@ -81,5 +80,4 @@ protected:
 //   void approximate_hessian( const vnl_vector<double> &x, vnl_matrix<double> &h, const double step);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_conjugate_gradient.
-
+#endif // vnl_conjugate_gradient_h_

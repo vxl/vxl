@@ -1,15 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_lsqr_h_
 #define vnl_lsqr_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vnl_lsqr - Undocumented class FIXME
-// .LIBRARY     vnl
+// .NAME	vnl_lsqr - linear least squares
+// .LIBRARY	vnl
 // .HEADER	vxl Package
-// .INCLUDE     vnl/algo/vnl_lsqr.h
-// .FILE        vnl_lsqr.cxx
+// .INCLUDE	vnl/algo/vnl_lsqr.h
+// .FILE	vnl_lsqr.cxx
 //
 // .SECTION Description
 //    vnl_lsqr implements an algorithm for large, sparse linear systems and
@@ -42,7 +41,7 @@ public:
   // -- Perform the minimization starting from x=0 and putting the result into x.
   // Return code may be translated with translate_return_code().
   int minimize(vnl_vector<double>& x);
-  
+
   int get_number_of_iterations() const { return num_iter_; }
 
   // -- Pontificate about the outcome of the last minimization.
@@ -63,9 +62,7 @@ protected:
   static int aprod_(int* mode, int* m, int* n, double* x, double* y, int* leniw, int* lenrw, int* iw, double* rw );
 
   friend class vnl_lsqr_Activate;
-  
+
 };
 
-#endif
-
-
+#endif // vnl_lsqr_h_

@@ -21,4 +21,4 @@
 // Images must be exactly the same dimensions, but datatype isn't matched
 void vil_copy(vil_image const& src, vil_image& DST);
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_copy.
+#endif // vil_copy_h_

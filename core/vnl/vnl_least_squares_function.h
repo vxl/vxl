@@ -1,15 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_least_squares_function_h_
 #define vnl_least_squares_function_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vnl_least_squares_function - Many-to-many function.
-// .LIBRARY     vnl
+// .NAME	vnl_least_squares_function - Many-to-many function
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_least_squares_function.h
-// .FILE        vnl/vnl_least_squares_function.cxx
+// .INCLUDE	vnl/vnl_least_squares_function.h
+// .FILE	vnl_least_squares_function.cxx
 //
 // .SECTION Description
 //    vnl_least_squares_function is an abstract base for functions to be minimized
@@ -54,7 +53,7 @@ public:
 
   // Operations----------------------------------------------------------------
   void throw_failure(); // the virtuals may call this to signal a failure.
-  void clear_failure(); // 
+  void clear_failure(); //
 
   // Computations--------------------------------------------------------------
 
@@ -71,7 +70,7 @@ public:
 // -- Compute the rms error at x by calling f and returning the norm of the residual
 // vector.
   double rms(vnl_vector<double> const & x);
-  
+
   // Data Access---------------------------------------------------------------
 
 // -- Return the number of unknowns
@@ -94,5 +93,4 @@ protected:
   void init(int number_of_unknowns, int number_of_residuals);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_least_squares_function.
-
+#endif // vnl_least_squares_function_h_

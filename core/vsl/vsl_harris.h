@@ -92,4 +92,4 @@ private:
   void do_adaptive();
 };
 
-#endif
+#endif // vsl_harris_h

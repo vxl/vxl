@@ -3,13 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //
-// .NAME        vnl_real_npolynomial - real polynomial in N variables.
-// .LIBRARY     vnl
-// .HEADER      vxl package
-// .INCLUDE     vnl/vnl_real_npolynomial.h
-// .FILE        vnl/vnl_real_npolynomial.cxx
+// .NAME	vnl_real_npolynomial - real polynomial in N variables
+// .LIBRARY	vnl
+// .HEADER	vxl package
+// .INCLUDE	vnl/vnl_real_npolynomial.h
+// .FILE	vnl_real_npolynomial.cxx
 //
 // .SECTION Description
 //    vnl_real_npolynomial represents a polynomial in multiple variables.
@@ -49,7 +48,7 @@ public:
   vnl_real_npolynomial(const vnl_vector<double>& c, const vnl_matrix<int>& p);
 
   // Computations--------------------------------------------------------------
-  
+
   double eval(const vnl_vector<double>& x);
   int degree();
   vnl_real_npolynomial operator-() const; // unary minus
@@ -66,7 +65,7 @@ public:
 
 private:
   void simplify();
-  double eval(const vnl_matrix<double>& xn); 
+  double eval(const vnl_matrix<double>& xn);
 
   // Data Members--------------------------------------------------------------
   vnl_vector<double> coeffs_; // coefficients

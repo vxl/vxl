@@ -1,5 +1,8 @@
 #ifndef vnl_rotation_matrix_h_
 #define vnl_rotation_matrix_h_
+// .NAME vnl_rotation_matrix
+// .INCLUDE vnl/vnl_rotation_matrix.h
+// .FILE vnl_rotation_matrix.cxx
 
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
@@ -17,4 +20,4 @@ bool vnl_rotation_matrix(vnl_vector<double> const &axis, vnl_matrix<double> &R);
 
 vnl_matrix<double> vnl_rotation_matrix(vnl_vector<double> const &axis);
 
-#endif
+#endif // vnl_rotation_matrix_h_

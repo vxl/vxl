@@ -23,4 +23,4 @@ vnl_matrix<T> vnl_orthogonal_complement(vnl_vector<T> const &v);
 // template <typename T>
 // vnl_matrix<T> vnl_orthogonal_complement(vnl_matrix<T> const &M);
 
-#endif
+#endif // vnl_orthogonal_complement_h_

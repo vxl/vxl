@@ -48,4 +48,4 @@ inline ostream & operator<<(ostream & s, vnl_##T##_##n const & v) \
 vnl_T_n_class_impl(T,n) \
 vnl_T_n_funcs_impl(T,n)
 
-#endif
+#endif // vnl_T_n_h_

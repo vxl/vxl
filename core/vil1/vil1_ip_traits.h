@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_ip_traits_h_
 #define vil_ip_traits_h_
 #ifdef __GNUC__
@@ -20,7 +19,7 @@ struct vil_ip_traits {
   typedef vil_ip_traits row_type;
 };
 
-#if VCL_CAN_DO_PARTIAL_SPECIALIZATIONx
+#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
 //: Traits for c-like arrays
 template <class T>
 struct vil_ip_traits<T * *> {
@@ -58,6 +57,6 @@ VIL_IP_TRAITS_DECLARE_ALL(short)
 VIL_IP_TRAITS_DECLARE_ALL(int)
 VIL_IP_TRAITS_DECLARE_ALL(float)
 
-#endif
+#endif // VCL_CAN_DO_PARTIAL_SPECIALIZATION
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_ip_traits.
+#endif // vil_ip_traits_h_

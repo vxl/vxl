@@ -25,4 +25,4 @@ unsigned vil_16bit_read_little_endian(vil_stream *);
 void vil_16bit_write_big_endian(vil_stream *, unsigned);
 void vil_16bit_write_little_endian(vil_stream *, unsigned);
 
-#endif
+#endif // vil_16bit_h_

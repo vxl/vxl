@@ -1,9 +1,11 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_memory_image_window_h_
 #define vil_memory_image_window_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_memory_image_window
+// .INCLUDE vil/vil_memory_image_window
+// .FILE vil_memory_image_window.cxx
 
 #include "vil_memory_image_of.h"
 
@@ -57,5 +59,4 @@ private:
   vil_memory_image_window& operator=(const vil_memory_image_window& that);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_memory_image_window.
-
+#endif // vil_memory_image_window_h_

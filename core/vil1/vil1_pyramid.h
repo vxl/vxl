@@ -37,4 +37,4 @@ private:
   vcl_vector<vil_image> levels;
 };
 
-#endif
+#endif // vil_pyramid_h_

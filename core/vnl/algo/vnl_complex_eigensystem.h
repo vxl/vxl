@@ -60,4 +60,4 @@ private:
   void compute(const vnl_matrix<vnl_double_complex> &,bool,bool);
 };
 
-#endif
+#endif // vnl_complex_eigensystem_h_

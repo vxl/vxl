@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME        vnl_complex_traits
-// .LIBRARY     vnl
-// .HEADER      vxl package
-// .INCLUDE     vnl/vnl_complex_traits.h
-// .FILE        vnl/vnl_complex_traits.cxx
+// .NAME	vnl_complex_traits
+// .LIBRARY	vnl
+// .HEADER	vxl package
+// .INCLUDE	vnl/vnl_complex_traits.h
+// .FILE	vnl_complex_traits.cxx
 //
 // .SECTION Description
 //    To allow templated real or complex algorithms to determine appropriate
@@ -46,7 +46,7 @@ public:
   enum { isreal = false };
   static vnl_complex<float> conjugate(vnl_complex<float> z)
     { return vnl_complex<float>(z.real(), -z.imag()); }
-  static vnl_complex<float> complexify(vnl_complex<float> z) 
+  static vnl_complex<float> complexify(vnl_complex<float> z)
     { return z; }
 };
 

@@ -4,8 +4,8 @@
 #pragma interface
 #endif
 //
-// .NAME        vnl_matops - A collection of Matrix operations.
-// .FILE        vnl/vnl_matops.cxx
+// .NAME	vnl_matops - A collection of Matrix operations
+// .FILE	vnl_matops.cxx
 //
 // .SECTION Description
 //    matops is a collection of Matrix operations, mostly declared
@@ -43,4 +43,4 @@ public:
   static vnl_vector<float>  d2f(const vnl_vector<double>&);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_matops.
+#endif // vnl_matops_h_

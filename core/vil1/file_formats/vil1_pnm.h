@@ -72,4 +72,4 @@ public:
   vil_image get_plane(int ) const;
 };
 
-#endif
+#endif // vil_pnm_file_format_h_

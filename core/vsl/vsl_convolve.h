@@ -48,4 +48,4 @@ void vsl_convolven (vsl_roi_window const *window,
 		    vil_memory_image_of<float> *scratch);
 #endif
 
-#endif
+#endif // vsl_convolve_h_

@@ -78,4 +78,4 @@ public:
   int _old_finish;
 };
 
-#endif
+#endif // vsl_fit_lines_h

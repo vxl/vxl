@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_crop_image_h_
 #define vil_crop_image_h_
 #ifdef __GNUC__
@@ -44,4 +43,4 @@ protected:
   int height_;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_crop_image_impl.
+#endif // vil_crop_image_h_

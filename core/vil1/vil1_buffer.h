@@ -47,4 +47,4 @@ private:
   void operator=(vil_buffer<T> const &) { }
 };
 
-#endif
+#endif // vil_buffer_h_

@@ -1,15 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_linear_system_h_
 #define vnl_linear_system_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vnl_linear_system
-// .LIBRARY     vnl
+// .NAME	vnl_linear_system
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_linear_system.h
-// .FILE        vnl/vnl_linear_system.cxx
+// .INCLUDE	vnl/vnl_linear_system.h
+// .FILE	vnl_linear_system.cxx
 //
 // .SECTION Description
 //    vnl_linear_system provides an abstraction for a linear system
@@ -47,14 +46,14 @@ public:
 
   // -- (Optional) Apply a suitable preconditioner to x.
   // A preconditioner is an approximation of the inverse of A.
-  // Common choices are Jacobi (1/diag(A'A)), Gauss-Seidel, 
+  // Common choices are Jacobi (1/diag(A'A)), Gauss-Seidel,
   // and incomplete LU or Cholesky decompositions.
   // The default implementation applies the identity.
   virtual void apply_preconditioner(vnl_vector<double> const& x, vnl_vector<double> & px) const;
 
   // -- Return the number of unknowns
   int get_number_of_unknowns() const { return p_; }
-  
+
   // -- Return the number of residuals.
   int get_number_of_residuals() const { return n_; }
 
@@ -69,4 +68,4 @@ protected:
   int n_;
 };
 
-#endif
+#endif // vnl_linear_system_h_

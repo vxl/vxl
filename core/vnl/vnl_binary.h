@@ -29,4 +29,4 @@ template <class T> bool vnl_binary_load(istream &, vnl_vector<T> &);
 template <class T> bool vnl_binary_load(istream &, vnl_matrix<T> &);
 template <class T> bool vnl_binary_load(istream &, vnl_diag_matrix<T> &);
 
-#endif
+#endif // vnl_binary_h_

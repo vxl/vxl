@@ -96,4 +96,4 @@ private:
   //int** local_color_map_;
 };
 
-#endif
+#endif // vil_bmp_file_format_h_

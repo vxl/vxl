@@ -72,4 +72,4 @@ private:
   int doFFT (const vnl_fftxd_prime_factors<T> &, int dir);
 };
   
-#endif
+#endif // vnl_fft1d_h_

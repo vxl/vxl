@@ -17,4 +17,4 @@ void vsl_save_topology(char const *, vcl_list<vsl_edge*> const &);
 void vsl_save_topology(ostream &   , vcl_list<vsl_edge*> const &, vcl_list<vsl_vertex*> const &);
 void vsl_save_topology(ostream &   , vcl_list<vsl_edge*> const &);
 
-#endif
+#endif // vsl_save_topology_h_

@@ -7,10 +7,10 @@
 // .HEADER  vxl package
 // .LIBRARY vil
 // .INCLUDE vil/vil_scale_intensities.h
-// .FILE    vil/vil_scale_intensities.cxx
+// .FILE    vil_scale_intensities.cxx
 //
 // .SECTION Author
-//    David Capel 
+//    David Capel
 
 #include <vil/vil_image.h>
 

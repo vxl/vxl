@@ -3,9 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vil_block_cache_image_impl
+// .INCLUDE vil/vil_block_cache_image_impl
+// .FILE vil_block_cache_image_impl.cxx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
@@ -40,4 +43,4 @@ private:
   unsigned block_size_y;
 };
 
-#endif
+#endif // vil_block_cache_image_impl_h_

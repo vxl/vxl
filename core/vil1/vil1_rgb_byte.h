@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_rgb_byte_h_
 #define vil_rgb_byte_h_
 #ifdef __GNUC__
@@ -28,4 +27,4 @@ struct vil_rgb_byte {
   vil_byte grey() const { return int(0.5+r*0.299+0.587*g+0.114*b); }  
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_rgb_byte.
+#endif // vil_rgb_byte_h_

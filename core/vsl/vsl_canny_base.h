@@ -90,4 +90,4 @@ protected:
   bool verbose;
 };
 
-#endif
+#endif // vsl_canny_base_h_

@@ -1,3 +1,6 @@
+#ifndef vnl_test_h_
+#define vnl_test_h_
+
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
@@ -12,9 +15,6 @@
 // .NAME vnl_test
 // .INCLUDE vnl/vnl_test.h
 // .FILE vnl_test.cxx
-
-#ifndef vnl_test_h_
-#define vnl_test_h_
 
 #include <vcl/vcl_string.h>
 
@@ -48,4 +48,4 @@ void vnl_test_assert_near(const vcl_string& msg, double expr, double target = 0,
 
 #define TESTMAIN(x) int main() { vnl_test_start(#x); x(); return vnl_test_summary(); }
 
-#endif
+#endif // vnl_test_h_

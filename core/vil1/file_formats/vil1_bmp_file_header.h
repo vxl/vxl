@@ -26,4 +26,4 @@ struct vil_bmp_file_header
   bool signature_valid() const;
 };
 
-#endif
+#endif // vil_bmp_file_header_h_

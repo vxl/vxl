@@ -129,4 +129,4 @@ void vil_convolve_1d_y(I1 const *half_kernel, unsigned kernel_size,
 		       vil_convolve_boundary_option b,
 		       vil_convolve_boundary_option e);
 
-#endif
+#endif // vil_convolve_h_

@@ -15,11 +15,11 @@
 // The image class vil_image has the methods :
 //
 //   bool get_property(char const *tag, void *property_value = 0) const;
-//   bool set_property(char const *tag, void const *property_value = 0) 
+//   bool set_property(char const *tag, void const *property_value = 0)
 //
 // which allow format extensions to be added without cluttering the
-// interface to vil_image. The idea is that properties can be 
-// identified by a "tag" (some name or other textual description) 
+// interface to vil_image. The idea is that properties can be
+// identified by a "tag" (some name or other textual description)
 // through which clients can obtain or manipulate extra properties.
 //
 // A false return value means that the underlying image does not
@@ -30,10 +30,10 @@
 // protocols for manipulating boolean properties (i.e when there is
 // no data to be passed).
 //
-// To make this work in practice, it is necessary to avoid name clashes 
+// To make this work in practice, it is necessary to avoid name clashes
 // and to make sure everyone agrees on the meaning of the property data.
 // That is the purpose of this file. The set of tags is a namespace in
-// the general sense of the word. We only have one namespace, so try 
+// the general sense of the word. We only have one namespace, so try
 // not to clutter it. All property tags described in this file should
 // begin with "vil_property_" and that chunk of the namespace is reserved.
 
@@ -73,4 +73,4 @@
 //   0 if there is no preferred direction.
 //  +1 if the preferred direction is increasing.
 
-#endif
+#endif // vil_property_h_

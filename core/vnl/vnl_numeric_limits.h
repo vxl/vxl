@@ -1,15 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_numeric_limits_h_
 #define vnl_numeric_limits_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        numeric_limits - Standard limits for numeric datatypes
-// .LIBRARY     vnl
+// .NAME	numeric_limits - Standard limits for numeric datatypes
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_numeric_limits.h
-// .FILE        vnl/vnl_numeric_limits.cxx
+// .INCLUDE	vnl/vnl_numeric_limits.h
+// .FILE	vnl_numeric_limits.cxx
 //
 // .SECTION Description
 //    Implementation of the May 96 ANSI Draft Working Paper (DWP)
@@ -51,10 +50,10 @@ public:
 
 // --  Minimum finite value. (Equivalent to CHAR_MIN, SHRT_MIN, FLT_MIN,
 // DBL_MIN, etc)
-// 
+//
 //  For  floating types with denormalization, returns the minimum positive
 //   normalized value, denorm_min().
-// 
+//
 //  Meaningful for all specializations in which  is_bounded  ==  true,  or
 //   is_bounded == false && is_signed == false.
   static T min();
@@ -62,7 +61,7 @@ public:
 // --  Maximum finite value. Equivalent to CHAR_MAX, SHRT_MAX, FLT_MAX, DBL_MAX, etc.
 //  Meaningful for all specializations in which is_bounded == true.
   static T max();
-  
+
 //  Number of radix digits which can be represented without change.
 //  For built-in integer types, the number of non-sign bits in the
 //   representation.
@@ -85,7 +84,7 @@ public:
 
 // --  For floating types, specifies the base or radix of the exponent
 //    representation (often 2).  Equivalent to FLT_RADIX.
-// 
+//
 //  For integer types, specifies the base of the representation -
 //    distinguishes types with bases other than 2 (e.g. BCD).
   static const int  radix;
@@ -95,7 +94,7 @@ public:
 //    LDBL_EPSILON.
 //  Meaningful only for floating point types.
   static T epsilon();
-  
+
 //  Measure of the maximum rounding error.  This has a precise definition in
 //    the Language Independent Arithmetic (LIA-1) standard.  Required by LIA-1.
   static T round_error();
@@ -110,7 +109,7 @@ public:
 //    range. Equivalent to FLT_MIN_10_EXP, DBL_MIN_10_EXP, LDBL_MIN_10_EXP.
 //  Meaningful only for floating point types.
   static const int  min_exponent10;
-  
+
 //  Maximum positive integer such that radix raised to that  power  is  in
 //    range. Equivalent to FLT_MAX_EXP, DBL_MAX_EXP, LDBL_MAX_EXP.
 //  Meaningful only for floating point types.
@@ -143,7 +142,7 @@ public:
 //  Meaningful only for flotaing point types.
   static const bool has_denorm;
 
-// --  Representation of positive infinity, if available. 
+// --  Representation of positive infinity, if available.
   static T infinity();
 
 // --  Representation of a quiet ``Not a Number,'' if available.

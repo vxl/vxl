@@ -49,4 +49,4 @@ protected:
   vcl_string make_var_name(char const* variable_name);
 };
 
-#endif
+#endif // vnl_matlab_filewrite_h_

@@ -20,4 +20,4 @@ public:
   bool verbose;
 };
 
-#endif
+#endif // vsl_canny_rothwell_params_h_

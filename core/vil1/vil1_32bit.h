@@ -23,4 +23,4 @@ unsigned vil_32bit_read_little_endian(vil_stream *);
 void vil_32bit_write_big_endian(vil_stream *, unsigned);
 void vil_32bit_write_little_endian(vil_stream *, unsigned);
 
-#endif
+#endif // vil_32bit_h_

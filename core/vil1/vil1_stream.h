@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_stream_h_
 #define vil_stream_h_
 #ifdef __GNUC__
@@ -41,4 +40,4 @@ private: // use the methods, Luke!
   int refcount;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_stream.
+#endif // vil_stream_h_

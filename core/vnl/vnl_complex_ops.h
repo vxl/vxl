@@ -32,4 +32,4 @@ template <class T> vnl_matrix<T> angle(vnl_matrix<vnl_complex<T> > const &);
 template <class T> vnl_matrix<T> real (vnl_matrix<vnl_complex<T> > const &);
 template <class T> vnl_matrix<T> imag (vnl_matrix<vnl_complex<T> > const &);
 
-#endif
+#endif // vnl_complex_ops_h_

@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME        vnl_double_2x2 - 2x2 Matrix of double
-// .LIBRARY     vnl
+// .NAME	vnl_double_2x2 - 2x2 Matrix of double
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_double_2x2.h
-// .FILE        vnl/vnl_double_2x2.cxx
+// .INCLUDE	vnl/vnl_double_2x2.h
+// .FILE	vnl_double_2x2.cxx
 //
 // .SECTION Description
 //    vnl_double_2x2 is a vnl_matrix<double> of fixed size 2x2.  It is
@@ -26,4 +26,4 @@
 
 typedef vnl_matrix_fixed<double,2,2> vnl_double_2x2;
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_double_2x2.
+#endif // vnl_double_2x2_h_

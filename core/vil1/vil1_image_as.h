@@ -27,4 +27,4 @@ vil_image vil_image_as_rgb_byte(vil_image const & i);
 vil_image vil_image_as_rgb_float(vil_image const & i);
 
 
-#endif
+#endif // vil_image_as_h_

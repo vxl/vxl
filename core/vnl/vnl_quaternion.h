@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_quaternion_h_
 #define vnl_quaternion_h_
 #ifdef __GNUC__
@@ -203,4 +202,4 @@ inline ostream& operator<< (ostream& os, const vnl_quaternion<T>& q) {
 
 #define VNL_QUATERNION_INSTANTIATE(T) extern "Error, include vnl/vnl_quaternion.txx";
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_quaternion.
+#endif // vnl_quaternion_h_

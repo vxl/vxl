@@ -145,4 +145,4 @@ switch (f) {\
  VIL_DISPATCH_AUX(VIL_FLOAT_32, vil_float_32); \
 }
 
-#endif
+#endif // vil_image_impl_h_

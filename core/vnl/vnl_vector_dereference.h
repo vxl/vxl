@@ -1,15 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_vector_dereference_h_
 #define vnl_vector_dereference_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vnl_vector_dereference - Undocumented class FIXME
-// .LIBRARY     vnl
+// .NAME	vnl_vector_dereference - Undocumented class FIXME
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_vector_dereference.h
-// .FILE        vnl/vnl_vector_dereference.cxx
+// .INCLUDE	vnl/vnl_vector_dereference.h
+// .FILE	vnl_vector_dereference.cxx
 //
 // .SECTION Description
 //    vnl_vector_dereference is a class that awf hasn't documented properly. FIXME
@@ -36,5 +35,4 @@ public:
   }
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_vector_dereference.
-
+#endif // vnl_vector_dereference_h_

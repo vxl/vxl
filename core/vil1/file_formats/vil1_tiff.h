@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_tiff_file_format_h_
 #define vil_tiff_file_format_h_
 // .NAME vil_tiff
@@ -76,4 +75,4 @@ public:
   vil_image get_plane(int ) const;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_tiff_file_format.
+#endif // vil_tiff_file_format_h_

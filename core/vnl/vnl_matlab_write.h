@@ -3,9 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+//
+// .NAME vnl_matlab_write
+// .INCLUDE vnl/vnl_matlab_write.h
+// .FILE vnl_matlab_write.cxx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
 
 // Core code stolen from D. Capel's code. These functions are useful
 // because they allow one to write, say, an image buffer to a MAT file.
@@ -27,4 +31,4 @@ bool vnl_matlab_write(ostream &, T const *, unsigned, char const *);
 template <class T> // 2D array
 bool vnl_matlab_write(ostream &, T const * const *, unsigned, unsigned, char const *);
 
-#endif
+#endif // vnl_matlab_write_h_

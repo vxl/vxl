@@ -54,4 +54,4 @@ protected:
   vcl_vector<double*> temp_store;
 };
 
-#endif
+#endif // vnl_sparse_symmetric_eigensystem_h_

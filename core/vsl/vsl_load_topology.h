@@ -14,4 +14,4 @@
 void vsl_load_topology(char const *f, vcl_list<vsl_edge*> &, vcl_list<vsl_vertex*> &);
 void vsl_load_topology(istream &f   , vcl_list<vsl_edge*> &, vcl_list<vsl_vertex*> &);
 
-#endif
+#endif // vsl_load_topology_h_

@@ -48,4 +48,4 @@ vnl_matrix<T> operator*(vnl_matrix_inverse<T> const & i, vnl_matrix<T> const & B
   return i.solve(B);
 }
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_matrix_inverse.
+#endif // vnl_matrix_inverse_h_

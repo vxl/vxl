@@ -31,4 +31,4 @@ bool vil_interpolate_bilinear_grad(vil_memory_image_of<T> const& img, double src
 template <class T, class U>
 bool vil_interpolate_bicubic(vil_memory_image_of<T> const& img, double src_x, double src_y, U* out);
 
-#endif
+#endif // vil_interpolate_h_

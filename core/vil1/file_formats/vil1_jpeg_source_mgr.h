@@ -38,4 +38,4 @@ vil_jpeg_stream_src_set (j_decompress_ptr cinfo, vil_stream *vs);
 void 
 vil_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil_stream *vs);
 
-#endif
+#endif // vil_jpeg_source_mgr_h_

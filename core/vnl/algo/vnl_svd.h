@@ -11,41 +11,39 @@
 // .EXAMPLE	../examples/vnl_svd.cxx
 //
 // .SECTION Description
-// @{ vnl_svd holds the singular value decomposition of an vnl\_matrix.
+//    vnl_svd holds the singular value decomposition of a vnl_matrix.
 //
-//    The class holds three matrices U, W, V such that the original matrix $M =
+//    @{ The class holds three matrices U, W, V such that the original matrix $M =
 //    U W V^\top$.  The DiagMatrix W stores the singular values in decreasing
 //    order.  The columns of U which correspond to the nonzero singular values
 //    form a basis for range of M, while the columns of V corresponding to the
-//    zero singular values are the nullspace.
+//    zero singular values are the nullspace. @}
 //    
 //    The SVD is computed at construction time, and enquiries may then be made
 //    of the SVD.  In particular, this allows easy access to multiple
 //    right-hand-side solves without the bother of putting all the RHS's into a
 //    Matrix.
 //
-//    This class is supplied even though there is an existing vnl\_matrix method
+//    This class is supplied even though there is an existing vnl_matrix method
 //    for several reasons:
-// \begin{itemize}
-// \item It is more convenient to use as it manages all the storage for
+//
+//       It is more convenient to use as it manages all the storage for
 //      the U,S,V matrices, allowing repeated queries of the same SVD
 //      results.
 //
-// \item It avoids namespace clutter in the Matrix class.   While svd()
+//       It avoids namespace clutter in the Matrix class.   While svd()
 //      is a perfectly reasonable method for a Matrix, there are many other
 //      decompositions that might be of interest, and adding them all would
 //      make for a very large Matrix class.
 //
-// \item It demonstrates the holder model of compute class, implementing an
+//       It demonstrates the holder model of compute class, implementing an
 //      algorithm on an object without adding a member that may not be of
 //      general interest.  A similar pattern can be used for other
 //      decompositions which are not defined as members of the library Matrix
 //      class.
 //
-// \item It extends readily to n-ary operations, such as generalized
+//       It extends readily to n-ary operations, such as generalized
 //      eigensystems, which cannot be members of just one matrix.
-//  \end{itemize}
-//  @}
 //
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford IERG, 15 Jul 96
@@ -186,4 +184,4 @@ vnl_matrix<T> vnl_svd_inverse(vnl_matrix<T> const& m)
   return vnl_svd<T>(m).inverse();
 }
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS BaseSVD.
+#endif // vnl_svd_h_

@@ -11,4 +11,4 @@
 
 typedef unsigned char vil_byte;
 
-#endif
+#endif // vil_byte_h_

@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME        vnl_numeric_traits - Templated zero/one/precision
-// .LIBRARY     vnl
-// .HEADER      vxl package
-// .INCLUDE     vnl/vnl_numeric_traits.h
-// .FILE        vnl/vnl_numeric_traits.cxx
+// .NAME	vnl_numeric_traits - Templated zero/one/precision
+// .LIBRARY	vnl
+// .HEADER	vxl package
+// .INCLUDE	vnl/vnl_numeric_traits.h
+// .FILE	vnl_numeric_traits.cxx
 //
 // .SECTION Description
 //    To allow templated numerical algorithms to determine appropriate
@@ -42,14 +42,14 @@ public:
   static const T one;
 
 // -- Return value of abs()
-  typedef T abs_t; 
+  typedef T abs_t;
 
 // -- Name of a type twice as long as this one for accumulators and products.
 // For float it's double, for vnl_complex<float> it's vnl_complex<double>.
 // In theory one might use long double for double, but in practice it's too slow
 // and it doesn't matter so much for double.  Define NUMERICS_LONG_DOUBLE_IS_FAST
 // if you want long double.
-  typedef double double_t; 
+  typedef double double_t;
 
 // -- Name of type which results from multiplying this type with a double
   typedef double real_t;
@@ -65,7 +65,7 @@ typedef unsigned short long_uchar;
 typedef unsigned long int long_ushort;
 typedef unsigned long long long_uint;
 #else
-// 32 bit 
+// 32 bit
 typedef short long_char;
 typedef int long_short;
 typedef long long_int;

@@ -40,4 +40,4 @@ class vnl_least_squares_function;
 class vnl_matlab_readhdr;
 class vnl_nonlinear_minimizer;
 
-#endif
+#endif // vnl_fwd_h_

@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_int_2
-// .LIBRARY     vnl
+// .NAME	vnl_int_2
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_int_2.h
-// .FILE        vnl/vnl_int_2.cxx
+// .INCLUDE	vnl/vnl_int_2.h
+// .FILE	vnl_int_2.cxx
 //
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 31 Aug 96
@@ -17,7 +17,7 @@
 
 #include <vnl/vnl_T_n.h>
 
-//: class vnl_int_2 : a vnl_vector of 2 ints. 
+//: class vnl_int_2 : a vnl_vector of 2 ints.
 vnl_T_n_impl(int,2);
 
-#endif
+#endif // vnl_int_2_h_

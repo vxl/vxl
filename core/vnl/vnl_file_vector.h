@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_file_vector - Load vnl_vector<T> from file.
-// .LIBRARY     vnl
+// .NAME	vnl_file_vector - Load vnl_vector<T> from file
+// .LIBRARY	vnl
 // .HEADER	vxl Package
-// .INCLUDE     vnl/vnl_file_vector.h
-// .FILE        vnl_file_vector.txx
+// .INCLUDE	vnl/vnl_file_vector.h
+// .FILE	vnl_file_vector.txx
 //
 // .SECTION Description
 //    vnl_file_vector is a templated class to load a vector from a file.
@@ -33,5 +33,4 @@ private:
   bool ok_;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS FileVector.
-
+#endif // vnl_file_vector_h_

@@ -33,4 +33,4 @@ private:
   double high_;
 };
 
-#endif
+#endif // vil_clamp_image_impl_h_

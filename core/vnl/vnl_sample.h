@@ -17,4 +17,4 @@ double vnl_sample_normal(double mean, double sigma);
 // P(X = k) = [kth term in binomial expansion of (p + (1-p))^n]
 //int vnl_sample_binomial(int n, int k, double p); 
 
-#endif
+#endif // vnl_sample_h_

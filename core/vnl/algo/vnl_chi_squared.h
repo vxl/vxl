@@ -19,4 +19,4 @@
 //: Compute cumulative distribution function value for chi-squared distribution
 extern float vnl_chi_squared_cumulative(float chisq, int dof);
 
-#endif
+#endif // vnl_chi_squared_h_

@@ -31,4 +31,4 @@ template <class T> class vnl_matrix;
 template <class T>
 T vnl_determinant(vnl_matrix<T> const &);
 
-#endif
+#endif // vnl_algo_determinant_h_

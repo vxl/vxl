@@ -3,13 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vnl_trace
+// .INCLUDE vnl/vnl_trace.h
+// .FILE vnl_trace.cxx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
 
 template <class T> class vnl_matrix;
 
 template <class T>
 T vnl_trace(vnl_matrix<T> const &);
 
-#endif
+#endif // vnl_trace_h_

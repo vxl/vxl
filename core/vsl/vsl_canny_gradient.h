@@ -25,4 +25,4 @@ void vsl_canny_gradient_central(int _xsize, int _ysize,
 				float * const * _dy, 
 				float * const * _grad);
 
-#endif
+#endif // vsl_canny_gradient_h_

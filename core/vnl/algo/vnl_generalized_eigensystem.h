@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_generalized_eigensystem_h_
 #define vnl_generalized_eigensystem_h_
 #ifdef __GNUC__
@@ -56,5 +55,4 @@ private:
   void compute_eispack(const vnl_matrix<double>& A, const vnl_matrix<double>& B);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_generalized_eigensystem.
-
+#endif // vnl_generalized_eigensystem_h_

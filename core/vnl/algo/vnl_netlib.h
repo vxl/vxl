@@ -230,5 +230,4 @@ extern "C" {
 #undef doublecomplex
 };
 
-
-#endif
+#endif // vnl_netlib_h_

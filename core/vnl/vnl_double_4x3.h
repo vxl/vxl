@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME        vnl_double_4x3 - 4x3 Matrix of double
-// .LIBRARY     vnl
+// .NAME	vnl_double_4x3 - 4x3 Matrix of double
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_double_4x3.h
-// .FILE        vnl/vnl_double_4x3.cxx
+// .INCLUDE	vnl/vnl_double_4x3.h
+// .FILE	vnl_double_4x3.cxx
 //
 // .SECTION Description
 //    vnl_double_4x3 is a vnl_matrix<double> of fixed size 4x3.  It is
@@ -26,4 +26,4 @@
 
 typedef vnl_matrix_fixed<double,4,3> vnl_double_4x3;
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_double_4x3.
+#endif // vnl_double_4x3_h_

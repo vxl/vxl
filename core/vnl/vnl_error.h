@@ -3,9 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+//
+// .NAME vnl_error
+// .INCLUDE vnl/vnl_error.h
+// .FILE vnl_error.cxx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
 
 //
 extern void vnl_error_vector_index (const char* fcn, int index);
@@ -19,4 +23,4 @@ extern void vnl_error_matrix_dimension (char const* fcn, int r1, int c1, int r2,
 extern void vnl_error_matrix_nonsquare (char const* fcn);
 extern void vnl_error_matrix_va_arg (int n);
 
-#endif
+#endif // vnl_error_h_

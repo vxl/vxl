@@ -1,16 +1,15 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_cost_function_h_
 #define vnl_cost_function_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vnl_cost_function - Vector->Real function
-// .LIBRARY     vnl
+// .NAME	vnl_cost_function - Vector->Real function
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_cost_function.h
-// .FILE        vnl/vnl_cost_function.cxx
-// .EXAMPLE     vnl/examples/vnl_amoeba.cxx
+// .INCLUDE	vnl/vnl_cost_function.h
+// .FILE	vnl_cost_function.cxx
+// .EXAMPLE	examples/vnl_amoeba.cxx
 //
 // .SECTION Description
 //    vnl_cost_function is an object that represents a function from

@@ -3,10 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
+// .NAME vil_stream_core
+// .INCLUDE vil/vil_stream_core
+// .FILE vil_stream_core.cxx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
+// .SECTION Description
 // An in-core vil_stream implementation.
 // This is an infinite stream - reads past the last point
 // written will succeed but will return garbage data.
@@ -39,4 +42,4 @@ private:
   unsigned tailpos; // size of file so far
 };
 
-#endif
+#endif // vil_stream_core_h_

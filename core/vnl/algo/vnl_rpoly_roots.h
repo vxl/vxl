@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_rpoly_roots_h_
 #define vnl_rpoly_roots_h_
 #ifdef __GNUC__
@@ -100,4 +99,4 @@ private:
   // Helpers-------------------------------------------------------------------
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_rpoly_roots.
+#endif // vnl_rpoly_roots_h_

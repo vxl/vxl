@@ -48,4 +48,4 @@ inline vnl_complex<double> vnl_math_sqr(vnl_complex<double> const& x) { return x
 inline float    vnl_math_squared_magnitude(vnl_complex<float> const& x) { return vcl_norm(x); }
 inline double   vnl_math_squared_magnitude(vnl_complex<double> const& x) { return vcl_norm(x); }
 
-#endif
+#endif // vnl_complex_h_

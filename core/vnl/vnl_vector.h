@@ -312,4 +312,4 @@ inline void vnl_vector<T>::set_t(T const& tt){
 template <class T> vcl_ostream& operator<< (vcl_ostream &, vnl_vector<T> const&);
 template <class T> vcl_istream& operator>> (vcl_istream &, vnl_vector<T>      &);
 
-#endif
+#endif // vnl_vector_h_

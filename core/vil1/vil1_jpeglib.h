@@ -18,4 +18,4 @@ extern "C" {
 #undef boolean
 }
 
-#endif
+#endif // vil_jpeglib_h_

@@ -26,4 +26,4 @@ template <class T> T vnl_determinant(T const *row0,
 				     T const *row2,
 				     T const *row3);
 
-#endif
+#endif // vnl_determinant_h_

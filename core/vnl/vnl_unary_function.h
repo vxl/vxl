@@ -1,15 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_unary_function_h_
 #define vnl_unary_function_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vnl_unary_function - Abstract 1D map.
-// .LIBRARY     vnl
+// .NAME	vnl_unary_function - Abstract 1D map
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_unary_function.h
-// .FILE        vnl/vnl_unary_function.cxx
+// .INCLUDE	vnl/vnl_unary_function.h
+// .FILE	vnl_unary_function.cxx
 //
 // .SECTION Description
 //    vnl_unary_function is an abstract map between two types (read spaces).

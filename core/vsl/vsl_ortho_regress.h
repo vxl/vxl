@@ -68,4 +68,4 @@ protected:
   bool fit_constrained(double x, double y, double &a, double &b, double &c) const;
 };
 
-#endif
+#endif // vsl_ortho_regress_h_

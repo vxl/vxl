@@ -68,4 +68,4 @@ private:
   friend class vil_jpeg_file_format;
 };
 
-#endif
+#endif // vil_jpeg_file_format_h_

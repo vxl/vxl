@@ -17,4 +17,4 @@
 #include <vsl/vsl_edge.h>
 #include <vsl/vsl_hacks.h>
 
-#endif
+#endif // vsl_canny_port_h_

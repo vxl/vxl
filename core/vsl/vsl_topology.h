@@ -71,4 +71,4 @@ void vsl_topology_unref(Container &C)
 VCL_INSTANTIATE_INLINE(void vsl_topology_ref(C &)); \
 VCL_INSTANTIATE_INLINE(void vsl_topology_unref(C &));
 
-#endif
+#endif // vsl_topology_h_

@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_gaussian_kernel_1d_h_
 #define vnl_gaussian_kernel_1d_h_
 #ifdef __GNUC__
@@ -44,5 +43,4 @@ protected:
   // Helpers-------------------------------------------------------------------
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_gaussian_kernel_1d.
-
+#endif // vnl_gaussian_kernel_1d_h_

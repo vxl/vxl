@@ -43,4 +43,4 @@ void vsl_break_edge(vsl_edge const *in,
 		    double threshold = 0.2,
 		    unsigned nbhd_size = 2);
 
-#endif
+#endif // vsl_break_edge_h_

@@ -39,4 +39,4 @@ private:
   JSAMPLE *biffer;   // pointer to scanline buffer.
 };
 
-#endif
+#endif // vil_jpeg_decompressor_h_

@@ -47,4 +47,4 @@ void vsl_canny_smooth(T const * const *in, int _xsize, int _ysize,
 		      float const *_kernel, int _width, float const *_sub_area_OX,
 		      float * unpro_const * image_out);
 
-#endif
+#endif // vsl_canny_smooth_h_

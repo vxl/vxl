@@ -33,5 +33,4 @@ private:
   double est_;
 };
 
-
-#endif
+#endif // vsl_OrthogRegress_h_

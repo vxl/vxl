@@ -172,4 +172,4 @@ protected:
   bool itr_isreset;
 };
 
-#endif
+#endif // vnl_sparse_matrix_h_

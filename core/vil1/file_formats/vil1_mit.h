@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_mit_file_format_h_
 #define vil_mit_file_format_h_
 #ifdef __GNUC__
@@ -114,4 +113,4 @@ public:
   vil_image get_plane(int ) const;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_mit_file_format.
+#endif // vil_mit_file_format_h_

@@ -56,4 +56,4 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,
 			 AC *, // dummy
 			 vil_memory_image_of<O>        &output);
 
-#endif
+#endif // vil_convolve_simple_h_

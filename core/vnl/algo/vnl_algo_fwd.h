@@ -18,4 +18,4 @@ class vnl_lbfgs;
 class vnl_levenberg_marquardt;
 class vnl_levenberg_marquardt_Activate;
 
-#endif
+#endif // vnl_algo_fwd_h_

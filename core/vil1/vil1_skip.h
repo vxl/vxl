@@ -12,4 +12,4 @@
 
 vil_image vil_skip(vil_image const &, unsigned, unsigned);
 
-#endif
+#endif // vil_skip_h_

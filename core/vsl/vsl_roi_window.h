@@ -15,4 +15,4 @@ struct vsl_roi_window {
   int row_end_index;
   int row_start_index;
 };
-#endif
+#endif // vsl_roi_window_h_

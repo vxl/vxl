@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_transpose - Efficient matrix transpose.
-// .LIBRARY     vnl
+// .NAME	vnl_transpose - Efficient matrix transpose
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_transpose.h
-// .FILE        vnl/vnl_transpose.cxx
+// .INCLUDE	vnl/vnl_transpose.h
+// .FILE	vnl_transpose.cxx
 //
 // .SECTION Description
 //    vnl_transpose is an efficient way to write C = vnl_transpose(A) * B.
@@ -36,7 +36,7 @@ public:
 
 // -- Make a vnl_transpose object referring to matrix M
   vnl_transpose(const vnl_matrix<double>& M): M_(M) {}
-  
+
 // -- Noisily convert a vnl_transpose to a matrix
   operator vnl_matrix<double> () const {
     cerr << "vnl_transpose being converted to matrix -- help! I don't wanna go!\n";
@@ -71,4 +71,4 @@ public:
 
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_transpose.
+#endif // vnl_transpose_h_

@@ -28,4 +28,4 @@ private:
   bool ready;
 };
 
-#endif
+#endif // vil_jpeg_compressor_h_

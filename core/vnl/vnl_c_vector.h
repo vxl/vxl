@@ -1,15 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_c_vector_h_
 #define vnl_c_vector_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vnl_c_vector - Math on blocks of memory
-// .LIBRARY     vnl
+// .NAME	vnl_c_vector - Math on blocks of memory
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_c_vector.h
-// .FILE        vnl_c_vector.txx
+// .INCLUDE	vnl/vnl_c_vector.h
+// .FILE	vnl_c_vector.txx
 //
 // .SECTION Description
 //    vnl_c_vector interfaces to lowlevel memory-block operations.
@@ -37,7 +36,7 @@ public:
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
 
   static T sum(const T* v, unsigned n);
-  static inline abs_t squared_magnitude(T const *p, unsigned n) 
+  static inline abs_t squared_magnitude(T const *p, unsigned n)
     { abs_t val; vnl_c_vector_two_norm_squared(p, n, &val); return val; }
   static void normalize(T *, unsigned n);
   static void apply(T const *, unsigned, T (*f)(T), T* v_out);
@@ -66,15 +65,15 @@ public:
   // inf_norm : max of abs values
   // two_nrm2 : sum of squared abs values
   // rms_norm : sqrt of mean sum of squared abs values
-  static inline abs_t one_norm(T const *p, unsigned n) 
+  static inline abs_t one_norm(T const *p, unsigned n)
     { abs_t val; vnl_c_vector_one_norm(p, n, &val); return val; }
-  static inline abs_t two_norm(T const *p, unsigned n) 
+  static inline abs_t two_norm(T const *p, unsigned n)
     { abs_t val; vnl_c_vector_two_norm(p, n, &val); return val; }
-  static inline abs_t inf_norm(T const *p, unsigned n) 
+  static inline abs_t inf_norm(T const *p, unsigned n)
     { abs_t val; vnl_c_vector_inf_norm(p, n, &val); return val; }
-  static inline abs_t two_nrm2(T const *p, unsigned n) 
+  static inline abs_t two_nrm2(T const *p, unsigned n)
     { abs_t val; vnl_c_vector_two_norm_squared(p, n, &val); return val; }
-  static inline abs_t rms_norm(T const *p, unsigned n) 
+  static inline abs_t rms_norm(T const *p, unsigned n)
     { abs_t val; vnl_c_vector_rms_norm(p, n, &val); return val; }
 
   // Memory allocation
@@ -84,5 +83,4 @@ public:
   static void deallocate(T*, int n_when_allocated);
 };
 
-#endif
-
+#endif // vnl_c_vector_h_

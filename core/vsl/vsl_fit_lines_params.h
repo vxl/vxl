@@ -32,4 +32,4 @@ public :
   // start and end of a segment when fitting a line
 };
 
-#endif
+#endif // vsl_fit_lines_params_h_

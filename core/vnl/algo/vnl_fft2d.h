@@ -1,4 +1,5 @@
-// -*- c++ -*-
+#ifndef vnl_fft2d_h_
+#define vnl_fft2d_h_
 //
 // .NAME vnl_fft2d - templated 2D FFT class based on Temperton FFT routines
 // .INCLUDE vnl/algo/vnl_fft2d.h
@@ -31,8 +32,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef vnl_fft2d_h_
-#define vnl_fft2d_h_
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_matrix.h>
 #include "vnl_fftxd_prime_factors.h"
@@ -79,4 +78,4 @@ private:
 	     const vnl_fftxd_prime_factors<T> &oPFy, int dir);
 };
   
-#endif
+#endif // vnl_fft2d_h_

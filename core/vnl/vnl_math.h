@@ -1,15 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_math_h_
 #define vnl_math_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vnl_math - namespace with standard math functions
-// .LIBRARY     vnl
+// .NAME	vnl_math - namespace with standard math functions
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_math.h
-// .FILE        vnl/vnl_math.cxx
+// .INCLUDE	vnl/vnl_math.h
+// .FILE	vnl_math.cxx
 //
 // .SECTION Description
 //    The vnl_math namespace provides a standard set of the simple mathematical
@@ -166,4 +165,4 @@ inline double vnl_math_hypot(int x, int y) { return sqrt(double(x*x + y*y)); }
 inline float  vnl_math_hypot(float x, float y) { return float( sqrt(double(x*x + y*y)) ); }
 inline double vnl_math_hypot(double x, double y) { return sqrt(x*x + y*y); }
 
-#endif 
+#endif // vnl_math_h_

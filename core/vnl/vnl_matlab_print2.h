@@ -75,4 +75,4 @@ VCL_INSTANTIATE_INLINE(vnl_matlab_print_proxy<T > vnl_matlab_print(T const &, \
                                                                    char const *, \
                                                                    vnl_matlab_print_format));
 
-#endif
+#endif // vnl_matlab_print2_h_

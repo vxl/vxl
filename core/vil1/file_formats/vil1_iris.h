@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_iris_file_format_h_
 #define vil_iris_file_format_h_
 #ifdef __GNUC__
@@ -104,4 +103,4 @@ public:
 
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_iris_file_format.
+#endif // vil_iris_file_format_h_

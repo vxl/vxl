@@ -343,4 +343,4 @@ inline vnl_matrix<T> operator* (T const& value, vnl_matrix<T> const& m) {
   return m * value;
 }
 
-#endif
+#endif // vnl_matrix_h_

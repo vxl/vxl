@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME        vnl_double_3x4 - 3x4 Matrix of double
-// .LIBRARY     vnl
+// .NAME	vnl_double_3x4 - 3x4 Matrix of double
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_double_3x4.h
-// .FILE        vnl/vnl_double_3x4.cxx
+// .INCLUDE	vnl/vnl_double_3x4.h
+// .FILE	vnl_double_3x4.cxx
 //
 // .SECTION Description
 //    vnl_double_3x4 is a vnl_matrix<double> of fixed size 3x4.  It is

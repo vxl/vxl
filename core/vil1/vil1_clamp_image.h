@@ -27,4 +27,4 @@ template <> vil_decl(vil_rgb<double>);
 
 #undef vil_decl
 
-#endif
+#endif // vil_clamp_image_h_

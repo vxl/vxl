@@ -3,6 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+
+// .NAME vnl_int_matrix
+// .INCLUDE vnl/vnl_int_matrix.h
+// .FILE vnl_int_matrix.cxx
 // .SECTION Description
 //    vnl_int_matrix specializes vnl_matrix for integers, adding a vnl_matrix<double> ctor.
 //
@@ -30,5 +34,4 @@ public:
   vnl_int_matrix& operator = (const vnl_matrix<int>& d) { return (vnl_int_matrix&)Base::operator = (d); }
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_int_matrix.
-
+#endif // vnl_int_matrix_h_

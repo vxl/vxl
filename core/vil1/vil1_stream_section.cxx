@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vil_stream_section"
+#pragma implementation
 #endif
 #include "vil_stream_section.h"
 #include <vcl/vcl_cassert.h>

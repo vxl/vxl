@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_float_3
-// .LIBRARY     vnl
+// .NAME	vnl_float_3
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_float_3.h
-// .FILE        vnl/vnl_float_3.cxx
+// .INCLUDE	vnl/vnl_float_3.h
+// .FILE	vnl_float_3.cxx
 //
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 05 Aug 96
@@ -20,4 +20,4 @@
 //: class vnl_float_3 : a vnl_vector of 3 floats.
 vnl_T_n_impl(float,3);
 
-#endif
+#endif // vnl_float_3_h_

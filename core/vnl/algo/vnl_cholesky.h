@@ -92,5 +92,4 @@ private:
   vnl_cholesky& operator=(vnl_cholesky const & that);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_cholesky.
-
+#endif // vnl_cholesky_h_

@@ -1,15 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_sparse_matrix_linear_system_h_
 #define vnl_sparse_matrix_linear_system_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vnl_sparse_matrix_linear_system - vnl_sparse_matrix -> vnl_linear_system adaptor
-// .LIBRARY     vnl
+// .NAME	vnl_sparse_matrix_linear_system - vnl_sparse_matrix -> vnl_linear_system adaptor
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_sparse_matrix_linear_system.h
-// .FILE        vnl/vnl_sparse_matrix_linear_system.cxx
+// .INCLUDE	vnl/vnl_sparse_matrix_linear_system.h
+// .FILE	vnl_sparse_matrix_linear_system.cxx
 //
 // .SECTION Description
 //    An adaptor that converts a vnl_sparse_matrix<T> to a vnl_linear_system
@@ -42,4 +41,4 @@ protected:
   vnl_vector<double> jacobi_precond_;
 };
 
-#endif
+#endif // vnl_sparse_matrix_linear_system_h_

@@ -53,4 +53,4 @@ private:
   void set_defaults();
 };
 
-#endif
+#endif // vsl_harris_params_h_

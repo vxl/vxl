@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_int_4
-// .LIBRARY     vnl
+// .NAME	vnl_int_4
+// .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE     vnl/vnl_int_4.h
-// .FILE        vnl/vnl_int_4.cxx
+// .INCLUDE	vnl/vnl_int_4.h
+// .FILE	vnl_int_4.cxx
 //
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 31 Aug 96
@@ -17,7 +17,7 @@
 
 #include <vnl/vnl_T_n.h>
 
-//: class vnl_int_4 : a vnl_vector of 4 ints. 
+//: class vnl_int_4 : a vnl_vector of 4 ints.
 vnl_T_n_impl(int,4);
 
-#endif
+#endif // vnl_int_4_h_

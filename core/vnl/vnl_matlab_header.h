@@ -32,4 +32,4 @@ struct vnl_matlab_header/*MATFileHeader*/ {
   };
 };
 
-#endif
+#endif // vnl_matlab_header_h_

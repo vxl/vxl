@@ -28,4 +28,4 @@ struct vsl_1d_half_kernel {
 template <class T>
 void vsl_create_gaussian (T gauss_sigma, vsl_1d_half_kernel<T> *mask_ptr);
 
-#endif
+#endif // vsl_1d_half_kernel_h_

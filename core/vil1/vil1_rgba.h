@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_rgba_h_
 #define vil_rgba_h_
 #ifdef __GNUC__
@@ -135,4 +134,4 @@ public:
 #define VIL_RGBA_INSTANTIATE \
 extern "please include vil/vil_rgba.txx instead"
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_rgba<>.
+#endif // vil_rgba_h_

@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_file_image_h_
 #define vil_file_image_h_
 #ifdef __GNUC__
@@ -31,5 +30,4 @@ public:
   bool load(vcl_string const&, verbosity = verbose);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_file_image.
-
+#endif // vil_file_image_h_

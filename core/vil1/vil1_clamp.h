@@ -7,10 +7,10 @@
 //           a range appropriate for the data type (e.g. 0-255 for bytes).
 // .LIBRARY vil
 // .INCLUDE vil/vil_clamp.h
-// .FILE    vil/vil_clamp.cxx
+// .FILE    vil_clamp.cxx
 //
 // .SECTION Author
-//    Andrew Fitzgibbon and David Capel 
+//    Andrew Fitzgibbon and David Capel
 
 #include <vil/vil_image.h>
 
@@ -32,10 +32,10 @@ V vil_clamp_pixel(V const& b, double range_min, double range_max)
   return (b < V(range_min) ? V(range_min) : (b > V(range_max) ? V(range_max) : b));
 }
 
-// capes@robots : The functions below are deprecated. Use the adaptor style or the 
+// capes@robots : The functions below are deprecated. Use the adaptor style or the
 // vil_clamp_pixel functions instead.
 #if 0
-//: 
+//:
 // Default behaviour just returns value. Clamping of double to return byte is
 // also defined here. Other clamps, such as vil_rgb<double> to vil_rgb<byte>
 // may be defined in the appropriate places.
@@ -53,22 +53,22 @@ inline
 unsigned char vil_clamp(const float& d, unsigned char *)
 {
   if (d > 255.0)
-    return 255; 
+    return 255;
   else if (d < 0.0)
-    return 0; 
+    return 0;
   else
-    return (unsigned char)d; 
+    return (unsigned char)d;
 }
 
 inline
 unsigned char vil_clamp(const double& d, unsigned char *)
 {
   if (d > 255.0)
-    return 255; 
+    return 255;
   else if (d < 0.0)
-    return 0; 
+    return 0;
   else
-    return (unsigned char)d; 
+    return (unsigned char)d;
 }
 #endif
 
