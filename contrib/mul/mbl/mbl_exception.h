@@ -2,6 +2,9 @@
 #define mbl_exception_h_
 //:
 // \file
+// \brief Exceptions thrown by mbl, and amechanism for turning them off.
+// \author Ian Scott.
+
 #include <vcl_string.h>
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
@@ -15,7 +18,7 @@
 template <class T>
 void mbl_exception_error(T exception)
 {
-  vcl_cerr << "ERROR: " << exception.what() << vcl_endl;
+  vcl_cerr << "\nERROR: " << exception.what() << vcl_endl;
 #if !defined MBL_EXCEPTIONS_DISABLE  && VCL_HAS_EXCEPTIONS
   throw exception;
 #else
@@ -29,7 +32,7 @@ void mbl_exception_error(T exception)
 template <class T>
 void mbl_exception_warning(T exception)
 {
-vcl_cerr << "WARNING: " << exception.what() << vcl_endl;
+  vcl_cerr << "\nWARNING: " << exception.what() << vcl_endl;
 #if !defined MBL_EXCEPTIONS_DISABLE  && VCL_HAS_EXCEPTIONS
   throw exception;
 #endif

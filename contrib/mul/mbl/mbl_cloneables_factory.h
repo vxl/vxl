@@ -3,6 +3,8 @@
 #define mbl_cloneables_factory_h
 //:
 //  \file
+// \brief A general factory pattern.
+// \author Ian Scott.
 
 #include <vcl_cassert.h>
 #include <vcl_map.h>
@@ -19,6 +21,18 @@
 // a bunch of concrete instantiations of the derived classes,
 // you can create any of the derived classes simply from
 // the class's name.
+//
+// BASE must define a clone() and is_a() members
+// \code
+// class BASE
+// {
+//   ...
+// public:
+//   virtual BASE* clone() const=0; // Derived classes must copy themselves.
+//   virtual vcl_string BASE::is_a() const; {
+//     return "BASE";} // Derived classes need unique names.
+// }
+// \endcode
 //
 // Example:
 // \code
@@ -68,9 +82,7 @@ class mbl_cloneables_factory
   }
 
   //: Get a pointer to a new copy of the object identified by name.
-  //
-  // There MUST be an object labelled name in the factory,
-  // otherwise behaviour is undefined.
+  // An exception will be thrown if name does not exist.
   static vcl_auto_ptr<BASE > get_clone(const vcl_string & name)
   {
     typedef VCL_DISAPPEARING_TYPENAME MAP::const_iterator IT;
@@ -95,7 +107,7 @@ class mbl_cloneables_factory
   }
 };
 
-
+// Macro to instantiate template, and initialise singleton data item.
 #define MBL_CLONEABLES_FACTORY_INSTANTIATE(T) \
 template class mbl_cloneables_factory< T >; \
 template <class BASE > \
