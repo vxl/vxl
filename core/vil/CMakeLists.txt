@@ -100,11 +100,7 @@ SET( vil_sources ${vil_sources}
   vil_stream_fstream.cxx vil_stream_fstream.h
   vil_stream_core.cxx vil_stream_core.h
   vil_stream_section.cxx vil_stream_section.h
-  vil_stream_url.cxx vil_stream_url.h
   vil_open.cxx vil_open.h
-# The next two lines are deprecated in favour of the following two
-#  vil_stream_16bit.cxx vil_stream_16bit.h
-#  vil_stream_32bit.cxx vil_stream_32bit.h
   vil_stream_read.cxx vil_stream_read.h
   vil_stream_write.cxx vil_stream_write.h
 
