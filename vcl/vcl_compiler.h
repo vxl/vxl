@@ -62,6 +62,9 @@
 #  if (__GNUC_MINOR__>0)
 #   define VCL_GCC_31
 #  endif
+#  if (__GNUC_MINOR__>1)
+#   define VCL_GCC_32
+#  endif
 # else
 #  error "Dunno about this gcc"
 # endif
