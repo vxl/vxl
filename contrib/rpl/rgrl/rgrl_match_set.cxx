@@ -462,6 +462,12 @@ geometric_weight() const
   return itr_->geometric_weight;
 }
 
+double
+rgrl_match_set_from_to_iterator::
+geometric_error() const
+{
+  return itr_->geometric_residual;
+}
 
 double
 rgrl_match_set_from_to_iterator::
@@ -688,6 +694,12 @@ cumulative_weight( ) const
   return itr_->cumulative_weight;
 }
 
+double
+rgrl_match_set_const_from_to_iterator::
+geometric_error() const
+{
+  return itr_->geometric_residual;
+}
 
 rgrl_match_set_const_from_to_iterator::
 rgrl_match_set_const_from_to_iterator( MatchInfoIter const& itr )

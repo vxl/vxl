@@ -298,6 +298,9 @@ class rgrl_match_set_from_to_iterator
   double geometric_weight() const;
 
   //:
+  double geometric_error() const;
+
+  //:
   double signature_weight() const;
 
   //:
@@ -356,6 +359,9 @@ class rgrl_match_set_const_from_to_iterator
 
   //:
   double cumulative_weight() const;
+  
+  //:
+  double geometric_error() const;
 
  protected:
 
