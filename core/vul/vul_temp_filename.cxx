@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_temp_filename.cxx
+// This is core/vul/vul_temp_filename.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -7,13 +7,14 @@
 #include <vcl_string.h>
 #include <vcl_ctime.h>
 #include <vcl_cstdlib.h> // for rand/srand
-#include <stdio.h>  // for P_tmpdir
 
 #ifdef _MSC_VER
   #include <Windows.h>
 #else
+#ifdef unix
   // Helper functions for Unix
 
+  #include <stdio.h>  // for P_tmpdir
   #include <unistd.h> // for unlink
   #include <fcntl.h>  // for O_CREATE,...
 
@@ -58,6 +59,9 @@
       return (r<26) ? char('A'+r) : (r<52) ? char('a'+r-26) : char('0'+r-52);
     }
   }
+#else
+# warning "This is neither unix nor MS-windows - please add specifics to " __FILE__
+#endif
 #endif
 
 vcl_string
@@ -77,8 +81,8 @@ vul_temp_filename( )
   if ( file == 0 )
     return "";
   return file;
-
 #else
+#ifdef unix
   // Don't use tmpnam, since it causes linker warnings (and sometimes
   // linker errors). Instead reimplement. Sigh.
   const unsigned int num_char_in_filename = 7+1; // should always be at least 1
@@ -111,5 +115,8 @@ vul_temp_filename( )
     return filename;
   else
     return "";
+#else
+# warning "This is neither unix nor MS-windows - please add specifics to " __FILE__
+#endif
 #endif
 }
