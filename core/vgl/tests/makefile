@@ -21,6 +21,7 @@ TESTS += test_h_matrix_3d.cxx
 TESTS += test_fit_lines_2d.cxx
 TESTS += test_closest_point.cxx
 TESTS += test_p_matrix.cxx
+TESTS += test_convex.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
