@@ -73,9 +73,18 @@ SOURCES += vnl_gaussian_kernel_1d.cxx
 MANPAGE_SOURCES += vnl_adjugate.txx
 MANPAGE_SOURCES += vnl_orthogonal_complement.txx
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+# tests
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
 
 ifeq "HP-UX" "$(findstring HP-UX,$(OS))"
 FLAGS_Templates/vnl_determinant+vcl_complex+long_double--.cxx := -O0
