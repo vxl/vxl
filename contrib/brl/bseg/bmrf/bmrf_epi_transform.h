@@ -61,7 +61,7 @@ class bmrf_const_epi_transform : public bmrf_epi_transform
 {
  public:
   //: Constructor
-  bmrf_const_epi_transform(double gamma = 0.0);
+  explicit bmrf_const_epi_transform(double gamma = 0.0);
 
   //: Set the constant gamma value
   void set_gamma(double gamma);
