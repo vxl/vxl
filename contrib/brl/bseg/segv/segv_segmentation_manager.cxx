@@ -108,7 +108,7 @@ void segv_segmentation_manager::load_image()
 
   vil1_image temp = vil1_load(image_filename.c_str());
 
-  if(greyscale)
+  if (greyscale)
     {
       vil1_memory_image_of<unsigned char> temp1 =
       brip_float_ops::convert_to_grey(temp);
@@ -281,16 +281,16 @@ void segv_segmentation_manager::roi()
 
   vcl_cout << "Choose upper left corner of ROI.\n";
   picktab_->pick_point(&x0,&y0);
-  vcl_cout << "picked (x="<<x0<<", y="<<y0<<")\n";
-  vcl_cout << "Choose lower right corner of ROI.\n";
+  vcl_cout << "picked (x="<<x0<<", y="<<y0<<")\n"
+           << "Choose lower right corner of ROI.\n";
   picktab_->pick_point(&x1,&y1);
   vcl_cout << "picked (x="<<x1<<", y="<<y1<<")\n";
-  if( (x1 > x0) && (y1 > y0) )
+  if ( (x1 > x0) && (y1 > y0) )
   {
     int w = int(x1 - x0);
     int h = int(y1 - y0);
     vil1_image cropped = vil1_crop(img_,int(x0),int(y0),w,h);
-    cout << "cropped x=" <<x0<<" y=" <<y0<< " w=" <<w<<" h=" <<h<< "\n";
+    vcl_cout << "cropped x=" <<x0<<" y=" <<y0<< " w=" <<w<<" h=" <<h<< "\n";
     if (cropped)
     {
       img_ = cropped;
@@ -298,10 +298,10 @@ void segv_segmentation_manager::roi()
       t2D_->post_redraw();
       return;
     }
-    cout << "crop failed.\n";
+    vcl_cout << "crop failed.\n";
     return;
   }
-  cout << "invalid ROI\n";
+  vcl_cout << "invalid ROI\n";
   return;
 }
 
@@ -562,7 +562,7 @@ void segv_segmentation_manager::test_camera_parms()
       K.put(1,0,k_values[3]); K.put(1,1,k_values[4]); K.put(1,2,k_values[5]);
       K.put(2,0,k_values[6]); K.put(2,1,k_values[7]); K.put(2,2,k_values[8]);
 
-      vcl_cout << "K = \n" << K << "\n";
+      vcl_cout << "K =\n" << K << "\n";
 
       // read number of views
       int n_views = 0;
@@ -598,7 +598,7 @@ void segv_segmentation_manager::test_camera_parms()
       M.put(1,0,m_values[4]); M.put(1,1,m_values[5]); M.put(1,2,m_values[6]);  M.put(1,3,m_values[7]);
       M.put(2,0,m_values[8]); M.put(2,1,m_values[9]); M.put(2,2,m_values[10]); M.put(2,3,m_values[11]);
 
-      vcl_cout << "M = \n" << M << "\n";
+      vcl_cout << "M =\n" << M << "\n";
 
       //transform the grid points to the image
       sdet_grid_finder_params gfp;
@@ -749,7 +749,7 @@ void segv_segmentation_manager::fit_lines()
          * we would want to disregard this homography and move on */
         vcl_cout << "warning: grid match failed double-check\n";
       }
-      if(!gfp.debug_state_)
+      if (!gfp.debug_state_)
         //gf.get_mapped_lines(mapped_lines);
         gf.get_backprojected_grid(mapped_lines);
       else
