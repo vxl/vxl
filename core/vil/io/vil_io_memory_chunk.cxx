@@ -2,7 +2,7 @@
 // \file
 // \author Tim Cootes
 // \verbatim
-// Modifications
+//  Modifications
 //   Feb.2003 - Ian Scott - Upgraded IO to use vsl_block_binary io
 // \endverbatim
 
@@ -11,8 +11,7 @@
 
 #define write_case_macro(T)\
 vsl_b_write(os,unsigned(chunk.size()/sizeof(T ))); \
-vsl_block_binary_write(os,(const T*) chunk.const_data(), \
-                     chunk.size()/sizeof(T ))
+vsl_block_binary_write(os,(const T*) chunk.const_data(),chunk.size()/sizeof(T))
 
 
 //: Binary save vil2_memory_chunk to stream.
@@ -52,8 +51,8 @@ void vsl_b_write(vsl_b_ostream &os, const vil2_memory_chunk& chunk)
       write_case_macro(bool);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_write(vsl_b_istream&, vil2_memory_chunk&) \n";
-      vcl_cerr << "           Unknown component type  "<< "\n";
+      vcl_cerr << "I/O ERROR: vsl_b_write(vsl_b_istream&, vil2_memory_chunk&)\n"
+               << "           Unknown component type\n";
       return;
   }
 }
@@ -61,12 +60,11 @@ void vsl_b_write(vsl_b_ostream &os, const vil2_memory_chunk& chunk)
 #undef write_case_macro
 
 
-
 // This file never users the fast versions of vsl_b_read_block, so just locally
 //implement the old slow version.
 #define read_case_macro_v1(T)\
 chunk.set_size(n*sizeof(T ),pixel_format); \
-  for(unsigned i=0; i<n; ++i)\
+  for (unsigned i=0; i<n; ++i)\
     vsl_b_read(is, static_cast<T *>(chunk.data())[i]);
 
 #define read_case_macro_v2(T)\
@@ -118,8 +116,8 @@ void vsl_b_read(vsl_b_istream &is, vil2_memory_chunk& chunk)
         read_case_macro_v1(bool);
         break;
       default:
-        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil2_memory_chunk&) \n";
-        vcl_cerr << "           Unknown pixel format "<< format << "\n";
+        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil2_memory_chunk&)\n"
+                 << "           Unknown pixel format "<< format << '\n';
         is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
         return;
     }
@@ -158,16 +156,16 @@ void vsl_b_read(vsl_b_istream &is, vil2_memory_chunk& chunk)
         read_case_macro_v2(bool);
         break;
       default:
-        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil2_memory_chunk&) \n";
-        vcl_cerr << "           Unknown pixel format "<< format << "\n";
+        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil2_memory_chunk&)\n"
+                 << "           Unknown pixel format "<< format << '\n';
         is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
         return;
     }
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil2_memory_chunk&) \n";
-    vcl_cerr << "           Unknown version number "<< w << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil2_memory_chunk&)\n"
+             << "           Unknown version number "<< w << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
