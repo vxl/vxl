@@ -12,7 +12,7 @@ SOURCES += vbl_awk.cxx
 SOURCES += vbl_file.cxx
 SOURCES += vbl_file_iterator.cxx
 ifneq ($(HAS_BROKEN_AS),1) # this file generates 4281 bytes assembler line (Rb_tree) which is too much.
-SOURCES += vbl_canonical_path.cxx
+SOURCES += vbl_expand_path.cxx
 endif
 SOURCES += vbl_printf.cxx
 SOURCES += vbl_redirector.cxx
