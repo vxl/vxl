@@ -1,6 +1,8 @@
-
 #ifndef rsdl_kd_tree_h_
 #define rsdl_kd_tree_h_
+
+//:
+// \file
 
 #include <vcl_vector.h>
 #include <rsdl/rsdl_point.h>
@@ -10,7 +12,7 @@
 class rsdl_kd_node {
 public:
   //: ctor for internal node
-  rsdl_kd_node( const rsdl_bounding_box& outer_box, 
+  rsdl_kd_node( const rsdl_bounding_box& outer_box,
                 const rsdl_bounding_box& inner_box,
                 unsigned int depth )
     : outer_box_(outer_box), inner_box_(inner_box), depth_(depth),
@@ -26,7 +28,7 @@ public:
 
   //: outer bounding box in both cartesian and angular dimensions
   rsdl_bounding_box outer_box_;
-  //: inner bounding box in both cartesian and angular dimensions     
+  //: inner bounding box in both cartesian and angular dimensions
   rsdl_bounding_box inner_box_;
   //: depth of node in the tree
   unsigned int depth_;
@@ -46,7 +48,7 @@ public:
     : dist_(dist), p_(p) {}
   bool operator< ( const rsdl_kd_heap_entry& right ) const
   { return right.dist_ < this->dist_; }  // kludge because max heap
-  
+
   double dist_;
   rsdl_kd_node* p_;
 };
@@ -78,7 +80,7 @@ public:
                   bool use_heap = false );
 
     //: \brief find all points within a query's bounding box
-  void points_in_bounding_box( const rsdl_bounding_box& box, 
+  void points_in_bounding_box( const rsdl_bounding_box& box,
                                vcl_vector< rsdl_point >& closest_points,
                                vcl_vector< int >& indices );
 
@@ -99,7 +101,7 @@ private:
   int leaf_count_;
   int leaves_examined_;
   int internal_count_;
-  int internal_examined_; 
+  int internal_examined_;
 
 private:
   void destroy_tree( rsdl_kd_node*& p );
@@ -142,12 +144,11 @@ private:
                          int & num_found );
 
   void points_in_bounding_box( rsdl_kd_node* current,
-                               const rsdl_bounding_box& box, 
+                               const rsdl_bounding_box& box,
                                vcl_vector< int >& indices );
 
   void report_all_in_subtree( rsdl_kd_node* current,
                               vcl_vector< int >& indices );
-
 };
 
 #endif
