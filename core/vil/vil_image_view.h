@@ -243,6 +243,12 @@ class vil2_image_view : public vil2_image_view_base
   //  the result will still be false.
   bool operator==(const vil2_image_view<T>& other) const;
 
+  //: Provides a ordering.
+  //  Useful for ordered containers.
+  //  There is no guaranteed meaning to the less than operator, except
+  //  that  !(a<b) && !(b<a) is equivalent to a==b
+  bool operator<(const vil2_image_view<T>& other) const;
+
   //: Copy a view. The rhs and lhs will point to the same image data.
   // You can assign a vil2_image_view<compound_type<T>> to a vil2_image_view<T>
   // in all reasonable cases - the lhs will have as many planes as the rhs has
@@ -282,5 +288,12 @@ vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& im) {
 template<class T>
 bool vil2_image_view_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> &rhs);
 
+
+//: True if they do not share same view of same image data.
+//  This does not do a deep inequality on image data. If the images point
+//  to different image data objects that contain identical images, then
+//  the result will still be true.
+template<class T>
+bool operator!=(const vil2_image_view<T>& lhs, const vil2_image_view<T>& rhs);
 
 #endif // vil2_image_view_h_

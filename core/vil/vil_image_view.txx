@@ -596,6 +596,7 @@ void vil2_image_view<T>::print(vcl_ostream& os) const
 template<class T>
 bool vil2_image_view<T>::operator==(const vil2_image_view<T> &other) const
 {
+  if (!(bool) *this && !(bool)other) return true;
   return ptr_  == other.ptr_ &&
     top_left_  == other.top_left_ &&
     nplanes_   == other.nplanes_ &&
@@ -605,6 +606,26 @@ bool vil2_image_view<T>::operator==(const vil2_image_view<T> &other) const
     istep_      == other.istep_ &&
     jstep_     == other.jstep_;
 }
+
+//=======================================================================
+//: Provides a ordering.
+//  Useful for ordered containers.
+//  There is no guaranteed meaning to the less than operator, except
+//  that  !(a<b) && !(b<a) is equivalent to a==b
+template<class T>
+bool vil2_image_view<T>::operator<(const vil2_image_view<T>& other) const
+{
+  
+  if (ptr_ != other.ptr_) return ptr_<other.ptr_;
+  if ((bool) *this && (bool)other) return false;
+  if (nplanes_ != other.nplanes_) return nplanes_ < other.nplanes_;
+  if (ni_ != other.ni_) return ni_ < other.ni_;
+  if (nj_ != other.nj_) return nj_ < other.nj_;
+  if (planestep_ != other.planestep_) return planestep_ < other.planestep_;
+  if (istep_ != other.istep_) return istep_ < other.istep_;
+  return jstep_ < other.jstep_;
+}
+
 
 //=======================================================================
 //: True if the actual images are identical.
@@ -629,9 +650,23 @@ bool vil2_image_view_deep_equality(const vil2_image_view<T> &lhs,
   return true;
 }
 
+//=======================================================================
+//: True if they do not share same view of same image data.
+//  This does not do a deep inequality on image data. If the images point
+//  to different image data objects that contain identical images, then
+//  the result will still be true.
+template<class T>
+bool operator!=(const vil2_image_view<T>& lhs, const vil2_image_view<T>& rhs)
+{
+  return !(lhs.operator==(rhs));
+}
+
+
 #define VIL2_IMAGE_VIEW_INSTANTIATE(T) \
 template class vil2_image_view<T >; \
 template bool vil2_image_view_deep_equality(const vil2_image_view<T > &lhs, \
-                                            const vil2_image_view<T > &rhs)
+                                            const vil2_image_view<T > &rhs); \
+template bool operator!=(const vil2_image_view<T >& lhs, \
+                         const vil2_image_view<T >& rhs);
 
 #endif // vil2_image_view_txx_

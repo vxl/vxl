@@ -72,14 +72,27 @@ void test_image_resource_1()
   TEST("Transpose, and clamping", view1 && view1(3,0) == 9.0f && view1(0,3)==1.0f, true);
 
 
-  vil2_image_resource_sptr flip1 = vil2_flip_lr(clamp);
+  vil2_image_resource_sptr flip1 = vil2_flip_lr(mem);
   vil2_image_resource_sptr flip2 = vil2_flip_ud(flip1);
   vil2_image_resource_sptr flip3 = vil2_flip_lr(flip2);
   vil2_image_resource_sptr flip4 = vil2_flip_ud(flip3);
   view1 = flip4->get_view(0, flip4->ni(), 0, flip4->nj());
-  view2 = clamp->get_view(0, clamp->ni(), 0, clamp->nj());
-  TEST("x == flip_lr(flip_ud(flip_lr(flip_ud(x))))",
+  view2 = mem->get_view(0, mem->ni(), 0, mem->nj());
+  // Check that they are the same view of the same data
+  TEST("x == flip_lr(flip_ud(flip_lr(flip_ud(x)))) A",
+       view1 == view2, true);
+  view1 = flip4->get_copy_view(0, flip4->ni(), 0, flip4->nj());
+  // Check that they are not the same view of the same data
+  TEST("x == flip_lr(flip_ud(flip_lr(flip_ud(x)))) B",
+       view1 != view2, true);
+  TEST("x == flip_lr(flip_ud(flip_lr(flip_ud(x)))) C",
        vil2_image_view_deep_equality(view1, view2), true);
+  flip4->put_view(view2, 0, 0);
+  view1 = mem->get_copy_view(0, mem->ni(), 0, mem->nj());
+  // Check that the put view works
+  TEST("x == flip_lr(flip_ud(flip_lr(flip_ud(x)))) D",
+       vil2_image_view_deep_equality(view1, view2), true);
+
 }
 
 MAIN( test_image_resource )
