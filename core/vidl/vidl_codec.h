@@ -1,19 +1,17 @@
 // This is core/vidl/vidl_codec.h
 #ifndef vidl_codec_h
 #define vidl_codec_h
-
 //:
 // \file
 // \author Nicolas Dano, september 1999
 //
 // \verbatim
-// Modifications
-// Julien ESTEVE, June 2000
-//     Ported from TargetJr
-// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
-// 10/7/2003 Matt Leotta (Brown) Converted vil1 to vil
+//  Modifications
+//   June 2000 Julien ESTEVE          Ported from TargetJr
+//   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//   10/7/2003 Matt Leotta (Brown)    Converted vil1 to vil
+//   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
 // \endverbatim
-
 
 #include <vcl_cstring.h>
 #include <vidl/vidl_codec_sptr.h>
@@ -30,8 +28,9 @@ class vidl_avicodec;
 //: Base for video coder/decoder
 //   A vidl_codec is a pure virtual class defining the codecs of video
 //   See also vidl_io and vidl_image_list_codec and vidl_avicodec
-class vidl_codec :  public vbl_ref_count
+class vidl_codec : public vbl_ref_count
 {
+  vidl_codec(vidl_codec const&) : vbl_ref_count() {}
  public:
 
   // Constructors/Initializers/Destructors-------------------------------------
@@ -114,14 +113,14 @@ class vidl_codec :  public vbl_ref_count
 
   inline void clear_strings() { name = description = date_time = NULL; }
 
-  char*      name;             // Video Name
-  char*      description;      // Video Descriptor
-  char*      date_time;        // Date/Time Stamp
-  char       format;           // Video format
-  char       Class;            // Video class
-  int        B;                // Pixel Precision
-  int        X,Y,Z,T;          // Frame Size (width,height,up,time)
-  int        numberframes;     // Length of the sequence
+  char*      name;             //!< Video Name
+  char*      description;      //!< Video Descriptor
+  char*      date_time;        //!< Date/Time Stamp
+  char       format;           //!< Video format
+  char       Class;            //!< Video class
+  int        B;                //!< Pixel Precision
+  int        X,Y,Z,T;          //!< Frame Size (width,height,up,time)
+  int        numberframes;     //!< Length of the sequence
 };
 
 #endif // vidl_codec_h

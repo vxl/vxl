@@ -7,17 +7,17 @@
 
 class impl : public vbl_ref_count
 {
-public :
+ public:
   static int reftotal;
   int n;
 
   impl(int nn);
+  impl(impl const& x) : vbl_ref_count(), n(x.n) {}
   impl();
   ~impl();
   void Print (vcl_ostream &str);
   static void checkcount ();
 };
-
 
 void vsl_b_read(vsl_b_istream&, impl &);
 void vsl_b_write(vsl_b_ostream&, const impl &);

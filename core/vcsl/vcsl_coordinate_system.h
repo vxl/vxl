@@ -9,9 +9,10 @@
 // \author François BERTEL
 //
 // \verbatim
-// Modifications
-// 2000/06/28 François BERTEL Creation. Adapted from IUE
-// 2002/01/22 Peter Vanroose - return type of from_cs_to_standard_units() and from_standard_units_to_cs() changed non-ptr
+//  Modifications
+//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2002/01/22 Peter Vanroose - return type of from_cs_to_standard_units() and from_standard_units_to_cs() changed non-ptr
+//   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
 // \endverbatim
 
 #include <vcsl/vcsl_coordinate_system_sptr.h>
@@ -37,10 +38,14 @@ class vcsl_coordinate_system
   // Constructors/Destructor
   //***************************************************************************
 
-  //: Default constructor
+  // Default constructor
   explicit vcsl_coordinate_system(void) {}
 
-  //: Destructor
+  // Copy constructor
+  vcsl_coordinate_system(vcsl_coordinate_system const& c)
+    : vbl_ref_count(), axes_(c.axes_) {}
+
+  // Destructor
   virtual ~vcsl_coordinate_system() {}
 
   //***************************************************************************
@@ -49,7 +54,6 @@ class vcsl_coordinate_system
 
   //: Number of axes
   virtual int dimensionality(void) const;
-
 
   //: Is `i' an index on an axis ?
   virtual bool valid_axis(int i) const;

@@ -11,9 +11,9 @@
 //
 // \verbatim
 //  Modifications
-//    awf - Renamed derived classes to be consistent with header-file
-//          naming convention.
-//    fsm - Fixed everything afterwards....
+//   awf - Renamed derived classes to be consistent with header-file naming convention.
+//   fsm - Fixed everything afterwards....
+//   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
@@ -22,6 +22,7 @@
 struct vgui_command : public vbl_ref_count
 {
   vgui_command();
+  vgui_command(vgui_command const&) : vbl_ref_count() {}
   virtual ~vgui_command();
   virtual void execute() =0;
 };
@@ -77,6 +78,7 @@ struct vgui_command_simple : public vgui_command
   receiver* obj;
   action mem;
 };
+
 #define VGUI_COMMAND_SIMPLE_INSTANTIATE(receiver) \
 template struct vgui_command_simple<receiver >
 
@@ -94,6 +96,7 @@ struct vgui_command_bound_method : public vgui_command
   action_t mem;
   data_t dat;
 };
+
 #define VGUI_COMMAND_BOUND_METHOD_INSTANTIATE(O, D) \
 template struct vgui_command_bound_method<O, D >
 

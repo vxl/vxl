@@ -10,6 +10,7 @@
 //   Julien Esteve, May 2000 Ported from TargetJr
 //   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 //   10/7/2003 Matt Leotta (Brown) Converted vil1 to vil
+//   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
@@ -26,13 +27,15 @@ class vidl_frame : public vbl_ref_count
 
   // Constructors/Initializers/Destructors
   vidl_frame(int position, vidl_codec_sptr coder);
+  vidl_frame(vidl_frame const& f)
+    : vbl_ref_count(), position_(f.position_), coder_(f.coder_) {}
   ~vidl_frame();
 
   //: Return an image resource
   vil_image_resource_sptr get_resource() const;
   vil_image_view_base_sptr get_view() const;
   virtual vil_image_view_base_sptr get_view(
-                         int x0, int width, int y0, int heigth) const;
+                         int x0, int width, int y0, int height) const;
 
   vidl_codec_sptr get_codec() const {return coder_;}
 

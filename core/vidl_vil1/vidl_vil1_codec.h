@@ -1,17 +1,15 @@
 #ifndef vidl_vil1_codec_h
 #define vidl_vil1_codec_h
-
 //:
 // \file
 // \author Nicolas Dano, september 1999
 //
 // \verbatim
-// Modifications
-// Julien ESTEVE, June 2000
-//     Ported from TargetJr
-// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//  Modifications
+//   June 2000 Julien ESTEVE          Ported from TargetJr
+//   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
 // \endverbatim
-
 
 #include <vcl_cstring.h>
 #include <vidl_vil1/vidl_vil1_codec_sptr.h>
@@ -27,6 +25,7 @@ class vidl_vil1_avicodec;
 //   See also vidl_vil1_io and vidl_vil1_image_list_codec and vidl_vil1_avicodec
 class vidl_vil1_codec :  public vbl_ref_count
 {
+  vidl_vil1_codec(vidl_vil1_codec const&) : vbl_ref_count() {}
  public:
 
   // Constructors/Initializers/Destructors-------------------------------------
@@ -103,14 +102,14 @@ class vidl_vil1_codec :  public vbl_ref_count
 
   inline void clear_strings() { name = description = date_time = NULL; }
 
-  char*      name;             // Video Name
-  char*      description;      // Video Descriptor
-  char*      date_time;        // Date/Time Stamp
-  char       format;           // Video format
-  char       Class;            // Video class
-  int        B;                // Pixel Precision
-  int        X,Y,Z,T;          // Frame Size (width,height,up,time)
-  int        numberframes;     // Length of the sequence
+  char*      name;             //!< Video Name
+  char*      description;      //!< Video Descriptor
+  char*      date_time;        //!< Date/Time Stamp
+  char       format;           //!< Video format
+  char       Class;            //!< Video class
+  int        B;                //!< Pixel Precision
+  int        X,Y,Z,T;          //!< Frame Size (width,height,up,time)
+  int        numberframes;     //!< Length of the sequence
 };
 
 #endif // vidl_vil1_codec_h

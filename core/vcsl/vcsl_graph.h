@@ -9,12 +9,12 @@
 // \author François BERTEL
 //
 // \verbatim
-// Modifications
-// 2000/08/01 François BERTEL Creation.
-// 2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
-// 2002/01/28 Peter Vanroose - vcl_vector member vertices_ changed to non-ptr
+//  Modifications
+//   2000/08/01 François BERTEL Creation.
+//   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
+//   2002/01/28 Peter Vanroose - vcl_vector member vertices_ changed to non-ptr
+//   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
 // \endverbatim
-
 
 #include <vcsl/vcsl_graph_sptr.h>
 
@@ -35,6 +35,9 @@ class vcsl_graph
 
   //: Default constructor
   explicit vcsl_graph(void) {}
+
+  // Copy constructor
+  vcsl_graph(vcsl_graph const& x) : vbl_ref_count(), vertices_(x.vertices_) {}
 
   //: Destructor
   virtual ~vcsl_graph() {}

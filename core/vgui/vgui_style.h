@@ -17,6 +17,7 @@
 //   18-OCT-1999 P.Pritchett - Initial version.
 //   07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
 //   06-APR-2004 M.Leotta - Updated for use with smart pointers and no style factory
+//   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
@@ -80,7 +81,12 @@ class vgui_style : public vbl_ref_count
   //: Constructor - creates a style and initializes the values
   vgui_style(float r, float g, float b, float point_size, float line_width);
 
-  //: Destructor - only the smart pointer should use this
+  // Copy constructor
+  vgui_style(vgui_style const& s)
+    : vbl_ref_count(), point_size(s.point_size), line_width(s.line_width)
+    { rgba[0]=s.rgba[0]; rgba[1]=s.rgba[1]; rgba[2]=s.rgba[2]; rgba[3]=s.rgba[3]; }
+
+  // Destructor - only the smart pointer should use this
   ~vgui_style();
 
   friend class vbl_smart_ptr<vgui_style>;

@@ -16,6 +16,7 @@
 //   2002/01/22 Peter Vanroose - added lmi() as it is used in vcsl_matrix.cxx
 //   2002/01/22 Peter Vanroose - return type of lqi(), lvi(), execute() and inverse() changed to non-ptr
 //   2002/01/28 Peter Vanroose - vcl_vector members beat_ and interpolator_ changed to non-ptr
+//   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
 // \endverbatim
 
 #include <vcsl/vcsl_spatial_transformation_sptr.h>
@@ -45,10 +46,14 @@ class vcsl_spatial_transformation : public vbl_ref_count
   // Constructors/Destructor
   //***************************************************************************
 
-  //: Default constructor. Do nothing
+  // Default constructor. Do nothing
   explicit vcsl_spatial_transformation(void) {}
 
-  //: Destructor. Do nothing
+  // Copy constructor
+  vcsl_spatial_transformation(vcsl_spatial_transformation const& x)
+    : vbl_ref_count(), beat_(x.beat_), interpolator_(x.interpolator_) {}
+
+  // Destructor. Do nothing
   virtual ~vcsl_spatial_transformation() {}
 
   //***************************************************************************
@@ -79,7 +84,6 @@ class vcsl_spatial_transformation : public vbl_ref_count
   //: Return the index of the beat inferior or equal to `time'
   //  REQUIRE: valid_time(time)
   virtual int matching_interval(double time) const;
-
 
   //: Image of `v' by `this'
   //  REQUIRE: is_valid()
