@@ -17,6 +17,7 @@ extern "C" {
 /*     Algorithm 7.5 (Adaptive Quadrature Using Simpson's Rule). */
 /*     Section 7.4, Adaptive Quadrature, Page 389 */
 
+/*     add missing variable F in Refine subrutine. */
 /* Subroutine */ int adaptquad_(U_fp f, real *a, real *b, real *tol, real *
 	srmat, real *integral, real *errbdd, integer *m, integer *state)
 {
@@ -30,7 +31,7 @@ extern "C" {
     static integer done;
     static real srvec[11];
     extern /* Subroutine */ int srule_(U_fp, real *, real *, real *, real *), 
-	    refine_(integer *, real *, integer *, integer *);
+	    refine_(U_fp, integer *, real *, integer *, integer *);
 
     /* Parameter adjustments */
     srmat -= 102;
@@ -47,7 +48,7 @@ extern "C" {
     while(*state == iterating) {
 	n = *m;
 	for (j = n; j >= 1; --j) {
-	    refine_(&j, &srmat[102], m, state);
+	    refine_((U_fp)f, &j, &srmat[102], m, state);
 	}
     }
     sum1 = (float)0.;
@@ -62,8 +63,8 @@ extern "C" {
     return 0;
 } /* adaptquad_ */
 
-/* Subroutine */ int refine_(integer *p, real *srmat, integer *m, integer *
-	state)
+/* Subroutine */ int refine_(U_fp f, integer *p, real *srmat, integer *m, 
+	integer *state)
 {
     /* System generated locals */
     integer i__1;
@@ -71,7 +72,6 @@ extern "C" {
 
     /* Local variables */
     static real a, b, c__;
-    extern /* Subroutine */ int f_(...);
     static integer j, k;
     static real s;
     static integer iterating;
@@ -106,8 +106,8 @@ extern "C" {
 	return 0;
     }
     tol2 = tol / 2;
-    srule_((U_fp)f_, &a, &c__, &tol2, sr1vec);
-    srule_((U_fp)f_, &c__, &b, &tol2, sr2vec);
+    srule_((U_fp)f, &a, &c__, &tol2, sr1vec);
+    srule_((U_fp)f, &c__, &b, &tol2, sr2vec);
     err = (r__1 = sr0vec[6] - sr1vec[6] - sr2vec[6], dabs(r__1)) / 10;
     if (err < tol) {
 	sr0vec[10] = (float)1.;
