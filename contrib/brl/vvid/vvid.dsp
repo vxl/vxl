@@ -51,6 +51,15 @@ SOURCE=.\vvid_live_video_tableau.cxx
 # Begin Source File
 SOURCE=.\vvid_region_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vvid_capture_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_frame_diff_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_motion_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -95,6 +104,15 @@ SOURCE=.\vvid_region_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vvid_live_video_tableau_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_capture_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_frame_diff_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_motion_process.h
 # End Source File
 # End Group
 # End Target
