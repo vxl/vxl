@@ -356,7 +356,7 @@ bool vgl_box_2d<Type>::intersect(const vgl_line_2d<Type>& line,
   //
   if (vgl_near_zero(a))// The line is y = -c/b
   {
-    float y0 = -c/b;
+    float y0 = static_cast<float>(-c/b);
     // The box edge is collinear with line?
     if (vgl_near_eq(ymin,y0))
     {
@@ -383,7 +383,7 @@ bool vgl_box_2d<Type>::intersect(const vgl_line_2d<Type>& line,
 
   if (vgl_near_zero(b))// The line is x = -c/a
   {
-    float x0 = -c/a;
+    float x0 = static_cast<float>(-c/a);
     // The box edge is collinar with l?
     if (vgl_near_eq(xmin,x0))
     {
@@ -436,19 +436,19 @@ bool vgl_box_2d<Type>::intersect(const vgl_line_2d<Type>& line,
 // \endverbatim
 
   // Intersection with x = xmin
-  float y_xmin_int = -(c + a*xmin)/b;
+  float y_xmin_int = static_cast<float>(-(c + a*xmin)/b);
   bool inside_xmin = (y_xmin_int >= ymin) && (y_xmin_int <= ymax);
 
   // Intersection with x = xmax
-  float y_xmax_int = -(c + a*xmax)/b;
+  float y_xmax_int = static_cast<float>(-(c + a*xmax)/b);
   bool inside_xmax = (y_xmax_int >= ymin) && (y_xmax_int <= ymax);
 
   // Intersection with y = ymin
-  float x_ymin_int = -(c + b*ymin)/a;
+  float x_ymin_int = static_cast<float>(-(c + b*ymin)/a);
   bool inside_ymin = (x_ymin_int >= xmin) && (x_ymin_int <= xmax);
 
   // Intersection with y = ymax
-  float x_ymax_int = -(c + b*ymax)/a;
+  float x_ymax_int = static_cast<float>(-(c + b*ymax)/a);
   bool inside_ymax = (x_ymax_int >= xmin) && (x_ymax_int <= xmax);
 
   // Case CX
