@@ -1,4 +1,5 @@
-#include <rrel/rrel_trunc_quad_obj.h>
+// This is rpl/rrel/rrel_trunc_quad_obj.cxx
+#include "rrel_trunc_quad_obj.h"
 
 rrel_trunc_quad_obj::rrel_trunc_quad_obj( double T )
   : T_sqr_( T*T )

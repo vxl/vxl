@@ -1,13 +1,8 @@
-#include <vsrl/vsrl_token_saliency.h>
-
+// This is gel/vsrl/vsrl_token_saliency.cxx
+#include "vsrl_token_saliency.h"
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h>
-#include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>
 #include <vil/vil_save.h>
-
 
 vsrl_token_saliency::vsrl_token_saliency(vsrl_image_correlation *image_correlation)
 {

@@ -1,8 +1,9 @@
+// This is mul/mil/mil_convert_image_2d.cxx
+#include "mil_convert_image_2d.h"
 //: \file
 //  \brief Functions to convert images from one type to another
 //  \author Tim Cootes
 
-#include <mil/mil_convert_image_2d.h>
 #include <vcl_cassert.h>
 
 //: Copies src_im (of bytes) into dest_im (of float)
@@ -78,8 +79,6 @@ void mil_convert_image_2d_flip(mil_image_2d_of<float>& dest,
   // not sure about this ???
   dest.setWorld2im(src.world2im());
 }
-
-
 
 
 //: Converts float plane image to vil_byte and stretches to 0-255 range

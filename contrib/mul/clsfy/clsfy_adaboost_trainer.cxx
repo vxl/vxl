@@ -17,8 +17,8 @@
 // Modifications
 // \endverbatim
 
+#include "clsfy_adaboost_trainer.h"
 
-#include <clsfy/clsfy_adaboost_trainer.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_indent.h>
 #include <vcl_cmath.h>

@@ -1,7 +1,8 @@
+// This is gel/vtol/vtol_topology_object.cxx
+#include "vtol_topology_object.h"
 //:
 //  \file
 
-#include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_topology_cache.h>
 #include <vcl_cassert.h>
 

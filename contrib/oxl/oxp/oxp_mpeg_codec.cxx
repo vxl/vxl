@@ -1,4 +1,5 @@
-
+// This is oxl/oxp/oxp_mpeg_codec.cxx
+#include "oxp_mpeg_codec.h"
 //:
 //  \file
 
@@ -24,9 +25,7 @@ extern "C" {
 #include <oxp/oxp_yuv_to_rgb.h>
 #include <oxp/oxp_bunch_of_files.h>
 
-#include "oxp_mpeg_codec.h"
-
-#include "oxp_vob_frame_index.cxx"
+#include <oxp/oxp_vob_frame_index.h>
 
 static bool verbose = false;
 

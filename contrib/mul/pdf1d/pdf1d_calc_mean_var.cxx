@@ -1,8 +1,9 @@
+// This is mul/pdf1d/pdf1d_calc_mean_var.cxx
+#include "pdf1d_calc_mean_var.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Calculate mean and variance of 1D data.
-#include <pdf1d/pdf1d_calc_mean_var.h>
 
 void pdf1d_calc_mean_var(double& mean, double& var,
                        const vnl_vector<double>& d)

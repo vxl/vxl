@@ -1,4 +1,5 @@
-#include <vmal/vmal_kl.h>
+// This is gel/vmal/vmal_kl.cxx
+#include "vmal_kl.h"
 
 #include <vil/vil_byte.h>
 #include <vil/vil_pixel.h>

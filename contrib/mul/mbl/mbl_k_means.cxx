@@ -1,8 +1,8 @@
+// This is mul/mbl/mbl_k_means.cxx
+#include "mbl_k_means.h"
 //:
 //  \file
 
-#include "mbl_k_means.h"
-#include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
@@ -231,7 +231,7 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
     centres.resize(k);
     for (i=0; i<k; ++i)
     {
-      while(wts[data.index()] == 0.0) // skip zero weighted data
+      while (wts[data.index()] == 0.0) // skip zero weighted data
       {
 #ifdef NDEBUG
         data.next();

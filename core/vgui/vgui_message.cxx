@@ -1,12 +1,9 @@
-//  This is oxl/vgui/vgui_message.cxx
-
+// This is oxl/vgui/vgui_message.cxx
+#include "vgui_message.h"
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  See vgui_message.h for a description of this file.
-
-
-#include "vgui_message.h"
 
 vgui_message::vgui_message()
   : from(0)

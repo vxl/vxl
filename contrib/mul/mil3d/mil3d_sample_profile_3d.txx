@@ -1,11 +1,12 @@
+// This is mul/mil3d/mil3d_sample_profile_3d.txx
 #ifndef mil3d_sample_profile_3d_txx_
 #define mil3d_sample_profile_3d_txx_
-
-//: \file
+//:
+//  \file
 //  \brief Profile sampling functions for 3D images
 //  \author Tim Cootes
 
-#include <mil3d/mil3d_sample_profile_3d.h>
+#include "mil3d_sample_profile_3d.h"
 #include <mil3d/mil3d_trilin_interp_3d.h>
 #include <vnl/vnl_vector.h>
 

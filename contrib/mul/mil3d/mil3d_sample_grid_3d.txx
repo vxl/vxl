@@ -1,3 +1,4 @@
+// This is mul/mil3d/mil3d_sample_grid_3d.txx
 #ifndef mil3d_sample_grid_3d_txx_
 #define mil3d_sample_grid_3d_txx_
 //:
@@ -5,7 +6,7 @@
 //  \brief Profile sampling functions for 3D images
 //  \author Graham Vincent
 
-#include <mil3d/mil3d_sample_grid_3d.h>
+#include "mil3d_sample_grid_3d.h"
 #include <mil3d/mil3d_trilin_interp_3d.h>
 #include <vnl/vnl_vector.h>
 

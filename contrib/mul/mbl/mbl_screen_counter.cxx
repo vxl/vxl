@@ -1,9 +1,10 @@
+// This is mul/mbl/mbl_screen_counter.cxx
+#include "mbl_screen_counter.h"
 //:
 // \file
 // \brief Printing dots to the screen to indicate events
 // \author Ian Scott
 
-#include <mbl/mbl_screen_counter.h>
 #include <vcl_iostream.h>
 
 mbl_screen_counter::mbl_screen_counter(vcl_ostream & os):

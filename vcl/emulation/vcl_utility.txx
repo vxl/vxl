@@ -1,7 +1,8 @@
+// This is vcl/emulation/vcl_utility.txx
 #ifndef vcl_emulation_utility_txx_
 #define vcl_emulation_utility_txx_
 
-#include <vcl_utility.h>
+#include "vcl_utility.h"
 #include "vcl_pair.h"
 #include "vcl_algorithm.txx"
 

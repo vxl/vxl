@@ -1,3 +1,5 @@
+// This is mul/clsfy/clsfy_builder_1d.cxx
+#include "clsfy_builder_1d.h"
 //:
 // \file
 // \brief Describe an abstract classifier builder for scalar data
@@ -5,8 +7,6 @@
 
 //=======================================================================
 
-#include <clsfy/clsfy_builder_1d.h>
-#include <vcl_cstdlib.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 

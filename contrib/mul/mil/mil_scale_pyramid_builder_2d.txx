@@ -1,10 +1,11 @@
+// This is mul/mil/mil_scale_pyramid_builder_2d.txx
 #ifndef mil_scale_pyramid_builder_2d_txx_
 #define mil_scale_pyramid_builder_2d_txx_
 //: \file
 //  \brief Build gaussian image pyramids at any scale separation
 //  \author Ian Scott
 
-#include <mil/mil_scale_pyramid_builder_2d.h>
+#include "mil_scale_pyramid_builder_2d.h"
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vcl_string.h>

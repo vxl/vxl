@@ -1,4 +1,5 @@
-#include <rrel/rrel_muse_table.h>
+// This is rpl/rrel/rrel_muse_table.cxx
+#include "rrel_muse_table.h"
 #include <rrel/rrel_misc.h>
 #include <vnl/vnl_math.h>
 
@@ -147,7 +148,7 @@ rrel_muse_table_print( vcl_ostream& ostr,
                        const rrel_muse_table& table )
 {
   ostr << "rrel_muse_table:\n";
-  for( int n=2; n<=table.get_max_stored(); ++n ) {
+  for ( int n=2; n<=table.get_max_stored(); ++n ) {
     rrel_muse_table_print( ostr, table, n );
   }
 }

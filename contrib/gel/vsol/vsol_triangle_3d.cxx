@@ -1,5 +1,5 @@
-#include <vsol/vsol_triangle_3d.h>
-
+// This is gel/vsol/vsol_triangle_3d.cxx
+#include "vsol_triangle_3d.h"
 //:
 //  \file
 

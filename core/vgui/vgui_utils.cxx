@@ -1,18 +1,14 @@
 // This is oxl/vgui/vgui_utils.cxx
-
+#include "vgui_utils.h"
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 // \date   Oct 99
 // \brief  See vgui_utils.h for a description of this file.
 
-#include "vgui_utils.h"
-
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
 #include <vcl_iostream.h>
-#include <vcl_algorithm.h>
 
 #include <vul/vul_sprintf.h>
 

@@ -1,5 +1,5 @@
 // This is mul/clsfy/clsfy_binary_threshold_1d_builder.cxx
-
+#include "clsfy_binary_threshold_1d_builder.h"
 //:
 // \file
 // \author dac
@@ -9,7 +9,6 @@
 // Modifications
 // \endverbatim
 
-#include <clsfy/clsfy_binary_threshold_1d_builder.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>

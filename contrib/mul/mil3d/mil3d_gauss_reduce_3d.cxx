@@ -1,9 +1,10 @@
+// This is mul/mil3d/mil3d_gauss_reduce_3d.cxx
+#include "mil3d_gauss_reduce_3d.h"
 //:
 //  \file
 //  \brief Functions to smooth and sub-sample image in one direction
 //  \author Tim Cootes
 
-#include <mil3d/mil3d_gauss_reduce_3d.h>
 #include <mil/mil_gauss_reduce_2d.h>
 
 

@@ -1,9 +1,10 @@
+// This is mul/mbl/mbl_histogram.cxx
+#include "mbl_histogram.h"
 //:
 // \file
 // \brief Simple object to build histogram from supplied data.
 // \author Tim Cootes
 
-#include <mbl/mbl_histogram.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_vector_io.h>
@@ -165,7 +166,7 @@ bool mbl_histogram::write_probabilities(const char* path)
 vcl_ostream& operator<<(vcl_ostream& os, const mbl_histogram& histo)
 {
   histo.print_summary(os);
-  return(os);
+  return os;
 }
 
   //: Stream output operator for class reference

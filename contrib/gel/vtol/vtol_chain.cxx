@@ -1,9 +1,9 @@
-#include <vtol/vtol_chain.h>
-#include <vcl_algorithm.h>
-#include <vcl_cassert.h>
-
+// This is gel/vtol/vtol_chain.cxx
+#include "vtol_chain.h"
 //:
 //  \file
+
+#include <vcl_cassert.h>
 
 //***************************************************************************
 // Initialization

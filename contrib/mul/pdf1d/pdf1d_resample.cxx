@@ -1,11 +1,11 @@
+// This is mul/pdf1d/pdf1d_resample.cxx
+#include "pdf1d_resample.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Select random sample of data with replacement.
 
 #include <mbl/mbl_mz_random.h>
-
-#include <pdf1d/pdf1d_resample.h>
 
 // Object used to do sampling
 static mbl_mz_random pdf1d_resample_mz_random;

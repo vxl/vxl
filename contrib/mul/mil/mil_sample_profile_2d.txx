@@ -1,11 +1,11 @@
+// This is mul/mil/mil_sample_profile_2d.txx
 #ifndef mil_sample_profile_2d_txx_
 #define mil_sample_profile_2d_txx_
-
 //: \file
 //  \brief Profile sampling functions for 2D images
 //  \author Tim Cootes
 
-#include <mil/mil_sample_profile_2d.h>
+#include "mil_sample_profile_2d.h"
 #include <mil/mil_bilin_interp_2d.h>
 #include <vnl/vnl_vector.h>
 

@@ -1,4 +1,5 @@
-#include <vsrl/vsrl_window_accumulator.h>
+// This is gel/vsrl/vsrl_window_accumulator.cxx
+#include "vsrl_window_accumulator.h"
 #include <vcl_cassert.h>
 #include <vsrl/vsrl_parameters.h>
 

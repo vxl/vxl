@@ -1,5 +1,5 @@
-#include <osl/osl_edge_detector_params.h>
-
+// This is oxl/osl/osl_edge_detector_params.cxx
+#include "osl_edge_detector_params.h"
 //:
 //  \file
 

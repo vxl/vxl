@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 
-#include <vgel/vgel_kl_params.h>
+#include "vgel_kl_params.h"
 
 vgel_kl_params::vgel_kl_params()
 {

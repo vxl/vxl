@@ -1,9 +1,10 @@
+// This is mul/mbl/mbl_sum_1d.cxx
+#include "mbl_sum_1d.h"
 //:
 // \file
 // \brief Computes sum and mean of 1D variable.
 // \author Tim Cootes
 
-#include <mbl/mbl_sum_1d.h>
 #include <vcl_cmath.h>
 
 mbl_sum_1d::mbl_sum_1d()
@@ -29,8 +30,8 @@ const double MAX_ERROR = 1.0e-8;
 //: Test for equality
 bool mbl_sum_1d::operator==(const mbl_sum_1d& s) const
 {
-  return (n_obs_==s.nObs() &&
-          vcl_fabs(sum_-s.sum())<MAX_ERROR);
+  return n_obs_==s.nObs() &&
+         vcl_fabs(sum_-s.sum())<MAX_ERROR;
 }
 
 //: Version number for I/O
@@ -81,7 +82,7 @@ void mbl_sum_1d::print_summary(vcl_ostream& os) const
 vcl_ostream& operator<<(vcl_ostream& os, const mbl_sum_1d& stats)
 {
   stats.print_summary(os);
-  return(os);
+  return os;
 }
 
   //: Stream output operator for class reference

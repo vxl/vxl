@@ -1,6 +1,5 @@
-// This is ./gel/vsol/vsol_polygon_3d.cxx
-#include <vsol/vsol_polygon_3d.h>
-
+// This is gel/vsol/vsol_polygon_3d.cxx
+#include "vsol_polygon_3d.h"
 //:
 // \file
 

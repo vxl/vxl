@@ -1,4 +1,5 @@
-#include <vgel/vgel_kl.h>
+// This is gel/vgel/vgel_kl.cxx
+#include "vgel_kl.h"
 
 #include <vxl_config.h>
 #include <vil/vil_byte.h>
@@ -218,7 +219,7 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image &image)
     return tab_mono;
   }
   else if (vil_pixel_format(image)==VIL_UINT16)
-  {   
+  {
     int w=image.width();
     int h=image.height();
     KLT_PixelType* tab_mono=new KLT_PixelType[w*h];

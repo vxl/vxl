@@ -1,4 +1,5 @@
-#include <vmal/vmal_lines_correlation.h>
+// This is gel/vmal/vmal_lines_correlation.cxx
+#include "vmal_lines_correlation.h"
 
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3x3.h>
@@ -28,7 +29,7 @@ double vmal_lines_correlation::find_min_corr(vnl_double_3 &line0p, vnl_double_3 
   double res, min_res=-1.0;
   int i;
   vnl_double_3 min_trans;
-  for(i=-_delta;i<=_delta;i++)
+  for (i=-_delta;i<=_delta;i++)
   {
     res=lines_correlation(line0p, line0q,
                   line1p, line1q,
@@ -51,7 +52,6 @@ double vmal_lines_correlation::lines_correlation(vnl_double_3 &line0_p, vnl_doub
                                                  vil_memory_image_of<vil_byte> &image1,
                                                  vnl_double_3 &trans, int bias)
 {
-
   //compute the director vector of the segments
   vnl_double_2 tan0(line0_q[0]-line0_p[0], line0_q[1]-line0_p[1]);
 //vnl_double_2 tan1(line1_q[0]-line1_p[0], line1_q[1]-line1_p[1]);
@@ -105,7 +105,7 @@ double vmal_lines_correlation::lines_correlation(vnl_double_3 &line0_p, vnl_doub
         sum+=vcl_abs(value0-value1);
     }
 
-  return (sum/(num_pixel_height*num_pixel_height));
+  return sum/(num_pixel_height*num_pixel_height);
 }
 
 bool vmal_lines_correlation::interpol_pixel(vnl_double_3 &pixel0, vnl_double_3 &pixel1,

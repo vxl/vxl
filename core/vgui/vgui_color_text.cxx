@@ -1,5 +1,5 @@
-// This is ./oxl/vgui/vgui_color_text.cxx
-
+// This is oxl/vgui/vgui_color_text.cxx
+#include "vgui_color_text.h"
 //:
 // \file
 // \author K.Y.McGaul
@@ -10,7 +10,6 @@
 //    25-FEB-2000 K.Y.McGaul - Initial version.
 // \endverbatim
 
-#include "vgui_color_text.h"
 #include <vcl_cstdio.h>
 #include <vcl_iostream.h>
 #include <vgui/vgui_macro.h>

@@ -1,8 +1,8 @@
-
+// This is gel/vsrl/vsrl_parameters.cxx
+#include "vsrl_parameters.h"
 //:
 //  \file
 
-#include <vsrl/vsrl_parameters.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_cstring.h> // for strcmp()
@@ -15,7 +15,7 @@ vsrl_parameters* vsrl_parameters::_instance = 0;
 
 vsrl_parameters* vsrl_parameters::instance()
 {
-  if(vsrl_parameters::_instance == 0){
+  if (vsrl_parameters::_instance == 0){
     vsrl_parameters::_instance = new vsrl_parameters;
   }
 
@@ -80,47 +80,47 @@ void vsrl_parameters::load(char *filename)
   char tag[512];
   float val;
 
-  while(!file.eof()){
+  while (!file.eof()){
 
     file >> tag;
     file >> val;
 
-    if(!vcl_strcmp(tag,"correlation_range")){
+    if (!vcl_strcmp(tag,"correlation_range")){
       vcl_cout << "setting correlation_range to " << val << vcl_endl;
       this->correlation_range=(int)val;
     }
 
-    if(!vcl_strcmp(tag,"inner_cost")){
+    if (!vcl_strcmp(tag,"inner_cost")){
       vcl_cout << "setting inner_cost to " << val << vcl_endl;
       this->inner_cost=(double)val;
     }
 
-    if(!vcl_strcmp(tag,"outer_cost")){
+    if (!vcl_strcmp(tag,"outer_cost")){
       vcl_cout << "setting outer_cost to " << val << vcl_endl;
       this->outer_cost=(double)val;
     }
 
-    if(!vcl_strcmp(tag,"continuity_cost")){
+    if (!vcl_strcmp(tag,"continuity_cost")){
       vcl_cout << "setting continuity_cost to " << val << vcl_endl;
       this->continuity_cost=(double)val;
     }
 
-    if(!vcl_strcmp(tag,"correlation_window_width")){
+    if (!vcl_strcmp(tag,"correlation_window_width")){
       vcl_cout << "setting correlation_window_width to " << val << vcl_endl;
       this->correlation_window_width=(int)val;
     }
 
-    if(!vcl_strcmp(tag,"correlation_window_height")){
+    if (!vcl_strcmp(tag,"correlation_window_height")){
       vcl_cout << "setting correlation_window_height to " << val << vcl_endl;
       this->correlation_window_height=(int)val;
     }
 
-    if(!vcl_strcmp(tag,"bias_cost")){
+    if (!vcl_strcmp(tag,"bias_cost")){
       vcl_cout << "setting bias_cost to " << val << vcl_endl;
       this->bias_cost=(double)val;
     }
 
-    if(!vcl_strcmp(tag,"common_intensity_diff")){
+    if (!vcl_strcmp(tag,"common_intensity_diff")){
       vcl_cout << "setting common_intensity_diff to " << val << vcl_endl;
       this->common_intensity_diff=(double)val;
     }

@@ -1,11 +1,11 @@
+// This is mul/mil/algo/mil_algo_exp_filter_2d.txx
 #ifndef mil_algo_exp_filter_2d_txx_
 #define mil_algo_exp_filter_2d_txx_
-
 //: \file
 //  \brief Apply exponential filter to a 2D image
 //  \author Tim Cootes
 
-#include <mil/algo/mil_algo_exp_filter_2d.h>
+#include "mil_algo_exp_filter_2d.h"
 #include <mil/algo/mil_algo_exp_filter_1d.h>
 
 

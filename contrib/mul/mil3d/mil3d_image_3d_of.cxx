@@ -1,8 +1,9 @@
+// This is mul/mil3d/mil3d_image_3d_of.cxx
+#include "mil3d_image_3d_of.h"
 //: \file
 //  \brief Specialisations of is_a() function
 //  \author Graham Vincent
 
-#include <mil3d/mil3d_image_3d_of.h>
 #include <vil/vil_byte.h>
  
 // Specialise the is_a() for vil_byte

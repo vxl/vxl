@@ -1,9 +1,10 @@
+// This is mul/vpdfl/vpdfl_calc_mean_var.cxx
+#include "vpdfl_calc_mean_var.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Calculate mean and variance of multivariate data.
 
-#include <vpdfl/vpdfl_calc_mean_var.h>
 #include <mbl/mbl_data_array_wrapper.h>
 
 //: Compute mean and variance of data

@@ -1,5 +1,5 @@
 // This is oxl/vgui/vgui_image_renderer.cxx
-
+#include "vgui_image_renderer.h"
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -13,10 +13,7 @@
 //   08-AUG-2000 Marko Bacic, Oxford RRG -- Minor changes
 // \endverbatim
 
-#include "vgui_image_renderer.h"
-
 #include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 
 #include <vgui/vgui_gl.h>

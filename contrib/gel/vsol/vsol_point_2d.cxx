@@ -1,6 +1,5 @@
-// This is ./gel/vsol/vsol_point_2d.cxx
+// This is gel/vsol/vsol_point_2d.cxx
 #include "vsol_point_2d.h"
-
 //:
 // \file
 

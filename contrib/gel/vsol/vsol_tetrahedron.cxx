@@ -1,7 +1,7 @@
+// This is gel/vsol/vsol_tetrahedron.cxx
+#include "vsol_tetrahedron.h"
 //:
 //  \file
-
-#include "vsol_tetrahedron.h"
 
 //*****************************************************************************
 // External declarations for implementation

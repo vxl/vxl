@@ -1,15 +1,14 @@
-#include <vtol/vtol_block.h>
-
+// This is gel/vtol/vtol_block.cxx
+#include "vtol_block.h"
 //:
 //  \file
 
 #include <vtol/vtol_edge.h>
+#include <vtol/vtol_two_chain.h>
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
-#include <vcl_algorithm.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
-#include <vtol/vtol_two_chain.h>
 
 //***************************************************************************
 // Initialization

@@ -1,15 +1,13 @@
+// This is mul/mil/mil_invert_image_2d.cxx
+#include "mil_invert_image_2d.h"
 //: \file
 //  \brief Function to invert 2d float plane images (black->white, white->black)
 //  \author dac
 
-#include <mil/mil_invert_image_2d.h>
-#include <vcl_cmath.h>
-
-//: creates an inverted version of an input image  
+//: creates an inverted version of an input image
 void mil_invert_image_2d(mil_image_2d_of<float>& dest,
                          const mil_image_2d_of<float>& src)
 {
-
   int n = src.n_planes();
   int nx = src.nx();
   int ny = src.ny();
@@ -19,7 +17,6 @@ void mil_invert_image_2d(mil_image_2d_of<float>& dest,
   int dxstep=dest.xstep();
   int dystep=dest.ystep();
 
-  
   // calculate the max value of the src image
   float max=-10000;
   for (int i=0;i<n;++i)

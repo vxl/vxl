@@ -1,4 +1,5 @@
-#include <mvl/HMatrix2DComputeMLESAC.h>
+// This is oxl/mvl/HMatrix2DComputeMLESAC.cxx
+#include "HMatrix2DComputeMLESAC.h"
 #include <mvl/HomgOperator2D.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_fastops.h>
@@ -13,8 +14,8 @@ HMatrix2DComputeMLESAC::~HMatrix2DComputeMLESAC() {}
 double HMatrix2DComputeMLESAC::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count) {
   double inthresh = 5.99*std_*std_;
   double sse = 0.0;
-  for(unsigned int i = 0; i < residuals.size(); i++) {
-    if(residuals[i] < inthresh) {
+  for (unsigned int i = 0; i < residuals.size(); i++) {
+    if (residuals[i] < inthresh) {
       inlier_list[i] = true;
       sse += residuals[i];
       count++;
@@ -37,7 +38,7 @@ double HMatrix2DComputeMLESAC::calculate_residual(HomgPoint2D& one, HomgPoint2D&
   vnl_double_2 p2 = two.get_double2();
   vcl_cerr << H->transform_to_plane2(one).get_double2() << " : " << two.get_double2() << " : " << r[0] << vcl_endl;
   vcl_cerr << H->transform_to_plane1(two).get_double2() << " : " << one.get_double2() << " : " << r[1] << vcl_endl;
-  if(r[0] < 100.0 && r[1] < 100.0) {
+  if (r[0] < 100.0 && r[1] < 100.0) {
     double t11 = t[0] - t[6]*p2[0];
     double t12 = t[1] - t[7]*p2[0];
     double t13 = - t[6]*p1[0] - t[7]*p1[1] - t[8];

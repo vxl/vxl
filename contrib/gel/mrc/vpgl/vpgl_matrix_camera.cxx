@@ -1,5 +1,5 @@
-#include <vpgl/vpgl_matrix_camera.h>
-
+// This is gel/mrc/vpgl/vpgl_matrix_camera.cxx
+#include "vpgl_matrix_camera.h"
 //:
 //  \file
 

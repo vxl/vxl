@@ -1,6 +1,5 @@
-// This is ./gel/vsol/vsol_spatial_object_3d.cxx
-#include <vsol/vsol_spatial_object_3d.h>
-
+// This is gel/vsol/vsol_spatial_object_3d.cxx
+#include "vsol_spatial_object_3d.h"
 //:
 // \file
 

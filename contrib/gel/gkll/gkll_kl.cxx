@@ -1,4 +1,5 @@
-#include <gkll/gkll_kl.h>
+// This is gel/gkll/gkll_kl.cxx
+#include "gkll_kl.h"
 
 #include <vil/vil_byte.h>
 #include <vil/vil_pixel.h>

@@ -1,13 +1,12 @@
+// This is mul/mil/mil_gaussian_pyramid_builder_2d_general.txx
 #ifndef mil_gaussian_pyramid_builder_2d_general_txx_
 #define mil_gaussian_pyramid_builder_2d_general_txx_
-
 //: \file
 //  \brief Build gaussian image pyramids at any scale separation
 //  \author Ian Scott
 
-
-#include <mil/mil_gaussian_pyramid_builder_2d_general.h>
-#include <vcl_cstdlib.h>
+#include "mil_gaussian_pyramid_builder_2d_general.h"
+#include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
@@ -16,7 +15,6 @@
 #include <mil/mil_image_pyramid.h>
 #include <mbl/mbl_gamma.h>
 #include <vsl/vsl_indent.h>
-#include <vcl_cmath.h>
 
 //=======================================================================
 

@@ -1,4 +1,5 @@
-#include <vsrl/vsrl_results_dense_matcher.h>
+// This is gel/vsrl/vsrl_results_dense_matcher.cxx
+#include "vsrl_results_dense_matcher.h"
 #include <vsrl/vsrl_parameters.h>
 
 
@@ -22,7 +23,7 @@ int vsrl_results_dense_matcher::get_disparity(int x, int y)
 
   disp = _disparity(x,y);
 
-  if(!disp){
+  if (!disp){
     // it looks like there was a null assignment
     return 0-1000;
   }
@@ -39,7 +40,7 @@ int vsrl_results_dense_matcher::get_assignment(int x, int y)
 
   int disp = this->get_disparity(x,y);
 
-  if(disp > 0-999){
+  if (disp > 0-999){
     return x+disp;
   }
 

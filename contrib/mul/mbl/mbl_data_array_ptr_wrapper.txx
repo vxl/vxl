@@ -1,10 +1,10 @@
+// This is mul/mbl/mbl_data_array_ptr_wrapper.txx
 #ifndef mbl_data_array_ptr_wrapper_txx_
 #define mbl_data_array_ptr_wrapper_txx_
-
 //:
 //  \file
 
-#include <mbl/mbl_data_array_ptr_wrapper.h>
+#include "mbl_data_array_ptr_wrapper.h"
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
@@ -79,8 +79,7 @@ const T& mbl_data_array_ptr_wrapper<T>::current()
 template<class T>
 bool mbl_data_array_ptr_wrapper<T>::next()
 {
-  index_++;
-  return (index_<n_);
+  return ++index_<n_;
 }
 
 //: Return current index

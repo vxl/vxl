@@ -1,6 +1,5 @@
-// This is ./gel/vsol/vsol_rectangle_2d.cxx
-#include <vsol/vsol_rectangle_2d.h>
-
+// This is gel/vsol/vsol_rectangle_2d.cxx
+#include "vsol_rectangle_2d.h"
 //:
 // \file
 

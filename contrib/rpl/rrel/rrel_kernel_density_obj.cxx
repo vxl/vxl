@@ -1,4 +1,5 @@
-#include <rrel/rrel_kernel_density_obj.h>
+// This is rpl/rrel/rrel_kernel_density_obj.cxx
+#include "rrel_kernel_density_obj.h"
 #include <rrel/rrel_muset_obj.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
@@ -115,7 +116,7 @@ double
 rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter res_end,
                                    double prior_scale) const
 {
-  unsigned int n = res_end - res_begin;
+  unsigned long n = res_end - res_begin;
   double scale = 1.0;
 
   switch ( scale_type_ ) {
@@ -166,7 +167,7 @@ rrel_kernel_density_obj::kernel_density(vect_const_iter res_begin,
                                         double h) const
 {
   double f=0;
-  unsigned int n = res_end - res_begin;
+  unsigned long n = res_end - res_begin;
   for ( ; res_begin!= res_end; ++res_begin ) {
     f += kernel_function( ( *res_begin - x ) / h );
   }

@@ -1,12 +1,10 @@
-// This is ./oxl/vgui/vgui_menu.cxx
-
+// This is oxl/vgui/vgui_menu.cxx
+#include "vgui_menu.h"
 //: 
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  See vgui_menu.h for a description of this file.
 
-#include "vgui_menu.h"
-#include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <vgui/vgui_command.h>
 

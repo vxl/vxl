@@ -1,5 +1,6 @@
+// This is mul/clsfy/clsfy_rbf_svm_smo_1_builder.cxx
 //  Copyright: (C) 2001 British Telecommunications plc.
-
+#include "clsfy_rbf_svm_smo_1_builder.h"
 //:
 // \file
 // \brief Implement an interface to SMO algorithm SVM builder and additional logic
@@ -8,12 +9,8 @@
 
 //=======================================================================
 
-#include "clsfy_rbf_svm_smo_1_builder.h"
 #include <clsfy/clsfy_smo_1.h>
 #include <vcl_string.h>
-#include <vcl_sstream.h>
-#include <vcl_iomanip.h>
-#include <vcl_limits.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>

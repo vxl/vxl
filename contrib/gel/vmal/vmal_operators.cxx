@@ -1,6 +1,8 @@
-#include <vmal/vmal_operators.h>
+// This is gel/vmal/vmal_operators.cxx
+#include "vmal_operators.h"
 #include <vcl_cmath.h>
 #include <vnl/vnl_double_2.h>
+
 vmal_operators::vmal_operators()
 {
 }
@@ -23,12 +25,12 @@ double vmal_operators::project_point(double x0,double y0,
   double n1=bx-ax;
   double n2=by-ay;
   double norm=n1*n1+n2*n2;
-  if(norm!=0)
+  if (norm!=0)
   {
     double resy=-(ax*n1*n2-ay*n1*n1-x0*n1*n2-y0*n2*n2)/norm;
     double resx= (ax*n2*n2-ay*n1*n2+x0*n1*n1+y0*n1*n2)/norm;
 
-    if(((ax-resx)*(bx-resx)+(ay-resy)*(by-resy))>0)
+    if (((ax-resx)*(bx-resx)+(ay-resy)*(by-resy))>0)
     {
       *x=-1;
       *y=-1;

@@ -1,10 +1,9 @@
+// This is mul/mil/mil_gauss_reduce_2d.cxx
+#include "mil_gauss_reduce_2d.h"
 //:
 //  \file
 //  \brief Functions to smooth and sub-sample image in one direction
 //  \author Tim Cootes
-
-#include <mil/mil_gauss_reduce_2d.h>
-
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
@@ -258,8 +257,6 @@ void mil_gauss_reduce_121_2d(float* dest_im,
     }
   }
 }
-
-
 
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y

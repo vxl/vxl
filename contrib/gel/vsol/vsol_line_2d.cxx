@@ -1,5 +1,5 @@
 // This is gel/vsol/vsol_line_2d.cxx
-#include <vsol/vsol_line_2d.h>
+#include "vsol_line_2d.h"
 //:
 // \file
 

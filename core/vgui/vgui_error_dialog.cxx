@@ -1,12 +1,9 @@
-// This is ./oxl/vgui/vgui_error_dialog.cxx
-
+// This is oxl/vgui/vgui_error_dialog.cxx
+#include "vgui_error_dialog.h"
 //:
 // \file
 // \author VGG, Oxford University
 // \brief  See vgui_error_dialog.h for a description of this file.
-
-
-#include "vgui_error_dialog.h"
 
 #include <vgui/vgui_dialog.h>
 

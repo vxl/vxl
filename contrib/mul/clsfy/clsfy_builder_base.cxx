@@ -1,5 +1,6 @@
+// This is mul/clsfy/clsfy_builder_base.cxx
 // Copyright: (C) 2000 Britsh Telecommunications plc
-
+#include "clsfy_builder_base.h"
 //:
 // \file
 // \brief Implement bits of an abstract classifier builder
@@ -13,8 +14,6 @@
 
 //=======================================================================
 
-#include "clsfy_builder_base.h"
-#include <vcl_cstdlib.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 

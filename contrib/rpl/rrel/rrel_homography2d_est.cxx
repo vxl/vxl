@@ -1,4 +1,5 @@
-#include <rrel/rrel_homography2d_est.h>
+// This is rpl/rrel/rrel_homography2d_est.cxx
+#include "rrel_homography2d_est.h"
 
 #include <vgl/vgl_homg_point_2d.h>
 #include <vnl/vnl_vector.h>
@@ -61,7 +62,7 @@ rrel_homography2d_est :: fit_from_minimal_set( const vcl_vector<int>& point_indi
   vnl_matrix< double > A(9, 9, 0.0);
   assert( point_indices.size() == 4 );
 
-  for( int i=0; i<4; ++i ) {
+  for ( int i=0; i<4; ++i ) {
     int loc = point_indices[ i ];
     A( 2*i, 0 ) = A( 2*i+1, 3 ) = from_pts_[ loc ][ 0 ] * to_pts_[ loc ][ 2 ];
     A( 2*i, 1 ) = A( 2*i+1, 4 ) = from_pts_[ loc ][ 1 ] * to_pts_[ loc ][ 2 ];

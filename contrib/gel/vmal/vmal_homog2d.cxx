@@ -1,7 +1,6 @@
-#include <vmal/vmal_homog2d.h>
-
+// This is gel/vmal/vmal_homog2d.cxx
+#include "vmal_homog2d.h"
 #include <vnl/algo/vnl_svd.h>
-
 
 vmal_homog2d::vmal_homog2d()
 {

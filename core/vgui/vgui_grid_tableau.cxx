@@ -1,5 +1,5 @@
-// This is ./oxl/vgui/vgui_grid_tableau.cxx
-
+// This is oxl/vgui/vgui_grid_tableau.cxx
+#include "vgui_grid_tableau.h"
 //:
 // \file
 // \author  K.Y.McGaul
@@ -11,7 +11,6 @@
 //    20-JAN-2000 K.Y.McGaul - Initial version.
 // \endverbatim
 
-#include "vgui_grid_tableau.h"
 #include <vcl_iostream.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_clear_tableau.h>
@@ -105,7 +104,7 @@ vcl_string vgui_grid_tableau::type_name() const
 float vgui_grid_tableau::get_x(unsigned col_pos)
 {
   if (col_pos < nb_cols)
-    return (col_pos * get_w());
+    return col_pos * get_w();
   else
   {
     vgui_macro_warning << "Error in get_x: col_pos = " << col_pos << ", max = " << nb_cols << vcl_endl;
@@ -122,7 +121,7 @@ float vgui_grid_tableau::get_x(unsigned col_pos)
 float vgui_grid_tableau::get_y(unsigned row_pos)
 {
   if (row_pos < nb_rows)
-    return ((nb_rows - row_pos - 1) * get_h());
+    return (nb_rows - row_pos - 1) * get_h();
   else
   {
     vgui_macro_warning << "Error in get_y: row_pos = " << row_pos << ", max = " << nb_rows << vcl_endl;

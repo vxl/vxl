@@ -1,9 +1,10 @@
+// This is mul/mbl/mbl_stats_1d.cxx
+#include "mbl_stats_1d.h"
 //:
 // \file
 // \brief Simple statistics on a 1D variable.
 // \author Tim Cootes
 
-#include <mbl/mbl_stats_1d.h>
 #include <vcl_cmath.h>
 
 mbl_stats_1d::mbl_stats_1d()
@@ -110,11 +111,11 @@ const double MAX_ERROR = 1.0e-8;
 //: Test for equality
 bool mbl_stats_1d::operator==(const mbl_stats_1d& s) const
 {
-  return (n_obs_==s.nObs() &&
-          vcl_fabs(sum_-s.sum())<MAX_ERROR &&
-          vcl_fabs(sum_sq_-s.sumSq())<MAX_ERROR &&
-          vcl_fabs(min_v_-s.min())<MAX_ERROR &&
-          vcl_fabs(max_v_-s.max())<MAX_ERROR);
+  return n_obs_==s.nObs() &&
+         vcl_fabs(sum_-s.sum())<MAX_ERROR &&
+         vcl_fabs(sum_sq_-s.sumSq())<MAX_ERROR &&
+         vcl_fabs(min_v_-s.min())<MAX_ERROR &&
+         vcl_fabs(max_v_-s.max())<MAX_ERROR;
 }
 
 //: Version number for I/O
@@ -176,7 +177,7 @@ void mbl_stats_1d::print_summary(vcl_ostream& os) const
 vcl_ostream& operator<<(vcl_ostream& os, const mbl_stats_1d& stats)
 {
   stats.print_summary(os);
-  return(os);
+  return os;
 }
 
   //: Stream output operator for class reference

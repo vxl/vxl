@@ -1,10 +1,10 @@
+// This is tbl/vipl/section/vipl_section_iterator.txx
 #ifndef vipl_section_iterator_txx_
 #define vipl_section_iterator_txx_
-
 //:
 //  \file
 
-#include <vipl/section/vipl_section_iterator.h>
+#include "vipl_section_iterator.h"
 #include <vipl/section/vipl_section_container.h>
 #include <vipl/section/vipl_section_descriptor.h>
 #include <vipl/filter/vipl_filter_abs.h> // for default def of FILTER_IMPTR_INC_REFCOUNT
@@ -21,8 +21,8 @@ template < class DataType >
     hscontainer(containr),
     hsincr_count(0)
 {
-  if(desc) FILTER_IMPTR_INC_REFCOUNT(desc);
-  if(containr) FILTER_IMPTR_INC_REFCOUNT(containr);
+  if (desc) FILTER_IMPTR_INC_REFCOUNT(desc);
+  if (containr) FILTER_IMPTR_INC_REFCOUNT(containr);
 #if 0
   vcl_cerr << "Warning: called unimplemented constructor with signature "
            << "vipl_section_descriptor< DataType >* desc, vipl_section_container< DataType >* containr\n";

@@ -1,4 +1,5 @@
-#include <vsrl/vsrl_3d_output.h>
+// This is gel/vsrl/vsrl_3d_output.cxx
+#include "vsrl_3d_output.h"
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_fstream.h>

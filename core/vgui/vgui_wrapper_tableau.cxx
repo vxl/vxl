@@ -1,12 +1,9 @@
-// This is ./oxl/vgui/vgui_wrapper_tableau.cxx
-
+// This is oxl/vgui/vgui_wrapper_tableau.cxx
+#include "vgui_wrapper_tableau.h"
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  See vgui_wrapper_tableau.h for a description of this file.
-
-
-#include "vgui_wrapper_tableau.h"
 
 #include <vcl_iostream.h>
 

@@ -1,4 +1,5 @@
-#include <rrel/rrel_cauchy_obj.h>
+// This is rpl/rrel/rrel_cauchy_obj.cxx
+#include "rrel_cauchy_obj.h"
 
 #include <vcl_cmath.h>
 

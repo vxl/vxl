@@ -1,4 +1,5 @@
-#include <rrel/rrel_muset_obj.h>
+// This is rpl/rrel/rrel_muset_obj.cxx
+#include "rrel_muset_obj.h"
 
 #include <rrel/rrel_muse_table.h>
 
@@ -8,7 +9,7 @@
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 
-rrel_muset_obj::rrel_muset_obj( int max_n, 
+rrel_muset_obj::rrel_muset_obj( int max_n,
                                 bool use_sk_refine )
   : use_sk_refine_( use_sk_refine ), muse_type_( RREL_MUSE_TRIMMED ),
     table_owned_(true)
@@ -36,9 +37,8 @@ rrel_muset_obj::rrel_muset_obj( rrel_muse_table* table,
 
 rrel_muset_obj::~rrel_muset_obj()
 {
-  if (table_owned_) {
+  if (table_owned_)
     delete table_;
-  }
 }
 
 double
@@ -46,7 +46,7 @@ rrel_muset_obj::fcn( vect_const_iter begin, vect_const_iter end,
                      vect_const_iter /*scale begin*/,
                      vnl_vector<double>* /*param_vector*/ ) const
 {
-  double sigma; 
+  double sigma;
   int best_k;
   internal_fcn( begin, end, sigma, best_k );
   return sigma;
@@ -82,7 +82,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
   // Calculate the absolute residuals and sort them.
   vcl_vector<double> abs_residuals;
   abs_residuals.reserve( end - begin );
-  for( ; begin != end; ++begin ) {
+  for ( ; begin != end; ++begin ) {
     abs_residuals.push_back( vnl_math_abs( *begin ) );
   }
   vcl_sort( abs_residuals.begin(), abs_residuals.end() );
@@ -110,12 +110,12 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     //  Find the best k
     for ( double frac=min_frac_; frac<=max_frac_+0.00001; frac+=frac_inc_ ) {
       unsigned int k = vnl_math_rnd( frac*num_residuals );
-      if( k>num_residuals ) k=num_residuals;
-      if( k<=0 ) k=1;
-      if ( table_->expected_kth(k, num_residuals) / 
+      if ( k>num_residuals ) k=num_residuals;
+      if ( k<=0 ) k=1;
+      if ( table_->expected_kth(k, num_residuals) /
            table_->standard_dev_kth(k, num_residuals) < min_exp_kth_to_stddev_ratio )
         {
-          if( notwarned ) {
+          if ( notwarned ) {
             vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at \n"
                      << "value of k that lead to unstable estimates\n";
             notwarned = false;
@@ -151,7 +151,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     else {
       // vcl_cout << "sk refinement\n";
       unsigned int new_n = best_k;
-      while( new_n<num_residuals && abs_residuals[new_n] < 2.5*best_sk )
+      while ( new_n<num_residuals && abs_residuals[new_n] < 2.5*best_sk )
         ++new_n;
       // vcl_cout << "New n = " << new_n << "\n";
       sigma_est = best_sum / table_ -> muset_divisor(best_k, new_n);
@@ -169,12 +169,12 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     //  Find the best k
     for ( double frac=min_frac_; frac<=max_frac_+0.00001; frac+=frac_inc_ ) {
       unsigned int k = vnl_math_rnd( frac*num_residuals );
-      if( k>num_residuals ) k=num_residuals;
-      if( k<=0 ) k=1;
-      if ( table_->expected_kth(k, num_residuals) / 
+      if ( k>num_residuals ) k=num_residuals;
+      if ( k<=0 ) k=1;
+      if ( table_->expected_kth(k, num_residuals) /
            table_->standard_dev_kth(k, num_residuals) < min_exp_kth_to_stddev_ratio )
         {
-          if( notwarned ) {
+          if ( notwarned ) {
             vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at \n"
                      << "value of k that lead to unstable estimates\n";
             notwarned = false;
@@ -185,8 +185,8 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
       for ( unsigned int i=prev_k; i<k; ++i ) {
         sum_sq_residuals += vnl_math_sqr( abs_residuals[i] );
       }
-      sk = vcl_sqrt( sum_sq_residuals 
-                     / table_->muset_sq_divisor(k, num_residuals) );      
+      sk = vcl_sqrt( sum_sq_residuals
+                     / table_->muset_sq_divisor(k, num_residuals) );
       objective = sk * table_->standard_dev_kth(k, num_residuals) /
         table_->expected_kth(k, num_residuals);
 
@@ -211,10 +211,10 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     else {
       // vcl_cout << "sk refinement\n";
       unsigned int new_n = best_k;
-      while( new_n<num_residuals && abs_residuals[new_n] < 2.5*best_sk )
+      while ( new_n<num_residuals && abs_residuals[new_n] < 2.5*best_sk )
         ++new_n;
       // vcl_cout << "New n = " << new_n << "\n";
-      sigma_est = vcl_sqrt( best_sum_sq 
+      sigma_est = vcl_sqrt( best_sum_sq
                             / table_->muset_sq_divisor(best_k, new_n) );
     }
     break;
@@ -226,11 +226,11 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     for ( double frac=min_frac_; frac<=max_frac_+0.00001; frac+=frac_inc_ ) {
       int kk = vnl_math_rnd( frac*num_residuals );
       unsigned int k = ( kk <= 0 )  ? 1 : kk;
-      if( k>num_residuals ) k=num_residuals;
-      if ( table_->expected_kth(k, num_residuals) / 
+      if ( k>num_residuals ) k=num_residuals;
+      if ( table_->expected_kth(k, num_residuals) /
            table_->standard_dev_kth(k, num_residuals) < min_exp_kth_to_stddev_ratio )
         {
-          if( notwarned ) {
+          if ( notwarned ) {
             vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at \n"
                      << "value of k that lead to unstable estimates\n";
             notwarned = false;
@@ -261,7 +261,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     else {
       // vcl_cout << "sk refinement\n";
       unsigned int new_n = best_k;
-      while( new_n<num_residuals && abs_residuals[new_n] < 2.5*best_sk )
+      while ( new_n<num_residuals && abs_residuals[new_n] < 2.5*best_sk )
         ++new_n;
       // vcl_cout << "New n = " << new_n << "\n";
       sigma_est = abs_residuals[ best_k ] / table_->expected_kth(best_k, new_n);
@@ -269,5 +269,4 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     break;
     }
   }
-
 }

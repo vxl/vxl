@@ -1,3 +1,5 @@
+// This is mul/clsfy/clsfy_smo_base.cxx
+#include "clsfy_smo_base.h"
 //:
 // \file
 // \author Ian Scott
@@ -12,10 +14,6 @@
 // Minimal Optimisation. In Advances in Kernel Methods - Support Vector Learning.
 // B. Scholkopf, C. Burges and A. Smola, MIT Press: 185-208. and other papers.
 
-#include "clsfy_smo_base.h"
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
-#include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 
 // ----------------------------------------------------------------

@@ -7,8 +7,7 @@
 // \author Tim Cootes
 // \brief Base for classes to build pdf1d_pdf objects.
 
-
-#include <pdf1d/pdf1d_builder.h>
+#include "pdf1d_builder.h"
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_data_array_wrapper.h>

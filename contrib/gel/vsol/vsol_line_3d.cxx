@@ -1,6 +1,5 @@
-// This is ./gel/vsol/vsol_line_3d.cxx
-#include <vsol/vsol_line_3d.h>
-
+// This is gel/vsol/vsol_line_3d.cxx
+#include "vsol_line_3d.h"
 //:
 // \file
 
@@ -110,7 +109,7 @@ bool vsol_line_3d::operator==(const vsol_line_3d &other) const
   bool result;
 
   result=this==&other;
-  if(!result)
+  if (!result)
     result=(((*p0_)==(*(other.p0_)))&&((*p1_)==(*(other.p1_))))
       ||(((*p0_)==(*(other.p1_)))&&((*p1_)==(*(other.p0_))));
   return result;
@@ -243,7 +242,7 @@ bool vsol_line_3d::in(const vsol_point_3d_sptr &p) const
   bz=p->z()-p0_->z();
 
   result=(ay*bz-az*by==0)&&(az*bx-ax*bz==0)&&(ax*by-ay*bx==0);
-  if(result) // `p' belongs to the segment
+  if (result) // `p' belongs to the segment
     {
       dot_product=(p->x()-p0_->x())*(p1_->x()-p0_->x())
         +(p->y()-p0_->y())*(p1_->y()-p0_->y())

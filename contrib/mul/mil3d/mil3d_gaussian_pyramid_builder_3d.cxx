@@ -1,8 +1,9 @@
+// This is mul/mil3d/mil3d_gaussian_pyramid_builder_3d.cxx
+#include "mil3d_gaussian_pyramid_builder_3d.h"
 //: \file
 //  \brief Specialisations of is_a() function
 //  \author Tim Cootes
 
-#include <mil3d/mil3d_gaussian_pyramid_builder_3d.h>
 #include <vil/vil_byte.h>
 
 // Specialise the is_a() for vil_byte

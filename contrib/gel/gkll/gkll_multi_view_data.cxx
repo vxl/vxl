@@ -1,4 +1,5 @@
-#include <gkll/gkll_multi_view_data.h>
+// This is gel/gkll/gkll_multi_view_data.cxx
+#include "gkll_multi_view_data.h"
 
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>

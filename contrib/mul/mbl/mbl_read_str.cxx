@@ -1,3 +1,5 @@
+// This is mul/mbl/mbl_read_str.cxx
+#include "mbl_read_str.h"
 //:
 // \file
 //
@@ -12,7 +14,6 @@
 //  1.1   Tim   TC_ version 4-Nov-98
 // ********************************************************************
 
-#include <mbl/mbl_read_str.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
 

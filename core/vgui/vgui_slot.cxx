@@ -1,22 +1,10 @@
 // This is oxl/vgui/vgui_slot.cxx
-
+#include "vgui_slot.h"
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  See vgui_slot.h for a description of this file.
-
-#include "vgui_slot.h"
-
-#include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_set.h>
-#include <vcl_algorithm.h>
-
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_macro.h>
-
+//
 // Implementation notes:
 //
 // [1]
@@ -42,7 +30,16 @@
 // A slot's parent pointer cannot be changed because there is no legitimite
 // use for that.
 
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
+#include <vcl_vector.h>
+#include <vcl_set.h>
 
+#include <vgui/vgui_event.h>
+#include <vgui/vgui_tableau.h>
+#include <vgui/vgui_macro.h>
+
+//:
 // For efficiency (e.g. when posting redraws), the parents of a tableau
 // may be cached in the vgui_slot_data baseclass of vgui_tableau. This
 // macro enables that optimization. If caching is not enabled, parents
@@ -50,12 +47,13 @@
 // which could obviously be quite slow.
 #define cache_parents 1
 
+//:
+// this container holds a single pointer for every impl object.
+// the pointers are cast to and from void* to avoid (a) exposing the
+// implementation class and (b) instantiating an extra class template.
+
 struct vgui_slot_impl
 {
-  // this container holds a single pointer for every impl object.
-  // the pointers are cast to and from void* to avoid (a) exposing the
-  // implementation class and (b) instantiating an extra class template.
-
   // all is stored as a pointer as it must live longer than any static slots
   typedef vcl_set<void *> all_t;
   static all_t* all;

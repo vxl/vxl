@@ -1,4 +1,5 @@
-#include <vmal/vmal_refine_lines.h>
+// This is gel/vmal/vmal_refine_lines.cxx
+#include "vmal_refine_lines.h"
 
 #include <vmal/vmal_operators.h>
 #include <vnl/algo/vnl_svd.h>
@@ -18,7 +19,6 @@ void vmal_refine_lines::refine_lines_f(vnl_double_3 &line0p, vnl_double_3 &line0
                      vnl_double_3 &r_line0p, vnl_double_3 &r_line0q,
                        vnl_double_3 &r_line1p, vnl_double_3 &r_line1q)
 {
-
   vnl_double_3 epi_line1p=F*line0p;
   vnl_double_3 epi_line1q=F*line0q;
   vnl_double_3 epi_line0p=(F.transpose()*line1p);
@@ -34,9 +34,9 @@ void vmal_refine_lines::refine_lines_f(vnl_double_3 &line0p, vnl_double_3 &line0
 
   double alpha,beta;
 
-  if(vmal_operators::line_cross_seg(line1p, line1q,
+  if (vmal_operators::line_cross_seg(line1p, line1q,
                     epi_line1p, inter1p,alpha))
-    if(vmal_operators::line_cross_seg(line1p, line1q,
+    if (vmal_operators::line_cross_seg(line1p, line1q,
                         epi_line1q, inter1q,beta))
     {
       //1 case: the first segment is "included" in the second segment
@@ -53,7 +53,7 @@ void vmal_refine_lines::refine_lines_f(vnl_double_3 &line0p, vnl_double_3 &line0
       r_line1q=inter1q;
     }
   else
-    if(vmal_operators::line_cross_seg(line1p, line1q,
+    if (vmal_operators::line_cross_seg(line1p, line1q,
                         epi_line1q, inter1q, beta))
     {
       //3 case:  the segments share a part.
@@ -67,7 +67,6 @@ void vmal_refine_lines::refine_lines_f(vnl_double_3 &line0p, vnl_double_3 &line0
       r_line1p=inter1p;
       r_line1q=inter1q;
     }
-
 }
 
 // Between two lines in 2 images that are matched, it compute the best lines
@@ -78,7 +77,6 @@ void vmal_refine_lines::refine_lines_max_h(vnl_double_3 &line0p, vnl_double_3 &l
                            vnl_double_3 &r_line0p, vnl_double_3 &r_line0q,
                            vnl_double_3 &r_line1p, vnl_double_3 &r_line1q)
 {
-
   vnl_double_3x3 HI;
   vnl_svd<double> SVD(H);
   HI=SVD.inverse();
@@ -96,8 +94,8 @@ void vmal_refine_lines::refine_lines_max_h(vnl_double_3 &line0p, vnl_double_3 &l
   vnl_double_3 inter1p;
   vnl_double_3 inter1q;
 
-  if(vmal_operators::project_point(h_line1_p,line1p,line1q,inter1p))
-    if(vmal_operators::project_point(h_line1_q,line1p,line1q,inter1q))
+  if (vmal_operators::project_point(h_line1_p,line1p,line1q,inter1p))
+    if (vmal_operators::project_point(h_line1_q,line1p,line1q,inter1q))
     {
       //Case 1
       vmal_operators::project_point(h_line0_p,line0p,line0q,r_line0p);
@@ -108,10 +106,9 @@ void vmal_refine_lines::refine_lines_max_h(vnl_double_3 &line0p, vnl_double_3 &l
       //Case 2
       vmal_operators::project_point(h_line0_p,line0p,line0q,r_line0p);
       r_line1q=inter1q;
-
     }
   else
-    if(vmal_operators::project_point(h_line1_q,line1p,line1q,inter1q))
+    if (vmal_operators::project_point(h_line1_q,line1p,line1q,inter1q))
     {
       //Case 3
       r_line1p=inter1p;
@@ -150,9 +147,9 @@ void vmal_refine_lines::refine_lines_min_h(vnl_double_3 &line0p, vnl_double_3 &l
   vnl_double_3 inter1p;
   vnl_double_3 inter1q;
 
-  if(vmal_operators::project_point(h_line1_p,line1p,line1q,inter1p))
+  if (vmal_operators::project_point(h_line1_p,line1p,line1q,inter1p))
   {
-    if(vmal_operators::project_point(h_line1_q,line1p,line1q,inter1q))
+    if (vmal_operators::project_point(h_line1_q,line1p,line1q,inter1q))
     {
       //Case 1
       r_line1p=inter1p;
@@ -167,7 +164,7 @@ void vmal_refine_lines::refine_lines_min_h(vnl_double_3 &line0p, vnl_double_3 &l
   }
   else
   {
-    if(vmal_operators::project_point(h_line1_q,line1p,line1q,inter1q))
+    if (vmal_operators::project_point(h_line1_q,line1p,line1q,inter1q))
     {
       //Case 3
       vmal_operators::project_point(h_line0_p,line0p,line0q,r_line0p);

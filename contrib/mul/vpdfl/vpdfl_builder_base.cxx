@@ -9,7 +9,7 @@
 // \brief Base for classes to build vpdfl_pdf_base objects.
 
 
-#include <vpdfl/vpdfl_builder_base.h>
+#include "vpdfl_builder_base.h"
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 

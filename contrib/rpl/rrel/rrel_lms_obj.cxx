@@ -1,4 +1,5 @@
-#include <rrel/rrel_lms_obj.h>
+// This is rpl/rrel/rrel_lms_obj.cxx
+#include "rrel_lms_obj.h"
 
 #include <vnl/vnl_math.h>
 
@@ -16,7 +17,6 @@ rrel_lms_obj::rrel_lms_obj( unsigned int num_sam_inst, double inlier_frac )
 rrel_lms_obj::~rrel_lms_obj()
 {
 }
-
 
 
 double
@@ -44,7 +44,7 @@ rrel_lms_obj::fcn( vect_const_iter begin, vect_const_iter end,
 
   vcl_vector<double> sq_res;
   sq_res.reserve( end - begin );
-  for( ; begin != end; ++begin ) {
+  for ( ; begin != end; ++begin ) {
     sq_res.push_back( (*begin) * (*begin) );
   }
 

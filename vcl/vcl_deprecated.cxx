@@ -1,4 +1,5 @@
-#include <vcl_deprecated.h>
+// This is vcl/vcl_deprecated.cxx
+#include "vcl_deprecated.h"
 
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>

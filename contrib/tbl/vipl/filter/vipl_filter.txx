@@ -1,7 +1,10 @@
+// This is tbl/vipl/filter/vipl_filter.txx
 #ifndef vipl_filter_txx_
 #define vipl_filter_txx_
+//:
+// \file
 
-#include <vipl/filter/vipl_filter.h>
+#include "vipl_filter.h"
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h> // for vcl_max and vcl_min
 
@@ -18,9 +21,10 @@ const VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>:
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,int Arity,class PixelItr>
 const VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Filter_Owned VCL_STATIC_CONST_INIT_INT_DEFN( 4 );
 
-// A workhorse constructor for this abstract class. If dst_image (by default)
-// the output will be generated automatically when filtering is about to
-// proceed. (Either way, the filter increments refcount when set and
+//: A workhorse constructor for this abstract class.
+// If dst_image (by default) the output will be generated automatically when
+// filtering is about to proceed.
+// (Either way, the filter increments refcount when set and
 // decrements the refcount of the output when it is destroyed.) Some filters
 // support multiple inputs, if ninputs is >1 then this constructor expects
 // src_img to be the first element pointer to the input (i.e. src_img+1 is
@@ -77,9 +81,9 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int  Arity, c
   }
 }
 
-// A second workhorse constructor for this abstract class. If dst_img is
-// null (by default), the output will be generated automatically when
-// filtering is about to proceed. The filter decrements the refcount of the
+//: A second workhorse constructor for this abstract class.
+// If dst_img is null (by default), the output will be generated automatically
+// when filtering is about to proceed. The filter decrements the refcount of the
 // output when it is destroyed. Some filters support multiple inputs, if
 // ninputs is >1 then this constructor uses non_consecutive input images (with
 // their address in a c_vector, i.e. *(src_img+1) is the location of input
@@ -168,10 +172,11 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   }
   // delete the output and intermediate functions if they are filter-owned
 #if 0
-    if (FILTER_OWNED(hsoutput_state) && hsoutf) {
+    if (FILTER_OWNED(hsoutput_state) && hsoutf)
 #else
-    if (ref_outf()) {
+    if (ref_outf())
 #endif
+    {
       FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
     }
 #endif
@@ -249,6 +254,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     hsoutput_state ^= Filter_Owned;
 }
 
+//:
 // Is the current apply section intersected with the ROA an empty region, if
 // so we should not load it. If its empty there is no guarantee that the
 // section_start and section_end will not overlap.
@@ -290,10 +296,10 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   return 0;
 }
 
-// What is the ``start coordinate for the current apply section. This always
-// leaves a border around the section. (E.g. if there is no ROA this is
-// actual section start + image_boarder_size; remember section iteration
-// overlaps). If the current section is outside the ROA, the section_start
+//: What is the ``start coordinate'' for the current apply section.
+// This always leaves a border around the section. (E.g. if there is no ROA this
+// is actual section start + image_boarder_size;  remember section iteration
+// overlaps).  If the current section is outside the ROA, the section_start
 // and section_end may be equal.
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
@@ -303,10 +309,10 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   else  return start_dst(axis);
 }
 
-// What is the ``start'' coordinate for the current source apply section. This always
-// leaves a border around the section. (E.g. if there is no ROA this is
-// actual section start + image_boarder_size; remember section iteration
-// overlaps). If the current section is outside the ROA, the section_start
+//: What is the ``start'' coordinate for the current source apply section.
+// This always leaves a border around the section. (E.g. if there is no ROA this
+// is actual section start + image_boarder_size;  remember section iteration
+// overlaps).  If the current section is outside the ROA, the section_start
 // and section_end may be equal.
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
@@ -332,13 +338,13 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   // error if reaching this point:
   vcl_cerr << "Warning: called start_src but no valid sections defined. Returning 0\n";
   return 0;
-}  
-    
-    
-// What is the ``start'' coordinate for the current destination apply section. This always
-// leaves a border around the section. (E.g. if there is no ROA this is
-// actual section start + image_boarder_size; remember section iteration
-// overlaps). If the current section is outside the ROA, the section_start
+}
+
+
+//: What is the ``start'' coordinate for the current destination apply section.
+// This always leaves a border around the section. (E.g. if there is no ROA this
+// is actual section start + image_boarder_size;  remember section iteration
+// overlaps).  If the current section is outside the ROA, the section_start
 // and section_end may be equal.
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
@@ -372,10 +378,10 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
                      ::start(int axis, int /*other_axis_value*/) const
 { return start(axis); }
 
-// What is the ``stopping'' coordinate for the current apply section This
-// always leaves a border around the section. (E.g. if there is no ROA this
-// is actual section end - image_boarder_size; remember section iteration
-// overlaps). If the current section is outside the ROA, the section_start
+//: What is the ``stopping'' coordinate for the current apply section.
+// This always leaves a border around the section. (E.g. if there is no ROA this
+// is actual section end - image_boarder_size;  remember section iteration
+// overlaps).  If the current section is outside the ROA, the section_start
 // and section_end may be equal.
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
@@ -385,11 +391,11 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   else  return stop_dst(axis);
 }
 
-    
-// What is the ``stopping'' coordinate for the current apply section This
-// always leaves a border around the section. (E.g. if there is no ROA this
-// is actual section end - image_boarder_size; remember section iteration
-// overlaps). If the current section is outside the ROA, the section_start
+
+//: What is the ``stopping'' coordinate for the current apply section.
+// This always leaves a border around the section. (E.g. if there is no ROA this
+// is actual section end - image_boarder_size;  remember section iteration
+// overlaps).  If the current section is outside the ROA, the section_start
 // and section_end may be equal.
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
@@ -414,11 +420,11 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   return 0;
 }
 
-  
-// What is the ``stopping'' coordinate for the current apply section This
-// always leaves a border around the section. (E.g. if there is no ROA this
-// is actual section end - image_boarder_size; remember section iteration
-// overlaps). If the current section is outside the ROA, the section_start
+
+//: What is the ``stopping'' coordinate for the current apply section.
+// This always leaves a border around the section. (E.g. if there is no ROA this
+// is actual section end - image_boarder_size;  remember section iteration
+// overlaps).  If the current section is outside the ROA, the section_start
 // and section_end may be equal.
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
@@ -489,8 +495,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   return inf()[index];
 }
 
-// Return a ref to the input ``data object'' at the provided index
-// (dereferences the internal pointer).
+//: Return a ref to the input ``data object'' at the provided index.
+// (dereferences the internal pointer)
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   const ImgIn& vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr>
                            ::in_data(int index) const
@@ -507,8 +513,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
    return *inf()[0];
 }
 
-// Put the given pointer into output data at the given index location
-// Decrements old putput refcount, Inc's newobjects refcount
+//: Put the given pointer into output data at the given index location.
+// Decrements old putput refcount, increments newobjects refcount.
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   bool vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                         ::put_out_data_ptr(ImgOut* fpointer , int /*index*/)
@@ -526,8 +532,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   return true;
 }
 
-// Get ptr to specified output data item given index location. Inc's refcount
-// before returning ptr
+//: Get ptr to specified output data item given index location.
+// Inc's refcount before returning ptr.
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   ImgOut* vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                      ::out_data_ptr(int /*index*/)
@@ -542,7 +548,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   }
 }
 
-// Get ref to specified output data item given index location
+//: Get ref to specified output data item given index location.
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
    ImgOut& vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr>
                             ::out_data(int /*index*/) const
@@ -555,9 +561,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   }
 }
 
-// This is the function that gets called for every iteration of the filtering
-// operation, before the actual filtering routine. Can be used for
-// normalization or such. Default op is noop
+//: This function gets called for every iteration of the filtering operation, before the actual filtering routine.
+// Can be used for input normalization or such. Default op is noop.
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   bool vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                       ::preop()
@@ -565,9 +570,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   return true;
 }
 
-// This is the function that gets called after every iteration of the actual
-// filtering routine. Can be used for post_processing normalization or
-// cleaning up the edges. Default op is noop
+//: This function gets called after every iteration of the actual filtering routine.
+// Can be used for post_processing normalization or cleaning up the edges. Default op is noop.
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   bool vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                       ::postop()
@@ -575,7 +579,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   return true;
 }
 
-// This is the method that implements the basic form for the filtering operation.
+//: This is the method that implements the basic form for the filtering operation.
 // For each section, this method runs before section_applyop. Default at this
 // level is noop. (lower level class redefine it to ``fill'' the image borders).
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
@@ -585,7 +589,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   return true;
 }
 
-// For each section, this method runs after section_applyop. Default is noop
+//: For each section, this method runs after section_applyop.
+// Default is noop
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   bool vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                      ::section_postop()
@@ -593,10 +598,10 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   return true;
 }
 
-// This is the method that implements the filtering inside each section. You
-// must supply this function
+//: This is the method that implements the filtering inside each section.
+// You must supply this function.
 // If a section is pointer safe, then this function is called to filter
-// it. default is just to call the non-pointer section_applyop
+// it. Default is just to call the non-pointer section_applyop
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   bool vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                       ::ptr_based_section_applyop()
@@ -604,6 +609,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   return section_applyop();
 }
 
+//:
 // Before this function can run to completion, all arguments must be set via
 // the respective ``put_*'' functions (or be supplied at
 // construction time). Particularly important is the filter input. The
@@ -648,6 +654,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   return check_params_1(proceeding) && !proceeding;
 }
 
+//:
 // For those filters that only need one input and output set (after
 // construction), the following function allows one to treat the filter
 // object more like a function calling
@@ -668,7 +675,7 @@ bool vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
   return ret;
 }
 
-// second process form passing imgs by ptr.
+//: second process form passing imgs by ptr.
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
 bool vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                      ::process( ImgIn const* inimg, ImgOut* outimg)
@@ -681,6 +688,7 @@ bool vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
   return ret;
 }
 
+//:
 // Called by \usemethod {filter()} and checks additional parameters required
 // before the filtering operation can proceed. Default is empty_func
 // returning true, but subclasses can define as then need.  check_parms_1
@@ -694,6 +702,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 }
 
 #ifdef USE_COMPOSE_WITH
+//:
 // Try to set the output of this filter to be the input of ``to'', and
 // if possible make the filtering more efficient than just sequential
 // calls. Currently unimplemented so far this function does

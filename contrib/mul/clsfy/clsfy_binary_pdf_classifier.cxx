@@ -1,9 +1,9 @@
+// This is mul/clsfy/clsfy_binary_pdf_classifier.cxx
 //  Copyright: (C) 2000 British Telecommunications PLC
-
+#include "clsfy_binary_pdf_classifier.h"
 //:
 // \file
 
-#include <clsfy/clsfy_binary_pdf_classifier.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>

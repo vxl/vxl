@@ -1,7 +1,7 @@
+// This is gel/vsol/vsol_box_2d.cxx
+#include "vsol_box_2d.h"
 //:
 // \file
-
-#include <vsol/vsol_box_2d.h>
 
 vsol_box_2d::vsol_box_2d()
 {
@@ -71,15 +71,11 @@ void vsol_box_2d::grow_minmax_bounds(vsol_box_2d & comp_box)
 //    That is, all boundaries of *this must be on or inside the boundaries of b.
 bool vsol_box_2d::operator< (vsol_box_2d& b)
 {
-  float xmin_b = b.get_min_x(), ymin_b = b.get_min_y();
-  float xmax_b = b.get_max_x(), ymax_b = b.get_max_y();
-  float xmin=this->get_min_x(), ymin=this->get_min_y();
-  float xmax=this->get_max_x(), ymax=this->get_max_y();
-  if (xmin < xmin_b) return false;
-  if (ymin < ymin_b) return false;
-  if (xmax > xmax_b) return false;
-  if (ymax > ymax_b) return false;
-  return true;
+  return 
+    this->get_min_x() >= b.get_min_x() &&
+    this->get_min_y() >= b.get_min_y() &&
+    this->get_max_x() <= b.get_max_x() &&
+    this->get_max_y() <= b.get_max_y();
 }
 
 inline static bool near_same(float f1, float f2, float tolerance)
@@ -89,13 +85,9 @@ inline static bool near_same(float f1, float f2, float tolerance)
 
 bool vsol_box_2d::near_equal(vsol_box_2d& b, float tolerance)
 {
-  float xmin_b = b.get_min_x(), ymin_b = b.get_min_y();
-  float xmax_b = b.get_max_x(), ymax_b = b.get_max_y();
-  float xmin=this->get_min_x(), ymin=this->get_min_y();
-  float xmax=this->get_max_x(), ymax=this->get_max_y();
-  if (!near_same(xmin, xmin_b, tolerance)) return false;
-  if (!near_same(ymin, ymin_b, tolerance)) return false;
-  if (!near_same(xmax, xmax_b, tolerance)) return false;
-  if (!near_same(ymax, ymax_b, tolerance)) return false;
-  return true;
+  return 
+    near_same(this->get_min_x(), b.get_min_x(), tolerance) &&
+    near_same(this->get_min_y(), b.get_min_y(), tolerance) &&
+    near_same(this->get_max_x(), b.get_max_x(), tolerance) &&
+    near_same(this->get_max_y(), b.get_max_y(), tolerance);
 }

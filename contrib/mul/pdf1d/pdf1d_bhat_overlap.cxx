@@ -1,9 +1,10 @@
+// This is mul/pdf1d/pdf1d_bhat_overlap.cxx
+#include "pdf1d_bhat_overlap.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Functions to calculate Bhattacharyya overlap.
 
-#include <pdf1d/pdf1d_bhat_overlap.h>
 #include <pdf1d/pdf1d_sampler.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_vector.h>
