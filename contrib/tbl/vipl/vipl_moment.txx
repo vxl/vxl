@@ -15,7 +15,7 @@
 // template code cannot see file statics.
 static
 #endif
-double pow (double x, int y)
+double power(double x, int y)
 {
   if (y == 0)
     return 1.0;
@@ -74,7 +74,7 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
     for (int j=starty-y1;j<=(starty+y2);++j)
     {
       DataIn w = getpixel(in,i,j,DataIn());
-      d += pow(double(w),order_);
+      d += power(double(w),order_);
     }
   tempbuf[0] = d;
   d/=size;
@@ -89,9 +89,9 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
     {
       DataIn
       w  = getpixel(in,i-1-x1,j,DataIn());
-      d -= pow(double(w),order_);
+      d -= power(double(w),order_);
       w  = getpixel(in,i+x2,j,DataIn());
-      d += pow(double(w),order_);
+      d += power(double(w),order_);
     }
     tempbuf[i-startx] = d;
     d /= size;
@@ -107,9 +107,9 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
     {
       DataIn
       w  = getpixel(in,i,j-1-y1,DataIn());
-      d -= pow(double(w),order_);
+      d -= power(double(w),order_);
       w  = getpixel(in,i,j+y2,DataIn());
-      d += pow(double(w),order_);
+      d += power(double(w),order_);
     }
     tempbuf[(j-starty)*sizex] = d;
     d /= size;
@@ -125,10 +125,10 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
       int j1 = j-starty;
       d = tempbuf[i1-1 + j1*sizex] + tempbuf[i1+(j1-1)*sizex] - tempbuf[(i1-1) + (j1-1)*sizex];
       DataIn
-      w = getpixel(in,i-x1-1,j-y1-1,DataIn());  d += pow(double(w),order_);
-      w = getpixel(in,i-x1-1,j+y2,DataIn());    d -= pow(double(w),order_);
-      w = getpixel(in,i+x2,j-y1-1,DataIn());    d -= pow(double(w),order_);
-      w = getpixel(in,i+x2,j+y2,DataIn());      d += pow(double(w),order_);
+      w = getpixel(in,i-x1-1,j-y1-1,DataIn());  d += power(double(w),order_);
+      w = getpixel(in,i-x1-1,j+y2,DataIn());    d -= power(double(w),order_);
+      w = getpixel(in,i+x2,j-y1-1,DataIn());    d -= power(double(w),order_);
+      w = getpixel(in,i+x2,j+y2,DataIn());      d += power(double(w),order_);
       tempbuf[i1+j1*sizex] = d;
       d /= size;
       fsetpixel(out,i,j,(DataOut)d);
