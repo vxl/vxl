@@ -60,6 +60,21 @@ void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<int>& index)
   vcl_sort(index.begin(), index.end(), c);
 }
 
+//: Sort n elements, giving the resulting order in index
+//  data[index[0]] is smallest element, data[index[n-1]] is largest
+template <class T>
+void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<unsigned>& index)
+{
+  mbl_index_sort_cmp2<T> c;
+  c.data = &data;
+
+  unsigned n = data.size();
+  index.resize(n);
+  for (unsigned i =0;i < n; ++i) index[i] = i;
+
+  vcl_sort(index.begin(), index.end(), c);
+}
+
 //: A comparator for general index sorting.
 // It will take any type of index on to any sort of container
 // so long as T container.operator[](index) const is defined.
