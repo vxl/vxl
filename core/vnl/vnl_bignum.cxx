@@ -147,6 +147,39 @@ vnl_bignum::vnl_bignum (double d) {
 }
 
 
+//: Creates a vnl_bignum from a "long double" floating point number.
+
+vnl_bignum::vnl_bignum (long double d) {
+  if (d >= 0)                   // Get sign of d
+    this->sign = 1;
+  else {
+    d = -d;                     // Get absolute value of d
+    this->sign = -1;
+  }
+
+  const double LOG10_MAXDOUBLE = log10(vnl_math::maxdouble); // to be on the safe side
+  const double LOG10_RADIX_S = log10(double(0x10000));
+  static unsigned long buf_size_s = (int)(LOG10_MAXDOUBLE/LOG10_RADIX_S+0.1); // Size of buffer to convert d
+
+  Data *buf = new Data[buf_size_s];     // Buffer to convert d into
+  Counter i = 0;                        // buffer index
+  while (d >= 1.0) {
+    assert(i < buf_size_s);             // no more buffer space
+    buf[i] = Data(fmod(d,0x10000L));    // Get next data "digit" from d
+    d /= 0x10000L;                      // Shift d right 1 data "digit"
+    ++i;                                // Increment buffer index
+  }
+  this->data = (i>0 ? new Data[i] : 0); // Allocate permanent data
+  this->count = i;                      // Save count
+  i = 0;
+  while (i < this->count) {             // Copy temp buffer into
+    this->data[i] = buf[i];             //   permanent data
+    i++;
+  }
+  delete [] buf;                        // Deallocate buffer
+}
+
+
 #if 0 // original implementation - PVr
 static bool is_decimal(const char *s)
 {
@@ -549,7 +582,7 @@ vnl_bignum& vnl_bignum_from_string (vnl_bignum& b, const vcl_string& s)
 }
 
 
-//:
+//: Implicit conversion from a vnl_bignum to a short.
 vnl_bignum::operator short () const {
   short s = 0;
   for (Counter i = this->count; i > 0; )
@@ -558,7 +591,7 @@ vnl_bignum::operator short () const {
 }
 
 
-//:
+//: Implicit conversion from a vnl_bignum to an int.
 vnl_bignum::operator int () const {
   int j = 0;
   for (Counter i = this->count; i > 0; )
@@ -567,7 +600,7 @@ vnl_bignum::operator int () const {
 }
 
 
-//:
+//: Implicit conversion from a vnl_bignum to a long.
 vnl_bignum::operator long () const {
   long l = 0;
   for (Counter i = this->count; i > 0; )
@@ -576,7 +609,7 @@ vnl_bignum::operator long () const {
 }
 
 
-//:
+//: Implicit conversion from a vnl_bignum to a float.
 vnl_bignum::operator float () const {
   float f = 0.0f;
   for (Counter i = this->count; i > 0; )
@@ -585,10 +618,19 @@ vnl_bignum::operator float () const {
 }
 
 
-//: Implicit conversion from a vnl_bignum to a short/int/long/float/double respectively.
+//: Implicit conversion from a vnl_bignum to a double.
 
 vnl_bignum::operator double () const {
   double d = 0.0;
+  for (Counter i = this->count; i > 0; )
+    d = d*0x10000 + this->data[--i];
+  return this->sign*d;
+}
+
+//: Implicit conversion from a vnl_bignum to a long double.
+
+vnl_bignum::operator long double () const {
+  long double d = 0.0;
   for (Counter i = this->count; i > 0; )
     d = d*0x10000 + this->data[--i];
   return this->sign*d;
