@@ -4,6 +4,7 @@
 #include <vcl_fstream.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdio.h> // for sscanf()
+#include <vcl_cmath.h> // for exp()
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -376,48 +377,44 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
 
 void kalman_filter::update_confidence()
 {
-  vcl_vector<vnl_double_3x4> cams;
-  cams.resize(cur_pos_+1); //cur_pos_ is 0 based
-  for(int i = 0; i < cur_pos_; i++){
+  vcl_vector<vnl_double_3x4> cams(cur_pos_+1); //cur_pos_ is 0 based
+  for (int i = 0; i < cur_pos_; i++)
     cams[i] = get_projective_matrix(motions_[i]);
-  }
 
   double normalization_factor = 0;
   for (int i=0; i<num_points_; i++)
-  { 
+  {
     double dist2 = 0; // square distance
-    
-    for(int f = 0; f<cur_pos_; f++){
+
+    for (int f = 0; f<cur_pos_; ++f)
+    {
       vgl_point_3d<double> X(curve_3d_[i][0], curve_3d_[i][1], curve_3d_[i][2]);
       vgl_point_2d<double> x = brct_algos::projection_3d_point(X, cams[f]);
       vgl_point_2d<double> u = brct_algos::closest_point(curves_[f], x);
 
       double dx = x.x() - u.x();
       double dy = x.y() - u.y();
-      
+
       dist2 += (dx*dx + dy*dy);
-      
     }
-    
-    prob_[i] = exp(-dist2);
+
+    prob_[i] = vcl_exp(-dist2);
     normalization_factor += prob_[i];
   }
 
   vcl_cout<<"normalization_factor = "<<normalization_factor;
   // normalize the probability weight across all the points
-  for(int i=0; i<num_points_; i++)
+  for (int i=0; i<num_points_; i++)
     prob_[i] /= normalization_factor;
-
 }
 
 void kalman_filter::inc()
 {
-
-  if(cur_pos_ >= curves_.size()-1){ // end of the data
-    vcl_cout<<"\n at the end of last curve";
+  if ((unsigned)(cur_pos_+1) >= curves_.size()){ // end of the data
+    vcl_cout<<"\n at the end of last curve\n";
     return;
   }
- 
+
   cur_pos_ ++;
 
   //
