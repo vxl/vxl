@@ -3,7 +3,6 @@
 
 DECLARE( test_similarity_from_matches );
 DECLARE( test_homography2d_est );
-DECLARE( test_include );
 DECLARE( test_irls );
 DECLARE( test_linear_reg );
 DECLARE( test_lms_lts );
@@ -18,7 +17,6 @@ register_tests()
 {
   REGISTER( test_similarity_from_matches );
   REGISTER( test_homography2d_est );
-  REGISTER( test_include );
   REGISTER( test_irls );
   REGISTER( test_linear_reg );
   REGISTER( test_lms_lts );
