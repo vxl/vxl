@@ -24,7 +24,6 @@
 #include <vtol/vtol_one_chain_sptr.h>
 #include <vtol/vtol_face_2d.h>
 #include <vtol/vtol_face_sptr.h>
-#include <vtol/vtol_two_chain_sptr.h>
 #include <vtol/vtol_block.h>
 #include <vtol/vtol_block_sptr.h>
 
