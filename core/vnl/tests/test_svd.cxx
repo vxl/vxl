@@ -181,6 +181,27 @@ template void test_svd_recomposition(char const *, double, double *);
 template void test_svd_recomposition(char const *, double, vcl_complex<float> *);
 template void test_svd_recomposition(char const *, double, vcl_complex<double> *);
 
+#include <vnl/vnl_matlab_print.h>
+template <class T>
+void test_nullvector(char const *type, T *)
+{
+  int n = 5;
+  vnl_matrix<T> A(n, n+1);
+  vnl_test_fill_random(A.begin(), A.end());
+  vnl_svd<T> svd(A);
+  vnl_vector<T>  x = svd.nullvector();
+  vnl_vector<T> Ax = A*x;
+  vcl_cout << __FILE__ ": type = " << type << vcl_endl;
+  vnl_matlab_print(vcl_cout, A, "A", vnl_matlab_print_format_long);
+  vcl_cout << __FILE__ ": || x|| = " <<  x.two_norm() << vcl_endl;
+  vcl_cout << __FILE__ ": ||Ax|| = " << Ax.two_norm() << vcl_endl;
+}
+
+template void test_nullvector(char const *, float *);
+template void test_nullvector(char const *, double *);
+template void test_nullvector(char const *, vcl_complex<float> *);
+template void test_nullvector(char const *, vcl_complex<double> *);
+
 // Driver
 void test_svd()
 {
@@ -192,6 +213,11 @@ void test_svd()
   test_svd_recomposition("double",             1e-10, (double*)0);
   test_svd_recomposition("vcl_complex<float>",  1e-5 , (vcl_complex<float>*)0);
   test_svd_recomposition("vcl_complex<double>", 1e-10, (vcl_complex<double>*)0);
+
+  test_nullvector("float",               (float*)0);
+  test_nullvector("double",              (double*)0);
+  test_nullvector("vcl_complex<float>",  (vcl_complex<float>*)0);
+  test_nullvector("vcl_complex<double>", (vcl_complex<double>*)0);
 }
 
 TESTMAIN(test_svd);
