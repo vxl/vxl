@@ -30,7 +30,10 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
   char c;
   if (!open_already)
   {
+    if (afs.eof())
+      return "{}";
     afs >> c;
+
     if (c != '{')
     {
       afs.putback(c); // push c back into stream.
