@@ -16,5 +16,7 @@ vsol_region_2d::~vsol_region_2d()
 {
 }
 
-#include <vcl_rel_ops.h> // gcc 2.7
+#if 0 // gcc 2.7
+#include <vcl_rel_ops.h>
 VCL_INSTANTIATE_INLINE(bool operator!=(vsol_region_2d const &, vsol_region_2d const &));
+#endif

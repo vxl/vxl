@@ -150,8 +150,10 @@ bool operator==(vgui_event const& a, vgui_event const& b)
           a.data    == b.data);
 }
 
+#if 0 // should not be needed anymore (gcc 2.7 stuff)
 #if defined(VCL_SUNPRO_CC)
 template <class T> inline bool operator!=(T const &x, T const &y) { return !(x == y); }
 #endif
 // should this go in a template directory?
 VCL_INSTANTIATE_INLINE(bool operator!=(vgui_event const& a, vgui_event const& b));
+#endif
