@@ -1,4 +1,4 @@
-// This is core/vgui/impl/gtk/vgui_gtk2_statusbar.h
+// This is core/vgui/impl/gtk2/vgui_gtk2_statusbar.h
 #ifndef vgui_gtk2_statusbar_h_
 #define vgui_gtk2_statusbar_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -11,7 +11,7 @@
 // \brief  The GTK implementation of vgui_statusbar.
 //
 //  Contains  classes:  vgui_gtk2_statusbar
-// 
+//
 // \verbatim
 //  Modifications:
 //    13-SEP-2002 K.Y.McGaul - Changed to Doxygen style documentation.
@@ -30,7 +30,7 @@ class vgui_gtk2_statusbar : public vgui_statusbar
  public:
   //: Constructor, creates a GTK status bar and displays it.
   vgui_gtk2_statusbar();
- 
+
   //: Destructor.
  ~vgui_gtk2_statusbar();
 
