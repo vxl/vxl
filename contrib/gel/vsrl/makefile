@@ -4,9 +4,9 @@
 #
 #   DEPENDENCIES:  libvil libvnl
 
-USES += contrib/gel core
+USES += contrib/gel contrib/brl/bseg contrib/tbl core
 
-IMMEDIATE_LIBS := -lvil -lvnl
+IMMEDIATE_LIBS := -lvtol -lvdgl -lvgui -lvepl -lvgl -lvil -lvnl
 
 LIBRARY := vsrl
 VERSION := 1.0
@@ -27,10 +27,10 @@ SOURCES += vsrl_step_diffusion.cxx
 SOURCES += vsrl_saliency_diffusion.cxx
 SOURCES += vsrl_token_saliency.cxx
 SOURCES += vsrl_parameters.cxx
-MANPAGE_SOURCES += vsrl_manager.h
-MANPAGE_SOURCES += vsrl_menus.h
-MANPAGE_SOURCES += vsrl_point_picker.h
+SOURCES += vsrl_manager.cxx
+SOURCES += vsrl_point_picker.cxx
 MANPAGE_SOURCES += vsrl_point_picker_sptr.h
+MANPAGE_SOURCES += vsrl_menus.h
 
 DEFINES += -DBUILDING_VSRL_DLL
 

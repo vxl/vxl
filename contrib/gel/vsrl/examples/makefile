@@ -1,4 +1,4 @@
-USES += contrib/gel contrib/oxl core
+USES += contrib/gel contrib/tbl contrib/brl core
 include ../config.mk
 
 MINI_PROG_SOURCES += dense_matcher_full.cxx
