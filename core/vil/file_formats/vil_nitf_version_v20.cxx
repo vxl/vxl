@@ -3,8 +3,8 @@
 //
 // Description:	Implementation of version class for NITF version 2.0
 //
-// $Revision: 1.1 $ 
-// $Date: 2003/12/26 00:22:42 $
+// $Revision: 1.2 $ 
+// $Date: 2003/12/26 02:54:21 $
 // $Author: mlaymon $
 //
 
@@ -86,7 +86,7 @@ vil_nitf_image_subheader_band * vil_nitf_version_v20::newImageHeaderBand (
             rval->NELUT = ish_band->NELUT;
             rval->LUTD  = new unsigned char*[rval->NLUTS];
 
-            int j;
+            unsigned int j;
             for (j = 0; j < rval->NLUTS; j++) {
                 rval->LUTD[j] = new unsigned char[rval->NELUT];
                 memcpy(rval->LUTD[j], ish_band->LUTD[j], rval->NELUT);
