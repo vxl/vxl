@@ -11,6 +11,7 @@ template ostream & operator<<(ostream &, smanip<int> const &);
 
 #if defined(VCL_GCC_295)
 # if defined(GNU_LIBSTDCXX_V3)
+#  include <bits/sstream.tcc>
 #  include <bits/istream.tcc>
 #  include <bits/ostream.tcc>
 // for some reason these templates aren't in libstdc++ (yet).
@@ -28,6 +29,9 @@ namespace {
   void tac(std::basic_istream<char, std::char_traits<char> > &s,
 	   std::fpos<__mbstate_t> x) { s.seekg(x); }
 #endif
+  //void tuc(std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> > &s,
+  //int x) { s << x; }
+  template std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >;
 }
 # else
 #  if !VCL_HAS_TEMPLATE_SYMBOLS

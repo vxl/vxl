@@ -13,6 +13,11 @@ namespace std {
   template void std::fill<std::_Bit_iterator, bool>(std::_Bit_iterator, std::_Bit_iterator, bool const &);
   template std::_Bit_iterator std::fill_n<std::_Bit_iterator, unsigned int, bool>(std::_Bit_iterator, unsigned int, bool const &);
 }
+namespace {
+  void tickler(std::vector<bool> &uctive) {
+    uctive.push_back(true);
+  }
+}
 # endif
 #else
 VCL_VECTOR_INSTANTIATE(bool);

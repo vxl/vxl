@@ -18,6 +18,12 @@ void vcl_string_instance_tickler(ostream &os, vcl_string::iterator i, char *a, c
   os << s;
   s.replace(i, i, a, a);
   s.replace(i, i, b, b);
+  //s.find(i);
+  s.find(a);
+  s.find(b);
+
+  vcl_string(s.begin()+3, s.end()) == b;
+  s + s;
 }
 
 
