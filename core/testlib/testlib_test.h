@@ -9,6 +9,7 @@
 //  Modifications
 //   Apr 2002, Amitha Perera: Copied from vil_test and moved into testlib in an
 //                  attempt to consolidate all the repeated test functionality.
+//   Sep.2004, Peter Vanroose: added testlib_test_assert_near_relative().
 // \endverbatim
 
 #include <vcl_string.h>
@@ -31,6 +32,14 @@ void testlib_test_assert_near(const vcl_string& msg, double expr,
 //: output msg, then perform test to see if expr is within tol of target
 void testlib_test_assert_near(const vcl_string& msg, vcl_complex<double> expr,
                               vcl_complex<double> target, double tol = 1e-12);
+//: output msg, then test to see if expr is within relative tol of target
+void testlib_test_assert_near_relative(const vcl_string& msg, double expr,
+                                       double target = 0, double tol = 1e-12);
+//: output msg, then test to see if expr is within relative tol of target
+void testlib_test_assert_near_relative(const vcl_string& msg,
+                                       vcl_complex<double> expr,
+                                       vcl_complex<double> target,
+                                       double tol = 1e-12);
 //: output msg, then perform test to see if expr is not within tol of target
 void testlib_test_assert_far(const vcl_string& msg, double expr,
                              double target = 0, double tol = 1e-12);
@@ -66,6 +75,13 @@ do { \
 do { \
   testlib_test_begin(s); \
   testlib_test_assert_near("",p,v,t); \
+} while (false)
+
+//: TEST function, message s, test to see if (p-v)/p is small compared to t
+#define TEST_NEAR_REL(s,p,v,t) \
+do { \
+  testlib_test_begin(s); \
+  testlib_test_assert_near_relative("",p,v,t); \
 } while (false)
 
 //: TEST function, s is message, test to see if p is far from v, tolerance t
