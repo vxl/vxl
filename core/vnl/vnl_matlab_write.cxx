@@ -92,7 +92,7 @@ bool vnl_matlab_write(vcl_ostream &s, T const & x, char const *name) {
   hdr.rows = 1;
   hdr.cols = 1;
   hdr.imag = vnl_is_complex(x);
-  hdr.namlen = vcl_strlen(name)+1;
+  hdr.namlen = (long)vcl_strlen(name)+1L;
 
   ::vnl_write_bytes(s, &hdr, sizeof(hdr));
   ::vnl_write_bytes(s, name, hdr.namlen);
@@ -109,10 +109,10 @@ template <class T>
 bool vnl_matlab_write(vcl_ostream &s, T const *v, unsigned n, char const *name) {
   vnl_matlab_header hdr;
   hdr.type = native_BYTE_ORDER + vnl_matlab_header::vnl_COLUMN_WISE + vnl_scalar_precision(v[0]);
-  hdr.rows = n;
-  hdr.cols = 1;
+  hdr.rows = (long)n;
+  hdr.cols = 1L;
   hdr.imag = vnl_is_complex(v[0]);
-  hdr.namlen = vcl_strlen(name)+1;
+  hdr.namlen = (long)vcl_strlen(name)+1L;
 
   ::vnl_write_bytes(s, &hdr, sizeof(hdr));
   ::vnl_write_bytes(s, name, hdr.namlen);
@@ -133,10 +133,10 @@ bool vnl_matlab_write(vcl_ostream &s,
 {
   vnl_matlab_header hdr;
   hdr.type = native_BYTE_ORDER + vnl_matlab_header::vnl_ROW_WISE + vnl_scalar_precision(data[0][0]);
-  hdr.rows = rows;
-  hdr.cols = cols;
+  hdr.rows = (long)rows;
+  hdr.cols = (long)cols;
   hdr.imag = vnl_is_complex(data[0][0]);
-  hdr.namlen = vcl_strlen(name)+1;
+  hdr.namlen = (long)vcl_strlen(name)+1L;
 
   ::vnl_write_bytes(s, &hdr, sizeof(hdr));
   ::vnl_write_bytes(s, name, hdr.namlen);

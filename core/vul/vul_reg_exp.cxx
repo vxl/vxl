@@ -442,14 +442,14 @@ void vul_reg_exp::compile (char const* exp) {
          //
         if (flags & SPSTART) {
             longest = NULL;
-            len = 0;
+            len = 0L;
             for (; scan != NULL; scan = regnext(scan))
                 if (OP(scan) == EXACTLY && vcl_strlen(OPERAND(scan)) >= len) {
                     longest = OPERAND(scan);
                     len = vcl_strlen(OPERAND(scan));
                 }
             this->regmust = longest;
-            this->regmlen = len;
+            this->regmlen = (int)len;
         }
     }
 }
