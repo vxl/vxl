@@ -45,10 +45,14 @@ MANPAGE_SOURCES += vil2_resample_bilin.txx
 
 SUBDIRS += algo io
 
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 ifndef NOTEST
  SUBDIRS += tests examples
 endif
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
