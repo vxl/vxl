@@ -1,5 +1,9 @@
 LINK_LIBRARIES( vidl )
 
+IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vidl )
+ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+
 # Immediate dependencies
 IF(WIN32)
   LINK_LIBRARIES( vfw32 )

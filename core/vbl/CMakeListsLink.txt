@@ -1,4 +1,8 @@
 LINK_LIBRARIES( vbl )
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
 
+IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vbl )
+ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+
+# Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
