@@ -71,7 +71,7 @@ class vgl_polygon
   ~vgl_polygon() {}
 
   //: Returns true if \a p(x,y) is inside the polygon, else false
-  bool contains(point_t const& p) { return contains(p.x(),p.y()); }
+  bool contains(point_t const& p) const { return contains(p.x(),p.y()); }
 
   bool contains(T x, T y) const;
 

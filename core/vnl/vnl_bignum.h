@@ -166,7 +166,6 @@ class vnl_bignum
   inline operator long double() { return ((const vnl_bignum*)this)->operator long double(); }
 
   vnl_bignum operator-() const;        // Unary minus operator
-  inline vnl_bignum operator+() { return *this; } // Unary plus operator
   inline vnl_bignum operator+() const { return *this; } // Unary plus operator
 
   vnl_bignum& operator=(const vnl_bignum&); // Assignment operator

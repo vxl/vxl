@@ -29,13 +29,13 @@ class vil_stream
   virtual vil_streampos read(void* buf, vil_streampos n) = 0;
 
   //: Return file pointer
-  virtual vil_streampos tell() = 0;
+  virtual vil_streampos tell() const = 0;
 
   //: Goto file pointer
   virtual void seek(vil_streampos position) = 0;
 
   //: Amount of data in the stream
-  virtual vil_streampos file_size() = 0;
+  virtual vil_streampos file_size() const = 0;
 
   //: up/down the reference count
   void ref();

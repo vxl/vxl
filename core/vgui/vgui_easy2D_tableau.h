@@ -157,7 +157,7 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   { return vgui_displaybase_tableau::get_all(); }
 
   //: If the child tableau is an image_tableau, return this.
-  vgui_image_tableau_sptr get_image_tableau() { return image_image; }
+  vgui_image_tableau_sptr get_image_tableau() const { return image_image; }
 
   //: Screen dump to postscript file.
   //  Specify the optional arguments in case this tableau does not contain

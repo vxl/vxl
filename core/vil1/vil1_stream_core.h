@@ -38,7 +38,7 @@ class vil1_stream_core : public vil1_stream
   bool ok() const { return true; }
   vil1_streampos read (void       *buf, vil1_streampos n);
   vil1_streampos write(void const *buf, vil1_streampos n);
-  vil1_streampos tell()              { return curpos_; }
+  vil1_streampos tell()     const    { return curpos_; }
   void seek(vil1_streampos position) { curpos_ = position; }
 
  protected:

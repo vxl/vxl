@@ -113,7 +113,7 @@ class frame_buffer
     vcl_cout << "frame_buffer DTOR. exiting.\n";
   }
 
-  unsigned char * get_buff(int i) {return (*buffers_)[i];}
+  unsigned char * get_buff(int i) const { return (*buffers_)[i]; }
   unsigned char * next(int framenum)
   {
     //first, get the oldest frame in the buffer
@@ -135,7 +135,7 @@ class frame_buffer
       vcl_cout << (*vmiucit).first << vcl_endl;
   }
 
-  int first_frame_num() { return (*buffers_->begin()).first;}
+  int first_frame_num() const { return (*buffers_->begin()).first;}
 
   bool reset()
   {
@@ -193,10 +193,10 @@ class vidl_mpegcodec_helper
   bool init();
   int execute(decode_request * p);
   void print();
-  int get_width() {return output_->width;}
-  int get_height() {return output_->height;}
-  int get_last_frame() {return output_->last_frame_decoded;}
-  vidl_mpegcodec_data::output_format_t get_format() {return output_->output_format;}
+  int get_width() const {return output_->width;}
+  int get_height() const {return output_->height;}
+  int get_last_frame() const {return output_->last_frame_decoded;}
+  vidl_mpegcodec_data::output_format_t get_format() const {return output_->output_format;}
 
  private:
   /////////////////////////////////////////////////////////

@@ -152,16 +152,16 @@ class vidl_movie : public vbl_ref_count
        { return fr1.frame_number_ >= fr2.frame_number_; }
 
     // Comparison against integers
-    bool operator ==(int n) { return frame_number_ == n; }
-    bool operator !=(int n) { return frame_number_ != n; }
-    bool operator < (int n) { return frame_number_ < n; }
-    bool operator > (int n) { return frame_number_ > n; }
-    bool operator <=(int n) { return frame_number_ <= n; }
-    bool operator >=(int n) { return frame_number_ >= n; }
+    bool operator ==(int n) const { return frame_number_ == n; }
+    bool operator !=(int n) const { return frame_number_ != n; }
+    bool operator < (int n) const { return frame_number_ < n; }
+    bool operator > (int n) const { return frame_number_ > n; }
+    bool operator <=(int n) const { return frame_number_ <= n; }
+    bool operator >=(int n) const { return frame_number_ >= n; }
 
     // Data member access
-    int current_frame_number () { return frame_number_; }
-    vidl_movie_sptr get_movie ()  { return movie_; }
+    int current_frame_number () const { return frame_number_; }
+    vidl_movie_sptr get_movie() const { return movie_; }
   };
 
   //---------------------------------------------------------------------

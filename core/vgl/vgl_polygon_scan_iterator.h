@@ -143,7 +143,7 @@ class vgl_polygon_scan_iterator : public vgl_region_scan_iterator
   inline T get_y(vertind v) const { return poly_[v.chainnum][v.vertnum].y(); }
 
   // Returns vertex v
-  inline Point2 get_pt( vertind v ) { return poly_[v.chainnum][v.vertnum]; }
+  inline Point2 get_pt( vertind v ) const { return poly_[v.chainnum][v.vertnum]; }
 
   // assumes poly_, win, have_window, boundp are set
   void init();

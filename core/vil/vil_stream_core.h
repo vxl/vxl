@@ -38,10 +38,10 @@ class vil_stream_core : public vil_stream
   bool ok() const { return true; }
   vil_streampos read (void       *buf, vil_streampos n);
   vil_streampos write(void const *buf, vil_streampos n);
-  vil_streampos tell()              { return curpos_; }
+  vil_streampos tell()     const    { return curpos_; }
   void seek(vil_streampos position) { curpos_ = position; }
 
-  vil_streampos file_size() { return tailpos_; }
+  vil_streampos file_size() const { return tailpos_; }
 
  protected:
   ~vil_stream_core();

@@ -105,18 +105,18 @@ class vnl_scalar_join_iterator
   bool done() const;
   void next();
 
-  //: Return the indices of the current rows in the first and second relations.
-  unsigned row1();
-  //: Return the indices of the current rows in the first and second relations.
-  unsigned row2();
+  //: Return the index of the current row in the first relation.
+  unsigned row1() const;
+  //: Return the index of the current row in the second relation.
+  unsigned row2() const;
 
  private:
   // Postfix ++ is private as it would be costly to implement.
   vnl_scalar_join_iterator<T>& operator ++ (int);
 
 #if 0
-  T object1() { return *I1[index1].object; }
-  T object2() { return *I2[index2].object; }
+  T object1() const { return *I1[index1].object; }
+  T object2() const { return *I2[index2].object; }
 #endif
 };
 

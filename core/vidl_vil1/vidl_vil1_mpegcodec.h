@@ -60,10 +60,10 @@ class vidl_vil1_mpegcodec : public vidl_vil1_codec
                      int /*xs*/,
                      int /*ys*/){return 0;}
 
-  virtual bool probe(const char* fname);
-  virtual vidl_vil1_codec_sptr load(const char* fname, char mode = 'r' );
-  bool save(vidl_vil1_movie*  /*movie*/, const char*  /*fname*/){return true;}
-  virtual const char* type() {return "MPEG";}
+  virtual bool probe(vcl_string const& fname);
+  virtual vidl_vil1_codec_sptr load(vcl_string const& fname, char mode = 'r' );
+  bool save(vidl_vil1_movie*  /*movie*/, vcl_string const&  /*fname*/){return true;}
+  virtual vcl_string type() const {return "MPEG";}
 
   //-----------------------------------------------
   //initialization methods.

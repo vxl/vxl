@@ -23,16 +23,16 @@ class vidl_vil1_file_sequence
 #endif
  public:
   vidl_vil1_file_sequence(){}
-  vidl_vil1_file_sequence(char const* fmt);
+  vidl_vil1_file_sequence(vcl_string const& fmt);
   ~vidl_vil1_file_sequence(){}
 
-  bool open(char const* fmt);
+  bool open(vcl_string const& fmt);
   void close();
 
   void seek(offset_t to);
   offset_t tell() const;
   int read(void*, unsigned int);
-  bool ok() { return current_file_index != -1; }
+  bool ok() const { return current_file_index != -1; }
 
  private:
   int current_file_index;

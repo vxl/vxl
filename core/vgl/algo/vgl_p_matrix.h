@@ -105,7 +105,7 @@ class vgl_p_matrix
   //: pre-multiply this projection matrix with a 2-d projective transform
   vgl_p_matrix<T> premultiply(vnl_matrix_fixed<T,3,3> const& H) const;
   //: pre-multiply this projection matrix with a 2-d projective transform
-  vgl_p_matrix<T> operator*(vnl_matrix_fixed<T, 3,3> const& C){return vgl_p_matrix(C * p_matrix_);}
+  vgl_p_matrix<T> operator*(vnl_matrix_fixed<T, 3,3> const& C)const{return vgl_p_matrix(C * p_matrix_);}
 
   //: Compute the svd of this P and cache it, so that future operations that require it need not recompute it.
   vnl_svd<T>* svd() const; // mutable const

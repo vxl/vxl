@@ -23,7 +23,7 @@ class vil1_stream_fstream : public vil1_stream
   bool ok() const { return f_.good(); }
   vil1_streampos write(void const* buf, vil1_streampos n);
   vil1_streampos read(void* buf, vil1_streampos n);
-  vil1_streampos tell();
+  vil1_streampos tell() const;
   void seek(vil1_streampos position);
 
  protected:
@@ -31,7 +31,7 @@ class vil1_stream_fstream : public vil1_stream
 
  private:
   vcl_ios_openmode flags_;
-  vcl_fstream f_;
+  mutable vcl_fstream f_;
   int id_;
 };
 

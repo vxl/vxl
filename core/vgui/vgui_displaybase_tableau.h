@@ -115,7 +115,7 @@ class vgui_displaybase_tableau : public vgui_tableau
 
   vgui_soview* contains_hit(vcl_vector<unsigned> hit);
 
-  unsigned get_id() {return id;}
+  unsigned get_id() const {return id;}
 
  protected:
   vcl_vector<vgui_soview*> objects;

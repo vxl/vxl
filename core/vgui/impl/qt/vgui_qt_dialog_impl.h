@@ -57,7 +57,7 @@ class vgui_qt_filebrowser_impl : public QHGroupBox
    vgui_qt_filebrowser_impl(QWidget* parent, const char*, vcl_string&, vcl_string&);
   ~vgui_qt_filebrowser_impl() { };
 
-   vcl_string  file() { return vcl_string(edit_->text().latin1()); };
+   vcl_string  file() const { return vcl_string(edit_->text().latin1()); };
 
  public slots:
    void get_a_file();
@@ -74,7 +74,7 @@ class vgui_qt_colorchooser_impl : public QHGroupBox
    vgui_qt_colorchooser_impl(QWidget* parent, const char*, vcl_string&);
   ~vgui_qt_colorchooser_impl() { };
 
-  vcl_string  color() { return value_; };
+  vcl_string  color() const { return value_; };
 
  public slots:
    void get_a_color();

@@ -29,7 +29,7 @@ class vil1_stream
   virtual vil1_streampos read(void* buf, vil1_streampos n) = 0;
 
   //: Return file pointer
-  virtual vil1_streampos tell() = 0;
+  virtual vil1_streampos tell() const = 0;
 
   //: Goto file pointer
   virtual void seek(vil1_streampos position) = 0;

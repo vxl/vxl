@@ -34,7 +34,7 @@ struct vil1_stream_section : public vil1_stream
   bool ok() const { return underlying_->ok(); }
   vil1_streampos write(void const* buf, vil1_streampos n);
   vil1_streampos read(void* buf, vil1_streampos n);
-  vil1_streampos  tell() { return current_; } // regardless of what the underlying stream is doing.
+  vil1_streampos tell() const { return current_; } // regardless of what the underlying stream is doing.
   void seek(vil1_streampos position);
 
  protected:

@@ -53,7 +53,7 @@ class vnl_real_polynomial
   //: Initialize polynomial of a given degree.
   vnl_real_polynomial(int d): coeffs_(d+1) { assert (d>=0); }
 
-  bool operator==(vnl_real_polynomial const& p) { return p.coefficients() == coeffs_; }
+  bool operator==(vnl_real_polynomial const& p) const { return p.coefficients() == coeffs_; }
 
   //: Evaluate polynomial at value x
   double evaluate(double x) const;

@@ -34,10 +34,10 @@ struct vil_stream_section : public vil_stream
   bool ok() const { return underlying_->ok(); }
   vil_streampos write(void const* buf, vil_streampos n);
   vil_streampos read(void* buf, vil_streampos n);
-  vil_streampos  tell() { return current_; } // regardless of what the underlying stream is doing.
+  vil_streampos tell() const { return current_; } // regardless of what the underlying stream is doing.
   void seek(vil_streampos position);
 
-  vil_streampos file_size();
+  vil_streampos file_size() const;
 
  protected:
   ~vil_stream_section();

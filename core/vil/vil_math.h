@@ -199,12 +199,12 @@ inline void vil_math_mean_and_variance(sumT& mean, sumT& var, const vil_image_vi
 class vil_math_sqrt_functor
 {
  public:
-  vxl_byte operator()(vxl_byte x) { return vxl_byte(0.5+vcl_sqrt(float(x))); }
-  unsigned operator()(unsigned x) { return unsigned(0.5+vcl_sqrt(float(x))); }
-  int operator()(int x)           { return x>0?int(0.5+vcl_sqrt(float(x))):0; }
-  short operator()(short x)       { return x>0?short(0.5+vcl_sqrt(float(x))):0; }
-  float operator()(float x)       { return x>0?vcl_sqrt(x):0.0f; }
-  double operator()(double x)     { return x>0?vcl_sqrt(x):0.0; }
+  vxl_byte operator()(vxl_byte x) const { return vxl_byte(0.5+vcl_sqrt(float(x))); }
+  unsigned operator()(unsigned x) const { return unsigned(0.5+vcl_sqrt(float(x))); }
+  int operator()(int x)           const { return x>0?int(0.5+vcl_sqrt(float(x))):0; }
+  short operator()(short x)       const { return x>0?short(0.5+vcl_sqrt(float(x))):0; }
+  float operator()(float x)       const { return x>0?vcl_sqrt(x):0.0f; }
+  double operator()(double x)     const { return x>0?vcl_sqrt(x):0.0; }
 };
 
 //: Compute square-root of each pixel element (or zero if negative)
@@ -248,13 +248,13 @@ class vil_math_scale_functor
   double s_;
  public:
   vil_math_scale_functor(double s) : s_(s) {}
-  vxl_byte operator()(vxl_byte x) { return vxl_byte(0.5+s_*x); }
-  unsigned operator()(unsigned x) { return unsigned(0.5+s_*x); }
-  short operator()(short x)   { double r=s_*x; return short(r<0?r-0.5:r+0.5); }
-  int operator()(int x)       { double r=s_*x; return int(r<0?r-0.5:r+0.5); }
-  float operator()(float x)       { return float(s_*x); }
-  double operator()(double x)     { return s_*x; }
-  vcl_complex<double> operator()(vcl_complex<double> x) { return s_*x; }
+  vxl_byte operator()(vxl_byte x) const { return vxl_byte(0.5+s_*x); }
+  unsigned operator()(unsigned x) const { return unsigned(0.5+s_*x); }
+  short operator()(short x)   const { double r=s_*x; return short(r<0?r-0.5:r+0.5); }
+  int operator()(int x)       const { double r=s_*x; return int(r<0?r-0.5:r+0.5); }
+  float operator()(float x)       const { return float(s_*x); }
+  double operator()(double x)     const { return s_*x; }
+  vcl_complex<double> operator()(vcl_complex<double> x) const { return s_*x; }
 };
 
 //: Multiply values in-place in image view by scale

@@ -113,7 +113,7 @@ void vil_stream_section::seek(vil_streampos position)
     current_ = begin_ + position;
 }
 
-vil_streampos vil_stream_section::file_size()
+vil_streampos vil_stream_section::file_size() const
 {
   return end_ >= begin_ ? end_ - begin_ : underlying_->file_size() - begin_;
 }

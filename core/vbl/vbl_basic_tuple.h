@@ -180,7 +180,7 @@ with wrong number of arguments.");
   }
 
   // Print the tuple on cout.
-  inline void Print() { Dump(vcl_cout); }
+  inline void Print() const { Dump(vcl_cout); }
 
   // Print the tuple on cerr.
   void Dump(vcl_ostream& str = vcl_cerr) const

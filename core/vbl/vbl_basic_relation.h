@@ -163,10 +163,10 @@ class vbl_basic_relation : public vbl_basic_relation_type
   void set_fifth_unique(bool b) { impl->SetFifthUnique(b); }
 
   // Print the relation on cout.
-  inline void print_relation() { dump_relation(vcl_cout); }
+  inline void print_relation() const { dump_relation(vcl_cout); }
 
   // Print the relation on cerr.
-  void dump_relation(vcl_ostream& str = vcl_cerr);
+  void dump_relation(vcl_ostream& str = vcl_cerr) const;
 
   // Type downcasting methods.
   virtual void* get_type();

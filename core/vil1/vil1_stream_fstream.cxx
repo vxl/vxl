@@ -107,7 +107,7 @@ vil1_streampos vil1_stream_fstream::read(void* buf, vil1_streampos n)
   return numread;
 }
 
-vil1_streampos vil1_stream_fstream::tell()
+vil1_streampos vil1_stream_fstream::tell() const
 {
   assert(id > 0);
   if (flags_ & vcl_ios_in) {

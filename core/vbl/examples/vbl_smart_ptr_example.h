@@ -48,7 +48,7 @@ class bigmatrix
 {
   vbl_smart_ptr<bigmatrix_impl> impl;
  public:
-  double * operator[](unsigned i) { return impl->data[i]; }
+  double * operator[](unsigned i) const { return impl->data[i]; }
 };
 
 #endif // vbl_smart_ptr_example_h_

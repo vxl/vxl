@@ -61,7 +61,7 @@ class vidl_clip : public vbl_ref_count
   vidl_frame_sptr get_frame(int n);
 
   //: Return the number of frames
-  int length() { return (endframe_-startframe_)/increment_ + 1; }
+  int length() const { return (endframe_-startframe_)/increment_ + 1; }
 
   // Get the size in pixels
   int width() const;

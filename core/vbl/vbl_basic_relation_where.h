@@ -115,7 +115,7 @@ class vbl_basic_relation_where : public vbl_basic_tuple<T1,T2,T3,T4,T5>
   }
 
   //: Print the where clause on cout.
-  inline void Print() { Dump(vcl_cout); }
+  inline void Print() const { Dump(vcl_cout); }
 
   //: Print the where clause on cerr or stream.
   void Dump(vcl_ostream& str = vcl_cerr) const

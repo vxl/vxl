@@ -40,7 +40,7 @@ class vgl_line_2d_regression
   ~vgl_line_2d_regression(){};
 
   //: The number of points added.
-  inline unsigned int get_n_pts() { return npts_; }
+  inline unsigned int get_n_pts() const { return npts_; }
 
   //: Add a point to the 2d_regression
   void increment_partial_sums(const T x, const T y);
@@ -79,7 +79,7 @@ class vgl_line_2d_regression
   double get_rms_error_est(vgl_point_2d<T> const& p, bool increment=true);
 
   //: Get the fitted line
-  vgl_line_2d<T> get_line() { return line_; }
+  vgl_line_2d<T> get_line() const { return line_; }
 
   //: Fit a line to the current point set
   bool fit();

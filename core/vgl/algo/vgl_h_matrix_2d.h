@@ -64,7 +64,7 @@ class vgl_h_matrix_2d
   vgl_homg_line_2d<T> operator*(vgl_homg_line_2d<T> const& l) const { return (*this)(l);}
 
   //: Composition
-  vgl_h_matrix_2d operator*(const vgl_h_matrix_2d& h2) { return vgl_h_matrix_2d<T>(t12_matrix_ * h2.t12_matrix_); }
+  vgl_h_matrix_2d operator*(const vgl_h_matrix_2d& h2) const { return vgl_h_matrix_2d<T>(t12_matrix_ * h2.t12_matrix_); }
 
   // Data Access---------------------------------------------------------------
 

@@ -28,7 +28,7 @@ class vil1_stream_url : public vil1_stream
   vil1_streampos write(void const *buf, vil1_streampos n) { return u_ ? u_->write(buf, n) : 0L; }
   // strictly speaking, writes should fail, but that isn't useful in any way.
   vil1_streampos read(void *buf, vil1_streampos n) { return u_ ? u_->read(buf, n) : 0L; }
-  vil1_streampos tell() { return u_ ? u_->tell() : (vil1_streampos)(-1L); }
+  vil1_streampos tell() const { return u_ ? u_->tell() : (vil1_streampos)(-1L); }
   void seek(vil1_streampos position) { if (u_) u_->seek(position); }
 };
 

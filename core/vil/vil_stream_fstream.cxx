@@ -111,7 +111,7 @@ vil_streampos vil_stream_fstream::read(void* buf, vil_streampos n)
   return numread;
 }
 
-vil_streampos vil_stream_fstream::tell()
+vil_streampos vil_stream_fstream::tell() const
 {
   assert(id > 0);
   if (flags_ & vcl_ios_in) {
@@ -164,7 +164,7 @@ void vil_stream_fstream::seek(vil_streampos position)
     assert(false); // did you get here? use at least one of vcl_ios_in, vcl_ios_out.
 }
 
-vil_streampos vil_stream_fstream::file_size()
+vil_streampos vil_stream_fstream::file_size() const
 {
   // if not already computed, do so
   if ( end_ == -1 ) {
