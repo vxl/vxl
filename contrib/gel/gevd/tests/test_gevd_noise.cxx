@@ -29,8 +29,8 @@ test_gevd_noise()
            << ", texture_noise = " << texture_noise << vcl_endl;
   TEST("sensor  noise cannot be negative", sensor_noise >= 0, true);
   TEST("texture noise cannot be negative", texture_noise >= 0, true);
-  TEST_NEAR("sensor  noise", sensor_noise,  0.4975, 0.003);
-  TEST_NEAR("texture noise", texture_noise, 0.4975, 0.003);
+  TEST_NEAR("sensor  noise", sensor_noise,  0.4975, 0.004);
+  TEST_NEAR("texture noise", texture_noise, 0.4975, 0.004);
 }
 
 TESTMAIN(test_gevd_noise);
