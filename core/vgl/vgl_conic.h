@@ -66,14 +66,6 @@
 template <class T>
 class vgl_conic
 {
-  vgl_conic_type type_;
-  T a_; //: coefficient of \a x^2
-  T b_; //: coefficient of \a xy
-  T c_; //: coefficient of \a y^2
-  T d_; //: coefficient of \a xw
-  T e_; //: coefficient of \a yw
-  T f_; //: coefficient of \a w^2
-
 public:
    enum vgl_conic_type {
      no_type=0,
@@ -91,10 +83,21 @@ public:
      num_conic_types // is here to enable iterating through this list
    };
 
-public:
+private:
   // DATA MEMBERS
 
+  vgl_conic_type type_;
+  T a_; //: coefficient of \a x^2
+  T b_; //: coefficient of \a xy
+  T c_; //: coefficient of \a y^2
+  T d_; //: coefficient of \a xw
+  T e_; //: coefficient of \a yw
+  T f_; //: coefficient of \a w^2
+
+
+public:
   inline vgl_conic::vgl_conic_type type() const { return type_; }
+
   //: Returns the type of the conic as a string.
   // Possible returned strings are:
   // "real ellipse", "real circle", "imaginary ellipse", "imaginary circle",
@@ -103,22 +106,29 @@ public:
   // "real parallel lines", "complex parallel lines", "coincident lines".
   // The default constructor sets the type to "invalid conic".
   vcl_string real_type() const;
+
   //: Returns the internal enum value corresponding to the string argument.
   // Useful for comparison purposes, or for use in "case" statements.
   static vgl_conic::vgl_conic_type type_by_name(vcl_string const& name);
+
   //: Converts the conic type from enum (internal representation) to string.
   static vcl_string type_by_number(vgl_conic::vgl_conic_type type);
 
   //: Returns the coefficient of \f$X^2\f$
   inline T a() const { return  a_; }
+
   //: Returns the coefficient of \f$XY\f$
   inline T b() const { return  b_; }
+
   //: Returns the coefficient of \f$Y^2\f$
   inline T c() const { return  c_; }
+
   //: Returns the coefficient of \f$XW\f$
   inline T d() const { return  d_; }
+
   //: Returns the coefficient of \f$YW\f$
   inline T e() const { return  e_; }
+
   //: Returns the coefficient of \f$W^2\f$
   inline T f() const { return  f_; }
 
@@ -138,6 +148,7 @@ public:
   // destructor
   ~vgl_conic() {}
 #endif
+
   //: constructor using polynomial coefficients.
   //  The order of the coefficients is: $X^2$, $XY$, $Y^2$, $XW$, $YW$, $W^2$,
   //  where $W$ is the homogeneous coordinate (sometimes denoted by $Z$).
