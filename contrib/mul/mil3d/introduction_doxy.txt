@@ -1,0 +1,14 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage mil : Manchester's Image Library
+* Provides a set of image classes, derived from mil_image, which can be used
+* as `views' on actual image data in 3D.
+*
+* The images use pointer arithmetic to get at the pixel values, so store pointers
+* to the start of each plane, and integers indicating how to get to neighbours in
+* the x, y and z directions.
+*
+* The most commonly used class is likely to be mil_image_3d_of<T>, a templated
+* multi-plane image.
+*
+* 
+*/
