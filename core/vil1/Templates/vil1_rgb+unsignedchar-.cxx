@@ -18,11 +18,11 @@
 // }
 // #endif
 
+VCL_DEFINE_SPECIALIZATION
 vcl_ostream& operator<<(vcl_ostream& s, const vil_rgb<unsigned char>& rgb)
 {
  return s << '[' << (int)rgb.r << ' ' << (int)rgb.g << ' ' << (int)rgb.b << ']';
 }
-
 
 VIL_RGB_INSTANTIATE(unsigned char);
 VIL_RGB_INSTANTIATE_LS(unsigned char);
