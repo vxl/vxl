@@ -76,10 +76,9 @@ SET( vil_sources ${vil_sources}
   vil_fill.h
   vil_transform.h
   vil_decimate.cxx                      vil_decimate.h
-  vil_convert.h
   vil_load.cxx                          vil_load.h
   vil_save.cxx                          vil_save.h
-  vil_copy.txx              vil_copy.cxx             vil_copy.h
+  vil_copy.txx       vil_copy.cxx       vil_copy.h
   vil_new.cxx                           vil_new.h
   vil_print.cxx                         vil_print.h
 
@@ -104,7 +103,7 @@ SET( vil_sources ${vil_sources}
   vil_rgb.txx                           vil_rgb.h
   vil_rgba.txx                          vil_rgba.h
   vil_fwd.h
-  
+
   # Streams
   vil_stream.cxx                        vil_stream.h
   vil_stream_fstream.cxx                vil_stream_fstream.h
@@ -159,8 +158,7 @@ ELSE(APPLE)
     ADD_LIBRARY(vil ${vil_sources} ${vil_network_sources})
   ELSE(NOT SOLARIS)
     ADD_LIBRARY(vil ${vil_sources})
-      ADD_LIBRARY(vil_network ${vil_network_sources})
-    ENDIF(NOT APPLE)
+    ADD_LIBRARY(vil_network ${vil_network_sources})
   ENDIF(NOT SOLARIS)
 ENDIF(APPLE)
 
