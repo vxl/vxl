@@ -47,7 +47,9 @@
 #include <vgui/vgui_fwd.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
-#include <vgui/vgui_glut.h>
+#if HAS_GLUT
+# include <vgui/vgui_glut.h>
+#endif
 #include <vgui/vgui_glx.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
