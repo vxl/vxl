@@ -45,7 +45,7 @@ vbl_array_3d<T>::vbl_array_3d (unsigned int n1, unsigned int n2, unsigned int n3
 
 // -- Copy constructor
 template <class T>
-vbl_array_3d<T>::vbl_array_3d(const vbl_array_3d<T>& that):
+vbl_array_3d<T>::vbl_array_3d(vbl_array_3d<T> const& that):
   base(that.row1_count_, that.row2_count_, that.row3_count_)
 {
   allocate_array(row1_count_, row2_count_, row3_count_);
@@ -94,7 +94,7 @@ vbl_array_3d<T>::~vbl_array_3d()
 
 // -- Assignment
 template <class T>
-vbl_array_3d<T>& vbl_array_3d<T>::operator = (const vbl_array_3d<T>& that)
+vbl_array_3d<T>& vbl_array_3d<T>::operator = (vbl_array_3d<T> const& that)
 {
   assert(row1_count_ == that.row1_count_);
   assert(row2_count_ == that.row2_count_);
@@ -107,7 +107,7 @@ vbl_array_3d<T>& vbl_array_3d<T>::operator = (const vbl_array_3d<T>& that)
 // we consider the tensor as a set of matrices (M[i])[j][k] then the matrices are
 // filled in the usual C order.
 template <class T>
-void vbl_array_3d<T>::set(const T* p)
+void vbl_array_3d<T>::set(T const* p)
 {
   for (unsigned int row1_index = 0; row1_index < row1_count_; row1_index++)
     for (unsigned int row2_index = 0; row2_index < row2_count_; row2_index++)
@@ -127,7 +127,7 @@ void vbl_array_3d<T>::get(T* p) const
 
 // -- Fill with constant
 template <class T>
-void vbl_array_3d<T>::fill(const T& value)
+void vbl_array_3d<T>::fill(T const& value)
 {
   int n = row1_count_ * row2_count_ * row3_count_;
   T* d = data_block();
