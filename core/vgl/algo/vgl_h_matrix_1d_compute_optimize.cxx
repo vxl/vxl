@@ -1,4 +1,4 @@
-#include <vgl/algo/vgl_h_matrix_1d_compute_optimize.h>
+#include "vgl_h_matrix_1d_compute_optimize.h"
 #include <vgl/algo/vgl_h_matrix_1d_compute_linear.h>
 
 #include <vcl_cassert.h>
@@ -8,7 +8,6 @@
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_double_2x2.h>
-#include <vgl/algo/vgl_h_matrix_1d.h>
 
 //********************************************************************************
 //
@@ -19,10 +18,10 @@
 
 class XXX : public vnl_least_squares_function
 {
-private:
+ private:
   unsigned N;
   const vcl_vector<double> &z1,z2;
-public:
+ public:
   XXX(const vcl_vector<double> &z1_,const vcl_vector<double> &z2_)
     : vnl_least_squares_function(3, z1_.size(), no_gradient)
     , N(z1_.size())
@@ -88,11 +87,6 @@ void do_compute(const vcl_vector<double> &z1,const vcl_vector<double> &z2,vgl_h_
   T(1,0)=x[1]; T(1,1)=1+x[2];
   M.set(T);
 }
-
-vgl_h_matrix_1d_compute_optimize::
-vgl_h_matrix_1d_compute_optimize(void) : vgl_h_matrix_1d_compute() { }
-
-vgl_h_matrix_1d_compute_optimize::~vgl_h_matrix_1d_compute_optimize() { }
 
 bool vgl_h_matrix_1d_compute_optimize::
 compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >&p1,

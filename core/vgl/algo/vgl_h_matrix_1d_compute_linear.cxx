@@ -1,21 +1,13 @@
+// This is core/vgl/algo/vgl_h_matrix_1d_compute_linear.cxx
 #include "vgl_h_matrix_1d_compute_linear.h"
-
 #include <vcl_cassert.h>
-
 #include <vnl/algo/vnl_svd.h>
-#include <vgl/algo/vgl_h_matrix_1d.h>
 
 //********************************************************************************
 //
 //
 //
 //********************************************************************************
-
-
-vgl_h_matrix_1d_compute_linear::
-vgl_h_matrix_1d_compute_linear(void) : vgl_h_matrix_1d_compute() { }
-
-vgl_h_matrix_1d_compute_linear::~vgl_h_matrix_1d_compute_linear() { }
 
 bool vgl_h_matrix_1d_compute_linear::
 compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >&P,

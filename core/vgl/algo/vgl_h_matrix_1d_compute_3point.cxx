@@ -1,14 +1,11 @@
-//---*-c++-*----
-#include <vgl/algo/vgl_h_matrix_1d_compute_3point.h>
-#include <vcl_vector.h>
+// This is core/vgl/algo/vgl_h_matrix_1d_compute_3point.cxx
+#include "vgl_h_matrix_1d_compute_3point.h"
 #include <vcl_cassert.h>
-#include <vgl/algo/vgl_h_matrix_1d.h>
 
 //
 // computes 1d Moebius map from three point correspondences :
 //
-static
-void
+static void
 direct_compute(double T[2][2],
                double p11,double p12,double p13,// p1 p2 p3
                double p21,double p22,double p23,
@@ -30,11 +27,6 @@ direct_compute(double T[2][2],
   T[0][1]=-B[0][0]*A[0][1]+B[0][1]*A[0][0];
   T[1][1]=-B[1][0]*A[0][1]+B[1][1]*A[0][0];
 }
-
-vgl_h_matrix_1d_compute_3point::
-vgl_h_matrix_1d_compute_3point(void) : vgl_h_matrix_1d_compute() { }
-
-vgl_h_matrix_1d_compute_3point::~vgl_h_matrix_1d_compute_3point() { }
 
 bool vgl_h_matrix_1d_compute_3point::
 compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >& points1,
