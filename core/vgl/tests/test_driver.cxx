@@ -12,6 +12,7 @@ DECLARE( test_ellipse_scan_iterator );
 DECLARE( test_window_scan_iterator );
 DECLARE( test_area );
 DECLARE( test_clip );
+DECLARE( test_h_matrix_1d );
 DECLARE( test_h_matrix_2d );
 DECLARE( test_h_matrix_3d );
 DECLARE( test_fit_lines_2d );
@@ -33,6 +34,7 @@ register_tests()
   REGISTER( test_window_scan_iterator );
   REGISTER( test_area );
   REGISTER( test_clip );
+  REGISTER( test_h_matrix_1d );
   REGISTER( test_h_matrix_2d );
   REGISTER( test_h_matrix_3d );
   REGISTER( test_fit_lines_2d );
