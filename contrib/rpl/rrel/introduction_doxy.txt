@@ -1,6 +1,6 @@
 // The following text is included in the main documentation page by doxygen
 /*! \mainpage rrel : Robust Estimation Library
-* The robust estimation library provide various classes for robust
+* The robust estimation library provides various classes for robust
 * estimation of parameters. The library design is based on three
 * concepts: the problem, the objective function, and the search
 * technique. The problem involves that data and the model. Examples of
