@@ -25,8 +25,10 @@ test_gevd_noise()
   noise_estim.EstimateSensorTexture(sensor_noise, texture_noise);
   vcl_cout << "sensor_noise = " << sensor_noise
            << ", texture_noise = " << texture_noise << vcl_endl;
-  TEST("gevd_noise", sensor_noise <= 2 && sensor_noise >= 0 &&
-                     texture_noise <= 2 && texture_noise >= 0, true);
+  TEST("sensor  noise cannot be negative", sensor_noise >= 0, true);
+  TEST("texture noise cannot be negative", texture_noise >= 0, true);
+  TEST_NEAR("sensor  noise", sensor_noise, 0.0, 2.0);
+  TEST_NEAR("texture noise", texture_noise, 0.0, 2.0);
 }
 
 TESTMAIN(test_gevd_noise);
