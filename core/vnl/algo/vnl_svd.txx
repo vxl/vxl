@@ -84,12 +84,24 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
       // matrix. Check for that now.
       M.assert_finite();
 
-      // If we get here it might be because the scalar type has such 
+      // If we get here it might be because
+      // 1. The scalar type has such 
       // extreme precision that too few iterations were performed to
       // converge to within machine precision (that is the svdc criterion).
-      // The only solution to that is to increase the maximum number of
-      // iterations in the netlib code. Diagnose the problem here by
-      // printing a warning message.
+      // One solution to that is to increase the maximum number of
+      // iterations in the netlib code.
+      //
+      // 2. The LINPACK dsvdc_ code expects correct IEEE rounding behaviour,
+      // which some platforms (notably x86 processors)
+      // have trouble doing. For example, gcc can output
+      // code in -O2 and static-linked code that causes this problem.
+      // One solution to this is to persuade gcc to output slightly different code
+      // by adding and -fPIC option to the command line for v3p\netlib\dsvdc.c. If
+      // that doesn't work try adding -ffloat-store, which should fix the problem
+      // at the expense of being significantly slower for big problems. Note that
+      // if this is the cause, vxl/vnl/tests/test_svd should have failed.
+      //
+      // You may be able to diagnose the problem here by printing a warning message.
       vcl_cerr << __FILE__ ": suspicious return value (" << info << ") from SVDC\n"
                << __FILE__ ": M is " << M.rows() << 'x' << M.cols() << vcl_endl;
     }

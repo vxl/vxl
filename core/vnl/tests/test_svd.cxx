@@ -22,32 +22,34 @@ vnl_matrix<double> solve_with_warning(const vnl_matrix<double>& M,
   return svd.solve(B);
 }
 
-void test_hilbert()
+template <class T, class S>
+void test_hilbert(T dummy, char * type, S residual)
 {
   // Test inversion and recomposition of 5x5 hilbert matrix
-  vnl_matrix<double> H(5,5);
+  vnl_matrix<T> H(5,5);
   for(int i = 0; i < 5; ++i)
     for(int j = 0; j < 5; ++j)
       H(i,j) = 1.0 / (i+j+1); // sic, because i,j are zero based
 
-  vcl_cout << "H = [ " << H << "]\n";
+  vcl_cout << "H = <"<<type<<">[ " << H << "]\n";
 
-  vnl_svd<double> svd(H);
+  vnl_svd<T> svd(H);
 
   vcl_cout << "rcond(H) = " << svd.well_condition() << vcl_endl;
 
-  vnl_matrix<double> Hinv = svd.inverse();
+  vnl_matrix<T> Hinv = svd.inverse();
 
-  vnl_matrix<double> X = Hinv * H;
+  vnl_matrix<T> X = Hinv * H;
 
   vcl_cout << "H*inv(H) = " << X << vcl_endl;
 
-  vnl_matrix<double> I(5,5);
+  vnl_matrix<T> I(5,5);
   I = 0.0;
   I.fill_diagonal(1.0);
 
-  vnl_matrix<double> res = X - I;
-  vnl_test_assert("Hilbert recomposition residual", res.fro_norm() < 1.1e-10);
+  vnl_matrix<T> res = X - I;
+  vcl_cout << "Hilbert recomposition residual" << res.fro_norm() << vcl_endl;
+  vnl_test_assert("Hilbert recomposition residual", res.fro_norm() < residual);
 }
 
 // Test recovery of parameters of least-squares parabola fit.
@@ -205,7 +207,10 @@ template void test_nullvector(char const *, vcl_complex<double> *);
 // Driver
 void test_svd()
 {
-  test_hilbert();
+  test_hilbert(double(), "double", 1.1e-10);
+  test_hilbert(float(), "float", float(0.02));
+  test_hilbert(vcl_complex<double>(), "vcl_complex<double>", double(4.4e-10));
+  test_hilbert(vcl_complex<float>(), "vcl_complex<float>", float(0.04));
   test_ls();
   test_pmatrix();
   test_I();
