@@ -12,14 +12,14 @@
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_cmath.h>
 #include <vcl/vcl_iostream.h>
-#include <vil/vil_rgb_byte.h>
+#include <vil/vil_rgb.h>
 
 
 template <class T>
 inline float as_float(T const &v) { return float(v); }
 
 VCL_DEFINE_SPECIALIZATION
-inline float as_float(vil_rgb_byte const &v) { return 0.299*v.r + 0.587*v.g + 0.114*v.b; }
+inline float as_float(vil_rgb<unsigned char> const &v) { return v.grey(); }
 
 //--------------------------------------------------------------------------------
 
