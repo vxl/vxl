@@ -1,28 +1,29 @@
 # oxl/vgui/CMakeLists.txt
 
-INCLUDE(${MODULE_PATH}/FindOpenGL.cmake)
+INCLUDE(${MODULE_PATH}/NewCMake/FindOpenGL.cmake)
 
 # Build here only if OpenGL is available:
-IF (HAS_OPENGL)
+IF (OPENGL_FOUND)
 
-INCLUDE(${MODULE_PATH}/NewCMake/FindX11.cmake)
-# Qv needed by vrml only
-INCLUDE(${MODULE_PATH}/FindQv.cmake)
-# glut optionally used by vgui_text and by the glut toolkit
-# implementation
-INCLUDE(${MODULE_PATH}/NewCMake/FindGLUT.cmake)
+  INCLUDE(${MODULE_PATH}/NewCMake/FindX11.cmake)
+  # Qv needed by vrml only
+  INCLUDE(${MODULE_PATH}/FindQv.cmake)
+  # glut optionally used by vgui_text and by the glut toolkit
+  # implementation
+  INCLUDE(${MODULE_PATH}/NewCMake/FindGLUT.cmake)
 
-# The following are for the optional toolkit
-# implementations
-INCLUDE(${MODULE_PATH}/NewCMake/FindQt.cmake)
-INCLUDE(${MODULE_PATH}/NewCMake/FindGTK.cmake)
-INCLUDE(${MODULE_PATH}/NewCMake/FindFLTK.cmake)
+  # The following are for the optional toolkit
+  # implementations
+  INCLUDE(${MODULE_PATH}/NewCMake/FindQt.cmake)
+  INCLUDE(${MODULE_PATH}/NewCMake/FindGTK.cmake)
+  INCLUDE(${MODULE_PATH}/NewCMake/FindFLTK.cmake)
 
-INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
-IF( GLUT_FOUND )
-  INCLUDE_DIRECTORIES(${GLUT_INCLUDE_DIR})
-  ADD_DEFINITIONS( -DHAS_GLUT)
-ENDIF( GLUT_FOUND )
+  ADD_DEFINITIONS( -DHAS_OPENGL)
+  INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+  IF( GLUT_FOUND )
+    INCLUDE_DIRECTORIES(${GLUT_INCLUDE_DIR})
+    ADD_DEFINITIONS( -DHAS_GLUT)
+  ENDIF( GLUT_FOUND )
 
 SET(vgui_sources
   vgui_fwd.h
@@ -570,4 +571,4 @@ IF (BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF (BUILD_TESTING)
 
-ENDIF (HAS_OPENGL)
+ENDIF (OPENGL_FOUND)
