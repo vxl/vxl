@@ -31,8 +31,9 @@
 //                    - added get_min() & get_max() pass-throughs
 //                    - restored perimeter() API
 //                    - added topology_type() override (INTENSITYFACE)
-//   14-Nov-2003 - Joe Mundy - removed leak since the region_ was not being
-//                             deleted
+//   14-Nov-2003 - Joe Mundy - removed leak since region_ was not being deleted
+//   22-Sep-2004 - Peter Vanroose - deprecated all 3D interface stuff
+//   22-Sep-2004 - Peter Vanroose - added cast_to_intensity_face()
 // \endverbatim
 //
 //-------------------------------------------------------------------------
@@ -58,8 +59,6 @@ class vtol_intensity_face : public vtol_face_2d
   vtol_intensity_face(vtol_intensity_face_sptr const& iface);
   vtol_intensity_face(vtol_face_2d_sptr const& face, int npts, float const* xp, float const* yp,
                       unsigned short const* pix);
-  vtol_intensity_face(vtol_face_2d_sptr const& face, int npts, float const* xp, float const* yp,
-                      float const* zp, unsigned short const* pix);
   ~vtol_intensity_face();
 
   //---------------------------------------------------------------------------
@@ -67,7 +66,7 @@ class vtol_intensity_face : public vtol_face_2d
   //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_2d* clone(void) const;
-  
+
   //: Return a platform independent string identifying the class
   vcl_string is_a() const;
 
@@ -79,7 +78,20 @@ class vtol_intensity_face : public vtol_face_2d
   virtual vtol_topology_object::vtol_topology_object_type
   topology_type(void) const { return GetTopologyType(); }
 
-  virtual vtol_intensity_face* CastToIntensityFace() {return this;}
+  //***************************************************************************
+  // Replaces dynamic_cast<T>
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is an intensity face, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual const vtol_intensity_face* cast_to_intensity_face(void) const { return this; }
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is an intensity face, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual vtol_intensity_face* cast_to_intensity_face(void) { return this; }
+
   virtual vdgl_digital_region* cast_to_digital_region() const {return region_;}
   virtual vdgl_digital_region* cast_to_digital_region() {return region_;}
   double area() const { return region_->area(); }
@@ -91,15 +103,15 @@ class vtol_intensity_face : public vtol_face_2d
 
   float const* Xj() const { return region_->Xj(); }
   float const* Yj() const { return region_->Yj(); }
-  //:need to deprecate Z access since intensity_face is strictly 2d in VXL
-  float const* Zj() const { return region_->Zj(); }
+  // \deprecated since intensity_face is strictly 2d in VXL
+  float const* Zj() const { return 0; }
   unsigned short const* Ij() const { return region_->Ij(); }
 
   int Npix()const {return region_->Npix(); }
   float X() const { return region_->X(); }
   float Y() const { return region_->Y(); }
-  //:need to deprecate Z access since intensity_face is strictly 2d in VXL
-  float Z() const { return region_->Z(); }
+  // \deprecated since intensity_face is strictly 2d in VXL
+  float Z() const { return 0.f; }
   unsigned short I() const {return region_->I();}
 
   void set_X(float x){region_->set_X(x); }
@@ -110,7 +122,8 @@ class vtol_intensity_face : public vtol_face_2d
   bool next() const {return region_->next();}
   float Xo()const { return region_->Xo(); }
   float Yo()const { return region_->Yo(); }
-  float Zo()const { return region_->Zo(); }
+  // \deprecated since intensity_face is strictly 2d in VXL
+  float Zo()const { return 0.f; }
   float Io()const { return region_->Io(); }
   float Io_sd()const { return region_->Io_sd(); }
   double X2()const { return region_->X2(); }
@@ -143,19 +156,6 @@ class vtol_intensity_face : public vtol_face_2d
   // MPP 5/9/2003
   // Resurrected from #ifdef'd block below for intensity face attributes
   double perimeter();
-
-// Nobody appears to call these methods
-#if 0
-  // The projection of the face onto a given orientation
-  virtual void extrema(vcl_vector<float>& orientation, float& min, float& max);
-
-  // Only TaggedTransform can handle the shared geometry.
-  virtual bool TaggedTransform(CoolTransform const& t);
-
-  // Computations on the adjacent Face(s)
-  Histogram_ref GetAdjacentRegionHistogram();
-  float GetAdjacentRegionMean();
-#endif
 };
 
 #endif // vtol_intensity_face_h_

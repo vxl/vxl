@@ -33,6 +33,7 @@
 //   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
 //   9 Jan. 2003, Peter Vanroose - added pure virtual "copy_geometry()"
 //   5 Feb. 2003, Peter Vanroose - moved IsHoleP() here from vtol_intensity_face
+//   22 Sep.2004, Peter Vanroose - added cast_to_intensity_face()
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -45,6 +46,7 @@ class vtol_edge;
 class vtol_face_2d;
 class vtol_one_chain;
 class vtol_two_chain;
+class vtol_intensity_face;
 
 class vtol_face : public vtol_topology_object
 {
@@ -95,14 +97,24 @@ class vtol_face : public vtol_topology_object
   virtual vtol_face *cast_to_face(void) { return this; }
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a face, 0 otherwise
+  //: Return `this' if `this' is a 2D face, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_face_2d *cast_to_face_2d(void) const {return 0;}
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a face, 0 otherwise
+  //: Return `this' if `this' is a 2D face, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vtol_face_2d *cast_to_face_2d(void) {return 0;}
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is an intensity face, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual const vtol_intensity_face *cast_to_intensity_face(void) const { return 0; }
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is an intensity face, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual vtol_intensity_face *cast_to_intensity_face(void) { return 0; }
 
   //***************************************************************************
   // Status report
