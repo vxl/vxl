@@ -1,4 +1,4 @@
-// This is brl/bseg/segv/dll.h
+// This is brl/bseg/segv/vil_dll.h
 #ifndef segv_vil_dll_h_
 #define segv_vil_dll_h_
 
