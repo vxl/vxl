@@ -261,13 +261,14 @@ void xcv_display::show_line_slice()
   unsigned col, row;
   get_current(&col, &row);
   xcv_picker_tableau_sptr picker = get_picker_tableau_at(col, row);
-  if (!picker) return;
+  if (!picker) 
+    return;
 
   float fx0,fy0,fx1,fy1;
   picker->pick_line(&fx0, &fy0, &fx1, &fy1);
 
   vil_image img;
-  if (!get_image_at(&img, col, row))
+  if (!get_image_at(&img, col, row)) 
     return;
 
   int num_points
@@ -284,8 +285,9 @@ void xcv_display::show_line_slice()
   line_profile(img, fx0, fy0, fx1, fy1, num_points+1, x, y, val);
 
   char tmp_heading[200];
-  vcl_sprintf(tmp_heading, "Image Intensity Profile across (%.0f, %.0f) to (%.0f, %.0f)",
-              fx0, fy0, fx1, fy1);
+  vcl_sprintf(tmp_heading, 
+    "Image Intensity Profile across (%.0f, %.0f) to (%.0f, %.0f)", 
+    fx0, fy0, fx1, fy1);
 
   xcv_axes_tableau_new axes(tmp_heading, "X", "Intensity");
   for (int i=0; i<num_points+1; i++)
@@ -298,15 +300,6 @@ void xcv_display::show_line_slice()
   profile_dialog.set_ok_button("close");
   profile_dialog.set_cancel_button(0);
   profile_dialog.ask();
-#if 0
-  vgui_window *popup = vgui::produce_window(700, 500, "Image Line Profile");
-  if (popup)
-  {
-    popup->set_statusbar(false);
-    popup->get_adaptor()->set_tableau(vgui_shell_tableau_new(viewer));
-    popup->show();
-  }
-#endif
 }
 
 //-----------------------------------------------------------------------------
