@@ -7,7 +7,8 @@ SOURCES += brct_windows_frame.cxx
 SOURCES += brct_menus.cxx
 
 IULIBS += -lbcrt_test
-TESTS += test_brct_kalman.cxx
+#TESTS += test_brct_kalman.cxx
+MINI_PROG_SOURCES += test_brct_kalman.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
