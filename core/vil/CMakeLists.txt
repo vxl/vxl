@@ -53,6 +53,9 @@ SET( vil2_sources ${vil2_sources}
 
   file_formats/vil2_ras.cxx  file_formats/vil2_ras.h
 
+  file_formats/vil2_dicom.cxx         file_formats/vil2_dicom.h
+  file_formats/vil2_dicom_header.cxx  file_formats/vil2_dicom_header.h
+
   # image operations
   vil2_crop.cxx  vil2_crop.h
   vil2_clamp.cxx vil2_clamp.h

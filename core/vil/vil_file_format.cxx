@@ -9,18 +9,19 @@ vil2_file_format::~vil2_file_format()
 {
 }
 
-#define HAS_PNM  1
-#define HAS_VIFF 0
-#define HAS_IRIS 0
-#define HAS_MIT  0
-#define HAS_BMP  1
-#define HAS_GIF  0
+#define HAS_PNM   1
+#define HAS_VIFF  0
+#define HAS_IRIS  0
+#define HAS_MIT   0
+#define HAS_BMP   1
+#define HAS_GIF   0
 // These will be defined "outside" if there really is a JPEG (PNG, TIFF) library
 // #define HAS_JPEG
 // #define HAS_PNG
 // #define HAS_TIFF
-#define HAS_RAS  1
-#define HAS_GEN  0
+#define HAS_RAS   1
+#define HAS_GEN   0
+#define HAS_DICOM 1
 
 #if HAS_PNM
 #include <vil2/file_formats/vil2_pnm.h>
@@ -66,6 +67,10 @@ vil2_file_format::~vil2_file_format()
 #include <vil2/file_formats/vil2_gen.h>
 #endif
 
+#if HAS_DICOM
+#include <vil2/file_formats/vil2_dicom.h>
+#endif
+
 
 static vil2_file_format** storage = 0;
 vil2_file_format** vil2_file_format::all()
@@ -109,6 +114,9 @@ vil2_file_format** vil2_file_format::all()
 #endif
 #if HAS_GEN
     storage[c++] = new vil2_gen_file_format;
+#endif
+#if HAS_DICOM
+    storage[c++] = new vil2_dicom_file_format;
 #endif
 
     storage[c++] = 0;
