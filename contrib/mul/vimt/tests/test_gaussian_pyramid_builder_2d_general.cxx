@@ -1,5 +1,6 @@
 // This is mul/vimt/tests/test_gaussian_pyramid_builder_2d_general.cxx
 #include <vcl_iostream.h>
+#include <vpl/vpl.h> // vpl_unlink()
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d_general.h>
 #include <vimt/vimt_image_pyramid.h>
@@ -7,12 +8,16 @@
 #include <vsl/vsl_binary_loader.h>
 #include <testlib/testlib_test.h>
 
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
+
 void test_gaussian_pyramid_builder_2d_general_a()
 {
   unsigned ni = 20, nj = 20;
-  vcl_cout << "\n\n**************************************************************\n"
-           <<     " Testing vimt_gaussian_pyramid_builder_2d_general (byte)(ni="<<ni<<")\n"
-           <<     "**************************************************************\n";
+  vcl_cout << "****************************************************************\n"
+           << " Testing vimt_gaussian_pyramid_builder_2d_general (byte)(ni="<<ni<<")\n"
+           << "****************************************************************\n";
 
 
   vimt_image_2d_of<vil_byte> image0;
@@ -88,7 +93,7 @@ void test_gaussian_pyramid_builder_2d_general_a()
 
   vcl_string test_path = "test_gaussian_pyramid_builder_2d_general.bvl.tmp";
   vsl_b_ofstream bfs_out(test_path);
-  TEST (("Created " + test_path + " for writing").c_str(), (!bfs_out), false);
+  TEST(("Created " + test_path + " for writing").c_str(), (!bfs_out), false);
   vsl_b_write(bfs_out, builder);
   vsl_b_write(bfs_out, (vimt_image_pyramid_builder*)(&builder));
   bfs_out.close();
@@ -97,13 +102,16 @@ void test_gaussian_pyramid_builder_2d_general_a()
   vimt_image_pyramid_builder* ptr_in=0;
 
   vsl_b_ifstream bfs_in(test_path);
-  TEST (("Opened " + test_path + " for reading").c_str(), (!bfs_in), false);
+  TEST(("Opened " + test_path + " for reading").c_str(), (!bfs_in), false);
   vsl_b_read(bfs_in, builder_in);
   vsl_b_read(bfs_in, ptr_in);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink(test_path.c_str());
+#endif
 
-  TEST ("saved builder = loaded builder", builder.scale_step(), builder_in.scale_step());
+  TEST("saved builder = loaded builder", builder.scale_step(), builder_in.scale_step());
   TEST("saved and loaded builder by base class ptr", ptr_in->is_a(), builder.is_a());
 
   delete ptr_in;

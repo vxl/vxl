@@ -1,3 +1,5 @@
+// This is mul/clsfy/tests/test_mean_square_1d.cxx
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief Tests the clsfy_mean_square_1d class
@@ -6,14 +8,17 @@
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
+#include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_mean_square_1d.h>
 #include <clsfy/clsfy_mean_square_1d_builder.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
-#include <testlib/testlib_test.h>
 #include <pdf1d/pdf1d_gaussian.h>
 #include <pdf1d/pdf1d_gaussian_sampler.h>
 
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 //: Tests the clsfy_mean_square_1d class
 void test_adaboost()
@@ -88,8 +93,8 @@ void test_adaboost()
                                           wts,
                                           outputs);
 
-  TEST( "Clsfrs the same", *mean_square_clsfr2, *mean_square_clsfr);
-  TEST_NEAR( "Clsfr error", error2, 0, 0.2);
+  TEST("Clsfrs the same", *mean_square_clsfr2, *mean_square_clsfr);
+  TEST_NEAR("Clsfr error", error2, 0.0, 0.2);
 
   vcl_cout<<*mean_square_clsfr2<<vcl_endl;
 
@@ -125,20 +130,17 @@ void test_adaboost()
   vcl_cout<<"True positives= "<<tpr<<vcl_endl;
   vcl_cout<<"False positives= "<<fpr<<vcl_endl;
 
-
   te=((n_pos-tp+fp)*1.0)/(n_pos+n_neg);
   vcl_cout<<"te= "<<te<<vcl_endl;
 
-
   // simple test for binary threshold
-  TEST( "tpr>0.7", tpr>0.7, true );
-  TEST( "fpr<0.3", fpr<0.3, true );
+  TEST("tpr>0.7", tpr>0.7, true);
+  TEST("fpr<0.3", fpr<0.3, true);
 
 
   vcl_cout << "******************************\n"
            << " Testing clsfy_mean_square_1d\n"
            << "******************************\n";
-
 
   // Test various parameter settings
   vnl_vector<double> p(2);
@@ -146,9 +148,8 @@ void test_adaboost()
   p[0]=1;
   p[1]=4;
   mean_square_clsfr->set_params(p);
-  TEST( "-2 not accepted", mean_square_clsfr->classify(-2), 0 );
-  TEST( "2 accepted", mean_square_clsfr->classify(2), 1 );
-
+  TEST("-2 not accepted", mean_square_clsfr->classify(-2), 0);
+  TEST("2 accepted", mean_square_clsfr->classify(2), 1);
 
   // Test loading clsfy_mean_square_1d by base class pointer
 
@@ -166,10 +167,13 @@ void test_adaboost()
   clsfy_classifier_1d* classifier_in = mean_square_builder.new_classifier();;
 
   vsl_b_ifstream bfs_in(test_path);
-  TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
+  TEST(("Opened " + test_path + " for reading").c_str(), (!bfs_in ), false);
   vsl_b_read(bfs_in, *classifier_in);
 
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink(test_path.c_str());
+#endif
 
   vcl_cout<<"Saved :\n";
   vcl_cout<< *mean_square_clsfr << vcl_endl;
@@ -177,8 +181,7 @@ void test_adaboost()
   vcl_cout<< classifier_in << vcl_endl;
 
   TEST("saved classifier = loaded classifier",
-       mean_square_clsfr ->params(), classifier_in->params() );
-
+       mean_square_clsfr ->params(), classifier_in->params());
 
   delete mean_square_clsfr2;
   delete mean_square_clsfr;

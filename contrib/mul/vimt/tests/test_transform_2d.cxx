@@ -1,11 +1,16 @@
 // This is mul/vimt/tests/test_transform_2d.cxx
 #include <testlib/testlib_test.h>
+
 #include <vcl_iostream.h>
+#include <vpl/vpl.h> // vpl_unlink()
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vimt/vimt_transform_2d.h>
 
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 void test_product(const vimt_transform_2d& t0, const vimt_transform_2d& t1)
 {
@@ -125,17 +130,20 @@ void test_transform_2d_a()
   // -------- Test the binary I/O --------
 
   vsl_b_ofstream bfs_out("test_transform_2d.bvl.tmp");
-  TEST ("Created test_transform_2d.bvl.tmp for writing", (!bfs_out), false);
+  TEST("Created test_transform_2d.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, trans0);
   bfs_out.close();
 
   vimt_transform_2d trans0_in;
 
   vsl_b_ifstream bfs_in("test_transform_2d.bvl.tmp");
-  TEST ("Opened test_transform_2d.bvl.tmp for reading", (!bfs_in), false);
+  TEST("Opened test_transform_2d.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, trans0_in);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink("test_transform_2d.bvl.tmp");
+#endif
 
   vnl_vector<double> v0,v0_in;
   trans0.params(v0);

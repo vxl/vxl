@@ -1,10 +1,16 @@
 // This is mul/mil3d/tests/test_transform_3d.cxx
+#include <testlib/testlib_test.h>
+
 #include <vcl_iostream.h>
+#include <vpl/vpl.h> // vpl_unlink()
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vgl/vgl_distance.h>
 #include <mil3d/mil3d_transform_3d.h>
-#include <testlib/testlib_test.h>
+
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 void test_product(const mil3d_transform_3d& t0, const mil3d_transform_3d& t1)
 {
@@ -62,9 +68,9 @@ void test_the_transform(mil3d_transform_3d& t)
 
 void test_transform_3d()
 {
-  vcl_cout << "****************************\n";
-  vcl_cout << " Testing mil3d_transform_3d\n";
-  vcl_cout << "****************************\n";
+  vcl_cout << "****************************\n"
+           << " Testing mil3d_transform_3d\n"
+           << "****************************\n";
 
   mil3d_transform_3d trans0;
   vgl_point_3d<double> p0(1,2,0),p1;
@@ -113,6 +119,9 @@ void test_transform_3d()
   vsl_b_read(bfs_in, trans0_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink("test_transform_3d.bvl.tmp");
+#endif
 
   vnl_vector<double> v0,v0_in;
   trans0.params(v0);

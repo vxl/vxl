@@ -4,7 +4,7 @@
 //  Copyright: (C) 2000 Victoria University of Manchester
 //
 //=======================================================================
-
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \author Tim Cootes
@@ -13,6 +13,7 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
+#include <vpl/vpl.h> // vpl_unlink()
 #include <pdf1d/pdf1d_mixture.h>
 #include <pdf1d/pdf1d_mixture_builder.h>
 #include <pdf1d/pdf1d_mixture_sampler.h>
@@ -22,14 +23,16 @@
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vsl/vsl_binary_loader.h>
 
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_mixture()
 {
-  vcl_cout << "\n\n**************************" << vcl_endl;
-  vcl_cout << " Testing pdf1d_mixture" << vcl_endl;
-  vcl_cout << "**************************" << vcl_endl;
-
+  vcl_cout << "***********************\n"
+           << " Testing pdf1d_mixture\n"
+           << "***********************\n";
 
   vsl_add_to_binary_loader(pdf1d_gaussian());
   vsl_add_to_binary_loader(pdf1d_gaussian_builder());
@@ -76,42 +79,37 @@ void test_mixture()
 
   builder.build(*p_pdf,data_array);
 
-  vcl_cout<<"Original PDF: "<<pdf<<vcl_endl;
-  vcl_cout<<"Mean: "<< pdf.mean() <<vcl_endl;
-  vcl_cout<<"Var:  "<<pdf.variance()<<vcl_endl;
-  vcl_cout<<"New PDF: "<<p_pdf<<vcl_endl;
-  vcl_cout<<"Mean: " << p_pdf->mean()<<vcl_endl;
-  vcl_cout<<"Var:  " << p_pdf->variance()<<vcl_endl;
+  vcl_cout<<"Original PDF: "<<pdf<<vcl_endl
+          <<"Mean: "<< pdf.mean() <<vcl_endl
+          <<"Var:  "<<pdf.variance()<<vcl_endl
+          <<"New PDF: "<<p_pdf<<vcl_endl
+          <<"Mean: " << p_pdf->mean()<<vcl_endl
+          <<"Var:  " << p_pdf->variance()<<vcl_endl;
 
   pdf1d_mixture & gmm =  (pdf1d_mixture &) (*p_pdf);
 
   vcl_vector<double> test_wts(n_comp, 1.0/n_comp);
-  TEST("Weights are about correct",
-    vnl_c_vector<double>::euclid_dist_sq(&gmm.weights()[0],
-      &test_wts[0], n_comp) < 0.01,
-    true);
+  TEST_NEAR("Weights are about correct",
+            vnl_c_vector<double>::euclid_dist_sq(&gmm.weights()[0], &test_wts[0], n_comp),
+            0.0, 0.001);
 
   if (vcl_fabs(gmm.component(0).mean()-mean[0]) <
       vcl_fabs(gmm.component(0).mean()-mean[1]) )
   {
-    TEST("Means are about correct",
-      (vcl_fabs(gmm.component(0).mean()-mean[0]) < 0.05 &&
-      vcl_fabs(gmm.component(1).mean()-mean[1]) < 0.05),
-      true);
+    TEST_NEAR("Means are about correct", gmm.component(0).mean(), mean[0], 0.05);
+    TEST_NEAR("Means are about correct", gmm.component(1).mean(), mean[1], 0.05);
   }
   else
   {
-    TEST("Means are about correct",
-      (vcl_fabs(gmm.component(0).mean()-mean[1]) < 0.05 &&
-      vcl_fabs(gmm.component(1).mean()-mean[0]) < 0.05),
-      true);
+    TEST_NEAR("Means are about correct", gmm.component(0).mean(), mean[1], 0.05);
+    TEST_NEAR("Means are about correct", gmm.component(1).mean(), mean[0], 0.05);
   }
 
   vcl_string test_path = "test_mixture.bvl.tmp";
 
   vcl_cout<<"\n\n=================Testing I/O:\nSaving data...\n";
   vsl_b_ofstream bfs_out(test_path);
-  TEST (("Created "+test_path+" for writing").c_str(), (!bfs_out), false);
+  TEST(("Created "+test_path+" for writing").c_str(), (!bfs_out), false);
 
   vsl_b_write(bfs_out,builder);
   vsl_b_write(bfs_out,(pdf1d_builder*) &builder);
@@ -119,20 +117,23 @@ void test_mixture()
   vsl_b_write(bfs_out,(pdf1d_pdf*) 0);
   bfs_out.close();
 
-  vcl_cout<<"Loading data..."<<vcl_endl;
+  vcl_cout<<"Loading data...\n";
   pdf1d_mixture_builder builder2;
   pdf1d_builder*  p_builder2 = 0;
   pdf1d_pdf*         p_pdf2 = 0;
   pdf1d_pdf*         p_pdf3 = 0;
 
   vsl_b_ifstream bfs_in(test_path);
-  TEST (("Opened "+test_path+" for reading").c_str(), (!bfs_in), false);
+  TEST(("Opened "+test_path+" for reading").c_str(), (!bfs_in), false);
   vsl_b_read(bfs_in, builder2);
   vsl_b_read(bfs_in, p_builder2);
   vsl_b_read(bfs_in, p_pdf2);
   vsl_b_read(bfs_in, p_pdf3);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink(test_path.c_str());
+#endif
 
   vcl_cout<<"Original builder: "; vsl_print_summary(vcl_cout, builder); vcl_cout<<vcl_endl;
   vcl_cout<<"Loaded builder: "; vsl_print_summary(vcl_cout, p_builder2); vcl_cout<<vcl_endl;
@@ -162,7 +163,7 @@ void test_mixture()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("820 < pass < 980", pass > 820 && pass < 980, true);
   pass=0; fail=0;
   thresh = p_pdf->log_prob_thresh(0.1);
@@ -175,7 +176,7 @@ void test_mixture()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
 
   delete p_pdf;

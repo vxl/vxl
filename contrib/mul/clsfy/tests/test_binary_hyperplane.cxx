@@ -1,5 +1,6 @@
+// This is mul/clsfy/tests/test_binary_hyperplane.cxx
 // Copyright: (C) 2000 British Telecommunications PLC
-
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief Tests the clsfy_binary_pdf_classifier class
@@ -20,14 +21,16 @@
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <vsl/vsl_vector_io.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vcl_cmath.h>
-#include <testlib/testlib_test.h>
+#include <vpl/vpl.h> // vpl_unlink()
+
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 //: Tests the clsfy_binary_hyperplane and clsfy_binary_hyperplane_builder classes
 void test_binary_hyperplane()
 {
-  vcl_cout << "\n\n\n"
-           << "*****************************\n"
+  vcl_cout << "*****************************\n"
            << " Testing clsfy_binary_linear\n"
            << "*****************************\n";
 
@@ -56,7 +59,7 @@ void test_binary_hyperplane()
   vcl_vector<unsigned> testLabels(nTestSamples);
   vnl_vector<double> s;
 
-  vcl_cout << "Generating test data" << vcl_endl;
+  vcl_cout << "Generating test data\n";
   for (unsigned int i=0; i<nSamples; i++)
   {
     int c = rng.lrand32(0,1);
@@ -74,20 +77,20 @@ void test_binary_hyperplane()
   delete generator[0];
   delete generator[1];
 
-  vcl_cout << "****************The Training set****************" <<vcl_endl;
+  vcl_cout << "****************The Training set****************\n";
 
   vnl_vector<double> x(nDims);
   vcl_vector<double> out(1);
   x.fill(0.0);
-  vcl_cout << "x(2) varies across from -2 to + 2" << vcl_endl
-           << "x(1) varies down from    2 to  -2" << vcl_endl;
+  vcl_cout << "x(2) varies across from -2 to + 2\n"
+           << "x(1) varies down from    2 to  -2\n";
 
 #if 0
 
   clsfy_k_nearest_neighbour knn;
   knn.set(trainingVectors, labels);
   knn.set_k(3);
-  vcl_cout << vcl_endl << "KNN output"<<vcl_endl
+  vcl_cout << vcl_endl << "KNN output\n"
            << vcl_setprecision(4);
   for (x(0) = 2; x(0) >= -2 ; x(0) -= 0.25)
   {
@@ -112,9 +115,9 @@ void test_binary_hyperplane()
   win.set(trainingVectors, labels);
   win.set_rbf_width(0.2);
   win.set_power(10);
-  vcl_cout << "x(2) varies across from -2 to +2" << vcl_endl
-           << "x(1) varies down from    2 to -2" << vcl_endl
-           << vcl_endl << "Training data distribution"<<vcl_endl
+  vcl_cout << "x(2) varies across from -2 to +2\n"
+           << "x(1) varies down from    2 to -2\n"
+           << vcl_endl << "Training data distribution\n"
            << vcl_setprecision(1);
   for (x(0) = 2; x(0) >= -2 ; x(0) -= 0.25)
   {
@@ -129,7 +132,7 @@ void test_binary_hyperplane()
     vcl_cout << vcl_endl;
   }
 #endif
-  vcl_cout<<"======== TESTING BUILDING ==========="<<vcl_endl;
+  vcl_cout<<"======== TESTING BUILDING ===========\n";
 
 
   vcl_cout << vcl_setprecision(6);
@@ -138,14 +141,14 @@ void test_binary_hyperplane()
 
   clsfy_binary_hyperplane *pClassifier =
     (clsfy_binary_hyperplane*) builder.new_classifier();
-  vcl_cout << "Finding Least Squares Separator using least squares" << vcl_endl;
+  vcl_cout << "Finding Least Squares Separator using least squares\n";
   mbl_data_array_wrapper<vnl_vector<double> > training_set(trainingVectors);
   vcl_cout << "Error on Training set ";
   double train_error = builder.build(*pClassifier, training_set, labels);
   vcl_cout << train_error << vcl_endl;
   TEST("Train error on classifier is good enough", train_error < 0.05, true);
 
-  vcl_cout << "****************Testing over test set**************" <<vcl_endl;
+  vcl_cout << "****************Testing over test set**************\n";
 
   mbl_data_array_wrapper<vnl_vector<double> > test_set_inputs(testVectors);
 
@@ -157,8 +160,8 @@ void test_binary_hyperplane()
   // print input, print output
 
   x.fill(0.0);
-  vcl_cout << "x(2) varies across from -2 to +2" << vcl_endl
-           << "x(1) varies down from    2 to -2" << vcl_endl;
+  vcl_cout << "x(2) varies across from -2 to +2\n"
+           << "x(1) varies down from    2 to -2\n";
 
   vcl_cout << vcl_setprecision(4);
   for (x(0) = 2; x(0) >= -2 ; x(0) -= 0.25)
@@ -180,7 +183,7 @@ void test_binary_hyperplane()
     vcl_cout << vcl_endl;
   }
 
-  vcl_cout<<"======== TESTING I/O ==========="<<vcl_endl;
+  vcl_cout<<"======== TESTING I/O ===========\n";
 
   vcl_string test_path = "test_binary_hyperplane.bvl.tmp";
 
@@ -189,14 +192,16 @@ void test_binary_hyperplane()
   vsl_b_write(bfs_out, *pClassifier);
   bfs_out.close();
 
-
   clsfy_binary_hyperplane classifier_in;
 
   vsl_b_ifstream bfs_in(test_path);
-  TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
+  TEST(("Opened " + test_path + " for reading").c_str(), (!bfs_in ), false);
   vsl_b_read(bfs_in, classifier_in);
 
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink(test_path.c_str());
+#endif
 
   vcl_cout<<"Saved : " << *pClassifier << vcl_endl
           <<"Loaded: " << classifier_in << vcl_endl;
@@ -206,10 +211,9 @@ void test_binary_hyperplane()
        pClassifier->bias() == classifier_in.bias(),
        true);
 
-  TEST("saved classifier(x) = loaded classifier(x)",
-       vcl_fabs(pClassifier->log_l(vnl_vector<double>(nDims, 0.25)) -
-                classifier_in.log_l(vnl_vector<double>(nDims, 0.25))) < 1.0e-10,
-       true);
+  TEST_NEAR("saved classifier(x) = loaded classifier(x)",
+            pClassifier->log_l(vnl_vector<double>(nDims, 0.25)),
+            classifier_in.log_l(vnl_vector<double>(nDims, 0.25)), 1.0e-10);
   vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
 
   delete pClassifier;

@@ -1,5 +1,6 @@
+// This is mul/clsfy/tests/test_binary_pdf_classifier.cxx
 // Copyright: (C) 2000 British Telecommunications PLC
-
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief Tests the clsfy_binary_pdf_classifier class
@@ -9,20 +10,22 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <vcl_ios.h>
-
 #include <vcl_string.h>
+#include <vpl/vpl.h> // vpl_unlink()
+
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <clsfy/clsfy_binary_pdf_classifier.h>
 
-#include <testlib/testlib_test.h>
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 //: Tests the clsfy_binary_pdf_classifier class
 void test_binary_pdf_classifier()
 {
   vsl_add_to_binary_loader(vpdfl_axis_gaussian());
 
-  vcl_cout << "\n\n\n"
-           << "*************************************\n"
+  vcl_cout << "*************************************\n"
            << " Testing clsfy_binary_pdf_classifier\n"
            << "*************************************\n";
 
@@ -79,10 +82,13 @@ void test_binary_pdf_classifier()
   clsfy_binary_pdf_classifier classifier2;
 
   vsl_b_ifstream bfs_in(test_path);
-  TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
+  TEST(("Opened " + test_path + " for reading").c_str(), (!bfs_in ), false);
   classifier2.b_read(bfs_in);
 
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink(test_path.c_str());
+#endif
 
   vcl_cout<<"Saved : " << classifier << vcl_endl
           <<"Loaded: " << classifier2 << vcl_endl;

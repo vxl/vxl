@@ -60,7 +60,7 @@ bool test_image_equal(char const* type_name,
   int planes2 = image2.nplanes();
 
   // make sure saved image has the same pixels as the original image
-  TEST ("Loaded image can be viewed as same type as saved image", (bool)image2,true);
+  TEST("Loaded image can be viewed as same type as saved image", !image2, false);
   if (!image2)
   {
     vcl_cout << "read back image type has pixel type " << pimage2->pixel_format()
@@ -68,7 +68,7 @@ bool test_image_equal(char const* type_name,
     return false;
   }
 
-  TEST ("Image dimensions", sizex == sizex2 && sizey == sizey2, true);
+  TEST("Image dimensions", sizex == sizex2 && sizey == sizey2, true);
   if (sizex != sizex2 || sizey != sizey2)
   {
     vcl_cout << type_name << ": sizes are " << sizex2 << " x " << sizey2
@@ -76,7 +76,7 @@ bool test_image_equal(char const* type_name,
     return false;
   }
 
-  TEST ("Number of planes", planes, planes2);
+  TEST("Number of planes", planes, planes2);
   if (planes != planes2)
   {
     vcl_cout << type_name << ": nplanes are " << planes2
@@ -86,7 +86,7 @@ bool test_image_equal(char const* type_name,
 
   if (!exact) // no exact pixel match wanted
   {
-    TEST ("image headers are identical", true, true);
+    TEST("image headers are identical", true, true);
     return true;
   }
 
@@ -116,7 +116,7 @@ bool test_image_equal(char const* type_name,
     }
   }
 
-  TEST ("pixelwise comparison", bad, 0);
+  TEST("pixelwise comparison", bad, 0);
   if (bad)
   {
     vcl_cout << type_name << ": number of unequal pixels: "  << bad
@@ -238,14 +238,14 @@ void vil2_test_image_type(char const* type_name, // type for image to read and w
   else
   {
     bool tst = vil2_save(image, fname.c_str(), type_name);
-    TEST ("write image to disk", tst, true);
+    TEST("write image to disk", tst, true);
     if (!tst) return; // fatal error
   }
 
   // STEP 2) Read the image that was just saved to file
   {
     vil2_image_view_base_sptr image2 = vil2_load(fname.c_str());
-    TEST ("load image", !image2, false);
+    TEST("load image", !image2, false);
     if (!image2)
     {
       return; // fatal error
@@ -362,13 +362,13 @@ MAIN( test_save_load_image )
 #endif
 
 
-
   // PNG
 #if 1
   vil2_test_image_type("png", image8);
   vil2_test_image_type("png", image16);
   vil2_test_image_type("png", image3p);
 #endif
+
 
   // JPEG
 #if HAS_JPEG
@@ -396,8 +396,12 @@ MAIN( test_save_load_image )
     for (unsigned i=0;i<ni;++i)
     { double d=double(small_greyscale_image(i,17))-new_image(i,17); sum2+=d*d; }
     TEST_NEAR("Loaded image close to original",sum2,0.0,2*ni);
+#if !LEAVE_IMAGES_BEHIND
+    vpl_unlink(out_path.c_str());
+#endif
   }
 #endif
+
 
   // pnm ( = PBM / PGM / PPM )
 #if 1
@@ -408,11 +412,13 @@ MAIN( test_save_load_image )
   vil2_test_image_type("ppm", image3p);
 #endif
 
+
   // bmp
 #if 1
   vil2_test_image_type("bmp", image8);
   vil2_test_image_type("bmp", image3p);
 #endif
+
 
   // VIFF image (Khoros)
 #if 0
@@ -424,6 +430,7 @@ MAIN( test_save_load_image )
   vil2_test_image_type("viff", imagefloat);
 #endif
 
+
   // TIFF
 #if 0
   vil2_test_image_type("tiff", image1);
@@ -434,12 +441,14 @@ MAIN( test_save_load_image )
   vil2_test_image_type("tiff", imagefloat);
 #endif
 
+
   // GIF (read-only)
 #if 0
   // lossy format ==> not guaranteed to be identical (hence arg. 3 set to false)
   vil2_test_image_type("gif", image8, false);
   vil2_test_image_type("gif", image3p, false);
 #endif
+
 
   // SGI "iris" rgb
 #if 0

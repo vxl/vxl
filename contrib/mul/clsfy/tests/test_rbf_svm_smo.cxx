@@ -1,6 +1,6 @@
 // This is mul/clsfy/tests/test_rbf_svm_smo.cxx
 // Copyright: (C) 2001 British Telecommunications PLC
-
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief Tests clsfy_rbf_svm and clsfy_rbf_svm_smo_1_builder
@@ -22,15 +22,18 @@
 #include <mbl/mbl_mz_random.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vul/vul_timer.h>
-#include <testlib/testlib_test.h>
+#include <vpl/vpl.h> // vpl_unlink()
+
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 //=======================================================================
 void test_rbf_svm()
 {
-  vcl_cout << "\n\n\n";
-  vcl_cout << "*************************************\n";
-  vcl_cout << " Testing clsfy_rbf_svm_smo_1_builder\n";
-  vcl_cout << "*************************************\n";
+  vcl_cout << "*************************************\n"
+           << " Testing clsfy_rbf_svm_smo_1_builder\n"
+           << "*************************************\n";
 
   vcl_cout<<"======== TESTING BUILDING ===========\n";
 
@@ -203,21 +206,21 @@ void test_rbf_svm()
 
   vcl_cout << "There are " << classifier3.n_support_vectors() << " Support Vectors\n";
 
-  TEST("Training Error < 0.05", error < 0.05, true);
+  TEST_NEAR("Training Error < 0.05", error, 0.0, 0.05);
 
   vcl_cout << "\nError on Testing set ";
   mbl_data_array_wrapper<vnl_vector<double> > test_vector_data(testingVectors);
   double testError = clsfy_test_error(classifier3, test_vector_data, testLabels);
   vcl_cout << testError << vcl_endl;
 
-  TEST("Test Error < 0.1", testError < 0.1, true);
+  TEST_NEAR("Test Error < 0.1", testError, 0.0, 0.1);
 
   vcl_cout << "\n****************Testing classifier IO**************\n";
   vsl_add_to_binary_loader(clsfy_rbf_svm());
   vcl_string test_path = "test_rbf_svm.bvl.tmp";
 
   vsl_b_ofstream bfs_out(test_path);
-  TEST (("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
+  TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
   vsl_b_write(bfs_out, classifier3);
   vsl_b_write(bfs_out, (clsfy_classifier_base *) &classifier3);
   bfs_out.close();
@@ -226,10 +229,13 @@ void test_rbf_svm()
   clsfy_classifier_base *pClassifier2=0;
 
   vsl_b_ifstream bfs_in(test_path);
-  TEST (("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
+  TEST(("Opened " + test_path + " for reading").c_str(), (!bfs_in ), false);
   vsl_b_read(bfs_in, svmi);
   vsl_b_read(bfs_in, pClassifier2);
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink(test_path.c_str());
+#endif
 
   vcl_cout<<"Saved : " << classifier3 << vcl_endl;
   vcl_cout<<"Loaded: " << svmi << vcl_endl;
@@ -238,24 +244,24 @@ void test_rbf_svm()
   clsfy_rbf_svm &svmo = *(clsfy_rbf_svm *)&classifier3;
 
   TEST("Saved Classifier = Loaded Classifier",
-    svmo.bias() == svmi.bias() &&
-    svmo.lagrangians() == svmi.lagrangians() &&
-    svmo.support_vectors() == svmi.support_vectors(),
-    true);
+       svmo.bias() == svmi.bias() &&
+       svmo.lagrangians() == svmi.lagrangians() &&
+       svmo.support_vectors() == svmi.support_vectors(),
+       true);
 
   double ll_o = svmo.log_l(vnl_vector<double>(nDims, 0.3));
   double ll_i = svmi.log_l(vnl_vector<double>(nDims, 0.3));
-  TEST("Saved Classifier.log_l() = Loaded Classifier.log_l()",
-    vcl_fabs(ll_o-ll_i) < 1e-11, true);
+  TEST_NEAR("Saved Classifier.log_l() = Loaded Classifier.log_l()",
+            ll_o, ll_i, 1e-11);
 
   TEST("Saved Classifier = Classifier Loaded by Base Class Ptr",
-    svmo.is_a(), pClassifier2->is_a());
+       svmo.is_a(), pClassifier2->is_a());
 
   TEST("Loaded Classifier type = Original Classifier type",
-    pClassifier2->is_class(svmo.is_a()), true);
+       pClassifier2->is_class(svmo.is_a()), true);
 
   TEST("Loaded Classifier has base class type",
-    pClassifier2->is_class("clsfy_classifier_base"), true);
+       pClassifier2->is_class("clsfy_classifier_base"), true);
 
   vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
 

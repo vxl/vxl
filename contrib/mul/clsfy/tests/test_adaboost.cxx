@@ -1,5 +1,5 @@
 // This is mul/clsfy/tests/test_adaboost.cxx
-
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief Tests the clsfy_adaboost_trainer class
@@ -9,6 +9,7 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_algorithm.h>
+#include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_simple_adaboost.h>
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
@@ -17,10 +18,12 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <testlib/testlib_test.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 //: Extracts the j-th element of each vector in data and puts into v
 void get_1d_inputs(vnl_vector<double>& v,
@@ -150,8 +153,10 @@ void test_adaboost()
   double diff=0;
   unsigned na= vcl_min(pClassifier->alphas().size(), pClassifier4->alphas().size() );
   na = 3; // rounding errors can cause major differences in the values of some of the later weightings.
-  for (unsigned k=0; k<na; ++k) {
-    TEST_NEAR( "sorted classifier4 == normal classifier", pClassifier->alphas()[k], pClassifier4->alphas()[k], 0.001);
+  for (unsigned k=0; k<na; ++k)
+  {
+    TEST_NEAR("sorted classifier4 == normal classifier",
+              pClassifier->alphas()[k], pClassifier4->alphas()[k], 0.001);
   }
 
   vcl_cout<<"diff= "<<diff<<vcl_endl;
@@ -185,8 +190,8 @@ void test_adaboost()
 
 
   //soft test
-  TEST( "tpr>0.8", tpr>0.8, true );
-  TEST( "fpr<0.2", fpr<0.2, true );
+  TEST("tpr>0.8", tpr>0.8, true);
+  TEST("fpr<0.2", fpr<0.2, true);
 
 
   //Train individual classifiers on each of the 4 Gaussian data sets
@@ -228,14 +233,13 @@ void test_adaboost()
     te= ((n_pos-tp+fp)*1.0)/(n_pos+n_neg);
     vcl_cout<<"total error rate= "<<te<<vcl_endl;
 
-    TEST( "Weak clfr te not less than strong clfr te", te<adab_te, false);
+    TEST("Weak clfr te not less than strong clfr te", te<adab_te, false);
 
     delete c1d2;
   }
 
 
   vcl_cout<<"======== TESTING I/O ===========\n";
-
 
    // add binary loaders
   vsl_add_to_binary_loader(clsfy_binary_threshold_1d());
@@ -250,20 +254,20 @@ void test_adaboost()
   clsfy_simple_adaboost classifier_in;
 
   vsl_b_ifstream bfs_in(test_path);
-  TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
+  TEST(("Opened " + test_path + " for reading").c_str(), (!bfs_in ), false);
   vsl_b_read(bfs_in, classifier_in);
 
   bfs_in.close();
-
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink(test_path.c_str());
+#endif
 
   vcl_cout<<"Saved :\n";
   vcl_cout<< *pClassifier << vcl_endl;
   vcl_cout<<"Loaded:\n";
   vcl_cout<< classifier_in << vcl_endl;
 
-
-  TEST("saved classifier == loaded classifier",
-       *pClassifier==classifier_in, true);
+  TEST("saved classifier == loaded classifier", *pClassifier, classifier_in);
 
   delete pClassifier;
 }

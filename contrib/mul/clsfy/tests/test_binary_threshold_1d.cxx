@@ -1,5 +1,5 @@
 // This is mul/clsfy/tests/test_binary_threshold_1d.cxx
-
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief Tests the clsfy_binary_threshold_1d class
@@ -8,15 +8,17 @@
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <vcl_cmath.h>
+#include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_binary_threshold_1d.h>
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
-#include <testlib/testlib_test.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 //: Tests the clsfy_binary_threshold_1d class
 void test_adaboost()
@@ -132,8 +134,8 @@ void test_adaboost()
 
 
   // simple test for binary threshold
-  TEST( "tpr>0.7", tpr>0.7, true );
-  TEST( "fpr<0.3", fpr<0.3, true );
+  TEST("tpr>0.7", tpr>0.7, true);
+  TEST("fpr<0.3", fpr<0.3, true);
 
 
   vcl_cout<<"=========swap pos and neg samples round===========\n";
@@ -150,7 +152,7 @@ void test_adaboost()
 
   vcl_cout<<"error2= "<<error2<<vcl_endl;
 
-  TEST ("error1~=error2", vcl_fabs(error1-error2)<0.001, true);
+  TEST_NEAR("error1 ~= error2", error1, error2, 0.001);
 
   tp=0;
   fp=0;
@@ -210,10 +212,13 @@ void test_adaboost()
   clsfy_classifier_1d* classifier_in = b_thresh_builder.new_classifier();;
 
   vsl_b_ifstream bfs_in(test_path);
-  TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
+  TEST(("Opened " + test_path + " for reading").c_str(), (!bfs_in ), false);
   vsl_b_read(bfs_in, *classifier_in);
 
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink(test_path.c_str());
+#endif
 
   vcl_cout<<"Saved :\n";
   vcl_cout<< *b_thresh_clsfr << vcl_endl;
@@ -221,7 +226,7 @@ void test_adaboost()
   vcl_cout<< classifier_in << vcl_endl;
 
   TEST("saved classifier = loaded classifier",
-       b_thresh_clsfr ->params(), classifier_in->params() );
+       b_thresh_clsfr ->params(), classifier_in->params());
 
 
   delete b_thresh_clsfr;

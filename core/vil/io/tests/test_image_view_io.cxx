@@ -1,10 +1,16 @@
 // This is mul/vil2/io/tests/test_image_view_io.cxx
+#include <testlib/testlib_test.h>
+
 #include <vcl_iostream.h>
 #include <vxl_config.h>
-#include <testlib/testlib_test.h>
+#include <vpl/vpl.h> // vpl_unlink()
 #include <vil2/vil2_image_view.h>
 #include <vil2/io/vil2_io_image_view.h>
 #include <vil2/vil2_plane.h>
+
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 template<class T>
 inline void test_image_view_io_as(T value1, T value2)
@@ -16,20 +22,21 @@ inline void test_image_view_io_as(T value1, T value2)
   vil2_image_view<T> image1p = vil2_plane(image1,1);
 
   vsl_b_ofstream bfs_out("vil2_image_view_test_io.bvl.tmp");
-  TEST ("Created vil2_image_view_test_io.bvl.tmp for writing",
-        (!bfs_out), false);
+  TEST("Created vil2_image_view_test_io.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, image1);
   vsl_b_write(bfs_out, image1p);
   bfs_out.close();
 
   vil2_image_view<T> image2, image2p;
   vsl_b_ifstream bfs_in("vil2_image_view_test_io.bvl.tmp");
-  TEST ("Opened vil2_image_view_test_io.bvl.tmp for reading",
-        (!bfs_in), false);
+  TEST("Opened vil2_image_view_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, image2);
   vsl_b_read(bfs_in, image2p);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink("vil2_image_view_test_io.bvl.tmp");
+#endif
 
   TEST("ni()",image2.ni(),image1.ni());
   TEST("ni()",image2p.ni(),image2.ni());
@@ -49,9 +56,9 @@ MAIN( test_image_view_io )
 {
   START( "vil2_image_view" );
 
-  vcl_cout << "*********************************\n"
+  vcl_cout << "********************************\n"
            << " Testing IO for vil2_image_view\n"
-           << "*********************************\n";
+           << "********************************\n";
 
   test_image_view_io_as(vxl_uint_32(3),vxl_uint_32(17));
   test_image_view_io_as(vxl_int_32(5),vxl_int_32(-17));

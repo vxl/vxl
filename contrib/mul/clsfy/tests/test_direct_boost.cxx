@@ -1,3 +1,5 @@
+// This is mul/clsfy/tests/test_direct_boost.cxx
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief Tests the clsfy_direct_boost and clsfy_direct_boost_builder classes
@@ -6,6 +8,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
+#include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_direct_boost.h>
 #include <clsfy/clsfy_direct_boost_builder.h>
 #include <clsfy/clsfy_mean_square_1d_builder.h>
@@ -14,10 +17,12 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <testlib/testlib_test.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 //: Extracts the j-th element of each vector in data and puts into v
 void get_1d_inputs(vnl_vector<double>& v,
@@ -163,8 +168,8 @@ void test_direct_boost()
 
 
   //soft test
-  TEST( "tpr>0.8", tpr>0.8, true );
-  TEST( "fpr<0.2", fpr<0.2, true );
+  TEST("tpr>0.8", tpr>0.8, true);
+  TEST("fpr<0.2", fpr<0.2, true);
 
 
   vcl_cout<<"======== TESTING I/O ===========\n";
@@ -182,17 +187,18 @@ void test_direct_boost()
   clsfy_direct_boost classifier_in;
 
   vsl_b_ifstream bfs_in(test_path);
-  TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
+  TEST(("Opened " + test_path + " for reading").c_str(), (!bfs_in ), false);
   vsl_b_read(bfs_in, classifier_in);
 
   bfs_in.close();
-
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink(test_path.c_str());
+#endif
 
   vcl_cout<<"Saved :\n";
   vcl_cout<< *pClassifier << vcl_endl;
   vcl_cout<<"Loaded:\n";
   vcl_cout<< classifier_in << vcl_endl;
-
 
   TEST("saved classifier == loaded classifier", *pClassifier, classifier_in);
 

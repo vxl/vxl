@@ -1,7 +1,14 @@
 // This is mul/mbl/tests/test_file_data_wrapper.cxx
+#include <testlib/testlib_test.h>
+
 #include <mbl/mbl_file_data_collector.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_iostream.h>
+#include <vpl/vpl.h> // vpl_unlink()
+
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 void test_file_data_wrapper()
 {
@@ -28,8 +35,7 @@ void test_file_data_wrapper()
   collector.record(v2);
 
   // read in data using mbl_file_data_wrapper
-  mbl_data_wrapper<vnl_vector<double> >& wrapper
-          =collector.data_wrapper();
+  mbl_data_wrapper<vnl_vector<double> >& wrapper =collector.data_wrapper();
 
   // test size of data
   vcl_cout<<"wrapper.size()= "<<wrapper.size()<<vcl_endl;
@@ -56,26 +62,26 @@ void test_file_data_wrapper()
   TEST("set index=0 ie first element",wrapper.current(),v1);
 
   // try to get new wrapper should just return old on, but reset it!
-  mbl_data_wrapper<vnl_vector<double> >& wrapper2
-          =collector.data_wrapper();
+  mbl_data_wrapper<vnl_vector<double> >& wrapper2 =collector.data_wrapper();
   vcl_cout<<"current element= "<<wrapper.current()<<vcl_endl;
   TEST("testing wrapper2, should be set to first element",wrapper2.current(),v1);
-
 
   // record more data then get new wrapper
   // can't really have more than one wrapper, so just get reference to old one!
   collector.record(v3);
-  mbl_data_wrapper<vnl_vector<double> >& wrapper3
-          =collector.data_wrapper();
+  mbl_data_wrapper<vnl_vector<double> >& wrapper3 =collector.data_wrapper();
   vcl_cout<<"wrapper3.size()= "<<wrapper3.size()<<vcl_endl;
-  TEST("wrapper3 should still be same size, even though data file extended"
-                      ,wrapper3.size(),2);
+  TEST("wrapper3 should still be same size, even though data file extended",
+       wrapper3.size(),2);
 
   wrapper3.next();
   wrapper3.next();
   vcl_cout<<"current element= "<<wrapper.current()<<vcl_endl;
   TEST("testing wrapper3, should be set to first element",wrapper3.current(),v1);
-}
 
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink(path.c_str());
+#endif
+}
 
 TESTMAIN(test_file_data_wrapper);

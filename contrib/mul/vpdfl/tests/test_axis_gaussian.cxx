@@ -1,5 +1,5 @@
 // This is mul/vpdfl/tests/test_axis_gaussian.cxx
-
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \author Tim Cootes
@@ -11,13 +11,17 @@
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vsl/vsl_binary_loader.h>
-#include <testlib/testlib_test.h>
+#include <vpl/vpl.h> // vpl_unlink()
+
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 void test_axis_gaussian()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << " Testing vpdfl_axis_gaussian " << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "*****************************\n"
+           << " Testing vpdfl_axis_gaussian\n"
+           << "*****************************\n";
 
   int n_dims = 3;
   vnl_vector<double> mean0(n_dims),var0(n_dims),v0(n_dims);
@@ -66,8 +70,7 @@ void test_axis_gaussian()
   vpdfl_builder_base *base_builder_ptr_out = &builder0;
 
   vsl_b_ofstream bfs_out("test_axis_gaussian.bvl.tmp");
-  TEST ("Created test_axis_gaussian.bvl.tmp for writing",
-             (!bfs_out), false);
+  TEST("Created test_axis_gaussian.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, gauss0);
   vsl_b_write(bfs_out, builder0);
   vsl_b_write(bfs_out, base_pdf_ptr_out);
@@ -80,16 +83,18 @@ void test_axis_gaussian()
   vpdfl_builder_base *base_builder_ptr_in  = 0;
 
   vsl_b_ifstream bfs_in("test_axis_gaussian.bvl.tmp");
-  TEST ("Opened test_axis_gaussian.bvl.tmp for reading",
-           (!bfs_in), false);
+  TEST("Opened test_axis_gaussian.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, gauss0_in);
   vsl_b_read(bfs_in, builder0_in);
   vsl_b_read(bfs_in, base_pdf_ptr_in);
   vsl_b_read(bfs_in, base_builder_ptr_in);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink("test_axis_gaussian.bvl.tmp");
+#endif
 
-  vcl_cout<<"Loaded: "<<vcl_endl;
+  vcl_cout<<"Loaded:\n";
   vcl_cout<<"Model: "; vsl_print_summary(vcl_cout, gauss0_in); vcl_cout<<vcl_endl;
   vcl_cout<<"Builder: "; vsl_print_summary(vcl_cout, builder0_in); vcl_cout<<vcl_endl;
   vcl_cout<<"Model   (by base ptr): "; vsl_print_summary(vcl_cout, base_pdf_ptr_in); vcl_cout<<vcl_endl;
@@ -117,7 +122,7 @@ void test_axis_gaussian()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
   pass=0; fail=0;
   thresh = gauss1.log_prob_thresh(0.1);
@@ -130,7 +135,7 @@ void test_axis_gaussian()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
 
   delete p_sampler2;

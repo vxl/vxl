@@ -1,8 +1,14 @@
 // This is mul/vimt/tests/test_image_2d_of.cxx
 #include <testlib/testlib_test.h>
+
 #include <vxl_config.h> // for vxl_byte
+#include <vpl/vpl.h> // vpl_unlink()
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_crop.h>
+
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 bool Equal(const vimt_image_2d_of<vxl_byte>& im0,
            const vimt_image_2d_of<vxl_byte>& im1)
@@ -30,7 +36,7 @@ void test_image_2d_byte_io()
   image_out1 = image_out0;
 
   vsl_b_ofstream bfs_out("test_image_2d_of.bvl.tmp");
-  TEST ("Created test_image_2d_of.bvl.tmp for writing", (!bfs_out), false);
+  TEST("Created test_image_2d_of.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, image_out0);
   vsl_b_write(bfs_out, image_out1);
   bfs_out.close();
@@ -38,11 +44,14 @@ void test_image_2d_byte_io()
   vimt_image_2d_of<vxl_byte> image_in0,image_in1;
 
   vsl_b_ifstream bfs_in("test_image_2d_of.bvl.tmp");
-  TEST ("Opened test_image_2d_of.bvl.tmp for reading", (!bfs_in), false);
+  TEST("Opened test_image_2d_of.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, image_in0);
   vsl_b_read(bfs_in, image_in1);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink("test_image_2d_of.bvl.tmp");
+#endif
 
   TEST("Binary IO", Equal(image_in0,image_out0),true);
   TEST("Binary IO (2)", Equal(image_in1,image_out1),true);
@@ -62,7 +71,7 @@ void test_image_2d_byte_functions()
         image0.image()(i,j,p)=i+10*j+100*p;
 
   // Test external functions
-  vcl_cout<<"Testing vimt_crop"<<vcl_endl;
+  vcl_cout<<"Testing vimt_crop\n";
   vimt_image_2d_of<vxl_byte> image1 = vimt_crop(image0,1,3,2,4);
   TEST("Origin",image1.image()(0,0),image0.image()(1,2));
   TEST("Width",image1.image().ni(),3);

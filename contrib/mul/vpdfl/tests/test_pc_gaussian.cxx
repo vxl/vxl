@@ -1,3 +1,5 @@
+// This is mul/vpdfl/tests/test_pc_gaussian.cxx
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \author Ian Scott
@@ -5,6 +7,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_ctime.h>
+#include <vpl/vpl.h> // vpl_unlink()
 
 #include <vpdfl/vpdfl_pc_gaussian.h>
 #include <vpdfl/vpdfl_pc_gaussian_builder.h>
@@ -12,15 +15,19 @@
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vsl/vsl_binary_loader.h>
 
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
+
 //=======================================================================
 
 
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_pc_gaussian()
 {
-  vcl_cout << "***************************\n";
-  vcl_cout << " Testing vpdfl_pc_gaussian\n";
-  vcl_cout << "***************************\n";
+  vcl_cout << "***************************\n"
+           << " Testing vpdfl_pc_gaussian\n"
+           << "***************************\n";
 
   vsl_add_to_binary_loader(vpdfl_pc_gaussian());
   vsl_add_to_binary_loader(vpdfl_pc_gaussian_builder());
@@ -104,8 +111,7 @@ void test_pc_gaussian()
 
   vcl_cout<<"\n=================Testing I/O:\n";
   vsl_b_ofstream bfs_out("test_pc_gaussian.bvl.tmp");
-  TEST ("Created test_pc_gaussian.bvl.tmp for writing",
-        (!bfs_out), false);
+  TEST("Created test_pc_gaussian.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out,pdf);
   vsl_b_write(bfs_out,builder);
   vsl_b_write(bfs_out,p_pdf);
@@ -122,15 +128,18 @@ void test_pc_gaussian()
 
 
   vsl_b_ifstream bfs_in("test_pc_gaussian.bvl.tmp");
-  TEST ("Opened test_pc_gaussian.bvl.tmp for reading", (!bfs_in), false);
+  TEST("Opened test_pc_gaussian.bvl.tmp for reading", (!bfs_in), false);
 
   vsl_b_read(bfs_in, pdf_in);
   vsl_b_read(bfs_in, builder_in);
   vsl_b_read(bfs_in, p_base_pdf_in);
   vsl_b_read(bfs_in, p_base_builder_in);
   vsl_b_read(bfs_in, pdf_in2);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink("test_pc_gaussian.bvl.tmp");
+#endif
 
   vcl_cout<<"\nOriginal PDF: "; vsl_print_summary(vcl_cout, pdf);
   vcl_cout<<"\nOriginal builder: "; vsl_print_summary(vcl_cout, builder);
@@ -139,7 +148,6 @@ void test_pc_gaussian()
   vcl_cout<<"\nLoaded PDF: "; vsl_print_summary(vcl_cout, pdf_in);
   vcl_cout<<"\nLoaded builder: "; vsl_print_summary(vcl_cout, builder_in);
   vcl_cout<<vcl_endl<<vcl_endl;
-
 
   TEST("Original Model == Loaded model",
        pdf.mean()==pdf_in.mean() &&
@@ -185,7 +193,6 @@ void test_pc_gaussian()
        builder.partition_method() == chooser->partition_method(),
        true);
 
-
   vcl_cout << "========Testing PDF Thresholds==========";
   vpdfl_sampler_base *p_sampler2 = p_pdf_built->new_sampler();
   unsigned pass=0, fail=0;
@@ -214,9 +221,8 @@ void test_pc_gaussian()
   }
   vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
+
   delete p_sampler2;
-
-
   delete p_pdf_built;
   delete p_sampler;
   delete p_base_pdf_in;

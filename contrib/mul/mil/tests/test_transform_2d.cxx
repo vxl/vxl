@@ -1,10 +1,16 @@
 // This is mul/mil/tests/test_transform_2d.cxx
+#include <testlib/testlib_test.h>
+
 #include <vcl_iostream.h>
+#include <vpl/vpl.h> // vpl_unlink()
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vgl/vgl_distance.h>
 #include <mil/mil_transform_2d.h>
-#include <testlib/testlib_test.h>
+
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 void test_product(const mil_transform_2d& t0, const mil_transform_2d& t1)
 {
@@ -73,9 +79,9 @@ void test_the_transform(mil_transform_2d& t)
 
 void test_transform_2d()
 {
-  vcl_cout << "**************************\n";
-  vcl_cout << " Testing mil_transform_2d\n";
-  vcl_cout << "**************************\n";
+  vcl_cout << "**************************\n"
+           << " Testing mil_transform_2d\n"
+           << "**************************\n";
 
   mil_transform_2d trans0;
   vgl_point_2d<double> p0(1,2),p1;
@@ -135,6 +141,9 @@ void test_transform_2d()
   vsl_b_read(bfs_in, trans0_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink("test_transform_2d.bvl.tmp");
+#endif
 
   vnl_vector<double> v0,v0_in;
   trans0.params(v0);

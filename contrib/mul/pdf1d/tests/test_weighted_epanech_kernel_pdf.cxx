@@ -1,8 +1,9 @@
+// This is mul/pdf1d/tests/test_weighted_epanech_kernel_pdf.cxx
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \author Ian Scott
 // \brief test weighted_epanech_kernel_pdf, building, saving etc.
-
 
 #include <pdf1d/pdf1d_weighted_epanech_kernel_pdf.h>
 #include <pdf1d/pdf1d_epanech_kernel_pdf.h>
@@ -12,13 +13,17 @@
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h> // for vcl_fabs()
+#include <vpl/vpl.h> // vpl_unlink()
 #include <vsl/vsl_binary_loader.h>
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <pdf1d/pdf1d_gaussian.h>
 #include <pdf1d/pdf1d_gaussian_builder.h>
 #include <pdf1d/pdf1d_gaussian_sampler.h>
+
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 //=======================================================================
 
@@ -26,9 +31,9 @@
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_weighted_epanech_kernel_pdf()
 {
-  vcl_cout << "\n\n*******************************************\n";
-  vcl_cout <<     " Testing pdf1d_weighted_epanech_kernel_pdf\n";
-  vcl_cout <<     "*******************************************\n";
+  vcl_cout << "*******************************************\n"
+           << " Testing pdf1d_weighted_epanech_kernel_pdf\n"
+           << "*******************************************\n";
 
 
   // Test Single kernel distribution
@@ -113,7 +118,7 @@ void test_weighted_epanech_kernel_pdf()
 
   vcl_cout<<"\n\n=================Testing I/O:\nSaving data...\n";
   vsl_b_ofstream bfs_out("test_gaussian_kernel_pdf.bvl.tmp");
-  TEST ("Created test_gaussian_kernel_pdf.bvl.tmp for writing", (!bfs_out), false);
+  TEST("Created test_gaussian_kernel_pdf.bvl.tmp for writing", (!bfs_out), false);
 
   vsl_b_write(bfs_out,p_pdf_built);
   bfs_out.close();
@@ -122,11 +127,14 @@ void test_weighted_epanech_kernel_pdf()
   pdf1d_builder*     p_builder_in = NULL;
 
   vsl_b_ifstream bfs_in("test_gaussian_kernel_pdf.bvl.tmp");
-  TEST ("Opened test_gaussian_kernel_pdf.bvl.tmp for reading", (!bfs_in), false);
+  TEST("Opened test_gaussian_kernel_pdf.bvl.tmp for reading", (!bfs_in), false);
 
   vsl_b_read(bfs_in, p_pdf_in);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink("test_gaussian_kernel_pdf.bvl.tmp");
+#endif
 
   vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, p_pdf_built); vcl_cout<<vcl_endl;
   vcl_cout<<vcl_endl;
@@ -157,7 +165,6 @@ void test_weighted_epanech_kernel_pdf()
   }
   vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed using normal method.\n";
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
-
 
   pass=0; fail=0;
   thresh = p_pdf_built->inverse_cdf(0.1);

@@ -1,10 +1,16 @@
 // This is mul/vimt/tests/test_gaussian_pyramid_builder_2d.cxx
 #include <testlib/testlib_test.h>
+
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
+#include <vpl/vpl.h> // vpl_unlink()
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vsl/vsl_binary_loader.h>
+
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder_2d<vxl_byte>& builder)
 {
@@ -53,7 +59,7 @@ void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder_2d<vxl
 
 void test_gaussian_pyramid_builder_2d_a()
 {
-  vcl_cout << "\n\n*************************************************\n"
+  vcl_cout << "*************************************************\n"
            << " Testing vimt_gaussian_pyramid_builder_2d (byte)\n"
            << "*************************************************\n";
 
@@ -69,7 +75,7 @@ void test_gaussian_pyramid_builder_2d_a()
 
   vcl_string test_path = "test_gaussian_pyramid_builder_2d.bvl.tmp";
   vsl_b_ofstream bfs_out(test_path);
-  TEST (("Created " + test_path + " for writing").c_str(), (!bfs_out), false);
+  TEST(("Created " + test_path + " for writing").c_str(), (!bfs_out), false);
   vsl_b_write(bfs_out, builder);
   vsl_b_write(bfs_out, (vimt_image_pyramid_builder*)(&builder));
   bfs_out.close();
@@ -78,13 +84,16 @@ void test_gaussian_pyramid_builder_2d_a()
   vimt_image_pyramid_builder* ptr_in=0;
 
   vsl_b_ifstream bfs_in(test_path);
-  TEST (("Opened " + test_path + " for reading").c_str(), (!bfs_in), false);
+  TEST(("Opened " + test_path + " for reading").c_str(), (!bfs_in), false);
   vsl_b_read(bfs_in, builder_in);
   vsl_b_read(bfs_in, ptr_in);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink(test_path.c_str());
+#endif
 
-  TEST ("saved builder = loaded builder", builder.scale_step(), 2.0);
+  TEST("saved builder = loaded builder", builder.scale_step(), 2.0);
   TEST("saved and loaded builder by base class ptr", ptr_in->is_a(), builder.is_a());
   delete ptr_in;
 

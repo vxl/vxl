@@ -1,26 +1,31 @@
+// This is mul/vpdfl/tests/test_gaussian.cxx
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \author Ian Scott
 // \brief test vpdfl_gaussian, building, sampling, saving etc.
 
 #include <vcl_iostream.h>
-#include <vcl_cmath.h> // for vcl_fabs()
+#include <vpl/vpl.h> // vpl_unlink()
 
 #include <vpdfl/vpdfl_gaussian.h>
 #include <vpdfl/vpdfl_gaussian_builder.h>
 #include <vpdfl/vpdfl_gaussian_sampler.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vnl/io/vnl_io_matrix.h>
-#include <testlib/testlib_test.h>
+
+#ifndef LEAVE_FILES_BEHIND
+#define LEAVE_FILES_BEHIND 0
+#endif
 
 //=======================================================================
 
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_gaussian()
 {
-  vcl_cout << "\n\n************************\n";
-  vcl_cout << " Testing vpdfl_gaussian\n";
-  vcl_cout << "************************\n";
+  vcl_cout << "************************\n"
+           << " Testing vpdfl_gaussian\n"
+           << "************************\n";
 
   vsl_add_to_binary_loader(vpdfl_gaussian());
   vsl_add_to_binary_loader(vpdfl_gaussian_builder());
@@ -50,7 +55,7 @@ void test_gaussian()
   vnl_vector<double> v0(n, 0.0);
   vcl_cout<<"Prob at zero: "<<pdf(v0)<<vcl_endl;
 
-  TEST("pdf(0)",vcl_fabs(pdf(v0) - 7.7485962980456893420900205e-9)<1e-15,true);
+  TEST_NEAR("pdf(0)",pdf(v0),7.748596298e-9,1e-15);
 
 // Test builder =======================================
   int n_samples = 10000;
@@ -84,7 +89,7 @@ void test_gaussian()
 
   vcl_cout<<"\n\n=================Testing I/O:\nSaving data...\n";
   vsl_b_ofstream bfs_out("test_gaussian.bvl.tmp");
-  TEST ("Created test_gaussian.bvl.tmp for writing", (!bfs_out), false);
+  TEST("Created test_gaussian.bvl.tmp for writing", (!bfs_out), false);
 
   vsl_b_write(bfs_out,pdf);
   vsl_b_write(bfs_out,builder);
@@ -98,14 +103,17 @@ void test_gaussian()
   vpdfl_builder_base*     p_base_builder_in = NULL;
 
   vsl_b_ifstream bfs_in("test_gaussian.bvl.tmp");
-  TEST ("Opened test_gaussian.bvl.tmp for reading", (!bfs_in), false);
+  TEST("Opened test_gaussian.bvl.tmp for reading", (!bfs_in), false);
 
   vsl_b_read(bfs_in, pdf_in);
   vsl_b_read(bfs_in, builder_in);
   vsl_b_read(bfs_in, p_base_pdf_in);
   vsl_b_read(bfs_in, p_base_builder_in);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink("test_gaussian.bvl.tmp");
+#endif
 
   vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, pdf); vcl_cout<<vcl_endl;
   vcl_cout<<"Original builder: "; vsl_print_summary(vcl_cout, builder); vcl_cout<<vcl_endl;
