@@ -127,7 +127,7 @@ void test_adaboost()
   clsfy_simple_adaboost *pClassifier = new clsfy_simple_adaboost;
   clsfy_binary_threshold_1d_builder b_thresh_builder;
   clsfy_adaboost_trainer adab_trainer;
-  int n_rounds=5;
+  int n_rounds=100; // was 5; increased to 100 to better see the timing (since vcl_clock() is rather inaccurate...) - PVr
   adab_trainer.build_strong_classifier(*pClassifier, n_rounds, b_thresh_builder,
                                        egs0, egs1 );
 
