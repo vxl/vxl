@@ -1,5 +1,4 @@
 SOURCE_FILES( vnl_sources
-  dll.h
   vnl_T_n.h
   vnl_alloc.h
   vnl_binary.h
