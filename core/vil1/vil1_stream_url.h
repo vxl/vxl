@@ -1,0 +1,31 @@
+#ifndef vil_stream_url_h_
+#define vil_stream_url_h_
+#ifdef __GNUC__
+#pragma interface "vil_stream_url"
+#endif
+/*
+  fsm@robots.ox.ac.uk
+*/
+
+#include <vil/vil_stream.h>
+
+struct vil_stream_url_data;
+
+struct vil_stream_url : vil_stream
+{
+  vil_stream_url(char const *);
+  ~vil_stream_url();
+  
+  bool ok();
+  int write(void const *buf, int n);
+  int read(void *buf, int n);
+  int tell();
+  void seek(int position);
+  
+private:
+  vil_stream_url_data *data;
+  vil_stream_url(vil_stream_url const &) { }
+  void operator=(vil_stream_url const &) { }
+};
+
+#endif
