@@ -57,18 +57,6 @@ vil2_image_resource_sptr vil2_load_image_resource_raw(char const* filename)
 vil2_image_resource_sptr vil2_load_image_resource(char const* filename)
 {
   vil2_image_resource_sptr im = vil2_load_image_resource_raw(filename);
-  if (!im) return im; // leave early if it hasn't loaded.
-
-  bool top_first=true, bgr=false;
-  im->get_property(vil2_property_top_row_first, &top_first);
-  if (im->nplanes() == 3)
-    im->get_property(vil2_property_component_order_is_BGR,&bgr);
-#ifdef VIL2_TO_BE_FIXED
-  if (!top_first)
-    im = vil_flipud(im);
-  if (bgr)
-    im = vil_flip_components(im);
-#endif// VIL2_TO_BE_FIXED
   return im;
 }
 
