@@ -121,7 +121,7 @@ foreach $dir (@DIRS)
     close CMAKEFILE;
     $/=$old_v;
   }
-  $cmakefile =~ s/\#.*\n//g;
+  $cmakefile =~ s/\n\#[^\n]*//g;
   while ($cmakefile =~ s/\bSOURCE_FILES\s*\(\s*\S+sources\s*([^()]+)\)//) {
     @tmpl_list = split /\s+/, "$1";
     foreach $x (@tmpl_list) {
