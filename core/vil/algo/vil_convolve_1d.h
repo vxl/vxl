@@ -107,7 +107,7 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_s
   else if (option==vil2_convolve_constant_extend)
   {
     // Assume src[i]=src[0] for i<0
-    vcl_ptrdiff_t i_max = 1+k_hi;
+    vcl_ptrdiff_t i_max = k_hi-1;
     for (vcl_ptrdiff_t i=0;i<=i_max;++i)
     {
       accumT sum=0;
@@ -122,7 +122,7 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_s
   else if (option==vil2_convolve_reflect_extend)
   {
     // Assume src[i]=src[0] for i<0
-    vcl_ptrdiff_t i_max = -1+k_hi;
+    vcl_ptrdiff_t i_max = k_hi-1;
     for (vcl_ptrdiff_t i=0;i<=i_max;++i)
     {
       accumT sum=0;
@@ -137,7 +137,7 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_s
   else if (option==vil2_convolve_periodic_extend)
   {
     // Assume src[i]=src[n+i] for i<0
-    vcl_ptrdiff_t i_max = -1+k_hi;
+    vcl_ptrdiff_t i_max = k_hi-1;
     for (int i=0;i<=i_max;++i)
     {
       accumT sum=0;
@@ -152,7 +152,7 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_s
     accumT k_sum_all=0;
     for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j) k_sum_all+=(accumT)(kernel[j*(-kstep)]);
 
-    vcl_ptrdiff_t i_max = -1+k_hi;
+    vcl_ptrdiff_t i_max = k_hi-1;
     for (vcl_ptrdiff_t i=0;i<=i_max;++i)
     {
       accumT sum=0;
