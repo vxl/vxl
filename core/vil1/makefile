@@ -79,6 +79,7 @@ endif
 # Operations
 SOURCES += vil_image_as.cxx
 SOURCES += vil_new.cxx
+SOURCES += vil_open.cxx
 SOURCES += vil_load.cxx
 SOURCES += vil_save.cxx
 SOURCES += vil_copy.cxx
