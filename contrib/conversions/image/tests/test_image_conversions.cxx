@@ -11,8 +11,10 @@ static char* filename = 0;
 
 void test_image_conversions()
 {
+  TEST("command line argument", (bool)filename, true);
   if (!filename) { vcl_cerr << "Give image file on command line\n"; return; }
   vil_image im1 = vil_load(filename);
+  TEST("image file", (bool)im1, true);
   if (!im1) { vcl_cerr << filename << " is not a valid image file\n"; return; }
   int size = im1.get_size_bytes();
   char* buf1 = new char[size];
