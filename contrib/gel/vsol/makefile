@@ -48,7 +48,7 @@ SOURCES += vsol_volume_3d.cxx
 SOURCES += vsol_polyhedron.cxx
 SOURCES += vsol_tetrahedron.cxx
 
-IMMEDIATE_LIBS += -lvgl -lvnl -lvbl
+IMMEDIATE_LIBS += -lvgl -lvnl -lvbl -lvul
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
