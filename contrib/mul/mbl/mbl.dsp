@@ -100,12 +100,17 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\Templates/mil_image_data+int-.cxx
+SOURCE=.\mbl_screen_counter.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/mil_image_data+short-.cxx
+SOURCE=.\Templates/mbl_data_wrapper+double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mbl_data_wrapper+double-.cxx
 
 # End Source File
 # Begin Source File
