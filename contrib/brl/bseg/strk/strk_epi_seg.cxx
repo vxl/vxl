@@ -494,7 +494,7 @@ double strk_epi_seg::match(const double a,
 vcl_ostream&  operator<<(vcl_ostream& s, strk_epi_seg const& epi_seg)
 {
   int n = epi_seg.n_pts();
-  strk_epi_seg& es = (strk_epi_seg)epi_seg;//cast away const
+  strk_epi_seg& es = (strk_epi_seg &)epi_seg;//cast away const
   s << "Epi Segment[" << n <<"]\n";
   s << "alpha:[" << es.min_alpha() << "" << es.max_alpha() << "]\n";
   s << "s:[" << es.min_s() << " " << es.max_s() << "]\n";

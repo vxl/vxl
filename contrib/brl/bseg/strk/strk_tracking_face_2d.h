@@ -138,6 +138,19 @@ class strk_tracking_face_2d : public vbl_ref_count
   float grad_mutual_info() const { return gradient_dir_mi_; }
   float color_mutual_info() const { return color_mi_; }
   float total_info() const { return total_info_; }
+  //: internal entropies for debugging purposes
+  float model_intensity_entropy(){return model_intensity_entropy_;}
+  float intensity_entropy(){return intensity_entropy_;}
+  float intensity_joint_entropy(){return intensity_joint_entropy_;}
+
+  float model_gradient_entropy(){return model_gradient_dir_entropy_;}
+  float gradient_entropy(){return gradient_dir_entropy_;}
+  float gradient_joint_entropy(){return gradient_joint_entropy_;}
+
+  float model_color_entropy(){return model_color_entropy_;}
+  float color_entropy(){return color_entropy_;}
+  float color_joint_entropy(){return color_joint_entropy_;}
+
   //: utilities
   bool compute_mutual_information(vil1_memory_image_of<float> const& image,
                                   vil1_memory_image_of<float> const& Ix,
@@ -207,9 +220,15 @@ class strk_tracking_face_2d : public vbl_ref_count
   unsigned int intensity_hist_bins_;
   unsigned int gradient_dir_hist_bins_;
   unsigned int color_hist_bins_;
-  double model_intensity_entropy_;
-  double model_gradient_dir_entropy_;
-  double model_color_entropy_;
+  float model_intensity_entropy_;
+  float model_gradient_dir_entropy_;
+  float model_color_entropy_;
+  float intensity_entropy_;
+  float gradient_dir_entropy_;
+  float color_entropy_;
+  float intensity_joint_entropy_;
+  float gradient_joint_entropy_;
+  float color_joint_entropy_;
 };
 
 #endif // strk_tracking_face_2d_h_

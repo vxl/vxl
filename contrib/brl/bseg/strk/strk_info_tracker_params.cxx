@@ -23,7 +23,8 @@ strk_info_tracker_params(const strk_info_tracker_params& tp)
              tp.gradient_info_,
              tp.color_info_,
              tp.frac_time_samples_,
-             tp.verbose_
+             tp.verbose_,
+             tp.debug_
              );
 }
 
@@ -36,7 +37,8 @@ strk_info_tracker_params(const int n_samples,
                          const bool gradient_info,
                          const bool color_info,
                          const float frac_time_samples,
-                         const bool verbose)
+                         const bool verbose,
+                         const bool debug)
 {
   InitParams(n_samples, 
              search_radius,
@@ -46,7 +48,8 @@ strk_info_tracker_params(const int n_samples,
              gradient_info,
              color_info,
              frac_time_samples,
-             verbose);
+             verbose,
+             debug);
 }
 
 void strk_info_tracker_params::InitParams(int n_samples, 
@@ -57,7 +60,8 @@ void strk_info_tracker_params::InitParams(int n_samples,
                                           bool gradient_info,
                                           bool color_info,
                                           float frac_time_samples,
-                                          bool verbose)
+                                          bool verbose,
+                                          bool debug)
 {
   n_samples_ = n_samples; 
   search_radius_ = search_radius;
@@ -68,6 +72,7 @@ void strk_info_tracker_params::InitParams(int n_samples,
   color_info_ = color_info;
   frac_time_samples_ = frac_time_samples;
   verbose_ = verbose;
+  debug_ = debug;
 }
 
 //-----------------------------------------------------------------------------
@@ -99,6 +104,7 @@ vcl_ostream& operator << (vcl_ostream& os, const strk_info_tracker_params& tp)
   os << "color_info " << tp.color_info_ << vcl_endl;
   os << "frac_time_samples " << tp.frac_time_samples_ << vcl_endl;
   os << "verbose " << tp.verbose_ << vcl_endl;
+  os << "debug " << tp.debug_ << vcl_endl;
   os << "---]" << vcl_endl;
   return os;
 }

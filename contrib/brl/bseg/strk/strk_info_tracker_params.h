@@ -24,7 +24,8 @@ class strk_info_tracker_params : public gevd_param_mixin
                            const bool gradient_info = true,
                            const bool color_info = false,
                            const float frac_time_samples = 0,
-                           const bool verbose = false
+                           const bool verbose = false,
+                           const bool debug = false
                           );
 
  strk_info_tracker_params(const strk_info_tracker_params& old_params);
@@ -42,7 +43,8 @@ class strk_info_tracker_params : public gevd_param_mixin
                  bool gradient_info,
                  bool color_info,
                  float frac_time_samples,
-                 bool verbose
+                 bool verbose,
+                 bool debug
                 );
  public:
   //
@@ -57,6 +59,7 @@ class strk_info_tracker_params : public gevd_param_mixin
   bool color_info_;        //!< Combine color and intensity info
   float frac_time_samples_;//!< fraction of new base samples
   bool verbose_;           //!< informative messages to cout
+  bool debug_;             //!< informative debug messages to cout
 };
 
 #endif // strk_info_tracker_params_h_

@@ -307,6 +307,15 @@ strk_tracking_face_2d(vtol_face_2d_sptr const& face,
   intensity_mi_=0;
   gradient_dir_mi_=0;
   color_mi_=0;
+  model_intensity_entropy_=0;
+  model_gradient_dir_entropy_=0;
+  model_color_entropy_=0;
+  intensity_entropy_=0;
+  gradient_dir_entropy_=0;
+  color_entropy_=0;
+  intensity_joint_entropy_=0;
+  gradient_joint_entropy_=0;
+  color_joint_entropy_=0;
   gradient_info_ = Ix&&Iy;
   color_info_ = hue&&sat;
   this->init_intensity_info(face, image);
@@ -330,6 +339,15 @@ strk_tracking_face_2d::strk_tracking_face_2d (vtol_intensity_face_sptr const& in
   intensity_mi_=0;
   gradient_dir_mi_=0;
   color_mi_=0;
+  model_intensity_entropy_=0;
+  model_gradient_dir_entropy_=0;
+  model_color_entropy_=0;
+  intensity_entropy_=0;
+  gradient_dir_entropy_=0;
+  color_entropy_=0;
+  intensity_joint_entropy_=0;
+  gradient_joint_entropy_=0;
+  color_joint_entropy_=0;
 }
 
 strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d_sptr const& tf)
@@ -381,6 +399,12 @@ strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d_sptr const& t
   model_intensity_entropy_=tf->model_intensity_entropy_;
   model_gradient_dir_entropy_=tf->model_gradient_dir_entropy_;
   model_color_entropy_=tf->model_color_entropy_;
+  intensity_entropy_=tf->intensity_entropy_;
+  gradient_dir_entropy_=tf->gradient_dir_entropy_;
+  color_entropy_=tf->color_entropy_;
+  intensity_joint_entropy_=tf->intensity_joint_entropy_;
+  gradient_joint_entropy_=tf->gradient_joint_entropy_;
+  color_joint_entropy_=tf->color_joint_entropy_;
 }
 
 strk_tracking_face_2d::~strk_tracking_face_2d()
@@ -643,7 +667,9 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
     }
   }
   enti /= (float)vcl_log(2.0);
+  intensity_entropy_=enti;
   jent /= (float)vcl_log(2.0);
+  intensity_joint_entropy_ = jent;
   mi = float(model_intensity_entropy_) + enti - jent;
 #ifdef DEBUG
   vcl_cout << "Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << ' '
@@ -713,7 +739,9 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
     }
   }
   enti /= (float)vcl_log(2.0);
+  gradient_dir_entropy_ = enti;
   jent /= (float)vcl_log(2.0);
+  gradient_joint_entropy_ = jent;
   mi = float(model_gradient_dir_entropy_) + enti - jent;
 #ifdef DEBUG
   vcl_cout << "Dir Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << ' '
@@ -770,7 +798,9 @@ compute_color_mutual_information(vil1_memory_image_of<float> const& hue,
     }
   }
   enti /= (float)vcl_log(2.0);
+  color_entropy_ = enti;
   jent /= (float)vcl_log(2.0);
+  color_joint_entropy_=jent;
   mi = float(model_color_entropy_) + enti - jent;
   return mi;
 }

@@ -204,13 +204,34 @@ void strk_info_tracker::cull_samples()
       //     vcl_cout << "I[" << i << "]= " << hypothesized_samples_[i]->total_info() << "\n";
       //     vcl_cout << vcl_flush;
 
+  strk_tracking_face_2d_sptr tf = hypothesized_samples_[0];
   if (verbose_)
-    vcl_cout << "Total Inf = " << hypothesized_samples_[0]->total_info()
-             << " = IntInfo(" <<  hypothesized_samples_[0]->int_mutual_info()
-             << ") + GradInfo(" <<  hypothesized_samples_[0]->grad_mutual_info()
-             << ") + ColorInfo(" <<  hypothesized_samples_[0]->color_mutual_info()
+    vcl_cout << "Total Inf = " << tf->total_info()
+             << " = IntInfo(" <<  tf->int_mutual_info()
+             << ") + GradInfo(" <<  tf->grad_mutual_info()
+             << ") + ColorInfo(" <<  tf->color_mutual_info()
              << ")\n";
-
+  
+  if(debug_)
+    vcl_cout << "model_intensity_entropy = " << tf->model_intensity_entropy()
+             << "\n"
+             << "intensity_entropy = " << tf->intensity_entropy()
+             << "\n"
+             << "intensity_joint_entropy = " <<tf->intensity_joint_entropy()
+             << "\n\n"
+             << "model_gradient_entropy = " << tf->model_gradient_entropy()
+             << "\n"
+             << "gradient_entropy = " << tf->gradient_entropy()
+             << "\n"
+             << "gradient_joint_entropy = " << tf->gradient_joint_entropy()
+             << "\n\n"
+             << "model_color_entropy = " << tf->model_color_entropy()
+             << "\n"
+             << "color_entropy = " << tf->color_entropy()
+             << "\n"
+             << "color_joint_entropy = " << tf->color_joint_entropy()
+             << "\n\n\n";
+  
   hypothesized_samples_.clear();
   //save track history
   strk_tracking_face_2d_sptr refreshed_best =
