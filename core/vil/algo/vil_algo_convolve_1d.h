@@ -165,7 +165,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
   }
 }
 
-//: Convolve kernel[x] x in [k_lo,k_hi] with srcT
+//: Convolve kernel[x] (x in [k_lo,k_hi]) with srcT
 // Assumes dest and src same size (nx)
 // \relates vil2_image_view
 template <class srcT, class destT, class kernelT, class accumT>
@@ -198,7 +198,9 @@ inline void vil2_algo_convolve_1d(const srcT* src0, unsigned nx, int s_step,
                              kernel,-k_hi,-k_lo,-1,ac,end_option);
 }
 
-//: Convolve kernel[x] x in [k_lo,k_hi] with srcT
+//: Convolve kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
+// On exit dest_im(i,j) = sum src(i+x,j)*kernel(i)  (x=k_lo..k_hi)
+//
 // Assumes dest and src same size (nx)
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
