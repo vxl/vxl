@@ -54,12 +54,12 @@ class vtol_block
   //  The first two-chain is the outside boundary.
   //  The remaining two-chains are considered holes inside the outside volume.
   //---------------------------------------------------------------------------
-  explicit vtol_block(two_chain_list &faceloops);
+  explicit vtol_block(two_chain_list const& faceloops);
 
   //---------------------------------------------------------------------------
   //: Constructor from a list of faces
   //---------------------------------------------------------------------------
-  explicit vtol_block(face_list &new_face_list);
+  explicit vtol_block(face_list const& new_face_list);
 
   //---------------------------------------------------------------------------
   //: Copy constructor. Deep copy.
@@ -84,13 +84,7 @@ class vtol_block
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_type topology_type(void) const { return BLOCK; }
 
-  virtual vtol_two_chain *get_boundary_cycle(void)
-  {
-    return
-      (inferiors_.size() > 0)
-      ? inferiors_[0]->cast_to_two_chain()
-      : 0;
-  }
+  virtual vtol_two_chain_sptr get_boundary_cycle(void);
 
   //***************************************************************************
   // Replaces dynamic_cast<T>

@@ -35,18 +35,18 @@ vtol_block::vtol_block(vtol_two_chain &faceloop)
 //---------------------------------------------------------------------------
 //: Constructor from a list of two-chains.
 // The first two-chain is the outside boundary.
-// The remaining two-chains are considered holes inside the the outside volume.
+// The remaining two-chains are considered holes inside the outside volume.
 //---------------------------------------------------------------------------
-vtol_block::vtol_block(two_chain_list &faceloops)
+vtol_block::vtol_block(two_chain_list const& faceloops)
 {
   if (faceloops.size()>0)
   {
     link_inferior(faceloops.front());
   }
 
-  vtol_two_chain *twoch=get_boundary_cycle();
+  vtol_two_chain_sptr twoch=get_boundary_cycle();
 
-  if (twoch!=0)
+  if (twoch)
     for (unsigned int i=1;i<faceloops.size();++i)
       twoch->link_chain_inferior(faceloops[i]);
 }
@@ -54,7 +54,7 @@ vtol_block::vtol_block(two_chain_list &faceloops)
 //---------------------------------------------------------------------------
 //: Constructor from a list of faces
 //---------------------------------------------------------------------------
-vtol_block::vtol_block(face_list &new_face_list)
+vtol_block::vtol_block(face_list const& new_face_list)
 {
   link_inferior(new vtol_two_chain(new_face_list));
 }
@@ -359,6 +359,14 @@ two_chain_list *vtol_block::hole_cycles(void) const
   return result;
 }
 
+//: get the boundary cycle
+vtol_two_chain_sptr vtol_block::get_boundary_cycle(void)
+{
+  return
+    (inferiors_.size() > 0)
+    ? inferiors_[0]->cast_to_two_chain()
+    : 0;
+}
 
 //: add a hole cycle
 
