@@ -71,7 +71,7 @@ static struct {
   integer mp, lp; // Fortran i/o stuff.  Unused here.
   doublereal gtol, stpmin, stpmax;
   doublereal stpawf; // line search default step length, added by awf
-} lb3_;
+} lb3_; // SGI CC warns here about unused variable.
 
 #define lb3_1 lb3_
 
