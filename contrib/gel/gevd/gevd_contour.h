@@ -137,7 +137,7 @@ public:
   static void BeTalkative() {talkative = true;}
 protected:
   float minStrength;  // hysteresis or noise threshold
-  float minLength;    // number of pixels in shortest chain
+  int minLength;      // number of pixels in shortest chain
   float minJump;      // change in strength at junction
   int maxSpiral;      // number of spiral search for max_gap
   vbl_array_2d<vtol_edge_2d_sptr> *edgeMap;
