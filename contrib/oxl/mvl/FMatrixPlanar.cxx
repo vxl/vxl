@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //:
-//  \file
+// \file
 
 #include "FMatrixPlanar.h"
 
@@ -11,12 +11,12 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_double_3.h>
 
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
-#include <mvl/HomgOperator2D.h>
 #include <mvl/FMatrix.h>
 
 //--------------------------------------------------------------
@@ -60,7 +60,7 @@ FMatrixPlanar::~FMatrixPlanar()
 
 //-------------------------------------------------------------------
 //
-//: Null function as already Rank 2.
+//: Null function has already Rank 2.
 
 inline void
 FMatrixPlanar::set_rank2_using_svd (void)
@@ -74,7 +74,7 @@ FMatrixPlanar::set_rank2_using_svd (void)
 inline  FMatrixPlanar
 FMatrixPlanar::get_rank2_truncated()
 {
-     return *this;
+  return *this;
 }
 
 
@@ -87,8 +87,8 @@ FMatrixPlanar::get_rank2_truncated()
 
 bool FMatrixPlanar::set (const double* f_matrix )
 {
-     vnl_matrix<double> temp(f_matrix,3,3);
-     return set(temp);
+  vnl_matrix<double> temp(f_matrix,3,3);
+  return set(temp);
 }
 
 
@@ -103,53 +103,52 @@ bool FMatrixPlanar::set (const double* f_matrix )
 inline bool
 FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
 {
-     int
-          row_index, col_index;
+  int row_index, col_index;
 
 #if PARANOID
 
-     // CRUDE test for planar form with tolerance 0
-     // test F and F+F' are Rank 2
-     // HACK: has been alterd to have some tolerances
-     bool planar = true;
-     vnl_svd<double> svd(f_matrix,1e-8);
-     if (svd.rank()!=2)
-     {
-          planar = false;
-          vcl_cerr << "WARNING in FMatrixPlanar::set\n";
-          vcl_cerr << "F matrix not rank 2: svd = " << svd.W() << vcl_endl;
-     }
-     else
-     {
-          vnl_svd<double> svd(f_matrix + f_matrix.transpose(),1e-8);
-          if (svd.rank()!=2)
-          {
-               planar = false;
-               vcl_cerr << "WARNING in FMatrixPlanar::set\n";
-               vcl_cerr << "Symmetric part matrix not rank 2: svd = " << svd.W() << vcl_endl;
-          }
-     }
+  // CRUDE test for planar form with tolerance 0
+  // test F and F+F' are Rank 2
+  // HACK: has been alterd to have some tolerances
+  bool planar = true;
+  vnl_svd<double> svd(f_matrix,1e-8);
+  if (svd.rank()!=2)
+  {
+    planar = false;
+    vcl_cerr << "WARNING in FMatrixPlanar::set\n"
+             << "F matrix not rank 2: svd = " << svd.W() << vcl_endl;
+  }
+  else
+  {
+    vnl_svd<double> svd(f_matrix + f_matrix.transpose(),1e-8);
+    if (svd.rank()!=2)
+    {
+      planar = false;
+      vcl_cerr << "WARNING in FMatrixPlanar::set\n"
+               << "Symmetric part matrix not rank 2: svd = " << svd.W() << '\n';
+    }
+  }
 
-     if (!planar)
-     {
-          vcl_cerr << "WARNING: F matrix not planar so cannot allocate to FMatrixPlanar\n" ;
-          return FALSE;
-     }
+  if (!planar)
+  {
+    vcl_cerr << "WARNING: F matrix not planar so cannot allocate to FMatrixPlanar\n" ;
+    return FALSE;
+  }
 
 #endif
 
-     for (row_index = 0; row_index < 3; row_index++)
-          for (col_index = 0; col_index < 3; col_index++)
-          {
-               f_matrix_. put (row_index, col_index,f_matrix.get(row_index,col_index));
-               ft_matrix_. put (col_index, row_index,f_matrix.get(row_index,col_index));
-          }
+  for (row_index = 0; row_index < 3; row_index++)
+    for (col_index = 0; col_index < 3; col_index++)
+    {
+      f_matrix_. put (row_index, col_index,f_matrix.get(row_index,col_index));
+      ft_matrix_. put (col_index, row_index,f_matrix.get(row_index,col_index));
+    }
 
-     // set rank flag true
+  // set rank flag true
 
-     this->set_rank2_flag(true);
+  this->set_rank2_flag(true);
 
-     return true;
+  return true;
 }
 
 
@@ -160,7 +159,7 @@ FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
 inline bool
 FMatrixPlanar::get_rank2_flag (void) const
 {
-     return true;
+  return true;
 }
 
 //----------------------------------------------------------------
@@ -185,77 +184,79 @@ FMatrixPlanar::set_rank2_flag (bool) const
 
 void FMatrixPlanar::init(const FMatrix& F)
 {
-     // this converts to 6 parameter form of [e2]x[ls]x[e1]x - see A Zisserman
-     // HACK this is not the most efficient/accurate way to convert to this form
-     // as it goes via the Armstrong inplementation of the
-     // Lingrand Veiville formula (ECCV96).
-     // This should be redone at some point.
+  // this converts to 6 parameter form of [e2]x[ls]x[e1]x - see A Zisserman
+  // HACK this is not the most efficient/accurate way to convert to this form
+  // as it goes via the Armstrong inplementation of the
+  // Lingrand Veiville formula (ECCV96).
+  // This should be redone at some point.
 
-     HomgPoint2D e1,e2;
-     F.get_epipoles(&e1,&e2);
+  vgl_homg_point_2d<double> e1,e2;
+  F.get_epipoles(e1,e2);
 
-     vnl_symmetric_eigensystem<double>  symm_eig(F.get_matrix()+F.get_matrix().transpose());
+  vnl_symmetric_eigensystem<double>  symm_eig(F.get_matrix()+F.get_matrix().transpose());
 
-     double eig0 = symm_eig.D(0,0);
-     double eig1 = symm_eig.D(2,2);
+  double eig0 = symm_eig.D(0,0);
+  double eig1 = symm_eig.D(2,2);
 
-     vnl_vector<double> v0(symm_eig.get_eigenvector(0));
-     vnl_vector<double> v1(symm_eig.get_eigenvector(2));
+  vnl_double_3 v0 = symm_eig.get_eigenvector(0);
+  vnl_double_3 v1 = symm_eig.get_eigenvector(2);
 
-     vnl_vector<double> f1(3),f2(3);
+  vnl_double_3 f1, f2;
 
-     if (eig0 > 0 && eig1 < 0) {
-          f1 = vcl_sqrt(eig0)*v0 + vcl_sqrt(-eig1)*v1;
-          f2 = vcl_sqrt(eig0)*v0 - vcl_sqrt(-eig1)*v1;
-     }
-     else if (eig0 < 0 && eig1 > 0) {
-          f1 = vcl_sqrt(eig1)*v1 + vcl_sqrt(-eig0)*v0;
-          f2 = vcl_sqrt(eig1)*v1 - vcl_sqrt(-eig0)*v0;
-     }
-     else {
-          vcl_cerr << "ERROR in FMatrix::init\n"
-                   << "EXITING...\n";
-          assert(false);
-     }
+  if (eig0 > 0 && eig1 < 0) {
+    f1 = vcl_sqrt(eig0)*v0 + vcl_sqrt(-eig1)*v1;
+    f2 = vcl_sqrt(eig0)*v0 - vcl_sqrt(-eig1)*v1;
+  }
+  else if (eig0 < 0 && eig1 > 0) {
+    f1 = vcl_sqrt(eig1)*v1 + vcl_sqrt(-eig0)*v0;
+    f2 = vcl_sqrt(eig1)*v1 - vcl_sqrt(-eig0)*v0;
+  }
+  else {
+    vcl_cerr << "ERROR in FMatrix::init\n"
+             << "EXITING...\n";
+    assert(false);
+  }
 
-     vnl_vector<double> ls;
-     if (vcl_fabs(HomgOperator2D::dot(e1,f1)/e1.w())+
-         vcl_fabs(HomgOperator2D::dot(e2,f1)/e2.w()) >
-         vcl_fabs(HomgOperator2D::dot(e1,f2)/e1.w())+
-         vcl_fabs(HomgOperator2D::dot(e2,f2)/e2.w()) )
-          ls = f1;
-     else
-          ls = f2;
+#define dot_n(a,b) (a.x()*b(0)/a.w()+a.y()*b(1)/a.w()+b(2))
+  vnl_double_3 ls;
+  if (vcl_fabs(dot_n(e1,f1))+
+      vcl_fabs(dot_n(e2,f1)) >
+      vcl_fabs(dot_n(e1,f2))+
+      vcl_fabs(dot_n(e2,f2)) )
+    ls = f1;
+  else
+    ls = f2;
+#undef dot_n
 
-     ls /= ls.magnitude();
+  ls.normalize();
 
-     double ls_thi = vcl_acos(ls.z());
-     if (ls_thi < 0) ls_thi += vnl_math::pi;
+  double ls_thi = vcl_acos(ls.z());
+  if (ls_thi < 0) ls_thi += vnl_math::pi;
 
-     double ls_theta;
-     if (ls.y() >= 0)
-          ls_theta =  vcl_acos(ls.x()/vcl_sin(ls_thi));
-     else
-          ls_theta = -vcl_acos(ls.x()/vcl_sin(ls_thi));
+  double ls_theta;
+  if (ls.y() >= 0)
+    ls_theta =  vcl_acos(ls.x()/vcl_sin(ls_thi));
+  else
+    ls_theta = -vcl_acos(ls.x()/vcl_sin(ls_thi));
 
-     double ls1 = vcl_cos(ls_theta)*vcl_sin(ls_thi);
-     double ls2 = vcl_sin(ls_theta)*vcl_sin(ls_thi);
-     double ls3 = vcl_cos(ls_thi);
+  double ls1 = vcl_cos(ls_theta)*vcl_sin(ls_thi);
+  double ls2 = vcl_sin(ls_theta)*vcl_sin(ls_thi);
+  double ls3 = vcl_cos(ls_thi);
 
-     double list1[9] = {0,-1.0,e1.y()/e1.w(),
-                        1,0,-e1.x()/e1.w(),
-                        -e1.y()/e1.w(),e1.x()/e1.w(),0};
-     double list2[9] = {0,-ls3,ls2,ls3,0,-ls1,-ls2,ls1,0};
-     double list3[9] = {0,-1.0,e2.y()/e2.w(),
-                        1,0,-e2.x()/e2.w(),
-                        -e2.y()/e2.w(),e2.x()/e2.w(),0};
+  double list1[9] = {0,-1.0,e1.y()/e1.w(),
+                     1,0,-e1.x()/e1.w(),
+                     -e1.y()/e1.w(),e1.x()/e1.w(),0};
+  double list2[9] = {0,-ls3,ls2,ls3,0,-ls1,-ls2,ls1,0};
+  double list3[9] = {0,-1.0,e2.y()/e2.w(),
+                     1,0,-e2.x()/e2.w(),
+                     -e2.y()/e2.w(),e2.x()/e2.w(),0};
 
-     vnl_matrix<double> mat1(3,3,9,list1),mat2(3,3,9,list2),mat3(3,3,9,list3);
+  vnl_matrix<double> mat1(3,3,9,list1),mat2(3,3,9,list2),mat3(3,3,9,list3);
 
-     vnl_matrix<double> fmat = mat1*mat2*mat3;
+  vnl_matrix<double> fmat = mat1*mat2*mat3;
 
-     fmat /= fmat.fro_norm();
+  fmat /= fmat.fro_norm();
 
-     // store the corrected fmatrix
-     set(fmat);
+  // store the corrected fmatrix
+  set(fmat);
 }
