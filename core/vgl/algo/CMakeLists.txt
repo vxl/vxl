@@ -12,11 +12,11 @@ SET( vgl_algo_sources
   vgl_p_matrix.txx                     vgl_p_matrix.h
   vgl_norm_trans_2d.txx                vgl_norm_trans_2d.h
   vgl_norm_trans_3d.txx                vgl_norm_trans_3d.h
-  vgl_h_matrix_1d_compute.cxx          vgl_h_matrix_1d_compute.h
+                                       vgl_h_matrix_1d_compute.h
   vgl_h_matrix_1d_compute_linear.cxx   vgl_h_matrix_1d_compute_linear.h
   vgl_h_matrix_1d_compute_3point.cxx   vgl_h_matrix_1d_compute_3point.h
   vgl_h_matrix_1d_compute_optimize.cxx vgl_h_matrix_1d_compute_optimize.h
-  vgl_h_matrix_2d_compute.cxx          vgl_h_matrix_2d_compute.h
+                                       vgl_h_matrix_2d_compute.h
   vgl_h_matrix_2d_compute_linear.cxx   vgl_h_matrix_2d_compute_linear.h
   vgl_h_matrix_2d_compute_4point.cxx   vgl_h_matrix_2d_compute_4point.h
   vgl_line_2d_regression.txx           vgl_line_2d_regression.h
