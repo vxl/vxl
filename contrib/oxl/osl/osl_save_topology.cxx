@@ -11,7 +11,7 @@
 
 void osl_save_topology(vcl_ostream &f, vcl_list<osl_edge*> const &es, vcl_list<osl_vertex*> const &vs)
 {
-  unsigned long vid = 0L;
+  unsigned char* vid = 0;
   char const *name = "fred";
 
   // list of all vertices
