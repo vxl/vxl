@@ -782,12 +782,12 @@ void vtol_one_chain::describe_directions(vcl_ostream &strm, int blanking) const
 {
   for (int j=0; j<blanking; ++j)
     strm << ' ';
-  strm << "<Dirs [" << directions_.size() << "]: ";
+  strm << "<Dirs [" << directions_.size() << "]:";
 
   vcl_vector<signed char>::const_iterator d1;
   for (d1=directions_.begin();d1!=directions_.end();++d1)
-    strm << (int)(*d1) << "  ";
-  strm << vcl_endl;
+    strm << ' ' << (int)(*d1);
+  strm << ">\n";
 }
 
 //---------------------------------------------------------------------------

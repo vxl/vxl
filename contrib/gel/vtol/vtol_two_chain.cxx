@@ -108,7 +108,7 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
   for (edge_list::iterator ei=edges->begin();ei!= edges->end();++ei,++j)
     {
       vtol_edge_sptr e = *ei;
-      newedges[j]= newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(*(newverts[e->v2()->get_id()]->cast_to_vertex()));
+      newedges[j]= newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(*(newverts[e->v2()->get_id()]->cast_to_vertex()))->cast_to_topology_object();
       e->set_id(j);
     }
   delete edges;
@@ -743,12 +743,12 @@ void vtol_two_chain::describe_directions(vcl_ostream &strm,
                                          int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
-  strm << "<Dirs [" << directions_.size() << "]: ";
+  strm << "<Dirs [" << directions_.size() << "]:";
 
   vcl_vector<signed char>::const_iterator di;
   for (di=directions_.begin();di!=directions_.end();++di)
-    strm << (*di) << "  ";
-  strm << vcl_endl;
+    strm << ' ' << (int)(*d1);
+  strm << ">\n";
 }
 
 void vtol_two_chain::describe(vcl_ostream &strm,
