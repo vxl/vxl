@@ -53,6 +53,9 @@ int main(int argc, char ** argv)
   }
 
   vil_save(moviefile->get_frame(a_frame())->get_image(), a_outfile());
+ 
+  vidl_io::close(); // Need to call this to avoid segvs from naughty codecs.
+
   vul_printf(vcl_clog, __FILE__ ": saved [%s]\n", a_outfile());
   
   return 0;

@@ -11,6 +11,8 @@ IF(HAS_OPENGL)
  ADD_EXECUTABLE( vobgetframe vobgetframe.cxx )
 ENDIF(HAS_OPENGL)
 
+ADD_EXECUTABLE( glmovie glmovie.cxx make_index.cxx )
+
 IF(WIN32)
  LINK_LIBRARIES( vfw32 )
 ENDIF(WIN32)

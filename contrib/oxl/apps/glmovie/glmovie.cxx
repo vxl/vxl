@@ -11,7 +11,7 @@
 
 // test args:
 //  ~/images/HannoverDino/ppm/viff.%03d.ppm -n 3
-//  /awf/images/handrail.avi -g /tmp/tcm/problem.out/camsolve
+// /awf/images/handrail.avi -g /tmp/tcm/problem.out/camsolve
 
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
@@ -53,10 +53,6 @@
 
 // extern void gl_draw_conic(double cx, double cy, double rx, double ry, double theta);
 
-vul_arg<int>   a_start_frame("-s", "Start frame", 0);
-vul_arg<char*> a_save_fmt("-save", "Save files to fmt", 0);
-
-
 /////////////////////////////////////////////////////////////////////////////
 
 // Overlay mgmt
@@ -94,6 +90,9 @@ bool playing = true;
 double pixel_zoom = 1.0;
 double pixel_zoom_tx = 0;
 double pixel_zoom_ty = TEXTHEIGHT;
+int start_frame = 0;
+char* save_fmt = 0;
+vcl_FILE* idx_fp = 0;
 
 vul_arg<bool> fast("-fast", "Go faster", false);
 vul_arg<bool> gx_notext("-gx:notext", "No text", false);
@@ -288,7 +287,7 @@ bool drawframe(int frame)
     glPopMatrix();
   }
 
-  if (a_save_fmt.set()) {
+  if (save_fmt) {
     static int first_frame_saved = -1;
     if (frame == first_frame_saved)
       // done
@@ -299,7 +298,7 @@ bool drawframe(int frame)
     vil_memory_image_of<vil_rgb_byte > img(window_width, window_height - TEXTHEIGHT);
     glReadPixels(0,0, window_width, window_height - TEXTHEIGHT, GL_RGB, GL_UNSIGNED_BYTE, img.get_buffer());
     char buf[1024];
-    vcl_sprintf(buf, a_save_fmt(), frame);
+    vcl_sprintf(buf, save_fmt, frame);
     if (buf[0] == '^') {
       // Flip
       vil_save(img, buf+1);
@@ -364,7 +363,7 @@ void display()
   // idle migh be called before 1st display
   if (first_display) {
     first_display = false;
-    frame = a_start_frame();
+    frame = start_frame;
   }
 
   bool ok = drawframe(frame);
@@ -372,7 +371,7 @@ void display()
   if (!ok) {
     vul_printf(vcl_cerr, "Ran out of frames at %d\n", frame);
     num_frames = frame;
-    frame = a_start_frame();
+    frame = start_frame;
     if (!drawframe(frame))
       vcl_abort();
   }
@@ -485,7 +484,7 @@ struct ShuttleCB : public CB {
   //    double scale_factor = vcl_min(100, num_frames) / 800.0;
     double scale_factor = (num_frames > 10000) ? 10 : 1;
     frame = down_frame + int((x - down_x) * scale_factor);
-    vcl_cerr << "sc = " << scale_factor << vcl_endl;
+//    vcl_cerr << "sc = " << scale_factor << vcl_endl;
     if (frame < 0) {
       frame = 0;
       down_x = x;
@@ -699,10 +698,25 @@ void keyboard(unsigned char key, int x, int y)
     glDeleteLists(0, num_frames);
     break;
   }
+
+  case ',': {
+    frame -= 1;
+    break;
+  }
+  case '.': {
+    frame += 1;
+    break;
+  }
+
+  case '<': {
+    frame -= 100;
+    break;
+  }
   case '>': {
     frame += 100;
     break;
   }
+
   case 'q': {
     vcl_exit(0);
   }
@@ -728,6 +742,8 @@ static void convert(vidl_movie_sptr m, char const* out)
   }
 }
 
+void make_mpeg_index(char const* in, char const* out);
+
 int main(int argc, char ** argv)
 {
   vcl_cerr << "OI\n";
@@ -735,12 +751,25 @@ int main(int argc, char ** argv)
   // ios::sync_with_stdio(false);
   vul_arg<char*> filename(0, "Input file");
   vul_arg<int>   a_step("-d", "frame step", 1);
+  vul_arg<int>   a_start_frame("-s", "Start frame", 0);
+  vul_arg<char*> a_save_fmt("-save", "Save files to fmt", 0);
   vul_arg<int>   a_end_frame("-e", "End frame", 199999);
   vul_arg<char*> a_gx_file("-g", "GX file");
   vul_arg<char*> a_out("-o", "Output frames");
+  vul_arg<char*> a_idx("-makeindex", "Output IDX filename");
   vul_arg_parse(argc,argv);
 
   if (argc > 1) vul_arg_display_usage_and_exit("Too many arguments\n");
+
+  ::start_frame = a_start_frame();
+  ::save_fmt = a_save_fmt();
+
+  if (a_idx.set()) {
+    //idx_fp = vcl_fopen(a_idx(), "w");
+    //vcl_fprintf(idx_fp, "MPEG_IDX %s\n", filename());
+    make_mpeg_index(filename(), a_idx());
+    return 0;
+  }
 
   // Register video codec
 #ifdef VCL_WIN32
@@ -763,7 +792,7 @@ int main(int argc, char ** argv)
 
   // Copy args to globals
   int step = a_step();
-  num_frames = (a_end_frame() - a_start_frame()) / step;
+  num_frames = (a_end_frame() - ::start_frame) / step;
   if (num_frames > 0) {
     dir = 1;
     num_frames = +num_frames + 1;
@@ -781,9 +810,8 @@ int main(int argc, char ** argv)
   if (vil_image img = vil_load(filename())) {
     vcl_vector<vcl_string> v(1, filename());
     moviefile = new vidl_movie(vidl_io::load_images(v));
-  }
-  else {
-    moviefile = vidl_io::load_movie(filename(), a_start_frame(), a_end_frame(), increment);
+  } else { 
+    moviefile = vidl_io::load_movie(filename(), 0, a_end_frame(), increment);
   }
   if (!moviefile || moviefile->width() < 1) {
     vcl_cerr << "glmovie: Couldn't find any movie files. Stopping\n";
@@ -791,7 +819,7 @@ int main(int argc, char ** argv)
   }
 
   if (a_gx_file()) {
-    gx_basename = new ImageSequenceName(a_gx_file(), a_start_frame(), increment, "r", ".gx");
+    gx_basename = new ImageSequenceName(a_gx_file(), ::start_frame, increment, "r", ".gx");
     vcl_cerr << "glmovie: Getting gx from " << *gx_basename << "\n";
   }
   else {
