@@ -193,8 +193,8 @@ void mil_gaussian_pyramid_builder_2d<T>::emptyPyr(mil_image_pyramid& im_pyr) con
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::checkPyr(mil_image_pyramid& im_pyr,  int n_levels) const
 {
-  const unsigned got_levels = im_pyr.n_levels();
-  if (got_levels >= (unsigned int)n_levels && im_pyr(0).is_a()==work_im_.is_a())
+  const int got_levels = im_pyr.n_levels();
+  if (got_levels >= n_levels && im_pyr(0).is_a()==work_im_.is_a())
   {
     if (im_pyr.n_levels()==n_levels) return;
     else
@@ -231,7 +231,7 @@ void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
   // than minXSize_ x minYSize_
   int s = 1;
   int max_levels = 1;
-  while ((nx/(2*s)>=minXSize_) && (ny/(2*s)>=minYSize_))
+  while ((nx/(2*s)>=int(minXSize_)) && (ny/(2*s)>=int(minYSize_)))
   {
     max_levels++;
     s*=2;

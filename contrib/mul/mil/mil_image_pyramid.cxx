@@ -42,7 +42,7 @@ const mil_image_pyramid&
     base_pixel_width_ = that.base_pixel_width_;
     scale_step_ = that.scale_step_;
     image_.resize(that.image_.size());
-    for (int i=0;i<image_.size();++i)
+    for (unsigned int i=0;i<image_.size();++i)
         image_[i] = that.image_[i]->clone();
 
     return *this;
@@ -58,7 +58,7 @@ mil_image_pyramid::mil_image_pyramid(const mil_image_pyramid &that)
 //: Resize to [lo,hi] pyramid, each level of which is a clone of im_type
 void mil_image_pyramid::resize(int n_levels, const mil_image& im_type)
 {
-    if (image_.size()==n_levels && n_levels>0 && image_[0]->is_a()==im_type.is_a())
+    if (int(image_.size())==n_levels && n_levels>0 && image_[0]->is_a()==im_type.is_a())
         return;
     deleteImages();
     image_.resize(n_levels);
@@ -86,14 +86,14 @@ int mil_image_pyramid::n_levels() const
         //: Image at level L
 mil_image& mil_image_pyramid::operator()(int L)
 {
-    assert(L>=0 && L<image_.size());
+    assert(L>=0 && (unsigned int)L<image_.size());
     return *image_[L];
 }
 
         //: Image at level L
 const mil_image& mil_image_pyramid::operator()(int L) const
 {
-    assert(L>=0 && L<image_.size());
+    assert(L>=0 && (unsigned int)L<image_.size());
     return *image_[L];
 }
 
@@ -129,7 +129,7 @@ void mil_image_pyramid::setWidths(double base_pixel_width,
 void mil_image_pyramid::print_summary(vcl_ostream& os) const
 {
     os<<"Levels: "<<image_.size()<<vcl_endl;
-    for (int i=0;i<image_.size();++i)
+    for (unsigned int i=0;i<image_.size();++i)
         os<<"Image at level "<<i<<" : "<<image_[i]<<vcl_endl;
 }
 
@@ -137,7 +137,7 @@ void mil_image_pyramid::print_summary(vcl_ostream& os) const
 void mil_image_pyramid::print_all(vcl_ostream& os) const
 {
     os<<"Levels: "<<image_.size()<<vcl_endl;
-    for (int i=0;i<image_.size();++i)
+    for (unsigned int i=0;i<image_.size();++i)
     {
         os<<"Image at level "<<i<<" : ";
         image_[i]->print_all(os);

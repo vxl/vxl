@@ -127,8 +127,8 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
                              const vnl_matrix<double>& B,
                              int nc_a)
 {
+  assert(nc_a >= 0 && A.columns()>=(unsigned int)nc_a);
   unsigned int nr1 = A.rows();
-  assert(A.columns()>=nc_a);
   unsigned int nr2 = B.rows();
   unsigned int nc2 = B.columns();
 
@@ -138,7 +138,7 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
     vcl_abort();
   }
 
-  if ( (AtB.rows()!=nc_a) || (AtB.columns()!= nc2) )
+  if ( (AtB.rows()!=(unsigned int)nc_a) || (AtB.columns()!= nc2) )
     AtB.resize( nc_a, nc2 ) ;
 
   double const *const * A_data = A.data_array();

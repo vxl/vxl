@@ -259,8 +259,8 @@ void mbl_thin_plate_spline_2d::set_params(const vnl_vector<double>& W1,
 {
   int n = W1.size()-3;
 
-  if (Wx_.size() != n) Wx_.resize(n);
-  if (Wy_.size() != n) Wy_.resize(n);
+  if (int(Wx_.size()) < n) Wx_.resize(n);
+  if (int(Wy_.size()) < n) Wy_.resize(n);
 
   double *Wx_data=Wx_.data_block();
   double *Wy_data=Wy_.data_block();
@@ -338,7 +338,7 @@ void mbl_thin_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& so
 {
   // See Booksteins paper in IPMI 1993 for details of calculation
 
-  int n=source_pts.size();
+  unsigned int n=source_pts.size();
   if (dest_pts.size() != n)
   {
     vcl_cerr<<"mbl_thin_plate_spline_2d::build - incompatible number of points."<<vcl_endl;
@@ -382,7 +382,7 @@ void mbl_thin_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& so
 //  called multiple times efficiently
 void mbl_thin_plate_spline_2d::set_source_pts(const vcl_vector<vgl_point_2d<double> >& source_pts)
 {
-  int n=source_pts.size();
+  unsigned int n=source_pts.size();
   src_pts_ = source_pts;
 
   if (n<=3)
@@ -406,7 +406,7 @@ void mbl_thin_plate_spline_2d::set_source_pts(const vcl_vector<vgl_point_2d<doub
 //: Sets up internal transformation to map source_pts onto dest_pts
 void mbl_thin_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& dest_pts)
 {
-  int n=src_pts_.size();
+  unsigned int n=src_pts_.size();
   if (dest_pts.size() != n)
   {
     vcl_cerr<<"mbl_thin_plate_spline_2d::build - incompatible number of points."<<vcl_endl;
@@ -435,7 +435,7 @@ void mbl_thin_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& de
 
 vgl_point_2d<double>  mbl_thin_plate_spline_2d::operator()(double x, double y) const
 {
-  int n = src_pts_.size();
+  unsigned int n = src_pts_.size();
 
   double x_sum = Ax0_ + AxX_ * x + AxY_ * y;
   double y_sum = Ay0_ + AyX_ * x + AyY_ * y;
@@ -447,7 +447,7 @@ vgl_point_2d<double>  mbl_thin_plate_spline_2d::operator()(double x, double y) c
   const double* Wx_data = Wx_.data_block();
   const double* Wy_data = Wy_.data_block();
 
-  for (int i=0;i<n;i++)
+  for (unsigned int i=0;i<n;i++)
   {
     double Ui = r2lnr(x - pts_data[i].x(), y - pts_data[i].y() );
     x_sum += (Ui * Wx_data[i]);
@@ -476,10 +476,10 @@ void mbl_thin_plate_spline_2d::print_summary(vcl_ostream& os) const
 {
   os<<vcl_endl;
   os<<"fx: "<<Ax0_<<" + "<<AxX_<<"*x + "<<AxY_<<"*y   Nonlinear terms:";
-  for (int i=0;i<Wx_.size();++i) os<<Wx_[i]<<" ";
+  for (unsigned int i=0;i<Wx_.size();++i) os<<Wx_[i]<<" ";
   os<<vcl_endl;
   os<<"fy: "<<Ay0_<<" + "<<AyX_<<"*x + "<<AyY_<<"*y   Nonlinear terms:";
-  for (int i=0;i<Wy_.size();++i) os<<Wy_[i]<<" ";
+  for (unsigned int i=0;i<Wy_.size();++i) os<<Wy_[i]<<" ";
   os<<vcl_endl;
 }
 
