@@ -3,7 +3,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-#include <vcl_ios.h>
+#include <vcl_iomanip.h>
 
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
@@ -14,7 +14,6 @@
 //
 //
 //********************************************************************************
-
 
 
 class XXX : public vnl_least_squares_function
@@ -36,7 +35,7 @@ public:
 
   void boo(const vnl_vector<double> &x) {
     assert(x.size()==3);
-    vcl_cout.flags(vcl_ios::fixed | vcl_ios::showpos);
+    vcl_cout << vcl_showpos << vcl_fixed; // <iomanip>
     double z,y;
     for (unsigned i=0;i<N;i++) {
       z=z1[i];
