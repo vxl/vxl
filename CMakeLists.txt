@@ -7,7 +7,7 @@ PROJECT(allvxl)
 
 SET(BUILD_TESTS "NO")
 
-SUBDIRS(vcl v3p vxl oxl gel)
+SUBDIRS(vcl v3p vxl mul oxl tbl gel conversions)
 
 # For out of place builds, the configure generated headers are in the
 # binary directory
