@@ -39,11 +39,10 @@ vil1_stream_fstream::vil1_stream_fstream(char const* fn, char const* mode):
   f_(fn, flags_ | vcl_ios_binary) // need ios::binary on windows.
 {
   id_ = ++id;
-  xerr << "vil1_stream_fstream(\"" << fn << "\", \""<<mode<<"\") = " << id_ << "\n";
+  xerr << "vil1_stream_fstream(\"" << fn << "\", \""<<mode<<"\") = " << id_ << '\n';
 #if 0
-  if (!f_) {
+  if (!f_)
     vcl_cerr << "vil1_stream_fstream::Could not open [" << fn << "]\n";
-  }
 #endif // 0
 }
 
@@ -115,7 +114,6 @@ vil1_streampos vil1_stream_fstream::tell()
     xerr << "tellg\n";
     return f_.tellg();
   }
-
   if (flags_ & vcl_ios_out) {
     xerr << "tellp\n";
     return f_.tellp();
@@ -139,7 +137,6 @@ void vil1_stream_fstream::seek(vil1_streampos position)
       assert(f_.good());
     }
   }
-
   else if (fi) {
     xerr << "seek to " << position << vcl_endl;
     if (position != vil1_streampos(f_.tellg())) {
@@ -147,12 +144,11 @@ void vil1_stream_fstream::seek(vil1_streampos position)
       assert(f_.good());
     }
   }
-
   else if (fo) {
     xerr << "seekp to " << position << vcl_endl;
     int at = f_.tellp();
     if (position != at) {
-      xerr << "seekp to " << position << ", at " << f_.tellp() << vcl_endl;
+      xerr << "seekp to " << position << ", at " << (long)f_.tellp() << vcl_endl;
       f_.seekp(position);
       assert(f_.good());
     }

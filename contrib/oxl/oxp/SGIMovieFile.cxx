@@ -198,7 +198,7 @@ SGIMovieFilePrivates::SGIMovieFilePrivates(char const* fn):
       vcl_cerr << '\n';
     }
 
-    vcl_cerr << "SGIMovieFile: Final position, after reading header, is " << f.tellg() << '\n';
+    vcl_cerr << "SGIMovieFile: Final position, after reading header, is " << (long)f.tellg() << '\n';
   }
 }
 
@@ -226,7 +226,8 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
   int bytes_per_pixel = 3;
   int interlace_factor = p->interlaced ? 2 : 1;
 
-  if (p->compression == "2") {
+  if (p->compression == "2")
+  {
     // RGB32 extract to RGB byte-triplet buffer
     if (MovieFileInterface::verbose)
       vcl_cerr << "[RGB32 " << frame_index << " @ " << s << ' ';
@@ -238,9 +239,12 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
     char* row_buf = new char[inrowsize];
 
     char r,g,b;
-    for (int i=0; i < interlace_factor; ++i) {
-      if (MovieFileInterface::verbose) vcl_cerr << "fld " << i << ' ';
-      for (int y=h-1; y >= 0; --y) {
+    for (int i=0; i < interlace_factor; ++i)
+    {
+      if (MovieFileInterface::verbose)
+        vcl_cerr << "fld " << i << ' ';
+      for (int y=h-1; y >= 0; --y)
+      {
         vcl_fread(row_buf, 1, inrowsize, fp);
         char* buf_ptr = (char*)buffer + (interlace_factor * y + i) * outrowsize;
         char* row_ptr = row_buf;
@@ -260,13 +264,15 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
     vcl_fclose(fp);
     delete[] row_buf;
   }
-  else if (p->compression == "10") {
+  else if (p->compression == "10")
+  {
     // JPEG
     if (MovieFileInterface::verbose)
       vcl_cerr << "[JPEG " << frame_index << " @ " << s << ' ';
 
     JPEG_Decompressor jpeg(vpl_fileno(fp));
-    for (int i = 0; i < interlace_factor; ++i) {
+    for (int i = 0; i < interlace_factor; ++i)
+    {
       if (MovieFileInterface::verbose)
         vcl_cerr << "fld " << i << ' ';
       if (i > 0) jpeg.StartNextJPEG();
@@ -319,11 +325,12 @@ bool SGIMovieFile::GetField(int /*field_index*/, void* /*buffer*/)
   // Load a jpeg from fd...
   if (p->compression != "10")
     vcl_cerr << "SGIMovieFile: Can't decompress ``" << p->compression << "'' format images\n";
-  else {
-
+  else
+  {
     int field_start = p->field_indices[0][field_index];
     JPEG_Decompressor *jpeg;
-    if (field_start == 0) {
+    if (field_start == 0)
+    {
       int frame_index = field_index / 2;
       int frame_start = p->video_indices[0][frame_index].offset;
       // Must go to the start of the frame and read forward
@@ -337,9 +344,9 @@ bool SGIMovieFile::GetField(int /*field_index*/, void* /*buffer*/)
       p->field_indices[0][frame_index * 2 + 1] = jpeg->GetFilePosition();
 
       jpeg->StartNextJPEG();
-    } else {
+    }
+    else {
       p->fp->seekg(field_start);
-
       jpeg = new JPEG_Decompressor(p->fp->rdbuf()->fd());
     }
 
@@ -376,24 +383,26 @@ bool SGIMovieFile::GetField(int /*field_index*/, void* /*buffer*/)
 
 /////////////////////////////////////////////////////////////////////////////
 
-void SGIMV_Variables::read(vcl_istream& f) {
-  //   struct SGIMV_Variables {
-  //     word pad;
-  //     word num_vars;
-  //     word pad;
-  //     struct VarData {
-  //     byte var_buf[16];
-  //     word var_size;
-  //     byte var_data[var_size];  // Asciiish variable value
-  //     };
-  //     VarData data[num_vars];
-  //   };
-  /*int pad =*/ get_u32(f);
+void SGIMV_Variables::read(vcl_istream& f)
+{
+#if 0
+  struct SGIMV_Variables {
+    word pad;
+    word num_vars;
+    word pad;
+    struct VarData {
+    byte var_buf[16];
+    word var_size;
+    byte var_data[var_size];  // Asciiish variable value
+    };
+    VarData data[num_vars];
+  };
+#endif // 0
+  get_u32(f);
   unsigned long n = get_u32(f);
-  /*pad =*/ get_u32(f);
-  if (n > 1000L) {
+  get_u32(f);
+  if (n > 1000L)
     vcl_cerr << "SGIMovieFile: warning: A Variable list is " << n << " elements long\n";
-  }
   for (unsigned long i = 0; i < n; ++i)
   {
     char var_buf[17];
@@ -441,19 +450,20 @@ vcl_ostream& SGIMV_Variables::print(vcl_ostream& s) const
 SGIMV_FrameIndexArray::SGIMV_FrameIndexArray(vcl_istream& f, int n):
   vcl_vector<SGIMV_FrameIndex>(n, SGIMV_FrameIndex())
 {
-//   struct Index {
-//     word offset;
-//     word size;
-//     word pad;
-//     word frame; // ????
-//   };
-
+#if 0
+  struct Index {
+    word offset;
+    word size;
+    word pad;
+    word frame; // ????
+  };
+#endif // 0
   for (int i = 0; i < n; ++i) {
     (*this)[i].offset = get_u32(f);
     (*this)[i].size = get_u32(f);
-    /* int pad1 = */ get_u32(f);
-    /* int pad2 = */ get_u32(f);
-    // vcl_cerr << "FMV: " << (*this)[i].offset << ' ' << (*this)[i].size << ' ' << pad1 << ' ' << pad2 << '\n';
+    get_u32(f);
+    get_u32(f);
+    // vcl_cerr << "FMV: " << (*this)[i].offset << ' ' << (*this)[i].size << '\n';
   }
 }
 
