@@ -48,7 +48,19 @@ vnl_algo uses the netlib library to provide good numerical algorithms.
 During VNL's design, it was though that the much newer LAPACK was better
 than the LINPACK library. However, it was faster to get something working
 with LINPACK, since it had less dependencies than LAPACK. Now, LAPACK's
-superiority is undisputed. LAPACK is faster, and more accurate.
+superiority is undisputed. LAPACK is faster, and more accurate. It is
+designed for efficient parallel processing including on SMP machines
+so it should be thread safe. We do not know if f2c'ed LAPACK is
+automally thread safe, but it should be possible to hand edit it
+to deal with f2c's deficiencies.
+
+It should be possible to start using LAPACK incrementally. LAPACK
+names do not appear to clash with LINPACK, and since they both need
+BLAS, adding the LAPACK code to v3p/netlib would be sensible.
+I suggest starting with SVD of double matrices. This will require
+also converting some helper functions. After that it should be
+relatively straight forward to start importing individual LAPACK
+routines, and moving vnl_algo classes over one at a time.
 
 Note that vnl does not use BLAS, but does its own vector and matrix
 multiplications. The speed of the MKL (An Intel supplied/optimised copy
