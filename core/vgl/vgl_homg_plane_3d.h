@@ -1,10 +1,9 @@
-// This is ./vxl/vgl/vgl_homg_plane_3d.h
+// This is vxl/vgl/vgl_homg_plane_3d.h
 #ifndef vgl_homg_plane_3d_h
 #define vgl_homg_plane_3d_h
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief homogeneous plane in 3D projective space
@@ -16,6 +15,7 @@
 // Peter Vanroose  6 July 2001: Added normal(); replaced data_[4] by a_ b_ c_ d_
 // Peter Vanroose  6 July 2001: Added constructor from 3 points
 // CJB (Manchester) 16/03/2001: Tidied up the documentation
+// Peter Vanroose 15 July 2002: Added constructor from two concurrent lines
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -25,8 +25,15 @@
 
 //: Represents a homogeneous 3D plane
 template <class Type>
-class vgl_homg_plane_3d {
-public:
+class vgl_homg_plane_3d
+{
+  // the four homogenenous coordinates of the point.
+  Type a_;
+  Type b_;
+  Type c_;
+  Type d_;
+
+ public:
   inline vgl_homg_plane_3d () {}
 
   //: Construct from four Types.
@@ -46,6 +53,10 @@ public:
   vgl_homg_plane_3d (vgl_homg_point_3d<Type> const& p1,
                      vgl_homg_point_3d<Type> const& p2,
                      vgl_homg_point_3d<Type> const& p3);
+
+  //: Construct from two concurrent lines
+  vgl_homg_plane_3d (vgl_homg_line_3d_2_points<Type> const& l1,
+                     vgl_homg_line_3d_2_points<Type> const& l2);
 
   // Data Access-------------------------------------------------------------
 
@@ -70,6 +81,7 @@ public:
 
   //: Return true iff the plane is the plane at infinity.
   // The method checks that max(|a|,|b|,|c|) <= tol * |d|
+  // If called without an argument, tol=0, i.e., a, b and c must be 0.
   inline bool ideal(Type tol = Type(0)) const {
 #define vgl_Abs(x) (x<0?-x:x) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
     return vgl_Abs(a()) <= tol * vgl_Abs(d()) &&
@@ -79,13 +91,6 @@ public:
   }
 
   inline vgl_vector_3d<double> normal() const { return normalized(vgl_vector_3d<double>(a(),b(),c())); }
-
-private:
-  // the four homogenenous coordinates of the point.
-  Type a_;
-  Type b_;
-  Type c_;
-  Type d_;
 };
 
 //: Return true iff p is the plane at infinity

@@ -10,6 +10,7 @@
 #include <vcl_iostream.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
+#include <vgl/vgl_homg_line_3d_2_points.h>
 
 //: Construct from non-homogeneous plane
 template <class Type>
@@ -35,6 +36,19 @@ vgl_homg_plane_3d<Type>::vgl_homg_plane_3d (vgl_homg_point_3d<Type> const& p1,
     +p3.x()*(p1.z()*p2.y()-p1.y()*p2.z()))
 {
   assert(a_||b_||c_||d_); // points should not be collinear or coinciding
+}
+
+//: Construct from two concurrent lines
+template <class Type>
+vgl_homg_plane_3d<Type>::vgl_homg_plane_3d(vgl_homg_line_3d_2_points<Type> const& l1,
+                                           vgl_homg_line_3d_2_points<Type> const& l2)
+{
+  assert(concurrent(l1,l2));
+  vgl_homg_point_3d<Type> p1 = l1.point_finite();
+  vgl_homg_point_3d<Type> p2 = l1.point_infinite();
+  vgl_homg_point_3d<Type> p3 = l2.point_finite();
+  if (collinear(p1,p2,p3)) p3 = l2.point_infinite();
+  *this = vgl_homg_plane_3d<Type>(p1,p2,p3);
 }
 
 //: Construct from normal and a point
