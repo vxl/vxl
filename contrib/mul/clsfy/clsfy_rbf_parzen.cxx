@@ -1,25 +1,17 @@
 //    Copyright: (C) 2000 British Telecommunications plc
 
 // inclusions
+#include "clsfy_rbf_parzen.h"
+
 #include <vcl_string.h>
 #include <vcl_queue.h>
+#include <vcl_algorithm.h>
 
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
-#include <clsfy/clsfy_rbf_parzen.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
-
-//=======================================================================
-
-
-//: Set the training data.
-void clsfy_rbf_parzen::set(vcl_vector<vnl_vector<double> > inputs,
-  vcl_vector<unsigned> outputs)
-{
-  trainInputs_ = inputs;
-  trainOutputs_ = outputs;
-}
+#include <vnl/io/vnl_io_vector.h>
 
 //=======================================================================
 //: Return the classification of the given probe vector.
@@ -48,9 +40,19 @@ unsigned clsfy_rbf_parzen::classify(const vnl_vector<double> &input) const
       sumPredictions += weight * trainOutputs_[i];
     }
   }
-  return sumPredictions * 2 > sumWeightings;
+  return sumPredictions * 2 > sumWeightings ? 1 : 0;
 }
 
+//=======================================================================
+//: Set the training data.
+void clsfy_rbf_parzen::set(const vcl_vector<vnl_vector<double> > &inputs,
+  const vcl_vector<unsigned> &outputs)
+{
+  assert(*vcl_max_element(outputs.begin(), outputs.end()) <= 1); // The class labels must be 0 or 1.
+  assert(inputs.size() == outputs.size());
+  trainInputs_ = inputs;
+  trainOutputs_ = outputs;
+}
 
 //=======================================================================
 //: Return a probability like value that the input being in each class.

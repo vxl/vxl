@@ -61,7 +61,7 @@ public:
   virtual double log_l(const vnl_vector<double> &input) const;
 
   //: Set the training data.
-  void set(vcl_vector<vnl_vector<double> > inputs, vcl_vector<unsigned> outputs);
+  void set(const vcl_vector<vnl_vector<double> > &inputs, const vcl_vector<unsigned> &outputs);
 
   //: The 1st standard deviation width of the RBF window.
   // The default value is 1.
