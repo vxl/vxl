@@ -25,8 +25,10 @@ class vpyr_2_tpyramid ;
 template <class V, class E, class F, class D>
 class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
                              public vmap_ptr_sequence< typename V::base_type >,
+#ifndef VCL_VC60 // TODO - VC60 thinks that the next 2 are identical to the above
                              public vmap_ptr_sequence< typename E::base_type >,
                              public vmap_ptr_sequence< typename F::base_type >
+#endif
 {
  public:
 
