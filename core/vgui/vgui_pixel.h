@@ -9,8 +9,8 @@
 // \author fsm
 // \verbatim
 // Modifications:
-//  Jan 2003, Amitha Perera: added functionality used in displaying vil2 images.
-//     The vil and vil2 functionality could probably be coalesced for a cleaner design.
+//  Jan 2003, Amitha Perera: added functionality used in displaying vil images.
+//     The vil1 and vil functionality could probably be coalesced for a cleaner design.
 // \endverbatim
 
 #include <vgui/vgui_gl.h>

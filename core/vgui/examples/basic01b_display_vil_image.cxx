@@ -3,8 +3,8 @@
 
 #include <vcl_iostream.h>
 
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_load.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_load.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_vil2_image_tableau.h>
@@ -25,10 +25,10 @@ int main(int argc, char **argv)
 
   // We load it as a byte image. There are more complex processing
   // techniques to load arbitrary image types, but that is an issue
-  // for vil2, not vgui.
+  // for vil, not vgui.
   //
 
-  vil2_image_view< vxl_byte > b_im = vil2_load(argv[1]);
+  vil_image_view< vxl_byte > b_im = vil_load(argv[1]);
 
   // Load image (given in the first command line param) into an image tableau.
   vgui_vil2_image_tableau_new< vxl_byte > image(b_im);

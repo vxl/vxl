@@ -3,13 +3,13 @@
 #define vgui_image_renderer_h_
 //:
 // \file
-// \brief OpenGL utility to render a vil_image.
+// \brief OpenGL utility to render a vil1_image.
 // \author fsm
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 struct vgui_section_buffer;
 
-//: OpenGL utility to render a vil_image.
+//: OpenGL utility to render a vil1_image.
 //
 //  This is not a tableau.
 //
@@ -25,13 +25,13 @@ struct vgui_section_buffer;
 //  describe the x,y-locations of the rendered pixels. It is currently
 //  undefined where the centre of a pixel is placed.
 //
-//  Note that the class keeps a vil_image (as given), so if the
+//  Note that the class keeps a vil1_image (as given), so if the
 //  underlying image is modified after sections have been taken by
 //  this class, inconsistent rendering may result. Call need_resection()
 //  to mark all previous sections as invalid.
 class vgui_image_renderer
 {
-  vil_image the_image;
+  vil1_image the_image;
   vgui_section_buffer *buffer;
 
  public:
@@ -46,11 +46,11 @@ class vgui_image_renderer
   //: Destructor - delete image buffer.
   ~vgui_image_renderer();
 
-  //: Attach the renderer to a new vil_image.
-  void set_image(vil_image const &);
+  //: Attach the renderer to a new vil1_image.
+  void set_image(vil1_image const &);
 
-  //: Return the vil_image that this renderer draws
-  vil_image get_image() const { return the_image; }
+  //: Return the vil1_image that this renderer draws
+  vil1_image get_image() const { return the_image; }
 
   //: Tell the renderer that the underlying image has been changed.
   void reread_image();

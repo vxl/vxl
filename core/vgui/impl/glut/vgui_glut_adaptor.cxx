@@ -684,10 +684,10 @@ implement_static_callback(special_up,(int key,int x,int y),(key,x,y));
 
 #ifdef DUMP_FRAME
 #include <vul/vul_sprintf.h>
-#include <vil/vil_save.h>
-#include <vil/vil_rgb.h>
-#include <vil/vil_rgba.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_save.h>
+#include <vil1/vil1_rgb.h>
+#include <vil1/vil1_rgba.h>
+#include <vil1/vil1_memory_image_of.h>
 static
 void fsm_dump(char const *file)
 {
@@ -699,11 +699,11 @@ void fsm_dump(char const *file)
   unsigned w = vp[2];
   unsigned h = vp[3];
 
-  // It's easier to get the buffer in vil_rgba format and then convert to
+  // It's easier to get the buffer in vil1_rgba format and then convert to
   // RGB, because that avoids alignment problems with glReadPixels.
-  static vil_rgba<GLubyte> *pixels = 0;
+  static vil1_rgba<GLubyte> *pixels = 0;
   if (! pixels)
-    pixels = new vil_rgba<GLubyte>[ w * h ];
+    pixels = new vil1_rgba<GLubyte>[ w * h ];
 
   //
   glPixelZoom(1,1);
@@ -729,8 +729,8 @@ void fsm_dump(char const *file)
                pixels);
 
   // glReadPixels() reads the pixels from the bottom of the viewport up.
-  // Copy them into an vil_memory_image_of in the other order :
-  static vil_memory_image_of<vil_rgb<GLubyte> > colour_buffer;
+  // Copy them into an vil1_memory_image_of in the other order :
+  static vil1_memory_image_of<vil1_rgb<GLubyte> > colour_buffer;
   colour_buffer.resize(w, h);
 
   for (unsigned yy=0; yy<h; ++yy)
@@ -741,7 +741,7 @@ void fsm_dump(char const *file)
     }
 
   //
-  vil_save(colour_buffer, file, "pnm");
+  vil1_save(colour_buffer, file, "pnm");
 }
 bool fsm_hook_flag = false;
 static

@@ -20,13 +20,13 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_string.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_rgb.h>
 
 struct vgui_vrml_texture_map
 {
   vcl_string filename_;
-  vil_memory_image_of<vil_rgb<unsigned char> > rgb;
+  vil1_memory_image_of<vil1_rgb<unsigned char> > rgb;
 
   vgui_vrml_texture_map(char const* fn, int w, int h):
     filename_(fn),

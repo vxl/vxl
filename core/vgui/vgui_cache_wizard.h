@@ -22,7 +22,7 @@
 #include <vcl_list.h>
 #include <vcl_utility.h>
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vgui/vgui_gl.h>
 
 //: Provides support for caching of large images.
@@ -31,18 +31,18 @@ class vgui_cache_wizard
  public:
   //: Each image consists of MxN quadrants. M,N is to be determined on runtime
   typedef vcl_vector <GLuint> image_cache_quadrants;
-  typedef vcl_pair<vil_image,image_cache_quadrants *> wizard_image;
+  typedef vcl_pair<vil1_image,image_cache_quadrants *> wizard_image;
   typedef vcl_pair<int,int> dimension;
 
   //: Loads an image into the memory
-  int load_image(vil_image);
+  int load_image(vil1_image);
 
   //: Get the texture names for the current viewport
   bool get_section(int id, int x, int y,int width,int height,
                    image_cache_quadrants *quadrants,dimension *pos,dimension *size);
 
   //:
-  void TexImage2D_Brownie(vil_image img);
+  void TexImage2D_Brownie(vil1_image img);
 
   //: Get the image quadrant width
   int get_quadrant_width() const

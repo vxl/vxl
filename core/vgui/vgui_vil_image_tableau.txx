@@ -40,7 +40,7 @@ vgui_vil2_image_tableau<T>::vgui_vil2_image_tableau()
 
 //-----------------------------------------------------------------------------
 template<typename T>
-vgui_vil2_image_tableau<T>::vgui_vil2_image_tableau(vil2_image_view<T> const &I)
+vgui_vil2_image_tableau<T>::vgui_vil2_image_tableau(vil_image_view<T> const &I)
   : pixels_centered_( true ),
     renderer_( new vgui_vil2_image_renderer<T> )
 { 
@@ -79,7 +79,7 @@ vgui_vil2_image_tableau<T>::pretty_name() const
 //-----------------------------------------------------------------------------
 //: Return the image being rendered by this tableau.
 template<typename T>
-vil2_image_view<T>
+vil_image_view<T>
 vgui_vil2_image_tableau<T>::get_image() const
 {
   return renderer_->get_image();
@@ -89,7 +89,7 @@ vgui_vil2_image_tableau<T>::get_image() const
 //: Make the given image, the image rendered by this tableau.
 template<typename T>
 void
-vgui_vil2_image_tableau<T>::set_image( vil2_image_view<T> const &I )
+vgui_vil2_image_tableau<T>::set_image( vil_image_view<T> const &I )
 {
   renderer_->set_image( I );
 }

@@ -3,19 +3,19 @@
 #define vgui_vil2_image_renderer_h_
 //:
 // \file
-// \brief OpenGL utility to render a vil2_image_view.
+// \brief OpenGL utility to render a vil_image_view.
 // \author Amitha
 //
-// Cut-n-paste and modify from vil_image_renderer.
+// Cut-n-paste and modify from vil1_image_renderer.
 
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 class vgui_vil2_section_buffer;
 
-//: OpenGL utility to render a vil2_image_view.
+//: OpenGL utility to render a vil_image_view.
 //
 //  This is not a tableau.
 //
-//  The vil2_image_renderer provides an easy way to render sections of an
+//  The vil_image_renderer provides an easy way to render sections of an
 //  image. It should manage possibly sub-sampled buffers internally
 //  to provide a reasonable trade-off between memory consumption and
 //  rendering speed. For a very large image, which cannot be stored
@@ -27,7 +27,7 @@ class vgui_vil2_section_buffer;
 //  describe the x,y-locations of the rendered pixels. It is currently
 //  undefined where the centre of a pixel is placed.
 //
-//  Note that the class keeps a vil2_image_view (as given), so if the
+//  Note that the class keeps a vil_image_view (as given), so if the
 //  underlying image is modified after sections have been taken by
 //  this class, inconsistent rendering may result. Call need_resection()
 //  to mark all previous sections as invalid.
@@ -35,7 +35,7 @@ class vgui_vil2_section_buffer;
 template<typename T>
 class vgui_vil2_image_renderer
 {
-  vil2_image_view<T> the_image_;
+  vil_image_view<T> the_image_;
   vgui_vil2_section_buffer* buffer_;
 
  public:
@@ -45,11 +45,11 @@ class vgui_vil2_image_renderer
   //: Destructor - delete image buffer.
   ~vgui_vil2_image_renderer();
 
-  //: Attach the renderer to a new vil2_image_view.
-  void set_image(vil2_image_view<T> const &);
+  //: Attach the renderer to a new vil_image_view.
+  void set_image(vil_image_view<T> const &);
 
-  //: Return the vil2_image_view that this renderer draws
-  vil2_image_view<T> get_image() const { return the_image_; }
+  //: Return the vil_image_view that this renderer draws
+  vil_image_view<T> get_image() const { return the_image_; }
 
   //: Tell the renderer that the underlying image has been changed.
   void reread_image();

@@ -20,8 +20,8 @@
 
 #include <vul/vul_psfile.h>
 
-#include <vil/vil_image.h>
-#include <vil/vil_pixel.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_pixel.h>
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_macro.h>
@@ -237,7 +237,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
   if (wd < 0 || ht < 0)
   {
     assert(get_image_tableau());
-    vil_image img = get_image_tableau()->get_image();
+    vil1_image img = get_image_tableau()->get_image();
     if (wd < 0) wd = img.width();
     if (ht < 0) ht = img.height();
     assert (wd <= img.width());
@@ -252,17 +252,17 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
   // Write image, if present
   if (get_image_tableau() && wd*ht > 0)
   {
-    vil_image img = get_image_tableau()->get_image();
+    vil1_image img = get_image_tableau()->get_image();
     unsigned char* data = new unsigned char[img.get_size_bytes()];
     img.get_section(data, 0, 0, wd, ht);
-    if (vil_pixel_format(img) == VIL_BYTE)
+    if (vil1_pixel_format(img) == VIL1_BYTE)
     {
       if (debug)
         vcl_cerr << "vgui_easy2D_tableau::print_psfile printing greyscale image to"
                  << filename.c_str() << vcl_endl;
       psfile.print_greyscale_image(data, wd, ht);
     }
-    else if (vil_pixel_format(img) == VIL_RGB_BYTE)
+    else if (vil1_pixel_format(img) == VIL1_RGB_BYTE)
     {
       if (debug)
         vcl_cerr << "vgui_easy2D_tableau::print_psfile printing color image to "

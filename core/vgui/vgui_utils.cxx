@@ -10,10 +10,10 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
-#include <vil/vil_rgb.h>
-#include <vil/vil_rgba.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_rgb.h>
+#include <vil1/vil1_rgba.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_save.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
@@ -29,9 +29,9 @@ void vgui_utils::dump_colour_buffer(char const *file) {
   unsigned w = vp[2];
   unsigned h = vp[3];
 
-  // It's easier to get the buffer in vil_rgba format and then convert to
+  // It's easier to get the buffer in vil1_rgba format and then convert to
   // RGB, because that avoids alignment problems with glReadPixels.
-  vil_rgba<GLubyte> *pixels = new vil_rgba<GLubyte>[ w * h ];
+  vil1_rgba<GLubyte> *pixels = new vil1_rgba<GLubyte>[ w * h ];
 
   //
   glPixelZoom(1,1);
@@ -54,8 +54,8 @@ void vgui_utils::dump_colour_buffer(char const *file) {
                pixels);
 
   // glReadPixels() reads the pixels from the bottom of the viewport up.
-  // Copy them into an vil_memory_image_of in the other order :
-  vil_memory_image_of<vil_rgb<GLubyte> > colour_buffer(w, h);
+  // Copy them into an vil1_memory_image_of in the other order :
+  vil1_memory_image_of<vil1_rgb<GLubyte> > colour_buffer(w, h);
   for (unsigned yy=0; yy<h; ++yy)
     for (unsigned xx=0; xx<w; ++xx) {
       colour_buffer(xx, h-1-yy).r = pixels[xx + w*yy].r;
@@ -67,7 +67,7 @@ void vgui_utils::dump_colour_buffer(char const *file) {
   delete [] pixels;
 
   //
-  vil_save(colour_buffer, file);
+  vil1_save(colour_buffer, file);
 }
 
 //------------------------------------------------------------------------------

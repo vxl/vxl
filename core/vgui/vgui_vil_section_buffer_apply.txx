@@ -24,7 +24,7 @@ namespace
   //
   template<typename InT, typename OutT>
   bool
-  convert_buffer( vil2_image_view<InT> const& in,
+  convert_buffer( vil_image_view<InT> const& in,
                   unsigned x, unsigned y, unsigned w, unsigned h,
                   OutT* out, vcl_ptrdiff_t hstep )
   {
@@ -68,7 +68,7 @@ namespace
 template<typename T>
 void
 vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& sec_buf,
-                                vil2_image_view<T> const& image_in )
+                                vil_image_view<T> const& image_in )
 {
   unsigned x = sec_buf.internal_x();
   unsigned y = sec_buf.internal_y();
@@ -106,11 +106,11 @@ vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& sec_buf,
 #define INSTANTIATE_VGUI_VIL2_SECTION_BUFFER( T ) \
   template void                                   \
   vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& sec_buf, \
-                                  vil2_image_view<T > const& image_in)
+                                  vil_image_view<T > const& image_in)
 
 #else
 #define INSTANTIATE_VGUI_VIL2_SECTION_BUFFER( T ) \
-  void vgui_vil2_section_buffer_tickler( vgui_vil2_section_buffer& sec_buf, vil2_image_view<T >& view ) \
+  void vgui_vil2_section_buffer_tickler( vgui_vil2_section_buffer& sec_buf, vil_image_view<T >& view ) \
   { \
     vgui_vil2_section_buffer_apply( sec_buf, view ); \
   }

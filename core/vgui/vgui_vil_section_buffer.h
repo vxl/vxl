@@ -13,7 +13,7 @@
 
 #include <vgui/vgui_gl.h>
 
-#include <vil2/vil2_fwd.h>
+#include <vil/vil_fwd.h>
 
 class vgui_accelerate_cached_image;
 
@@ -41,7 +41,7 @@ class vgui_accelerate_cached_image;
 // Usually 'format'=GL_RGBA, 'type'=GL_UNSIGNED_BYTE works well.
 //
 // Since we aren't allowed member templates, we get from a
-// vil2_image_view to a vgui_vil2_section_buffer the non-member
+// vil_image_view to a vgui_vil2_section_buffer the non-member
 // vgui_vil2_section_buffer_apply.
 //
 class vgui_vil2_section_buffer

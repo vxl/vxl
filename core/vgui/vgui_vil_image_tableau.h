@@ -5,7 +5,7 @@
 //:
 // \file
 // \author Amitha Perera
-// \brief  Tableau which renders the given vil2_image_view using an image_renderer.
+// \brief  Tableau which renders the given vil_image_view using an image_renderer.
 //
 //  Mostly cut-n-paste from vgui_image_tableau.
 //
@@ -16,7 +16,7 @@
 template<class T>
 class vgui_vil2_image_renderer;
 
-#include <vil2/vil2_fwd.h>
+#include <vil/vil_fwd.h>
 
 //: Captures the non-templated functionality of vgui_vil2_image_tableau.
 //
@@ -79,10 +79,10 @@ public:
   vcl_string pretty_name() const;
 
   //: Return the image being rendered by this tableau.
-  vil2_image_view<T> get_image() const;
+  vil_image_view<T> get_image() const;
 
   //: Make the given image, the image rendered by this tableau.
-  void set_image( vil2_image_view<T> const &img );
+  void set_image( vil_image_view<T> const &img );
 
   //: Width of image (0 if none).
   unsigned width() const;
@@ -110,7 +110,7 @@ public:
 private:
   vgui_vil2_image_tableau();
 
-  vgui_vil2_image_tableau( vil2_image_view<T> const &img );
+  vgui_vil2_image_tableau( vil_image_view<T> const &img );
 
   friend struct vgui_vil2_image_tableau_new<T>;
 
@@ -128,7 +128,7 @@ struct vgui_vil2_image_tableau_new : public vgui_vil2_image_tableau_sptr<T> {
     : vgui_vil2_image_tableau_sptr<T>( new vgui_vil2_image_tableau<T> ) { }
 
   //: Constructor - creates a tableau displaying the given image.
-  vgui_vil2_image_tableau_new( vil2_image_view<T> const &t )
+  vgui_vil2_image_tableau_new( vil_image_view<T> const &t )
     : vgui_vil2_image_tableau_sptr<T>( new vgui_vil2_image_tableau<T>(t) ) { }
 };
 

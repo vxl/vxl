@@ -92,7 +92,7 @@ SET(vgui_sources
   vgui_image_tableau.cxx        vgui_image_tableau.h      vgui_image_tableau_sptr.h
   vgui_blender_tableau.cxx      vgui_blender_tableau.h    vgui_blender_tableau_sptr.h
 
-  # vil2 support
+  # vil support
   vgui_vil2_image_tableau.txx         vgui_vil2_image_tableau.h         vgui_vil2_image_tableau_sptr.h
   vgui_vil2_image_renderer.txx        vgui_vil2_image_renderer.h
   vgui_vil2_section_buffer.cxx        vgui_vil2_section_buffer.h
@@ -427,12 +427,12 @@ SET( vgui_sources ${vgui_sources}
 ADD_LIBRARY(vgui ${vgui_sources})
 
 # Dependencies on other vxl libraries
-TARGET_LINK_LIBRARIES(vgui vnl_algo vnl vil vil2 vgl vpl vbl vul)
+TARGET_LINK_LIBRARIES(vgui vnl_algo vnl vil1 vil vgl vpl vbl vul)
 
 # Dependencies created by the toolkit implementations
 
 IF (VGUI_USE_GLUT)
-  # vil and vul listed above, and glut listed below. Don't repeat.
+  # vil1 and vul listed above, and glut listed below. Don't repeat.
   # TARGET_LINK_LIBRARIES(vgui ${GLUT_LIBRARIES})
 ENDIF (VGUI_USE_GLUT)
 IF (VGUI_USE_QT)

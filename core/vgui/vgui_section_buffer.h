@@ -12,7 +12,7 @@
 //  Contains classes:  vgui_section_buffer
 
 #include <vgui/vgui_gl.h>
-class vil_image;
+class vil1_image;
 
 class vgui_accelerate_cached_image;
 
@@ -64,7 +64,7 @@ struct vgui_section_buffer
   bool draw_image_as_cached_textures(float xlo, float ylo, float xhi, float yhi);
   bool load_image_as_textures();
   //: Grab a section from the given image.
-  void apply(vil_image const &);
+  void apply(vil1_image const &);
 
   //: Return true if the last get_section() succeeded.
   operator bool () const { return section_ok; }

@@ -28,9 +28,9 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 
-#include <vil/vil_image.h>
-#include <vil/vil_image_as.h>
-#include <vil/vil_pixel.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_image_as.h>
+#include <vil1/vil1_pixel.h>
 
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_pixel.h>
@@ -255,25 +255,25 @@ else { /* not really necessary */ } \
 delete [] data; \
 assert(section_ok)
 
-void vgui_section_buffer::apply(vil_image const& image_in) {
+void vgui_section_buffer::apply(vil1_image const& image_in) {
   // FIXME: the calls to fsm_macro_magic() are identical for each image pixel type.
   // They could be coalesced to reduce code maintenance.
-  vil_image image = image_in;
-  vil_pixel_format_t pixel_format = vil_pixel_format(image);
+  vil1_image image = image_in;
+  vil1_pixel_format_t pixel_format = vil1_pixel_format(image);
 
   // Convert non-handled formats to ones we can handle.
   // e.g. uint32 -> float
-  if (pixel_format == VIL_UINT32 || pixel_format == VIL_UINT16) {
-    image  = vil_image_as_float(image_in);
-    pixel_format = vil_pixel_format(image);
+  if (pixel_format == VIL1_UINT32 || pixel_format == VIL1_UINT16) {
+    image  = vil1_image_as_float(image_in);
+    pixel_format = vil1_pixel_format(image);
   }
-  if (pixel_format == VIL_RGB_UINT16) {
-    image  = vil_image_as_rgb_float(image_in);
-    pixel_format = vil_pixel_format(image);
+  if (pixel_format == VIL1_RGB_UINT16) {
+    image  = vil1_image_as_rgb_float(image_in);
+    pixel_format = vil1_pixel_format(image);
   }
 
   // 8bit greyscale
-  if (pixel_format == VIL_BYTE) {
+  if (pixel_format == VIL1_BYTE) {
     fsm_macro_begin(GLubyte, "8 bit greyscale");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
@@ -294,7 +294,7 @@ void vgui_section_buffer::apply(vil_image const& image_in) {
   }
 
   // 24bit rgb
-  else if (pixel_format == VIL_RGB_BYTE) {
+  else if (pixel_format == VIL1_RGB_BYTE) {
     fsm_macro_begin(vgui_pixel_rgb888, "24 bit RGB");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
@@ -315,7 +315,7 @@ void vgui_section_buffer::apply(vil_image const& image_in) {
   }
 
   // float rgb
-  else if (pixel_format == VIL_RGB_FLOAT) {
+  else if (pixel_format == VIL1_RGB_FLOAT) {
     fsm_macro_begin(vgui_pixel_rgbfloat, "float RGB");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
@@ -336,7 +336,7 @@ void vgui_section_buffer::apply(vil_image const& image_in) {
   }
 
   // 32bit rgba
-  else if (pixel_format == VIL_RGBA_BYTE) {
+  else if (pixel_format == VIL1_RGBA_BYTE) {
     fsm_macro_begin(vgui_pixel_rgba8888, "32 bit RGBA");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
@@ -357,7 +357,7 @@ void vgui_section_buffer::apply(vil_image const& image_in) {
   }
 
   // 32bit float
-  else if (pixel_format == VIL_FLOAT) {
+  else if (pixel_format == VIL1_FLOAT) {
     fsm_macro_begin(float, "32 bit float");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
@@ -378,7 +378,7 @@ void vgui_section_buffer::apply(vil_image const& image_in) {
   }
 
   // IEEE double
-  else if (pixel_format == VIL_DOUBLE) {
+  else if (pixel_format == VIL1_DOUBLE) {
     fsm_macro_begin(double, "64 bit double");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
@@ -401,7 +401,7 @@ void vgui_section_buffer::apply(vil_image const& image_in) {
   // dunno.
   else
     {
-      vcl_cerr << "pixel_format == " << vil_print(pixel_format) << " which is unknown...\n";
+      vcl_cerr << "pixel_format == " << vil1_print(pixel_format) << " which is unknown...\n";
       assert(false);
     }
 

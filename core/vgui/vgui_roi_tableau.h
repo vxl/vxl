@@ -22,9 +22,9 @@
 
 
 #include <vgui/vgui_tableau.h>
-#include <vil/vil_image.h>
-class vil_crop_image_impl;
-class vil_image;
+#include <vil1/vil1_image.h>
+class vil1_crop_image_impl;
+class vil1_image;
 class vgui_image_tableau;
 
 #include "vgui_roi_tableau_sptr.h"
@@ -46,7 +46,7 @@ class vgui_roi_tableau : public vgui_tableau
 
  private:
   ROI roi_;
-  vil_image cropped_image_;
+  vil1_image cropped_image_;
   vcl_string name_;
 
  public:
@@ -54,7 +54,7 @@ class vgui_roi_tableau : public vgui_tableau
   vgui_roi_tableau();
 
   //: Constructor - don't use this, use vgui_roi_tableau_new.
-  vgui_roi_tableau(vil_image const &, char const *, float, float, float, float);
+  vgui_roi_tableau(vil1_image const &, char const *, float, float, float, float);
 
   //: Returns the type of this tableau ('vgui_roi_tableau').
   vcl_string type_name() const;
@@ -66,10 +66,10 @@ class vgui_roi_tableau : public vgui_tableau
   vcl_string pretty_name() const;
 
   //: Returns the image cropped by the ROI.
-  vil_image get_image() const;
+  vil1_image get_image() const;
 
   //: Make the given image the underlying image for this tableau.
-  void set_image(vil_image const &);
+  void set_image(vil1_image const &);
 
   //: Make image loaded from the given filename the image for this tableau.
   void set_image(char const *);          // <- convenience

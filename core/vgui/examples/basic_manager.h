@@ -13,13 +13,13 @@
 //   J.L. Mundy December 26, 2002    Initial version.
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 
 class basic_manager : public vgui_wrapper_tableau
 {
-  vil_image img_;
+  vil1_image img_;
   vgui_image_tableau_sptr itab_; 
   static basic_manager *instance_;
  public:

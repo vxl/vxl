@@ -13,7 +13,7 @@
 
 #include <vcl_string.h>
 
-#include <vil/vil_load.h>
+#include <vil1/vil1_load.h>
 
 #include <vgui/vgui_image_renderer.h>
 #include <vgui/vgui_event.h>
@@ -33,7 +33,7 @@ vgui_image_tableau::vgui_image_tableau()
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_image_tableau_new.
 //  Creates a tableau displaying the given image.
-vgui_image_tableau::vgui_image_tableau(vil_image const &I)
+vgui_image_tableau::vgui_image_tableau(vil1_image const &I)
   : vgui_tableau()
   , pixels_centered(true)
   , renderer(new vgui_image_renderer)
@@ -86,14 +86,14 @@ vcl_string vgui_image_tableau::pretty_name() const
 
 //-----------------------------------------------------------------------------
 //: Return the image being rendered by this tableau.
-vil_image vgui_image_tableau::get_image() const
+vil1_image vgui_image_tableau::get_image() const
 {
   return renderer->get_image();
 }
 
 //-----------------------------------------------------------------------------
 //: Make the given image, the image rendered by this tableau.
-void vgui_image_tableau::set_image(vil_image const &I)
+void vgui_image_tableau::set_image(vil1_image const &I)
 {
   // use the name of the image as the name of the tableau :
   renderer->set_image( I );
@@ -103,7 +103,7 @@ void vgui_image_tableau::set_image(vil_image const &I)
 //: Make image loaded from the given file, the image rendered by this tableau.
 void vgui_image_tableau::set_image(char const *f)
 {
-  set_image( vil_load(f ? f : "az32_10.tif") );
+  set_image( vil1_load(f ? f : "az32_10.tif") );
 }
 
 //-----------------------------------------------------------------------------

@@ -12,7 +12,7 @@
 
 #include <vcl_iostream.h>
 
-#include <vil/vil_load.h>
+#include <vil1/vil1_load.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
@@ -33,14 +33,14 @@ vgui_blender_tableau::vgui_blender_tableau(char const* file, float a)
   : alpha(a)
 {
   renderer = new vgui_image_renderer;
-  renderer->set_image(vil_load(file));
+  renderer->set_image(vil1_load(file));
   filename = vcl_string(file);
 }
 
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_blender_tableau_new.
 //  Creates a blender with the given image and alpha value.
-vgui_blender_tableau::vgui_blender_tableau(vil_image const& img, float a)
+vgui_blender_tableau::vgui_blender_tableau(vil1_image const& img, float a)
   : alpha(a)
 {
   renderer = new vgui_image_renderer;

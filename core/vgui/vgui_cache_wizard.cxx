@@ -8,8 +8,8 @@
 
 #include "vgui_cache_wizard.h"
 
-#include <vil/vil_crop.h>
-#include <vil/vil_pixel.h>
+#include <vil1/vil1_crop.h>
+#include <vil1/vil1_pixel.h>
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -79,7 +79,7 @@ vgui_cache_wizard *vgui_cache_wizard::Instance()
 }
 
 //: Loads an image
-int vgui_cache_wizard::load_image(vil_image img)
+int vgui_cache_wizard::load_image(vil1_image img)
 {
   // Check whether the image pointer is already in memory
   vcl_vector<wizard_image *>::iterator i = images_.begin();
@@ -112,7 +112,7 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
 {
   // Find out which image it is
   wizard_image *wz = images_[id];
-  vil_image img = wz->first;
+  vil1_image img = wz->first;
   image_cache_quadrants *icq = wz->second;
   dimension *d = dimensions_[id];
   // Work out which quadrant (x,y) lies in
@@ -182,7 +182,7 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
           }
 
           glBindTexture(GL_TEXTURE_2D,texture_name);
-          TexImage2D_Brownie(vil_crop(img,pos->first*quadrant_width_+j*quadrant_width_,
+          TexImage2D_Brownie(vil1_crop(img,pos->first*quadrant_width_+j*quadrant_width_,
                                       pos->second*quadrant_height_+i*quadrant_height_,
                                       quadrant_width_,
                                       quadrant_height_));
@@ -227,7 +227,7 @@ if (format==fmt && type==typ) { \
 delete [] data; \
 assert(section_ok);
 
-void vgui_cache_wizard::TexImage2D_Brownie(vil_image img)
+void vgui_cache_wizard::TexImage2D_Brownie(vil1_image img)
 {
   void *the_pixels = 0;
   bool section_ok;
@@ -238,9 +238,9 @@ void vgui_cache_wizard::TexImage2D_Brownie(vil_image img)
   GLenum format,type;
   vgui_accelerate::instance()->vgui_choose_cache_format(&format,&type);
 
-  vil_pixel_format_t pixel_format = vil_pixel_format(img);
+  vil1_pixel_format_t pixel_format = vil1_pixel_format(img);
 
-  if (pixel_format == VIL_BYTE) {
+  if (pixel_format == VIL1_BYTE) {
     fsm_macro_begin(GLubyte, "8 bit greyscale");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
@@ -257,7 +257,7 @@ void vgui_cache_wizard::TexImage2D_Brownie(vil_image img)
   }
 
   // 24bit rgb
-  else if (pixel_format == VIL_RGB_BYTE) {
+  else if (pixel_format == VIL1_RGB_BYTE) {
     fsm_macro_begin(vgui_pixel_rgb888, "24 bit RGB");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
@@ -274,7 +274,7 @@ void vgui_cache_wizard::TexImage2D_Brownie(vil_image img)
   }
 
   // 32bit rgba
-  else if (pixel_format == VIL_RGBA_BYTE) {
+  else if (pixel_format == VIL1_RGBA_BYTE) {
     fsm_macro_begin(vgui_pixel_rgba8888, "32 bit RGBA");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);

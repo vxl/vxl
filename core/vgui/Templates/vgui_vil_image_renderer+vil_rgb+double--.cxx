@@ -1,6 +1,6 @@
 #include <vgui/vgui_vil2_image_renderer.txx>
-#include <vil2/vil2_rgb.h>
+#include <vil/vil_rgb.h>
 
-typedef vil2_rgb<double> Type;
+typedef vil_rgb<double> Type;
 
 template class vgui_vil2_image_renderer<Type>;

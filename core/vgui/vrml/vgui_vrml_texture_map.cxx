@@ -10,10 +10,10 @@
 
 #include "vgui_vrml_texture_map.h"
 #include <vul/vul_file.h>
-#include <vil/vil_rgb.h>
-#include <vil/vil_byte.h>
-#include <vil/vil_file_image.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_rgb.h>
+#include <vil1/vil1_byte.h>
+#include <vil1/vil1_file_image.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vcl_iostream.h>
 
 int VrmlDraw_TEX_MAX = 256;
@@ -53,7 +53,7 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
   filename = fn.c_str();
 
   vcl_cerr << "Loading texture from ["<< filename <<"]... ";
-  vil_file_image fileimage(filename, vil_file_image::laconic);
+  vil1_file_image fileimage(filename, vil1_file_image::laconic);
   if (!fileimage) {
     vcl_cerr << "Failed!";
     return 0;
@@ -70,9 +70,9 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
     vcl_cerr << "Rescale from "<<w<<"x"<<h<<" to "<<tex_w<<"x"<<tex_h<<", ";
 
   // Rescale and flip Y
-  if (vil_pixel_format(fileimage) == VIL_RGB_BYTE) {
+  if (vil1_pixel_format(fileimage) == VIL1_RGB_BYTE) {
     vgui_vrml_texture_map* newmap = new vgui_vrml_texture_map(filename, tex_w, tex_h);
-    vil_memory_image_of<vil_rgb<unsigned char> > rgb(fileimage.width(), fileimage.height());
+    vil1_memory_image_of<vil1_rgb<unsigned char> > rgb(fileimage.width(), fileimage.height());
     fileimage.get_section(rgb.get_buffer(), 0,0, fileimage.width(), fileimage.height());
     for (int y = 0; y < tex_h; ++y) {
       int orig_y = y * h / tex_h;
@@ -81,10 +81,10 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
     }
     vcl_cerr << "Done.\n";
     return newmap;
-  } else if (vil_pixel_format(fileimage) == VIL_BYTE) {
+  } else if (vil1_pixel_format(fileimage) == VIL1_BYTE) {
     vgui_vrml_texture_map* newmap = new vgui_vrml_texture_map(filename, tex_w, tex_h);
-    //vil_memory_image_of<byte> gray( fileimage.get_image_ptr() ); //im8);
-    vil_memory_image_of<vil_byte> gray(fileimage.width(), fileimage.height());
+    //vil1_memory_image_of<byte> gray( fileimage.get_image_ptr() ); //im8);
+    vil1_memory_image_of<vil1_byte> gray(fileimage.width(), fileimage.height());
     fileimage.get_section(gray.get_buffer(), 0,0, fileimage.width(), fileimage.height());
     for (int y = 0; y < tex_h; ++y) {
       int orig_y = y * h / tex_h;

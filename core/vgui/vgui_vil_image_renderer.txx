@@ -6,7 +6,7 @@
 // \author Amitha Perera
 // \brief  See vgui_vil2_image_renderer.h for a description of this file.
 //
-// Cut-n-paste and modify from vil_image_renderer.cxx
+// Cut-n-paste and modify from vil1_image_renderer.cxx
 
 #include "vgui_vil2_image_renderer.h"
 
@@ -40,10 +40,10 @@ vgui_vil2_image_renderer<T>::~vgui_vil2_image_renderer()
 }
 
 //-----------------------------------------------------------------------------
-//: Attach the renderer to a new vil_image.
+//: Attach the renderer to a new vil1_image.
 template<typename T>
 void
-vgui_vil2_image_renderer<T>::set_image( vil2_image_view<T> const &image )
+vgui_vil2_image_renderer<T>::set_image( vil_image_view<T> const &image )
 {
   if ( image == the_image_ )
     return; // same image -- do nothing.

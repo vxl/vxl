@@ -1,7 +1,7 @@
 // This is core/vgui/examples/basic_manager.cxx
 #include "basic_manager.h"
 #include <vcl_cstdlib.h> // for vcl_exit()
-#include <vil/vil_load.h>
+#include <vil1/vil1_load.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -59,6 +59,6 @@ void basic_manager::load_image()
   load_image_dlg.file("Image Filename:", ext, image_filename);
   if (!load_image_dlg.ask())
     return;
-  img_ = vil_load(image_filename.c_str());
+  img_ = vil1_load(image_filename.c_str());
   itab_->set_image(img_);
 }

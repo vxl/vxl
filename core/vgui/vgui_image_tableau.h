@@ -18,7 +18,7 @@
 #include <vgui/vgui_image_tableau_sptr.h>
 
 class vgui_image_renderer;
-class vil_image;
+class vil1_image;
 
 //: Tableau which renders the given image using an image_renderer.
 class vgui_image_tableau : public vgui_tableau
@@ -33,7 +33,7 @@ class vgui_image_tableau : public vgui_tableau
 
   //: Constructor - don't use this, use vgui_image_tableau_new.
   //  Creates a tableau displaying the given image.
-  vgui_image_tableau(vil_image const &img);
+  vgui_image_tableau(vil1_image const &img);
 
   //: Constructor - don't use this, use vgui_image_tableau_new.
   //  Creates a tableau which loads and displays an image from
@@ -45,17 +45,17 @@ class vgui_image_tableau : public vgui_tableau
 
   //: Returns the filename of the loaded image.
   //  It will not know this if the tableau was constructed from
-  //  a vil_image, only if the filename was given to the constructor.
+  //  a vil1_image, only if the filename was given to the constructor.
   vcl_string file_name() const;
 
   //: Returns a nice version of the name, including details of the image file.
   vcl_string pretty_name() const;
 
   //: Return the image being rendered by this tableau.
-  vil_image get_image() const;
+  vil1_image get_image() const;
 
   //: Make the given image, the image rendered by this tableau.
-  void set_image(vil_image const &img);
+  void set_image(vil1_image const &img);
 
   //: Make image loaded from the given file, the image rendered by this tableau.
   void set_image(char const *filename);
@@ -94,7 +94,7 @@ struct vgui_image_tableau_new : public vgui_image_tableau_sptr {
   vgui_image_tableau_new() : vgui_image_tableau_sptr(new vgui_image_tableau) { }
 
   //  Constructor - creates a tableau displaying the given image.
-  vgui_image_tableau_new(vil_image const &t) : vgui_image_tableau_sptr(new vgui_image_tableau(t)) { }
+  vgui_image_tableau_new(vil1_image const &t) : vgui_image_tableau_sptr(new vgui_image_tableau(t)) { }
 
   //  Constructor - creates a tableau which loads and displays an image from
   //  the given file.

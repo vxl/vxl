@@ -24,7 +24,7 @@ gint idlecallback( gpointer context)
     pframe = my_movie->first();
   ++pframe;
 
-  vil_image im = pframe->get_image();
+  vil1_image im = pframe->get_image();
   ((vgui_image_tableau*)context)->set_image(im);
   ((vgui_image_tableau*)context)->post_redraw();
   return TRUE;
@@ -70,7 +70,7 @@ int main(int argc, char ** argv)
   my_movie = vidl_io::load_movie(img_filenames);
   pframe = my_movie->first();
 
-  vil_image im = pframe->get_image();
+  vil1_image im = pframe->get_image();
   vgui_image_tableau_new img_tab(im);
 
   // set initial image region :

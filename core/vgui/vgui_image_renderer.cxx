@@ -58,8 +58,8 @@ void vgui_image_renderer::need_resection() const
 }
 
 //-----------------------------------------------------------------------------
-//: Attach the renderer to a new vil_image.
-void vgui_image_renderer::set_image(vil_image const &image_)
+//: Attach the renderer to a new vil1_image.
+void vgui_image_renderer::set_image(vil1_image const &image_)
 {
   if (image_ == the_image)
     return; // same image -- do nothing.

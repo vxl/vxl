@@ -11,8 +11,8 @@
 #include "vgui_roi_tableau.h"
 #include <vcl_string.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_crop.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_crop.h>
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_matrix_state.h>
@@ -27,11 +27,11 @@ vgui_roi_tableau::vgui_roi_tableau()
   cropped_image_ = 0;
 }
 
-vgui_roi_tableau::vgui_roi_tableau(vil_image const &I,char const *name,
+vgui_roi_tableau::vgui_roi_tableau(vil1_image const &I,char const *name,
                                    float x,float y,float w,float h)
   : vgui_tableau(),name_(name)
 {
-  cropped_image_ = vil_crop(I,int(x+0.5),int(y+0.5),int(w+0.5),int(h+0.5));
+  cropped_image_ = vil1_crop(I,int(x+0.5),int(y+0.5),int(w+0.5),int(h+0.5));
   roi_.sx = x;
   roi_.sy = y;
   roi_.width = w;
@@ -56,7 +56,7 @@ vcl_string vgui_roi_tableau::pretty_name() const {
 
 //------------------------------------------------------------------------------
 
-vil_image vgui_roi_tableau::get_image() const {
+vil1_image vgui_roi_tableau::get_image() const {
   return cropped_image_;
 }
 
@@ -66,16 +66,16 @@ vil_image vgui_roi_tableau::get_image() const {
 //  return slash ? slash+1 : s;
 //}
 
-void vgui_roi_tableau::set_image(vil_image const &I) {
+void vgui_roi_tableau::set_image(vil1_image const &I) {
   //  // use the name of the image as the name of the tableau :
   //  name_ = __FILE__rem_dir(I.name().c_str());
-  cropped_image_ = vil_crop( I,int(roi_.sx), int(roi_.sy),
+  cropped_image_ = vil1_crop( I,int(roi_.sx), int(roi_.sy),
                                int(roi_.width), int(roi_.height));
 }
 
 // derived :
 void vgui_roi_tableau::set_image(char const *f) {
-  set_image( vil_load(f ? f : "az32_10.tif") );
+  set_image( vil1_load(f ? f : "az32_10.tif") );
 }
 
 //------------------------------------------------------------------------------
