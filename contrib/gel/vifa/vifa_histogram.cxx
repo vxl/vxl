@@ -33,7 +33,7 @@ vifa_histogram::vifa_histogram()
   standard_dev = 0.0f;
   stats_consistent = 0;
   stats_consistent |= (MEAN_FLAG | SD_FLAG);
-  delimiter = " ";
+  delimiter = ' ';
 }
 
 vifa_histogram::vifa_histogram(int xres, float val1, float val2)
@@ -52,7 +52,7 @@ vifa_histogram::vifa_histogram(int xres, float val1, float val2)
   standard_dev = (vmax - vmin) / float(2 * vcl_sqrt(3.0));
   stats_consistent = 0;
   stats_consistent |= (MEAN_FLAG | SD_FLAG);
-  delimiter = " ";
+  delimiter = ' ';
 
   if (vals == NULL || counts == NULL)
   {
@@ -92,7 +92,7 @@ vifa_histogram::vifa_histogram(float* uvals, float* ucounts, int xres)
   standard_dev = GetStandardDev();
   stats_consistent |= (MEAN_FLAG | SD_FLAG);
 
-  delimiter = " ";
+  delimiter = ' ';
 }
 //-----------------------------------------------------------
 //: Copy constructor
@@ -157,7 +157,7 @@ vifa_histogram::~vifa_histogram()
 
 //---------------------------------------
 //: Resample a histogram
-vifa_histogram::vifa_histogram(vifa_histogram* his, float width, bool preserveCounts)
+vifa_histogram::vifa_histogram(vifa_histogram const* his, float width, bool preserveCounts)
 {
   stats_consistent = 0;
 
@@ -680,7 +680,7 @@ vifa_histogram* vifa_histogram::NonMaximumSupress(int radius, bool cyclic)
 
 //----------------------------------------------------------
 //: Compute the mean of the histogram population
-float vifa_histogram::GetMean()
+float vifa_histogram::GetMean() const
 {
   float xsum = 0.0f;
   float minv = this->GetMinVal();
@@ -720,7 +720,7 @@ float vifa_histogram::GetMean()
   }
 }
 
-float vifa_histogram::GetStandardDev()
+float vifa_histogram::GetStandardDev() const
 {
   float sum = 0.0f;
   float bucket_size = this->GetBucketSize();
@@ -760,7 +760,7 @@ float vifa_histogram::GetStandardDev()
   }
 }
 
-float vifa_histogram::GetMedian()
+float vifa_histogram::GetMedian() const
 {
   // step through each bin until num_so_far > num_samps / 2
   int i = 0;  // bin number
@@ -775,7 +775,7 @@ float vifa_histogram::GetMedian()
   return vals[i];
 }
 
-int vifa_histogram::GetIndex(float pixelval)
+int vifa_histogram::GetIndex(float pixelval) const
 {
   // Done by binary search.  This was taking far too long
   // Since there is an implication that the distance between
@@ -816,7 +816,7 @@ int vifa_histogram::GetIndex(float pixelval)
   return low;
 }
 
-int vifa_histogram::GetValIndex(float pixelval)
+int vifa_histogram::GetValIndex(float pixelval) const
 {
   if ((pixelval > vmax) || (pixelval < vmin))
     return -1;
@@ -836,7 +836,7 @@ int vifa_histogram::GetValIndex(float pixelval)
   return idx;
 }
 
-float vifa_histogram::GetCount(float pixelval)
+float vifa_histogram::GetCount(float pixelval) const
 {
   int index = GetIndex(pixelval);
   if (index < 0)
@@ -845,7 +845,7 @@ float vifa_histogram::GetCount(float pixelval)
     return counts[index];
 }
 
-float vifa_histogram::GetMinVal()
+float vifa_histogram::GetMinVal() const
 {
   register int i=0;
   while (i<num-1 && !counts[i])
@@ -853,7 +853,7 @@ float vifa_histogram::GetMinVal()
   return vals[i];
 }
 
-float vifa_histogram::GetMaxVal()
+float vifa_histogram::GetMaxVal() const
 {
   register int i=num-1;
   while (i>0 && !counts[i])
@@ -863,7 +863,7 @@ float vifa_histogram::GetMaxVal()
   return vals[i];
 }
 
-float vifa_histogram::GetMaxCount()
+float vifa_histogram::GetMaxCount() const
 {
   register int i;
   float max = 0.0f;
@@ -917,7 +917,7 @@ void vifa_histogram::UpCount(float pixelval)
   }
 }
 
-int vifa_histogram::GetNumSamples()
+int vifa_histogram::GetNumSamples() const
 {
   float num_samps = 0;
   for (int i=0; i < num; i++)
@@ -928,7 +928,7 @@ int vifa_histogram::GetNumSamples()
   return (int)num_samps;
 }
 
-float vifa_histogram::ComputeArea(float low, float high)
+float vifa_histogram::ComputeArea(float low, float high) const
 {
   float maxval = GetMaxVal();
   float minval = GetMinVal();
@@ -977,7 +977,7 @@ float vifa_histogram::ComputeArea(float low, float high)
 //----------------------------------------------------------------------
 //: Compute the total area under the histogram
 //
-float vifa_histogram::ComputeArea()
+float vifa_histogram::ComputeArea() const
 {
   float vmin = this->GetMinVal();
   float vmax = this->GetMaxVal();

@@ -33,17 +33,17 @@ class vifa_histogram : public vul_timestamp,
 {
   enum histogram_type{HISTOGRAM=0, CONTRAST_HIST, NUM_TYPES};
  protected:
-  char* delimiter;  // text delimeter for writing out histograms.
+  char delimiter;   // text delimiter for writing out histograms.
   float* vals;      // histogram of x array (value = midpoint of the buckets.
   float* counts;    // histogram of y array; counts[i] is the # of pixels
                     // with value within range of bucket i.
   int num;          // Number of indices.
   float delta;      // Width of the bins
   float vmax, vmin; // Max & Min plots on the histogram.
-  float mean;       // Mean value of the distribution
-  float standard_dev;      // Standard Deviation of the distribution
+  mutable float mean; // Mean value of the distribution
+  mutable float standard_dev; // Standard Deviation of the distribution
 
-  virtual int GetIndex(float i);
+  virtual int GetIndex(float i) const;
 
  public:
   // Constructors
@@ -52,7 +52,7 @@ class vifa_histogram : public vul_timestamp,
   vifa_histogram(float*, float*, int);
   vifa_histogram(const vifa_histogram& h); // copy X-tor
   // Resampling Constructor
-  vifa_histogram(vifa_histogram*, float width, bool preserveCounts=false);
+  vifa_histogram(vifa_histogram const*, float width, bool preserveCounts=false);
   // Destructor
   virtual ~vifa_histogram();
 
@@ -68,46 +68,43 @@ class vifa_histogram : public vul_timestamp,
   // Attribute accessors
   void  UpCount(float newval);
   void  UpCount(float newval,bool useNewIndexMethod);
-  int   GetNumSamples();
-  float GetCount(float uval);
+  int   GetNumSamples() const;
+  float GetCount(float uval) const;
   float SetCount(float pixelval, float count);
 
-  float GetMinVal();
-  float GetMaxVal();
-  float GetMaxCount();
-  float GetMean();
-  float GetStandardDev();
-  float GetMedian();
-  int GetValIndex(float val);
+  float GetMinVal() const;
+  float GetMaxVal() const;
+  float GetMaxCount() const;
+  float GetMean() const;
+  float GetStandardDev() const;
+  float GetMedian() const;
+  int GetValIndex(float val) const;
 
-  float* GetVals()
+  float* GetVals() const
   {
     stats_consistent = 0; // Values might change.
     return vals;
   }
 
-  float* GetCounts()
+  float* GetCounts() const
   {
     stats_consistent = 0; // Counts might change.
     return counts;
   }
 
-  int GetRes()
-  { return num; }
+  int GetRes() const { return num; }
 
-  float GetBucketSize() { return delta; }
+  float GetBucketSize() const { return delta; }
 
-  float* GetMinValAddr()
-  { return vals+GetIndex(GetMinVal());  }
+  float* GetMinValAddr() const { return vals+GetIndex(GetMinVal());  }
 
-  float* GetMinCountAddr()
-  { return counts+GetIndex(GetMinVal());  }
+  float* GetMinCountAddr() const { return counts+GetIndex(GetMinVal());  }
 
   // Other usefule functions
-  char* GetDelimiter() {return delimiter;}
-  void SetDelimiter(char* d) {delimiter = d;}
-  float ComputeArea(float low, float high);// bounded area
-  float ComputeArea();//total area
+  char GetDelimiter() const {return delimiter;}
+  void SetDelimiter(char d) {delimiter = d;}
+  float ComputeArea(float low, float high) const;// bounded area
+  float ComputeArea() const;//total area
 
   //Find bounds that clip off a given percent of the area
   float LowClipVal(float clip_fraction);
@@ -118,7 +115,7 @@ class vifa_histogram : public vul_timestamp,
   int  WritePlot(const char* fname);
 
  private:
-  int stats_consistent;  // A 2 bit state flag  Mean = 1 | StandDev = 2
+  mutable int stats_consistent;  // A 2 bit state flag  Mean = 1 | StandDev = 2
 };
 
 typedef vbl_smart_ptr<vifa_histogram> vifa_histogram_sptr;
