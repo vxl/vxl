@@ -277,6 +277,12 @@ SOURCE=.\test_trilin_interp.cxx
 # Begin Source File
 SOURCE=.\test_image_resource.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_normalised_correlation_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_file_format_read.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
