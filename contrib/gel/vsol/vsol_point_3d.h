@@ -63,7 +63,7 @@ class vsol_point_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
-  inline vsol_point_3d(const vsol_point_3d &pt) : p_(pt.x(),pt.y(),pt.z()) {}
+  inline vsol_point_3d(const vsol_point_3d &pt) : vsol_spatial_object_3d(*this), p_(pt.x(),pt.y(),pt.z()) {}
 
   //---------------------------------------------------------------------------
   //: Destructor
