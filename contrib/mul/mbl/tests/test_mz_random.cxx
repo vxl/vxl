@@ -17,7 +17,7 @@ void test_mz_random()
   mz_random.reseed(123456);
 
 
-  TEST("lrand32",mz_random.lrand32()==3501493769,true);
+  TEST("lrand32",mz_random.lrand32()==3501493769ul,true);
   TEST("lrand32(0,10)",mz_random.lrand32(0,10)==9,true);
   double d1 = mz_random.drand32(0,1) - 0.615854;
   TEST("drand32(0,1)",d1*d1<0.000001,true);
