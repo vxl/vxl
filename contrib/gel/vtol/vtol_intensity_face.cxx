@@ -49,7 +49,7 @@ vtol_intensity_face::vtol_intensity_face(vtol_intensity_face_sptr const& f)
 //    The list is structured with the outer boundary as the first
 //    element of one_chains and the interior hole boundaries as
 //    the remaining elements of the list.
-vtol_intensity_face::vtol_intensity_face(one_chain_list const& one_chains)
+vtol_intensity_face::vtol_intensity_face(one_chain_list & one_chains)
   :vtol_face_2d(one_chains), region_(new vdgl_digital_region())
 {
 }
