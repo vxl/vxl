@@ -9,6 +9,14 @@ IF(BUILD_VGUI)
     SET( HAS_VGUI "YES" )
     ADD_DEFINITIONS( -DHAS_OPENGL)
 
+    # There is a bug in the CMake 1.4.x dependency analysis that
+    # affects the vgui dependencies: the libraries get re-ordered
+    # incorrectly. This is a work-around until that gets fixed.
+    INCLUDE(${MODULE_PATH}/NewCMake/FindGTK.cmake)
+    IF (GTK_FOUND)
+      LINK_LIBRARIES( ${GTK_LIBRARIES} ${OPENGL_LIBRARIES} )
+    ENDIF (GTK_FOUND)
+
   ENDIF (OPENGL_GLU_FOUND)
   ENDIF (OPENGL_FOUND)
 
