@@ -3,6 +3,8 @@ USES += contrib/mul core
 LIBRARY := pdf1d
 VERSION := 1.0
 
+MANPAGE_SOURCES += pdf1d_all.h
+SOURCES += pdf1d_add_all_loaders.cxx
 SOURCES += pdf1d_bhat_overlap.cxx
 SOURCES += pdf1d_builder.cxx
 SOURCES += pdf1d_calc_mean_var.cxx
@@ -39,7 +41,6 @@ SOURCES += pdf1d_select_pdf.cxx
 SOURCES += pdf1d_weighted_epanech_kernel_pdf.cxx
 SOURCES += pdf1d_weighted_epanech_kernel_sampler.cxx
 SOURCES += pdf1d_weighted_kernel_pdf.cxx
-MANPAGE_SOURCES += pdf1d_all.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk

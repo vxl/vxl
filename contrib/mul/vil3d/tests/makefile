@@ -1,6 +1,7 @@
 USES += contrib/mul core
 include ../algo/config.mk
 include ${IUEROOT}/core/testlib/config.mk
+include ${IUEROOT}/core/vpl/config.mk
 
 TESTMAIN = test_driver.cxx
 
