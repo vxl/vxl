@@ -6,7 +6,7 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 SET(sdet_sources
     sdet_edge_champher.cxx       sdet_edge_champher.h
-    sdet_region_edge.cxx         sdet_region_edge.h
+    sdet_region_edge.cxx         sdet_region_edge.h  sdet_region_edge_sptr.h
     sdet_edgel_regions.cxx       sdet_edgel_regions.h
     sdet_contour.cxx             sdet_contour.h
     sdet_detector_params.cxx     sdet_detector_params.h
