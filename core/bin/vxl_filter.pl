@@ -286,10 +286,10 @@ sub process_headers {
       s/(\s)::((sort|find|swap_ranges|copy|fill|find_if)\s*\()/$1vcl_$2/;
 
       # std::cout, std::cerr, std::endl etc
-      s/\b(std::)\s*(cout|cerr|endl|(i|o|f|if|of)stream)\b/vcl_\2/g;
-      s/\b(cout|cerr|endl|(i|o|f|if|of)stream)\b/vcl_\1/g;
+      s/\b(std::)\s*(cout|cerr|endl|(i|o|f|if|of)stream)\b/vcl_$2/g;
+      s/\b(cout|cerr|endl|(i|o|f|if|of)stream)\b/vcl_$1/g;
 
-      s/\b(assert|abort|exit|sqrt|real|imag|abs)\b/vcl_\1/g;
+      s/\b(assert|abort|exit|sqrt|real|imag|abs)\b/vcl_$1/g;
 
       # remember what we saw
       $saw_functional_h = 1 if m/include <vcl_functional\.h>/;
