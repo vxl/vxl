@@ -84,6 +84,15 @@ bool vgl_polygon::contains(float tx, float ty)
   return point_in_simple_polygon(tx, ty, sheets_[0]);
 }
 
+vcl_ostream& vgl_polygon::print(vcl_ostream& os) const {
+  for (int s = 0; s < sheets_.size(); ++s) {
+    os << "Sheet " << s << " ";
+    for (int p = 0; p < sheets_[s].size(); ++p)
+      os << "(" << sheets_[s][p].x() << "," << sheets_[s][p].y() << ") ";
+    os << vcl_endl;
+  }
+  return os;
+}
 
 vgl_polygon_sheet_as_array::vgl_polygon_sheet_as_array(vgl_polygon::sheet_t const& p)
 {
