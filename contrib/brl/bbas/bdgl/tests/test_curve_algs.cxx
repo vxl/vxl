@@ -6,6 +6,7 @@
 #include <vdgl/vdgl_digital_curve.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
+#include <vsol/vsol_point_2d.h>
 #include <bdgl/bdgl_curve_algs.h>
 
 #define Assert(x) { vcl_cout << #x "\t\t\t test "; \
