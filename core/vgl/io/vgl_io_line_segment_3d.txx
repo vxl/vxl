@@ -13,8 +13,8 @@ void vsl_b_write(vsl_b_ostream &os, const vgl_line_segment_3d<T> & p)
 {
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
-  vsl_b_write(os, p.get_point1());
-  vsl_b_write(os, p.get_point2());
+  vsl_b_write(os, p.point1());
+  vsl_b_write(os, p.point2());
 }
 
 //============================================================================
@@ -26,9 +26,12 @@ void vsl_b_read(vsl_b_istream &is, vgl_line_segment_3d<T> & p)
   vsl_b_read(is, v);
   switch(v)
   {
-  case 1:
-    vsl_b_read(is, p.get_point1());
-    vsl_b_read(is, p.get_point2());
+  case 1: {
+    vgl_point_3d<T> p1, p2;
+    vsl_b_read(is, p1);
+    vsl_b_read(is, p2);
+    p.set(p1,p2);
+    }
     break;
 
   default:
@@ -44,9 +47,9 @@ template<class T>
 void vsl_print_summary(vcl_ostream& os,const vgl_line_segment_3d<T> & l)
 {
   os<<"Segment from ";
-  vsl_print_summary(os,l.get_point1());
+  vsl_print_summary(os,l.point1());
   os<<" to ";
-  vsl_print_summary(os,l.get_point2());
+  vsl_print_summary(os,l.point2());
 }
 
 #define VGL_IO_LINE_SEGMENT_3D_INSTANTIATE(T) \
