@@ -9,10 +9,10 @@
 // \author Chris Wolstenholme - Manchester
 // Modified by Ian Scott to work with vil loader.
 
+#include <vcl_ostream.h>
 #include <vcl_string.h>
 #include <vxl_config.h>
 #include <vil/vil_stream.h>
-
 
 //: DICOM types
 //  Defines the type of the dicom file being loaded. A
@@ -622,5 +622,8 @@ class vil_dicom_header_format
   //    \sa determineMetaInfo() and imageType()
   vil_dicom_header_image_type image_type_;
 };
+
+void vil_dicom_header_print(vcl_ostream &os, const vil_dicom_header_info &s);
+
 
 #endif // vil_dicom_header_h_
