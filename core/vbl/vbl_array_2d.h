@@ -21,11 +21,9 @@
 
 #include <vcl_iosfwd.h>
 
-export template <class T> class vbl_array_2d;
-
 //: Simplest possible 2D array
-//
-template <class T>
+
+export template <class T>
 class vbl_array_2d {
 public:
   vbl_array_2d();
@@ -67,12 +65,10 @@ public:
   const_iterator end  () const { return rows_[0] + num_cols_ * num_rows_; }
 
 private:
-  //protected:
   T** rows_;
   int num_rows_;
   int num_cols_;
 
-  //protected:
   void destroy();
   void create(int m, int n);
 };
