@@ -2,19 +2,20 @@
 #define rgrl_matcher_pseudo_txx_
 
 #include "rgrl_matcher_pseudo.h"
-#include "rgrl_feature_face_region.h"
-#include "rgrl_feature_trace_region.h"
-#include "rgrl_feature_point_region.h"
+#include <rgrl/rgrl_feature_face_region.h>
+#include <rgrl/rgrl_feature_trace_region.h>
+#include <rgrl/rgrl_feature_point_region.h>
 #include <rgrl/rgrl_match_set.h>
 #include <rgrl/rgrl_cast.h>
+#include <rgrl/rgrl_macros.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vil/vil_bilin_interp.h>
 #include <vcl_cassert.h>
 
-const static unsigned verbose_ = 2;
-const static double max_response_value = 1.0e30;
+static const unsigned int verbose_ = 2;
+static const double max_response_value = 1.0e30;
 
 
 template <class PixelType>
@@ -139,7 +140,7 @@ compute_matches( rgrl_feature_set const&    from_set,
                                             match_weights );
 
      DebugMacro_abv(1, " skip match from: " << (*fitr)->location()
-                     << ", to: " << mapped_feature->location() << '\n' );
+                    << ", to: " << mapped_feature->location() << '\n' );
 
       continue;
     }
@@ -518,22 +519,22 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
     // second derivative at sub_pixel.
     // We need at least three valid values for calculating second derivatives.
     //
-    if ( index >0 && index+1 < responses.size() &&
+    if ( index >0 && index+1 < (int)responses.size() &&
          responses[ index ] != max_response_value &&
          index + 1 <= 2*max_offset &&
          index - 1 >= -2*max_offset &&
          responses[ index + 1 ] != max_response_value &&
          responses[ index - 1 ] != max_response_value )
          second_derivative = vnl_math_abs( responses[ index-1 ] + responses[ index+1 ]
-                                        - 2 * responses[ index ] ); // should be positive
+                                           - 2 * responses[ index ] ); // should be positive
     // If one neighbor's response is not valid, calculate the second
     // derivative value of the other neighbor
     else {
       second_derivative = 0;
       DebugMacro_abv(2, "index=" << index << ", max_offset="
                      << max_offset << ", responses[index-1]=" << responses[index-1]
-                     << ", responses[index+1]=" << responses[index+1] << '\n' );
-      DebugMacro_abv(2, "   neighbors' responses are not valid. Set the second_derivative = 0\n");
+                     << ", responses[index+1]=" << responses[index+1] << '\n'
+                     << "   neighbors' responses are not valid. Set the second_derivative = 0\n");
     }
   }
   else if ( normal_space.columns() == 2 ) { //For feature_point_region
@@ -670,7 +671,7 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
     mf_ptr = new rgrl_feature_point_region( match_location );
   }
 
-  matched_to_features . push_back( mf_ptr );
+  matched_to_features.push_back( mf_ptr );
   double weight = second_derivative / (1.0 + min_response);
 #if 0 // other options for weights
   double epsilon = 1e-16;
@@ -688,9 +689,9 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
 template <class PixelType>
 double
 rgrl_matcher_pseudo<PixelType> ::
-compute_response( vnl_double_2            const& mapped_location,
+compute_response( vnl_double_2                  const& mapped_location,
                   rgrl_mapped_pixel_vector_type const& mapped_pixels,
-                  vnl_double_2            const& shift ) const
+                  vnl_double_2                  const& shift ) const
 {
   //  Extract the intensities at the mapped locations.  Make sure
   //  they are inside the image.
