@@ -48,8 +48,8 @@
 #undef REALLOC
 #undef NEW
 #undef Status
-#include </Lg/IUPackages/Carmen/Carmen/Carmen.h>
-#include </Lg/IUPackages/Carmen/CarmenModels/Perspective/pp.h>
+#include <Carmen/Carmen.h>
+#include <CarmenModels/Perspective/pp.h>
 #include "carmen_interface.h"
 
 //--------------------------------------------------------------

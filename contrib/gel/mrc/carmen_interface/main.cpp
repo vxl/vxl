@@ -31,7 +31,7 @@
 // ---------------------------------------------------------------------------
 // <end copyright notice>
 #include "carmen_interface.h"
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vul/vul_arg.h>
 #include <vcl_iosfwd.h>
@@ -43,15 +43,11 @@
 
 int main(int argc, char ** argv)
 {
-
   carmen_interface ci;
   vcl_string path = "./egemen1.cm";
-  vcl_vector  vvect();
+  vcl_vector<double> vvect();
 //  vcl_string s = "try out this";
   vcl_cout << path << vcl_endl;
-
-
-
 
   ci.set_carmen_camera(1);
   ci.load_correspondence_file(path);
