@@ -46,7 +46,7 @@ do { \
 #define TEST_NEAR(s,p,v,t) \
 do { \
   testlib_test_begin(s); \
-  testlib_test_assert_near(s,p,v,t); \
+  testlib_test_assert_near("",p,v,t); \
 } while (0)
 
 //: run x, s is message, then test to see if p==v
