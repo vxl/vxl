@@ -171,7 +171,7 @@ vil2_image_view_base_sptr vil2_flip_ud_image_resource::get_view(unsigned i0, uns
 bool vil2_flip_ud_image_resource::put_view(const vil2_image_view_base& im, unsigned i0,
                                            unsigned j0)
 {
-  if (i0 + im.ni() >= src_->ni()) return false;
+  if (i0 + im.ni() > src_->ni()) return false;
   switch (im.pixel_format())
   {
 #define macro( F, T ) \

@@ -134,7 +134,7 @@ void test_image_view_byte()
   test_image(2,1,0) = test_image(2,2,0) = 25;
   test_image(2,1,1) = test_image(2,2,1) = 35;
   test_image(2,1,2) = test_image(2,2,2) = 45;
-  TEST("vil2_reformat_copy, vil2_window and vil2_deep_equality",
+  TEST("vil2_reformat_copy, vil2_crop and vil2_deep_equality",
        vil2_image_view_deep_equality(test_image,image2), true);
   test_image(2,2,2) = 44;
   TEST("!vil2_deep_equality", vil2_image_view_deep_equality(test_image,image2), false);

@@ -95,6 +95,7 @@ bool vil2_plane_image_resource::put_view(const vil2_image_view_base& im, unsigne
   case F : { \
     const vil2_image_view<T > view = static_cast<const vil2_image_view<T >&>(im); \
     vil2_image_view<T > plane = vil2_plane(static_cast<vil2_image_view<T >&>(*vs), plane); \
+    if (view == plane) return true; /* If we have already modified the data, do nothing */ \
     for (unsigned j=0;j<view.nj();++j) \
       for (unsigned i=0;i<view.ni();++i) \
         plane(i,j) = view(i,j); \

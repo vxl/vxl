@@ -39,6 +39,7 @@ SET( vil2_sources ${vil2_sources}
   vil2_view_as.h
   vil2_fill.h
   vil2_transform.h
+  vil2_decimate.h vil2_decimate.cxx
   vil2_convert.h
   vil2_load.cxx  vil2_load.h
   vil2_save.cxx  vil2_save.h

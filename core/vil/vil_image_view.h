@@ -235,28 +235,28 @@ class vil2_image_view : public vil2_image_view_base
   //  This does not do a deep equality on image data. If the images point
   //  to different image data objects that contain identical images, then
   //  the result will still be false.
-  bool operator==(const vil2_image_view<T>& other) const;
+  bool operator==(const vil2_image_view_base& other) const;
 
   //: True if they do not share same view of same image data.
   //  This does not do a deep inequality on image data. If the images point
   //  to different image data objects that contain identical images, then
   //  the result will still be true.
-  inline bool operator!=(const vil2_image_view<T>& rhs) const { return !operator==(rhs); }
+  inline bool operator!=(const vil2_image_view_base& rhs) const { return !operator==(rhs); }
 
   //: Provides an ordering.
   //  Useful for ordered containers.
   //  There is no guaranteed meaning to the less than operator, except that
   //  (a<b && b<a)  is false and  !(a<b) && !(b<a)  is equivalent to  a==b
-  bool operator<(const vil2_image_view<T>& other) const;
+  bool operator<(const vil2_image_view_base& rhs) const;
 
   //: Provides an ordering.
-  inline bool operator>=(const vil2_image_view<T>& other) const { return !operator<(other); }
+  inline bool operator>=(const vil2_image_view_base& rhs) const { return !operator<(rhs); }
 
   //: Provides an ordering.
-  inline bool operator>(const vil2_image_view<T>& other) const { return other<(*this); }
+  bool operator>(const vil2_image_view_base& rhs) const;
 
   //: Provides an ordering.
-  inline bool operator<=(const vil2_image_view<T>& other) const { return !operator>(other); }
+  inline bool operator<=(const vil2_image_view_base & rhs) const { return !operator>(rhs); }
 
   //: Copy a view. The rhs and lhs will point to the same image data.
   // You can assign a vil2_image_view<compound_type<T>> to a vil2_image_view<T>

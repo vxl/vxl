@@ -316,7 +316,9 @@ for each <code>get_view(..)</code> is quite expensive. Note that the cost of
 allocating the <code>vil2_memory_chunk</code> is irrelevant. If the image is
 already in memory, no new <code>vil2_memory_chunk</code> is allocated. If the
 image isn't already in memory, the cost of the new memory chunk is smaller than
-the disk access time.</p>
+the disk access time. Note, one alternative may be to bring back the
+vil2_image_resource::fill_view(...) which modifies the contents of an existing
+view and doesn't allocate any memory.</p>
 <h2>Notes</h2>
 <p>#includes to vxl/vil are simply to use old vil stuff that doesn't need to be converted. e.g. 
 <code>vil_stream</code></p>

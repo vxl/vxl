@@ -594,8 +594,11 @@ void vil2_image_view<T>::print(vcl_ostream& os) const
 //  to different image data objects that contain identical images, then
 //  the result will still be false.
 template<class T>
-bool vil2_image_view<T>::operator==(const vil2_image_view<T> &other) const
+bool vil2_image_view<T>::operator==(const vil2_image_view_base &rhs) const
 {
+  if (rhs.pixel_format() != pixel_format()) return true;
+  const vil2_image_view<T> & other = static_cast<const vil2_image_view<T> &>(rhs);
+
   if (!(bool) *this && !(bool)other) return true;
   return ptr_  == other.ptr_ &&
     top_left_  == other.top_left_ &&
@@ -613,8 +616,11 @@ bool vil2_image_view<T>::operator==(const vil2_image_view<T> &other) const
 //  There is no guaranteed meaning to the less than operator, except that
 //  (a<b && b<a)  is false and  !(a<b) && !(b<a)  is equivalent to  a==b
 template<class T>
-bool vil2_image_view<T>::operator<(const vil2_image_view<T>& other) const
+bool vil2_image_view<T>::operator<(const vil2_image_view_base& rhs) const
 {
+  if (rhs.pixel_format() != pixel_format()) return pixel_format() < rhs.pixel_format();
+  const vil2_image_view<T> & other = static_cast<const vil2_image_view<T> &>(rhs);
+
   if (ptr_ != other.ptr_) return ptr_<other.ptr_;
   if ((bool) *this && (bool)other) return false;
   if (nplanes_ != other.nplanes_) return nplanes_ < other.nplanes_;
@@ -623,6 +629,28 @@ bool vil2_image_view<T>::operator<(const vil2_image_view<T>& other) const
   if (planestep_ != other.planestep_) return planestep_ < other.planestep_;
   if (istep_ != other.istep_) return istep_ < other.istep_;
   return jstep_ < other.jstep_;
+}
+
+
+//=======================================================================
+//: Provides an ordering.
+//  Useful for ordered containers.
+//  There is no guaranteed meaning to the less than operator, except that
+//  (a>b) is equivalent to (b<a)
+template<class T>
+bool vil2_image_view<T>::operator>(const vil2_image_view_base& rhs) const
+{
+  if (rhs.pixel_format() != pixel_format()) return pixel_format() > rhs.pixel_format();
+  const vil2_image_view<T> & other = static_cast<const vil2_image_view<T> &>(rhs);
+
+  if (ptr_ != other.ptr_) return ptr_>other.ptr_;
+  if ((bool) *this && (bool)other) return false;
+  if (nplanes_ != other.nplanes_) return nplanes_ > other.nplanes_;
+  if (ni_ != other.ni_) return ni_ > other.ni_;
+  if (nj_ != other.nj_) return nj_ > other.nj_;
+  if (planestep_ != other.planestep_) return planestep_ > other.planestep_;
+  if (istep_ != other.istep_) return istep_ > other.istep_;
+  return jstep_ > other.jstep_;
 }
 
 
