@@ -53,7 +53,7 @@ public:
   //  Options are '' (ie rely on image), 'Grey' or 'RGB'
   void setColour(const vcl_string&);
   //: Set the colour by the depth or using the standard code in the header
-  //  Only colour (3-plane) and greyscale (1-plane) curretnly supported
+  //  Only colour (3-plane) and greyscale (1-plane) currently supported
   //  Returns false if the depth is not suipported
   bool set_colour_depth( int );
 
@@ -61,7 +61,7 @@ public:
   //  Returns "RGB","Grey" or ""
   vcl_string colour() const;
   //: Return the colour depth using the standard code in the header
-  //  Only colour (3-plane) and greyscale (1-plane) curretnly supported
+  //  Only colour (3-plane) and greyscale (1-plane) currently supported
   int colour_depth();
 
   //: Current image
@@ -69,30 +69,30 @@ public:
   virtual const mil_image& image() const;
 
   //: Attempt to load image from named file
-  // \param filetype  String hinting at what image format is
-  //!ret: true if successful
+  // \param filetype  String hinting at what image format is.
+  // \return true if successful
   virtual bool loadImage(const vcl_string& path,
                          const vcl_string& filetype);
 
-  //: Attempt to save image to named file
-  // \param filetype  String defining what format to save in
-  //!ret: true if successful
-  virtual bool saveImage(const vcl_string& path,
+  //: Attempt to save image to named filepath
+  // \param filetype  String defining what format to save in.
+  // \return true if successful
+  virtual bool saveImage(const vcl_string& filepath,
                          const vcl_string& filetype) const;
 
-  //: Attempt to load image from named file
-  // \param filetype  String hinting at what image format is
-  //  If filetype=="" ,then guess the format from the path extension
-  //  Return true if successful
+  //: Attempt to load image from named filepath
+  // \param filetype  String hinting at what image format is.
+  //  If filetype=="", then guess the format from the path extension
+  // \return true if successful
   bool loadTheImage(mil_image_2d_of<vil_byte>& image,
-                    const vcl_string& path,
+                    const vcl_string& filepath,
                     const vcl_string& filetype);
 
-  //: Attempt to save image to named file
-  // \param filetype  String defining what format to save in
+  //: Attempt to save image to named filepath
+  // \param filetype  String defining what format to save in.
   static bool saveTheImage(const mil_image_2d_of<vil_byte>& image,
-                         const vcl_string& path,
-                         const vcl_string& filetype);
+                           const vcl_string& filepath,
+                           const vcl_string& filetype);
 
   //: Version number for I/O
   short version_no() const;
