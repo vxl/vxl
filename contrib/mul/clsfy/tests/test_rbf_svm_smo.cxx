@@ -68,7 +68,7 @@ void test_rbf_svm()
   vnl_vector<double> s;
   vcl_cout << "Generating test data" << vcl_endl;
   vcl_vector<unsigned> labelcount(4, 0u);
-  for (int i=0; i<nSamples; i++)
+  for (unsigned int i=0; i<nSamples; i++)
   {
     int c = rng.lrand32(3);
     labels[i] = c/2;
@@ -80,7 +80,7 @@ void test_rbf_svm()
   const unsigned nTestSamples = 1000;
   vcl_vector<unsigned> testLabels(nTestSamples);
   vcl_vector<vnl_vector<double> > testingVectors(nTestSamples);
-  for (int i=0; i<nTestSamples; i++)
+  for (unsigned int i=0; i<nTestSamples; i++)
   {
     int c = rng.lrand32(3);
     testLabels[i] = c/2;
@@ -173,7 +173,7 @@ void test_rbf_svm()
 #if 0
   mbl_data_wrapper<vnl_vector<double> > &data = trainingVectors.vectorData();
   data.first();
-  for (int i=0; i<nSamples; i++)
+  for (unsigned int i=0; i<nSamples; i++)
   {
     vcl_cout << i << '\t' << vcl_setw(8) << pClassifier->log_l(data.current()) << '\t' << pClassifier->classify(data.current()) <<
       " should be " << labels(i) <<vcl_endl;
