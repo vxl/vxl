@@ -9,6 +9,7 @@
 //=======================================================================
 // inclusions
 
+#include <vcl_vector.h>
 #include <vil/vil_image_view.h>
 
 class vil_gauss_filter_5tap_params
@@ -95,5 +96,21 @@ inline void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
   vil_image_view<destT> work;
   vil_gauss_filter_5tap(src_im, dest_im, params, work);
 }
+
+
+//: Generate an n-tap FIR filter from a Gaussian function.
+// The filter uses the equation $k D^d \exp -\frac{x^2}{2\sigma^2} $,
+// where D is the differential operator, and k is a normalising constant.
+// \param diff The number of differential operators to apply to the filter.
+// If you want just a normal gaussian, set diff to 0.
+// \param sd The width of the gaussian.
+//
+// The taps will be calculated using the itegeral of the above equation over
+// the pixel width. However, aliasing will reduce the meaningfulness of
+// your filter when sd << (diff+1). In most applications there will not
+// be much point in having filter.size() >> sd*3, since the outer taps
+// will be very small.
+void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
+                                vcl_vector<double> &filter_dest);
 
 #endif // vil_gauss_filter_h_
