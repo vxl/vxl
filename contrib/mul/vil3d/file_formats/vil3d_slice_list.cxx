@@ -166,25 +166,44 @@ vil3d_image_view_base_sptr vil3d_slice_list_image::get_copy_view(
 {
   if (i0+ni > this->ni() || j0+nj > this->nj() || k0+nk > this->nk()) return 0;
 
-#define macro( type )\
+#define macro( type ) { \
+  vil3d_image_view< type > vv(ni, nj, nk, nplanes()); \
+  for (unsigned k=0; k<nk; ++k)  { \
+    vil2_image_view< type > src(slices_[k+k0]->get_view(i0, ni, j0, nj)); \
+    vil2_image_view< type > dest(vil3d_slice_ij(vv, k)); \
+    vil2_copy_reformat(src, dest); } \
+  return new vil3d_image_view< type >(vv); \
+  break; }
 
   switch (pixel_format())
   {
   case VIL2_PIXEL_FORMAT_BYTE:
-    vil3d_image_view<vxl_byte> vv(ni, nj, nk, nplanes());
-    for (unsigned k=0; k<nk; ++k)
-    {
-      vil2_image_view<vxl_byte> src(slices_[k+k0]->get_view(i0, ni, j0, nj));
-      vil2_image_view<vxl_byte> dest(vil3d_slice_ij(vv, k));
-      vil2_copy_reformat(src, dest);
-    }
-    return new vil3d_image_view<vxl_byte>(vv);
-    break;
+    macro( vxl_byte );
+  case VIL2_PIXEL_FORMAT_SBYTE:
+    macro( vxl_sbyte );
+  case VIL2_PIXEL_FORMAT_UINT_16:
+    macro( vxl_uint_16 );
+  case VIL2_PIXEL_FORMAT_INT_16:
+    macro( vxl_int_16 );
+  case VIL2_PIXEL_FORMAT_UINT_32:
+    macro( vxl_uint_32 );
+  case VIL2_PIXEL_FORMAT_INT_32:
+    macro( vxl_int_32 );
+  case VIL2_PIXEL_FORMAT_FLOAT:
+    macro( float );
+  case VIL2_PIXEL_FORMAT_DOUBLE:
+    macro( double );
+#if 0 // Several miising templates needed before these can be used
+  case VIL2_PIXEL_FORMAT_COMPLEX_FLOAT:
+    macro( vcl_complex<float> );
+  case VIL2_PIXEL_FORMAT_COMPLEX_DOUBLE:
+    macro( vcl_complex<double> );
+#endif
+  default:
+    vcl_cerr << "ERROR: vil3d_slice_list_image::get_copy_view\n"
+      "       Can't deal with pixel_format " << pixel_format() << vcl_endl;
+    return 0;
   }
-
-  vcl_cerr << "ERROR: vil3d_slice_list_image::get_copy_view\n"
-    "       Can't deal with pixel_format " << pixel_format() << vcl_endl;
-  return 0;
 }
 
 //: Set the contents of the volume.
