@@ -3,9 +3,7 @@
 exec perl -w -x $0 ${1+"$@"}
 #!perl
 #line 6
-# If Windows barfs at line 3 here, you will need to run perl -x this_file.pl
-# You can set up as a permanent file association using the following commands
-#  >assoc .pl=PerlScript
+# If Windows barfs at line 3 here, you will need to run perl -x this_file.pl < # You can set up as a permanent file association using the following commands< #  >assoc .pl=PerlScript
 #  >ftype PerlScript=C:\Perl\bin\Perl.exe -x "%1" %*
 
 use Cwd;
@@ -41,13 +39,24 @@ sub get_dependencies
 {
   my ($library,$file)  = @_;
   my $package;
+  my @depends;
   $prefix = "";
-  @stuff = ();
-  @liblist = ();
+
+  # list of libraries that $packlib is dependent on
+  my @liblist;
+  # same thing in hash->null (i.e. set) form
+  my %libset;
+  # list of references to lists.
+  # each entry is a library and its direct dependencies
+  my @deplist;
+
+  # placefiller
+  my $option;
 
   # search the file for an entry
 
   open(IN, $file) || die "can't open $file\n";
+
   while (<IN>)
   {
     # ignore empty lines
@@ -66,22 +75,48 @@ sub get_dependencies
     if ( /book:/ ) { next; }
 
     chomp;
-    ($package, $libry, $pref, @stuff) = split /\s/;
+    ($package, $libry, $pref, $option, @liblist) = split /\s+/;
+    #print "LINE: $package $libry $pref O$option O D@liblist D\n";
+
 
     $packlib = $package . "/" . $libry;
 
     # Check for special case (eg . vcl)
     if ($package eq ".") { $packlib = $library; }
-
+    unshift(@deplist,[$packlib, @liblist]);
     if ( $packlib eq $library )
     {
       $prefix = $pref;
       last;
     }
-    # Add library to list of those seen
-    @liblist = (@liblist,$packlib);
   }
+
   close(IN);
+
+  # initialise set of dependencies
+  foreach $lib1  (@liblist) {
+    $libset{$lib1} = 0;
+  }
+
+  # go through each listed libraries dependency list.
+  foreach $depref (@deplist)
+  {
+    foreach $lib (keys(%libset))
+    {
+      ($from, @tolist) = @{$depref};
+      if ($from eq $lib)
+      {
+        foreach $to (@tolist)
+        {
+          $libset{$to} = 0;
+        }
+      }
+    }
+  }
+
+  @liblist = keys(%libset);
+
+  #print "DEPENDS: @liblist \n";
   return ($prefix, @liblist);
 }
 

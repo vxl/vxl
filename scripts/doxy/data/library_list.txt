@@ -1,16 +1,15 @@
 # define the libraries and package dependencies for doc generation
 # Format:
-# Package Library Prefix [build/ignore]
-#  - If the last field is "ignore" the library will not be built,
+# Package Library Prefix [build/ignore] dependencies
+#  - If the fourth field is "ignore" the library will not be built,
 #    but will be considered when building a list of dependencies.
 #    (Provided for testing, and to allow a single library to be built alone)
-# Each library is assumed to depend on those preceding it (for the
-# purpose of building links between libraries in the html).
+# The dependencies, which are used build links between the html for each library,
+# are transitive. So if B depends on A, and C depends on A and B,
+# then C need only list A
 
 # package: vcl :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl Cross platform STL library
 # . vcl vcl_ build
-
-
 
 search: ../search_vxl.html Search this Documentation Tree.
 
@@ -19,63 +18,63 @@ book: mul : Manchester University Library overview documentation
 book: tbl : The Image Processing Library
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl vxl Core Vision Libraries
-vxl testlib testlib_ build
 vxl vsl vsl_ build
-vxl vnl vnl_ build
-vxl vbl vbl_ build
-vxl vgl vgl_ build
-vxl vil vil_ build
-vxl vul vul_ build
+vxl vnl vnl_ build vxl/vsl
+vxl vbl vbl_ build vxl/vsl
+vxl vgl vgl_ build vxl/vsl vxl/vnl
+vxl vil vil_ build vxl/vsl
+vxl vul vul_ build vxl/vsl
 vxl vpl vpl_ build
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl vxl Level-2 Vision Libraries
-vxl vidl vidl_ build
-vxl vcsl vcsl_ build
+vxl vidl vidl_ build vxl/vbl vxl/vul vxl/vil
+vxl vcsl vcsl_ build vxl/vnl vxl/vbl
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl vxl Test Framework
 vxl testlib testlib_ build
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl mul Manchester University Libraries
-mul mbl   mbl_   build
-mul mil   mil_   build
-mul mil3d mil3d_ build
-mul pdf1d pdf1d_ build
-mul vpdfl vpdfl_ build
-mul clsfy clsfy_ build
-mul vil2  vil2_  build
-mul vimt  vimt_  build
-mul vil3d vil3d_ build
+mul mbl   mbl_   build vxl/vnl vxl/vgl
+mul mil   mil_   build mul/mbl vxl/vbl vxl/vil
+mul mil3d mil3d_ build mul/mil
+mul pdf1d pdf1d_ build mul/mbl vxl/vbl
+mul vpdfl vpdfl_ build mul/mbl
+mul clsfy clsfy_ build mul/vpdfl mul/vpdf1d
+mul vil2  vil2_  build vxl/vil vxl/vnl
+mul vimt  vimt_  build mul/vil2
+mul vil3d vil3d_ build mul/vil2
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl tbl Various Image Processing Libraries
-tbl vipl vipl_ build
-tbl vepl vepl_ build
-tbl vepl2 vepl2_ build
+tbl vipl vipl_ build vxl/vil
+tbl vepl vepl_ build tbl/vipl
+tbl vepl2 vepl2_ build tbl/vipl mul/vil2
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl oxl Oxford University Libraries
 # Need to check dependency order
-oxl mvl mvl_ build
-oxl osl osl_ build
-oxl vgui vgui_ build
+oxl mvl mvl_ build vxl/vnl vxl/vil vxl/vbl vxl/vgl vxl/vul
+oxl osl osl_ build vxl/vnl vxl/vil vxl/vgl vxl/vbl
+oxl vgui vgui_ build vxl/vgl vxl/vpl vxl/vbl vxl/vul vxl/vnl vxl/vil
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl gel GE Libraries
-gel geml geml_ build
-gel vsrl vsrl_ build
-gel gtrl gtrl_ build
-gel vsol vsol_ build
-gel gst gst_ build
-gel vtol vtol_ build
-gel vdgl vdgl_ build
-gel gmvl gmvl_ build
-gel vgel vgel_ build
-gel gkll gkll_ build
-gel vmal vmal_ build
-gel gevd gevd_ build
+gel geml geml_ build vxl/vil vxl/vnl
+gel vsrl vsrl_ build vxl/vil vxl/vnl
+gel gtrl gtrl_ build vxl/vbl
+gel vsol vsol_ build vxl/vgl vxl/vnl vxl/vbl vxl/vul
+gel gst gst_ build vxl/vbl
+gel vdgl vdgl_ build gel/vsol vxl/vgl
+gel vtol vtol_ build gel/vdgl
+gel gmvl gmvl_ build gel/vtol vxl/vil
+gel vgel vgel_ build gel/vtol vxl/vil vxl/vidl oxl/mvl
+gel gkll gkll_ build gel/vgel
+gel vmal vmal_ build gel/vgel oxl/osl
+gel gevd gevd_ build gel/vtol vxl/vil
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl rpl RPI libraries
-rpl rrel rrel_ build
-rpl rsdl rsdl_ build
+rpl rrel rrel_ build mul/mbl vxl/vbl
+rpl rsdl rsdl_ build vxl/vnl vxl/vbl vxl/vil
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl brl Brown University libraries
-brl vvid vvid_ build
+brl vvid vvid_ build gel/gevd oxl/vgui vxl/vidl vxl/vul
+
 
 
