@@ -95,7 +95,7 @@ T vnl_symmetric_eigensystem<T>::get_eigenvalue(int i) const
 }
 
 template <class T>
-vnl_vector<T> vnl_symmetric_eigensystem<T>::solve(const vnl_vector<T>& b)
+vnl_vector<T> vnl_symmetric_eigensystem<T>::solve(vnl_vector<T> const& b)
 {
   //vnl_vector<T> ret(b.length());
   //FastOps::AtB(V, b, &ret);
