@@ -135,7 +135,10 @@ vil1_image
 vgui_image_tableau::
 get_image() const
 {
-  return renderer_->get_image();
+  if(renderer_)
+    return renderer_->get_image();
+  else
+    return 0;
 }
 
 //-----------------------------------------------------------------------------

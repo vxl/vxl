@@ -69,7 +69,7 @@
 //   <none>
 // \endverbatim
 #include <vxl_config.h>
-#include <vcl_vector.h>
+#include <vbl/vbl_array_1d.h>
 #include <vgui/vgui_range_map_params.h>
 
 template <class Type>
@@ -91,28 +91,27 @@ class vgui_range_map : public vgui_range_map_params
   // get the software range maps (byte range)
 
   //: Luminance map
-  vcl_vector<vxl_byte> Lmap(){return this->compute_byte_table(Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);}
+  vbl_array_1d<vxl_byte> Lmap(){return this->compute_byte_table(Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);}
   //: Red Channel map
-  vcl_vector<vxl_byte> Rmap(){return this->compute_byte_table(Type(min_R_), Type(max_R_), gamma_R_, ratio_R_);}
+  vbl_array_1d<vxl_byte> Rmap(){return this->compute_byte_table(Type(min_R_), Type(max_R_), gamma_R_, ratio_R_);}
   //: Green Channel map
-  vcl_vector<vxl_byte> Gmap(){return this->compute_byte_table(Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);}
+  vbl_array_1d<vxl_byte> Gmap(){return this->compute_byte_table(Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);}
   //: Blue Channel map
-  vcl_vector<vxl_byte> Bmap(){return this->compute_byte_table(Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);}
+  vbl_array_1d<vxl_byte> Bmap(){return this->compute_byte_table(Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);}
   //: Alpha Channel map
-  vcl_vector<vxl_byte> Amap(){return this->compute_byte_table(Type(min_A_), Type(max_A_), gamma_A_, ratio_A_);}
-
-  // get the OpenGL hardware range maps (float [0, 1] range)
-
+  vbl_array_1d<vxl_byte> Amap(){return this->compute_byte_table(Type(min_A_), Type(max_A_), gamma_A_, ratio_A_);}
+   
+  //: get the OpenGL hardware range maps (float [0, 1] range)
   //: Luminance hardware map
-  vcl_vector<float> fLmap(){return this->compute_float_table(Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);}
+  vbl_array_1d<float> fLmap(){return this->compute_float_table(Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);}
   //: Red channel hardware map
-  vcl_vector<float> fRmap(){return this->compute_float_table(Type(min_R_), Type(max_R_), gamma_R_, ratio_R_);}
+  vbl_array_1d<float> fRmap(){return this->compute_float_table(Type(min_R_), Type(max_R_), gamma_R_, ratio_R_);}
   //: Green channel hardware map
-  vcl_vector<float> fGmap(){return this->compute_float_table(Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);}
+  vbl_array_1d<float> fGmap(){return this->compute_float_table(Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);}
   //: Blue channel hardware map
-  vcl_vector<float> fBmap(){return this->compute_float_table(Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);}
+  vbl_array_1d<float> fBmap(){return this->compute_float_table(Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);}
   //: Alpha channel hardware map
-  vcl_vector<float> fAmap(){return this->compute_float_table(Type(min_A_), Type(max_A_), gamma_A_, ratio_A_);}
+  vbl_array_1d<float> fAmap(){return this->compute_float_table(Type(min_A_), Type(max_A_), gamma_A_, ratio_A_);}
 
   //: Luminance computed map
   vxl_byte map_L_pixel(const Type pix) {return this->map_pixel_byte(pix, Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);}
@@ -145,11 +144,11 @@ class vgui_range_map : public vgui_range_map_params
                         const float gamma, const long double ratio);
 
   //: Initialize the byte mapping table
-  vcl_vector<vxl_byte> compute_byte_table(const Type min, const Type max,
+  vbl_array_1d<vxl_byte> compute_byte_table(const Type min, const Type max,
                                const float gamma,  const long double ratio);
 
   //: Initialize the float mapping table
-  vcl_vector<float> compute_float_table(const Type min, const Type max,
+  vbl_array_1d<float> compute_float_table(const Type min, const Type max,
                              const float gamma, const long double ratio);
 
   bool mapable_;           //!< input pixel type can be mapped

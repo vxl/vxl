@@ -29,7 +29,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-
+#include <vbl/vbl_array_1d.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_pixel.h>
 
@@ -75,16 +75,16 @@ namespace
         switch ( in.nplanes() )
         {
          case 1: {
-          vcl_vector<vxl_byte> Lmap = rm.Lmap();
+          vbl_array_1d<vxl_byte> Lmap = rm.Lmap();
           for ( unsigned j=0; j < in.nj(); ++j )
             for ( unsigned i=0; i < in.ni(); ++i )
               vgui_pixel_convert( Lmap[(unsigned)(in(i,j)+O)],
                                   *(out+i+j*hstep) );
           return true; }
          case 3: {
-          vcl_vector<vxl_byte> Rmap = rm.Rmap();
-          vcl_vector<vxl_byte> Gmap = rm.Gmap();
-          vcl_vector<vxl_byte> Bmap = rm.Bmap();
+          vbl_array_1d<vxl_byte> Rmap = rm.Rmap();
+          vbl_array_1d<vxl_byte> Gmap = rm.Gmap();
+          vbl_array_1d<vxl_byte> Bmap = rm.Bmap();
           for ( unsigned j=0; j < in.nj(); ++j )
             for ( unsigned i=0; i < in.ni(); ++i )
               vgui_pixel_convert( Rmap[(unsigned)(in(i,j,0)+O)],
@@ -93,10 +93,10 @@ namespace
                                   *(out+i+j*hstep) );
           return true; }
          case 4: {
-          vcl_vector<vxl_byte> Rmap = rm.Rmap();
-          vcl_vector<vxl_byte> Gmap = rm.Gmap();
-          vcl_vector<vxl_byte> Bmap = rm.Bmap();
-          vcl_vector<vxl_byte> Amap = rm.Amap();
+          vbl_array_1d<vxl_byte> Rmap = rm.Rmap();
+          vbl_array_1d<vxl_byte> Gmap = rm.Gmap();
+          vbl_array_1d<vxl_byte> Bmap = rm.Bmap();
+          vbl_array_1d<vxl_byte> Amap = rm.Amap();
           for ( unsigned j=0; j < in.nj(); ++j )
             for ( unsigned i=0; i < in.ni(); ++i )
               vgui_pixel_convert( Rmap[(unsigned)(in(i,j,0)+O)],
@@ -226,8 +226,10 @@ vgui_section_buffer( unsigned in_x, unsigned in_y,
     buffer_ok_( false )
 {
   assert( w_ > 0 && h_ > 0 );
+#if 0 //These variables are not used and cause warnings
   GLenum format1 = GL_RGBA;
   GLenum type1 = GL_UNSIGNED_SHORT, type2 = GL_SHORT, type3 = GL_BYTE, type4 = GL_UNSIGNED_BYTE;
+#endif
   // It doesn't seem to make any sense to specify only one of the 'format' and
   // 'type' parameters. Until we decide if it makes sense, it's not allowed.
   if      ( format_ == GL_NONE && type_ == GL_NONE )

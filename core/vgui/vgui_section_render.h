@@ -9,7 +9,7 @@
 // \author fsm
 
 #include <vgui/vgui_gl.h>
-#include <vcl_vector.h>
+#include <vbl/vbl_array_1d.h>
 //: Render the pixels onto the frame buffer
 //
 // This renders the portion of the image within (x0,y0)-(x1,y1). The
@@ -26,11 +26,11 @@ bool vgui_section_render(void const *pixels,
                          GLenum format,
                          GLenum type ,
                          bool hardware_map = false,
-                         vcl_vector<float>* fLmap=0,
-                         vcl_vector<float>* fRmap=0,
-                         vcl_vector<float>* fGmap=0,
-                         vcl_vector<float>* fBmap=0,
-                         vcl_vector<float>* fAmap=0);
+                         vbl_array_1d<float>* fLmap=0,
+                         vbl_array_1d<float>* fRmap=0,
+                         vbl_array_1d<float>* fGmap=0,
+                         vbl_array_1d<float>* fBmap=0,
+                         vbl_array_1d<float>* fAmap=0);
                          
 
 #endif // vgui_section_render_h_

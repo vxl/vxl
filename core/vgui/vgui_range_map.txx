@@ -91,11 +91,11 @@ map_pixel_float(const Type pix, const Type min, const Type max,
 }
 
 template <class Type>
-vcl_vector<vxl_byte>  vgui_range_map<Type>::
+vbl_array_1d<vxl_byte>  vgui_range_map<Type>::
 compute_byte_table(const Type min, const Type max, const float gamma,
                    const long double ratio)
 {
-  vcl_vector<vxl_byte> bmap(size_);
+  vbl_array_1d<vxl_byte> bmap(size_, 0);
   //there are two cases, signed and unsigned map domains
   if (!vil_pixel_traits<Type>::is_signed())
     for (unsigned int i = 0; i < size_; i++)
@@ -116,14 +116,14 @@ compute_byte_table(const Type min, const Type max, const float gamma,
 
 // Hardware mapping cannot support signed Types
 template <class Type>
-vcl_vector<float> vgui_range_map<Type>::
+vbl_array_1d<float> vgui_range_map<Type>::
 compute_float_table(const Type min, const Type max, const float gamma,
                     const long double ratio)
 {
-  vcl_vector<float> null;
+  vbl_array_1d<float> null;
   if (vil_pixel_traits<Type>::is_signed())
     return null;
-  vcl_vector<float> fmap(size_);
+  vbl_array_1d<float> fmap(size_, 0);
   unsigned maxt = (unsigned)vil_pixel_traits<Type>::maxval();
   for (int i = 0; i <= maxt; i++)
   {

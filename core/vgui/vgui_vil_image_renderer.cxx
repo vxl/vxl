@@ -118,7 +118,7 @@ render_directly(vgui_range_map_params_sptr const& rmp)
       {
        case 1:
         {
-          vcl_vector<float> fLmap = rm.fLmap();
+          vbl_array_1d<float> fLmap = rm.fLmap();
           if (!fLmap.size())
             return false;
           if (vgui_section_render(buf, view.ni(), view.nj(),
@@ -135,9 +135,9 @@ render_directly(vgui_range_map_params_sptr const& rmp)
         }
        case 3:
         {
-          vcl_vector<float> fRmap = rm.fRmap();
-          vcl_vector<float> fGmap = rm.fGmap();
-          vcl_vector<float> fBmap = rm.fBmap();
+          vbl_array_1d<float> fRmap = rm.fRmap();
+          vbl_array_1d<float> fGmap = rm.fGmap();
+          vbl_array_1d<float> fBmap = rm.fBmap();
           if (!(fRmap.size()&&fGmap.size()&&fBmap.size()))
             return false;
           if (vgui_section_render(buf, view.ni(), view.nj(),
@@ -155,10 +155,10 @@ render_directly(vgui_range_map_params_sptr const& rmp)
         }
        case 4:
         {
-          vcl_vector<float> fRmap = rm.fRmap();
-          vcl_vector<float> fGmap = rm.fGmap();
-          vcl_vector<float> fBmap = rm.fBmap();
-          vcl_vector<float> fAmap = rm.fAmap();
+          vbl_array_1d<float> fRmap = rm.fRmap();
+          vbl_array_1d<float> fGmap = rm.fGmap();
+          vbl_array_1d<float> fBmap = rm.fBmap();
+          vbl_array_1d<float> fAmap = rm.fAmap();
           if (!(fRmap.size()&&fGmap.size()&&fBmap.size()&&fAmap.size()))
             return false;
           if (vgui_section_render(buf, view.ni(), view.nj(),
@@ -181,7 +181,7 @@ render_directly(vgui_range_map_params_sptr const& rmp)
    case VIL_PIXEL_FORMAT_UINT_16:
     {
       vgui_range_map<unsigned short> rm(*rmp);
-      vcl_vector<float> fLmap = rm.fLmap();
+      vbl_array_1d<float> fLmap = rm.fLmap();
       if (!fLmap.size())
         return false;
       vil_image_view<unsigned short> view = the_image_->get_view();
