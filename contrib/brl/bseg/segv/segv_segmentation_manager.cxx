@@ -1071,11 +1071,11 @@ void segv_segmentation_manager::test_digital_lines()
   vdgl_digital_curve_sptr cad = new vdgl_digital_curve(pa, pd);
   vdgl_digital_curve_sptr cae = new vdgl_digital_curve(pa, pe);
   vdgl_digital_curve_sptr caf = new vdgl_digital_curve(pa, pf);
-  t2D->add_digital_curve(cab);
-  t2D->add_digital_curve(cac);
-  t2D->add_digital_curve(cad);
-  t2D->add_digital_curve(cae);
-  t2D->add_digital_curve(caf);
+  t2D->add_edgel_curve(cab);
+  t2D->add_edgel_curve(cac);
+  t2D->add_edgel_curve(cad);
+  t2D->add_edgel_curve(cae);
+  t2D->add_edgel_curve(caf);
 }
 
 void segv_segmentation_manager::display_IHS()
