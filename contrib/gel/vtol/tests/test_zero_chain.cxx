@@ -23,13 +23,11 @@ int main(int, char **)
 
   vtol_zero_chain_sptr zc1 = new vtol_zero_chain(*v1,*v2);
 
-  vtol_zero_chain_sptr zc1_clone = zc1->clone()->cast_to_topology_object()->
-    cast_to_zero_chain();
+  vtol_zero_chain_sptr zc1_clone = zc1->clone()->cast_to_topology_object()->cast_to_zero_chain();
 
+  Assert(*zc1 == *zc1_clone);
 
   vtol_vertex_sptr v3 = new vtol_vertex_2d(2.0,2.0);
-  vtol_vertex_sptr v4 = new vtol_vertex_2d(3.0,3.0);
-
 
   vcl_vector<vtol_vertex_sptr> v_list;
   v_list.push_back(v2);

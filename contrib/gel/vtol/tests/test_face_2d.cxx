@@ -79,6 +79,8 @@ int main(int, char **)
 
   vtol_face_2d_sptr f3 = new vtol_face_2d(*oc1);
 
+  Assert(*f1 != *f3);
+
   vtol_face_2d_sptr f1_copy = new vtol_face_2d(*f1);
 
   Assert(*f1 == *f1_copy);
