@@ -28,36 +28,33 @@
 void vil_copy(vil_image const& in, vil_image& out)
 {
 #define assert_dimension_equal(dim) assert(in.dim() == out.dim())
-//  assert_dimension_equal(planes);
   assert_dimension_equal(height);
   assert_dimension_equal(width);
-//  assert_dimension_equal(components);
   assert_dimension_equal(bits_per_component);
+  assert_dimension_equal(planes);
+  assert_dimension_equal(components);
 #undef assert_dimension_equal
-  assert((in.components() * in.planes()) == (out.components() * out.planes()));
+//assert((in.components() * in.planes()) == (out.components() * out.planes()));
 
   int height = in.height();
   int width = in.width();
-  int components = in.components();
-  int bits_per_component = in.bits_per_component();
-
-  int rowsize_bits = bits_per_component * components * width;
-  int rowsize_bytes = (rowsize_bits+CHAR_BIT-1) / CHAR_BIT;
-//assert(rowsize_bytes * CHAR_BIT == rowsize_bits); // not for e.g. 1-bit pixels
 
   // Simple implementation copies the whole buffer at once
-  vcl_vector<unsigned char> buf(rowsize_bytes*height);
+  // This is only valid if planes and components are identical,
+  // not just their product.  Hence the assert above.
+  unsigned char* buf = new (unsigned char)[in.get_size_bytes()];
 #ifdef DEBUG
   vcl_cerr << "...vil_copy() doing get_section()" << vcl_endl;
 #endif
-  in .get_section(/* xxx */&buf[0], 0, 0, width, height);
+  in.get_section(buf, 0, 0, width, height);
 #ifdef DEBUG
   vcl_cerr << "...vil_copy() doing put_section()" << vcl_endl;
 #endif
-  out.put_section(/* xxx */&buf[0], 0, 0, width, height);
+  out.put_section(buf, 0, 0, width, height);
 #ifdef DEBUG
   vcl_cerr << "...vil_copy() done" << vcl_endl;
 #endif
+  delete[] buf;
 }
 
 vil_memory_image
