@@ -1,14 +1,16 @@
+//This is vxl/vil/vil_bmp_core_header.h
 #ifndef vil_bmp_core_header_h_
 #define vil_bmp_core_header_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//This is vxl/vil/vil_bmp_core_header.h
-
 //:
-// \file vgl/vil_block_cache_image_impl.h
+// \file
 // \author fsm@robots.ox.ac.uk
-//          Nick Costen added Manchester IO 16/3/01
+// \verbatim
+//  Modifications
+//   Nick Costen added Manchester IO 16/3/01
+// \endverbatim
 
 
 class vil_stream;
@@ -22,7 +24,7 @@ struct vil_bmp_core_header
   unsigned  height;       // 4
   short     planes;       // 2
   short     bitsperpixel; // 2
-  
+
   vil_bmp_core_header();
   void read(vil_stream *);
   void write(vil_stream *) const;
