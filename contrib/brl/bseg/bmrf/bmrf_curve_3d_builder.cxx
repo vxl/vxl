@@ -390,7 +390,7 @@ bmrf_curve_3d_builder::append_curvels(vcl_list<bmrf_curvel_3d_sptr> curvels,
         g_itr != growing_curves.end();  ++g_itr )
   {
     bmrf_curvel_3d_sptr end_curvel = (*g_itr)->back();
-    bool found_match = false;
+//  bool found_match = false;
     for ( vcl_list<bmrf_curvel_3d_sptr>::iterator c_itr = curvels.begin();
           c_itr != curvels.end();  ++c_itr )
     {
@@ -398,7 +398,7 @@ bmrf_curve_3d_builder::append_curvels(vcl_list<bmrf_curvel_3d_sptr> curvels,
         (*g_itr)->push_back((*c_itr));
         grown_curves.push_back(*g_itr);
         curvels.erase(c_itr);
-        found_match = true;
+//      found_match = true;
         break;
       }
     }
@@ -425,13 +425,13 @@ bmrf_curve_3d_builder::append_correct( const bmrf_curvel_3d_sptr& new_c,
                                        const bmrf_curvel_3d_sptr& prev_c ) const
 {
   unsigned int num_frames = network_->num_frames();
-  unsigned int total_overlap = 0;
+//unsigned int total_overlap = 0;
   unsigned int total_equal = 0;
   for (unsigned int f = 0; f<num_frames; ++f){
     bmrf_node_sptr p_node = prev_c->node_at_frame(f);
     bmrf_node_sptr n_node = new_c->node_at_frame(f);
     if ( p_node && n_node ){
-      ++total_overlap;
+//    ++total_overlap;
       if ( p_node == n_node )
         ++total_equal;
     }
