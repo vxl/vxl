@@ -248,7 +248,7 @@ vnl_quaternion<T> vnl_quaternion<T>::operator* (const vnl_quaternion<T>& rhs) co
 }
 
 //: Rotates 3D vector v with source quaternion and stores the rotated vector back into v.
-// For speed and greater accurary, first convert quaternion into an orthonormal
+// For speed and greater accuracy, first convert quaternion into an orthonormal
 // matrix,  then  use matrix multiplication to rotate many vectors.
 
 template <class T>
