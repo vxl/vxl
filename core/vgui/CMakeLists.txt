@@ -242,12 +242,13 @@ ENDIF (HAS_GLUT)
 ##################################################
 
 IF (QT_FOUND)
+IF (QT_WRAP_CPP)
 
   OPTION(VGUI_USE_QT "Should Qt support be compiled into vgui?" YES)
 
   IF(VGUI_USE_QT)
 
-    ADD_DEFINITIONS( "-DVGUI_USE_QT" )
+    ADD_DEFINITIONS( ${QT_DEFINITIONS} "-DVGUI_USE_QT" )
 
     INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR})
     ADD_DEFINITIONS(${QT_DEFINITIONS})
@@ -273,6 +274,7 @@ IF (QT_FOUND)
 
   ENDIF(VGUI_USE_QT)
 
+ENDIF (QT_WRAP_CPP)
 ENDIF (QT_FOUND)
 
 
