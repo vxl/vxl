@@ -33,7 +33,7 @@ vgl_line_2d<Type>::vgl_line_2d (vgl_homg_line_2d<Type> const& l)
 // of these, the point with \a y=1 or \a x=1, resp. are taken.
 // When the line goes through the origin, the second point is \a (b,-a).
 template <class Type>
-void vgl_line_2d<Type>::get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type> &p2)
+void vgl_line_2d<Type>::get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type> &p2) const
 {
   if (b() == 0)       p1.set(-c()/a(), 1);
   else                p1.set(0, -c()/b());

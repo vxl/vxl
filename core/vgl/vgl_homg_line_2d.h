@@ -106,7 +106,7 @@ class vgl_homg_line_2d
   // through the origin, the second point is (b, -a, 1).  Finally, when the line
   // is the line at infinity, the returned points are (1,0,0) and (0,1,0).
   // Thus, whenever possible, the returned points are not at infinity.
-  void get_two_points(vgl_homg_point_2d<Type> &p1, vgl_homg_point_2d<Type> &p2);
+  void get_two_points(vgl_homg_point_2d<Type> &p1, vgl_homg_point_2d<Type> &p2) const;
 };
 
 #define l vgl_homg_line_2d<Type>

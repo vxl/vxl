@@ -26,7 +26,7 @@ vgl_homg_line_2d<Type>::vgl_homg_line_2d (vgl_line_2d<Type> const& l)
 //  Thus, whenever possible, the returned points are not at infinity.
 //
 template <class Type>
-void vgl_homg_line_2d<Type>::get_two_points(vgl_homg_point_2d<Type> &p1, vgl_homg_point_2d<Type> &p2)
+void vgl_homg_line_2d<Type>::get_two_points(vgl_homg_point_2d<Type> &p1, vgl_homg_point_2d<Type> &p2) const
 {
   if (      b() == 0) p1.set(-c(), a(), a());
   else                p1.set(0, -c(), b());

@@ -118,7 +118,7 @@ class vgl_line_2d
   // When the line is parallel to one of these,
   // the point with \a y=1 or \a x=1, resp. are taken.  When the line goes
   // through the origin, the second point is (b, -a).
-  void get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type> &p2);
+  void get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type> &p2) const;
 };
 
 #define l vgl_line_2d<Type>

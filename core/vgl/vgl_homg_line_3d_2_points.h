@@ -72,7 +72,7 @@ class vgl_homg_line_3d_2_points
   // Utility methods
 
   //: Return true iff line is at infinity
-  inline bool ideal(Type tol = Type(0)) { return point_finite_.ideal(tol); }
+  inline bool ideal(Type tol = Type(0)) const { return point_finite_.ideal(tol); }
 
  protected:
   //: force the point point_infinite_ to infinity, without changing the line
