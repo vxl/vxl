@@ -107,6 +107,9 @@ SOURCE=.\brip_float_ops.cxx
 # Begin Source File
 SOURCE=.\brip_float_ops.h
 # End Source File
+# Begin Source File
+SOURCE=.\brip_vil_ops.h
+# End Source File
 # End Group
 # End Target
 # End Project

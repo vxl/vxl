@@ -243,9 +243,6 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
@@ -255,10 +252,10 @@ SOURCE=.\sdet_test_detector.cxx
 SOURCE=.\sdet_test_region_proc.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\sdet_test_tracker.cxx
+SOURCE=.\brip_test_lucas_kanade.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_test_lucas_kanade.cxx
+SOURCE=.\brip_test_fourier.cxx
 # End Source File
 # End Group
 # End Target
