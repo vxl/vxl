@@ -79,6 +79,7 @@ vtol_topology_object::is_superior(const vtol_topology_object &superior) const
 //---------------------------------------------------------------------------
 const topology_list * vtol_topology_object::superiors(void) const
 {
+  vcl_cerr << "*** Warning: superiors() is deprecated\n";
   topology_list *result=new topology_list;
   result->reserve(superiors_.size());
 

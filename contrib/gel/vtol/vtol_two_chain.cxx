@@ -259,15 +259,14 @@ void vtol_two_chain::update_superior_list_p_from_hierarchy_parent(void)
 
   if (hierarchy_parent!=0)
     {
-      const topology_list *parent_superiors = hierarchy_parent->superiors();
+      const vcl_list<vtol_topology_object*> *parent_superiors = hierarchy_parent->superiors_list();
 
       // Clear all previous superiors.
       superiors_.clear();
-      topology_list::const_iterator ti;
+      vcl_list<vtol_topology_object*>::const_iterator ti;
       for (ti=parent_superiors->begin();ti!= parent_superiors->end();++ti)
         if (vcl_find(superiors_.begin(),superiors_.end(),*ti)==superiors_.end())
-          superiors_.push_back((*ti).ptr());
-      delete parent_superiors;
+          superiors_.push_back(*ti);
 
       // Recursively update all children.
       two_chain_list *chains=inferior_two_chains();
