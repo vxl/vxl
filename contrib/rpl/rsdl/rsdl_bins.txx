@@ -29,7 +29,7 @@ struct rsdl_bins_point_dist_entry
   rsdl_bins_point_dist_entry( point_type const& query_pt,
                               bin_entry_type const* entry );
 
-  inline bool operator<( rsdl_bins_point_dist_entry const& other );
+  inline bool operator<( rsdl_bins_point_dist_entry const& other ) const;
 
   bin_entry_type const* entry_;
   coord_type            dist_;
@@ -618,7 +618,7 @@ rsdl_bins_point_dist_entry( point_type const& query_pt,
 template<unsigned N, typename C, typename V>
 bool
 rsdl_bins_point_dist_entry<N,C,V>::
-operator<( rsdl_bins_point_dist_entry const& other )
+operator<( rsdl_bins_point_dist_entry const& other ) const
 {
   return this->dist_ < other.dist_;
 }
