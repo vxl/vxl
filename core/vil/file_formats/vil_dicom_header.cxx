@@ -107,9 +107,9 @@ vil_dicom_header_info_clear( vil_dicom_header_info& info )
   info.size_y_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
   info.size_z_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
   info.high_bit_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
-  info.small_im_pix_val_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  info.large_im_pix_val_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  info.pixel_padding_val_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.small_im_pix_val_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
+  info.large_im_pix_val_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
+  info.pixel_padding_val_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
   info.window_centre_ = VIL_DICOM_HEADER_UNSPECIFIED;
   info.window_width_ = VIL_DICOM_HEADER_UNSPECIFIED;
 
@@ -120,7 +120,7 @@ vil_dicom_header_info_clear( vil_dicom_header_info& info )
   info.res_intercept_ = VIL_DICOM_HEADER_DEFAULTINTERCEPT;
   info.res_slope_ = VIL_DICOM_HEADER_DEFAULTSLOPE;
   info.pix_rep_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
-  info.stored_bits_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.stored_bits_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
   info.allocated_bits_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
 }
 
