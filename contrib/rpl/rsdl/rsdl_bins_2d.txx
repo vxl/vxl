@@ -573,6 +573,20 @@ min_sq_distance_to_bin( COORD_T x, COORD_T y, int bin_x, int bin_y ) const
   return sq_dist;
 }
 
+template < class COORD_T, class VALUE_T >
+void
+rsdl_bins_2d< COORD_T, VALUE_T > ::
+change_value( const VALUE_T& old_val, const VALUE_T& new_val )
+{  
+  bin_vector_type_::iterator p;
+  for ( int bin_x = 0; bin_x < num_bins_x_; ++ bin_x )
+    for ( int bin_y = 0; bin_y < num_bins_y_; ++ bin_y )
+      for ( p = bins_( bin_x, bin_y ).begin(); p != bins_( bin_x, bin_y ).end(); ++p )
+        if ( p->value_ == old_val )
+                        p->value_ = new_val;
+}
+
+
 
 template < class COORD_T, class VALUE_T >
 vcl_ostream& operator<< ( vcl_ostream& ostr,
