@@ -216,7 +216,7 @@ Type vgl_homg_operators_3d<Type>::plane_plane_angle(const vgl_homg_plane_3d<Type
 {
   double cosang = dot_product(plane1.normal(), plane2.normal());
 
-  return vcl_acos(cosang);
+  return (Type)vcl_acos(cosang);
 }
 
 //-----------------------------------------------------------------------------
