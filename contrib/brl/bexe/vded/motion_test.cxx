@@ -84,43 +84,36 @@ int main(int argc, char** argv)
     return -1;
   }
 
+  bool make_output_video = (output_directory() != "") && (!no_output());
 
 
-
-  // Load each frame of the movie, convert to greyscale, cast to float
-  //   and push onto a vector
-  vcl_vector< vil_image_view<float> > images;
+  // create a gaussian filter with sigma()
+  vil_gauss_filter_5tap_params gauss_params(sigma());
+  
+  vil_image_view<float> prev_image;
+  vcl_vector< double > scores;
+  vcl_vector< vil_image_resource_sptr > results; 
   for ( vidl_movie::frame_iterator f_itr = video->first();
         f_itr != video->end();  ++f_itr ){
-    vil_image_view<float> input_image, grey_image, smooth_image;
-    input_image = vil_convert_stretch_range((float)0.0, f_itr->get_view());
-    if ( input_image.nplanes() == 3 )
-      vil_convert_planes_to_grey( input_image , grey_image );
-    else if ( input_image.nplanes() == 1 )
-      grey_image = input_image;
-    else {
-      vcl_cerr << "Error: can't deal with an image with "
-               << input_image.nplanes() << " planes."<< vcl_endl;
-      return -1;
-    }
-    vil_gauss_filter_5tap_params gauss_params(sigma());
-    vil_gauss_filter_5tap(grey_image, smooth_image, gauss_params);
-    images.push_back(smooth_image);
-  }
+    vil_image_view<vxl_byte> input_image;
+    vil_image_view<float> smooth_image;     
+    input_image = vil_convert_to_grey_using_rgb_weighting(f_itr->get_view());
+    vil_gauss_filter_5tap(input_image, smooth_image, gauss_params);
 
-  vcl_vector< double > scores;
-  vcl_vector< vil_image_resource_sptr > results;
-  for ( vcl_vector< vil_image_view<float> >::iterator itr = images.begin()+1;
-        itr != images.end();  ++itr ){
+    if( f_itr == video->first() ){
+      prev_image = smooth_image;
+      continue;
+    }
 
     vil_image_view<float> sing_img;
-    brip_sqrt_grad_singular_values(*itr, sing_img, 1);
+    brip_sqrt_grad_singular_values(smooth_image, sing_img, 1);
 
     vil_image_view<float> diff_img;
-    vil_math_image_abs_difference(*itr, *(itr-1), diff_img);
+    vil_math_image_abs_difference(smooth_image, prev_image, diff_img);
 
     vil_image_view<float> motion_img;
     vil_math_image_product(diff_img, sing_img, motion_img);
+    
     float min_val, max_val;
     vil_math_value_range(motion_img, min_val, max_val);
     vil_math_scale_values(motion_img, 1.0/max_val);
@@ -128,7 +121,6 @@ int main(int argc, char** argv)
 
     vil_image_view<bool> bool_img;
     vil_threshold_above( motion_img, bool_img, thresh2());
-    vil_math_truncate_range( motion_img, 0.0f, thresh1());
 
     int sum = 0;
     vil_math_sum(sum, bool_img, 0);
@@ -136,21 +128,27 @@ int main(int argc, char** argv)
     vcl_cout << "Sum: "<<sum<<" total: "<< total << " ratio: "<< double(sum)/total << vcl_endl;
     scores.push_back(double(sum)/total);
 
-    vil_image_view<vxl_byte> byte_img;
-    vil_convert_stretch_range(motion_img, byte_img);
-    vil_image_resource_sptr img_sptr = vil_new_image_resource(byte_img.ni(), byte_img.nj(),
+    // Make the output video frame
+    if ( make_output_video ){
+      vil_math_truncate_range( motion_img, 0.0f, thresh1());
+      vil_image_view<vxl_byte> byte_img;
+      vil_convert_stretch_range(motion_img, byte_img);
+      vil_image_resource_sptr img_sptr = vil_new_image_resource(byte_img.ni(), byte_img.nj(),
                                                               byte_img.nplanes(), byte_img.pixel_format());
-    img_sptr->put_view(byte_img);
-    results.push_back(img_sptr);
+      img_sptr->put_view(byte_img);
+      results.push_back(img_sptr);
+    }
 
     if (status_block_file() != "")
-      write_status(status_block_file(), results.size(), images.size()-1);
+      write_status(status_block_file(), scores.size(), video->length()-1);
+            
+    prev_image = smooth_image;
   }
   if (performance_output_file() != "")
     print_xml_performance( performance_output_file(), input_video_file(), scores );
 
-  vidl_movie_sptr result_movie = new vidl_movie(new vidl_clip(results, 0, results.size()));
-  if (output_directory() != "" && !no_output() ){
+  if ( make_output_video ){
+    vidl_movie_sptr result_movie = new vidl_movie(new vidl_clip(results, 0, results.size()));
     vcl_string output_name = output_directory()+"/output";
     vidl_io::save(result_movie.ptr(), output_name.c_str(), "ImageList");
   }
