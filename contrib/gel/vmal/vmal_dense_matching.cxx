@@ -9,11 +9,11 @@
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_save.h>
 
-#include <stdio.h>
+//#include <vcl_cstdio.h>
 #include <vcl_cmath.h>
 
 vmal_dense_matching::vmal_dense_matching(const vnl_double_3x3 & H0,
-                     const vnl_double_3x3 & H1)
+                                         const vnl_double_3x3 & H1)
 {
   _H0=H0;
   _H1=H1;
@@ -38,7 +38,7 @@ void vmal_dense_matching::set_hmatrix(const vnl_double_3x3 & H)
 // Between two set of lines in 2 images that are matched, it compute the best lines
 // using the fundamental constraint.
 void vmal_dense_matching::refine_lines_using_F(vmal_multi_view_data_edge_sptr mvd_edge,
-                         vmal_multi_view_data_edge_sptr res)
+                                               vmal_multi_view_data_edge_sptr res)
 {
   //We assume that the lines have been sorted. It means that, for example, the
   //first end-point of the first segment correspond to the first end-point of
@@ -135,7 +135,7 @@ void vmal_dense_matching::refine_lines_using_F(vmal_multi_view_data_edge_sptr mv
 // Between two set of lines in 2 images that are matched, it compute the best lines
 // using the homography
 void vmal_dense_matching::refine_lines_using_H(vmal_multi_view_data_edge_sptr mvd_edge,
-                         vmal_multi_view_data_edge_sptr res)
+                                               vmal_multi_view_data_edge_sptr res)
 {
   //the second segment.
   if (_type==2)
