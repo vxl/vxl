@@ -19,6 +19,7 @@
 // \verbatim
 
 #include <vcl_new.h>
+#include <vcl_cassert.h>
 
 template <class T>
 struct vbl_array_1d
@@ -45,6 +46,16 @@ struct vbl_array_1d
   vbl_array_1d(vbl_array_1d<T> const &that) {
     new (this) vbl_array_1d<T>(that.begin_, that.end_);
   }
+
+//: Construct an array with n elements, all equal to v
+  vbl_array_1d(unsigned n, const T &v) {
+    begin_ = (T*) new char [n * sizeof(T)]; // FIXME alignment
+    end_   = begin_ + n;
+    alloc_ = begin_ + n;
+    for (unsigned i=0; i<n; ++i)
+      new (begin_ + i) T(v);
+  }
+
 
   vbl_array_1d<T> &operator=(vbl_array_1d<T> const &that) {
     this->~vbl_array_1d();
@@ -122,8 +133,21 @@ struct vbl_array_1d
   unsigned size() const { return end_ - begin_; }
   unsigned capacity() const { return alloc_ - begin_; }
 
-  reference       operator[](unsigned i) { return begin_[i]; }
-  const_reference operator[](unsigned i) const { return begin_[i]; }
+  //: Get the ith element.
+  // Use NDEBUG to turn bounds checking off
+  reference       operator[](unsigned i)
+  {
+    assert (i < end_ - begin_);
+    return begin_[i];
+  }
+
+  //: Get the ith element.
+  // Use NDEBUG to turn bounds checking off
+  const_reference operator[](unsigned i) const
+  {
+    assert (i < end_ - begin_);
+    return begin_[i];
+  }
 
 private:
   // begin_ <= end_ <= alloc_
