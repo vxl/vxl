@@ -37,7 +37,6 @@ Homg
 Homg1D
 Homg2D
 Homg3D
-HomgConic
 HomgInterestPoint
 HomgInterestPointSet
 HomgLine2D
@@ -46,7 +45,6 @@ HomgLineSeg2D
 HomgLineSeg3D
 HomgMetric
 HomgNorm2D
-HomgOperator1D
 HomgOperator2D
 HomgOperator3D
 HomgPlane3D
@@ -55,7 +53,6 @@ HomgPoint2D
 HomgPoint3D
 HomgPrettyPrint
 ImageMetric
-LineSeg
 LineSegSet
 MatchSet
 NViewMatches
