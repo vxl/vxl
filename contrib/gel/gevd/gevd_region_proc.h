@@ -4,11 +4,11 @@
 //:
 // \file
 // \brief a processor for extracting expanded resolution regions
-// 
+//
 // edgel_regions uses a flood fill algorithm and is thus
 // region labeling is only as localized as one pixel.
 // In the CAD application, we need sub-pixel details. So
-// In this algorithm the original image resolution is 
+// In this algorithm the original image resolution is
 // expanded using Gaussian interpolation, typically by
 // a factor of two. Then the resulting regions are
 // transformed back to original image coordinates.
