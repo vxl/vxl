@@ -74,8 +74,8 @@ png_set_crc_action(png_structp png_ptr, int crit_action, int ancil_action)
 /* handle alpha and tRNS via a background color */
 void PNGAPI
 png_set_background(png_structp png_ptr,
-   png_color_16p background_color, int background_gamma_code,
-   int need_expand, double background_gamma)
+                   png_color_16p background_color, int background_gamma_code,
+                   int need_expand, double background_gamma)
 {
    png_debug(1, "in png_set_background\n");
    if (background_gamma_code == PNG_BACKGROUND_GAMMA_UNKNOWN)
@@ -737,7 +737,6 @@ png_init_read_transformations(png_structp png_ptr)
            }
         }
 #endif
-
       }
    }
 #endif
@@ -1338,7 +1337,6 @@ From Andreas Dilger e-mail to png-implement, 26 March 1998:
          png_ptr->row_info.pixel_depth+7)>>3;
    }
 #endif
-
 }
 
 #if defined(PNG_READ_PACK_SUPPORTED)
@@ -1385,7 +1383,6 @@ png_do_unpack(png_row_infop row_info, png_bytep row)
          }
          case 2:
          {
-
             png_bytep sp = row + (png_size_t)((row_width - 1) >> 2);
             png_bytep dp = row + (png_size_t)row_width - 1;
             png_uint_32 shift = (int)((3 - ((row_width + 3) & 0x03)) << 1);
@@ -2065,7 +2062,7 @@ png_do_gray_to_rgb(png_row_infop row_info, png_bytep row)
  *
  *  The calculation is to be done in a linear colorspace.
  *
- *  Other integer coefficents can be used via png_set_rgb_to_gray().
+ *  Other integer coefficients can be used via png_set_rgb_to_gray().
  */
 int /* PRIVATE */
 png_do_rgb_to_gray(png_structp png_ptr, png_row_infop row_info, png_bytep row)
@@ -3864,7 +3861,6 @@ png_build_gamma_table(png_structp png_ptr)
     defined(PNG_READ_RGB_TO_GRAY_SUPPORTED)
       if (png_ptr->transformations & ((PNG_BACKGROUND) | PNG_RGB_TO_GRAY))
       {
-
          g = 1.0 / (png_ptr->gamma);
 
          png_ptr->gamma_to_1 = (png_bytep)png_malloc(png_ptr,
@@ -3875,7 +3871,6 @@ png_build_gamma_table(png_structp png_ptr)
             png_ptr->gamma_to_1[i] = (png_byte)(pow((double)i / 255.0,
                g) * 255.0 + .5);
          }
-
 
          png_ptr->gamma_from_1 = (png_bytep)png_malloc(png_ptr,
             (png_uint_32)256);
@@ -3889,7 +3884,6 @@ png_build_gamma_table(png_structp png_ptr)
          {
             png_ptr->gamma_from_1[i] = (png_byte)(pow((double)i / 255.0,
                g) * 255.0 + .5);
-
          }
       }
 #endif /* PNG_READ_BACKGROUND_SUPPORTED || PNG_RGB_TO_GRAY_SUPPORTED */
@@ -3996,7 +3990,6 @@ png_build_gamma_table(png_structp png_ptr)
     defined(PNG_READ_RGB_TO_GRAY_SUPPORTED)
       if (png_ptr->transformations & (PNG_BACKGROUND | PNG_RGB_TO_GRAY))
       {
-
          g = 1.0 / (png_ptr->gamma);
 
          png_ptr->gamma_16_to_1 = (png_uint_16pp)png_malloc(png_ptr,
