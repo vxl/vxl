@@ -56,7 +56,7 @@ void test_math() {
 #pragma warning ( pop )
 #endif
 
-#if !defined(VCL_VC50) && !defined(VCL_VC60)
+#if !defined(VCL_VC) // VC70 gives an "error C2124: divide or mod by zero".
   long double a5 = (long double)1/(long double)0; // compiler warning
   long double a6 = -(long double)1/(long double)0; // compiler warning
 #endif
