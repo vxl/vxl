@@ -79,7 +79,7 @@ double gst_polygon_2d::get_centroid_y() const
 //        2 A( P ) = sum_{i=0}^{n-1} (x_i y_{i+1} - y_i x_{i+1}).
 double gst_polygon_2d::area() const
 {
-  double area= 0;
+  double a= 0;
 
   for( int i=0; i< edges_.size(); i++)
     {
@@ -88,10 +88,10 @@ double gst_polygon_2d::area() const
       double dp= edges_[i]->get_start()->get_x()* edges_[ip1]->get_start()->get_y()
                - edges_[i]->get_start()->get_x()* edges_[ip1]->get_start()->get_x();
 
-      area+= dp;
+      a+= dp;
     }
 
-  return (area/2);
+  return (a/2);
 }
 
 
