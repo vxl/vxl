@@ -1,8 +1,0 @@
-#ifndef vcl_iso_cstdarg_h_
-#define vcl_iso_cstdarg_h_
-
-#include <cstdarg>
-
-@va_list
-
-#endif
