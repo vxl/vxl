@@ -343,8 +343,8 @@ bool vil_iris_generic_image::get_section_rle(void* ib, int x0, int y0, int xs, i
     for (int rowno=y0; rowno<(y0+ys); ++rowno) {
       // find length and start position
       int ysize = height_;
-      vil_streampos rleoffset =  starttab_[rowno+channo*ysize];
-      vil_streampos rlelength = lengthtab_[rowno+channo*ysize];
+      unsigned long rleoffset =  starttab_[rowno+channo*ysize];
+      unsigned long rlelength = lengthtab_[rowno+channo*ysize];
 
       // read rle row into array
       unsigned char* rlerow = new unsigned char[rlelength];
@@ -416,8 +416,8 @@ bool vil_iris_generic_image::read_offset_tables() {
   int tablen;
   tablen = height_ * planes_;
 
-  starttab_  = new vil_streampos[tablen];
-  lengthtab_ = new vil_streampos[tablen];
+  starttab_  = new unsigned long[tablen];
+  lengthtab_ = new unsigned long[tablen];
 
   int i;
   for (i=0; i<tablen; ++i) {
