@@ -33,7 +33,6 @@ class strk_info_model_tracker_process : public vpro_video_process
   vcl_string track_file_;
   bool failure_;
   bool first_frame_;
-  int start_frame_;
   strk_info_model_tracker model_tracker_;
   vcl_vector<strk_art_info_model_sptr> tracked_models_;
 };

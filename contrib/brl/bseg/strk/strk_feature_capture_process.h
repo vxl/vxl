@@ -32,15 +32,12 @@ class strk_feature_capture_process : public vpro_video_process
   virtual bool finish();
   bool set_input_file(vcl_string const& file_name);
   bool set_output_file(vcl_string const& file_name);
-  unsigned int start_frame(){return start_frame_;}
-  unsigned int end_frame(){return end_frame_;}
  private:
   //members
   bool failure_;
   bool first_frame_;
-  unsigned int start_frame_;
-  unsigned int end_frame_;
   unsigned int face_index_;
+  unsigned int start_frame_;
   vcl_string track_file_;
   vcl_string hist_file_;
   strk_info_tracker tracker_;

@@ -30,15 +30,11 @@ class strk_track_display_process : public vpro_video_process
   virtual bool execute();
   virtual bool finish() { return true; }
   bool set_input_file(vcl_string const& file_name);
-  unsigned int start_frame(){return start_frame_;}
-  unsigned int end_frame(){return end_frame_;}
  private:
   //members
   bool failure_;
   bool first_frame_;
   vcl_string track_file_;
-  unsigned int start_frame_;
-  unsigned int end_frame_;
   vcl_vector<vgl_point_2d<double> > tracked_cogs_;
   vcl_vector<vtol_face_2d_sptr> tracked_faces_;
 };

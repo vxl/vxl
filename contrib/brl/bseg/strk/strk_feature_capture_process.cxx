@@ -14,7 +14,6 @@ strk_feature_capture_process::strk_feature_capture_process(strk_info_tracker_par
 {
   failure_ = false;
   first_frame_ = true;
-  start_frame_ = 0;
   face_index_ =0;
 }
 

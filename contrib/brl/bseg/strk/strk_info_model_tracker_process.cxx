@@ -20,7 +20,6 @@ strk_info_model_tracker_process::strk_info_model_tracker_process(strk_info_model
 {
   failure_ = false;
   first_frame_ = true;
-  start_frame_=0;
   write_tracked_models_ = false;
 }
 

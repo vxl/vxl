@@ -12,7 +12,6 @@ strk_track_display_process::strk_track_display_process()
 {
   failure_ = false;
   first_frame_ = true;
-  start_frame_ = 0;
 }
 
 strk_track_display_process::~strk_track_display_process()
