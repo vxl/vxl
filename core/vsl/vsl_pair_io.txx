@@ -1,3 +1,5 @@
+#ifndef vsl_pair_io_txx_
+#define vsl_pair_io_txx_
 // This is vxl/vsl/vsl_pair_io.txx
 
 //:
@@ -47,5 +49,6 @@ void vsl_print_summary(vcl_ostream& os, const vcl_pair<S, T> &v)
 #define VSL_PAIR_INSTANTIATE(S, T ) \
 template void vsl_print_summary(vcl_ostream& s, const vcl_pair<S, T >& v); \
 template void vsl_b_write(vsl_b_ostream& s, const vcl_pair<S, T > & v); \
-template void vsl_b_read(vsl_b_istream& s, vcl_pair<S, T > & v); 
-;
+template void vsl_b_read(vsl_b_istream& s, vcl_pair<S, T > & v)
+
+#endif
