@@ -6,6 +6,7 @@ extern "C" {
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdlib.h>
+#include <string.h>  // for strdup
 }
 #include <vxl_config.h> // for VXL_UNISTD_*
 
@@ -63,12 +64,12 @@ vpl_usleep( unsigned int t )
 
 int vpl_putenv ( const char * envvar )
 {
-  //char * storage_space = vcl_strdup(envvar); // This causes a memory leak
-  //                                           // but this can't be helped
-  //
+  char * storage_space = strdup(envvar); // This causes a memory leak
+                                         // but this can't be helped
   // Why copy the string? putenv is meant to take a const char* of the
   // form "name=value". Also, putenv is neither ANSI C nor ANSI C++, but
   // is often present in stdlib on most Unix-like systems. -- AGAP.
+  // But on some platforms (Linux), putenv "captures" the string. -- AGAP.
 
-  return putenv(envvar);
+  return putenv(storage_space);
 }
