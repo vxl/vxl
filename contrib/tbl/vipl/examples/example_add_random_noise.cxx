@@ -38,10 +38,12 @@ main(int argc, char** argv) {
   // The input image:
   vil1_image in = vil1_load(argv[1]);
   if (vil1_pixel_format(in) != VIL1_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
-  vil1_image* src = &in;
+  vil1_image* src;
 #ifndef NO_MEMORY_IMAGE // otherwise get_pixel() would be very slow!!
   vil1_memory_image_of<ubyte> mem (in);
   src = &mem;
+#else
+  src = &in;
 #endif
 
   // The output image:

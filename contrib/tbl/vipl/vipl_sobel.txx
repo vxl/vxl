@@ -8,7 +8,7 @@ bool vipl_sobel <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
   const ImgIn &in = in_data(0);
   ImgOut &out = out_data();
   // apply filter:
-  DataIn v = DataIn(0);
+  DataIn v;
   int startx = start(X_Axis());
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());

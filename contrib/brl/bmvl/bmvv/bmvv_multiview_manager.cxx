@@ -169,7 +169,7 @@ void bmvv_multiview_manager::quit()
 //=========================================================================
 //: load an image an put it in the currently selected grid cell
 //=========================================================================
-void bmvv_multiview_manager::load_image_file(vcl_string image_filename, bool greyscale, unsigned col, unsigned row)
+void bmvv_multiview_manager::load_image_file(vcl_string image_filename, bool /* greyscale */, unsigned col, unsigned row)
 {
   img_ = vil1_load(image_filename.c_str());
   bgui_vtol2D_tableau_sptr btab = this->get_vtol2D_tableau_at(col, row);

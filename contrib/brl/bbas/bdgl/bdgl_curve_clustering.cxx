@@ -579,7 +579,7 @@ void bdgl_curve_clustering::merge_clusters(int i,int j)
 }
 
 //  function to obtain curves on the moving object
-void bdgl_curve_clustering::get_moving_objects(int frame_no,
+void bdgl_curve_clustering::get_moving_objects(int /* frame_no */,
                                                vcl_vector<vcl_vector<bdgl_tracker_curve_sptr> >& curves_on_objects)
 {
   vcl_vector<bdgl_tracker_curve_sptr> temp;

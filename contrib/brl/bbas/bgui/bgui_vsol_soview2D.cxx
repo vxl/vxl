@@ -95,7 +95,7 @@ bgui_vsol_soview2D_dotted_digital_curve(vdgl_digital_curve_sptr const& dc)
   //n, x, and y are in the parent class vgui_soview2D_linestrip
   unsigned int n = ech->size();
 
-  float x = 0, y=0;
+  float x, y;
   for (unsigned int i=0; i<n;i++)
     {
       vdgl_edgel ed = (*ech)[i];

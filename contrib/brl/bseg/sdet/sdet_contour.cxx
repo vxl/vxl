@@ -1612,7 +1612,7 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
   vdgl_digital_curve *dc = new vdgl_digital_curve(it);
   new_edge->set_curve(*dc);
 
-  int xs =0, ys = 0;
+  int xs, ys;
   //replace the old edge
   while (true)
   {

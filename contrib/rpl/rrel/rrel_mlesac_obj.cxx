@@ -23,7 +23,7 @@ rrel_mlesac_obj::rrel_mlesac_obj(unsigned int residual_dof, double outlier_sigma
 double
 rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
                       vect_const_iter scale,
-                      vnl_vector<double>* param_vector ) const
+                      vnl_vector<double>* /* param_vector */ ) const
 {
   double value=0;
   double pi,p0,zi;

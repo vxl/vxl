@@ -300,7 +300,7 @@ compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
   if (debug_)
     this->print_region_array();
 
-  unsigned int y=0, x=0;
+  unsigned int y, x;
   //Propagate connected components
   // the -1 accounts for the 2x2 label classification neighborhood
   for (y=0; y<ys_-1; y++)
@@ -476,11 +476,10 @@ merge_equivalence(vcl_map<unsigned int, vcl_vector<unsigned int>* >& tab,
   }
 
   //We look through the set of labels found in map for label
-  bool found = false;
   for (int i = 0; i<len; i++)
   {
     unsigned int l = (*labels)[i];
-    found = false;
+    bool found = false;
     //see if l is in the current set of equivalent labels for cur_label
     for (unsigned int j=0 ; j < array->size() ; j++)
     {
@@ -556,7 +555,7 @@ void sdet_edgel_regions::GrowEquivalenceClasses()
     vcl_vector<unsigned int>* cur_set = NULL;
     unsigned int i = cur_label;
     int len = 0;
-    int old_len = 0;
+    int old_len;
     while (merging)
     {
       old_len = len;
@@ -623,7 +622,7 @@ void sdet_edgel_regions::GrowEquivalenceClasses()
 //------------------------------------------------------------
 //: Check if the vtol_edge list sg (spatial group) contains edge(s) - NYI
 //
-bool sdet_edgel_regions::GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& sg)
+bool sdet_edgel_regions::GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& /* sg */)
 {
 #if 0
   CoolString type(sg.GetSpatialGroupName());
@@ -836,7 +835,7 @@ bool sdet_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
 //
 unsigned char sdet_edgel_regions::label_code(unsigned int label)
 {
-  unsigned char result = 0;
+  unsigned char result;
   if (label<min_region_label_)
     result = label;
   else
@@ -925,21 +924,21 @@ unsigned char
 sdet_edgel_regions::EncodeNeighborhood(unsigned int ul, unsigned int ur,
                                        unsigned int ll, unsigned int lr)
 {
-  unsigned char nhood = 0, nul = 0, nur = 0, nll = 0, nlr =0;
+  unsigned char nhood = 0;
 
-  nul = label_code(ul);
+  unsigned char nul = label_code(ul);
   nul = nul<<6;
   nhood |= nul;
 
-  nur = label_code(ur);
+  unsigned char nur = label_code(ur);
   nur = nur<<4;
   nhood |= nur;
 
-  nll = label_code(ll);
+  unsigned char nll = label_code(ll);
   nll = nll << 2;
   nhood |= nll;
 
-  nlr = label_code(lr);
+  unsigned char nlr = label_code(lr);
   nhood |= nlr;
 
   return nhood;
@@ -1224,7 +1223,6 @@ void sdet_edgel_regions::print_edge_colis(unsigned int x, unsigned int y,
 //  process.
 static bool embedded_T(vtol_vertex_sptr v, vtol_edge_2d_sptr bar, vcl_vector<vtol_edge_2d_sptr>& real_edges)
 {
-  bool embedded = true;
   vcl_vector<vtol_edge_sptr>* edges = v->edges();
   int tedges = 0;
   vcl_vector<vtol_edge_sptr>::iterator eit;
@@ -1247,7 +1245,7 @@ static bool embedded_T(vtol_vertex_sptr v, vtol_edge_2d_sptr bar, vcl_vector<vto
     }
   }
   delete edges;
-  embedded = (tedges>=3);
+  bool embedded = (tedges>=3);
   return embedded;
 }
 
@@ -1764,7 +1762,7 @@ unsigned short sdet_edgel_regions::get_intensity(unsigned int x)
 void sdet_edgel_regions::AccumulateMeans()
 {
   vul_timer t;
-  unsigned int i =0;
+  unsigned int i;
   //Initialize the intensity face means
   for (i=min_region_label_; i<max_region_label_; i++)
     if (intensity_face_index_[i])

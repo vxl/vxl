@@ -63,7 +63,7 @@ vcl_string clsfy_adaboost_sorted_builder::is_a() const
 // working on a single element of the input vector.
 double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
                                             mbl_data_wrapper<vnl_vector<double> >& inputs,
-                                            unsigned nClasses,
+                                            unsigned /* nClasses */,
                                             const vcl_vector<unsigned> &outputs) const
 {
   // N.B. ignore nClasses=1, i.e. always binary classifier

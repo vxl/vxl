@@ -110,7 +110,7 @@ brip_float_ops::half_resolution(vil1_memory_image_of<float> const & input,
   brip_float_ops::half_resolution_1d(in2, half_w, k0, k1, k2, out2);
   brip_float_ops::half_resolution_1d(in3, half_w, k0, k1, k2, out3);
   brip_float_ops::half_resolution_1d(in4, half_w, k0, k1, k2, out4);
-  int x=0, y=0;
+  int x=0, y;
   //do the first output line
   for (;x<half_w;x++)
     output(x,0)= k0*out0[x]+ 2.0f*(k1*out1[x]+k2*out2[x]);

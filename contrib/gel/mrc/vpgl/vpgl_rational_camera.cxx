@@ -268,7 +268,7 @@ void vpgl_rational_camera::world_to_image(
     vnl_vector<double> const& world_3d_pt,
     double& image_u,
     double& image_v,
-    double time)
+    double /* time */)
 {
     static vcl_string method_name = "vpgl_rational_camera::world_to_image: ";
 

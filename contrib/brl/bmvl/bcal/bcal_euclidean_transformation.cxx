@@ -41,7 +41,7 @@ bool bcal_euclidean_transformation::is_invertible(double time) const
   return true;
 }
 
-vnl_vector<double> bcal_euclidean_transformation::execute(const vnl_vector<double> &v, double tims) const
+vnl_vector<double> bcal_euclidean_transformation::execute(const vnl_vector<double> &v, double /* tims */) const
 {
   // require not completed yet
   assert(is_valid());
@@ -52,7 +52,7 @@ vnl_vector<double> bcal_euclidean_transformation::execute(const vnl_vector<doubl
 }
 
 
-vnl_vector<double> bcal_euclidean_transformation::inverse(const vnl_vector<double> &v, double time) const
+vnl_vector<double> bcal_euclidean_transformation::inverse(const vnl_vector<double> &v, double /* time */) const
 {
   // not finished yet
   vcl_cerr<<"\n bcal_euclidean_transformation::inverse() ----- not finished yet\n";

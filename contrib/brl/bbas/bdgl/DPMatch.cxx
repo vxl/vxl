@@ -138,7 +138,7 @@ vcl_map <int,int> DPMatch::refine_mapping()
   return one_to_one;
 }
 
-double DPMatch::euclidean_distance(vnl_matrix<double> R,vnl_matrix<double> T,double scale)
+double DPMatch::euclidean_distance(vnl_matrix<double> R,vnl_matrix<double> T,double /* scale */)
 {
   vcl_map<int,int>:: iterator iter1;
   vcl_vector<double> x1,y1,x2,y2,x1t,y1t;
@@ -489,7 +489,7 @@ void DPMatch::init()
  dc2=bdgl_curve_algs::create_digital_curves(points2);
 }
 
-double DPMatch::computeEpipolarCost(int i, int ip, int j, int jp)
+double DPMatch::computeEpipolarCost(int i, int /* ip */, int j, int /* jp */)
 {
   vgl_homg_point_2d<double> e(ep_pt);
   // assuming the variance of a point to be 0.5 pixel

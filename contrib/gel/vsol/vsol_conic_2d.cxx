@@ -387,8 +387,8 @@ void vsol_conic_2d::hyperbola_parameters(double &cx,
 //: Return 2 parabola parameters: top (`cx',`cy'), orientation (`cosphi',`sinphi')
 // Require: is_parabola()
 //---------------------------------------------------------------------------
-void vsol_conic_2d::parabola_parameters(double &cx,
-                                        double &cy,
+void vsol_conic_2d::parabola_parameters(double & /* cx */,
+                                        double & /* cy */,
                                         double &cosphi,
                                         double &sinphi) const
 {

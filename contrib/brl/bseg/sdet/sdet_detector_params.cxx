@@ -260,7 +260,7 @@ vcl_ostream& operator << (vcl_ostream& os, const sdet_detector_params& dp)
 }
 //------------------------------------------------------------
 //: Describe the parameters to a parameter modifier.
-void sdet_detector_params::Describe(ParamModifier& mod)
+void sdet_detector_params::Describe(ParamModifier& /* mod */)
 {
 //   static UIChoice JunctionClosure[] =
 //   {

@@ -778,7 +778,7 @@ double  bdgl_curve_algs::compute_transformed_euclidean_distance
                                             bdgl_tracker_curve_sptr c2,
                                             vnl_matrix<double> R,
                                             vnl_matrix<double> T,
-                                            double s,vcl_map<int,int> alignment)
+                                            double /* s */,vcl_map<int,int> alignment)
 {
   if (!c1.ptr() && !c2.ptr())
     return -1;

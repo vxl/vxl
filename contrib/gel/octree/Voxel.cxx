@@ -27,7 +27,7 @@ vcl_ostream &operator<<( vcl_ostream &os, const Voxel &a)
   return os << a.depth << " " << a.x << " " << a.y << " " << a.z;
 }
 
-bool operator<( Voxel &v1, Voxel &v2)
+bool operator<( Voxel & /* v1 */, Voxel & /* v2 */)
 {
   assert(0);
   return false;

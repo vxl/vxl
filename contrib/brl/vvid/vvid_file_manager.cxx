@@ -316,7 +316,6 @@ void vvid_file_manager::load_video_file()
   if (win_)
     win_->reshape(2*width_, height_);
   int i = 0;
-  int inc = 40;
   if (cache_frames_)
   {
     for (pframe = my_movie_->first(); pframe!=my_movie_->last(); ++pframe)
@@ -326,7 +325,6 @@ void vvid_file_manager::load_video_file()
       bgui_vtol2D_tableau_new  e(itab);
       tabs_.push_back(e);
       vcl_cout << "Loading Frame [" << i << "]: (" <<width_ <<'x'<<height_ << ")\n";
-      ++inc;
       ++i;
     }
     v2D0_->child.assign(tabs_[0]);

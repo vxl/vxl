@@ -624,7 +624,7 @@ static vnl_matrix_fixed<double, 3,3> skew_transform(const double ah,
 // and vertical (gv) directions. The transformation makes each of these
 // distances equal to spacing. The result is returned in S.
 
-bool sdet_grid_finder::scale_transform(const double max_distance,
+bool sdet_grid_finder::scale_transform(const double /* max_distance */,
                                        vcl_vector<vsol_line_2d_sptr> const& gh,
                                        vcl_vector<vsol_line_2d_sptr> const& gv,
                                        vnl_matrix_fixed<double, 3, 3>& S)
@@ -1484,7 +1484,7 @@ bool sdet_grid_finder::check_grid_match(vil1_image img)
 bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
                                               int x,int y,
                                               double & mean_intensity,
-                                              double & intensity_sigma)
+                                              double & /* intensity_sigma */)
 {
 
   gevd_bufferxy img_buff(img);

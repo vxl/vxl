@@ -97,7 +97,7 @@ void clsfy_knn_builder::b_read(vsl_b_istream& bfs)
 // indicate a binary classifier
 double clsfy_knn_builder::build(clsfy_classifier_base& model,
                                 mbl_data_wrapper<vnl_vector<double> >& inputs,
-                                unsigned nClasses,
+                                unsigned /* nClasses */,
                                 const vcl_vector<unsigned> &outputs) const
 {
   const unsigned n = inputs.size();

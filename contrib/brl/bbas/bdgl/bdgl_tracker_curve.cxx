@@ -153,7 +153,7 @@ void bdgl_tracker_curve
   }
 }
 
-double bdgl_tracker_curve ::compute_euclidean_distance(vnl_matrix<double> R,vnl_matrix<double> T,double s)
+double bdgl_tracker_curve ::compute_euclidean_distance(vnl_matrix<double> R,vnl_matrix<double> T,double /* s */)
 {
   if (get_best_match_prev())
   {
@@ -177,10 +177,10 @@ double bdgl_tracker_curve ::compute_euclidean_distance(vnl_matrix<double> R,vnl_
       curve2.push_back(point2);
     }
     compute_transformation(curve1,tcurve1,R,T);
-    int min_index=0;
     for (unsigned int i=0; i<tcurve1.size(); ++i)
     {
       double min_dist=1e6;
+      int min_index=0;
       for (unsigned int j=0; j<curve2.size(); ++j)
       {
         double dist=vcl_sqrt((tcurve1[i].x()-curve2[j].x())*(tcurve1[i].x()-curve2[j].x())
@@ -201,7 +201,7 @@ double bdgl_tracker_curve ::compute_euclidean_distance(vnl_matrix<double> R,vnl_
     return -1;
 }
 
-double bdgl_tracker_curve ::compute_euclidean_distance_next(vnl_matrix<double> R,vnl_matrix<double> T,double s)
+double bdgl_tracker_curve ::compute_euclidean_distance_next(vnl_matrix<double> R,vnl_matrix<double> T,double /* s */)
 {
   if (get_best_match_next())
   {

@@ -36,7 +36,7 @@ mvl2_video_reader* mvl2_video_from_sequence::clone() const
 }
 
 // possible options : Grey
-bool mvl2_video_from_sequence::initialize( int width, int height,
+bool mvl2_video_from_sequence::initialize( int /* width */, int /* height */,
                                            vcl_string format, vcl_string file_name)
 {
   use_colour_=true;

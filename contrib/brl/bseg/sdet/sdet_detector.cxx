@@ -338,8 +338,8 @@ void sdet_detector::print(vcl_ostream &strm) const
        << vcl_endl;
 }
 
-void sdet_detector::DoBreakCorners(vcl_vector<vtol_edge_2d_sptr >& in_edgels,
-                                   vcl_vector<vtol_edge_2d_sptr >& out_edgels)
+void sdet_detector::DoBreakCorners(vcl_vector<vtol_edge_2d_sptr >& /* in_edgels */,
+                                   vcl_vector<vtol_edge_2d_sptr >& /* out_edgels */)
 {
   vcl_cerr << "sdet_detector::DoBreakCorners() NYI\n";
 }

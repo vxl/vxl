@@ -66,7 +66,7 @@ static void test_curve_algs()
     vcl_cout << " p[0] " << pts[0] << " p[1] " << pts[1] << '\n';
   //test closest point
   double xc=0, yc=0;
-  good =  bdgl_curve_algs::closest_point(dc, 0.5, 2.0, xc, yc);
+  /* good = */ bdgl_curve_algs::closest_point(dc, 0.5, 2.0, xc, yc);
   vcl_cout << "Closest Point to (0.5, 2.0)=(" << xc << ' ' << yc << ")\n";
 }
 

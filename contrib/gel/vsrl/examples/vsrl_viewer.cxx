@@ -7,12 +7,11 @@
 #include <vsrl/vsrl_menus.h>
 #include <vsrl/vsrl_manager.h>
 
-int main (int &argc, char **argv)
+int main (int & /* argc */, char ** /* argv */)
 {
   //  vgui::init(argc, argv);
-  argv = NULL;
   int tmp = 1;
-  vgui::init(tmp, argv);
+  vgui::init(tmp, NULL);
   vgui_menu menubar = vsrl_menus::get_menus();
   unsigned w=512, h=512;
   vcl_string title = "Dense Matcher Test Program";

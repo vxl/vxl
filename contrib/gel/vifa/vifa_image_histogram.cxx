@@ -73,7 +73,7 @@ init(void)
 
 void vifa_image_histogram::
 fill_histogram(vil_image_view_base_sptr  image,
-               double                    percentage)
+               double                    /* percentage */)
 {
   // Get the base histogram's array of counts
   float*  counts = this->GetCounts();

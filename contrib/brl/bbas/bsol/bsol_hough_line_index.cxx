@@ -795,7 +795,7 @@ vbl_array_2d<unsigned char> bsol_hough_line_index::get_hough_image()
   for (int r=0;r<r_dim_;r++)
     for (int th=0;th<th_dim_;th++)
     {
-      unsigned char val = 0;
+      unsigned char val;
       int n_lines = index_[r][th]->size();
       float v = 255*n_lines/scale;
       val = (unsigned char)v;

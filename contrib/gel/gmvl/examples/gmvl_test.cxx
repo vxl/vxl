@@ -12,7 +12,7 @@
 #include <gmvl/gmvl_tag_node.h>
 #include <gmvl/gmvl_helpers.h>
 
-int main( int argc, char **argv)
+int main( int /* argc */, char ** /* argv */)
 {
 #if 0
   vbl_bit_array_2d ba(5,5, false);

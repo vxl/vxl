@@ -84,7 +84,7 @@ rrel_shift2d_est::compute_residuals(
 bool
 rrel_shift2d_est::weighted_least_squares_fit(
     vnl_vector<double>& params,
-    vnl_matrix<double>& norm_covar,
+    vnl_matrix<double>& /* norm_covar */,
     const vcl_vector<double>* weights ) const
 {
   const vcl_vector<double> * w;

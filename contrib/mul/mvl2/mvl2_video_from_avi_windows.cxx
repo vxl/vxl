@@ -29,7 +29,7 @@ mvl2_video_reader* mvl2_video_from_avi::clone() const
 }
 
 // possible options : Grey
-bool mvl2_video_from_avi::initialize( int width, int height,
+bool mvl2_video_from_avi::initialize( int /* width */, int /* height */,
                                       vcl_string format, vcl_string file_name)
 {
   if (!format.find(vcl_string("Grey"))) use_colour_=false;

@@ -54,7 +54,7 @@ int main(int argc, char** argv)
       vcl_cout << "Frame index out of range \n";
       return -2;
     }
-  int pos = 0;
+  int pos;
   if(frame_index()<1.0)
     pos = (int)(frame_index()*(my_movie->length()-1));
   else

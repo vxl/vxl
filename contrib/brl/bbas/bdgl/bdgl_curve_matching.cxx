@@ -130,7 +130,7 @@ void bdgl_curve_matching::match_next_tail_curve(bdgl_tracker_curve_sptr parent_c
 
 double bdgl_curve_matching::coarse_match_DP(bdgl_curve_description * desc1,
                                             bdgl_curve_description * desc2,
-                                            vgl_point_2d<double> epi)
+                                            vgl_point_2d<double> /* epi */)
 {
   vcl_vector<vcl_pair<double,double> > v1,v2;
 
@@ -163,7 +163,7 @@ double bdgl_curve_matching::match_DP(bdgl_curve_description * desc1,
                                      bdgl_curve_description * desc2,vcl_map<int,int> &alignment,
                                      double & cost, vnl_matrix<double> &R,vnl_matrix<double> &T,
                                      vnl_matrix<double> & Tbar,double & scale,vcl_vector<int> & tail1,
-                                     vcl_vector<int> & tail2,vgl_point_2d<double> & e)
+                                     vcl_vector<int> & tail2,vgl_point_2d<double> & /* e */)
 {
   double dist = -1; // dummy initialisation, to avoid compiler warning
 
@@ -839,7 +839,7 @@ double bdgl_curve_matching::compute_std(vcl_vector<double> t)
 }
 
 void bdgl_curve_matching::best_matches_tc(vcl_vector<bdgl_tracker_curve_sptr> * current_curves,
-                                          vcl_vector<bdgl_tracker_curve_sptr> * past_curves,
+                                          vcl_vector<bdgl_tracker_curve_sptr> * /* past_curves */,
                                           vcl_vector<bdgl_tracker_curve_sptr> * future_curves)
 
 {
@@ -856,7 +856,6 @@ void bdgl_curve_matching::best_matches_tc(vcl_vector<bdgl_tracker_curve_sptr> * 
     for (iter=(*current_curves).begin();iter!=(*current_curves).end();iter++)
     {
       // iterating over i
-      dji=0;
       if (!(*iter)->ismatchedprev_)
       {
         for (unsigned int i=0; i<(*iter)->prev_.size(); ++i)

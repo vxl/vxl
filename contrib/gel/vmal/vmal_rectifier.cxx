@@ -206,8 +206,8 @@ void vmal_rectifier::compute_joint_epipolar_transform_new (
   vnl_double_3* points1,  // Points in the other view
   int numpoints,          // Number of matched points
   vnl_double_3x3 &H0, vnl_double_3x3 &H1,  // The matrices to be returned
-  int in_height, int in_width, // Dimensions of the input images
-  int &out_height, int &out_width,
+  int /* in_height */, int /* in_width */, // Dimensions of the input images
+  int & /* out_height */, int & /* out_width */,
   double sweeti, double sweetj,// Sweet spot in the first image
   bool affine // = FALSE
 )
@@ -237,12 +237,12 @@ void vmal_rectifier::compute_joint_epipolar_transform_new (
 }
 
 void vmal_rectifier::compute_initial_joint_epipolar_transforms (
-   vnl_double_3* points0,       // Points in one view
-   vnl_double_3* points1,       // Points in the other view
-   int numpoints,               // Number of matched points
+   vnl_double_3* /* points0 */,       // Points in one view
+   vnl_double_3* /* points1 */,       // Points in the other view
+   int /* numpoints */,               // Number of matched points
    vnl_double_3x3 &H0, vnl_double_3x3 &H1,  // The matrices to be returned
    double sweeti, double sweetj,// Sweet spot in the first image
-   bool affine // = FALSE
+   bool /* affine */ // = FALSE
    )
 {
    // Compute the pair of epipolar transforms to rectify matched points

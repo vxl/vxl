@@ -29,12 +29,11 @@ static void sdet_test_detector(int argc, char * argv[])
       n = edges->size();
     vcl_cout << "nedges = " << n << '\n';
     TEST("...", n==647 || n==648 || n==649, true);
-    int x = 0, y = 0;
     if (n)
     {
       vtol_edge_2d_sptr e = (*edges)[0];
-      x = int(e->v1()->cast_to_vertex_2d()->x());
-      y = int(e->v1()->cast_to_vertex_2d()->y());
+      int x = int(e->v1()->cast_to_vertex_2d()->x());
+      int y = int(e->v1()->cast_to_vertex_2d()->y());
       vcl_cout << "v(" << x << ' ' << y << ")\n";
       TEST("...", x==229&&y==235, true);
     }

@@ -199,10 +199,10 @@ bgui_vsol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr const& dc)
 bgui_vsol_soview2D_dotted_digital_curve*
 bgui_vsol2D_tableau::add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc,
                                               const float r,
-                                              const float g,
-                                              const float b,
-                                              const float line_width,
-                                              const float point_radius)
+                                              const float /* g */,
+                                              const float /* b */,
+                                              const float /* line_width */,
+                                              const float /* point_radius */)
 {
   bgui_vsol_soview2D_dotted_digital_curve* obj =
     new bgui_vsol_soview2D_dotted_digital_curve(dc);

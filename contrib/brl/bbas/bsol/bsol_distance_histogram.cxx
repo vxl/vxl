@@ -161,11 +161,11 @@ distance_peaks(double& peak1, double& peak2, double min_peak_height_ratio)
     s_peak2 = 7, fail=8;
   //Initial state assignment
   int state=init;
-  int i=0,upi1=0, upi2=0;
+  int upi1=0, upi2=0;
   double v=0;
   double tr=0, peak1_bin_counts=0;
   double start_distance = 0;
-  for (i = 0; i<nbins&&state!=fail&&state!=s_peak2; i++)
+  for (int i = 0; i<nbins&&state!=fail&&state!=s_peak2; i++)
     {
 //        vcl_cout << "State[" << state << "], D = " << bin_values_[i]
 //                 << " C = "<< bin_counts_[i] << " srt_d = " << start_distance
