@@ -118,8 +118,7 @@ vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_3d<Type>& p);
 // The method checks whether |w| <= tol * max(|x|,|y|,|z|)
 // \relates vgl_homg_point_3d
 template <class Type> inline
-bool is_ideal(vgl_homg_point_3d<Type> const& p, Type tol = Type(0)) {
-  return p.ideal(); }
+bool is_ideal(vgl_homg_point_3d<Type> const& p, Type tol = Type(0)) { return p.ideal(tol); }
 
 //: Return true iff the 4 points are coplanar, i.e., they belong to a common plane
 // \relates vgl_homg_point_3d

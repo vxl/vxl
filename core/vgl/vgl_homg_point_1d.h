@@ -35,7 +35,7 @@ class vgl_homg_point_1d
   //: Construct from homogeneous 2-array.
   inline vgl_homg_point_1d(const T v[2]) : x_(v[0]), w_(v[1]) {}
 
-#if 0
+#if 0 // the compiler defaults are better...
   // Default copy constructor
   inline vgl_homg_point_1d(const vgl_homg_point_1d<T>& that) : x_(p.x()), w_(p.w()) {}
 
@@ -56,6 +56,7 @@ class vgl_homg_point_1d
 
   inline T x() const { return x_; }
   inline T w() const { return w_; }
+  inline bool get_nonhomogeneous(T& ret) const { if (w_!=0) ret=x_/w_; return w_!=0; }
 
   //: Set \a x,w
   // Note that it does not make sense to set \a x or \a w individually.
@@ -89,7 +90,7 @@ vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_1d<T>& p);
 // The method checks whether |w| <= tol * |x|
 // \relates vgl_homg_point_1d
 template <class T> inline
-bool is_ideal(vgl_homg_point_1d<T> const& p, T tol = T(0)) { return p.ideal(); }
+bool is_ideal(vgl_homg_point_1d<T> const& p, T tol = T(0)) { return p.ideal(tol); }
 
 //: The difference of two points is the distance between the two.
 // This function is only valid if the points are not at infinity.

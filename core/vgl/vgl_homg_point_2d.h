@@ -119,7 +119,7 @@ vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_2d<Type>& p);
 // The method checks whether |w| <= tol * max(|x|,|y|)
 // \relates vgl_homg_point_2d
 template <class Type> inline
-bool is_ideal(vgl_homg_point_2d<Type> const& p, Type tol=Type(0)){return p.ideal();}
+bool is_ideal(vgl_homg_point_2d<Type> const& p, Type tol=Type(0)){return p.ideal(tol);}
 
 //: The difference of two points is the vector from second to first point
 // This function is only valid if the points are not at infinity.
