@@ -12,7 +12,6 @@
 #include <vgl/vgl_distance.h>
 #include <vgui/vgui_soview2D.h>
 
-#include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel.h>
@@ -64,10 +63,11 @@ void bgui_vsol_soview2D_point::translate(float tx, float ty)
 
 vcl_ostream& bgui_vsol_soview2D_line_seg::print(vcl_ostream& s) const
 {
-  s << "[bgui_vsol_soview2D_line_seg " << sptr->p0()->x() << ','
-                                              << sptr->p0()->y() << " -- "
-                                              << sptr->p1()->x() << ','
-                                              << sptr->p1()->y() << ' ';
+  s << "[bgui_vsol_soview2D_line_seg "
+    << sptr->p0()->x() << ','
+    << sptr->p0()->y() << " -- "
+    << sptr->p1()->x() << ','
+    << sptr->p1()->y() << ' ';
   return vgui_soview2D::print(s) << ']';
 }
 
@@ -122,7 +122,7 @@ vcl_ostream& bgui_vsol_soview2D_polyline::print(vcl_ostream& s) const
   for (unsigned int i=0; i<n; ++i)
   {
     s << sptr->vertex(i)->x() << ',' << sptr->vertex(i)->y();
-    if (i!=n-1) s << " -- ";
+    if (i != n-1) s << " -- ";
   }
   return vgui_soview::print( s ) << " ]";
 }

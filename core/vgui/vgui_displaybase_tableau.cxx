@@ -15,8 +15,6 @@
 #include <vcl_algorithm.h>
 #include <vcl_utility.h> // for vcl_pair<,>
 
-#include <vbl/vbl_bool_ostream.h>
-
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
 #include <vgui/vgui_event.h>
