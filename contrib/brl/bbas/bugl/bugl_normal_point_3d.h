@@ -8,7 +8,7 @@
 #include <bugl/bugl_gaussian_point_3d.h>
 #include <vbl/vbl_ref_count.h>
 
-class bugl_normal_point_3d : public bugl_gaussian_point_3d<double>, vbl_ref_count
+class bugl_normal_point_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_count
 {
   private:
 //  bugl_gaussian_point_3d<double> p_;

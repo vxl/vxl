@@ -6,7 +6,7 @@
 
 //: \brief a specification of template class bugl_gaussian_point_2d
 //
-class bugl_normal_point_2d: public bugl_gaussian_point_2d<double>, vbl_ref_count
+class bugl_normal_point_2d: public bugl_gaussian_point_2d<double>, public vbl_ref_count
 {
 //  bugl_gaussian_point_2d<double> p_;
   
