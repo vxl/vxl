@@ -32,7 +32,7 @@ int main(int, char **)
   vsol_point_2d_sptr p0 = new vsol_point_2d(1.0,0.0);
   vsol_point_2d_sptr p1 = new vsol_point_2d(1.0,5.0);
 
-  vdgl_digital_curve_sptr dc = new vdgl_digital_curve(*p0, *p1);
+  vdgl_digital_curve_sptr dc = new vdgl_digital_curve(p0, p1);
   vgl_line_2d<double> l(0.0, 1.0, -2.1);
   vcl_vector<vgl_point_2d<double> > pts;
   bool good = bdgl_curve_algs::intersect_line(dc, l, pts);
