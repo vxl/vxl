@@ -6,7 +6,7 @@ ADD_EXECUTABLE( vbl_test_all
   test_driver.cxx
   vbl_test_classes.cxx vbl_test_classes.h
   vbl_test_all.cxx
-  vbl_test_array.cxx
+  vbl_test_array.cxx vbl_test_array_x.cxx vbl_test_array_x.h
   vbl_test_sparse_array_2d.cxx
   vbl_test_sparse_array_3d.cxx
   vbl_test_smart_ptr.cxx
