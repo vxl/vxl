@@ -5,8 +5,10 @@
 // \brief Various functions for manipulating image views
 // \author Tim Cootes and Ian Scott - Manchester
 
+#include <vxl_config.h>
 #include <vil/vil_rgb.h>
 #include <vil2/vil2_image_data.h>
+#include <vil2/vil2_byte.h>
 
 //: Explicit overload for bool
 VCL_DEFINE_SPECIALIZATION
@@ -17,7 +19,15 @@ void vil2_print_value(vcl_ostream& os, const bool& value)
 
 //: Explicit overload for unsigned char
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const unsigned char& value)
+void vil2_print_value(vcl_ostream& os, const vil2_byte& value)
+{
+  os.width(3);
+  os<<int(value);
+}
+
+//: Explicit overload for unsigned char
+VCL_DEFINE_SPECIALIZATION
+void vil2_print_value(vcl_ostream& os, const vxl_int_8& value)
 {
   os.width(3);
   os<<int(value);
@@ -25,7 +35,7 @@ void vil2_print_value(vcl_ostream& os, const unsigned char& value)
 
 //: Explicit overload for unsigned short
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const short& value)
+void vil2_print_value(vcl_ostream& os, const vxl_int_16& value)
 {
   int v=value;
   if (v<0) { v=-v; os<<'-'; } else os<<' ';
@@ -38,7 +48,7 @@ void vil2_print_value(vcl_ostream& os, const short& value)
 
 //: Explicit overload for unsigned short
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const unsigned short& value)
+void vil2_print_value(vcl_ostream& os, const vxl_uint_16& value)
 {
   if (value<10)    os<<'0';
   if (value<100)   os<<'0';
@@ -49,7 +59,7 @@ void vil2_print_value(vcl_ostream& os, const unsigned short& value)
 
 //: Explicit overload for unsigned short
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const unsigned int& value)
+void vil2_print_value(vcl_ostream& os, const vxl_uint_32& value)
 {
   if (value<10)       os<<'0';
   if (value<100)      os<<'0';
@@ -63,7 +73,7 @@ void vil2_print_value(vcl_ostream& os, const unsigned int& value)
 
 //: Explicit overload for unsigned short
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const int& value)
+void vil2_print_value(vcl_ostream& os, const vxl_int_32& value)
 {
   int v=value;
   if (v<0) { v=-v; os<<'-'; } else os<<' ';
