@@ -176,7 +176,7 @@ void vil2_gauss_filter_5tap(
 
   // Reduce plane-by-plane
 
-  for (int p=0;p<n_planes;++p)
+  for (unsigned p=0;p<n_planes;++p)
     vil2_gauss_filter_5tap(&src_im(0,0,p), src_im.istep(), src_im.jstep(),
                            &dest_im(0,0,p), dest_im.istep(), dest_im.jstep(), ni,nj,
                            params, work.top_left_ptr());
