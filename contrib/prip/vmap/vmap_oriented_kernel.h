@@ -1,4 +1,4 @@
-// This is contrib/prip/vmap/vmap_oriented_kernel.h
+// This is prip/vmap/vmap_oriented_kernel.h
 #ifndef vmap_oriented_kernel_h_
 #define vmap_oriented_kernel_h_
 //:
@@ -11,40 +11,35 @@
 //  06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include <vector>
 #include "vmap_kernel.h"
 
 //: Wrapper to avoid having non rooted hierarchies while constructing a kernel.
 template <class vmap_kernel>
 class vmap_oriented_kernel : public vmap_kernel
 {
-public:
+ public:
 
   //:
   typedef vmap_kernel _Base ;
-  
+
   //:
   typedef typename _Base::map_type map_type ;
- 
+
   //:
   typedef typename _Base::dart_iterator dart_iterator ;
   //typedef typename map_type::vmap_dart_index vmap_dart_index ;
 
   //:
-  vmap_oriented_kernel(map_type & arg)
-      : _Base(arg)
-  {}
-  
+  vmap_oriented_kernel(map_type & arg) : _Base(arg) {}
+
   //:
-  ~vmap_oriented_kernel()
-  {}
+  ~vmap_oriented_kernel() {}
 
   //: Before any addion/test
   void initialise() ;
 
   //: After addions
-  void finalise()
-  {}
+  void finalise() {}
 
   //:
   bool can_insert(const dart_iterator & arg) const
@@ -68,15 +63,14 @@ public:
     _mark.clear() ;
   }
 
-private :
+ private :
 
   //:
   typedef std::vector<int> Mark ;
-  
+
   //:
   Mark _mark ;
 };
-
 
 #include "vmap_oriented_kernel.txx"
 
