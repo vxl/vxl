@@ -1,24 +1,21 @@
-// This is ./vxl/vgl/algo/vgl_homg_operators_3d.txx
+// This is vxl/vgl/algo/vgl_homg_operators_3d.txx
 #ifndef vgl_homg_operators_3d_txx_
 #define vgl_homg_operators_3d_txx_
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include "vgl_homg_operators_3d.h"
 
-#include <vcl_list.h>
+#include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_cmath.h> // for vcl_sqrt(), vcl_acos()
 
-#include <vnl/vnl_matops.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/algo/vnl_svd.h>
 
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
-#include <vgl/vgl_homg_line_3d_2_points.h>
-#include <vgl/algo/vgl_homg_operators_3d.h>
 
 //-----------------------------------------------------------------------------
 
@@ -97,7 +94,7 @@ vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane (
 
   // Scale for conditioning
   double scale;
-  if( numerator + denominator != 0 )
+  if ( numerator + denominator != 0 )
     scale = 1.0/(numerator + denominator);
   else
     scale = 1.0/numerator;
@@ -156,7 +153,7 @@ vgl_homg_operators_3d<Type>::perp_distance_squared (const vgl_homg_line_3d& l,
 //: Return the line which is perpendicular to l and passes through p.
 //
 template <class Type>
-vgl_homg_operators_3d<Type>::vgl_homg_line_3d
+typename vgl_homg_operators_3d<Type>::vgl_homg_line_3d
 vgl_homg_operators_3d<Type>::perp_line_through_point (const vgl_homg_line_3d& l,
                                                       const vgl_homg_point_3d<Type>& p)
 {
@@ -193,7 +190,7 @@ vgl_homg_operators_3d<Type>::perp_projection (const vgl_homg_line_3d& l,
 //: Return the intersection line of the planes
 //
 template <class Type>
-vgl_homg_operators_3d<Type>::vgl_homg_line_3d
+typename vgl_homg_operators_3d<Type>::vgl_homg_line_3d
 vgl_homg_operators_3d<Type>::planes_to_line (const vgl_homg_plane_3d<Type>& plane1,
                                              const vgl_homg_plane_3d<Type>& plane2)
 {
@@ -321,7 +318,7 @@ vgl_homg_operators_3d<Type>::intersection_point (const vcl_vector<vgl_homg_plane
   int n = planes.size();
   vnl_matrix<Type> A(planes.size(), 4);
 
-  for(int i =0; i < n; ++i) {
+  for (int i =0; i < n; ++i) {
     A(i,0) = planes[i].nx();
     A(i,1) = planes[i].ny();
     A(i,2) = planes[i].nz();

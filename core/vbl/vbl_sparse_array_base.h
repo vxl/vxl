@@ -68,7 +68,7 @@ public:
   void clear();
 
     //: The type of iterators into the efficient storage
-  typedef Map::const_iterator const_iterator;
+  typedef typename Map::const_iterator const_iterator;
 
     //: Return number of locations that have been assigned a value using "put".
   unsigned count_nonempty() const { return storage_.size(); }
@@ -81,7 +81,7 @@ public:
 
     //: The type of values of the controlled sequence
     // The value_type is a vcl_pair<Index_type, typename T_type>
-  typedef Map::value_type sequence_value_type;
+  typedef typename Map::value_type sequence_value_type;
 
     //: A bidirectional iterator pointing at the first non-empty element
     // If the array is empty it points just beyond the end.

@@ -40,7 +40,7 @@ void vbl_sparse_array_base<T, Index>::clear()
 template <class T, class Index>
 T const & vbl_sparse_array_base<T, Index>::operator () (Index i) const
 {
-  Map::const_iterator p = storage_.find(i);
+  typename Map::const_iterator p = storage_.find(i);
 
   assert(p != storage_.end());
 
@@ -51,7 +51,7 @@ T const & vbl_sparse_array_base<T, Index>::operator () (Index i) const
 template <class T, class Index>
 void vbl_sparse_array_base<T, Index>::erase (Index i)
 {
-  Map::iterator p = storage_.find(i);
+  typename Map::iterator p = storage_.find(i);
 
   assert(p != storage_.end());
 
@@ -62,7 +62,7 @@ void vbl_sparse_array_base<T, Index>::erase (Index i)
 template <class T, class Index>
 T* vbl_sparse_array_base<T, Index>::get_addr(Index i)
 {
-  Map::iterator p = storage_.find(i);
+  typename Map::iterator p = storage_.find(i);
 
   if (p == storage_.end())
     return 0;
@@ -81,7 +81,7 @@ bool vbl_sparse_array_base<T, Index>::fullp(Index i) const
 template <class T, class Index>
 bool vbl_sparse_array_base<T, Index>::put(Index i, const T& t)
 {
-  vcl_pair<Map::iterator,bool> res = storage_.insert(Map::value_type(i,t));
+  vcl_pair<typename Map::iterator,bool> res = storage_.insert(Map::value_type(i,t));
 
   return res.second;
 }

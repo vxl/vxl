@@ -31,6 +31,9 @@
 template <class T>
 class vbl_sparse_array_2d : public vbl_sparse_array_base<T, vcl_pair<unsigned, unsigned> >
 {
+  typedef typename vbl_sparse_array_base<T,vcl_pair<unsigned,unsigned> >::const_iterator const_iterator;
+  typedef typename vbl_sparse_array_base<T,vcl_pair<unsigned,unsigned> >::Index_type Index_type;
+
 public:
 
   //: Put a value into location (i,j).

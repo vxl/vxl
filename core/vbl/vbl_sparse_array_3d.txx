@@ -13,7 +13,8 @@
 template <class T>
 vcl_ostream& vbl_sparse_array_3d<T>::print(vcl_ostream& out) const
 {
-  for(const_iterator p = storage_.begin(); p != storage_.end(); ++p)
+  typedef typename vbl_sparse_array_base<T,vbl_triple<unsigned,unsigned,unsigned> >::const_iterator ci;
+  for(ci p = storage_.begin(); p != storage_.end(); ++p)
     out << "(" << (*p).first.first
         << "," << (*p).first.second
         << "," << (*p).first.third

@@ -17,7 +17,7 @@ void vsl_b_write(vsl_b_ostream &os, const vbl_sparse_array_base<T, Index> & p)
   vsl_b_write(os, io_version_no);
 
   vsl_b_write(os, p.count_nonempty());
-  for(vbl_sparse_array_base<T, Index>::const_iterator s = p.begin(); s != p.end(); ++s){
+  for(typename vbl_sparse_array_base<T, Index>::const_iterator s = p.begin(); s != p.end(); ++s){
     // the value_type of a map<Key, T> is "pair<Key const, T>", not "pair<Key, T>".
     vcl_pair<Index, T> tt((*s).first, (*s).second);
     vsl_b_write(os, tt);
@@ -76,7 +76,7 @@ void vsl_print_summary(vcl_ostream& os,const vbl_sparse_array_base<T, Index> & p
   os<<"nonempty elements: "<< p.count_nonempty() << vcl_endl;
   int k=0;
 
-  for(vbl_sparse_array_base<T, Index>::const_iterator s = p.begin();
+  for(typename vbl_sparse_array_base<T, Index>::const_iterator s = p.begin();
       s != p.end() && k<5; ++s)
   {
     k++;
