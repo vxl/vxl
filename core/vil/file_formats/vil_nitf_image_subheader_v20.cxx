@@ -1622,7 +1622,11 @@ StatusCode vil_nitf_image_subheader_v20::extract_ichipb_extension()
       // Grab FI_COL
       vcl_strncpy(temp,&work[offset],8); // grab string from buffer
       temp[8] = 0;                   // ensure NULL terminator
-      offset += 8;                   // advance to next field
+
+// COMMENT OUT LINE BELOW.  offset NOT REFERENCED AFTER THIS, SO
+// BORLAND COMPILER COMPLAINS ABOUT UNUSED VALUE.
+//      offset += 8;                   // advance to next field
+
       FI_COL = vcl_atoi(temp);         // store value into data structure
       vcl_cout << ":Full Image Col " << FI_COL << vcl_endl;
 
@@ -1795,7 +1799,11 @@ StatusCode vil_nitf_image_subheader_v20::extract_piaimc_extension()
         // Grab SATTRACK_ROW
         vcl_strncpy(temp, &work[offset], 4);               // grab string from buffer
         temp[4] = 0;                                   // ensure NULL terminator
+
+// COMMENT OUT LINE BELOW.  offset NOT REFERENCED AFTER THIS, SO
+// BORLAND COMPILER COMPLAINS ABOUT UNUSED VALUE.
         offset += 4;                                   // advance to next field
+
         SATTRACK_ROW = vcl_atoi(temp);                     // store value
         vcl_cout << ":Satellite Track ROW " << SATTRACK_ROW << vcl_endl;
 
@@ -1803,7 +1811,8 @@ StatusCode vil_nitf_image_subheader_v20::extract_piaimc_extension()
         vcl_cout << "Parsed and stored PIAIMC data.\n";
         PIAIMC_present = true; // Right on, baby!
         return error ? STATUS_BAD : STATUS_GOOD;
-}
+
+}  // end method extract_piaimc_extension
 
 // G. W. Brooksby 2/10/2003
 // Added support for STDIDx extension
@@ -1966,7 +1975,11 @@ StatusCode vil_nitf_image_subheader_v20::extract_stdid_extension()
 
     // Grab the RESERVED_2 field
     STRNCPY(RESERVED_2, &XSHD->XHD[offset],res2);
+
+// COMMENT OUT LINE BELOW.  offset NOT REFERENCED AFTER THIS, SO
+// BORLAND COMPILER COMPLAINS ABOUT UNUSED VALUE.
     offset += res2;
+
     vcl_cout << "RESERVED_2 = " << RESERVED_2 << vcl_endl;
 
     // Now we fix the RPC line & sample offset if this image
