@@ -1,16 +1,12 @@
-#include <vcl_ostream.h>
-
-
-
+#include <vcl_iostream.h>
 #include <mbl/mbl_lru_cache.h>
-
 #include <vnl/vnl_test.h>
 
 void test_lru_cache()
 {
   vcl_cout << "\n\n***********************\n"
-           << " Testing mbl_lru_cache \n"
-           << "***********************" << vcl_endl;
+           <<     " Testing mbl_lru_cache\n"
+           <<     "***********************\n";
 
   mbl_lru_cache<unsigned int, int> cache(3);
 
@@ -25,8 +21,6 @@ void test_lru_cache()
   cache.insert(5, -5);
   TEST("Lookup 3 miss",cache.lookup(3), 0);
   TEST("Lookup 2 hits -2",*cache.lookup(2), -2);
-
-
 }
 
 TESTMAIN(test_lru_cache);
