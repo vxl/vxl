@@ -125,10 +125,10 @@ void oxp_mpeg_codec_data::seek_to_iframe_before(int frame)
   typedef oxp_bunch_of_files::offset_t index_t;
   index_t byte = index_t(lba) * 2048;
   if (verbose)
-    vcl_fprintf(stderr, "seek_to_iframe_before: Frame %d -> Start at closest frame %d, LBA 0x%x, byte %ul\n", 
+    vcl_fprintf(stderr, __FILE__ ": seek_to_iframe_before: Frame %d -> Start at closest frame %d, LBA 0x%x, byte %lu\n", 
                 frame, start_frame_index, lba, (unsigned long) byte);
   if (lba < 0) {
-    vcl_fprintf(stderr, "oxp_mpeg_codec: ERROR!\n");
+    vcl_fprintf(stderr, __FILE__ ": ERROR!\n");
     return;
   }
   fp.seek(byte);
@@ -188,7 +188,7 @@ bool oxp_mpeg_codec_data::decode_until_desired(int f,
   // Check the ring buffer to see if any in there...
   for (int i = 0; i < 8; ++i)
     if (ring_buffer[i] && ring_buffer[i]->frame == f) {
-      if (verbose) vcl_fprintf(stderr, "decode_until_desired: Found frame %d in ring buffer\n", f);
+      if (verbose) vcl_fprintf(stderr, __FILE__ ": decode_until_desired: Found frame %d in ring buffer\n", f);
       convert_frame(ring_buffer[i], &r);
       r.done = true;
       return true;
@@ -196,7 +196,7 @@ bool oxp_mpeg_codec_data::decode_until_desired(int f,
 
   // Not in ring buffer, only possible if f < frame_number
   if (f <= frame_number) {
-    if (verbose) vcl_fprintf(stderr, "decode_until_desired: Need to seek for %d\n", f);
+    if (verbose) vcl_fprintf(stderr, __FILE__ ": decode_until_desired: Need to seek for %d\n", f);
     return false;
   }
 
@@ -241,7 +241,7 @@ int oxp_mpeg_codec_data::decode_mpeg2(unsigned char const *start, unsigned char 
 static
 int my_setup(vo_instance_t *self, int width, int height)
 {
-  if (verbose) vcl_printf("setup(%d, %d)\n", width, height);
+  if (verbose) vcl_fprintf(stderr, __FILE__ ": setup(%d, %d)\n", width, height);
   oxp_mpeg_codec_data *impl = (oxp_mpeg_codec_data*)self;
   impl->w = width;
   impl->h = height;
@@ -256,7 +256,7 @@ int my_setup(vo_instance_t *self, int width, int height)
 static
 void my_close(vo_instance_t *self)
 {
-  if (verbose) vcl_printf("close()\n");
+  if (verbose) vcl_fprintf(stderr, __FILE__ ": close()\n");
   oxp_mpeg_codec_data *impl = (oxp_mpeg_codec_data*)self;
 
   vcl_free(impl->ppm_frame);
@@ -272,7 +272,7 @@ my_get_frame(vo_instance_t *self, int flags)
 #define VO_BOTH_FIELDS (VO_TOP_FIELD | VO_BOTTOM_FIELD)
 #define VO_PREDICTION_FLAG 4
 #endif
-  if (verbose) vcl_printf("get(%d)\n", flags);
+  if (verbose) vcl_fprintf(stderr, __FILE__ ": get(%d)\n", flags);
   oxp_mpeg_codec_data *impl = (oxp_mpeg_codec_data*)self;
 
   if (! impl->ring_buffer[impl->ring_buffer_pos])
@@ -290,7 +290,7 @@ oxp_mpeg_codec_data::frame_plus_index*
 oxp_mpeg_codec_data::make_frame()
 {
   frame_plus_index *frame = (frame_plus_index*) vcl_malloc(sizeof(frame_plus_index));
-  if (verbose) vcl_printf("make: frame = 0x%08X\n", unsigned(frame));
+  if (verbose) vcl_fprintf(stderr, __FILE__ ": make_frame() : frame = 0x%08X\n", unsigned(frame));
   frame->base[0] = (uint8_t*) vcl_malloc(    w * h    );
   frame->base[1] = (uint8_t*) vcl_malloc((w>>1)*(h>>1));
   frame->base[2] = (uint8_t*) vcl_malloc((w>>1)*(h>>1));
@@ -335,17 +335,17 @@ void my_draw(vo_frame_t *frame_p)
   // got pending_decode from decode_until_desired
   if (p->frame == impl->frame_number) {
     if (verbose)
-      vcl_fprintf(stderr, "Found %d\n", impl->frame_number);
+      vcl_fprintf(stderr, __FILE__ ": Found %d\n", impl->frame_number);
     impl->convert_frame(frame, p);
     p->done = true;
   }
   else {
     if (verbose) {
       if (impl->frame_number < p->frame)
-        vcl_fprintf(stderr, "Skipping %d waiting for %d\n", 
+        vcl_fprintf(stderr, __FILE__ ": Skipping %d waiting for %d\n", 
                     impl->frame_number, p->frame);
       else
-        vcl_fprintf(stderr, "Queuing %d having got %d\n", 
+        vcl_fprintf(stderr, __FILE__ ": Queuing %d having got %d\n", 
                     impl->frame_number, p->frame);
     }
   }
@@ -363,28 +363,28 @@ void oxp_mpeg_codec_data::convert_frame(frame_plus_index* frame,
 
   if (this->output_format == oxp_mpeg_codec_data::grey) {
     // Recover in gray
-    int w = this->w;
-    int h = this->h;
-    unsigned char (*ppm_frame)[3] = this->ppm_frame;
+    //int w = this->w;
+    //int h = this->h;
+    //unsigned char (*ppm_frame)[3] = this->ppm_frame;
 
     int c = 0;
     for (int i=p->y0; i<p->h; ++i)
       for (int j=p->x0; j<p->w; ++j, ++c)
         // this is assuming the chroma channels are half-size in each direction.
-        p->buf[c]= Y[i*w+j];
+        p->buf[c]= Y[i*p->w+j];
   }
   else {
     // Recover in RGB
-    int w = this->w;
-    int h = this->h;
+    //int w = this->w;
+    //int h = this->h;
 
     int c = 0;
     for (int i=p->y0; i<p->h; ++i)
       for (int j=p->x0; j<p->w; ++j, c+=3)
         // this is assuming the chroma channels are half-size in each direction.
         oxp_yuv_to_rgb(Y[i*w+j],
-                       U[(i>>1)*(w>>1)+(j>>1)],
-                       V[(i>>1)*(w>>1)+(j>>1)],
+                       U[(i>>1)*(p->w>>1)+(j>>1)],
+                       V[(i>>1)*(p->w>>1)+(j>>1)],
                        &p->buf[c]);
   }
 }
@@ -461,12 +461,11 @@ int oxp_mpeg_codec::put_section(int position,
 
 bool oxp_mpeg_codec::probe(const char* fname)
 {
-  vcl_cerr << "oxp_mpeg_codec::probe[" << fname << "]\n";
   vcl_string fn(fname);
-  if (vul_file::size((fn + ".lst").c_str()) > 0)
-    return true;
-
-  return false;
+  
+  bool p = (vul_file::size((fn + ".lst").c_str()) > 0);
+  vcl_cerr << "oxp_mpeg_codec::probe[" << fname << "] -> " << (p ? "true" : "false") << "\n";
+  return p;
 }
 
 bool oxp_mpeg_codec::load(const char* fname, char mode)
