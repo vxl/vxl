@@ -125,7 +125,7 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\test_erode_disk.cxx
+SOURCE=.\vepl_test_erode_disk.cxx
 
 # End Source File
 # End Group
