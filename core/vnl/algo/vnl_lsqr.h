@@ -43,7 +43,7 @@ public:
   // Return code may be translated with translate_return_code().
   int minimize(vnl_vector<double>& x);
   
-  int get_number_of_iterations() { return num_iter_; }
+  int get_number_of_iterations() const { return num_iter_; }
 
   // -- Pontificate about the outcome of the last minimization.
   void diagnose_outcome(ostream& os) const;
