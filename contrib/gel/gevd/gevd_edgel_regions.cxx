@@ -84,7 +84,7 @@ void gevd_edgel_regions::print_region_array()
     }
   vcl_cout << "\n\n\n";
 }
-//Print the contents of the forward eqivalence index
+//Print the contents of the forward equivalence index
 void gevd_edgel_regions::print_region_equivalence()
 {
   vcl_cout << vcl_endl << "Label Equivalence:\n"
@@ -98,7 +98,7 @@ void gevd_edgel_regions::print_region_equivalence()
     }
   vcl_cout << vcl_endl;
 }
-//Print the contents of the reverse eqivalence index
+//Print the contents of the reverse equivalence index
 void gevd_edgel_regions::print_reverse_region_equivalence()
 {
   vcl_cout << vcl_endl << "Reverse Label Equivalence:\n"
@@ -365,7 +365,7 @@ bool gevd_edgel_regions::compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sg
 
 
 //----------------------------------------------------------
-//: assign eqivalence of region label b to region label a
+//: assign equivalence of region label b to region label a
 //
 bool gevd_edgel_regions::InsertRegionEquivalence(unsigned int label_b,
                                                  unsigned int label_a)
@@ -529,7 +529,7 @@ bool gevd_edgel_regions::get_next_label(vcl_vector<unsigned int>* labels,
 //: Form equivalence classes by transitive closure on each label.
 //    The idea is to add labels to the set, cur_set, by equivalence until no
 //    new equivalence groups can be found.  The current equivalence class,
-//    cur_set is repeatedly scanned whan new labels are added to pick up
+//    cur_set is repeatedly scanned when new labels are added to pick up
 //    new equivalence groups.  Old equivalence table entries are removed
 //    as they are used.  When the equivalence class corresponding to cur_lable
 //    is completely closed, then a new label not in a previously formed
@@ -598,9 +598,9 @@ bool gevd_edgel_regions::GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& /*sg*
 #endif
   return true; // TODO
 }
-//Advance along a line and generate continguous pixels on the line.
-//This function assures that the spatial digitization of the Edge(s)
-//produces completely connected boundaries.
+//: Advance along a line and generate contiguous pixels on the line.
+//  This function assures that the spatial digitization of the Edge(s)
+//  produces completely connected boundaries.
 static bool line_gen(float xs, float ys, float xe, float ye,
                      unsigned int& x, unsigned int& y)
 {
