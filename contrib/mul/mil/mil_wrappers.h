@@ -9,15 +9,20 @@
 #include <vimt/vimt_image_2d_of.h>
 #include <vnl/vnl_matrix.h>
 
-
 //: Create a vimt image that wraps a mil image - should only be used read only.
 //  Sorry about breaking the naming conventions, but I don't want this in vimt
 template <class T>
-inline
-vimt_image_2d_of<T> vimt_wrap_mil_image(const mil_image_2d_of<T>& im)
+inline vimt_image_2d_of<T> vimt_wrap_mil_image(const mil_image_2d_of<T>& im)
 {
+  // Set transform, assuming it is no more complex than affine
   vimt_transform_2d vt;
-  vt.set_affine(im.world2im().matrix());
+  vnl_matrix<double> M;
+  im.world2im().matrix(M);
+  vnl_matrix<double> A(2,3);
+  A.set_row(0,M.get_row(0));
+  A.set_row(1,M.get_row(1));
+  vt.set_affine(A);
+
   vimt_image_2d_of<T> vim;
   vim.set_world2im(vt);
   int planestep=0;
