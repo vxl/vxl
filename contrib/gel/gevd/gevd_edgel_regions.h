@@ -1,90 +1,54 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//                               
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//       
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef _gevd_edgel_regions_h_
 #define _gevd_edgel_regions_h_
-//
-// .NAME gevd_edgel_regions - generation of regions bounded by gevd_edgel chains
-// .LIBRARY Detection
-// .HEADER Segmentation package
-// .INCLUDE Detection/gevd_edgel_regions.h
-// .FILE gevd_edgel_regions.h
-// .FILE edgel_regions.C
-//
-// .SECTION Description
+//:
+// \file
+// \brief generation of regions bounded by gevd_edgel chains
+// \verbatim
 //     Inputs:  Image, EdgelGroup
 //     Output: CoolListP<IntensityFace*>
-//
+// \endverbatim
 //  The idea is to generate regions by inserting boundaries into an
 //  array.  The boundaries are defined by a set of edgel chains and
-//  a boundary location is inserted at each edgel.  The array is 
+//  a boundary location is inserted at each edgel.  The array is
 //  assumed to have a boundary at the perimeter of the ROI.
 //
 //  The array is scanned with a 2x2 neighborhood to form connected
 //  components in the usual way. Each of the connected component labels are
-//  reduced to the lowest equivalent label id by a transitive closure 
-//  on the equivalence table. 
+//  reduced to the lowest equivalent label id by a transitive closure
+//  on the equivalence table.
 //
-/// A second scan of the label array is made to determine adjacency to
-//  a given edge.  This process is enabled by a companion class, 
+// A second scan of the label array is made to determine adjacency to
+//  a given edge.  This process is enabled by a companion class,
 //  the gevd_region_edge which has storage for two labels, corresponding to
 //  each side of the edge.
 //
 //  The region edges are then used to collect the input edges which are
 //  adjacent to a given region.  The set of edges adjacent to a region
 //  are used to construct a multiply-connected sub-class of Face, the
-//  IntensityFace.  The IntensityFace maintains a scatter matrix of 
+//  IntensityFace.  The IntensityFace maintains a scatter matrix of
 //  a planar fit to the intensity distribution over the corresponding
 //  region.
-// .SECTION Author J. L. Mundy - January 14, 1999
-// .SECTION Modifications 
-//  25 April 2000 - collinsr@cs.rpi.edu -- switched _region_edges
+//
+// \author Author J. L. Mundy - January 14, 1999
+// \verbatim
+// Modifications
+//  25 April 2000 - collinsr@cs.rpi.edu - switched _region_edges
 //                  to key on the Id() rather than the pointer value
 //                  to avoid different hash tables (and different
-//                  segmentations) for identical inputs (leaving the 
-//                  question of why the hash table order matters for 
+//                  segmentations) for identical inputs (leaving the
+//                  question of why the hash table order matters for
 //                  another day)
-//
+// 24 April 2002 - Peter Vanroose - replaced GetLeftLabel and GetRightLabel
+//                  by GetLabel, in accordance with gevd_region_edge change
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 #include <vcl_list.h>
 #include <vcl_map.h>
 
 #include <vtol/vtol_vertex.h>
-#include <vtol/vtol_edge.h>
-#include <vtol/vtol_face.h>
+#include <vtol/vtol_edge_sptr.h>
 #include <vsol/vsol_spatial_object_2d.h>
-#include <vtol/vtol_face.h>
 #include <gevd/gevd_region_edge.h>
 #include <gevd/gevd_bufferxy.h>
 #include <gevd/gevd_detector.h>
@@ -98,9 +62,9 @@ public:
   enum RegionLabel {UNLABELED=0, EDGE, LABEL};
   //Constructors/Destructors
   gevd_edgel_regions(bool debug = false);
-  ~gevd_edgel_regions();	  
+  ~gevd_edgel_regions();
   //Main process method
-  bool compute_edgel_regions(vil_image* image, 
+  bool compute_edgel_regions(vil_image* image,
                              vcl_vector<vsol_spatial_object_2d*>& sgrp,
                              vcl_vector<gevd_intensity_face*>& faces);
 
@@ -126,8 +90,11 @@ public:
   bool InsertRegionEquivalence(unsigned int label_b, unsigned int label_a);
   void GrowEquivalenceClasses();
   void PropagateEquivalence();
-  unsigned int GetLeftLabel(vtol_edge* e);
-  unsigned int GetRightLabel(vtol_edge* e);
+#if 0 // now obsolete: replaced by GetLabel
+  unsigned int GetLeftLabel(vtol_edge_sptr e);
+  unsigned int GetRightLabel(vtol_edge_sptr e);
+#endif
+  unsigned int GetLabel(vtol_edge_sptr e, unsigned int nr);
   //Debug print methods
   void print_region_array();
   void print_region_equivalence();
@@ -142,7 +109,7 @@ protected:
   bool add_to_forward(unsigned int key, unsigned int value);
   bool add_to_reverse(unsigned int key, unsigned int value);
   unsigned char EncodeNeighborhood(unsigned int ul, unsigned int ur,
-				   unsigned int ll, unsigned int lr); 
+                                   unsigned int ll, unsigned int lr);
   void UpdateConnectedNeighborhood(unsigned int x, unsigned int y);
   void AssignEdgeLabels(unsigned int x, unsigned int y);
   void ApplyRegionEquivalence();
@@ -159,14 +126,14 @@ protected:
   unsigned int Xf(float x);
   unsigned int Yf(float y);
   bool insert_edgel(float pre_x, float pre_y, float x, float y,
-		    gevd_region_edge* e);
+                    gevd_region_edge* e);
   void insert_equivalence(unsigned int ll, unsigned int ur, unsigned int& lr);
   bool merge_equivalence(vcl_map<unsigned int, vcl_vector<unsigned int>* >& tab,
-		    unsigned int cur_label,
-		    unsigned int label);
+                         unsigned int cur_label,
+                         unsigned int label);
   bool get_next_label(vcl_vector<unsigned int>* labels,
                       unsigned int& label);
-  void print_edge_colis(unsigned int x, unsigned int y, 
+  void print_edge_colis(unsigned int x, unsigned int y,
                         gevd_region_edge* r1, gevd_region_edge* r2);
   bool corrupt_boundary(vcl_vector<vtol_edge_sptr>& edges,
                         vcl_vector<vtol_vertex_sptr>& bad_verts);
