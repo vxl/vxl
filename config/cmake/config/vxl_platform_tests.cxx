@@ -1,10 +1,8 @@
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_has_bool
-/* (vcl_cv_cxx_has_bool=yes)
-   (vcl_cv_cxx_has_bool=no)
-   (vcl_cv_cxx_has_bool)
-*/
+// (vcl_cv_cxx_has_bool=yes)
+// (vcl_cv_cxx_has_bool=no)
 
 void function(int i, void *ptr, bool v) {}
 
@@ -14,10 +12,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_has_typename
-/* (vcl_cv_cxx_has_typename=yes)
-   (vcl_cv_cxx_has_typename=no)
-   (vcl_cv_cxx_has_typename)
-*/
+// (vcl_cv_cxx_has_typename=yes)
+// (vcl_cv_cxx_has_typename=no)
 
 template <typename T>
 class bingo { public: void bongo(T **); };
@@ -28,10 +24,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_has_export
-/* (vcl_cv_cxx_has_export=yes)
-   (vcl_cv_cxx_has_export=no)
-   (vcl_cv_cxx_has_export)
-*/
+// (vcl_cv_cxx_has_export=yes)
+// (vcl_cv_cxx_has_export=no)
 
 export
 template <class T, int N>
@@ -56,10 +50,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_has_mutable
-/* (vcl_cv_cxx_has_mutable=yes)
-   (vcl_cv_cxx_has_mutable=no)
-   (vcl_cv_cxx_has_mutable)
-*/
+// (vcl_cv_cxx_has_mutable=yes)
+// (vcl_cv_cxx_has_mutable=no)
 
 class X {
  public:
@@ -72,10 +64,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_has_explicit
-/* (vcl_cv_cxx_has_explicit=yes)
-   (vcl_cv_cxx_has_explicit=no)
-   (vcl_cv_cxx_has_explicit)
-*/
+// (vcl_cv_cxx_has_explicit=yes)
+// (vcl_cv_cxx_has_explicit=no)
 
 class X { public: explicit X(int) {} };
 
@@ -85,10 +75,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_has_dynamic_cast
-/* (vcl_cv_cxx_has_dynamic_cast=yes)
-   (vcl_cv_cxx_has_dynamic_cast=no)
-   (vcl_cv_cxx_has_dynamic_cast)
-*/
+// (vcl_cv_cxx_has_dynamic_cast=yes)
+// (vcl_cv_cxx_has_dynamic_cast=no)
 
 struct foo { foo(){} virtual ~foo(){} virtual void f()=0; };
 struct boo : public foo { void f() { *(int*)0 = 1; } };
@@ -100,10 +88,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_check_for_scope
-/* (vcl_cv_cxx_check_for_scope=yes)
-   (vcl_cv_cxx_check_for_scope=no)
-   (vcl_cv_cxx_check_for_scope)
-*/
+// (vcl_cv_cxx_check_for_scope=yes)
+// (vcl_cv_cxx_check_for_scope=no)
 
 void fn() {
   for (int i=0; i<100; ++i) {}
@@ -117,10 +103,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_default_value
-/* (vcl_cv_cxx_default_value=no)
-   (vcl_cv_cxx_default_value=yes)
-   (vcl_cv_cxx_default_value)
-*/
+// (vcl_cv_cxx_default_value=no)
+// (vcl_cv_cxx_default_value=yes)
 
 // declaration
 void function(int x, char *ptr = "foo");
@@ -134,10 +118,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_has_member_templates
-/* (vcl_cv_cxx_has_member_templates=yes)
-   (vcl_cv_cxx_has_member_templates=no)
-   (vcl_cv_cxx_has_member_templates)
-*/
+// (vcl_cv_cxx_has_member_templates=yes)
+// (vcl_cv_cxx_has_member_templates=no)
 
 template <class S>
 class blip {
@@ -158,10 +140,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_can_do_partial_specialization
-/* (vcl_cv_cxx_can_do_partial_specialization=yes)
-   (vcl_cv_cxx_can_do_partial_specialization=no)
-   (vcl_cv_cxx_can_do_partial_specialization)
-*/
+// (vcl_cv_cxx_can_do_partial_specialization=yes)
+// (vcl_cv_cxx_can_do_partial_specialization=no)
 
 template <class T>
 class victor
@@ -196,10 +176,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_define_specialization
-/* (vcl_cv_cxx_define_specialization=yes)
-   (vcl_cv_cxx_define_specialization=no)
-   (vcl_cv_cxx_define_specialization)
-*/
+// (vcl_cv_cxx_define_specialization=yes)
+// (vcl_cv_cxx_define_specialization=no)
 
 // declaration
 template <class T> class traits {};
@@ -218,10 +196,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef VCL_ALLOWS_INLINE_INSTANTIATION
-/* (VCL_ALLOWS_INLINE_INSTANTIATION="1"; echo """yes" 1>&6)
-   (VCL_ALLOWS_INLINE_INSTANTIATION="0"; echo """no" 1>&6)
-   (VCL_ALLOWS_INLINE_INSTANTIATION)
-*/
+// (VCL_ALLOWS_INLINE_INSTANTIATION=1; echo yes)
+// (VCL_ALLOWS_INLINE_INSTANTIATION=0; echo no)
 
 template <class T>
 inline
@@ -238,10 +214,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef VCL_NEEDS_INLINE_INSTANTIATION
-/* (VCL_NEEDS_INLINE_INSTANTIATION="0"; echo """no" 1>&6)
-   (VCL_NEEDS_INLINE_INSTANTIATION="1"; echo """yes" 1>&6)
-   (VCL_NEEDS_INLINE_INSTANTIATION)
-*/
+// (VCL_NEEDS_INLINE_INSTANTIATION=0; echo no)
+// (VCL_NEEDS_INLINE_INSTANTIATION=1; echo yes)
 
 template <class T>
 inline T dot(T const *a, T const *b) { return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]; }
@@ -262,10 +236,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_static_const_init_int
-/* (vcl_cv_cxx_static_const_init_int=yes)
-   (vcl_cv_cxx_static_const_init_int=no)
-   (vcl_cv_cxx_static_const_init_int)
-*/
+// (vcl_cv_cxx_static_const_init_int=yes)
+// (vcl_cv_cxx_static_const_init_int=no)
 
 class A {
  public:
@@ -279,33 +251,27 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef VCL_STATIC_CONST_INIT_NO_DEFN
-/* This should not compile.  C++ requires storage to be allocated for
-   the constant to use it at runtime.  Some compilers do compile this,
-   though, and if a definition is given, it becomes a multiply defined
-   symbol.  If this does compile, we should not give a definition for
-   such constants.  */
+
+// This should not compile.  C++ requires storage to be allocated for
+// the constant to use it at runtime.  Some compilers do compile this,
+// though, and if a definition is given, it becomes a multiply defined
+// symbol.  If this does compile, we should not give a definition for
+// such constants.
 class A
 {
-public:
+ public:
   static const int x = 27;
 };
 
 void f(const int&) {}
-
-int main()
-{
-  f(A::x);
-  return 0;
-}
+int main() { f(A::x); return 0; }
 #endif
 
 //-------------------------------------
 
 #ifdef VCL_STATIC_CONST_INIT_FLOAT
-/* (VCL_STATIC_CONST_INIT_FLOAT="1"; echo """yes" 1>&6)
-   (VCL_STATIC_CONST_INIT_FLOAT="0"; echo """no" 1>&6)
-   (VCL_STATIC_CONST_INIT_FLOAT)
-*/
+// (VCL_STATIC_CONST_INIT_FLOAT=1; echo yes)
+// (VCL_STATIC_CONST_INIT_FLOAT=0; echo no)
 
 class A {
  public:
@@ -319,10 +285,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
-/* (VCL_CAN_DO_STATIC_TEMPLATE_MEMBER="1"; echo """yes" 1>&6)
-   (VCL_CAN_DO_STATIC_TEMPLATE_MEMBER="0"; echo """no" 1>&6)
-   (VCL_CAN_DO_STATIC_TEMPLATE_MEMBER)
-*/
+// (VCL_CAN_DO_STATIC_TEMPLATE_MEMBER=1; echo yes)
+// (VCL_CAN_DO_STATIC_TEMPLATE_MEMBER=0; echo no)
 
 template <class T> struct A { A() {} static char *fmt; };
 template <class T> char *A<T>::fmt = 0;
@@ -333,10 +297,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER
-/* (VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER="1"; echo """yes" 1>&6)
-   (VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER="0"; echo """no" 1>&6)
-   (VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER)
-*/
+// (VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER=1; echo yes)
+// (VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER=0; echo no)
 
 template <class T, int n> struct splek { T data[n]; };
 
@@ -356,10 +318,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
-/* (VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD="0"; echo """no" 1>&6)
-   (VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD="1"; echo """yes" 1>&6)
-   (VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD)
-*/
+// (VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD=0; echo no)
+// (VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD=1; echo yes)
 
 template <class T>
 class victor_base {
@@ -400,10 +360,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef VCL_OVERLOAD_CAST
-/* (VCL_OVERLOAD_CAST="(x)"; echo """no" 1>&6)
-   (VCL_OVERLOAD_CAST="((T)(x))"; echo """yes" 1>&6)
-   (VCL_OVERLOAD_CAST)
-*/
+// (VCL_OVERLOAD_CAST="(x)"; echo no)
+// (VCL_OVERLOAD_CAST="((T)(x))"; echo yes)
 
 //
 template <class T>
@@ -457,10 +415,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef VCL_NULL_TMPL_ARGS
-/* (VCL_NULL_TMPL_ARGS=" / * <> * / "; echo """no" 1>&6)
-   (VCL_NULL_TMPL_ARGS="<>"; echo """yes" 1>&6)
-   (VCL_NULL_TMPL_ARGS)
-*/
+// (VCL_NULL_TMPL_ARGS=" / * <> * / "; echo no)
+// (VCL_NULL_TMPL_ARGS="<>"; echo yes)
 
 template <class T> class victor;
 template <class T> T dot(victor<T> const &u, victor<T> const &v);
@@ -501,10 +457,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef VCL_NO_STATIC_DATA_MEMBERS
-/* (VCL_NO_STATIC_DATA_MEMBERS="0"; echo """yes" 1>&6)
-   (VCL_NO_STATIC_DATA_MEMBERS="1"; echo """no" 1>&6)
-   (VCL_NO_STATIC_DATA_MEMBERS)
-*/
+// (VCL_NO_STATIC_DATA_MEMBERS=0; echo yes)
+// (VCL_NO_STATIC_DATA_MEMBERS=1; echo no)
 
 template <class T> class vvv { static T xxx; };
 template class vvv<int>;
@@ -515,10 +469,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef VCL_HAS_TEMPLATE_SYMBOLS
-/* (VCL_HAS_TEMPLATE_SYMBOLS="0"; echo """no" 1>&6)
-   (VCL_HAS_TEMPLATE_SYMBOLS="1"; echo """yes" 1>&6)
-   (VCL_HAS_TEMPLATE_SYMBOLS)
-*/
+// (VCL_HAS_TEMPLATE_SYMBOLS=0; echo no)
+// (VCL_HAS_TEMPLATE_SYMBOLS=1; echo yes)
 
 // Declare a function template.
 template <class T> void function(T *ptr, int n);
@@ -541,10 +493,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef VCL_CAN_DO_IMPLICIT_TEMPLATES
-/* (VCL_CAN_DO_IMPLICIT_TEMPLATES="1"; echo """yes" 1>&6)
-   (VCL_CAN_DO_IMPLICIT_TEMPLATES="0"; echo """no" 1>&6)
-   (VCL_CAN_DO_IMPLICIT_TEMPLATES)
-*/
+// (VCL_CAN_DO_IMPLICIT_TEMPLATES=1; echo yes)
+// (VCL_CAN_DO_IMPLICIT_TEMPLATES=0; echo no)
 
 struct fsm_plap_normal {};
 template <class I>
@@ -589,10 +539,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER
-/* (VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER="1"; echo """yes" 1>&6)
-   (VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER="0"; echo """no" 1>&6)
-   (VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER)
-*/
+// (VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER=1; echo yes)
+// (VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER=0; echo no)
 
 template <class T> struct less {};
 
@@ -619,10 +567,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER
-/* (VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER="1"; echo """yes" 1>&6)
-   (VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER="0"; echo """no" 1>&6)
-   (VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER)
-*/
+// (VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER=1; echo yes)
+// (VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER=0; echo no)
 
 template <class T> struct less {};
 template <class T, class C=less<T> > struct X { C t1; };
@@ -635,10 +581,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef VCL_SUNPRO_CLASS_SCOPE_HACK
-/* (VCL_SUNPRO_CLASS_SCOPE_HACK=" / * , A * / "; echo """no" 1>&6)
-   (VCL_SUNPRO_CLASS_SCOPE_HACK=", A"; echo """yes" 1>&6)
-   (VCL_SUNPRO_CLASS_SCOPE_HACK)
-*/
+// (VCL_SUNPRO_CLASS_SCOPE_HACK=" / * , A * / "; echo no)
+// (VCL_SUNPRO_CLASS_SCOPE_HACK=", A"; echo yes)
 
 template < class T >
 struct allocator
@@ -675,10 +619,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_has_exceptions
-/* (vcl_cv_cxx_has_exceptions=yes)
-   (vcl_cv_cxx_has_exceptions=no)
-   (vcl_cv_cxx_has_exceptions)
-*/
+// (vcl_cv_cxx_has_exceptions=yes)
+// (vcl_cv_cxx_has_exceptions=no)
 
 struct bizop {};
 
@@ -719,10 +661,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_has_namespaces
-/* (vcl_cv_cxx_has_namespaces=yes)
-   (vcl_cv_cxx_has_namespaces=no)
-   (vcl_cv_cxx_has_namespaces)
-*/
+// (vcl_cv_cxx_has_namespaces=yes)
+// (vcl_cv_cxx_has_namespaces=no)
 
 namespace foo {
   int hello() { return 10; }
@@ -798,10 +738,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_allows_namespace_std
-/* (vcl_cv_cxx_allows_namespace_std=yes)
-   (vcl_cv_cxx_allows_namespace_std=no)
-   (vcl_cv_cxx_allows_namespace_std)
-*/
+// (vcl_cv_cxx_allows_namespace_std=yes)
+// (vcl_cv_cxx_allows_namespace_std=no)
 
 #include <cmath>
 #include <vector>
@@ -819,16 +757,14 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef vcl_cv_cxx_needs_namespace_std
-/* (vcl_cv_cxx_needs_namespace_std=no)
-   (vcl_cv_cxx_needs_namespace_std=yes)
-   (vcl_cv_cxx_needs_namespace_std)
-*/
+// (vcl_cv_cxx_needs_namespace_std=no)
+// (vcl_cv_cxx_needs_namespace_std=yes)
 
 #include <cmath>
 #include <vector>
 //#include <iostream>
 void function() {
-  vector<double> flaz; // correct should be:  std::vector<double> 
+  vector<double> flaz; // correct should be:  std::vector<double>
   flaz.push_back(sqrt(2.0));   // should be:  std::sqrt(2.0)
   flaz.push_back(fabs(1.0f));  // should be:  std::fabs(1.0)
   //cerr << "hello, world" << endl;
@@ -840,10 +776,8 @@ int main() { return 0; }
 //-------------------------------------
 
 #ifdef VXL_UNISTD_USLEEP_IS_VOID
-/* (VXL_UNISTD_USLEEP_IS_VOID="0";)
-   (VXL_UNISTD_USLEEP_IS_VOID="1";)
-   (VXL_UNISTD_USLEEP_IS_VOID)
-*/
+// (VXL_UNISTD_USLEEP_IS_VOID=0)
+// (VXL_UNISTD_USLEEP_IS_VOID=1)
 #include <unistd.h>
 
 int main() { int x = usleep(0); return x*0; }
@@ -852,29 +786,22 @@ int main() { int x = usleep(0); return x*0; }
 //-------------------------------------
 
 #ifdef ac_vxl_has_qsort
-/* (ac_vxl_has_qsort=yes)
-   (ac_vxl_has_qsort=no)
-   (ac_vxl_has_qsort)
-*/
+// (ac_vxl_has_qsort=yes)
+// (ac_vxl_has_qsort=no)
 
-/* This is not a C++ header, strictly speaking. */
-/* Actually, it is normative but deprecated, strictly speaking :) */
+// This is not a C++ header, strictly speaking.
+// Actually, it is normative but deprecated, strictly speaking :)
 #include <stdlib.h>
 int f(const void *a,const void *b) { return 1; }
-/* configure provides its own main(), so putting one here
-   makes the test fail even if qsort() is available */
-int not_main(void) { int a[5]; qsort(a, 5, sizeof(int), f); return 0; }
 
-int main() { return 0; }
+int main() { int a[5]; qsort(a, 5, sizeof(int), f); return 0; }
 #endif
 
 //-------------------------------------
 
 #ifdef   VXL_MATH_HAS_FINITE
-/* (VXL_MATH_HAS_FINITE=1; echo """yes" 1>&6)
-   (VXL_MATH_HAS_FINITE=0; echo """no" 1>&6)
-   (VXL_MATH_HAS_FINITE)
-*/
+// (VXL_MATH_HAS_FINITE=1; echo yes)
+// (VXL_MATH_HAS_FINITE=0; echo no)
 
 #include <math.h>
 
@@ -884,10 +811,8 @@ int main() { finite(4.0); return 0; }
 //-------------------------------------
 
 #ifdef   VXL_MATH_HAS_SQRTF
-/* (VXL_MATH_HAS_SQRTF=1; echo """yes" 1>&6)
-   (VXL_MATH_HAS_SQRTF=0; echo """no" 1>&6)
-   (VXL_MATH_HAS_SQRTF)
-*/
+// (VXL_MATH_HAS_SQRTF=1; echo yes)
+// (VXL_MATH_HAS_SQRTF=0; echo no)
 
 #include <math.h>
 
@@ -897,10 +822,8 @@ int main() { sqrtf(4.0f); return 0; }
 //-------------------------------------
 
 #ifdef   VXL_IEEEFP_HAS_FINITE
-/* (VXL_IEEEFP_HAS_FINITE=1; echo """yes" 1>&6)
-   (VXL_IEEEFP_HAS_FINITE=0; echo """no" 1>&6)
-   (VXL_IEEEFP_HAS_FINITE)
-*/
+// (VXL_IEEEFP_HAS_FINITE=1; echo yes)
+// (VXL_IEEEFP_HAS_FINITE=0; echo no)
 
 #include <ieeefp.h>
 
@@ -910,10 +833,8 @@ int main() { finite(4.0); return 0; }
 //-------------------------------------
 
 #ifdef   VXL_STDLIB_HAS_LRAND48
-/* (VXL_STDLIB_HAS_LRAND48=1; echo """yes" 1>&6)
-   (VXL_STDLIB_HAS_LRAND48=0; echo """no" 1>&6)
-   (VXL_STDLIB_HAS_LRAND48)
-*/
+// (VXL_STDLIB_HAS_LRAND48=1; echo yes)
+// (VXL_STDLIB_HAS_LRAND48=0; echo no)
 
 #include <stdlib.h>
 
@@ -923,10 +844,8 @@ int main() { lrand48(); return 0; }
 //-------------------------------------
 
 #ifdef   VXL_STDLIB_HAS_DRAND48
-/* (VXL_STDLIB_HAS_DRAND48=1; echo """yes" 1>&6)
-   (VXL_STDLIB_HAS_DRAND48=0; echo """no" 1>&6)
-   (VXL_STDLIB_HAS_DRAND48)
-*/
+// (VXL_STDLIB_HAS_DRAND48=1; echo yes)
+// (VXL_STDLIB_HAS_DRAND48=0; echo no)
 
 #include <stdlib.h>
 
