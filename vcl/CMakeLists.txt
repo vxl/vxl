@@ -4,7 +4,7 @@
 #   geoff.cross@crd.ge.com
 #
 
-SOURCE_FILES( vcl_common
+SOURCE_FILES( vcl_sources
 vcl_cmath
 vcl_cassert
 vcl_cstdlib
@@ -15,9 +15,9 @@ IF(WIN32)
   INCLUDE_DIRECTORIES( config.win32-vc60 )
 ENDIF(WIN32)
 
-AUX_SOURCE_DIRECTORY(Templates vcl_common)
+AUX_SOURCE_DIRECTORY(Templates vcl_sources)
 
-ADD_LIBRARY(vcl vcl_common)
+ADD_LIBRARY(vcl vcl_sources)
 
-#SUBDIRS(tests)
+# SUBDIRS(tests)
 
