@@ -70,4 +70,6 @@ class rgrl_weighter_unit;
 template<unsigned N> class rgrl_feature_set_location;
 template<unsigned N> class rgrl_feature_set_location_masked;
 
+template<typename T> class rgrl_set_of;
+
 #endif
