@@ -69,7 +69,7 @@ SOURCES += vgui_enhance.cxx
 SOURCES += vgui_tview.cxx
 SOURCES += vgui_function_tableau.cxx
 SOURCES += vgui_test.cxx
-#SOURCES += vgui_roi_tableau.cxx
+SOURCES += vgui_roi_tableau.cxx
 SOURCES += vgui_rubberbander.cxx
 SOURCES += vgui_load.cxx
 SOURCES += vgui_color_text.cxx
@@ -130,6 +130,8 @@ SOURCES += internals/vgui_accelerate.cxx
 ifeq (1,$(HAS_X11))
 SOURCES += internals/vgui_accelerate_x11.cxx
 SOURCES += internals/vgui_accelerate_tag.cxx
+else
+SOURCES += internals/vgui_accelerate_mfc.cxx
 endif
 
 # -O2 does not turn on inlining, so make sure we use -O3 for egcs and 2.95.
