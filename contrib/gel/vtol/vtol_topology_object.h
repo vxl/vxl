@@ -256,6 +256,7 @@ class vtol_topology_object
   //: Return the superiors list (must be deallocated after use)
   //---------------------------------------------------------------------------
   const topology_list *superiors(void) const;
+  const vcl_list<vtol_topology_object*> *superiors_list(void) const {return &superiors_;}
 
   //---------------------------------------------------------------------------
   //: Return the inferiors list
