@@ -6,15 +6,17 @@
 
 #include <vcl_cstdlib.h> // abort()
 #include <vcl_cmath.h> // sqrt() , acos()
-#include <vcl_ostream.h>
+#include <vcl_iostream.h>
 
 template <class T>
-double vgl_vector_3d<T>::length() const {
+double vgl_vector_3d<T>::length() const
+{
   return vcl_sqrt( 0.0+x()*x()+y()*y()+z()*z() );
 }
 
 template<class T>
-double angle(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b) {
+double angle(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b)
+{
   return vcl_acos(cos_angle(a,b));
 }
 
@@ -28,16 +30,23 @@ bool parallel(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b, double eps)
   return (dev < eps && -dev < eps);
 }
 
-
 //: Write "<vgl_vector_3d x,y,z> " to stream
 template <class T>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_vector_3d<T>& p) {
-  return s << "<"<< p.x() << "," << p.y() << "," << p.z() << "> ";
+vcl_ostream&  operator<<(vcl_ostream& s, vgl_vector_3d<T> const& p)
+{
+  return s << "<vgl_vector_3d "<< p.x() << "," << p.y() << "," << p.z() << "> ";
+}
+
+//: Read x y z from stream
+template <class T>
+vcl_istream&  operator>>(vcl_istream& s, vgl_vector_3d<T>& p)
+{
+  T x, y, z; s >> x >> y >> z;
+  p.set(x,y,z); return s;
 }
 
 
 #undef VGL_VECTOR_3D_INSTANTIATE
-#define v vgl_vector_3d
 #define VGL_VECTOR_3D_INSTANTIATE(T) \
 template class vgl_vector_3d<T >;\
 VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      operator+    (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
@@ -57,10 +66,10 @@ VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      cross_product(vgl_vector_3d<T > co
 VCL_INSTANTIATE_INLINE(double cos_angle    (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
 template               double angle        (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&);\
 template               bool   parallel     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&, double);\
-template vcl_ostream& operator<<(vcl_ostream&, const vgl_vector_3d<T >&); \
 VCL_INSTANTIATE_INLINE(double operator/    (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
 VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >&     normalize    (vgl_vector_3d<T >&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      normalized   (vgl_vector_3d<T > const&))
-#undef v
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      normalized   (vgl_vector_3d<T > const&));\
+template        vcl_ostream&  operator<<   (vcl_ostream&, vgl_vector_3d<T >const&);\
+template        vcl_istream&  operator>>   (vcl_istream&, vgl_vector_3d<T >&)
 
 #endif // vgl_vector_3d_txx_

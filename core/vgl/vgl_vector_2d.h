@@ -60,10 +60,13 @@ public:
 
 #define v vgl_vector_2d<T>
 
-//  +-+-+ vector_3d simple I/O +-+-+
+//  +-+-+ vector_2d simple I/O +-+-+
 
 //: Write "<vgl_vector_2d x,y> " to stream
-template <class T> vcl_ostream&  operator<<(vcl_ostream& s, const v& p);
+template <class T> vcl_ostream& operator<<(vcl_ostream& s, v const& p);
+
+//: Read x y from stream
+template <class T> vcl_istream& operator>>(vcl_istream& s, v& p);
 
 
 //  +-+-+ vector_2d geometry and algebra +-+-+

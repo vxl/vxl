@@ -18,8 +18,6 @@
 
 //----------------------------------------------------------------------
 
-//----------------------------------------------------------------------
-
 //: Direction vector in Euclidean 3D space, templated by type of element
 // (typically float or double).  A vgl_vector_3d<T> represents the
 // difference (or connecting vector) between two vgl_point_3d<T>s.
@@ -67,7 +65,10 @@ public:
 //  +-+-+ vector_3d simple I/O +-+-+
 
 //: Write "<vgl_vector_3d x,y,z> " to stream
-template <class T> vcl_ostream&  operator<<(vcl_ostream& s, const v& p);
+template <class T> vcl_ostream&  operator<<(vcl_ostream& s, v const& p);
+
+//: Read x y z from stream
+template <class T> vcl_istream& operator>>(vcl_istream& s, v& p);
 
 
 //  +-+-+ vector_3d geometry and algebra +-+-+
