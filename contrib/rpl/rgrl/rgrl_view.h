@@ -21,6 +21,10 @@ class rgrl_view
   : public rgrl_object
 {
  public:
+  
+  //: ctor
+  rgrl_view();
+  
   //:  Build a view for registration estimation problem.
   rgrl_view( rgrl_mask_box       const& from_image_roi,
              rgrl_mask_box       const& to_image_roi,

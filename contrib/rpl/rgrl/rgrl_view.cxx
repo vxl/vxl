@@ -8,6 +8,16 @@
 #include "rgrl_estimator.h"
 
 rgrl_view::
+rgrl_view()
+  : from_image_roi_(0),
+    to_image_roi_(0),
+    current_region_(0),
+    global_region_(0),
+    current_resolution_(0)
+{
+}
+
+rgrl_view::
 rgrl_view( rgrl_mask_box           const& from_image_roi,
            rgrl_mask_box           const& to_image_roi,
            rgrl_mask_box           const& region,
