@@ -461,6 +461,12 @@ SOURCE=.\mbl_progress_null.h
 # Begin Source File
 SOURCE=.\mbl_progress_text.h
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_cloneables_factory.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_exception.h
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
