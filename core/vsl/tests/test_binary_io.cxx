@@ -10,9 +10,9 @@
 
 void test_binary_io()
 {
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "*********************" << vcl_endl;
   vcl_cout << "Testing vsl binary io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "*********************" << vcl_endl;
 
   bool b_out = true;
   char c_out = 'y';
