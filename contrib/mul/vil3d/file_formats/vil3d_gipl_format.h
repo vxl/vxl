@@ -14,9 +14,10 @@
 //: Reader/Writer for GIPL format images.
 class vil3d_gipl_format : public vil3d_file_format
 {
- public:
-  // The destructor must be virtual so that the memory chunk is destroyed.
-  virtual ~vil3d_gipl_format() {};
+public:
+  vil3d_gipl_format();
+  //: The destructor must be virtual so that the memory chunk is destroyed.
+  virtual ~vil3d_gipl_format();
 
     //: Read header and image from given stream if possible
   virtual bool read_stream(vil3d_header_data_sptr& header,

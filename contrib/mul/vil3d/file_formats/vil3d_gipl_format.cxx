@@ -83,6 +83,13 @@ inline void vil2_stream_16bit_read_big_endian_shorts(vil2_stream* is,
 #endif
 }
 
+vil3d_gipl_format::vil3d_gipl_format() {}
+
+// The destructor must be virtual so that the memory chunk is destroyed.
+vil3d_gipl_format::~vil3d_gipl_format()
+{
+}
+
 //: Read header and image from given stream if possible
 bool vil3d_gipl_format::read_stream(vil3d_header_data_sptr& header,
                                     vil3d_image_view_base_sptr& image,
