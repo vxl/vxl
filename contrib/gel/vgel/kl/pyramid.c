@@ -5,14 +5,14 @@
 
 /* Standard includes */
 #include <assert.h>
-#include <stdlib.h>		/* malloc() ? */
-#include <string.h>		/* memset() ? */
-#include <math.h>		/* */
+#include <stdlib.h>     /* malloc() ? */
+#include <string.h>     /* memset() ? */
+#include <math.h>       /* */
 
 /* Our includes */
 #include "base.h"
 #include "error.h"
-#include "convolve.h"	/* for computing pyramid */
+#include "convolve.h"   /* for computing pyramid */
 #include "pyramid.h"
 
 
@@ -27,23 +27,23 @@ _KLT_Pyramid _KLTCreatePyramid(
   int nlevels)
 {
   _KLT_Pyramid pyramid;
-  int nbytes = sizeof(_KLT_PyramidRec) +	
+  int nbytes = sizeof(_KLT_PyramidRec) +
     nlevels * sizeof(_KLT_FloatImage *) +
     nlevels * sizeof(int) +
     nlevels * sizeof(int);
   int i;
 
-  if (subsampling != 2 && subsampling != 4 && 
+  if (subsampling != 2 && subsampling != 4 &&
       subsampling != 8 && subsampling != 16 && subsampling != 32)
     KLTError("(_KLTCreatePyramid)  Pyramid's subsampling must "
              "be either 2, 4, 8, 16, or 32");
 
-     
+
   /* Allocate memory for structure and set parameters */
   pyramid = (_KLT_Pyramid)  malloc(nbytes);
   if (pyramid == NULL)
     KLTError("(_KLTCreatePyramid)  Out of memory");
-     
+
   /* Set parameters */
   pyramid->subsampling = subsampling;
   pyramid->nLevels = nlevels;
@@ -85,7 +85,7 @@ void _KLTFreePyramid(
  */
 
 void _KLTComputePyramid(
-  _KLT_FloatImage img, 
+  _KLT_FloatImage img,
   _KLT_Pyramid pyramid,
   float sigma_fact)
 {
@@ -96,8 +96,8 @@ void _KLTComputePyramid(
   float sigma = subsampling * sigma_fact;  /* empirically determined */
   int oldncols;
   int i, x, y;
-	
-  if (subsampling != 2 && subsampling != 4 && 
+
+  if (subsampling != 2 && subsampling != 4 &&
       subsampling != 8 && subsampling != 16 && subsampling != 32)
     KLTError("(_KLTComputePyramid)  Pyramid's subsampling must "
              "be either 2, 4, 8, 16, or 32");
@@ -119,25 +119,13 @@ void _KLTComputePyramid(
     ncols /= subsampling;  nrows /= subsampling;
     for (y = 0 ; y < nrows ; y++)
       for (x = 0 ; x < ncols ; x++)
-        pyramid->img[i]->data[y*ncols+x] = 
+        pyramid->img[i]->data[y*ncols+x] =
           tmpimg->data[(subsampling*y+subhalf)*oldncols +
                       (subsampling*x+subhalf)];
 
     /* Reassign current image */
     currimg = pyramid->img[i];
-				
+
     _KLTFreeFloatImage(tmpimg);
   }
 }
- 
-
-
-
-
-
-
-
-
-
-
-

@@ -22,7 +22,7 @@ _KLT_Pyramid _KLTCreatePyramid(
   int nlevels);
 
 void _KLTComputePyramid(
-  _KLT_FloatImage floatimg, 
+  _KLT_FloatImage floatimg,
   _KLT_Pyramid pyramid,
   float sigma_fact);
 

@@ -18,7 +18,7 @@
 unsigned char* pgmReadFile(
   char *fname,
   unsigned char *img,
-  int *ncols, 
+  int *ncols,
   int *nrows);
 void pgmWriteFile(
   char *fname,

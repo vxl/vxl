@@ -20,10 +20,7 @@
 //*****************************************************************************
 #include <vbl/vbl_smart_ptr.h>
 
-//typedef vbl_smart_ptr<vgel_multi_view_data<>> vgel_multi_view_data_sptr;
-
-
 typedef vgel_multi_view_data<vtol_vertex_2d_sptr> vgel_mvd_vertex;
-
 typedef vbl_smart_ptr<vgel_mvd_vertex> vgel_multi_view_data_vertex_sptr;
-#endif // #ifndef vgel_multi_view_data_vertex_sptr_h_
+
+#endif // vgel_multi_view_data_vertex_sptr_h_

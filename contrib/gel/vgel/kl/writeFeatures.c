@@ -6,18 +6,18 @@
 
 /* Standard includes */
 #include <assert.h>
-#include <ctype.h>		/* isdigit() */
-#include <stdio.h>		/* sprintf(), fprintf(), sscanf(), fscanf() */
-#include <stdlib.h>		/* malloc() */
-#include <string.h>		/* memcpy(), strcmp() */
+#include <ctype.h>      /* isdigit() */
+#include <stdio.h>      /* sprintf(), fprintf(), sscanf(), fscanf() */
+#include <stdlib.h>     /* malloc() */
+#include <string.h>     /* memcpy(), strcmp() */
 
 /* Our includes */
 #include "base.h"
 #include "error.h"
-#include "pnmio.h"		/* ppmWriteFileRGB() */
+#include "pnmio.h"      /* ppmWriteFileRGB() */
 #include "klt.h"
 
-#define BINHEADERLENGTH	6
+#define BINHEADERLENGTH 6
 
 extern int KLT_verbose;
 
@@ -45,9 +45,9 @@ void KLTWriteFeatureListToPPM(
   int offset;
   int x, y, xx, yy;
   int i;
-	
-  if (KLT_verbose >= 1) 
-    fprintf(stderr, "(KLT) Writing %d features to PPM file: '%s'\n", 
+
+  if (KLT_verbose >= 1)
+    fprintf(stderr, "(KLT) Writing %d features to PPM file: '%s'\n",
             KLTCountRemainingFeatures(featurelist), filename);
 
   /* Allocate memory for component images */
@@ -63,14 +63,14 @@ void KLTWriteFeatureListToPPM(
   memcpy(redimg, greyimg, nbytes);
   memcpy(grnimg, greyimg, nbytes);
   memcpy(bluimg, greyimg, nbytes);
-	
+
   /* Overlay features in red */
   for (i = 0 ; i < featurelist->nFeatures ; i++)
     if (featurelist->feature[i]->val >= 0)  {
       x = (int) (featurelist->feature[i]->x + 0.5);
       y = (int) (featurelist->feature[i]->y + 0.5);
       for (yy = y - 1 ; yy <= y + 1 ; yy++)
-        for (xx = x - 1 ; xx <= x + 1 ; xx++)  
+        for (xx = x - 1 ; xx <= x + 1 ; xx++)
           if (xx >= 0 && yy >= 0 && xx < ncols && yy < nrows)  {
             offset = yy * ncols + xx;
             *(redimg + offset) = 255;
@@ -78,7 +78,7 @@ void KLTWriteFeatureListToPPM(
             *(bluimg + offset) = 0;
           }
     }
-	
+
   /* Write to PPM file */
   ppmWriteFileRGB(filename, redimg, grnimg, bluimg, ncols, nrows);
 
@@ -90,10 +90,10 @@ void KLTWriteFeatureListToPPM(
 
 
 static FILE* _printSetupTxt(
-  char *fname, 	/* Input: filename, or NULL for stderr */
-  char *fmt,	/* Input: format (e.g., %5.1f or %3d) */
-  char *format,	/* Output: format (e.g., (%5.1f,%5.1f)=%3d) */
-  char *type)	/* Output: either 'f' or 'd', based on input format */
+  char *fname,  /* Input: filename, or NULL for stderr */
+  char *fmt,    /* Input: format (e.g., %5.1f or %3d) */
+  char *format, /* Output: format (e.g., (%5.1f,%5.1f)=%3d) */
+  char *type)   /* Output: either 'f' or 'd', based on input format */
 {
   FILE *fp;
   const int val_width = 5;
@@ -115,16 +115,16 @@ static FILE* _printSetupTxt(
 
   /* Construct feature format */
   sprintf(format, "(%s,%s)=%%%dd ", fmt, fmt, val_width);
-     
+
   return fp;
 }
 
 
 static FILE* _printSetupBin(
-  char *fname) 	/* Input: filename */
+  char *fname) /* Input: filename */
 {
   FILE *fp;
-  if (fname == NULL) 
+  if (fname == NULL)
     KLTError("(KLTWriteFeatures) Can't write binary data to stderr");
   fp = fopen(fname, "wb");
   if (fp == NULL)
@@ -184,7 +184,6 @@ static int _findStringWidth(
   int maxi = strlen(str) - 1;
   int i = 0;
 
-	
   while (str[i] != '\0')  {
     if (str[i] == '%')  {
       if (isdigit(str[i+1]))  {
@@ -201,7 +200,7 @@ static int _findStringWidth(
       } else if (str[i+1] == 'c')  {
         width++;
         i += 2;
-      } else 
+      } else
         KLTError("(_findStringWidth) Can't determine length "
                  "of string '%s'", str);
     } else  {
@@ -209,7 +208,7 @@ static int _findStringWidth(
       width++;
     }
   }
-	
+
   return width;
 }
 
@@ -223,7 +222,7 @@ static void _printHeader(
 {
   int width = _findStringWidth(format);
   int i;
-	
+
   assert(id == FEATURE_LIST || id == FEATURE_HISTORY || id == FEATURE_TABLE);
 
   if (fp != stderr)  {
@@ -251,19 +250,19 @@ static void _printHeader(
      case FEATURE_LIST: fprintf(fp, "feature | (x,y)=val\n");
        fprintf(fp, "--------+-");
        _printNhyphens(fp, width);
-       fprintf(fp, "\n");   
+       fprintf(fp, "\n");
        break;
      case FEATURE_HISTORY: fprintf(fp, "frame | (x,y)=val\n");
        fprintf(fp, "------+-");
        _printNhyphens(fp, width);
-       fprintf(fp, "\n");   
+       fprintf(fp, "\n");
        break;
-     case FEATURE_TABLE: fprintf(fp, "feature |          frame\n");   
-       fprintf(fp, "        |");   
+     case FEATURE_TABLE: fprintf(fp, "feature |          frame\n");
+       fprintf(fp, "        |");
        for (i = 0 ; i < nFrames ; i++) _printInteger(fp, i, width);
-       fprintf(fp, "\n--------+-");   
+       fprintf(fp, "\n--------+-");
        for (i = 0 ; i < nFrames ; i++) _printNhyphens(fp, width);
-       fprintf(fp, "\n");   
+       fprintf(fp, "\n");
        break;
   }
 }
@@ -285,7 +284,7 @@ static void _printFeatureTxt(
     float y = feat->y;
     if (x >= 0.0) x += 0.5;
     if (y >= 0.0) y += 0.5;
-    fprintf(fp, format, 
+    fprintf(fp, format,
             (int) x, (int) y, feat->val);
   }
 }
@@ -314,7 +313,7 @@ static void _printShutdown(
  * KLTWriteFeatureList()
  * KLTWriteFeatureHistory()
  * KLTWriteFeatureTable()
- * 
+ *
  * Writes features to file or to screen.
  *
  * INPUTS
@@ -325,7 +324,7 @@ static void _printShutdown(
 
 void KLTWriteFeatureList(
   KLT_FeatureList fl,
-  char *fname, 
+  char *fname,
   char *fmt)
 {
   FILE *fp;
@@ -334,15 +333,15 @@ void KLTWriteFeatureList(
   int i;
 
   if (KLT_verbose >= 1 && fname != NULL)  {
-    fprintf(stderr,  
-            "(KLT) Writing feature list to %s file: '%s'\n", 
+    fprintf(stderr,
+            "(KLT) Writing feature list to %s file: '%s'\n",
             (fmt == NULL ? "binary" : "text"), fname);
   }
 
   if (fmt != NULL) {  /* text file or stderr */
     fp = _printSetupTxt(fname, fmt, format, &type);
     _printHeader(fp, format, FEATURE_LIST, NULL, fl->nFeatures);
-	
+
     for (i = 0 ; i < fl->nFeatures ; i++)  {
       fprintf(fp, "%7d | ", i);
       _printFeatureTxt(fp, fl->feature[i], format, type);
@@ -351,7 +350,7 @@ void KLTWriteFeatureList(
     _printShutdown(fp);
   } else {  /* binary file */
     fp = _printSetupBin(fname);
-    fwrite(binheader_fl, sizeof(char), BINHEADERLENGTH, fp); 
+    fwrite(binheader_fl, sizeof(char), BINHEADERLENGTH, fp);
     fwrite(&(fl->nFeatures), sizeof(int), 1, fp);
     for (i = 0 ; i < fl->nFeatures ; i++)  {
       _printFeatureBin(fp, fl->feature[i]);
@@ -363,7 +362,7 @@ void KLTWriteFeatureList(
 
 void KLTWriteFeatureHistory(
   KLT_FeatureHistory fh,
-  char *fname, 
+  char *fname,
   char *fmt)
 {
   FILE *fp;
@@ -372,15 +371,15 @@ void KLTWriteFeatureHistory(
   int i;
 
   if (KLT_verbose >= 1 && fname != NULL)  {
-    fprintf(stderr,  
-            "(KLT) Writing feature history to %s file: '%s'\n", 
+    fprintf(stderr,
+            "(KLT) Writing feature history to %s file: '%s'\n",
             (fmt == NULL ? "binary" : "text"), fname);
   }
 
   if (fmt != NULL) {  /* text file or stderr */
     fp = _printSetupTxt(fname, fmt, format, &type);
     _printHeader(fp, format, FEATURE_HISTORY, fh->nFrames, NULL);
-	
+
     for (i = 0 ; i < fh->nFrames ; i++)  {
       fprintf(fp, "%5d | ", i);
       _printFeatureTxt(fp, fh->feature[i], format, type);
@@ -389,7 +388,7 @@ void KLTWriteFeatureHistory(
     _printShutdown(fp);
   } else {  /* binary file */
     fp = _printSetupBin(fname);
-    fwrite(binheader_fh, sizeof(char), BINHEADERLENGTH, fp); 
+    fwrite(binheader_fh, sizeof(char), BINHEADERLENGTH, fp);
     fwrite(&(fh->nFrames), sizeof(int), 1, fp);
     for (i = 0 ; i < fh->nFrames ; i++)  {
       _printFeatureBin(fp, fh->feature[i]);
@@ -399,10 +398,9 @@ void KLTWriteFeatureHistory(
 }
 
 
-
 void KLTWriteFeatureTable(
   KLT_FeatureTable ft,
-  char *fname, 
+  char *fname,
   char *fmt)
 {
   FILE *fp;
@@ -411,8 +409,8 @@ void KLTWriteFeatureTable(
   int i, j;
 
   if (KLT_verbose >= 1 && fname != NULL)  {
-    fprintf(stderr,  
-            "(KLT) Writing feature table to %s file: '%s'\n", 
+    fprintf(stderr,
+            "(KLT) Writing feature table to %s file: '%s'\n",
             (fmt == NULL ? "binary" : "text"), fname);
   }
 
@@ -429,7 +427,7 @@ void KLTWriteFeatureTable(
     _printShutdown(fp);
   } else {  /* binary file */
     fp = _printSetupBin(fname);
-    fwrite(binheader_ft, sizeof(char), BINHEADERLENGTH, fp); 
+    fwrite(binheader_ft, sizeof(char), BINHEADERLENGTH, fp);
     fwrite(&(ft->nFrames), sizeof(int), 1, fp);
     fwrite(&(ft->nFeatures), sizeof(int), 1, fp);
     for (j = 0 ; j < ft->nFeatures ; j++)  {
@@ -442,7 +440,6 @@ void KLTWriteFeatureTable(
 }
 
 
-
 static structureType _readHeader(
   FILE *fp,
   int *nFrames,
@@ -452,7 +449,7 @@ static structureType _readHeader(
 #define LINELENGTH 100
   char line[LINELENGTH];
   structureType id;
-	
+
   /* If file is binary, then read data and return */
   fread(line, sizeof(char), BINHEADERLENGTH, fp);
   line[BINHEADERLENGTH] = 0;
@@ -576,7 +573,7 @@ static void _readFeatureBin(
  * KLTReadFeatureHistory
  * KLTReadFeatureTable
  *
- * If the first parameter (fl, fh, or ft) is NULL, then the 
+ * If the first parameter (fl, fh, or ft) is NULL, then the
  * corresponding structure is created.
  */
 
@@ -589,16 +586,16 @@ KLT_FeatureList KLTReadFeatureList(
   int nFeatures;
   structureType id;
   int indx;
-  KLT_BOOL binary; 		/* whether file is binary or text */
+  KLT_BOOL binary;      /* whether file is binary or text */
   int i;
 
   fp = fopen(fname, "rb");
   if (fp == NULL)  KLTError("(KLTReadFeatureList) Can't open file '%s' "
                             "for reading", fname);
-  if (KLT_verbose >= 1) 
+  if (KLT_verbose >= 1)
     fprintf(stderr,  "(KLT) Reading feature list from '%s'\n", fname);
   id = _readHeader(fp, NULL, &nFeatures, &binary);
-  if (id != FEATURE_LIST) 
+  if (id != FEATURE_LIST)
     KLTError("(KLTReadFeatureList) File '%s' does not contain "
              "a FeatureList", fname);
 
@@ -642,7 +639,7 @@ KLT_FeatureHistory KLTReadFeatureHistory(
   int nFrames;
   structureType id;
   int indx;
-  KLT_BOOL binary; 		/* whether file is binary or text */
+  KLT_BOOL binary;      /* whether file is binary or text */
   int i;
 
   fp = fopen(fname, "rb");
@@ -668,7 +665,7 @@ KLT_FeatureHistory KLTReadFeatureHistory(
   if (!binary) {  /* text file */
     for (i = 0 ; i < fh->nFrames ; i++)  {
       fscanf(fp, "%d |", &indx);
-      if (indx != i) 
+      if (indx != i)
         KLTError("(KLTReadFeatureHistory) Bad index at i = %d"
                  "-- %d", i, indx);
       _readFeatureTxt(fp, fh->feature[i]);
@@ -695,7 +692,7 @@ KLT_FeatureTable KLTReadFeatureTable(
   int nFeatures;
   structureType id;
   int indx;
-  KLT_BOOL binary; 		/* whether file is binary or text */
+  KLT_BOOL binary;      /* whether file is binary or text */
   int i, j;
 
   fp = fopen(fname, "rb");
@@ -713,7 +710,7 @@ KLT_FeatureTable KLTReadFeatureTable(
   }
   else  {
     ft = ft_in;
-					
+
     if (ft->nFrames != nFrames || ft->nFeatures != nFeatures)
       KLTError("(KLTReadFeatureTable) The feature table passed "
                "does not contain the same number of frames and "
@@ -723,7 +720,7 @@ KLT_FeatureTable KLTReadFeatureTable(
   if (!binary) {  /* text file */
     for (j = 0 ; j < ft->nFeatures ; j++)  {
       fscanf(fp, "%d |", &indx);
-      if (indx != j) 
+      if (indx != j)
         KLTError("(KLTReadFeatureTable) Bad index at j = %d"
                  "-- %d", j, indx);
       for (i = 0 ; i < ft->nFrames ; i++)

@@ -2,9 +2,9 @@
 NOTICE:
 
 Copyright (1997) The Board of Trustees of the Leland Stanford Junior
-Univeristy.  Except for commercial resale, lease, license or other 
-commercial transactions, permission is hereby given to use, copy, modify, 
-and distribute this software. STANFORD MAKES NO REPRESENTATIONS OR 
+Univeristy.  Except for commercial resale, lease, license or other
+commercial transactions, permission is hereby given to use, copy, modify,
+and distribute this software. STANFORD MAKES NO REPRESENTATIONS OR
 WARRANTIES OF ANY KIND CONCERNING THIS SOFTWARE.
 
 Developed by Stan Birchfield.  Questions, comments, and suggestions
@@ -123,7 +123,7 @@ KLT_TrackingContext KLTCreateTrackingContext()
 
   /* Change nPyramidLevels and subsampling */
   KLTChangeTCPyramid(tc, search_range);
-	
+
   /* Update border, which is dependent upon  */
   /* smooth_sigma_fact, pyramid_sigma_fact, window_size, and subsampling */
   KLTUpdateTCBorder(tc);
@@ -146,12 +146,12 @@ KLT_FeatureList KLTCreateFeatureList(
     nFeatures * sizeof(KLT_Feature) +
     nFeatures * sizeof(KLT_FeatureRec);
   int i;
-	
+
   /* Allocate memory for feature list */
   fl = (KLT_FeatureList)  malloc(nbytes);
-	
+
   /* Set parameters */
-  fl->nFeatures = nFeatures; 
+  fl->nFeatures = nFeatures;
 
   /* Set pointers */
   fl->feature = (KLT_Feature *) (fl + 1);
@@ -178,13 +178,13 @@ KLT_FeatureHistory KLTCreateFeatureHistory(
     nFrames * sizeof(KLT_Feature) +
     nFrames * sizeof(KLT_FeatureRec);
   int i;
-	
+
   /* Allocate memory for feature history */
   fh = (KLT_FeatureHistory)  malloc(nbytes);
-	
+
   /* Set parameters */
-  fh->nFrames = nFrames; 
-	
+  fh->nFrames = nFrames;
+
   /* Set pointers */
   fh->feature = (KLT_Feature *) (fh + 1);
   first = (KLT_Feature) (fh->feature + nFrames);
@@ -209,16 +209,16 @@ KLT_FeatureTable KLTCreateFeatureTable(
   KLT_Feature first;
   int nbytes = sizeof(KLT_FeatureTableRec);
   int i, j;
-	
+
   /* Allocate memory for feature history */
   ft = (KLT_FeatureTable)  malloc(nbytes);
-	
+
   /* Set parameters */
-  ft->nFrames = nFrames; 
-  ft->nFeatures = nFeatures; 
-	
+  ft->nFrames = nFrames;
+  ft->nFeatures = nFeatures;
+
   /* Set pointers */
-  ft->feature = (KLT_Feature **) 
+  ft->feature = (KLT_Feature **)
     _createArray2D(nFrames, nFeatures, sizeof(KLT_Feature));
   first = (KLT_Feature) malloc(nFrames * nFeatures * sizeof(KLT_FeatureRec));
   for (j = 0 ; j < nFeatures ; j++)
@@ -264,7 +264,7 @@ void KLTPrintTrackingContext(
 
   fprintf(stderr, "\n\tpyramid_last = %s\n", (tc->pyramid_last!=NULL) ?
           "points to old image" : "NULL");
-  fprintf(stderr, "\tpyramid_last_gradx = %s\n", 
+  fprintf(stderr, "\tpyramid_last_gradx = %s\n",
           (tc->pyramid_last_gradx!=NULL) ?
           "points to old image" : "NULL");
   fprintf(stderr, "\tpyramid_last_grady = %s\n",
@@ -311,23 +311,23 @@ void KLTChangeTCPyramid(
 
   subsampling = ((float) search_range) / window_halfwidth;
 
-  if (subsampling < 1.0)  {		/* 1.0 = 0+1 */
+  if (subsampling < 1.0)  {             /* 1.0 = 0+1 */
     tc->nPyramidLevels = 1;
-  } else if (subsampling <= 3.0)  {	/* 3.0 = 2+1 */
+  } else if (subsampling <= 3.0)  {     /* 3.0 = 2+1 */
     tc->nPyramidLevels = 2;
     tc->subsampling = 2;
-  } else if (subsampling <= 5.0)  {	/* 5.0 = 4+1 */
+  } else if (subsampling <= 5.0)  {     /* 5.0 = 4+1 */
     tc->nPyramidLevels = 2;
     tc->subsampling = 4;
-  } else if (subsampling <= 9.0)  {	/* 9.0 = 8+1 */
+  } else if (subsampling <= 9.0)  {     /* 9.0 = 8+1 */
     tc->nPyramidLevels = 2;
     tc->subsampling = 8;
   } else {
     /* The following lines are derived from the formula:
-       search_range = 
+       search_range =
        window_halfwidth * \sum_{i=0}^{nPyramidLevels-1} 8^i,
        which is the same as:
-       search_range = 
+       search_range =
        window_halfwidth * (8^nPyramidLevels - 1)/(8 - 1).
        Then, the value is rounded up to the nearest integer. */
     float val = log(7.0*subsampling+1.0)/log(8.0);
@@ -340,7 +340,7 @@ void KLTChangeTCPyramid(
 /*********************************************************************
  * NOTE:  Manually must ensure consistency with _KLTComputePyramid()
  */
- 
+
 static float _pyramidSigma(
   KLT_TrackingContext tc)
 {
@@ -349,7 +349,7 @@ static float _pyramidSigma(
 
 
 /*********************************************************************
- * Updates border, which is dependent upon 
+ * Updates border, which is dependent upon
  * smooth_sigma_fact, pyramid_sigma_fact, window_size, and subsampling
  */
 
@@ -400,10 +400,10 @@ void KLTUpdateTCBorder(
   pyramid_gauss_hw = gauss_width/2;
 
   /* Compute the # of invalid pixels at each level of the pyramid.
-     n_invalid_pixels is computed with respect to the ith level   
-     of the pyramid.  So, e.g., if n_invalid_pixels = 5 after   
-     the first iteration, then there are 5 invalid pixels in   
-     level 1, which translated means 5*subsampling invalid pixels   
+     n_invalid_pixels is computed with respect to the ith level
+     of the pyramid.  So, e.g., if n_invalid_pixels = 5 after
+     the first iteration, then there are 5 invalid pixels in
+     level 1, which translated means 5*subsampling invalid pixels
      in the original level 0. */
   n_invalid_pixels = smooth_gauss_hw;
   for (i = 1 ; i < num_levels ; i++)  {
@@ -435,11 +435,11 @@ void KLTUpdateTCBorder(
 void KLTFreeTrackingContext(
   KLT_TrackingContext tc)
 {
-  if (tc->pyramid_last)        
+  if (tc->pyramid_last)
     _KLTFreePyramid((_KLT_Pyramid) tc->pyramid_last);
-  if (tc->pyramid_last_gradx)  
+  if (tc->pyramid_last_gradx)
     _KLTFreePyramid((_KLT_Pyramid) tc->pyramid_last_gradx);
-  if (tc->pyramid_last_grady)  
+  if (tc->pyramid_last_grady)
     _KLTFreePyramid((_KLT_Pyramid) tc->pyramid_last_grady);
   free(tc);
 }
@@ -507,6 +507,3 @@ void KLTSetVerbosity(
 {
   KLT_verbose = verbosity;
 }
-
-
-

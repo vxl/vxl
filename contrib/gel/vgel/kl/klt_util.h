@@ -12,12 +12,12 @@ typedef struct  {
 }  _KLT_FloatImageRec, *_KLT_FloatImage;
 
 _KLT_FloatImage _KLTCreateFloatImage(
-  int ncols, 
+  int ncols,
   int nrows);
 
 void _KLTFreeFloatImage(
   _KLT_FloatImage);
-	
+
 void _KLTPrintSubFloatImage(
   _KLT_FloatImage floatimg,
   int x0, int y0,

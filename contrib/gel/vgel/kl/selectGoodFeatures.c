@@ -26,18 +26,18 @@ typedef enum {SELECTING_ALL, REPLACING_SOME} selectionMode;
 /*********************************************************************
  * _quicksort
  * Replacement for qsort().  Computing time is decreased by taking
- * advantage of specific knowledge of our array (that there are 
+ * advantage of specific knowledge of our array (that there are
  * three ints associated with each point).
  *
- * This routine generously provided by 
+ * This routine generously provided by
  *      Manolis Lourakis <lourakis@csi.forth.gr>
  *
  * NOTE: The results of this function may be slightly different from
- * those of qsort().  This is due to the fact that different sort 
- * algorithms have different behaviours when sorting numbers with the 
- * same value: Some leave them in the same relative positions in the 
- * array, while others change their relative positions. For example, 
- * if you have the array [c d b1 a b2] with b1=b2, it may be sorted as 
+ * those of qsort().  This is due to the fact that different sort
+ * algorithms have different behaviours when sorting numbers with the
+ * same value: Some leave them in the same relative positions in the
+ * array, while others change their relative positions. For example,
+ * if you have the array [c d b1 a b2] with b1=b2, it may be sorted as
  * [a b1 b2 c d] or [a b2 b1 c d].
  */
 
@@ -99,10 +99,10 @@ void _quicksort(int *pointlist, int n)
 /*********************************************************************/
 
 static void _fillFeaturemap(
-  int x, int y, 
-  uchar *featuremap, 
-  int mindist, 
-  int ncols, 
+  int x, int y,
+  uchar *featuremap,
+  int mindist,
+  int ncols,
   int nrows)
 {
   int ix, iy;
@@ -144,14 +144,14 @@ static void _enforceMinimumDistance(
   int x, y, val;     /* Location and trackability of pixel under consideration */
   uchar *featuremap; /* Boolean array recording proximity of features */
   int *ptr;
-	
+
   /* Cannot add features with an eigenvalue less than one */
   if (min_eigenvalue < 1)  min_eigenvalue = 1;
 
   /* Allocate memory for feature map and clear it */
   featuremap = (uchar *) malloc(ncols * nrows * sizeof(uchar));
   memset(featuremap, 0, ncols*nrows);
-	
+
   /* Necessary because code below works with (mindist-1) */
   mindist--;
 
@@ -172,8 +172,8 @@ static void _enforceMinimumDistance(
     /* If we can't add all the points, then fill in the rest
        of the featurelist with -1's */
     if (ptr >= pointlist + 3*npoints)  {
-      while (indx < featurelist->nFeatures)  {	
-        if (overwriteAllFeatures || 
+      while (indx < featurelist->nFeatures)  {
+        if (overwriteAllFeatures ||
             featurelist->feature[indx]->val < 0) {
           featurelist->feature[indx]->x   = -1;
           featurelist->feature[indx]->y   = -1;
@@ -187,14 +187,14 @@ static void _enforceMinimumDistance(
     x   = *ptr++;
     y   = *ptr++;
     val = *ptr++;
-		
+
     /* Ensure that feature is in-bounds */
     assert(x >= 0);
     assert(x < ncols);
     assert(y >= 0);
     assert(y < nrows);
-	
-    while (!overwriteAllFeatures && 
+
+    while (!overwriteAllFeatures &&
            indx < featurelist->nFeatures &&
            featurelist->feature[indx]->val >= 0)
       indx++;
@@ -225,7 +225,7 @@ static void _enforceMinimumDistance(
  *
  * Used by qsort (in _KLTSelectGoodFeatures) to determine
  * which feature is better.
- * By switching the '>' with the '<', qsort is fooled into sorting 
+ * By switching the '>' with the '<', qsort is fooled into sorting
  * in descending order.
  */
 
@@ -264,21 +264,21 @@ static void _sortPointList(
  * Given the three distinct elements of the symmetric 2x2 matrix
  *                     [gxx gxy]
  *                     [gxy gyy],
- * Returns the minimum eigenvalue of the matrix.  
+ * Returns the minimum eigenvalue of the matrix.
  */
 
 static float _minEigenvalue(float gxx, float gxy, float gyy)
 {
   return (gxx + gyy - sqrt((gxx - gyy)*(gxx - gyy) + 4*gxy*gxy))/2.0;
 }
-	
+
 
 /*********************************************************************/
 
 void _KLTSelectGoodFeatures(
   KLT_TrackingContext tc,
-  KLT_PixelType *img, 
-  int ncols, 
+  KLT_PixelType *img,
+  int ncols,
   int nrows,
   KLT_FeatureList featurelist,
   selectionMode mode)
@@ -312,15 +312,15 @@ void _KLTSelectGoodFeatures(
     KLTWarning("Tracking context's window height must be at least three.  \n"
                "Changing to %d.\n", tc->window_height);
   }
-  window_hw = tc->window_width/2; 
+  window_hw = tc->window_width/2;
   window_hh = tc->window_height/2;
-		
+
   /* Create pointlist, which is a simplified version of a featurelist, */
   /* for speed.  Contains only integer locations and values. */
   pointlist = (int *) malloc(ncols * nrows * 3 * sizeof(int));
 
   /* Create temporary images, etc. */
-  if (mode == REPLACING_SOME && 
+  if (mode == REPLACING_SOME &&
       tc->sequentialMode && tc->pyramid_last != NULL)  {
     floatimg = ((_KLT_Pyramid) tc->pyramid_last)->img[0];
     gradx = ((_KLT_Pyramid) tc->pyramid_last_gradx)->img[0];
@@ -339,11 +339,11 @@ void _KLTSelectGoodFeatures(
       _KLTComputeSmoothedImage(tmpimg, _KLTComputeSmoothSigma(tc), floatimg);
       _KLTFreeFloatImage(tmpimg);
     } else _KLTToFloatImage(img, ncols, nrows, floatimg);
- 
+
     /* Compute gradient of image in x and y direction */
     _KLTComputeGradients(floatimg, tc->grad_sigma, gradx, grady);
   }
-	
+
   /* Write internal images */
   if (tc->writeInternalImages)  {
     _KLTWriteFloatImageToPGM(floatimg, "kltimg_sgfrlf.pgm");
@@ -360,18 +360,18 @@ void _KLTSelectGoodFeatures(
     register int *ptr;
     float val;
     unsigned int limit = 1;
-    int borderx = tc->borderx;	/* Must not touch cols */
-    int bordery = tc->bordery;	/* lost by convolution */
+    int borderx = tc->borderx;  /* Must not touch cols */
+    int bordery = tc->bordery;  /* lost by convolution */
     int x, y;
     int i;
-	
+
     if (borderx < window_hw)  borderx = window_hw;
     if (bordery < window_hh)  bordery = window_hh;
 
     /* Find largest value of an int */
     for (i = 0 ; i < sizeof(int) ; i++)  limit *= 256;
     limit = limit/2 - 1;
-		
+
     /* For most of the pixels in the image, do ... */
     ptr = pointlist;
     for (y = bordery ; y < nrows - bordery ; y += tc->nSkippedPixels + 1)
@@ -403,7 +403,7 @@ void _KLTSelectGoodFeatures(
         npoints++;
       }
   }
-			
+
   /* Sort the features  */
   _sortPointList(pointlist, npoints);
 
@@ -438,22 +438,22 @@ void _KLTSelectGoodFeatures(
  * KLTSelectGoodFeatures
  *
  * Main routine, visible to the outside.  Finds the good features in
- * an image.  
- * 
+ * an image.
+ *
  * INPUTS
- * tc:	Contains parameters used in computation (size of image,
+ * tc:  Contains parameters used in computation (size of image,
  *        size of window, min distance b/w features, sigma to compute
  *        image gradients, # of features desired).
- * img:	Pointer to the data of an image (probably unsigned chars).
- * 
+ * img: Pointer to the data of an image (probably unsigned chars).
+ *
  * OUTPUTS
- * features:	List of features.  The member nFeatures is computed.
+ * features:    List of features.  The member nFeatures is computed.
  */
 
 void KLTSelectGoodFeatures(
   KLT_TrackingContext tc,
-  KLT_PixelType *img, 
-  int ncols, 
+  KLT_PixelType *img,
+  int ncols,
   int nrows,
   KLT_FeatureList fl)
 {
@@ -463,11 +463,11 @@ void KLTSelectGoodFeatures(
     fflush(stderr);
   }
 
-  _KLTSelectGoodFeatures(tc, img, ncols, nrows, 
+  _KLTSelectGoodFeatures(tc, img, ncols, nrows,
                          fl, SELECTING_ALL);
 
   if (KLT_verbose >= 1)  {
-    fprintf(stderr,  "\n\t%d features found.\n", 
+    fprintf(stderr,  "\n\t%d features found.\n",
             KLTCountRemainingFeatures(fl));
     if (tc->writeInternalImages)
       fprintf(stderr,  "\tWrote images to 'kltimg_sgfrlf*.pgm'.\n");
@@ -479,23 +479,23 @@ void KLTSelectGoodFeatures(
 /*********************************************************************
  * KLTReplaceLostFeatures
  *
- * Main routine, visible to the outside.  Replaces the lost features 
- * in an image.  
- * 
+ * Main routine, visible to the outside.  Replaces the lost features
+ * in an image.
+ *
  * INPUTS
- * tc:	Contains parameters used in computation (size of image,
+ * tc:  Contains parameters used in computation (size of image,
  *        size of window, min distance b/w features, sigma to compute
  *        image gradients, # of features desired).
- * img:	Pointer to the data of an image (probably unsigned chars).
- * 
+ * img: Pointer to the data of an image (probably unsigned chars).
+ *
  * OUTPUTS
- * features:	List of features.  The member nFeatures is computed.
+ * features:    List of features.  The member nFeatures is computed.
  */
 
 void KLTReplaceLostFeatures(
   KLT_TrackingContext tc,
-  KLT_PixelType *img, 
-  int ncols, 
+  KLT_PixelType *img,
+  int ncols,
   int nrows,
   KLT_FeatureList fl)
 {
@@ -509,7 +509,7 @@ void KLTReplaceLostFeatures(
 
   /* If there are any lost features, replace them */
   if (nLostFeatures > 0)
-    _KLTSelectGoodFeatures(tc, img, ncols, nrows, 
+    _KLTSelectGoodFeatures(tc, img, ncols, nrows,
                            fl, REPLACING_SOME);
 
   if (KLT_verbose >= 1)  {
@@ -520,5 +520,3 @@ void KLTReplaceLostFeatures(
     fflush(stderr);
   }
 }
-
-

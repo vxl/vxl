@@ -20,10 +20,7 @@
 //*****************************************************************************
 #include <vbl/vbl_smart_ptr.h>
 
-//typedef vbl_smart_ptr<gkll_multi_view_data<>> gkll_multi_view_data_sptr;
-
-
 typedef gkll_multi_view_data<vtol_vertex_2d_sptr> gkll_mvd_vertex;
-
 typedef vbl_smart_ptr<gkll_mvd_vertex> gkll_multi_view_data_vertex_sptr;
+
 #endif // #ifndef gkll_multi_view_data_vertex_sptr_h_

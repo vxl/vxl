@@ -5,17 +5,17 @@
 
 /* Standard includes */
 #include <assert.h>
-#include <math.h>		/* fabs() */
-#include <stdlib.h>		/* malloc() */
-#include <stdio.h>		/* fflush() */
+#include <math.h>       /* fabs() */
+#include <stdlib.h>     /* malloc() */
+#include <stdio.h>      /* fflush() */
 
 /* Our includes */
 #include "base.h"
 #include "error.h"
-#include "convolve.h"	/* for computing pyramid */
+#include "convolve.h"   /* for computing pyramid */
 #include "klt.h"
-#include "klt_util.h"	/* _KLT_FloatImage */
-#include "pyramid.h"	/* _KLT_Pyramid */
+#include "klt_util.h"   /* _KLT_FloatImage */
+#include "pyramid.h"    /* _KLT_Pyramid */
 
 extern int KLT_verbose;
 
@@ -24,14 +24,14 @@ typedef float *_FloatWindow;
 
 /*********************************************************************
  * _interpolate
- * 
- * Given a point (x,y) in an image, computes the bilinear interpolated 
- * gray-level value of the point in the image.  
+ *
+ * Given a point (x,y) in an image, computes the bilinear interpolated
+ * gray-level value of the point in the image.
  */
 
 static float _interpolate(
-  float x, 
-  float y, 
+  float x,
+  float y,
   _KLT_FloatImage img)
 {
   int xt = (int) x;  /* coordinates of top-left corner */
@@ -62,7 +62,7 @@ static float _interpolate(
  * _computeIntensityDifference
  *
  * Given two images and the window center in both images,
- * aligns the images wrt the window and computes the difference 
+ * aligns the images wrt the window and computes the difference
  * between the two overlaid images.
  */
 
@@ -92,7 +92,7 @@ static void _computeIntensityDifference(
  * _computeGradientSum
  *
  * Given two gradients and the window center in both images,
- * aligns the gradients wrt the window and computes the sum of the two 
+ * aligns the gradients wrt the window and computes the sum of the two
  * overlaid gradients.
  */
 
@@ -135,8 +135,8 @@ static void _compute2by2GradientMatrix(
   int width,   /* size of window */
   int height,
   float *gxx,  /* return values */
-  float *gxy, 
-  float *gyy) 
+  float *gxy,
+  float *gyy)
 
 {
   register float gx, gy;
@@ -152,8 +152,8 @@ static void _compute2by2GradientMatrix(
     *gyy += gy*gy;
   }
 }
-	
-	
+
+
 /*********************************************************************
  * _compute2by1ErrorVector
  *
@@ -172,7 +172,7 @@ static void _compute2by1ErrorVector(
   register int i;
 
   /* Compute values */
-  *ex = 0;  *ey = 0;  
+  *ex = 0;  *ey = 0;
   for (i = 0 ; i < width * height ; i++)  {
     diff = *imgdiff++;
     *ex += diff * (*gradx++);
@@ -200,7 +200,6 @@ static int _solveEquation(
 {
   float det = gxx*gyy - gxy*gxy;
 
-	
   if (det < small)  return KLT_SMALL_DET;
 
   *dx = (gyy*ex - gxy*ey)/det;
@@ -212,7 +211,7 @@ static int _solveEquation(
 /*********************************************************************
  * _allocateFloatWindow
  */
-	
+
 static _FloatWindow _allocateFloatWindow(
   int width,
   int height)
@@ -230,7 +229,7 @@ static _FloatWindow _allocateFloatWindow(
  * (for debugging purposes)
  */
 
-/*
+#ifdef DEBUG
 static void _printFloatWindow(
   _FloatWindow fw,
   int width,
@@ -246,17 +245,17 @@ static void _printFloatWindow(
     fprintf(stderr, "\n");
   }
 }
-*/
-	
+#endif
+
 
 /*********************************************************************
  * _sumAbsFloatWindow
  */
 
 static float _sumAbsFloatWindow(
-  _FloatWindow fw,
-  int width,
-  int height)
+                                _FloatWindow fw,
+                                int width,
+                                int height)
 {
   float sum = 0.0;
   int w;
@@ -285,10 +284,10 @@ static int _trackFeature(
   float y1,
   float *x2, /* starting location of search in second image */
   float *y2,
-  _KLT_FloatImage img1, 
+  _KLT_FloatImage img1,
   _KLT_FloatImage gradx1,
   _KLT_FloatImage grady1,
-  _KLT_FloatImage img2, 
+  _KLT_FloatImage img2,
   _KLT_FloatImage gradx2,
   _KLT_FloatImage grady2,
   int width,           /* size of window */
@@ -308,7 +307,7 @@ static int _trackFeature(
   int nr = img1->nrows;
   float one_plus_eps = 1.000001f;   /* To prevent rounding errors */
 
-	
+
   /* Allocate memory for windows */
   imgdiff = _allocateFloatWindow(width, height);
   gradx   = _allocateFloatWindow(width, height);
@@ -327,19 +326,19 @@ static int _trackFeature(
     }
 
     /* Compute gradient and difference windows */
-    _computeIntensityDifference(img1, img2, x1, y1, *x2, *y2, 
+    _computeIntensityDifference(img1, img2, x1, y1, *x2, *y2,
                                 width, height, imgdiff);
 
-    _computeGradientSum(gradx1, grady1, gradx2, grady2, 
-			x1, y1, *x2, *y2, width, height, gradx, grady);
-		
+    _computeGradientSum(gradx1, grady1, gradx2, grady2,
+                        x1, y1, *x2, *y2, width, height, gradx, grady);
+
 
     /* Use these windows to construct matrices */
-    _compute2by2GradientMatrix(gradx, grady, width, height, 
+    _compute2by2GradientMatrix(gradx, grady, width, height,
                                &gxx, &gxy, &gyy);
     _compute2by1ErrorVector(imgdiff, gradx, grady, width, height,
                             &ex, &ey);
-				
+
     /* Using matrices, solve equation for new displacement */
     status = _solveEquation(gxx, gxy, gyy, ex, ey, small, &dx, &dy);
     if (status == KLT_SMALL_DET)  break;
@@ -351,15 +350,15 @@ static int _trackFeature(
   }  while ((fabs(dx)>=th || fabs(dy)>=th) && iteration < max_iterations);
 
   /* Check whether window is out of bounds */
-  if (*x2-hw < 0.0f || *x2+hw > nc-one_plus_eps || 
+  if (*x2-hw < 0.0f || *x2+hw > nc-one_plus_eps ||
       *y2-hh < 0.0f || *y2+hh > nr-one_plus_eps)
     status = KLT_OOB;
 
   /* Check whether residue is too large */
   if (status == KLT_TRACKED)  {
-    _computeIntensityDifference(img1, img2, x1, y1, *x2, *y2, 
+    _computeIntensityDifference(img1, img2, x1, y1, *x2, *y2,
                                 width, height, imgdiff);
-    if (_sumAbsFloatWindow(imgdiff, width, height)/(width*height) > max_residue) 
+    if (_sumAbsFloatWindow(imgdiff, width, height)/(width*height) > max_residue)
       status = KLT_LARGE_RESIDUE;
   }
 
@@ -372,7 +371,6 @@ static int _trackFeature(
   else if (status == KLT_LARGE_RESIDUE)  return KLT_LARGE_RESIDUE;
   else if (iteration >= max_iterations)  return KLT_MAX_ITERATIONS;
   else  return KLT_TRACKED;
-
 }
 
 
@@ -398,12 +396,12 @@ static KLT_BOOL _outOfBounds(
  */
 
 void KLTTrackFeatures(
-  KLT_TrackingContext tc,
-  KLT_PixelType *img1,
-  KLT_PixelType *img2,
-  int ncols,
-  int nrows,
-  KLT_FeatureList featurelist)
+                      KLT_TrackingContext tc,
+                      KLT_PixelType *img1,
+                      KLT_PixelType *img2,
+                      int ncols,
+                      int nrows,
+                      KLT_FeatureList featurelist)
 {
   _KLT_FloatImage tmpimg, floatimg1, floatimg2;
   _KLT_Pyramid pyramid1, pyramid1_gradx, pyramid1_grady,
@@ -468,7 +466,7 @@ void KLTTrackFeatures(
     pyramid1_gradx = _KLTCreatePyramid(ncols, nrows, subsampling, tc->nPyramidLevels);
     pyramid1_grady = _KLTCreatePyramid(ncols, nrows, subsampling, tc->nPyramidLevels);
     for (i = 0 ; i < tc->nPyramidLevels ; i++)
-      _KLTComputeGradients(pyramid1->img[i], tc->grad_sigma, 
+      _KLTComputeGradients(pyramid1->img[i], tc->grad_sigma,
                            pyramid1_gradx->img[i],
                            pyramid1_grady->img[i]);
   }
@@ -482,7 +480,7 @@ void KLTTrackFeatures(
   pyramid2_gradx = _KLTCreatePyramid(ncols, nrows, subsampling, tc->nPyramidLevels);
   pyramid2_grady = _KLTCreatePyramid(ncols, nrows, subsampling, tc->nPyramidLevels);
   for (i = 0 ; i < tc->nPyramidLevels ; i++)
-    _KLTComputeGradients(pyramid2->img[i], tc->grad_sigma, 
+    _KLTComputeGradients(pyramid2->img[i], tc->grad_sigma,
                          pyramid2_gradx->img[i],
                          pyramid2_grady->img[i]);
 
@@ -527,22 +525,22 @@ void KLTTrackFeatures(
         xloc *= subsampling;  yloc *= subsampling;
         xlocout *= subsampling;  ylocout *= subsampling;
 
-        val = _trackFeature(xloc, yloc, 
+        val = _trackFeature(xloc, yloc,
                             &xlocout, &ylocout,
-                            pyramid1->img[r], 
-                            pyramid1_gradx->img[r], pyramid1_grady->img[r], 
-                            pyramid2->img[r], 
+                            pyramid1->img[r],
+                            pyramid1_gradx->img[r], pyramid1_grady->img[r],
+                            pyramid2->img[r],
                             pyramid2_gradx->img[r], pyramid2_grady->img[r],
                             tc->window_width, tc->window_height,
                             tc->max_iterations,
                             tc->min_determinant,
                             tc->min_displacement,
                             tc->max_residue);
-	
+
         if (val==KLT_SMALL_DET || val==KLT_OOB)
           break;
       }
-	
+
       /* Record feature */
       if (val == KLT_OOB)  {
         featurelist->feature[indx]->x   = -1.0;
@@ -597,7 +595,4 @@ void KLTTrackFeatures(
       fprintf(stderr,  "\tWrote images to 'kltimg_tf*.pgm'.\n");
     fflush(stderr);
   }
-
 }
-
-

@@ -60,7 +60,7 @@ void KLTExtractFeatureList(
     fl->feature[feat]->val = ft->feature[feat][frame]->val;
   }
 }
- 
+
 
 /*********************************************************************
  *

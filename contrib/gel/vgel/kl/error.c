@@ -13,9 +13,9 @@
 
 /*********************************************************************
  * KLTError
- * 
+ *
  * Prints an error message and dies.
- * 
+ *
  * INPUTS
  * exactly like printf
  */
@@ -35,9 +35,9 @@ void KLTError(char *fmt, ...)
 
 /*********************************************************************
  * KLTWarning
- * 
+ *
  * Prints a warning message.
- * 
+ *
  * INPUTS
  * exactly like printf
  */

@@ -34,30 +34,30 @@ typedef unsigned char KLT_PixelType;
 
 typedef struct  {
   /* Available to user */
-  int mindist;			/* min distance b/w features */
+  int mindist;                  /* min distance b/w features */
   int window_width, window_height;
-  KLT_BOOL sequentialMode;	/* whether to save most recent image to save time */
+  KLT_BOOL sequentialMode;      /* whether to save most recent image to save time */
   /* can set to TRUE manually, but don't set to */
   /* FALSE manually */
-  KLT_BOOL smoothBeforeSelecting;	/* whether to smooth image before */
+  KLT_BOOL smoothBeforeSelecting;       /* whether to smooth image before */
   /* selecting features */
-  KLT_BOOL writeInternalImages;	/* whether to write internal images */
-  
+  KLT_BOOL writeInternalImages; /* whether to write internal images */
+
   /* Available, but hopefully can ignore */
-  int min_eigenvalue;		/* smallest eigenvalue allowed for selecting */
-  float min_determinant;	/* th for determining lost */
-  float min_displacement;	/* th for stopping tracking when pixel changes little */
-  int max_iterations;		/* th for stopping tracking when too many iterations */
-  float max_residue;		/* th for stopping tracking when residue is large */
+  int min_eigenvalue;           /* smallest eigenvalue allowed for selecting */
+  float min_determinant;        /* th for determining lost */
+  float min_displacement;       /* th for stopping tracking when pixel changes little */
+  int max_iterations;           /* th for stopping tracking when too many iterations */
+  float max_residue;            /* th for stopping tracking when residue is large */
   float grad_sigma;
   float smooth_sigma_fact;
   float pyramid_sigma_fact;
-  int nSkippedPixels;		/* # of pixels skipped when finding features */
-  int borderx;			/* border in which features will not be found */
+  int nSkippedPixels;           /* # of pixels skipped when finding features */
+  int borderx;                  /* border in which features will not be found */
   int bordery;
-  int nPyramidLevels;		/* computed from search_ranges */
-  int subsampling;		/* 		" */
-  
+  int nPyramidLevels;           /* computed from search_ranges */
+  int subsampling;              /*              "              */
+
   /* User must not touch these */
   void *pyramid_last;
   void *pyramid_last_gradx;
@@ -68,10 +68,10 @@ typedef struct  {
 typedef struct  {
   KLT_locType x;
   KLT_locType y;
-  int val;	
+  int val;
 /* will be needed when we do affine */
 /*     int window_width, window_height; */
-/*	uchar *img; */
+/*      uchar *img; */
 }  KLT_FeatureRec, *KLT_Feature;
 
 typedef struct  {
@@ -201,11 +201,4 @@ KLT_FeatureTable KLTReadFeatureTable(
   KLT_FeatureTable ft,
   char *filename);
 
-
-#endif
-
-
-
-
-
-
+#endif /* _KLT_H_ */

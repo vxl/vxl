@@ -1,14 +1,14 @@
 #ifndef gkll_kl_h_
 #define gkll_kl_h_
 //--------------------------------------------------------------------------------
-// .NAME	gkll_kl
-// .INCLUDE	gkll/gkll_kl.h
-// .FILE	gkll_kl.cxx
-// .SECTION Description:
+// .NAME        gkll_kl
+// .INCLUDE     gkll/gkll_kl.h
+// .FILE        gkll_kl.cxx
+// .SECTION     Description:
 //   Interface to use Kanade-Lucas algorithm
 // .SECTION Author
 //   L. Guichard
-// .SECTION Modifications:   
+// .SECTION Modifications:
 //--------------------------------------------------------------------------------
 #include <gkll/kl/klt_CC.h>
 #include <gkll/gkll_kl_params.h>
@@ -28,27 +28,27 @@ public:
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Default constructor. Parametres set to defaults
+//: Default constructor. Parameters set to defaults
 //---------------------------------------------------------------------------
-	explicit gkll_kl(const gkll_kl_params & params);
+  explicit gkll_kl(const gkll_kl_params & params);
 
 //---------------------------------------------------------------------------
 //: Destructor.
 //---------------------------------------------------------------------------
-	virtual ~gkll_kl();
-	
-	virtual void match_sequence(vcl_vector<vil_image> &,gkll_multi_view_data_vertex_sptr);
-	
-	virtual void match_sequence(vidl_movie_sptr,gkll_multi_view_data_vertex_sptr);
+  virtual ~gkll_kl();
 
-	virtual vcl_vector<vtol_vertex_2d_sptr> * extract_points(vil_image &);
+  virtual void match_sequence(vcl_vector<vil_image> &,gkll_multi_view_data_vertex_sptr);
+
+  virtual void match_sequence(vidl_movie_sptr,gkll_multi_view_data_vertex_sptr);
+
+  virtual vcl_vector<vtol_vertex_2d_sptr> * extract_points(vil_image &);
 
 private:
-	gkll_kl_params _params;
-	
-	virtual KLT_PixelType* convert_to_gs_image(vil_image &);
+  gkll_kl_params _params;
 
-	virtual void set_tracking_context( KLT_TrackingContext tc);
+  virtual KLT_PixelType* convert_to_gs_image(vil_image &);
+
+  virtual void set_tracking_context( KLT_TrackingContext tc);
 };
 
 #endif // gkll_kl_
