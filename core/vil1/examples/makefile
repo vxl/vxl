@@ -1,11 +1,5 @@
 USES = vxl
-# The following three are needed, as libvil uses tiff, jpeg, png if available:
-TRY_TIFF := 1
-TRY_JPEG := 1
-TRY_PNG  := 1
-
-## vil_stream_url uses tcp sockets.
-USE_SOCKETS := 1
+include ${IUEROOT}/vxl/vil/config.mk
 
 # Examples may use vbl....
 IULIBS = -lvil -lvbl -lvpl

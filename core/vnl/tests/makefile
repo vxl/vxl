@@ -1,5 +1,5 @@
 USES := vxl
-USE_NETLIB := 1
+include ${IUEROOT}/vxl/vnl/algo/config.mk
 
 TESTS += test_all.cxx
 TESTS += test_fft.cxx
@@ -32,7 +32,7 @@ TESTS += test_transpose.cxx
 TESTS += test_levenberg_marquardt.cxx
 TESTS += $(wildcard test_tensor.cxx)
 
-IULIBS += -lvnl-algo -lvnl -lnetlib -lvpl # vpl_unlink used in test_matlab
+IULIBS += -lvnl-algo -lvnl -lvpl # vpl_unlink used in test_matlab
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

@@ -1,7 +1,7 @@
 USES += vxl
-USE_NETLIB := 1
+include ${IUEROOT}/vxl/vnl/algo/config.mk
 
-IULIBS := -lvnl-algo -lvbl -lvnl -lnetlib
+IULIBS := -lvnl-algo -lvbl -lvnl
 
 MINI_PROG_SOURCES += time_fastops.cxx
 MINI_PROG_SOURCES += vnl_amoeba.cxx

@@ -1,7 +1,8 @@
 USES = vxl
+include ${IUEROOT}/vxl/vnl/algo/config.mk
 
 # Examples may use vbl....
-IULIBS = -lvnl-algo -lvbl -lvnl -lnetlib
+IULIBS = -lvnl-algo -lvbl -lvnl
 
 MINI_PROG_SOURCES += vnl_calc.cxx
 #MINI_PROG_SOURCES += time_fastops.cxx
