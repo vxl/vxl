@@ -13,7 +13,7 @@ IF(NOT HAS_PNG)
     # exist.
     #
   
-    FIND_PATH( PNG_INCLUDE_PATH pngasmrd.h
+    FIND_PATH( PNG_INCLUDE_PATH png.h
       ${allvxl_SOURCE_DIR}/v3p/png
     )
   

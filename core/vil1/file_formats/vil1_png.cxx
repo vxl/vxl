@@ -6,6 +6,9 @@
 
 #include "vil_png.h"
 
+
+
+
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
@@ -16,6 +19,9 @@
 #include <vil/vil_property.h>
 
 #include <png.h>
+#if (PNG_LIBPNG_VER_MAJOR == 0)
+extern "You need a later libpng. You should rerun CMake, after setting NATIVE_PNG_LIBRARY and NATIVE_PNG_INCLUDE_PATH to Ignore"
+#endif
 #include <vcl_cstdlib.h> // for vcl_exit()
 
 #include <vxl_config.h>
