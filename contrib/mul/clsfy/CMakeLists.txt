@@ -14,6 +14,7 @@ clsfy_binary_hyperplane_ls_builder.cxx
 clsfy_binary_pdf_classifier.cxx
 clsfy_builder_base.cxx
 clsfy_classifier_base.cxx
+clsfy_simple_adaboost.cxx
 clsfy_k_nearest_neighbour.cxx
 clsfy_rbf_parzen.cxx
 clsfy_knn_builder.cxx
@@ -34,6 +35,7 @@ IF (WIN32)
     clsfy_binary_pdf_classifier.h
     clsfy_builder_base.h
     clsfy_classifier_base.h
+		clsfy_simple_adaboost.h
     clsfy_k_nearest_neighbour.h
     clsfy_rbf_parzen.h
     clsfy_knn_builder.h
