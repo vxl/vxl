@@ -56,4 +56,5 @@ int main(int argc, char ** argv)
 
   // write the output of the data
   output.write_output(argv[4]);
+  return 0;
 }
