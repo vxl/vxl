@@ -243,6 +243,30 @@ SOURCE=.\Templates/vbl_io_smart_ptr+vsol_spatial_object_2d-.cxx
 SOURCE=.\Templates/vsl_binary_loader+vsol_spatial_object_2d-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+vsol_conic_2d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+vsol_group_2d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+vsol_rectangle_2d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+vsol_triangle_2d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsol_conic_2d_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsol_rectangle_2d_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsol_spatial_object_2d_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsol_triangle_2d_sptr-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsol_box_2d.cxx
 # End Source File
 # Begin Source File

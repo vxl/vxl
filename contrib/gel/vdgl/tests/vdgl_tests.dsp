@@ -97,6 +97,9 @@ SOURCE=.\test_vdgl.cxx
 # Begin Source File
 SOURCE=.\test1_vdgl.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_vdgl_io.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
