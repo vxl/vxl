@@ -81,7 +81,7 @@ struct vul_file
   static vcl_string strip_extension(vcl_string const &filename)
   { return strip_extension(filename.c_str()); }
 
-  //: Delete 1 or more files using the Local OS prefered globbing.
+  //: Delete 1 or more files using the Local OS preferred globbing.
   // E.g. \c delete_file_glob("*"); will delete all the files in the
   // current directory on most operating systems.
   // \return true if successful.

@@ -152,7 +152,7 @@ static unsigned replace(char from, char to, vcl_string &s)
 }
 #endif
 
-//: Delete 1 or more files using the Local OS prefered globbing.
+//: Delete 1 or more files using the Local OS preferred globbing.
 // E.g. \c delete_file_glob("*"); will delete all the files in the
 // current directory on most operating systems.
 // Takes Posix path separators i.e. '/'
