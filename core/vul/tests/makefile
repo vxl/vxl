@@ -9,6 +9,7 @@ TESTS += test_psfile.cxx
 TESTS += test_sprintf.cxx
 TESTS += test_url.cxx
 TESTS += test_temp_filename.cxx
+TESTS += test_regexp.cxx
 
 IULIBS := -lvul -lvpl -ltestlib
 
