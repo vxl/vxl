@@ -1,17 +1,18 @@
+// This is mul/mil/mil_image_2d_of.txx
 #ifndef mil_image_2d_of_txx_
 #define mil_image_2d_of_txx_
-
 //:
 //  \file
 //  \brief Represent images of one or more planes of Ts.
 //  \author Tim Cootes
+
+#include "mil_image_2d_of.h"
 
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
-#include <mil/mil_image_2d_of.h>
 #include <vsl/vsl_vector_io.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 

@@ -1,12 +1,10 @@
+// This is gel/vsrl/vsrl_diffusion.cxx
+#include "vsrl_diffusion.h"
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
-#include <vcl_cstddef.h>
-#include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>
+#include <vcl_cstdio.h> // for std::sprintf()
 #include <vil/vil_byte.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_save.h>
-#include <vsrl/vsrl_diffusion.h>
 #include <vsrl/vsrl_parameters.h>
 
 vsrl_diffusion::vsrl_diffusion(vsrl_dense_matcher *matcher)
@@ -46,7 +44,7 @@ double vsrl_diffusion::get_disparity(int x, int y)
 
 void vsrl_diffusion::write_image(char *file_name,int it_num, vnl_matrix<double> *mat)
 {
-  // we want to write the file_name concatinated with the it_number
+  // we want to write the file_name concatenated with the it_number
 
   char new_name[512];
 

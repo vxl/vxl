@@ -1,3 +1,5 @@
+// This is oxl/mvl/PMatrixComputeLinear.cxx
+#include "PMatrixComputeLinear.h"
 //:
 //  \file
 
@@ -9,7 +11,6 @@
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgPoint3D.h>
 #include <mvl/PMatrix.h>
-#include <mvl/PMatrixComputeLinear.h>
 
 //-----------------------------------------------------------------------------
 //

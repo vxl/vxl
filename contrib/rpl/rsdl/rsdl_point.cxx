@@ -1,11 +1,11 @@
+// This is rpl/rsdl/rsdl_point.cxx
+#include "rsdl_point.h"
 //:
 //  \file
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
-
-#include <rsdl/rsdl_point.h>
 
 rsdl_point::rsdl_point( )
   : Nc_(0), Na_(0), data_(0)
@@ -121,8 +121,8 @@ rsdl_point::resize( unsigned int Nc, unsigned int Na )
     double* buf = new double[ Nc + Na ];
     unsigned int min_c = ( Nc < Nc_ ? Nc : Nc_ );
     unsigned int min_a = ( Na < Na_ ? Na : Na_ );
-    for( unsigned int i=0; i < min_c; ++i )  buf[i] = data_[i];
-    for( unsigned int i=0; i < min_a; ++i )  buf[Nc+i] = data_[Nc_+i];
+    for ( unsigned int i=0; i < min_c; ++i )  buf[i] = data_[i];
+    for ( unsigned int i=0; i < min_a; ++i )  buf[Nc+i] = data_[Nc_+i];
     delete[] data_;
     data_ = buf;
     Nc_ = Nc;

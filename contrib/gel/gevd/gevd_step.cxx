@@ -1,10 +1,5 @@
-#include <vcl_vector.h>
-#include <vnl/vnl_math.h>
+// This is gel/gevd/gevd_step.cxx
 #include "gevd_step.h"
-#include "gevd_noise.h"
-#include "gevd_float_operators.h"
-#include "gevd_pixel.h"
-
 //:
 // \file
 // Use 8 directions, with 45 degree angle in between them.
@@ -26,6 +21,12 @@
 //        |______|______|______|
 //
 //\endverbatim
+
+#include <vcl_vector.h>
+#include <vnl/vnl_math.h>
+#include "gevd_noise.h"
+#include "gevd_float_operators.h"
+#include "gevd_pixel.h"
 
 const byte TWOPI = 8, FULLPI = 4, HALFPI = 2;
 const int DIS[] = { 1, 1, 0,-1,-1,-1, 0, 1, // 8-connected neighbors
@@ -145,14 +146,14 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
 
   grad_mag = gevd_float_operators::SimilarBuffer(image);
   angle = gevd_float_operators::SimilarBuffer(image);
-  const float kdeg = 180.0/vnl_math::pi;
+  const double kdeg = 180*vnl_math::one_over_pi;
   for (int j = 0; j < image.GetSizeY(); j++)
-      for (int i = 0; i < image.GetSizeX(); i++)
-          if ((floatPixel(*grad_mag, i, j) = floatPixel(*slope, i, j)))
-            floatPixel(*angle, i, j) = kdeg*vcl_atan2(floatPixel(*diry, i, j),
-                                                      floatPixel(*dirx, i, j));
-          else
-            floatPixel(*angle, i, j) = 0;
+    for (int i = 0; i < image.GetSizeX(); i++)
+      if ((floatPixel(*grad_mag, i, j) = floatPixel(*slope, i, j)))
+        floatPixel(*angle, i, j) = float(kdeg*vcl_atan2(floatPixel(*diry, i, j),
+                                                        floatPixel(*dirx, i, j)));
+      else
+        floatPixel(*angle, i, j) = 0;
 
 
   // 3. Estimate sensor/texture sigmas from histogram of weak step edgels
@@ -300,8 +301,8 @@ BestStepExtension(const gevd_bufferxy& smooth,
       int dj = DJS[dir];
       float pix_m = floatPixel(smooth, ni-di, nj-dj);
       float pix_p = floatPixel(smooth, ni+di, nj+dj);
-      float slope = vcl_fabs(pix_p - pix_m);
-      float max_s = (dir%HALFPI)? best_s*vcl_sqrt(2.0): best_s;
+      float slope = (float)vcl_fabs(pix_p - pix_m);
+      float max_s = (dir%HALFPI)? best_s*(float)vcl_sqrt(2.0): best_s;
       if (slope > max_s) {      // find best strength
         int di2 = 2*di;
         int dj2 = 2*dj;
@@ -309,7 +310,7 @@ BestStepExtension(const gevd_bufferxy& smooth,
             slope > vcl_fabs(pix - floatPixel(smooth, ni+di2, nj+dj2))) {
           best_i = ni;
           best_j = nj;
-          best_s = (dir%HALFPI)? slope/vcl_sqrt(2.0) : slope;
+          best_s = (dir%HALFPI)? slope/(float)vcl_sqrt(2.0) : slope;
           best_d = dir%FULLPI + TWOPI; // in range [0 FULLPI) + TWOPI
         }
       }
@@ -318,11 +319,11 @@ BestStepExtension(const gevd_bufferxy& smooth,
   if (best_s > threshold) {     // interpolate with parabola
     float pix = floatPixel(smooth, best_i, best_j);
     int di2 = 2 * DIS[best_d], dj2 = 2 * DJS[best_d];
-    float s_m = vcl_fabs(pix - floatPixel(smooth, best_i-di2, best_j-dj2));
-    float s_p = vcl_fabs(pix - floatPixel(smooth, best_i+di2, best_j+dj2));
+    float s_m = (float)vcl_fabs(pix - floatPixel(smooth, best_i-di2, best_j-dj2));
+    float s_p = (float)vcl_fabs(pix - floatPixel(smooth, best_i+di2, best_j+dj2));
     if (best_d%HALFPI) {
-      s_m /= vcl_sqrt(2.0);
-      s_p /= vcl_sqrt(2.0);
+      s_m /= (float)vcl_sqrt(2.0);
+      s_p /= (float)vcl_sqrt(2.0);
     }
     best_l = gevd_float_operators::InterpolateParabola(s_m, best_s, s_p, best_s);
     return best_s;
@@ -498,9 +499,8 @@ gevd_step::NoiseThreshold(bool shortp) const
 {
   float factor = (shortp? junctionFactor : contourFactor);
   float smooth = (shortp? smoothSigma/2 : smoothSigma);
-  return (factor * 3 *          // 3*sigma for 99% removal confidence
-          NoiseResponseToFilter(noiseSigma,
-                                smooth, filterFactor));
+  return factor * 3 *          // 3*sigma for 99% removal confidence
+         NoiseResponseToFilter(noiseSigma, smooth, filterFactor);
 }
 
 
@@ -513,10 +513,10 @@ gevd_step::NoiseResponseToFilter(const float noiseSigma,
                             const float smoothSigma,
                             const float filterFactor)
 {
-  return (noiseSigma /          // white noise
-          vcl_pow(smoothSigma, 1.5f) * // size of filter dG
-          (0.5 / vcl_pow(vnl_math::pi, 0.25)) *
-          filterFactor);        // multiplication factor
+  return noiseSigma /          // white noise
+         vcl_pow(smoothSigma, 1.5f) * // size of filter dG
+         (0.5f / (float)vcl_pow(vnl_math::pi, 0.25)) *
+         filterFactor;        // multiplication factor
 }
 
 

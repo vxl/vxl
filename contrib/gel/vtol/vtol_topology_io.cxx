@@ -1,6 +1,7 @@
-#include <vcl_ostream.h>
+// This is gel/vtol/vtol_topology_io.cxx
+#include "vtol_topology_io.h"
 
-#include <vtol/vtol_topology_io.h>
+#include <vcl_ostream.h>
 
 #include <vtol/vtol_list_functions.h>
 #include <vtol/vtol_vertex_2d.h>

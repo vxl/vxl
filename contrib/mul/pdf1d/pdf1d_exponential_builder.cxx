@@ -5,6 +5,8 @@
 //:
 // \file
 
+#include "pdf1d_exponential_builder.h"
+
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_cstdlib.h> // vcl_abort()
@@ -13,7 +15,6 @@
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <pdf1d/pdf1d_exponential.h>
-#include <pdf1d/pdf1d_exponential_builder.h>
 #include <pdf1d/pdf1d_calc_mean_var.h>
 
 //=======================================================================

@@ -1,15 +1,14 @@
 // This is oxl/vgui/impl/mfc/vgui_mfc_mainfrm.cxx
-
+#include "StdAfx.h"
+#include "vgui_mfc_mainfrm.h"
 //:
 //  \file
 //
 // See vgui_mfc_mainfrm.h for a description of this file.
 //
 
-#include "StdAfx.h"
 #include "vgui_mfc.h"
 #include "vgui_mfc_utils.h"
-#include "vgui_mfc_mainfrm.h"
 #include "vgui_mfc_adaptor.h"
 #include "vgui_mfc_statusbar.h"
 

@@ -1,5 +1,8 @@
+// This is rpl/rsdl/rsdl_bins_2d.txx
 #ifndef rsdl_bins_2d__txx_
 #define rsdl_bins_2d__txx_
+
+#include "rsdl_bins_2d.h"
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -7,8 +10,6 @@
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>
-
-#include <rsdl/rsdl_bins_2d.h>
 
 
 template < class COORD_T, class VALUE_T >
@@ -105,7 +106,6 @@ get_value( const vnl_vector_fixed< COORD_T,  2 > & pt, VALUE_T& value )
 
   int max_bin_x, max_bin_y;
   this->point_to_bin( pt.x()+distance, pt.y()+distance, max_bin_x, max_bin_y );
-
 
   for ( int bin_x = min_bin_x; bin_x <= max_bin_x; ++ bin_x ) {
     for ( int bin_y = min_bin_y; bin_y <= max_bin_y; ++ bin_y ) {
@@ -577,15 +577,14 @@ template < class COORD_T, class VALUE_T >
 void
 rsdl_bins_2d< COORD_T, VALUE_T > ::
 change_value( const VALUE_T& old_val, const VALUE_T& new_val )
-{  
+{
   typename bin_vector_type_::iterator p;
   for ( int bin_x = 0; bin_x < num_bins_x_; ++ bin_x )
     for ( int bin_y = 0; bin_y < num_bins_y_; ++ bin_y )
       for ( p = bins_( bin_x, bin_y ).begin(); p != bins_( bin_x, bin_y ).end(); ++p )
         if ( p->value_ == old_val )
-                        p->value_ = new_val;
+          p->value_ = new_val;
 }
-
 
 
 template < class COORD_T, class VALUE_T >

@@ -1,7 +1,8 @@
+// This is tbl/vepl/vepl_histogram.cxx
+#include "vepl_histogram.h"
 #include <vcl_iostream.h>
 #include <vipl/accessors/vipl_accessors_vcl_vector.h>
 #include <vipl/accessors/vipl_accessors_vil_image.h>
-#include <vepl/vepl_histogram.h>
 #include <vipl/vipl_histogram.h>
 #include <vil/vil_memory_image_of.h>
 

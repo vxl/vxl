@@ -8,7 +8,8 @@
 // \date   28 Mar 2000
 // \brief  See vgui_accelerate_x11.h for a description of this file.
 
-#include <vgui/vgui_gl.h>
+#include "vgui_accelerate_x11.h"
+
 //capes : there's no point starting this accelerator unless you're running Mesa at the moment
 #if VGUI_MESA
 
@@ -25,9 +26,6 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-
-#include <vgui/internals/vgui_accelerate_x11.h>
-#include <vgui/internals/vgui_accelerate.h>
 
 // These accelerated functions take advantage of the fact the Mesa-X11 uses
 // an XImage for its backbuffer. This allows us to determine the optimal

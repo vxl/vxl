@@ -1,11 +1,11 @@
+// This is gel/mrc/vpgl/vpgl_perspective_camera.cxx
+#include "vpgl_perspective_camera.h"
 //:
 //  \file
 
 #include <vcsl/vcsl_cartesian_3d.h>
 #include <vcsl/vcsl_graph.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vcsl/vcsl_matrix.h>
-//#include <vcsl/vcsl_translation.h>
 #include <vcsl/vcsl_spatial.h>
 #include <vnl/vnl_math.h>
 

@@ -1,15 +1,15 @@
+// This is oxl/VPLAYER/vplayer_file.cxx
+#include "vplayer_file.h"
 //:
 //  \file
 
 #include "vplayer.h"
-#include "vplayer_file.h"
 #include "easy2D_sequencer.h"
 #include "easy2D_loader.h"
 
 #include <vul/vul_sprintf.h>
 
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>

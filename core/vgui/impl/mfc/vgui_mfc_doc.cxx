@@ -1,5 +1,6 @@
 // This is oxl/vgui/impl/mfc/vgui_mfc_doc.cxx
-
+#include "StdAfx.h"
+#include "vgui_mfc_doc.h"
 //:
 // \file
 //
@@ -9,10 +10,7 @@
 // \date   27 July 2000
 //
 
-#include "StdAfx.h"
 #include "vgui_mfc.h"
-
-#include "vgui_mfc_doc.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

@@ -1,36 +1,5 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
-
+// This is gel/gevd/gevd_float_operators.cxx
+#include "gevd_float_operators.h"
 //:
 // \file
 
@@ -46,7 +15,6 @@
 #include "gevd_pixel.h"
 #include "gevd_xpixel.h"
 #include "gevd_bufferxy.h"
-#include "gevd_float_operators.h"
 //#include <ImageProcessing/xpixel.h>
 //#include <cool/Timer.h>
 
@@ -131,7 +99,7 @@ gevd_float_operators::Correlation(const gevd_bufferxy& from,
       double varx = sum1 * sumxx - sumx * sumx; // all multiplied with sum1
       double vary = sum1 * sumyy - sumy * sumy;
       double cvar = sum1 * sumxy - sumx * sumy; // linear correlation coeft
-      floatPixel(*to, x+rx, y+ry) = cvar / vcl_sqrt(varx * vary);
+      floatPixel(*to, x+rx, y+ry) = cvar / (float)vcl_sqrt(varx * vary);
     }
   FillFrameX(*to, 0, rx);       // pad border with 0
   FillFrameY(*to, 0, ry);
@@ -171,7 +139,7 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
     double varx = sum1 * sumxx - sumx * sumx; // all multiplied with sum1
     double vary = sum1 * sumyy - sumy * sumy;
     double cvar = sum1 * sumxy - sumx * sumy;   // linear correlation coeft
-    floatPixel(*to, x+rx, y+ry) = cvar / vcl_sqrt(varx * vary);
+    floatPixel(*to, x+rx, y+ry) = cvar / (float)vcl_sqrt(varx * vary);
   }
   for (x = xhi/2, y = 0; y < yhi; y++) {
     register double sumx = 0, sumy = 0, sumxx = 0, sumyy = 0, sumxy = 0,
@@ -189,7 +157,7 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
     double varx = sum1 * sumxx - sumx * sumx; // all multiplied with sum1
     double vary = sum1 * sumyy - sumy * sumy;
     double cvar = sum1 * sumxy - sumx * sumy;   // linear correlation coeft
-    floatPixel(*to, x+rx, y+ry) = cvar / vcl_sqrt(varx * vary);
+    floatPixel(*to, x+rx, y+ry) = cvar / (float)vcl_sqrt(varx * vary);
   }
 //   vcl_cout << " in " << t.real() << " msecs.\n";
   return 1;                     // extra scaling factor
@@ -571,7 +539,7 @@ gevd_float_operators::RunningSum(float* from, float*& to, const int len,
     to[x] = sum;
   }
   delete [] cache;
-  return 2*kradius+1;           // magnification factor
+  return float(2*kradius+1);            // magnification factor
 }
 
 //: Read 1d odd/even kernel from a file: width k_i .....
@@ -650,14 +618,14 @@ gevd_float_operators::Find1dGaussianKernel(const float sigma,
                                            float*& kernel, int& radius,
                                            const float fuzz)
 {
-  for (radius = 0; Gaussian(radius, sigma) > fuzz; radius++)
+  for (radius = 0; Gaussian(float(radius), sigma) > fuzz; radius++)
     {;}                                         // find radius
   if (radius == 0)
     return false;
 
   kernel = new float[2*radius + 1];             // create kernel
   {for (int i=0; i<=radius; ++i)
-    kernel[radius+i] = kernel[radius-i] = Gaussian(i, sigma);
+    kernel[radius+i] = kernel[radius-i] = Gaussian(float(i), sigma);
   }
   float sum = 0;
   {for (int i= 0; i <= 2*radius; ++i)
@@ -680,7 +648,7 @@ float
 gevd_float_operators::Gaussian(const float x, const float sigma)
 {
   double x_on_sigma = x / sigma;
-  return vcl_exp(x_on_sigma * x_on_sigma / -2.0);
+  return (float)vcl_exp(- x_on_sigma * x_on_sigma / 2);
 }
 
 
@@ -877,19 +845,19 @@ LocalHessian(const gevd_bufferxy& smooth, const int i, const int j,
   float ddx_plus_ddy = ddx + ddy;
   float ddx_minus_ddy = ddx - ddy;
   float theta = (two_dxdy==0 && ddx_minus_ddy==0) ? 0 : // DOMAIN cond. on atan2
-                vcl_atan2(two_dxdy, ddx_minus_ddy) / 2; // modulo PI
+                (float)vcl_atan2(two_dxdy, ddx_minus_ddy) / 2; // modulo PI
   if (ddx_plus_ddy < 0) {
     mag = - ddx_plus_ddy +      // most negative eigenvalue
       vcl_sqrt((ddx_minus_ddy * ddx_minus_ddy) + (two_dxdy * two_dxdy));
-    theta += vnl_math::pi_over_2;// angle in range [0 pi]
+    theta += (float)vnl_math::pi_over_2;// angle in range [0 pi]
   } else {
     mag = ddx_plus_ddy +        // most positive eigenvalue
           vcl_sqrt((ddx_minus_ddy * ddx_minus_ddy) + (two_dxdy * two_dxdy));
     if (theta > 0)
-      theta -= vnl_math::pi;    // angle in range [-pi 0]
+      theta -= (float)vnl_math::pi;    // angle in range [-pi 0]
   }
-  dirx = vcl_cos(theta); // eigenvector corresponding to
-  diry = vcl_sin(theta); // largest eigenvalue/curvature
+  dirx = (float)vcl_cos(theta); // eigenvector corresponding to
+  diry = (float)vcl_sin(theta); // largest eigenvalue/curvature
 }
 
 //: Compute the Hessian of the intensity surface. O(m*n).
@@ -991,13 +959,13 @@ LocalLaplacian(const gevd_bufferxy& smooth, const int i, const int j,
              -20 * floatPixel(smooth, i, j)) / 6;
 #endif
   float theta = (diag1==diag2 && ddx==ddy) ? 0 : // DOMAIN condition on atan2
-                vcl_atan2((diag1 - diag2) / 2, ddx - ddy) / 2; // modulo PI
+                (float)vcl_atan2((diag1 - diag2) / 2, ddx - ddy) / 2; // modulo PI
   if (mag < 0) {
     mag = - mag;                  // absolute magnitude
-    theta += vnl_math::pi_over_2; // other eigenvector
+    theta += (float)vnl_math::pi_over_2; // other eigenvector
   }
-  dirx = vcl_cos(theta);          // eigenvector corresponding to
-  diry = vcl_sin(theta);          // largest eigenvalue/curvature
+  dirx = (float)vcl_cos(theta);   // eigenvector corresponding to
+  diry = (float)vcl_sin(theta);   // largest eigenvalue/curvature
 }
 
 //: Compute the Laplacian of the intensity surface. O(m*n).
@@ -1129,7 +1097,7 @@ gevd_float_operators::Orientation(const gevd_bufferxy& smooth,
       dy = floatPixel(smooth, i, j+1) - p_ij;   // onto x and y axes
       ox = (dy * dy) - (dx * dx);
       oy = 2 * dx * dy;
-      floatPixel(thetaI, i, j) = vcl_atan2(oy, ox);
+      floatPixel(thetaI, i, j) = (float)vcl_atan2(oy, ox);
       floatPixel(coherenceI, i, j) = ((ox * ox + oy * oy) /
                                       (dx + dy) * (dx + dy));
     }
@@ -1149,7 +1117,7 @@ LocalMaximum(const gevd_bufferxy& magnitude,
              float& contour, unsigned char& dir, // response & direction
              float& locx, float& locy)  // subpixel location
 {
-  const float tan_pi_8 = tan(vnl_math::pi_over_4/2);
+  const float tan_pi_8 = (float)tan(vnl_math::pi_over_4/2);
   float strength = floatPixel(magnitude, i, j);
   if (strength > threshold) { // eliminate noisy responses
     float dx = floatPixel(directionx, i, j);
@@ -1409,9 +1377,9 @@ gevd_float_operators::SupportAngle(const gevd_bufferxy& dirx, const gevd_bufferx
   for (j = 0; j < highy; ++j)
     for (i = 0; i < highx; ++i)
       if (floatPixel(magnitude, i, j) > 0) {
-        theta = vcl_atan2(floatPixel(diry, i, j), floatPixel(dirx, i, j));
-        if (theta < 0) theta += vnl_math::pi;
-        floatPixel(*angLe, i, j) = theta * 180 * vnl_math::one_over_pi;
+        theta = (float)vcl_atan2(floatPixel(diry, i, j), floatPixel(dirx, i, j));
+        if (theta < 0) theta += (float)vnl_math::pi;
+        floatPixel(*angLe, i, j) = theta * 180 * (float)vnl_math::one_over_pi;
       }
 }
 
@@ -1472,11 +1440,11 @@ gevd_float_operators::SurfaceCurvature(const gevd_bufferxy& normal, gevd_bufferx
       if (max_curv2 < curv2) max_curv2 = curv2;
       curv2 =                   // along 45 degree
         cross_3d(*fvectorPixel(normal, i+1, j+1),
-                 *fvectorPixel(normal, i-1, j-1)).squared_magnitude()/2.0;
+                 *fvectorPixel(normal, i-1, j-1)).squared_magnitude()/2;
       if (max_curv2 < curv2) max_curv2 = curv2;
       curv2 =                   // along 135 degree
         cross_3d(*fvectorPixel(normal, i+1, j-1),
-                 *fvectorPixel(normal, i-1, j+1)).squared_magnitude()/2.0;
+                 *fvectorPixel(normal, i-1, j+1)).squared_magnitude()/2;
       if (max_curv2 < curv2) max_curv2 = curv2;
       floatPixel(*curvature, i, j) = vcl_sqrt(max_curv2);
     }
@@ -1629,7 +1597,8 @@ _CurvatureInDir( const gevd_bufferxy& normal,
   //  CoolVector<float> * norm      = fvectorPixel( normal, x, y );
   //  CoolVector<float> * high_norm = fvectorPixel( normal, high_x, high_y );
 
-  float zval1, zval2, dx, dy, dz;
+  float zval1, zval2, dz;
+  int dx, dy;
 
   if ( (norm == NULL) || ( low_norm == NULL && high_norm == NULL ) )
     return false;
@@ -1699,7 +1668,7 @@ gevd_float_operators::SurfaceCurvatureD(const gevd_bufferxy& normal,
   const int frame = 2;
   const int highx = normal.GetSizeX()-frame, highy = normal.GetSizeY()-frame;
   curvature = gevd_float_operators::Allocate(curvature, normal, bits_per_float);
-  float sq_unit_normalize = 1.0/(pixel_distance*pixel_distance);
+  float sq_unit_normalize = 1.0f/(pixel_distance*pixel_distance);
 
   for (int j = frame; j < highy; j++)
     for (int i = frame; i < highx; i++) { // for all grid points
@@ -1763,8 +1732,8 @@ gevd_float_operators::ShrinkBy2 (const gevd_bufferxy& from, gevd_bufferxy*& to,
   const int sizeY = (from.GetSizeY() + 1) / 2;
   to = gevd_float_operators::Allocate(to, from, 0, sizeX, sizeY);
   const float ka = burt_ka;
-  const float kb = 0.25;
-  const float kc = (0.5 - burt_ka) / 2;
+  const float kb = 0.25f;
+  const float kc = (0.5f - burt_ka) / 2;
 
   int p = 0;                            // pipeline of 5 lines
   float* yline0 = new float[sizeX];     // shrink_by_2 along x
@@ -1884,8 +1853,8 @@ gevd_float_operators::ShrinkBy2_D (const gevd_bufferxy& from,
   //  Build a kernel of smoothing weights.  kernel[2] is the center.
   float kernel[5];
   kernel[2] = burt_ka;
-  kernel[1] = kernel[3] = 0.25;
-  kernel[0] = kernel[4] = (0.5 - burt_ka) / 2;
+  kernel[1] = kernel[3] = 0.25f;
+  kernel[0] = kernel[4] = (0.5f - burt_ka) / 2;
   int i;
 
   //  Smoothing and subsampling will occur first along each row and
@@ -2062,8 +2031,8 @@ gevd_float_operators::ExpandBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
   const int sizeY = 2 * from.GetSizeY();
   to = gevd_float_operators::Allocate(to, from, 0, sizeX, sizeY);
   const float ka = burt_ka * 2;
-  const float kb = 0.5;
-  const float kc = 0.5 - burt_ka;
+  const float kb = 0.5f;
+  const float kc = 0.5f - burt_ka;
   int p = 0;                            // pipeline of 3 lines
   float* yline0 = new float[sizeX];     // to cache ExpandBy2AlongX
   float* yline1 = new float[sizeX];
@@ -2167,8 +2136,8 @@ gevd_float_operators::ShrinkBy2(const float* from, const int length,
   if (!to)
     to = new float[slength];    // allocate or reuse space
   const float ka = burt_ka;
-  const float kb = 0.25;
-  const float kc = (0.5 - burt_ka) / 2;
+  const float kb = 0.25f;
+  const float kc = (0.5f - burt_ka) / 2;
   int p = 0;                            // setup pipeline of 5 x values
   float x0 = from[p++];
   float x1 = from[p++];
@@ -2883,13 +2852,13 @@ gevd_float_operators::TestWavelets ()
           dims[ndim] = ntot;
           float* data = new float[ntot];
           for (int k = 2; k <= 12; k+=2) {
-            {for (int i = 0; i < ntot; i++) data[i] = i;}
+            {for (int i = 0; i < ntot; i++) data[i] = float(i);}
             int nlevels = 2;
             WaveletTransformByBlock (data, dims, ndim, true, nlevels, k);
             WaveletTransformByBlock (data, dims, ndim, false, nlevels, k);
             float max_err = 0;
             for (int i = 0; i < ntot; i++) {
-              float err = vcl_fabs(data[i] - i);
+              float err = (float)vcl_fabs(data[i] - i);
               if (err > max_err)
                 max_err = err;
             }
@@ -3210,7 +3179,7 @@ gevd_float_operators::Correlation(const float* data, const int length,
     double varx = sum1 * sumxx - sumx * sumx; // all multiplied with sum1
     double vary = sum1 * sumyy - sumy * sumy;
     double cvar = sum1 * sumxy - sumx * sumy;
-    return cvar / vcl_sqrt(varx * vary); // linear correlation coefficient
+    return cvar / (float)vcl_sqrt(varx * vary); // linear correlation coefficient
   }
 }
 
@@ -3299,7 +3268,7 @@ gevd_float_operators::CoarseFineCorrelation(const float* dataPyr, const int dlen
 #endif
   if (shift != 0)               // search from apriori shift
     shift /= (1 << coarse);
-  shift = rint(shift);
+  shift = (float)rint(shift);
   int dlen = dlength >> coarse, plen = plength >> coarse;
   int rmax = int((1 - overlap) * dlen + 0.5); // for minimum overlap
   if (rmax < 1) rmax = 1;       // boundary case, for 100% overlap
@@ -3335,7 +3304,7 @@ gevd_float_operators::CoarseFineCorrelation(const float* dataPyr, const int dlen
   const int SEARCH = 1, RMAX = 3;// local search 3 times
   int k = coarse-1;
   for (; ; k--) {
-    shift = rint(2*shift);
+    shift = (float)rint(2*shift);
     dlen = dlength >> k, plen = plength >> k;
     cors = Correlations(dataPyr+dlen, dlen,
                         patternPyr+plen, plen,
@@ -3796,7 +3765,7 @@ gevd_float_operators::BufferToFloat (const gevd_bufferxy& from, gevd_bufferxy& t
       const unsigned char* frombuf = (const unsigned char*) from.GetBuffer();
       float* tobuf = (float*) to.GetBuffer();
       for (int i = 0; i < size; i++)
-        tobuf[i] = 0.299*frombuf[3*i]+0.587*frombuf[3*i+1]+0.114*frombuf[3*i+2];
+        tobuf[i] = 0.299f*frombuf[3*i]+0.587f*frombuf[3*i+1]+0.114f*frombuf[3*i+2];
     }
     break;
   case sizeof(int):
@@ -3804,7 +3773,7 @@ gevd_float_operators::BufferToFloat (const gevd_bufferxy& from, gevd_bufferxy& t
       const unsigned int* frombuf = (const unsigned int*) from.GetBuffer();
       float* tobuf = (float*) to.GetBuffer();
       for (int i = 0; i < size; i++)
-        tobuf[i] = frombuf[i];
+        tobuf[i] = (float)frombuf[i];
     }
     break;
   default:

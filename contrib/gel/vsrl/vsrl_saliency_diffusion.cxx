@@ -1,10 +1,6 @@
+// This is gel/vsrl/vsrl_saliency_diffusion.cxx
+#include "vsrl_saliency_diffusion.h"
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
-#include <vcl_cstddef.h>
-#include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>
-
-#include <vsrl/vsrl_saliency_diffusion.h>
 
 vsrl_saliency_diffusion::vsrl_saliency_diffusion(vsrl_dense_matcher *matcher):
   vsrl_diffusion(matcher)

@@ -8,11 +8,10 @@
 // \date 19-Apr-2001
 // \brief Base class for Multi-Variate Probability Sampler classes.
 
-#include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vpdfl/vpdfl_sampler_base.h>
+#include "vpdfl_sampler_base.h"
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vsl/vsl_indent.h>
+#include <vcl_cassert.h>
 
 //=======================================================================
 // Dflt ctor

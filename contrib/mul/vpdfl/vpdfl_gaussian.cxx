@@ -13,13 +13,13 @@
 //    IMS   Converted to VXL 18 April 2000
 // \endverbatim
 
-#include <vcl_cstdlib.h>
+#include "vpdfl_gaussian.h"
+
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
 
 #include <vsl/vsl_indent.h>
-#include <vpdfl/vpdfl_gaussian.h>
 #include <vnl/vnl_math.h>
 #include <mbl/mbl_matxvec.h>
 #include <mbl/mbl_matrix_products.h>

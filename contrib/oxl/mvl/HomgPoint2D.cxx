@@ -5,10 +5,10 @@
 //:
 //  \file
 
+#include "HomgPoint2D.h"
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_double_2.h>
-#include <mvl/HomgPoint2D.h>
 
 //--------------------------------------------------------------
 //

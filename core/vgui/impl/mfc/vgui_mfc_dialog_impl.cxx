@@ -8,7 +8,8 @@
 // \date   31 July 2000
 //
 // See vgui_mfc_dialog_impl.h for a description of this file.
-//
+
+#include "vgui_mfc_dialog_impl.h"
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
@@ -19,7 +20,6 @@
 #include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>
 #include <vgui/internals/vgui_string_field.h>
-#include <vgui/impl/mfc/vgui_mfc_dialog_impl.h>
 #include <vgui/impl/mfc/vgui_mfc_adaptor.h>
 #include <winuser.h>
 
@@ -199,8 +199,8 @@ bool vgui_mfc_dialog_impl::ask()
     {
       vgui_mfc_dialog_inline_tab* tab_data = (vgui_mfc_dialog_inline_tab*)l.widget;
       if (max_length < tab_data->width/8 + 5)
-        max_length = tab_data->width/8 + 5;
-      height += tab_data->height + 20;
+        max_length = int((7+tab_data->width)/8) + 5;
+      height += int(tab_data->height) + 20;
     }
     else if (l.type == text_msg)
     {
@@ -504,9 +504,9 @@ bool vgui_mfc_dialog_impl::ask()
       // because this adaptor is not in the main window we need to call setup_adaptor:
       widg->setup_adaptor(this, wglGetCurrentDC(), wglGetCurrentContext());
       r.left=8;
-      r.right=r.left + tab_data->width;
+      r.right=r.left + long(tab_data->width);
       r.top += 5;
-      r.bottom += r.top + tab_data->height;
+      r.bottom += r.top + long(tab_data->height);
       widg->CreateEx(WS_EX_CLIENTEDGE,TempsNewClass,NULL,
                    WS_CHILD|WS_BORDER|ES_LEFT|ES_AUTOHSCROLL,r,this,IDOK);
 
@@ -569,7 +569,7 @@ bool vgui_mfc_dialog_impl::ask()
   }
   // Remove all the created objects from the heap
   for (vcl_vector<CWnd *>::iterator w_iter = awlist.begin();w_iter!=awlist.end();++w_iter)
-    delete (*w_iter);
+    delete *w_iter;
   for (vcl_vector<element>::iterator e_iter4 = elements.begin(); e_iter4 != elements.end(); ++e_iter4)
   {
     element l = *e_iter4;

@@ -8,10 +8,9 @@
 // \date   12 Oct 99
 // \brief  See vgui_tview.h for a description of this file.
 
-#include <vcl_string.h>
 #include "vgui_tview.h"
 
-#include <vcl_cmath.h>
+#include <vcl_string.h>
 #include <vcl_iostream.h>
 
 #include <vgui/vgui_gl.h>

@@ -1,5 +1,5 @@
-// This is ./oxl/vgui/vgui_image_tableau.cxx
-
+// This is oxl/vgui/vgui_image_tableau.cxx
+#include "vgui_image_tableau.h"
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -12,8 +12,6 @@
 
 
 #include <vcl_string.h>
-
-#include "vgui_image_tableau.h"
 
 #include <vil/vil_load.h>
 

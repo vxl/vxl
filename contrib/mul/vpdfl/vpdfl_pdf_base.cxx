@@ -8,14 +8,14 @@
 // \date 12-Apr-2001
 // \brief Base class for Multi-Variate Probability Density Function classes.
 
+#include "vpdfl_pdf_base.h"
+
 #include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
-#include <vpdfl/vpdfl_pdf_base.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_queue.h>
-#include <vcl_ctime.h>
 #include <vpdfl/vpdfl_sampler_base.h>
 
 //=======================================================================

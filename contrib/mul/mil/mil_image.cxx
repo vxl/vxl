@@ -5,8 +5,7 @@
 //:
 //  \file
 
-#include <vcl_cstdlib.h>
-#include <mil/mil_image.h>
+#include "mil_image.h"
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 

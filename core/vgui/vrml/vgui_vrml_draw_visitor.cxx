@@ -8,10 +8,10 @@
 // \date   09 Jan 99
 //-----------------------------------------------------------------------------
 
-#include <vcl_functional.h> //vxl_filter
-#include <vcl_utility.h>    //vxl_filter
-#include <vcl_string.h>
 #include "vgui_vrml_draw_visitor.h"
+
+#include <vcl_functional.h>
+#include <vcl_string.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
@@ -73,13 +73,12 @@ static vgui_vrml_texture_map* gettexture(char const* filename)
 
   return texturemaps[filename] = newmap;
 }
-#else
+#else // 0
 
-#include <vcl_cstdlib.h>
 static vgui_vrml_texture_map *current_texmap = 0;
 static vgui_vrml_texture_map* gettexture(char const* filename)
 {
-  static vcl_vector<vcl_string > names;
+  static vcl_vector<vcl_string> names;
   static vcl_vector<vgui_vrml_texture_map*> tmaps;
 
   unsigned N=names.size();
@@ -93,7 +92,7 @@ static vgui_vrml_texture_map* gettexture(char const* filename)
 
   return newmap;
 }
-#endif
+#endif // 0
 
 
 vgui_vrml_draw_visitor::vgui_vrml_draw_visitor() {

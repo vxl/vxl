@@ -1,5 +1,5 @@
-// This is ./oxl/xcv/xcv_axes_limits.cxx
-
+// This is oxl/xcv/xcv_axes_limits.cxx
+#include "xcv_axes_limits.h"
 //:
 //  \file
 // See xcv_axes_limits.h for a description of this file.
@@ -16,7 +16,6 @@
 
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
-#include <xcv/xcv_axes_limits.h>
 
 static bool debug = false;
 

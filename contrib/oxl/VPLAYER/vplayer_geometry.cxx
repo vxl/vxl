@@ -1,3 +1,5 @@
+// This is oxl/VPLAYER/vplayer_geometry.cxx
+#include "vplayer_geometry.h"
 //:
 //  \file
 
@@ -16,7 +18,6 @@
 #include <vgui/vgui_macro.h>
 
 #include "vplayer.h"
-#include "vplayer_geometry.h"
 
 //static bool debug = true;
 extern void get_current(unsigned*, unsigned*);

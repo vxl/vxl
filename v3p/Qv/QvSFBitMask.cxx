@@ -1,6 +1,6 @@
+#include "QvSFBitMask.h"
 #include "QvDebugError.h"
 #include "QvReadError.h"
-#include "QvSFBitMask.h"
 
 // Special characters when reading or writing value in ASCII
 #define OPEN_PAREN      '('

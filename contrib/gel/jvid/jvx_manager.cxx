@@ -1,8 +1,9 @@
+// This is gel/jvid/jvx_manager.cxx
+#include "jvx_manager.h"
 //:
 // \file
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
 #include <vul/vul_timer.h>
 #include <vil/vil_image.h>
 
@@ -19,7 +20,6 @@
 
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
-#include <jvid/jvx_manager.h>
 
 //-----------------------------------------------------------
 // constructors/destructor

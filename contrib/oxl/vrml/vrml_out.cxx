@@ -5,10 +5,9 @@
 //:
 //  \file
 
-#include <vcl_functional.h> //vxl_filter
-#include <vcl_utility.h>    //vxl_filter
 #include "vrml_out.h"
 
+#include <vcl_functional.h>
 #include <vcl_fstream.h>
 #include <vcl_map.h>
 #include <vul/vul_printf.h>

@@ -1,8 +1,9 @@
+// This is tbl/vepl/vepl_convert.txx
 #ifndef vepl_convert_txx_
 #define vepl_convert_txx_
 
+#include "vepl_convert.h"
 #include <vipl/accessors/vipl_accessors_vil_image.h>
-#include <vepl/vepl_convert.h>
 #include <vipl/vipl_convert.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>

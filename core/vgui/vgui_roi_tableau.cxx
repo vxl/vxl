@@ -2,17 +2,14 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Marko Bacic, RRG, University of Oxford
 // \date   18 Jul 2000
 // \brief  See vgui_roi_tableau.h for a description of this file.
 
-#include <vcl_string.h>
 #include "vgui_roi_tableau.h"
-
-#include <vcl_cmath.h>
+#include <vcl_string.h>
 
 #include <vil/vil_load.h>
 #include <vil/vil_crop.h>

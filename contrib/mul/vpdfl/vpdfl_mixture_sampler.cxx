@@ -1,9 +1,10 @@
+// This is mul/vpdfl/vpdfl_mixture_sampler.cxx
 //=======================================================================
 //
 //  Copyright: (C) 1998 Victoria University of Manchester
 //
 //=======================================================================
-
+#include "vpdfl_mixture_sampler.h"
 //:
 // \file
 // \brief Implements a mixture model pdf sampler
@@ -17,11 +18,8 @@
 
 //=======================================================================
 
-#include <vcl_cstdlib.h>
 #include <vcl_string.h>
-#include <vcl_cmath.h>
 #include <vpdfl/vpdfl_sampler_base.h>
-#include <vpdfl/vpdfl_mixture_sampler.h>
 
 //=======================================================================
 

@@ -1,11 +1,11 @@
+// This is mul/vpdfl/vpdfl_resample.cxx
+#include "vpdfl_resample.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Select random sample of data with replacement.
 
 #include <mbl/mbl_mz_random.h>
-
-#include <vpdfl/vpdfl_resample.h>
 
 // Object used to do sampling
 static mbl_mz_random vpdfl_resample_mz_random;

@@ -8,13 +8,13 @@
 // \date 12-Apr-2001
 // \brief Multi-variate gaussian PDF, with a diagonal covariance matrix
 
+#include "vpdfl_axis_gaussian.h"
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
-#include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <vpdfl/vpdfl_sampler_base.h>
 #include <vpdfl/vpdfl_prob_chi2.h>

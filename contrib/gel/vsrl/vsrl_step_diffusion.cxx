@@ -1,10 +1,6 @@
+// This is gel/vsrl/vsrl_step_diffusion.cxx
+#include "vsrl_step_diffusion.h"
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
-#include <vcl_cstddef.h>
-#include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>
-
-#include <vsrl/vsrl_step_diffusion.h>
 
 vsrl_step_diffusion::vsrl_step_diffusion(vsrl_dense_matcher *matcher):
   vsrl_diffusion(matcher)
@@ -20,9 +16,9 @@ void vsrl_step_diffusion::set_initial_disparity()
 {
   // we want to set the initial disparity
 
-  for(int x=0;x<_width;x++)
+  for (int x=0;x<_width;x++)
   {
-    for(int y=0;y<_height;y++)
+    for (int y=0;y<_height;y++)
     {
       int d = _matcher->get_disparity(x,y);
       double dd =d;
@@ -44,23 +40,23 @@ void vsrl_step_diffusion::interpolate_disparity()
 
   // find all points do not have a defined disparity
 
-  for(y=0;y<_height;y++)
+  for (y=0;y<_height;y++)
   {
-    for(x=0;x<_width;x++)
+    for (x=0;x<_width;x++)
     {
       v = (*_disparity_matrix)(x,y);
 
-      if(v<low_val)
+      if (v<low_val)
       {
         // this is a non valid point
         // find the first valid point to the left of x
 
         flag1=0;
         x1=x-1;
-        while(x1>=0 && !flag1)
+        while (x1>=0 && !flag1)
         {
           d1=(*_disparity_matrix)(x1,y);
-          if(d1>low_val)
+          if (d1>low_val)
           {
             flag1=1;
           }
@@ -74,10 +70,10 @@ void vsrl_step_diffusion::interpolate_disparity()
 
         flag2=0;
         x2=x+1;
-        while(x2<_width && !flag2)
+        while (x2<_width && !flag2)
         {
           d2=(*_disparity_matrix)(x2,y);
-          if(d2>low_val)
+          if (d2>low_val)
           {
             flag2=1;
           }
@@ -87,7 +83,7 @@ void vsrl_step_diffusion::interpolate_disparity()
           }
         }
 
-        if(flag1 && flag2)
+        if (flag1 && flag2)
         {
           // OK we hade two points to interopolate
           // from - lets doit
@@ -102,12 +98,12 @@ void vsrl_step_diffusion::interpolate_disparity()
     }
   }
 
-  for(y=0;y<_height;y++)
+  for (y=0;y<_height;y++)
   {
-    for(x=0;x<_width;x++)
+    for (x=0;x<_width;x++)
     {
       v = (*_disparity_matrix)(x,y);
-      if(v<low_val)
+      if (v<low_val)
       {
         (*_disparity_matrix)(x,y)=0.0;
       }
@@ -125,12 +121,12 @@ void vsrl_step_diffusion::clear_borders(int width)
 
   // find all points do not have a defined disparity
 
-  for(y=0;y<_height;y++)
+  for (y=0;y<_height;y++)
   {
-    for(x=0;x<width;x++)
+    for (x=0;x<width;x++)
       (*_disparity_matrix)(x,y)=0;
 
-    for(x=_width-width;x<_width;x++)
+    for (x=_width-width;x<_width;x++)
       (*_disparity_matrix)(x,y)=0;
   }
 }
@@ -163,9 +159,9 @@ void vsrl_step_diffusion::difuse_disparity()
 
   int x,y;
 
-  for(x=0;x<_width;x++)
+  for (x=0;x<_width;x++)
   {
-    for(y=0;y<_height;y++)
+    for (y=0;y<_height;y++)
     {
       T1(x,y)=T1(x,y) - 1;
       T2(x,y)=T2(x,y) + 1;
@@ -181,13 +177,13 @@ void vsrl_step_diffusion::difuse_disparity()
   double val;
   double low,hi;
 
-   for(dif_num=0;dif_num<100;dif_num++)
+   for (dif_num=0;dif_num<100;dif_num++)
    {
      vcl_cout << "Iteration " << dif_num << vcl_endl;
 
-     for(x=1;x<_width -1;x++)
+     for (x=1;x<_width -1;x++)
      {
-       for(y=1;y<_height - 1;y++)
+       for (y=1;y<_height - 1;y++)
        {
          // get the average value of mat1(x,y)'s neighborhood
          N=0;
@@ -198,12 +194,12 @@ void vsrl_step_diffusion::difuse_disparity()
          low=T1(x,y);
          hi=T2(x,y);
 
-         for(i=x-1;i<x+2;i++)
+         for (i=x-1;i<x+2;i++)
          {
-           for(j=y-1;j<y+2;j++)
+           for (j=y-1;j<y+2;j++)
            {
              val = (*mstar1)(i,j);
-             if(val>=low && val <= hi)
+             if (val>=low && val <= hi)
              {
                // this is not a major jump so
                // diffuse naturally

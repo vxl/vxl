@@ -5,11 +5,10 @@
 //:
 //  \file
 
+#include "mbl_mz_random.h"
 #include <vcl_ctime.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
-
-#include<mbl/mbl_mz_random.h>
 
 unsigned long mbl_mz_random::linear_congruential_lrand32()
 {

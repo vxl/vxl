@@ -3,8 +3,7 @@
 #pragma implementation
 #endif
 
-#include <vcl_cstdlib.h>
-#include <mil/mil_image_io.h>
+#include "mil_image_io.h"
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 

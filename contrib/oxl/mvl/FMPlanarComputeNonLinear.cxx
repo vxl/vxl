@@ -5,9 +5,9 @@
 //:
 //  \file
 
+#include "FMPlanarComputeNonLinear.h"
 #include <mvl/PairSetCorner.h>
 #include <mvl/FMatrixPlanar.h>
-#include <mvl/FMPlanarComputeNonLinear.h>
 #include <mvl/FMPlanarNonLinFun.h>
 
 //: Constructor.

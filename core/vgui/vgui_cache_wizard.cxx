@@ -6,15 +6,14 @@
 // \file
 // \brief See vgui_cache_wizard.h for a description of this file.
 
+#include "vgui_cache_wizard.h"
+
 #include <vil/vil_crop.h>
 #include <vil/vil_pixel.h>
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // abort()
-#include <vcl_cstring.h> // memmove()
 #include <vcl_iostream.h>
 
-#include <vgui/vgui_cache_wizard.h>
 #include <vgui/vgui_pixel.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/internals/vgui_accelerate.h>

@@ -12,10 +12,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
-
 #include "OctreeLevel.h"
+#include <vcl_iostream.h>
 
 // Default ctor
 OctreeLevel::OctreeLevel( const int d) :

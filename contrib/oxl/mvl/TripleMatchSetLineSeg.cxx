@@ -3,15 +3,15 @@
 #pragma implementation
 #endif
 
+#include "TripleMatchSetLineSeg.h"
+
 #include <vcl_cassert.h>
 
 #include <vcl_vector.h>
 #include <mvl/HomgLineSeg2D.h>
 
 #include <mvl/LineSegSet.h>
-
-#include "PairMatchSetLineSeg.h"
-#include "TripleMatchSetLineSeg.h"
+#include <mvl/PairMatchSetLineSeg.h>
 
 
 TripleMatchSetLineSeg::TripleMatchSetLineSeg():

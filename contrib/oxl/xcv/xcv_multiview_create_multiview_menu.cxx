@@ -1,5 +1,5 @@
-// This is ./oxl/xcv/xcv_multiview_create_multiview_menu.cxx
-
+// This is oxl/xcv/xcv_multiview_create_multiview_menu.cxx
+#include "xcv_multiview.h"
 //:
 //  \file
 // See xcv_multiview.h for a description of this file.
@@ -7,8 +7,6 @@
 // \author  Andrew Fitzgibbon
 
 #include <vgui/vgui_menu.h>
-
-#include "xcv_multiview.h"
 
 //-----------------------------------------------------------------------------
 //: Creates a menu containing all the functions in xcv_multiview

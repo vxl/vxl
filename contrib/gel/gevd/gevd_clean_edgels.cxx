@@ -1,7 +1,8 @@
+// This is gel/gevd/gevd_clean_edgels.cxx
+#include "gevd_clean_edgels.h"
 //:
 // \file
 
-#include "gevd_clean_edgels.h"
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>   // for vcl_abs(int)
 #include <vcl_vector.h>

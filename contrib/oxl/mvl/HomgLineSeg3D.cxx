@@ -5,14 +5,10 @@
 //:
 //  \file
 
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
-//#include <vcl_memory.h>
-#include <vcl_cstdlib.h>
+#include "HomgLineSeg3D.h"
 #include <mvl/HomgLine3D.h>
-#include <mvl/HomgLineSeg3D.h>
 #include <mvl/HomgOperator3D.h>
-
+#include <vcl_iostream.h>
 
 //--------------------------------------------------------------
 //

@@ -7,6 +7,8 @@
 // \author Tim Cootes
 // \brief Initialises kernel pdfs
 
+#include "vpdfl_kernel_pdf_builder.h"
+
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_cstdlib.h> // vcl_abort()
@@ -17,7 +19,6 @@
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vpdfl/vpdfl_kernel_pdf.h>
-#include <vpdfl/vpdfl_kernel_pdf_builder.h>
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_priority_bounded_queue.h>
 #include <vpdfl/vpdfl_calc_mean_var.h>

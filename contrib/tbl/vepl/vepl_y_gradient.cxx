@@ -1,5 +1,6 @@
+// This is tbl/vepl/vepl_y_gradient.cxx
+#include "vepl_y_gradient.h"
 #include <vipl/accessors/vipl_accessors_vil_image.h>
-#include <vepl/vepl_y_gradient.h>
 #include <vipl/vipl_y_gradient.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>

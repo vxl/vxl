@@ -1,7 +1,7 @@
+#include "QvInput.h"
 #include <vcl_cctype.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cstdio.h>
-#include "QvInput.h"
 #include "QvDebugError.h"
 #include "QvReadError.h"
 #include "QvNode.h"
@@ -104,7 +104,7 @@ QvInput::get(char &c)
 QvBool
 QvInput::read(char &c)
 {
-    return (skipWhiteSpace() && get(c));
+    return skipWhiteSpace() && get(c);
 }
 
 QvBool
@@ -449,13 +449,13 @@ QvInput::readReal(double& d)
 
 /* begin hard hat area */
 
+#if 0
     // may try something like this to speed up things:
-//     if (backBufIndex < 0)  // backbuf empty
-//     {
-//       return (vcl_fscanf (fp, "%lf", &d) == 1);  // EOF considered as failure
-//     }
-//     // else
-//     // vcl_fprintf (vcl_stderr, "reading real from backbuffer ");
+    if (backBufIndex < 0)  // backbuf empty
+        return vcl_fscanf(fp, "%lf", &d) == 1;  // EOF considered as failure
+    else
+        vcl_fprintf (vcl_stderr, "reading real from backbuffer ");
+#endif
 
 /* end hard hat area */
 
@@ -581,7 +581,7 @@ QvInput::findReference(const QvName &name) const
     void *node;
 
     if (refDict.find((u_long) name.getString(), node))
-        return (QvNode *) node;
+        return (QvNode*)node;
 
     return NULL;
 }

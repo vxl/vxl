@@ -1,6 +1,7 @@
+// This is tbl/vepl/vepl_threshold.cxx
+#include "vepl_threshold.h"
 #include <vcl_iostream.h>
 #include <vipl/accessors/vipl_accessors_vil_image.h>
-#include <vepl/vepl_threshold.h>
 #include <vipl/vipl_threshold.h>
 #include <vil/vil_memory_image_of.h>
 
@@ -40,7 +41,7 @@ vil_image vepl_threshold(vil_image const& image, double threshold, double below,
   else if (vil_pixel_format(image) == VIL_FLOAT) {
     vil_memory_image_of<float> mem(image); // load in memory to pass to filter
     vil_memory_image_of<float> out(image);
-    vipl_threshold<vil_image,vil_image,float,float,vipl_trivial_pixeliter> op(threshold, below, above);
+    vipl_threshold<vil_image,vil_image,float,float,vipl_trivial_pixeliter> op((float)threshold, (float)below, (float)above);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();

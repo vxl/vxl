@@ -6,8 +6,8 @@
 // \file
 // \author crossge@crd.ge.com
 
-#include "gst_vertex_2d_sptr.h"
 #include "gst_polygon_2d.h"
+#include "gst_vertex_2d_sptr.h"
 
 bool gst_polygon_2d::check_validity() const
 {

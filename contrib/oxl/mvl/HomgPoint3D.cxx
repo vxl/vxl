@@ -5,14 +5,9 @@
 //:
 //  \file
 
+#include "HomgPoint3D.h"
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
-//#include <vcl_memory.h>
-#include <vcl_cstdlib.h>
-
-////////////////#include <Geometry/IUPoint.h>
-#include <mvl/Homg3D.h>
-#include <mvl/HomgPoint3D.h>
 
 //--------------------------------------------------------------
 //

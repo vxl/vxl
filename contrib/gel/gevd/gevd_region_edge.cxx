@@ -1,9 +1,8 @@
+// This is gel/gevd/gevd_region_edge.cxx
+#include "gevd_region_edge.h"
 //:
 // \file
-#include <vcl_cmath.h>
 #include <vtol/vtol_edge_2d.h>
-#include <gevd/gevd_region_edge.h>
-
 
 gevd_region_edge::gevd_region_edge(vtol_edge_2d_sptr e)
 : edge_(e)

@@ -1,3 +1,5 @@
+// This is mul/mbl/mbl_matxvec.cxx
+#include "mbl_matxvec.h"
 //:
 // \file
 // \brief Various specialised versions of simple linear algebra operators.
@@ -7,9 +9,8 @@
 // do not match for normal linear algebra operations, these functions will
 // for example, only use the first n elements of an >n input vector
 //
-// Modifications
-//
 // \verbatim
+// Modifications
 // TFC    Revised version 3-Oct-97
 // TFC    Added TC_MatXVec2
 // NPC    Added NC_VecXMat
@@ -18,7 +19,6 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <mbl/mbl_matxvec.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_iostream.h>
@@ -316,7 +316,7 @@ void TC_ProductABt(vnl_matrix<double>& ABt,
    int nc2 = B.ncols();
 
 #ifndef NDEBUG
-   if( nc2 != nc1 )
+   if ( nc2 != nc1 )
    {
       vcl_cerr<<"TC_ProductABt : B.ncols != A.ncols"<<vcl_endl;
       vcl_abort() ;
@@ -362,7 +362,7 @@ void TC_ProductAtB(vnl_matrix<double>& AtB,
    int nr2 = B.nrows();
    int nc2 = B.ncols();
 
-   if( nr2 != nr1 )
+   if ( nr2 != nr1 )
    {
       vcl_cerr<<"TC_ProductAtB : B.nrows != A.nrows"<<vcl_endl;
       vcl_abort() ;

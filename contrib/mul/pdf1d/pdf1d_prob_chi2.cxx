@@ -1,6 +1,8 @@
+// This is mul/pdf1d/pdf1d_prob_chi2.cxx
+#include "pdf1d_prob_chi2.h"
+
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
-#include <pdf1d/pdf1d_prob_chi2.h>
 #include <mbl/mbl_gamma.h>
 
 double pdf1d_chi2_for_cum_prob(double p, int n_dof, double tol)

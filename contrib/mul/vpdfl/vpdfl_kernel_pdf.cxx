@@ -7,12 +7,10 @@
 // \brief Multi-variate kernel PDF
 // \author Tim Cootes
 
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
+#include "vpdfl_kernel_pdf.h"
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
-#include <vpdfl/vpdfl_kernel_pdf.h>
 #include <vsl/vsl_vector_io.h>
 
 //=======================================================================

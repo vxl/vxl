@@ -8,11 +8,10 @@
 // \date 19-Apr-2001
 // \brief Base class for Univariate Probability Sampler classes.
 
-#include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <pdf1d/pdf1d_sampler.h>
+#include "pdf1d_sampler.h"
 #include <pdf1d/pdf1d_pdf.h>
 #include <vsl/vsl_indent.h>
+#include <vcl_cassert.h>
 
 //=======================================================================
 // Dflt ctor

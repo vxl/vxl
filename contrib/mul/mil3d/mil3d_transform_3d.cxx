@@ -1,5 +1,9 @@
+// This is mul/mil3d/mil3d_transform_3d.cxx
+#include "mil3d_transform_3d.h"
+//:
+// \file
+
 #include <vcl_cstdlib.h>
-#include <mil3d/mil3d_transform_3d.h>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>

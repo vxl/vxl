@@ -1,3 +1,5 @@
+// This is gel/gevd/gevd_detector.cxx
+#include "gevd_detector.h"
 //:
 // \file
 // see gevd_detector.h
@@ -6,7 +8,6 @@
 
 #include <vil/vil_image.h>
 
-#include "gevd_detector.h"
 #include "gevd_pixel.h"
 #include "gevd_float_operators.h"
 #include "gevd_step.h"

@@ -1,7 +1,8 @@
+// This is gel/gevd/gevd_region_proc.cxx
+#include "gevd_region_proc.h"
 //:
 // \file
 // See gevd_region_proc.h for documentation
-#include <gevd/gevd_region_proc.h>
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_detector.h>
 #include <gevd/gevd_clean_edgels.h>

@@ -1,48 +1,9 @@
-//-*- c++ -*-------------------------------------------------------------------
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
-//--------------------------------------------------------------
-
+// This is gel/mrc/carmen_interface/carmen_interface.cpp
+#include "carmen_interface.h"
 //:
 //  \file
 //
-// Class : gauss_simulator
-//
-// Modifications : see gauss_simulator.h
-//
 //-----------------------------------------------------------------------------
-//#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
 //--------------------------------------------
@@ -53,7 +14,6 @@
 #undef Status
 #include <Carmen/Carmen.h>
 #include <CarmenModels/Perspective/pp.h>
-#include "carmen_interface.h"
 
 //--------------------------------------------------------------
 //
@@ -78,10 +38,10 @@ carmen_interface::~carmen_interface()
 //: intialize carmen
 void carmen_interface::set_carmen_camera(int view_no)
 {
-  if(!_carmen)
+  if (!_carmen)
     return;
   bool stat = (bool)_carmen->create_camera(view_no, "PerspectiveCamera");
-  if(!stat)
+  if (!stat)
     {
       vcl_cerr << _carmen->geterror() << vcl_endl;
       return;
@@ -101,7 +61,7 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
   //Set up the primary point3D.
   stat = (bool)_carmen->set_primary_parameter(point_id, "X", x,
                                               default_3d_point_sdev, FIX);
-  if(!stat)
+  if (!stat)
     {
       vcl_cerr << _carmen->geterror() << vcl_endl;
       return stat;
@@ -109,14 +69,14 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
 
   stat = (bool)_carmen->set_primary_parameter(point_id, "Y", y,
                                               default_3d_point_sdev, FIX);
-  if(!stat)
+  if (!stat)
     {
       vcl_cerr << _carmen->geterror() << vcl_endl;
       return stat;
     }
   stat = (bool)_carmen->set_primary_parameter(point_id, "Z", z,
                                               default_3d_point_sdev, FIX);
-  if(!stat)
+  if (!stat)
     {
       vcl_cerr << _carmen->geterror() << vcl_endl;
       return stat;
@@ -124,7 +84,7 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
   //define the corresponding 2d secondary
   stat = _carmen->define_control_point(view_no, point_id, u, v,
                                        default_2d_point_sdev);
-  if(!stat)
+  if (!stat)
     {
       vcl_cerr << _carmen->geterror() << vcl_endl;
       return stat;
@@ -137,7 +97,7 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
 bool carmen_interface::load_correspondence_file(const string& file_path)
 {
   vcl_ifstream instr(file_path.c_str());
-  if(!instr)
+  if (!instr)
     {
       vcl_cout <<"In carmen_interface::load_correspondence_file()"
                <<" - can't open file  " << file_path.c_str() << vcl_endl;
@@ -148,7 +108,7 @@ bool carmen_interface::load_correspondence_file(const string& file_path)
   instr >> buf ;
   string keyword=buf;
 
-  if(keyword=="NUMPOINTS:"&&instr)
+  if (keyword=="NUMPOINTS:"&&instr)
     instr >> npts;
   else
     {
@@ -158,11 +118,11 @@ bool carmen_interface::load_correspondence_file(const string& file_path)
   int view_no=0, point_id=0;
   double x=0, y=0, z=0;
   float u=0, v=0;
-  for(int i=0; i<npts&&instr; i++)
+  for (int i=0; i<npts&&instr; i++)
     {
       instr >> buf;
       keyword = buf;
-      if(keyword!="CORRESP:")
+      if (keyword!="CORRESP:")
         {
           vcl_cout << "wrong number of correspondences " << vcl_endl;
           return false;
@@ -171,7 +131,7 @@ bool carmen_interface::load_correspondence_file(const string& file_path)
       vcl_cout << "Corr: " <<  view_no << " " << point_id << " " << x << " " <<  y
                << " " << z << " " <<  u << " " << v << vcl_endl;
       bool stat = add_full_correspondence(view_no, point_id, x, y, z, u, v);
-      if(!stat)
+      if (!stat)
         return false;
     }
   _carmen->DoneDefiningProblem();
@@ -182,10 +142,10 @@ bool carmen_interface::load_correspondence_file(const string& file_path)
 //
 void carmen_interface::solve()
 {
-  if(!_carmen)
+  if (!_carmen)
     return;
   bool stat = (bool)_carmen->init_cameras();
-  if(!stat)
+  if (!stat)
     {
       vcl_cerr << _carmen->geterror() << vcl_endl;
       return;

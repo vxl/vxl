@@ -1,4 +1,5 @@
-//-*-c++-*--------------------------------------------------------------
+// This is oul/ouel/kalman_filter.cxx
+#include "kalman_filter.h"
 //:
 // \file
 // \brief kalman_filter.cc: A linear Kalman filter class
@@ -22,11 +23,8 @@
 // Reproduction rights limited as described in the COPYRIGHT file.
 //----------------------------------------------------------------------
 
-#include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
-
-#include "kalman_filter.h"
 
 #include <vnl/algo/vnl_svd.h>
 

@@ -1,13 +1,16 @@
-// 05/13/98  RIH replaced append by insert_after to avoid n^2 behavior
-
+// This is gel/vtol/vtol_two_chain.cxx
+#include "vtol_two_chain.h"
 //:
 //  \file
+// \verbatim
+// Modifications
+//  05/13/98  RIH replaced append by insert_after to avoid n^2 behavior
+// \endverbatim
 
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 
 #include <vtol/vtol_list_functions.h>
-#include <vtol/vtol_two_chain.h>
 #include <vtol/vtol_face.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_vertex.h>
@@ -414,22 +417,16 @@ void vtol_two_chain::add_face(vtol_face &new_face,
 
 void vtol_two_chain::remove_face(vtol_face &doomed_face)
 {
-  topology_list::const_iterator i;
-  vtol_topology_object_sptr t;
-  t=&doomed_face;
-
-  i=vcl_find(inferiors()->begin(),inferiors()->end(),t);
-  int index=i-inferiors()->begin();
+  vtol_topology_object_sptr t=&doomed_face;
+  topology_list::const_iterator i=vcl_find(inferiors()->begin(),inferiors()->end(),t);
+  long index=i-inferiors()->begin();
   if (index>=0)
     {
-      vcl_vector<signed char>::iterator j=_directions.begin();
-      j=j+index;
-
+      vcl_vector<signed char>::iterator j = _directions.begin() + index;
       _directions.erase(j);
       touch();
       unlink_inferior(doomed_face);
     }
-  //  return false;
 }
 
 void vtol_two_chain::add_block(vtol_block &new_block)

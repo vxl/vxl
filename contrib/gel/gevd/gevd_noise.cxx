@@ -1,36 +1,5 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
-
+// This is gel/gevd/gevd_noise.cxx
+#include "gevd_noise.h"
 //:
 // \file
 
@@ -43,7 +12,6 @@
 
 #include "gevd_pixel.h"
 #include "gevd_float_operators.h"
-#include "gevd_noise.h"
 
 
 const int INVALID = -1;
@@ -301,7 +269,7 @@ gevd_noise::WouldBeZeroCrossing(const float* dhist, const int nbin,
 
 bool
 gevd_noise::RealZeroCrossing(const float* dhist, const int nbin,
-                        float& index)
+                             float& index)
 {
   int i3=INVALID, imin=INVALID, i;// x-coord right of zero-crossing
   float dh3 = 0, mindh = 0;             // y-coord
@@ -324,10 +292,10 @@ gevd_noise::RealZeroCrossing(const float* dhist, const int nbin,
     }
   if (i3 == INVALID)            // range of histogram is too small
     return false;
-  index = i3;
+  index = (float)i3;
   if (dh3 > 0) {                // interpolate zero-crossing
     int i4 = i3+1;
-    float dh4 = vcl_fabs(dhist[i4]);
+    float dh4 = (float)vcl_fabs(dhist[i4]);
     index = (i3*dh4 + i4*dh3) / (dh3 + dh4);
   }
 #ifdef TRACE_DEBUG

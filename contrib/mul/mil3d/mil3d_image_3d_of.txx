@@ -1,17 +1,18 @@
+// This is mul/mil3d/mil3d_image_3d_of.txx
 #ifndef mil3d_image_3d_of_txx_
 #define mil3d_image_3d_of_txx_
-
 //:
 //  \file
 //  \brief Represent 3D images of one or more planes of Ts.
 //  \author Graham Vincent (extended from mil_image_2d_of by Tim Cootes)
+
+#include "mil3d_image_3d_of.h"
 
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
-#include <mil3d/mil3d_image_3d_of.h>
 #include <vsl/vsl_vector_io.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 

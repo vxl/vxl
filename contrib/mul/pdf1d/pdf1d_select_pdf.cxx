@@ -1,3 +1,5 @@
+// This is mul/pdf1d/pdf1d_select_pdf.cxx
+#include "pdf1d_select_pdf.h"
 //:
 // \file
 // \author Tim Cootes
@@ -5,7 +7,6 @@
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
-#include <pdf1d/pdf1d_select_pdf.h>
 
 //: Use the comparitor to decide which pdf the data is most like
 //  Returns index of the chosen pdf.

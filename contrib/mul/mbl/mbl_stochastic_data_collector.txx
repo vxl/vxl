@@ -1,12 +1,12 @@
+// This is mul/mbl/mbl_stochastic_data_collector.txx
 #ifndef mbl_stochastic_data_collector_txx_
 #define mbl_stochastic_data_collector_txx_
-
 //:
 //  \file
 
+#include "mbl_stochastic_data_collector.h"
 #include <vcl_string.h>
 #include <vsl/vsl_vector_io.h>
-#include <mbl/mbl_stochastic_data_collector.h>
 #include <vnl/vnl_math.h>
 
 //=======================================================================

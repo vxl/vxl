@@ -1,6 +1,7 @@
+// This is tbl/vepl/vepl_median.cxx
+#include "vepl_median.h"
 #include <vcl_iostream.h>
 #include <vipl/accessors/vipl_accessors_vil_image.h>
-#include <vepl/vepl_median.h>
 #include <vipl/vipl_median.h>
 #include <vil/vil_memory_image_of.h>
 

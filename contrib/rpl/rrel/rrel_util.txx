@@ -1,5 +1,8 @@
+// This is rpl/rrel/rrel_util.txx
 #ifndef rrel_util_txx_
 #define rrel_util_txx_
+
+#include "rrel_util.h"
 
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
@@ -8,17 +11,15 @@
 #include <vcl_vector.h>
 #include <vnl/vnl_math.h>
 
-#include <rrel/rrel_util.h>
-
 
 template <class O, class T>
 O
 rrel_util_median_abs_dev_scale( const T& begin,  const T& end, int dof, O* /*dummy*/ )
 {
-  int count = end - begin;
+  long count = end - begin;
   assert( count > 0);
 
-  if( count <= dof )
+  if ( count <= dof )
     return 0;
 
   for ( T i=begin; i!=end; ++i ) {
@@ -46,7 +47,7 @@ rrel_util_weighted_scale( const T& residuals_first, const T& residuals_end,
     sum_weights += *w_itr;
     ++num;
   }
-  if( num <= dof )
+  if ( num <= dof )
     return 0;
 
   O divisor = sum_weights * ( num - dof ) / num;
@@ -59,7 +60,7 @@ void rrel_util_median_and_scale( Ran first, Ran last,
                                  T& median, T& scale,
                                  int dof )
 {
-  int count = last-first;
+  long count = last-first;
   assert( count > 0 );
   assert( count > dof );
 
@@ -86,7 +87,7 @@ void rrel_util_median_and_scale_copy( InpIter first, InpIter last,
   // support it for vector iterators.
   //
   vcl_vector<T> scratch;
-  for( ; first != last; ++first )
+  for ( ; first != last; ++first )
     scratch.push_back( *first );
   rrel_util_median_and_scale( scratch.begin(), scratch.end(), median, scale, dof );
 }
@@ -97,7 +98,7 @@ void rrel_util_intercept_adjustment( Ran first, Ran last,
                                      T & center, T & half_width,
                                      int dof )
 {
-  int count = last-first;
+  long count = last-first;
   assert( count > dof );
   vcl_sort( first, last );
   int num_in_interval = (count-dof)/2 + dof;
@@ -129,7 +130,7 @@ void rrel_util_intercept_adjustment_copy( InpIter first, InpIter last,
   // support it for vector iterators.
   //
   vcl_vector<T> scratch;
-  for( ; first != last; ++first )
+  for ( ; first != last; ++first )
     scratch.push_back( *first );
   rrel_util_intercept_adjustment( scratch.begin(), scratch.end(),
                                   center, half_width, dof );
@@ -141,7 +142,7 @@ void rrel_util_intercept_adjust_stats( Ran first, Ran last,
                                        T & robust_mean, T & robust_std, T & inlier_frac,
                                        int dof )
 {
-  int count = last-first;
+  long count = last-first;
   assert( count >= dof );
   T center, half_width;
   rrel_util_intercept_adjustment( first, last, center, half_width, dof );
@@ -157,7 +158,7 @@ void rrel_util_intercept_adjust_stats( Ran first, Ran last,
   while ( ++end_itr < last && *end_itr <= center+bound ) {
     sum += *end_itr;
   }
-  int inliers = end_itr - begin_itr;
+  long inliers = end_itr - begin_itr;
   robust_mean = sum / inliers;
   inlier_frac = T(inliers) / T(count);
 
@@ -180,7 +181,7 @@ void rrel_util_intercept_adjust_stats_copy( InpIter first, InpIter last,
   // support it for vector iterators.
   //
   vcl_vector<T> scratch;
-  for( ; first != last; ++first )
+  for ( ; first != last; ++first )
     scratch.push_back( *first );
   rrel_util_intercept_adjust_stats( scratch.begin(), scratch.end(),
                                     robust_mean, robust_std, inlier_frac, dof );

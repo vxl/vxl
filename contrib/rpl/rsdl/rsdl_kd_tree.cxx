@@ -1,3 +1,6 @@
+// This is rpl/rsdl/rsdl_kd_tree.cxx
+#include "rsdl_kd_tree.h"
+
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
@@ -8,7 +11,6 @@
 #include <vnl/vnl_numeric_traits.h>
 
 #include <rsdl/rsdl_dist.h>
-#include <rsdl/rsdl_kd_tree.h>
 
 
 rsdl_kd_tree::rsdl_kd_tree( const vcl_vector< rsdl_point >& points,

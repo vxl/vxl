@@ -1,3 +1,5 @@
+// This is gel/gevd/gevd_edgel_regions.cxx
+#include "gevd_edgel_regions.h"
 //:
 // \file
 
@@ -6,7 +8,6 @@
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h> // for vcl_sort() and vcl_find()
 
-#include "gevd_edgel_regions.h"
 #include <vdgl/vdgl_intensity_face.h>
 
 #include <vil/vil_byte.h>
@@ -819,7 +820,7 @@ bool gevd_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
       //There shouldn't be DigitalCurve(s) with this defect but it
       //does seem to occur.
       gevd_region_edge* vre = new gevd_region_edge(NULL);
-      float pex1, pey1, pex2, pey2;
+      double pex1, pey1, pex2, pey2;
       if (n_edgels>0)
         {
           pex1 = (*xy)[0].x(); pey1 = (*xy)[0].y();

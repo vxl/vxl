@@ -1,5 +1,6 @@
+// This is tbl/vepl/vepl_sobel.cxx
+#include "vepl_sobel.h"
 #include <vipl/accessors/vipl_accessors_vil_image.h>
-#include <vepl/vepl_sobel.h>
 #include <vipl/vipl_sobel.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>

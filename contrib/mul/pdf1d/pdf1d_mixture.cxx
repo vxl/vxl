@@ -1,3 +1,5 @@
+// This is mul/pdf1d/pdf1d_mixture.cxx
+#include "pdf1d_mixture.h"
 //:
 // \file
 // \brief Implements a mixture model (a set of individual pdfs + weights)
@@ -10,7 +12,6 @@
 #include <vcl_string.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
-#include <pdf1d/pdf1d_mixture.h>
 #include <pdf1d/pdf1d_mixture_sampler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_vector_io.h>

@@ -1,14 +1,15 @@
+// This is oxl/mvl/HMatrix2DComputeLinear.cxx
+#include "HMatrix2DComputeLinear.h"
+//:
+//  \file
+
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vnl/algo/vnl_svd.h>
 #include <mvl/HMatrix2D.h>
 #include <mvl/HomgMetric.h>
-#include "HomgNorm2D.h"
-#include "HMatrix2DComputeLinear.h"
-
-//:
-//  \file
+#include <mvl/HomgNorm2D.h>
 
 //: Construct a HMatrix2DComputeLinear object.
 // The allow_ideal_points flag is described below.

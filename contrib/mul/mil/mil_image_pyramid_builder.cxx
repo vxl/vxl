@@ -7,8 +7,7 @@
 //  \brief Class to load and save images from named files
 //  \author Tim Cootes
 
-#include <vcl_cstdlib.h>
-#include <mil/mil_image_pyramid_builder.h>
+#include "mil_image_pyramid_builder.h"
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 

@@ -1,8 +1,8 @@
+#include "QvGroup.h"
 #include "QvInput.h"
 #include "QvReadError.h"
 #include "QvFieldData.h"
 #include "QvChildList.h"
-#include "QvGroup.h"
 
 QV_NODE_SOURCE(QvGroup);
 
@@ -55,7 +55,7 @@ QvGroup::readInstance(QvInput *in)
         }
     }
 
-    return (fieldData_auto->read(in, this, FALSE) && readChildren(in));
+    return fieldData_auto->read(in, this, FALSE) && readChildren(in);
 }
 
 QvBool

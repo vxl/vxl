@@ -1,5 +1,6 @@
+// This is tbl/vepl/vepl_dyadic.cxx
+#include "vepl_dyadic.h"
 #include <vipl/accessors/vipl_accessors_vil_image.h>
-#include <vepl/vepl_dyadic.h>
 #include <vipl/vipl_dyadic.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>

@@ -1,13 +1,12 @@
+// This is oxl/oxp/oxp_bunch_of_files.cxx
+#include "oxp_bunch_of_files.h"
+
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
 #include <vcl_fstream.h>
 
 #include <vul/vul_awk.h>
 #include <vul/vul_file.h>
-
-#include <vxl_config.h>
-
-#include <oxp/oxp_bunch_of_files.h>
 
 oxp_bunch_of_files::oxp_bunch_of_files(char const* fmt)
 {
@@ -90,7 +89,7 @@ bool oxp_bunch_of_files::open(char const* fmt)
   start_byte.resize(n);
   start_byte[0] = 0;
   for (unsigned int i = 1; i < filenames.size(); ++i)
-    start_byte[i] = (vxl_int_64)start_byte[i-1] + (vxl_int_64)filesizes[i-1];
+    start_byte[i] = (offset_t)start_byte[i-1] + (offset_t)filesizes[i-1];
 
   // Open them all
   fps.resize(n);

@@ -1,5 +1,6 @@
+// This is mul/clsfy/clsfy_binary_hyperplane_ls_builder.cxx
 // Copyright: (C) 2001 British Telecommunications PLC
-
+#include "clsfy_binary_hyperplane_ls_builder.h"
 //:
 // \file
 // \brief Implement a two class output linear classifier builder
@@ -10,7 +11,6 @@
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <clsfy/clsfy_binary_hyperplane_ls_builder.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>

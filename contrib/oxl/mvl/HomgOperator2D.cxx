@@ -5,6 +5,8 @@
 //:
 // \file
 
+#include "HomgOperator2D.h"
+
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -16,7 +18,6 @@
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLineSeg2D.h>
-#include <mvl/HomgOperator2D.h>
 
 // == BASICS ==
 

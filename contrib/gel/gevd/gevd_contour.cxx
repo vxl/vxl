@@ -1,3 +1,5 @@
+// This is gel/gevd/gevd_contour.cxx
+#include "gevd_contour.h"
 //:
 // \file
 #include <vcl_iostream.h>
@@ -5,7 +7,6 @@
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h> // for vcl_max()
-#include "gevd_contour.h"
 #include <vil/vil_byte.h>
 #include <vnl/vnl_math.h> // for sqrt(2)
 #include <vdgl/vdgl_digital_curve.h>
@@ -191,7 +192,7 @@ gevd_contour::FindNetwork(gevd_bufferxy& edgels,
 bool
 on_contour(const gevd_bufferxy& edgels, const int i, const int j)
 {
-  float pix = (1 + vnl_math::sqrt2) * floatPixel(edgels, i, j); // fuzzy threshold
+  double pix = (1 + vnl_math::sqrt2) * floatPixel(edgels, i, j); // fuzzy threshold
   for (vil_byte dir = 0; dir < TWOPI; dir += HALFPI) // 4-connected only
     if (floatPixel(edgels, i+DIS[dir], j+DJS[dir]) > pix)
       return false;             // should choose neighbor instead
@@ -1520,8 +1521,8 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d_sptr>& edges,
   }
   // 2.0 Move the vertices to the bounds of the ROI
   int iv,  len = xmin_verts.size();
-  float xmi = 0, xmx = (xmax + rmax);
-  float ymi = 0, ymx = (ymax + rmax);
+  float xmi = 0, xmx = float(xmax + rmax);
+  float ymi = 0, ymx = float(ymax + rmax);
   for (iv=1; iv<len-1; iv++)
   {
     vtol_vertex_2d_sptr  v = xmin_verts[iv];
@@ -1632,18 +1633,17 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d_sptr>& edges,
 // center pixel by average of 2 neighbors.
 // This will make the spacing between pixels almost equal
 // and prune away small zig-zags.
-void
-EqualizeElements(float* elmts, const int n,
-                 const float v1, const float v2)
+static void
+EqualizeElements(double* elmts, int n, double v1, double v2)
 {
-  float p0 = elmts[0], p1 = elmts[1], p2 = elmts[2]; // setup pipeline
+  double p0 = elmts[0], p1 = elmts[1], p2 = elmts[2]; // setup pipeline
   elmts[0] = (v1 + p1) / 2;     // touching first vertex
   for (int i = 1; i < n-2; i++) {
     elmts[i] = (p0 + p2)/2;
     p0 = p1; p1 = p2; p2 = elmts[i+2]; // faster with circular list
   }
-  if (n>1) elmts[n-2] = (p0 + p2)/2;    // last convolution
-  if (n>0) elmts[n-1] = (p1 + v2) / 2;  // touching second vertex
+  if (n>1) elmts[n-2] = (p0 + p2)/2;   // last convolution
+  if (n>0) elmts[n-1] = (p1 + v2)/2;   // touching second vertex
 }
 
 
@@ -1675,8 +1675,8 @@ gevd_contour::EqualizeSpacing(vcl_vector<vtol_edge_2d_sptr>& chains)
     {   // not necessary for short chains
       vtol_vertex_sptr v1 = e->v1(), v2 = e->v2();
 
-      vcl_vector<float> cx(len);
-      vcl_vector<float> cy(len);
+      vcl_vector<double> cx(len);
+      vcl_vector<double> cy(len);
 
       for ( int qq=0; qq<len; qq++)
       {
