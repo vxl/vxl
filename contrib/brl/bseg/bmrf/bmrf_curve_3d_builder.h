@@ -54,24 +54,18 @@ class bmrf_curve_3d_builder
 
   //: Determine the alpha bounds from the network
   void find_alpha_bounds();
+  
+  //: Build curvels by linking across time through probable arcs
+  vcl_set<bmrf_curvel_3d_sptr>
+    build_curvels(vcl_set<bmrf_curvel_3d_sptr>& all_curvels, double alpha) const;
 
-  //: Build curvels by matching curves in all frames at \p alpha
-  //  Curves with less than \p min projections are removed
-  vcl_set<bmrf_curvel_3d_sptr> build_curvels(double alpha);
+  //: extend all curves to the next alpha 
+  vcl_set<bmrf_curvel_3d_sptr> 
+    extend_curves( vcl_set<vcl_list<bmrf_curvel_3d_sptr>*>& growing_curves, 
+                   double alpha );
 
-  //: Find all curves that intersect \p alpha in \p frame
-  vcl_set<bmrf_node_sptr> find_curves_at(double alpha, int frame = -1);
-
-  //: return the node iterator in \p choices that best matches \p curvel at \p alpha
-  bmrf_node_sptr best_match( const bmrf_curvel_3d_sptr& curvel, 
-                             vcl_set<bmrf_node_sptr>& choices,
-                             double alpha, int frame ) const;
-
-  //: return all valid matches from curvels to nodes in \p frame
-  void all_matches( const bmrf_curvel_3d_sptr& curvel,
-                    const vcl_set<bmrf_node_sptr>& choices,
-                    int frame,
-                    match_vector& matches) const;
+  //: Find all arcs where both nodes are valid at \p alpha
+  vcl_vector<bmrf_arc_sptr> find_arcs_at(double alpha) const;
 
   //: Reconstruct the 3d location of a curvel from its projections
   void reconstruct_point(bmrf_curvel_3d_sptr curvel) const;
@@ -79,15 +73,19 @@ class bmrf_curve_3d_builder
   //: Simultaneously reconstruct all points in a 3d curve
   void reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, float sigma = 0.5) const;
 
+  //: Attempt to interpolate artificial values for missing correspondences
+  void interp_gaps(vcl_list<bmrf_curvel_3d_sptr>& curve);
+
   //: Attempt to fill in missing correspondences
-  void fill_gaps(vcl_list<bmrf_curvel_3d_sptr>& curve);
+  void fill_gaps(vcl_list<bmrf_curvel_3d_sptr>& curve, double da);
 
   //: Trim the ends of the curve with few correspondences
   void trim_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, int min_prj);
 
   //: Match the \p curvels to the ends of the \p growing_curves
-  void append_curvels(vcl_set<bmrf_curvel_3d_sptr> curvels,
-                      vcl_set<vcl_list<bmrf_curvel_3d_sptr>*>& growing_curves);\
+  void append_curvels(vcl_set<bmrf_curvel_3d_sptr>& curvels,
+                      vcl_set<vcl_list<bmrf_curvel_3d_sptr>*>& growing_curves,
+                      int min_prj);
 
   //: Return a measure (0.0 to 1.0) of how well \p new_c matches \p prev_c
   double append_correct(const bmrf_curvel_3d_sptr& new_c, const bmrf_curvel_3d_sptr& prev_c) const;
