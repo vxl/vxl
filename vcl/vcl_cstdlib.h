@@ -13,7 +13,9 @@
 
 #include "vcl_compiler.h"
 
-#if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
+#if defined(VCL_STLPORT)
+# include "stlport/vcl_cstdlib.h"
+#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
 # include "gcc/vcl_cstdlib.h"
 #elif defined(VCL_SGI_CC)
 # include "sgi/vcl_cstdlib.h"

@@ -39,7 +39,9 @@
 
 #include "vcl_compiler.h"
 
-#if defined(VCL_GCC)
+#if defined(VCL_STLPORT)
+# include "stlport/vcl_cmath.h"
+#elif defined(VCL_GCC)
 # include "gcc/vcl_cmath.h"
 #elif defined(VCL_SGI_CC)
 # include "sgi/vcl_cmath.h"

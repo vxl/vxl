@@ -22,6 +22,9 @@
 #if !VCL_USE_NATIVE_COMPLEX 
 # include "emulation/vcl_complex.h"
 
+#elif defined(VCL_STLPORT)
+# include "stlport/vcl_complex.h"
+
 // ---------- Visual Studio 6
 #elif VCL_VC60
 # include "win32-vc60/vcl_complex.h"
