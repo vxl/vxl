@@ -91,9 +91,9 @@ protected:
   vcl_vector<vsol_line_2d_sptr> afgroup1_;
   bsol_hough_line_index_sptr index_;
   vcl_vector<vcl_vector<vsol_line_2d_sptr> > dindex0_; 
-  vcl_vector<vcl_vector<vsol_line_2d_sptr> > dindex1_;
+  vcl_vector<vcl_vector<vsol_line_2d_sptr> > dindex90_;
   vgl_homg_point_2d<double> vp0_;
-  vgl_homg_point_2d<double> vp1_;
+  vgl_homg_point_2d<double> vp90_;
   vgl_h_matrix_2d<double> projective_homography_;
   vgl_h_matrix_2d<double> affine_homography_;
   vgl_h_matrix_2d<double> homography_;

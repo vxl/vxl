@@ -38,7 +38,12 @@ void sdet_fit_lines::set_edges(vcl_vector<vtol_edge_2d_sptr> const& edges)
 }
 
 //--------------------------------------------------------------------------
-//: extract a set of vsol_point_2d(s)
+//: convert each digital curve to a set of vgl_point_2d<double> and add 
+//  them to vgl linear regression fitter point set. A set of line segments
+//  are computed that fit the point set within a specified mean square
+//  tolerance.  The resulting vgl_line_segment_2d<double> segments 
+//  are converted back to vsol geometry.
+//
 bool sdet_fit_lines::fit_lines()
 {
   if (segs_valid_)
