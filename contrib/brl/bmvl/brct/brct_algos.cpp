@@ -27,7 +27,7 @@ brct_algos::~brct_algos()
 {
 }
 
-vgl_point_3d<double> brct_algos::triangulate_3d_point(const vgl_point_2d<double>& x1, const vnl_double_3x4& P1, \
+vgl_point_3d<double> brct_algos::triangulate_3d_point(const vgl_point_2d<double>& x1, const vnl_double_3x4& P1,
                                                       const vgl_point_2d<double>& x2, const vnl_double_3x4& P2)
 {
   vnl_double_4x4 A;

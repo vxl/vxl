@@ -19,18 +19,17 @@ class brct_structure_estimator
     ~brct_structure_estimator(){}
 
     //: go to the next step
-    bugl_gaussian_point_3d<double> forward( \
-        bugl_gaussian_point_3d<double>& state, \
+    bugl_gaussian_point_3d<double> forward(
+        bugl_gaussian_point_3d<double>& state,
         bugl_gaussian_point_2d<double>& observe);
 
     //: get measurement matrix
     vnl_double_2x3 get_H_matrix(vnl_double_3 &state);
-    
- private:
 
+ private:
     //: process variance
     vnl_double_3x3 Q_;
-    
+
     //: state transit matrix
     vnl_double_3x3 A_;
 
