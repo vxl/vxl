@@ -1,11 +1,18 @@
+#ifdef GNU_LIBSTDCXX_V3
+// FIXME
+# include <vnl/vnl_vector.h>
+struct foo : vnl_vector<double> { foo() { } };
+#endif
+
 #include "vnl_file_vector.h"
+
 #include <vcl/vcl_fstream.h>
 #include <vcl/vcl_cstring.h> // for strcmp()
 
 // -- Load vector from filename.
 template <class T>
-vnl_file_vector<T>::vnl_file_vector(char const* filename) : 
-  vnl_vector<T>() // makes an empty vector.
+vnl_file_vector<T>::vnl_file_vector(char const* filename)
+  : vnl_vector<T>() // makes an empty vector.
 {
   //cerr << "filename=" << filename << endl;
   //cerr << "length=" << this->length() << endl;
