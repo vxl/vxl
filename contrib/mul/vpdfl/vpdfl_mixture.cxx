@@ -6,9 +6,11 @@
 
 //:
 // \file
+// \brief Implements a mixture model (a set of individual pdfs + weights)
 // \author Tim Cootes
 // \date 21-July-98
-// \brief Implements a mixture model (a set of individual pdfs + weights)
+//
+// Modifications
 // \verbatim
 //    IMS   Converted to VXL 12 May 2000
 // \endverbatim

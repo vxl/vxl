@@ -6,9 +6,11 @@
 
 //:
 // \file
+// \brief Implements builder for a mixture model PDF.
 // \author Tim Cootes
 // \date 21-July-98
-// \brief Implements builder for a mixture model PDF.
+//
+// Modifications
 // \verbatim
 //    IMS   Converted to VXL 14 May 2000, with redesign
 // \endverbatim

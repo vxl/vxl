@@ -2,26 +2,15 @@
 //
 //  Copyright: (C) 1998 Victoria University of Manchester
 //
-//    Class:          vpdfl_mixture_sampler
-//    Type:           instance
-//    Derived From:   TC_MVPDFInstanceBase
-//    Description:    Instance class for vpdfl_mixture
-//
-//=======================================================================
-//
-//  Revision History:
-//
-//    Rev:    Author: Comments:
-//
-//    1.1     TFC     First draft 2-Feb-2000
-//
 //=======================================================================
 
 //:
 // \file
+// \brief Implements a mixture model pdf sampler
 // \author Tim Cootes
 // \date 2-Feb-2000
-// \brief Implements a mixture model pdf sampler
+//
+// Modifications
 // \verbatim
 //    IMS   Converted to VXL 12 May 2000
 // \endverbatim

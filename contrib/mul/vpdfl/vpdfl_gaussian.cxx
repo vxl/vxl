@@ -1,8 +1,10 @@
 //:
 // \file
+// \brief Multi-variate gaussian PDF with arbitrary axes.
 // \author Tim Cootes
 // \date 16-Oct-98
-// \brief Multi-variate gaussian PDF with arbitrary axes.
+//
+// Modifications
 // \verbatim
 //    IMS   Converted to VXL 18 April 2000
 // \endverbatim
