@@ -26,7 +26,7 @@ class vbl_array_2d {
 public:
 
   //: Default constructor
-  vbl_array_2d() : rows_(0), num_rows_(0), num_cols_(0) { }
+  vbl_array_2d() { construct(); }
 
   //: Construct m-by-n array.
   vbl_array_2d(int m, int n) { construct(m, n); }
@@ -84,6 +84,14 @@ public:
     }
   }
 
+  //: make as if default-constructed.
+  void clear() {
+    if (rows_) {
+      destruct();
+      construct();
+    }
+  }
+
   // Data Access---------------------------------------------------------------
   T const& operator() (int i, int j) const { return rows_[i][j]; }
   T      & operator() (int i, int j) { return rows_[i][j]; }
@@ -122,16 +130,27 @@ private:
   T** rows_;
   int num_rows_;
   int num_cols_;
-  
+
+  void construct() {
+    rows_ = 0;
+    num_rows_ = 0;
+    num_cols_ = 0;
+  }
+
   void construct(int m, int n) {
     num_rows_ = m;
     num_cols_ = n;
-    rows_ = new T * [m];
-    T* p = new T[m * n];
-    for (int i = 0; i < m; ++i)
-      rows_[i] = p + i * n;
+    if (m && n) {
+      rows_ = new T * [m];
+      T* p = new T[m * n];
+      for (int i = 0; i < m; ++i)
+        rows_[i] = p + i * n;
+    }
+    else {
+      rows_ = 0;
+    }
   }
-  
+
   void destruct() {
     if (rows_) {
       delete [] rows_[0];
