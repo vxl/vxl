@@ -412,6 +412,7 @@ void xcv_window_size_traditional(int rows, int cols,
                                  unsigned *window_w, unsigned *window_h,
                                  double *viewer_scale)
 {
+  assert(rows > 0 && cols > 0);
   assert(window_w && window_h && viewer_scale);
   *window_w = 0;
   *window_h = 0;
@@ -421,7 +422,7 @@ void xcv_window_size_traditional(int rows, int cols,
   for (int i=0; i<rows; ++i) {
     unsigned int winnie = 0;
     for (int j=0; j<cols; ++j) {
-      int d = i*cols + j;
+      unsigned int d = i*cols + j;
       if (d < images.size())
         winnie += images[d]->width();
     }
@@ -433,7 +434,7 @@ void xcv_window_size_traditional(int rows, int cols,
   for (int j=0; j<cols; ++j) {
     unsigned int winnie = 0;
     for (int i=0; i<rows; ++i) {
-      int d = i*cols + j;
+      unsigned int d = i*cols + j;
       if (d < images.size())
         winnie += images[d]->height();
     }
