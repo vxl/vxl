@@ -39,6 +39,8 @@ class bmrf_arc : public vbl_ref_count
 
   double probability() { return probability_; }
 
+  double avg_intensity_error() { return avg_intensity_error_; }
+
   //: Smart pointer to the node where this arc originates
   bmrf_node_sptr from() { return bmrf_node_sptr(from_); }
 
