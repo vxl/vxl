@@ -20,7 +20,6 @@
 #ifndef vil_nitf_util_h_
 #define vil_nitf_util_h_
 
-#include <vcl_iosfwd.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
 #include <vcl_string.h>

@@ -14,6 +14,7 @@
 // \endverbatim
 
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_resource.h>
 
