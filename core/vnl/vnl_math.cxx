@@ -67,12 +67,19 @@ const float    vnl_math::maxfloat     = 3.40282346638528860e+38F;
 
 //--------------------------------------------------------------------------------
 
+#if defined(__GNUC__) || defined(VCL_WIN32)
 //: Return true iff x is "Not a Number"
 bool vnl_math_isnan(float x) { return x != x; }
 //: Return true iff x is "Not a Number"
 bool vnl_math_isnan(double x) { return x != x; }
 //: Return true iff x is "Not a Number"
 bool vnl_math_isnan(long double x) { return x != x; }
+#else
+// Assume IEEE floating point number representation AND bigendian or 32-bit
+bool vnl_math_isnan(float x) { return ((*(int*)(&x)) & 0x7f800000L) == 0x7f800000L && ((*(int*)(&x)) & 0x007fffffL); }
+bool vnl_math_isnan(double x) { return ((*(int*)(&x)) & 0x7ff00000L) == 0x7ff00000L && ((*(int*)(&x)) & 0x000fffffL); }
+bool vnl_math_isnan(long double x) { return ((*(int*)(&x)) & 0x7ff00000L) == 0x7ff00000L && ((*(int*)(&x)) & 0x000fffffL); }
+#endif
 
 // fsm@robots.ox.ac.uk
 // On linux noshared builds, with optimisation on, calling 'finite' within the
@@ -89,20 +96,18 @@ bool vnl_math_isnan(long double x) { return x != x; }
 # endif
 #endif
 
-#if defined(_MSC_VER)
+#ifndef VNL_HAS_NO_FINITE // is currently not defined
 //: Return true if x is neither NaN nor Inf.
-bool vnl_math_isfinite(double x) { return finite(x) != 0; } // quell performance warning -- fsm
+bool vnl_math_isfinite(float x) { return finite(x) != 0; }
 //: Return true if x is neither NaN nor Inf.
-bool vnl_math_isfinite(float x) { return finite(x) != 0; } // quell performance warning -- fsm
+bool vnl_math_isfinite(double x) { return finite(x) != 0; }
 //: Return true if x is neither NaN nor Inf.
-bool vnl_math_isfinite(long double x) { return finite(x) != 0; } // quell performance warning -- fsm
+bool vnl_math_isfinite(long double x) { return finite(x) != 0; }
 #else
-//: Return true if x is neither NaN nor Inf.
-bool vnl_math_isfinite(float x) { return finite(x); }
-//: Return true if x is neither NaN nor Inf.
-bool vnl_math_isfinite(double x) { return finite(x); }
-//: Return true if x is neither NaN nor Inf.
-bool vnl_math_isfinite(long double x) { return finite(x); }
+// Assume IEEE floating point number representation AND bigendian or 32-bit
+bool vnl_math_isfinite(float x) { return ((*(int*)(&x)) & 0x7f800000L) != 0x7f800000L; }
+bool vnl_math_isfinite(double x) { return ((*(int*)(&x)) & 0x7ff00000L) != 0x7ff00000L; }
+bool vnl_math_isfinite(long double x) { return ((*(int*)(&x)) & 0x7ff00000L) != 0x7ff00000L; }
 #endif
 
 #if defined(_MSC_VER)
