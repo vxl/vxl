@@ -110,7 +110,7 @@ class sdet_contour
   //: computation is carried out in a zero origin ROI - translate back
   static void Translate(vcl_vector<vtol_edge_2d_sptr>& edges,
                         vcl_vector<vtol_vertex_2d_sptr >& vertices,
-                        const float tx=0.5, const float ty = 0.5);
+                        float tx=0.5, float ty = 0.5);
 
   //: clear network storage (edges and vertices)
   static void ClearNetwork(vcl_vector<vtol_edge_2d_sptr>*& edges,
