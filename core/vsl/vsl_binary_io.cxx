@@ -448,7 +448,8 @@ vsl_b_istream::vsl_b_istream(vcl_istream *is): is_(is)
   // Binary VXL file, or it is a corrupted Binary VXL file
   if (m2 != vsl_magic_number_part_2 || m1 != vsl_magic_number_part_1)
   {
-    vcl_cerr << "\nI/O ERROR: The input stream does not appear to be"
+    vcl_cerr << "\nI/O ERROR: vsl_b_istream::vsl_b_istream(vcl_istream *is)\n"
+             << "             The input stream does not appear to be"
              << " a Binary VXL stream.\n"
              << "             Can't find correct magic number." << vcl_endl;
     is_->clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -456,7 +457,8 @@ vsl_b_istream::vsl_b_istream(vcl_istream *is): is_(is)
 
   if (v != 1)
   {
-    vcl_cerr << "\nI/O ERROR: The stream's leading version number is "
+    vcl_cerr << "\nI/O ERROR: vsl_b_istream::vsl_b_istream(vcl_istream *is)\n"
+             << "             The stream's leading version number is "
              << v << ". Expected value 1." << vcl_endl;
     is_->clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }

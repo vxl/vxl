@@ -62,7 +62,7 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
   }
   else
   {
-    vcl_cerr << "ERROR: vsl_binary_loader<BaseClass>::load_object: ";
+    vcl_cerr << "\n I/O ERROR: vsl_binary_loader<BaseClass>::load_object: ";
     vcl_cerr << "class name <" << name << "> not in list of loaders"<<vcl_endl;
     vcl_cerr << object_.size()<<" valid loaders: "<<vcl_endl;
     for (int j=0; j<object_.size(); ++j)

@@ -148,8 +148,7 @@ inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, int nbyt
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const unsigned long* ints,
-                                                     unsigned char *buffer,
-                                                     unsigned long count = 1)
+  unsigned char *buffer, unsigned long count = 1)
 {
   unsigned char* ptr = buffer;
   while (count-- > 0)
@@ -172,14 +171,13 @@ inline unsigned long vsl_convert_to_arbitrary_length(const unsigned long* ints,
 //: Decode a buffer of arbitrary length integers
 // Converts from the integers from the arbitrary length format into
 // an array of normal longs.
-// The return value is the number of bytes used.
-// ints* should be at least as long as count.
-// The functions will abort if the input data will not fit into
-// an unsigned long.
+// \param count Number of integers expected. Cannot be zero.
+// \param ints should point to a buffer at least as long as count.
+// \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                                       unsigned long *ints,
-                                                       unsigned long count = 1)
+  unsigned long *ints, unsigned long count = 1)
 {
+  assert (count != 0);
   const unsigned char* ptr = buffer;
   while (count-- > 0)
   {
@@ -200,11 +198,11 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
     {
       if (bitsLeft <= 0 || ((b & 127) >> bitsLeft) != 0)
       {
-        vcl_cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length() has "
-                 << "attempted to\n convert a number that is too large "
-                 << "to fit into an unsigned long\n"
-                 << "Aborting with " << count << " integers left to convert\n";
-        vcl_abort();
+        vcl_cerr << "\nI/O ERROR: "
+          << "vsl_convert_from_arbitrary_length(.., unsigned long*,..) has\n"
+          << "attempted to convert a number that is too large "
+          << "to fit into an unsigned long\n";
+        return 0;
       }
     }
 
@@ -222,8 +220,7 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed long)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const signed long* ints,
-                                                     unsigned char *buffer,
-                                                     unsigned long count = 1)
+  unsigned char *buffer, unsigned long count = 1)
 {
   unsigned char* ptr = buffer;
   while (count-- > 0)
@@ -246,14 +243,13 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed long* ints,
 //: Decode a buffer of arbitrary length integers
 // Converts from the integers from the arbitrary length format into
 // an array of normal longs.
-// The return value is the number of bytes used.
-// ints* should be at least as long as count.
-// The functions will abort if the input data will not fit into
-// a signed long.
+// \param count Number of integers expected. Cannot be zero.
+// \param ints should point to a buffer at least as long as count.
+// \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                                       signed long *ints,
-                                                       unsigned long count = 1)
+  signed long *ints, unsigned long count = 1)
 {
+  assert (count != 0);
   const unsigned char* ptr = buffer;
   while (count-- > 0)
   {
@@ -278,11 +274,11 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
               (((signed char)b >> (bitsLeft-1)) != -1) :
               (((b & 127) >> (bitsLeft-1)) != 0) )
       {
-        vcl_cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length() has "
-                 << "attempted to\n convert a number that is too large "
-                 << "to fit into a signed long\n"
-                 << "Aborting with " << count << " integers left to convert\n";
-        vcl_abort();
+        vcl_cerr << "\nI/O ERROR: "
+          << "vsl_convert_from_arbitrary_length(.., signed long*,..) has\n"
+          << "attempted to convert a number that is too large "
+          << "to fit into an unsigned long\n";
+        return 0;
       }
     }
 
@@ -302,8 +298,7 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const unsigned int* ints,
-                                                     unsigned char *buffer,
-                                                     unsigned long count = 1)
+  unsigned char *buffer, unsigned long count = 1)
 {
   unsigned char* ptr = buffer;
   while (count-- > 0)
@@ -326,14 +321,13 @@ inline unsigned long vsl_convert_to_arbitrary_length(const unsigned int* ints,
 //: Decode a buffer of arbitrary length integers
 // Converts from the integers from the arbitrary length format into
 // an array of normal ints.
-// The return value is the number of bytes used.
-// ints* should be at least as long as count.
-// The functions will abort if the input data will not fit into
-// an unsigned int.
+// \param count Number of integers expected. Cannot be zero.
+// \param ints should point to a buffer at least as long as count.
+// \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                                       unsigned int *ints,
-                                                       unsigned long count = 1)
+  unsigned int *ints, unsigned long count = 1)
 {
+  assert (count != 0);
   const unsigned char* ptr = buffer;
   while (count-- > 0)
   {
@@ -355,11 +349,11 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
     {
       if (bitsLeft <= 0 || ((b & 127) >> bitsLeft) != 0)
       {
-        vcl_cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length() has "
-                 << "attempted to\n convert a number that is too large "
-                 << "to fit into an unsigned int\n"
-                 << "Aborting with " << count << " integers left to convert\n";
-        vcl_abort();
+        vcl_cerr << "\nI/O ERROR: "
+          << "vsl_convert_from_arbitrary_length(.., unsigned int*,..) has \n"
+          << "attempted to convert a number that is too large "
+          << "to fit into an unsigned long\n";
+        return 0;
       }
     }
 
@@ -377,8 +371,7 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed int)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const signed int* ints,
-                                                     unsigned char *buffer,
-                                                     unsigned long count = 1)
+  unsigned char *buffer, unsigned long count = 1)
 {
   unsigned char* ptr = buffer;
   while (count-- > 0)
@@ -402,14 +395,13 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed int* ints,
 //: Decode a buffer of arbitrary length integers
 // Converts from the integers from the arbitrary length format into
 // an array of normal ints.
-// The return value is the number of bytes used.
-// ints* should be at least as long as count.
-// The functions will abort if the input data will not fit into
-// a signed int.
+// \param count Number of integers expected. Cannot be zero.
+// \param ints should point to a buffer at least as long as count.
+// \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                                       signed int *ints,
-                                                       unsigned long count = 1)
+  signed int *ints, unsigned long count = 1)
 {
+  assert (count != 0);
   const unsigned char* ptr = buffer;
   while (count-- > 0)
   {
@@ -434,11 +426,11 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
               (((signed char)b >> (bitsLeft-1)) != -1) :
               (((b & 127) >> (bitsLeft-1)) != 0) )
       {
-        vcl_cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length() has "
-                 << "attempted to\n convert a number that is too large "
-                 << "to fit into a signed int\n"
-                 << "Aborting with " << count << " integers left to convert\n";
-        vcl_abort();
+        vcl_cerr << "\nI/O ERROR: "
+          << "vsl_convert_from_arbitrary_length(.., signed int*,..) has \n"
+          << "attempted to convert a number that is too large "
+          << "to fit into an unsigned long\n";
+        return 0;
       }
     }
 
@@ -459,8 +451,7 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const unsigned short* ints,
-                                                     unsigned char *buffer,
-                                                     unsigned long count = 1)
+  unsigned char *buffer, unsigned long count = 1)
 {
   unsigned char* ptr = buffer;
   while (count-- > 0)
@@ -483,14 +474,13 @@ inline unsigned long vsl_convert_to_arbitrary_length(const unsigned short* ints,
 //: Decode a buffer of arbitrary length integers
 // Converts from the integers from the arbitrary length format into
 // an array of normal ints.
-// The return value is the number of bytes used.
-// ints* should be at least as long as count.
-// The functions will abort if the input data will not fit into
-// an unsigned short.
+// \param count Number of integers expected. Cannot be zero.
+// \param ints should point to a buffer at least as long as count.
+// \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                                       unsigned short *ints,
-                                                       unsigned long count = 1)
+unsigned short *ints, unsigned long count = 1)
 {
+  assert (count != 0);
   const unsigned char* ptr = buffer;
   while (count-- > 0)
   {
@@ -512,11 +502,11 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
     {
       if (bitsLeft <= 0 || ((b & 127) >> bitsLeft) != 0)
       {
-        vcl_cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length() has "
-                 << "attempted to\n convert a number that is too large "
-                 << "to fit into an unsigned short\n"
-                 << "Aborting with " << count << " integers left to convert\n";
-        vcl_abort();
+        vcl_cerr << "\nI/O ERROR: "
+          << "vsl_convert_from_arbitrary_length(.., unsigned short*,..) has\n"
+          << "attempted to convert a number that is too large "
+          << "to fit into an unsigned long\n";
+        return 0;
       }
     }
 
@@ -534,8 +524,7 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed short)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const signed short* ints,
-                                                     unsigned char *buffer,
-                                                     unsigned long count = 1)
+  unsigned char *buffer, unsigned long count = 1)
 {
   unsigned char* ptr = buffer;
   while (count-- > 0)
@@ -559,14 +548,13 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed short* ints,
 //: Decode a buffer of arbitrary length integers
 // Converts from the integers from the arbitrary length format into
 // an array of normal ints.
-// The return value is the number of bytes used.
-// ints* should be at least as long as count.
-// The functions will abort if the input data will not fit into
-// a signed short.
+// \param count Number of integers expected. Cannot be zero.
+// \param ints should point to a buffer at least as long as count.
+// \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                                       signed short *ints,
-                                                       unsigned long count = 1)
+  signed short *ints, unsigned long count = 1)
 {
+  assert (count != 0);
   const unsigned char* ptr = buffer;
   while (count-- > 0)
   {
@@ -592,11 +580,11 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
               (((signed char)b >> (bitsLeft-1)) != -1) :
               (((b & 127) >> (bitsLeft-1)) != 0) )
       {
-        vcl_cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length() has "
-                 << "attempted to\n convert a number that is too large "
-                 << "to fit into a signed short\n"
-                 << "Aborting with " << count << " integers left to convert\n";
-        vcl_abort();
+        vcl_cerr << "\nI/O ERROR: "
+          << "vsl_convert_from_arbitrary_length(.., signed short*,..) has\n"
+          << "attempted to convert a number that is too large "
+          << "to fit into an unsigned long\n";
+        return 0;
       }
     }
 
@@ -614,7 +602,7 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 
 //: Write an unsigned int as 16 bits to vsl_b_ostream
 // If your signed int cannot be represented in 16 bits (e.g. on a 32 bit
-// platform) the function will abort().
+// platform) the stream's error flag will be set.
 //
 // Warning: This function should be used infrequently and carefully. Under
 // all normal cicurmstances, the generic vsl_b_read and vsl_b_write in
@@ -648,7 +636,7 @@ inline void vsl_b_read_uint_16(vsl_b_istream& is, unsigned long& n )
 
 //: Write a signed int as 16 bits to vsl_b_ostream
 // If your signed int cannot be represented in 16 bits (e.g. on a 32 bit
-// platform) the function will abort().
+// platform) the stream's error flag will be set.
 //
 // Warning: This function should be used infrequently and carefully. Under
 // all normal cicurmstances, the generic vsl_b_read and vsl_b_write in
@@ -729,7 +717,6 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const float* begin, unsigned ne
 inline void vsl_b_read_block(vsl_b_istream &is, float* begin, unsigned nelems)
 {
   is.is().read((char*) begin, (unsigned long)nelems*(unsigned long)sizeof(float));
-
   vsl_swap_bytes((char *)begin, sizeof(float), nelems);
 }
 
@@ -742,8 +729,8 @@ inline void vsl_b_read_block(vsl_b_istream &is, float* begin, unsigned nelems)
 inline void vsl_b_write_block(vsl_b_ostream &os, const signed int* begin, unsigned nelems)
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed int)) * nelems];
-
   unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
+  
   vsl_b_write(os, nbytes);
 
   os.os().write( block, nbytes);
@@ -756,20 +743,23 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const signed int* begin, unsign
 // size of the block being read.
 inline void vsl_b_read_block(vsl_b_istream &is, signed int* begin, unsigned nelems)
 {
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed int)) * nelems];
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
-
-  is.is().read(block, nbytes);
-
-#ifndef NDEBUG
-  unsigned long n_bytes_converted =
-#endif
-  vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-
-  assert(n_bytes_converted == nbytes); // If this fails, the file is probably corrupted
-                                       // or something's read and write are not matched.
-  delete block;
+  if (nbytes)
+  {
+    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed int)) * nelems];
+    is.is().read(block, nbytes);
+    unsigned long n_bytes_converted =
+    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
+    delete block;
+    if (n_bytes_converted != nbytes)
+    {
+      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., signed int*,..)"
+        << " Corrupted data stream" << vcl_endl;
+      vcl_abort();
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    }
+  }
 }
 
 
@@ -796,20 +786,22 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned int* begin, unsi
 // size of the block being read.
 inline void vsl_b_read_block(vsl_b_istream &is, unsigned int* begin, unsigned nelems)
 {
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)) * nelems];
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
-
-  is.is().read(block, nbytes);
-
-#ifndef NDEBUG
-  unsigned long n_bytes_converted =
-#endif
-  vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-
-  assert(n_bytes_converted == nbytes); // If this fails, the file is probably corrupted
-                                       // or something's read and write are not matched.
-  delete block;
+  if (nbytes)
+  {
+    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)) * nelems];
+    is.is().read(block, nbytes);
+    unsigned long n_bytes_converted =
+    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
+    delete block;
+    if (n_bytes_converted != nbytes)
+    {
+      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned int*,..)"
+        << " Corrupted data stream" << vcl_endl;
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    }
+  }
 }
 
 
@@ -836,20 +828,22 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const signed short* begin, unsi
 // size of the block being read.
 inline void vsl_b_read_block(vsl_b_istream &is, signed short* begin, unsigned nelems)
 {
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed short)) * nelems];
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
-
-  is.is().read(block, nbytes);
-
-#ifndef NDEBUG
-  unsigned long n_bytes_converted =
-#endif
-  vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-
-  assert(n_bytes_converted == nbytes); // If this fails, the file is probably corrupted
-                                       // or something's read and write are not matched.
-  delete block;
+  if (nbytes)
+  {
+    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed short)) * nelems];
+    is.is().read(block, nbytes);
+    unsigned long n_bytes_converted =
+    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
+    delete block;
+    if (n_bytes_converted != nbytes)
+    {
+      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., signed short*,..)"
+        << " Corrupted data stream" << vcl_endl;
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    }
+  }
 }
 
 
@@ -876,20 +870,22 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned short* begin, un
 // size of the block being read.
 inline void vsl_b_read_block(vsl_b_istream &is, unsigned short* begin, unsigned nelems)
 {
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * nelems];
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
-
-  is.is().read(block, nbytes);
-
-#ifndef NDEBUG
-  unsigned long n_bytes_converted =
-#endif
-  vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-
-  assert(n_bytes_converted == nbytes); // If this fails, the file is probably corrupted
-                                       // or something's read and write are not matched.
-  delete block;
+  if (nbytes)
+  {
+    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * nelems];
+    is.is().read(block, nbytes);
+    unsigned long n_bytes_converted =
+    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
+    delete block;
+    if (n_bytes_converted != nbytes)
+    {
+      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned short*,..)"
+        << " Corrupted data stream" << vcl_endl;
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    }
+  }
 }
 
 
@@ -916,20 +912,22 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const signed long* begin, unsig
 // size of the block being read.
 inline void vsl_b_read_block(vsl_b_istream &is, signed long* begin, unsigned nelems)
 {
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed long)) * nelems];
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
-
-  is.is().read(block, nbytes);
-
-#ifndef NDEBUG
-  unsigned long n_bytes_converted =
-#endif
-  vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-
-  assert(n_bytes_converted == nbytes); // If this fails, the file is probably corrupted
-                                       // or something's read and write are not matched.
-  delete block;
+  if (nbytes)
+  {
+    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed long)) * nelems];
+    is.is().read(block, nbytes);
+    unsigned long n_bytes_converted =
+    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
+    delete block;
+    if (n_bytes_converted != nbytes)
+    {
+      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., signed long*,..)"
+        << " Corrupted data stream" << vcl_endl;
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    }
+  }
 }
 
 
@@ -956,20 +954,22 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned long* begin, uns
 // size of the block being read.
 inline void vsl_b_read_block(vsl_b_istream &is, unsigned long* begin, unsigned nelems)
 {
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * nelems];
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
-
-  is.is().read(block, nbytes);
-
-#ifndef NDEBUG
-  unsigned long n_bytes_converted =
-#endif
-  vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-
-  assert(n_bytes_converted == nbytes); // If this fails, the file is probably corrupted
-                                       // or something's read and write are not matched.
-  delete block;
+  if (nbytes)
+  {
+    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * nelems];
+    is.is().read(block, nbytes);
+    unsigned long n_bytes_converted =
+    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
+    delete block;
+    if (n_bytes_converted != nbytes)
+    {
+      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned long*,..)"
+        << " Corrupted data stream" << vcl_endl;
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    }
+  }
 }
 
 #endif // vsl_binary_explicit_io_h_
