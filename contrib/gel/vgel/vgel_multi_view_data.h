@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //--------------------------------------------------------------------------------
-// .NAME        vgel_multi_view_point_data
-// .INCLUDE     vgel/vgel_multi_view_point_data
-// .FILE        vgel_multi_view_point_data.cxx
+// .NAME        vgel_multi_view_data
+// .INCLUDE     vgel/vgel_multi_view_data
+// .FILE        vgel_multi_view_data.cxx
 // .SECTION     Description:
-//   Class to hold the matched points through mutli views
+//   Class to hold the matched points through multi views
 // .SECTION Author
 //   L. Guichard
 // .SECTION Modifications:
