@@ -11,7 +11,7 @@ void vsl_b_write(vsl_b_ostream &os, vgl_polygon<T> const& p)
     const short io_version_no = 1;
     vsl_b_write(os, io_version_no);
     vsl_b_write(os, p.num_sheets());
-    for (int i=0;i<p.num_sheets();i++)
+    for (unsigned int i=0;i<p.num_sheets();i++)
     {
         vsl_b_write(os,p[i].size());
         for (unsigned int j=0;j<p[i].size();j++)
@@ -33,10 +33,10 @@ void vsl_b_read(vsl_b_istream &is, vgl_polygon<T> & p)
   switch(v)
   {
   case 1:
-    int num_sheets;
+    unsigned int num_sheets;
     vsl_b_read(is, num_sheets);
     p.clear();
-    for (int i=0;i<num_sheets;i++)
+    for (unsigned int i=0;i<num_sheets;i++)
     {
         p.new_sheet();
         int npoints;
@@ -67,7 +67,7 @@ template <class T>
 void vsl_print_summary(vcl_ostream& os, vgl_polygon<T>const& p)
 {
   os<<"Polygon with points defined by sheets :\n";
-  for (int i=0;i<p.num_sheets();i++)
+  for (unsigned int i=0;i<p.num_sheets();i++)
   {
       for (unsigned int j=0;j<p[i].size();j++)
           os << p[i][j].x()<<','<<p[i][j].y()<<vcl_endl;

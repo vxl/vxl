@@ -6,7 +6,7 @@
 
 template <class T> inline static bool is_vertex(vgl_polygon<T> const& poly, T x, T y)
 {
-  for ( int i=0; i < poly.num_sheets(); ++i )
+  for ( unsigned int i=0; i < poly.num_sheets(); ++i )
     for ( unsigned int p=0; p < poly[i].size(); ++p )
       if ( vcl_abs(x - poly[i][p].x()) < 1e-6 && vcl_abs(y - poly[i][p].y()) < 1e-6 )
         return true;
