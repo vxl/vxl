@@ -9,7 +9,7 @@
 #include <vcl_string.h>
 
 #ifdef VCL_WIN32
-#define ROOT_PATH "C:/TEMP"
+#define ROOT_PATH "C:/"
 #else
 #define ROOT_PATH "/tmp"
 #endif
