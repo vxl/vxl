@@ -1,3 +1,4 @@
+#include <vxl_config.h>
 #include <vul/vul_timer.h>
 #include <mvl/mvl_multi_view_matches.h>
 #include <vcl_iostream.h>
