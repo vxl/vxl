@@ -339,7 +339,7 @@ void segv_segmentation_manager::vd_edges()
   static bool agr = true;
   static sdet_detector_params dp;
   static float nm = 2.0;
-  	
+
   vgui_dialog vd_dialog("VD Edges");
   vd_dialog.field("Gaussian sigma", dp.smooth);
   vd_dialog.field("Noise Threshold", nm);
@@ -348,7 +348,7 @@ void segv_segmentation_manager::vd_edges()
   vd_dialog.checkbox("Compute Junctions", dp.junctionp);
   if (!vd_dialog.ask())
     return;
-	dp.noise_multiplier=nm;	
+  dp.noise_multiplier=nm;
   if (agr)
     dp.aggressive_junction_closure=1;
   else
@@ -436,7 +436,7 @@ void segv_segmentation_manager::fit_lines()
   vd_dialog.checkbox("Compute Junctions", dp.junctionp);
   if (!vd_dialog.ask())
     return;
-	dp.noise_multiplier=nm;
+  dp.noise_multiplier=nm;
   if (agr)
     dp.aggressive_junction_closure=1;
   else
@@ -447,10 +447,10 @@ void segv_segmentation_manager::fit_lines()
 
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
-  if(!edges)
+  if (!edges)
   {
-	  vcl_cout << "No edges to fit lines \n";
-	  return;
+    vcl_cout << "No edges to fit lines \n";
+    return;
   }
   sdet_fit_lines fl(flp);
   fl.set_edges(*edges);
