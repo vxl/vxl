@@ -39,7 +39,7 @@ public:
     mil_image_data<T>& operator=(const mil_image_data&);
 
     //: Destructor
-    ~mil_image_data();
+    virtual ~mil_image_data();
 
     //: Increment reference count
     void ref();

@@ -202,7 +202,7 @@ template class mil_image_data<T >; \
    template void vsl_b_write(vsl_b_ostream&s, const mil_image_data<T >*v); \
 /* template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >  & v); */ \
    template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >* & v); \
-template void vsl_print_summary(vsl_b_ostream& s, const mil_image_data<T >* p)
+template void vsl_print_summary(vcl_ostream& s, const mil_image_data<T >* p)
 
 
 #endif // mil_image_data_txx_
