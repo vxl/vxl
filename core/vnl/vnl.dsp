@@ -780,6 +780,9 @@ SOURCE=.\Templates/vnl_vector_fixed_ref+double.3-.cxx
 SOURCE=.\Templates/vnl_vector_fixed_ref+float.3-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_erf.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_gamma.cxx
 # End Source File
 # End Group
@@ -1126,6 +1129,9 @@ SOURCE=.\vnl_imag.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_real.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_erf.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_gamma.h
