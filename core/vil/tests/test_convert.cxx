@@ -80,9 +80,9 @@ static void test_convert_diff_types(const char * golden_data_dir)
   else
     vcl_cout << "(no dump)\n";
 
-  testlib_test_begin( "Converting implicitly 8bit RGB to 8bit grey" );
-  vil_image_view<vxl_byte> image_8_3 = vil_convert_cast( vxl_byte(), image3 );
+  testlib_test_begin( "Converting explicitly 8bit RGB to 8bit grey" );
   vil_image_view<vxl_byte> image_3 = image3;
+  vil_image_view<vxl_byte> image_8_3; vil_convert_planes_to_grey( image_3, image_8_3 );
   testlib_test_perform( image_8_3 && image_8_3(1,0) == image_3(1,0,1) ); // accidentally a grey pixel ...
 
   vil_print_all(vcl_cout, image3);
