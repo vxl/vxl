@@ -1,0 +1,145 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage vmap : the Topological Map library.
+* A set of classes to represent and manipulate combinatorial maps and
+* cellular decomposition of the (for now) digital or continuous plane.
+*
+* \section intro Topological and Combinatorial Maps
+*
+* A topological 2-map is the decomposition of the plane into three kind of cells :
+* - vertices, which are points of the planes, 
+* - edges, which are jordan arcs, and which extremities are the vertices of the map, 
+* - faces, which are connected regions, and which boundaries consist of edges and vertices of the map.
+* \image html topo.jpg A topological map with different embeddings
+*  
+* Typically, a topological 2-map structure represents the different elements together
+* with the bounding relations. It is then possible to access efficiently all
+* the edges and the faces bounded by a given vertex, the faces and vertices 
+* adjacent to a given edge, or the vertices and edges bounding a given face.
+*
+* Several structures encoding a topological 2-map exist. vmap library is based
+* on the combinatorial map (also called 2-map) structure. A combinatorial map
+* is defined s a triplet \f$ (\mathcal{D},\sigma,\alpha) \f$ where \f$ \mathcal{D} \f$
+* is a set of objects called darts or half-edges, \f$ \sigma \f$ is a permutation
+* on \f$ \mathcal{D} \f$, and \f$ \alpha \f$ is an involution on \f$ \mathcal{D} \f$.
+* A 2-map can be viewed as a plane graph, where its darts are directed edges
+* between vertices of the graph, \f$ \sigma \f$ gives all the darts clocwise
+* arround a vertex, and \f$ \alpha \f$ gives the two darts associated to a non
+* oriented edge. A third permutation can be defined as \f$ \varphi= \sigma \circ \alpha \f$,
+* which gives all darts arround a face turning clocwise.
+*
+* It has been shown that there exits a bijection between the set of combinatorial maps
+* and the set of topological maps (up to an isomorphism). A code for a topological map
+* can then be given from a combinatorial map by associating to each dart the triplet
+* of cells \f$ (V, E, F) \f$ where \f$ V \f$ is the vertex corresponding to the begining
+* of a dart, \f$ E \f$ is its underlying edge, and \f$ F \f$ is its left face.
+*
+* \section map Handling Combinatorial Maps
+*
+* The class vmap_2_map<D> enable to handle the structure of a combinatorial map.
+* It is the basic structure of vmap and vpyr libraries. 
+* D must inherit from vmap_2_map_dart, which provides useful functionalities.
+* Among other things, iterators (including const_iterators) on darts are defined
+* and enable to iterate on the set of darts of the encoded 2-map using the
+* standard sequence operator (++), or the permutations sigma(), alpha(),
+* phi(), isigma() (the inverse of sigma), ialpha() and iphi().
+*
+* Member functions of vmap_2_map<D> enable to build a 2-map:
+* - initialise_darts(arg), which reserves arg darts and set alpha for them,
+* - set_sigma (arg, arg_sigma), which sets sigma for the dart of index arg,
+* - set_alpha (arg, arg_alpha), which sets alpha,
+* - set_phi (arg, arg_phi), replacing set_sigma, provided that the pemutation alpha is set.
+* 
+* Other functionalities assumes that the permutations are correctly set.
+*
+* Modifying operations, contration and removal, are outlined below. 
+*
+* \section tmap Handling Topological Maps
+*
+* The class vmap_2_tmap<V,E,F,D> enable to handle the structure of a topological 2-map.
+* V,E,F and D are user provided types which must publically inherit from respectively
+* vmap_2_tmap_vertex, vmap_2_tmap_edge, vmap_2_tmap_face and vmap_2_tmap_dart.
+* Thus, the simplest instance of the typpe is given by : * \verbatim
+typedef vmap_2_tmap<vmap_2_tmap_vertex,vmap_2_tmap_edge,vmap_2_tmap_face,vmap_2_tmap_dart> my_tmap
+\endverbatim
+* vmap_2_tmap<V,E,F,D> provides iterators for vertices, edges, faces and darts.
+* The dart iterators can be used to access all the adjacency relations between the different
+* elements, using the operation sigma(), alpha() and phi(). For example, iterating on all
+* vertices, edges and faces adjacent to each vertex of the map is done by :\verbatim
+my_map m;
+//... initialisation of the map
+
+for (my_map::vertex_iterator v=m.begin_vertex(); v!=m.end_vertex(); ++v) // iterates on all vertices
+{
+	my_map::dart_iterator d=v->begin(), // gives the iterator on a dart of *v
+		e=d ;
+	do
+	{
+		my_map::dart_iterator a=d ; a.alpha() ;
+		
+		//do something with a->vertex() ;
+		
+		//do something with d->edge() ;
+		
+		//do something with d->face() ;
+		
+		d->sigma() ; // next dart turning clocwise around a vertex
+	} while (d!=e) ;
+}
+\endverbatim
+* Similarly, for retrieving all elements adjacent to a face:\verbatim
+for (my_map::face_iterator f=m.begin_face(); f!=m.end_face(); ++f) // iterates on all faces
+{
+	my_map::dart_iterator d=f->begin(), // gives the iterator on a dart of *f
+		e=d ;
+	do
+	{
+		//do something with d->vertex() ;
+		
+		//do something with d->edge() ;
+		
+		my_map::dart_iterator a=d ; a.alpha() ;
+		
+		//do something with a->face() ;
+		
+		d->phi() ; // next dart turning clocwise around a vertex
+	} while (d!=e) ;
+}
+\endverbatim
+*
+* The topological map can be initialised using convenient functions:
+* - setting functions of vmap_2_map,
+* - set_vertex (arg_dart, arg_vertex), set_edge(arg_dart, arg_edge) and set_face (arg_dart, arg_face), which enable to assiciate the cells to darts,
+* - set_dart(arg_dart, arg_sigma, arg_vertex, arg_face) and set_dart(arg_dart, arg_sigma, arg_alpha, arg_vertex, arg_edge, arg_face), which are setting several things together,
+* - set_vertex_cycles(), set_edge_cycles() and set_face_cycles() which initializes and set the different cells provided that the permutations have been set beforehand,
+* - and set_all_cycles(), which sets all the cells and association when the permutations have been set.
+*
+* \section operations Operations on Topological Maps
+*
+* Two dual operations defined on combinatorial maps can be used. These operations are conraction and removal of edges (pair of darts).
+* When a dart is removed from a topological map its left face is being identified with its right face. It is a way to implement
+* the fusion operation.
+* When a dart is being contracted, its begining vertex is identified with its end vertex (for details, see Marchadier Jocelyn,
+* Luc Brun, Walter Kropatsch « Rooted Kernels and Labeled Combinatorial Pyramids », CVWW 2004, page 59-68).
+* Removal and contraction can be used respectively to merge regions and simply the boundaries resulting from merging.
+* Note that it is not possible (for now) to remove darts adjacent to a single face (i.e. isthmus and pendant darts), or to contract
+* loops.
+*
+* The class vmap_kernel<M> can be used to build sets of darts satisfying the required constraints for contraction/removal. It is 
+* implemented in the maps classes under two forms:
+* - contraction_kernel enable to build a set of darts which can be viewed as a forest of vertices. It is the class used to contract a whole set of darts.
+* - removal_kernel enable to build a set of darts which can be viewed as a forest of faces. This class is used for simultaneously removing the darts of the sets.
+*
+* Using kernel classes and associated functions is much more efficient than performing the operations dart per dart.
+*
+* Two extra classes are provided: vmap_oriented_kernel<K> and vmap_non_oriented_kernel<K>. Both template parameters must be either
+* contraction_kernel or removal_kernel from the class they are defined on. vmap_oriented_kernel<K> ensures that darts included 
+* in the kernel form a rooted tree, whereas vmap_non_oriente_kernel<K> ensure that the kernel built is a non-rooted tree.
+* Usually, the second class is needed, although certain uses may require the first one.
+*
+* \section Lead Developer
+* Jocelyn Marchadier is currently project assistant at PRIP., under Austrian Science Fund's grants P14445-MAT and P14662-INF.
+*/
+
+/*! \page Design Notes
+* \htmlinclude core/vil/notes.html
+*/

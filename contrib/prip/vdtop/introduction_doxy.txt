@@ -1,0 +1,23 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage vpyr : The Topological Pyramid library.
+* A set of classes to represent and manipulate pyramids of combinatorial/topological maps.
+*
+* \section intro Digital Topology
+*
+* This library provides algorithms and data structures that can be used to compute skeletons, watersheds and other 
+* digital topology related results.
+* 
+* Among provided algorithms, you can find :
+* - freeman codes and digital neighborhood structures which provide the basis for (efficiently) computing topological numbers, simplyhood of points, ...
+* - computation of homotopic and leveling kernels, as decribed in G. Bertrand, J. C. Everat and M. Couprie, "Image segmentation through operators based upon topology", Journal of Electronic Imaging, Vol. 6, N. 4, 395-405, 1997,
+* - computation of leveling kernels and well composed grayscale images, as decribed in Marchadier Jocelyn, Arquès Didier, Michelin Sylvain, « Thinning grayscale well-composed images  », Pattern Recognition Letters, Volume 25, Issue 5, Pages 525-601,
+* - computation of veinerization graphs of M. P. Deseilligny and al. in PAMI (Vol. 20, No. 5, pp. 505-521 ),
+* - and watersheds as described in Marchadier Jocelyn, Walter Kropatsch, Allan Hanbury "Homotopic transformations of combinatorial maps", DGCI2003,  Lectures Notes On Computer Science no. 2886, page 134-143, 2003.
+*
+* \section Lead Developer
+* Jocelyn Marchadier is currently project assistant at PRIP, under Austrian Science Fund's grants P14445-MAT and P14662-INF.
+*/
+
+/*! \page Design Notes
+* \htmlinclude core/vil/notes.html
+*/

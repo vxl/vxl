@@ -1,0 +1,60 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage vpyr : The Topological Pyramid library.
+* A set of classes to represent and manipulate pyramids of combinatorial/topological maps.
+*
+* \section intro Topological and Combinatorial Pyramids
+*
+* A topological 2-pyramid is a set of topological maps which can be deduced from one another by removing or contracting edges.
+*
+* vpyr_2_pyramid<TLevel> handle combinatorial pyramids. TLevel must inherit from vpyr_2_pyramid_level<D>, where D itself 
+* must inherit from vpyr_2_pyramid_level_dart. Each level of the pyramid is handled exactly as vmap_2_map.
+* The vpyr_2_pyramid uses implicit encoding. The structure is therefore linear in the number of edges of the base map.
+*
+* In order to access data attached to each dart, those have to be defined in an external struct.
+* vmap_simple_data<S> can be used in order to replicate the data attached to darts on ll levels, whereas vmap_replicated_data<S>
+* handles data of typ S which are replicated on all levels.
+* A level vpyr_2_pyramid_level<D> can then be declared as:\verbatim
+
+struct IdData // A simple structure handling data associated to all darts at all levels
+{
+  int id ;
+} ;
+
+struct my_pyramid_dart : public vmap_2_pdl_dart< vmap_simple_data<IdData> > // 
+{
+  int id() const
+  {
+    return data().id ;
+  }
+
+  int & id()
+  {
+    return data().id ;
+  }
+} ;
+
+typedef vpyr_2_pyramid_level<my_pyramid_dart> my_pyramid_level ;
+typedef vpyr_2_pyramid<my_pyramid_level> my_tpyramid ;
+\endverbatim
+* 
+* vpyr_2_tpyramid works exactly the same way. Each level has to inherit from vpyr_2_tpyramid_level<V,E,F,D>.
+* V,E,F and D themselves have to inherit from vpyr_2_tpyramid_level_vertex, vpyr_2_tpyramid_level_edge, 
+* vpyr_2_tpyramid_level_face and vpyr_2_tpyramid_level_dart.
+*
+* down_projection_vertices (resp. down_projection_faces) functions may be used to retrieve the correspondance 
+* between vertices (resp. the faces) of the base level and their ancestor at a higher level of the pyramid.
+* This is needed, for example, when one wants to now which pixels (face of the grid) are included in a face 
+* at a given level. Note that it is, from this function, possible to retrieve the correspondance between
+* two arbitrary level. This functions are based on union/find startegies and are linear in the number of
+* elements of the base map.
+*
+* vpyr_top_map and vpyr_top_tmap can be used in order to replicate the last level of a pyramid in an efficient bottom/up
+* construction process. A simple segmentation process is illustrated in the example directory of vpyr.
+*
+* \section Lead Developer
+* Jocelyn Marchadier is currently project assistant at PRIP, under Austrian Science Fund's grants P14445-MAT and P14662-INF
+*/
+
+/*! \page Design Notes
+* \htmlinclude core/vil/notes.html
+*/
