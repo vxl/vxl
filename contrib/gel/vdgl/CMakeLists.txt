@@ -15,3 +15,4 @@ vdgl_edgel           vdgl_interpolator_linear
 vdgl_edgel_chain     vdgl_ortho_regress
 )
 
+AUX_SOURCE_DIRECTORY(Templates vdgl_sources)

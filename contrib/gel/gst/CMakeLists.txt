@@ -12,3 +12,4 @@ gst_face_2d     gst_vertex_2d
 gst_polygon_2d
 )
 
+AUX_SOURCE_DIRECTORY(Templates gst_sources)

@@ -26,3 +26,5 @@ ELSE(HAS_X11)
     menu_hack_none
   )
 ENDIF(HAS_X11)
+
+AUX_SOURCE_DIRECTORY(Templates vgui_glut_sources)
