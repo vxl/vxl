@@ -36,7 +36,7 @@
 // Author: Peter Vanroose, KULeuven/ESAT, December 1999
 
 #include <vcl/vcl_iostream.h>
-#include <vbl/vbl_rgb.txx>
+#include <vbl/vbl_rgb.h>
 typedef vbl_rgb<unsigned char> vbl_rgb_cell;
 
 static char* as_hex(vbl_rgb_cell const&);
