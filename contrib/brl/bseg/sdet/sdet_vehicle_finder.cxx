@@ -3,7 +3,6 @@
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <bsol/bsol_algs.h>
-#include <vcl_cmath.h> // for sqrt()
 #include <sdet/sdet_region.h>
 #include <brip/brip_roi.h>
 #include <brip/brip_para_cvrg.h>
@@ -75,9 +74,8 @@ n_regions_closest_to_pick(vcl_vector<sdet_region_sptr> const& regions,
         continue;
       float x0 = (*rit)->Xo(), y0 = (*rit)->Yo();
       int xp = pick_.x(), yp = pick_.y();
-      float d = (float)vcl_sqrt((x0-xp)*(x0-xp) + (y0-yp)*(y0-yp));
-      double area = (*rit)->area();
-      float max_d = distance_scale_*vcl_sqrt(area);
+      float d = (x0-xp)*(x0-xp) + (y0-yp)*(y0-yp);
+      double max_d = distance_scale_*distance_scale_ * (*rit)->area();
 #ifdef DEBUG
       vcl_cout << "d = " << d << '\n'
                << "max_d = " << max_d << '\n';
@@ -124,7 +122,7 @@ bool sdet_vehicle_finder::detect_shadow_regions()
       if (verbose_)
         vcl_cout << "Sreg(Np:" << r->Npix() << " Io:"
                  << r->Io() << " Xo:" << r->Xo()
-                 << " Yo:" << r->Yo() << ")\n" << vcl_flush;
+                 << " Yo:" << r->Yo() << ')' << vcl_endl;
       shadow_regions_.push_back(r);
     }
   }
@@ -149,7 +147,7 @@ bool sdet_vehicle_finder::detect_shadow_regions()
     if (verbose_)
       vcl_cout << "Closest Shadow Region(Np:" << cs->Npix() << " Io:"
                << cs->Io() << " Xo:" << cs->Xo()
-               << " Yo:" << cs->Yo() << ")\n" << vcl_flush;
+               << " Yo:" << cs->Yo() << ')' << vcl_endl;
     shadow_boundaries.push_back(cs->boundary());
   }
   if (!bsol_algs::hull_of_poly_set(shadow_boundaries, shadow_hull_))
@@ -188,7 +186,7 @@ bool sdet_vehicle_finder::detect_para_regions()
         if (verbose_)
           vcl_cout << "Preg(Np:" << r->Npix() << " Io:"
                    << r->Io() << " Xo:" << r->Xo()
-                   << " Yo:" << r->Yo() << ")\n" << vcl_flush;
+                   << " Yo:" << r->Yo() << ')' << vcl_endl;
         para_regions_.push_back(r);
       }
   }
@@ -206,7 +204,7 @@ bool sdet_vehicle_finder::detect_para_regions()
     if (verbose_)
       vcl_cout << "Closest Para Region(Np:" << cs->Npix() << " Io:"
                << cs->Io() << " Xo:" << cs->Xo()
-               << " Yo:" << cs->Yo() << ")\n" << vcl_flush;
+               << " Yo:" << cs->Yo() << ')' << vcl_endl;
     para_boundaries.push_back(cs->boundary());
   }
   if (!bsol_algs::hull_of_poly_set(para_boundaries, para_hull_))
