@@ -658,10 +658,8 @@ bool vil_dicom_header_format::convertValueRepresentation(unsigned int &dblock_si
              last == VIL_DICOM_HEADER_OTHERBYTE  ||
              last == VIL_DICOM_HEADER_OTHERWORD)
     {
-      vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tAbout to read dblock_size again in convertValue\n";
       fs.read(&dblock_size, sizeof(int));
-      vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tPre-Dodgy Looking Short-Swap data_block_size= "<<dblock_size<<vcl_endl;
-      dblock_size = shortSwap(dblock_size);
+      dblock_size = intSwap(dblock_size); 
       vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tPost-Dodgy Looking Short-Swap data_block_size= "<<dblock_size<<vcl_endl;
       result = true;
     } // End of else if (first...)
