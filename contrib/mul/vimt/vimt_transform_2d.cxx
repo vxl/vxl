@@ -429,6 +429,7 @@ void vimt_transform_2d::calcInverse()  const
             yt2_ = -yt_;
             break;
         case ZoomOnly :
+            assert(xx_ != 0 && yy_ != 0);
             xx2_=1.0/xx_;
             xt2_=-xt_/xx_;
             yy2_=1.0/yy_;
