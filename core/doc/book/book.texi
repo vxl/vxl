@@ -208,6 +208,8 @@ vcl would not be necessary, as all compiler vendors would ship perfectly
 compliant systems.  But then, in a perfect world, C++ wouldn't be the only
 choice for high efficiency high-level programming.
 
+Note that vcl is not (any longer) a subirectory of vxl, but sits next to it.
+
 @subsection vbl: Basics.
 The basics library contains a small set of generally useful C++ classes and
 functions, notably smart pointers, file and directory handling,
@@ -487,7 +489,7 @@ Before anything else, let's look at some VXL example programs.
 Here's one to print "Hello world":
 @example
 // Include standard C++ input/output library
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 // main is the first function to be called
 int main()
@@ -504,7 +506,7 @@ This is the same example that one might see in any C++ book, but for the
 include line at the start.  C++ books assume that your C++ compiler works,
 which is not true of any C++ compiler in the year 2000.  Chapter 3 goes
 into more detail, but for the moment, include standard headers such as
-@code{<cstdio>} using @code{<vcl/vcl_cstdio.h>}.
+@code{<cstdio>} using @code{<vcl_cstdio.h>}.
 
 @subsection Loading an image
 
@@ -513,7 +515,7 @@ loading an image, and printing the pixel value at (100,100).  It assumes
 the image is grayscale, and does no error checking.
 
 @example
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vil/vil_load.h>
 #include <vil/vil_memory_image_of.h>
 
@@ -576,13 +578,13 @@ entirely different stream libraries, which may not be linked together.
 Therefore every file in the program must use the same header.  For us, the
 @code{<iostream>} version is appropriate, but of course, not all of the
 unix compilers support its use.  The solution is for every @vxl{} program
-to include @code{<vcl/vcl_iostream.h>}.  In this way, we can maintain
+to include @code{<vcl_iostream.h>}.  In this way, we can maintain
 consistency between the many compilers, and if we ever do need to use
 another stream library, we can make the switch in one place.
 Thus rule one is
 @quotation
 Wherever you wish to include standard header @code{<foo>}, you should
-include @code{<vcl/vcl_foo.h>} instead.
+include @code{<vcl_foo.h>} instead.
 @end quotation
 
 Some compilers place STL classes such as @code{vector} and @code{vcl_string} in
@@ -596,7 +598,7 @@ considered good C++, and (b) it doesn't work anyway.
 
 The low-tech solution is simply to prefix each standard identifier with
 @code{vcl_}, so that @code{vcl_vector} works everywhere.  And this is
-what @vxl {} does, when you include @code{<vcl/vcl_vector.h>}.  Thus, safe
+what @vxl {} does, when you include @code{<vcl_vector.h>}.  Thus, safe
 programmers prefix @emph{everything} in the standard library with
 @code{vcl_}.
 @quotation
@@ -621,10 +623,10 @@ library has been prefixed by @code{vcl_}.  It may look like extreme
 overkill, but it works, and can be made to work on all compilers we've
 seen.
 @example
-#include <vcl/vcl_string.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_string.h>
+#include <vcl_iostream.h>
+#include <vcl_vector.h>
+#include <vcl_algorithm.h>
 
 int main()
 @{
@@ -807,7 +809,7 @@ Here is a complete example which uses @code{vbl_arg}.  I tend to give these
 argument variables names beginning with @code{a_}, but don't let that put
 you off.
 @example
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vbl/vbl_arg.h>
 
 vbl_arg<double> a_naughty_global_arg("-hack", "Fudge", 1.2);
@@ -852,7 +854,7 @@ makemovie -frames 1:10,9:-1:1,0,0,0,0
 @end example
 These can be easily read into a @code{vcl_list<int>}:
 @example
-#include <vcl/vcl_list.h>
+#include <vcl_list.h>
 vbl_arg<vcl_list<int> >  a_frame_list("-frames", "List of indices");
 @end example
 The list will preserve the order specified on the command line, so in the
@@ -1545,7 +1547,7 @@ disk file, copies it into memory, and prints the pixel at
 100,100.
 
 @example
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vil/vil_load.h>
 #include <vil/vil_memory_image_of.h>
 
@@ -1826,11 +1828,11 @@ simple.
 @appendix  Filenames and structure
 The directory structure of VXL is below
 @example
-  $VXLROOT/vxl/vcl
-              /vnl
+  $IUEROOT/vcl
+           vcl/config.$BUILD
+           vxl/vnl
               /vbl
               /vil
-              /config.$BUILD
           /config
           /Scripts
 @end example
