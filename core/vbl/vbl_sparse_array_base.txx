@@ -81,7 +81,8 @@ bool vbl_sparse_array_base<T, Index>::fullp(Index i) const
 template <class T, class Index>
 bool vbl_sparse_array_base<T, Index>::put(Index i, const T& t)
 {
-  vcl_pair<typename Map::iterator,bool> res = storage_.insert(Map::value_type(i,t));
+  typedef typename Map::iterator iter;
+  vcl_pair<iter,bool> res = storage_.insert(Map::value_type(i,t));
 
   return res.second;
 }
