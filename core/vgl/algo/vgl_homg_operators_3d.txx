@@ -1,4 +1,4 @@
-// This is vxl/vgl/algo/vgl_homg_operators_3d.txx
+// This is core/vgl/algo/vgl_homg_operators_3d.txx
 #ifndef vgl_homg_operators_3d_txx_
 #define vgl_homg_operators_3d_txx_
 //:
@@ -405,16 +405,6 @@ vgl_homg_point_2d<T> operator*(vnl_matrix_fixed<T,3,4> const& m,
                               m(2,0)*p.x()+m(2,1)*p.y()+m(2,2)*p.z()+m(2,3)*p.w());
 }
 
-// //: Project a plane through a 3x4 projective transformation matrix
-// template <class T>
-// vgl_homg_line_2d<T> operator*(vnl_matrix_fixed<T,3,4> const& m,
-//                               vgl_homg_plane_3d<T> const& l)
-// {
-//   return vgl_homg_line_2d<T>(m(0,0)*l.a()+m(0,1)*l.b()+m(0,2)*l.c()+m(0,3)*l.d(),
-//                              m(1,0)*l.a()+m(1,1)*l.b()+m(1,2)*l.c()+m(1,3)*l.d(),
-//                              m(2,0)*l.a()+m(2,1)*l.b()+m(2,2)*l.c()+m(2,3)*l.d());
-// }
-
 //: Backproject a 2D line through a 4x3 projective transformation matrix
 template <class T>
 vgl_homg_plane_3d<T> operator*(vnl_matrix_fixed<T,4,3> const& m,
@@ -433,8 +423,6 @@ vgl_homg_plane_3d<T> operator*(vnl_matrix_fixed<T,4,3> const& m,
                                            vgl_homg_point_3d<T > const&); \
   template vgl_homg_point_2d<T > operator*(vnl_matrix_fixed<T,3,4> const&,\
                                            vgl_homg_point_3d<T > const&); \
- /* template vgl_homg_line_2d<T >  operator*(vnl_matrix_fixed<T,3,4> const&,\
-                                             vgl_homg_plane_3d<T > const&); */ \
   template vgl_homg_plane_3d<T > operator*(vnl_matrix_fixed<T,4,3> const&,\
                                            vgl_homg_line_2d<T > const&)
 
