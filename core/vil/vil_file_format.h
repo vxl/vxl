@@ -36,10 +36,10 @@ class vil_file_format
   // The width/height etc are explicitly specified, so that file_format implementors
   // know what they need to do...
   virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
-                                                     unsigned nx,
-                                                     unsigned ny,
-                                                     unsigned nplanes,
-                                                     enum vil_pixel_format) = 0;
+                                                    unsigned nx,
+                                                    unsigned ny,
+                                                    unsigned nplanes,
+                                                    enum vil_pixel_format) = 0;
 
  public:
   static vil_file_format** all();
