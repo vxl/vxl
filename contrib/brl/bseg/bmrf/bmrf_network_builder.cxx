@@ -12,6 +12,7 @@
 #include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel_chain.h>
+#include <vdgl/vdgl_interpolator.h>
 #include <vtol/vtol_edge_2d.h>
 #include <bmrf/bmrf_epi_point.h>
 #include <bmrf/bmrf_epi_seg.h>
@@ -147,18 +148,18 @@ static void alpha_segment(vcl_vector<bmrf_epi_point_sptr> const& samples,
   int i=0;
   double last_alpha = samples[0]->alpha();
   // find the first differing alpha (usually i=1)
-  while( last_alpha == samples[++i]->alpha() );
+  while ( last_alpha == samples[++i]->alpha() )  ;
   bool dir = samples[i]->alpha() > last_alpha;
   last_alpha = samples[i]->alpha();
   seg->add_point(samples[i-1]);
   seg->add_point(samples[i]);
   for (i += 1; i<n; ++i){
     double alpha = samples[i]->alpha();
-    if( alpha == last_alpha ){  
+    if ( alpha == last_alpha ) {
       segs.push_back(seg);
       seg = new bmrf_epi_seg();
     }
-    else if(dir != (alpha > last_alpha) ){
+    else if (dir != (alpha > last_alpha) ) {
       segs.push_back(seg);
       seg = new bmrf_epi_seg();
       seg->add_point(samples[i-1]);
@@ -192,7 +193,7 @@ extract_alpha_segments(vdgl_digital_curve_sptr const & dc,
     return false;
   vcl_vector<bmrf_epi_point_sptr> samples;
 
-  vdgl_edgel_chain_sptr ec = dc->get_interpolator()->get_edgel_chain(); 
+  vdgl_edgel_chain_sptr ec = dc->get_interpolator()->get_edgel_chain();
   for ( unsigned int i=0; i<ec->size(); ++i ){
     const vdgl_edgel & edgel = ec->edgel(i);
     double u = edgel.get_x(), v = edgel.get_y(), alpha=0.0, s=0.0;
