@@ -48,7 +48,16 @@ void test_algo_exp_grad_filter_1d_byte_float()
   src_im.fill(10);
   for (unsigned j=0;j<10;++j)
     for (unsigned i=5;i<10;++i) src_im(i,j)=20;
-  vil2_exp_grad_filter_1d(src_im,dest_im,0.25,double());
+  vil2_exp_grad_filter_i(src_im,dest_im,0.25,double());
+
+  TEST("Width",dest_im.ni(),src_im.ni());
+  TEST("Height",dest_im.nj(),src_im.nj());
+  TEST_NEAR("dest_im(5,5)",dest_im(5,5),10,1e-2);
+
+  src_im.fill(10);
+  for (unsigned j=0;j<10;++j)
+    for (unsigned i=5;i<10;++i) src_im(j,i)=20;
+  vil2_exp_grad_filter_j(src_im,dest_im,0.25,double());
 
   TEST("Width",dest_im.ni(),src_im.ni());
   TEST("Height",dest_im.nj(),src_im.nj());

@@ -49,14 +49,17 @@ void test_algo_exp_filter_1d_byte_float()
   vil2_image_view<float> dest_im;
   for (unsigned j=0;j<10;++j)
     for (unsigned i=0;i<10;++i) src_im(i,j)=i+10*j;
-  vil2_exp_filter_1d(src_im,dest_im,0.1,double());
+  vil2_exp_filter_i(src_im,dest_im,0.1,double());
 
   TEST("Width",dest_im.ni(),src_im.ni());
   TEST("Height",dest_im.nj(),src_im.nj());
   TEST_NEAR("dest_im(5,5)",dest_im(5,5),55,1e-2);
 
-  vil2_print_all(vcl_cout,dest_im);
+  vil2_exp_filter_j(src_im,dest_im,0.1,double());
 
+  TEST("Width",dest_im.ni(),src_im.ni());
+  TEST("Height",dest_im.nj(),src_im.nj());
+  TEST_NEAR("dest_im(5,5)",dest_im(5,5),55,1e-2);
 }
 
 void test_algo_exp_filter_1d_float_float()
