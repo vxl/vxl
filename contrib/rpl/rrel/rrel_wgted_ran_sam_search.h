@@ -2,8 +2,7 @@
 #define rrel_wgted_ran_sam_search_h_
 //:
 // \file
-// \brief Weighted/Non-uniform Random sampling search 
-//        for minimization of a robust objective function
+// \brief Weighted/Non-uniform Random sampling search for minimization of a robust objective function
 // \author Gehua Yang (yangg2@rpi.edu)
 // \date Nov 2004
 
@@ -14,7 +13,7 @@ class rrel_wgted_ran_sam_search : public rrel_ran_sam_search
 {
  public:
   //: Constructor using a non-deterministic random-sampling seed.
-  rrel_wgted_ran_sam_search( ) 
+  rrel_wgted_ran_sam_search( )
   : rrel_ran_sam_search(), is_sim_wgt_set_( false )
   {   }
 
@@ -30,7 +29,7 @@ class rrel_wgted_ran_sam_search : public rrel_ran_sam_search
   // ----------------------------------------
 
   //: \brief Estimation for an "ordinary" estimation problem.
-  virtual bool 
+  virtual bool
   estimate( const rrel_estimation_problem* problem,
             const rrel_objective* obj_fcn );
 
@@ -45,7 +44,7 @@ class rrel_wgted_ran_sam_search : public rrel_ran_sam_search
   // ------------------------------------------------------------
 
   //: Determine the next random sample, filling in the "sample" vector.
-  virtual void 
+  virtual void
   next_sample( unsigned int taken, unsigned int num_points, vcl_vector<int>& sample,
                unsigned int points_per_sample );
 
@@ -54,14 +53,14 @@ class rrel_wgted_ran_sam_search : public rrel_ran_sam_search
     int      index_;
     double   lower_;
     double   upper_;
-    
+
     prob_interval() : index_(-1), lower_(-1.0), upper_(-1.0) {  }
-    
+
     bool operator< ( const prob_interval& rhs ) {
-      return this->upper_ < rhs.upper_; 
+      return this->upper_ < rhs.upper_;
     }
   };
-  
+
   //: store the intervals
   vcl_vector<prob_interval> intervals_;
   bool is_sim_wgt_set_;
