@@ -708,6 +708,9 @@ SOURCE=.\vnl_rotation_matrix.cxx
 SOURCE=.\vnl_sample.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_random.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_sparse_matrix_linear_system.cxx
 # End Source File
 # Begin Source File
@@ -1012,6 +1015,9 @@ SOURCE=.\vnl_rotation_matrix.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_sample.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_random.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_scalar_join_iterator.h
