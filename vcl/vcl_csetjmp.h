@@ -17,10 +17,11 @@
 # include "iso/vcl_csetjmp.h"
 #endif
 
-// In ISO C, setjmp() is a macro. However, many people
-// don't know this so we provide another macro here in
-// order to avoid confusing people who think they want
-// to use std::setjmp() or ::setjmp().
-#define vcl_setjmp setjmp
+// In ISO C, setjmp() is a macro. So in vcl it should be
+// a macro without the vcl_ prefix, just like assert().
+// It is good that people know assert() is a macro because
+// they treat it with more care than a function. If vcl
+// provided a `vcl_setjmp' preprocessor macro people might
+// think they were using a function and not a macro.
 
 #endif // vcl_csetjmp_h_
