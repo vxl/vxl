@@ -30,3 +30,5 @@ vul_redirector
 
 AUX_SOURCE_DIRECTORY(Templates vul_sources)
 
+SUBDIRS(io)
+

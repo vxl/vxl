@@ -130,6 +130,8 @@ FLAGS_Templates/vil_interpolate+vil_rgb+uchar-.vil_rgb+uchar-.cxx := $(optimize)
 
 # subdirectories
 #SUBDIRS += algo
+SUBDIRS += io
+
 ifndef NOTEST
 SUBDIRS += tests
 SUBDIRS += examples

@@ -117,6 +117,9 @@ FLAGS_Templates/vnl_sparse_matrix_instances.cxx += $(optimize)
 # algo
 SUBDIRS += algo
 
+# stream I/O
+SUBDIRS += io
+
 # tests
 ifndef NOTEST
 SUBDIRS += tests

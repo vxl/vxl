@@ -37,6 +37,9 @@ MANPAGE_SOURCES += vbl_sparse_array_3d.txx
 
 DEFINES += -DBUILDING_VBL_DLL
 
+# stream I/O
+SUBDIRS += io
+
 ifndef NOTEST
 SUBDIRS += tests
 SUBDIRS += examples

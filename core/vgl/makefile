@@ -43,6 +43,7 @@ MANPAGE_SOURCES += vgl_vector_3d.txx
 MANPAGE_SOURCES += vgl_1d_basis.txx
 
 SUBDIRS += algo
+SUBDIRS += io
 
 ifndef NOTEST
 SUBDIRS += tests

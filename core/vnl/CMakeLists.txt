@@ -61,6 +61,7 @@ vnl_transpose
 AUX_SOURCE_DIRECTORY(Templates vnl_sources)
 
 SUBDIRS(algo)
+SUBDIRS(io)
 
 IF( BUILD_TESTS)
   SUBDIRS(tests)

@@ -61,6 +61,7 @@ INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindTIFF.cmake)
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
 
 SUBDIRS(file_formats)
+SUBDIRS(io)
 
 IF( BUILD_TESTS)
   SUBDIRS(tests)
