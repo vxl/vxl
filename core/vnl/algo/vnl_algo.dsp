@@ -260,6 +260,9 @@ SOURCE=.\vnl_sparse_symmetric_eigensystem.cxx
 # Begin Source File
 SOURCE=.\vnl_symmetric_eigensystem.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_svd_economy+double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -403,6 +406,12 @@ SOURCE=.\vnl_algo_fwd.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_netlib.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_svd_economy.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_svd_economy.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
