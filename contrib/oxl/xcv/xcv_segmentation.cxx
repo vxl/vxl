@@ -7,6 +7,7 @@
 // \author K.Y.McGaul
 
 #include <vil/vil_image.h>
+#include <vcl_cmath.h>
 
 #include <osl/osl_harris_params.h>
 #include <osl/osl_harris.h>
