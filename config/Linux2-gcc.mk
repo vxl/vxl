@@ -36,6 +36,8 @@ endif
 # include generic gcc stuff that works for any system with gcc
 include $(configdir)/generic-gcc.mk
 
+optimize := -O3 -march=pentium4 -mfpmath=sse -DNDEBUG
+
 ifdef TJ_EGCS
 #0. Adding -O or -O2 to GeneralUtility/DEX/makefile generated link errors
 #   when using EGCS 1.1.1 on Linux.  So, turn optimization off for EGCS.
