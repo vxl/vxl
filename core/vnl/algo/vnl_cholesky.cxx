@@ -49,7 +49,6 @@ vnl_cholesky::vnl_cholesky(vnl_matrix<double> const & M, Operation mode):
 void vnl_cholesky::solve(vnl_vector<double> const& b, vnl_vector<double>* x) const
 {
   unsigned n = A_.columns();
-  assert(x->size() == n);
   assert(b.size() == n);
 
   *x = b;
