@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma interface
+#pragma implementation
 #endif
 
 #include <vul/vul_temp_filename.h>
