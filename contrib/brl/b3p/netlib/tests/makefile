@@ -1,6 +1,6 @@
 include ../config.mk
 
-TESTS += b3p_test_integral.cxx
+TESTS += b3p_test_integral.c
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
