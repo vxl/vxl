@@ -1,6 +1,5 @@
 // This is mul/mbl/tests/test_correspond_points.cxx
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
 #include <mbl/mbl_correspond_points.h>
 #include <mbl/mbl_mz_random.h>
 
@@ -29,7 +28,7 @@ void test_correspond_points()
   double sigma = 0.01;
   cp.correspond(points1,points1,matches,sigma);
 
-  int n_correct = 0;
+  unsigned int n_correct = 0;
   for (unsigned i=0;i<matches.size();++i) if (matches[i]==i) n_correct++;
   vcl_cout<<n_correct<<" out of "<<n1<<vcl_endl;
 
@@ -37,7 +36,7 @@ void test_correspond_points()
 
   cp.correspond(points1,points2,matches,sigma);
 
-   n_correct = 0;
+  n_correct = 0;
   for (unsigned i=0;i<matches.size();++i) if (matches[i]==i) n_correct++;
   vcl_cout<<n_correct<<" out of "<<n1<<vcl_endl;
 
@@ -53,7 +52,7 @@ void test_correspond_points()
 
   cp.correspond(points1,points4,matches,sigma);
 
-   n_correct = 0;
+  n_correct = 0;
   for (unsigned i=0;i<matches.size();++i)
   {
     if (matches[i]==n1-1-i) n_correct++;
