@@ -10,7 +10,7 @@ USE_PNG  := 1
 USE_NETLIB := 1
 USE_SOCKETS := 1
 
-IULIBS := -lvsrl -lvsl -lvnl-algo -lvnl -lvil -lvbl
+IULIBS := -lvsrl -losl -lvnl-algo -lvnl -lvil -lvbl
 
 # include ../../vil/vil_config.mk
 
