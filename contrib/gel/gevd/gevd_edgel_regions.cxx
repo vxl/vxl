@@ -712,35 +712,30 @@ bool gevd_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
   if (!this->GroupContainsEdges(sg))
     return false;
 
-  double xmin = 1e33; // dummy initialisation
-  double ymin = 1e33;
-  double xmax = -1e33;
-  double ymax = -1e33;
+  double xmin;
+  double ymin;
+  double xmax;
+  double ymax;
   vsol_box_2d_sptr b;
-  vcl_vector<vtol_edge_2d_sptr>::iterator i;
 
-  for (i=sg.begin();i!=sg.end();++i)
+  vcl_vector<vtol_edge_2d_sptr>::iterator i = sg.begin();
+  assert( i != sg.end() );
+  b=(*i)->get_bounding_box();
+  xmin=b->get_min_x();
+  ymin=b->get_min_y();
+  xmax=b->get_max_x();
+  ymax=b->get_max_y();
+  for (++i; i!=sg.end(); ++i)
     {
       b=(*i)->get_bounding_box();
-      if (i==sg.begin())
-        {
-          xmin=b->get_min_x();
-          ymin=b->get_min_y();
-          xmax=b->get_max_x();
-          ymax=b->get_max_y();
-        }
-      else
-        {
-          if (b->get_min_x()<xmin)
-            xmin=b->get_min_x();
-          if (b->get_min_y()<ymin)
-            ymin=b->get_min_y();
-          if (b->get_max_x()>xmax)
-            xmax=b->get_max_x();
-          if (b->get_max_y()>ymax)
-            ymax=b->get_max_y();
-        }
-      //      delete b;
+      if (b->get_min_x()<xmin)
+        xmin=b->get_min_x();
+      if (b->get_min_y()<ymin)
+        ymin=b->get_min_y();
+      if (b->get_max_x()>xmax)
+        xmax=b->get_max_x();
+      if (b->get_max_y()>ymax)
+        ymax=b->get_max_y();
     }
 
   //Get the size of the arrays
@@ -1384,10 +1379,7 @@ bool gevd_edgel_regions::remove_hairs(vcl_vector<vtol_edge_2d_sptr>& edges)
        hit != hairs.end(); hit++)
     edges.erase(vcl_find(edges.begin(),edges.end(),*hit));
 
-  if (hairs.size()) 
-  {return true;} 
-  else 
-  {return false;};
+  return hairs.size() != 0;
 }
 //-----------------------------------------------------------
 // --Fix up corrupt boundaries by connecting dangling vertices
