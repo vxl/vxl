@@ -4,6 +4,10 @@
 #   geoff.cross@crd.ge.com
 #
 
+IF(WIN32)
+ SET( MSPROJECT_TEMPLATE_DIRECTORY ${allvxl_SOURCE_DIR}/config.cmake/DSPTemplates/with_mfc )
+ENDIF(WIN32)
+
 ADD_LIBRARY(vgui vgui_sources)
 
 SOURCE_FILES(vgui_sources
