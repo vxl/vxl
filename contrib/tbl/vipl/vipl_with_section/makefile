@@ -5,7 +5,7 @@
 #   the class "section" (instead of vil_image) as 2D pixel container.
 #
 
-USES += vxl
+USES += vxl tbl
 
 LIBRARY := vipl_with_section
 VERSION := 1.0
