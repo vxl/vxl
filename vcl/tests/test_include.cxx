@@ -9,7 +9,7 @@
 #include <vcl_climits.h>
 #include <vcl_csignal.h>
 #include <vcl_cstdlib.h>
-#ifndef VCL_GCC_295 //FreeBSD4 
+#ifndef __FreeBSD__ //FreeBSD4 
 #include <vcl_cwchar.h>
 #include <vcl_cwctype.h>
 #endif
