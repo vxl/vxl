@@ -1,3 +1,4 @@
+// This is ./vxl/vil/file_formats/vil_viff.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
@@ -127,12 +128,21 @@ bool vil_viff_generic_image::read_header()
   unsigned long dst = header_.data_storage_type;
   unsigned long ndb = header_.num_data_bands;
 
+  unsigned long ispare1 = header_.ispare1;
+  unsigned long ispare2 = header_.ispare2;
+  float fspare1 = header_.fspare1;
+  float fspare2 = header_.fspare2;
+
   if(!endian_consistent_)
   {
     swap(&rs,sizeof(rs));
     swap(&cs,sizeof(cs));
     swap(&dst,sizeof(dst));
     swap(&ndb,sizeof(ndb));
+    swap(&ispare1,sizeof(ispare1));
+    swap(&ispare2,sizeof(ispare2));
+    swap(&fspare1,sizeof(fspare1));
+    swap(&fspare2,sizeof(fspare2));
   }
 
   width_ = rs;
@@ -343,3 +353,59 @@ bool vil_viff_generic_image::get_section_byte(void* buf, int x0, int y0, int wid
   return get_section(buf,x0,y0,width,height);
 }
 
+void vil_viff_generic_image::set_ispare1(unsigned long ispare1)
+{
+  header_.ispare1 = ispare1;
+  int longsize = sizeof(unsigned long);
+  unsigned char* bytes = new unsigned char[longsize];
+  vcl_memcpy(bytes,&ispare1,longsize);
+  if (!endian_consistent_)
+    swap(bytes,longsize);
+
+  is_->seek((int)((unsigned char*)&header_.ispare1 - (unsigned char*)&header_));
+  is_->write(bytes, longsize);
+  delete[] bytes;
+}
+
+void vil_viff_generic_image::set_ispare2(unsigned long ispare2)
+{
+  header_.ispare2 = ispare2;
+  int longsize = sizeof(unsigned long);
+  unsigned char* bytes = new unsigned char[longsize];
+  vcl_memcpy(bytes,&ispare2,longsize);
+  if (!endian_consistent_)
+    swap(bytes,longsize);
+
+  is_->seek((int)((unsigned char*)&header_.ispare2 - (unsigned char*)&header_));
+  is_->write(bytes, longsize);
+  delete[] bytes;
+}
+
+void vil_viff_generic_image::set_fspare1(float fspare1)
+{
+  header_.fspare1 = fspare1;
+  int floatsize = sizeof(float);
+  unsigned char* bytes = new unsigned char[floatsize];
+  vcl_memcpy(bytes,&fspare1,floatsize);
+  if (!endian_consistent_)
+    swap(bytes,floatsize);
+
+  is_->seek((int)((unsigned char*)&header_.fspare1 - (unsigned char*)&header_));
+  is_->write(bytes, floatsize);
+
+  delete[] bytes;
+}
+
+void vil_viff_generic_image::set_fspare2(float fspare2)
+{
+  header_.fspare2 = fspare2;
+  int floatsize = sizeof(float);
+  unsigned char* bytes = new unsigned char[floatsize];
+  vcl_memcpy(bytes,&fspare2,floatsize);
+  if (!endian_consistent_)
+    swap(bytes,floatsize);
+
+  is_->seek((int)((unsigned char*)&header_.fspare2 - (unsigned char*)&header_));
+  is_->write(bytes, floatsize);
+  delete[] bytes;
+}

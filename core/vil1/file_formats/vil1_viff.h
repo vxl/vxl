@@ -1,4 +1,4 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vil/file_formats/vil_viff.h
 #ifndef vil_viff_h_
 #define vil_viff_h_
 #ifdef __GNUC__
@@ -14,6 +14,7 @@
 //\verbatim
 //  Modifications
 //  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
+//  21 February 2002 Maarten Vergauwen - Added access functions for [fi]spare[12]
 //\endverbatim
 
 #include <vil/vil_file_format.h>
@@ -91,6 +92,16 @@ public:
 
   char const* file_format() const;
   bool get_property(char const *tag, void *prop = 0) const;
+
+  //: User defined spare values in header
+  unsigned long ispare1() const { return header_.ispare1;}
+  unsigned long ispare2() const { return header_.ispare2;}
+  float fspare1() const { return header_.fspare1;}
+  float fspare2() const { return header_.fspare2;}
+  void set_ispare1(unsigned long ispare1);
+  void set_ispare2(unsigned long ispare2);
+  void set_fspare1(float fspare1);
+  void set_fspare2(float fspare2);
 };
 
 #endif // vil_viff_h_
