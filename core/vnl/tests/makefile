@@ -53,6 +53,7 @@ TESTS += test_diag_matrix.cxx
 TESTS += test_gamma.cxx
 TESTS += test_arithmetic.cxx
 TESTS += test_cholesky.cxx
+TESTS += test_algo.cxx
 
 MANPAGE_SOURCES += test_arithmetic_body.h
 
