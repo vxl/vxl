@@ -87,6 +87,14 @@ vcl_string clsfy_classifier_base::is_a() const
 
 //=======================================================================
 
+bool clsfy_classifier_base::is_class(vcl_string const& s) const
+{
+  static const vcl_string s_ = "clsfy_classifier_base";
+  return s == s_;
+}
+
+//=======================================================================
+
 vcl_ostream& operator<<(vcl_ostream& os, clsfy_classifier_base const& b)
 {
   os << b.is_a() << ": ";

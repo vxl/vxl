@@ -1,5 +1,4 @@
-//    Copyright: (C) 2000 British Telecommunications plc
-
+//  Copyright: (C) 2000 British Telecommunications plc
 
 #include "clsfy_k_nearest_neighbour.h"
 
@@ -17,12 +16,11 @@
 
 //: Set the training data.
 void clsfy_k_nearest_neighbour::set(const vcl_vector<vnl_vector<double> > &inputs,
-  const vcl_vector<unsigned> &outputs)
+                                    const vcl_vector<unsigned> &outputs)
 {
   assert(inputs.size() == outputs.size());
   trainInputs_ = inputs;
   trainOutputs_ = outputs;
-
 }
 
 // stuff to get the priority queue to work happily
@@ -38,10 +36,10 @@ unsigned clsfy_k_nearest_neighbour::classify(const vnl_vector<double> &input) co
   const unsigned k = vnl_math_min(k_, nTrainingVecs-1 + (nTrainingVecs%2));
   mbl_priority_bounded_queue<pairDV, vcl_vector<pairDV>, first_lt >  pq(k);
   unsigned i;
-  
+
   for (i = 0; i < nTrainingVecs; i++)
     pq.push(vcl_make_pair(vnl_vector_ssd(input, trainInputs_[i]), trainOutputs_[i]));
-  
+
   unsigned count = 0;
   for (i = 0; i < k; i++)
   {
@@ -52,21 +50,20 @@ unsigned clsfy_k_nearest_neighbour::classify(const vnl_vector<double> &input) co
 }
 
 
-
 //: Return a probability like value that the input being in each class.
 // output(i) i<<nClasses, contains the probability that the input
 // is in class i;
 void clsfy_k_nearest_neighbour::class_probabilities(vcl_vector<double> &outputs,
-  const vnl_vector<double> &input) const
+                                                    const vnl_vector<double> &input) const
 {
   const unsigned nTrainingVecs = trainInputs_.size();
   const unsigned k = vnl_math_min(k_, nTrainingVecs-1 + (nTrainingVecs%2));
   mbl_priority_bounded_queue<pairDV, vcl_vector<pairDV>, first_lt >  pq(k);
   unsigned i;
-  
+
   for (i = 0; i < nTrainingVecs; i++)
     pq.push(vcl_make_pair(vnl_vector_ssd(input, trainInputs_[i]), trainOutputs_[i]));
-  
+
   unsigned count = 0;
   for (i = 0; i < k; i++)
   {
@@ -87,7 +84,6 @@ unsigned clsfy_k_nearest_neighbour::n_dims() const
 }
 
 
-
 //=======================================================================
 
 //: This value has properties of a Log likelyhood of being in class (binary classifiers only)
@@ -105,6 +101,14 @@ double clsfy_k_nearest_neighbour::log_l(const vnl_vector<double> &input) const
 vcl_string clsfy_k_nearest_neighbour::is_a() const
 {
   return vcl_string("clsfy_k_nearest_neighbour");
+}
+
+//=======================================================================
+
+bool clsfy_k_nearest_neighbour::is_class(vcl_string const& s) const
+{
+  static const vcl_string s_ = "clsfy_k_nearest_neighbour";
+  return s == s_ || clsfy_classifier_base::is_class(s);
 }
 
 //=======================================================================
@@ -133,9 +137,9 @@ void clsfy_k_nearest_neighbour::print_summary(vcl_ostream& os) const
 void clsfy_k_nearest_neighbour::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,k_); 
-  vsl_b_write(bfs,trainOutputs_); 
-  vsl_b_write(bfs,trainInputs_); 
+  vsl_b_write(bfs,k_);
+  vsl_b_write(bfs,trainOutputs_);
+  vsl_b_write(bfs,trainInputs_);
 }
 
 //=======================================================================
@@ -143,15 +147,15 @@ void clsfy_k_nearest_neighbour::b_write(vsl_b_ostream& bfs) const
 void clsfy_k_nearest_neighbour::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
-  
+
   short version;
   vsl_b_read(bfs,version);
   switch (version)
   {
   case (1):
-    vsl_b_read(bfs,k_); 
-    vsl_b_read(bfs,trainOutputs_); 
-    vsl_b_read(bfs,trainInputs_); 
+    vsl_b_read(bfs,k_);
+    vsl_b_read(bfs,trainOutputs_);
+    vsl_b_read(bfs,trainInputs_);
     break;
   default:
     vcl_cerr << "I/O ERROR: clsfy_k_nearest_neighbour::b_read(vsl_b_istream&) \n";

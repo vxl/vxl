@@ -41,6 +41,9 @@ public:
   //: Name of the class
   vcl_string is_a() const;
 
+  //: Name of the class
+  virtual bool is_class(vcl_string const& s) const;
+
   //: Print class to os
   void print_summary(vcl_ostream& os) const;
 

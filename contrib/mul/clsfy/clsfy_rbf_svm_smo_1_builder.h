@@ -1,7 +1,7 @@
 #ifndef clsfy_rbf_svm_smo_1_builder_h_
 #define clsfy_rbf_svm_smo_1_builder_h_
 
-//	Copyright: (C) 2001 British Telecommunications plc.
+// Copyright: (C) 2001 British Telecommunications plc.
 
 //:
 // \file
@@ -9,7 +9,6 @@
 // \author Ian Scott
 // \date Dec 2001
 
-// inclusions
 #include <clsfy/clsfy_builder_base.h>
 #include <clsfy/clsfy_rbf_svm.h>
 #include <vnl/vnl_vector.h>
@@ -37,7 +36,7 @@ class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base
 
 public:
 
-	//: Dflt ctor
+  //: Dflt ctor
   clsfy_rbf_svm_smo_1_builder();
 
   //: Destructor
@@ -86,11 +85,14 @@ public:
   //: Name of the class
   virtual vcl_string is_a() const;
 
+  //: Name of the class
+  virtual bool is_class(vcl_string const& s) const;
+
   //: Return the class's IO version number
   short clsfy_rbf_svm_smo_1_builder::version_no() const;
 
   //: Create a copy on the heap and return base class pointer
-  virtual	clsfy_builder_base*	clone()	const;
+  virtual clsfy_builder_base* clone() const;
 
   //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
@@ -101,6 +103,5 @@ public:
   //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 };
-#endif
 
-
+#endif // clsfy_rbf_svm_smo_1_builder_h_

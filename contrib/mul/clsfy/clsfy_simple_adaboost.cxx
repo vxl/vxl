@@ -137,6 +137,14 @@ vcl_string clsfy_simple_adaboost::is_a() const
 
 //=======================================================================
 
+bool clsfy_simple_adaboost::is_class(vcl_string const& s) const
+{
+  static const vcl_string s_ = "clsfy_simple_adaboost";
+  return s == s_ || clsfy_classifier_base::is_class(s);
+}
+
+//=======================================================================
+
 // required if data is present in this class
 void clsfy_simple_adaboost::print_summary(vcl_ostream& os) const
 {

@@ -1,5 +1,4 @@
-
-//    Copyright: (C) 2001 British Telecommunications plc
+// Copyright: (C) 2001 British Telecommunications plc
 
 //:
 // \file
@@ -15,8 +14,6 @@
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/vnl_math.h>
 #include <vsl/vsl_vector_io.h>
-
-
 
 //=======================================================================
 
@@ -47,13 +44,13 @@ double clsfy_rbf_svm::kernel(const vnl_vector<double> &v1,
 unsigned clsfy_rbf_svm::classify(const vnl_vector<double> &input) const
 {
   int n = supports_.size();
-	double sum =- bias_;
-	double upper_target = upper_target_;
-	double lower_target = lower_target_;
+  double sum =- bias_;
+  double upper_target = upper_target_;
+  double lower_target = lower_target_;
   int i;
   for (i =0; i<n; i++)
   {
-		const double l = lagrangians_[i];
+    const double l = lagrangians_[i];
     if (l <0) upper_target += l;
     else lower_target += l;
     sum += l * vcl_exp(gamma_*localEuclideanDistanceSq(input, supports_[i]));
@@ -67,18 +64,18 @@ unsigned clsfy_rbf_svm::classify(const vnl_vector<double> &input) const
 }
 
 //=======================================================================
-	
+
 //: Log likelyhood of being in class (binary classifiers only)
 // class probability = vcl_exp(logL) / (1+vcl_exp(logL))
 // This is not a strict log likelihood value, since SVMs do not give Bayesian outputs. However
 // its properties fit the requirements of a log likelihood value.
 double clsfy_rbf_svm::log_l(const vnl_vector<double> &input) const
 {
-	int n = supports_.size();
-	double sum =0.0;
-	for (int i =0; i<n; i++)
-		sum += lagrangians_[i] * vcl_exp(gamma_*vnl_vector_ssd(input, supports_[i]));
-	return sum - bias_;
+  int n = supports_.size();
+  double sum =0.0;
+  for (int i =0; i<n; i++)
+    sum += lagrangians_[i] * vcl_exp(gamma_*vnl_vector_ssd(input, supports_[i]));
+  return sum - bias_;
 }
 
 //=======================================================================
@@ -91,13 +88,13 @@ double clsfy_rbf_svm::log_l(const vnl_vector<double> &input) const
 void clsfy_rbf_svm::class_probabilities(vcl_vector<double> &outputs,
                                         const vnl_vector<double> &input) const
 {
-	outputs.resize(1);
-	double Likely = vcl_exp(log_l(input));
+  outputs.resize(1);
+  double Likely = vcl_exp(log_l(input));
   if (Likely == vnl_huge_val(double()))
-		outputs[0] = 1;
-	else
-		outputs[0] = Likely / (1+Likely);
-	return;
+    outputs[0] = 1;
+  else
+    outputs[0] = Likely / (1+Likely);
+  return;
 }
 
 //=======================================================================
@@ -114,7 +111,6 @@ void clsfy_rbf_svm::calculate_targets()
     if (l < 0)  upper_target_ -= l;
     else        lower_target_ -= l;
   }
-
 }
 
 
@@ -122,26 +118,24 @@ void clsfy_rbf_svm::calculate_targets()
 
 //: Set the internal values defining the classifier;
 void clsfy_rbf_svm::set( const vcl_vector<vnl_vector<double> > &supportVectors,
-		const vcl_vector<double> &lagrangianAlphas, 
-		const vcl_vector<unsigned> &labels, 
-		double RBFWidth, double bias)
+                         const vcl_vector<double> &lagrangianAlphas,
+                         const vcl_vector<unsigned> &labels,
+                         double RBFWidth, double bias)
 {
-	int n = supportVectors.size();
-	assert(n == lagrangianAlphas.size());
-	assert(n == labels.size());
-	supports_ = supportVectors;
+  int n = supportVectors.size();
+  assert(n == lagrangianAlphas.size());
+  assert(n == labels.size());
+  supports_ = supportVectors;
 
-	// premultiply lagrangians with output labels.
-	lagrangians_ = lagrangianAlphas;
-	for (int i=0; i<n; i++)
-		lagrangians_[i] *= (labels[i]?1:-1);
+  // premultiply lagrangians with output labels.
+  lagrangians_ = lagrangianAlphas;
+  for (int i=0; i<n; i++)
+    lagrangians_[i] *= (labels[i]?1:-1);
 
-	gamma_ = -0.5/(RBFWidth*RBFWidth);
-	bias_ = bias;
+  gamma_ = -0.5/(RBFWidth*RBFWidth);
+  bias_ = bias;
   calculate_targets();
 }
-
-
 
 
 //=======================================================================
@@ -149,6 +143,14 @@ void clsfy_rbf_svm::set( const vcl_vector<vnl_vector<double> > &supportVectors,
 vcl_string clsfy_rbf_svm::is_a() const
 {
   return vcl_string("clsfy_rbf_svm");
+}
+
+//=======================================================================
+
+bool clsfy_rbf_svm::is_class(vcl_string const& s) const
+{
+  static const vcl_string s_ = "clsfy_rbf_svm";
+  return s == s_ || clsfy_classifier_base::is_class(s);
 }
 
 //=======================================================================
@@ -170,7 +172,7 @@ clsfy_classifier_base* clsfy_rbf_svm::clone() const
 void clsfy_rbf_svm::print_summary(vcl_ostream& os) const
 {
   os << vsl_indent() << "bias=" << bias_ << "  sigma=" << rbf_width();
-	os << "  nSupportVectors=" << n_support_vectors() << vcl_endl;
+  os << "  nSupportVectors=" << n_support_vectors() << vcl_endl;
   os << vsl_indent() <<"  Starting targets are  " << upper_target_;
   os << ", " << lower_target_ << vcl_endl;
 }
@@ -180,10 +182,10 @@ void clsfy_rbf_svm::print_summary(vcl_ostream& os) const
 void clsfy_rbf_svm::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-	vsl_b_write(bfs,bias_);
-	vsl_b_write(bfs,gamma_);
-	vsl_b_write(bfs,lagrangians_);
-	vsl_b_write(bfs,supports_);
+  vsl_b_write(bfs,bias_);
+  vsl_b_write(bfs,gamma_);
+  vsl_b_write(bfs,lagrangians_);
+  vsl_b_write(bfs,supports_);
 }
 
 //=======================================================================
@@ -223,4 +225,3 @@ void clsfy_rbf_svm::b_read(vsl_b_istream& bfs)
     return;
   }
 }
-

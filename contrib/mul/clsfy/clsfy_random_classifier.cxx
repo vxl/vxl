@@ -38,6 +38,14 @@ vcl_string clsfy_random_classifier::is_a() const
 
 //=======================================================================
 
+bool clsfy_random_classifier::is_class(vcl_string const& s) const
+{
+  static const vcl_string s_ = "clsfy_random_classifier";
+  return s == s_ || clsfy_classifier_base::is_class(s);
+}
+
+//=======================================================================
+
 clsfy_classifier_base* clsfy_random_classifier::clone() const
 {
   return new clsfy_random_classifier(*this);

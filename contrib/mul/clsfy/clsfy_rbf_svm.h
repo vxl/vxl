@@ -1,7 +1,7 @@
 #ifndef clsfy_rbf_svm_h_
 #define clsfy_rbf_svm_h_
 
-//	Copyright: (C) 2000 British Telecommunications plc.
+// Copyright: (C) 2000 British Telecommunications plc.
 
 //:
 // \file
@@ -13,7 +13,6 @@
 // 31 May 2001 IMS Converted to VXL
 // 31 May 2001 IMS Merged with Finder/IS_OrderedSVM
 // \endverbatim
-
 
 #include <clsfy/clsfy_classifier_base.h>
 #include <vcl_cmath.h>
@@ -66,8 +65,6 @@ public:
   // class probability = vcl_exp(logL) / (1+vcl_exp(logL)
   virtual double log_l(const vnl_vector<double> &input) const;
 
-
-
   //: Set the internal values defining the classifier;
   // \param labels These should be 0 or 1.
   virtual void set( const vcl_vector<vnl_vector<double> > & supportVectors,
@@ -119,8 +116,11 @@ public:
   //: Name of the class
   virtual vcl_string is_a() const ;
 
+  //: Name of the class
+  virtual bool is_class(vcl_string const& s) const;
+
   //: Create a copy on the heap and return base class pointer
-  virtual	clsfy_classifier_base*	clone()	const;
+  virtual clsfy_classifier_base* clone() const;
 
   //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
@@ -146,4 +146,5 @@ protected:
     return vnl_vector_ssd(a, b);
   }
 };
-#endif
+
+#endif // clsfy_rbf_svm_h_

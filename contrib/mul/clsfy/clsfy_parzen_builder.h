@@ -51,6 +51,9 @@ public:
   //: Name of the class
   virtual vcl_string is_a() const;
 
+  //: Name of the class
+  virtual bool is_class(vcl_string const& s) const;
+
   //: IO Version number
   short version_no() const;
 
