@@ -1790,10 +1790,10 @@ cross_correlate(vil_image_view<float> const & image1,
   int s = 2*radius+1;
   double area = s*s;
   double sI1=0, sI2=0, sI1I1=0, sI2I2=0, sI1I2=0;
-  for (float y0 = -radius; y0<=radius; y0+=1.f)
-    for (float x0 = -radius; x0<=radius; x0+=1.f)
+  for (int y0 = -10*radius; y0<=10*radius; ++y0)
+    for (int x0 = -10*radius; x0<=10*radius; ++x0)
     {
-      float xp = x+x0, yp = y+y0;
+      float xp = x+0.1f*x0, yp = y+0.1f*y0;
       double v1 =
         brip_vil_float_ops::bilinear_interpolation(image1, xp, yp);
       double v2 =
