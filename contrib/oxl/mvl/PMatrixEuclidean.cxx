@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implementation "PMatrixEuclidean.h"
+#pragma implementation
 #endif
 //
 // Class: PMatrixEuclidean
