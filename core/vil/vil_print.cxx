@@ -98,7 +98,7 @@ void vil_print_value(vcl_ostream& os, const vxl_uint_32& value)
 VCL_DEFINE_SPECIALIZATION
 void vil_print_value(vcl_ostream& os, const vxl_uint_64& value)
 {
-#if VCL_VC60    // IMS. This Hack could be replaced by code which
+#ifdef VCL_VC60 // IMS. This Hack could be replaced by code which
   os << "****"; // splits the 64bit int and does the right thing.
 #else
   if (value<10)       os<<'0';
@@ -116,7 +116,7 @@ void vil_print_value(vcl_ostream& os, const vxl_uint_64& value)
 VCL_DEFINE_SPECIALIZATION
 void vil_print_value(vcl_ostream& os, const vxl_int_64& value)
 {
-#if VCL_VC60    // IMS. This Hack could be replaced by code which
+#ifdef VCL_VC60 // IMS. This Hack could be replaced by code which
   os << "****"; // splits the 64bit int and does the right thing.
 #else
   vxl_int_64 v=value;

@@ -32,7 +32,7 @@ inline vil_image_view<typename T::value_type> vil_view_as_planes(const vil_image
   // complex image is RCRCRC, so istep = ncomponents*v.istep(), and
   // jstep = ncomponents*v.jstep().
 
-#if VCL_VC60 || !VCL_HAS_TYPENAME
+#if defined(VCL_VC60) || !VCL_HAS_TYPENAME
   return vil_image_view<T::value_type>(
     v.memory_chunk(),reinterpret_cast<T::value_type const*>(v.top_left_ptr()),
 #else

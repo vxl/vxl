@@ -440,7 +440,7 @@ inline void vil_convert_rgb_to_grey(const vil_image_view<rgbP >&src,
                                     vil_image_view<outP >&dest,
                                     double rw=0.2125, double gw=0.7154, double bw=0.0721)
 {
-#if VCL_VC60 || !VCL_HAS_TYPENAME
+#if defined(VCL_VC60) || !VCL_HAS_TYPENAME
   vil_convert_rgb_to_grey_pixel<rgbP::value_type, outP> func(rw, gw, bw);
 #else
   vil_convert_rgb_to_grey_pixel<typename rgbP::value_type, outP>
@@ -816,7 +816,7 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_average(
       return vil_image_view_base_sptr(new vil_image_view<T >(dest)); }
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-#if VXL_HAS_INT_64 && !VCL_VC60
+#if VXL_HAS_INT_64 && !defined(VCL_VC60)
 macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
 macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
@@ -864,7 +864,7 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_rgb_weighting(
       return vil_image_view_base_sptr(new vil_image_view<T > (dest)); }
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-#if VXL_HAS_INT_64 && !VCL_VC60
+#if VXL_HAS_INT_64 && !defined(VCL_VC60)
 macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
 macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
@@ -1088,7 +1088,7 @@ inline vil_image_view_base_sptr vil_convert_stretch_range(
       break; }
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-#if VXL_HAS_INT_64 && !VCL_VC60
+#if VXL_HAS_INT_64 && !defined(VCL_VC60)
 macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
 macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif

@@ -1,5 +1,5 @@
 // This is core/vnl/tests/test_matrix_fixed.cxx
-#if TEST_MALLOC // see note below, at the other #if TEST_MALLOC
+#ifdef TEST_MALLOC // see note below, at the other #ifdef TEST_MALLOC
 # include <vcl_new.h>
 #endif
 #include <vcl_cstdio.h> // do not use iostream within operator new - it causes infinite recursion
@@ -444,7 +444,7 @@ void test_matrix_fixed()
   test_double();
 }
 
-#if TEST_MALLOC
+#ifdef TEST_MALLOC
       // BAD-BAD-BAD these operators new/delete are picked up by *all* tests!!!
       //  The problem is that they don't provide new[] and delete[].  - PVr
 
