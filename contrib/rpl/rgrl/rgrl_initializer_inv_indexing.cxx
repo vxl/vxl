@@ -182,3 +182,28 @@ next_initial( rgrl_view_sptr           & view,
 
   return true;
 }
+
+bool
+rgrl_initializer_inv_indexing::
+next_initial( rgrl_invariant_match_sptr& best_match )
+{
+  if ( max_num_matches_tried_ > 0 &&
+       num_matches_tried_ == max_num_matches_tried_ )
+    return false;
+
+  if (matches_[current_moving_image_ind_].empty())
+    return false;
+
+  bool found_best_match;
+  // Remove the best (last) match from the vector
+  do {
+    best_match = matches_[current_moving_image_ind_].back();
+    matches_[current_moving_image_ind_].pop_back();
+    ++num_matches_tried_;
+    found_best_match = best_match->estimate();
+  } while ( !found_best_match && !matches_[current_moving_image_ind_].empty());
+
+  if ( !found_best_match ) return false;
+
+  return true;
+}

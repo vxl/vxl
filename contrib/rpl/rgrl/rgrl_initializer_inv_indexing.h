@@ -77,6 +77,10 @@ class rgrl_initializer_inv_indexing
   bool next_initial( rgrl_view_sptr           & view,
                      rgrl_scale_sptr          & prior_scale);
 
+  //: Get and remove the next initial estimate from the end of the list for the current moving_set
+  //  Return this match in best_match
+  bool next_initial( rgrl_invariant_match_sptr& best_match );
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_initializer_inv_indexing, rgrl_initializer );
 
