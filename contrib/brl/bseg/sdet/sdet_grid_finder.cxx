@@ -1034,10 +1034,11 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
       (*wit)/=length_sum;
   
   vgl_h_matrix_2d_compute_linear hcl;
-  double error_term = -1;
-  H = hcl.compute(lines_image, lines_grid, weights, error_term);
+  //double error_term = -1;
+  //H = hcl.compute(lines_image, lines_grid, weights, error_term);
+  H = hcl.compute(lines_image, lines_grid, weights);
   vcl_cout << "Translation \n" << H << '\n';
-  vcl_cout << "Error Term = " << error_term << "\n\n";
+  //vcl_cout << "Error Term = " << error_term << "\n\n";
   
   return true;
 }
@@ -1161,12 +1162,13 @@ bool sdet_grid_finder::compute_manual_homography(vsol_point_2d_sptr ul,
 	  wit != weights.end(); wit++)
        (*wit)/=length_sum;
    
-   double error_term = -1;
-   H = hcl.compute(image_lines, grid_lines, weights, error_term);
+   //double error_term = -1;
+   //H = hcl.compute(image_lines, grid_lines, weights, error_term);
+   H = hcl.compute(image_lines, grid_lines, weights);
    vcl_cout << "fine tuned homography\n" << H << '\n';
    Hinv = H.get_inverse();
    vcl_cout << "inverse H = \n" << Hinv << "\n";
-   vcl_cout << "Error Term = " << error_term << "\n\n";
+   //vcl_cout << "Error Term = " << error_term << "\n\n";
    
    
    homography_ = H;
