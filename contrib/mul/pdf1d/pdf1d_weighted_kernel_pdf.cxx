@@ -4,9 +4,9 @@
 
 //:
 // \file
-// \brief give a brief description of the file.
-// \author 	Ian Scott	
-// \date 	Tue Apr  9 14:00:27 2002	
+// \brief ...
+// \author Ian Scott
+// \date   Tue Apr  9 14:00:27 2002
 
 
 #include "pdf1d_weighted_kernel_pdf.h"
@@ -20,13 +20,13 @@
 #include <pdf1d/pdf1d_calc_mean_var.h>
 
 
-//:calc the weighted mean and var of kernels
+//:calc the weighted mean and var of kernels.
 // w is expected to sum to n.
 void pdf1d_weighted_kernel_pdf::pdf1d_weighted_kernel_mean_var(double& mean, double& var,
   const vnl_vecd& centres, const vnl_vecd& widths, const vnl_vecd& weights)
 {
   const unsigned n = centres.size();
-  assert(widths.size() == n && weights.size() ==n);
+  assert(n > 1 && widths.size() == n && weights.size() ==n);
 
   double sum=0;
   double sum2 = 0;
@@ -40,9 +40,9 @@ void pdf1d_weighted_kernel_pdf::pdf1d_weighted_kernel_mean_var(double& mean, dou
     sum_weights += weights(i);
   }
 
-  mean = sum/n;
+  mean = sum/sum_weights;
   //variance = weighted variance of centres + weighted mean square of widths
-  var  = (sum2 - sum_weights*mean*mean)/(sum_weights-1.0) + sum3/sum_weights;
+  var  = (sum2 - n*mean*mean)/(n-1) + sum3/sum_weights;
 }
 
   //: Initialise so all kernels have the same width
@@ -56,7 +56,7 @@ void pdf1d_weighted_kernel_pdf::set_centres(const vnl_vector<double>& x, double 
 
   //: Initialise so all kernels have given width
 void pdf1d_weighted_kernel_pdf::set_centres(const vnl_vector<double>& x,
-                 const vnl_vector<double>& width)
+                                            const vnl_vector<double>& width)
 {
   pdf1d_kernel_pdf::set_centres(x, width);
   weight_.resize(x.size());
@@ -80,7 +80,6 @@ void pdf1d_weighted_kernel_pdf::set_weight(const vnl_vector<double>& weights)
   pdf1d_weighted_kernel_mean_var(m,v,x_, width_, weight_);
   set_mean(m);
   set_variance(v);
-
 }
 
 //=======================================================================
