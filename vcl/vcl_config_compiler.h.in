@@ -27,7 +27,7 @@
 
 // -- VCL_HAS_EXPORT
 // 
-// True if the compiler supports the "typename" keyword
+// True if the compiler supports the "export" keyword
 //
 #define VCL_HAS_EXPORT @VCL_HAS_EXPORT@
 
