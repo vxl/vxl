@@ -147,6 +147,7 @@ Copyright @copyright{} 2001 Victoria University of Manchester
 * mbl::
 * mil::
 * vpdfl::
+* clsfy::
 * Conclusion::
 * Index::
 @end menu
@@ -255,7 +256,7 @@ Design goals:
 @include chapter_mil.texi
 
 @comment ------------------------------------------------------------------
-@node    vpdfl, Conclusion, mbl, Top
+@node    vpdfl, clsfy, mbl, Top
 @comment node-name, next, previous,     up
 @chapter vpdfl: Multivariate Probability Density Modelling
 @cindex probability
@@ -265,6 +266,16 @@ Design goals:
 
 
 @include chapter_vpdfl.texi
+
+@comment ------------------------------------------------------------------
+@node    clsfy, Conclusion, vpdfl, Top
+@comment node-name, next, previous,     up
+@chapter clsfy: Statistical Classification
+@cindex probability
+@cindex statistical classifier
+@cindex classifier
+
+@include chapter_clsfy.texi
 
 
 
