@@ -68,7 +68,7 @@ int vnl_test_summary() {
   if (test_name != NULL) vcl_cout << test_name << " ";
   vcl_cout << "Test Summary: ";
   if (tests_failed > 0)
-    vcl_cout<<tests_passed<<" tests succeeded, "<<tests_failed<<" tests didn't\t\t\t*****";
+    vcl_cout<<tests_passed<<" tests succeeded, "<<tests_failed<<" tests failed\t\t\t*****";
   else
     vcl_cout<<"All "<<tests_passed<<" tests succeeded";
   vcl_cout << "\n-----------------------------------------------------------------------------\n";

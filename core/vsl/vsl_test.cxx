@@ -70,7 +70,7 @@ int vsl_test_summary() {
   vcl_cout << "Test Summary: ";
   if (tests_failed > 0)
     vcl_cout<<tests_passed<<" tests succeeded, "<<tests_failed<<
-      " tests didn't\t\t\t*****";
+      " tests failed\t\t\t*****";
   else
     vcl_cout<<"All "<<tests_passed<<" tests succeeded";
   vcl_cout << "\n" <<
