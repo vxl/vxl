@@ -9,3 +9,4 @@ include ${IUEROOT}/contrib/gel/vtol/config.mk
 include ${IUEROOT}/contrib/gel/vdgl/config.mk
 include ${IUEROOT}/core/vil1/config.mk
 include ${IUEROOT}/core/vbl/config.mk
+include ${IUEROOT}/core/vgui/config.mk
