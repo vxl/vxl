@@ -35,7 +35,10 @@ vtol_zero_chain_sptr vtol_edge::zero_chain(void) const
 {
   vcl_vector<vtol_topology_object_sptr> const& inf = *(inferiors());
   for (unsigned int i=0; i<inf.size(); ++i)
-    if (inf[i]->cast_to_zero_chain()) // PVr- added this condition so no empty chain is returned
+    if (inf[i]->cast_to_zero_chain()->v0()) // PVr- avoid returning empty chain
+      return inf[i]->cast_to_zero_chain();
+  for (unsigned int i=0; i<inf.size(); ++i)
+    if (inf[i]->cast_to_zero_chain()) // return empty chain if nothing else present
       return inf[i]->cast_to_zero_chain();
   return 0;
 }
