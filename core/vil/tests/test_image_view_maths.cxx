@@ -68,11 +68,11 @@ void test_image_view_maths_byte()
   double sumA,sum_sqrA;
   vil2_math_sum_squares(sumA,sum_sqrA,imA,0);
   vil2_math_integral_image(imA,im_sum);
-  TEST_NEAR("integral_image",im_sum(n-1,m-1),sumA,1e-6);
+  TEST_NEAR("integral_image",im_sum(n,m),sumA,1e-6);
 
   vil2_math_integral_sqr_image(imA,im_sum,im_sum_sqr);
-  TEST_NEAR("integral_sqr_image (sum)",im_sum(n-1,m-1),sumA,1e-6);
-  TEST_NEAR("integral_sqr_image (sum sqr)",im_sum_sqr(n-1,m-1),sum_sqrA,1e-6);
+  TEST_NEAR("integral_sqr_image (sum)",im_sum(n,m),sumA,1e-6);
+  TEST_NEAR("integral_sqr_image (sum sqr)",im_sum_sqr(n,m),sum_sqrA,1e-6);
 
   vil2_image_view<float> f_image(5,5);
   f_image.fill(1.0);
@@ -100,7 +100,7 @@ void test_image_view_maths_byte()
 
   vil2_print_all( vcl_cout, orig_image );
 
-   var_norm_image=vil2_copy_deep(orig_image);
+  var_norm_image=vil2_copy_deep(orig_image);
   vil2_math_normalise( var_norm_image);
 
   vil2_print_all( vcl_cout, var_norm_image );
