@@ -1,6 +1,6 @@
 # This is core/vgui/test/CMakeLists.txt
 
-INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 IF( HAS_VGUI )
 
