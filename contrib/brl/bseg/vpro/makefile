@@ -28,6 +28,14 @@ SOURCES += vpro_spatial_filter_params.cxx
 SOURCES += vpro_spatial_filter_process.cxx
 SOURCES += vpro_ihs_process.cxx
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+ SUBDIRS += tests
+endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
