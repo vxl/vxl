@@ -28,7 +28,6 @@ C        badly scaled (in which case the exponents should be increased).
 /*#define lb3_1 (*(struct lb3_1_ *) &lb3_)*/
 #define lb3_1 lb3_
 
-/* Initialized data */
-struct lb3_1_ lb3_1 = { 6, 6, .9, 1e-20, 1e20, 1. };
+extern struct lb3_1_ lb3_1;
 
 #endif /* lbfgs_h_ */

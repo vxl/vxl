@@ -13,6 +13,8 @@ void lbptf_(char* msg);
 void lbp1d_(char* msg, int* i);
 
 #include "lbfgs.h"
+/* Initialized data */
+struct lb3_1_ lb3_1 = { 6, 6, .9, 1e-20, 1e20, 1. };
 
 /* Table of constant values */
 static integer c__1 = 1;
