@@ -228,7 +228,7 @@ vnl_vector<T>::vnl_vector (vnl_matrix<T> const &M, vnl_vector<T> const &v, vnl_t
 {
   vnl_vector_alloc_blah(M.rows());
 
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if (M.cols() != v.size())
     vnl_error_vector_dimension ("vnl_vector<>::vnl_vector(M, v, vnl_vector_mul_tag)", M.cols(), v.size());
 #endif
@@ -244,7 +244,7 @@ template<class T>
 vnl_vector<T>::vnl_vector (vnl_vector<T> const &v, vnl_matrix<T> const &M, vnl_tag_mul)
 {
   vnl_vector_alloc_blah(M.cols());
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if (v.size() != M.rows())
     vnl_error_vector_dimension ("vnl_vector<>::vnl_vector(v, M, vnl_vector_mul_tag)", v.size(), M.rows());
 #endif
@@ -412,7 +412,7 @@ vnl_vector<T>& vnl_vector<T>::operator/= (T value) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator+= (vnl_vector<T> const& rhs) {
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if (this->num_elmts != rhs.num_elmts)
     vnl_error_vector_dimension ("operator+=",
                            this->num_elmts, rhs.num_elmts);
@@ -427,7 +427,7 @@ vnl_vector<T>& vnl_vector<T>::operator+= (vnl_vector<T> const& rhs) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator-= (vnl_vector<T> const& rhs) {
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if (this->num_elmts != rhs.num_elmts)
     vnl_error_vector_dimension ("operator-=",
                            this->num_elmts, rhs.num_elmts);
@@ -442,7 +442,7 @@ vnl_vector<T>& vnl_vector<T>::operator-= (vnl_vector<T> const& rhs) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::pre_multiply (vnl_matrix<T> const& m) {
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if (m.columns() != this->num_elmts)           // dimensions do not match?
     vnl_error_vector_dimension ("operator*=",
                            this->num_elmts, m.columns());
@@ -465,7 +465,7 @@ vnl_vector<T>& vnl_vector<T>::pre_multiply (vnl_matrix<T> const& m) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::post_multiply (vnl_matrix<T> const& m) {
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if (this->num_elmts != m.rows())              // dimensions do not match?
     vnl_error_vector_dimension ("operator*=", this->num_elmts, m.rows());
 #endif
@@ -499,7 +499,7 @@ vnl_vector<T> vnl_vector<T>::operator- () const {
 template<class T>
 vnl_vector<T> operator* (vnl_matrix<T> const& m, vnl_vector<T> const& v) {
 
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if (m.columns() != v.size())                  // dimensions do not match?
     vnl_error_vector_dimension ("operator*",
                                 m.columns(), v.size());
@@ -527,7 +527,7 @@ vnl_vector<T> vnl_vector<T>::operator* (vnl_matrix<T> const&m) const {
   // also avoids the error.
   // template vnl_matrix<double > outer_product (const vnl_vector<double >&,const vnl_vector<dou
 
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if (num_elmts != m.rows())                    // dimensions do not match?
     vnl_error_vector_dimension ("operator*", num_elmts, m.rows());
 #endif
@@ -548,7 +548,7 @@ vnl_vector<T> vnl_vector<T>::operator* (vnl_matrix<T> const&m) const {
 template<class T>
 vnl_vector<T>& vnl_vector<T>::update (vnl_vector<T> const& v, unsigned start) {
   unsigned end = start + v.size();
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if ( end> this->num_elmts)
     vnl_error_vector_dimension ("update", end-start, v.size());
 #endif
@@ -562,7 +562,7 @@ vnl_vector<T>& vnl_vector<T>::update (vnl_vector<T> const& v, unsigned start) {
 
 template<class T>
 vnl_vector<T> vnl_vector<T>::extract (unsigned len, unsigned start) const {
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   unsigned end = start + len;
   if (this->num_elmts < end)
     vnl_error_vector_dimension ("extract", end-start, len);
@@ -577,7 +577,7 @@ vnl_vector<T> vnl_vector<T>::extract (unsigned len, unsigned start) const {
 
 template<class T>
 vnl_vector<T> element_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if (v1.size() != v2.size())
     vnl_error_vector_dimension ("element_product", v1.size(), v2.size());
 #endif
@@ -591,7 +591,7 @@ vnl_vector<T> element_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2)
 
 template<class T>
 vnl_vector<T> element_quotient (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if (v1.size() != v2.size())
     vnl_error_vector_dimension ("element_quotient",
                         v1.size(), v2.size());
@@ -622,7 +622,7 @@ vnl_vector<T> vnl_vector<T>::apply(T (*f)(T)) const {
 
 template<class T>
 T dot_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if (v1.size() != v2.size())
     vnl_error_vector_dimension ("dot_product",
                                 v1.size(), v2.size());
@@ -636,7 +636,7 @@ T dot_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
 
 template<class T>
 T inner_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if (v1.size() != v2.size())
     vnl_error_vector_dimension ("inner_product",
                                 v1.size(), v2.size());
@@ -650,7 +650,7 @@ T inner_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
 
 template<class T>
 T bracket(vnl_vector<T> const &u, vnl_matrix<T> const &A, vnl_vector<T> const &v) {
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if (u.size() != A.rows())
     vnl_error_vector_dimension("bracket",u.size(),A.rows());
   if (A.columns() != v.size())
@@ -680,7 +680,7 @@ vnl_matrix<T> outer_product (vnl_vector<T> const& v1,
 
 template<class T>
 T cross_2d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if (v1.size() < 2 || v2.size() < 2)
     vnl_error_vector_dimension ("cross_2d", v1.size(), v2.size());
 #endif
@@ -691,7 +691,7 @@ T cross_2d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
 
 template<class T>
 vnl_vector<T> cross_3d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+#ifndef NDEBUG
   if (v1.size() != 3 || v2.size() != 3)
     vnl_error_vector_dimension ("cross_3d", v1.size(), v2.size());
 #endif
