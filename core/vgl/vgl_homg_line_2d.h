@@ -19,12 +19,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for vcl_abs(double) etc
 #include <vcl_cstdlib.h> // for vcl_abs(int) etc
-
-template <class Type>
-class vgl_homg_point_2d;
-
-template <class Type>
-class vgl_line_2d;
+#include <vgl/vgl_fwd.h> // forward declare vgl_homg_point_2d and vgl_line_2d
 
 //: Represents a homogeneous 2D line.
 template <class Type>

@@ -17,9 +17,7 @@
 // \endverbatim
 
 #include <vcl_iostream.h>
-
-template <class Type>
-class vgl_point_2d;
+#include <vgl/vgl_fwd.h> // forward declare vgl_point_2d
 
 //: Represents a 2D box
 //  A 2d box with sides aligned with the x and y axes.

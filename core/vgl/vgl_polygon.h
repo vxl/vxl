@@ -16,8 +16,8 @@
 // \endverbatim
 
 #include <vcl_iostream.h>
+#include <vgl/vgl_point_2d.h> // needed for vcl_vector instantiations
 #include <vcl_vector.h>
-#include <vgl/vgl_point_2d.h>
 #include <vcl_string.h>
 #include <vcl_utility.h>
 
@@ -103,8 +103,6 @@ protected:
 
   // Data Members--------------------------------------------------------------
   vcl_vector<sheet_t> sheets_;
-
-  // Helpers-------------------------------------------------------------------
 };
 
 //: A commonly required polygon representation.

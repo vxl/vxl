@@ -21,20 +21,12 @@
 // 2000/02/16 Don HAMILTON, Peter TU Creation
 // \endverbatim
 
-template <class Type>
-class vgl_line_2d;
-
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for vcl_sqrt()
 #include <vcl_string.h>
+#include <vgl/vgl_fwd.h> // forward declare vgl_point_2d and vgl_homg_line_2d
 
-template <class Type>
-class vgl_point_2d;
-
-template <class Type>
-class vgl_homg_line_2d;
-
-//:Represents an euclidian 2D line
+//: Represents a Euclidian 2D line
 // An interface for the line coefficients, [a,b,c], is provided in terms of the
 // standard implicit line equation: a*x + b*y + c = 0
 template <class Type>

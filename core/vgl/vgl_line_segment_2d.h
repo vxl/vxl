@@ -16,8 +16,7 @@
 // \endverbatim
 
 #include <vcl_iosfwd.h>
-
-#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_2d.h> // data member of this class
 
 //: Represents a 2D line segment using two points.
 template <class Type>

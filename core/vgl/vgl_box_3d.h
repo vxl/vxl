@@ -19,9 +19,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
-
-template <class Type>
-class vgl_point_3d;
+#include <vgl/vgl_fwd.h> // forward declare vgl_point_3d
 
 //: Represents a 3D box
 //  A 3d box with sides aligned with x, y and z axes. Supports operations

@@ -20,12 +20,7 @@
 #include <vcl_cmath.h> // for vcl_abs(double) etc
 #include <vcl_cstdlib.h> // for vcl_abs(int) etc
 #include <vcl_string.h>
-
-template <class Type>
-class vgl_plane_3d;
-
-template <class Type>
-class vgl_homg_point_3d;
+#include <vgl/vgl_fwd.h> // forward declare vgl_plane_3d and vgl_homg_point_3d
 
 //: Represents a homogeneous 3D plane
 template <class Type>

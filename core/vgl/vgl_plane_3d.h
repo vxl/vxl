@@ -13,10 +13,8 @@
 //  \date   Feb 15 2000
 
 #include <vcl_iostream.h>
-#include <vgl/vgl_point_3d.h> // necessary for some inline functions
-
-template <class Type>
-class vgl_homg_plane_3d;
+#include <vgl/vgl_fwd.h> // forward declare vgl_homg_plane_3d
+#include <vgl/vgl_point_3d.h> // necessary for inline functions x(), y() and z()
 
 //: Represents a Euclidian 3D plane
 //  the equation of the plane is (nx * x) + (ny * y) + (nz * z) + d = 0
