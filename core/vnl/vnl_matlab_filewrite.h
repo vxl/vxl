@@ -20,8 +20,8 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
+#include <vcl_complex.h>
 
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
@@ -36,12 +36,12 @@ public:
   void write(double v, char const* variable_name = 0);
 
   void write(vnl_vector<double> const & v, char const* variable_name = 0);
-  void write(vnl_vector<vnl_double_complex> const & v, char const* variable_name = 0);
+  void write(vnl_vector<vcl_complex<double> > const & v, char const* variable_name = 0);
 
   void write(vnl_matrix<float> const & M, char const* variable_name = 0);
   void write(vnl_matrix<double> const & M, char const* variable_name = 0);
-  void write(vnl_matrix<vnl_float_complex> const & M, char const* variable_name = 0);
-  void write(vnl_matrix<vnl_double_complex> const & M, char const* variable_name = 0);
+  void write(vnl_matrix<vcl_complex<float> > const & M, char const* variable_name = 0);
+  void write(vnl_matrix<vcl_complex<double> > const & M, char const* variable_name = 0);
 
   void write(double const * const *M, int rows, int cols, char const* variable_name = 0);
 
