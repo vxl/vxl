@@ -111,6 +111,16 @@ vnl_vector<T> vnl_symmetric_eigensystem<T>::solve(vnl_vector<T> const& b)
 }
 
 template <class T>
+T vnl_symmetric_eigensystem<T>::determinant() const
+{
+  int const n = D.size();
+  T det(1);
+  for (int i=0; i<n; ++i)
+    det *= D[i];
+  return det;
+}
+
+template <class T>
 vnl_matrix<T> vnl_symmetric_eigensystem<T>::pinverse() const
 {
   unsigned n = D.rows();

@@ -109,6 +109,9 @@ class vnl_symmetric_eigensystem
 
   vnl_matrix<T> recompose() const { return V * D * V.transpose(); }
 
+  //: return product of eigenvalues.
+  T determinant() const;
+
   //: return the pseudoinverse.
   vnl_matrix<T> pinverse() const;
 
