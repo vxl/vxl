@@ -8,12 +8,12 @@
 
 #define TestWith( T )                                                   \
 {                                                                       \
-  vcl_cout << "Testing pixel type " << #T << "\n";                      \
+  vcl_cout << "Testing pixel type " << #T << '\n';                      \
   {                                                                     \
-    vcl_cout << "  from constructor " << #T << "\n";                    \
+    vcl_cout << "  from constructor " << #T << '\n';                    \
     vil_image_view< T > img( 5, 6, 7 );                                 \
     vgui_generic_vil_image_view generic( img );                         \
-    TEST( "top left", img.top_left_ptr(), (T*)generic.top_left_ptr() ); \
+    TEST( "top left", img.top_left_ptr(), (T const*)generic.top_left_ptr() ); \
     TEST( "istep", img.istep(), generic.istep() );                      \
     TEST( "jstep", img.jstep(), generic.jstep() );                      \
     TEST( "planestep", img.planestep(), generic.planestep() );          \
@@ -21,11 +21,11 @@
     TEST( "image view", img, *generic.make_view() );                    \
   }                                                                     \
   {                                                                     \
-    vcl_cout << "  from operator== " << #T << "\n";                     \
+    vcl_cout << "  from operator== " << #T << '\n';                     \
     vil_image_view< T > img( 5, 6, 7 );                                 \
     vgui_generic_vil_image_view generic;                                \
     generic = img;                                                      \
-    TEST( "top left", img.top_left_ptr(), (T*)generic.top_left_ptr() ); \
+    TEST( "top left", img.top_left_ptr(), (T const*)generic.top_left_ptr() ); \
     TEST( "istep", img.istep(), generic.istep() );                      \
     TEST( "jstep", img.jstep(), generic.jstep() );                      \
     TEST( "planestep", img.planestep(), generic.planestep() );          \
