@@ -4,7 +4,8 @@ Method2: for (unsigned i=0;i<ni;++i) image(i,j,p) = vxl_byte(i+j+3*p);
 Method3: for (unsigned i=0;i<image.ni();++i,pixel+=image.istep()) *pixel = vxl_byte(i+j+3*p);
 Method4: for (unsigned i=0;i<ni;++i,pixel+=istep) *pixel = vxl_byte(i+j+3*p);
 Method5: for (unsigned i=ni;i>ni;--i,pixel-=istep) *pixel = vxl_byte(i-1+j+3*p);
-
+Method6: for (unsigned i=0;i<ni;++i) row[i] = vxl_byte(i+j+3*p);
+  // Method 6 simulates lookup method of original vil
 
 Times to fill a 256 x 256 image of 3 planes (in microsecs) [Range= 0.5(max-min)]
 
@@ -22,6 +23,7 @@ Method 2) Mean: 18100us  +/-0us
 Method 3) Mean: 11650us  +/-50us
 Method 4) Mean: 4750us  +/-50us
 Method 5) Mean: 4810us  +/-50us
+Method 6) Mean: 4390us  +/-100us
 
 Using -O2:
 Method 1) Mean: 5920us  +/-100us
@@ -29,6 +31,7 @@ Method 2) Mean: 6430us  +/-100us
 Method 3) Mean: 1850us  +/-50us
 Method 4) Mean: 2210us  +/-50us
 Method 5) Mean: 2090us  +/-50us
+Method 6) Mean: 1200us  +/-100us
 
 Using -O3:
 Method 1) Mean: 5950us  +/-200us
@@ -36,9 +39,10 @@ Method 2) Mean: 6550us  +/-300us
 Method 3) Mean: 1900us  +/-350us
 Method 4) Mean: 2220us  +/-50us
 Method 5) Mean: 2040us  +/-50us
+Method 6) Mean: 1200us  +/-100us
 
 Conclusion: Methods 3&4 (using pointer incrementing) about 3x faster than im(i,j,p)
-
+Lookup appears to be significantly faster than pointer arithmetic!
 
 1.1 GHz AMD FreeBSD 4.5, using gcc-2.95.3
 -----------------------------------------
