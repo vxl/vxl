@@ -17,17 +17,15 @@
 //  Modifications
 //     000218 JS  Initial version, header info from MITImage.C
 //\endverbatim
- 
-/*
-  TYPES:
-  1 unsigned (grayscale)
-  2 rgb
-  3 hsb
-  4 cap
-  5 signed (grayscale?)
-  6 float
-  7 edge
-*/
+
+// TYPES:
+// 1 unsigned (grayscale)
+// 2 rgb
+// 3 hsb
+// 4 cap
+// 5 signed (grayscale?)
+// 6 float
+// 7 edge
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_impl.h>
