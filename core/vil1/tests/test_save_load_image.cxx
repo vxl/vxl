@@ -474,7 +474,7 @@ MAIN( test_save_load_image )
   vil_test_image_type("viff", image8);
   vil_test_image_type("viff", image16);
   vil_test_image_type("viff", image32);
-//vil_test_image_type("viff", image3p); // which one of these two? - PVr
+  vil_test_image_type("viff", image3p); // which one of these two? - PVr
 //vil_test_image_type("viff", image24); // seems to depend on OS which one fails...
   vil_test_image_type("viff", imagefloat);
 #endif
