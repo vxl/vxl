@@ -16,7 +16,7 @@ public :
   base_impl();
   ~base_impl();
   void Print (vcl_ostream &str);
-  static void checkcount ();
+  static bool checkcount ( int count = 0 );
 };
 
 //-------------------------------------------------------

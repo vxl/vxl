@@ -49,7 +49,7 @@
 // can sometimes (but not always) be avoided by assigning 0 (null pointer)
 // to one of the nodes in the ring.
 //
-// See also vbl_refcount
+// See also vbl_ref_count
 template <class T>
 class vbl_smart_ptr {
 public:
@@ -98,7 +98,7 @@ public:
         ref(ptr_);
 
       // *this might get deleted now, but that's ok.
-      if (old_ptr)
+      if (old_ptr && protected_)
         unref(old_ptr);
     }
     protected_ = true;

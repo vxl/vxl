@@ -26,10 +26,14 @@ void base_impl::Print (vcl_ostream &str) {
   str << "base_impl(" << n << ") ";
 }
   
-void base_impl::checkcount () {
-  if (reftotal == 0)
+bool base_impl::checkcount ( int count ) {
+  if (reftotal == count) {
     vcl_cout << "base_impl : PASSED" << vcl_endl;
-  else
-    vcl_cout << "base_impl : FAILED : count = " << reftotal << vcl_endl;
+    return true;
+  } else {
+    vcl_cout << "base_impl : FAILED : count = " << reftotal
+             << " (expecting " << count << ")" << vcl_endl;
+    return false;
+  }
 } 
 
