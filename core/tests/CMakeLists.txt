@@ -47,6 +47,7 @@ IF( COMMAND WRITE_FILE )
 ENDIF( COMMAND WRITE_FILE )
 
 ADD_EXECUTABLE( vxl_echo vxl_echo.cxx )
+TARGET_LINK_LIBRARIES( vxl_echo vcl )
 
 ADD_TEST( cmake_config vxl_echo
           MAKECOMMAND: ${MAKECOMMAND} nl
