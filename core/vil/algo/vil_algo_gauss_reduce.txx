@@ -1,6 +1,5 @@
 #ifndef vil2_algo_gauss_reduce_txx_
 #define vil2_algo_gauss_reduce_txx_
-
 //: \file
 //  \brief Functions to smooth and sub-sample image in one direction
 //  \author Tim Cootes
@@ -33,15 +32,15 @@ void vil2_algo_gauss_reduce(vil2_image_view<T>& dest_im,
   {
     // Smooth and subsample in x, result in work_im
     vil2_algo_gauss_reduce(work_im.top_left_ptr(),
-		                          work_im.istep(),work_im.jstep(),
-                              src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
-                              src_im.istep(),src_im.jstep());
+                           work_im.istep(),work_im.jstep(),
+                           src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
+                           src_im.istep(),src_im.jstep());
 
     // Smooth and subsample in y (by implicitly transposing work_im)
     vil2_algo_gauss_reduce(dest_im.top_left_ptr()+i*dest_im.planestep(),
-		                          dest_im.jstep(),dest_im.istep(),
-                              work_im.top_left_ptr(),nj,ni2,
-                              work_im.jstep(),work_im.istep());
+                           dest_im.jstep(),dest_im.istep(),
+                           work_im.top_left_ptr(),nj,ni2,
+                           work_im.jstep(),work_im.istep());
   }
 }
 //: Smooth and subsample src_im to produce dest_im
@@ -49,8 +48,8 @@ void vil2_algo_gauss_reduce(vil2_image_view<T>& dest_im,
 //  work_im provides workspace
 template<class T>
 void vil2_algo_gauss_reduce_121(vil2_image_view<T>& dest_im,
-                            const vil2_image_view<T>& src_im,
-														vil2_image_view<T>& work_im)
+                                const vil2_image_view<T>& src_im,
+                                vil2_image_view<T>& work_im)
 {
   int ni = src_im.ni();
   int nj = src_im.nj();
@@ -70,26 +69,25 @@ void vil2_algo_gauss_reduce_121(vil2_image_view<T>& dest_im,
   {
     // Smooth and subsample in x, result in work_im
     vil2_algo_gauss_reduce_121(work_im.top_left_ptr(),
-		                          work_im.istep(),work_im.jstep(),
-                              src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
-                              src_im.istep(),src_im.jstep());
+                               work_im.istep(),work_im.jstep(),
+                               src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
+                               src_im.istep(),src_im.jstep());
 
     // Smooth and subsample in y (by implicitly transposing work_im)
     vil2_algo_gauss_reduce_121(dest_im.top_left_ptr()+i*dest_im.planestep(),
-		                          dest_im.jstep(),dest_im.istep(),
-                              work_im.top_left_ptr(),nj,ni2,
-                              work_im.jstep(),work_im.istep());
+                               dest_im.jstep(),dest_im.istep(),
+                               work_im.top_left_ptr(),nj,ni2,
+                               work_im.jstep(),work_im.istep());
   }
 }
 
 #undef VIL2_ALGO_GAUSS_REDUCE_INSTANTIATE
 #define VIL2_ALGO_GAUSS_REDUCE_INSTANTIATE(T) \
-template void vil2_algo_gauss_reduce(vil2_image_view<T>& dest, \
-                            const vil2_image_view<T>& src, \
-														vil2_image_view<T>& work_im); \
-template void vil2_algo_gauss_reduce_121(vil2_image_view<T>& dest, \
-                            const vil2_image_view<T>& src, \
-														vil2_image_view<T>& work_im)
+template void vil2_algo_gauss_reduce(vil2_image_view<T >& dest, \
+                                     const vil2_image_view<T >& src, \
+                                     vil2_image_view<T >& work_im); \
+template void vil2_algo_gauss_reduce_121(vil2_image_view<T >& dest, \
+                                         const vil2_image_view<T >& src, \
+                                         vil2_image_view<T >& work_im)
 
-
-#endif
+#endif // vil2_algo_gauss_reduce_txx_
