@@ -68,7 +68,7 @@ public:
   // Data Access-------------------------------------------------------------
 
   inline void get_direction(Type& dx, Type& dy) const { dx=dir_x(); dy=dir_y(); }
-  inline void get_normal(Type& nx, Type& ny) const { ny=normal_x(); ny=normal_y(); }
+  inline void get_normal(Type& nx, Type& ny) const { nx=normal_x(); ny=normal_y(); }
 
   inline Type dir_x() const { return -b()/(sqrt(a()*a() + b()*b())); }
   inline Type dir_y() const { return a()/(sqrt(a()*a() + b()*b())); }
