@@ -76,8 +76,10 @@ Using these is easy, and is often modelled on Matlab.  For example, this
 declares a 3x4 matrix of @code{double}:
 @example
 #include <vnl/vnl_matrix.h>
-main() @{
+int main()
+@{
   vnl_matrix<double> P(3,4);
+  return 0;
 @}
 @end example
 Operators are overloaded as expected, so if we have another 3x4
@@ -107,15 +109,15 @@ decided that zero-based indexing was closer to being ``not weird''.
   vnl_matrix<double> A(3,3); // 3x3 matrix, elements not initialized
   vnl_matrix<double> B(3,3, 1.0); // 3x3 matrix, filled with ones.
   vnl_matrix<double> R(3,4); // Rectangular matrix
-  vcl_cerr << "A is " << A.@ttb{rows}() << "x" << A.@ttb{columns}() << vcl_endl;
-  vcl_cerr << "A has a total of " << A.@ttb{size}() << " elements" << vcl_endl;
+  vcl_cerr << "A is " << A.@ttb{rows}() << 'x' << A.@ttb{columns}() << vcl_endl
+           << "A has a total of " << A.@ttb{size}() << " elements" << vcl_endl;
   A(0,0) = 2.0; // Set top-left component of A.
   A(3,3) = 0.0; // *** Error, (3,3) is outside the range of A.
   A.@ttb{set_size}(3,4); // Change size of A, invalidating elements.
   R.@ttb{update}(A, 0, 1); // Copy A into R, starting at (0,1): last 3 cols
   R.@ttb{set_column}(0, B.@ttb{get_column}(0)); // Copy 1st col of B into R
-  vcl_cerr << R.@ttb{extract}(3,3, 0,1); // Print last 3 cols
-  vcl_cerr << R.@ttb{get_n_columns}(1, 3) const; // Ditto
+  vcl_cerr << R.@ttb{extract}(3,3, 0,1) // Print last 3 cols
+           << R.@ttb{get_n_columns}(1, 3) const; // Ditto
 
   A.@ttb{fill}(0.0); // Set all elements of A to 0.0
   A.@ttb{fill_diagonal}(1.0); // Set diagonal elements to 1.0
@@ -134,8 +136,8 @@ decided that zero-based indexing was closer to being ``not weird''.
   vnl_matrix<double> Csqrt = C.@ttb{apply}(sqrt); // Square root all elements
   @ttb{element_product}(Csqrt, Csqrt); // Should be equal to C, modulo roundoff
 
-  vcl_cerr << A.@ttb{fro_norm}(); // Print sum of squares of elements
-  vcl_cerr << A.@ttb{min_value}(); // Print minimum element
+  vcl_cerr << A.@ttb{fro_norm}() // Print sum of squares of elements
+           << A.@ttb{min_value}(); // Print minimum element
 
   if (A.@ttb{is_zero}(1e-8))
     vcl_cerr << "Each element of A is within 1e-8 of zero\n";
@@ -194,10 +196,12 @@ above sequence would be
 @example
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
-main() @{
+int main()
+@{
   vnl_matrix_fixed<double,3,4> P;
   vnl_vector_fixed<double,4> X;
   vcl_cerr << P*X;
+  return 0;
 @}
 @end example
 It's a bit clumsy typing these long names, so it is common to use
@@ -208,10 +212,12 @@ example is
 @example
 #include <vnl/vnl_double_3x4.h>
 #include <vnl/vnl_double_4.h>
-main() @{
+int main()
+@{
   vnl_double_3x4 P;
   vnl_double_4 X;
   vcl_cerr << P*X;
+  return 0;
 @}
 @end example
 Note again that in this example there will be no noticeable speedup,
@@ -343,15 +349,17 @@ things, you can use the @code{vnl_matrix_inverse} class to compute an
 inverse object:
 @example
 #include <vnl/algo/vnl_matrix_inverse.h>
-main() @{
+int main()
+@{
   vcl_cerr << vnl_matrix_inverse<double>(A) * B;
+  return 0;
 @}
 @end example
 
 If you want more control over how the inverse is taken, then you might want
-to look at one of the decomposition classes.
+to look at @code{vnl_inverse} or at one of the decomposition classes.
 
-xxx order in general-specific, give flop counts, show decomps.
+TODO - order in general-specific, give flop counts, show decomps.
 
 
 The following fragment demonstrates use of the @code{vnl_svd<double>} class
@@ -382,7 +390,8 @@ points read from standard input.
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vcl_iostream.h>
 
-main() @{
+int main()
+@{
   // Read points from stdin
   vnl_matrix<double> pts;
   vcl_cin >> pts;
@@ -410,6 +419,7 @@ main() @{
     vnl_vector<double> a = eig.get_eigenvector(0);
     vcl_cout << "Eig residual = " << (D * a).magnitude() << vcl_endl;
   @}
+  return 0;
 @}
 @end example
 @end cartouche
@@ -591,7 +601,8 @@ And we can now close the declaration of @code{my_rosenbrock_functor}:
 @c @code{no_gradient} flag if the function @code{gradf} has not been
 @c implemented.
 @c @example
-@c struct Rosenbrock : public vnl_least_squares_function @{
+@c struct Rosenbrock : public vnl_least_squares_function
+@c @{
 @c   Rosenbrock(): vnl_least_squares_function(2, 2, no_gradient) @{@}
 @c @};
 @c @end example
@@ -600,7 +611,8 @@ And we can now close the declaration of @code{my_rosenbrock_functor}:
 @c function.  Any data required for the evaluation can be stored in the class
 @c and will be available whenever @code{f} is called.
 @c @example
-@c   double f(const vnl_vector<double>& x, vnl_vector<double>& fx) @{
+@c   double f(const vnl_vector<double>& x, vnl_vector<double>& fx)
+@c   @{
 @c     fx[0] = 10 * (x[1] - vnl_math_sqr(x[0]));
 @c     fx[1] = 1 - x[0];
 @c   @}
@@ -634,7 +646,7 @@ f(x, y) = [ 10(y - x^2) ]
           [    1-x      ]
 @end example
 In this case, we need to make a class derived from
-@code{vnl_least_squares_function}.  xxx
+@code{vnl_least_squares_function}.  TODO
 
 @page
 @section Design issues (Developer Topic)
