@@ -156,7 +156,7 @@ rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
   // h = [243 * R(K) / 35 / Mu(K)^2 / n]^0.2 * scale
   // R(K) = Integral ( K(u)^2 ) du
   // Mu(K) = Integral ( u^2 * K(u) ) du
-  const double c = 75087.0 / 143;
+  const double c = 65610.0 / 143;
   return vcl_pow( c / n , 0.2 ) * scale;
 }
 
