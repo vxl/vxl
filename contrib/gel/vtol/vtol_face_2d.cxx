@@ -388,7 +388,7 @@ void vtol_face_2d::print(vcl_ostream &strm) const
 
   for(ii=_inferiors.begin();ii!= _inferiors.end();++ii)
     strm << " " << (*ii)->inferiors()->size();
-  strm << "   " << (void *) this << '>' << vcl_endl;
+  strm << "   " << (void const *) this << '>' << vcl_endl;
 }
 
 //: provide a mechanism to compare geometry

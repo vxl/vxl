@@ -816,7 +816,7 @@ void vtol_two_chain::correct_chain_directions(void)
 
 void vtol_two_chain::print(vcl_ostream &strm) const
 {
-  strm << "<vtol_two_chain " << _inferiors.size() << "  "  << (void *)this << ">"  << vcl_endl;
+  strm << "<vtol_two_chain " << _inferiors.size() << "  "  << (void const *)this << ">"  << vcl_endl;
 }
 
 void vtol_two_chain::describe_directions(vcl_ostream &strm,

@@ -467,5 +467,5 @@ void vtol_edge::describe(vcl_ostream &strm,
 // This method outputs a brief vtol_edge info with vtol_edge object address.
 void vtol_edge::print(vcl_ostream &strm) const
 {
-   strm<<"<vtol_edge  "<<"  "<<(void *)this <<"> with id "<<get_id()<<vcl_endl;
+   strm<<"<vtol_edge  "<<"  "<<(void const *)this <<"> with id "<<get_id()<<vcl_endl;
 }

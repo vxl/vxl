@@ -322,7 +322,7 @@ void vtol_edge_2d::describe(vcl_ostream &strm,
 // This method outputs a brief vtol_edge_2d info with vtol_edge_2d object address.
 void vtol_edge_2d::print(vcl_ostream &strm) const
 {
-   strm<<"<vtol_edge_2d  "<<"  "<<(void *)this <<"> with id "<<get_id()<<vcl_endl;
+   strm<<"<vtol_edge_2d  "<<"  "<<(void const *)this <<"> with id "<<get_id()<<vcl_endl;
 }
 
 bool vtol_edge_2d::compare_geometry(const vtol_edge &other) const

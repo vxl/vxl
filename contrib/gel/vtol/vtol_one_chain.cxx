@@ -902,7 +902,7 @@ bool vtol_one_chain::operator==(vsol_spatial_object_3d const& obj) const
 
 void vtol_one_chain::print(vcl_ostream &strm) const
 {
-  strm << "<one_chain " << _inferiors.size() << "  " << (void *) this << ">"  << vcl_endl;
+  strm << "<one_chain " << _inferiors.size() << "  " << (void const *) this << ">"  << vcl_endl;
 }
 
 //: Describe the directions

@@ -250,7 +250,7 @@ bool vtol_zero_chain::operator==(const vsol_spatial_object_3d& obj) const
 
 void vtol_zero_chain::print(vcl_ostream &strm) const
 {
-  strm << "<vtol_zero_chain " << _inferiors.size() << " " << (void *)this << ">" << vcl_endl;
+  strm << "<vtol_zero_chain " << _inferiors.size() << " " << (void const *)this << ">" << vcl_endl;
 }
 
 void vtol_zero_chain::describe(vcl_ostream &strm,

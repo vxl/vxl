@@ -157,7 +157,7 @@ vtol_vertex::valid_superior_type(const vtol_topology_object &superior) const
 //: This method outputs a simple text representation of the vertex including its address in memory.
 void vtol_vertex::print(vcl_ostream &strm) const
 {
-  strm<< "<vtol_vertex " << (void *)this<<"> with id ";
+  strm<< "<vtol_vertex " << (void const *)this<<"> with id ";
   strm<< get_id() << vcl_endl;
 }
 

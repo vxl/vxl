@@ -171,7 +171,7 @@ vtol_vertex_2d *vtol_vertex_2d::cast_to_vertex_2d(void)
 //: This method outputs a simple text representation of the vertex including its address in memory.
 void vtol_vertex_2d::print(vcl_ostream &strm) const
 {
-  strm<<"<vtol_vertex_2d "<<x()<<","<<y()<<","<<(void *)this<<"> with id ";
+  strm<<"<vtol_vertex_2d "<<x()<<","<<y()<<","<<(void const *)this<<"> with id ";
   strm<<get_id()<<vcl_endl;
 }
 

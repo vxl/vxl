@@ -469,7 +469,7 @@ bool vtol_block::add_hole_cycle(vtol_two_chain &new_hole)
 
 void vtol_block::print(vcl_ostream &strm) const
 {
-  strm<<"<vtol_block "<<_inferiors.size()<<"  "<<(void *)this<<">"<<vcl_endl;
+  strm<<"<vtol_block "<<_inferiors.size()<<"  "<<(void const*)this<<">"<<vcl_endl;
 }
 
 void vtol_block::describe(vcl_ostream &strm,

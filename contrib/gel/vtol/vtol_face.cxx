@@ -472,5 +472,5 @@ void vtol_face::print(vcl_ostream &strm) const
 
   for(ii=_inferiors.begin();ii!= _inferiors.end();++ii)
     strm << " " << (*ii)->inferiors()->size();
-  strm << "   " << (void *) this << '>' << vcl_endl;
+  strm << "   " << (void const *) this << '>' << vcl_endl;
 }

@@ -495,7 +495,7 @@ void vtol_topology_object::blocks(block_list &new_list)
 //: print the object
 void vtol_topology_object::print(vcl_ostream &strm) const
 {
-  strm<<"<vtol_topology_object "<<(void *)this<<">"<<vcl_endl;
+  strm<<"<vtol_topology_object "<<(void const *)this<<">"<<vcl_endl;
   strm<<"number of inferiors "<<numinf()<<vcl_endl;
   strm<<"number of superiors "<<numsup()<<vcl_endl;
 }
