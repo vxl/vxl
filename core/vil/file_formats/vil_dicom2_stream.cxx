@@ -116,8 +116,7 @@ create() const
 
 vil_dicom2_stream_input::
 vil_dicom2_stream_input( vil_stream* vs )
-  : DcmInputStream( new vil_dicom2_stream_producer( vs ) ),
-    producer_( 0 )
+  : DcmInputStream( new vil_dicom2_stream_producer( vs ) )
 {
 }
 
@@ -125,7 +124,7 @@ vil_dicom2_stream_input( vil_stream* vs )
 vil_dicom2_stream_input::
 ~vil_dicom2_stream_input()
 {
-  delete producer_;
+  delete currentProducer();
 }
 
 

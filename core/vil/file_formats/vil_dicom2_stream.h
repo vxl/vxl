@@ -5,7 +5,7 @@
 // \file
 // \author Amitha Perera
 
-#include <dcistrma.h>
+#include <dcmtk\dcmdata\include\dcistrma.h>
 
 class vil_stream;
 
@@ -57,8 +57,6 @@ public:
   virtual ~vil_dicom2_stream_input();
   virtual DcmInputStreamFactory* newFactory() const;
 
-private:
-  vil_dicom2_stream_producer* producer_;
 };
 
 #endif // vil_dicom2_stream_h_
