@@ -20,7 +20,7 @@ bool oxp_vob_frame_index::load(char const* filename)
   const int MPEG_IDX = 1;
   const int LBA = 2;
   int idx_type = 0;
-  if (tag == "MPEG_IDX") 
+  if (tag == "MPEG_IDX")
     idx_type = MPEG_IDX;
   else if (tag == "LBA")
     idx_type = LBA;
@@ -72,7 +72,7 @@ int oxp_vob_frame_index::frame_to_lba_of_prev_I_frame(int f, int* f_actual)
       break;
     }
   }
-  // vcl_fprintf(stderr, "oxp_vob_frame_index: [%5d %5d] -> [%5d %5d]\n", lo, hi, l[lo].frame, l[hi].frame);
+  // vcl_cerr << "oxp_vob_frame_index: [" << lo << ' ' << hi << "] -> [" << l[lo].frame << ' ' << l[hi].frame << "]\n";
   if (f_actual)
     *f_actual = l[lo].frame;
   return l[lo].lba;

@@ -39,8 +39,8 @@
 // ---------------------------------------------------------------------------
 // <end copyright notice>
 
-#include <vcl_cstdio.h>
 #include <vcl_iostream.h>
+#include <vcl_iomanip.h>
 #include <vcl_string.h>
 
 #include "vpgl_rational_camera.h"
@@ -570,20 +570,24 @@ void vpgl_rational_camera::verify_camera(
   double x, y;
 
   this->world_to_image(UL, x, y, time);
-  vcl_fprintf(stdout, "Upper Left  (%14.6e, %14.6e, %14.6e) -> (%13.5e, %13.5e)\n",
-              UL[0], UL[1], UL[2], x, y);
+  vcl_cout << "Upper Left  (" << vcl_setw(14) << vcl_setprecision(6) << UL[0] << ", "
+           << vcl_setw(14) << vcl_setprecision(6) << UL[1] << ", " << vcl_setw(14) << vcl_setprecision(6) << UL[2] << ") -> ("
+           << vcl_setw(13) << vcl_setprecision(5) << x << ", " << vcl_setw(13) << vcl_setprecision(5) << y << ")\n";
 
   this->world_to_image(UR, x, y, time);
-  vcl_fprintf(stdout, "Upper Right (%14.6e, %14.6e, %14.6e) -> (%13.5e, %13.5e)\n",
-              UR[0], UR[1], UR[2], x, y);
+  vcl_cout << "Upper Right (" << vcl_setw(14) << vcl_setprecision(6) << UR[0] << ", "
+           << vcl_setw(14) << vcl_setprecision(6) << UR[1] << ", " << vcl_setw(14) << vcl_setprecision(6) << UR[2] << ") -> ("
+           << vcl_setw(13) << vcl_setprecision(5) << x << ", " << vcl_setw(13) << vcl_setprecision(5) << y << ")\n";
 
   this->world_to_image(LR, x, y, time);
-  vcl_fprintf(stdout, "Lower Right (%14.6e, %14.6e, %14.6e) -> (%13.5e, %13.5e)\n",
-              LR[0], LR[1], LR[2], x, y);
+  vcl_cout << "Lower Right (" << vcl_setw(14) << vcl_setprecision(6) << LR[0] << ", "
+           << vcl_setw(14) << vcl_setprecision(6) << LR[1] << ", " << vcl_setw(14) << vcl_setprecision(6) << LR[2] << ") -> ("
+           << vcl_setw(13) << vcl_setprecision(5) << x << ", " << vcl_setw(13) << vcl_setprecision(5) << y << ")\n";
 
   this->world_to_image(LL, x, y, time);
-  vcl_fprintf(stdout, "Lower Left  (%14.6e, %14.6e, %14.6e) -> (%13.5e, %13.5e)\n",
-              LL[0], LL[1], LL[2], x, y);
+  vcl_cout << "Lower Left  (" << vcl_setw(14) << vcl_setprecision(6) << LL[0] << ", "
+           << vcl_setw(14) << vcl_setprecision(6) << LL[1] << ", " << vcl_setw(14) << vcl_setprecision(6) << LL[2] << ") -> ("
+           << vcl_setw(13) << vcl_setprecision(5) << x << ", " << vcl_setw(13) << vcl_setprecision(5) << y << ")\n"
 
-  vcl_cout << "---------------------------------------------------\n";
+           << "---------------------------------------------------\n";
 }
