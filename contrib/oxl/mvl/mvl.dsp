@@ -409,6 +409,9 @@ SOURCE=.\mvl_five_point_camera_pencil.cxx
 # Begin Source File
 
 SOURCE=.\mvl_multi_view_matches.cxx
+
+# PROP Exclude_From_Build 1
+
 # End Source File
 # Begin Source File
 
