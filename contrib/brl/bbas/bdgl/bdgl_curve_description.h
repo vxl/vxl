@@ -16,11 +16,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vdgl/vdgl_edgel_chain_sptr.h>
-#include <vdgl/vdgl_digital_curve_sptr.h>
-#include <vdgl/vdgl_digital_curve.h>
 #include <vgl/vgl_point_2d.h>
-#include <vdgl/vdgl_interpolator.h>
-#include <vdgl/vdgl_interpolator_linear.h>
 #include <vsol/vsol_box_2d_sptr.h>
 
 class bdgl_curve_description
@@ -49,13 +45,7 @@ class bdgl_curve_description
     init(ec);
     compute_bounding_box(ec);
   }
-  void compute_bounding_box(vdgl_edgel_chain_sptr const& ec)
-  {
-  vdgl_digital_curve_sptr dc;
-  dc = new vdgl_digital_curve(new vdgl_interpolator_linear(ec));
-  dc->compute_bounding_box();
-  box_=dc->get_bounding_box();
-  }
+  void compute_bounding_box(vdgl_edgel_chain_sptr const& ec);
   void init(vdgl_edgel_chain_sptr const& ec);
 
   // display information
