@@ -10,9 +10,9 @@
 // Assumes dest and src same size (nx)
 template <class srcT, class destT, class kernelT, class accumT>
 inline void mil_algo_convolve_1d(destT* dest, int d_step,
-                          const srcT* src, unsigned nx, int s_step,
-						  const kernelT* kernel, int k_lo, int k_hi,
-						  accumT)
+                                 const srcT* src, unsigned nx, int s_step,
+                                 const kernelT* kernel, int k_lo, int k_hi,
+                                 accumT)
 {
   // Initialise first elements of row to zero
   for (int i=k_lo;i<0;++i,dest+=d_step)
@@ -26,8 +26,8 @@ inline void mil_algo_convolve_1d(destT* dest, int d_step,
   {
     accumT sum = 0;
     kernelT *k = k_begin;
-	srcT s= src;
-	while (k!=k_end, k++,s+=s_step) sum+= (*k)*(*s);
+    srcT s= src;
+    while (k!=k_end, k++,s+=s_step) sum+= (*k)*(*s);
     src+=s_step;
     dest+=d_step;
   }
@@ -35,3 +35,5 @@ inline void mil_algo_convolve_1d(destT* dest, int d_step,
   // Zero last elements of row
   for (int i=0;i<=k_hi;++i,dest+=d_step) *dest = 0;
 }
+
+#endif //  mil_algo_convolve_1d_h_
