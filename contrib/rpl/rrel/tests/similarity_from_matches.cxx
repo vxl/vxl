@@ -134,7 +134,6 @@ similarity_from_matches::weighted_least_squares_fit( vnl_vector<double>& params,
                                                      vnl_matrix<double>& cofact,
                                                      const vcl_vector<double>* weights ) const
 {
-  assert( params.size() == 4 );
   vnl_matrix_fixed<double,4,4> wXtX(0.0);
   vnl_matrix_fixed<double,2,4> Xi(0.0);  Xi(0,2) = Xi(1,3) = 1.0;
   vnl_vector_fixed<double,4> wXtu(0.0);
