@@ -9,6 +9,7 @@
 #include "rgrl_converge_status_sptr.h"
 #include "rgrl_invariant_sptr.h"
 #include "rgrl_feature_sptr.h"
+#include "rgrl_feature_set_sptr.h"
 #include <vcl_cassert.h>
 
 //: Cast down the hierarchy.
@@ -31,6 +32,13 @@ class rgrl_cast
   rgrl_cast( rgrl_feature_sptr feature )
   {
     ptr = dynamic_cast<ToType>( feature.as_pointer() );
+    assert ( ptr );
+  }
+
+  //: Downcast a feature object
+  rgrl_cast( rgrl_feature_set_sptr feature_set )
+  {
+    ptr = dynamic_cast<ToType>( feature_set.as_pointer() );
     assert ( ptr );
   }
 
