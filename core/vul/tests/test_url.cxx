@@ -22,13 +22,11 @@
 //=======================================================================
 void test_url()
 {
-  vcl_cout << "\n"
-           << "*****************\n"
-           << " Testing vul_url\n"
-           << "*****************\n\n";
+  vcl_cout <<"\n*****************\n"
+           <<  " Testing vul_url\n"
+           <<  "*****************\n\n"
 
-
-  vcl_cout<<"======== base64 stuff ===========\n";
+           << "======== base64 stuff ===========\n";
 
   unsigned const nTests = 300;
   vcl_string data;
@@ -37,7 +35,6 @@ void test_url()
   for (unsigned i=0; i < nTests; ++i)
   {
     data += (char)(i % 255);
-
 
     vcl_string encoded = vul_url::encode_base64(data);
     if (!(encoded.size() >= i * 4 / 3 && encoded.size() <= 4+i * 5 / 3))
@@ -72,7 +69,7 @@ void test_url()
 
   bool no_download = !vul_url::exists("http://vxl.sourceforge.net/index.html");
   if (no_download)
-    vcl_cout<<"vul_url::exists() and vil_url::open() tests disabled: probably behind firewall\n";
+    vcl_cout << "vul_url::exists() and vil_url::open() tests disabled: probably behind firewall\n";
   else
   {
     TEST("vul_url::exists(\"http://vxl.sourceforge.net/index.html\")",
@@ -84,7 +81,8 @@ void test_url()
     vcl_istream* i = vul_url::open("http://vxl.sourceforge.net/");
     TEST("vul_url::open(\"http://vxl.sourceforge.net/\")", i==0, false);
 
-    char b[]="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<html>\n  <head>\n    <title>VXL - C++ Libraries for Computer Vision</title>";
+    char b[]="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n"
+             "<html>\n  <head>\n    <title>VXL - C++ Libraries for Computer Vision</title>";
     if (i)
     {
       int l = vcl_strlen(b);
