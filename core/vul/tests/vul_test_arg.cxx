@@ -5,6 +5,9 @@
 // Created: 21 Jan 97
 //
 //-----------------------------------------------------------------------------
+#ifdef __GNUC__
+#pragma implementation "vul_arg.h"
+#endif
 
 #include <vul/vul_arg.h>
 #include <vcl_cstring.h> // needed for strcmp()
