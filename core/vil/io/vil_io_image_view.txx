@@ -1,3 +1,5 @@
+#ifndef vil2_io_image_view_txx_
+#define vil2_io_image_view_txx_
 //:
 // \file
 // \author Tim Cootes
@@ -5,6 +7,7 @@
 #include "vil2_io_image_view.h"
 
 //: Binary save vil2_image_view to stream.
+template<class T>
 void vsl_b_write(vsl_b_ostream &os, const vil2_image_view<T>& image)
 {
   const short io_version_no = 1;
@@ -23,6 +26,7 @@ void vsl_b_write(vsl_b_ostream &os, const vil2_image_view<T>& image)
 
 
 //: Binary load vil2_image_view from stream.
+template<class T>
 void vsl_b_read(vsl_b_istream &is, vil2_image_view<T>& image)
 {
   if (!is) return;
@@ -57,9 +61,8 @@ void vsl_b_read(vsl_b_istream &is, vil2_image_view<T>& image)
   }
 }
 
-#undef read_case_macro
-
 //: Binary load vil2_image_view from stream  onto the heap
+template<class T>
 void vsl_b_read(vsl_b_istream &is, vil2_image_view<T>*& p)
 {
   delete p;
@@ -75,7 +78,12 @@ void vsl_b_read(vsl_b_istream &is, vil2_image_view<T>*& p)
 }
 
 //: Print human readable summary of a vil2_image_view object to a stream
+template<class T>
 void vsl_print_summary(vcl_ostream& os,const vil2_image_view<T>& image)
 {
   image.print(os);
 }
+
+#endif
+
+
