@@ -1,4 +1,5 @@
 ADD_EXECUTABLE( test_vpgl main.cpp )
+INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/gel/mrc)
 INCLUDE( ${allvxl_SOURCE_DIR}/gel/mrc/vpgl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vcsl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt )
