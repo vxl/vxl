@@ -191,7 +191,8 @@ vgui_menu segv_menus::get_menu()
   menuedit.add("Compute Mutual Info",compute_mutual_info_callback);
 
 
-  menuedit.add("Compute Fore/Background entropy",compute_background_info_callback);  menuedit.add("Set Background Face", set_background_face_callback);
+  menuedit.add("Compute Fore/Background entropy",compute_background_info_callback);
+  menuedit.add("Set Background Face", set_background_face_callback);
 
   menuedit.add("Set Foreground Face", set_foreground_face_callback);
   menuedit.add("Compute parallel coverage",compute_parallel_coverage_callback);
