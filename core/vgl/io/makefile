@@ -23,6 +23,7 @@ MANPAGE_SOURCES += vgl_io_point_2d.txx
 MANPAGE_SOURCES += vgl_io_point_3d.txx
 MANPAGE_SOURCES += vgl_io_vector_2d.txx
 MANPAGE_SOURCES += vgl_io_vector_3d.txx
+MANPAGE_SOURCES += vgl_io_conic.txx
 
 ifndef NOTEST
 SUBDIRS += tests
