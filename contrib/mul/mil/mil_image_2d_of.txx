@@ -142,7 +142,7 @@ void mil_image_2d_of<T>::set_n_planes(int n)
 template<class T>
 void mil_image_2d_of<T>::setValidRegion(int xlo, int xhi, int ylo, int yhi)
 {
-  resize(xhi-xlo,yhi-ylo);
+  resize(1+xhi-xlo,1+yhi-ylo);
   world2im_.set_translation(-xlo,-ylo);
 }
 
