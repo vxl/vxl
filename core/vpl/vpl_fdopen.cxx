@@ -1,8 +1,5 @@
 #include "vpl_fdopen.h"
-
-#if defined(VCL_BORLAND_56)
-# include <stdio.h> /* For _fdopen on Borland 5.6 */
-#endif
+#include <vcl_cstdio.h>
 
 #if defined(VCL_COMO)
 extern "C" FILE *fdopen(int, char const *);
