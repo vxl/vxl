@@ -320,7 +320,7 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
              << ", planestep="<<ibuf.planestep()
              << " instead of "<<components_<<','<<components_*ni<<','<<1
              << " or 1,"<<ni<<','<<ni*nj<<'\n';
-    return false;
+    return buf_is_planar; // == false
   }
   const vxl_byte* ob = ibuf.top_left_ptr();
   unsigned int pix_size = 8*bytes_per_pixel();

@@ -222,7 +222,7 @@ bool vil_viff_image::write_header()
   else
   {
     vcl_cout << "vil_viff: non supported data type: " << (short)format_ << '\n';
-    return false;
+    return type!=0; // == false
   }
 
   //create header
@@ -300,9 +300,9 @@ bool vil_viff_image::put_view(vil_image_view_base const& buf, unsigned int x0, u
            << ni<<'x'<<nj<<'x'<< buf.nplanes()<<'p'
            << " at ("<<x0<<','<<y0<<")\n";
 #endif
-  vcl_cout << "buf="<<buf<<"\n";
+  vcl_cout << "buf=" << buf << '\n';
   vil_image_view<vxl_byte> const& ibuf = reinterpret_cast<vil_image_view<vxl_byte> const&>(buf);
-  vcl_cout << "ibuf="<<ibuf<<"\n";;
+  vcl_cout << "ibuf=" << ibuf << '\n';
   if (ibuf.istep() != 1 || ibuf.jstep() != int(ni) ||
       (ibuf.planestep() != int(ni*nj) && nplanes() != 1))
   {
