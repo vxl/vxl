@@ -3,5 +3,5 @@
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
 
-SUBDIRS(mvl)
+SUBDIRS(mvl oxp vrml)
 
