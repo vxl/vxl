@@ -137,7 +137,7 @@ macro (int);
 macro (unsigned int);
 macro (long);
 macro (unsigned long);
-#if VXL_HAS_INT_64
+#if VXL_HAS_INT_64 && !defined(__alpha__)
 macro (vxl_int_64);
 macro (vxl_uint_64);
 #endif
