@@ -54,8 +54,10 @@
 #  if (__GNUC_MINOR__>7)
 #   define VCL_GCC_EGCS // so this is the union of EGCS, GCC_28 and GCC_295
 #  endif
-# else
+# elif (__GNUC__==3)
 #  define VCL_GCC_30
+# else
+#  error "Dunno about this gcc"
 # endif
 #endif
 
@@ -89,9 +91,11 @@
 
 // This *needs* to come after vcl_config_headers.h
 #ifdef __GNUC__
+# ifdef VCL_GCC_30
+#  define GNU_LIBSTDCXX_V3 1
+# elif !defined(GNU_LIBSTDCXX_V3) && defined(VCL_GCC_295) && VCL_CXX_HAS_HEADER_ISTREAM
 // One difference between v2 and v3 is that the former has
 // no <istream> header file whereas v3 has the lot.
-# if !defined(GNU_LIBSTDCXX_V3) && defined(VCL_GCC_295) && VCL_CXX_HAS_HEADER_ISTREAM
 #  define GNU_LIBSTDCXX_V3 1
 # endif
 #endif
