@@ -685,8 +685,8 @@ trace_face_boundary( vcl_vector<unsigned>& markers,
   chain_list.i = node(index).i + delta_i[dir];
   chain_list.j = node(index).j + delta_j[dir];
 
-  assert( 0 <= chain_list.i && chain_list.i < img_.ni() );
-  assert( 0 <= chain_list.j && chain_list.j < img_.nj() );
+  assert( chain_list.i < img_.ni() );
+  assert( chain_list.j < img_.nj() );
 
   do {
     // Mark the current direction of the current node as travelled,
@@ -1222,8 +1222,8 @@ smooth_chain( vdgl_edgel_chain_sptr chain,
   // constrained fit.
   //
   if( num_pts == chain->size() ) {
-    assert( fit_end = chain->size() );
-    assert( fit_start = 1 );
+    assert( fit_end == chain->size() );
+    assert( fit_start == 1 );
     fit_end = chain->size()-1;
     reg.decrement_partial_sums( chain->edgel(fit_end).x(),
                                 chain->edgel(fit_end).y() );
