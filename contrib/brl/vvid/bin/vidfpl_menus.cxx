@@ -73,6 +73,17 @@ void vidfpl_menus::prev_frame_callback()
   vvid_file_manager::instance()->prev_frame();
 }
 
+
+void vidfpl_menus::start_frame_callback()
+{
+  vvid_file_manager::instance()->start_frame();
+}
+
+void vidfpl_menus::end_frame_callback()
+{
+  vvid_file_manager::instance()->end_frame();
+}
+
 void vidfpl_menus::play_video_callback()
 {
   vvid_file_manager::instance()->play_video();
@@ -234,6 +245,17 @@ void vidfpl_menus::create_c_and_g_tracking_face_callback()
   vvid_file_manager::instance()->create_c_and_g_tracking_face();
 }
 
+void vidfpl_menus::display_tracked_hist_data_callback()
+{
+  vvid_file_manager::instance()->display_tracked_hist_data();
+}
+
+void vidfpl_menus::capture_feature_data_callback()
+{
+  vvid_file_manager::instance()->capture_feature_data();
+}
+
+
 void vidfpl_menus::quit_callback()
 {
   vcl_exit(1);
@@ -261,12 +283,18 @@ vgui_menu vidfpl_menus::get_menu()
   menufile.add( "Save Half Resolution Video", save_half_res_callback);
 
   //view menu entries
+
+  menuview.add( "Start Frame", start_frame_callback);
+  menuview.add( "End Frame", end_frame_callback);
   menuview.add( "Play", play_video_callback);
   menuview.add( "Pause", pause_video_callback,(vgui_key)'p', vgui_CTRL);
   menuview.add( "Next", next_frame_callback,(vgui_key)'f', vgui_CTRL);
   menuview.add( "Prev", prev_frame_callback,(vgui_key)'b', vgui_CTRL);
   menuview.add( "Stop", stop_video_callback,(vgui_key)'s', vgui_CTRL);
   menuview.add( "Display Track", display_poly_track_callback);
+  menuview.add( "Display Histogram Track Image",
+                display_tracked_hist_data_callback);
+
   menuview.add( "Display Art Model Track", display_art_model_track_callback);
 
   //edit menu entries
@@ -297,6 +325,7 @@ vgui_menu vidfpl_menus::get_menu()
   menuprocess.add( "Compute Fourier Transform ",
                    compute_fourier_transform_callback);
   menuprocess.add( "Spatial Filter ", spatial_filter_callback);
+  menuprocess.add( "Capture Feature Data ", capture_feature_data_callback);
 
   //Tracking menu entries
   menutrack.add( "Compute Corr Tracking", compute_corr_tracking_callback);

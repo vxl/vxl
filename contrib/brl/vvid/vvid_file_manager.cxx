@@ -58,13 +58,14 @@
 #include <strk/strk_info_model_tracker_process.h>
 #include <strk/strk_info_tracker_process.h>
 #include <strk/strk_track_display_process.h>
+#include <strk/strk_feature_capture_process.h>
 #include <vpro/vpro_basis_generator_process.h>
 #include <vpro/vpro_fourier_process.h>
 #include <vpro/vpro_spatial_filter_process.h>
 #include <strk/strk_art_model_display_process.h>
 #include <vpro/vpro_ihs_process.h>
 #include <vpro/vpro_half_res_process.h>
-
+#include <strk/strk_io.h>
 //static manager instance
 vvid_file_manager *vvid_file_manager::instance_ = 0;
 
@@ -116,7 +117,8 @@ void vvid_file_manager::init()
   art_model_=0;
   background_model_ = 0;
   display_frame_repeat_=1;
-
+  start_frame_ = 0;
+  end_frame_ = 0;
   on_style_  = vgui_style::new_style(0.0, 1.0, 0.0, 3.0, 4.0);
   off_style_ = vgui_style::new_style(1.0, 0.0, 0.0, 3.0, 4.0);
 }
@@ -328,10 +330,11 @@ void vvid_file_manager::load_video_file()
     return;
   }
   tabs_.clear();
-
+  int n_frames = my_movie_->length();
+  end_frame_ = n_frames-1;
   vidl_vil1_movie::frame_iterator pframe = my_movie_->first();
   vil1_image img = pframe->get_image();
-  vil1_image second = (++pframe)->get_image();
+  //  vil1_image second = (++pframe)->get_image();
   height_ = img.height();
   width_ = img.width();
   vcl_cout << "Video Height " << height_ << vcl_endl
@@ -356,8 +359,11 @@ void vvid_file_manager::load_video_file()
   else
   {
     //v2D0_->child.assign(easy0_);
-    itab1_->set_image(second);
-    itab0_->set_image(second);
+    //don't display frame in process window
+#if 0
+    itab1_->set_image(img);
+#endif
+    itab0_->set_image(img);
   }
   grid_->post_redraw();
   vgui::run_till_idle();
@@ -407,9 +413,11 @@ void vvid_file_manager::un_cached_play()
   }
   if (video_process_)
     video_process_->set_n_frames(my_movie_->length());
-  for (vidl_vil1_movie::frame_iterator pframe=my_movie_->begin();
-       pframe!=my_movie_->end() && play_video_;
-       ++pframe)
+  vidl_vil1_movie::frame_iterator pframe = my_movie_->begin();
+  vidl_vil1_movie::frame_iterator lframe = pframe;
+  pframe += start_frame_;
+  lframe += end_frame_+1;
+  for ( ; pframe!=my_movie_->end() && pframe!=lframe && play_video_; ++pframe)
   {
     int frame_index = pframe->get_real_frame_index();
     vgui::out << "frame["<< frame_index <<"]\n";
@@ -473,6 +481,7 @@ void vvid_file_manager::play_video()
   easy0_->clear_all();
   frame_trail_.clear();
   //return the display to the first frame after the play is finished
+  
   if (cache_frames_)
   {
     this->cached_play();
@@ -483,12 +492,21 @@ void vvid_file_manager::play_video()
     this->un_cached_play();
     if (!my_movie_)
       return;
+	
+
     if (video_process_&&video_process_->get_output_image())
       itab1_->set_image(video_process_->get_output_image());
-    else
+    else//don't display first video frame in process window, instead show nothing
+#if 0
       itab1_->set_image(my_movie_->get_image(0));
+#endif
+	{
+		vil1_image null;
+		itab1_->set_image(null);
+	}
   }
   this->post_redraw();
+
 }
 
 //Player control functions
@@ -507,10 +525,22 @@ void vvid_file_manager::pause_video()
   time_interval_ = 50.0;
 }
 
-void vvid_file_manager::go_to_frame()
+void vvid_file_manager::start_frame()
 {
-  //not implemented yet
+  vgui_dialog frame_dlg("Start Frame");
+  frame_dlg.field("Frame No.", start_frame_);
+  if (!frame_dlg.ask())
+    return;
 }
+
+void vvid_file_manager::end_frame()
+{
+  vgui_dialog frame_dlg("End Frame");
+  frame_dlg.field("Frame No.", end_frame_);
+  if (!frame_dlg.ask())
+    return;
+}
+
 
 //While the video is paused go to the next frame
 void vvid_file_manager::next_frame()
@@ -816,7 +846,12 @@ void vvid_file_manager::save_display(int /* frame */)
 
 void vvid_file_manager::display_poly_track()
 {
-  vgui_dialog output_dialog("Track Data File");
+  start_frame_ = 0;
+  if(my_movie_)
+    end_frame_ = my_movie_->length()-1;
+  else
+    end_frame_=0;
+  vgui_dialog output_dialog("Track Data File(sets start frame)");
   static vcl_string track_file;
   static vcl_string trk_ext = "trk", out_ext = "out";
   output_dialog.file("Track File:", trk_ext, track_file);
@@ -825,6 +860,8 @@ void vvid_file_manager::display_poly_track()
   strk_track_display_process* vtd = new strk_track_display_process();
   video_process_ = vtd;
   vtd->set_input_file(track_file);
+  start_frame_ = vtd->start_frame();
+  end_frame_ = vtd->end_frame();
 }
 
 void vvid_file_manager::generate_basis_sequence()
@@ -1159,4 +1196,51 @@ void vvid_file_manager::create_c_and_g_tracking_face()
   easy0_->set_temp(f->cast_to_topology_object());
   easy0_->add_face(f);
   easy0_->post_redraw();
+}
+// Display an image of tracked histogram data
+void vvid_file_manager::display_tracked_hist_data()
+{
+  vgui_dialog hist_dlg("Histogram Track File");
+  static vcl_string hist_filename = "";
+  static vcl_string ext = "*.*";
+  hist_dlg.file("Tracked Histogram filename:", ext, hist_filename);
+  if (!hist_dlg.ask())
+    return;
+  vcl_ifstream hist_instr(hist_filename.c_str());
+  unsigned int start_frame, n_frames, n_pixels;
+  unsigned int n_int_bins, n_grad_dir_bins, n_color_bins;
+  float diameter, aspect_ratio;
+  vnl_matrix<float> hist_data;
+  if(!strk_io::read_histogram_data(hist_instr, start_frame, n_frames,
+                                   n_pixels, diameter, aspect_ratio,
+                                   n_int_bins, n_grad_dir_bins, n_color_bins,
+                                   hist_data))
+    return;
+  vil1_memory_image_of<float> temp = 
+    brip_vil1_float_ops::convert_to_float(hist_data);
+  vil1_memory_image_of<unsigned char> image = 
+    brip_vil1_float_ops::convert_to_byte(temp);
+  easy1_->get_image_tableau()->set_image(image);
+  easy1_->post_redraw();
+  vgui::run_till_idle();
+}
+// capture histogram data from a prestored track
+void vvid_file_manager::capture_feature_data()
+{
+  vgui_dialog file_dialog("Feature Capture From Track");
+  static vcl_string track_file;
+  static vcl_string hist_file;
+  static vcl_string trk_ext = "trk", hist_ext = "hist";
+  file_dialog.file("Track File(input):", trk_ext, track_file);
+  file_dialog.file("Hist File(output):", hist_ext, hist_file);
+  if (!file_dialog.ask())
+    return;
+  strk_info_tracker_params itp;
+  itp.color_info_ = true;
+  strk_feature_capture_process* fcp = new strk_feature_capture_process(itp);
+  video_process_ = fcp;
+  fcp->set_input_file(track_file);
+  fcp->set_output_file(hist_file);
+  start_frame_ = fcp->start_frame();
+  end_frame_ = fcp->end_frame();
 }

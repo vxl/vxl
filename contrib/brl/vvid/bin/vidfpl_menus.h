@@ -24,6 +24,8 @@ class vidfpl_menus
 {
  public:
   static void load_video_callback();
+  static void start_frame_callback();
+  static void end_frame_callback();
   static void play_video_callback();
   static void pause_video_callback();
   static void next_frame_callback();
@@ -59,7 +61,8 @@ class vidfpl_menus
   static void save_frame_callback();
   static void save_half_res_callback();
   static void create_c_and_g_tracking_face_callback();
-
+  static void display_tracked_hist_data_callback();
+  static void capture_feature_data_callback();
   static void quit_callback();
   static vgui_menu get_menu();
  private:

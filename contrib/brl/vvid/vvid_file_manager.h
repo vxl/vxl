@@ -80,8 +80,11 @@ class vvid_file_manager : public vgui_wrapper_tableau
   //: stop playing and return to the first frame
   void stop_video();
 
-  //: pops up a dialog to indicate what frame to go to
-  void go_to_frame();
+  //: pops up a dialog to indicate what frame to start play
+  void start_frame();
+
+  //: pops up a dialog to indicate what frame to start play
+  void end_frame();
 
   //: index to the next frame (must be paused)
   void next_frame();
@@ -176,6 +179,12 @@ class vvid_file_manager : public vgui_wrapper_tableau
   //: click and go tracking face
   void create_c_and_g_tracking_face();
 
+  //: display tracked histogram feature data
+  void display_tracked_hist_data();
+
+  //: capture feature data from stored track
+  void capture_feature_data();
+
   //: get the window of this player
   vgui_window* get_window() { return win_; }
 
@@ -207,6 +216,8 @@ class vvid_file_manager : public vgui_wrapper_tableau
   bool overlay_pane_;
   bool track_;//keep trail of display items
   int window_;//frame trail time window
+  int start_frame_; //frame to start play
+  int end_frame_; //frame to start play
   bool color_label_;//display with a different color for different labels
   float time_interval_;
   int display_frame_repeat_;//insert duplicate frames to slow playback
