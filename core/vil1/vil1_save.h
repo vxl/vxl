@@ -35,12 +35,12 @@ bool vil1_save_raw(vil1_image const &, vil1_stream* outstream, char const* file_
 void vil1_save_gray(unsigned char const* p, int w, int h, vcl_string const& fn);
 
 //: Save raw floats as gray.
-// No scaling is performed, so values whould be 0..255.
+// No scaling is performed, so values would be 0..255.
 // File format is deduced from filename.
 void vil1_save_gray(float const* p, int w, int h, vcl_string const& fn);
 
 //: Save raw doubles as gray.
-// No scaling is performed, so values whould be 0..255.
+// No scaling is performed, so values would be 0..255.
 // File format is deduced from filename.
 void vil1_save_gray(double const* p, int w, int h, vcl_string const& fn);
 
