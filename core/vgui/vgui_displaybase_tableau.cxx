@@ -13,6 +13,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
+#include <vcl_utility.h> // for vcl_pair<,>
 
 #include <vbl/vbl_bool_ostream.h>
 
@@ -65,13 +66,14 @@ void vgui_displaybase_tableau::set_selection_callback(vgui_displaybase_tableau_s
 }
 
 void vgui_displaybase_tableau::add(vgui_soview* object)
-{ 
+{
   vcl_vector<vgui_soview*>::iterator i = vcl_find(objects.begin(), objects.end(), object);
   if (i == objects.end())
   {
     objects.push_back(object);
     vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.find( current_grouping );
-    if( it == groupings.end() ) {
+    if ( it == groupings.end() )
+    {
       vgui_displaybase_tableau_grouping temp;
       temp.style = NULL;
       temp.hide = false;
@@ -80,9 +82,9 @@ void vgui_displaybase_tableau::add(vgui_soview* object)
       temp.point_size_override = false;
       temp.objects.push_back( object );
       groupings.insert( vcl_pair< vcl_string , vgui_displaybase_tableau_grouping >( current_grouping , temp ) );
-    } else {
-      it->second.objects.push_back( object );
     }
+    else
+      it->second.objects.push_back( object );
   }
 }
 
@@ -106,16 +108,17 @@ void vgui_displaybase_tableau::remove(vgui_soview* object)
   }
 
   bool found = false;
-  
-  for( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin() ;
-       !found && it != groupings.end() ; 
-       it++ ) {
 
+  for ( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin() ;
+        !found && it != groupings.end() ;
+        it++ )
+  {
     vcl_vector<vgui_soview*>::iterator a = vcl_find(it->second.objects.begin(), it->second.objects.end(), object);
     if (a != objects.end())
     {
       it->second.objects.erase(a);
-      if( it->second.objects.size() == 0 ) {
+      if ( it->second.objects.size() == 0 )
+      {
         delete it->second.style;
         groupings.erase( it );
       }
@@ -139,33 +142,34 @@ void vgui_displaybase_tableau::clear()
 
   // delete the style associations and destroy the objects
   for (vcl_vector<vgui_soview*>::iterator so_iter = objects.begin();
-       so_iter != objects.end(); ++so_iter) {
+       so_iter != objects.end(); ++so_iter)
+  {
     vgui_style_factory::remove_style( *so_iter );
     delete *so_iter;
   }
 
   objects.clear();
 
-  for( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin() ;
-       it != groupings.end() ; 
-       it++ ) {
-
-       delete it->second.style;
-       it->second.objects.clear();
+  for ( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin() ;
+        it != groupings.end() ;
+        it++ )
+  {
+    delete it->second.style;
+    it->second.objects.clear();
   }
 
   groupings.clear();
-  
 }
 
 void vgui_displaybase_tableau::draw_soviews_render()
 {
   vgui_macro_report_errors;
-  /*if (debug)
+  if (debug)
     vcl_cerr << "vgui_style_factory::use_factory : "
              << vbl_bool_ostream::true_false(vgui_style_factory::use_factory)
-             << vcl_endl;
+             << " (but doing as if it is false)\n";
 
+#if 0 // commented out the case vgui_style_factory::use_factory == true
   if (vgui_style_factory::use_factory)
   {
     vcl_vector<vgui_style*> styles_copy;
@@ -221,54 +225,49 @@ void vgui_displaybase_tableau::draw_soviews_render()
     }
   }
   else // vgui_style_factory::use_factory == false
+#endif // 0
   {
-  */
-  
-  for( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
-      it != groupings.end();
-      it++ ) {
-
-    if( ! it->second.hide ) {
-      for (vcl_vector<vgui_soview*>::iterator so_iter= it->second.objects.begin();
-          so_iter != it->second.objects.end(); ++so_iter)
+    for (vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
+         it != groupings.end();
+         it++ )
+    {
+      if ( ! it->second.hide )
       {
-       
-        vgui_soview *so = *so_iter;
-        vgui_style* style = so->get_style();
-      
-        if( it->second.style != NULL ) {
-          
-          if( it->second.color_override )
-            it->second.style->apply_color();
+        for (vcl_vector<vgui_soview*>::iterator so_iter= it->second.objects.begin();
+             so_iter != it->second.objects.end(); ++so_iter)
+        {
+          vgui_soview *so = *so_iter;
+          vgui_style* style = so->get_style();
+
+          if ( ! it->second.style )
+            style->apply_all();
           else
-            style->apply_color();
+          {
+            if ( it->second.color_override )
+              it->second.style->apply_color();
+            else
+              style->apply_color();
 
-          if( it->second.line_width_override ) 
-            it->second.style->apply_line_width();
-          else
-            style->apply_line_width();
+            if ( it->second.line_width_override )
+              it->second.style->apply_line_width();
+            else
+              style->apply_line_width();
 
-          if( it->second.point_size_override )
-            it->second.style->apply_point_size();
-          else
-            style->apply_point_size();
+            if ( it->second.point_size_override )
+              it->second.style->apply_point_size();
+            else
+              style->apply_point_size();
+          }
 
-        } else {
+          if (is_selected(so->get_id()))
+            glColor3f(1.0f, 0.0f, 0.0f);
 
-          style->apply_all();
-
-        }
-        
-        if (is_selected(so->get_id()))
-          glColor3f(1.0f, 0.0f, 0.0f);
-
-        so->draw();
-      }//  for all soviews
+          so->draw();
+        }//  for all soviews
+      }
     }
   }
-  // }
   vgui_macro_report_errors;
-
 }
 
 
@@ -279,14 +278,14 @@ void vgui_displaybase_tableau::draw_soviews_select()
 
   glPushName(0); // will be replaced by the id of each object
 
-  for( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
-         it != groupings.end();
-         it++ ) {
-
-    if( ! it->second.hide ) {
-
+  for ( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
+        it != groupings.end();
+        it++ )
+  {
+    if ( ! it->second.hide )
+    {
       for (vcl_vector<vgui_soview*>::iterator so_iter=it->second.objects.begin();
-          so_iter != it->second.objects.end(); ++so_iter)
+           so_iter != it->second.objects.end(); ++so_iter)
       {
         // only highlight if the so is selectable
         vgui_soview* so = *so_iter;
@@ -296,7 +295,6 @@ void vgui_displaybase_tableau::draw_soviews_select()
           so->draw_select();
         }
       }//  for all soviews
-
     }
   }
 
@@ -471,34 +469,36 @@ vgui_soview* vgui_displaybase_tableau::contains_hit(vcl_vector<unsigned> names)
   return 0;
 }
 
-void vgui_displaybase_tableau::set_current_grouping( vcl_string name ) {
+void vgui_displaybase_tableau::set_current_grouping( vcl_string name )
+{
   current_grouping = name;
 }
 
-vcl_string vgui_displaybase_tableau::get_current_grouping() {
+vcl_string vgui_displaybase_tableau::get_current_grouping()
+{
   return current_grouping;
 }
 
-vgui_displaybase_tableau_grouping* vgui_displaybase_tableau::get_grouping_ptr( vcl_string name ) {
+vgui_displaybase_tableau_grouping* vgui_displaybase_tableau::get_grouping_ptr( vcl_string name )
+{
   vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.find( name );
-  if( it != groupings.end() ) {
+  if ( it != groupings.end() )
     return & it->second;
-  }
-  return NULL;
+  else
+    return NULL;
 }
 
-vcl_vector< vcl_string > vgui_displaybase_tableau::get_grouping_names() {
-
+vcl_vector< vcl_string > vgui_displaybase_tableau::get_grouping_names()
+{
   vcl_vector< vcl_string > to_return;
 
-  for( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
-         it != groupings.end();
-         it++ ) {
-    
+  for ( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
+        it != groupings.end();
+        it++ )
+  {
     to_return.push_back( it->first );
   }
 
   return to_return;
-
 }
 
