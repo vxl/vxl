@@ -7,7 +7,8 @@
 
 //:
 // \file
-// \brief DEPRECATED Sparse array allowing space efficient access of the form s[3000]=2.
+// \brief Sparse array allowing space efficient access of the form s[3000]=2.
+// \deprecated
 // \author  Andrew W. Fitzgibbon, Oxford RRG
 // \date    02 Oct 96
 //
