@@ -2,7 +2,7 @@
 #
 
 SUBDIRS( kym fsm capes geoff) 
-IF(HAS_MFC)
+IF(MFC_FOUND)
   SUBDIRS( vgui_example_mfc )
-ENDIF(HAS_MFC)
+ENDIF(MFC_FOUND)
 #SUBDIRS(awf) 

@@ -58,18 +58,6 @@ IF( CMAKE_SYSTEM MATCHES "SunOS.*" )
   SET( SOLARIS 1 )
 ENDIF( CMAKE_SYSTEM MATCHES "SunOS.*" )
 
-# Assume no MFC support
-SET( HAS_MFC 0 )
-# Add MFC support if win32 and not cygwin and not borland
-IF( WIN32 )
-  IF( NOT CYGWIN )
-     IF( NOT BORLAND )
-       SET( HAS_MFC 1 )
-       ADD_DEFINITIONS( "-DHAS_MFC" )
-     ENDIF( NOT BORLAND )
-  ENDIF( NOT CYGWIN )
-ENDIF( WIN32 )
-
 # Some people may want to build the test cases even though they aren't
 # using Dart.
 IF( NOT DART_ROOT )

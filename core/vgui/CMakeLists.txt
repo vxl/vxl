@@ -17,6 +17,7 @@ IF (OPENGL_FOUND)
   INCLUDE(${MODULE_PATH}/NewCMake/FindQt.cmake)
   INCLUDE(${MODULE_PATH}/NewCMake/FindGTK.cmake)
   INCLUDE(${MODULE_PATH}/NewCMake/FindFLTK.cmake)
+  INCLUDE(${MODULE_PATH}/NewCMake/FindMFC.cmake)
 
   ADD_DEFINITIONS( -DHAS_OPENGL)
   INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
@@ -157,21 +158,22 @@ SET(vgui_sources
 
 AUX_SOURCE_DIRECTORY(Templates vgui_sources)
 
-IF (HAS_QV)
-  INCLUDE_DIRECTORIES(${QV_INCLUDE_PATH})
+IF (QV_FOUND)
+  INCLUDE_DIRECTORIES(${QV_INCLUDE_DIR})
   SET(vgui_sources ${vgui_sources}
     vrml/vgui_vrml_draw_visitor.cxx  vrml/vgui_vrml_draw_visitor.h
     vrml/vgui_vrml_tableau.cxx       vrml/vgui_vrml_tableau.h
     vrml/vgui_vrml_texture_map.cxx   vrml/vgui_vrml_texture_map.h
   )
   AUX_SOURCE_DIRECTORY(vrml/Templates vgui_sources)
-ENDIF (HAS_QV)
+ENDIF (QV_FOUND)
 
-IF (HAS_MFC)
+IF (MFC_FOUND)
+  ADD_DEFINITIONS(-DHAS_MFC)
   SET(vgui_sources ${vgui_sources}
     internals/vgui_accelerate_mfc.cxx internals/vgui_accelerate_mfc.h
   )
-ENDIF (HAS_MFC)
+ENDIF (MFC_FOUND)
 
 IF (X11_FOUND)
   INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
@@ -180,11 +182,11 @@ IF (X11_FOUND)
   )
 ENDIF (X11_FOUND)
 
-IF (HAS_MFC)
+IF (MFC_FOUND)
   # add stuff to use MFC in this executable
   ADD_DEFINITIONS( "-D_AFXDLL" )
   SET(CMAKE_MFC_FLAG 6)
-ENDIF (HAS_MFC)
+ENDIF (MFC_FOUND)
 
 
 
@@ -285,7 +287,7 @@ ENDIF (QT_FOUND)
 ##################################################
 
 
-IF (HAS_MFC)
+IF (MFC_FOUND)
 
   OPTION(VGUI_USE_MFC "Should MFC support be compiled into vgui?" YES)
 
@@ -313,7 +315,7 @@ IF (HAS_MFC)
 
   ENDIF(VGUI_USE_MFC)
 
-ENDIF (HAS_MFC)
+ENDIF (MFC_FOUND)
 
 
 ##################################################
@@ -518,9 +520,9 @@ TARGET_LINK_LIBRARIES(vgui vnl_algo vnl vil vgl vpl vbl vul)
 IF (GLUT_FOUND)
   TARGET_LINK_LIBRARIES(vgui ${GLUT_LIBRARIES})
 ENDIF (GLUT_FOUND)
-IF (HAS_QV)
+IF (QV_FOUND)
   TARGET_LINK_LIBRARIES(vgui ${QV_LIBRARIES})
-ENDIF (HAS_QV)
+ENDIF (QV_FOUND)
 
 TARGET_LINK_LIBRARIES(vgui ${OPENGL_LIBRARIES})
 
