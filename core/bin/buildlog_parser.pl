@@ -1,6 +1,6 @@
 #! /bin/sh
 # -*- perl -*-
-exec perl -I $IUEROOT/vxl/bin -x $0 ${1+"$@"}
+exec perl -I $VXLROOT/core/bin -x $0 ${1+"$@"}
 #!perl
 #line 6
 
