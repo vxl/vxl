@@ -135,7 +135,7 @@ void clsfy_adaboost_sorted_trainer::build_strong_classifier(
     //vcl_cout<<"wts0= "<<wts0<<vcl_endl;
     //vcl_cout<<"wts1= "<<wts1<<vcl_endl;
 
-    double best_i=-1;
+    int best_i=-1;
     double min_error= 100000;
     for (int i=0;i<d;++i)
     {
