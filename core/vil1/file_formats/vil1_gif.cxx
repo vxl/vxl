@@ -179,7 +179,7 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_)
     vcl_cerr << "position is 0x" << vcl_hex << s->tell() << vcl_dec << vcl_endl;
 
     // interlaced or sequential?
-    ir->interlaced = b & 0x40;
+    ir->interlaced = bool(b & 0x40);
     vcl_cerr << "image is " << (ir->interlaced ? "interlaced" : "sequential") << vcl_endl;
     if (ir->interlaced) {
       vcl_cerr << "can't read interlaced GIFs yet" << vcl_endl;
