@@ -432,9 +432,9 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
     vs_->seek(start_of_data_);
     for (int y = 0; y < ys; ++y) {
       if (bits_per_component_ <= 1)
-        for (int x = 0; x < xs*components_; ++x) { (*vs_) << int((ob[x/8]>>(7-x&7))&1); }
+        for (int x = 0; x < xs*components_; ++x) { (*vs_) << ((ob[x/8]>>(7-x&7))&1); }
       else if (bits_per_component_ <= 8)
-        for (int x = 0; x < xs*components_; ++x) { (*vs_) << int(ob[x]); }
+        for (int x = 0; x < xs*components_; ++x) { (*vs_) << ob[x]; }
       else if (bits_per_component_ <= 16)
         for (int x = 0; x < xs*components_; ++x) { (*vs_) << pb[x]; }
       else
