@@ -6,6 +6,7 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 SET(bvgl_sources
 bvgl_h_matrix_1d.h bvgl_h_matrix_1d.txx 
 bvgl_h_matrix_2d.h bvgl_h_matrix_2d.txx 
+bvgl_h_matrix_3d.h bvgl_h_matrix_3d.txx 
 )
 
 AUX_SOURCE_DIRECTORY(Templates bvgl_sources)

@@ -144,7 +144,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const bvgl_h_matrix_2d<T>& h)
 template <class T>
 vcl_istream& operator >> (vcl_istream& s, bvgl_h_matrix_2d<T>& H)
 {
-  H = bvgl_h_matrix_2d<T>(s);
+  H.read(s);
   return s;
 }
 
