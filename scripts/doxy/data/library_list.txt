@@ -36,19 +36,21 @@ package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl core Test Frame
 core testlib testlib_ build
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/mul Manchester University Libraries
-contrib/mul mbl   mbl_   build vxl/vnl vxl/vgl
-contrib/mul mil   mil_   build mul/mbl vxl/vbl vxl/vil
-contrib/mul mil3d mil3d_ build mul/mil
-contrib/mul pdf1d pdf1d_ build mul/mbl vxl/vbl
-contrib/mul vpdfl vpdfl_ build mul/mbl
-contrib/mul clsfy clsfy_ build mul/vpdfl mul/vpdf1d
-contrib/mul vimt  vimt_  build vxl/vil2
-contrib/mul vil3d vil3d_ build vxl/vil2
+contrib/mul mbl    mbl_    build vxl/vnl vxl/vgl
+contrib/mul mil    mil_    build mul/mbl vxl/vbl vxl/vil
+contrib/mul mil3d  mil3d_  build mul/mil
+contrib/mul pdf1d  pdf1d_  build mul/mbl vxl/vbl
+contrib/mul vpdfl  vpdfl_  build mul/mbl
+contrib/mul clsfy  clsfy_  build mul/vpdfl mul/vpdf1d
+contrib/mul vimt   vimt_   build vxl/vil2
+contrib/mul vil3d  vil3d_  build vxl/vil2
+contrib/mul vimt3d vimt3d_ build mul/vil3d mul/vimt
+contrib/mul mvl2   mvl2_   build mul/vimt mul/ vxl/vul
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/tbl Various Image Processing Libraries
 contrib/tbl vipl vipl_ build vxl/vil
 contrib/tbl vepl vepl_ build tbl/vipl
-contrib/tbl vepl2 vepl2_ build tbl/vipl vxl/vil2
+contrib/tbl vepl2 vepl2_ build tbl/vipl vxl/vil2 
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/oxl Oxford University Libraries
 # Need to check dependency order
