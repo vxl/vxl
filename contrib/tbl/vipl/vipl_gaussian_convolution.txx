@@ -2,7 +2,7 @@
 #define vipl_gaussian_convolution_txx_
 
 #include "vipl_gaussian_convolution.h"
-#include <vcl_cmath.h> // for sqrt(), exp(), log()
+#include <vcl_cmath.h> // for vcl_sqrt(), vcl_exp(), vcl_log()
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
@@ -19,10 +19,14 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section
   // 1-D mask was generated in preop(), we just use it here:
   DataIn dummy;
   // horizontal convolution:
-  for(int j = start(Y_Axis()); j < stop(Y_Axis()); ++j) {
-    int buf_j = j - start(Y_Axis());
-    for(int i = start(X_Axis(),j); i < stop(X_Axis(),j); ++i) {
-      int buf_i = i - start(X_Axis(),j);
+  int starty = start(Y_Axis());
+  int stopy = stop(Y_Axis());
+  for(int j = starty; j < stopy; ++j) {
+    int buf_j = j - starty;
+    int startx = start(X_Axis(),j);
+    int stopx = stop(X_Axis(),j);
+    for(int i = startx; i < stopx; ++i) {
+      int buf_i = i - startx;
       double result = mask()[0] * fgetpixel(in, i, j, dummy);
       for (int x=1; x<size; ++x)
         result += mask()[x] * (getpixel(in, i+x, j, dummy) + getpixel(in, i-x, j, dummy));
@@ -30,10 +34,12 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section
     }
   }
   // vertical convolution:
-  for(int j = start(Y_Axis()); j < stop(Y_Axis()); ++j) {
-    int buf_j = j - start(Y_Axis());
-    for(int i = start(X_Axis(),j); i < stop(X_Axis(),j); ++i) {
-      int buf_i = i - start(X_Axis(),j);
+  for(int j = starty; j < stopy; ++j) {
+    int buf_j = j - starty;
+    int startx = start(X_Axis(),j);
+    int stopx = stop(X_Axis(),j);
+    for(int i = startx; i < stopx; ++i) {
+      int buf_i = i - startx;
       double result = mask()[0] * buf[buf_i+width*buf_j];
       for (int y=1; y<size; ++y) {
         if (buf_j+y < height) result += mask()[y] * buf[buf_i+width*(buf_j+y)];
@@ -50,8 +56,8 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop() {
   // create 1-D mask:
-  double lc = -2 * log(cutoff()); // cutoff guaranteed > 0
-  int radius = (lc<=0) ? 0 : 1 + int(sqrt(lc)*sigma()); // sigma guaranteed >= 0
+  double lc = -2 * vcl_log(cutoff()); // cutoff guaranteed > 0
+  int radius = (lc<=0) ? 0 : 1 + int(vcl_sqrt(lc)*sigma()); // sigma guaranteed >= 0
   int size = radius + 1; // only need half mask, because it is symmetric
   ref_masksize() = size;
   if(mask() == 0) ref_mask() = new double[size];
@@ -59,7 +65,7 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
   double halfnorm = 0.5;
   ref_mask()[0] = 1.0;
   for (int x=1; x<=size; ++x)
-    { ref_mask()[x] = exp(-0.5*x*x/sigma()/sigma()); halfnorm += mask()[x]; }
+    { ref_mask()[x] = vcl_exp(-0.5*x*x/sigma()/sigma()); halfnorm += mask()[x]; }
   for (int x=0; x<=size; ++x) ref_mask()[x] /= 2*halfnorm; // normalise mask
   return true;
 }

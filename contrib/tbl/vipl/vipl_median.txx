@@ -12,10 +12,14 @@ bool vipl_median <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
   // circular mask was generated in preop(), we just use it here
 
   // apply filter:
-  DataIn dummy /* quell gcc warning : */ = DataIn();
+  DataIn dummy = DataIn();
   DataIn* v = new DataIn[(2*size+1)*(2*size+1)];
-  for(int j = start(Y_Axis()); j < stop(Y_Axis()); ++j)
-    for(int i = start(X_Axis(),j); i < stop(X_Axis(),j); ++i) {
+  int startx = start(X_Axis());
+  int starty = start(Y_Axis());
+  int stopx = stop(X_Axis());
+  int stopy = stop(Y_Axis());
+  for(int j = starty; j < stopy; ++j)
+    for(int i = startx; i < stopx; ++i) {
       register int count = 0;
       v[count++] = fgetpixel(in, i, j, dummy);
       for (int x=0; x<=size; ++x) for (int y=0; y<=size; ++y) if (mask()[x][y]) {

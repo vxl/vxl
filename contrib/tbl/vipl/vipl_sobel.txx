@@ -10,9 +10,13 @@ bool vipl_sobel <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
   const ImgIn &in = in_data(0);
   ImgOut &out = out_data();
   // apply filter:
-  register DataIn v /* quell gcc warning : */ = DataIn();
-  for(int j = start(Y_Axis()), ej =  stop(Y_Axis()); j < ej  ; ++j)
-    for(int i = start(X_Axis(),j), ei = stop(X_Axis(),j); i < ei ; ++i) {
+  register DataIn v = DataIn();
+  int startx = start(X_Axis());
+  int starty = start(Y_Axis());
+  int stopx = stop(X_Axis());
+  int stopy = stop(Y_Axis());
+  for(int j = starty, ej =  stopy; j < ej  ; ++j)
+    for(int i = startx, ei = stopx; i < ei ; ++i) {
       v = fgetpixel(in, i, j, v); v *= 4;
       v -= getpixel(in, i+1, j+1, v);
       v -= getpixel(in, i-1, j+1, v);

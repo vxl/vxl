@@ -10,8 +10,12 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(
   int size = (radius() < 0) ? 0 : int(radius());
   // mask is filled in preop function
   // apply filter:
-  for(int j = start(Y_Axis()), ej =  stop(Y_Axis()); j < ej  ; ++j)
-    for(int i = start(X_Axis(),j), ei = stop(X_Axis(),j); i < ei ; ++i) {
+  int startx = start(X_Axis());
+  int starty = start(Y_Axis());
+  int stopx = stop(X_Axis());
+  int stopy = stop(Y_Axis());
+  for(int j = starty, ej =  stopy; j < ej  ; ++j)
+    for(int i = startx, ei = stopx; i < ei ; ++i) {
       register DataIn
       v = fgetpixel(in, i, j, DataIn()); // set v to max of surrounding pixels:
       for (int x=0; x<=size; ++x) for (int y=0; y<=size; ++y) if (mask()[x][y]) {

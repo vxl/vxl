@@ -9,10 +9,13 @@ bool vipl_gradient_mag <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop
   const ImgIn &in = in_data(0);
   ImgOut &out = *out_data_ptr();
 
-  DataIn dummy /* quell gcc warning : */ = DataIn();
-  register double dx, dy;
-  for(int j = start(Y_Axis()); j < stop(Y_Axis()); ++j)
-    for(int i = start(X_Axis(),j); i < stop(X_Axis(),j); ++i) {
+  DataIn dummy = DataIn(); register double dx, dy;
+  int startx = start(X_Axis());
+  int starty = start(Y_Axis());
+  int stopx = stop(X_Axis());
+  int stopy = stop(Y_Axis());
+  for(int j = starty; j < stopy; ++j)
+    for(int i = startx; i < stopx; ++i) {
       dx = fgetpixel(in, i, j, dummy) - getpixel(in, i-1, j, dummy);
       dy = fgetpixel(in, i, j, dummy) - getpixel(in, i, j-1, dummy);
       dx = (vcl_sqrt( dx*dx + dy*dy ) + shift()) * scale();
