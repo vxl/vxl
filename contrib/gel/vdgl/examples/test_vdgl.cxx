@@ -66,7 +66,7 @@ int main()
 
 
   //  vtol_edge_2d edge( vertexstart, vertexend, vsol_curve_2d_sptr( digital_curve.ptr()));
-  vtol_edge_2d edge( *(vertexstart.ptr()), *(vertexend.ptr()), digital_curve.ptr());
+  vtol_edge_2d_sptr edge = new vtol_edge_2d( *(vertexstart.ptr()), *(vertexend.ptr()), digital_curve.ptr());
 
   // Sample 50 points along the curve and print them out
   for( double i=0; i< 1; i+=0.02)
