@@ -6,7 +6,7 @@
 // \brief  Defines macros used for marking deprecated functions
 // \author Amitha Perera
 // \date   27 May 2001
-// 
+//
 // To mark a function as deprecated, use the macro VXL_DEPRECATED as
 // the first line of that function:
 // \verbatim
@@ -43,7 +43,7 @@
     #endif
   #endif
 #else
-  #define VXL_DEPRECATED(f) /* supress deprecation warning */
-#endif 
+  #define VXL_DEPRECATED(f) /* suppress deprecation warning */
+#endif
 
 #endif
