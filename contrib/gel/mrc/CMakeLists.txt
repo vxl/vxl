@@ -1,5 +1,8 @@
 # photogrammetry
 SUBDIRS(vpgl)
 
-# coordinate systems addon
-SUBDIRS(vcsl)
+# CARMEN
+SUBDIRS(carmen_interface)
+
+# tests
+SUBDIRS(vpgl_tests)
