@@ -1,3 +1,6 @@
+#ifndef ge3d_vectors_h
+#define ge3d_vectors_h
+
 #if 0
 //<copyright>
 //
@@ -36,10 +39,6 @@
  *
  *
  */
-
-
-#ifndef ge3d_vectors_h
-#define ge3d_vectors_h
 
 
 typedef struct
@@ -98,7 +97,7 @@ typedef float matrix4D [4][4];
 /* scale.  a *= s  */
 #define scl3D(a, s)  (a).x *= (s), \
                      (a).y *= (s), \
-                     (a).z *= (s)   
+                     (a).z *= (s)
 
 /* dotproduct.  return <a.b>  */
 #define dot3D(a, b)     ((a).x * (b).x + (a).y * (b).y + (a).z * (b).z)
@@ -126,4 +125,4 @@ typedef float matrix4D [4][4];
   (c).z = (s) * (a).z + (t) * (b).z
 
 
-#endif
+#endif // ge3d_vectors_h

@@ -1,3 +1,6 @@
+#ifndef ge3d_color_h
+#define ge3d_color_h
+
 #if 0
 //<copyright>
 //
@@ -38,11 +41,6 @@
  */
 
 
-
-#ifndef ge3d_color_h
-#define ge3d_color_h
-
-
 typedef struct
 { float R, G, B;
 } colorRGB;
@@ -53,4 +51,4 @@ typedef struct
   (c).R = (r),  (c).G = (g),  (c).B = (b)
 
 
-#endif
+#endif // ge3d_color_h

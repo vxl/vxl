@@ -1,3 +1,6 @@
+#ifndef ge3d_mtl_h
+#define ge3d_mtl_h
+
 #if 0
 //<copyright>
 //
@@ -36,11 +39,6 @@
  *
  *
  */
-
-
-
-#ifndef ge3d_mtl_h
-#define ge3d_mtl_h
 
 
 #include "color.h"
@@ -104,4 +102,4 @@ enum ge3d_material_t  /* constants for ge3dMaterial */
 };
 
 
-#endif
+#endif // ge3d_mtl_h
