@@ -5,7 +5,6 @@
 //:
 // \file
 
-#include <vcl_sstream.h>
 #include "vnl_io_bignum.h"
 #include <vsl/vsl_binary_io.h>
 
