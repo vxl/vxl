@@ -14,7 +14,7 @@
 
 #include <vpdfl/vpdfl_sampler_base.h>
 #include <vpdfl/vpdfl_mixture.h>
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 
 //=======================================================================
 
@@ -22,18 +22,19 @@ class vpdfl_mixture;
 
 //: Instance class for vpdfl_mixture
 //  Implements calculation of prob, gradient, sampling etc
-class vpdfl_mixture_sampler : public vpdfl_sampler_base {
-private:
+class vpdfl_mixture_sampler : public vpdfl_sampler_base
+{
+ private:
   //: workspace
   vcl_vector<vpdfl_sampler_base*> inst_;
 
   void init();
   void delete_stuff();
 
-protected:
+ protected:
   //: The random number generator
-  mbl_mz_random rng_;
-public:
+  vnl_random rng_;
+ public:
 
   //: Dflt ctor
   vpdfl_mixture_sampler();

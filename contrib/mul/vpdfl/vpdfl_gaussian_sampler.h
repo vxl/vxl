@@ -12,8 +12,8 @@
 
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
-#include <mbl/mbl_mz_random.h>
 #include <vnl/vnl_fwd.h>
+#include <vnl/vnl_random.h>
 #include <vpdfl/vpdfl_sampler_base.h>
 class vpdfl_gaussian;
 
@@ -24,7 +24,7 @@ class vpdfl_gaussian_sampler :public vpdfl_sampler_base
 {
  protected:
   //: The random number generator
-  mbl_mz_random rng_;
+  vnl_random rng_;
   //: workspace variable
   vnl_vector<double> b_;
  public:

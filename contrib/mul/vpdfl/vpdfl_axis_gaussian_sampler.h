@@ -11,8 +11,8 @@
 // \brief Sampler class for Multi-Variate axis aligned Gaussian.
 
 #include <vcl_string.h>
-#include <mbl/mbl_mz_random.h>
 #include <vnl/vnl_fwd.h>
+#include <vnl/vnl_random.h>
 #include <vpdfl/vpdfl_sampler_base.h>
 class vpdfl_axis_gaussian;
 
@@ -23,7 +23,7 @@ class vpdfl_axis_gaussian_sampler :public vpdfl_sampler_base
 {
  protected:
   //: The random number generator
-  mbl_mz_random rng_;
+  vnl_random rng_;
  public:
 
   //: Dflt ctor

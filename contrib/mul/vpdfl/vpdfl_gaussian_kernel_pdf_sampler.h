@@ -10,12 +10,11 @@
 // \brief Sampler class for gaussian kernel PDF.
 
 #include <vcl_string.h>
-#include <mbl/mbl_mz_random.h>
 #include <vnl/vnl_fwd.h>
+#include <vnl/vnl_random.h>
 #include <vpdfl/vpdfl_sampler_base.h>
-
-
 class vpdfl_gaussian_kernel_pdf;
+
 //=======================================================================
 
 //: Samples from an axis aligned Gaussian PDF
@@ -23,7 +22,7 @@ class vpdfl_gaussian_kernel_pdf_sampler :public vpdfl_sampler_base
 {
  protected:
   //: The random number generator
-  mbl_mz_random rng_; 
+  vnl_random rng_; 
  public:
 
   // Dflt ctor
