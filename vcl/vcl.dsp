@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "config.win32-vc60"  == include path
+# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "config.win32-vc60"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DBUILDING_VCL_DLL == compiler defines
 #  == override in output directory
 # vcl  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "config.win32-vc60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DBUILDING_VCL_DLL /D "vcl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "config.win32-vc60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DBUILDING_VCL_DLL /D "vcl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "config.win32-vc60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DBUILDING_VCL_DLL /D "vcl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "config.win32-vc60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DBUILDING_VCL_DLL /D "vcl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "config.win32-vc60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DBUILDING_VCL_DLL /D "vcl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "config.win32-vc60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DBUILDING_VCL_DLL /D "vcl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "config.win32-vc60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DBUILDING_VCL_DLL /D "vcl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "config.win32-vc60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DBUILDING_VCL_DLL /D "vcl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,49 +156,49 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vcl/CMakeLists.txt"
+SOURCE=.\"$(IUEROOT)/vcl/CMakeLists.txt"
 
 !IF  "$(CFG)" == "vcl - Win32 Release"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vcl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/vcl/CMakeLists.txt"
 # Begin Custom Build
 
 "vcl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vcl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vcl" -O"c:/awf/src/vxl/vcl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vcl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vcl" -O"$(IUEROOT)/vcl" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vcl - Win32 Debug"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vcl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/vcl/CMakeLists.txt"
 # Begin Custom Build
 
 "vcl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vcl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vcl" -O"c:/awf/src/vxl/vcl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vcl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vcl" -O"$(IUEROOT)/vcl" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vcl - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vcl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/vcl/CMakeLists.txt"
 # Begin Custom Build
 
 "vcl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vcl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vcl" -O"c:/awf/src/vxl/vcl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vcl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vcl" -O"$(IUEROOT)/vcl" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vcl - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vcl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/vcl/CMakeLists.txt"
 # Begin Custom Build
 
 "vcl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vcl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vcl" -O"c:/awf/src/vxl/vcl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vcl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vcl" -O"$(IUEROOT)/vcl" -B"$(IUEROOT)"
 
 # End Custom Build
 
@@ -209,582 +209,582 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/alloc-instances.cxx
+SOURCE=.\Templates/alloc-instances.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/complex-instances.cxx
+SOURCE=.\Templates/complex-instances.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/fstream-instances.cxx
+SOURCE=.\Templates/fstream-instances.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/stream-instances.cxx
+SOURCE=.\Templates/stream-instances.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/string-instances.cxx
+SOURCE=.\Templates/string-instances.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_algorithm+bool-.cxx
+SOURCE=.\Templates/vcl_algorithm+bool-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_algorithm+double-.cxx
+SOURCE=.\Templates/vcl_algorithm+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_algorithm+float-.cxx
+SOURCE=.\Templates/vcl_algorithm+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_algorithm+int-.cxx
+SOURCE=.\Templates/vcl_algorithm+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_algorithm+uchar-.cxx
+SOURCE=.\Templates/vcl_algorithm+uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_algorithm+unsigned-.cxx
+SOURCE=.\Templates/vcl_algorithm+unsigned-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_algorithm+ushort-.cxx
+SOURCE=.\Templates/vcl_algorithm+ushort-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_algorithm+vcl_pair+double.int--.cxx
+SOURCE=.\Templates/vcl_algorithm+vcl_pair+double.int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_algorithm+vcl_pair+float.int--.cxx
+SOURCE=.\Templates/vcl_algorithm+vcl_pair+float.int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_deque+int-.cxx
+SOURCE=.\Templates/vcl_deque+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_list+float-.cxx
+SOURCE=.\Templates/vcl_list+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_list+float~-.cxx
+SOURCE=.\Templates/vcl_list+float~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_list+int-.cxx
+SOURCE=.\Templates/vcl_list+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_list+uint-.cxx
+SOURCE=.\Templates/vcl_list+uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_list+ulong-.cxx
+SOURCE=.\Templates/vcl_list+ulong-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_list+vcl_pair+void~.int--.cxx
+SOURCE=.\Templates/vcl_list+vcl_pair+void~.int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_list+vcl_pair+void~.void~--.cxx
+SOURCE=.\Templates/vcl_list+vcl_pair+void~.void~--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_list+vcl_string-.cxx
+SOURCE=.\Templates/vcl_list+vcl_string-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_list+void~-.cxx
+SOURCE=.\Templates/vcl_list+void~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+double.int-.cxx
+SOURCE=.\Templates/vcl_map+double.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+int.double-.cxx
+SOURCE=.\Templates/vcl_map+int.double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+int.int-.cxx
+SOURCE=.\Templates/vcl_map+int.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+int.uint-.cxx
+SOURCE=.\Templates/vcl_map+int.uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+int.vcl_string-.cxx
+SOURCE=.\Templates/vcl_map+int.vcl_string-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+int.void~-.cxx
+SOURCE=.\Templates/vcl_map+int.void~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+long.void~-.cxx
+SOURCE=.\Templates/vcl_map+long.void~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+ulong.vcl_pair+void~.int--.cxx
+SOURCE=.\Templates/vcl_map+ulong.vcl_pair+void~.int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+unsigned_int.double-.cxx
+SOURCE=.\Templates/vcl_map+unsigned_int.double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+unsigned_int.int-.cxx
+SOURCE=.\Templates/vcl_map+unsigned_int.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+unsigned_int.unsigned_int-.cxx
+SOURCE=.\Templates/vcl_map+unsigned_int.unsigned_int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+unsigned_int.void~-.cxx
+SOURCE=.\Templates/vcl_map+unsigned_int.void~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+vcl_pair+int.int-.vcl_pair+float.float--.cxx
+SOURCE=.\Templates/vcl_map+vcl_pair+int.int-.vcl_pair+float.float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+vcl_pair+int.int-.void~-.cxx
+SOURCE=.\Templates/vcl_map+vcl_pair+int.int-.void~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+vcl_pair+uint.uint-.double-.cxx
+SOURCE=.\Templates/vcl_map+vcl_pair+uint.uint-.double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+vcl_pair+uint.uint-.int-.cxx
+SOURCE=.\Templates/vcl_map+vcl_pair+uint.uint-.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+vcl_string.int-.cxx
+SOURCE=.\Templates/vcl_map+vcl_string.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+vcl_string.vcl_string-.cxx
+SOURCE=.\Templates/vcl_map+vcl_string.vcl_string-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+vcl_string.void~-.cxx
+SOURCE=.\Templates/vcl_map+vcl_string.void~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+void~.int-.cxx
+SOURCE=.\Templates/vcl_map+void~.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+void~.vcl_pair+int.int--.cxx
+SOURCE=.\Templates/vcl_map+void~.vcl_pair+int.int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+void~.vcl_pair+ulong.int--.cxx
+SOURCE=.\Templates/vcl_map+void~.vcl_pair+ulong.int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_map+void~.void~-.cxx
+SOURCE=.\Templates/vcl_map+void~.void~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_ostream_iterator+int-.cxx
+SOURCE=.\Templates/vcl_ostream_iterator+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_pair+float.float-.cxx
+SOURCE=.\Templates/vcl_pair+float.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_pair+void~.int-.cxx
+SOURCE=.\Templates/vcl_pair+void~.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_queue+double-.cxx
+SOURCE=.\Templates/vcl_queue+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_set+int-.cxx
+SOURCE=.\Templates/vcl_set+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_set+unsigned-.cxx
+SOURCE=.\Templates/vcl_set+unsigned-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_set+vcl_pair+int.int--.cxx
+SOURCE=.\Templates/vcl_set+vcl_pair+int.int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_set+vcl_string-.cxx
+SOURCE=.\Templates/vcl_set+vcl_string-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_set+void~-.cxx
+SOURCE=.\Templates/vcl_set+void~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_unique+double~-.cxx
+SOURCE=.\Templates/vcl_unique+double~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+bool-.cxx
+SOURCE=.\Templates/vcl_vector+bool-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+bool~-.cxx
+SOURCE=.\Templates/vcl_vector+bool~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+char-.cxx
+SOURCE=.\Templates/vcl_vector+char-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+char~-.cxx
+SOURCE=.\Templates/vcl_vector+char~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+const_char~-.cxx
+SOURCE=.\Templates/vcl_vector+const_char~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+double-.cxx
+SOURCE=.\Templates/vcl_vector+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+double_const~-.cxx
+SOURCE=.\Templates/vcl_vector+double_const~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+double~-.cxx
+SOURCE=.\Templates/vcl_vector+double~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+float-.cxx
+SOURCE=.\Templates/vcl_vector+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+float~-.cxx
+SOURCE=.\Templates/vcl_vector+float~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+int-.cxx
+SOURCE=.\Templates/vcl_vector+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+int~-.cxx
+SOURCE=.\Templates/vcl_vector+int~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+long-.cxx
+SOURCE=.\Templates/vcl_vector+long-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+long_double-.cxx
+SOURCE=.\Templates/vcl_vector+long_double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+long_double~-.cxx
+SOURCE=.\Templates/vcl_vector+long_double~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+long~-.cxx
+SOURCE=.\Templates/vcl_vector+long~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+schar-.cxx
+SOURCE=.\Templates/vcl_vector+schar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+schar~-.cxx
+SOURCE=.\Templates/vcl_vector+schar~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+uchar-.cxx
+SOURCE=.\Templates/vcl_vector+uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+uchar~-.cxx
+SOURCE=.\Templates/vcl_vector+uchar~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+uint-.cxx
+SOURCE=.\Templates/vcl_vector+uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+uint~-.cxx
+SOURCE=.\Templates/vcl_vector+uint~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+ulong-.cxx
+SOURCE=.\Templates/vcl_vector+ulong-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+ulong~-.cxx
+SOURCE=.\Templates/vcl_vector+ulong~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_complex+double--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_complex+double-~-.cxx
+SOURCE=.\Templates/vcl_vector+vcl_complex+double-~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_complex+float--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_complex+float-~-.cxx
+SOURCE=.\Templates/vcl_vector+vcl_complex+float-~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_complex+long_double--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_complex+long_double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_complex+long_double-~-.cxx
+SOURCE=.\Templates/vcl_vector+vcl_complex+long_double-~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_map+int.int--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_map+int.int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_map+uint.uint--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_map+uint.uint--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_pair+char~.int--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_pair+char~.int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_pair+double.double--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_pair+double.double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_pair+double.int--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_pair+double.int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_pair+float.float--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_pair+float.float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_pair+float.int--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_pair+float.int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_pair+int.double~--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_pair+int.double~--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_pair+int.int--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_pair+int.int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_pair+int.int-~-.cxx
+SOURCE=.\Templates/vcl_vector+vcl_pair+int.int-~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_pair+int.vcl_string--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_pair+int.vcl_string--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_pair+uint.uint--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_pair+uint.uint--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_pair+vcl_string.vcl_string--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_pair+vcl_string.vcl_string--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_string-.cxx
+SOURCE=.\Templates/vcl_vector+vcl_string-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_vector+double--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_vector+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_vector+int--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_vector+int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_vector+int-~-.cxx
+SOURCE=.\Templates/vcl_vector+vcl_vector+int-~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_vector+unsigned--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_vector+unsigned--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+vcl_vector+unsigned-~-.cxx
+SOURCE=.\Templates/vcl_vector+vcl_vector+unsigned-~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/Templates/vcl_vector+void~-.cxx
+SOURCE=.\Templates/vcl_vector+void~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/emulation/vcl_alloc.cxx
+SOURCE=.\emulation/vcl_alloc.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/emulation/vcl_hashtable.cxx
+SOURCE=.\emulation/vcl_hashtable.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/emulation/vcl_rbtree_instances.cxx
+SOURCE=.\emulation/vcl_rbtree_instances.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/emulation/vcl_straits.cxx
+SOURCE=.\emulation/vcl_straits.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/emulation/vcl_string_instances.cxx
+SOURCE=.\emulation/vcl_string_instances.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/vcl_cassert.cxx
+SOURCE=.\vcl_cassert.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/vcl_cmath.cxx
+SOURCE=.\vcl_cmath.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/vcl_cstdlib.cxx
+SOURCE=.\vcl_cstdlib.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vcl/vcl_deprecated.cxx
+SOURCE=.\vcl_deprecated.cxx
 
 # End Source File
 # End Group

@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"  == include path
+# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
 # vbl_io  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vbl_io_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vbl_io_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vbl_io_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vbl_io_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vbl_io_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vbl_io_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vbl_io_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vbl_io_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,57 +156,57 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vbl/io/CMakeLists.txt"
+SOURCE=.\"$(IUEROOT)/vxl/vbl/io/CMakeLists.txt"
 
 !IF  "$(CFG)" == "vbl_io - Win32 Release"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/vbl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/vbl/io/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/vbl/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/vbl/io/CMakeLists.txt"
 # Begin Custom Build
 
 "vbl_io.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vbl/io/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vbl/io" -O"c:/awf/src/vxl/vxl/vbl/io" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vbl/io/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vbl/io" -O"$(IUEROOT)/vxl/vbl/io" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vbl_io - Win32 Debug"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/vbl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/vbl/io/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/vbl/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/vbl/io/CMakeLists.txt"
 # Begin Custom Build
 
 "vbl_io.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vbl/io/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vbl/io" -O"c:/awf/src/vxl/vxl/vbl/io" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vbl/io/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vbl/io" -O"$(IUEROOT)/vxl/vbl/io" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vbl_io - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/vbl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/vbl/io/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/vbl/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/vbl/io/CMakeLists.txt"
 # Begin Custom Build
 
 "vbl_io.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vbl/io/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vbl/io" -O"c:/awf/src/vxl/vxl/vbl/io" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vbl/io/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vbl/io" -O"$(IUEROOT)/vxl/vbl/io" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vbl_io - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/vbl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/vbl/io/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/vbl/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/vbl/io/CMakeLists.txt"
 # Begin Custom Build
 
 "vbl_io.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vbl/io/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vbl/io" -O"c:/awf/src/vxl/vxl/vbl/io" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vbl/io/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vbl/io" -O"$(IUEROOT)/vxl/vbl/io" -B"$(IUEROOT)"
 
 # End Custom Build
 
@@ -217,72 +217,72 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_array_1d+double-.cxx
+SOURCE=.\Templates/vbl_io_array_1d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_array_1d+float-.cxx
+SOURCE=.\Templates/vbl_io_array_1d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_array_2d+double-.cxx
+SOURCE=.\Templates/vbl_io_array_2d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_array_2d+int-.cxx
+SOURCE=.\Templates/vbl_io_array_2d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_array_2d+unsigned-.cxx
+SOURCE=.\Templates/vbl_io_array_2d+unsigned-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_array_2d+unsignedchar-.cxx
+SOURCE=.\Templates/vbl_io_array_2d+unsignedchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_array_3d+int-.cxx
+SOURCE=.\Templates/vbl_io_array_3d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_bounding_box+double.2-.cxx
+SOURCE=.\Templates/vbl_io_bounding_box+double.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_bounding_box+float.2-.cxx
+SOURCE=.\Templates/vbl_io_bounding_box+float.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_bounding_box+int.2-.cxx
+SOURCE=.\Templates/vbl_io_bounding_box+int.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_sparse_array+double.uint-.cxx
+SOURCE=.\Templates/vbl_io_sparse_array+double.uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_sparse_array+double.vcl_pair+uint.uint--.cxx
+SOURCE=.\Templates/vbl_io_sparse_array+double.vcl_pair+uint.uint--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_sparse_array+int.uint-.cxx
+SOURCE=.\Templates/vbl_io_sparse_array+int.uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_sparse_array+int.vcl_pair+uint.uint--.cxx
+SOURCE=.\Templates/vbl_io_sparse_array+int.vcl_pair+uint.uint--.cxx
 
 # End Source File
 # End Group

@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/mul"  == include path
+# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
 # mbl  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "mbl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "mbl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "mbl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "mbl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "mbl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "mbl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "mbl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "mbl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,53 +156,53 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/mul/mbl/CMakeLists.txt"
+SOURCE=.\"$(IUEROOT)/mul/mbl/CMakeLists.txt"
 
 !IF  "$(CFG)" == "mbl - Win32 Release"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/mul/CMakeLists.txt"\
-	"c:/awf/src/vxl/mul/mbl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/mul/CMakeLists.txt"\
+	"$(IUEROOT)/mul/mbl/CMakeLists.txt"
 # Begin Custom Build
 
 "mbl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/mul/mbl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/mul/mbl" -O"c:/awf/src/vxl/mul/mbl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/mul/mbl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/mul/mbl" -O"$(IUEROOT)/mul/mbl" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "mbl - Win32 Debug"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/mul/CMakeLists.txt"\
-	"c:/awf/src/vxl/mul/mbl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/mul/CMakeLists.txt"\
+	"$(IUEROOT)/mul/mbl/CMakeLists.txt"
 # Begin Custom Build
 
 "mbl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/mul/mbl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/mul/mbl" -O"c:/awf/src/vxl/mul/mbl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/mul/mbl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/mul/mbl" -O"$(IUEROOT)/mul/mbl" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "mbl - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/mul/CMakeLists.txt"\
-	"c:/awf/src/vxl/mul/mbl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/mul/CMakeLists.txt"\
+	"$(IUEROOT)/mul/mbl/CMakeLists.txt"
 # Begin Custom Build
 
 "mbl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/mul/mbl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/mul/mbl" -O"c:/awf/src/vxl/mul/mbl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/mul/mbl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/mul/mbl" -O"$(IUEROOT)/mul/mbl" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "mbl - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/mul/CMakeLists.txt"\
-	"c:/awf/src/vxl/mul/mbl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/mul/CMakeLists.txt"\
+	"$(IUEROOT)/mul/mbl/CMakeLists.txt"
 # Begin Custom Build
 
 "mbl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/mul/mbl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/mul/mbl" -O"c:/awf/src/vxl/mul/mbl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/mul/mbl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/mul/mbl" -O"$(IUEROOT)/mul/mbl" -B"$(IUEROOT)"
 
 # End Custom Build
 
@@ -213,82 +213,82 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/mbl_data_array_wrapper+vnl_vector+double--.cxx
+SOURCE=.\Templates/mbl_data_array_wrapper+vnl_vector+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/mbl_data_collector+vnl_vector+double--.cxx
+SOURCE=.\Templates/mbl_data_collector+vnl_vector+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/mbl_data_collector_list+vnl_vector+double--.cxx
+SOURCE=.\Templates/mbl_data_collector_list+vnl_vector+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/mbl_data_wrapper+vnl_vector+double--.cxx
+SOURCE=.\Templates/mbl_data_wrapper+vnl_vector+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/mbl_stochastic_data_collector+vnl_vector+double--.cxx
+SOURCE=.\Templates/mbl_stochastic_data_collector+vnl_vector+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/vcl_vector+mbl_data_collector_base~-.cxx
+SOURCE=.\Templates/vcl_vector+mbl_data_collector_base~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/vsl_binary_loader+mbl_data_collector_base-.cxx
+SOURCE=.\Templates/vsl_binary_loader+mbl_data_collector_base-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/vsl_vector_io+mbl_chord-.cxx
+SOURCE=.\Templates/vsl_vector_io+mbl_chord-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_data_collector_base.cxx
+SOURCE=.\mbl_data_collector_base.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_gamma.cxx
+SOURCE=.\mbl_gamma.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_k_means.cxx
+SOURCE=.\mbl_k_means.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_matrix_products.cxx
+SOURCE=.\mbl_matrix_products.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_matxvec.cxx
+SOURCE=.\mbl_matxvec.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_mz_random.cxx
+SOURCE=.\mbl_mz_random.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_read_props.cxx
+SOURCE=.\mbl_read_props.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_stats_1d.cxx
+SOURCE=.\mbl_stats_1d.cxx
 
 # End Source File
 # End Group

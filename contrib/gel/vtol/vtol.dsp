@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"  == include path
+# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
 #  == override in output directory
 # vtol  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vtol_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vtol_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vtol_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vtol_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vtol_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vtol_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vtol_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vtol_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,57 +156,57 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/gel/vtol/CMakeLists.txt"
+SOURCE=.\"$(IUEROOT)/gel/vtol/CMakeLists.txt"
 
 !IF  "$(CFG)" == "vtol - Win32 Release"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/gel/CMakeLists.txt"\
-	"c:/awf/src/vxl/gel/vtol/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/gel/CMakeLists.txt"\
+	"$(IUEROOT)/gel/vtol/CMakeLists.txt"
 # Begin Custom Build
 
 "vtol.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/vtol/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/vtol" -O"c:/awf/src/vxl/gel/vtol" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/vtol/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vtol" -O"$(IUEROOT)/gel/vtol" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vtol - Win32 Debug"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/gel/CMakeLists.txt"\
-	"c:/awf/src/vxl/gel/vtol/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/gel/CMakeLists.txt"\
+	"$(IUEROOT)/gel/vtol/CMakeLists.txt"
 # Begin Custom Build
 
 "vtol.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/vtol/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/vtol" -O"c:/awf/src/vxl/gel/vtol" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/vtol/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vtol" -O"$(IUEROOT)/gel/vtol" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vtol - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/gel/CMakeLists.txt"\
-	"c:/awf/src/vxl/gel/vtol/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/gel/CMakeLists.txt"\
+	"$(IUEROOT)/gel/vtol/CMakeLists.txt"
 # Begin Custom Build
 
 "vtol.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/vtol/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/vtol" -O"c:/awf/src/vxl/gel/vtol" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/vtol/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vtol" -O"$(IUEROOT)/gel/vtol" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vtol - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/gel/CMakeLists.txt"\
-	"c:/awf/src/vxl/gel/vtol/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/gel/CMakeLists.txt"\
+	"$(IUEROOT)/gel/vtol/CMakeLists.txt"
 # Begin Custom Build
 
 "vtol.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/vtol/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/vtol" -O"c:/awf/src/vxl/gel/vtol" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/vtol/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vtol" -O"$(IUEROOT)/gel/vtol" -B"$(IUEROOT)"
 
 # End Custom Build
 
@@ -217,262 +217,262 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_block-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_block-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_chain-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_chain-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_edge-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_edge-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_edge_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_edge_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_face-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_face-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_face_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_face_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_one_chain-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_one_chain-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_topology_object-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_topology_object-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_two_chain-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_two_chain-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_vertex-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_vertex-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_vertex_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_vertex_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_zero_chain-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_zero_chain-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_list+vtol_chain_sptr-.cxx
+SOURCE=.\Templates/vcl_list+vtol_chain_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_list+vtol_topology_object_sptr-.cxx
+SOURCE=.\Templates/vcl_list+vtol_topology_object_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_block_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_block_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_block~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_block~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_chain_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_chain_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_edge_2d_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_edge_2d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_edge_2d~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_edge_2d~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_edge_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_edge_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_edge~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_edge~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_face_2d_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_face_2d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_face_2d~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_face_2d~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_face_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_face_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_face~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_face~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_one_chain_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_one_chain_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_one_chain~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_one_chain~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_topology_object_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_topology_object_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_topology_object~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_topology_object~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_two_chain_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_two_chain_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_two_chain~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_two_chain~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_vertex_2d_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_vertex_2d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_vertex_2d~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_vertex_2d~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_vertex_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_vertex_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_vertex~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_vertex~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_zero_chain_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_zero_chain_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_zero_chain~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_zero_chain~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_block.cxx
+SOURCE=.\vtol_block.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_chain.cxx
+SOURCE=.\vtol_chain.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_edge.cxx
+SOURCE=.\vtol_edge.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_edge_2d.cxx
+SOURCE=.\vtol_edge_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_face.cxx
+SOURCE=.\vtol_face.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_face_2d.cxx
+SOURCE=.\vtol_face_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_list_functions.cxx
+SOURCE=.\vtol_list_functions.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_one_chain.cxx
+SOURCE=.\vtol_one_chain.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_topology_cache.cxx
+SOURCE=.\vtol_topology_cache.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_topology_io.cxx
+SOURCE=.\vtol_topology_io.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_topology_object.cxx
+SOURCE=.\vtol_topology_object.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_two_chain.cxx
+SOURCE=.\vtol_two_chain.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_vertex.cxx
+SOURCE=.\vtol_vertex.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_vertex_2d.cxx
+SOURCE=.\vtol_vertex_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_zero_chain.cxx
+SOURCE=.\vtol_zero_chain.cxx
 
 # End Source File
 # End Group

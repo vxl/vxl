@@ -81,7 +81,7 @@ SOURCE=.\homepage\index.html
 # End Source File
 # Begin Source File
 
-SOURCE=".\homepage\logo1-quant.png"
+SOURCE=.\".\homepage\logo1-quant.png"
 # End Source File
 # Begin Source File
 

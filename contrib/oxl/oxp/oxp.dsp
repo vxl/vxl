@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/awf/src/vxl/v3p/jpeg"  == include path
+# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p/jpeg"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
 #  == override in output directory
 # oxp  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/awf/src/vxl/v3p/jpeg"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "oxp_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p/jpeg"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "oxp_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/awf/src/vxl/v3p/jpeg"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "oxp_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p/jpeg"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "oxp_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/awf/src/vxl/v3p/jpeg"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "oxp_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p/jpeg"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "oxp_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/awf/src/vxl/v3p/jpeg"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "oxp_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p/jpeg"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "oxp_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,57 +156,57 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/oxl/oxp/CMakeLists.txt"
+SOURCE=.\"$(IUEROOT)/oxl/oxp/CMakeLists.txt"
 
 !IF  "$(CFG)" == "oxp - Win32 Release"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/oxp/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/oxl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/oxp/CMakeLists.txt"
 # Begin Custom Build
 
 "oxp.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/oxp/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/oxp" -O"c:/awf/src/vxl/oxl/oxp" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/oxp/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/oxp" -O"$(IUEROOT)/oxl/oxp" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "oxp - Win32 Debug"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/oxp/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/oxl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/oxp/CMakeLists.txt"
 # Begin Custom Build
 
 "oxp.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/oxp/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/oxp" -O"c:/awf/src/vxl/oxl/oxp" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/oxp/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/oxp" -O"$(IUEROOT)/oxl/oxp" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "oxp - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/oxp/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/oxl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/oxp/CMakeLists.txt"
 # Begin Custom Build
 
 "oxp.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/oxp/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/oxp" -O"c:/awf/src/vxl/oxl/oxp" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/oxp/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/oxp" -O"$(IUEROOT)/oxl/oxp" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "oxp - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/oxp/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/oxl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/oxp/CMakeLists.txt"
 # Begin Custom Build
 
 "oxp.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/oxp/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/oxp" -O"c:/awf/src/vxl/oxl/oxp" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/oxp/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/oxp" -O"$(IUEROOT)/oxl/oxp" -B"$(IUEROOT)"
 
 # End Custom Build
 
@@ -217,112 +217,112 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/ByteConvertImage.cxx
+SOURCE=.\ByteConvertImage.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/GXFileVisitor.cxx
+SOURCE=.\GXFileVisitor.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/ImageSequenceMovieFile.cxx
+SOURCE=.\ImageSequenceMovieFile.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/ImageSequenceName.cxx
+SOURCE=.\ImageSequenceName.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/JPEG_Decompressor.cxx
+SOURCE=.\JPEG_Decompressor.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/Mapping_2d_2d.cxx
+SOURCE=.\Mapping_2d_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/MedianReduceImage.cxx
+SOURCE=.\MedianReduceImage.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/MovieFile.cxx
+SOURCE=.\MovieFile.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/MovieFileInterface.cxx
+SOURCE=.\MovieFileInterface.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/RadialLensCorrection.cxx
+SOURCE=.\RadialLensCorrection.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/SGIMovieFile.cxx
+SOURCE=.\SGIMovieFile.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/SGIMovieFilePrivates.cxx
+SOURCE=.\SGIMovieFilePrivates.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/SGIMovieFileWrite.cxx
+SOURCE=.\SGIMovieFileWrite.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/SequenceFileName.cxx
+SOURCE=.\SequenceFileName.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/Templates/ImageWarp+byte-.cxx
+SOURCE=.\Templates/ImageWarp+byte-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/Templates/vcl_vector+SGIMV_FrameIndex-.cxx
+SOURCE=.\Templates/vcl_vector+SGIMV_FrameIndex-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/Templates/vcl_vector+SGIMV_FrameIndexArray-.cxx
+SOURCE=.\Templates/vcl_vector+SGIMV_FrameIndexArray-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/Templates/vcl_vector+SGIMV_Variables-.cxx
+SOURCE=.\Templates/vcl_vector+SGIMV_Variables-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/oxp_parse_seqname.cxx
+SOURCE=.\oxp_parse_seqname.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/vsl_conic_as_matrix.cxx
+SOURCE=.\vsl_conic_as_matrix.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/vsl_conic_as_params.cxx
+SOURCE=.\vsl_conic_as_params.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/vsl_conic_points.cxx
+SOURCE=.\vsl_conic_points.cxx
 
 # End Source File
 # End Group

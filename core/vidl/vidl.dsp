@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"  == include path
+# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
 # vidl  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,53 +156,53 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vidl/CMakeLists.txt"
+SOURCE=.\"$(IUEROOT)/vxl/vidl/CMakeLists.txt"
 
 !IF  "$(CFG)" == "vidl - Win32 Release"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/vidl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/vidl/CMakeLists.txt"
 # Begin Custom Build
 
 "vidl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vidl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vidl" -O"c:/awf/src/vxl/vxl/vidl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vidl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vidl" -O"$(IUEROOT)/vxl/vidl" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vidl - Win32 Debug"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/vidl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/vidl/CMakeLists.txt"
 # Begin Custom Build
 
 "vidl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vidl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vidl" -O"c:/awf/src/vxl/vxl/vidl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vidl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vidl" -O"$(IUEROOT)/vxl/vidl" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vidl - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/vidl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/vidl/CMakeLists.txt"
 # Begin Custom Build
 
 "vidl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vidl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vidl" -O"c:/awf/src/vxl/vxl/vidl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vidl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vidl" -O"$(IUEROOT)/vxl/vidl" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vidl - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/vxl/vidl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/CMakeLists.txt"\
+	"$(IUEROOT)/vxl/vidl/CMakeLists.txt"
 # Begin Custom Build
 
 "vidl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vidl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vidl" -O"c:/awf/src/vxl/vxl/vidl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/vxl/vidl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vidl" -O"$(IUEROOT)/vxl/vidl" -B"$(IUEROOT)"
 
 # End Custom Build
 
@@ -213,82 +213,82 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vbl_smart_ptr+vidl_clip-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vidl_clip-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vbl_smart_ptr+vidl_codec-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vidl_codec-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vbl_smart_ptr+vidl_frame-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vidl_frame-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vbl_smart_ptr+vidl_image_list_codec-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vidl_image_list_codec-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vbl_smart_ptr+vidl_movie-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vidl_movie-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vcl_list+vbl_smart_ptr+vidl_clip--.cxx
+SOURCE=.\Templates/vcl_list+vbl_smart_ptr+vidl_clip--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vcl_list+vbl_smart_ptr+vidl_codec--.cxx
+SOURCE=.\Templates/vcl_list+vbl_smart_ptr+vidl_codec--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vcl_vector+vbl_smart_ptr+vidl_frame--.cxx
+SOURCE=.\Templates/vcl_vector+vbl_smart_ptr+vidl_frame--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_avicodec.cxx
+SOURCE=.\vidl_avicodec.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_clip.cxx
+SOURCE=.\vidl_clip.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_frame.cxx
+SOURCE=.\vidl_frame.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_frame_as_image.cxx
+SOURCE=.\vidl_frame_as_image.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_image_list_codec.cxx
+SOURCE=.\vidl_image_list_codec.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_io.cxx
+SOURCE=.\vidl_io.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_movie.cxx
+SOURCE=.\vidl_movie.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_test.cxx
+SOURCE=.\vidl_test.cxx
 
 # End Source File
 # End Group

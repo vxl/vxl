@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"  == include path
+# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
 #  == override in output directory
 # vsol  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsol_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsol_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsol_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsol_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsol_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsol_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsol_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/gel"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vsol_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,57 +156,57 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/gel/vsol/CMakeLists.txt"
+SOURCE=.\"$(IUEROOT)/gel/vsol/CMakeLists.txt"
 
 !IF  "$(CFG)" == "vsol - Win32 Release"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/gel/CMakeLists.txt"\
-	"c:/awf/src/vxl/gel/vsol/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/gel/CMakeLists.txt"\
+	"$(IUEROOT)/gel/vsol/CMakeLists.txt"
 # Begin Custom Build
 
 "vsol.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/vsol/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/vsol" -O"c:/awf/src/vxl/gel/vsol" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/vsol/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vsol" -O"$(IUEROOT)/gel/vsol" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vsol - Win32 Debug"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/gel/CMakeLists.txt"\
-	"c:/awf/src/vxl/gel/vsol/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/gel/CMakeLists.txt"\
+	"$(IUEROOT)/gel/vsol/CMakeLists.txt"
 # Begin Custom Build
 
 "vsol.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/vsol/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/vsol" -O"c:/awf/src/vxl/gel/vsol" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/vsol/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vsol" -O"$(IUEROOT)/gel/vsol" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vsol - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/gel/CMakeLists.txt"\
-	"c:/awf/src/vxl/gel/vsol/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/gel/CMakeLists.txt"\
+	"$(IUEROOT)/gel/vsol/CMakeLists.txt"
 # Begin Custom Build
 
 "vsol.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/vsol/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/vsol" -O"c:/awf/src/vxl/gel/vsol" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/vsol/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vsol" -O"$(IUEROOT)/gel/vsol" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vsol - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/gel/CMakeLists.txt"\
-	"c:/awf/src/vxl/gel/vsol/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/gel/CMakeLists.txt"\
+	"$(IUEROOT)/gel/vsol/CMakeLists.txt"
 # Begin Custom Build
 
 "vsol.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/gel/vsol/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/gel/vsol" -O"c:/awf/src/vxl/gel/vsol" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/gel/vsol/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vsol" -O"$(IUEROOT)/gel/vsol" -B"$(IUEROOT)"
 
 # End Custom Build
 
@@ -217,277 +217,277 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_bounding_box+double.3-.cxx
+SOURCE=.\Templates/vbl_bounding_box+double.3-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_box_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_box_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_box_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_box_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_conic_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_conic_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_curve_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_curve_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_curve_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_curve_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_group_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_group_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_group_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_group_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_line_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_line_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_line_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_line_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_point_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_point_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_point_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_point_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_polygon_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_polygon_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_polygon_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_polygon_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_rectangle_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_rectangle_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_rectangle_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_rectangle_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_region_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_region_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_region_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_region_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_spatial_object_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_spatial_object_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_spatial_object_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_spatial_object_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_surface_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_surface_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_tetrahedron-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_tetrahedron-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_triangle_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_triangle_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_triangle_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_triangle_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vcl_list+vsol_spatial_object_2d_sptr-.cxx
+SOURCE=.\Templates/vcl_list+vsol_spatial_object_2d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vcl_list+vsol_spatial_object_3d_sptr-.cxx
+SOURCE=.\Templates/vcl_list+vsol_spatial_object_3d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vcl_vector+vsol_point_2d_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vsol_point_2d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vcl_vector+vsol_point_3d_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vsol_point_3d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vcl_vector+vsol_spatial_object_2d~-.cxx
+SOURCE=.\Templates/vcl_vector+vsol_spatial_object_2d~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vcl_vector+vsol_spatial_object_3d~-.cxx
+SOURCE=.\Templates/vcl_vector+vsol_spatial_object_3d~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_box_2d.cxx
+SOURCE=.\vsol_box_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_box_3d.cxx
+SOURCE=.\vsol_box_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_conic_2d.cxx
+SOURCE=.\vsol_conic_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_curve_2d.cxx
+SOURCE=.\vsol_curve_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_curve_3d.cxx
+SOURCE=.\vsol_curve_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_group_2d.cxx
+SOURCE=.\vsol_group_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_group_3d.cxx
+SOURCE=.\vsol_group_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_line_2d.cxx
+SOURCE=.\vsol_line_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_line_3d.cxx
+SOURCE=.\vsol_line_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_point_2d.cxx
+SOURCE=.\vsol_point_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_point_3d.cxx
+SOURCE=.\vsol_point_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_polygon_2d.cxx
+SOURCE=.\vsol_polygon_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_polygon_3d.cxx
+SOURCE=.\vsol_polygon_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_polyhedron.cxx
+SOURCE=.\vsol_polyhedron.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_rectangle_2d.cxx
+SOURCE=.\vsol_rectangle_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_rectangle_3d.cxx
+SOURCE=.\vsol_rectangle_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_region_2d.cxx
+SOURCE=.\vsol_region_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_region_3d.cxx
+SOURCE=.\vsol_region_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_spatial_object_2d.cxx
+SOURCE=.\vsol_spatial_object_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_spatial_object_3d.cxx
+SOURCE=.\vsol_spatial_object_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_surface_3d.cxx
+SOURCE=.\vsol_surface_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_tetrahedron.cxx
+SOURCE=.\vsol_tetrahedron.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_triangle_2d.cxx
+SOURCE=.\vsol_triangle_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_triangle_3d.cxx
+SOURCE=.\vsol_triangle_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_volume_3d.cxx
+SOURCE=.\vsol_volume_3d.cxx
 
 # End Source File
 # End Group

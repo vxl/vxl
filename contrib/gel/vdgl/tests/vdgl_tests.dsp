@@ -79,7 +79,7 @@ LINK32=link.exe
 # Begin Custom Build
 IntDir=.\Debug
 InputPath=.\Debug\vdgl_tests.exe
-SOURCE="$(InputPath)"
+SOURCE=.\"$(InputPath)"
 
 "ki" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(IntDir)

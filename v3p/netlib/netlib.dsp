@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60"  == include path
+# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
 # netlib  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "netlib_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "netlib_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "netlib_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "netlib_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "netlib_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "netlib_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "netlib_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "netlib_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,69 +156,69 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/v3p/netlib/CMakeLists.txt"
+SOURCE=.\"$(IUEROOT)/v3p/netlib/CMakeLists.txt"
 
 !IF  "$(CFG)" == "netlib - Win32 Release"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"c:/awf/src/vxl/v3p/CMakeLists.txt"\
-	"c:/awf/src/vxl/v3p/netlib/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"$(IUEROOT)/v3p/CMakeLists.txt"\
+	"$(IUEROOT)/v3p/netlib/CMakeLists.txt"
 # Begin Custom Build
 
 "netlib.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/v3p/netlib/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/v3p/netlib" -O"c:/awf/src/vxl/v3p/netlib" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/v3p/netlib/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/v3p/netlib" -O"$(IUEROOT)/v3p/netlib" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "netlib - Win32 Debug"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"c:/awf/src/vxl/v3p/CMakeLists.txt"\
-	"c:/awf/src/vxl/v3p/netlib/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"$(IUEROOT)/v3p/CMakeLists.txt"\
+	"$(IUEROOT)/v3p/netlib/CMakeLists.txt"
 # Begin Custom Build
 
 "netlib.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/v3p/netlib/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/v3p/netlib" -O"c:/awf/src/vxl/v3p/netlib" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/v3p/netlib/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/v3p/netlib" -O"$(IUEROOT)/v3p/netlib" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "netlib - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"c:/awf/src/vxl/v3p/CMakeLists.txt"\
-	"c:/awf/src/vxl/v3p/netlib/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"$(IUEROOT)/v3p/CMakeLists.txt"\
+	"$(IUEROOT)/v3p/netlib/CMakeLists.txt"
 # Begin Custom Build
 
 "netlib.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/v3p/netlib/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/v3p/netlib" -O"c:/awf/src/vxl/v3p/netlib" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/v3p/netlib/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/v3p/netlib" -O"$(IUEROOT)/v3p/netlib" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "netlib - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"c:/awf/src/vxl/v3p/CMakeLists.txt"\
-	"c:/awf/src/vxl/v3p/netlib/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"$(IUEROOT)/v3p/CMakeLists.txt"\
+	"$(IUEROOT)/v3p/netlib/CMakeLists.txt"
 # Begin Custom Build
 
 "netlib.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/v3p/netlib/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/v3p/netlib" -O"c:/awf/src/vxl/v3p/netlib" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/v3p/netlib/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/v3p/netlib" -O"$(IUEROOT)/v3p/netlib" -B"$(IUEROOT)"
 
 # End Custom Build
 
@@ -229,1012 +229,1012 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/F77_aloc.c
+SOURCE=.\F77_aloc.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/c_abs.c
+SOURCE=.\c_abs.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/c_div.c
+SOURCE=.\c_div.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/cabs.c
+SOURCE=.\cabs.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/camsun.c
+SOURCE=.\camsun.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/caxpy.c
+SOURCE=.\caxpy.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/ccopy.c
+SOURCE=.\ccopy.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/cdotc.c
+SOURCE=.\cdotc.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/cg.c
+SOURCE=.\cg.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/cqrdc.c
+SOURCE=.\cqrdc.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/cqrsl.c
+SOURCE=.\cqrsl.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/cscal.c
+SOURCE=.\cscal.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/csrot.c
+SOURCE=.\csrot.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/csvdc.c
+SOURCE=.\csvdc.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/cswap.c
+SOURCE=.\cswap.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/d_cnjg.c
+SOURCE=.\d_cnjg.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/d_imag.c
+SOURCE=.\d_imag.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/d_lg10.c
+SOURCE=.\d_lg10.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/d_sign.c
+SOURCE=.\d_sign.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dasum.c
+SOURCE=.\dasum.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/daxpy.c
+SOURCE=.\daxpy.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dcopy.c
+SOURCE=.\dcopy.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/ddot.c
+SOURCE=.\ddot.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dgemv.c
+SOURCE=.\dgemv.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dgeqpf.c
+SOURCE=.\dgeqpf.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dgeqr2.c
+SOURCE=.\dgeqr2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dger.c
+SOURCE=.\dger.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dgerq2.c
+SOURCE=.\dgerq2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dggsvd.c
+SOURCE=.\dggsvd.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dggsvp.c
+SOURCE=.\dggsvp.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dgpfa.c
+SOURCE=.\dgpfa.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dgpfa2f.c
+SOURCE=.\dgpfa2f.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dgpfa3f.c
+SOURCE=.\dgpfa3f.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dgpfa5f.c
+SOURCE=.\dgpfa5f.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlabad.c
+SOURCE=.\dlabad.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlacpy.c
+SOURCE=.\dlacpy.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dladiv.c
+SOURCE=.\dladiv.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlags2.c
+SOURCE=.\dlags2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlamch.c
+SOURCE=.\dlamch.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlange.c
+SOURCE=.\dlange.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlapll.c
+SOURCE=.\dlapll.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlapmt.c
+SOURCE=.\dlapmt.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlapy2.c
+SOURCE=.\dlapy2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlapy3.c
+SOURCE=.\dlapy3.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlarf.c
+SOURCE=.\dlarf.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlarfg.c
+SOURCE=.\dlarfg.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlartg.c
+SOURCE=.\dlartg.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlas2.c
+SOURCE=.\dlas2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlaset.c
+SOURCE=.\dlaset.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlassq.c
+SOURCE=.\dlassq.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dlasv2.c
+SOURCE=.\dlasv2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dnlaso.c
+SOURCE=.\dnlaso.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dnrm2.c
+SOURCE=.\dnrm2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dorg2r.c
+SOURCE=.\dorg2r.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dorm2r.c
+SOURCE=.\dorm2r.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dormr2.c
+SOURCE=.\dormr2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dpoco.c
+SOURCE=.\dpoco.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dpodi.c
+SOURCE=.\dpodi.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dpofa.c
+SOURCE=.\dpofa.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dposl.c
+SOURCE=.\dposl.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dqrdc.c
+SOURCE=.\dqrdc.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dqrsl.c
+SOURCE=.\dqrsl.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/drot.c
+SOURCE=.\drot.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/drotg.c
+SOURCE=.\drotg.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dscal.c
+SOURCE=.\dscal.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dsetgpfa.c
+SOURCE=.\dsetgpfa.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dsvdc.c
+SOURCE=.\dsvdc.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dswap.c
+SOURCE=.\dswap.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dtgsja.c
+SOURCE=.\dtgsja.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dtrans.c
+SOURCE=.\dtrans.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/dzasum.c
+SOURCE=.\dzasum.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/enorm.c
+SOURCE=.\enorm.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/exit.c
+SOURCE=.\exit.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/fdjac2.c
+SOURCE=.\fdjac2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/gpfa.c
+SOURCE=.\gpfa.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/gpfa2f.c
+SOURCE=.\gpfa2f.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/gpfa3f.c
+SOURCE=.\gpfa3f.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/gpfa5f.c
+SOURCE=.\gpfa5f.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/idamax.c
+SOURCE=.\idamax.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/ilaenv.c
+SOURCE=.\ilaenv.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/isamax.c
+SOURCE=.\isamax.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/izamax.c
+SOURCE=.\izamax.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/izmax1.c
+SOURCE=.\izmax1.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/lbfgs-lb1.c
+SOURCE=.\lbfgs-lb1.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/lbfgs.c
+SOURCE=.\lbfgs.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/lmder.c
+SOURCE=.\lmder.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/lmder1.c
+SOURCE=.\lmder1.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/lmdif.c
+SOURCE=.\lmdif.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/lmpar.c
+SOURCE=.\lmpar.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/lsame.c
+SOURCE=.\lsame.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/lsqr.c
+SOURCE=.\lsqr.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/machineparams.c
+SOURCE=.\machineparams.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/pow_dd.c
+SOURCE=.\pow_dd.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/pow_di.c
+SOURCE=.\pow_di.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/pow_ii.c
+SOURCE=.\pow_ii.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/pow_ri.c
+SOURCE=.\pow_ri.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/pythag.c
+SOURCE=.\pythag.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/qrfac.c
+SOURCE=.\qrfac.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/qrsolv.c
+SOURCE=.\qrsolv.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/r_cnjg.c
+SOURCE=.\r_cnjg.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/r_imag.c
+SOURCE=.\r_imag.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/r_sign.c
+SOURCE=.\r_sign.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/rg.c
+SOURCE=.\rg.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/rpoly.c
+SOURCE=.\rpoly.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/rs.c
+SOURCE=.\rs.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/rsg.c
+SOURCE=.\rsg.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/s_cat.c
+SOURCE=.\s_cat.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/s_cmp.c
+SOURCE=.\s_cmp.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/s_copy.c
+SOURCE=.\s_copy.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sasum.c
+SOURCE=.\sasum.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/saxpy.c
+SOURCE=.\saxpy.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/scnrm2.c
+SOURCE=.\scnrm2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/scopy.c
+SOURCE=.\scopy.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sdot.c
+SOURCE=.\sdot.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/setgpfa.c
+SOURCE=.\setgpfa.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sgemv.c
+SOURCE=.\sgemv.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sgeqpf.c
+SOURCE=.\sgeqpf.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sgeqr2.c
+SOURCE=.\sgeqr2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sger.c
+SOURCE=.\sger.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sgerq2.c
+SOURCE=.\sgerq2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sggsvd.c
+SOURCE=.\sggsvd.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sggsvp.c
+SOURCE=.\sggsvp.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sig_die.c
+SOURCE=.\sig_die.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/slacpy.c
+SOURCE=.\slacpy.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/slags2.c
+SOURCE=.\slags2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/slamch.c
+SOURCE=.\slamch.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/slange.c
+SOURCE=.\slange.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/slapll.c
+SOURCE=.\slapll.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/slapmt.c
+SOURCE=.\slapmt.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/slapy2.c
+SOURCE=.\slapy2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/slarf.c
+SOURCE=.\slarf.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/slarfg.c
+SOURCE=.\slarfg.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/slartg.c
+SOURCE=.\slartg.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/slas2.c
+SOURCE=.\slas2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/slaset.c
+SOURCE=.\slaset.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/slassq.c
+SOURCE=.\slassq.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/slasv2.c
+SOURCE=.\slasv2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/snlaso.c
+SOURCE=.\snlaso.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/snrm2.c
+SOURCE=.\snrm2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sorg2r.c
+SOURCE=.\sorg2r.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sorm2r.c
+SOURCE=.\sorm2r.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sormr2.c
+SOURCE=.\sormr2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sqrdc.c
+SOURCE=.\sqrdc.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sqrsl.c
+SOURCE=.\sqrsl.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/srot.c
+SOURCE=.\srot.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/srotg.c
+SOURCE=.\srotg.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sscal.c
+SOURCE=.\sscal.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/ssvdc.c
+SOURCE=.\ssvdc.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/sswap.c
+SOURCE=.\sswap.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/stgsja.c
+SOURCE=.\stgsja.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/tql1.c
+SOURCE=.\tql1.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/tql2.c
+SOURCE=.\tql2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/trans.c
+SOURCE=.\trans.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/tred1.c
+SOURCE=.\tred1.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/tred2.c
+SOURCE=.\tred2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/xerbla.c
+SOURCE=.\xerbla.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/z_abs.c
+SOURCE=.\z_abs.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/z_div.c
+SOURCE=.\z_div.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/z_sqrt.c
+SOURCE=.\z_sqrt.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zaxpy.c
+SOURCE=.\zaxpy.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zcopy.c
+SOURCE=.\zcopy.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zdotc.c
+SOURCE=.\zdotc.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zdotu.c
+SOURCE=.\zdotu.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zdrot.c
+SOURCE=.\zdrot.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zdscal.c
+SOURCE=.\zdscal.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zgebak.c
+SOURCE=.\zgebak.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zgebal.c
+SOURCE=.\zgebal.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zgeev.c
+SOURCE=.\zgeev.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zgehd2.c
+SOURCE=.\zgehd2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zgehrd.c
+SOURCE=.\zgehrd.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zgemm.c
+SOURCE=.\zgemm.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zgemv.c
+SOURCE=.\zgemv.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zgerc.c
+SOURCE=.\zgerc.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zhseqr.c
+SOURCE=.\zhseqr.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zlacgv.c
+SOURCE=.\zlacgv.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zlacpy.c
+SOURCE=.\zlacpy.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zladiv.c
+SOURCE=.\zladiv.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zlahqr.c
+SOURCE=.\zlahqr.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zlahrd.c
+SOURCE=.\zlahrd.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zlange.c
+SOURCE=.\zlange.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zlanhs.c
+SOURCE=.\zlanhs.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zlarf.c
+SOURCE=.\zlarf.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zlarfb.c
+SOURCE=.\zlarfb.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zlarfg.c
+SOURCE=.\zlarfg.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zlarft.c
+SOURCE=.\zlarft.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zlarfx.c
+SOURCE=.\zlarfx.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zlascl.c
+SOURCE=.\zlascl.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zlaset.c
+SOURCE=.\zlaset.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zlassq.c
+SOURCE=.\zlassq.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zlatrs.c
+SOURCE=.\zlatrs.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zqrdc.c
+SOURCE=.\zqrdc.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zqrsl.c
+SOURCE=.\zqrsl.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zscal.c
+SOURCE=.\zscal.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zsvdc.c
+SOURCE=.\zsvdc.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zswap.c
+SOURCE=.\zswap.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/ztrevc.c
+SOURCE=.\ztrevc.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/ztrmm.c
+SOURCE=.\ztrmm.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/ztrmv.c
+SOURCE=.\ztrmv.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/ztrsv.c
+SOURCE=.\ztrsv.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zung2r.c
+SOURCE=.\zung2r.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zunghr.c
+SOURCE=.\zunghr.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/netlib/zungqr.c
+SOURCE=.\zungqr.c
 
 # End Source File
 # End Group

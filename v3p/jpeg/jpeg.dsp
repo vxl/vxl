@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60"  == include path
+# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
 # jpeg  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "jpeg_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "jpeg_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "jpeg_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "jpeg_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "jpeg_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "jpeg_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "jpeg_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "jpeg_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,69 +156,69 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/v3p/jpeg/CMakeLists.txt"
+SOURCE=.\"$(IUEROOT)/v3p/jpeg/CMakeLists.txt"
 
 !IF  "$(CFG)" == "jpeg - Win32 Release"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"c:/awf/src/vxl/v3p/CMakeLists.txt"\
-	"c:/awf/src/vxl/v3p/jpeg/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"$(IUEROOT)/v3p/CMakeLists.txt"\
+	"$(IUEROOT)/v3p/jpeg/CMakeLists.txt"
 # Begin Custom Build
 
 "jpeg.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/v3p/jpeg/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/v3p/jpeg" -O"c:/awf/src/vxl/v3p/jpeg" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/v3p/jpeg/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/v3p/jpeg" -O"$(IUEROOT)/v3p/jpeg" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"c:/awf/src/vxl/v3p/CMakeLists.txt"\
-	"c:/awf/src/vxl/v3p/jpeg/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"$(IUEROOT)/v3p/CMakeLists.txt"\
+	"$(IUEROOT)/v3p/jpeg/CMakeLists.txt"
 # Begin Custom Build
 
 "jpeg.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/v3p/jpeg/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/v3p/jpeg" -O"c:/awf/src/vxl/v3p/jpeg" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/v3p/jpeg/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/v3p/jpeg" -O"$(IUEROOT)/v3p/jpeg" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "jpeg - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"c:/awf/src/vxl/v3p/CMakeLists.txt"\
-	"c:/awf/src/vxl/v3p/jpeg/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"$(IUEROOT)/v3p/CMakeLists.txt"\
+	"$(IUEROOT)/v3p/jpeg/CMakeLists.txt"
 # Begin Custom Build
 
 "jpeg.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/v3p/jpeg/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/v3p/jpeg" -O"c:/awf/src/vxl/v3p/jpeg" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/v3p/jpeg/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/v3p/jpeg" -O"$(IUEROOT)/v3p/jpeg" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "jpeg - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"c:/awf/src/vxl/v3p/CMakeLists.txt"\
-	"c:/awf/src/vxl/v3p/jpeg/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"$(IUEROOT)/v3p/CMakeLists.txt"\
+	"$(IUEROOT)/v3p/jpeg/CMakeLists.txt"
 # Begin Custom Build
 
 "jpeg.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/v3p/jpeg/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/v3p/jpeg" -O"c:/awf/src/vxl/v3p/jpeg" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/v3p/jpeg/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/v3p/jpeg" -O"$(IUEROOT)/v3p/jpeg" -B"$(IUEROOT)"
 
 # End Custom Build
 
@@ -229,232 +229,232 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jcapimin.c
+SOURCE=.\jcapimin.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jcapistd.c
+SOURCE=.\jcapistd.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jccoefct.c
+SOURCE=.\jccoefct.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jccolor.c
+SOURCE=.\jccolor.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jcdctmgr.c
+SOURCE=.\jcdctmgr.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jchuff.c
+SOURCE=.\jchuff.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jcinit.c
+SOURCE=.\jcinit.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jcmainct.c
+SOURCE=.\jcmainct.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jcmarker.c
+SOURCE=.\jcmarker.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jcmaster.c
+SOURCE=.\jcmaster.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jcomapi.c
+SOURCE=.\jcomapi.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jcparam.c
+SOURCE=.\jcparam.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jcphuff.c
+SOURCE=.\jcphuff.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jcprepct.c
+SOURCE=.\jcprepct.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jcsample.c
+SOURCE=.\jcsample.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jctrans.c
+SOURCE=.\jctrans.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdapimin.c
+SOURCE=.\jdapimin.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdapistd.c
+SOURCE=.\jdapistd.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdatadst.c
+SOURCE=.\jdatadst.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdatasrc.c
+SOURCE=.\jdatasrc.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdcoefct.c
+SOURCE=.\jdcoefct.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdcolor.c
+SOURCE=.\jdcolor.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jddctmgr.c
+SOURCE=.\jddctmgr.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdhuff.c
+SOURCE=.\jdhuff.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdinput.c
+SOURCE=.\jdinput.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdmainct.c
+SOURCE=.\jdmainct.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdmarker.c
+SOURCE=.\jdmarker.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdmaster.c
+SOURCE=.\jdmaster.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdmerge.c
+SOURCE=.\jdmerge.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdphuff.c
+SOURCE=.\jdphuff.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdpostct.c
+SOURCE=.\jdpostct.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdsample.c
+SOURCE=.\jdsample.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jdtrans.c
+SOURCE=.\jdtrans.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jerror.c
+SOURCE=.\jerror.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jfdctflt.c
+SOURCE=.\jfdctflt.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jfdctfst.c
+SOURCE=.\jfdctfst.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jfdctint.c
+SOURCE=.\jfdctint.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jidctflt.c
+SOURCE=.\jidctflt.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jidctfst.c
+SOURCE=.\jidctfst.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jidctint.c
+SOURCE=.\jidctint.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jidctred.c
+SOURCE=.\jidctred.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jmemansi.c
+SOURCE=.\jmemansi.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jmemmgr.c
+SOURCE=.\jmemmgr.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jquant1.c
+SOURCE=.\jquant1.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jquant2.c
+SOURCE=.\jquant2.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/jpeg/jutils.c
+SOURCE=.\jutils.c
 
 # End Source File
 # End Group

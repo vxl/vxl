@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/tbl"  == include path
+# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/tbl"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
 # vepl  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/tbl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vepl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/tbl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vepl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/tbl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vepl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/tbl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vepl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/tbl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vepl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/tbl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vepl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/tbl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vepl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/tbl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vepl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,53 +156,53 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/tbl/vepl/CMakeLists.txt"
+SOURCE=.\"$(IUEROOT)/tbl/vepl/CMakeLists.txt"
 
 !IF  "$(CFG)" == "vepl - Win32 Release"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/vepl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/tbl/CMakeLists.txt"\
+	"$(IUEROOT)/tbl/vepl/CMakeLists.txt"
 # Begin Custom Build
 
 "vepl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/tbl/vepl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/tbl/vepl" -O"c:/awf/src/vxl/tbl/vepl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/tbl/vepl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/tbl/vepl" -O"$(IUEROOT)/tbl/vepl" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vepl - Win32 Debug"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/vepl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/tbl/CMakeLists.txt"\
+	"$(IUEROOT)/tbl/vepl/CMakeLists.txt"
 # Begin Custom Build
 
 "vepl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/tbl/vepl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/tbl/vepl" -O"c:/awf/src/vxl/tbl/vepl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/tbl/vepl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/tbl/vepl" -O"$(IUEROOT)/tbl/vepl" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vepl - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/vepl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/tbl/CMakeLists.txt"\
+	"$(IUEROOT)/tbl/vepl/CMakeLists.txt"
 # Begin Custom Build
 
 "vepl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/tbl/vepl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/tbl/vepl" -O"c:/awf/src/vxl/tbl/vepl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/tbl/vepl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/tbl/vepl" -O"$(IUEROOT)/tbl/vepl" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vepl - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/vepl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/tbl/CMakeLists.txt"\
+	"$(IUEROOT)/tbl/vepl/CMakeLists.txt"
 # Begin Custom Build
 
 "vepl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/tbl/vepl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/tbl/vepl" -O"c:/awf/src/vxl/tbl/vepl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/tbl/vepl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/tbl/vepl" -O"$(IUEROOT)/tbl/vepl" -B"$(IUEROOT)"
 
 # End Custom Build
 
@@ -213,232 +213,232 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vepl_convert+double-.cxx
+SOURCE=.\Templates/vepl_convert+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vepl_convert+float-.cxx
+SOURCE=.\Templates/vepl_convert+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vepl_convert+int-.cxx
+SOURCE=.\Templates/vepl_convert+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vepl_convert+short-.cxx
+SOURCE=.\Templates/vepl_convert+short-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vepl_convert+uchar-.cxx
+SOURCE=.\Templates/vepl_convert+uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vepl_convert+vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vepl_convert+vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_add_random_noise+vil_image.vil_image.double.double-.cxx
+SOURCE=.\Templates/vipl_add_random_noise+vil_image.vil_image.double.double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_add_random_noise+vil_image.vil_image.float.float-.cxx
+SOURCE=.\Templates/vipl_add_random_noise+vil_image.vil_image.float.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_add_random_noise+vil_image.vil_image.vil_rgb+uchar-.vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_add_random_noise+vil_image.vil_image.vil_rgb+uchar-.vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.double.double-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.double.double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.double.float-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.double.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.double.int-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.double.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.double.short-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.double.short-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.double.vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.double.vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.float.double-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.float.double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.float.float-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.float.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.float.int-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.float.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.float.short-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.float.short-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.float.vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.float.vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.short.short-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.short.short-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.uchar.double-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.uchar.double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.uchar.int-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.uchar.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.uchar.short-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.uchar.short-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.uchar.vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.uchar.vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.double-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.float-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.int-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.short-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.short-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.uchar-.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/vepl_add_random_noise.cxx
+SOURCE=.\vepl_add_random_noise.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/vepl_dilate_disk.cxx
+SOURCE=.\vepl_dilate_disk.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/vepl_dyadic.cxx
+SOURCE=.\vepl_dyadic.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/vepl_erode_disk.cxx
+SOURCE=.\vepl_erode_disk.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/vepl_gaussian_convolution.cxx
+SOURCE=.\vepl_gaussian_convolution.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/vepl_gradient_dir.cxx
+SOURCE=.\vepl_gradient_dir.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/vepl_gradient_mag.cxx
+SOURCE=.\vepl_gradient_mag.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/vepl_histogram.cxx
+SOURCE=.\vepl_histogram.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/vepl_median.cxx
+SOURCE=.\vepl_median.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/vepl_moment.cxx
+SOURCE=.\vepl_moment.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/vepl_monadic.cxx
+SOURCE=.\vepl_monadic.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/vepl_sobel.cxx
+SOURCE=.\vepl_sobel.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/vepl_threshold.cxx
+SOURCE=.\vepl_threshold.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/vepl_x_gradient.cxx
+SOURCE=.\vepl_x_gradient.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vepl/vepl_y_gradient.cxx
+SOURCE=.\vepl_y_gradient.cxx
 
 # End Source File
 # End Group

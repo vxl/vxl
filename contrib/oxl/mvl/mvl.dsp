@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"  == include path
+# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
 #  == override in output directory
 # mvl  == name of output library
@@ -55,7 +55,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "mvl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "mvl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -81,7 +81,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "mvl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "mvl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -106,7 +106,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "mvl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "mvl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -132,7 +132,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "mvl_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "mvl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -156,57 +156,57 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/oxl/mvl/CMakeLists.txt"
+SOURCE=.\"$(IUEROOT)/oxl/mvl/CMakeLists.txt"
 
 !IF  "$(CFG)" == "mvl - Win32 Release"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/mvl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/oxl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/mvl/CMakeLists.txt"
 # Begin Custom Build
 
 "mvl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/mvl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/mvl" -O"c:/awf/src/vxl/oxl/mvl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/mvl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/mvl" -O"$(IUEROOT)/oxl/mvl" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "mvl - Win32 Debug"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/mvl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/oxl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/mvl/CMakeLists.txt"
 # Begin Custom Build
 
 "mvl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/mvl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/mvl" -O"c:/awf/src/vxl/oxl/mvl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/mvl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/mvl" -O"$(IUEROOT)/oxl/mvl" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "mvl - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/mvl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/oxl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/mvl/CMakeLists.txt"
 # Begin Custom Build
 
 "mvl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/mvl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/mvl" -O"c:/awf/src/vxl/oxl/mvl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/mvl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/mvl" -O"$(IUEROOT)/oxl/mvl" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "mvl - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/mvl/CMakeLists.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/oxl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/mvl/CMakeLists.txt"
 # Begin Custom Build
 
 "mvl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/mvl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/mvl" -O"c:/awf/src/vxl/oxl/mvl" -B"c:/awf/src/vxl"
+	"$(CMAKE_ROOT)/Source/cmake.exe" "$(IUEROOT)/oxl/mvl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/mvl" -O"$(IUEROOT)/oxl/mvl" -B"$(IUEROOT)"
 
 # End Custom Build
 
@@ -217,702 +217,702 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/AffineMetric.cxx
+SOURCE=.\AffineMetric.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/ClosestImagePointFinder.cxx
+SOURCE=.\ClosestImagePointFinder.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/FDesignMatrix.cxx
+SOURCE=.\FDesignMatrix.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/FMPlanarComputeNonLinear.cxx
+SOURCE=.\FMPlanarComputeNonLinear.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/FMPlanarNonLinFun.cxx
+SOURCE=.\FMPlanarNonLinFun.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/FManifoldProject.cxx
+SOURCE=.\FManifoldProject.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/FMatrix.cxx
+SOURCE=.\FMatrix.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/FMatrixAffine.cxx
+SOURCE=.\FMatrixAffine.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/FMatrixCompute.cxx
+SOURCE=.\FMatrixCompute.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/FMatrixComputeLinear.cxx
+SOURCE=.\FMatrixComputeLinear.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/FMatrixPlanar.cxx
+SOURCE=.\FMatrixPlanar.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/FMatrixSkew.cxx
+SOURCE=.\FMatrixSkew.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HMatrix1D.cxx
+SOURCE=.\HMatrix1D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HMatrix1DCompute.cxx
+SOURCE=.\HMatrix1DCompute.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HMatrix1DCompute3Point.cxx
+SOURCE=.\HMatrix1DCompute3Point.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HMatrix1DComputeDesign.cxx
+SOURCE=.\HMatrix1DComputeDesign.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HMatrix1DComputeOptimize1.cxx
+SOURCE=.\HMatrix1DComputeOptimize1.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HMatrix2D.cxx
+SOURCE=.\HMatrix2D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HMatrix2DAffineCompute.cxx
+SOURCE=.\HMatrix2DAffineCompute.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HMatrix2DCompute.cxx
+SOURCE=.\HMatrix2DCompute.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HMatrix2DCompute4Line.cxx
+SOURCE=.\HMatrix2DCompute4Line.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HMatrix2DCompute4Point.cxx
+SOURCE=.\HMatrix2DCompute4Point.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HMatrix2DComputeLinear.cxx
+SOURCE=.\HMatrix2DComputeLinear.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HMatrix2DEuclideanCompute.cxx
+SOURCE=.\HMatrix2DEuclideanCompute.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HMatrix2DSimilarityCompute.cxx
+SOURCE=.\HMatrix2DSimilarityCompute.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HMatrix3D.cxx
+SOURCE=.\HMatrix3D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Homg.cxx
+SOURCE=.\Homg.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Homg1D.cxx
+SOURCE=.\Homg1D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Homg2D.cxx
+SOURCE=.\Homg2D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Homg3D.cxx
+SOURCE=.\Homg3D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgConic.cxx
+SOURCE=.\HomgConic.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgInterestPoint.cxx
+SOURCE=.\HomgInterestPoint.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgInterestPointSet.cxx
+SOURCE=.\HomgInterestPointSet.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgLine2D.cxx
+SOURCE=.\HomgLine2D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgLine3D.cxx
+SOURCE=.\HomgLine3D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgLineSeg2D.cxx
+SOURCE=.\HomgLineSeg2D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgLineSeg3D.cxx
+SOURCE=.\HomgLineSeg3D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgMetric.cxx
+SOURCE=.\HomgMetric.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgNorm2D.cxx
+SOURCE=.\HomgNorm2D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgOperator1D.cxx
+SOURCE=.\HomgOperator1D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgOperator2D.cxx
+SOURCE=.\HomgOperator2D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgOperator3D.cxx
+SOURCE=.\HomgOperator3D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgPlane3D.cxx
+SOURCE=.\HomgPlane3D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgPoint1D.cxx
+SOURCE=.\HomgPoint1D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgPoint2D.cxx
+SOURCE=.\HomgPoint2D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgPoint3D.cxx
+SOURCE=.\HomgPoint3D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/HomgPrettyPrint.cxx
+SOURCE=.\HomgPrettyPrint.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/ImageMetric.cxx
+SOURCE=.\ImageMetric.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/LineSeg.cxx
+SOURCE=.\LineSeg.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/LineSegSet.cxx
+SOURCE=.\LineSegSet.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/MatchSet.cxx
+SOURCE=.\MatchSet.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/NViewMatches.cxx
+SOURCE=.\NViewMatches.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/PMatrix.cxx
+SOURCE=.\PMatrix.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/PMatrixAffine.cxx
+SOURCE=.\PMatrixAffine.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/PMatrixCompute.cxx
+SOURCE=.\PMatrixCompute.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/PMatrixComputeLinear.cxx
+SOURCE=.\PMatrixComputeLinear.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/PMatrixDec.cxx
+SOURCE=.\PMatrixDec.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/PMatrixDecompAa.cxx
+SOURCE=.\PMatrixDecompAa.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/PMatrixDecompCR.cxx
+SOURCE=.\PMatrixDecompCR.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/PMatrixEuclidean.cxx
+SOURCE=.\PMatrixEuclidean.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/PairMatchMulti.cxx
+SOURCE=.\PairMatchMulti.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/PairMatchMultiIterator.cxx
+SOURCE=.\PairMatchMultiIterator.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/PairMatchSet.cxx
+SOURCE=.\PairMatchSet.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/PairMatchSet2D3D.cxx
+SOURCE=.\PairMatchSet2D3D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/PairMatchSetCorner.cxx
+SOURCE=.\PairMatchSetCorner.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/PairMatchSetLineSeg.cxx
+SOURCE=.\PairMatchSetLineSeg.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/PairSetCorner.cxx
+SOURCE=.\PairSetCorner.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/ProjStructure.cxx
+SOURCE=.\ProjStructure.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/ProjectiveBasis2D.cxx
+SOURCE=.\ProjectiveBasis2D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/SimilarityMetric.cxx
+SOURCE=.\SimilarityMetric.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/ModifyHandle+double-.cxx
+SOURCE=.\Templates/ModifyHandle+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_array_2d+HomgPoint2D-.cxx
+SOURCE=.\Templates/vbl_array_2d+HomgPoint2D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_array_2d+PairMatchSetLineSeg~-.cxx
+SOURCE=.\Templates/vbl_array_2d+PairMatchSetLineSeg~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_array_2d+vnl_matrix+double--.cxx
+SOURCE=.\Templates/vbl_array_2d+vnl_matrix+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_array_2d+vnl_vector+double--.cxx
+SOURCE=.\Templates/vbl_array_2d+vnl_vector+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_sparse_array_1d+FMatrix~-.cxx
+SOURCE=.\Templates/vbl_sparse_array_1d+FMatrix~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_sparse_array_1d+HMatrix2D~-.cxx
+SOURCE=.\Templates/vbl_sparse_array_1d+HMatrix2D~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_sparse_array_1d+HMatrix3D-.cxx
+SOURCE=.\Templates/vbl_sparse_array_1d+HMatrix3D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_sparse_array_1d+ImageMetric~-.cxx
+SOURCE=.\Templates/vbl_sparse_array_1d+ImageMetric~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_sparse_array_1d+PairMatchSetCorner~-.cxx
+SOURCE=.\Templates/vbl_sparse_array_1d+PairMatchSetCorner~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_sparse_array_1d+PairMatchSetLineSeg~-.cxx
+SOURCE=.\Templates/vbl_sparse_array_1d+PairMatchSetLineSeg~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_sparse_array_2d+FMatrix~-.cxx
+SOURCE=.\Templates/vbl_sparse_array_2d+FMatrix~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_sparse_array_2d+HMatrix2D~-.cxx
+SOURCE=.\Templates/vbl_sparse_array_2d+HMatrix2D~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_sparse_array_2d+HMatrix3D-.cxx
+SOURCE=.\Templates/vbl_sparse_array_2d+HMatrix3D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_sparse_array_2d+PairMatchSetCorner~-.cxx
+SOURCE=.\Templates/vbl_sparse_array_2d+PairMatchSetCorner~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_sparse_array_2d+PairMatchSetLineSeg~-.cxx
+SOURCE=.\Templates/vbl_sparse_array_2d+PairMatchSetLineSeg~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_sparse_array_3d+TriTensor~-.cxx
+SOURCE=.\Templates/vbl_sparse_array_3d+TriTensor~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_sparse_array_3d+TripleMatchSetCorner~-.cxx
+SOURCE=.\Templates/vbl_sparse_array_3d+TripleMatchSetCorner~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vbl_sparse_array_3d+TripleMatchSetLineSeg~-.cxx
+SOURCE=.\Templates/vbl_sparse_array_3d+TripleMatchSetLineSeg~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_algorithm+ImageMetric~-.cxx
+SOURCE=.\Templates/vcl_algorithm+ImageMetric~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_algorithm+ImageMetric~~-.cxx
+SOURCE=.\Templates/vcl_algorithm+ImageMetric~~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_list+HomgLineSeg2D-.cxx
+SOURCE=.\Templates/vcl_list+HomgLineSeg2D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_list+HomgMatchPoint3D2D~-.cxx
+SOURCE=.\Templates/vcl_list+HomgMatchPoint3D2D~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_list+HomgPlane3D~-.cxx
+SOURCE=.\Templates/vcl_list+HomgPlane3D~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_list+HomgPoint2D-.cxx
+SOURCE=.\Templates/vcl_list+HomgPoint2D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_list+HomgPoint3D~-.cxx
+SOURCE=.\Templates/vcl_list+HomgPoint3D~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_list+LineSeg~-.cxx
+SOURCE=.\Templates/vcl_list+LineSeg~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_map+uint.FMatrix~-.cxx
+SOURCE=.\Templates/vcl_map+uint.FMatrix~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_map+uint.HMatrix2D~-.cxx
+SOURCE=.\Templates/vcl_map+uint.HMatrix2D~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_map+uint.HMatrix3D-.cxx
+SOURCE=.\Templates/vcl_map+uint.HMatrix3D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_map+uint.HomgInterestPointSet-.cxx
+SOURCE=.\Templates/vcl_map+uint.HomgInterestPointSet-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_map+uint.ImageMetric~-.cxx
+SOURCE=.\Templates/vcl_map+uint.ImageMetric~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_map+uint.LineSegSet-.cxx
+SOURCE=.\Templates/vcl_map+uint.LineSegSet-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_map+uint.PMatrix-.cxx
+SOURCE=.\Templates/vcl_map+uint.PMatrix-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_map+uint.PairMatchSetCorner~-.cxx
+SOURCE=.\Templates/vcl_map+uint.PairMatchSetCorner~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_map+uint.PairMatchSetLineSeg~-.cxx
+SOURCE=.\Templates/vcl_map+uint.PairMatchSetLineSeg~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_map+uint.TriTensor-.cxx
+SOURCE=.\Templates/vcl_map+uint.TriTensor-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_map+uint.TriTensor~-.cxx
+SOURCE=.\Templates/vcl_map+uint.TriTensor~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_map+uint.TripleMatchSetCorner~-.cxx
+SOURCE=.\Templates/vcl_map+uint.TripleMatchSetCorner~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_map+uint.TripleMatchSetLineSeg~-.cxx
+SOURCE=.\Templates/vcl_map+uint.TripleMatchSetLineSeg~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+FMatrix~-.cxx
+SOURCE=.\Templates/vcl_vector+FMatrix~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+HMatrix1D-.cxx
+SOURCE=.\Templates/vcl_vector+HMatrix1D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+HMatrix2D-.cxx
+SOURCE=.\Templates/vcl_vector+HMatrix2D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+HomgInterestPoint-.cxx
+SOURCE=.\Templates/vcl_vector+HomgInterestPoint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+HomgInterestPointSet~-.cxx
+SOURCE=.\Templates/vcl_vector+HomgInterestPointSet~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+HomgLine2D-.cxx
+SOURCE=.\Templates/vcl_vector+HomgLine2D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+HomgLine3D-.cxx
+SOURCE=.\Templates/vcl_vector+HomgLine3D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+HomgLineSeg2D-.cxx
+SOURCE=.\Templates/vcl_vector+HomgLineSeg2D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+HomgLineSeg3D-.cxx
+SOURCE=.\Templates/vcl_vector+HomgLineSeg3D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+HomgMetric-.cxx
+SOURCE=.\Templates/vcl_vector+HomgMetric-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+HomgPlane3D-.cxx
+SOURCE=.\Templates/vcl_vector+HomgPlane3D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+HomgPoint1D-.cxx
+SOURCE=.\Templates/vcl_vector+HomgPoint1D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+HomgPoint2D-.cxx
+SOURCE=.\Templates/vcl_vector+HomgPoint2D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+HomgPoint3D-.cxx
+SOURCE=.\Templates/vcl_vector+HomgPoint3D-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+ImageMetric~-.cxx
+SOURCE=.\Templates/vcl_vector+ImageMetric~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+NViewMatch-.cxx
+SOURCE=.\Templates/vcl_vector+NViewMatch-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+PMatrix-.cxx
+SOURCE=.\Templates/vcl_vector+PMatrix-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+PMatrix~-.cxx
+SOURCE=.\Templates/vcl_vector+PMatrix~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+PairMatchMulti-.cxx
+SOURCE=.\Templates/vcl_vector+PairMatchMulti-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+TriTensor-.cxx
+SOURCE=.\Templates/vcl_vector+TriTensor-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/Templates/vcl_vector+vcl_vector+HomgPoint2D--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_vector+HomgPoint2D--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/TriTensor.cxx
+SOURCE=.\TriTensor.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/TripleMatchSet.cxx
+SOURCE=.\TripleMatchSet.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/TripleMatchSetCorner.cxx
+SOURCE=.\TripleMatchSetCorner.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/TripleMatchSetLineSeg.cxx
+SOURCE=.\TripleMatchSetLineSeg.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/mvl_five_point_camera_pencil.cxx
+SOURCE=.\mvl_five_point_camera_pencil.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/mvl_multi_view_matches.cxx
+SOURCE=.\mvl_multi_view_matches.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/mvl_psi.cxx
+SOURCE=.\mvl_psi.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/mvl_six_point_design_matrix_row.cxx
+SOURCE=.\mvl_six_point_design_matrix_row.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/mvl/mvl_three_view_six_point_structure.cxx
+SOURCE=.\mvl_three_view_six_point_structure.cxx
 
 # End Source File
 # End Group
