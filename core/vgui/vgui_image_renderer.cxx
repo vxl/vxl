@@ -51,7 +51,6 @@ void vgui_image_renderer::need_resection() const
 //-----------------------------------------------------------------------------
 //: Attach the renderer to a new vil1_image.
 void vgui_image_renderer::set_image(vil1_image const &image_)
-
 {
   if (image_ == the_image)
     return; // same image -- do nothing.
@@ -79,7 +78,7 @@ create_buffer(vgui_range_map_params_sptr const& rmp)
                                      the_image.width(), the_image.height(),
                                      GL_NONE, GL_NONE);
   buffer->apply( the_image, rmp );
- 
+
   buffer_params = rmp;
   valid_buffer = true;
 }
@@ -105,21 +104,20 @@ void vgui_image_renderer::render(vgui_range_map_params_sptr const& rmp)
   if (!the_image)
     return;
 
-  //If the image can be mapped then there is no point in having a 
+  //If the image can be mapped then there is no point in having a
   //GL buffer.  The image can be directly rendered by the hardware
   //using the range map.
-  if(rmp&&rmp->use_glPixelMap_&&this->render_directly(rmp))
-	  return;
+  if (rmp&&rmp->use_glPixelMap_&&this->render_directly(rmp))
+    return;
 
   // Delay sectioning until first render time. This allows the section
   // buffer to decide on a cache format which depends on the current GL
   // rendering context.
 
-  if(!this->old_range_map_params(rmp)||!valid_buffer)
+  if (!this->old_range_map_params(rmp)||!valid_buffer)
     this->create_buffer(rmp);
-    
-    
-	this->draw_pixels();
+
+  this->draw_pixels();
 }
 
 //: Are the range map params associated with the current buffer out of date?
@@ -127,23 +125,23 @@ void vgui_image_renderer::render(vgui_range_map_params_sptr const& rmp)
 bool vgui_image_renderer::
 old_range_map_params(vgui_range_map_params_sptr const& rmp)
 {
-  //Cases 
+  //Cases
 
   //1) Both the current params and the new params are null
-  if(!buffer_params&&!rmp)
+  if (!buffer_params&&!rmp)
     return false;
 
   //2) The current params are null and the new params are not
-  if(!buffer_params&&rmp)
+  if (!buffer_params&&rmp)
     return false;
 
   //3) The current params are not null and the new params are
-  if(buffer_params&&!rmp)
+  if (buffer_params&&!rmp)
     return false;
-  
-  //4) Both current params and the new params are not null. 
+
+  //4) Both current params and the new params are not null.
   // Are they equal?
-  if(buffer_params&&rmp)
+  if (buffer_params&&rmp)
     return *buffer_params==*rmp;
 
   return false;

@@ -30,8 +30,8 @@
 vgui_image_tableau::
 vgui_image_tableau()
   : vgui_tableau(),
-    rmp_( 0 ),
     pixels_centered_( true ),
+    rmp_( 0 ),
     renderer_( 0 ),
     vil_renderer_( 0 )
 {
@@ -153,10 +153,10 @@ vil_image_resource_sptr
 vgui_image_tableau::
 get_image_resource() const
 {
-  if(vil_renderer_)
-	return vil_renderer_->get_image_resource();
+  if (vil_renderer_)
+    return vil_renderer_->get_image_resource();
   else
-	  return 0;
+    return 0;
 }
 
 //-----------------------------------------------------------------------------
