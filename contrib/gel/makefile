@@ -1,6 +1,3 @@
-# basics
-SUBDIRS += gbl
-
 # van-duc region finder (ported from TargetJr)
 SUBDIRS += gevd
 
