@@ -578,10 +578,10 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
   int width = image.width(), height = image.height();
   bsta_histogram<float> image_hist(255, intensity_hist_bins_);
   bsta_joint_histogram<float> joint_hist(255, intensity_hist_bins_);
-  int npix = intf_->Npix();
-  if (!npix)
+  unsigned int npix = intf_->Npix();
+  if (npix == 0)
     return 0;
-  int n = 0;
+  unsigned int n = 0;
   for (intf_->reset(); intf_->next();)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
@@ -633,11 +633,11 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
   bsta_histogram<float> image_dir_hist(360, gradient_dir_hist_bins_);
   bsta_joint_histogram<float> joint_dir_hist(360, gradient_dir_hist_bins_);
 
-  int npix = intf_->Npix();
-  if (!npix)
+  unsigned int npix = intf_->Npix();
+  if (npix == 0)
     return 0;
   double deg_rad = 180.0/vnl_math::pi;
-  int i = 0, n = 0;
+  unsigned int i = 0, n = 0;
   for (intf_->reset(); intf_->next(); ++i, ++n)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
@@ -694,11 +694,11 @@ compute_color_mutual_information(vil1_memory_image_of<float> const& hue,
   bsta_histogram<float> color_hist(360, color_hist_bins_);
   bsta_joint_histogram<float> joint_color_hist(360, color_hist_bins_);
 
-  int npix = intf_->Npix();
-  if (!npix)
+  unsigned int npix = intf_->Npix();
+  if (npix == 0)
     return 0;
 
-  int i = 0, n = 0;
+  unsigned int i = 0, n = 0;
   for (intf_->reset(); intf_->next(); ++i, ++n)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
@@ -829,11 +829,11 @@ compute_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other,
     return 0;
   int width = image.width(), height = image.height();
   bsta_joint_histogram<float> joint_hist(255, intensity_hist_bins_);
-  int npix = intf_->Npix();
-  int mpix = other->face()->Npix();
-  if (!npix)
+  unsigned int npix = intf_->Npix();
+  unsigned int mpix = other->face()->Npix();
+  if (npix == 0)
     return 0;
-  int n = 0;
+  unsigned int n = 0;
   //iterate through the pixels of the target model face
   for (intf_->reset(); intf_->next(); n++)
   {
@@ -870,7 +870,7 @@ compute_model_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other)
 
   bsta_joint_histogram<float> joint_hist(255, intensity_hist_bins_);
   int npix = intf_->Npix();
-  if (!npix)
+  if (npix == 0)
     return 0;
   int n = 0;
   vcl_vector<float> rand_int = other->random_intensities(npix);
@@ -929,10 +929,9 @@ compute_color_joint_entropy(strk_tracking_face_2d_sptr const& other,
 {
   if (!intf_||!other||!hue||!sat||!hue_||!sat_)
     return 0;
-  int npix = intf_->Npix();
-  int mpix = other->face()->Npix();
-  if (!npix)
+  if (intf_->Npix() == 0)
     return 0;
+  unsigned int mpix = other->face()->Npix();
   bsta_joint_histogram<float> joint_color_hist;
   int width = hue.width(), height = hue.height();
   unsigned int i = 0;
@@ -1152,8 +1151,7 @@ print_intensity_histograms(vil1_memory_image_of<float> const& image)
   int width = image.width(), height = image.height();
   bsta_histogram<float> model_image_hist(255, intensity_hist_bins_);
   bsta_histogram<float> obs_image_hist(255, intensity_hist_bins_);
-  int npix = intf_->Npix();
-  if (!npix)
+  if (intf_->Npix() == 0)
     return;
   for (intf_->reset(); intf_->next();)
   {
@@ -1181,8 +1179,7 @@ print_gradient_histograms(vil1_memory_image_of<float> const& Ix,
   int width = Ix.width(), height = Iy.height();
   bsta_histogram<float> model_image_dir_hist(360, gradient_dir_hist_bins_);
   bsta_histogram<float> obs_image_dir_hist(360, gradient_dir_hist_bins_);
-  int npix = intf_->Npix();
-  if (!npix)
+  if (intf_->Npix() == 0)
     return;
   double deg_rad = 180.0/vnl_math::pi;
   int i = 0;
@@ -1220,8 +1217,7 @@ print_color_histograms(vil1_memory_image_of<float> const& hue,
   bsta_histogram<float> model_color_hist(360, color_hist_bins_);
   bsta_histogram<float> obs_color_hist(360, color_hist_bins_);
 
-  int npix = intf_->Npix();
-  if (!npix)
+  if (intf_->Npix() == 0)
     return;
   int i = 0;
   for (intf_->reset(); intf_->next(); ++i)
@@ -1250,8 +1246,7 @@ intensity_histogram(vil1_memory_image_of<float> const& image)
   if (!intf_||!image)
     return image_hist;
   int width = image.width(), height = image.height();
-  int npix = intf_->Npix();
-  if (!npix)
+  if (intf_->Npix() == 0)
     return image_hist;
   for (intf_->reset(); intf_->next();)
   {
@@ -1272,8 +1267,7 @@ gradient_histogram(vil1_memory_image_of<float> const& Ix,
   if (!intf_||!Ix||!Iy)
     return grad_dir_hist;
   int width = Ix.width(), height = Iy.height();
-  int npix = intf_->Npix();
-  if (!npix)
+  if (intf_->Npix() == 0)
     return grad_dir_hist;
   double deg_rad = 180.0/vnl_math::pi;
   int i = 0;
@@ -1299,8 +1293,7 @@ color_histogram(vil1_memory_image_of<float> const& hue,
   if (!intf_||!hue||!sat)
     return color_hist;
   int width = hue.width(), height = hue.height();
-  int npix = intf_->Npix();
-  if (!npix)
+  if (intf_->Npix() == 0)
     return color_hist;
   int i = 0;
   for (intf_->reset(); intf_->next(); ++i)
