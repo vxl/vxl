@@ -3,7 +3,6 @@
 #define _VIFA_INT_FACE_ATTR_FACTORY_H_
 
 #include <sdet/sdet_fit_lines_params.h>
-#include <vtol/vtol_intensity_face.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vifa/vifa_group_pgram_params.h>
 #include <vifa/vifa_int_face_attr.h>

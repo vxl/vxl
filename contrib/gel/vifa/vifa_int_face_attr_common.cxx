@@ -1,7 +1,6 @@
 // This is gel/vifa/vifa_int_face_attr_common.cxx
 #include <sdet/sdet_fit_lines.h>
 #include <vtol/vtol_intensity_face.h>
-#include <vtol/vtol_intensity_face_sptr.h>
 #include <vgl/vgl_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_point_2d.h>

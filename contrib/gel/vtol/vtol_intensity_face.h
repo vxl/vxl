@@ -39,7 +39,6 @@
 #include <vdgl/vdgl_digital_region.h>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_face_2d.h>
-#include <vtol/vtol_intensity_face_sptr.h>
 
 class vtol_intensity_face : public vtol_face_2d
 {

@@ -18,7 +18,6 @@
 #include <vcl_vector.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <sdet/sdet_fit_lines_params.h>
-#include <vtol/vtol_intensity_face.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vifa/vifa_histogram.h>
 #include <vifa/vifa_int_face_attr_common.h>

@@ -17,7 +17,6 @@
 
 #include <vcl_vector.h>
 #include <vtol/vtol_intensity_face.h>
-#include <vtol/vtol_intensity_face_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vifa/vifa_histogram.h>
 #include <vifa/vifa_parallel_params.h>

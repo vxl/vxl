@@ -19,12 +19,12 @@
 //-------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vil1/vil1_image.h>
-#include <vtol/vtol_intensity_face.h>
+#include <vtol/vtol_intensity_face_sptr.h>
 #include <sdet/sdet_region_proc_params.h>
 
 class sdet_region_proc : public sdet_region_proc_params
 {
-public:
+ public:
   //Constructors/destructor
   sdet_region_proc(sdet_region_proc_params& rpp);
 
@@ -39,7 +39,7 @@ public:
   vil1_image get_residual_image();
   //Debug methods
   vil1_image get_edge_image(){return edge_image_;}
-protected:
+ protected:
   //protected methods
 
   //members
@@ -48,4 +48,5 @@ protected:
   vil1_image edge_image_;//debug
   vcl_vector<vtol_intensity_face_sptr> regions_; //resulting intensity faces
 };
+
 #endif // sdet_region_proc_h_
