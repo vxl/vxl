@@ -8,6 +8,7 @@ TESTS += sdet_test_detector.cxx
 TESTS += sdet_test_region_proc.cxx
 TESTS += brip_test_lucas_kanade.cxx
 TESTS += brip_test_fourier.cxx
+TESTS += brip_test_homography.cxx
 
 PARAMS_sdet_test_detector := jar-closeup.tif
 PARAMS_sdet_test_region_proc := jar-closeup.tif

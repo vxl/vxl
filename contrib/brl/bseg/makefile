@@ -1,6 +1,9 @@
 # This is brl/bseg/makefile
 # main package for segmentation-related code and applications
 
+# float image operations
+SUBDIRS += brip
+
 # segmentation feature detection library
 SUBDIRS += sdet
 
@@ -10,14 +13,14 @@ SUBDIRS += vpro
 # tracking
 SUBDIRS += strk
 
+# markov random fields
+SUBDIRS += bmrf
+
 # misc 
 #SUBDIRS += bcons
 
 # segmentation view library
 SUBDIRS += segv
-
-# float image operations
-SUBDIRS += brip
 
 # segmentation application executables
 SUBDIRS += sbin
