@@ -38,7 +38,7 @@ int main()
   vnl_svd<vcl_complex<double> > C_svd(C);
 
   vnl_matlab_print(vcl_cout, C_svd.U(), "U");
-  vnl_matlab_print(vcl_cout, C_svd.W().asMatrix(), "W");
+  vnl_matlab_print(vcl_cout, C_svd.W(), "W");
   vnl_matlab_print(vcl_cout, C_svd.V(), "V");
 
   vcl_complex<double> rhs[4]; rhs[0]=3; rhs[1]=9; rhs[2]=-2; rhs[3]=-8;

@@ -114,19 +114,14 @@ vnl_vector<double> vgui_projection_inspector::back_project(vnl_vector<double> co
 vnl_vector<double> vgui_projection_inspector::back_project(double x,double y,
                                                            vnl_vector_fixed<double,4> const &p) const
 {
-  vnl_vector<double> xy(2);
-  xy[0]=x;
-  xy[1]=y;
+  vnl_vector<double> xy(2, x,y);
   return back_project(xy,p);
 }
 
 vnl_vector<double> vgui_projection_inspector::back_project(double x,double y,double z,
                                                            vnl_vector_fixed<double,4> const &p) const
 {
-  vnl_vector<double> xyz(3);
-  xyz[0]=x;
-  xyz[1]=y;
-  xyz[2]=z;
+  vnl_vector<double> xyz(3, x,y,z);
   return back_project(xyz,p);
 }
 

@@ -14,10 +14,7 @@
 
 void test_matrix_exp()
 {
-  vnl_vector<double> v(3);
-  v[0] =  1.233;
-  v[1] = -0.572;
-  v[2] =  0.777;
+  vnl_vector<double> v(3, 1.233,-0.572,0.777);
 
   vnl_matrix<double> X = vnl_cross_product_matrix(v).as_ref();
   vnl_matlab_print(vcl_cout, X, "[v]");

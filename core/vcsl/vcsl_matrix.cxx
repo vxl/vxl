@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_matrix.cxx
+// This is core/vcsl/vcsl_matrix.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -68,11 +68,7 @@ vnl_vector<double> vcsl_matrix::execute(const vnl_vector<double> &v,
   assert(is_valid());
   assert(v.size()==3);
 
-  vnl_vector<double> temp(4);
-  temp(0)=v(0);
-  temp(1)=v(1);
-  temp(2)=v(2);
-  temp(3)=1;
+  vnl_vector<double> temp(4, v(0),v(1),v(2),1.0);
 
   vnl_matrix<double> value=matrix_value(time,true);
   return value*temp;
@@ -89,11 +85,7 @@ vnl_vector<double> vcsl_matrix::inverse(const vnl_vector<double> &v,
   assert(is_valid());
   assert(v.size()==3);
 
-  vnl_vector<double> temp(4);
-  temp(0)=v(0);
-  temp(1)=v(1);
-  temp(2)=v(2);
-  temp(3)=1;
+  vnl_vector<double> temp(4, v(0),v(1),v(2),1.0);
 
   vnl_matrix<double> value=matrix_value(time,false);
   return value*temp;

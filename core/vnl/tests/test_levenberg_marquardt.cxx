@@ -32,9 +32,7 @@ void do_test(bool with_grad)
 {
   vnl_rosenbrock f(with_grad);
 
-  vnl_vector<double> x0(2);
-  x0[0] =  2.7;
-  x0[1] = -1.3;
+  vnl_vector<double> x0(2, 2.7,-1.3);
   vcl_cout << "x0 = " << x0 << vcl_endl;
 
   vnl_levenberg_marquardt lm(f);

@@ -11,8 +11,9 @@
 #include <vnl/algo/vnl_amoeba.h>
 
 // See rosenbrock.cxx for a description of this function.
-class vnl_rosenbrock : public vnl_cost_function {
-public:
+class vnl_rosenbrock : public vnl_cost_function
+{
+ public:
   vnl_rosenbrock(): vnl_cost_function(2) {}
 
   double f(const vnl_vector<double>& x)
@@ -29,9 +30,7 @@ int main()
   vnl_rosenbrock f;
 
   // Set up the initial guess
-  vnl_vector<double> x(2);
-  x[0] = -1.9;
-  x[1] = 2.0;
+  vnl_vector<double> x(2, -1.9,2.0);
 
   // Make a Levenberg Marquardt minimizer, attach f to it, and
   // run the minimization
