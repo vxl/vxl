@@ -411,6 +411,17 @@ register_single_feature( rgrl_mask_box            image_region,
       match_set->remap_from_features( *current_xform_estimate_ );
       weighter->compute_weights( *scale, *match_set );
 
+      // compute the scaling factors  
+      {
+        bool ret_success;
+        vnl_vector<double> scaling;
+        ret_success = rgrl_util_geometric_scaling_factors( *match_set, scaling );
+        if( ret_success ) 
+          current_xform_estimate_->set_scaling_factors( scaling );
+        else 
+          WarningMacro( "cannot compute scaling factors!!!" );
+      }
+      
 #if 0
       // CT: this step seems redundant, since the scale is re-computed
       // at the beginning of next iteration.
@@ -680,6 +691,18 @@ register_multi_feature( rgrl_mask_box            image_region,
         if ( current_match_sets_[fs]->from_size() > 0 ) {
           current_match_sets_[fs]->remap_from_features( *current_xform_estimate_ );
           weighters[fs]->compute_weights( *scales[fs], *current_match_sets_[fs] );
+
+      // compute image scaling factors  
+      {
+        bool ret_success;
+        vnl_vector<double> scaling;
+        ret_success = rgrl_util_geometric_scaling_factors( current_match_sets_, scaling );
+        if( ret_success ) 
+          current_xform_estimate_->set_scaling_factors( scaling );
+        else 
+          WarningMacro( "cannot compute scaling factors!!!" );
+      }
+
 #if 0
           // CT: this step seems redundant, since the scale is re-computed
           // at the beginning of next iteration.

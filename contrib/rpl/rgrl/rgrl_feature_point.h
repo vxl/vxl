@@ -54,6 +54,11 @@ class rgrl_feature_point
   //
   rgrl_feature_point( unsigned dim );
 
+  //: Apply transformation to the scale property
+  virtual double  
+  transform_scale( rgrl_transformation const& xform ) const;
+  
+ protected:
   vnl_vector<double> location_;
   
   double             scale_;
