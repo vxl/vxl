@@ -17,4 +17,14 @@ inline T vcl_log10(std::complex<T> const &z) { return ::log10(z); }
 template <typename T>
 inline std::complex<T> vcl_exp(std::complex<T> const &z) { return vcl_polar(T(exp(z.real())), z.imag()); }
 
+# undef vcl_cos
+# define vcl_cos vcl_cos
+template <typename T>
+inline std::complex<T> vcl_cos(std::complex<T> const &z) { return std::complex<T>(vcl_cos(z.real())*vcl_cosh(z.imag()),-vcl_sin(z.real())*vcl_sinh(z.imag())); }
+
+# undef vcl_sin
+# define vcl_sin vcl_sin
+template <typename T>
+inline std::complex<T> vcl_sin(std::complex<T> const &z) { return std::complex<T>(vcl_sin(z.real())*vcl_cosh(z.imag()),vcl_cos(z.real())*vcl_sinh(z.imag())); }
+
 #endif // vcl_sgi_complex_h_
