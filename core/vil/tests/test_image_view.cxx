@@ -1,11 +1,13 @@
 // This is mul/vil2/tests/test_image_view.cxx
 #include <vcl_iostream.h>
+#include <vcl_functional.h>
 #include <vxl_config.h>
 #include <testlib/testlib_test.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_crop.h>
 #include <vil2/vil2_copy.h>
 #include <vil2/vil2_print.h>
+#include <vil2/vil2_convert.h>
 
 bool Equal(const vil2_image_view<vxl_byte>& im0,
            const vil2_image_view<vxl_byte>& im1)
@@ -134,6 +136,16 @@ void test_image_view_byte()
   TEST("!vil2_deep_equality", vil2_image_view_deep_equality(test_image,image2), false);
   test_image.resize(5,4,4);
   TEST("!vil2_deep_equality", vil2_image_view_deep_equality(test_image,image2), false);
+  vil2_print_all(vcl_cout, image2);
+
+  vil2_image_view<float> image7;
+  vil2_convert_cast(image2, image7);
+  vil2_print_all(vcl_cout, image7);
+  vil2_transform(image7, image7, vcl_bind2nd(vcl_plus<float>(),0.6f));
+  vil2_convert_cast(image7, image2);
+  vil2_print_all(vcl_cout, image2);
+  TEST("Rounding up", image2(0,0,0) == 1 && image2(2,2,1) == 36, true);
+
 }
 
 #if 0 // commented out

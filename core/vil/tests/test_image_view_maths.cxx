@@ -36,6 +36,8 @@ void test_image_view_maths_byte()
   vil2_math_sum_squares(sum,sum_sq,imA,0);
   TEST_NEAR("Sum of squares",sum_sq,sum2,1e-8);
 
+  TEST_NEAR("Sum of squared differences", vil2_math_ssd(imA, imB, double()),93960.0, 1e-8);
+
   vil2_image_view<vxl_byte> imC = vil2_copy_deep(imA);
   vil2_math_scale_values(imC,2.0);
   TEST_NEAR("Values scaled",imC(3,5),imA(3,5)*2,1e-8);

@@ -24,6 +24,8 @@ SET( vil2_sources
   vil2_math.h
   vil2_view_as.h
   vil2_fill.h
+  vil2_transform.h
+  vil2_convert.h
   vil2_load.cxx  vil2_load.h
   vil2_save.cxx  vil2_save.h
   vil2_copy.txx  vil2_copy.h

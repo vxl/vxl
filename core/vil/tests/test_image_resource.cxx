@@ -48,13 +48,13 @@ void test_image_resource_1()
 
   float v1, v2;
 
-  vil2_math_value_range(v1, v2, view1);
+  vil2_math_value_range(view1, v1, v2);
   TEST("Value range is 0,10", v1 == 0.0f && v2 == 10.0f, true);
 
   vil2_image_resource_sptr clamp = vil2_clamp(mem, 1.0, 9.0);
   view1 = clamp->get_view(0, clamp->ni(), 0, clamp->nj());
   vil2_print_all(vcl_cout, view1);
-  vil2_math_value_range(v1, v2, view1);
+  vil2_math_value_range(view1, v1, v2);
   TEST("Value range after clamping is 1,9", v1 == 1.0f && v2 == 9.0f, true);
 
 

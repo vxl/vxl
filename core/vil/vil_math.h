@@ -14,7 +14,7 @@
 
 //: Compute minimum and maximum values over view
 template<class T>
-inline void vil2_math_value_range(T& min_value, T& max_value,const vil2_image_view<T>& view)
+inline void vil2_math_value_range(const vil2_image_view<T>& view, T& min_value, T& max_value)
 {
   if (view.size()==0)
   {
@@ -46,28 +46,45 @@ inline void vil2_math_value_range(T& min_value, T& max_value,const vil2_image_vi
 
 //: Compute minimum and maximum values over view
 VCL_DEFINE_SPECIALIZATION
-inline void vil2_math_value_range(vil_rgb<vxl_byte>& min_value, vil_rgb<vxl_byte>& max_value,
-                      const vil2_image_view<vil_rgb<vxl_byte> >& rgb_view)
+inline void vil2_math_value_range(const vil2_image_view<vil_rgb<vxl_byte> >& rgb_view,
+                                  vil_rgb<vxl_byte>& min_value, vil_rgb<vxl_byte>& max_value)
 {
   vil2_image_view<vxl_byte> plane_view = vil2_view_as_planes(rgb_view);
   // Get range for each plane in turn
-  vil2_math_value_range(min_value.r,max_value.r,vil2_plane(plane_view,0));
-  vil2_math_value_range(min_value.g,max_value.g,vil2_plane(plane_view,1));
-  vil2_math_value_range(min_value.b,max_value.b,vil2_plane(plane_view,2));
+  vil2_math_value_range(vil2_plane(plane_view,0),min_value.r,max_value.r);
+  vil2_math_value_range(vil2_plane(plane_view,0),min_value.g,max_value.g);
+  vil2_math_value_range(vil2_plane(plane_view,0),min_value.b,max_value.b);
 }
 
 //: Compute minimum and maximum values over view
 VCL_DEFINE_SPECIALIZATION
-inline void vil2_math_value_range(vil_rgb<float>& min_value, vil_rgb<float>& max_value,
-                      const vil2_image_view<vil_rgb<float> >& rgb_view)
+inline void vil2_math_value_range(const vil2_image_view<vil_rgb<float> >& rgb_view,
+                                  vil_rgb<float>& min_value, vil_rgb<float>& max_value)
 {
   vil2_image_view<float> plane_view = vil2_view_as_planes(rgb_view);
   // Get range for each plane in turn
-  vil2_math_value_range(min_value.r,max_value.r,vil2_plane(plane_view,0));
-  vil2_math_value_range(min_value.g,max_value.g,vil2_plane(plane_view,1));
-  vil2_math_value_range(min_value.b,max_value.b,vil2_plane(plane_view,2));
+  vil2_math_value_range(vil2_plane(plane_view,0),min_value.r,max_value.r);
+  vil2_math_value_range(vil2_plane(plane_view,0),min_value.g,max_value.g);
+  vil2_math_value_range(vil2_plane(plane_view,0),min_value.b,max_value.b);
 }
 
+
+//: Sum of squared differences between two images
+// \relates vil2_image_view
+template<class imT, class sumT>
+inline sumT vil2_math_ssd(const vil2_image_view<imT>& imA, const vil2_image_view<imT>& imB, sumT dummy=sumT())
+{
+  assert(imA.ni() == imB.ni() && imB.nj() == imB.nj() && imA.nplanes() == imB.nplanes());
+  sumT ssd=0;
+  for (unsigned p=0;p<imA.nplanes();++p)
+    for (unsigned j=0;j<imA.nj();++j)
+      for (unsigned i=0;i<imA.ni();++i)
+      {
+        const sumT v = ((sumT)imA(i,j,p) - (sumT)imB(i,j,p));
+        ssd += v*v;
+      }
+  return ssd;
+}
 
 
 //: Sum of elements in plane p of image
