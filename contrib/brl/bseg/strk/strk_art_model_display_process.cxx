@@ -187,23 +187,23 @@ bool strk_art_model_display_process::execute()
     {
       first_frame_ = false;
       const char* file = track_file_.c_str();
-      vcl_ifstream str = vcl_ifstream(file);
-      if(!str.is_open())
-        {
-          vcl_cout << "In strk_art_model_display_process::execute() -"
-                   << " could not open file " << track_file_ << "\n";
-          failure_ = true;
-          return false;
-        }
+      vcl_ifstream str(file);
+      if (!str)
+      {
+        vcl_cout << "In strk_art_model_display_process::execute() -"
+                 << " could not open file " << track_file_ << "\n";
+        failure_ = true;
+        return false;
+      }
         
       this->input_tracked_models(str);
       n_models = tracked_models_.size();
-      if(!n_models)
-        {
-          vcl_cout << "In strk_art_model_display_process::execute() -"
-                   << " no models found in track file\n";
-          failure_ = true;
-        }
+      if (!n_models)
+      {
+        vcl_cout << "In strk_art_model_display_process::execute() -"
+                 << " no models found in track file\n";
+        failure_ = true;
+      }
     }
   }
   int frame_index = this->frame_index();
@@ -213,16 +213,16 @@ bool strk_art_model_display_process::execute()
   vcl_vector<vtol_face_2d_sptr> tracked_faces = tracked_models_[offset];
   for (vcl_vector<vtol_face_2d_sptr>::iterator fit = tracked_faces.begin();
        fit != tracked_faces.end(); fit++)
+  {
+    vcl_vector<vtol_edge_sptr> edges;
+    (*fit)->edges(edges);
+    for (vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
+         eit != edges.end(); eit++)
     {
-        vcl_vector<vtol_edge_sptr> edges;
-      (*fit)->edges(edges);
-      for (vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
-           eit != edges.end(); eit++)
-        {
-          vtol_topology_object_sptr to = (*eit)->cast_to_edge();
-          output_topo_objs_.push_back(to);
-        }
+      vtol_topology_object_sptr to = (*eit)->cast_to_edge();
+      output_topo_objs_.push_back(to);
     }
+  }
   return true;
 }
 
