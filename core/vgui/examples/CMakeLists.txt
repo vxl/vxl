@@ -72,7 +72,7 @@ ENDIF (GLUT_FOUND)
 
 # MFC example
 #------------
-INCLUDE(${MODULE_PATH}/NewCMake/FindMFC.cmake)
+INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
 IF(MFC_FOUND)
    SUBDIRS( mfc_example )
 ENDIF(MFC_FOUND)
