@@ -30,6 +30,7 @@
 #include "test_select_n_from_m.cxx"
 #include "test_lda.cxx"
 #include "test_read_props.cxx"
+#include "test_correspond_points.cxx"
 
 #undef TESTLIB_DEFINE_MAIN
 #define TESTLIB_DEFINE_MAIN(x) int main() \
@@ -63,6 +64,7 @@ void run_test_mbl()
   test_thin_plate_spline_3d();
   test_thin_plate_spline_weights_3d();
   test_read_props();
+  test_correspond_points();
 }
 
 TESTLIB_DEFINE_MAIN(run_test_mbl);
