@@ -62,6 +62,7 @@ SET( rgrl_sources
   rgrl_est_quadratic.h                 rgrl_est_quadratic.cxx
   rgrl_est_reduced_quad2d.h            rgrl_est_reduced_quad2d.cxx
   rgrl_est_homography2d.h              rgrl_est_homography2d.cxx
+  rgrl_est_homo2d_lm.h                rgrl_est_homo2d_lm.cxx
                                      
   rgrl_scale.h                         rgrl_scale.cxx                
   rgrl_scale_sptr.h
