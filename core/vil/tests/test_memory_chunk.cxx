@@ -2,7 +2,6 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vil2/vil2_memory_chunk.h>
-#include <vil2/io/vil2_io_memory_chunk.h>
 
 void test_memory_chunk1()
 {
