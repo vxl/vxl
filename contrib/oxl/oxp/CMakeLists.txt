@@ -15,9 +15,9 @@ SOURCE_FILES(oxp_sources
  SequenceFileName.cxx       SequenceFileName.h
  oxp_parse_seqname.cxx      oxp_parse_seqname.h
  oxp_bunch_of_files.cxx     oxp_bunch_of_files.h
- vsl_conic_as_matrix.cxx    vsl_conic_as_matrix.h
- vsl_conic_as_params.cxx    vsl_conic_as_params.h
- vsl_conic_points.cxx       vsl_conic_points.h
+#vsl_conic_as_matrix.cxx    vsl_conic_as_matrix.h
+#vsl_conic_as_params.cxx    vsl_conic_as_params.h
+#vsl_conic_points.cxx       vsl_conic_points.h
  oxp_yuv_to_rgb.cxx         oxp_yuv_to_rgb.h
  oxp_vidl_moviefile.cxx     oxp_vidl_moviefile.h
 
