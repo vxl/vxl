@@ -56,6 +56,8 @@ TESTS += test_algo_grid_merge.cxx
 TESTS += test_algo_find_4con_boundary.cxx
 TESTS += test_algo_fft.cxx
 TESTS += test_suppress_non_max.cxx
+TESTS += test_algo_histogram.cxx
+TESTS += test_algo_histogram_equalise.cxx
 
 #MINI_PROG_SOURCES += vil_mil_gauss_general_timings.cxx
 #MINI_PROG_SOURCES += vil_vil_compare_access_timings.cxx

@@ -35,6 +35,8 @@ MANPAGE_SOURCES += vil_find_4con_boundary.h
 MANPAGE_SOURCES += vil_fft.txx
 MANPAGE_SOURCES += vil_exp_filter_2d.h
 MANPAGE_SOURCES += vil_suppress_non_max.h
+SOURCES += vil_histogram.cxx
+SOURCES += vil_histogram_equalise.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
