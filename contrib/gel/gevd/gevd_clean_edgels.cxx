@@ -88,17 +88,17 @@ void gevd_clean_edgels::DoCleanEdgelChains(vcl_vector<vtol_edge_2d_sptr>& in_edg
   for (vcl_vector<vtol_edge_2d_sptr>::iterator egit = in_edgels.begin();
        egit != in_edgels.end(); ++egit)
     out_edgels_->push_back(*egit);
-  if ( steps > 0 )
+  if (steps > 0)
     this->JumpGaps();
-  if ( steps > 1 )
+  if (steps > 1)
     this->DeleteShortEdges();
-  if ( steps > 2 )
+  if (steps > 2)
     this->FixDefficientEdgels();
-  if ( steps > 3 )
+  if (steps > 3)
     this->RemoveBridges();
-  if ( steps > 4 )
+  if (steps > 4)
     this->RemoveJaggies();
-  if ( steps > 5 )
+  if (steps > 5)
     this->RemoveLoops();
   vcl_cout << "Total Clean Time(" << out_edgels_->size() << ") in " << t.real() << " msecs.\n";
 }
@@ -201,8 +201,8 @@ void gevd_clean_edgels::remove_connected_edges(vtol_vertex_2d* v, vcl_vector<vto
        eit != edges.end(); ++eit)
   {
     vtol_edge_2d_sptr e = (*eit);
-    if ( e->v1() != v && e->v2() != v )
-      tmp.push_back ( e );
+    if (e->v1() != v && e->v2() != v)
+      tmp.push_back(e);
   }
   edges = tmp;
 }
@@ -217,16 +217,16 @@ bool gevd_clean_edgels::closest_vertex(vtol_edge_2d_sptr e, vsol_point_2d_sptr p
 {
   vdgl_digital_curve_sptr dc = e->curve()->cast_to_digital_curve();
   if (!dc){ v = NULL; return false;}
-  vsol_point_2d_sptr sp = new vsol_point_2d ( *p );
+  vsol_point_2d_sptr sp = new vsol_point_2d(*p);
   vsol_point_2d_sptr pc = dc->get_interpolator()->closest_point_on_curve( sp );
-  double span_sq = p->distance ( pc );
+  double span_sq = p->distance(pc);
   if (radius < span_sq)
     vcl_cerr << __FILE__ << ": closest_vertex(): Warning: ignoring radius="
              << radius << " since span=" << span_sq << " is larger\n";
 
   vtol_vertex_2d_sptr v1 = e->v1()->cast_to_vertex_2d(), v2 = e->v2()->cast_to_vertex_2d();
-  double d1 = v1->point()->distance ( p );
-  double d2 = v2->point()->distance ( p );
+  double d1 = v1->point()->distance(p);
+  double d2 = v2->point()->distance(p);
   if (d1<d2)
     {
       if (d1<=span_sq)
@@ -253,30 +253,30 @@ bool gevd_clean_edgels::split_edge(vtol_edge_2d_sptr e, vtol_vertex_2d_sptr new_
                                    vtol_edge_2d_sptr & e1, vtol_edge_2d_sptr & e2)
 {
   if (!e||!new_v)
-    {
-      vcl_cout << "In gevd_clean_edgels::split_edge(..) null edge or vertex\n";
-      return false;
-    }
+  {
+    vcl_cout << "In gevd_clean_edgels::split_edge(..) null edge or vertex\n";
+    return false;
+  }
   vdgl_digital_curve_sptr dc = e->curve()->cast_to_digital_curve();
   if (!dc)
-    {
-      vcl_cout << "In gevd_clean_edgels::split_edge(..) no digital curve\n";
-      return false;
-    }
+  {
+    vcl_cout << "In gevd_clean_edgels::split_edge(..) no digital curve\n";
+    return false;
+  }
 
   // Find the proper index
   int index = -1;
   double min_distance = 10e5;
-  for ( int i=0; i< dc->get_interpolator()->get_edgel_chain()->size(); i++)
-    {
+  for (unsigned int i=0; i< dc->get_interpolator()->get_edgel_chain()->size(); ++i)
+  {
     vgl_point_2d<double> curve_point = dc->get_interpolator()->get_edgel_chain()->edgel(i).get_pt();
-    double d = new_v->point()->distance ( vsol_point_2d ( curve_point ) );
-    if ( d < min_distance )
-      {
+    double d = new_v->point()->distance(vsol_point_2d(curve_point));
+    if (d < min_distance)
+    {
       index = i;
       min_distance = d;
-      }
     }
+  }
 
   vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
 
@@ -304,7 +304,7 @@ bool gevd_clean_edgels::split_edge(vtol_edge_2d_sptr e, vtol_vertex_2d_sptr new_
   edge2->set_curve(*dc2);
   vdgl_edgel_chain *cxy2= ec2;
 
-  for (int k = index; k < dc->get_interpolator()->get_edgel_chain()->size(); k++)
+  for (unsigned int k = index; k < dc->get_interpolator()->get_edgel_chain()->size(); ++k)
     cxy2->add_edgel( cxy->edgel( k ));
 
   vtol_vertex_sptr v2 = e->v2()->cast_to_vertex();
@@ -345,8 +345,8 @@ void gevd_clean_edgels::JumpGaps()
   vcl_vector<vtol_edge_2d_sptr >::iterator eit;
   for (eit = out_edgels_->begin(); eit != out_edgels_->end(); ++eit)
   {
-    verts.push_back ( (*eit)->v1()->cast_to_vertex_2d() );
-    verts.push_back ( (*eit)->v2()->cast_to_vertex_2d() );
+    verts.push_back( (*eit)->v1()->cast_to_vertex_2d() );
+    verts.push_back( (*eit)->v2()->cast_to_vertex_2d() );
   }
   //Iterate over the vertices and find nearby edgel chains
   for (vcl_vector<vtol_vertex_2d*>::iterator vit = verts.begin();
@@ -362,7 +362,7 @@ void gevd_clean_edgels::JumpGaps()
     for (eit = out_edgels_->begin(); eit != out_edgels_->end(); ++eit)
     {
       vdgl_digital_curve_sptr dc = (*eit)->curve()->cast_to_digital_curve();
-      if ( dc && radius > dc->get_interpolator()->distance_curve_to_point ( p ) )
+      if (dc && radius > dc->get_interpolator()->distance_curve_to_point(p))
         near_edges.push_back( *eit );
     }
 
@@ -396,11 +396,11 @@ void gevd_clean_edgels::JumpGaps()
         out_edgels_->push_back(e2);
         vcl_vector<vtol_edge_2d_sptr >::iterator f;
         //e->unlink(); -tpk-
-        f = vcl_find ( out_edgels_->begin(), out_edgels_->end(), e );
-        if ( f != out_edgels_->end() )
+        f = vcl_find(out_edgels_->begin(), out_edgels_->end(), e);
+        if (f != out_edgels_->end())
         {
           if (verbose) vcl_cout <<"getting rid of old edge\n";
-          out_edgels_->erase ( f );
+          out_edgels_->erase(f);
         }
       }
       //Check if an edge already exists
@@ -414,10 +414,10 @@ void gevd_clean_edgels::JumpGaps()
       vtol_edge_2d_sptr new_edge = new vtol_edge_2d(v, new_v);
       // vdgl_digital_curve_sptr dc = new vdgl_digital_curve(v->point(),new_v->point());
       vdgl_edgel_chain* new_chain = new vdgl_edgel_chain();
-      new_chain->add_edgel ( vdgl_edgel ( v->point()->x(), v->point()->y() ) );
-      new_chain->add_edgel ( vdgl_edgel ( new_v->point()->x(), new_v->point()->y() ) );
-      vdgl_digital_curve_sptr dc = new vdgl_digital_curve( new vdgl_interpolator_linear ( new_chain ) );
-      // dc->set_p0 ( vsol_point_2d_sptr ( new vsol_point_2d ( v ) ) );
+      new_chain->add_edgel(vdgl_edgel(v->point()->x(), v->point()->y()));
+      new_chain->add_edgel(vdgl_edgel(new_v->point()->x(), new_v->point()->y()));
+      vdgl_digital_curve_sptr dc = new vdgl_digital_curve(new vdgl_interpolator_linear(new_chain));
+      // dc->set_p0(vsol_point_2d_sptr(new vsol_point_2d(v)));
       new_edge->set_curve(*dc);
       out_edgels_->push_back(new_edge);
     }
@@ -443,7 +443,7 @@ void gevd_clean_edgels::DeleteShortEdges()
   for (vcl_vector<vtol_edge_2d_sptr >::iterator egit = out_edgels_->begin();
        egit != out_edgels_->end(); egit++, ++N_total)
   {
-    if ( ( edgelcount % 100 ) == 0 )
+    if ( (edgelcount % 100) == 0 )
       vcl_cout << "Edgels: " << edgelcount << '/' << out_edgels_->size() << vcl_endl;
     edgelcount++;
     vtol_edge_2d_sptr e = (vtol_edge_2d_sptr )(*egit);
@@ -467,8 +467,8 @@ void gevd_clean_edgels::DeleteShortEdges()
       bool all_close = true;
       for (int t = 0; (t<n_edgels)&&all_close; t++)
       {
-        int xe = int ( chain->edgel(t).x() );
-        int ye = int ( chain->edgel(t).y() );
+        int xe = int(chain->edgel(t).x());
+        int ye = int(chain->edgel(t).y());
         dx = xe-x1; if (dx < 0) dx = -dx; // dx = vcl_abs(xe-x1);
         dy = ye-y1; if (dy < 0) dy = -dy; // dy = vcl_abs(ye-y1);
         bool far_from_v1 = (dx>d_close||dy>d_close);
@@ -499,8 +499,8 @@ void gevd_clean_edgels::DeleteShortEdges()
   {
     vcl_vector<vtol_edge_2d_sptr >::iterator f;
     // (*eit)->unlink();
-    f = vcl_find ( out_edgels_->begin(), out_edgels_->end(), *eit );
-    if ( f != out_edgels_->end() )
+    f = vcl_find(out_edgels_->begin(), out_edgels_->end(), *eit);
+    if (f != out_edgels_->end())
       out_edgels_->erase( f );
   }
 
@@ -524,10 +524,10 @@ void gevd_clean_edgels::RemoveBridges()
     // vcl_vector<vtol_vertex_2d*>* verts = Vertices(out_edgels_);
     vcl_vector<vtol_vertex_2d*> verts;
     vcl_vector<vtol_edge_2d_sptr >::iterator eit;
-    for ( eit = out_edgels_->begin(); eit != out_edgels_->end(); ++eit )
+    for (eit = out_edgels_->begin(); eit != out_edgels_->end(); ++eit)
     {
-      verts.push_back ( (*eit)->v1()->cast_to_vertex_2d() );
-      verts.push_back ( (*eit)->v2()->cast_to_vertex_2d() );
+      verts.push_back( (*eit)->v1()->cast_to_vertex_2d() );
+      verts.push_back( (*eit)->v2()->cast_to_vertex_2d() );
     }
     v_one.clear();
     //Collect all the vertices of order one which are not self-loops.
@@ -536,7 +536,7 @@ void gevd_clean_edgels::RemoveBridges()
     {
       vtol_vertex_2d* v = *vit;
       vcl_vector<vtol_edge_sptr>* edges = v->edges();
-      if ( edges->size()==1 )
+      if (edges->size()==1)
       {
         vtol_edge_sptr e = (*edges)[0];
         if (e->v1()!=e->v2())
@@ -582,10 +582,10 @@ void gevd_clean_edgels::RemoveBridges()
       vcl_vector<vtol_edge_2d_sptr >::iterator f;
       vcl_cout << "Removing from output edgels: " << e << vcl_endl;
       // e->unlink();
-      f = vcl_find ( out_edgels_->begin(), out_edgels_->end(), e );
-      if ( f != out_edgels_->end() )
+      f = vcl_find(out_edgels_->begin(), out_edgels_->end(), e);
+      if (f != out_edgels_->end())
       {
-        out_edgels_->erase ( f );
+        out_edgels_->erase(f);
       }
     }
   }
@@ -616,11 +616,11 @@ void gevd_clean_edgels::FixDefficientEdgels()
       vsol_point_2d_sptr p2 = v2->point();
       // vdgl_digital_curve_sptr dc = new vdgl_digital_curve(p1, p2);
       vdgl_edgel_chain_sptr chain = new vdgl_edgel_chain();
-      // chain->set_p0 ( p1 );
-      // chain->set_p1 ( p2 );
-      chain->add_edgel ( vdgl_edgel ( p1->x(), p1->y() ) );
-      chain->add_edgel ( vdgl_edgel ( p2->x(), p2->y() ) );
-      vdgl_digital_curve_sptr dc = new vdgl_digital_curve(new vdgl_interpolator_linear ( chain ) );
+      // chain->set_p0(p1);
+      // chain->set_p1(p2);
+      chain->add_edgel(vdgl_edgel(p1->x(), p1->y()));
+      chain->add_edgel(vdgl_edgel(p2->x(), p2->y()));
+      vdgl_digital_curve_sptr dc = new vdgl_digital_curve(new vdgl_interpolator_linear(chain));
       e->set_curve(*dc);
     }
   }
@@ -705,9 +705,9 @@ void gevd_clean_edgels::RemoveLoops()
   for (vcl_vector<vtol_edge_2d_sptr >::iterator eit = removed_edges.begin();
        eit != removed_edges.end(); ++eit)
   {
-    vcl_vector<vtol_edge_2d_sptr>::iterator f = vcl_find ( out_edgels_->begin(), out_edgels_->end(), *eit );
-    if ( f != out_edgels_->end() )
-      out_edgels_->erase ( f );
+    vcl_vector<vtol_edge_2d_sptr>::iterator f = vcl_find(out_edgels_->begin(), out_edgels_->end(), *eit);
+    if (f != out_edgels_->end())
+      out_edgels_->erase(f);
   }
 
   vcl_cout << "Remove Loops(" << out_edgels_->size() << ") in " << t.real() << " msecs.\n";
