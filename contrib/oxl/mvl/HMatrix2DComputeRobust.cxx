@@ -40,6 +40,7 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
     point2_image[a] = HomgPoint2D(temp2[0], temp2[1], 1.0);
   }
 
+  HMatrix2D Hs;
   double Ds = 1e+10;
   int count;
   vcl_vector<bool> inlier_list(data_size_);
@@ -69,7 +70,6 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
 //  HMatrix2D* H_temp_homg = new HMatrix2D();
 //  HMatrix2D* H_temp = new HMatrix2D();
 
-    HMatrix2D Hs;
     if (!Computor.compute(four1_homg, four2_homg, &Hs))
       vcl_cout << "HMatrix2DCompute4Point - failure!" << vcl_endl;
 
