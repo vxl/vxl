@@ -36,20 +36,20 @@ class vnl_real_polynomial
   //: Initialize polynomial.
   // The polynomial is $ a[0] x^d + a[1] x^{d-1} + \cdots + a[d] = 0 $.
   vnl_real_polynomial(vnl_vector<double> const & a): coeffs_(a) {
-    assert(!coeffs_.empty()); }
+    if(a.empty()){ coeffs_.set_size(1);coeffs_(0)=0.0; } }
 
   //: Initialize polynomial from C vector.
   // The parameter len is the number
   // of coefficients, one greater than the degree.
   vnl_real_polynomial(double const * a, unsigned len): coeffs_(a, len) {
-    assert(len>0);}
+    if(len==0){ coeffs_.set_size(1);coeffs_(0)=0.0; } }
 
   //: Initialize polynomial from double.
   // Useful when adding or multiplying a polynomial and a number.
   vnl_real_polynomial(double a): coeffs_(1u, a) {}
 
   //: Initialize polynomial of a given degree.
-  vnl_real_polynomial(int d): coeffs_(d+1) {assert (d>=0);}
+  vnl_real_polynomial(int d): coeffs_(d+1) { assert (d>=0);  }
 
   bool operator==(vnl_real_polynomial const& p) {
     return p.coefficients() == coeffs_; }
