@@ -1,6 +1,10 @@
 /*
   fsm@robots.ox.ac.uk
 */
+#ifdef __GNUC__
+#pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
+#endif
+
 #include <vul/vul_arg.h>
 
 #include <osl/osl_edge.h>

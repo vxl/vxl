@@ -1,3 +1,7 @@
+#ifdef __GNUC__
+#pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
+#endif
+
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vul/vul_arg.h>
