@@ -283,11 +283,12 @@ PASSTHRU(int, unlink, (const char * s), (s));
 // libc has a usleep(), whether declared in unistd.h or not.
 # if VXL_UNISTD_USLEEP_IS_VOID 
 // if usleep() returns void, we have to fake the return value :
-#if !(defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
+#if !defined(VCL_SUNPRO_CC_50)
 // Error: Only one of a set of overloaded functions can be extern "C".
 // Error: usleep(unsigned), returning void, was previously declared returning int.
 // Error: Overloading ambiguity between "usleep(unsigned)" and "usleep(unsigned)".
 extern "C" void usleep (vpl_useconds_t) VPL_THROW(());
+//was: extern "C" void usleep (unsigned vpl_useconds_t);
 #endif
 int vpl_usleep(vpl_useconds_t s) { ::usleep(s); return 0; }
 # else
