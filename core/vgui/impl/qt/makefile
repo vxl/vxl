@@ -19,6 +19,7 @@ MOCHEADERS := $(shell fgrep -l Q_OBJECT $(ALLHEADERS))
 MOCSOURCES := $(MOCHEADERS:.$(HPPEXT)=_mocced.$(CPPEXT))
 
 SOURCES += ${MOCSOURCES}
+DEFINES += -DQT_NO_STL
 
 ################################
 include ${IUEROOT}/config/top.mk
