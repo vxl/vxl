@@ -4,10 +4,10 @@
   fsm
 */
 
-// this is to get the vcl_ios_* macros.
-#include "vcl_iostream.h"
 
 #if (defined(VCL_GCC) && !VCL_CXX_HAS_HEADER_SSTREAM) || defined(VCL_SGI_CC_720)
+// this is to get the vcl_ios_* macros.
+# include "vcl_iostream.h"
 # include <strstream.h>
 # include <vcl_string.h>
 
