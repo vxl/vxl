@@ -13,6 +13,7 @@
 //
 // \verbatim
 // Modifications
+// Peter Vanroose -  4 July 2001 - Added geometric interface like vgl_point_2d
 // Peter Vanroose -  1 July 2001 - Renamed data to x_ y_ w_, inlined constructors
 // Peter Vanroose - 27 June 2001 - Added operator==
 // \endverbatim
@@ -159,7 +160,9 @@ template <class Type>
 inline bool collinear(vgl_homg_point_2d<Type> const& p1,
                       vgl_homg_point_2d<Type> const& p2,
                       vgl_homg_point_2d<Type> const& p3) {
-  return parallel(p1-p2, p1-p3);
+  return (p1.x()*p2.y()-p1.y()*p2.x())*p3.w()
+        +(p3.x()*p1.y()-p3.y()*p1.x())*p2.w()
+        +(p2.x()*p3.y()-p2.y()*p3.x())*p1.w()==0;
 }
 
 //: Return the relative distance to p1 wrt p1-p2 of p3.
