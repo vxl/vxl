@@ -133,6 +133,16 @@ class vidl_io
   // returns vcl_string names  for supported types
   static vcl_list<vcl_string> supported_types();
 
+  // This is no longer used by the new vidl approach of loading all
+  // available codecs. This function is present simply to prevent code
+  // breakage, and will eventually be removed.
+  static void register_codec( vidl_codec* ) { };
+
+  // This is no longer used by the new vidl approach of loading all
+  // available codecs. This function is present simply to prevent code
+  // breakage, and will eventually be removed.
+  static void close() { };
+
  public:
 
   // Helpers-------------------------------------------------------------------
