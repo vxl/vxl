@@ -1,18 +1,7 @@
 // This is core/vcsl/vcsl_spatial_transformation.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
-//:
-// \file
-
 #include "vcsl_spatial_transformation.h"
 #include <vcl_cmath.h> // for acos(), sin()
-
 #include <vcl_cassert.h>
-
-//***************************************************************************
-// Status report
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Is `time' between the two time bounds ?
@@ -22,19 +11,6 @@ bool vcsl_spatial_transformation::valid_time(double time) const
   if (beat_.size() == 0) return true;
   return (beat_[0]<=time)&&(time<=beat_[beat_.size()-1]);
 }
-
-//---------------------------------------------------------------------------
-// Is `this' correctly set ?
-//---------------------------------------------------------------------------
-bool vcsl_spatial_transformation::is_valid(void) const
-{
-  return ((beat_.size()==0)&&(interpolator_.size()==0))||
-         (beat_.size()==interpolator_.size()+1);
-}
-
-//***************************************************************************
-// Basic operations
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Return the index of the beat inferior or equal to `time'
@@ -59,26 +35,6 @@ int vcsl_spatial_transformation::matching_interval(double time) const
   return inf;
 }
 
-//***************************************************************************
-// Status setting
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Set the list of time clocks
-//---------------------------------------------------------------------------
-void vcsl_spatial_transformation::set_beat(vcl_vector<double> const& new_beat)
-{
-  beat_=new_beat;
-}
-
-//---------------------------------------------------------------------------
-//: Set the list of interpolators
-//---------------------------------------------------------------------------
-void vcsl_spatial_transformation::set_interpolators(vcl_vector<vcsl_interpolator> const& new_interpolators)
-{
-  interpolator_=new_interpolators;
-}
-
 //---------------------------------------------------------------------------
 // Empty the time clock and interpolators, thereby making the transf static
 //---------------------------------------------------------------------------
@@ -87,10 +43,6 @@ void vcsl_spatial_transformation::set_static()
   beat_.clear();
   interpolator_.clear();
 }
-
-//***************************************************************************
-// Interpolators
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Linear interpolation on scalar values
@@ -173,8 +125,7 @@ vcsl_spatial_transformation::lqi(const vnl_quaternion<double> &v0,
   double t1=beat_[index+1];
   double t=(time-t0)/(t1-t0);
 
-  double cosangle;
-  cosangle=dot_product(v0.as_ref(), v1.as_ref());
+  double cosangle=dot_product(v0.as_ref(), v1.as_ref());
   double angle=vcl_acos(cosangle);
   double invsin=1/vcl_sin(angle);
   double coef1=vcl_sin((1-t)*angle)*invsin;
