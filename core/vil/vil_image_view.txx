@@ -38,11 +38,27 @@ vil2_image_view<T>::vil2_image_view(const T* top_left, unsigned nx, unsigned ny,
 template<class T>
 vil2_image_view<T>::vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem_chunk,
                   const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
-                  unsigned xstep, unsigned ystep, unsigned planestep)
+                  unsigned xstep, unsigned ystep, unsigned planestep):
+  vil2_image_view_base(nx, ny, nplanes), top_left_(const_cast<T*>( top_left))
+  ,xstep_(xstep), ystep_(ystep), planestep_(planestep), ptr_(mem_chunk)
+
 {
-  set_to_memory(top_left,nx,ny,nplanes,xstep,ystep,planestep);
-  ptr_ = mem_chunk;
+  // check view and chunk are in rough agreement
+  assert(mem_chunk->size() >= nplanes*nx*ny*sizeof(T));
+  assert(top_left >= (const T*)mem_chunk->data() &&
+    top_left < (const T*)mem_chunk->data() + mem_chunk->size());
+  
 }
+
+//: Copy constructor
+// If this view cannot set itself to view the other data (e.g. because the
+// types are incompatible) it will set itself to empty.
+template<class T>
+vil2_image_view<T>::vil2_image_view(const vil2_image_view_base& that)
+{
+  operator=(that);
+}
+
 
 
 //: Perform deep copy of the src image, placing in this image
@@ -85,10 +101,35 @@ void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
 template<class T>
 vil2_image_view<T> vil2_image_view<T>::deep_copy() const
 {
- vil2_image_view<T> cpy;
- cpy.deep_copy(*this);
- return cpy;
+  vil2_image_view<T> cpy;
+  cpy.deep_copy(*this);
+  return cpy;
 }
+
+
+//: Create a copy of the data viewed by this, and return a view of copy.
+// This function can be made a lot more powerful - to automatically convert between pixel types.
+template<class T>
+const vil2_image_view_base & vil2_image_view<T>::operator = (const vil2_image_view_base & rhs)
+{
+  if (static_cast<const vil2_image_view_base*>(this) == &rhs)
+    return *this;
+
+  if (rhs.is_a() == is_a())
+  {
+    const vil2_image_view<T> &that = static_cast<const vil2_image_view<T>&>(rhs);
+    nx_=that.nx_;
+    ny_=that.ny_;
+    nplanes_=that.nplanes_;
+    xstep_=that.xstep_;
+    ystep_=that.ystep_;
+    planestep_=that.planestep_;
+    top_left_=that.top_left_;
+    ptr_=that.ptr_;
+  }
+  return *this;
+}
+
 
 //=======================================================================
 

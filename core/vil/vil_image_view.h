@@ -53,6 +53,11 @@ public:
                   const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
                   unsigned xstep, unsigned ystep, unsigned planestep);
 
+    //: Copy constructor
+    // If this view cannot set itself to view the other data (e.g. because the
+    // types are incompatible) it will set itself to empty.
+  vil2_image_view(const vil2_image_view_base& );
+
     //  Destructor
   virtual ~vil2_image_view();
 
@@ -88,6 +93,10 @@ public:
   int ystep() const { return ystep_; }
   //: Add this to your pixel pointer to get pixel on next plane
   int planestep() const { return planestep_; }
+
+  //: Cast to bool is true if pointing at some data.
+  operator bool () const { return top_left_ != (T*)0; }
+
 
   //: The number of pixels.
   inline unsigned size() const { return nx() * ny() * nplanes(); }
@@ -200,6 +209,8 @@ public:
     //  to different image data objects that contain identical images, then
     //  the result will still be false.
   bool operator==(const vil2_image_view<T> &other) const;
+
+  const vil2_image_view_base & operator = (const vil2_image_view_base & rhs);
 };
 
 //: Print a 1-line summary of contents
