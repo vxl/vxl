@@ -1,3 +1,4 @@
+INCLUDE( ${allvxl_SOURCE_DIR}/conversions/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/gel/vdgl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/gel/vsol/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/osl/CMakeListsLink.txt )

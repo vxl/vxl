@@ -1,7 +1,11 @@
+INCLUDE( ${allvxl_SOURCE_DIR}/conversions/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
 
-
+IF(BUILD_MUL)
+  INCLUDE( ${allvxl_SOURCE_DIR}/mul/mil/CMakeListsLink.txt )
+  ADD_EXECUTABLE( test_mil_conversions test_mil_conversions.cxx )
+ENDIF(BUILD_MUL)
 IF(HAS_IMAGE)
   LINK_DIRECTORIES( Image COOL Numerics GeneralUtility )
   LINK_LIBRARIES( ImageClasses Basics Numerics )
