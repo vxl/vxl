@@ -254,7 +254,7 @@ bool vtol_face::operator==(const vsol_spatial_object_2d& obj) const
 
 //: Returns the ith inferior vtol_one_chain of the vtol_face.
 
-vtol_one_chain *vtol_face::get_one_chain(int which)
+vtol_one_chain_sptr vtol_face::get_one_chain(int which)
 {
   if ((unsigned int)which < inferiors()->size())
     return (inferiors_[which])->cast_to_one_chain();
@@ -267,7 +267,7 @@ vtol_one_chain *vtol_face::get_one_chain(int which)
 
 //: Returns the first inferior vtol_one_chain of the vtol_face (the boundary onechain).
 
-vtol_one_chain *vtol_face::get_boundary_cycle(void)
+vtol_one_chain_sptr vtol_face::get_boundary_cycle(void)
 {
   // The outside boundary vtol_one_chain will *always*
   // be the first one chain in the inferiors
@@ -280,9 +280,9 @@ vtol_one_chain *vtol_face::get_boundary_cycle(void)
 //---------------------------------------------------------------------------
 bool vtol_face::add_hole_cycle(vtol_one_chain_sptr new_hole)
 {
-  vtol_one_chain *onech=get_boundary_cycle();
+  vtol_one_chain_sptr onech=get_boundary_cycle();
 
-  if (onech!=0)
+  if (onech)
   {
     onech->link_chain_inferior(new_hole);
     return true;
