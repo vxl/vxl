@@ -15,8 +15,8 @@
 * The core class is vil2_image_view<T> which gives a view of an image in memory.
 * The only way to get at the pixel data in an image is through a vil2_image_view<T>.
 *
-* Large images (in files) can be accessed through the vil2_image_resource class, but
-* one can only get at the data by asking for a view of it, which loads the
+* Large images (in files) can be accessed through the vil2_image_resource class,
+* but one can only get at the data by asking for a view of it, which loads the
 * requested section into memory and creates a suitable vil2_image_view<T>.
 *
 * The vil2_image_view<T> represents a view of a multi-plane image of given type.
@@ -38,20 +38,20 @@
 vil2_image_view<vil_rgb<vxl_byte> > rgb_image;
 rgb_image = vil2_load("my_image.jpg");
 
-  // Create a 3 plane view of rgb
+// Create a 3 plane view of rgb
 vil2_image_view<vxl_byte > three_plane_image =  rgb_image;
-  // or explicitly
+// or explicitly
 three_plane_image =  vil2_view_as_planes(rgb_image);
-  // or with less typing
+// or with less typing
 three_plane_image = vil2_load("my_image.jpg");
 
-  // Now create rgb view of 3 plane image (note: will set view to empty if not possible)
+// Now create rgb view of 3 plane image (note: will set view to empty if not possible)
 vil2_image_view<vil_rgb<vxl_byte> > rgb_image2 = three_plane_image;
-  // or explicitly
+// or explicitly
 rgb_image2 = vil2_view_as_rgb(three_plane_image);
 
-  // If you want a greyscale image no matter whether the underlying image is rgb or grey
-vil2_image_view<vxl_byte> image2 = vil2_convert_to_gray_using_average("my_image.jpg");
+// If you want a greyscale image no matter whether the underlying image is rgb or grey
+vil2_image_view<vxl_byte> image2 = vil2_convert_to_grey_using_average("my_image.jpg");
 
 \endverbatim
 *
@@ -60,7 +60,7 @@ vil2_image_view<vxl_byte> image2 = vil2_convert_to_gray_using_average("my_image.
 * - vil2_view_as_rgb(view): Create an rgb pixel view from a multi-plane view.
 *
 * There are some conversions that will process each pixel to do a conversion.
-* - vil2_convert_to_grey_using_average(view, new_pixel_type): Create an greyscale view from any image.
+* - vil2_convert_to_grey_using_average(view, new_pixel_type): Create a greyscale view from any image.
 * - vil2_convert_cast(source, dest): Convert, for example, a byte image to float image
 *
 * \subsection copying Copying
@@ -74,8 +74,8 @@ vil2_image_view<vxl_byte> image2 = vil2_convert_to_gray_using_average("my_image.
 * if it is possible to reconfigure the view very cheaply.
 * If you wish to copy the image data itself, then use the vil2_copy_deep(src_im)
 * function. This copies the raw data into a newly created space, and returns
-* a new view of it.  Alternatively, use the method deep_copy(dest_im), or the
-* function vil2_copy_reformat(src_im, dest_im).
+* a new view of it.  Alternatively, use the method dest_im.deep_copy(src_im),
+* or the function vil2_copy_reformat(src_im, dest_im).
 *
 *
 * Example of loading, copying then processing:
@@ -83,7 +83,7 @@ vil2_image_view<vxl_byte> image2 = vil2_convert_to_gray_using_average("my_image.
 vil2_image_view<vxl_byte> image;
 image = vil2_load("test_image.jpg");
 vil2_image_view<vxl_byte> image2 = vil2_copy_deep(image);
-vil2_invert_image(image2);
+my_invert_image(image2);
 vil2_save(image2,"output_image.jpg");
 \endverbatim
 *
@@ -119,21 +119,21 @@ for (unsigned p=0;p<nplanes;++p)
 \endverbatim
 *
 * \subsection resize Resizing
-* When one resizes a vil2_image_view<T>  the view disconnects from the data (which may then
-* be deleted if no other views are connected), allocates a new chunk of memory for the new
-* image and sets the view to look at it.
+* When one resizes a vil2_image_view<T> the view disconnects from the data
+* (which may then be deleted if no other views are connected), allocates a new
+* chunk of memory for the new image and sets the view to look at it.
 *
-* Note that if the resize does not change the image size, then nothing is done and the view
-* remains unchanged.
+* Note that if the resize does not change the image size, then nothing is done
+* and the view remains unchanged.
 *
 * \subsection view_manipulation Manipulating Views
-* There are a variety of ways one can view the same data, allowing one to appear to
-* change the data simply by changing ones view of it.
+* There are a variety of ways one can view the same data, allowing one to appear
+* to change the data simply by changing ones view of it.
 *
-* For instance one can obtain a transposed view of an image simply by swapping ni-nj and
-* istep-jstep.  This is particularly useful when implementing decomposable filters, as
-* one need only write it for one direction, then can apply it to the original image and
-* its transpose.
+* For instance one can obtain a transposed view of an image simply by swapping
+* ni-nj and istep-jstep.  This is particularly useful when implementing
+* decomposable filters, as one need only write it for one direction, then can
+* apply it to the original image and its transpose.
 * \verbatim
 vil2_image_view<vxl_byte> ;
 src_image = vil2_load("image_file.jpg");
@@ -141,76 +141,87 @@ vil2_image_view<vxl_byte> tmp_image1,tmp_image2;
 vil2_algo_exp_filter_1d(tmp_image1,src_image,k,double());  // Apply filter to rows of src_image
 vil2_algo_exp_filter_1d(tmp_image2,tmp_image1.tranpose(),k,double());  // Apply filter to cols of tmp_image1
 vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
-// Note that vil2_filter_rows(vil2_transpose(filtered_image),vil2_transpose(tmp_image1))
+// Note that
+// vil2_algo_exp_filter_1d(vil2_transpose(filtered_image),vil2_transpose(tmp_image1),k,double())
 // would only work correctly if filtered_image was already the correct size.
-// If it isn't, then the view created by vil2_transpose(filtered_image) would be resized,
-// and disconnected from filtered_image itself, which would remain unchanged.
+// If it isn't, then the view created by vil2_transpose(filtered_image) would
+// be resized, and disconnected from filtered_image itself, which would remain
+// unchanged.
 \endverbatim
 *
 * View manipulations include:
-* - vil2_transpose : Return transposed view
-* - vil2_flip_lr : View which reflects along i (ie i -> (ni-1)-i) (left/right)
-* - vil2_flip_ud : View which reflects along j (ie j -> (nj-1)-j) (up/down)
-* - vil2_view_as_planes : View rgb<T> data as planes of T
-* - vil2_view_as_rgb : View plane data as rgb<T> pixels
+* - vil2_transpose     : Return transposed view
+* - vil2_flip_lr       : View which reflects along i (ie i -> ni-1-i left/right)
+* - vil2_flip_ud       : View which reflects along j (ie j -> nj-1-j up/down)
+* - vil2_view_as_planes: View rgb<T> data as planes of T
+* - vil2_view_as_rgb   : View plane data as rgb<T> pixels
 *
 * \subsection view_ops Operations on Views
 * Useful simple operations on views include
-* - vil2_print_all(os,view) : Prints out view in a grid
-* - vil2_fill(view,value)   : Fills view with value
+* - vil2_print_all(os,view)     : Prints out view in a grid
+* - vil2_fill(view,value)       : Fills view with value
 * - vil2_fill_row(view,j,value) : Fills row j with value
 * - vil2_fill_col(view,i,value) : Fills col i with value
 *
 * \section image_src Image resources
-* The vil2_image_resource class is an abstract base class for image data, views of which can be
-* obtained (or changed) with the get_view()/put_view() functions.
+* The vil2_image_resource class is an abstract base class for image data, views
+* of which can be obtained (or changed) with the get_view()/put_view() functions.
 * The types of derived classes are
-* - vil2_filetype_image: Representing an image in a file
+* - Representing an image in a file: e.g. vil2_pnm_image, vil2_jpeg_image
 * - vil2_memory_image: Representing an image in memory (essentially a wrapper around a view)
-* - vil2_filter_image_resource: Representing a filtered (e.g. cropped) version of an image in a file.
+* - Representing a filtered version of an image in a file (without loading in memory):
+*   - vil2_clamp_image_resource    : behaves like a clamped version of its input
+*   - vil2_crop_image_resource     : behaves like a cropped version of its input
+*   - vil2_flip_lr_image_resource  : behaves like a mirrored version of its input
+*   - vil2_flip_ud_image_resource  : behaves like a mirrored version of its input
+*   - vil2_transpose_image_resource: behaves like a mirrored version of its input
+*   - vil2_plane_image_resource    : views at a single plane of an image
+* - Representing the outcome of an image processing algorithm (see next section)
+*   e.g. vil2_algo_convolve_1d_resource
 *
-* Most instances of vil2_image_resource objects will be through smart pointers. So expect to see
-* lots of references to vil2_image_resource_sptr types. vil2_image_resource objects in most cases
-* only deal with scalar-type pixels. Of course once you get a view of real image data in memory, you
-* can easily convert a multi-planar view into a multi-component view.
+* Most instances of vil2_image_resource objects will be through smart pointers.
+* So expect to see lots of references to vil2_image_resource_sptr types.
+* vil2_image_resource objects in most cases only deal with scalar-type pixels.
+* Of course once you get a view of real image data in memory, you can easily
+* convert a multi-planar view into a multi-component view.
 *
 * \section algo Algorithms and Image Processing
 * Some simple algorithms for manipulating images are included in the algo sub-directory.
 * Note that the argument order is typically of the form vil2_algo_f(src_im,dest_im,params).
 * Examples include
-* - vil2_algo_convolve_1d - Convolve with 1D filter - all manner of edge effects catered for
-* - vil2_algo_convolve_2d - Convolve with 2D filter (no edge effects catered for yet!)
+* - vil2_algo_convolve_1d   - Convolve with 1D filter - all manner of edge effects catered for
+* - vil2_algo_convolve_2d   - Convolve with 2D filter (no edge effects catered for yet!)
 * - vil2_algo_exp_filter_1d - Apply exponential filter along one axis (fast recursive method)
-* - vil2_algo_sobel_3x3 - to generate X/Y gradient images using 3x3 Sobel operators
-* - vil2_algo_gauss_reduce - smooth and sub-sample to produce half sized image
+* - vil2_algo_sobel_3x3     - to generate X/Y gradient images using 3x3 Sobel operators
+* - vil2_algo_gauss_reduce  - smooth and sub-sample to produce half sized image
 * See also the vipl library for a more generic image processing interface and
 * more image processing algorithms.
 *
 * \subsection maths Mathematics on images
 * Functions to evaluate image properties:
-* - vil2_math_value_range - Get range of values in view
-* - vil2_math_sum(sum,im,p) - Sum of elements in plane of view
-* - vil2_math_mean - Mean of elements
+* - vil2_math_value_range       - Get range of values in view
+* - vil2_math_sum(sum,im,p)     - Sum of elements in plane of view
+* - vil2_math_mean              - Mean of elements
 * - vil2_math_mean_and_variance - Mean and variance over view
 *
 * Functions to modify images:
-* - vil2_math_scale_values(im,s) : im(x,y,p) = s*im(x,y,p)
-* - vil2_math_scale_and_offset_values(im,s,o) : im(x,y,p) = s*im(x,y,p)+o
-* - vil2_math_image_sum(imA,imB,im_sum) : im_sum = imA+imB
-* - vil2_math_image_difference(imA,imB,im_diff) : im_diff = imA-imB
+* - vil2_math_scale_values(im,s)                    : im(x,y,p) = s*im(x,y,p)
+* - vil2_math_scale_and_offset_values(im,s,o)       : im(x,y,p) = s*im(x,y,p)+o
+* - vil2_math_image_sum(imA,imB,im_sum)             : im_sum = imA+imB
+* - vil2_math_image_difference(imA,imB,im_diff)     : im_diff = imA-imB
 * - vil2_math_image_abs_difference(imA,imB,im_diff) : im_diff = |imA-imB|
-* - vil2_math_add_image_fraction(imA,fa,imB,fb) : imA = fa*imA + fb*imB  (Useful for moving averages!)
+* - vil2_math_add_image_fraction(imA,fa,imB,fb)     : imA = fa*imA + fb*imB  (Useful for moving averages!)
 *
 * Other related maths functions
-* - vil2_math_integral_image(imA,im_sum) : Images integrating values
+* - vil2_math_integral_image(imA,im_sum)               : Images integrating values
 * - vil2_math_integral_sqr_image(imA,im_sum,im_sum_sq) : Images integrating values and square of values
 *
 * \subsection interp Interpolating images
 * Bilinear interpolation (of single planes of scalar types) can be obtained using
-* - vil2_bilin_interp : Interpolate, assuming point in valid region (seg fault otherwise)
-* - vil2_safe_bilin_interp : Interpolate, returning zero if outside image
-* - vil2_assert_bilin_interp : Intepolate, using assert to check if in valid region
-* - vil2_safe_extend_bilin_interp : Interpolate, returning nearest edge value if outside
+* - vil2_bilin_interp      : Intepolate, using assert to check if in valid region
+* - vil2_bilin_interp_raw  : Interpolate, assuming point in valid region (seg fault otherwise)
+* - vil2_bilin_interp_safe : Interpolate, returning zero if outside image
+* - vil2_bilin_interp_safe_extend : Interpolate, returning nearest edge value if outside
 *
 * Other methods of sampling include:
 * - vil2_sample_profile_bilin : Sample values along a line (using bilin. interpolation)
@@ -219,11 +230,11 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * \subsection conventions Parameter Conventions
 * For your ease of use, all vil2 functions and methods adhere to the following
 * parameter conventions:
-* - Index types - All pixel index and image size types are unsigned.
-* - Specifying a pixel - func(i,j) assumes plane 0 or func(i,j,p)
+* - Index types         - All pixel index and image size types are unsigned.
+* - Specifying a pixel  - func(i,j) assumes plane 0 or func(i,j,p)
 * - Specifying a window - func(i0,ni,j0,nj) window includes all planes.
 *
 * \section Examples examples
-* There are plenty of working examples in the examples subdirectory - these can be
-* treated as a mini-tutorial.
+* There are plenty of working examples in the examples subdirectory - these can
+* be treated as a mini-tutorial.
 */
