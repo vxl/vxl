@@ -6,6 +6,11 @@
 //:
 // \file
 // \author Don HAMILTON, Peter TU
+//
+// \verbatim
+// Modifications
+// Peter Vanroose - 27 June 2001 - Implemented operator==
+// \endverbatim
 
 template <class Type>
 class vgl_point_3d;
@@ -98,14 +103,15 @@ public:
   }
 
   //: the equality operator
-  bool operator==(const vgl_homg_point_3d<Type> &other) const;
+  bool operator==(vgl_homg_point_3d<Type> const& other) const;
+  bool operator!=(vgl_homg_point_3d<Type> const& other) const { return ! operator==(other); }
 
   //: Test for point at infinity
   // Return true when |w| < tol * max(|x|, |y|, |z|)
-  bool ideal(Type tol) {
-    return vcl_abs(w()) < tol * vcl_abs(x()) ||
-           vcl_abs(w()) < tol * vcl_abs(y()) ||
-           vcl_abs(w()) < tol * vcl_abs(z());
+  bool ideal(Type tol = Type(0)) {
+    return vcl_abs(w()) <= tol * vcl_abs(x()) ||
+           vcl_abs(w()) <= tol * vcl_abs(y()) ||
+           vcl_abs(w()) <= tol * vcl_abs(z());
   }
 
   //***************************************************************************
