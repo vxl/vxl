@@ -25,7 +25,7 @@ inline std::complex<T> vcl_sqrt(std::complex<T> const &z) {
   // NOW implemented without using log() or exp() which are
   // not necessarily available with type T - PVr, May 2002.
   T c = vcl_abs(z);
-  return std::complex<T>(vcl_sqrt((c+z.real())/T(2)), vcl_sqrt((c-z.real())/T(2)));
+  return std::complex<T>(::sqrt((c+z.real())/T(2)), ::sqrt((c-z.real())/T(2)));
 }
 
 # undef vcl_cos
