@@ -53,10 +53,10 @@ class bmrf_network : public vbl_ref_count
   // \retval false if the node was not found in the network
   bool remove_node(const bmrf_node_sptr& node);
 
-  //: Add an arc between \param n1 and \param n2 of type \param type
+  //: Add an arc between \p n1 and \p n2 of type \p type
   bool add_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, neighbor_type type );
 
-  //: Add an arc between \param n1 and \param n2 of type \param type
+  //: Add an arc between \p n1 and \p n2 of type \p type
   bool remove_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, neighbor_type type = bmrf_node::ALL );
 
   //: Remove all arcs to NULL nodes and node not found in this network
@@ -66,22 +66,22 @@ class bmrf_network : public vbl_ref_count
 
   //: Look up the node corresponding to an epi-segment
   // \return a null smart pointer if no node exists
-  // \note if the optional paramater \param frame is positive the search is restricted to that frame
+  // \note if the optional paramater \p frame is positive the search is restricted to that frame
   bmrf_node_sptr seg_to_node(const bmrf_epi_seg_sptr& seg, int frame = -1) const;
 
   //: Returns the number of nodes in the network
-  // \ note if the optional parameter \param frame is positive then the size is of that frame
+  // \ note if the optional parameter \p frame is positive then the size is of that frame
   int size( int frame = -1 );
 
   //: Returns the probability that the entire network is correct
   double probability();
 
-  //: Returns the beginning const iterator to the map of nodes in frame \param frame
-  // \note if \param frame is negative the iterator will cover all frames
+  //: Returns the beginning const iterator to the map of nodes in frame \p frame
+  // \note if \p frame is negative the iterator will cover all frames
   seg_node_map::const_iterator begin(int frame = -1) const;
 
-  //: Returns the end const iterator to the map of nodes in frame \param frame
-  // \note if \param frame is negative the iterator will cover all frames
+  //: Returns the end const iterator to the map of nodes in frame \p frame
+  // \note if \p frame is negative the iterator will cover all frames
   seg_node_map::const_iterator end(int frame = -1) const;
 
   //: Binary save self to stream.

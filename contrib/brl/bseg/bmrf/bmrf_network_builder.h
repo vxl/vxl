@@ -57,7 +57,7 @@ class bmrf_network_builder : public bmrf_network_builder_params
                   double& alpha, double& s) const;
 
   //:convert epipolar coordinates to image coordinates
-  // \note if \param u or \param v are outside the image return false.
+  // \note if \p u or \p v are outside the image return false.
   bool image_coords(const double a, const double s,
                     double& u, double& v) const;
 

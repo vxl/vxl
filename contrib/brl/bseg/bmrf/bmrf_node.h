@@ -81,19 +81,19 @@ class bmrf_node : public vbl_ref_count
   //: Calculate the conditional probability that this node is correct give its neighbors
   double probability();
 
-  //: Returns an iterator to the beginning of the type \param type neighbors
-  // \note if \param type is ALL then iteration is over all types
+  //: Returns an iterator to the beginning of the type \p type neighbors
+  // \note if \p type is ALL then iteration is over all types
   arc_iterator begin(neighbor_type type = ALL);
 
-  //: Returns an iterator to the end of the type \param type neighbors
-  // \note if \param type is ALL then iteration is over all types
+  //: Returns an iterator to the end of the type \p type neighbors
+  // \note if \p type is ALL then iteration is over all types
   arc_iterator end(neighbor_type type = ALL);
 
   //: Return the frame number at which this node is found
   bmrf_epi_seg_sptr epi_seg() const { return segment_; }
 
-  //: Returns the number of outgoing neighbors to this node of type \param type
-  // \note if \param type is ALL then this returns the total number of neighbors
+  //: Returns the number of outgoing neighbors to this node of type \p type
+  // \note if \p type is ALL then this returns the total number of neighbors
   int num_neighbors( neighbor_type type = ALL );
 
   //: Return the frame number at which this node is found
@@ -112,12 +112,12 @@ class bmrf_node : public vbl_ref_count
   void print_summary(vcl_ostream &os) const;
 
  protected:
-  //: Add \param node as a neighbor of type \param type
+  //: Add \p node as a neighbor of type \p type
   // \return true if the node was added successfully
   // \return false if the neighbor is not valid or already exists
   bool add_neighbor( bmrf_node *node, neighbor_type type );
 
-  //: Remove \param node from the neighborhood
+  //: Remove \p node from the neighborhood
   // \return true if the node is removed successfully
   // \return false if the node was not a neighbor
   bool remove_neighbor( bmrf_node *node, neighbor_type type = ALL);
