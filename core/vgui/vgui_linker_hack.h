@@ -78,4 +78,9 @@ inline int vgui_linker_hack()
 
 static int vgui_linker_hack_init = vgui_linker_hack();
 
+#ifdef WIN32
+# include <vgui/impl/mfc/vgui_mfc_app_init.h>
+vgui_mfc_app_init theAppinit;
+#endif
+
 #endif
