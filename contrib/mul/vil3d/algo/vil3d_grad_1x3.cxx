@@ -1,10 +1,11 @@
 //:
-//  \file
-//  \brief Apply gradient filter to single plane 3D image
-//  \author Tim Cootes
+// \file
+// \brief Apply gradient filter to single plane 3D image
+// \author Tim Cootes
 
 #include "vil3d_grad_1x3.h"
 #include <vil3d/vil3d_slice.h>
+#include <vcl_cassert.h>
 
 //: Fill 1 pixel border in image with zeros
 void vil3d_zero_border_1plane(vil3d_image_view<float>& image)
@@ -23,22 +24,22 @@ void vil3d_zero_border_1plane(vil3d_image_view<float>& image)
 
 //: Compute gradients of single plane of 2D data using 1x3 grad filters
 void vil3d_grad_1x3_1plane(const vil3d_image_view<vxl_byte>& src_im,
-                    vil3d_image_view<float>& grad_i,
-                    vil3d_image_view<float>& grad_j,
-                    vil3d_image_view<float>& grad_k)
+                           vil3d_image_view<float>& grad_i,
+                           vil3d_image_view<float>& grad_j,
+                           vil3d_image_view<float>& grad_k)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
   unsigned nk = src_im.nk();
 
-	// Not exhaustive
-	assert(grad_i.ni()==ni);
-	assert(grad_j.nj()==nj);
-	assert(grad_k.nk()==nk);
+  // Not exhaustive
+  assert(grad_i.ni()==ni);
+  assert(grad_j.nj()==nj);
+  assert(grad_k.nk()==nk);
 
   if (ni<=2 || nj<=2 || nk<=2)
   {
-      // Zero the elements in the column
+    // Zero the elements in the column
     grad_i.fill(0.0f);
     grad_j.fill(0.0f);
     grad_k.fill(0.0f);
@@ -89,9 +90,9 @@ void vil3d_grad_1x3_1plane(const vil3d_image_view<vxl_byte>& src_im,
 
 //: Compute gradients of single plane of 3D data using 1x3 grad filters
 void vil3d_grad_1x3_1plane(const vil3d_image_view<float>& src_im,
-                    vil3d_image_view<float>& grad_i,
-                    vil3d_image_view<float>& grad_j,
-                    vil3d_image_view<float>& grad_k)
+                           vil3d_image_view<float>& grad_i,
+                           vil3d_image_view<float>& grad_j,
+                           vil3d_image_view<float>& grad_k)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -99,7 +100,7 @@ void vil3d_grad_1x3_1plane(const vil3d_image_view<float>& src_im,
 
   if (ni<=2 || nj<=2 || nk<=2)
   {
-      // Zero the elements in the column
+    // Zero the elements in the column
     grad_i.fill(0.0f);
     grad_j.fill(0.0f);
     grad_k.fill(0.0f);
@@ -149,15 +150,15 @@ void vil3d_grad_1x3_1plane(const vil3d_image_view<float>& src_im,
 //: Compute square dgradient magnitude of single plane of 3D data
 //  Use (-0.5,0,+0.5) filters in i,j,k
 void vil3d_grad_1x3_mag_sq_1plane(const vil3d_image_view<vxl_byte>& src_im,
-                    vil3d_image_view<float>& grad_mag2)
+                                  vil3d_image_view<float>& grad_mag2)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
   unsigned nk = src_im.nk();
 
-	assert(grad_mag2.ni()==ni);
-	assert(grad_mag2.nj()==nj);
-	assert(grad_mag2.nk()==nk);
+  assert(grad_mag2.ni()==ni);
+  assert(grad_mag2.nj()==nj);
+  assert(grad_mag2.nk()==nk);
 
   if (ni<=2 || nj<=2 || nk<=2)
   {
@@ -192,7 +193,7 @@ void vil3d_grad_1x3_mag_sq_1plane(const vil3d_image_view<vxl_byte>& src_im,
         // Compute gradient in k
         float dz = 0.5f*s[dk1] - 0.5f*s[dk2];
 
-				*pg = dx*dx + dy*dy + dz*dz;
+        *pg = dx*dx + dy*dy + dz*dz;
 
         s   += src_im.istep();
         pg += grad_mag2.istep();
@@ -206,15 +207,15 @@ void vil3d_grad_1x3_mag_sq_1plane(const vil3d_image_view<vxl_byte>& src_im,
 //: Compute square gradient magnitude of single plane of 3D data
 //  Use (-0.5,0,+0.5) filters in i,j,k
 void vil3d_grad_1x3_mag_sq_1plane(const vil3d_image_view<float>& src_im,
-                    vil3d_image_view<float>& grad_mag2)
+                                  vil3d_image_view<float>& grad_mag2)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
   unsigned nk = src_im.nk();
 
-	assert(grad_mag2.ni()==ni);
-	assert(grad_mag2.nj()==nj);
-	assert(grad_mag2.nk()==nk);
+  assert(grad_mag2.ni()==ni);
+  assert(grad_mag2.nj()==nj);
+  assert(grad_mag2.nk()==nk);
 
   if (ni<=2 || nj<=2 || nk<=2)
   {
@@ -247,7 +248,7 @@ void vil3d_grad_1x3_mag_sq_1plane(const vil3d_image_view<float>& src_im,
         // Compute gradient in k
         float dz = s[dk1] - s[dk2];
 
-				*pg = 0.25*(dx*dx + dy*dy + dz*dz);
+        *pg = 0.25*(dx*dx + dy*dy + dz*dz);
 
         s   += src_im.istep();
         pg += grad_mag2.istep();
@@ -257,4 +258,3 @@ void vil3d_grad_1x3_mag_sq_1plane(const vil3d_image_view<float>& src_im,
 
   vil3d_zero_border_1plane(grad_mag2);
 }
-

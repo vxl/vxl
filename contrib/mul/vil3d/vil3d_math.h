@@ -2,18 +2,17 @@
 #ifndef vil3d_math_h_
 #define vil3d_math_h_
 //:
-//  \file
-//  \brief Various mathematical manipulations of 3D images
-//  \author Tim Cootes
+// \file
+// \brief Various mathematical manipulations of 3D images
+// \author Tim Cootes
 
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_plane.h>
 
 //: Compute minimum and maximum values over im
 // \relates vil3d_image_view
-template<class T>
+template <class T>
 inline void vil3d_math_value_range(const vil3d_image_view<T>& im,
                                    T& min_value, T& max_value)
 {
@@ -24,7 +23,7 @@ inline void vil3d_math_value_range(const vil3d_image_view<T>& im,
     return;
   }
 
-	const T* plane = im.origin_ptr();
+  const T* plane = im.origin_ptr();
   min_value = *plane;
   max_value = min_value;
 
@@ -32,19 +31,19 @@ inline void vil3d_math_value_range(const vil3d_image_view<T>& im,
   unsigned nj = im.nj();
   unsigned nk = im.nk();
   unsigned np = im.nplanes();
-  vcl_ptrdiff_t istep = im.istep(),jstep=im.jstep(),kstep=im.kstep();
+  vcl_ptrdiff_t istep = im.istep(), jstep=im.jstep(), kstep=im.kstep();
 
-  for (unsigned int p=0;p<nplanes;++p,plane += im.planestep())
+  for (unsigned int p=0;p<nplanes;++p, plane += im.planestep())
   {
     const T* slice = plane;
-    for (unsigned int k=0;k<nk;++k,slice += kstep)
+    for (unsigned int k=0;k<nk;++k, slice += kstep)
     {
       const T* row = slice;
-      for (unsigned int j=0;j<nj;++j,row += jstep)
+      for (unsigned int j=0;j<nj;++j, row += jstep)
       {
         const T* pixel = row;
-        for (unsigned int i=0;i<ni;++i,pixel+=istep)
-				{
+        for (unsigned int i=0;i<ni;++i, pixel+=istep)
+        {
           if (*pixel<min_value)      min_value = *pixel;
           else if (*pixel>max_value) max_value = *pixel;
         }
@@ -55,38 +54,38 @@ inline void vil3d_math_value_range(const vil3d_image_view<T>& im,
 
 //: Compute sum of values in plane p
 // \relates vil3d_image_view
-template<class imT, class sumT>
-inline void vil3d_math_sum(sumT& sum,const vil3d_image_view<imT>& im,
+template <class imT, class sumT>
+inline void vil3d_math_sum(sumT& sum, const vil3d_image_view<imT>& im,
                            unsigned p)
 {
   assert(p<im.nplanes());
-	sum=0;
+  sum=0;
   if (im.size()==0)
   {
     return;
   }
 
-	const imT* plane = im.origin_ptr();
+  const imT* plane = im.origin_ptr();
   unsigned ni = im.ni();
   unsigned nj = im.nj();
   unsigned nk = im.nk();
-  vcl_ptrdiff_t istep = im.istep(),jstep=im.jstep(),kstep=im.kstep();
+  vcl_ptrdiff_t istep = im.istep(), jstep=im.jstep(), kstep=im.kstep();
 
   const imT* slice = plane + p*im.planestep();
-  for (unsigned int k=0;k<nk;++k,slice += kstep)
+  for (unsigned int k=0;k<nk;++k, slice += kstep)
   {
     const imT* row = slice;
-    for (unsigned int j=0;j<nj;++j,row += jstep)
+    for (unsigned int j=0;j<nj;++j, row += jstep)
     {
       const imT* pixel = row;
-      for (unsigned int i=0;i<ni;++i,pixel+=istep) sum += sumT(*pixel);
+      for (unsigned int i=0;i<ni;++i, pixel+=istep) sum += sumT(*pixel);
     }
   }
 }
 
 //: Mean of elements in plane p of image
 // \relates vil3d_image_view
-template<class imT, class sumT>
+template <class imT, class sumT>
 inline void vil3d_math_mean(sumT& mean, const vil3d_image_view<imT>& im,
                             unsigned p)
 {
@@ -98,7 +97,7 @@ inline void vil3d_math_mean(sumT& mean, const vil3d_image_view<imT>& im,
 
 //: Sum of squares of elements in plane p of image
 // \relates vil3d_image_view
-template<class imT, class sumT>
+template <class imT, class sumT>
 inline void vil3d_math_sum_squares(sumT& sum, sumT& sum_sq,
                               const vil3d_image_view<imT>& im, unsigned p)
 {
@@ -109,33 +108,34 @@ inline void vil3d_math_sum_squares(sumT& sum, sumT& sum_sq,
     return;
   }
 
-	const imT* plane = im.origin_ptr();
+  const imT* plane = im.origin_ptr();
   unsigned ni = im.ni();
   unsigned nj = im.nj();
   unsigned nk = im.nk();
-  vcl_ptrdiff_t istep = im.istep(),jstep=im.jstep(),kstep=im.kstep();
+  vcl_ptrdiff_t istep = im.istep(), jstep=im.jstep(), kstep=im.kstep();
 
   const imT* slice = plane + p*im.planestep();
-  for (unsigned int k=0;k<nk;++k,slice += kstep)
+  for (unsigned int k=0;k<nk;++k, slice += kstep)
   {
     const imT* row = slice;
-    for (unsigned int j=0;j<nj;++j,row += jstep)
+    for (unsigned int j=0;j<nj;++j, row += jstep)
     {
       const imT* p = row;
-      for (unsigned int i=0;i<ni;++i,p+=istep)
-			{ sum += *p; sum_sq+=sumT(*p)*sumT(*p); }
+      for (unsigned int i=0;i<ni;++i, p+=istep)
+      { sum += *p; sum_sq+=sumT(*p)*sumT(*p); }
     }
   }
 }
 
 //: Mean and variance of elements in plane p of image
 // \relates vil3d_image_view
-template<class imT, class sumT>
+template <class imT, class sumT>
 inline void vil3d_math_mean_and_variance(sumT& mean, sumT& var,
-                               const vil3d_image_view<imT>& im, unsigned p)
+                                         const vil3d_image_view<imT>& im,
+                                         unsigned p)
 {
   if (im.size()==0) { mean=0; var=0; return; }
-  sumT sum,sum_sq;
+  sumT sum, sum_sq;
   vil3d_math_sum_squares(sum,sum_sq,im,p);
   mean = sum/(im.ni()*im.nj()*im.nk());
   var = sum_sq/(im.ni()*im.nj()*im.nk()) - mean*mean;

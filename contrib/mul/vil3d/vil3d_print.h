@@ -13,7 +13,7 @@
 
 //: Print all image data to os in a grid (rounds output to int)
 // \relates vil3d_image_view
-template<class T>
+template <class T>
 inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
 {
   os<<view.is_a()<<" "<<view.nplanes()
@@ -23,11 +23,11 @@ inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
     <<" kstep: "<<view.kstep()<<' '
     <<" planestep: "<<view.planestep()<<'\n' << vcl_flush;
   for (unsigned int p=0;p<view.nplanes();++p)
-	{
-   if (view.nplanes()>1) os<<"Plane "<<p<<vcl_endl;
+  {
+   if (view.nplanes()>1) os<<"Plane "<<p<<'\n';
    for (unsigned int k=0;k<view.nk();++k)
    {
-		if (view.nk()>1) os<<"Slice "<<k<<":\n";
+    if (view.nk()>1) os<<"Slice "<<k<<":\n";
     for (unsigned int j=0;j<view.nj();++j)
     {
       for (unsigned int i=0;i<view.ni();++i)

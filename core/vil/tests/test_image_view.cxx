@@ -17,7 +17,7 @@
 template <class S, class T>
 void test_image_view_rgba(vil2_image_view<S> &image2, vil2_image_view<T> &image7)
 {
-// do nothing in general case
+  // do nothing in general case
 }
 
 VCL_DEFINE_SPECIALIZATION
@@ -69,21 +69,19 @@ void test_image_view_rgba(vil2_image_view<float> &image2, vil2_image_view<double
   TEST_NEAR("Conversion rgba to grey wibble", image7(0,0),  1.3154, 1e-5);
 
   TEST_NEAR("Conversion rgba to grey", image7(2,1), 34.9114, 1e-5);
-
 }
 
 
 template <class S, class T>
 void test_image_view(S d1, vcl_string s_name, T d2)
 {
-
   vil2_image_view<S> image0;
   image0.set_size(10,8);
   vcl_cout<<"image0: "<<image0<<vcl_endl;
 
-  TEST("N.Planes",image0.nplanes(),1);
-  TEST("set_size i",image0.ni(),10);
-  TEST("set_size j",image0.nj(),8);
+  TEST("N.Planes", image0.nplanes(), 1);
+  TEST("set_size i", image0.ni(), 10);
+  TEST("set_size j", image0.nj(), 8);
 
   for (unsigned int j=0;j<image0.nj();++j)
      for (unsigned int i=0;i<image0.ni();++i)
@@ -102,9 +100,8 @@ void test_image_view(S d1, vcl_string s_name, T d2)
          image0.nplanes()==image1.nplanes(), true);
 
     image0(4,6)=127;
-    TEST("Shallow copy (values)",image1(4,6),image0(4,6));
+    TEST("Shallow copy (values)", image1(4,6), image0(4,6));
   }
-
 
   vil2_image_view<S> image2;
   {
@@ -115,12 +112,13 @@ void test_image_view(S d1, vcl_string s_name, T d2)
     image2 = image3;
   }
 
-  TEST("Shallow copy 2",image2.ni()==4
-       && image2.nj()==5 && image2.nplanes()==3, true);
+  TEST("Shallow copy 2", image2.ni()==4
+                      && image2.nj()==5
+                      && image2.nplanes()==3, true);
 
   image2(1,1)=17;
-  TEST("Data still in scope",image2(3,3),111);
-  TEST("Data still in scope",image2(1,1),17);
+  TEST("Data still in scope", image2(3,3), 111);
+  TEST("Data still in scope", image2(1,1), 17);
 
   vcl_cout<<image2<<vcl_endl;
 
@@ -128,14 +126,14 @@ void test_image_view(S d1, vcl_string s_name, T d2)
     // Test the deep copy
     vil2_image_view<S> image4;
     image4.deep_copy(image0);
-    TEST("Deep copy (size)",image0.ni()==image4.ni()
-                         && image0.nj()==image4.nj()
-                         && image0.nplanes()==image4.nplanes(), true);
-    TEST("Deep copy (values)",image4(4,6),image0(4,6));
+    TEST("Deep copy (size)", image0.ni()==image4.ni()
+                          && image0.nj()==image4.nj()
+                          && image0.nplanes()==image4.nplanes(), true);
+    TEST("Deep copy (values)", image4(4,6), image0(4,6));
 
     S v46 = image0(4,6);
     image0(4,6)=255;
-    TEST("Deep copy (values really separate)",image4(4,6),v46);
+    TEST("Deep copy (values really separate)", image4(4,6), v46);
   }
 
   vil2_image_view<S> image_win;
@@ -145,10 +143,10 @@ void test_image_view(S d1, vcl_string s_name, T d2)
        true);
 
   image0(2,3)=222;
-  TEST("vil2_crop is shallow copy",image_win(0,0),222);
+  TEST("vil2_crop is shallow copy", image_win(0,0), 222);
 
   vcl_cout<<image0.is_a()<<vcl_endl;
-  TEST("is_a() specialisation for S",image0.is_a(),"vil2_image_view<"+s_name+">");
+  TEST("is_a() specialisation for S", image0.is_a(), "vil2_image_view<"+s_name+">");
 
   vil2_image_view<vil2_rgb<S> > image5;
   image5.set_size(5,4);
@@ -205,7 +203,7 @@ void test_image_view(S d1, vcl_string s_name, T d2)
 
   vil2_convert_cast(image2, image7);
   vil2_print_all(vcl_cout, image7);
-  vil2_transform(image7, image7, vcl_bind2nd(vcl_plus<T>(),0.6f));
+  vil2_transform(image7, image7, vcl_bind2nd(vcl_plus<T>(), 0.6f));
   vil2_convert_cast(image7, image2);
   vil2_print_all(vcl_cout, image2);
 
@@ -216,7 +214,9 @@ void test_image_view(S d1, vcl_string s_name, T d2)
     TEST_NEAR("Casting ", image2(2,2,1), 35.6, 1e-5);
   }
   else
+  {
     TEST("Casting ", image2(0,0,0) == 0 && image2(2,2,1) == 35, true);
+  }
 
   image7.clear();
   vil2_convert_rgb_to_grey(vil2_view_as_rgb(image2), image7);
@@ -224,13 +224,21 @@ void test_image_view(S d1, vcl_string s_name, T d2)
   TEST("vil2_convert_rgb_to_grey(vil2_rgb)", image7, true);
 
   if (format == VIL2_PIXEL_FORMAT_FLOAT || format == VIL2_PIXEL_FORMAT_DOUBLE)
+  {
     TEST_NEAR("Conversion rgb to grey", image7(0,0), 0.6, 1e-5);
+  }
   else
+  {
     TEST_NEAR("Conversion rgb to grey", image7(0,0), 0.0, 1e-5);
+  }
   if (format == VIL2_PIXEL_FORMAT_FLOAT || format == VIL2_PIXEL_FORMAT_DOUBLE)
+  {
     TEST_NEAR("Conversion rgb to grey", image7(2,1), 34.196, 1e-5);
+  }
   else
+  {
     TEST_NEAR("Conversion rgb to grey", image7(2,1), 33.596, 1e-5);
+  }
 
   vil2_convert_cast(image7, image5);
   TEST("vil2_convert_cast<T,S>", image5, true);
@@ -249,11 +257,14 @@ void test_contiguous()
 
   vxl_byte memory[ 3*5*7 ];
 
-  for( unsigned d1 = 0; d1 < 3; ++d1 ) {
-    for( unsigned d2 = 0; d2 < 3; ++d2 ) {
-      if( d2==d1 ) continue;
-      for( unsigned d3 = 0; d3 < 3; ++d3 ) {
-        if( d3==d1 || d3==d2 ) continue;
+  for ( unsigned d1 = 0; d1 < 3; ++d1 )
+  {
+    for ( unsigned d2 = 0; d2 < 3; ++d2 )
+    {
+      if ( d2==d1 ) continue;
+      for ( unsigned d3 = 0; d3 < 3; ++d3 )
+      {
+        if ( d3==d1 || d3==d2 ) continue;
         vcl_ptrdiff_t step[3];
         step[d1] = 1;
         step[d2] = 3;
@@ -266,11 +277,14 @@ void test_contiguous()
     }
   }
 
-  for( unsigned d1 = 0; d1 < 3; ++d1 ) {
-    for( unsigned d2 = 0; d2 < 3; ++d2 ) {
-      if( d2==d1 ) continue;
-      for( unsigned d3 = 0; d3 < 3; ++d3 ) {
-        if( d3==d1 || d3==d2 ) continue;
+  for ( unsigned d1 = 0; d1 < 3; ++d1 )
+  {
+    for ( unsigned d2 = 0; d2 < 3; ++d2 )
+    {
+      if ( d2==d1 ) continue;
+      for ( unsigned d3 = 0; d3 < 3; ++d3 )
+      {
+        if ( d3==d1 || d3==d2 ) continue;
         vcl_ptrdiff_t step[3];
         step[d1] = 2;
         step[d2] = 3;
@@ -286,36 +300,34 @@ void test_contiguous()
   TEST( "vil2_new_image_view_plane_i_j is_continuous", im2.is_contiguous(), true );
   vil2_image_view<double> im3 = vil2_new_image_view_j_i_plane(4, 5, 6, double());
   TEST( "vil2_new_image_view_i_j_plane is_continuous", im2.is_contiguous(), true);
-  
 }
 
 void test_image_view_fill()
 {
   vil2_image_view<vxl_byte> image(10,10,2);
-	image.fill(vxl_byte(17));
-	TEST("fill (contiguous) (0,0,0)",image(0,0,0),vxl_byte(17));
-	TEST("fill (contiguous) (9,9,1)",image(9,9,1),vxl_byte(17));
+  image.fill(vxl_byte(17));
+  TEST("fill (contiguous) (0,0,0)", image(0,0,0), vxl_byte(17));
+  TEST("fill (contiguous) (9,9,1)", image(9,9,1), vxl_byte(17));
 
   vil2_image_view<vxl_byte> crop_image=vil2_crop(image,4,4,4,4);
-	crop_image.fill(vxl_byte(23));
-	TEST("fill (istep==1) (0,0,0)",crop_image(0,0,0),vxl_byte(23));
-	TEST("fill (istep==1) (3,3,1)",crop_image(3,3,1),vxl_byte(23));
-	TEST("fill (original) ",image(4,4,0),vxl_byte(23));
-	TEST("fill (no i under-run) ",image(3,4,0),vxl_byte(17));
-	TEST("fill (no i over-run) ",image(8,4,0),vxl_byte(17));
-	TEST("fill (no j under-run) ",image(4,3,0),vxl_byte(17));
-	TEST("fill (no j over-run) ",image(8,4,0),vxl_byte(17));
+  crop_image.fill(vxl_byte(23));
+  TEST("fill (istep==1) (0,0,0)", crop_image(0,0,0), vxl_byte(23));
+  TEST("fill (istep==1) (3,3,1)", crop_image(3,3,1), vxl_byte(23));
+  TEST("fill (original) ", image(4,4,0), vxl_byte(23));
+  TEST("fill (no i under-run) ", image(3,4,0), vxl_byte(17));
+  TEST("fill (no i over-run) ", image(8,4,0), vxl_byte(17));
+  TEST("fill (no j under-run) ", image(4,3,0), vxl_byte(17));
+  TEST("fill (no j over-run) ", image(8,4,0), vxl_byte(17));
 
-	image.fill(vxl_byte(11));
-	vil2_transpose(crop_image).fill(vxl_byte(25));
-	TEST("fill (jstep==1) (0,0,0)",crop_image(0,0,0),vxl_byte(25));
-	TEST("fill (jstep==1) (3,3,1)",crop_image(3,3,1),vxl_byte(25));
-	TEST("fill (original) ",image(4,4,0),vxl_byte(25));
-	TEST("fill (no i under-run) ",image(3,4,0),vxl_byte(11));
-	TEST("fill (no i over-run) ",image(8,4,0),vxl_byte(11));
-	TEST("fill (no j under-run) ",image(4,3,0),vxl_byte(11));
-	TEST("fill (no j over-run) ",image(8,4,0),vxl_byte(11));
-
+  image.fill(vxl_byte(11));
+  vil2_transpose(crop_image).fill(vxl_byte(25));
+  TEST("fill (jstep==1) (0,0,0)", crop_image(0,0,0), vxl_byte(25));
+  TEST("fill (jstep==1) (3,3,1)", crop_image(3,3,1), vxl_byte(25));
+  TEST("fill (original) ", image(4,4,0), vxl_byte(25));
+  TEST("fill (no i under-run) ", image(3,4,0), vxl_byte(11));
+  TEST("fill (no i over-run) ", image(8,4,0), vxl_byte(11));
+  TEST("fill (no j under-run) ", image(4,3,0), vxl_byte(11));
+  TEST("fill (no j over-run) ", image(8,4,0), vxl_byte(11));
 }
 
 MAIN( test_image_view )
@@ -325,17 +337,17 @@ MAIN( test_image_view )
            << " Testing vil2_image_view<byte and float>\n"
            << "*****************************************\n";
   test_image_view(vxl_byte(), "vxl_byte", float());
-  vcl_cout << "*****************************************\n"
+  vcl_cout << "*******************************************\n"
            << " Testing vil2_image_view<float and double>\n"
-           << "*****************************************\n";
+           << "*******************************************\n";
   test_image_view(float(), "float", double());
-  vcl_cout << "*****************************************\n"
+  vcl_cout << "********************************************\n"
            << " Testing vil2_image_view<int_16 and double>\n"
-           << "*****************************************\n";
+           << "********************************************\n";
   test_image_view(vxl_int_16(), "vxl_int_16", float());
-  vcl_cout << "*****************************************\n"
+  vcl_cout << "*********************************************\n"
            << " Testing vil2_image_view<uint_32 and double>\n"
-           << "*****************************************\n";
+           << "*********************************************\n";
   test_image_view(vxl_uint_32(), "vxl_uint_32", float());
   test_contiguous();
   test_image_view_fill();
