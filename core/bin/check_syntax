@@ -318,6 +318,7 @@ foreach $f (@FILES)
     elsif ($j eq "vnl/vnl_tag.h") { $i="($i)_[a-z]+"; }
     elsif ($j eq "vpl/vpl.h") { $i="($i)_[a-z]+"; }
     elsif ($j eq "vsl/vsl_binary_io.h") { $i="vsl_b_(read|write|[io]f?stream)"; }
+    elsif ($j eq "vsl/vsl_block_binary.h") { $i="($i)_(read|write)"; }
     elsif ($j eq "vsl/vsl_binary_loader.h") { next if ($f =~ m/\/Templates\/\S+\~-\.cxx$/); $i="($i|vsl_b_(read|write))"; }
     elsif ($j eq "vsl/vsl_binary_explicit_io.h") { $i="vsl_(convert_[a-z_]+|swap_bytes|swap_bytes_to_buffer|b_(read|write)_[a-z_]+)"; }
     elsif ($j eq "vsl/vsl_complex_io.h") { $i="(VNL_IO_[A-Z]+_INSTANTIATE.vcl_complex|vsl_b_(read|write))"; }
