@@ -12,4 +12,6 @@ SOURCE_FILES(gmvl_sources
 
 AUX_SOURCE_DIRECTORY(Templates gmvl_sources)
 
-SUBDIRS(examples)
+IF( BUILD_TESTS)
+  SUBDIRS(examples)
+ENDIF( BUILD_TESTS)
