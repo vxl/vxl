@@ -112,7 +112,7 @@
 /* exit() may or may not already be defined at this point.  I declare these  */
 /* functions explicitly because some non-ANSI C compilers lack stdlib.h.     */
 
-#if !defined(_STDLIB_H_) && !defined(_STDLIB_H)
+#if !defined(_STDLIB_H_) && !defined(_STDLIB_H) && defined(__need_malloc_and_calloc)
 extern char *malloc();
 extern void free();
 extern void exit();
