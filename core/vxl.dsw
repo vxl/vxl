@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "allvxl"=.\allvxl\allvxl.dsp - Package Owner=<4>
+Project: "allvxl"=".\allvxl\allvxl.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -48,43 +48,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "awfmfc"=.\vgui\examples\awf\awfmfc\awfmfc.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name allvxl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui_mfc
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui_vrml
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "canny"=.\canny\canny.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "example_mfc"=.\vgui\examples\vgui_example_mfc\example_mfc.dsp - Package Owner=<4>
+Project: "example_mfc"=".\vgui\examples\vgui_example_mfc\example_mfc.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -105,7 +69,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "netlib"=..\v3p\netlib\netlib.dsp - Package Owner=<4>
+Project: "netlib"="..\v3p\netlib\netlib.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -117,19 +81,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "newovm"=.\newovm\newovm.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_allvxl"=.\test_allvxl\test_allvxl.dsp - Package Owner=<4>
+Project: "test_allvxl"=".\test_allvxl\test_allvxl.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -144,7 +96,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_save_load_image"=.\vil\tests\test_save_load_image.dsp - Package Owner=<4>
+Project: "test_save_load_image"=".\vil\tests\test_save_load_image.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -162,7 +114,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "tiff"=..\V3P\tiff\tiff.dsp - Package Owner=<4>
+Project: "tiff"="..\V3P\tiff\tiff.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -174,7 +126,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vbl"=.\vbl\vbl.dsp - Package Owner=<4>
+Project: "vbl"=".\vbl\vbl.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -186,7 +138,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vcl"=.\vcl\vcl.dsp - Package Owner=<4>
+Project: "vcl"=".\vcl\vcl.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -198,7 +150,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vcl_tests"=.\vcl\tests\vcl_tests.dsp - Package Owner=<4>
+Project: "vcl_tests"=".\vcl\tests\vcl_tests.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -210,7 +162,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vgl"=.\vgl\vgl.dsp - Package Owner=<4>
+Project: "vgl"=".\vgl\vgl.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -222,7 +174,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vgui"=.\vgui\vgui.dsp - Package Owner=<4>
+Project: "vgui"=".\vgui\vgui.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -234,7 +186,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vgui_glut"=.\vgui\impl\glut\vgui_glut.dsp - Package Owner=<4>
+Project: "vgui_glut"=".\vgui\impl\glut\vgui_glut.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -246,7 +198,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vgui_mfc"=.\vgui\impl\mfc\vgui_mfc.dsp - Package Owner=<4>
+Project: "vgui_mfc"=".\vgui\impl\mfc\vgui_mfc.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -258,7 +210,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vgui_vrml"=.\vgui\vrml\vgui_vrml.dsp - Package Owner=<4>
+Project: "vgui_vrml"=".\vgui\vrml\vgui_vrml.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -270,7 +222,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vil"=.\vil\vil.dsp - Package Owner=<4>
+Project: "vil"=".\vil\vil.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -282,7 +234,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vipl"=.\vipl\vipl.dsp - Package Owner=<4>
+Project: "vnl"=".\vnl\vnl.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -294,7 +246,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vnl"=.\vnl\vnl.dsp - Package Owner=<4>
+Project: "vnl_algo"=".\vnl\algo\vnl_algo.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -306,19 +258,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vnl_algo"=.\vnl\algo\vnl_algo.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vnl_calc"=.\examples\vnl_calc\vnl_calc.dsp - Package Owner=<4>
+Project: "vnl_calc"=".\examples\vnl_calc\vnl_calc.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -339,7 +279,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vplayer"=.\vplayer\vplayer.dsp - Package Owner=<4>
+Project: "vplayer"=".\vplayer\vplayer.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -351,7 +291,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vsl"=.\vsl\vsl.dsp - Package Owner=<4>
+Project: "vsl"=".\vsl\vsl.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -363,7 +303,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vsl_harris"=.\VSL\EXAMPLES\vsl_harris.dsp - Package Owner=<4>
+Project: "vsl_harris"=".\VSL\EXAMPLES\vsl_harris.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -375,7 +315,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vtol"=.\vtol\vtol.dsp - Package Owner=<4>
+Project: "vtol"=".\vtol\vtol.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -387,7 +327,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vvl"=.\vvl\vvl.dsp - Package Owner=<4>
+Project: "vvl"=".\vvl\vvl.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -399,7 +339,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "xcv"=.\xcv\xcv.dsp - Package Owner=<4>
+Project: "xcv"=".\xcv\xcv.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{

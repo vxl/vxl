@@ -90,6 +90,10 @@ SOURCES += vil_pyramid.cxx
 SOURCES += vil_rgb_byte.cxx
 SOURCES += vil_memory_image_window.cxx
 
+ifeq ($(OS),Linux2)
+  optimize := -O3 -ffast-math -fstrict-aliasing -march=pentiumpro
+endif
+
 # turn on optimization for the convolution code
 FLAGS_Templates/vil_convolve_1d.cxx := $(optimize)
 FLAGS_Templates/vil_convolve_simple+byte.byte.int.int-.cxx := $(optimize)
