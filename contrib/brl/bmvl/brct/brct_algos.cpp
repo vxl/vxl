@@ -6,12 +6,11 @@
 
 #include "brct_algos.h"
 #include <vcl_algorithm.h>//for sort
-#include <vcl_cmath.h> 
+#include <vcl_cmath.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
-#include <vnl/vnl_double_2x2.h>
 #include <vnl/vnl_double_3x4.h>
 #include <vnl/vnl_double_4x4.h>
 #include <vnl/vnl_double_2x3.h>
@@ -76,7 +75,7 @@ bugl_gaussian_point_2d<double> brct_algos::project_3d_point(const vnl_double_3x4
   for (int k=0; k<3; k++)
     t += P[2][k]*Y[k];
 
-  // 
+  //
   for (int i=0; i<2; i++){
     double t1 = P[i][3];
     for (int k = 0; k<3; k++)
@@ -88,13 +87,14 @@ bugl_gaussian_point_2d<double> brct_algos::project_3d_point(const vnl_double_3x4
 
   vnl_matrix_fixed<double, 3, 3> Sigma3d = X.get_covariant_matrix();
   vnl_matrix_fixed<double, 2, 2> Sigma2d = H*Sigma3d*H.transpose();
-  //  vcl_cout << "Sigma2d \n" << Sigma2d << "\n";
+#ifdef DEBUG
+  vcl_cout << "Sigma2d\n" << Sigma2d << vcl_endl;
+#endif
   vgl_homg_point_2d<double> hp2d(u[0], u[1], u[2]);
   vgl_point_2d<double> p2d(hp2d);
   return bugl_gaussian_point_2d<double>(p2d, Sigma2d);
 }
-//:  Given a set of perspective views of a point reconstruct 
-//   the point according to least squares (SVD).  
+//:  Given a set of perspective views of a point reconstruct the point according to least squares (SVD).
 //   The cameras for each view are given.
 //
 vgl_point_3d<double> brct_algos::bundle_reconstruct_3d_point(vcl_vector<vnl_double_2> &pts, vcl_vector<vnl_double_3x4> &Ps)
@@ -149,7 +149,7 @@ vgl_point_2d<double> brct_algos::most_possible_point(vdgl_digital_curve_sptr dc,
   vdgl_edgel_chain_sptr ec = interp->get_edgel_chain();
 
   if (!ec)
-  { 
+  {
     vcl_cout<<"In brct_algos::most_possible_point(...) - warning, null chain\n";
     return vgl_point_2d<double>();
   }
@@ -171,7 +171,7 @@ vgl_point_2d<double> brct_algos::most_possible_point(vdgl_digital_curve_sptr dc,
 
   return pmax;
 }
- 
+
 vnl_double_2 brct_algos::projection_3d_point(const vnl_double_3x4 &P, const vnl_double_3 &X)
 {
   double t1 = P[2][3];
@@ -196,14 +196,14 @@ static bool error_compare(brct_error_index* const e1,
 
 
 {
-  if(!e1||!e2)
+  if (!e1||!e2)
     return false;
   return e1->error() > e2->error();
 }
 
-//:filter correspondences to remove outliers.  fraction is the portion
-// of correspondences to be removed, i.e. fraction = 0.1 takes out the 
-// points with top 10% projection error.
+//:filter correspondences to remove outliers.
+//  fraction is the portion of correspondences to be removed,
+//  i.e. fraction = 0.1 takes out the points with top 10% projection error.
 //
 void brct_algos::filter_outliers(const vnl_double_3x3& K,
                                  const vnl_double_3& trans,
@@ -219,16 +219,16 @@ void brct_algos::filter_outliers(const vnl_double_3x3& K,
   vnl_double_3x4 P = K*Pe;
   vcl_vector<brct_error_index*> errors;
   int Np = pts_2d.size();
-  for(int i = 0; i<Np; i++)
-    {
-      //project the 3-d points
-      vnl_double_4 X(pts_3d[i][0], pts_3d[i][1], pts_3d[i][2], 1.0);
-      vnl_double_3 p = P*X;
-      double x_proj = p[0]/p[2], y_proj = p[1]/p[2];
-      double x = pts_2d[i][0], y = pts_2d[i][1];
-      double error = vcl_sqrt((x-x_proj)*(x-x_proj)+(y-y_proj)*(y-y_proj));
-      errors.push_back(new brct_error_index(i,error));
-    }
+  for (int i = 0; i<Np; i++)
+  {
+    //project the 3-d points
+    vnl_double_4 X(pts_3d[i][0], pts_3d[i][1], pts_3d[i][2], 1.0);
+    vnl_double_3 p = P*X;
+    double x_proj = p[0]/p[2], y_proj = p[1]/p[2];
+    double x = pts_2d[i][0], y = pts_2d[i][1];
+    double error = vcl_sqrt((x-x_proj)*(x-x_proj)+(y-y_proj)*(y-y_proj));
+    errors.push_back(new brct_error_index(i,error));
+  }
   //sort the errors, largest first
   vcl_sort(errors.begin(), errors.end(), error_compare);
   int n_errors = errors.size();
@@ -236,35 +236,37 @@ void brct_algos::filter_outliers(const vnl_double_3x3& K,
   int n_remove = (int)(fraction*n_errors);
   vcl_vector<vnl_double_2> filt_pts_2d;
   vcl_vector<vnl_double_3> filt_pts_3d;
-  for(int i = 0; i<Np; i++)
+  for (int i = 0; i<Np; i++)
+  {
+    bool erase = false;
+    int k = 0;
+    for (; k<n_remove&&!erase; k++)
+      if (i==errors[k]->i())
+        erase=true;
+    if (!erase)
     {
-      bool erase = false;
-      int k = 0;
-      for(; k<n_remove&&!erase; k++)
-        if(i==errors[k]->i())
-          erase=true;
-      if(!erase)
-        {
-          filt_pts_2d.push_back(pts_2d[i]);
-          filt_pts_3d.push_back(pts_3d[i]);
-        }
-    //   else
-//         vcl_cout << "Error(" << pts_2d[i][0] << " " << pts_2d[i][1] 
-//                  << ")/("<< pts_3d[i][0] << " " << pts_3d[i][0] 
-//                  << " " << pts_3d[i][2] << ")= " << errors[k]->error()
-//                 << "\n" << vcl_flush;
+      filt_pts_2d.push_back(pts_2d[i]);
+      filt_pts_3d.push_back(pts_3d[i]);
     }
-  for(int k = 0; k<n_errors; k++)
+#ifdef DEBUG
+    else
+      vcl_cout << "Error(" << pts_2d[i][0] << ' ' << pts_2d[i][1]
+               << ")/("<< pts_3d[i][0] << ' ' << pts_3d[i][0]
+               << ' ' << pts_3d[i][2] << ")= " << errors[k]->error()
+               << vcl_endl;
+#endif
+  }
+  for (int k = 0; k<n_errors; k++)
     delete errors[k];
-  //replace the point sets  
+  //replace the point sets
   pts_2d = filt_pts_2d;
   pts_3d = filt_pts_3d;
  }
 
-//: Determine the camera translation from a set of matched points
+//: Determine the camera translation from a set of matched points.
 //  The calibration matrix K is given along with a set of correspondences.
 //  Form the design matrix, i.e. two equations from each image coordinate,
-//  (ui vi). 
+//  (ui vi).
 //
 // [wi ui]      [1  0  0  tx][Xi]
 // [wi vi] = [K][0  1  0  ty][Yi]
@@ -279,35 +281,37 @@ bool brct_algos::camera_translation(const vnl_double_3x3& K,
 {
   int Np = pts_2d.size();
   vnl_matrix<double> A(2*Np, 4, 0.0);
-  for(int ip = 0; ip<Np; ip++)
+  for (int ip = 0; ip<Np; ip++)
+  {
+    double sum0 = 0;
+    double sum1 = 0;
+    for (int j = 0; j<3; j++)
     {
-      double sum0 = 0;
-      double sum1 = 0;
-      for(int j = 0; j<3; j++)
-        {
-          sum0 += K[0][j]*pts_3d[ip][j];
-          sum1 += K[1][j]*pts_3d[ip][j];
-          A[2*ip  ][j] = K[0][j];
-          A[2*ip+1][j] = K[1][j];
-        }
-      sum0 -= pts_2d[ip][0]*pts_3d[ip][2];
-      sum1 -= pts_2d[ip][1]*pts_3d[ip][2];
-      A[2*ip  ][2]-=pts_2d[ip][0];
-      A[2*ip+1][2]-=pts_2d[ip][1];
-      A[2*ip  ][3] = sum0;
-      A[2*ip+1][3] = sum1;
+      sum0 += K[0][j]*pts_3d[ip][j];
+      sum1 += K[1][j]*pts_3d[ip][j];
+      A[2*ip  ][j] = K[0][j];
+      A[2*ip+1][j] = K[1][j];
     }
+    sum0 -= pts_2d[ip][0]*pts_3d[ip][2];
+    sum1 -= pts_2d[ip][1]*pts_3d[ip][2];
+    A[2*ip  ][2]-=pts_2d[ip][0];
+    A[2*ip+1][2]-=pts_2d[ip][1];
+    A[2*ip  ][3] = sum0;
+    A[2*ip+1][3] = sum1;
+  }
   vnl_svd<double> svd_solver(A);
   vnl_double_4 t = svd_solver.nullvector();
   vnl_matrix<double> sings = svd_solver.W();
-  //  vcl_cout << "W: \n" << sings << "\n";
-  if(vcl_fabs(t[3])<1e-06)
-    {
-      vcl_cout << "In brct_algos::camera_translation(...) -"
-              << " singular matrix - returning 0\n";
-      trans[0] = 0.0; trans[1] = 0.0; trans[2] = 0.0;
-      return false;
-    }
+#ifdef DEBUG
+  vcl_cout << "W:\n" << sings << vcl_endl;
+#endif
+  if (vcl_fabs(t[3])<1e-06)
+  {
+    vcl_cout << "In brct_algos::camera_translation(...) -"
+             << " singular matrix - returning 0\n";
+    trans[0] = 0.0; trans[1] = 0.0; trans[2] = 0.0;
+    return false;
+  }
   trans[0]=t[0]/t[3];   trans[1]=t[1]/t[3];   trans[2]=t[2]/t[3];
   return true;
 }
@@ -322,38 +326,40 @@ robust_camera_translation(const vnl_double_3x3& K,
   vcl_vector<vnl_double_2> p2d;
   vcl_vector<vnl_double_3> p3d;
   int npts_2d = pts_2d.size();
-  for(int i = 0; i<npts_2d; i++)
-    if(pts_2d[i].exists())
-      {
-        p2d.push_back(vnl_double_2(pts_2d[i].x(),pts_2d[i].y()));
-        p3d.push_back(vnl_double_3(pts_3d[i].x(),pts_3d[i].y(), pts_3d[i].z()));
-      }
+  for (int i = 0; i<npts_2d; i++)
+    if (pts_2d[i].exists())
+    {
+      p2d.push_back(vnl_double_2(pts_2d[i].x(),pts_2d[i].y()));
+      p3d.push_back(vnl_double_3(pts_3d[i].x(),pts_3d[i].y(), pts_3d[i].z()));
+    }
   //first solution
-  if(!camera_translation(K, p2d, p3d, trans))
+  if (!camera_translation(K, p2d, p3d, trans))
     return;
-//   vcl_cout << "Initial Trans (" << trans[0] << " " << trans[1] 
-//            << " " << trans[2] << ")\n";
+#ifdef DEBUG
+  vcl_cout << "Initial Trans (" << trans[0] << ' ' << trans[1]
+           << ' ' << trans[2] << ')' << vcl_endl;
+#endif
     brct_algos::filter_outliers(K, trans, p2d, p3d);//JLM
   //recompute camera translation
   camera_translation(K, p2d, p3d, trans);
-   vcl_cout << "Trans after filtering (" << trans[0] << " " << trans[1] 
-            << " " << trans[2] << ")\n";
+   vcl_cout << "Trans after filtering (" << trans[0] << ' ' << trans[1]
+            << ' ' << trans[2] << ')' << vcl_endl;
   //just to print new errors
   brct_algos::filter_outliers(K, trans, p2d, p3d);
 }
 //
-//:solve for the world translation given three points on a projective line
+//:solve for the world translation given three points on a projective line.
 // epi corresponds to -infinity, p0 == 0, p1 == 1 in world coordinates
 // image epipolar location is taken to be zero on the epipolar line
 //
-static double line_trans(const double p0, 
+static double line_trans(const double p0,
                          const double p1, const double p)
 {
-  if(p0==p1)
-    {
-      vcl_cout << "In line_trans(..) - infinite translation \n";
-      return 0;
-    }
+  if (p0==p1)
+  {
+    vcl_cout << "In line_trans(..) - infinite translation\n";
+    return 0;
+  }
   //from the cross ratio
   double pw = (p1*(p0-p))/(p*(p0-p1));
   return pw;
@@ -372,13 +378,12 @@ static double line_distance(vgl_line_segment_2d<double> const& seg,
   return length;
 }
 //
-//: compute camera translation using two corresponding points on 
-//  a bundle of epipolar lines passing through the epipole.  The
-//  epipole, points_0 and points_1 define the projective transform
+//: compute camera translation using two corresponding points on a bundle of epipolar lines passing through the epipole.
+//  The epipole, points_0 and points_1 define the projective transform
 //  between the image and the world. We assume the translation magnitude
-//  between points_0 and points_1 is unity.  The output will be the 
+//  between points_0 and points_1 is unity.  The output will be the
 //  world translation between points_0 and points.
-void 
+void
 brct_algos::camera_translation(vnl_double_3x3 const & K,
                                vnl_double_2 const& image_epipole,
                                vcl_vector<vnl_double_2> const& points_0,
@@ -386,28 +391,28 @@ brct_algos::camera_translation(vnl_double_3x3 const & K,
                                vcl_vector<vnl_double_2> const& points,
                                vnl_double_3& T)
 {
-  int n = points_0.size();
-  if(!n)
+  unsigned int n = points_0.size();
+  if (!n)
     return;
   assert(n==points_0.size());
   assert(n==points_1.size());
-  vgl_point_2d<double> E(image_epipole[0], image_epipole[1]);      
+  vgl_point_2d<double> E(image_epipole[0], image_epipole[1]);
   double sumt = 0;
-  for(int i =0; i<n; i++)
-    {
-      vgl_point_2d<double> P0(points_0[i][0],points_0[i][1]);
-      //construct an image epipolar line through the epipole and p0
-      vgl_line_segment_2d<double> seg(E, P0);
-      //get the appropiate distances
-      double p0 = line_distance(seg, P0);
-      vgl_point_2d<double> P1(points_1[i][0],points_1[i][1]);
-      double p1 = line_distance(seg, P1);
-      vgl_point_2d<double> P(points[i][0],points[i][1]);
-      double p = line_distance(seg, P);
-      //get the line translation distance
-      double t = line_trans(p0, p1, p);
-      sumt += t;
-    }
+  for (unsigned int i =0; i<n; i++)
+  {
+    vgl_point_2d<double> P0(points_0[i][0],points_0[i][1]);
+    //construct an image epipolar line through the epipole and p0
+    vgl_line_segment_2d<double> seg(E, P0);
+    //get the appropiate distances
+    double p0 = line_distance(seg, P0);
+    vgl_point_2d<double> P1(points_1[i][0],points_1[i][1]);
+    double p1 = line_distance(seg, P1);
+    vgl_point_2d<double> P(points[i][0],points[i][1]);
+    double p = line_distance(seg, P);
+    //get the line translation distance
+    double t = line_trans(p0, p1, p);
+    sumt += t;
+  }
   sumt/=n;//the average epipolar translation magnitude
   vnl_double_3 e(E.x(), E.y(), 1);
   T = vnl_inverse(K) * e;
@@ -416,14 +421,14 @@ brct_algos::camera_translation(vnl_double_3x3 const & K,
     T *= -sumt;
   else
     T *= sumt;
-  vcl_cout << "Camera Trans " << T << "\n";
+  vcl_cout << "Camera Trans " << T << vcl_endl;
 }
 double brct_algos::motion_constant(vnl_double_2 const& image_epipole,
                                    int i,
-                                   vnl_double_2& p_i, 
+                                   vnl_double_2& p_i,
                                    vnl_double_2& p_i1)
-{ 
-  vgl_point_2d<double> E(image_epipole[0], image_epipole[1]);  
+{
+  vgl_point_2d<double> E(image_epipole[0], image_epipole[1]);
   vgl_point_2d<double> Pi(p_i[0],p_i[1]);
   //construct an image epipolar line through the epipole and p_i
   vgl_line_segment_2d<double> seg(E, Pi);
@@ -433,10 +438,10 @@ double brct_algos::motion_constant(vnl_double_2 const& image_epipole,
   double k_i1 = line_distance(seg, Pi1);
   double dk = k_i1-k_i;
   double temp = (i+1)*k_i1 - i*k_i;
-  if(!temp)
+  if (!temp)
     return 0;
   double gamma = dk/temp;
-  
+
   return gamma;
 }
 
