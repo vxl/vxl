@@ -24,7 +24,7 @@
 #include "brct_structure_estimator.h"
 #include "brct_algos.h"
 
-const double kalman_filter::large_num_ =1e15;
+const double kalman_filter::large_num_ = 1e15;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -326,11 +326,13 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
 
     vgl_point_2d<double> u = brct_algos::most_possible_point(curves_[iframe], x);
     // check whether a outlier founded
+#if 0 // commented out
     vnl_double_2 z(u.x(), u.y());
     vnl_double_2 z_pred(x.x(), x.y());
 
-    //if (is_outlier(z, z_pred))
-    //  u.set(this->large_num_, this->large_num_);
+    if (is_outlier(z, z_pred))
+      u.set(this->large_num_, this->large_num_);
+#endif // 0
 
     // set point
     observes_[iframe%queue_size_][i].set_point(u);
@@ -465,11 +467,11 @@ void kalman_filter::inc()
 
     Sigma3d = Sigma3d*(cur_pos_-1.0)/(double)cur_pos_;
 
-	for (int m = 0; m<3; m++)
+    for (int m = 0; m<3; m++)
       for (int n = 0; n<3; n++)
         Sigma3d[m][n] += dX[m]*dX[n] /(cur_pos_);
 
-	curve_3d_[i].set_point(X3d);
+    curve_3d_[i].set_point(X3d);
     curve_3d_[i].set_covariant_matrix(Sigma3d);
 
 #if 0
