@@ -2,6 +2,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 
 #include <vbl/vbl_printf.h>
 
