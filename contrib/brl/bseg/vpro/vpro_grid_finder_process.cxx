@@ -10,8 +10,7 @@
 #include <sdet/sdet_grid_finder.h>
 #include <vpro/vpro_edge_process.h>
 #include <vpro/vpro_line_fit_process.h>
-#include <vsol/vsol_curve_2d.h>
-
+#include <vsol/vsol_line_2d.h>
 
 vpro_grid_finder_process::vpro_grid_finder_process(sdet_detector_params& dp,
                                                    sdet_fit_lines_params& flp,
@@ -86,33 +85,29 @@ bool vpro_grid_finder_process::execute()
   //Get the backprojected grid
   vcl_vector<vsol_line_2d_sptr> mapped_lines;
   if (!gf.compute_homography())
-    {
-      vcl_cout << "compute_homography() failed\n";
-      this->clear_input();
-      frame_scores_.push_back(0.0);
-      return false;
-    }
+  {
+    vcl_cout << "compute_homography() failed\n";
+    this->clear_input();
+    frame_scores_.push_back(0.0);
+    return false;
+  }
   if (!gf.get_backprojected_grid(mapped_lines))
-    //if (!gf.get_mapped_lines(mapped_lines))
-    {
-      this->clear_input();
-      frame_scores_.push_back(0.0);
-      return false;
-    }
+  {
+    this->clear_input();
+    frame_scores_.push_back(0.0);
+    return false;
+  }
   for (vcl_vector<vsol_line_2d_sptr>::iterator lit = mapped_lines.begin();
        lit != mapped_lines.end(); lit++)
-    {
-      vsol_line_2d* l2d = (*lit).ptr();
-      output_spat_objs_.push_back((vsol_spatial_object_2d*)l2d);
-    }
+    output_spat_objs_.push_back((*lit)->cast_to_spatial_object());
   // double check backprojected grid with image intensities
   if (!gf.check_grid_match(img))
-    {
-      vcl_cout << "check_grid_match() failed - disregarding homography\n";
-      this->clear_input();
-      frame_scores_.push_back(0.0);
-      return true;
-    }
+  {
+    vcl_cout << "check_grid_match() failed - disregarding homography\n";
+    this->clear_input();
+    frame_scores_.push_back(0.0);
+    return true;
+  }
   // TEMP - Write grid points to file
   if (output_filename_ != "")
   {
