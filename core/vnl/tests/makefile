@@ -54,9 +54,9 @@ TESTS += test_cholesky.cxx
 
 MANPAGE_SOURCES += test_arithmetic_body.h
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+#########################################
+include ${IUEROOT}/config/static-tests.mk
+#########################################
 
 ifeq "$(TJ_GCC30)" "1"
 # gcc 3.0 needs too much virtual memory with optimisation
