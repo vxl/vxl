@@ -7,8 +7,8 @@
 #include <vsrl/vsrl_token.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
-// constructor
 
+// constructor
 vsrl_raster_dp_setup::vsrl_raster_dp_setup(int raster_line, vsrl_image_correlation *image_correlation)
 {
   tok_list1.clear();
@@ -20,7 +20,6 @@ vsrl_raster_dp_setup::vsrl_raster_dp_setup(int raster_line, vsrl_image_correlati
   bias_cost_=vsrl_parameters::instance()->bias_cost; // probably 0.2
   inner_cost_=1.0;
   outer_cost_=0.5;
-
 }
 
 
@@ -43,6 +42,7 @@ int vsrl_raster_dp_setup::get_image2_width()
   return image_correlation_->get_image2_width();
 }
 
+
 int vsrl_raster_dp_setup::get_assignment(int x)
 {
   if (x<0 || (unsigned int)x >= tok_list1.size())
@@ -53,17 +53,9 @@ int vsrl_raster_dp_setup::get_assignment(int x)
   vsrl_token *tok2= (tok_list1[x]->get_assigned_token());
 
   if (!tok2)
-  {
-    // this is a null assignment
     return -1;
-  }
-
-  double dx,dy;
-  tok2->get_position(dx,dy);
-
-  int new_x = (int)dx;
-
-  return new_x;
+  else
+    return (int)(tok2->get_x());
 }
 
 
@@ -105,6 +97,7 @@ void vsrl_raster_dp_setup::create_token_list(int width,
   }
 }
 
+
 void vsrl_raster_dp_setup::clear_token_list(vcl_vector<vsrl_intensity_token*> &tok_list)
 {
   // clear the token list
@@ -117,6 +110,7 @@ void vsrl_raster_dp_setup::clear_token_list(vcl_vector<vsrl_intensity_token*> &t
   }
   tok_list.clear();
 }
+
 
 double vsrl_raster_dp_setup::execute()
 {
@@ -170,6 +164,7 @@ double vsrl_raster_dp_setup::execute()
   return total_cost;
 }
 
+
 double vsrl_raster_dp_setup::execute(vnl_vector<int > curr_row)
 {
   // create the token lists
@@ -220,12 +215,13 @@ double vsrl_raster_dp_setup::execute(vnl_vector<int > curr_row)
   return total_cost;
 }
 
+
 void vsrl_raster_dp_setup::set_search_range(int range)
 {
   search_range_=range;
 }
 
-void  vsrl_raster_dp_setup::set_prior_raster(vsrl_raster_dp_setup *prior_raster)
+void vsrl_raster_dp_setup::set_prior_raster(vsrl_raster_dp_setup *prior_raster)
 {
   prior_raster_=prior_raster;
 }
@@ -234,6 +230,7 @@ void vsrl_raster_dp_setup::set_bias_cost(double bias_cost)
 {
   bias_cost_=bias_cost;
 }
+
 
 void vsrl_raster_dp_setup::set_token_biases()
 {
