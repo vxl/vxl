@@ -48,7 +48,7 @@ static void ZeroMatrix(vnl_matrix<double>& M)
 
 void mbl_lda::updateCovar(vnl_matrix<double>& S, const vnl_vector<double>& V)
 {
-  int n = V.size();
+  unsigned int n = V.size();
   if (S.rows()!=n)
   {
     S.resize(n,n);
@@ -57,11 +57,11 @@ void mbl_lda::updateCovar(vnl_matrix<double>& S, const vnl_vector<double>& V)
 
   double** s = S.data_array();
   const double* v = V.data_block();
-  for (int i=0;i<n;++i)
+  for (unsigned int i=0;i<n;++i)
   {
     double *row = s[i];
     double vi = v[i];
-    for (int j=0;j<n;++j)
+    for (unsigned int j=0;j<n;++j)
       row[j] += vi*v[j];
   }
 }
@@ -266,11 +266,11 @@ void mbl_lda::build(const vcl_vector<vnl_vector<double> >& v, const vcl_vector<i
 //  Note: label([1..n]) not label([0..n-1])
 void mbl_lda::build(const vnl_matrix<double>& M, const vcl_vector<int>& label)
 {
-  int n_egs = M.columns();
+  unsigned int n_egs = M.columns();
   assert(n_egs==label.size());
   //  assert(label.lo()==1);
   vcl_vector<vnl_vector<double> > v(n_egs);
-  for (int i=0;i<n_egs;++i)
+  for (unsigned int i=0;i<n_egs;++i)
   {
     v[i] = M.get_column(i);
   }
@@ -285,11 +285,11 @@ void mbl_lda::build(const vnl_matrix<double>& M, const vcl_vector<int>& label)
 void mbl_lda::build(const vnl_matrix<double>& M, const vcl_vector<int>& label,
                     const vnl_matrix<double>& wS)
 {
-  int n_egs = M.columns();
+  unsigned int n_egs = M.columns();
   assert(n_egs==label.size());
   //  assert(label.lo()==1);
   vcl_vector<vnl_vector<double> > v(n_egs);
-  for (int i=0;i<n_egs;++i)
+  for (unsigned int i=0;i<n_egs;++i)
   {
     v[i] = M.get_column(i);
   }

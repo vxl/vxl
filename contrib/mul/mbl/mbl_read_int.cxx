@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implemantation
+#pragma implementation
 #endif
 
 //:
@@ -27,6 +27,7 @@
 //    int new_scale = mbl_read_int("Scale?",5,min_scale,max_scale);
 
 #include <mbl/mbl_read_int.h>
+#include <vcl_cstdio.h>
 
 const int MAX_LEN = 20;
 
@@ -44,10 +45,10 @@ int RD_ReadInt1(char* q_str, int default_int,
       vcl_cout<<q_str<<" ["<<min_int<<".."<<max_int<<"] ("<<default_int<<") :";
     vcl_cout.flush();
 
-    if (fgets(reply,MAX_LEN,stdin)!=NULL)
+    if (vcl_fgets(reply,MAX_LEN,stdin)!=NULL)
     {
       int r = default_int;
-      if (reply[0]=='\n' || sscanf(reply,"%d",&r)>0)
+      if (reply[0]=='\n' || vcl_sscanf(reply,"%d",&r)>0)
         return r;
     }
   }

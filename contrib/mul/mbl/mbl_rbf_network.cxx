@@ -96,7 +96,7 @@ void mbl_rbf_network::build(const vnl_vector<double>* x, int n, double s)
 
 double mbl_rbf_network::distSqr(const vnl_vector<double>& x, const vnl_vector<double>& y) const
 {
-  int n = x.size();
+  unsigned int n = x.size();
   if (y.size()!=n)
   {
     vcl_cerr<<"mbl_rbf_network::distSqr() x and y different sizes."<<vcl_endl;
@@ -106,7 +106,7 @@ double mbl_rbf_network::distSqr(const vnl_vector<double>& x, const vnl_vector<do
   const double *x_data = x.begin();
   const double *y_data = y.begin();
   double sum = 0.0;
-  for (int i=0;i<n;++i)
+  for (unsigned int i=0;i<n;++i)
   {
     double dx = x_data[i]-y_data[i];
     sum += dx*dx;
@@ -131,7 +131,7 @@ void mbl_rbf_network::setSumToOne(bool flag)
 //  moves away from the training examples x().
 void mbl_rbf_network::calcWts(vnl_vector<double>& w, const vnl_vector<double>& new_x)
 {
-  int n = x_.size();
+  unsigned int n = x_.size();
   if (w.size()!=n) w.resize(n);
 
   if (v_.size()!=n) v_.resize(n);
@@ -155,7 +155,7 @@ void mbl_rbf_network::calcWts(vnl_vector<double>& w, const vnl_vector<double>& n
     return;
   }
 
-  for (int i=0;i<n;++i)
+  for (unsigned int i=0;i<n;++i)
   {
     double v_i = rbf(new_x,x_data[i]);
     v_data[i+1] = v_i;
@@ -167,7 +167,7 @@ void mbl_rbf_network::calcWts(vnl_vector<double>& w, const vnl_vector<double>& n
   {
     double* w_data = w.begin();
     double sum = 0.0;
-    for (int i=0;i<n;++i)
+    for (unsigned int i=0;i<n;++i)
       sum+=w_data[i];
     if (sum!=0) w/=sum;
   }

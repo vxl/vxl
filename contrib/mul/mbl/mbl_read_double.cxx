@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implemantation
+#pragma implementation
 #endif
 
 //:
@@ -27,6 +27,7 @@
 //    double new_scale = mbl_read_double("Scale?",1.00,min_scale,max_scale);
 
 #include <mbl/mbl_read_double.h>
+#include <vcl_cstdio.h>
 
 const int MAX_LEN = 40;
 
@@ -44,10 +45,10 @@ double RD_ReadDouble1(char *q_str, double default_d,
       vcl_cout<<q_str<<" ["<<min_d<<".."<<max_d<<"] ("<<default_d<<") :";
     vcl_cout.flush();
 
-    if (fgets(reply,MAX_LEN,stdin)!=NULL)
+    if (vcl_fgets(reply,MAX_LEN,stdin)!=NULL)
     {
       double r = default_d;
-      if (reply[0]=='\n' || sscanf(reply,"%lf",&r)>0)
+      if (reply[0]=='\n' || vcl_sscanf(reply,"%lf",&r)>0)
         return r;
     }
   }

@@ -260,8 +260,8 @@ void mbl_matxvec_add_prod_vm(const vnl_vector<double>& V,
                              vnl_vector<double>& R)
 // R += M'V
 {
-  int nc = M.cols();
-  int nr = M.rows();
+  unsigned int nc = M.cols();
+  unsigned int nr = M.rows();
 
 #ifndef NDEBUG
   if (nr!=V.size())
@@ -272,7 +272,7 @@ void mbl_matxvec_add_prod_vm(const vnl_vector<double>& V,
   }
 #endif //!NDEBUG
 
-  int t = R.size();
+  unsigned int t = R.size();
   assert(t<=nc); // R too long
   if (t==0) return;
 

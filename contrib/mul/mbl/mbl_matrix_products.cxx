@@ -17,10 +17,10 @@
 void mbl_matrix_product(vnl_matrix<double>& AB, const vnl_matrix<double>& A,
                         const vnl_matrix<double>& B)
 {
-   int nr1 = A.rows();
-   int nc1 = A.cols();
-   int nr2 = B.rows();
-   int nc2 = B.cols();
+   unsigned int nr1 = A.rows();
+   unsigned int nc1 = A.cols();
+   unsigned int nr2 = B.rows();
+   unsigned int nc2 = B.cols();
 
    if( nr2 != nc1 )
    {
@@ -38,11 +38,11 @@ void mbl_matrix_product(vnl_matrix<double>& AB, const vnl_matrix<double>& A,
   // Zero the elements of AB
   AB.fill(0);
 
-  for(int r=0; r < nr1; ++r)
+  for(unsigned int r=0; r < nr1; ++r)
   {
     const double* A_row = AData[r];
     double* R_row = RData[r]-1;
-    for(int c=0; c < nc1 ; ++c )
+    for(unsigned int c=0; c < nc1 ; ++c )
     {
       double a = A_row[c];
       if (a==0.0) continue;
@@ -84,8 +84,8 @@ void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
                              const vnl_matrix<double>& B,
                              int nc)
 {
-  int nr1 = A.rows();
-  int nr2 = B.rows();
+  unsigned int nr1 = A.rows();
+  unsigned int nr2 = B.rows();
 
   assert(A.columns()>=nc);
   assert(B.columns()>=nc);
@@ -97,11 +97,11 @@ void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
   double const *const * B_data = B.data_array();
   double ** R_data = ABt.data_array();
 
-  for (int r=0;r<nr1;++r)
+  for (unsigned int r=0;r<nr1;++r)
   {
     const double* A_row = A_data[r];
     double* R_row = R_data[r];
-    for (int c=0;c<nr2;++c)
+    for (unsigned int c=0;c<nr2;++c)
     {
       const double* B_row = B_data[c];
       R_row[c] = vnl_c_vector<double>::dot_product(A_row,B_row,nc);
@@ -127,10 +127,10 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
                              const vnl_matrix<double>& B,
                              int nc_a)
 {
-  int nr1 = A.rows();
+  unsigned int nr1 = A.rows();
   assert(A.columns()>=nc_a);
-  int nr2 = B.rows();
-  int nc2 = B.columns();
+  unsigned int nr2 = B.rows();
+  unsigned int nc2 = B.columns();
 
   if( nr2 != nr1 )
   {
@@ -147,7 +147,7 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
 
   AtB.fill(0);
 
-  for (int r1 = 0; r1<nr1; ++r1)
+  for (unsigned int r1 = 0; r1<nr1; ++r1)
   {
     const double* A_row = A_data[r1]-1;
     const double* B_row = B_data[r1]-1;
@@ -173,10 +173,10 @@ void mbl_matrix_product_adb(vnl_matrix<double>& ADB,
                           const vnl_vector<double>& d,
                                 const vnl_matrix<double>& B)
 {
-  int nr1 = A.rows();
-  int nc1 = A.cols();
-  int nr2 = B.rows();
-  int nc2 = B.cols();
+  unsigned int nr1 = A.rows();
+  unsigned int nc1 = A.cols();
+  unsigned int nr2 = B.rows();
+  unsigned int nc2 = B.cols();
 
   assert ( nr2 == nc1 ); //Product : B.nrows != A.ncols
 
@@ -192,11 +192,11 @@ void mbl_matrix_product_adb(vnl_matrix<double>& ADB,
 
   ADB.fill(0);
 
-  for(int r=0; r < nr1; ++r)
+  for(unsigned int r=0; r < nr1; ++r)
   {
     const double* A_row = AData[r];
     double* ADB_row = ADBdata[r]-1;
-    for(int c=0; c < nc1 ; ++c )
+    for(unsigned int c=0; c < nc1 ; ++c )
     {
       double ad = A_row[c] * d_data[c];
       if (ad==0.0) continue;
