@@ -30,10 +30,10 @@ vil_image_resource_sptr vil_bmp_file_format::make_input_image(vil_stream* vs)
 }
 
 vil_image_resource_sptr vil_bmp_file_format::make_output_image(vil_stream* vs,
-                                                                 unsigned nx,
-                                                                 unsigned ny,
-                                                                 unsigned nplanes,
-                                                                 vil_pixel_format format)
+                                                               unsigned nx,
+                                                               unsigned ny,
+                                                               unsigned nplanes,
+                                                               vil_pixel_format format)
 {
   return new vil_bmp_image(vs, nx, ny, nplanes, format);
 }
@@ -69,7 +69,7 @@ bool vil_bmp_image::get_property(char const * /*tag*/, void * /*prop*/) const
 }
 
 vil_bmp_image::vil_bmp_image(vil_stream* vs, unsigned nx, unsigned ny,
-                               unsigned nplanes, vil_pixel_format format):
+                             unsigned nplanes, vil_pixel_format format):
   is_(vs), bit_map_start(-1L)
 {
   is_->ref();
@@ -346,7 +346,8 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
     }
   }
 
-  return new vil_image_view<vxl_byte>(buf,
+  return new vil_image_view<vxl_byte>(
+    buf,
     reinterpret_cast<vxl_byte *>(buf->data())+(ny-1)*have_bytes_per_raster + nplanes()-1,
     nx, ny, nplanes(),
     nplanes(), -(long)have_bytes_per_raster, -1);
@@ -354,7 +355,7 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
 
 
 bool vil_bmp_image::put_view(const vil_image_view_base& view,
-                              unsigned x0, unsigned y0)
+                             unsigned x0, unsigned y0)
 {
   if (!view_fits(view, x0, y0))
   {

@@ -32,7 +32,7 @@ inline bool vil_is_peak_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_s
 //  pixels are set to non_max_value.
 //
 //  non_max_value must be below the threshold (so the default value of
-//  zero is inappropriate if the image contains peaks of interest with 
+//  zero is inappropriate if the image contains peaks of interest with
 //  negative values)
 //
 //  Note that where there are neighbouring pixels with identical values
@@ -41,8 +41,8 @@ inline bool vil_is_peak_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_s
 //  can be reduced by using float images and pre-smoothing slightly.
 template <class T>
 inline void vil_suppress_non_max_3x3(const vil_image_view<T>& src_im,
-                                      vil_image_view<T>& dest_im,
-                                      T threshold=0, T non_max_value=0)
+                                     vil_image_view<T>& dest_im,
+                                     T threshold=0, T non_max_value=0)
 {
   unsigned ni=src_im.ni(),nj=src_im.nj();
   assert(src_im.nplanes()==1);

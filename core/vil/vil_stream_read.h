@@ -23,6 +23,6 @@ float vil_stream_read_big_endian_float(vil_stream* is);
 //: Reads in n 16 bit unsigned ints.
 // Caller is responsible for allocating enough space.
 void vil_stream_read_big_endian_int_16(vil_stream* is,
-                                        vxl_uint_16* data, unsigned n);
+                                       vxl_uint_16* data, unsigned n);
 
 #endif // vil_stream_read_h_

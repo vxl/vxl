@@ -38,7 +38,7 @@ bool vil_clamp_image_resource::get_property(char const* tag, void* property_valu
 }
 
 vil_image_view_base_sptr vil_clamp_image_resource::get_copy_view(unsigned i0, unsigned ni,
-                                                                   unsigned j0, unsigned nj) const
+                                                                 unsigned j0, unsigned nj) const
 {
   vil_image_view_base_sptr vs = src_->get_copy_view(i0, ni, j0, nj);
   if (!vs) return 0;
@@ -48,7 +48,7 @@ vil_image_view_base_sptr vil_clamp_image_resource::get_copy_view(unsigned i0, un
 #define macro( F , T ) \
   case F : \
     vil_clamp(static_cast<vil_image_view<T >&>(*vs), static_cast<vil_image_view<T >&>(*vs), \
-      T (lo_), T (hi_)); \
+              T (lo_), T (hi_)); \
     break;
 
       macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )

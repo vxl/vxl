@@ -23,10 +23,10 @@ class vil_dicom_file_format : public vil_file_format
   virtual char const* tag() const;
   virtual vil_image_resource_sptr make_input_image(vil_stream* vs);
   virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
-                                                     unsigned ni,
-                                                     unsigned nj,
-                                                     unsigned nplanes,
-                                                     vil_pixel_format format);
+                                                    unsigned ni,
+                                                    unsigned nj,
+                                                    unsigned nplanes,
+                                                    vil_pixel_format format);
 };
 
 
@@ -43,8 +43,8 @@ class vil_dicom_image : public vil_image_resource
 
  public:
   vil_dicom_image(vil_stream* is, unsigned ni,
-                   unsigned nj, unsigned nplanes,
-                   vil_pixel_format format);
+                  unsigned nj, unsigned nplanes,
+                  vil_pixel_format format);
   vil_dicom_image(vil_stream* is);
   ~vil_dicom_image();
 
@@ -55,7 +55,7 @@ class vil_dicom_image : public vil_image_resource
   virtual enum vil_pixel_format pixel_format() const;
 
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                  unsigned j0, unsigned nj) const;
+                                                 unsigned j0, unsigned nj) const;
 
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
 
@@ -63,7 +63,7 @@ class vil_dicom_image : public vil_image_resource
   bool get_property(char const *tag, void *prop = 0) const;
 
 // Dicom specific stuff
-  const vil_dicom_header_info & header() const { return header_;} 
+  const vil_dicom_header_info & header() const { return header_; }
 };
 
 #endif // vil_dicom_file_format_h_

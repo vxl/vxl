@@ -26,9 +26,9 @@ class vil_memory_image : public vil_image_resource
   //: Create an in-memory image of given size and pixel type.
   // The pixel type must be scalar.
   vil_memory_image(unsigned ni,
-                    unsigned nj,
-                    unsigned nplanes,
-                    vil_pixel_format format);
+                   unsigned nj,
+                   unsigned nplanes,
+                   vil_pixel_format format);
 
   friend vil_image_resource_sptr vil_new_image_resource(
     unsigned ni, unsigned nj, unsigned nplanes,
@@ -49,12 +49,12 @@ class vil_memory_image : public vil_image_resource
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                  unsigned j0, unsigned nj) const;
+                                                 unsigned j0, unsigned nj) const;
 
   //: Create a view of this data.
   // \return 0 if unable to get view of correct size.
   virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
-                                             unsigned j0, unsigned nj) const;
+                                            unsigned j0, unsigned nj) const;
 
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);

@@ -1,9 +1,9 @@
 #ifndef vil_binary_opening_h_
 #define vil_binary_opening_h_
 //:
-//  \file
-//  \brief Perform binary opening on images
-//  \author Tim Cootes
+// \file
+// \brief Perform binary opening on images
+// \author Tim Cootes
 
 #include <vil/algo/vil_binary_dilate.h>
 #include <vil/algo/vil_binary_erode.h>
@@ -13,8 +13,8 @@
 // \relates vil_image_view
 // \relates vil_structuring_element
 inline void vil_binary_opening(const vil_image_view<bool>& src_image,
-                                vil_image_view<bool>& dest_image,
-                                const vil_structuring_element& element)
+                               vil_image_view<bool>& dest_image,
+                               const vil_structuring_element& element)
 {
   vil_image_view<bool> eroded_im;
   vil_binary_erode(src_image,eroded_im,element);

@@ -32,13 +32,13 @@ vil1_image vil1_new(int width, int height, vil1_image const& prototype)
 
 
 vil1_image vil1_new(vil1_stream* os,
-                  int planes,
-                  int width,
-                  int height,
-                  int components,
-                  int bits_per_component,
-                  vil1_component_format format,
-                  char const* file_format)
+                    int planes,
+                    int width,
+                    int height,
+                    int components,
+                    int bits_per_component,
+                    vil1_component_format format,
+                    char const* file_format)
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
@@ -61,33 +61,33 @@ vil1_image vil1_new(vil1_stream* os,
 
 //: Make a new vil1_image_impl, writing to stream "os", size "w" x "h", copying pixel format etc from "prototype".
 vil1_image vil1_new(vil1_stream* os,
-                  int width, int height,
-                  vil1_image const& prototype,
-                  char const* file_format)
+                    int width, int height,
+                    vil1_image const& prototype,
+                    char const* file_format)
 {
   return vil1_new(os,
-                 prototype.planes(),
-                 width,
-                 height,
-                 prototype.components(),
-                 prototype.bits_per_component(),
-                 prototype.component_format(),
-                 file_format ? file_format : prototype.file_format());
+                  prototype.planes(),
+                  width,
+                  height,
+                  prototype.components(),
+                  prototype.bits_per_component(),
+                  prototype.component_format(),
+                  file_format ? file_format : prototype.file_format());
 }
 
 //: Make a new vil1_image_impl, writing to file "filename", size "w" x "h", copying pixel format etc from "prototype".
 vil1_image vil1_new(char const* filename,
-                  int width, int height,
-                  vil1_image const& prototype,
-                  char const* file_format)
+                    int width, int height,
+                    vil1_image const& prototype,
+                    char const* file_format)
 {
   vil1_stream_fstream* os = new vil1_stream_fstream(filename, "w");
   return vil1_new(os,
-                 prototype.planes(),
-                 width,
-                 height,
-                 prototype.components(),
-                 prototype.bits_per_component(),
-                 prototype.component_format(),
-                 file_format ? file_format : prototype.file_format());
+                  prototype.planes(),
+                  width,
+                  height,
+                  prototype.components(),
+                  prototype.bits_per_component(),
+                  prototype.component_format(),
+                  file_format ? file_format : prototype.file_format());
 }

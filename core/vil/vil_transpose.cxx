@@ -21,7 +21,7 @@ vil_transpose_image_resource::vil_transpose_image_resource(vil_image_resource_sp
 }
 
 vil_image_view_base_sptr vil_transpose_image_resource::get_copy_view(unsigned i0, unsigned ni,
-                                                                       unsigned j0, unsigned nj) const
+                                                                     unsigned j0, unsigned nj) const
 {
   vil_image_view_base_sptr vs = src_->get_copy_view(j0, nj, i0, ni);
   if (!vs) return 0;
@@ -47,7 +47,7 @@ vil_image_view_base_sptr vil_transpose_image_resource::get_copy_view(unsigned i0
 }
 
 vil_image_view_base_sptr vil_transpose_image_resource::get_view(unsigned i0, unsigned ni,
-                                                                  unsigned j0, unsigned nj) const
+                                                                unsigned j0, unsigned nj) const
 {
   vil_image_view_base_sptr vs = src_->get_view(j0, nj, i0, ni);
   if (!vs) return 0;
@@ -74,7 +74,7 @@ vil_image_view_base_sptr vil_transpose_image_resource::get_view(unsigned i0, uns
 
 //: Put the data in this view back into the image source.
 bool vil_transpose_image_resource::put_view(const vil_image_view_base& im, unsigned i0,
-                                             unsigned j0)
+                                            unsigned j0)
 {
   switch (im.pixel_format())
   {

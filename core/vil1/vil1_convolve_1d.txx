@@ -23,17 +23,17 @@
 #define VIL1_CONVOLVE_1D_INSTANTIATE(I1, I2, AC, O) \
 template \
 void vil1_convolve_1d_x(vil1_convolve_signal_1d<const I1 > const &, \
-                       vil1_convolve_signal_2d<const I2 > const &, \
-                       AC *, \
-                       vil1_convolve_signal_2d<O > const &, \
-                       vil1_convolve_boundary_option, \
-                       vil1_convolve_boundary_option); \
+                        vil1_convolve_signal_2d<const I2 > const &, \
+                        AC *, \
+                        vil1_convolve_signal_2d<O > const &, \
+                        vil1_convolve_boundary_option, \
+                        vil1_convolve_boundary_option); \
 template \
 void vil1_convolve_1d_y(vil1_convolve_signal_1d<const I1 > const &, \
-                       vil1_convolve_signal_2d<const I2 > const &, \
-                       AC *, \
-                       vil1_convolve_signal_2d<O > const &, \
-                       vil1_convolve_boundary_option, \
-                       vil1_convolve_boundary_option)
+                        vil1_convolve_signal_2d<const I2 > const &, \
+                        AC *, \
+                        vil1_convolve_signal_2d<O > const &, \
+                        vil1_convolve_boundary_option, \
+                        vil1_convolve_boundary_option)
 
 #endif // vil1_convolve_1d_txx_

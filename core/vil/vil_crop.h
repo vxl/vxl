@@ -19,25 +19,25 @@
 // \return an n_i x n_j window of im with offset (x0,y0)
 template<class T>
 inline vil_image_view<T> vil_crop(const vil_image_view<T> &im, unsigned i0,
-                                    unsigned n_i, unsigned j0, unsigned n_j)
+                                  unsigned n_i, unsigned j0, unsigned n_j)
 {
   assert(i0<im.ni()); assert(i0+n_i<=im.ni());
   assert(j0<im.nj()); assert(j0+n_j<=im.nj());
   return vil_image_view<T>(im.memory_chunk(), im.top_left_ptr()+ i0*im.istep() + j0*im.jstep(),
-                            n_i, n_j, im.nplanes(), im.istep(), im.jstep(), im.planestep());
+                           n_i, n_j, im.nplanes(), im.istep(), im.jstep(), im.planestep());
 }
 
 //: Crop to a region of src.
 // \relates vil_image_resource
 vil_image_resource_sptr vil_crop(const vil_image_resource_sptr &src, unsigned i0,
-                                   unsigned n_i, unsigned j0, unsigned n_j);
+                                 unsigned n_i, unsigned j0, unsigned n_j);
 
 //: A generic_image adaptor that behaves like a cropped version of its input
 class vil_crop_image_resource : public vil_image_resource
 {
  public:
   vil_crop_image_resource(vil_image_resource_sptr const&, unsigned i0, unsigned n_i,
-                           unsigned j0, unsigned n_j);
+                          unsigned j0, unsigned n_j);
 
   virtual unsigned nplanes() const { return src_->nplanes(); }
   virtual unsigned ni() const { return ni_; }
@@ -47,14 +47,14 @@ class vil_crop_image_resource : public vil_image_resource
 
 
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
-                                                  unsigned j0, unsigned n_j) const
+                                                 unsigned j0, unsigned n_j) const
   {
     if (i0 + n_i > ni() || j0 + n_j > nj()) return 0;
     return src_->get_copy_view(i0+i0_, n_i, j0+j0_, n_j);
   }
 
   virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned n_i,
-                                             unsigned j0, unsigned n_j) const
+                                            unsigned j0, unsigned n_j) const
   {
     if (i0 + n_i > ni() || j0 + n_j > nj()) return 0;
     return src_->get_view(j0+j0_, n_i, j0+j0_, n_j);

@@ -8,10 +8,9 @@
 template <class pixel_type, class float_type>
 void
 vil1_convolve_separable(float const kernel[], unsigned N,
-                       vil1_memory_image_of<pixel_type>& buf,
-                       vil1_memory_image_of<float_type>& tmp,
-                       vil1_memory_image_of<float_type>& out
-                      )
+                        vil1_memory_image_of<pixel_type>& buf,
+                        vil1_memory_image_of<float_type>& tmp,
+                        vil1_memory_image_of<float_type>& out)
 {
   vil1_convolve_signal_1d<float const> K(kernel, 0, N/2, N);
 
@@ -20,28 +19,26 @@ vil1_convolve_separable(float const kernel[], unsigned N,
 
   vcl_cerr << "convolve x..." << vcl_flush;
   vil1_convolve_1d_x(K,
-                    vil1_convolve_signal_2d<pixel_type const>(buf.row_array(), 0, 0, w,  0, 0, h),
-                    (float_type*)0,
-                    vil1_convolve_signal_2d<float_type         >(tmp.row_array(), 0, 0, w,  0, 0, h),
-                    vil1_convolve_trim, vil1_convolve_trim);
-  vcl_cerr << "done\n";
-
-  vcl_cerr << "convolve y..." << vcl_flush;
+                     vil1_convolve_signal_2d<pixel_type const>(buf.row_array(), 0, 0, w,  0, 0, h),
+                     (float_type*)0,
+                     vil1_convolve_signal_2d<float_type      >(tmp.row_array(), 0, 0, w,  0, 0, h),
+                     vil1_convolve_trim, vil1_convolve_trim);
+  vcl_cerr << "done\n"
+           << "convolve y...";
   vil1_convolve_1d_y(K,
-                    vil1_convolve_signal_2d<float_type const>(tmp.row_array(), 0, 0, w,  0, 0, h),
-                    (float_type*)0,
-                    vil1_convolve_signal_2d<float_type      >(out.row_array(), 0, 0, w,  0, 0, h),
-                    vil1_convolve_trim, vil1_convolve_trim);
+                     vil1_convolve_signal_2d<float_type const>(tmp.row_array(), 0, 0, w,  0, 0, h),
+                     (float_type*)0,
+                     vil1_convolve_signal_2d<float_type      >(out.row_array(), 0, 0, w,  0, 0, h),
+                     vil1_convolve_trim, vil1_convolve_trim);
   vcl_cerr << "done\n";
 }
 
 template <class pixel_type, class float_type>
 vil1_image vil1_convolve_separable(vil1_image const & in,
-                                 float const* kernel,
-                                 int N,
-                                 pixel_type*,
-                                 float_type*
-                                 )
+                                   float const* kernel,
+                                   int N,
+                                   pixel_type*,
+                                   float_type*)
 {
   // Copy input image, unless it's already a memory image
   // of the appropriate format.

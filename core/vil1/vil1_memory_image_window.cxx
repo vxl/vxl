@@ -44,8 +44,8 @@ inline int labs(int x) { return (x > 0) ? x : -x; }
 // accumulator overflow which can easily happen on certain medical and range
 // images.
 int vil1_memory_image_window::sum_abs_diff(const vil1_memory_image_of<vil1_byte>& image2,
-                                          int centre2_x, int centre2_y,
-                                          int early_exit_level)
+                                           int centre2_x, int centre2_y,
+                                           int early_exit_level)
 {
   int mask2_col_index = centre2_x - mask_size_ / 2;
   int mask2_row_index = centre2_y - mask_size_ / 2;
@@ -86,8 +86,8 @@ int vil1_memory_image_window::sum_abs_diff(const vil1_memory_image_of<vil1_byte>
 // accumulator overflow which can easily happen on certain medical and range
 // images.
 int vil1_memory_image_window::sum_sqr_diff(const vil1_memory_image_of<vil1_byte>& image2,
-                                          int centre2_x, int centre2_y,
-                                          int early_exit_level)
+                                           int centre2_x, int centre2_y,
+                                           int early_exit_level)
 {
   int mask2_col_index = centre2_x - mask_size_ / 2;
   int mask2_row_index = centre2_y - mask_size_ / 2;
@@ -125,9 +125,9 @@ int vil1_memory_image_window::sum_sqr_diff(const vil1_memory_image_of<vil1_byte>
 
 
 int vil1_memory_image_window::normalised_sum_abs_diff(const vil1_memory_image_of<vil1_byte>& image2,
-                                                     int centre2_x, int centre2_y,
-                                                     double normalise_ratio,
-                                                     int early_exit_level)
+                                                      int centre2_x, int centre2_y,
+                                                      double normalise_ratio,
+                                                      int early_exit_level)
 {
   int mask2_col_index = centre2_x - mask_size_ / 2;
   int mask2_row_index = centre2_y - mask_size_ / 2;
@@ -149,7 +149,7 @@ int vil1_memory_image_window::normalised_sum_abs_diff(const vil1_memory_image_of
 
 
 double vil1_memory_image_window::normalised_cross_correlation(const vil1_memory_image_of<vil1_byte>& image2,
-                                                             int centre2_x, int centre2_y)
+                                                              int centre2_x, int centre2_y)
 {
   // set mask size
   int n = (int)mask_size_/2;

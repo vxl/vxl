@@ -79,8 +79,8 @@ struct vil1_convolve_signal_2d {
   int beginx_, originx_, endx_;
   int beginy_, originy_, endy_;
   vil1_convolve_signal_2d(T * const *a,
-                         int bx, int ox, int ex,
-                         int by, int oy, int ey)
+                          int bx, int ox, int ex,
+                          int by, int oy, int ey)
     : array_(a)
     , beginx_(bx), originx_(ox), endx_(ex)
     , beginy_(by), originy_(oy), endy_(ey)
@@ -97,39 +97,39 @@ struct vil1_convolve_signal_2d {
 //: Convolution in x-direction : out(x, y) = \sum_i kernel[i]*in(x-i, y)
 template <class I1, class I2, class AC, class O>
 void vil1_convolve_1d_x(vil1_convolve_signal_1d<I1 const> const &kernel,
-                       vil1_convolve_signal_2d<I2 const> const &input,
-                       AC * /*accumulator type*/,
-                       vil1_convolve_signal_2d<O> const &output,
-                       vil1_convolve_boundary_option b,
-                       vil1_convolve_boundary_option e);
+                        vil1_convolve_signal_2d<I2 const> const &input,
+                        AC * /*accumulator type*/,
+                        vil1_convolve_signal_2d<O> const &output,
+                        vil1_convolve_boundary_option b,
+                        vil1_convolve_boundary_option e);
 
 //: Convolution in y-direction : out(x, y) = \sum_j kernel[j]*in(x, y-j)
 template <class I1, class I2, class AC, class O>
 void vil1_convolve_1d_y(vil1_convolve_signal_1d<I1 const> const &kernel,
-                       vil1_convolve_signal_2d<I2 const> const &input,
-                       AC * /*accumulator type*/,
-                       vil1_convolve_signal_2d<O> const &output,
-                       vil1_convolve_boundary_option b,
-                       vil1_convolve_boundary_option e);
+                        vil1_convolve_signal_2d<I2 const> const &input,
+                        AC * /*accumulator type*/,
+                        vil1_convolve_signal_2d<O> const &output,
+                        vil1_convolve_boundary_option b,
+                        vil1_convolve_boundary_option e);
 
 // *** the following are not yet implemented.
 
 //: Convolution in x-direction, using a symmetric kernel.
 template <class I1, class I2, class AC, class O>
 void vil1_convolve_1d_x(I1 const *half_kernel, unsigned kernel_size,
-                       vil1_convolve_signal_2d<I2 const> const &input,
-                       AC * /*accumulator type*/,
-                       vil1_convolve_signal_2d<O> const &output,
-                       vil1_convolve_boundary_option b,
-                       vil1_convolve_boundary_option e);
+                        vil1_convolve_signal_2d<I2 const> const &input,
+                        AC * /*accumulator type*/,
+                        vil1_convolve_signal_2d<O> const &output,
+                        vil1_convolve_boundary_option b,
+                        vil1_convolve_boundary_option e);
 
 //: Convolution in y-direction, using a symmetric kernel.
 template <class I1, class I2, class AC, class O>
 void vil1_convolve_1d_y(I1 const *half_kernel, unsigned kernel_size,
-                       vil1_convolve_signal_2d<I2 const> const &input,
-                       AC * /*accumulator type*/,
-                       vil1_convolve_signal_2d<O> const &output,
-                       vil1_convolve_boundary_option b,
-                       vil1_convolve_boundary_option e);
+                        vil1_convolve_signal_2d<I2 const> const &input,
+                        AC * /*accumulator type*/,
+                        vil1_convolve_signal_2d<O> const &output,
+                        vil1_convolve_boundary_option b,
+                        vil1_convolve_boundary_option e);
 
 #endif // vil1_convolve_h_

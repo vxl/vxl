@@ -20,9 +20,9 @@ template<class T>
 inline vil_image_view<T> vil_flip_lr(const vil_image_view<T>& v)
 {
   return vil_image_view<T>(v.memory_chunk(),
-                            v.top_left_ptr()+(v.ni()-1)*v.istep(),
-                            v.ni(),v.nj(),v.nplanes(),
-                            -v.istep(),v.jstep(),v.planestep());
+                           v.top_left_ptr()+(v.ni()-1)*v.istep(),
+                           v.ni(),v.nj(),v.nplanes(),
+                           -v.istep(),v.jstep(),v.planestep());
 }
 
 //: Create a reflected view in which y -> nj-1-j.
@@ -33,9 +33,9 @@ template<class T>
 inline vil_image_view<T> vil_flip_ud(const vil_image_view<T>& v)
 {
   return vil_image_view<T>(v.memory_chunk(),
-                            v.top_left_ptr()+(v.nj()-1)*v.jstep(),
-                            v.ni(),v.nj(),v.nplanes(),
-                            v.istep(),-v.jstep(),v.planestep());
+                           v.top_left_ptr()+(v.nj()-1)*v.jstep(),
+                           v.ni(),v.nj(),v.nplanes(),
+                           v.istep(),-v.jstep(),v.planestep());
 }
 
 
@@ -59,10 +59,10 @@ class vil_flip_lr_image_resource : public vil_image_resource
 
 
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                  unsigned j0, unsigned nj) const;
+                                                 unsigned j0, unsigned nj) const;
 
   virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
-                                             unsigned j0, unsigned nj) const;
+                                            unsigned j0, unsigned nj) const;
 
 
   //: Put the data in this view back into the image source.
@@ -100,10 +100,10 @@ class vil_flip_ud_image_resource : public vil_image_resource
 
 
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                  unsigned j0, unsigned nj) const;
+                                                 unsigned j0, unsigned nj) const;
 
   virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
-                                             unsigned j0, unsigned nj) const;
+                                            unsigned j0, unsigned nj) const;
 
 
   //: Put the data in this view back into the image source.

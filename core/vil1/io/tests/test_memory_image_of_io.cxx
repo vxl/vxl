@@ -31,41 +31,38 @@ void test_memory_image_of_io()
 
   // Test the save
   vsl_b_ofstream bfs_out("vil1_memory_image_of_io.bvl.tmp");
-  TEST ("Created vil1_memory_image_of_io.bvl.tmp for writing",
-    (!bfs_out), false);
+  TEST("Created vil1_memory_image_of_io.bvl.tmp for writing", !bfs_out, false);
   vsl_b_write(bfs_out,p_out);
   bfs_out.close();
 
   // And the load
   vsl_b_ifstream bfs_in("vil1_memory_image_of_io.bvl.tmp");
-  TEST ("Opened vil1_memory_image_of_io.bvl.tmp for reading",
-    (!bfs_in), false);
+  TEST("Opened vil1_memory_image_of_io.bvl.tmp for reading", !bfs_in, false);
   vsl_b_read(bfs_in,p_in);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   vpl_unlink ("vil1_memory_image_of_io.bvl.tmp");
 
   // Compare the images' size and so on
-  TEST ("p_out == p_in (structure)",
-    p_out.size() == p_in.size() &&
-    p_out.planes() == p_in.planes() &&
-    p_out.height() == p_in.height() &&
-    p_out.components() && p_in.components() &&
-    p_out.bits_per_component() == p_in.bits_per_component() &&
-    p_out.component_format() == p_in.component_format(), true);
+  TEST("p_out == p_in (structure)",
+       p_out.size() == p_in.size() &&
+       p_out.planes() == p_in.planes() &&
+       p_out.height() == p_in.height() &&
+       p_out.components() && p_in.components() &&
+       p_out.bits_per_component() == p_in.bits_per_component() &&
+       p_out.component_format() == p_in.component_format(), true);
 
    // Now get the data and compare them
   bool data_same = false;
   for (int i=0;i<p_out.cols();i++)
     for (int j=0;j<p_out.rows();j++)
      data_same = (p_out(i,j)==p_in(i,j));
-  TEST ( "p_out == p_in (data)", data_same, true);
+  TEST("p_out == p_in (data)", data_same, true);
 
   // And have a look at the summary
   vsl_print_summary(vcl_cout, p_in);
   vcl_cout << vcl_endl;
 }
-
 
 TESTMAIN( test_memory_image_of_io );

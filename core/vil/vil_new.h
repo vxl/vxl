@@ -29,36 +29,36 @@
 //: Make a new image of given format.
 // \relates vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, unsigned nplanes,
-                                                 vil_pixel_format format);
+                                               vil_pixel_format format);
 
 //: Make a new image, similar format to the prototype.
 // \relates vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj,
-                                                 vil_image_resource_sptr const& prototype);
+                                               vil_image_resource_sptr const& prototype);
 
 //: Make a new image.
 // \relates vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
-                                                 unsigned ni, unsigned nj,
-                                                 unsigned nplanes,
-                                                 vil_pixel_format format,
-                                                 char const* file_format = 0);
+                                               unsigned ni, unsigned nj,
+                                               unsigned nplanes,
+                                               vil_pixel_format format,
+                                               char const* file_format = 0);
 
 //: Make a new image on disk
 // \relates vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(char const* filename,
-                                                 unsigned ni, unsigned nj,
-                                                 unsigned nplanes,
-                                                 vil_image_resource_sptr const &prototype,
-                                                 char const* format = 0);
+                                               unsigned ni, unsigned nj,
+                                               unsigned nplanes,
+                                               vil_image_resource_sptr const &prototype,
+                                               char const* format = 0);
 
 //: Make a new image.
 // \relates vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
-                                                 unsigned ni, unsigned nj,
-                                                 unsigned nplanes,
-                                                 vil_image_resource_sptr const& prototype,
-                                                 char const* file_format = 0);
+                                               unsigned ni, unsigned nj,
+                                               unsigned nplanes,
+                                               vil_image_resource_sptr const& prototype,
+                                               char const* file_format = 0);
 
 //: Create an image view whose plane step is 1.
 // i_step will by nplanes.
@@ -66,7 +66,7 @@ template <class T>
 vil_image_view<T> vil_new_image_view_j_i_plane(unsigned ni, unsigned nj, unsigned nplanes, T /*dummy*/)
 {
   vil_memory_chunk_sptr chunk = new vil_memory_chunk(ni*nj*nplanes*sizeof(T),
-    vil_pixel_format_component_format(vil_pixel_format_of(T())));
+                                                     vil_pixel_format_component_format(vil_pixel_format_of(T())));
   return vil_image_view<T>(chunk, reinterpret_cast<T *>(chunk->data()), ni, nj, nplanes, nplanes*nj, nplanes, 1);
 }
 
@@ -76,7 +76,7 @@ template <class T>
 vil_image_view<T> vil_new_image_view_plane_i_j(unsigned ni, unsigned nj, unsigned nplanes, T /*dummy*/)
 {
   vil_memory_chunk_sptr chunk = new vil_memory_chunk(ni*nj*nplanes*sizeof(T),
-    vil_pixel_format_component_format(vil_pixel_format_of(T())));
+                                                     vil_pixel_format_component_format(vil_pixel_format_of(T())));
   return vil_image_view<T>(chunk, reinterpret_cast<T *>(chunk->data()), ni, nj, nplanes, nj, 1, nj*ni);
 }
 

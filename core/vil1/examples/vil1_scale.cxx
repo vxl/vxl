@@ -367,8 +367,8 @@ template struct pnmscaleT<unsigned char, long>;
 static inline
 vil1_rgb<long> operator*(long const &a, vil1_rgb<unsigned char> const &b) {
   return vil1_rgb<long>(a*long(b.r),
-                       a*long(b.g),
-                       a*long(b.b));
+                        a*long(b.g),
+                        a*long(b.b));
 }
 #endif
 template struct pnmscaleT<vil1_rgb<unsigned char>, vil1_rgb<long> >;

@@ -20,14 +20,14 @@
 //  No bound checks are done.
 template<class T>
 double vil_bicub_interp_unsafe(double x, double y, const T* data,
-                                vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep);
+                               vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep);
 
 //: Compute bicubic interpolation at (x,y), no bound checks
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
 //  No bound checks are done.
 template<class T>
 double vil_bicub_interp_raw(double x, double y, const T* data,
-                             vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep);
+                            vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep);
 
 //: Compute bicubic interpolation at (x,y), with bound checks
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
@@ -35,8 +35,8 @@ double vil_bicub_interp_raw(double x, double y, const T* data,
 //  The safe interpolatable region is [1,nx-2]*[1,ny-2].
 template<class T>
 inline double vil_bicub_interp_safe(double x, double y, const T* data,
-                                     int nx, int ny,
-                                     vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                    int nx, int ny,
+                                    vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     if (x<1) return 0.0;
     if (y<1) return 0.0;
@@ -51,11 +51,11 @@ inline double vil_bicub_interp_safe(double x, double y, const T* data,
 // \relates vil_image_view
 template<class T>
 inline double vil_bicub_interp_safe(const vil_image_view<T> &view,
-                                     double x, double y, unsigned p=0)
+                                    double x, double y, unsigned p=0)
 {
     return vil_bicub_interp_safe(x, y, &view(0,0,p),
-                                  view.ni(), view.nj(),
-                                  view.istep(), view.jstep());
+                                 view.ni(), view.nj(),
+                                 view.istep(), view.jstep());
 }
 
 //: Compute bicubic interpolation at (x,y), with minimal bound checks
@@ -65,8 +65,8 @@ inline double vil_bicub_interp_safe(const vil_image_view<T> &view,
 //  The safe interpolatable region is [1,nx-2]*[1,ny-2].
 template<class T>
 inline double vil_bicub_interp(double x, double y, const T* data,
-                                int nx, int ny,
-                                vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                               int nx, int ny,
+                               vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     assert (x>=1);
     assert (y>=1);
@@ -82,11 +82,11 @@ inline double vil_bicub_interp(double x, double y, const T* data,
 // \relates vil_image_view
 template<class T>
 inline double vil_bicub_interp(const vil_image_view<T> &view,
-                                double x, double y, unsigned p=0)
+                               double x, double y, unsigned p=0)
 {
     return vil_bicub_interp(x, y, &view(0,0,p),
-                             view.ni(), view.nj(),
-                             view.istep(), view.jstep());
+                            view.ni(), view.nj(),
+                            view.istep(), view.jstep());
 }
 
 //: Compute bicubic interpolation at (x,y), with bound checks
@@ -95,8 +95,8 @@ inline double vil_bicub_interp(const vil_image_view<T> &view,
 //  The safe interpolatable region is [1,nx-2]*[1,ny-2].
 template<class T>
 inline double vil_bicub_interp_safe_extend(double x, double y, const T* data,
-                                            int nx, int ny,
-                                            vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                           int nx, int ny,
+                                           vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     if (x<1) x= 0.0;
     if (y<1) y= 0.0;
@@ -111,11 +111,11 @@ inline double vil_bicub_interp_safe_extend(double x, double y, const T* data,
 // \relates vil_image_view
 template<class T>
 inline double vil_bicub_interp_safe_extend(const vil_image_view<T> &view,
-                                            double x, double y, unsigned p=0)
+                                           double x, double y, unsigned p=0)
 {
     return vil_bicub_interp_safe_extend(x, y, &view(0,0,p),
-                                         view.ni(), view.nj(),
-                                         view.istep(), view.jstep());
+                                        view.ni(), view.nj(),
+                                        view.istep(), view.jstep());
 }
 
 #endif // vil_bicub_interp_h_

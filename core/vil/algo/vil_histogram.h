@@ -1,9 +1,9 @@
 #ifndef vil_histogram_h_
 #define vil_histogram_h_
 //:
-//  \file
-//  \brief Construct histogram from pixels in given image.
-//  \author Tim Cootes
+// \file
+// \brief Construct histogram from pixels in given image.
+// \author Tim Cootes
 
 #include <vil/vil_image_view.h>
 #include <vcl_vector.h>
@@ -14,8 +14,8 @@
 template<class T>
 inline
 void vil_histogram(const vil_image_view<T>& image,
-                    vcl_vector<double>& histo,
-                    double min, double max, unsigned n_bins)
+                   vcl_vector<double>& histo,
+                   double min, double max, unsigned n_bins)
 {
   histo.resize(n_bins);
   vcl_fill(histo.begin(),histo.end(),0.0);
@@ -43,7 +43,6 @@ void vil_histogram(const vil_image_view<T>& image,
 //: Construct histogram from pixels in given image of bytes
 //  Resulting histogram has 256 bins
 void vil_histogram_byte(const vil_image_view<vxl_byte>& image,
-                         vcl_vector<double>& histo);
-
+                        vcl_vector<double>& histo);
 
 #endif // vil_histogram_h_

@@ -55,19 +55,19 @@ int main( int argc, char* argv[] )
 
   // convolution of the input image in y-direction
   vcl_cout << "Convolving in y-direction...\n";
-  vil_convolve_1d( vil_transpose( imageIn ), tmp,
-                    &kernel[halfSupport], -halfSupport, halfSupport,
-                    float(),
-                    vil_convolve_constant_extend,
-                    vil_convolve_constant_extend );
+  vil_convolve_1d(vil_transpose( imageIn ), tmp,
+                  &kernel[halfSupport], -halfSupport, halfSupport,
+                  float(),
+                  vil_convolve_constant_extend,
+                  vil_convolve_constant_extend );
 
   // convolution of the input image in x-direction
   vcl_cout << "Convolving in x-direction...\n";
-  vil_convolve_1d( vil_transpose( tmp ), imageOut,
-                    &kernel[1], -halfSupport, halfSupport,
-                    float(),
-                    vil_convolve_constant_extend,
-                    vil_convolve_constant_extend );
+  vil_convolve_1d(vil_transpose( tmp ), imageOut,
+                  &kernel[1], -halfSupport, halfSupport,
+                  float(),
+                  vil_convolve_constant_extend,
+                  vil_convolve_constant_extend );
 
   vil_save(imageOut, outputFilename);
   return 0;

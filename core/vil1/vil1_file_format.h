@@ -36,12 +36,12 @@ class vil1_file_format
   // The width/height etc are explicitly specified, so that file_format implementors
   // know what they need to do...
   virtual vil1_image_impl* make_output_image(vil1_stream* vs,
-                                            int planes,
-                                            int width,
-                                            int height,
-                                            int components,
-                                            int bits_per_component,
-                                            enum vil1_component_format) = 0;
+                                             int planes,
+                                             int width,
+                                             int height,
+                                             int components,
+                                             int bits_per_component,
+                                             enum vil1_component_format) = 0;
 
  public:
   static vil1_file_format** all();

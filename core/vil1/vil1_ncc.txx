@@ -11,8 +11,8 @@
 
 template <class I1, class I2, class O>
 O vil1_ncc(vil1_memory_image_of<I1> const &a,
-          vil1_memory_image_of<I2> const &b,
-          O *)
+           vil1_memory_image_of<I2> const &b,
+           O *)
 {
   assert(a.width() == b.width());
   assert(a.height() == b.height());
@@ -77,8 +77,8 @@ inline double vil1_ncc_cond(unsigned char const &x, double *) { return (double(x
 
 template <class T1, class T2, class A>
 A vil1_ncc(T1 const * const *I1, int x1, int y1,
-          T2 const * const *I2, int x2, int y2,
-          int size, A *)
+           T2 const * const *I2, int x2, int y2,
+           int size, A *)
 {
   unsigned N = 0;
   A S1=0, S2 = 0;
@@ -102,11 +102,11 @@ A vil1_ncc(T1 const * const *I1, int x1, int y1,
 //--------------------------------------------------------------------------------
 
 #define VIL1_NCC_INSTANTIATE(I1, I2, O) \
-template O vil1_ncc/*<I1, I2, O >*/(vil1_memory_image_of<I1 > const &, \
-                                   vil1_memory_image_of<I2 > const &, \
-                                   O *); \
-template O vil1_ncc/*<I1, I2, O >*/(I1 const * const *, int, int, \
-                                   I2 const * const *, int, int, \
-                                   int, O *)
+template O vil1_ncc(vil1_memory_image_of<I1 > const &, \
+                    vil1_memory_image_of<I2 > const &, \
+                    O *); \
+template O vil1_ncc(I1 const * const *, int, int, \
+                    I2 const * const *, int, int, \
+                    int, O *)
 
 #endif // vil1_ncc_txx_

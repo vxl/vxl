@@ -1,9 +1,9 @@
 #ifndef vil_exp_filter_1d_h_
 #define vil_exp_filter_1d_h_
 //:
-//  \file
-//  \brief Apply exponential filter
-//  \author Tim Cootes
+// \file
+// \brief Apply exponential filter
+// \author Tim Cootes
 
 #include <vil/vil_image_view.h>
 
@@ -13,8 +13,8 @@
 //  Uses fast recursive implementation.
 template <class srcT, class destT, class accumT>
 inline void vil_exp_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
-                               destT* dest, vcl_ptrdiff_t dstep,
-                               int n, accumT k)
+                              destT* dest, vcl_ptrdiff_t dstep,
+                              int n, accumT k)
 {
   const srcT* s = src;
   const srcT* src_end = src + n*sstep;
@@ -50,8 +50,8 @@ inline void vil_exp_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
 // \relates vil_image_view
 template <class srcT, class destT, class accumT>
 inline void vil_exp_filter_i(const vil_image_view<srcT>& src_im,
-                               vil_image_view<destT>& dest_im,
-                               accumT k)
+                             vil_image_view<destT>& dest_im,
+                             accumT k)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -75,8 +75,8 @@ inline void vil_exp_filter_i(const vil_image_view<srcT>& src_im,
 // \relates vil_image_view
 template <class srcT, class destT, class accumT>
 inline void vil_exp_filter_j(const vil_image_view<srcT>& src_im,
-                               vil_image_view<destT>& dest_im,
-                               accumT k)
+                             vil_image_view<destT>& dest_im,
+                             accumT k)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();

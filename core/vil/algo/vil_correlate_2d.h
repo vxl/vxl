@@ -2,9 +2,9 @@
 #ifndef vil_correlate_2d_h_
 #define vil_correlate_2d_h_
 //:
-//  \file
-//  \brief 2D Convolution
-//  \author Tim Cootes
+// \file
+// \brief 2D Convolution
+// \author Tim Cootes
 
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
@@ -14,9 +14,9 @@
 // Returns  sum_ijp src_im[i*istep+j*jstep+p*pstep]*kernel(i,j,p)
 template <class srcT, class kernelT, class accumT>
 inline accumT vil_correlate_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
-                                      vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_pstep,
-                                      const vil_image_view<kernelT>& kernel,
-                                      accumT)
+                                     vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_pstep,
+                                     const vil_image_view<kernelT>& kernel,
+                                     accumT)
 {
   unsigned ni = kernel.ni();
   unsigned nj = kernel.nj();
@@ -51,9 +51,9 @@ inline accumT vil_correlate_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
 // \relates vil_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil_correlate_2d(const vil_image_view<srcT>& src_im,
-                              vil_image_view<destT>& dest_im,
-                              const vil_image_view<kernelT>& kernel,
-                              accumT ac)
+                             vil_image_view<destT>& dest_im,
+                             const vil_image_view<kernelT>& kernel,
+                             accumT ac)
 {
   int ni = 1+src_im.ni()-kernel.ni(); assert(ni >= 0);
   int nj = 1+src_im.nj()-kernel.nj(); assert(nj >= 0);

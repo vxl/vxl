@@ -54,9 +54,7 @@ vil_image_resource_sptr vil_load_image_resource(char const* filename)
 {
   vil_image_resource_sptr im = vil_load_image_resource_plugin(filename);
   if (!im)
-    {
     im=vil_load_image_resource_raw(filename);
-    }
   return im;
 }
 
@@ -65,20 +63,18 @@ vil_image_resource_sptr vil_load_image_resource_plugin(char const* filename)
 {
   vil_image_resource_plugin im_ressource_plugin;
   if (im_ressource_plugin.can_be_loaded(filename))
-    {
+  {
     vil_image_view_base* img=new vil_image_view<vxl_byte>(640,480,3);
     vil_image_resource_sptr im;
     vil_image_view_base_sptr im_view(img);
     if (im_ressource_plugin.load_the_image(im_view,filename))
-      {
+    {
       im=vil_new_image_resource(im_view->ni(),im_view->nj(),
-          im_view->nplanes(),im_view->pixel_format());
+                                im_view->nplanes(),im_view->pixel_format());
       if (im->put_view((const vil_image_view_base&)*im_view,0,0))
-        {
         return im;
-        }
-      }
     }
+  }
   return vil_image_resource_sptr(0);
 }
 

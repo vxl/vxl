@@ -1,9 +1,9 @@
 #ifndef vil_structuring_element_h_
 #define vil_structuring_element_h_
 //:
-//  \file
-//  \brief Structuring element for morphology represented as a list of non-zero pixels
-//  \author Tim Cootes
+// \file
+// \brief Structuring element for morphology represented as a list of non-zero pixels
+// \author Tim Cootes
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -27,7 +27,7 @@ class vil_structuring_element
   //: Elements in box bounded by [min_i_,max_i_][min_j_,max_j]
   int max_j_;
 
-public:
+ public:
   vil_structuring_element()
     : min_i_(0),max_i_(-1),min_j_(0),max_j_(-1) {}
 
@@ -69,7 +69,7 @@ vcl_ostream& operator<<(vcl_ostream& os, const vil_structuring_element& element)
 //  On exit offset[k] = element.p_i()[k]*istep +  element.p_j()[k]*jstep
 //  Gives an efficient way of looping through all the pixels in the structuring element
 void vil_compute_offsets(vcl_vector<vcl_ptrdiff_t>& offset,
-                          const vil_structuring_element& element,
-                          vcl_ptrdiff_t istep, vcl_ptrdiff_t jstep);
+                         const vil_structuring_element& element,
+                         vcl_ptrdiff_t istep, vcl_ptrdiff_t jstep);
 
 #endif // vil_structuring_element_h_

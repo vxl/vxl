@@ -1,9 +1,9 @@
 #ifndef vil_median_h_
 #define vil_median_h_
 //:
-//  \file
-//  \brief Perform median filtering on images
-//  \author Tim Cootes
+// \file
+// \brief Perform median filtering on images
+// \author Tim Cootes
 
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/vil_image_view.h>
@@ -13,7 +13,7 @@
 //  Values im[offset[k]] placed into values[k] then sorted
 template <class T>
 inline T vil_sorted_value(const T* im, const vcl_ptrdiff_t* offset, T* values,
-                           unsigned n, unsigned r)
+                          unsigned n, unsigned r)
 {
   for (unsigned i=0;i<n;++i) values[i]=im[offset[i]];
 //  vcl_sort(values,values+n);
@@ -22,13 +22,13 @@ inline T vil_sorted_value(const T* im, const vcl_ptrdiff_t* offset, T* values,
 }
 
 //: Return (n*r)-th sorted value of pixels under element centred at (i0,j0)
-//  \param r in [0,1].
-//  \param values used to store values sampled from image before sorting
+// \param r in [0,1].
+// \param values used to store values sampled from image before sorting
 //  Checks boundary overlap
 template <class T>
 inline T vil_sorted_value(const vil_image_view<T>& image, unsigned plane,
-                           const vil_structuring_element& element, int i0, int j0,
-                           vcl_vector<T>& values, double r)
+                          const vil_structuring_element& element, int i0, int j0,
+                          vcl_vector<T>& values, double r)
 {
   values.clear();
   unsigned n = element.p_i().size();
@@ -52,7 +52,7 @@ inline T vil_sorted_value(const vil_image_view<T>& image, unsigned plane,
 // \relates vil_structuring_element
 template <class T>
 void vil_median(const vil_image_view<T>& src_image,
-                 vil_image_view<T>& dest_image,
-                 const vil_structuring_element& element);
+                vil_image_view<T>& dest_image,
+                const vil_structuring_element& element);
 
 #endif // vil_median_h_

@@ -32,11 +32,11 @@ vil1_image_impl* vil1_bmp_file_format::make_input_image(vil1_stream* is)
 }
 
 vil1_image_impl* vil1_bmp_file_format::make_output_image(vil1_stream* is, int planes,
-                                                       int width,
-                                                       int height,
-                                                       int components,
-                                                       int bits_per_component,
-                                                       vil1_component_format format)
+                                                         int width,
+                                                         int height,
+                                                         int components,
+                                                         int bits_per_component,
+                                                         vil1_component_format format)
 {
   return new vil1_bmp_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
@@ -78,12 +78,12 @@ bool vil1_bmp_generic_image::get_property(char const *tag, void *prop) const
 }
 
 vil1_bmp_generic_image::vil1_bmp_generic_image(vil1_stream* is,
-                                             int planes,
-                                             int width,
-                                             int height,
-                                             int components,
-                                             int bits_per_component,
-                                             vil1_component_format /*format*/)
+                                               int planes,
+                                               int width,
+                                               int height,
+                                               int components,
+                                               int bits_per_component,
+                                               vil1_component_format /*format*/)
   : is_(is)
   , bit_map_start(-1L)
 {

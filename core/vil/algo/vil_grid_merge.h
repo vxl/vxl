@@ -14,9 +14,9 @@
 //  Useful for comparing two images.
 template <class T>
 inline void vil_grid_merge(const vil_image_view<T>& image1,
-                            const vil_image_view<T>& image2,
-                            vil_image_view<T>& dest_image, 
-                            unsigned box_ni, unsigned box_nj)
+                           const vil_image_view<T>& image2,
+                           vil_image_view<T>& dest_image,
+                           unsigned box_ni, unsigned box_nj)
 {
   unsigned ni = image1.ni();
   unsigned nj = image1.nj();

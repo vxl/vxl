@@ -2,9 +2,9 @@
 #ifndef vil_gauss_reduce_txx_
 #define vil_gauss_reduce_txx_
 //:
-//  \file
-//  \brief Functions to smooth and sub-sample image in one direction
-//  \author Tim Cootes
+// \file
+// \brief Functions to smooth and sub-sample image in one direction
+// \author Tim Cootes
 
 #include "vil_gauss_reduce.h"
 #include <vcl_cassert.h>
@@ -16,8 +16,8 @@
 //  work_im provides workspace
 template<class T>
 void vil_gauss_reduce(const vil_image_view<T>& src_im,
-                       vil_image_view<T>& dest_im,
-                       vil_image_view<T>& work_im)
+                      vil_image_view<T>& dest_im,
+                      vil_image_view<T>& work_im)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -37,15 +37,15 @@ void vil_gauss_reduce(const vil_image_view<T>& src_im,
   {
     // Smooth and subsample in x, result in work_im
     vil_gauss_reduce(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
-                      src_im.istep(),src_im.jstep(),
-                      work_im.top_left_ptr(),
-                      work_im.istep(),work_im.jstep());
+                     src_im.istep(),src_im.jstep(),
+                     work_im.top_left_ptr(),
+                     work_im.istep(),work_im.jstep());
 
     // Smooth and subsample in y (by implicitly transposing work_im)
     vil_gauss_reduce(work_im.top_left_ptr(),nj,ni2,
-                           work_im.jstep(),work_im.istep(),
-                           dest_im.top_left_ptr()+i*dest_im.planestep(),
-                           dest_im.jstep(),dest_im.istep());
+                     work_im.jstep(),work_im.istep(),
+                     dest_im.top_left_ptr()+i*dest_im.planestep(),
+                     dest_im.jstep(),dest_im.istep());
   }
 }
 
@@ -53,7 +53,7 @@ void vil_gauss_reduce(const vil_image_view<T>& src_im,
 //  Applies filter in x and y, then samples every other pixel.
 template<class T>
 void vil_gauss_reduce_121(const vil_image_view<T>& src_im,
-                           vil_image_view<T>& dest_im)
+                          vil_image_view<T>& dest_im)
 {
   unsigned int ni = src_im.ni();
   unsigned int nj = src_im.nj();
@@ -69,9 +69,9 @@ void vil_gauss_reduce_121(const vil_image_view<T>& src_im,
   for (unsigned int i=0;i<n_planes;++i)
   {
     vil_gauss_reduce_121(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
-                          src_im.istep(),src_im.jstep(),
-                          dest_im.top_left_ptr(),
-                          dest_im.istep(),dest_im.jstep());
+                         src_im.istep(),src_im.jstep(),
+                         dest_im.top_left_ptr(),
+                         dest_im.istep(),dest_im.jstep());
   }
 }
 
@@ -115,10 +115,10 @@ inline float l_round (double x, float )
 
 template <class T>
 void vil_gauss_reduce_general_plane(const vil_image_view<T>& src,
-                                vil_image_view<T>& dest,
-                                vil_image_view<T>& worka,
-                                vil_image_view<T>& workb,
-                                const vil_gauss_reduce_params &params)
+                                    vil_image_view<T>& dest,
+                                    vil_image_view<T>& worka,
+                                    vil_image_view<T>& workb,
+                                    const vil_gauss_reduce_params &params)
 {
   assert(src.ni() >= 5 && src.nj() >= 5);
   // Convolve src with a 5 x 1 gaussian filter,
@@ -212,10 +212,10 @@ void vil_gauss_reduce_general_plane(const vil_image_view<T>& src,
 
 template <class T>
 void vil_gauss_reduce_general(const vil_image_view<T>& src,
-                          vil_image_view<T>& dest,
-                          vil_image_view<T>& worka,
-                          vil_image_view<T>& workb,
-                          const vil_gauss_reduce_params &params)
+                              vil_image_view<T>& dest,
+                              vil_image_view<T>& worka,
+                              vil_image_view<T>& workb,
+                              const vil_gauss_reduce_params &params)
 {
   if (worka.ni() < src.ni() || worka.nj() < src.nj())
     worka.set_size(src.ni(), src.nj());
@@ -242,14 +242,14 @@ void vil_gauss_reduce_general(const vil_image_view<T>& src,
 #undef VIL_GAUSS_REDUCE_INSTANTIATE
 #define VIL_GAUSS_REDUCE_INSTANTIATE(T) \
 template void vil_gauss_reduce(const vil_image_view<T >& src, \
-                                vil_image_view<T >& dest, \
-                                vil_image_view<T >& work_im); \
+                               vil_image_view<T >& dest, \
+                               vil_image_view<T >& work_im); \
 template void vil_gauss_reduce_121(const vil_image_view<T >& src, \
-                                    vil_image_view<T >& dest); \
+                                   vil_image_view<T >& dest); \
 template void vil_gauss_reduce_general(const vil_image_view<T >& src_im, \
-                                   vil_image_view<T >& dest_im, \
-                                   vil_image_view<T >& worka, \
-                                   vil_image_view<T >& workb, \
-                                   const vil_gauss_reduce_params& params)
+                                       vil_image_view<T >& dest_im, \
+                                       vil_image_view<T >& worka, \
+                                       vil_image_view<T >& workb, \
+                                       const vil_gauss_reduce_params& params)
 
 #endif // vil_gauss_reduce_txx_

@@ -18,9 +18,9 @@
 // \relates vil_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil_convolve_2d(const vil_image_view<srcT>& src_im,
-                             vil_image_view<destT>& dest_im,
-                             const vil_image_view<kernelT>& kernel,
-                             accumT ac)
+                            vil_image_view<destT>& dest_im,
+                            const vil_image_view<kernelT>& kernel,
+                            accumT ac)
 {
   vil_correlate_2d(src_im,dest_im,vil_flip_ud(vil_flip_lr(kernel)), ac);
 }

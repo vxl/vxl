@@ -30,10 +30,10 @@ class vil_jpeg_file_format : public vil_file_format
   virtual char const *tag() const;
   virtual vil_image_resource_sptr make_input_image(vil_stream *vs);
   virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
-                                                     unsigned nx,
-                                                     unsigned ny,
-                                                     unsigned nplanes,
-                                                     enum vil_pixel_format);
+                                                    unsigned nx,
+                                                    unsigned ny,
+                                                    unsigned nplanes,
+                                                    enum vil_pixel_format);
 };
 
 //
@@ -45,7 +45,7 @@ class vil_jpeg_image : public vil_image_resource
 {
   vil_jpeg_image(vil_stream *is);
   vil_jpeg_image (vil_stream* is, unsigned ni,
-    unsigned nj, unsigned nplanes, vil_pixel_format format);
+                  unsigned nj, unsigned nplanes, vil_pixel_format format);
   ~vil_jpeg_image();
 
   //: Dimensions:  planes x width x height x components
@@ -61,7 +61,7 @@ class vil_jpeg_image : public vil_image_resource
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                  unsigned j0, unsigned nj) const;
+                                                 unsigned j0, unsigned nj) const;
 
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);

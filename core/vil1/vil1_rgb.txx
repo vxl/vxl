@@ -12,8 +12,8 @@ VCL_DEFINE_SPECIALIZATION \
 vil1_rgb<T> vil1_clamp_pixel(vil1_rgb<T> const& d, double min, double max) \
 { \
   return vil1_rgb<T>(vil1_clamp_pixel(d.r, min , max), \
-                    vil1_clamp_pixel(d.g, min , max), \
-                    vil1_clamp_pixel(d.b, min , max)); \
+                     vil1_clamp_pixel(d.g, min , max), \
+                     vil1_clamp_pixel(d.b, min , max)); \
 }
 
 // instantiation macros for vil1_rgb<T>s

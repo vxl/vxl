@@ -30,8 +30,8 @@ vil_image_view<T> vil1_to_vil_image_view(const vil1_memory_image_of<T> &vil1_im)
     planestep = &((vil1_memory_image_of<T>((vil1_im.get_plane(1)))).operator()(0,0)) - tl;
 
   return vil_image_view<T>(tl,
-                            vil1_im.cols(), vil1_im.rows(), vil1_im.planes(),
-                            &vil1_im(1,0) - tl, &vil1_im(0,1) - tl, planestep);
+                           vil1_im.cols(), vil1_im.rows(), vil1_im.planes(),
+                           &vil1_im(1,0) - tl, &vil1_im(0,1) - tl, planestep);
 }
 
 
@@ -49,7 +49,7 @@ vil1_memory_image_of<T> vil1_from_vil_image_view(const vil_image_view<T> &vil_im
   }
 
   return vil1_memory_image_of<T>(const_cast<T*>(vil_im.top_left_ptr()),
-                                               vil_im.ni(), vil_im.nj());
+                                                vil_im.ni(), vil_im.nj());
 }
 
 //: Create a vil_image_resource from a vil1 vil1_image.

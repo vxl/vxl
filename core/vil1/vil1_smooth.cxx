@@ -19,9 +19,9 @@
 #define inst(pixel_type, float_type) \
 template \
 void vil1_convolve_separable(float const kernel[], unsigned N, \
-                            vil1_memory_image_of<pixel_type> & buf, \
-                            vil1_memory_image_of<float_type>& tmp, \
-                            vil1_memory_image_of<float_type>& out); \
+                             vil1_memory_image_of<pixel_type> & buf, \
+                             vil1_memory_image_of<float_type>& tmp, \
+                             vil1_memory_image_of<float_type>& out); \
 template \
 vil1_image vil1_convolve_separable(vil1_image const &, float const*, int, pixel_type*, float_type* )
 

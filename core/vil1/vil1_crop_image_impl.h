@@ -35,18 +35,13 @@ class vil1_crop_image_impl : public vil1_image_impl
   bool put_section(void const* buf, int x0, int y0, int width, int height) {
     return gi_.put_section(buf, x0 + x0_, y0 + y0_, width, height);
   }
-  //  vil1_image get_plane(int ) const;
-
-
-/* START_MANCHESTER_BINARY_IO_CODE */
+  //  vil1_image get_plane(unsigned int p) const;
 
   //: Return the name of the class;
   virtual vcl_string is_a() const;
 
   //: Return true if the name of the class matches the argument
   virtual bool is_class(vcl_string const&) const;
-
-/* END_MANCHESTER_BINARY_IO_CODE */
 
  protected:
   vil1_image gi_;

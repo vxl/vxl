@@ -22,21 +22,21 @@ vil1_io_image_impl::~vil1_io_image_impl()
 
 //: Write derived class to os using vil1_image_impl reference
 void vil1_io_image_impl::b_write_by_base(vsl_b_ostream& os,
-                                        const vil1_image_impl& base) const
+                                         const vil1_image_impl& base) const
 {
   vsl_b_write(os,base);
 }
 
 //: Write derived class to os using vil1_image_impl reference
 void vil1_io_image_impl::b_read_by_base(vsl_b_istream& is,
-                                       vil1_image_impl& base) const
+                                        vil1_image_impl& base) const
 {
   vsl_b_read(is,base);
 }
 
 //: Print summary of derived class to os using vil1_image_impl reference
 void vil1_io_image_impl::print_summary_by_base(vcl_ostream& os,
-                                              const vil1_image_impl& base) const
+                                               const vil1_image_impl& base) const
 {
   vsl_print_summary(os,base);
 }
@@ -76,7 +76,7 @@ void vsl_b_read(vsl_b_istream &is, vil1_image_impl & p)
   case 1:
     // Nothing to load.
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil1_image_impl&) \n"
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil1_image_impl&)\n"
              << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;

@@ -102,14 +102,14 @@ bool test_image_equal(char const* type_name,
     #ifndef NDEBUG
           if (++bad < 20)
           {
-            vcl_cout << "pixel (" << i << "," << j << "," << p <<  ") differs:\t";
+            vcl_cout << "pixel (" << i << ',' << j << ',' << p <<  ") differs:\t";
             vil_print_value(vcl_cout, image(i,j,p));
             vcl_cout << "---> ";
             vil_print_value(vcl_cout,image2(i,j,p));
             vcl_cout << '\n';
           }
     #else
-          ++bad; vcl_cout << "." << vcl_flush;
+          ++bad; vcl_cout << '.' << vcl_flush;
     #endif
         }
       }
@@ -230,7 +230,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
 
   // Write image to disk
   if (vcl_strcmp(type_name, "gif") == 0 &&
-    vil_pixel_format_num_components( image.pixel_format() ) == 3)
+      vil_pixel_format_num_components( image.pixel_format() ) == 3)
   {
     if (!create_colour_gif(fname.c_str()))
       return; // fatal error

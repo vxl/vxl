@@ -52,10 +52,10 @@ vil_image_resource_sptr vil_pnm_file_format::make_input_image(vil_stream* vs)
 }
 
 vil_image_resource_sptr vil_pnm_file_format::make_output_image(vil_stream* vs,
-                                                                 unsigned ni,
-                                                                 unsigned nj,
-                                                                 unsigned nplanes,
-                                                                 vil_pixel_format format)
+                                                               unsigned ni,
+                                                               unsigned nj,
+                                                               unsigned nplanes,
+                                                               vil_pixel_format format)
 {
   return new vil_pnm_image(vs, ni, nj, nplanes, format);
 }
@@ -86,7 +86,7 @@ char const* vil_pnm_image::file_format() const
 }
 
 vil_pnm_image::vil_pnm_image(vil_stream* vs, unsigned ni, unsigned nj,
-                               unsigned nplanes, vil_pixel_format format):
+                             unsigned nplanes, vil_pixel_format format):
   vs_(vs)
 {
   vs_->ref();
@@ -454,7 +454,7 @@ static void operator<<(vil_stream& vs, int a)
 }
 
 bool vil_pnm_image::put_view(const vil_image_view_base& view,
-                              unsigned x0, unsigned y0)
+                             unsigned x0, unsigned y0)
 {
   if (!view_fits(view, x0, y0))
   {

@@ -50,7 +50,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 // Currently not yet implemented.
 // \return 0 if unable to get view of correct size.
 vil_image_view_base_sptr vil_memory_image::get_copy_view(unsigned i0, unsigned ni,
-                                                           unsigned j0, unsigned nj) const
+                                                         unsigned j0, unsigned nj) const
 {
   if (i0 + ni > view_->ni() || j0 + nj > view_->nj()) return 0;
 
@@ -61,8 +61,8 @@ vil_image_view_base_sptr vil_memory_image::get_copy_view(unsigned i0, unsigned n
       const vil_image_view< T > &v = \
         static_cast<const vil_image_view< T > &>(*view_); \
       vil_image_view< T > w(v.memory_chunk(), &v(i0,j0), \
-                             ni, nj, v.nplanes(), \
-                             v.istep(), v.jstep(), v.planestep()); \
+                            ni, nj, v.nplanes(), \
+                            v.istep(), v.jstep(), v.planestep()); \
       return new vil_image_view< T >(vil_copy_deep(w)); }
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
@@ -82,7 +82,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 //: Create a read/write view of a copy of this data.
 // \return 0 if unable to get view of correct size.
 vil_image_view_base_sptr vil_memory_image::get_view(unsigned i0, unsigned ni,
-                                                      unsigned j0, unsigned nj) const
+                                                    unsigned j0, unsigned nj) const
 {
   if (i0 + ni > view_->ni() || j0 + nj > view_->nj()) return 0;
 
@@ -93,8 +93,8 @@ vil_image_view_base_sptr vil_memory_image::get_view(unsigned i0, unsigned ni,
       const vil_image_view< T > &v = \
         static_cast<const vil_image_view< T > &>(*view_); \
       return new vil_image_view< T >(v.memory_chunk(), &v(i0,j0), \
-                                      ni, nj, v.nplanes(), \
-                                      v.istep(), v.jstep(), v.planestep()); }
+                                     ni, nj, v.nplanes(), \
+                                     v.istep(), v.jstep(), v.planestep()); }
 macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
 macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )

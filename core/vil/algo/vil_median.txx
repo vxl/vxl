@@ -1,9 +1,9 @@
 #ifndef vil_median_txx_
 #define vil_median_txx_
 //:
-//  \file
-//  \brief Perform median filtering on images
-//  \author Tim Cootes
+// \file
+// \brief Perform median filtering on images
+// \author Tim Cootes
 
 #include "vil_median.h"
 #include <vcl_cassert.h>
@@ -13,8 +13,8 @@
 // structuring element when it is centred on src_image(i0,j0)
 template <class T>
 void vil_median(const vil_image_view<T>& src_image,
-                 vil_image_view<T>& dest_image,
-                 const vil_structuring_element& element)
+                vil_image_view<T>& dest_image,
+                const vil_structuring_element& element)
 {
   assert(src_image.nplanes()==1);
   unsigned ni = src_image.ni();
@@ -72,7 +72,7 @@ void vil_median(const vil_image_view<T>& src_image,
 #undef VIL_MEDIAN_INSTANTIATE
 #define VIL_MEDIAN_INSTANTIATE(T) \
 template void vil_median(const vil_image_view< T >& src_image, \
-                          vil_image_view< T >& dest_image, \
-                          const vil_structuring_element& element)
+                         vil_image_view< T >& dest_image, \
+                         const vil_structuring_element& element)
 
 #endif // vil_median_txx_

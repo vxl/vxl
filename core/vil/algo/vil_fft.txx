@@ -17,10 +17,10 @@
 template<class T>
 static void
 vil_fft_2d_base (vcl_complex<T> * data,
-                  unsigned n0, vcl_ptrdiff_t step0,
-                  unsigned n1, vcl_ptrdiff_t step1,
-                  unsigned n2, vcl_ptrdiff_t step2,
-                  int dir)
+                 unsigned n0, vcl_ptrdiff_t step0,
+                 unsigned n1, vcl_ptrdiff_t step1,
+                 unsigned n2, vcl_ptrdiff_t step2,
+                 int dir)
 {
   vnl_fft_1d<T> fft_1d (n0);
 
@@ -57,15 +57,15 @@ void
 vil_fft_2d_fwd (vil_image_view<vcl_complex<T> > & img)
 {
   vil_fft_2d_base (img.top_left_ptr(),
-                    img.ni(), img.istep(),
-                    img.nj(), img.jstep(),
-                    img.nplanes(), img.planestep(),
-                    1);
+                   img.ni(), img.istep(),
+                   img.nj(), img.jstep(),
+                   img.nplanes(), img.planestep(),
+                   1);
   vil_fft_2d_base (img.top_left_ptr(),
-                    img.nj(), img.jstep(),
-                    img.ni(), img.istep(),
-                    img.nplanes(), img.planestep(),
-                    1);
+                   img.nj(), img.jstep(),
+                   img.ni(), img.istep(),
+                   img.nplanes(), img.planestep(),
+                   1);
 }
 
 template<class T>
@@ -73,24 +73,24 @@ void
 vil_fft_2d_bwd (vil_image_view<vcl_complex<T> > & img)
 {
   vil_fft_2d_base (img.top_left_ptr(),
-                    img.nj(), img.jstep(),
-                    img.ni(), img.istep(),
-                    img.nplanes(), img.planestep(),
-                    -1);
+                   img.nj(), img.jstep(),
+                   img.ni(), img.istep(),
+                   img.nplanes(), img.planestep(),
+                   -1);
   vil_fft_2d_base (img.top_left_ptr(),
-                    img.ni(), img.istep(),
-                    img.nj(), img.jstep(),
-                    img.nplanes(), img.planestep(),
-                    -1);
+                   img.ni(), img.istep(),
+                   img.nj(), img.jstep(),
+                   img.nplanes(), img.planestep(),
+                   -1);
 }
 
 #undef VIL_FFT_INSTANTIATE
 #define VIL_FFT_INSTANTIATE(T) \
 template void vil_fft_2d_base (vcl_complex<T >* data, \
-                                unsigned n0, vcl_ptrdiff_t step0, \
-                                unsigned n1, vcl_ptrdiff_t step1, \
-                                unsigned n2, vcl_ptrdiff_t step2, \
-                                int dir); \
+                               unsigned n0, vcl_ptrdiff_t step0, \
+                               unsigned n1, vcl_ptrdiff_t step1, \
+                               unsigned n2, vcl_ptrdiff_t step2, \
+                               int dir); \
 template void vil_fft_2d_fwd(vil_image_view<vcl_complex<T > >& img); \
 template void vil_fft_2d_bwd(vil_image_view<vcl_complex<T > >& img)
 

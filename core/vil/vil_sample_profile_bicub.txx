@@ -15,8 +15,8 @@
 #include <vil/vil_bicub_interp.h>
 
 inline bool vil_profile_in_image(double x0, double y0,
-                                  double x1, double y1,
-                                  const vil_image_view_base& image)
+                                 double x1, double y1,
+                                 const vil_image_view_base& image)
 {
   if (x0<2) return false;
   if (y0<2) return false;
@@ -37,9 +37,9 @@ inline bool vil_profile_in_image(double x0, double y0,
 //  Points outside image return zero.
 template <class imType, class vecType>
 void vil_sample_profile_bicub(vecType* v,
-                               const vil_image_view<imType>& image,
-                               double x0, double y0, double dx, double dy,
-                               int n)
+                              const vil_image_view<imType>& image,
+                              double x0, double y0, double dx, double dy,
+                              int n)
 {
   bool all_in_image = vil_profile_in_image(x0,y0,x0+(n-1)*dx,y0+(n-1)*dy,image);
 
@@ -90,9 +90,9 @@ void vil_sample_profile_bicub(vecType* v,
 
 #define VIL_SAMPLE_PROFILE_BICUB_INSTANTIATE( imType, vecType ) \
 template void vil_sample_profile_bicub(vecType* v, \
-                                        const vil_image_view<imType >& image, \
-                                        double x0, double y0, \
-                                        double dx, double dy, \
-                                        int n)
+                                       const vil_image_view<imType >& image, \
+                                       double x0, double y0, \
+                                       double dx, double dy, \
+                                       int n)
 
 #endif // vil_sample_profile_bicub_txx_

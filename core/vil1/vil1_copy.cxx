@@ -56,7 +56,7 @@ vil1_memory_image
 vil1_copy(vil1_image const& src)
 {
   vil1_memory_image dst( src.planes(), src.width(), src.height(), src.components(),
-                        src.bits_per_component(), src.component_format() );
+                         src.bits_per_component(), src.component_format() );
   vil1_copy( src, dst );
   return dst;
 }

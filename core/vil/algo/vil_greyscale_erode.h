@@ -1,9 +1,9 @@
 #ifndef vil_greyscale_erode_h_
 #define vil_greyscale_erode_h_
 //:
-//  \file
-//  \brief Perform greyscale erosion on images
-//  \author Tim Cootes
+// \file
+// \brief Perform greyscale erosion on images
+// \author Tim Cootes
 
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/vil_image_view.h>
@@ -22,8 +22,8 @@ inline T vil_greyscale_erode(const T* im, const vcl_ptrdiff_t* offset, unsigned 
 //  Checks boundary overlap
 template <class T>
 inline T vil_greyscale_erode(const vil_image_view<T>& image, unsigned plane,
-                              const vil_structuring_element& element,
-                              int i0, int j0)
+                             const vil_structuring_element& element,
+                             int i0, int j0)
 {
   T min_v = T(0); // dummy initialisation - otherwise, compiler complains
   bool first=true;
@@ -48,7 +48,7 @@ inline T vil_greyscale_erode(const vil_image_view<T>& image, unsigned plane,
 // \relates vil_structuring_element
 template <class T>
 void vil_greyscale_erode(const vil_image_view<T>& src_image,
-                          vil_image_view<T>& dest_image,
-                          const vil_structuring_element& element);
+                         vil_image_view<T>& dest_image,
+                         const vil_structuring_element& element);
 
 #endif // vil_greyscale_erode_h_

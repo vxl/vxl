@@ -13,15 +13,15 @@
 
 
 vil_image_resource_sptr vil_crop(const vil_image_resource_sptr &src, unsigned i0,
-                                   unsigned n_i, unsigned j0, unsigned n_j)
+                                 unsigned n_i, unsigned j0, unsigned n_j)
 {
   return new vil_crop_image_resource(src, i0, n_i, j0, n_j);
 }
 
 
 vil_crop_image_resource::vil_crop_image_resource(vil_image_resource_sptr const& gi,
-                                                   unsigned i0, unsigned n_i,
-                                                   unsigned j0, unsigned n_j):
+                                                 unsigned i0, unsigned n_i,
+                                                 unsigned j0, unsigned n_j):
   src_(gi),
   i0_(i0),
   ni_(n_i),

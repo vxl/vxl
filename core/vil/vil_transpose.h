@@ -20,8 +20,8 @@ inline vil_image_view<T> vil_transpose(const vil_image_view<T>& v)
 {
   // Create view with i and j switched
   return vil_image_view<T>(v.memory_chunk(),v.top_left_ptr(),
-                            v.nj(),v.ni(),v.nplanes(),
-                            v.jstep(),v.istep(),v.planestep());
+                           v.nj(),v.ni(),v.nplanes(),
+                           v.jstep(),v.istep(),v.planestep());
 }
 
 
@@ -47,10 +47,10 @@ class vil_transpose_image_resource : public vil_image_resource
   inline enum vil_pixel_format pixel_format() const { return src_->pixel_format(); }
 
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                  unsigned j0, unsigned nj) const;
+                                                 unsigned j0, unsigned nj) const;
 
   virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
-                                             unsigned j0, unsigned nj) const;
+                                            unsigned j0, unsigned nj) const;
 
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);

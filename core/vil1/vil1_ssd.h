@@ -16,7 +16,7 @@
 // \endverbatim
 template <class I1, class I2, class O>
 O vil1_ssd(vil1_memory_image_of<I1> const &,
-          vil1_memory_image_of<I2> const &,
-          O * /*dummy*/);
+           vil1_memory_image_of<I2> const &,
+           O * /*dummy*/);
 
 #endif // vil1_ssd_h_

@@ -25,7 +25,7 @@
 
 template<class T>
 double vil_bicub_interp_unsafe(double x, double y, const T* data,
-                                vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                               vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     int p1x=int(x);
     double normx = x-p1x;
@@ -62,7 +62,7 @@ double vil_bicub_interp_unsafe(double x, double y, const T* data,
 
 template<class T>
 double vil_bicub_interp_raw(double x, double y, const T* data,
-                             vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                            vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     int p1x=int(x);
     double normx = x-p1x;
@@ -124,9 +124,9 @@ double vil_bicub_interp_raw(double x, double y, const T* data,
 #define VIL_BICUB_INTERP_INSTANTIATE(T) \
 template double \
 vil_bicub_interp_unsafe (double x, double y, const T* data, \
-                          vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep); \
+                         vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep); \
 template double \
 vil_bicub_interp_raw (double x, double y, const T* data, \
-                       vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                      vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 
 #endif // vil_bicub_interp_txx_

@@ -1,14 +1,14 @@
 //:
-//  \file
-//  \brief Construct histogram from pixels in given image.
-//  \author Tim Cootes
+// \file
+// \brief Construct histogram from pixels in given image.
+// \author Tim Cootes
 
 #include <vil/algo/vil_histogram.h>
 
 //: Construct histogram from pixels in given image of bytes
 //  Resulting histogram has 256 bins
 void vil_histogram_byte(const vil_image_view<vxl_byte>& image,
-                         vcl_vector<double>& histo)
+                        vcl_vector<double>& histo)
 {
   histo.resize(256);
   vcl_fill(histo.begin(),histo.end(),0.0);

@@ -31,7 +31,7 @@ class vil1_io_image_impl
 
   //: Write derived class to os using vil1_image_impl reference
   virtual void b_read_by_base(vsl_b_istream& is,
-                               vil1_image_impl& base) const;
+                              vil1_image_impl& base) const;
 
   //: Print summary of derived class to os using vil1_image_impl reference
   virtual void print_summary_by_base(vcl_ostream& os,

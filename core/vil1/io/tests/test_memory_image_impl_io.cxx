@@ -30,16 +30,16 @@ void test_memory_image_impl_io()
        val++;
     }
   vil1_memory_image_impl p_out(planes,height,width,
-                              format.components,
-                              format.bits_per_component,
-                              format.component_format);
+                               format.components,
+                               format.bits_per_component,
+                               format.component_format);
   p_out.put_section(imageof.get_buffer(), 0, 0, width, height);
 
   vil1_memory_image_of_format<int> format2;
   vil1_memory_image_impl p_in(0,0,0,
-                             format2.components,
-                             format2.bits_per_component,
-                             format2.component_format);
+                              format2.components,
+                              format2.bits_per_component,
+                              format2.component_format);
 
   // Construct the loader object
   vil1_io_memory_image_impl io_impl;

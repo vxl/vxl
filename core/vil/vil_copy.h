@@ -27,7 +27,7 @@ void vil_copy_reformat(const vil_image_view<T> &src, vil_image_view<T> &dest);
 // \relates vil_image_view
 template<class T>
 void vil_copy_to_window(const vil_image_view<T> &src, vil_image_view<T> &dest,
-                         unsigned i0, unsigned j0);
+                        unsigned i0, unsigned j0);
 
 //: Deep copy src to dest.
 //  O(size).

@@ -326,8 +326,8 @@ void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
 //================================================================
 
 void vil_dicom_header_format::readIdentifyingElements(short element,
-                                                       int dblock_size,
-                                                       vil_stream &fs)
+                                                      int dblock_size,
+                                                      vil_stream &fs)
 {
   // Pointer to any data read
   char *data_p = 0;
@@ -600,8 +600,8 @@ void vil_dicom_header_format::readIdentifyingElements(short element,
 //================================================================
 
 void vil_dicom_header_format::readPatientElements(short element,
-                                                   int dblock_size,
-                                                   vil_stream &fs)
+                                                  int dblock_size,
+                                                  vil_stream &fs)
 {
   // Pointer to any data read
   char *data_p = 0;
@@ -699,8 +699,8 @@ void vil_dicom_header_format::readPatientElements(short element,
 //================================================================
 
 void vil_dicom_header_format::readAcquisitionElements(short element,
-                                                       int dblock_size,
-                                                       vil_stream &fs)
+                                                      int dblock_size,
+                                                      vil_stream &fs)
 {
   // Pointer to any data read
   char *data_p = 0;
@@ -1017,8 +1017,8 @@ void vil_dicom_header_format::readAcquisitionElements(short element,
 //================================================================
 
 void vil_dicom_header_format::readRelationshipElements(short element,
-                                                        int dblock_size,
-                                                        vil_stream &fs)
+                                                       int dblock_size,
+                                                       vil_stream &fs)
 {
   // Pointer to any data read
   char *data_p = 0;
@@ -1182,8 +1182,8 @@ void vil_dicom_header_format::readRelationshipElements(short element,
 //================================================================
 
 void vil_dicom_header_format::readImageElements(short element,
-                                                 int dblock_size,
-                                                 vil_stream &fs)
+                                                int dblock_size,
+                                                vil_stream &fs)
 {
   // Pointer to any data read
   char *data_p = 0;
@@ -1423,8 +1423,8 @@ void vil_dicom_header_format::readImageElements(short element,
 //================================================================
 
 void vil_dicom_header_format::readDelimiterElements(short element,
-                                                     int dblock_size,
-                                                     vil_stream &fs)
+                                                    int dblock_size,
+                                                    vil_stream &fs)
 {
   // Check the elements
   switch ((vxl_uint_16)element)
@@ -1444,7 +1444,7 @@ void vil_dicom_header_format::readDelimiterElements(short element,
 //================================================================
 
 bool vil_dicom_header_format::convertValueRepresentation(unsigned int &dblock_size,
-                                                          vil_stream &fs)
+                                                         vil_stream &fs)
 {
   bool result = false;
   vcl_string first, last;
@@ -1763,7 +1763,7 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
         delete [] tfx_type; tfx_type=0;
 
         if (temp == VIL_DICOM_HEADER_IMPLICITLITTLE ||
-          temp == VIL_DICOM_HEADER_EXPLICITLITTLE)
+            temp == VIL_DICOM_HEADER_EXPLICITLITTLE)
         {
           // Little endian
           ret_end = VIL_DICOM_HEADER_DELITTLEENDIAN;
@@ -1779,49 +1779,49 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
           image_type_ = VIL_DICOM_HEADER_DITJPEGBASE;
         }
         else if (temp == VIL_DICOM_HEADER_JPEGDEFLOSSY_P2_4 ||
-               temp == VIL_DICOM_HEADER_JPEGEXTENDED_P3_5)
+                 temp == VIL_DICOM_HEADER_JPEGEXTENDED_P3_5)
         {
           // Jpeg extended lossy
           image_type_ = VIL_DICOM_HEADER_DITJPEGEXTLOSSY;
         }
         else if (temp == VIL_DICOM_HEADER_JPEGSPECTRAL_P6_8 ||
-               temp == VIL_DICOM_HEADER_JPEGSPECTRAL_P7_9)
+                 temp == VIL_DICOM_HEADER_JPEGSPECTRAL_P7_9)
         {
           // Jpeg spectral selection non-hierarchical
           image_type_ = VIL_DICOM_HEADER_DITJPEGSPECNH;
         }
         else if (temp == VIL_DICOM_HEADER_JPEGFULLPROG_P10_12 ||
-               temp == VIL_DICOM_HEADER_JPEGFULLPROG_P11_13)
+                 temp == VIL_DICOM_HEADER_JPEGFULLPROG_P11_13)
         {
           // Full progression non-hierarchical
           image_type_ = VIL_DICOM_HEADER_DITJPEGFULLNH;
         }
         else if (temp == VIL_DICOM_HEADER_JPEGLOSSLESS_P14 ||
-               temp == VIL_DICOM_HEADER_JPEGLOSSLESS_P15)
+                 temp == VIL_DICOM_HEADER_JPEGLOSSLESS_P15)
         {
           // Lossless non-hierarchical
           image_type_ = VIL_DICOM_HEADER_DITJPEGLOSSLNH;
         }
         else if (temp == VIL_DICOM_HEADER_JPEGEXTHIER_P16_18 ||
-               temp == VIL_DICOM_HEADER_JPEGEXTHIER_P17_19)
+                 temp == VIL_DICOM_HEADER_JPEGEXTHIER_P17_19)
         {
           // Extended hierarchical
           image_type_ = VIL_DICOM_HEADER_DITJPEGEXTHIER;
         }
         else if (temp == VIL_DICOM_HEADER_JPEGSPECHIER_P20_22 ||
-               temp == VIL_DICOM_HEADER_JPEGSPECHIER_P21_23)
+                 temp == VIL_DICOM_HEADER_JPEGSPECHIER_P21_23)
         {
           // Spectral selection hierarchical
           image_type_ = VIL_DICOM_HEADER_DITJPEGSPECHIER;
         }
         else if (temp == VIL_DICOM_HEADER_JPEGFULLHIER_P24_26 ||
-               temp == VIL_DICOM_HEADER_JPEGFULLHIER_P25_27)
+                 temp == VIL_DICOM_HEADER_JPEGFULLHIER_P25_27)
         {
           // Full progression hierarchical
           image_type_ = VIL_DICOM_HEADER_DITJPEGFULLHIER;
         }
         else if (temp == VIL_DICOM_HEADER_JPEGLLESSHIER_P28 ||
-               temp == VIL_DICOM_HEADER_JPEGLLESSHIER_P29)
+                 temp == VIL_DICOM_HEADER_JPEGLLESSHIER_P29)
         {
           // Lossless hierarchical
           image_type_ = VIL_DICOM_HEADER_DITJPEGLOSSLHIER;

@@ -88,9 +88,9 @@ bool vil1_vil_image_resource::get_property (char const *tag, void *property_valu
 }
 
 vil_image_view_base_sptr vil1_vil_image_resource::get_copy_view(unsigned i0,
-                                                                  unsigned ni,
-                                                                  unsigned j0,
-                                                                  unsigned nj) const
+                                                                unsigned ni,
+                                                                unsigned j0,
+                                                                unsigned nj) const
 {
   if (!src_)
     return 0;
@@ -103,7 +103,7 @@ vil_image_view_base_sptr vil1_vil_image_resource::get_copy_view(unsigned i0,
         vil_memory_chunk(ni*nj*nplanes()*sizeof(T ), F ); \
       src_.get_section(chunk->data(), i0, j0, ni, nj); \
       return new vil_image_view<T >(chunk, (const T *)chunk->data(), \
-        ni, nj, nplanes(), nplanes(), ni*nplanes(), 1); }
+                                    ni, nj, nplanes(), nplanes(), ni*nplanes(), 1); }
 
       macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
       macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )

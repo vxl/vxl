@@ -77,16 +77,16 @@ void golden_test_vil1_io(bool save_file)
     // vil1_memory_image_impl
     vil1_memory_image_of_format<int> memory_image_of_format;
     vil1_memory_image_impl p_out_memory_image_impl(planes,width,height,
-                                                  memory_image_of_format.components,
-                                                  memory_image_of_format.bits_per_component,
-                                                  memory_image_of_format.component_format);
+                                                   memory_image_of_format.components,
+                                                   memory_image_of_format.bits_per_component,
+                                                   memory_image_of_format.component_format);
     p_out_memory_image_impl.put_section(p_out_memory_image_of.get_buffer(),
                                         0, 0, width, height);
     vil1_memory_image_of_format<double> format2;
     vil1_memory_image_impl p_in_memory_image_impl(0,0,0,
-                                                 format2.components,
-                                                 format2.bits_per_component,
-                                                 format2.component_format);
+                                                  format2.components,
+                                                  format2.bits_per_component,
+                                                  format2.component_format);
 
 
     // vil1_memory_image_format

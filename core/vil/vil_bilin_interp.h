@@ -20,7 +20,7 @@
 //  No bound checks are done.
 template<class T>
 inline double vil_bilin_interp_unsafe(double x, double y, const T* data,
-                                       vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                      vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     int p1x=int(x);
     double normx = x-p1x;
@@ -39,7 +39,7 @@ inline double vil_bilin_interp_unsafe(double x, double y, const T* data,
 //  No bound checks are done.
 template<class T>
 inline double vil_bilin_interp_raw(double x, double y, const T* data,
-                                    vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                   vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     int p1x=int(x);
     double normx = x-p1x;
@@ -66,8 +66,8 @@ inline double vil_bilin_interp_raw(double x, double y, const T* data,
 //  The safe interpolatable region is [0,nx-1]*[0,ny-1].
 template<class T>
 inline double vil_bilin_interp_safe(double x, double y, const T* data,
-                                     int nx, int ny,
-                                     vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                    int nx, int ny,
+                                    vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     if (x<0) return 0.0;
     if (y<0) return 0.0;
@@ -82,11 +82,11 @@ inline double vil_bilin_interp_safe(double x, double y, const T* data,
 // \relates vil_image_view
 template<class T>
 inline double vil_bilin_interp_safe(const vil_image_view<T> &view,
-                                     double x, double y, unsigned p=0)
+                                    double x, double y, unsigned p=0)
 {
     return vil_bilin_interp_safe(x, y, &view(0,0,p),
-                                  view.ni(), view.nj(),
-                                  view.istep(), view.jstep());
+                                 view.ni(), view.nj(),
+                                 view.istep(), view.jstep());
 }
 
 
@@ -97,8 +97,8 @@ inline double vil_bilin_interp_safe(const vil_image_view<T> &view,
 //  The safe interpolatable region is [0,nx-1]*[0,ny-1].
 template<class T>
 inline double vil_bilin_interp(double x, double y, const T* data,
-                                int nx, int ny,
-                                vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                               int nx, int ny,
+                               vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     assert (x>=0);
     assert (y>=0);
@@ -114,11 +114,11 @@ inline double vil_bilin_interp(double x, double y, const T* data,
 // \relates vil_image_view
 template<class T>
 inline double vil_bilin_interp(const vil_image_view<T> &view,
-                                double x, double y, unsigned p=0)
+                               double x, double y, unsigned p=0)
 {
     return vil_bilin_interp(x, y, &view(0,0,p),
-                             view.ni(), view.nj(),
-                             view.istep(), view.jstep());
+                            view.ni(), view.nj(),
+                            view.istep(), view.jstep());
 }
 
 
@@ -128,8 +128,8 @@ inline double vil_bilin_interp(const vil_image_view<T> &view,
 //  The safe interpolatable region is [0,nx-1]*[0,ny-1].
 template<class T>
 inline double vil_bilin_interp_safe_extend(double x, double y, const T* data,
-                                            int nx, int ny,
-                                            vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                           int nx, int ny,
+                                           vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     if (x<0) x= 0.0;
     if (y<0) y= 0.0;
@@ -144,11 +144,11 @@ inline double vil_bilin_interp_safe_extend(double x, double y, const T* data,
 // \relates vil_image_view
 template<class T>
 inline double vil_bilin_interp_safe_extend(const vil_image_view<T> &view,
-                                            double x, double y, unsigned p=0)
+                                           double x, double y, unsigned p=0)
 {
     return vil_bilin_interp_safe_extend(x, y, &view(0,0,p),
-                                         view.ni(), view.nj(),
-                                         view.istep(), view.jstep());
+                                        view.ni(), view.nj(),
+                                        view.istep(), view.jstep());
 }
 
 #endif // vil_bilin_interp_h_

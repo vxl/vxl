@@ -64,15 +64,15 @@ class vil_image_view : public vil_image_view_base
   //  If the data goes out of scope then this view could be invalid, and
   //  there's no way of knowing until its too late - so take care!
   vil_image_view(const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
-                  vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step);
+                 vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step);
 
   //: Set this view to look at another view's data
   //  Typically used by functions which generate a manipulated view of
   //  another's image data.
   //  Need to pass the memory chunk to set up the internal smart ptr appropriately
   vil_image_view(const vil_memory_chunk_sptr& mem_chunk,
-                  const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
-                  vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step);
+                 const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
+                 vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step);
 
   //: Construct from various vil_image_view types.
   // The new object will point to the same underlying image as the rhs

@@ -21,8 +21,8 @@
 // \relates vil_image_view
 template <class imType, class vecType>
 void vil_sample_profile_bicub(vecType* v,
-                               const vil_image_view<imType>& image,
-                               double x0, double y0, double dx, double dy,
-                               int n);
+                              const vil_image_view<imType>& image,
+                              double x0, double y0, double dx, double dy,
+                              int n);
 
 #endif // vil_sample_profile_bicub_h_

@@ -31,7 +31,7 @@ char const* vil_png_format_tag = "png";
 // Functions
 static bool problem(char const* msg)
 {
-  vcl_cerr << "[vil_png: PROBLEM " <<msg << "]";
+  vcl_cerr << "[vil_png: PROBLEM " <<msg << ']';
   return false;
 }
 
@@ -51,10 +51,10 @@ vil_image_resource_sptr vil_png_file_format::make_input_image(vil_stream* is)
 }
 
 vil_image_resource_sptr vil_png_file_format::make_output_image(vil_stream* vs,
-                                                                 unsigned nx,
-                                                                 unsigned ny,
-                                                                 unsigned nplanes,
-                                                                 enum vil_pixel_format format)
+                                                               unsigned nx,
+                                                               unsigned ny,
+                                                               unsigned nplanes,
+                                                               enum vil_pixel_format format)
 {
   if (format != VIL_PIXEL_FORMAT_BYTE &&
       format != VIL_PIXEL_FORMAT_UINT_16)
@@ -270,10 +270,10 @@ bool vil_png_image::get_property(char const* /*tag*/, void* /*prop*/) const
 }
 
 vil_png_image::vil_png_image(vil_stream *s,
-                               unsigned nx,
-                               unsigned ny,
-                               unsigned nplanes,
-                               enum vil_pixel_format format):
+                             unsigned nx,
+                             unsigned ny,
+                             unsigned nplanes,
+                             enum vil_pixel_format format):
   vs_(s),
   width_(nx),
   height_(ny),
@@ -397,9 +397,9 @@ bool vil_png_image::write_header()
 }
 
 vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
-                                                        unsigned nx,
-                                                        unsigned y0,
-                                                        unsigned ny) const
+                                                      unsigned nx,
+                                                      unsigned y0,
+                                                      unsigned ny) const
 {
   if (!p_->ok)
     return 0;
@@ -412,8 +412,7 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
   int bytes_per_pixel = bit_depth * p_->channels / 8;
   int bytes_per_row_dst = nx*nplanes() * vil_pixel_format_sizeof_components(format_);
 
-  vil_memory_chunk_sptr chunk = new vil_memory_chunk(ny*bytes_per_row_dst,
-    format_);
+  vil_memory_chunk_sptr chunk = new vil_memory_chunk(ny*bytes_per_row_dst, format_);
 
   if ((bit_depth==16) &&
       (nx == png_get_image_width(p_->png_ptr, p_->info_ptr)))
@@ -455,7 +454,7 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
 
 
 bool vil_png_image::put_view(const vil_image_view_base &view,
-                               unsigned x0, unsigned y0)
+                             unsigned x0, unsigned y0)
 {
   if (!view_fits(view, x0, y0))
   {

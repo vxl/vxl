@@ -29,10 +29,10 @@ class vil_pnm_file_format : public vil_file_format
   virtual char const* tag() const;
   virtual vil_image_resource_sptr make_input_image(vil_stream* vs);
   virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
-                                                     unsigned ni,
-                                                     unsigned nj,
-                                                     unsigned nplanes,
-                                                     vil_pixel_format format);
+                                                    unsigned ni,
+                                                    unsigned nj,
+                                                    unsigned nplanes,
+                                                    vil_pixel_format format);
 };
 
 //: Alias name for pnm; only tag() differs
@@ -79,8 +79,8 @@ class vil_pnm_image : public vil_image_resource
 
  public:
   vil_pnm_image (vil_stream* is, unsigned ni,
-                  unsigned nj, unsigned nplanes,
-                  vil_pixel_format format);
+                 unsigned nj, unsigned nplanes,
+                 vil_pixel_format format);
   vil_pnm_image(vil_stream* is);
   ~vil_pnm_image();
 
@@ -93,7 +93,7 @@ class vil_pnm_image : public vil_image_resource
   virtual enum vil_pixel_format pixel_format() const {return format_; }
 
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                  unsigned j0, unsigned nj) const;
+                                                 unsigned j0, unsigned nj) const;
 
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
 

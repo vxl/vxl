@@ -14,8 +14,8 @@ vil_image_view<vxl_byte> transpose_view(const vil_image_view<vxl_byte>& v)
 {
   // Create view with i and j switched
   return vil_image_view<vxl_byte>(v.memory_chunk(),v.top_left_ptr(),
-                                   v.nj(),v.ni(),v.nplanes(),
-                                   v.jstep(),v.istep(),v.planestep());
+                                  v.nj(),v.ni(),v.nplanes(),
+                                  v.jstep(),v.istep(),v.planestep());
 }
 
 int main(int argc, char** argv)
@@ -29,11 +29,10 @@ int main(int argc, char** argv)
     for (unsigned i=0;i<ni;++i)
       image(i,j) = vxl_byte(i+10*j);
 
-  vcl_cout<<"Original image:"<<vcl_endl;
+  vcl_cout<<"Original image:\n";
   vil_print_all(vcl_cout,image);
 
-  vcl_cout<<vcl_endl;
-  vcl_cout<<"Create transposed view of plane"<<vcl_endl;
+  vcl_cout<<"\nCreate transposed view of plane\n";
   vil_image_view<vxl_byte> transpose = transpose_view(image);
   vil_print_all(vcl_cout,transpose);
 

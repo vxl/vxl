@@ -30,7 +30,8 @@ bool vil_image_resource::get_property(char const *, void *) const
 // This includes checking that the pixel type is scalar.
 bool vil_image_resource::view_fits(const vil_image_view_base& im, unsigned i0, unsigned j0)
 {
-  return (i0 + im.ni() <= ni() && j0 + im.nj() <= nj() &&
-    im.nplanes() == nplanes() &&
-    vil_pixel_format_num_components(im.pixel_format()) == 1);
+  return i0 + im.ni() <= ni() &&
+         j0 + im.nj() <= nj() &&
+         im.nplanes() == nplanes() &&
+         vil_pixel_format_num_components(im.pixel_format()) == 1;
 }

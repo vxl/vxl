@@ -30,9 +30,9 @@
 // that seems to trick the compiler into emitting only one instantiation.
 template <class I1, class I2, class AC, class O>
 void vil1_convolve_simple(I1 const* const* input1, unsigned w1, unsigned h1,
-                         I2 const* const* input2, unsigned w2, unsigned h2,
-                         AC *,
-                         O       * const* out)
+                          I2 const* const* input2, unsigned w2, unsigned h2,
+                          AC *,
+                          O       * const* out)
 {
   //?? typedef typename vil1_ip_traits<O* const*>::pixel_type OutType;
 
@@ -73,10 +73,10 @@ void vil1_convolve_simple(I1 const* const* input1, unsigned w1, unsigned h1,
 }
 
 #define VIL1_CONVOLVE_SIMPLE_INSTANTIATE0(I1, I2, AC, O) \
-template void vil1_convolve_simple/*<I1, I2, AC, O >*/(I1 const * const *, unsigned, unsigned, \
-                                                      I2 const * const *, unsigned, unsigned, \
-                                                      AC *,  \
-                                                      O * const *)
+template void vil1_convolve_simple(I1 const * const *, unsigned, unsigned, \
+                                   I2 const * const *, unsigned, unsigned, \
+                                   AC *,  \
+                                   O * const *)
 
 //----------------------------------------------------------------------
 
@@ -84,12 +84,12 @@ template void vil1_convolve_simple/*<I1, I2, AC, O >*/(I1 const * const *, unsig
 
 template <class I1, class I2, class AC, class O>
 void vil1_convolve_simple(vil1_memory_image_of<I1> const &input1,    // input 1
-                         int x1, int y1, unsigned w1, unsigned h1,
-                         vil1_memory_image_of<I2> const &input2,    // input 2
-                         int x2, int y2, unsigned w2, unsigned h2,
-                         AC *,
-                         vil1_memory_image_of<O>        &output,    // output
-                         int xo, int yo)
+                          int x1, int y1, unsigned w1, unsigned h1,
+                          vil1_memory_image_of<I2> const &input2,    // input 2
+                          int x2, int y2, unsigned w2, unsigned h2,
+                          AC *,
+                          vil1_memory_image_of<O>        &output,    // output
+                          int xo, int yo)
 {
   // assert that the memory to be touched may be touched :
   assert( input1.in_range(x1, y1, w1, h1) );
@@ -134,22 +134,22 @@ void vil1_convolve_simple(vil1_memory_image_of<I1> const &input1,    // input 1
 }
 
 #define VIL1_CONVOLVE_SIMPLE_INSTANTIATE1(I1, I2, AC, O) \
-template void vil1_convolve_simple/*<I1, I2, AC, O >*/(vil1_memory_image_of<I1 > const &, \
-                                                      int, int, unsigned, unsigned, \
-                                                      vil1_memory_image_of<I2 > const &, \
-                                                      int, int, unsigned, unsigned, \
-                                                      AC *, \
-                                                      vil1_memory_image_of<O >        &, \
-                                                      int, int)
+template void vil1_convolve_simple(vil1_memory_image_of<I1 > const &, \
+                                   int, int, unsigned, unsigned,      \
+                                   vil1_memory_image_of<I2 > const &, \
+                                   int, int, unsigned, unsigned,      \
+                                   AC *, \
+                                   vil1_memory_image_of<O >        &, \
+                                   int, int)
 
 //----------------------------------------------------------------------
 
 //: $\displaystyle {\rm out}_{{\rm off}+k} = \sum_{i+j=k} a_{{\rm off}+i} b_{{\rm off}+j}$
 template <class I1, class I2, class AC, class O>
 void vil1_convolve_simple(vil1_memory_image_of<I1> const &in1,
-                         vil1_memory_image_of<I2> const &in2,
-                         AC *,
-                         vil1_memory_image_of<O>        &out)
+                          vil1_memory_image_of<I2> const &in2,
+                          AC *,
+                          vil1_memory_image_of<O>        &out)
 {
   // see comment above for explanation of hack.
   static void (*f)(I1 const * const *, unsigned, unsigned,
@@ -165,10 +165,10 @@ void vil1_convolve_simple(vil1_memory_image_of<I1> const &in1,
 }
 
 #define VIL1_CONVOLVE_SIMPLE_INSTANTIATE2(I1, I2, AC, O) \
-template void vil1_convolve_simple/*<I1, I2, AC, O >*/(vil1_memory_image_of<I1 > const &, \
-                                                      vil1_memory_image_of<I2 > const &, \
-                                                      AC *, \
-                                                      vil1_memory_image_of<O >        &)
+template void vil1_convolve_simple(vil1_memory_image_of<I1 > const &, \
+                                   vil1_memory_image_of<I2 > const &, \
+                                   AC *, \
+                                   vil1_memory_image_of<O >        &)
 
 //--------------------------------------------------------------------------------
 

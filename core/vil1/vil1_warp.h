@@ -33,19 +33,19 @@ enum vil1_warp_interpolation_type {
 // values.
 // The mapping is such that out(mapper.forward_map(x,y)) = in(x,y);
 vil1_image vil1_warp(vil1_image const& in, vil1_warp_mapping const& mapper,
-                   int out_width = -1, int out_height = -1);
+                     int out_width = -1, int out_height = -1);
 
 //: Warp, specifying interpolation
 vil1_image vil1_warp(vil1_image const& in, vil1_warp_mapping const& mapper,
-                   vil1_warp_interpolation_type i,
-                   int out_width = -1, int out_height = -1);
+                     vil1_warp_interpolation_type i,
+                     int out_width = -1, int out_height = -1);
 
 
 //: Templated warper
 template <class PixelType, class Mapper>
 void vil1_warp_output_driven(vil1_memory_image_of<PixelType> const& in,
-                            vil1_memory_image_of<PixelType>& out,
-                            Mapper const& mapper,
-                            vil1_warp_interpolation_type);
+                             vil1_memory_image_of<PixelType>& out,
+                             Mapper const& mapper,
+                             vil1_warp_interpolation_type);
 
 #endif // vil1_warp_h_

@@ -11,7 +11,7 @@
 
 template <class T>
 bool vil1_scale_intensities_image(vil1_image const& base, double scale, double shift,
-                                 T *buf, int x0, int y0, int w, int h)
+                                  T *buf, int x0, int y0, int w, int h)
 {
   if (!base.get_section(buf, x0, y0, w, h)) return false;
 
@@ -25,13 +25,13 @@ bool vil1_scale_intensities_image(vil1_image const& base, double scale, double s
 #undef VIL1_INSTANTIATE_SCALE_INTENSITIES_IMAGE
 #define VIL1_INSTANTIATE_SCALE_INTENSITIES_IMAGE(T) \
 template bool vil1_scale_intensities_image(vil1_image const& base, double scale, double shift, \
-                                          T *buf, int x0, int y0, int w, int h)
+                                           T *buf, int x0, int y0, int w, int h)
 
 #undef VIL1_SPECIALIZE_SCALE_INTENSITIES_IMAGE_RGB
 #define VIL1_SPECIALIZE_SCALE_INTENSITIES_IMAGE_RGB(T) \
 VCL_DEFINE_SPECIALIZATION \
 bool vil1_scale_intensities_image(vil1_image const& base, double scale, double shift, \
-                                 vil1_rgb<T> *buf, int x0, int y0, int w, int h) \
+                                  vil1_rgb<T> *buf, int x0, int y0, int w, int h) \
 { \
   if (!base.get_section(buf, x0, y0, w, h)) return false; \
   unsigned size = w*h; \

@@ -143,7 +143,7 @@ static void test_algo_convolve_1d_double()
   // set up a convolved image_resource object
   vil_image_resource_sptr conv =
     vil_convolve_1d(mem, vxl_byte(), &kernel[1],-1,1, int(),
-      vil_convolve_constant_extend, vil_convolve_zero_extend);
+                    vil_convolve_constant_extend, vil_convolve_zero_extend);
 
   //set up a convolved view.
   vil_convolve_1d(v, v_out, &kernel[1], -1, 1, int(),

@@ -9,7 +9,7 @@
 
 //: Define elements { (p_i[k],p_j[k]) }
 vil_structuring_element::vil_structuring_element(const vcl_vector<int>& p_i,
-                                                   const vcl_vector<int>& p_j)
+                                                 const vcl_vector<int>& p_j)
 {
   set(p_i,p_j);
 }
@@ -79,8 +79,8 @@ void vil_structuring_element::set_to_line_j(int jlo, int jhi)
 vcl_ostream& operator<<(vcl_ostream& os, const vil_structuring_element& element)
 {
   os<<"Bounds ["
-    <<element.min_i()<<","<<element.max_i()<<"]["
-    <<element.min_j()<<","<<element.max_j()<<"] Points: ";
+    <<element.min_i()<<','<<element.max_i()<<"]["
+    <<element.min_j()<<','<<element.max_j()<<"] Points: ";
   for (unsigned int k=0;k<element.p_i().size();++k)
     os<<'('<<element.p_i()[k]<<','<<element.p_j()[k]<<") ";
   return os;
@@ -89,7 +89,7 @@ vcl_ostream& operator<<(vcl_ostream& os, const vil_structuring_element& element)
 //: Generate a list of offsets for use on image with istep,jstep
 //  Gives an efficient way of looping through all the pixels in the structuring element
 void vil_compute_offsets(vcl_vector<vcl_ptrdiff_t>& offset, const vil_structuring_element& element,
-                          vcl_ptrdiff_t istep, vcl_ptrdiff_t jstep)
+                         vcl_ptrdiff_t istep, vcl_ptrdiff_t jstep)
 {
   unsigned n = element.p_i().size();
   offset.resize(n);

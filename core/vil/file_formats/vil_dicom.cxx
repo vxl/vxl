@@ -30,10 +30,10 @@ vil_image_resource_sptr vil_dicom_file_format::make_input_image(vil_stream* vs)
 }
 
 vil_image_resource_sptr vil_dicom_file_format::make_output_image(vil_stream* vs,
-                                                                   unsigned ni,
-                                                                   unsigned nj,
-                                                                   unsigned nplanes,
-                                                                   vil_pixel_format format)
+                                                                 unsigned ni,
+                                                                 unsigned nj,
+                                                                 unsigned nplanes,
+                                                                 vil_pixel_format format)
 {
   vcl_cerr << "ERROR: vil_dicom_file::make_output_file\n"
            << "       Doesn't support output yet\n";
@@ -227,7 +227,7 @@ char const* vil_dicom_image::file_format() const
 }
 
 vil_dicom_image::vil_dicom_image(vil_stream* vs, unsigned ni, unsigned nj,
-                                   unsigned nplanes, vil_pixel_format format):
+                                 unsigned nplanes, vil_pixel_format format):
   vs_(vs)
 {
   assert(!"vil_dicom_image doesn't yet support output");
@@ -309,7 +309,7 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
   // of bits (16) read). Otherwise, one vxl_byte at a time is read
 
   if (header_.allocated_bits_ == 16 ||
-    header_.allocated_bits_ == 12)
+      header_.allocated_bits_ == 12)
     bytes_read = 2;
   else
     bytes_read = 1;
@@ -421,7 +421,7 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
 
 
 bool vil_dicom_image::put_view(const vil_image_view_base& view,
-                              unsigned x0, unsigned y0)
+                               unsigned x0, unsigned y0)
 {
   assert(!"vil_dicom_image doesn't yet support output yet");
 
@@ -438,8 +438,8 @@ bool vil_dicom_image::put_view(const vil_image_view_base& view,
 // readEncapsulatedData
 //==================================================================
 bool vil_dicom_image::readEncapsulatedData(vimt_image_2d_of<vxl_int_32>&im,
-                      vil_dicom_header_info head_info,
-                      vcl_ifstream &fs)
+                                           vil_dicom_header_info head_info,
+                                           vcl_ifstream &fs)
 {
   // We should now be at the start of the encapsulated data.
   // This needs reading as a series of delimeted blocks, each
@@ -473,20 +473,14 @@ bool vil_dicom_image::readEncapsulatedData(vimt_image_2d_of<vxl_int_32>&im,
   // The size of the finished data has to be multiplied by
   // the number of bytes - just to make sure.
   if (head_info.allocated_bits_ == 16 ||
-    head_info.allocated_bits_ == 12)
-  {
+      head_info.allocated_bits_ == 12)
     num_bytes = 2;
-  } // End of if (head_info.allocated...
   else
-  {
     num_bytes = 1;
-  } // End of else
 
   // If 12 bits allocated, use the right number of 16 bits
   if (head_info.allocated_bits_ == 12)
-  {
     cols = 3.0*cols/4;
-  } // End of if (head_info...
 
   data_size = (cols*num_bytes)*rows;
   data = new unsigned char [data_size];
@@ -502,8 +496,8 @@ bool vil_dicom_image::readEncapsulatedData(vimt_image_2d_of<vxl_int_32>&im,
   group = shortSwap(group);
   element = shortSwap(element);
 
-  if (group == CW_DICOM_DELIMITERGROUP &&
-    element == CW_DICOM_DLITEM)
+  if (group   == CW_DICOM_DELIMITERGROUP &&
+      element == CW_DICOM_DLITEM)
   {
     fs.read((char *)&length, sizeof(unsigned int));
     length = intSwap(length);
@@ -545,7 +539,7 @@ bool vil_dicom_image::readEncapsulatedData(vimt_image_2d_of<vxl_int_32>&im,
 // getDataFromEncapsulation
 //==================================================================
 bool vil_dicom_image::getDataFromEncapsulation(unsigned char **data, unsigned long &data_len,
-                        vcl_ifstream &fs)
+                                               vcl_ifstream &fs)
 {
   bool result = true;
 
@@ -592,8 +586,8 @@ bool vil_dicom_image::getDataFromEncapsulation(unsigned char **data, unsigned lo
 
   if (result)
   {
-    if (group == CW_DICOM_DELIMITERGROUP &&
-      element == CW_DICOM_DLSEQDELIMITATIONITEM)
+    if (group   == CW_DICOM_DELIMITERGROUP &&
+        element == CW_DICOM_DLSEQDELIMITATIONITEM)
     {
       // Just read the length and all's ok!
       fs.read((char *)&length, sizeof(unsigned int));
@@ -642,10 +636,10 @@ short vil_dicom_image::shortSwap(short short_in)
     short_swap.byte_val[1]=temp;
 
     result = short_swap.short_val;
-  } // End of if (head_info.file_endian_...
+  }
 
   return result;
-} // End of vil_dicom_image::shortSwap
+}
 
 //===============================================================
 // intSwap
@@ -680,10 +674,10 @@ int vil_dicom_image::intSwap(int int_in)
     int_swap.byte_val[2] = temp;
 
     result = int_swap.int_val;
-  } // End of if (head_info.file_endian_...
+  }
 
   return result;
-} // End of vil_dicom_image::intSwap
+}
 
 //===============================================================
 // charSwap
@@ -696,30 +690,26 @@ void vil_dicom_image::charSwap(char *char_in, int val_size)
   if (headerInfo().file_endian_ != headerInfo().sys_endian_)
   {
     // Create a char the same size to swap
-    char *temp = new char [val_size];
+    char *temp = new char[val_size];
 
     if (temp)
     {
       // Copy from the first vcl_string into the temp
       for (int i=0; i<val_size; i++)
-      {
         temp[i]=char_in[i];
-      } // End of for
 
       // Now put back in reverse
       for (int i=0; i<val_size; i++)
-      {
         char_in[(val_size-i)-1] = temp[i];
-      } // End of for
 
       delete [] temp;
-    } // End of if (temp)
+    }
     else
     {
       vcl_cerr << "Couldn't create temp in charSwap!\n"
                << "Value remains unswapped!\n";
     }
-  } // End of if (head_info.file_endian_...
-} // End of vil_dicom_image::charSwap
+  }
+}
 
 #endif // 0

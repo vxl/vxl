@@ -23,8 +23,8 @@
 // \relates vil_image_view
 template <class imType, class vecType>
 void vil_sample_grid_bilin(vecType* v,
-                            const vil_image_view<imType>& image,
-                            double x0, double y0, double dx1, double dy1,
-                            double dx2, double dy2, int n1, int n2);
+                           const vil_image_view<imType>& image,
+                           double x0, double y0, double dx1, double dy1,
+                           double dx2, double dy2, int n1, int n2);
 
 #endif // vil_sample_grid_bilin_h_

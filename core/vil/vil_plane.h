@@ -21,7 +21,7 @@ inline vil_image_view<T> vil_plane(const vil_image_view<T> &im, unsigned p)
 {
   assert(p<im.nplanes());
   return vil_image_view<T>(im.memory_chunk(),im.top_left_ptr()+p*im.planestep(),im.ni(),im.nj(),1,
-    im.istep(),im.jstep(),im.planestep());
+                           im.istep(),im.jstep(),im.planestep());
 }
 
 //: Return a view of a selection of im's planes.
@@ -32,17 +32,17 @@ inline vil_image_view<T> vil_plane(const vil_image_view<T> &im, unsigned p)
 //  O(1).
 template<class T>
 inline vil_image_view<T> vil_planes(const vil_image_view<T> &im,
-                                      unsigned first, int skip,
-                                      unsigned n)
+                                    unsigned first, int skip,
+                                    unsigned n)
 {
   assert(first<im.nplanes());
   int end = first + n*skip;
   assert(end >= 0);
   assert((unsigned)end <= im.nplanes());
   return vil_image_view<T>(im.memory_chunk(),
-                            im.top_left_ptr()+first*im.planestep(),
-                            im.ni(),im.nj(),n,
-                            im.istep(),im.jstep(),skip*im.planestep());
+                           im.top_left_ptr()+first*im.planestep(),
+                           im.ni(),im.nj(),n,
+                           im.istep(),im.jstep(),skip*im.planestep());
 }
 
 
@@ -65,11 +65,11 @@ class vil_plane_image_resource : public vil_image_resource
 
   virtual enum vil_pixel_format pixel_format() const { return src_->pixel_format(); }
 
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, 
-                                                  unsigned j0, unsigned nj) const;
+  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+                                                 unsigned j0, unsigned nj) const;
 
   virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
-                                             unsigned j0, unsigned nj) const;
+                                            unsigned j0, unsigned nj) const;
 
 
   //: Put the data in this view back into the image source.

@@ -14,10 +14,10 @@
 //  Applies 1-5-8-5-1 filter in x, then samples
 //  every other pixel.  Fills [0,(ni+1)/2-1][0,nj-1] elements of dest
 void vil_gauss_reduce(const vxl_byte* src_im,
-                       unsigned src_ni, unsigned src_nj,
-                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
-                       vxl_byte* dest_im,
-                       vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+                      unsigned src_ni, unsigned src_nj,
+                      vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                      vxl_byte* dest_im,
+                      vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
     vxl_byte* d_row = dest_im;
     const vxl_byte* s_row = src_im;
@@ -32,9 +32,9 @@ void vil_gauss_reduce(const vxl_byte* src_im,
         for (unsigned x=0;x<ni2;++x)
         {
             // The 0.5 offset in the following ensures rounding
-            *d = vxl_byte(0.5+ 0.05*s[-sxs2] +0.05 *s[sxs2]
-                          +0.25*s[-s_x_step]+0.25*s[s_x_step]
-                          +0.4*s[0]);
+            *d = vxl_byte(0.5 + 0.05*s[-sxs2]    + 0.05*s[sxs2]
+                              + 0.25*s[-s_x_step]+ 0.25*s[s_x_step]
+                              + 0.4*s[0]);
 
             d += d_x_step;
             s += sxs2;
@@ -51,9 +51,9 @@ void vil_gauss_reduce(const vxl_byte* src_im,
 //  Applies 1-5-8-5-1 filter in x, then samples
 //  every other pixel.  Fills [0,(ni+1)/2-1][0,nj-1] elements of dest
 void vil_gauss_reduce(const float* src_im,
-                       unsigned src_ni, unsigned src_nj,
-                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
-                       float* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+                      unsigned src_ni, unsigned src_nj,
+                      vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                      float* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
     float* d_row = dest_im;
     const float* s_row = src_im;
@@ -87,10 +87,10 @@ void vil_gauss_reduce(const float* src_im,
 //  Applies 1-5-8-5-1 filter in x, then samples
 //  every other pixel.  Fills [0,(ni+1)/2-1][0,nj-1] elements of dest
 void vil_gauss_reduce(const int* src_im,
-                       unsigned src_ni, unsigned src_nj,
-                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
-                       int* dest_im,
-                       vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+                      unsigned src_ni, unsigned src_nj,
+                      vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                      int* dest_im,
+                      vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
     int* d_row = dest_im;
     const int* s_row = src_im;
@@ -124,9 +124,9 @@ void vil_gauss_reduce(const int* src_im,
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smoothes with a 3x3 filter and subsamples
 void vil_gauss_reduce_121(const vxl_byte* src_im,
-                           unsigned src_ni, unsigned src_nj,
-                           vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
-                           vxl_byte* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+                          unsigned src_ni, unsigned src_nj,
+                          vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                          vxl_byte* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
   vcl_ptrdiff_t sxs2 = s_x_step*2;
   vcl_ptrdiff_t sys2 = s_y_step*2;
@@ -195,10 +195,10 @@ void vil_gauss_reduce_121(const vxl_byte* src_im,
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smoothes with a 3x3 filter and subsamples
 void vil_gauss_reduce_121(const float* src_im,
-                           unsigned src_ni, unsigned src_nj,
-                           vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
-                           float* dest_im,
-                           vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+                          unsigned src_ni, unsigned src_nj,
+                          vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                          float* dest_im,
+                          vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
   vcl_ptrdiff_t sxs2 = s_x_step*2;
   vcl_ptrdiff_t sys2 = s_y_step*2;
@@ -266,10 +266,10 @@ void vil_gauss_reduce_121(const float* src_im,
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smoothes with a 3x3 filter and subsamples
 void vil_gauss_reduce_121(const int* src_im,
-                           unsigned src_ni, unsigned src_nj,
-                           vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
-                           int* dest_im,
-                           vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+                          unsigned src_ni, unsigned src_nj,
+                          vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                          int* dest_im,
+                          vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
   vcl_ptrdiff_t sxs2 = s_x_step*2;
   vcl_ptrdiff_t sys2 = s_y_step*2;

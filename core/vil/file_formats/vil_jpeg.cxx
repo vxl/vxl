@@ -58,10 +58,10 @@ vil_image_resource_sptr  vil_jpeg_file_format::make_input_image(vil_stream *vs) 
 
 vil_image_resource_sptr
   vil_jpeg_file_format::make_output_image(vil_stream* vs,
-                                           unsigned nx,
-                                           unsigned ny,
-                                           unsigned nplanes,
-                                           enum vil_pixel_format format)
+                                          unsigned nx,
+                                          unsigned ny,
+                                          unsigned nplanes,
+                                          enum vil_pixel_format format)
 {
   if (format != VIL_PIXEL_FORMAT_BYTE)
   {
@@ -91,10 +91,10 @@ bool vil_jpeg_image::get_property(char const * /*tag*/, void * /*prop*/) const
 }
 
 vil_jpeg_image::vil_jpeg_image(vil_stream *s,
-                                 unsigned nx,
-                                 unsigned ny,
-                                 unsigned nplanes,
-                                 enum vil_pixel_format format)
+                               unsigned nx,
+                               unsigned ny,
+                               unsigned nplanes,
+                               enum vil_pixel_format format)
   : jc(new vil_jpeg_compressor(s))
   , jd(0)
   , stream(s)
@@ -129,9 +129,9 @@ vil_jpeg_image::~vil_jpeg_image() {
 
 //: decompressing from the vil_stream to a section buffer.
 vil_image_view_base_sptr vil_jpeg_image::get_copy_view(unsigned x0,
-                                                         unsigned nx,
-                                                         unsigned y0,
-                                                         unsigned ny) const {
+                                                       unsigned nx,
+                                                       unsigned y0,
+                                                       unsigned ny) const {
   if (!jd) {
     vcl_cerr << "attempted get_copy_view() failed -- no jpeg decompressor\n";
     return 0;
@@ -158,7 +158,7 @@ vil_image_view_base_sptr vil_jpeg_image::get_copy_view(unsigned x0,
 
 //: compressing a section onto the vil_stream.
 bool vil_jpeg_image::put_view(const vil_image_view_base &view,
-                               unsigned x0, unsigned y0)
+                              unsigned x0, unsigned y0)
 {
   if (!jc) {
     vcl_cerr << "attempted put_view() failed -- no jpeg compressor\n";
@@ -178,7 +178,7 @@ bool vil_jpeg_image::put_view(const vil_image_view_base &view,
     return false;
   }
   if (y0 != jc->jobj.next_scanline) {
-    vcl_cerr << __FILE__ << " : Scanlines must be sent sequentially \n";
+    vcl_cerr << __FILE__ << " : Scanlines must be sent sequentially\n";
     return false;
   }
 

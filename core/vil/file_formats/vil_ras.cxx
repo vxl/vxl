@@ -155,18 +155,19 @@ file_format() const
 
 
 vil_ras_image::
-vil_ras_image( vil_stream* vs,
-                unsigned ni,
-                unsigned nj,
-                unsigned nplanes,
-                vil_pixel_format format )
+vil_ras_image(vil_stream* vs,
+              unsigned ni,
+              unsigned nj,
+              unsigned nplanes,
+              vil_pixel_format format )
 {
   vs_->ref();
   width_ = ni;
   height_ = nj;
 
   components_ = nplanes * vil_pixel_format_num_components( format );
-  if ( components_ != 1 && components_ != 3 ) {
+  if ( components_ != 1 && components_ != 3 )
+  {
     vcl_cerr << __FILE__ << ": can't handle "
              << nplanes << " x "
              << vil_pixel_format_num_components( format ) << " components\n";
@@ -401,8 +402,8 @@ get_copy_view( unsigned i0, unsigned ni,
   }
 
   return new vil_image_view<vxl_byte>( buf, ib,
-                                        width_, height_, components_,
-                                        components_, components_*width_, 1 );
+                                       width_, height_, components_,
+                                       components_, components_*width_, 1 );
 }
 
 

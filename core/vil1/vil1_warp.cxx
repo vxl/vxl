@@ -16,8 +16,8 @@ VIL1_WARP_INSTANTIATE(vil1_rgb<unsigned char>, vil1_warp_mapping);
 VIL1_WARP_INSTANTIATE(double, vil1_warp_mapping);
 
 vil1_image vil1_warp(vil1_image const& in, vil1_warp_mapping const& mapper,
-                   vil1_warp_interpolation_type i,
-                   int out_width, int out_height)
+                     vil1_warp_interpolation_type i,
+                     int out_width, int out_height)
 {
   int ow = out_width  < 0 ? in.width()  : out_width;
   int oh = out_height < 0 ? in.height() : out_height;

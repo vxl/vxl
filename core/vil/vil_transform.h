@@ -75,12 +75,11 @@ inline void vil_transform2(const vil_image_view<inP >&src, vil_image_view<outP >
 //: Apply a binary operation to each pixel in srcA and srcB to get dest.
 template <class inA, class inB, class outP, class BinOp >
 inline void vil_transform(const vil_image_view<inA >&srcA,
-                           const vil_image_view<inB >&srcB,
-                           vil_image_view<outP >&dest,
-                           BinOp functor)
+                          const vil_image_view<inB >&srcB,
+                          vil_image_view<outP >&dest,
+                          BinOp functor)
 {
-  assert(srcB.ni() == srcA.ni() && srcA.nj() == srcB.nj()
-    && srcA.nplanes() == srcB.nplanes());
+  assert(srcB.ni() == srcA.ni() && srcA.nj() == srcB.nj() && srcA.nplanes() == srcB.nplanes());
   dest.set_size(srcA.ni(), srcA.nj(), srcA.nplanes());
   for (unsigned p = 0; p < srcA.nplanes(); ++p)
     for (unsigned j = 0; j < srcA.nj(); ++j)
@@ -92,14 +91,12 @@ inline void vil_transform(const vil_image_view<inA >&srcA,
 // non-const dest version, assumes dest is already correct size.
 template <class inA, class inB, class outP, class BinOp >
 inline void vil_transform(const vil_image_view<inA >&srcA,
-                           const vil_image_view<inB >&srcB,
-                           const vil_image_view<outP >&dest,
-                           BinOp functor)
+                          const vil_image_view<inB >&srcB,
+                          const vil_image_view<outP >&dest,
+                          BinOp functor)
 {
-  assert(dest.ni() == srcA.ni() && srcA.nj() == dest.nj()
-    && srcA.nplanes() == dest.nplanes());
-  assert(srcB.ni() == srcA.ni() && srcA.nj() == srcB.nj()
-    && srcA.nplanes() == srcB.nplanes());
+  assert(dest.ni() == srcA.ni() && srcA.nj() == dest.nj() && srcA.nplanes() == dest.nplanes());
+  assert(srcB.ni() == srcA.ni() && srcA.nj() == srcB.nj() && srcA.nplanes() == srcB.nplanes());
   vil_image_view<outP >& nc_dest = const_cast<vil_image_view<outP >&>(dest);
   for (unsigned p = 0; p < srcA.nplanes(); ++p)
     for (unsigned j = 0; j < srcA.nj(); ++j)

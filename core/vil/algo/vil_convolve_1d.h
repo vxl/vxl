@@ -2,9 +2,9 @@
 #ifndef vil_convolve_1d_h_
 #define vil_convolve_1d_h_
 //:
-//  \file
-//  \brief 1D Convolution with cunning boundary options
-//  \author Tim Cootes, Ian Scott (based on work by fsm)
+// \file
+// \brief 1D Convolution with cunning boundary options
+// \author Tim Cootes, Ian Scott (based on work by fsm)
 //
 // Note. The convolution operation is defined by
 //    $(f*g)(x) = \int f(x-y) g(y) dy$
@@ -80,11 +80,11 @@ enum vil_convolve_boundary_option
 //  Fills only edge: dest[i], i=0..(k_hi-1)
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_step,
-                                  destT* dest, vcl_ptrdiff_t d_step,
-                                  const kernelT* kernel,
-                                  vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
-                                  vcl_ptrdiff_t kstep, accumT,
-                                  vil_convolve_boundary_option option)
+                                 destT* dest, vcl_ptrdiff_t d_step,
+                                 const kernelT* kernel,
+                                 vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                                 vcl_ptrdiff_t kstep, accumT,
+                                 vil_convolve_boundary_option option)
 {
   if (option==vil_convolve_ignore_edge) return;
   if (option==vil_convolve_no_extend)
@@ -181,12 +181,12 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
 // Assumes dest and src same size (nx)
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
-                             destT* dest0, vcl_ptrdiff_t d_step,
-                             const kernelT* kernel,
-                             vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
-                             accumT ac,
-                             vil_convolve_boundary_option start_option,
-                             vil_convolve_boundary_option end_option)
+                            destT* dest0, vcl_ptrdiff_t d_step,
+                            const kernelT* kernel,
+                            vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                            accumT ac,
+                            vil_convolve_boundary_option start_option,
+                            vil_convolve_boundary_option end_option)
 {
   // Deal with start (fill elements 0..1+k_hi of dest)
   vil_convolve_edge_1d(src0,nx,s_step,dest0,d_step,kernel,k_lo,k_hi,1,ac,start_option);
@@ -206,8 +206,8 @@ inline void vil_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
 
   // Deal with end  (reflect data and kernel!)
   vil_convolve_edge_1d(src0+(nx-1)*s_step,nx,-s_step,
-                        dest0+(nx-1)*d_step,-d_step,
-                        kernel,-k_hi,-k_lo,-1,ac,end_option);
+                       dest0+(nx-1)*d_step,-d_step,
+                       kernel,-k_hi,-k_lo,-1,ac,end_option);
 }
 
 //: Convolve kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
@@ -219,12 +219,12 @@ inline void vil_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
 // \relates vil_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil_convolve_1d(const vil_image_view<srcT>& src_im,
-                             vil_image_view<destT>& dest_im,
-                             const kernelT* kernel,
-                             vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
-                             accumT ac,
-                             vil_convolve_boundary_option start_option,
-                             vil_convolve_boundary_option end_option)
+                            vil_image_view<destT>& dest_im,
+                            const kernelT* kernel,
+                            vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                            accumT ac,
+                            vil_convolve_boundary_option start_option,
+                            vil_convolve_boundary_option end_option)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -247,22 +247,22 @@ inline void vil_convolve_1d(const vil_image_view<srcT>& src_im,
       if (d_istep == 1)
         for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
           vil_convolve_1d(src_row,ni,1,  dest_row,1,
-                           kernel,k_lo,k_hi,ac,start_option,end_option);
+                          kernel,k_lo,k_hi,ac,start_option,end_option);
       else
         for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
           vil_convolve_1d(src_row,ni,1,  dest_row,d_istep,
-                           kernel,k_lo,k_hi,ac,start_option,end_option);
+                          kernel,k_lo,k_hi,ac,start_option,end_option);
     }
     else
     {
       if (d_istep == 1)
         for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
           vil_convolve_1d(src_row,ni,s_istep,  dest_row,1,
-                           kernel,k_lo,k_hi,ac,start_option,end_option);
+                          kernel,k_lo,k_hi,ac,start_option,end_option);
       else
         for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
           vil_convolve_1d(src_row,ni,s_istep,  dest_row,d_istep,
-                           kernel,k_lo,k_hi,ac,start_option,end_option);
+                          kernel,k_lo,k_hi,ac,start_option,end_option);
     }
   }
 }
@@ -283,9 +283,9 @@ class vil_convolve_1d_resource : public vil_image_resource
   //: Construct a convolve filter.
   // You can't create one of these directly, use vil_convolve_1d instead
   vil_convolve_1d_resource(const vil_image_resource_sptr& src,
-                            const kernelT* kernel, int k_lo, int k_hi,
-                            vil_convolve_boundary_option start_option,
-                            vil_convolve_boundary_option end_option)  :
+                           const kernelT* kernel, int k_lo, int k_hi,
+                           vil_convolve_boundary_option start_option,
+                           vil_convolve_boundary_option end_option)  :
       src_(src), kernel_(kernel), klo_(k_lo), khi_(k_hi),
       start_option_(start_option), end_option_(end_option)
     {
@@ -302,7 +302,7 @@ class vil_convolve_1d_resource : public vil_image_resource
 
  public:
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                  unsigned j0, unsigned nj) const
+                                                 unsigned j0, unsigned nj) const
   {
     if (i0 + ni > src_->ni() || j0 + nj > src_->nj())  return 0;
     const unsigned lsrc = (unsigned) vcl_max(0,(int)i0 + klo_); // lhs of input window
@@ -316,7 +316,7 @@ class vil_convolve_1d_resource : public vil_image_resource
 #define macro( F , T ) \
       case F : \
         vil_convolve_1d(static_cast<vil_image_view<T >&>(*vs),dest, \
-          kernel_, klo_, khi_, accumT(), start_option_, end_option_); \
+                        kernel_, klo_, khi_, accumT(), start_option_, end_option_); \
         return new vil_image_view<destT>(vil_crop(dest, lboundary, ni, 0, nj));
 
       macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
@@ -380,8 +380,7 @@ inline vil_image_resource_sptr vil_convolve_1d(
                          vil_convolve_boundary_option start_option,
                          vil_convolve_boundary_option end_option)
 {
-  return new vil_convolve_1d_resource<kernelT, accumT, destT>(src_im,
-                              kernel, k_lo, k_hi, start_option, end_option);
+  return new vil_convolve_1d_resource<kernelT, accumT, destT>(src_im, kernel, k_lo, k_hi, start_option, end_option);
 }
 
 #endif // vil_convolve_1d_h_

@@ -19,7 +19,7 @@ vil_image_resource_sptr vil_plane(const vil_image_resource_sptr &src, unsigned p
 
 
 vil_plane_image_resource::vil_plane_image_resource(vil_image_resource_sptr const& gi,
-                                                     unsigned p):
+                                                   unsigned p):
   src_(gi),
   plane_(p)
 {
@@ -28,7 +28,7 @@ vil_plane_image_resource::vil_plane_image_resource(vil_image_resource_sptr const
 
 
 vil_image_view_base_sptr vil_plane_image_resource::get_copy_view(unsigned i0, unsigned ni,
-                                                unsigned j0, unsigned nj) const
+                                                                 unsigned j0, unsigned nj) const
 {
   vil_image_view_base_sptr vs = src_->get_copy_view(i0, ni, j0, nj);
   if (!vs) return 0;
@@ -55,7 +55,7 @@ vil_image_view_base_sptr vil_plane_image_resource::get_copy_view(unsigned i0, un
 
 
 vil_image_view_base_sptr vil_plane_image_resource::get_view(unsigned i0, unsigned ni,
-                                           unsigned j0, unsigned nj) const
+                                                            unsigned j0, unsigned nj) const
 {
   vil_image_view_base_sptr vs = src_->get_view(i0, ni, j0, nj);
   if (!vs) return 0;
@@ -82,8 +82,8 @@ vil_image_view_base_sptr vil_plane_image_resource::get_view(unsigned i0, unsigne
 
 
 //: Put the data in this view back into the image source.
-bool vil_plane_image_resource::put_view(const vil_image_view_base& im, unsigned i0,
-                      unsigned j0)
+bool vil_plane_image_resource::put_view(const vil_image_view_base& im,
+                                        unsigned i0, unsigned j0)
 {
   if (im.nplanes() != 1) return false;
   vil_image_view_base_sptr vs = src_->get_view(i0, im.ni(), j0, im.nj());

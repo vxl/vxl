@@ -236,8 +236,8 @@ inline
 vil1_rgb<T> vil1_clamp_pixel(vil1_rgb<T> const& b, double range_min , double range_max)
 {
   return vil1_rgb<double>(vil1_clamp_pixel(b.r, range_min , range_max),
-                         vil1_clamp_pixel(b.g, range_min , range_max),
-                         vil1_clamp_pixel(b.b, range_min , range_max));
+                          vil1_clamp_pixel(b.g, range_min , range_max),
+                          vil1_clamp_pixel(b.b, range_min , range_max));
 }
 #endif
 
@@ -246,16 +246,16 @@ inline
 vil1_rgb<unsigned char> vil1_clamp(vil1_rgb<double> const & d, vil1_rgb<unsigned char>* dummy)
 {
   return vil1_rgb<unsigned char>(vil1_clamp(d.r, &dummy->r),
-                                vil1_clamp(d.g, &dummy->g),
-                                vil1_clamp(d.b, &dummy->b));
+                                 vil1_clamp(d.g, &dummy->g),
+                                 vil1_clamp(d.b, &dummy->b));
 }
 
 inline
 vil1_rgb<unsigned char> vil1_clamp(vil1_rgb<float> const& d, vil1_rgb<unsigned char>* dummy)
 {
   return vil1_rgb<unsigned char>(vil1_clamp(d.r, &dummy->r),
-                                vil1_clamp(d.g, &dummy->g),
-                                vil1_clamp(d.b, &dummy->b));
+                                 vil1_clamp(d.g, &dummy->g),
+                                 vil1_clamp(d.b, &dummy->b));
 }
 #endif
 

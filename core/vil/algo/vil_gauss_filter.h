@@ -2,9 +2,9 @@
 #ifndef vil_gauss_filter_h_
 #define vil_gauss_filter_h_
 //:
-//  \file
-//  \brief Smoothes images.
-//  \author Ian Scott
+// \file
+// \brief Smoothes images.
+// \author Ian Scott
 
 //=======================================================================
 // inclusions
@@ -71,26 +71,26 @@ class vil_gauss_filter_5tap_params
 //  Assumes dest_im has sufficient data allocated.
 template <class srcT, class destT>
 void vil_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_ystep,
-                            unsigned ni, unsigned nj,
-                            destT* dest_im, vcl_ptrdiff_t dest_ystep,
-                            const vil_gauss_filter_5tap_params& params,
-                            destT* work);
+                           unsigned ni, unsigned nj,
+                           destT* dest_im, vcl_ptrdiff_t dest_ystep,
+                           const vil_gauss_filter_5tap_params& params,
+                           destT* work);
 
 //: Smooth a src_im to produce dest_im
 //  Applies 5 element FIR filter in x and y.
 template <class srcT, class destT>
 void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
-                            vil_image_view<destT>& dest_im,
-                            const vil_gauss_filter_5tap_params &params,
-                            vil_image_view<destT> &work);
+                           vil_image_view<destT>& dest_im,
+                           const vil_gauss_filter_5tap_params &params,
+                           vil_image_view<destT> &work);
 
 
 //: Smooth a src_im to produce dest_im
 //  Applies 5 element FIR filter in x and y.
 template <class srcT, class destT>
 inline void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
-                                   vil_image_view<destT>& dest_im,
-                                   const vil_gauss_filter_5tap_params &params)
+                                  vil_image_view<destT>& dest_im,
+                                  const vil_gauss_filter_5tap_params &params)
 {
   vil_image_view<destT> work;
   vil_gauss_filter_5tap(src_im, dest_im, params, work);

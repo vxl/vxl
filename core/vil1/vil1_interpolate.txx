@@ -25,8 +25,8 @@ bool vil1_interpolate_nearest(vil1_memory_image_of<T> const& img, double src_x, 
 
 template <class T, class U>
 bool vil1_interpolate_bilinear(vil1_memory_image_of<T> const& img,
-                              double src_x, double src_y,
-                              U* out)
+                               double src_x, double src_y,
+                               U* out)
 {
   int src_x_int = (int)src_x;
   int src_y_int = (int)src_y;
@@ -57,10 +57,10 @@ bool vil1_interpolate_bilinear(vil1_memory_image_of<T> const& img,
 
 template <class T, class U>
 bool vil1_interpolate_bilinear_grad(vil1_memory_image_of<T> const& img,
-                                   double src_x, double src_y,
-                                   U* out_i,
-                                   U* out_dx,
-                                   U* out_dy)
+                                    double src_x, double src_y,
+                                    U* out_i,
+                                    U* out_dx,
+                                    U* out_dy)
 {
   int src_x_int = (int)src_x;
   int src_y_int = (int)src_y;
@@ -91,8 +91,8 @@ bool vil1_interpolate_bilinear_grad(vil1_memory_image_of<T> const& img,
 
 template <class T, class U>
 bool vil1_interpolate_bicubic(vil1_memory_image_of<T> const& img,
-                             double src_x, double src_y,
-                             U* out)
+                              double src_x, double src_y,
+                              U* out)
 {
   int src_x_int = (int)src_x;
   int src_y_int = (int)src_y;
@@ -122,10 +122,10 @@ bool vil1_interpolate_bicubic(vil1_memory_image_of<T> const& img,
 
 #define I(dx,dy) (img(src_x_int + (dx), src_y_int + (dy)))
   *out =U(0.25*
-    ( (s0*I(-1,-1) + s1*I(+0,-1) + s2*I(+1,-1) + s3*I(+2,-1))*t0 +
-      (s0*I(-1,+0) + s1*I(+0,+0) + s2*I(+1,+0) + s3*I(+2,+0))*t1 +
-      (s0*I(-1,+1) + s1*I(+0,+1) + s2*I(+1,+1) + s3*I(+2,+1))*t2 +
-      (s0*I(-1,+2) + s1*I(+0,+2) + s2*I(+1,+2) + s3*I(+2,+2))*t3 ));
+          ( (s0*I(-1,-1) + s1*I(+0,-1) + s2*I(+1,-1) + s3*I(+2,-1)) * t0 +
+            (s0*I(-1,+0) + s1*I(+0,+0) + s2*I(+1,+0) + s3*I(+2,+0)) * t1 +
+            (s0*I(-1,+1) + s1*I(+0,+1) + s2*I(+1,+1) + s3*I(+2,+1)) * t2 +
+            (s0*I(-1,+2) + s1*I(+0,+2) + s2*I(+1,+2) + s3*I(+2,+2)) * t3 ));
 #undef I
   return true;
 }

@@ -20,7 +20,7 @@ inline bool vil_binary_erode(const bool* im, const vcl_ptrdiff_t* offset, unsign
 // \relates vil_image_view
 // \relates vil_structuring_element
 void vil_binary_erode(const vil_image_view<bool>& src_image,
-                       vil_image_view<bool>& dest_image,
-                       const vil_structuring_element& element);
+                      vil_image_view<bool>& dest_image,
+                      const vil_structuring_element& element);
 
 #endif // vil_binary_erode_h_

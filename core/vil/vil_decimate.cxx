@@ -16,15 +16,15 @@
 static const unsigned long large_image_limit = 1024ul * 1024ul * 8ul; //8M Pixels
 
 vil_image_resource_sptr vil_decimate(const vil_image_resource_sptr &src,
-                                       unsigned i_factor,
-                                       unsigned j_factor)
+                                     unsigned i_factor,
+                                     unsigned j_factor)
 {
   return new vil_decimate_image_resource(src, i_factor, j_factor);
 }
 
 
 vil_decimate_image_resource::vil_decimate_image_resource(vil_image_resource_sptr const& src,
-                                                           unsigned i_factor, unsigned j_factor):
+                                                         unsigned i_factor, unsigned j_factor):
   src_(src),
   i_factor_(i_factor),
   j_factor_(j_factor)
@@ -34,13 +34,13 @@ vil_decimate_image_resource::vil_decimate_image_resource(vil_image_resource_sptr
 
 
 vil_image_view_base_sptr vil_decimate_image_resource::get_copy_view(unsigned i0, unsigned ni,
-                                                                      unsigned j0, unsigned nj) const
+                                                                    unsigned j0, unsigned nj) const
 {
   if ((unsigned long)i_factor_ * (unsigned long)ni *
     (unsigned long)j_factor_ * (unsigned long)nj < large_image_limit)
   {
    vil_image_view_base_sptr vs = src_->get_copy_view(i0*i_factor_, ni*i_factor_,
-      j0 * j_factor_, nj * j_factor_);
+                                                     j0*j_factor_, nj*j_factor_);
     if (!vs) return 0;
 
     switch (vs->pixel_format())
@@ -48,7 +48,7 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_copy_view(unsigned i0,
   #define macro( F , T ) \
     case F : \
       return new vil_image_view<T >(vil_decimate(static_cast<vil_image_view<T >&>(*vs), \
-        i_factor_, j_factor_));
+                                                 i_factor_, j_factor_));
 
         macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
         macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
@@ -98,13 +98,13 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_copy_view(unsigned i0,
 }
 
 vil_image_view_base_sptr vil_decimate_image_resource::get_view(unsigned i0, unsigned ni,
-                                                                 unsigned j0, unsigned nj) const
+                                                               unsigned j0, unsigned nj) const
 {
   if ((unsigned long)i_factor_ * (unsigned long)ni *
     (unsigned long)j_factor_ * (unsigned long)nj < large_image_limit)
   {
     vil_image_view_base_sptr vs = src_->get_view(i0*i_factor_, ni*i_factor_,
-      j0 * j_factor_, nj * j_factor_);
+                                                 j0*j_factor_, nj*j_factor_);
     if (!vs) return 0;
 
     switch (vs->pixel_format())
@@ -112,7 +112,7 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_view(unsigned i0, unsi
 #define macro( F , T ) \
     case F : \
       return new vil_image_view<T >(vil_decimate(static_cast<vil_image_view<T >&>(*vs), \
-        i_factor_, j_factor_));
+                                    i_factor_, j_factor_));
 
         macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
         macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
@@ -134,15 +134,16 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_view(unsigned i0, unsi
 
 //: Put the data in this view back into the image source.
 bool vil_decimate_image_resource::put_view(const vil_image_view_base& im, unsigned i0,
-                      unsigned j0)
+                                           unsigned j0)
 {
   if ((unsigned long)i_factor_ * (unsigned long)im.ni() *
     (unsigned long)j_factor_ * (unsigned long)im.nj() < large_image_limit)
   {
     vil_image_view_base_sptr vs = src_->get_view(i0*i_factor_, im.ni()*i_factor_,
-      j0 * j_factor_, im.nj() * j_factor_);
+                                                 j0*j_factor_, im.nj()*j_factor_);
     if (!vs || im.pixel_format() != vs->pixel_format() ||
-      im.nplanes() != vs->nplanes()) return false;
+        im.nplanes() != vs->nplanes())
+      return false;
 
 
     switch (vs->pixel_format())

@@ -2,9 +2,9 @@
 #ifndef vil_sobel_1x3_txx_
 #define vil_sobel_1x3_txx_
 //:
-//  \file
-//  \brief Apply sobel gradient filter to an image
-//  \author Tim Cootes
+// \file
+// \brief Apply sobel gradient filter to an image
+// \author Tim Cootes
 
 #include "vil_sobel_1x3.h"
 
@@ -13,7 +13,7 @@
 //  of source plane i and dest plane (2i+1) being the j-gradient.
 template<class srcT, class destT>
 void vil_sobel_1x3(const vil_image_view<srcT>& src,
-                    vil_image_view<destT>& grad_ij)
+                   vil_image_view<destT>& grad_ij)
 {
   unsigned np = src.nplanes();
   unsigned ni = src.ni();
@@ -22,19 +22,19 @@ void vil_sobel_1x3(const vil_image_view<srcT>& src,
   for (unsigned p=0;p<np;++p)
   {
     vil_sobel_1x3_1plane(src.top_left_ptr()+p*src.planestep(),
-                          src.istep(),src.jstep(),
-                          grad_ij.top_left_ptr()+2*p*grad_ij.planestep(),
-                          grad_ij.istep(),grad_ij.jstep(),
-                          grad_ij.top_left_ptr()+(2*p+1)*grad_ij.planestep(),
-                          grad_ij.istep(),grad_ij.jstep(), ni,nj);
+                         src.istep(),src.jstep(),
+                         grad_ij.top_left_ptr()+2*p*grad_ij.planestep(),
+                         grad_ij.istep(),grad_ij.jstep(),
+                         grad_ij.top_left_ptr()+(2*p+1)*grad_ij.planestep(),
+                         grad_ij.istep(),grad_ij.jstep(), ni,nj);
   }
 }
 
 //: Apply Sobel 1x3 gradient filter to 2D image
 template<class srcT, class destT>
 void vil_sobel_1x3(const vil_image_view<srcT>& src,
-                    vil_image_view<destT>& grad_i,
-                    vil_image_view<destT>& grad_j)
+                   vil_image_view<destT>& grad_i,
+                   vil_image_view<destT>& grad_j)
 {
   unsigned np = src.nplanes();
   unsigned ni = src.ni();
@@ -44,11 +44,11 @@ void vil_sobel_1x3(const vil_image_view<srcT>& src,
   for (unsigned p=0;p<np;++p)
   {
     vil_sobel_1x3_1plane(src.top_left_ptr()+p*src.planestep(),
-                          src.istep(),src.jstep(),
-                          grad_i.top_left_ptr()+p*grad_i.planestep(),
-                          grad_i.istep(),grad_i.jstep(),
-                          grad_j.top_left_ptr()+p*grad_j.planestep(),
-                          grad_j.istep(),grad_j.jstep(), ni,nj);
+                         src.istep(),src.jstep(),
+                         grad_i.top_left_ptr()+p*grad_i.planestep(),
+                         grad_i.istep(),grad_i.jstep(),
+                         grad_j.top_left_ptr()+p*grad_j.planestep(),
+                         grad_j.istep(),grad_j.jstep(), ni,nj);
   }
 }
 
@@ -56,9 +56,9 @@ void vil_sobel_1x3(const vil_image_view<srcT>& src,
 #undef VIL_SOBEL_1X3_INSTANTIATE
 #define VIL_SOBEL_1X3_INSTANTIATE(srcT, destT) \
 template void vil_sobel_1x3(const vil_image_view< srcT >& src, \
-                                   vil_image_view<destT >& grad_ij); \
+                            vil_image_view<destT >& grad_ij); \
 template void vil_sobel_1x3(const vil_image_view< srcT >& src, \
-                                   vil_image_view<destT >& grad_i, \
-                                   vil_image_view<destT >& grad_j)
+                            vil_image_view<destT >& grad_i, \
+                            vil_image_view<destT >& grad_j)
 
 #endif // vil_sobel_1x3_txx_

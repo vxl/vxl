@@ -10,7 +10,7 @@
 //: Apply threshold such that dest(i,j,p)=true if src(i,j,p)>=t
 template<class srcT>
 void vil_threshold_above(const vil_image_view<srcT>& src,
-                          vil_image_view<bool>& dest,  srcT t)
+                         vil_image_view<bool>& dest,  srcT t)
 {
   unsigned ni = src.ni(),nj = src.nj(),np = src.nplanes();
   dest.set_size(ni,nj,np);
@@ -36,7 +36,7 @@ void vil_threshold_above(const vil_image_view<srcT>& src,
 //: Apply threshold such that dest(i,j,p)=true if src(i,j,p)<=t
 template<class srcT>
 void vil_threshold_below(const vil_image_view<srcT>& src,
-                          vil_image_view<bool>& dest,  srcT t)
+                         vil_image_view<bool>& dest,  srcT t)
 {
   unsigned ni = src.ni(),nj = src.nj(),np = src.nplanes();
   dest.set_size(ni,nj,np);
@@ -62,7 +62,7 @@ void vil_threshold_below(const vil_image_view<srcT>& src,
 //: Apply threshold such that dest(i,j,p)=true if t0<=src(i,j,p)<=t1
 template<class srcT>
 void vil_threshold_inside(const vil_image_view<srcT>& src,
-                           vil_image_view<bool>& dest,  srcT t0, srcT t1)
+                          vil_image_view<bool>& dest,  srcT t0, srcT t1)
 {
   unsigned ni = src.ni(),nj = src.nj(),np = src.nplanes();
   dest.set_size(ni,nj,np);
@@ -88,7 +88,7 @@ void vil_threshold_inside(const vil_image_view<srcT>& src,
 //: Apply threshold such that dest(i,j,p)=true if src(i,j,p)<=t0 or src(i,j,p)>=t1
 template<class srcT>
 void vil_threshold_outside(const vil_image_view<srcT>& src,
-                            vil_image_view<bool>& dest,  srcT t0, srcT t1)
+                           vil_image_view<bool>& dest,  srcT t0, srcT t1)
 {
   unsigned ni = src.ni(),nj = src.nj(),np = src.nplanes();
   dest.set_size(ni,nj,np);
@@ -114,12 +114,12 @@ void vil_threshold_outside(const vil_image_view<srcT>& src,
 #undef VIL_THRESHOLD_INSTANTIATE
 #define VIL_THRESHOLD_INSTANTIATE(srcT) \
 template void vil_threshold_above(const vil_image_view<srcT >& src, \
-                          vil_image_view<bool >& dest,  srcT t); \
+                                  vil_image_view<bool >& dest,  srcT t); \
 template void vil_threshold_below(const vil_image_view<srcT >& src, \
-                          vil_image_view<bool >& dest,  srcT t); \
+                                  vil_image_view<bool >& dest,  srcT t); \
 template void vil_threshold_inside(const vil_image_view<srcT >& src, \
-                          vil_image_view<bool >& dest,  srcT t0, srcT t1); \
+                                   vil_image_view<bool >& dest,  srcT t0, srcT t1); \
 template void vil_threshold_outside(const vil_image_view<srcT >& src, \
-                          vil_image_view<bool >& dest,  srcT t0, srcT t1)
+                                    vil_image_view<bool >& dest,  srcT t0, srcT t1)
 
 #endif // vil_threshold_txx_

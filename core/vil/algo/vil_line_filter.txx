@@ -17,9 +17,9 @@
 //  This version looks for light lines on a dark background only.
 template <class Type>
 void vil_line_filter<Type>::light_lines_3x3(vil_image_view<vxl_byte>& line_dir,
-                                             vil_image_view<float>& line_str,
-                                             vil_image_view<Type>const& image,
-                                             float edge_thresh)
+                                            vil_image_view<float>& line_str,
+                                            vil_image_view<Type>const& image,
+                                            float edge_thresh)
 {
   assert(image.nplanes()==1);
   unsigned ni = image.ni();
@@ -110,9 +110,9 @@ void vil_line_filter<Type>::light_lines_3x3(vil_image_view<vxl_byte>& line_dir,
 //  0 = Undefined, 1 = horizontal, 2 = 45 degrees etc
 template <class Type>
 void vil_line_filter<Type>::dark_lines_3x3(vil_image_view<vxl_byte>& line_dir,
-                                            vil_image_view<float>& line_str,
-                                            vil_image_view<Type>const& image,
-                                            float edge_thresh)
+                                           vil_image_view<float>& line_str,
+                                           vil_image_view<Type>const& image,
+                                           float edge_thresh)
 {
   assert(image.nplanes()==1);
   unsigned ni = image.ni();
@@ -204,9 +204,9 @@ void vil_line_filter<Type>::dark_lines_3x3(vil_image_view<vxl_byte>& line_dir,
 //  This version looks for light lines on a dark background only.
 template <class Type>
 void vil_line_filter<Type>::light_lines_5x5(vil_image_view<vxl_byte>& line_dir,
-                                             vil_image_view<float>& line_str,
-                                             vil_image_view<Type>const& image,
-                                             float edge_thresh)
+                                            vil_image_view<float>& line_str,
+                                            vil_image_view<Type>const& image,
+                                            float edge_thresh)
 {
   assert(image.nplanes()==1);
   unsigned ni = image.ni();
@@ -312,9 +312,9 @@ void vil_line_filter<Type>::light_lines_5x5(vil_image_view<vxl_byte>& line_dir,
 //: Find line like structures in image (dark lines on light backgrounds)
 template <class Type>
 void vil_line_filter<Type>::dark_lines_5x5(vil_image_view<vxl_byte>& line_dir,
-                                            vil_image_view<float>& line_str,
-                                            vil_image_view<Type>const& image,
-                                            float edge_thresh)
+                                           vil_image_view<float>& line_str,
+                                           vil_image_view<Type>const& image,
+                                           float edge_thresh)
 {
   assert(image.nplanes()==1);
   unsigned ni = image.ni();

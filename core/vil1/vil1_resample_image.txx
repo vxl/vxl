@@ -11,8 +11,8 @@
 
 template <class T, class A>
 bool vil1_resample_image(vil1_image const &base, unsigned new_width, unsigned new_height,
-                        T *buf, A* /*dummy*/,
-                        int x0, int y0, int w, int h)
+                         T *buf, A* /*dummy*/,
+                         int x0, int y0, int w, int h)
 {
   assert(new_width > 0 && new_height > 0);
 

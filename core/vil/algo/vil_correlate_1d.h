@@ -153,7 +153,7 @@ class vil_correlate_1d_resource : public vil_image_resource
 #define macro( F , T ) \
       case F : \
         vil_correlate_1d(static_cast<vil_image_view<T >&>(*vs),dest, \
-          kernel_, klo_, khi_, accumT(), start_option_, end_option_); \
+                         kernel_, klo_, khi_, accumT(), start_option_, end_option_); \
         return new vil_image_view<destT>(vil_crop(dest, lboundary, ni, 0, nj));
 
       macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
@@ -217,8 +217,7 @@ inline vil_image_resource_sptr vil_correlate_1d(
                          vil_convolve_boundary_option start_option,
                          vil_convolve_boundary_option end_option)
 {
-  return new vil_correlate_1d_resource<kernelT, accumT, destT>(src_im,
-                              kernel, k_lo, k_hi, start_option, end_option);
+  return new vil_correlate_1d_resource<kernelT, accumT, destT>(src_im, kernel, k_lo, k_hi, start_option, end_option);
 }
 
 #endif // vil_correlate_1d_h_

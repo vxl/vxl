@@ -36,8 +36,8 @@ template<class T>
 void vil_copy_reformat(const vil_image_view<T> &src, vil_image_view<T> &dest)
 {
   assert (src.nplanes() == dest.nplanes() &&
-    src.nj() == dest.nj() &&
-    src.ni() == dest.ni());
+          src.nj() == dest.nj() &&
+          src.ni() == dest.ni());
   for (unsigned p = 0; p < dest.nplanes(); ++p)
     for (unsigned j = 0; j < dest.nj(); ++j)
       for (unsigned i = 0; i < dest.ni(); ++i)
@@ -50,7 +50,7 @@ void vil_copy_reformat(const vil_image_view<T> &src, vil_image_view<T> &dest)
 //  O(window.size).
 template<class T>
 void vil_copy_to_window(const vil_image_view<T> &src, vil_image_view<T> &dest,
-                         unsigned i0, unsigned j0)
+                        unsigned i0, unsigned j0)
 {
   // check window is within dest's bounds
   assert(i0+src.ni() <= dest.ni() && j0+src.nj() <= dest.nj());
@@ -67,7 +67,7 @@ void vil_copy_to_window(const vil_image_view<T> &src, vil_image_view<T> &dest,
 #define VIL_COPY_INSTANTIATE(T) \
 template void vil_copy_deep(const vil_image_view<T > &src, vil_image_view<T > &dest); \
 template void vil_copy_to_window(const vil_image_view<T > &src, vil_image_view<T > &dest, \
-                                  unsigned i0, unsigned j0); \
+                                 unsigned i0, unsigned j0); \
 template void vil_copy_reformat(const vil_image_view<T > &src, vil_image_view<T > &dest); \
 template vil_image_view<T > vil_copy_deep(const vil_image_view<T > &rhs)
 

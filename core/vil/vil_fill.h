@@ -79,8 +79,8 @@ void vil_fill_col(vil_image_view<T>& view, unsigned i, T value)
 template<class srcT>
 inline
 void vil_fill_mask(vil_image_view<srcT>& image,
-                    const vil_image_view<bool>& mask,
-                    srcT value, bool b=true)
+                   const vil_image_view<bool>& mask,
+                   srcT value, bool b=true)
 {
   unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
   assert(ni==mask.ni() && nj==mask.nj());

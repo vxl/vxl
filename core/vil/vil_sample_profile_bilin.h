@@ -2,9 +2,9 @@
 #ifndef vil_sample_profile_bilin_h_
 #define vil_sample_profile_bilin_h_
 //:
-//  \file
-//  \brief Bilinear profile sampling functions for 2D images
-//  \author Tim Cootes
+// \file
+// \brief Bilinear profile sampling functions for 2D images
+// \author Tim Cootes
 //
 // The vil bicub source files were derived from the corresponding
 // vil bilin files, thus the vil bilin/bicub source files are very
@@ -22,8 +22,8 @@
 // \relates vil_image_view
 template <class imType, class vecType>
 void vil_sample_profile_bilin(vecType* v,
-                               const vil_image_view<imType>& image,
-                               double x0, double y0, double dx, double dy,
-                               int n);
+                              const vil_image_view<imType>& image,
+                              double x0, double y0, double dx, double dy,
+                              int n);
 
 #endif // vil_sample_profile_bilin_h_

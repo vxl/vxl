@@ -1,5 +1,5 @@
 // This is core/vil1/tests/test_save_load_image.cxx
-
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \author Peter.Vanroose@esat.kuleuven.ac.be
@@ -34,8 +34,6 @@
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_save.h>
 #include <vil1/vil1_memory_image_of.h>
-
-#include <testlib/testlib_test.h>
 
 #ifndef LEAVE_IMAGES_BEHIND
 #define LEAVE_IMAGES_BEHIND 0
@@ -136,7 +134,7 @@ bool test_image_equal(char const* type_name,
         vcl_cout << "\n byte " << i <<  " differs: " << (int)image_buf[i] << " --> "
                  << (int) image_buf2[i] << vcl_flush;
 #else
-      ++bad; vcl_cout << "." << vcl_flush;
+      ++bad; vcl_cout << '.' << vcl_flush;
 #endif
     }
   }
@@ -156,9 +154,9 @@ bool test_image_equal(char const* type_name,
 // vil1_load_raw and vil1_save_raw to avoid that, so that testing can be performed.
 // The non_raw save and load functions are also called, but the images aren't compared.
 
-void vil1_test_image_type_raw(char const* type_name, // type for image to read and write
-                         vil1_image const & image, // test image to save and restore
-                         bool exact = true) // require read back image identical
+void vil1_test_image_type_raw(char const* type_name, //!< type for image to read and write
+                              vil1_image const & image, //!< test image to save and restore
+                              bool exact = true) //!< require read back image identical
 {
   int n = image.bits_per_component() * image.components();
   vcl_cout << "=== Start testing " << type_name << " (" << n << " bpp) ===\n" << vcl_flush;
@@ -286,8 +284,8 @@ static bool create_grey_gif(const char* filename)
 }
 
 void vil1_test_image_type(char const* type_name, // type for image to read and write
-                         vil1_image const & image, // test image to save and restore
-                         bool exact = true) // require read back image identical
+                          vil1_image const & image, // test image to save and restore
+                          bool exact = true) // require read back image identical
 {
   int n = image.bits_per_component() * image.components();
   vcl_cout << "=== Start testing " << type_name << " (" << n << " bpp) ===\n" << vcl_flush;

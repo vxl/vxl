@@ -21,8 +21,8 @@
 // \relates vil_image_view
 template <class sType, class dType>
 void vil_resample_bicub(const vil_image_view<sType>& src_image,
-                         vil_image_view<dType>& dest_image,
-                         double x0, double y0, double dx1, double dy1,
-                         double dx2, double dy2, int n1, int n2);
+                        vil_image_view<dType>& dest_image,
+                        double x0, double y0, double dx1, double dy1,
+                        double dx2, double dy2, int n1, int n2);
 
 #endif // vil_resample_bicub_h_

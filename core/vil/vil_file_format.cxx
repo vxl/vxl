@@ -2,7 +2,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
+//:
+// \file
 #include "vil_file_format.h"
 
 vil_file_format::~vil_file_format()
@@ -75,7 +76,7 @@ vil_file_format::~vil_file_format()
 // Clears list on deletion.
 struct vil_file_format_storage
 {
-  vil_file_format** l;  
+  vil_file_format** l;
   vil_file_format_storage(): l(new vil_file_format*[256])
   {
     unsigned c=0;

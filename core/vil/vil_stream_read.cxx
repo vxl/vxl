@@ -93,7 +93,7 @@ float vil_stream_read_big_endian_float(vil_stream* is)
 // The following function should be moved to relevant places in vil soon
 // Reads in n shorts, assumed to be two bytes, into data[i]
 void vil_stream_read_big_endian_int_16(vil_stream* is,
-                                        vxl_uint_16* data, unsigned n)
+                                       vxl_uint_16* data, unsigned n)
 {
   assert(sizeof(short)==2);
   is->read((char*)data,n*2);

@@ -20,8 +20,6 @@ vil1_crop_image_impl::~vil1_crop_image_impl()
 {
 }
 
-/* START_MANCHESTER_BINARY_IO_CODE */
-
 //: Return the name of the class;
 vcl_string vil1_crop_image_impl::is_a() const
 {
@@ -34,5 +32,3 @@ bool vil1_crop_image_impl::is_class(vcl_string const& s) const
 {
   return s==vil1_crop_image_impl::is_a() || vil1_image_impl::is_class(s);
 }
-
-/* END_MANCHESTER_BINARY_IO_CODE */

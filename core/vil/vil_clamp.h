@@ -18,8 +18,8 @@ inline void vil_clamp(vil_image_view<T >&src, vil_image_view<T >&dest, T lo, T h
 {
   assert (hi >= lo);
   assert (src.nplanes() == dest.nplanes() &&
-    src.nj() == dest.nj() &&
-    src.ni() == dest.ni());
+          src.nj() == dest.nj() &&
+          src.ni() == dest.ni());
   for (unsigned p = 0; p < src.nplanes(); ++p)
     for (unsigned j = 0; j < src.nj(); ++j)
       for (unsigned i = 0; i < src.ni(); ++i)
@@ -51,10 +51,10 @@ class vil_clamp_image_resource : public vil_image_resource
 
 
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                  unsigned j0, unsigned nj) const;
+                                                 unsigned j0, unsigned nj) const;
 
   virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
-                                             unsigned j0, unsigned nj) const {
+                                            unsigned j0, unsigned nj) const {
     return get_copy_view(i0, ni, j0, nj); }
 
 

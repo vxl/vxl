@@ -11,11 +11,11 @@ croak
 
 template <class I1, class I2, class AC, class O>
 void vil1_convolve_1d_y(vil1_convolve_signal_1d<I1 const> const &kernel,
-                       vil1_convolve_signal_2d<I2 const> const &input,
-                       AC *,
-                       vil1_convolve_signal_2d<O> const &output,
-                       vil1_convolve_boundary_option b,
-                       vil1_convolve_boundary_option e)
+                        vil1_convolve_signal_2d<I2 const> const &input,
+                        AC *,
+                        vil1_convolve_signal_2d<O> const &output,
+                        vil1_convolve_boundary_option b,
+                        vil1_convolve_boundary_option e)
 {
   // compute ranges of i, x, y here.
   int i0 = kernel.begin_-kernel.origin_;

@@ -54,9 +54,9 @@ inline vil_image_view<vil_rgb<T> > vil_view_as_rgb(const vil_image_view<T>& v)
     return vil_image_view<vil_rgb<T> >();
 
   return vil_image_view<vil_rgb<T> >(v.memory_chunk(),
-                                      reinterpret_cast<vil_rgb<T> const*>( v.top_left_ptr()),
-                                      v.ni(),v.nj(),1,
-                                      v.istep()/3,v.jstep()/3,1);
+                                     reinterpret_cast<vil_rgb<T> const*>( v.top_left_ptr()),
+                                     v.ni(),v.nj(),1,
+                                     v.istep()/3,v.jstep()/3,1);
 }
 
 //: Return an RGBA component view of a 4-plane image.
@@ -70,9 +70,9 @@ inline vil_image_view<vil_rgba<T> > vil_view_as_rgba(const vil_image_view<T>& v)
     return vil_image_view<vil_rgba<T> >();
 
   return vil_image_view<vil_rgba<T> >(v.memory_chunk(),
-                                       static_cast<vil_rgba<T> const*>( v.top_left_ptr()),
-                                       v.ni(),v.nj(),1,
-                                       v.istep()/3,v.jstep()/3,1);
+                                      static_cast<vil_rgba<T> const*>( v.top_left_ptr()),
+                                      v.ni(),v.nj(),1,
+                                      v.istep()/3,v.jstep()/3,1);
 }
 
 //: Return an complex component view of a 2N-plane image.

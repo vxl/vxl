@@ -27,7 +27,7 @@
 
 //: Make a new image of given format.
 vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, unsigned nplanes,
-                                                 vil_pixel_format format)
+                                               vil_pixel_format format)
 {
   return new vil_memory_image(ni, nj, nplanes, format);
 }
@@ -36,15 +36,15 @@ vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, unsigne
 vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, vil_image_resource_sptr const& prototype)
 {
   return vil_new_image_resource(ni, nj, prototype->nplanes(),
-                                 prototype->pixel_format());
+                                prototype->pixel_format());
 }
 
 vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
-                                                 unsigned ni,
-                                                 unsigned nj,
-                                                 unsigned nplanes,
-                                                 vil_pixel_format format,
-                                                 char const* file_format)
+                                               unsigned ni,
+                                               unsigned nj,
+                                               unsigned nplanes,
+                                               vil_pixel_format format,
+                                               char const* file_format)
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
@@ -67,27 +67,27 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
 
 //: Make a new vil_image_impl, writing to stream "os", size ni x nj, copying pixel format etc from "prototype".
 vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
-                                                 unsigned ni, unsigned nj,
-                                                 vil_image_resource_sptr const& prototype,
-                                                 char const* file_format)
+                                               unsigned ni, unsigned nj,
+                                               vil_image_resource_sptr const& prototype,
+                                               char const* file_format)
 {
   return vil_new_image_resource(os,
-                                 prototype->nplanes(),
-                                 ni, nj,
-                                 prototype->pixel_format(),
-                                 file_format ? file_format : prototype->file_format());
+                                prototype->nplanes(),
+                                ni, nj,
+                                prototype->pixel_format(),
+                                file_format ? file_format : prototype->file_format());
 }
 
 //: Make a new vil_image_impl, writing to file "filename", size "w" x "h", copying pixel format etc from "prototype".
 vil_image_resource_sptr vil_new_image_resource(char const* filename,
-                                                 unsigned ni, unsigned nj,
-                                                 vil_image_resource_sptr const& prototype,
-                                                 char const* file_format)
+                                               unsigned ni, unsigned nj,
+                                               vil_image_resource_sptr const& prototype,
+                                               char const* file_format)
 {
   vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
   return vil_new_image_resource(os,
-                                 ni, nj,
-                                 prototype->nplanes(),
-                                 prototype->pixel_format(),
-                                 file_format ? file_format : prototype->file_format());
+                                ni, nj,
+                                prototype->nplanes(),
+                                prototype->pixel_format(),
+                                file_format ? file_format : prototype->file_format());
 }

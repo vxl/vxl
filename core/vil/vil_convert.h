@@ -300,7 +300,7 @@ class vil_convert_rgb_to_grey_pixel
 // http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
 template <class rgbP, class outP>
 inline void vil_convert_rgb_to_grey(const vil_image_view<rgbP >&src, vil_image_view<outP >&dest,
-                                     double rw=0.2125, double gw=0.7154, double bw = 0.0721)
+                                    double rw=0.2125, double gw=0.7154, double bw = 0.0721)
 {
 #if VCL_VC60 || !VCL_HAS_TYPENAME
   vil_convert_rgb_to_grey_pixel<rgbP::value_type, outP> func(rw, gw, bw);
@@ -320,9 +320,9 @@ inline void vil_convert_rgb_to_grey(const vil_image_view<rgbP >&src, vil_image_v
 // http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
 template <class inP, class outP>
 inline void vil_convert_planes_to_grey(const vil_image_view<inP>&src,
-                                        vil_image_view<outP>&dest,
-                                        double rw=0.2125, double gw=0.7154,
-                                        double bw = 0.0721)
+                                       vil_image_view<outP>&dest,
+                                       double rw=0.2125, double gw=0.7154,
+                                       double bw = 0.0721)
 {
   assert(src.nplanes() >= 3);
   assert(vil_pixel_format_num_components(src.pixel_format()) == 1);
@@ -338,7 +338,7 @@ inline void vil_convert_planes_to_grey(const vil_image_view<inP>&src,
 // \relates vil_image_view
 template <class T>
 inline void vil_convert_stretch_range(const vil_image_view<T>& src,
-                                       vil_image_view<vxl_byte>& dest)
+                                      vil_image_view<vxl_byte>& dest)
 {
   T min_b,max_b;
   vil_math_value_range(src,min_b,max_b);

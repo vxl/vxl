@@ -14,7 +14,7 @@ class vil1_image;
 
 #define vil1_decl(T) \
 bool vil1_scale_intensities_image(vil1_image const &base, double scale, double shift, \
-                                 T *buf, int x0, int y0, int w, int h)
+                                  T *buf, int x0, int y0, int w, int h)
 
 template <class T> vil1_decl(T);
 

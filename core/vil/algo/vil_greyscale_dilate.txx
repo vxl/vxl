@@ -14,8 +14,8 @@
 // structuring element when it is centred on src_image(i0,j0)
 template <class T>
 void vil_greyscale_dilate(const vil_image_view<T>& src_image,
-                           vil_image_view<T>& dest_image,
-                           const vil_structuring_element& element)
+                          vil_image_view<T>& dest_image,
+                          const vil_structuring_element& element)
 {
   assert(src_image.nplanes()==1);
   unsigned ni = src_image.ni();
@@ -67,7 +67,7 @@ void vil_greyscale_dilate(const vil_image_view<T>& src_image,
 #undef VIL_GREYSCALE_DILATE_INSTANTIATE
 #define VIL_GREYSCALE_DILATE_INSTANTIATE(T) \
 template void vil_greyscale_dilate(const vil_image_view< T >& src_image, \
-                                    vil_image_view< T >& dest_image, \
-                                    const vil_structuring_element& element)
+                                   vil_image_view< T >& dest_image, \
+                                   const vil_structuring_element& element)
 
 #endif // vil_greyscale_dilate_txx_
