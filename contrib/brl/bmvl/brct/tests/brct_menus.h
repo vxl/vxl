@@ -7,7 +7,7 @@
 //  This is essentially a namespace for static methods;
 //  there is no public constructor
 // \author
-//  Kongbin Kang 
+//  Kongbin Kang
 //
 //-----------------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ class brct_menus
 {
  public:
   static void init_kalman_callback();
-	static void kalman_go_callback();
+  static void kalman_go_callback();
   static void quit_callback();
   static vgui_menu get_menu();
  private:

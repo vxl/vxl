@@ -75,18 +75,18 @@ void brct_windows_frame::init()
 
   vgui_viewer3D_tableau_sptr v3d = vgui_viewer3D_tableau_new(tab_3d_);
   grid_->add_at(v3d, col+1, row);
-  
+
   // initialize the easy 2d grid
   vgui_easy2D_tableau_new tab2d;
-  
+
   tab_2d_ = tab2d;
   tab_2d_->set_foreground(0, 0, 1);
 
   vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(tab_2d_);
   grid_->add_at(v2d, col, row);
 
-	vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);
- 	this->add_child(shell);
+  vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);
+  this->add_child(shell);
 
   // set a kalman filter
   kalman_ = new kalman_filter();
@@ -112,7 +112,7 @@ void brct_windows_frame::quit()
 
 void brct_windows_frame::clean_up()
 {
-  if(kalman_)
+  if (kalman_)
     delete kalman_;
 }
 
@@ -122,7 +122,7 @@ void brct_windows_frame::add_curve2d(vcl_vector<vgl_point_2d<double> > &pts)
   assert(size > 1);
   curves_2d_.resize(size-1);
   instance_->tab_2d_->set_foreground(1, 1, 1);
-  for(int i=0; i<size-1; i++){
+  for (int i=0; i<size-1; i++) {
     vgl_point_2d<double>& s = pts[i];
     vgl_point_2d<double>& e = pts[i+1];
     vgui_soview2D_lineseg* l = instance_->tab_2d_->add_line(s.x(), s.y(), e.x(), e.y());
@@ -161,9 +161,9 @@ void brct_windows_frame::remove_curve3d()
 
 void brct_windows_frame::init_kalman()
 {
-  if(kalman_ == 0)
+  if (kalman_ == 0)
     vcl_cout<<"brct_windows_frame::kalman_ not created yet\n";
-  else{
+  else {
     kalman_->read_data("data/curves.txt");
     kalman_->init();
   }
