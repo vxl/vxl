@@ -1,15 +1,16 @@
 #ifndef vcl_iso_list_h_
 #define vcl_iso_list_h_
 
+// This is a generated file. DO NOT EDIT! Not even a little bit.
+
 #include <list>
 
-// list
-#ifndef vcl_list
-#define vcl_list std::list
+#ifdef vcl_generic_list_STD
+  ** error **
+#else
+# define vcl_generic_list_STD std
 #endif
-// swap
-#ifndef vcl_swap
-#define vcl_swap std::swap
-#endif
+
+#include "../generic/vcl_list.h"
 
 #endif // vcl_iso_list_h_
