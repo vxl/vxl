@@ -127,8 +127,8 @@ int main(int argc, char **argv)
             vil_convert_cast(vxl_byte(),
               vil_load(argv[1]))));
 
-  for (unsigned j = 0; j < img.height(); ++j)
-    for (unsigned i = 0; i < img.width(); ++i)
+  for (unsigned j = 0; j < img.nj(); ++j)
+    for (unsigned i = 0; i < img.ni(); ++i)
       if (img(i,j).r < 200 && img(i,j).g < 200 && img(i,j).b < 200)
         img(i,j) = vil_rgb<vxl_byte>(0,0,0);
 
