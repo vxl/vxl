@@ -39,10 +39,6 @@ MANPAGE_SOURCES += vnl_fft_base.txx
 MANPAGE_SOURCES += vnl_fft_1d.txx
 MANPAGE_SOURCES += vnl_fft_2d.txx
 MANPAGE_SOURCES += vnl_fft_prime_factors.txx
-## deprecated:
-SOURCES += vnl_fftxd_prime_factors.cxx
-MANPAGE_SOURCES += vnl_fft1d.txx
-MANPAGE_SOURCES += vnl_fft2d.txx
 
 # stuff
 MANPAGE_SOURCES += vnl_convolve.txx

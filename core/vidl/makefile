@@ -10,6 +10,7 @@ VERSION := 1.0
 
 USES += vxl
 
+MANPAGE_SOURCES += vidl_codec.h
 SOURCES += vidl_clip.cxx
 SOURCES += vidl_movie.cxx
 SOURCES += vidl_frame.cxx
@@ -17,6 +18,14 @@ SOURCES += vidl_frame_as_image.cxx
 SOURCES += vidl_image_list_codec.cxx
 SOURCES += vidl_io.cxx
 SOURCES += vidl_test.cxx
+
+MANPAGE_SOURCES += vidl_avicodec_sptr.h
+MANPAGE_SOURCES += vidl_clip_sptr.h
+MANPAGE_SOURCES += vidl_codec_sptr.h
+MANPAGE_SOURCES += vidl_frame_as_image_sptr.h
+MANPAGE_SOURCES += vidl_frame_sptr.h
+MANPAGE_SOURCES += vidl_image_list_codec_sptr.h
+MANPAGE_SOURCES += vidl_movie_sptr.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk

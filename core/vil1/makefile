@@ -7,6 +7,8 @@ USES += vxl
 LIBRARY := vil
 VERSION := 1.0
 
+MANPAGE_SOURCES += vil_fwd.h
+
 # basic things
 SOURCES += vil_pixel.cxx
 SOURCES += vil_image_impl.cxx
@@ -49,6 +51,7 @@ SOURCES += file_formats/vil_gen.cxx
 SOURCES += file_formats/vil_pnm.cxx
 SOURCES += file_formats/vil_viff.cxx
 SOURCES += file_formats/vil_viff_support.c
+MANPAGE_SOURCES += file_formats/vil_viffheader.h
 SOURCES += file_formats/vil_iris.cxx
 SOURCES += file_formats/vil_mit.cxx
 SOURCES += file_formats/vil_bmp_file_header.cxx
@@ -101,11 +104,15 @@ MANPAGE_SOURCES += vil_ssd.txx
 
 # Stuff
 SOURCES += vil_pyramid.cxx
+MANPAGE_SOURCES += vil_property.h
+MANPAGE_SOURCES += vil_byte.h
 MANPAGE_SOURCES += vil_rgb.txx
 MANPAGE_SOURCES += vil_rgba.txx
 SOURCES += vil_rgb_byte.cxx
 SOURCES += vil_colour_space.cxx
 SOURCES += vil_memory_image_window.cxx
+MANPAGE_SOURCES += vil_jpeglib.h
+MANPAGE_SOURCES += vil_ip_traits.h
 
 ifeq ($(OS),Linux2)
   optimize := -O3 -ffast-math -fstrict-aliasing -march=pentiumpro

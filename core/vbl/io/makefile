@@ -15,6 +15,11 @@ MANPAGE_SOURCES += vbl_io_bounding_box.txx
 MANPAGE_SOURCES += vbl_io_smart_ptr.txx
 MANPAGE_SOURCES += vbl_io_sparse_array.txx
 MANPAGE_SOURCES += vbl_io_sparse_array_base.txx
+MANPAGE_SOURCES += vbl_io_quadruple.txx
+MANPAGE_SOURCES += vbl_io_sparse_array_1d.h
+MANPAGE_SOURCES += vbl_io_sparse_array_2d.h
+MANPAGE_SOURCES += vbl_io_sparse_array_3d.h
+MANPAGE_SOURCES += vbl_io_triple.txx
 
 ifndef NOTEST
  SUBDIRS += tests

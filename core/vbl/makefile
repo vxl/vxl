@@ -7,6 +7,8 @@ USES += vxl
 LIBRARY := vbl
 VERSION := 1.0
 
+MANPAGE_SOURCES += vbl_fwd.h
+
 SOURCES += vbl_bool_ostream.cxx
 SOURCES += vbl_ref_count.cxx
 SOURCES += vbl_sort.cxx
@@ -23,9 +25,14 @@ SOURCES += vbl_bit_array_3d.cxx
 #MANPAGE_SOURCES += vbl_binary.txx # deprecated
 MANPAGE_SOURCES += vbl_bounding_box.txx
 #MANPAGE_SOURCES += vbl_basic_relation.txx # FIXME - vcl_hash_map does not exist
+MANPAGE_SOURCES += vbl_basic_optional.h
+MANPAGE_SOURCES += vbl_basic_relation_type.h
+MANPAGE_SOURCES += vbl_basic_relation_where.h
+MANPAGE_SOURCES += vbl_basic_tuple.h
 #MANPAGE_SOURCES += vbl_br_default.txx
 #MANPAGE_SOURCES += vbl_br_impl.txx
 #MANPAGE_SOURCES += vbl_hash_map.txx
+
 MANPAGE_SOURCES += vbl_protection_traits.txx
 MANPAGE_SOURCES += vbl_smart_ptr.txx
 MANPAGE_SOURCES += vbl_sort.txx
@@ -36,6 +43,10 @@ MANPAGE_SOURCES += vbl_sparse_array_1d.txx
 MANPAGE_SOURCES += vbl_sparse_array_2d.txx
 MANPAGE_SOURCES += vbl_sparse_array_3d.txx
 MANPAGE_SOURCES += vbl_big_sparse_array_3d.txx
+
+MANPAGE_SOURCES += vbl_shared_pointer.txx
+MANPAGE_SOURCES += vbl_triple.txx
+MANPAGE_SOURCES += vbl_quadruple.txx
 
 # debugging
 

@@ -12,10 +12,13 @@ SOURCES += vnl_io_real_polynomial.cxx
 SOURCES += vnl_io_real_npolynomial.cxx
 SOURCES += vnl_io_rational.cxx
 
-MANPAGE_SOURCES += vnl_io_diag_matrix.txx
 MANPAGE_SOURCES += vnl_io_matrix.txx
+MANPAGE_SOURCES += vnl_io_diag_matrix.txx
 MANPAGE_SOURCES += vnl_io_sparse_matrix.txx
+MANPAGE_SOURCES += vnl_io_sym_matrix.txx
+MANPAGE_SOURCES += vnl_io_matrix_fixed.h
 MANPAGE_SOURCES += vnl_io_vector.txx
+MANPAGE_SOURCES += vnl_io_vector_fixed.h
 
 ifndef NOTEST
 SUBDIRS += tests

@@ -38,6 +38,7 @@ TESTS += test_rational.cxx
 TESTS += test_convolve.cxx
 TESTS += test_real_polynomial.cxx
 TESTS += test_sym_matrix.cxx
+TESTS += test_amoeba.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk

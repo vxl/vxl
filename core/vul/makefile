@@ -7,6 +7,11 @@ USES += vxl
 LIBRARY := vul
 VERSION := 1.0
 
+MANPAGE_SOURCES += vul_fwd.h
+
+MANPAGE_SOURCES += vul_canonical_path.h
+MANPAGE_SOURCES += vul_deprecated.h
+MANPAGE_SOURCES += vul_whereami.h
 SOURCES += vul_arg.cxx  # if this is in a .txx file, gcc 2.95 will not generate any code.
 SOURCES += vul_awk.cxx
 SOURCES += vul_file.cxx

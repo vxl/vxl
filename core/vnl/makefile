@@ -10,11 +10,14 @@ LIBRARY := vnl
 VERSION := 1.0
 DEFINES += -DBUILDING_VNL_DLL
 
+MANPAGE_SOURCES += vnl_fwd.h
+
 # template sources
 MANPAGE_SOURCES += vnl_c_vector.txx
 MANPAGE_SOURCES += vnl_vector.txx
 MANPAGE_SOURCES += vnl_vector_ref.txx
 MANPAGE_SOURCES += vnl_vector_fixed.txx
+MANPAGE_SOURCES += vnl_vector_fixed_ref.txx
 MANPAGE_SOURCES += vnl_file_vector.txx
 MANPAGE_SOURCES += vnl_matrix.txx
 MANPAGE_SOURCES += vnl_matrix_fixed.txx
@@ -23,6 +26,7 @@ MANPAGE_SOURCES += vnl_diag_matrix.txx
 MANPAGE_SOURCES += vnl_sparse_matrix.txx
 MANPAGE_SOURCES += vnl_matrix_exp.txx
 MANPAGE_SOURCES += vnl_file_matrix.txx
+MANPAGE_SOURCES += vnl_sym_matrix.txx
 
 MANPAGE_SOURCES += vnl_fortran_copy.txx
 MANPAGE_SOURCES += vnl_det.txx
@@ -64,6 +68,25 @@ SOURCES += vnl_rational.cxx
 #MANPAGE_SOURCES += vnl_finite_ring.txx
 #SOURCES += vnl_padic_field.cxx
 #SOURCES += vnl_bignum.cxx
+
+#misc header files
+MANPAGE_SOURCES += vnl_T_n.h
+MANPAGE_SOURCES += vnl_binary.h
+MANPAGE_SOURCES += vnl_complexify.h
+MANPAGE_SOURCES += vnl_config.h
+MANPAGE_SOURCES += vnl_double_2x2.h
+MANPAGE_SOURCES += vnl_double_3x3.h
+MANPAGE_SOURCES += vnl_double_3x4.h
+MANPAGE_SOURCES += vnl_double_4x3.h
+MANPAGE_SOURCES += vnl_double_4x4.h
+MANPAGE_SOURCES += vnl_identity.h
+MANPAGE_SOURCES += vnl_imag.h
+MANPAGE_SOURCES += vnl_matlab_file_write.h
+MANPAGE_SOURCES += vnl_matrix_ref.h
+MANPAGE_SOURCES += vnl_operators.h
+MANPAGE_SOURCES += vnl_real.h
+MANPAGE_SOURCES += vnl_tag.h
+MANPAGE_SOURCES += vnl_vector_dereference.h
 
 # ops
 SOURCES += vnl_fastops.cxx
