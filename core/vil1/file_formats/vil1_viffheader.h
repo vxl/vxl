@@ -29,7 +29,7 @@
 #ifndef vil_viffheader_h_
 #define vil_viffheader_h_
 
-#if 0 /* this is a C header file. you cannot use // comments in it */
+/* this is a C header file. you cannot use // comments in it
 //:
 // \file
 // \brief  Khoros Visualization/Image File Format. 
@@ -95,7 +95,7 @@
 //
 // ******************************************************************
 // \endverbatim
-#endif
+*/
 
 
 /*
