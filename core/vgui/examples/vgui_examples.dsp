@@ -100,7 +100,10 @@ SOURCE=.\basic_manager.cxx
 SOURCE=.\basic_menus.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\basic01b_display_vil_image.cxx
+SOURCE=.\basic01c_display_vil_image.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\basic01d_display_vil1_image.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
