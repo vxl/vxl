@@ -35,7 +35,7 @@
 
 #include <vcl_cstddef.h>   // For ptrdiff_t
 #include <vcl_iosfwd.h>
-#include <vcl_rel_ops.h>   // For operator!= from operator==
+//dont use this. it is wrong. #include <vcl_rel_ops.h>   // For operator!= from operator==
 
 #include "vcl_stlconf.h"
 #include "vcl_straits.h"
@@ -523,16 +523,24 @@ operator== (const vcl_basic_string <charT, traits>& lhs, const charT* rhs)
 
 template <class charT, class traits>
 inline bool
+operator!= (const vcl_basic_string <charT, traits>& lhs,
+            const vcl_basic_string <charT, traits>& rhs)
+{
+  return !(lhs == rhs);
+}
+
+template <class charT, class traits>
+inline bool
 operator!= (const charT* lhs, const vcl_basic_string <charT, traits>& rhs)
 {
-  return (rhs.compare (lhs) != 0);
+  return !(lhs == rhs);
 }
 
 template <class charT, class traits>
 inline bool
 operator!= (const vcl_basic_string <charT, traits>& lhs, const charT* rhs)
 {
-  return (lhs.compare (rhs) != 0);
+  return !(lhs == rhs);
 }
 
 template <class charT, class traits>
@@ -606,13 +614,13 @@ operator>= (const vcl_basic_string <charT, traits>& lhs, const charT* rhs)
 // #ifndef __IGNORE_STRING_COMPARISOM_OPERATORS
 // #if !defined(__SGI_STL_FUNCTION_H)
 #if !defined(FUNCTION_H)
-template <class charT, class traits>
-inline bool
-operator!= (const vcl_basic_string <charT, traits>& lhs,
-            const vcl_basic_string <charT, traits>& rhs)
-{
-  return (lhs.compare (rhs) != 0);
-}
+// template <class charT, class traits>
+// inline bool
+// operator!= (const vcl_basic_string <charT, traits>& lhs,
+//             const vcl_basic_string <charT, traits>& rhs)
+// {
+//   return (lhs.compare (rhs) != 0);
+// }
 
 template <class charT, class traits>
 inline bool
