@@ -12,7 +12,7 @@
 //
 // \verbatim
 //  Modifications
-//   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+//   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_1d interface
 //   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 // \endverbatim
 
