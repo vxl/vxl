@@ -102,7 +102,13 @@ LIB32=link.exe -lib
 SOURCE=.\vtol_extract_topology.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vtol_extract_topology_internals.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_extract_topology_edgel_chain-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vtol_extract_topology_region_type-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_extract_topology+vxl_uint_16-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -111,7 +117,7 @@ SOURCE=.\vtol_extract_topology_internals.cxx
 SOURCE=.\vtol_extract_topology.h
 # End Source File
 # Begin Source File
-SOURCE=.\vtol_extract_topology_internals.h
+SOURCE=.\vtol_extract_topology.txx
 # End Source File
 # End Group
 # End Target
