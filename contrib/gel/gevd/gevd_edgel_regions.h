@@ -32,7 +32,7 @@
 // \author Author J. L. Mundy - January 14, 1999
 // \verbatim
 // Modifications
-//  25 April 2000 - collinsr@cs.rpi.edu - switched _region_edges
+//  25 April 2000 - collinsr@cs.rpi.edu - switched region_edges_
 //                  to key on the Id() rather than the pointer value
 //                  to avoid different hash tables (and different
 //                  segmentations) for identical inputs (leaving the
@@ -43,12 +43,11 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_list.h>
+#include <vcl_vector.h>
 #include <vcl_map.h>
 
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
-#include <vsol/vsol_spatial_object_2d.h>
 #include <gevd/gevd_region_edge.h>
 #include <gevd/gevd_bufferxy.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
@@ -71,21 +70,21 @@ public:
                              vcl_vector<vtol_edge_2d_sptr>& sgrp,
                              vcl_vector<vdgl_intensity_face_sptr>& faces);
   //Acessors
-  void SetVerbose() {_verbose = true;}
-  void ClearVerbose() {_verbose = false;}
-  void SetDebug() {_debug = true;}
-  void ClearDebug() {_debug = false;}
+  void SetVerbose() {verbose_ = true;}
+  void ClearVerbose() {verbose_ = false;}
+  void SetDebug() {debug_ = true;}
+  void ClearDebug() {debug_ = false;}
   void set_magnification(float magnification){magnification_=magnification;}
   unsigned int BaseLabel(unsigned int label);
-  unsigned int GetMaxRegionLabel(){return _max_region_label;}
-  void SetMaxRegionLabel(unsigned int label){_max_region_label = label;}
+  unsigned int GetMaxRegionLabel(){return max_region_label_;}
+  void SetMaxRegionLabel(unsigned int label){max_region_label_ = label;}
   void set_magnification(int m) { magnification_ = m; }
-  unsigned int** GetRegionArray(){return _region_label_array;}
-  int GetXSize(){return _xend - _xo + 1;}
-  int GetYSize(){return _yend - _yo + 1;}
+  unsigned int** GetRegionArray(){return region_label_array_;}
+  int GetXSize(){return xend_ - xo_ + 1;}
+  int GetYSize(){return yend_ - yo_ + 1;}
   vil_image* GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& edgels);
 #if 0
-  topo_debug_data_ref get_topo_debug_data(){return _debug_data;};
+  topo_debug_data_ref get_topo_debug_data(){return debug_data_;};
 #endif
   //Utitities (especially for testing)
   bool InsertRegionEquivalence(unsigned int label_b, unsigned int label_a);
@@ -148,41 +147,41 @@ protected:
   bool compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
                              vcl_vector<vdgl_intensity_face_sptr>& faces);
   //members
-  bool _verbose;
-  bool _debug;
-  bool _image_source;
-  bool _buf_source;
+  bool verbose_;
+  bool debug_;
+  bool image_source_;
+  bool buf_source_;
   float magnification_;
-  vil_image* _image;
-  gevd_bufferxy* _buf;
-  gevd_region_edge*** _edge_boundary_array;
-  unsigned int** _region_label_array;
-  unsigned int _min_region_label;
-  unsigned int _max_region_label;
-  float _Xob;//buffer X origin in original image
-  float _Yob;//buffer Y origin in original image
-  unsigned int _xo;                    //X coor of starting x pixel
-  unsigned int _yo;                    //Y coor of starting y pixel
-  unsigned int _xend;                  //X coor of ending x pixel
-  unsigned int _yend;                  //Y coor of ending y pixel
+  vil_image* image_;
+  gevd_bufferxy* buf_;
+  gevd_region_edge*** edge_boundary_array_;
+  unsigned int** region_label_array_;
+  unsigned int min_region_label_;
+  unsigned int max_region_label_;
+  float Xob_;//buffer X origin in original image
+  float Yob_;//buffer Y origin in original image
+  unsigned int xo_;                    //X coor of starting x pixel
+  unsigned int yo_;                    //Y coor of starting y pixel
+  unsigned int xend_;                  //X coor of ending x pixel
+  unsigned int yend_;                  //Y coor of ending y pixel
   //Region label equivalency hash tables
-  vcl_map<unsigned int, vcl_vector<unsigned int>* > _region_pairs_forward;
-  vcl_map<unsigned int, vcl_vector<unsigned int>* > _region_pairs_reverse;
-  vcl_map<unsigned int, vcl_vector<unsigned int>* > _equivalence_set;
-  vcl_map<unsigned int, unsigned int > _label_map;
+  vcl_map<unsigned int, vcl_vector<unsigned int>* > region_pairs_forward_;
+  vcl_map<unsigned int, vcl_vector<unsigned int>* > region_pairs_reverse_;
+  vcl_map<unsigned int, vcl_vector<unsigned int>* > equivalence_set_;
+  vcl_map<unsigned int, unsigned int > label_map_;
   //hash table for Edge<->gevd_region_edge relationship
-  vcl_map<int, gevd_region_edge*> _region_edges;
-  vcl_map<unsigned int, vcl_vector<vtol_edge_2d_sptr>* > _region_edge_adjacency;
+  vcl_map<int, gevd_region_edge*> region_edges_;
+  vcl_map<unsigned int, vcl_vector<vtol_edge_2d_sptr>* > region_edge_adjacency_;
   //Final output vdgl_intensity_face(s) and relation to corresponding region label
-  vcl_vector<vdgl_intensity_face_sptr>* _faces;
-  vdgl_intensity_face_sptr* _intensity_face_index;
-  vcl_vector<vtol_edge_2d_sptr>** _face_edge_index;
-  vcl_vector<vtol_edge_2d_sptr>* _failed_insertions; //Short edges that fail
+  vcl_vector<vdgl_intensity_face_sptr>* faces_;
+  vdgl_intensity_face_sptr* intensity_face_index_;
+  vcl_vector<vtol_edge_2d_sptr>** face_edge_index_;
+  vcl_vector<vtol_edge_2d_sptr>* failed_insertions_; //Short edges that fail
 #if 0
-  topo_debug_data_ref _debug_data;
+  topo_debug_data_ref debug_data_;
 #endif
-  unsigned char* _ubuf;
-  unsigned short* _sbuf;
+  unsigned char* ubuf_;
+  unsigned short* sbuf_;
 };
 
 #endif
