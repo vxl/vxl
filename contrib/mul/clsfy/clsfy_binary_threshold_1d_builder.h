@@ -75,9 +75,6 @@ public:
   virtual void b_read(vsl_b_istream& bfs);
 };
 
-//: Allows derived class to be loaded by base-class pointer
-void vsl_add_to_binary_loader(const clsfy_binary_threshold_1d_builder& b);
-
 //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const clsfy_binary_threshold_1d_builder& b);
 
