@@ -88,6 +88,18 @@ class bgui_selector_tableau : public vgui_tableau
 
   //: Returns true if the child tableau with the given name is active.
   bool is_visible(const vcl_string& name) const;
+  
+  //: Move the active tableau to the top of the display list.
+  void active_to_top();
+  
+  //: Move the active tableau up one position in the display list.
+  void active_raise();
+  
+  //: Move the active tableau down one position in the display list.
+  void active_lower();
+
+  //: Move the active tableau to the bottom of the display list.
+  void active_to_bottom();
 
   //: Returns the number of children
   int num_children() const { return child_map_.size(); }

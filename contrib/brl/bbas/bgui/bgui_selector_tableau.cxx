@@ -12,6 +12,8 @@
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 #include <vcl_vector.h>
+#include <vcl_algorithm.h>
+#include <vcl_string.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
@@ -272,6 +274,54 @@ void bgui_selector_tableau::set_active(const vcl_string& name)
 }
 
 //----------------------------------------------------------------------------
+//: Move the active tableau up one position in the display list.
+void bgui_selector_tableau::active_raise()
+{
+  vcl_vector<vcl_string>::iterator itr;
+  itr = vcl_find(render_order_.begin(), render_order_.end(), active_child_);
+  if (itr != render_order_.end() && itr+1 != render_order_.end()) {
+    *itr = *(itr+1);
+    *(itr+1) = active_child_;
+  }
+}
+
+//----------------------------------------------------------------------------
+//: Move the active tableau down one position in the display list.
+void bgui_selector_tableau::active_lower()
+{
+  vcl_vector<vcl_string>::iterator itr;
+  itr = vcl_find(render_order_.begin(), render_order_.end(), active_child_);
+  if (itr != render_order_.end() && itr != render_order_.begin()) {
+    *itr = *(itr-1);
+    *(itr-1) = active_child_;
+  }
+}
+
+//----------------------------------------------------------------------------
+//: Move the active tableau to the top of the display list.
+void bgui_selector_tableau::active_to_top()
+{
+  vcl_vector<vcl_string>::iterator itr;
+  itr = vcl_find(render_order_.begin(), render_order_.end(), active_child_);
+  while (itr != render_order_.end() && itr+1 != render_order_.end()) {
+    *itr = *(++itr);
+  }
+  *(itr) = active_child_;
+}
+
+//----------------------------------------------------------------------------
+//: Move the active tableau to the bottom of the display list.
+void bgui_selector_tableau::active_to_bottom()
+{
+  vcl_vector<vcl_string>::iterator itr;
+  itr = vcl_find(render_order_.begin(), render_order_.end(), active_child_);
+  while (itr != render_order_.end() && itr != render_order_.begin()) {
+    *itr = *(--itr);
+  }
+  *(itr) = active_child_;
+}
+
+//----------------------------------------------------------------------------
 class bgui_selector_switch_command : public vgui_command
 {
  public:
@@ -293,6 +343,35 @@ class bgui_selector_toggle_command : public vgui_command
   vcl_string name;
 };
 
+//----------------------------------------------------------------------------
+class bgui_selector_position_command : public vgui_command
+{
+  public:
+  enum motion { TO_TOP, RAISE, LOWER, TO_BOTTOM };
+  bgui_selector_position_command(bgui_selector_tableau* s, motion m) : selector(s), m_type(m) {}
+  void execute()
+  {
+    switch(m_type){
+    case TO_TOP:
+      selector->active_to_top();
+      break;
+    case RAISE:
+      selector->active_raise();
+      break;
+    case LOWER:
+      selector->active_lower();
+      break;
+    case TO_BOTTOM:
+      selector->active_to_bottom();
+      break;
+    };
+    selector->post_redraw();
+  }
+
+  bgui_selector_tableau *selector;
+  motion m_type; 
+};
+
 
 //----------------------------------------------------------------------------
 //: Builds a popup menu for the user to select the active child.
@@ -304,6 +383,7 @@ void bgui_selector_tableau::get_popup(const vgui_popup_params& params,
   // build child selection menus
   vgui_menu active_menu;
   vgui_menu visible_menu;
+  vgui_menu position_menu;
 
   vcl_string check;
   vcl_vector<vcl_string>::iterator itr = render_order_.begin();
@@ -316,9 +396,16 @@ void bgui_selector_tableau::get_popup(const vgui_popup_params& params,
     else check = "[ ] ";
     visible_menu.add(check+(*itr), new bgui_selector_toggle_command(this,*itr));
   }
+  
+  position_menu.add("Move to Top", new bgui_selector_position_command(this, bgui_selector_position_command::TO_TOP));
+  position_menu.add("Move Up", new bgui_selector_position_command(this, bgui_selector_position_command::RAISE));
+  position_menu.add("Move Down", new bgui_selector_position_command(this,bgui_selector_position_command::LOWER));
+  position_menu.add("Move to Bottom", new bgui_selector_position_command(this,bgui_selector_position_command::TO_BOTTOM));
+  
 
-  submenu.add("Select Active", active_menu);
   submenu.add("Toggle Visible", visible_menu);
+  submenu.add("Select Active", active_menu);
+  submenu.add("Position Active", position_menu);
 
   if (params.nested)
   {
