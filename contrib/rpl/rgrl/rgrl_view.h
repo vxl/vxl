@@ -29,7 +29,7 @@ class rgrl_view
              rgrl_estimator_sptr        xform_estimator,
              rgrl_transformation_sptr   xform_estimate,
              unsigned                   resolution = 0,
-             rgrl_transformation_sptr   reverse_estimate = 0 );
+             rgrl_transformation_sptr   inverse_estimate = 0 );
 
   // default copy and assignment are good.
 
@@ -52,7 +52,11 @@ class rgrl_view
   rgrl_transformation_sptr xform_estimate() const;
 
   //:  Access current REVERSE transform estimate
-  rgrl_transformation_sptr reverse_xform_estimate() const;
+  rgrl_transformation_sptr inverse_xform_estimate() const;
+  
+  //:  Set REVERSE transform estimate
+  void set_inverse_xform_estimate(rgrl_transformation_sptr const& inverse)
+  { inverse_estimate_ = inverse; }
 
   //:  Access the current resolution at which registration is working
   unsigned resolution() const;
@@ -92,7 +96,7 @@ class rgrl_view
 
   rgrl_estimator_sptr        xform_estimator_;
   rgrl_transformation_sptr   xform_estimate_;
-  rgrl_transformation_sptr   reverse_estimate_;
+  rgrl_transformation_sptr   inverse_estimate_;
   
   unsigned                   current_resolution_;
 };
