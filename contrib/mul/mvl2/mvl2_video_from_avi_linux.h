@@ -18,8 +18,8 @@
 #include <vil2/vil2_image_view.h>
 #include <mvl2/mvl2_video_reader.h>
 
-class IAviReadFile*;
-class IAviReadStream*;
+class IAviReadFile;
+class IAviReadStream;
 
 //: A class to get video input from avi file
 class mvl2_video_from_avi: public mvl2_video_reader
