@@ -7,7 +7,6 @@
 #include <vipl/vipl_convert.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>
-#include <vil/vil_rgb.h>
 #include <vil/vil_new.h>
 #include <vxl_config.h> // for vxl_byte
 
@@ -21,17 +20,6 @@ vil_image_resource_sptr vepl2_convert(vil_image_resource_sptr image, D /*dummy*/
     vil_image_view<vxl_byte> in = image->get_view();
     vil_image_view<D> out = image->get_copy_view();
     vipl_convert<vil_image_view_base,vil_image_view_base,vxl_byte,D> op;
-    op.put_in_data_ptr(&in);
-    op.put_out_data_ptr(&out);
-    op.filter();
-    img_out->put_view(out);
-  }
-
-  // byte rgb
-  else if (image->pixel_format() == VIL_PIXEL_FORMAT_RGB_BYTE) {
-    vil_image_view<vil_rgb<vxl_byte> > in = image->get_view();
-    vil_image_view<D > out(image->ni(),image->nj(),image->nplanes());
-    vipl_convert<vil_image_view_base,vil_image_view_base,vil_rgb<vxl_byte>,D> op;
     op.put_in_data_ptr(&in);
     op.put_out_data_ptr(&out);
     op.filter();
