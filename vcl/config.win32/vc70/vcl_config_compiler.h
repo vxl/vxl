@@ -226,7 +226,9 @@
 // Most compilers don't implement that yet, so the solution is to provide a
 // dummy specialization of T::bad_method that returns something mundane and
 // stops the standard bad_method from being generated.  For this, use:
+// \code
 //     VCL_DO_NOT_INSTANTIATE(int T::bad_method(), some_return_value)
+// \endcode
 // if the function is void, use VCL_VOID_RETURN as the return value
 
 //#define VCL_DO_NOT_INSTANTIATE(text, ret) text { return ret; }
@@ -251,7 +253,7 @@ text { return ret; }
 //#define VCL_UNINSTANTIATE_SPECIALIZATION(symbol)  @pragma do_not_instantiate text@
 //#define VCL_UNINSTANTIATE_SPECIALIZATION(symbol) /* no need - sensible compiler */
 //FIXME #define VCL_UNINSTANTIATE_SPECIALIZATION(symbol) @VCL_UNINSTANTIATE_SPECIALIZATION@
-#define VCL_UNINSTANTIATE_SPECIALIZATION(symbol) /* which compiler needs this ? */
+#define VCL_UNINSTANTIATE_SPECIALIZATION(symbol) // which compiler needs this ?
 
 
 //: VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol)
@@ -319,7 +321,7 @@ text { return ret; }
 # define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) /* */
 #else
 # define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) symbol;
-# define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) /* which compiler needs this ? */
+# define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) // which compiler needs this ?
 #endif
 
 
@@ -363,6 +365,7 @@ text { return ret; }
 // templated base class (see above), or even realizing that
 // "template void foo(float const * const *, float * const *, int, int)"
 // can be called with parameters of type "(float **, float **, int, int)".
+//
 //   To fix the code, it is tempting to add an explicit cast and get on
 // with things, but that would throw away the checking performed by more
 // helpful compilers. Use VCL_OVERLOAD_CAST instead.
@@ -378,12 +381,8 @@ text { return ret; }
 
 //: VCL_NO_STATIC_DATA_MEMBERS
 //
-// Set if compiler does not support static data members in template classes.
-// Uses value determined for STL
-
-//#if (__STL_STATIC_TEMPLATE_DATA < 1)
-//#define VCL_NO_STATIC_DATA_MEMBERS 1
-//#endif
+// True if compiler does not support static data members in template classes.
+//
 #define VCL_NO_STATIC_DATA_MEMBERS 0
 
 
@@ -429,10 +428,14 @@ text { return ret; }
 
 // VCL_DFL_TYPE_PARAM_STLDECL(A, a) and VCL_DFL_TMPL_PARAM_STLDECL(A, a)
 // EGCS doesn't like definition of default types, viz:
+// \code
 //   template <class A = default> class vector;
 //   template <class A = default> class vector { ... };
+// \endcode
 // This macro is used to say "define if not previously defined, like
+// \code
 //   template <VCL_DFL_TYPE_PARAM_STLDECL(A,a)> class vector { ... };
+// \endcode
 
 //#define VCL_DFL_TYPE_PARAM_STLDECL(A,a) A = a
 //#define VCL_DFL_TYPE_PARAM_STLDECL(A,a) A /* = a */
@@ -450,7 +453,9 @@ text { return ret; }
 // template argument, some compilers don't like the redeclaration of
 // that argument, while others insist on it.
 // In such cases, specify the default argument as follows:
+// \code
 //   template class vector <int VCL_DFL_TMPL_ARG(default_iterator) >;
+// \endcode
 // (Note the missing comma after int: it is inside the macro.)
 
 //#define VCL_DFL_TMPL_ARG(classname) , classname
@@ -502,41 +507,7 @@ text { return ret; }
 #define VCL_NEEDS_NAMESPACE_STD 1
 
 //----------------------------------------------------------------------
-// architecture issues, like endianness.
 
-//: VCL_LITTLE_ENDIAN
-// Set to 0,1 or 1,0 respectively, depending on the architecture.
-#define VCL_LITTLE_ENDIAN 1
-//: VCL_BIG_ENDIAN
-// Set to 0,1 or 1,0 respectively, depending on the architecture.
-#define VCL_BIG_ENDIAN    0
-
-
-//: VCL_SIZEOF_type
-// These are useful to have as macros since you can't use the
-// preprocessor to conditionalize on the size of a data type.
-//
-//                                                      typical value
-//#define VCL_SIZEOF_bool     @VCL_SIZEOF_bool@         /* 4 */
-//#define VCL_SIZEOF_char     @VCL_SIZEOF_char@         /* 1 */
-//#define VCL_SIZEOF_short    @VCL_SIZEOF_short@        /* 2 */
-//#define VCL_SIZEOF_int      @VCL_SIZEOF_int@          /* 4 */
-//#define VCL_SIZEOF_long     @VCL_SIZEOF_long@         /* 4 */
-//#define VCL_SIZEOF_float    @VCL_SIZEOF_float@        /* 4 */
-//#define VCL_SIZEOF_double   @VCL_SIZEOF_double@       /* 8 */
-//#define VCL_SIZEOF_void_ptr @VCL_SIZEOF_void_ptr@     /* 4 */
-
-//: VCL_ALIGNMENT_type
-// Alignment requirements of various types.             typical value
-//#define VCL_ALIGNMENT_bool     @VCL_ALIGNMENT_bool@       /* 4 */
-//#define VCL_ALIGNMENT_char     @VCL_ALIGNMENT_char@       /* 1 */
-//#define VCL_ALIGNMENT_short    @VCL_ALIGNMENT_short@      /* 4 */
-//#define VCL_ALIGNMENT_int      @VCL_ALIGNMENT_int@        /* 4 */
-//#define VCL_ALIGNMENT_long     @VCL_ALIGNMENT_long@       /* 4 */
-//#define VCL_ALIGNMENT_float    @VCL_ALIGNMENT_float@      /* 4 */
-//#define VCL_ALIGNMENT_double   @VCL_ALIGNMENT_double@     /* 8 */
-//#define VCL_ALIGNMENT_void_ptr @VCL_ALIGNMENT_void_ptr@   /* 4 */
-
-//--------------------------------------------------------------------------------
+// architecture macros removed -- they're not in the C++ standard
 
 #endif // vcl_config_compiler_h_config_win32_vc70_
