@@ -58,8 +58,12 @@ class rgrl_trans_homography2d
   //: Return an inverse transformation of the uncentered transform
   rgrl_transformation_sptr inverse_transform() const;
 
-  //: Return the jacobian of the transform. This is a 2x3 matrix
+  //: Return the jacobian of the transform w/ respect to inhomogenous coordinate
+  //  This is a 2x2 matrix
   vnl_matrix<double> jacobian( vnl_vector<double> const& from_loc ) const;
+
+  //: Return the jacobian of the transform. This is a 2x3 matrix
+  vnl_matrix<double> homo_jacobian( vnl_vector<double> const& from_loc ) const;
 
   //:  transform the transformation for images of different resolution
   rgrl_transformation_sptr scale_by( double scale ) const;

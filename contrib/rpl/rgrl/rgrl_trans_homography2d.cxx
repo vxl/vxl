@@ -135,7 +135,7 @@ inv_map( const vnl_vector<double>& to,
     ++t;
 
     // compute the inverse of the approximated affine from the jacobian
-    J = jacobian( from );
+    J = homo_jacobian( from );
     vnl_svd<double> svd(J);
     approx_A_inv = svd.inverse();
 
@@ -157,7 +157,7 @@ inv_map( const vnl_vector<double>& to,
 
   if ( initialize_next ) {
     if ( t == 0 ) { //approx_A_inv not yet calculated
-      J = jacobian( from );
+      J = homo_jacobian( from );
       vnl_svd<double> svd(J);
       approx_A_inv = svd.inverse();
     }
@@ -193,7 +193,7 @@ inverse_transform() const
 //: Return the jacobian of the transform.
 vnl_matrix<double>
 rgrl_trans_homography2d::
-jacobian( vnl_vector<double> const& from_loc ) const
+homo_jacobian( vnl_vector<double> const& from_loc ) const
 {
   // Let h_i be the i_th row of H_, and p be the homogeneous vector of from_loc
   // f_0(p) = h_0.p/h_2.p
@@ -216,6 +216,30 @@ jacobian( vnl_vector<double> const& from_loc ) const
   jacobian.set_row(1, h_1-mapped_y*h_2 );
 
   return inv_mapped_w*jacobian;
+}
+
+//: Return the jacobian of the transform.
+vnl_matrix<double>
+rgrl_trans_homography2d::
+jacobian( vnl_vector<double> const& from_loc ) const
+{
+  // The jacobian is a 2x3 matrix with entries
+  // [d(f_0)/dx   d(f_0)/dy;
+  //  d(f_1)/dx   d(f_1)/dy]
+  //
+
+  double mapped_w = H_(2,0)*from_loc[0] + H_(2,1)*from_loc[1] + H_(2,2);
+
+  vnl_matrix<double> jacobian(2, 2);
+  // w/ respect to x
+  jacobian(0,0) = H_(0,0)*( H_(2,1)*from_loc[1]+H_(2,2) ) - H_(2,0)*( H_(0,1)*from_loc[1] + H_(0,2) );
+  jacobian(1,0) = H_(1,0)*( H_(2,1)*from_loc[1]+H_(2,2) ) - H_(2,0)*( H_(1,1)*from_loc[1] + H_(1,2) );
+  // w/ respect to y
+  jacobian(0,1) = H_(0,1)*( H_(2,0)*from_loc[0]+H_(2,2) ) - H_(2,1)*( H_(0,0)*from_loc[0] + H_(0,2) );
+  jacobian(1,1) = H_(1,1)*( H_(2,0)*from_loc[0]+H_(2,2) ) - H_(2,1)*( H_(1,0)*from_loc[0] + H_(1,2) );
+  
+  jacobian *= (1/(mapped_w*mapped_w));
+  return jacobian;
 }
 
 // for output UNCENTERED transformation and the original center
