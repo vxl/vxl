@@ -52,9 +52,9 @@ class vidl_mpegcodec : public vidl_codec
                                      int x0, int xs,
                                      int y0, int ys ) const;
 
-  bool put_view( int frame_position,
-                 const vil_image_view_base &im,
-                 int x0, int y0 ) {return 0;}
+  bool put_view( int /*frame_position*/,
+                 const vil_image_view_base & /*im*/,
+                 int /*x0*/, int /*y0*/ ) {return 0;}
 
   virtual bool probe(const char* fname);
   virtual vidl_codec_sptr load(const char* fname, char mode = 'r' );
