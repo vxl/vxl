@@ -114,7 +114,8 @@ template<class CastTo>
 class rgrl_feature_caster
 {
  public:
-  rgrl_feature_caster( rgrl_feature_sptr f );
+  rgrl_feature_caster( rgrl_feature_sptr f )
+    : data_( dynamic_cast<CastTo*>( f.as_pointer() ) ) {}
 
   operator CastTo*() const { return data_; }
   CastTo* operator ->() const { return data_; }
