@@ -11,6 +11,7 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/vgl_homg_plane_3d.h>
+#include <vgl/vgl_distance.h>
 #include <vgl/vgl_1d_basis.h>
 #include <vgl/algo/vgl_homg_operators_1d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
@@ -74,6 +75,10 @@ static void test_homg_point_1d()
   TEST("conjugate", cj, vgl_homg_point_1d<float>(23.0f,7.0f));
 
   r = vgl_homg_operators_1d<float>::distance(p1,p2);
+  vcl_cout << "distance(p1,p2) = " << r << '\n';
+  TEST("distance", r, 2);
+
+  r = vgl_distance(p1,p2);
   vcl_cout << "distance(p1,p2) = " << r << '\n';
   TEST("distance", r, 2);
 }
@@ -228,12 +233,21 @@ static void test_homg_line_2d()
   vgl_homg_line_2d<double> l1(3,7,0), l2(d), l3(0,-1,-8);
   vcl_cout << l3 << vcl_endl;
 
+  TEST("vgl_distance_origin", vgl_distance_origin(l1), 0);
+  TEST_NEAR("vgl_distance_origin", vgl_distance_origin(l2), .141421358, 1e-8);
+  TEST("vgl_distance_origin", vgl_distance_origin(l3), 8);
+
   TEST("inequality", (l1 != l3), true);
 
   l3.set(3,7,0);
   TEST("equality", (l1 == l3), true);
 
-  l2.set(4,5,0);
+  vgl_homg_point_2d<double> p, q;
+  l2.get_two_points(p,q);
+  TEST("get_two_points()", p, vgl_homg_point_2d<double>(0,1,5));
+  TEST("get_two_points()", q, vgl_homg_point_2d<double>(1,0,5));
+
+  l2.set(3,4,0);
   l3.set(7,-1,0);
   bool b = concurrent(l1,l2,l3); // because they share the point (0,0)
   TEST("concurrent", b, true);
@@ -243,6 +257,12 @@ static void test_homg_line_2d()
   vcl_cout << li << vcl_endl;
   vgl_homg_line_2d<double> ll(1,1,-1);
   TEST("join", li, ll);
+
+  vgl_homg_point_2d<double> p3(0,3);
+  l3.set(0,-1,-8);
+  TEST("vgl_distance(line,point)", vgl_distance(l3,p3), 11);
+  TEST_NEAR("vgl_distance(line,point)", vgl_distance(l2,p3), 2.4, 1e-9);
+  TEST_NEAR("vgl_distance(point,line)", vgl_distance(p3,l2), 2.4, 1e-9);
 
   TEST("ideal", ll.ideal(), false);
   ll.set(0,0,-7);
@@ -285,6 +305,9 @@ static void test_homg_plane_3d()
   vcl_cout << pl << vcl_endl;
   vgl_homg_plane_3d<double> pp(1,1,1,-1);
   TEST("join", pl, pp);
+
+  TEST_NEAR("vgl_distance(plane,point)", vgl_distance(pl2,p2), 0.8, 1e-9);
+  TEST("vgl_distance(point,plane)", vgl_distance(p3,pl2), 1);
 
   TEST("ideal", pp.ideal(), false);
   pp.set(0,0,0,-7);

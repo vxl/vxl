@@ -1,4 +1,4 @@
-// This is vxl/vgl/tests/test_cartesian.cxx
+// This is core/vgl/tests/test_cartesian.cxx
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -246,7 +246,7 @@ static void test_line_2d()
   l3.set(3,7,0);
   TEST("equality", (l1 == l3), true);
 
-  l2.set(4,5,0);
+  l2.set(3,4,0);
   l3.set(7,-1,0);
   bool b = concurrent(l1,l2,l3); // because they share the point (0,0)
   TEST("concurrent", b, true);
@@ -256,6 +256,12 @@ static void test_line_2d()
   vcl_cout << li << vcl_endl;
   vgl_line_2d<double> ll(1,1,-1);
   TEST("join", li, ll);
+
+  vgl_point_2d<double> p3(0,3);
+  l3.set(0,-1,-8);
+  TEST("vgl_distance(line,point)", vgl_distance(l3,p3), 11);
+  TEST_NEAR("vgl_distance(line,point)", vgl_distance(l2,p3), 2.4, 1e-9);
+  TEST_NEAR("vgl_distance(point,line)", vgl_distance(p3,l2), 2.4, 1e-9);
 
   vgl_line_segment_2d<double> ls(p1,p2); // line segment through these two points
   vcl_cout << ls << '\n';
@@ -329,6 +335,9 @@ static void test_plane_3d()
   vcl_cout << pl << vcl_endl;
   vgl_plane_3d<double> pp(1,1,1,-1);
   TEST("join", pl, pp);
+
+  TEST_NEAR("vgl_distance(plane,point)", vgl_distance(pl2,p2), 0.8, 1e-9);
+  TEST("vgl_distance(point,plane)", vgl_distance(p3,pl2), 1);
 }
 
 static void test_box_2d()
