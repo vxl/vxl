@@ -353,6 +353,9 @@ SOURCE=.\vil2_stream_section.cxx
 # Begin Source File
 SOURCE=.\vil2_stream_url.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vil2_image_resource_plugin.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -544,6 +547,9 @@ SOURCE=.\vil2_stream_section.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_stream_url.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_image_resource_plugin.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
