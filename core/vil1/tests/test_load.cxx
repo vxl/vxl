@@ -61,7 +61,7 @@ static void test(char const* magic, int comps, int bits, int maxval)
     }
   } else {
     TEST("loading temp file", false, true);
-	vcl_cerr << "Failed to load " << file << vcl_endl;
+    vcl_cerr << "Failed to load " << file << vcl_endl;
   }
 
 #ifndef LEAVE_IMAGES_BEHIND
