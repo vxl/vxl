@@ -135,6 +135,9 @@ sub print_book_index_links
 
   print OF "<h2>Overview Documentation</h2>\n";
 
+  print_link("VXL Homepage","http://vxl.sourceforge.net/");
+  print OF "<br>\n";
+
   # Read in list of books
   open(BOOKS, $book_list) || die "can't open $book_list\n";
   while (<BOOKS>)
@@ -165,6 +168,9 @@ sub print_tail()
 print OF '<p>';
 print OF  "<HR>";
 print OF  "<h2>Download</h2>\n";
+print OF "See the ";
+print_link("VXL Homepage","http://vxl.sourceforge.net/");
+print OF "\n";
 print OF "The source for VXL can be downloaded from ";
 print_link("sourceforge.net/projects/vxl","http://sourceforge.net/projects/vxl");
 print OF "\n";
