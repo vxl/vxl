@@ -3,7 +3,6 @@
 
 #include <vcl_compiler.h> // for export keyword
 
-template <class T> class vbl_arg;
 template <class T> struct vbl_array_1d;
 export
 template <class T> class vbl_array_2d;

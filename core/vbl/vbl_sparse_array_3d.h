@@ -20,26 +20,29 @@
 // 26 March 01 cjb updated documentation
 // 10 April 01 IMS (Manchester ISBE) modified to use vbl_sparse_array_base
 // 11 April 01 Peter Vanroose - vbl_index_3d moved to separate file
+// 25 June 01 IMS - vbl_index_3d replaces with vbl_triple
 // \endverbatim
 //---------------------------------------------------------------------------
 
 
 #include <vcl_iosfwd.h>
 #include <vbl/vbl_sparse_array_base.h>
-#include <vbl/vbl_index_3d.h>
+#include <vbl/vbl_triple.h>
 
 
 //: Sparse 3d array allowing space efficient access
 // You can use this as s(300,700,900) = 2.
 template <class T>
-class vbl_sparse_array_3d : public vbl_sparse_array_base<T, vbl_index_3d>
+class vbl_sparse_array_3d : public vbl_sparse_array_base<T, vbl_triple<unsigned, unsigned, unsigned> >
 {
 public:
 
   //: Put a value into location (i,j).
   bool put(unsigned i, unsigned j, unsigned k, const T& t)
   {
-    return vbl_sparse_array_base<T, vbl_index_3d>::put(vbl_index_3d(i, j, k), t);
+    return vbl_sparse_array_base<T,
+      vbl_triple<unsigned, unsigned, unsigned> >::
+      put(vbl_make_triple(i, j, k), t);
   }
 
   //: Return contents of location (i,j,k).
@@ -47,25 +50,33 @@ public:
   //  a T()) if location (i,j,k) has not been filled with a value.
   T& operator () (unsigned i, unsigned j, unsigned k)
   {
-    return vbl_sparse_array_base<T, vbl_index_3d>::operator() (vbl_index_3d(i, j, k));
+    return vbl_sparse_array_base<T,
+      vbl_triple<unsigned, unsigned, unsigned> >::
+      operator() (vbl_make_triple(i, j, k));
   }
 
   //: Return contents of (i,j,k).  Assertion failure if not yet filled.
   const T& operator () (unsigned i, unsigned j, unsigned k) const
   {
-    return vbl_sparse_array_base<T, vbl_index_3d>::operator() (vbl_index_3d(i, j, k));
+    return vbl_sparse_array_base<T,
+      vbl_triple<unsigned, unsigned, unsigned> >::
+      operator() (vbl_make_triple(i, j, k));
   }
 
   //: Return true if location (i,j,k) has been filled.
   bool fullp(unsigned i, unsigned j, unsigned k) const
   {
-    return vbl_sparse_array_base<T, vbl_index_3d>::fullp(vbl_index_3d(i, j, k));
+    return vbl_sparse_array_base<T,
+      vbl_triple<unsigned, unsigned, unsigned> >::
+      fullp(vbl_make_triple(i, j, k));
   }
 
   //: Return the address of location (i,j,k).  0 if not yet filled.
   T* get_addr(unsigned i, unsigned j, unsigned k)
   {
-    return vbl_sparse_array_base<T, vbl_index_3d>::get_addr(vbl_index_3d(i, j, k));
+    return vbl_sparse_array_base<T,
+      vbl_triple<unsigned, unsigned, unsigned> >::
+      get_addr(vbl_make_triple(i, j, k));
   }
 
   //: Print the Array to a stream in "(i,j,k): value" format.
@@ -81,7 +92,7 @@ inline vcl_ostream& operator <<
 }
 
 
-#define VBL_SPARSE_ARRAY_3D_INSTANTIATE_base(T) \
+#define VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T) \
 extern "please include vbl/vbl_sparse_array_3d.txx instead"
 #define VBL_SPARSE_ARRAY_3D_INSTANTIATE(T) \
 extern "please include vbl/vbl_sparse_array_3d.txx instead"

@@ -1,0 +1,2 @@
+LINK_LIBRARIES( vul )
+LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vul )

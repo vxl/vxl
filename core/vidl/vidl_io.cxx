@@ -15,8 +15,8 @@
 #include <Basics/IUFilename.h>
 #endif
 
-#include <vbl/vbl_file.h>
-#include <vbl/vbl_sequence_filename_map.h>
+#include <vul/vul_file.h>
+#include <vul/vul_sequence_filename_map.h>
 
 #include <vcl_iostream.h>
 #include <vcl_list.h>
@@ -134,7 +134,7 @@ vidl_clip_sptr  vidl_io::load_clip(
 #endif
 
   // test if fname is a directory
-  if (vbl_file::is_directory(fname))
+  if (vul_file::is_directory(fname))
       {
           // fname is a directory.
           // So, we will process all the files in this directory
@@ -331,12 +331,12 @@ static vidl_clip_sptr load_from_file_list(char const* fname)
   // Declare the vcl_list of image filenames
   vcl_list<vcl_string> filenames;
 
-  vbl_sequence_filename_map map(fname);
+  vul_sequence_filename_map map(fname);
 
   for(int i = 0;i < map.get_nviews(); ++i) {
     vcl_string fullpath = map.image_name(i);
     // check to see if file is a directory.
-    if (vbl_file::is_directory(fullpath))
+    if (vul_file::is_directory(fullpath))
       continue;
     filenames.push_back(fullpath);
   }

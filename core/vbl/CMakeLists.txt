@@ -9,28 +9,10 @@ ADD_LIBRARY(vbl vbl_sources)
 
 SOURCE_FILES( vbl_sources
 vbl_ref_count
-vbl_arg
-vbl_reg_exp
-vbl_awk
-vbl_sequence_filename_map
 vbl_bool_ostream
 vbl_sort
-vbl_canonical_path
-vbl_file
-vbl_sprintf
-vbl_file_iterator
-vbl_string
-vbl_get_timestamp
 vbl_test
-vbl_timer
-vbl_printf
-vbl_timestamp
-vbl_psfile
-vbl_trace
 vbl_qsort
-vbl_user_info
-vbl_redirector
-vbl_deprecated
 )
 
 AUX_SOURCE_DIRECTORY(Templates vbl_sources)

@@ -145,6 +145,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @menu
 * Introduction::
 * vbl::
+* vul::
 * vnl::
 * vil::
 * vgl::
@@ -219,9 +220,14 @@ choice for high efficiency high-level programming.
 
 Note that vcl is not (any longer) a subirectory of vxl, but sits next to it.
 
-@subsection vbl: Basics.
-The basics library contains a small set of generally useful C++ classes and
-functions, notably smart pointers, file and directory handling,
+@subsection vbl: Basic Templates.
+The basic templates library contains a small set of generally useful templated
+containers and algorithms, e.g. smart pointers, triples, and sparse_arrays. Many of these
+things should have been in the STL.
+
+@subsection vul: Utilities.
+This contains a number of generally useful C++ classes and functions, notably
+file and directory handling,
 command-line argument parser, string utilities, a timer, etc.
 
 @subsection vnl: Numerical algorithms.
@@ -250,7 +256,7 @@ placed there.  For example, surface fitting cannot be in geometry as it
 would require the singular value decomposition.  However, there is much
 here that is useful, and the library is quite large enough already.  The
 @code{vgl_algo} library contains the higher-level code, which is allowed
-to depend on @code{vnl} (and if necessary even on @code{vbl}).
+to depend on @code{vnl} (and if necessary even on @code{vul}).
 
 @subsection vsl: Binary I/O
 This section describes how to save and restore objects using a binary stream.
@@ -465,7 +471,7 @@ half-answer: Koenig lookup means it's OK.
 @cindex library interdependencies
 Which brings us on to layering: core @vxl{} libraries may not depend on
 each other.  The numerics library cannot use the handy string manipulation
-in vbl, the imaging library cannot use matrices, or smart pointers.  This
+in vul, the imaging library cannot use matrices, or smart pointers.  This
 restriction is central to the design of @vxl{}, because it intrinsically
 limits the size of the core libraries.
 It appears to contradict traditional software development practice because
@@ -477,7 +483,9 @@ Level:   0         1         2          3
          vcl       vbl       vnl_algo   v**l
                    vnl       vil_algo
                    vil       vgl_algo
-                   vgl       vsl
+                   vgl
+                   vul
+                   vsl
 @end example
 @quotation
 Library layers: libraries in one layer may not call their
@@ -485,10 +493,10 @@ siblings, even if this means code copying.
 @end quotation
 
 However, other alternatives have been considered, and may yet be
-considered.  For example, what about putting vbl at level 0.5, so that
+considered.  For example, what about putting vul at level 0.5, so that
 common utilities can be available to level 1?  The problem of course is
 that everything will end up in the level 0.5 library.  We could impose the
-rule that nothing goes in vbl unless it is used in at least two level 1
+rule that nothing goes in vul unless it is used in at least two level 1
 libraries.  I don't know whether that would help or not...
 
 
@@ -666,7 +674,7 @@ C++ should describe it better than we can.  However, it is important to
 note that nothing more can go in there.  If it's not in the standard, it's
 not in VCL.  Remember, VCL is full, nothing else can go in there.  It
 cannot for example be ``helpfully'' modified, Microsoft-style, to send
-standard error to a window (but see also @code{vbl_redirector}).
+standard error to a window (but see also @code{vul_redirector}).
 
 
 @comment fsm
@@ -943,15 +951,15 @@ General rule: never forward declare vcl_something with "class vcl_something;"
 but either #include <vcl_something_fwd.h> or #include <vcl_something.h>
 
 @comment ------------------------------------------------------------------
-@node    vbl, vnl, vcl, Top
+@node    vbl, vul, vcl, Top
 @comment node-name, next,           previous, up
-@chapter vbl: Basics
+@chapter vbl: Basic Templates
 @cindex vbl
 @cindex basics
 @cindex general utilities
 
 @chapsummary
-General utilities are often handy.  VBL has a few.
+The STL isn't perfect. vbl provides some of the missing classes.
 @endchapsummary
 
 
@@ -966,56 +974,88 @@ Reference counted smart pointers for any class that defines @code{ref} and
 @code{unref}.
 @end deffn
 
-@deffn class @code{vbl_file}
-@deffnx class @code{vbl_directory}
+@deffn class @code{vbl_triple}
+Three element version of @code{vcl_pair}.
+@end deffn
+
+@deffn class @code{vbl_array_2d}
+A simple two dimensional array
+@end deffn
+
+@deffn class @code{vbl_sparse_array_2d}
+A simple two dimensional sparse array
+@end deffn
+
+
+@comment ------------------------------------------------------------------
+@node    vul, vnl, vbl, Top
+@comment node-name, next,           previous, up
+@chapter vbl: Basics
+@cindex vbl
+@cindex basics
+@cindex general utilities
+
+@chapsummary
+General utilities are often handy.  vul has a few.
+@endchapsummary
+
+
+All C++ programs need a few basic utilities, and all C++ programmers write
+their own at some point.  The things included in vbl are not considered any
+better or worse than the several other libraries available, but they are
+consistently named and lightweight.  The key elements of this library
+are
+
+@deffn class @code{vul_file}
+@deffnx class @code{vul_directory}
 File handling utilities, directory reading
 @end deffn
 
-@deffn {class template} @code{vbl_arg}
+@deffn {class template} @code{vul_arg}
 Parse command-line arguments conveniently.
 @end deffn
 
-@deffn class @code{vbl_redirector}
+@deffn class @code{vul_redirector}
 Simplify redirection of standard output/error
 @end deffn
 
-@deffn class @code{vbl_awk}
+@deffn class @code{vul_awk}
 Read text files, breaking each line into fields.
 @end deffn
 
-@deffn class @code{vbl_reg_exp}
+@deffn class @code{vul_reg_exp}
 Regular expression matching.
 @end deffn
 
-@section Redirecting standard output: @code{vbl_redirector}
+@section Redirecting standard output: @code{vul_redirector}
 @cindex cerr
 @cindex cout
 @cindex redirecting ostreams
-@cindex vbl_redirector
-@anchor{vbl_redirector}
+@cindex vul_redirector
+@anchor{vul_redirector}
 
-The class @code{vbl_redirector} is provided to simplify the task of
+The class @code{vul_redirector} is provided to simplify the task of
 filtering the output of @code{vcl_cerr} and @code{vcl_cout}, a common requirement
 in graphical applications.  This encapsulates some of the subtleties of
 deriving from @code{vcl_streambuf}, providing a simpler interface.
 
-The basic usage is to subclass from @code{vbl_redirector}, implementing the
+The basic usage is to subclass from @code{vul_redirector}, implementing the
 @code{putchunk} method, which is then called whenever characters are ready
-for output.  The @code{vbl_redirector} constructor takes care of attaching
+for output.  The @code{vul_redirector} constructor takes care of attaching
 the new buffer to the stream, and of restoring the original behaviour on
 destruction.  Here is a simple example, which switches output on or off
 depending on the value of a global flag;
 @example
 
-#include <vbl/vbl_redirector.h>
+#include <vul/vul_redirector.h>
 
 bool on = true;
 
-struct my_redirector : vbl_redirector @{
-  my_redirector(vcl_ostream& s): vbl_redirector(s) @{@}
+struct my_redirector : vul_redirector @{
+  my_redirector(vcl_ostream& s): vul_redirector(s) @{@}
   int putchunk(char const* buf, int n) @{
     if (on)
-      return vbl_redirector::put_passthru(buf, n);
+      return vul_redirector::put_passthru(buf, n);
     else
       return n;
   @}
@@ -1043,36 +1083,36 @@ what to you think @code{put_passthru} does?  What happens if you set
 
 
 
-@section Complex output formatting: @code{vbl_printf}
+@section Complex output formatting: @code{vul_printf}
 @cindex vcl_printf
-@cindex vbl_printf
+@cindex vul_printf
 
 While it is possible to achieve all of the functionality
 of the C @code{printf} function in C++, it is very very difficult.
 There are many times when programs can be made clearer by the use
 of printf formatting, rather than the standard iostream operators.
 On the other hand, one needs iostreams for type-safe (and convenient)
-output of user-defined objects.  Thus vbl provides a stream-aware
-version, @code{vbl_printf}:
+output of user-defined objects.  Thus vul provides a stream-aware
+version, @code{vul_printf}:
 @smallexample
-vcl_ostream& vbl_printf(vcl_ostream&, char const* format, ...);
+vcl_ostream& vul_printf(vcl_ostream&, char const* format, ...);
 @end smallexample
 so that one can say, for example,
 @smallexample
-vbl_printf(vcl_cerr, "Line %05d, Code %-30s\n", __LINE__, code);
+vul_printf(vcl_cerr, "Line %05d, Code %-30s\n", __LINE__, code);
 @end smallexample
 
 
 
 
-@section Reading command-line arguments: @code{vbl_arg}
+@section Reading command-line arguments: @code{vul_arg}
 @cindex argc, argv
-@cindex vbl_arg
+@cindex vul_arg
 @cindex command-line arguments, reading
-@cindex ArgParse, new name vbl_arg
-@cindex Arg, new name vbl_arg
+@cindex ArgParse, new name vul_arg
+@cindex Arg, new name vul_arg
 
-My favourite bit of vbl is the @code{vbl_arg} header which provides the
+My favourite bit of vul is the @code{vul_arg} header which provides the
 easiest way to parse command-line arguments that I've seen.  The basic idea
 is that a minimal specification for a command-line argument includes: the
 argument's type, a variable to hold it, its flag, and possibly some
@@ -1081,10 +1121,10 @@ descriptive text and a default value.
 In the default, easy to use (and a bit naughty) form, each argument is
 declared anywhere in the program, like so:
 @smallexample
-   vbl_arg<double> my_threshold("-fudge", "Twiddle fudge", 1.7);
+   vul_arg<double> my_threshold("-fudge", "Twiddle fudge", 1.7);
    //     Type     Variable     Flag      Help text        Default
 @end smallexample
-and when @code{vbl_arg_parse} is called, all the arguments are gathered,
+and when @code{vul_arg_parse} is called, all the arguments are gathered,
 and extracted from the command line.  To use an argument anywhere in the
 program, use its @code{()} operator:
 @example
@@ -1093,20 +1133,20 @@ program, use its @code{()} operator:
 To check if an argument was changed from its default value, one can check
 @code{bool my_naughty_threshold.set()}.
 
-Here is a complete example which uses @code{vbl_arg}.  I tend to give these
+Here is a complete example which uses @code{vul_arg}.  I tend to give these
 argument variables names beginning with @code{a_}, but don't let that put
 you off.
 @example
 #include <vcl_iostream.h>
-#include <vbl/vbl_arg.h>
+#include <vul/vul_arg.h>
 
-vbl_arg<double> a_naughty_global_arg("-hack", "Fudge", 1.2);
+vul_arg<double> a_naughty_global_arg("-hack", "Fudge", 1.2);
 
 void main(int argc, char* argv[])
 @{
-  vbl_arg<char const*>     a_filename(0, "Input filename");
-  vbl_arg<bool>            a_fast("-fast", "Go fast", false);
-  vbl_arg_parse(argc, argv);
+  vul_arg<char const*>     a_filename(0, "Input filename");
+  vul_arg<bool>            a_fast("-fast", "Go fast", false);
+  vul_arg_parse(argc, argv);
 
   vcl_cerr << "Filename [" << a_filename() << "]\n";
 @}
@@ -1121,7 +1161,7 @@ options when the special argument @code{-?} is seen.  Running this example
 with the @code{-?} flag produces the output.
 
 @smallexample
-Usage: ./example_vbl_arg.exe [-hack float] string [-fast bool]
+Usage: ./example_vul_arg.exe [-hack float] string [-fast bool]
 
 REQUIRED:
          string       Input filename  ['-']
@@ -1143,7 +1183,7 @@ makemovie -frames 1:10,9:-1:1,0,0,0,0
 These can be easily read into a @code{vcl_list<int>}:
 @example
 #include <vcl_list.h>
-vbl_arg<vcl_list<int> >  a_frame_list("-frames", "List of indices");
+vul_arg<vcl_list<int> >  a_frame_list("-frames", "List of indices");
 @end example
 The list will preserve the order specified on the command line, so in the
 above example, the result of printing the list would be
@@ -1161,19 +1201,19 @@ vcl_copy(a_frame_list().begin(), a_frame_list().end(),
 @subsection More structured argument handling
 Of course, it's disgraceful programming practice to throw args around ones
 program higgledy piggledy, so one can collect arguments in objects of type
-@code{vbl_arg_list}.
+@code{vul_arg_list}.
 
 
-@section Timing operations: vbl_timer
+@section Timing operations: vul_timer
 @cindex time, measuring elapsed
-@cindex vbl_timer
+@cindex vul_timer
 @cindex cpu time
 
 If you want to measure elapsed time, for example to find out how long a
-section of your program takes to run, use the @code{vbl_timer} class.  When
-a @code{vbl_timer} is initialized, like so, it records the current time.
+section of your program takes to run, use the @code{vul_timer} class.  When
+a @code{vul_timer} is initialized, like so, it records the current time.
 @example
-   vbl_timer mytimer;
+   vul_timer mytimer;
 @end example
 Later, you can find out the elapsed time using the @code{real()} method:
 @example
@@ -1202,25 +1242,25 @@ Finally, there's a super-convienient @code{print} method, which is used
 to just print the real and user times to a stream without any
 formatting, for quick testing purposes.  Here's an example
 @example
-  vbl_timer tic; // Start timing
+  vul_timer tic; // Start timing
   // do stuff
   tic.print(vcl_cerr); // Print times to vcl_cerr.
 @end example
 
 
 
-@section Reading ASCII files: @code{vbl_awk}
+@section Reading ASCII files: @code{vul_awk}
 @cindex awk
-@cindex perl-like operations: vbl_awk
-@cindex file handling: vbl_awk
+@cindex perl-like operations: vul_awk
+@cindex file handling: vul_awk
 
 It is often convenient to read text files a line at a time, and split each
-line into space-separated fields.  The @code{vbl_awk} class is an easy way
+line into space-separated fields.  The @code{vul_awk} class is an easy way
 to do this.  It also adds a few handy extras like stripping comments, and
 remembering the line number for error messages.  It is used like this:
 @smallexample
    vcl_ifstream thefile("myfile.txt");
-   vbl_awk awk(thefile); // initialize and read 1st line
+   vul_awk awk(thefile); // initialize and read 1st line
    for(;awk; ++awk) @{
      vcl_cerr << "Field 0 = " << awk[0] << vcl_endl;
      vcl_cerr << "Field 2 = " << awk[2] << vcl_endl;
@@ -1239,15 +1279,15 @@ the above program would print
   Field 2 = grimsby
 @end smallexample
 
-@section Regular expression parsing: @code{vbl_reg_exp}
+@section Regular expression parsing: @code{vul_reg_exp}
 @cindex regular expressions
-@cindex vbl_reg_exp
+@cindex vul_reg_exp
 A regular expression allows a programmer to specify complex patterns that
 can be searched for and matched against the character string of a string
 object. In its simplest form, a regular expression is a sequence of
 characters used to search for exact character matches. However, many times
 the exact sequence to be found is not known, or only a match at the
-beginning or end of a string is desired. The vbl regular expression class
+beginning or end of a string is desired. The vul regular expression class
 implements regular expression pattern matching as is found and implemented
 in many UNIX commands and utilities, notably perl.  The perl code
 @example
@@ -1256,12 +1296,12 @@ in many UNIX commands and utilities, notably perl.  The perl code
 @end example
 is written as follows in @vxl{}
 @example
-   vbl_reg_exp re("([a-z]+)\\.h");
+   vul_reg_exp re("([a-z]+)\\.h");
    re.find(filename);
    vcl_cerr << re.match(1);
 @end example
 
-The vbl syntax is similar to perl's, although not quite as clean.  Here are
+The vul syntax is similar to perl's, although not quite as clean.  Here are
 the metacharacters:
 @example
  ^        Matches at beginning of a line
@@ -1281,7 +1321,7 @@ the pattern @code{[^ab1-9]} says to match any character sequence that does
 not begin with the characters "ab" followed by numbers in the series 1-9.
 
 @comment ------------------------------------------------------------------
-@node    vnl, vil, vbl, Top
+@node    vnl, vil, vul, Top
 @comment node-name, next, previous, up
 @chapter vnl: Numerics
 @cindex vnl
@@ -2324,6 +2364,7 @@ The directory structure of VXL is below
   $IUEROOT/vcl
            vcl/config.$BUILD
            vxl/vnl
+              /vul
               /vbl
               /vil
               /vgl

@@ -3,7 +3,7 @@
 #include <vcl_cstdio.h>
 #include <vcl_iostream.h>
 
-#include <vbl/vbl_sprintf.h>
+#include <vul/vul_sprintf.h>
 
 #include <vidl/vidl_codec.h>
 #include <vidl/vidl_movie.h>
@@ -110,7 +110,7 @@ vidl_codec_sptr vidl_image_list_codec::load(const char* fname, char mode)
 
   for( int i=0; ; i++)
     {
-      const char *name = vbl_sprintf( fname, i).c_str();
+      const char *name = vul_sprintf( fname, i).c_str();
       vil_image img= vil_load(name);
 
       if (img!=0)
