@@ -84,6 +84,8 @@ struct vbl_shared_pointer
 
   // conversion to pointer
 #if !defined VBL_SHARED_POINTER_OF_NON_COMPOUND // Get rid of warning with vbl_shared_pointer<int>
+      // VCL_DO_NOT_INSTANTIATE can't be used instead because the declaration of
+      // the method that causes the problem, not the instantiation.
   T const *operator->() const { return as_pointer(); }
   T       *operator->() { return as_pointer(); }
 #endif
