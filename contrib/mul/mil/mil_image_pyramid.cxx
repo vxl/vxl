@@ -9,16 +9,12 @@
 #include <vsl/vsl_indent.h>
 
 //=======================================================================
-// Dflt ctor
-//=======================================================================
 
 mil_image_pyramid::mil_image_pyramid()
     : base_pixel_width_(1.0),scale_step_(2.0)
 {
 }
 
-//=======================================================================
-// Destructor
 //=======================================================================
 
 void mil_image_pyramid::deleteImages()
@@ -31,6 +27,29 @@ void mil_image_pyramid::deleteImages()
 mil_image_pyramid::~mil_image_pyramid()
 {
     deleteImages();
+}
+
+//=======================================================================
+//: Copy operator
+// Makes a shallow copy of each mil_image object, not of the
+// underlying data
+const mil_image_pyramid&
+    mil_image_pyramid::operator=(const mil_image_pyramid& that)
+{
+    base_pixel_width_ = that.base_pixel_width_;
+    scale_step_ = that.scale_step_;
+    image_.resize(that.image_.size());
+    for (int i=0;i<image_.size();++i)
+        image_[i] = that.image_[i]->clone();
+
+    return *this;
+}
+
+//=======================================================================
+//: Copy ctor
+mil_image_pyramid::mil_image_pyramid(const mil_image_pyramid &that)
+{
+  this->operator=(that);
 }
 
 //: Resize to [lo,hi] pyramid, each level of which is a clone of im_type

@@ -27,6 +27,11 @@ public:
         //: Dflt ctor
     mil_image_pyramid();
 
+        //: Copy ctor
+        // Makes a shallow copy of each mil_image object, not of the
+        // underlying data
+    mil_image_pyramid(const mil_image_pyramid &);
+
         //: Destructor
     virtual ~mil_image_pyramid();
 
@@ -49,6 +54,11 @@ public:
         //: Image at level L
     const mil_image& operator()(int L) const;
 
+        //: Copy operator
+        // Makes a shallow copy of each mil_image object, not of the
+        // underlying data
+    const mil_image_pyramid& operator=(const mil_image_pyramid& that);
+
         //: Mean width (in world coords) of pixels at level zero
     double basePixelWidth() const;
 
@@ -69,6 +79,19 @@ public:
         //: Print whole of each image to os
     void print_all(vcl_ostream& os) const;
 };
+
+//: Convert an image pyramid into a flat image containing each layer.
+// e.g. a three layer 2d image pyramid with scale factor 2.0
+// would be converted to an image looking like
+// \verbatim
+// ________________
+// |11111111222233|
+// |111111112222  |
+// |11111111      |
+// |11111111      |
+// ----------------
+// \endverabtim
+template <class T> void mil_image_pyramid_flatten(T& out, const mil_image_pyramid & in);
 
 vcl_ostream& operator<<(vcl_ostream& os, const mil_image_pyramid& im_pyr);
 vcl_ostream& operator<<(vcl_ostream& os, const mil_image_pyramid* im_pyr);
