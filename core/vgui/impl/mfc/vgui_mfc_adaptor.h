@@ -164,9 +164,6 @@ protected:
 
   HBITMAP m_oldbitmap;
 
-  //: Whether or not double buffering is being used.
-  bool double_buffered;
-
   vgui_overlay_helper *ovl_helper;
 
   static vgui_menu last_popup;

@@ -23,6 +23,7 @@
 // 07-SEP-2000      Marko Bacic,Oxford RRG - Added pure virtual method "draw"
 // 20 Sept     2000 capes@robots. added post_destroy() method.
 // Feb.2002         Peter Vanroose - brief doxygen comment placed on single line
+// 08-OCT-2002 K.Y.McGaul - Added use_double_buffering.
 // \endverbatim
 
 #include "dll.h"
@@ -49,24 +50,40 @@ class vgui_adaptor_tableau;
 class vgui_adaptor 
 {
 public:
+  //: Constructor - create a default adaptor.
   vgui_adaptor();
+
+  //: Destructor - quits application if all adaptors have been deleted.
   virtual ~vgui_adaptor();
 
-  // ---------- mixin methods ----------
-
-  // tableau related.
+  //: Get the vgui_tableau associated with this vgui_adaptor.
   vgui_tableau_sptr get_tableau() const;
+ 
+  //: Set the vgui_tableau associated with this vgui_adaptor.
   void set_tableau(vgui_tableau_sptr const& t);
 
-  // popup related.
+  //: True to use double buffering, false to not use it.
+  void set_double_buffering(bool b) { use_double_buffering = b; }
+
+  //: Return the concatenation of the adaptor's menu with the tableau's menu.
   vgui_menu get_total_popup(vgui_popup_params &) const;
+
+  //: Pop up a dialog for changing the popup modifier and button bindings.
   void config_dialog();
-  // why not just make 'menu' a public member?
+
+  //: Return the popup menu for this adaptor.
   vgui_menu &get_popup() { return menu; }
+
+  //: Set the popup menu for this adaptor.
   void set_popup(vgui_menu const &m) { get_popup() = m; }
+
+  //: Add the given menu to the popup menu for this adaptor.
   void include_in_popup(vgui_menu const &m) { get_popup().include(m); }
 
-  // event related.
+  //: Dispatches the given event to the tableau.
+  //  This method performs various checks which can be performed generically for
+  //  all tableaux. It is not the responsibility of this method to take care of
+  //  overlay handling - the derived class must sort that out.
   bool dispatch_to_tableau(vgui_event const &);
 
   //: This static datum points to the adaptor that last received a mouse event.
@@ -80,12 +97,13 @@ public:
   // the rest is quality-of-implementation stuff.
 
   //: Return width of rendering area.
-  // *Not* the width of the viewport. There seems to be no OpenGL 
-  // mechanism for doing this.
+  //  *Not* the width of the viewport. There seems to be no OpenGL 
+  //  mechanism for doing this.
   virtual unsigned get_width() const =0;
+
   //: Return height of rendering area.
-  // *Not* the height of the viewport. There seems to be no OpenGL 
-  // mechanism for doing this.
+  //  *Not* the height of the viewport. There seems to be no OpenGL 
+  //  mechanism for doing this.
   virtual unsigned get_height() const =0;
 
   // These methods are called by vgui_adaptor (in its capacity as a base class)
@@ -98,10 +116,13 @@ public:
   virtual void post_message(char const *, void const *);
   virtual void post_destroy();
 
-  // popup menus
-  virtual void bind_popups(vgui_modifier =vgui_MODIFIER_NULL, vgui_button =vgui_RIGHT);
-  virtual void get_popup_bindings(vgui_modifier &, vgui_button &) const;
+  //: Bind the given modifier/button combination to the popup menu.
+  virtual void bind_popups(vgui_modifier =vgui_MODIFIER_NULL, 
+    vgui_button =vgui_RIGHT);
 
+  //: Return the modifier/button which pops up the popup menu.
+  virtual void get_popup_bindings(vgui_modifier &, vgui_button &) const;
+ 
   // getting the window.
   virtual vgui_window *get_window() const;
 
@@ -115,8 +136,12 @@ protected:
   bool nested_popups;
   bool default_items;
 
+  //: Whether or not to use double buffering.
+  bool use_double_buffering;
+
 private:
   vgui_adaptor_tableau *the_tableau;
+
 
   //: this menu is put before the tableau's popup menu.
   vgui_menu menu;

@@ -38,10 +38,9 @@ IMPLEMENT_DYNCREATE(vgui_mfc_adaptor, CView)
 vgui_mfc_adaptor::vgui_mfc_adaptor():ovl_helper(0), /*come_out_now(false),*/ redraw_posted(true)
 {
   if (vgui_accelerate::vgui_mfc_acceleration)
-    double_buffered = false; // kym - double buffering is not available with 
-                             // acceleration (it crashes windows).
-  else
-    double_buffered = true;
+    // kym - double buffering is not available with 
+    // acceleration (it crashes windows).
+    set_double_buffering(false); 
 
   // If m_pCWnd is not set (using setup_adaptor) assume we use the main window:
   m_pCWnd = 0;
@@ -130,7 +129,7 @@ void vgui_mfc_adaptor::make_current()
 void vgui_mfc_adaptor::swap_buffers()
 {
   vgui_mfc_adaptor_global_dc = m_pDC;
-  if (double_buffered)
+  if (use_double_buffering)
     SwapBuffers(m_pDC->m_hDC);
 }
 
@@ -215,9 +214,10 @@ int vgui_mfc_adaptor::OnCreate(LPCREATESTRUCT lpCreateStruct)
     // DIB sections (especially large DIBs) can be blted to the screen faster than normal
     // DIBs and bitmaps.
 
-    HBITMAP hbmp = CreateDIBSection(m_pDC->GetSafeHdc(),(BITMAPINFO *)&bmi,DIB_RGB_COLORS,&buffer,NULL,0);
+    HBITMAP hbmp = CreateDIBSection(m_pDC->GetSafeHdc(),
+      (BITMAPINFO *)&bmi,DIB_RGB_COLORS,&buffer,NULL,0);
     m_oldbitmap = (HBITMAP)::SelectObject(m_pDC->GetSafeHdc(),hbmp);
-    double_buffered = false;
+    set_double_buffering(false);
   }
   else
     m_pDC = new CClientDC(this);
@@ -340,13 +340,13 @@ void vgui_mfc_adaptor::service_redraws()
 {
   if (redraw_posted)
   {
-    if (double_buffered)  // kym - changed from if (!double_buffered) - why 
-                          // change the buffer otherwise?
+    if (use_double_buffering) 
       glDrawBuffer(GL_BACK);
+
     dispatch_to_tableau(vgui_event(vgui_DRAW));
-    if (!double_buffered)
+
+    if (!use_double_buffering)
     {
-      //CWnd *wnd = AfxGetApp()->GetMainWnd();
       CWnd* wnd;
       if (m_pCWnd)
         wnd = m_pCWnd;
@@ -355,7 +355,8 @@ void vgui_mfc_adaptor::service_redraws()
       CDC *win_dc = wnd->GetDC();
       RECT r;
       wnd->GetClientRect(&r);
-      win_dc->BitBlt(0,0,r.right,r.bottom,vgui_mfc_adaptor_global_dc,0,0,SRCCOPY);
+      win_dc->BitBlt(0,0,r.right,r.bottom,vgui_mfc_adaptor_global_dc,0,0,
+        SRCCOPY);
     }
 
     swap_buffers();
@@ -363,10 +364,9 @@ void vgui_mfc_adaptor::service_redraws()
   }
 }
 
-//: Sets the timer to dispatch WM_TIME event to a mainframe every time miliseconds
+//: Sets timer to dispatch WM_TIME event to a mainframe every time miliseconds
 void vgui_mfc_adaptor::post_timer(float tm,int id)
 {
-  //CWnd *wnd = AfxGetApp()->GetMainWnd();
   CWnd* wnd;
   if (m_pCWnd)
     wnd = m_pCWnd;
