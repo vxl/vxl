@@ -74,6 +74,9 @@ class vgl_line_2d
 
   inline bool operator!=(vgl_line_2d<Type>const& other)const{return !operator==(other);}
 
+  //: angle
+  double tangent_angle() const;
+
   // Data Access-------------------------------------------------------------
 
   //: Parameter a of line a*x + b*y + c = 0

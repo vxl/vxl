@@ -12,6 +12,7 @@
 // Modifications
 // Peter Vanroose -  9 July 2001 - Inlined constructors
 // Peter Vanroose - 27 June 2001 - Added operator==
+// J.L. Mundy     - 13 April 2003 - Added angle and line coefficient functions
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -56,6 +57,25 @@ class vgl_line_segment_2d
   //: The inequality comparison operator.
   inline bool operator!=(vgl_line_segment_2d<Type>const& other)const{return !operator==(other);}
 
+  //: A consistent interface with vgl_line_2d
+  //: Parameter a of line a*x + b*y + c = 0
+  Type a() const;
+
+  //: Parameter b of line a*x + b*y + c = 0
+  Type b() const;
+
+  //: Parameter c of line a*x + b*y + c = 0
+  Type c() const;
+
+  //: unit vector describing line direction
+  vgl_vector_2d<double> direction() const;
+
+  //: unit vector orthogonal to line
+  inline vgl_vector_2d<double> normal() const;
+
+  //: tangent angle in degrees
+  double tangent_angle() const;
+  
   //: Assignment
   inline void set(vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2) {
     point1_ = p1; point2_ = p2; }

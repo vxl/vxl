@@ -10,7 +10,6 @@
 #include <vcl_iostream.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
-#include <vnl/vnl_numeric_traits.h>
 
 //: line through two given points
 template <class Type>
@@ -46,12 +45,21 @@ void vgl_line_2d<Type>::get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type
 }
 
 template <class Type>
+double vgl_line_2d<Type>::tangent_angle() const
+{
+ double deg_per_rad = 180/3.14159265358979323846;
+ double dy = a();
+ double dx = -b();
+ double atn = vcl_atan2(dy,dx);
+ return deg_per_rad*atn;
+}
+
+template <class Type>
 bool vgl_line_2d<Type>::normalize()
 {
-  typedef typename vnl_numeric_traits<Type>::abs_t abs_t;
-  typedef typename vnl_numeric_traits<Type>::real_t real_t;
-  real_t mag_sq = a_*a_ + b_*b_;
-  abs_t mag = abs_t(vcl_sqrt(mag_sq));
+
+  double mag_sq = a_*a_ + b_*b_;
+  double mag = vcl_sqrt(mag_sq);
   if(mag)
     {
       a_ = a_/mag;
