@@ -30,6 +30,7 @@ vbl_trace
 vbl_qsort
 vbl_user_info
 vbl_redirector
+vbl_deprecated
 )
 
 AUX_SOURCE_DIRECTORY(Templates vbl_sources)

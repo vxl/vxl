@@ -31,6 +31,7 @@ SOURCES += vbl_qsort.cxx
 SOURCES += vbl_psfile.cxx
 SOURCES += vbl_sequence_filename_map.cxx
 SOURCES += vbl_index_3d.cxx
+SOURCES += vbl_deprecated.cxx
 
 MANPAGE_SOURCES += vbl_array.txx # deprecated
 MANPAGE_SOURCES += vbl_array_1d.txx
