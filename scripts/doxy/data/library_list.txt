@@ -23,6 +23,7 @@ core vnl vnl_ build vxl/vsl
 core vbl vbl_ build vxl/vsl
 core vgl vgl_ build vxl/vsl vxl/vnl
 core vil vil_ build vxl/vsl
+core vil2  vil2_  build vxl/vil vxl/vnl
 core vul vul_ build vxl/vsl
 core vpl vpl_ build
 
@@ -41,14 +42,13 @@ contrib/mul mil3d mil3d_ build mul/mil
 contrib/mul pdf1d pdf1d_ build mul/mbl vxl/vbl
 contrib/mul vpdfl vpdfl_ build mul/mbl
 contrib/mul clsfy clsfy_ build mul/vpdfl mul/vpdf1d
-contrib/mul vil2  vil2_  build vxl/vil vxl/vnl
-contrib/mul vimt  vimt_  build mul/vil2
-contrib/mul vil3d vil3d_ build mul/vil2
+contrib/mul vimt  vimt_  build vxl/vil2
+contrib/mul vil3d vil3d_ build vxl/vil2
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/tbl Various Image Processing Libraries
 contrib/tbl vipl vipl_ build vxl/vil
 contrib/tbl vepl vepl_ build tbl/vipl
-contrib/tbl vepl2 vepl2_ build tbl/vipl mul/vil2
+contrib/tbl vepl2 vepl2_ build tbl/vipl vxl/vil2
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/oxl Oxford University Libraries
 # Need to check dependency order
