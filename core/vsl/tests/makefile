@@ -18,7 +18,14 @@ TESTS += test_stack_io.cxx
 TESTS += test_string_io.cxx
 TESTS += test_vector_io.cxx
 
-################################
-#include ${IUEROOT}/config/top.mk
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifeq "$(TJ_GCC30)" "1"
+FLAGS_test_map_io.cxx += -O0 # otherwise gcc 3.0 needs too much virtual memory
+endif
+
+#########################################
 include ${IUEROOT}/config/static-tests.mk
-################################
+#########################################
