@@ -100,6 +100,13 @@ vnl_svd_economy<real_t>::vnl_svd_economy( vnl_matrix<real_t> const& M ) :
   }
 }
 
+template <typename real_t>
+vnl_vector<real_t>
+vnl_svd_economy<real_t>:: nullvector()
+{
+  return V_.get_column( n_ - 1 );
+}
+
 #undef VNL_SVD_ECONOMY_INSTANTIATE
 #define VNL_SVD_ECONOMY_INSTANTIATE(T) template class vnl_svd_economy<T >
 

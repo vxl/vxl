@@ -34,6 +34,9 @@ public:
   vnl_vector<singval_t> const& lambdas() const { return sv_; }
   vnl_vector<singval_t>      & lambdas()       { return sv_; }
 
+  //: Return the rightmost column of V.
+  vnl_vector<real_t> nullvector();
+
 protected:
   int m_, n_;
   vnl_matrix<real_t>    V_;
