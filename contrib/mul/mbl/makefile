@@ -12,6 +12,7 @@ SOURCES += mbl_data_collector_base.cxx
 SOURCES += mbl_k_means.cxx
 SOURCES += mbl_read_props.cxx
 SOURCES += mbl_stats_1d.cxx
+SOURCES += mbl_sum_1d.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_data_array_wrapper.txx
