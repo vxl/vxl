@@ -3,7 +3,7 @@
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
-
+#include <vcl_cmath.h>
 #include <vxl_config.h> // for vxl_uint_16 etc.
 
 #include <testlib/testlib_test.h>
@@ -19,12 +19,12 @@
 // Apr 2002
 
 // Compare the results of loading different files with the true data
-// that's supposed to be in those files. Only deals with single plane
-// images so far.
+// that's supposed to be in those files.
 
 vcl_string image_base;
 
-typedef vxl_uint_32 TruePixelType;
+// Set to "double", which is the only type that can (roughly) represent all data types
+typedef double TruePixelType;
 
 class CheckPixel
 {
@@ -78,7 +78,6 @@ class CheckRGBNear : public CheckRGB<T>
     assert( p == 0 );
     if (!( img_ && pixel.size() == 3)) return false;
     // Find difference in two values whilst avoiding unsigned underflow
-    // Find difference in two values whilst avoiding unsigned underflow
     const TruePixelType diff_A = pixel[0]*pixel[0] +
       (TruePixelType)img_(i,j).r * (TruePixelType)img_(i,j).r + pixel[1]*pixel[1] +
       (TruePixelType)img_(i,j).g * (TruePixelType)img_(i,j).g + pixel[2]*pixel[2] +
@@ -90,7 +89,7 @@ class CheckRGBNear : public CheckRGB<T>
       2 * pixel[2] * (TruePixelType)img_(i,j).b + (TruePixelType)tol_sq_ ;
     return diff_A < diff_B;
   }
- protected:
+ private:
   TruePixelType tol_sq_;
 };
 
@@ -120,9 +119,10 @@ class CheckColourPlanes : public CheckPixel
 
   bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const
   {
+    assert( p==0 || p==1 || p==2 );
     return img_ && pixel.size() == 1 && pixel[0] == img_(i,j,p);
   }
- protected:
+ private:
   vil_image_view< T > img_;
 };
 
@@ -179,16 +179,36 @@ class CheckGreyNear : public CheckGrey<T>
     const TruePixelType diff_B = 2 * pixel[0] * (TruePixelType)img_(i,j) + (TruePixelType)tol_sq_ ;
     return diff_A <= diff_B;
   }
- protected:
+ private:
   TruePixelType tol_sq_;
+};
+
+template<class T>
+class CheckGreyFloat : public CheckGrey<T>
+{
+ public:
+  CheckGreyFloat( const char* file) : CheckGrey<T>(file) {}
+
+  bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const
+  {
+    assert( p == 0 );
+    if (!img_ || pixel.size() != 1) return false;
+    TruePixelType diff = vcl_fabs(pixel[0] - (TruePixelType)img_(i,j));
+    return diff <= 1e-6*vcl_fabs(pixel[0]);
+  }
 };
 
 template class CheckRGB< vxl_byte >;
 template class CheckRGB< vxl_uint_16 >;
 template class CheckColourPlanes< vxl_byte >;
+template class CheckColourPlanes< vxl_uint_16 >;
+template class CheckGrey< vxl_uint_32 >;
 template class CheckGrey< vxl_uint_16 >;
 template class CheckGrey< vxl_byte >;
 template class CheckGrey< bool >;
+template class CheckGreyNear< vxl_byte >;
+template class CheckGreyFloat< float >;
+template class CheckGreyFloat< double >;
 
 
 bool
@@ -279,11 +299,9 @@ test_file_format_read_main( int argc, char* argv[] )
 
   vcl_cout << "JPEG [jpg]\n";
   testlib_test_begin( "  8-bit grey, normal image to 4 quanta" );
-  testlib_test_perform( test( "ff_grey8bit_true.txt",
-    CheckGreyNear<vxl_byte>( "ff_grey8bit_compressed.jpg", 4 ) ) );
+  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGreyNear<vxl_byte>( "ff_grey8bit_compressed.jpg", 4 ) ) );
   testlib_test_begin( "  8-bit RGB, easy image accurate to 3 quanta" );
-  testlib_test_perform( test( "ff_rgb8biteasy_true.txt",
-    CheckRGBNear<vxl_byte>( "ff_rgb8biteasy_compressed.jpg", 3 ) ) );
+  testlib_test_perform( test( "ff_rgb8biteasy_true.txt", CheckRGBNear<vxl_byte>( "ff_rgb8biteasy_compressed.jpg", 3 ) ) );
 
   vcl_cout << "Windows bitmap [bmp]\n";
   testlib_test_begin( "  8-bit greyscale (xv created)" );
@@ -311,6 +329,36 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  8-bit indexed RGB" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_indexed.ras" ) ) );
 
+  vcl_cout << "Khoros VIFF [viff]\n";
+  testlib_test_begin( "  8-bit grey big endian" );
+  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_bigendian.viff" ) ) );
+  testlib_test_begin( "  8-bit RGB big endian" );
+  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_bigendian.viff" ) ) );
+  testlib_test_begin( "  16-bit grey big endian" );
+  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_bigendian.viff" ) ) );
+  testlib_test_begin( "  16-bit RGB big endian" );
+  testlib_test_perform( test( "ff_planar16bit_true.txt", CheckColourPlanes<vxl_uint_16>( "ff_rgb16bit_bigendian.viff" ) ) );
+  testlib_test_begin( "  32-bit grey big endian" );
+  testlib_test_perform( test( "ff_grey32bit_true.txt", CheckGrey<vxl_uint_32>( "ff_grey32bit_bigendian.viff" ) ) );
+  testlib_test_begin( "  32-bit float grey big endian" );
+  testlib_test_perform( test( "ff_grey_float_true.txt", CheckGreyFloat<float>( "ff_grey_float_bigendian.viff" ) ) );
+  testlib_test_begin( "  64-bit float grey big endian" );
+  testlib_test_perform( test( "ff_grey_float_true.txt", CheckGreyFloat<double>( "ff_grey_double_bigendian.viff" ) ) );
+
+  testlib_test_begin( "  8-bit grey little endian" );
+  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_littleendian.viff" ) ) );
+  testlib_test_begin( "  8-bit RGB little endian" );
+  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_littleendian.viff" ) ) );
+  testlib_test_begin( "  16-bit grey little endian" );
+  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_littleendian.viff" ) ) );
+  testlib_test_begin( "  16-bit RGB little endian" );
+  testlib_test_perform( test( "ff_planar16bit_true.txt", CheckColourPlanes<vxl_uint_16>( "ff_rgb16bit_littleendian.viff" ) ) );
+  testlib_test_begin( "  32-bit grey little endian" );
+  testlib_test_perform( test( "ff_grey32bit_true.txt", CheckGrey<vxl_uint_32>( "ff_grey32bit_littleendian.viff" ) ) );
+  testlib_test_begin( "  32-bit float grey little endian" );
+  testlib_test_perform( test( "ff_grey_float_true.txt", CheckGreyFloat<float>( "ff_grey_float_littleendian.viff" ) ) );
+  testlib_test_begin( "  64-bit float grey little endian" );
+  testlib_test_perform( test( "ff_grey_float_true.txt", CheckGreyFloat<double>( "ff_grey_double_littleendian.viff" ) ) );
 
   vcl_cout << "DICOM [dcm]\n";
   testlib_test_begin( "  16-bit greyscale uncompressed" );

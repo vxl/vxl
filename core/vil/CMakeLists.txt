@@ -56,6 +56,10 @@ SET( vil_sources ${vil_sources}
   file_formats/vil_dicom.cxx         file_formats/vil_dicom.h
   file_formats/vil_dicom_header.cxx  file_formats/vil_dicom_header.h
 
+  file_formats/vil_viff.cxx          file_formats/vil_viff.h
+  file_formats/vil_viff_support.c    file_formats/vil_viff_support.h
+  file_formats/vil_viffheader.h
+
   # image operations
   vil_crop.cxx  vil_crop.h
   vil_clamp.cxx vil_clamp.h

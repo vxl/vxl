@@ -61,13 +61,13 @@ vil_image_resource_sptr vil_load_image_resource(char const* filename)
 
 vil_image_resource_sptr vil_load_image_resource_plugin(char const* filename)
 {
-  vil_image_resource_plugin im_ressource_plugin;
-  if (im_ressource_plugin.can_be_loaded(filename))
+  vil_image_resource_plugin im_resource_plugin;
+  if (im_resource_plugin.can_be_loaded(filename))
   {
     vil_image_view_base* img=new vil_image_view<vxl_byte>(640,480,3);
     vil_image_resource_sptr im;
     vil_image_view_base_sptr im_view(img);
-    if (im_ressource_plugin.load_the_image(im_view,filename))
+    if (im_resource_plugin.load_the_image(im_view,filename))
     {
       im=vil_new_image_resource(im_view->ni(),im_view->nj(),
                                 im_view->nplanes(),im_view->pixel_format());
