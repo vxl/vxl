@@ -672,9 +672,6 @@ SOURCE=.\vnl_matops.cxx
 SOURCE=.\vnl_nonlinear_minimizer.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_numeric_limits.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vnl_numeric_traits.cxx
 # End Source File
 # Begin Source File
@@ -978,9 +975,6 @@ SOURCE=.\vnl_matrix_fixed_ref.txx
 SOURCE=.\vnl_nonlinear_minimizer.h
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_numeric_limits.h
-# End Source File
-# Begin Source File
 SOURCE=.\vnl_numeric_traits.h
 # End Source File
 # Begin Source File
@@ -1033,6 +1027,9 @@ SOURCE=.\vnl_trace.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_transpose.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_unary_function.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_unary_function.h
