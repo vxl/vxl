@@ -11,23 +11,23 @@
 template<class T>
 inline double mil_bilin_interp_2d(double x, double y, const T* data, int ystep)
 {
-	int p1x,p1y;
-	double normx,normy;
-	p1x=int(x);
-	normx = x-p1x;
-	p1y=int(y);
-	normy = y-p1y;
-	
-	const T* row1 = data + p1y*ystep + p1x;
-	const T* row2 = row1 + ystep;
-	
-	double i1,i2;
-	i1 = (double)row1[0]+
-		(double)(row2[0]-row1[0])*normy;
-	i2 = (double)row1[1]+
-		(double)(row2[1]-row1[1])*normy;
+    int p1x,p1y;
+    double normx,normy;
+    p1x=int(x);
+    normx = x-p1x;
+    p1y=int(y);
+    normy = y-p1y;
 
-	return i1+(i2-i1)*normx;
+    const T* row1 = data + p1y*ystep + p1x;
+    const T* row2 = row1 + ystep;
+
+    double i1,i2;
+    i1 = (double)row1[0]+
+        (double)(row2[0]-row1[0])*normy;
+    i2 = (double)row1[1]+
+        (double)(row2[1]-row1[1])*normy;
+
+    return i1+(i2-i1)*normx;
 }
 
 //: Compute bilinear interpolation at (x,y), no bound checks
@@ -36,23 +36,23 @@ inline double mil_bilin_interp_2d(double x, double y, const T* data, int ystep)
 template<class T>
 inline double mil_bilin_interp_2d(double x, double y, const T* data, int xstep, int ystep)
 {
-	int p1x,p1y;
-	double normx,normy;
-	p1x=int(x);
-	normx = x-p1x;
-	p1y=int(y);
-	normy = y-p1y;
-	
-	const T* row1 = data + p1y*ystep + p1x * xstep;
-	const T* row2 = row1 + ystep;
-	
-	double i1,i2;
-	i1 = (double)row1[0]+
-		(double)(row2[0]-row1[0])*normy;
-	i2 = (double)row1[xstep]+
-		(double)(row2[xstep]-row1[xstep])*normy;
+    int p1x,p1y;
+    double normx,normy;
+    p1x=int(x);
+    normx = x-p1x;
+    p1y=int(y);
+    normy = y-p1y;
 
-	return i1+(i2-i1)*normx;
+    const T* row1 = data + p1y*ystep + p1x * xstep;
+    const T* row2 = row1 + ystep;
+
+    double i1,i2;
+    i1 = (double)row1[0]+
+        (double)(row2[0]-row1[0])*normy;
+    i2 = (double)row1[xstep]+
+        (double)(row2[xstep]-row1[xstep])*normy;
+
+    return i1+(i2-i1)*normx;
 }
 
 
@@ -62,27 +62,25 @@ inline double mil_bilin_interp_2d(double x, double y, const T* data, int xstep, 
 template<class T>
 inline double mil_safe_bilin_interp_2d(double x, double y, const T* data, int nx, int ny, int ystep)
 {
-	if (x<0) return 0.0;
-	if (y<0) return 0.0;
-	if (x>nx-1) return 0.0;
-	if (y>ny-1) return 0.0;
-	return mil_bilin_interp_2d(x,y,data,ystep);
+    if (x<0) return 0.0;
+    if (y<0) return 0.0;
+    if (x>nx-1) return 0.0;
+    if (y>ny-1) return 0.0;
+    return mil_bilin_interp_2d(x,y,data,ystep);
 }
 
 //: Compute bilinear interpolation at (x,y), with bound checks
 //  Image is nx * ny array of Ts. x,y element is data[ystep*y+xstep*x]
 //  If (x,y) is outside interpolatable image region, zero is returned.
 template<class T>
-inline double mil_safe_bilin_interp_2d(double x, double y, const T* data, 
-							int nx, int ny, int xstep, int ystep)
+inline double mil_safe_bilin_interp_2d(double x, double y, const T* data,
+                                       int nx, int ny, int xstep, int ystep)
 {
-	if (x<0) return 0.0;
-	if (y<0) return 0.0;
-	if (x>nx-1) return 0.0;
-	if (y>ny-1) return 0.0;
-	return mil_bilin_interp_2d(x,y,data,xstep,ystep);
+    if (x<0) return 0.0;
+    if (y<0) return 0.0;
+    if (x>nx-1) return 0.0;
+    if (y>ny-1) return 0.0;
+    return mil_bilin_interp_2d(x,y,data,xstep,ystep);
 }
 
 #endif // mil_bilin_interp_2d_h_
-
-
