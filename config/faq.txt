@@ -1,0 +1,46 @@
+The TargetJr configuration FAQ.
+
+./configure --help gives current options.  The interesting ones
+   are the --with-* options that are at the end of the output.
+   Those are the targetjr specific options.
+
+configure: error: installation or configuration problem: C++ compiler cannot create executables.
+  Remove config.cache and retry.  To configure for different machines,
+   ./configure --cache-file=machine1
+   ./configure --cache-file=machine2
+
+I can't find the X includes.
+  Add USE_RENDERING = 1 to your makefile.
+
+I can't find the COOL includes.
+  Make sure COOL is in your USES variable.
+
+make: Nothing to be done for `XXX'.
+  Where XXX is anything other than `all', and it's not a target
+  in your makefile --- some chump has put a target rule in params.mk.
+  Scold them and move it to rules.mk
+
+configure: error: can not find sources in . or ..
+  configure.in is missing, This should be in the directory that has configure.
+
+make[1]: tjwd: Command not found
+   Scripts/Shell and Scripts/Perl are not in your path.
+
+I remove the library in $IUEOSTYPE and re-make, nothing happens, what is up?
+   The libraries have been moved there is no longer a symlink from the
+   directory with the .o files.  The library is built in the lib.$IUEOSTYPE directory
+   of the package.
+
+Why did my disk use double with the new makefiles?  See above question.
+   If you remove all the libraries in the $IUEOSTYPE directories it should
+   fix it.
+
+Why does a packages have USE_foo and HAS_foo.  HAS_foo is set when the
+   configure script finds foo, or is given foo on the command line for the
+   system that is being built.   USE_foo is used in an individual makefile to
+   be able to use those header files/ libraries when building those files.
+   This is done so that the -I lines only have the packages being used by the
+   code that needs it.
+
+How do I make cpp- for a Templates file?  cd Templates; 
+   make NODEPENDS=1 -f ../makefile cpp-Protection_IuBaseWindow.C

@@ -1,0 +1,10 @@
+# skip directories containing dummy IUE classes
+Dex2/iue
+Dex2/plist
+Image/IPGeneric/iue
+CoordSysLite-IUE
+Viewing
+Pre-adddex
+Pre-iueclass
+Pre-objectstore
+Pre-markdexable

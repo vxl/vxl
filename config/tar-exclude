@@ -1,0 +1,6 @@
+CVS
+config.log
+config.cache
+config.status
+config/config-solaris-gcc.mk
+config/tar-exclude

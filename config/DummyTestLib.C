@@ -1,0 +1,1 @@
+int This_is_A_Test_Variable_to_make_a_library;

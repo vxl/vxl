@@ -1,0 +1,30 @@
+Fri Sep 11 10:08:09 1998    <Administrator@ORLANDO>
+
+	* rules.mk (xall): Added SUBLIBDIRS to make a central include
+	  dir.
+
+Wed May 20 10:22:08 1998  Andrew Fitzgibbon  <awf@robots.ox.ac.uk>
+
+	* rules.mk ($(MINI_PROG_EXES)): Add $(SOURCES_obj) to all
+	  makes, mainly to pick up TEMPLATE_SOURCES.
+
+Fri May 25 09:50:22 1998  Peter Vanroose
+
+	* rules.mk: `public' variable CLEAN added, which, if set, makes sure
+	  that object files are removed after successfully building a library
+	  or executables.  Saves disk space, but only useful for infrequent
+	  builds.  Uses the internal variable CLEAN_FILES for the list of
+	  files to be removed after successful building.
+
+Fri May 15 15:47:26 1998  Target Junior User  <awf@robots.ox.ac.uk>
+
+	* params.mk: Move USE_TEMPLATES to rules.mk.  This is OK as
+	  the user can override it by defining it before rules.mk is
+	  included.
+
+Thu May 14 13:52:14 1998  Target Junior User  <awf@robots.ox.ac.uk>
+
+	* Attempt to start a ChangeLog
+	* rules.mk: Add sys_or_iu_macro_lib to make OBJBASE work.
+	  Changed search strategy for Viewing and Parmesan Statics/*.o
+	  to use sys_or_iu_macro_lib.
