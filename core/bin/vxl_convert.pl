@@ -108,7 +108,7 @@ sub main {
   }
   if ($#options == -1) {
     print STDERR "no options given, consider using -vcl\n";
-    exit 0;
+    #exit 0;
   }
   
   # for each file, $f :

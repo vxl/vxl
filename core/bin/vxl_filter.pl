@@ -282,10 +282,13 @@ sub process_headers {
       # `global' stl algorithms to be replaced with their vcl_ conterpart.
       s/(\s)::((sort|find|swap_ranges|copy|fill|find_if)\s*\()/$1vcl_$2/;
 
-      # std::cout, std::cerr and std::endl
+      # std::cout, std::cerr, std::endl etc
       s/\b(std::)?cout\b/vcl_cout/g;
       s/\b(std::)?cerr\b/vcl_cerr/g;
       s/\b(std::)?endl\b/vcl_endl/g;
+      s/\b(std::)?istream\b/vcl_istream/g;
+      s/\b(std::)?ostream\b/vcl_ostream/g;
+      s/\b(std::)?fstream\b/vcl_fstream/g;
       
       # remember what we saw
       $saw_functional_h = 1 if m/include <vcl_functional\.h>/;
