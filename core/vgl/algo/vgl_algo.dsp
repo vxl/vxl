@@ -154,6 +154,9 @@ SOURCE=.\vgl_h_matrix_2d_compute_4point.cxx
 # Begin Source File
 SOURCE=.\vgl_h_matrix_2d_compute_linear.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_p_matrix+double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -237,6 +240,12 @@ SOURCE=.\vgl_line_2d_regression.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_line_2d_regression.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_p_matrix.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_p_matrix.txx
 # End Source File
 # End Group
 # End Target
