@@ -727,10 +727,10 @@ bool sdet_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
   switch (this->bytes_per_pix())
   {
    case 1:     // Grey scale image with one byte per pixel
-    ubuf_ = new unsigned char[this->GetXSize()];
+    delete[] ubuf_; ubuf_ = new unsigned char[this->GetXSize()];
     break;
    case 2:     // Grey scale image with an unsigned short per pixel
-    sbuf_ = new unsigned short[this->GetXSize()];
+    delete[] sbuf_; sbuf_ = new unsigned short[this->GetXSize()];
     break;
    default:
     vcl_cout<<"In vtol_intensity_face::get_intensity(): "

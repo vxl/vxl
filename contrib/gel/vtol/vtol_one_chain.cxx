@@ -471,6 +471,7 @@ vcl_vector<vtol_face*> *vtol_one_chain::compute_faces(void)
         result->push_back(*ii);
       delete sublist;
     }
+    delete onech;
     return tagged_union(result);
   }
   else
@@ -497,6 +498,7 @@ vcl_vector<vtol_two_chain*> *vtol_one_chain::compute_two_chains(void)
         result->push_back(*ii);
       delete sublist;
     }
+    delete onech;
     return tagged_union(result);
   }
   else
@@ -522,6 +524,7 @@ vcl_vector<vtol_block*> *vtol_one_chain::compute_blocks(void)
         result->push_back(*ii);
       delete sublist;
     }
+    delete onech;
     return tagged_union(result);
   }
   else

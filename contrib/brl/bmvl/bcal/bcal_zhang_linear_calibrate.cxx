@@ -20,6 +20,7 @@ bcal_zhang_linear_calibrate::bcal_zhang_linear_calibrate()
 
 bcal_zhang_linear_calibrate::~bcal_zhang_linear_calibrate()
 {
+  clear();
 }
 
 
@@ -41,7 +42,7 @@ int bcal_zhang_linear_calibrate::compute_homography()
   vgl_h_matrix_2d_compute_linear hmcl;
 
   int size = cam_graph_ptr_->num_vertice();
-  h_matrice_.resize(size);
+  clear(); h_matrice_.resize(size);
 
   vcl_vector<vgl_homg_point_2d<double> > &p0 = cam_graph_ptr_->get_source()->get_points();
 
@@ -51,6 +52,7 @@ int bcal_zhang_linear_calibrate::compute_homography()
     assert(cam);
     // compute homography
     int nViews = cam->num_views();
+    h_matrice_[i] = new vgl_h_matrix_2d<double> [nViews];
     for (int j=0; j<nViews; j++){ // for each view
       vcl_vector<vgl_homg_point_2d<double> > &p1 = cam->getPoints(j);
       h_matrice_[i][j] = hmcl.compute(p0, p1);
@@ -63,7 +65,7 @@ int bcal_zhang_linear_calibrate::initialize()
 {
   // resize h_matrice_
   int num_camera = cam_graph_ptr_->num_vertice();
-  h_matrice_.resize(num_camera);
+  clear(); h_matrice_.resize(num_camera);
   num_views_.resize(num_camera);
 
   // allocate vgl_h_matrix_2d<double> for each views
@@ -111,7 +113,6 @@ vnl_vector_fixed<double, 6> bcal_zhang_linear_calibrate::homg_constrain(const vg
 
 int bcal_zhang_linear_calibrate::calibrate()
 {
-  this->clear();
   this->initialize();
 
   // get homographies

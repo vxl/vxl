@@ -46,8 +46,11 @@ vil1_image vil1_load_raw(vil1_stream *is)
 vil1_image vil1_load_raw(char const* filename)
 {
   vil1_stream *is = vil1_open(filename, "r");
-  if (is)
-    return vil1_load_raw(is);
+  if (is) {
+    vil1_image im = vil1_load_raw(is);
+    delete is;
+    return im;
+  }
   else {
     vcl_cerr << __FILE__ ": Failed to load [" << filename << "]\n";
     return vil1_image();

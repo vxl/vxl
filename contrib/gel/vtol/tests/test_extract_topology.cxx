@@ -12,7 +12,7 @@
 typedef vil_image_view<vxl_byte> image_type;
 
 
-// This class has access to the private members of vtol_extract_topology
+// This class has access to the private member is_edge() of vtol_extract_topology
 //
 class test_vtol_extract_topology
 {
@@ -98,7 +98,7 @@ image_5()
 
 void
 test_vtol_extract_topology::
-test_image_1( )
+test_image_1()
 {
   vcl_cout << "\n\nTesting image 1\n";
 
@@ -136,24 +136,23 @@ test_image_1( )
 
   testlib_test_begin( "Testing (internal) is_edge()" );
   bool good = true;
-  for ( unsigned i = 0; i < 7; ++i ) {
-    for ( unsigned j = 0; j < 7; ++j ) {
-      for ( unsigned dir = 0; dir < 4; ++dir ) {
+  for ( unsigned i = 0; i < 7; ++i )
+    for ( unsigned j = 0; j < 7; ++j )
+      for ( unsigned dir = 0; dir < 4; ++dir )
+      {
         unsigned d = 1 << dir;
         if ( (edges[j][i] & d) != 0 ) {
           if ( ! te.is_edge( i, j, dir ) ) {
             good = false;
-            vcl_cout << "["<<edges[j][i]<<"] ("<<i<<","<<j<<", d="<<dir<<")  should be a boundary edge\n";
+            vcl_cout << '['<<edges[j][i]<<"] ("<<i<<','<<j<<", d="<<dir<<")  should be a boundary edge\n";
           }
         } else {
           if ( te.is_edge( i, j, dir ) ) {
             good = false;
-            vcl_cout << "["<<edges[j][i]<<"] ("<<i<<","<<j<<", d="<<dir<<")  should not be a boundary edge\n";
+            vcl_cout << '['<<edges[j][i]<<"] ("<<i<<','<<j<<", d="<<dir<<")  should not be a boundary edge\n";
           }
         }
       }
-    }
-  }
   testlib_test_perform( good );
 
   TEST_EQUAL( "Vertex count", te.vertices().size(), 19 );
@@ -162,7 +161,7 @@ test_image_1( )
 
 
 static void
-test_image_2( )
+test_image_2()
 {
   vcl_cout << "\n\nTesting image 2\n";
 
@@ -179,7 +178,7 @@ test_image_2( )
 
 
 static void
-test_image_3( )
+test_image_3()
 {
   vcl_cout << "\n\nTesting image 3\n";
 
@@ -194,8 +193,9 @@ test_image_3( )
   TEST_EQUAL( "Face count", te.faces().size(), 4 );
 }
 
+
 static void
-test_image_4( )
+test_image_4()
 {
   vcl_cout << "\n\nTesting image 4\n";
 
@@ -216,29 +216,32 @@ has_vertex( vtol_intensity_face_sptr face, double x, double y )
   static const double tol = 1e-5;
 
   vertex_list* verts = face->outside_boundary_vertices();
-  for( vertex_list::iterator itr = verts->begin();
-       itr != verts->end(); ++itr ) {
+  for (vertex_list::iterator itr = verts->begin();
+       itr != verts->end(); ++itr )
+  {
     vtol_vertex_2d* v2d = (*itr)->cast_to_vertex_2d();
-    if( !v2d ) {
+    if ( !v2d ) {
       vcl_cerr << "Error: Non-2D vertex in face\n";
+      delete verts;
       return false;
     }
-    if( vcl_abs( v2d->x() - x ) < tol &&
-        vcl_abs( v2d->y() - y ) < tol ) {
+    if ( vcl_abs( v2d->x() - x ) < tol &&
+         vcl_abs( v2d->y() - y ) < tol ) {
+      delete verts;
       return true;
     }
   }
-
+  delete verts;
   return false;
 }
 
 
 static void
-test_smoothing( )
+test_smoothing()
 {
   // Make sure that smoothing doesn't move the vertices around
 
-  vcl_cout << "\n\nTesting edgel chain smoothing" << vcl_endl;
+  vcl_cout << "\n\nTesting edgel chain smoothing\n";
 
   {
     vcl_cout << "Without smoothing\n";
@@ -314,11 +317,11 @@ test_smoothing( )
 
 
 static void
-test_digital_region( )
+test_digital_region()
 {
   // Make sure the digital regions match the segmented regions.
 
-  vcl_cout << "\n\nTesting digital region" << vcl_endl;
+  vcl_cout << "\n\nTesting digital region\n";
 
   image_type img( image_2() );
 

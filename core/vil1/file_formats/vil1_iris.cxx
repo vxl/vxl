@@ -143,6 +143,8 @@ vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream* is, int planes,
 vil1_iris_generic_image::~vil1_iris_generic_image()
 {
   is_ -> unref();
+  delete starttab_;
+  delete lengthtab_;
 }
 
 bool vil1_iris_generic_image::read_header()

@@ -232,6 +232,11 @@ static void test_irls()
   testlib_test_perform( irls_m.estimate( match_prob, m_est ) &&
                         check( params.as_vector(), &irls_m ) );
   TEST_NEAR("scale unchanged", sigma, irls_m.scale() , 1e-6);
+
+  delete lr;
+  delete m_est;
+  delete irls;
+  delete match_prob;
 }
 
 TESTMAIN(test_irls);

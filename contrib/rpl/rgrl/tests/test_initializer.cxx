@@ -145,6 +145,8 @@ test_inv_indexing()
   to = rgrl_cast<simple_invariant_feature*>(matches[2]->to());
   testlib_test_perform(from->location() == location2+t &&
                        to->location() == location2);
+
+  delete initializer;
 }
 
 void

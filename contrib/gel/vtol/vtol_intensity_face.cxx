@@ -20,8 +20,8 @@
 //----------------------------------------------------------------
 //: A constructor from an existing face
 vtol_intensity_face::vtol_intensity_face(vtol_face_2d_sptr const& f)
-  :vtol_face_2d(f),
-   region_(new vdgl_digital_region())
+  : vtol_face_2d(f),
+    region_(new vdgl_digital_region())
 {
 }
 
@@ -39,8 +39,8 @@ vtol_intensity_face::vtol_intensity_face(vcl_vector<vtol_edge*>* edges)
 
 //: Copy constructor
 vtol_intensity_face::vtol_intensity_face(vtol_intensity_face_sptr const& f)
-  :vtol_face_2d(f->cast_to_face_2d()),
-   region_(new vdgl_digital_region(f->Npix(), f->Xj(), f->Yj(), f->Zj(), f->Ij()))
+  : vtol_face_2d(f->cast_to_face_2d()),
+    region_(new vdgl_digital_region(f->Npix(), f->Xj(), f->Yj(), f->Ij()))
 {
 }
 
@@ -50,7 +50,7 @@ vtol_intensity_face::vtol_intensity_face(vtol_intensity_face_sptr const& f)
 //    element of one_chains and the interior hole boundaries as
 //    the remaining elements of the list.
 vtol_intensity_face::vtol_intensity_face(one_chain_list & one_chains)
-  :vtol_face_2d(one_chains), region_(new vdgl_digital_region())
+  : vtol_face_2d(one_chains), region_(new vdgl_digital_region())
 {
 }
 
@@ -80,12 +80,6 @@ vtol_intensity_face::vtol_intensity_face(vtol_face_2d_sptr const& face, int npts
 {
 }
 
-vtol_intensity_face::vtol_intensity_face(vtol_face_2d_sptr const& face, int npts, float const* xp, float const* yp,
-                                         float const* zp, unsigned short const* pix)
-  :vtol_face_2d(face),
-   region_(new vdgl_digital_region(npts, xp, yp, zp, pix))
-{
-}
 //Default Destructor
 vtol_intensity_face::~vtol_intensity_face()
 {
@@ -131,17 +125,14 @@ vnl_matrix<double> vtol_intensity_face::MomentMatrix()
 // Resurrected from #ifdef'd block below for intensity face attributes
 double vtol_intensity_face::perimeter()
 {
-  vcl_vector<vtol_edge_sptr>*  edges = this->edges();
+  edge_list edges; this->edges(edges);
   double  p = 0.0;
 
-  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges->begin();
-       eit != edges->end(); eit++)
+  for (edge_list::iterator eit = edges.begin(); eit != edges.end(); eit++)
   {
     vsol_curve_2d_sptr  c = (*eit)->cast_to_edge_2d()->curve();
     if (c)
-    {
       p += c->length();
-    }
   }
   return p;
 }
@@ -158,16 +149,16 @@ void vtol_intensity_face::extrema(vcl_vector<float>& orientation,
   float fmin = vnl_numeric_traits<float>::maxval,
         fmax = -vnl_numeric_traits<float>::maxval;
   for (this->reset(); this->next();)
-    {
-      //The coordinates of each region pixel
-      float xi = float(this->X())+.5, yi = float(this->Y())+.5;
-      //Project onto the orientation direction
-      float c = orientation.x(), s = orientation.y();
-      float w = (xi*c + yi*s);
-      //Update the extrema
-      if (w<fmin) fmin = w;
-      if (w>fmax) fmax = w;
-    }
+  {
+    //The coordinates of each region pixel
+    float xi = float(this->X())+.5, yi = float(this->Y())+.5;
+    //Project onto the orientation direction
+    float c = orientation.x(), s = orientation.y();
+    float w = (xi*c + yi*s);
+    //Update the extrema
+    if (w<fmin) fmin = w;
+    if (w>fmax) fmax = w;
+  }
 }
 
 bool vtol_intensity_face::TaggedTransform(CoolTransform const& t)
@@ -186,27 +177,25 @@ bool vtol_intensity_face::TaggedTransform(CoolTransform const& t)
 //
 Histogram_ref vtol_intensity_face::GetAdjacentRegionHistogram()
 {
-    //Get the adjacent faces
+  //Get the adjacent faces
   float mini=this->get_min(), maxi=this->get_max();
   vcl_vector<vtol_face_2d*> adj_faces;
   this->GetAdjacentFaces(adj_faces);
   //iterate through and collect intensity bounds
-  list<vtol_intensity_face_ref> afs;
+  iface_list afs;
   for (vcl_vector<vtol_face_2d*>::iterator fit = adj_faces.begin();
        fit != adj_faces.end(); fit++)
-    {
-      vtol_intensity_face_ref af=
-        (vtol_intensity_face*)((*fit)->CastTovtol_intensity_face());
-      if (!af)
-        continue;
-      afs.push_back(af);
-      if (af->get_min() < mini) mini = af->get_min();
-      if (af->get_max() > maxi) maxi = af->get_max();
-    }
+  {
+    vtol_intensity_face_sptr af= (*fit)->cast_to_intensity_face();
+    if (!af)
+      continue;
+    afs.push_back(af);
+    if (af->get_min() < mini) mini = af->get_min();
+    if (af->get_max() > maxi) maxi = af->get_max();
+  }
   //The histogram of the adjacent regions
   Histogram_ref ha = new Histogram(100, mini, maxi);
-  for (list<vtol_intensity_face_ref>::iterator ifit = afs.begin();
-       ifit != afs.end(); ifit++)
+  for (iface_iterator ifit = afs.begin(); ifit != afs.end(); ifit++)
     for ((*ifit)->reset(); (*ifit)->next();)
       ha->UpCount((*ifit)->I());
 
@@ -226,15 +215,14 @@ float vtol_intensity_face::GetAdjacentRegionMean()
   float mean = 0;
   for (vcl_vector<vtol_face_2d*>::iterator fit = adj_faces.begin();
        fit != adj_faces.end(); fit++)
-    {
-      vtol_intensity_face_ref af=
-        (vtol_intensity_face*)((*fit)->CastTovtol_intensity_face());
-      if (!af)
-        continue;
-      float n = af->Npix();
-      area += n;
-      mean += n*af->Io();
-    }
+  {
+    vtol_intensity_face_sptr af= (*fit)->cast_to_intensity_face();
+    if (!af)
+      continue;
+    float n = af->Npix();
+    area += n;
+    mean += n*af->Io();
+  }
   if (!area)
     return 0;
   mean/=area;
