@@ -21,8 +21,8 @@ inline void vsl_b_write(vsl_b_ostream &os, const vil2_image_view<T>& image)
   vsl_b_write(os, image.istep());
   vsl_b_write(os, image.jstep());
   vsl_b_write(os, image.planestep());
-	if (image.size()>0)
-	{
+  if (image.size()>0)
+  {
     vsl_b_write(os, image.memory_chunk());
 
     int offset = (image.top_left_ptr()-(const T*)image.memory_chunk()->data());
@@ -49,24 +49,24 @@ inline void vsl_b_read(vsl_b_istream &is, vil2_image_view<T>& image)
   case 1:
     vsl_b_read(is, ni);
     vsl_b_read(is, nj);
-	  vsl_b_read(is, np);
-	  vsl_b_read(is, istep);
-	  vsl_b_read(is, jstep);
-	  vsl_b_read(is, pstep);
-		if (ni*nj*np==0) image.resize(0,0,0);
-		else
-		{
-	    vsl_b_read(is, chunk);
-	    vsl_b_read(is, offset);
-			const T* data = (const T*) chunk->data();
-	    image = vil2_image_view<T>(chunk,data+offset,
+    vsl_b_read(is, np);
+    vsl_b_read(is, istep);
+    vsl_b_read(is, jstep);
+    vsl_b_read(is, pstep);
+    if (ni*nj*np==0) image.resize(0,0,0);
+    else
+    {
+      vsl_b_read(is, chunk);
+      vsl_b_read(is, offset);
+      const T* data = (const T*) chunk->data();
+      image = vil2_image_view<T>(chunk,data+offset,
                                  ni,nj,np,istep,jstep,pstep);
     }
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil2_image_view<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< w << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil2_image_view<T>&)\n"
+             << "           Unknown version number "<< w << "\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
