@@ -8,5 +8,9 @@
 #include <vcl/vcl_vector.txx>
 
 VCL_VECTOR_INSTANTIATE(unsigned int);
-//VCL_FIND_INSTANTIATE(vcl_vector<unsigned>::iterator, unsigned);
-//VCL_FIND_INSTANTIATE(vcl_vector<unsigned>::const_iterator, unsigned);
+
+#if defined(GNU_LIBSTDCXX_V3)
+// In V3, vector<T>::iterator is not a T *.
+VCL_FIND_INSTANTIATE(vcl_vector<unsigned>::iterator, unsigned);
+VCL_FIND_INSTANTIATE(vcl_vector<unsigned>::const_iterator, unsigned);
+#endif
