@@ -1,18 +1,10 @@
+#ifdef __GNUC__
+#pragma implementation
+#endif
 #include <vcsl/vcsl_cylindrical_to_cartesian_3d.h>
 #include <vcl_cmath.h> // for sqrt(), cos(), sin()
 
 #include <vcsl/vcsl_spatial.h>
-
-//***************************************************************************
-// Constructors/Destructor
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-// Destructor
-//---------------------------------------------------------------------------
-vcsl_cylindrical_to_cartesian_3d::~vcsl_cylindrical_to_cartesian_3d()
-{
-}
 
 //***************************************************************************
 // Status report
@@ -22,19 +14,11 @@ vcsl_cylindrical_to_cartesian_3d::~vcsl_cylindrical_to_cartesian_3d()
 // Is `this' invertible at time `time'?
 // REQUIRE: valid_time(time)
 //---------------------------------------------------------------------------
-bool vcsl_cylindrical_to_cartesian_3d::is_invertible(const double time) const
+bool vcsl_cylindrical_to_cartesian_3d::is_invertible(double time) const
 {
   // require
   assert(valid_time(time));
 
-  return true;
-}
-
-//---------------------------------------------------------------------------
-// Is `this' correctly set ?
-//---------------------------------------------------------------------------
-bool vcsl_cylindrical_to_cartesian_3d::is_valid(void) const
-{
   return true;
 }
 
@@ -49,7 +33,7 @@ bool vcsl_cylindrical_to_cartesian_3d::is_valid(void) const
 //---------------------------------------------------------------------------
 vnl_vector<double>
 vcsl_cylindrical_to_cartesian_3d::execute(const vnl_vector<double> &v,
-                                          const double time) const
+                                          double time) const
 {
   // require
   assert(is_valid());
@@ -79,7 +63,7 @@ vcsl_cylindrical_to_cartesian_3d::execute(const vnl_vector<double> &v,
 //---------------------------------------------------------------------------
 vnl_vector<double>
 vcsl_cylindrical_to_cartesian_3d::inverse(const vnl_vector<double> &v,
-                                          const double time) const
+                                          double time) const
 {
   // require
   assert(is_valid());
@@ -113,13 +97,6 @@ vcsl_cylindrical_to_cartesian_3d::instance(void)
   if(instance_.ptr()==0)
     instance_=new vcsl_cylindrical_to_cartesian_3d;
   return instance_;
-}
-
-//---------------------------------------------------------------------------
-// Default constructor
-//---------------------------------------------------------------------------
-vcsl_cylindrical_to_cartesian_3d::vcsl_cylindrical_to_cartesian_3d(void)
-{
 }
 
 //---------------------------------------------------------------------------

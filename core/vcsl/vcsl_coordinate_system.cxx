@@ -1,27 +1,12 @@
+#ifdef __GNUC__
+#pragma implementation
+#endif
 #include <vcsl/vcsl_coordinate_system.h>
 
 #include <vcl_cassert.h>
 
 #include <vcsl/vcsl_axis.h>
 #include <vcsl/vcsl_unit.h>
-
-//***************************************************************************
-// Constructors/Destructor
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-// Default constructor
-//---------------------------------------------------------------------------
-vcsl_coordinate_system::vcsl_coordinate_system(void)
-{
-}
-
-//---------------------------------------------------------------------------
-// Destructor
-//---------------------------------------------------------------------------
-vcsl_coordinate_system::~vcsl_coordinate_system()
-{
-}
 
 //***************************************************************************
 // Status report
@@ -38,7 +23,7 @@ int vcsl_coordinate_system::dimensionnality(void) const
 //---------------------------------------------------------------------------
 // Is `i' an index on an axis ?
 //---------------------------------------------------------------------------
-bool vcsl_coordinate_system::valid_axis(const int i) const
+bool vcsl_coordinate_system::valid_axis(int i) const
 {
   return (i>=0)&&(i<axes_.size());
 }
@@ -47,7 +32,7 @@ bool vcsl_coordinate_system::valid_axis(const int i) const
 // Return the axis `i'
 // REQUIRE: valid_axis(i)
 //---------------------------------------------------------------------------
-vcsl_axis_sptr vcsl_coordinate_system::axis(const int i) const
+vcsl_axis_sptr vcsl_coordinate_system::axis(int i) const
 {
   // require
   assert(valid_axis(i));
