@@ -1,4 +1,3 @@
-
 //:
 // \file
 // \brief test program for symmetric eigensystem routines.
@@ -34,23 +33,23 @@ void test_symmetric_eigensystem()
     vcl_cout << "residual = " << res.fro_norm() << vcl_endl;
     vnl_test_assert("recompose residual",  res.fro_norm() < 1e-12);
 
-	vcl_cout<<"Eigenvalues: ";
+    vcl_cout<<"Eigenvalues: ";
     for (int i=0;i<6;++i)
-       vcl_cout<<eig.get_eigenvalue(i)<<" ";
-	vcl_cout<<vcl_endl;
+      vcl_cout<<eig.get_eigenvalue(i)<<" ";
+    vcl_cout<<vcl_endl;
   }
 
   double Cdata[36] = {
-    0,  0,  0,  0,  0,  0,  
-    0,  0,  0,  0,  0,  0,  
-    0,  0,  0,  0,  0,  0,  
-    0,  0,  0,  0,  0,  2,  
-    0,  0,  0,  0, -1,  0,  
-    0,  0,  0,  2,  0,  0,  
+    0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  2,
+    0,  0,  0,  0, -1,  0,
+    0,  0,  0,  2,  0,  0,
   };
 
   vnl_matrix<double> C(Cdata, 6,6);
-  
+
   {
     vnl_symmetric_eigensystem<double> eig(C);
     vnl_matrix<double> res = eig.recompose() - C;
@@ -58,10 +57,10 @@ void test_symmetric_eigensystem()
     vcl_cout << "residual = " << res.fro_norm() << vcl_endl;
     vnl_test_assert("recompose residual", res.fro_norm() < 1e-12);
 
-	vcl_cout<<"Eigenvalues: ";
+    vcl_cout<<"Eigenvalues: ";
     for (int i=0;i<6;++i)
-       vcl_cout<<eig.get_eigenvalue(i)<<" ";
-	vcl_cout<<vcl_endl;
+      vcl_cout<<eig.get_eigenvalue(i)<<" ";
+    vcl_cout<<vcl_endl;
   }
 
   {
@@ -71,19 +70,18 @@ void test_symmetric_eigensystem()
     int s = 10;
     vnl_matrix<double> D_rand(s,n);
     for (int i=0;i<s;++i)
-    	for (int j=0;j<n;++j)
-	      D_rand(i,j)=vnl_sample_normal(1,2);
+      for (int j=0;j<n;++j)
+        D_rand(i,j)=vnl_sample_normal(1,2);
 
     vnl_matrix<double> S = D_rand.transpose()*D_rand;
     vnl_matrix<double> evecs(n,n);
     vnl_vector<double> evals(n);
     vnl_symmetric_eigensystem_compute(S,evecs,evals);
-	vcl_cout<<"Testing random system: "<<vcl_endl;
+    vcl_cout<<"Testing random system: "<<vcl_endl;
     vcl_cout<<"evals: "<<evals<<vcl_endl;
-	for (int i=1;i<n;++i)
+    for (int i=1;i<n;++i)
       TEST("Eigenvalue increases",evals(i)>=evals(i-1),true);
   }
-
 }
 
 TESTMAIN(test_symmetric_eigensystem);
