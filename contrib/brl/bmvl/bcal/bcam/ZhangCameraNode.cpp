@@ -8,7 +8,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-ZhangCameraNode::ZhangCameraNode(int nViews)
+ZhangCameraNode::ZhangCameraNode(int id, int nViews) : CameraNode(id)
 {
   // build lens distortion model
   vcl_vector<bool> flags(7, false);
@@ -17,11 +17,40 @@ ZhangCameraNode::ZhangCameraNode(int nViews)
   pCam_ -> setLensModel(flags);
 
   // allocate space to store features.
-  pImageLists_ = new vcl_list< vgl_homg_point_2d<double> > [nViews];
+  nViews_ = nViews;
+  pPointLists_ = new vcl_vector< vgl_homg_point_2d<double> > [nViews];
 }
 
 ZhangCameraNode::~ZhangCameraNode()
 {
-  if (pImageLists_)
-    delete [] pImageLists_;
+
+  if (pPointLists_)
+    delete [] pPointLists_;
+}
+
+int ZhangCameraNode::readData(char *fname, int iView)
+{
+  vcl_ifstream  in(fname);
+
+  if(!in){
+    vcl_cerr<<" cannot open the file: "<<fname;
+    return 1;
+  }
+
+  if(nViews_<=0){
+    vcl_cerr<<" not memory allocated for storing\n";
+    return 2;
+  }
+
+  if(pPointLists_[iView].size() != 0){
+    pPointLists_[iView].clear();
+  }
+
+  while(!in.eof()){
+    double u, v;
+    in>>u>>v;
+    vgl_homg_point_2d<double> pt(u, v);
+    pPointLists_[iView].push_back(pt);
+  }
+  return 0;  
 }

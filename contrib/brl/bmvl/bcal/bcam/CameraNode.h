@@ -18,7 +18,7 @@ class CameraNode : public vcsl_spatial
  protected:
   Camera* pCam_;
  public:
-  CameraNode();
+  CameraNode(int id);
   virtual ~CameraNode();
 };
 

@@ -49,3 +49,4 @@ int CameraGraph::addEdge(vcsl_spatial_sptr &v1, vcsl_spatial_sptr &v2, vcsl_spat
 {
 }
 #endif // 0
+

@@ -14,11 +14,16 @@
 
 class ZhangLinearCalibrate
 {
-  CameraGraph* camGraph_;
- public:
+public:
   void setCameraGraph(CameraGraph* pG);
   ZhangLinearCalibrate();
   virtual ~ZhangLinearCalibrate();
+
+private:
+  CameraGraph* camGraph_;
+
+private: // operations need for public functions.
+   
 };
 
 #endif // AFX_ZHANGLINEARCALIBRATE_H__A6F24F23_8E39_494F_83FB_3ABF8093481D__INCLUDED_

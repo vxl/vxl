@@ -8,10 +8,10 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CameraNode::CameraNode()
+CameraNode::CameraNode(int id)
 {
   pCam_ = 0;
-  pCam_ = new Camera;
+  pCam_ = new Camera(id);
 }
 
 CameraNode::~CameraNode()

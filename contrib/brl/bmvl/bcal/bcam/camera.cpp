@@ -1,7 +1,7 @@
 #include "camera.h"
 #include <vcl_cassert.h>
 
-Camera::Camera()
+Camera::Camera(int id) : id_(id)
 {
 }
 

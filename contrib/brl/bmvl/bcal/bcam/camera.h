@@ -47,6 +47,7 @@ class LensModel
 // it store the lens model and intrisic parameter of camera
 class Camera
 {
+  int id_;
   vnl_double_3x4 k_;
   LensModel lm_;
  public:
@@ -55,7 +56,7 @@ class Camera
 
   void setIntrisicMatrix(vnl_double_3x4 k) {k_ = k;}
 
-  Camera();
+  Camera(int id);
   ~Camera(){}
 };
 

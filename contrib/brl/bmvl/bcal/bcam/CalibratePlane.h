@@ -15,11 +15,17 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include <vcl_vector.h>
+#include <vgl/vgl_homg_point_2d.h>
+
 #include "CalibrationObject.h"
 
 class CalibratePlane : public CalibrationObject
 {
- public:
+private:
+  vcl_vector<vgl_homg_point_2d<double> > pts_;
+public:
+	int readData(char* fname);
   CalibratePlane();
   virtual ~CalibratePlane();
 };
