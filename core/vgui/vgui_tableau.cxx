@@ -11,6 +11,7 @@
 // \verbatim
 //  Modifications:
 //    11-SEP-1999 P.Pritchett - Initial version.
+//    08-OCT-2002 K.Y.McGaul - Removed unused adopt and disown functions.
 // \endverbatim
 
 #include "vgui_tableau.h"
@@ -30,8 +31,9 @@
 #define debug if (true) { } else vcl_cerr
 
 // static data
-// every tableau is on this array.
-// must be a ptr as must live longer than any vgui_tableau_sptr
+//------------
+// Every tableau is on this array.
+// It must be a ptr as must live longer than any vgui_tableau_sptr
 static vgui_DLLDATA vcl_vector<vgui_tableau*>* all = 0;
 
 //-----------------------------------------------------------------------------
@@ -45,13 +47,13 @@ vgui_tableau::vgui_tableau()
 
   // register :
   if (all == 0) {
-    //vcl_cerr << __FILE__ ": CREATING tableau cache\n";
     all = new vcl_vector<vgui_tableau*>;
   }
   all->push_back(this);
 }
 
 //-----------------------------------------------------------------------------
+//: Destructor - called by vgui_tableau_sptr when ref count is zero.
 vgui_tableau::~vgui_tableau()
 {
   debug << "vgui_tableau destructor : this = " << (void*)this << vcl_endl;
@@ -66,31 +68,33 @@ vgui_tableau::~vgui_tableau()
   all->erase(i);
   if (all->size() == 0)
   {
-    //vcl_cerr << __FILE__ ": DELETING tableau cache\n";
     delete all;
     all = 0;
   }
 }
 
 //-----------------------------------------------------------------------------
+//: Increase the reference count by one (for smart-pointers).
 void vgui_tableau::ref() const
 {
   ++ const_cast<int &>(references);
 }
 
 //-----------------------------------------------------------------------------
+//: Decrease the reference count by one (for smart-pointers).
+//  If the refernce count reaches zero then delete the object.
 void vgui_tableau::unref() const
 {
   assert(references > 0); // fatal if not
 
   if (-- const_cast<int &>(references) == 0) {
-    //vcl_cerr << "about to delete this=" << (void*)this << ", " << type_name() << vcl_endl;
     delete const_cast<vgui_tableau*>(this);
   }
 }
 
 //-----------------------------------------------------------------------------
-//: Override in subclasses to give the tableau some appearance and behaviour.
+//: Handle all events sent to this tableau.
+//  Override in subclasses to give the tableau some appearance and behaviour.
 bool vgui_tableau::handle(vgui_event const &event) {
   vgui_macro_report_errors;
 
@@ -108,7 +112,7 @@ bool vgui_tableau::handle(vgui_event const &event) {
     return mouse_up   (event.wx, event.wy, event.button, event.modifier);
 
   case vgui_KEY_PRESS:
-    if (event.key == '?')
+    if (event.key == '?' || event.key == '/')
       return help();
     else
       return key_press(event.wx, event.wy, event.key, event.modifier);
@@ -119,36 +123,42 @@ bool vgui_tableau::handle(vgui_event const &event) {
 }
 
 //-----------------------------------------------------------------------------
+//: Called by default handle when it receives a mouse down event.
 bool vgui_tableau::mouse_down(int, int, vgui_button, vgui_modifier) {
   //debug << "vgui_tableau::mouse_down\n";
   return false;
 }
 
 //-----------------------------------------------------------------------------
+//: Called by default handle when it receives a mouse up event.
 bool vgui_tableau::mouse_up(int, int, vgui_button, vgui_modifier) {
   //debug << "vgui_tableau::mouse_up\n";
   return false;
 }
 
 //-----------------------------------------------------------------------------
+//: Called by default handle when it receives a mouse motion event.
 bool vgui_tableau::motion(int, int) {
   //debug << "vgui_tableau::motion\n";
   return false;
 }
 
 //-----------------------------------------------------------------------------
+//: Caled by default handle when it receives a key press event.
 bool vgui_tableau::key_press(int, int, vgui_key, vgui_modifier) {
   //debug << "vgui_tableau::key_press\n";
   return false;
 }
 
 //-----------------------------------------------------------------------------
+//: Called by default handle when it receives a '?' pressed event.
 bool vgui_tableau::help() {
   //debug << "vgui_tableau::help\n";
   return false;
 }
 
 //-----------------------------------------------------------------------------
+//: Called by default handle when it receives a draw event.
 bool vgui_tableau::draw() {
   //debug << "vgui_tableau::draw\n";
   return false;
@@ -157,13 +167,14 @@ bool vgui_tableau::draw() {
 
 //-----------------------------------------------------------------------------
 //: Return the bounding box of this tableau.
-// If infinite in extent, or nothing is drawn, or you can't be bothered to
-// implement it, return false.
+//  If infinite in extent, or nothing is drawn, or you can't be bothered to
+//  implement it, return false.
 bool vgui_tableau::get_bounding_box(float /*low*/[3], float /*high*/[3]) const {
   return false;
 }
 
 //-----------------------------------------------------------------------------
+//: Post a message event.
 void vgui_tableau::post_message(char const *msg, void const *data) {
   vcl_vector<vgui_tableau_sptr> ps;
   get_parents(&ps);
@@ -172,6 +183,7 @@ void vgui_tableau::post_message(char const *msg, void const *data) {
 }
 
 //-----------------------------------------------------------------------------
+//: Post a draw event.
 void vgui_tableau::post_redraw() {
   vcl_vector<vgui_tableau_sptr> ps;
   get_parents(&ps);
@@ -180,6 +192,7 @@ void vgui_tableau::post_redraw() {
 }
 
 //-----------------------------------------------------------------------------
+//: Post a overlay redraw event.
 void vgui_tableau::post_overlay_redraw() {
   vcl_vector<vgui_tableau_sptr> ps;
   get_parents(&ps);
@@ -188,27 +201,30 @@ void vgui_tableau::post_overlay_redraw() {
 }
 
 //-----------------------------------------------------------------------------
-//: virtual. returns some sort of name.
+//: Return the name of the tableau.
 vcl_string vgui_tableau::name() const {
   return file_name();
 }
 
 //-----------------------------------------------------------------------------
-//: virtual. returns the name of a file associated with some tableau below.
+//: Return the name of a file associated with some tableau below.
+//  Virtual function.
 vcl_string vgui_tableau::file_name() const {
   return "(none)";
 }
 
 //-----------------------------------------------------------------------------
-//: virtual. used to provide an informative name for printouts, debugging etc.
-// Often it's type_name() + some representation of the essential state.
+//: Used to provide an informative name for printouts, debugging etc.
+//  Often it's type_name() + some representation of the essential state.
+//  Virtual function.
 vcl_string vgui_tableau::pretty_name() const {
   return type_name();
 }
 
 //-----------------------------------------------------------------------------
 //: Return the name of the most derived (tableau) class.
-// virtual. This ought never to be called as derived classes should implement type_name().
+//  Virtual. This ought never to be called as derived classes should 
+//  implement type_name().
 vcl_string vgui_tableau::type_name() const {
   static bool warned=false;
   if (!warned) {
@@ -219,19 +235,19 @@ vcl_string vgui_tableau::type_name() const {
 }
 
 //-----------------------------------------------------------------------------
-// push parents onto the given vcl_vector.
+//: Push parents onto the given vcl_vector.
 void vgui_tableau::get_parents(vcl_vector<vgui_tableau_sptr> *v) const {
   vgui_parent_child_link::get_parents_of(const_cast<vgui_tableau*>(this),v);
 }
 
 //-----------------------------------------------------------------------------
-// push children onto the given vcl_vector.
+//: Push children onto the given vcl_vector.
 void vgui_tableau::get_children(vcl_vector<vgui_tableau_sptr> *v) const {
   vgui_parent_child_link::get_children_of(const_cast<vgui_tableau*>(this),v);
 }
 
 //-----------------------------------------------------------------------------
-// get the ith child, or return 0. supplied by special request from geoff.
+//: Get the ith child, or return 0. 
 vgui_tableau_sptr vgui_tableau::get_child(unsigned i) const {
   vcl_vector<vgui_tableau_sptr> children;
   get_children(&children);
@@ -239,22 +255,24 @@ vgui_tableau_sptr vgui_tableau::get_child(unsigned i) const {
 }
 
 //-----------------------------------------------------------------------------
-// virtual overridden by consenting parents :
+//: Add the given tableau to the list of child tableaux.
+//  Virtual overridden by consenting parents.
 bool vgui_tableau::add_child(vgui_tableau_sptr const &) {
   return false;
 }
 
 //-----------------------------------------------------------------------------
-//
+//: Remove the given tableau from the list of child tableaux.
 bool vgui_tableau::remove_child(vgui_tableau_sptr const&) {
   return false;
 }
 
 //-----------------------------------------------------------------------------
-//:
-// This method is called when some part of the program (typically the slot
-// mechanism) is about to forcibly replace a child of this tableau.
-// The canonical reason to override this is in order to invalidate caches.
+//: Called when a child of this tableau is forcibly replaced.
+//  This method is called when some part of the program (typically the 
+//  parent_child_link mechanism) is about to forcibly replace a child of this 
+//  tableau.
+//  The canonical reason to override this is in order to invalidate caches.
 bool vgui_tableau::notify_replaced_child(vgui_tableau_sptr const& /*old_child*/,
                                          vgui_tableau_sptr const& /*new_child*/)
 {
@@ -262,16 +280,13 @@ bool vgui_tableau::notify_replaced_child(vgui_tableau_sptr const& /*old_child*/,
 }
 
 //-----------------------------------------------------------------------------
-// == MENUS ==
-
-//-----------------------------------------------------------------------------
-//:
-// This method is for tableaux to implement if they want to _add_ some items to
-// the popup menu. They can assign to or clear 'menu', but that is not recommended
-// as it would remove what other tableaux put there.
-// The recommended usage is to .add() items or to .include() another menu.
+//: Add given menu to the tableau popup menu.
+//  This method is for tableaux to implement if they want to _add_ some items to
+//  the popup menu. They can assign to or clear 'menu', but that is not
+//  recommended as it would remove what other tableaux put there.
+//  The recommended usage is to .add() items or to .include() another menu.
 //
-// ** this is an interface method. it abstracts a behaviour. **
+//  ** This is an interface method. it abstracts a behaviour. **
 void vgui_tableau::add_popup(vgui_menu &/*menu*/) {
   // do nothing by default.
 }
@@ -318,17 +333,6 @@ void vgui_tableau::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
 }
 
 //-----------------------------------------------------------------------------
-void vgui_tableau::adopt (vgui_tableau_sptr const &) const
-{
-}
-
-//-----------------------------------------------------------------------------
-void vgui_tableau::disown(vgui_tableau_sptr const &) const
-{
-}
-
-
-//-----------------------------------------------------------------------------
 //: Prints pretty name and address of tableau.
 //  eg : pig.jpg[vgui_composite:0xeffff728]
 vcl_ostream &operator<<(vcl_ostream &os, vgui_tableau_sptr const &t)
@@ -340,7 +344,7 @@ vcl_ostream &operator<<(vcl_ostream &os, vgui_tableau_sptr const &t)
 }
 
 //-----------------------------------------------------------------------------
-//: Push all tableaux onto v :
+//: Push all tableaux onto the given vector.
 void vgui_tableau::get_all(vcl_vector<vgui_tableau_sptr> *v) {
   //v->insert(v->begin(), all->begin(), all->end());
   for (unsigned i=0; i<all->size(); ++i)

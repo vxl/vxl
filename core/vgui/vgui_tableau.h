@@ -14,16 +14,17 @@
 //
 // \verbatim
 // Modifications:
-//  21-Sep-1999  fsm@robots various changes.
-//  05-Oct-1999  fsm@robots
-//  11-Oct-1999  fsm@robots. removed old build_chain code.
-//  12-Oct-1999  fsm@robots. added type_name() method. various cleanup.
-//  13-Oct-1999  fsm@robots. deprecated draw_impl() and draw_overlay_impl().
-//  16-Oct-1999  fsm@robots. deprecated draw(), draw_overlay() + two minor
+//  21-SEP-1999 fsm@robots various changes.
+//  05-OCT-1999 fsm@robots
+//  11-OCT-1999 fsm@robots. removed old build_chain code.
+//  12-OCT-1999 fsm@robots. added type_name() method. various cleanup.
+//  13-OCT-1999 fsm@robots. deprecated draw_impl() and draw_overlay_impl().
+//  16-OCT-1999 fsm@robots. deprecated draw(), draw_overlay() + two minor
 //                     methods. added get_popup().
-//  11-Nov-1999  fsm@robots. added add_popup() now that get_popup() has a
+//  11-NOV-1999 fsm@robots. added add_popup() now that get_popup() has a
 //                     different meaning. Added exists().
-//  07-Aug-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
+//  07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
+//  08-OCT-2002 K.Y.McGaul - Removed unused adopt and disown functions.
 // \endverbatim
 
 #include <vcl_string.h>
@@ -81,14 +82,18 @@ struct vgui_tableau_sptr;
 class vgui_tableau : public vgui_parent_child_link_data
 {
  public:
+  //: Constructor - in general you should not use this, use vgui_tableau_new.
   vgui_tableau();
 
   //: Return the name of the tableau.
   virtual vcl_string name() const;
+
   //: Get filename from descendant holding a file (if meaningful).
   virtual vcl_string file_name() const;
+
   //: Returns name suitable for debugging purposes.
   virtual vcl_string pretty_name() const;
+
   //: Return name of most derived class (for RTTI purposes).
   virtual vcl_string type_name() const;
 
@@ -97,17 +102,28 @@ class vgui_tableau : public vgui_parent_child_link_data
 
   //: Get the child tableaux for this tableau.
   void get_children(vcl_vector<vgui_tableau_sptr> *out) const;
+
+  //: Get the ith child or return 0.
   vgui_tableau_sptr get_child(unsigned i) const;
+
+  //: Add the given tableau to the list of child tableaux.
+  //  Virtual overridden by consenting parents.
   virtual bool add_child(vgui_tableau_sptr const &);
+
+  //: Remove the given child from the list of child tableaux.
   virtual bool remove_child(vgui_tableau_sptr const &);
+
+  //: Push all tableaux onto the given vector.
   static void get_all(vcl_vector<vgui_tableau_sptr> *out);
+
+  //: Returns true if the given addresss points to a valid tableau.
   static bool exists(vgui_tableau_sptr const &);
 
   //: Called whenever a child of this tableau is about to be forcibly replaced
   virtual bool notify_replaced_child(vgui_tableau_sptr const & old_child,
                                      vgui_tableau_sptr const & new_child);
 
-  //: Make the given menu the default popup menu for the tableau.
+  //: Add the given menu to the popup menu for the tableau.
   virtual void add_popup(vgui_menu &);
 
   //: Get the default popup menu for the tableau.
@@ -129,6 +145,7 @@ class vgui_tableau : public vgui_parent_child_link_data
   virtual void post_overlay_redraw();
 
   //: Handle all events sent to this tableau.
+  //  Override in subclass to give the tableau some appearance and behaviour.
   virtual bool handle(vgui_event const &);
 
   //: Get the bounding box of this tableau.
@@ -164,13 +181,8 @@ class vgui_tableau : public vgui_parent_child_link_data
   //  If the reference count reaches zero then delete the object.
   void unref() const;
 
-  //: Not used?
-  void adopt (vgui_tableau_sptr const &) const;
-
-  //: Not used?
-  void disown(vgui_tableau_sptr const &) const;
-
  protected:
+  //: Destructor - called by vgui_tableau_sptr.
   virtual ~vgui_tableau();
 
  private:
@@ -178,7 +190,8 @@ class vgui_tableau : public vgui_parent_child_link_data
   friend struct vgui_parent_child_link_impl;
   friend class vgui_adaptor;
 
-  int references; // reference count. starts at 0.
+  //: Reference count - starts at 0.
+  int references; 
 };
 
 //: Print some indication of what the tableau is.
