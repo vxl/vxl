@@ -9,6 +9,7 @@ SET(vsl_sources
   vsl_indent.cxx vsl_indent.h
   vsl_quick_file.h
   vsl_block_binary.h
+  vsl_b_read_block_old.h
 
   vsl_binary_loader.txx vsl_binary_loader.h
   vsl_clipon_binary_loader.txx vsl_clipon_binary_loader.h
