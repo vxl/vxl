@@ -106,6 +106,11 @@ class mbl_mz_random
     //   drand32(1,0) is random down to about the 10th decimal place.
     double drand32(double a, double b);
 
+    //: Generates a random unsigned integer in [0,n)
+    // This function allows the random number generator to be used as
+    // a functor, e.g. with vcl_random_shuffle()
+    unsigned long operator()(unsigned n) { return lrand32(0, n-1); }
+
     //:  Generates a random double in the range 0 <= x <= b with 32 bit randomness.
     //   drand32(1.0) is random down to about the 10th decimal place.
     double drand32(double b) {return drand32(0.0, b);}
