@@ -54,7 +54,8 @@ bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr& e)
     }
   toe->unlink_inferior(*inf_two_chain);
   inf_two_chain->unlink_inferior(*tv1);
-  inf_two_chain->unlink_inferior(*tv2);
+  if(!(tv1==tv2))
+	inf_two_chain->unlink_inferior(*tv2);
   return true;
 }
 //:
