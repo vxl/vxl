@@ -3,6 +3,8 @@
 #include <vnl/vnl_rational.h>
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_det.h>
 
 void test_rational() {
   {
@@ -70,11 +72,37 @@ void test_rational() {
     TEST("construct from double", d, vnl_rational(-123456,100000));
     vnl_rational pi = vnl_rational(vnl_math::pi);
     double pi_a = double(pi);
-    TEST("pi", pi_a-vnl_math::pi < 1e-15 && vnl_math::pi-pi_a < 1e-15, true);
+    TEST("pi", pi_a-vnl_math::pi < 1e-18 && vnl_math::pi-pi_a < 1e-18, true);
     vcl_cout << "Best rational approximation of pi: " << pi << " = "
              << pi_a << vcl_endl;
-    vcl_cout << "Compare this with pi in 16 decimals:                   "
+    vcl_cout << "Compare this with pi in 20 decimals:                     "
              << vnl_math::pi << vcl_endl;
+  }
+  {
+    vnl_matrix_fixed<vnl_rational,3,3> m;
+    m[0][0] = vnl_rational(1,3);
+    m[0][1] = vnl_rational(2,7);
+    m[0][2] = vnl_rational(2,5);
+    m[1][0] = vnl_rational(-1,2);
+    m[1][1] = vnl_rational(1,4);
+    m[1][2] = vnl_rational(6,7);
+    m[2][0] = vnl_rational(2,3);
+    m[2][1] = vnl_rational(1,5);
+    m[2][2] = vnl_rational(5,2);
+    vcl_cout << "rational matrix:\n" << m
+             << "determinant = " << vnl_det(m[0], m[1], m[2]) << vcl_endl;
+    TEST("determinant", vnl_det(m[0], m[1], m[2]), vnl_rational(16609,29400));
+  }
+  {
+    vnl_rational d(16,9);
+    TEST("sqrt", sqrt(d), vnl_rational(4,3));
+    d = sqrt(vnl_rational(2L));
+    double sqrt2 = sqrt(2.0), sqrt_2 = double(d);
+    vcl_cout << "Best rational approximation of sqrt(2): " << d << " = "
+             << sqrt_2 << vcl_endl;
+    vcl_cout << "Compare this with sqrt(2) in 20 decimals:                     "
+             << sqrt2 << vcl_endl;
+    TEST("sqrt(2)", sqrt2-sqrt_2 < 1e-18 && sqrt_2-sqrt2 < 1e-18, true);
   }
 }
 

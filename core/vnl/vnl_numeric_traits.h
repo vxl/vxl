@@ -21,12 +21,12 @@
 //     AWF 010498 Moved to math
 //     LSB (Manchester) 23/3/01 Documentation tidied
 //     Peter Vanroose   14/7/01 vnl_rational added
+//     Peter Vanroose   14/10/01 vnl_rational moved to vnl_rational.h
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
 
 #include <vcl_complex_fwd.h>
-class vnl_rational;
 
 // this is an empty class template.
 // only the specializations make sense.
@@ -276,21 +276,6 @@ public:
   typedef vcl_complex<vnl_numeric_traits<long double>::double_t> double_t;
   //: Name of type which results from multiplying this type with a double
   typedef vcl_complex<long double> real_t;
-};
-
-VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vnl_rational> {
-public:
-  //: Additive identity
-  static const vnl_rational zero;
-  //: Multiplicative identity
-  static const vnl_rational one;
-  //: Return value of abs()
-  typedef vnl_rational abs_t;
-  //: Name of a type twice as long as this one for accumulators and products.
-  typedef vnl_rational double_t;
-  //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
 };
 
 #endif // vnl_numeric_traits_h_

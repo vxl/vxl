@@ -4,13 +4,16 @@
 //#include <vnl/dll.h>
 #include <vnl/vnl_T_n.h>
 #include <vnl/vnl_alloc.h>
+#include <vnl/vnl_block.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_complex.h>
+#include <vnl/vnl_complexify.h>
 #include <vnl/vnl_complex_ops.h>
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/vnl_copy.h>
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_cross_product_matrix.h>
+#include <vnl/vnl_det.h>
 #include <vnl/vnl_diag_matrix.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_2x2.h>
@@ -48,6 +51,8 @@
 #include <vnl/vnl_matlab_header.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_matlab_print2.h>
+#include <vnl/vnl_matlab_print_format.h>
+#include <vnl/vnl_matlab_print_scalar.h>
 #include <vnl/vnl_matlab_read.h>
 #include <vnl/vnl_matlab_write.h>
 #include <vnl/vnl_matops.h>
@@ -78,6 +83,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_dereference.h>
 #include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_vector_fixed_ref.h>
 #include <vnl/vnl_vector_ref.h>
 
 //#include <vnl/algo/dll.h>
@@ -89,12 +95,13 @@
 #include <vnl/algo/vnl_cholesky.h>
 #include <vnl/algo/vnl_complex_eigensystem.h>
 #include <vnl/algo/vnl_conjugate_gradient.h>
+#include <vnl/algo/vnl_convolve.h>
 #include <vnl/algo/vnl_cpoly_roots.h>
 #include <vnl/algo/vnl_determinant.h>
 #include <vnl/algo/vnl_discrete_diff.h>
-#include <vnl/algo/vnl_fft1d.h>
-#include <vnl/algo/vnl_fft2d.h>
-#include <vnl/algo/vnl_fftxd_prime_factors.h>
+#include <vnl/algo/vnl_fft_1d.h>
+#include <vnl/algo/vnl_fft_2d.h>
+#include <vnl/algo/vnl_fft_prime_factors.h>
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>
 #include <vnl/algo/vnl_lbfgs.h>

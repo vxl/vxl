@@ -1,4 +1,5 @@
 #include <vnl/vnl_rational.h>
+#include <vcl_cmath.h> // for sqrt
 
 vnl_rational::vnl_rational(double d)
 {
@@ -8,7 +9,7 @@ vnl_rational::vnl_rational(double d)
   // Continued fraction approximation of abs(d): recursively determined
   long den=0L, num=1L, prev_den=1L, prev_num=0L;
 
-  while (d*num < 1e8 && d*den < 1e8) {
+  while (d*num < 1e9 && d*den < 1e9) {
     long a = (long)d; // integral part of d
     d -= a; // certainly >= 0
     long temp = num; num = a*num + prev_num; prev_num = temp;
@@ -18,6 +19,22 @@ vnl_rational::vnl_rational(double d)
   }
   num_ = num; den_ = den;
   if (sign) num_ = -num_;
-  // no need to normalize() since prev_num and prev_den are guaranteed of gcd=1
+  // no need to normalize() since prev_num and prev_den have guaranteed a gcd=1
 }
 
+vnl_rational sqrt(vnl_rational x)
+{
+  return vnl_rational(vcl_sqrt(double(x)));
+}
+
+const vnl_rational vnl_numeric_traits<vnl_rational>::zero = 0L;
+const vnl_rational vnl_numeric_traits<vnl_rational>::one = 1L;
+
+const vcl_complex<vnl_rational> vnl_numeric_traits<vcl_complex<vnl_rational> >::zero = vcl_complex<vnl_rational>(0L,0L);
+const vcl_complex<vnl_rational> vnl_numeric_traits<vcl_complex<vnl_rational> >::one = vcl_complex<vnl_rational>(1L,0L);
+
+#ifdef VCL_GCC_EGCS // this includes egcs, gcc 2.8 and gcc 2.95
+#include <std/complext.cc>
+template complex<vnl_rational>& __doadv<vnl_rational>(complex<vnl_rational>*, complex<vnl_rational> const&);
+template complex<vnl_rational> operator/(complex<vnl_rational> const&, complex<vnl_rational> const&);
+#endif

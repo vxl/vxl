@@ -13,7 +13,6 @@
 
 #include <vnl/vnl_numeric_traits.h>
 #include <vcl_complex.h>
-#include <vnl/vnl_rational.h>
 
 #if !VCL_CAN_STATIC_CONST_INIT_INT
 
@@ -73,7 +72,3 @@ const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::ze
 const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::one = 1.0;
 
 //--------------------------------------------------------------------------------
-
-const vnl_rational vnl_numeric_traits<vnl_rational>::zero = 0L;
-const vnl_rational vnl_numeric_traits<vnl_rational>::one = 1L;
-

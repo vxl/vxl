@@ -79,6 +79,7 @@ public:
     : num_(num), den_(den) { assert(num!=0||den!=0); normalize(); }
   //: Creates a rational from a double.
   //  This is done by computing the continued fraction approximation for d.
+  //  Note that this is explicitly *not* an automatic type conversion.
   explicit vnl_rational (double d);
   //  Copy constructor
   inline vnl_rational (vnl_rational const& from)
@@ -108,6 +109,8 @@ public:
 
   //: Unary minus - returns the negation of the current rational.
   inline vnl_rational operator-() const { return vnl_rational(-num_, den_); }
+  //: Unary plus - returns the current rational.
+  inline vnl_rational operator+() const { return *this; }
   //: Unary not - returns true if rational is equal to zero.
   inline bool operator!() const { return (num_ == 0L); }
   //: Returns the absolute value of the current rational.
@@ -228,6 +231,9 @@ public:
     assert(r == t); // abort on underflow or overflow
     return r;
   }
+  //inline operator const long () const { return truncate(); }
+  //inline operator const float () const { return ((float)num_)/((float)den_); }
+  //inline operator const double () const { return ((double)num_)/((double)den_); }
   inline operator long () { return truncate(); }
   inline operator float () { return ((float)num_)/((float)den_); }
   inline operator double () { return ((double)num_)/((double)den_); }
@@ -329,10 +335,74 @@ inline long floor (vnl_rational const& r) { return r.floor(); }
 inline long ceil (vnl_rational const& r) { return r.ceil(); }
 inline long round (vnl_rational const& r) { return r.round(); }
 
+inline vnl_rational abs (vnl_rational const& x) { return x<0L ? -x : x; }
+vnl_rational sqrt (vnl_rational x); // { return vnl_rational(vcl_sqrt(double(x))); }
+
 inline vnl_rational vnl_math_abs(vnl_rational const& x) { return x<0L ? -x : x; }
 inline vnl_rational vnl_math_squared_magnitude(vnl_rational const& x) { return x*x; }
 inline vnl_rational vnl_math_sqr(vnl_rational const& x) { return x*x; }
 inline bool vnl_math_isnan(vnl_rational const& x){return false;}
 inline bool vnl_math_isfinite(vnl_rational const& x){return x.denominator() != 0L;} \
+
+#include <vnl/vnl_complex_traits.h>
+
+VCL_DEFINE_SPECIALIZATION
+struct vnl_complex_traits<vnl_rational>
+{
+  enum { isreal = true };
+  static vnl_rational conjugate(vnl_rational x) { return x; }
+  static vcl_complex<vnl_rational> complexify(vnl_rational x) { return vcl_complex<vnl_rational>(x, vnl_rational(0,1)); }
+};
+
+#include <vnl/vnl_numeric_traits.h>
+
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<vnl_rational> {
+public:
+  //: Additive identity
+  static const vnl_rational zero; // = 0L
+  //: Multiplicative identity
+  static const vnl_rational one; // = 1L
+  //: Return value of abs()
+  typedef vnl_rational abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
+  typedef vnl_rational double_t;
+  //: Name of type which results from multiplying this type with a double
+  typedef double real_t;
+};
+
+#include <vcl_complex.h>
+
+inline vnl_rational vnl_math_squared_magnitude(vcl_complex<vnl_rational> const& z) { return vcl_norm(z); }
+inline vnl_rational vnl_math_abs(vcl_complex<vnl_rational> const& z) { return sqrt(vcl_norm(z)); }
+inline vcl_complex<vnl_rational> vnl_math_sqr(vcl_complex<vnl_rational> const& z) { return z*z; }
+inline vcl_ostream& operator<< (vcl_ostream& s, vcl_complex<vnl_rational> const& z) {
+  return s << '(' << z.real() << "," << z.imag() << ')'; }
+inline vcl_istream& operator>> (vcl_istream& s, vcl_complex<vnl_rational>& z) {
+  vnl_rational r, i; s >> r >> i; z=vcl_complex<vnl_rational>(r,i); return s; }
+
+
+VCL_DEFINE_SPECIALIZATION
+struct vnl_complex_traits<vcl_complex<vnl_rational> >
+{
+  enum { isreal = false };
+  static vcl_complex<vnl_rational> conjugate(vcl_complex<vnl_rational> x) {return vcl_complex<vnl_rational>(x.real(),-x.imag());}
+  static vcl_complex<vnl_rational> complexify(vcl_complex<vnl_rational> x) { return x; }
+};
+
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<vcl_complex<vnl_rational> > {
+public:
+  //: Additive identity
+  static const vcl_complex<vnl_rational> zero; // = 0L
+  //: Multiplicative identity
+  static const vcl_complex<vnl_rational> one; // = 1L
+  //: Return value of abs()
+  typedef vnl_rational abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
+  typedef vcl_complex<vnl_rational> double_t;
+  //: Name of type which results from multiplying this type with a double
+  typedef vcl_complex<vnl_rational> real_t; // should be vcl_complex<double>, but that gives casting problems
+};
 
 #endif // vnl_rational_h_
