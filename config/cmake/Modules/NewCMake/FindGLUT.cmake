@@ -1,6 +1,14 @@
 #
 # try to find glut library and include files
 #
+# GLUT_INCLUDE_DIR, where to find GL/glut.h, etc.
+# GLUT_LIBRARIES, the libraries to link against to use GLUT.
+# GLUT_FOUND, If false, do not try to use GLUT.
+
+# also defined, but not for general use are
+# GLUT_glut_LIBRARY, where to find the glut library.
+# GLUT_Xmu_LIBRARY, where to find the Xmu library if available.
+# GLUT_Xi_LIBRARY, where to find the Xi Library if available.
 
 IF (WIN32)
 
@@ -79,7 +87,7 @@ ELSE (WIN32)
 
 ENDIF (WIN32)
 
-
+SET( GLUT_FOUND "NO" )
 IF(GLUT_INCLUDE_DIR)
   IF(GLUT_glut_LIBRARY)
     # Is -lXi and -lXmu required on all platforms that have it?
@@ -90,6 +98,11 @@ IF(GLUT_INCLUDE_DIR)
       ${GLUT_Xi_LIBRARY} 
     )
     SET( GLUT_FOUND "YES" )
+
+#The following deprecated settings are for backwards compatibility with CMake1.4
+    SET (GLUT_LIBRARY ${GLUT_LIBRARIES})
+    SET (GLUT_INCLUDE_PATH ${GLUT_INCLUDE_DIR})
+
   ENDIF(GLUT_glut_LIBRARY)
 ENDIF(GLUT_INCLUDE_DIR)
 
