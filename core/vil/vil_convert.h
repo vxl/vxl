@@ -63,7 +63,7 @@
 // \verbatim
 //  Modifications
 //   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
-// \endvarbatim
+// \endverbatim
 
 #include <vcl_deprecated.h>
 #include <vcl_cassert.h>
@@ -576,6 +576,7 @@ inline vil_image_view_base_sptr vil_convert_cast(outP /*dummy*/,
 // multi-planar view, and do a second (cheap) conversion.
 //
 // \deprecated Use other vil_convert_cast()
+// Can be removed after VXL 1.1.1
 template <class outP>
 inline void vil_convert_cast(const vil_image_view_base_sptr& src,
                              vil_image_view<outP >&dest)
