@@ -27,13 +27,9 @@
 
 class xcv_tableau : public vgui_grid_tableau
 {
-public:
-  xcv_tableau(int nb_images)
-   : vgui_grid_tableau(nb_images, 1)
-  {
-  }
-
-  ~xcv_tableau() {}
+ public:
+  xcv_tableau(int nb_images) : vgui_grid_tableau(nb_images, 1) {}
+ ~xcv_tableau() {}
 };
 typedef vgui_tableau_sptr_t<xcv_tableau> xcv_tableau_sptr;
 
@@ -147,7 +143,6 @@ int main(int argc, char** argv)
   vgui::init(argc,argv);
 
   xcv_tab = new xcv_tableau(argc-1);
-  int argcount = 1;
   unsigned window_width = 0;
   unsigned window_height = 0;
 
@@ -157,7 +152,6 @@ int main(int argc, char** argv)
   vgui_composite_tableau_new c(easy, rubber);
   vgui_viewer2D_tableau_new view(c);
   xcv_tab->add_next(view);
-  argcount++;
   if (image->height() > window_height)
      window_height = image->height();
    window_width = window_width + image->width();
