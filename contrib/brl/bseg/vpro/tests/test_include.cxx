@@ -9,6 +9,7 @@
 #include <bseg/vpro/vpro_frame_diff_process.h>
 #include <bseg/vpro/vpro_grid_finder_process.h>
 #include <bseg/vpro/vpro_harris_corner_process.h>
+#include <bseg/vpro/vpro_half_res_process.h>
 #include <bseg/vpro/vpro_ihs_process.h>
 #include <bseg/vpro/vpro_line_fit_process.h>
 #include <bseg/vpro/vpro_lucas_kanade_process.h>
