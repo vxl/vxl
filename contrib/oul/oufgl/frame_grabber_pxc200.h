@@ -10,6 +10,7 @@
 // Reproduction rights limited as described in the COPYRIGHT file.
 //----------------------------------------------------------------------
 
+#include <vcl_cstdio.h>
 #include <vil/vil_memory_image.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>
@@ -40,7 +41,7 @@ class FrameGrabberPxc200RGB : public FrameGrabber
   ImageContents *contents[2];
   ImageRGB *im[2];
   int current;
-  FILE *devfile;
+  vcl_FILE *devfile;
   AsyncIO *aio;
   int width, height;
   int fd;
