@@ -118,9 +118,10 @@ extern "C" void test_vbl_smart_ptr()
   base_impl::checkcount();
 }
 
-main(int /*argc*/, char **/*argv*/)
+int main(int /*argc*/, char **/*argv*/)
 {
   test_vbl_smart_ptr();
+  return 0;
 }
 
 //-------------------------------------------------------

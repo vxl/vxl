@@ -20,7 +20,7 @@ void test_vbl_sprintf(void)
   Assert("buf1 == [awf]", buf1 == "[awf]");
 }
 
-main()
+int main()
 {
   vcl_cout << "Running" << vcl_endl;
   test_vbl_sprintf();
