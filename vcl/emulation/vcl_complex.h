@@ -92,14 +92,14 @@ vcl_complex<FLOAT>::operator /= (const vcl_complex<FLOAT>& y)
   if (ar <= ai)
     {
       t = y.real() / y.imag();
-      d = y.imag() * (1 + t*t);
+      d = y.imag() * (t*t + 1L);
       nr = (re * t + im) / d;
       ni = (im * t - re) / d;
     }
   else
     {
       t = y.imag() / y.real();
-      d = y.real() * (1 + t*t);
+      d = y.real() * (t*t + 1L);
       nr = (re + im * t) / d;
       ni = (im - re * t) / d;
     }
@@ -328,14 +328,14 @@ operator / (const vcl_complex<FLOAT>& x, const vcl_complex<FLOAT>& y)
   if (ar <= ai)
     {
       t = y.real() / y.imag();
-      d = y.imag() * (1 + t*t);
+      d = y.imag() * (t*t + 1L);
       nr = (x.real() * t + x.imag()) / d;
       ni = (x.imag() * t - x.real()) / d;
     }
   else
     {
       t = y.imag() / y.real();
-      d = y.real() * (1 + t*t);
+      d = y.real() * (t*t + 1L);
       nr = (x.real() + x.imag() * t) / d;
       ni = (x.imag() - x.real() * t) / d;
     }
