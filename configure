@@ -63,14 +63,14 @@ fi
 # Name of the executable.
 as_me=`(basename "$0") 2>/dev/null ||
 $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
-	 X"$0" : 'X\(//\)$' \| \
-	 X"$0" : 'X\(/\)$' \| \
-	 .     : '\(.\)' 2>/dev/null ||
+         X"$0" : 'X\(//\)$' \| \
+         X"$0" : 'X\(/\)$' \| \
+         .     : '\(.\)' 2>/dev/null ||
 echo X/"$0" |
     sed '/^.*\/\([^/][^/]*\)\/*$/{ s//\1/; q; }
-  	  /^X\/\(\/\/\)$/{ s//\1/; q; }
-  	  /^X\/\(\/\).*/{ s//\1/; q; }
-  	  s/.*/./; q'`
+         /^X\/\(\/\/\)$/{ s//\1/; q; }
+         /^X\/\(\/\).*/{ s//\1/; q; }
+         s/.*/./; q'`
 
 # PATH needs CR, and LINENO needs CR and PATH.
 # Avoid depending upon Character Ranges.
@@ -130,20 +130,20 @@ do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
   for as_base in sh bash ksh sh5; do
-	 case $as_dir in
-	 /*)
-	   if ("$as_dir/$as_base" -c '
-  as_lineno_1=$LINENO
-  as_lineno_2=$LINENO
-  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
-  test "x$as_lineno_1" != "x$as_lineno_2" &&
-  test "x$as_lineno_3"  = "x$as_lineno_2" ') 2>/dev/null; then
-	     CONFIG_SHELL=$as_dir/$as_base
-	     export CONFIG_SHELL
-	     exec "$CONFIG_SHELL" "$0" ${1+"$@"}
-	   fi;;
-	 esac
-       done
+    case $as_dir in
+    /*)
+      if ("$as_dir/$as_base" -c '
+        as_lineno_1=$LINENO
+        as_lineno_2=$LINENO
+        as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
+        test "x$as_lineno_1" != "x$as_lineno_2" &&
+        test "x$as_lineno_3"  = "x$as_lineno_2" ') 2>/dev/null; then
+        CONFIG_SHELL=$as_dir/$as_base
+        export CONFIG_SHELL
+        exec "$CONFIG_SHELL" "$0" ${1+"$@"}
+      fi;;
+    esac
+  done
 done
 ;;
   esac
@@ -698,10 +698,10 @@ $as_expr X"$0" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
          .     : '\(.\)' 2>/dev/null ||
 echo X"$0" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
-  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
-  	  /^X\(\/\/\)$/{ s//\1/; q; }
-  	  /^X\(\/\).*/{ s//\1/; q; }
-  	  s/.*/./; q'`
+         /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+         /^X\(\/\/\)$/{ s//\1/; q; }
+         /^X\(\/\).*/{ s//\1/; q; }
+         s/.*/./; q'`
   srcdir=$ac_confdir
   if test ! -r $srcdir/$ac_unique_file; then
     srcdir=..
@@ -1022,7 +1022,7 @@ _ASBOX
     *ac_space=\ *)
       sed -n \
         "s/'"'"'/'"'"'\\\\'"'"''"'"'/g;
-    	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='"'"'\\2'"'"'/p"
+         s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='"'"'\\2'"'"'/p"
       ;;
     *)
       sed -n \
@@ -1626,9 +1626,9 @@ if test "$cross_compiling" != yes; then
     cross_compiling=no
   else
     if test "$cross_compiling" = maybe; then
-	cross_compiling=yes
+      cross_compiling=yes
     else
-	{ { echo "$as_me:$LINENO: error: cannot run C compiled programs.
+      { { echo "$as_me:$LINENO: error: cannot run C compiled programs.
 If you meant to cross compile, use \`--host'." >&5
 echo "$as_me: error: cannot run C compiled programs.
 If you meant to cross compile, use \`--host'." >&2;}
@@ -3220,9 +3220,9 @@ fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_default_value" >&5
 echo "${ECHO_T}$vcl_cv_cxx_default_value" >&6
 if test "$vcl_cv_cxx_default_value" = "yes" ; then
-  VCL_DEFAULT_VALUE="/* no need */"
-else
   VCL_DEFAULT_VALUE=" = x"
+else
+  VCL_DEFAULT_VALUE="/* no need */"
 fi
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -13822,7 +13822,7 @@ _ACEOF
       # substitution turns \\\\ into \\, and sed turns \\ into \).
       sed -n \
         "s/'/'\\\\''/g;
-    	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"
+         s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"
       ;;
     *)
       # `set' quotes correctly as required by POSIX, so do not add quotes.
@@ -13968,14 +13968,14 @@ fi
 # Name of the executable.
 as_me=`(basename "$0") 2>/dev/null ||
 $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
-	 X"$0" : 'X\(//\)$' \| \
-	 X"$0" : 'X\(/\)$' \| \
-	 .     : '\(.\)' 2>/dev/null ||
+         X"$0"  : 'X\(//\)$' \| \
+         X"$0"  : 'X\(/\)$' \| \
+         .      : '\(.\)' 2>/dev/null ||
 echo X/"$0" |
     sed '/^.*\/\([^/][^/]*\)\/*$/{ s//\1/; q; }
-  	  /^X\/\(\/\/\)$/{ s//\1/; q; }
-  	  /^X\/\(\/\).*/{ s//\1/; q; }
-  	  s/.*/./; q'`
+         /^X\/\(\/\/\)$/{ s//\1/; q; }
+         /^X\/\(\/\).*/{ s//\1/; q; }
+         s/.*/./; q'`
 
 # PATH needs CR, and LINENO needs CR and PATH.
 # Avoid depending upon Character Ranges.
@@ -14036,20 +14036,20 @@ do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
   for as_base in sh bash ksh sh5; do
-	 case $as_dir in
-	 /*)
-	   if ("$as_dir/$as_base" -c '
-  as_lineno_1=$LINENO
-  as_lineno_2=$LINENO
-  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
-  test "x$as_lineno_1" != "x$as_lineno_2" &&
-  test "x$as_lineno_3"  = "x$as_lineno_2" ') 2>/dev/null; then
-	     CONFIG_SHELL=$as_dir/$as_base
-	     export CONFIG_SHELL
-	     exec "$CONFIG_SHELL" "$0" ${1+"$@"}
-	   fi;;
-	 esac
-       done
+    case $as_dir in
+    /*)
+      if ("$as_dir/$as_base" -c '
+        as_lineno_1=$LINENO
+        as_lineno_2=$LINENO
+        as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
+        test "x$as_lineno_1" != "x$as_lineno_2" &&
+        test "x$as_lineno_3"  = "x$as_lineno_2" ') 2>/dev/null; then
+        CONFIG_SHELL=$as_dir/$as_base
+        export CONFIG_SHELL
+        exec "$CONFIG_SHELL" "$0" ${1+"$@"}
+      fi;;
+    esac
+  done
 done
 ;;
   esac
@@ -14538,9 +14538,9 @@ _ACEOF
       (echo ':t
   /@[a-zA-Z_][a-zA-Z_0-9]*@/!b' && cat $tmp/subs.frag) >$tmp/subs-$ac_sed_frag.sed
       if test -z "$ac_sed_cmds"; then
-  	ac_sed_cmds="sed -f $tmp/subs-$ac_sed_frag.sed"
+        ac_sed_cmds="sed -f $tmp/subs-$ac_sed_frag.sed"
       else
-  	ac_sed_cmds="$ac_sed_cmds | sed -f $tmp/subs-$ac_sed_frag.sed"
+        ac_sed_cmds="$ac_sed_cmds | sed -f $tmp/subs-$ac_sed_frag.sed"
       fi
       ac_sed_frag=`expr $ac_sed_frag + 1`
       ac_beg=$ac_end
@@ -14575,10 +14575,10 @@ $as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
          .     : '\(.\)' 2>/dev/null ||
 echo X"$ac_file" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
-  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
-  	  /^X\(\/\/\)$/{ s//\1/; q; }
-  	  /^X\(\/\).*/{ s//\1/; q; }
-  	  s/.*/./; q'`
+         /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+         /^X\(\/\/\)$/{ s//\1/; q; }
+         /^X\(\/\).*/{ s//\1/; q; }
+         s/.*/./; q'`
   { case "$ac_dir" in
   [\\/]* | ?:[\\/]* ) as_incr_dir=;;
   *)                      as_incr_dir=.;;
@@ -14592,7 +14592,7 @@ for as_mkdir_dir in `IFS='/\\'; set X $as_dummy; shift; echo "$@"`; do
       as_incr_dir=$as_incr_dir/$as_mkdir_dir
       test -d "$as_incr_dir" ||
         mkdir "$as_incr_dir" ||
-	{ { echo "$as_me:$LINENO: error: cannot create \"$ac_dir\"" >&5
+        { { echo "$as_me:$LINENO: error: cannot create \"$ac_dir\"" >&5
 echo "$as_me: error: cannot create \"$ac_dir\"" >&2;}
    { (exit 1); exit 1; }; }
     ;;

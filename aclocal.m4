@@ -533,9 +533,9 @@ void function(int x, char *ptr) { ++ ptr[x]; }
 ],,vcl_cv_cxx_default_value=no,vcl_cv_cxx_default_value=yes)
 ])
 if test "$vcl_cv_cxx_default_value" = "yes" ; then
-  VCL_DEFAULT_VALUE="/* no need */"
-else
   VCL_DEFAULT_VALUE=" = x"
+else
+  VCL_DEFAULT_VALUE="/* no need */"
 fi
 AC_LANG_RESTORE
 ])
