@@ -2321,6 +2321,21 @@ SOURCE=.\win32/vcl_ctime.h
 SOURCE=.\vcl_where_root_dir.h.in
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\vcl_config_compiler.h.in
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_config_headers.h.in
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_config_manual.h.in
+
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
