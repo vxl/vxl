@@ -31,20 +31,20 @@ class vgl_fit_lines_2d
  protected:
   vcl_vector<vgl_point_2d<T> > curve_;
   vcl_vector<vgl_line_segment_2d<T> > segs_;
-  int min_length_;
+  unsigned int min_length_;
   T tol_;
  public:
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-  vgl_fit_lines_2d(int min_length = 10, T tol = 0.15);
+  vgl_fit_lines_2d(unsigned int min_length = 10, T tol = 0.15);
 
   ~vgl_fit_lines_2d(){};
 
   // Operations----------------------------------------------------------------
 
   //: set parameters
-  void set_min_fit_length(int min_fit_length){min_length_ = min_fit_length;}
+  void set_min_fit_length(unsigned int min_fit_length){min_length_ = min_fit_length;}
   void set_rms_error_tol(T rms_error_tol){tol_ = rms_error_tol;}
 
   //: add a point to the curve
@@ -65,7 +65,7 @@ class vgl_fit_lines_2d
   vcl_vector<vgl_line_segment_2d<T> >& get_line_segs(){return segs_;}
  protected:
   //:output a line that fits from start to end
-  void output(int start_index, int end_index);
+  void output(unsigned int start_index, unsigned int end_index);
 };
 
 #define VGL_FIT_LINES_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_lines_2d.txx first"
