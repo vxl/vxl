@@ -1,21 +1,18 @@
-//------------------------------------------------------------------------------
-// FileName             : bcal_zhang_linear_calibrate.h
-// Author               : Kongbin Kang (kk@lems.brown.edu)
-// Company              : Brown University
-// Purpose              : zhang linear camera calibration from planary pattern
-// Date Of Creation     : 3/23/2003
-// Modification History :
-// Date             Modifications
-//------------------------------------------------------------------------------
-
+// This is brl/bmvl/bcal/bcal_zhang_linear_calibrate.h
 #ifndef AFX_ZHANGLINEARCALIBRATE_H__A6F24F23_8E39_494F_83FB_3ABF8093481D__INCLUDED_
 #define AFX_ZHANGLINEARCALIBRATE_H__A6F24F23_8E39_494F_83FB_3ABF8093481D__INCLUDED_
+//:
+// \file
+// \author Kongbin Kang (kk@lems.brown.edu)
+//         Brown University
+// \brief zhang linear camera calibration from planary pattern
+// \date  3/23/2003
+//------------------------------------------------------------------------------
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include <vcsl/vcsl_graph_sptr.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
