@@ -282,7 +282,7 @@ void vgui_tableau::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
     // not nested.
     if (submenu.size() > 0) // do not add empty submenus.
       menu.include(submenu);
-    
+
     if (params.recurse) {
       vcl_vector<vgui_tableau_sptr> children;
       get_children(&children);

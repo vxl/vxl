@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_style_factory - Undocumented class FIXME
 // .LIBRARY vgui
 // .HEADER vxl Package
@@ -31,13 +31,13 @@
 class vgui_style;
 class vgui_soview;
 
-class vgui_style_factory 
+class vgui_style_factory
 {
-public:  
+public:
  ~vgui_style_factory();
 
   static vgui_style_factory* instance();
-  
+
   static vgui_style* get_style(float r, float g, float b, float point_size, float line_width);
   static void get_styles(vcl_vector<vgui_style*>& styles_copy);
   static void get_soviews(vgui_style*, vcl_vector<vgui_soview*>& soviews);
@@ -50,12 +50,12 @@ public:
   class so_equal {
   public:
     so_equal(vgui_soview* s1_) : s1(s1_) {}
-    
+
     bool operator() (MultiMap_styles::value_type obj);
-    
+
     vgui_soview *s1;
   };
-  
+
   static vgui_DLLDATA bool use_factory;
 
 protected:
@@ -72,7 +72,7 @@ protected:
 
   //vgui_style* default_style;
   vcl_vector<vgui_style*> styles;
-  MultiMap_styles styles_map; 
+  MultiMap_styles styles_map;
 
 };
 
