@@ -11,21 +11,18 @@
 
 template <class T>
 vil_memory_image_of<T>::vil_memory_image_of():
-  VIL_IMAGE_DERIVED_CLASS_INIT,
   vil_memory_image()
 {
 }
 
 template <class T>
 vil_memory_image_of<T>::vil_memory_image_of(vil_memory_image_of<T> const & that):
-  VIL_IMAGE_DERIVED_CLASS_INIT,
   vil_memory_image(that)
 {
 }
 
 template <class T>
 vil_memory_image_of<T>::vil_memory_image_of(vil_image const& image):
-  VIL_IMAGE_DERIVED_CLASS_INIT,
   vil_memory_image(image)
 {
   assert(image.components() == components());
@@ -37,7 +34,6 @@ vil_memory_image_of<T>::vil_memory_image_of(vil_image const& image):
 
 template <class T>
 vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey):
-  VIL_IMAGE_DERIVED_CLASS_INIT,
   vil_memory_image(1, sizex, sizey, vil_memory_image_of_format<T>())
 {
 }
@@ -45,7 +41,6 @@ vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey):
 #if 0 // this method was removed
 template <class T>
 vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey, T const& value):
-  VIL_IMAGE_DERIVED_CLASS_INIT,
   vil_memory_image(1, sizex, sizey, vil_memory_image_of_format<T>())
 {
   T *p = (T*)get_buffer();

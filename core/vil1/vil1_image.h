@@ -20,19 +20,11 @@
 // vbl_smart_ptr<vil_image_impl>, but with some extra convenience
 // methods.  These methods might traditionally be attached to the ABC
 // image_impl, but this avoids cluttering that interface.
-class vil_image;
 
-//: You should not derive from vil_image to make a new image type.
+// You should not derive from vil_image to make a new image type.
 // Derive from vil_image_impl instead.
-// The trick used here to inhibit derivation is to derive from a 
-// virtual base class.
-struct vil_image_inhibit_derivation {vil_image_inhibit_derivation(int) {}};
-// fsm: initialization of the virtual base class must come first.
-//#define VIL_IMAGE_DERIVED_CLASS_INIT  , vil_image_inhibit_derivation(1)
-//#define VIL_IMAGE_DERIVED_CLASS_INIT0 : vil_image_inhibit_derivation(1)
-#define VIL_IMAGE_DERIVED_CLASS_INIT vil_image_inhibit_derivation(1)
 
-class vil_image : public virtual vil_image_inhibit_derivation {
+class vil_image {
 public:
 // use this delegation macro for consistency, not convenience.
 #define vil_image_delegate(m, args, default) { return ptr ? ptr->m args : default; }
@@ -94,12 +86,13 @@ public:
   
   //------------ smart-pointer logic --------
 
-  vil_image(vil_image_impl *p = 0) : VIL_IMAGE_DERIVED_CLASS_INIT, ptr(p) {
+  vil_image(vil_image_impl *p = 0) : ptr(p) 
+  {
     if (ptr)
       ptr->up_ref();
   }
 
-  vil_image(vil_image const& that) : VIL_IMAGE_DERIVED_CLASS_INIT, ptr(that.ptr) {
+  vil_image(vil_image const& that) : ptr(that.ptr) {
     if (ptr)
       ptr->up_ref();
   }

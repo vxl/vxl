@@ -27,43 +27,37 @@
   } \
 }
 
-vil_memory_image::vil_memory_image()
-  : VIL_IMAGE_DERIVED_CLASS_INIT
+vil_memory_image::vil_memory_image() 
 {
   cache_from_impl;
 }
 
 vil_memory_image::vil_memory_image(int planes, int w, int h, vil_memory_image_format const& format)
-  : VIL_IMAGE_DERIVED_CLASS_INIT
-  , vil_image(new vil_memory_image_impl(planes, w, h, format))
+  : vil_image(new vil_memory_image_impl(planes, w, h, format))
 {
   cache_from_impl;
 }
 
 vil_memory_image::vil_memory_image(int planes, int w, int h, int components, int bits_per_component, vil_component_format component_format)
-  : VIL_IMAGE_DERIVED_CLASS_INIT
-  , vil_image(new vil_memory_image_impl(planes, w, h, components, bits_per_component, component_format))
+  : vil_image(new vil_memory_image_impl(planes, w, h, components, bits_per_component, component_format))
 {
   cache_from_impl;
 }
 
 vil_memory_image::vil_memory_image(int planes, int w, int h, vil_pixel_format pixel_format)
-  : VIL_IMAGE_DERIVED_CLASS_INIT
-  , vil_image(new vil_memory_image_impl(planes, w, h, pixel_format))
+  : vil_image(new vil_memory_image_impl(planes, w, h, pixel_format))
 {
   cache_from_impl;
 }
 
 vil_memory_image::vil_memory_image(int w, int h, int components, int bits_per_component, vil_component_format component_format)
-  : VIL_IMAGE_DERIVED_CLASS_INIT
-  , vil_image(new vil_memory_image_impl(1, w, h, components, bits_per_component, component_format))
+  : vil_image(new vil_memory_image_impl(1, w, h, components, bits_per_component, component_format))
 {
   cache_from_impl;
 }
 
 vil_memory_image::vil_memory_image(int w, int h, vil_pixel_format pixel_format)
-  : VIL_IMAGE_DERIVED_CLASS_INIT
-  , vil_image(new vil_memory_image_impl(1, w, h, pixel_format))
+  : vil_image(new vil_memory_image_impl(1, w, h, pixel_format))
 {
   cache_from_impl;
 }
@@ -91,15 +85,13 @@ vil_image make_memory_image(vil_image const * thatp)
 
 //: If that is a memory image, just point to it, otherwise get_section
 vil_memory_image::vil_memory_image(vil_image const & that)
-  : VIL_IMAGE_DERIVED_CLASS_INIT
-  , vil_image(make_memory_image(&that))
+  : vil_image(make_memory_image(&that))
 {
   cache_from_impl;
 }
 
 vil_memory_image::vil_memory_image(vil_memory_image const& that)
-  : VIL_IMAGE_DERIVED_CLASS_INIT
-  , vil_image(that)
+  : vil_image(that)
 {
   cache_from_impl;
 }

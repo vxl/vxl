@@ -7,19 +7,16 @@
 #include <vil/vil_load.h>
 
 vil_file_image::vil_file_image(char const* filename, verbosity v VCL_DEFAULT_VALUE(verbose))
-: VIL_IMAGE_DERIVED_CLASS_INIT
 {
   load(filename, v);
 }
 
 vil_file_image::vil_file_image(vcl_string const& filename, verbosity v VCL_DEFAULT_VALUE(verbose))
-: VIL_IMAGE_DERIVED_CLASS_INIT
 {
   load(filename, v);
 }
 
 vil_file_image::vil_file_image()
-: VIL_IMAGE_DERIVED_CLASS_INIT
 {
 }
 
