@@ -317,7 +317,7 @@ template class vgl_box_2d<Type >;\
 template vcl_istream& operator>>(vcl_istream&, vgl_box_2d<Type >&);\
 template vcl_ostream& operator<<(vcl_ostream&, vgl_box_2d<Type > const&);\
 template vgl_box_2d<Type > intersect(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&);\
-template vgl_box_2d<Type > vgl_bounding_box_2d(const vgl_point_2d<Type>& p1,\
-                                               const vgl_point_2d<Type>& p2)
+template vgl_box_2d<Type > vgl_bounding_box_2d(const vgl_point_2d<Type >& p1,\
+                                               const vgl_point_2d<Type >& p2)
 
 #endif // vgl_box_2d_txx_
