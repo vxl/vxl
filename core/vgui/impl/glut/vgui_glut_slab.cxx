@@ -4,12 +4,12 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-#include <vcl_functional.h>
-#include <vcl_utility.h>
 #include "vgui_glut_slab.h"
 
 #include <vcl_csetjmp.h>
 #include <vcl_map.h>
+#include <vcl_functional.h>
+#include <vcl_utility.h>
 #include <vcl_iostream.h>
 
 #include <vgui/vgui_macro.h>
@@ -119,18 +119,18 @@ vgui_glut_slab::~vgui_glut_slab()
     the_map.erase(i);
 }
 
-static jmp_buf biffer;
+static vcl_jmp_buf biffer;
 
 static void my_longjmp_idler()
 {
-  longjmp(biffer, 1234);
+  vcl_longjmp(biffer, 1234);
 }
 
 // this runs the glut event loop for a short 
 // while, in fact till it becomes idle.
 static void service_glut_events()
 {
-  if (setjmp(biffer) == 1234)
+  if (vcl_setjmp(biffer) == 1234)
     return;
   glutIdleFunc(my_longjmp_idler);
   glutMainLoop();
