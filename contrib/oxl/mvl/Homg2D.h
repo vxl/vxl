@@ -64,9 +64,9 @@ class Homg2D : public vnl_double_3, public Homg
   //: Retrieve components.  Do not attempt to write into null pointers.
   void get(double *x_ptr, double *y_ptr, double *w_ptr) const
   {
-    if (x_ptr) *x_ptr = x();
-    if (y_ptr) *y_ptr = y();
-    if (w_ptr) *w_ptr = z();
+    if (x_ptr) *x_ptr = (*this)[0];
+    if (y_ptr) *y_ptr = (*this)[1];
+    if (w_ptr) *w_ptr = (*this)[2];
   }
 
 // @{ ACCESS TO COMPONENTS: @}

@@ -31,7 +31,7 @@ static vcl_ostream& warning(char const * fn)
 //  Default implementation is simply to return p in homogeneous coordinates
 HomgPoint2D ImageMetric::image_to_homg(const vnl_double_2& p) const
 {
-  return HomgPoint2D(p.x(), p.y(), 1.0);
+  return HomgPoint2D(p[0], p[1], 1.0);
 }
 
 //: Condition 2D point (x,y)

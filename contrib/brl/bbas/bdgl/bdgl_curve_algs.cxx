@@ -87,8 +87,8 @@ static double interpolate_segment(vnl_double_2& p0,
                                    vnl_double_2& p,
                                    vnl_double_2& pc)
 {
-  double Dx = p1.x()-p0.x(), Dy = p1.y()-p0.y();
-  double dx = p.x()-p0.x(), dy = p.y()-p0.y();
+  double Dx = p1[0]-p0[0], Dy = p1[1]-p0[1];
+  double dx = p[0]-p0[0], dy = p[1]-p0[1];
   double den = Dx*Dx + Dy*Dy;
   if (den<bdgl_curve_algs::tol)
   {
@@ -101,7 +101,7 @@ static double interpolate_segment(vnl_double_2& p0,
     t=0.0;
   if (t>1.0)
     t=1.0;
-  pc.x() = t*Dx + p0.x();   pc.y() = t*Dy + p0.y();
+  pc[0] = t*Dx + p0[0];   pc[1] = t*Dy + p0[1];
   return t;
 }
 
@@ -121,26 +121,25 @@ bool bdgl_curve_algs::closest_point_near(vdgl_edgel_chain_sptr const& ec,
   int last = ec->size()-1;//last edgel
   if (index<0||index>last)
     return false;
-  double t = 0;
   vnl_double_2 p(x, y);
   vnl_double_2 p0, p1, pc;
   if (index<last)
   {
-    p0.x()=(*ec)[index].x();
-    p0.y()=(*ec)[index].y();
-    p1.x()=(*ec)[index+1].x();
-    p1.y()=(*ec)[index+1].y();
+    p0[0]=(*ec)[index].x();
+    p0[1]=(*ec)[index].y();
+    p1[0]=(*ec)[index+1].x();
+    p1[1]=(*ec)[index+1].y();
   }
   if (index==last)
   {
-    p0.x()=(*ec)[index-1].x();
-    p0.y()=(*ec)[index-1].y();
-    p1.x()=(*ec)[index].x();
-    p1.y()=(*ec)[index].y();
+    p0[0]=(*ec)[index-1].x();
+    p0[1]=(*ec)[index-1].y();
+    p1[0]=(*ec)[index].x();
+    p1[1]=(*ec)[index].y();
   }
-  t = interpolate_segment(p0, p1, p, pc);
-  vcl_cout << "At " << p << " t = " << t << "\n";
-  xc = pc.x();   yc = pc.y();
+  double t = interpolate_segment(p0, p1, p, pc);
+  vcl_cout << "At " << p << " t = " << t << '\n';
+  xc = pc[0];   yc = pc[1];
   return true;
 }
 
@@ -176,7 +175,7 @@ static bool intersect_crossing(vnl_double_3& line_coefs,
   //Find the intersection point
   inter = cross_3d(lv01, line_coefs);
   //Check sanity of the intersection
-  return vcl_fabs(inter.z()) >= bdgl_curve_algs::tol;
+  return vcl_fabs(inter[2]) >= bdgl_curve_algs::tol;
 }
 
 //-------------------------------------------------------------
@@ -207,7 +206,7 @@ bool bdgl_curve_algs::intersect_line(vdgl_digital_curve_sptr const& dc,
   vnl_double_3 p0(dc->get_x(t), dc->get_y(t), 1.0), p1;
   for (double t=dt; t<=1.0; t+=dt)
   {
-    p1.x()=dc->get_x(t); p1.y()=dc->get_y(t); p1.z()= 1.0;
+    p1[0]=dc->get_x(t); p1[1]=dc->get_y(t); p1[2]= 1.0;
     double sign0 = dot_product(p0, lv);
     double sign1 = dot_product(p1, lv);
     if (vcl_fabs(sign0)<bdgl_curve_algs::tol||              //we have crossed or
@@ -216,7 +215,7 @@ bool bdgl_curve_algs::intersect_line(vdgl_digital_curve_sptr const& dc,
       vnl_double_3 inter;
       if (intersect_crossing(lv, p0, p1, inter))
       {
-        vgl_point_2d<double> p(inter.x()/inter.z(), inter.y()/inter.z());
+        vgl_point_2d<double> p(inter[0]/inter[2], inter[1]/inter[2]);
         pts.push_back(p);
         intersection = true;
       }
@@ -302,17 +301,15 @@ int bdgl_curve_algs::add_straight_edgels(vdgl_edgel_chain_sptr const& ec,
 {
   if (!ec)
   {
-    vcl_cout << "In bdgl_curve_algs::add_straight_edgels -"
-             << " null edgel chain\n";
+    vcl_cout << "In bdgl_curve_algs::add_straight_edgels - null edgel chain\n";
     return 0;
   }
 
   int Npix = 0, last = ec->size()-1;
   if (last<0)
   {
-    vcl_cout << "In bdgl_curve_algs::add_straight_edgels -"
-             << " chain with 0 edgels with target ("
-             << xe << " " << ye << ")\n";
+    vcl_cout << "In bdgl_curve_algs::add_straight_edgels - chain with 0 edgels with target ("
+             << xe << ' ' << ye << ")\n";
     return 0;
   }
 
@@ -326,7 +323,7 @@ int bdgl_curve_algs::add_straight_edgels(vdgl_edgel_chain_sptr const& ec,
       ec->add_edgel(ed);
       Npix++;
       if (debug)
-        vcl_cout << "Adding edgel " << ed <<  "\n";
+        vcl_cout << "Adding edgel " << ed << '\n';
     }
     else
       first = false;//skip first point since it is already last element of ec
@@ -341,15 +338,13 @@ int bdgl_curve_algs::closest_end(vdgl_edgel_chain_sptr const & ec,
 {
   if (!ec)
   {
-    vcl_cout << "In bdgl_curve_algs::closest_end -"
-             << " null edgel chain\n";
+    vcl_cout << "In bdgl_curve_algs::closest_end - null edgel chain\n";
     return 0;
   }
   int N = ec->size();
   if (!N)
   {
-    vcl_cout << "In bdgl_curve_algs::closest_end -"
-             << " no edgels in chain\n";
+    vcl_cout << "In bdgl_curve_algs::closest_end - no edgels in chain\n";
     return 0;
   }
   double x0 = (*ec)[0].x(), y0=(*ec)[0].y();

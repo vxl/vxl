@@ -34,18 +34,18 @@ MAIN( test_similarity_from_matches )
   vnl_vector_fixed<double,2> to_loc;
   vcl_vector< image_point_match > matches;
 
-  from_loc.x() = 10;  from_loc.y() = 20;
+  from_loc[0] = 10;  from_loc[1] = 20;
   to_loc = A*from_loc + t;
   int id = 0;
   matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 0 - id 0 - good
 
-  to_loc.x() += 3;  to_loc.y() += -4;   // dist = 5
+  to_loc[0] += 3;  to_loc[1] += -4;   // dist = 5
   id = 0;
   matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 1 - id 0 - bad
 
-  from_loc.x() = -15;  from_loc.y() = 6;
+  from_loc[0] = -15;  from_loc[1] = 6;
   to_loc = A*from_loc + t;
-  to_loc.x() += -30;  to_loc.y() += 40;  // dist = 50
+  to_loc[0] += -30;  to_loc[1] += 40;  // dist = 50
   id = 1;
   matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 2 - id 1 - bad
 
@@ -54,13 +54,13 @@ MAIN( test_similarity_from_matches )
   matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 3 - id 1 - good
 
   id = 1;
-  to_loc.x() += -6; to_loc.y() += 8;   // dist = 10
+  to_loc[0] += -6; to_loc[1] += 8;   // dist = 10
   matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 4 - id 1 - bad
 
   id = 2;
-  from_loc.x() += 5; from_loc.y() += -3;
+  from_loc[0] += 5; from_loc[1] += -3;
   to_loc = A*from_loc + t;
-  to_loc.x() += 0.3;  to_loc.y() += -0.4;
+  to_loc[0] += 0.3;  to_loc[1] += -0.4;
   matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 5 - id 2 - good (small error)
 
   testlib_test_begin( "ctor" );

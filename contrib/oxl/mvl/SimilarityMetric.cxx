@@ -105,13 +105,13 @@ SimilarityMetric::~SimilarityMetric()
 //: One line printout
 void SimilarityMetric::print(char* msg) const
 {
-  vcl_cerr<<msg<<": SimilarityMetric ("<<centre_x_<<","<<centre_y_<<", "<<inv_scale_<<")\n";
+  vcl_cerr<<msg<<": SimilarityMetric ("<<centre_x_<<','<<centre_y_<<", "<<inv_scale_<<")\n";
 }
 
 //: One line printout
 vcl_ostream& SimilarityMetric::print(vcl_ostream& s) const
 {
-  return s<<"[SimilarityMetric ("<<centre_x_<<","<<centre_y_<<"), "<<inv_scale_ << "]";
+  return s<<"[SimilarityMetric ("<<centre_x_<<','<<centre_y_<<"), "<<inv_scale_ << ']';
 }
 
 // IMPLEMENTATION OF ImageMetric
@@ -142,7 +142,7 @@ vnl_double_2 SimilarityMetric::homg_to_image(const HomgPoint2D& p) const
 //: Condition the 2D point p
 HomgPoint2D SimilarityMetric::image_to_homg(const vnl_double_2& p) const
 {
-  return image_to_homg(p.x(), p.y());
+  return image_to_homg(p[0], p[1]);
 }
 
 //: Transform homogeneous point to image coordinates, leaving it in homogeneous form.

@@ -21,9 +21,9 @@ test_bins_2()
   typedef rsdl_bins< 2, double, int > bin_type;
 
   vnl_vector_fixed< double, 2 > min_pt, max_pt, bin_sizes;
-  min_pt.x() = 1.0;   min_pt.y() = -2.5;
-  max_pt.x() = 75.0;  max_pt.y() = 32;
-  bin_sizes.x() = 6; bin_sizes.y() = 4;
+  min_pt[0] = 1.0;   min_pt[1] = -2.5;
+  max_pt[0] = 75.0;  max_pt[1] = 32;
+  bin_sizes[0] = 6; bin_sizes[1] = 4;
 
   bin_type bins( min_pt, max_pt, bin_sizes );
   double dist_tol = 0.0001;
@@ -34,14 +34,14 @@ test_bins_2()
 
   int stored_value;
 
-  pt.x() = 100; pt.y() = -30;
+  pt[0] = 100; pt[1] = -30;
   int added_value = 24;
   testlib_test_begin( "adding point outside range 1" );
   bins.add_point( pt, added_value );
   testlib_test_perform( bins.get_value( pt, stored_value )
                         && stored_value == added_value );
 
-  pt.x() = -50; pt.y() = 77.7;
+  pt[0] = -50; pt[1] = 77.7;
   added_value = 13;
   testlib_test_begin( "adding point outside range 2" );
   bins.add_point( pt, added_value );
@@ -58,8 +58,8 @@ test_bins_2()
 
     for ( int i=0; i<M; ++i ) {
       indices[ i ] = i;
-      points[ i ].x() = (max_pt.x() - min_pt.x()) * mz_rand.drand32() + min_pt.x();
-      points[ i ].y() = (max_pt.y() - min_pt.y()) * mz_rand.drand32() + min_pt.y();
+      points[ i ][0] = (max_pt[0] - min_pt[0]) * mz_rand.drand32() + min_pt[0];
+      points[ i ][1] = (max_pt[1] - min_pt[1]) * mz_rand.drand32() + min_pt[1];
       bins.add_point( points[ i ], i );
     }
 
@@ -68,9 +68,9 @@ test_bins_2()
     const int num_tests = 5;
     for ( int t=0; t<num_tests; ++t ) {
       vnl_vector_fixed< double, 2 > q;
-      q.x() = (max_pt.x() - min_pt.x()) * mz_rand.drand32() + min_pt.x();
-      q.y() = (max_pt.y() - min_pt.y()) * mz_rand.drand32() + min_pt.y();
-      double radius = (t+1) * bin_sizes.x() / 2;  // increasing size, starting smallest
+      q[0] = (max_pt[0] - min_pt[0]) * mz_rand.drand32() + min_pt[0];
+      q[1] = (max_pt[1] - min_pt[1]) * mz_rand.drand32() + min_pt[1];
+      double radius = (t+1) * bin_sizes[0] / 2;  // increasing size, starting smallest
 
       bool bin_answer = bins.is_any_point_within_radius( q, radius );
 
@@ -218,7 +218,7 @@ test_bins_3()
       q[0] = (max_pt[0] - min_pt[0]) * mz_rand.drand32() + min_pt[0];
       q[1] = (max_pt[1] - min_pt[1]) * mz_rand.drand32() + min_pt[1];
       q[2] = (max_pt[2] - min_pt[2]) * mz_rand.drand32() + min_pt[2];
-      double radius = (t+1) * bin_sizes.x() / 2;  // increasing size, starting smallest
+      double radius = (t+1) * bin_sizes[0] / 2;  // increasing size, starting smallest
 
       bool bin_answer = bins.is_any_point_within_radius( q, radius );
 

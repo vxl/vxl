@@ -230,14 +230,14 @@ void FMatrixPlanar::init(const FMatrix& F)
 
   ls.normalize();
 
-  double ls_thi = vcl_acos(ls.z());
+  double ls_thi = vcl_acos(ls[2]);
   if (ls_thi < 0) ls_thi += vnl_math::pi;
 
   double ls_theta;
-  if (ls.y() >= 0)
-    ls_theta =  vcl_acos(ls.x()/vcl_sin(ls_thi));
+  if (ls[1] >= 0)
+    ls_theta =  vcl_acos(ls[0]/vcl_sin(ls_thi));
   else
-    ls_theta = -vcl_acos(ls.x()/vcl_sin(ls_thi));
+    ls_theta = -vcl_acos(ls[0]/vcl_sin(ls_thi));
 
   double ls1 = vcl_cos(ls_theta)*vcl_sin(ls_thi);
   double ls2 = vcl_sin(ls_theta)*vcl_sin(ls_thi);

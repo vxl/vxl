@@ -28,11 +28,11 @@ rsdl_bins_2d( const vnl_vector_fixed< COORD_T, 2 > & min_pt,
               const vnl_vector_fixed< COORD_T, 2 > & bin_sizes )
   : min_pt_( min_pt ), max_pt_( max_pt ), bin_sizes_( bin_sizes ), dist_tolerance_sqr_( 0 )
 {
-  assert( min_pt_.x() <= max_pt_.x() );
-  assert( min_pt_.y() <= max_pt_.y() );
+  assert( min_pt_[0] <= max_pt_[0] );
+  assert( min_pt_[1] <= max_pt_[1] );
 
-  num_bins_x_ = int( vcl_ceil( double( max_pt_.x() - min_pt_.x() ) / bin_sizes_.x() ) );
-  num_bins_y_ = int( vcl_ceil( double( max_pt_.y() - min_pt_.y() ) / bin_sizes_.y() ) );
+  num_bins_x_ = int( vcl_ceil( double( max_pt_[0] - min_pt_[0] ) / bin_sizes_[0] ) );
+  num_bins_y_ = int( vcl_ceil( double( max_pt_[1] - min_pt_[1] ) / bin_sizes_[1] ) );
 
   bins_.resize( num_bins_x_, num_bins_y_ );
 }
@@ -55,11 +55,11 @@ reset( const vnl_vector_fixed< COORD_T, 2 > & min_pt,
   max_pt_ = max_pt;
   bin_sizes_ = bin_sizes;
 
-  assert( min_pt_.x() <= max_pt_.x() );
-  assert( min_pt_.y() <= max_pt_.y() );
+  assert( min_pt_[0] <= max_pt_[0] );
+  assert( min_pt_[1] <= max_pt_[1] );
 
-  num_bins_x_ = int( vcl_ceil( double( max_pt_.x() - min_pt_.x() ) / bin_sizes_.x() ) );
-  num_bins_y_ = int( vcl_ceil( double( max_pt_.y() - min_pt_.y() ) / bin_sizes_.y() ) );
+  num_bins_x_ = int( vcl_ceil( double( max_pt_[0] - min_pt_[0] ) / bin_sizes_[0] ) );
+  num_bins_y_ = int( vcl_ceil( double( max_pt_[1] - min_pt_[1] ) / bin_sizes_[1] ) );
 
   bins_.resize( 2, 2);    //needed because the next line does not clear out the previous bins
                           //if the previous bins are the same size....KHF 8/6/01
@@ -86,7 +86,7 @@ add_point( const vnl_vector_fixed< COORD_T, 2 > & pt,
            const VALUE_T & value )
 {
   int bin_x, bin_y;
-  this->point_to_bin( pt.x(), pt.y(), bin_x, bin_y );
+  this->point_to_bin( pt[0], pt[1], bin_x, bin_y );
   bins_( bin_x, bin_y ).push_back( bin_entry_type_ ( pt, value ) );
 }
 
@@ -97,15 +97,15 @@ rsdl_bins_2d< COORD_T, VALUE_T > ::
 get_value( const vnl_vector_fixed< COORD_T,  2 > & pt, VALUE_T& value )
 {
   int bin_x, bin_y;
-  this->point_to_bin( pt.x(), pt.y(), bin_x, bin_y );
+  this->point_to_bin( pt[0], pt[1], bin_x, bin_y );
   typename bin_vector_type_::iterator p = bins_( bin_x, bin_y ).begin();
 
   COORD_T distance = vcl_sqrt(dist_tolerance_sqr_);
   int min_bin_x, min_bin_y;
-  this->point_to_bin( pt.x()-distance, pt.y()-distance, min_bin_x, min_bin_y );
+  this->point_to_bin( pt[0]-distance, pt[1]-distance, min_bin_x, min_bin_y );
 
   int max_bin_x, max_bin_y;
-  this->point_to_bin( pt.x()+distance, pt.y()+distance, max_bin_x, max_bin_y );
+  this->point_to_bin( pt[0]+distance, pt[1]+distance, max_bin_x, max_bin_y );
 
   for ( int bin_x = min_bin_x; bin_x <= max_bin_x; ++ bin_x ) {
     for ( int bin_y = min_bin_y; bin_y <= max_bin_y; ++ bin_y ) {
@@ -129,15 +129,15 @@ change_point( const vnl_vector_fixed< COORD_T, 2 > & pt,
               const VALUE_T & value )
 {
   int bin_x, bin_y;
-  this->point_to_bin( pt.x(), pt.y(), bin_x, bin_y );
+  this->point_to_bin( pt[0], pt[1], bin_x, bin_y );
   typename bin_vector_type_::iterator p = bins_( bin_x, bin_y ).begin();
 
   COORD_T distance = vcl_sqrt(dist_tolerance_sqr_);
   int min_bin_x, min_bin_y;
-  this->point_to_bin( pt.x()-distance, pt.y()-distance, min_bin_x, min_bin_y );
+  this->point_to_bin( pt[0]-distance, pt[1]-distance, min_bin_x, min_bin_y );
 
   int max_bin_x, max_bin_y;
-  this->point_to_bin( pt.x()+distance, pt.y()+distance, max_bin_x, max_bin_y );
+  this->point_to_bin( pt[0]+distance, pt[1]+distance, max_bin_x, max_bin_y );
 
   for ( int bin_x = min_bin_x; bin_x <= max_bin_x; ++ bin_x ) {
     for ( int bin_y = min_bin_y; bin_y <= max_bin_y; ++ bin_y ) {
@@ -162,15 +162,15 @@ change_point( const vnl_vector_fixed< COORD_T, 2 > & pt,
               const VALUE_T& new_val )
 {
   int bin_x, bin_y;
-  this->point_to_bin( pt.x(), pt.y(), bin_x, bin_y );
+  this->point_to_bin( pt[0], pt[1], bin_x, bin_y );
   typename bin_vector_type_::iterator p = bins_( bin_x, bin_y ).begin();
 
   COORD_T distance = vcl_sqrt(dist_tolerance_sqr_);
   int min_bin_x, min_bin_y;
-  this->point_to_bin( pt.x()-distance, pt.y()-distance, min_bin_x, min_bin_y );
+  this->point_to_bin( pt[0]-distance, pt[1]-distance, min_bin_x, min_bin_y );
 
   int max_bin_x, max_bin_y;
-  this->point_to_bin( pt.x()+distance, pt.y()+distance, max_bin_x, max_bin_y );
+  this->point_to_bin( pt[0]+distance, pt[1]+distance, max_bin_x, max_bin_y );
 
   for ( int bin_x = min_bin_x; bin_x <= max_bin_x; ++ bin_x ) {
     for ( int bin_y = min_bin_y; bin_y <= max_bin_y; ++ bin_y ) {
@@ -195,15 +195,15 @@ rsdl_bins_2d< COORD_T, VALUE_T > ::
 remove_point( const vnl_vector_fixed< COORD_T, 2 > & pt )
 {
   int bin_x, bin_y;
-  this->point_to_bin( pt.x(), pt.y(), bin_x, bin_y );
+  this->point_to_bin( pt[0], pt[1], bin_x, bin_y );
   typename bin_vector_type_::iterator p = bins_( bin_x, bin_y ).begin();
 
   COORD_T distance = vcl_sqrt(dist_tolerance_sqr_);
   int min_bin_x, min_bin_y;
-  this->point_to_bin( pt.x()-distance, pt.y()-distance, min_bin_x, min_bin_y );
+  this->point_to_bin( pt[0]-distance, pt[1]-distance, min_bin_x, min_bin_y );
 
   int max_bin_x, max_bin_y;
-  this->point_to_bin( pt.x()+distance, pt.y()+distance, max_bin_x, max_bin_y );
+  this->point_to_bin( pt[0]+distance, pt[1]+distance, max_bin_x, max_bin_y );
 
   for ( int bin_x = min_bin_x; bin_x <= max_bin_x; ++ bin_x ) {
     for ( int bin_y = min_bin_y; bin_y <= max_bin_y; ++ bin_y ) {
@@ -227,15 +227,15 @@ remove_point( const vnl_vector_fixed< COORD_T, 2 > & pt,
               const VALUE_T & value )
 {
   int bin_x, bin_y;
-  this->point_to_bin( pt.x(), pt.y(), bin_x, bin_y );
+  this->point_to_bin( pt[0], pt[1], bin_x, bin_y );
   typename bin_vector_type_::iterator p = bins_( bin_x, bin_y ).begin();
 
   COORD_T distance = vcl_sqrt(dist_tolerance_sqr_);
   int min_bin_x, min_bin_y;
-  this->point_to_bin( pt.x()-distance, pt.y()-distance, min_bin_x, min_bin_y );
+  this->point_to_bin( pt[0]-distance, pt[1]-distance, min_bin_x, min_bin_y );
 
   int max_bin_x, max_bin_y;
-  this->point_to_bin( pt.x()+distance, pt.y()+distance, max_bin_x, max_bin_y );
+  this->point_to_bin( pt[0]+distance, pt[1]+distance, max_bin_x, max_bin_y );
 
   for ( int bin_x = min_bin_x; bin_x <= max_bin_x; ++ bin_x ) {
     for ( int bin_y = min_bin_y; bin_y <= max_bin_y; ++ bin_y ) {
@@ -280,7 +280,7 @@ n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
   int num_found = 0;
 
   int c_bin_x, c_bin_y;
-  this->point_to_bin( query_pt.x(), query_pt.y(), c_bin_x, c_bin_y );
+  this->point_to_bin( query_pt[0], query_pt[1], c_bin_x, c_bin_y );
 
   int infinity_norm_dist = 0;
 
@@ -294,7 +294,7 @@ n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
     still_testing = false;
     for ( unsigned int i=0; i<bin_xs.size(); ++ i ) {
       if ( num_found < n ||
-           this->min_sq_distance_to_bin( query_pt.x(), query_pt.y(), bin_xs[i], bin_ys[i] )
+           this->min_sq_distance_to_bin( query_pt[0], query_pt[1], bin_xs[i], bin_ys[i] )
              < sq_distances[ num_found - 1 ] ) {
         still_testing = true;
         for (typename bin_vector_type_::const_iterator p = bins_( bin_xs[i], bin_ys[i] ).begin();
@@ -381,10 +381,10 @@ is_any_point_within_radius( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
   COORD_T sq_radius = radius * radius;
 
   int min_bin_x, min_bin_y;
-  this->point_to_bin( query_pt.x() - radius, query_pt.y() - radius, min_bin_x, min_bin_y );
+  this->point_to_bin( query_pt[0] - radius, query_pt[1] - radius, min_bin_x, min_bin_y );
 
   int max_bin_x, max_bin_y;
-  this->point_to_bin( query_pt.x() + radius, query_pt.y() + radius, max_bin_x, max_bin_y );
+  this->point_to_bin( query_pt[0] + radius, query_pt[1] + radius, max_bin_x, max_bin_y );
 
   typename bin_vector_type_::const_iterator p;
 
@@ -426,10 +426,10 @@ points_within_radius( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
   COORD_T sq_radius = radius * radius;
 
   int min_bin_x, min_bin_y;
-  this->point_to_bin( query_pt.x() - radius, query_pt.y() - radius, min_bin_x, min_bin_y );
+  this->point_to_bin( query_pt[0] - radius, query_pt[1] - radius, min_bin_x, min_bin_y );
 
   int max_bin_x, max_bin_y;
-  this->point_to_bin( query_pt.x() + radius, query_pt.y() + radius, max_bin_x, max_bin_y );
+  this->point_to_bin( query_pt[0] + radius, query_pt[1] + radius, max_bin_x, max_bin_y );
 
   points.clear();
   values.clear();
@@ -458,18 +458,18 @@ is_any_point_in_bounding_box( const vnl_vector_fixed<COORD_T,2>& min_query_pt,
 {
   COORD_T distance = vcl_sqrt(dist_tolerance_sqr_);
   int min_bin_x, min_bin_y;
-  this->point_to_bin( min_query_pt.x()-distance, min_query_pt.y()-distance, min_bin_x, min_bin_y );
+  this->point_to_bin( min_query_pt[0]-distance, min_query_pt[1]-distance, min_bin_x, min_bin_y );
 
   int max_bin_x, max_bin_y;
-  this->point_to_bin( max_query_pt.x()+distance, max_query_pt.y()+distance, max_bin_x, max_bin_y );
+  this->point_to_bin( max_query_pt[0]+distance, max_query_pt[1]+distance, max_bin_x, max_bin_y );
 
   typename bin_vector_type_::const_iterator p;
 
   for ( int bin_x = min_bin_x; bin_x <= max_bin_x; ++ bin_x ) {
     for ( int bin_y = min_bin_y; bin_y <= max_bin_y; ++ bin_y ) {
       for ( p = bins_( bin_x, bin_y ).begin(); p != bins_( bin_x, bin_y ).end(); ++p ) {
-        if ( min_query_pt.x() <= p->point_.x() && p->point_.x() <= max_query_pt.x() &&
-             min_query_pt.y() <= p->point_.y() && p->point_.y() <= max_query_pt.y() ) {
+        if ( min_query_pt[0] <= p->point_[0] && p->point_[0] <= max_query_pt[0] &&
+             min_query_pt[1] <= p->point_[1] && p->point_[1] <= max_query_pt[1] ) {
           return true;
         }
       }
@@ -501,10 +501,10 @@ points_in_bounding_box( const vnl_vector_fixed< COORD_T, 2 > & min_query_pt,
 {
   COORD_T distance = vcl_sqrt(dist_tolerance_sqr_);
   int min_bin_x, min_bin_y;
-  this->point_to_bin( min_query_pt.x()-distance, min_query_pt.y()-distance, min_bin_x, min_bin_y );
+  this->point_to_bin( min_query_pt[0]-distance, min_query_pt[1]-distance, min_bin_x, min_bin_y );
 
   int max_bin_x, max_bin_y;
-  this->point_to_bin( max_query_pt.x()+distance, max_query_pt.y()+distance, max_bin_x, max_bin_y );
+  this->point_to_bin( max_query_pt[0]+distance, max_query_pt[1]+distance, max_bin_x, max_bin_y );
 
   points.clear();
   values.clear();
@@ -514,8 +514,8 @@ points_in_bounding_box( const vnl_vector_fixed< COORD_T, 2 > & min_query_pt,
   for ( int bin_x = min_bin_x; bin_x <= max_bin_x; ++ bin_x ) {
     for ( int bin_y = min_bin_y; bin_y <= max_bin_y; ++ bin_y ) {
       for ( p = bins_( bin_x, bin_y ).begin(); p != bins_( bin_x, bin_y ).end(); ++p ) {
-        if ( min_query_pt.x() <= p->point_.x() && p->point_.x() <= max_query_pt.x() &&
-             min_query_pt.y() <= p->point_.y() && p->point_.y() <= max_query_pt.y() ) {
+        if ( min_query_pt[0] <= p->point_[0] && p->point_[0] <= max_query_pt[0] &&
+             min_query_pt[1] <= p->point_[1] && p->point_[1] <= max_query_pt[1] ) {
           points.push_back( p->point_ );
           values.push_back( p->value_ );
         }
@@ -530,14 +530,14 @@ void
 rsdl_bins_2d< COORD_T, VALUE_T > ::
 point_to_bin( COORD_T x, COORD_T y, int& bin_x, int& bin_y ) const
 {
-  bin_x = int( ( x - min_pt_.x() ) / bin_sizes_.x() );
+  bin_x = int( ( x - min_pt_[0] ) / bin_sizes_[0] );
 
   if ( bin_x < 0 )
     bin_x = 0;
   else if ( bin_x >= num_bins_x_ )
     bin_x = num_bins_x_ - 1;
 
-  bin_y = int( ( y - min_pt_.y() ) / bin_sizes_.y() );
+  bin_y = int( ( y - min_pt_[1] ) / bin_sizes_[1] );
 
   if ( bin_y < 0 )
     bin_y = 0;
@@ -553,16 +553,16 @@ min_sq_distance_to_bin( COORD_T x, COORD_T y, int bin_x, int bin_y ) const
 {
   COORD_T sq_dist = 0;
 
-  COORD_T min_x = min_pt_.x() + bin_x * bin_sizes_.x();
-  COORD_T max_x = min_pt_.x() + (bin_x + 1) * bin_sizes_.x();  // not right for COORD_T == int
+  COORD_T min_x = min_pt_[0] + bin_x * bin_sizes_[0];
+  COORD_T max_x = min_pt_[0] + (bin_x + 1) * bin_sizes_[0];  // not right for COORD_T == int
 
   if ( x < min_x )
     sq_dist += vnl_math_sqr( min_x - x );
   else if ( x > max_x )
     sq_dist += vnl_math_sqr( x - max_x );
 
-  COORD_T min_y = min_pt_.y() + bin_y * bin_sizes_.y();
-  COORD_T max_y = min_pt_.y() + (bin_y + 1) * bin_sizes_.y();  // not right for COORD_T == int
+  COORD_T min_y = min_pt_[1] + bin_y * bin_sizes_[1];
+  COORD_T max_y = min_pt_[1] + (bin_y + 1) * bin_sizes_[1];  // not right for COORD_T == int
 
   if ( y < min_y )
     sq_dist += vnl_math_sqr( min_y - y );
@@ -591,7 +591,7 @@ vcl_ostream& operator<< ( vcl_ostream& ostr,
                           const vcl_vector< rsdl_bins_2d_entry< COORD_T, VALUE_T > > & entries )
 {
   for ( unsigned int i=0; i<entries.size(); ++ i )
-    ostr << i << ":  point = " << entries[i].point_ << ", value = " << entries[i].value_ << "\n";
+    ostr << i << ":  point = " << entries[i].point_ << ", value = " << entries[i].value_ << '\n';
   return ostr;
 }
 

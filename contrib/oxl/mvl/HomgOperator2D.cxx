@@ -58,7 +58,7 @@ double HomgOperator2D::dot(const Homg2D& a, const Homg2D& b)
 //: Normalize Homg2D to unit magnitude
 void HomgOperator2D::unitize(Homg2D* a)
 {
-  double norm = a->x()*a->x() + a->y()*a->y() + a->z()*a->z();
+  double norm = a->x()*a->x() + a->y()*a->y() + a->w()*a->w();
 
   if (norm == 0.0) {
     vcl_cerr << "HomgOperator2D::unitize() -- Zero length vector\n";
@@ -66,7 +66,7 @@ void HomgOperator2D::unitize(Homg2D* a)
   }
 
   norm = 1.0/vcl_sqrt(norm);
-  a->set(a->x()*norm, a->y()*norm, a->z()*norm);
+  a->set(a->x()*norm, a->w()*norm, a->w()*norm);
 }
 
 // == DISTANCE MEASUREMENTS IN IMAGE COORDINATES ==
@@ -365,7 +365,7 @@ static vnl_vector<double> most_orthogonal_vector_svd(const vcl_vector<HomgLine2D
     D.set_row(i, lines[i].get_vector());
 
   vnl_svd<double> svd(D);
-  vcl_cerr << "[movrank " << svd.W() << "]";
+  vcl_cerr << "[movrank " << svd.W() << ']';
 
   return svd.nullvector();
 }

@@ -160,8 +160,8 @@ rsdl_borgefors<T>::initialize(iterator_type  begin, iterator_type end)
   // 2. Mark the data on the maps
   //
   for (unsigned int i = 0; i < data_.size(); i++) {
-    int x = vnl_math_rnd(data_[i]->x() - org_x_);
-    int y = vnl_math_rnd(data_[i]->y() - org_y_);
+    int x = vnl_math_rnd((*data_[i])[0] - org_x_);
+    int y = vnl_math_rnd((*data_[i])[1] - org_y_);
     if ( x>= 0 && x < size_x_ && y>=0 && y < size_y_ )
       {
         distance_map_[y][x] = 0;

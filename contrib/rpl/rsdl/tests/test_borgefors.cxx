@@ -10,8 +10,8 @@ void TEST_NEAR_vec(const char* msg,
                    const vnl_vector_fixed<double,2>& v2,
                    double tol)
 {
-  TEST_NEAR(msg, v1.x(), v2.x(), tol);
-  TEST_NEAR(msg, v1.y(), v2.y(), tol);
+  TEST_NEAR(msg, v1[0], v2[0], tol);
+  TEST_NEAR(msg, v1[1], v2[1], tol);
 }
 
 MAIN( test_borgefors )

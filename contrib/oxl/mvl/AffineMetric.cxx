@@ -85,7 +85,7 @@ HomgPoint2D AffineMetric::image_to_homg(double x, double y) const
 
 HomgPoint2D AffineMetric::image_to_homg(const vnl_double_2& p) const
 {
-  return image_to_homg(p.x(), p.y());
+  return image_to_homg(p[0], p[1]);
 }
 
 //: Convert conditioned point p to image coordinates
@@ -100,5 +100,5 @@ vnl_double_2 AffineMetric::homg_to_image(const HomgPoint2D& p) const
 //: print to vcl_ostream
 vcl_ostream& AffineMetric::print(vcl_ostream& s) const
 {
-  return s << "AffineMetric [" << A_.get_row(0) << ";" << A_.get_row(1) << ";" << A_.get_row(2) << "]";
+  return s << "AffineMetric [" << A_.get_row(0) << ';' << A_.get_row(1) << ';' << A_.get_row(2) << ']';
 }
