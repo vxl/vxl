@@ -23,7 +23,7 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_array_1d<T> & p)
   vsl_b_write(os, array_size);
   int array_capacity = p.capacity();
   vsl_b_write(os, array_capacity);
-  for (unsigned i=0; i < array_size; ++i)
+  for (int i=0; i < array_size; ++i)
     vsl_b_write(os, p[i]);
 }
 
@@ -45,7 +45,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_1d<T> & p)
     vsl_b_read(is, array_size);
     vsl_b_read(is, array_capacity);
     p.reserve(array_capacity);
-    for (unsigned i=0; i<array_size; ++i)
+    for (int i=0; i<array_size; ++i)
     {
       vsl_b_read(is, val);
       p.push_back(val);
@@ -67,7 +67,7 @@ template<class T>
 void vsl_print_summary(vcl_ostream & os,const vbl_array_1d<T> & p)
 {
   os<<"Length: "<<p.size()<<vcl_endl;
-  for ( int i =0; i < p.size() && i < 5; i++ )
+  for (unsigned int i =0; i < p.size() && i < 5; i++ )
   {
     os << " " << i << ": ";
     vsl_print_summary(os, p[i]);

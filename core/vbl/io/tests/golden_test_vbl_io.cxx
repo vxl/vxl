@@ -9,13 +9,10 @@
 #include <vbl/io/tests/vbl_io_test_classes.h>
 #include <vbl/io/tests/vbl_io_test_classes.cxx>
 
-
 #include <vbl/io/vbl_io_smart_ptr.h>
-
 
 #include <vbl/io/vbl_io_sparse_array_1d.h>
 #include <vbl/io/vbl_io_bounding_box.h>
-
 
 #include <vcl_cassert.h>
 #include <vcl_string.h>
@@ -112,7 +109,7 @@ void golden_test_vbl_io(bool save_file)
   vbl_array_3d<int> a3_out(array_row1, array_row2, array_row3), a3_in;
   for (int i=0; i<array_row1; i++)
     for (int j=0; j< array_row2; j++)
-      for (unsigned k=0; k<array_row3; k++)
+      for (int k=0; k<array_row3; k++)
         a3_out(i,j,k) = i*j*j*k;
 
 
@@ -127,8 +124,6 @@ void golden_test_vbl_io(bool save_file)
   sa_out(key3)=data3;
   for (unsigned k=60; k<70; k++)
     sa_out(k)=data1;
-
-
 
 
   // Smart Pointer
@@ -262,9 +257,6 @@ void golden_test_vbl_io(bool save_file)
     }
   }
   TEST ("vbl_sparse_array_1d: sa_out == sa_in",test_result4, true);
-
-
-
 
 
   // Test Smart Pointer

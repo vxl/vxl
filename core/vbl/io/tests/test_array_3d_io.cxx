@@ -19,7 +19,7 @@ void test_array_3d_io()
 
   for (int i=0; i<array_row1; i++)
     for (int j=0; j< array_row2; j++)
-      for (unsigned k=0; k<array_row3; k++)
+      for (int k=0; k<array_row3; k++)
         v_out(i,j,k) = i*j*j*k;
 
   vsl_b_ofstream bfs_out("vbl_array_3d_test_io.bvl.tmp");

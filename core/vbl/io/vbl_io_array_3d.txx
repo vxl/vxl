@@ -25,9 +25,9 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_array_3d<T> &p)
   vsl_b_write(os, row1_count);
   vsl_b_write(os, row2_count);
   vsl_b_write(os, row3_count);
-  for (unsigned i=0; i<row1_count; i++)
-    for (unsigned j=0; j<row2_count; j++)
-      for (unsigned k=0; k<row3_count; k++)
+  for (int i=0; i<row1_count; i++)
+    for (int j=0; j<row2_count; j++)
+      for (int k=0; k<row3_count; k++)
         vsl_b_write(os, p(i,j,k));
 }
 
@@ -48,9 +48,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_3d<T> &p)
     vsl_b_read(is, row2_count);
     vsl_b_read(is, row3_count);
     p.resize(row1_count, row2_count, row3_count);
-    for (unsigned i=0; i<row1_count; i++)
-      for (unsigned j=0; j<row2_count; j++)
-        for (unsigned k=0; k<row3_count; k++)
+    for (int i=0; i<row1_count; i++)
+      for (int j=0; j<row2_count; j++)
+        for (int k=0; k<row3_count; k++)
           vsl_b_read(is, p(i,j,k));
     break;
 
@@ -70,11 +70,11 @@ void vsl_print_summary(vcl_ostream & os,const vbl_array_3d<T> & p)
   os << "Row1 count: " << p.get_row1_count() << vcl_endl;
   os << "Row2 count: " << p.get_row2_count() << vcl_endl;
   os << "Row3 count: " << p.get_row3_count() << vcl_endl;
-  for (unsigned i =0; i<p.get_row1_count() && i<5; i++)
+  for (int i =0; i<p.get_row1_count() && i<5; i++)
   {
-    for (unsigned j=0; j<p.get_row2_count() && j<5; j++)
+    for (int j=0; j<p.get_row2_count() && j<5; j++)
     {
-      for (unsigned k=0; k<p.get_row3_count() && k<5; k++)
+      for (int k=0; k<p.get_row3_count() && k<5; k++)
       {
         os << " ";
         vsl_print_summary(os, p(i,j,k));

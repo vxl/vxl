@@ -46,9 +46,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_2d<T> &p)
     vsl_b_read(is, array_rows);
     vsl_b_read(is, array_cols);
     p.resize(array_rows, array_cols);
-    for (unsigned i=0; i<array_rows; i++)
+    for (int i=0; i<array_rows; i++)
     {
-      for (unsigned j=0; j<array_cols; j++)
+      for (int j=0; j<array_cols; j++)
         vsl_b_read(is, p(i,j));
     }
     break;
@@ -68,9 +68,9 @@ void vsl_print_summary(vcl_ostream & os,const vbl_array_2d<T> & p)
 {
   os << "Rows: " << p.rows() << vcl_endl;
   os << "Columns: " << p.cols() << vcl_endl;
-  for (unsigned i =0; i<p.rows() && i<5; i++)
+  for (int i =0; i<p.rows() && i<5; i++)
   {
-    for (unsigned j=0; j<p.cols() && j<5; j++)
+    for (int j=0; j<p.cols() && j<5; j++)
     {
       os << " ";
       vsl_print_summary(os, p(i,j));

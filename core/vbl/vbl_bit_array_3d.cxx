@@ -93,7 +93,7 @@ void vbl_bit_array_3d_base::index(unsigned x, unsigned y, unsigned z,
                                   unsigned long & byteindex,
                                   unsigned char & bitindex) const
 {
-  assert(x<row1_count() && y<row2_count() && z<row3_count());
+  assert(int(x)<row1_count() && int(y)<row2_count() && int(z)<row3_count());
   unsigned long i = (z*row2_count()+y)*row1_count()+x;
 
   byteindex = i/CHAR_BIT;
