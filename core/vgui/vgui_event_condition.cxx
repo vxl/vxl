@@ -29,8 +29,9 @@ void vgui_event_condition::init(vgui_key k, vgui_button b, vgui_modifier m,
   if (k > 0 && k < 32) 
   {
     // Convert control character to lower case
+    // (operator!= doesn't work for bitfields with gcc 2.95)
     key = vgui_key(k + 'a' -1);
-    if (modifier != vgui_CTRL)
+    if (! (modifier == vgui_CTRL))
     {
       vcl_cerr << "ERROR attempting to make an impossible vgui_event_condition."
         << " - key " << vgui_key(k) << " is a control character, but modifier "
@@ -41,8 +42,9 @@ void vgui_event_condition::init(vgui_key k, vgui_button b, vgui_modifier m,
   if (k >= 'A' && k <= 'Z')
   {
     // Convert upper to lower case:
+    // (operator!= doesn't work for bitfields with gcc 2.95)
     key = vgui_key(k + 'a' - 'A');
-    if (modifier != vgui_SHIFT)
+    if (! (modifier == vgui_SHIFT))
     {
       vcl_cerr << "ERROR attempting to make an impossible vgui_event_condition"
         << " - Given key " << vgui_key(k) << " is a shift character, but "
