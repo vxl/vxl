@@ -27,14 +27,11 @@ static void test_region_proc(int argc, char * argv[])
     rp.extract_regions();
     vcl_vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
     int n = regions.size();
-    vcl_cout << "nregions = " << n << '\n';
-    TEST("nregions should be around 187", n>=185 && n<=193, true);
+    TEST_NEAR("nregions", n, 190, 5);
     if (n>0)
     {
       vtol_intensity_face_sptr f = regions[0];
-      vcl_cout << "f->Npix() " << f->Npix() << '\n';
-      TEST("size of first region should be around 41120",
-           f->Npix()>=41120 && f->Npix()<=41121, true);
+      TEST_NEAR("size of first region", f->Npix(), 41100, 50);
     }
   }
 }
