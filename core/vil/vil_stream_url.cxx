@@ -7,6 +7,7 @@
 // \author fsm
 
 #include "vil_stream_url.h"
+#include <vil/vil_stream_core.h>
 
 #include <vcl_cassert.h>
 #include <vcl_cstdio.h>  // sprintf()
@@ -14,7 +15,6 @@
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vil/vil_stream_core.h>
 #include <vcl_fstream.h>
 
 #if defined(unix) || defined(__unix)

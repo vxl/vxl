@@ -9,14 +9,14 @@
 //  \date: 2003/12/26
 //  \author: mlaymon
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-
 #include <vil/vil_pixel_format.h>
 
 #include "vil_nitf_typeinfo.h"
 #include "vil_nitf_header.h"
 #include "vil_nitf_extended_header.h"
+
+#include <vcl_string.h>
+#include <vcl_vector.h>
 
 //====================================================================
 // The Image Subheader
