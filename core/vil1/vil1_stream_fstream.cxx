@@ -34,7 +34,7 @@ vil_stream_fstream::vil_stream_fstream(char const* fn, char const* mode):
 {
   id_ = ++id;
   xerr << "vil_stream_fstream(\"" << fn << "\", \""<<mode<<"\") = " << id_ << "\n";
-  if (!f_.good()) {
+  if (!f_) {
     vcl_cerr << "vil_stream_fstream::Could not open [" << fn << "]\n";
   }
 }
