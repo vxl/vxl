@@ -1,8 +1,10 @@
+#ifndef rgrl_feature_set_location_txx_
+#define rgrl_feature_set_location_txx_
 //:
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
-// 
+//
 // \verbatim
 //  modifications:
 //  April 2004 Charlene: allow the use of kd_tree and user-defined bin_size.
@@ -25,10 +27,9 @@ rgrl_feature_set_location( feature_vector const& features,
                            bool use_bins,
                            double bin_size)
   :
-  use_bins_ (use_bins),
-  bounding_box_( N )
+  bounding_box_( N ),
+  use_bins_(use_bins)
 {
-
   assert( !features.empty() );
 
   // Determine the extents of the data. (And the type.)
@@ -41,12 +42,12 @@ rgrl_feature_set_location( feature_vector const& features,
   feature_type_ = &typeid(*(*itr));
   min = (*itr)->location();
   max = min;
-  for( ; itr != features.end(); ++itr ) {
+  for ( ; itr != features.end(); ++itr ) {
     vnl_vector<double> const& loc = (*itr)->location();
     assert( loc.size() == N );
-    for( unsigned i=0; i < N; ++i ) {
-      if( loc[i] < min[i] )    min[i] = loc[i];
-      if( loc[i] > max[i] )    max[i] = loc[i];
+    for ( unsigned i=0; i < N; ++i ) {
+      if ( loc[i] < min[i] )    min[i] = loc[i];
+      if ( loc[i] > max[i] )    max[i] = loc[i];
     }
   }
   bounding_box_.set_x0( min.as_ref() );
@@ -59,9 +60,9 @@ rgrl_feature_set_location( feature_vector const& features,
     point_type bin_sizes;
     bin_sizes.fill( bin_size );
     bins_.reset( new bin_type( min, max, bin_sizes ) );
-    
+
     // Add the data
-    for( itr = features.begin(); itr != features.end(); ++itr ) {
+    for ( itr = features.begin(); itr != features.end(); ++itr ) {
       bins_->add_point( (*itr)->location(), *itr );
     }
   }
@@ -69,12 +70,11 @@ rgrl_feature_set_location( feature_vector const& features,
     features_ = features;
     vcl_vector<rsdl_point> search_pts;
     search_pts.reserve( features.size() );
-    for( itr = features.begin(); itr != features.end(); ++itr ) {
+    for ( itr = features.begin(); itr != features.end(); ++itr ) {
       search_pts.push_back( rsdl_point((*itr)->location()) );
-    } 
+    }
     kd_tree_ = new rsdl_kd_tree( search_pts );
   }
-
 }
 
 
@@ -102,12 +102,12 @@ features_in_region( rgrl_mask_box const& roi ) const
     rsdl_point min_point( roi.x0() );
     rsdl_point max_point( roi.x1() );
     rsdl_bounding_box box(min_point, max_point);
-    
+
     // Extract pts in the bounding box
     vcl_vector<rsdl_point> points_in_box;
     vcl_vector<int> point_indices;
     kd_tree_->points_in_bounding_box( box, points_in_box, point_indices );
-    
+
     // transfer the closest_pts to result
     //
     unsigned int num_pts = point_indices.size();
@@ -120,7 +120,7 @@ features_in_region( rgrl_mask_box const& roi ) const
 
 
 template<unsigned N>
-rgrl_feature_sptr 
+rgrl_feature_sptr
 rgrl_feature_set_location<N>::
 nearest_feature( rgrl_feature_sptr feature ) const
 {
@@ -145,7 +145,7 @@ features_within_distance( rgrl_feature_sptr feature, double distance ) const
     vcl_vector<rsdl_point> points;
     vcl_vector<int> indices;
     kd_tree_->points_in_radius( query_point, distance, points, indices );
-    
+
     // transfer the closest_pts to result
     //
     unsigned int num_pts = indices.size();
@@ -156,7 +156,7 @@ features_within_distance( rgrl_feature_sptr feature, double distance ) const
   return results;
 }
 
-//:  Return the k nearest features based on Euclidiean distance.
+//:  Return the k nearest features based on Euclidean distance.
 template<unsigned N>
 typename rgrl_feature_set_location<N>::feature_vector
 rgrl_feature_set_location<N>::
@@ -166,13 +166,13 @@ k_nearest_features( rgrl_feature_sptr feature, unsigned int k ) const
 
   if ( use_bins_ )
     bins_->n_nearest( feature->location(), k, results );
-  
+
   else { // Use kd_tree
     rsdl_point query_point(feature->location());
     vcl_vector<rsdl_point> closest_points;
     vcl_vector<int> point_indices;
     kd_tree_->n_nearest( query_point, k, closest_points, point_indices );
-    
+
     // transfer the closest_pts to result
     //
     unsigned int num_pts = point_indices.size();
@@ -190,7 +190,7 @@ bounding_box() const
 {
   return bounding_box_;
 }
- 
+
 template<unsigned N>
 const vcl_type_info&
 rgrl_feature_set_location<N>::
@@ -198,3 +198,5 @@ type() const
 {
   return *feature_type_;
 }
+
+#endif // rgrl_feature_set_location_txx_

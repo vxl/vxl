@@ -25,16 +25,16 @@
 
 #include <vcl_vector.h>
 #include <vcl_map.h>
-#include <vcl_memory.h>
 
 // ---------------------------------------------------------------------------
 //                                                                   data item
 //
 
-//: An object to store the moving_feature_set, its matching fixed_feature_set, and other components that work on the two feature sets during registration.  
+//: An object to store the moving_feature_set, its matching fixed_feature_set, and other components that work on the two feature sets during registration.
 //
-class rgrl_data_manager_data_item {
-public:
+class rgrl_data_manager_data_item
+{
+ public:
   rgrl_data_manager_data_item( rgrl_feature_set_sptr              in_from_set,
                                rgrl_feature_set_sptr              in_to_set,
                                rgrl_matcher_sptr                  in_matcher,
@@ -44,9 +44,9 @@ public:
     : from_set( in_from_set ),
       to_set( in_to_set ),
       matcher( in_matcher ),
-      weighter( in_weighter ),
       unwgted_scale_est( in_unwgted_scale_est ),
-      wgted_scale_est( in_wgted_scale_est )
+      wgted_scale_est( in_wgted_scale_est ),
+      weighter( in_weighter )
     {
     }
 
@@ -64,8 +64,9 @@ public:
 
 //: A collection of data in stages, where each stage can store multiple data items and multiple estimators.
 //
-class rgrl_data_manager_data_storage {
-public:
+class rgrl_data_manager_data_storage
+{
+ public:
   typedef vcl_vector< rgrl_data_manager_data_item >  data_vector;
   typedef vcl_map< unsigned, data_vector >  data_map;
   typedef vcl_vector< rgrl_estimator_sptr >  estimator_vector;
@@ -73,22 +74,22 @@ public:
 
   //: same as std::map[]
   data_vector& operator[]( unsigned i )
-    {
-      return map_[i];
-    }
+  {
+    return map_[i];
+  }
 
   //: Assumes the key is in the map.
   data_vector const& operator[]( unsigned i ) const
-    {
-      return map_.find( i )->second;
-    }
+  {
+    return map_.find( i )->second;
+  }
 
   //: true iff the key is in the map.
   bool has(unsigned i ) const
-    {
-      return map_.find( i ) != map_.end();
-    }
-  
+  {
+    return map_.find( i ) != map_.end();
+  }
+
   //:
   void add_estimator( unsigned i, rgrl_estimator_sptr estimator)
   {
@@ -98,7 +99,7 @@ public:
   //: true iff the key is in the map
   bool has_estimator_hierarchy(unsigned i ) const
   {
-    return estimators_.find( i ) != estimators_.end(); 
+    return estimators_.find( i ) != estimators_.end();
   }
 
   //: Assume the key in in the map
@@ -118,8 +119,8 @@ public:
   {
     return dim_increase_for_next_stage_.find( i )->second;
   }
-  
-private:
+
+ private:
   data_map map_;
   estimator_map estimators_;
   vcl_map< unsigned, double >  dim_increase_for_next_stage_;
@@ -131,7 +132,7 @@ private:
 
 class rgrl_data_manager: public rgrl_object
 {
-public:
+ public:
   //: Constructor
   //
   //  If multi_stage set to true, the data manager allows data stored
@@ -143,7 +144,7 @@ public:
 
   ~rgrl_data_manager();
 
-  //:  Add a data item to a multi-stage data storage. 
+  //:  Add a data item to a multi-stage data storage.
   //
   //  The data item for registration takes at least two feature
   //  sets. Other components are set to the techniques commonly used
@@ -164,7 +165,7 @@ public:
                  rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est = 0,
                  rgrl_scale_estimator_wgted_sptr          wgted_scale_est = 0);
 
-  //: Add a data item to a single-stage data storage. 
+  //: Add a data item to a single-stage data storage.
   //
   //  The stage is assumed to be 0.
   //
@@ -175,14 +176,14 @@ public:
                  rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est = 0,
                  rgrl_scale_estimator_wgted_sptr          wgted_scale_est = 0);
 
-  //: Add an estimator to a multi-stage data storage. 
-  void add_estimator( unsigned                           stage, 
+  //: Add an estimator to a multi-stage data storage.
+  void add_estimator( unsigned                           stage,
                       rgrl_estimator_sptr                estimator);
 
   //: Add an estimator to a single-stage data storage.
   //
-  //  The stage is assumed to be 0 
-  // 
+  //  The stage is assumed to be 0
+  //
   void add_estimator( rgrl_estimator_sptr                estimator);
 
   //: Set the dimension increase to go from the current stage to the next
@@ -190,7 +191,7 @@ public:
   //  If the function is never called for stage \a stage, the
   //  dimension increase for \a stage is 1.
   void set_dimension_increase_for_next_stage( unsigned stage, double rate);
-  
+
   //: Return \a dimension_increase_for_next_stage_ at stage \a stage
   double dimension_increase_for_next_stage(unsigned stage) const;
 
@@ -252,12 +253,12 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_data_manager, rgrl_object );
 
-private:
+ private:
   void generate_defaults(rgrl_matcher_sptr&                  matcher,
                          rgrl_weighter_sptr&                 weighter,
                          rgrl_scale_estimator_unwgted_sptr&  unwgted_scale_est );
 
-private:
+ private:
   rgrl_data_manager_data_storage   data_;
   bool                             multi_stage_;
   bool                             multi_feature_;
