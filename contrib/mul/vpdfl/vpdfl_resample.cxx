@@ -8,7 +8,7 @@
 #include <vpdfl/vpdfl_resample.h>
 
 // Object used to do sampling
-mbl_mz_random mz_random;
+static mbl_mz_random vpdfl_resample_mz_random;
 
 //: Fill x with n samples drawn at random from d
 //  If n not specified (or zero) then draw d.size() samples from d
@@ -27,5 +27,5 @@ void vpdfl_resample(vcl_vector<vnl_vector<double> >& x,
   x.resize(ns);
 
   for (int i=0;i<ns;++i)
-    x[i] = d[mz_random.lrand32(0,n-1)];
+    x[i] = d[vpdfl_resample_mz_random.lrand32(0,n-1)];
 }
