@@ -13,6 +13,7 @@
 #include <vil/vil_image.h>
 
 #include <png.h>
+#include <vcl/vcl_cstdlib.h> // for exit()
 
 // http://www.mirror.ac.uk/sites/ftp.cdrom.com/pub/png/libpng.html
 
@@ -319,6 +320,7 @@ bool vil_png_generic_image::read_header()
   
   // if (p->info_ptr->valid & PNG_INFO_bKGD) problem("LAZY AWF! PNG_INFO_bKGD");
   png_setjmp_off();
+  return true;
 }
 
 bool vil_png_generic_image::write_header()
