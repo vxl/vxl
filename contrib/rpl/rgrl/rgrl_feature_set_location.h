@@ -56,6 +56,11 @@ class rgrl_feature_set_location
   feature_vector
   features_in_region( rgrl_mask_box const& roi ) const;
 
+  //:  Return the features in a given circle/sphere.
+  //
+  feature_vector
+  features_within_radius( vnl_vector<double> const& center, double radius ) const;
+
   //: Nearest feature based on Euclidean distance
   //
   rgrl_feature_sptr

@@ -45,6 +45,21 @@ class rgrl_feature_set_location_masked
     return final_results;
   }
 
+  //:  Return the features in a given circle/sphere.
+  //
+  feature_vector
+  features_within_radius( vnl_vector<double> const& center, double radius ) const
+  {
+    feature_vector final_results;
+    feature_vector results = rgrl_feature_set_location<N>::features_within_radius( center, radius );
+    // check if features are in the valid region
+    typedef typename feature_vector::iterator fvec_itr;
+    for ( fvec_itr fitr = results.begin(); fitr != results.end(); ++fitr )
+      if ( mask_->inside( (*fitr)->location() ) )
+        final_results.push_back( *fitr );
+    return final_results;
+  }
+
   //: Nearest feature based on signature error
   //
   rgrl_feature_sptr

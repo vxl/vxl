@@ -38,6 +38,12 @@ class rgrl_feature_set
   feature_vector
   features_in_region( rgrl_mask_box const& roi ) const = 0;
 
+  //:  Return the features in a given circle/sphere.
+  //
+  virtual
+  feature_vector
+  features_within_radius( vnl_vector<double> const& center, double radius ) const = 0;
+
   //: Return the nearest feature to the given feature.
   //
   // This may be constructed from an underlying continuous

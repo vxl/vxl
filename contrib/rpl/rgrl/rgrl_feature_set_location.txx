@@ -118,6 +118,32 @@ features_in_region( rgrl_mask_box const& roi ) const
   return results;
 }
 
+template<unsigned N>
+typename rgrl_feature_set_location<N>::feature_vector
+rgrl_feature_set_location<N>::
+features_within_radius( vnl_vector<double> const& center, double radius ) const
+{
+  feature_vector results;
+
+  if ( use_bins_ )
+    bins_->points_within_radius( center, radius, results );
+
+  else { // Use kd_tree
+    // Extract pts
+    vcl_vector<rsdl_point> points_in_box;
+    vcl_vector<int> point_indices;
+    kd_tree_->points_in_radius(  center, radius, points_in_box, point_indices );
+
+    // transfer the closest_pts to result
+    //
+    unsigned int num_pts = point_indices.size();
+    results.reserve( num_pts );
+    for (unsigned int i = 0; i<num_pts; i++ )
+      results.push_back( features_[point_indices[i]] );
+  }
+
+  return results;
+}
 
 template<unsigned N>
 rgrl_feature_sptr
