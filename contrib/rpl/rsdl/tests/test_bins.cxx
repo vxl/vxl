@@ -168,7 +168,7 @@ test_bins_3()
 
   vnl_vector_fixed< double, 3 > min_pt, max_pt, bin_sizes;
   min_pt[0] = 1.0;   min_pt[1] = -2.5;  min_pt[2] = -5.0;
-  max_pt[1] = 75.0;  max_pt[1] = 32;    max_pt[2] = 10.0;
+  max_pt[0] = 75.0;  max_pt[1] = 32;    max_pt[2] = 10.0;
   bin_sizes[0] = 6.0; bin_sizes[1] = 4.0; bin_sizes[2] = 5.0;
 
   {

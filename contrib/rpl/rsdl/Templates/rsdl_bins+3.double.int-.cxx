@@ -1,3 +1,4 @@
 #include <rsdl/rsdl_bins.txx>
 
-template class rsdl_bins<3,double,int>;
+INSTANTIATE_RSDL_BINS( 3, double, int );
+
