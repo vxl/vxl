@@ -58,24 +58,23 @@ void test_arb_length_int() {
     TEST("Printing correct", ss.str(), "-5 -7 279280248357375 256 65536");
   }
   mbl_arb_length_int d(-4l);
-  d++; d++; d++; d++; 
+  d++; d++; d++; d++;
   TEST("++", d , 0ul);
   for (unsigned i = 0; i < 70000; ++i) ++d;
   vcl_cout << "d= " << d << vcl_endl;
   TEST("++", d, 70000l);
   bool fail = false;
-  for (unsigned i = 0; i < 80000; ++i)
+  for (long i = 0; i < 80000; ++i)
   {
-    if (d !=(long)(70000-i)) fail=true;
+    if (d != 70000l-i) { fail=true; break; }
     --d;
   }
   TEST("--", fail, false);
   vcl_cout << "d= " << d << vcl_endl;
   TEST("--", d, -10000l);
 
+  vcl_cout << "===============Testing IO============" <<vcl_endl;
 
-	vcl_cout << "===============Testing IO============" <<vcl_endl;
-		
   mbl_arb_length_int c ((unsigned long) -1l);
   c *= 255; c*= 255;
 
@@ -94,14 +93,7 @@ void test_arb_length_int() {
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-
-
-    
-  
   TEST("Loaded integer == saved integer", c, c_in);
-
-
-
 }
 
 TESTMAIN(test_arb_length_int);
