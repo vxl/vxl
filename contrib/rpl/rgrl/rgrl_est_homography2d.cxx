@@ -25,8 +25,11 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vcl_vector< double > wgts;
   double from_scale, to_scale;
   vnl_vector<double> from_center(2), to_center(2);
-  normalize( matches, norm_from_pts, norm_to_pts, wgts, from_scale, to_scale, 
-             from_center, to_center );
+  if( !normalize( matches, norm_from_pts, norm_to_pts, wgts, from_scale, to_scale, 
+                  from_center, to_center ) ) {
+    return 0;
+  }
+                  
 
   vnl_matrix< double > A( 2*norm_from_pts.size(), 9, 0.0 );
   for ( unsigned int i=0; i<norm_from_pts.size(); ++i ) {
@@ -89,7 +92,7 @@ transformation_type() const
   return rgrl_trans_homography2d::type_id();
 }
 
-void 
+bool 
 rgrl_est_homography2d::
 normalize( rgrl_set_of<rgrl_match_set_sptr> const& matches,
            vcl_vector< vnl_vector<double> >& norm_froms,
@@ -130,6 +133,12 @@ normalize( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       }
     }
   }
+  // if the weight is too small or zero,
+  // that means there is no good match
+  if( sum_wgt < 1e-13 ) {
+    return false;
+  }
+  
   from_center /= sum_wgt;
   to_center /= sum_wgt;
 
@@ -191,6 +200,8 @@ normalize( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       }
     }
   }
+  
+  return true;
 }
 
 void 

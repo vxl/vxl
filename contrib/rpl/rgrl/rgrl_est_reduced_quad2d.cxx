@@ -99,6 +99,12 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       }
     }
   }
+  // if the weight is too small or zero,
+  // that means there is no good match
+  if( sum_wgt < 1e-13 ) {
+    return 0;
+  }
+  
   from_centre /= sum_wgt;
   to_centre /= sum_wgt;
 
