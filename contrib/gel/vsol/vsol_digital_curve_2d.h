@@ -153,7 +153,7 @@ class vsol_digital_curve_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an digital_curve, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_digital_curve_2d const*cast_to_vsol_digital_curve(void)const{return this;}
+  virtual vsol_digital_curve_2d const*cast_to_digital_curve(void)const{return this;}
   virtual vsol_digital_curve_2d *cast_to_digital_curve(void) {return this;}
 
   //---------------------------------------------------------------------------
