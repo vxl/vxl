@@ -22,6 +22,20 @@ NOTE: The vsl library, and the io/v?l libraries currently live in the Manchester
 University package - mul.  They will be moved to the core vxl once they've been
 tested at more than one site.
 
+@subsection Supported Platforms
+
+The binary I/O code is known to work across the following hardware/OS/compiler combinations:
+
+@enumerate
+@item  Intel - Linux - gcc-2.95.2
+@item  Intel - WindowsNT - vc++
+@item  SGI (Native compiler)
+@item  Sun - Solaris - gcc-2.95.2
+@item  DEC alpha - gcc-2.95.2  (64 bit!)
+@end enumerate
+
+Thus binary files produced by any of the above should be readable by any other of the above.
+
 @section Using Binary I/O
 
 To save an object to a file, simply do the following:
@@ -650,7 +664,7 @@ void vsl_b_write(vsl_b_ostream &os, const vanyl_my_base_class* b)
     b->b_write(os);
   @}
   else
-    vsl_b_write(os,vcl_string("VIOL_NULL_PTR"));
+    vsl_b_write(os,vcl_string("VSL_NULL_PTR"));
 @}
 
 //==============================================
@@ -1201,7 +1215,7 @@ void vsl_b_read(vsl_b_istream &is, BaseClass* &b)
 
 
 // Explicitly instantiate loader
-VIOL_CLIPON_BINARY_LOADER_INSTANTIATE(BaseClass, BaseClassIO)
+VSL_CLIPON_BINARY_LOADER_INSTANTIATE(BaseClass, BaseClassIO)
 
 
 @end example
