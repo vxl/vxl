@@ -80,9 +80,9 @@ void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
 //: Compute product ABt = A * B.transpose(), using only nc cols of A and B
 //=======================================================================
 void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
-                   const vnl_matrix<double>& A,
-                   const vnl_matrix<double>& B,
-				   int nc)
+                             const vnl_matrix<double>& A,
+                             const vnl_matrix<double>& B,
+                             int nc)
 {
   int nr1 = A.rows();
   int nr2 = B.rows();
@@ -113,8 +113,8 @@ void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
 //: Compute product ABt = A * B.transpose()
 //=======================================================================
 void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
-                   const vnl_matrix<double>& A,
-                   const vnl_matrix<double>& B)
+                             const vnl_matrix<double>& A,
+                             const vnl_matrix<double>& B)
 {
   mbl_matrix_product_at_b(AtB,A,B,A.columns());
 }
@@ -123,9 +123,9 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
 //: Compute product ABt = A * B.transpose(), using nc_a cols of A
 //=======================================================================
 void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
-                   const vnl_matrix<double>& A,
-                   const vnl_matrix<double>& B,
-				   int nc_a)
+                             const vnl_matrix<double>& A,
+                             const vnl_matrix<double>& B,
+                             int nc_a)
 {
   int nr1 = A.rows();
   assert(A.columns()>=nc_a);

@@ -167,33 +167,33 @@ void test_pc_gaussian()
     true);
 
 
-	vcl_cout << "========Testing PDF Thresholds==========";
-	vpdfl_sampler_base *p_sampler2 = p_pdf_built->new_sampler();
-	unsigned pass=0, fail=0;
-	double thresh = p_pdf_built->log_prob_thresh(0.9);
-	vcl_cout << vcl_endl << "log density threshold for passing 90%: " << thresh << vcl_endl;
-	for (unsigned i=0; i < 1000; i++)
-	{
-		p_sampler2->sample(x);
-		if (p_pdf_built->log_p(x) > thresh)
-			pass ++;
-		else
-			fail ++; 
-	}
-	vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
+  vcl_cout << "========Testing PDF Thresholds==========";
+  vpdfl_sampler_base *p_sampler2 = p_pdf_built->new_sampler();
+  unsigned pass=0, fail=0;
+  double thresh = p_pdf_built->log_prob_thresh(0.9);
+  vcl_cout << vcl_endl << "log density threshold for passing 90%: " << thresh << vcl_endl;
+  for (unsigned i=0; i < 1000; i++)
+  {
+    p_sampler2->sample(x);
+    if (p_pdf_built->log_p(x) > thresh)
+      pass ++;
+    else
+      fail ++;
+  }
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
-	pass=0; fail=0;
-	thresh = p_pdf_built->log_prob_thresh(0.1);
-	vcl_cout << vcl_endl << vcl_endl << "log density threshold for passing 10%: " << thresh << vcl_endl;
-	for (unsigned i=0; i < 1000; i++)
-	{
-		p_sampler2->sample(x);
-		if (p_pdf_built->log_p(x) > thresh)
-			pass ++;
-		else
-			fail ++; 
-	}
-	vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
+  pass=0; fail=0;
+  thresh = p_pdf_built->log_prob_thresh(0.1);
+  vcl_cout << vcl_endl << vcl_endl << "log density threshold for passing 10%: " << thresh << vcl_endl;
+  for (unsigned i=0; i < 1000; i++)
+  {
+    p_sampler2->sample(x);
+    if (p_pdf_built->log_p(x) > thresh)
+      pass ++;
+    else
+      fail ++;
+  }
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
   delete p_sampler2;
 
