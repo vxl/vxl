@@ -16,8 +16,8 @@ doublereal *rcond, *z;
 integer *info;
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
-    doublereal d__1, d__2;
+    integer a_dim1, a_offset, i__1;
+    doublereal d__1;
 
     /* Builtin functions */
     double d_sign();
@@ -60,8 +60,7 @@ integer *info;
 
 /*     on return */
 
-/*        a       an upper triangular matrix  r  so that  a = trans(r)*r
-*/
+/*        a       an upper triangular matrix  r  so that  a = trans(r)*r */
 /*                where  trans(r)  is the transpose. */
 /*                the strict lower triangle is unaltered. */
 /*                if  info .ne. 0 , the factorization is not complete. */
@@ -70,8 +69,7 @@ integer *info;
 /*                an estimate of the reciprocal condition of  a . */
 /*                for the system  a*x = b , relative perturbations */
 /*                in  a  and  b  of size  epsilon  may cause */
-/*                relative perturbations in  x  of size  epsilon/rcond .
-*/
+/*                relative perturbations in  x  of size  epsilon/rcond .  */
 /*                if  rcond  is so small that the logical expression */
 /*                           1.0 + rcond .eq. 1.0 */
 /*                is true, then  a  may be singular to working */
@@ -113,29 +111,21 @@ integer *info;
     a -= a_offset;
 
     /* Function Body */
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
+    for (j = 1; j <= *n; ++j) {
         z[j] = dasum_(&j, &a[j * a_dim1 + 1], &c__1);
         jm1 = j - 1;
         if (jm1 < 1) {
             goto L20;
         }
-        i__2 = jm1;
-        for (i = 1; i <= i__2; ++i) {
-            z[i] += (d__1 = a[i + j * a_dim1], abs(d__1));
-/* L10: */
+        for (i = 1; i <= jm1; ++i) {
+            z[i] += abs(a[i + j * a_dim1]);
         }
 L20:
-/* L30: */
         ;
     }
     anorm = 0.;
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
-/* Computing MAX */
-        d__1 = anorm, d__2 = z[j];
-        anorm = max(d__1,d__2);
-/* L40: */
+    for (j = 1; j <= *n; ++j) {
+        anorm = max(anorm,z[j]);
     }
 
 /*     factor */
@@ -154,21 +144,18 @@ L20:
 /*        solve trans(r)*w = e */
 
     ek = 1.;
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
+    for (j = 1; j <= *n; ++j) {
         z[j] = 0.;
-/* L50: */
     }
-    i__1 = *n;
-    for (k = 1; k <= i__1; ++k) {
+    for (k = 1; k <= *n; ++k) {
         if (z[k] != 0.) {
             d__1 = -z[k];
             ek = d_sign(&ek, &d__1);
         }
-        if ((d__1 = ek - z[k], abs(d__1)) <= a[k + k * a_dim1]) {
+        if (abs(ek - z[k]) <= a[k + k * a_dim1]) {
             goto L60;
         }
-        s = a[k + k * a_dim1] / (d__1 = ek - z[k], abs(d__1));
+        s = a[k + k * a_dim1] / abs(ek - z[k]);
         dscal_(n, &s, &z[1], &c__1);
         ek = s * ek;
 L60:
@@ -182,47 +169,40 @@ L60:
         if (kp1 > *n) {
             goto L100;
         }
-        i__2 = *n;
-        for (j = kp1; j <= i__2; ++j) {
-            sm += (d__1 = z[j] + wkm * a[k + j * a_dim1], abs(d__1));
+        for (j = kp1; j <= *n; ++j) {
+            sm += abs(z[j] + wkm * a[k + j * a_dim1]);
             z[j] += wk * a[k + j * a_dim1];
-            s += (d__1 = z[j], abs(d__1));
-/* L70: */
+            s += abs(z[j]);
         }
         if (s >= sm) {
             goto L90;
         }
         t = wkm - wk;
         wk = wkm;
-        i__2 = *n;
-        for (j = kp1; j <= i__2; ++j) {
+        for (j = kp1; j <= *n; ++j) {
             z[j] += t * a[k + j * a_dim1];
-/* L80: */
         }
 L90:
 L100:
         z[k] = wk;
-/* L110: */
     }
     s = 1. / dasum_(n, &z[1], &c__1);
     dscal_(n, &s, &z[1], &c__1);
 
 /*        solve r*y = w */
 
-    i__1 = *n;
-    for (kb = 1; kb <= i__1; ++kb) {
+    for (kb = 1; kb <= *n; ++kb) {
         k = *n + 1 - kb;
-        if ((d__1 = z[k], abs(d__1)) <= a[k + k * a_dim1]) {
+        if (abs(z[k]) <= a[k + k * a_dim1]) {
             goto L120;
         }
-        s = a[k + k * a_dim1] / (d__1 = z[k], abs(d__1));
+        s = a[k + k * a_dim1] / abs(z[k]);
         dscal_(n, &s, &z[1], &c__1);
 L120:
         z[k] /= a[k + k * a_dim1];
         t = -z[k];
-        i__2 = k - 1;
-        daxpy_(&i__2, &t, &a[k * a_dim1 + 1], &c__1, &z[1], &c__1);
-/* L130: */
+        i__1 = k - 1;
+        daxpy_(&i__1, &t, &a[k * a_dim1 + 1], &c__1, &z[1], &c__1);
     }
     s = 1. / dasum_(n, &z[1], &c__1);
     dscal_(n, &s, &z[1], &c__1);
@@ -231,19 +211,17 @@ L120:
 
 /*        solve trans(r)*v = y */
 
-    i__1 = *n;
-    for (k = 1; k <= i__1; ++k) {
-        i__2 = k - 1;
-        z[k] -= ddot_(&i__2, &a[k * a_dim1 + 1], &c__1, &z[1], &c__1);
-        if ((d__1 = z[k], abs(d__1)) <= a[k + k * a_dim1]) {
+    for (k = 1; k <= *n; ++k) {
+        i__1 = k - 1;
+        z[k] -= ddot_(&i__1, &a[k * a_dim1 + 1], &c__1, &z[1], &c__1);
+        if (abs(z[k]) <= a[k + k * a_dim1]) {
             goto L140;
         }
-        s = a[k + k * a_dim1] / (d__1 = z[k], abs(d__1));
+        s = a[k + k * a_dim1] / abs(z[k]);
         dscal_(n, &s, &z[1], &c__1);
         ynorm = s * ynorm;
 L140:
         z[k] /= a[k + k * a_dim1];
-/* L150: */
     }
     s = 1. / dasum_(n, &z[1], &c__1);
     dscal_(n, &s, &z[1], &c__1);
@@ -251,21 +229,19 @@ L140:
 
 /*        solve r*z = v */
 
-    i__1 = *n;
-    for (kb = 1; kb <= i__1; ++kb) {
+    for (kb = 1; kb <= *n; ++kb) {
         k = *n + 1 - kb;
-        if ((d__1 = z[k], abs(d__1)) <= a[k + k * a_dim1]) {
+        if (abs(z[k]) <= a[k + k * a_dim1]) {
             goto L160;
         }
-        s = a[k + k * a_dim1] / (d__1 = z[k], abs(d__1));
+        s = a[k + k * a_dim1] / abs(z[k]);
         dscal_(n, &s, &z[1], &c__1);
         ynorm = s * ynorm;
 L160:
         z[k] /= a[k + k * a_dim1];
         t = -z[k];
-        i__2 = k - 1;
-        daxpy_(&i__2, &t, &a[k * a_dim1 + 1], &c__1, &z[1], &c__1);
-/* L170: */
+        i__1 = k - 1;
+        daxpy_(&i__1, &t, &a[k * a_dim1 + 1], &c__1, &z[1], &c__1);
     }
 /*        make znorm = 1.0 */
     s = 1. / dasum_(n, &z[1], &c__1);

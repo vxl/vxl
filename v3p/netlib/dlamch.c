@@ -50,7 +50,6 @@ doublereal dlamch_(char *cmach)
     static logical first = TRUE_;
     /* System generated locals */
     integer i__1;
-    doublereal ret_val;
     /* Builtin functions */
     double pow_di(doublereal *, integer *);
     /* Local variables */
@@ -119,10 +118,7 @@ doublereal dlamch_(char *cmach)
         rmach = rmax;
     }
 
-    ret_val = rmach;
-    return ret_val;
-
-/*     End of DLAMCH */
+    return rmach;
 
 } /* dlamch_ */
 
@@ -214,18 +210,14 @@ doublereal dlamch_(char *cmach)
         a = 1.;
         c = 1.;
 
-/* +       WHILE( C.EQ.ONE )LOOP */
-L10:
-        if (c == one) {
+        while (c == one) {
             a *= 2;
             c = dlamc3_(&a, &one);
             d__1 = -a;
             c = dlamc3_(&c, &d__1);
-            goto L10;
         }
-/* +       END WHILE
 
-          Now compute  b = 2.0**m  with the smallest positive integer m
+/*        Now compute  b = 2.0**m  with the smallest positive integer m
           such that
 
              fl( a + b ) .gt. a. */
@@ -233,16 +225,12 @@ L10:
         b = 1.;
         c = dlamc3_(&a, &b);
 
-/* +       WHILE( C.EQ.A )LOOP */
-L20:
-        if (c == a) {
+        while (c == a) {
             b *= 2;
             c = dlamc3_(&a, &b);
-            goto L20;
         }
-/* +       END WHILE
 
-          Now compute the base.  a and c  are neighbouring floating point
+/*        Now compute the base.  a and c  are neighbouring floating point
           numbers  in the  interval  ( beta**t, beta**( t + 1 ) )  and so
           their difference is beta. Adding 0.25 to c is to ensure that it
           is truncated to beta and not ( beta - 1 ). */
@@ -297,18 +285,13 @@ L20:
         a = 1.;
         c = 1.;
 
-/* +       WHILE( C.EQ.ONE )LOOP */
-L30:
-        if (c == one) {
+        while (c == one) {
             ++lt;
             a *= lbeta;
             c = dlamc3_(&a, &one);
             d__1 = -a;
             c = dlamc3_(&c, &d__1);
-            goto L30;
         }
-/* +       END WHILE */
-
     }
 
     *beta = lbeta;
@@ -316,8 +299,6 @@ L30:
     *rnd = lrnd;
     *ieee1 = lieee1;
     return;
-
-/*     End of DLAMC1 */
 
 } /* dlamc1_ */
 
@@ -397,7 +378,7 @@ L30:
     static logical iwarn = FALSE_;
     /* System generated locals */
     integer i__1;
-    doublereal d__1, d__2, d__3, d__4, d__5;
+    doublereal d__1, d__2;
     /* Builtin functions */
     double pow_di(doublereal *, integer *);
     /* Local variables */
@@ -419,15 +400,12 @@ L30:
             dlamc5_(integer *, integer *, integer *, logical *, integer *,
             doublereal *);
     static integer lt, ngnmin, ngpmin;
-    static doublereal one, two;
-
-
+    static doublereal one;
 
     if (first) {
         first = FALSE_;
         zero = 0.;
         one = 1.;
-        two = 2.;
 
 /*        LBETA, LT, LRND, LEPS, LEMIN and LRMIN  are the local values of
           BETA, T, RND, EPS, EMIN and RMIN.
@@ -450,7 +428,7 @@ L30:
 
 /*        Try some tricks to see whether or not this is the correct  EPS. */
 
-        b = two / 3;
+        b = 2. / 3;
         half = one / 2;
         d__1 = -half;
         sixth = dlamc3_(&b, &d__1);
@@ -465,16 +443,10 @@ L30:
 
         leps = 1.;
 
-/* +       WHILE( ( LEPS.GT.B ).AND.( B.GT.ZERO ) )LOOP */
-L10:
-        if (leps > b && b > zero) {
+        while (leps > b && b > zero) {
             leps = b;
             d__1 = half * leps;
-/* Computing 5th power */
-            d__3 = two, d__4 = d__3, d__3 *= d__3;
-/* Computing 2nd power */
-            d__5 = leps;
-            d__2 = d__4 * (d__3 * d__3) * (d__5 * d__5);
+            d__2 = 32. * (leps * leps);
             c = dlamc3_(&d__1, &d__2);
             d__1 = -c;
             c = dlamc3_(&half, &d__1);
@@ -482,9 +454,7 @@ L10:
             d__1 = -b;
             c = dlamc3_(&half, &d__1);
             b = dlamc3_(&half, &c);
-            goto L10;
         }
-/* +       END WHILE */
 
         if (a < leps) {
             leps = a;
@@ -501,7 +471,6 @@ L10:
         for (i = 1; i <= 3; ++i) {
             d__1 = small * rbase;
             small = dlamc3_(&d__1, &zero);
-/* L20: */
         }
         a = dlamc3_(&one, &small);
         dlamc4_(&ngpmin, &one, &lbeta);
@@ -529,7 +498,7 @@ L10:
             }
 
         } else if (ngpmin == gpmin && ngnmin == gnmin) {
-            if ((i__1 = ngpmin - ngnmin, abs(i__1)) == 1) {
+            if (abs(ngpmin - ngnmin) == 1) {
                 lemin = max(ngpmin,ngnmin);
 /*            ( Twos-complement machines, no gradual underflow;
                 e.g., CYBER 205 ) */
@@ -539,7 +508,7 @@ L10:
                 iwarn = TRUE_;
             }
 
-        } else if ((i__1 = ngpmin - ngnmin, abs(i__1)) == 1 && gpmin == gnmin)
+        } else if (abs(ngpmin - ngnmin) == 1 && gpmin == gnmin)
                  {
             if (gpmin - min(ngpmin,ngnmin) == 3) {
                 lemin = max(ngpmin,ngnmin) - 1 + lt;
@@ -552,9 +521,7 @@ L10:
             }
 
         } else {
-/* Computing MIN */
-            i__1 = min(ngpmin,ngnmin), i__1 = min(i__1,gpmin);
-            lemin = min(i__1,gnmin);
+            lemin = min(min(min(ngpmin,ngnmin),gpmin),gnmin);
 /*         ( A guess; no known machine ) */
             iwarn = TRUE_;
         }
@@ -583,11 +550,9 @@ L10:
           this computation. */
 
         lrmin = 1.;
-        i__1 = 1 - lemin;
         for (i = 1; i <= 1-lemin; ++i) {
             d__1 = lrmin * rbase;
             lrmin = dlamc3_(&d__1, &zero);
-/* L30: */
         }
 
 /*        Finally, call DLAMC5 to compute EMAX and RMAX. */
@@ -603,8 +568,6 @@ L10:
     *rmin = lrmin;
     *emax = lemax;
     *rmax = lrmax;
-
-/*     End of DLAMC2 */
 
 } /* dlamc2_ */
 
@@ -645,8 +608,6 @@ doublereal dlamc3_(doublereal *a, doublereal *b)
 
     return ret_val;
 
-/*     End of DLAMC3 */
-
 } /* dlamc3_ */
 
 #include "f2c.h"
@@ -682,7 +643,6 @@ doublereal dlamc3_(doublereal *a, doublereal *b)
    =====================================================================
 */
     /* System generated locals */
-    integer i__1;
     doublereal d__1;
     /* Local variables */
     static doublereal zero, a;
@@ -690,8 +650,6 @@ doublereal dlamc3_(doublereal *a, doublereal *b)
     static doublereal rbase, b1, b2, c1, c2, d1, d2;
     extern doublereal dlamc3_(doublereal *, doublereal *);
     static doublereal one;
-
-
 
     a = *start;
     one = 1.;
@@ -704,10 +662,7 @@ doublereal dlamc3_(doublereal *a, doublereal *b)
     c2 = a;
     d1 = a;
     d2 = a;
-/* +    WHILE( ( C1.EQ.A ).AND.( C2.EQ.A ).AND.
-      $       ( D1.EQ.A ).AND.( D2.EQ.A )      )LOOP */
-L10:
-    if (c1 == a && c2 == a && d1 == a && d2 == a) {
+    while (c1 == a && c2 == a && d1 == a && d2 == a) {
         --(*emin);
         a = b1;
         d__1 = a / *base;
@@ -715,7 +670,6 @@ L10:
         d__1 = b1 * *base;
         c1 = dlamc3_(&d__1, &zero);
         d1 = zero;
-        i__1 = *base;
         for (i = 1; i <= *base; ++i) {
             d1 += b1;
         }
@@ -724,15 +678,10 @@ L10:
         d__1 = b2 / rbase;
         c2 = dlamc3_(&d__1, &zero);
         d2 = zero;
-        i__1 = *base;
         for (i = 1; i <= *base; ++i) {
             d2 += b2;
         }
-        goto L10;
     }
-/* +    END WHILE */
-
-/*     End of DLAMC4 */
 
 } /* dlamc4_ */
 
@@ -745,7 +694,6 @@ L10:
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
        Courant Institute, Argonne National Lab, and Rice University
        October 31, 1992
-
 
     Purpose
     =======
@@ -793,7 +741,6 @@ L10:
     static doublereal c_b5 = 0.;
 
     /* System generated locals */
-    integer i__1;
     doublereal d__1;
     /* Local variables */
     static integer lexp;
@@ -881,14 +828,12 @@ it
     recbas = 1. / *beta;
     z = *beta - 1.;
     y = 0.;
-    i__1 = *p;
     for (i = 1; i <= *p; ++i) {
         z *= recbas;
         if (y < 1.) {
             oldy = y;
         }
         y = dlamc3_(&y, &z);
-/* L20: */
     }
     if (y >= 1.) {
         y = oldy;
@@ -896,16 +841,11 @@ it
 
 /*     Now multiply by BETA**EMAX to get RMAX. */
 
-    i__1 = *emax;
     for (i = 1; i <= *emax; ++i) {
         d__1 = y * *beta;
         y = dlamc3_(&d__1, &c_b5);
-/* L30: */
     }
 
     *rmax = y;
 
-/*     End of DLAMC5 */
-
 } /* dlamc5_ */
-

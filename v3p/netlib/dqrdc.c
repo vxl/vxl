@@ -18,8 +18,8 @@ doublereal *work;
 integer *job;
 {
     /* System generated locals */
-    integer x_dim1, x_offset, i__1, i__2, i__3;
-    doublereal d__1, d__2;
+    integer x_dim1, x_offset, i__1;
+    doublereal d__1;
 
     /* Builtin functions */
     double d_sign(), sqrt();
@@ -35,7 +35,7 @@ integer *job;
     static logical swapj;
     extern /* Subroutine */ void daxpy_();
     static doublereal nrmxl;
-    static integer jj, jp, pl, pu;
+    static integer jp, pl, pu;
     static doublereal tt, maxnrm;
     static integer lp1, lup;
 
@@ -104,8 +104,7 @@ integer *job;
 /*                with its columns permuted as described by jpvt. */
 
 /*        qraux   double precision(p). */
-/*                qraux contains further information required to recover
-*/
+/*                qraux contains further information required to recover */
 /*                the orthogonal part of the decomposition. */
 
 /*        jpvt    jpvt(k) contains the index of the column of the */
@@ -142,8 +141,7 @@ integer *job;
 /*        pivoting has been requested.  rearrange the columns */
 /*        according to jpvt. */
 
-    i__1 = *p;
-    for (j = 1; j <= i__1; ++j) {
+    for (j = 1; j <= *p; ++j) {
         swapj = jpvt[j] > 0;
         negj = jpvt[j] < 0;
         jpvt[j] = j;
@@ -160,13 +158,10 @@ integer *job;
         jpvt[pl] = j;
         ++pl;
 L10:
-/* L20: */
         ;
     }
     pu = *p;
-    i__1 = *p;
-    for (jj = 1; jj <= i__1; ++jj) {
-        j = *p - jj + 1;
+    for (j = *p; j >= 1; --j) {
         if (jpvt[j] >= 0) {
             goto L40;
         }
@@ -181,7 +176,6 @@ L10:
 L30:
         --pu;
 L40:
-/* L50: */
         ;
     }
 L60:
@@ -191,19 +185,16 @@ L60:
     if (pu < pl) {
         goto L80;
     }
-    i__1 = pu;
-    for (j = pl; j <= i__1; ++j) {
+    for (j = pl; j <= pu; ++j) {
         qraux[j] = dnrm2_(n, &x[j * x_dim1 + 1], &c__1);
         work[j] = qraux[j];
-/* L70: */
     }
 L80:
 
 /*     perform the householder reduction of x. */
 
     lup = min(*n,*p);
-    i__1 = lup;
-    for (l = 1; l <= i__1; ++l) {
+    for (l = 1; l <= lup; ++l) {
         if (l < pl || l >= pu) {
             goto L120;
         }
@@ -213,15 +204,13 @@ L80:
 
         maxnrm = 0.;
         maxj = l;
-        i__2 = pu;
-        for (j = l; j <= i__2; ++j) {
+        for (j = l; j <= pu; ++j) {
             if (qraux[j] <= maxnrm) {
                 goto L90;
             }
             maxnrm = qraux[j];
             maxj = j;
 L90:
-/* L100: */
             ;
         }
         if (maxj == l) {
@@ -242,17 +231,17 @@ L120:
 
 /*           compute the householder transformation for column l. */
 
-        i__2 = *n - l + 1;
-        nrmxl = dnrm2_(&i__2, &x[l + l * x_dim1], &c__1);
+        i__1 = *n - l + 1;
+        nrmxl = dnrm2_(&i__1, &x[l + l * x_dim1], &c__1);
         if (nrmxl == 0.) {
             goto L180;
         }
         if (x[l + l * x_dim1] != 0.) {
             nrmxl = d_sign(&nrmxl, &x[l + l * x_dim1]);
         }
-        i__2 = *n - l + 1;
+        i__1 = *n - l + 1;
         d__1 = 1. / nrmxl;
-        dscal_(&i__2, &d__1, &x[l + l * x_dim1], &c__1);
+        dscal_(&i__1, &d__1, &x[l + l * x_dim1], &c__1);
         x[l + l * x_dim1] += 1.;
 
 /*              apply the transformation to the remaining columns, */
@@ -262,40 +251,33 @@ L120:
         if (*p < lp1) {
             goto L170;
         }
-        i__2 = *p;
-        for (j = lp1; j <= i__2; ++j) {
-            i__3 = *n - l + 1;
-            t = -ddot_(&i__3, &x[l + l * x_dim1], &c__1, &x[l + j * x_dim1], &
-                    c__1) / x[l + l * x_dim1];
-            i__3 = *n - l + 1;
-            daxpy_(&i__3, &t, &x[l + l * x_dim1], &c__1, &x[l + j * x_dim1], &
-                    c__1);
+        for (j = lp1; j <= *p; ++j) {
+            i__1 = *n - l + 1;
+            t = -ddot_(&i__1, &x[l + l * x_dim1], &c__1, &x[l + j * x_dim1], &c__1) / x[l + l * x_dim1];
+            daxpy_(&i__1, &t, &x[l + l * x_dim1], &c__1, &x[l + j * x_dim1], &c__1);
             if (j < pl || j > pu) {
                 goto L150;
             }
             if (qraux[j] == 0.) {
                 goto L150;
             }
-/* Computing 2nd power */
-            d__2 = (d__1 = x[l + j * x_dim1], abs(d__1)) / qraux[j];
-            tt = 1. - d__2 * d__2;
+            d__1 = abs(x[l + j * x_dim1]) / qraux[j];
+            tt = 1. - d__1 * d__1;
             tt = max(tt,0.);
             t = tt;
-/* Computing 2nd power */
             d__1 = qraux[j] / work[j];
-            tt = tt * .05 * (d__1 * d__1) + 1.;
+            tt = tt * .05 * d__1 * d__1 + 1.;
             if (tt == 1.) {
                 goto L130;
             }
             qraux[j] *= sqrt(t);
             goto L140;
 L130:
-            i__3 = *n - l;
-            qraux[j] = dnrm2_(&i__3, &x[l + 1 + j * x_dim1], &c__1);
+            i__1 = *n - l;
+            qraux[j] = dnrm2_(&i__1, &x[l + 1 + j * x_dim1], &c__1);
             work[j] = qraux[j];
 L140:
 L150:
-/* L160: */
             ;
         }
 L170:
@@ -306,7 +288,6 @@ L170:
         x[l + l * x_dim1] = -nrmxl;
 L180:
 L190:
-/* L200: */
         ;
     }
     return;

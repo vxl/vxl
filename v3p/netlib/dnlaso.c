@@ -29,7 +29,6 @@ integer *ind, *ierr;
 {
     /* System generated locals */
     integer vec_dim1, vec_offset, val_dim1, val_offset, i__1, i__2;
-    doublereal d__1;
 
     /* Local variables */
     static doublereal temp, tarr[1];
@@ -294,7 +293,6 @@ TES*/
     i__1 = *nperm;
     for (i = 1; i <= i__1; ++i) {
         val[i + val_dim1] = -val[i + val_dim1];
-/* L10: */
     }
 
 /* THIS SORTS THE USER SUPPLIED VALUES AND VECTORS. */
@@ -308,10 +306,8 @@ L20:
 
     i__1 = *nperm;
     for (i = 1; i <= i__1; ++i) {
-        val[i + (val_dim1 << 1)] = (d__1 = val[i + (val_dim1 << 1)], abs(d__1)
-                );
+        val[i + (val_dim1 << 1)] = abs(val[i + (val_dim1 << 1)]);
         val[i + val_dim1 * 3] = dnrm2_(n, &vec[i * vec_dim1 + 1], &c__1);
-/* L60: */
     }
 
 /* THIS PERFORMS THE ORTHONORMALIZATION. */
@@ -322,7 +318,7 @@ L20:
     i__1 = *nperm;
     for (i = 1; i <= i__1; ++i) {
         m = m + *nperm + 1;
-        if ((d__1 = work[m], abs(d__1)) > val[i + val_dim1 * 3] * (float).9) {
+        if (abs(work[m]) > val[i + val_dim1 * 3] * .9f) {
             goto L70;
         }
         *ierr = -1;
@@ -352,7 +348,6 @@ L110:
         if (temp == 1.) {
             goto L130;
         }
-/* L120: */
     }
 
 /* ------------------------------------------------------------------ */
@@ -428,7 +423,7 @@ integer *ierr;
     integer vec_dim1, vec_offset, p0_dim1, p0_offset, p1_dim1, p1_offset,
             p2_dim1, p2_offset, t_dim1, t_offset, alp_dim1, alp_offset,
             bet_dim1, bet_offset, s_dim1, s_offset, i__1, i__2, i__3, i__4;
-    doublereal d__1, d__2, d__3;
+    doublereal d__1;
 
     /* Builtin functions */
     double sqrt(), pow();
@@ -562,13 +557,10 @@ integer *ierr;
     --d;
     --ind;
 
-    /* Function Body */
     dzero[0] = 0.;
     rnorm = 0.;
     if (*nperm != 0) {
-/* Computing MAX */
-        d__1 = -val[1], d__2 = val[*nperm];
-        rnorm = max(d__1,d__2);
+        rnorm = max(-val[1],val[*nperm]);
     }
     pnorm = rnorm;
     *delta = 1e31;
@@ -577,10 +569,7 @@ integer *ierr;
     *nop = 0;
     number = *nperm;
     *raritz = FALSE_;
-/* Computing MAX */
-    d__3 = (doublereal) (-(doublereal)((real) (*nfig)));
-    d__1 = (doublereal) ((real) (*n)) * *eps, d__2 = pow(c_b15, d__3);
-    utol = max(d__1,d__2);
+    utol = max((*n) * *eps, pow(c_b15, -(*nfig)));
     j = *maxj;
 
 /* ------------------------------------------------------------------ */
@@ -594,7 +583,6 @@ L30:
         if (temp == 0.) {
             dlaran_(n, &p1[i * p1_dim1 + 1]);
         }
-/* L50: */
     }
     if (*nperm == 0) {
         goto L70;
@@ -603,7 +591,6 @@ L30:
     for (i = 1; i <= i__1; ++i) {
         tau[i] = 1.;
         otau[i] = 0.;
-/* L60: */
     }
 L70:
     i__1 = *n * *nblock;
@@ -616,7 +603,6 @@ L70:
     i__1 = mtemp;
     for (i = 1; i <= i__1; ++i) {
         dcopy_(&j, dzero, &c__0, &s[i * s_dim1 + 1], &c__1);
-/* L75: */
     }
     ngood = 0;
     tmin = 1e30;
@@ -659,11 +645,9 @@ L80:
 /* NEW LANCZOS VECTOR AND A GOOD RITZ VECTOR.  THE ALGORITHM IS */
 /* TERMINATED IF TOO MUCH ORTHOGONALITY IS LOST. */
 
-            if ((d__1 = temp * bet[k + k * bet_dim1], abs(d__1)) > (
-                    doublereal) ((real) (*n)) * epsrt * anorm && i > *nperm) {
+            if (abs(temp * bet[k + k * bet_dim1]) > (*n) * epsrt * anorm && i > *nperm) {
                 goto L380;
             }
-/* L90: */
         }
 L100:
         ;
@@ -693,7 +677,6 @@ L110:
             t[l + m * t_dim1] = -t[l + m * t_dim1];
             --l;
             ++m;
-/* L120: */
         }
 L130:
         ;
@@ -713,11 +696,8 @@ L160:
         i__2 = *nblock;
         for (k = i; k <= i__2; ++k) {
             d__1 = -bet[i + k * bet_dim1];
-            daxpy_(n, &d__1, &p0[k * p0_dim1 + 1], &c__1, &p2[i * p2_dim1 + 1]
-                    , &c__1);
-/* L170: */
+            daxpy_(n, &d__1, &p0[k * p0_dim1 + 1], &c__1, &p2[i * p2_dim1 + 1], &c__1);
         }
-/* L180: */
     }
 
 /* THIS COMPUTES ALP AND P2=P2-P1*ALP. */
@@ -730,16 +710,12 @@ L160:
             alp[ii + k * alp_dim1] = ddot_(n, &p1[i * p1_dim1 + 1], &c__1, &
                     p2[k * p2_dim1 + 1], &c__1);
             d__1 = -alp[ii + k * alp_dim1];
-            daxpy_(n, &d__1, &p1[i * p1_dim1 + 1], &c__1, &p2[k * p2_dim1 + 1]
-                    , &c__1);
+            daxpy_(n, &d__1, &p1[i * p1_dim1 + 1], &c__1, &p2[k * p2_dim1 + 1] , &c__1);
             if (k != i) {
                 d__1 = -alp[ii + k * alp_dim1];
-                daxpy_(n, &d__1, &p1[k * p1_dim1 + 1], &c__1, &p2[i * p2_dim1
-                        + 1], &c__1);
+                daxpy_(n, &d__1, &p1[k * p1_dim1 + 1], &c__1, &p2[i * p2_dim1 + 1], &c__1);
             }
-/* L190: */
         }
-/* L200: */
     }
 
 /*  REORTHOGONALIZATION OF THE SECOND BLOCK */
@@ -754,18 +730,14 @@ L160:
             temp = ddot_(n, &p1[i * p1_dim1 + 1], &c__1, &p2[k * p2_dim1 + 1],
                      &c__1);
             d__1 = -temp;
-            daxpy_(n, &d__1, &p1[i * p1_dim1 + 1], &c__1, &p2[k * p2_dim1 + 1]
-                    , &c__1);
+            daxpy_(n, &d__1, &p1[i * p1_dim1 + 1], &c__1, &p2[k * p2_dim1 + 1] , &c__1);
             if (k != i) {
                 d__1 = -temp;
-                daxpy_(n, &d__1, &p1[k * p1_dim1 + 1], &c__1, &p2[i * p2_dim1
-                        + 1], &c__1);
+                daxpy_(n, &d__1, &p1[k * p1_dim1 + 1], &c__1, &p2[i * p2_dim1 + 1], &c__1);
             }
             ii = i - k + 1;
             alp[ii + k * alp_dim1] += temp;
-/* L210: */
         }
-/* L215: */
     }
 
 /* THIS ORTHONORMALIZES THE NEXT BLOCK */
@@ -782,15 +754,12 @@ L220:
         for (k = i; k <= i__2; ++k) {
             l = k - i + 1;
             t[l + m * t_dim1] = alp[l + i * alp_dim1];
-/* L230: */
         }
         i__2 = i;
         for (k = 1; k <= i__2; ++k) {
             l = *nblock - i + k + 1;
             t[l + m * t_dim1] = bet[k + i * bet_dim1];
-/* L240: */
         }
-/* L250: */
     }
 
 /* THIS NEGATES T IF SMALL IS FALSE. */
@@ -804,9 +773,7 @@ L220:
         i__2 = l;
         for (k = 1; k <= i__2; ++k) {
             t[k + i * t_dim1] = -t[k + i * t_dim1];
-/* L260: */
         }
-/* L270: */
     }
 
 /* THIS SHIFTS THE LANCZOS VECTORS */
@@ -818,9 +785,7 @@ L280:
     dcopy_(&i__1, &p2[p2_offset], &c__1, &p1[p1_offset], &c__1);
     i__1 = j - *nblock + 1;
     dlager_(&j, nband, &i__1, &t[t_offset], &tmin, &tmax);
-/* Computing MAX */
-    d__1 = max(rnorm,tmax), d__2 = -tmin;
-    anorm = max(d__1,d__2);
+    anorm = max(max(rnorm,tmax),-tmin);
     if (number == 0) {
         goto L305;
     }
@@ -849,9 +814,7 @@ L305:
             i__3 = *nblock - i + 1;
             alp[l + k * alp_dim1] = ddot_(&i__3, &bet[i + i * bet_dim1],
                     nblock, &bet[k + i * bet_dim1], nblock);
-/* L300: */
         }
-/* L310: */
     }
     if (number == 0) {
         goto L330;
@@ -861,25 +824,20 @@ L305:
 
     dcopy_(nblock, dzero, &c__0, &p2[p2_offset], &c__1);
     d__1 = anorm * anorm;
-    dlaeig_(nblock, nblock, &c__1, &c__1, &alp[alp_offset], tarr, nblock, &p2[
-            p2_offset], &bound[1], &atemp[1], &d[1], &vtemp[1], eps, &c_b88, &
-            d__1);
+    dlaeig_(nblock, nblock, &c__1, &c__1, &alp[alp_offset], tarr, nblock, &p2[p2_offset],
+            &bound[1], &atemp[1], &d[1], &vtemp[1], eps, &c_b88, &d__1);
     betmin = sqrt(tarr[0]);
 
 /* THIS UPDATES TAU AND OTAU. */
 
     i__1 = number;
     for (i = 1; i <= i__1; ++i) {
-/* Computing MAX */
-        d__1 = alpmax - val[i], d__2 = val[i] - alpmin;
-        temp = (tau[i] * max(d__1,d__2) + otau[i] * betmax + *eps * anorm) /
-                betmin;
+        temp = (tau[i] * max(alpmax - val[i],val[i] - alpmin) + otau[i] * betmax + *eps * anorm) / betmin;
         if (i <= *nperm) {
             temp += res[i] / betmin;
         }
         otau[i] = tau[i];
         tau[i] = temp;
-/* L320: */
     }
 
 /* THIS COMPUTES THE LARGEST SINGULAR VALUE OF BET. */
@@ -887,9 +845,8 @@ L305:
 L330:
     dcopy_(nblock, dzero, &c__0, &p2[p2_offset], &c__1);
     d__1 = anorm * anorm;
-    dlaeig_(nblock, nblock, nblock, nblock, &alp[alp_offset], tarr, nblock, &
-            p2[p2_offset], &bound[1], &atemp[1], &d[1], &vtemp[1], eps, &
-            c_b88, &d__1);
+    dlaeig_(nblock, nblock, nblock, nblock, &alp[alp_offset], tarr, nblock, &p2[p2_offset],
+            &bound[1], &atemp[1], &d[1], &vtemp[1], eps, &c_b88, &d__1);
     betmax = sqrt(tarr[0]);
     if (j <= *nblock << 1) {
         goto L80;
@@ -966,9 +923,7 @@ L410:
 
 L430:
     m = number + nleft + 1;
-/* Computing MIN */
-    d__1 = *delta, d__2 = val[m];
-    *delta = min(d__1,d__2);
+    *delta = min(*delta,val[m]);
     enough = TRUE_;
     if (nleft == 0) {
         goto L80;
@@ -986,19 +941,13 @@ L430:
         goto L470;
     }
     *delta = min(*delta,anorm);
-/* Computing MAX */
-/* Computing MAX */
-    d__3 = -val[number + 1];
-    d__1 = rnorm, d__2 = max(d__3,*delta);
-    pnorm = max(d__1,d__2);
+    pnorm = max(rnorm,max(-val[number + 1],*delta));
     tola = utol * pnorm;
     nstart = 0;
     i__1 = ntheta;
     for (i = 1; i <= i__1; ++i) {
         m = number + i;
-/* Computing MIN */
-        d__1 = atemp[i] * atemp[i] / (*delta - val[m]), d__2 = atemp[i];
-        if (min(d__1,d__2) > tola) {
+        if (min(atemp[i] * atemp[i] / (*delta - val[m]),atemp[i]) > tola) {
             goto L450;
         }
         ind[i] = -1;
@@ -1020,7 +969,6 @@ L460:
     i__1 = ntheta;
     for (i = 1; i <= i__1; ++i) {
         vtemp[i] = (doublereal) ((real) ind[i]);
-/* L465: */
     }
     goto L500;
 
@@ -1072,8 +1020,7 @@ L500:
     if (nstart == ntheta) {
         goto L530;
     }
-    dvsort_(&ntheta, &vtemp[1], &atemp[1], &c__1, &val[*nperm + 1], maxj, &j,
-            &s[s_offset]);
+    dvsort_(&ntheta, &vtemp[1], &atemp[1], &c__1, &val[*nperm + 1], maxj, &j, &s[s_offset]);
 
 /* THES ACCUMULATES THE J-VECTORS USED TO FORM THE STARTING */
 /* VECTORS. */
@@ -1091,10 +1038,7 @@ L530:
     temp = atemp[1];
     i__1 = nstart;
     for (i = 1; i <= i__1; ++i) {
-/* Computing MIN */
-        d__1 = temp, d__2 = atemp[i];
-        temp = min(d__1,d__2);
-/* L535: */
+        temp = min(temp,atemp[i]);
     }
     m = ngood + 1;
     l = ngood + min(nstart,*nblock);
@@ -1102,7 +1046,6 @@ L530:
     for (i = m; i <= i__1; ++i) {
         d__1 = temp / atemp[i];
         dscal_(&j, &d__1, &s[i * s_dim1 + 1], &c__1);
-/* L540: */
     }
     m = (nstart - 1) / *nblock;
     if (m == 0) {
@@ -1119,11 +1062,8 @@ L530:
             }
             i1 = ngood + k;
             d__1 = temp / atemp[l];
-            daxpy_(&j, &d__1, &s[l * s_dim1 + 1], &c__1, &s[i1 * s_dim1 + 1],
-                    &c__1);
-/* L550: */
+            daxpy_(&j, &d__1, &s[l * s_dim1 + 1], &c__1, &s[i1 * s_dim1 + 1], &c__1);
         }
-/* L560: */
     }
 L570:
     nstart = min(nstart,*nblock);
@@ -1138,7 +1078,6 @@ L580:
     for (i = 1; i <= i__1; ++i) {
         m = *nperm + i;
         res[m] = atemp[i];
-/* L590: */
     }
 
 /* THIS COMPUTES THE RITZ VECTORS BY SEQUENTIALLY RECALLING THE */
@@ -1157,7 +1096,6 @@ L600:
     i__1 = number;
     for (i = m; i <= i__1; ++i) {
         dcopy_(n, dzero, &c__0, &vec[i * vec_dim1 + 1], &c__1);
-/* L610: */
     }
 L620:
     i__1 = j;
@@ -1175,7 +1113,6 @@ L620:
                 i1 = ngood + l;
                 daxpy_(n, &s[m + i1 * s_dim1], &p2[k * p2_dim1 + 1], &c__1, &
                         p1[l * p1_dim1 + 1], &c__1);
-/* L630: */
             }
 L640:
             if (ngood == 0) {
@@ -1186,12 +1123,10 @@ L640:
                 i1 = l + *nperm;
                 daxpy_(n, &s[m + l * s_dim1], &p2[k * p2_dim1 + 1], &c__1, &
                         vec[i1 * vec_dim1 + 1], &c__1);
-/* L650: */
             }
 L660:
             ;
         }
-/* L670: */
     }
     if (test || enough) {
         goto L690;
@@ -1207,7 +1142,6 @@ L660:
         dscal_(n, &temp, &vec[i * vec_dim1 + 1], &c__1);
         tau[i] = 1.;
         otau[i] = 1.;
-/* L680: */
     }
 
 /*  SHIFT S VECTORS TO ALIGN FOR LATER CALL TO DLAEIG */
@@ -1245,9 +1179,7 @@ L690:
     }
     *nperm += ngood;
     nleft -= ngood;
-/* Computing MAX */
-    d__1 = -val[1], d__2 = val[*nperm];
-    rnorm = max(d__1,d__2);
+    rnorm = max(-val[1],val[*nperm]);
 
 /* THIS DECIDES WHERE TO GO NEXT. */
 
@@ -1274,7 +1206,6 @@ L690:
         if (val[l] - val[i] < tola) {
             goto L30;
         }
-/* L780: */
     }
 
 /* THIS DOES A CLUSTER TEST TO SEE IF A FINAL RAYLEIGH-RITZ */
@@ -1373,8 +1304,7 @@ doublereal *a, *x, *y;
 
 /* *********************************************************************** */
 
-/* Subroutine */ void dlabcm_(n, nband, nl, nr, a, eigval, lde, eigvec, atol,
-        artol, bound, atemp, d, vtemp)
+/* Subroutine */ void dlabcm_(n, nband, nl, nr, a, eigval, lde, eigvec, atol, artol, bound, atemp, d, vtemp)
 integer *n, *nband, *nl, *nr;
 doublereal *a, *eigval;
 integer *lde;
@@ -1382,7 +1312,7 @@ doublereal *eigvec, *atol, *artol, *bound, *atemp, *d, *vtemp;
 {
     /* System generated locals */
     integer a_dim1, a_offset, eigvec_dim1, eigvec_offset, i__1, i__2, i__3;
-    doublereal d__1, d__2;
+    doublereal d__1;
 
     /* Local variables */
     static logical flag__;
@@ -1447,7 +1377,6 @@ doublereal *eigvec, *atol, *artol, *bound, *atemp, *d, *vtemp;
                 eigvec_dim1 + 1], &c__1) == 0.) {
             dlaran_(n, &eigvec[i * eigvec_dim1 + 1]);
         }
-/* L5: */
     }
 
 /*  LOOP OVER EIGENVALUES */
@@ -1471,8 +1400,7 @@ L10:
         d__1 = 1. / vnorm;
         dscal_(n, &d__1, &eigvec[j * eigvec_dim1 + 1], &c__1);
         d__1 = -sigma;
-        daxpy_(n, &d__1, &eigvec[j * eigvec_dim1 + 1], &c__1, &vtemp[1], &
-                c__1);
+        daxpy_(n, &d__1, &eigvec[j * eigvec_dim1 + 1], &c__1, &vtemp[1], &c__1);
 
 /*  LOOP OVER SHIFTS */
 
@@ -1487,15 +1415,11 @@ L20:
         goto L10;
 
 L30:
-        rq = sigma + ddot_(n, &eigvec[j * eigvec_dim1 + 1], &c__1, &vtemp[1],
-                &c__1) / vnorm / vnorm;
+        rq = sigma + ddot_(n, &eigvec[j * eigvec_dim1 + 1], &c__1, &vtemp[1], &c__1) / vnorm / vnorm;
         d__1 = sigma - rq;
-        daxpy_(n, &d__1, &eigvec[j * eigvec_dim1 + 1], &c__1, &vtemp[1], &
-                c__1);
-/* Computing MAX */
-        d__1 = *atol, d__2 = dnrm2_(n, &vtemp[1], &c__1) / vnorm;
-        resid = max(d__1,d__2);
-        d__1 = (float)1. / vnorm;
+        daxpy_(n, &d__1, &eigvec[j * eigvec_dim1 + 1], &c__1, &vtemp[1], &c__1);
+        resid = max(*atol,dnrm2_(n, &vtemp[1], &c__1) / vnorm);
+        d__1 = 1.f / vnorm;
         dscal_(n, &d__1, &eigvec[j * eigvec_dim1 + 1], &c__1);
 
 /*  ACCEPT EIGENVALUE IF THE INTERVAL IS SMALL ENOUGH */
@@ -1507,13 +1431,9 @@ L30:
 /*  COMPUTE MINIMAL ERROR BOUND */
 
         errb = resid;
-/* Computing MIN */
-        d__1 = bound[(j << 1) + 5] - rq, d__2 = rq - bound[(j << 1) + 2];
-        gap = min(d__1,d__2);
+        gap = min(bound[(j << 1) + 5] - rq,rq - bound[(j << 1) + 2]);
         if (gap > resid) {
-/* Computing MAX */
-            d__1 = *atol, d__2 = resid * resid / gap;
-            errb = max(d__1,d__2);
+            errb = max(*atol,resid * resid / gap);
         }
 
 /*  TENTATIVE NEW SHIFT */
@@ -1563,7 +1483,6 @@ L50:
             if (bound[(i << 1) + 4] > rq) {
                 goto L70;
             }
-/* L60: */
         }
         goto L80;
 
@@ -1579,14 +1498,10 @@ L80:
 
 L100:
         if (sigma < rq) {
-/* Computing MAX */
-            d__1 = sigma, d__2 = rq - errb;
-            sigma = max(d__1,d__2);
+            sigma = max(sigma,rq - errb);
         }
         if (sigma > rq) {
-/* Computing MIN */
-            d__1 = sigma, d__2 = rq + errb;
-            sigma = min(d__1,d__2);
+            sigma = min(sigma,rq + errb);
         }
 
 /*  FACTOR AND SOLVE */
@@ -1597,7 +1512,6 @@ L200:
             if (sigma < bound[(i << 1) + 3]) {
                 goto L220;
             }
-/* L210: */
         }
         i = nval + 1;
 L220:
@@ -1624,7 +1538,6 @@ L220:
             m = j + i;
             d__1 = 1. / vnorm;
             dscal_(n, &d__1, &eigvec[m * eigvec_dim1 + 1], &c__1);
-/* L225: */
         }
 
 /*  UPDATE INTERVALS */
@@ -1645,7 +1558,6 @@ L227:
             if (numl >= i) {
                 bound[(i << 1) + 4] = sigma;
             }
-/* L230: */
         }
         if (numl < nval + 1) {
             if (sigma > bound[(nval << 1) + 5])
@@ -1667,7 +1579,7 @@ L305:
         dlabfc_(n, nband, &a[a_offset], &rq, &numvec, lde, &eigvec[j *
                 eigvec_dim1 + 1], &numl, &i__2, &atemp[1], &d[1], atol);
         vnorm = dnrm2_(n, &eigvec[j * eigvec_dim1 + 1], &c__1);
-        if (vnorm != (float)0.) {
+        if (vnorm != 0.f) {
             d__1 = 1. / vnorm;
             dscal_(n, &d__1, &eigvec[j * eigvec_dim1 + 1], &c__1);
         }
@@ -1682,11 +1594,8 @@ L310:
         m = j - 1;
         i__2 = m;
         for (i = 1; i <= i__2; ++i) {
-            d__1 = -ddot_(n, &eigvec[i * eigvec_dim1 + 1], &c__1, &eigvec[j *
-                    eigvec_dim1 + 1], &c__1);
-            daxpy_(n, &d__1, &eigvec[i * eigvec_dim1 + 1], &c__1, &eigvec[j *
-                    eigvec_dim1 + 1], &c__1);
-/* L320: */
+            d__1 = -ddot_(n, &eigvec[i * eigvec_dim1 + 1], &c__1, &eigvec[j * eigvec_dim1 + 1], &c__1);
+            daxpy_(n, &d__1, &eigvec[i * eigvec_dim1 + 1], &c__1, &eigvec[j * eigvec_dim1 + 1], &c__1);
         }
 L330:
         vnorm = dnrm2_(n, &eigvec[j * eigvec_dim1 + 1], &c__1);
@@ -1707,10 +1616,8 @@ L330:
         m = j + 1;
         i__2 = nval;
         for (i = m; i <= i__2; ++i) {
-            d__1 = -ddot_(n, &eigvec[j * eigvec_dim1 + 1], &c__1, &eigvec[i *
-                    eigvec_dim1 + 1], &c__1);
-            daxpy_(n, &d__1, &eigvec[j * eigvec_dim1 + 1], &c__1, &eigvec[i *
-                    eigvec_dim1 + 1], &c__1);
+            d__1 = -ddot_(n, &eigvec[j * eigvec_dim1 + 1], &c__1, &eigvec[i * eigvec_dim1 + 1], &c__1);
+            daxpy_(n, &d__1, &eigvec[j * eigvec_dim1 + 1], &c__1, &eigvec[i * eigvec_dim1 + 1], &c__1);
         }
     }
 } /* dlabcm_ */
@@ -1718,8 +1625,7 @@ L330:
 
 /* *********************************************************************** */
 
-/* Subroutine */ void dlabfc_(n, nband, a, sigma, number, lde, eigvec, numl,
-        ldad, atemp, d, atol)
+/* Subroutine */ void dlabfc_(n, nband, a, sigma, number, lde, eigvec, numl, ldad, atemp, d, atol)
 integer *n, *nband;
 doublereal *a, *sigma;
 integer *number, *lde;
@@ -1730,7 +1636,7 @@ doublereal *atemp, *d, *atol;
     /* System generated locals */
     integer a_dim1, a_offset, eigvec_dim1, eigvec_offset, atemp_dim1,
             atemp_offset, d_dim1, d_offset, i__1, i__2, i__3;
-    doublereal d__1, d__2;
+    doublereal d__1;
 
     /* Builtin functions */
     double d_sign();
@@ -1805,7 +1711,6 @@ doublereal *atemp, *d, *atol;
             la = k - i;
             ld = *nband - i;
             d[ld + *nband * d_dim1] = a[i + 1 + la * a_dim1];
-/* L10: */
         }
 
 L20:
@@ -1819,7 +1724,6 @@ L20:
         for (i = 1; i <= i__2; ++i) {
             ld = *nband + i;
             d[ld + *nband * d_dim1] = a[i + 1 + k * a_dim1];
-/* L30: */
         }
 
 /*   TERMINATE */
@@ -1835,8 +1739,7 @@ L40:
             if (d[i + *nband * d_dim1] == 0.) {
                 goto L60;
             }
-            if ((d__1 = d[i + i * d_dim1], abs(d__1)) >= (d__2 = d[i + *nband
-                    * d_dim1], abs(d__2))) {
+            if (abs(d[i + i * d_dim1]) >= abs(d[i + *nband * d_dim1])) {
                 goto L50;
             }
             if (d[i + *nband * d_dim1] < 0. && d[i + i * d_dim1] < 0. || d[i
@@ -1844,18 +1747,15 @@ L40:
                 lpm = -lpm;
             }
             i__3 = *ldad - i + 1;
-            dswap_(&i__3, &d[i + i * d_dim1], &c__1, &d[i + *nband * d_dim1],
-                    &c__1);
+            dswap_(&i__3, &d[i + i * d_dim1], &c__1, &d[i + *nband * d_dim1], &c__1);
             dswap_(number, &eigvec[l + eigvec_dim1], lde, &eigvec[k +
                     eigvec_dim1], lde);
 L50:
             i__3 = *ldad - i;
             d__1 = -d[i + *nband * d_dim1] / d[i + i * d_dim1];
-            daxpy_(&i__3, &d__1, &d[i + 1 + i * d_dim1], &c__1, &d[i + 1 + *
-                    nband * d_dim1], &c__1);
+            daxpy_(&i__3, &d__1, &d[i + 1 + i * d_dim1], &c__1, &d[i + 1 + *nband * d_dim1], &c__1);
             d__1 = -d[i + *nband * d_dim1] / d[i + i * d_dim1];
-            daxpy_(number, &d__1, &eigvec[l + eigvec_dim1], lde, &eigvec[k +
-                    eigvec_dim1], lde);
+            daxpy_(number, &d__1, &eigvec[l + eigvec_dim1], lde, &eigvec[k + eigvec_dim1], lde);
 L60:
             ;
         }
@@ -1892,7 +1792,6 @@ L80:
             dcopy_(&i__3, &d[i + 1 + (i + 1) * d_dim1], &c__1, &d[i + i *
                     d_dim1], &c__1);
             d[*ldad + i * d_dim1] = 0.;
-/* L90: */
         }
 L100:
         ;
@@ -1917,7 +1816,7 @@ L110:
     i__1 = *n;
     for (kk = 1; kk <= i__1; ++kk) {
         k = *n - kk + 1;
-        if ((d__1 = atemp[k * atemp_dim1 + 1], abs(d__1)) <= *atol) {
+        if (abs(atemp[k * atemp_dim1 + 1]) <= *atol) {
             atemp[k * atemp_dim1 + 1] = d_sign(atol, &atemp[k * atemp_dim1 + 1]);
         }
 
@@ -1950,7 +1849,6 @@ doublereal *eigvec, *bound, *atemp, *d, *vtemp, *eps, *tmin, *tmax;
 {
     /* System generated locals */
     integer a_dim1, a_offset, eigvec_dim1, eigvec_offset, i__1;
-    doublereal d__1, d__2;
 
     /* Builtin functions */
     double sqrt();
@@ -1991,10 +1889,7 @@ doublereal *eigvec, *bound, *atemp, *d, *vtemp, *eps, *tmin, *tmax;
     --d;
     --vtemp;
 
-    /* Function Body */
-/* Computing MAX */
-    d__1 = *tmax, d__2 = -(*tmin);
-    atol = (doublereal) ((real) (*n)) * *eps * max(d__1,d__2);
+    atol = (doublereal) ((real) (*n)) * *eps * max(*tmax,-(*tmin));
     artol = atol / sqrt(*eps);
     nval = *nr - *nl + 1;
 
@@ -2039,7 +1934,6 @@ doublereal *a, *tmin, *tmax;
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
-    doublereal d__1, d__2;
 
     /* Local variables */
     static doublereal temp;
@@ -2070,10 +1964,8 @@ doublereal *a, *tmin, *tmax;
         temp = 0.;
         i__2 = *nband;
         for (i = 2; i <= i__2; ++i) {
-            temp += (d__1 = a[i + k * a_dim1], abs(d__1));
-/* L10: */
+            temp += abs(a[i + k * a_dim1]);
         }
-/* L20: */
         l = min(k,*nband);
         if (l == 1) {
             goto L40;
@@ -2081,17 +1973,11 @@ doublereal *a, *tmin, *tmax;
         i__2 = l;
         for (i = 2; i <= i__2; ++i) {
             m = k - i + 1;
-            temp += (d__1 = a[i + m * a_dim1], abs(d__1));
-/* L30: */
+            temp += abs(a[i + m * a_dim1]);
         }
 L40:
-/* Computing MIN */
-        d__1 = *tmin, d__2 = a[k * a_dim1 + 1] - temp;
-        *tmin = min(d__1,d__2);
-/* Computing MAX */
-        d__1 = *tmax, d__2 = a[k * a_dim1 + 1] + temp;
-        *tmax = max(d__1,d__2);
-/* L50: */
+        *tmin = min(*tmin,a[k * a_dim1 + 1] - temp);
+        *tmax = max(*tmax,a[k * a_dim1 + 1] + temp);
     }
     return;
 } /* dlager_ */
@@ -2146,8 +2032,7 @@ doublereal *x;
 
 /* ------------------------------------------------------------------ */
 
-/* Subroutine */ void dmvpc_(nblock, bet, maxj, j, s, number, resnrm, orthcf,
-        rv)
+/* Subroutine */ void dmvpc_(nblock, bet, maxj, j, s, number, resnrm, orthcf, rv)
 integer *nblock;
 doublereal *bet;
 integer *maxj, *j;
@@ -2157,7 +2042,6 @@ doublereal *resnrm, *orthcf, *rv;
 {
     /* System generated locals */
     integer bet_dim1, bet_offset, s_dim1, s_offset, i__1, i__2;
-    doublereal d__1, d__2, d__3;
 
     /* Local variables */
     extern doublereal ddot_(), dnrm2_();
@@ -2194,11 +2078,9 @@ doublereal *resnrm, *orthcf, *rv;
             rv[k] = ddot_(nblock, &s[m + i * s_dim1], &c__1, &bet[k +
                     bet_dim1], nblock);
             if (k == 1) {
-                orthcf[i] = (d__1 = rv[k], abs(d__1));
+                orthcf[i] = abs(rv[k]);
             }
-/* Computing MIN */
-            d__2 = orthcf[i], d__3 = (d__1 = rv[k], abs(d__1));
-            orthcf[i] = min(d__2,d__3);
+            orthcf[i] = min(orthcf[i], abs(rv[k]));
         }
         resnrm[i] = dnrm2_(nblock, &rv[1], &c__1);
     }
@@ -2221,8 +2103,7 @@ doublereal *eps;
 {
     /* System generated locals */
     integer val_dim1, val_offset, vec_dim1, vec_offset, h_dim1, h_offset,
-            hv_dim1, hv_offset, p_dim1, p_offset, q_dim1, q_offset, i__1,
-            i__2, i__3, i__4;
+            hv_dim1, hv_offset, p_dim1, p_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4;
     doublereal d__1;
 
     /* Local variables */
@@ -2295,7 +2176,6 @@ doublereal *eps;
     i__1 = m;
     for (i = 1; i <= i__1; ++i) {
         dcopy_(n, &vec[i * vec_dim1 + 1], &c__1, &p[i * p_dim1 + 1], &c__1);
-/* L10: */
     }
     (*iovect)(n, &m, &p[p_offset], &m, &c__0);
     (*op)(n, &m, &p[p_offset], &q[q_offset]);
@@ -2307,9 +2187,7 @@ doublereal *eps;
             jj = j - i + 1;
             h[jj + i * h_dim1] = temp * ddot_(n, &vec[j * vec_dim1 + 1], &
                     c__1, &q[i * q_dim1 + 1], &c__1);
-/* L20: */
         }
-/* L30: */
     }
     if (*nperm < *nblock) {
         goto L90;
@@ -2324,7 +2202,6 @@ L40:
             l = i - *nblock + j;
             dcopy_(n, &vec[l * vec_dim1 + 1], &c__1, &p[j * p_dim1 + 1], &
                     c__1);
-/* L50: */
         }
         (*iovect)(n, nblock, &p[p_offset], &i, &c__0);
         (*op)(n, nblock, &p[p_offset], &q[q_offset]);
@@ -2337,11 +2214,8 @@ L40:
                 kk = k - l + 1;
                 h[kk + l * h_dim1] = temp * ddot_(n, &vec[k * vec_dim1 + 1], &
                         c__1, &q[j * q_dim1 + 1], &c__1);
-/* L60: */
             }
-/* L70: */
         }
-/* L80: */
     }
 
 /* THIS COMPUTES THE SPECTRAL DECOMPOSITION OF H. */
@@ -2351,8 +2225,7 @@ L90:
     hmax = h[h_dim1 + 1];
     dlager_(nperm, nperm, &c__1, &h[h_offset], &hmin, &hmax);
     dlaeig_(nperm, nperm, &c__1, nperm, &h[h_offset], &val[val_offset], nperm,
-             &hv[hv_offset], &bound[1], &p[p_offset], &d[1], &q[q_offset],
-            eps, &hmin, &hmax);
+            &hv[hv_offset], &bound[1], &p[p_offset], &d[1], &q[q_offset], eps, &hmin, &hmax);
 
 /* THIS COMPUTES THE RITZ VECTORS--THE COLUMNS OF */
 /* Y = QS WHERE S IS THE MATRIX OF EIGENVECTORS OF H. */
@@ -2360,7 +2233,6 @@ L90:
     i__2 = *nperm;
     for (i = 1; i <= i__2; ++i) {
         dcopy_(n, dzero, &c__0, &vec[i * vec_dim1 + 1], &c__1);
-/* L120: */
     }
     m = *nperm % *nblock;
     if (m == 0) {
@@ -2373,9 +2245,7 @@ L90:
         for (j = 1; j <= i__1; ++j) {
             daxpy_(n, &hv[i + j * hv_dim1], &p[i * p_dim1 + 1], &c__1, &vec[j
                     * vec_dim1 + 1], &c__1);
-/* L130: */
         }
-/* L140: */
     }
     if (*nperm < *nblock) {
         goto L190;
@@ -2393,11 +2263,8 @@ L150:
             for (k = 1; k <= i__4; ++k) {
                 daxpy_(n, &hv[l + k * hv_dim1], &p[j * p_dim1 + 1], &c__1, &
                         vec[k * vec_dim1 + 1], &c__1);
-/* L160: */
             }
-/* L170: */
         }
-/* L180: */
     }
 
 /* ------------------------------------------------------------------ */
@@ -2416,7 +2283,6 @@ L190:
     i__1 = m;
     for (i = 1; i <= i__1; ++i) {
         dcopy_(n, &vec[i * vec_dim1 + 1], &c__1, &p[i * p_dim1 + 1], &c__1);
-/* L200: */
     }
     (*op)(n, &m, &p[p_offset], &q[q_offset]);
     ++(*nop);
@@ -2425,10 +2291,8 @@ L190:
         val[i + val_dim1] = ddot_(n, &p[i * p_dim1 + 1], &c__1, &q[i * q_dim1
                 + 1], &c__1);
         d__1 = -val[i + val_dim1];
-        daxpy_(n, &d__1, &p[i * p_dim1 + 1], &c__1, &q[i * q_dim1 + 1], &c__1)
-                ;
+        daxpy_(n, &d__1, &p[i * p_dim1 + 1], &c__1, &q[i * q_dim1 + 1], &c__1);
         val[i + (val_dim1 << 1)] = dnrm2_(n, &q[i * q_dim1 + 1], &c__1);
-/* L210: */
     }
     if (*nperm < *nblock) {
         goto L260;
@@ -2443,7 +2307,6 @@ L220:
             l = i - 1 + j;
             dcopy_(n, &vec[l * vec_dim1 + 1], &c__1, &p[j * p_dim1 + 1], &
                     c__1);
-/* L230: */
         }
         (*op)(n, nblock, &p[p_offset], &q[q_offset]);
         ++(*nop);
@@ -2453,12 +2316,9 @@ L220:
             val[l + val_dim1] = ddot_(n, &p[j * p_dim1 + 1], &c__1, &q[j *
                     q_dim1 + 1], &c__1);
             d__1 = -val[l + val_dim1];
-            daxpy_(n, &d__1, &p[j * p_dim1 + 1], &c__1, &q[j * q_dim1 + 1], &
-                    c__1);
+            daxpy_(n, &d__1, &p[j * p_dim1 + 1], &c__1, &q[j * q_dim1 + 1], &c__1);
             val[l + (val_dim1 << 1)] = dnrm2_(n, &q[j * q_dim1 + 1], &c__1);
-/* L240: */
         }
-/* L250: */
     }
 
 /* THIS COMPUTES THE ACCURACY ESTIMATES.  FOR CONSISTENCY WITH DILASO */
@@ -2557,7 +2417,6 @@ doublereal *z, *b;
 L10:
             b[i + k * b_dim1] = z[i + k * z_dim1];
             z[i + k * z_dim1] = 0.;
-/* L20: */
         }
 L30:
         ;
@@ -2669,9 +2528,6 @@ integer *iy;
     static integer m2 = 0;
     static integer itwo = 2;
 
-    /* System generated locals */
-    real ret_val;
-
     /* Builtin functions */
     double atan(), sqrt();
 
@@ -2717,7 +2573,7 @@ L10:
 
 /*  S IS THE SCALE FACTOR FOR CONVERTING TO FLOATING POINT */
 
-    s = (float).5 / halfm;
+    s = .5f / m2;
 
 /*  COMPUTE NEXT RANDOM NUMBER */
 
@@ -2746,7 +2602,6 @@ L20:
     if (*iy < 0) {
         *iy = *iy + m2 + m2;
     }
-    ret_val = (real) (*iy) * s;
-    return ret_val;
+    return (real) (*iy) * s;
 } /* urand_ */
 

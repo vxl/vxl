@@ -23,7 +23,7 @@ integer *job, *info;
 {
     /* System generated locals */
     integer x_dim1, x_offset, u_dim1, u_offset, v_dim1, v_offset, i__1;
-    doublereal d__1, d__2, d__3, d__4, d__5, d__6, d__7;
+    doublereal d__1;
 
     /* Builtin functions */
     double d_sign(), sqrt();
@@ -48,13 +48,12 @@ integer *job, *info;
     extern /* Subroutine */ void daxpy_();
     static logical wantu, wantv;
     static doublereal t1, ztest, el;
-    static integer kk;
     static doublereal cs;
-    static integer ll, mm, ls;
+    static integer mm, ls;
     static doublereal sl;
     static integer lu;
     static doublereal sm, sn;
-    static integer lm1, mm1, lp1, nct, ncu, lls, nrt;
+    static integer lm1, lp1, nct, ncu, nrt;
     static doublereal emm1, smm1;
 
 
@@ -120,8 +119,7 @@ integer *job, *info;
 /*                   discussion of info for exceptions. */
 
 /*         u         double precision(ldu,k), where ldu.ge.n.  if */
-/*                                   joba.eq.1 then k.eq.n, if joba.ge.2
-*/
+/*                                   joba.eq.1 then k.eq.n, if joba.ge.2 */
 /*                                   then k.eq.min(n,p). */
 /*                   u contains the matrix of left singular vectors. */
 /*                   u is not referenced if joba.eq.0.  if n.le.p */
@@ -243,11 +241,8 @@ L20:
 /*              apply the transformation. */
 
             i__1 = *n - l + 1;
-            t = -ddot_(&i__1, &x[l + l * x_dim1], &c__1, &x[l + j * x_dim1], &
-                    c__1) / x[l + l * x_dim1];
-            i__1 = *n - l + 1;
-            daxpy_(&i__1, &t, &x[l + l * x_dim1], &c__1, &x[l + j * x_dim1], &
-                    c__1);
+            t = -ddot_(&i__1, &x[l + l * x_dim1], &c__1, &x[l + j * x_dim1], &c__1) / x[l + l * x_dim1];
+            daxpy_(&i__1, &t, &x[l + l * x_dim1], &c__1, &x[l + j * x_dim1], &c__1);
 L30:
 
 /*           place the l-th row of x into  e for the */
@@ -299,14 +294,12 @@ L80:
         }
         for (j = lp1; j <= *p; ++j) {
             i__1 = *n - l;
-            daxpy_(&i__1, &e[j], &x[lp1 + j * x_dim1], &c__1, &work[lp1], &
-                    c__1);
+            daxpy_(&i__1, &e[j], &x[lp1 + j * x_dim1], &c__1, &work[lp1], &c__1);
         }
         for (j = lp1; j <= *p; ++j) {
             i__1 = *n - l;
             d__1 = -e[j] / e[lp1];
-            daxpy_(&i__1, &d__1, &work[lp1], &c__1, &x[lp1 + j * x_dim1], &
-                    c__1);
+            daxpy_(&i__1, &d__1, &work[lp1], &c__1, &x[lp1 + j * x_dim1], &c__1);
         }
 L120:
         if (! wantv) {
@@ -351,8 +344,7 @@ L170:
         u[j + j * u_dim1] = 1.;
     }
     if (wantu)
-    for (ll = 1; ll <= nct; ++ll) {
-        l = nct - ll + 1;
+    for (l = nct; l >= 1; --l) {
         if (s[l] == 0.) {
             for (i = 1; i <= *n; ++i) {
                 u[i + l * u_dim1] = 0.;
@@ -366,11 +358,8 @@ L170:
         }
         for (j = lp1; j <= ncu; ++j) {
             i__1 = *n - l + 1;
-            t = -ddot_(&i__1, &u[l + l * u_dim1], &c__1, &u[l + j * u_dim1], &
-                    c__1) / u[l + l * u_dim1];
-            i__1 = *n - l + 1;
-            daxpy_(&i__1, &t, &u[l + l * u_dim1], &c__1, &u[l + j * u_dim1], &
-                    c__1);
+            t = -ddot_(&i__1, &u[l + l * u_dim1], &c__1, &u[l + j * u_dim1], &c__1) / u[l + l * u_dim1];
+            daxpy_(&i__1, &t, &u[l + l * u_dim1], &c__1, &u[l + j * u_dim1], &c__1);
         }
 L220:
         i__1 = *n - l + 1;
@@ -385,8 +374,7 @@ L220:
 /*     if it is required, generate v. */
 
     if (wantv)
-    for (ll = 1; ll <= *p; ++ll) {
-        l = *p - ll + 1;
+    for (l = *p; l >= 1; --l) {
         lp1 = l + 1;
         if (l > nrt) {
             goto L320;
@@ -396,11 +384,8 @@ L220:
         }
         for (j = lp1; j <= *p; ++j) {
             i__1 = *p - l;
-            t = -ddot_(&i__1, &v[lp1 + l * v_dim1], &c__1, &v[lp1 + j *
-                    v_dim1], &c__1) / v[lp1 + l * v_dim1];
-            i__1 = *p - l;
-            daxpy_(&i__1, &t, &v[lp1 + l * v_dim1], &c__1, &v[lp1 + j *
-                    v_dim1], &c__1);
+            t = -ddot_(&i__1, &v[lp1 + l * v_dim1], &c__1, &v[lp1 + j * v_dim1], &c__1) / v[lp1 + l * v_dim1];
+            daxpy_(&i__1, &t, &v[lp1 + l * v_dim1], &c__1, &v[lp1 + j * v_dim1], &c__1);
         }
 L320:
         for (i = 1; i <= *p; ++i) {
@@ -439,14 +424,13 @@ L360:
 /*                        s(l), ..., s(m) are not negligible (qr step). */
 /*           kase = 4     if e(m-1) is negligible (convergence). */
 
-    for (ll = 1; ll <= m; ++ll) {
-        l = m - ll;
+    for (l = m-1; l >= 0; --l) {
 /*        ...exit */
         if (l == 0) {
             goto L400;
         }
-        test = (d__1 = s[l], abs(d__1)) + (d__2 = s[l + 1], abs(d__2));
-        ztest = test + (d__1 = e[l], abs(d__1));
+        test = abs(s[l]) + abs(s[l + 1]);
+        ztest = test + abs(e[l]);
         if (ztest != test) {
             goto L380;
         }
@@ -464,20 +448,19 @@ L400:
     goto L480;
 L410:
     lp1 = l + 1;
-    for (lls = lp1; lls <= m+1; ++lls) {
-        ls = m - lls + lp1;
+    for (ls = m; ls >= l; --ls) {
 /*           ...exit */
         if (ls == l) {
             goto L440;
         }
         test = 0.;
         if (ls != m) {
-            test += (d__1 = e[ls], abs(d__1));
+            test += abs(e[ls]);
         }
         if (ls != l + 1) {
-            test += (d__1 = e[ls - 1], abs(d__1));
+            test += abs(e[ls - 1]);
         }
-        ztest = test + (d__1 = s[ls], abs(d__1));
+        ztest = test + abs(s[ls]);
         if (ztest != test) {
             goto L420;
         }
@@ -518,11 +501,9 @@ L480:
 /*        deflate negligible s(m). */
 
 L490:
-    mm1 = m - 1;
     f = e[m - 1];
     e[m - 1] = 0.;
-    for (kk = l; kk <= mm1; ++kk) {
-        k = mm1 - kk + l;
+    for (k = m-1; k >= l; --k) {
         t1 = s[k];
         drotg_(&t1, &f, &cs, &sn);
         s[k] = t1;
@@ -563,30 +544,20 @@ L540:
 
 /*           calculate the shift. */
 
-/* Computing MAX */
-    d__6 = (d__1 = s[m], abs(d__1)), d__7 = (d__2 = s[m - 1], abs(d__2)),
-            d__6 = max(d__6,d__7), d__7 = (d__3 = e[m - 1], abs(d__3)), d__6 =
-             max(d__6,d__7), d__7 = (d__4 = s[l], abs(d__4)), d__6 = max(d__6,
-            d__7), d__7 = (d__5 = e[l], abs(d__5));
-    scale = max(d__6,d__7);
+    scale = max(max(max(max(abs(s[m]),abs(s[m-1])),abs(e[m-1])),abs(s[l])),abs(e[l]));
     sm = s[m] / scale;
     smm1 = s[m - 1] / scale;
     emm1 = e[m - 1] / scale;
     sl = s[l] / scale;
     el = e[l] / scale;
-/* Computing 2nd power */
-    d__1 = emm1;
-    b = ((smm1 + sm) * (smm1 - sm) + d__1 * d__1) / 2.;
-/* Computing 2nd power */
+    b = ((smm1 + sm) * (smm1 - sm) + emm1 * emm1) / 2.;
     d__1 = sm * emm1;
     c = d__1 * d__1;
     shift = 0.;
     if (b == 0. && c == 0.) {
         goto L550;
     }
-/* Computing 2nd power */
-    d__1 = b;
-    shift = sqrt(d__1 * d__1 + c);
+    shift = sqrt(b * b + c);
     if (b < 0.) {
         shift = -shift;
     }
@@ -597,8 +568,7 @@ L550:
 
 /*           chase zeros. */
 
-    mm1 = m - 1;
-    for (k = l; k <= mm1; ++k) {
+    for (k = l; k <= m-1; ++k) {
         drotg_(&f, &g, &cs, &sn);
         if (k != l) {
             e[k - 1] = f;
