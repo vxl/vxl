@@ -25,8 +25,8 @@ unsigned mbl_correspond_points::closest_row(const vnl_matrix<double>& H1,
                                             unsigned i1)
 {
   unsigned nc = vcl_min(H1.cols(),H2.cols());
-  unsigned best_i;
-  double best_d2;
+  unsigned best_i = 0;
+  double best_d2 = -1.0;
   const double* h1 = &H1(i1,0);
   for (unsigned i=0;i<H2.rows();++i)
   {
@@ -37,7 +37,7 @@ unsigned mbl_correspond_points::closest_row(const vnl_matrix<double>& H1,
       double d = h1[j]-h2[j];
       sum += d*d;
     }
-    if (i==0 || sum<best_d2)
+    if (best_d2 < 0 || sum<best_d2)
     {
       best_d2=sum;
       best_i = i;
