@@ -110,6 +110,11 @@ SOURCE=.\Templates/mbl_data_wrapper+double-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/mbl_data_wrapper_mixer+vnl_vector+double--.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/mbl_data_array_wrapper+double-.cxx
 
 # End Source File
@@ -266,6 +271,16 @@ SOURCE=.\mbl_clamped_plate_spline_2d.cxx
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\mbl_data_wrapper_mixer.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_data_wrapper_mixer.h
+
+# End Source File
 # Begin Source File
 
 SOURCE=.\mbl_data_array_wrapper.h
