@@ -2,8 +2,8 @@
 #define vcl_emulation_complex_h
 #define VCL_COMPLEX_AVAILABLE
 
-#include <math.h>
 #include <vcl/vcl_compiler.h>
+#include <vcl_vcl_cmath.h>
 #include <vcl/vcl_iostream.h>
 
 // The Sunpro 4.2 compiler has a bug that it will not instantiate
@@ -450,5 +450,8 @@ inline vcl_complex<float> operator*(const vcl_complex<float>& c, double d)
   float f = (float)d;
   return vcl_complex<float>(c.real() * f, c.imag() * f);
 }
+
+#define VCL_COMPLEX_INSTANTIATE \
+extern "please include vcl/emulation/vcl_complex.txx instead"
 
 #endif // vcl_emulation_complex_h
