@@ -1,5 +1,6 @@
 IULIBS += -lsdet
 include ${IUEROOT}/contrib/brl/bbas/bdgl/config.mk
+include ${IUEROOT}/contrib/brl/bbas/btol/config.mk
 include ${IUEROOT}/contrib/gel/gevd/config.mk
 include ${IUEROOT}/contrib/gel/vdgl/config.mk
 include ${IUEROOT}/contrib/gel/vtol/config.mk
