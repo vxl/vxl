@@ -287,7 +287,9 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       }
       st += ibs;
       end -= ibs;
+#ifdef DEBUG
       vcl_cerr << "i_ st end ibs" << st << " " << end << " " << ibs << vcl_endl;
+#endif
       if(inROA()) {
         int t = inROA()->curr_sec_start(axis)+ibs;
         st =vcl_min(end,vcl_max(st,t));
@@ -300,7 +302,9 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       int ibs = image_border_size();
       int end = secp()->curr_sec_end(axis);
       int st = secp()->curr_sec_start(axis);
+#ifdef DEBUG
       vcl_cerr << "o_ st end ibs" << st << " " << end << " " << ibs << vcl_endl;
+#endif
       if(st > end){ // swap hack in case people get it wrong....
         int temp = end;
         end = st;
@@ -308,7 +312,9 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       }
       st += ibs;
       end -= ibs;
+#ifdef DEBUG
       vcl_cerr << "o_ st end ibs" << st << " " << end << " " << ibs << vcl_endl;
+#endif
       if(ROA()) st = vcl_min(end,vcl_max(st,ROA()->curr_sec_start(axis)+ibs));
       return st;
     }
@@ -344,7 +350,9 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       }
       st += ibs;
       end -= ibs;
+#ifdef DEBUG
       vcl_cerr << "_i st end ibs" << st << " " << end << " " << ibs << vcl_endl;
+#endif
       if(inROA())
         if(inROA()) st = vcl_min(end,vcl_max(st,inROA()->curr_sec_start(axis)+ibs));
       return end;
@@ -361,7 +369,9 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       }
       st += ibs;
       end -= ibs;
+#ifdef DEBUG
       vcl_cerr << "_o st end ibs" << st << " " << end << " " << ibs << vcl_endl;
+#endif
       if(ROA()) st = vcl_min(end,vcl_max(st,ROA()->curr_sec_start(axis)+ibs));
       return end;
     }
