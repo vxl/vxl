@@ -2,6 +2,8 @@
 #include <vcl/vcl_list.h>
 #include <vbl/vbl_smart_ptr.h>
 
+int base_impl::reftotal = 0;
+
 void printval (base_ref const &p)
 {
   cout << "base_impl val = " << p->n << endl;
@@ -118,3 +120,15 @@ main(int /*argc*/, char **/*argv*/)
 }
 
 //-------------------------------------------------------
+
+#include <vbl/vbl_smart_ptr.txx>
+VBL_SMART_PTR_INSTANTIATE(base_impl);
+VBL_SMART_PTR_INSTANTIATE(derived_impl);
+
+#include <vcl/vcl_list.txx>
+VCL_LIST_INSTANTIATE(base_ref);
+
+#include <vcl/vcl_iterator.h>
+#include <vcl/vcl_algorithm.txx>
+VCL_OPERATOR_NE_INSTANTIATE(base_ref);
+VCL_CONTAINABLE_INSTANTIATE(base_ref);
