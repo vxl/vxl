@@ -71,7 +71,7 @@ vcsl_spatial_sptr  get_acs();
 
   // Projection matrix from 3d to 2d
   vpgl_matrix_camera_sptr _mat_cam;
-  // Paramters of projection matrix
+  // Parameters of projection matrix
   vcl_vector<double> _mat_params;
 
   void update_matrix_camera();
