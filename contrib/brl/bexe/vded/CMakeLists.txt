@@ -1,0 +1,19 @@
+# brl/vded/bin/CMakeLists.txt
+
+INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
+
+INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
+
+IF( MPEG2_FOUND )
+  INCLUDE_DIRECTORIES(${MPEG2_INCLUDE_DIR})
+  ADD_DEFINITIONS(-DHAS_MPEG2)
+ENDIF( MPEG2_FOUND )
+
+
+ADD_EXECUTABLE (frame_extractor frame_extractor.cxx)
+TARGET_LINK_LIBRARIES(frame_extractor vidl vil1 vul)
+
+ADD_EXECUTABLE (video_description video_description.cxx)
+TARGET_LINK_LIBRARIES(video_description vidl vil1 vul)
+
+
