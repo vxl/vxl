@@ -29,13 +29,13 @@ class vil2_crop_image_data : public vil2_image_data
   virtual enum vil2_pixel_format pixel_format() const { return gi_->pixel_format(); }
 
 
-  virtual vil2_image_view_base* get_copy_view(unsigned i0, unsigned j0,
-                                              unsigned ni, unsigned nj) const {
+  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned j0,
+                                                  unsigned ni, unsigned nj) const {
     return gi_->get_copy_view(i0+i0_, j0+j0_, ni, nj);
   }
 
-  virtual vil2_image_view_base* get_view(unsigned i0, unsigned j0,
-                                         unsigned ni, unsigned nj) const {
+  virtual vil2_image_view_base_sptr get_view(unsigned i0, unsigned j0,
+                                             unsigned ni, unsigned nj) const {
     return gi_->get_view(j0+j0_, j0+j0_, ni, nj);
   }
 

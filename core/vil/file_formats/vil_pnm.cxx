@@ -14,13 +14,17 @@
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
 
+#include <vxl_config.h> // for VXL_BIG_ENDIAN
+
 #include <vil/vil_stream.h>
 #include <vil/vil_property.h>
 #include <vil2/vil2_image_data.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_memory_chunk.h>
 
-#include <vxl_config.h>
+#if 0 // see comment below
+# include <vil/vil_rgb.h>
+#endif
 
 char const* vil2_pnm_format_tag = "pnm";
 
@@ -49,10 +53,10 @@ vil2_image_data_sptr vil2_pnm_file_format::make_input_image(vil_stream* vs)
 }
 
 vil2_image_data_sptr vil2_pnm_file_format::make_output_image(vil_stream* vs,
-                                                       unsigned nx,
-                                                       unsigned ny,
-                                                       unsigned nplanes,
-                                                       vil2_pixel_format format)
+                                                             unsigned nx,
+                                                             unsigned ny,
+                                                             unsigned nplanes,
+                                                             vil2_pixel_format format)
 {
   return new vil2_pnm_image(vs, nx, ny, nplanes, format);
 }
@@ -96,6 +100,17 @@ vil2_pnm_image::vil2_pnm_image(vil_stream* vs, unsigned nx, unsigned ny,
   ny_ = ny;
 
   ncomponents_ = nplanes;
+  if (nplanes == 1 && 
+      (format==VIL2_PIXEL_FORMAT_RGB_BYTE ||
+       format==VIL2_PIXEL_FORMAT_RGB_SIGNED_CHAR ||
+       format==VIL2_PIXEL_FORMAT_RGB_SIGNED_SHORT ||
+       format==VIL2_PIXEL_FORMAT_RGB_UNSIGNED_SHORT ||
+       format==VIL2_PIXEL_FORMAT_RGB_SIGNED_INT ||
+       format==VIL2_PIXEL_FORMAT_RGB_UNSIGNED_INT ||
+       format==VIL2_PIXEL_FORMAT_RGB_FLOAT ||
+       format==VIL2_PIXEL_FORMAT_RGB_DOUBLE
+     ))
+    ncomponents_ = 3;
   if (format==VIL2_PIXEL_FORMAT_BOOL)
     bits_per_component_ = 1;
   else
@@ -109,7 +124,9 @@ vil2_pnm_image::vil2_pnm_image(vil_stream* vs, unsigned nx, unsigned ny,
     else
       magic_ = 5;
   }
-  // from August 2000, pnm allows 16 bit samples in rawbits format, stored MSB.
+  else assert(!"nplanes must be 1 or 3");
+
+  // pnm allows 16 bit samples in rawbits format, stored MSB, but not 32 bit.
   if (bits_per_component_ > 16) magic_ -= 3;
 
   if (bits_per_component_ < 31)
@@ -178,8 +195,6 @@ static void ConvertHostToMSB( void* buf, int num_words )
   }
 #endif
 }
-
-
 
 
 //: This method accepts any valid PNM file (first 3 bytes "P1\n" to "P6\n")
@@ -296,7 +311,7 @@ static bool operator>>(vil_stream& vs, int& a)
   return true;
 }
 
-vil2_image_view_base* vil2_pnm_image::get_copy_view(
+vil2_image_view_base_sptr vil2_pnm_image::get_copy_view(
   unsigned x0, unsigned y0,
   unsigned nx, unsigned ny) const
 {
@@ -309,33 +324,29 @@ vil2_image_view_base* vil2_pnm_image::get_copy_view(
 
   if (bits_per_component_ == 1)
   {
-    buf = new vil2_memory_chunk(nx_ * ny_* ncomponents_ * sizeof(bool));
+    buf = new vil2_memory_chunk(nx_ * ny_* nplanes() * sizeof(bool));
     bb = (bool *) buf->data();
   }
   else if (bits_per_component_ <= 8)
   {
-    buf = new vil2_memory_chunk(nx_ * ny_* ncomponents_ * sizeof(unsigned char));
+    buf = new vil2_memory_chunk(nx_ * ny_* nplanes() * sizeof(unsigned char));
     ib = (unsigned char *) buf->data();
   }
   else if (bits_per_component_ <= 16)
   {
-    buf = new vil2_memory_chunk(nx_ * ny_* ncomponents_ * sizeof(unsigned short));
+    buf = new vil2_memory_chunk(nx_ * ny_* nplanes() * sizeof(unsigned short));
     jb = (unsigned short *) buf->data();
   }
   else
   {
-    buf = new vil2_memory_chunk(nx_ * ny_* ncomponents_ * sizeof(unsigned int));
+    buf = new vil2_memory_chunk(nx_ * ny_* nplanes() * sizeof(unsigned int));
     kb = (unsigned int *) buf->data();
   }
 
-  if (magic_ == 1) // ascii pbm
-  {
-    vcl_cerr << __FILE__ << ": ascii bitmap not implemented\n";
-    return 0;
-  } else if (magic_ > 4) // pgm or ppm raw image
+  if (magic_ > 4) // pgm or ppm raw image
   {
     unsigned bytes_per_sample = (bits_per_component_+7)/8;
-    unsigned bytes_per_pixel = ncomponents_ * bytes_per_sample;
+    unsigned bytes_per_pixel = nplanes() * bytes_per_sample;
     unsigned byte_start = start_of_data_ + (y0 * nx_ + x0) * bytes_per_pixel;
     unsigned byte_width = nx_ * bytes_per_pixel;
     unsigned byte_out_width = nx * bytes_per_pixel;
@@ -345,21 +356,34 @@ vil2_image_view_base* vil2_pnm_image::get_copy_view(
       vs_->read((unsigned char *)buf->data() + y * byte_out_width, byte_out_width);
     }
     if ( bytes_per_sample==2 && VXL_LITTLE_ENDIAN ) {
-      ConvertMSBToHost( (unsigned char *)buf->data(), nx*ny*ncomponents_ );
+      ConvertMSBToHost( (unsigned char *)buf->data(), nx*ny*nplanes() );
     } else if ( bytes_per_sample > 2 ) {
       vcl_cerr << "ERROR: pnm: reading rawbits format with > 16bit samples\n";
       return 0;
     }
-    if (bits_per_component_ <= 8)
-      return new vil2_image_view<unsigned char>(buf, ib, nx, ny, ncomponents_, ncomponents_, nx*ncomponents_, 1);
-    else if (bits_per_component_ <= 16)
-      return new vil2_image_view<unsigned short>(buf, jb, nx, ny, ncomponents_, ncomponents_, nx*ncomponents_, 1);
-    else
-      return new vil2_image_view<unsigned int>(buf, kb, nx, ny, ncomponents_, ncomponents_, nx*ncomponents_, 1);
-
+#if 0 // see comment below
+    if (ncomponents_ == 1) {
+#endif
+      if (bits_per_component_ <= 1)
+        return new vil2_image_view<bool>(buf, bb, nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
+      if (bits_per_component_ <= 8)
+        return new vil2_image_view<unsigned char>(buf, ib, nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
+      else if (bits_per_component_ <= 16)
+        return new vil2_image_view<unsigned short>(buf, jb, nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
+      else
+        return new vil2_image_view<unsigned int>(buf, kb, nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
+#if 0 // never return vil2_image_view<vil_rgb<T> > : default image representation is planar
+    } else if (ncomponents_ == 3) {
+      if (bits_per_component_ <= 8)
+        return new vil2_image_view<vil_rgb<unsigned char> >(buf, (vil_rgb<unsigned char>*)ib, nx, ny, 1, 1, nx, 1);
+      else if (bits_per_component_ <= 16)
+        return new vil2_image_view<vil_rgb<unsigned short> >(buf, (vil_rgb<unsigned short>*)jb, nx, ny, 1, 1, nx, 1);
+      else
+        return new vil2_image_view<vil_rgb<unsigned int> >(buf, (vil_rgb<unsigned int>*)kb, nx, ny, 1, 1, nx, 1);
+    } else return 0;
+#endif // 0
   } else if (magic_ == 4) // pbm (bitmap) raw image
   {
-
     unsigned byte_width = (nx_+7)/8;
 
     for (unsigned y = 0; y < ny; ++y) {
@@ -382,28 +406,45 @@ vil2_image_view_base* vil2_pnm_image::get_copy_view(
     vs_->seek(start_of_data_);
     //0. Skip to the starting line
     //
-    for (unsigned t = 0; t < y0*nx_*ncomponents_; ++t) { int a; (*vs_) >> a; }
+    for (unsigned t = 0; t < y0*nx_*nplanes(); ++t) { int a; (*vs_) >> a; }
     for (unsigned y = 0; y < ny; ++y) {
       // 1. Skip to column x0
-      for (unsigned t = 0; t < x0*ncomponents_; ++t) { int a; (*vs_) >> a; }
+      for (unsigned t = 0; t < x0*nplanes(); ++t) { int a; (*vs_) >> a; }
       for (unsigned x = 0; x < nx; ++x) {
         // 3. Read the data
-        if (bits_per_component_ <= 8)
-          for (unsigned p = 0; p < ncomponents_; ++p) { int a; (*vs_) >> a; *(ib++)=a; }
+        if (bits_per_component_ <= 1)
+          for (unsigned p = 0; p < nplanes(); ++p) { int a; (*vs_) >> a; *(bb++)=a; }
+        else if (bits_per_component_ <= 8)
+          for (unsigned p = 0; p < nplanes(); ++p) { int a; (*vs_) >> a; *(ib++)=a; }
         else if (bits_per_component_ <= 16)
-          for (unsigned p = 0; p < ncomponents_; ++p) { int a; (*vs_) >> a; *(jb++)=a; }
+          for (unsigned p = 0; p < nplanes(); ++p) { int a; (*vs_) >> a; *(jb++)=a; }
         else
-          for (unsigned p = 0; p < ncomponents_; ++p) { int a; (*vs_) >> a; *(kb++)=a; }
+          for (unsigned p = 0; p < nplanes(); ++p) { int a; (*vs_) >> a; *(kb++)=a; }
       }
       // 5. Skip to the next line
-      for (unsigned t = 0; t < (nx_-x0-nx)*ncomponents_; ++t) { int a; (*vs_) >> a; }
+      for (unsigned t = 0; t < (nx_-x0-nx)*nplanes(); ++t) { int a; (*vs_) >> a; }
     }
-    if (bits_per_component_ <= 8)
-      return new vil2_image_view<unsigned char>(buf, (unsigned char*)buf->data(), nx, ny, ncomponents_, ncomponents_, nx*ncomponents_, 1);
-    else if (bits_per_component_ <= 16)
-      return new vil2_image_view<unsigned short>(buf, (unsigned short*)buf->data(), nx, ny, ncomponents_, ncomponents_, nx*ncomponents_, 1);
-    else
-      return new vil2_image_view<unsigned int>(buf, (unsigned int*)buf->data(), nx, ny, ncomponents_, ncomponents_, nx*ncomponents_, 1);
+#if 0 // see comment below
+    if (ncomponents_ == 1) {
+#endif
+      if (bits_per_component_ <= 1)
+        return new vil2_image_view<bool>(buf, (bool*)buf->data(), nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
+      if (bits_per_component_ <= 8)
+        return new vil2_image_view<unsigned char>(buf, (unsigned char*)buf->data(), nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
+      else if (bits_per_component_ <= 16)
+        return new vil2_image_view<unsigned short>(buf,(unsigned short*)buf->data(),nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
+      else
+        return new vil2_image_view<unsigned int>(buf, (unsigned int*)buf->data(), nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
+#if 0 // never return vil2_image_view<vil_rgb<T> > : default image representation is planar
+    } else if (ncomponents_ == 3) {
+      if (bits_per_component_ <= 8)
+        return new vil2_image_view<vil_rgb<unsigned char> >(buf, (vil_rgb<unsigned char>*)buf->data(), nx, ny, 1, 1, nx, 1);
+      else if (bits_per_component_ <= 16)
+        return new vil2_image_view<vil_rgb<unsigned short> >(buf, (vil_rgb<unsigned short>*)buf->data(), nx, ny, 1, 1, nx, 1);
+      else
+        return new vil2_image_view<vil_rgb<unsigned int> >(buf, (vil_rgb<unsigned int>*)buf->data(), nx, ny, 1, 1, nx, 1);
+    } else return 0;
+#endif // 0
   }
 }
 
@@ -413,22 +454,33 @@ static void operator<<(vil_stream& vs, int a) {
 }
 
 bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
-                                      unsigned x0, unsigned y0)
+                              unsigned x0, unsigned y0)
 {
-  if (!view_fits(view, x0, y0)) return false;
+  if (!view_fits(view, x0, y0)) {
+    vcl_cerr << "ERROR: " << __FILE__ << ":\n view does not fit\n";
+    return false;
+  }
 
-
-  if (view.pixel_format() == VIL2_PIXEL_FORMAT_UNSIGNED_INT &&
-        bits_per_component_ < 32 ||
-      view.pixel_format() == VIL2_PIXEL_FORMAT_UNSIGNED_SHORT &&
-        bits_per_component_ < 16 ||
-      view.pixel_format() == VIL2_PIXEL_FORMAT_BYTE &&
-        bits_per_component_ < 8 ||
-      view.pixel_format() == VIL2_PIXEL_FORMAT_BOOL &&
-        bits_per_component_ == 0)
+  if ((view.pixel_format() == VIL2_PIXEL_FORMAT_UNSIGNED_INT   && bits_per_component_ < 32) ||
+      (view.pixel_format() == VIL2_PIXEL_FORMAT_SIGNED_INT     && bits_per_component_ < 32) ||
+      (view.pixel_format() == VIL2_PIXEL_FORMAT_UNSIGNED_SHORT && bits_per_component_ < 16) ||
+      (view.pixel_format() == VIL2_PIXEL_FORMAT_SIGNED_SHORT   && bits_per_component_ < 16) ||
+      (view.pixel_format() == VIL2_PIXEL_FORMAT_BYTE           && bits_per_component_ <  8) ||
+      (view.pixel_format() == VIL2_PIXEL_FORMAT_SIGNED_CHAR    && bits_per_component_ <  8) ||
+      (view.pixel_format() == VIL2_PIXEL_FORMAT_BOOL           && bits_per_component_ <  1) ||
+      (view.pixel_format() == VIL2_PIXEL_FORMAT_RGB_UNSIGNED_INT   && bits_per_component_ < 32) ||
+      (view.pixel_format() == VIL2_PIXEL_FORMAT_RGB_SIGNED_INT     && bits_per_component_ < 32) ||
+      (view.pixel_format() == VIL2_PIXEL_FORMAT_RGB_UNSIGNED_SHORT && bits_per_component_ < 16) ||
+      (view.pixel_format() == VIL2_PIXEL_FORMAT_RGB_SIGNED_SHORT   && bits_per_component_ < 16) ||
+      (view.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE           && bits_per_component_ <  8) ||
+      (view.pixel_format() == VIL2_PIXEL_FORMAT_RGB_SIGNED_CHAR    && bits_per_component_ <  8) ||
+       view.pixel_format() == VIL2_PIXEL_FORMAT_RGB_DOUBLE ||
+       view.pixel_format() == VIL2_PIXEL_FORMAT_RGB_FLOAT  ||
+       view.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE     ||
+       view.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT )
   {
-      vcl_cerr << "ERROR: " << __FILE__ << ":\n Can't fit view into pnm component size\n" << vcl_endl;
-      return false;
+    vcl_cerr << "ERROR: " << __FILE__ << ":\n Can't fit view into pnm component size\n";
+    return false;
   }
 
   const vil2_image_view<bool>*  bb=0;
@@ -436,62 +488,58 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
   const vil2_image_view<unsigned short>* pb = 0;
   const vil2_image_view<unsigned int>*   qb = 0;
 
-  if (view.pixel_format() == VIL2_PIXEL_FORMAT_BYTE)
-    ob = &static_cast<const vil2_image_view<unsigned char>& >(view);
-  else if (view.pixel_format() == VIL2_PIXEL_FORMAT_UNSIGNED_SHORT)
-    pb = &static_cast<const vil2_image_view<unsigned short>& >(view);
-  else if (view.pixel_format() == VIL2_PIXEL_FORMAT_UNSIGNED_INT)
-    qb = &static_cast<const vil2_image_view<unsigned int>& >(view);
-  else if (view.pixel_format() == VIL2_PIXEL_FORMAT_BOOL)
+  if (view.pixel_format() == VIL2_PIXEL_FORMAT_BOOL)
     bb = &static_cast<const vil2_image_view<bool>& >(view);
+  else if (view.pixel_format() == VIL2_PIXEL_FORMAT_BYTE ||
+           view.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE)
+    ob = &static_cast<const vil2_image_view<unsigned char>& >(view);
+  else if (view.pixel_format() == VIL2_PIXEL_FORMAT_UNSIGNED_SHORT ||
+           view.pixel_format() == VIL2_PIXEL_FORMAT_RGB_UNSIGNED_SHORT)
+    pb = &static_cast<const vil2_image_view<unsigned short>& >(view);
+  else if (view.pixel_format() == VIL2_PIXEL_FORMAT_UNSIGNED_INT ||
+           view.pixel_format() == VIL2_PIXEL_FORMAT_RGB_UNSIGNED_INT)
+    qb = &static_cast<const vil2_image_view<unsigned int>& >(view);
   else
   {
-      vcl_cerr << "ERROR: " << __FILE__ << ":\n Do not support putting "
-        << view.is_a() << " views into pnm image_data objects " << vcl_endl;
-      return false;
+    vcl_cerr << "ERROR: " << __FILE__ << ":\n Do not support putting "
+             << view.is_a() << " views into pnm image_data objects\n";
+    return false;
   }
 
 
-  if (magic_ == 1) // ascii pbm
-  {
-    vcl_cerr << __FILE__ << ": ascii bitmap not implemented\n";
-    return false;
-  } else if (magic_ > 4) // pgm or ppm raw image
+  if (magic_ > 4) // pgm or ppm raw image
   {
     unsigned bytes_per_sample = (bits_per_component_+7)/8;
-    unsigned bytes_per_pixel = ncomponents_ * bytes_per_sample;
+    unsigned bytes_per_pixel = nplanes() * bytes_per_sample;
     vil_streampos byte_start = start_of_data_ + (y0 * nx_ + x0) *
       bytes_per_pixel;
     unsigned byte_width = nx_ * bytes_per_pixel;
     unsigned byte_out_width = view.ni() * bytes_per_pixel;
 
     if ( bytes_per_sample==1 || ( bytes_per_sample==2 && VXL_BIG_ENDIAN ) ) {
-      for (unsigned y = 0; y < view.nj(); ++y) 
-        for (unsigned x = 0; x < view.ni(); ++x) {
-          vs_->seek(byte_start + y * byte_width + x * bytes_per_pixel);
-  	      for (unsigned p = 0; p < ncomponents_; p++)
-            vs_->write(&(*ob)(x,y,p),1 );
-        }
+      for (unsigned y = 0; y < view.nj(); ++y) {
+        vs_->seek(byte_start + y * byte_width);
+        vs_->write(pb->top_left_ptr() + y * view.ni() * nplanes(), byte_out_width);
+      }
     } else if ( bytes_per_sample==2 ) {
       // Little endian host; must convert words to have MSB first.
-      unsigned short tempbuf[3];
-      for (int y = 0; y < view.nj(); ++y)
-        for (unsigned x = 0; x < view.ni(); ++x) {
-          vs_->seek(byte_start + y * byte_width + x*bytes_per_pixel);
-          for (unsigned p=0; p < ncomponents_; ++p)
-            tempbuf[p] = (*pb)(x,y,p);
-          ConvertHostToMSB( &tempbuf[0], ncomponents_  );
-          vs_->write(tempbuf, ncomponents_ * 2);
-        }
+      //
+      // Convert line by line to avoid duplicating a potentially large image.
+      vcl_vector<unsigned char> tempbuf( byte_out_width );
+      for (int y = 0; y < view.nj(); ++y) {
+        vs_->seek(byte_start + y * byte_width);
+        vcl_memcpy( &tempbuf[0], pb->top_left_ptr() + y * view.ni() * nplanes(), byte_out_width );
+        ConvertHostToMSB( &tempbuf[0], view.ni() );
+        vs_->write(&tempbuf[0], byte_out_width);
+      }
     } else {
-      vcl_cerr << "ERROR: pnm: writing rawbits format with > 16bit samples\n";
+      vcl_cerr << "ERROR: pgm: writing rawbits format with > 16bit samples\n";
       return false;
     }
   }
   else if (magic_ == 4) // pbm (bitmap) raw image
   {
     int byte_width = (nx_+7)/8;
-    int byte_out_width = (view.ni()+7)/8;
 
     for (int y = 0; y < view.nj(); ++y) {
       vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
@@ -528,12 +576,10 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
     for (int y = 0; y < view.nj(); ++y) 
       for (int x = 0; x < view.ni(); ++x) 
         for (int p = 0; p < ncomponents_; ++p) {
-          if (bits_per_component_ <= 8)
-            { (*vs_) << (*ob)(x,y,p); }
-          else if (bits_per_component_ <= 16)
-            { (*vs_) << (*pb)(x,y,p); }
-          else
-            { (*vs_) << (*qb)(x,y,p); }
+          if (bits_per_component_ <= 1)       (*vs_) << (*bb)(x,y,p);
+          else if (bits_per_component_ <= 8)  (*vs_) << (*ob)(x,y,p);
+          else if (bits_per_component_ <= 16) (*vs_) << (*pb)(x,y,p);
+          else                                (*vs_) << (*qb)(x,y,p);
         }
   }
 

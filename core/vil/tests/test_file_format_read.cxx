@@ -1,9 +1,10 @@
+// This is mul/vil2/tests/test_file_format_read.cxx
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 
-#include <vxl_config.h>
+#include <vxl_config.h> // for vxl_uint_8 etc.
 
 #include <testlib/testlib_test.h>
 
@@ -38,15 +39,16 @@ class CheckRGB : public CheckPixel
 public:
   CheckRGB( const char* file )
   {
-    vil2_image_view_base *im = vil2_load( (image_base + file).c_str() );
+    vil2_image_view_base_sptr im = vil2_load( (image_base + file).c_str() );
     if ( !im )
       vcl_cout << "[ couldn't load " << file << "]\n";
+    else if (im->nplanes() == 3)
+      img_ = vil2_view_as_rgb(static_cast<vil2_image_view<T> >(im));
     else
-    {
-//      im->print(vcl_cout);
-      img_ = vil2_view_as_rgb(static_cast<vil2_image_view<T>&>(*im));
-    }
-    delete im;
+      img_ = im;
+#ifdef DEBUG
+    vcl_cout << '\n'; vil2_print_all(vcl_cout, img_);
+#endif
   }
 
   bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
@@ -64,16 +66,16 @@ class CheckColourPlanes : public CheckPixel
 public:
   CheckColourPlanes( const char* file )
   {
-    vil2_image_view_base *im = vil2_load( (image_base + file).c_str() );
+    vil2_image_view_base_sptr im = vil2_load( (image_base + file).c_str() );
     if ( !im )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
     {
-//      i->print(vcl_cout);
-      img_ = static_cast<vil2_image_view<T>&>(*im);
-//      vil2_print_all(vcl_cout, img_);
+      img_ = im;
+#ifdef DEBUG
+      vcl_cout << '\n'; vil2_print_all(vcl_cout, img_);
+#endif
     }
-    delete im;
   }
 
   bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
@@ -90,16 +92,16 @@ class CheckGrey : public CheckPixel
 public:
   CheckGrey( const char* file )
   {
-    vil2_image_view_base *im = vil2_load( (image_base + file).c_str() );
+    vil2_image_view_base_sptr im = vil2_load( (image_base + file).c_str() );
     if ( !im )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
     {
-//      im->print(vcl_cout);
-      img_ = static_cast<vil2_image_view<T>&>(*im);
-//      vil2_print_all(vcl_cout, img_);
+      img_ = im;
+#ifdef DEBUG
+      vcl_cout << '\n'; vil2_print_all(vcl_cout, img_);
+#endif
     }
-    delete im;
   };
 
   bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
@@ -112,8 +114,11 @@ private:
 };
 
 template class CheckRGB< vxl_uint_8 >;
+template class CheckRGB< vxl_uint_16 >;
 template class CheckColourPlanes< vxl_uint_8 >;
+template class CheckGrey< vxl_uint_16 >;
 template class CheckGrey< vxl_uint_8 >;
+template class CheckGrey< bool >;
 
 
 bool
@@ -175,16 +180,30 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_start(" file format read");
 
   vcl_cout << "Portable aNy Map [pnm]: pbm, pgm, ppm)\n";
+  testlib_test_begin( "  1-bit pbm ascii" );
+  testlib_test_perform( test( "ff_grey1bit_true.txt", CheckGrey<bool>( "ff_grey1bit_raw.pbm" ) ) );
+  testlib_test_begin( "  1-bit pbm raw" );
+  testlib_test_perform( test( "ff_grey1bit_true.txt", CheckGrey<bool>( "ff_grey1bit_raw.pbm" ) ) );
   testlib_test_begin( "  8-bit pgm ascii" );
   testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_ascii.pgm" ) ) );
-  testlib_test_begin( "  1-bit pbm ascii" );
-  testlib_test_perform( test( "ff_grey1bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey1bit_raw.pbm" ) ) );
   testlib_test_begin( "  8-bit pgm raw" );
   testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_raw.pgm" ) ) );
+  testlib_test_begin( " 16-bit pgm ascii" );
+  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_ascii.pgm" ) ) );
+  testlib_test_begin( " 16-bit pgm raw" );
+  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_raw.pgm" ) ) );
   testlib_test_begin( "  8-bit ppm ascii" );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_ascii.ppm" ) ) );
+  testlib_test_begin( "  8-bit ppm ascii as planar" );
   testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_ascii.ppm" ) ) );
   testlib_test_begin( "  8-bit ppm raw" );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_raw.ppm" ) ) );
+  testlib_test_begin( "  8-bit ppm raw as planar" );
   testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_raw.ppm" ) ) );
+  testlib_test_begin( " 16-bit ppm ascii" );
+  testlib_test_perform( test( "ff_rgb16bit_true.txt", CheckRGB<vxl_uint_16>( "ff_rgb16bit_ascii.ppm" ) ) );
+  testlib_test_begin( " 16-bit ppm raw" );
+  testlib_test_perform( test( "ff_rgb16bit_true.txt", CheckRGB<vxl_uint_16>( "ff_rgb16bit_raw.ppm" ) ) );
 
 #if 0
   vcl_cout << "Sun raster [ras]\n";

@@ -72,7 +72,7 @@ vil2_image_data_sptr vil2_load_image_data(char const* filename)
 
 
 //: Convenience function for loading an image into an image view.
-vil2_image_view_base * vil2_load(const char *file)
+vil2_image_view_base_sptr vil2_load(const char *file)
 {
   vil2_image_data_sptr data = vil2_load_image_data(file);
   if (!data) return 0;

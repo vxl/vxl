@@ -8,7 +8,6 @@
 // \file
 // \author Ian Scott
 
-#include <vcl_memory.h>
 #include <vil2/vil2_image_data.h>
 #include <vil2/vil2_image_view_base.h>
 
@@ -25,9 +24,9 @@ class vil2_memory_image : public vil2_image_data
   //: Create an in-memory image of given size and pixel type.
   // The pixel type must be scalar.
   vil2_memory_image(unsigned ni,
-                 unsigned nj,
-                 unsigned nplanes,
-                 vil2_pixel_format format);
+                    unsigned nj,
+                    unsigned nplanes,
+                    vil2_pixel_format format);
 
   ~vil2_memory_image() {delete view_;}
 
@@ -40,13 +39,13 @@ class vil2_memory_image : public vil2_image_data
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.
-  virtual vil2_image_view_base* get_copy_view(unsigned x0, unsigned y0,
-                                              unsigned nx, unsigned ny) const;
+  virtual vil2_image_view_base_sptr get_copy_view(unsigned x0, unsigned y0,
+                                                  unsigned nx, unsigned ny) const;
 
   //: Create a view of this data.
   // \return 0 if unable to get view of correct size.
-  virtual vil2_image_view_base* get_view(unsigned x0, unsigned y0,
-                                         unsigned nx, unsigned ny) const;
+  virtual vil2_image_view_base_sptr get_view(unsigned x0, unsigned y0,
+                                             unsigned nx, unsigned ny) const;
 
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil2_image_view_base& im, unsigned x0, unsigned y0);

@@ -29,12 +29,32 @@ class vil2_pnm_file_format : public vil2_file_format
   virtual char const* tag() const;
   virtual vil2_image_data_sptr make_input_image(vil_stream* vs);
   virtual vil2_image_data_sptr make_output_image(vil_stream* vs,
-                                            unsigned nx,
-                                            unsigned ny,
-                                            unsigned nplanes,
-                                            vil2_pixel_format format);
+                                                 unsigned nx,
+                                                 unsigned ny,
+                                                 unsigned nplanes,
+                                                 vil2_pixel_format format);
 };
 
+//: Alias name for pnm; only tag() differs
+class vil2_pbm_file_format : public vil2_pnm_file_format
+{
+ public:
+  virtual char const* tag() const { return "pbm"; }
+};
+
+//: Alias name for pnm; only tag() differs
+class vil2_pgm_file_format : public vil2_pnm_file_format
+{
+ public:
+  virtual char const* tag() const { return "pgm"; }
+};
+
+//: Alias name for pnm; only tag() differs
+class vil2_ppm_file_format : public vil2_pnm_file_format
+{
+ public:
+  virtual char const* tag() const { return "ppm"; }
+};
 
 //: Generic image implementation for PNM files
 class vil2_pnm_image : public vil2_image_data
@@ -57,7 +77,7 @@ class vil2_pnm_image : public vil2_image_data
 
   friend class vil2_pnm_file_format;
 
-public:
+ public:
   vil2_pnm_image (vil_stream* is, unsigned ni,
     unsigned nj, unsigned nplanes, vil2_pixel_format format);
   vil2_pnm_image(vil_stream* is);
@@ -72,8 +92,8 @@ public:
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.
-  virtual vil2_image_view_base* get_copy_view(unsigned i0, unsigned j0,
-    unsigned ni, unsigned nj) const;
+  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned j0,
+                                                  unsigned ni, unsigned nj) const;
 
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil2_image_view_base& im, unsigned i0, unsigned j0);

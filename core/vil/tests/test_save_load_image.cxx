@@ -1,5 +1,5 @@
-// This is ./vxl/vil/tests/test_save_load_image.cxx
-
+// This is mul/vil2/tests/test_save_load_image.cxx
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \author Peter.Vanroose@esat.kuleuven.ac.be
@@ -24,10 +24,7 @@
 #include <vcl_string.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
-#include <vcl_ios.h>
 #include <vcl_fstream.h>
-#include <vcl_iomanip.h> // vcl_flush
-#include <vcl_vector.h>
 
 #include <vul/vul_temp_filename.h>
 #include <vpl/vpl.h> // vpl_unlink()
@@ -41,14 +38,8 @@
 #include <vil2/vil2_pixel_format.h>
 #include <vil2/vil2_image_view_functions.h>
 
-#include <testlib/testlib_test.h>
-
 #ifndef LEAVE_IMAGES_BEHIND
 #define LEAVE_IMAGES_BEHIND 0
-#endif
-
-#if 0
-#define ww vcl_cout << "reached " __FILE__ ":" << __LINE__ << vcl_endl << vcl_flush
 #endif
 
 
@@ -56,7 +47,7 @@
 template <class T>
 bool test_image_equal(char const* type_name,
                       vil2_image_view<T> const & image,
-                      vil2_image_view_base const * pimage2,
+                      vil2_image_view_base_sptr const& pimage2,
                       bool exact = true)
 {
   vil2_image_view<T> image2 = *pimage2;
@@ -73,15 +64,15 @@ bool test_image_equal(char const* type_name,
   if (!image)
   {
     vcl_cout << "read back image type has pixel type " << pimage2->pixel_format()
-             << " instead of (as written) " << image.pixel_format() << vcl_endl;
+             << " instead of (as written) " << image.pixel_format() << '\n' << vcl_flush;
     return false;
   }
-  
+
   TEST ("Image dimensions", sizex == sizex2 && sizey == sizey2, true);
   if (sizex != sizex2 || sizey != sizey2)
   {
     vcl_cout << type_name << ": sizes are " << sizex2 << " x " << sizey2
-             << " instead of " << sizex << " x " << sizey << vcl_endl << vcl_flush;
+             << " instead of " << sizex << " x " << sizey << '\n' << vcl_flush;
     return false;
   }
 
@@ -89,12 +80,9 @@ bool test_image_equal(char const* type_name,
   if (planes != planes2)
   {
     vcl_cout << type_name << ": nplanes are " << planes2
-             << " instead of " << planes << vcl_endl ;
+             << " instead of " << planes << '\n' << vcl_flush;
     return false;
   }
-
-
-
 
 
   if (!exact) // no exact pixel match wanted
@@ -110,16 +98,16 @@ bool test_image_equal(char const* type_name,
     {
       for (int x=0; x < sizex; ++x)
       {
-        if( !(image(x,y,p) == image2(x,y,p)) )
+        if ( !(image(x,y,p) == image2(x,y,p)) )
         {
     #ifndef NDEBUG
           if (++bad < 20)
-		  {
+          {
             vcl_cout << "pixel (" << x << "," << y << "," << p <<  ") differs: ";
             vil2_print_value(vcl_cout, image(x,y,p));
-			vcl_cout << " ---> ";  vil2_print_value(vcl_cout,image2(x,y,p));
-            vcl_cout << vcl_endl;
-		  }
+            vcl_cout << " ---> ";  vil2_print_value(vcl_cout,image2(x,y,p));
+            vcl_cout << '\n';
+          }
     #else
           ++bad; vcl_cout << "." << vcl_flush;
     #endif
@@ -131,8 +119,8 @@ bool test_image_equal(char const* type_name,
   TEST ("pixelwise comparison", bad, 0);
   if (bad)
   {
-    vcl_cout << type_name << ": number of unequal pixels: "  << bad <<
-		"out of " << planes *sizex * sizey << vcl_endl;
+    vcl_cout << type_name << ": number of unequal pixels: "  << bad
+             << "out of " << planes *sizex * sizey << '\n' << vcl_flush;
     return false;
   }
   else
@@ -146,8 +134,8 @@ bool test_image_equal(char const* type_name,
 
 template <class T>
 void vil_test_image_type_raw(char const* type_name, // type for image to read and write
-                         vil2_image_view<T> const & image, // test image to save and restore
-                         bool exact = true) // require read back image identical
+                             vil2_image_view<T> const & image, // test image to save and restore
+                             bool exact = true) // require read back image identical
 {
   vcl_cout << "=== Start testing " << type_name << "===\n" << vcl_flush;
 
@@ -183,10 +171,11 @@ void vil_test_image_type_raw(char const* type_name, // type for image to read an
     TEST ("compare image file formats", tst, true);
     if (!tst)
       vcl_cout << "read back image type is " << image2.file_format()
-               << " instead of written " << type_name << vcl_endl << vcl_flush;
+               << " instead of written " << type_name << '\n' << vcl_flush;
     else
       test_image_equal(type_name, image, image2, exact);
   }
+
 #if !LEAVE_IMAGES_BEHIND
   vpl_unlink(fname.c_str());
 #endif
@@ -309,7 +298,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
 
   // STEP 2) Read the image that was just saved to file
   {
-    vil2_image_view_base * image2 = vil2_load(fname.c_str());
+    vil2_image_view_base_sptr image2 = vil2_load(fname.c_str());
     TEST ("load image", !image2, false);
     if (!image2)
     {
@@ -329,8 +318,8 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
 vil2_image_view<bool> CreateTest1bitImage(int wd, int ht)
 {
   vil2_image_view<bool> image(wd, ht, 1);
-  for(int y = 0; y < ht; ++y) {
-    for(int x = 0; x < wd; x++)
+  for (int y = 0; y < ht; ++y) {
+    for (int x = 0; x < wd; x++)
       image(x,y) = (x*y)%2 ==1 ? true : false;
   }
   return image;
@@ -341,8 +330,8 @@ vil2_image_view<bool> CreateTest1bitImage(int wd, int ht)
 vil2_image_view<vil_byte> CreateTest8bitImage(int wd, int ht)
 {
   vil2_image_view<unsigned char> image(wd, ht);
-  for(int y = 0; y < ht; y++)
-    for(int x = 0; x < wd; x++) {
+  for (int y = 0; y < ht; y++)
+    for (int x = 0; x < wd; x++) {
       image(x,y) = ((x-wd/2)*(y-ht/2)/16) & 0xff;
     }
   return image;
@@ -352,8 +341,8 @@ vil2_image_view<vil_byte> CreateTest8bitImage(int wd, int ht)
 vil2_image_view<unsigned short> CreateTest16bitImage(int wd, int ht)
 {
   vil2_image_view<unsigned short> image(wd, ht);
-  for(int y = 0; y < ht; y++)
-    for(int x = 0; x < wd; x++) {
+  for (int y = 0; y < ht; y++)
+    for (int x = 0; x < wd; x++) {
       image(x,y) = ((x-wd/2)*(y-ht/2)/16) & 0xffff;
   }
   return image;
@@ -364,8 +353,8 @@ vil2_image_view<unsigned short> CreateTest16bitImage(int wd, int ht)
 vil2_image_view<unsigned int> CreateTest32bitImage(int wd, int ht)
 {
   vil2_image_view<unsigned int> image(wd, ht);
-  for(int y = 0; y < ht; y++)
-    for(int x = 0; x < wd; x++)
+  for (int y = 0; y < ht; y++)
+    for (int x = 0; x < wd; x++)
       image(x, y) = x + wd*y;
   return image;
 }
@@ -375,8 +364,8 @@ vil2_image_view<unsigned int> CreateTest32bitImage(int wd, int ht)
 vil2_image_view<vil_rgb<vil_byte> > CreateTest24bitImage(int wd, int ht)
 {
   vil2_image_view<vil_rgb<unsigned char> > image(wd, ht);
-  for(int x = 0; x < wd; x++)
-    for(int y = 0; y < ht; y++) {
+  for (int x = 0; x < wd; x++)
+    for (int y = 0; y < ht; y++) {
       image(x,y) = vil_rgb<vil_byte>(x%(1<<8),
         ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)));
     }
@@ -388,8 +377,8 @@ vil2_image_view<vil_rgb<vil_byte> > CreateTest24bitImage(int wd, int ht)
 vil2_image_view<vil_byte> CreateTest3planeImage(int wd, int ht)
 {
   vil2_image_view<vil_byte> image( wd, ht, 3);
-  for(int x = 0; x < wd; x++)
-    for(int y = 0; y < ht; y++) {
+  for (int x = 0; x < wd; x++)
+    for (int y = 0; y < ht; y++) {
       image(x,y,0) = x%(1<<8);
       image(x,y,1) = ((x-wd/2)*(y-ht/2)/16) % (1<<8);
       image(x,y,1) = ((y/3)%(1<<8));
@@ -402,10 +391,9 @@ vil2_image_view<vil_byte> CreateTest3planeImage(int wd, int ht)
 vil2_image_view<float> CreateTestfloatImage(int wd, int ht)
 {
   vil2_image_view<float> image(wd, ht);
-  for(int x = 0; x < wd; x++)
-    for(int y = 0; y < ht; y++) {
+  for (int x = 0; x < wd; x++)
+    for (int y = 0; y < ht; y++)
       image(x,y) = 0.01 * ((x-wd/2)*(y-ht/2)/16);
-    }
   return image;
 }
 
@@ -425,12 +413,10 @@ MAIN( test_save_load_image )
 
   // pnm ( = PGM / PPM )
 #if 1
-  vil_test_image_type("pnm", image1);
-  vil_test_image_type("pnm", image8);
+  vil_test_image_type("pbm", image1);
+  vil_test_image_type("pgm", image8);
   vil_test_image_type("pnm", image16);
-# ifdef VIL2_TO_BE_FIXED
-  vil_test_image_type("pnm", image24);
-# endif
+  vil_test_image_type("ppm", image24);
   vil_test_image_type("pnm", image32);
   vil_test_image_type("pnm", image3p);
 #endif

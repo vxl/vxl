@@ -1,4 +1,4 @@
-// This is vxl/vil2/vil2_load.h
+// This is mul/vil2/vil2_load.h
 #ifndef vil2_load_h_
 #define vil2_load_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -32,7 +32,6 @@
 //     24 Sep 2002 Ian Scott - converted to vil2
 //\endverbatim
 
-#include <vcl_iosfwd.h>
 #include <vil/vil_fwd.h>
 #include <vil2/vil2_image_data.h>
 
@@ -47,6 +46,6 @@ vil2_image_data_sptr vil2_load_image_data_raw(vil_stream *);
 vil2_image_data_sptr vil2_load_image_data_raw(char const*);
 
 //: Convenience function for loading an image into an image view.
-vil2_image_view_base * vil2_load(const char *);
+vil2_image_view_base_sptr vil2_load(const char *);
 
 #endif // vil2_load_h_
