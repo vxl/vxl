@@ -109,7 +109,7 @@ public:
   //: These methods all return the raw/dumb pointer.
   // WARNING : Do not add an automatic cast to T*.
   //           This is intrinsically incorrect as you loose the smartness!
-  //           In cases where you really need the pointer, it is bettter
+  //           In cases where you really need the pointer, it is better
   //           to be explicit about it and use one of the methods.
   T *operator -> () const { return ptr_; }
 
