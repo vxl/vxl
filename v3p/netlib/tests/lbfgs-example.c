@@ -86,7 +86,7 @@ L20:
 /* L30: */
     }
     lbfgs_(&n, &m, x, &f, g, &diagco, diag, iprint, &eps, &xtol, w, &iflag);
-    printf("f = %7g\n", &f, 7L);
+    printf("f = %7g\n", &f);
     if (iflag <= 0) {
         goto L50;
     }
