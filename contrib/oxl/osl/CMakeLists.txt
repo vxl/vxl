@@ -27,3 +27,4 @@ osl_edge
 AUX_SOURCE_DIRECTORY(Templates osl_sources)
 
 SUBDIRS(internals)
+
