@@ -105,6 +105,9 @@ SOURCE=.\basic01c_display_vil_image.cxx
 # Begin Source File
 SOURCE=.\basic01d_display_vil1_image.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\example_sprite.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

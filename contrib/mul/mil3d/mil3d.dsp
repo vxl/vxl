@@ -117,13 +117,13 @@ SOURCE=.\Templates/mil3d_image_3d_of+long-.cxx
 SOURCE=.\Templates/mil3d_image_3d_of+short-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mil3d_image_3d_of+vil_byte-.cxx
+SOURCE=.\Templates/mil3d_image_3d_of+vil1_byte-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/mil3d_gaussian_pyramid_builder_3d+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mil3d_gaussian_pyramid_builder_3d+vil_byte-.cxx
+SOURCE=.\Templates/mil3d_gaussian_pyramid_builder_3d+vil1_byte-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\mil3d_transform_3d.cxx
