@@ -514,7 +514,7 @@ vgui_event vgui_mfc_adaptor::generate_vgui_event(UINT nChar, UINT nRepCnt, UINT 
 
   int the_key, the_ascii_char;
   mfc_key(nChar, nFlags, &the_key, &the_ascii_char);
-  evt.set_key(the_key);
+  evt.set_key( vgui_key(the_key) );
   evt.ascii_char = vgui_key(the_ascii_char);
   return evt;
 }
