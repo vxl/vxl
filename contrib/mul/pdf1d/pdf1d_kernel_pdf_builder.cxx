@@ -168,7 +168,7 @@ void pdf1d_kernel_pdf_builder::weighted_build(pdf1d_pdf& model,
 void pdf1d_kernel_pdf_builder::build_fixed_width(pdf1d_kernel_pdf& kpdf,
                                                  const double* data, int n, double width) const
 {
-  vnl_vector_ref<double> v_data(n,(double*) data);
+  vnl_vector_ref<double> v_data(n,(double*) data); // const violation
   kpdf.set_centres(v_data,width);
 }
 
