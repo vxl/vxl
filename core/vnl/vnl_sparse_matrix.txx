@@ -439,7 +439,7 @@ void vnl_sparse_matrix<T>::set_row(unsigned int r,
 
   row& rw = elements[r];
   if (rw.size() != cols.size()) rw = row(cols.size());
-  for (unsigned int i=0 ; i < cols.size(); ++i)
+  for (unsigned int i=0; i < cols.size(); ++i)
     rw[i] = vnl_sparse_matrix_pair<T>(cols[i], vals[i]);
   vcl_sort(rw.begin(), rw.end(), vnl_sparse_matrix_pair<T>::less());
 }

@@ -48,7 +48,7 @@ vnl_rpoly_roots::vnl_rpoly_roots(const vnl_real_polynomial& poly)
 {
   bool has_nans=false;
   unsigned size = poly.degree() + 1;
-  for (unsigned i=0;i< size ;i++)
+  for (unsigned i=0;i< size; i++)
     if (vnl_math_isnan(poly[i]))
       has_nans=true;
 

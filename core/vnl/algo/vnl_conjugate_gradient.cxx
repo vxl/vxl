@@ -123,7 +123,7 @@ int vnl_conjugate_gradient::preconditioner_( double *out, double *in)
   vnl_cost_function* f = active->f_;
 
   int n = f->get_number_of_unknowns();
-  for (int i=0; i < n ; ++i)
+  for (int i=0; i < n; ++i)
     out[i] = in[i];
 
   return 0;
