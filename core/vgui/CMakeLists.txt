@@ -93,7 +93,7 @@ vgui_slab
 vgui_event_loop
 )
 
-INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
+INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake )
 
 AUX_SOURCE_DIRECTORY(Templates vgui_sources)
 

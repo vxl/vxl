@@ -1,22 +1,34 @@
 #
-# Find the native JPEG library
+# Find a JPEG library
 #
 
-FIND_PATH(NATIVE_JPEG_INCLUDE_PATH jpeglib.h
-/usr/local/include
-/usr/include
-)
+SET( HAS_JPEG "NO" )
 
-FIND_LIBRARY(NATIVE_JPEG_LIB_PATH jpeg
-/usr/lib
-/usr/local/lib
-)
+INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativeJPEG.cmake )
 
-SET(HAS_NATIVE_JPEG "NO")
+IF(NOT HAS_NATIVE_JPEG)
 
-IF(NATIVE_JPEG_LIB_PATH)
-  IF(NATIVE_JPEG_INCLUDE_PATH)
-    SET(NATIVE_JPEG_LIBRARY "jpeg" CACHE)
-    SET(HAS_NATIVE_JPEG "YES")
-  ENDIF(NATIVE_JPEG_INCLUDE_PATH)
-ENDIF(NATIVE_JPEG_LIB_PATH)
+  #
+  # At some point, in a "release" version, it is possible that someone
+  # will not have the v3p jpeg library
+  #
+
+  FIND_PATH( JPEG_INCLUDE_PATH jpeglib.h
+    ${allvxl_SOURCE_DIR}/v3p/jpeg
+  )
+
+  IF(JPEG_INCLUDE_PATH)
+
+    SET( HAS_JPEG "YES" )
+    ADD_DEFINITIONS( -DHAS_JPEG )
+
+    INCLUDE( ${allvxl_SOURCE_DIR}/v3p/jpeg/CMakeListsLink.txt )
+
+  ENDIF(JPEG_INCLUDE_PATH)
+
+ELSE(NOT HAS_NATIVE_JPEG)
+
+  SET( HAS_JPEG "YES" )
+  ADD_DEFINITIONS( -DHAS_JPEG )
+
+ENDIF(NOT HAS_NATIVE_JPEG)

@@ -4,8 +4,12 @@
 #   geoff.cross@crd.ge.com
 #
 
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/v3p/netlib )
-LINK_LIBRARIES( netlib )
+INCLUDE(${allvxl_SOURCE_DIR}/v3p/netlib/CMakeListsLink.txt)
+
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativeJPEG.cmake)
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativeTIFF.cmake)
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativePNG.cmake)
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativeZLIB.cmake)
 
 IF(NOT HAS_NATIVE_JPEG)
   INCLUDE( ${allvxl_SOURCE_DIR}/v3p/jpeg/CMakeListsLink.txt )
@@ -13,10 +17,12 @@ ENDIF(NOT HAS_NATIVE_JPEG)
 
 IF(NOT NATIVE_TIFF_LIBRARY)
   INCLUDE( ${allvxl_SOURCE_DIR}/v3p/tiff/CMakeListsLink.txt )
+  SUBDIRS(tiff)
 ENDIF(NOT NATIVE_TIFF_LIBRARY)
 
 IF(NOT NATIVE_PNG_LIBRARY)
   INCLUDE( ${allvxl_SOURCE_DIR}/v3p/png/CMakeListsLink.txt )
+  SUBDIRS(png)
 ENDIF(NOT NATIVE_PNG_LIBRARY)
 
 IF(NOT NATIVE_ZLIB_LIBRARY)

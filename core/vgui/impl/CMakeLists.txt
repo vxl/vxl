@@ -9,21 +9,15 @@ IF(WIN32)
 ELSE(WIN32)
 
   INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindGTK.cmake)
-
-  IF(GTK_LIBRARY)
-
-    SUBDIRS(gtk)
-
-  ENDIF(GTK_LIBRARY)
-
   INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake)
 
-  IF(GLUT_LIBRARY)
+  IF(HAS_GTK)
+    SUBDIRS(gtk)
+  ENDIF(HAS_GTK)
 
+  IF(HAS_GLUT)
     SUBDIRS(glut)
-
-  ENDIF(GLUT_LIBRARY)
-
+  ENDIF(HAS_GLUT)
 
 ENDIF(WIN32)
 

@@ -16,11 +16,10 @@ vgui_glut
 vgui_glut_slab
 )
 
-IF(X11_LIBRARY)
-  INCLUDE_DIRECTORIES( ${X11_INCLUDE_PATH} )
+INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindX11.cmake )
+
+IF(HAS_X11)
   SOURCE_FILES(vgui_glut_sources
     menu_hack_X11
   )
-ENDIF(X11_LIBRARY)
-
-INCLUDE_DIRECTORIES(${GLUT_INCLUDE_PATH})
+ENDIF(HAS_X11)

@@ -1,19 +1,35 @@
 #
-# Find the native PNG includes and library
+# Find a PNG library
 #
 
+SET( HAS_PNG "NO" )
 
-FIND_PATH(NATIVE_PNG_INCLUDE_PATH png.h
-/usr/local/include
-/usr/include
-)
+INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativePNG.cmake )
 
-FIND_LIBRARY(NATIVE_PNG_LIB_PATH png
-/usr/lib
-/usr/local/lib
-)
+IF(NOT HAS_NATIVE_PNG)
 
-IF(NATIVE_PNG_INCLUDE_PATH)
-  SET(NATIVE_PNG_LIBRARY "-lpng" CACHE)
-ENDIF(NATIVE_PNG_INCLUDE_PATH)
+  #
+  # At some point, in a "release" version, it is possible that someone
+  # will not have the v3p png library, so make sure the headers
+  # exist.
+  #
 
+  FIND_PATH( PNG_INCLUDE_PATH png.h
+    ${allvxl_SOURCE_DIR}/v3p/png
+  )
+
+  IF(PNG_INCLUDE_PATH)
+
+    SET( HAS_PNG "YES" )
+    ADD_DEFINITIONS( -DHAS_PNG )
+
+    INCLUDE( ${allvxl_SOURCE_DIR}/v3p/png/CMakeListsLink.txt )
+
+  ENDIF(PNG_INCLUDE_PATH)
+
+ELSE(NOT HAS_NATIVE_PNG)
+
+  SET( HAS_PNG "YES" )
+  ADD_DEFINITIONS( -DHAS_PNG )
+
+ENDIF(NOT HAS_NATIVE_PNG)

@@ -1,6 +1,6 @@
 ADD_LIBRARY( png png_sources )
 
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/v3p/zlib )
+INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindZLIB )
 
 SOURCE_FILES( png_sources
 png

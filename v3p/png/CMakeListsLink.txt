@@ -1,3 +1,4 @@
 LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/v3p/png )
 LINK_LIBRARIES( png )
-INCLUDE( ${allvxl_SOURCE_DIR}/v3p/zlib/CMakeListsLink.txt )
+
+INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindZLIB )

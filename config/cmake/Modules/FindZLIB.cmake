@@ -1,19 +1,35 @@
 #
-# Find the native ZLIB includes and library
+# Find a ZLIB library
 #
 
+SET( HAS_ZLIB "NO" )
 
-FIND_PATH(NATIVE_ZLIB_INCLUDE_PATH zlib.h
-/usr/local/include
-/usr/include
-)
+INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativeZLIB.cmake )
 
-FIND_LIBRARY(NATIVE_ZLIB_LIB_PATH z
-/usr/lib
-/usr/local/lib
-)
+IF(NOT HAS_NATIVE_ZLIB)
 
-IF(NATIVE_ZLIB_INCLUDE_PATH)
-  SET(NATIVE_ZLIB_LIBRARY "-lz" CACHE)
-ENDIF(NATIVE_ZLIB_INCLUDE_PATH)
+  #
+  # At some point, in a "release" version, it is possible that someone
+  # will not have the v3p zlib library, so make sure the headers
+  # exist.
+  #
 
+  FIND_PATH( ZLIB_INCLUDE_PATH zlib.h
+    ${allvxl_SOURCE_DIR}/v3p/zlib
+  )
+
+  IF(ZLIB_INCLUDE_PATH)
+
+    SET( HAS_ZLIB "YES" )
+    ADD_DEFINITIONS( -DHAS_ZLIB )
+
+    INCLUDE( ${allvxl_SOURCE_DIR}/v3p/zlib/CMakeListsLink.txt )
+
+  ENDIF(ZLIB_INCLUDE_PATH)
+
+ELSE(NOT HAS_NATIVE_ZLIB)
+
+  SET( HAS_ZLIB "YES" )
+  ADD_DEFINITIONS( -DHAS_ZLIB )
+
+ENDIF(NOT HAS_NATIVE_ZLIB)
