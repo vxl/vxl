@@ -22,6 +22,8 @@
 #include <sdet/sdet_harris_detector.h>
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_fit_lines.h>
+#include <sdet/sdet_grid_finder_params.h>
+#include <sdet/sdet_grid_finder.h>
 #include <gevd/gevd_clean_edgels.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
@@ -163,7 +165,7 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines)
 {
   if (!t2D_)
     return;
-  //  this->clear_display();
+  //this->clear_display();
   vgui_image_tableau_sptr itab = t2D_->get_image_tableau();
   if (!itab)
     {
@@ -172,7 +174,9 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines)
     }
   for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
        lit != lines.end(); lit++)
-      t2D_->add_vsol_line_2d(*lit);
+	   {
+			t2D_->add_vsol_line_2d(*lit);
+	   }
 
   t2D_->post_redraw();
 }
@@ -180,32 +184,32 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines)
 void segv_segmentation_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions,
                                              bool verts)
 {
-   for (vcl_vector<vdgl_intensity_face_sptr>::iterator rit = regions.begin();
-        rit != regions.end(); rit++)
-     {
-       vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
-       t2D_->add_face(f);
-       if (verts)
-         {
-           vcl_vector<vtol_vertex_sptr>* vts = f->vertices();
-           for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts->begin();
-                vit != vts->end(); vit++)
-             {
-               vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
-               t2D_->add_vertex(v);
-             }
-           delete vts;
-         }
-     }
+  for (vcl_vector<vdgl_intensity_face_sptr>::iterator rit = regions.begin();
+       rit != regions.end(); rit++)
+    {
+      vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
+      t2D_->add_face(f);
+      if (verts)
+        {
+          vcl_vector<vtol_vertex_sptr>* vts = f->vertices();
+          for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts->begin();
+               vit != vts->end(); vit++)
+            {
+              vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
+              t2D_->add_vertex(v);
+            }
+          delete vts;
+        }
+    }
 }
 
 void segv_segmentation_manager::original_image()
 {
   if (img_)
-  {
-    t2D_->get_image_tableau()->set_image(img_);
-    t2D_->post_redraw();
-  }
+    {
+      t2D_->get_image_tableau()->set_image(img_);
+      t2D_->post_redraw();
+    }
 }
 
 void segv_segmentation_manager::gaussian()
@@ -268,8 +272,8 @@ void segv_segmentation_manager::downsample()
     return;
   vil_memory_image_of<unsigned char> input(img_);
   vil_memory_image_of<float> inputf = brip_float_ops::convert_to_float(input);
-   vil_memory_image_of<float> half_res =
-     brip_float_ops::half_resolution(inputf, filter_factor);
+  vil_memory_image_of<float> half_res =
+    brip_float_ops::half_resolution(inputf, filter_factor);
   vil_memory_image_of<unsigned char> char_half_res =
     brip_float_ops::convert_to_byte(half_res);
   t2D_->get_image_tableau()->set_image(char_half_res);
@@ -313,8 +317,8 @@ void segv_segmentation_manager::beaudet_measure()
       return;
     }
   static float sigma = 1.0f;
-//static float scale_factor = 0.04f;
-//static int n = 2;
+  //static float scale_factor = 0.04f;
+  //static int n = 2;
   static float cmax=100;
   vgui_dialog harris_dialog("beaudet");
   harris_dialog.field("sigma", sigma);
@@ -398,46 +402,50 @@ void segv_segmentation_manager::regions()
       vil_image ed_img = rp.get_edge_image();
       vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
       if (!itab)
-      {
+        {
           vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
           return;
-      }
+        }
       itab->set_image(ed_img);
     }
   if (!debug)
     {
-   vcl_vector<vdgl_intensity_face_sptr>& regions = rp.get_regions();
-   this->draw_regions(regions, true);
+      vcl_vector<vdgl_intensity_face_sptr>& regions = rp.get_regions();
+      this->draw_regions(regions, true);
     }
   if (residual)
     {
       vil_image res_img = rp.get_residual_image();
       vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
       if (!itab)
-      {
+        {
           vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
           return;
-      }
+        }
       itab->set_image(res_img);
     }
 }
 void segv_segmentation_manager::fit_lines()
 {
-  //  this->clear_display();
+   this->clear_display();
+  static sdet_grid_finder_params gfp;
   static bool agr = true;
   static sdet_detector_params dp;
+  dp.borderp=false;
   static sdet_fit_lines_params flp;
   static float nm = 2.0;
-  static bool hough_index=false;;
+  static bool detect_grid=true;
   vgui_dialog vd_dialog("Fit Lines");
   vd_dialog.field("Gaussian sigma", dp.smooth);
   vd_dialog.field("Noise Threshold", nm);
-  vd_dialog.field("Min Fit Length", flp.min_fit_length_);
-  vd_dialog.field("RMS Distance", flp.rms_distance_);
   vd_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
   vd_dialog.checkbox("Agressive Closure", agr);
   vd_dialog.checkbox("Compute Junctions", dp.junctionp);
-  vd_dialog.checkbox("Display Hough Index", hough_index);
+  vd_dialog.field("Min Fit Length", flp.min_fit_length_);
+  vd_dialog.field("RMS Distance", flp.rms_distance_);
+  vd_dialog.field("Angle Tolerance", gfp.angle_tol_);
+  vd_dialog.field("Line Count Threshold", gfp.thresh_);
+  vd_dialog.checkbox("Detect Grid", detect_grid);
   if (!vd_dialog.ask())
     return;
   dp.noise_multiplier=nm;
@@ -445,41 +453,38 @@ void segv_segmentation_manager::fit_lines()
     dp.aggressive_junction_closure=1;
   else
     dp.aggressive_junction_closure=0;
-
+  dp.borderp = false;
   sdet_detector det(dp);
   det.SetImage(img_);
 
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   if (!edges)
-  {
-    vcl_cout << "No edges to fit lines \n";
-    return;
-  }
+    {
+      vcl_cout << "No edges to fit lines \n";
+      return;
+    }
   sdet_fit_lines fl(flp);
   fl.set_edges(*edges);
   fl.fit_lines();
-  if (hough_index)
+  vcl_vector<vsol_line_2d_sptr> lines = fl.get_line_segs();
+  if(detect_grid)
     {
-      vcl_vector<vsol_line_2d_sptr> lines = fl.get_line_segs();
-      bsol_hough_line_index hind(0.0, 0.0, img_.width(), img_.height(), 180.0, 5.0);
-      for (vcl_vector<vsol_line_2d_sptr>::iterator lit = lines.begin();
-           lit != lines.end(); lit++)
-        hind.index(*lit);
-      int rdim = hind.get_r_dimension(), tdim = hind.get_theta_dimension();
-      vbl_array_2d<unsigned char> hough_image = hind.get_hough_image();
-      vil_memory_image_of<unsigned char> img(tdim, rdim);
-      for (int y = 0; y<rdim; y++)
-        for (int x = 0; x<tdim; x++)
-          img(x,y) = 30*hough_image[y][x];
-      vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
-      if (itab)
-        itab->set_image(img);
+      sdet_grid_finder gf(gfp);
+      if(!gf.set_lines(img_.width(), img_.height(), lines))
+        {
+          vcl_cout << "Less than two dominant groups \n";
+          return;
+        }
+      vcl_vector<vsol_line_2d_sptr> mapped_lines;
+      gf.compute_homography();
+      //      if(gf.get_mapped_lines(mapped_lines))
+      if(gf.get_backprojected_grid(mapped_lines))
+        this->draw_lines(mapped_lines);          
       return;
     }
-  this->draw_lines(fl.get_line_segs());
+  this->draw_lines(lines);
 }
-
 
 #ifdef HAS_XERCES
 void segv_segmentation_manager::read_xml_edges()
