@@ -389,6 +389,8 @@ namespace std {
 #endif
 #if defined(VCL_SUNPRO_CC) || defined(VCL_SGI_CC) || !VCL_USE_NATIVE_COMPLEX
 inline vnl_rational vcl_sqrt(vnl_rational const& x) { return vnl_rational(vcl_sqrt(double(x))); }
+#elif defined (VCL_VC)
+inline vnl_rational sqrt(vnl_rational const& x) { return vnl_rational(sqrt(double(x))); }
 #else
 namespace std {
   inline vnl_rational sqrt(vnl_rational const& x) { return vnl_rational(vcl_sqrt(double(x))); }

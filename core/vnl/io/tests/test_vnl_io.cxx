@@ -14,6 +14,7 @@
 #include <vnl/io/tests/test_sparse_matrix_io.cxx>
 #include <vnl/io/tests/test_nonlinear_minimizer_io.cxx>
 #include <vnl/io/tests/test_rational_io.cxx>
+#include <vnl/io/tests/test_bignum_io.cxx>
 #include <vnl/io/tests/test_sym_matrix_io.cxx>
 #include <vnl/io/tests/golden_test_vnl_io.cxx>
 
@@ -32,6 +33,7 @@ void run_test_vnl_io()
   test_sparse_matrix_double_io();
   test_nonlinear_minimizer_io();
   test_rational_io();
+  test_bignum_io();
   test_sym_matrix_io();
   golden_test_vnl_io();
 }

@@ -498,11 +498,11 @@ bool vnl_bignum::operator< (const vnl_bignum& rhs) const {
 vcl_ostream& operator<< (vcl_ostream& os, const vnl_bignum& b) {
   vnl_bignum d = b;                     // Copy the input vnl_bignum
   if (d.sign == -1) {                   // If it's negative
-    vcl_cout.put('-');                  //   Output leading minus sign
+    os.put('-');                  //   Output leading minus sign
     d.sign = 1;                         //   Make d positive for divide
   }
   vnl_bignum q,r;                       // Temp quotient and remainder
-  char *cbuf = new char[5 * b.count];   // Temp character buffer
+  char *cbuf = new char[5 * (b.count+1)];   // Temp character buffer
   Counter i = 0;
   do {                                  // repeat:
     divide(d,10L,q,r);                  //   Divide vnl_bignum by ten

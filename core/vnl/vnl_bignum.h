@@ -322,16 +322,20 @@ inline bool operator> (long r1, vnl_bignum const& r2) { return r2< r1; }
 inline bool operator<=(long r1, vnl_bignum const& r2) { return r2>=r1; }
 inline bool operator>=(long r1, vnl_bignum const& r2) { return r2<=r1; }
 
-#if defined(VCL_SUNPRO_CC) || defined(VCL_SGI_CC) || defined(VCL_VC) || defined(VCL_METRO_WERKS)
+#if defined(VCL_SUNPRO_CC) || defined(VCL_SGI_CC) || defined(VCL_METRO_WERKS)
 inline vnl_bignum vcl_sqrt(vnl_bignum const& x) { return vnl_bignum(vcl_sqrt(double(x))); }
+#elif defined(VCL_VC)
+inline vnl_bignum sqrt(vnl_bignum const& x) { return vnl_bignum(sqrt(double(x))); }
 #else
 namespace std {
   inline vnl_bignum sqrt(vnl_bignum const& x) { return vnl_bignum(vcl_sqrt(double(x))); }
 }
 #endif
 
-#if defined(VCL_SUNPRO_CC) || defined(VCL_SGI_CC) || defined(VCL_VC) || defined(VCL_METRO_WERKS)
+#if defined(VCL_SUNPRO_CC) || defined(VCL_SGI_CC) || defined(VCL_METRO_WERKS)
 inline vnl_bignum vcl_abs(vnl_bignum const& x) { return x.abs(); }
+#elif defined(VCL_VC)
+inline vnl_bignum abs(vnl_bignum const& x) { return x.abs(); }
 #else
 namespace std {
   inline vnl_bignum abs(vnl_bignum const& x) { return x.abs(); }

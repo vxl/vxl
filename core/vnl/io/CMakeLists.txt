@@ -7,6 +7,7 @@ SOURCE_FILES(vnl_io_sources
   vnl_io_real_npolynomial.cxx
   vnl_io_real_polynomial.cxx
   vnl_io_rational.cxx
+  vnl_io_bignum.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vnl_io_sources)
