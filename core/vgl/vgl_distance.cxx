@@ -57,8 +57,6 @@ double vgl_distance_to_linesegment(double x1, double y1,
   return vcl_sqrt(vgl_distance2_to_linesegment(x1, y1, x2, y2, x, y));
 }
 
-#if 0 // deprecated interface; use vgl_distance(vgl_polygon,vgl_point_2d<T>,false)
-
 double vgl_distance_to_non_closed_polygon(float const px[], float const py[], unsigned n,
                                           double x, double y)
 {
@@ -89,8 +87,6 @@ double vgl_distance_to_closed_polygon(float const px[], float const py[], unsign
 
   return dd;
 }
-
-#endif // 0
 
 template <class Type>
 double vgl_distance_origin(vgl_homg_line_2d<Type> const& l)
@@ -207,5 +203,5 @@ template double vgl_distance(vgl_homg_plane_3d<double> const& l, vgl_homg_point_
 template double vgl_distance(vgl_homg_point_3d<float> const& p, vgl_homg_plane_3d<float> const& l);
 template double vgl_distance(vgl_homg_point_3d<double> const& p, vgl_homg_plane_3d<double> const& l);
 
-template double vgl_distance(vgl_polygon const&, vgl_point_2d<float> const&);
-template double vgl_distance(vgl_polygon const&, vgl_point_2d<double> const&);
+template double vgl_distance(vgl_polygon const&, vgl_point_2d<float> const&, bool);
+template double vgl_distance(vgl_polygon const&, vgl_point_2d<double> const&, bool);
