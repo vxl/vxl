@@ -75,8 +75,8 @@ public:
   {
     for(const_iterator p = storage_.begin(); p != storage_.end(); ++p)
       out << "(" << (*p).first.first
-	  << "," << (*p).first.second
-	  << "): " << (*p).second << vcl_endl;
+          << "," << (*p).first.second
+          << "): " << (*p).second << vcl_endl;
     return out;
   }
 };
