@@ -1,5 +1,8 @@
 # vxl/vbl/examples/CMakeLists.txt
 
+SET( vbl_example_templates_sources
+  # empty
+)
 AUX_SOURCE_DIRECTORY( Templates vbl_example_templates_sources )
 
 ADD_LIBRARY( vbl_example_templates ${vbl_example_templates_sources} )
