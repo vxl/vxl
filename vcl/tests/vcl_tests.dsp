@@ -117,6 +117,9 @@ SOURCE=.\test_exception.cxx
 SOURCE=.\test_fstream.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_sstream.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_iostream.cxx
 # End Source File
 # Begin Source File
