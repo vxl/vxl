@@ -7,6 +7,8 @@
 #include <bseg/bmrf/bmrf_gamma_func.h>
 #include <bseg/bmrf/bmrf_gamma_func_sptr.h>
 #include <bseg/bmrf/bmrf_epipole.h>
+#include <bseg/bmrf/bmrf_arc_sptr.h>
+#include <bseg/bmrf/bmrf_arc.h>
 #include <bseg/bmrf/bmrf_node_sptr.h>
 #include <bseg/bmrf/bmrf_node.h>
 #include <bseg/bmrf/bmrf_network_sptr.h>
