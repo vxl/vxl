@@ -9,7 +9,7 @@
 void mil_algo_grad_3x3(float* gx, int gx_xstep, int gx_ystep,
                        float* gy, int gy_xstep, int gy_ystep,
                        const unsigned char* src,
-             int s_xstep, int s_ystep, int nx, int ny)
+                       int s_xstep, int s_ystep, int nx, int ny)
 {
   const unsigned char* s_data = src;
   float *gx_data = gx;
@@ -48,12 +48,12 @@ void mil_algo_grad_3x3(float* gx, int gx_xstep, int gx_ystep,
   for (int x=1;x<nx1;++x)
   {
     // Compute gradient in x
-	// Note: Multiply each element individually
-	//      to ensure conversion to float before addition
-      *pgx = 0.25*s[o3] + 0.5*s[o5] + 0.25*s[o8]
+    // Note: Multiply each element individually
+    //      to ensure conversion to float before addition
+      *pgx = (0.25*s[o3] + 0.5*s[o5] + 0.25*s[o8])
            - (0.25*s[o1] + 0.5*s[o4] + 0.25*s[o6]);
     // Compute gradient in y
-      *pgy = 0.25*s[o1] + 0.5*s[o2] + 0.25*s[o3]
+      *pgy = (0.25*s[o1] + 0.5*s[o2] + 0.25*s[o3])
            - (0.25*s[o6] + 0.5*s[o7] + 0.25*s[o8]);
 
     s+=s_xstep;
@@ -86,7 +86,7 @@ void mil_algo_grad_3x3(float* gx, int gx_xstep, int gx_ystep,
 void mil_algo_grad_3x3(float* gx, int gx_xstep, int gx_ystep,
                        float* gy, int gy_xstep, int gy_ystep,
                        const float* src,
-             int s_xstep, int s_ystep, int nx, int ny)
+                       int s_xstep, int s_ystep, int nx, int ny)
 {
   const float* s_data = src;
   float *gx_data = gx;

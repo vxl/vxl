@@ -14,7 +14,7 @@
 //  of source plane i and dest plane (2i+1) being the y-gradient.
 template<class srcT, class destT>
 void mil_algo_grad_filter_2d<srcT,destT>::filter_xy_3x3(mil_image_2d_of<destT>& dest,
-                                                  mil_image_2d_of<srcT>& src)
+                                                        mil_image_2d_of<srcT>& src)
 {
   int n_planes = src.n_planes();
   dest.set_n_planes(2*n_planes);
@@ -24,7 +24,7 @@ void mil_algo_grad_filter_2d<srcT,destT>::filter_xy_3x3(mil_image_2d_of<destT>& 
   for (int i=0;i<n_planes;++i)
   {
     mil_algo_grad_3x3(dest.plane(2*i),dest.xstep(),dest.ystep(),
-	                  dest.plane(2*i+1),dest.xstep(),dest.ystep(),
+                      dest.plane(2*i+1),dest.xstep(),dest.ystep(),
                       src.plane(i),src.xstep(),src.ystep(),nx,ny);
   }
 }
@@ -32,8 +32,8 @@ void mil_algo_grad_filter_2d<srcT,destT>::filter_xy_3x3(mil_image_2d_of<destT>& 
 //: Apply simple 3x3 gradient filter to 2D image
 template<class srcT, class destT>
 void mil_algo_grad_filter_2d<srcT,destT>::filter_xy_3x3(mil_image_2d_of<destT>& grad_x,
-                                                  mil_image_2d_of<destT>& grad_y,
-                                                  mil_image_2d_of<srcT>& src)
+                                                        mil_image_2d_of<destT>& grad_y,
+                                                        mil_image_2d_of<srcT>& src)
 {
   int n_planes = src.n_planes();
   grad_x.set_n_planes(n_planes);
@@ -45,7 +45,7 @@ void mil_algo_grad_filter_2d<srcT,destT>::filter_xy_3x3(mil_image_2d_of<destT>& 
   for (int i=0;i<n_planes;++i)
   {
     mil_algo_grad_3x3(grad_x.plane(i),grad_x.xstep(),grad_x.ystep(),
-	                  grad_y.plane(i),grad_y.xstep(),grad_y.ystep(),
+                      grad_y.plane(i),grad_y.xstep(),grad_y.ystep(),
                       src.plane(i),src.xstep(),src.ystep(),nx,ny);
   }
 }
@@ -54,4 +54,4 @@ void mil_algo_grad_filter_2d<srcT,destT>::filter_xy_3x3(mil_image_2d_of<destT>& 
 #define MIL_ALGO_GRAD_FILTER_2D_INSTANTIATE(srcT, destT) \
  template class mil_algo_grad_filter_2d<srcT, destT >
 
-#endif
+#endif // mil_algo_grad_filter_2d_txx_
