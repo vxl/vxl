@@ -69,7 +69,7 @@ sdet_watershed_region_proc::~sdet_watershed_region_proc()
 //: if an roi is defined then create a chip image and define the bounds
 void sdet_watershed_region_proc::clip_image()
 {
-  if (!image_||!roi_)
+  if (!image_ || !roi_)
     return;
   vsol_box_2d_sptr box = roi_->region(0);
   if (! brip_vil1_float_ops::chip(image_, box, clip_))
@@ -120,7 +120,7 @@ void sdet_watershed_region_proc::scan_region_data(vbl_array_2d<unsigned int> con
         imgr = roi_->ir(r);
       }
       unsigned int lab = lab_array[r][c];
-      if (lab<min_label_||lab>max_label_)
+      if (lab<min_label_ || lab>max_label_)
         continue;
       int index = lab-min_label_;
       //dangerous, might not be scaled properly (FIXME)
@@ -141,7 +141,7 @@ void sdet_watershed_region_proc::scan_region_data(vbl_array_2d<unsigned int> con
         imgr = roi_->ir(r);
       }
       unsigned int lab = lab_array[r][c];
-      if (lab<min_label_||lab>max_label_)
+      if (lab<min_label_ || lab>max_label_)
         continue;
       int index = lab-min_label_;
       //dangerous, might not be scaled properly (FIXME)
@@ -211,7 +211,7 @@ static bool found_in_regions(sdet_region_sptr const &r,
 {
   bool found = false;
   for (vcl_vector<sdet_region_sptr>::const_iterator rit = regions.begin();
-       rit != regions.end()&& !found; rit++)
+       rit != regions.end() && !found; rit++)
     if ((*rit).ptr() == r.ptr())
       found = true;
   return found;
@@ -278,7 +278,7 @@ bool sdet_watershed_region_proc::merge_regions()
       sdet_region_sptr& ar = *arit;
       if (found_in_regions(ar, merged_regions))
         continue;
-      if (r->Npix()<min_area_||ar->Npix()<min_area_)
+      if (r->Npix()<min_area_ || ar->Npix()<min_area_)
         continue;
 #ifdef DEBUG
       vcl_cout << "R[" << r->label() <<"]:vs:[" << ar->label() << "]\n";
@@ -432,7 +432,7 @@ void sdet_watershed_region_proc::clear()
 //  Return the residual error
 vil1_image sdet_watershed_region_proc::get_residual_image()
 {
-  if (!image_||!regions_valid_)
+  if (!image_ || !regions_valid_)
   {
     vcl_cout << "In sdet_watershed_region_proc::get_residual_image() - no regions\n";
     return 0;
@@ -473,7 +473,7 @@ void sdet_watershed_region_proc::print_region_info()
   for (vcl_vector<sdet_region_sptr>::iterator rit = regions_.begin();
        rit != regions_.end(); rit++, index++)
   {
-    int npix = (*rit)->Npix();
+    unsigned int npix = (*rit)->Npix();
     if (npix<min_area_)
       continue;
     vcl_cout << "R[" << (*rit)->label() << "](Np:" << npix << " Io:"
@@ -484,7 +484,7 @@ void sdet_watershed_region_proc::print_region_info()
 
 bool sdet_watershed_region_proc::compute_region_image()
 {
-  if (!regions_valid_||!image_)
+  if (!regions_valid_ || !image_)
     return false;
   //create the image assume for now everything is unsigned char
   int w = image_.width(), h = image_.height();
@@ -494,8 +494,8 @@ bool sdet_watershed_region_proc::compute_region_image()
        rit != regions_.end(); rit++)
     for ((*rit)->reset(); (*rit)->next();)
     {
-      int c = (int)(*rit)->X(), r = (int)(*rit)->Y();
-      if (c<0||r<0||c>w-1||r>h-1)
+      int c = int((*rit)->X()), r = int((*rit)->Y());
+      if (c<0 || r<0 || c>=w || r>=h)
         continue;
       unsigned char val = (unsigned char)(*rit)->I();
       region_image_(c,r) = val;
