@@ -1,4 +1,4 @@
-USES += vxl
+USES += vxl gel
 
 IULIBS := -lvdgl -lvbl -lvnl -lvcl -lvsol -lvgl 
 

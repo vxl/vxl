@@ -1,4 +1,4 @@
-USES += vxl
+USES += vxl gel
 USE_NETLIB := 1
 
 IULIBS := -lvdgl -lvtol -lvsol -lvnl-algo -lvbl -lvnl -lvgl -lvcl
