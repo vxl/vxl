@@ -7,6 +7,7 @@
 // \date 12 Nov 2002
 
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_vector.h>
 #include <vbl/vbl_array_2d.h>
 
@@ -29,9 +30,9 @@ class rgrl_feature_landmark
                          vcl_vector< vnl_vector<double> > const& outgoing_directions );
 
   //: read in feature
-  virtual 
+  virtual
   bool read( vcl_istream& is, bool skip_tag=false );
-  
+
   //: write out feature
   virtual
   void write( vcl_ostream& os ) const;
@@ -59,11 +60,11 @@ class rgrl_feature_landmark
 
   //: uninitialized constructor
   rgrl_feature_landmark();
-  
+
   // to be able to use the protected constructor
   friend rgrl_feature_sptr
          rgrl_feature_reader( vcl_istream& is );
- 
+
   // disabled, not implemented
   rgrl_feature_landmark& operator=( rgrl_feature_landmark const& );
 

@@ -7,6 +7,7 @@
 
 #include "rgrl_feature.h"
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 //: Represent a point along a trace (of a vessel, neuron, etc.)
 //
@@ -36,9 +37,9 @@ class rgrl_feature_trace_pt
                          double                    radius );
 
   //: read in feature
-  virtual 
+  virtual
   bool read( vcl_istream& is, bool skip_tag=false );
-  
+
   //: write out feature
   virtual
   void write( vcl_ostream& os ) const;
@@ -47,11 +48,11 @@ class rgrl_feature_trace_pt
   location() const;
 
   //: Provide the scale level at which this feature is detected
-  virtual 
+  virtual
   double scale() const { return scale_; }
-  
+
   //: Set the scale level at which this feature is detected
-  virtual 
+  virtual
   void set_scale( double scale ) { scale_ = scale; }
 
   virtual vnl_vector<double> const&

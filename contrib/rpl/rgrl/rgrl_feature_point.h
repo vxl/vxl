@@ -6,6 +6,7 @@
 // \date   Feb 2003
 
 #include "rgrl_feature.h"
+#include <vcl_iosfwd.h>
 
 //: Represent a point in space.
 //
@@ -16,14 +17,14 @@ class rgrl_feature_point
   : public rgrl_feature
 {
  public:
-  
+
   //:
   rgrl_feature_point( vnl_vector<double> const& loc );
 
   //: read in feature
-  virtual 
+  virtual
   bool read( vcl_istream& is, bool skip_tag=false );
-  
+
   //: write out feature
   virtual
   void write( vcl_ostream& os ) const;
@@ -32,11 +33,11 @@ class rgrl_feature_point
   location() const;
 
   //: Provide the scale level at which this feature is detected
-  virtual 
+  virtual
   double scale() const { return scale_; }
-  
+
   //: Set the scale level at which this feature is detected
-  virtual 
+  virtual
   void set_scale( double scale ) { scale_ = scale; }
 
   vnl_matrix<double> const&
@@ -68,12 +69,12 @@ class rgrl_feature_point
          rgrl_feature_reader( vcl_istream& is );
 
   //: Apply transformation to the scale property
-  virtual double  
+  virtual double
   transform_scale( rgrl_transformation const& xform ) const;
-  
+
  protected:
   vnl_vector<double> location_;
-  
+
   double             scale_;
 };
 
