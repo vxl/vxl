@@ -281,55 +281,64 @@ int main() {
   vil_image image24 = CreateTest24bitImage(sizex, sizey);
   vil_image image3p = CreateTest3planeImage(sizex, sizey);
   vil_image imagefloat = CreateTestfloatImage(sizex, sizey);
-
-  // pnm
+  
+#if 1
   vil_test_image_type("pnm", image8);
   vil_test_image_type("pnm", image16);
   vil_test_image_type("pnm", image24);
+#endif
 
-  // lily image
+#if 1
   //vil_test_image_type("lily", image8);
   //vil_test_image_type("lily", imagefloat);
+#endif
 
-  // VIFF image
+#if 1
   //vil_test_image_type("viff", image1);
   vil_test_image_type("viff", image8);
   vil_test_image_type("viff", image16);
   //vil_test_image_type("viff", image3p);
   vil_test_image_type("viff", imagefloat);
+#endif
 
+#if 1
 #ifdef HAS_TIFF
-  // TIFF
   vil_test_image_type("tiff", image8);
   vil_test_image_type("tiff", image24);
 #endif
+#endif
 
+#if 1
 #ifdef HAS_JPEG // lossy format ==> not guaranteed to be identical
-  // JPEG
   vil_test_image_type("jpeg", image8, false);
   vil_test_image_type("jpeg", image24, false);
 #endif
+#endif
 
+#if 1
 #ifdef HAS_PNG
-  // PNG
   vil_test_image_type("png", image8);
   vil_test_image_type("png", image24);
 #endif
+#endif
 
-  // sgi
+#if 1
   blather = true;
   vil_test_image_type("iris", image8);
 //vil_test_image_type("iris", image16); // not implemented yet
   vil_test_image_type("iris", image24);
+#endif
 
-  // bmp
+#if 1
   vil_test_image_type("bmp", image8);
   vil_test_image_type("bmp", image24);
+#endif
 
-  // mit
+#if 1
   vil_test_image_type("mit", image8);
   vil_test_image_type("mit", image16);
   vil_test_image_type("mit", image24);
+#endif
 
   cout << "Summary: ";
   if (nr_failures > 1)

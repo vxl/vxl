@@ -17,6 +17,7 @@ SOURCES += vil_stream.cxx
 SOURCES += vil_file_format.cxx
 SOURCES += vil_byte_swap.cxx
 SOURCES += vil_16bit.cxx
+SOURCES += vil_32bit.cxx
 
 # various vil_stream classes
 #SOURCES += vil_stream_iso_stream.cxx  # from a C++ stream
@@ -48,6 +49,9 @@ SOURCES += file_formats/vil_viff.cxx
 SOURCES += file_formats/vil_viff_support.c
 SOURCES += file_formats/vil_iris.cxx
 SOURCES += file_formats/vil_mit.cxx
+SOURCES += file_formats/vil_bmp_file_header.cxx
+SOURCES += file_formats/vil_bmp_core_header.cxx
+SOURCES += file_formats/vil_bmp_info_header.cxx
 SOURCES += file_formats/vil_bmp.cxx
 ifeq ($(HAS_PNG),1)
 USE_PNG := 1

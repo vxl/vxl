@@ -216,7 +216,7 @@ bool vil_iris_generic_image::write_header()
   cerr << "bytes_per_c = " << bytes_per_component_ << endl;
   cerr << "dimension_  = " << dimension_ << endl;
   cerr << "width_      = " << width_ << endl;
-  cerr << "hieght_     = " << height_ << endl;
+  cerr << "height_     = " << height_ << endl;
   cerr << "planes_     = " << planes_ << endl;
   cerr << "pixmin_     = " << pixmin_ << endl;
   cerr << "pixmax_     = " << pixmax_ << endl;
