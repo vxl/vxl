@@ -44,3 +44,23 @@ Bilin. Method 1) Mean: 4.3ns  +/-1ns
 Bilin. Method 2) Mean: 4.2ns  +/-1ns
 Bilin. Method 3) Mean: 4.2ns  +/-1ns
 
+850MHz P3 Windows MSVC6.0SP5
+In RelwithDebInfo
+Times to randomly access image (in nanosecs) [Range= 0.5(max-min)]
+Images of BYTE
+Method 1) Mean: 13.8ns  +/-1ns
+Method 2) Mean: 13.7ns  +/-1ns
+Method 3) Mean: 11ns  +/-1ns
+Images of FLOAT
+Method 1) Mean: 8.5ns  +/-0.5ns
+Method 2) Mean: 8.5ns  +/-0.5ns
+Method 3) Mean: 7.1ns  +/-1ns
+Using Bilinear interpolation.
+Images of BYTE
+Bilin. Method 1) Mean: 221.4ns  +/-1.5ns
+Bilin. Method 2) Mean: 221.2ns  +/-1ns
+Bilin. Method 3) Mean: 256.8ns  +/-1.4ns
+Images of FLOAT
+Bilin. Method 1) Mean: 205.9ns  +/-1ns
+Bilin. Method 2) Mean: 205.9ns  +/-1ns
+Bilin. Method 3) Mean: 240.4ns  +/-1ns
