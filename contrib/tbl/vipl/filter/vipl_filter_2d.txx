@@ -60,6 +60,9 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
 template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
   bool vipl_filter_2d< ImgIn,ImgOut,DataIn,DataOut,PixelItr > ::applyop()
 {
+  typedef typename vipl_section_container< DataIn  >::iterator iter_in;
+  typedef typename vipl_section_container< DataOut >::iterator iter_out;
+
   // assuming that the coordinate space of input, intermediate and output are
   // "locked" by sectioning
   if (!ref_outf()) {
@@ -88,8 +91,8 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
     ref_src_section()->ref_overlap()[0] = image_border_size();
     ref_src_section()->ref_overlap()[1] = image_border_size();
   }
-  vipl_section_container< DataOut >::iterator enddstitr, dstitr;
-  vipl_section_container< DataIn >::iterator endsrcitr, srcitr;
+  iter_out enddstitr, dstitr;
+  iter_in endsrcitr, srcitr;
   if (ref_src_section()) {
     endsrcitr = (*ref_src_section()).end();
     srcitr = (*ref_src_section()).begin();
@@ -99,10 +102,8 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
     dstitr = (*ref_dst_section()).begin();
   }
   if (is_input_driven()) {
-    vipl_section_container< DataIn >::iterator enditr = (*ref_src_section()).end();
-    for (vipl_section_container< DataIn >::iterator it = (*ref_src_section()).begin();
-         it != enditr;
-         ++it) {
+    iter_in enditr = (*ref_src_section()).end();
+    for (iter_in it = (*ref_src_section()).begin(); it != enditr; ++it) {
       if (dstitr ==enddstitr) {
         vcl_cerr << "Warning: In vipl_filter_2d, output iter ran out of items before input.  resetting to beginning\n";
         dstitr = (*ref_dst_section()).begin();
@@ -140,10 +141,8 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
     }
   }
   else {
-    vipl_section_container< DataOut >::iterator enditr = (*ref_dst_section()).end();
-    for (vipl_section_container< DataOut >::iterator it = (*ref_dst_section()).begin();
-         it != enditr;
-         ++it) {
+    iter_out enditr = (*ref_dst_section()).end();
+    for (iter_out it = (*ref_dst_section()).begin(); it != enditr; ++it) {
       if (srcitr == endsrcitr) {
         vcl_cerr << "Warning: In vipl_filter_2d, input iter ran out of items before output.  resetting to beginning\n";
         srcitr = (*ref_src_section()).begin();
