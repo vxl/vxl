@@ -10,7 +10,7 @@
 
 
 
-#define Assert(x) do { if (x) vcl_cerr << "test PASSED\n"; else vcl_cerr << "test FAILED [" #x "]\n"; } while (0)
+#define Assert(x) do { if (x) vcl_cout << "test PASSED\n"; else vcl_cerr << "test FAILED [" #x "]\n"; } while (0)
 
 
 int main(int, char **)
