@@ -4,9 +4,9 @@ IF(BUILD_TESTING)
   ADD_EXECUTABLE( test_gevd_param_mixin test_gevd_param_mixin.cxx )
   ADD_EXECUTABLE( test_gevd_memory_mixin test_gevd_memory_mixin.cxx )
   ADD_EXECUTABLE( test_gevd_bufferxy test_gevd_bufferxy.cxx )
-  ADD_TEST(test_gevd_param_mixin)
-  ADD_TEST(test_gevd_memory_mixin)
-  ADD_TEST(test_gevd_bufferxy)
+  ADD_TEST(test_gevd_param_mixin test_gevd_param_mixin)
+  ADD_TEST(test_gevd_memory_mixin test_gevd_memory_mixin)
+  ADD_TEST(test_gevd_bufferxy test_gevd_bufferxy)
 ENDIF(BUILD_TESTING)
 
 # Immediate dependencies
