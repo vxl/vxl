@@ -1,5 +1,5 @@
-#this-sets-shell-mode-in-emacs-*-sh-*-
-# ./brl/vvid/CMakeLists.txt
+# brl/vvid/CMakeLists.txt
+
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/brl )
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/gel )
 # find the path to the cmu camera libraries and includes
@@ -12,16 +12,23 @@ IF(HAS_VGUI)
 # we have vgui enabled so ..
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/oxl )
 
-# Uses the vidl_avicodec, and thus will only build under Windows
-IF(WIN32)
-IF(NOT CYGWIN)
-
 # sources that don't depend on the camera being present
-SOURCE_FILES(vvid_sources vvid_file_manager vvid_video_process vvid_epipolar_space_process) 
+SOURCE_FILES(vvid_sources
+             vvid_file_manager.cxx vvid_video_process.cxx vvid_epipolar_space_process.cxx
+             vvid_file_manager.h   vvid_video_process.h   vvid_epipolar_space_process.h
+                                   vvid_video_process_sptr.h )
 
 # sources that do depend on the camera being present
-SOURCE_FILES(cmu_camera_sources cmu_1394_camera_params cmu_1394_camera vvid_live_video_frame vvid_live_video_manager)
-AUX_SOURCE_DIRECTORY(Templates cmu_camera_sources)
+SOURCE_FILES(cmu_camera_sources cmu_1394_camera_params.cxx cmu_1394_camera_params.h )
+                                       
+IF(HAS_CMU1394CAMERA)
+ ADD_DEFINITIONS(-DHAS_CMU1394CAMERA)
+ SOURCE_FILES(cmu_camera_sources
+              cmu_1394_camera.cxx vvid_live_video_frame.cxx vvid_live_video_manager.cxx
+              cmu_1394_camera.h   vvid_live_video_frame.h   vvid_live_video_manager.h
+                                                            vvid_live_video_frame_sptr.h )
+ AUX_SOURCE_DIRECTORY(Templates cmu_camera_sources)
+ENDIF(HAS_CMU1394CAMERA)
 
 # check if we have the camera libraries and assemble accordingly
 IF(HAS_CMU1394CAMERA)
@@ -35,6 +42,4 @@ TARGET_LINK_LIBRARIES( vvid gevd vgui vidl vul vil )
 # the main executables
 SUBDIRS(bin)
 
-ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
 ENDIF(HAS_VGUI)
