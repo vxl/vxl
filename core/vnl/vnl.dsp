@@ -1170,11 +1170,6 @@ SOURCE=.\vnl_sparse_matrix_linear_system.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_test.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vnl_trace.cxx
 
 # End Source File
