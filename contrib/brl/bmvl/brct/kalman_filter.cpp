@@ -180,7 +180,7 @@ void kalman_filter::init_state_vector()
       {
         vgl_homg_point_2d<double> temp(pts[j].x(), pts[j].y());
 
-        int x1_index = bdgl_curve_algs:: closest_point(ec1, pts[j].x(), pts[j].y());
+        int x1_index = bdgl_curve_algs::closest_point(ec1, pts[j].x(), pts[j].y());
         double angle1 = (*ec1)[x1_index].get_theta();
 
         double dist_p1p2 = vgl_homg_operators_2d<double>::distance_squared(p1, temp);
@@ -305,7 +305,7 @@ void kalman_filter::init_cam_intrinsic()
 
 void kalman_filter::prediction()
 {
-  // TODO
+  // TO DO
 }
 
 vnl_double_3x4 kalman_filter::get_projective_matrix(vnl_double_3& v )
@@ -675,4 +675,24 @@ vcl_vector<vgl_point_2d<double> > kalman_filter::get_pre_observes()
 vnl_double_3 kalman_filter::get_next_motion(vnl_double_3 v)
 {
   return motions_[cur_pos_]+v;
+}
+
+
+
+vnl_matrix<double> kalman_filter::get_predicted_curve()
+{
+  //
+  // prediction step:
+  //
+  vnl_vector_fixed<double, 6> Xpred = A_*X_;
+
+  vnl_double_3 camCenter;
+  camCenter[0] = Xpred[0];
+  camCenter[1] = Xpred[1];
+  camCenter[2] = Xpred[2];
+  
+  vnl_double_3x4 P = get_projective_matrix(camCenter);
+  update_observes(P, cur_pos_+1);
+
+  return observes_[cur_pos_+1];
 }

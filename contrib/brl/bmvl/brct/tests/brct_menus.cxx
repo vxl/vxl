@@ -28,7 +28,7 @@ vgui_menu brct_menus::get_menu()
   file_menu.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
   action_menu.add("init", init_kalman_callback, (vgui_key)'i', vgui_CTRL);
   action_menu.add("go", kalman_go_callback, (vgui_key)'g', vgui_CTRL);
-
+  action_menu.add("show prediction", show_predicted_curves, (vgui_key)'p', vgui_CTRL);
   menu_bar.add("file", file_menu);
   menu_bar.add("action", action_menu);
   return menu_bar;
@@ -38,4 +38,10 @@ void brct_menus::kalman_go_callback()
 {
   vcl_cerr<<"goes into kalman_go_callback\n";
   brct_windows_frame::instance()->go();
+}
+
+void brct_menus::show_predicted_curves()
+{
+  vcl_cerr<<"goes into predicted_curves\n";
+  brct_windows_frame::instance()->show_predicted_curve();
 }

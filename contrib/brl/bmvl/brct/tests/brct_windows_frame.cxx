@@ -134,6 +134,7 @@ void brct_windows_frame::add_curve2d(vcl_vector<vgl_point_2d<double> > &pts)
 
 void brct_windows_frame::remove_curve2d()
 {
+  predicted_curves_2d_.clear();
   curves_2d_.clear();
   this->post_redraw();
 }
@@ -202,4 +203,36 @@ void brct_windows_frame::go()
   vcl_vector<vgl_point_3d<double> > c3d = kalman_->get_local_pts();
   add_curve3d(c3d);
   this->post_redraw();
+}
+
+void brct_windows_frame::show_predicted_curve()
+{
+  vnl_matrix<double> pts = kalman_->get_predicted_curve();
+  vcl_vector<vgl_point_2d<double> > curve;
+
+  int num_points = pts.columns();
+  curve.resize(num_points);
+
+  for (int i=0; i<num_points; i++) {
+    vgl_point_2d<double> pt(pts[0][i], pts[1][i]);
+    curve[i]=pt;
+  }
+  
+  add_predicted_curve2d(curve);
+  this->post_redraw();
+}
+
+void brct_windows_frame::add_predicted_curve2d(vcl_vector<vgl_point_2d<double> > &pts)
+{
+  int size = pts.size();
+  assert(size > 1);
+  predicted_curves_2d_.resize(size-1);
+  instance_->tab_2d_->set_foreground(0, 1, 0);
+  for (int i=0; i<size-1; i++) {
+    vgl_point_2d<double>& s = pts[i];
+    vgui_soview2D_point* p = instance_->tab_2d_->add_point(s.x(), s.y());
+    predicted_curves_2d_[i] = p;
+  }
+
+  instance_->post_redraw();
 }

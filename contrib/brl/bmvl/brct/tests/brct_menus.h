@@ -15,6 +15,7 @@
 class brct_menus
 {
  public:
+  static void show_predicted_curves();
   static void init_kalman_callback();
   static void kalman_go_callback();
   static void quit_callback();

@@ -28,6 +28,7 @@ class kalman_filter
   //: initialize the kalman filter with
   //virtual kalman_state inc(double dt);
  public:
+	vnl_matrix<double> get_predicted_curve();
 	vnl_double_3 get_next_motion(vnl_double_3 v);
   vcl_vector<vgl_point_2d<double> > get_pre_observes();
   vcl_vector<vgl_point_2d<double> > get_cur_observes();
