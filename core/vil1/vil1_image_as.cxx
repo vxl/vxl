@@ -18,6 +18,21 @@
 #include <vil/vil_memory_image.h>
 #include <vil/vil_memory_image_of_format.txx>
 
+vil_image vil_image_as(vil_image const & img, vil_byte* dummy)
+{ return vil_image_as_byte(img); }
+
+vil_image vil_image_as(vil_image const & img, int* dummy)
+{ return vil_image_as_int(img); }
+
+vil_image vil_image_as(vil_image const & img, float* dummy)
+{ return vil_image_as_float(img); }
+
+vil_image vil_image_as(vil_image const & img, double* dummy)
+{ return vil_image_as_double(img); }
+
+vil_image vil_image_as(vil_image const & img, vil_rgb<unsigned char>* dummy)
+{ return vil_image_as_rgb_byte(img); }
+
 template <class T>
 struct vil_image_as_impl : vil_image_impl, vil_memory_image_of_format<T>
 {
