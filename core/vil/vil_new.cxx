@@ -6,15 +6,11 @@
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   16 Feb 00
-//
-//\verbatim
-//  Modifications
-//     25 Sep 2002 Ian Scott - convert to vil.
-//\endverbatim
 
 #include "vil_new.h"
 
 #include <vcl_cstring.h>
+#include <vcl_cassert.h>
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_stream_fstream.h>
@@ -23,13 +19,14 @@
 
 
 // The first two functions really should be upgraded to create an image in
-// a temporary file on disk if the sizes are large.
+// a temporary file on disk if the sizes are large. - TODO
 
 //: Make a new image of given format.
 // If the format is not scalar, the number of planes must be 1. When you create
 // a multi-component image in this way, the vil_image_resource API will treat
 // it as a scalar pixel image with multiple planes. (This doesn't affect the
 // underlying data storage.)
+// \relates vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, unsigned nplanes,
                                                vil_pixel_format format)
 {
@@ -53,15 +50,17 @@ vil_image_resource_sptr vil_new_image_resource_of_view(vil_image_view_base & vie
 }
 
 //: Make a new image, similar format to the prototype.
+// \relates vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, vil_image_resource_sptr const& prototype)
 {
   return vil_new_image_resource(ni, nj, prototype->nplanes(),
                                 prototype->pixel_format());
 }
 
+//: Make a new image.
+// \relates vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
-                                               unsigned ni,
-                                               unsigned nj,
+                                               unsigned ni, unsigned nj,
                                                unsigned nplanes,
                                                vil_pixel_format format,
                                                char const* file_format)
@@ -85,20 +84,8 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
   return 0;
 }
 
-//: Make a new vil_image_impl, writing to stream "os", size ni x nj, copying pixel format etc from "prototype".
-vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
-                                               unsigned ni, unsigned nj,
-                                               vil_image_resource_sptr const& prototype,
-                                               char const* file_format)
-{
-  return vil_new_image_resource(os,
-                                prototype->nplanes(),
-                                ni, nj,
-                                prototype->pixel_format(),
-                                file_format ? file_format : prototype->file_format());
-}
-
-//: Make a new vil_image_impl, writing to file "filename", size "w" x "h", copying pixel format etc from "prototype".
+//: Make a new vil_image_resource, writing to file "filename", size ni x nj, copying pixel format etc from "prototype".
+// \relates vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(char const* filename,
                                                unsigned ni, unsigned nj,
                                                vil_image_resource_sptr const& prototype,
@@ -108,6 +95,20 @@ vil_image_resource_sptr vil_new_image_resource(char const* filename,
   return vil_new_image_resource(os,
                                 ni, nj,
                                 prototype->nplanes(),
+                                prototype->pixel_format(),
+                                file_format ? file_format : prototype->file_format());
+}
+
+//: Make a new vil_image_resource, writing to stream "os", size ni x nj, copying pixel format etc from "prototype".
+// \relates vil_image_resource
+vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
+                                               unsigned ni, unsigned nj,
+                                               vil_image_resource_sptr const& prototype,
+                                               char const* file_format)
+{
+  return vil_new_image_resource(os,
+                                prototype->nplanes(),
+                                ni, nj,
                                 prototype->pixel_format(),
                                 file_format ? file_format : prototype->file_format());
 }
