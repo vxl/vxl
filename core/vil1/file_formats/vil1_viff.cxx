@@ -264,10 +264,11 @@ bool vil_viff_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
       ib += rowsize;
     }
   }
-  if(!endian_consistent_)
+  if(!endian_consistent_) {
     ib = (unsigned char*) buf;
     for (unsigned int i=0;i<tbytes;i+=bits_per_component_/8)
       swap(ib+i,bits_per_component_/8);
+  }
 
   return true;
 }
