@@ -8,8 +8,9 @@
 #include <vcl_vector.txx>
 
 VCL_VECTOR_INSTANTIATE(unsigned int);
+VCL_SWAP_INSTANTIATE(unsigned int);
 #ifdef VCL_GCC_295
-template void fill<unsigned int *, int>(unsigned int *, unsigned int *, int const &);
+template void fill(unsigned*, unsigned*, int const&);
 #endif
 
 #if defined(GNU_LIBSTDCXX_V3)
