@@ -43,8 +43,8 @@ class PMatrixDec : public PMatrix
   // Data Members------------------------------------------------------------
 
   // J and D matrices
-  vnl_matrix<double> _j_matrix;  // 3x3
-  vnl_matrix<double> _d_matrix;  // 4x4
+  vnl_matrix<double> j_matrix_;  // 3x3
+  vnl_matrix<double> d_matrix_;  // 4x4
 
  public:
   // Constructors/Initializers/Destructors----------------------------------
@@ -52,13 +52,13 @@ class PMatrixDec : public PMatrix
   ~PMatrixDec();
 
   // Data Access------------------------------------------------------------
-  const vnl_matrix<double>& IntrinsicParameters () { return _j_matrix; }
-  const vnl_matrix<double>& ExtrinsicParameters () { return _d_matrix; }
+  const vnl_matrix<double>& IntrinsicParameters () { return j_matrix_; }
+  const vnl_matrix<double>& ExtrinsicParameters () { return d_matrix_; }
 
-  double GetAlphaU() const { return _j_matrix(0,0); }
-  double GetAlphaV() const { return _j_matrix(1,1); }
-  double GetU0() const { return _j_matrix(0,2); }
-  double GetV0() const { return _j_matrix(1,2); }
+  double GetAlphaU() const { return j_matrix_(0,0); }
+  double GetAlphaV() const { return j_matrix_(1,1); }
+  double GetU0() const { return j_matrix_(0,2); }
+  double GetV0() const { return j_matrix_(1,2); }
 
   // make tests for this class
   void Test();

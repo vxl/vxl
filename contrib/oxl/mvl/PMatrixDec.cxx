@@ -14,7 +14,7 @@
 //: Constructor
 
 PMatrixDec::PMatrixDec(const vnl_matrix<double>& p_matrix)
-  : PMatrix(p_matrix), _j_matrix(3,3), _d_matrix(4,4)
+  : PMatrix(p_matrix), j_matrix_(3,3), d_matrix_(4,4)
 {
   if (!((p_matrix.rows() == 3) && (p_matrix.columns() == 4)))
     vcl_cerr << "PMatrixDec WARNING: Incorrect size of matrix\n";
@@ -56,38 +56,38 @@ void PMatrixDec::Init()
       a_v = vcl_sqrt(a_v);
 
       // INTRINSIC parameters => J
-      _j_matrix(0,0) = a_u;
-      _j_matrix(0,1) = 0.0;
-      _j_matrix(0,2) = u0;
+      j_matrix_(0,0) = a_u;
+      j_matrix_(0,1) = 0.0;
+      j_matrix_(0,2) = u0;
 
-      _j_matrix(1,0) = 0.0;
-      _j_matrix(1,1) = a_v;
-      _j_matrix(1,2) = v0;
+      j_matrix_(1,0) = 0.0;
+      j_matrix_(1,1) = a_v;
+      j_matrix_(1,2) = v0;
 
-      _j_matrix(2,0) = 0.0;
-      _j_matrix(2,1) = 0.0;
-      _j_matrix(2,2) = 1.0; // last diagonal element = 1
+      j_matrix_(2,0) = 0.0;
+      j_matrix_(2,1) = 0.0;
+      j_matrix_(2,2) = 1.0; // last diagonal element = 1
 
       // EXTRINSIC parameters => D
-      _d_matrix(0,0) = (p_matrix_(0,0) - u0*p_matrix_(2,0))/a_u;
-      _d_matrix(0,1) = (p_matrix_(0,1) - u0*p_matrix_(2,1))/a_u;
-      _d_matrix(0,2) = (p_matrix_(0,2) - u0*p_matrix_(2,2))/a_u;
-      _d_matrix(0,3) = (p_matrix_(0,3) - u0*p_matrix_(2,3))/a_u;
+      d_matrix_(0,0) = (p_matrix_(0,0) - u0*p_matrix_(2,0))/a_u;
+      d_matrix_(0,1) = (p_matrix_(0,1) - u0*p_matrix_(2,1))/a_u;
+      d_matrix_(0,2) = (p_matrix_(0,2) - u0*p_matrix_(2,2))/a_u;
+      d_matrix_(0,3) = (p_matrix_(0,3) - u0*p_matrix_(2,3))/a_u;
 
-      _d_matrix(1,0) = (p_matrix_(1,0) - v0*p_matrix_(2,0))/a_v;
-      _d_matrix(1,1) = (p_matrix_(1,1) - v0*p_matrix_(2,1))/a_v;
-      _d_matrix(1,2) = (p_matrix_(1,2) - v0*p_matrix_(2,2))/a_v;
-      _d_matrix(1,3) = (p_matrix_(1,3) - v0*p_matrix_(2,3))/a_v;
+      d_matrix_(1,0) = (p_matrix_(1,0) - v0*p_matrix_(2,0))/a_v;
+      d_matrix_(1,1) = (p_matrix_(1,1) - v0*p_matrix_(2,1))/a_v;
+      d_matrix_(1,2) = (p_matrix_(1,2) - v0*p_matrix_(2,2))/a_v;
+      d_matrix_(1,3) = (p_matrix_(1,3) - v0*p_matrix_(2,3))/a_v;
 
-      _d_matrix(2,0) = p_matrix_(2,0);
-      _d_matrix(2,1) = p_matrix_(2,1);
-      _d_matrix(2,2) = p_matrix_(2,2);
-      _d_matrix(2,3) = p_matrix_(2,3);
+      d_matrix_(2,0) = p_matrix_(2,0);
+      d_matrix_(2,1) = p_matrix_(2,1);
+      d_matrix_(2,2) = p_matrix_(2,2);
+      d_matrix_(2,3) = p_matrix_(2,3);
 
-      _d_matrix(3,0) = 0.0;
-      _d_matrix(3,1) = 0.0;
-      _d_matrix(3,2) = 0.0;
-      _d_matrix(3,3) = 1.0; // last diagonal element = 1
+      d_matrix_(3,0) = 0.0;
+      d_matrix_(3,1) = 0.0;
+      d_matrix_(3,2) = 0.0;
+      d_matrix_(3,3) = 1.0; // last diagonal element = 1
     }
 }
 
@@ -98,8 +98,8 @@ vcl_ostream& operator<<(vcl_ostream& s, const PMatrixDec& P)
 {
   s << "PROJECTION MATRIX = [\n" << P.get_matrix() << "]\n"
     << "DECOMPOSITION: \n"
-    << "Intrinsic Parameters = [\n" << P._j_matrix << "]\n"
-    << "Extrinsic Parameters = [\n" << P._d_matrix << "]\n";
+    << "Intrinsic Parameters = [\n" << P.j_matrix_ << "]\n"
+    << "Extrinsic Parameters = [\n" << P.d_matrix_ << "]\n";
   return s;
 }
 
