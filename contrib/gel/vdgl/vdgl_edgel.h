@@ -45,8 +45,8 @@ public:
   inline double y() const { return p_.y(); }
 
   // setters
-  inline void set_x( const double x) { p_.set_x( x); }
-  inline void set_y( const double y) { p_.set_y( y); }
+  inline void set_x( const double x) { p_.set(x,p_.y()); }
+  inline void set_y( const double y) { p_.set(p_.x(),y); }
   inline void set_grad( const double grad) { grad_= grad; }
   inline void set_theta( const double theta) { theta_= theta; }
     
