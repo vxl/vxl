@@ -854,7 +854,7 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *curves_) {
   XB = xb*cp - yb*sp;
   YB = yb*cp + xb*sp;
 
-  // Create a new ImplicitLine and EdgelChain with these paramters
+  // Create a new ImplicitLine and EdgelChain with these parameters
   line = new ImplicitDigitalLine(l1->size()+l2->size(),
                                  new IUPoint(XA,YA,0.0),
                                  new IUPoint(XB,YB,0.0));
