@@ -1,4 +1,4 @@
-// This is ./oxl/apps/glmovie/make_index.cxx
+// This is oxl/apps/glmovie/make_index.cxx
 
 //:
 // \file
@@ -8,7 +8,6 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
-#include <vcl_memory.h>
 
 struct scanner_t
 {
