@@ -5,8 +5,8 @@
 // \brief parameter mixin for vdgl_region_proc
 //
 // \author
-//             Joseph L. Mundy - Apr. 11, 2001
-//             GE Corporate Research and Development
+//    Joseph L. Mundy - Apr. 11, 2001
+//    GE Corporate Research and Development
 //
 //-----------------------------------------------------------------------------
 #include <gevd/gevd_param_mixin.h>
@@ -15,13 +15,13 @@
 
 class sdet_region_proc_params : public gevd_param_mixin
 {
-public :
+ public:
   sdet_region_proc_params(
                           const sdet_detector_params& dp = sdet_detector_params(),
                           bool verbose = true,
                           bool debug = false,
                           int array_scale = 2
-                          );
+                         );
 
  sdet_region_proc_params(const sdet_region_proc_params& old_params);
  ~sdet_region_proc_params(){}
@@ -29,14 +29,14 @@ public :
   bool SanityCheck();
  friend
    vcl_ostream& operator<<(vcl_ostream& os, const sdet_region_proc_params& rpp);
-protected:
+ protected:
  void InitParams(
                  const sdet_detector_params& dp,
-				 bool verbose,                  
+                 bool verbose,
                  bool debug,
                  int array_scale
-                 );
-public:
+                );
+ public:
   //
   // Parameter blocks and parameters
   //
