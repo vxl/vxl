@@ -1,8 +1,16 @@
+# ./oxl/oxltest/CMakeLists.txt
+
 ADD_EXECUTABLE( oxltest oxltest_sources )
+
 SOURCE_FILES( oxltest_sources oxltest.cpp )
+
 IF(WIN32)
-SOURCE_FILES( oxltest_sources StdAfx.cpp )
+  IF (NOT CYGWIN)
+    SOURCE_FILES( oxltest_sources StdAfx.cpp )
+    SOURCE_FILES( oxltest_sources StdAfx.h )
+  ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
+
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/mvl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vgl/CMakeListsLink.txt )
