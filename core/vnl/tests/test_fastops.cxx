@@ -1,4 +1,4 @@
-// This is core/vnl/tests/test_fastops.h
+// This is core/vnl/tests/test_fastops.cxx
 #include <testlib/testlib_test.h>
 //:
 // \file
