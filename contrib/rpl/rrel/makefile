@@ -26,7 +26,6 @@ MANPAGE_SOURCES += rrel_objective.h
 MANPAGE_SOURCES += rrel_util.txx
 MANPAGE_SOURCES += rrel_wls_obj.h
 SOURCES += rrel_homography2d_est_aff.cxx
-SOURCES += rrel_ransac_obj_smooth_cost.cxx
 SOURCES += rrel_affine_est.cxx
 
 #######################################
