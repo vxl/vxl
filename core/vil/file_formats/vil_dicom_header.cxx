@@ -143,7 +143,7 @@ vil2_dicom_header_type vil2_dicom_header_format::determineFileType(vil2_stream &
     if (dicm_test == "DICM")
     {
       result = VIL2_DICOM_HEADER_DTPART10;
-    } // End of if (dicm_test...
+    }
     else
     {
       // Read the first four chars and see if they are the letters
@@ -156,7 +156,7 @@ vil2_dicom_header_type vil2_dicom_header_format::determineFileType(vil2_stream &
       if (dicm_test == "DICM")
       {
         result = VIL2_DICOM_HEADER_DTPART10;
-      } // End of if (dicm_test...
+      }
       else
       {
         // Some other format - test it with both little and
@@ -171,12 +171,12 @@ vil2_dicom_header_type vil2_dicom_header_format::determineFileType(vil2_stream &
           // Go back to the beginning and search for the
           // first element of the Identifying group
           fs.seek(0);
-          short group, element;
+          vxl_uint_16 group, element;
           int data_block_size, num_elements;
 
-          fs.read((char *)&group, sizeof(short));
+          fs.read((char *)&group, sizeof(vxl_uint_16));
           group = shortSwap(group);
-          fs.read((char *)&element, sizeof(short));
+          fs.read((char *)&element, sizeof(vxl_uint_16));
           element = shortSwap(element);
           fs.read((char *)&data_block_size, sizeof(int));
           data_block_size = intSwap(data_block_size);
@@ -192,9 +192,9 @@ vil2_dicom_header_type vil2_dicom_header_format::determineFileType(vil2_stream &
             fs.seek(data_block_size + fs.tell());
 
 
-            fs.read((char *)&group, sizeof(short));
+            fs.read((char *)&group, sizeof(vxl_uint_16));
             group = shortSwap(group);
-            fs.read((char *)&element, sizeof(short));
+            fs.read((char *)&element, sizeof(vxl_uint_16));
             element = shortSwap(element);
             fs.read((char *)&data_block_size, sizeof(int));
             data_block_size = intSwap(data_block_size);
@@ -208,7 +208,7 @@ vil2_dicom_header_type vil2_dicom_header_format::determineFileType(vil2_stream &
           {
             // First, standard non-Part10 header
             if (element == VIL2_DICOM_HEADER_IDGROUPLENGTH &&
-              data_block_size == 4)
+                data_block_size == 4)
             {
               // Put the file back at the beginning
               fs.seek(0);
@@ -225,23 +225,23 @@ vil2_dicom_header_type vil2_dicom_header_format::determineFileType(vil2_stream &
               result = VIL2_DICOM_HEADER_DTNON_PART10;
               known = true;
             } // End of else if (element...
-          } // End of if (group...
+          } // End of if (group == VIL2_DICOM_HEADER_IDENTIFYINGGROUP)
 
           if (!known)
           {
             file_endian_ = VIL2_DICOM_HEADER_DELITTLEENDIAN;
-          } // End of if (!known)
+          }
 
           num_tries++;
-        } // End of while (num_tries...
+        } // End of while (num_tries < 2 && !known)
 
         if (!known)
         {
           file_endian_ = old_endian;
-        } // End of if (!known)
+        }
       } // End of else
     } // End of else
-  } // End of if (fs.is_open...
+  } // End of if (fs.ok())
   else
   {
     vcl_cerr << "File not open for reading:\n"
@@ -255,12 +255,12 @@ vil2_dicom_header_type vil2_dicom_header_format::determineFileType(vil2_stream &
 
 void vil2_dicom_header_format::readHeaderElements(vil2_stream &fs)
 {
-  unsigned short group, element;  // The groups and elements read from the header part of the dicom file
-  unsigned int data_block_size;   // The size of the information held for this group/element pair
+  vxl_uint_16 group, element;   // The groups and elements read from the header part of the dicom file
+  unsigned int data_block_size; // The size of the information held for this group/element pair
 
   // Read the first group/element pair
-  fs.read((char *)&group, sizeof(short));
-  fs.read((char *)&element, sizeof(short));
+  fs.read((char *)&group, sizeof(vxl_uint_16));
+  fs.read((char *)&element, sizeof(vxl_uint_16));
 
   // Swap them if necessary
   group = shortSwap(group);
@@ -309,8 +309,8 @@ void vil2_dicom_header_format::readHeaderElements(vil2_stream &fs)
     } // End of switch
 
     // Read the next group and element
-    fs.read((char *)&group, sizeof(short));
-    fs.read((char *)&element, sizeof(short));
+    fs.read((char *)&group, sizeof(vxl_uint_16));
+    fs.read((char *)&element, sizeof(vxl_uint_16));
 
     // Swap them if necessary
     group = shortSwap(group);
@@ -333,7 +333,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
   char *data_p = 0;
 
   // Check the elements
-  switch ((unsigned short)element)
+  switch ((vxl_uint_16)element)
   {
    case VIL2_DICOM_HEADER_IDIMAGETYPE :
     // It's the image type
@@ -607,7 +607,7 @@ void vil2_dicom_header_format::readPatientElements(short element,
   char *data_p = 0;
 
   // Check the elements
-  switch ((unsigned short)element)
+  switch ((vxl_uint_16)element)
   {
    case VIL2_DICOM_HEADER_PIPATIENTNAME :
     // It's the patient's name
@@ -706,7 +706,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
   char *data_p = 0;
 
   // Check the elements
-  switch ((unsigned short)element)
+  switch ((vxl_uint_16)element)
   {
    case VIL2_DICOM_HEADER_AQSCANNINGSEQUENCE :
     // It's the scanning sequence
@@ -1024,7 +1024,7 @@ void vil2_dicom_header_format::readRelationshipElements(short element,
   char *data_p = 0;
 
   // Check the elements
-  switch ((unsigned short)element)
+  switch ((vxl_uint_16)element)
   {
    case VIL2_DICOM_HEADER_RSSTUDYINSTANCEUID :
     // It's the study instance id
@@ -1189,7 +1189,7 @@ void vil2_dicom_header_format::readImageElements(short element,
   char *data_p = 0;
 
   // Check the elements
-  switch ((unsigned short)element)
+  switch ((vxl_uint_16)element)
   {
    case VIL2_DICOM_HEADER_IMSAMPLESPERPIXEL :
     // It's the samples per pixel
@@ -1198,8 +1198,8 @@ void vil2_dicom_header_format::readImageElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      charSwap(data_p, sizeof(unsigned short));
-      last_read_.pix_samps_ = *((unsigned short *)data_p);
+      charSwap(data_p, sizeof(vxl_uint_16));
+      last_read_.pix_samps_ = *((vxl_uint_16*)data_p);
     } // End of if (data_p)
     break;
 
@@ -1221,8 +1221,8 @@ void vil2_dicom_header_format::readImageElements(short element,
     {
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
-      charSwap(data_p, sizeof(unsigned short));
-      last_read_.dimx_ = *((unsigned short *)data_p);
+      charSwap(data_p, sizeof(vxl_uint_16));
+      last_read_.dimx_ = *((vxl_uint_16*)data_p);
     } // End of if (data_p)
     break;
 
@@ -1233,8 +1233,8 @@ void vil2_dicom_header_format::readImageElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      charSwap(data_p, sizeof(unsigned short));
-      last_read_.dimy_ = *((unsigned short *)data_p);
+      charSwap(data_p, sizeof(vxl_uint_16));
+      last_read_.dimy_ = *((vxl_uint_16 *)data_p);
     } // End of if (data_p)
     break;
 
@@ -1245,8 +1245,8 @@ void vil2_dicom_header_format::readImageElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      charSwap(data_p, sizeof(unsigned short));
-      last_read_.dimz_ = *((unsigned short *)data_p);
+      charSwap(data_p, sizeof(vxl_uint_16));
+      last_read_.dimz_ = *((vxl_uint_16 *)data_p);
     } // End of if (data_p)
     break;
 
@@ -1269,17 +1269,17 @@ void vil2_dicom_header_format::readImageElements(short element,
         for (int i=0; i<dblock_size; i++)
         {
           data_p[i] = data_p[i+1];
-        } // End of for
+        }
       } // End of while
 
       if (gone == '\\')
       {
         last_read_.ysize_ = atof(data_p);
-      } // End of if (gone...
+      }
       else
       {
         last_read_.ysize_ = last_read_.xsize_;
-      } // End of else
+      }
     } // End of if (data_p)
     break;
 
@@ -1290,8 +1290,8 @@ void vil2_dicom_header_format::readImageElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      charSwap(data_p, sizeof(unsigned short));
-      last_read_.allocated_bits_ = *((unsigned short *)data_p);
+      charSwap(data_p, sizeof(vxl_uint_16));
+      last_read_.allocated_bits_ = *((vxl_uint_16 *)data_p);
     } // End of if (data_p)
     break;
 
@@ -1302,8 +1302,8 @@ void vil2_dicom_header_format::readImageElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      charSwap(data_p,sizeof(unsigned short));
-      last_read_.stored_bits_ = *((unsigned short *)data_p);
+      charSwap(data_p,sizeof(vxl_uint_16));
+      last_read_.stored_bits_ = *((vxl_uint_16 *)data_p);
     } // End of if (data_p)
     break;
 
@@ -1314,8 +1314,8 @@ void vil2_dicom_header_format::readImageElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      charSwap(data_p, sizeof(unsigned short));
-      last_read_.high_bit_ = *((unsigned short *)data_p);
+      charSwap(data_p, sizeof(vxl_uint_16));
+      last_read_.high_bit_ = *((vxl_uint_16 *)data_p);
     } // End of if (data_p)
     break;
 
@@ -1326,8 +1326,8 @@ void vil2_dicom_header_format::readImageElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      charSwap(data_p,sizeof(unsigned short));
-      last_read_.pix_rep_ = *((unsigned short *)data_p);
+      charSwap(data_p,sizeof(vxl_uint_16));
+      last_read_.pix_rep_ = *((vxl_uint_16 *)data_p);
     } // End of if (data_p)
     break;
 
@@ -1427,7 +1427,7 @@ void vil2_dicom_header_format::readDelimiterElements(short element,
                                                      vil2_stream &fs)
 {
   // Check the elements
-  switch ((unsigned short)element)
+  switch ((vxl_uint_16)element)
   {
    case VIL2_DICOM_HEADER_DLITEM:
    case VIL2_DICOM_HEADER_DLITEMDELIMITATIONITEM:
@@ -1482,9 +1482,9 @@ bool vil2_dicom_header_format::convertValueRepresentation(unsigned int &dblock_s
       result = true;
     } // End of if (first...
     else if (first == VIL2_DICOM_HEADER_OTHERBYTE ||
-           first == VIL2_DICOM_HEADER_OTHERWORD ||
-         last == VIL2_DICOM_HEADER_OTHERBYTE  ||
-         last == VIL2_DICOM_HEADER_OTHERWORD)
+             first == VIL2_DICOM_HEADER_OTHERWORD ||
+             last == VIL2_DICOM_HEADER_OTHERBYTE  ||
+             last == VIL2_DICOM_HEADER_OTHERWORD)
     {
       fs.read((char *)&dblock_size, sizeof(int));
       dblock_size = shortSwap(dblock_size);
@@ -1494,7 +1494,7 @@ bool vil2_dicom_header_format::convertValueRepresentation(unsigned int &dblock_s
     {
       dblock_size = 0;
       result = true;
-    } // End of else if (dblock_size...
+    } // End of else if (dblock_size == VIL2_DICOM_HEADER_ALLSET)
     else if (first == VIL2_DICOM_HEADER_APPLICATIONENTRY    ||
              first == VIL2_DICOM_HEADER_AGESTRING           ||
              first == VIL2_DICOM_HEADER_ATTRIBUTETAG        ||
@@ -1519,16 +1519,12 @@ bool vil2_dicom_header_format::convertValueRepresentation(unsigned int &dblock_s
     {
       if (last_read_.sys_endian_ == VIL2_DICOM_HEADER_DELITTLEENDIAN)
       {
-        dblock_size = (unsigned int)
-                    ((256*conv_dblock.char_val[3]) +
-                 conv_dblock.char_val[2]);
-      } // End of if (last_read_...
+        dblock_size = (unsigned int)((256*conv_dblock.char_val[3]) + conv_dblock.char_val[2]);
+      }
       else
       {
-        dblock_size = (unsigned int)
-                    ((256*conv_dblock.char_val[2]) +
-                 conv_dblock.char_val[3]);
-      } // End of else
+        dblock_size = (unsigned int)((256*conv_dblock.char_val[2]) + conv_dblock.char_val[3]);
+      }
 
       result = true;
     } // End of else if (first...
@@ -1556,20 +1552,16 @@ bool vil2_dicom_header_format::convertValueRepresentation(unsigned int &dblock_s
     {
       if (last_read_.sys_endian_ == VIL2_DICOM_HEADER_DELITTLEENDIAN)
       {
-        dblock_size = (unsigned int)
-                    ((256*conv_dblock.char_val[1]) +
-                 conv_dblock.char_val[0]);
-      } // End of if (last_read_...
+        dblock_size = (unsigned int)((256*conv_dblock.char_val[1]) + conv_dblock.char_val[0]);
+      }
       else
       {
-        dblock_size = (unsigned int)
-                    ((256*conv_dblock.char_val[0]) +
-                 conv_dblock.char_val[1]);
-      } // End of else
+        dblock_size = (unsigned int)((256*conv_dblock.char_val[0]) + conv_dblock.char_val[1]);
+      }
 
       result = true;
-    } // End of else if (first...
-  } // End of if (last_read_...
+    } // End of else if (last...
+  } // End of if (last_read_.file_type_ != VIL2_DICOM_HEADER_DTUNKNOWN)
 
   return result;
 }
@@ -1581,8 +1573,8 @@ bool vil2_dicom_header_format::pixelDataFound(short group, short element)
   bool result = false;
 
   // Check if it's the pixel data
-  if (group == VIL2_DICOM_HEADER_PIXELGROUP &&
-    element == VIL2_DICOM_HEADER_PXPIXELDATA)
+  if ((vxl_uint_16)group == VIL2_DICOM_HEADER_PIXELGROUP &&
+      (vxl_uint_16)element == VIL2_DICOM_HEADER_PXPIXELDATA)
   {
     result = true;
   }
@@ -1730,7 +1722,7 @@ vil2_dicom_header_endian vil2_dicom_header_format::determineMetaInfo(vil2_stream
   vil2_dicom_header_endian ret_end = VIL2_DICOM_HEADER_DELITTLEENDIAN; // Assume little if none found
   //vil2_dicom_header_endian ret_end = VIL2_DICOM_HEADER_DEBIGENDIAN;
 
-  short group, element;
+  vxl_uint_16 group, element;
   unsigned int data_block_size;
   char *tfx_type=0;
   vil2_streampos ret_pos = fs.tell(); // Maintain the file position
@@ -1742,13 +1734,13 @@ vil2_dicom_header_endian vil2_dicom_header_format::determineMetaInfo(vil2_stream
   image_type_ = VIL2_DICOM_HEADER_DITUNKNOWN;
 
   // Read the next group
-  fs.read((char *)&group,sizeof(short));
+  fs.read((char *)&group,sizeof(vxl_uint_16));
   group = shortSwap(group);
 
   while (fs.ok() && group <= VIL2_DICOM_HEADER_METAFILEGROUP)
   {
     // Read the element
-    fs.read((char *)&element,sizeof(short));
+    fs.read((char *)&element,sizeof(vxl_uint_16));
     element = shortSwap(element);
 
     // Read the data block size
@@ -1757,7 +1749,7 @@ vil2_dicom_header_endian vil2_dicom_header_format::determineMetaInfo(vil2_stream
     convertValueRepresentation(data_block_size,fs);
 
     if (group == VIL2_DICOM_HEADER_METAFILEGROUP &&
-      element == VIL2_DICOM_HEADER_MFTRANSFERSYNTAX)
+        element == VIL2_DICOM_HEADER_MFTRANSFERSYNTAX)
     {
       // This tells us the transfer syntax for the file
       tfx_type = new char[data_block_size+1]; // Ensure room for 0
@@ -1845,11 +1837,11 @@ vil2_dicom_header_endian vil2_dicom_header_format::determineMetaInfo(vil2_stream
           image_type_ = VIL2_DICOM_HEADER_DITRLE;
         }
       } // End of if (tfx_type)
-    } // End of if (group
-    else if ((vxl_uint_16)group == VIL2_DICOM_HEADER_DELIMITERGROUP &&
-             ((vxl_uint_16)element == VIL2_DICOM_HEADER_DLITEM ||
-              (vxl_uint_16)element == VIL2_DICOM_HEADER_DLITEMDELIMITATIONITEM ||
-              (vxl_uint_16)element == VIL2_DICOM_HEADER_DLSEQDELIMITATIONITEM))
+    } // End of if (group...
+    else if (group == VIL2_DICOM_HEADER_DELIMITERGROUP &&
+             (element == VIL2_DICOM_HEADER_DLITEM ||
+              element == VIL2_DICOM_HEADER_DLITEMDELIMITATIONITEM ||
+              element == VIL2_DICOM_HEADER_DLSEQDELIMITATIONITEM))
     {
       // Do nothing
     }
@@ -1862,7 +1854,7 @@ vil2_dicom_header_endian vil2_dicom_header_format::determineMetaInfo(vil2_stream
     ret_pos = fs.tell();
 
     // Read the next group
-    fs.read((char *)&group,sizeof(short));
+    fs.read((char *)&group,sizeof(vxl_uint_16));
     group = shortSwap(group);
   } // End of while
 
@@ -1874,9 +1866,9 @@ vil2_dicom_header_endian vil2_dicom_header_format::determineMetaInfo(vil2_stream
 
 //===============================================================
 
-short vil2_dicom_header_format::shortSwap(short short_in)
+vxl_uint_16 vil2_dicom_header_format::shortSwap(vxl_uint_16 short_in)
 {
-  short result = short_in;
+  vxl_uint_16 result = short_in;
 
   // Only swap if the architecture is different to the
   // file (the logic means that if one is unknown it swaps,
@@ -1886,7 +1878,7 @@ short vil2_dicom_header_format::shortSwap(short short_in)
     // Create a short unioned with two chars
     union short_char
     {
-      short short_val;
+      vxl_uint_16 short_val;
       char byte_val[2];
     } short_swap;
 
@@ -1899,7 +1891,7 @@ short vil2_dicom_header_format::shortSwap(short short_in)
     short_swap.byte_val[1]=temp;
 
     result = short_swap.short_val;
-  } // End of if (file_endian_...
+  } // End of if (file_endian_ != endian_)
 
   return result;
 }
@@ -1936,7 +1928,7 @@ int vil2_dicom_header_format::intSwap(int int_in)
     int_swap.byte_val[2] = temp;
 
     result = int_swap.int_val;
-  } // End of if (file_endian_...
+  } // End of if (file_endian_ != endian_)
 
   return result;
 }
@@ -1955,16 +1947,14 @@ void vil2_dicom_header_format::charSwap(char *char_in, int val_size)
 
     if (temp)
     {
-      int i;
-
       // Copy from the first vcl_string into the temp
-      for (i=0; i<val_size; i++)
+      for (int i=0; i<val_size; i++)
       {
         temp[i]=char_in[i];
-      } // End of for
+      }
 
       // Now put back in reverse
-      for (i=0; i<val_size; i++)
+      for (int i=0; i<val_size; i++)
       {
         char_in[(val_size-i)-1] = temp[i];
       } // End of for
@@ -1976,5 +1966,5 @@ void vil2_dicom_header_format::charSwap(char *char_in, int val_size)
       vcl_cerr << "Couldn't create temp in charSwap!\n"
                << "Value remains unswapped!\n";
     }
-  } // End of if (file_endian_...
+  } // End of if (file_endian_ != endian)
 }

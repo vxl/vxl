@@ -396,10 +396,8 @@ class vil2_dicom_header_format
 //  result in a header struct, which it returns. When finished,
 // the file stream should be pointing at the start of the image
 // data
-// \param fs The file stream to read - on exit points to the
-//           start of the image data
-// \return A dicom header struct containing the info gained from
-//         the header
+// \param fs The file stream to read - on exit points to the start of the image data
+// \return A dicom header struct containing the info gained from the header
 // \sa lastHeader(), headerValid(), last_read_() and info_valid_()
   vil2_dicom_header_info readHeader(vil2_stream &fs);
 
@@ -407,8 +405,7 @@ class vil2_dicom_header_format
 //
 //  The class holds a dicom header info struct containing the
 //  info from the last dicom file read.
-//  \return A dicom header struct containing the info gained from
-//          the last header read
+//  \return A dicom header struct containing the info gained from the last header read
   vil2_dicom_header_info lastHeader(void);
 
 //: Method to indicate if the header info held is valid or not
@@ -418,8 +415,7 @@ class vil2_dicom_header_format
 
 //: Return the current system endian
 //
-//  \return The system endian for the architecture running the
-//          application
+//  \return The system endian for the architecture running the application
   vil2_dicom_header_endian systemEndian(void);
 
   //: Return the endian of the header being read
@@ -449,8 +445,8 @@ class vil2_dicom_header_format
   //  \param fs The file stream to read from
   //  \sa readIdentifyingElements(), readPatientElements(),
   //      readAcquisitionElements(), readRelationshipElements(),
-  //    readImageElements, readDelimiterElements(),
-  //    readHeader() and last_read_()
+  //      readImageElements, readDelimiterElements(),
+  //      readHeader() and last_read_()
   void readHeaderElements(vil2_stream &fs);
 
   //: Method to read the identifying group's details
@@ -464,8 +460,7 @@ class vil2_dicom_header_format
   //  \param fs The file stream to read from
   //  \sa readHeaderElements(), readPatientElements(),
   //      readAcquisitionElements(), readRelationshipElements(),
-  //    readImageElements(), readDelimiterElements()
-  //    and last_read_()
+  //      readImageElements(), readDelimiterElements() and last_read_()
   void readIdentifyingElements(short element, int dblock_size,
                                vil2_stream &fs);
 
@@ -479,8 +474,7 @@ class vil2_dicom_header_format
   //  \param fs The file stream to read from
   //  \sa readHeaderElements(), readIdentifyingElements(),
   //      readAcquisitionElements(), readRelationshipElements(),
-  //    readImageElements(), readDelimiterElements()
-  //    and last_read_()
+  //      readImageElements(), readDelimiterElements() and last_read_()
   void readPatientElements(short element, int dblock_size,
                            vil2_stream &fs);
 
@@ -495,8 +489,7 @@ class vil2_dicom_header_format
   //  \param fs The file stream to read from
   //  \sa readHeaderElements(), readIdentifyingElements(),
   //      readPatientElements(), readRelationshipElements(),
-  //    readImageElements(), readDelimiterElements()
-  //    and last_read_()
+  //      readImageElements(), readDelimiterElements() and last_read_()
   void readAcquisitionElements(short element, int dblock_size,
                                vil2_stream &fs);
 
@@ -582,23 +575,22 @@ class vil2_dicom_header_format
 
   //: Method to vxl_byte swap a short int if necessary
   //
-  //  /param short_in The short to swap
-  //  /return The swapped short
-  //  /sa intSwap() and charSwap()
-  short shortSwap(short short_in);
+  //  \param short_in The short to swap
+  //  \return The swapped short
+  //  \sa intSwap() and charSwap()
+  vxl_uint_16 shortSwap(vxl_uint_16 short_in);
 
   //: Method to vxl_byte swap an int if necessary
   //
-  //  /param int_in The int to swap
-  //  /return The swapped int
-  //  /sa shortSwap() and charSwap()
+  //  \param int_in The int to swap
+  //  \return The swapped int
+  //  \sa shortSwap() and charSwap()
   int intSwap(int int_in);
 
   //: Method to swap a number inside a char array
   //
-  //  /param char_in The char array to swap - on exit contains
-  //                 the result
-  //  /param val_size The size of the var to swap
+  //  \param char_in The char array to swap - on exit contains the result
+  //  \param val_size The size of the var to swap
   void charSwap(char *char_in, int val_size);
 
  private:
@@ -611,8 +603,7 @@ class vil2_dicom_header_format
 
   //: TRUE if the header info is valid (i.e. has been read) otherwise FALSE
   //
-  //  \sa readHeader(), lastHeader(), headerValid(), clearInfo()
-  //      and last_read_()
+  // \sa readHeader(), lastHeader(), headerValid(), clearInfo() and last_read_()
   bool info_valid_;
 
   //: A variable to hold the discovered architecture endian
