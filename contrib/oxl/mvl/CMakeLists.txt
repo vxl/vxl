@@ -10,7 +10,7 @@ SET(mvl_sources
  FMatrix.cxx                            FMatrix.h
  FMatrixAffine.cxx                      FMatrixAffine.h
  FMatrixCompute.cxx                     FMatrixCompute.h
- FMatrixComputeLinear.cxx               FMatrixComputeLinear.h
+ FMatrixComputeLinear.cxx               FMatrixComputeLinear.h FMatrixCompute8Point.h
  FMatrixPlanar.cxx                      FMatrixPlanar.h
  FMatrixSkew.cxx                        FMatrixSkew.h
  HMatrix1D.cxx                          HMatrix1D.h
@@ -51,7 +51,7 @@ SET(mvl_sources
  PMatrix.cxx                            PMatrix.h PMatrix_sptr.h
  PMatrixAffine.cxx                      PMatrixAffine.h
  PMatrixCompute.cxx                     PMatrixCompute.h
- PMatrixComputeLinear.cxx               PMatrixComputeLinear.h
+ PMatrixComputeLinear.cxx               PMatrixComputeLinear.h PMatrixCompute6Point.h
  PMatrixDec.cxx                         PMatrixDec.h
  PMatrixDecompAa.cxx                    PMatrixDecompAa.h
  PMatrixDecompCR.cxx                    PMatrixDecompCR.h
@@ -91,14 +91,10 @@ SET(mvl_sources
  FileNameGenerator.cxx                  FileNameGenerator.h
  RawPMatrixStore.cxx                    RawPMatrixStore.h
 
- FMSkewComputeLinear.h
- FMatrixCompute8Point.h
-
  HomgMap2D.h
  HomgMatchPoint3D2D.h
  LineSeg.h
  ModifyHandle.h
- PMatrixCompute6Point.h
  PairMatchMultiStrength.h
  PairMatchSetMulti.h
  mvl_modify_handle.h
