@@ -35,20 +35,21 @@
 //  purposes.
 
 
-class rrel_homography2d_est : public rrel_estimation_problem {
-public:
+class rrel_homography2d_est : public rrel_estimation_problem
+{
+ public:
 
   //: Constructor from vgl_homg_point_2d's
   //  By default, we want a full 8-DOF homography
   rrel_homography2d_est( const vcl_vector< vgl_homg_point_2d<double> > & from_pts,
                          const vcl_vector< vgl_homg_point_2d<double> > & to_pts,
-                         const int homog_dof = 8 );
+                         unsigned int homog_dof = 8 );
 
   //: Constructor from vnl_vectors
   //  By default, we want a full 8-DOF homography
   rrel_homography2d_est( const vcl_vector< vnl_vector<double> > & from_pts,
                          const vcl_vector< vnl_vector<double> > & to_pts,
-                         const int homog_dof = 8 );
+                         unsigned int homog_dof = 8 );
 
   //: Destructor.
   virtual ~rrel_homography2d_est();
@@ -84,21 +85,21 @@ public:
   virtual void  params_to_homog(const vnl_vector<double>&  p,
                                 vnl_matrix<double>&        m) const;
 
-public:  // testing / debugging utility
-    //: \brief Print information as a test utility.
+ public:  // testing / debugging utility
+  //: \brief Print information as a test utility.
   void print_points() const;
 
-protected:
+ protected:
   void normalize( const vcl_vector< vnl_vector<double> >& pts,
                   const vcl_vector< double >& wgts,
                   vcl_vector< vnl_vector<double> > & norm_pts,
                   vnl_matrix< double > & norm_matrix ) const;
 
-protected:
-  vcl_vector< vnl_vector< double > > from_pts_;
-  vcl_vector< vnl_vector< double > > to_pts_;
+ protected:
+  vcl_vector< vnl_vector<double> > from_pts_;
+  vcl_vector< vnl_vector<double> > to_pts_;
   int homog_dof_;
-  int min_num_pts_;
+  unsigned int min_num_pts_;
 };
 
 #endif // rrel_homography2d_est_h_
