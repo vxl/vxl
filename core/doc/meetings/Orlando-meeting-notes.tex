@@ -1,0 +1,595 @@
+  \documentclass[11pt]{article}
+  \parskip1mm\parindent0mm\advance\textheight5cm\advance\textwidth4cm\advance\oddsidemargin-2cm\advance\topmargin-2cm
+  \def\TargetJr{{T\kern-0.2em arget\kern-0.3em\lower.5ex\hbox{\Large J}\kern-0.13em r}}
+  \def\by#1.{{\normalsize\sf\it(#1)}}\relax
+  \edef\@{@}\edef\<{<}\edef\|{|}
+  \catcode64=\active\def@#1@{{\em#1\/}}
+  \catcode124=\active\def|#1|{{\tt#1}}
+  \catcode60=\active\def<#1>{\hspace*{-3mm}{\bf#1}}
+  \catcode42=\active\def*#1*{\hfil\penalty-8000\section{#1}}
+  \catcode168=\active\let¨\ldots
+  \catcode95=\active\let_\_
+  \begin{document}
+
+  \centerline{\bf\large
+Minutes of the \TargetJr{} meeting at Orlando, December 9\&10, 1999.
+  }
+
+
+* Participants: *
+
+  \begin{tabbing}
+Manchester: ~ \= Dave Cooper, Alan Beveridge \\
+GE/CRD:       \> Joe Mundy, Richard Hartley, Don Hamilton, Peter Tu \\
+Oxford:       \> Andrew Zisserman, Andrew Fitzgibbon, David Capel, Geoff Cross,
+                 Karen McGaul, Fred Schaffalitzky \\
+Leuven:       \> Peter Vanroose, Joris Schouteden \\
+Zurich:       \> Manuel Oetiker, Stephan Scholze, Andreas Turina \\
+  \end{tabbing}
+
+
+* Overview and GE demo \by Joe Mundy. *
+
+<GE concerns:>
+
+-- \TargetJr{} fragmentation
+
+-- Repository fragility
+
+-- Too infrequent coordination
+
+-- Departure of Bill Hoffman
+
+<Recent developments at GE:>
+
+-- Improved junction closure of Canny edge detection through @region analysis@
+(class |IntensityFace|).  Allows planar intensity fit.  Note that regions are
+subpixel.
+
+-- boolean operations (intersection, \dots) on solids, implemented using
+BSPTree.  Useful for (e.g.) refining 3D shape from contours in different
+views.
+
+
+* Oxford demo \by Andrew Fitzgibbon. *
+
+demo of new `vgui'.
+
+
+* Leuven overview \by Peter Vanroose. *
+
+overview of new functionality, and of research projects using \TargetJr.
+
+
+* Reorganisation of \TargetJr{} packages \by Andrew Fitzgibbon. *
+
+Ideally, we want a software environment which is easy to learn/read.\\
+@keywords:@ |consistency|; |power| (algos+interface);
+|lightweight|; |compatibility| (e.g.~MMX).
+
+<Ways of achieving this:> rewrite (the model used when Target junior was
+created from Target), springclean (used for \TargetJr{} version 3).
+Rewrite has the advantage that above goals are achievable.  The
+disadvantage of any springclean is that bugs are reintroduced.
+
+-- Proposed libraries in the `cleanland' |v$x$l| suite:
+|vcl| (ISO compatibility level), |vbl| (basics layer), |vsl| (spatial objects),
+|vnl| (numerics), |vil| (imaging), |vgl| (GUI). \\
+An example application (xcv) should be included. 
+
+<Did the following experiment:>
+-- Can xcv be rewritten from scratch (but `cleanly') in 1 day by 4 people?
+Participants: Andrew Fitzgibbon, Karen McGaul, Fred Schaffalitzky, David Cooper. 
+4 hours at the whiteboard, setting up guiderules and structure, then
+4 hours of programming (including grabbing existing \TargetJr{} code).
+At that point, numerics demos run, basics library contains 20 ``.h'' files
+
+-- In order to obtain such a result, @clean coding rules@ are needed.
+(Note that it will be difficult to decide on such rules, as tastes differ¨)
+AWF: It may be difficult, but there will be agreement.
+Appendix 3 contains an initial list, as discussed at the Oxford/Manchester meeting.
+
+<Discussion:>
+
+-- There will be problems in re-writing algorithms: now depending on (say)
+Topology, must be rewritten in an independent way.  This could cost several days
+per algorithm.
+
+-- How to reconcile different @paradigms@, and possibly perform paradigm
+change (from ``old but functional'' code to ``new, clean'' code)~? \\
+Examples: embedding dimension splitup (|IUPoint_2d| -- |IUPoint_3d|);
+          |CoolList| node sharing vs.~STL;
+          
+-- To avoid that non-clean code enters `cleanland', some @people@ have to
+function as whatchdog, and perform the actual move.
+
+-- How can we assure that `smart, exotic' behaviour (like large image support,
+hacks needed for a specific platform, ¨) is not destroyed by this move?
+
+-- Have to avoid code duplication!  I.e., move implementation, and leave a
+`pointer' to it in the old place.
+Gradually, the old \TargetJr{} will be re-implemented in terms of the new
+design.
+
+<Summary:>
+
+-- Rationalise the basic functionality in \TargetJr{}, forming a 
+``reptilian brain'' area, around which `cleanland' can be built.
+
+-- Gradually re-implement existing algorithms and structures in `oldland',
+taking care of maintaining its functionality.
+
+-- The resulting @clean@ system alone should be capable of doing non-trivial
+demos:  we will define 5 ``killer demos'' (like VanDuc Canny), see further.
+
+-- @Timing:@ design meeting by the end of January (3 to 5 days, 5 to 8 people,
+possibly in Oxford), which results in a clean reptilian brain core system.
+The complete cleanland system must be ready before ECCV and CVPR (June 2000).
+
+
+* \TargetJr{} and the IUE \by Joe Mundy. *
+
+<The current situation:>
+
+DARPA is stopping (after 25 years) its financial support for image processing
+research, so the IUE has no money any more.  AAI will no longer be able to
+continue its IUE support.
+
+<How to proceed:>
+
+either (A) IUE goes its own way (if there is still an active IUE community), \\
+or     (B) we incorporate the IUE bits in our restructured \TargetJr{}
+           (in much the same way as we do with the \TargetJr{} bits). \\
+Good points in the IUE are e.g. its neat @structure@, its transform graph
+network (local coordinate systems, and transforms between neighbours,
+cf. robotics), templated images, its documentation system, and the algorithms
+embedded in the |Tasks-IUE| package.
+
+We will ask the IUE community (|iue-users\@aai.com|) which path (A or B) they
+prefer.  No explicit choice in favour of A will imply B.
+
+* Makefiles \by Richard Hartley. *
+
+<Current situation:>
+in order to build a new application, one has to spend several hours
+finding out what the |IULIBS| variable should look like.
+
+The point is that I don't (want to) know that libraries which I need, are
+themselves using a (possibly changing) set of other libraries.
+
+<Proposal:>
+It is possible to setup the makefiles so that |IULIBS| is automatically
+determined, using a pre-generated global |iu_library_table| and an
+|IU_LibDependencies| file in every library directory.
+
+Your (application) library only has to specify |IMMEDIATE_LIBS|, include
+the auto-generated |LDLIBS.mk| and then set |IULIBS| equal to
+\verb|$(STDLIBS)|.  %$
+|USES| is no longer used to find libraries, only include files.
+Actually, |USES| can be dropped completely.
+
+<Discussion:>
+
+-- There are some concerns, like the danger of over-crosslink libraries,
+of makefiles becoming less readable, and of increased unwanted
+library/package interdependency because the makefile author does not have to
+specify |USES| any more, so has no control over unwanted dependencies.
+
+-- However, the advantages are more important, so we go for it.
+The objections can easily be overcome by appropriate changes to |rules.mk|,
+and by still requiring |USES|, but only issuing a warning when something
+outside of that list is being used.
+
+
+* STL (versus COOL) and portability status *
+
+-- Shall we start replacing |CoolList| etc.?  This is very difficult because of
+the different semantics (be it in maybe only 1\% of the used places).
+
+-- The `cleanland' code will exclusively use STL.
+
+
+* Smart pointers \by Richard Hartley. *
+
+Using smart pointers avoids memory leaks without any extra effort.
+
+However, the current implementation (in Fresco's CORBA) is {\bf bad}:
+not the smart pointer @constructor@ should increment the refcount,
+the @assignment@ to something of type |¨_ref| should do.
+
+In the new implementation (|GeneralUtility/Basics/smart_ptr.h|), 
+every |RefCntTimeStampMixin| can be made into a smart pointer.
+(Actually, every class which has methods |Protect()| and |UnProtect()|.)
+
+Note that it is still up to the user to actually @use@ smart pointers.
+
+Example:
+  {\obeylines\tt
+typedef IUE_smart_ptr\<Image> Image_ref; // this is in Image_ref.h
+Image_ref ptr = new Image(...);
+  }
+
+%%% RICHARD, COULD YOU INSERT YOUR CODE EXAMPLES HERE, PLEASE?
+
+We will include this in the ``reptilian brain'' design.
+
+
+* Video processing in \TargetJr \by Richard Hartley. *
+
+GE has a new Video package, which operates on either AVI files (NT only) or
+on Image sequences.  A demo is shown, where we see the video playing, with
+spatial object overlay (Harris corners). \\
+The package will be released soon, after some necessary cleanup.
+
+@Internals:@ classes |VideoMovie| (= list of clips), |VideoTake| (= header info:
+file + number of frames + list of frames), |VideoClip| (= ptr to |VideoTake|),
+|VideoFrame| (= ptr to codec), |VideoCodec| (sort of ImageInterface + framenr.),
+|VideoAsImage| (derived class from |Image|, also contains current frame nr.).
+
+For the GUI: all overlay planes (one for each frame) are populated in advance,
+before starting the video display.  There is only one image plane, which is
+updated with the different frames during display of the video.
+
+<Discussion:>
+
+-- Patent issue: do we support MPEG?  (We cannot distribute freeware MPEG
+readers/writers with a \TargetJr{} release without paying royalties).
+
+-- Do we need 4-D (time-aware) spatial objects?  Note that a 4D object is more
+than just a list of 3D objects, one for each frame: a continuous time notion
+will e.g. allow to specify object @speed@ (which is necessary for e.g.
+predictive image coding).
+
+
+* The next release *
+
+Should be ready just before ECCV and CVPR, i.e., June 1, 2000.  On ECCV a
+tutorial day is scheduled devoted to TargetJr/IUE (Peter Vanroose).  Joe
+will try to organize a similar event at CVPR.
+
+Should contain 5 ``killer demos'', which should be completely written in
+`cleanland' code.  Suggestions are:
+
+-- VanDuc Canny, Harris corner detection, line fitting.
+
+-- 3D geometry (boolean ops, BSPTree, Cameras, VRML I/O).
+
+-- geometry GUI interaction, in the style of |xfig|.
+E.g.: edit conic parameters, draw bitangent~¨\ 
+Also: plane overlay + update (timestamp); RTree selection speed; extrusion.
+
+-- MultiView: find point correspondences, compute fundamental matrix, display
+epipolar geometry.
+
+-- a 10 to 20 line code example, showing how easy it is to program \TargetJr.
+
+-- other suggestions are welcome (e.g.: Video; splines/snakes; ¨)
+
+
+<Timing:>
+
+  \begin{tabbing}
+February 1: ~ \= design meeting, first version of core `reptilian brain'. \\
+March 1:      \> end of pass 1, including the 5 demos.                    \\
+April 1:      \> end of pass 2, including fully functional demos.         \\
+May 1:        \> documentation (incl. example code) ready.                \\
+June 1:       \> CD release, possibly including NT binaries.
+  \end{tabbing}
+
+* A new name ? *
+
+-- Several suggestions are made, but nothing really appealing came up.
+Acronyms versus full names (of, e.g., historical persons, from literature,
+opera, ¨)
+
+-- New suggestions are welcome.  The final decision is for June 1, 2000.
+
+
+* GUI issues --- the Oxford/Manchester VGUI design *
+
+-- David Cooper sketches GUI history at Manchester: \\
+never liked Fresco; tcl(/tk) looked promising, but does not scale well to
+large GUIs; now prefer Qt (but: need to work out object display).
+
+<Introduction> \by Andrew Fitzgibbon.
+
+-- a GUI is a necessary I/O interface to a package like \TargetJr.
+
+-- but try to be as independent as possible from the graphics package used.
+
+-- @2 design choices:@
+
+- VGUI deals with geometry, not widgets/buttons¨
+~(note: this was one of Parmesan's mistakes.)\\
+$\Rightarrow$ able to use MFC or Qt or GTK or glut or glX or Motif or ¨ \\
+VGUI codes the geometry, the graphical package does the rendering and widgets.
+
+- Assume fast OpenGL is available (with Mesa as a fallback). \\
+(Note: OpenGL has a pure 3D interface: you give it 3D directives: absolute
+coordinates and camera position ($4\times4$ matrix).)
+Assuming that only OpenGL is supported greatly simplifies the design.
+(Should maybe support Direct3D in the future?)
+
+<VGUI design:>
+
+A @tableau@ is a screen rectangle (``canvas/context/subwindow''), which
+receives events and draws GL.  It has methods |draw()| and |handle(event e)|.
+(Actually, |draw()| is an event, not a method.)
+
+An application consists of several tableaux.  Some have already been
+predefined, like an image drawer, an image zoomer, an `acetate' (which just
+draws its children one after another), a point overlay, an image raster ¨
+
+Example of an application: video with point overlay.  Consists of $2+3n$
+tableaux: a top ``image zoom'' tableau, an ``image deck'' with $n$
+``acetate'' children, each having an image drawer and point overlay as
+children.
+
+<Discussion:>
+
+-- some technical issues (``does it do 16-bit images or colormapped images?'')
+will have to be answered in the coming days.
+
+-- how can we provide backward compatibility with Parmesan?  nobody seems to be
+willing to write a Fresco implementation, although this is perfectly possible
+but probably time consuming.
+
+-- There is no general camera support in GL; how to use a non-linear camera,
+like radial distortion?
+\\ Answer: you will need to do the rendering manually, line by line, so
+should write an appropriate tableau (VGUI_nonlinear_camera_tableau for
+example).
+
+<Case study: GTK implementation> \by Karen McGaul.
+
+%%% KAREN, PLEASE FILL IN DETAILS.
+
+<Status:> almost ready for release, which is planned for January 8, 2000. \\
+there are plans for a netscape plugin. \\
+MFC: has to be done.
+
+
+* \TargetJr{} and VTK \by Joris Schouteden. *
+
+-- goal: GUI must be able to do 3D editing/picking, which vtk provides.
+         should be easily extensible $\Rightarrow$ plugin system.
+
+-- New |ImportVtk| package provides a \TargetJr{} to vtk interface.
+vtk is mainly used for visualisation (on top of OpenGL).
+
+-- GUI independent C++ @manipulators@ have been set up for interaction.
+They receive events from GUI, which cause calling one of the functions
+|finish()|, |cancel()| or |temporary()|.
+
+A demo is shown (uses Qt as GUI): \\
+image can be rotated; corner detector $\Rightarrow$ point overlay.
+3D points can be selected.
+
+
+* VTK and \TargetJr{} \by Peter Tu. *
+
+The @Visualisation ToolKit@ is open source, $ > 500 $ C++ classes.
+See |http://www.kitware.com|.
+
+Rendering primitives: point, line, polygon, triangular strip, volume, ¨
+
+Easy to use (e.g.) \TargetJr{} Numerics within a vtk application.
+
+Currently not very strong on 2D, not recommended for 2D work.
+
+
+* Java advanced imaging (JAI) and Java3D \by Joe Mundy. *
+
+These are new Java libraries to support image operations;
+still too slow to be used.
+
+VanDuc has ported \TargetJr's Topology to Jave3D.
+
+
+* GUI: discussion and way forward *
+
+Integrating the different ideas (VGUI, vtk, Qt, Fresco):
+
+-- VGUI is an interesting concept;
+it must be shown that it can interoperate with vtk (maybe modify the VGUI
+design slightly?)
+
+-- One solution : make a vtk VGUI tableau, or make a VGUI vtk renderer \\
+-- Other solution: (partially) separate design, use VGUI for 2D, vtk for 3D. \\
+-- Or: make a vtk actor which delegates to a tableau (which may be better
+   because vtk is more general than vgui; e.g. it does not assume OpenGL).
+
+-- We have to make sure that the new GUI can do the current sophisticated things
+like displaying 16-bit images, colourmapped images, parts of very large images ¨
+
+-- We should not make the same errors as when we went from InterViews to Fresco.
+which are?
+
+-- Inform |iue-users| in January (say) so that they know as soon as is sensible
+that there is going to be an alternative to Fresco/Pamesan $-$ this will also
+enable feedback from them.
+
+* Repository (CVS) issues *
+
+-- Apparently there have been ``bad'' CVS commits in September.
+How to avoid this in the future?
+
+-- Idea: give every active group a time slot (1 week?) during which no other
+commits can happen.  This allows them to prepare the commit and make sure
+everything compiles OK before doing so.
+
+-- Maybe this is only necessary for ``large'' or ``deep'' commits.  The current
+policy at GE (daily (small) commits by several researchers) works perfectly.
+Infrequent CVS updates and commits have the important disadvantage that
+conflicts occur more frequent, in which case (and also in the case of compile
+errors) the person who was responsible for the `bad' commit cannot remember
+why he made that change, which makes it very difficult to find the correct fix.
+
+-- We must make sure that the central (Leuven) repository compiles OK at all
+times.  We will set up a dashboard (accessible through http) where this can
+be verified.  There are about 20 platform/compiler combinations which we
+actively support (Linux/Solaris/IRIX/WinNT; gcc 2.7, 2.91, 2.95, VC 5.0, 6.0,
+CC-n32; complete list in appendix), so we need 20 computers which do a nightly
+build and make their logfile available for inclusion on the dashboard.
+
+
+* Identify @core@ \TargetJr{} -- avoid Balkanization \by Joe Mundy. *
+
+An example: there are 11 different line intersection algorithm implementations
+in \TargetJr, not counting the IUE ones: 5 in |ImplicitLine|, 2 in |CompGeom|,
+3 in |MultiView|, 1 in |Polyhedra|.
+
+-- @Proposal:@  create a @Standard Geometry Library@ (SGL),
+with ultra lightweight classes, both 2D and 3D, both Euclidean and projective.
+
+-- @Issues:@ which representation? which interface for (e.g.) intersection? \\
+which types of objects? (e.g., point, line, triangle? spline? box?)
+infinite lines or line segments? \\
+Tolerances: user-settable or default? used in |operator==()| or not?
+
+-- Discussion: do we really need separating Euclidean and projective?
+A 3D point is an abstract concept, should be able to behave as 3-vector
+(Euclidean) or homogeneous 4-vector (projective).
+
+
+* Documentation *
+
+-- We want to use |perceps| instead of |gendoc|, and possibly re-define the
+structured comments.
+
+-- Zurich proposes to set up a web ``HowTo'' server page, which will be kept
+up-to-date, containing code snippets and the possibility for anybody to add
+examples. 
+
+-- The present example code should be kept up-to-date.  This could be made
+sure automatically, by also running these examples (just like the tests)
+during building, and verifying the output.
+
+-- We need a better mailing list setup, so that users should not hesitate
+to submit questions.
+
+-- Stefan Scholze is willing to write a FAQ list (without answers ;-)
+
+
+* ToDo list after this meeting * %%% PLEASE MAKE ADDITIONS !!
+
+Contact |iue-users\@aai.com| to find out if they want to continue with IUE 
+on their own (Joe)
+
+Organize VXL meeting in late Jan/early February (AWF)
+
+Set up a HowTo server (Stefan)
+
+Set up a CVS-repo compile status dashboard (Peter V)
+
+Prepare for the big changes.  (Some ideas in appendix.)
+
+Work out how to integrate different GUI ideas (Joris, AWF)
+
+Release VGUI on January 8, 2000 (AWF)
+
+\newpage
+
+
+APPENDIX 1 --- Supported platforms, and who's responsible for nightly build:
+
+  \begin{tabbing}
+
+Linux 2.x ~~~\=	gcc 2.7.2 ~~~~~~ \=		\\
+Linux 2.x \>	EGCS 1.1.x	 \>		\\
+Linux 2.x \>	gcc 2.95.2	 \>	Oxford	\\
+Solaris 2.5 \>	gcc 2.7.2	 \>		\\
+Solaris 2.5 \>	EGCS 1.1.x	 \>		\\
+Solaris 2.5 \>	gcc 2.95.2	 \>		\\
+Solaris 2.5 \>	SunPro 4.2	 \>		\\
+Solaris 2.6 \>	SunPro 5	 \>	Oxford	\\
+Solaris 2.6 \>	gcc 2.7.2	 \>		\\
+Solaris 2.6 \>	EGCS 1.1.x	 \>		\\
+Solaris 2.6 \>	gcc 2.95.2	 \>	Leuven	\\
+Solaris 2.6 \>	SunPro 4.2	 \>	GE	\\
+IRIX 6.5 \>	gcc 2.95.2	 \>		\\
+IRIX 6.5 \>	CC-n32  	 \>	Leuven	\\
+IRIX64 6.5 \>	gcc 2.95.2	 \>	Zurich	\\
+Alpha 4 \>	gcc 2.95.2	 \>		\\
+HP-UX \>	gcc 2.95.2	 \>	Leuven	\\
+WinNT \>	VC++ 5.0	 \>		\\
+WinNT \>	VC++ 6.0	 \>	GE	\\
+
+  \end{tabbing}
+
+APPENDIX 2 --- Prepare for the big changes
+
+The following initial steps can already be taken. \\
+Report on this will help making the correct decisions in February:
+
+-- CoolListP $\rightarrow$ CoolList etc. \\
+-- |reset()|, |next()|, |value()| $\rightarrow$ |CoolList_iterator|, in
+those `perlable' situations where a |for| loop only uses |value()|, not (e.g.)
+|remove()| or |find()|. \\
+-- CoolList $\rightarrow$ STL list, etc., with provisional automatic conversion
+to allow gradual substitution.
+
+\vskip1cm
+
+APPENDIX 3 --- Coding conventions
+
+\def\vxl{|v$x$l}
+A subset of rules:
+\begin{itemize}
+\item All identifiers are lowercase with underscores separating words.
+
+{\em Rationale:}
+This choice is preferred as MixedCase identifiers are poisoned by Visual
+C++ headers.
+
+
+\item All class names (and file names) start with the
+|vcl_| |vbl_| |vnl_| etc.~prefixes.
+
+{\em Rationale:} Avoid conflict with other libraries.  If conflicts do
+occur, adherence to the prefix rules means that names are more likely to be
+easily changed automatically.
+
+{\em Rejected alternatives:} (1) Use of the C++ namespace feature.  We do
+not wish to depend on nearly-ready C++ functionality, as we have in the
+past (e.g.\ usage of STL in the early days of the IUE).  (2) Use of
+\verb|#define| to simulate namespaces.  Experience with InterViews and
+Fresco shows that that way lies madness.
+
+
+\item The file \vxl_$y$.h| defines one or more globally visible identifiers
+(class names, functions, cpp macros).
+All globally visible identifiers defined in |vxl_y.h| begin with |vxl_y|.
+
+{\em Rationale:} Make it easy to locate the definitions of
+identifiers. e.g.\ on seeing the symbol |vbl_rtree_iterator|, one must look 
+in library |vbl|, file |vbl_rtr|$\langle${\sc tab}$\rangle$
+
+{\em Rejected alternatives:}
+Stricter rules are possible, for example the file |vxl_y.h| defines only the
+identifier |vxl_y|.  These will not be obeyed, so it is better to propose
+rules that can be.
+
+
+\item Each library contains the file \vxl_dll.h|.  
+
+{\em Rationale:} standard practice, this formalizes the naming.
+
+
+\item Each library contains the file \vxl_fwd.h|, which forward-declares
+all global identifiers in the library.  
+
+{\em Rationale:} Naming is by analogy with the ISO C++ \verb|<iosfwd>|
+header.  One file per library means a larger recompilation burden whenever
+a new class is added, but in normal use, new classes are added rarely.
+
+{\em Rejected alternatives:} One file per \vxl| header, so that \vxl_$y$.h|
+has a corresponding \vxl_$y$_fwd.h|.  This was considered too great a
+burden on the user, so that they would be tempted to simply write |class
+vbl_generic_image;| rather than \verb|#include <vbl/vbl_generic_image_fwd.h>|.
+
+
+\end{itemize}
+
+
+\end{document}
