@@ -20,6 +20,7 @@ SOURCES += vil_memory_image.cxx
 # file format readers/writers
 SOURCES += file_formats/vil_pnm.cxx
 SOURCES += file_formats/vil_ras.cxx
+SOURCES += file_formats/vil_iris.cxx
 SOURCES += file_formats/vil_viff.cxx
 SOURCES += file_formats/vil_viff_support.c
 MANPAGE_SOURCES += file_formats/vil_viffheader.h
