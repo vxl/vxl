@@ -26,6 +26,7 @@ MANPAGE_SOURCES += vil2_greyscale_opening.h
 MANPAGE_SOURCES += vil2_median.txx
 MANPAGE_SOURCES += vil2_normalised_correlation_2d.h
 MANPAGE_SOURCES += vil2_exp_grad_filter_1d.h
+MANPAGE_SOURCES += vil2_line_filter.txx
 
 ################################
 include ${IUEROOT}/config/top.mk
