@@ -1,3 +1,4 @@
+// This is oxl/osl/internals/droid.cxx
 #include "droid.h"
 
 #include <vcl_cmath.h>   // pow()
@@ -38,7 +39,6 @@ void droid::compute_gradx_grady (osl_roi_window      *window_str,
     }
   }
 }
-
 
 
 //-----------------------------------------------------------------------------
@@ -90,7 +90,6 @@ void droid::compute_fxx_fxy_fyy (osl_roi_window      *window_str,
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
 // Computes the cornerness for each pixel.
@@ -132,7 +131,6 @@ float droid::compute_cornerness (osl_roi_window      *window_str,
 
   return corner_max;
 }
-
 
 
 //-----------------------------------------------------------------------------
@@ -243,6 +241,7 @@ int droid::find_corner_maxima (float corner_min,
   return maxima_count;
 }
 
+
 //-----------------------------------------------------------------------------
 //
 // Change value of "corner_min" to get a more acceptable no of corners.
@@ -254,7 +253,6 @@ float droid::compute_corner_min (float /*corner_min*/,
                                  vil_memory_image_of<float> *pixel_cornerness,
                                  vil_memory_image_of<bool>  *image_corner_max_ptr)
 {
-
 #define DR_BIN_COUNT 200
 
   float
@@ -267,12 +265,12 @@ float droid::compute_corner_min (float /*corner_min*/,
     corner_count;
 
   vcl_memset (bin_array, 0, sizeof (bin_array));
-  corner_max_4throot = vcl_pow ((double) corner_max, 0.25);
+  corner_max_4throot = (float)vcl_pow ((double) corner_max, 0.25);
 
   for (int row = window_str->row_start_index; row < window_str->row_end_index; row++) {
     for (int col = window_str->col_start_index; col < window_str->col_end_index; col++) {
       if ((*image_corner_max_ptr) [row][col]) {
-        corner_4throot = vcl_pow ((double) (*pixel_cornerness) [row][col], 0.25);
+        corner_4throot = (float)vcl_pow ((double) (*pixel_cornerness) [row][col], 0.25);
         bin_index = (int) ((DR_BIN_COUNT-1) * corner_4throot / corner_max_4throot);
         bin_array [bin_index]++;
       }
@@ -291,7 +289,7 @@ float droid::compute_corner_min (float /*corner_min*/,
 
   bin_index += 2;
 
-  return vcl_pow ((double) bin_index / (double) (DR_BIN_COUNT-1) * corner_max_4throot, 4.0);
+  return (float)vcl_pow ((double) bin_index / (double) (DR_BIN_COUNT-1) * corner_max_4throot, 4.0);
 
 #undef DR_BIN_COUNT
 }
@@ -327,27 +325,27 @@ bool droid::compute_subpixel_max (vil_memory_image_of<float> *pixel_cornerness,
     // 1/8 * [ -1  0 +1 ]
     //       [ -2  0 +2 ]
     //       [ -1  0 +1 ]
-    b=0.125*(-DR_P11 -2*DR_P21 -  DR_P31 +  DR_P13 +2*DR_P23 +  DR_P33);
+    b=0.125f*(-DR_P11 -2*DR_P21 -  DR_P31 +  DR_P13 +2*DR_P23 +  DR_P33);
 
     // 1/8 * [ -1 -2 -1 ]
     //       [  0  0  0 ]
     //       [ +1 +2 +1 ]
-    c=0.125*(-DR_P11 +  DR_P31 -2*DR_P12 +2*DR_P32 -  DR_P13 +  DR_P33);
+    c=0.125f*(-DR_P11 +  DR_P31 -2*DR_P12 +2*DR_P32 -  DR_P13 +  DR_P33);
 
     // 1/4 * [ +1 -2 +1 ]
     //       [ +2 -4 +2 ]
     //       [ +1 -2 +1 ]
-    d=0.25*(  DR_P11 +2*DR_P21 +  DR_P31 -2*DR_P12 -4*DR_P22 -2*DR_P32 +DR_P13 +2*DR_P23+DR_P33);
+    d=0.25f*(  DR_P11 +2*DR_P21 +  DR_P31 -2*DR_P12 -4*DR_P22 -2*DR_P32 +DR_P13 +2*DR_P23+DR_P33);
 
     // 1/4 * [ +1  0 -1 ]
     //       [  0  0  0 ]
     //       [ -1  0 +1 ]
-    e=0.25*(  DR_P11 -  DR_P31 -  DR_P13 +  DR_P33);
+    e=0.25f*(  DR_P11 -  DR_P31 -  DR_P13 +  DR_P33);
 
     // 1/4 * [ +1 +2 +1 ]
     //       [ -2 -4 -2 ]
     //       [ +1 +2 +1 ]
-    f=0.25*(  DR_P11 -2*DR_P21 +  DR_P31 +2*DR_P12 -4*DR_P22 +2*DR_P32 +DR_P13 -2*DR_P23+DR_P33);
+    f=0.25f*(  DR_P11 -2*DR_P21 +  DR_P31 +2*DR_P12 -4*DR_P22 +2*DR_P32 +DR_P13 -2*DR_P23+DR_P33);
   }
   else { // new fsm masks
     // 1/9 * [ -1 +2 -1 ]
@@ -358,28 +356,27 @@ bool droid::compute_subpixel_max (vil_memory_image_of<float> *pixel_cornerness,
     // 1/6 * [ -1  0 +1 ]
     //       [ -1  0 +1 ]
     //       [ -1  0 +1 ]
-    b=(-DR_P11 +  DR_P13 -  DR_P21 +  DR_P23 -  DR_P31 +  DR_P33)/6.0;
+    b=(-DR_P11 +  DR_P13 -  DR_P21 +  DR_P23 -  DR_P31 +  DR_P33)/6.0f;
 
     // 1/6 * [ -1 -1 -1 ]
     //       [  0  0  0 ]
     //       [ +1 +1 +1 ]
-    c=(-DR_P11 -  DR_P12 -  DR_P13 +  DR_P31 +  DR_P32 +  DR_P33)/6.0;
+    c=(-DR_P11 -  DR_P12 -  DR_P13 +  DR_P31 +  DR_P32 +  DR_P33)/6.0f;
 
     // 1/3 * [ +1 -2 +1 ]
     //       [ +1 -2 +1 ]
     //       [ +1 -2 +1 ]
-    d=(  DR_P11 -2*DR_P12 +  DR_P13 +  DR_P21 -2*DR_P22 +  DR_P23 +DR_P31 -2*DR_P32+DR_P33)/3.0;
+    d=(  DR_P11 -2*DR_P12 +  DR_P13 +  DR_P21 -2*DR_P22 +  DR_P23 +DR_P31 -2*DR_P32+DR_P33)/3.0f;
 
     // 1/4 * [ +1  0 -1 ]
     //       [  0  0  0 ]
     //       [ -1  0 +1 ]
-    e=(  DR_P11 -  DR_P31 -  DR_P13 +  DR_P33)/4.0;
+    e=(  DR_P11 -  DR_P31 -  DR_P13 +  DR_P33)/4.0f;
 
     // 1/3 * [ +1 +1 +1 ]
     //       [ -2 -2 -2 ]
     //       [ +1 +1 +1 ]
-    f=(  DR_P11 +  DR_P12 +  DR_P13 -2*DR_P21 -2*DR_P22 -2*DR_P23 +DR_P31 +  DR_P32+DR_P33)/3.0;
-
+    f=(  DR_P11 +  DR_P12 +  DR_P13 -2*DR_P21 -2*DR_P22 -2*DR_P23 +DR_P31 +  DR_P32+DR_P33)/3.0f;
   }
 
   //

@@ -38,7 +38,7 @@ int main(int argc,char **argv)
   // parameters
   osl_harris_params params;
   params.corner_count_max = corner_count_max();
-  params.gauss_sigma = sigma();
+  params.gauss_sigma = (float)sigma();
   params.verbose = true;
   params.adaptive_window_size = adaptive_window_size();
   params.adaptive = (adaptive_window_size() != 0);

@@ -1,3 +1,7 @@
+//:
+// \file
+// \brief     utilities for 3D vectors
+//
 //<copyright>
 //
 // Copyright (c) 1993,94,95,96
@@ -22,20 +26,11 @@
 // Boston, MA 02111-1307, USA.
 //
 //</copyright>
-
-//<file>
 //
-// Name:        vecutil.cxx
-//
-// Purpose:     utilities for 3D vectors
-//
+// \author
 // Created:     15 Mar 93   Michael Pichler
-//
 // Changed:     30 Jan 96   Michael Pichler
 //
-//
-//</file>
-
 
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
@@ -270,8 +265,8 @@ void invertmatrix (matrix4D a)
     for (i = k; i < n; i++)
     { s = 0.0;
       for (j = k; j < n; j++)
-        s += vcl_fabs (a [i][j]);
-      q = vcl_fabs (a [i][k]) / s;
+        s += (float)vcl_fabs (a [i][j]);
+      q = (float)vcl_fabs (a [i][k]) / s;
       if (q > max)
       { max = q;
         p [k] = i;
@@ -317,8 +312,8 @@ void invertmatrix (matrix4D a)
 void cartes2sphere (const point3D& p, spherepoint& s)
 {
   s.r = vcl_sqrt (dot3D (p, p));  // length
-  s.phi = vcl_atan2 (p.y, p.x);  // angle from x to y axis
-  s.theta = (s.r > 0.0) ? vcl_acos (p.z / s.r) : 0.0;  // angle from z axis to x-y-plane
+  s.phi = (float)vcl_atan2 (p.y, p.x);  // angle from x to y axis
+  s.theta = (s.r > 0.0) ? (float)vcl_acos (p.z / s.r) : 0.0f;  // angle from z axis to x-y-plane
 }
 
 
@@ -328,46 +323,49 @@ void cartes2sphere (const point3D& p, spherepoint& s)
 
 void sphere2cartes (const spherepoint& s, point3D& p)
 {
-  double sinth = vcl_sin (s.theta);
-  p.x = s.r * vcl_cos (s.phi) * sinth;
-  p.y = s.r * vcl_sin (s.phi) * sinth;
-  p.z = s.r * vcl_cos (s.theta);
+  float sinth = (float)vcl_sin (s.theta);
+  p.x = s.r * (float)vcl_cos (s.phi) * sinth;
+  p.y = s.r * (float)vcl_sin (s.phi) * sinth;
+  p.z = s.r * (float)vcl_cos (s.theta);
 }
 
 
+#if 0 // rotatearoundaxis() is not used
+
+#include "Qv_pi.h" // for QV_ONE_OVER_PI
+
 // convert radians to degrees
-#define DEGREES(R)  ( (R) * (180 / QV_PI) )
+#define DEGREES(R)  ( (R) * 180 * QV_ONE_OVER_PI )
 
-
-// rotatearoundaxis
+//:
 // preconcatenate the current transformation matrix (of ge3d) with one that does a
 // rotation about an arbitrary axis u through origin about an angle omega -
 // in radians; positive direction = CCW when looking along u towards origin
 
-// void rotatearoundaxis (const vector3D& u, float omega)
-// {
-//   spherepoint s;
-//   cartes2sphere (u, s);
+void rotatearoundaxis (const vector3D& u, float omega)
+{
+  spherepoint s;
+  cartes2sphere (u, s);
 
-// // TEST !!!
-// static int firstcall = 1;
+  // TEST !!!
+  static int firstcall = 1;
 
-//   // sorry, ge3d (as gl) expects angles in degrees
-//   // note: the matrices are PREconcatenated, therefore to be read from bottom up!
-// if (firstcall)  vcl_cerr << "rotz" << vcl_endl;
-//   ge3d_rotate_axis ('z', DEGREES (s.phi));
-// if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "roty" << vcl_endl;
-//   ge3d_rotate_axis ('y', DEGREES (s.theta));
-// if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "rotz" << vcl_endl;
-//   ge3d_rotate_axis ('z', DEGREES (omega));  // u lies in positive z axis
-// if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "roty" << vcl_endl;
-//   ge3d_rotate_axis ('y', DEGREES (-s.theta));
-// if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "rotz" << vcl_endl;
-//   ge3d_rotate_axis ('z', DEGREES (-s.phi));
-// if (firstcall)  ge3d_print_cur_matrix ();
-// firstcall = 0;
-// }
-
+  // sorry, ge3d (as gl) expects angles in degrees
+  // note: the matrices are PREconcatenated, therefore to be read from bottom up!
+  if (firstcall)  vcl_cerr << "rotz" << vcl_endl;
+    ge3d_rotate_axis ('z', DEGREES (s.phi));
+  if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "roty" << vcl_endl;
+    ge3d_rotate_axis ('y', DEGREES (s.theta));
+  if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "rotz" << vcl_endl;
+    ge3d_rotate_axis ('z', DEGREES (omega));  // u lies in positive z axis
+  if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "roty" << vcl_endl;
+    ge3d_rotate_axis ('y', DEGREES (-s.theta));
+  if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "rotz" << vcl_endl;
+    ge3d_rotate_axis ('z', DEGREES (-s.phi));
+  if (firstcall)  ge3d_print_cur_matrix ();
+  firstcall = 0;
+}
+#endif
 
 // quaternion utilities
 
@@ -375,11 +373,11 @@ void sphere2cartes (const spherepoint& s, point3D& p)
 
 void rotation2quaternion (const vector3D& axis, float angle, vector3D& v, float& s)
 {
-  angle /= 2.0;
-  s = vcl_sin (angle);
+  angle /= 2;
+  s = (float)vcl_sin (angle);
   v = axis;
   scl3D (v, s);         // v = vcl_sin (phi/2) * axis
-  s = vcl_cos (angle);  // s = vcl_cos (phi/2)
+  s = (float)vcl_cos (angle);  // s = vcl_cos (phi/2)
 }
 
 
@@ -387,10 +385,10 @@ void rotation2quaternion (const vector3D& axis, float angle, vector3D& v, float&
 
 void quaternion2rotation (const vector3D& v, float s, vector3D& axis, float& angle)
 {
-  angle = vcl_acos (s);  // half angle
-  s = vcl_sin (angle);
+  angle = (float)vcl_acos (s);  // half angle
+  s = (float)vcl_sin (angle);
   if (s)
-  { s = 1.0 / s;
+  { s = 1.0f / s;
     axis = v;
     scl3D (axis, s);  // axis = v / vcl_sin (vcl_acos (s))
   }

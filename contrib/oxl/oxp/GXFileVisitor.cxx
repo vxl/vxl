@@ -7,7 +7,6 @@
 
 #include "GXFileVisitor.h"
 
-#include <vcl_cctype.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cstring.h>
 #include <vcl_fstream.h>
@@ -71,17 +70,17 @@ bool GXFileVisitor::visit(vcl_istream& s)
     StringToFloat instruction_value(instruction.c_str());
     if (instruction == "r")
     {        // Set point radius
-      this->point_radius = vcl_atof(awk[1]);
+      this->point_radius = (float)vcl_atof(awk[1]);
       this->set_point_radius(this->point_radius);
     }
     else if (instruction == "p" || (instruction_value.ok() && NF == 2))
     { // "p" x y, or just x y
       int base = (instruction == "p") ? 1 : 0;
-      this->point("p", vcl_atof(awk[base+0]), vcl_atof(awk[base+1]));
+      this->point("p", (float)vcl_atof(awk[base+0]), (float)vcl_atof(awk[base+1]));
     }
     else if (instruction == "+")
     { // + sign
-      this->point("+", vcl_atof(awk[1]), vcl_atof(awk[2]));
+      this->point("+", (float)vcl_atof(awk[1]), (float)vcl_atof(awk[2]));
     }
     else if (instruction == "l" || (instruction_value.ok() && NF == 4))
     { // Polyline
@@ -108,8 +107,8 @@ bool GXFileVisitor::visit(vcl_istream& s)
       float x[1024];
       float y[1024];
       for (int i = 0; i < npoints; ++i) {
-        x[i] = vcl_atof(awk[i*2 + 0 + base]);
-        y[i] = vcl_atof(awk[i*2 + 1 + base]);
+        x[i] = (float)vcl_atof(awk[i*2 + 0 + base]);
+        y[i] = (float)vcl_atof(awk[i*2 + 1 + base]);
       }
       this->polyline(x, y, npoints);
 
@@ -127,9 +126,9 @@ bool GXFileVisitor::visit(vcl_istream& s)
       bool ok = false;
       if (awk.NF() == 4) {
         // Assume 0-1 rgb spec
-        color[0] = vcl_atof(awk[1]);
-        color[1] = vcl_atof(awk[2]);
-        color[2] = vcl_atof(awk[3]);
+        color[0] = (float)vcl_atof(awk[1]);
+        color[1] = (float)vcl_atof(awk[2]);
+        color[2] = (float)vcl_atof(awk[3]);
         ok = true;
       } else {
         static struct { char const* s; float c[3]; } colors [] = {

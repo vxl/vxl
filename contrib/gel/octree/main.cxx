@@ -1,3 +1,5 @@
+// This is gel/octree/main.cxx
+
 //:
 // \file
 // \author Geoffrey Cross, Oxford RRG
@@ -166,12 +168,12 @@ cubetest_t DoScan( VoxmapImagePoints const& voxmap, Voxel &voxel, int imageindex
 
   vcl_vector<vgl_point_2d<float> > points;
   //  vgl_polygon_scan_iterator::Point2 points[cv.get_npoints()];
-  vgl_box_2d<float> box( 0, imagestore[imageindex]->width()-1, 0, imagestore[imageindex]->height()-1);
+  vgl_box_2d<float> box( 0.f, imagestore[imageindex]->width()-1.f, 0.f, imagestore[imageindex]->height()-1.f);
 
   for (int i=0; i< cv.get_npoints(); i++)
     {
-      vgl_point_2d<float> f( cv.get_pointx( i),
-                             cv.get_pointy( i));
+      vgl_point_2d<float> f( (float)cv.get_pointx( i),
+                             (float)cv.get_pointy( i));
 
       points.push_back( f);
     }
