@@ -12,9 +12,18 @@ VERSION := 1.0
 
 MANPAGE_SOURCES += accessors/vipl_accessors_vnl_matrix.txx
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+# No need to compile the files in Templates when implicitly instantiating:
+ifeq ($(USE_IMPLICIT_TEMPLATES),1)
+  TEMPLATE_SOURCES :=
+endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
 
 # compile with -O2 for efficiency:
 debug = $(optimize)

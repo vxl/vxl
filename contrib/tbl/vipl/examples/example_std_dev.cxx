@@ -16,6 +16,7 @@
 //
 #include <vil/vil_pixel.h>
 #include <vil/vil_memory_image_of.h>
+#include <vipl/accessors/vipl_accessors_vil_image.h>
 #include <vipl/vipl_moment.h>
 #include <vipl/vipl_monadic.h>
 #include <vipl/vipl_dyadic.h>

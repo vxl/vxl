@@ -2,6 +2,7 @@
 #define vipl_accessors_vbl_array_2d_txx_
 
 #include "vipl_accessors_vbl_array_2d.h"
+#include "../vipl_filterable_section_container_generator_vbl_array_2d.txx"
 
 template <class DataType>
 DataType fgetpixel(vbl_array_2d<DataType> const& i, int x, int y, DataType /* dummy */) {

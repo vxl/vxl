@@ -1,11 +1,14 @@
-// .SECTION Description
+//:
+// \file
 //   This class provides a non-templated abstract class for all filters.  It
 //   has no data and little functionality, providing only axis naming and
 //   composition methods.
-// .SECTION Author
+// \author
 //   Terry Boult, Lehigh University 1997, 1998.
-// .SECTION Modifications
+// \verbatim
+// Modifications
 //   Peter Vanroose - Aug.2000 - converted to vxl
+// \endverbatim
 
 #ifndef vipl_filter_abs_h_
 #define vipl_filter_abs_h_

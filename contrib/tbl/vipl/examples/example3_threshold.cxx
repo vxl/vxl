@@ -18,6 +18,7 @@
 #include <vil/vil_pixel.h>
 #include <vil/vil_memory_image_of.h>
 
+#include <vipl/vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.h>
 #include <vipl/vipl_threshold.h>
 
 typedef unsigned char ubyte;

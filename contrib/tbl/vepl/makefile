@@ -43,6 +43,11 @@ SOURCES += vepl_histogram.cxx
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+# No need to compile the files in Templates when implicitly instantiating:
+ifeq ($(USE_IMPLICIT_TEMPLATES),1)
+  TEMPLATE_SOURCES :=
+endif
+
 ifndef NOTEST
 SUBDIRS += examples
 SUBDIRS += tests

@@ -17,6 +17,7 @@
 //   Peter Vanroose, Aug.2000 - adapted to vxl
 //
 #include <../Image/ImageProcessingBasics/section.h>
+#include <vipl/vipl_with_section/accessors/vipl_accessors_section.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_pixel.h>
 #include <vil/vil_memory_image_of.h>
@@ -32,13 +33,16 @@ typedef section<rgbcell,2> img_type;
 #include <vil/vil_save.h>
 #include <vcl_iostream.h>
 
+// Necessary for vipl_dilate_disk, and not provided by the vil_rgb class itself:
+bool operator< (rgbcell const& a, rgbcell const& b) { return a.r < b.r && a.g < b.g && a.b < b.b; }
+
 int
 main(int argc, char** argv) {
   if (argc < 3) { vcl_cerr << "Syntax: example_dilate_disk file_in file_out [radius]\n"; return 1; }
 
   // The input image:
   vil_image in = vil_load(argv[1]);
-  if (!vil_pixel_format(in) == VIL_RGB_BYTE) { vcl_cerr << "Please use a colour image as input\n"; return 2; }
+  if (! (vil_pixel_format(in) == VIL_RGB_BYTE) ) { vcl_cerr << "Please use a colour image as input\n"; return 2; }
 
   // The output image:
   vil_memory_image_of<rgbcell> out(in);
@@ -57,7 +61,7 @@ main(int argc, char** argv) {
   in.get_section(src.buffer,0,0,xs,ys);
 
   // The filter:
-  vipl_dilate_disk<img_type,img_type,rgbcell,rgbcell VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op(radius);
+  vipl_dilate_disk<img_type,img_type,rgbcell,rgbcell, vipl_trivial_pixeliter> op(radius);
   op.put_in_data_ptr(&src);
   op.put_out_data_ptr(&dst);
   op.filter();

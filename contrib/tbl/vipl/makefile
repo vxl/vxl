@@ -14,24 +14,13 @@
 # The examples subdirectory contains example programs showing how to use the
 # filter classes with any 2D storage class of your choice.
 #
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-ifneq (,$(wildcard $(IUEROOT)/Image/ImageProcessingBasics/section.h))
-SUBDIRS += vipl_with_section
-endif
-SUBDIRS += vipl_with_vnl_matrix
-SUBDIRS += vipl_with_vbl_array_2d
-ifndef NOTEST
-SUBDIRS += examples
-SUBDIRS += tests
-endif
 
 USES += vxl tbl
 
 LIBRARY := vipl
 VERSION := 1.0
+
+SOURCES += filter/vipl_filter_abs.cxx
 
 # A. Point operators:
 MANPAGE_SOURCES += vipl_convert.txx
@@ -66,6 +55,25 @@ MANPAGE_SOURCES += section/vipl_section_descriptor_2d.txx
 MANPAGE_SOURCES += section/vipl_section_iterator.txx
 
 MANPAGE_SOURCES += accessors/vipl_accessors_vil_image.txx
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+# No need to compile the files in Templates when implicitly instantiating:
+ifeq ($(USE_IMPLICIT_TEMPLATES),1)
+  TEMPLATE_SOURCES :=
+endif
+
+ifneq (,$(wildcard $(IUEROOT)/Image/ImageProcessingBasics/section.h))
+SUBDIRS += vipl_with_section
+endif
+SUBDIRS += vipl_with_vnl_matrix
+SUBDIRS += vipl_with_vbl_array_2d
+ifndef NOTEST
+SUBDIRS += examples
+SUBDIRS += tests
+endif
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk

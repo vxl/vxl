@@ -16,6 +16,7 @@
 #include <vil/vil_pixel.h>
 #include <vil/vil_memory_image_of.h>
 
+#include <vipl/vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.h>
 #include <vipl/vipl_sobel.h>
 
 typedef unsigned char ubyte;

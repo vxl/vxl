@@ -20,6 +20,7 @@
 //   Peter Vanroose, Aug.2000 - adapted to vxl
 //
 #include <../Image/ImageProcessingBasics/section.h>
+#include <vipl/vipl_with_section/accessors/vipl_accessors_section.h>
 #include <vil/vil_pixel.h>
 #include <vipl/vipl_histogram.h>
 

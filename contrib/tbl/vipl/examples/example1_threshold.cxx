@@ -19,6 +19,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
+#include <vipl/accessors/vipl_accessors_vil_image.h>
 #include <vipl/vipl_threshold.h>
 #include <vcl_iostream.h>
 typedef unsigned char ubyte;

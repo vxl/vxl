@@ -14,6 +14,7 @@
 //
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_pixel.h>
+#include <vipl/accessors/vipl_accessors_vil_image.h>
 #include <vipl/vipl_threshold.h>
 
 typedef unsigned char ubyte;

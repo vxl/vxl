@@ -2,6 +2,7 @@
 #define vipl_accessors_section_txx_
 
 #include "vipl_accessors_section.h"
+#include "../vipl_filterable_section_container_generator_section.txx"
 
 template <class DataType>
 DataType fgetpixel(section<DataType,2> const& i, int x, int y, DataType /* dummy */) {
