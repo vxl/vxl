@@ -1,3 +1,5 @@
+//:
+// \file
 #include <vcl_iostream.h>
 #include <vil1/vil1_save.h>
 #include <vsol/vsol_point_2d.h>
@@ -38,16 +40,19 @@ void brct_dense_reconstructor::set_correlation_window_radius(const int radius)
   vsrl_parameters::instance()->correlation_window_width = w;
   vsrl_parameters::instance()->correlation_window_height = w;
 }
+
 //: set inner null cost
 void brct_dense_reconstructor::set_inner_cost(const double inner_cost)
 {
   vsrl_parameters::instance()->inner_cost = inner_cost;
 }
+
 //: set outer null cost
 void brct_dense_reconstructor::set_outer_cost(const double outer_cost)
 {
   vsrl_parameters::instance()->outer_cost = outer_cost;
 }
+
   //: set continuity cost
 void brct_dense_reconstructor::set_continuity_cost(const double continuity_cost)
 {
@@ -197,11 +202,12 @@ void brct_dense_reconstructor::write_disparity_image(char *filename)
 
 void brct_dense_reconstructor::print_correlation_cost(const int x, const int y)
 {
-  vcl_cout << "Correlation costs for pixel " << x << " " << y << vcl_endl;
+  vcl_cout << "Correlation costs for pixel " << x << ' ' << y << vcl_endl;
 
   for (int disp = 0-correlation_range_;disp < correlation_range_;disp++)
     vcl_cout << disp << " -> " << image_correlation_.get_correlation(x,y,disp) << vcl_endl;
 }
+
 //: get vsol points corresponding to a line from image 0
 vcl_vector<vsol_point_2d_sptr> brct_dense_reconstructor::points0(const int i,
                                                                  const int del)
@@ -209,9 +215,9 @@ vcl_vector<vsol_point_2d_sptr> brct_dense_reconstructor::points0(const int i,
   vcl_vector<vsol_point_2d_sptr> points;
   int w = image_correlation_.get_image1_width();
   int h = image_correlation_.get_image1_height();
-  if(i<0||i>=h)
+  if (i<0||i>=h)
     return points;
-  for(int x = 0; x<w; x+=del)
+  for (int x = 0; x<w; x+=del)
     points.push_back(new vsol_point_2d(x, i));
   return points;
 }
@@ -223,17 +229,18 @@ vcl_vector<vsol_point_2d_sptr> brct_dense_reconstructor::points1(const int i,
   vcl_vector<vsol_point_2d_sptr> points;
   int w = image_correlation_.get_image1_width();
   int h = image_correlation_.get_image1_height();
-  if(i<0||i>=h)
+  if (i<0||i>=h)
     return points;
-  for(int x = 0; x<w; x+=del)
-    {
-      int xa = this->get_assignment(x, i);
-      vcl_cout << "(" << x << " " << xa << ")\n";
-      points.push_back(new vsol_point_2d(xa, i));
-    }
+  for (int x = 0; x<w; x+=del)
+  {
+    int xa = this->get_assignment(x, i);
+    vcl_cout << '(' << x << ' ' << xa << ")\n";
+    points.push_back(new vsol_point_2d(xa, i));
+  }
   vcl_cout << vcl_flush;
   return points;
 }
+
 void  brct_dense_reconstructor::get_correlation(const int x0, const int y0,
                                                 vcl_vector<int>& xpos,
                                                 vcl_vector<double>& corr)
@@ -242,10 +249,10 @@ void  brct_dense_reconstructor::get_correlation(const int x0, const int y0,
   corr.clear();
   int range = image_correlation_.get_correlation_range();
   int w = image_correlation_.get_image2_width();
-  for(int x=x0-range; x<=x0+range; ++x)
-    if(x>=0&&x<w)
-      {
-        xpos.push_back(x);
-        corr.push_back(image_correlation_.get_correlation(x0, y0, x, y0));
-      }
+  for (int x=x0-range; x<=x0+range; ++x)
+    if (x>=0&&x<w)
+    {
+      xpos.push_back(x);
+      corr.push_back(image_correlation_.get_correlation(x0, y0, x, y0));
+    }
 }
