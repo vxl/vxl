@@ -70,6 +70,21 @@ int mvl2_video_from_avi::next_frame()
   return ++current_frame_;
 }
 
+int mvl2_video_from_avi::seek(int frame_number)
+{
+  if (!is_initialized_ || frame_number<0)
+    return -1;
+  reset_frame();
+  bool b;
+  do {
+    vil2_image_view<vxl_byte> im;
+    b = get_frame(im);
+    if (b) ++current_frame_;
+  } while (b && frame_number--);
+
+  return current_frame_;
+}
+
 bool mvl2_video_from_avi::get_frame(vil2_image_view<vxl_byte>& image)
 {
   //nb doesn't allow you to load in colour videos as grey scale
@@ -94,7 +109,7 @@ bool mvl2_video_from_avi::get_frame(vil2_image_view<vxl_byte>& image)
     colour_vid=false;
   else
     colour_vid=true;
-  
+
   int ystep=(nx*(bpp/8) + 3)& -4;
   int xstep=bpp/8;
 
@@ -105,23 +120,23 @@ bool mvl2_video_from_avi::get_frame(vil2_image_view<vxl_byte>& image)
     temp_img.set_to_memory(data+2,nx,ny,bplanes,xstep,ystep,-1);
   else
     temp_img.set_to_memory(data,nx,ny,bplanes,xstep,ystep,0);
-  
-  
+
+
   vil2_image_view<vxl_byte> image_tmp_;
   image_tmp_=vil2_flip_ud(temp_img);
-  
+
   if ( colour_vid == use_colour_ )
   {
     image.deep_copy(image_tmp_);
   }
   else if ( colour_vid && !use_colour_ )
   {
-    vil2_convert_planes_to_grey( image_tmp_, image ); 
+    vil2_convert_planes_to_grey( image_tmp_, image );
   }
   else
   {
-    vcl_cout<<"ERROR: mvl2_video_from_avi_windows.cxx "<<vcl_endl;
-    vcl_cout<<"Requested colour video, but only grey scale available "<<vcl_endl;
+    vcl_cout<<"ERROR: mvl2_video_from_avi_windows.cxx\n"
+            <<"Requested colour video, but only grey scale available\n";
     vcl_abort();
   }
 
