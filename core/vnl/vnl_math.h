@@ -31,6 +31,7 @@
 // Modifications
 //  210598 AWF Removed conditional VCL_IMPLEMENT_STATIC_CONSTS, sometimes gcc needs them.
 //  LSB (Modifications) 23/1/01 Documentation tidied
+//  Peter Vanroose - 7 Sept. 2002 - maxdouble etc. replaced by vnl_numeric_traits<T>::maxval
 // \endverbatim
 
 #include <vcl_cmath.h>
@@ -68,13 +69,14 @@ class vnl_math
   static VNL_DLL_DATA const double eps             VCL_STATIC_CONST_INIT_FLOAT(2.2204460492503131e-16);
   static VNL_DLL_DATA const double sqrteps         VCL_STATIC_CONST_INIT_FLOAT(1.490116119384766e-08);
 
+#if 0 // deprecated; use vnl_numeric_traits<T>::maxval instead
   //: MAX* constants.
-  // Supplied until compilers accept the templated numeric_traits.
   // These are lowercase to avoid conflict with OS-defined macros.
   static VNL_DLL_DATA const int      maxint;
   static VNL_DLL_DATA const long int maxlong;
   static VNL_DLL_DATA const double   maxdouble;
   static VNL_DLL_DATA const float    maxfloat;
+#endif
 };
 
 // Note that the three template functions below should not be declared "inline"
@@ -197,12 +199,6 @@ inline float         vnl_math_squared_magnitude(float x) { return x*x; }
 inline double        vnl_math_squared_magnitude(double x) { return x*x; }
 inline long double   vnl_math_squared_magnitude(long double x) { return x*x; }
 
-#if 0 // deprecated
-// squareroot
-inline float  vnl_math_sqrt(float x) { return float( vcl_sqrt(double(x))); }
-inline double vnl_math_sqrt(double x) { return       vcl_sqrt(double(x));  }
-#endif
-
 // cuberoot
 inline float  vnl_math_cuberoot(float a) { return float((a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3)); }
 inline double vnl_math_cuberoot(double a) { return (a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3); }
@@ -211,5 +207,6 @@ inline double vnl_math_cuberoot(double a) { return (a<0) ? -vcl_exp(vcl_log(-a)/
 inline double vnl_math_hypot(int x, int y) { return vcl_sqrt(double(x*x + y*y)); }
 inline float  vnl_math_hypot(float x, float y) { return float( vcl_sqrt(double(x*x + y*y)) ); }
 inline double vnl_math_hypot(double x, double y) { return vcl_sqrt(x*x + y*y); }
+inline long double vnl_math_hypot(long double x, long double y) { return vcl_sqrt(x*x + y*y); }
 
 #endif // vnl_math_h_

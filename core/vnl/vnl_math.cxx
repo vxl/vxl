@@ -68,11 +68,6 @@ const double vnl_math::eps            = 2.2204460492503131e-16;
 const double vnl_math::sqrteps        = 1.490116119384766e-08;
 #endif
 
-const int      vnl_math::maxint       = 0x7fffffff;
-const long int vnl_math::maxlong      = 0x7fffffffL;
-const double   vnl_math::maxdouble    = 1.7976931348623157E+308; // not HUGE_VAL since that is inf
-const float    vnl_math::maxfloat     = 3.40282346638528860e+38F;
-
 //--------------------------------------------------------------------------------
 #if !defined(VNL_HAS_NO_FINITE) && !defined(VCL_SGI_CC_7) && !defined(__alpha__) && !defined(VCL_WIN32)
 //: Return true iff x is "Not a Number"
