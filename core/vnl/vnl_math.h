@@ -113,6 +113,7 @@ inline long double vnl_math_abs(long double x) { return x < 0 ? -x : x; }
 inline int      vnl_math_max(int x, int y) { return (x > y) ? x : y; }
 inline unsigned vnl_math_max(unsigned x, unsigned y) { return (x > y) ? x : y; }
 inline long     vnl_math_max(long x, long y) { return (x > y) ? x : y; }
+inline unsigned long vnl_math_max(unsigned long x, unsigned long y) { return (x > y) ? x : y;}
 inline float    vnl_math_max(float x, float y) { return (x < y) ? y : x; }
 inline double   vnl_math_max(double x, double y) { return (x < y) ? y : x; }
 
@@ -120,6 +121,7 @@ inline double   vnl_math_max(double x, double y) { return (x < y) ? y : x; }
 inline int      vnl_math_min(int x, int y) { return (x < y) ? x : y; }
 inline unsigned vnl_math_min(unsigned x, unsigned y) { return (x < y) ? x : y; }
 inline long     vnl_math_min(long x, long y) { return (x < y) ? x : y; }
+inline unsigned long vnl_math_min(unsigned long x, unsigned long y) { return (x < y) ? x : y;}
 inline float    vnl_math_min(float x, float y) { return (x > y) ? y : x; }
 inline double   vnl_math_min(double x, double y) { return (x > y) ? y : x; }
 
