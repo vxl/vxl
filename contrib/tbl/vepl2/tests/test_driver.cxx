@@ -6,7 +6,6 @@
 #include <vil/vil_rgb.h>
 #include <vxl_config.h> // for vxl_byte etc.
 #include <vcl_string.h>
-#include <vcl_cstdlib.h> // for vcl_abs()
 
 DECLARE(vepl2_test_dilate_disk);
 DECLARE(vepl2_test_dyadic);
@@ -49,7 +48,7 @@ vil2_image_view_base_sptr CreateTest1bitImage(int wd, int ht)
   vil2_image_view<bool>* image = new vil2_image_view<bool>(im->get_view(0,wd,0,ht));
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++)
-      (*image)(x, y) = ((x-wd/2)*(y-ht/2)/16) & 1 == 1;
+      (*image)(x, y) = (((x-wd/2)*(y-ht/2)/16) & 1) == 1;
   return image;
 }
 
@@ -151,11 +150,25 @@ bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr co
       } \
   ret = (int)(r+0.5); \
 }
+#define DIFFB(T, ABSX) /* for very short types like e.g. bool */ {\
+  ret = 0; \
+  vil2_image_view<T >& v1 = (vil2_image_view<T >&)(*a); \
+  vil2_image_view<T >& v2 = (vil2_image_view<T >&)(*b); \
+  vil2_image_view<T >::const_iterator it1 = v1.begin(); \
+  vil2_image_view<T >::const_iterator it2 = v2.begin(); \
+  for (unsigned int p=0; p<sp; ++p) \
+    for (unsigned int j=1; j+1<sy; ++j) \
+      for (unsigned int i=1; i+1<sx; ++i) { \
+        long x = (long)(*(it1+i*v1.istep()+j*v1.jstep()+p*v1.planestep())) \
+                -(long)(*(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep())); \
+        ret += ABSX; \
+      } \
+}
   if (a->pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) { DIFF(float, x<0?-x:x ); }
   else if (a->pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) { DIFF(double, x<0?-x:x ); }
-  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_BOOL) { DIFF(bool, x); }
-  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_BYTE) { DIFF(vxl_byte, x); }
-  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) { DIFF(vxl_uint_16, x); }
+  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_BOOL) { DIFFB(bool, x); }
+  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_BYTE) { DIFFB(vxl_byte, x); }
+  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) { DIFFB(vxl_uint_16, x); }
   else if (a->pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) { DIFF(vxl_uint_32, x); }
   vcl_cout<<m<<": expected "<<v<<", found "<<ret<<'\n';
   TEST(m.c_str(), ret, v);
