@@ -112,3 +112,17 @@ vil1_file_format** vil1_file_format::all()
   }
   return storage;
 }
+
+class vil1_file_format_list_destroyer
+{
+public:
+  ~vil1_file_format_list_destroyer()
+  {
+    unsigned i=0;
+    while (storage[i])
+      delete storage[i++];
+    delete [] storage;
+  }
+};
+static vil1_file_format_list_destroyer destroyer_obj;
+
