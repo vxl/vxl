@@ -2,9 +2,6 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
-#include <vgui/vgui_command.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/internals/vgui_accelerate.h>
 #include <vidl_vil1/vidl_vil1_io.h>
 #include "videx_menus.h"
 #include <vvid/vvid_live_video_manager.h>
@@ -17,10 +14,6 @@
 
 #ifdef VCL_WIN32
 #include <vidl_vil1/vidl_vil1_avicodec.h>
-#endif
-
-#ifdef HAS_X11
-# include <vgui/internals/vgui_accelerate_x11.h>
 #endif
 
 int main(int argc, char** argv)

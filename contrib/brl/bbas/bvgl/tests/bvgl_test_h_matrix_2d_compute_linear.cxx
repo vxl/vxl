@@ -3,7 +3,6 @@
 #include <vcl_vector.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <bvgl/bvgl_h_matrix_2d.h>
-#include <bvgl/bvgl_norm_trans_2d.h>
 #include <bvgl/bvgl_h_matrix_2d_compute_linear.h>
 #include <testlib/testlib_test.h>
 

@@ -11,18 +11,11 @@
 #include <vul/vul_timer.h>
 #include <vul/vul_file.h>
 #include <vil1/vil1_memory_image_of.h>
-#include <vgui/vgui_key.h>
-#include <vgui/vgui_modifier.h>
 #include <vgui/vgui.h>
-#include <vgui/vgui_find.h>
-#include <vgui/vgui_error_dialog.h>
 #include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_tableau.h>
 #include <vgui/vgui_dialog.h>
-#include <vgui/vgui_macro.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_image_tableau.h>
 #include <bgui/bgui_vtol2D_tableau.h>
 #include <vtol/vtol_face_2d.h>
 #include <sdet/sdet_detector_params.h>
@@ -40,10 +33,10 @@ vvid_live_video_manager *vvid_live_video_manager::instance_ = 0;
 vvid_live_video_manager *vvid_live_video_manager::instance()
 {
   if (!instance_)
-    {
-      instance_ = new vvid_live_video_manager();
-      instance_->init();
-    }
+  {
+    instance_ = new vvid_live_video_manager();
+    instance_->init();
+  }
   return vvid_live_video_manager::instance_;
 }
 
@@ -359,12 +352,12 @@ void vvid_live_video_manager::run_frames()
           video_process_->add_input_image(image);
         else return;
         if (video_process_->execute())
-          {
-            if (video_process_->get_output_type()==vpro_video_process::IMAGE)
-              display_image();
-            if (video_process_->get_output_type()==vpro_video_process::TOPOLOGY)
-              display_topology();
-          }
+        {
+          if (video_process_->get_output_type()==vpro_video_process::IMAGE)
+            display_image();
+          if (video_process_->get_output_type()==vpro_video_process::TOPOLOGY)
+            display_topology();
+        }
       }
       vt2Ds_[i]->post_redraw();
     }
@@ -416,11 +409,11 @@ get_current_rgb_image(unsigned camera_index,
                       vil1_memory_image_of< vil1_rgb<unsigned char> >& im)
 {
   if (!init_successful_||!vtabs_[camera_index])
-    {
-      vcl_cout << "In vvid_live_video_manger::get_current_rgb_imge(..) -"
-               << " bad initialization\n";
-      return false;
-    }
+  {
+    vcl_cout << "In vvid_live_video_manger::get_current_rgb_imge(..) -"
+             << " bad initialization\n";
+    return false;
+  }
 
   return vtabs_[camera_index]->get_current_rgb_image(pix_sample_interval, im);
 }
@@ -431,11 +424,11 @@ get_current_mono_image(unsigned camera_index,
                        vil1_memory_image_of<unsigned char>& im)
 {
   if (!init_successful_||!vtabs_[camera_index])
-    {
-      vcl_cout << "In vvid_live_video_manger::get_current_mono_imge(..) -"
-               << " bad initialization\n";
-      return false;
-    }
+  {
+    vcl_cout << "In vvid_live_video_manger::get_current_mono_imge(..) -"
+             << " bad initialization\n";
+    return false;
+  }
 
   return vtabs_[camera_index]->get_current_mono_image(pix_sample_interval, im);
 }

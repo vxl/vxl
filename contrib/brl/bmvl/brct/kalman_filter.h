@@ -23,7 +23,6 @@
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <bugl/bugl_gaussian_point_2d.h>
 #include <vgl/vgl_point_3d.h>
-#include <bugl/bugl_gaussian_point_3d.h>
 #include <bugl/bugl_curve_3d.h>
 
 class kalman_filter

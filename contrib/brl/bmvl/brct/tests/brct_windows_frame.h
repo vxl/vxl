@@ -16,7 +16,7 @@
 #include <vgui/vgui_rubberband_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
-#include <bgui/bgui_picker_tableau.h>
+#include <bgui/bgui_picker_tableau_sptr.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgui/vgui_soview2D.h>

@@ -20,7 +20,6 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_soview.h>
 #include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
@@ -29,8 +28,6 @@
 #include <bgui/bgui_picker_tableau.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
-#include <vgui/vgui_key.h>
-#include <vgui/vgui_modifier.h>
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vtol/vtol_intensity_face.h>
 #include <brip/brip_vil1_float_ops.h>
@@ -621,7 +618,7 @@ void bmvv_multiview_manager::set_changing_colors(int num, float *r, float *g, fl
   strength %= 20;
   float s = 1.0f - strength * 0.05f;
 
-  switch(pattern)
+  switch (pattern)
   {
     case 0 : (*r) = s; (*g) = 0; (*b) = 0; break;
     case 1 : (*r) = 0; (*g) = s; (*b) = 0; break;

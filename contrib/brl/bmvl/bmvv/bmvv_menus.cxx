@@ -1,6 +1,5 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
-#include <vgui/vgui_modifier.h>
 #include <vgui/vgui_menu.h>
 #include <bmvv/bmvv_multiview_manager.h>
 #include <bmvv/bmvv_menus.h>

@@ -3,7 +3,6 @@
 // \file
 
 #include <bgui/bgui_vsol_soview2D.h>
-//#include <vgui/vgui.h>
 #include <vgui/vgui_style.h>
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_point_2d.h>

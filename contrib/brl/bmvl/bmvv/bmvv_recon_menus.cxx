@@ -1,6 +1,5 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
-#include <vgui/vgui_modifier.h>
 #include <vgui/vgui_menu.h>
 #include <bmvv/bmvv_recon_manager.h>
 #include <bmvv/bmvv_recon_menus.h>
@@ -32,6 +31,7 @@ void bmvv_recon_menus::read_3d_points_callback()
 {
   bmvv_recon_manager::instance()->read_3d_points();
 }
+
 void bmvv_recon_menus::initial_model_projection_callback()
 {
   bmvv_recon_manager::instance()->initial_model_projection();
@@ -46,14 +46,17 @@ void bmvv_recon_menus::print_selected_corr_callback()
 {
   bmvv_recon_manager::instance()->print_selected_corr();
 }
+
 void bmvv_recon_menus::pick_corr_callback()
 {
   bmvv_recon_manager::instance()->pick_corr();
 }
+
 void bmvv_recon_menus::write_corrs_callback()
 {
   bmvv_recon_manager::instance()->write_corrs();
 }
+
 void bmvv_recon_menus::read_corrs_callback()
 {
   bmvv_recon_manager::instance()->read_corrs();
@@ -68,6 +71,7 @@ void bmvv_recon_menus::write_homographies_callback()
 {
   bmvv_recon_manager::instance()->write_homographies();
 }
+
 void bmvv_recon_menus::read_homographies_callback()
 {
   bmvv_recon_manager::instance()->read_homographies();
@@ -112,6 +116,7 @@ void bmvv_recon_menus::cross_correlate_z_callback()
 {
   bmvv_recon_manager::instance()->cross_correlate_z();
 }
+
 void bmvv_recon_menus::cross_correlate_harris_z_callback()
 {
   bmvv_recon_manager::instance()->cross_correlate_harris_z();
@@ -262,7 +267,6 @@ vgui_menu bmvv_recon_menus::get_menu()
   menudebug.add("Harris Sweep", harris_sweep_callback);
   menudebug.add("Matched Corners at Z", display_matched_corners_callback);
   menudebug.add("Display Harris 3d", display_harris_3d_callback);
-
 
 
   //Top level menu layout

@@ -13,19 +13,15 @@
 #include <vgui/vgui_find.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_dialog.h>
-#include <vgui/vgui_soview.h>
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_style.h>
 #include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vtol2D_tableau.h>
 #include <bgui/bgui_picker_tableau.h>
-#include <vgui/vgui_key.h>
-#include <vgui/vgui_modifier.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <brct/brct_plane_sweeper_params.h>
 #include <brct/brct_volume_processor_params.h>
@@ -996,7 +992,6 @@ void bmvv_recon_manager::match_harris_corners()
 }
 
 void bmvv_recon_manager::harris_sweep()
-
 {
   static int from_cam=1;
   if (!images_set_||!harris_set_)

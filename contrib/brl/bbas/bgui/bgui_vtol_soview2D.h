@@ -21,7 +21,6 @@
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vgui/vgui_soview2D.h>
-#include <vgui/vgui_style.h>
 
 //: vsol_point_2d
 // This view is essentially the same as a point the only difference

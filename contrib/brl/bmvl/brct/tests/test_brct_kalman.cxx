@@ -1,7 +1,4 @@
 #include <vgui/vgui.h>
-#include <vgui/vgui_easy3D_tableau.h>
-#include <vgui/vgui_viewer3D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
 #include "brct_windows_frame.h"
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_window.h>

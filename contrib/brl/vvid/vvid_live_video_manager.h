@@ -16,10 +16,6 @@
 //-----------------------------------------------------------------------------
 
 #include <vil1/vil1_memory_image_of.h>
-#include <vgui/vgui_grid_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_image_tableau_sptr.h>
-#include <vgui/vgui_easy2D_tableau_sptr.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
@@ -34,7 +30,7 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
 {
  public:
   vvid_live_video_manager();
-  ~vvid_live_video_manager();
+ ~vvid_live_video_manager();
   static vvid_live_video_manager *instance();
 
   //:post construction actions

@@ -1,24 +1,11 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
-#include <vgui/vgui_command.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/internals/vgui_accelerate.h>
-#include <vidl_vil1/vidl_vil1_io.h>
 #include "vidster_menus.h"
 #include <vvid/vvid_live_stereo_manager.h>
 
-
-
-#ifdef HAS_X11
-# include <vgui/internals/vgui_accelerate_x11.h>
-#endif
-
-
-
 int main(int argc, char** argv)
 {
- 
    // Initialize the toolkit.
   vgui::init(argc, argv);
   vgui_menu menubar = vidster_menus::get_menu();

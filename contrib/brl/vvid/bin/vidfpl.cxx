@@ -2,8 +2,6 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
-#include <vgui/vgui_command.h>
-#include <vgui/vgui_image_tableau.h>
 #include <vidl_vil1/vidl_vil1_io.h>
 #include "vidfpl_menus.h"
 #include <vvid/vvid_file_manager.h>

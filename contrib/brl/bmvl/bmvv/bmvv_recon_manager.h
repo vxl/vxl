@@ -18,7 +18,6 @@
 #include <vil1/vil1_image.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
-#include <vgui/vgui_easy2D_tableau_sptr.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
 #include <vgui/vgui_style_sptr.h>
@@ -36,7 +35,7 @@ class bmvv_recon_manager : public vgui_wrapper_tableau
 {
  public:
   bmvv_recon_manager();
-  ~bmvv_recon_manager();
+ ~bmvv_recon_manager();
   static bmvv_recon_manager *instance();
 
   //:methods for menu callbacks

@@ -23,7 +23,6 @@
 #include <vtol/vtol_intensity_face.h>
 
 #include <bdgl/bdgl_curve_algs.h>
-#include <btol/btol_vertex_algs.h>
 #include <btol/btol_edge_algs.h>
 #include <sdet/sdet_region_edge.h>
 

@@ -15,7 +15,6 @@
 #include <vcl_vector.h>
 #include <vcl_list.h>
 #include <vgui/vgui_grid_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_rubberband_tableau_sptr.h>
@@ -25,10 +24,10 @@
 #include <strk/strk_art_info_model_sptr.h>
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vpro/vpro_video_process_sptr.h>
-#include <vgui/vgui_dialog.h>
 #include <vgui/vgui_window.h>
-#include <vidl_vil1/vidl_vil1_movie.h>
+#include <vidl_vil1/vidl_vil1_movie_sptr.h>
 #include <vvid/vvid_frame_trail.h>
+class vil1_image;
 
 //: A singleton manager class for playing videos.
 // A vector of images with

@@ -5,13 +5,9 @@
 #include <vcl_iostream.h>
 
 #include <vgui/vgui_gl.h>
-#include <vgui/vgui_style.h>
-#include <vgui/vgui_projection_inspector.h>
-#include <vgui/internals/vgui_draw_line.h>
-
-#include <vgl/vgl_distance.h>
 #include <vgui/vgui_soview2D.h>
 
+#include <vgl/vgl_distance.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
@@ -199,7 +195,6 @@ void bgui_vsol_soview2D_polyline::translate(float tx, float ty)
 }
 
 
-
 //--------------------------------------------------------------------------
 //: vsol_digital_curve_2d view
 //--------------------------------------------------------------------------
@@ -225,7 +220,7 @@ void bgui_vsol_soview2D_digital_curve::draw() const
     glVertex2f( sptr()->point(i)->x() , sptr()->point(i)->y() );
   }
   glEnd();
-  
+
   if (draw_dotted_)
   {
     glBegin(GL_POINTS);

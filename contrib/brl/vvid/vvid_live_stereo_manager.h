@@ -16,13 +16,9 @@
 #include <vcl_vector.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vgui/vgui_grid_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau_sptr.h>
-#include <vgui/vgui_easy2D_tableau_sptr.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
-#include <vgui/vgui_dialog.h>
 #include <vgui/vgui_window.h>
-#include <vidl_vil1/vidl_vil1_movie.h>
 #include <vvid/cmu_1394_camera.h>
 #include <vpro/vpro_video_process_sptr.h>
 #include <vvid/vvid_live_video_tableau.h>
@@ -37,7 +33,7 @@ class vvid_live_stereo_manager : public vgui_grid_tableau
 {
  public:
   vvid_live_stereo_manager();
-  ~vvid_live_stereo_manager();
+ ~vvid_live_stereo_manager();
   static vvid_live_stereo_manager *instance();
 
   //: properties of the video frames

@@ -1,15 +1,8 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
-#include <vgui/vgui_command.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/internals/vgui_accelerate.h>
 #include <bmvl/bmvv/bmvv_tomg_menus.h>
 #include <bmvl/bmvv/bmvv_tomography_manager.h>
-
-#ifdef HAS_X11
-# include <vgui/internals/vgui_accelerate_x11.h>
-#endif
 
 int main(int argc, char** argv)
 {

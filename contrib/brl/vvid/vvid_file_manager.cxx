@@ -14,21 +14,20 @@
 #include <vidl_vil1/vidl_vil1_io.h>
 #include <vidl_vil1/vidl_vil1_frame.h>
 #include <vgui/vgui.h>
-#include <vgui/vgui_find.h>
 #include <vgui/vgui_error_dialog.h>
 #include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_tableau.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_utils.h>
+#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_style_sptr.h>
 #include <vgui/vgui_style.h>
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vtol2D_tableau.h>
-#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_rubberband_tableau.h>
+#include <bgui/bgui_vtol2D_rubberband_client.h>
 #include <vgui/vgui_composite_tableau.h>
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_face_2d.h>
@@ -228,6 +227,7 @@ void vvid_file_manager::display_spatial_objects()
     }
   }
 }
+
 // set changing colors for labelling curves, points, etc
 //-----------------------------------------------------------------------------
 void vvid_file_manager::set_changing_colors(int num, float *r, float *g, float *b)
@@ -237,7 +237,7 @@ void vvid_file_manager::set_changing_colors(int num, float *r, float *g, float *
   strength %= 20;
   float s = 1.0f - strength * 0.05f;
 
-  switch(pattern)
+  switch (pattern)
   {
     case 0 : (*r) = s; (*g) = 0; (*b) = 0; break;
     case 1 : (*r) = 0; (*g) = s; (*b) = 0; break;
@@ -430,7 +430,7 @@ void vvid_file_manager::un_cached_play()
     vgui::run_till_idle();
     this->save_display(frame_index);
   }
-  
+
   if (video_process_)
     video_process_->finish();
   if (save_display_)
@@ -675,7 +675,6 @@ void vvid_file_manager::compute_grid_match()
 
   video_process_  = new vpro_grid_finder_process(dp, flp, gfp);
 }
-
 
 
 void vvid_file_manager::compute_corr_tracking()
@@ -1036,8 +1035,9 @@ void vvid_file_manager::epipolar_grouping()
     = new strk_epipolar_grouper_process(dp, egp);
   video_process_  = egpr;
 }
+
 void vvid_file_manager::display_ihs()
 {
   video_process_  = new vpro_ihs_process();
 }
-  
+

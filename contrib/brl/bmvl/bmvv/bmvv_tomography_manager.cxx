@@ -13,9 +13,7 @@
 #include <vgui/vgui_find.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_dialog.h>
-#include <vgui/vgui_soview.h>
 #include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
@@ -24,8 +22,6 @@
 #include <bgui/bgui_picker_tableau.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
-#include <vgui/vgui_key.h>
-#include <vgui/vgui_modifier.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <brip/brip_vil1_float_ops.h>
@@ -39,10 +35,10 @@ bmvv_tomography_manager *bmvv_tomography_manager::instance_ = 0;
 bmvv_tomography_manager *bmvv_tomography_manager::instance()
 {
   if (!instance_)
-    {
-      instance_ = new bmvv_tomography_manager();
-      instance_->init();
-    }
+  {
+    instance_ = new bmvv_tomography_manager();
+    instance_->init();
+  }
   return bmvv_tomography_manager::instance_;
 }
 
@@ -68,14 +64,14 @@ void bmvv_tomography_manager::init()
   grid_->set_grid_size_changeable(true);
   unsigned int col=0, row = 0;
   for (; col<2; col++)
-    {
-      vgui_image_tableau_sptr itab = bgui_image_tableau_new();
-      bgui_vtol2D_tableau_sptr btab = bgui_vtol2D_tableau_new(itab);
-      vtol_tabs_.push_back(btab);
-      bgui_picker_tableau_new pcktab(btab);
-      vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(pcktab);
-      grid_->add_at(v2d, col, row);
-    }
+  {
+    vgui_image_tableau_sptr itab = bgui_image_tableau_new();
+    bgui_vtol2D_tableau_sptr btab = bgui_vtol2D_tableau_new(itab);
+    vtol_tabs_.push_back(btab);
+    bgui_picker_tableau_new pcktab(btab);
+    vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(pcktab);
+    grid_->add_at(v2d, col, row);
+  }
   vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);
   this->add_child(shell);
 }
@@ -100,13 +96,13 @@ bmvv_tomography_manager::get_picker_tableau_at(unsigned col, unsigned row)
 {
   vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
   if (top_tab)
-    {
-      bgui_picker_tableau_sptr tt;
-      tt.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                    vcl_string("bgui_picker_tableau")));
-      if (tt)
-        return tt;
-    }
+  {
+    bgui_picker_tableau_sptr tt;
+    tt.vertical_cast(vgui_find_below_by_type_name(top_tab,
+                                                  vcl_string("bgui_picker_tableau")));
+    if (tt)
+      return tt;
+  }
   vgui_macro_warning << "Unable to get bgui_picker_tableau at (" << col << ", "
                      << row << ")\n";
   return 0;
@@ -169,11 +165,11 @@ void bmvv_tomography_manager::load_image()
   img_ = vil1_load(image_filename.c_str());
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
   if (btab)
-    {
-      vgui_image_tableau_sptr itab = btab->get_image_tableau();
-      itab->set_image(img_);
-      return;
-    }
+  {
+    vgui_image_tableau_sptr itab = btab->get_image_tableau();
+    itab->set_image(img_);
+    return;
+  }
   vcl_cout << "In bmvv_tomography_manager::load_image() - null tableau\n";
 }
 
@@ -183,10 +179,10 @@ void bmvv_tomography_manager::load_image()
 void bmvv_tomography_manager::save_sinogram()
 {
   if (!sino_||!img_)
-    {
-      vcl_cout << "In bmvv_tomography_manager::save_sinogram() - no images\n";
-      return;
-    }
+  {
+    vcl_cout << "In bmvv_tomography_manager::save_sinogram() - no images\n";
+    return;
+  }
   vgui_dialog load_image_dlg("Save Sinogram");
   static vcl_string image_filename = "", sino_filename="";
   static vcl_string ext = "*.*";
@@ -247,13 +243,13 @@ void bmvv_tomography_manager::sinogram()
   bgui_vtol2D_tableau_sptr btab0 = vtol_tabs_[0];
   bgui_vtol2D_tableau_sptr btab1 = vtol_tabs_[1];
   if (btab0)
-    {
-      vgui_image_tableau_sptr itab = btab0->get_image_tableau();
-      itab->set_image(img_);
-    }
+  {
+    vgui_image_tableau_sptr itab = btab0->get_image_tableau();
+    itab->set_image(img_);
+  }
   if (btab1)
-    {
-      vgui_image_tableau_sptr itab = btab1->get_image_tableau();
-      itab->set_image(sino_);
-    }
+  {
+    vgui_image_tableau_sptr itab = btab1->get_image_tableau();
+    itab->set_image(sino_);
+  }
 }

@@ -17,9 +17,6 @@
 #include <bgui/bgui_selector_tableau_sptr.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_parent_child_link.h>
-#include <vgui/vgui_event_condition.h>
-#include <vgui/vgui_observable.h>
-
 class vgui_event;
 
 //: Tableau that allows the selection of one active child but displays all children
