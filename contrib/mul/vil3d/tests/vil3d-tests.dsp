@@ -289,6 +289,12 @@ SOURCE=.\test_convert.cxx
 # Begin Source File
 SOURCE=.\test_algo_convolve_1d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_histogram.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_algo_histogram_equalise.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

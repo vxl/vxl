@@ -111,6 +111,12 @@ SOURCE=.\vil3d_binary_erode.cxx
 SOURCE=.\vil3d_structuring_element.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vil3d_histogram.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_histogram_equalise.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil3d_grad_1x3+byte.float-.cxx
 # End Source File
 # Begin Source File
@@ -169,6 +175,12 @@ SOURCE=.\vil3d_normalised_correlation_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_convolve_1d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_histogram.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_histogram_equalise.h
 # End Source File
 # End Group
 # End Target
