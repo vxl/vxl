@@ -8,7 +8,7 @@ multivariate probability density functions (@acronym{PDF}s).
 
 Each @acronym{PDF} comes as a builder-model-sampler triplet of objects.
 
-@multitable @columnfractions 0.1 .3 .3 .3
+@multitable {Derived Classes:} {vpdfl_axis_gaussian_builder}  {vpdfl_axis_gaussian}  {vpdfl_axis_gaussian_sampler}  
 @item Base Class:
 @tab vpdfl_builder_base
 @tab vpdfl_pdf_base
