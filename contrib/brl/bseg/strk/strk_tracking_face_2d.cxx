@@ -524,14 +524,9 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
 
   //compute the mutual information
   intensity_entropy_= image_hist.entropy();
+  intensity_joint_entropy_ = renyi_joint_entropy_ ? joint_hist.renyi_entropy() : joint_hist.entropy();
 
-  if (renyi_joint_entropy_)
-    intensity_joint_entropy_ = joint_hist.renyi_entropy();//JLM
-  else
-    intensity_joint_entropy_ = joint_hist.entropy();
-
-  float mi = (float)(model_intensity_entropy_ + intensity_entropy_
-                     - intensity_joint_entropy_);
+  float mi = float(model_intensity_entropy_ + intensity_entropy_ - intensity_joint_entropy_);
 
 #ifdef DEBUG
   vcl_cout << "Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << ' '
@@ -591,14 +586,9 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
   joint_dir_hist.parzen(parzen_sigma_);
 
   gradient_dir_entropy_ = image_dir_hist.entropy();
+  gradient_joint_entropy_ = renyi_joint_entropy_ ? joint_dir_hist.renyi_entropy() : joint_dir_hist.entropy();
 
-  if (renyi_joint_entropy_)
-    gradient_joint_entropy_ = joint_dir_hist.renyi_entropy();
-  else
-    gradient_joint_entropy_ = joint_dir_hist.entropy();
-
-  float mi = float(model_gradient_dir_entropy_ + gradient_dir_entropy_
-                   - gradient_joint_entropy_);
+  float mi = float(model_gradient_dir_entropy_ + gradient_dir_entropy_ - gradient_joint_entropy_);
 #ifdef DEBUG
   vcl_cout << "Dir Entropies:(M,I,J, MI)=(" << model_gradient_dir_entropy_ << ' '
            << gradient_dir_entropy_ << ' ' << gradient_joint_entropy_ << ' ' << mi <<")\n";
@@ -642,15 +632,9 @@ compute_color_mutual_information(vil1_memory_image_of<float> const& hue,
 
   //compute entropies
   color_entropy_ = color_hist.entropy();
+  color_joint_entropy_ = renyi_joint_entropy_? joint_color_hist.renyi_entropy() : joint_color_hist.entropy();
 
-  if (renyi_joint_entropy_)
-    color_joint_entropy_ = joint_color_hist.renyi_entropy();
-  else
-    color_joint_entropy_ = joint_color_hist.entropy();
-
-  float mi = float(model_color_entropy_ + color_entropy_
-                   - color_joint_entropy_);
-
+  float mi = float(model_color_entropy_ + color_entropy_ - color_joint_entropy_);
 
   return mi;
 }
@@ -775,12 +759,7 @@ compute_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other,
   joint_hist.parzen(parzen_sigma_);
 
   //compute the joint entropy
-  float jent=0;
-  if (renyi_joint_entropy_)
-    jent = joint_hist.renyi_entropy();//JLM
-  else
-    jent=joint_hist.entropy();
-   return jent;
+  return renyi_joint_entropy_ ? joint_hist.renyi_entropy() : joint_hist.entropy();
 }
 
 //: compute the intensity joint entropy between the model pixels of this face and the model pixels of the "other" face.
@@ -816,12 +795,7 @@ compute_model_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other)
   joint_hist.parzen(parzen_sigma_);
 
   //compute the joint entropy
-  float jent=0;
-  if (renyi_joint_entropy_)
-    jent = joint_hist.renyi_entropy();//JLM
-  else
-    jent=joint_hist.entropy();
-   return jent;
+  return renyi_joint_entropy_ ? joint_hist.renyi_entropy() : joint_hist.entropy();
 }
 
 //: randomly select a set of pixels from the interior
@@ -887,12 +861,7 @@ compute_color_joint_entropy(strk_tracking_face_2d_sptr const& other,
   //apply parzen windows
   joint_color_hist.parzen(parzen_sigma_);
 
-  float jent=0;
-  if (renyi_joint_entropy_)
-    jent = joint_color_hist.renyi_entropy();
-  else
-    jent = joint_color_hist.entropy();
-   return jent;
+  return renyi_joint_entropy_ ? joint_color_hist.renyi_entropy() : joint_color_hist.entropy();
 }
 
 //: Difference in mutual information due to intensity
