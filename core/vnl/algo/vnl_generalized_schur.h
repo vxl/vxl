@@ -16,8 +16,27 @@
 
 #include <vnl/vnl_matrix.h>
 
-// For a *real* scalar type T, this function computes orthogonal L, R such that
+// For a *real* scalar type T, this function uses orthogonal
+// matrices L, R to reduce the (square) matrices A, B to generalized
+// (real) Schur form. This means that B is upper triangular and A is
+// block upper triangular with blocks of size at most 2x2 such that
+// the 2x2 blocks B corresponding to 2x2 blocks of A are diagonal.
+// E.g.:
 //
+//                [ * * * * * ]
+//                [   * * * * ]
+// A <- L^* A R = [   * * * * ]
+//                [       * * ]
+//                [       * * ]
+//
+//                [ * * * * * ]
+//                [   *   * * ]
+// B <- L^* B R = [     * * * ]
+//                [       *   ]
+//                [         * ]
+//
+// In addition, the function computes the generalized eigenvalues
+// (alphar(k) + i alphai(k) : beta(k) for k = 0, 1, 2,...
 template <class T>
 bool vnl_generalized_schur(vnl_matrix<T> *A,
                            vnl_matrix<T> *B,
