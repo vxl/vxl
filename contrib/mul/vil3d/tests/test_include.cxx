@@ -11,7 +11,6 @@
 #include <vil3d/vil3d_copy.h>
 #include <vil3d/vil3d_crop.h>
 #include <vil3d/vil3d_file_format.h>
-#include <vil3d/vil3d_header_data.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/vil3d_image_view_base.h>
 #include <vil3d/vil3d_image_view.h>

@@ -15,6 +15,8 @@
 
 #if 0 // commented out
 
+#include <vil3d/vil3d_header_data.h>
+
 //: Read header and image from named file if possible
 bool vil3d_file_format::read_file(vil3d_header_data_sptr& header,
                                   vil3d_image_view_base_sptr& image,
@@ -40,8 +42,8 @@ bool vil3d_file_format::write_file(vil3d_header_data_sptr& header,
 
   return write_stream(header,image,os);
 }
-#endif // 0
 
+#endif // 0
 
 //: Store list of file_formats in this class to ensure tidy deletion.
 class vil3d_file_formats

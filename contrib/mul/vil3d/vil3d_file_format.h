@@ -9,7 +9,6 @@
 // \brief Manager for 3d image file loaders
 // \author Tim Cootes - Manchester
 
-#include <vil3d/vil3d_header_data.h>
 #include <vil3d/vil3d_image_view_base.h>
 #include <vil3d/vil3d_image_resource.h>
 
