@@ -87,20 +87,20 @@ public:
   ~sdet_contour();
 
   //: Trace the edgel locations to form a topological network (edges, vertices)
-  bool FindNetwork(gevd_bufferxy& edgels, 
-                   const int njunction, 
+  bool FindNetwork(gevd_bufferxy& edgels,
+                   const int njunction,
                    const int* junctionx, const int* junctiony,
                    vcl_vector<vtol_edge_2d_sptr>*& edges,
                    vcl_vector<vtol_vertex_2d_sptr >*& vertices);
 
   //: Use interpolation of the gradient to localize to sub-pixel accuracy
   void SubPixelAccuracy(vcl_vector<vtol_edge_2d_sptr>& edges,
-                        vcl_vector<vtol_vertex_2d_sptr >& vertices, 
-                        const gevd_bufferxy& locationx, 
+                        vcl_vector<vtol_vertex_2d_sptr >& vertices,
+                        const gevd_bufferxy& locationx,
                         const gevd_bufferxy& locationy);
 
   //: Insert a border at the ROI boundary to support connected components
-  void InsertBorder(vcl_vector<vtol_edge_2d_sptr>& edges, 
+  void InsertBorder(vcl_vector<vtol_edge_2d_sptr>& edges,
                     vcl_vector<vtol_vertex_2d_sptr >& vertices);
 
   //: apply a smoothing filter to edgel_chain(s)
@@ -108,13 +108,13 @@ public:
 
 
   //: computation is carried out in a zero origin ROI - translate back
-  static void Translate(vcl_vector<vtol_edge_2d_sptr>& edges, 
-                        vcl_vector<vtol_vertex_2d_sptr >& vertices, 
+  static void Translate(vcl_vector<vtol_edge_2d_sptr>& edges,
+                        vcl_vector<vtol_vertex_2d_sptr >& vertices,
                         const float tx=0.5, const float ty = 0.5,
                         const float tz = 0);
 
   //: clear network storage (edges and vertices)
-  static void ClearNetwork(vcl_vector<vtol_edge_2d_sptr>*& edges, 
+  static void ClearNetwork(vcl_vector<vtol_edge_2d_sptr>*& edges,
                            vcl_vector<vtol_vertex_2d_sptr >*& vertices);
 
   //: Set edgel gradient and direction values from pixel arrays
@@ -130,28 +130,28 @@ public:
   static  bool talkative_; // output comentaries or not
   static  bool debug_;
 
-  //: internal routines  
+  //: internal routines
 protected:
   //: link detected edgels and junctions into chains
-  int FindChains(gevd_bufferxy& edgels, 
-                 const int njunction, 
+  int FindChains(gevd_bufferxy& edgels,
+                 const int njunction,
                  const int* junctionx, const int* junctiony,
                  vcl_vector<vtol_edge_2d_sptr>& edges);
 
   //: Establish verticesimprove connectivity by jumping small gaps
-  int FindJunctions(gevd_bufferxy& edgels, 
-                    vcl_vector<vtol_edge_2d_sptr>& edges, 
+  int FindJunctions(gevd_bufferxy& edgels,
+                    vcl_vector<vtol_edge_2d_sptr>& edges,
                     vcl_vector<vtol_vertex_2d_sptr >& vertices);
 
-  bool move_junction(vtol_vertex_2d_sptr const& junction, 
+  bool move_junction(vtol_vertex_2d_sptr const& junction,
                      int& index, vdgl_digital_curve_sptr const & dc);
 
-  void update_edgel_chain(vtol_edge_2d_sptr const& edge, 
+  void update_edgel_chain(vtol_edge_2d_sptr const& edge,
                           const int old_x, const int old_y,
                           vtol_vertex_2d_sptr& v);
-  
+
   bool near_border(vtol_vertex_2d_sptr const&  v);
-  
+
   //: Detect a nearby vertex by carrying out a spiral search
   bool DetectJunction(vtol_vertex_2d_sptr const& end, int& index,
                       vtol_edge_2d_sptr& weaker,
@@ -160,11 +160,11 @@ protected:
                       const gevd_bufferxy& edgels);
 
   //: Break a chain at a junction and form a "T"
-  void sdet_contour::BreakChain(vtol_vertex_2d_sptr const& junction,
-                              int& index,
-                              vtol_edge_2d_sptr const& stronger,
-                              vtol_edge_2d_sptr& longer,
-                              vtol_edge_2d_sptr& shorter);
+  void BreakChain(vtol_vertex_2d_sptr const& junction,
+                  int& index,
+                  vtol_edge_2d_sptr const& stronger,
+                  vtol_edge_2d_sptr& longer,
+                  vtol_edge_2d_sptr& shorter);
 
   //: Break a single edge at junction and form a loop
   void LoopChain(vtol_vertex_2d_sptr const& junction, int& index,
@@ -176,7 +176,6 @@ protected:
     void BreakCycle(vtol_vertex_2d_sptr const& junction,
                     int& index, vtol_edge_2d_sptr const& stronger,
                     vtol_edge_2d_sptr & split);
-
 
   //: Detect nearby vertices by searching in a spiral pattern
   vtol_vertex_2d_sptr
@@ -245,7 +244,6 @@ protected:
   vbl_array_2d<vtol_edge_2d_sptr> *edgeMap;
   vbl_array_2d<vtol_vertex_2d_sptr> *vertexMap; // map pixel to junction/chain
   vcl_vector<vtol_vertex_2d_sptr> test_verts_;
-
 };
 
 #endif // sdet_contour_h_
