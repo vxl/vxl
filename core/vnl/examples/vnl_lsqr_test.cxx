@@ -1,5 +1,5 @@
+// This is vxl/vnl/examples/vnl_lsqr_test.cxx
 #include <vcl_cstdlib.h>
-#include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_sparse_matrix.h>

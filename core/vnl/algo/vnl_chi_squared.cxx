@@ -7,8 +7,6 @@
 
 #include "vnl_chi_squared.h"
 
-#include <vcl_cmath.h>
-
 // FORTRAN routine
 #include "vnl_netlib.h" // dchscdf_()
 

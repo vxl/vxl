@@ -1,8 +1,6 @@
-// This is ./vxl/vgl/vgl_point_2d.txx
+// This is vxl/vgl/vgl_point_2d.txx
 #ifndef vgl_point_2d_txx_
 #define vgl_point_2d_txx_
-
-
 //:
 // \file
 
@@ -12,7 +10,6 @@
 #include <vgl/vgl_homg_line_2d.h>
 
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
 
 //: Construct from homogeneous point
 template <class Type>

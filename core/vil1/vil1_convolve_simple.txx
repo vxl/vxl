@@ -9,7 +9,6 @@
 #include "vil_convolve_simple.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_vector.h>
 
@@ -19,8 +18,6 @@
 #if TRACE
 #include <vcl_iostream.h>
 #endif
-
-//#include <vil/vil_ip_traits.h>
 
 //--------------------------------------------------------------------------------
 

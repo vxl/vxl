@@ -1,14 +1,11 @@
+// This is vxl/vnl/vnl_matrix_exp.txx
 #ifndef vnl_matrix_exp_txx_
 #define vnl_matrix_exp_txx_
-// This is vxl/vnl/vnl_matrix_exp.txx
-
 /*
   fsm@robots.ox.ac.uk
 */
 #include "vnl_matrix_exp.h"
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-//#include <vcl_iostream.h>
 
 template <class T>
 bool vnl_matrix_exp(vnl_matrix<T> const &X, vnl_matrix<T> &expX, double max_err)

@@ -1,7 +1,6 @@
-// This is ./vxl/vgl/vgl_point_3d.txx
+// This is vxl/vgl/vgl_point_3d.txx
 #ifndef vgl_point_3d_txx_
 #define vgl_point_3d_txx_
-
 //:
 // \file
 
@@ -11,7 +10,6 @@
 #include <vgl/vgl_homg_plane_3d.h>
 
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
 
 //: Construct from homogeneous point
 template <class Type>
