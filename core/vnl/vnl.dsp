@@ -423,16 +423,13 @@ SOURCE=.\Templates/vnl_matrix_fixed+float.3.3-.cxx
 SOURCE=.\Templates/vnl_matrix_fixed+float.3.4-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+float.3.5-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_matrix_fixed+float.4.3-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_matrix_fixed+float.4.4-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vnl_matrix_fixed+float.9.9-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vnl_matrix_fixed+float.10.10-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_matrix_fixed+int.2.2-.cxx
@@ -594,7 +591,13 @@ SOURCE=.\Templates/vnl_vector_fixed+float.3-.cxx
 SOURCE=.\Templates/vnl_vector_fixed+float.4-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_vector_fixed+float.5-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_vector_fixed+float.6-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_vector_fixed+float.9-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_vector_fixed+float.10-.cxx

@@ -138,6 +138,9 @@ SOURCE=.\test_algo_trace_8con_boundary.cxx
 # Begin Source File
 SOURCE=.\test_algo_blob_finder.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_find_peaks.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
