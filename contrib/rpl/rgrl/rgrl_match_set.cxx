@@ -106,7 +106,9 @@ add_feature_and_matches( rgrl_feature_sptr                      from_feature,
   for ( to_itr = matching_to.begin(); to_itr != matching_to.end(); ++to_itr )
   {
     const double sig_wgt = (*to_itr)->absolute_signature_weight( mapped_feature );
-    const double geo_err = (*to_itr)->geometric_error( *mapped_feature );
+    double geo_err = -1e5;
+    if( mapped_feature) 
+      geo_err = (*to_itr)->geometric_error( *mapped_feature );
     matches_and_weights_.back().push_back( match_info( *to_itr, sig_wgt, geo_err ));
   }
 }
@@ -145,7 +147,9 @@ add_feature_matches_and_weights( rgrl_feature_sptr                      from_fea
   for ( to_itr = matching_to.begin(), s_itr = signature_weights.begin();
         to_itr != matching_to.end(); ++to_itr,  ++s_itr )
   {
-    const double geo_err = (*to_itr)->geometric_error( *mapped_feature );
+    double geo_err = -1e5;
+    if( mapped_feature) 
+      geo_err = (*to_itr)->geometric_error( *mapped_feature );
     matches_and_weights_.back().push_back( match_info( *to_itr, *s_itr, geo_err ));
   }
 }
@@ -168,7 +172,9 @@ add_feature_and_match( rgrl_feature_sptr from_feature,
   xformed_from_features_.push_back( mapped_feature );
 
   vcl_vector<match_info> match;
-  const double geo_err = matching_to->geometric_error( *mapped_feature );
+  double geo_err = -1e5;
+  if( mapped_feature) 
+    geo_err = matching_to->geometric_error( *mapped_feature );
   match.push_back( match_info( matching_to, wgt, wgt, wgt, geo_err ) );
   matches_and_weights_.push_back( match );
 }

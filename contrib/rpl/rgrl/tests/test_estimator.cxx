@@ -198,7 +198,7 @@ test_est_affine_pt_to_pt()
     {
       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
       for ( unsigned i=0; i < from_pts.size(); ++i ) {
-        ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
+        ms->add_feature_and_match( from_pts[i], from_pts[i], to_pts[i] );
       }
 
       rgrl_estimator_sptr est = new rgrl_est_affine();
@@ -214,9 +214,9 @@ test_est_affine_pt_to_pt()
 
     {
       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
-      ms->add_feature_and_match( from_pts[0], 0, to_pts[0] );
+      ms->add_feature_and_match( from_pts[0], from_pts[0], to_pts[0] );
       for ( unsigned i=0; i < from_pts.size(); ++i ) {
-        ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
+        ms->add_feature_and_match( from_pts[i], from_pts[i], to_pts[i] );
       }
 
       testlib_test_begin( "Underconstrained (samples not independent)" );
@@ -238,7 +238,7 @@ test_est_affine_pt_to_pt()
     {
       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
       for ( unsigned i=0; i < from_pts.size(); ++i ) {
-        ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
+        ms->add_feature_and_match( from_pts[i], from_pts[i], to_pts[i] );
       }
 
       rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null3d_trans );
@@ -275,7 +275,7 @@ test_est_affine_pt_to_pt()
     {
       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id());
       for ( unsigned i=0; i < from_pts.size(); ++i ) {
-        ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
+        ms->add_feature_and_match( from_pts[i], from_pts[i], to_pts[i] );
       }
 
       rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null3d_trans );
@@ -294,7 +294,7 @@ test_est_affine_pt_to_pt()
     {
       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id());
       for ( unsigned i=0; i < from_pts.size(); ++i ) {
-        ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
+        ms->add_feature_and_match( from_pts[i], from_pts[i], to_pts[i] );
       }
 
       // add two zero weighted outliers
@@ -357,7 +357,7 @@ test_est_affine_pt_to_pt()
     //
     rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id());
     for ( unsigned i=0; i < from.size(); ++i ) {
-      ms->add_feature_and_match( pf(from[i]), 0, pf(to[i]), wgt[i] );
+      ms->add_feature_and_match( pf(from[i]), pf(from[i]), pf(to[i]), wgt[i] );
     }
     rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null3d_trans );
     TEST("Weighted least squares", !trans, false);
@@ -532,7 +532,7 @@ test_est_affine_pt_to_line()
     {
       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id(), rgrl_feature_trace_pt::type_id() );
       for ( unsigned i=0; i < from.size(); ++i ) {
-        ms->add_feature_and_match( pf( from[i] ), 0, tf( to[i], to_tang[i] ) );
+        ms->add_feature_and_match( pf( from[i] ), pf( from[i] ), tf( to[i], to_tang[i] ) );
       }
 
       testlib_test_begin( "Underconstrained (not enough correspondences)" );
@@ -546,9 +546,9 @@ test_est_affine_pt_to_line()
 
     {
       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id(), rgrl_feature_trace_pt::type_id() );
-      ms->add_feature_and_match( pf( from[0] ), 0, tf( to[0], to_tang[0] ) );
+      ms->add_feature_and_match( pf( from[0] ), pf( from[0] ), tf( to[0], to_tang[0] ) );
       for ( unsigned i=0; i < from.size(); ++i ) {
-        ms->add_feature_and_match( pf( from[i] ), 0, tf( to[i], to_tang[i] ) );
+        ms->add_feature_and_match( pf( from[i] ), pf( from[i] ), tf( to[i], to_tang[i] ) );
       }
 
       testlib_test_begin( "Underconstrained (samples not independent)" );
@@ -567,7 +567,7 @@ test_est_affine_pt_to_line()
     {
       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id(), rgrl_feature_trace_pt::type_id() );
       for ( unsigned i=0; i < from.size(); ++i ) {
-        ms->add_feature_and_match( pf( from[i] ), 0, tf( to[i], to_tang[i] ) );
+        ms->add_feature_and_match( pf( from[i] ), pf( from[i] ), tf( to[i], to_tang[i] ) );
       }
 
       rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null2d_trans );
@@ -595,7 +595,7 @@ test_est_affine_pt_to_line()
     {
       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id(), rgrl_feature_trace_pt::type_id() );
       for ( unsigned i=0; i < from.size(); ++i ) {
-        ms->add_feature_and_match( pf( from[i] ), 0, tf( to[i], to_tang[i] ) );
+        ms->add_feature_and_match( pf( from[i] ), pf( from[i] ), tf( to[i], to_tang[i] ) );
       }
 
       rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null2d_trans );
@@ -614,7 +614,7 @@ test_est_affine_pt_to_line()
     {
       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id(), rgrl_feature_trace_pt::type_id() );
       for ( unsigned i=0; i < from.size(); ++i ) {
-        ms->add_feature_and_match( pf( from[i] ), 0, tf( to[i], to_tang[i] ) );
+        ms->add_feature_and_match( pf( from[i] ), pf( from[i] ), tf( to[i], to_tang[i] ) );
       }
 
       // add two zero weighted outliers
@@ -694,7 +694,7 @@ test_est_affine_pt_to_line()
     //
     rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id(), rgrl_feature_trace_pt::type_id() );
     for ( unsigned i=0; i < from.size(); ++i ) {
-      ms->add_feature_and_match( pf( from[i] ), 0, tf( to[i], to_tang[i] ), wgt[i] );
+      ms->add_feature_and_match( pf( from[i] ), pf( from[i] ), tf( to[i], to_tang[i] ), wgt[i] );
     }
     rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null2d_trans );
     TEST("Weighted least squares", !trans, false);
@@ -927,7 +927,7 @@ test_est_spline()
       to_pts.push_back(to_pt);
       rgrl_feature_sptr from_feature = new rgrl_feature_point( pts[i] );
       rgrl_feature_sptr to_feature = new rgrl_feature_point( to_pt );
-      match_set->add_feature_and_match( from_feature, 0, to_feature, 1.0 );
+      match_set->add_feature_and_match( from_feature, from_feature, to_feature, 1.0 );
     }
     rgrl_set_of<rgrl_match_set_sptr> set;
     set.push_back(match_set);
@@ -1081,7 +1081,7 @@ test_est_spline_reduce_dof()
     to_pts.push_back(to_pt);
     rgrl_feature_sptr from_feature = new rgrl_feature_point( pts[i] );
     rgrl_feature_sptr to_feature = new rgrl_feature_point( to_pt );
-    match_set->add_feature_and_match( from_feature, 0, to_feature, 1.0 );
+    match_set->add_feature_and_match( from_feature, from_feature, to_feature, 1.0 );
   }
   rgrl_set_of<rgrl_match_set_sptr> set;
   set.push_back(match_set);
@@ -1190,7 +1190,7 @@ test_est_quadratic()
   {
     rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
     for ( unsigned i=0; i < from_pts.size(); ++i ) {
-      ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
+      ms->add_feature_and_match( from_pts[i], from_pts[i], to_pts[i] );
     }
 
     rgrl_trans_quadratic dummy_trans(2);
@@ -1241,7 +1241,7 @@ test_est_similarity2d()
   {
     rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
     for ( unsigned i=0; i < from_pts.size(); ++i ) {
-      ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
+      ms->add_feature_and_match( from_pts[i], from_pts[i], to_pts[i] );
     }
 
     rgrl_trans_similarity dummy_trans(2);
@@ -1325,7 +1325,7 @@ test_est_reduced_quad2d()
   {
     rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
     for ( unsigned i=0; i < from_pts.size(); ++i ) {
-      ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
+      ms->add_feature_and_match( from_pts[i], from_pts[i], to_pts[i] );
     }
 
     rgrl_trans_quadratic dummy_trans(2);
@@ -1425,7 +1425,7 @@ test_est_rigid()
   {
     rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
     for ( unsigned i=0; i < from_pts.size(); ++i ) {
-      ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
+      ms->add_feature_and_match( from_pts[i], from_pts[i], to_pts[i] );
   }
 
     rgrl_trans_rigid dummy_trans(3);
@@ -1541,7 +1541,8 @@ void test_homography2d()
     rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id());
 
     for (unsigned i=0; i < n; ++i) {
-      ms->add_feature_and_match( new rgrl_feature_point(d2_p[i]), 0,
+      ms->add_feature_and_match( new rgrl_feature_point(d2_p[i]),
+                                 new rgrl_feature_point(d2_p[i]),
                                  new rgrl_feature_point(d2_q[i]) );
     }
     rgrl_estimator_sptr estimator = new rgrl_est_homography2d();
@@ -1669,7 +1670,8 @@ void test_homography2d_sym()
     rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id());
 
     for (unsigned i=0; i < n; ++i) {
-      ms->add_feature_and_match( new rgrl_feature_point(d2_p[i]), 0,
+      ms->add_feature_and_match( new rgrl_feature_point(d2_p[i]), 
+                                 new rgrl_feature_point(d2_p[i]),
                                  new rgrl_feature_point(d2_q[i]) );
     }
     rgrl_estimator_sptr estimator = new rgrl_est_homo2d_lm();
