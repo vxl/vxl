@@ -14,6 +14,8 @@ MANPAGE_SOURCES += vimt3d_sample_profile_trilin.h
 MANPAGE_SOURCES += vimt3d_trilin_interp.h
 MANPAGE_SOURCES += vimt3d_slice.h
 MANPAGE_SOURCES += vimt3d_crop.h
+SOURCES += vimt3d_add_all_loaders.cxx
+SOURCES += vimt3d_vil3d_v3i.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk

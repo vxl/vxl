@@ -9,6 +9,7 @@ TESTS += test_image_3d_of.cxx
 TESTS += test_load.cxx
 TESTS += test_sample_grid_trilin.cxx
 PARAMS_test_load := ../../vil3d/tests/file_read_data
+TESTS += test_v3i.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
