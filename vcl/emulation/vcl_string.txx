@@ -33,6 +33,7 @@
 // Rewritten by awf@robots.ox.ac.uk to use non-refcounting implementation.
 
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 
 extern "C++" {
 
@@ -350,8 +351,6 @@ compare (const charT* s, vcl_size_t pos, vcl_size_t n) const
     return r;
   return (length () - pos) - n;
 }
-
-#include <vcl_iostream.h>
 
 template <class charT, class traits>
 vcl_istream &
