@@ -186,7 +186,7 @@ static int _findStringWidth(
 
   while (str[i] != '\0')  {
     if (str[i] == '%')  {
-      if (isdigit(str[i+1]))  {
+      if (isdigit((int)str[i+1]))  {
         sscanf(str+i+1, "%d", &add);
         width += add;
         i += 2;
