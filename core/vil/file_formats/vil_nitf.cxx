@@ -146,11 +146,12 @@ vil_image_resource_sptr vil_nitf_file_format::make_input_image(vil_stream* is)
 
     nitf_image_resource = nitf_image;
 
-    vcl_cout << method_name << "ni = " << nitf_image->ni()
-             << " nj = " << nitf_image->nj() << vcl_endl;
-
-    nitf_image->display_image_attributes(method_name);
-
+    if (debug_level > 0) {
+        vcl_cout << method_name << "ni = " << nitf_image->ni()
+                 << " nj = " << nitf_image->nj() << vcl_endl;
+    
+        nitf_image->display_image_attributes(method_name);
+    }
     unsigned bits_per_pixel = 8 * vil_pixel_format_sizeof_components(nitf_image->pixel_format());
 
     //  IS THIS TRUE ?  For now, we are forcing this to be true.
@@ -205,8 +206,9 @@ bool vil_nitf_file_format::read_header_data()
 
   if (status == STATUS_GOOD)
   {
-    message_header_->display_header_info(method_name);
-
+    if (debug_level > 0) {
+        message_header_->display_header_info(method_name);
+    }
     vil_streampos save_pos = io_stream_->tell();
 
     // CAST BELOW IS OK.  CURRENT POSITION IF FILE WILL ALWAYS BE > 0.
@@ -224,9 +226,8 @@ bool vil_nitf_file_format::read_header_data()
 
     if (status == STATUS_GOOD)
     {
-      image_subheader->display_attributes(method_name);
-
       if (debug_level > 0) {
+          image_subheader->display_attributes(method_name);
 	  vcl_cout << method_name
 		   << "after read message header, file position = "
 		   << save_pos << vcl_endl
