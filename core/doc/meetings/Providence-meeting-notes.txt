@@ -1,0 +1,503 @@
+----------------------------------------------------------------------------
+
+* Temporary section
+
+If you would like to correct an error or omission, or clarify
+something in these minutes, feel free to do so.  Places where I think
+a correction is needed are marked with '???'.
+
+These minutes will be a record of the actual meeting.  If you would
+like to add additional helpful information that *should* have come up
+at the meeting, but did not, please put it in an appendix or somewhere
+else.
+
+If you participated in the meeting please search for your name and
+check that you agree with everything I attributed to you.
+
+To avoid CVS merging problems, avoid reformatting paragraphs as you
+add text.  I will go through this document and clean up formatting in
+one month, after everyone has had a chance to modify the content.  At
+that time I will remove this note.
+
+-Fred Wheeler
+
+============================================================================
+
+Minutes of the VXL meeting held at Brown University, Providence, Rhode
+Island, U.S. on 27 Sept. 2002.
+
+----------------------------------------------------------------------------
+
+The following people attended in person:
+
+Joe Mundy (Brown)
+Ian Scott (Manchester)
+Amitha Perera (Rensselaer)
+Peter Tu (GE)
+Andrew Fitzgibbon (Oxford)
+Fred Wheeler (GE)
+
+The following people called in on the phone at various times during
+the day:
+
+Luis Galup (GE)
+Tim Cootes (Manchester)
+Peter Vanroose (KU Leuven)
+Geoff Cross (consultant to McClaren)
+Brad King (Kitware)
+Karen McGaul (Oxford)
+Jim Miller (GE)
+
+----------------------------------------------------------------------------
+
+0. Interest in VXL
+
+For those present at the beginning of the day, there was a round of
+introductions with brief statements about each person's interest in
+VXL.
+
+Joe Mundy: Will be using VXL for video processing -- both bulk
+processing from files and processing of live video.
+
+Fred Wheeler: Using VXL for image enhancement/super-resolution work.
+
+Andrew Fitzgibbon: Using VXL for bulk processing of video for
+applications where Matlab is too slow.  His students are using VXL.
+Current strategy for promoting VXL is to not tell anybody about TargetJr.
+
+Peter Tu: GE use of VXL includes real-time metrology, computer vision
+for surveillance, and medical applications.
+
+Amitha Perera: Rensselaer uses VXL for applications in tracing blood
+vessels in retinal images.  They make heavy use of VIL.  Rensselaer
+has developed and uses robust estimation techniques (in vxl/vnl and
+rpl).
+
+Ian Scott: Using VXL for object finding and recognition.  Forcing
+students to use VXL.  Some of these students have no CS background.
+
+Luis Galup: Used TargetJr in the past.  Working on video and tracking.
+Would like to do 3D image processing in VXL.
+
+Tim Cootes: Has used VXL for two years now.  Would like to see a
+common image library in VXL.  Uses VXL for statistical models of
+appearance and shape.
+
+Peter Vanroose: Is migrating from TargetJr to VXL, and currently using
+both.  Using VXL for object recognition and 3D modeling.
+
+Geoff Cross: Currently promoting the use of Matlab as a front-end to
+VXL.
+
+----------------------------------------------------------------------------
+
+1. VIL2
+
+Ian Scott gave a presentation on the plans for vil2, which is meant to
+replace the current vil.  With these minutes you should find his
+slides in the file "vil2talk.ppt".  These minutes assume you have the
+presentation also.  Without duplicating what is present in the
+presentation slides, additional comments and discussions are noted
+here.
+
+Slide "Good points about existing vil": vil2 will be considerably
+easier to develop because large image support (entire image not in
+memory) will be changed.  This should not bother anyone because large
+image support is not as complete in vil as one might think.
+
+Slide "Problems with existing vil": Ian has done experiments
+confirming that on modern computers arithmetic indexing is faster than
+pointer based indexing.  The multiplications are faster than the
+memory lookups.
+
+Slide "Philosophy 3": vil2 will readily extend to 3D, however, that
+extension will not be put in vil2.
+
+A vil2_image_view does not have its own data.  A view tells how to
+access underlying data properly as an image, regardless of how the
+underlying data is structured.
+
+vil2 is currently under development in vxl/mul/vil2.  There are actual
+working examples available.  It was noted that having actual working
+examples is a new approach for VXL.
+
+Joe Mundy: Indexing an image with x,y implies to some that there is a
+Cartesian coordinate system.  But this is not the case with the origin
+in the upper left.  Suggests changing to r,c or i,j.
+
+Ian Scott: A vil2_image_view to switch you to r,c or i,j can be constructed.
+
+Ian Scott: An open issue is whether indices should be signed or unsigned.
+
+There was consensus that indices should be unsigned.  If you are
+accessing an image with negative coordinate, then you should call it
+something else because it is not an image.
+
+Slide "Examples 2 and 6": The flip and transpose operations are
+accomplished entirely by manipulation of stepx, stepy and stepplane in
+the view.
+
+Slide "Example 5": resize() does not preserve data.  This is different
+than STL behavior, but nobody would expect data preservation during an
+image resize.
+
+It was suggested that the name resize() be changed since its behavior
+is different than might be expected.
+
+Slide "File Example 1": Ian is open to suggestion on changes to get
+rid of the "delete" in this example.
+
+It was agreed that get_view should be renamed new_view as Amitha
+suggests.  This helps to emphasize that what is returned must be
+deleted.  Also, a new function will be needed to replace get_view().
+[??? Ian or Amitha should check this paragraph]
+
+There was a call for a vote on the meaning of equality for vil2 views.
+The choices would be.
+
+1.a.  As file_ex1 is written, and get_view returns a pointer
+1.b.  As file_ex1 is written, and get_view returns a smart pointer
+2.    ??? Something else.
+
+There was general consensus around option 1.b.  Using _sptr here is
+type proliferation, but in a way the people are used to.
+
+Ian Scott will make sure examples using option 1.b. will get coded.
+
+Slide "File Example 2": We should standardize on functions expecting
+the arguments top,left,width,height to specify regions.  Any function
+that does otherwise should have a name that makes this obvious.
+
+Slide "File Example 3": The first line will now use a smart pointer
+(resolved during previous discussion).  One result will be that lines
+1 and 2 can be merged.
+
+Open issue: What happens when you try to save a file-image (image not
+all in memory) to disk?  This is not done now, and is not supported in
+vil2.
+
+* Polymorphic registered images
+
+The library mul/vilt was named for vil+transform, but has now been
+renamed to mul/vimt.
+
+AWF: This is a clip-on.
+
+Ian Scott: vimt will not be integrated into vil2.
+
+It was agreed that vimt is important enough to keep.  There was some
+discussion on the difficulty of deciding where to try the line
+delimiting which types is transforms should be supported.
+
+* Questions
+
+- Which indexing scheme
+
+It was decided that i,j,plane should be used for 2D images and
+i,j,k,plane should be used for 3D images.  These variable names will
+be used in the function declarations.
+
+- Which index type
+
+It was decided that unsigned should be used.
+
+* Conversion/Integration process
+
+vil2 is currently in mul/vil2 and all are encouraged to use it.
+
+Soon vil2 will be moved to vxl/vil2 and then vxl/vil will be moved
+outside of vxl, but will be kept in the tree.
+
+Having vil2 working in vxl/vil2 will not be a requirement for release
+1.0.
+
+----------------------------------------------------------------------------
+
+2. VNL
+
+[I missed the first 5 minutes -Fred Wheeler]
+
+Brad King and Bill Hoffman (Kitware) called in to discuss their new
+implementation of vnl_vector and vnl_matrix.  A design goal is to have
+both fixed and variable sized vectors and matrices with the fixed size
+versions using just enough memory for the elements themselves (no
+length, etc.).
+
+They use a parent class with the type and memory policy and two
+subclasses, one fixed size and one variable size.  A concern is that
+if this were adopted in VXL, each vnl function would have a templated
+wrapper laid down 3 times.
+
+* discussion on backward compatibility
+
+Code that currently takes a vnl_vector would not work with the new
+template and there is a lot of code that uses vnl_vector.
+
+There was much discussion on how to wrap fixed and variable sized
+templated vectors and when to do it.
+
+Amitha agreed to meet with Brad King and Bill Hoffman back at Kitware
+to hash out some ideas on how to improve vnl_vector.
+
+* ITK and VTK
+
+Bill Hoffman discussed the relationship with ITK and VTK.  ITK has
+adopted VNL.
+
+* VCL
+
+Bill was asked for his thoughts on VCL.
+
+Bill responded that VCL is not liked.  To avoid using something like
+VCL, ITK forces people to use a relatively new compiler, like msvs6 or
+gcc-2.95.  VTK takes the least common denominator approach as to what
+parts of the C++ language are allowed.  A problem with VCL is that it
+is very heavy on the macros and thus hard to debug.  Most people
+cannot fix problems they encounter with VCL.  The VCL plan is that one
+expert makes it work once, and then everyone can use it.  But this
+hinders experimentation with new compilers/machines by those who are
+not VCL experts.
+
+Soon CMake will support "try run" and "try compile".  This will give
+CMake capabilities like GNU autoconf.
+
+----------------------------------------------------------------------------
+
+3. VGUI
+
+[I missed the first 15 minutes -- Lousy Providence parking
+rules. -Fred Wheeler]
+
+Karen McGaul called in for the VGUI discussion.
+
+A common approach to using VGUI is to use a toolkit such a gtk, qt or
+mfc for menus and buttons and to use a vgui/opengl section inside the
+main GUI.
+
+Joe Mundy: VGUI should be promoted to vxl/vgui.  It will get better
+support as a top-level library.  Also, the vgui dead tendrils should
+be removed.
+
+Karen McGaul agreed to remove the the implementations other than the
+core implementations (gtk, qt, mfc) and to remove the event-loop code.
+
+There was agreement that the vgui improvement plan in Karen McGaul's
+recent e-mail is a good plan.  Karen and Andrew Fitzgibbon will meet
+back at Oxford to implement the planned changes in Karen's e-mail.
+
+----------------------------------------------------------------------------
+
+4. VIDL
+
+Karen McGaul and Luis Galup are on the telephone line.
+
+It is agreed that vxl/vidl is useful and necessary.
+
+Joe Mundy: We need more codecs.  We should be able to handle .mov
+files and write mpeg2.
+
+vxl/vidl needs a chapter in the VXL Book.
+
+The vidl API has a signed/unsigned mix that should be fixed up.
+
+Joe Mundy: We should discuss which codecs we want and who will insert them.
+
+Ian Scott: Manchester has an AVI codec that they can donate to vidl.
+This codec uses an executable that will work only on Intel/Linux.
+
+Joe Mundy: We'll want to read data from DVDs (VOB, LST files).
+
+Fred Wheeler agrees to find out about open source MPEG2 encoders and
+also about open source MPEG2 header parsers.  Joe Mundy would like to
+be pointed toward an open source MPEG2 header parser.
+
+It was agreed that we need to be able to read MPEG headers to automate
+the mux/demux decision and to find the image size.
+
+It may be the case that the current implementation will decode VOB
+files if mux/demux is set correctly.
+
+AWF: There is a way to get the image size out of the mpeg2dec library
+via a callback.  This was done in oxl/...
+
+----------------------------------------------------------------------------
+
+5. Matlab
+
+Oxford uses the VXL Canny edge detector from Matlab via an executable.
+
+Geoff Cross has been making Matlab mex interfaces with VXL by hand.
+(Geoff was not on the line at the time.)
+
+Bill Hoffman suggested that we might be able to do automatic Matlab
+wrapping with CABLE (Kitware product using gcc-XML).
+
+CABLE may also be able to help VXL make DLLs in windows.  Brad King
+would know about this.
+
+----------------------------------------------------------------------------
+
+6. MUL Upgrades
+
+Ian Scott discussed mul code that other may be interested in and that
+may be ready for promotion to vxl top-level libraries.
+
+mul/mil is being converted and integrated into vil2.
+
+If anything from mul is promoted into vxl, then mul/mbl will have to
+be promoted because it is heavily used.
+
+vpdfl is a standard representation for PDFs used by mul code.  There
+is consensus that vpdfl should go into vxl.  There was a discussion of
+where the many vpdfl-vnl templates should go.  If both libraries are
+at the top-level, then neither can hold the shared templates because
+no interdependency is allowed at the top-level.
+
+vpdfl is used by clsfy, which can produce many types of classifiers,
+including a state vector machine.
+
+Ian also suggests promoting mbl_mz_random.
+
+It was agreed that mbl_erf and mbl_gamma should be promoted to
+somewhere in vxl.
+
+----------------------------------------------------------------------------
+
+7. RREL Promotion
+
+Rensselaer would like to promote rrel (Robust Estimation) into
+vxl/vnl.  Chuck Stewart (Rensselaer) may get funding for Amitha Perera
+to do this.
+
+The group feels that what rrel does needs to be better documented.
+Amitha noted that rrel has RANSAC, and many other related algorithms
+that he feels are superior.  There is a need to distinguish what rrel
+does from minimization.
+
+rrel contains several algorithms that perform robust estimation, like
+RANSAC.  All work on problems for which parameters are estimated such
+that a set of residuals is minimized, and some of the residuals are
+outliers and should be removed.
+
+----------------------------------------------------------------------------
+
+8. Image Processing
+
+There was a discussion of vipl.  There is a concern that some people
+are afraid of the profuse templates.
+
+The group viewed the vipl and vepl interfaces in Doxygen.  AWF
+commented that the vepl examples look great.
+
+This discussion was interrupted to discuss ITK.  It is continued
+below in section 10.
+
+----------------------------------------------------------------------------
+
+9. ITK
+
+Jim Miller (GE) called in to discuss ITK and answer questions.
+
+The U.S. National Library of Medicine (NLM) funds ITK.  We are at the
+end of the original 3 year contract period, but that period will be
+extended by 1 year and more contracts are coming.
+
+Q.:  Will NIH mandate ITK for its funded research projects?
+
+Jim Miller: Yes.
+
+Joe Mundy: The lack of cooperation between government agencies will
+probably prevent this mandate.
+
+Jim Miller has got an application working that links ITK, VTK and VXL.
+It is easy for ITK to use VXL.  It's easy to get the data into ITK,
+just pass a block pointer back and forth.
+
+ITK has a data pipelining process.  This supports a GUI building block
+design.  The pipelining helps algorithms work on very large data sets
+by feeding in a section at a time.  Each block can be multi-threaded.
+
+ITK classes tend to have a lot of template parameters.  People are
+trying to reduce this.
+
+AWF: What should VXL do to make it easier to use from ITK?
+
+Jim: 1. There are some VNL issues.  2. It is mostly pretty easy right
+now.
+
+VTK uses tcl or python bindings.  Wrappers cannot be generated
+automatically for ITK because of the templates.
+
+The big algorithms in ITK are: watershed, mutual information based
+registration, level sets, classification hierarchy.
+
+VXL could use an ITK algorithm by wrapping it in a function and faking
+the pipelined I/O.
+
+----------------------------------------------------------------------------
+
+10. Image Processing, continued from section 8.
+
+The discussion returned to image processing.
+
+Ian Scott proposed that image processing go in vxl/vil/algo.
+Algorithms would operate on both vil2_image_views (N in, M out) in
+memory, and would operate on vil_image_data, stitching together tiles
+of data.
+
+AWF proposed that we skip the stitching.
+
+Amitha Perera suggested that we start by making algorithms in
+vxl/vil/algo only operate on memory images, and add operations on file
+images only when they are needed.
+
+----------------------------------------------------------------------------
+
+11. Image Formats
+
+Manchester University does not want to write the code for these image
+formats: viff, mit, tiff.  They plan to do most of the work, but want
+others to fill in the gaps.
+
+Consensus is that the tiff format is important, but the mit format is
+not.
+
+Fred Wheeler needs tiff support and offered to do it.  Other suggested
+that we first try to find out who put the tiff support in vil, and ask
+them to put it into vil2.
+
+----------------------------------------------------------------------------
+
+12. Closing Comments
+
+It was suggested that it would be a good idea to automatically check
+that the examples in the VXL Book compile.
+
+Image processing code will go in vxl/vil/algo.
+
+Manchester University would like everyone to look at vil2 and to fix
+and/or report bugs.
+
+vil2 functions should take inputs first, then outputs: function(input,
+..., output, ...).  Inputs before outputs is preferred everywhere in
+VXL, even though this is contrary to the equals '=' operation.
+
+There was a vigorous discussion over whether to use native type names
+like int and char or to use specific VXL type names like vxl_uint8 and
+vxl_sint32 in vil2.  One concern is that vxl_uint8 is odd looking to
+new users.
+
+Goals:
+
+* VXL 1.0 in 2-3 months with these requirements
+  - vgui a top-level library
+  - vidl, vcsl get documented (Peter Tu has a vcsl document, not in
+    texinfo, needs to be converted)
+
+Question: Should the VXL Book be split into a users books and a
+developers book.  vsl has a lot of sections of developer interest
+only.  There are several other sections labeled "developer topic".
+
+vbl_bounding_box_DIM and vbl_*tuple* should be removed.
+
+----------------------------------------------------------------------------
