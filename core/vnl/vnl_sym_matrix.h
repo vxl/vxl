@@ -173,7 +173,7 @@ inline vnl_matrix<T> vnl_sym_matrix<T>::as_matrix() const
 template <class T>
 inline void vnl_sym_matrix<T>::resize(int n)
 {
-  if (n == nn_) return;
+  if (n == (int)nn_) return;
 
   vnl_c_vector<T>::deallocate(data_, size());
   vnl_c_vector<T>::deallocate(index_, nn_);

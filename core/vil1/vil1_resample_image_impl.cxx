@@ -62,7 +62,7 @@ bool vil_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int 
   }
 
   // compute and check bounds of region requested.
-  if (x0 < 0 || y0 < 0 || x0+w > new_width || y0+h > new_height) {
+  if (x0 < 0 || y0 < 0 || x0+w > (int)new_width || y0+h > (int)new_height) {
     vcl_cerr << __FILE__ ": invalid section bounds" << vcl_endl;
     return false;
   }

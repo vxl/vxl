@@ -186,7 +186,10 @@ void test_explicit_int_io()
 // stringstream not yet properly supported on gcc-2.95.2 (see vcl/vcl_sstream.h)
 #if (!defined(VCL_GCC) || defined(GNU_LIBSTDCXX_V3)) && !defined(VCL_SGI_CC_720)
   vcl_stringstream ss(vcl_ios_in | vcl_ios_out | vcl_ios_binary);
-  const char *b= ss.str().c_str();
+  //const char *b= ss.str().c_str();
+  //Is the above simply to make a call to c_str? b is otherwise unused. Removing it
+  //to avoid compiler warnings.
+  ss.str().c_str();
   {
     vsl_b_ostream bss(&ss);
     TEST ("Created stringstream for writing", (!bss), false);

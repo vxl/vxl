@@ -290,7 +290,7 @@ vil_stream_url::vil_stream_url(char const *url)
       }
       else
       {
-        for (unsigned i=0; i<n; ++i)
+        for (int i=0; i<n; ++i)
         {
           if ((entity_marker==2||entity_marker==0) && buffer[i]=='\r') entity_marker++;
           else if (entity_marker==1 && buffer[i]=='\n') entity_marker++;

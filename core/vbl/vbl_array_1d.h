@@ -138,7 +138,7 @@ struct vbl_array_1d
   // #define NDEBUG to turn bounds checking off.
   reference       operator[](unsigned i)
   {
-    assert (i < end_ - begin_);
+    assert (int(i) < end_ - begin_);
     return begin_[i];
   }
 
@@ -146,7 +146,7 @@ struct vbl_array_1d
   // #define NDEBUG to turn bounds checking off.
   const_reference operator[](unsigned i) const
   {
-    assert (i < end_ - begin_);
+    assert (int(i) < end_ - begin_);
     return begin_[i];
   }
 

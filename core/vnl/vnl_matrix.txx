@@ -1401,7 +1401,7 @@ L40:
   i2 = im;
   if (iter == i2)
     goto L40;
-  if (iter <= iwrk) {
+  if (iter <= (int)iwrk) {
     if (move[iter-1])
       goto L40;
     else
@@ -1422,9 +1422,9 @@ L80:
   while (true) {
     i2 = m * i1 - k * (i1 / n);
     i2c = k - i2;
-    if (i1 <= iwrk)
+    if (i1 <= (int)iwrk)
       move[i1-1] = '1'; // true;
-    if (i1c <= iwrk)
+    if (i1c <= (int)iwrk)
       move[i1c-1] = '1'; // true;
     ncount += 2;
     if (i2 == iter)

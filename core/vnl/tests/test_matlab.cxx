@@ -58,7 +58,7 @@ void test_matlab() {
       vnl_matlab_readhdr vh(f);
       fsm_assert( vh);
       fsm_assert( vh.is_single());
-      fsm_assert( vh.rows() == v.size());
+      fsm_assert( vh.rows() == (int)v.size());
       fsm_assert( vh.cols() == 1);
       fsm_assert(!vh.is_complex());
       fsm_assert(vcl_strcmp(vh.name(), "v")==0);
@@ -69,8 +69,8 @@ void test_matlab() {
       vnl_matlab_readhdr Mh(f);
       fsm_assert( Mh);
       fsm_assert(!Mh.is_single());
-      fsm_assert( Mh.rows() == M.rows());
-      fsm_assert( Mh.cols() == M.cols());
+      fsm_assert( Mh.rows() == (int)M.rows());
+      fsm_assert( Mh.cols() == (int)M.cols());
       fsm_assert( Mh.is_rowwise());
       fsm_assert(!Mh.is_complex());
       fsm_assert(vcl_strcmp(Mh.name(), "M")==0);

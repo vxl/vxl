@@ -52,7 +52,7 @@ template<class T>
 void vsl_print_summary(vcl_ostream & os,const vnl_vector<T> & p)
 {
   os<<"Len: "<<p.size()<<" (";
-  for ( int i =0; i < p.size() && i < 5; ++i )
+  for ( unsigned int i =0; i < p.size() && i < 5; ++i )
     os << p.operator()(i) <<" ";
   if (p.size() > 5) os << " ...";
   os << ")";

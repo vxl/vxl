@@ -67,10 +67,10 @@ template class mystack<Matrix>;
 void print(mystack<Matrix> const &stack, char const *fmt)
 {
   char buf[4096];
-  for (int k=0; k<stack.size(); ++k) {
+  for (unsigned int k=0; k<stack.size(); ++k) {
     Matrix const& M = stack[k];
-    for (int i=0; i<M.rows(); ++i) {
-      for (int j=0; j<M.cols(); ++j) {
+    for (unsigned int i=0; i<M.rows(); ++i) {
+      for (unsigned int j=0; j<M.cols(); ++j) {
         vcl_sprintf(buf, fmt, M[i][j]);
         vcl_cout << ' ' << buf;
       }

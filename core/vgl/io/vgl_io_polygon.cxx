@@ -15,7 +15,7 @@ void vsl_b_write(vsl_b_ostream &os, const vgl_polygon & p)
     for (int i=0;i<p.num_sheets();i++)
     {
         vsl_b_write(os,p[i].size());
-        for (int j=0;j<p[i].size();j++)
+        for (unsigned int j=0;j<p[i].size();j++)
             vsl_b_write(os, p[i][j]);
     }
 }
@@ -63,7 +63,7 @@ void vsl_print_summary(vcl_ostream& os,const vgl_polygon & p)
   os<<"Polygon with points defined by sheets : "<<vcl_endl;
   for (int i=0;i<p.num_sheets();i++)
   {
-      for (int j=0;j<p[i].size();j++)
+      for (unsigned int j=0;j<p[i].size();j++)
           os << p[i][j].x()<<","<<p[i][j].y()<<vcl_endl;
       os<<vcl_endl;
   }

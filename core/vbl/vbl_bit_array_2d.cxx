@@ -23,7 +23,7 @@ vbl_bit_array_2d::vbl_bit_array_2d(vbl_bit_array_2d const& that)
     unsigned int bitindex;
     index( num_rows_-1, num_cols_-1, byteindex, bitindex);
 
-    for( int i=0; i<= byteindex; i++)
+    for( unsigned int i=0; i<= byteindex; i++)
       data_[i] = that.data_[i];
   }
 }
@@ -39,7 +39,7 @@ vbl_bit_array_2d& vbl_bit_array_2d::operator=(vbl_bit_array_2d const& that)
   unsigned int bitindex;
   index(num_rows_-1, num_cols_-1, byteindex, bitindex);
 
-  for (int i=0;i< byteindex;i++)
+  for (unsigned int i=0;i< byteindex;i++)
     data_[i]= that.data_[i];
 
   return *this;
@@ -92,7 +92,7 @@ void vbl_bit_array_2d::fill(bool value)
     if (value) v |= 1;
   }
 
-  for (int i=0;i<= byteindex;i++)
+  for (unsigned int i=0;i<= byteindex;i++)
     data_[i]= v;
 }
 

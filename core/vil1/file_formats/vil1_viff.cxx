@@ -289,7 +289,7 @@ bool vil_viff_generic_image::put_section(void const* buf, int x0, int y0, int xs
     for(int p = 0; p<planes_; ++p)
       for (int y = y0; y < y0+ys; ++y) {
         vcl_memcpy(tempbuf, ob, rowsize);
-        for (int i=0; i<rowsize; i+=bits_per_component_/8)
+        for (unsigned int i=0; i<rowsize; i+=bits_per_component_/8)
           swap(tempbuf+i,bits_per_component_/8);
         is_->seek(start_of_data_ + p*width_*height_*bits_per_component_/8 + bits_per_component_*(y*width_+x0)/8);
         is_->write(tempbuf, rowsize);

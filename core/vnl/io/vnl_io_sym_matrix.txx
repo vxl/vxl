@@ -55,17 +55,17 @@ void vsl_print_summary(vcl_ostream & os,const vnl_sym_matrix<T> & p)
 {
   os<<"Size: "<<p.rows()<<" x "<<p.cols()<<vcl_endl;
 
-  int n = 5;
+  unsigned int n = 5;
 
 
   if (n>p.cols()) n=p.cols();
 
   vsl_indent_inc(os);
-  for (int i=0;i<n;i++)
+  for (unsigned int i=0;i<n;i++)
   {
     os<<vsl_indent()<<" (";
 
-    for ( int j=0; j<=i; j++)
+    for ( unsigned int j=0; j<=i; j++)
       os<<p(i,j)<<" ";
     os << vcl_endl;
   }

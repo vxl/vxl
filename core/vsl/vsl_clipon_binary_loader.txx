@@ -57,7 +57,7 @@ const BaseClassIO& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::io_for_class
     vcl_cerr << "vsl_clipon_binary_loader<BaseClass>::io_for_class: ";
     vcl_cerr << "Unable to determine suitable loader."<<vcl_endl;
     vcl_cerr << object_io_.size()<<" valid loaders available for "<<vcl_endl;
-    for (int j=0; j<object_io_.size(); ++j)
+    for (unsigned int j=0; j<object_io_.size(); ++j)
       vcl_cerr << object_io_[j]->target_classname() << vcl_endl;
     vcl_abort();
   }

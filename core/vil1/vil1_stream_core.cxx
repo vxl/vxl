@@ -73,9 +73,9 @@ int vil_stream_core::m_transfer(char *buf, int pos, int n, bool read)
   
   if (read)
   {
-    if (n+pos > tailpos)
+    if ((unsigned int)(n+pos) > tailpos)
     {
-      if (pos > tailpos)
+      if ((unsigned int)pos > tailpos)
         n = 0;
       else
         n = tailpos - pos;
@@ -84,7 +84,7 @@ int vil_stream_core::m_transfer(char *buf, int pos, int n, bool read)
   }
   else
     // chunk up to the required size :
-    while (blocksize*block.size() < pos+n)
+    while (blocksize*block.size() < (unsigned int)(pos+n))
       block.push_back(new char [blocksize]);
 
   // transfer data
@@ -114,7 +114,7 @@ int vil_stream_core::m_transfer(char *buf, int pos, int n, bool read)
 
 
   // update tailpos
-  if (tailpos < pos+n)
+  if (tailpos < (unsigned int)(pos+n))
     tailpos = pos+n;
 
   // always succeed.

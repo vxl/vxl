@@ -159,7 +159,7 @@ void golden_test_vil_io(bool save_file)
     p_in_memory_image_impl.get_section(&buf2[0], 0, 0,
       p_out_memory_image_impl.width(), p_out_memory_image_impl.width());
     bool data_same = false;
-    for (int i=0;i<buf1.size();i++)
+    for (unsigned int i=0;i<buf1.size();i++)
       data_same = (buf1[i]==buf2[i]);
     TEST ( "p_out_memory_image_impl == p_in_memory_image_impl (data)",
       data_same, true);

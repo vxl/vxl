@@ -403,7 +403,7 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
           break;
         default:
           fprintf(stderr,"\nvil_viff_imagesize: Unknown mapping scheme:");
-          fprintf(stderr," %d\n",image->map_scheme);
+          fprintf(stderr," %lu\n",image->map_scheme);
           return(0);
           /* break; */
       }

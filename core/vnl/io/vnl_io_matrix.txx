@@ -58,18 +58,18 @@ void vsl_print_summary(vcl_ostream & os,const vnl_matrix<T> & p)
 {
   os<<"Size: "<<p.rows()<<" x "<<p.cols()<<vcl_endl;
 
-  int m = 5; int n = 5;
+  unsigned int m = 5; unsigned int n = 5;
 
 
   if (m>p.rows()) m=p.rows();
   if (n>p.cols()) n=p.cols();
 
   vsl_indent_inc(os);
-  for (int i=0;i<m;i++)
+  for (unsigned int i=0;i<m;i++)
   {
      os<<vsl_indent()<<" (";
 
-     for ( int j=0; j<n; j++)
+     for ( unsigned int j=0; j<n; j++)
         os<<p(i,j)<<" ";
       if (p.cols()>n) os<<"...";
         os<<")"<<vcl_endl;

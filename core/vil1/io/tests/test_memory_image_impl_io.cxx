@@ -84,7 +84,7 @@ void test_memory_image_impl_io()
   vcl_vector<int> buf2(imageof.size());
   p_in.get_section(&buf2[0], 0, 0, width, height);
   bool data_same = false;
-  for (int i=0;i<buf1.size();i++)
+  for (unsigned int i=0;i<buf1.size();i++)
      data_same = (buf1[i]==buf2[i]);
   TEST ( "p_out == p_in (data)", data_same, true);
 

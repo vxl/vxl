@@ -227,7 +227,7 @@ vil_gif_loader_saver::~vil_gif_loader_saver()
     global_color_map = 0;
   }
 
-  for (int i=0; i<images.size(); ++i) {
+  for (unsigned int i=0; i<images.size(); ++i) {
     vil_gif_image_record *ir = static_cast<vil_gif_image_record*>(images[i]);
     if (ir->color_map)
       delete ir->color_map;

@@ -254,7 +254,7 @@ bool vil_bmp_generic_image::read_header()
 #ifdef DEBUG
   where << "bit_map_start = " << bit_map_start << vcl_endl; // blather
 #endif
-  assert(bit_map_start == file_hdr.bitmap_offset); // I think they're supposed to be the same -- fsm.
+  assert(bit_map_start == (int)file_hdr.bitmap_offset); // I think they're supposed to be the same -- fsm.
 
   return true;
 }

@@ -67,7 +67,7 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
     vcl_cerr << "\n I/O ERROR: vsl_binary_loader<BaseClass>::load_object: ";
     vcl_cerr << "class name <" << name << "> not in list of loaders"<<vcl_endl;
     vcl_cerr << object_.size()<<" valid loaders: "<<vcl_endl;
-    for (int j=0; j<object_.size(); ++j)
+    for (unsigned int j=0; j<object_.size(); ++j)
       vcl_cerr << object_[j]->is_a() << vcl_endl;
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;

@@ -79,11 +79,11 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_sparse_matrix<T> & p)
   vsl_b_write(os, v.rows());
   vsl_b_write(os, v.columns());
 
-  for (int i=0;i<v.rows();i++)
+  for (unsigned int i=0;i<v.rows();i++)
   {
     rw=v.get_row(i);
     vsl_b_write(os, rw.size());
-    for (int j=0;j<rw.size();j++)
+    for (unsigned int j=0;j<rw.size();j++)
     {
       vsl_b_write(os, rw[j]);
     }
@@ -121,8 +121,8 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix<T> & p)
     vsl_b_read(is, n_rows);
     vsl_b_read(is, n_cols);
     // As we cannot resize the matrix, check that it is the correct size.
-    assert (n_rows==p.rows());
-    assert (n_cols==p.columns());
+    assert (n_rows==(int)p.rows());
+    assert (n_cols==(int)p.columns());
     for(int i=0;i<n_rows;i++)
     {
       vsl_b_read(is,row_size);
