@@ -24,6 +24,47 @@ int malloc_count = 0;
 # define check_count /* */
 #endif
 
+static
+void
+test_size()
+{
+  vnl_matrix_fixed<double,3,4> m;
+  TEST( "memory footprint", sizeof(m), sizeof(double[12]) );
+}
+
+static
+void
+test_multiply()
+{
+  double data_m1[6] = {
+    1, 2,
+    3, 4,
+    5, 6
+  };
+  double data_m2[8] = {
+    2, 3, 4, 5,
+    6, 7, 8, 9
+  };
+  double data_v1[2] = {
+    7,
+    8
+  };
+
+  vnl_matrix_fixed<double,3,2> m1( data_m1 );
+  vnl_matrix_fixed<double,2,4> m2( data_m2 );
+  vnl_vector_fixed<double,2> v1( data_v1 );
+
+  testlib_test_begin( "Matrix-matrix multiply" );
+  vnl_matrix_fixed<double,3,4> mr = m1*m2;
+  testlib_test_perform( mr(0,0) == 14 && mr(0,1) == 17 && mr(0,2) == 20 && mr(0,3) == 23 &&
+                        mr(1,0) == 30 && mr(1,1) == 37 && mr(1,2) == 44 && mr(1,3) == 51 &&
+                        mr(2,0) == 46 && mr(2,1) == 57 && mr(2,2) == 68 && mr(2,3) == 79 );
+
+  testlib_test_begin( "Matrix-vector multiply" );
+  vnl_vector_fixed<double,3> vr = m1*v1;
+  testlib_test_perform( vr(0) = 23 && vr(1) == 53 && vr(2) == 83 );
+}
+
 void test_matrix_fixed()
 {
   verbose_malloc = true;
@@ -67,6 +108,9 @@ void test_matrix_fixed()
   // test that vnl_double_3x3's can be multiplied
   vnl_double_3x3 A(datablock);
   vnl_double_3x3 B = A * A;
+
+  test_multiply();
+  test_size();
 }
 
 #if TEST_MALLOC

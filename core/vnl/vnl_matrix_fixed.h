@@ -30,6 +30,67 @@
 #include "vnl_vector.h"
 #include "vnl_vector_fixed.h"
 
+// This mess is for a MSVC6 workaround.
+//
+// The problem: the matrix-matrix operator* should be written as a
+// non-member function since vxl (currently) forbits the use of member
+// templates. However, when declared as
+//
+//     template<typename T, unsigned m, unsigned n, unsigned o>
+//     matrix<T,m,o> operator*( matrix<T,m,n>, matrix<T,n,o> );
+//
+// MSVC6 does not find it. A solution is to declare it as a member
+// template. However, the obvious
+//
+//     template<unsigned o>
+//     matrix<T,num_rows,o> operator*( matrix<T,num_cols,o> );
+//
+// causes an internal compiler error. It turns out that if the new
+// template parameter "o" comes _first_, then all is okay. Now, we
+// can't change the signature of vnl_matrix_fixed to <unsigned cols,
+// unsigned rows, type>, so we use a "hidden" helper matrix. Except
+// that user defined conversion operators and conversion constructors
+// are not called for templated functions. So we have to use a helper
+// base class. The base class is empty, which means that there is no
+// loss in space or time efficiency. Finally, we have:
+//
+//   template<unsigned cols, unsigned rows, typename T>
+//   class fake_base { };
+//
+//   template<typename T, unsigned rows, unsigned cols>
+//   class matrix : public fake_base<cols,rows,T>
+//   {
+//      template<unsigned o>
+//      matrix<T,rows,o>  operator*( fake_base<o,cols,T> );
+//   };
+//
+// Notice how "o" is first in the list of template parameters. Since
+// base class conversions _are_ performed during template matching,
+// matrix<T,m,n> is matched as fake_base<n,m,T>, and all is good. For
+// some values of good.
+//
+// Of course, all this trickery is pre-processed away for conforming
+// compilers.
+//
+template <class T, unsigned int num_rows, unsigned int num_cols>
+class vnl_matrix_fixed;
+template <class T, unsigned M, unsigned N>
+inline
+vnl_vector_fixed<T, M> vnl_matrix_fixed_mat_vec_mult(const vnl_matrix_fixed<T, M, N>& a, const vnl_vector_fixed<T, N>& b);
+template <class T, unsigned M, unsigned N, unsigned O>
+inline
+vnl_matrix_fixed<T, M, O> vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b);
+#if VCL_VC60
+template<unsigned cols, unsigned rows, typename T>
+class vnl_matrix_fixed_fake_base
+{
+};
+#define VNL_MATRIX_FIXED_VCL60_WORKAROUND : public vnl_matrix_fixed_fake_base<num_cols,num_rows,T>
+#else
+#define VNL_MATRIX_FIXED_VCL60_WORKAROUND /* no workaround. Phew. */
+#endif
+
+
 //: Fixed size, stack-stored, space-efficient matrix.
 // vnl_matrix_fixed is a fixed-length, stack storage vector. It has
 // the same storage size as a C-style array. It is not related via
@@ -39,7 +100,7 @@
 // Read the overview documentation of vnl_vector_fixed. The text there
 // applies here.
 template <class T, unsigned int num_rows, unsigned int num_cols>
-class vnl_matrix_fixed
+class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
 {
 public:
   typedef unsigned int size_type;
@@ -250,6 +311,19 @@ public:
     sub( T(0), data_block(), r.data_block() );
     return r;
   }
+
+#if VCL_VC60
+  template<unsigned o>
+  vnl_matrix_fixed<T,num_rows,o> operator*( vnl_matrix_fixed_fake_base<o,num_cols,T> const& mat ) const
+  {
+    vnl_matrix_fixed<T,num_cols,o> const& b = static_cast<vnl_matrix_fixed<T,num_cols,o> const&>(mat);
+    return vnl_matrix_fixed_mat_mat_mult<T,num_rows,num_cols,o>( *this, b );
+  }
+  vnl_vector_fixed<T, num_rows> operator*( vnl_vector_fixed<T, num_cols> const& b) const
+  {
+    return vnl_matrix_fixed_mat_vec_mult<T,num_rows,num_cols>(*this,b);
+  }
+#endif
 
   ////--------------------------- Additions ----------------------------
 
@@ -518,6 +592,8 @@ private:
   void assert_size_internal(unsigned, unsigned) const;
 };
 
+#undef VNL_MATRIX_FIXED_VCL60_WORKAROUND
+
 
 // Make the operators below inline because (1) they are small and
 // (2) we then have less explicit instantiation trouble.
@@ -608,6 +684,7 @@ vnl_matrix_fixed<T,m,n> operator/( const vnl_matrix_fixed<T,m,n>& mat, T s )
 
 
 template<class T, unsigned m, unsigned n>
+inline
 vnl_matrix_fixed<T,m,n> element_product( const vnl_matrix_fixed<T,m,n>& mat1,
                                          const vnl_matrix_fixed<T,m,n>& mat2 )
 {
@@ -618,6 +695,7 @@ vnl_matrix_fixed<T,m,n> element_product( const vnl_matrix_fixed<T,m,n>& mat1,
 
 
 template<class T, unsigned m, unsigned n>
+inline
 vnl_matrix_fixed<T,m,n> element_quotient( const vnl_matrix_fixed<T,m,n>& mat1,
                                           const vnl_matrix_fixed<T,m,n>& mat2)
 {
@@ -627,7 +705,46 @@ vnl_matrix_fixed<T,m,n> element_quotient( const vnl_matrix_fixed<T,m,n>& mat1,
 }
 
 
-#ifndef VCL_VC60
+// The following two functions are helper functions keep the
+// matrix-matrix and matrix-vector multiplication code in one place,
+// so that bug fixes, etc, can be localized.
+template <class T, unsigned M, unsigned N>
+inline
+vnl_vector_fixed<T, M>
+vnl_matrix_fixed_mat_vec_mult(const vnl_matrix_fixed<T, M, N>& a,
+                              const vnl_vector_fixed<T, N>& b)
+{
+  vnl_vector_fixed<T, M> out;
+  for (unsigned i = 0; i < M; ++i)
+  {
+    T accum = a(i,0) * b(0);
+    for (unsigned k = 1; k < N; ++k)
+      accum += a(i,k) * b(k);
+    out(i) = accum;
+  }
+  return out;
+}
+
+// see comment above
+template <class T, unsigned M, unsigned N, unsigned O>
+inline
+vnl_matrix_fixed<T, M, O>
+vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed<T, M, N>& a,
+                              const vnl_matrix_fixed<T, N, O>& b)
+{
+  vnl_matrix_fixed<T, M, O> out;
+  for (unsigned i = 0; i < M; ++i)
+    for (unsigned j = 0; j < O; ++j)
+    {
+      T accum = a(i,0) * b(0,j);
+      for (unsigned k = 1; k < N; ++k)
+        accum += a(i,k) * b(k,j);
+      out(i,j) = accum;
+    }
+  return out;
+}
+
+#if ! VCL_VC60
 // The version for correct compilers
 
 //: Multiply  conformant vnl_matrix_fixed (M x N) and vector_fixed (N)
@@ -637,15 +754,7 @@ template <class T, unsigned M, unsigned N>
 inline
 vnl_vector_fixed<T, M> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_vector_fixed<T, N>& b)
 {
-  vnl_vector_fixed<T, M> out;
-  for (unsigned i = 0; i < M; ++i)
-  {
-    T accum = a(i,0) * b(0);
-    for (unsigned k = 1; k < N; ++k)
-      accum += a(i,k) * b(k);
-    out(i) = accum;
-  }
-  return out;
+  return vnl_matrix_fixed_mat_vec_mult(a,b);
 }
 
 //: Multiply two conformant vnl_matrix_fixed (M x N) times (N x O)
@@ -654,104 +763,9 @@ template <class T, unsigned M, unsigned N, unsigned O>
 inline
 vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b)
 {
-  vnl_matrix_fixed<T, M, O> out;
-  for (unsigned i = 0; i < M; ++i)
-    for (unsigned j = 0; j < O; ++j)
-    {
-      T accum = a(i,0) * b(0,j);
-      for (unsigned k = 1; k < N; ++k)
-        accum += a(i,k) * b(k,j);
-      out(i,j) = accum;
-    }
-  return out;
+  return vnl_matrix_fixed_mat_mat_mult(a,b);
 }
-
-
-#else // VCL_VC60
-// For some reason MSVC6.0 cannot cope with these particular instances of template matching.
-
-
-//: Multiply two conformant vnl_matrix_fixed (M x N) times (N x O)
-// \relates vnl_matrix_fixed
-template <class T, unsigned M, unsigned N, unsigned O>
-inline
-vnl_matrix_fixed<T, M, O> vnl_matrix_fixed_m_mult_m_msvc6_hack(
-  const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b)
-{
-  vnl_matrix_fixed<T, M, O> out;
-  for (unsigned i = 0; i < M; ++i)
-    for (unsigned j = 0; j < O; ++j)
-    {
-      T accum = a(i,0) * b(0,j);
-      for (unsigned k = 1; k < N; ++k)
-        accum += a(i,k) * b(k,j);
-      out(i,j) = accum;
-    }
-  return out;
-}
-
-
-# define macro( T, M, N, O ) inline \
-vnl_matrix_fixed<T, M, O > operator*(const vnl_matrix_fixed<T, M, N >& a, const vnl_matrix_fixed<T, N, O >& b) \
-{ return vnl_matrix_fixed_m_mult_m_msvc6_hack< T, M, N, O >(a, b); }
-
-macro(double, 2, 2, 2)
-macro(double, 2, 2, 3)
-macro(double, 2, 2, 6)
-macro(double, 2, 3, 2)
-macro(double, 2, 3, 3)
-macro(double, 3, 2, 2)
-macro(double, 3, 2, 3)
-macro(double, 3, 3, 3)
-macro(double, 3, 3, 4)
-macro(double, 3, 3, 12)
-macro(double, 3, 4, 3)
-macro(double, 3, 4, 4)
-macro(double, 4, 2, 4)
-macro(double, 4, 3, 3)
-macro(double, 4, 3, 4)
-macro(double, 4, 4, 3)
-macro(double, 4, 4, 4)
-macro(float, 3, 3, 3)
-# undef macro
-
-
-// Multiply  conformant vnl_matrix_fixed (M x N) and vector_fixed (N)
-// This version is used by MSVC60 to avoid an annoying instantiation problem.
-template <class T, unsigned M, unsigned N>
-inline
-vnl_vector_fixed<T, M> vnl_matrix_fixed_m_mult_v_msvc6_hack(const vnl_matrix_fixed<T, M, N>& a, const vnl_vector_fixed<T, N>& b)
-{
-  vnl_vector_fixed<T, M> out;
-  for (unsigned i = 0; i < M; ++i)
-  {
-    T accum = a(i,0) * b(0);
-    for (unsigned k = 1; k < N; ++k)
-      accum += a(i,k) * b(k);
-    out(i) = accum;
-  }
-  return out;
-}
-
-# define macro( T, M, N ) inline \
-vnl_vector_fixed<T, M > operator*(const vnl_matrix_fixed<T, M, N >& a, const vnl_vector_fixed<T, N >& b) \
-{ return vnl_matrix_fixed_m_mult_v_msvc6_hack< T, M, N >(a, b); }
-
-macro(double, 2, 2)
-macro(double, 2, 3)
-macro(double, 2, 6)
-macro(double, 3, 2)
-macro(double, 3, 3)
-macro(double, 3, 4)
-macro(double, 3, 12)
-macro(double, 4, 2)
-macro(double, 4, 3)
-macro(double, 4, 4)
-macro(float, 3, 3)
-# undef macro
-
-
-#endif // VCL_VC60
+#endif // ! VCL_VC60
 
 
 // These overloads for the common case of mixing a fixed with a
