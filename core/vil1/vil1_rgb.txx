@@ -1,4 +1,3 @@
-#include <vcl/vcl_compiler.h>
 #include <vil/vil_rgb.h>
 #undef VIL_RGB_INSTANTIATE
 #undef VIL_RGB_INSTANTIATE_LS

@@ -2,7 +2,7 @@
 #ifndef vil_rgb_h_
 #define vil_rgb_h_
 #ifdef __GNUC__
-#pragma interface
+#pragma interface "vil_rgb"
 #endif
 // .NAME    vil_rgb<> - Templated three-value colour cell
 //
@@ -26,8 +26,6 @@
 //           nonsense from the .txx file.
 
 #include <vcl/vcl_iostream.h>
-#include <vcl/vcl_compiler.h>
-#include <vcl/vcl_iosfwd.h>
 #include <vil/vil_clamp.h>
 
 #ifdef VCL_SUNPRO_CC
@@ -37,8 +35,8 @@
 #endif
 
 template <class T>
-struct vil_rgb {
-public:
+struct vil_rgb 
+{
   typedef T value_type;
   
   // -- Create (0,0,0) vil_rgb cell. We need the default ctor to do this as the STL

@@ -14,6 +14,7 @@ TESTS += test_load.cxx
 #memory_image:
 TESTS += test_memory_image.cxx
 TESTS += test_memory_image_of.cxx
+TESTS += test_write_endian.cxx
 
 IULIBS = -lvil -lvcl
 

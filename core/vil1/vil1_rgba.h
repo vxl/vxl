@@ -20,7 +20,6 @@
 //              Philip C. Pritchett, 12 Nov 99
 //              Robotics Research Group, University of Oxford
 //
-#include <vcl/vcl_compiler.h>
 #include <vcl/vcl_iosfwd.h>
 
 template <class T>

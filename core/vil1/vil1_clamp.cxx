@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implementation "vil_clamp.h"
+#pragma implementation "vil_clamp"
 #endif
 //
 // Class: vil_clamp

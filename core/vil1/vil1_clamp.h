@@ -1,10 +1,9 @@
 #ifndef vil_clamp_h_
 #define vil_clamp_h_
 #ifdef __GNUC__
-#pragma interface
+#pragma interface "vil_clamp"
 #endif
 // .NAME    vil_clamp - Templated vil_clamping functions to ensure value is in given range
-// .HEADER  Basics Package
 // .LIBRARY vil
 // .INCLUDE vil/vil_clamp.h
 // .FILE    vil/vil_clamp.cxx
