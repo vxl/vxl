@@ -1,3 +1,7 @@
+//:
+// \file
+#ifndef gevd_pixel_h_
+#define gevd_pixel_h_
 // <begin copyright notice>
 // ---------------------------------------------------------------------------
 //
@@ -30,15 +34,6 @@
 //
 // ---------------------------------------------------------------------------
 // <end copyright notice>
-#ifndef _pixel_h_
-#define _pixel_h_
-
-//:
-// \file
-
-//#include <IUE_cmath.h> // take care: don't use abs(double) as you will be getting abs(int)
-//#include <Basics/bufferxy.h>
-//#include <ImageProcessing/bufferxyz.h>
 
 #include "gevd_bufferxy.h"
 
@@ -80,7 +75,7 @@ shortPixel(gevd_bufferxy& buf, int x, int y)
 }
 
 //: Get reference to pixel as a float number, at indexes (x, y) in buf.
-// float is generally used to avoid overflow and unecessary conversion
+// float is generally used to avoid overflow and unnecessary conversion
 // between float/double for math computation and byte/short for storage.
 
 inline float&
