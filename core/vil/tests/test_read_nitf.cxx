@@ -18,7 +18,7 @@
  * Test to read NITF file using class vil_nitf.
  * NOTE: Only reads header data.
  */
-static void test_read_nitf (char const* filename)
+static void test_read_nitf(char const* filename)
 {
     static vcl_string method_name = "test_read_nitf: ";
 
@@ -39,25 +39,24 @@ static void test_read_nitf (char const* filename)
 
     if (image_resource != static_cast<vil_image_resource_sptr>(0)) {
       vcl_cout << method_name
-               << "ni = " << image_resource->ni()
+               << "  ni = " << image_resource->ni()
                << "  nj = " << image_resource->nj()
                << "  nplanes = " << image_resource->nplanes()
                << "  pixel_format = " << image_resource->pixel_format()
                << vcl_endl;
 
-      char * tag_name = vil_property_quantisation_depth ;  // DEFINED IN vil_property.h
-      unsigned int bits_per_component = 0 ;
-      bool got_property = image_resource->get_property (tag_name, &bits_per_component) ;
+      char * tag_name = vil_property_quantisation_depth;  // DEFINED IN vil_property.h
+      unsigned int bits_per_component = 0;
+      bool got_property = image_resource->get_property(tag_name, &bits_per_component);
 
       if (got_property == false) {
-	vcl_cout << "WARNING: failed to get property <" << tag_name << ">"
-		 << vcl_endl ;
+        vcl_cout << "WARNING: failed to get property <" << tag_name << ">\n";
       }
       else {
-	vcl_cout << "vil_property_quantisation_depth"
-		 << " (= actual bits per pixel per band) = " 
-		 << bits_per_component
-		 << vcl_endl ;
+        vcl_cout << "vil_property_quantisation_depth"
+                 << " (= actual bits per pixel per band) = "
+                 << bits_per_component
+                 << vcl_endl;
       }
     }
 
@@ -196,20 +195,20 @@ static void test_read_nitf (char const* filename)
 }  // end method test_read_nitf
 
 //*****************************************************************************
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
-    static vcl_string method_name = "main: ";
+  static vcl_string method_name = "main: ";
 
-    vcl_cout << "argc = " << argc << vcl_endl ;
+  vcl_cout << "argc = " << argc << vcl_endl;
 
-    if (argc > 1) {
-      for (int i = 1 ; i < argc ; ++i) { 
-	vcl_cout << "argv[" << i << "] = <" << argv[i] << ">" << vcl_endl ;
-	char * test_input_file = argv[i] ;
-	test_read_nitf (test_input_file) ;
-      }
+  if (argc > 1) {
+    for (int i = 1; i < argc; ++i) {
+      vcl_cout << "argv[" << i << "] = <" << argv[i] << ">\n";
+      char * test_input_file = argv[i];
+      test_read_nitf(test_input_file);
     }
-    else {
-      vcl_cout << "Usage: " << argv[0] << " <input_file_name_1> [<input_file_name_2> ...]\n";
-    }
+  }
+  else {
+    vcl_cout << "Usage: " << argv[0] << " <input_file_name_1> [<input_file_name_2> ...]\n";
+  }
 }  // end main
