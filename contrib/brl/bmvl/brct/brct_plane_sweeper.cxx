@@ -383,8 +383,10 @@ brct_plane_sweeper::cross_correlate_projections(const int plane)
     }
   vcl_vector<vil1_memory_image_of<float> > imgs;
   this->overlapping_projections(plane, imgs);
-  vil1_memory_image_of<float> cc = 
-    brip_vil1_float_ops::cross_correlate(imgs[0], imgs[1], corr_radius_, intensity_thresh_);
+  vil1_memory_image_of<float> cc; 
+  if(!brip_vil1_float_ops::cross_correlate(imgs[0], imgs[1], cc,
+                                           corr_radius_, intensity_thresh_))
+    return out;
   out = brip_vil1_float_ops::convert_to_byte(cc, corr_min_, corr_max_);
   return out;
 }
@@ -406,8 +408,10 @@ brct_plane_sweeper::cross_correlate_projections(const double z)
   this->homographies_at_z(z, homgs);
   double tx=0, ty=0;
   this->overlapping_projections(homgs, imgs, tx, ty);
-  vil1_memory_image_of<float> cc = 
-    brip_vil1_float_ops::cross_correlate(imgs[0], imgs[1], corr_radius_, intensity_thresh_);
+  vil1_memory_image_of<float> cc; 
+  if(!brip_vil1_float_ops::cross_correlate(imgs[0], imgs[1], cc,
+                                           corr_radius_, intensity_thresh_))
+    return out;
   out = brip_vil1_float_ops::convert_to_byte(cc, corr_min_, corr_max_);
   return out;
 }
@@ -535,11 +539,10 @@ depth_image(vil1_memory_image_of<unsigned char>& depth_out,
 //       vil1_memory_image_of<float> cc = 
 //         brip_vil1_float_ops::cross_correlate(imgs[0], imgs[1], radius_, intensity_thresh_);
 
-      vil1_memory_image_of<float> cc = 
-        brip_vil1_float_ops::cross_correlate(imgs[0], imgs[1],
-                                                  corr_radius_,
-                                                  intensity_thresh_);
-      if(!cc)
+      vil1_memory_image_of<float> cc; 
+      if(!brip_vil1_float_ops::cross_correlate(imgs[0], imgs[1],
+                                               cc, corr_radius_,
+                                               intensity_thresh_))
         return false;
       //translate the correlation image to the base image 
       double dtx = 2*Tx-tx, dty = 2*Ty-ty;
