@@ -21,12 +21,13 @@
 //   LSB (Manchester) 23/3/01 Documentation tidied
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Jan.2003 - Peter Vanroose - bug fix in infinity() and NaN(): LITTLE_ENDIAN
-//   Oct.2003 - Ian Scott - deprecated in favour of vcl_numeric_limits
+//   Oct.2003 - Ian Scott - deprecated. Can be deleted after VXL-1.1
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
 
 #include <vcl_compiler.h>
+#include <vcl_deprecated_header.h>
 
 //: 18.2.1.3  Type float_round_style                     [lib.round.style]
 

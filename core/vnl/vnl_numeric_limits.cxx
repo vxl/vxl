@@ -7,9 +7,14 @@
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 28 Aug 96
 // \deprecated in favour of vcl_limits.
+// \verbatim
+// Modifications
+// IMS (Manchester) 21/10/2003: Deprecated - Can be deleted after VXL-1.1
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
+#define vcl_deprecated_header_h_ // A hack to allow this vnl_numeric_limits.cxx to compile without complaint.
 #include "vnl_numeric_limits.h"
 #include <vxl_config.h> // for VXL_BIG_ENDIAN
 
