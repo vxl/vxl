@@ -39,8 +39,9 @@ IF(HAS_CMU1394CAMERA)
   vvid_live_video_manager.cxx  vvid_live_video_manager.h
   vvid_live_stereo_manager.cxx vvid_live_stereo_manager.h
  )
- AUX_SOURCE_DIRECTORY(Templates cmu_camera_sources)
 ENDIF(HAS_CMU1394CAMERA)
+
+AUX_SOURCE_DIRECTORY(Templates cmu_camera_sources)
 
 # check if we have the camera libraries and assemble accordingly
 IF(HAS_CMU1394CAMERA)
