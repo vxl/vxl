@@ -3,6 +3,7 @@
 //:
 // \file
 
+#include <vsol/vsol_box_2d.h>
 #include <vtol/vtol_topology_cache.h>
 #include <vtol/vtol_vertex.h>
 #include <vcl_cassert.h>

@@ -1,6 +1,7 @@
 //:
 // \file
 #include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_box_2d.h>
 #include <bsol/bsol_algs.h>
 #include <bsol/bsol_point_index_2d.h>
 #ifdef DEBUG

@@ -5,6 +5,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
+#include <vsol/vsol_box_2d.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_macros.h>
