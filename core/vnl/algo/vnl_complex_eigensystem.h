@@ -6,8 +6,8 @@
 //  \author fsm
 //
 //  \verbatim
-//  Modifications
-//  dac (Manchester) 26/03/2001: tidied up documentation
+//   Modifications
+//    dac (Manchester) 26/03/2001: tidied up documentation
 //  \endverbatim
 
 #include <vcl_complex.h>
@@ -28,8 +28,8 @@
 //
 //  Computed right eigenvectors are stored in the **ROWS** of the
 //  member 'R' and computed left eigenvectors are stored in the **ROWS**
-//  of the member 'L'. When eigenvectors are not requested, the corre-
-//  sponding matrices L and R will be empty.
+//  of the member 'L'. When eigenvectors are not requested, the 
+//  corresponding matrices L and R will be empty.
 //
 //  The ith right eigenvector v satisfies A*v = W[i]*v   \n
 //  The ith left  eigenvector u satisfies u*A = W[i]*u (no conjugation)
