@@ -401,6 +401,9 @@ SOURCE=.\Templates/vbl_smart_ptr+PMatrix-.cxx
 # Begin Source File
 SOURCE=.\TriTensorCompute.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mvl_linear_backproject.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -697,6 +700,9 @@ SOURCE=.\mvl_modify_handle.h
 # End Source File
 # Begin Source File
 SOURCE=.\PMatrix_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\mvl_linear_backproject.h
 # End Source File
 # End Group
 # End Target
