@@ -28,7 +28,7 @@ else {
     print STDERR "IUEROOT is not defined, and no command line arguments were given\n";
     exit 0;
   }
-  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/vxl $IUEROOT/mul $IUEROOT/oxl $IUEROOT/gel $IUEROOT/tbl $IUEROOT/conversions $IUEROOT/rpl -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/\.v.ol\\.new/`;
+  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/vxl $IUEROOT/mul $IUEROOT/oxl $IUEROOT/gel $IUEROOT/tbl $IUEROOT/conversions $IUEROOT/rpl $IUEROOT/oul -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/\.v.ol\\.new/`;
   @FILES = split(' ', $FILES);
 }
 
@@ -76,6 +76,10 @@ foreach $f (@FILES)
   if ($file =~ m!\n\s*//:! && $file !~ m!\n\s*//:(\s*\n\s*//)?\s*\\file\b! &&
                               $file !~ m!^\s*//:(\s*\n\s*//)?\s*\\file\b!) {
     print "$f\t\# doxygen comments will not be shown without \\file\n";
+    $printed = 1;
+  }
+  if ($file =~ m!//\s*\\file[ \t]+(\S[^\n]*)!) {
+    print "$f\t\# doxygen \\file better not have an argument, so remove \"$1\"\n";
     $printed = 1;
   }
   if ($file =~ m!\n\s*//(:|\s*\\brief\b)([^\n]{40,})\n *// *([a-z]\S*)!) {
@@ -131,7 +135,7 @@ foreach $f (@FILES)
     if ($j eq "vcl_map.h") { $i="vcl_(multi)?map"; }
     if ($j eq "vcl_queue.h") { $i="vcl_(priority_)?queue"; }
     if ($j eq "vcl_string.h") { $i="vcl_(basic_)?string"; }
-    if ($j eq "vcl_cerrno.h") { $i="(errno|EBUSY)"; }
+    if ($j eq "vcl_cerrno.h") { $i="(errno|EBUSY|EEXIST)"; }
     next if ($j eq "vcl_iostream.h" && $f =~ m!/(vcl_ios\.h|win32/vcl_complex\.h|StdAfx\.h)$!);
     if ($j eq "vcl_iostream.h") { $i="(vcl_(cout|cerr|cin|endl|[io]stream)|vgui_macro_warning)"; }
     if ($j eq "mbl/mbl_cloneable_ptr.h") { $i="($i|MBL_CLONEABLE_PTR_INSTANTIATE)"; }
@@ -237,6 +241,7 @@ foreach $f (@FILES)
   $file =~ s/\*\//\002/g;
   $file =~ s/(\"[^\001\n\"]{0,15})\001([^\001\n\"]{0,15}\")/$1\/\*$2/g;
   $file =~ s/(\"[^\002\n\"]{0,15})\002([^\002\n\"]{0,15}\")/$1\*\/$2/g;
+  $file =~ s/\001\*/\/\*\*/g; # Doxygen style comments
   if ($file =~ m/\/\/\s*[a-zA-Z_0_9]*\s*--\s/) {
     print "$f\t\# contains old style // -- docs\n";
     $printed = 1;
@@ -247,6 +252,7 @@ foreach $f (@FILES)
       $f !~ m/\bfile_formats\/vil_viff(header|_support)/ &&
       $f !~ m/\bvgui\/internals\/trackball/ &&
       $f !~ m/\bvxl\/vgl\/internals\/gpc.h$/ &&
+      $f !~ m/\/oufgl\/(pxc200|bt848(-addons)?)\.h$/ &&
       $f !~ m/\bgel\/vgel\/kl\/.*\.h$/ &&
       $f !~ m/\bvcl\/vcl_c/ &&
       $f !~ m/\bvcl\/emulation\// &&
@@ -270,7 +276,7 @@ foreach $f (@FILES)
   $file_s = "\n" . $file;
   $file_s =~ s/\n\#if\s+0\s*\n.*?\n\#endif\s*\n/\n/g;
   # remove string constants, incl. multiline string constants with "correct syntax":
-  $file_s =~ s/\\\n//g; $file_s =~ s/([^\\])\\\"/$1/g;
+  $file_s =~ s/\\\n//g; $file_s =~ s/([^\\])(\\\")+/$1/g;
   $file_s =~ s/\".*?\"/\003/g;
   # replace :: by \005 and -> by \006 (useful later)
   $file_s =~ s/::/\005/g;
@@ -278,7 +284,7 @@ foreach $f (@FILES)
   # remove // comments
   $file_s =~ s/\/\/[^\n]*\n/\n/g;
   # remove /* ... */ comments
-  $file_s =~ s/\001[^\001\002]*\002//g;
+  $file_s =~ s/(\001|\/\*)[^\001\002]*\002//g;
 # if ($file_s =~ m/[\001\002]/) {
 #   print "$f\t\# contains nested comments\n";
 #   $printed = 1;
@@ -392,7 +398,7 @@ foreach $f (@FILES)
   }
   foreach $wd (split(' ',"complex real imag conj arg polar abs acos asin atan atan2 ceil cos exp fabs floor log min max pow sin sqrt printf fprintf sprintf scanf fscanf sscanf fopen fclose fread fwrite memchr memcpy memcmp memmove memset strcat strncat strcpy strncpy strchr strcmp strncmp strcoll strcspn strerror strlen strpbrk strrchr strspn strstr strtok strxfrm isspace isprint iscntrl isupper islower isalpha isgraph isdigit ispunct isxdigit isalnum isgraph toupper tolower")) {
     if ($f !~ m/\.c$/ && $f !~ m/\bv3p\/(netlib|[jm]peg|tiff|png|zlib)\// && $f !~ m/\bv3p\/Qv\/vectors\.h$/ &&
-        $f !~ m/\bvcl(\/[^\/]+)?\/vcl_(cmath|complex|cstdlib|sstream)\./ &&
+        $f !~ m/\/oufgl\/pxc200\.h$/ && $f !~ m/\bvcl(\/[^\/]+)?\/vcl_(cmath|complex|cstdlib|sstream)\./ &&
         "$f.$wd" !~ m/\/emulation\/[^\/]*-stlconf\.h\.f?printf$/ &&
         "$f.$wd" !~ m/vnl_(rational|bignum)\.(h|cxx)\.sqrt$/ &&
         "$f.$wd" !~ m/\bvul\/vul_timer\.(h|cxx)\.real$/ &&
