@@ -64,6 +64,11 @@ vgl_line_segment_2d<T> vgl_clip_line_to_box(vgl_line_2d<T> const& l,
 //: Clip a polygon against another polygon.
 // The two polygons poly1 and poly2 are combined with each other.
 // The operation (intersection, union, etc) is given by parameter op.
+//
+// \note The implementation of this code is based on Alan Murta's GPC
+// library (http://www.cs.man.ac.uk/aig/staff/alan/software/gpc.html)
+// which is free for non-commercial use.
+//
 // \relates vgl_polygon
 template <class T>
 vgl_polygon<T>
