@@ -37,10 +37,10 @@
 //
 // packing of rgb(a) colours in the data produced by get_section().
 // tags:
-//   -   "vil_property_r_packing"
-//   -   "vil_property_g_packing"
-//   -   "vil_property_b_packing"
-//   -   "vil_property_a_packing"
+// - "vil_property_r_packing"
+// - "vil_property_g_packing"
+// - "vil_property_b_packing"
+// - "vil_property_a_packing"
 // type: three ints
 //
 // If supported, the returned values describe the index of the
@@ -66,13 +66,13 @@
 // \endverbatim
 // preferred direction for access.
 // tags:
-//   -   "vil_property_preferred_x_direction"
-//   -   "vil_property_preferred_y_direction"
+// - "vil_property_preferred_x_direction"
+// - "vil_property_preferred_y_direction"
 // type: int
 // If supported, the returned property value is
-// -  -1 if the preferred direction is decreasing.
-// -   0 if there is no preferred direction.
-// -  +1 if the preferred direction is increasing.
+// - "-1" if the preferred direction is decreasing.
+// - " 0" if there is no preferred direction.
+// - "+1" if the preferred direction is increasing.
 //
 // \author  fsm@robots.ox.ac.uk
 
