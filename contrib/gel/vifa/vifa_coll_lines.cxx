@@ -154,12 +154,8 @@ double vifa_coll_lines::spanning_length(void)
 double vifa_coll_lines::spanning_length(vgl_point_2d<double>&  p1,
                                         vgl_point_2d<double>&  p2)
 {
-  double  min_d;
-  double  min_x;
-  double  min_y;
-  double  max_d;
-  double  max_x;
-  double  max_y;
+  double  min_x=0.0, min_y=0.0, min_d;
+  double  max_x=0.0, max_y=0.0, max_d= -1.0;
 
   for (edge_2d_iterator e = contributors_.begin();
        e != contributors_.end(); ++e)
