@@ -9,8 +9,3 @@ template class vipl_filter<vbl_array_2d<ubyte>, vbl_array_2d<ubyte>, ubyte, ubyt
 
 #include <vipl/filter/vipl_filter_2d.txx>
 template class vipl_filter_2d<vbl_array_2d<ubyte>, vbl_array_2d<ubyte>, ubyte, ubyte, vipl_trivial_pixeliter>;
-
-#include <vbl/vbl_smart_ptr.h>
-template class vbl_smart_ptr<vbl_array_2d<ubyte> >;
-void vbl_smart_ptr<vbl_array_2d<ubyte> >::ref(vbl_array_2d<ubyte> *) {}
-void vbl_smart_ptr<vbl_array_2d<ubyte> >::unref(vbl_array_2d<ubyte> *) {}

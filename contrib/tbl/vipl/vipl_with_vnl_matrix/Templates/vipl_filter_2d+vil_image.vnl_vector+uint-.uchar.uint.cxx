@@ -10,8 +10,3 @@ template class vipl_filter<vil_image, vnl_vector<unsigned>, unsigned char, unsig
 
 #include <vipl/filter/vipl_filter_2d.txx>
 template class vipl_filter_2d<vil_image, vnl_vector<unsigned>, unsigned char, unsigned, vipl_trivial_pixeliter>;
-
-#include <vbl/vbl_smart_ptr.h>
-template class vbl_smart_ptr<vnl_vector<unsigned> >;
-void vbl_smart_ptr<vnl_vector<unsigned> >::ref(vnl_vector<unsigned> *) {}
-void vbl_smart_ptr<vnl_vector<unsigned> >::unref(vnl_vector<unsigned> *) {}

@@ -8,8 +8,3 @@ template class vipl_filter<mil_image_2d_of<short>, mil_image_2d_of<short>, short
 
 #include <vipl/filter/vipl_filter_2d.txx>
 template class vipl_filter_2d<mil_image_2d_of<short>, mil_image_2d_of<short>, short, short, vipl_trivial_pixeliter>;
-
-#include <vbl/vbl_smart_ptr.h>
-template class vbl_smart_ptr<mil_image_2d_of<short> >;
-void vbl_smart_ptr<mil_image_2d_of<short> >::ref(mil_image_2d_of<short> *) {}
-void vbl_smart_ptr<mil_image_2d_of<short> >::unref(mil_image_2d_of<short> *) {}

@@ -85,8 +85,6 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 // the include file below defines the type VIPL_FILTER_STATE
 #include "vipl_filter_helper.h" // for adding members by macros....
 
-#include <vbl/vbl_smart_ptr.h>
-
 class vipl_trivial_pixeliter;
 extern const void * DAhelp(vipl_trivial_pixeliter const*,int level=0);
 
@@ -104,8 +102,8 @@ class vipl_filter          : public vipl_filter_abs {
  public: typedef typename PixelItr::Xiterator Xiterator;
  public: typedef typename PixelItr::Ziterator Ziterator;
  public: typedef vipl_filter_abs parent;
- public: typedef vbl_smart_ptr<ImgIn const> inimagept; // make it easy to use.
- public: typedef vbl_smart_ptr<ImgOut> outimagept; // make it easy to use.
+ public: typedef ImgIn const* inimagept; // make it easy to use.
+ public: typedef ImgOut* outimagept; // make it easy to use.
  public: typedef vipl_filter thisclass; // needed for macro use
 
   //declare variable to hold "border" size for images.
@@ -151,34 +149,34 @@ class vipl_filter          : public vipl_filter_abs {
  public: void put_outf(outimagept const& t) { hsoutf = t; }
   // input section container.  Macros cannot handle commas so use typedef.
   // Assume one container works for all input images (implies multi-image filters cannot be ptr-safe.. FIXME)
-  typedef vbl_smart_ptr<vipl_section_container< DataIn > > in_section_type;
+  typedef vipl_section_container< DataIn >* in_section_type;
  private:   in_section_type hssrc_section;
  public: in_section_type src_section() const { return hssrc_section; }
  public: in_section_type & ref_src_section() { return hssrc_section; }
   // section descriptor for "current" input section
-  typedef vbl_smart_ptr<vipl_section_descriptor< DataIn > >  in_descriptor_type;
+  typedef vipl_section_descriptor< DataIn >* in_descriptor_type;
  private:  in_descriptor_type hsinsecp;
  public: in_descriptor_type insecp() const { return hsinsecp; }
  public: in_descriptor_type & ref_insecp() { return hsinsecp; }
  public: void put_insecp(in_descriptor_type const t) { hsinsecp = t; }
   // output section container.  Macros cannot handle commas so use typedef
-  typedef vbl_smart_ptr<vipl_section_container< DataOut > > out_section_type;
+  typedef vipl_section_container< DataOut >* out_section_type;
  private:  out_section_type hsdst_section;
  public: out_section_type dst_section() const { return hsdst_section; }
  public: out_section_type & ref_dst_section() { return hsdst_section; }
   // section descriptor for "current" output section
-  typedef vbl_smart_ptr<vipl_section_descriptor< DataOut > >  out_descriptor_type;
+  typedef vipl_section_descriptor< DataOut>* out_descriptor_type;
  private:  out_descriptor_type hssecp;
  public: out_descriptor_type secp() const { return hssecp; }
  public: out_descriptor_type & ref_secp() { return hssecp; }
  public: void put_secp(out_descriptor_type t) { hssecp = t; }
   // section descriptor for input ROA
-  typedef vbl_smart_ptr<vipl_section_descriptor< DataIn > >  in_ROA_descriptor_type;
+  typedef vipl_section_descriptor< DataIn >* in_ROA_descriptor_type;
  private:  in_ROA_descriptor_type hsinROA;
  public: in_ROA_descriptor_type inROA() const { return hsinROA; }
  public: in_ROA_descriptor_type & ref_inROA() { return hsinROA; }
   // section descriptor for output ROA
-  typedef vbl_smart_ptr<vipl_section_descriptor< DataOut > >  out_ROA_descriptor_type;
+  typedef vipl_section_descriptor< DataOut >* out_ROA_descriptor_type;
  private:  out_ROA_descriptor_type hsROA;
  public: out_descriptor_type ROA() const { return hsROA; }
  public: out_descriptor_type & ref_ROA() { return hsROA; }

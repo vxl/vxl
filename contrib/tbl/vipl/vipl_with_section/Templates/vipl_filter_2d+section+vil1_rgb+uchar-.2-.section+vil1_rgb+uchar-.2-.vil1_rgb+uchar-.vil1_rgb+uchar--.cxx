@@ -11,8 +11,3 @@ template class vipl_filter<section<rgbcell,2>, section<rgbcell,2>, rgbcell, rgbc
 
 #include <vipl/filter/vipl_filter_2d.txx>
 template class vipl_filter_2d<section<rgbcell,2>, section<rgbcell,2>, rgbcell, rgbcell, vipl_trivial_pixeliter>;
-
-#include <vbl/vbl_smart_ptr.h>
-template class vbl_smart_ptr<section<rgbcell,2> >;
-void vbl_smart_ptr<section<rgbcell,2> >::ref(section<rgbcell,2> *) {}
-void vbl_smart_ptr<section<rgbcell,2> >::unref(section<rgbcell,2> *) {}

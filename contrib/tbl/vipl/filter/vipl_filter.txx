@@ -20,10 +20,6 @@ template <class ImgIn,class ImgOut,class DataIn,class DataOut,int Arity,class Pi
 const VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Filter_Owned = 4;
 #endif
 
-// The ref counting for the smart pointer
-template <class T> void vbl_smart_ptr<T>::ref(T *p) { if (p) FILTER_IMPTR_INC_REFCOUNT(p); }
-template <class T> void vbl_smart_ptr<T>::unref(T *p) { if (p) FILTER_IMPTR_DEC_REFCOUNT(p); }
-
 // A workhorse constructor for this abstract class. If dst_image (by default)
 // the output will be generated automatically when filtering is about to
 // proceed. (Either way, the filter increments refcount when set and
@@ -151,14 +147,14 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 #ifdef DEBUG
   vcl_cout << "destructor for abstract class filter called " << this << vcl_endl;
 #endif
-#ifdef NOSMARTPTR
+#ifndef SMARTPTR
   if (ref_src_section()) FILTER_IMPTR_DEC_REFCOUNT(ref_src_section()); // dec_refcount or kill it
   if (ref_dst_section()) FILTER_IMPTR_DEC_REFCOUNT(ref_dst_section()); // dec_refcount or kill it
   if (ref_secp())        FILTER_IMPTR_DEC_REFCOUNT(ref_secp()); // dec_refcount or kill it
   if (ref_insecp())      FILTER_IMPTR_DEC_REFCOUNT(ref_insecp()); // dec_refcount or kill it
   if (ref_ROA())         FILTER_IMPTR_DEC_REFCOUNT(ref_ROA()); // dec_refcount or kill it
   if (ref_inROA())       FILTER_IMPTR_DEC_REFCOUNT(ref_inROA()); // dec_refcount or kill it
-
+#if 0
   for (int i=0; i< numinputs(); i++) {
     if (ref_inf()[i]) { // no longer needed with smart pointers
       FILTER_IMPTR_DEC_REFCOUNT(
@@ -180,6 +176,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 #endif
       FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
     }
+#endif
 #endif
 }
 
@@ -240,7 +237,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     if (ref_inf()[i]) FILTER_IMPTR_INC_REFCOUNT(((ImgIn*)ref_inf()[i]));
 #endif
   }
-#ifdef NOSMARTPTR
+#ifndef SMARTPTR
   if (ref_outf()) FILTER_IMPTR_INC_REFCOUNT(ref_outf());
   if (ref_src_section()) FILTER_IMPTR_INC_REFCOUNT(ref_src_section()); // share so inc_refcount
   if (ref_dst_section()) FILTER_IMPTR_INC_REFCOUNT(ref_dst_section()); // share so inc_refcount
@@ -481,10 +478,10 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   return false;
 }
 
-// Return the a pointer to the input ``functions'' at the provided
+// Return a pointer to the input ``functions'' at the provided
 // index. Increments refcount before returning
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
-  vbl_smart_ptr<ImgIn const> vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
+  ImgIn const* vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                           ::in_data_ptr(int index)
 {
   if (index < 0 || index >= numinputs()) {
@@ -534,7 +531,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 // Get ptr to specified output data item given index location. Inc's refcount
 // before returning ptr
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
-  vbl_smart_ptr<ImgOut> vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
+  ImgOut* vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                      ::out_data_ptr(int /*index*/)
 {
   if (READY(output_state()) || UNCHANGED(output_state()))
