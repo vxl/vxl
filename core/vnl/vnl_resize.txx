@@ -13,6 +13,9 @@
 template <class T>
 void vnl_resize(vnl_vector<T> &v, unsigned newsize)
 {
+  if (v.size() == newsize)
+    return;
+
   // copy
   vnl_vector<T> old_v(v);
   
@@ -30,6 +33,9 @@ void vnl_resize(vnl_vector<T> &v, unsigned newsize)
 template <class T>
 void vnl_resize(vnl_matrix<T> &M, unsigned newrows, unsigned newcols)
 {
+  if (M.rows() == newrows && M.cols() == newcols)
+    return;
+
   // copy
   vnl_matrix<T> old_M(M);
   
@@ -48,6 +54,9 @@ void vnl_resize(vnl_matrix<T> &M, unsigned newrows, unsigned newcols)
 template <class T>
 void vnl_resize(vnl_diag_matrix<T> &D, unsigned newsize)
 {
+  if (D.size() == newsize)
+    return;
+
   // copy
   vnl_diag_matrix<T> old_D(D);
   

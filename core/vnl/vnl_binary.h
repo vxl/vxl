@@ -21,12 +21,12 @@ template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
 template <class T> class vnl_diag_matrix;
 
-template <class T> void vnl_binary_save(ostream &, vnl_vector<T> const &);
-template <class T> void vnl_binary_save(ostream &, vnl_matrix<T> const &);
-template <class T> void vnl_binary_save(ostream &, vnl_diag_matrix<T> const &);
+template <class T> bool vnl_binary_save(ostream &, vnl_vector<T> const &);
+template <class T> bool vnl_binary_save(ostream &, vnl_matrix<T> const &);
+template <class T> bool vnl_binary_save(ostream &, vnl_diag_matrix<T> const &);
 
-template <class T> void vnl_binary_load(istream &, vnl_vector<T> &);
-template <class T> void vnl_binary_load(istream &, vnl_matrix<T> &);
-template <class T> void vnl_binary_load(istream &, vnl_diag_matrix<T> &);
+template <class T> bool vnl_binary_load(istream &, vnl_vector<T> &);
+template <class T> bool vnl_binary_load(istream &, vnl_matrix<T> &);
+template <class T> bool vnl_binary_load(istream &, vnl_diag_matrix<T> &);
 
 #endif
