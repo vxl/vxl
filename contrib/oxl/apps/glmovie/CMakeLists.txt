@@ -1,7 +1,7 @@
 # ./oxl/apps/vxl_vrml_viewer/CMakeLists.txt
 
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
 INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake)
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
 INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindMPEG.cmake)
 
 IF(HAS_OPENGL)
