@@ -1,6 +1,6 @@
 #include <vcl_iostream.h>
 
-#include <vpl/vpl_unistd.h>
+#include <vpl/vpl.h>
 #include <vcl_cstdio.h> /* for tempnam() */
 
 #include <vil/vil_memory_image.h>

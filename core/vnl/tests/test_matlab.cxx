@@ -6,7 +6,7 @@
 #include <vcl_cstdio.h> // tempnam()
 #include <vcl_fstream.h>
 
-#include <vpl/vpl_unistd.h>
+#include <vpl/vpl.h>
 
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_vector.h>

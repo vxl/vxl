@@ -1,6 +1,6 @@
 #include <vcl_iostream.h>
 
-#include <vpl/vpl_unistd.h>
+#include <vpl/vpl.h>
 
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_save.h>

@@ -3,7 +3,7 @@
 
 #include <vcl_cstring.h> // for memcmp()
 #include <vcl_cstdio.h> // for fopen() etc.
-#include <vpl/vpl_unistd.h> // for vpl_unlink()
+#include <vpl/vpl.h> // for vpl_unlink()
 #include <vil/vil_load.h>
 #include <vil/vil_test.h>
 

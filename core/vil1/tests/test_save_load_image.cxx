@@ -23,7 +23,7 @@
 #include <vcl_iomanip.h> // vcl_flush
 #include <vcl_vector.h>
 
-#include <vpl/vpl_unistd.h> // vpl_unlink()
+#include <vpl/vpl.h> // vpl_unlink()
 
 #include <vil/vil_rgb.h>
 #include <vil/vil_load.h>
