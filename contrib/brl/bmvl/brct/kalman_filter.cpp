@@ -20,6 +20,7 @@
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_digital_curve_sptr.h>
 #include <bbas/bdgl/bdgl_curve_algs.h>
 #include "brct_structure_estimator.h"
 #include "brct_algos.h"
@@ -59,9 +60,8 @@ void kalman_filter::init()
   init_velocity();
   init_covariant_matrix();
 
-  init_state_vector();
+  init_state_3d_estimation();
   memory_size_ = 2;
-
 
   cur_pos_ = (cur_pos_ + 1) % queue_size_;
 }
@@ -73,126 +73,143 @@ kalman_filter::~kalman_filter()
 }
 
 
-void kalman_filter::init_state_vector()
+void kalman_filter::init_state_3d_estimation()
 {
-  double dt = time_tick_[1] - time_tick_[0];
-  vnl_double_3 T(X_[3]*dt,X_[4]*dt,X_[5]*dt);
+	
+	// 
+	// 
+	//
+	
+	double dt = time_tick_[1] - time_tick_[0];
+	vnl_double_3 T(X_[3]*dt,X_[4]*dt,X_[5]*dt);
+  vcl_cout<<"T = "<<T<<'\n';
+	
+	// compute camera calibration matrix
+	vnl_double_3x4 E1, E2;
+	E1[0][0] = 1;       E1[0][1] = 0;        E1[0][2] = 0;          E1[0][3] = 0;
+	E1[1][0] = 0;       E1[1][1] = 1;        E1[1][2] = 0;          E1[1][3] = 0;
+	E1[2][0] = 0;       E1[2][1] = 0;        E1[2][2] = 1;          E1[2][3] = 0;
+	
+	E2[0][0] = 1;       E2[0][1] = 0;        E2[0][2] = 0;          E2[0][3] = T[0];
+	E2[1][0] = 0;       E2[1][1] = 1;        E2[1][2] = 0;          E2[1][3] = T[1];
+	E2[2][0] = 0;       E2[2][1] = 0;        E2[2][2] = 1;          E2[2][3] = T[2];
+	
+	vnl_double_3x4 P1 = K_*E1, P2 = K_*E2;
+	
+	// save the motion
+	motions_[0] = vnl_double_3(0.0,0.0,0.0);
+	motions_[1] = T;
+	
+	// compute epipole from velocity
+	vnl_double_3 e = K_*T;
+	
+	// construct fundamental matrix between the first and second views.
+	vnl_double_3x3 F;
+	F[0][0] = 0;     F[0][1] = -e[2];  F[0][2] = e[1];
+	F[1][0] = e[2];  F[1][1] = 0;      F[1][2] = -e[0];
+	F[2][0] = -e[1]; F[2][1] = e[0];   F[2][2] = 0;
+	
+	FMatrix FM(F);
+	
+	//
+	// 3D estimation
+	//
+	
+	// point matcher using epipolar geometry	
+	int c = trackers_.size();
 
-  // compute camera calibration matrix
-  vnl_double_3x4 E1, E2;
-  E1[0][0] = 1;       E1[0][1] = 0;        E1[0][2] = 0;          E1[0][3] = 0;
-  E1[1][0] = 0;       E1[1][1] = 1;        E1[1][2] = 0;          E1[1][3] = 0;
-  E1[2][0] = 0;       E1[2][1] = 0;        E1[2][2] = 1;          E1[2][3] = 0;
+	vnl_double_3x3 Sigma3d;
+  vnl_double_2x2 Sigma2d;
+	Sigma2d.set_identity();
+  Sigma3d.set_identity();
+  vcl_cout<<Sigma3d<<'\n';
+	
+	for(int t =0; t<c; t++){
+    vcl_vector<bugl_normal_point_3d_sptr> pts_3d;
 
-  E2[0][0] = 1;       E2[0][1] = 0;        E2[0][2] = 0;          E2[0][3] = T[0];
-  E2[1][0] = 0;       E2[1][1] = 1;        E2[1][2] = 0;          E2[1][3] = T[1];
-  E2[2][0] = 0;       E2[2][1] = 0;        E2[2][2] = 1;          E2[2][3] = T[2];
+		//assert(trackers_[t].size()== time_tick_.size());
+		vdgl_digital_curve_sptr dc0 = trackers_[t][0];
+		vdgl_interpolator_sptr interp0 = dc0->get_interpolator();
+		vdgl_edgel_chain_sptr  ec0 = interp0->get_edgel_chain();
+		
+		vdgl_digital_curve_sptr dc1 = trackers_[t][1];
+		vdgl_interpolator_sptr interp1 = dc1->get_interpolator();
+		vdgl_edgel_chain_sptr  ec1 = interp1->get_edgel_chain();
+		
+		int size0 = ec0->size();
+		int size1 = ec1->size();
+		int npts = 2* ((size0 < size1) ? size0 : size1); // interpolate 2 times more
+	
+#if 0
+		for (int i=0; i<3; i++)
+			for (int j=0; j<3; j++)
+				Sigma3d[i][j] = Q0_[i][j];
+#endif
+			
+			for (int i=0; i<npts; i++)
+			{
+				double index = i/double(npts);
+				vgl_homg_point_2d<double> p1(dc0->get_x(index),dc0->get_y(index));
+				vgl_point_2d<double> temp_p(p1);
+				vnl_double_2x2 sigma1;
+				sigma1.set_identity();
+				bugl_gaussian_point_2d<double> x1(temp_p, sigma1);
+				int x0_index = bdgl_curve_algs:: closest_point(ec0, x1.x(), x1.y());
+				double angle0 = (*ec0)[x0_index].get_theta();
+				
+				vgl_line_2d<double> lr(FM.image2_epipolar_line(p1));
+				
+				// get rid of any matching candidate point whose gradient is far away original gradient
+				// getting the intersection point
+				vgl_point_2d<double> p2;
+				vcl_vector<vgl_point_2d<double> > pts;
+				bdgl_curve_algs::intersect_line(dc1, lr, pts);
+				
+				// find the correspoinding point
+				double dist = 1e10; // big number
+				bool flag = false;
+				for (unsigned int j=0; j<pts.size(); j++)
+				{
+					vgl_homg_point_2d<double> temp(pts[j].x(), pts[j].y());
+					
+					int x1_index = bdgl_curve_algs::closest_point(ec1, pts[j].x(), pts[j].y());
+					double angle1 = (*ec1)[x1_index].get_theta();
+					
+					double dist_p1p2 = vgl_homg_operators_2d<double>::distance_squared(p1, temp);
+					if (vcl_fabs(angle1-angle0)<12.5 && dist > dist_p1p2)
+					{ // make sure it filters out lines parallel to epipole lines.
+						p2 = temp;
+						flag = true;
+						dist = dist_p1p2;
+					}
+					else
+						continue;
+				}
+				
+				if (flag) { // if have corresponding
+					bugl_gaussian_point_2d<double> x2(p2, Sigma2d);
+					vgl_point_3d<double> point_3d = brct_algos::triangulate_3d_point(x1, P1, x2, P2);
+          bugl_normal_point_3d_sptr p3d_sptr = new bugl_normal_point_3d(point_3d, Sigma3d);
+          pts_3d.push_back(p3d_sptr);
+					observes_[0].push_back(x1);
+					observes_[1].push_back(x2);
+				}
+			}// end of point
+	
+      curve_3d_.add_curve(pts_3d);
+  } // end of each tracker
+	
+	num_points_ = curve_3d_.get_num_points();
+	prob_.resize(num_points_);
+	for (int i=0; i<num_points_; i++)
+	{		
+		prob_[i] = 1.0/num_points_;
+	}
+	
 
-  vnl_double_3x4 P1 = K_*E1, P2 = K_*E2;
-
-  // save the motion
-  motions_[0] = vnl_double_3(0.0,0.0,0.0);
-  motions_[1] = T;
-
-  // compute epipole from velocity
-  vnl_double_3 e = K_*T;
-
-  // construct fundamental matrix between the first and second views.
-  vnl_double_3x3 F;
-  F[0][0] = 0;     F[0][1] = -e[2];  F[0][2] = e[1];
-  F[1][0] = e[2];  F[1][1] = 0;      F[1][2] = -e[0];
-  F[2][0] = -e[1]; F[2][1] = e[0];   F[2][2] = 0;
-
-  FMatrix FM(F);
-
-  // point matcher using epipolar geometry
-  assert(curves_.size()>=2);
-  vdgl_digital_curve_sptr dc0 = curves_[0];
-  vdgl_interpolator_sptr interp0 = dc0->get_interpolator();
-  vdgl_edgel_chain_sptr  ec0 = interp0->get_edgel_chain();
-
-  vdgl_digital_curve_sptr dc1 = curves_[1];
-  vdgl_interpolator_sptr interp1 = dc1->get_interpolator();
-  vdgl_edgel_chain_sptr  ec1 = interp1->get_edgel_chain();
-
-  int size0 = ec0->size();
-  int size1 = ec1->size();
-  int npts = 2* ((size0 < size1) ? size0 : size1); // interpolate 2 times more
-
-  vcl_vector<vgl_point_3d<double> > pts_3d;
-
-  vnl_double_3x3 Sigma3d;
-
-  for (int i=0; i<3; i++)
-    for (int j=0; j<3; j++)
-      Sigma3d[i][j] = Q0_[i][j];
-
-  for (int i=0; i<npts; i++)
-  {
-    double index = i/double(npts);
-    vgl_homg_point_2d<double> p1(dc0->get_x(index),dc0->get_y(index));
-    vgl_point_2d<double> temp_p(p1);
-    vnl_double_2x2 sigma1;
-    sigma1.set_identity();
-    bugl_gaussian_point_2d<double> x1(temp_p, sigma1);
-    int x0_index = bdgl_curve_algs:: closest_point(ec0, x1.x(), x1.y());
-    double angle0 = (*ec0)[x0_index].get_theta();
-
-    vgl_line_2d<double> lr(FM.image2_epipolar_line(p1));
-
-    // get rid of any matching candidate point whose gradient is far away original gradient
-      // getting the intersection point
-      vgl_point_2d<double> p2;
-      vcl_vector<vgl_point_2d<double> > pts;
-      bdgl_curve_algs::intersect_line(dc1, lr, pts);
-
-      // find the correspoinding point
-      double dist = 1e10; // big number
-      bool flag = false;
-      for (unsigned int j=0; j<pts.size(); j++)
-      {
-        vgl_homg_point_2d<double> temp(pts[j].x(), pts[j].y());
-
-        int x1_index = bdgl_curve_algs::closest_point(ec1, pts[j].x(), pts[j].y());
-        double angle1 = (*ec1)[x1_index].get_theta();
-
-        double dist_p1p2 = vgl_homg_operators_2d<double>::distance_squared(p1, temp);
-        if (vcl_fabs(angle1-angle0)<12.5 && dist > dist_p1p2)
-        { // make sure it filters out lines parallel to epipole lines.
-          p2 = temp;
-          flag = true;
-          dist = dist_p1p2;
-        }
-        else
-          continue;
-      }
-
-      if (flag) { // if have corresponding
-        vnl_double_2x2 Sigma2d;
-        Sigma2d.set_identity();
-        bugl_gaussian_point_2d<double> x2(p2, Sigma2d);
-        vgl_point_3d<double> point_3d = brct_algos::triangulate_3d_point(x1, P1, x2, P2);
-        pts_3d.push_back(point_3d);
-        observes_[0].push_back(x1);
-        observes_[1].push_back(x2);
-      }
-  }
-
-  num_points_ = pts_3d.size();
-
-  curve_3d_.resize(num_points_);
-  prob_.resize(num_points_);
-  for (int i=0; i<num_points_; i++)
-  {
-    bugl_gaussian_point_3d<double> p3d(pts_3d[i].x(), pts_3d[i].y(), pts_3d[i].z(), Sigma3d);
-    curve_3d_[i] = p3d;
-
-    prob_[i] = 1.0/num_points_;
-  }
-
-  X_[0] = T[0];
-  X_[1] = T[1];
-  X_[2] = T[2];
+	X_[0] = T[0];
+	X_[1] = T[1];
+	X_[2] = T[2];
 }
 
 
@@ -240,13 +257,6 @@ void kalman_filter::init_cam_intrinsic()
   K_[1][0] = 0;        K_[1][1] = 832.7951; K_[1][2] = 221.5451;
   K_[2][0] = 0;        K_[2][1] = 0;        K_[2][2] = 1;
 }
-
-
-void kalman_filter::prediction()
-{
-  // TODO
-}
-
 
 vnl_double_3x4 kalman_filter::get_projective_matrix(const vnl_double_3& v ) const
 {
@@ -319,52 +329,58 @@ vnl_double_2 kalman_filter::projection(const vnl_double_3x4 &P, const vnl_double
 void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
 {
   observes_[iframe%queue_size_].resize(num_points_);
+  vnl_double_2x2 sigma;
+  sigma.set_identity();
 
-  for (int i=0; i<num_points_; i++)
-  {
-    bugl_gaussian_point_2d<double> x = brct_algos::project_3d_point(P, curve_3d_[i]);
-
-    vgl_point_2d<double> u = brct_algos::most_possible_point(curves_[iframe], x);
-    // check whether a outlier founded
-#if 0 // commented out
-    vnl_double_2 z(u.x(), u.y());
-    vnl_double_2 z_pred(x.x(), x.y());
-
-    if (is_outlier(z, z_pred))
-      u.set(this->large_num_, this->large_num_);
-#endif // 0
-
-    // set point
-    observes_[iframe%queue_size_][i].set_point(u);
-    vnl_double_2x2 sigma;
-    sigma.set_identity();
-    observes_[iframe%queue_size_][i].set_covariant_matrix(sigma);
+  int c = trackers_.size();
+  for(int t=0; t<c; t++){
+    int frag_size = curve_3d_.get_fragment_size(t);
+    for (int i=0; i<frag_size; i++)
+    {
+      int pos = curve_3d_.get_global_pos(t, i);
+      bugl_gaussian_point_2d<double> x = brct_algos::project_3d_point(P, *curve_3d_.get_point(pos));
+      vgl_point_2d<double> u = brct_algos::most_possible_point(trackers_[t][iframe], x);
+      // set point
+      observes_[iframe%queue_size_][pos].set_point(u);
+      observes_[iframe%queue_size_][pos].set_covariant_matrix(sigma);
+    }
   }
 }
 
 
 void kalman_filter::update_confidence()
 {
+#if 1
   vcl_vector<vnl_double_3x4> cams(memory_size_); //cur_pos_ is 0 based
   for (int i = 0; i < memory_size_; i++)
     cams[i] = get_projective_matrix(motions_[(cur_pos_-i)%memory_size_]);
 
   double normalization_factor = 0;
-  for (int i=0; i<num_points_; i++)
-  {
-    double prob = 1; // square distance
-
-    for (int f = 0; f<memory_size_; ++f)
+  int c = trackers_.size();
+  for(int t=0; t<c; t++){
+    int frag_size = curve_3d_.get_fragment_size(t);
+    for (int i=0; i<frag_size; i++)
     {
-      bugl_gaussian_point_2d<double> x = brct_algos::project_3d_point(cams[f], curve_3d_[i]);
-      vgl_point_2d<double> u = brct_algos::most_possible_point(curves_[cur_pos_ - f], x);
+      double prob = 1; // square distance
+      int pos = curve_3d_.get_global_pos(t, i);
 
-      vnl_double_2 z(x.x(), x.y()), z_matched(u.x(), u.y());
-      prob *= matched_point_prob(z, z_matched);
+      for (int f = 0; f<memory_size_; ++f)
+      {
+      
+        bugl_gaussian_point_2d<double> x = brct_algos::project_3d_point(cams[f], *curve_3d_.get_point(pos));
+        // find most possible point across all the trackers
+        double probability = 0;
+        vgl_point_2d<double> u = brct_algos::most_possible_point(trackers_[t][cur_pos_ - f], x);
+        if(probability<x.prob_at(u)){
+          probability = x.prob_at(u);
+        }
+        
+        prob *= probability;
+      }
+      
+      prob_[pos] = prob;
+      normalization_factor += prob_[pos];
     }
-
-    prob_[i] = prob;
-    normalization_factor += prob_[i];
   }
 
   vcl_cout<<"normalization_factor = "<<normalization_factor;
@@ -373,14 +389,23 @@ void kalman_filter::update_confidence()
   if (normalization_factor == 0)
     return ;
 
+
   for (int i=0; i<num_points_; i++)
     prob_[i] /= normalization_factor;
+
+#endif
+
+#if 0
+  for(int i=0; i<num_points_; i++)
+    //prob_[i] = 1.0/vnl_det(curve_3d_.get_point(i)->get_covariant_matrix());
+    prob_[i] = 1;
+#endif
 }
 
 
 void kalman_filter::inc()
 {
-  if ((unsigned)(cur_pos_+1) >= curves_.size()){ // end of the data
+  if ((unsigned)(cur_pos_+1) >= trackers_[0].size()){ // end of the data
     vcl_cout<<"\n at the end of last curve\n";
     return;
   }
@@ -391,6 +416,8 @@ void kalman_filter::inc()
   // prediction step:
   //
   vnl_matrix_fixed<double, 6, 6> A = get_transit_matrix(cur_pos_-1, cur_pos_);
+  vcl_cout<<A<<'\n';
+  vcl_cout<<X_<<'\n';
   vnl_vector_fixed<double, 6> Xpred = A*X_;
   vnl_double_3 camCenter(Xpred[0],Xpred[1],Xpred[2]);
   vnl_double_3x4 P = get_projective_matrix(camCenter);
@@ -399,13 +426,16 @@ void kalman_filter::inc()
   // adjustion
   vcl_vector<bugl_gaussian_point_2d<double> > & cur_measures = observes_[cur_pos_%queue_size_];
 
+  //int c = trackers_.size();
+  //for(int t = 0; t < c; t ++)
+
   for (int i=0; i<num_points_; i++)
   {
     vnl_double_3 X;
 
-    X[0] = curve_3d_[i].x();
-    X[1] = curve_3d_[i].y();
-    X[2] = curve_3d_[i].z();
+    X[0] = curve_3d_.get_point(i)->x();
+    X[1] = curve_3d_.get_point(i)->y();
+    X[2] = curve_3d_.get_point(i)->z();
 
     vnl_matrix_fixed<double, 2, 6> H = get_H_matrix(P, X);
 
@@ -416,7 +446,7 @@ void kalman_filter::inc()
     vnl_double_2 z(cur_measures[i].x(), cur_measures[i].y());
 
     vnl_double_2 z_pred = projection(P,X);
-    if (matched_point_prob(z, z_pred) > 0) // if not a outlier
+    if (matched_point_prob(z, z_pred) >= 0) // if not a outlier
     {
       // go to the correction step
       //
@@ -441,6 +471,7 @@ void kalman_filter::inc()
 
   // store the history
   X_ = Xpred;
+  vcl_cout<<"X_ = "<< X_;
 
   if (memory_size_ < queue_size_)
     ++memory_size_;
@@ -448,7 +479,7 @@ void kalman_filter::inc()
   // update 3d reconstruction results
   vcl_vector<vnl_double_3x4> Ps(memory_size_);
   vcl_vector<vnl_double_2> pts(memory_size_);
-
+ 
   for (int i=0; i<num_points_; i++)
   {
     for (int j=0; j<memory_size_; j++)
@@ -462,8 +493,9 @@ void kalman_filter::inc()
 
     vgl_point_3d<double> X3d = brct_algos::bundle_reconstruct_3d_point(pts, Ps);
     // update covariant matrix
-    vnl_double_3 dX(X3d.x() - curve_3d_[i].x(), X3d.y() - curve_3d_[i].y(), X3d.z() - curve_3d_[i].z());
-    vnl_double_3x3 Sigma3d = curve_3d_[i].get_covariant_matrix();
+    bugl_normal_point_3d_sptr p3d_sptr = curve_3d_.get_point(i);
+    vnl_double_3 dX(X3d.x() - p3d_sptr->x(), X3d.y() - p3d_sptr->y(), X3d.z() - p3d_sptr->z());
+    vnl_double_3x3 Sigma3d = p3d_sptr->get_covariant_matrix();
 
     Sigma3d = Sigma3d*(cur_pos_-1.0)/(double)cur_pos_;
 
@@ -471,30 +503,74 @@ void kalman_filter::inc()
       for (int n = 0; n<3; n++)
         Sigma3d[m][n] += dX[m]*dX[n] /(cur_pos_);
 
-    curve_3d_[i].set_point(X3d);
-    curve_3d_[i].set_covariant_matrix(Sigma3d);
-
-#if 0
-    vcl_cout<<Sigma3d<<"\n i = "<<i<<"--------------\n";
-
-    brct_structure_estimator se(Ps[cur_pos_%queue_size_]);
-    bugl_gaussian_point_3d<double> X = se.forward(curve_3d_[i], observes_[cur_pos_%queue_size_][i]);
-    curve_3d_[i] = se.forward(curve_3d_[i], observes_[cur_pos_%queue_size_][i]);
-#endif
+    p3d_sptr->set_point(X3d);
+    p3d_sptr->set_covariant_matrix(Sigma3d);
   }
 
   // update confidence level for each points
-  update_confidence();
+//  update_confidence();
 }
 
 
 void kalman_filter::read_data(const char *fname)
 {
+	vcl_ifstream fin(fname);
+
+	if(!fin){
+		vcl_cerr<<"cannot open the file - "<<fname<<'\n';
+		exit(2);
+	}
+
+	char buff[255];
+	fin >> buff;
+
+	time_tick_ = read_timestamp_file(buff);
+
+	while (fin>>buff){ // for each line
+		if(vcl_strlen(buff)<2 || buff[0]=='#')
+			continue;
+
+		// push a tracker into the memory
+		trackers_.push_back(read_tracker_file(buff));
+	}
+	
+}
+
+vcl_vector<double> kalman_filter::read_timestamp_file(char *fname)
+{
+	vcl_ifstream fin(fname);
+
+	if(!fin){
+		vcl_cerr<<"cannot open the file - "<<fname<<'\n';
+		exit(2);
+	}
+
+	int nviews =0, junk=0;
+	fin >> nviews;
+	vcl_vector<double> times(nviews);
+
+	for (int i=0; i<nviews; i++){
+		fin>> junk >> times[i];
+	}
+
+	return times;
+	
+}
+
+vcl_vector<vdgl_digital_curve_sptr> kalman_filter::read_tracker_file(char *fname)
+{
   vcl_ifstream fp(fname);
+
+  if(!fp){
+	  vcl_cerr<<" cannot open the file - "<<fname<<'\n';
+	  exit(2);
+  }
 
   char buffer[1000];
   int MAX_LEN=1000;
   int numEdges;
+
+  vcl_vector<vdgl_digital_curve_sptr > tracker;
 
   double x, y, dir, conf;
   while (fp.getline(buffer,MAX_LEN))
@@ -530,7 +606,7 @@ void kalman_filter::read_data(const char *fname)
         //add this edge to the current contour
       }
 
-      curves_.push_back(new vdgl_digital_curve(new vdgl_interpolator_linear(ec)));
+      tracker.push_back(new vdgl_digital_curve(new vdgl_interpolator_linear(ec)));
       //read in the end of contour block
       fp.getline(buffer,MAX_LEN);
 
@@ -541,18 +617,8 @@ void kalman_filter::read_data(const char *fname)
     }
   }
 
-  // not this is temporially solution.
-  //setting up the time beats
-  int num_frames = curves_.size();
-  time_tick_.resize(num_frames);
-
-  double time = 0;
-  for (int i=0; i<num_frames; i++) {
-    time_tick_[i] = time;
-    time += (i%2==0?1:2);
-  }
+  return tracker;
 }
-
 
 void kalman_filter::init_velocity()
 {
@@ -578,12 +644,16 @@ void kalman_filter::init_velocity()
   X_[1] = T[1];
   X_[2] = T[2];
 
-  double dt = time_tick_[1]-time_tick_[2];
-  X_[3] = T[0] /dt;
-  X_[4] = T[1] /dt;
-  X_[5] = T[2] /dt;
+  double dt = time_tick_[1]-time_tick_[0];
+  X_[3] = -T[0] /dt;
+  X_[4] = -T[1] /dt;
+  X_[5] = -T[2] /dt;
 }
 
+bugl_curve_3d kalman_filter::get_curve_3d()
+{
+  return curve_3d_;
+}
 
 vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
 {
@@ -593,9 +663,10 @@ vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
 
   for (int i=0; i<num_points_; i++)
   {
-    xc += curve_3d_[i].x();
-    yc += curve_3d_[i].y();
-    zc += curve_3d_[i].z();
+    bugl_normal_point_3d_sptr pt3d_sptr = curve_3d_.get_point(i);
+    xc += pt3d_sptr->x();
+    yc += pt3d_sptr->y();
+    zc += pt3d_sptr->z();
   }
 
   xc /= num_points_;
@@ -604,7 +675,8 @@ vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
 
   for (int i=0; i<num_points_; i++)
     if (prob_[i] > 0) {
-      vgl_point_3d<double> pt(curve_3d_[i].x()-xc, curve_3d_[i].y()-yc, curve_3d_[i].z()-zc);
+      bugl_normal_point_3d_sptr pt3d_sptr = curve_3d_.get_point(i);
+      vgl_point_3d<double> pt(pt3d_sptr->x()-xc, pt3d_sptr->y()-yc, pt3d_sptr->z()-zc);
       pts.push_back(pt);
     }
 
@@ -616,11 +688,17 @@ vcl_vector<vgl_point_2d<double> > kalman_filter::get_next_observes()
 {
   vcl_vector<vgl_point_2d<double> > pts(num_points_);
 
-  vdgl_digital_curve_sptr dc = curves_[(cur_pos_+1)%queue_size_];
-  for (int i=0; i<num_points_; i++)
-  {
-    double s = double(i) / double(num_points_);
-    pts[i].set(dc->get_x(s), dc->get_y(s));
+  int c = trackers_.size();
+  for(int t=0; t<c; t++){
+    vdgl_digital_curve_sptr dc = trackers_[t][(cur_pos_+1)%queue_size_];
+		vdgl_interpolator_sptr interp = dc->get_interpolator();
+		vdgl_edgel_chain_sptr  ec = interp->get_edgel_chain();
+    int size = ec->size();
+    for (int i=0; i<size; i++)
+    {
+      double s = double(i) / double(size);
+      pts.push_back(vgl_point_2d<double> (dc->get_x(s), dc->get_y(s)));
+    }
   }
   return pts;
 }
@@ -628,13 +706,20 @@ vcl_vector<vgl_point_2d<double> > kalman_filter::get_next_observes()
 
 vcl_vector<vgl_point_2d<double> > kalman_filter::get_cur_observes()
 {
-  vcl_vector<vgl_point_2d<double> > pts(num_points_);
+  vcl_vector<vgl_point_2d<double> > pts;
 
-  vdgl_digital_curve_sptr dc = curves_[cur_pos_];
-  for (int i=0; i<num_points_; i++)
-  {
-    double s = double(i) / double(num_points_);
-    pts[i].set(dc->get_x(s), dc->get_y(s));
+  int c = trackers_.size();
+
+  for(int t=0; t<c; t++){
+	  vdgl_digital_curve_sptr dc = trackers_[t][cur_pos_];
+		vdgl_interpolator_sptr interp = dc->get_interpolator();
+		vdgl_edgel_chain_sptr  ec = interp->get_edgel_chain();
+    int size = ec->size();
+	  for (int i=0; i<size; i++)
+	  {
+		  double s = double(i) / double(size);
+		  pts.push_back(vgl_point_2d<double>(dc->get_x(s), dc->get_y(s)));
+	  }
   }
   return pts;
 }
@@ -642,18 +727,24 @@ vcl_vector<vgl_point_2d<double> > kalman_filter::get_cur_observes()
 
 vcl_vector<vgl_point_2d<double> > kalman_filter::get_pre_observes()
 {
-  assert(cur_pos_ > 0);
-  vcl_vector<vgl_point_2d<double> > pts(num_points_);
-
-  vdgl_digital_curve_sptr dc = curves_[(cur_pos_-1)%queue_size_];
-  for (int i=0; i<num_points_; i++)
-  {
-    double s = double(i) / double(num_points_);
-    pts[i].set(dc->get_x(s), dc->get_y(s));
-  }
-  return pts;
+	assert(cur_pos_ > 0);
+	vcl_vector<vgl_point_2d<double> > pts;
+	
+	int c = trackers_.size();
+	
+	for(int t = 0; t<c; t++){
+		vdgl_digital_curve_sptr dc = trackers_[t][(cur_pos_-1)%queue_size_];
+		vdgl_interpolator_sptr interp = dc->get_interpolator();
+		vdgl_edgel_chain_sptr  ec = interp->get_edgel_chain();
+    int size = ec->size();
+		for (int i=0; i<size; i++)
+		{
+			double s = double(i) / double(size);
+			pts.push_back(vgl_point_2d<double> (dc->get_x(s), dc->get_y(s)));
+		}
+	}
+	return pts;
 }
-
 
 vnl_double_3 kalman_filter::get_next_motion(vnl_double_3 v)
 {
@@ -674,7 +765,7 @@ vnl_matrix<double> kalman_filter::get_predicted_curve()
   vnl_matrix<double> t(2, num_points_);
   for (int i=0; i<num_points_; i++)
   {
-    vgl_point_2d<double> x = brct_algos::projection_3d_point(curve_3d_[i], P);
+    vgl_point_2d<double> x = brct_algos::projection_3d_point(*curve_3d_.get_point(i), P);
 
     t[0][i] = x.x();
     t[1][i] = x.y();
@@ -695,7 +786,8 @@ vcl_vector<vnl_matrix<double> > kalman_filter::get_back_projection() const
 
     for (int i=0; i<num_points_; i++)
     {
-      vgl_point_2d<double> p = brct_algos::projection_3d_point(curve_3d_[i], P);
+
+      vgl_point_2d<double> p = brct_algos::projection_3d_point(* curve_3d_.get_point(i), P);
       t[0][i] = p.x();
       t[1][i] = p.y();
     }
@@ -758,10 +850,12 @@ double kalman_filter::matched_point_prob(vnl_double_2& z, vnl_double_2& z_pred)
 
 vnl_matrix_fixed<double, 6, 6> kalman_filter::get_transit_matrix(int i, int j)
 {
-  assert(i>=0 && j>=0);
+  assert(i>=0 && j>=0 && j>=i);
   vnl_matrix_fixed<double, 6, 6> A;
 
   double dt = time_tick_[j] - time_tick_[i];
+
+  // fix the current problem of time stamp
   for (int i=0; i<6; i++)
     for (int j=0; j<6; j++)
       A[i][j] = 0.0;

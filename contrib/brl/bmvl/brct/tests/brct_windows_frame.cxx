@@ -112,7 +112,7 @@ void brct_windows_frame::init()
   this->add_child(shell);
 
   // set a kalman filter
-  data_file_name_ = "data/curve41.txt";
+  data_file_name_ = "data/par.txt";
   kalman_ = new kalman_filter(data_file_name_.c_str());
   e_ = 0;
 }
@@ -149,13 +149,16 @@ void brct_windows_frame::add_curve2d(vcl_vector<vgl_point_2d<double> > &pts)
   int size = pts.size();
   assert(size > 1);
   curves_2d_.resize(size-1);
-  instance_->easy_2d_->set_foreground(1, 1, 1);
+  instance_->easy_2d_->set_foreground(1, 0, 0);
   for (int i=0; i<size-1; i++)
   {
     vgl_point_2d<double>& s = pts[i];
     vgl_point_2d<double>& e = pts[i+1];
-    vgui_soview2D_lineseg* l = instance_->easy_2d_->add_line(s.x(), s.y(), e.x(), e.y());
-    curves_2d_[i] = l;
+    //vgui_soview2D* so = instance_->easy_2d_->add_line(s.x(), s.y(), e.x(), e.y());
+    vgui_soview2D *so = instance_->easy_2d_->add_point(s.x(), s.y());
+    so->set_point_size(2);
+    so->set_colour(1, 0, 0);
+    curves_2d_[i] = so;
   }
 
   instance_->post_redraw();
@@ -168,18 +171,20 @@ void brct_windows_frame::remove_curve2d()
   this->post_redraw();
 }
 
-void brct_windows_frame::add_curve3d(vcl_vector<vgl_point_3d<double> >& pts)
+void brct_windows_frame::add_curve3d(bugl_curve_3d& c3d)
 {
-  int size = pts.size();
+  int size = c3d.get_num_points();
   if (size > 1){
-    curves_3d_.resize(size-1);
     instance_->tab_3d_->set_foreground(1, 1, 1);
     for (int i=0; i<size-1; i++)
     {
-      vgl_point_3d<double>& s = pts[i];
-      vgl_point_3d<double>& e = pts[i+1];
-      vgui_lineseg3D* l = instance_->tab_3d_->add_line(s.x(), s.y(), s.z(), e.x(), e.y(), e.z());
-      curves_3d_[i] = l;
+      bugl_normal_point_3d_sptr s = c3d.get_point(i);
+      bugl_normal_point_3d_sptr e = c3d.get_neighbor(i, 1);
+      if(e.ptr()!=0){
+        //vgui_soview3D* so = instance_->tab_3d_->add_line(s->x(), s->y(), s->z(), e->x(), e->y(), e->z());
+        vgui_soview3D* so = instance_->tab_3d_->add_point(s->x(), s->y(), s->z());
+        curves_3d_.push_back(so);
+      }
     }
   instance_->post_redraw();
   }
@@ -229,7 +234,7 @@ void brct_windows_frame::init_kalman()
   add_curve2d(c2d);
 
   //update the display.
-  vcl_vector<vgl_point_3d<double> > c3d = kalman_->get_local_pts();
+  bugl_curve_3d c3d = kalman_->get_curve_3d();
   add_curve3d(c3d);
 
   // add the curve in the second view
@@ -249,7 +254,7 @@ void brct_windows_frame::go()
   add_curve2d(c2d);
 
   //add 3D resoult
-  vcl_vector<vgl_point_3d<double> > c3d = kalman_->get_local_pts();
+  bugl_curve_3d c3d = kalman_->get_curve_3d();
   add_curve3d(c3d);
 
   show_epipole();
@@ -275,11 +280,12 @@ void brct_windows_frame::add_predicted_curve2d(vcl_vector<vgl_point_2d<double> >
   int size = pts.size();
   assert(size > 1);
   predicted_curves_2d_.resize(size-1);
-  instance_->easy_2d_->set_foreground(0, 1, 0);
   for (int i=0; i<size-1; i++) {
     vgl_point_2d<double>& s = pts[i];
-    vgui_soview2D_point* p = instance_->easy_2d_->add_point(s.x(), s.y());
-    predicted_curves_2d_[i] = p;
+    vgui_soview2D* so = instance_->easy_2d_->add_point(s.x(), s.y());
+    so->set_colour(0, 0, 1);
+    so->set_point_size(2);
+    predicted_curves_2d_[i] = so;
   }
 
   instance_->post_redraw();
@@ -294,8 +300,9 @@ void brct_windows_frame::add_next_observes(vcl_vector<vgl_point_2d<double> > &pt
   for (int i=0; i<size-1; i++) {
     vgl_point_2d<double>& s = pts[i];
     vgl_point_2d<double>& e = pts[i+1];
-    vgui_soview2D_lineseg* l = instance_->easy_2d_->add_line(s.x(), s.y(), e.x(), e.y());
-    debug_curves_2d_[i] = l;
+    //vgui_soview2D* so = instance_->easy_2d_->add_line(s.x(), s.y(), e.x(), e.y());
+    vgui_soview2D* so = instance_->easy_2d_->add_point(s.x(), s.y());
+    debug_curves_2d_[i] = so;
   }
 
   instance_->post_redraw();
@@ -322,8 +329,11 @@ void brct_windows_frame::show_back_projection()
     for (int i=0; i<size-1; i++) {
       double x1 = c2d[f][0][i], x2 = c2d[f][0][i+1];
       double y1 = c2d[f][1][i], y2 = c2d[f][1][i+1];
-      vgui_soview2D_lineseg* l = instance_->easy_2d_->add_line(x1, y1, x2, y2);
-      debug_curves_2d_.push_back(l);
+      //vgui_soview2D* so = instance_->easy_2d_->add_line(x1, y1, x2, y2);
+      vgui_soview2D* so = instance_->easy_2d_->add_point(x1, y1);
+      so->set_colour(0, 0, 1);
+      so->set_point_size(2);
+      debug_curves_2d_.push_back(so);
     }
   }
   instance_->post_redraw();

@@ -51,7 +51,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
   void remove_curve2d();
   void remove_debug_info();
 
-  void add_curve3d(vcl_vector<vgl_point_3d<double> > &pts);
+  void add_curve3d(bugl_curve_3d& c3d);
   void add_next_observes(vcl_vector<vgl_point_2d<double> > &pts);
   void remove_curve3d();
   void init_kalman();
@@ -72,16 +72,16 @@ class brct_windows_frame : public vgui_wrapper_tableau
 
  private:
   //: get track of all the 3d points added into 3d tableau
-  vcl_vector<vgui_lineseg3D* > curves_3d_;
+  vcl_vector<vgui_soview3D* > curves_3d_;
 
   //: get predicted curves 2d
-  vcl_vector<vgui_soview2D_point* > predicted_curves_2d_;
+  vcl_vector<vgui_soview2D* > predicted_curves_2d_;
 
   //: 2d curve for the next frame, which is used for debugging
-  vcl_vector<vgui_soview2D_lineseg* > debug_curves_2d_;
+  vcl_vector<vgui_soview2D* > debug_curves_2d_;
 
   //: 2d curve at time t
-  vcl_vector<vgui_soview2D_lineseg* > curves_2d_;
+  vcl_vector<vgui_soview2D* > curves_2d_;
 
   //: 2d curve at time 0
   vcl_vector<vgui_soview2D_lineseg* > curves_2d_0_;

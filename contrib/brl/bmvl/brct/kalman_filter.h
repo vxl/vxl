@@ -24,6 +24,7 @@
 #include <bbas/bugl/bugl_gaussian_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <bbas/bugl/bugl_gaussian_point_3d.h>
+#include <bbas/bugl/bugl_curve_3d.h>
 
 class kalman_filter
 {
@@ -39,15 +40,20 @@ class kalman_filter
   vcl_vector<vgl_point_2d<double> > get_pre_observes();
   vcl_vector<vgl_point_2d<double> > get_cur_observes();
   vcl_vector<vgl_point_2d<double> > get_next_observes();
+  vcl_vector<vgl_point_3d<double> > get_local_pts(); // will be superseded
+  bugl_curve_3d kalman_filter::get_curve_3d();
+
+  //: read all the data including time stampes, trackers.
   void read_data(const char* fname);
-  vcl_vector<vgl_point_3d<double> > get_local_pts();
+
+  //: read vishual tracker result out of a file
+  vcl_vector<vdgl_digital_curve_sptr> read_tracker_file(char* fname);
 
   //: initialize the kalman filter states
   void init();
   void init_epipole(double x, double y);
   void inc();
   vnl_double_2 projection(const vnl_double_3x4 &P, const vnl_double_3 &X);
-  void prediction();
 
   //: constructors
   //
@@ -56,6 +62,9 @@ class kalman_filter
   virtual ~kalman_filter();
 
  protected:
+  //: read time stamp
+  vcl_vector<double> read_timestamp_file(char* fname);
+  
   //: if the zero probability returned, the matched point is a outlier
   double matched_point_prob(vnl_double_2& z, vnl_double_2& z_pred);
 
@@ -77,20 +86,22 @@ class kalman_filter
 
   void init_covariant_matrix();
   void init_cam_intrinsic();
-  void init_state_vector();
+  void init_state_3d_estimation();
   void init_transit_matrix();
 
  private:
    //: position and confidence of feature samples
-  vcl_vector<bugl_gaussian_point_3d<double> > curve_3d_;
+  bugl_curve_3d curve_3d_;
+
   vcl_vector<double> prob_;
 
+  //: used for matching point
   vcl_vector<vcl_vector<bugl_gaussian_point_2d<double> > > observes_;
 
   //: each element represents shoting times for this frame.
   vcl_vector<double> time_tick_;
   //: each element of the vector represents a projection of the same 3D curves.
-  vcl_vector<vdgl_digital_curve_sptr> curves_;
+  vcl_vector<vcl_vector<vdgl_digital_curve_sptr> >	trackers_;
 
   vcl_vector<vnl_double_3> motions_;
   //: current frame position in history pool
