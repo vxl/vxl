@@ -101,6 +101,11 @@ static void test_build_info()
       vxl_BUILD_DIR "/vcl/vcl_config_compiler.h",
       vxl_BUILD_DIR "/vcl/vcl_config_headers.h",
       vxl_BUILD_DIR "/vcl/vcl_config_manual.h",
+      vxl_BUILD_DIR "/core/vil/vil_config.h",
+      vxl_BUILD_DIR "/core/vnl/vnl_config.h",
+      vxl_BUILD_DIR "/v3p/dcmtk/config/include/osconfig.h",
+      vxl_BUILD_DIR "/v3p/mpeg2/include/config.h",
+      vxl_BUILD_DIR "/v3p/mpeg2/include/inttypes.h",
       0
     };
 
