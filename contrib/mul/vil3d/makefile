@@ -11,6 +11,7 @@ MANPAGE_SOURCES += vil3d_sample_profile_trilin.txx
 MANPAGE_SOURCES += vil3d_slice.h
 MANPAGE_SOURCES += vil3d_trilin_interp.h
 MANPAGE_SOURCES += vil3d_crop.h
+MANPAGE_SOURCES += vil3d_switch_axes.h
 
 SUBDIRS += algo io
 
