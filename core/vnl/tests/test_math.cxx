@@ -78,14 +78,11 @@ void test_math()
   TEST("vcl_numeric_limits<double>::has_infinity==true assumption",vcl_numeric_limits<double>::has_infinity,true);
   if ((! vcl_numeric_limits<float>::has_infinity) || (! vcl_numeric_limits<double>::has_infinity))
   {
-    vcl_cout << "VXL is in places relatively dependent on the existence of an infinity. Your\n"
-             << "platform claims that it doesn't have an infinity for float or double, which\n"
-             << "is rather unlikely. Instead it is likely a problem with your implementation\n"
-             << "of std::numeric_limits<>. You may be able to deal with this problem by\n"
-             << "setting VCL_CXX_HAS_HEADER_LIMITS=0 in your CMakeCache.txt file, or\n"
-             << "wherever in your build system. This will allow VXL to use its own emulated\n"
-             << "version of vcl_numeric_limits<> which does provide an infinity on most\n"
-             << "platforms." << vcl_endl;
+    vcl_cout << "Your platform doesn't appear to have an infinity. VXL is in places relatively\n"
+             << "dependent on the existence of an infinity. There are two solutions.\n"
+             << "A. If your platform really doesn have an infinity, VXL's configuration code\n"
+             << "   can be modified to correctly detect and use the infinity.\n"
+             << "B. Fix VXL so that it can cope with the lack of an infinity.\n" << vcl_endl;
   }
   // Create Inf and -Inf:
   float pinf_f =   vcl_numeric_limits<float>::infinity();

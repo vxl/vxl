@@ -768,6 +768,22 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "VCL_NUMERIC_LIMITS_HAS_INFINITY ";
+#ifdef VCL_NUMERIC_LIMITS_HAS_INFINITY
+  vcl_cout << "is set to " << quote(VCL_NUMERIC_LIMITS_HAS_INFINITY);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_PROCESSOR_HAS_INFINITY ";
+#ifdef VCL_PROCESSOR_HAS_INFINITY
+  vcl_cout << "is set to " << quote(VCL_PROCESSOR_HAS_INFINITY);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "VCL_CXX_HAS_HEADER_STRSTREAM ";
 #ifdef VCL_CXX_HAS_HEADER_STRSTREAM
   vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_STRSTREAM);

@@ -758,6 +758,49 @@ int main() { int a[5]; qsort(a, 5, sizeof(int), f); return 0; }
 
 //-------------------------------------
 
+#ifdef VCL_NUMERIC_LIMITS_HAS_INFINITY
+// Does vcl_numeric_limits<float>::has_infinity == 1?
+
+// Several versions of gcc (3.0, 3.1, and 3.2) come with a
+// numeric_limits that reports that they have no infinity.
+#include <limits>
+int main() {
+  return !(std::numeric_limits<double>::has_infinity &&
+    std::numeric_limits<float>::has_infinity);
+}
+#endif // VCL_NUMERIC_LIMITS_HAS_INFINITY
+
+//-------------------------------------
+
+#ifdef VCL_PROCESSOR_HAS_INFINITY
+// Does the processor actually have an infinity?
+#include <cfloat>
+
+union u {  double d;  unsigned char c[8]; };
+
+int main()
+{
+  if (sizeof(double) != 8) return 1; // If you have an odd machine, then add
+  // your own construction of infinity.
+
+  u v;
+  // Can we generate an IEEE infinity artifically on a big-endian machine?
+  v.c[0] = 0x7f; v.c[1] = 0xf0;
+  v.c[2] = v.c[3] = v.c[4] = v.c[5] = v.c[6] = v.c[7] = 0x00;
+  if (v.d > DBL_MAX)
+    return 0;
+
+  // Can we generate an IEEE infinity artifically on a little-endian machine?
+  v.c[7] = 0x7f; v.c[6] = 0xf0;
+  v.c[0] = v.c[1] = v.c[2] = v.c[3] = v.c[4] = v.c[5] = 0x00;
+  if (v.d > DBL_MAX)
+    return 0;
+  return 1;
+}
+#endif // VCL_PROCESSOR_HAS_INFINITY
+
+//-------------------------------------
+
 #ifdef VCL_CANNOT_SPECIALIZE_CV
 // VCL_CANNOT_SPECIALIZE_CV is set to 1 if this fails to compile
 

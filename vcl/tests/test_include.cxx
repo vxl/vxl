@@ -32,9 +32,7 @@
 #ifndef VCL_GCC_295 //gcc2.95
 #include <vcl_locale.h>
 #endif
-#ifndef VCL_GCC_295 //gcc2.95
 #include <vcl_limits.h>
-#endif
 #include <vcl_queue.h>
 #include <vcl_string.h>
 #include <vcl_complex.h>

@@ -81,7 +81,7 @@ int test_limits_main(int argc,char* argv[])
            << "rnder = " << vcl_numeric_limits<float>::round_error() << vcl_endl;
 
   TEST("dmax", vcl_numeric_limits<double>::max() > 1e308, true);
-  if (vcl_numeric_limits<double>::has_infinity)
+  if (VCL_PROCESSOR_HAS_INFINITY)
     TEST("dinf", vcl_numeric_limits<double>::infinity() >
                vcl_numeric_limits<double>::max(), true);
   TEST("dmin", vcl_numeric_limits<double>::min() < 1e-307 &&

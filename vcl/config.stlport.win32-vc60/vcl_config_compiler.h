@@ -589,6 +589,20 @@ text { return ret; }
 // Set to true if the compiler needs namespace std:: for the standard library.
 #define VCL_NEEDS_NAMESPACE_STD 0
 
+
+//----------------------------------------------------------------------
+// infinity issues
+
+//: VCL_NUMERIC_LIMITS_HAS_INFINITY
+// Set to true if there is a numeric_limits and it reports having an floating point infinity.
+#define VCL_NUMERIC_LIMITS_HAS_INFINITY 1
+
+//: VCL_PROCESSOR_HAS_INFINITY
+// Set to true if the processor really does have an infinity.
+// Although this is strictly not a C++ issue, some platforms' versions of
+// numeric_limits<double> imply that there is no infinity, when there is.
+#define VCL_PROCESSOR_HAS_INFINITY 1
+
 //----------------------------------------------------------------------
 
 // architecture macros removed -- they're not in the C++ standard
