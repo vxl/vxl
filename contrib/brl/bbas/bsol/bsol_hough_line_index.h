@@ -114,6 +114,8 @@
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_bounding_box.h>
 #include <vbl/vbl_array_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>
 
@@ -128,7 +130,13 @@ class bsol_hough_line_index :  public vbl_ref_count
   bsol_hough_line_index(const int r_dimension, const int theta_dimension);
   bsol_hough_line_index(const float x0, const float y0,
                         const float xsize, const float ysize,
-                        const float angle_range, const float angle_increment);
+                        const float angle_range=180.0,
+                        const float angle_increment=5.0);
+
+  bsol_hough_line_index(vbl_bounding_box<double, 2> const & box,
+                        const float angle_range=180.0,
+                        const float angle_increment=5.0);
+
   ~bsol_hough_line_index();
 
   // Data Access---------------------------------------------------------------
@@ -206,15 +214,31 @@ class bsol_hough_line_index :  public vbl_ref_count
     parallel_lines(vsol_line_2d_sptr const &l,
                    const float angle_dist);
 
+  //: Angle histogram - projection of hough space onto theta axis
+  vcl_vector<int> angle_histogram();
+
+  //:Dominant line directions found by non-maximum supression above thresh
+  int dominant_directions(const int thresh, const float angle_tol, 
+                          vcl_vector<int>& dirs);
+
+  //:Dominant line groups
+  int dominant_line_groups(const int thresh, const float angle_tol,
+                           vcl_vector<vcl_vector<vsol_line_2d_sptr> >& groups);
+
+  //:An image of the hough space
   vbl_array_2d<unsigned char> get_hough_image();
+
   // Data Control--------------------------------------------------------------
 
   void clear_index();
 
   // INTERNALS-----------------------------------------------------------------
 
- protected:
+protected:
+  //internal functions
   void init(const int r_dimension, const int theta_dimension);
+  vcl_vector<int> non_maximum_suppress(const int radius,
+                                       vcl_vector<int> const & bins);
 
   // Data Members--------------------------------------------------------------
 

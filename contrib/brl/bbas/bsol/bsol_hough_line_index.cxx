@@ -15,6 +15,15 @@
 #define DEGTORAD vnl_math::pi/180
 #endif
 
+class nlines{
+public:
+  bool operator ()(const vcl_vector<vsol_line_2d_sptr> & v1, 
+                   const vcl_vector<vsol_line_2d_sptr> & v2)
+  {
+    return v1.size() > v2.size();
+  }
+};
+
 //--------------------------------------------------------------
 //
 // Constructor and Destructor Functions
@@ -37,7 +46,7 @@ bsol_hough_line_index::bsol_hough_line_index(const int r_dimension,
 }
 
 //--------------------------------------------------------------
-//:  A Useful Constructor
+//: Constructors from given bounds
 //
 bsol_hough_line_index::bsol_hough_line_index(const float x0,
                                              const float y0,
@@ -60,7 +69,26 @@ bsol_hough_line_index::bsol_hough_line_index(const float x0,
   this->init(rmax, theta_dimension);
 }
 
-// Destructor
+bsol_hough_line_index::
+bsol_hough_line_index(vbl_bounding_box<double, 2> const& box,
+                      const float angle_range,
+                      const float angle_increment)
+{
+  xo_ = box.xmin();  yo_ = box.ymin();
+  xsize_ = box.xmax()-xo_;
+  ysize_ = box.ymax()-yo_;
+  angle_range_ = angle_range;
+  angle_increment_ = angle_increment;
+
+  int theta_dimension = (int)vcl_ceil(angle_range_/angle_increment_);
+  theta_dimension++; //Include both 0 and angle_range_
+  float diag = vcl_sqrt(xsize_*xsize_ + ysize_*ysize_);
+  int rmax = int(diag);
+  rmax++; //Round off.
+  this->init(rmax, theta_dimension);
+}
+
+//: Destructor
 bsol_hough_line_index::~bsol_hough_line_index()
 {
   for (int r=0;r<r_dim_;r++)
@@ -77,14 +105,15 @@ void bsol_hough_line_index::array_loc(vsol_line_2d_sptr const& line,
 {
   //Compute angle index
   float angle = (float)line->tangent_angle();
-  if (angle>180.0)
+
+  if(angle>180.0)
     angle -= 180.0;
-  if (angle>angle_range_)
-  {
-    vcl_cout << "The line angle was outside the range of bsol_hough_line_index"
-             << " space!\n";
-    return;
-  }
+  if(angle>angle_range_)
+    {
+      vcl_cout << "The line angle was outside the range of bsol_hough_line_index"
+               << " space!\n";
+      return;
+    }
 
   theta = angle;
 
@@ -94,7 +123,7 @@ void bsol_hough_line_index::array_loc(vsol_line_2d_sptr const& line,
   vsol_point_2d_sptr mid = line->middle();
   float midx = mid->x()-xo_;
   float midy = mid->y()-yo_;
-  float xs2 = xsize_/2.0;
+  float xs2 = xsize_/2.0; 
   float ys2 = ysize_/2.0;
 
   float cx = -(midx-xs2)*vcl_sin(angrad);
@@ -104,7 +133,6 @@ void bsol_hough_line_index::array_loc(vsol_line_2d_sptr const& line,
   //Also, the distance index is guaranteed to be positive
   r = cx + cy + vcl_sqrt(xs2*xs2 + ys2*ys2);
 }
-
 //-----------------------------------------------------------------------------
 //
 //: Compute the bsol_hough_line_index array locations corresponding to a line
@@ -161,7 +189,8 @@ int bsol_hough_line_index::count(const int r, const int theta)
 //  multiple items.
 bool bsol_hough_line_index::index(vsol_line_2d_sptr const& line)
 {
-  if (!line)
+
+  if(!line)
     {
       vcl_cout << "In bsol_hough_line_index::index(..) NULL line\n";
       return false;
@@ -181,15 +210,17 @@ bool bsol_hough_line_index::index(vsol_line_2d_sptr const& line)
 //  Only new vsol_line_2d_sptr pointers are added to the bin.
 bool bsol_hough_line_index::index_new(vsol_line_2d_sptr const& line)
 {
-  if (!line)
+  if(!line)
+
     {
       vcl_cout << "In bsol_hough_line_index::index_new(..) NULL line\n";
       return false;
     }
+
   int r, theta;
   //Check array bounds and uniqueness of line
   this->array_loc(line, r, theta);
-  if (!(r < r_dim_)||!(theta < th_dim_))
+  if(!(r < r_dim_)||!(theta < th_dim_))
     return false;
 
   vcl_vector<vsol_line_2d_sptr>* lines = index_[r][theta];
@@ -218,15 +249,16 @@ bool bsol_hough_line_index::find(vsol_line_2d_sptr const& line)
 //  multiple items.  See vsol_line_2d_sptrGroup as an example.
 bool bsol_hough_line_index::remove(vsol_line_2d_sptr const& line)
 {
+
   int r, theta;
   this->array_loc(line, r, theta);
-  if (!(r < r_dim_)||!(theta < th_dim_))
+  if(!(r < r_dim_)||!(theta < th_dim_))
     return false;
   vcl_vector<vsol_line_2d_sptr>* lines = index_[r][theta];
 
-  vcl_vector<vsol_line_2d_sptr>::iterator lit =
+  vcl_vector<vsol_line_2d_sptr>::iterator lit = 
     vcl_find(lines->begin(), lines->end(), line);
-  if (lit == lines->end())
+  if(lit == lines->end())
     return false;
   lines->erase(lit);
   return true;
@@ -296,15 +328,16 @@ lines_in_interval(vsol_line_2d_sptr const & l,
       int t_indx = (theta + i) % (th_dim_m1);
       if (t_indx<0)
         t_indx += th_dim_m1;
-      for (int j = -r_radius; j<=r_radius; j++)
+
+      for(int j = -r_radius; j<=r_radius; j++)
         {
           int r_indx = r + j;
-          if ((r_indx<0)||(r_indx>=r_dim_))
+          if((r_indx<0)||(r_indx>=r_dim_))
             continue;
           vcl_vector<vsol_line_2d_sptr> temp;
           this->lines_at_index(r_indx, t_indx,temp);
-          for (vcl_vector<vsol_line_2d_sptr>::iterator lit = temp.begin();
-               lit != temp.end(); lit++)
+          for(vcl_vector<vsol_line_2d_sptr>::iterator lit = temp.begin();
+              lit != temp.end(); lit++)
             {
               //Note, these tests should eventually be more
               //sophisticated - JLM
@@ -315,13 +348,13 @@ lines_in_interval(vsol_line_2d_sptr const & l,
               this->array_loc(line, line_ndist, line_angle);
 
               //Test error in normal distance
-              bool within_r_radius = vcl_fabs(l_ndist - line_ndist) < r_dist;
-              if (!within_r_radius)
+              bool within_r_radius = fabs(l_ndist - line_ndist) < r_dist;
+              if(!within_r_radius)
                 continue;
 
               //Test angular error
-              bool within_angle_radius = vcl_fabs(l_angle - line_angle) < theta_dist;
-              if (!within_angle_radius)
+              bool within_angle_radius = fabs(l_angle - line_angle) < theta_dist;
+              if(!within_angle_radius)
                 continue;
 
               //line, passed both tests
@@ -343,7 +376,7 @@ bsol_hough_line_index::lines_in_interval(vsol_line_2d_sptr const & l,
                                          const float theta_dist)
 {
   vcl_vector<vsol_line_2d_sptr> out;
-  if (!l)
+  if(!l)
     {
       vcl_cout << "In bsol_hough_line_index::lines_in_interval(..) NULL line\n";
       return out;
@@ -359,8 +392,8 @@ bsol_hough_line_index::lines_in_interval(vsol_line_2d_sptr const & l,
 //
 //-----------------------------------------------------------------------------
 
-void
-bsol_hough_line_index::parallel_lines(const float angle,
+void 
+bsol_hough_line_index::parallel_lines(const float angle, 
                                       const float angle_dist,
                                       vcl_vector<vsol_line_2d_sptr>& lines)
 {
@@ -373,7 +406,7 @@ bsol_hough_line_index::parallel_lines(const float angle,
   if (ang>angle_range_)
     {
       vcl_cout << "The line angle was outside the range "
-           << " of bsol_hough_line_index Space!\n";
+               << " of bsol_hough_line_index Space!\n";
       return;
     }
   int theta = (int)vcl_floor(ang/angle_increment_);
@@ -392,17 +425,21 @@ bsol_hough_line_index::parallel_lines(const float angle,
             continue;
           vcl_vector<vsol_line_2d_sptr> temp;
           this->lines_at_index(j, t_indx, temp);
-          for (vcl_vector<vsol_line_2d_sptr>::iterator lit = temp.begin();
-        lit != temp.end(); lit++)
+
+          for(vcl_vector<vsol_line_2d_sptr>::iterator lit = temp.begin();
+              lit != temp.end(); lit++)
             {
               vsol_line_2d_sptr line = *lit;
               //Test angular error
               float line_angle = (float)line->tangent_angle();
-              if (line_angle>180.0)
-          line_angle -= 180.0;
-              float ang_error = vcl_fabs(ang - line_angle);
-              if (ang_error<angle_dist)
-          lines.push_back(line);
+              if(line_angle>180.0)
+                line_angle -= 180.0;
+              float ang_error = fabs(ang - line_angle);
+              if(ang_error<angle_dist)
+                lines.push_back(line);
+              ang_error-=180.0;//anti-parallel lines are included
+              if(fabs(ang_error)<angle_dist)
+                lines.push_back(line);
             }
         }
     }
@@ -415,8 +452,8 @@ bsol_hough_line_index::parallel_lines(const float angle,
 //-----------------------------------------------------------------------------
 
 vcl_vector<vsol_line_2d_sptr >
- bsol_hough_line_index::parallel_lines(const float angle,
-                                       const float angle_dist)
+bsol_hough_line_index::parallel_lines(const float angle, 
+                                      const float angle_dist)
 {
   vcl_vector<vsol_line_2d_sptr> out;
   this->parallel_lines(angle, angle_dist, out);
@@ -430,8 +467,9 @@ vcl_vector<vsol_line_2d_sptr >
 //
 //-----------------------------------------------------------------------------
 
-void
-bsol_hough_line_index::lines_at_angle(vsol_line_2d_sptr const &l,
+
+void 
+bsol_hough_line_index::lines_at_angle(vsol_line_2d_sptr const &l, 
                                       const float angle,
                                       const float angle_dist,
                                       vcl_vector<vsol_line_2d_sptr >& lines)
@@ -445,6 +483,8 @@ bsol_hough_line_index::lines_at_angle(vsol_line_2d_sptr const &l,
   float line_angle = (float)l->tangent_angle();
   if (line_angle>180.0)
     line_angle -= 180.0;
+//   if(line_angle<0)
+//     line_angle += 180.0;
   float ang = line_angle + angle;
   this->parallel_lines(ang, angle_dist, lines);
 }
@@ -456,7 +496,7 @@ bsol_hough_line_index::lines_at_angle(vsol_line_2d_sptr const &l,
 //-----------------------------------------------------------------------------
 
 vcl_vector<vsol_line_2d_sptr>
-bsol_hough_line_index::lines_at_angle(vsol_line_2d_sptr const &l,
+bsol_hough_line_index::lines_at_angle(vsol_line_2d_sptr const &l, 
                                       const float angle,
                                       const float angle_dist)
 {
@@ -471,19 +511,20 @@ bsol_hough_line_index::lines_at_angle(vsol_line_2d_sptr const &l,
 //
 //-----------------------------------------------------------------------------
 
-void
-bsol_hough_line_index::parallel_lines(vsol_line_2d_sptr const &l,
+
+void 
+bsol_hough_line_index::parallel_lines(vsol_line_2d_sptr const &l, 
                                       const float angle_dist,
                                       vcl_vector<vsol_line_2d_sptr>& lines)
 {
   lines.clear();
- if (!l)
+  if(!l)
     {
       vcl_cout << "In bsol_hough_line_index::parallel_lines(..) NULL line\n";
       return;
     }
- float angle = (float)l->tangent_angle();
- this->parallel_lines(angle, angle_dist, lines);
+  float angle = (float)l->tangent_angle();
+  this->parallel_lines(angle, angle_dist, lines);
 }
 
 //-----------------------------------------------------------------------------
@@ -521,7 +562,8 @@ void bsol_hough_line_index::clear_index()
 //-----------------------------------------------------------------
 //: Constructor Utility
 //
-void bsol_hough_line_index::init(const int r_dimension,
+
+void bsol_hough_line_index::init(const int r_dimension, 
                                  const int theta_dimension)
 {
   r_dim_ = r_dimension;
@@ -533,7 +575,217 @@ void bsol_hough_line_index::init(const int r_dimension,
 }
 
 //-----------------------------------------------------------------
-//: An image of the hough index, useful for debugging applications that use this class
+//: Fill the angle histogram
+//  
+vcl_vector<int> bsol_hough_line_index::angle_histogram()
+{
+  vcl_vector<int> angle_hist(th_dim_);
+  for(int x = 0; x<th_dim_; x++)
+    {
+      angle_hist[x]=0;
+      for(int y = 0; y<r_dim_; y++)
+	  {
+		vcl_vector<vsol_line_2d_sptr>* lines = index_[y][x];
+        if(lines)
+		 angle_hist[x]+=lines->size();
+	  }
+    }
+  return angle_hist;
+}
+//-------------------------------------------------------------------
+//: Provides the correct values for angle histogram counts when the bin index 
+// extends outside the valid range of the counts array.  This function
+// permits easy access logic for the non_maximum_suppression algorithm.
+static int get_extended_count(int bin, vcl_vector<int> const& ang_hist)
+{
+  int n_bins = ang_hist.size();
+  int nbm = n_bins-1;
+  //Abnormal Cases
+  if(bin<0)
+    return ang_hist[nbm+bin];
+
+  if(bin >= n_bins)
+    return ang_hist[bin-n_bins];
+  //Normal Case
+  return ang_hist[bin];
+}
+
+//---------------------------------------------------------------------
+//:Prune any sequences of more than one maxium value.
+// That is, it is possible to have a "flat" top peak with an arbitarily
+// long sequence of equal, but maximum values.
+static void remove_flat_peaks(vcl_vector<int>& angle_hist)
+{
+  int nbins = angle_hist.size();
+  int nbm = nbins-1;
+
+  //Here we define a small state machine - parsing for runs of peaks
+  //init is the state corresponding to an initial run (starting at i ==0)
+  bool init= get_extended_count(0, angle_hist)>0;
+  int init_end =0;
+
+  //start is the state corresponding to any other run of peaks
+  bool start=false;  
+  int start_index=0; 
+
+  //The scan of the state machine
+  for(int i = 0; i < nbins; i++)
+    {
+      int v = get_extended_count(i, angle_hist);
+
+      //State init: a string of non-zeroes at the begining.
+      if(init&&v!=0)
+        continue;
+
+      if(init&&v==0)
+        {
+          init_end = i;
+          init = false;
+          continue;
+        }
+
+      //State !init&&!start: a string of "0s"
+      if(!start&&v==0)
+        continue;
+
+      //State !init&&start: the first non-zero value
+      if(!start&&v!=0)
+        {
+          start_index = i;
+          start = true;
+          continue;
+        }
+      //State ending flat peak: encountered a subsequent zero after starting
+      if(start&&v==0)
+        {
+          int peak_location = (start_index+i-1)/2;//The middle of the run
+          for(int k = start_index; k<=(i-1); k++)
+            if(k!=peak_location)
+              angle_hist[k] = 0;
+          start = false;
+        }
+    }
+  //Now handle the boundary conditions
+  if(init_end!=0)  //Is there a run which crosses the cyclic cut?
+    if(start)    
+      { //Yes, so define the peak location accordingly
+        int peak_location = (start_index + init_end - nbm -1)/2;
+        int k;
+        if(peak_location < 0) //Is the peak to the left of the cut?
+          {// Yes, to the left
+            peak_location += nbm; 
+            for( k = 0; k< init_end; k++)
+              angle_hist[k]=0;
+            for( k= start_index; k <nbins; k++)
+              if(k!=peak_location)
+                angle_hist[k] = 0;
+          }
+        else   
+          {//No, on the right.
+            for( k = start_index; k< nbins; k++)
+              angle_hist[k]=0;
+            for( k= 0; k < init_end; k++)
+              if(k!=peak_location)
+                angle_hist[k] = 0;
+          }
+      }
+    else  
+      {//There wasn't a final run so just clean up the initial run
+        int init_location = (init_end-1)/2;
+        for(int k = 0; k<=init_end; k++)
+          if(k!=init_location)
+            angle_hist[k] = 0;
+      }
+}
+
+//----------------------------------------------------------
+// -- Suppress values in the angle histogram which are not locally 
+//    a maxium. The neighborhood for computing the local maximum
+//    is [radius X radius], e.g. for radius =1 the neighborhood
+//    is [-X-], for radius = 2, the neighborhood is [--X--], etc.
+//
+vcl_vector<int> 
+bsol_hough_line_index::non_maximum_suppress(const int radius,
+                                            vcl_vector<int> const& bins)
+{
+  int num = bins.size();
+  vcl_vector<int> out(num);
+  if((2*radius +1)> num/2)
+    {
+      vcl_cout << "In bsol_hough_line_index::non_maximum_suppress(.)-"
+               << " the radius is too large\n";
+      return out;
+    }
+
+  //Clear the output 
+  for(int indx =0; indx < num; indx++)
+    out[indx] = 0;
+  
+  //Find local maxima
+  for(int indx = 0; indx<num; indx++)
+    {
+      //find the maxium value in the current kernel
+      int max_count = bins[indx];
+      for(int k = -radius; k <= radius ;k++)
+        {
+          int index = indx+k;
+          int c = get_extended_count(index, bins);
+          if( c > max_count)
+            max_count = c;
+        }
+      //Is position th a local maxium?
+      if(max_count == bins[indx])
+        out[indx] = max_count;//Yes. So set the counts to the max value
+    }
+  remove_flat_peaks(out);
+  return out;
+}
+
+//-----------------------------------------------------------------
+//: Find the dominant peaks in the direction histogram.  The output
+//  vector contains the theta indices of dominant direction peaks.
+//  thresh is the minimum number of lines in a valid peak
+//  angle tol is the width of the peak in degrees
+int bsol_hough_line_index::
+dominant_directions(const int thresh, const float angle_tol, 
+                    vcl_vector<int>& dirs)
+{
+  int radius = angle_tol/angle_increment_;
+  vcl_vector<int> angle_hist = this->angle_histogram();
+  vcl_vector<int> suppressed_hist = 
+    this->non_maximum_suppress(radius, angle_hist);
+  for(int i = 0; i<th_dim_; i++)
+    if(suppressed_hist[i]>=thresh)
+      dirs.push_back(i);
+  return dirs.size();
+}
+
+//------------------------------------------------------------------
+//: Get the dominant line groups in the hough index.  Sets of lines
+// belonging to distinct orientations are returned 
+//
+int bsol_hough_line_index::
+dominant_line_groups(const int thresh, const float angle_tol,
+                     vcl_vector<vcl_vector<vsol_line_2d_sptr> >& groups)
+{ 
+  groups.clear();
+  vcl_vector<int> dirs;
+  int n_groups = this->dominant_directions(thresh, angle_tol, dirs);
+  if(!n_groups)
+    return 0;
+  for(int gi = 0; gi<n_groups; gi++)
+  {
+     vcl_vector<vsol_line_2d_sptr> lines;
+     float angle = dirs[gi]*angle_increment_;
+     this->parallel_lines(angle, angle_tol, lines);
+     groups.push_back(lines);
+     }
+  vcl_sort(groups.begin(), groups.end(), nlines());
+  return n_groups;
+}
+//-----------------------------------------------------------------
+//: An image of the hough index, useful for debugging applications
+//  that use this class
 vbl_array_2d<unsigned char> bsol_hough_line_index::get_hough_image()
 {
   vbl_array_2d<unsigned char> out(r_dim_, th_dim_);
