@@ -3,6 +3,7 @@
 #endif
 
 #include <vcl_cassert.h>
+#include <vcl_cstdio.h>    // perror()
 #include <vcl_iostream.h>
 #include <vil/vil_stream_fstream.h>
 
@@ -21,7 +22,7 @@ static int modeflags(char const* mode)
   return 0;
 }
 
-#define xerr if (true) ; else (vcl_cerr << "fstream#" << id_ << ": ")
+#define xerr if (true) ; else (vcl_cerr << "vcl_fstream#" << id_ << ": ")
 
 static int id = 0;
 
@@ -58,12 +59,16 @@ bool vil_stream_fstream::ok()
 int vil_stream_fstream::write(void const* buf, int n)
 {
   assert(id > 0);
-  if (!(flags_ & vcl_ios_out))
+  if (!(flags_ & vcl_ios_out)) {
+    vcl_cerr << "vil_stream_fstream: write failed, not an vcl_ostream\n";
     return 0;
+  }
 
   vcl_streampos a = tell();
   xerr << "write " << n << vcl_endl;
   f_.write((char const*)buf, n);
+  if (!f_.good())
+    vcl_perror("vil_stream_fstream: ERROR: write failed!\n");
   vcl_streampos b = tell();
   f_.flush();
   return b-a;
@@ -146,5 +151,5 @@ void vil_stream_fstream::seek(int position)
     }
   }
   else
-    assert(false); // see above
+    assert(false); // see above assert
 }
