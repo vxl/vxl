@@ -104,7 +104,7 @@
 // .SECTION Modifications : <None>
 
 //-----------------------------------------------------------------------------
-
+#include <vcl_iostream.h>
 #include <gevd/gevd_param_mixin.h>
 
 class sdet_detector_params : public gevd_param_mixin
@@ -125,7 +125,7 @@ class sdet_detector_params : public gevd_param_mixin
 
   sdet_detector_params(const sdet_detector_params& old_params);
   ~sdet_detector_params(){};
-
+  friend vcl_ostream& operator << (vcl_ostream& os, const sdet_detector_params& dp);
   bool SanityCheck();
   void Describe(ParamModifier& mod);
 

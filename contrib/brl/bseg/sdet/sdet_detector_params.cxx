@@ -1,6 +1,7 @@
 //:
 // \file
 #include "sdet_detector_params.h"
+#include <vcl_string.h>
 #include <vcl_sstream.h>
 
 //------------------------------------------------------------------------
@@ -228,7 +229,34 @@ bool sdet_detector_params::SanityCheck()
   SetErrorMsg(msg.str().c_str());
   return valid;
 }
+vcl_ostream& operator << (vcl_ostream& os, const sdet_detector_params& dp)
+{
+  vcl_string sa, st;
+  if(dp.aggressive_junction_closure>0)
+    sa = "yes";
+  else
+    sa = "no";
+  if(dp.automatic_threshold)
+    st = "yes";
+  else
+    st = "no";
+  os << "Edge Detector Params:" << vcl_endl;
+  os << " Smooth Sigma " << dp.smooth << vcl_endl;
+  os << " Noise Weight " << dp.noise_weight << vcl_endl;
+  os << " Noise Multiplier " << dp.noise_multiplier << vcl_endl;
+  os << " Automatic Threshold? " << st << vcl_endl;
+  os << " Agressive Closure " << sa << vcl_endl;
+  os << " Minimum Chain Length " << dp.minLength << vcl_endl;
+  os << " Peaks Only " << dp.peaks_only << vcl_endl;
+  os << " Valleys Only " << dp.valleys_only << vcl_endl << vcl_endl;
+  os << "Corner Detection Params: " << vcl_endl;
+  os << " Corner Angle " << dp.corner_angle << vcl_endl;
+  os << " Corner Separation " << dp.separation  << vcl_endl;
+  os << " Min Corner Length " << dp.min_corner_length << vcl_endl;
+  os << " Close borders " << dp.borderp << vcl_endl << vcl_endl;
 
+  return os;
+}
 //------------------------------------------------------------
 //: Describe the parameters to a parameter modifier.
 void sdet_detector_params::Describe(ParamModifier& mod)
