@@ -567,8 +567,8 @@ template <class T> T dot(victor<T> const &u, victor<T> const &v);
 
 template <class T> class victor {
 public:
-  // Without -fguiding-decls, egcs and 2.95 will think this 
-  // declares a non-template and so the program will fail
+  // Without -fguiding-decls, egcs and 2.95 will rightly think
+  // this declares a non-template and so the program will fail
   // due to access violation below and missing symbols at link time.
   friend T dot /* <> */ (victor<T> const &, victor<T> const &);
 
@@ -699,6 +699,10 @@ AC_DEFUN(AC_CXX_ALLOWS_INLINE_INSTANTIATION,[
 AC_MSG_CHECKING(whether the C++ compiler allows explicit instantiation of inline templates)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+fsm_save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS=$TXXFLAGS
+
 AC_TRY_COMPILE([
 template <class T>
 inline
@@ -715,6 +719,9 @@ AC_MSG_RESULT(yes)
 VCL_ALLOWS_INLINE_INSTANTIATION="0";
 AC_MSG_RESULT(no)
 ])
+
+CXXFLAGS=$fsm_save_CXXFLAGS
+
 AC_LANG_RESTORE
 export VCL_ALLOWS_INLINE_INSTANTIATION
 ])
@@ -727,6 +734,10 @@ AC_DEFUN(AC_CXX_NEEDS_INLINE_INSTANTIATION,[
 AC_MSG_CHECKING(whether the C++ compiler needs explicit instantiation of inline function templates)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+fsm_save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS=$TXXFLAGS
+
 AC_TRY_RUN([
 #ifdef __GNUC__
 #pragma interface
@@ -755,6 +766,9 @@ AC_MSG_RESULT(no)
 VCL_NEEDS_INLINE_INSTANTIATION="1";
 AC_MSG_RESULT(yes)
 ])
+
+CXXFLAGS=$fsm_save_CXXFLAGS
+
 AC_LANG_RESTORE
 export VCL_NEEDS_INLINE_INSTANTIATION
 ])
