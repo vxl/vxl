@@ -41,7 +41,7 @@ public:
     int hi() const;
 
         //: Number of levels
-    int nLevels() const;
+    int n_levels() const;
 
         //: Image at level L
     mil_image& operator()(int L);

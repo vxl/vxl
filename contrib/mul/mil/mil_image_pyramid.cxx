@@ -56,7 +56,7 @@ int mil_image_pyramid::hi() const
     return ((int)image_.size())-1;
 }
 
-int mil_image_pyramid::nLevels() const
+int mil_image_pyramid::n_levels() const
 {
     return image_.size();
 }

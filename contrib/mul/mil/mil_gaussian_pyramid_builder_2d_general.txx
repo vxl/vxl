@@ -393,7 +393,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::extend(mil_image_pyramid& image
   workb_.resize(nx,ny);
 
   // Set up image pyramid
-  int oldsize = image_pyr.nLevels();
+  int oldsize = image_pyr.n_levels();
   if (oldsize<max_levels) // only extend, if it isn't already tall enough
   {
     image_pyr.data().resize(max_levels);

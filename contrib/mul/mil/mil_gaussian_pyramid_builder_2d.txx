@@ -120,7 +120,7 @@ void mil_gaussian_pyramid_builder_2d<T>::gauss_reduce(mil_image_2d_of<T>& dest_i
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::emptyPyr(mil_image_pyramid& im_pyr) const
 {
-    for (int i=0; i<im_pyr.nLevels();++i)
+    for (int i=0; i<im_pyr.n_levels();++i)
         delete im_pyr.data()[i];
 }
 
@@ -129,7 +129,7 @@ void mil_gaussian_pyramid_builder_2d<T>::emptyPyr(mil_image_pyramid& im_pyr) con
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::checkPyr(mil_image_pyramid& im_pyr,  int n_levels) const
 {
-    if (im_pyr.nLevels()>=n_levels)
+    if (im_pyr.n_levels()>=n_levels)
     {
         if (im_pyr(0).is_a()==work_im_.is_a()) return;
     }
@@ -229,7 +229,7 @@ void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr) co
     work_im_.resize(nx,ny);
 
     // Set up image pyramid
-    int oldsize = image_pyr.nLevels();
+    int oldsize = image_pyr.n_levels();
     if (oldsize<max_levels) // only extend, if it isn't already tall enough
     {
       image_pyr.data().resize(max_levels);

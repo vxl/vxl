@@ -42,7 +42,7 @@ void test_gaussian_pyramid_builder_2d()
   image_pyr.print_all(vcl_cout);
 
 
-  TEST("Found correct number of levels", image_pyr.nLevels(), 2);
+  TEST("Found correct number of levels", image_pyr.n_levels(), 2);
 
   int nx2 = (nx+1)/2;
   int ny2 = (ny+1)/2;
@@ -58,7 +58,7 @@ void test_gaussian_pyramid_builder_2d()
   image_pyr.print_all(vcl_cout);
 
 
-  TEST("Found correct number of levels", image_pyr.nLevels(), 3);
+  TEST("Found correct number of levels", image_pyr.n_levels(), 3);
 
   
 }

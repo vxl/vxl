@@ -53,7 +53,7 @@ void test_gaussian_pyramid_builder_2d_general()
   image_pyr.print_all(vcl_cout);
 
 
-  TEST("Found correct number of levels", image_pyr.nLevels(), 2);
+  TEST("Found correct number of levels", image_pyr.n_levels(), 2);
 
   const mil_image_2d_of<vil_byte>& image1 = (const mil_image_2d_of<vil_byte>&) image_pyr(1);
   TEST("Level 1 size",image1.nx()==(int)(nx/1.2+0.5) && image1.ny()==(int)(ny/1.2+0.5), true);
@@ -67,7 +67,7 @@ void test_gaussian_pyramid_builder_2d_general()
   image_pyr.print_all(vcl_cout);
 
 
-  TEST("Found correct number of levels", image_pyr.nLevels(), 9);
+  TEST("Found correct number of levels", image_pyr.n_levels(), 9);
 
   
 }
