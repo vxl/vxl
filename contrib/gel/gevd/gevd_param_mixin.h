@@ -38,15 +38,16 @@ class gevd_param_mixin
   vcl_string error_msg_;
  public:
   //=====================================================
-  // Constructors and Destructors
-  gevd_param_mixin();
-  virtual  ~gevd_param_mixin();
+  //: Constructor.  By default a constructed parameter block is valid.
+  gevd_param_mixin() : valid_(true) {}
+  // Destructor
+  virtual ~gevd_param_mixin() {}
   //=====================================================
   virtual bool SanityCheck();
   bool Valid() { return valid_; }
-  const char* GetErrorMsg() {return error_msg_.c_str();}
+  const char* GetErrorMsg() { return error_msg_.c_str(); }
   void SetErrorMsg(const char* msg);
-  virtual void Describe(ParamModifier&) {};
+  virtual void Describe(ParamModifier&) {}
 };
 
 class ParamModifier
