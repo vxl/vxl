@@ -1,0 +1,22 @@
+
+450MHz Linux Box,  egcs-2.91.66
+
+Times to randomly access image (in nanosecs) [Range= 0.5(max-min)]
+Using -O2:
+Images of BYTE
+Method 1) Mean: 19.8ns  +/-4ns
+Method 2) Mean: 5.1ns  +/-1ns
+Method 3) Mean: 5.1ns  +/-1ns
+Images of FLOAT
+Method 1) Mean: 20.1ns  +/-7ns
+Method 2) Mean: 5ns  +/-1ns
+Method 3) Mean: 5.2ns  +/-1.5ns
+Using Bilinear interpolation.
+Images of BYTE
+Bilin. Method 1) Mean: 5ns  +/-1ns
+Bilin. Method 2) Mean: 5.1ns  +/-1ns
+Bilin. Method 3) Mean: 5.1ns  +/-1ns
+Images of FLOAT
+Bilin. Method 1) Mean: 5ns  +/-1ns
+Bilin. Method 2) Mean: 5ns  +/-1ns
+Bilin. Method 3) Mean: 5.1ns  +/-1ns
