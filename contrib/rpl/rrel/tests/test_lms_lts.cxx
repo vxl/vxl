@@ -77,6 +77,11 @@ static void test_lms_lts()
   corr_obj +=  vnl_math_sqr(-4.0) + vnl_math_sqr(-2.4) + vnl_math_sqr(3.1) ;
   obj = lts2->fcn( test_lts.begin(), test_lts.end(), 0.0, 0 );
   TEST_NEAR("LTS with 0.7 inlier fraction:", obj, corr_obj, 1e-6);
+
+  delete lms1;
+  delete lms2;
+  delete lts1;
+  delete lts2;
 }
 
 TESTMAIN(test_lms_lts);
