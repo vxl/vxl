@@ -42,14 +42,6 @@ short vpdfl_pdf_builder_base::version_no() const
 }
 
 //=======================================================================
-// Declaration
-//=======================================================================
-
-  // For load/save by pointer
-vsl_binary_loader<vpdfl_pdf_builder_base>*
-    vsl_binary_loader<vpdfl_pdf_builder_base>::instance_ = 0;
-
-//=======================================================================
 // Method: vxl_add_to_binary_loader
 //=======================================================================
 
@@ -62,9 +54,9 @@ void vxl_add_to_binary_loader(const vpdfl_pdf_builder_base& b)
 // Method: is_a
 //=======================================================================
 
-vcl_string  vpdfl_pdf_builder_base::is_a() const
+vcl_string vpdfl_pdf_builder_base::is_a() const
 {
-  return string("vpdfl_pdf_builder_base");
+  return vcl_string("vpdfl_pdf_builder_base");
 }
 
 //=======================================================================

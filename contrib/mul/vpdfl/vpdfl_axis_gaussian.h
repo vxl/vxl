@@ -42,9 +42,6 @@ public:
     //: Log of probability density at x
   virtual double log_p(const vnl_vector<double>& x);
 
-    //: Probability density at x
-  virtual double operator()(const vnl_vector<double>& x);
-
     //: Gradient and value of PDF at x
     //  Computes gradient of PDF at x, and returns the prob at x in p
   virtual void gradient(vnl_vector<double>& g,

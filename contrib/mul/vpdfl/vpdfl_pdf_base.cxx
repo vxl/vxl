@@ -48,17 +48,6 @@ short vpdfl_pdf_base::version_no() const
 }
 
 //=======================================================================
-// Declaration
-//=======================================================================
-
-  // For load/save by pointer
-vsl_binary_loader<vpdfl_pdf_base>*
-    vsl_binary_loader<vpdfl_pdf_base>::instance_ = NULL;
-
-  // for is_a method
-vcl_string vpdfl_pdf_base::class_name_ = "vpdfl_pdf_base";
-
-//=======================================================================
 // Method: vxl_add_to_binary_loader
 //=======================================================================
 
@@ -73,7 +62,8 @@ void vxl_add_to_binary_loader(const vpdfl_pdf_base& b)
 
 vcl_string vpdfl_pdf_base::is_a() const
 {
-  return class_name_;
+  return vcl_string("vpdfl_pdf_base");
+
 }
 
 //=======================================================================
