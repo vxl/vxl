@@ -10,7 +10,6 @@
 #include <vil2/vil2_image_view.h>
 #include <vcl_ctime.h>
 #include <mbl/mbl_stats_1d.h>
-#include <vcl_vector.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>
 
