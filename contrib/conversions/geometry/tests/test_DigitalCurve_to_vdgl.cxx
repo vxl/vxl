@@ -11,9 +11,9 @@ void test_DigitalCurve_to_vdgl() {
   dc.SetX(x);
   dc.SetY(y);
   vdgl_digital_curve vdc = DigitalCurve_to_vdgl(dc);
-  vsol_point_2d_ref p0 = vdc.p0();
+  vsol_point_2d_sptr p0 = vdc.p0();
   TEST("p0()", p0->x()==1 && p0->y()==0, true);
-  vsol_point_2d_ref p1 = vdc.p1();
+  vsol_point_2d_sptr p1 = vdc.p1();
   TEST("p1()", p1->x()==-1 && p1->y()==-1, true);
 }
 
