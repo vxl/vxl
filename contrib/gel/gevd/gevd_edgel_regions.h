@@ -47,7 +47,7 @@
 #include <vcl_map.h>
 
 #include <vtol/vtol_vertex.h>
-#include <vtol/vtol_edge_sptr.h>
+#include <vtol/vtol_edge_2d_sptr.h>
 #include <vsol/vsol_spatial_object_2d.h>
 #include <gevd/gevd_region_edge.h>
 #include <gevd/gevd_bufferxy.h>
@@ -90,11 +90,7 @@ public:
   bool InsertRegionEquivalence(unsigned int label_b, unsigned int label_a);
   void GrowEquivalenceClasses();
   void PropagateEquivalence();
-#if 0 // now obsolete: replaced by GetLabel
-  unsigned int GetLeftLabel(vtol_edge_sptr e);
-  unsigned int GetRightLabel(vtol_edge_sptr e);
-#endif
-  unsigned int GetLabel(vtol_edge_sptr e, unsigned int nr);
+  unsigned int GetLabel(vtol_edge_2d_sptr e, unsigned int nr);
   //Debug print methods
   void print_region_array();
   void print_region_equivalence();
@@ -114,7 +110,7 @@ protected:
   void AssignEdgeLabels(unsigned int x, unsigned int y);
   void ApplyRegionEquivalence();
   bool out_of_bounds(unsigned int x, unsigned int y);
-  void insert_adjacency(unsigned int region, vtol_edge_sptr e);
+  void insert_adjacency(unsigned int region, vtol_edge_2d_sptr e);
   void CollectEdges();
   void CollectFaceEdges();
   void ConstructFaces();
@@ -135,12 +131,12 @@ protected:
                       unsigned int& label);
   void print_edge_colis(unsigned int x, unsigned int y,
                         gevd_region_edge* r1, gevd_region_edge* r2);
-  bool corrupt_boundary(vcl_vector<vtol_edge_sptr>& edges,
+  bool corrupt_boundary(vcl_vector<vtol_edge_2d_sptr>& edges,
                         vcl_vector<vtol_vertex_sptr>& bad_verts);
-  bool remove_hairs(vcl_vector<vtol_edge_sptr>& edges);
-  bool connect_ends(vcl_vector<vtol_edge_sptr>& edges,
+  bool remove_hairs(vcl_vector<vtol_edge_2d_sptr>& edges);
+  bool connect_ends(vcl_vector<vtol_edge_2d_sptr>& edges,
                     vcl_vector<vtol_vertex_sptr>& bad_verts);
-  void repair_failed_insertions(vcl_vector<vtol_edge_sptr>& edges,
+  void repair_failed_insertions(vcl_vector<vtol_edge_2d_sptr>& edges,
                                 vcl_vector<vtol_vertex_sptr>& bad_verts);
   void get_buffer_row(unsigned int row);
   void get_image_row(unsigned int row);
@@ -175,12 +171,12 @@ protected:
   vcl_map<unsigned int, unsigned int > _label_map;
   //hash table for Edge<->gevd_region_edge relationship
   vcl_map<int, gevd_region_edge*> _region_edges;
-  vcl_map<unsigned int, vcl_vector<vtol_edge_sptr>* > _region_edge_adjacency;
+  vcl_map<unsigned int, vcl_vector<vtol_edge_2d_sptr>* > _region_edge_adjacency;
   //Final output gevd_intensity_face(s) and relation to corresponding region label
   vcl_vector<gevd_intensity_face*>* _faces;
   gevd_intensity_face** _intensity_face_index;
-  vcl_vector<vtol_edge_sptr>** _face_edge_index;
-  vcl_vector<vtol_edge_sptr>* _failed_insertions; //Short edges that fail
+  vcl_vector<vtol_edge_2d_sptr>** _face_edge_index;
+  vcl_vector<vtol_edge_2d_sptr>* _failed_insertions; //Short edges that fail
 #if 0
   topo_debug_data_ref _debug_data;
 #endif

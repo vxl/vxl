@@ -196,7 +196,7 @@ gevd_edgel_regions::gevd_edgel_regions(bool debug)
   _faces = new vcl_vector<gevd_intensity_face*>;
   _face_edge_index = NULL;
   _intensity_face_index = NULL;
-  _failed_insertions = new vcl_vector<vtol_edge_sptr>;
+  _failed_insertions = new vcl_vector<vtol_edge_2d_sptr>;
   _ubuf = NULL;
   _sbuf = NULL;
 }
@@ -805,7 +805,7 @@ bool gevd_edgel_regions::InitRegionArray(vcl_vector< vsol_spatial_object_2d *>& 
   int counter=0;
   for (vcl_vector<vsol_spatial_object_2d *>::iterator sgit = sg.begin(); sgit != sg.end(); sgit++)
     {
-    vtol_edge* e = (*sgit)->cast_to_topology_object()->cast_to_edge();
+    vtol_edge_2d* e = (*sgit)->cast_to_topology_object()->cast_to_edge()->cast_to_edge_2d();
       if (!e)
         continue;
       e->set_id(counter++);
@@ -1249,12 +1249,12 @@ void gevd_edgel_regions::print_edge_colis(unsigned int x, unsigned int y,
 //    one vertex, but in this case, one edge shares the same vertex twice.
 //    This routine tests this constraint.
 bool gevd_edgel_regions::
-corrupt_boundary(vcl_vector<vtol_edge_sptr>& edges,
+corrupt_boundary(vcl_vector<vtol_edge_2d_sptr>& edges,
                  vcl_vector<vtol_vertex_sptr>& bad_vertices)
 {
   bool bad = false;
   //Intialize Markers
-  vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
+  vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
   for (;eit != edges.end(); eit++)
     {
       vtol_vertex_sptr v1 = (*eit)->v1();
@@ -1311,7 +1311,7 @@ corrupt_boundary(vcl_vector<vtol_edge_sptr>& edges,
 //  is used to remove "hairs" which are extra edges attached to a
 //  closed contour by the pixel-level granularity of the region growing
 //  process.
-static bool embedded_T(vtol_vertex_sptr v, vtol_edge_sptr bar, vcl_vector<vtol_edge_sptr>& real_edges)
+static bool embedded_T(vtol_vertex_sptr v, vtol_edge_2d_sptr bar, vcl_vector<vtol_edge_2d_sptr>& real_edges)
 {
   bool embedded = true;
   vcl_vector<vtol_edge*>* edges = v->compute_edges();
@@ -1319,10 +1319,10 @@ static bool embedded_T(vtol_vertex_sptr v, vtol_edge_sptr bar, vcl_vector<vtol_e
   for (vcl_vector<vtol_edge*>::iterator eit = edges->begin();
       eit != edges->end(); eit++)
     {
-      if (vcl_find(real_edges.begin(), real_edges.end(),(*eit)) == real_edges.end())
+      if (vcl_find(real_edges.begin(), real_edges.end(),(*eit)->cast_to_edge_2d()) == real_edges.end())
         continue;
 
-      if ((*eit)==bar)
+      if ((*eit)->cast_to_edge_2d()==bar)
         {
           tedges++;
           continue;
@@ -1346,12 +1346,12 @@ static bool embedded_T(vtol_vertex_sptr v, vtol_edge_sptr bar, vcl_vector<vtol_e
 //    are detected by incrementing a count at each vertex for each
 //    attached edge in the input array, "edges".  Such hairs are removed from
 //    the input array.
-bool gevd_edgel_regions::remove_hairs(vcl_vector<vtol_edge_sptr>& edges)
+bool gevd_edgel_regions::remove_hairs(vcl_vector<vtol_edge_2d_sptr>& edges)
 {
-  vcl_vector<vtol_edge_sptr> hairs;
-  vcl_vector<vtol_edge_sptr> temp;
+  vcl_vector<vtol_edge_2d_sptr> hairs;
+  vcl_vector<vtol_edge_2d_sptr> temp;
   //Intialize Markers
-  vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
+  vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
   for (;eit != edges.end(); eit++)
     {
       vtol_vertex_sptr v1 = (*eit)->v1();
@@ -1388,7 +1388,7 @@ bool gevd_edgel_regions::remove_hairs(vcl_vector<vtol_edge_sptr>& edges)
               hairs.push_back(*eit);
         }
     }
-  for (vcl_vector<vtol_edge_sptr>::iterator hit = hairs.begin();
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator hit = hairs.begin();
       hit != hairs.end(); hit++)
     edges.erase(vcl_find(edges.begin(),edges.end(),*hit));
 
@@ -1402,7 +1402,7 @@ bool gevd_edgel_regions::remove_hairs(vcl_vector<vtol_edge_sptr>& edges)
 //   constructed only if there already exists an edge between the
 //   vertices in the input array, "edges".
 //
-bool gevd_edgel_regions::connect_ends(vcl_vector<vtol_edge_sptr>& edges,
+bool gevd_edgel_regions::connect_ends(vcl_vector<vtol_edge_2d_sptr>& edges,
                                 vcl_vector<vtol_vertex_sptr>& bad_verts)
 {
   bool all_ends_connected = true;
@@ -1421,7 +1421,7 @@ bool gevd_edgel_regions::connect_ends(vcl_vector<vtol_edge_sptr>& edges,
   //FLAG2 defines the state of a vertex in forming the set edge_verts,
   //that is there should be no duplicate vertices
   vcl_vector<vtol_vertex_sptr> edge_verts;
-  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
       eit != edges.end(); eit++)
     {
       vtol_vertex_sptr v1 = (*eit)->v1(), v2 = (*eit)->v2();
@@ -1429,7 +1429,7 @@ bool gevd_edgel_regions::connect_ends(vcl_vector<vtol_edge_sptr>& edges,
       v1->unset_user_flag(VSOL_FLAG1); v2->unset_user_flag(VSOL_FLAG1);
       v1->unset_user_flag(VSOL_FLAG2); v2->unset_user_flag(VSOL_FLAG2);
     }
-  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
       eit != edges.end(); eit++)
     {
       vtol_vertex_sptr v1 = (*eit)->v1(), v2 = (*eit)->v2();
@@ -1477,10 +1477,10 @@ bool gevd_edgel_regions::connect_ends(vcl_vector<vtol_edge_sptr>& edges,
             }
           if (!(found_in_bad_verts||found_in_edge_verts)) //3)
             continue;
-          if (vcl_find(edges.begin(), edges.end(), *eit) != edges.end())
+          if (vcl_find(edges.begin(), edges.end(), (*eit)->cast_to_edge_2d()) != edges.end())
             continue; //4)
           //Found a connecting edge.
-          edges.push_back(*eit);
+          edges.push_back((*eit)->cast_to_edge_2d());
           found_edge = true;
           v->set_user_flag(VSOL_FLAG1);
           (*vit)->set_user_flag(VSOL_FLAG1);
@@ -1501,13 +1501,13 @@ bool gevd_edgel_regions::connect_ends(vcl_vector<vtol_edge_sptr>& edges,
 //    edges caused by a high local density of vertices.  Take each
 //    un-attached vertex and look for a match in the failed edge insertion
 //    array. If an edge can be attached, do so.
-void gevd_edgel_regions::repair_failed_insertions(vcl_vector<vtol_edge_sptr>& edges,
+void gevd_edgel_regions::repair_failed_insertions(vcl_vector<vtol_edge_2d_sptr>& edges,
                                             vcl_vector<vtol_vertex_sptr>& bad_verts)
 {
   vcl_vector<vtol_vertex_sptr> temp1, temp2;
   for (vcl_vector<vtol_vertex_sptr>::iterator vit = bad_verts.begin();
       vit != bad_verts.end(); vit++)
-    for (vcl_vector<vtol_edge_sptr>::iterator eit = _failed_insertions->begin();
+    for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = _failed_insertions->begin();
         eit != _failed_insertions->end(); eit++)
       if ((*vit)==(*eit)->v1())
         {
@@ -1726,7 +1726,7 @@ bool gevd_edgel_regions::out_of_bounds(unsigned int x, unsigned int y)
 //: Get the a region label for an edge used to construct the boundaries.
 //   A return corresponding to UNLABELED means the domain outside the ROI
 //   or nr is larger than the number of adjacent regions.
-unsigned int gevd_edgel_regions::GetLabel(vtol_edge_sptr e, unsigned int nr)
+unsigned int gevd_edgel_regions::GetLabel(vtol_edge_2d_sptr e, unsigned int nr)
 {
   vcl_map<int,gevd_region_edge *>::iterator reit = _region_edges.find(e->get_id());
   if ( reit == _region_edges.end())
@@ -1734,46 +1734,17 @@ unsigned int gevd_edgel_regions::GetLabel(vtol_edge_sptr e, unsigned int nr)
   return reit->second->GetLabel(nr);
 }
 
-#if 0 // these two functions are replaced by GetLabel()
-//-------------------------------------------------------------
-// - Get the left region label for an Edge used to construct the boundaries
-//   A return corresponding to UNLABELED means the domain outside the ROI
-unsigned int gevd_edgel_regions::GetLeftLabel(vtol_edge_sptr e)
-{
-  vcl_map<int,gevd_region_edge *>::iterator reit = _region_edges.begin();
-    for (; reit != _region_edges.end() ; reit++)
-      {
-      if (e->get_id() == reit->first)
-        break;
-      }
-  if ( reit == _region_edges.end())
-    return UNLABELED;
-  return reit->second->GetLeftRegion();
-}
-
-//-------------------------------------------------------------
-// - Get the right region label for an Edge used to construct the boundaries
-//   A return corresponding to UNLABELED means the domain outside the ROI
-unsigned int gevd_edgel_regions::GetRightLabel(vtol_edge_sptr e)
-{
-  vcl_map<int,gevd_region_edge *>::iterator reit = _region_edges.find(e->get_id());
-  if ( reit == _region_edges.end())
-    return UNLABELED;
-  return reit->second->GetRightRegion();
-}
-#endif
-
 //--------------------------------------------------------------------
 //: Insert an Edge into the adjacency list for a region
 //
-void gevd_edgel_regions::insert_adjacency(unsigned int r, vtol_edge_sptr e)
+void gevd_edgel_regions::insert_adjacency(unsigned int r, vtol_edge_2d_sptr e)
 {
   if (!e) return;
   //  e->Protect();
-  vcl_map<unsigned int,vcl_vector<vtol_edge_sptr> *>::iterator reit =_region_edge_adjacency.find(r);
+  vcl_map<unsigned int,vcl_vector<vtol_edge_2d_sptr> *>::iterator reit =_region_edge_adjacency.find(r);
   if (reit == _region_edge_adjacency.end())
     {
-      vcl_vector<vtol_edge_sptr>* array = new vcl_vector<vtol_edge_sptr>;
+      vcl_vector<vtol_edge_2d_sptr>* array = new vcl_vector<vtol_edge_2d_sptr>;
       array->push_back(e);
       _region_edge_adjacency[r] = array;
     }
@@ -1790,7 +1761,7 @@ void gevd_edgel_regions::CollectEdges()
   for ( vcl_map<int, gevd_region_edge*>::iterator reit= _region_edges.begin(); reit == _region_edges.end(); reit++)
     {
       gevd_region_edge* re = reit->second;
-      vtol_edge_sptr e = re->get_edge();
+      vtol_edge_2d_sptr e = re->get_edge()->cast_to_edge_2d();
       if (_verbose)
         vcl_cout << "\nEdge:" << e << "(" << e->v1() <<  " " << e->v2() <<"):(";
       for (unsigned int i = 0; i<re->NumLabels(); i++)
@@ -1816,18 +1787,18 @@ void gevd_edgel_regions::CollectFaceEdges()
   unsigned int i;
   vcl_cout<<"Constructing Face-Edges:";
 
-  _face_edge_index = new vcl_vector<vtol_edge_sptr>*[_max_region_label];
+  _face_edge_index = new vcl_vector<vtol_edge_2d_sptr>*[_max_region_label];
   for (i=0; i<_max_region_label; i++)
     _face_edge_index[i] = NULL;
 
   for (i =_min_region_label; i<_max_region_label; i++)
     {
-    vcl_map<unsigned int, vcl_vector<vtol_edge_sptr>* >::iterator  reait;
+    vcl_map<unsigned int, vcl_vector<vtol_edge_2d_sptr>* >::iterator  reait;
     reait = _region_edge_adjacency.find(i);
       if (reait == _region_edge_adjacency.end())
         continue;
 
-      vcl_vector<vtol_edge_sptr>* edges = reait->second;
+      vcl_vector<vtol_edge_2d_sptr>* edges = reait->second;
 
       int len = edges->size();
       if (!len)
@@ -1850,7 +1821,7 @@ void gevd_edgel_regions::CollectFaceEdges()
                       vit++)
                     if (!(*vit)->get_user_flag(VSOL_FLAG1))
                       vcl_cout << *(*vit);
-                  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges->begin();
+                  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin();
                       eit != edges->end(); eit++)
                     vcl_cout << "\nEdge(\n" << *((*eit)->v1()) << *((*eit)->v2()) <<")\n";
                 }
@@ -1867,16 +1838,16 @@ void gevd_edgel_regions::CollectFaceEdges()
         vcl_cout << " Building Region [" << i << "]\n";
       len = edges->size();
 
-      vcl_vector<vtol_edge_sptr> EdgeSet;
+      vcl_vector<vtol_edge_2d_sptr> EdgeSet;
       for (int j =0; j<len; j++)
         {
-          vtol_edge_sptr e = (*edges)[j];
+          vtol_edge_2d_sptr e = (*edges)[j];
           if (_verbose)
             vcl_cout << "Edge(" << e->v1() <<  " " << e->v2() << vcl_endl;
           EdgeSet.push_back ( e );
         }
-      vcl_vector<vtol_edge_sptr>* edge_list = new vcl_vector<vtol_edge_sptr>;
-      for (vcl_vector<vtol_edge_sptr>::iterator esit = EdgeSet.begin(); esit != EdgeSet.end() ; esit++)
+      vcl_vector<vtol_edge_2d_sptr>* edge_list = new vcl_vector<vtol_edge_2d_sptr>;
+      for (vcl_vector<vtol_edge_2d_sptr>::iterator esit = EdgeSet.begin(); esit != EdgeSet.end() ; esit++)
         {
         edge_list->push_back (*esit );
         }
@@ -1904,7 +1875,7 @@ void gevd_edgel_regions::ConstructFaces()
   for (i =_min_region_label; i<_max_region_label; i++)
     {
       //Retrieve the face boundary edges
-      vcl_vector<vtol_edge_sptr>* edge_list = _face_edge_index[i];
+      vcl_vector<vtol_edge_2d_sptr>* edge_list = _face_edge_index[i];
       if (!edge_list||!edge_list->size())
         continue;
       //Make a new gevd_intensity_face
