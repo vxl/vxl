@@ -44,9 +44,9 @@ SOURCES += vsol_polygon_3d.cxx
 SOURCES += vsol_triangle_3d.cxx
 SOURCES += vsol_rectangle_3d.cxx
 # 3-D
-#SOURCES += vsol_volume_3d.cxx
-#SOURCES += vsol_polyhedron.cxx
-#SOURCES += vsol_tetrahedron.cxx
+SOURCES += vsol_volume_3d.cxx
+SOURCES += vsol_polyhedron.cxx
+SOURCES += vsol_tetrahedron.cxx
 
 IMMEDIATE_LIBS += -lvgl -lvnl -lvbl
 
