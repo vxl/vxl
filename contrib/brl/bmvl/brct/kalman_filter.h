@@ -47,7 +47,7 @@ class kalman_filter
   virtual ~kalman_filter();
 
  protected:
-  //: update the matched points in the next frame using closeset neighbour.
+  //: update the matched points in the next frame using closest neighbour.
   void update_observes(const vnl_double_3x4 &P, int iframe);
   void init_velocity();
   void adjust_state_vector(vnl_double_2 const& pred, vnl_double_2 const& meas, double confidence);

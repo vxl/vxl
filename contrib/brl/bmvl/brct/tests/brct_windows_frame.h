@@ -7,7 +7,6 @@
 // \author
 //   Kongbin Kang
 //
-// \endverbatim
 //--------------------------------------------------------------------------------
 
 #include <vgui/vgui_wrapper_tableau.h>
@@ -30,7 +29,7 @@ class vgui_window;
 class brct_windows_frame : public vgui_wrapper_tableau
 {
  public:
-	 void go();
+  void go();
   brct_windows_frame();
   ~brct_windows_frame();
   static brct_windows_frame *instance();
@@ -50,7 +49,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
 
  protected:
   //:internal utility methods
-  
+
   //: it clean the memory allocated by init. it should be called by quit()
   void clean_up();
 
@@ -60,10 +59,10 @@ class brct_windows_frame : public vgui_wrapper_tableau
 
   //: 2d curve at time t
   vcl_vector<vgui_soview2D_lineseg* > curves_2d_;
-  
+
   //: 2d curve at time 0
   vcl_vector<vgui_soview2D_lineseg* > curves_2d_0_;
-  
+
   //: kalman filter
   kalman_filter* kalman_;
   vgui_easy2D_tableau_sptr tab_2d_;
