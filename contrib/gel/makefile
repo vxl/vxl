@@ -19,7 +19,13 @@ SUBDIRS += gmvl
 #SUBDIRS += vsrl
 
 # Triangulation code
-SUBDIRS += gtrl
+#SUBDIRS += gtrl
+
+# spatial objects
+SUBDIRS += vsol
+
+# topology
+SUBDIRS += vtol
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk

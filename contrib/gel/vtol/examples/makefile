@@ -1,4 +1,4 @@
-USES = vxl
+USES = vxl gel
 IULIBS += -lvtol -lvsol -lvgl -lvbl -lvnl
 
 MINI_PROG_SOURCES += example2d.cxx
