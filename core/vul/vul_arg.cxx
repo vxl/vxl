@@ -22,7 +22,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
-#include <vcl_cstdio.h> // sprintf()
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
 #include <vcl_cstdlib.h> // exit()
@@ -233,7 +232,7 @@ void vul_arg_info_list::display_help( char const*progname)
   vcl_cerr << vcl_endl << command_precis_ << vcl_endl;
 
   // Find longest option, type name, or default
-  int maxl_option  = vcl_max(8u, help_.size()); // Length of "REQUIRED" or help option
+  int maxl_option  = vcl_max(vcl_size_t(8), help_.size()); // Length of "REQUIRED" or help option
   int maxl_type    = 4; // Length of "Type", minimum "bool"
   //  int maxl_default = 0;
   for (unsigned int i=0; i< args_.size(); i++)
