@@ -37,7 +37,8 @@ class vdgl_interpolator : public vul_timestamp,
 
   vdgl_interpolator(vdgl_edgel_chain_sptr chain) : chain_(chain) {}
 
-  vdgl_interpolator(vdgl_interpolator const& x) : vbl_ref_count(), chain_(x.chain_) {}
+  vdgl_interpolator(vdgl_interpolator const& x)
+    : vul_timestamp(), vbl_ref_count(), chain_(x.chain_) {}
 
   // Operators----------------------------------------------------------------
 
