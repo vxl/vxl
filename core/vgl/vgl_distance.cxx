@@ -15,6 +15,7 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
+#include <vgl/vgl_polygon.h>
 #include <vcl_cmath.h> // for vcl_sqrt()
 
 template <class Type>
@@ -71,19 +72,16 @@ double vgl_distance_to_non_closed_polygon(float const px[], float const py[], un
 double vgl_distance_to_closed_polygon(float const px[], float const py[], unsigned n,
                                       double x, double y)
 {
-  double dd = -1;
+  double dd = vgl_distance_to_linesegment(px[n-1], py[n-1],
+                                          px[0  ], py[0  ],
+                                          x, y);
   for (unsigned i=0; i<n-1; ++i) {
     double nd = vgl_distance_to_linesegment(px[i  ], py[i  ],
-              px[i+1], py[i+1],
-              x, y);
-    if (dd<0 || nd<dd)
+                                            px[i+1], py[i+1],
+                                            x, y);
+    if (nd<dd)
       dd = nd;
   }
-  double nd = vgl_distance_to_linesegment(px[n-1], py[n-1],
-            px[0  ], py[0  ],
-            x, y);
-  if (dd<0 || nd<dd)
-    dd = nd;
 
   return dd;
 }
@@ -134,6 +132,29 @@ double vgl_distance(vgl_homg_plane_3d<Type> const& l, vgl_homg_point_3d<Type> co
   else return num / vcl_sqrt(l.nx()*l.nx() + l.ny()*l.ny() + l.nz()*l.nz()) / p.w();
 }
 
+template <class Type>
+double vgl_distance(vgl_polygon const& poly, vgl_point_2d<Type> const& point)
+{
+  double dist = -1;
+  for( int s=0; s < poly.num_sheets(); ++s ) {
+    unsigned int n = poly[s].size();
+    assert( n > 1 );
+    double dd = vgl_distance_to_linesegment(poly[s][n-1].x(), poly[s][n-1].y(),
+                                            poly[s][0  ].x(), poly[s][0  ].y(),
+                                            point.x(), point.y());
+    for( unsigned int i=0; i < n-1; ++i ) {
+      double nd = vgl_distance_to_linesegment(poly[s][i  ].x(), poly[s][i  ].y(),
+                                              poly[s][i+1].x(), poly[s][i+1].y(),
+                                              point.x(), point.y());
+      if( nd<dd )  dd=nd;
+    }
+    if( dist < 0 || dd < dist )  dist = dd;
+  }
+
+  return dist;
+}
+
+
 template double vgl_distance_origin(vgl_line_2d<float> const&);
 template double vgl_distance_origin(vgl_line_2d<double> const&);
 template double vgl_distance_origin(vgl_homg_line_2d<float> const&);
@@ -164,3 +185,6 @@ template double vgl_distance(vgl_homg_plane_3d<float> const& l, vgl_homg_point_3
 template double vgl_distance(vgl_homg_plane_3d<double> const& l, vgl_homg_point_3d<double> const& p);
 template double vgl_distance(vgl_homg_point_3d<float> const& p, vgl_homg_plane_3d<float> const& l);
 template double vgl_distance(vgl_homg_point_3d<double> const& p, vgl_homg_plane_3d<double> const& l);
+
+template double vgl_distance(vgl_polygon const&, vgl_point_2d<float> const&);
+template double vgl_distance(vgl_polygon const&, vgl_point_2d<double> const&);

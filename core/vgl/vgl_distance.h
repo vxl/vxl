@@ -93,4 +93,13 @@ template <class Type>
 inline double vgl_distance(vgl_homg_point_3d<Type> const& p,
                            vgl_homg_plane_3d<Type> const& l) {return vgl_distance(l,p);}
 
+//: distance between a point and the closest point on the polygon.
+template <class Type>
+double vgl_distance(vgl_polygon const& poly, vgl_point_2d<Type> const& point);
+
+template <class Type>
+inline double vgl_distance(vgl_point_2d<Type> const& point, vgl_polygon const& poly) {
+  return vgl_distance(poly, point);
+}
+
 #endif // vgl_distance_h_
