@@ -30,8 +30,7 @@ T vnl_determinant(T const * const * rows, unsigned n) {
       for (unsigned i=0; i<n; ++i)
 	tmp.set_row(i, rows[i]);
       return vnl_determinant(tmp);
-    } break;
-    
+    }
   }
 }
 
