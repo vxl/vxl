@@ -105,4 +105,8 @@ SOURCES += dnlaso.c
 include $(SYS_IUPACKAGES)/config/top.mk
 ##########################################
 
-APP_CFLAGS = -O 
+ifneq ($(OS),win32)
+ifneq ($(OS),hpux10.20)
+  APP_CFLAGS = $(optimize)
+endif
+endif

@@ -4,11 +4,14 @@
 */
 
 #include "f2c.h"
-
+#ifdef KR_headers
 doublereal dnrm2_(n, x, incx)
 integer *n;
 doublereal *x;
 integer *incx;
+#else
+doublereal dnrm2_(integer* n, doublereal* x, integer* incx)
+#endif
 {
     /* System generated locals */
     integer i__1, i__2;

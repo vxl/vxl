@@ -4,7 +4,7 @@
 */
 
 #include "f2c.h"
-
+#ifdef KR_headers
 /* Subroutine */ int drot_(n, dx, incx, dy, incy, c, s)
 integer *n;
 doublereal *dx;
@@ -12,6 +12,15 @@ integer *incx;
 doublereal *dy;
 integer *incy;
 doublereal *c, *s;
+#else
+int drot_(
+integer *n,
+doublereal *dx,
+integer *incx,
+doublereal *dy,
+integer *incy,
+doublereal *c, doublereal*s)
+#endif
 {
     /* System generated locals */
     integer i__1;

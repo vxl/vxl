@@ -104,7 +104,12 @@ logical *fail;
     /* Function Body */
     base = (float)2.;
     global_1.eta = (float)2.23e-16;
+    /* the sun compiler will not compile with the number too large for float */
+#ifdef __SUNPRO_C
+    infin = (float)3.40282346638528860e+38;
+#else
     infin = (float)1e50; /* on purpose too large to fit in `float' type */
+#endif
     smalno = (float)1e-45;
 /* ARE AND MRE REFER TO THE UNIT ERROR IN + AND * */
 /* RESPECTIVELY. THEY ARE ASSUMED TO BE THE SAME AS */

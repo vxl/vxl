@@ -4,13 +4,16 @@
 */
 
 #include "f2c.h"
-
+#ifdef KR_headers
 doublereal ddot_(n, dx, incx, dy, incy)
 integer *n;
 doublereal *dx;
 integer *incx;
 doublereal *dy;
 integer *incy;
+#else
+doublereal ddot_(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy)
+#endif
 {
     /* System generated locals */
     integer i__1;

@@ -4,13 +4,21 @@
 */
 
 #include "f2c.h"
-
+#ifndef KR_headers
+int daxpy_(integer *n,
+doublereal *da, 
+doublereal *dx,
+integer *incx,
+doublereal *dy,
+integer *incy)
+#else
 /* Subroutine */ int daxpy_(n, da, dx, incx, dy, incy)
 integer *n;
 doublereal *da, *dx;
 integer *incx;
 doublereal *dy;
 integer *incy;
+#endif
 {
     /* System generated locals */
     integer i__1;
