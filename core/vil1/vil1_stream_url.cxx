@@ -44,8 +44,6 @@ vil_stream_url::vil_stream_url(char const *url)
   host = vcl_string(url+7, p);
 
 
-
-
   if (*p)
     path = p+1;
   else
@@ -69,7 +67,7 @@ vil_stream_url::vil_stream_url(char const *url)
 
 
   // so far so good.
-#if 0
+#ifdef DEBUG
   vcl_cerr << "auth = \'" << auth << "\'" << vcl_endl
            << "host = \'" << host << "\'" << vcl_endl
            << "path = \'" << path << "\'" << vcl_endl
@@ -83,17 +81,17 @@ vil_stream_url::vil_stream_url(char const *url)
     WORD wVersionRequested;
     WSADATA wsaData;
     int err;
- 
+
     wVersionRequested = MAKEWORD( 2, 2 );
- 
+
     err = WSAStartup( wVersionRequested, &wsaData );
   }
 #endif
 
   // create socket endpoint.
   SOCKET tcp_socket = socket(PF_INET,      // IPv4 protocols.
-                          SOCK_STREAM,  // two-way, reliable, connection-based stream socket.
-                          PF_UNSPEC);   // protocol number.
+                             SOCK_STREAM,  // two-way, reliable, connection-based stream socket.
+                             PF_UNSPEC);   // protocol number.
 
 #ifdef VCL_WIN32
   if (tcp_socket == INVALID_SOCKET) {
@@ -104,9 +102,9 @@ vil_stream_url::vil_stream_url(char const *url)
     return;
   }
 #else
-  if (tcp_socket < 0) {
+  if (tcp_socket < 0)
     vcl_cerr << __FILE__ ": failed to create socket." << vcl_endl;
-#endif 
+#endif
 
 #ifdef DEBUG
   vcl_cerr << __FILE__ ": tcp_sockect = " << tcp_socket << vcl_endl;
@@ -141,10 +139,11 @@ vil_stream_url::vil_stream_url(char const *url)
     vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  user %s\n", auth.c_str());
 
 #ifdef VCL_WIN32
-  if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0) {
+  if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0)
 #else
-  if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0) {
-#endif 
+  if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0)
+#endif
+  {
     vcl_cerr << __FILE__ ": error sending HTTP request" << vcl_endl;
     return;
   }
@@ -162,10 +161,11 @@ vil_stream_url::vil_stream_url(char const *url)
   {
     int n;
 #ifdef VCL_WIN32
-    while ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0) {
+    while ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0)
 #else
-    while ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0) {
-#endif 
+    while ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0)
+#endif
+    {
       underlying->write(buffer, n);
       //vcl_cerr << n << " bytes" << vcl_endl;
     }
@@ -176,16 +176,9 @@ vil_stream_url::vil_stream_url(char const *url)
   closesocket(tcp_socket);
 #else
   close(tcp_socket);
-#endif 
+#endif
 }
 
-/*#else
-vil_stream_url::vil_stream_url(char const *) : underlying(0)
-{
-  vcl_cerr << __FILE__ ": only implemented for unix at the moment" << vcl_endl;
-}
-#endif
-*/
 vil_stream_url::~vil_stream_url()
 {
   if (underlying) {
