@@ -20,7 +20,7 @@ void test_matrix(char const* name, const vnl_matrix<double>& A, double det = 0)
     vnl_test_assert_near(n+ "Determinant", qr.determinant(), det, 1e-10);
 } 
 
-void old_test()
+void double_test()
 {
   double A_data[] = {
     89,    21,    27,
@@ -64,7 +64,6 @@ void old_test()
     test_matrix("S", S, 66431);
     test_matrix("S-100", S-100, -79869);
   }
-
 }
 
 //--------------------------------------------------------------------------------
@@ -115,7 +114,7 @@ inst(vcl_complex<float>);
 inst(vcl_complex<double>);
 #undef inst
 
-void amithas_test()
+void complex_test()
 {
   typedef vcl_complex<double> ct;
   
@@ -147,18 +146,21 @@ void amithas_test()
   b(1)=ct(  0.5994,0.0454);
   b(2)=ct( -0.2385,0.4884);
   b(3)=ct(  0.0538,0.0402);
-  
-  vnl_qr<ct> qr(A);
-  const vnl_matrix<ct>& Q = qr.Q();
-  const vnl_matrix<ct>& R = qr.R();
-  vnl_vector<ct> x = qr.solve(b);
+                                    vnl_matlab_print(vcl_cout, b, "b");
+  vnl_qr<ct> qr(A);                 vnl_matlab_print(vcl_cout, A, "A");
+  const vnl_matrix<ct>& Q = qr.Q(); vnl_matlab_print(vcl_cout, Q, "Q");
+  const vnl_matrix<ct>& R = qr.R(); vnl_matlab_print(vcl_cout, R, "R");
+  vnl_vector<ct> x = qr.solve(b);   vnl_matlab_print(vcl_cout, x, "solve");
+  vnl_test_assert_near("||Ax - b||", (A*x - b).two_norm(), 0, 1e-12);
 }
 
 //--------------------------------------------------------------------------------
 
 extern "C" void test_qr() {
-  amithas_test();
-  old_test();
+  vcl_cout << "-------------------- double_complex" << vcl_endl;
+  complex_test();
+  vcl_cout << "-------------------- double" << vcl_endl;
+  double_test();
   
   vcl_cout << "-------------------- float" << vcl_endl;
   new_test((float*)0);
