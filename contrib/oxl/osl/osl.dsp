@@ -2,9 +2,22 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
+# ITK DSP Header file
+# This file is read by the build system of itk, and is used as the top part of
+# a microsoft project dsp header file
+# IF this is in a dsp file, then it is not the header, but has
+# already been used, so do not edit here...
+
+# variables to REPLACE
+# 
+# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"  == include path
+#   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
+#  == override in output directory
+# osl  == name of output library
+
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=osl - Win32 StaticDebug
+CFG=osl - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,21 +26,19 @@ CFG=osl - Win32 StaticDebug
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "osl.mak" CFG="osl - Win32 StaticDebug"
+!MESSAGE NMAKE /f "osl.mak" CFG="osl - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "osl - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "osl - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "osl - Win32 StaticDebug" (based on "Win32 (x86) Static Library")
-!MESSAGE "osl - Win32 StaticRelease" (based on "Win32 (x86) Static Library")
-!MESSAGE 
-
+!MESSAGE "osl - Win32 MinSizeRel" (based on "Win32 (x86) Static Library")
+!MESSAGE "osl - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "osl - Win32 RelWithDebInfo" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
-CPP=xicl6.exe
+CPP=cl.exe
 RSC=rc.exe
 
 !IF  "$(CFG)" == "osl - Win32 Release"
@@ -42,17 +53,19 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "osl_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
+LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\Release\osl.lib"
+# ADD LIB32 /nologo
 
 !ELSEIF  "$(CFG)" == "osl - Win32 Debug"
 
@@ -66,33 +79,11 @@ LIB32=xilink6.exe -lib
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR /FD /GZ /c
-# ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC /l 0x409 /d "_DEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
-# ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\Debug\osl.lib"
-
-!ELSEIF  "$(CFG)" == "osl - Win32 StaticDebug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "StaticDebug"
-# PROP BASE Intermediate_Dir "StaticDebug"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "StaticDebug"
-# PROP Intermediate_Dir "StaticDebug"
-# PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
+# ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "osl_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -100,31 +91,58 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\StaticDebug\osl.lib"
-
-!ELSEIF  "$(CFG)" == "osl - Win32 StaticRelease"
+!ELSEIF  "$(CFG)" == "osl - Win32 MinSizeRel"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "StaticRelease"
-# PROP BASE Intermediate_Dir "StaticRelease"
+# PROP BASE Output_Dir "MinSizeRel"
+# PROP BASE Intermediate_Dir "MinSizeRel"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "StaticRelease"
-# PROP Intermediate_Dir "StaticRelease"
+# PROP Output_Dir "MinSizeRel"
+# PROP Intermediate_Dir "MinSizeRel"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
+# ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "osl_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32
-# ADD LIB32 /nologo /out:"..\StaticRelease\osl.lib"
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo
+
+!ELSEIF  "$(CFG)" == "osl - Win32 RelWithDebInfo"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "RelWithDebInfo"
+# PROP BASE Intermediate_Dir "RelWithDebInfo"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "RelWithDebInfo"
+# PROP Intermediate_Dir "RelWithDebInfo"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "osl_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /Zi /O2
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo
 
 !ENDIF 
 
@@ -132,315 +150,284 @@ LIB32=link.exe -lib
 
 # Name "osl - Win32 Release"
 # Name "osl - Win32 Debug"
-# Name "osl - Win32 StaticDebug"
-# Name "osl - Win32 StaticRelease"
+# Name "osl - Win32 MinSizeRel"
+# Name "osl - Win32 RelWithDebInfo"
+
+
+# Begin Source File
+
+SOURCE="c:/awf/src/vxl/oxl/osl/CMakeLists.txt"
+
+!IF  "$(CFG)" == "osl - Win32 Release"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/osl/CMakeLists.txt"
+# Begin Custom Build
+
+"osl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/osl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/osl" -O"c:/awf/src/vxl/oxl/osl" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "osl - Win32 Debug"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/osl/CMakeLists.txt"
+# Begin Custom Build
+
+"osl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/osl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/osl" -O"c:/awf/src/vxl/oxl/osl" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "osl - Win32 MinSizeRel"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/osl/CMakeLists.txt"
+# Begin Custom Build
+
+"osl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/osl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/osl" -O"c:/awf/src/vxl/oxl/osl" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "osl - Win32 RelWithDebInfo"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/osl/CMakeLists.txt"
+# Begin Custom Build
+
+"osl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/osl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/osl" -O"c:/awf/src/vxl/oxl/osl" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ENDIF
+
+# End Source File
 # Begin Group "Source Files"
-
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\internals\droid.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/osl_1d_half_kernel+double-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_list+osl_edgel_chain~-.cxx"
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/osl_canny_smooth+float-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_list+osl_edge~-.cxx"
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/osl_canny_smooth+ushort-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_list+osl_vertex~-.cxx"
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/osl_canny_smooth+vil_byte-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+osl_LINK~-.cxx"
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/osl_canny_smooth+vil_rgb+uchar--.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+osl_edge~-.cxx"
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_list+osl_edgel_chain~-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+osl_vertex~-.cxx"
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_list+osl_edge~-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\osl_1d_half_kernel+double-.cxx"
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_list+osl_vertex~-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_break_edge.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_vector+osl_LINK~-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_base.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_vector+osl_edge~-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_gradient.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_vector+osl_vertex~-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_nms.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/internals/droid.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_ox.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/internals/osl_reorder_chain.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_ox_params.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_OrthogRegress.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_port.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_break_edge.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_rothwell.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_base.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_rothwell_params.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_gradient.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\osl_canny_smooth+vil_byte-.cxx"
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_nms.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\osl_canny_smooth+float-.cxx"
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_ox.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\osl_canny_smooth+vil_rgb+uchar--.cxx"
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_ox_params.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\osl_canny_smooth+ushort-.cxx"
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_port.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_canny_smooth.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_rothwell.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_chamfer.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_rothwell_params.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_convolve.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_smooth.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_easy_canny.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_chamfer.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_edge.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_convolve.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_edge_detector.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_easy_canny.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_edge_detector_params.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_edge.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_edgel_chain.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_edge_detector.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_fit_lines.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_edge_detector_params.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_fit_lines_params.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_edgel_chain.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_harris.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_fit_lines.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_harris_params.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_fit_lines_params.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_kernel.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_harris.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_load_topology.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_harris_params.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_ortho_regress.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_kernel.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_OrthogRegress.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_load_topology.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\internals\osl_reorder_chain.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_ortho_regress.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_roi_window.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_roi_window.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_save_topology.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_save_topology.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_topology.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_topology.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\osl_vertex.cxx
+SOURCE=c:/awf/src/vxl/oxl/osl/osl_vertex.cxx
+
 # End Source File
 # End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\internals\droid.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_1d_half_kernel.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_break_edge.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_canny_base.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_canny_gradient.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_canny_nms.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_canny_ox.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_canny_ox_params.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_canny_port.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_canny_rothwell.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_canny_rothwell_params.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_canny_smooth.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_chamfer.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_convolve.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_easy_canny.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_edge.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_edge_detector.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_edge_detector_params.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_edgel_chain.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_fit_lines.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_fit_lines_params.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_hacks.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_harris.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_harris_params.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_kernel.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_load_topology.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_ortho_regress.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_OrthogRegress.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\internals\osl_reorder_chain.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_roi_window.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_save_topology.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_topology.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\osl_vertex.h
-# End Source File
+# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
+

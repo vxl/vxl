@@ -2,6 +2,19 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
+# ITK DSP Header file
+# This file is read by the build system of itk, and is used as the top part of
+# a microsoft project dsp header file
+# IF this is in a dsp file, then it is not the header, but has
+# already been used, so do not edit here...
+
+# variables to REPLACE
+# 
+# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60"  == include path
+#   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
+#  == override in output directory
+# tiff  == name of output library
+
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
 CFG=tiff - Win32 Debug
@@ -17,10 +30,10 @@ CFG=tiff - Win32 Debug
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "tiff - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "tiff - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE 
-
+!MESSAGE "tiff - Win32 MinSizeRel" (based on "Win32 (x86) Static Library")
+!MESSAGE "tiff - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "tiff - Win32 RelWithDebInfo" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -40,17 +53,19 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)\v3p\jpeg" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_LIB" /D "JPEG_SUPPORT" /D "HAVE_IEEEFP" /D USE_VARARGS=0 /D "USE_PROTOTYPES" /D "USE_CONST" /YX /Zl /FD /c
-# ADD BASE RSC /l 0x809 /d "NDEBUG"
+# ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "tiff_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /O2
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\Release\tiff.lib"
+# ADD LIB32 /nologo
 
 !ELSEIF  "$(CFG)" == "tiff - Win32 Debug"
 
@@ -64,17 +79,70 @@ LIB32=link.exe -lib
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)\v3p\jpeg" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_LIB" /D "JPEG_SUPPORT" /D "HAVE_IEEEFP" /D USE_VARARGS=0 /D "USE_PROTOTYPES" /D "USE_CONST" /YX /Zl /FD /GZ /c
-# ADD BASE RSC /l 0x809 /d "_DEBUG"
-# ADD RSC /l 0x809 /d "_DEBUG"
+# ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "tiff_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MDd /Zi /Od /GZ
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\Debug\tiff.lib"
+!ELSEIF  "$(CFG)" == "tiff - Win32 MinSizeRel"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "MinSizeRel"
+# PROP BASE Intermediate_Dir "MinSizeRel"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "MinSizeRel"
+# PROP Intermediate_Dir "MinSizeRel"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
+# ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "tiff_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /O1
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo
+
+!ELSEIF  "$(CFG)" == "tiff - Win32 RelWithDebInfo"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "RelWithDebInfo"
+# PROP BASE Intermediate_Dir "RelWithDebInfo"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "RelWithDebInfo"
+# PROP Intermediate_Dir "RelWithDebInfo"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "tiff_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /Zi /O2
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo
 
 !ENDIF 
 
@@ -82,217 +150,251 @@ LIB32=link.exe -lib
 
 # Name "tiff - Win32 Release"
 # Name "tiff - Win32 Debug"
+# Name "tiff - Win32 MinSizeRel"
+# Name "tiff - Win32 RelWithDebInfo"
+
+
+# Begin Source File
+
+SOURCE="c:/awf/src/vxl/v3p/tiff/CMakeLists.txt"
+
+!IF  "$(CFG)" == "tiff - Win32 Release"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"c:/awf/src/vxl/v3p/CMakeLists.txt"\
+	"c:/awf/src/vxl/v3p/tiff/CMakeLists.txt"
+# Begin Custom Build
+
+"tiff.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/v3p/tiff/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/v3p/tiff" -O"c:/awf/src/vxl/v3p/tiff" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "tiff - Win32 Debug"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"c:/awf/src/vxl/v3p/CMakeLists.txt"\
+	"c:/awf/src/vxl/v3p/tiff/CMakeLists.txt"
+# Begin Custom Build
+
+"tiff.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/v3p/tiff/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/v3p/tiff" -O"c:/awf/src/vxl/v3p/tiff" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "tiff - Win32 MinSizeRel"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"c:/awf/src/vxl/v3p/CMakeLists.txt"\
+	"c:/awf/src/vxl/v3p/tiff/CMakeLists.txt"
+# Begin Custom Build
+
+"tiff.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/v3p/tiff/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/v3p/tiff" -O"c:/awf/src/vxl/v3p/tiff" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "tiff - Win32 RelWithDebInfo"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"c:/awf/src/vxl/v3p/CMakeLists.txt"\
+	"c:/awf/src/vxl/v3p/tiff/CMakeLists.txt"
+# Begin Custom Build
+
+"tiff.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/v3p/tiff/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/v3p/tiff" -O"c:/awf/src/vxl/v3p/tiff" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ENDIF
+
+# End Source File
 # Begin Group "Source Files"
-
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\tif_aux.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_aux.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_close.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_close.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_codec.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_codec.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_compress.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_compress.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_dir.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_dir.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_dirinfo.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_dirinfo.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_dirread.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_dirread.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_dirwrite.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_dirwrite.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_dumpmode.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_dumpmode.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_error.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_error.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_fax3.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_fax3.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_fax3sm.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_fax3sm.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_flush.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_flush.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_getimage.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_getimage.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_jpeg.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_jpeg.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_luv.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_luv.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_lzw.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_lzw.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_next.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_next.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_open.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_open.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_packbits.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_packbits.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_pixarlog.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_pixarlog.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_predict.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_predict.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_print.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_print.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_read.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_read.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_strip.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_strip.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_swab.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_swab.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_thunder.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_thunder.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_tile.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_tile.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_version.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_version.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_warning.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_warning.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_win32.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_win32.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_write.c
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_write.c
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\tif_zip.c
-# End Source File
-# End Group
-# Begin Group "Header Files"
+SOURCE=c:/awf/src/vxl/v3p/tiff/tif_zip.c
 
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\format.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\machdep.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\port.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\prototypes.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\t4.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\tif_dir.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\tif_fax3.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\tif_predict.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\tiff.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\tiffcomp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\tiffcompat.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\tiffconf.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\tiffio.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\tiffiop.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\uvcode.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\version.h
 # End Source File
 # End Group
-# Begin Source File
-
-SOURCE=.\makefile
-# End Source File
-# Begin Source File
-
-SOURCE=.\template.tex
-# End Source File
+# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# End Group
 # End Target
 # End Project
+

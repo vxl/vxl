@@ -3,6 +3,12 @@ INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/impl/CMakeListsLink.txt )
 LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/oxl/vgui )
 LINK_LIBRARIES( vgui )
 
+# add stuff to use MFC in this executable
+IF(WIN32)
+ ADD_DEFINITIONS(-D_AFXDLL)
+ SET(CMAKE_MFC_FLAG 6)
+ENDIF(WIN32)
+
 INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake )
 INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindQv.cmake )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )

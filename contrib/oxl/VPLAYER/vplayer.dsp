@@ -1,24 +1,39 @@
-# Microsoft Developer Studio Project File - Name="vplayer" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="pcbuilder" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# TARGTYPE "Win32 (x86) Console Application" 0x0103
+# CM DSP Header file
+# This file is read by the build system of cm, and is used as the top part of
+# a microsoft project dsp header file
+# IF this is in a dsp file, then it is not the header, but has
+# already been used, so do not edit here...
 
-CFG=vplayer - Win32 Debug
+# variables to REPLACE
+# 
+# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"  == include path
+#  == override in output directory
+#   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
+# VPLAYER  == name of output library
+#  "opengl32.lib" "glu32.lib" "nafxcw.lib" "allvxl.lib" "alloxl.lib" "opengl32.lib" "glu32.lib" /STACK:10000000  == libraries linked in 
+# TARGTYPE "Win32 (x86) Application" 0x0103
+
+CFG=VPLAYER - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vplayer.mak".
+!MESSAGE NMAKE /f "VPLAYER.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vplayer.mak" CFG="vplayer - Win32 Debug"
+!MESSAGE NMAKE /f "VPLAYER.mak" CFG="VPLAYER - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vplayer - Win32 Release" (based on "Win32 (x86) Console Application")
-!MESSAGE "vplayer - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "VPLAYER - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "VPLAYER - Win32 MinSizeRel" (based on "Win32 (x86) Application")
+!MESSAGE "VPLAYER - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "VPLAYER - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -26,9 +41,10 @@ CFG=vplayer - Win32 Debug
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
+MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vplayer - Win32 Release"
+!IF  "$(CFG)" == "VPLAYER - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -39,21 +55,32 @@ RSC=rc.exe
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
-# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /FD /c
-# SUBTRACT CPP /YX
-# ADD BASE RSC /l 0x809 /d "NDEBUG"
-# ADD RSC /l 0x809 /d "NDEBUG"
+# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "VPLAYER_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /O2
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 vgui_vrml.lib vgui.lib vil.lib vgl.lib vbl.lib vnl.lib vcl.lib Qv.lib opengl32.lib glu32.lib vfw32.lib /nologo /subsystem:console /machine:I386 /libpath:"$(IUEROOT)\vcl\Release" /libpath:"$(IUEROOT)\vxl\Release" /libpath:"$(IUEROOT)\v3p\Release" /libpath:"$(IUEROOT)\oxl\Release"
+# ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
-!ELSEIF  "$(CFG)" == "vplayer - Win32 Debug"
+# ADD LINK32 "opengl32.lib"
+# ADD LINK32 "glu32.lib"
+# ADD LINK32 "nafxcw.lib"
+# ADD LINK32 "allvxl.lib"
+# ADD LINK32 "alloxl.lib"
+# ADD LINK32 "opengl32.lib"
+# ADD LINK32 "glu32.lib"
+# ADD LINK32 /STACK:10000000 
+
+
+!ELSEIF  "$(CFG)" == "VPLAYER - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -64,85 +91,207 @@ LINK32=link.exe
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
-# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /Gi /GX /ZI /Od /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /FR /FD /GZ /c
-# SUBTRACT CPP /YX
-# ADD BASE RSC /l 0x809 /d "_DEBUG"
-# ADD RSC /l 0x809 /d "_DEBUG"
+# ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
+# ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "VPLAYER_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MDd /Zi /Od /GZ
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 vgui_vrml.lib vgui.lib vil.lib vgl.lib vbl.lib vnl.lib vcl.lib Qv.lib glu32.lib opengl32.lib vfw32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"$(IUEROOT)\vcl\Debug" /libpath:"$(IUEROOT)\vxl\Debug" /libpath:"$(IUEROOT)\v3p\Debug" /libpath:"$(IUEROOT)\oxl\Debug"
+# ADD BASE LINK32   kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
+
+# ADD LINK32 "opengl32.lib"
+# ADD LINK32 "glu32.lib"
+# ADD LINK32 "nafxcw.lib"
+# ADD LINK32 "allvxl.lib"
+# ADD LINK32 "alloxl.lib"
+# ADD LINK32 "opengl32.lib"
+# ADD LINK32 "glu32.lib"
+# ADD LINK32 /STACK:10000000 
+
+
+!ELSEIF  "$(CFG)" == "VPLAYER - Win32 MinSizeRel"
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "MinSizeRel"
+# PROP BASE Intermediate_Dir "MinSizeRel"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "MinSizeRel"
+# PROP Intermediate_Dir "MinSizeRel"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /nologo  /D "WIN32" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "VPLAYER_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /O1
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
+# ADD LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
+
+# ADD LINK32 "opengl32.lib"
+# ADD LINK32 "glu32.lib"
+# ADD LINK32 "nafxcw.lib"
+# ADD LINK32 "allvxl.lib"
+# ADD LINK32 "alloxl.lib"
+# ADD LINK32 "opengl32.lib"
+# ADD LINK32 "glu32.lib"
+# ADD LINK32 /STACK:10000000 
+
+
+!ELSEIF  "$(CFG)" == "VPLAYER - Win32 RelWithDebInfo"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "RelWithDebInfo"
+# PROP BASE Intermediate_Dir "RelWithDebInfo"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "RelWithDebInfo"
+# PROP Intermediate_Dir "RelWithDebInfo"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "VPLAYER_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /Zi /O2
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
+
+# ADD LINK32 "opengl32.lib"
+# ADD LINK32 "glu32.lib"
+# ADD LINK32 "nafxcw.lib"
+# ADD LINK32 "allvxl.lib"
+# ADD LINK32 "alloxl.lib"
+# ADD LINK32 "opengl32.lib"
+# ADD LINK32 "glu32.lib"
+# ADD LINK32 /STACK:10000000 
+
 
 !ENDIF 
 
 # Begin Target
 
-# Name "vplayer - Win32 Release"
-# Name "vplayer - Win32 Debug"
+# Name "VPLAYER - Win32 Release"
+# Name "VPLAYER - Win32 Debug"
+# Name "VPLAYER - Win32 MinSizeRel"
+# Name "VPLAYER - Win32 RelWithDebInfo"
+
+# Begin Source File
+
+SOURCE="c:/awf/src/vxl/oxl/VPLAYER/CMakeLists.txt"
+
+!IF  "$(CFG)" == "VPLAYER - Win32 Release"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/VPLAYER/CMakeLists.txt"
+# Begin Custom Build
+
+"VPLAYER.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/VPLAYER/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/VPLAYER" -O"c:/awf/src/vxl/oxl/VPLAYER" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "VPLAYER - Win32 Debug"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/VPLAYER/CMakeLists.txt"
+# Begin Custom Build
+
+"VPLAYER.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/VPLAYER/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/VPLAYER" -O"c:/awf/src/vxl/oxl/VPLAYER" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "VPLAYER - Win32 MinSizeRel"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/VPLAYER/CMakeLists.txt"
+# Begin Custom Build
+
+"VPLAYER.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/VPLAYER/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/VPLAYER" -O"c:/awf/src/vxl/oxl/VPLAYER" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "VPLAYER - Win32 RelWithDebInfo"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
+	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/oxl/VPLAYER/CMakeLists.txt"
+# Begin Custom Build
+
+"VPLAYER.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/VPLAYER/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/VPLAYER" -O"c:/awf/src/vxl/oxl/VPLAYER" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ENDIF
+
+# End Source File
 # Begin Group "Source Files"
-
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\easy2D_loader.cxx
+SOURCE=c:/awf/src/vxl/oxl/VPLAYER/easy2D_loader.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\easy2D_sequencer.cxx
+SOURCE=c:/awf/src/vxl/oxl/VPLAYER/easy2D_sequencer.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vplayer.cxx
+SOURCE=c:/awf/src/vxl/oxl/VPLAYER/vplayer.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vplayer_file.cxx
+SOURCE=c:/awf/src/vxl/oxl/VPLAYER/vplayer_file.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vplayer_geometry.cxx
+SOURCE=c:/awf/src/vxl/oxl/VPLAYER/vplayer_geometry.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vplayer_video.cxx
+SOURCE=c:/awf/src/vxl/oxl/VPLAYER/vplayer_video.cxx
+
 # End Source File
 # End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\easy2D_loader.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\easy2D_sequencer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\vgui\vgui_error_dialog.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vplayer.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vplayer_file.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vplayer_geometry.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vplayer_video.h
-# End Source File
+# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
+

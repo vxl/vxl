@@ -2,8 +2,10 @@
 # ./oxl/vgui/CMakeLists.txt
 #
 
+# add stuff to use MFC in this executable
 IF(WIN32)
- SET( MSPROJECT_TEMPLATE_DIRECTORY ${allvxl_SOURCE_DIR}/config.cmake/DSPTemplates/with_mfc )
+ ADD_DEFINITIONS(-D_AFXDLL)
+ SET(CMAKE_MFC_FLAG 6)
 ENDIF(WIN32)
 
 ADD_LIBRARY(vgui vgui_sources)

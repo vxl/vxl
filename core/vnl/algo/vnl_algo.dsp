@@ -2,9 +2,22 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
+# ITK DSP Header file
+# This file is read by the build system of itk, and is used as the top part of
+# a microsoft project dsp header file
+# IF this is in a dsp file, then it is not the header, but has
+# already been used, so do not edit here...
+
+# variables to REPLACE
+# 
+# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"  == include path
+#   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
+#  == override in output directory
+# vnl_algo  == name of output library
+
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=vnl_algo - Win32 StaticDebug
+CFG=vnl_algo - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,21 +26,19 @@ CFG=vnl_algo - Win32 StaticDebug
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vnl_algo.mak" CFG="vnl_algo - Win32 StaticDebug"
+!MESSAGE NMAKE /f "vnl_algo.mak" CFG="vnl_algo - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vnl_algo - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "vnl_algo - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "vnl_algo - Win32 StaticDebug" (based on "Win32 (x86) Static Library")
-!MESSAGE "vnl_algo - Win32 StaticRelease" (based on "Win32 (x86) Static Library")
-!MESSAGE 
-
+!MESSAGE "vnl_algo - Win32 MinSizeRel" (based on "Win32 (x86) Static Library")
+!MESSAGE "vnl_algo - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "vnl_algo - Win32 RelWithDebInfo" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
-CPP=xicl6.exe
+CPP=cl.exe
 RSC=rc.exe
 
 !IF  "$(CFG)" == "vnl_algo - Win32 Release"
@@ -42,17 +53,19 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
+# ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vnl_algo_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
+LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\Release\vnl_algo.lib"
+# ADD LIB32 /nologo
 
 !ELSEIF  "$(CFG)" == "vnl_algo - Win32 Debug"
 
@@ -66,499 +79,530 @@ LIB32=xilink6.exe -lib
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c /Zl
+# ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vnl_algo_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
+LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\Debug\vnl_algo.lib"
-
-!ELSEIF  "$(CFG)" == "vnl_algo - Win32 StaticDebug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "StaticDebug"
-# PROP BASE Intermediate_Dir "StaticDebug"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "StaticDebug"
-# PROP Intermediate_Dir "StaticDebug"
-# PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c /Zl
-# ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC /l 0x409 /d "_DEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
-# ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\StaticDebug\vnl_algo.lib"
-
-!ELSEIF  "$(CFG)" == "vnl_algo - Win32 StaticRelease"
+!ELSEIF  "$(CFG)" == "vnl_algo - Win32 MinSizeRel"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "StaticRelease"
-# PROP BASE Intermediate_Dir "StaticRelease"
+# PROP BASE Output_Dir "MinSizeRel"
+# PROP BASE Intermediate_Dir "MinSizeRel"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "StaticRelease"
-# PROP Intermediate_Dir "StaticRelease"
+# PROP Output_Dir "MinSizeRel"
+# PROP Intermediate_Dir "MinSizeRel"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
+# ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
+# ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vnl_algo_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
+LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\StaticRelease\vnl_algo.lib"
+# ADD LIB32 /nologo
+
+!ELSEIF  "$(CFG)" == "vnl_algo - Win32 RelWithDebInfo"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "RelWithDebInfo"
+# PROP BASE Intermediate_Dir "RelWithDebInfo"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "RelWithDebInfo"
+# PROP Intermediate_Dir "RelWithDebInfo"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vnl_algo_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /Zi /O2
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo
+
+!ENDIF 
 
 # Begin Target
 
 # Name "vnl_algo - Win32 Release"
 # Name "vnl_algo - Win32 Debug"
-# Name "vnl_algo - Win32 StaticDebug"
-# Name "vnl_algo - Win32 StaticRelease"
+# Name "vnl_algo - Win32 MinSizeRel"
+# Name "vnl_algo - Win32 RelWithDebInfo"
+
+
+# Begin Source File
+
+SOURCE="c:/awf/src/vxl/vxl/vnl/algo/CMakeLists.txt"
+
+!IF  "$(CFG)" == "vnl_algo - Win32 Release"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vnl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vnl/algo/CMakeLists.txt"
+# Begin Custom Build
+
+"vnl_algo.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vnl/algo/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vnl/algo" -O"c:/awf/src/vxl/vxl/vnl/algo" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "vnl_algo - Win32 Debug"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vnl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vnl/algo/CMakeLists.txt"
+# Begin Custom Build
+
+"vnl_algo.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vnl/algo/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vnl/algo" -O"c:/awf/src/vxl/vxl/vnl/algo" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "vnl_algo - Win32 MinSizeRel"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vnl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vnl/algo/CMakeLists.txt"
+# Begin Custom Build
+
+"vnl_algo.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vnl/algo/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vnl/algo" -O"c:/awf/src/vxl/vxl/vnl/algo" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "vnl_algo - Win32 RelWithDebInfo"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vnl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vnl/algo/CMakeLists.txt"
+# Begin Custom Build
+
+"vnl_algo.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vnl/algo/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vnl/algo" -O"c:/awf/src/vxl/vxl/vnl/algo" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ENDIF
+
+# End Source File
 # Begin Group "Source Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_qr+double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_qr+float-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_qr+long_double-.cxx
 
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_qr+vcl_complex+double--.cxx
 
-SOURCE=".\Templates\vcl_vector+vnl_amoeba_SimplexCorner-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_adjugate+double-.cxx"
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_qr+vcl_complex+float--.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_amoeba.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_qr+vcl_complex+long_double--.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_svdc+double-.cxx
 
-SOURCE=.\vnl_brent.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_chi_squared.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_svdc+float-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_cholesky.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_svdc+long_double-.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_svdc+vcl_complex+double--.cxx
 
-SOURCE=.\vnl_complex_eigensystem.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_conjugate_gradient.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_svdc+vcl_complex+float--.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_cpoly_roots.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_svdc+vcl_complex+long_double--.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vcl_vector+vnl_amoeba_SimplexCorner-.cxx
 
-SOURCE=.\vnl_discrete_diff.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_fft1d+double-.cxx"
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_adjugate+double-.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_convolve+double.double-.cxx
 
-SOURCE=".\Templates\vnl_fft1d+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_fft2d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_convolve+int.double-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_fftxd_prime_factors.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_convolve+int.int-.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_determinant+double-.cxx
 
-SOURCE=.\vnl_gaussian_kernel_1d.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_generalized_eigensystem.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_determinant+float-.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_determinant+long_double-.cxx
 
-SOURCE=.\vnl_lbfgs.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_levenberg_marquardt.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_determinant+long_double_complex-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_lsqr.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_determinant+vcl_complex+double--.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_determinant+vcl_complex+float--.cxx
 
-SOURCE=".\Templates\vnl_matrix_inverse+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_orthogonal_complement+double-.cxx"
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft1d+double-.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft1d+float-.cxx
 
-SOURCE=".\Templates\vnl_orthogonal_complement+vcl_complex+double--.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_qr+double-.cxx"
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft2d+double-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_qr+vcl_complex+double--.cxx"
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft2d+float-.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_1d+double-.cxx
 
-SOURCE=".\Templates\vnl_qr+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_qr+vcl_complex+float--.cxx"
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_1d+float-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_real_eigensystem.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_2d+double-.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_2d+float-.cxx
 
-SOURCE=.\vnl_rnpoly_solve.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_rpoly_roots.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_base+1.double-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_scatter_3x3+double-.cxx"
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_base+1.float-.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_base+2.double-.cxx
 
-SOURCE=".\Templates\vnl_scatter_3x3+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_sparse_symmetric_eigensystem.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_base+2.float-.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_prime_factors+double-.cxx
 
-SOURCE=".\Templates\vnl_svd+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_svd+vcl_complex+double--.cxx"
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_prime_factors+float-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_svd+float-.cxx"
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_matrix_inverse+double-.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_orthogonal_complement+double-.cxx
 
-SOURCE=".\Templates\vnl_svd+vcl_complex+float--.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_symmetric_eigensystem.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_orthogonal_complement+vcl_complex+double--.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_orthogonal_complement+vcl_complex+float--.cxx
 
-SOURCE=.\Templates\fsm_qr+double-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\fsm_qr+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_orthogonal_complement+vcl_complex+long_double--.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\fsm_qr+long_double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_qr+double-.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_qr+float-.cxx
 
-SOURCE=.\Templates\fsm_qr+vcl_complex+double--.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\fsm_qr+vcl_complex+float--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_qr+long_double-.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_qr+vcl_complex+double--.cxx
 
-SOURCE=.\Templates\fsm_qr+vcl_complex+long_double--.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\fsm_svdc+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_qr+vcl_complex+float--.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\fsm_svdc+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_qr+vcl_complex+long_double--.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_scatter_3x3+double-.cxx
 
-SOURCE=.\Templates\fsm_svdc+long_double-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\fsm_svdc+vcl_complex+double--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_scatter_3x3+float-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\fsm_svdc+vcl_complex+float--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_svd+double-.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_svd+float-.cxx
 
-SOURCE=.\Templates\fsm_svdc+vcl_complex+long_double--.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_determinant+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_svd+long_double-.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_determinant+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_svd+vcl_complex+double--.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_svd+vcl_complex+float--.cxx
 
-SOURCE=.\Templates\vnl_determinant+long_double-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_determinant+long_double_complex-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_svd+vcl_complex+long_double--.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_amoeba.cxx
 
-SOURCE=.\Templates\vnl_determinant+vcl_complex+double--.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_determinant+vcl_complex+float--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_brent.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_fft.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_chi_squared.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_cholesky.cxx
 
-SOURCE=.\Templates\vnl_fft2d+float-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_fft_1d+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_complex_eigensystem.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_fft_1d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_conjugate_gradient.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_cpoly_roots.cxx
 
-SOURCE=.\Templates\vnl_fft_2d+double-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_fft_2d+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_discrete_diff.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_fft_base+1.double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_fft.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_fftxd_prime_factors.cxx
 
-SOURCE=.\Templates\vnl_fft_base+1.float-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_fft_base+2.double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_gaussian_kernel_1d.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_generalized_eigensystem.cxx
 
-SOURCE=.\Templates\vnl_fft_base+2.float-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_fft_prime_factors+double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_lbfgs.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_fft_prime_factors+float-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_levenberg_marquardt.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_lsqr.cxx
 
-SOURCE=.\Templates\vnl_orthogonal_complement+vcl_complex+float--.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_orthogonal_complement+vcl_complex+long_double--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_powell.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_powell.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_real_eigensystem.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_rnpoly_solve.cxx
 
-SOURCE=.\Templates\vnl_qr+long_double-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_qr+vcl_complex+long_double--.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_rpoly_roots.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_svd+long_double-.cxx
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_sparse_symmetric_eigensystem.cxx
+
 # End Source File
 # Begin Source File
+
+SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_symmetric_eigensystem.cxx
 
-SOURCE=.\Templates\vnl_svd+vcl_complex+long_double--.cxx
 # End Source File
 # End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\dll.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_affine_approx.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_algo_fwd.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_amoeba.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_brent.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_chi_squared.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_cholesky.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_complex_eigensystem.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_conjugate_gradient.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_cpoly_roots.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_determinant.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_discrete_diff.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_fft.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_fft1d.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_fft2d.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_fftxd_prime_factors.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_gaussian_kernel_1d.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_generalized_eigensystem.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_lbfgs.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_levenberg_marquardt.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_matrix_inverse.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_netlib.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_powell.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_qr.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_real_eigensystem.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_rnpoly_solve.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_rpoly_roots.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_sparse_symmetric_eigensystem.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_svd.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_symmetric_eigensystem.h
-# End Source File
+# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
-# Begin Source File
-
-SOURCE=.\vnl_matrix_inverse.txx
-# End Source File
 # End Target
 # End Project
+

@@ -2,9 +2,22 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
+# ITK DSP Header file
+# This file is read by the build system of itk, and is used as the top part of
+# a microsoft project dsp header file
+# IF this is in a dsp file, then it is not the header, but has
+# already been used, so do not edit here...
+
+# variables to REPLACE
+# 
+# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"  == include path
+#   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
+#  == override in output directory
+# vul  == name of output library
+
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=vul - Win32 DebugSTLPort
+CFG=vul - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,22 +26,18 @@ CFG=vul - Win32 DebugSTLPort
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vul.mak" CFG="vul - Win32 DebugSTLPort"
+!MESSAGE NMAKE /f "vul.mak" CFG="vul - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vul - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "vul - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "vul - Win32 StaticDebug" (based on "Win32 (x86) Static Library")
-!MESSAGE "vul - Win32 StaticRelease" (based on "Win32 (x86) Static Library")
-!MESSAGE "vul - Win32 ReleaseSTLPort" (based on "Win32 (x86) Static Library")
-!MESSAGE "vul - Win32 DebugSTLPort" (based on "Win32 (x86) Static Library")
-!MESSAGE 
-
+!MESSAGE "vul - Win32 MinSizeRel" (based on "Win32 (x86) Static Library")
+!MESSAGE "vul - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "vul - Win32 RelWithDebInfo" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
-# PROP Scc_ProjName ""$/vxl-2d3/vxl/vul", YBECAAAA"
-# PROP Scc_LocalPath "."
+# PROP Scc_ProjName ""
+# PROP Scc_LocalPath ""
 CPP=cl.exe
 RSC=rc.exe
 
@@ -44,9 +53,11 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vul_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -54,7 +65,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\Release\vul.lib"
+# ADD LIB32 /nologo
 
 !ELSEIF  "$(CFG)" == "vul - Win32 Debug"
 
@@ -68,9 +79,11 @@ LIB32=link.exe -lib
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
+# ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vul_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -78,47 +91,24 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\Debug\vul.lib"
-
-!ELSEIF  "$(CFG)" == "vul - Win32 StaticDebug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "StaticDebug"
-# PROP BASE Intermediate_Dir "StaticDebug"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "StaticDebug"
-# PROP Intermediate_Dir "StaticDebug"
-# PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
-# ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC /l 0x409 /d "_DEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\StaticDebug\vul.lib"
-
-!ELSEIF  "$(CFG)" == "vul - Win32 StaticRelease"
+!ELSEIF  "$(CFG)" == "vul - Win32 MinSizeRel"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "StaticRelease"
-# PROP BASE Intermediate_Dir "StaticRelease"
+# PROP BASE Output_Dir "MinSizeRel"
+# PROP BASE Intermediate_Dir "MinSizeRel"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "StaticRelease"
-# PROP Intermediate_Dir "StaticRelease"
+# PROP Output_Dir "MinSizeRel"
+# PROP Intermediate_Dir "MinSizeRel"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
+# ADD CPP /nologo /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vul_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -126,23 +116,25 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\StaticRelease\vul.lib"
+# ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "vul - Win32 ReleaseSTLPort"
+!ELSEIF  "$(CFG)" == "vul - Win32 RelWithDebInfo"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "ReleaseSTLPort"
-# PROP BASE Intermediate_Dir "ReleaseSTLPort"
+# PROP BASE Output_Dir "RelWithDebInfo"
+# PROP BASE Intermediate_Dir "RelWithDebInfo"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "ReleaseSTLPort"
-# PROP Intermediate_Dir "ReleaseSTLPort"
+# PROP Output_Dir "RelWithDebInfo"
+# PROP Intermediate_Dir "RelWithDebInfo"
 # PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vul_EXPORTS"
+# ADD CPP /W3 /Zm1000 /GX /GR
+# ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -150,31 +142,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\ReleaseSTLPort\vul.lib"
-
-!ELSEIF  "$(CFG)" == "vul - Win32 DebugSTLPort"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "DebugSTLPort"
-# PROP BASE Intermediate_Dir "DebugSTLPort"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "DebugSTLPort"
-# PROP Intermediate_Dir "DebugSTLPort"
-# PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
-# ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC /l 0x409 /d "_DEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\DebugSTLPort\vul.lib"
+# ADD LIB32 /nologo
 
 !ENDIF 
 
@@ -182,177 +150,160 @@ LIB32=link.exe -lib
 
 # Name "vul - Win32 Release"
 # Name "vul - Win32 Debug"
-# Name "vul - Win32 StaticDebug"
-# Name "vul - Win32 StaticRelease"
-# Name "vul - Win32 ReleaseSTLPort"
-# Name "vul - Win32 DebugSTLPort"
+# Name "vul - Win32 MinSizeRel"
+# Name "vul - Win32 RelWithDebInfo"
+
+
+# Begin Source File
+
+SOURCE="c:/awf/src/vxl/vxl/vul/CMakeLists.txt"
+
+!IF  "$(CFG)" == "vul - Win32 Release"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vul/CMakeLists.txt"
+# Begin Custom Build
+
+"vul.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vul/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vul" -O"c:/awf/src/vxl/vxl/vul" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "vul - Win32 Debug"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vul/CMakeLists.txt"
+# Begin Custom Build
+
+"vul.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vul/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vul" -O"c:/awf/src/vxl/vxl/vul" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "vul - Win32 MinSizeRel"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vul/CMakeLists.txt"
+# Begin Custom Build
+
+"vul.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vul/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vul" -O"c:/awf/src/vxl/vxl/vul" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "vul - Win32 RelWithDebInfo"
+USERDEP__HACK=\
+	"c:/awf/src/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/CMakeLists.txt"\
+	"c:/awf/src/vxl/vxl/vul/CMakeLists.txt"
+# Begin Custom Build
+
+"vul.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
+	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/vxl/vul/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/vxl/vul" -O"c:/awf/src/vxl/vxl/vul" -B"c:/awf/src/vxl"
+
+# End Custom Build
+
+!ENDIF
+
+# End Source File
 # Begin Group "Source Files"
-
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;txx"
+# PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\vul_arg.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_arg.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_awk.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_awk.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_expand_path.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_expand_path.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_file.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_file.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_file_iterator.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_file_iterator.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_get_timestamp.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_get_timestamp.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_printf.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_printf.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_psfile.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_psfile.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_redirector.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_redirector.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_reg_exp.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_reg_exp.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_sequence_filename_map.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_sequence_filename_map.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_sprintf.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_sprintf.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_string.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_string.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_test.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_test.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_timer.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_timer.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_timestamp.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_timestamp.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_trace.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_trace.cxx
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_user_info.cxx
+SOURCE=c:/awf/src/vxl/vxl/vul/vul_user_info.cxx
+
 # End Source File
 # End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\vul_arg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_awk.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_canonical_path.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_deprecated.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_expand_path.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_file.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_file_iterator.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_fwd.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_get_timestamp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_printf.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_psfile.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_redirector.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_reg_exp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_sequence_filename_map.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_sprintf.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_string.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_test.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_timer.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_timestamp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_trace.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_user_info.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_whereami.h
-# End Source File
+# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
+
