@@ -11,12 +11,12 @@ exec perl -w -x $0 ${1+"$@"}
 # This script prints output lines in this format:
 # <filename>:<line number>: <message>
 # so the result can be processed by emacs in compile-mode.  Right now
-# the line number is always 1, which at least allows you to jump to the
+# the line number is almost always 1, which at least allows you to jump to the
 # file, if not the correct line number.
 #
 # ;; sample compile command for emacs
 # (setq compile-command
-#   "find /sw/vxl_src -type f -exec /sw/vxl_src/core/bin/check_syntax -f {} \\;" )
+#  "find $VXLROOT -type f \( -name \*.cxx -o -name \*.txx -o -name \*.h \) -exec $VXLROOT/core/bin/check_syntax -f {} \\;" )
 # ESC-x compile
 
 undef $/;
@@ -47,7 +47,7 @@ else
     print STDERR "VXLROOT is not defined, and no command line arguments were given\n";
     exit 0;
   }
-  $FILES = `find $VXLROOT/config $VXLROOT/vcl $VXLROOT/v3p $VXLROOT/core $VXLROOT/contrib -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/\.v.ol\\.new/|grep -v v3p/xerces-c-src1_4_0/`;
+  $FILES = `find $VXLROOT/config $VXLROOT/vcl $VXLROOT/v3p $VXLROOT/core $VXLROOT/contrib -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/\.v.ol\\.new/|grep -v v3p/xerces-c-src1_4_0/|grep -v v3p/dcmtk/`;
   @FILES = split(' ', $FILES);
 }
 
@@ -117,7 +117,7 @@ foreach $f (@FILES)
   print "$f:1:\t\# consider joining consecutive \"\<\<\" output lines for $2\n"
     if ($printed && $file =~ m![{;:](\s*//.*\n)?\s*(\S+)\s*\<\<[^;]+\;\s*\2\s*\<\<!);
   print "$f:1:\t\# consider joining consecutive strings in output for $1\n"
-    if ($printed && $file =~ m!(\S+)\s*\<\<[^;]*(..)\"\s*\<\<\s*\"! && $2 ne "\\n");
+    if ($printed && $file =~ m!(\S+)\s*\<\<[^;]*(..)\"\s*\<\<\s*\"! && $2 ne "\\n" && $2 ne " -");
   print "$f:1:\t\# consider replacing \"$2\" by \'$2\' in output for $1\n"
     if ($printed && $file =~ m!(\S+)\s*\<\<[^;]+\"([^\\]|\\.)\"!);
   print "$f:1:\t\# consider removing space before \\n\n"
@@ -296,6 +296,7 @@ foreach $f (@FILES)
     elsif ($j =~ m"vil/vil_bi(lin|cub)_interp\.h$") { $i="($i)(|_safe|_unsafe|_raw|_safe_extend)"; }
     elsif ($j eq "vil1/vil1_clamp.h") { $i="$i(|_pixel)"; }
     elsif ($j eq "vil1/vil1_colour_space.h") { $i="($i)_(RGB|HSV)_to_(YIQ|HSV|RGB)"; }
+    elsif ($j eq "vil/vil_config.h") { $i="HAS_[A-Z]+"; }
     elsif ($j eq "vil/vil_convert.h") { $i="($i)_((cast|round)(|_pixel)|(rgb|planes)_to_grey|stretch_range|to_[a-z_]+)"; }
     elsif ($j eq "vil1/vil1_convolve.h") { $i="($i)_(signal_[12]d|1d_[xy]|separable|boundary_option|trim|[a-z]+_extend)"; }
     elsif ($j eq "vil/vil_copy.h") { $i="($i)(|_deep|_to_window|_reformat)"; }
@@ -307,7 +308,7 @@ foreach $f (@FILES)
     elsif ($j eq "vil/vil_image_view.h") { $i="$i(|_deep_equality)"; }
     elsif ($j eq "vil/vil_image_view_base.h") { $i="$i(|_sptr)"; }
     elsif ($j eq "vil1/vil1_interpolate.h") { $i="($i)_(nearest|bilinear(|_grad)|bicubic)"; }
-    elsif ($j eq "vil/vil_load.h") { $i="$i(|_image_resource)"; }
+    elsif ($j eq "vil/vil_load.h") { $i="$i(|_image_resource(|_raw))"; }
     elsif ($j eq "vil/vil_math.h") { $i="($i)_([a-z_]+)"; }
     elsif ($j eq "vil/vil_memory_chunk.h") { $i="$i(|_sptr)"; }
     elsif ($j eq "vil1/vil1_memory_image.h") { $i="$i(|_format)"; }
@@ -693,7 +694,7 @@ foreach $f (@FILES)
         "$f.$wd" !~ m!\bgel/vgel/kl/base\.h\.(min|max)$! &&
         "$f.$wd" !~ m!\bmul/mbl/mbl_stats_1d\.h\.(min|max)$! &&
         "$f.$wd" !~ m!\boxl/mvl/HomgConic\.(h|cxx)\.polar$! &&
-        "$f.$wd" !~ m!\bbrl/bbas/bdgl/bdgl_curve_clustering\.h\.min$! &&
+        "$f.$wd" !~ m!\bbrl/bbas/bdgl/bdgl_curve_clustering\.(cxx|h)\.(min|max)$! &&
         "$f.$wd" !~ m!\bvnl/algo/vnl_rn?poly_(solve|roots)\.h\.(real|imag)$! &&
         "$f"     !~ m!/cmake/config/vxl_platform_tests\.cxx$! &&
         $file_s =~ m![^.\005\006]\b$wd(\s*)\(!) # \005 is :: and \006 is ->
