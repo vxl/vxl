@@ -225,6 +225,42 @@ void test_table4()
                                 val==8.88,              true);
 }
 
+//========================================================================
+// Test the subtable mechanism
+//========================================================================
+void test_table5()
+{
+    vcl_cout << "\n\n"
+        << "------------------------------- \n"
+        << " Testing equality operations    \n"
+        << "------------------------------- \n";
+
+    char delim = '\t';
+    vcl_vector<vcl_string> headers(3);
+    headers[0] = "x coord";
+    headers[1] = "y coord";
+    headers[2] = "z coord";
+    
+    vcl_vector<double> col0(4, 2.3);
+    vcl_vector<double> col1(4, 4.7);
+    vcl_vector<double> col2(4, 8.9);
+
+    mbl_table table0(delim);
+    table0.append_column(headers[0],col0);
+    table0.append_column(headers[1],col1);
+    table0.append_column(headers[2],col2);
+    vcl_vector<vcl_string> subheaders(2);
+    subheaders[0] = headers[0];
+    subheaders[1] = headers[1];
+    mbl_table subtable;
+    table0.subtable(subtable,subheaders);
+    bool ok=bool(table0==subtable);
+    TEST("Subtable is not same as full table",ok,false);
+
+    subtable.append_column(headers[2],col2);
+    ok=bool(table0==subtable);
+    TEST("Subtable is same as full table afger apending third column",ok,true);
+}
 
 //========================================================================
 // Run a series of tests
@@ -243,7 +279,8 @@ void test_table()
   test_table3();
 
   test_table4();
-}
+
+  test_table5();}
 
 
 
