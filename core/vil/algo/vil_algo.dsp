@@ -231,6 +231,9 @@ SOURCE=.\Templates/vil_histogram+signed_char-.cxx
 SOURCE=.\Templates/vil_histogram+unsigned_short-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil_abs_shuffle_distance+byte.byte-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil_histogram.cxx
 # End Source File
 # Begin Source File
@@ -421,6 +424,12 @@ SOURCE=.\vil_tile_images.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_orientations.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_abs_shuffle_distance.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_abs_shuffle_distance.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_colour_space.h
