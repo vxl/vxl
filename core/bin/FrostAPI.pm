@@ -6,7 +6,7 @@ use MIME::Base64;
 use IO::Socket;
 
 # globals
-$frostsocket= "STDERR";
+$frostsocket= "STDOUT";
 
 
 #StartFrost( "icehouse", "vxl", "vxluser", "");
