@@ -363,6 +363,7 @@ mil_image_pyramid_builder* mil_scale_pyramid_builder_2d<T>::clone() const
 template <class T>
 void mil_scale_pyramid_builder_2d<T>::print_summary(vcl_ostream& os) const
 {
+  vcl_cerr << "mil_scale_pyramid_builder_2d<T>::print_summary() NYI\n";
 }
 
 //=======================================================================
