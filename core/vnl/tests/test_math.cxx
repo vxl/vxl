@@ -96,7 +96,7 @@ void test_math() {
   testlib_test_assert("!isinf(0/0d)    ", !vnl_math_isinf(b2));
   testlib_test_assert(" isnan(0/0d)    ",  vnl_math_isnan(b2));
 
-#if !defined(VCL_VC50) && !defined(VCL_VC60)
+#if !defined(VCL_VC)
   testlib_test_assert("!isfinite(1/0l) ", !vnl_math_isfinite(a5));
   testlib_test_assert(" isinf(1/0l)    ",  vnl_math_isinf(a5));
   testlib_test_assert("!isnan(1/0l)    ", !vnl_math_isnan(a5));
