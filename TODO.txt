@@ -12,8 +12,6 @@ When someone works on or completes one of these tasks, make a note of
 that in this file.  If that marks a significant improvement, make an
 entry in the CHANGES.txt file as well.
 
-
-
 ############################################################################
 
 * Add exception support to VXL.
@@ -85,7 +83,13 @@ See https://sourceforge.net/mailarchive/message.php?msg_id=3628964 for
 more details.
 Ian Scott.
 
+############################################################################
 
+* Borland compiler
+
+VXL has been ported to the Borland 5.5 compiler, but only for the core
+libraries, not the contrib libraries.  Brad King did the port for the
+core libraries and may have some advice on getting contrib ported.
 
 ############################################################################
 
