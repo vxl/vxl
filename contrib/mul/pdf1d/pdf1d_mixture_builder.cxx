@@ -137,7 +137,7 @@ double pdf1d_mixture_builder::min_var() const
 //: Build default model with given mean
 void pdf1d_mixture_builder::build(pdf1d_pdf& model, double mean) const
 {
-  vcl_cerr<<"pdf1d_mixture_builder::build(model,mean) Not yet implemented."<<vcl_endl;
+  vcl_cerr<<"pdf1d_mixture_builder::build(model,mean) Not yet implemented.\n";
   vcl_abort();
 }
 
@@ -438,12 +438,12 @@ pdf1d_builder* pdf1d_mixture_builder::clone() const
 
 void pdf1d_mixture_builder::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl;
   for (unsigned int i=0;i<builder_.size();++i)
   {
-    os<<vsl_indent()<<"Builder "<<i<<": ";
-    vsl_print_summary(os, builder_[i]); os << vcl_endl;
+    os<<'\n'<<vsl_indent()<<"Builder "<<i<<": ";
+    vsl_print_summary(os, builder_[i]);
   }
+  os<<vcl_endl;
 }
 
 //=======================================================================
@@ -467,9 +467,9 @@ void pdf1d_mixture_builder::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture_builder &) \n";
-    vcl_cerr << "           Attempted to load object of type ";
-    vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture_builder &)\n"
+             << "           Attempted to load object of type "
+             << name <<" into object of type " << is_a() << vcl_endl;
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -486,8 +486,8 @@ void pdf1d_mixture_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,weights_fixed_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture_builder &) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture_builder &)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

@@ -190,8 +190,8 @@ void pdf1d_mixture::print_summary(vcl_ostream& os) const
   os<<vcl_endl;
   for (unsigned int i=0;i<component_.size();++i)
   {
-    os<<vsl_indent()<<"Component "<<i<<" :  Wt: "<<weight_[i] <<vcl_endl;
-    os<<vsl_indent()<<"PDF: " << component_[i]<<vcl_endl;
+    os<<vsl_indent()<<"Component "<<i<<" :  Wt: "<<weight_[i] <<vcl_endl
+      <<vsl_indent()<<"PDF: " << component_[i]<<vcl_endl;
   }
 }
 
@@ -216,9 +216,9 @@ void pdf1d_mixture::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture &) \n";
-    vcl_cerr << "           Attempted to load object of type ";
-    vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture &)\n"
+             << "           Attempted to load object of type "
+             << name <<" into object of type " << is_a() << vcl_endl;
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -235,8 +235,8 @@ void pdf1d_mixture::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs, weight_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture &) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture &)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
@@ -351,7 +351,7 @@ unsigned pdf1d_mixture::nearest_comp(double x) const
 // \param x This may be modified to the nearest plausible position.
 double pdf1d_mixture::nearest_plausible(double x, double log_p_min) const
 {
-  vcl_cerr << "ERROR: pdf1d_mixture::nearest_plausible NYI" << vcl_endl;
+  vcl_cerr << "ERROR: pdf1d_mixture::nearest_plausible NYI\n";
   vcl_abort();
   return 0.0; // dummy return
 }

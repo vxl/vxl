@@ -8,8 +8,8 @@
 // \author Tim Cootes
 // \date 16-Oct-98
 //
-// Modifications
 // \verbatim
+//  Modifications
 //    IMS   Converted to VXL 18 April 2000
 // \endverbatim
 
@@ -366,8 +366,8 @@ static void ShowStartVec(vcl_ostream& os, const vnl_vector<double>& v)
 {
   int n = 3;
   if (n>v.size()) n=v.size();
-  os<<"(";
-  for (int i=0;i<n;++i) os<<v(i)<<" ";
+  os<<'(';
+  for (int i=0;i<n;++i) os<<v(i)<<' ';
   if (v.size()>n) os<<"...";
   os<<")\n";
 }
@@ -383,10 +383,10 @@ static void ShowStartMat(vcl_ostream& os, const vnl_matrix<double>& A)
 
   for (int i=0;i<m;++i)
   {
-    os<<vsl_indent()<<"(";
+    os<<vsl_indent()<<'(';
 
     for ( int j=0; j<n; ++j)
-      os<<A(i,j)<<" ";
+      os<<A(i,j)<<' ';
     if (A.cols()>n) os<<"...";
     os<<")\n";
   }
@@ -434,9 +434,9 @@ void vpdfl_gaussian::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian &) \n";
-    vcl_cerr << "           Attempted to load object of type ";
-    vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian &)\n"
+             << "           Attempted to load object of type "
+             << name <<" into object of type " << is_a() << vcl_endl;
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -452,8 +452,8 @@ void vpdfl_gaussian::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,log_k_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian &) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian &)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
