@@ -21,7 +21,7 @@ ADD_EXECUTABLE( vnl_io_test_driver
   test_vector_io.cxx
 )
 
-TARGET_LINK_LIBRARIES( vnl_io_test_driver vnl_io vsl testlib )
+TARGET_LINK_LIBRARIES( vnl_io_test_driver vnl_io vsl testlib vpl )
 
 ADD_TEST( vnl_test_include                  vnl_io_test_driver test_include                 )
 ADD_TEST( vnl_test_bignum_io                vnl_io_test_driver test_bignum_io               )

@@ -3,6 +3,7 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_matrix_fixed_double_2_2_io()
 {
@@ -33,6 +34,7 @@ void test_matrix_fixed_double_2_2_io()
   vsl_b_read(bfs_in, m_in1);
   bfs_in.close();
 
+  vpl_unlink ("vnl_matrix_fixed_io.bvl.tmp");
 
   // m_in0 is initially empty
   TEST ("m_out == m_in0", m_out, m_in0);

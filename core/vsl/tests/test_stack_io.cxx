@@ -3,6 +3,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_stack_io.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_stack_io()
 {
@@ -27,6 +28,8 @@ void test_stack_io()
   vsl_b_read(bfs_in, s_int_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vsl_stack_io_test.bvl.tmp");
 
   //kym - double = not defined for stack?
   //TEST("vcl_stack<int> out == vcl_stack<int> in", s_int_out, s_int_in);

@@ -3,6 +3,7 @@
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_vector_double_io()
 {
@@ -36,6 +37,8 @@ void test_vector_double_io()
   bfs_in.close();
 
   vcl_cout << "after reading in:\t"; vsl_print_summary(vcl_cout, v_in);
+
+  vpl_unlink ("vnl_vector_test_double_io.bvl.tmp");
 
   TEST ("v_out == v_in", v_out, v_in);
 

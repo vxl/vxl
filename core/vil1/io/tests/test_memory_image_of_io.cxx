@@ -5,6 +5,7 @@
 #include <vil/io/vil_io_image_impl.h>
 #include <vil/io/vil_io_memory_image_impl.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_memory_image_of_io()
 {
@@ -43,6 +44,7 @@ void test_memory_image_of_io()
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
+  vpl_unlink ("vil_memory_image_of_io.bvl.tmp");
 
   // Compare the images' size and so on
   TEST ("p_out == p_in (structure)",

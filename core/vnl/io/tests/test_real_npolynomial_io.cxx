@@ -5,6 +5,7 @@
 #include <vnl/vnl_real_npolynomial.h>
 #include <vnl/io/vnl_io_real_npolynomial.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_real_npolynomial_io()
 {
@@ -49,6 +50,8 @@ void test_real_npolynomial_io()
   vsl_b_read(bfs_in, poly_in1);
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vnl_real_npolynomial_test_io.bvl.tmp");
 
   TEST ("poly_out.coefficients() == poly_in0.coefficients()",
         poly_out.coefficients() == poly_in0.coefficients(), true);

@@ -3,6 +3,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_string_io.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_string_io()
 {
@@ -24,6 +25,8 @@ void test_string_io()
   vsl_b_read(bfs_in, instring);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vsl_string_io_test.bvl.tmp");
 
   TEST("vcl_string<int> out == vcl_string<int> in", outstring, instring);
 }

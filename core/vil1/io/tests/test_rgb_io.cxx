@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <vil/io/vil_io_rgb.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_rgb_io()
 {
@@ -25,6 +26,8 @@ void test_rgb_io()
   vsl_b_read(bfs_in, p_in);
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vil_rgb_test_double_io.bvl.tmp");
 
   TEST ("p_out == p_in", 
         p_out.R()==p_in.R() && 

@@ -1,6 +1,6 @@
 # vxl/vbl/io/tests/CMakeLists.txt
 
-LINK_LIBRARIES( vbl_io testlib )
+LINK_LIBRARIES( vbl_io testlib vpl )
 
 ADD_EXECUTABLE(vbl_test_io
   test_driver.cxx

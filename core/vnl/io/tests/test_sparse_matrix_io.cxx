@@ -4,6 +4,7 @@
 #include <vnl/vnl_sparse_matrix.h>
 #include <vnl/io/vnl_io_sparse_matrix.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 static bool Compare(vnl_sparse_matrix<double>& M1, vnl_sparse_matrix<double>& M2)
 {
@@ -67,6 +68,8 @@ void test_sparse_matrix_double_io()
   vsl_b_read(bfs_in, m_in0);
   vsl_b_read(bfs_in, m_in1);
   bfs_in.close();
+
+  vpl_unlink ("vnl_sparse_matrix_io.bvl.tmp");
 
 #if 0
   bool test_result=true;

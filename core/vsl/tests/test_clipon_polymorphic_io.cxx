@@ -8,6 +8,7 @@
 #include <vsl/vsl_clipon_binary_loader.h>
 #include <vsl/vsl_clipon_binary_loader.txx>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 //: Base class to test polymorphic loading
 class test2_base_class
@@ -217,6 +218,8 @@ void test_clipon_polymorphic_io()
   // Tidy up
   delete b1_in;
   delete b2_in;
+
+  vpl_unlink ("vsl_clipon_polymorphic_io_test.bvl.tmp");
 }
 
 TESTMAIN(test_clipon_polymorphic_io);

@@ -4,6 +4,7 @@
 #include <vgl/io/vgl_io_vector_2d.h>
 #include <vsl/vsl_binary_io.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_vector_2d_double_io()
 {
@@ -26,6 +27,8 @@ void test_vector_2d_double_io()
   vsl_b_read(bfs_in, v_in);
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vgl_vector_2d_test_double_io.bvl.tmp");
 
   TEST ("v_out == v_in", v_out, v_in);
 
@@ -55,6 +58,8 @@ void test_vector_2d_float_io()
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
+  vpl_unlink ("vgl_vector_2d_test_float_io.bvl.tmp");
+
   TEST ("v_out == v_in", v_out, v_in);
 
   vsl_print_summary(vcl_cout, v_out);
@@ -82,6 +87,8 @@ void test_vector_2d_int_io()
   vsl_b_read(bfs_in, v_in);
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vgl_vector_2d_test_int_io.bvl.tmp");
 
   TEST ("v_out == v_in", v_out, v_in);
 

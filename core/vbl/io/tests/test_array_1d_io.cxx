@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <vbl/io/vbl_io_array_1d.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_array_1d_io()
 {
@@ -29,6 +30,8 @@ void test_array_1d_io()
   vsl_b_read(bfs_in, v_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vbl_array_1d_test_io.bvl.tmp");
 
   //kym - double = not defined for vbl_array_1d
   //TEST("v_out == v_in", v_out, v_in);

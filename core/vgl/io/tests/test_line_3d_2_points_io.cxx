@@ -3,6 +3,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/io/vgl_io_line_3d_2_points.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_line_3d_2_points_float_io()
 {
@@ -27,6 +28,8 @@ void test_line_3d_2_points_float_io()
   vsl_b_read(bfs_in, p_in);
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vgl_line_3d_2_points_test_float_io.bvl.tmp");
 
   TEST ("p1 == p_in.point1()", p1, p_in.point1());
   TEST ("p2 == p_in.point2()", p2, p_in.point2());

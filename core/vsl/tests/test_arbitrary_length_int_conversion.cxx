@@ -4,6 +4,7 @@
 #include <vcl_ctime.h>
 #include <vsl/vsl_binary_explicit_io.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_arbitrary_length_int_conversion_int()
 {
@@ -211,6 +212,9 @@ void test_explicit_int_io()
   if (i != 65536)
     vcl_cout << "Failed at number " << i <<vcl_endl;
   TEST("Finished reading file successfully", (!bfs_in), false);
+  bfs_in.close();
+
+  vpl_unlink ("vsl_explicit_int_io_test.bvl.tmp");
 }
 
 
@@ -246,6 +250,8 @@ void test_extreme_int_io()
   vsl_b_read(bfs_in,max_ulong_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vsl_extreme_int_io_test.bvl.tmp");
 
   TEST("min_long == min_long_in", min_long, min_long_in);
   TEST("max_long == max_long_in", max_long, max_long_in);

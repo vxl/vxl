@@ -4,6 +4,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_set_io.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_set_io()
 {
@@ -37,6 +38,8 @@ void test_set_io()
   vsl_b_read(bfs_in, s_string_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vsl_set_io_test.bvl.tmp");
 
   TEST("vcl_set<int> out == in", s_int_out, s_int_in);
   TEST("vcl_set<vcl_string> out == in", s_string_out, s_string_in);

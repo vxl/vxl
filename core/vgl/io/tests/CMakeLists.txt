@@ -24,7 +24,7 @@ ADD_EXECUTABLE( vgl_io_test_driver
   test_polygon_io.cxx
   golden_test_vgl_io.cxx
 )
-TARGET_LINK_LIBRARIES( vgl_io_test_driver vgl_io testlib )
+TARGET_LINK_LIBRARIES( vgl_io_test_driver vgl_io testlib vpl )
 
 ADD_TEST( vgl_io_test_includes           vgl_io_test_driver test_includes )
 ADD_TEST( vgl_io_test_point_2d_io        vgl_io_test_driver test_point_2d_io )

@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <vil/io/vil_io_memory_image_format.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_memory_image_format_io()
 {
@@ -26,6 +27,8 @@ void test_memory_image_format_io()
   vsl_b_read(bfs_in, p_in);
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vil_memory_image_format_test_double_io.bvl.tmp");
 
   TEST ("p_out == p_in", p_out.components==p_in.components &&
         p_out.bits_per_component==p_in.bits_per_component &&

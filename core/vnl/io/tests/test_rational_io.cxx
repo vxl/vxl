@@ -4,6 +4,7 @@
 #include <vnl/io/vnl_io_rational.h>
 #include <vsl/vsl_binary_io.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_rational_io()
 {
@@ -30,6 +31,8 @@ void test_rational_io()
   vsl_b_read(bfs_in, r3);
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vnl_rational_test_io.bvl.tmp");
 
   TEST ("equality nil", nil, r1);
   TEST ("equality inf", inf, r2);

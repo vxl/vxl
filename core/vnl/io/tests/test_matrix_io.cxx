@@ -3,6 +3,7 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_matrix_double_io()
 {
@@ -37,6 +38,8 @@ void test_matrix_double_io()
   vsl_b_read(bfs_in, m_in2);
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vnl_matrix_test_double_io.bvl.tmp");
 
   // m_in1 has content
   TEST ("m_out == m_in1", m_out, m_in1);

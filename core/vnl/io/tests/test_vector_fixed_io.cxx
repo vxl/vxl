@@ -4,6 +4,7 @@
 #include <vnl/io/vnl_io_vector_fixed.h>
 #include <vsl/vsl_binary_io.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_vector_fixed_double_3_io()
 {
@@ -23,6 +24,8 @@ void test_vector_fixed_double_3_io()
   TEST ("vnl_vector_fixed_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, m_in);
   bfs_in.close();
+
+  vpl_unlink ("vnl_vector_fixed_io.bvl.tmp");
 
   TEST ("m_out == m_in", m_out, m_in);
 

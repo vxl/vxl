@@ -4,6 +4,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_map_io.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_map_io()
 {
@@ -48,6 +49,8 @@ void test_map_io()
   vsl_b_read(bfs_in, m_string_int_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vsl_map_io_test.bvl.tmp");
 
   TEST("vcl_map<int,int> out == in", m_int_int_out, m_int_int_in);
   TEST("vcl_map<int,vcl_string> out == in", m_int_string_out, m_int_string_in);

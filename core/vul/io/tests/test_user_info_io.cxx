@@ -3,8 +3,8 @@
 #include <vul/vul_user_info.h>
 #include <vul/io/vul_io_user_info.h>
 #include <vsl/vsl_binary_io.h>
-
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_user_info_io()
 {
@@ -27,6 +27,8 @@ void test_user_info_io()
   vsl_b_read(bfs_in, p_in);
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vul_user_info_test_io.bvl.tmp");
 
   TEST ("p_out == p_in",p_out.uid==p_in.uid && p_out.gid==p_in.gid && 
     p_out.name==p_in.name && p_out.home_directory==p_in.home_directory && 

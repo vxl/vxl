@@ -11,7 +11,7 @@ ADD_EXECUTABLE( vil_io_test_driver
   test_rgb_io.cxx
   test_rgba_io.cxx
 )
-TARGET_LINK_LIBRARIES( vil_io_test_driver vil_io testlib )
+TARGET_LINK_LIBRARIES( vil_io_test_driver vil_io testlib vpl )
 
 ADD_TEST( vil_io_test_include                 vil_io_test_driver test_include )
 ADD_TEST( vil_io_test_memory_image_format_io  vil_io_test_driver test_memory_image_format_io )

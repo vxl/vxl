@@ -4,6 +4,7 @@
 #include <vnl/io/vnl_io_bignum.h>
 #include <vsl/vsl_binary_io.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_bignum_io()
 {
@@ -35,6 +36,8 @@ void test_bignum_io()
   vsl_b_read(bfs_in, r5);
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vnl_bignum_test_io.bvl.tmp");
 
   TEST ("equality 0", nil, r1);
   TEST ("equality -3245444", big, r2);

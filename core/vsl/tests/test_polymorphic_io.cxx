@@ -9,6 +9,7 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_binary_loader.txx>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 //: Base class to test polymorphic loading
 class test_base_class {
@@ -169,6 +170,8 @@ void test_polymorphic_io()
   vsl_b_read(bfs_in,b2_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vsl_polymorphic_io_test.bvl.tmp");
 
   TEST("derived in = derived out", d1_in.data(), d1_out.data());
   TEST("Load derived by base", b1_in->is_a(), d1_out.is_a());

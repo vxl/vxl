@@ -3,6 +3,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_vector_io()
 {
@@ -31,6 +32,8 @@ void test_vector_io()
   vsl_b_read(bfs_in, v_float_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vsl_vector_io_test.bvl.tmp");
 
   TEST("vcl_vector<int> out == vcl_vector<int> in", v_int_out, v_int_in);
   TEST("vcl_vector<float> out == vcl_vector<float> in", v_float_out,v_float_in);

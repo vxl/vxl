@@ -3,6 +3,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_deque_io.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_deque_io()
 {
@@ -28,6 +29,8 @@ void test_deque_io()
   vsl_b_read(bfs_in, d_int_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vsl_deque_io_test.bvl.tmp");
 
   // kym - double equals not defined for deque??
   //TEST("vcl_deque<int> out == vcl_deque<int> in", d_int_out, d_int_in);

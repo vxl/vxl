@@ -5,6 +5,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <testlib/testlib_root_dir.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_binary_io()
 {
@@ -155,6 +156,8 @@ void test_binary_io()
 
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vsl_binary_io_test.bvl.tmp");
 
   vcl_cout << "****************************\n"
            << "Testing Golden vsl binary io\n"

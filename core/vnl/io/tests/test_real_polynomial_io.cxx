@@ -3,6 +3,7 @@
 #include <vnl/vnl_real_polynomial.h>
 #include <vnl/io/vnl_io_real_polynomial.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_real_polynomial_io()
 {
@@ -36,6 +37,7 @@ void test_real_polynomial_io()
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
+  vpl_unlink ("vnl_real_polynomial_test_io.bvl.tmp");
 
   TEST ("poly_out.coefficients() == poly_in0.coefficients()",
            poly_out.coefficients() == poly_in0.coefficients(), true);

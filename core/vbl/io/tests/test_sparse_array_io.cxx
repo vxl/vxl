@@ -3,6 +3,7 @@
 #include <vbl/io/vbl_io_sparse_array_2d.h>
 #include <vbl/vbl_sparse_array_2d.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_sparse_array_io()
 {
@@ -33,6 +34,8 @@ void test_sparse_array_io()
   vsl_b_read(bfs_in, v_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vbl_sparse_array_test_io.bvl.tmp");
 
   bool test_result = true;
   //same number of non zero elements?

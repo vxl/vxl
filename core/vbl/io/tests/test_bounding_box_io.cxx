@@ -4,6 +4,7 @@
 #include <vbl/io/vbl_io_bounding_box.h>
 #include <vsl/vsl_binary_io.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_bounding_box_double_io()
 {
@@ -32,6 +33,7 @@ void test_bounding_box_double_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
+  vpl_unlink ("vbl_bounding_box_test_double_io.bvl.tmp");
 
   TEST("p_out.empty() == p_in.empty()", p_out.empty(), p_in.empty());
   TEST("p_out.min()[0] == p_in.min()[0]", p_out.min()[0], p_in.min()[0]);

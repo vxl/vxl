@@ -5,6 +5,7 @@
 #include <vnl/vnl_diag_matrix.h>
 #include <vnl/io/vnl_io_diag_matrix.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_diag_matrix_double_io()
 {
@@ -38,6 +39,8 @@ void test_diag_matrix_double_io()
   vsl_b_read(bfs_in, diag_mat_in);
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vnl_diag_matrix_test_io.bvl.tmp");
 
   TEST ("diag_mat_out.diagonal() == diag_mat_in.diagonal()",
         diag_mat_out.diagonal() == diag_mat_in.diagonal(), true);

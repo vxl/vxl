@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include "vbl_io_test_classes.h"
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_smart_ptr_io()
 {
@@ -29,6 +30,8 @@ void test_smart_ptr_io()
   vsl_b_read(bfs_in, sp2_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vbl_smart_ptr_test_io.bvl.tmp");
 
   TEST("sp1_in == sp2_in", sp1_in, sp2_in);
   TEST("sp1_in->get_references() == 2", sp1_in->get_references(), 2);

@@ -3,6 +3,7 @@
 #include <vnl/vnl_nonlinear_minimizer.h>
 #include <vnl/io/vnl_io_nonlinear_minimizer.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_nonlinear_minimizer_io()
 {
@@ -47,6 +48,8 @@ void test_nonlinear_minimizer_io()
   vsl_b_read(bfs_in, minimizer_in);
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vnl_nonlinear_minimizer_io.bvl.tmp");
 
   double ftol_in=minimizer_in.get_f_tolerance();
   double xtol_in=minimizer_in.get_x_tolerance();

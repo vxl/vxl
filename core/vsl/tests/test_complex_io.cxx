@@ -3,6 +3,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_complex_io.h>
 #include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_complex_io()
 {
@@ -24,6 +25,8 @@ void test_complex_io()
   vsl_b_read(bfs_in, c_float_in);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
+
+  vpl_unlink ("vsl_complex_io_test.bvl.tmp");
 
   TEST("vcl_complex<float> out == in", c_float_out, c_float_in);
 
