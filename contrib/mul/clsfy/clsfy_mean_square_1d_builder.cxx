@@ -292,6 +292,8 @@ double clsfy_mean_square_1d_builder::build_from_sorted_data(
   vcl_cout<<"Function not implemented because can't use pre-sorted data"<<vcl_endl;
   vcl_cout<<"the weighted mean of the data is needed to calc the ordering!"<<vcl_endl;
   vcl_abort();
+
+  return 0.0;
   
 }
 
