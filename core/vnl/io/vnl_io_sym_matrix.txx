@@ -6,7 +6,7 @@
 
 #include "vnl_io_sym_matrix.h"
 #include <vnl/vnl_sym_matrix.h>
-#include <vsl/vsl_binary_explicit_io.h>
+#include <vsl/vsl_b_read_block_old.h>
 #include <vsl/vsl_block_binary.h>
 #include <vsl/vsl_indent.h>
 
@@ -41,7 +41,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_sym_matrix<T> & p)
     p.resize(n);
     // Calling begin() on empty matrix causes segfault
     if (n>0)
-      vsl_b_read_block(is, p.data_block(), p.size());
+      vsl_b_read_block_old(is, p.data_block(), p.size());
     break;
 
   case 2:

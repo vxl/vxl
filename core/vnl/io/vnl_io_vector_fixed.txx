@@ -6,7 +6,7 @@
 
 #include "vnl_io_vector_fixed.h"
 #include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_binary_explicit_io.h>
+#include <vsl/vsl_b_read_block_old.h>
 #include <vsl/vsl_block_binary.h>
 
 //=================================================================================
@@ -36,7 +36,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_vector_fixed<T,n> & p)
   case 1:
     vsl_b_read(is, stream_n);
     if ( n == stream_n ) {
-      vsl_b_read_block(is, p.begin(), n);
+      vsl_b_read_block_old(is, p.begin(), n);
     } else {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_vector_fixed<T,n>&)\n"
                << "           Expected n="<<n<<", got "<<stream_n<<'\n';

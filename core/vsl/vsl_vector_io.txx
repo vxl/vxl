@@ -9,9 +9,17 @@
 #include "vsl_vector_io.h"
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_block_binary.h>
+#include <vsl/vsl_b_read_block_old.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
+
+
+//===================================================================================
+// Some old code to support backwards compatibility for reading existing files
+
+
+
 
 //====================================================================================
 //: Write vector to binary stream
@@ -56,9 +64,7 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
 
     if (v.size())
     {
-      T* ptr = &v[0];
-      while (n--)
-        vsl_b_read(is, *(ptr++));
+      vsl_b_read_block_old(is, &v[0], n);
     }
     break;
   case 2:

@@ -6,7 +6,7 @@
 
 #include "vnl_io_vector.h"
 #include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_binary_explicit_io.h>
+#include <vsl/vsl_b_read_block_old.h>
 #include <vsl/vsl_block_binary.h>
 
 //=================================================================================
@@ -37,7 +37,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_vector<T> & p)
     vsl_b_read(is, n);
     p.set_size(n);
     if (n)
-      vsl_b_read_block(is, p.data_block(), n);
+      vsl_b_read_block_old(is, p.data_block(), n);
     break;
 
   case 2:
