@@ -9,12 +9,14 @@ SOURCES += brct_algos.cpp
 SOURCES += brct_structure_estimator.cxx
 SOURCES += brct_epi_reconstructor.cxx
 SOURCES += brct_corr.cxx
-MANPAGE_SOURCES += brct_corr_sptr.h
 SOURCES += brct_plane_calibrator.cxx
 SOURCES += brct_plane_sweeper.cxx
 SOURCES += brct_plane_sweeper_params.cxx
 SOURCES += brct_volume_processor.cxx
 SOURCES += brct_volume_processor_params.cxx
+SOURCES += brct_dense_reconstructor.cxx
+SOURCES += brct_plane_corr.cxx
+MANPAGE_SOURCES += brct_plane_corr_sptr.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
