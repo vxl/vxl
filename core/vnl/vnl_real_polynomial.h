@@ -27,8 +27,8 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vcl_complex.h>
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_complex.h>
 
 //:Evaluation of real polynomials at real and complex points.
 
@@ -54,14 +54,11 @@ private: // not implemented
   double devaluate(double x) const;
 public:
 
-//#define VNL_USED_COMPLEX
-//#ifdef VNL_COMPLEX_AVAILABLE
   // -- Evaluate polynomial at complex value x
-  vnl_double_complex evaluate(const vnl_double_complex& x) const;
+  vcl_complex<double> evaluate(vcl_complex<double> const& x) const;
 
   // -- Evaluate derivative at complex value x
-  vnl_double_complex devaluate(const vnl_double_complex& x) const;
-//#endif
+  vcl_complex<double> devaluate(vcl_complex<double> const& x) const;
 
   // Data Access---------------------------------------------------------------
 

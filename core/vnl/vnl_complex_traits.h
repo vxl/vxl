@@ -21,7 +21,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_complex.h>
+#include <vcl_complex.h>
 
 // default is real.
 template <class T>
@@ -34,30 +34,30 @@ public:
   static T conjugate(T x) { return x; }
 
   // -- complexification
-  static vnl_complex<T> complexify(T x) { return vnl_complex<T>(x,T(0)); }
+  static vcl_complex<T> complexify(T x) { return vcl_complex<T>(x,T(0)); }
 };
 
-// -- override for vnl_complex<REAL> :
+// -- override for vcl_complex<REAL> :
 
-// vnl_complex<float>
+// vcl_complex<float>
 VCL_DEFINE_SPECIALIZATION
-class vnl_complex_traits< vnl_complex<float> > {
+class vnl_complex_traits< vcl_complex<float> > {
 public:
   enum { isreal = false };
-  static vnl_complex<float> conjugate(vnl_complex<float> z)
-    { return vnl_complex<float>(z.real(), -z.imag()); }
-  static vnl_complex<float> complexify(vnl_complex<float> z)
+  static vcl_complex<float> conjugate(vcl_complex<float> z)
+    { return vcl_complex<float>(z.real(), -z.imag()); }
+  static vcl_complex<float> complexify(vcl_complex<float> z)
     { return z; }
 };
 
-// vnl_complex<double>
+// vcl_complex<double>
 VCL_DEFINE_SPECIALIZATION
-class vnl_complex_traits< vnl_complex<double> > {
+class vnl_complex_traits< vcl_complex<double> > {
 public:
   enum { isreal = false };
-  static vnl_complex<double> conjugate(vnl_complex<double> z)
-    { return vnl_complex<double>(z.real(), -z.imag()); }
-  static vnl_complex<double> complexify(vnl_complex<double> z)
+  static vcl_complex<double> conjugate(vcl_complex<double> z)
+    { return vcl_complex<double>(z.real(), -z.imag()); }
+  static vcl_complex<double> complexify(vcl_complex<double> z)
     { return z; }
 };
 

@@ -34,7 +34,7 @@
 // The parameterized vnl_matrix<T> class implements two dimensional arithmetic
 // matrices of a user specified type. The only constraint placed on the type is
 // that it must overload the following operators: +, -,  *,  and /. Thus, it 
-// will be possible to have a vnl_matrix over vnl_complex<T>. The vnl_matrix<T> 
+// will be possible to have a vnl_matrix over vcl_complex<T>. The vnl_matrix<T> 
 // class is static in size, that is once a vnl_matrix<T> of a particular size
 // has been created, there is no dynamic growth or resize method available.
 //
@@ -84,6 +84,7 @@
 #include <vcl_algorithm.h>
 
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_complex.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_numeric_traits.h>

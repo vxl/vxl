@@ -13,8 +13,8 @@
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
+#include <vcl_complex.h>
 
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_complex_ops.h>
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_matrix.h>
@@ -57,7 +57,7 @@ void test_reim(vnl_fftxd_prime_factors<fsm_real> const &prx,
 
 void test_cplx(vnl_fftxd_prime_factors<fsm_real> const &prx,
 	       vnl_fftxd_prime_factors<fsm_real> const &pry,
-	       vnl_matrix<vnl_complex<fsm_real> > const &M, 
+	       vnl_matrix<vcl_complex<fsm_real> > const &M, 
 	       int dir)
 {
 #ifndef VCL_VC
@@ -100,11 +100,11 @@ void test_fft2d () {
   }
   
   // complexify :
-  vnl_complex<fsm_real> cplx_array[fsm_rows*fsm_cols];
+  vcl_complex<fsm_real> cplx_array[fsm_rows*fsm_cols];
   vnl_complexify(real_array, imag_array, cplx_array, fsm_rows*fsm_cols);
   
   // data as matrices :
-  vnl_matrix<vnl_complex<fsm_real> > cplx_matrix(cplx_array, fsm_rows,fsm_cols);
+  vnl_matrix<vcl_complex<fsm_real> > cplx_matrix(cplx_array, fsm_rows,fsm_cols);
   vnl_matrix<fsm_real> real_matrix(real_array, fsm_rows,fsm_cols);
   vnl_matrix<fsm_real> imag_matrix(imag_array, fsm_rows,fsm_cols);
 
@@ -133,7 +133,7 @@ void test_fft2d () {
     vnl_fft2d<fsm_real> fwd(cplx_matrix, prx, pry, +1);
     vnl_fft2d<fsm_real> bwd(fwd, prx, pry, -1);
     
-    double error = (bwd - vnl_double_complex(cplx_matrix.size())*cplx_matrix).fro_norm();
+    double error = (bwd - vcl_complex<double>(cplx_matrix.size())*cplx_matrix).fro_norm();
     vcl_cout << "error = " << error << vcl_endl;
     Assert ("fwd-bwd error", error < 1e-7); // increase for float
 #endif
