@@ -46,7 +46,6 @@ void vsrl_3d_output::set_matcher(vsrl_dense_matcher *matcher)
 void vsrl_3d_output::set_projective_transform(vnl_matrix<double> &H)
 {
   H_=H;
-
   return;
 }
 
@@ -111,28 +110,23 @@ void vsrl_3d_output::write_output(char *filename)
   vnl_matrix<double> input(4,1);
   vnl_matrix<double> output(4,1);
 
-  double width = matcher_->get_width();
-  double height = matcher_->get_height();
-
-  double difuse_d;
-  int x,y; // image coordinates and disparity
-  double X,Y,Z,W; // 3d coordinates
-  double tx,ty; // texture coordinates
+  int width = matcher_->get_width();
+  int height = matcher_->get_height();
 
   // keep track of the indices
 
-  vnl_matrix<int> point_index(matcher_->get_width(),matcher_->get_height());
+  vnl_matrix<int> point_index(width,height);
   point_index.fill(-1);
   int index=0;
 
-  for (x=0;x<width;x++){
-    for (y=0;y<height;y++){
+  for (int x=0;x<width;x++) {
+    for (int y=0;y<height;y++) {
       // get the disparity
 
-      difuse_d = step_diffusion.get_disparity(x,y);
+      double difuse_d = step_diffusion.get_disparity(x,y);
       // difuse_d = sal_diffusion.get_disparity(x,y);
 
-      if (non_valid_point(x,y)){
+      if (non_valid_point(x,y)) {
         difuse_d=0.0;
       }
 
@@ -149,17 +143,16 @@ void vsrl_3d_output::write_output(char *filename)
 
         output = H_ * input;
 
-
         // normalize to X,Y,Z,1
 
-        W=output(3,0);
+        double W=output(3,0);
 
-        if (W){
+        if (W) {
           // the normalized coordinates
 
-          X=output(0,0)/W;
-          Y=output(1,0)/W;
-          Z=output(2,0)/W;
+          double X=output(0,0)/W;
+          double Y=output(1,0)/W;
+          double Z=output(2,0)/W;
 
           // regardless of the calculations,
           // -correlation_range <= Z <= +correlation_range_
@@ -169,8 +162,8 @@ void vsrl_3d_output::write_output(char *filename)
           if (Z >= c_range) Z = c_range;
 
           // the texture coordinates
-          tx=x/width;
-          ty=(height-y)/height;
+          double tx=x/width;
+          double ty=(height-y)/height;
           // ty=y/height;
 
           X_out.push_back(X);
@@ -190,9 +183,6 @@ void vsrl_3d_output::write_output(char *filename)
     }
   }
 
-  vcl_vector<double>::iterator iX,iY,iZ,itx,ity;
-
-
   // O.K we can now write out the data;
 
   vcl_ofstream file(filename);
@@ -202,24 +192,23 @@ void vsrl_3d_output::write_output(char *filename)
   // Create a range image to dump the data into for further use.
   // Set initial image to zero.
   range_image_.resize(width,height+1);
-  for (x=0;x<width;x++) {
-    for (y=0;y<height+1;y++) {
+  for (int x=0;x<width;x++) {
+    for (int y=0;y<height+1;y++) {
       range_image_(x,y) = 0.0;
     }
   }
 
-  iY=Y_out.begin();
-  iZ=Z_out.begin();
-  itx =tx_out.begin();
-  ity = ty_out.begin();
-  int ix,iy; // integers to hold range image indexes
+  vcl_vector<double>::iterator iX=X_out.begin();
+  vcl_vector<double>::iterator iY=Y_out.begin();
+  vcl_vector<double>::iterator iZ=Z_out.begin();
+  vcl_vector<double>::iterator itx=tx_out.begin();
+  vcl_vector<double>::iterator ity=ty_out.begin();
 
-  for (iX=X_out.begin();iX!=X_out.end();iX++, iY++, iZ++,itx++, ity++)
+  for (; iX!=X_out.end(); ++iX, ++iY, ++iZ, ++itx, ++ity)
     {
-      file << (*iX) << " " << (*iY) << " " << (*iZ) << " " << *itx << " " << *ity <<
-        vcl_endl;
+      file << (*iX) << " " << (*iY) << " " << (*iZ) << " " << *itx << " " << *ity << vcl_endl;
       // populate the range image
-      ix = *iX; iy = *iY;
+      int ix = int(*iX+0.5), iy = int(*iY+0.5); // round to nearest integer
       range_image_(ix,height-iy) = *iZ;
     }
 
@@ -233,20 +222,17 @@ void vsrl_3d_output::write_output(char *filename)
   vcl_vector<int> vert2;
   vcl_vector<int> vert3;
 
-  int x2,y2;
-  int in1,in2,in3,in4;
-
   // make all posible triangles
 
-  for (y=0;y<height-1;y++){
-    y2=y+1;
-    for (x=0;x<width-1;x++){
-      x2=x+1;
+  for (int y=0;y<height-1;y++) {
+    int y2=y+1;
+    for (int x=0;x<width-1;x++) {
+      int x2=x+1;
 
-      in1=point_index(x,y);
-      in2=point_index(x2,y);
-      in3=point_index(x2,y2);
-      in4=point_index(x,y2);
+      int in1=point_index(x,y);
+      int in2=point_index(x2,y);
+      int in3=point_index(x2,y2);
+      int in4=point_index(x,y2);
 
       // the first triangle
 
@@ -304,14 +290,11 @@ void vsrl_3d_output::read_projective_transform(char *filename)
   file >> hold;
   file >> hold;
 
-
   vnl_matrix<double> H(4,4);
 
-  int row,col;
-  double value;
-
-  for (row=0;row<4;row++){
-    for (col=0;col<4;col++){
+  for (int row=0;row<4;row++){
+    for (int col=0;col<4;col++){
+      double value;
       file >> value;
       vcl_cout << "Point r c " << value << " " << row << " " << col << vcl_endl;
 
@@ -361,23 +344,18 @@ void vsrl_3d_output::write_disparity_image(char *filename,vsrl_diffusion *diff)
 
   vil_memory_image_of<int> buffer(image1_);
 
-  int x,y;
-  int disparity;
-  int value;
-
-
-  for (x=0;x<buffer.width();x++)
-    for (y=0;y<buffer.height();y++)
+  for (int x=0;x<buffer.width();x++)
+    for (int y=0;y<buffer.height();y++)
       buffer(x,y)=0;
 
   // go through each point, get the disparity and save it into the buffer
 
   int correlation_range = vsrl_parameters::instance()->correlation_range;
 
-  for (y=0;y<buffer.height();y++)
-    for (x=0;x<buffer.width();x++){
-      disparity = (int)(diff->get_disparity(x,y));
-      value = disparity + correlation_range+1;
+  for (int y=0;y<buffer.height();y++)
+    for (int x=0;x<buffer.width();x++){
+      int disparity = (int)(diff->get_disparity(x,y));
+      int value = disparity + correlation_range+1;
       if (value < 0)
         value = 0;
 
