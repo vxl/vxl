@@ -33,6 +33,11 @@ void bmvv_menus::vd_edges_callback()
   bmvv_multiview_manager::instance()->vd_edges();
 }
 
+void bmvv_menus::track_edges_callback()
+{
+  bmvv_multiview_manager::instance()->track_edges();
+}
+
 #ifdef HAS_XERCES
 void bmvv_menus::read_xml_edges_callback()
 {
@@ -58,8 +63,8 @@ vgui_menu bmvv_menus::get_menu()
   vgui_menu menuview;
   vgui_menu menuedit;
   //file menu entries
-  menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
   menufile.add( "Load Image", load_image_callback,(vgui_key)'l', vgui_CTRL);
+  menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
 #ifdef HAS_XERCES
   menufile.add( "Load XML Edges", read_xml_edges_callback);
 #endif
@@ -71,6 +76,7 @@ vgui_menu bmvv_menus::get_menu()
   //edit menu entries
   menuedit.add("VD Edges", vd_edges_callback);
   menuedit.add("Select Edges", select_curve_corres_callback);
+  menuedit.add("Track Edges", track_edges_callback);
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);

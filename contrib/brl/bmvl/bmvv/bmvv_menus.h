@@ -22,6 +22,7 @@ BMVV_DLL_DATA  static void quit_callback();
   BMVV_DLL_DATA static void clear_display_callback();
   BMVV_DLL_DATA static void clear_selected_callback();
   BMVV_DLL_DATA static void vd_edges_callback();
+  BMVV_DLL_DATA static void track_edges_callback();
 #ifdef HAS_XERCES
   BMVV_DLL_DATA static void read_xml_edges_callback();
 #endif

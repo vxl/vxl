@@ -19,6 +19,7 @@
 #include <vdgl/vdgl_intensity_face_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_easy2D_tableau_sptr.h>
+#include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
 #include <mvl/FMatrix.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
@@ -41,6 +42,7 @@ class bmvv_multiview_manager : public vgui_wrapper_tableau
   void clear_selected();
   void vd_edges();
   void regions();
+	void track_edges();
 #ifdef HAS_XERCES
   void read_xml_edges();
 #endif
@@ -52,6 +54,9 @@ class bmvv_multiview_manager : public vgui_wrapper_tableau
   void init();
   //: the virtual handle function
   virtual bool handle(const vgui_event&);
+
+	void load_image_file(vcl_string image_filename, bool greyscale, unsigned col, unsigned row);
+
  protected:
   //:internal utility methods
   void draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions,
@@ -62,6 +67,8 @@ class bmvv_multiview_manager : public vgui_wrapper_tableau
   bgui_vtol2D_tableau_sptr get_selected_vtol2D_tableau();
   bgui_picker_tableau_sptr get_picker_tableau_at(unsigned col, unsigned row);
   bgui_picker_tableau_sptr get_selected_picker_tableau();
+	vil_image get_image_at(unsigned col, unsigned row);
+
   //
  private:
   vil_image img_;
