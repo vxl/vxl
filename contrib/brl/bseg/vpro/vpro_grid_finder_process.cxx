@@ -65,7 +65,7 @@ bool vpro_grid_finder_process::execute()
   sdet_grid_finder gf(*((sdet_grid_finder_params*)this));
   gf.unset_verbose();
 
-  if (!gf.set_lines(img.width(), img.height(), lines))
+  if (!gf.set_lines(float(img.width()), float(img.height()), lines))
   {
     this->clear_input();
     return false;

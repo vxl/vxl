@@ -69,9 +69,9 @@ attr_min_vals[] = {
   1.0f,         // min weighted complexity
   0.05f,        // min strong parallel
   0.05f,        // min weak parallel
-  1.0e-05f,
-  1.0e-05f,
-  1.0e-05f
+  1e-5f,
+  1e-5f,
+  1e-5f
 };
 
 void vifa_int_faces_attr::
@@ -97,7 +97,7 @@ init()
     attr_vec_.push_back(NULL);
   }
 
-  perimeter_ = -1.0;
+  perimeter_ = -1.f;
 }
 
 vifa_int_faces_attr::
@@ -429,12 +429,12 @@ GetMeanAttr(int attr_index)
       }
     }
 
-    return attr_vec_[attr_index]->get_mean();
+    return float(attr_vec_[attr_index]->get_mean());
   }
   else
   {
     // If no faces in neighborhood...
-    return -1;
+    return -1.f;
   }
 }
 
@@ -451,7 +451,7 @@ GetSDAttr(int attr_index)
       this->GetMeanAttr(attr_index);
     }
 
-    return vcl_sqrt(attr_vec_[attr_index]->get_var());
+    return (float)vcl_sqrt(attr_vec_[attr_index]->get_var());
   }
   else
   {
@@ -473,10 +473,10 @@ GetMinAttr(int attr_index)
       this->GetMeanAttr(attr_index);
     }
 
-    return attr_vec_[attr_index]->get_min();
+    return float(attr_vec_[attr_index]->get_min());
   }
   else
-    return -1;
+    return -1.f;
 }
 
 // Get or compute max value of an vifa_int_face_attr attribute.
@@ -492,10 +492,10 @@ GetMaxAttr(int attr_index)
       this->GetMeanAttr(attr_index);
     }
 
-    return attr_vec_[attr_index]->get_max();
+    return float(attr_vec_[attr_index]->get_max());
   }
   else
-    return -1;
+    return -1.f;
 }
 
 // ---------------------------------------------------------------------
@@ -514,14 +514,14 @@ Area()
     return area_;
   }
   else
-    return 0.0;
+    return 0.f;
 }
 
 // ratio of major moments of union of all faces
 float vifa_int_faces_attr::
 AspectRatio()
 {
-  return 0.0;
+  return 0.f;
 }
 
 // a helper function
@@ -629,7 +629,7 @@ PerimeterLength()
       vtol_edge_2d*  e = (*eit)->cast_to_edge_2d();
 
       if (e)
-        perimeter_ += e->curve()->length();
+        perimeter_ += float(e->curve()->length());
     }
 
     delete p_edges;
@@ -719,9 +719,7 @@ WeightedPerimeterLength()
 //        vcl_cout << "i_intensity_sum = " << i_intensity_sum
 //                 << ", i_area_sum = " << i_area_sum << vcl_endl;
 
-        float  i_intensity = (i_area_sum > 0) ?
-                    i_intensity_sum / i_area_sum :
-                    0.0;
+        float  i_intensity = (i_area_sum > 0) ?  i_intensity_sum / i_area_sum : 0.f;
 
         float  o_intensity_sum = 0;
         float  o_area_sum = 0;
@@ -735,9 +733,7 @@ WeightedPerimeterLength()
 //        vcl_cout << "o_intensity_sum = " << o_intensity_sum
 //                 << ", o_area_sum = " << o_area_sum << vcl_endl;
 
-        float  o_intensity = (o_area_sum > 0) ?
-                    o_intensity_sum / o_area_sum :
-                    0.0;
+        float  o_intensity = (o_area_sum > 0) ?  o_intensity_sum / o_area_sum : 0.f;
 
         float  intensity_gradient = vcl_fabs(i_intensity - o_intensity);
 
@@ -745,7 +741,7 @@ WeightedPerimeterLength()
 //                 << ", curve length = " << e->curve()->length() << vcl_endl;
 
         weighted_perimeter_sum +=
-          e->curve()->length() * intensity_gradient;
+          float(e->curve()->length()) * intensity_gradient;
         contrast_sum += intensity_gradient;
       }
       else
@@ -769,7 +765,7 @@ float vifa_int_faces_attr::
 Complexity()
 {
   if (this->Area() <= 0)
-    return 0.0;
+    return 0.f;
 
   float  p = this->PerimeterLength();
   return p * p / this->Area();
@@ -780,7 +776,7 @@ float vifa_int_faces_attr::
 WeightedComplexity()
 {
   if (this->Area() <= 0)
-    return 0.0;
+    return 0.f;
 
   float  wp = this->WeightedPerimeterLength();
   return wp * wp / this->Area();
@@ -846,7 +842,7 @@ EightyPercentParallel()
   {
     SetNP();
 
-    for (int i=0; i < 20 && npobj_->area() > 0.3; ++i)
+    for (int i=0; i < 20 && npobj_->area() > 0.3f; ++i)
     {
       float  max_angle, std_dev, scale;
       npobj_->map_gaussian(max_angle, std_dev, scale);

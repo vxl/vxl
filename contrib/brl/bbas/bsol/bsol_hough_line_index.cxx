@@ -38,9 +38,9 @@ bsol_hough_line_index::bsol_hough_line_index(const int r_dimension,
                                              const int theta_dimension)
 {
   xo_ = 0; yo_ = 0;
-  ysize_ = xsize_ = vcl_ceil(r_dimension/vnl_math::sqrt2);
+  ysize_ = xsize_ = (float)vcl_ceil(r_dimension/vnl_math::sqrt2);
   angle_range_ = (float)theta_dimension;
-  angle_increment_ = 1.0;
+  angle_increment_ = 1.0f;
 
   this->init(r_dimension, theta_dimension);
 }
@@ -74,9 +74,9 @@ bsol_hough_line_index(vbl_bounding_box<double, 2> const& box,
                       const float angle_range,
                       const float angle_increment)
 {
-  xo_ = box.xmin();  yo_ = box.ymin();
-  xsize_ = box.xmax()-xo_;
-  ysize_ = box.ymax()-yo_;
+  xo_ = float(box.xmin());  yo_ = float(box.ymin());
+  xsize_ = float(box.xmax()-xo_);
+  ysize_ = float(box.ymax()-yo_);
   angle_range_ = angle_range;
   angle_increment_ = angle_increment;
 
@@ -105,33 +105,34 @@ void bsol_hough_line_index::array_loc(vsol_line_2d_sptr const& line,
 {
   //Compute angle index
   float angle = (float)line->tangent_angle();
+  if (angle >= 180.0f)
+    angle -= 180.0f;
 
-  if (angle>180.0)
-    angle -= 180.0;
-  if (angle>angle_range_)
-    {
-      vcl_cout << "The line angle was outside the range of bsol_hough_line_index space!\n";
-      return;
-    }
+  if (angle > angle_range_)
+  {
+    vcl_cout << "Warning - bsol_hough_line_index angle outside of range!\n";
+    return;
+  }
 
   theta = angle;
 
-  float angrad = DEGTORAD*angle;
+  float angrad = float(DEGTORAD*angle);
 
   //Compute distance indices
   vsol_point_2d_sptr mid = line->middle();
-  float midx = mid->x()-xo_;
-  float midy = mid->y()-yo_;
-  float xs2 = xsize_/2.0;
-  float ys2 = ysize_/2.0;
+  float midx = float(mid->x()-xo_);
+  float midy = float(mid->y()-yo_);
+  float xs2 = xsize_/2.0f;
+  float ys2 = ysize_/2.0f;
 
-  float cx = -(midx-xs2)*vcl_sin(angrad);
-  float cy = (midy-ys2)*vcl_cos(angrad);
+  double cx = -(midx-xs2)*vcl_sin(angrad);
+  double cy =  (midy-ys2)*vcl_cos(angrad);
 
   //We use the middle of the ranges as the origin to insure minium error
   //Also, the distance index is guaranteed to be positive
-  r = cx + cy + vcl_sqrt(xs2*xs2 + ys2*ys2);
+  r = float(cx + cy + vcl_sqrt(xs2*xs2 + ys2*ys2));
 }
+
 //-----------------------------------------------------------------------------
 //
 //: Compute the bsol_hough_line_index array locations corresponding to a line
@@ -153,16 +154,17 @@ int bsol_hough_line_index::trans_loc(const int transx, const int transy,
                                      const int r, const int theta)
 {
   float angle = angle_increment_*theta;
-  float angrad = DEGTORAD*angle;
-  int new_cx =  -int(float(transx)*vcl_sin(angrad));
-  int new_cy = int(float(transy)*vcl_cos(angrad));
+  float angrad = float(DEGTORAD*angle);
+  int new_cx = -int(transx*vcl_sin(angrad));
+  int new_cy =  int(transy*vcl_cos(angrad));
   int newr = new_cx + new_cy;
   newr += r;
-  if (newr< 0)
+  if (newr < 0)
     return 0;
-  if (newr > r_dim_)
+  else if (newr > r_dim_)
     return r_dim_;
-  return newr;
+  else
+    return newr;
 }
 
 //-----------------------------------------------------------------------------
@@ -173,10 +175,10 @@ int bsol_hough_line_index::trans_loc(const int transx, const int transy,
 int bsol_hough_line_index::count(const int r, const int theta)
 {
   if (r<0||theta<0||r>=r_dim_||theta>=th_dim_)
-    {
-      vcl_cout << "Warning - bsol_hough_line_index index outside of range!\n";
-      return 0;
-    }
+  {
+    vcl_cout << "Warning - bsol_hough_line_index index outside of range!\n";
+    return 0;
+  }
 
   return index_[r][theta]->size();
 }
@@ -189,10 +191,10 @@ int bsol_hough_line_index::count(const int r, const int theta)
 bool bsol_hough_line_index::index(vsol_line_2d_sptr const& line)
 {
   if (!line)
-    {
-      vcl_cout << "In bsol_hough_line_index::index(..) NULL line\n";
-      return false;
-    }
+  {
+    vcl_cout << "In bsol_hough_line_index::index(..) NULL line\n";
+    return false;
+  }
   int r, theta;
   this->array_loc(line, r, theta);
   if (!(r < r_dim_)||!(theta < th_dim_))
@@ -209,11 +211,10 @@ bool bsol_hough_line_index::index(vsol_line_2d_sptr const& line)
 bool bsol_hough_line_index::index_new(vsol_line_2d_sptr const& line)
 {
   if (!line)
-
-    {
-      vcl_cout << "In bsol_hough_line_index::index_new(..) NULL line\n";
-      return false;
-    }
+  {
+    vcl_cout << "In bsol_hough_line_index::index_new(..) NULL line\n";
+    return false;
+  }
 
   int r, theta;
   //Check array bounds and uniqueness of line
@@ -309,10 +310,10 @@ lines_in_interval(vsol_line_2d_sptr const & l,
 {
   lines.clear();
   if (!l)
-    {
-      vcl_cout << "In bsol_hough_line_index::lines_in_interval(..) NULL line\n";
-      return;
-    }
+  {
+    vcl_cout << "In bsol_hough_line_index::lines_in_interval(..) NULL line\n";
+    return;
+  }
   int r, theta;
   this->array_loc(l, r, theta);
   int angle_radius = (int)vcl_ceil(theta_dist/angle_increment_);
@@ -320,45 +321,45 @@ lines_in_interval(vsol_line_2d_sptr const & l,
   int th_dim_m1 = th_dim_ - 1;
 
   for (int i = -angle_radius; i<=angle_radius; i++)
+  {
+    //The angle space is circular
+    int t_indx = (theta + i) % (th_dim_m1);
+    if (t_indx<0)
+      t_indx += th_dim_m1;
+
+    for (int j = -r_radius; j<=r_radius; j++)
     {
-      //The angle space is circular
-      int t_indx = (theta + i) % (th_dim_m1);
-      if (t_indx<0)
-        t_indx += th_dim_m1;
+      int r_indx = r + j;
+      if ((r_indx<0)||(r_indx>=r_dim_))
+        continue;
+      vcl_vector<vsol_line_2d_sptr> temp;
+      this->lines_at_index(r_indx, t_indx,temp);
+      for (vcl_vector<vsol_line_2d_sptr>::iterator lit = temp.begin();
+           lit != temp.end(); lit++)
+      {
+        //Note, these tests should eventually be more
+        //sophisticated - JLM
+        vsol_line_2d_sptr line = *lit;
+        float l_angle, line_angle;
+        float l_ndist, line_ndist;
+        this->array_loc(l, l_ndist, l_angle);
+        this->array_loc(line, line_ndist, line_angle);
 
-      for (int j = -r_radius; j<=r_radius; j++)
-        {
-          int r_indx = r + j;
-          if ((r_indx<0)||(r_indx>=r_dim_))
-            continue;
-          vcl_vector<vsol_line_2d_sptr> temp;
-          this->lines_at_index(r_indx, t_indx,temp);
-          for (vcl_vector<vsol_line_2d_sptr>::iterator lit = temp.begin();
-               lit != temp.end(); lit++)
-            {
-              //Note, these tests should eventually be more
-              //sophisticated - JLM
-              vsol_line_2d_sptr line = *lit;
-              float l_angle, line_angle;
-              float l_ndist, line_ndist;
-              this->array_loc(l, l_ndist, l_angle);
-              this->array_loc(line, line_ndist, line_angle);
+        //Test error in normal distance
+        bool within_r_radius = vcl_fabs(l_ndist - line_ndist) < r_dist;
+        if (!within_r_radius)
+          continue;
 
-              //Test error in normal distance
-              bool within_r_radius = vcl_fabs(l_ndist - line_ndist) < r_dist;
-              if (!within_r_radius)
-                continue;
+        //Test angular error
+        bool within_angle_radius = vcl_fabs(l_angle - line_angle) < theta_dist;
+        if (!within_angle_radius)
+          continue;
 
-              //Test angular error
-              bool within_angle_radius = vcl_fabs(l_angle - line_angle) < theta_dist;
-              if (!within_angle_radius)
-                continue;
-
-              //line, passed both tests
-              lines.push_back(line);
-            }
-        }
+        //line, passed both tests
+        lines.push_back(line);
+      }
     }
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -374,10 +375,10 @@ bsol_hough_line_index::lines_in_interval(vsol_line_2d_sptr const & l,
 {
   vcl_vector<vsol_line_2d_sptr> out;
   if (!l)
-    {
-      vcl_cout << "In bsol_hough_line_index::lines_in_interval(..) NULL line\n";
-      return out;
-    }
+  {
+    vcl_cout << "In bsol_hough_line_index::lines_in_interval(..) NULL line\n";
+    return out;
+  }
 
   this->lines_in_interval(l, r_dist, theta_dist, out);
   return out;
@@ -397,48 +398,48 @@ bsol_hough_line_index::parallel_lines(const float angle,
   lines.clear();
 
   //Compute angle index and tolerance
-  float ang = angle;
-  if (ang>180.0)
-    ang -= 180.0;
-  if (ang>angle_range_)
-    {
-      vcl_cout << "The line angle was outside the range of bsol_hough_line_index Space!\n";
-      return;
-    }
+  float ang = vcl_fmod(angle,180.f);
+  if (ang < 0) ang = 180.0f-ang;
+
+  if (ang > angle_range_)
+  {
+    vcl_cout << "Warning - bsol_hough_line_index angle outside of range!\n";
+    return;
+  }
   int theta = (int)vcl_floor(ang/angle_increment_);
   int angle_radius = (int)vcl_ceil(angle_dist/angle_increment_);
   int th_dim_m1 = th_dim_ - 1;
 
   for (int i = -angle_radius; i<=angle_radius; i++)
+  {
+    //The angle space is circular
+    int t_indx = (theta + i) % (th_dim_m1);
+    if (t_indx<0)
+      t_indx += th_dim_m1;
+    for (int j = 0; j<r_dim_; j++)
     {
-      //The angle space is circular
-      int t_indx = (theta + i) % (th_dim_m1);
-      if (t_indx<0)
-        t_indx += th_dim_m1;
-      for (int j = 0; j<r_dim_; j++)
-        {
-          if (!(this->count(j, t_indx)>0))
-            continue;
-          vcl_vector<vsol_line_2d_sptr> temp;
-          this->lines_at_index(j, t_indx, temp);
+      if (!(this->count(j, t_indx)>0))
+        continue;
+      vcl_vector<vsol_line_2d_sptr> temp;
+      this->lines_at_index(j, t_indx, temp);
 
-          for (vcl_vector<vsol_line_2d_sptr>::iterator lit = temp.begin();
-               lit != temp.end(); lit++)
-            {
-              vsol_line_2d_sptr line = *lit;
-              //Test angular error
-              float line_angle = (float)line->tangent_angle();
-              if (line_angle>180.0)
-                line_angle -= 180.0;
-              float ang_error = vcl_fabs(ang - line_angle);
-              if (ang_error<angle_dist)
-                lines.push_back(line);
-              ang_error-=180.0;//anti-parallel lines are included
-              if (vcl_fabs(ang_error)<angle_dist)
-                lines.push_back(line);
-            }
-        }
+      for (vcl_vector<vsol_line_2d_sptr>::iterator lit = temp.begin();
+           lit != temp.end(); lit++)
+      {
+        vsol_line_2d_sptr line = *lit;
+        //Test angular error
+        float line_angle = (float)line->tangent_angle();
+        if (line_angle >= 180.0f)
+          line_angle -= 180.0f;
+        float ang_error = vcl_fabs(ang - line_angle);
+        if (ang_error<angle_dist)
+          lines.push_back(line);
+        ang_error-=180.0f;//anti-parallel lines are included
+        if (vcl_fabs(ang_error)<angle_dist)
+          lines.push_back(line);
+      }
     }
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -472,16 +473,11 @@ bsol_hough_line_index::lines_at_angle(vsol_line_2d_sptr const &l,
 {
   lines.clear();
   if (!l)
-    {
-      vcl_cout << "In bsol_hough_line_index::lines_at_angle(..) NULL line\n";
-      return;
-    }
-  float line_angle = (float)l->tangent_angle();
-  if (line_angle>180.0)
-    line_angle -= 180.0;
-//   if (line_angle<0)
-//     line_angle += 180.0;
-  float ang = line_angle + angle;
+  {
+    vcl_cout << "In bsol_hough_line_index::lines_at_angle(..) NULL line\n";
+    return;
+  }
+  float ang = (float)l->tangent_angle() + angle;
   this->parallel_lines(ang, angle_dist, lines);
 }
 
@@ -515,10 +511,10 @@ bsol_hough_line_index::parallel_lines(vsol_line_2d_sptr const &l,
 {
   lines.clear();
   if (!l)
-    {
-      vcl_cout << "In bsol_hough_line_index::parallel_lines(..) NULL line\n";
-      return;
-    }
+  {
+    vcl_cout << "In bsol_hough_line_index::parallel_lines(..) NULL line\n";
+    return;
+  }
   float angle = (float)l->tangent_angle();
   this->parallel_lines(angle, angle_dist, lines);
 }
@@ -535,10 +531,10 @@ bsol_hough_line_index::parallel_lines(vsol_line_2d_sptr const &l,
 {
   vcl_vector<vsol_line_2d_sptr> out;
   if (!l)
-    {
-      vcl_cout << "In bsol_hough_line_index::parallel_lines(..) NULL line\n";
-      return out;
-    }
+  {
+    vcl_cout << "In bsol_hough_line_index::parallel_lines(..) NULL line\n";
+    return out;
+  }
   this->parallel_lines(l, angle_dist, out);
   return out;
 }
@@ -577,15 +573,15 @@ vcl_vector<int> bsol_hough_line_index::angle_histogram()
 {
   vcl_vector<int> angle_hist(th_dim_);
   for (int x = 0; x<th_dim_; x++)
+  {
+    angle_hist[x]=0;
+    for (int y = 0; y<r_dim_; y++)
     {
-      angle_hist[x]=0;
-      for (int y = 0; y<r_dim_; y++)
-      {
-        vcl_vector<vsol_line_2d_sptr>* lines = index_[y][x];
-        if (lines)
-         angle_hist[x]+=lines->size();
-      }
+      vcl_vector<vsol_line_2d_sptr>* lines = index_[y][x];
+      if (lines)
+        angle_hist[x]+=lines->size();
     }
+  }
   return angle_hist;
 }
 
@@ -628,72 +624,72 @@ static void remove_flat_peaks(vcl_vector<int>& angle_hist)
 
   //The scan of the state machine
   for (int i = 0; i < nbins; i++)
+  {
+    int v = get_extended_count(i, angle_hist);
+
+    //State init: a string of non-zeroes at the beginning.
+    if (init && v!=0)
+      continue;
+
+    if (init && v==0)
     {
-      int v = get_extended_count(i, angle_hist);
-
-      //State init: a string of non-zeroes at the beginning.
-      if (init && v!=0)
-        continue;
-
-      if (init && v==0)
-        {
-          init_end = i;
-          init = false;
-          continue;
-        }
-
-      //State !init&&!start: a string of "0s"
-      if (!start && v==0)
-        continue;
-
-      //State !init&&start: the first non-zero value
-      if (!start && v!=0)
-        {
-          start_index = i;
-          start = true;
-          continue;
-        }
-      //State ending flat peak: encountered a subsequent zero after starting
-      if (start && v==0)
-        {
-          int peak_location = (start_index+i-1)/2;//The middle of the run
-          for (int k = start_index; k<=(i-1); k++)
-            if (k!=peak_location)
-              angle_hist[k] = 0;
-          start = false;
-        }
+      init_end = i;
+      init = false;
+      continue;
     }
+
+    //State !init&&!start: a string of "0s"
+    if (!start && v==0)
+      continue;
+
+    //State !init&&start: the first non-zero value
+    if (!start && v!=0)
+    {
+      start_index = i;
+      start = true;
+      continue;
+    }
+    //State ending flat peak: encountered a subsequent zero after starting
+    if (start && v==0)
+    {
+      int peak_location = (start_index+i-1)/2;//The middle of the run
+      for (int k = start_index; k<=(i-1); k++)
+        if (k!=peak_location)
+          angle_hist[k] = 0;
+      start = false;
+    }
+  }
   //Now handle the boundary conditions
   if (init_end!=0)  //Is there a run which crosses the cyclic cut?
     if (start)
-      { //Yes, so define the peak location accordingly
-        int peak_location = (start_index + init_end - nbm -1)/2;
-        int k;
-        if (peak_location < 0) //Is the peak to the left of the cut?
-          {// Yes, to the left
-            peak_location += nbm;
-            for ( k = 0; k< init_end; k++)
-              angle_hist[k]=0;
-            for ( k= start_index; k <nbins; k++)
-              if (k!=peak_location)
-                angle_hist[k] = 0;
-          }
-        else
-          {//No, on the right.
-            for ( k = start_index; k< nbins; k++)
-              angle_hist[k]=0;
-            for ( k= 0; k < init_end; k++)
-              if (k!=peak_location)
-                angle_hist[k] = 0;
-          }
-      }
-    else
-      {//There wasn't a final run so just clean up the initial run
-        int init_location = (init_end-1)/2;
-        for (int k = 0; k<=init_end; k++)
-          if (k!=init_location)
+    {    //Yes, so define the peak location accordingly
+      int peak_location = (start_index + init_end - nbm -1)/2;
+      int k;
+      if (peak_location < 0) //Is the peak to the left of the cut?
+      {   // Yes, to the left
+        peak_location += nbm;
+        for ( k = 0; k< init_end; k++)
+          angle_hist[k]=0;
+        for ( k= start_index; k <nbins; k++)
+          if (k!=peak_location)
             angle_hist[k] = 0;
       }
+      else
+      {   //No, on the right.
+        for ( k = start_index; k< nbins; k++)
+          angle_hist[k]=0;
+        for ( k= 0; k < init_end; k++)
+          if (k!=peak_location)
+            angle_hist[k] = 0;
+      }
+    }
+    else
+    {   //There wasn't a final run so just clean up the initial run
+      int init_location = (init_end-1)/2;
+      for (int k = 0; k<=init_end; k++)
+        if (k!=init_location)
+          angle_hist[k] = 0;
+    }
 }
 
 //----------------------------------------------------------
@@ -709,10 +705,9 @@ bsol_hough_line_index::non_maximum_suppress(const int radius,
   int num = bins.size();
   vcl_vector<int> out(num);
   if ((2*radius +1)> num/2)
-    {
-      vcl_cout << "In bsol_hough_line_index::non_maximum_suppress(.) - "
-               << " the radius is too large\n";
-      return out;
+  {
+    vcl_cout << "bsol_hough_line_index::non_maximum_suppress(..) - radius is too large\n";
+    return out;
     }
 
   //Clear the output
@@ -721,20 +716,20 @@ bsol_hough_line_index::non_maximum_suppress(const int radius,
 
   //Find local maxima
   for (int indx = 0; indx<num; indx++)
+  {
+    //find the maximum value in the current kernel
+    int max_count = bins[indx];
+    for (int k = -radius; k <= radius ;k++)
     {
-      //find the maximum value in the current kernel
-      int max_count = bins[indx];
-      for (int k = -radius; k <= radius ;k++)
-        {
-          int index = indx+k;
-          int c = get_extended_count(index, bins);
-          if ( c > max_count)
-            max_count = c;
-        }
-      //Is position th a local maximum?
-      if (max_count == bins[indx])
-        out[indx] = max_count;//Yes. So set the counts to the max value
+      int index = indx+k;
+      int c = get_extended_count(index, bins);
+      if ( c > max_count)
+        max_count = c;
     }
+    //Is position th a local maximum?
+    if (max_count == bins[indx])
+      out[indx] = max_count;//Yes. So set the counts to the max value
+  }
   remove_flat_peaks(out);
   return out;
 }
@@ -790,22 +785,22 @@ vbl_array_2d<unsigned char> bsol_hough_line_index::get_hough_image()
   int nmax = 0;
   for (int r=0;r<r_dim_;r++)
     for (int th=0;th<th_dim_;th++)
-      {
-        int n_lines = index_[r][th]->size();
-        if (n_lines>nmax)
-          nmax = n_lines;
-      }
+    {
+      int n_lines = index_[r][th]->size();
+      if (n_lines>nmax)
+        nmax = n_lines;
+    }
   float scale = 1;
   if (nmax != 0)
     scale /= 1.0f/nmax;
   for (int r=0;r<r_dim_;r++)
     for (int th=0;th<th_dim_;th++)
-      {
-        unsigned char val = 0;
-        int n_lines = index_[r][th]->size();
-        float v = 255*n_lines/scale;
-        val = (unsigned char)v;
-        out.put(r,th,val);
-      }
+    {
+      unsigned char val = 0;
+      int n_lines = index_[r][th]->size();
+      float v = 255*n_lines/scale;
+      val = (unsigned char)v;
+      out.put(r,th,val);
+    }
   return out;
 }

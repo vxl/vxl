@@ -34,8 +34,8 @@ brip_float_ops::convolve(vil1_memory_image_of<float> const & input,
         }
       output(x,y)=accum;
     }
-  brip_float_ops::fill_x_border(output, n, 0.0);
-  brip_float_ops::fill_y_border(output, n, 0.0);
+  brip_float_ops::fill_x_border(output, n, 0.0f);
+  brip_float_ops::fill_y_border(output, n, 0.0f);
   return output;
 }
 
@@ -110,7 +110,7 @@ brip_float_ops::half_resolution(vil1_memory_image_of<float> const & input,
   int x=0, y=0;
   //do the first output line
   for (;x<half_w;x++)
-    output(x,0)= k0*out0[x]+ 2.0*(k1*out1[x]+k2*out2[x]);
+    output(x,0)= k0*out0[x]+ 2.0f*(k1*out1[x]+k2*out2[x]);
   //normal lines
   for (y=1; y<half_h; y++)
   {
@@ -225,7 +225,7 @@ interpolate_center(vbl_array_2d<float> const & neighborhood,
     dx = (Iy*Ixy - Ix*Iyy) / det;
     dy = (Ix*Ixy - Iy*Ixx) / det;
     // more than one pixel away
-    if (vcl_fabs (dx) > 1.0 || vcl_fabs (dy) > 1.0)
+    if (vcl_fabs(dx) > 1.0 || vcl_fabs(dy) > 1.0)
     {
       dx = 0; dy = 0;
     }
@@ -324,10 +324,10 @@ void brip_float_ops::gradient_3x3(vil1_memory_image_of<float> const & input,
       grad_x(x,y) = scale*gx;
       grad_y(x,y) = scale*gy;
     }
-  brip_float_ops::fill_x_border(grad_x, 1, 0.0);
-  brip_float_ops::fill_y_border(grad_x, 1, 0.0);
-  brip_float_ops::fill_x_border(grad_y, 1, 0.0);
-  brip_float_ops::fill_y_border(grad_y, 1, 0.0);
+  brip_float_ops::fill_x_border(grad_x, 1, 0.0f);
+  brip_float_ops::fill_y_border(grad_x, 1, 0.0f);
+  brip_float_ops::fill_x_border(grad_y, 1, 0.0f);
+  brip_float_ops::fill_y_border(grad_y, 1, 0.0f);
   vcl_cout << "\nCompute Gradient in " << t.real() << " msecs.\n";
 }
 
@@ -352,25 +352,25 @@ void brip_float_ops::hessian_3x3(vil1_memory_image_of<float> const & input,
     {
       float xx = input(x-1,y-1)+input(x-1,y)+input(x+1,y)+
                  input(x+1,y-1)+input(x+1,y)+input(x+1,y+1)-
-                 2.0*(input(x,y-1)+input(x,y)+input(x,y+1));
+                 2.0f*(input(x,y-1)+input(x,y)+input(x,y+1));
 
       float xy = (input(x-1,y-1)+input(x+1,y+1))-
                  (input(x-1,y+1)+input(x+1,y-1));
 
       float yy = input(x-1,y-1)+input(x,y-1)+input(x+1,y-1)+
                  input(x-1,y+1)+input(x,y+1)+input(x+1,y+1)-
-                 2.0*(input(x-1,y)+input(x,y)+input(x+1,y));
+                 2.0f*(input(x-1,y)+input(x,y)+input(x+1,y));
 
-      Ixx(x,y) = xx/3.0;
-      Ixy(x,y) = xy/4.0;
-      Iyy(x,y) = yy/3.0;
+      Ixx(x,y) = xx/3.0f;
+      Ixy(x,y) = xy/4.0f;
+      Iyy(x,y) = yy/3.0f;
     }
-  brip_float_ops::fill_x_border(Ixx, 1, 0.0);
-  brip_float_ops::fill_y_border(Ixx, 1, 0.0);
-  brip_float_ops::fill_x_border(Ixy, 1, 0.0);
-  brip_float_ops::fill_y_border(Ixy, 1, 0.0);
-  brip_float_ops::fill_x_border(Iyy, 1, 0.0);
-  brip_float_ops::fill_y_border(Iyy, 1, 0.0);
+  brip_float_ops::fill_x_border(Ixx, 1, 0.0f);
+  brip_float_ops::fill_y_border(Ixx, 1, 0.0f);
+  brip_float_ops::fill_x_border(Ixy, 1, 0.0f);
+  brip_float_ops::fill_y_border(Ixy, 1, 0.0f);
+  brip_float_ops::fill_x_border(Iyy, 1, 0.0f);
+  brip_float_ops::fill_y_border(Iyy, 1, 0.0f);
   vcl_cout << "\nCompute a hessian matrix "<< w <<" x " << h << " image in "<< t.real() << " msecs.\n";
 }
 
@@ -397,7 +397,7 @@ brip_float_ops::beaudet(vil1_memory_image_of<float> const & Ixx,
         lambda0 = tr+vcl_sqrt(arg);
         lambda1 = tr-vcl_sqrt(arg);
       }
-      output(x,y)=lambda0*lambda1; //just det for now
+      output(x,y)=float(lambda0*lambda1); //just det for now
     }
   return output;
 }
@@ -438,20 +438,20 @@ brip_float_ops::grad_matrix_NxN(vil1_memory_image_of<float> const & input,
         for (int j = -n; j<=n; j++)
         {
           double gx = grad_x(x+i, y+j), gy = grad_y(x+i, y+j);
-          xx += gx*gx;
-          xy += gx*gy;
-          yy += gy*gy;
+          xx += float(gx*gx);
+          xy += float(gx*gy);
+          yy += float(gy*gy);
         }
       IxIx(x,y) = xx/N;
       IxIy(x,y) = xy/N;
       IyIy(x,y) = yy/N;
     }
-  brip_float_ops::fill_x_border(IxIx, n, 0.0);
-  brip_float_ops::fill_y_border(IxIx, n, 0.0);
-  brip_float_ops::fill_x_border(IxIy, n, 0.0);
-  brip_float_ops::fill_y_border(IxIy, n, 0.0);
-  brip_float_ops::fill_x_border(IyIy, n, 0.0);
-  brip_float_ops::fill_y_border(IyIy, n, 0.0);
+  brip_float_ops::fill_x_border(IxIx, n, 0.0f);
+  brip_float_ops::fill_y_border(IxIx, n, 0.0f);
+  brip_float_ops::fill_x_border(IxIy, n, 0.0f);
+  brip_float_ops::fill_y_border(IxIy, n, 0.0f);
+  brip_float_ops::fill_x_border(IyIy, n, 0.0f);
+  brip_float_ops::fill_y_border(IyIy, n, 0.0f);
   vcl_cout << "\nCompute a gradient matrix "<< w <<" x " << h << " image in "<< t.real() << " msecs.\n";
 }
 
@@ -463,7 +463,7 @@ brip_float_ops::harris(vil1_memory_image_of<float> const & IxIx,
 
 {
   int w = IxIx.width(), h = IxIx.height();
-  double norm = 1.0e-3;//Scale the output to values in the 10->1000.0 range
+  float norm = 1e-3f; // Scale the output to values in the 10->1000 range
   vil1_memory_image_of<float> output;
   output.resize(w, h);
   for (int y = 0; y<h; y++)
@@ -517,8 +517,8 @@ brip_float_ops::sqrt_grad_singular_values(vil1_memory_image_of<float> & input,
       double det = (IxIx*IyIy-IxIy*IxIy)/N;
       output(x,y)=(float)vcl_sqrt(vcl_fabs(det));
     }
-  brip_float_ops::fill_x_border(output, n, 0.0);
-  brip_float_ops::fill_y_border(output, n, 0.0);
+  brip_float_ops::fill_x_border(output, n, 0.0f);
+  brip_float_ops::fill_y_border(output, n, 0.0f);
   vcl_cout << "\nCompute sqrt(sigma0*sigma1) in" << t.real() << " msecs.\n";
   return output;
 }
@@ -565,24 +565,24 @@ brip_float_ops::Lucas_KanadeMotion(vil1_memory_image_of<float> & current_frame,
         }
       //Divide by the number of pixels in the neighborhood
       IxIx/=N;  IxIy/=N; IyIy/=N; IxIt/=N; IyIt/=N;
-      double det = (IxIx*IyIy-IxIy*IxIy);
+      float det = float(IxIx*IyIy-IxIy*IxIy);
       //Eliminate small motion factors
       double dif = diff(x,y);
       double motion_factor = vcl_fabs(det*dif);
       if (motion_factor<thresh)
       {
-        vx(x,y) = 0.0;
-        vy(x,y) = 0.0;
+        vx(x,y) = 0.0f;
+        vy(x,y) = 0.0f;
         continue;
       }
       //solve for the motion vector
-      vx(x,y) = (IyIy*IxIt-IxIy*IyIt)/det;
-      vy(x,y) = (-IxIy*IxIt + IxIx*IyIt)/det;
+      vx(x,y) = float(IyIy*IxIt-IxIy*IyIt)/det;
+      vy(x,y) = float(-IxIy*IxIt + IxIx*IyIt)/det;
     }
-  brip_float_ops::fill_x_border(vx, n, 0.0);
-  brip_float_ops::fill_y_border(vx, n, 0.0);
-  brip_float_ops::fill_x_border(vy, n, 0.0);
-  brip_float_ops::fill_y_border(vy, n, 0.0);
+  brip_float_ops::fill_x_border(vx, n, 0.0f);
+  brip_float_ops::fill_y_border(vx, n, 0.0f);
+  brip_float_ops::fill_x_border(vy, n, 0.0f);
+  brip_float_ops::fill_y_border(vy, n, 0.0f);
   vcl_cout << "\nCompute Lucas-Kanade in " << t.real() << " msecs.\n";
 }
 
@@ -638,10 +638,10 @@ brip_float_ops::convert_to_byte(vil1_memory_image_of<float> const & image)
       max_val = vnl_math_max(max_val, image(x,y));
     }
   float range = max_val-min_val;
-  if (!range)
-    range = 1.0;
+  if (range == 0.f)
+    range = 1.f;
   else
-    range = 255./range;
+    range = 255.f/range;
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
     {
@@ -661,10 +661,10 @@ brip_float_ops::convert_to_byte(vil1_memory_image_of<float> const & image,
   vil1_memory_image_of<unsigned char> output;
   output.resize(w,h);
   float range = max_val-min_val;
-  if (!range)
-    range = 1;
+  if (range == 0.f)
+    range = 1.f;
   else
-    range = 255.0/range;
+    range = 255.f/range;
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
     {
@@ -683,7 +683,7 @@ brip_float_ops::convert_to_short(vil1_memory_image_of<float> const & image,
                                  const float min_val, const float max_val)
 {
   int w = image.width(), h = image.height();
-  float max_short = 65355.0;
+  float max_short = 65355.f;
   vil1_memory_image_of<unsigned short> output;
   output.resize(w,h);
   float range = max_val-min_val;

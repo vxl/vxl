@@ -38,7 +38,7 @@ sdet_tracker::~sdet_tracker()
   for (vcl_vector<sdet_correlated_face*>::iterator
        cit = hypothesized_samples_.begin();
        cit != hypothesized_samples_.end(); cit++)
-    delete (*cit);
+    delete *cit;
   hypothesized_samples_.clear();
 }
 
@@ -93,7 +93,8 @@ void sdet_tracker::fill_face(vtol_intensity_face_sptr const& face,
   face->vertices(verts);
   for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
        vit != verts.end(); vit++)
-    p.push_back((*vit)->cast_to_vertex_2d()->x(), (*vit)->cast_to_vertex_2d()->y());
+    p.push_back(float((*vit)->cast_to_vertex_2d()->x()),
+                float((*vit)->cast_to_vertex_2d()->y()));
   vgl_polygon_scan_iterator psi(p, true);
 
   //go throught the pixels once to gather statistics for the face Npix etc.
@@ -103,7 +104,7 @@ void sdet_tracker::fill_face(vtol_intensity_face_sptr const& face,
       int y = psi.scany();
       if (x<0||x>=width||y<0||y>=height)
         continue;
-      face->IncrementMeans(x, y, img(x, y));
+      face->IncrementMeans(float(x), float(y), img(x, y));
     }
   face->InitPixelArrays();
   //Got through the pixels again to actually set the face arrays X(), Y() etc
@@ -113,7 +114,7 @@ void sdet_tracker::fill_face(vtol_intensity_face_sptr const& face,
       int y = psi.scany();
       if (x<0||x>=width||y<0||y>=height)
         continue;
-      face->InsertInPixelArrays(x, y, img(x, y));
+      face->InsertInPixelArrays(float(x), float(y), img(x, y));
     }
   vcl_cout << "Model Io " << face->Io() << "/n" << vcl_flush;
 }
@@ -152,8 +153,8 @@ sdet_tracker::transform_face(vtol_intensity_face_sptr const& face,
   unsigned short const* Ij = face->Ij();
   for (int i=0; i<npix; i++)
   {
-    X[i]=Xj[i]+tx;
-    Y[i]=Yj[i]+ty;
+    X[i]=Xj[i]+float(tx);
+    Y[i]=Yj[i]+float(ty);
     I[i]=Ij[i];
   }
   vcl_vector<vtol_vertex_sptr> verts, new_verts;
@@ -249,8 +250,8 @@ void sdet_tracker::correlate_face(vtol_intensity_face_sptr const& face,
 vtol_intensity_face_sptr
 sdet_tracker::generate_sample(vtol_intensity_face_sptr const& seed)
 {
-  float x = (2.0*search_radius_)*(rand()/(RAND_MAX+1.0)) - search_radius_;
-  float y = (2.0*search_radius_)*(rand()/(RAND_MAX+1.0)) - search_radius_;
+  float x = (2.f*search_radius_)*(rand()/(RAND_MAX+1.f)) - search_radius_;
+  float y = (2.f*search_radius_)*(rand()/(RAND_MAX+1.f)) - search_radius_;
   return this->transform_face(seed, x, y);
 }
 
@@ -261,7 +262,7 @@ void sdet_tracker::generate_samples()
   for (vcl_vector<sdet_correlated_face*>::iterator
        cit = hypothesized_samples_.begin();
        cit != hypothesized_samples_.end(); cit++)
-    delete (*cit);
+    delete *cit;
   hypothesized_samples_.clear();
   for (vcl_vector<vtol_intensity_face_sptr>::iterator fit =
        current_samples_.begin(); fit != current_samples_.end(); fit++)
@@ -331,6 +332,6 @@ void sdet_tracker::clear()
   for (vcl_vector<sdet_correlated_face*>::iterator
        cit = hypothesized_samples_.begin();
        cit != hypothesized_samples_.end(); cit++)
-    delete (*cit);
+    delete *cit;
   hypothesized_samples_.clear();
 }

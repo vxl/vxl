@@ -22,15 +22,15 @@ static int SD_FLAG = 2;
 vifa_histogram::vifa_histogram()
 {
   vals = new float [1];
-  vals[0] = 0.0;
+  vals[0] = 0.0f;
   counts = new float [1];
-  counts[0] = 0.0;
+  counts[0] = 0.0f;
   num = 0;
   vmin = 0;
   vmax = 0;
-  delta = 0.0;
-  mean = 0.0;
-  standard_dev = 0.0;
+  delta = 0.0f;
+  mean = 0.0f;
+  standard_dev = 0.0f;
   stats_consistent = 0;
   stats_consistent |= (MEAN_FLAG | SD_FLAG);
   delimiter = " ";
@@ -48,8 +48,8 @@ vifa_histogram::vifa_histogram(int xres, float val1, float val2)
   vmin = vcl_min(val2, val1);
 
   delta = (vmax - vmin) / xres;
-  mean = (vmax + vmin) / 2.0;
-  standard_dev = (vmax - vmin) / (2.0 * vcl_sqrt(3.0));
+  mean = (vmax + vmin) / 2.0f;
+  standard_dev = (vmax - vmin) / float(2 * vcl_sqrt(3.0));
   stats_consistent = 0;
   stats_consistent |= (MEAN_FLAG | SD_FLAG);
   delimiter = " ";
@@ -62,14 +62,14 @@ vifa_histogram::vifa_histogram(int xres, float val1, float val2)
     num = 0;
     vmin = 0;
     vmax = 0;
-    delta = 0.0;
+    delta = 0.0f;
   }
   else
   {
     for (int i = 0; i < xres; i++)
     {
-      vals[i] = vmin + (delta * (i + 0.5));
-      counts[i] = 0.0;
+      vals[i] = vmin + (delta * (i + 0.5f));
+      counts[i] = 0.0f;
     }
   }
 }
@@ -80,13 +80,13 @@ vifa_histogram::vifa_histogram(float* uvals, float* ucounts, int xres)
   vals = uvals;
   counts = ucounts;
   num = xres;
-  delta = vals[1] - vals[0]; // Changed this from delta = 1.0
+  delta = vals[1] - vals[0]; // Changed this from delta = 1.0f
   //  vmax = GetMaxVal();
   //  vmin = GetMinVal(); JAF version
   // MPP 7/1/2002
   // JimG - inconsistent with JLM's definition!
-  vmin = uvals[0] - (0.5 * delta);
-  vmax = uvals[num - 1] + (0.5 * delta);
+  vmin = uvals[0]     - 0.5f * delta;
+  vmax = uvals[num-1] + 0.5f * delta;
 
   mean = GetMean();
   standard_dev = GetStandardDev();
@@ -119,7 +119,7 @@ vifa_histogram::vifa_histogram(const vifa_histogram& h)
     num = 0;
     vmin = 0;
     vmax = 0;
-    delta = 0.0;
+    delta = 0.0f;
     stats_consistent = 0;
     return;
   }
@@ -169,17 +169,17 @@ vifa_histogram::vifa_histogram(vifa_histogram* his, float width, bool preserveCo
   int max_index = his->GetRes() - 1;
 
   // Range start
-  float minvalue = his->GetVals()[0] - (org_delta * 0.5);
+  float minvalue = his->GetVals()[0] - (org_delta * 0.5f);
 
   // Range end
-  float maxvalue = his->GetVals()[max_index] + (org_delta * 0.5);
+  float maxvalue = his->GetVals()[max_index] + (org_delta * 0.5f);
 
   // Initialize a new histogram
   if (width == org_delta)
   {
     num = his->GetRes();
   }
-  else if (!(width == 0.0))
+  else if (!(width == 0.0f))
   {
     // Any degenerate cases?
     num = (int)vcl_ceil((maxvalue - minvalue) / width);
@@ -195,8 +195,8 @@ vifa_histogram::vifa_histogram(vifa_histogram* his, float width, bool preserveCo
   delta = width;
 
   // Entire range of x-values, including endpoints of first & last bin
-  float mean_val = (maxvalue + minvalue) / 2.0;
-  float half_range = (num * delta) / 2.0;
+  float mean_val = (maxvalue + minvalue) * 0.5f;
+  float half_range = (num * delta) * 0.5f;
 
   // Endpoint to endpoint (inconsistent w/ JLM's definition!)
   vmax =  mean_val + half_range;
@@ -210,9 +210,9 @@ vifa_histogram::vifa_histogram(vifa_histogram* his, float width, bool preserveCo
     num = 0;
     vmin = 0;
     vmax = 0;
-    delta = 0.0;
-    mean = 0.0;
-    standard_dev = 0.0;
+    delta = 0.0f;
+    mean = 0.0f;
+    standard_dev = 0.0f;
     stats_consistent |= (MEAN_FLAG | SD_FLAG);
     return;
   }
@@ -221,8 +221,8 @@ vifa_histogram::vifa_histogram(vifa_histogram* his, float width, bool preserveCo
     for (int i = 0; i < num; i++)
     {
       // Inconsistent with JLM's definition!
-      vals[i] = vmin + (delta * (i + 0.5));
-      counts[i] = 0.0;
+      vals[i] = vmin + (delta * (i + 0.5f));
+      counts[i] = 0.0f;
     }
   }
 
@@ -245,10 +245,10 @@ vifa_histogram::vifa_histogram(vifa_histogram* his, float width, bool preserveCo
     //    Start
 
     // Midpoint of old first bucket
-    float his_start = minvalue + (0.5 * org_delta);
+    float his_start = minvalue + (0.5f * org_delta);
 
     // Inconsistent with JLM's definition!
-    float start = vmin + (0.5 * delta);
+    float start = vmin + (0.5f * delta);
 
     // Contents of first old bucket
     float c0 = his->GetCount(his_start);
@@ -277,10 +277,10 @@ vifa_histogram::vifa_histogram(vifa_histogram* his, float width, bool preserveCo
 
     //    End
     // Midpoint of last old bucket
-    float his_end = maxvalue - (0.5 * org_delta);
+    float his_end = maxvalue - (0.5f * org_delta);
 
     // Midpoint of last new bucket
-    float end = vmax - (0.5 * delta);
+    float end = vmax - (0.5f * delta);
 
     // Contents of last old bucket
     float cn = his->GetCount(his_end);
@@ -313,11 +313,11 @@ vifa_histogram::vifa_histogram(vifa_histogram* his, float width, bool preserveCo
       float cip1 = his->GetCount(z + org_delta);
 
       // Old bucket first derivative
-      float deriv = (cip1 - ci_1)/(2.0 * org_delta);
+      float deriv = (cip1 - ci_1)/(2.0f * org_delta);
 
       // Old bucket second derivative
       float second_drv =
-        (((cip1 + ci_1) / 2.0) - ci) / (org_delta * org_delta);
+        (((cip1 + ci_1) / 2.0f) - ci) / (org_delta * org_delta);
 
       // X-index in new histogram, based on old histogram value
       int fine_x_index = GetIndex(z);
@@ -365,10 +365,10 @@ vifa_histogram::vifa_histogram(vifa_histogram* his, float width, bool preserveCo
   if (org_delta < delta)
   {
     // Just accumulate samples from his into larger bins
-    if (org_delta != 0.0)
+    if (org_delta != 0.0f)
     {
-      float his_start = minvalue + (0.5 * org_delta);
-      float his_end = maxvalue - (0.5 * org_delta);
+      float his_start = minvalue + (0.5f * org_delta);
+      float his_end = maxvalue - (0.5f * org_delta);
       for (float x = his_start; x <= his_end;)
       {
         SetCount(x, GetCount(x) + his->GetCount(x));
@@ -400,14 +400,14 @@ vifa_histogram* vifa_histogram::Scale(float scale_factor)
   vifa_histogram* scaled_his = new vifa_histogram(this, delta);
   float* new_counts = scaled_his->GetCounts();
   for (int i = 0; i < num; i++)  // Initialize
-    new_counts[i] = 0.0;
+    new_counts[i] = 0.0f;
 
   // Compute scaled values
   // We assume that the new histogram is to be scaled down from his
 
   float scale = scale_factor;
-  if (scale_factor > 1.0)
-    scale = 1.0;
+  if (scale_factor > 1.0f)
+    scale = 1.0f;
 
   for (float x = highvalue; x > vmin;)
   {
@@ -434,7 +434,7 @@ vifa_histogram* vifa_histogram::Scale(float scale_factor)
 
     // Distribute the counts in proportion
 
-    new_counts[index] += (1.0 - abs_fraction) * counts[x_index];
+    new_counts[index] += (1.0f - abs_fraction) * counts[x_index];
     if (fraction > 0)
     {
       if (index < (num - 1))
@@ -488,8 +488,8 @@ vifa_histogram* vifa_histogram::Cumulative()
   //   lower bucket, vmin for cumulative histogram was incorrectly set by
   //   copy constructor above.  Let's reset vmin & vmax after cumulative
   //   counts have been filled in!
-  cum_his->vmin = cum_his->GetMinVal() - 0.5 * cum_his->GetBucketSize();
-  cum_his->vmax = cum_his->GetMaxVal() + 0.5 * cum_his->GetBucketSize();
+  cum_his->vmin = cum_his->GetMinVal() - 0.5f * cum_his->GetBucketSize();
+  cum_his->vmax = cum_his->GetMaxVal() + 0.5f * cum_his->GetBucketSize();
 
   return cum_his;
 }
@@ -682,34 +682,32 @@ vifa_histogram* vifa_histogram::NonMaximumSupress(int radius, bool cyclic)
 //: Compute the mean of the histogram population
 float vifa_histogram::GetMean()
 {
-  float xsum = 0.0;
+  float xsum = 0.0f;
   float minv = this->GetMinVal();
   float maxv = this->GetMaxVal();
-  double bucket_size = (double)this->GetBucketSize();
+  float bucket_size = this->GetBucketSize();
 
   if (MEAN_FLAG & stats_consistent)
     return mean;
   else
   {
-    if (bucket_size > 0.0)
+    if (bucket_size > 0.0f)
     {
-      for (double x=minv; x<=maxv; x+=bucket_size)
-      {
-        xsum += x*GetCount((float)x);
-      }
+      for (float x=minv; x<=maxv; x+=bucket_size)
+        xsum += x*GetCount(x);
     }
     else
     {
       stats_consistent |= MEAN_FLAG;
-      mean = (maxv+minv)/2.0;
+      mean = (maxv+minv)/2.0f;
       return mean;
     }
 
     float area = ComputeArea(vmin, vmax);
-    if (area <= 0.0)
+    if (area <= 0.0f)
     {
       //vcl_cerr << "vifa_histogram : Area <= 0.0\n";
-      return 0.0;
+      return 0.0f;
     }
     else
     {
@@ -719,9 +717,10 @@ float vifa_histogram::GetMean()
     }
   }
 }
+
 float vifa_histogram::GetStandardDev()
 {
-  float sum = 0.0;
+  float sum = 0.0f;
   double bucket_size = (double)this->GetBucketSize();
 
   if (SD_FLAG & stats_consistent)
@@ -730,26 +729,23 @@ float vifa_histogram::GetStandardDev()
   {
     float xm = this -> GetMean(); // Force an Update of Mean
 
-    if ( this->GetBucketSize() > 0.0)
+    if ( this->GetBucketSize() > 0.0f)
     {
-      for (double x=this->GetMinVal();
-           x<= this->GetMaxVal(); x += bucket_size)
-      {
-        sum += (x-xm)*(x-xm)*GetCount((float)x);
-      }
+      for (float x=this->GetMinVal(); x<= this->GetMaxVal(); x += bucket_size)
+        sum += (x-xm)*(x-xm)*GetCount(x);
     }
     else
     {
       stats_consistent |= SD_FLAG;
-      standard_dev = 0.0;
+      standard_dev = 0.0f;
       return standard_dev;
     }
 
     float area = ComputeArea(vmin, vmax);
-    if (area <= 0.0)
+    if (area <= 0.0f)
     {
       // vcl_cerr << "vifa_histogram : Area <= 0.0\n\n";
-      return 0.0;
+      return 0.0f;
     }
     else
     {
@@ -764,7 +760,7 @@ float vifa_histogram::GetMedian()
 {
   // step through each bin until num_so_far > num_samps / 2
   int i = 0;  // bin number
-  float num_samps_2 = 0.5 * GetNumSamples();
+  float num_samps_2 = 0.5f * GetNumSamples();
   float num_so_far  = 0;
   while (num_so_far < num_samps_2)
   {
@@ -800,7 +796,7 @@ int vifa_histogram::GetIndex(float pixelval)
     // Get a mid point.  mid will lie strictly in the range [low, high-1]
     int mid = (high + low - 1) / 2;
 
-    if (pixelval <= vals[mid] + 0.5*delta)
+    if (pixelval <= vals[mid] + 0.5f*delta)
     {
       // mid is in the yes set
       high = mid;
@@ -825,8 +821,8 @@ int vifa_histogram::GetValIndex(float pixelval)
 
   for (int i = 0; i < num; i++)
   {
-    if ((pixelval > (vals[i] - 0.5 * delta)) &&
-        (pixelval <= (vals[i] + 0.5 * delta)))
+    if ((pixelval > (vals[i] - 0.5f * delta)) &&
+        (pixelval <= (vals[i] + 0.5f * delta)))
     {
       idx = i;
       break;
@@ -859,15 +855,14 @@ float vifa_histogram::GetMaxVal()
   while (i>0 && !counts[i])
     i--;
   if (i < 0)
-    return 0.0;
+    return 0.0f;
   return vals[i];
 }
 
 float vifa_histogram::GetMaxCount()
 {
   register int i=0;
-  float max;
-  max = 0.0;
+  float max = 0.0f;
 
   for (i=0; i < num; i++)
   {
@@ -905,7 +900,7 @@ void vifa_histogram::UpCount(float pixelval, bool useNewIndexMethod)
     UpCount(pixelval);
 
   if (index >= 0)
-    counts[index] += 1.0;
+    counts[index] += 1.0f;
 }
 
 void vifa_histogram::UpCount(float pixelval)
@@ -914,7 +909,7 @@ void vifa_histogram::UpCount(float pixelval)
   int index = GetIndex(pixelval);
   if (index >= 0)  // Originally (index > 0)
   {
-    counts[index] += 1.0;
+    counts[index] += 1.0f;
   }
 }
 
@@ -961,7 +956,7 @@ float vifa_histogram::ComputeArea(float low, float high)
     }
 
     register int i=indexlow;
-    float sum = 0.0;
+    float sum = 0.0f;
     while (i <= indexhigh)
     {
       sum += counts[i];
@@ -972,7 +967,7 @@ float vifa_histogram::ComputeArea(float low, float high)
   }
   else
   {
-    return 0.0;
+    return 0.0f;
   }
 }
 //----------------------------------------------------------------------
@@ -998,17 +993,17 @@ float vifa_histogram::ComputeArea()
 float vifa_histogram::LowClipVal(float clip_fraction)
 {
   if (clip_fraction < 0)
-    clip_fraction = 0.0;
-  if (clip_fraction > 1.0)
-    clip_fraction = 1.0;
+    clip_fraction = 0.0f;
+  if (clip_fraction > 1.0f)
+    clip_fraction = 1.0f;
 
   float area = this->ComputeArea();
-  if (area == 0.0)
+  if (area == 0.0f)
     return this->GetMinVal();
 
-  if (clip_fraction == 0.0)
+  if (clip_fraction == 0.0f)
     return this->GetMinVal();
-  if (clip_fraction == 1.0)
+  if (clip_fraction == 1.0f)
     return this->GetMaxVal();
 
   float clip_area = area*clip_fraction;
@@ -1032,17 +1027,17 @@ float vifa_histogram::LowClipVal(float clip_fraction)
 float vifa_histogram::HighClipVal(float clip_fraction)
 {
   if (clip_fraction < 0)
-    clip_fraction = 0.0;
-  if (clip_fraction > 1.0)
-    clip_fraction = 1.0;
+    clip_fraction = 0.0f;
+  if (clip_fraction > 1.0f)
+    clip_fraction = 1.0f;
 
   float area = this->ComputeArea();
-  if (area==0.0)
+  if (area==0.0f)
     return this->GetMaxVal();
 
-  if (clip_fraction == 0.0)
+  if (clip_fraction == 0.0f)
     return this->GetMaxVal();
-  if (clip_fraction == 1.0)
+  if (clip_fraction == 1.0f)
     return this->GetMinVal();
 
   float clip_area = area * clip_fraction;
@@ -1126,8 +1121,8 @@ int vifa_histogram::WritePlot(const char *fname)
 
   for (register int i=0; i < stat_res ;i++)
   {
-    x[2*i] = temp_x[i] - 0.5 * delt;
-    x[2*i+1] = temp_x[i] + 0.5 * delt;
+    x[2*i] = temp_x[i] - 0.5f * delt;
+    x[2*i+1] = temp_x[i] + 0.5f * delt;
     y[2*i] = temp_y[i];
     y[2*i+1] = temp_y[i];
   }
@@ -1155,9 +1150,9 @@ float vifa_histogram::CompareToHistogram(vifa_histogram* h)
   float v2 = h->GetStandardDev();
 
   //We don't like singular situations
-  if ( (vcl_fabs(v1) < 1.0e-6) || (vcl_fabs(v2) < 1.0e-6) ) return 0.0;
-  if (m1==0||m2==0) return 0.0;//means exactly 0 indicate singular histogram
+  if ( vcl_fabs(v1) < 1e-6 || vcl_fabs(v2) < 1e-6 ) return 0.0f;
+  if (m1==0||m2==0) return 0.0f; //means exactly 0 indicate singular histogram
 
   // scale factor ln(2)/2 = 0.347 means M = 2 at exp = 0.5
-  return vcl_exp(- vcl_fabs( 0.693 * (m1 - m2) * vcl_sqrt(1.0/(v1*v1) + 1.0/(v2*v2))));
+  return (float)vcl_exp(- vcl_fabs( 0.693 * (m1 - m2) * vcl_sqrt(1.0/(v1*v1) + 1.0/(v2*v2))));
 }

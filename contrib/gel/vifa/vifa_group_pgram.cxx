@@ -2,6 +2,8 @@
 #include <vifa/vifa_group_pgram.h>
 //:
 // \file
+
+#include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_clip.h>
 #include <vgl/vgl_vector_2d.h>
@@ -93,11 +95,11 @@ Clear()
 vifa_histogram_sptr vifa_group_pgram::
 GetCoverageHist(void)
 {
-  vifa_histogram_sptr  h = new vifa_histogram(th_dim_, 0.0, angle_range_);
+  vifa_histogram_sptr  h = new vifa_histogram(th_dim_, 0.0f, angle_range_);
 
   float*  cnts = h->GetCounts();
   for (int i = 0; i < th_dim_; i++)
-    cnts[i] = this->LineCoverage(i);
+    cnts[i] = float(this->LineCoverage(i));
   return h;
 }
 
@@ -238,11 +240,11 @@ norm_parallel_line_length(void)
   if (dominant_dirs_.size() < 1)
   {
     // No basis
-    return 0;
+    return 0.0;
   }
 
-  double            max_cover = 0.0;
-  int              max_dir = 0;
+  double max_cover = 0.0;
+  int    max_dir = 0;
   vcl_vector<int>::iterator  iit = dominant_dirs_.begin();
   for (; iit != dominant_dirs_.end(); iit++)
   {
@@ -281,17 +283,14 @@ int vifa_group_pgram::
 AngleLoc(imp_line_sptr  il)
 {
   // Compute angle index
-  double  angle = il->slope_degrees();
-  while (angle < 0.0)
+  double  angle = vcl_fmod(il->slope_degrees(), 180.0);
+  if (angle < 0.0)
     angle += 180.0;
-  while (angle >= 180.0)
-    angle -= 180.0;
 
   if (angle > angle_range_)
   {
     vcl_cerr << "In vifa_group_pgram::AngleLoc(): angle " << angle
              << " was outside the angle range " << angle_range_ << vcl_endl;
-
     return 0;
   }
 

@@ -10,10 +10,10 @@ vifa_int_face_attr(sdet_fit_lines_params*  fitter_params,
                    vifa_norm_params*    np) :
   vifa_int_face_attr_common(fitter_params, gpp, gpp_w, 0, np),
   face_(NULL),
-  cached_min_(0.0),
-  cached_max_(0.0),
-  cached_mean_(0.0),
-  cached_var_(0.0),
+  cached_min_(0.0f),
+  cached_max_(0.0f),
+  cached_mean_(0.0f),
+  cached_var_(0.0f),
   npobj_(0)
 {
 }
@@ -26,10 +26,10 @@ vifa_int_face_attr(vtol_intensity_face_sptr f,
                    vifa_norm_params*    np) :
   vifa_int_face_attr_common(fitter_params, gpp, gpp_w, 0, np),
   face_(f),
-  cached_min_(0.0),
-  cached_max_(0.0),
-  cached_mean_(0.0),
-  cached_var_(0.0),
+  cached_min_(0.0f),
+  cached_max_(0.0f),
+  cached_mean_(0.0f),
+  cached_var_(0.0f),
   cached_2_parallel_(-1),
   cached_4_parallel_(-1),
   cached_80_parallel_(-1),
@@ -178,7 +178,7 @@ float vifa_int_face_attr::
 PerimeterLength()
 {
   if (peri_length_ < 0)
-    peri_length_ = face_->perimeter();
+    peri_length_ = float(face_->perimeter());
 
   return peri_length_;
 }
@@ -191,8 +191,8 @@ WeightedPerimeterLength()
     // Block-copied from intensity face rather than undergo the pain
     // of adding a "weighted" boolean parameter
     edge_list*  edges = face_->edges();
-    float    p = 0.0;
-    float    intensity_sum = 1.0;
+    float    p = 0.0f;
+    float    intensity_sum = 1.0f;
 
     if (edges)
     {
@@ -204,9 +204,9 @@ WeightedPerimeterLength()
         {
           // Leave at default of 1.0 if no adjacent face
           float  int_grad =
-            get_contrast_across_edge(e->cast_to_edge(), 1.0);
+            get_contrast_across_edge(e->cast_to_edge(), 1.0f);
 
-          p += e->curve()->length() * int_grad;
+          p += float(e->curve()->length()) * int_grad;
           intensity_sum += int_grad;
         }
       }
@@ -298,7 +298,7 @@ EightyPercentParallel()
   {
     SetNP();
 
-    for (int i=0; i < 20 && npobj_->area() > 0.3; ++i)
+    for (int i=0; i < 20 && npobj_->area() > 0.3f; ++i)
     {
       float  max_angle, std_dev, scale;
       npobj_->map_gaussian(max_angle, std_dev, scale);
@@ -319,8 +319,8 @@ ComputeCacheValues()
   // Sanity check -- can happen if face has 0 pixels...
   if (real_min > real_max)
   {
-    real_min = 0.0;
-    real_max = 1.0;  // Superstitous, probably could also be zero?
+    real_min = 0.0f;
+    real_max = 1.0f;  // Superstitous, probably could also be zero?
   }
 
   int        max_bins = int(real_max - real_min + 1);
@@ -348,7 +348,7 @@ ComputeCacheValues()
   cached_max_ = normalize_intensity(intensity_hist.LowClipVal(0.9f));
   cached_mean_ = normalize_intensity(face_->Io());
 
-  float          sum = 0.0;
+  float          sum = 0.0f;
   const unsigned short*  pvals = face_->Ij();
 
   for (int i = 0; i < face_->Npix(); i++)

@@ -137,7 +137,7 @@ StrongParallelSal()
   {
     if (!gpp_s_.ptr())
     {
-      const float  angle_increment = 5.0;
+      const float  angle_increment = 5.f;
       gpp_s_ = new vifa_group_pgram_params(angle_increment);
     }
 
@@ -154,7 +154,7 @@ WeakParallelSal()
   {
     if (!gpp_w_.ptr())
     {
-      const float  angle_increment = 20.0;
+      const float  angle_increment = 20.f;
       gpp_w_ = new vifa_group_pgram_params(angle_increment);
     }
 
@@ -358,7 +358,7 @@ find_collinear_match(vtol_edge_2d_sptr edge,
 float vifa_int_face_attr_common::
 compute_parallel_sal(vifa_group_pgram_params_sptr  gpp)
 {
-  float      sal = 0.0;
+  float      sal = 0.f;
   edge_2d_list  fedges = this->GetFittedEdges();
 
 //  vcl_cout << "ifac::compute_parallel_sal(): " << fedges.size()
@@ -368,18 +368,14 @@ compute_parallel_sal(vifa_group_pgram_params_sptr  gpp)
   {
 //    vcl_cout << (*fitter_params_);
 
-    float        total_len = 0.0;
-    int          nlines = 0;
+    float    total_len = 0.f;
+    int      nlines = 0;
     imp_line_list    lg_filtered;
-    edge_2d_iterator  ei = fedges.begin();
-    int          i = 0;
-    for (; ei != fedges.end(); ei++, i++)
+    for (edge_2d_iterator ei = fedges.begin(); ei != fedges.end(); ++ei)
     {
       vsol_curve_2d_sptr  cur = (*ei)->curve();
-      float        len = cur->length();
+      float        len = float(cur->length());
       total_len += len;
-
-//      vcl_cout << "  edge #" << i << " curve length: " << len << vcl_endl;
 
       if (len >= fitter_params_->min_fit_length_)
       {
@@ -403,7 +399,7 @@ compute_parallel_sal(vifa_group_pgram_params_sptr  gpp)
       gp.SetTemp1(total_len);
 
       // Get the resultant value
-      sal = gp.norm_parallel_line_length();
+      sal = float(gp.norm_parallel_line_length());
     }
   }
 

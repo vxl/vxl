@@ -73,68 +73,68 @@ inline void vil_cartesian_differential_invariants_3_1plane(
     {
       // I1 = LiLi=LxLx+LyLy
       // cdi(1,:,:)=(Lx.*Lx)+(Ly.*Ly);
-      dest(j,i,0)= (Lx(i,j)*Lx(i,j))
-                  +(Ly(i,j)*Ly(i,j));
+      dest(j,i,0)= Lx(i,j)*Lx(i,j)
+                  +Ly(i,j)*Ly(i,j);
 
       // LiLijLj=LxxLxLx+2LxLxyLy+LyyLyLy
       // cdi(2,:,:)=(Lxx.*Lx.*Lx)+(2.*Lx.*Lxy.*Ly)+(Lyy.*Ly.*Ly);
-      dest(j,i,1)= (Lxx(i,j)*Lx(i,j)*Lx(i,j))
-                  +(2.0*Lx(i,j)*Lxy(i,j)*Ly(i,j))
-                  +(Lyy(i,j)*Ly(i,j)*Ly(i,j));
+      dest(j,i,1)= Lxx(i,j)*Lx(i,j)*Lx(i,j)
+                  +T(2)*Lx(i,j)*Lxy(i,j)*Ly(i,j)
+                  +Lyy(i,j)*Ly(i,j)*Ly(i,j);
 
       // %LiiLjLj-LijLiLj=LxxLyLy-2LxyLxLy+LyyLxLx
       // cdi(3,:,:)=(Lxx.*Ly.*Ly)-(2.*Lxy.*Lx.*Ly)+(Lyy.*Lx.*Lx);
-      dest(j,i,2)= (Lxx(i,j)*Ly(i,j)*Ly(i,j))
-                  -(2.0*Lxy(i,j)*Lx(i,j)*Ly(i,j))
-                  +(Lyy(i,j)*Lx(i,j)*Lx(i,j));
+      dest(j,i,2)= Lxx(i,j)*Ly(i,j)*Ly(i,j)
+                  -T(2)*Lxy(i,j)*Lx(i,j)*Ly(i,j)
+                  +Lyy(i,j)*Lx(i,j)*Lx(i,j);
 
 
       // %-eijLjkLiLk=LxxLxLy+LxyLyLy-LyyLxLy-LxyLxLx
       // cdi(4,:,:)=(Lxx.*Lx.*Ly)+(Lxy.*Ly.*Ly)-(Lyy.*Lx.*Ly)-(Lxy.*Lx.*Lx);
-      dest(j,i,3)= (Lxx(i,j)*Lx(i,j)*Ly(i,j))
-                  +(Lxy(i,j)*Ly(i,j)*Ly(i,j))
-                  -(Lyy(i,j)*Lx(i,j)*Ly(i,j))
-                  -(Lxy(i,j)*Lx(i,j)*Lx(i,j));
+      dest(j,i,3)= Lxx(i,j)*Lx(i,j)*Ly(i,j)
+                  +Lxy(i,j)*Ly(i,j)*Ly(i,j)
+                  -Lyy(i,j)*Lx(i,j)*Ly(i,j)
+                  -Lxy(i,j)*Lx(i,j)*Lx(i,j);
 
       // %eij(LjklLiLkLl-LjkkLiLlLl)=(2LxyyLxLxLy)-(2LxxyLxLyLy)-(LxxyLxLyLy)-(LyyyLxLxLx)+(LxyyLyLxLx)+(LxxxLyLyLy)
       // cdi(5,:,:) = (2.*Lxyy.*Lx.*Lx.*Ly)-(2.*Lxxy.*Lx.*Ly.*Ly)-(Lxxy.*Lx.*Ly.*Ly)
       //             -(Lyyy.*Lx.*Lx.*Lx)+(Lxyy.*Ly.*Lx.*Lx)+(Lxxx.*Ly.*Ly.*Ly);
-      dest(j,i,4)= (2.0*Lxyy(i,j)*Lx(i,j)*Lx(i,j)*Ly(i,j))
-                  -(2.0*Lxxy(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j))
-                  -(Lxxy(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j))
-                  -(Lyyy(i,j)*Lx(i,j)*Lx(i,j)*Lx(i,j))
-                  +(Lxyy(i,j)*Ly(i,j)*Lx(i,j)*Lx(i,j))
-                  +(Lxxx(i,j)*Ly(i,j)*Ly(i,j)*Ly(i,j));
+      dest(j,i,4)= T(2)*Lxyy(i,j)*Lx(i,j)*Lx(i,j)*Ly(i,j)
+                  -T(2)*Lxxy(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j)
+                  -Lxxy(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j)
+                  -Lyyy(i,j)*Lx(i,j)*Lx(i,j)*Lx(i,j)
+                  +Lxyy(i,j)*Ly(i,j)*Lx(i,j)*Lx(i,j)
+                  +Lxxx(i,j)*Ly(i,j)*Ly(i,j)*Ly(i,j);
 
 
       // %LiijLjLkLk-LijkLiLjLk=(LxxxLxLyLy)-(2LxxyLxLxLy)+(LxxyLyLyLy)+(LxyyLxLxLx)-(2LxyyLxLyLy)+(LyyylxLxLy)
       // cdi(6,:,:) = (Lxxx.*Lx.*Ly.*Ly)-(2.*Lxxy.*Lx.*Lx.*Ly)+(Lxxy.*Ly.*Ly.*Ly)
       //             +(Lxyy.*Lx.*Lx.*Lx)-(2.*Lxyy.*Lx.*Ly.*Ly)+(Lyyy.*Lx.*Lx.*Ly);
-      dest(j,i,5)= (Lxxx(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j))
-                  -(2.0*Lxxy(i,j)*Lx(i,j)*Lx(i,j)*Ly(i,j))
-                  +(Lxxy(i,j)*Ly(i,j)*Ly(i,j)*Ly(i,j))
-                  +(Lxyy(i,j)*Lx(i,j)*Lx(i,j)*Lx(i,j))
-                  -(2.0*Lxyy(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j))
-                  +(Lyyy(i,j)*Lx(i,j)*Lx(i,j)*Ly(i,j));
+      dest(j,i,5)= Lxxx(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j)
+                  -T(2)*Lxxy(i,j)*Lx(i,j)*Lx(i,j)*Ly(i,j)
+                  +Lxxy(i,j)*Ly(i,j)*Ly(i,j)*Ly(i,j)
+                  +Lxyy(i,j)*Lx(i,j)*Lx(i,j)*Lx(i,j)
+                  -T(2)*Lxyy(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j)
+                  +Lyyy(i,j)*Lx(i,j)*Lx(i,j)*Ly(i,j);
 
 
       // %-eijLjklLiLkLl=(LxxxLxLxLy)+(2LxxyLxLyLy)+(LxyyLyLyLy)-(LyyyLxLyLy)-(2LxyyLxLxLy)-(LxxyLxLxLx)
       // cdi(7,:,:) = (Lxxx.*Lx.*Lx.*Ly)+(2.*Lxxy.*Lx.*Ly.*Ly)+(Lxyy.*Ly.*Ly.*Ly)
       //             -(Lyyy.*Lx.*Ly.*Ly)-(2.*Lxyy.*Lx.*Lx.*Ly)-(Lxxy.*Lx.*Lx.*Lx);
-      dest(j,i,6)= (Lxxx(i,j)*Lx(i,j)*Lx(i,j)*Ly(i,j))
-                  +(2.0*Lxxy(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j))
-                  +(Lxyy(i,j)*Ly(i,j)*Ly(i,j)*Ly(i,j))
-                  -(Lyyy(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j))
-                  -(2.0*Lxyy(i,j)*Lx(i,j)*Lx(i,j)*Ly(i,j))
-                  -(Lxxy(i,j)*Lx(i,j)*Lx(i,j)*Lx(i,j));
+      dest(j,i,6)= Lxxx(i,j)*Lx(i,j)*Lx(i,j)*Ly(i,j)
+                  +T(2)*Lxxy(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j)
+                  +Lxyy(i,j)*Ly(i,j)*Ly(i,j)*Ly(i,j)
+                  -Lyyy(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j)
+                  -T(2)*Lxyy(i,j)*Lx(i,j)*Lx(i,j)*Ly(i,j)
+                  -Lxxy(i,j)*Lx(i,j)*Lx(i,j)*Lx(i,j);
 
 
       // %LijkLiLjLk=(LxxxLxLxLx)+(LyyyLyLyLy)+(3LxxyLxLxLy)+(3LxyyLxLyLy)
       // cdi(8,:,:)=(Lxxx.*Lx.*Lx.*Lx)+(Lyyy.*Ly.*Ly.*Ly)+(3.*Lxxy.*Lx.*Lx.*Ly)+(3.*Lxyy.*Lx.*Ly.*Ly);
-      dest(j,i,7)= (Lxxx(i,j)*Lx(i,j)*Lx(i,j)*Lx(i,j))
-                  +(Lyyy(i,j)*Ly(i,j)*Ly(i,j)*Ly(i,j))
-                  +(3.0*Lxxy(i,j)*Lx(i,j)*Lx(i,j)*Ly(i,j))
-                  +(3.0*Lxyy(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j));
+      dest(j,i,7)= Lxxx(i,j)*Lx(i,j)*Lx(i,j)*Lx(i,j)
+                  +Lyyy(i,j)*Ly(i,j)*Ly(i,j)*Ly(i,j)
+                  +T(3)*Lxxy(i,j)*Lx(i,j)*Lx(i,j)*Ly(i,j)
+                  +T(3)*Lxyy(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j);
     }
   }
 }

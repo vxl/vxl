@@ -274,9 +274,9 @@ Collinearity()
   compute_closure();
   get_collinear_lines();
 
-  float    u_len = 0.0;
-  float    w_len = 0.0;
-  float    coll = 0.0;
+  float    u_len = 0.0f;
+  float    w_len = 0.0f;
+  float    coll = 0.0f;
   edge_list*  edges = seed_->edges();
 
   if (edges)
@@ -291,16 +291,15 @@ Collinearity()
 
         if (clr)
         {
-          float  len = e->curve()->length();
-          u_len += len;
-          w_len += clr->spanning_length();
+          u_len += float(e->curve()->length());
+          w_len += float(clr->spanning_length());
         }
       }
     }
 
     delete edges;
 
-    if (u_len > 0.0)
+    if (u_len > 0.0f)
       coll = w_len / u_len;
   }
 
@@ -324,8 +323,8 @@ GetMinRatioAttr(int attr_index)
 void vifa_int_faces_adj_attr::
 init()
 {
-  junk_percent_ = 0.0;
-  junk_area_ratio_ = 0.0;
+  junk_percent_ = 0.0f;
+  junk_area_ratio_ = 0.0f;
 
   int    n = NumHistAttributes();
   mean_ratios_.reserve(n);

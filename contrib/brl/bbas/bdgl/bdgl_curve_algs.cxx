@@ -315,10 +315,10 @@ int bdgl_curve_algs::add_straight_edgels(vdgl_edgel_chain_sptr const& ec,
     return 0;
   }
 
-  double xs = (*ec)[last].x(), ys = (*ec)[last].y();
+  float xs = float((*ec)[last].x()), ys = float((*ec)[last].y());
   bool first = true, init = true, done = false;
   float x, y;
-  while (bdgl_curve_algs::line_gen(xs, ys, xe, ye, init, done, x, y))
+  while (bdgl_curve_algs::line_gen(xs, ys, float(xe), float(ye), init, done, x, y))
     if (!first)
     {
       vdgl_edgel ed(x, y, bdgl_curve_algs::synthetic);

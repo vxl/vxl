@@ -18,7 +18,7 @@ test_gevd_noise()
   const int size=100000;
   vnl_sample_reseed();
   float data[size];
-  for (int i=0; i<size; ++i) data[i]=vnl_sample_uniform(0,2);
+  for (int i=0; i<size; ++i) data[i]=(float)vnl_sample_uniform(0,2);
   gevd_noise noise_estim(data,size);
   float sensor_noise, texture_noise;
   noise_estim.EstimateSensorTexture(sensor_noise, texture_noise);
