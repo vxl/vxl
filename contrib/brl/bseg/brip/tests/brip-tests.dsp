@@ -225,6 +225,15 @@ SOURCE=.\test_mutual_info.cxx
 SOURCE=.\test_watershed.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_fourier.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_homography.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_lucas_kanade.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
