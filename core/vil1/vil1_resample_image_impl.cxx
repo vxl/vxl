@@ -66,7 +66,7 @@ bool vil_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int 
   }
   
   // switch on pixel type:
-  switch ( vil_pixel_type(base) ) {
+  switch ( vil_pixel_format(base) ) {
   case VIL_BYTE:
     return vil_resample_image(base, new_width, new_height, 
 			(vil_byte*)buf, (unsigned*)0,
