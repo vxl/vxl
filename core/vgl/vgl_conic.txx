@@ -68,7 +68,7 @@ bool vgl_conic<T>::operator==(vgl_conic<T> const& that) const
         && c()*that.f() == f()*that.c()
         && d()*that.e() == e()*that.d()
         && d()*that.f() == f()*that.d()
-        && e()*that.f() == f()*that.e());
+        && e()*that.f() == f()*that.e();
 }
 
 //-------------------------------------------------------------
