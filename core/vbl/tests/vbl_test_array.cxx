@@ -45,6 +45,6 @@ int main(int, char **)
 }
 
 #if use_vbl
-# include <vbl/vbl_array.txx>
-VBL_ARRAY_INSTANTIATE(X);
+# include <vbl/vbl_array_1d.txx>
+VBL_ARRAY_1D_INSTANTIATE(X);
 #endif
