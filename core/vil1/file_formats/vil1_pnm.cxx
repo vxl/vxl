@@ -104,7 +104,7 @@ vil_pnm_generic_image::vil_pnm_generic_image(vil_stream* vs, int planes,
     maxval_ = 0xFFFFFF;
     bits_per_component_ = 24;
   } else if (bits_per_component_ <= 32) {
-    maxval_ = 0xFFFFFFFF;
+    maxval_ = 0x7FFFFFFF; // not 0xFFFFFFFF as the pnm format does not allow values > MAX_INT
   } else { 
     vcl_cerr << "vil_pnm_generic_image: cannot make  " << bits_per_component_ << " bit x " << components_ << " image\n";
   }
