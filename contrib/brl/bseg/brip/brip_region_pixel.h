@@ -29,17 +29,17 @@ class brip_region_pixel : public vbl_ref_count
   int dist_;
 
   brip_region_pixel()
-    : location_(0,0), nearest_(0,0), cost_(0.0f),
+    : vbl_ref_count(), location_(0,0), nearest_(0,0), cost_(0.0f),
       count_(0), label_(0), dist_(0) {}
   brip_region_pixel(brip_region_pixel const& p)
-    : location_(p.location_), nearest_(p.nearest_), cost_(p.cost_),
-      count_(p.count_), label_(p.label_), dist_(p.dist_) {}
+    : vbl_ref_count(), location_(p.location_), nearest_(p.nearest_),
+      cost_(p.cost_), count_(p.count_), label_(p.label_), dist_(p.dist_) {}
   brip_region_pixel(vgl_point_2d<int> const& location,
                     vgl_point_2d<int> const& nearest,
                     float const& cost,
                     int const count,
                     unsigned int const& label)
-    : location_(location), nearest_(nearest), cost_(cost),
+    : vbl_ref_count(), location_(location), nearest_(nearest), cost_(cost),
       count_(count), label_(label)
   {
     int dx = location_.x() - nearest_.x();
@@ -47,11 +47,11 @@ class brip_region_pixel : public vbl_ref_count
     dist_ = dx * dx + dy * dy;
   }
 
-  void set(vgl_point_2d<int> const & location,
-           vgl_point_2d<int> const & nearest,
-           float const & cost,
-           int const & count,
-           int const & label)
+  void set(vgl_point_2d<int> const& location,
+           vgl_point_2d<int> const& nearest,
+           float const& cost,
+           int   const& count,
+           int   const& label)
   {
     location_ = location;
     nearest_ = nearest;
@@ -66,8 +66,8 @@ class brip_region_pixel : public vbl_ref_count
   // must implement comparison since priority_queue looks for largest element
   struct compare
   {
-    bool operator()(brip_region_pixel const & l,
-                    brip_region_pixel const & r) const
+    bool operator()(brip_region_pixel const& l,
+                    brip_region_pixel const& r) const
     {
       if (r.cost_ == l.cost_)
       {
@@ -80,8 +80,8 @@ class brip_region_pixel : public vbl_ref_count
     }
 
 
-    bool operator()(brip_region_pixel_sptr const & l,
-                    brip_region_pixel_sptr const & r) const
+    bool operator()(brip_region_pixel_sptr const& l,
+                    brip_region_pixel_sptr const& r) const
     {
       if (r->cost_ == l->cost_)
       {
