@@ -30,7 +30,9 @@ double method1(vil2_image_view<imT>& image,
       sum+=(double) image(x[i],y[i]);
   }
   vcl_time_t t1=vcl_clock();
+  vcl_cout << sum;
   return 1e9*(double(t1)-double(t0))/(double(n_pts)*n_loops*CLOCKS_PER_SEC);
+  
 }
 
 template <class imT>
@@ -45,6 +47,7 @@ double method2(vil2_image_view<imT>& image,
       sum+=(double) image.top_left_ptr()[x[i]*image.istep()+y[i]*image.jstep()];
   }
   vcl_time_t t1=vcl_clock();
+  vcl_cout << sum;
   return 1e9*(double(t1)-double(t0))/(double(n_pts)*n_loops*CLOCKS_PER_SEC);
 }
 
@@ -72,6 +75,7 @@ double method3(vil2_image_view<imT>& image,
       sum+=(double) raster_ptrs[y[i]][x[i]];
   }
   vcl_time_t t1=vcl_clock();
+  vcl_cout << sum;
   return 1e9*(double(t1)-double(t0))/(double(n_pts)*n_loops*CLOCKS_PER_SEC);
 }
 
@@ -96,8 +100,9 @@ void compute_stats(int i, vil2_image_view<imT>& image,
                    const int* x, const int* y, int n_pts, int n_loops)
 {
   mbl_stats_1d stats;
+  vcl_cout << "\t\t\t\t";
   for (int j=0;j<10;++j) stats.obs(method(i,image,x,y,n_pts,n_loops));
-  vcl_cout<<"Method "<<i<<") Mean: "<<0.1*int(10*stats.mean()+5)
+  vcl_cout<<"\nMethod "<<i<<") Mean: "<<0.1*int(10*stats.mean()+5)
           <<"ns  +/-"<<0.1*int(5*(stats.max()-stats.min())+5)<<"ns"<<vcl_endl;
 }
 
@@ -153,6 +158,7 @@ double bilin_method1(vil2_image_view<imT>& image, int n_pts, int n_loops, double
        sum+=(double) bilin_interp1(x,y,plane,istep,jstep);
   }
   vcl_time_t t1=vcl_clock();
+  vcl_cout << sum;
   return 1e9*(double(t1)-double(t0))/(double(n_pts)*n_loops*CLOCKS_PER_SEC);
 }
 
@@ -168,6 +174,7 @@ double bilin_method2(vil2_image_view<imT>& image, int n_pts, int n_loops, double
       sum+=(double) bilin_interp1(x,y,image.top_left_ptr(),image.istep(),image.jstep());
   }
   vcl_time_t t1=vcl_clock();
+  vcl_cout << sum;
   return 1e9*(double(t1)-double(t0))/(double(n_pts)*n_loops*CLOCKS_PER_SEC);
 }
 
@@ -194,6 +201,7 @@ double bilin_method3(vil2_image_view<imT>& image, int n_pts, int n_loops, double
       sum+=(double) bilin_interp2(x,y,raster_ptrs);
   }
   vcl_time_t t1=vcl_clock();
+  vcl_cout << sum;
   return 1e9*(double(t1)-double(t0))/(double(n_pts)*n_loops*CLOCKS_PER_SEC);
 }
 
@@ -215,8 +223,9 @@ template <class imT>
 void compute_bilin_stats(int i, vil2_image_view<imT>& image,int n_pts, int n_loops)
 {
   mbl_stats_1d stats;
+  vcl_cout << "\t\t\t\t";
   for (int j=0;j<10;++j) stats.obs(bilin_method(i,image,n_pts,n_loops));
-  vcl_cout<<"Bilin. Method "<<i<<") Mean: "<<0.1*int(10*stats.mean()+5)
+  vcl_cout<<"\nBilin. Method "<<i<<") Mean: "<<0.1*int(10*stats.mean()+5)
           <<"ns  +/-"<<0.1*int(5*(stats.max()-stats.min())+5)<<"ns"<<vcl_endl;
 }
 
