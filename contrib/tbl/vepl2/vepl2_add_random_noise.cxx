@@ -7,7 +7,7 @@
 #include <vipl/vipl_add_random_noise.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_pixel_format.h>
-#include <vil/vil_rgb.h>
+#include <vil2/vil2_rgb.h>
 #include <vxl_config.h> // for vxl_byte
 
 vil2_image_view_base_sptr vepl2_add_random_noise(vil2_image_view_base const& image, double maxdev)
@@ -15,7 +15,7 @@ vil2_image_view_base_sptr vepl2_add_random_noise(vil2_image_view_base const& ima
   // byte rgb
   if (image.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE)
   {
-    vil2_image_view<vil_rgb<vxl_byte> >* out = new vil2_image_view<vil_rgb<vxl_byte> >(image.ni(),image.nj(),image.nplanes());
+    vil2_image_view<vil2_rgb<vxl_byte> >* out = new vil2_image_view<vil2_rgb<vxl_byte> >(image.ni(),image.nj(),image.nplanes());
     vipl_add_random_noise<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte>
       op(GAUSSIAN_NOISE,maxdev);
     op.put_in_data_ptr(&image);
