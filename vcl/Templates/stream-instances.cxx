@@ -16,6 +16,7 @@ template vcl_ostream & operator<<(vcl_ostream &, smanip<int> const &);
 # endif
 #endif
 
+#if 0  // not needed as of 2001/05/19
 #if defined(GNU_LIBSTDCXX_V3)
 # include <bits/sstream.tcc>
 # include <bits/istream.tcc>
@@ -28,6 +29,7 @@ namespace {
   void tic(vcl_ostream &s, int x) { s << std::setw(14) << x; }
   template std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >;
 }
+#endif
 #endif
 
 
