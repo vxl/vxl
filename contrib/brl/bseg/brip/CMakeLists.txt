@@ -4,6 +4,7 @@
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 SET(brip_sources
    brip_float_ops.cxx    brip_float_ops.h
+   brip_roi.cxx    brip_roi.h
 )
 AUX_SOURCE_DIRECTORY(Templates brip_sources)
 

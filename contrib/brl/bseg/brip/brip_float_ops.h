@@ -145,6 +145,9 @@ class brip_float_ops
   //: loads a 2n+1 x 2n+1 convolution kernel (see .cxx for file format)
   static vbl_array_2d<float> load_kernel(vcl_string const & file);
 
+  //:compute basis images for a set of input images
+  static 
+    void basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images, vcl_vector<vil1_memory_image_of<float> > & basis);
  private:
 
   //:find if the center pixel of a neighborhood is the maximum value
@@ -159,6 +162,8 @@ class brip_float_ops
   static void half_resolution_1d(const float* input, int n, 
                                  const float k0, const float k1,
                                  const float k2, float* output);
+  
+  
   brip_float_ops() {}
 };
 

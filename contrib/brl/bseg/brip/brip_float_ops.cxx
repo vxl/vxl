@@ -6,6 +6,7 @@
 #include <vul/vul_timer.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
+#include <vnl/algo/vnl_svd.h>
 #include <vil1/vil1_smooth.h>
 
 //------------------------------------------------------------
@@ -328,7 +329,7 @@ void brip_float_ops::gradient_3x3(vil1_memory_image_of<float> const & input,
   brip_float_ops::fill_y_border(grad_x, 1, 0.0f);
   brip_float_ops::fill_x_border(grad_y, 1, 0.0f);
   brip_float_ops::fill_y_border(grad_y, 1, 0.0f);
-  vcl_cout << "\nCompute Gradient in " << t.real() << " msecs.\n";
+  //  vcl_cout << "\nCompute Gradient in " << t.real() << " msecs.\n";
 }
 
 //----------------------------------------------------------------
@@ -825,4 +826,76 @@ vbl_array_2d<float> brip_float_ops::load_kernel(vcl_string const & file)
     vcl_cout << '\n';
   }
   return output;
+}
+
+static void insert_image(vil1_memory_image_of<float> const& image, int col, 
+                         vnl_matrix<double> & I)
+{
+  int width = image.width(), height = image.height(), row=0;
+  for(int y =0; y<height; y++)
+    for(int x = 0; x<width; x++, row++)
+      I.put(row, col, (double)image(x,y));
+}
+
+void brip_float_ops::
+basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images,
+             vcl_vector<vil1_memory_image_of<float> > & basis)
+{
+  basis.clear();
+  int n_images = input_images.size();
+  if(!n_images)
+    {
+      vcl_cout << "In brip_float_ops::basis_images(.) - no input images\n";
+      return;
+    }
+  int width = input_images[0].width(), height = input_images[0].height();
+  int npix = width*height;
+
+  //Insert the images into matrix I
+  vnl_matrix<double> I(npix, n_images, 0.0);
+  for(int i = 0; i<n_images; i++)
+    insert_image(input_images[i], i, I);
+
+  //Compute the SVD of matrix I
+  vcl_cout << "Computing Singular values of a " <<  npix << " by " 
+           << n_images << " matrix" << "\n";
+  vul_timer t;
+  vnl_svd<double> svd(I);
+  vcl_cout << "SVD Took " << t.real() << " msecs \n";;
+  vcl_cout << "Eigenvalues:\n";
+  for(int i = 0; i<n_images; i++)
+    vcl_cout << svd.W(i) << "\n";
+
+  //Extract the Basis images
+  int rank = svd.rank();
+  if(!rank)
+    {
+      vcl_cout << "In brip_float_ops::basis_images(.) - I has zero rank\n";
+      return;
+    }
+  vnl_matrix<double> U = svd.U();
+  //Output the basis images
+  int rows = U.rows();
+  for(int k = 0; k<rank; k++)
+    {
+      vil1_memory_image_of<float> out(width, height);
+      int x =0, y = 0;
+      for(int r = 0; r<rows; r++)
+        {
+          out(x, y) = U(r,k);
+          x++;
+          if(x>=width)
+            {
+              y++;
+              x=0;
+            }
+          if(y>=width)
+            {
+              vcl_cout << "In brip_float_ops::basis_images(.)"
+                       <<" shouldn't happen\n";
+              return;
+            }
+        }
+      basis.push_back(out);
+    }
 }
