@@ -10,8 +10,8 @@
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb_byte.h>
 #include <vepl/vepl_threshold.h>
-#include <iostream.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>
 typedef unsigned char ubyte;
 
 // create an 8 bit test image

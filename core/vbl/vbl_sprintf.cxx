@@ -14,6 +14,7 @@
 #include "vbl_sprintf.h"
 
 #include <vcl_cstdarg.h>
+#include <vcl_cstring.h>
 #include <vcl_cstdio.h>
 
 #include <vcl_iostream.h>
@@ -25,7 +26,7 @@ vbl_sprintf::vbl_sprintf(char const *fmt, ...) : vcl_string("")
 
   char s[65536];
   vsprintf(s, fmt, ap);
-  if (strlen(s) >= sizeof s)
+  if (vcl_strlen(s) >= sizeof s)
     vcl_cerr << __FILE__ ": WARNING! Possible memory corruption after call to vsprintf()\n";
   vcl_string::operator=(s);
 

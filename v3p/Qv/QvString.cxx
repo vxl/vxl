@@ -9,14 +9,14 @@ QvString::~QvString()
 void
 QvString::expand(int bySize)
 {
-    int newSize = strlen(string) + bySize + 1;
+    int newSize = vcl_strlen(string) + bySize + 1;
 
     if (newSize >= QV_STRING_STATIC_STORAGE_SIZE &&
         (string == staticStorage || newSize > storageSize)) {
 
         char *newString = new char[newSize];
 
-        strcpy(newString, string);
+        vcl_strcpy(newString, string);
 
         if (string != staticStorage)
             delete [] string;
@@ -56,7 +56,7 @@ QvString::makeEmpty(QvBool freeOld)
 QvString &
 QvString::operator =(const char *str)
 {
-    int size = strlen(str) + 1;
+    int size = vcl_strlen(str) + 1;
 
     if (str >= string &&
         str < string + (string != staticStorage ? storageSize :
@@ -80,7 +80,7 @@ QvString::operator =(const char *str)
         string = new char[size];
     }
 
-    strcpy(string, str);
+    vcl_strcpy(string, str);
     storageSize = size;
     return *this;
 }
@@ -88,19 +88,19 @@ QvString::operator =(const char *str)
 QvString &
 QvString::operator +=(const char *str)
 {
-    expand(strlen(str));
-    strcat(string, str);
+    expand(vcl_strlen(str));
+    vcl_strcat(string, str);
     return *this;
 }
 
 bool
 operator ==(const QvString &str, const char *s)
 {
-    return (str.string[0] == s[0] && ! strcmp(str.string, s));
+    return (str.string[0] == s[0] && ! vcl_strcmp(str.string, s));
 }
 
 bool
 operator !=(const QvString &str, const char *s)
 {
-    return (str.string[0] != s[0] || strcmp(str.string, s));
+    return (str.string[0] != s[0] || vcl_strcmp(str.string, s));
 }

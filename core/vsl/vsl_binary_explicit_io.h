@@ -34,6 +34,7 @@
 
 #include <vxl_config.h>
 #include <vcl_cassert.h>
+#include <vcl_cstring.h>
 #include <vcl_cstdlib.h> // vcl_abort()
 #include "vsl_binary_io.h"
 
@@ -105,7 +106,7 @@ inline void vsl_swap_bytes( char * ptr, int nbyte, int nelem = 1)
 inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, int nbyte, int nelem = 1)
 {
 #if VXL_LITTLE_ENDIAN
-  memcpy(dest, source, nbyte * nelem);
+  vcl_memcpy(dest, source, nbyte * nelem);
 #else
 
   assert(source != dest);  

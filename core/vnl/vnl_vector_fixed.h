@@ -39,13 +39,13 @@ public:
   vnl_vector_fixed(vnl_vector<T> const& rhs):Base(n, space) {
     if (rhs.size() != n)
       vnl_error_vector_dimension ("vnl_vector_fixed(const vnl_vector&) ", n, rhs.size());
-    memcpy(space, rhs.data_block(), sizeof space);
+    vcl_memcpy(space, rhs.data_block(), sizeof space);
   }
 
   //:
   // GCC generates (and calls) this even though above should do...
   vnl_vector_fixed(vnl_vector_fixed<T,n> const& rhs):Base(n, space) {
-    memcpy(space, rhs.space, sizeof space);
+    vcl_memcpy(space, rhs.space, sizeof space);
   }
 
   //: Constructs n-vector with elements initialised to v
@@ -70,14 +70,14 @@ public:
   }
 
   vnl_vector_fixed<T,n>& operator=(vnl_vector_fixed<T,n> const& rhs) {
-    memcpy(space, rhs.space, sizeof space);
+    vcl_memcpy(space, rhs.space, sizeof space);
     return *this;
   }
 
   vnl_vector_fixed<T,n>& operator=(vnl_vector<T> const& rhs) {
     if (rhs.size() != n)
       vnl_error_vector_dimension ("operator=", n, rhs.size());
-    memcpy(space, rhs.data_block(), sizeof space);
+    vcl_memcpy(space, rhs.data_block(), sizeof space);
     return *this;
   }
 

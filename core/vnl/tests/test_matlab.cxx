@@ -1,11 +1,12 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vcl_fstream.h>
 #include <vcl_cmath.h>
+#include <vcl_cstring.h>
+#include <vcl_cstdio.h> // tempnam()
+#include <vcl_fstream.h>
 
 #include <vpl/vpl_unistd.h>
-#include <vcl_cstdio.h> /* for tempnam() */
 
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_vector.h>
@@ -56,7 +57,7 @@ void test_matlab() {
       fsm_assert( vh.rows() == v.size());
       fsm_assert( vh.cols() == 1);
       fsm_assert(!vh.is_complex());
-      fsm_assert(strcmp(vh.name(), "v")==0);
+      fsm_assert(vcl_strcmp(vh.name(), "v")==0);
       vnl_vector<float> v_(v.size());
       fsm_assert( vh.read_data(v_.begin()));
       fsm_assert(v_ == v);
@@ -68,7 +69,7 @@ void test_matlab() {
       fsm_assert( Mh.cols() == M.cols());
       fsm_assert( Mh.is_rowwise());
       fsm_assert(!Mh.is_complex());
-      fsm_assert(strcmp(Mh.name(), "M")==0);
+      fsm_assert(vcl_strcmp(Mh.name(), "M")==0);
       vnl_matrix<double> M_( M.rows(), M.cols());
       fsm_assert( Mh.read_data(M_.data_array()));
       fsm_assert(M_ == M);

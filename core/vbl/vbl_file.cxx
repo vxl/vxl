@@ -14,6 +14,7 @@
 #include "vbl_file.h"
 
 #include <sys/stat.h>
+#include <vcl_cstring.h>
 #include <vcl_cstdlib.h>
 
 #ifdef WIN32
@@ -117,7 +118,7 @@ vcl_string vbl_file::basename(char const* fn, char const * suffix)
 
   // Now strip suffix if any
   if (suffix) {
-    int start = self.size() - strlen(suffix);
+    int start = self.size() - vcl_strlen(suffix);
     if (start >= 0)
       // egcs, 2.95, 2.96 have no method which can do
       //   self.compare(start, vcl_string::npos, suffix) == 0
@@ -129,7 +130,7 @@ vcl_string vbl_file::basename(char const* fn, char const * suffix)
 
 vcl_string vbl_file::expand_tilde(char const* vbl_filename)
 {
-  if (!vbl_filename || (strlen(vbl_filename) == 0))
+  if (!vbl_filename || (vcl_strlen(vbl_filename) == 0))
     return "";
 
 #ifdef WIN32

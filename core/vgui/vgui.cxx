@@ -10,9 +10,10 @@
 //-----------------------------------------------------------------------------
 
 #include "vgui.h"
-#include <vcl_cstdlib.h> // vcl_abort()
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
+#include <vcl_cstring.h>
+#include <vcl_cstdlib.h> // abort()
+#include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 
 #include <vbl/vbl_trace.h>
@@ -76,7 +77,7 @@ void vgui::select(char const *toolkit)
       return;
     }
   }
-  vgui_macro_warning << "no such toolkit \'" << toolkit << "\' -- abort()ing" << vcl_endl;
+  vgui_macro_warning << "no such toolkit \'" << toolkit << "\' -- vcl_abort()ing" << vcl_endl;
   vcl_abort();
 }
 
@@ -86,7 +87,7 @@ bool vgui::select(int &argc, char **argv)
 
   // look for --factory=name
   for (int i=1; i<argc; ) {
-    if (strncmp(argv[i],"--factory=",10) == 0) {
+    if (vcl_strncmp(argv[i],"--factory=",10) == 0) {
       instance_ = vgui_toolkit::lookup(argv[i]+10);
       vgui_remove_arg(i, argc, argv);
     }
@@ -135,38 +136,38 @@ void vgui::init(int &argc, char **argv)
 
   // abort if no toolkit has been selected.
   if (! instance_) {
-    vgui_macro_warning << "failed to find a toolkit implementation - abort()ing." << vcl_endl;
+    vgui_macro_warning << "failed to find a toolkit implementation - vcl_abort()ing." << vcl_endl;
     vcl_abort();
   }
   assert(instance_); // need an instance.
 
   // Look for command line options.
   for (int i=1; i<argc; ) {
-    if (strncmp(argv[i],"--factory=",10) == 0) {            // --factory=<name>
+    if (vcl_strncmp(argv[i],"--factory=",10) == 0) {            // --factory=<name>
       vgui_macro_warning << "superfluous command line argument \'"<< argv[i] << "\' ignored" << vcl_endl;
       vgui_remove_arg(i, argc, argv);
     }
-    else if (strncmp(argv[i],"--no-accel",10) == 0) {       // matches --no-accel*
+    else if (vcl_strncmp(argv[i],"--no-accel",10) == 0) {       // matches --no-accel*
       vgui_accelerate::vgui_no_acceleration = true;
       vgui_remove_arg(i, argc, argv);
     }
-    else if (strcmp(argv[i],"--with-mfc-accel") == 0) {
+    else if (vcl_strcmp(argv[i],"--with-mfc-accel") == 0) {
       vgui_accelerate::vgui_mfc_acceleration = true;
       vgui_remove_arg(i, argc, argv);
     }
-    else if (strcmp(argv[i],"--with-no-mfc-accel") == 0) {
+    else if (vcl_strcmp(argv[i],"--with-no-mfc-accel") == 0) {
       vgui_accelerate::vgui_mfc_acceleration = false;
       vgui_remove_arg(i, argc, argv);
     }
-    else if (strcmp(argv[i],"--images-are-textures") == 0) {
+    else if (vcl_strcmp(argv[i],"--images-are-textures") == 0) {
       vgui_images_are_textures = true;
       vgui_remove_arg(i, argc, argv);
     }
-    else if (strcmp(argv[i],"--emulate-overlays") == 0) {
+    else if (vcl_strcmp(argv[i],"--emulate-overlays") == 0) {
       vgui_emulate_overlays = true;
       vgui_remove_arg(i, argc, argv);
     }
-    else if (strcmp(argv[i],"--glerrors-are-bad") == 0) {
+    else if (vcl_strcmp(argv[i],"--glerrors-are-bad") == 0) {
       vgui_glerrors_are_bad = true;
       vgui_remove_arg(i, argc, argv);
     }

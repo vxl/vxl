@@ -1,6 +1,7 @@
 // Author: Peter@Vanroose.esat.kuleuven.ac.be
 // Date: 17 February, 2000
 #include <vcl_string.h>
+#include <vcl_cstring.h>
 #include <vcl_cstdio.h> // tmpnam()
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -140,7 +141,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   }
 
   // make sure saved image has the same pixels as the original image
-  tst = !(strcmp(type_name,image2.file_format()));
+  tst = !(vcl_strcmp(type_name,image2.file_format()));
   TEST ("compare image file formats", tst, true);
   if (!tst)
     vcl_cout << "read back image type is " << image2.file_format()

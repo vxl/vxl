@@ -21,6 +21,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
+#include <vcl_cstring.h>
 #include <vcl_algorithm.h>
 
 #include <vbl/vbl_printf.h>
@@ -436,7 +437,7 @@ bool vgui_accelerate_x11::vgui_copy_back_to_aux ()
         aux_buffer = new char[blit_size];
         aux_buffer_size = blit_size;
       }
-      memcpy(aux_buffer, backbuffer->data, blit_size);
+      vcl_memcpy(aux_buffer, backbuffer->data, blit_size);
       return true;
     }
 #endif
@@ -460,7 +461,7 @@ bool vgui_accelerate_x11::vgui_copy_aux_to_back ()
       XMesaGetBackBuffer(mesabuf, &p_dummy, &backbuffer);
       int blit_size = backbuffer->bytes_per_line * backbuffer->height;
       assert(aux_buffer_size > 0);
-      memcpy(backbuffer->data, aux_buffer, blit_size);
+      vcl_memcpy(backbuffer->data, aux_buffer, blit_size);
     }
     return true;
   }

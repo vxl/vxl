@@ -3,6 +3,7 @@
 #include <vxl_config.h>
 #include <vcl_map.txx>
 #include <vcl_cstdlib.h> // abort()
+#include <vcl_cstring.h> // memcpy()
 
 
 // \file

@@ -190,7 +190,7 @@ void vgl_polygon_scan_iterator::delete_edge( vertind v )
     if ( j >= numcrossedges ) return;
 
     numcrossedges--;
-    memcpy( &crossedges[j], &crossedges[j+1],
+    vcl_memcpy( &crossedges[j], &crossedges[j+1],
             (numcrossedges-j)*sizeof( crossedges[0] ));
 }
 

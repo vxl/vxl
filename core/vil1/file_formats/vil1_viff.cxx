@@ -229,7 +229,7 @@ bool vil_viff_generic_image::write_header()
         VFF_MS_NONE,VFF_MAPTYP_NONE,VFF_LOC_IMPLICIT,0);
 
   //make local copy of header
-  memcpy(&header_, imagep, sizeof(header_));
+  vcl_memcpy(&header_, imagep, sizeof(header_));
   start_of_data_ = sizeof(header_);
 
   // release xv header from createimage

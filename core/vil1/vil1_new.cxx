@@ -49,7 +49,7 @@ vil_image vil_new(vil_stream* os,
   vil_image_impl* outimage = 0;
   for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
     vil_file_format* fmt = *p;
-    if (strcmp(fmt->tag(), file_format) == 0) {
+    if (vcl_strcmp(fmt->tag(), file_format) == 0) {
       outimage = fmt->make_output_image(os, planes, width, height, components, bits_per_component, format);
       if (outimage == 0) {
         vcl_cerr << "vil_new: Unknown cannot new to type [" << file_format << "]\n";

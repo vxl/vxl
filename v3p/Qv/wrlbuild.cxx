@@ -165,7 +165,7 @@ void QvSwitch::build (QvState* state)
 {
   const char* name = objName->getString ();  // objName non nil
 
-  if (!name || strcmp (name, CAMERAS_SWITCH))  // ordinary Switch
+  if (!name || vcl_strcmp (name, CAMERAS_SWITCH))  // ordinary Switch
   {
     int which = whichChild.value;
 
@@ -1363,7 +1363,7 @@ void QvInfo::build (QvState*)
   if (handled_)  // only respected on first traversal
     return;
 
-  if (!strcmp (name, BACKGROUND_INFO))
+  if (!vcl_strcmp (name, BACKGROUND_INFO))
   {
     colorRGB col;
     if (sscanf (info, "%f %f %f", &col.R, &col.G, &col.B) == 3)
@@ -1374,12 +1374,12 @@ void QvInfo::build (QvState*)
     else
       QvDebugError::post ("Info", BACKGROUND_INFO " should be given as 3 floats, separated by spaces");
   }
-  else if (!strcmp (name, VIEWER_INFO))
+  else if (!vcl_strcmp (name, VIEWER_INFO))
   { // just differ between flip ("examiner") and the other modes ("walk")
 
-    if (!strcmp (info, "examiner"))
+    if (!vcl_strcmp (info, "examiner"))
       scene_->navigationHint (Scene3D::nav_flip);
-    else if (!strcmp (info, "walk"))
+    else if (!vcl_strcmp (info, "walk"))
       scene_->navigationHint (Scene3D::nav_walk);
     else
       QvDebugError::post ("Info", VIEWER_INFO " should be defined as \"walk\" or \"examiner\"");

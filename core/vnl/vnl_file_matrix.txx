@@ -14,7 +14,7 @@
 template <class T>
 vnl_file_matrix<T>::vnl_file_matrix(char const* filename)
 {
-  if (filename && strcmp(filename, "-")) {
+  if (filename && vcl_strcmp(filename, "-")) {
     vcl_ifstream o(filename);
     ok_=read_ascii(o);
     if (!ok_)

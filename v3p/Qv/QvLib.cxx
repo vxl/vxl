@@ -29,9 +29,9 @@ enum Binding { goofyBinding };  // confused about QvMaterialBinding/QvNormalBind
 #  include <malloc.h>
 char* strdup (const char* s)  // strdup not contained in system libraries
 {
-  char* p = (char*) malloc (strlen (s) + 1);
+  char* p = (char*) malloc (vcl_strlen (s) + 1);
   if (p)
-    strcpy (p, s);
+    vcl_strcpy (p, s);
   return p;
 }
 #endif

@@ -1799,8 +1799,8 @@ gevd_float_operators::ShrinkBy2 (const gevd_bufferxy& from, gevd_bufferxy*& to,
       gevd_float_operators::ShrinkBy2AlongX (from, p++, next1, sizeX, // new ylines
                              ka, kb, kc);                    // for pipeline
     } else {                            // reflect at image border
-      memcpy(next0, yline1, sizeX*sizeof(float));
-      memcpy(next1, yline0, sizeX*sizeof(float));
+      vcl_memcpy(next0, yline1, sizeX*sizeof(float));
+      vcl_memcpy(next1, yline0, sizeX*sizeof(float));
     }
   }
   delete [] yline0; delete [] yline1;
@@ -1910,10 +1910,10 @@ gevd_float_operators::ShrinkBy2_D (const gevd_bufferxy& from,
   //  This will allow the algorithm to mimic having a buffer of
   //  "no_value" surrounding the image.
   //
-  memcpy(yline[0], y_empty, sizeX*sizeof(float));
-  memcpy(wline[0], w_empty, sizeX*sizeof(float));
-  memcpy(yline[1], y_empty, sizeX*sizeof(float));
-  memcpy(wline[1], w_empty, sizeX*sizeof(float));
+  vcl_memcpy(yline[0], y_empty, sizeX*sizeof(float));
+  vcl_memcpy(wline[0], w_empty, sizeX*sizeof(float));
+  vcl_memcpy(yline[1], y_empty, sizeX*sizeof(float));
+  vcl_memcpy(wline[1], w_empty, sizeX*sizeof(float));
 
   //  Fill the center and bottom half of the pipelines with the top
   //  three rows of the image.
@@ -1965,15 +1965,15 @@ gevd_float_operators::ShrinkBy2_D (const gevd_bufferxy& from,
       ShrinkBy2AlongX_D( from, from.GetSizeX(), sizeX, p++, kernel,
                          no_value, yline[3], wline[3] );
     else {
-      memcpy(yline[3], y_empty, sizeX*sizeof(float));
-      memcpy(wline[3], w_empty, sizeX*sizeof(float));
+      vcl_memcpy(yline[3], y_empty, sizeX*sizeof(float));
+      vcl_memcpy(wline[3], w_empty, sizeX*sizeof(float));
     }
     if ( p < from.GetSizeY() )
       ShrinkBy2AlongX_D( from, from.GetSizeX(), sizeX, p++, kernel,
                          no_value, yline[4], wline[4] );
     else {
-      memcpy(yline[4], y_empty, sizeX*sizeof(float));
-      memcpy(wline[4], w_empty, sizeX*sizeof(float));
+      vcl_memcpy(yline[4], y_empty, sizeX*sizeof(float));
+      vcl_memcpy(wline[4], w_empty, sizeX*sizeof(float));
     }
   }
 
@@ -2067,7 +2067,7 @@ gevd_float_operators::ExpandBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
   float* yline2 = new float[sizeX];
   gevd_float_operators::ExpandBy2AlongX (from, p++, yline1, sizeX, ka, kb, kc);
   gevd_float_operators::ExpandBy2AlongX (from, p++, yline2, sizeX, ka, kb, kc);
-  memcpy(yline0, yline2, sizeX*sizeof(float));// first line is wrapped
+  vcl_memcpy(yline0, yline2, sizeX*sizeof(float));// first line is wrapped
 
   // Convolve and expand along x-axis.
   for (int y = 0; y < sizeY; y += 2) {
@@ -2084,7 +2084,7 @@ gevd_float_operators::ExpandBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
     if (y < sizeY-4)
       gevd_float_operators::ExpandBy2AlongX (from, p++, next, sizeX, ka, kb, kc);
     else                        // last line is wrapped
-      memcpy(next, yline0, sizeX*sizeof(float));
+      vcl_memcpy(next, yline0, sizeX*sizeof(float));
   }
   delete [] yline0;
   delete [] yline1;

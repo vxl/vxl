@@ -1,6 +1,6 @@
 
 #include "vpgl_tests.h"
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vcsl/vcsl_spatial.h>
 #include <vcsl/vcsl_unit.h>
 #include <vbl/vbl_ref_count.h>
@@ -12,9 +12,9 @@
 #include <vcsl/vcsl_length.h>
 #include <vbl/vbl_smart_ptr.txx>
 #include <vnl/vnl_math.h>
-#include <stdlib.h>
-#include <fstream.h>
-#include <iostream>
+#include <vcl_cstdlib.h>
+#include <vcl_fstream.h>
+#include <vcl_iostream.h>
 VBL_SMART_PTR_INSTANTIATE(matrix_param);
 VBL_SMART_PTR_INSTANTIATE(vpgl_matrix_camera);
 VBL_SMART_PTR_INSTANTIATE(vcsl_axis);
@@ -51,7 +51,7 @@ int main(int argc, char ** argv)
 double ix,iy;
 int i;
 double /*rnd_XL,rnd_YL,rnd_ZL, rnd_omega, rnd_phi, rnd_kappa,*/rnd_x,rnd_y,rnd_z;
-ofstream output("egemen1.cm");
+vcl_ofstream output("egemen1.cm");
 
 srand(1978);
 vcl_vector<double> parameters;
@@ -72,7 +72,7 @@ parameters[kappa] = 0;
 pers.set_params(parameters);
 
 
-output << "NUMPOINTS:" << "  "<< 10 <<endl;
+output << "NUMPOINTS:" << "  "<< 10 <<vcl_endl;
 
 for(i=0;i<10;i++){
 rnd_x= get_int_random();
@@ -81,18 +81,18 @@ rnd_z= get_int_random();
 
 
 pers.world_to_image(rnd_x,rnd_y,rnd_z,ix,iy,0);
-output << "CORRESP: 1 "<<i <<" "<< rnd_x <<" "<< rnd_y << " " << rnd_z  << " " << (float) ix << " " <<(float) iy <<endl;
+output << "CORRESP: 1 "<<i <<" "<< rnd_x <<" "<< rnd_y << " " << rnd_z  << " " << (float) ix << " " <<(float) iy <<vcl_endl;
 }
 
 output.close();
   vcl_cout << "test program for vpgl libraries" << vcl_endl;
 
 ////////////////////////////////////////////////////
-  /*ifstream instr("egemen1.cm");
+  /*vcl_ifstream instr("egemen1.cm");
   if(!instr)
     {
-      cout <<"In carmen_interface::load_correspondence_file()"
-           <<" - can't open file  " <<endl;
+      vcl_cout <<"In carmen_interface::load_correspondence_file()"
+           <<" - can't open file  " <<vcl_endl;
            
       return false;
     }
@@ -101,11 +101,11 @@ output.close();
   instr >> buf ;
   
 
-  if(!strcmp("NUMPOINTS:",buf))
+  if(!vcl_strcmp("NUMPOINTS:",buf))
     instr >> npts;
   else
     {
-      cout << "bad file " << endl;
+      vcl_cout << "bad file " << vcl_endl;
       return false;
     }
   int view_no=0, point_id=0;
@@ -115,14 +115,14 @@ output.close();
     {
       instr >> buf;
       
-      if(strcmp("CORRESP:",buf))
+      if(vcl_strcmp("CORRESP:",buf))
         {
-          cout << "wrong number of correspondences " << endl;
+          vcl_cout << "wrong number of correspondences " << vcl_endl;
           return false;
         }
       instr >> view_no >> point_id >> x >> y >> z >> u >> v;
-      cout << "Corr: " <<  view_no << " " << point_id << " " << x << " " <<  y 
-           << " " << z << " " <<  u << " " << v << endl;
+      vcl_cout << "Corr: " <<  view_no << " " << point_id << " " << x << " " <<  y 
+           << " " << z << " " <<  u << " " << v << vcl_endl;
       
     }*/
   return 0;

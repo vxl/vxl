@@ -10,7 +10,7 @@
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb_byte.h>
 #include <vipl/vipl_threshold.h>
-#include <iostream.h>
+#include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
 typedef unsigned char ubyte;

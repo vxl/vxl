@@ -115,7 +115,7 @@ vidl_clip_sptr  vidl_io::load_clip(
 {
   // make sure that fname is sane
   if (!fname ||
-      (strlen(fname) == 0))
+      (vcl_strlen(fname) == 0))
     {
       return 0;
     }
@@ -270,7 +270,7 @@ bool vidl_io::save(vidl_movie* movie, const char* fname, const char* type)
   // find the one of the type asked if it does exist.
   vcl_list<vidl_codec_sptr>::iterator i = supported_types_.begin();
 
-  while ((i != supported_types_.end()) && (strcmp((*i)->type(), type)))
+  while ((i != supported_types_.end()) && (vcl_strcmp((*i)->type(), type)))
     {
       // const char* debug = (*i)->type();
       // cout << "debug : " << debug << " type : " << type << endl;

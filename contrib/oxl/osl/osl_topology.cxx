@@ -43,7 +43,7 @@ void  osl_topology_base::stash_replace(char const *name,
                                        void (*dtor)(void *))
 {
   for (osl_stash_link *l = stash_head; l; l=l->next) {
-    if (strcmp(l->name, name) == 0) {
+    if (vcl_strcmp(l->name, name) == 0) {
       l->name = name;
       l->data = const_cast<void*>(data);
       l->dtor = dtor;
@@ -56,7 +56,7 @@ void  osl_topology_base::stash_replace(char const *name,
 
 void *osl_topology_base::stash_retrieve(char const *name) const {
   for (osl_stash_link *l = stash_head; l; l=l->next)
-    if (strcmp(l->name, name) == 0)
+    if (vcl_strcmp(l->name, name) == 0)
       return l->data;
   // not found
   return 0;
@@ -64,7 +64,7 @@ void *osl_topology_base::stash_retrieve(char const *name) const {
 
 void *osl_topology_base::stash_remove(char const *name) {
   for (osl_stash_link *p = 0, *l = stash_head; l; p=l, l=p->next) {
-    if (strcmp(l->name, name) == 0) {
+    if (vcl_strcmp(l->name, name) == 0) {
       if (p)
         p->next = l->next;
       else

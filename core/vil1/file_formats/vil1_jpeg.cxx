@@ -134,7 +134,7 @@ bool vil_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int h
     JSAMPLE const *scanline = jd->read_scanline(y0+i);
     if (!scanline)
       return false; // failed
-    memcpy(static_cast<char*>(buf) + i*w*bpp, &scanline[x0*bpp], w*bpp);
+    vcl_memcpy(static_cast<char*>(buf) + i*w*bpp, &scanline[x0*bpp], w*bpp);
   }
 
   return true;

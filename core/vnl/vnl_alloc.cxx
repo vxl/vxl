@@ -131,7 +131,7 @@ vnl_alloc::free_list[VNL_ALLOC_NFREELISTS]
 int main()
 {
   char* p = (char*)vnl_alloc::allocate(10);
-  strcpy(p, "fred\n");
+  vcl_strcpy(p, "fred\n");
   vcl_cerr << p << vcl_endl;
   vnl_alloc::deallocate(p,10);
 

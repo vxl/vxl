@@ -72,7 +72,7 @@ public:
 // failure (i.e. abort) if the rhs is not exactly the same size.
   vnl_matrix_fixed_ref<T, m, n>& operator=(const vnl_matrix<T>& rhs) {
     assert(rhs.rows() == m && rhs.columns() == n);
-    memcpy(data[0], rhs.data_block(), m*n*sizeof(T));
+    vcl_memcpy(data[0], rhs.data_block(), m*n*sizeof(T));
     return *this;
   }
 

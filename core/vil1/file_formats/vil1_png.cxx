@@ -369,12 +369,12 @@ bool vil_png_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
   int bytes_per_row_dst = xs*bytes_per_pixel;
   if ((unsigned int)xs == p->info_ptr->width) {
     assert(x0 == 0);
-    memcpy(buf, rows[y0], ys * bytes_per_row_dst);
+    vcl_memcpy(buf, rows[y0], ys * bytes_per_row_dst);
   }
   else {
     png_byte* dst = (png_byte*)buf;
     for(int y = 0; y < ys; ++y, dst += bytes_per_row_dst)
-      memcpy(dst, &rows[y0+y][x0], xs);
+      vcl_memcpy(dst, &rows[y0+y][x0], xs);
   }
 
   return true;
@@ -394,12 +394,12 @@ bool vil_png_generic_image::put_section(void const* buf, int x0, int y0, int xs,
   int bytes_per_row_dst = xs*bytes_per_pixel;
   if ((unsigned int)xs == p->info_ptr->width) {
     assert(x0 == 0);
-    memcpy(rows[y0], buf, ys * bytes_per_row_dst);
+    vcl_memcpy(rows[y0], buf, ys * bytes_per_row_dst);
   }
   else {
     png_byte* dst = (png_byte*)buf;
     for(int y = 0; y < ys; ++y, dst += bytes_per_row_dst)
-      memcpy(&rows[y0+y][x0], dst, xs);
+      vcl_memcpy(&rows[y0+y][x0], dst, xs);
   }
 
   return true;

@@ -26,7 +26,7 @@ QvInput::isASCIIHeader(const char *string)
 // gorasche: allow trailing garbage in header (conforming to VRML spec)
     for (int i = 0; i < numValidASCIIHeaders; i++) {
 //      if (strcmp(ASCIIHeader[i].string, string) == 0)
-        if (!strncmp(ASCIIHeader[i].string, string,strlen(ASCIIHeader[i].string)))
+        if (!vcl_strncmp(ASCIIHeader[i].string, string,vcl_strlen(ASCIIHeader[i].string)))
             return ASCIIHeader[i].version;
     }
     fprintf(stderr, "Qv: NOT ASCII\n");

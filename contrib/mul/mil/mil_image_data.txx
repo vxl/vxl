@@ -38,7 +38,7 @@ mil_image_data<T>& mil_image_data<T>::operator=(const mil_image_data& d)
   if (this==&d) return *this;
 
   resize(d.size());
-  memcpy(data_,d.data_,size_*sizeof(T));
+  vcl_memcpy(data_,d.data_,size_*sizeof(T));
   return *this;
 }
 //: Increment reference count

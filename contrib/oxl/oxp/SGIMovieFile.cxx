@@ -287,7 +287,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
           return false;
         }
         char* bufptr = (char*)buffer + (interlace_factor * y + i) * outrowsize;
-        memcpy(bufptr, jbuf, jpeg.width() * bytes_per_pixel);
+        vcl_memcpy(bufptr, jbuf, jpeg.width() * bytes_per_pixel);
       }
       if (MovieFileInterface::verbose) vbl_printf(vcl_cerr, "eof %d ", jpeg.GetFilePosition());
 
@@ -359,7 +359,7 @@ bool SGIMovieFile::GetField(int field_index, void* buffer)
         return false;
       }
       char* bufptr = (char*)buffer + y * outrowsize;
-      memcpy(bufptr, jbuf, jpeg->width() * bytes_per_pixel);
+      vcl_memcpy(bufptr, jbuf, jpeg->width() * bytes_per_pixel);
     }
 
     delete jpeg;

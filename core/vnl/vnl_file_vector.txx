@@ -14,7 +14,7 @@ vnl_file_vector<T>::vnl_file_vector(char const* filename)
 {
   //cerr << "filename=" << filename << endl;
   //cerr << "length=" << this->length() << endl;
-  if (filename && strcmp(filename, "-")) {
+  if (filename && vcl_strcmp(filename, "-")) {
     vcl_ifstream o(filename);
     ok_=read_ascii(o);
   }

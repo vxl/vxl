@@ -20,8 +20,9 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cstdio.h>
-#include <vcl_cstdlib.h> // for vcl_exit
-#include <vcl_cmath.h>   // vcl_floor()
+#include <vcl_cstring.h>
+#include <vcl_cstdlib.h> // exit()
+#include <vcl_cmath.h>   // floor()
 #include <vcl_vector.h>
 #include <vcl_list.h>
 #include <vcl_iostream.h>
@@ -85,7 +86,7 @@ void vbl_arg_base::display_usage_and_exit(char const* msg)
 
 vbl_arg_base::vbl_arg_base(vbl_arg_info_list& l, char const* option, char const*helpstring):
   option_(option),
-  optlen_(option ? strlen(option) : 0),
+  optlen_(option ? vcl_strlen(option) : 0),
   help_(helpstring)
 {
   l.add(this);
@@ -93,7 +94,7 @@ vbl_arg_base::vbl_arg_base(vbl_arg_info_list& l, char const* option, char const*
 
 vbl_arg_base::vbl_arg_base(char const* option, char const*helpstring):
   option_(option),
-  optlen_(option ? strlen(option) : 0),
+  optlen_(option ? vcl_strlen(option) : 0),
   help_(helpstring)
 {
   current_list().add(this);
@@ -122,7 +123,7 @@ void vbl_arg_info_list::set_help_option(char const* str)
 {
   // check that the operator isn't already being used
   for (int i=0; i<nargs; i++) {
-    if (strcmp(args[i]->option(),str) == 0) {
+    if (vcl_strcmp(args[i]->option(),str) == 0) {
       vcl_cerr << "vbl_arg_info_list: WARNING: requested help operator already assigned\n";
       return;
     }
@@ -164,7 +165,7 @@ void vbl_arg_info_list::display_help( char const*progname)
     if (args[i]->option()) {
       vcl_cerr << "[";
       vcl_cerr << args[i]->option();
-      if (strlen(args[i]->type_)> 0)
+      if (vcl_strlen(args[i]->type_)> 0)
         vcl_cerr << " " << args[i]->type_;
       vcl_cerr << "] ";
     } else {
@@ -182,11 +183,11 @@ void vbl_arg_info_list::display_help( char const*progname)
   for (int i=0; i< nargs; i++)
     if (args[i]->help_) {
       if (args[i]->option()) {
-        int l = strlen(args[i]->option());
+        int l = vcl_strlen(args[i]->option());
         if (l > maxl_option)
           maxl_option = l;
       }
-      int l = strlen(args[i]->type_);
+      int l = vcl_strlen(args[i]->type_);
       if (l > maxl_type)
         maxl_type = l;
     }
@@ -227,7 +228,7 @@ void vbl_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
     if (args[i]->option_)
       for (int j = i+1; j < nargs; ++j)
         if (args[j]->option_)
-          if (0==strcmp(args[i]->option_, args[j]->option_))
+          if (0==vcl_strcmp(args[i]->option_, args[j]->option_))
             vcl_cerr << "vbl_arg_info_list: WARNING: repeated switch ["
                      << args[j]->option_ << "]\n";
 
@@ -250,7 +251,7 @@ void vbl_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
           vcl_exit(1);
         }
 
-        if (0==strcmp(argmt, args[i]->option_)) {
+        if (0==vcl_strcmp(argmt, args[i]->option_)) {
           done_once[i] = true;
           int advance = args[i]->parse(my_argv + 1);
           args[i]->set_ = true;

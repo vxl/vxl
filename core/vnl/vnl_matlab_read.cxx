@@ -87,7 +87,7 @@ bool vnl_matlab_readhdr::is_bigendian() const {
 //: internal
 // increment 'current', record the file position and read the header.
 void vnl_matlab_readhdr::read_hdr() {
-  memset(&hdr, 0, sizeof hdr);
+  vcl_memset(&hdr, 0, sizeof hdr);
   ::vnl_read_bytes(s, &hdr, sizeof(hdr));
   if (varname)
     delete [] varname;
@@ -184,7 +184,7 @@ bool vnl_matlab_read_or_die(vcl_istream &s,
     return false;
   //assert(s/*bad stream?*/);
   if (name && *name)
-    assert(strcmp(name, h.name())==0/*wrong name?*/);
+    assert(vcl_strcmp(name, h.name())==0/*wrong name?*/);
   if (v.size() != unsigned(h.rows()*h.cols())) {
     vcl_destroy(&v);
     new (&v) vnl_vector<T>(h.rows()*h.cols());
@@ -203,7 +203,7 @@ bool vnl_matlab_read_or_die(vcl_istream &s,
     return false;
   //assert(s/*bad stream?*/);
   if (name && *name)
-    assert(strcmp(name, h.name())==0/*wrong name?*/);
+    assert(vcl_strcmp(name, h.name())==0/*wrong name?*/);
   if (M.rows() != unsigned(h.rows()) || M.cols() != unsigned(h.cols())) {
     vcl_destroy(&M);
     new (&M) vnl_matrix<T>(h.rows(), h.cols());

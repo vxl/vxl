@@ -46,15 +46,15 @@ bool vil_block_cache_image_impl::put_section(void const *buf, int x0, int y0, in
 bool vil_block_cache_image_impl::get_property(char const *tag,
                                               void *out) const
 {
-  if (strcmp(tag, "is_blocked") == 0)
+  if (vcl_strcmp(tag, "is_blocked") == 0)
     return true;
 
-  if (strcmp(tag, "block_size_x") == 0) {
+  if (vcl_strcmp(tag, "block_size_x") == 0) {
     if (out) *(unsigned *)out = block_size_x;
     return true;
   }
 
-  if (strcmp(tag, "block_size_y") == 0) {
+  if (vcl_strcmp(tag, "block_size_y") == 0) {
     if (out) *(unsigned *)out = block_size_y;
     return true;
   }

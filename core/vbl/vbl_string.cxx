@@ -88,7 +88,7 @@ char* c_left_trim (char* str, const char* rem) { // Trim prefix from string
 // Removes any suffix occurrence of the string rem
 // from the first string str, and returns the modified string str.
 char* c_right_trim (char* str, const char* rem) { // Trim suffix from string
-  char* s = str + strlen(str) - 1;                // last character of str
+  char* s = str + vcl_strlen(str) - 1;                // last character of str
   for (; s >= str; s--) {
     register const char* r = rem;
     register char t;
@@ -103,7 +103,7 @@ char* c_right_trim (char* str, const char* rem) { // Trim suffix from string
 
 // Reverses the order of the characters in char*.
 void c_reverse (char* c) {                // Reverse the order of characters
-  int length = strlen (c);              // Number of characters in string
+  int length = vcl_strlen (c);              // Number of characters in string
   char temp;
  
   for (int i = 0, j = length-1;         // Counting from front and rear
@@ -143,7 +143,7 @@ vcl_string& capitalize(vcl_string& s)
 // from the string sr, and returns the modified string sr.
 vcl_string& trim(vcl_string& sr, const char* rem)
 {
-  int l = strlen(rem);
+  int l = vcl_strlen(rem);
   for (;;) {
     vcl_string::size_type loc = sr.find(rem);
     if (loc == vcl_string::npos)
@@ -157,8 +157,8 @@ vcl_string& trim(vcl_string& sr, const char* rem)
 // from the string sr, and returns the modified string sr.
 vcl_string& left_trim(vcl_string& sr, const char* rem)
 {
-  int l = strlen(rem);
-  if (strncmp(sr.c_str(), rem, l) == 0)
+  int l = vcl_strlen(rem);
+  if (vcl_strncmp(sr.c_str(), rem, l) == 0)
     sr.erase(0, l);
   return sr;
 }
@@ -167,14 +167,14 @@ vcl_string& left_trim(vcl_string& sr, const char* rem)
 // from the string sr, and returns the modified string sr.
 vcl_string& right_trim(vcl_string& sr, const char* rem)
 {
-  int l = strlen(rem);
+  int l = vcl_strlen(rem);
   int lsr = sr.length();
-  if (strncmp(sr.c_str() + lsr - l, rem, l) == 0)
+  if (vcl_strncmp(sr.c_str() + lsr - l, rem, l) == 0)
     sr.erase(lsr - l, l);
   return sr;
 }
 
 int vbl_string_atoi(vcl_string const& s)
 {
-  return atoi(s.c_str());
+  return vcl_atoi(s.c_str());
 }

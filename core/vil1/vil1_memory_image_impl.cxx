@@ -167,10 +167,10 @@ bool vil_memory_image_impl::get_section(void* obuf, int x0, int y0,
       int byte_width = bytes_per_pixel_ * width_;
 
       for (int y = 0; y < ys; ++y) {
-        memcpy((unsigned char*)obuf + y * byte_out_width, buf_ + offset + y * byte_width, byte_out_width);
+        vcl_memcpy((unsigned char*)obuf + y * byte_out_width, buf_ + offset + y * byte_width, byte_out_width);
       }
     } else {
-      memcpy((unsigned char*)obuf, buf_ + offset, byte_out_width * ys);
+      vcl_memcpy((unsigned char*)obuf, buf_ + offset, byte_out_width * ys);
     }
     obuf = (void*)((char*)obuf + bytes_per_pixel_*width_*height_);
   }
@@ -188,11 +188,11 @@ bool vil_memory_image_impl::put_section(void const* ibuf, int x0,
       int byte_width = bytes_per_pixel_ * width_;
 
       for (int y = 0; y < ys; ++y) {
-        memcpy(buf_ + offset + y * byte_width,
+        vcl_memcpy(buf_ + offset + y * byte_width,
                (unsigned char const*)ibuf + y * byte_in_width, byte_in_width);
       }
     } else {
-      memcpy(buf_ + offset, (unsigned char const*)ibuf, byte_in_width * ys);
+      vcl_memcpy(buf_ + offset, (unsigned char const*)ibuf, byte_in_width * ys);
     }
     ibuf = (void const*)((char const*)ibuf + byte_in_width * ys);
   }
@@ -209,7 +209,7 @@ vil_image vil_memory_image_impl::get_plane(int /*plane*/) const
 bool vil_memory_image_impl::get_property(char const *tag,
                                          void *property_value) const
 {
-  if (0==strcmp(tag, "memory"))
+  if (0==vcl_strcmp(tag, "memory"))
     return true;
 
   return false;

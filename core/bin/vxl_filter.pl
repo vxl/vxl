@@ -289,7 +289,11 @@ sub process_headers {
       s/\b(std::)\s*(cout|cerr|endl|(i|o|f|if|of)stream)\b/vcl_$2/g;
       s/\b(cout|cerr|endl|(i|o|f|if|of)stream)\b/vcl_$1/g;
 
-      s/\b(assert|abort|exit|sqrt|real|imag|abs)\b/vcl_$1/g;
+      # misc functions names.
+      s/\b(memcpy|memset|strcat|strchr|strcmp|strncmp|strcpy|strlen)\b/vcl_$1/g;
+      s/\b(sprintf|printf|fprintf)\b/vcl_$1/g;
+      s/\b(abort|exit|abs|atoi|atof)\b/vcl_$1/g;
+      s/\b(sqrt|exp)\b/vcl_$1/g;
 
       # remember what we saw
       $saw_functional_h = 1 if m/include <vcl_functional\.h>/;

@@ -13,6 +13,7 @@
 #include "vbl_awk.h"
 
 #include <vcl_cctype.h>
+#include <vcl_cstring.h>
 #include <vcl_iostream.h>
 
 //: Construct from input stream
@@ -59,7 +60,7 @@ void vbl_awk::next()
   // copy string
   delete [] split_line_;
   split_line_ = new char[line_.size() + 1];
-  strcpy(split_line_, linep);
+  vcl_strcpy(split_line_, linep);
 
   // Chop line up into fields
   fields_.clear();

@@ -47,32 +47,32 @@ public:
 
 //: Construct an m*n Matrix and copy data into it row-wise.
   vnl_matrix_fixed(const T* datablck) : vnl_matrix_fixed_ref<T,m,n>(space) {
-    memcpy(space, datablck, m*n*sizeof(T));
+    vcl_memcpy(space, datablck, m*n*sizeof(T));
   }
 
 //: Construct an m*n Matrix and copy rhs into it.   Abort if rhs is
 // not the same size.
   vnl_matrix_fixed(const vnl_matrix<T>& rhs) : vnl_matrix_fixed_ref<T,m,n>(space) {
     assert(rhs.rows() == m && rhs.columns() == n);
-    memcpy(space, rhs.data_block(), m*n*sizeof(T));
+    vcl_memcpy(space, rhs.data_block(), m*n*sizeof(T));
   }
 
 //: Copy a vnl_matrix into this.   Abort if rhs is
 // not the same size.
   vnl_matrix_fixed<T,m,n>& operator=(const vnl_matrix<T>& rhs) {
     assert(rhs.rows() == m && rhs.columns() == n);
-    memcpy(space, rhs.data_block(), m*n*sizeof(T));
+    vcl_memcpy(space, rhs.data_block(), m*n*sizeof(T));
     return *this;
   }
 
 //: Copy another vnl_matrix_fixed<T,m,n> into this.
   vnl_matrix_fixed<T,m,n>& operator=(const vnl_matrix_fixed<T, m, n>& rhs) {
-    memcpy(space, rhs.data_block(), m*n*sizeof(T));
+    vcl_memcpy(space, rhs.data_block(), m*n*sizeof(T));
     return *this;
   }
 
   vnl_matrix_fixed(const vnl_matrix_fixed<T,m,n>& rhs) : vnl_matrix_fixed_ref<T,m,n>(space) {
-    memcpy(space, rhs.data_block(), m*n*sizeof(T));
+    vcl_memcpy(space, rhs.data_block(), m*n*sizeof(T));
   }
 };
 

@@ -78,7 +78,7 @@ vgui_window *vgui_glut::produce_window(int width, int height,
 //     goto idle;
 //  next_statement:
 //     glutMainLoop()
-//     exit(); // [gets here only on close of window.]
+//     vcl_exit(); // [gets here only on close of window.]
 //
 //  idle:
 //       [user code]

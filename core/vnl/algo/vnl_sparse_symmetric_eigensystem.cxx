@@ -4,6 +4,7 @@
 
 #include "vnl_sparse_symmetric_eigensystem.h"
 #include <vcl_cassert.h>
+#include <vcl_cstring.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 
@@ -259,7 +260,7 @@ int vnl_sparse_symmetric_eigensystem::SaveVectors(int n, int m,
   }
 
   double* temp = new double[n*m];
-  memcpy(temp,q,n*m*sizeof(double));
+  vcl_memcpy(temp,q,n*m*sizeof(double));
   //  cout << "Save vectors " << base << " " << temp << endl;
 
   temp_store.push_back(temp);
@@ -280,7 +281,7 @@ int vnl_sparse_symmetric_eigensystem::RestoreVectors(int n, int m,
     read_idx = 0;
 
   double* temp = temp_store[read_idx];
-  memcpy(q,temp,n*m*sizeof(double));
+  vcl_memcpy(q,temp,n*m*sizeof(double));
   //  cout << "Restore vectors " << base << " " << temp << endl;
 
   read_idx++;

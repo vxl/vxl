@@ -36,10 +36,10 @@
 #include <vcl_cstring.h>
 
 #include "gevd_bufferxy.h"
-//#include <memory.h> // For memcpy()
+//#include <vcl_memory.h> // For memcpy()
 //#include <iostream.h>/
 //#include <fstream.h>
-//#include <stdio.h> // For sscanf()
+//#include <vcl_cstdio.h> // For sscanf()
 
 #include <vcl_compiler.h>
 #if defined(VCL_SUNPRO_CC_50) || defined(VCL_SGI_CC) || defined(VCL_GCC_30)

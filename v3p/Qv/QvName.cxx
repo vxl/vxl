@@ -51,7 +51,7 @@ QvNameEntry::insert(const char *s)
 
     if (entry == NULL) {
 
-        int len = strlen(s) + 1;
+        int len = vcl_strlen(s) + 1;
 
         if (len >= CHUNK_SIZE)
             s = strdup(s);
@@ -68,7 +68,7 @@ QvNameEntry::insert(const char *s)
                 chunk = newChunk;
             }
 
-            strcpy(chunk->curByte, s);
+            vcl_strcpy(chunk->curByte, s);
             s = chunk->curByte;
 
             chunk->curByte   += len;

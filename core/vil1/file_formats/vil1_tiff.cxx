@@ -427,7 +427,7 @@ bool vil_tiff_generic_image::read_header()
 
 
 #if defined(RIH_DEBUG)
-  printf("vil_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
+  vcl_printf("vil_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
          " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
          this->width(), this->height(), this->components(), this->bits_per_component(),
          p->tiled, p->compressed, p->rows_per_strip, p->photometric, p->stripsize, p->scanlinesize);
@@ -565,7 +565,7 @@ bool vil_tiff_generic_image::write_header()
   p->buf = new unsigned char[p->stripsize];
 
 #ifdef RIH_DEBUG
-  printf("vil_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
+  vcl_printf("vil_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
          " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
          this->width(), this->height(), this->components(), this->bits_per_component(),
          p->tiled, p->compressed, p->rows_per_strip, p->photometric, p->stripsize, p->scanlinesize);
@@ -619,7 +619,7 @@ bool vil_tiff_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
         for(int y = ymin; y <= ymax; ++y) {
           unsigned char* in_row = p->buf + (y - strip_min_row) * p->scanlinesize;
           unsigned char* out_row = (unsigned char*)buf + (y - y0) * xs * pixel_byte_size;
-          memcpy(out_row, in_row + x0 * pixel_byte_size, xs * pixel_byte_size);
+          vcl_memcpy(out_row, in_row + x0 * pixel_byte_size, xs * pixel_byte_size);
         }
       }
     }
@@ -654,7 +654,7 @@ bool vil_tiff_generic_image::put_section(void const* buf, int x0, int y0, int xs
     for(int y = ymin; y <= ymax; ++y) {
       unsigned char* file_row = p->buf + (y - strip_min_row) * p->scanlinesize;
       unsigned char* mem_row = (unsigned char*)buf + (y - y0) * xs * pixel_byte_size;
-      memcpy(file_row + x0 * pixel_byte_size, mem_row, xs * pixel_byte_size);
+      vcl_memcpy(file_row + x0 * pixel_byte_size, mem_row, xs * pixel_byte_size);
     }
 
     TIFFWriteEncodedStrip(p->tif, strip_id, p->buf, (ymax - ymin + 1) * p->scanlinesize);

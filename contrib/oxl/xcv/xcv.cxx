@@ -522,7 +522,7 @@ int main(int argc, char** argv)
     vcl_vector<xcv_image_tableau_sptr> images;
 
     xcv_tab->set_grid_size_changeable(false);
-    for (int argcount=1; argcount<argc && strcmp(argv[argcount], "-d"); ++argcount)
+    for (int argcount=1; argcount<argc && vcl_strcmp(argv[argcount], "-d"); ++argcount)
     {
       xcv_image_tableau_new   image (argv[argcount]);
       vgui_easy2D_new         easy  (image);

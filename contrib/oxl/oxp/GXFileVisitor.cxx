@@ -67,14 +67,14 @@ bool GXFileVisitor::visit(vcl_istream& s)
     vcl_string instruction = awk[0];
     StringToFloat instruction_value(instruction.c_str());
     if (instruction == "r") {        // Set point radius
-      this->point_radius = atof(awk[1]);
+      this->point_radius = vcl_atof(awk[1]);
       this->set_point_radius(this->point_radius);
 
     } else if (instruction == "p" || (instruction_value.ok() && NF == 2)) { // "p" x y, or just x y
       int base = (instruction == "p") ? 1 : 0;
-      this->point("p", atof(awk[base+0]), atof(awk[base+1]));
+      this->point("p", vcl_atof(awk[base+0]), vcl_atof(awk[base+1]));
     } else if (instruction == "+") { // + sign
-      this->point("+", atof(awk[1]), atof(awk[2]));
+      this->point("+", vcl_atof(awk[1]), vcl_atof(awk[2]));
     } else if (instruction == "l" || (instruction_value.ok() && NF == 4)) { // Polyline
       bool numbers_only = instruction_value.ok();
       int npoints, base;
@@ -99,8 +99,8 @@ bool GXFileVisitor::visit(vcl_istream& s)
       float x[1024];
       float y[1024];
       for(int i = 0; i < npoints; ++i) {
-        x[i] = atof(awk[i*2 + 0 + base]);
-        y[i] = atof(awk[i*2 + 1 + base]);
+        x[i] = vcl_atof(awk[i*2 + 0 + base]);
+        y[i] = vcl_atof(awk[i*2 + 1 + base]);
       }
       this->polyline(x, y, npoints);
 
@@ -111,16 +111,16 @@ bool GXFileVisitor::visit(vcl_istream& s)
         if (!*text || !re.find(text)) {
           vbl_printf(vcl_cerr, "GXFileVisitor: Bad \"t\" line: [%s]\n", text);
         } else {
-          this->text(atof(awk[1]), atof(awk[2]), re.match(1).c_str());
+          this->text(vcl_atof(awk[1]), vcl_atof(awk[2]), re.match(1).c_str());
         }
       }
     } else if (instruction == "c") {
       bool ok = false;
       if (awk.NF() == 4) {
         // Assume 0-1 rgb spec
-        color[0] = atof(awk[1]);
-        color[1] = atof(awk[2]);
-        color[2] = atof(awk[3]);
+        color[0] = vcl_atof(awk[1]);
+        color[1] = vcl_atof(awk[2]);
+        color[2] = vcl_atof(awk[3]);
         ok = true;
       } else {
         static struct { char const* s; float c[3]; } colors [] = {
@@ -143,7 +143,7 @@ bool GXFileVisitor::visit(vcl_istream& s)
         vcl_string colour = awk[1];
         char const* cs = colour.c_str();
         for(unsigned i = 0; i < sizeof colors / sizeof colors[0]; ++i)
-          if (strcmp(colors[i].s, cs) == 0) {
+          if (vcl_strcmp(colors[i].s, cs) == 0) {
             //was : color = colors[i].c;
             // fsm@robots. some compilers (SGI native) don't
             // like assignment from float [3] to float [3].

@@ -11,7 +11,7 @@ class QvString {
     QvString(const QvString &str) {string = staticStorage; *this = str.string;}
     ~QvString();
     u_long              hash()          { return QvString::hash(string); }
-    int                 getLength() const       { return strlen(string); }
+    int                 getLength() const       { return vcl_strlen(string); }
     void                makeEmpty(QvBool freeOld = TRUE);
     const char *        getString() const       { return string; }
     QvString &          operator =(const char *str);
@@ -48,7 +48,7 @@ class QvNameEntry {
  public:
     QvBool              isEmpty() const   { return (string[0] == '\0'); }
     QvBool              isEqual(const char *s) const
-        { return (string[0] == s[0] && ! strcmp(string, s)); }
+        { return (string[0] == s[0] && ! vcl_strcmp(string, s)); }
  private:
     static int          nameTableSize;
     static QvNameEntry  **nameTable;
@@ -73,7 +73,7 @@ class QvName {
     QvName(const QvName &n)                     { entry = n.entry; }
     ~QvName()                                   {}
     const char          *getString() const      { return entry->string; }
-    int                 getLength() const   { return strlen(entry->string); }
+    int                 getLength() const   { return vcl_strlen(entry->string); }
     static QvBool       isIdentStartChar(char c);
     static QvBool       isIdentChar(char c);
     static QvBool       isNodeNameStartChar(char c);

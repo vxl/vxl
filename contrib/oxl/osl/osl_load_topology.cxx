@@ -6,6 +6,7 @@
 #endif
 #include "osl_load_topology.h"
 #include <vcl_cassert.h>
+#include <vcl_cstring.h>
 #include <vcl_cstdio.h> // sscanf()
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
@@ -28,7 +29,7 @@ void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_ver
   // check version string
   f >> vcl_ws;
   f.getline(buf, sizeof(buf));
-  if (strcmp("osl_save_topology 1.0", buf) != 0) {
+  if (vcl_strcmp("osl_save_topology 1.0", buf) != 0) {
     vcl_cerr << __FILE__ ": version string mismatch" << vcl_endl;
     return;
   }
