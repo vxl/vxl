@@ -14,7 +14,7 @@ inline DataType fgetpixel(vil_image_view_base const& i, int x, int y, DataType /
   return im(x,y);
 }
 template <class DataType>
-inline void fsetpixel(vil_image_view_base& i, int x, int y, DataType e)
+inline void fsetpixel(vil_image_view_base& i, int x, int y, DataType const e)
 {
   vil_image_view<DataType>& im = static_cast<vil_image_view<DataType>&>(i);
   im(x,y) = e;
@@ -27,7 +27,7 @@ inline DataType getpixel(vil_image_view_base const& i, int x, int y, DataType /*
   return im(x,y);
 }
 template <class DataType>
-inline void setpixel(vil_image_view_base& i, int x, int y, DataType e)
+inline void setpixel(vil_image_view_base& i, int x, int y, DataType const e)
 {
   if (x<0 || y<0 || x>=(int)i.ni() || y>=(int)i.nj()) return;
   vil_image_view<DataType>& im = static_cast<vil_image_view<DataType>&>(i);

@@ -10,9 +10,9 @@
 #define FILTER_KERNPTR_DEC_REFCOUNT(v) 
 
 template <class DataType> DataType fgetpixel(vil_image_view_base const& i, int x, int y, DataType);
-template <class DataType> void fsetpixel(vil_image_view_base& i, int x, int y, DataType e);
+template <class DataType> void fsetpixel(vil_image_view_base& i, int x, int y, DataType const e);
 template <class DataType> DataType getpixel(vil_image_view_base const& i, int x, int y, DataType);
-template <class DataType> void setpixel(vil_image_view_base& i, int x, int y, DataType e);
+template <class DataType> void setpixel(vil_image_view_base& i, int x, int y, DataType const e);
 #define VIPL_DECLARE_ACCESSORS(T) \
 T fgetpixel(vil_image_view_base const& i, int x, int y, T); \
 void fsetpixel(vil_image_view_base& i, int x, int y, T e); \
