@@ -773,6 +773,326 @@ SOURCE=.\vrml/vgui_vrml_texture_map.cxx
 SOURCE=.\vgui_register_all.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\impl/Fl/vgui_Fl.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Fl/vgui_Fl_adaptor.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Fl/vgui_Fl_dialog_impl.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Fl/vgui_Fl_statusbar.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Fl/vgui_Fl_tag.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Fl/vgui_Fl_utils.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Fl/vgui_Fl_window.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/SDL/vgui_SDL.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/SDL/vgui_SDL_adaptor.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/SDL/vgui_SDL_factory.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/SDL/vgui_SDL_tag.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/SDL/vgui_SDL_window.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/X/vgui_X_utils.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Xm/Templates/vcl_vector+Widget-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Xm/vgui_Xm.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Xm/vgui_Xm_adaptor.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Xm/vgui_Xm_dialog_impl.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Xm/vgui_Xm_statusbar.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Xm/vgui_Xm_tag.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Xm/vgui_Xm_utils.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Xm/vgui_Xm_window.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glX/Templates/vcl_vector+vgui_glX_window~-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glX/vgui_glX.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glX/vgui_glX_adaptor.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glX/vgui_glX_tag.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glX/vgui_glX_window.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/Templates/vcl_vector+vgui_glut_adaptor~-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/Templates/vcl_vector+vgui_glut_menu_hack+-per_window_record~-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/menu_hack_X11.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/menu_hack_none.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/vgui_glut_adaptor.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/vgui_glut_impl.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/vgui_glut_popup_impl.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/vgui_glut_slab.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/vgui_glut_tag.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/vgui_glut_window.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/gtk/Templates/vcl_vector+GtkWidget~-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/gtk/vgui_gtk.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/gtk/vgui_gtk_adaptor.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/gtk/vgui_gtk_dialog_impl.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/gtk/vgui_gtk_statusbar.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/gtk/vgui_gtk_tag.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/gtk/vgui_gtk_utils.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/gtk/vgui_gtk_window.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_adaptor.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_app.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_app_init.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_dialog_impl.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_doc.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_mainfrm.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_statusbar.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_tag.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_util.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_utils.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_view.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_window.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt_adaptor.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt_dialog_impl.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt_menu.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt_statusbar.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt_tag.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt_window.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -1383,6 +1703,251 @@ SOURCE=.\vgui_glx.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\impl/Fl/vgui_Fl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Fl/vgui_Fl_adaptor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Fl/vgui_Fl_dialog_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Fl/vgui_Fl_statusbar.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Fl/vgui_Fl_utils.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Fl/vgui_Fl_window.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/SDL/vgui_SDL.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/SDL/vgui_SDL_adaptor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/SDL/vgui_SDL_factory.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/SDL/vgui_SDL_window.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/X/vgui_X_utils.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Xm/vgui_Xm.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Xm/vgui_Xm_adaptor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Xm/vgui_Xm_dialog_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Xm/vgui_Xm_statusbar.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Xm/vgui_Xm_utils.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/Xm/vgui_Xm_window.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glX/vgui_glX.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glX/vgui_glX_adaptor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glX/vgui_glX_window.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/vgui_glut_adaptor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/vgui_glut_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/vgui_glut_popup_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/vgui_glut_slab.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/vgui_glut_window.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/gtk/vgui_gtk.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/gtk/vgui_gtk_adaptor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/gtk/vgui_gtk_dialog_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/gtk/vgui_gtk_statusbar.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/gtk/vgui_gtk_utils.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/gtk/vgui_gtk_window.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_adaptor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_app.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_app_init.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_dialog_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_doc.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_mainfrm.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_statusbar.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_util.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_utils.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_view.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/mfc/vgui_mfc_window.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt_adaptor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt_dialog_impl.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt_menu.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt_statusbar.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt_window.h
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vgui_grid_tableau_sptr.h
 
 # End Source File
@@ -1469,6 +2034,11 @@ SOURCE=.\vgui_viewer3D_sptr.h
 # Begin Source File
 
 SOURCE=.\vgui_wrapper_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/glut/menu_hack.h
 
 # End Source File
 # End Group
