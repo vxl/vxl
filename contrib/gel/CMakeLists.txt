@@ -35,7 +35,9 @@ SUBDIRS(vsrl vmal)
 SUBDIRS(gtrl)
 
 # octree stuff from Geoff's thesis
-SUBDIRS(octree)
+IF(BUILD_OXL)
+  SUBDIRS(octree)
+ENDIF(BUILD_OXL)
 
 # photogrammetry in mrc/vpgl,
 # coordinate systems add-on in mrc/vcsl
