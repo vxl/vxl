@@ -246,6 +246,9 @@ LINK32=link.exe
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\sdet_test_detector.cxx
 # End Source File
 # Begin Source File
