@@ -20,12 +20,14 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_image_tableau.h>
+#include <sdet/sdet_harris_detector_params.h>
 
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
 #include <vvid/vvid_frame_diff_process.h>
 #include <vvid/vvid_motion_process.h>
 #include <vvid/vvid_lucas_kanade_process.h>
+#include <vvid/vvid_harris_corner_process.h>
 #include <vvid/vvid_file_manager.h>
 
 //static manager instance
@@ -51,13 +53,13 @@ void vvid_file_manager::init()
   grid_->set_grid_size_changeable(true);
 
   itab0_ = vgui_image_tableau_new();
-  easy0_ = vgui_easy2D_tableau_new(itab0_);
+  easy0_ = bgui_vtol2D_tableau_new(itab0_);
   v2D0_ = vgui_viewer2D_tableau_new(easy0_);
   grid_->add_at(v2D0_, 0,0);
 
   itab1_ = vgui_image_tableau_new();
-  vgui_easy2D_tableau_sptr e1 = vgui_easy2D_tableau_new(itab1_);
-  v2D1_ = vgui_viewer2D_tableau_new(e1);
+  easy1_ = bgui_vtol2D_tableau_new(itab1_);
+  v2D1_ = vgui_viewer2D_tableau_new(easy1_);
   grid_->add_at(v2D1_, 1,0);
   vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);
   this->add_child(shell);
@@ -100,6 +102,22 @@ void vvid_file_manager::display_image()
     return;
   if (itab1_)
     itab1_->set_image(video_process_->get_output_image());
+}
+
+//-------------------------------------------------------------
+//: Display a set of spatial objects
+//
+void vvid_file_manager::display_spatial_objects()
+{
+  if (!video_process_)
+    return;
+  vcl_vector<vsol_spatial_object_2d_sptr> const& sos = 
+    video_process_->get_spatial_objects();
+  if (easy0_)
+  {
+	  easy0_->clear_all();
+    easy0_->add_spatial_objects(sos);
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -146,7 +164,7 @@ void vvid_file_manager::load_video_file()
         {
           vil_image img = pframe->get_image();
           vgui_image_tableau_sptr itab = vgui_image_tableau_new(img);
-          vgui_easy2D_tableau_new  e(itab);
+          bgui_vtol2D_tableau_new  e(itab);
           tabs_.push_back(e);
           ++pframe;//next video frame
           vcl_cout << "Loading Frame[" << i << "]:(" <<width_ <<" "<<height_ << ")\n";
@@ -168,7 +186,7 @@ void vvid_file_manager::load_video_file()
 void vvid_file_manager::cached_play()
 {
   vul_timer t;
-  for (vcl_vector<vgui_easy2D_tableau_sptr>::iterator vit = tabs_.begin();
+  for (vcl_vector<bgui_vtol2D_tableau_sptr>::iterator vit = tabs_.begin();
        vit != tabs_.end()&&play_video_; vit++)
     {
       //pause by repeating the same frame
@@ -227,6 +245,9 @@ void vvid_file_manager::un_cached_play()
           if (video_process_->execute())
             if (video_process_->get_output_type()==vvid_video_process::IMAGE)
               display_image();
+            else if (video_process_->get_output_type()==
+                     vvid_video_process::SPATIAL_OBJECT)
+              display_spatial_objects();
         }
       grid_->post_redraw();
       vgui::run_till_idle();
@@ -293,7 +314,7 @@ void vvid_file_manager::set_speed()
 void vvid_file_manager::easy2D_tableau_demo()
 {
   int inc = 40;
-  for (vcl_vector<vgui_easy2D_tableau_sptr>::iterator eit = tabs_.begin();
+  for (vcl_vector<bgui_vtol2D_tableau_sptr>::iterator eit = tabs_.begin();
        eit != tabs_.end(); eit++, ++inc)
     {
       (*eit)->clear();
@@ -335,4 +356,18 @@ void vvid_file_manager::compute_lucas_kanade()
   if (!downsample_dialog.ask())
     return;
   video_process_ = new vvid_lucas_kanade_process(downsample,windowsize,thresh);
+}
+
+void vvid_file_manager::compute_harris_corners()
+{
+  static sdet_harris_detector_params hdp(1.0f, 100.0f, 2);
+  vgui_dialog harris_dialog("harris");
+  harris_dialog.field("sigma", hdp.sigma_);
+  harris_dialog.field("thresh", hdp.thresh_);
+  harris_dialog.field("N = 2n+1, (n)", hdp.n_);
+  harris_dialog.field("scale_factor", hdp.scale_factor_);
+  if (!harris_dialog.ask())
+    return;
+
+  video_process_ = new vvid_harris_corner_process(hdp);
 }

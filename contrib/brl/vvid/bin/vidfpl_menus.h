@@ -31,6 +31,7 @@ class vidfpl_menus
   static void difference_frames_callback();
   static void compute_motion_callback();
   static void compute_lucas_kanade_callback();
+  static void compute_harris_corners_callback();
   static void quit_callback();
   static vgui_menu get_menu();
  private:

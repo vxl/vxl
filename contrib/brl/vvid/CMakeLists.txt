@@ -24,6 +24,7 @@ SET(vvid_sources
     vvid_lucas_kanade_process.cxx    vvid_lucas_kanade_process.h   
     vvid_epipolar_space_process.cxx  vvid_epipolar_space_process.h   
     vvid_edge_process.cxx            vvid_edge_process.h   
+    vvid_harris_corner_process.cxx   vvid_harris_corner_process.h   
     vvid_file_manager.cxx            vvid_file_manager.h
 )
 

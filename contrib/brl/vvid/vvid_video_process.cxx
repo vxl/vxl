@@ -25,3 +25,9 @@ vvid_video_process::get_segmentation()
 {
   return topo_objs_;
 }
+
+vcl_vector<vsol_spatial_object_2d_sptr> const & 
+vvid_video_process::get_spatial_objects()
+{
+  return spat_objs_;
+}

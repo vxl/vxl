@@ -17,7 +17,7 @@
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_image_tableau_sptr.h>
-#include <vgui/vgui_easy2D_tableau_sptr.h>
+#include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <vvid/vvid_video_process_sptr.h>
 #include <vgui/vgui_dialog.h>
@@ -99,6 +99,9 @@ class vvid_file_manager : public vgui_wrapper_tableau
   //: show the Lucas-Kanade vectors as color
   void compute_lucas_kanade();
 
+  //: show the Harris corners
+  void compute_harris_corners();
+
   //: get the window of this player
   vgui_window* get_window(){return win_;}
 
@@ -113,6 +116,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   void cached_play();
   void un_cached_play();
   void display_image();
+  void display_spatial_objects();
  private:
   //utility functions
 
@@ -127,10 +131,11 @@ class vvid_file_manager : public vgui_wrapper_tableau
   unsigned height_;
   vidl_movie_sptr my_movie_;
   vgui_window* win_;
-  vcl_vector<vgui_easy2D_tableau_sptr> tabs_;
+  vcl_vector<bgui_vtol2D_tableau_sptr> tabs_;
   vgui_viewer2D_tableau_sptr v2D0_;
   vgui_viewer2D_tableau_sptr v2D1_;
-  vgui_easy2D_tableau_sptr easy0_;
+  bgui_vtol2D_tableau_sptr easy0_;
+  bgui_vtol2D_tableau_sptr easy1_;
   vgui_image_tableau_sptr itab0_;
   vgui_image_tableau_sptr itab1_;
   vvid_video_process_sptr video_process_;
