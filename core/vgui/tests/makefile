@@ -3,6 +3,7 @@ include ../config.mk
 include ${IUEROOT}/core/testlib/config.mk
 
 TESTS += test_pixels.cxx
+TESTS += test_displaybase.cxx
 # The following tests cannot run in background:
 MINI_PROG_SOURCES += test_popup.cxx      #TESTS += test_popup.cxx
 MINI_PROG_SOURCES += test_timer.cxx      #TESTS += test_timer.cxx
