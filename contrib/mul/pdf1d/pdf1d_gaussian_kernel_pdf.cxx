@@ -14,10 +14,10 @@
 #include <vcl_cmath.h>
 
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_erf.h>
 #include <pdf1d/pdf1d_gaussian_kernel_pdf_sampler.h>
 #include <pdf1d/pdf1d_sampler.h>
 #include <pdf1d/pdf1d_prob_chi2.h>
-#include <mbl/mbl_gamma.h>
 #include <mbl/mbl_index_sort.h>
 
 //=======================================================================
@@ -89,17 +89,17 @@ double pdf1d_gaussian_kernel_pdf::cdf(double x0) const
 #if 1
 
   for (int i=0;i<n;++i)
-    sum += mbl_erf( (x0-x[i])/(vnl_math::sqrt2*w[i]) );
-    // CDF for gaussian = 0.5*(1+erf(x/sqrt2))
+    sum += vnl_erfc( (x[i]-x0)/(vnl_math::sqrt2*w[i]) );
+    // CDF for gaussian = 0.5*(erfc(-x/sqrt2))
 
-  return 0.5*(1+sum/n);
+  return 0.5*(sum/n);
 
 #else // a slower but clearer and easier to debug version of above
 
   if (index_.empty())
     mbl_index_sort(x_.data_block(), x_.size(), index_);
   for (int i=0;i<n;++i)
-    sum += 0.5 * (1.0 + mbl_erf( (x0-x[index_[i]])/(vnl_math::sqrt2*w[index_[i]]) ) )/n;
+    sum += 0.5 * (vnl_erfc( -(x0-x[index_[i]])/(vnl_math::sqrt2*w[index_[i]]) ) )/n;
 
   return sum;
 #endif

@@ -17,7 +17,7 @@
 #include <pdf1d/pdf1d_gaussian_sampler.h>
 #include <pdf1d/pdf1d_sampler.h>
 #include <pdf1d/pdf1d_prob_chi2.h>
-#include <mbl/mbl_gamma.h>
+#include <vnl/vnl_erf.h>
 
 
 //=======================================================================
@@ -90,7 +90,7 @@ double pdf1d_gaussian::log_p(double x) const
 double pdf1d_gaussian::cdf(double x) const
 {
   double dx = (x-mean())/(vnl_math::sqrt2*sd_);
-  return 0.5*(1+mbl_erf(dx));
+  return 0.5*(vnl_erfc(-dx));
 }
 
 //: Return true if cdf() uses an analytic implementation
