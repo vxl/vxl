@@ -19,22 +19,23 @@
 #include <vgl/vgl_point_2d.h>
 
 class vdgl_edgel {
-   // PUBLIC INTERFACE----------------------------------------------------------
+   // PUBLIC INTERFACE---------------------------------------------------------
 public:
-  
-  // Constructors/Destructors--------------------------------------------------
+
+  // Constructors/Destructor---------------------------------------------------
   vdgl_edgel() {}
   vdgl_edgel( const double x, const double y, const double grad= -1, const double theta= 0 );
   ~vdgl_edgel() {}
 
-  // Operators----------------------------------------------------------------
+  // Operators-----------------------------------------------------------------
 
   vdgl_edgel& operator=(const vdgl_edgel& that);
 
   friend bool operator==( const vdgl_edgel &e1, const vdgl_edgel &e2);
   friend vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel& p);
+
   // Data Access---------------------------------------------------------------
-  
+
   // getters
   inline vgl_point_2d<double> get_pt() const { return p_; }
   inline double get_x() const { return p_.x(); }
@@ -49,21 +50,14 @@ public:
   inline void set_y( const double y) { p_.set(p_.x(),y); }
   inline void set_grad( const double grad) { grad_= grad; }
   inline void set_theta( const double theta) { theta_= theta; }
-    
-  // Data Control--------------------------------------------------------------
 
-  // Computations--------------------------------------------------------------
-  
   // INTERNALS-----------------------------------------------------------------
 protected:
   // Data Members--------------------------------------------------------------
 
   vgl_point_2d<double> p_;
   double grad_;
-  double theta_; 
-
-private:
-  // Helpers-------------------------------------------------------------------
+  double theta_;
 };
 
 
