@@ -1537,6 +1537,29 @@ AC_LANG_RESTORE
 export VXL_MATH_HAS_FINITE
 ])
 
+dnl ----------------------------------------------------------------------------
+dnl Check whether <math.h> provides the sqrtf() function
+dnl
+dnl ---------------------------------------------------------------------------
+
+AC_DEFUN(VXL_CXX_MATH_HAS_SQRTF,[
+AC_MSG_CHECKING([whether <math.h> provides the sqrtf() function])
+AC_LANG_SAVE
+AC_LANG_C
+AC_TRY_COMPILE([
+#include <math.h>
+float vxl_sqrtf() { return sqrtf(4.f); }
+],,[
+VXL_MATH_HAS_SQRTF=1
+AC_MSG_RESULT(yes)
+],[
+VXL_MATH_HAS_SQRTF=0
+AC_MSG_RESULT(no)
+])
+AC_LANG_RESTORE
+export VXL_MATH_HAS_SQRTF
+])
+dnl
 
 
 dnl ------------------------------------------------------------
