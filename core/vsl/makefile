@@ -9,7 +9,6 @@ VERSION := 1.0
 
 
 SOURCES += vsl_indent.cxx
-SOURCES += vsl_test.cxx
 SOURCES += vsl_binary_io.cxx
 SOURCES += vsl_binary_loader_base.cxx
 
