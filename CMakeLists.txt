@@ -5,8 +5,13 @@
 
 PROJECT(allvxl)
 
-OPTION(BUILD_TESTS "Should the tests be built?" YES)
-OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" YES)
+IF(WIN32)
+  OPTION(BUILD_TESTS "Should the tests be built?" NO)
+  OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" NO)
+ELSE(WIN32)
+  OPTION(BUILD_TESTS "Should the tests be built?" YES)
+  OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" YES)
+ENDIF(WIN32)
 OPTION(WARN_DEPRECATED "Enable runtime warnings for deprecated functions?" YES)
 OPTION(WARN_DEPRECATED_ONCE "Only warn once per function (if runtime warnings are enabled)?" YES)
 OPTION(WARN_DEPRECATED_ABORT "Abort on executing a deprecated function (if runtime warnings are enabled)?" NO)
@@ -34,13 +39,13 @@ IF(BUILD_MUL)
   SUBDIRS(mul)
 ENDIF(BUILD_MUL)
 
-IF(BUILD_GEL)
-  SUBDIRS(gel)
-ENDIF(BUILD_GEL)
-
 IF(BUILD_OXL)
   SUBDIRS(oxl)
 ENDIF(BUILD_OXL)
+
+IF(BUILD_GEL)
+  SUBDIRS(gel)
+ENDIF(BUILD_GEL)
 
 IF(BUILD_TBL)
   SUBDIRS(tbl)
