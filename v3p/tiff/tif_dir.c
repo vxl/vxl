@@ -98,7 +98,7 @@ checkInkNamesString(TIFF* tif, int slen, const char* s)
                     goto bad;
             cp++;               /* skip \0 */
         }
-        return (cp-s);
+        return (int)(cp-s);
     }
 bad:
     TIFFError("TIFFSetField",

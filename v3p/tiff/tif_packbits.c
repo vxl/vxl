@@ -31,6 +31,7 @@
  */
 #include <assert.h>
 #include <stdio.h>
+#include <stddef.h> /* for ptrdiff_t */
 
 static int
 PackBitsPreEncode(TIFF* tif, tsample_t s)
@@ -39,10 +40,19 @@ PackBitsPreEncode(TIFF* tif, tsample_t s)
     /*
      * Calculate the scanline/tile-width size in bytes.
      */
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+/* warning C4312: 'type cast' : conversion from 'tsize_t' to 'tidata_t' of greater size */
+# pragma warning( push )
+# pragma warning( disable: 4312 )
+#endif
     if (isTiled(tif))
         tif->tif_data = (tidata_t) TIFFTileRowSize(tif);
     else
         tif->tif_data = (tidata_t) TIFFScanlineSize(tif);
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+# pragma warning( pop )
+#endif
+
     return (1);
 }
 
@@ -61,7 +71,8 @@ PackBitsEncode(TIFF* tif, tidata_t buf, tsize_t cc, tsample_t s)
 {
     u_char* bp = (u_char*) buf;
     tidata_t op, ep, lastliteral;
-    long n, slop;
+    long n;
+    ptrdiff_t slop;
     int b;
     enum { BASE, LITERAL, RUN, LITERAL_RUN } state;
 
@@ -87,7 +98,7 @@ PackBitsEncode(TIFF* tif, tidata_t buf, tsize_t cc, tsample_t s)
              */
             if (state == LITERAL || state == LITERAL_RUN) {
                 slop = op - lastliteral;
-                tif->tif_rawcc += lastliteral - tif->tif_rawcp;
+                tif->tif_rawcc += (tsize_t)(lastliteral - tif->tif_rawcp);
                 if (!TIFFFlushData1(tif))
                     return (-1);
                 op = tif->tif_rawcp;
@@ -95,7 +106,7 @@ PackBitsEncode(TIFF* tif, tidata_t buf, tsize_t cc, tsample_t s)
                     *op++ = *lastliteral++;
                 lastliteral = tif->tif_rawcp;
             } else {
-                tif->tif_rawcc += op - tif->tif_rawcp;
+                tif->tif_rawcc += (tsize_t)(op - tif->tif_rawcp);
                 if (!TIFFFlushData1(tif))
                     return (-1);
                 op = tif->tif_rawcp;
@@ -171,7 +182,7 @@ PackBitsEncode(TIFF* tif, tidata_t buf, tsize_t cc, tsample_t s)
             goto again;
         }
     }
-    tif->tif_rawcc += op - tif->tif_rawcp;
+    tif->tif_rawcc += (tsize_t)(op - tif->tif_rawcp);
     tif->tif_rawcp = op;
     return (1);
 }
@@ -186,7 +197,15 @@ PackBitsEncode(TIFF* tif, tidata_t buf, tsize_t cc, tsample_t s)
 static int
 PackBitsEncodeChunk(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 {
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+/*warning C4311: 'type cast' : pointer truncation from 'tidata_t' to 'tsize_t'*/
+# pragma warning( push )
+# pragma warning( disable: 4311 )
+#endif
     tsize_t rowsize = (tsize_t) tif->tif_data;
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+# pragma warning( pop )
+#endif
 
     assert(rowsize > 0);
     while ((long)cc > 0) {

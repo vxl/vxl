@@ -29,6 +29,14 @@
  */
 #include "tiffiop.h"
 
+/* Supress 64-bit warnings for VC7:
+tif_dirwrite.c(959): warning C4311: 'type cast' : pointer truncation from 'uint32 *__w64 ' to 'toff_t'
+*/
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+# pragma warning( disable: 4311 )
+#endif
+
+
 #if HAVE_IEEEFP
 #define TIFFCvtNativeToIEEEFloat(tif, n, fp)
 #define TIFFCvtNativeToIEEEDouble(tif, n, dp)

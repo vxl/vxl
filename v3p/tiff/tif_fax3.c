@@ -96,7 +96,13 @@ typedef struct {
 
 #define is2DEncoding(sp) \
     (sp->b.groupoptions & GROUP3OPT_2DENCODING)
+#if defined(_MSC_VER) && _MSC_VER >= 1300
+#include <stddef.h>
+#define isAligned(p,t)  ((((intptr_t)(p)) & (sizeof (t)-1)) == 0)
+#else
+/* original */
 #define isAligned(p,t)  ((((u_long)(p)) & (sizeof (t)-1)) == 0)
+#endif
 
 /*
  * Group 3 and Group 4 Decoding.
@@ -142,7 +148,7 @@ typedef struct {
     sp->bit = BitsAvail;                                                \
     sp->data = BitAcc;                                                  \
     sp->EOLcnt = EOLcnt;                                                \
-    tif->tif_rawcc -= (tidata_t) cp - tif->tif_rawcp;                   \
+    tif->tif_rawcc -= (tsize_t)( (tidata_t) cp - tif->tif_rawcp );      \
     tif->tif_rawcp = (tidata_t) cp;                                     \
 } while (0)
 

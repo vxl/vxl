@@ -29,6 +29,14 @@
 #include <windows.h>
 #include "tiffiop.h"
 
+/* Supress 64-bit warnings for VC7:
+tif_win32.c(205): warning C4311: 'type cast' : pointer truncation from 'thandle_t' to 'int'
+tif_win32.c(155): warning C4312: 'type cast' : conversion from 'int' to 'thandle_t' of greater size
+*/
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+# pragma warning( disable: 4311 4312 )
+#endif
+
 static tsize_t
 _tiffReadProc(thandle_t fd, tdata_t buf, tsize_t size)
 {
