@@ -37,6 +37,7 @@ ADD_EXECUTABLE(vnl_test_minimizers               test_minimizers.cxx            
 ADD_EXECUTABLE(vnl_test_amoeba                   test_amoeba.cxx                 )
 ADD_EXECUTABLE(vnl_test_rational                 test_rational.cxx               )
 ADD_EXECUTABLE(vnl_test_bignum                   test_bignum.cxx                 )
+ADD_EXECUTABLE(vnl_test_finite_field             test_finite_field.cxx           )
 ADD_EXECUTABLE(vnl_test_convolve                 test_convolve.cxx               )
 ADD_EXECUTABLE(vnl_test_real_polynomial          test_real_polynomial.cxx        )
 
@@ -77,6 +78,7 @@ ADD_TEST( vnl_test_minimizers vnl_test_minimizers )
 ADD_TEST( vnl_test_amoeba vnl_test_amoeba )
 ADD_TEST( vnl_test_rational vnl_test_rational )
 ADD_TEST( vnl_test_bignum vnl_test_bignum )
+ADD_TEST( vnl_test_finite_field vnl_test_finite_field )
 ADD_TEST( vnl_test_convolve vnl_test_convolve )
 ADD_TEST( vnl_test_real_polynomial vnl_test_real_polynomial )
 
