@@ -7,7 +7,7 @@
 // .HEADER SpatialObjects Package
 // .INCLUDE Topology/vtol_edge_3d.h
 // .FILE vtol_edge_3d.h
-// .FILE vtol_edge_3d.C
+// .FILE vtol_edge_3d.cxx
 //
 // .SECTION Description
 //  The vtol_edge_3d class is used to represent a topological edge.  An vtol_edge_3d

@@ -11,7 +11,7 @@
 // .HEADER vxl package
 // .INCLUDE     vtol/vtol_hierarchy_node_2d.h
 // .FILE        vtol_hierarchy_node_2d.h
-// .FILE        vtol_hierarchy_node_2d.C
+// .FILE        vtol_hierarchy_node_2d.cxx
 // .SECTION Author
 //     Patricia A. Vrobel
 // .SECTION Description

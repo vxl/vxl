@@ -14,7 +14,7 @@
 // .HEADER SpatialObjects package
 // .INCLUDE     Topology/vtol_zero_chain_3d.h
 // .FILE        vtol_zero_chain_3d.h
-// .FILE        vtol_zero_chain_3d.C
+// .FILE        vtol_zero_chain_3d.cxx
 // .SECTION Author
 //     Patricia A. Vrobel
 //     PTU - ported may 2000

@@ -7,7 +7,7 @@
 // .HEADER      vxl package
 // .INCLUDE     vtol/vtol_block_2d.h
 // .FILE        vtol_block_2d.h
-// .FILE        vtol_block_2d.C
+// .FILE        vtol_block_2d.cxx
 //
 // .SECTION Description
 //   The vtol_block_2d class is used to represent the highest node in a 3D topological

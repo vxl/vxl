@@ -13,7 +13,7 @@
 // .HEADER vxl package
 // .INCLUDE     vtol/vtol_topology_cache_2d.h
 // .FILE        vtol_topology_cache_2d.h
-// .FILE        vtol_topology_cache_2d.C
+// .FILE        vtol_topology_cache_2d.cxx
 // .SECTION Description
 //  The vtol_topology_cache_2d is a class used to cache vertices, edges, faces, blocks, etc.
 // .SECTION Author

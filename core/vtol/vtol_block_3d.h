@@ -7,7 +7,7 @@
 // .HEADER      vxl package
 // .INCLUDE     vtol/vtol_block_3d.h
 // .FILE        vtol_block_3d.h
-// .FILE        vtol_block_3d.C
+// .FILE        vtol_block_3d.cxx
 //
 // .SECTION Description
 //   The vtol_block_3d class is used to represent the highest node in a 3D topological

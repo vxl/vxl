@@ -11,7 +11,7 @@
 // .HEADER vxl package
 // .INCLUDE     vtol/vtol_hierarchy_node_3d.h
 // .FILE        vtol_hierarchy_node_3d.h
-// .FILE        vtol_hierarchy_node_3d.C
+// .FILE        vtol_hierarchy_node_3d.cxx
 // .SECTION Author
 //     Patricia A. Vrobel
 // .SECTION Description
