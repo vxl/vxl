@@ -131,12 +131,11 @@ static void cache_face_and_cog(vtol_face_2d_sptr const& face,
                                vnl_matrix<double>& X,
                                vnl_matrix<double>& Y)
 {
-  int n_verts = 0;
   if (!face)
     return;
   vcl_vector<vtol_vertex_sptr> verts;
   face->vertices(verts);
-  n_verts = verts.size();
+  int n_verts = verts.size();
   if (!n_verts)
     return;
   double cog_x =0, cog_y=0;

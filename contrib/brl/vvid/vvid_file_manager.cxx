@@ -382,7 +382,7 @@ void vvid_file_manager::un_cached_play()
     vcl_cout << "No movie has been loaded\n";
     return;
   }
-  int nframes = my_movie_->length();
+  // int nframes = my_movie_->length();
   if (video_process_)
     video_process_->set_n_frames(my_movie_->length());
   for (vidl_vil1_movie::frame_iterator pframe=my_movie_->begin();
@@ -816,7 +816,7 @@ void vvid_file_manager::compute_info_tracking()
   }
 }
 
-void vvid_file_manager::save_display(int frame)
+void vvid_file_manager::save_display(int /* frame */)
 {
   if (!save_display_)
     return;

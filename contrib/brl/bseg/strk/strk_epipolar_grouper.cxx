@@ -615,7 +615,7 @@ bool strk_epipolar_grouper::fill_intensity_values(strk_epi_seg_sptr& seg)
   double min_a = seg->min_alpha(), max_a = seg->max_alpha();
   for (double a = min_a; a<=max_a; a+=da_)
   {
-    double s = seg->s(a), left_int=0, right_int=0, left_ds=0, right_ds=0;
+    double s = seg->s(a), left_int, right_int, left_ds=0, right_ds=0;
     left_int = scan_left(a, s, left_cand, left_ds);
     right_int = scan_right(a, s, right_cand, right_ds);
     seg->add_int_sample(a, left_ds, left_int, right_ds, right_int);
@@ -655,7 +655,7 @@ bool strk_epipolar_grouper::group()
 }
 
 vcl_vector<vsol_polyline_2d_sptr>
-strk_epipolar_grouper::display_segs(int frame)
+strk_epipolar_grouper::display_segs(int /* frame */)
 {
   vcl_vector<vsol_polyline_2d_sptr> polys;
   vcl_vector<strk_epi_seg_sptr>& segs = min_epi_segs_[frame_];

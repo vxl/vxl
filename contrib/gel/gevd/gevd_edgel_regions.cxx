@@ -464,7 +464,7 @@ merge_equivalence(vcl_map<unsigned int, vcl_vector<unsigned int>* >& tab,
   if (!len) {
   return false;
   }
-  vcl_vector<unsigned int>* array = NULL;
+  vcl_vector<unsigned int>* array;
 
   hashi = equivalence_set_.find(cur_label);
   if ( hashi == equivalence_set_.end())

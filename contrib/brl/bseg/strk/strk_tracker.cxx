@@ -268,7 +268,7 @@ bool strk_tracker::compute_motion(strk_correlated_face* cf,
     return false;
   int i = 0;
   double IxIx=0, IxIy = 0, IyIy =0;
-  double bx = 0, by =0, Ith=0, Isc=0;
+  double bx = 0, by =0;
   double sn_th = 0, sd_th = 0, sn_sc = 0, sd_sc=0;
   double xo = face->Xo(), yo = face->Yo();
   for (face->reset(); face->next();)
@@ -279,8 +279,8 @@ bool strk_tracker::compute_motion(strk_correlated_face* cf,
     float Ii = image_i_(x,y);
     float dI = Ii-face->I();
     float Ix = cf->Ix(i), Iy = cf->Iy(i);
-    Ith = (-Ix*(y-yo)+Iy*(x-xo));
-    Isc = (Ix*(x-xo)+Iy*(y-yo));
+    double Ith = (-Ix*(y-yo)+Iy*(x-xo));
+    double Isc = (Ix*(x-xo)+Iy*(y-yo));
     IxIx += Ix*Ix;
     IxIy += Ix*Iy;
     IyIy += Iy*Iy;

@@ -2786,7 +2786,7 @@ gevd_float_operators::WaveletTransformByBlock(float* array,
     level_dims[l][ndim] = n;
   }
   if (!forwardp) {                              // reverse order of the
-    int* swap = NULL;                           // dimensions of sub_array
+    int * swap;                                 // dimensions of sub_array
     for (int l = 0; l < nlevels/2; l++) {
       swap = level_dims[l];
       level_dims[l] = level_dims[nlevels-1-l];

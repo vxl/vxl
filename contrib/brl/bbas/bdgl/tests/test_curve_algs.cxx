@@ -29,13 +29,14 @@ static void test_curve_algs()
   vdgl_digital_curve_sptr dc = new vdgl_digital_curve(p0, p1);
   vgl_line_2d<double> l(0.0, 1.0, -2.1);
   vcl_vector<vgl_point_2d<double> > pts;
-  bool good = bdgl_curve_algs::intersect_line(dc, l, pts);
+  bool good;
+  /* good = */ bdgl_curve_algs::intersect_line(dc, l, pts);
   TEST("Num Intersection points = 1", pts.size(), 1);
   TEST_NEAR("Intersection point = (1,2.1) (x)", pts[0].x(), 1.0, 1e-9);
   TEST_NEAR("Intersection point = (1,2.1) (y)", pts[0].y(), 2.1, 1e-9);
   // test fast curve intersection
   pts.clear();
-  good = bdgl_curve_algs::intersect_line_fast(dc, l, pts);
+  /* good = */ bdgl_curve_algs::intersect_line_fast(dc, l, pts);
   TEST("(fast) Num Intersection points = 1", pts.size(), 1);
   TEST_NEAR("(fast) Intersection point = (1,2.1) (x)", pts[0].x(), 1.0, 1e-9);
   TEST_NEAR("(fast) Intersection point = (1,2.1) (y)", pts[0].y(), 2.1, 1e-9);

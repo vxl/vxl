@@ -180,7 +180,7 @@ double bdgl_tracker_curve ::compute_euclidean_distance(vnl_matrix<double> R,vnl_
     for (unsigned int i=0; i<tcurve1.size(); ++i)
     {
       double min_dist=1e6;
-      int min_index=0;
+      // int min_index=0;
       for (unsigned int j=0; j<curve2.size(); ++j)
       {
         double dist=vcl_sqrt((tcurve1[i].x()-curve2[j].x())*(tcurve1[i].x()-curve2[j].x())
@@ -188,7 +188,7 @@ double bdgl_tracker_curve ::compute_euclidean_distance(vnl_matrix<double> R,vnl_
         if (min_dist>dist)
         {
           min_dist=dist;
-          min_index=j;
+          // min_index=j;
         }
       }
       if (min_dist<1e6)

@@ -623,7 +623,6 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
     return 0;
 
   int width = image.width(), height = image.height();
-  float mi = 0;
   strk_histf<float> image_hist;
   strk_joint_histf<float> joint_hist;
   int npix = intf_->Npix();
@@ -670,7 +669,7 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
   intensity_entropy_=enti;
   jent /= (float)vcl_log(2.0);
   intensity_joint_entropy_ = jent;
-  mi = float(model_intensity_entropy_) + enti - jent;
+  float mi = float(model_intensity_entropy_) + enti - jent;
 #ifdef DEBUG
   vcl_cout << "Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << ' '
            << enti << ' ' << jent << ' ' << mi <<")\n";
@@ -685,7 +684,6 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
   if (!intf_||!Ix||!Iy)
     return 0;
   int width = Ix.width(), height = Iy.height();
-  float mi = 0;
   strk_double_histf<float> image_dir_hist;
   strk_double_joint_histf<float> joint_dir_hist;
 
@@ -742,7 +740,7 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
   gradient_dir_entropy_ = enti;
   jent /= (float)vcl_log(2.0);
   gradient_joint_entropy_ = jent;
-  mi = float(model_gradient_dir_entropy_) + enti - jent;
+  float mi = float(model_gradient_dir_entropy_) + enti - jent;
 #ifdef DEBUG
   vcl_cout << "Dir Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << ' '
            << enti << ' ' << jent << ' ' << mi <<")\n";
@@ -757,14 +755,13 @@ compute_color_mutual_information(vil1_memory_image_of<float> const& hue,
   if (!intf_||!hue||!sat)
     return 0;
   int width = hue.width(), height = hue.height();
-  float mi = 0;
   strk_double_histf<float> color_hist;
   strk_double_joint_histf<float> joint_color_hist;
 
   int npix = intf_->Npix();
   if (!npix)
     return 0;
-  double deg_rad = 180.0/vnl_math::pi;
+  // double deg_rad = 180.0/vnl_math::pi;
   int i = 0, n = 0;
   for (intf_->reset(); intf_->next(); ++i, ++n)
   {
@@ -801,7 +798,7 @@ compute_color_mutual_information(vil1_memory_image_of<float> const& hue,
   color_entropy_ = enti;
   jent /= (float)vcl_log(2.0);
   color_joint_entropy_=jent;
-  mi = float(model_color_entropy_) + enti - jent;
+  float mi = float(model_color_entropy_) + enti - jent;
   return mi;
 }
 

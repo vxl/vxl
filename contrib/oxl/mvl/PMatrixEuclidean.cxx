@@ -15,8 +15,8 @@
 #include "PMatrixEuclidean.h"
 
 bool PMatrixEuclidean::decompose_to_intrinsic_extrinsic_params (
-  vnl_matrix<double> *camera_matrix,
-  vnl_matrix<double> *R,
-  vnl_vector<double> *t) {
+  vnl_matrix<double> * /* camera_matrix */,
+  vnl_matrix<double> * /* R */,
+  vnl_vector<double> * /* t */) {
   return false; // FIXME: not yet implemented
 };
