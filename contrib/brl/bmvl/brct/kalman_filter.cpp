@@ -20,7 +20,6 @@
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_digital_curve.h>
-#include <vdgl/vdgl_digital_curve_sptr.h>
 #include <bbas/bdgl/bdgl_curve_algs.h>
 #include "brct_algos.h"
 
@@ -45,10 +44,10 @@ void kalman_filter::init()
 
   // initialize the transit matrix
   dt_ = 1.0;
-  
+
   // initialize the default queue size
   queue_size_ = 10;
-  
+
   init_transit_matrix();
 
   init_cam_intrinsic();
@@ -59,8 +58,7 @@ void kalman_filter::init()
   init_covariant_matrix();
 
   // increase the frame number
-  cur_pos_ = (cur_pos_ ++) % queue_size_;
-
+  cur_pos_ = (cur_pos_+1) % queue_size_;
 }
 
 kalman_filter::~kalman_filter()
@@ -69,7 +67,6 @@ kalman_filter::~kalman_filter()
 
 void kalman_filter::init_transit_matrix()
 {
-  
   for (int i=0; i<6; i++)
     for (int j=0; j<6; j++)
       A_[i][j] = 0.0;
@@ -79,15 +76,14 @@ void kalman_filter::init_transit_matrix()
 
   for (int i=0; i<3; i++)
     A_[i][i+3] = dt_;
-  
-#if 0
+
+#ifdef DEBUG
   for (int i=0; i<6; i++) {
     for (int j=0; j<6; j++)
       vcl_cout<<A_[i][j]<<' ';
     vcl_cout<<'\n';
   }
-#endif //if 0
-  
+#endif // DEBUG
 }
 
 
@@ -115,9 +111,9 @@ void kalman_filter::init_state_vector()
 
   // compute epipole from velocity
   vnl_double_3 e = M_in_*T;
-  vnl_double_3x3 F;
 
-  // construct fundermental matrix between the first and second views.
+  // construct fundamental matrix between the first and second views.
+  vnl_double_3x3 F;
   F[0][0] = 0;     F[0][1] = -e[2];  F[0][2] = e[1];
   F[1][0] = e[2];  F[1][1] = 0;      F[1][2] = -e[0];
   F[2][0] = -e[1]; F[2][1] = e[0];   F[2][2] = 0;
@@ -141,7 +137,7 @@ void kalman_filter::init_state_vector()
   vcl_vector<vgl_point_3d<double> > pts_3d;
   for (int i=0; i<npts; i++)
   {
-    double index = 1.0*i/npts;
+    double index = i/double(npts);
     vgl_homg_point_2d<double> p1(dc0->get_x(index),dc0->get_y(index));
     vgl_point_2d<double> x1(p1);
     int x0_index = bdgl_curve_algs:: closest_point(ec0, x1.x(), x1.y());
@@ -215,8 +211,6 @@ void kalman_filter::init_state_vector()
   X_[0] = xc;
   X_[1] = yc;
   X_[2] = zc;
-
-
 }
 
 
@@ -224,16 +218,18 @@ void kalman_filter::init_observes(vcl_vector<vnl_matrix<double> > &input)
 {
   cur_pos_ = 0;
   queue_size_ = 10;
-  memory_size_ = 2;
+  memory_size_ = 2; // but can grow up to queue size
 
   observes_.resize(queue_size_);
-
+  assert(input.size() >= (unsigned int)queue_size_);
 
   curves_.resize(queue_size_);
   motions_.resize(queue_size_);
 
-  for (int i=0; i<queue_size_; i++)
+  for (int i=0; i<queue_size_; ++i) {
+    assert(input[i].rows() >= 2 && input[i].cols() >= (unsigned int)queue_size_);
     observes_[i] = input[i];
+  }
 }
 
 
@@ -294,7 +290,7 @@ vnl_double_3x4 kalman_filter::get_projective_matrix()
   return M_in_*M_ex;
 }
 
-void kalman_filter::set_H_matrix(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X)
+void kalman_filter::set_H_matrix(vnl_double_3x4 &P, vnl_double_3 &X)
 {
   // compute \sum {P_{4k} X_k } + P_{44}
   double temp = 0;
@@ -318,9 +314,9 @@ void kalman_filter::set_H_matrix(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> 
   }
 }
 
-vnl_vector_fixed<double, 2> kalman_filter::projection(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X)
+vnl_double_2 kalman_filter::projection(vnl_double_3x4 &P, vnl_double_3 &X)
 {
-    vnl_vector_fixed<double, 2> z;
+    vnl_double_2 z;
     for (int i=0; i<2; i++) {
       double t0 =0;
       for (int k=0; k<3; k++)
@@ -358,7 +354,7 @@ void kalman_filter::inc()
   {
     vnl_double_3x4 P = get_projective_matrix();
 
-    vnl_vector_fixed<double, 3> X;
+    vnl_double_3 X;
 
     for (int j=0; j<3; j++)
       X[j] = Xl_[j][i] + X_[j];
@@ -367,17 +363,17 @@ void kalman_filter::inc()
 
     update_covariant();
 
-    vnl_vector_fixed<double, 2> z;
+    vnl_double_2 z;
 
     for (int j=0; i<2; i++)
       z[j] = cur_measures[j][i];
 
-    vnl_vector_fixed<double, 2> z_pred = projection(P,X);
+    vnl_double_2 z_pred = projection(P,X);
 
     adjust_state_vector(z_pred, z);
   }
 
-  cur_pos_ = (cur_pos_ ++) % queue_size_;
+  cur_pos_ = (cur_pos_+1) % queue_size_;
 
   // store the history
   motions_[cur_pos_] = get_projective_matrix();
@@ -388,7 +384,7 @@ void kalman_filter::inc()
 
   // update local coordinates
   vcl_vector<vnl_double_3x4 > Ps;
-  vcl_vector<vnl_vector_fixed<double, 2> > pts;
+  vcl_vector<vnl_double_2 > pts;
 
   double xc=0, yc=0, zc=0;
   for (int i=0; i<num_points_; i++)
@@ -398,14 +394,14 @@ void kalman_filter::inc()
 
     for (int j=0; j<memory_size_; j++)
     {
-      vnl_vector_fixed<double, 2> pt;
+      vnl_double_2 pt;
       pt[0] = observes_[j][0][j];
       pt[1] = observes_[j][1][j];
       pts.push_back(pt);
-      Ps.push_back(motions_[i]);
+      Ps.push_back(motions_[j]);
     }
 
-    vnl_vector_fixed<double, 3> X3d = brct_algos::bundle_reconstruct_3d_point(pts, Ps);
+    vnl_double_3 X3d = brct_algos::bundle_reconstruct_3d_point(pts, Ps);
     Xl_[i][0] = X3d[0];
     Xl_[i][1] = X3d[1];
     Xl_[i][2] = X3d[2];
@@ -429,7 +425,7 @@ void kalman_filter::inc()
   }
 }
 
-void kalman_filter::adjust_state_vector(vnl_vector_fixed<double, 2> const& pred, vnl_vector_fixed<double, 2> const& meas)
+void kalman_filter::adjust_state_vector(vnl_double_2 const& pred, vnl_double_2 const& meas)
 {
   X_pred_ += K_*(meas - pred);
 }
@@ -476,10 +472,7 @@ void kalman_filter::read_data(char *fname)
         //add this edge to the current contour
       }
 
-      vdgl_interpolator_sptr intp=new vdgl_interpolator_linear(ec);
-      vdgl_digital_curve_sptr curve= new vdgl_digital_curve(intp);
-
-      curves_.push_back(curve);
+      curves_.push_back(new vdgl_digital_curve(new vdgl_interpolator_linear(ec)));
       //read in the end of contour block
       fp.getline(buffer,MAX_LEN);
 
@@ -524,19 +517,19 @@ void kalman_filter::init_velocity()
 
 
   vgl_homg_point_2d<double> epipole = vgl_homg_operators_2d<double>::lines_to_point(lines);
-  vnl_vector<double> e(3);
-  e[0] = epipole.x(); e[1] = epipole.y(); e[2] = epipole.w();
+  vnl_double_3 e; e[0] = epipole.x(); e[1] = epipole.y(); e[2] = epipole.w();
+#if 0 // F is not used
+  vnl_double_3x3 F;
+  F[0][0] =  0;    F[0][1] = -e[2]; F[0][2] =  e[1];
+  F[1][0] =  e[2]; F[1][1] =  0;    F[1][2] = -e[0];
+  F[2][0] = -e[1]; F[2][1] =  e[0]; F[2][2] =  0;
 
-  vnl_matrix<double> F(3, 3);
-  F[0][0] = 0;     F[0][1] = -e[2];  F[0][2] = e[1];
-  F[1][0] = e[2]; F[1][1] = 0;     F[1][2] = -e[0];
-  F[2][0] = -e[1];  F[2][1] = e[0]; F[2][2] = 0;
-
-//FMatrix Fmat(F);
+  FMatrix Fmat(F);
+#endif // 0
   init_cam_intrinsic();
 
   // get translation
-  double trans_dist = 1; // 105mm
+  double trans_dist = 1.0; // 105mm
   vnl_double_3 T = vnl_inverse(M_in_) * e;
   T /= vcl_sqrt(T[0]*T[0] + T[1]*T[1] + T[2]*T[2]);
   T *= trans_dist;
@@ -552,9 +545,9 @@ void kalman_filter::init_velocity()
 vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
 {
   vcl_vector<vgl_point_3d<double> > pts;
-  pts.resize(num_points_);  
-  
-  for(int i=0; i<num_points_; i++){
+  pts.resize(num_points_);
+
+  for (int i=0; i<num_points_; i++) {
     pts[i].set(Xl_[i][0], Xl_[i][1], Xl_[i][2]);
   }
   return pts;
@@ -565,9 +558,9 @@ vcl_vector<vgl_point_2d<double> > kalman_filter::get_cur_observes()
   vcl_vector<vgl_point_2d<double> > pts;
   pts.resize(num_points_);
 
-  vdgl_digital_curve_sptr dc = curves_[cur_pos_-1];
-  for(int i=0; i<num_points_; i++){
-    double s = double (i) / double(num_points_);
+  vdgl_digital_curve_sptr dc = curves_[cur_pos_];
+  for (int i=0; i<num_points_; i++) {
+    double s = double(i) / double(num_points_);
     pts[i].set(dc->get_x(s), dc->get_y(s));
   }
   return pts;
@@ -579,10 +572,9 @@ vcl_vector<vgl_point_2d<double> > kalman_filter::get_pre_observes()
   pts.resize(num_points_);
 
   assert(cur_pos_ > 0);
-
-  vdgl_digital_curve_sptr dc = curves_[cur_pos_];
-  for(int i=0; i<num_points_; i++){
-    double s = double (i) / double(num_points_);
+  vdgl_digital_curve_sptr dc = curves_[cur_pos_-1];
+  for (int i=0; i<num_points_; i++) {
+    double s = double(i) / double(num_points_);
     pts[i].set(dc->get_x(s), dc->get_y(s));
   }
   return pts;
