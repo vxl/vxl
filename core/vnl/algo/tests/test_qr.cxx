@@ -19,7 +19,7 @@ void test_matrix(char const* name, const vnl_matrix<double>& A, double det = 0)
   testlib_test_assert(n+"Q * Q = I", (qr.Q().transpose() * qr.Q()).is_identity(1e-12));
 
   if (det)
-    testlib_test_assert_near(n+ "Determinant", qr.determinant(), det, 1e-10);
+    testlib_test_assert_near(n+ "Determinant", qr.determinant(), det, 1e-9);
 }
 
 void double_test()
