@@ -3,11 +3,10 @@
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <bsol/bsol_algs.h>
-#include <vcl_cmath.h> // for log(), exp() ..
+#include <vcl_cmath.h> // for sqrt()
 #include <sdet/sdet_region.h>
 #include <brip/brip_roi.h>
 #include <brip/brip_para_cvrg.h>
-#include <vnl/vnl_numeric_traits.h>
 #include <sdet/sdet_watershed_region_proc_params.h>
 #include <sdet/sdet_watershed_region_proc.h>
 #include <sdet/sdet_vehicle_finder.h>
@@ -60,10 +59,9 @@ n_regions_closest_to_pick(vcl_vector<sdet_region_sptr> const& regions,
                           vcl_vector<sdet_region_sptr> & n_regions)
 {
   n_regions.clear();
-  float max_d = vnl_numeric_traits<float>::maxval;
   for (int i = 0; i<n; i++)
   {
-    float dmin = vnl_numeric_traits<float>::maxval;
+    float dmin = -1.0f;
     sdet_region_sptr reg;
     for (vcl_vector<sdet_region_sptr>::const_iterator rit = regions.begin();
          rit != regions.end(); rit++)
@@ -79,14 +77,14 @@ n_regions_closest_to_pick(vcl_vector<sdet_region_sptr> const& regions,
       int xp = pick_.x(), yp = pick_.y();
       float d = vcl_sqrt((x0-xp)*(x0-xp) + (y0-yp)*(y0-yp));
       double area = (*rit)->area();
-      max_d = distance_scale_*vcl_sqrt(area);
+      float max_d = distance_scale_*vcl_sqrt(area);
 #ifdef DEBUG
-      vcl_cout << "d " << d << '\n'
-               << "max_d " << max_d << '\n';
+      vcl_cout << "d = " << d << '\n'
+               << "max_d = " << max_d << '\n';
 #endif
       if (d>max_d)
         continue;
-      if (d<dmin)
+      if (dmin<0 || d<dmin)
       {
         dmin = d;
         reg = *rit;
