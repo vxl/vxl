@@ -18,8 +18,6 @@ SOURCES += mvl_three_view_six_point_structure.cxx
 # 1. Homogeneous objects
 
 SOURCES += Homg.cxx
-SOURCES += Homg1D.cxx
-#SOURCES += HomgPoint1D.cxx
 
 SOURCES += Homg2D.cxx
 SOURCES += HomgLine2D.cxx
