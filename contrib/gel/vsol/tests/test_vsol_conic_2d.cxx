@@ -17,8 +17,8 @@ void f(const vsol_conic_2d::vsol_conic_type &t)
 {
   switch(t)
     {
-    case vsol_conic_2d::degenerate:
-      vcl_cout<<"degenerate"<<vcl_endl;
+    case vsol_conic_2d::invalid:
+      vcl_cout<<"invalid"<<vcl_endl;
       break;
     case vsol_conic_2d::real_ellipse:
       vcl_cout<<"real_ellipse"<<vcl_endl;
