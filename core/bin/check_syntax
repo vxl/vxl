@@ -170,6 +170,8 @@ foreach $f (@FILES)
     next if ($f =~ m!vnl/vnl_math\.cxx$! && $j eq "math.h");
     next if ($f =~ m!vpl/vpl\.cxx$! && $j eq "vpl/os_unix/vpl.cxx");
     next if ($f =~ m!vbl_test_smart_ptr\.cxx$! && $j eq "vbl/vbl_smart_ptr.h");
+    next if ($f =~ m!vpdfl/vpdfl_all\.h$!);
+    next if ($f =~ m!pdf1d/pdf1d_all\.h$!);
     next if ($f =~ m!doc/vxl_doc_rules\.h!);
     &msg(1, "has multiple occurrence of \#include <$j>")
       if ($j eq $jj &&
@@ -181,7 +183,8 @@ foreach $f (@FILES)
          "$f-$j" !~ m!\bv3p/png/tests/pngtest\.c\-time\.h$! &&
           $j !~ m!^(stdlib|varargs|sys/types|stdio|windows|GL/glu?t?)\.h$!);
     $jj = $j; $i = $j;
-    next unless ($i =~ s!^(v[bginpsu]l|vil1|vtol|vsol|vdgl|vipl/vipl_with_[a-z_]+|vipl|vepl2?|mbl|mil|gevd|bdgl)/(file_formats/|algo/|io/|internals/|filter/|section/|vrml/|impl/(X|glut|gtk|mfc)/|)(.*)\.h!$4! || $i =~ s/^(v[cx]l_[a-z]+)\.h$/$1/);
+    next unless ($i =~ s!^(v[bginpsu]l|vil1|vgui|vidl|vidl_vil1|vtol|vsol|vdgl|vipl/vipl_with_[a-z_]+|vipl|vepl2?|mbl|pdf1d|vpdfl|mil|mil3d|vimt|vimt3d|gevd|bsol|btol|bugl|bvnl|bvgl|bgui|bdgl|rrel|rsdl|rgrl)/(file_formats/|algo/|io/|internals/|filter/|section/|vrml/|impl/(X|glut|gtk|mfc)/|)(.*)\.h!$4! || $i =~ s/^(v[cx]l_[a-z]+)\.h$/$1/);
+    next if ($f . " " . $j =~ m/(.*)\.h \1_sptr\.h/);
     next if ($j eq "vcl_compiler.h" || $j eq "vcl_new.h");
     next if ($j eq "vcl_cstdio.h" && $f =~ m!/StdAfx\.h$!);
     next if ($j eq "vcl_cmath.h" && $f =~ m!\bvcl/(vcl_cfloat|win32-vc60/vcl_complex)\.h$!);
@@ -198,7 +201,7 @@ foreach $f (@FILES)
     next if ($i eq "vcl_string" && $f =~ m!vgui/impl/gtk/(vgui_gtk_adaptor\.h|Templates/vcl_vector\+GtkWidget\~-\.cxx)$!);
     next if ($j eq "vsol/vsol_line_2d.h" && $f =~ m!bbas/bgui/bgui_vsol_soview2D\.cxx$!);
     $ii = $i;
-    $i =~ s/^(vgui.*)/$1\(\|_sptr\|_new\)/;
+    $i =~ s/^([vb]gui.*)/$1\(\|_sptr\|_new\)/;
     $i =~ s/^(v(so|to|dg|cs)l.*)/$1\(\|_sptr\)/ unless ($f =~ m/\.h$/);
     # VCL
     if ($j eq "vcl_algorithm.h") { $i="vcl_(adjacent_find|and|binary|binary_search|copy|copy_|count|count_if|equal|equal_range|fill|fill_n|find|find_end|find_first_of|find_if|for_each|generate|generate_n|generators_|heap|includes|inplace_merge|iter_swap|lexicographical_compare|lower_bound|make_heap|max|min|max_element|merge|merge_|min_element|mismatch|next_permutation|nth_element|partial_sort|partial_sort_copy|partition|stable_partition|partitions_|pop_heap|prev_permutation|push_heap|random_shuffle|remove|remove_copy|remove_copy_if|remove_if|replace|replace_copy|replace_copy_if|replace_if|reverse|reverse_copy|rotate|rotate_copy|search|search_n|set_difference|set_intersection|set_symmetric_difference|set_union|sort|sort_|sort_heap|stable_sort|swap|swap_|swap_ranges|transform|unique|unique_copy|upper_bound)"; }
@@ -371,15 +374,24 @@ foreach $f (@FILES)
     elsif ($j eq "vgui/vgui_color_text.h") { $i="(text_to_color|(red|green|blue)_value)"; }
     elsif ($j eq "vgui/vgui_command.h") { $i="($i(|_[a-z_]+)|VGUI_COMMAND_SIMPLE_INSTANTIATE)"; }
     elsif ($j eq "vgui/vgui_find.h") { $i="($i)_[a-z_]+name"; }
+    elsif ($j eq "vgui/vgui_grid_tableau.h") { $i="$i(_data|)"; }
     elsif ($j eq "vgui/vgui_macro.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vgui/vgui_menu.h") { $i="$i(|_item)"; }
     elsif ($j eq "vgui/vgui_pixel.h") { $i="($i)_([rgba1568]*|rgbfloat)"; }
-    elsif ($j eq "vgui/vgui_rubberbander.h") { $i="$i(|(|_easy2D)_client)"; }
-    elsif ($j eq "vgui/vgui_soview2D.h") { $i="$i(|_point|_circle|_lineseg|_linestrip|_polygon|_group)"; }
-    elsif ($j eq "vgui/vgui_statusbar.h") { $i="($i|get_statusbar\\(\\)->)"; }
+    elsif ($j eq "vgui/vgui_rubberband_tableau.h") { $i="vgui_rubberband(_tableau(|_new|_sptr)|(|_easy2D)_client)"; }
+    elsif ($j eq "vgui/vgui_shell_tableau.h") { $i="$i(_bindings|)"; }
+    elsif ($j eq "vgui/vgui_soview2D.h") { $i="$i(|_point|_circle|_lineseg|_linestrip|_polygon|_group|_image)"; }
+    elsif ($j eq "vgui/vgui_statusbar.h") { $i="($i|get_statusbar\(\)->)"; }
+    elsif ($j eq "vgui/vgui_style.h") { $i="$i(_equal|)"; }
     elsif ($j eq "vgui/vgui_tag.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vgui/vgui_tableau_sptr.h") { $i="($i(|_t)|get_tableau)"; }
+    elsif ($j eq "vgui/internals/vgui_rasterpos.h") { $i="($i).*"; }
     elsif ($j eq "vgui/internals/vgui_simple_field.h") { $i="vgui_(simple|bool|int|long|float|double)_field"; }
+    # VIDL
+    elsif ($j eq "vidl/vidl_codec.h") { $i="$i|coder_->"; }
+    elsif ($j eq "vidl_vil1/vidl_vil1_codec.h") { $i="$i|coder_->"; }
+    elsif ($j eq "vidl/vidl_frame.h") { $i="$i|->get_(view|image)\(\)"; }
+    elsif ($j eq "vidl_vil1/vidl_vil1_frame.h") { $i="$i|get_view"; }
     # VIPL
     elsif ($j eq "vipl/filter/vipl_filter_abs.h") { $i="($i|FILTER_IMPTR_(INC|DEC)_REFCOUNT)"; }
     elsif ($j =~ m"vipl/vipl_with_vbl_array_2d/accessors/vipl_accessors_(vbl_array_2d)\.h") { $i="$1"; }
@@ -422,6 +434,27 @@ foreach $f (@FILES)
     # MIL
     elsif ($j eq "mil/mil_bilin_interp_2d.h") { $i="mil(|_safe(|_extend))_bilin_interp_2d"; }
     elsif ($j eq "mil/mil_convert_vil.h") { $i="($i)_[gc][mv]2[gc][mv]"; }
+    # VIMT
+    elsif ($j eq "vimt/algo/vimt_find_peaks.h") { $i="vimt_(is_peak(|_3x3)|find_(image|world)_peaks(|_3x3)|find_max)"; }
+    elsif ($j eq "vimt/algo/vimt_find_throughs.h") { $i="vimt_(is_through_3x3|find_(image|world)_throughs_3x3)"; }
+    elsif ($j eq "vimt3d/vimt3d_trilin_interp.h") { $i="($i)_(safe|raw)"; }
+    # VPDFL
+    elsif ($j eq "vpdfl/vpdfl_prob_chi2.h") { $i="vpdfl_(cum_prob_chi2|chi2_for_cum_prob)"; }
+    # RREL
+    elsif ($j eq "rrel/rrel_misc.h") { $i="$i(|_[a-z_]+)"; }
+    elsif ($j eq "rrel/rrel_muse_table.h") { $i="$i(|_entry)|rrel_muse_key_type"; }
+    elsif ($j eq "rrel/rrel_util.h") { $i="$i(|_[a-z_]+)"; }
+    # RSDL
+    elsif ($j eq "rsdl/rsdl_dist.h") { $i="$i(|_[a-z_]+)"; }
+    elsif ($j eq "rsdl/rsdl_kd_tree.h") { $i="rsdl_kd_(node|heap_entry|tree"; }
+    # RGRL
+    elsif ($j eq "rgrl/rgrl_feature.h") { $i="$i(|_caster)"; }
+    elsif ($j eq "rgrl/rgrl_mask.h") { $i="$i(|_[a-z_]+)"; }
+    elsif ($j eq "rgrl/rgrl_match_set.h") { $i="$i(|_[a-z_]+_iterator)"; }
+    elsif ($j eq "rgrl/rgrl_scale_estimator.h") { $i="$i(|_(un|)wgted)"; }
+    elsif ($j eq "rgrl/rgrl_util.h") { $i="$i(|_[a-z_]+)"; }
+    # BGUI
+    elsif ($j eq "bgui/bgui_vsol_soview2D_point.h") { $i="$i(|_[a-z_]+)"; }
     # SPECIAL CASES
     if ($j =~ m"(vsl/vsl_[a-z]+_io|v[bginu]l1?/io/v[bginu]l1?_io_[a-z123_]+)\.h") { $i="$i|vsl_(b_(read|write)|print_summary)"; }
     next if ($j eq "vsol/vsol_curve.h" && $f =~ m!Templates/vbl_smart_ptr\+vtol_edge-\.cxx$!);
@@ -544,6 +577,7 @@ foreach $f (@FILES)
     &msg(1, "has no (valid) inclusion guard")
       unless (! $cpp_file || $f !~ m/\.(txx|h)$/ ||
               $f =~ m!vcl/vcl_typeinfo\.h$! ||
+              $f =~ m!copyright\.h$! ||
               $f =~ m!/resource\.h$!i ||
               $file_s eq "\n");
   }
@@ -601,6 +635,7 @@ foreach $f (@FILES)
     $class =~ s/\bconstchar/const_char/g; $class =~ s/(\w)const/$1_const/g;
     $class =~ s/\,vcl_less\<[^<>]+\<[^<>]+\>[^<>]*\>//g;
     $class =~ s/\,vcl_less\<[^<>]+\>//g;
+    $class =~ s/\,(.*)_sptr\,\1\005compare//g;
     $class =~ s/(vbl_io_sparse_array)_base\</$1\</g;
     $class =~ s/\005/+-/g; $class =~ tr/<,*>/+.~-/; # \005 is ::
     $class_q = $class; $class_q =~ s/([.+~-])/\\$1/g;
@@ -639,6 +674,8 @@ foreach $f (@FILES)
           "$f.$wd" !~ m!\bvbl/vbl_bounding_box\.(h|txx)\.(min|max)$! &&
           "$f.$wd" !~ m!\bgel/vgel/kl/base\.h\.(min|max)$! &&
           "$f.$wd" !~ m!\bmul/mbl/mbl_stats_1d\.h\.(min|max)$! &&
+          "$f.$wd" !~ m!\brpl/rgrl/rgrl_spline\.cxx\.(ceil|floor|min|max)$! &&
+          "$f.$wd" !~ m!\brpl/rgrl/tests/test_spline\.cxx\.(ceil|floor)$! &&
           "$f.$wd" !~ m!\boxl/mvl/HomgConic\.(h|cxx)\.polar$! &&
           "$f.$wd" !~ m!\bbrl/bbas/bdgl/bdgl_curve_clustering\.(cxx|h)\.(min|max)$! &&
           "$f.$wd" !~ m!\bvnl/algo/vnl_rn?poly_(solve|roots)\.h\.(real|imag)$! &&
@@ -685,6 +722,7 @@ foreach $f (@FILES)
             $f !~ m!\b(oxl/oxp/vsl_conic_points\.cxx|gel/gevd/gevd_float_operators\.cxx)$! &&
             $f !~ m!\bgel/vtol/algo/vtol_extract_topology\.(h|cxx)$! &&
             $f !~ m!\bvcsl/examples/vcsl_tutor\.cxx$! &&
+            $f !~ m!\brgrl/rgrl_invariant_match\.(cxx|h)$! &&
             $f !~ m!\brsdl/rsdl_(bins_2d|kd_tree)\.h$! &&
             $f !~ m!\brsdl/(rsdl_kd_tree|tests/test_bins_2d|tests/test_kd_tree)\.cxx$! ) ) &&
           $file_s =~ m![^ .>]\s*\b$wd\s*[|),]! );
