@@ -4,6 +4,14 @@ extern double sqrt(double); /* #include <math.h> */
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
+/*
+ * Calling this ensures that the operands are spilled to
+ * memory and thus avoids excessive precision when compiling
+ * for x86 with heavy optimization (gcc). It is better to do
+ * this than to turn on -ffloat-store.
+ */
+static int fsm_ieee_floats_equal(const real *x, const real *y);
+
 /* Table of constant values */
 static integer c__1 = 1;
 static complex c_1 = {1.f,0.f};
@@ -424,7 +432,8 @@ L400:
     for (l = m; l > 0; --l) {
         test = c_abs(&s[l-1]) + c_abs(&s[l]);
         ztest = test + c_abs(&e[l-1]);
-        if (ztest == test) {
+        if (fsm_ieee_floats_equal(&ztest, &test)) {
+/* WAS: if (ztest == test) { */
             e[l-1].r = 0.f, e[l-1].i = 0.f;
             break; /* last l */
         }
@@ -467,7 +476,8 @@ L400:
             test += c_abs(&e[ls-1]);
         }
         ztest = test + c_abs(&s[ls]);
-        if (ztest == test) {
+        if (fsm_ieee_floats_equal(&ztest, &test)) {
+/* WAS: if (ztest == test) { */
             s[ls].r = 0.f, s[ls].i = 0.f;
             break; /* last ls */
         }
@@ -562,3 +572,8 @@ L400:
     goto L400;
 
 } /* csvdc_ */
+
+int fsm_ieee_floats_equal(const real *x, const real *y)
+{
+  return *x == *y;
+}

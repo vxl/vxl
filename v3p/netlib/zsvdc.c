@@ -5,6 +5,14 @@ extern double sqrt(double); /* #include <math.h> */
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 /*     and moved zswap() zscal() zdrot() zdotc() zaxpy() to separate files */
 
+/*
+ * Calling this ensures that the operands are spilled to
+ * memory and thus avoids excessive precision when compiling
+ * for x86 with heavy optimization (gcc). It is better to do
+ * this than to turn on -ffloat-store.
+ */
+static int fsm_ieee_doubles_equal(const doublereal *x, const doublereal *y);
+
 /* Table of constant values */
 static integer c__1 = 1;
 static doublecomplex c_1 = {1.,0.};
@@ -430,7 +438,8 @@ L400:
     for (l = m; l > 0; --l) {
         test = z_abs(&s[l-1]) + z_abs(&s[l]);
         ztest = test + z_abs(&e[l-1]);
-        if (ztest == test) {
+        if (fsm_ieee_doubles_equal(&ztest, &test)) {
+/* WAS: if (ztest == test) { */
             e[l-1].r = 0., e[l-1].i = 0.;
             break; /* last l */
         }
@@ -473,7 +482,8 @@ L400:
             test += z_abs(&e[ls-1]);
         }
         ztest = test + z_abs(&s[ls]);
-        if (ztest == test) {
+        if (fsm_ieee_doubles_equal(&ztest, &test)) {
+/* WAS: if (ztest == test) { */
             s[ls].r = 0., s[ls].i = 0.;
             break; /* last ls */
         }
@@ -568,3 +578,8 @@ L400:
     goto L400;
 
 } /* zsvdc_ */
+
+int fsm_ieee_doubles_equal(const double *x, const double *y)
+{
+  return *x == *y;
+}

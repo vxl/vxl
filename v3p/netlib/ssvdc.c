@@ -2,6 +2,14 @@
 #include "netlib.h"
 extern double sqrt(double); /* #include <math.h> */
 
+/*
+ * Calling this ensures that the operands are spilled to
+ * memory and thus avoids excessive precision when compiling
+ * for x86 with heavy optimization (gcc). It is better to do
+ * this than to turn on -ffloat-store.
+ */
+static int fsm_ieee_floats_equal(const real *x, const real *y);
+
 /* Table of constant values */
 static integer c__1 = 1;
 static real c_m1 = -1.f;
@@ -355,7 +363,8 @@ L360:
     for (l = m-1; l >= 0; --l) {
         test = abs(s[l]) + abs(s[l+1]);
         ztest = test + abs(e[l]);
-        if (ztest == test) {
+        if (fsm_ieee_floats_equal(&ztest, &test)) {
+/* WAS: if (ztest == test) { */
             e[l] = 0.f;
             break;
         }
@@ -373,7 +382,8 @@ L360:
             test += abs(e[ls-1]);
         }
         ztest = test + abs(s[ls]);
-        if (ztest == test) {
+        if (fsm_ieee_floats_equal(&ztest, &test)) {
+/* WAS: if (ztest == test) { */
             s[ls] = 0.f;
             break;
         }
@@ -529,3 +539,8 @@ L600:
     --m;
     goto L360;
 } /* ssvdc_ */
+
+int fsm_ieee_floats_equal(const real *x, const real *y)
+{
+  return *x == *y;
+}
