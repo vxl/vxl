@@ -240,7 +240,7 @@ char const *vil_gif_loader_saver::file_format() const { return "gif"; }
 
 vil_image vil_gif_loader_saver::get_plane(int i) const
 {
-  if (0<=i && i<images.size())
+  if (0<=i && i<int(images.size()))
     return new vil_gif_loader_saver_proxy(i, const_cast<vil_gif_loader_saver*>(this));
   else
     return 0;
