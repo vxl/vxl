@@ -18,14 +18,14 @@
 // vil_image_view_base_sptr. The basic conversion
 // operations (e.g. casting, rounding) are available in both types.
 // All of the conversions attempt to find shortcuts, so the output
-// may be a reconfigured, or shallow copy of the input. 
+// may be a reconfigured, or shallow copy of the input.
 //
 // \par vil_convert with explicit pixel types
 // These are useful when you have two vil_image_view objects you want
 // to convert between. You can use them in templates where the pixel
 // type is one of the template parameters. These functions
 // may create a shallow copy of the input if the types match too save
-// unnecessary work. 
+// unnecessary work.
 // - vil_convert_cast
 // - vil_convert_round
 // - vil_convert_rgb_to_grey
@@ -37,7 +37,7 @@
 // of vil_image_resource::get_view(), where you may not know the
 // pixel type in advance, but want to force the image into a
 // particular pixel type.
-// - vil_convert_cast 
+// - vil_convert_cast
 // - vil_convert_round
 // - vil_convert_rgb_to_grey
 // - vil_convert_planes_to_grey
@@ -49,18 +49,16 @@
 // pixel-typed image, they all return a vil_image_view_base_sptr,
 // so that the functions can be strung along
 //
-
 // Note that these vil_convert_..( vil_image_view_base_sptr ) functions
 // are provided as a convenience for users of vil_load and
 // vil_image_resource::get_view(). Their existence should not suggest
-// that it is sensible to use a vil_image_view_base_sptr as storage, 
+// that it is sensible to use a vil_image_view_base_sptr as storage,
 // nor that it is a good idea to write a functions that
 // take or return a vil_image_view_base_sptr. If you need a
 // pixel-type-agnostic image container then use a vil_image_resource_sptr
-
+//
 // It may be a good idea to provide vil_image_resource_sptr based
 // vil_converts as well.
-
 
 #include <vcl_deprecated.h>
 #include <vcl_cassert.h>
@@ -78,54 +76,39 @@ class vil_convert_cast_pixel
   void operator () (In v, Out &d) const;
 };
 
-// deal with conversions from floating point types to some compounds
+// deal with conversions from floating point types to/from some compounds
 #define macro( in , out )\
 VCL_DEFINE_SPECIALIZATION \
-inline void vil_convert_cast_pixel<in, out >::operator () (in v, out& d) const \
-{ d.r = d.g = d.b = (out::value_type)v; }
-macro( vxl_byte , vil_rgb<vxl_byte> )
-macro( float , vil_rgb<vxl_byte> )
-macro( double , vil_rgb<vxl_byte> )
-macro( vxl_sbyte , vil_rgb<vxl_sbyte> )
-macro( float , vil_rgb<vxl_sbyte> )
-macro( double , vil_rgb<vxl_sbyte> )
-macro( vxl_int_16 , vil_rgb<vxl_int_16> )
-macro( float , vil_rgb<vxl_int_16> )
-macro( double , vil_rgb<vxl_int_16> )
-macro( vxl_uint_16 , vil_rgb<vxl_uint_16> )
-macro( float , vil_rgb<vxl_uint_16> )
-macro( double , vil_rgb<vxl_uint_16> )
-macro( vxl_int_32 , vil_rgb<vxl_int_32> )
-macro( float , vil_rgb<vxl_int_32> )
-macro( double , vil_rgb<vxl_int_32> )
-macro( vxl_uint_32 , vil_rgb<vxl_uint_32> )
-macro( float , vil_rgb<vxl_uint_32> )
-macro( double , vil_rgb<vxl_uint_32> )
-macro( double , vil_rgb<float> )
-#undef macro
-#define macro( in , out )\
+inline void vil_convert_cast_pixel<in, vil_rgb<out > >::operator () (in v, vil_rgb<out >& d) const \
+{ d.r = d.g = d.b = (out)v; } \
 VCL_DEFINE_SPECIALIZATION \
-inline void vil_convert_cast_pixel<in, out >::operator () (in v, out& d) const \
-{ d.r = d.g = d.b = (out::value_type)v; d.a=1; }
-macro( vxl_byte , vil_rgba<vxl_byte> )
-macro( float , vil_rgba<vxl_byte> )
-macro( double , vil_rgba<vxl_byte> )
-macro( vxl_sbyte , vil_rgba<vxl_sbyte> )
-macro( float , vil_rgba<vxl_sbyte> )
-macro( double , vil_rgba<vxl_sbyte> )
-macro( vxl_int_16 , vil_rgba<vxl_int_16> )
-macro( float , vil_rgba<vxl_int_16> )
-macro( double , vil_rgba<vxl_int_16> )
-macro( vxl_uint_16 , vil_rgba<vxl_uint_16> )
-macro( float , vil_rgba<vxl_uint_16> )
-macro( double , vil_rgba<vxl_uint_16> )
-macro( vxl_int_32 , vil_rgba<vxl_int_32> )
-macro( float , vil_rgba<vxl_int_32> )
-macro( double , vil_rgba<vxl_int_32> )
-macro( vxl_uint_32 , vil_rgba<vxl_uint_32> )
-macro( float , vil_rgba<vxl_uint_32> )
-macro( double , vil_rgba<vxl_uint_32> )
-macro( double , vil_rgba<float> )
+inline void vil_convert_cast_pixel<vil_rgb<out >, in >::operator () (vil_rgb<out > v, in& d) const \
+{ d = (in)(0.2125*v.r+0.7154*v.g+0.0721*v.b); } \
+VCL_DEFINE_SPECIALIZATION \
+inline void vil_convert_cast_pixel<in, vil_rgba<out > >::operator () (in v, vil_rgba<out >& d) const \
+{ d.r = d.g = d.b = (out)v; d.a=1; } \
+VCL_DEFINE_SPECIALIZATION \
+inline void vil_convert_cast_pixel<vil_rgba<out >, in >::operator () (vil_rgba<out > v, in& d) const \
+{ d = (in)(0.2125*v.r+0.7154*v.g+0.0721*v.b); }
+macro( vxl_byte , vxl_byte )
+macro( float , vxl_byte )
+macro( double , vxl_byte )
+macro( vxl_sbyte , vxl_sbyte )
+macro( float , vxl_sbyte )
+macro( double , vxl_sbyte )
+macro( vxl_int_16 , vxl_int_16 )
+macro( float , vxl_int_16 )
+macro( double , vxl_int_16 )
+macro( vxl_uint_16 , vxl_uint_16 )
+macro( float , vxl_uint_16 )
+macro( double , vxl_uint_16 )
+macro( vxl_int_32 , vxl_int_32 )
+macro( float , vxl_int_32 )
+macro( double , vxl_int_32 )
+macro( vxl_uint_32 , vxl_uint_32 )
+macro( float , vxl_uint_32 )
+macro( double , vxl_uint_32 )
+macro( double , float )
 #undef macro
 #define macro( inout )\
 VCL_DEFINE_SPECIALIZATION \
@@ -141,6 +124,32 @@ macro( float )
 macro( double )
 macro( vil_rgb<vxl_byte> )
 macro( vil_rgba<vxl_byte> )
+#undef macro
+#define macro( in )\
+VCL_DEFINE_SPECIALIZATION \
+inline void vil_convert_cast_pixel<in,vcl_complex<double> >::operator () (in v, vcl_complex<double>& d) const \
+{ d = vcl_complex<double>(double(v),0.0); } \
+inline void vil_convert_cast_pixel<in,vcl_complex<float> >::operator () (in v, vcl_complex<float>& d) const \
+{ d = vcl_complex<float>(float(v),0.0f); }
+macro( vxl_byte )
+macro( vxl_sbyte )
+macro( vxl_int_16 )
+macro( vxl_uint_16 )
+macro( vxl_int_32 )
+macro( vxl_uint_32 )
+#undef macro
+#define macro( out )\
+VCL_DEFINE_SPECIALIZATION \
+inline void vil_convert_cast_pixel<vcl_complex<double>,out >::operator () (vcl_complex<double> d, out& v) const \
+{ v = (out)(d.real()); } \
+inline void vil_convert_cast_pixel<vcl_complex<float>,out >::operator () (vcl_complex<float> d, out& v) const \
+{ v = (out)(d.real()); }
+macro( vxl_byte )
+macro( vxl_sbyte )
+macro( vxl_int_16 )
+macro( vxl_uint_16 )
+macro( vxl_int_32 )
+macro( vxl_uint_32 )
 #undef macro
 
 // declare general case in case anyone needs something weird.
@@ -159,7 +168,7 @@ inline void vil_convert_cast_pixel<In, Out>::operator () (In v, Out &d) const
 // \relates vil_image_view
 template <class inP, class outP>
 inline void vil_convert_cast(const vil_image_view<inP >&src,
-  vil_image_view<outP >&dest)
+                             vil_image_view<outP >&dest)
 {
   if (vil_pixel_format_of(inP()) == vil_pixel_format_of(outP()))
     dest = src;
@@ -167,7 +176,65 @@ inline void vil_convert_cast(const vil_image_view<inP >&src,
     vil_transform2(src, dest, vil_convert_cast_pixel<inP, outP>());
 }
 
+#if 0 // TODO ?
 
+//: Cast the unknown pixel type to the known one, if possible.
+//
+// Will call the other vil_convert_case to do the actual
+// conversion. For template instantiation reasons, this will only
+// convert to a scalar type, not an RGB or RGBA type.
+// However, the destination image will have a plane step of 1 if the source
+// image is RGB or RGBA, i.e., the pixel layout will still be RGBRGB...
+//
+// \relates vil_image_view
+//
+template <class outP>
+inline void vil_convert_cast(const vil_image_view_base_sptr&src, vil_image_view<outP >&dest)
+{
+#define docase(T) \
+   case T: \
+     vil_convert_cast( vil_image_view< typename vil_pixel_format_type_of<T >::component_type >(src), dest );\
+     break
+
+  switch( src->pixel_format() ) {
+    docase( VIL_PIXEL_FORMAT_UINT_32 );
+    docase( VIL_PIXEL_FORMAT_INT_32 );
+    docase( VIL_PIXEL_FORMAT_UINT_16 );
+    docase( VIL_PIXEL_FORMAT_INT_16 );
+    docase( VIL_PIXEL_FORMAT_BYTE );
+    docase( VIL_PIXEL_FORMAT_SBYTE );
+    docase( VIL_PIXEL_FORMAT_FLOAT );
+    docase( VIL_PIXEL_FORMAT_DOUBLE );
+    docase( VIL_PIXEL_FORMAT_BOOL );
+
+    docase( VIL_PIXEL_FORMAT_RGB_UINT_32 );
+    docase( VIL_PIXEL_FORMAT_RGB_INT_32 );
+    docase( VIL_PIXEL_FORMAT_RGB_UINT_16 );
+    docase( VIL_PIXEL_FORMAT_RGB_INT_16 );
+    docase( VIL_PIXEL_FORMAT_RGB_BYTE );
+    docase( VIL_PIXEL_FORMAT_RGB_SBYTE );
+    docase( VIL_PIXEL_FORMAT_RGB_FLOAT );
+    docase( VIL_PIXEL_FORMAT_RGB_DOUBLE );
+
+    docase( VIL_PIXEL_FORMAT_RGBA_UINT_32 );
+    docase( VIL_PIXEL_FORMAT_RGBA_INT_32 );
+    docase( VIL_PIXEL_FORMAT_RGBA_UINT_16 );
+    docase( VIL_PIXEL_FORMAT_RGBA_INT_16 );
+    docase( VIL_PIXEL_FORMAT_RGBA_BYTE );
+    docase( VIL_PIXEL_FORMAT_RGBA_SBYTE );
+    docase( VIL_PIXEL_FORMAT_RGBA_FLOAT );
+    docase( VIL_PIXEL_FORMAT_RGBA_DOUBLE );
+
+    docase( VIL_PIXEL_FORMAT_COMPLEX_FLOAT );
+    docase( VIL_PIXEL_FORMAT_COMPLEX_DOUBLE );
+
+    default:
+      ;
+  }
+#undef docase
+}
+
+#endif // 0
 
 //: Performs rounding between different pixel types.
 template <class In, class Out>
@@ -279,14 +346,13 @@ inline void vil_convert_round_pixel<In, Out>::operator () (In v, Out &d) const
 // \relates vil_image_view
 template <class inP, class outP>
 inline void vil_convert_round(const vil_image_view<inP >&src,
-  vil_image_view<outP >&dest)
+                              vil_image_view<outP >&dest)
 {
   if (vil_pixel_format_of(inP()) == vil_pixel_format_of(outP()))
     dest = src;
   else
     vil_transform2(src, dest, vil_convert_round_pixel<inP, outP>());
 }
-
 
 
 //: Convert various rgb types to greyscale, using given weights
@@ -312,8 +378,8 @@ class vil_convert_rgb_to_grey_pixel
 // http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
 template <class rgbP, class outP>
 inline void vil_convert_rgb_to_grey(const vil_image_view<rgbP >&src,
-  vil_image_view<outP >&dest,
-  double rw=0.2125, double gw=0.7154, double bw=0.0721)
+                                    vil_image_view<outP >&dest,
+                                    double rw=0.2125, double gw=0.7154, double bw=0.0721)
 {
 #if VCL_VC60 || !VCL_HAS_TYPENAME
   vil_convert_rgb_to_grey_pixel<rgbP::value_type, outP> func(rw, gw, bw);
@@ -334,8 +400,8 @@ inline void vil_convert_rgb_to_grey(const vil_image_view<rgbP >&src,
 // http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
 template <class inP, class outP>
 inline void vil_convert_planes_to_grey(const vil_image_view<inP>&src,
-  vil_image_view<outP>&dest,
-  double rw=0.2125, double gw=0.7154, double bw=0.0721)
+                                       vil_image_view<outP>&dest,
+                                       double rw=0.2125, double gw=0.7154, double bw=0.0721)
 {
   assert(src.nplanes() >= 3);
   assert(vil_pixel_format_num_components(src.pixel_format()) == 1);
@@ -346,11 +412,6 @@ inline void vil_convert_planes_to_grey(const vil_image_view<inP>&src,
       vil_convert_round_pixel<double,outP>()(
         src(i,j,0)*rw + src(i,j,1)*gw + src(i,j,2)*bw, dest(i,j));
 }
-
-
-
-
-
 
 
 //: Convert src to byte image dest by stretching to range [0,255]
@@ -390,15 +451,13 @@ inline void vil_convert_stretch_range(const vil_image_view<inP>& src,
   double b = 0.0;
   if (max_b-min_b >0)
     b = static_cast<double>(hi-lo)/static_cast<double>(max_b-min_b);
-  double a = -1.0*min_b*b + lo;    
+  double a = -1.0*min_b*b + lo;
   dest.set_size(src.ni(), src.nj(), src.nplanes());
   for (unsigned p = 0; p < src.nplanes(); ++p)
     for (unsigned j = 0; j < src.nj(); ++j)
       for (unsigned i = 0; i < src.ni(); ++i)
         dest(i,j,p) =  b*src(i,j,p) + a;
 }
-
-
 
 
 //: Cast the unknown pixel type to the known one.
@@ -412,36 +471,35 @@ inline void vil_convert_stretch_range(const vil_image_view<inP>& src,
 // The input image's storage arrangement may not be preserved.
 template <class outP>
 inline vil_image_view_base_sptr vil_convert_cast(outP /*dummy*/,
-  const vil_image_view_base_sptr& src)
+                                                 const vil_image_view_base_sptr& src)
 {
   if (!src) return vil_image_view_base_sptr();
-  
+
   vil_image_view_base_sptr dest = new vil_image_view<outP>;
   vil_image_view<outP> & dest_ref = static_cast<vil_image_view<outP> &>(*dest);
-  
+
   switch( vil_pixel_format_component_format(src->pixel_format()) )
   {
 #define macro(F , T) \
    case F: \
-     vil_convert_cast( vil_image_view<T >( src ), dest_ref );\
-     break;
-    
-    macro( VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32 )
-    macro( VIL_PIXEL_FORMAT_INT_32, vxl_int_32 )
-    macro( VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16 )
-    macro( VIL_PIXEL_FORMAT_INT_16, vxl_int_16 )
-    macro( VIL_PIXEL_FORMAT_BYTE, vxl_byte )
-    macro( VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte )
-    macro( VIL_PIXEL_FORMAT_FLOAT, float )
-    macro( VIL_PIXEL_FORMAT_DOUBLE, double )
-    macro( VIL_PIXEL_FORMAT_BOOL, bool )
+     vil_convert_cast( vil_image_view<T >( *src ), dest_ref );\
+     break
+
+    macro( VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32 );
+    macro( VIL_PIXEL_FORMAT_INT_32, vxl_int_32 );
+    macro( VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16 );
+    macro( VIL_PIXEL_FORMAT_INT_16, vxl_int_16 );
+    macro( VIL_PIXEL_FORMAT_BYTE, vxl_byte );
+    macro( VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte );
+    macro( VIL_PIXEL_FORMAT_FLOAT, float );
+    macro( VIL_PIXEL_FORMAT_DOUBLE, double );
+    macro( VIL_PIXEL_FORMAT_BOOL, bool );
 #undef macro
     default:
       dest = 0;
   }
   return dest;
 }
-
 
 
 //: Cast the unknown pixel type to the known one, if possible.
@@ -455,7 +513,7 @@ inline vil_image_view_base_sptr vil_convert_cast(outP /*dummy*/,
 // \deprecated Use other vil_convert_cast()
 template <class outP>
 inline void vil_convert_cast(const vil_image_view_base_sptr& src,
-  vil_image_view<outP >&dest)
+                             vil_image_view<outP >&dest)
 {
   VXL_DEPRECATED( "void vil_convert_cast(const vil_image_view_base_sptr&,"
     " vil_image_view<outP >&" );
@@ -486,9 +544,6 @@ inline void vil_convert_cast(const vil_image_view_base_sptr& src,
 }
 
 
-
-
-
 //: Convert an image of any pixel type to another with rounding.
 // This should only be used to convert to scalar
 // pixel types. This function only rounds in terms of the
@@ -499,7 +554,7 @@ inline void vil_convert_cast(const vil_image_view_base_sptr& src,
 //
 // If the input image already has outP as its pixel type, the destination
 // may only be a shallow copy of the source.
-// outP should be a scalar pixel type. 
+// outP should be a scalar pixel type.
 // The input image's storage arrangement may not be preserved.
 template <class outP>
 inline vil_image_view_base_sptr vil_convert_round(
@@ -512,7 +567,7 @@ inline vil_image_view_base_sptr vil_convert_round(
   if (vil_pixel_format_component_format(src->pixel_format()) ==
       vil_pixel_format_of(outP()))
     return src;
-    
+
   vil_image_view_base_sptr dest = new vil_image_view<outP >;
   vil_image_view<outP > &dest_ref = static_cast<vil_image_view<outP >&>(*dest);
 
@@ -548,25 +603,24 @@ inline vil_image_view_base_sptr vil_convert_to_component_order(
   const vil_image_view_base_sptr& src)
 {
   if (!src) return vil_image_view_base_sptr();
-  
+
   vil_image_view_base_sptr dest;
-  
+
   switch (vil_pixel_format_component_format(src->pixel_format()))
   {
 #define macro( F , T )\
     case F: { \
-      vil_image_view<T  > src_ref(src); \
+      vil_image_view<T > src_ref(src); \
       if (!src_ref) return vil_image_view_base_sptr(); \
       if (src_ref.planestep()==1) return src; \
       const unsigned ni=src->ni(), nj=src->nj(), nplanes=src->nplanes(); \
       vil_memory_chunk_sptr chunk = \
-        new vil_memory_chunk(ni*nj*nplanes*sizeof(T  ), \
-          vil_pixel_format_component_format(F)); \
+        new vil_memory_chunk(ni*nj*nplanes*sizeof(T), \
+                             vil_pixel_format_component_format(F)); \
       dest = new vil_image_view<T >(chunk, \
-        reinterpret_cast<T *>(chunk->data()), ni, nj, nplanes, nplanes, \
-        nplanes*ni, 1); \
-      vil_image_view<T > & dest_ref =  \
-        static_cast<vil_image_view<T > &>(*dest); \
+                                    reinterpret_cast<T*>(chunk->data()), \
+                                    ni, nj, nplanes, nplanes, nplanes*ni, 1); \
+      vil_image_view<T > & dest_ref = static_cast<vil_image_view<T >&>(*dest); \
       vil_copy_reformat(src_ref, dest_ref); \
       break; }
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
@@ -578,8 +632,8 @@ macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
- 
-    default: dest=0;  
+
+    default: dest=0;
   }
   return dest;
 }
@@ -740,7 +794,7 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_rgb_weighting(
   const vil_image_view_base_sptr &src)
 {
   return vil_convert_to_grey_using_rgb_weighting(0.2125, 0.7154, 0.0721, src);
-} 
+}
 
 
 //: Create a greyscale image of specified pixel type from any image src.
@@ -893,7 +947,7 @@ inline vil_image_view_base_sptr vil_convert_stretch_range(
     return vil_image_view_base_sptr();
 
   double hi,lo;
-  
+
   if (vcl_numeric_limits<outP>::is_integer)
   {
     hi = vcl_numeric_limits<outP>::max()+0.999;
@@ -903,7 +957,7 @@ inline vil_image_view_base_sptr vil_convert_stretch_range(
   {
     hi=1.0;
     lo=0.0;
-  }  
+  }
 
   vil_image_view_base_sptr dest = new vil_image_view<outP>;
   vil_image_view<outP> & dest_ref = static_cast<vil_image_view<outP> &>(*dest);
@@ -916,7 +970,7 @@ inline vil_image_view_base_sptr vil_convert_stretch_range(
       if (!src_ref) return vil_image_view_base_sptr(); \
       vil_convert_stretch_range(src_ref, inter, lo, hi); \
       vil_convert_cast(inter, dest_ref); \
-      break; } 
+      break; }
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
