@@ -64,6 +64,7 @@ SET( rgrl_sources
   rgrl_trans_homography2d.h            rgrl_trans_homography2d.cxx
   rgrl_trans_rad_dis_homo2d.h          rgrl_trans_rad_dis_homo2d.cxx
   rgrl_trans_reader.h                  rgrl_trans_reader.cxx
+  rgrl_trans_couple.h                  rgrl_trans_couple.cxx
 
   rgrl_estimator.h                     rgrl_estimator.cxx            
   rgrl_estimator_sptr.h
