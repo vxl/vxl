@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+// \file
 // \brief Optimized polygon scan iterator for triangles
 // \author fsm@robots.ox.ac.uk
 
