@@ -24,17 +24,17 @@
 
 static bool debug=false;
 
-vgui_deck::vgui_deck() : index_(-1) {
+vgui_deck_tableau::vgui_deck() : index_(-1) {
 }
 
-vgui_deck::vgui_deck(vgui_tableau_sptr const& child0,
+vgui_deck_tableau::vgui_deck(vgui_tableau_sptr const& child0,
                      vgui_tableau_sptr const& child1) : index_(-1)
 {
   add(child0);
   add(child1);
 }
 
-vgui_deck::vgui_deck(vgui_tableau_sptr const& child0,
+vgui_deck_tableau::vgui_deck(vgui_tableau_sptr const& child0,
                      vgui_tableau_sptr const& child1,
                      vgui_tableau_sptr const& child2) : index_(-1)
 {
@@ -43,10 +43,10 @@ vgui_deck::vgui_deck(vgui_tableau_sptr const& child0,
   add(child2);
 }
 
-vgui_deck::~vgui_deck() {
+vgui_deck_tableau::~vgui_deck() {
 }
 
-bool vgui_deck::handle(const vgui_event& event) {
+bool vgui_deck_tableau::handle(const vgui_event& event) {
 
   if (vgui_tableau::handle(event))
     return true;
@@ -58,7 +58,7 @@ bool vgui_deck::handle(const vgui_event& event) {
   return t->handle(event);
 }
 
-bool vgui_deck::help() {
+bool vgui_deck_tableau::help() {
   vcl_cerr << vcl_endl
            << "-- vgui_deck ------------------------------------\n"
            << "|     keys                                      |\n"
@@ -70,9 +70,9 @@ bool vgui_deck::help() {
 }
 
 
-bool vgui_deck::key_press(int x, int y, vgui_key key, vgui_modifier) {
+bool vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier) {
 
-  if (debug) vcl_cerr << "vgui_deck::key_press " << key << vcl_endl;
+  if (debug) vcl_cerr << "vgui_deck_tableau::key_press " << key << vcl_endl;
 
   switch(key) {
   case vgui_PAGE_UP:
@@ -100,12 +100,12 @@ bool vgui_deck::key_press(int x, int y, vgui_key key, vgui_modifier) {
   }
 }
 
-void vgui_deck::add(vgui_tableau_sptr const& t) {
+void vgui_deck_tableau::add(vgui_tableau_sptr const& t) {
   add_child(t);
 }
 
 // override virtual base class method
-bool vgui_deck::add_child(vgui_tableau_sptr const& t) {
+bool vgui_deck_tableau::add_child(vgui_tableau_sptr const& t) {
   children.push_back( vgui_slot(this,t) );
   index_ = size()-1;
   observers.notify();
@@ -113,13 +113,13 @@ bool vgui_deck::add_child(vgui_tableau_sptr const& t) {
   return true;
 }
 
-void vgui_deck::remove(vgui_tableau_sptr const& t) {
+void vgui_deck_tableau::remove(vgui_tableau_sptr const& t) {
   if (!remove_child(t))
     vcl_cerr << __FILE__ " no such child tableau : " << t << vcl_endl;
 }
 
 // override virtual base class  method
-bool vgui_deck::remove_child(vgui_tableau_sptr const& t) {
+bool vgui_deck_tableau::remove_child(vgui_tableau_sptr const& t) {
   for (vcl_vector<vgui_slot>::iterator i = children.begin() ; i!=children.end() ; ++i)
     if ( (*i) == t ) {
       children.erase(i);
@@ -132,38 +132,38 @@ bool vgui_deck::remove_child(vgui_tableau_sptr const& t) {
 }
 
 
-vgui_tableau_sptr vgui_deck::current() {
+vgui_tableau_sptr vgui_deck_tableau::current() {
   if (index_ok(index_))
     return children[index_];
 
   return 0;
 }
 
-vgui_tableau_sptr vgui_deck::get_tableau_at(int tab_pos) {
+vgui_tableau_sptr vgui_deck_tableau::get_tableau_at(int tab_pos) {
   if (index_ok(tab_pos))
     return children[tab_pos];
   return 0;
 }
 
-int vgui_deck::size() {
+int vgui_deck_tableau::size() {
   return children.size();
 }
 
-void vgui_deck::index(int v) {
+void vgui_deck_tableau::index(int v) {
   if (index_ok(v)) index_ = v;
-  if (debug) vcl_cerr << "vgui_deck::index " << index_ << vcl_endl;
+  if (debug) vcl_cerr << "vgui_deck_tableau::index " << index_ << vcl_endl;
   observers.notify();
 }
 
-void vgui_deck::begin() {
+void vgui_deck_tableau::begin() {
   if (index_ok(0))
     index_ = 0;
 
-  if (debug) vcl_cerr << "vgui_deck::begin " << index_ << vcl_endl;
+  if (debug) vcl_cerr << "vgui_deck_tableau::begin " << index_ << vcl_endl;
   observers.notify();
 }
 
-void vgui_deck::next() {
+void vgui_deck_tableau::next() {
   unsigned int tmp = index_;
 
   if (tmp+1 >= children.size())
@@ -174,11 +174,11 @@ void vgui_deck::next() {
   if (index_ok(tmp))
     index_=tmp;
 
-  if (debug) vcl_cerr << "vgui_deck::next " << index_ << vcl_endl;
+  if (debug) vcl_cerr << "vgui_deck_tableau::next " << index_ << vcl_endl;
   observers.notify();
 }
 
-void vgui_deck::prev() {
+void vgui_deck_tableau::prev() {
   int tmp = index_;
 
   if (tmp == 0)
@@ -189,21 +189,21 @@ void vgui_deck::prev() {
   if (index_ok(tmp))
     index_=tmp;
 
-  if (debug) vcl_cerr << "vgui_deck::prev " << index_ << vcl_endl;
+  if (debug) vcl_cerr << "vgui_deck_tableau::prev " << index_ << vcl_endl;
   observers.notify();
 
 }
 
-bool vgui_deck::index_ok(int v) const {
+bool vgui_deck_tableau::index_ok(int v) const {
   if (v < 0 || v >= children.size())
     return false;
 
   return true;
 }
 
-vcl_string vgui_deck::type_name() const { return "vgui_deck"; }
+vcl_string vgui_deck_tableau::type_name() const { return "vgui_deck_tableau"; }
 
-vcl_string vgui_deck::file_name() const {
+vcl_string vgui_deck_tableau::file_name() const {
   if (index_ok(index_)) {
     return children[index_]->file_name();
   }
@@ -211,7 +211,7 @@ vcl_string vgui_deck::file_name() const {
 }
 
 
-vcl_string vgui_deck::pretty_name() const {
+vcl_string vgui_deck_tableau::pretty_name() const {
   vcl_string name;
   if (index_ok(index_)) {
     name += "[current = ";
@@ -235,7 +235,7 @@ public:
 };
 
 
-void vgui_deck::get_popup(const vgui_popup_params& params, vgui_menu &menu) {
+void vgui_deck_tableau::get_popup(const vgui_popup_params& params, vgui_menu &menu) {
 
   vgui_menu submenu;
 
