@@ -26,6 +26,15 @@ T const & vbl_sparse_array_base<T, Index>::operator [] (Index i) const
   return (*p).second;
 }
 
+
+//: Empty the sparse matrix.
+template <class T, class Index>
+void vbl_sparse_array_base<T, Index>::clear()
+{
+  storage_.clear();
+}
+
+
 //: Return contents of (i).  Assertion failure if not yet filled.
 template <class T, class Index>
 T const & vbl_sparse_array_base<T, Index>::operator () (Index i) const
@@ -67,8 +76,8 @@ bool vbl_sparse_array_base<T, Index>::put(Index i, const T& t)
 
 
 #undef VBL_SPARSE_ARRAY_BASE_INSTANTIATE
-#define VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T)\
-template class vbl_sparse_array_base<T >
+#define VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T, I)\
+template class vbl_sparse_array_base<T , I >
 
 
 #endif

@@ -17,23 +17,23 @@
 // 26 March 01 cjb updated documentation
 // 10 April 01 IMS (Manchester ISBE) modified to use vbl_sparse_array_base
 // 11 April 01 Peter Vanroose - vbl_index_2d moved to separate file
+// 11 April 01 Ian Scott - replaced used of vbl_index_2d with vcl_pair
 // \endverbatim
 //---------------------------------------------------------------------------
 
 #include <vcl_iosfwd.h>
 #include <vbl/vbl_sparse_array_base.h>
-#include <vbl/vbl_index_2d.h>
 
 //: Sparse 2D array allowing space efficient access of the form  s(300,700) =2
 template <class T>
-class vbl_sparse_array_2d : public vbl_sparse_array_base<T, vbl_index_2d>
+class vbl_sparse_array_2d : public vbl_sparse_array_base<T, vcl_pair<unsigned, unsigned> >
 {
 public:
 
   //: Put a value into location (i,j).
   bool put(unsigned i, unsigned j, const T& t)
   {
-    return vbl_sparse_array_base<T, vbl_index_2d>::put(vbl_index_2d(i, j), t);
+    return vbl_sparse_array_base<T, Index_type>::put(vcl_make_pair(i, j), t);
   }
 
   //: Return contents of location (i,j).
@@ -41,25 +41,25 @@ public:
   //  a T()) if location (i,j) has not been filled with a value.
   T& operator () (unsigned i, unsigned j)
   {
-    return vbl_sparse_array_base<T, vbl_index_2d>::operator() (vbl_index_2d(i, j));
+    return vbl_sparse_array_base<T, Index_type>::operator() (vcl_make_pair(i, j));
   }
 
   //: Return contents of (i,j).  Assertion failure if not yet filled.
   const T& operator () (unsigned i, unsigned j) const
   {
-    return vbl_sparse_array_base<T, vbl_index_2d>::operator() (vbl_index_2d(i, j));
+    return vbl_sparse_array_base<T, Index_type>::operator() (vcl_make_pair(i, j));
   }
 
   //: Return true if location (i,j) has been filled.
   bool fullp(unsigned i, unsigned j) const
   {
-    return vbl_sparse_array_base<T, vbl_index_2d>::fullp(vbl_index_2d(i, j));
+    return vbl_sparse_array_base<T, Index_type>::fullp(vcl_make_pair(i, j));
   }
 
   //: Return the address of location (i,j).  0 if not yet filled.
   T* get_addr(unsigned i, unsigned j)
   {
-    return vbl_sparse_array_base<T, vbl_index_2d>::get_addr(vbl_index_2d(i, j));
+    return vbl_sparse_array_base<T, Index_type>::get_addr(vcl_make_pair(i, j));
   }
 
   //: Print the Array to a stream in "(i,j): value" format.

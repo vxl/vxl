@@ -7,19 +7,22 @@
 
 //:
 // \file
-// \brief An index for 3d arrays
+// \brief DEPRECATED An index for 3d arrays
 // \author Ian M. Scott, Manchester ISBE, 10 April 2001
+// This class is only designed as a temporary stop gap until vbl_sparse_array
+// and vtl_triple end up in the same library.
 // \verbatim
 // Modifications:
 // 10 April 2001 Peter Vanroose - corrected operator<
 // 11 April 2001 Peter Vanroose - moved out of vbl_sparse_array_3d.h
+// 11 April 2001 Ian Scott - Deprecated
 // \endverbatim
 //---------------------------------------------------------------------------
 
 
-//: An index for 3d arrays
-// Used specifically with vbl_sparse_array_3d, but can be used
-// for other things.
+//: DEPRECATED An index for 3d arrays
+// For use only with vbl_sparse_array_3d. It will disappear in 
+// favour of vtl_triple, as soon as it is in the same library.
 struct vbl_index_3d
 {
   vbl_index_3d() { }

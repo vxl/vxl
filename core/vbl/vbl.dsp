@@ -275,6 +275,10 @@ SOURCE=.\vbl_get_timestamp.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vbl_index_3d.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vbl_printf.cxx
 # End Source File
 # Begin Source File
@@ -448,6 +452,10 @@ SOURCE=.\vbl_get_timestamp.h
 # Begin Source File
 
 SOURCE=.\vbl_hash_map.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_index_3d.h
 # End Source File
 # Begin Source File
 
