@@ -232,43 +232,48 @@ bool vsol_polygon_2d::is_convex(void) const
 // outside the polygon
 //---------------------------------------------------------------------------
 bool vsol_polygon_2d::is_inside(const vsol_point_2d_sptr testpt)
- {
-   // compute centre
-   double cx = 0;
-   double cy = 0;
-   int size = (*storage_).size();
-   for (unsigned i=0; i<size; ++i) {
-     cx += (*storage_)[i]->x();
-     cy += (*storage_)[i]->y();
-   }
-   cx /= size;
-   cy /= size;
+{
+  // compute centre
+  double cx = 0;
+  double cy = 0;
+  unsigned int size = (*storage_).size();
+  for (unsigned i=0; i<size; ++i) {
+    cx += (*storage_)[i]->x();
+    cy += (*storage_)[i]->y();
+  }
+  cx /= size;
+  cy /= size;
 
-   // compute a point outside the polygon.
-   double ox = 0, oy = 0;
-   for (unsigned i=0; i<size; ++i) {
-     double tmp;
- 
-     tmp = (*storage_)[i]->x()-cx;
-     if (tmp<0) tmp = -tmp;
-     if (tmp>ox) ox = tmp;
- 
-     tmp = (*storage_)[i]->y()-cy;
-     if (tmp<0) tmp = -tmp;
-     if (tmp>oy) oy = tmp;
-   }
-   ox = cx + ox + oy + 1;
-   oy = cy + ox + oy + 1;
+  // compute a point outside the polygon.
+  double ox = 0, oy = 0;
+  for (unsigned i=0; i<size; ++i) {
+    double tmp;
 
-   // count crossings.
-   unsigned crossings = 0;
-   for (unsigned i=0; i<size; ++i)
-     if (vgl_lineseg_test_lineseg( (double) (*storage_)[i]->x(), (double) (*storage_)[i]->y(), (double)(*storage_)[(i+1)%size]->x(), (double) (*storage_)[(i+1)%size]->y(),  (double) ox, (double)oy,(double) testpt->x(), (double) testpt->y() ) )
-       ++crossings;
- 
-   // inside iff there was an odd number of crossings.
-   return crossings % 2 != 0;
- }
+    tmp = (*storage_)[i]->x()-cx;
+    if (tmp<0) tmp = -tmp;
+    if (tmp>ox) ox = tmp;
+
+    tmp = (*storage_)[i]->y()-cy;
+    if (tmp<0) tmp = -tmp;
+    if (tmp>oy) oy = tmp;
+  }
+  ox = cx + ox + oy + 1;
+  oy = cy + ox + oy + 1;
+
+  // count crossings.
+  unsigned crossings = 0;
+  for (unsigned i=0; i<size; ++i)
+    if (vgl_lineseg_test_lineseg( (double)(*storage_)[i]->x(),
+                                  (double)(*storage_)[i]->y(),
+                                  (double)(*storage_)[(i+1)%size]->x(),
+                                  (double)(*storage_)[(i+1)%size]->y(),
+                                  (double)ox, (double)oy,
+                                  (double)testpt->x(), (double)testpt->y() ) )
+      ++crossings;
+
+  // inside iff there was an odd number of crossings.
+  return crossings % 2 != 0;
+}
 
 
 //----------------------------------------------------------------
