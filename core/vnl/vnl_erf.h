@@ -3,7 +3,7 @@
 #define vnl_erf_h_
 //:
 // \file
-// \brief Error Function (erf) function approximations
+// \brief Error Function (erf) approximations
 // \author Tim Cootes, Ian Scott
 
 #include <vnl/vnl_gamma.h>
@@ -15,9 +15,9 @@ inline double vnl_erf(double x)
 { return (x<0)?-vnl_gamma_p(0.5,x*x):vnl_gamma_p(0.5,x*x); };
 
 //: The Complementary Error function
-// erfc(x) = 1 - (2/sqrt(pi)) Integral from 0 to x (exp(-t^2) dt)
+// erfc(x) = 1 - erf(x) = 1 - (2/sqrt(pi)) Integral from 0 to x (exp(-t^2) dt)
 // This value is useful for large x, when erf(x) ~= 1 and erfc(x) < eps.
-// \note the output ranges from 0 to 2, and vnl_erf(0) = 1.
+// \note the output ranges from 0 to 2, and vnl_erfc(0) = 1.
 double vnl_erfc(double x);
 
 #endif // vnl_erf_h_
