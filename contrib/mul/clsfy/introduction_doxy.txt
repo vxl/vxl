@@ -1,5 +1,5 @@
 // The following text is included in the main documentation page by doxygen
-/*! \mainpage mul : clsfy - Various statistical classifiers.
+/*! \mainpage clsfy - Various statistical classifiers.
 *
 * Code is divided into builders and classifiers, with full polymorphism over both sets.
 *
