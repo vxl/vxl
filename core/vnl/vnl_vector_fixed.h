@@ -735,7 +735,7 @@ vcl_ostream& operator<< ( vcl_ostream& ostr, const vnl_vector_fixed<T,n>& v ) {
 //: \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline
-vcl_ostream& operator>> ( vcl_ostream& ostr, vnl_vector_fixed<T,n>& v ) {
+vcl_istream& operator>> ( vcl_istream& ostr, vnl_vector_fixed<T,n>& v ) {
   v.read_ascii( ostr );
   return ostr;
 }
