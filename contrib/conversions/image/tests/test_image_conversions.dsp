@@ -14,7 +14,7 @@
 # $(VXLROOT)/bin/ == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF == compiler defines
 # test_image_conversions  == name of output library
-# /libpath:"$(VXLROOT)/core/$(OUTDIR)" /libpath:"$(VXLROOT)/Image/$(OUTDIR)" /libpath:"$(VXLROOT)/COOL/$(OUTDIR)" /libpath:"$(VXLROOT)/Numerics/$(OUTDIR)" /libpath:"$(VXLROOT)/GeneralUtility/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" "vil1.lib" "vpl.lib" "ImageClasses.lib" "Basics.lib" "Numerics.lib" "TJCOOL.lib" "iue-math.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
+# /libpath:"$(VXLROOT)/core/$(OUTDIR)" /libpath:"$(VXLROOT)/Image/$(OUTDIR)" /libpath:"$(VXLROOT)/COOL/$(OUTDIR)" /libpath:"$(VXLROOT)/Numerics/$(OUTDIR)" /libpath:"$(VXLROOT)/GeneralUtility/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" "vil1.lib" "vpl.lib" "vbl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=test_image_conversions - Win32 Debug
@@ -66,17 +66,10 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
-
 # ADD LINK32 /libpath:"$(VXLROOT)/core/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/Image/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/COOL/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/Numerics/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/GeneralUtility/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
-# ADD LINK32 "vil1.lib" "vpl.lib" "ImageClasses.lib" "Basics.lib" "Numerics.lib" "TJCOOL.lib" "iue-math.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000 
-
+# ADD LINK32 "vil1.lib" "vpl.lib" "vbl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000 
 
 !ELSEIF  "$(CFG)" == "test_image_conversions - Win32 Debug"
 
@@ -104,15 +97,10 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 # ADD LINK32 /libpath:"$(VXLROOT)/core/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/Image/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/COOL/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/Numerics/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/GeneralUtility/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
-# ADD LINK32 "vil1.lib" "vpl.lib" "ImageClasses.lib" "Basics.lib" "Numerics.lib" "TJCOOL.lib" "iue-math.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000 
+# ADD LINK32 "vil1.lib" "vpl.lib" "vbl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000 
 
 !ENDIF 
 
@@ -122,20 +110,19 @@ LINK32=link.exe
 # Name "test_image_conversions - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx;c"
 # Begin Source File
-
 SOURCE=.\test_driver.cxx
-
 # End Source File
 # Begin Source File
-
-SOURCE=.\test_image_conversions.cxx
-
+SOURCE=.\test_include.cxx
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+SOURCE=.\test_image_conversions.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_vil1_vbl_conversions.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
-

@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="test_complex_io" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vdtop_veinerization_test" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
 
-CFG=test_complex_io - Win32 Debug
+CFG=vdtop_veinerization_test - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "test_complex_io.mak".
+!MESSAGE NMAKE /f "vdtop_veinerization_test.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "test_complex_io.mak" CFG="test_complex_io - Win32 Debug"
+!MESSAGE NMAKE /f "vdtop_veinerization_test.mak" CFG="vdtop_veinerization_test - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "test_complex_io - Win32 Release" (based on "Win32 (x86) Console Application")
-!MESSAGE "test_complex_io - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "vdtop_veinerization_test - Win32 Release" (based on "Win32 (x86) Console Application")
+!MESSAGE "vdtop_veinerization_test - Win32 Debug" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project
@@ -28,7 +28,7 @@ CFG=test_complex_io - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "test_complex_io - Win32 Release"
+!IF  "$(CFG)" == "vdtop_veinerization_test - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\prip" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /FD /c
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
 # ADD RSC /l 0x809 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -52,7 +52,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 # ADD LINK32 vsl.lib testlib.lib vcl.lib /libpath:"$(VXLROOT)\lib\Release"
 
-!ELSEIF  "$(CFG)" == "test_complex_io - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vdtop_veinerization_test - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -66,7 +66,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\prip" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
 # ADD RSC /l 0x809 /d "_DEBUG"
@@ -82,19 +82,14 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "test_complex_io - Win32 Release"
-# Name "test_complex_io - Win32 Debug"
+# Name "vdtop - Win32 Release"
+# Name "vdtop - Win32 Debug"
+
 # Begin Group "Source Files"
-
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# PROP Default_Filter "cxx;c"
 # Begin Source File
-
-SOURCE=.\test_complex_io.cxx
+SOURCE=.\vdtop_veinerization_test.cxx
 # End Source File
-# End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
 # End Group
 # End Target
 # End Project

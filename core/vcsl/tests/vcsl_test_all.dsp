@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="vcsl_test_include" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vcsl_tests" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
 
-CFG=vcsl_test_include - Win32 Debug
+CFG=vcsl_tests - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vcsl_test_include.mak".
+!MESSAGE NMAKE /f "vcsl_tests.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vcsl_test_include.mak" CFG="vcsl_test_include - Win32 Debug"
+!MESSAGE NMAKE /f "vcsl_tests.mak" CFG="vcsl_tests - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vcsl_test_include - Win32 Release" (based on "Win32 (x86) Console Application")
-!MESSAGE "vcsl_test_include - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "vcsl_tests - Win32 Release" (based on "Win32 (x86) Console Application")
+!MESSAGE "vcsl_tests - Win32 Debug" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project
@@ -28,7 +28,7 @@ CFG=vcsl_test_include - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vcsl_test_include - Win32 Release"
+!IF  "$(CFG)" == "vcsl_tests - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -51,7 +51,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 # ADD LINK32 vcl.lib /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /nologo /subsystem:console /machine:I386
 
-!ELSEIF  "$(CFG)" == "vcsl_test_include - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vcsl_tests - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -79,20 +79,56 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "vcsl_test_include - Win32 Release"
-# Name "vcsl_test_include - Win32 Debug"
-# Begin Group "Source Files"
+# Name "vcsl_tests - Win32 Release"
+# Name "vcsl_tests - Win32 Debug"
 
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Group "Source Files"
+# PROP Default_Filter "cxx;c"
+# Begin Source File
+SOURCE=.\test_cartesian_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_cartesian_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_composition.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_cylindrical.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_degree.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_displacement.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_meter.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_polar.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_radian.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_rotation.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_scale.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_spherical.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_transformation_graph.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_translation.cxx
+# End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
-# End Group
-# Begin Group "Header Files"
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
-# End Group
-# Begin Group "Resource Files"
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
