@@ -43,6 +43,8 @@ vnl_qr<T>::vnl_qr(vnl_matrix<T> const& M):
   Q_(0),
   R_(0)
 {
+  assert(! M.empty());
+
   // Fill transposed O/P matrix
   int c = M.columns();
   int r = M.rows();
