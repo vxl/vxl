@@ -73,6 +73,7 @@
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_operators.h>
 #include <vnl/vnl_quaternion.h>
+#include <vnl/vnl_rank.h>
 #include <vnl/vnl_rational.h>
 #include <vnl/vnl_rational_traits.h>
 #include <vnl/vnl_real.h>
