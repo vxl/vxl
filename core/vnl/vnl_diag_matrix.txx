@@ -45,7 +45,7 @@ vcl_ostream& operator<< (vcl_ostream& s, const vnl_diag_matrix<T>& D)
 //: Compares two matrices for component-wise equality within a small epsilon
 template<class T>
 bool epsilon_equals (const vnl_diag_matrix<T>& m1, const vnl_diag_matrix<T>& m2,
-             double alt_epsilon)
+                     double alt_epsilon)
 {
   if (alt_epsilon < 0)
     {
@@ -70,7 +70,8 @@ bool epsilon_equals (const vnl_diag_matrix<T>& m1, const vnl_diag_matrix<T>& m2,
     if (result > local_epsilon)
       return false;
 #endif
-    if (vcl_abs(m1(i,i) - m2(i,i)) > local_epsilon)
+    if (m1(i,i) - m2(i,i) > local_epsilon ||
+        m2(i,i) - m1(i,i) > local_epsilon) // avoid using vcl_abs()
       return false;
   }
   return true;
