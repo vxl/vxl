@@ -112,7 +112,7 @@ class vgui_image_tableau
   // invert reverses the map (a negative version of the image)
   // set_mapping should be called before set_image methods to insure
   // the first image display has the requested mapping parameters
-  virtual void set_mapping(const vgui_range_map_params_sptr rmp);
+  virtual void set_mapping(vgui_range_map_params_sptr const& rmp);
 
   vgui_range_map_params_sptr map_params(){return rmp_;}
 

@@ -323,7 +323,7 @@ handle(vgui_event const &e)
     return false;
 }
 
-void vgui_image_tableau::set_mapping(const vgui_range_map_params_sptr rmp)
+void vgui_image_tableau::set_mapping(vgui_range_map_params_sptr const& rmp)
 {
   rmp_ = rmp; 
   this->post_redraw();
