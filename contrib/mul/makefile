@@ -13,7 +13,7 @@ SUBDIRS += mil mil3d
 SUBDIRS += clsfy
 
 # New vil
-SUBDIRS += vimt vil3d vimt3d
+SUBDIRS += vimt ipts vil3d vimt3d
 
 # video
 SUBDIRS += mvl2
