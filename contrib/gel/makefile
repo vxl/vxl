@@ -35,6 +35,9 @@ SUBDIRS += vgel gkll
 # Dense matcher
 SUBDIRS += vmal
 
+# Experiments with the vidl library and vgui (JLM)
+SUBDIRS += jvid
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
