@@ -44,20 +44,16 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // The dimensionality of the space we are working in. Find it by
   // looking at the dimension of one of the data points.
   //
-  unsigned int m = 0;
-  {
-    unsigned ms = 0;
-    while( ms < matches.size() &&
-           matches[ms]->from_begin() == matches[ms]->from_end() ) {
-      ++ms;
-    }
-    if( ms == matches.size() ) {
-      DebugMacro( 0, "No data!\n" );
-      return 0; // no data!
-    }
-    m = matches[ms]->from_begin().from_feature()->location().size();
+  unsigned ms = 0;
+  while( ms < matches.size() &&
+         matches[ms]->from_begin() == matches[ms]->from_end() )
+    ++ms;
+  if( ms == matches.size() ) {
+    DebugMacro( 0, "No data!\n" );
+    return 0; // no data!
   }
-  assert( (m == 3) || (m==2) );
+  const unsigned int m = matches[ms]->from_begin().from_feature()->location().size();
+  assert ( m==3 || m==2 ); // currently only 2D and 3D estimation is implemented
 
   // ----------------------------
   // Create the constraint matrix. See "Affine transform with a
