@@ -499,21 +499,18 @@ static int compare(osl_edge_detector_xyfloat* xyf1, osl_edge_detector_xyfloat* x
 // number of elements, and then sorting it - this is likely to be quite slow.
 // An alternative implementation would be better.
 //
-void osl_edge_detector::Thin_edges() {
-
+void osl_edge_detector::Thin_edges()
+{
   // Find all of the edgels with a strength > low_
-  int a,b,c,d,e,f,g,h,genus,count;
   bool do_output = true;
 
   vcl_cerr << __FILE__ ": Fast Sort\n";
   osl_edge_detector_xyfloat* edgel_array = new osl_edge_detector_xyfloat[xsize_ * ysize_];
-  int edgel_array_len = 0;
-  int pos = 0;
-  count = 1;     // count set to dummy value
-  while ( count )  { //  Thin until no Pixels are removed
-
+  int count = 1;     // count set to dummy, nonzero value
+  while ( count!=0 ) //  Thin until no Pixels are removed
+  {
     count = 0;
-    edgel_array_len = 0;
+    int edgel_array_len = 0;
     for (unsigned int x=width_; x+width_<xsize_; ++x)
       for (unsigned int y=width_; y+width_<ysize_; ++y)
         if ( thin_[x][y] > thresh_[x][y] )
@@ -543,26 +540,28 @@ void osl_edge_detector::Thin_edges() {
 
     // Do the thinning taking the weakest edges first and works
     // up through the list strengthwise.
-    for (pos=0; pos<edgel_array_len; ++pos) {
+    for (int pos=0; pos<edgel_array_len; ++pos)
+    {
       int x = edgel_array[pos].x;
       int y = edgel_array[pos].y;
 
-      if ( thin_[x-1][y-1] > thresh_[x-1][y-1] )  a = 1; else a = 0;
-      if ( thin_[x  ][y-1] > thresh_[x  ][y-1] )  b = 1; else b = 0;
-      if ( thin_[x+1][y-1] > thresh_[x+1][y-1] )  c = 1; else c = 0;
-      if ( thin_[x+1][y  ] > thresh_[x+1][y  ] )  d = 1; else d = 0;
-      if ( thin_[x+1][y+1] > thresh_[x+1][y+1] )  e = 1; else e = 0;
-      if ( thin_[x  ][y+1] > thresh_[x  ][y+1] )  f = 1; else f = 0;
-      if ( thin_[x-1][y+1] > thresh_[x-1][y+1] )  g = 1; else g = 0;
-      if ( thin_[x-1][y  ] > thresh_[x-1][y  ] )  h = 1; else h = 0;
+      int a = ( thin_[x-1][y-1] > thresh_[x-1][y-1] ) ? 1 : 0;
+      int b = ( thin_[x  ][y-1] > thresh_[x  ][y-1] ) ? 1 : 0;
+      int c = ( thin_[x+1][y-1] > thresh_[x+1][y-1] ) ? 1 : 0;
+      int d = ( thin_[x+1][y  ] > thresh_[x+1][y  ] ) ? 1 : 0;
+      int e = ( thin_[x+1][y+1] > thresh_[x+1][y+1] ) ? 1 : 0;
+      int f = ( thin_[x  ][y+1] > thresh_[x  ][y+1] ) ? 1 : 0;
+      int g = ( thin_[x-1][y+1] > thresh_[x-1][y+1] ) ? 1 : 0;
+      int h = ( thin_[x-1][y  ] > thresh_[x-1][y  ] ) ? 1 : 0;
 
-      genus = a+b+c+d+e+f+g+h;
+      int genus = a+b+c+d+e+f+g+h;
 
       // Continue if the pixel is not dangling.
       if ( (genus!=1) && (genus!=8) ) {
 
-        genus += h*a*b+b*c*d+d*e*f+f*g*h-a*b-b*c-c*d-d*e-e*f-f*g
-          - g*h-h*a-h*b-b*d-d*f-f*h-1;
+        genus += h*a*b+b*c*d+d*e*f+f*g*h
+               - a*b-b*c-c*d-d*e-e*f-f*g
+               - g*h-h*a-h*b-b*d-d*f-f*h-1;
 
         // If the genus is zero delete the edge
         if ( genus == 0 ) {
