@@ -108,4 +108,12 @@ double clsfy_test_error(const clsfy_classifier_base &classifier,
                         mbl_data_wrapper<vnl_vector<double> > & test_inputs,
                         const vcl_vector<unsigned> & test_outputs);
 
+//: Calculate the fraction of test samples of a particular class which are classified incorrectly
+// \return -1 if there are no samples of test_class. 
+double clsfy_test_error(const clsfy_classifier_base &classifier,
+                        mbl_data_wrapper<vnl_vector<double> > & test_inputs,
+                        const vcl_vector<unsigned> & test_outputs,
+                        unsigned test_class);
+
+
 #endif // clsfy_classifier_base_h_

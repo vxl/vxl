@@ -151,3 +151,30 @@ double clsfy_test_error(const clsfy_classifier_base &classifier,
   return ((double) sum_diff) / ((double) n);
 }
 
+//=======================================================================
+//: Calculate the fraction of test samples of a particular class which are classified incorrectly
+// \return -1 if there are no samples of test_class. 
+double clsfy_test_error(const clsfy_classifier_base &classifier,
+                        mbl_data_wrapper<vnl_vector<double> > & test_inputs,
+                        const vcl_vector<unsigned> & test_outputs,
+                        unsigned test_class)
+{
+  assert(test_inputs.size() == test_outputs.size());
+  
+  test_inputs.reset();
+  unsigned n_class=0, n_bad=0, i=0;
+  do
+  {
+    if (test_outputs[i] == test_class)
+    {
+      if (test_outputs[i] != classifier.classify(test_inputs.current()))
+        n_bad ++;
+      n_class ++;
+    }
+    i++;
+  } while (test_inputs.next());
+
+  if (n_class==0) return -1.0;
+  return ((double) n_bad) / ((double) n_class);
+}
+
