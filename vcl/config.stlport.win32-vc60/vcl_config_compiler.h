@@ -68,46 +68,69 @@
 
 
 //----------------------------------------------------------------------
-// problems with static members.
+// constant initializer issues.
 
-//: VCL_STATIC_CONST_INIT_INT(x)
+//: VCL_STATIC_CONST_INIT_INT_DECL(x)
 //
 // ANSI allows
-// \verbatim
+// \code
 //     class A {
 //       static const int x = 27;
 //     };
-// \endverbatim
+// \endcode
 // And there is a speed advantage, so we want to use it where supported.
-// The macro is used like this:
-// \verbatim
-//       static const int x VCL_STATIC_CONST_INIT_INT(27);
-// \endverbatim
+// However, the standard also requires (9.4.2/4) that the constant be
+// defined in namespace scope. (That is, space must be allocated.)
+// To use the macro, use VCL_STATIC_CONST_INIT_DECL in the class
+// definition (header file). This declares the constant.
+// \code
+//     class A {
+//       static const int x VCL_STATIC_CONST_INIT_INT_DECL(27);
+//     };
+// \endcode
+// Use VCL_STATIC_CONST_INIT_DEFN in some .cxx file to define
+// the constant.
+// \code
+//     const int A::x VCL_STATIC_CONST_INIT_DEFN(27);
+// \endcode
+//
+// In order to be able to query the setting of this, one actually must
+// define VCL_CAN_STATIC_CONST_INIT_INT to either 0 or 1.
 
-//#define VCL_STATIC_CONST_INIT_INT(x) /* not allowed */
-//#define VCL_STATIC_CONST_INIT_INT(x) = x
-#define VCL_STATIC_CONST_INIT_INT(x) /* = x */
+//#define VCL_CAN_STATIC_CONST_INIT_INT 1 /* allowed */
+//#define VCL_CAN_STATIC_CONST_INIT_INT 0 /* not allowed */
+#ifndef VCL_CAN_STATIC_CONST_INIT_INT
+#define VCL_CAN_STATIC_CONST_INIT_INT 0
+#endif
+#if VCL_CAN_STATIC_CONST_INIT_INT
+#define VCL_STATIC_CONST_INIT_INT_DECL(x) = x
+#define VCL_STATIC_CONST_INIT_INT_DEFN(x) /* initialized at declaration */
+#else
+#define VCL_STATIC_CONST_INIT_INT_DECL(x) /* not allowed */
+#define VCL_STATIC_CONST_INIT_INT_DEFN(x) = x
+#endif
 
 
 //: VCL_STATIC_CONST_INIT_FLOAT(x)
 //
 // GCC allows the above, but with floating point types, ANSI doesn't.
 // Again, we'll use it if we've got it.
-
-//#define VCL_STATIC_CONST_INIT_FLOAT(x) /* not allowed */
-//#define VCL_STATIC_CONST_INIT_FLOAT(x) = x
-#define VCL_STATIC_CONST_INIT_FLOAT(x) /* = x */
-
-
-// VCL_IMPLEMENT_STATIC_CONSTS
 //
-// True if static consts must be defined in some source file.  I don't know
-// what ANSI has to say about this, but anyway, the above example needs this
-// in some .C file:
-//     #if VCL_IMPLEMENT_STATIC_CONSTS
-//     const int A::x = 27;
-//     #endif
-//#define VCL_IMPLEMENT_STATIC_CONSTS @VCL_IMPLEMENT_STATIC_CONSTS@
+// In order to be able to query the setting of this, one actually must
+// define VCL_CAN_STATIC_CONST_INIT_FLOAT to either 0 or 1.
+
+//#define VCL_CAN_STATIC_CONST_INIT_FLOAT 1 /* allowed */
+//#define VCL_CAN_STATIC_CONST_INIT_FLOAT 0 /* not allowed */
+#ifndef VCL_CAN_STATIC_CONST_INIT_FLOAT
+#define VCL_CAN_STATIC_CONST_INIT_FLOAT 0
+#endif
+#if VCL_CAN_STATIC_CONST_INIT_FLOAT
+#define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) = x
+#define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) /* initialized at declaration */
+#else
+#define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) /* not allowed */
+#define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) = x
+#endif
 
 
 //----------------------------------------------------------------------

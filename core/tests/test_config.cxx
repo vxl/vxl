@@ -89,14 +89,6 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_IMPLEMENT_STATIC_CONSTS ";
-#ifdef VCL_IMPLEMENT_STATIC_CONSTS
-  vcl_cout << "is set to " << quote(VCL_IMPLEMENT_STATIC_CONSTS);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_CAN_STATIC_CONST_INIT_INT ";
 #ifdef VCL_CAN_STATIC_CONST_INIT_INT
   vcl_cout << "is set to " << quote(VCL_CAN_STATIC_CONST_INIT_INT);
@@ -105,9 +97,17 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_STATIC_CONST_INIT_INT(x) ";
-#ifdef VCL_STATIC_CONST_INIT_INT
-  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_INT(x));
+  vcl_cout << "VCL_STATIC_CONST_INIT_INT_DECL(x) ";
+#ifdef VCL_STATIC_CONST_INIT_INT_DECL
+  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_INT_DECL(x));
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_STATIC_CONST_INIT_INT_DEFN(x) ";
+#ifdef VCL_STATIC_CONST_INIT_INT_DEFN
+  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_INT_DEFN(x));
 #else
   vcl_cout << "is not set";
 #endif
@@ -121,9 +121,17 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_STATIC_CONST_INIT_FLOAT(x) ";
-#ifdef VCL_STATIC_CONST_INIT_FLOAT
-  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_FLOAT(x));
+  vcl_cout << "VCL_STATIC_CONST_INIT_FLOAT_DECL(x) ";
+#ifdef VCL_STATIC_CONST_INIT_FLOAT_DECL
+  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_FLOAT_DECL(x));
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) ";
+#ifdef VCL_STATIC_CONST_INIT_FLOAT_DEFN
+  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_FLOAT_DEFN(x));
 #else
   vcl_cout << "is not set";
 #endif

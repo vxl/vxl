@@ -589,11 +589,8 @@ AC_TRY_COMPILE([
 class A {
 public:
   static const int x = 27;
+  static const bool y = false;
 };
-//int main(int, char **)
-//{
-//  return A::x;
-//}
 ],,vcl_cv_cxx_static_const_init_int=yes,vcl_cv_cxx_static_const_init_int=no)
 AC_LANG_RESTORE
 ])
@@ -629,47 +626,6 @@ AC_MSG_RESULT(no)
 ])
 AC_LANG_RESTORE
 export VCL_STATIC_CONST_INIT_FLOAT
-])
-dnl
-
-
-###
-AC_DEFUN(VCL_CXX_IMPLEMENT_STATIC_CONSTS,[
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
-AC_MSG_CHECKING(whether the C++ compiler requires implementation of static consts)
-
-VCL_COMPILE_CXX
-
-AC_TRY_LINK([
-// "includes"
-template <class T> class A {
-public:
-  static const int x;
-};
-$VCL_DEFINE_SPECIALIZATION
-class A<int> {
-public:
-  static const int x = 23;
-};
-template <class T> class B {
-public:
-  T function(T t) { T a = t; if (t && a) t = a; if (a) return A<T>::x + a; else return t; }
-};
-template class B<int>;
-],[
-  // function body
-  B<int> b;
-  b.function(5);
-],[
-VCL_IMPLEMENT_STATIC_CONSTS="0";
-AC_MSG_RESULT(no)
-],[
-VCL_IMPLEMENT_STATIC_CONSTS="1";
-AC_MSG_RESULT(yes)
-])
-AC_LANG_RESTORE
-export VCL_IMPLEMENT_STATIC_CONSTS
 ])
 dnl
 

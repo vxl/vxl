@@ -11,6 +11,244 @@
 
 #include "vnl_numeric_limits.h"
 
+// ----------------------------------------------------------------------
+// Constants for int
+
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<int>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<int>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(31);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<int>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN(9);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<int>::is_signed  VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<int>::is_integer VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<int>::is_exact   VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<int>::radix VCL_STATIC_CONST_INIT_INT_DEFN(2);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<int>::min_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(-31);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<int>::min_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(-9);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<int>::max_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(31);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<int>::max_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(9);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<int>::has_infinity      VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<int>::has_quiet_NaN     VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<int>::has_signaling_NaN VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<int>::has_denorm        VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<int>::is_iec559  VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<int>::is_bounded VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<int>::is_modulo  VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<int>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<int>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const vnl_float_round_style vnl_numeric_limits<int>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vnl_round_toward_zero);
+
+
+// ----------------------------------------------------------------------
+// Constants for long
+
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<long>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<long>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(31);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<long>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN(9);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<long>::is_signed  VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<long>::is_integer VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<long>::is_exact   VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<long>::radix VCL_STATIC_CONST_INIT_INT_DEFN(2);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<long>::min_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(-31);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<long>::min_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(-9);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<long>::max_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(31);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<long>::max_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(9);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<long>::has_infinity      VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<long>::has_quiet_NaN     VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<long>::has_signaling_NaN VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<long>::has_denorm        VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<long>::is_iec559  VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<long>::is_bounded VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<long>::is_modulo  VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<long>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<long>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const vnl_float_round_style vnl_numeric_limits<long>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vnl_round_toward_zero);
+
+
+// ----------------------------------------------------------------------
+// Constants for unsigned long
+
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned long>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<unsigned long>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(sizeof(unsigned long) * 8 );
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<unsigned long>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN( (digits * 301) / 1000 );
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned long>::is_signed  VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned long>::is_integer VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned long>::is_exact   VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<unsigned long>::radix VCL_STATIC_CONST_INIT_INT_DEFN(2);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<unsigned long>::min_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(-31);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<unsigned long>::min_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(-9);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<unsigned long>::max_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(31);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<unsigned long>::max_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(9);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned long>::has_infinity      VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned long>::has_quiet_NaN     VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned long>::has_signaling_NaN VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned long>::has_denorm        VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned long>::is_iec559  VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned long>::is_bounded VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned long>::is_modulo  VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned long>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned long>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const vnl_float_round_style vnl_numeric_limits<unsigned long>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vnl_round_toward_zero);
+
+
+// ----------------------------------------------------------------------
+// Constants for unsigned short
+
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned short>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<unsigned short>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(sizeof(unsigned short) * 8 );
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<unsigned short>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN( (digits * 301) / 1000 );
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned short>::is_signed  VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned short>::is_integer VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned short>::is_exact   VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<unsigned short>::radix VCL_STATIC_CONST_INIT_INT_DEFN(2);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<unsigned short>::min_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(-31);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<unsigned short>::min_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(-9);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<unsigned short>::max_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(31);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<unsigned short>::max_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(9);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned short>::has_infinity      VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned short>::has_quiet_NaN     VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned short>::has_signaling_NaN VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned short>::has_denorm        VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned short>::is_iec559  VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned short>::is_bounded VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned short>::is_modulo  VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned short>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<unsigned short>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const vnl_float_round_style vnl_numeric_limits<unsigned short>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vnl_round_toward_zero);
+
+
+// ----------------------------------------------------------------------
+// Constants for short
+
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<short>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<short>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(15);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<short>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN(5);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<short>::is_signed  VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<short>::is_integer VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<short>::is_exact   VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<short>::radix VCL_STATIC_CONST_INIT_INT_DEFN(2);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<short>::min_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(-15);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<short>::min_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(-5);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<short>::max_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(15);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_limits<short>::max_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(5);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<short>::has_infinity      VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<short>::has_quiet_NaN     VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<short>::has_signaling_NaN VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<short>::has_denorm        VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<short>::is_iec559  VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<short>::is_bounded VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<short>::is_modulo  VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<short>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<short>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const vnl_float_round_style vnl_numeric_limits<short>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vnl_round_toward_zero);
+
+
+// ----------------------------------------------------------------------
+// Constants and functions for double
+
 union vnl_numeric_limits_double_nan {
   double nan;
   unsigned char x[8];
@@ -45,25 +283,68 @@ union vnl_numeric_limits_double_inf {
 };
 static vnl_numeric_limits_double_inf dinf;
 
-//VCL_DEFINE_SPECIALIZATION
 double vnl_numeric_limits<double>::infinity()
 {
   return dinf.inf;
 }
 
-//VCL_DEFINE_SPECIALIZATION
 double vnl_numeric_limits<double>::quiet_NaN()
 {
   return dnan.nan;
 }
 
-//VCL_DEFINE_SPECIALIZATION
 double vnl_numeric_limits<double>::signaling_NaN()
 {
   return quiet_NaN();
 }
 
-// *****************************************************************************
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<double>::is_specialized VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const int  vnl_numeric_limits<double>::digits   VCL_STATIC_CONST_INIT_FLOAT_DEFN(53);
+VCL_DEFINE_SPECIALIZATION
+const int  vnl_numeric_limits<double>::digits10 VCL_STATIC_CONST_INIT_FLOAT_DEFN( 15);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<double>::is_signed  VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<double>::is_integer VCL_STATIC_CONST_INIT_FLOAT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<double>::is_exact   VCL_STATIC_CONST_INIT_FLOAT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const int  vnl_numeric_limits<double>::radix VCL_STATIC_CONST_INIT_FLOAT_DEFN(2);
+VCL_DEFINE_SPECIALIZATION
+const int  vnl_numeric_limits<double>::min_exponent   VCL_STATIC_CONST_INIT_FLOAT_DEFN(-1021);
+VCL_DEFINE_SPECIALIZATION
+const int  vnl_numeric_limits<double>::min_exponent10 VCL_STATIC_CONST_INIT_FLOAT_DEFN(-307);
+VCL_DEFINE_SPECIALIZATION
+const int  vnl_numeric_limits<double>::max_exponent   VCL_STATIC_CONST_INIT_FLOAT_DEFN(1024);
+VCL_DEFINE_SPECIALIZATION
+const int  vnl_numeric_limits<double>::max_exponent10 VCL_STATIC_CONST_INIT_FLOAT_DEFN(308);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<double>::has_infinity      VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<double>::has_quiet_NaN     VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<double>::has_signaling_NaN VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<double>::has_denorm        VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<double>::is_iec559  VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<double>::is_bounded VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<double>::is_modulo  VCL_STATIC_CONST_INIT_FLOAT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<double>::traps      VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<double>::tinyness_before VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const vnl_float_round_style vnl_numeric_limits<double>::round_style VCL_STATIC_CONST_INIT_FLOAT_DEFN(vnl_round_to_nearest);
+
+
+// ----------------------------------------------------------------------
+// Constants and functions for float
+
 union vnl_numeric_limits_float_nan {
   float nan;
   unsigned char x[4];
@@ -90,67 +371,60 @@ union vnl_numeric_limits_float_inf {
 };
 static vnl_numeric_limits_float_inf finf;
 
-//VCL_DEFINE_SPECIALIZATION
 float vnl_numeric_limits<float>::infinity()
 {
   return finf.inf;
 }
 
-//VCL_DEFINE_SPECIALIZATION
 float vnl_numeric_limits<float>::quiet_NaN()
 {
   return fnan.nan;
 }
 
-//VCL_DEFINE_SPECIALIZATION
 float vnl_numeric_limits<float>::signaling_NaN()
 {
   return quiet_NaN();
 }
 
-#if !VCL_CAN_STATIC_CONST_INIT_INT
-// float
-const bool vnl_numeric_limits<float>::is_specialized = true;
-const int  vnl_numeric_limits<float>::digits   = 24;
-const int  vnl_numeric_limits<float>::digits10 =  6;
-const bool vnl_numeric_limits<float>::is_signed  = true;
-const bool vnl_numeric_limits<float>::is_integer = false;
-const bool vnl_numeric_limits<float>::is_exact   = false;
-const int  vnl_numeric_limits<float>::radix = 2;
-const int  vnl_numeric_limits<float>::min_exponent   = -125;
-const int  vnl_numeric_limits<float>::min_exponent10 = -37;
-const int  vnl_numeric_limits<float>::max_exponent   = 128;
-const int  vnl_numeric_limits<float>::max_exponent10 = 38;
-const bool vnl_numeric_limits<float>::has_infinity      = true;
-const bool vnl_numeric_limits<float>::has_quiet_NaN     = true;
-const bool vnl_numeric_limits<float>::has_signaling_NaN = true;
-const bool vnl_numeric_limits<float>::has_denorm        = false;
-const bool vnl_numeric_limits<float>::is_iec559  = true;
-const bool vnl_numeric_limits<float>::is_bounded = true;
-const bool vnl_numeric_limits<float>::is_modulo  = false;
-const bool vnl_numeric_limits<float>::traps      = true;
-const bool vnl_numeric_limits<float>::tinyness_before = true;
-const vnl_float_round_style vnl_numeric_limits<float>::round_style = vnl_round_to_nearest;
-// double
-const bool vnl_numeric_limits<double>::is_specialized = true;
-const int  vnl_numeric_limits<double>::digits   = 53;
-const int  vnl_numeric_limits<double>::digits10 =  15;
-const bool vnl_numeric_limits<double>::is_signed  = true;
-const bool vnl_numeric_limits<double>::is_integer = false;
-const bool vnl_numeric_limits<double>::is_exact   = false;
-const int  vnl_numeric_limits<double>::radix = 2;
-const int  vnl_numeric_limits<double>::min_exponent   = -1021;
-const int  vnl_numeric_limits<double>::min_exponent10 = -307;
-const int  vnl_numeric_limits<double>::max_exponent   = 1024;
-const int  vnl_numeric_limits<double>::max_exponent10 = 308;
-const bool vnl_numeric_limits<double>::has_infinity      = true;
-const bool vnl_numeric_limits<double>::has_quiet_NaN     = true;
-const bool vnl_numeric_limits<double>::has_signaling_NaN = true;
-const bool vnl_numeric_limits<double>::has_denorm        = true;
-const bool vnl_numeric_limits<double>::is_iec559  = true;
-const bool vnl_numeric_limits<double>::is_bounded = true;
-const bool vnl_numeric_limits<double>::is_modulo  = false;
-const bool vnl_numeric_limits<double>::traps      = true;
-const bool vnl_numeric_limits<double>::tinyness_before = true;
-const vnl_float_round_style vnl_numeric_limits<double>::round_style = vnl_round_to_nearest;
-#endif
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<float>::is_specialized VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const int  vnl_numeric_limits<float>::digits   VCL_STATIC_CONST_INIT_FLOAT_DEFN(24);
+VCL_DEFINE_SPECIALIZATION
+const int  vnl_numeric_limits<float>::digits10 VCL_STATIC_CONST_INIT_FLOAT_DEFN( 6);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<float>::is_signed  VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<float>::is_integer VCL_STATIC_CONST_INIT_FLOAT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<float>::is_exact   VCL_STATIC_CONST_INIT_FLOAT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const int  vnl_numeric_limits<float>::radix VCL_STATIC_CONST_INIT_FLOAT_DEFN(2);
+VCL_DEFINE_SPECIALIZATION
+const int  vnl_numeric_limits<float>::min_exponent   VCL_STATIC_CONST_INIT_FLOAT_DEFN(-125);
+VCL_DEFINE_SPECIALIZATION
+const int  vnl_numeric_limits<float>::min_exponent10 VCL_STATIC_CONST_INIT_FLOAT_DEFN(-37);
+VCL_DEFINE_SPECIALIZATION
+const int  vnl_numeric_limits<float>::max_exponent   VCL_STATIC_CONST_INIT_FLOAT_DEFN(128);
+VCL_DEFINE_SPECIALIZATION
+const int  vnl_numeric_limits<float>::max_exponent10 VCL_STATIC_CONST_INIT_FLOAT_DEFN(38);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<float>::has_infinity      VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<float>::has_quiet_NaN     VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<float>::has_signaling_NaN VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<float>::has_denorm        VCL_STATIC_CONST_INIT_FLOAT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<float>::is_iec559  VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<float>::is_bounded VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<float>::is_modulo  VCL_STATIC_CONST_INIT_FLOAT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<float>::traps      VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_limits<float>::tinyness_before VCL_STATIC_CONST_INIT_FLOAT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const vnl_float_round_style vnl_numeric_limits<float>::round_style VCL_STATIC_CONST_INIT_FLOAT_DEFN(vnl_round_to_nearest);

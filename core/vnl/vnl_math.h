@@ -32,6 +32,7 @@
 //  210598 AWF Removed conditional VCL_IMPLEMENT_STATIC_CONSTS, sometimes gcc needs them.
 //  LSB (Modifications) 23/1/01 Documentation tidied
 //  Peter Vanroose - 7 Sept. 2002 - maxdouble etc. replaced by vnl_numeric_traits<T>::maxval
+//  Amitha Perera - 13 Sep 2002 - make constant initialization standards compilant.
 // \endverbatim
 
 #include <vcl_cmath.h>
@@ -51,23 +52,23 @@ class vnl_math
 {
  public:
   //: pi, e and all that
-  static VNL_DLL_DATA const double e               VCL_STATIC_CONST_INIT_FLOAT(2.7182818284590452354);
-  static VNL_DLL_DATA const double log2e           VCL_STATIC_CONST_INIT_FLOAT(1.4426950408889634074);
-  static VNL_DLL_DATA const double log10e          VCL_STATIC_CONST_INIT_FLOAT(0.43429448190325182765);
-  static VNL_DLL_DATA const double ln2             VCL_STATIC_CONST_INIT_FLOAT(0.69314718055994530942);
-  static VNL_DLL_DATA const double ln10            VCL_STATIC_CONST_INIT_FLOAT(2.30258509299404568402);
-  static VNL_DLL_DATA const double pi              VCL_STATIC_CONST_INIT_FLOAT(3.14159265358979323846);
-  static VNL_DLL_DATA const double pi_over_2       VCL_STATIC_CONST_INIT_FLOAT(1.57079632679489661923);
-  static VNL_DLL_DATA const double pi_over_4       VCL_STATIC_CONST_INIT_FLOAT(0.78539816339744830962);
-  static VNL_DLL_DATA const double one_over_pi     VCL_STATIC_CONST_INIT_FLOAT(0.31830988618379067154);
-  static VNL_DLL_DATA const double two_over_pi     VCL_STATIC_CONST_INIT_FLOAT(0.63661977236758134308);
-  static VNL_DLL_DATA const double two_over_sqrtpi VCL_STATIC_CONST_INIT_FLOAT(1.12837916709551257390);
-  static VNL_DLL_DATA const double sqrt2           VCL_STATIC_CONST_INIT_FLOAT(1.41421356237309504880);
-  static VNL_DLL_DATA const double sqrt1_2         VCL_STATIC_CONST_INIT_FLOAT(0.70710678118654752440);
+  static VNL_DLL_DATA const double e               VCL_STATIC_CONST_INIT_FLOAT_DECL(2.7182818284590452354);
+  static VNL_DLL_DATA const double log2e           VCL_STATIC_CONST_INIT_FLOAT_DECL(1.4426950408889634074);
+  static VNL_DLL_DATA const double log10e          VCL_STATIC_CONST_INIT_FLOAT_DECL(0.43429448190325182765);
+  static VNL_DLL_DATA const double ln2             VCL_STATIC_CONST_INIT_FLOAT_DECL(0.69314718055994530942);
+  static VNL_DLL_DATA const double ln10            VCL_STATIC_CONST_INIT_FLOAT_DECL(2.30258509299404568402);
+  static VNL_DLL_DATA const double pi              VCL_STATIC_CONST_INIT_FLOAT_DECL(3.14159265358979323846);
+  static VNL_DLL_DATA const double pi_over_2       VCL_STATIC_CONST_INIT_FLOAT_DECL(1.57079632679489661923);
+  static VNL_DLL_DATA const double pi_over_4       VCL_STATIC_CONST_INIT_FLOAT_DECL(0.78539816339744830962);
+  static VNL_DLL_DATA const double one_over_pi     VCL_STATIC_CONST_INIT_FLOAT_DECL(0.31830988618379067154);
+  static VNL_DLL_DATA const double two_over_pi     VCL_STATIC_CONST_INIT_FLOAT_DECL(0.63661977236758134308);
+  static VNL_DLL_DATA const double two_over_sqrtpi VCL_STATIC_CONST_INIT_FLOAT_DECL(1.12837916709551257390);
+  static VNL_DLL_DATA const double sqrt2           VCL_STATIC_CONST_INIT_FLOAT_DECL(1.41421356237309504880);
+  static VNL_DLL_DATA const double sqrt1_2         VCL_STATIC_CONST_INIT_FLOAT_DECL(0.70710678118654752440);
 
   //: IEEE double machine precision
-  static VNL_DLL_DATA const double eps             VCL_STATIC_CONST_INIT_FLOAT(2.2204460492503131e-16);
-  static VNL_DLL_DATA const double sqrteps         VCL_STATIC_CONST_INIT_FLOAT(1.490116119384766e-08);
+  static VNL_DLL_DATA const double eps             VCL_STATIC_CONST_INIT_FLOAT_DECL(2.2204460492503131e-16);
+  static VNL_DLL_DATA const double sqrteps         VCL_STATIC_CONST_INIT_FLOAT_DECL(1.490116119384766e-08);
 
 #if 0 // deprecated; use vnl_numeric_traits<T>::maxval instead
   //: MAX* constants.

@@ -25,78 +25,121 @@ static const long s64 = 0L;
 static const unsigned long u64 = 0L;
 #endif
 
-#if !VCL_CAN_STATIC_CONST_INIT_INT
 
-#ifndef NO_STD_BOOL
-const bool vnl_numeric_traits<bool>::zero = false;
-const bool vnl_numeric_traits<bool>::one = true;
-const bool vnl_numeric_traits<bool>::maxval = true;
-#endif
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_traits<bool>::zero VCL_STATIC_CONST_INIT_INT_DEFN(false);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_traits<bool>::one VCL_STATIC_CONST_INIT_INT_DEFN(true);
+VCL_DEFINE_SPECIALIZATION
+const bool vnl_numeric_traits<bool>::maxval VCL_STATIC_CONST_INIT_INT_DEFN(true);
 
-const char vnl_numeric_traits<char>::zero = 0;
-const char vnl_numeric_traits<char>::one = 1;
-const char vnl_numeric_traits<char>::maxval = char(255)<0?127:255;
+VCL_DEFINE_SPECIALIZATION
+const char vnl_numeric_traits<char>::zero VCL_STATIC_CONST_INIT_INT_DEFN(0);
+VCL_DEFINE_SPECIALIZATION
+const char vnl_numeric_traits<char>::one VCL_STATIC_CONST_INIT_INT_DEFN(1);
+  //  It is 127 (and not 255) since "char" is not guaranteed to be unsigned.
+VCL_DEFINE_SPECIALIZATION
+const char vnl_numeric_traits<char>::maxval VCL_STATIC_CONST_INIT_INT_DEFN(char(255)<0?127:255);
 
-const unsigned char vnl_numeric_traits<unsigned char>::zero = 0;
-const unsigned char vnl_numeric_traits<unsigned char>::one = 1;
-const unsigned char vnl_numeric_traits<unsigned char>::maxval = 255;
+VCL_DEFINE_SPECIALIZATION
+const unsigned char vnl_numeric_traits<unsigned char>::zero VCL_STATIC_CONST_INIT_INT_DEFN(0);
+VCL_DEFINE_SPECIALIZATION
+const unsigned char vnl_numeric_traits<unsigned char>::one VCL_STATIC_CONST_INIT_INT_DEFN(1);
+VCL_DEFINE_SPECIALIZATION
+const unsigned char vnl_numeric_traits<unsigned char>::maxval VCL_STATIC_CONST_INIT_INT_DEFN(255);
 
-const signed char vnl_numeric_traits<signed char>::zero = 0;
-const signed char vnl_numeric_traits<signed char>::one = 1;
-const signed char vnl_numeric_traits<signed char>::maxval = 127;
+VCL_DEFINE_SPECIALIZATION
+const signed char vnl_numeric_traits<signed char>::zero VCL_STATIC_CONST_INIT_INT_DEFN(0);
+VCL_DEFINE_SPECIALIZATION
+const signed char vnl_numeric_traits<signed char>::one VCL_STATIC_CONST_INIT_INT_DEFN(1);
+VCL_DEFINE_SPECIALIZATION
+const signed char vnl_numeric_traits<signed char>::maxval VCL_STATIC_CONST_INIT_INT_DEFN(127);
 
-const short vnl_numeric_traits<short>::zero = 0;
-const short vnl_numeric_traits<short>::one = 1;
-
-const unsigned short vnl_numeric_traits<unsigned short>::zero = 0;
-const unsigned short vnl_numeric_traits<unsigned short>::one = 1;
-
-const int vnl_numeric_traits<int>::zero = 0;
-const int vnl_numeric_traits<int>::one = 1;
-
-const unsigned int vnl_numeric_traits<unsigned int>::zero = 0;
-const unsigned int vnl_numeric_traits<unsigned int>::one = 1;
-
-const long vnl_numeric_traits<long>::zero = 0L;
-const long vnl_numeric_traits<long>::one = 1L;
-
-const unsigned long vnl_numeric_traits<unsigned long>::zero = 0L;
-const unsigned long vnl_numeric_traits<unsigned long>::one = 1L;
-
-#endif
-
+VCL_DEFINE_SPECIALIZATION
+const short vnl_numeric_traits<short>::zero VCL_STATIC_CONST_INIT_INT_DEFN(0);
+VCL_DEFINE_SPECIALIZATION
+const short vnl_numeric_traits<short>::one VCL_STATIC_CONST_INIT_INT_DEFN(1);
+VCL_DEFINE_SPECIALIZATION
 const short vnl_numeric_traits<short>::maxval = s16;
+
+VCL_DEFINE_SPECIALIZATION
+const unsigned short vnl_numeric_traits<unsigned short>::zero VCL_STATIC_CONST_INIT_INT_DEFN(0);
+VCL_DEFINE_SPECIALIZATION
+const unsigned short vnl_numeric_traits<unsigned short>::one VCL_STATIC_CONST_INIT_INT_DEFN(1);
+VCL_DEFINE_SPECIALIZATION
 const unsigned short vnl_numeric_traits<unsigned short>::maxval = u16;
+
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_traits<int>::zero VCL_STATIC_CONST_INIT_INT_DEFN(0);
+VCL_DEFINE_SPECIALIZATION
+const int vnl_numeric_traits<int>::one VCL_STATIC_CONST_INIT_INT_DEFN(1);
+VCL_DEFINE_SPECIALIZATION
 const int vnl_numeric_traits<int>::maxval = sizeof(int)==4?s32:s16;
+
+VCL_DEFINE_SPECIALIZATION
+const unsigned int vnl_numeric_traits<unsigned int>::zero VCL_STATIC_CONST_INIT_INT_DEFN(0);
+VCL_DEFINE_SPECIALIZATION
+const unsigned int vnl_numeric_traits<unsigned int>::one VCL_STATIC_CONST_INIT_INT_DEFN(1);
+VCL_DEFINE_SPECIALIZATION
 const unsigned int vnl_numeric_traits<unsigned int>::maxval = sizeof(unsigned int)==4?u32:u16;
+
+VCL_DEFINE_SPECIALIZATION
+const long vnl_numeric_traits<long>::zero VCL_STATIC_CONST_INIT_INT_DEFN(0);
+VCL_DEFINE_SPECIALIZATION
+const long vnl_numeric_traits<long>::one VCL_STATIC_CONST_INIT_INT_DEFN(1);
+VCL_DEFINE_SPECIALIZATION
 const long vnl_numeric_traits<long>::maxval = sizeof(long)==8?s64:s32;
+
+VCL_DEFINE_SPECIALIZATION
+const unsigned long vnl_numeric_traits<unsigned long>::zero VCL_STATIC_CONST_INIT_INT_DEFN(0);
+VCL_DEFINE_SPECIALIZATION
+const unsigned long vnl_numeric_traits<unsigned long>::one VCL_STATIC_CONST_INIT_INT_DEFN(1);
+VCL_DEFINE_SPECIALIZATION
 const unsigned long vnl_numeric_traits<unsigned long>::maxval = sizeof(unsigned long)==8?u64:u32;
 
-#if !VCL_CAN_STATIC_CONST_INIT_FLOAT
+VCL_DEFINE_SPECIALIZATION
+const float vnl_numeric_traits<float>::zero VCL_STATIC_CONST_INIT_FLOAT_DEFN(0.0F);
+VCL_DEFINE_SPECIALIZATION
+const float vnl_numeric_traits<float>::one VCL_STATIC_CONST_INIT_FLOAT_DEFN(1.0F);
+VCL_DEFINE_SPECIALIZATION
+const float vnl_numeric_traits<float>::maxval VCL_STATIC_CONST_INIT_FLOAT_DEFN(3.40282346638528860e+38F);
 
-const float vnl_numeric_traits<float>::zero = 0.0F;
-const float vnl_numeric_traits<float>::one = 1.0F;
-const float vnl_numeric_traits<float>::maxval = 3.40282346638528860e+38F;
+VCL_DEFINE_SPECIALIZATION
+const double vnl_numeric_traits<double>::zero VCL_STATIC_CONST_INIT_FLOAT_DEFN(0.0);
+VCL_DEFINE_SPECIALIZATION
+const double vnl_numeric_traits<double>::one VCL_STATIC_CONST_INIT_FLOAT_DEFN(1.0);
+VCL_DEFINE_SPECIALIZATION
+const double vnl_numeric_traits<double>::maxval VCL_STATIC_CONST_INIT_FLOAT_DEFN(1.7976931348623157E+308);
 
-const double vnl_numeric_traits<double>::zero = 0.0;
-const double vnl_numeric_traits<double>::one = 1.0;
-const double vnl_numeric_traits<double>::maxval = 1.7976931348623157E+308;
+VCL_DEFINE_SPECIALIZATION
+const long double vnl_numeric_traits<long double>::zero VCL_STATIC_CONST_INIT_FLOAT_DEFN(0.0);
+VCL_DEFINE_SPECIALIZATION
+const long double vnl_numeric_traits<long double>::one VCL_STATIC_CONST_INIT_FLOAT_DEFN(1.0);
+VCL_DEFINE_SPECIALIZATION
+const long double vnl_numeric_traits<long double>::maxval VCL_STATIC_CONST_INIT_FLOAT_DEFN(1.7976931348623157E+308);
 
-const long double vnl_numeric_traits<long double>::zero = 0.0;
-const long double vnl_numeric_traits<long double>::one = 1.0;
-const long double vnl_numeric_traits<long double>::maxval = 1.7976931348623157E+308;
-
-#endif
-
-//--------------------------------------------------------------------------------
-
+VCL_DEFINE_SPECIALIZATION
 const vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::zero = 0.0;
+VCL_DEFINE_SPECIALIZATION
 const vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::one = 1.0;
+// Unknown, so undefined. Will cause link errors if someone refers to it.
+//VCL_DEFINE_SPECIALIZATION
+//const vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::maxval;
 
+VCL_DEFINE_SPECIALIZATION
 const vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::zero = 0.0;
+VCL_DEFINE_SPECIALIZATION
 const vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::one = 1.0;
+// Unknown, so undefined. Will cause link errors if someone refers to it.
+//VCL_DEFINE_SPECIALIZATION
+//const vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::maxval;
 
+VCL_DEFINE_SPECIALIZATION
 const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::zero = 0.0;
+VCL_DEFINE_SPECIALIZATION
 const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::one = 1.0;
+// Unknown, so undefined. Will cause link errors if someone refers to it.
+//VCL_DEFINE_SPECIALIZATION
+//const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::maxval;
 
 //--------------------------------------------------------------------------------

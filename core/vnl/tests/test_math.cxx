@@ -15,8 +15,36 @@ double one_d = 1.0;
 long double zero_ld = 0.0;
 long double one_ld = 1.0;
 
+static
+void check_pointer( const void * )
+{
+}
+
+static
+void test_static_const_definition()
+{
+  check_pointer( &vnl_math::e );
+  check_pointer( &vnl_math::log2e );
+  check_pointer( &vnl_math::log10e );
+  check_pointer( &vnl_math::ln2 );
+  check_pointer( &vnl_math::ln10 );
+  check_pointer( &vnl_math::pi );
+  check_pointer( &vnl_math::pi_over_2 );
+  check_pointer( &vnl_math::pi_over_4 );
+  check_pointer( &vnl_math::one_over_pi );
+  check_pointer( &vnl_math::two_over_pi );
+  check_pointer( &vnl_math::two_over_sqrtpi );
+  check_pointer( &vnl_math::sqrt2 );
+  check_pointer( &vnl_math::sqrt1_2 );
+  check_pointer( &vnl_math::eps );
+  check_pointer( &vnl_math::sqrteps );
+}
+
+
 void test_math()
 {
+  // Call it to avoid compiler warnings
+  test_static_const_definition();
 
   int n = -11;
   float f = -7.5;

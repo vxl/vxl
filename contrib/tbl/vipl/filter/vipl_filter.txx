@@ -9,16 +9,14 @@
 #pragma warning( disable: 4390 )
 #endif
 
-#if ! VCL_CAN_STATIC_CONST_INIT_INT
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,int Arity,class PixelItr>
-const VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Not_Ready = 0;
+const VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Not_Ready VCL_STATIC_CONST_INIT_INT_DEFN( 0 );
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,int Arity,class PixelItr>
-const VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Ready = 1;
+const VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Ready VCL_STATIC_CONST_INIT_INT_DEFN( 1 );
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,int Arity,class PixelItr>
-const VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Unchanged = 2;
+const VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Unchanged VCL_STATIC_CONST_INIT_INT_DEFN( 2 );
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,int Arity,class PixelItr>
-const VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Filter_Owned = 4;
-#endif
+const VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Filter_Owned VCL_STATIC_CONST_INIT_INT_DEFN( 4 );
 
 // A workhorse constructor for this abstract class. If dst_image (by default)
 // the output will be generated automatically when filtering is about to

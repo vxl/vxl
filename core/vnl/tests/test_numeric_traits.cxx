@@ -4,8 +4,54 @@
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for VXL_BIG_ENDIAN
 
+static
+void check_pointer( const void* )
+{
+}
+
+static
+void test_static_const_definition()
+{
+#define ONE_ZERO( Type ) \
+  if(true){\
+    check_pointer( &vnl_numeric_traits<Type>::zero );\
+    check_pointer( &vnl_numeric_traits<Type>::one );\
+    check_pointer( &vnl_numeric_traits<const Type>::zero );\
+    check_pointer( &vnl_numeric_traits<const Type>::one );\
+  }else
+#define ALL( Type ) \
+  ONE_ZERO( Type ); \
+  if(true){\
+    check_pointer( &vnl_numeric_traits<Type>::maxval );\
+    check_pointer( &vnl_numeric_traits<const Type>::maxval );\
+  }else
+
+  ALL(bool);
+  ALL(char);
+  ALL(unsigned char);
+  ALL(signed char);
+  ALL(short);
+  ALL(unsigned short);
+  ALL(int);
+  ALL(unsigned int);
+  ALL(long);
+  ALL(unsigned long);
+  ALL(float);
+  ALL(double);
+  ALL(long double);
+  ONE_ZERO( vcl_complex<float> );
+  ONE_ZERO( vcl_complex<double> );
+  ONE_ZERO( vcl_complex<long double> );
+
+#undef ONE_ZERO
+#undef ALL
+}
+
 void test_numeric_traits()
 {
+  // call it to avoid compiler warnings
+  test_static_const_definition();
+
   TEST("vnl_numeric_traits<bool>::zero", vnl_numeric_traits<bool>::zero, false);
   TEST("vnl_numeric_traits<bool>::one", vnl_numeric_traits<bool>::one, true);
   TEST("vnl_numeric_traits<char>::zero", vnl_numeric_traits<char>::zero, '\0');
@@ -87,9 +133,9 @@ void test_numeric_traits()
   TEST("vnl_numeric_traits<short>::maxval must be larger than that", sm>ucm, true);
   TEST("vnl_numeric_traits<int>::maxval must be at least as large", im>=sm, true);
   TEST("vnl_numeric_traits<unsigned short>::maxval must be larger than <short>", usm>sm, true);
-  TEST("vnl_numeric_traits<unsigned int>::maxval must be at least as large", uim>=usm && uim>im, true);
+  TEST("vnl_numeric_traits<unsigned int>::maxval must be at least as large", uim>=usm && uim>(unsigned int)im, true);
   TEST("vnl_numeric_traits<long>::maxval must be at least equal to <int>", lm>=im, true);
-  TEST("vnl_numeric_traits<unsigned long>::maxval must be larger than that", ulm>lm, true);
+  TEST("vnl_numeric_traits<unsigned long>::maxval must be larger than that", ulm>(unsigned long)lm, true);
   TEST("vnl_numeric_traits<float>::maxval must be at least 1e33", fm>1e33, true);
   TEST("vnl_numeric_traits<double>::maxval must be larger than that", dm>fm, true);
   TEST("vnl_numeric_traits<long double>::maxval must be at least as large", ldm>=dm, true);
