@@ -35,7 +35,7 @@ void vepl2_dyadic_sum(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // byte greyscale
   if (image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
     vil2_image_view<vxl_byte>& out = static_cast<vil2_image_view<vxl_byte>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte,vipl_trivial_pixeliter> op(sum_ubyte);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte> op(sum_ubyte);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -44,7 +44,7 @@ void vepl2_dyadic_sum(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // byte rgb
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE) {
     vil2_image_view<vil2_rgb<vxl_byte> >& out = static_cast<vil2_image_view<vil2_rgb<vxl_byte> >&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vil2_rgb<vxl_byte> ,vil2_rgb<vxl_byte> ,vipl_trivial_pixeliter> op(sum_rgb);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vil2_rgb<vxl_byte> ,vil2_rgb<vxl_byte> > op(sum_rgb);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -53,7 +53,7 @@ void vepl2_dyadic_sum(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // short
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) {
     vil2_image_view<vxl_uint_16>& out = static_cast<vil2_image_view<vxl_uint_16>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_16,vxl_uint_16,vipl_trivial_pixeliter> op(sum_short);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_16,vxl_uint_16> op(sum_short);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -62,7 +62,7 @@ void vepl2_dyadic_sum(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // int
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) {
     vil2_image_view<vxl_uint_32>& out = static_cast<vil2_image_view<vxl_uint_32>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_32,vxl_uint_32,vipl_trivial_pixeliter> op(sum_int);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_32,vxl_uint_32> op(sum_int);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -71,7 +71,7 @@ void vepl2_dyadic_sum(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // float
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) {
     vil2_image_view<float>& out = static_cast<vil2_image_view<float>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,float,float,vipl_trivial_pixeliter> op(sum_float);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,float,float> op(sum_float);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -80,7 +80,7 @@ void vepl2_dyadic_sum(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // double
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) {
     vil2_image_view<double>& out = static_cast<vil2_image_view<double>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,double,double,vipl_trivial_pixeliter> op(sum_double);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,double,double> op(sum_double);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -97,7 +97,7 @@ void vepl2_dyadic_dif(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // byte greyscale
   if (image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
     vil2_image_view<vxl_byte>& out = static_cast<vil2_image_view<vxl_byte>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte,vipl_trivial_pixeliter> op(dif_ubyte);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte> op(dif_ubyte);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -106,7 +106,7 @@ void vepl2_dyadic_dif(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // byte rgb
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE) {
     vil2_image_view<vil2_rgb<vxl_byte> >& out = static_cast<vil2_image_view<vil2_rgb<vxl_byte> >&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vil2_rgb<vxl_byte> ,vil2_rgb<vxl_byte> ,vipl_trivial_pixeliter> op(dif_rgb);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vil2_rgb<vxl_byte> ,vil2_rgb<vxl_byte> > op(dif_rgb);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -115,7 +115,7 @@ void vepl2_dyadic_dif(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // short
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) {
     vil2_image_view<vxl_uint_16>& out = static_cast<vil2_image_view<vxl_uint_16>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_16,vxl_uint_16,vipl_trivial_pixeliter> op(dif_short);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_16,vxl_uint_16> op(dif_short);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -124,7 +124,7 @@ void vepl2_dyadic_dif(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // int
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) {
     vil2_image_view<vxl_uint_32>& out = static_cast<vil2_image_view<vxl_uint_32>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_32,vxl_uint_32,vipl_trivial_pixeliter> op(dif_int);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_32,vxl_uint_32> op(dif_int);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -133,7 +133,7 @@ void vepl2_dyadic_dif(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // float
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) {
     vil2_image_view<float>& out = static_cast<vil2_image_view<float>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,float,float,vipl_trivial_pixeliter> op(dif_float);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,float,float> op(dif_float);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -142,7 +142,7 @@ void vepl2_dyadic_dif(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // double
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) {
     vil2_image_view<double>& out = static_cast<vil2_image_view<double>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,double,double,vipl_trivial_pixeliter> op(dif_double);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,double,double> op(dif_double);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -159,7 +159,7 @@ void vepl2_dyadic_min(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // byte greyscale
   if (image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
     vil2_image_view<vxl_byte>& out = static_cast<vil2_image_view<vxl_byte>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte,vipl_trivial_pixeliter> op(min_ubyte);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte> op(min_ubyte);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -168,7 +168,7 @@ void vepl2_dyadic_min(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // short
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) {
     vil2_image_view<vxl_uint_16>& out = static_cast<vil2_image_view<vxl_uint_16>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_16,vxl_uint_16,vipl_trivial_pixeliter> op(min_short);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_16,vxl_uint_16> op(min_short);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -177,7 +177,7 @@ void vepl2_dyadic_min(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // int
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) {
     vil2_image_view<vxl_uint_32>& out = static_cast<vil2_image_view<vxl_uint_32>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_32,vxl_uint_32,vipl_trivial_pixeliter> op(min_int);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_32,vxl_uint_32> op(min_int);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -186,7 +186,7 @@ void vepl2_dyadic_min(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // float
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) {
     vil2_image_view<float>& out = static_cast<vil2_image_view<float>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,float,float,vipl_trivial_pixeliter> op(min_float);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,float,float> op(min_float);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -195,7 +195,7 @@ void vepl2_dyadic_min(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // double
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) {
     vil2_image_view<double>& out = static_cast<vil2_image_view<double>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,double,double,vipl_trivial_pixeliter> op(min_double);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,double,double> op(min_double);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -212,7 +212,7 @@ void vepl2_dyadic_max(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // byte greyscale
   if (image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
     vil2_image_view<vxl_byte>& out = static_cast<vil2_image_view<vxl_byte>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte,vipl_trivial_pixeliter> op(max_ubyte);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte> op(max_ubyte);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -221,7 +221,7 @@ void vepl2_dyadic_max(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // short
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) {
     vil2_image_view<vxl_uint_16>& out = static_cast<vil2_image_view<vxl_uint_16>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_16,vxl_uint_16,vipl_trivial_pixeliter> op(max_short);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_16,vxl_uint_16> op(max_short);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -230,7 +230,7 @@ void vepl2_dyadic_max(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // int
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) {
     vil2_image_view<vxl_uint_32>& out = static_cast<vil2_image_view<vxl_uint_32>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_32,vxl_uint_32,vipl_trivial_pixeliter> op(max_int);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_32,vxl_uint_32> op(max_int);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -239,7 +239,7 @@ void vepl2_dyadic_max(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // float
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) {
     vil2_image_view<float>& out = static_cast<vil2_image_view<float>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,float,float,vipl_trivial_pixeliter> op(max_float);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,float,float> op(max_float);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -248,15 +248,14 @@ void vepl2_dyadic_max(vil2_image_view_base_sptr im_out, vil2_image_view_base con
   // double
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) {
     vil2_image_view<double>& out = static_cast<vil2_image_view<double>&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,double,double,vipl_trivial_pixeliter> op(max_double);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,double,double> op(max_double);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
   }
 
   //
-  else {
+  else
     vcl_cerr << __FILE__ ": vepl2_dyadic_max() not implemented for " << image.is_a() << '\n';
-  }
 }
 
