@@ -1,4 +1,4 @@
-// This is ./gel/vsol/vsol_spatial_object_2d.h
+// This is gel/vsol/vsol_spatial_object_2d.h
 #ifndef _vsol_spatial_object_2d_h_
 #define _vsol_spatial_object_2d_h_
 //-----------------------------------------------------------------------------
@@ -115,7 +115,7 @@ public:
   virtual void compute_bounding_box(void);
 
   //: get bounding box
-  virtual vsol_box_2d *get_bounding_box(void);
+  inline virtual vsol_box_2d *get_bounding_box(void);
 
   //: get id
   inline int get_id(void) const { return id_; }
@@ -256,17 +256,15 @@ public:
   // bounding box accessors
 
   inline void check_update_bounding_box(void);  // Test consistency of bound
-  // inline void get_min_location(vcl_vector<double>& min_loc);
-  // inline void get_max_location(vcl_vector<double>& max_loc);
   void grow_minmax_bounds(vsol_box_2d & comp_box);
   inline float get_min_x(void);
   inline float get_max_x(void);
   inline float get_min_y(void);
   inline float get_max_y(void);
-  virtual void set_min_x(float xmin);
-  virtual void set_max_x(float xmax);
-  virtual void set_min_y(float ymin);
-  virtual void set_max_y(float ymax);
+  inline virtual void set_min_x(float xmin);
+  inline virtual void set_max_x(float xmax);
+  inline virtual void set_min_y(float ymin);
+  inline virtual void set_max_y(float ymax);
 
   // operators
 
@@ -337,18 +335,6 @@ inline vsol_box_2d *vsol_spatial_object_2d::get_bounding_box(void)
   this->check_update_bounding_box();
   return bounding_box_;
 }
-
-//inline void vsol_spatial_object_2d::get_min_location(vcl_vector<double>& min_loc)
-//{
-//  this->check_update_bounding_box();
-//  bounding_box_->get_min_location(min_loc);
-//}
-
-//inline void vsol_spatial_object_2d::get_max_location(vcl_vector<double>& max_loc)
-//{
-//  this->check_update_bounding_box();
-//  bounding_box_->get_max_location(max_loc);
-//}
 
 inline float vsol_spatial_object_2d::get_min_x(void)
 {
