@@ -28,7 +28,7 @@
  * CCITT Group 3 1-D Modified Huffman
  * Run Length Encoding Compression Support
  */
-#include "tiffioP.h"
+#include "tiffiop.h"
 #include "tif_fax3.h"
 
 TIFFInitCCITTRLE(tif)

@@ -28,7 +28,7 @@
  * CCITT Group 4 Facsimile-compatible
  * Compression Scheme Support.
  */
-#include "tiffioP.h"
+#include "tiffiop.h"
 #include "tif_fax3.h"
 
 #if USE_PROTOTYPES

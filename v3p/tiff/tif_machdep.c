@@ -25,7 +25,7 @@
 /*
  * TIFF Library Machine Dependent Routines.
  */
-#include "tiffioP.h"
+#include "tiffiop.h"
 
 #ifdef tahoe
 typedef	struct ieeedouble {
