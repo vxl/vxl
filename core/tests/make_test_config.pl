@@ -53,6 +53,7 @@ for $var_exp (
   # from vcl_config_compiler.h
   'VCL_HAS_BOOL',
   'VCL_HAS_DYNAMIC_CAST',
+  'VCL_HAS_RTTI',
   'VCL_HAS_TYPENAME',
   'VCL_HAS_EXPORT',
   'VCL_HAS_MUTABLE',
@@ -165,6 +166,7 @@ for $var_exp (
   'VXL_INT_32_STRING',
   'VXL_HAS_INT_64',
   'VXL_INT_64_STRING',
+  'VXL_INT_64_IS_LONG',
   'VXL_HAS_IEEE_32',
   'VXL_IEEE_32_STRING',
   'VXL_HAS_IEEE_64',
