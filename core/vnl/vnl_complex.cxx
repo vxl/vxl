@@ -12,22 +12,22 @@
 
 // these are actuall suitable for inlining
 
-bool vnl_math_isnan(const vnl_complex<double>& x)
+bool vnl_math_isnan(const vcl_complex<double>& x)
 {
   return vnl_math_isnan(x.real()) || vnl_math_isnan(x.imag());
 }
 
-bool vnl_math_isfinite(const vnl_complex<double>& x)
+bool vnl_math_isfinite(const vcl_complex<double>& x)
 {
   return vnl_math_isfinite(x.real()) && vnl_math_isfinite(x.imag());
 }
 
-bool vnl_math_isnan(const vnl_complex<float>& x)
+bool vnl_math_isnan(const vcl_complex<float>& x)
 {
   return vnl_math_isnan(x.real()) || vnl_math_isnan(x.imag());
 }
 
-bool vnl_math_isfinite(const vnl_complex<float>& x)
+bool vnl_math_isfinite(const vcl_complex<float>& x)
 {
   return vnl_math_isfinite(x.real()) && vnl_math_isfinite(x.imag());
 }

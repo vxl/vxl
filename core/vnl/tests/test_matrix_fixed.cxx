@@ -65,7 +65,7 @@ void* operator new(size_t s)
 }
  
 void operator delete(void* s)
-#if defined(GNU_LIBSTDCXX_V3)
+#if defined(GNU_LIBSTDCXX_V3) || defined(VCL_SUNPRO_CC_50)
   throw ()
 #endif
 {

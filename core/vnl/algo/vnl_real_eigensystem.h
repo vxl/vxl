@@ -17,7 +17,7 @@
 // .SECTION Author:
 //    Andrew W. Fitzgibbon, Oxford RRG, 23 Jan 97
 
-#include <vnl/vnl_complex.h>
+#include <vcl_complex.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
 
@@ -29,10 +29,10 @@ public:
   vnl_matrix<double> Vreal;
   
   // -- Output matrix of eigenvectors, which will in general be complex.
-  vnl_matrix<vnl_double_complex> V;
+  vnl_matrix<vcl_complex<double> > V;
   
   // -- Output diagonal matrix of eigenvalues.
-  vnl_diag_matrix<vnl_double_complex> D;
+  vnl_diag_matrix<vcl_complex<double> > D;
 };
 
 #endif // vnl_real_eigensystem_h_
