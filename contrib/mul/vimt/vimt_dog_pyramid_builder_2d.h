@@ -63,9 +63,10 @@ class vimt_dog_pyramid_builder_2d : public vimt_image_pyramid_builder
   virtual int max_levels() const;
 
   //: Build difference of gaussian pyramid and a gaussian pyramid
+  //  If abs_diff, then use absolute difference of gaussians
   void build_dog(vimt_image_pyramid& dog_pyr,
                  vimt_image_pyramid& smooth_pyr,
-                 const vimt_image& im) const;
+                 const vimt_image& im, bool abs_diff=true) const;
 
   //: Build pyramid
   virtual void build(vimt_image_pyramid& dog_pyr, const vimt_image&) const;

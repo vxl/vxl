@@ -122,7 +122,7 @@ void vimt_dog_pyramid_builder_2d<T>::build(vimt_image_pyramid& dog_pyr,
 template<class T>
 void vimt_dog_pyramid_builder_2d<T>::build_dog(vimt_image_pyramid& dog_pyr,
                                                vimt_image_pyramid& smooth_pyr,
-                                               const vimt_image& im) const
+                                               const vimt_image& im, bool abs_diff) const
 {
   //  Require image vimt_image_2d_of<T>
   assert(im.is_class(work_im_.is_a()));
@@ -156,7 +156,11 @@ void vimt_dog_pyramid_builder_2d<T>::build_dog(vimt_image_pyramid& dog_pyr,
 
   vil_gauss_filter_5tap(base_image.image(),smooth0.image(),smooth_params,
                         dog0.image());  // Workspace
-  vil_math_image_difference(base_image.image(),smooth0.image(),dog0.image());
+
+  if (abs_diff)
+    vil_math_image_abs_difference(base_image.image(),smooth0.image(),dog0.image());
+  else
+    vil_math_image_difference(base_image.image(),smooth0.image(),dog0.image());
 
   smooth0.set_world2im(base_image.world2im());
   dog0.set_world2im(base_image.world2im());
@@ -194,7 +198,11 @@ void vimt_dog_pyramid_builder_2d<T>::build_dog(vimt_image_pyramid& dog_pyr,
     vil_gauss_filter_5tap(sub_sampled_image,smooth1.image(),
                           smooth_params,
                           dog1.image());  // Workspace
-    vil_math_image_difference(sub_sampled_image,smooth1.image(),
+    if (abs_diff)
+      vil_math_image_abs_difference(sub_sampled_image,smooth1.image(),
+                                    dog1.image());
+    else
+      vil_math_image_difference(sub_sampled_image,smooth1.image(),
                               dog1.image());
 
     smooth1.set_world2im(scaling_trans*smooth0.world2im());
