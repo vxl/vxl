@@ -327,7 +327,7 @@ bool vil_bmp_generic_image::put_section(void const *ib, int x0, int y0, int xs, 
 
   for (int y=0; y<ys; ++y,++skip_rows)
   {
-    is_->seek(bit_map_start+skip_rows*rowlen+x0*bypp);
+    is_->seek(bit_map_start+skip_rows*rowlen+x0*bypp); 
     is_->write(((char const*)ib)+y*xs*bypp, xs*bypp);
   }
 
