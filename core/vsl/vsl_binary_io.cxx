@@ -271,6 +271,65 @@ void vsl_b_read(vsl_b_istream &is,unsigned long& n )
   vsl_convert_from_arbitrary_length(buf, &n);
 }
 
+#if VXL_HAS_INT_64
+
+void vsl_b_write(vsl_b_ostream& os, vxl_int_64 n )
+{
+  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_int_64))];
+  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
+  os.os().write((char*)buf, nbytes );
+}
+
+void vsl_b_read(vsl_b_istream &is,vxl_int_64& n )
+{
+  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_int_64))];
+  unsigned char *ptr=buf;
+  do
+  {
+    vsl_b_read(is, *ptr);
+    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_int_64)))
+    {
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, vxl_int_64& )\n"
+               << "           Integer too big. Likely cause either file corruption, or\n"
+               << "           file was created on platform with larger integer sizes.\n";
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
+    }
+  }
+  while (!(*(ptr++) & 128));
+  vsl_convert_from_arbitrary_length(buf, &n);
+}
+
+void vsl_b_write(vsl_b_ostream& os, vxl_uint_64 n )
+{
+  unsigned char buf[
+    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_uint_64))];
+  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
+  os.os().write((char*)buf, nbytes );
+}
+
+void vsl_b_read(vsl_b_istream &is,vxl_uint_64& n )
+{
+  unsigned char buf[
+    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_uint_64))];
+  unsigned char *ptr=buf;
+  do
+  {
+    vsl_b_read(is, *ptr);
+    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_uint_64)))
+    {
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, vxl_uint_64& )\n"
+               << "           Integer too big. Likely cause either file corruption, or\n"
+               << "           file was created on platform with larger integer sizes.\n";
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
+    }
+  }
+  while (!(*(ptr++) & 128));
+  vsl_convert_from_arbitrary_length(buf, &n);
+}
+
+#endif // VXL_HAS_INT_64
 
 #if 0
 // When the macro is ready, this test will be

@@ -137,6 +137,10 @@ macro (int);
 macro (unsigned int);
 macro (long);
 macro (unsigned long);
+#if VXL_HAS_INT_64
+macro (vxl_int_64);
+macro (vxl_uint_64);
+#endif
 #if 0
 // This test will be replaced with !VCL_PTRDIFF_T_IS_A_STANDARD_TYPE
 // When that macro is working.
@@ -305,7 +309,6 @@ inline unsigned long vsl_convert_to_arbitrary_length(const unsigned long* ints,
   return vsl_convert_to_arbitrary_length_unsigned_impl(ints, buffer, count);
 }
 
-
 /////////////////////////////////////////////////////////////////////////
 
 //: Decode a buffer of arbitrary length integers
@@ -316,7 +319,8 @@ inline unsigned long vsl_convert_to_arbitrary_length(const unsigned long* ints,
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-  unsigned long *ints, unsigned long count = 1)
+                                                       unsigned long *ints,
+                                                       unsigned long count = 1)
 {
   return vsl_convert_from_arbitrary_length_unsigned_impl(buffer, ints, count);
 }
@@ -329,7 +333,8 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const long* ints,
-  unsigned char *buffer, unsigned long count = 1)
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
 {
   return vsl_convert_to_arbitrary_length_signed_impl(ints, buffer, count);
 }
@@ -344,7 +349,8 @@ inline unsigned long vsl_convert_to_arbitrary_length(const long* ints,
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-  long *ints, unsigned long count = 1)
+                                                       long *ints,
+                                                       unsigned long count = 1)
 {
   return vsl_convert_from_arbitrary_length_signed_impl(buffer, ints, count);
 }
@@ -357,7 +363,8 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const unsigned int* ints,
-  unsigned char *buffer, unsigned long count = 1)
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
 {
   return vsl_convert_to_arbitrary_length_unsigned_impl(ints, buffer, count);
 }
@@ -373,7 +380,8 @@ inline unsigned long vsl_convert_to_arbitrary_length(const unsigned int* ints,
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-  unsigned int *ints, unsigned long count = 1)
+                                                       unsigned int *ints,
+                                                       unsigned long count = 1)
 {
   return vsl_convert_from_arbitrary_length_unsigned_impl(buffer, ints, count);
 }
@@ -386,7 +394,8 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const int* ints,
-  unsigned char *buffer, unsigned long count = 1)
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
 {
   return vsl_convert_to_arbitrary_length_signed_impl(ints, buffer, count);
 }
@@ -402,7 +411,8 @@ inline unsigned long vsl_convert_to_arbitrary_length(const int* ints,
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-  int *ints, unsigned long count = 1)
+                                                       int *ints,
+                                                       unsigned long count = 1)
 {
   return vsl_convert_from_arbitrary_length_signed_impl(buffer, ints, count);
 }
@@ -415,7 +425,8 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const unsigned short* ints,
-  unsigned char *buffer, unsigned long count = 1)
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
 {
   return vsl_convert_to_arbitrary_length_unsigned_impl(ints, buffer, count);
 }
@@ -431,7 +442,8 @@ inline unsigned long vsl_convert_to_arbitrary_length(const unsigned short* ints,
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-unsigned short *ints, unsigned long count = 1)
+                                                       unsigned short *ints,
+                                                       unsigned long count = 1)
 {
   return vsl_convert_from_arbitrary_length_unsigned_impl(buffer, ints, count);
 }
@@ -444,7 +456,8 @@ unsigned short *ints, unsigned long count = 1)
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const short* ints,
-  unsigned char *buffer, unsigned long count = 1)
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
 {
   return vsl_convert_to_arbitrary_length_signed_impl(ints, buffer, count);
 }
@@ -460,10 +473,67 @@ inline unsigned long vsl_convert_to_arbitrary_length(const short* ints,
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-  short *ints, unsigned long count = 1)
+                                                       short *ints,
+                                                       unsigned long count = 1)
 {
   return vsl_convert_from_arbitrary_length_signed_impl(buffer, ints, count);
 }
+
+/////////////////////////////////////////////////////////////////////////
+
+#if VXL_HAS_INT_64
+
+//: Decode a buffer of arbitrary length integers
+// Converts from the integers from the arbitrary length format into
+// an array of normal longs.
+// \param buffer The buffer to be converted.
+// \param count  Number of integers expected. Cannot be zero.
+// \param ints   should point to a buffer at least as long as count.
+// \return the number of bytes used, or zero on error.
+inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
+                                                       vxl_uint_64 *ints,
+                                                       unsigned long count = 1)
+{
+  return vsl_convert_from_arbitrary_length_unsigned_impl(buffer, ints, count);
+}
+
+//: Decode a buffer of arbitrary length integers
+// Converts from the integers from the arbitrary length format into
+// an array of normal longs.
+// \param buffer The buffer to be converted.
+// \param count  Number of integers expected. Cannot be zero.
+// \param ints   should point to a buffer at least as long as count.
+// \return the number of bytes used, or zero on error.
+inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
+                                                       vxl_int_64 *ints,
+                                                       unsigned long count = 1)
+{
+  return vsl_convert_from_arbitrary_length_signed_impl(buffer, ints, count);
+}
+
+//: Encode an array of ints into an arbitrary length format.
+// The return value is the number of bytes used.
+// buffer should be at least as long as
+// VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)) * count
+inline unsigned long vsl_convert_to_arbitrary_length(const vxl_int_64* ints,
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
+{
+  return vsl_convert_to_arbitrary_length_signed_impl(ints, buffer, count);
+}
+
+//: Encode an array of ints into an arbitrary length format.
+// The return value is the number of bytes used.
+// buffer should be at least as long as
+// VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * count
+inline unsigned long vsl_convert_to_arbitrary_length(const vxl_uint_64* ints,
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
+{
+  return vsl_convert_to_arbitrary_length_unsigned_impl(ints, buffer, count);
+}
+
+#endif
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -476,7 +546,8 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_size_t)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const vcl_size_t* ints,
-  unsigned char *buffer, unsigned long count = 1)
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
 {
   return vsl_convert_to_arbitrary_length_unsigned_impl(ints, buffer, count);
 }
@@ -492,7 +563,8 @@ inline unsigned long vsl_convert_to_arbitrary_length(const vcl_size_t* ints,
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-vcl_size_t *ints, unsigned long count = 1)
+                                                       vcl_size_t *ints,
+                                                       unsigned long count = 1)
 {
   return vsl_convert_from_arbitrary_length_unsigned_impl(buffer, ints, count);
 }
@@ -504,7 +576,8 @@ vcl_size_t *ints, unsigned long count = 1)
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_ptrdiff_t)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const vcl_ptrdiff_t* ints,
-  unsigned char *buffer, unsigned long count = 1)
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
 {
   return vsl_convert_to_arbitrary_length_signed_impl(ints, buffer, count);
 }
@@ -520,7 +593,8 @@ inline unsigned long vsl_convert_to_arbitrary_length(const vcl_ptrdiff_t* ints,
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-  vcl_ptrdiff_t *ints, unsigned long count = 1)
+                                                       vcl_ptrdiff_t *ints,
+                                                       unsigned long count = 1)
 {
   return vsl_convert_from_arbitrary_length_signed_impl(buffer, ints, count);
 }

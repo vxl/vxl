@@ -18,6 +18,7 @@
 #include <vcl_fstream.h>
 #include <vcl_map.h>
 #include <vcl_utility.h>
+#include <vxl_config.h>
 
 //: A binary output adaptor for any vcl_ostream
 // Currently the main use of this is to encourage streams to be opened
@@ -352,6 +353,26 @@ void vsl_b_read(vsl_b_istream& is,unsigned long& n );
 //: Print to a stream
 inline void vsl_print_summary(vcl_ostream& os, unsigned long n )
 {  os << n; }
+
+#if VXL_HAS_INT_64
+
+//: Write  to vsl_b_ostream
+void vsl_b_write(vsl_b_ostream& os,vxl_int_64 n );
+//: Read  from vsl_b_istream
+void vsl_b_read(vsl_b_istream& is,vxl_int_64& n );
+//: Print to a stream
+inline void vsl_print_summary(vcl_ostream& os, vxl_int_64 n )
+{  os << n; }
+
+//: Write  to vsl_b_ostream
+void vsl_b_write(vsl_b_ostream& os,vxl_uint_64 n );
+//: Read  from vsl_b_istream
+void vsl_b_read(vsl_b_istream& is,vxl_uint_64& n );
+//: Print to a stream
+inline void vsl_print_summary(vcl_ostream& os, vxl_uint_64 n )
+{  os << n; }
+
+#endif // VXL_HAS_INT_64
 
 //: Write  to vsl_b_ostream
 // Number is saved with ANSI/IEEE Standard 754-1985 single precision.
