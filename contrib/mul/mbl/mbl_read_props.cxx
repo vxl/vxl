@@ -6,6 +6,8 @@
 #include <vsl/vsl_indent.h>
 #include <vcl_string.h>
 
+#include <mbl/mbl_parse_block.h>
+
 void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props)
 {
   typedef vcl_map<vcl_string, vcl_string>::iterator ITER;
@@ -56,6 +58,8 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
   if (label.empty())
     afs >> vcl_ws >> label;
 
+  vcl_string last_label( label );
+
   do 
   {
     if (label.substr(0,2) =="//")
@@ -71,7 +75,24 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
     else if (!label.empty())
     {
       if (label.size() > 1 && label[label.size() -1] == ':')
+      {
         label.erase(label.size() -1, 1);
+        afs >> vcl_ws;
+        vcl_getline(afs, str1);
+        props[label] = str1;
+        last_label = label;
+      }
+      else if ( label == "{" )
+      {
+        vcl_string block = mbl_parse_block( afs, true );
+        if ( block != "{}" )
+        {
+          vcl_string prop = props[ last_label ];
+          prop += "\n";
+          prop += block;
+          props[ last_label ] = prop;
+        }
+      }
       else
       {
         char c;
@@ -86,9 +107,6 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
           return props;
         }
       }
-      afs >> vcl_ws;
-      vcl_getline(afs, str1);
-      props[label] = str1;
     }
     afs >> vcl_ws >> label;
   }
