@@ -36,7 +36,8 @@
 //   02-26-97 - Peter Vanroose - Added implementation for virtual Transform()
 //   May 2000, PTU - ported to vxl
 //   Dec. 2002,  Peter Vanroose -interface change: vtol objects -> smart pointers
-//   9 Jan. 2003, Peter Vanroose - added pure virtual "copy_geometry()"
+//    9 Jan.2003, Peter Vanroose - added pure virtual "copy_geometry()"
+//   27 Sep.2004, Peter Vanroose -is_endpoint() now accepts smart pointer argument
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -186,18 +187,13 @@ class vtol_edge : public vtol_topology_object
 
   // Utility Functions
 
-  virtual bool share_vertex_with(vtol_edge &other);
-
+  virtual bool share_vertex_with(vtol_edge_sptr const& other);
   virtual bool add_vertex(vtol_vertex_sptr const&);
   virtual bool remove_vertex(vtol_vertex_sptr const&);
- private:
-  // Deprecated:
-  virtual bool add_vertex(vtol_vertex &);
-  virtual bool remove_vertex(vtol_vertex &);
- public:
-  virtual bool is_endpoint(const vtol_vertex &) const;
-  virtual bool is_endpoint1(const vtol_vertex &) const;
-  virtual bool is_endpoint2(const vtol_vertex &) const;
+
+  virtual bool is_endpoint(vtol_vertex_sptr const&) const;
+  virtual bool is_endpoint1(vtol_vertex_sptr const&) const;
+  virtual bool is_endpoint2(vtol_vertex_sptr const&) const;
 
   virtual vtol_vertex_sptr other_endpoint(const vtol_vertex &) const;
 

@@ -18,11 +18,11 @@
 //                      generic.  Note this is distance, NOT squared distance.
 //   LEG May 2000. ported to vxl
 //   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
+//   Sept.2004, Peter Vanroose -is_endpoint() now accepts smart pointer argument
 // \endverbatim
 
 #include <vtol/vtol_topology_object.h>
 #include <vcl_iosfwd.h>
-
 class vtol_vertex_2d;
 class vtol_edge;
 class vtol_zero_chain;
@@ -111,7 +111,7 @@ class vtol_vertex : public vtol_topology_object
   //: Is `this' connected with `v2' ?
   //  ie has a superior of `this' `v2' as inferior ?
   //---------------------------------------------------------------------------
-  virtual bool is_connected(const vtol_vertex &v2);
+  virtual bool is_connected(vtol_vertex_sptr const& v2) const;
 
   // methods that will be defined by inherited classes
 
@@ -127,7 +127,7 @@ class vtol_vertex : public vtol_topology_object
  public:
 
   //: check to see if the vertex is part of the edge
-  bool is_endpoint (const vtol_edge &);
+  bool is_endpoint(vtol_edge_sptr const&) const;
 
   void print(vcl_ostream &strm=vcl_cout) const;
   void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;

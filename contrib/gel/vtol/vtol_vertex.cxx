@@ -8,7 +8,6 @@
 #include <vtol/vtol_face.h>
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
-
 #include <vcl_algorithm.h> // for vcl_find()
 #include <vcl_cassert.h>
 
@@ -104,29 +103,21 @@ void vtol_vertex::describe(vcl_ostream &strm,
 //: Is `this' connected with `v2' ?
 //    ie has a superior of `this' `v2' as inferior ?
 //-----------------------------------------------------------------------------
-bool vtol_vertex::is_connected(const vtol_vertex &v2)
+bool vtol_vertex::is_connected(vtol_vertex_sptr const& v2) const
 {
-  edge_list *vertedges=edges();
-  edge_list::const_iterator i;
-  for (i=vertedges->begin();i!=vertedges->end();++i)
+  edge_list vertedges; edges(vertedges);
+  for (edge_list::const_iterator i=vertedges.begin(); i!=vertedges.end(); ++i)
     if ((*i)->is_endpoint(v2))
-    {
-      delete vertedges;
       return true;
-    }
-  delete vertedges;
   return false;
 }
 
 
 //: This method returns true if edg is on the superior list of the vertex.
-bool vtol_vertex::is_endpoint(const vtol_edge &edg)
+bool vtol_vertex::is_endpoint(vtol_edge_sptr const& e) const
 {
-  vtol_edge_sptr e=const_cast<vtol_edge*>(&edg); // const violation
-  const edge_list *e_list=edges();
-  bool result=vcl_find(e_list->begin(),e_list->end(),e)!=e_list->end();
-  delete e_list;
-  return result;
+  edge_list e_list; this->edges(e_list);
+  return vcl_find(e_list.begin(),e_list.end(),e)!=e_list.end();
 }
 
 //---------------------------------------------------------------------------
@@ -182,8 +173,8 @@ void vtol_vertex::explore_vertex(vertex_list &verts)
   // Note that "this" is not first put on the list:
   // it will be put as the second element, during the first recursive call.
 
-  edge_list *e_list=this->edges();
-  for (edge_list::iterator i=e_list->begin();i!=e_list->end();++i)
+  edge_list e_list; this->edges(e_list);
+  for (edge_list::iterator i=e_list.begin();i!=e_list.end();++i)
   {
     vtol_edge_sptr e=*i;
     vtol_vertex_sptr vv;
@@ -204,5 +195,4 @@ void vtol_vertex::explore_vertex(vertex_list &verts)
       vv->explore_vertex(verts);
     }
   }
-  delete e_list;
 }

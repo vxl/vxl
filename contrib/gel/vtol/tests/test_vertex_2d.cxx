@@ -134,12 +134,12 @@ static void test_vertex_2d()
   TEST("vtol_vertex::cast_to_vertex()", v1v->cast_to_vertex()==0, false);
   TEST("vtol_vertex::cast_to_vertex_2d()", v1v->cast_to_vertex_2d()==0, false);
 
-  TEST("vtol_vertex::is_connected()", v1v->is_connected(*v2v), true);
+  TEST("vtol_vertex::is_connected()", v1v->is_connected(v2v), true);
 
   v1v_copy->cast_to_vertex_2d()->set_x(100.0);
-  TEST("vtol_vertex::is_connected()", v1v->is_connected(*v1v_copy), false);
+  TEST("vtol_vertex::is_connected()", v1v->is_connected(v1v_copy), false);
 
-  TEST("vtol_vertex::is_endpoint()", v1v->is_endpoint(*new_edge), true);
+  TEST("vtol_vertex::is_endpoint()", v1v->is_endpoint(new_edge), true);
 
   TEST("vtol_vertex::valid_superior_type()", v1v->valid_superior_type(new_edge->zero_chain()), true);
   TEST("vtol_one_chain::valid_inferior_type()", new_edge->zero_chain()->valid_inferior_type(v1v), true);

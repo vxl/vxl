@@ -2,13 +2,11 @@
 #include "vtol_edge.h"
 //:
 // \file
-
 #include <vcl_cassert.h>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
-
 
 //***************************************************************************
 // Initialization
@@ -38,7 +36,6 @@ vtol_zero_chain_sptr vtol_edge::zero_chain(void) const
       return inf[i]->cast_to_zero_chain();
   return 0;
 }
-
 
 //---------------------------------------------------------------------------
 // Destructor
@@ -102,54 +99,45 @@ void vtol_edge::replace_end_point(vtol_vertex &curendpt,
 void vtol_edge::set_vertices_from_zero_chains(void)
 {
   if (numinf()==1) // This is the normal case.
+  {
+    // Set v1_ to be the first on the
+    // vtol_zero_chain. Set v2_ to be the last on
+    // the vtol_zero_chain.
+    vtol_topology_object_sptr zc0=inferiors()->front();
+    switch (zc0->numinf())
     {
-      // Set v1_ to be the first on the
-      // vtol_zero_chain. Set v2_ to be the last on
-      // the vtol_zero_chain.
-      vtol_topology_object_sptr zc0=inferiors()->front();
-      int numverts=zc0->numinf();
-      //topology_list *verts=zc0->inferiors();
-      switch(numverts)
-        {
-        case 0:
-          v1_=0;
-          v2_=0;
-          break;
-        case 1:
-          v1_=zc0->inferiors()->front()->cast_to_vertex();
-          v2_=v1_;
-          break;
-        default:
-          topology_list const * v = zc0->inferiors();
-          v1_=v->front()->cast_to_vertex();
-          v2_=v->back()->cast_to_vertex();
-          break;
-        }
+     case 0:
+      v1_=0;
+      v2_=0;
+      break;
+     case 1:
+      v1_=v2_=zc0->inferiors()->front()->cast_to_vertex();
+      break;
+     default:
+      topology_list const * v = zc0->inferiors();
+      v1_=v->front()->cast_to_vertex();
+      v2_=v->back()->cast_to_vertex();
+      break;
     }
-  else // This is a Strange case but we'll take care of it.
+  }
+  else // This is a strange case but we'll take care of it.
     // Assuming zero_chains have an ordering,
     // Set v1_ to the first vertex and Set v2_
     // to be the last vertex.  They will not
     // be on the same vtol_zero_chain.
+  {
+    vertex_list verts; vertices(verts);
+    switch (verts.size())
     {
-      vertex_list *verts=vertices();
-
-      if (verts)
-        {
-          int numverts=verts->size();
-          switch(numverts)
-            {
-            case 0:
-              v1_=0;
-              v2_=0;
-              break;
-            default:
-              v1_=(*verts)[0];
-              v2_=(*verts)[numverts-1];
-            }
-          delete verts;
-        }
+     case 0:
+      v1_=0;
+      v2_=0;
+      break;
+     default:
+      v1_=verts.front();
+      v2_=verts.back();
     }
+  }
   touch();
 }
 
@@ -292,19 +280,15 @@ vertex_list *vtol_edge::endpoints(void)
 //  vtol_edge `other'.  The method determines if the two edges share a vertex
 //  by comparing pointer values, not the vertex geometry.
 
-bool vtol_edge::share_vertex_with(vtol_edge &other)
+bool vtol_edge::share_vertex_with(vtol_edge_sptr const& other)
 {
-  bool r = false;
-  vertex_list *thisedges=vertices();
-  vertex_list *eedges=other.vertices();
-
-  for (vertex_list::iterator i1=thisedges->begin();i1!=thisedges->end()&&!r;++i1 )
-    for (vertex_list::iterator i2=eedges->begin();i2!=eedges->end()&&!r; ++i2 )
+  vertex_list thisvert; this->vertices(thisvert);
+  vertex_list everts; other->vertices(everts);
+  for (vertex_list::const_iterator i1=thisvert.begin();i1!=thisvert.end(); ++i1)
+    for (vertex_list::const_iterator i2=everts.begin();i2!=everts.end(); ++i2)
       if ((*i1)==(*i2))
-        r = true;
-  delete thisedges;
-  delete eedges;
-  return r;
+        return true;
+  return false;
 }
 
 //:
@@ -323,21 +307,6 @@ bool vtol_edge::add_vertex(vtol_vertex_sptr const& newvert)
   return true;
 }
 
-#if 1 // deprecated
-bool vtol_edge::add_vertex(vtol_vertex &newvert)
-{
-  vcl_cerr << "Warning: deprecated form of vtol_edge::add_vertex()\n";
-  vtol_zero_chain_sptr zc;
-
-  zc=zero_chain();
-  if (!zc)
-    link_inferior(zc = new vtol_zero_chain);
-
-  zc->link_inferior(&newvert);
-  return true;
-}
-#endif
-
 //:
 // This method removes uglyvert from the vtol_edge by removing it from the
 // inferior zero_chains.  (Method needs work.)
@@ -354,37 +323,22 @@ bool vtol_edge::remove_vertex(vtol_vertex_sptr const& uglyvert)
   return true;
 }
 
-#if 1 // deprecated
-bool vtol_edge::remove_vertex(vtol_vertex &uglyvert)
-{
-  vcl_cerr << "Warning: deprecated form of vtol_edge::remove_vertex()\n";
-  if (uglyvert==*v1_)
-    set_v1(0);
-  else if (uglyvert==*v2_)
-    set_v2(0);
-  else
-    return false;
-  touch();
-  return true;
-}
-#endif
-
-bool vtol_edge::is_endpoint(const vtol_vertex &v) const
+bool vtol_edge::is_endpoint(vtol_vertex_sptr const& v) const
 {
   return is_endpoint1(v)||is_endpoint2(v);
 }
 
 
 //: Returns True if v is equal to the first vtol_edge endpoint,v1_.
-bool vtol_edge::is_endpoint1(const vtol_vertex &v) const
+bool vtol_edge::is_endpoint1(vtol_vertex_sptr const& v) const
 {
-  return *v1_==v;
+  return *v1_==*v;
 }
 
 //: Returns True if v is equal to the second vtol_edge endpoint, v2_.
-bool vtol_edge::is_endpoint2(const vtol_vertex &v) const
+bool vtol_edge::is_endpoint2(vtol_vertex_sptr const& v) const
 {
-  return *v2_ ==v;
+  return *v2_ ==*v;
 }
 
 
