@@ -330,6 +330,7 @@ vidl_mpegcodec::probe(const char* fname)
 {
   vcl_string exten = vul_file::extension(fname);
   bool isthere = vul_file::exists(fname) && (exten == ".mpeg" ||
+                                             exten == ".mpe"  ||
                                              exten == ".mpg"  ||
                                              exten == ".mp2"  ||
                                              exten == ".mp1");
