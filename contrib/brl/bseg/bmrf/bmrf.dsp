@@ -99,13 +99,13 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx;c"
 # Begin Source File
-SOURCE=.\Templates/vbl_io_smart_ptr+bmrf_arc-.cxx
+SOURCE=.\Templates/vbl_io_smart_ptr+bmrf_node+-bmrf_arc-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bmrf_node-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bmrf_arc-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+bmrf_node+-bmrf_arc-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bmrf_epi_point-.cxx
