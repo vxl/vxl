@@ -33,7 +33,8 @@ bugl_gaussian_point_3d<double> brct_structure_estimator::forward(
 
   vnl_double_2 z(observe.x(), observe.y());
   Y = Y + G*(z - z_pred);
-  return state;
+
+  return  bugl_gaussian_point_3d<double> (Y[0], Y[1], Y[2], Q);
 }
 
 vnl_double_2x3 brct_structure_estimator::get_H_matrix(vnl_double_3& Y)

@@ -21,6 +21,7 @@
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <bbas/bdgl/bdgl_curve_algs.h>
+#include "brct_structure_estimator.h"
 #include "brct_algos.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -469,9 +470,15 @@ void kalman_filter::inc()
       pts[j] = vnl_double_2(observes_[j][i].x(), observes_[j][i].y());
       Ps[j] = get_projective_matrix(motions_[j]);
     }
-
+    
     vgl_point_3d<double> X3d = brct_algos::bundle_reconstruct_3d_point(pts, Ps);
     curve_3d_[i].set_point(X3d);
+#if 0
+    brct_structure_estimator se(Ps[cur_pos_%queue_size_]); 
+    bugl_gaussian_point_3d<double> X = se.forward(curve_3d_[i], observes_[cur_pos_%queue_size_][i]);
+    curve_3d_[i] = se.forward(curve_3d_[i], observes_[cur_pos_%queue_size_][i]);
+#endif
+    
   }
 
   // update confidence level for each points
@@ -672,7 +679,6 @@ vnl_matrix<double> kalman_filter::get_predicted_curve()
   vnl_matrix<double> t(2, num_points_);
   for (int i=0; i<num_points_; i++)
   {
-   // vgl_point_3d<double> X(curve_3d_[i][0], curve_3d_[i][1], curve_3d_[i][2]);
     vgl_point_2d<double> x = brct_algos::projection_3d_point(curve_3d_[i], P);
 
     t[0][i] = x.x();
@@ -682,17 +688,19 @@ vnl_matrix<double> kalman_filter::get_predicted_curve()
   return t;
 }
 
-vcl_vector<vgl_point_2d<double> > kalman_filter::get_back_projection()
+vcl_vector<vcl_vector<vgl_point_2d<double> > > kalman_filter::get_back_projection()
 {
-  vnl_double_3 camCenter(X_[0],X_[1],X_[2]);
-  vnl_double_3x4 P = get_projective_matrix(camCenter);
-
-  vcl_vector<vgl_point_2d<double> > t(num_points_);
-
-  for (int i=0; i<num_points_; i++)
+ vcl_vector<vcl_vector<vgl_point_2d<double> > > t(memory_size_);
+ for(int f=0; f<memory_size_; f++)
   {
-    //vgl_point_3d<double> X(curve_3d_[i][0], curve_3d_[i][1], curve_3d_[i][2]);
-    t[i] = brct_algos::projection_3d_point(curve_3d_[i], P);
+    vnl_double_3x4 P = get_projective_matrix(motions_[f]);
+    
+    t[f].resize(num_points_);
+
+    for (int i=0; i<num_points_; i++)
+    {
+      t[f][i] = brct_algos::projection_3d_point(curve_3d_[i], P);
+    }
   }
 
   return t;
