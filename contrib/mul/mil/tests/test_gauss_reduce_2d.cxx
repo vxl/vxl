@@ -9,7 +9,7 @@
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_gauss_reduce_2d.h>
 #include <vil/vil_byte.h>
-
+#include <vcl_cmath.h>
 
 void test_gauss_reduce_2d_byte(int nx)
 {
@@ -113,12 +113,116 @@ void test_gauss_reduce_2d_float(int nx)
   TEST("No overrun",vcl_fabs(test2(L+1,1)-222)<1e-6,true);
 }
 
+void test_gauss_reduce_121_2d_byte(int nx, int ny)
+{
+  vcl_cout << "****************************************" << vcl_endl;
+  vcl_cout << " Testing mil_gauss_reduce_121_2d (byte)(nx="<<nx<<")" << vcl_endl;
+  vcl_cout << "****************************************" << vcl_endl;
+
+  mil_image_2d_of<vil_byte> image0;
+  image0.resize(nx,ny);
+  mil_image_2d_of<vil_byte> reduced_x;
+  reduced_x.resize((nx+1)/2,(ny+1)/2);
+
+  for (int y=0;y<image0.ny();++y)
+     for (int x=0;x<image0.nx();++x)
+     {
+       image0(x,y) = x+y*10;
+     }
+
+  mil_gauss_reduce_121_2d(reduced_x.plane(0),reduced_x.xstep(),reduced_x.ystep(),
+                    image0.plane(0),image0.nx(),image0.ny(),
+                      image0.xstep(),image0.ystep());
+
+  vcl_cout<<"Original: "; image0.print_all(vcl_cout);
+  vcl_cout<<"reduced_x : "; reduced_x.print_all(vcl_cout);
+
+
+  TEST("First element",vcl_fabs(reduced_x(0,1)-image0(0,2))<1e-6,true);
+  TEST("Next element",vcl_fabs(reduced_x(1,1)-image0(2,2))<1e-6,true);
+  int Lx = (nx+1)/2;
+  int Ly = (ny+1)/2;
+  TEST("Last element in x",vcl_fabs(reduced_x(Lx-1,1)-image0(2*(Lx-1),2))<1e-6,true);
+  TEST("Last element in y",vcl_fabs(reduced_x(1,Ly-1)-image0(2,2*(Ly-1)))<1e-6,true);
+
+  mil_image_2d_of<vil_byte> test2;
+  test2.resize(nx,ny);
+  test2.fill(222);
+  mil_gauss_reduce_121_2d(test2.plane(0),test2.xstep(),test2.ystep(),
+                    image0.plane(0),image0.nx(),image0.ny(),
+                      image0.xstep(),image0.ystep());
+  TEST("No overrun in x",vcl_fabs(test2(Lx,1)-222)<1e-6,true);
+  TEST("No overrun in y",vcl_fabs(test2(1,Ly)-222)<1e-6,true);
+
+	image0.fill(17);
+  mil_gauss_reduce_121_2d(test2.plane(0),test2.xstep(),test2.ystep(),
+                    image0.plane(0),image0.nx(),image0.ny(),
+                      image0.xstep(),image0.ystep());
+  TEST("Smoothing correct",vcl_fabs(test2(1,1)-17)<1e-6,true);
+	vcl_cout<<"Value at (1,1):"<<float(test2(1,1))<<vcl_endl;
+}
+
+void test_gauss_reduce_121_2d_float(int nx, int ny)
+{
+  vcl_cout << "****************************************" << vcl_endl;
+  vcl_cout << " Testing mil_gauss_reduce_121_2d (float)(nx="<<nx<<")" << vcl_endl;
+  vcl_cout << "****************************************" << vcl_endl;
+
+  mil_image_2d_of<float> image0;
+  image0.resize(nx,ny);
+  mil_image_2d_of<float> reduced_x;
+  reduced_x.resize((nx+1)/2,(ny+1)/2);
+
+  for (int y=0;y<image0.ny();++y)
+     for (int x=0;x<image0.nx();++x)
+     {
+       image0(x,y) = x+y*10;
+     }
+
+  mil_gauss_reduce_121_2d(reduced_x.plane(0),reduced_x.xstep(),reduced_x.ystep(),
+                    image0.plane(0),image0.nx(),image0.ny(),
+                      image0.xstep(),image0.ystep());
+
+  vcl_cout<<"Original: "; image0.print_all(vcl_cout);
+  vcl_cout<<"reduced_x : "; reduced_x.print_all(vcl_cout);
+
+
+  TEST("First element",vcl_fabs(reduced_x(0,1)-image0(0,2))<1e-6,true);
+  TEST("Next element",vcl_fabs(reduced_x(1,1)-image0(2,2))<1e-6,true);
+  int Lx = (nx+1)/2;
+  int Ly = (ny+1)/2;
+  TEST("Last element in x",vcl_fabs(reduced_x(Lx-1,1)-image0(2*(Lx-1),2))<1e-6,true);
+  TEST("Last element in y",vcl_fabs(reduced_x(1,Ly-1)-image0(2,2*(Ly-1)))<1e-6,true);
+
+  mil_image_2d_of<float> test2;
+  test2.resize(nx,ny);
+  test2.fill(222);
+  mil_gauss_reduce_121_2d(test2.plane(0),test2.xstep(),test2.ystep(),
+                    image0.plane(0),image0.nx(),image0.ny(),
+                      image0.xstep(),image0.ystep());
+  TEST("No overrun in x",vcl_fabs(test2(Lx,1)-222)<1e-6,true);
+  TEST("No overrun in y",vcl_fabs(test2(1,Ly)-222)<1e-6,true);
+
+	image0.fill(17);
+  mil_gauss_reduce_121_2d(test2.plane(0),test2.xstep(),test2.ystep(),
+                    image0.plane(0),image0.nx(),image0.ny(),
+                      image0.xstep(),image0.ystep());
+  TEST("Smoothing correct",vcl_fabs(test2(1,1)-17)<1e-6,true);
+	vcl_cout<<"Value at (1,1):"<<float(test2(1,1))<<vcl_endl;
+
+}
+
 void test_gauss_reduce_2d()
 {
   test_gauss_reduce_2d_byte(7);
   test_gauss_reduce_2d_byte(6);
   test_gauss_reduce_2d_float(7);
   test_gauss_reduce_2d_float(6);
+
+  test_gauss_reduce_121_2d_byte(6,6);
+  test_gauss_reduce_121_2d_byte(7,7);
+  test_gauss_reduce_121_2d_float(6,6);
+  test_gauss_reduce_121_2d_float(7,7);
 }
 
 
