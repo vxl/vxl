@@ -135,12 +135,32 @@ SOURCE=.\Templates/mil3d_image_3d_of+vil_byte-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/mil3d_gaussian_pyramid_builder_3d+float-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil3d_gaussian_pyramid_builder_3d+vil_byte-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\mil3d_image_3d_of.cxx
 
 # End Source File
 # Begin Source File
 
 SOURCE=.\mil3d_transform_3d.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil3d_gauss_reduce_3d.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil3d_gaussian_pyramid_builder_3d.cxx
 
 # End Source File
 # End Group
@@ -179,6 +199,21 @@ SOURCE=.\mil3d_image_3d_of.txx
 # Begin Source File
 
 SOURCE=.\mil3d_transform_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil3d_gauss_reduce_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil3d_gaussian_pyramid_builder_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil3d_gaussian_pyramid_builder_3d.txx
 
 # End Source File
 # End Group
