@@ -65,6 +65,7 @@ int vil_stream_fstream::write(void const* buf, int n)
   xerr << "write " << n << endl;
   f_.write((char const*)buf, n);
   vcl_streampos b = tell();
+  f_.flush();
   return b-a;
 }
 
