@@ -27,7 +27,7 @@ SET(vgui_mfc_sources
 )
 
 ADD_LIBRARY(vgui_mfc ${vgui_mfc_sources})
-TARGET_LINK_LIBRARIES(vgui_mfc vgui_base)
+TARGET_LINK_LIBRARIES(vgui_mfc vgui_base vul)
 
 ENDIF(VGUI_USE_MFC)
 

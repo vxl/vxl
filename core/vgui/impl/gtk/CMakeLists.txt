@@ -28,7 +28,7 @@ SET(vgui_gtk_sources
 AUX_SOURCE_DIRECTORY(Templates vgui_gtk_sources)
 
 ADD_LIBRARY(vgui_gtk ${vgui_gtk_sources})
-TARGET_LINK_LIBRARIES(vgui_gtk vgui_base ${GTK_LIBRARIES})
+TARGET_LINK_LIBRARIES(vgui_gtk vgui_base vul ${GTK_LIBRARIES})
 
 ENDIF(VGUI_USE_GTK)
 

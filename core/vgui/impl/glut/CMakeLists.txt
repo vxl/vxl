@@ -42,7 +42,7 @@ ENDIF (HAS_X11)
 AUX_SOURCE_DIRECTORY(Templates vgui_glut_sources)
 
 ADD_LIBRARY(vgui_glut ${vgui_glut_sources})
-TARGET_LINK_LIBRARIES(vgui_glut vgui_base ${GLUT_LIBRARIES})
+TARGET_LINK_LIBRARIES(vgui_glut vgui_base vil vul ${GLUT_LIBRARIES})
 IF (HAS_X11)
   TARGET_LINK_LIBRARIES(vgui_glut ${X11_LIBRARIES})
 ENDIF (HAS_X11)

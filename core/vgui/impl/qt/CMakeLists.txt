@@ -33,7 +33,7 @@ QT_WRAP_CPP(vgui_qt vgui_qt_moc_files
 )
 
 ADD_LIBRARY(vgui_qt ${vgui_qt_sources} vgui_qt_moc_files)
-TARGET_LINK_LIBRARIES(vgui_qt vgui_base ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(vgui_qt vgui_base vul vbl ${QT_LIBRARIES})
 
 ENDIF(VGUI_USE_QT)
 
