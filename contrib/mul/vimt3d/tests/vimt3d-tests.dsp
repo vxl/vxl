@@ -263,6 +263,9 @@ SOURCE=.\test_image_3d_of.cxx
 # Begin Source File
 SOURCE=.\test_transform_3d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_load.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
