@@ -121,6 +121,8 @@ SOURCES += HMatrix2DEuclideanCompute.cxx
 SOURCES += PMatrixCompute.cxx
 SOURCES += PMatrixComputeLinear.cxx
 
+SOURCES += TriTensorCompute.cxx
+
 # 7. Misc utility functions
 
 SOURCES += ComputeGRIC.cxx
@@ -138,7 +140,6 @@ MANPAGE_SOURCES += ModifyHandle.h
 MANPAGE_SOURCES += PMatrixCompute6Point.h
 MANPAGE_SOURCES += PairMatchMultiStrength.h
 MANPAGE_SOURCES += PairMatchSetMulti.h
-MANPAGE_SOURCES += TriTensorCompute.h
 MANPAGE_SOURCES += mvl_modify_handle.h
 
 MANPAGE_SOURCES += PMatrix_sptr.h
