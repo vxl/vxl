@@ -176,6 +176,8 @@ bmrf_arc_prob_cmp( const bmrf_arc_sptr& left,
 vcl_set<bmrf_curvel_3d_sptr>
 bmrf_curve_3d_builder::build_curvels(vcl_set<bmrf_curvel_3d_sptr>& all_curvels, double alpha) const
 {
+  unsigned int num_frames = network_->num_frames();
+  
   // find all arcs at alpha
   vcl_vector<bmrf_arc_sptr> all_arcs = this->find_arcs_at(alpha);
   // sort by probability
@@ -189,7 +191,7 @@ bmrf_curve_3d_builder::build_curvels(vcl_set<bmrf_curvel_3d_sptr>& all_curvels, 
   {
     if( (*c_itr)->num_projections() == 0 )
       continue;
-    for( unsigned int f=0; f<network_->num_frames(); ++f){
+    for( unsigned int f=0; f<num_frames; ++f){
       bmrf_node_sptr update_node = (*c_itr)->node_at_frame(f);
       if( update_node )
         node_map[update_node] = *c_itr;
@@ -240,7 +242,7 @@ bmrf_curve_3d_builder::build_curvels(vcl_set<bmrf_curvel_3d_sptr>& all_curvels, 
         if( curvel_from->merge(curvel_to) ){
           if(new_curvels.erase(curvel_to) == 0)
             all_curvels.erase(curvel_to);
-          for( unsigned int f=0; f<network_->num_frames(); ++f){
+          for( unsigned int f=0; f<num_frames; ++f){
             bmrf_node_sptr update_node = curvel_to->node_at_frame(f);
             if( update_node )
               node_map[update_node] = curvel_from;
