@@ -53,6 +53,7 @@ SOURCES += HMatrix2D.cxx
 SOURCES += HMatrix3D.cxx
 
 SOURCES += PMatrix.cxx
+MANPAGE_SOURCES += PMatrix_sptr.h
 SOURCES += PMatrixDecompAa.cxx
 SOURCES += PMatrixDec.cxx
 SOURCES += PMatrixDecompCR.cxx
@@ -130,6 +131,7 @@ SOURCES += Probability.cxx
 SOURCES += FileNameGeneratorBase.cxx
 MANPAGE_SOURCES += FileNameGenerator.h
 SOURCES += RawPMatrixStore.cxx
+SOURCES += mvl_linear_backproject.cxx
 
 MANPAGE_SOURCES += HomgMap2D.h
 MANPAGE_SOURCES += HomgMatchPoint3D2D.h
@@ -138,8 +140,6 @@ MANPAGE_SOURCES += ModifyHandle.h
 MANPAGE_SOURCES += PairMatchMultiStrength.h
 MANPAGE_SOURCES += PairMatchSetMulti.h
 MANPAGE_SOURCES += mvl_modify_handle.h
-
-MANPAGE_SOURCES += PMatrix_sptr.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
