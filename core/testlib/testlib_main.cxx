@@ -40,15 +40,15 @@ LONG WINAPI vxl_exception_filter( struct _EXCEPTION_POINTERS *ExceptionInfo )
 }
 #endif // defined(VCL_WIN32)
 
-vcl_vector<TestMainFunction> *testlib_test_func_=new vcl_vector<TestMainFunction>;
-vcl_vector<vcl_string>       *testlib_test_name_=new vcl_vector<vcl_string>;
+static vcl_vector<TestMainFunction> testlib_test_func_;
+static vcl_vector<vcl_string>       testlib_test_name_;
 
 void
 list_test_names( vcl_ostream& ostr )
 {
   ostr << "The registered test names are:\n";
-  for ( unsigned int i = 0; i < testlib_test_name_->size(); ++i )
-    ostr << "   " << (*testlib_test_name_)[i] << "\n";
+  for ( unsigned int i = 0; i < testlib_test_name_.size(); ++i )
+    ostr << "   " << testlib_test_name_[i] << "\n";
   ostr << "\nOmitting a test name, or specifying the name \"all\" "
        << "will run all the tests.\n";
 }
@@ -81,9 +81,9 @@ testlib_main( int argc, char* argv[] )
   typedef vcl_vector<vcl_string>::size_type vec_size_t;
 
   // Error check.
-  if ( testlib_test_func_->size() != testlib_test_name_->size() ) {
-    vcl_cerr << "Error: " << testlib_test_func_->size() << " test functions are registered, but "
-             << testlib_test_name_->size() << " test names are registered.\n";
+  if ( testlib_test_func_.size() != testlib_test_name_.size() ) {
+    vcl_cerr << "Error: " << testlib_test_func_.size() << " test functions are registered, but "
+             << testlib_test_name_.size() << " test names are registered.\n";
     return 1;
   }
 
@@ -102,9 +102,9 @@ testlib_main( int argc, char* argv[] )
 
   if ( test_name_given )
   {
-    for ( vec_size_t i = 0; i < testlib_test_name_->size(); ++i )
-      if ( (*testlib_test_name_)[i] == argv[1] )
-        return (*testlib_test_func_)[i]( argc-1, argv+1 );
+    for ( vec_size_t i = 0; i < testlib_test_name_.size(); ++i )
+      if ( testlib_test_name_[i] == argv[1] )
+        return testlib_test_func_[i]( argc-1, argv+1 );
 
     vcl_cerr << "Test " << argv[1] << " not registered.\n";
     list_test_names( vcl_cerr );
@@ -116,18 +116,18 @@ testlib_main( int argc, char* argv[] )
     vcl_cout << "If you want to run a single test, specify one of the above on the command line.\n\n";
 
     bool all_pass = true;
-    for ( vec_size_t i = 0; i < testlib_test_name_->size(); ++i ) {
+    for ( vec_size_t i = 0; i < testlib_test_name_.size(); ++i ) {
       vcl_cout << "----------------------------------------\n"
-               << "Running: " << (*testlib_test_name_)[i] << "\n"
+               << "Running: " << testlib_test_name_[i] << "\n"
                << "----------------------------------------\n";
-      int result = (*testlib_test_func_)[i]( argc, argv );
+      int result = testlib_test_func_[i]( argc, argv );
       vcl_cout << "----------------------------------------\n"
-               << (*testlib_test_name_)[i] << " returned " << result << " " << ( result==0?"(PASS)":"(FAIL)") << "\n"
+               << testlib_test_name_[i] << " returned " << result << " " << ( result==0?"(PASS)":"(FAIL)") << "\n"
                << "----------------------------------------\n";
       all_pass &= (result == 0);
     }
 
-    vcl_cout << "\n\nCombined result of " << testlib_test_name_->size() << " tests: "
+    vcl_cout << "\n\nCombined result of " << testlib_test_name_.size() << " tests: "
              << ( all_pass?"PASS":"FAIL" ) << vcl_endl;
     return all_pass ? 0 : 1;
   }
@@ -135,10 +135,15 @@ testlib_main( int argc, char* argv[] )
   return 1;
 }
 
+void testlib_register_test(const vcl_string & name, TestMainFunction func)
+{
+  testlib_test_func_.push_back(func);
+  testlib_test_name_.push_back(name);
+}
+
+
 void testlib_cleanup()
 {
-  delete testlib_test_func_;
-  testlib_test_func_=0;
-  delete testlib_test_name_;
-  testlib_test_name_=0;
+  testlib_test_func_.clear();
+  testlib_test_func_.clear();
 }
