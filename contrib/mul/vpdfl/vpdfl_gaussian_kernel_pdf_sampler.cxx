@@ -81,11 +81,11 @@ void vpdfl_gaussian_kernel_pdf_sampler::sample_component(vnl_vector<double>& x,
 {
   const vpdfl_gaussian_kernel_pdf & kpdf = (const vpdfl_gaussian_kernel_pdf &) model();
 
-	int n_dims = kpdf.n_dims();
+  int n_dims = kpdf.n_dims();
   x.resize(n_dims);
 
-	const double* m = kpdf.centre()[j].data_block();
-	double w = kpdf.width()[j];
+  const double* m = kpdf.centre()[j].data_block();
+  double w = kpdf.width()[j];
 
   double* x_data = x.data_block();
   for (int i=0;i<n_dims;++i)
@@ -100,11 +100,11 @@ void vpdfl_gaussian_kernel_pdf_sampler::sample(vnl_vector<double>& x)
   const vpdfl_gaussian_kernel_pdf & kpdf = (const vpdfl_gaussian_kernel_pdf &) model();
   int n = kpdf.centre().size();
 
-	// Select component
+  // Select component
   int j = 0;
   if (n>1) j=rng_.lrand32(0,n-1);
 
-	sample_component(x,j);
+  sample_component(x,j);
 }
 
 //: Fill x with samples possibly chosen so as to represent the distribution
@@ -115,15 +115,15 @@ void vpdfl_gaussian_kernel_pdf_sampler::regular_samples(
   const vpdfl_gaussian_kernel_pdf & kpdf = (const vpdfl_gaussian_kernel_pdf &) model();
   int n_k = kpdf.centre().size();
 
-	int n_samples = x.size();
+  int n_samples = x.size();
 
-	for (int i=0;i<n_samples;++i)
-	{
-	    // Ensure sample at centre.  (This biases towards the centres somewhat)
-	  if (i<n_k)
-		  x[i]=kpdf.centre()[i];
-		else
-		  sample_component(x[i],i%n_k);
+  for (int i=0;i<n_samples;++i)
+  {
+    // Ensure sample at centre.  (This biases towards the centres somewhat)
+    if (i<n_k)
+      x[i]=kpdf.centre()[i];
+    else
+      sample_component(x[i],i%n_k);
   }
 }
 

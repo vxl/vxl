@@ -19,8 +19,8 @@ void vpdfl_calc_mean_var(vnl_vector<double>& mean,
   double* var_data = var.data_block();
   double* mean_data = mean.data_block();
   double* sum_sq_data = sum_sq.data_block();
-	mean.fill(0.0);
-	sum_sq.fill(0.0);
+  mean.fill(0.0);
+  sum_sq.fill(0.0);
 
   for (int i=0;i<n;i++)
   {
@@ -34,7 +34,7 @@ void vpdfl_calc_mean_var(vnl_vector<double>& mean,
 
   mean/=n;
 
-	var.resize(n_dims);
+  var.resize(n_dims);
   for (int j=0;j<n_dims;j++)
   {
     var_data[j] = sum_sq_data[j]/n - mean_data[j]*mean_data[j];

@@ -27,7 +27,7 @@ public:
     //: Probability density at x
   virtual double operator()(const vnl_vector<double>& x) const;
 
-		//: Log of probability density at x
+    //: Log of probability density at x
     // This value is also the Normalised Mahalanobis distance
     // from the centroid to the given vector.
   virtual double log_p(const vnl_vector<double>& x) const;

@@ -103,33 +103,33 @@ void vpdfl_kernel_pdf_builder::build(vpdfl_pdf_base& model,
 
 //: Build kernel_pdf from n elements in data[i]
 void vpdfl_kernel_pdf_builder::build_from_array(vpdfl_pdf_base& model,
-                                      const vnl_vector<double>* data, int n) const
+                                                const vnl_vector<double>* data, int n) const
 {
   vpdfl_kernel_pdf& kpdf = kernel_pdf(model);
 
   if (n<1)
   {
-    vcl_cerr<<"vpdfl_kernel_pdf_builder::build() No examples available."<<vcl_endl;
+    vcl_cerr<<"vpdfl_kernel_pdf_builder::build() No examples available.\n";
     vcl_abort();
   }
 
   switch (build_type_)
   {
     case fixed_width:
-	  build_fixed_width(kpdf,data,n,fixed_width_);
-	  break;
+    build_fixed_width(kpdf,data,n,fixed_width_);
+    break;
     case select_equal:
-	  build_select_equal_width(kpdf,data,n);
-	  break;
+    build_select_equal_width(kpdf,data,n);
+    break;
     case width_from_sep:
-	  build_width_from_separation(kpdf,data,n);
-	  break;
+    build_width_from_separation(kpdf,data,n);
+    break;
     case adaptive:
-	  build_adaptive(kpdf,data,n);
-	  break;
+    build_adaptive(kpdf,data,n);
+    break;
     default:
-	  cerr<<"vpdfl_kernel_pdf_builder::build_from_array() Unknown build type."<<vcl_endl;
-	  vcl_abort();
+    vcl_cerr<<"vpdfl_kernel_pdf_builder::build_from_array() Unknown build type.\n";
+    vcl_abort();
   }
 }
 
@@ -145,24 +145,24 @@ void vpdfl_kernel_pdf_builder::build(vpdfl_pdf_base& model, mbl_data_wrapper<vnl
     vcl_abort();
   }
 
-	if (data.is_a()=="mbl_data_array_wrapper<T>")
-	{
+  if (data.is_a()=="mbl_data_array_wrapper<T>")
+  {
     mbl_data_array_wrapper<vnl_vector<double> >& data_array =
-		               (mbl_data_array_wrapper<vnl_vector<double> >&) data;
-		build_from_array(model,data_array.data(),n);
-		return;
-	}
-
-	// Fill array with data
-	vcl_vector<vnl_vector<double> >x(n);
-	data.reset();
-	for (int i=0;i<n;++i)
-	{
-	  x[i]=data.current();
-		data.next();
+                   (mbl_data_array_wrapper<vnl_vector<double> >&) data;
+    build_from_array(model,data_array.data(),n);
+    return;
   }
 
-	build_from_array(model,&x[0],n);
+  // Fill array with data
+  vcl_vector<vnl_vector<double> >x(n);
+  data.reset();
+  for (int i=0;i<n;++i)
+  {
+    x[i]=data.current();
+    data.next();
+  }
+
+  build_from_array(model,&x[0],n);
 }
 
 void vpdfl_kernel_pdf_builder::weighted_build(vpdfl_pdf_base& model,
@@ -189,12 +189,12 @@ void vpdfl_kernel_pdf_builder::build_select_equal_width(vpdfl_kernel_pdf& kpdf,
   vnl_vector<double> m,var;
   vpdfl_calc_mean_var(m,var,data,n);
 
-	double mean_var = var.mean();
+  double mean_var = var.mean();
   if (mean_var<min_var_) var=min_var_;
 
-	double d = data[0].size();
+  double d = data[0].size();
 
-  double k_var = mean_var*pow(4.0/(3*n),0.4*d);  // Check this!!
+  double k_var = mean_var*vcl_pow(4.0/(3*n),0.4*d);  // Check this!!
   double w = vcl_sqrt(k_var);
 
   build_fixed_width(kpdf,data,n,w);
@@ -202,36 +202,36 @@ void vpdfl_kernel_pdf_builder::build_select_equal_width(vpdfl_kernel_pdf& kpdf,
 
 //: Kernel width proportional to distance to nearby samples.
 void vpdfl_kernel_pdf_builder::build_width_from_separation(vpdfl_kernel_pdf& kpdf,
-	                             const vnl_vector<double>* data, int n) const
+                               const vnl_vector<double>* data, int n) const
 {
   vnl_vector<double> width(n);
   double* w=width.data_block();
 
-	unsigned int k = 2;  // Second nearest neighbour
+  unsigned int k = 2;  // Second nearest neighbour
   for (int i=0;i<n;++i)
-	{
-	// Can't get the following to compile:
-//	  mbl_priority_bounded_queue<double,vcl_vector<double>,vcl_less<double> > d_sq(k);
+  {
+  // Can't get the following to compile:
+//    mbl_priority_bounded_queue<double,vcl_vector<double>,vcl_less<double> > d_sq(k);
 
     double min_d2= -1.0;
-		for (int j=0;j<n;++j)
-		{
-		  if (j!=i)
-			{
-			  double d2 = vnl_vector_ssd(data[i],data[j]);
+    for (int j=0;j<n;++j)
+    {
+      if (j!=i)
+      {
+        double d2 = vnl_vector_ssd(data[i],data[j]);
 
-				if (d2<min_d2 || min_d2<0) min_d2=d2;
-//				d_sq.push(d2);
-			}
-		}
+        if (d2<min_d2 || min_d2<0) min_d2=d2;
+//        d_sq.push(d2);
+      }
+    }
 
-		// Width set to distance to k-th nearest neighbour
+    // Width set to distance to k-th nearest neighbour
 //    w[i] = sqrt(d_sq[k-1]);
 
      //: Width to nearest neighbour
-		 if (min_d2<min_var_) min_d2=min_var_;
+     if (min_d2<min_var_) min_d2=min_var_;
      w[i] = vcl_sqrt(min_d2);
-	}
+  }
 
   kpdf.set_centres(data,n,width);
 }
@@ -240,7 +240,7 @@ void vpdfl_kernel_pdf_builder::build_width_from_separation(vpdfl_kernel_pdf& kpd
 //  Use equal widths to create a pilot estimate, then use the prob at each
 //  data point to modify the widths
 void vpdfl_kernel_pdf_builder::build_adaptive(vpdfl_kernel_pdf& kpdf,
-	                             const vnl_vector<double>* data, int n) const
+                               const vnl_vector<double>* data, int n) const
 {
   // First build the pilot estimate
   build_select_equal_width(kpdf,data,n);
@@ -259,8 +259,8 @@ void vpdfl_kernel_pdf_builder::build_adaptive(vpdfl_kernel_pdf& kpdf,
   for (int i=0;i<n;++i)
   {
     // Scale each inversely by sqrt(prob)
-		// Check: Should there be a power of d in there?
-    new_width[i] *= exp(-0.5*(log_p[i]-log_mean));
+    // Check: Should there be a power of d in there?
+    new_width[i] *= vcl_exp(-0.5*(log_p[i]-log_mean));
   }
 
   kpdf.set_centres(data,n,new_width);

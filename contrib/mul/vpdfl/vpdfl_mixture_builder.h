@@ -34,8 +34,8 @@ private:
   double min_var_;
   int max_its_;
 
-	  //: Whether weights changed during iterations
-	bool weights_fixed_;
+  //: Whether weights changed during iterations
+  bool weights_fixed_;
 
   void initialise(vpdfl_mixture& model,
                   const vnl_vector<double>* data,
@@ -74,11 +74,11 @@ public:
   //  Clone taken of builder
   void init(const vpdfl_builder_base& builder, int n);
 
-	  //: Whether weights on components left unchanged during iterations
-	bool weights_fixed() const { return weights_fixed_; }
+  //: Whether weights on components left unchanged during iterations
+  bool weights_fixed() const { return weights_fixed_; }
 
-	  //: Whether weights on components left unchanged during iterations
-	void set_weights_fixed(bool b);
+  //: Whether weights on components left unchanged during iterations
+  void set_weights_fixed(bool b);
 
   //: Define maximum number of EM iterations allowed
   void set_max_iterations(int n);

@@ -36,45 +36,45 @@ vpdfl_kernel_pdf::~vpdfl_kernel_pdf()
 void vpdfl_kernel_pdf::calc_mean_var()
 {
   int n = x_.size();
-	assert(n>0);
-	int t = x_[0].size();
+  assert(n>0);
+  int t = x_[0].size();
   vnl_vector<double> m(t),v2(t);
-	m.fill(0); v2.fill(0);
-	double* v2_data = v2.data_block();
+  m.fill(0); v2.fill(0);
+  double* v2_data = v2.data_block();
 
-	for (int i=0;i<n;++i)
-	{
-	  m += x_[i];
-		double* x_data = x_[i].data_block();
-		for (int j=0;j<t;++j)
+  for (int i=0;i<n;++i)
+  {
+    m += x_[i];
+    double* x_data = x_[i].data_block();
+    for (int j=0;j<t;++j)
       v2_data[j]+= x_data[j]*x_data[j];
   }
-	m/=n;
+  m/=n;
 
-	double sd=width_.rms();
-	double extra_var = sd*sd;
-	for (int j=0;j<t;++j)
+  double sd=width_.rms();
+  double extra_var = sd*sd;
+  for (int j=0;j<t;++j)
   {
-	  v2_data[j]/=n;
-		v2_data[j]+= extra_var - m[j]*m[j];
+    v2_data[j]/=n;
+    v2_data[j]+= extra_var - m[j]*m[j];
   }
 
 
-	set_mean(m);
-	set_variance(v2);
+  set_mean(m);
+  set_variance(v2);
 }
 
 //: Initialise so all kernels have the same width
 void vpdfl_kernel_pdf::set_centres(const vnl_vector<double>* x, int n, double width)
 {
   x_.resize(n);
-	for (int i=0;i<n;++i) x_[i] = x[i];
+  for (int i=0;i<n;++i) x_[i] = x[i];
 
   width_.resize(n);
   width_.fill(width);
   all_same_width_ = true;
 
-	calc_mean_var();
+  calc_mean_var();
 }
 
 //: Initialise so all kernels have given width
@@ -83,11 +83,11 @@ void vpdfl_kernel_pdf::set_centres(const vnl_vector<double>* x, int n,
 {
   assert(n==width.size());
   x_.resize(n);
-	for (int i=0;i<n;++i) x_[i] = x[i];
+  for (int i=0;i<n;++i) x_[i] = x[i];
   width_= width;
   all_same_width_ = false;
 
-	calc_mean_var();
+  calc_mean_var();
 }
 
 //=======================================================================

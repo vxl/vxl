@@ -85,23 +85,23 @@ public:
 
     //: Build from n elements in data[i].  Fixed kernel width.
   void build_fixed_width(vpdfl_kernel_pdf& kpdf,
-	                       const vnl_vector<double>* data, int n, double width) const;
+                         const vnl_vector<double>* data, int n, double width) const;
 
     //: Build from n elements in data[i].  Chooses width.
     //  Same width selected for all points, using
     //  $w=(3n/4)^{-0.2}\sigma$, as suggested by Silverman
   void build_select_equal_width(vpdfl_kernel_pdf& kpdf,
-	                             const vnl_vector<double>* data, int n) const;
+                                 const vnl_vector<double>* data, int n) const;
 
     //: Kernel width proportional to distance to nearby samples.
   void build_width_from_separation(vpdfl_kernel_pdf& kpdf,
-	                             const vnl_vector<double>* data, int n) const;
+                                   const vnl_vector<double>* data, int n) const;
 
     //: Build adaptive kernel estimate.
     //  Use equal widths to create a pilot estimate, then use the prob at each
     //  data point to modify the widths
   void build_adaptive(vpdfl_kernel_pdf& kpdf,
-	                  const vnl_vector<double>* data, int n) const;
+                      const vnl_vector<double>* data, int n) const;
 
     //: Version number for I/O
   short version_no() const;

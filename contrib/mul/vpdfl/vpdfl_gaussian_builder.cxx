@@ -210,7 +210,7 @@ void vpdfl_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 
   assert(n_samples>=2); // Need enough samples
 
-	data.reset();
+  data.reset();
   int n_dims = data.current().size();
   vnl_vector<double> sum(n_dims);
   sum.fill(0);

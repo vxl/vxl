@@ -31,8 +31,8 @@ protected:
   //: True if all kernels have the same width
   bool all_same_width_;
 
-	//: Compute mean/variance given current centres and widths
-	void calc_mean_var();
+  //: Compute mean/variance given current centres and widths
+  void calc_mean_var();
 
 public:
 
@@ -43,11 +43,11 @@ public:
   virtual ~vpdfl_kernel_pdf();
 
     //: Initialise so all kernels have the same width
-		//  width is essentially the sd on the kernels
+    //  width is essentially the sd on the kernels
   void set_centres(const vnl_vector<double>* x, int n, double width);
 
     //: Initialise so all kernels have given width
-		//  width[i] is essentially the sd on kernel i
+    //  width[i] is essentially the sd on kernel i
   void set_centres(const vnl_vector<double>* x, int n,
                    const vnl_vector<double>& width);
 

@@ -41,7 +41,7 @@ double vpdfl_gaussian_kernel_pdf::operator()(const vnl_vector<double>& x0) const
 {
   int n = x_.size();
   assert(n>0);
-	int dim = x_[0].size();
+  int dim = x_[0].size();
   double p;
   const vnl_vector<double>* x = &x_[0];
   const double* w = width_.data_block();
@@ -51,8 +51,8 @@ double vpdfl_gaussian_kernel_pdf::operator()(const vnl_vector<double>& x0) const
   for (int i=0;i<n;++i)
   {
     double M = vnl_vector_ssd(x[i],x0)/(w[i]*w[i]);
-		if (M<20)
-      sum += exp(-0.5*M)/pow(w[i],dim);
+    if (M<20)
+      sum += vcl_exp(-0.5*M)/vcl_pow(w[i],dim);
   }
 
   p = k*sum;
@@ -84,7 +84,7 @@ void vpdfl_gaussian_kernel_pdf::gradient(vnl_vector<double>& g,
                               double& p) const
 {
   vcl_cerr<<"vpdfl_gaussian_kernel_pdf::gradient() Not yet implemented."<<vcl_endl;
-	vcl_abort();
+  vcl_abort();
 }
 
 //=======================================================================
