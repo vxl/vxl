@@ -296,11 +296,16 @@ SET( vcl_sources
 
   win32-vc60/vcl_cmath.h
   win32-vc60/vcl_complex.h
+  win32-vc60/vcl_cstdarg.h
   win32-vc60/vcl_cstdlib.h
   win32-vc60/vcl_string.h
 
   win32-vc70/vcl_cmath.h
   win32-vc70/vcl_cstdlib.h
+
+  borland55/vcl_cfloat.h
+  borland55/vcl_ciso646.h
+  borland56/vcl_complex.h
 
   mwerks/vcl_cmath.h
   mwerks/vcl_complex.h
