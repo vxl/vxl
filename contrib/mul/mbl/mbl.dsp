@@ -258,6 +258,11 @@ SOURCE=.\mbl_thin_plate_spline_2d.cxx
 SOURCE=.\mbl_histogram.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\mbl_clamped_plate_spline_2d.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -449,6 +454,11 @@ SOURCE=.\mbl_thin_plate_spline_2d.h
 # Begin Source File
 
 SOURCE=.\mbl_histogram.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_clamped_plate_spline_2d.h
 
 # End Source File
 # End Group
