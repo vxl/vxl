@@ -13,6 +13,7 @@
 
 #include <vcl_string.h>
 #include <vcl_cmath.h>
+#include <vcl_sstream.h>
 
 #include <vul/vul_sprintf.h>
 #include <vil1/vil1_crop.h>
@@ -166,8 +167,9 @@ bool xcv_image_tableau::handle(vgui_event const &e)
                  &pixel);
 
     // Display on status bar:
-    const char* msg = vul_sprintf("(%d, %d)   R=%d,G=%d,B=%d", intx, inty, (int)pixel.r, (int)pixel.g, (int)pixel.b);
-    post_to_status_bar(msg);
+    vcl_ostringstream str;
+    str << "("<<intx<<","<<inty<<")  R="<<int(pixel.r)<<",G="<<int(pixel.g)<<",B="<<int(pixel.b);
+    post_to_status_bar(str.str().c_str());
   }
 
   return base::handle(e);
