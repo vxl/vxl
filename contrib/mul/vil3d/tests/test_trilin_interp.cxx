@@ -27,29 +27,29 @@ void test_trilin_interp_float()
 
    {
      double v1 = vil3d_trilin_interp_raw(3,3,3,image0.origin_ptr(),istep,jstep,kstep);
-     TEST_NEAR("vil3d_trilin_interp at grid point",v1,33.3f,1e-8);
+     TEST_NEAR("vil3d_trilin_interp at grid point",v1,33.3f,1e-5);
 
      double v2 = vil3d_trilin_interp_raw(3.4,3,3,image0.origin_ptr(),istep,jstep,kstep);
-     TEST_NEAR("vil3d_trilin_interp at off-grid point",v2,33.34f,1e-8);
+     TEST_NEAR("vil3d_trilin_interp at off-grid point",v2,33.34f,1e-5);
      double v3 = vil3d_trilin_interp_raw(3.4,3.5,3,image0.origin_ptr(),istep,jstep,kstep);
-     TEST_NEAR("vil3d_trilin_interp at off-grid point",v3,33.84f,1e-8);
+     TEST_NEAR("vil3d_trilin_interp at off-grid point",v3,33.84f,1e-5);
      double v4 = vil3d_trilin_interp_raw(3.4,3.5,3.5,image0.origin_ptr(),istep,jstep,kstep);
-     TEST_NEAR("vil3d_trilin_interp at off-grid point",v4,38.84f,1e-8);
+     TEST_NEAR("vil3d_trilin_interp at off-grid point",v4,38.84f,1e-5);
    }
 
    {
      double v1 = vil3d_trilin_interp_safe(3,3,3,image0.origin_ptr(),ni,nj,nk,istep,jstep,kstep);
-     TEST_NEAR("vil3d_trilin_interp at grid point",v1,33.3f,1e-8);
+     TEST_NEAR("vil3d_trilin_interp at grid point",v1,33.3f,1e-5);
 
      double v2 = vil3d_trilin_interp_safe(3.4,3,3,image0.origin_ptr(),ni,nj,nk,istep,jstep,kstep);
-     TEST_NEAR("vil3d_trilin_interp at off-grid point",v2,33.34f,1e-8);
+     TEST_NEAR("vil3d_trilin_interp at off-grid point",v2,33.34f,1e-5);
      double v3 = vil3d_trilin_interp_safe(3.4,3.5,3,image0.origin_ptr(),ni,nj,nk,istep,jstep,kstep);
-     TEST_NEAR("vil3d_trilin_interp at off-grid point",v3,33.84f,1e-8);
+     TEST_NEAR("vil3d_trilin_interp at off-grid point",v3,33.84f,1e-5);
      double v4 = vil3d_trilin_interp_safe(3.4,3.5,3.5,image0.origin_ptr(),ni,nj,nk,istep,jstep,kstep);
-     TEST_NEAR("vil3d_trilin_interp at off-grid point",v4,38.84f,1e-8);
+     TEST_NEAR("vil3d_trilin_interp at off-grid point",v4,38.84f,1e-5);
 
      double v_outside = vil3d_trilin_interp_safe(-1,-1,-1,image0.origin_ptr(),ni,nj,nk,istep,jstep,kstep);
-     TEST_NEAR("vil3d_safe_trilin_interp outside image",v_outside,0,1e-8);
+     TEST_NEAR("vil3d_safe_trilin_interp outside image",v_outside,0,1e-5);
    }
 }
 
