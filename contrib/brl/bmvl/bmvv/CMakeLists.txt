@@ -24,6 +24,7 @@ AUX_SOURCE_DIRECTORY(Templates bmvv_sources)
 ADD_LIBRARY(bmvv ${bmvv_sources})
 
 IF(HAS_XERCES)
+ ADD_DEFINITIONS(-DHAS_XERCES)
  TARGET_LINK_LIBRARIES(bmvv bxml)
 ENDIF(HAS_XERCES)
 TARGET_LINK_LIBRARIES(bmvv sdet btol bdgl vtol vdgl bgui vgui mvl vsol vul vbl vcl)
