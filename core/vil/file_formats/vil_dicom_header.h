@@ -9,13 +9,9 @@
 // \author Chris Wolstenholme - Manchester
 // Modified by Ian Scott to work with vil2 loader.
 
-#include <vcl_fstream.h>
-#include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vxl_config.h>
 #include <vil2/vil2_stream.h>
-
-
 
 
 //: DICOM types
@@ -33,30 +29,26 @@ enum vil2_dicom_header_type
 //: Endian types
 enum vil2_dicom_header_endian
 {
-
   VIL2_DICOM_HEADER_DEUNKNOWN=0,    /*!< If the endian is unknown */
   VIL2_DICOM_HEADER_DELITTLEENDIAN, /*!< Value for little endian */
   VIL2_DICOM_HEADER_DEBIGENDIAN     /*!< Value for big endian */
-
 };
 
 //: Encapsulated image types
 enum vil2_dicom_header_image_type
 {
-
-  VIL2_DICOM_HEADER_DITUNKNOWN=0,   /*!< Value for unknown (or non-encapsulated) file types */
-  VIL2_DICOM_HEADER_DITJPEGBASE,     /*!< Value for encapsulated jpeg baseline files */
+  VIL2_DICOM_HEADER_DITUNKNOWN=0,     /*!< Value for unknown (or non-encapsulated) file types */
+  VIL2_DICOM_HEADER_DITJPEGBASE,      /*!< Value for encapsulated jpeg baseline files */
   VIL2_DICOM_HEADER_DITJPEGEXTLOSSY,  /*!< Value for encapsulated jpeg, extended lossy files */
-  VIL2_DICOM_HEADER_DITJPEGSPECNH,    /*!< Value for encapsulated jpeg, spectral selection non-hierachical files */
-  VIL2_DICOM_HEADER_DITJPEGFULLNH,    /*!< Value for encapsulated jpeg, full progression non-hierachical files */
-  VIL2_DICOM_HEADER_DITJPEGLOSSLNH,   /*!< Value for encapsulated jpeg, lossless non-hierachical files */
-  VIL2_DICOM_HEADER_DITJPEGEXTHIER,   /*!< Value for encapsulated jpeg, extended hierachical files */
+  VIL2_DICOM_HEADER_DITJPEGSPECNH,    /*!< Value for encapsulated jpeg, spectral selection non-hierarchical files */
+  VIL2_DICOM_HEADER_DITJPEGFULLNH,    /*!< Value for encapsulated jpeg, full progression non-hierarchical files */
+  VIL2_DICOM_HEADER_DITJPEGLOSSLNH,   /*!< Value for encapsulated jpeg, lossless non-hierarchical files */
+  VIL2_DICOM_HEADER_DITJPEGEXTHIER,   /*!< Value for encapsulated jpeg, extended hierarchical files */
   VIL2_DICOM_HEADER_DITJPEGSPECHIER,  /*!< Value for encapsulated jpeg, spectral selection, hierarchical files */
-  VIL2_DICOM_HEADER_DITJPEGFULLHIER,  /*!< Value for encapsulated jpeg, full progression, hierachical files */
-  VIL2_DICOM_HEADER_DITJPEGLOSSLHIER, /*!< Value for encapsulated jpeg, lossless, hierachical files */
+  VIL2_DICOM_HEADER_DITJPEGFULLHIER,  /*!< Value for encapsulated jpeg, full progression, hierarchical files */
+  VIL2_DICOM_HEADER_DITJPEGLOSSLHIER, /*!< Value for encapsulated jpeg, lossless, hierarchical files */
   VIL2_DICOM_HEADER_DITJPEGLOSSLDEF,  /*!< Value for encapsulated jpeg, default lossless files */
-  VIL2_DICOM_HEADER_DITRLE       /*!< Value for encapsulated RLE files */
-
+  VIL2_DICOM_HEADER_DITRLE            /*!< Value for encapsulated RLE files */
 };
 
 // Max size (number of groups/elements)
@@ -270,45 +262,38 @@ const char * const VIL2_DICOM_HEADER_RLELOSSLESS               ="1.2.840.10008.1
 
 struct vil2_dicom_header_info
 {
-
-  /*
-   * General info fields
-   */
-  vil2_dicom_header_type file_type_;       /*< The type of dicom file */
-  vil2_dicom_header_endian sys_endian_;    /*< The endian of the architecture */
-  vil2_dicom_header_endian file_endian_;   /*< The endian of the file being read */
+  // General info fields
+  vil2_dicom_header_type file_type_;        /*< The type of dicom file */
+  vil2_dicom_header_endian sys_endian_;     /*< The endian of the architecture */
+  vil2_dicom_header_endian file_endian_;    /*< The endian of the file being read */
   vil2_dicom_header_image_type image_type_; /*< The encapsulated (or not) image type */
 
-  /*
-   * Identifying fields
-   */
-  vcl_string image_id_type_;/*< The image type from the dicom header */
-  vcl_string sop_cl_uid_;   /*< The class unique id for the Service/Object Pair */
-  vcl_string sop_in_uid_; /*< The instance uid for the SOP */
-  long study_date_;         /*< The date of the study */
-  long series_date_;        /*< The date this series was collected */
-  long acquisition_date_;   /*< The date of acquisition */
-  long image_date_;         /*< The date of this image */
-  float study_time_;        /*< The time of the study */
-  float series_time_;       /*< The time of the series */
-  float acquisition_time_;  /*< The time of acquisition */
-  float image_time_;        /*< The time of the image */
+  // Identifying fields
+  vcl_string image_id_type_;    /*< The image type from the dicom header */
+  vcl_string sop_cl_uid_;       /*< The class unique id for the Service/Object Pair */
+  vcl_string sop_in_uid_;       /*< The instance uid for the SOP */
+  long study_date_;             /*< The date of the study */
+  long series_date_;            /*< The date this series was collected */
+  long acquisition_date_;       /*< The date of acquisition */
+  long image_date_;             /*< The date of this image */
+  float study_time_;            /*< The time of the study */
+  float series_time_;           /*< The time of the series */
+  float acquisition_time_;      /*< The time of acquisition */
+  float image_time_;            /*< The time of the image */
   vcl_string accession_number_; /*< The accession number for this image */
-  vcl_string modality_;     /*< The imaging modality */
-  vcl_string manufacturer_; /*< The name of the scanner manufacturer */
+  vcl_string modality_;         /*< The imaging modality */
+  vcl_string manufacturer_;     /*< The name of the scanner manufacturer */
   vcl_string institution_name_; /*< The name of the institution */
   vcl_string institution_addr_; /*< The address of the institution */
-  vcl_string ref_phys_name_; /*< The name of the referring physician */
-  vcl_string station_name_;  /*< The name of the station used */
-  vcl_string study_desc_;    /*< A description of the study */
-  vcl_string series_desc_;   /*< A description of the series */
-  vcl_string att_phys_name_; /*< The name of the attending physician */
-  vcl_string operator_name_; /*< The name of the MR operator */
-  vcl_string model_name_;    /*< The name of the MR scanner model */
+  vcl_string ref_phys_name_;    /*< The name of the referring physician */
+  vcl_string station_name_;     /*< The name of the station used */
+  vcl_string study_desc_;       /*< A description of the study */
+  vcl_string series_desc_;      /*< A description of the series */
+  vcl_string att_phys_name_;    /*< The name of the attending physician */
+  vcl_string operator_name_;    /*< The name of the MR operator */
+  vcl_string model_name_;       /*< The name of the MR scanner model */
 
-  /*
-   * Patient info
-   */
+  // Patient info
   vcl_string patient_name_;  /*< Patient's name */
   vcl_string patient_id_;    /*< Patient's ID */
   long patient_dob_;         /*< The patient's date of birth */
@@ -317,9 +302,7 @@ struct vil2_dicom_header_info
   float patient_weight_;     /*< The weight of the patient */
   vcl_string patient_hist_;  /*< Any additional patient history */
 
-  /*
-   * Acquisition Info
-   */
+  // Acquisition Info
   vcl_string scanning_seq_;  /*< A description of the scanning sequence */
   vcl_string sequence_var_;  /*< A description of the sequence variant */
   vcl_string scan_options_;  /*< A description of various scan options */
@@ -347,9 +330,7 @@ struct vil2_dicom_header_info
   float sar_;                /*< The specific absorption rate */
   vcl_string patient_pos_;   /*< The position of the patient in the scanner */
 
-  /*
-   * Relationship info
-   */
+  // Relationship info
   vcl_string stud_ins_uid_;  /*< The study instance unique id */
   vcl_string ser_ins_uid_;   /*< The series instance unique id */
   vcl_string study_id_;      /*< The id of this study */
@@ -364,9 +345,7 @@ struct vil2_dicom_header_info
   vcl_string pos_ref_ind_;   /*< The position reference indicator */
   float slice_location_;     /*< The location of the slice */
 
-  /*
-   * Image info
-   */
+  // Image info
   unsigned short pix_samps_; /*< The number of samples per pixel */
   vcl_string photo_interp_;  /*< The photometric interpretation */
   unsigned short dimx_;      /*< The number of columns */
@@ -379,10 +358,7 @@ struct vil2_dicom_header_info
   float window_centre_;      /*< The value of the image window's centre */
   float window_width_;       /*< The actual width of the image window */
 
-  /*
-   * Info from the tags specifically for reading the
-   * image data
-   */
+  // Info from the tags specifically for reading the image data
   float xsize_;             /*< The pixel spacing in x */
   float ysize_;             /*< The pixel spacing in y */
   float slice_spacing_;     /*< The pixel spacing in z */
@@ -391,9 +367,7 @@ struct vil2_dicom_header_info
   unsigned short pix_rep_;  /*< The pixel representation (+/-) */
   float stored_bits_;       /*< The bits stored */
   float allocated_bits_;    /*< The bits allocated */
-
 };
-
 
 
 const short VIL2_DICOM_HEADER_UNSPECIFIED = -1;
@@ -409,8 +383,7 @@ const double VIL2_DICOM_HEADER_DEFAULTSLOPE = 1.0;
 //  structure.
 class vil2_dicom_header_format
 {
-
-public:
+ public:
 
   vil2_dicom_header_format();
   ~vil2_dicom_header_format();
@@ -461,7 +434,7 @@ public:
   //  \return The encapsulated image type of the file currently being read.
   vil2_dicom_header_image_type imageType(void);
 
-private:
+ private:
 
   //: Method to determine the file type
   //
@@ -494,7 +467,7 @@ private:
   //    readImageElements(), readDelimiterElements()
   //    and last_read_()
   void readIdentifyingElements(short element, int dblock_size,
-                             vil2_stream &fs);
+                               vil2_stream &fs);
 
   //: Method to read the patient details
   //
@@ -509,7 +482,7 @@ private:
   //    readImageElements(), readDelimiterElements()
   //    and last_read_()
   void readPatientElements(short element, int dblock_size,
-                         vil2_stream &fs);
+                           vil2_stream &fs);
 
   //: Method to read the acquisition group's details
   //
@@ -525,7 +498,7 @@ private:
   //    readImageElements(), readDelimiterElements()
   //    and last_read_()
   void readAcquisitionElements(short element, int dblock_size,
-                             vil2_stream &fs);
+                               vil2_stream &fs);
 
   //: Method to read the relationship group's details
   //
@@ -541,7 +514,7 @@ private:
   //    readImageElements(), readDelimiterElements()
   //    and last_read_()
   void readRelationshipElements(short element, int dblock_size,
-                              vil2_stream &fs);
+                                vil2_stream &fs);
 
   //: Method to read the image group's details
   //
@@ -556,7 +529,7 @@ private:
   //    readRelationshipElements(), readDelimiterElements()
   //    and last_read_()
   void readImageElements(short element, int dblock_size,
-                       vil2_stream &fs);
+                         vil2_stream &fs);
 
   //: Method to read the delimiter group's details
   //
@@ -571,7 +544,7 @@ private:
   //    readRelationshipElements(), readImageElements()
   //    and last_read_()
   void readDelimiterElements(short element, int dblock_size,
-                           vil2_stream &fs);
+                             vil2_stream &fs);
 
   //: Method to convert the Value Representation (VR) (if it exists)
   //
@@ -580,7 +553,7 @@ private:
   //  \param fs The file stream to read from
   //  \sa readHeaderElements()
   bool convertValueRepresentation(unsigned int &dblock_size,
-                                vil2_stream &ifs);
+                                  vil2_stream &ifs);
 
   //: Method to determine whether or not the actual pixel data has been reached
   //
@@ -628,8 +601,7 @@ private:
   //  /param val_size The size of the var to swap
   void charSwap(char *char_in, int val_size);
 
-
-private:
+ private:
 
   //: Holds the info from the last header read
   //
@@ -657,7 +629,6 @@ private:
   //
   //    \sa determineMetaInfo() and imageType()
   vil2_dicom_header_image_type image_type_;
-
 };
 
 #endif
