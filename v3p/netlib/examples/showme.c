@@ -101,6 +101,7 @@
 #define STARTEXPLOSION 0.5
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -213,6 +214,7 @@ char adjfilename[2][FILENAMESIZE];
 char vnodefilename[2][FILENAMESIZE];
 char vedgefilename[2][FILENAMESIZE];
 
+const
 char *colorname[] = {"aquamarine", "red", "green yellow", "magenta",
                      "yellow", "green", "orange", "blue",
                      "white", "sandy brown", "cyan", "moccasin",
