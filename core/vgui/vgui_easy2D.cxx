@@ -213,7 +213,7 @@ void vgui_easy2D::print_psfile(vcl_string filename, int reduction_factor, bool p
   }
 
   // Write PostScript header
-  vul_psfile psfile(filename.c_str());
+  vul_psfile psfile(filename.c_str(), false);
   psfile.set_reduction_factor(reduction_factor);
   psfile.set_parameters(wd, ht);
   psfile.postscript_header();
