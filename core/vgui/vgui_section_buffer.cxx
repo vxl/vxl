@@ -63,10 +63,7 @@ namespace
                   unsigned x, unsigned y, unsigned w, unsigned h,
                   OutT* out, vcl_ptrdiff_t hstep )
   {
-    const unsigned ni = in.ni();
-    const unsigned nj = in.nj();
-
-    assert( x+w <= ni && y+h <= nj );
+    assert( x+w <= in.ni() && y+h <= in.nj() );
 
     switch( in.nplanes() ) {
       case 1:
