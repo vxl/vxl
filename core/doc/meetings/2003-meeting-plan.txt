@@ -1,5 +1,8 @@
-This is vxl/core/doc/meetings/2003-meeting-plan.txt
-(http://cvs.sourceforge.net/viewcvs.py/vxl/vxl/core/doc/meetings/2003-meeting-plan.txt?view=markup).
+This is vxl/core/doc/meetings/2003-meeting-plan.txt.
+
+http://cvs.sourceforge.net/viewcvs.py/vxl/vxl/core/doc/meetings/2003-meeting-plan.txt?view=markup
+might get you to this file, but it appears that SourceForge WebCVS is
+running off of an older copy of the CVS repository.
 
 Thanks to everyone for all the positive responses about the 2003 VXL
 teleconference.  I will be away Tue. (11/4) to Thu. (11/6) of this
@@ -55,9 +58,14 @@ productive, but I am hoping that others with more VXL and TargetJr
 experience will step in to lead and steer the discussion where
 appropriate.  My original proposed "half-baked" agenda was not meant
 to be definitive.  Most of those items are copied below, but some have
-lines indicating they need to be "seconded".  Remove that line the
-"second" the agenda item.  Some people have e-mailed agenda items to
-me.  They are added below.
+lines indicating they need to be "seconded".  Remove that line to
+"second" the agenda item if you think that item should be discussed in
+the conference call.  Some people have e-mailed agenda items to me.
+They are added below.
+
+Items that are not seconded, or are not deemed important enough to
+discuss will be passed over during the conference call.  For now all
+items should stay to poll for interested parties and comments.
 
 *** VXL Principles - What is the VXL copyright exactly?
 Are we marking files properly?  Consistently?
