@@ -1,6 +1,6 @@
 #executables for segmentation processing
 # brl/bseg/sbin/
-
+IF(HAS_XERCES)
 INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
 
 IF( HAS_VGUI )
@@ -18,3 +18,4 @@ ADD_EXECUTABLE (seg seg.cxx sbin_sources)
 TARGET_LINK_LIBRARIES(seg segv vgui)
 
 ENDIF( HAS_VGUI )
+ENDIF(HAS_XERCES)
