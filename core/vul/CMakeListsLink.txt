@@ -2,9 +2,9 @@
 
 LINK_LIBRARIES( vul )
 
-IF (WIN32)
+IF (NOT UNIX)
   LINK_LIBRARIES(ws2_32.lib)
-ENDIF (WIN32)
+ENDIF (NOT UNIX)
 
 # TODO - CMake currently has no such definition "SOLARIS" by default;
 # Use the additional "-DSOLARIS:STRING=1" on the cmake command line,
