@@ -68,7 +68,7 @@ int vil_stream_fstream::write(void const* buf, int n)
   xerr << "write " << n << vcl_endl;
   f_.write((char const*)buf, n);
   if (!f_.good())
-    vcl_perror("vil_stream_fstream: ERROR: write failed!\n");
+    vcl_cerr << ("vil_stream_fstream: ERROR: write failed!\n");
   vcl_streampos b = tell();
   f_.flush();
   return b-a;

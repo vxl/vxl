@@ -133,10 +133,6 @@ SOURCE=".\Templates\ImageWarp+byte-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\ImageWarp+RGB+byte--.cxx"
-# End Source File
-# Begin Source File
-
 SOURCE=.\Mapping_2d_2d.cxx
 # End Source File
 # Begin Source File

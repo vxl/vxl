@@ -199,6 +199,10 @@ SOURCE=.\vbl_reg_exp.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vbl_sequence_filename_map.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vbl_sparse_array+double-.cxx"
 # End Source File
 # Begin Source File

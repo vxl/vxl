@@ -29,7 +29,7 @@
 #define vbl_qsort_double_ascending  vbl_sort_double_ascending
 #define vbl_qsort_double_descending vbl_sort_double_descending
 #define vbl_qsort_int_ascending     vbl_sort_int_ascending
-#define vbl_qsort_int_descending    vbl_qort_int_descending
+#define vbl_qsort_int_descending    vbl_sort_int_descending
 #define vbl_qsort_helper            vbl_sort_helper
 
 typedef int (*vbl_qsort_compare_t)(const void* a, const void* b);

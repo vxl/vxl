@@ -49,7 +49,7 @@ void vil_memory_image_impl::init(void *buf,
 				 int components, int bits_per_component,
 				 vil_component_format component_format)
 {
-  is_foreign_buf_ = bool(buf); // true if buf is non-nil
+  is_foreign_buf_ = (buf != 0); // true if buf is non-nil
   planes_ = planes;
   width_ = w;
   height_ = h;

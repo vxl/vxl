@@ -67,7 +67,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)\vcl\config.win32-VC60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)/vxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vcl/config.win32-vc60" /I "$(IUEROOT)\vcl\config.win32-VC60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)/vxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -322,19 +322,7 @@ SOURCE=".\Templates\ModifyHandle+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\ModifyHandle.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=.\NViewMatches.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\pair_float_int.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\pair_float_int_things.cxx
 # End Source File
 # Begin Source File
 
