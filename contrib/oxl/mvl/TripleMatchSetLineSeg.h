@@ -22,23 +22,24 @@ class LineSegSet;
 class PairMatchSetLineSeg;
 class HomgLineSeg2D;
 
-class TripleMatchSetLineSeg : public TripleMatchSet {
-public:
+class TripleMatchSetLineSeg : public TripleMatchSet
+{
+ public:
   TripleMatchSetLineSeg();
   TripleMatchSetLineSeg(LineSegSet& lines1, LineSegSet& lines2, LineSegSet& lines3);
   TripleMatchSetLineSeg(const PairMatchSetLineSeg&, const PairMatchSetLineSeg&);
 
   void set(LineSegSet& lines1, LineSegSet& lines2, LineSegSet& lines3);
 
-  PairMatchSetLineSeg* get_matches12() { return (PairMatchSetLineSeg*)_match12; }
-  PairMatchSetLineSeg* get_matches23() { return (PairMatchSetLineSeg*)_match23; }
+  PairMatchSetLineSeg* get_matches12() { return (PairMatchSetLineSeg*)match12_; }
+  PairMatchSetLineSeg* get_matches23() { return (PairMatchSetLineSeg*)match23_; }
 
   LineSegSet* get_linesegs1() { return get_matches12()->get_linesegs1(); }
   LineSegSet* get_linesegs2() { return get_matches12()->get_linesegs2(); }
   LineSegSet* get_linesegs3() { return get_matches23()->get_linesegs2(); }
 
-  PairMatchSetLineSeg const* get_matches12() const { return (PairMatchSetLineSeg const*)_match12; }
-  PairMatchSetLineSeg const* get_matches23() const { return (PairMatchSetLineSeg const*)_match23; }
+  PairMatchSetLineSeg const* get_matches12() const { return (PairMatchSetLineSeg const*)match12_; }
+  PairMatchSetLineSeg const* get_matches23() const { return (PairMatchSetLineSeg const*)match23_; }
 
   LineSegSet const* get_linesegs1() const { return get_matches12()->get_linesegs1(); }
   LineSegSet const* get_linesegs2() const { return get_matches12()->get_linesegs2(); }

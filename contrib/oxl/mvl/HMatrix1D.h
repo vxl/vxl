@@ -17,10 +17,10 @@
 class HMatrix1D
 {
   // Data Members--------------------------------------------------------------
-  vnl_double_2x2 _t12_matrix;
-  vnl_double_2x2 _t21_matrix;
+  vnl_double_2x2 t12_matrix_;
+  vnl_double_2x2 t21_matrix_;
 
-public:
+ public:
   // Constructors/Initializers/Destructors-------------------------------------
 
   HMatrix1D();
@@ -47,8 +47,8 @@ public:
   double get (unsigned int row_index, unsigned int col_index) const;
   void get (double *t_matrix) const;
   void get (vnl_matrix<double>* t_matrix) const;
-  const vnl_double_2x2& get_matrix () const { return _t12_matrix; }
-  const vnl_double_2x2& get_inverse () const { return _t21_matrix; }
+  const vnl_double_2x2& get_matrix () const { return t12_matrix_; }
+  const vnl_double_2x2& get_inverse () const { return t21_matrix_; }
 
   void set (const double *t_matrix);
   void set (const vnl_matrix<double>& t_matrix);

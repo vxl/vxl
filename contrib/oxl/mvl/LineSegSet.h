@@ -15,8 +15,13 @@
 
 class ImageMetric;
 
-class LineSegSet {
-public:
+class LineSegSet
+{
+  // Data Members--------------------------------------------------------------
+  vcl_vector<HomgLineSeg2D> hlines_;
+  HomgMetric conditioner_;
+
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   LineSegSet();
@@ -28,17 +33,17 @@ public:
   LineSegSet& operator=(const LineSegSet& that);
 
   // Operations----------------------------------------------------------------
-  unsigned size() const { return _hlines.size(); }
+  unsigned size() const { return hlines_.size(); }
 
   // Computations--------------------------------------------------------------
   int pick_line_index(double x, double y);
   HomgLineSeg2D* pick_line(double x, double y);
 
   // Data Access---------------------------------------------------------------
-        HomgLineSeg2D& get_homg(int i)       { return _hlines[i]; }
-  const HomgLineSeg2D& get_homg(int i) const { return _hlines[i]; }
+        HomgLineSeg2D& get_homg(int i)       { return hlines_[i]; }
+  const HomgLineSeg2D& get_homg(int i) const { return hlines_[i]; }
 
-  vcl_vector<HomgLineSeg2D>& get_homg() { return _hlines; }
+  vcl_vector<HomgLineSeg2D>& get_homg() { return hlines_; }
 
   int FindNearestLineIndex(double x, double y);
 
@@ -49,11 +54,6 @@ public:
   bool set_iuline(int i, void* l);
 
   void compute_homglines_from_rawlines(const HomgMetric& );
-
-protected:
-  // Data Members--------------------------------------------------------------
-  vcl_vector<HomgLineSeg2D> _hlines;
-  HomgMetric _conditioner;
 };
 
 #endif // LineSegSet_h_

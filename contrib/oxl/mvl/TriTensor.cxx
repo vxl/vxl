@@ -1,9 +1,8 @@
 #ifdef __GNUG__
 #pragma implementation
 #endif
-
 //:
-//  \file
+// \file
 
 #include "TriTensor.h"
 
@@ -34,20 +33,15 @@
 #include <mvl/HomgOperator2D.h>
 #include <mvl/FManifoldProject.h>
 
-struct OuterProduct3x3 : public vnl_double_3x3 {
-public:
-  // Constructors/Destructors--------------------------------------------------
-
-  OuterProduct3x3(const vnl_vector<double>& a, const vnl_vector<double>& b);
-};
-
-inline OuterProduct3x3::OuterProduct3x3(const vnl_vector<double>& a, const vnl_vector<double>& b)
+struct OuterProduct3x3 : public vnl_double_3x3
 {
-  for (int i = 0; i < 3; ++i)
-    for (int j = 0; j < 3; ++j)
-      put(i,j, a[i] * b[j]);
-}
-
+  OuterProduct3x3(const vnl_vector<double>& a, const vnl_vector<double>& b)
+  {
+    for (int i = 0; i < 3; ++i)
+      for (int j = 0; j < 3; ++j)
+        put(i,j, a[i] * b[j]);
+  }
+};
 
 static bool tt_verbose = false;
 
@@ -58,7 +52,7 @@ static bool tt_verbose = false;
 
 //: Default constructor.
 TriTensor::TriTensor ():
-  T (3, 3, 3), _e12(0), _e13(0), _fmp12(0), _fmp13(0), _fmp23(0)
+  T (3, 3, 3), e12_(0), e13_(0), fmp12_(0), fmp13_(0), fmp23_(0)
 {
 }
 
@@ -67,33 +61,33 @@ TriTensor::TriTensor ():
 // The doubles are stored in ``matrix'' order, with the last index
 // increasing fastest.
 TriTensor::TriTensor (const double *tritensor_array)
-  : T(3, 3, 3, tritensor_array), _e12(0), _e13(0), _fmp12(0), _fmp13(0), _fmp23(0)
+  : T(3, 3, 3, tritensor_array), e12_(0), e13_(0), fmp12_(0), fmp13_(0), fmp23_(0)
 {
 }
 
 //: Copy constructor.
 TriTensor::TriTensor (const TriTensor& that):
-  T(that.T), _e12(0), _e13(0), _fmp12(0), _fmp13(0), _fmp23(0)
+  T(that.T), e12_(0), e13_(0), fmp12_(0), fmp13_(0), fmp23_(0)
 {
 }
 
 //: Construct from 3 projection matrices.
 TriTensor::TriTensor (const PMatrix& P1, const PMatrix& P2, const PMatrix& P3):
-  T (3, 3, 3), _e12(0), _e13(0), _fmp12(0), _fmp13(0), _fmp23(0)
+  T (3, 3, 3), e12_(0), e13_(0), fmp12_(0), fmp13_(0), fmp23_(0)
 {
   set(P1, P2, P3);
 }
 
 //: Construct from 2 projection matrices, as described in set.
 TriTensor::TriTensor (const PMatrix& P2, const PMatrix& P3):
-  T (3, 3, 3), _e12(0), _e13(0), _fmp12(0), _fmp13(0), _fmp23(0)
+  T (3, 3, 3), e12_(0), e13_(0), fmp12_(0), fmp13_(0), fmp23_(0)
 {
   set(P2, P3);
 }
 
 //: Construct from 3 matrices.
 TriTensor::TriTensor (const vnl_matrix<double>& T1, const vnl_matrix<double>& T2, const vnl_matrix<double>& T3):
-  T (3, 3, 3), _e12(0), _e13(0), _fmp12(0), _fmp13(0), _fmp23(0)
+  T (3, 3, 3), e12_(0), e13_(0), fmp12_(0), fmp13_(0), fmp23_(0)
 {
   set(T1, T2, T3);
 }
@@ -116,11 +110,11 @@ TriTensor::~TriTensor()
 // - Delete and zero epipole and manifold projector classes.
 void TriTensor::delete_caches() const
 {
-  delete _e12; _e12 = 0;
-  delete _e13; _e13 = 0;
-  delete _fmp12; _fmp12 = 0;
-  delete _fmp13; _fmp13 = 0;
-  delete _fmp23; _fmp23 = 0;
+  delete e12_; e12_ = 0;
+  delete e13_; e13_ = 0;
+  delete fmp12_; fmp12_ = 0;
+  delete fmp13_; fmp13_ = 0;
+  delete fmp23_; fmp23_ = 0;
 }
 
 //: Convert T to 27x1 matrix. Out is assumed to have been appropriately resized.
@@ -139,7 +133,7 @@ void TriTensor::set(const vnl_matrix<double>& in)
   delete_caches();
 }
 
-// @{ BUILDING @}
+// == BUILDING ==
 
 //: Construct from 3 projection matrices.
 void
@@ -203,7 +197,7 @@ TriTensor::set(const vnl_matrix<double>& T1, const vnl_matrix<double>& T2, const
   delete_caches();
 }
 
-// @{ TRANSFER @}
+// == TRANSFER ==
 
 //-----------------------------------------------------------------------------
 //
@@ -257,7 +251,7 @@ TriTensor::image1_transfer (const HomgPoint2D& point2, const HomgPoint2D& point3
   return HomgOperator2D::lines_to_point(constraint_lines);
 }
 
-// @{ TRANSFER: ``Quick and Dirty'' @}
+// == TRANSFER: ``Quick and Dirty'' ==
 
 //-----------------------------------------------------------------------------
 //
@@ -341,7 +335,7 @@ TriTensor::image3_transfer (const HomgLine2D& line1, const HomgLine2D& line2) co
   return HomgLine2D(vnl_svd<double>(dot2(line2.get_vector())).inverse() * line1.get_vector());
 }
 
-// @{ HOMOGRAPHIES FROM LINES @}
+// == HOMOGRAPHIES FROM LINES ==
 
 //HMatrix2D TriTensor::get_hmatrix_23(const HomgLine2D& line1)
 //{
@@ -361,7 +355,7 @@ HMatrix2D TriTensor::get_hmatrix_21(const HomgLine2D& line3) const
   return HMatrix2D(dot3(line3.get_vector()));
 }
 
-// @{ CONTRACTION WITH VECTORS @}
+// == CONTRACTION WITH VECTORS ==
 
 //: Compute ${\tt M}_{jk} = T_{ijk} v_i$.
 vnl_double_3x3 TriTensor::dot1(const vnl_vector<double>& v) const
@@ -429,13 +423,14 @@ vnl_double_3x3 TriTensor::dot3t(const vnl_vector<double>& v) const
   return answer;
 }
 
-// @{ COMPOSITION WITH MATRICES @}
+// == COMPOSITION WITH MATRICES ==
 
-// - @{ Contract Tensor axis tensor\_axis with first component of Matrix {\tt M}.
-// That is, where $S$ is the result of the operation: \cr
-// For tensor\_axis = 1,  Compute $S_{ijk} = T_{pjk} M_{pi}$ \cr
-// For tensor\_axis = 2,  Compute $S_{ijk} = T_{ipk} M_{pj}$ \cr
-// For tensor\_axis = 3,  Compute $S_{ijk} = T_{ijp} M_{pk}$ @}
+//: Contract tensor axis tensor_axis with first component of matrix $M$.
+// That is, where $S$ is the result of the operation:
+//
+// - For tensor_axis = 1, compute $S_{ijk} = T_{pjk} M_{pi}$
+// - For tensor_axis = 2, compute $S_{ijk} = T_{ipk} M_{pj}$
+// - For tensor_axis = 3, compute $S_{ijk} = T_{ijp} M_{pk}$
 TriTensor TriTensor::postmultiply(unsigned tensor_axis, const vnl_matrix<double>& M) const
 {
   switch (tensor_axis) {
@@ -448,11 +443,12 @@ TriTensor TriTensor::postmultiply(unsigned tensor_axis, const vnl_matrix<double>
   }
 }
 
-// - @{Contract Tensor axis tensor\_axis with second component of Matrix {\tt M}.
-// That is, where $S$ is the result of the operation: \cr
-// For tensor\_axis = 1,  Compute $S_{ijk} = M_{ip} T_{pjk}$ \cr
-// For tensor\_axis = 2,  Compute $S_{ijk} = M_{jp} T_{ipk}$ \cr
-// For tensor\_axis = 3,  Compute $S_{ijk} = M_{kp} T_{ijp}$ @}
+//: Contract tensor axis tensor_axis with second component of matrix $M$.
+// That is, where $S$ is the result of the operation:
+//
+// - For tensor_axis = 1, compute $S_{ijk} = M_{ip} T_{pjk}$
+// - For tensor_axis = 2, compute $S_{ijk} = M_{jp} T_{ipk}$
+// - For tensor_axis = 3, compute $S_{ijk} = M_{kp} T_{ijp}$
 TriTensor TriTensor::premultiply(unsigned tensor_axis, const vnl_matrix<double>& M) const
 {
   switch (tensor_axis) {
@@ -557,11 +553,11 @@ TriTensor TriTensor::premultiply3(const vnl_matrix<double>& M) const
 
 // INTERNALS---------------------------------------------------------------
 
-// @{ TRANSFORMATION @}
+// == TRANSFORMATION ==
 
 //:
 // The ${\tt C}_{123}$ are line transformation matrices.  If
-// $ {\tt C}_v l_v = \hat l_v$ describes the transformation of each image plane under
+// ${\tt C}_{v} l_v = \hat l_v$ describes the transformation of each image plane under
 // a planar homography, and $l_1 = T l_2 l_3$ describes the action of this TriTensor, then
 // this routine computes $\hat T$ such that $\hat l_1 = \hat T \hat l_2 \hat l_3$.
 // \par Specifically $\hat T = T.\mbox{decondition}(C_1^{-1}, C_2, C_3)$ is the
@@ -764,12 +760,12 @@ void TriTensor::get_constraint_lines_image3(const HomgPoint2D& p1, const HomgPoi
 
 #if 0
   *trivec3_ptr = ho_trivec_orthog (line_table_ptr);
-  ma2_static_multiply_3x3_trivec (_point_invnorm_matrix3, trivec3_ptr, trivec3_ptr);
+  ma2_static_multiply_3x3_trivec (point_invnorm_matrix3, trivec3_ptr, trivec3_ptr);
 
   // Decondition lines
   if (false)
     for (int line_index = 0; line_index < lines->size(); line_index++)
-      ma2_static_multiply_3x3_trivec (_line_invnorm_matrix3, lines[line_index], lines[line_index]);
+      ma2_static_multiply_3x3_trivec (line_invnorm_matrix3, lines[line_index], lines[line_index]);
 
 
   ho_triveccam_aspect_lines_to_point (line_table_ptr, trivec3_ptr);
@@ -1170,7 +1166,7 @@ void TriTensor::get_constraint_lines_image1(const HomgPoint2D& p2, const HomgPoi
 }
 
 
-// @{ INPUT/OUTPUT @}
+// == INPUT/OUTPUT ==
 
 //-----------------------------------------------------------------------------
 //: Read from ASCII vcl_istream
@@ -1198,15 +1194,17 @@ vcl_ostream& operator << (vcl_ostream& s, const TriTensor& T)
   return s;
 }
 
-struct Column3x3 : public vnl_double_3x3 {
-  Column3x3(const vnl_vector<double>& v1, const vnl_vector<double>& v2, const vnl_vector<double>& v3) {
+struct Column3x3 : public vnl_double_3x3
+{
+  Column3x3(const vnl_vector<double>& v1, const vnl_vector<double>& v2, const vnl_vector<double>& v3)
+  {
     (*this)(0,0) = v1[0];   (*this)(0,1) = v2[0];  (*this)(0,2) = v3[0];
     (*this)(1,0) = v1[1];   (*this)(1,1) = v2[1];  (*this)(1,2) = v3[1];
     (*this)(2,0) = v1[2];   (*this)(2,1) = v2[2];  (*this)(2,2) = v3[2];
   }
 };
 
-// @{ FUNDAMENTAL MATRICES AND EPIPOLES @}
+// == FUNDAMENTAL MATRICES AND EPIPOLES ==
 
 //: Compute and cache the two epipoles from image 1.
 bool TriTensor::compute_epipoles() const
@@ -1234,8 +1232,8 @@ bool TriTensor::compute_epipoles() const
 
   vnl_svd<double> svdv(V);
 
-  delete _e12;
-  _e12 = new HomgPoint2D(svdv.left_nullvector());
+  delete e12_;
+  e12_ = new HomgPoint2D(svdv.left_nullvector());
 
   vnl_double_3x3 U;
   U(0,0) = u1[0];   U(0,1) = u2[0];  U(0,2) = u3[0];
@@ -1244,10 +1242,10 @@ bool TriTensor::compute_epipoles() const
 
   vnl_svd<double> svdu(U);
 
-  delete _e13;
-  _e13 = new HomgPoint2D(svdu.left_nullvector());
+  delete e13_;
+  e13_ = new HomgPoint2D(svdu.left_nullvector());
 
-  return _e12!=0 && _e13!=0;
+  return e12_!=0 && e13_!=0;
 }
 
 //: Return epipoles e2 and e3, from image 1 into images 2 and 3 respectively.
@@ -1255,11 +1253,11 @@ bool TriTensor::compute_epipoles() const
 bool TriTensor::get_epipoles(HomgPoint2D* e2, HomgPoint2D* e3) const
 {
   // Check if cached.
-  if (!_e12)
+  if (!e12_)
     compute_epipoles();
 
-  if (e2) *e2 = *_e12;
-  if (e3) *e3 = *_e13;
+  if (e2) *e2 = *e12_;
+  if (e3) *e3 = *e13_;
   return true;
 }
 
@@ -1267,33 +1265,31 @@ bool TriTensor::get_epipoles(HomgPoint2D* e2, HomgPoint2D* e3) const
 HomgPoint2D TriTensor::get_epipole_12() const
 {
   get_epipoles(0,0);
-  return *_e12;
+  return *e12_;
 }
 
 //: Return epipole13.
 HomgPoint2D TriTensor::get_epipole_13() const
 {
   get_epipoles(0,0);
-  return *_e13;
+  return *e13_;
 }
 
 //: Return F12, the fundamental matrix between images 1 and 2
 FMatrix TriTensor::get_fmatrix_12() const
 {
   get_epipoles(0,0);
-  return get_fmatrix_12(*_e12, *_e13);
+  return get_fmatrix_12(*e12_, *e13_);
 }
 
 //: Return F13, the fundamental matrix between images 1 and 3
 FMatrix TriTensor::get_fmatrix_13() const
 {
   get_epipoles(0,0);
-  return get_fmatrix_13(*_e12, *_e13);
+  return get_fmatrix_13(*e12_, *e13_);
 }
 
 // next two routines retired as caching introduced.  awf, aug97
-// This empty doc comment is to make gentex place these two together.
-//  @{ \vspace{-1.5\baselineskip} @}
 FMatrix TriTensor::get_fmatrix_13(const HomgPoint2D& e2, const HomgPoint2D& e3) const
 {
   return vnl_cross_product_matrix(e3.get_vector()) * dot2(e2.get_vector()).transpose();
@@ -1318,32 +1314,32 @@ FMatrix TriTensor::compute_fmatrix_23() const
 const FManifoldProject* TriTensor::get_fmp12() const
 {
   // If not cached, compute it.
-  if (!_fmp12) _fmp12 = new FManifoldProject(get_fmatrix_12());
-  return _fmp12;
+  if (!fmp12_) fmp12_ = new FManifoldProject(get_fmatrix_12());
+  return fmp12_;
 }
 
 //: Return a manifold-projector as above, between 1 and 3.
 const FManifoldProject* TriTensor::get_fmp13() const
 {
   // If not cached, compute it.
-  if (!_fmp13) _fmp13 = new FManifoldProject(get_fmatrix_13());
-  return _fmp13;
+  if (!fmp13_) fmp13_ = new FManifoldProject(get_fmatrix_13());
+  return fmp13_;
 }
 
 //: Return a manifold-projector as above, between 2 and 3.
 const FManifoldProject* TriTensor::get_fmp23() const
 {
   // If not cached, compute it.
-  if (!_fmp23) {
+  if (!fmp23_) {
     // Need to get FMatrix 23
     PMatrix P2;
     PMatrix P3;
     compute_P_matrices(&P2, &P3);
     FMatrix f23(P2,P3);
 
-    _fmp23 = new FManifoldProject(f23);
+    fmp23_ = new FManifoldProject(f23);
   }
-  return _fmp23;
+  return fmp23_;
 }
 
 //: Compute one of the family of P matrix triplets consistent with this T
@@ -1384,7 +1380,8 @@ void TriTensor::compute_P_matrices(const vnl_vector<double>& x, double alpha, do
   this->check_equal_up_to_scale(TriTensor(*P2, *P3));
 }
 
-struct maxabs {
+struct maxabs
+{
   int i, j, k;
   double maxval;
   maxabs(const TriTensor& T);

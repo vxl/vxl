@@ -47,7 +47,7 @@ TripleMatchSetCorner::TripleMatchSetCorner(const TripleMatchSetCorner& that):
   TripleMatchSet(new PairMatchSetCorner(that.get_corners1(), that.get_corners2()),
                  new PairMatchSetCorner(that.get_corners2(), that.get_corners3()))
 {
-  set_from_pairwise_matches(*that._match12, *that._match23);
+  set_from_pairwise_matches(*that.match12_, *that.match23_);
 }
 
 
@@ -70,7 +70,7 @@ void TripleMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D> &points1, vcl
   indices3.resize(size);
 
   unsigned i = 0;
-  for(iterator p = begin(); p; ++p, ++i) {
+  for (iterator p = begin(); p; ++p, ++i) {
     indices1[i] = p.get_i1();
     indices2[i] = p.get_i2();
     indices3[i] = p.get_i3();
@@ -95,7 +95,7 @@ void TripleMatchSetCorner::extract_matches(vcl_vector <HomgPoint2D>& points1,
   set_size(points3, size);
 
   int i = 0;
-  for(iterator p = begin(); p; ++p, ++i) {
+  for (iterator p = begin(); p; ++p, ++i) {
     points1[i] = corners1->get_homg(p.get_i1());
     points2[i] = corners2->get_homg(p.get_i2());
     points3[i] = corners3->get_homg(p.get_i3());

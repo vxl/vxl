@@ -33,10 +33,11 @@
 #include <mvl/PairMatchSet.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
 
-class TripleMatchSet : public MatchSet {
-protected:
+class TripleMatchSet : public MatchSet
+{
+ protected:
   TripleMatchSet(PairMatchSet* match12, PairMatchSet* match23);
-public:
+ public:
   TripleMatchSet(int i1_max, int i2_max, int i3_max);
   ~TripleMatchSet();
 
@@ -72,8 +73,9 @@ public:
   bool get_match(int at, int* i1, int* i2, int* i3) const { return get_1(at, i1, i2, i3); }
 
   // -------------------------------------------------------
-  class iterator {
-  public:
+  class iterator
+  {
+   public:
 //  iterator(bool full_only);
     iterator(const TripleMatchSet& ccc, bool full_only = true);
     iterator& operator=(const TripleMatchSet& ccc);
@@ -87,22 +89,22 @@ public:
     iterator& operator ++ (/*prefix*/) { next(); return *this; }
     bool isfull() const;
     operator bool () const;
-  private:
+   private:
     iterator& operator ++ (int /*postfix*/) { vcl_abort(); return *this; }
 
-  protected:
-    const TripleMatchSet* _c;
-    int _match_index;
+   protected:
+    const TripleMatchSet* c_;
+    int match_index_;
     int i1, i2, i3;
-    bool _full_only;
+    bool full_only_;
   };
   iterator begin() const { return iterator(*this, true); }
 
   // -------------------------------------------------------
 
-protected:
-  PairMatchSet *_match12;
-  PairMatchSet *_match23;
+ protected:
+  PairMatchSet *match12_;
+  PairMatchSet *match23_;
 };
 
 vcl_istream& operator >> (vcl_istream& s,  TripleMatchSet& ccc);

@@ -1,20 +1,15 @@
 #ifdef __GNUG__
 #pragma implementation
 #endif
-
 //:
-//  \file
+// \file
 
 #include "HMatrix2D.h"
-
-#include <vcl_fstream.h>
-
-#include <vnl/algo/vnl_svd.h>
-
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgOperator2D.h>
 #include <mvl/HomgPoint2D.h>
-// #include <Basics/BoundingBox.h>
+#include <vnl/algo/vnl_svd.h>
+#include <vcl_fstream.h>
 
 //--------------------------------------------------------------
 //
@@ -26,14 +21,14 @@ HMatrix2D::HMatrix2D()
 //: Copy constructor
 HMatrix2D::HMatrix2D(const HMatrix2D& M)
 {
-  _t12_matrix = M._t12_matrix;
+  t12_matrix_ = M.t12_matrix_;
 }
 
 
 //: Constructor from vcl_istream
 HMatrix2D::HMatrix2D(vcl_istream& s)
 {
-  _t12_matrix.read_ascii(s);
+  t12_matrix_.read_ascii(s);
 }
 
 //: Constructor from file
@@ -43,14 +38,14 @@ HMatrix2D::HMatrix2D(char const* filename)
   if (!f.good())
     vcl_cerr << "HMatrix2D::read: Error opening " << filename << vcl_endl;
   else
-    _t12_matrix.read_ascii(f);
+    t12_matrix_.read_ascii(f);
 }
 
 //--------------------------------------------------------------
 //
 //: Constructor
 HMatrix2D::HMatrix2D(const vnl_matrix<double>& M):
-  _t12_matrix (M)
+  t12_matrix_ (M)
 {
 }
 
@@ -58,7 +53,7 @@ HMatrix2D::HMatrix2D(const vnl_matrix<double>& M):
 //
 //: Constructor
 HMatrix2D::HMatrix2D (const double* H)
-  : _t12_matrix (H)
+  : t12_matrix_ (H)
 {
 }
 
@@ -67,7 +62,7 @@ HMatrix2D::~HMatrix2D()
 {
 }
 
-// @{ OPERATIONS @}
+// == OPERATIONS ==
 
 //-----------------------------------------------------------------------------
 //
@@ -75,7 +70,7 @@ HMatrix2D::~HMatrix2D()
 
 HomgPoint2D HMatrix2D::transform_to_plane2(const HomgPoint2D& x1) const
 {
-    return HomgPoint2D (_t12_matrix * x1.get_vector());
+    return HomgPoint2D (t12_matrix_ * x1.get_vector());
 }
 
 
@@ -85,7 +80,7 @@ HomgPoint2D HMatrix2D::transform_to_plane2(const HomgPoint2D& x1) const
 
 HomgLine2D HMatrix2D::transform_to_plane1(const HomgLine2D& l2) const
 {
-  return HomgLine2D(_t12_matrix.transpose() * l2.get_vector());
+  return HomgLine2D(t12_matrix_.transpose() * l2.get_vector());
 }
 
 //-----------------------------------------------------------------------------
@@ -99,8 +94,8 @@ HomgPoint2D HMatrix2D::transform_to_plane1(const HomgPoint2D& x2) const
     vcl_cerr << "HMatrix2D::transform_to_plane1(HomgPoint2D): Warning: calculating inverse matrix\n";
     warned = true;
   }
-  vnl_double_3x3 _t21_matrix = this->get_inverse().get_matrix();
-  return HomgPoint2D(_t21_matrix * x2.get_vector());
+  vnl_double_3x3 t21_matrix_ = this->get_inverse().get_matrix();
+  return HomgPoint2D(t21_matrix_ * x2.get_vector());
 }
 
 //-----------------------------------------------------------------------------
@@ -110,8 +105,8 @@ HomgPoint2D HMatrix2D::transform_to_plane1(const HomgPoint2D& x2) const
 HomgLine2D HMatrix2D::transform_to_plane2(const HomgLine2D& l1) const
 {
   vcl_cerr << "HMatrix2D::transform_to_plane2(HomgLine2D): Warning: calculating inverse matrix\n";
-  vnl_double_3x3 _t21_matrix = this->get_inverse().get_matrix().transpose();
-  return HomgLine2D(_t21_matrix * l1.get_vector());
+  vnl_double_3x3 t21_matrix_ = this->get_inverse().get_matrix().transpose();
+  return HomgLine2D(t21_matrix_ * l1.get_vector());
 }
 
 //-----------------------------------------------------------------------------
@@ -131,7 +126,7 @@ vcl_istream& operator >> (vcl_istream& s, HMatrix2D& H)
 //: Read H from vcl_istream
 bool HMatrix2D::read(vcl_istream& s)
 {
-  return _t12_matrix.read_ascii(s);
+  return t12_matrix_.read_ascii(s);
 }
 
 //: Read H from file
@@ -143,13 +138,13 @@ bool HMatrix2D::read(char const* filename)
   return read(f);
 }
 
-// @{ DATA ACCESS @}
+// == DATA ACCESS ==
 
 //-----------------------------------------------------------------------------
 //: Get matrix element at (row_index, col_index)
 double HMatrix2D::get (unsigned int row_index, unsigned int col_index) const
 {
-  return _t12_matrix. get (row_index, col_index);
+  return t12_matrix_. get (row_index, col_index);
 }
 
 //: Fill H with contents of this
@@ -157,19 +152,19 @@ void HMatrix2D::get (double *H) const
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 3; col_index++)
-      *H++ = _t12_matrix. get (row_index, col_index);
+      *H++ = t12_matrix_. get (row_index, col_index);
 }
 
 //: Fill H with contents of this
 void HMatrix2D::get (vnl_matrix<double>* H) const
 {
-  *H = _t12_matrix;
+  *H = t12_matrix_;
 }
 
 //: Set to identity
 void HMatrix2D::set_identity ()
 {
-  _t12_matrix.set_identity();
+  t12_matrix_.set_identity();
 }
 
 //: Set to 3x3 row-stored matrix
@@ -177,19 +172,19 @@ void HMatrix2D::set (const double *H)
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 3; col_index++)
-      _t12_matrix. put (row_index, col_index, *H++);
+      t12_matrix_. put (row_index, col_index, *H++);
 }
 
 //: Set to given vnl_matrix
 void HMatrix2D::set (const vnl_matrix<double>& H)
 {
-  _t12_matrix = H;
+  t12_matrix_ = H;
 }
 
 //: Return inverse of this homography
 HMatrix2D HMatrix2D::get_inverse() const
 {
-  vnl_svd<double> svd(_t12_matrix);
+  vnl_svd<double> svd(t12_matrix_);
   return svd.inverse();
 }
 

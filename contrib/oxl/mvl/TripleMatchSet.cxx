@@ -1,9 +1,8 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
-//  \file
+// \file
 
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vnl/vnl_matrix.h>
@@ -15,8 +14,8 @@
 // delete them.
 TripleMatchSet::TripleMatchSet(PairMatchSet* match12, PairMatchSet* match23)
 {
-  _match12 = match12;
-  _match23 = match23;
+  match12_ = match12;
+  match23_ = match23;
 }
 
 //: Initialize a TripleMatchSet, by specifying the maximum i1, i2, i3 values.
@@ -24,24 +23,24 @@ TripleMatchSet::TripleMatchSet(PairMatchSet* match12, PairMatchSet* match23)
 // the i3 value is ignored.
 TripleMatchSet::TripleMatchSet(int i1_max, int i2_max, int)
 {
-  _match12 = new PairMatchSet(i1_max);
-  _match23 = new PairMatchSet(i2_max);
+  match12_ = new PairMatchSet(i1_max);
+  match23_ = new PairMatchSet(i2_max);
 }
 
 //: Delete the PairMatchSets
 TripleMatchSet::~TripleMatchSet()
 {
-  delete _match12;
-  delete _match23;
+  delete match12_;
+  delete match23_;
 }
 
 //: Destroy current PairMatchSets and adopt two new ones.
 void TripleMatchSet::set(PairMatchSet* match12, PairMatchSet* match23)
 {
-  delete _match12;
-  delete _match23;
-  _match12 = match12;
-  _match23 = match23;
+  delete match12_;
+  delete match23_;
+  match12_ = match12;
+  match23_ = match23;
 }
 
 //: Join two PairMatchSets on their 2nd and 1st columns respectively.
@@ -118,7 +117,7 @@ vcl_istream& operator >> (vcl_istream& s, TripleMatchSet& matches)
   return s;
 }
 
-// @{ TRIPLET ACCESS @}
+// == TRIPLET ACCESS ==
 
 //: Add triplet (i1, i2, i3) to the matchset.
 //  Any existing matches of the form (i1, *, *) are removed. O(1).
@@ -138,7 +137,7 @@ bool TripleMatchSet::add_match(int i1, int i2, int i3)
     vcl_cerr<<"*** i1 is already in a match ("<<i1<<"/"<<old_i2<<"/"<<old_i3<<")\n";
   }
 
-  return _match12->add_match(i1, i2) && _match23->add_match(i2, i3);
+  return match12_->add_match(i1, i2) && match23_->add_match(i2, i3);
 }
 
 //: Return the number of triplets. O(n).
@@ -153,8 +152,8 @@ int TripleMatchSet::count() const
 //: Remove all tuples.
 void TripleMatchSet::clear_matches()
 {
-  _match12->clear();
-  _match23->clear();
+  match12_->clear();
+  match23_->clear();
 }
 
 //-----------------------------------------------------------------------------
@@ -162,7 +161,7 @@ void TripleMatchSet::clear_matches()
 // Complexity O(1).
 int TripleMatchSet::get_match_12(int i1) const
 {
-  return _match12->get_match_12(i1);
+  return match12_->get_match_12(i1);
 }
 
 //: Select(1 = i1).3
@@ -175,13 +174,13 @@ int TripleMatchSet::get_match_13(int i1) const
 //: Select(2 = i2).3 Complexity O(1)
 int TripleMatchSet::get_match_23(int i2) const
 {
-  return _match23->get_match_12(i2);
+  return match23_->get_match_12(i2);
 }
 
 //: Select(2 = i2).1 Complexity O(n)
 int TripleMatchSet::get_match_21(int i2) const
 {
-  return _match12->get_match_21(i2);
+  return match12_->get_match_21(i2);
 }
 
 //: Select(3 = i3).1 Complexity O(n)
@@ -193,14 +192,14 @@ int TripleMatchSet::get_match_31(int i3) const
 //: Select(3 = i3).2 Complexity O(n)
 int TripleMatchSet::get_match_32(int i3) const
 {
-  return _match23->get_match_21(i3);
+  return match23_->get_match_21(i3);
 }
 
 //: Select({1,2} = {i1, i2}).3
 // Complexity O(1).
 int TripleMatchSet::get_match_123(int i1, int i2) const
 {
-  int ii = _match12->get_match_12(i1);
+  int ii = match12_->get_match_12(i1);
   if (ii != i2)
     return MatchSet::NoMatch;
   else
@@ -211,12 +210,12 @@ int TripleMatchSet::get_match_123(int i1, int i2) const
 //  Complexity O(1).  Returns true iff a match was found.
 bool TripleMatchSet::get_1(int c, int* i1, int* i2, int* i3) const
 {
-  if (c >= _match12->size())
+  if (c >= match12_->size())
     return false;
 
   *i1 = c;
-  *i2 = _match12->get_match_12(*i1);
-  *i3 = _match23->get_match_12(*i2);
+  *i2 = match12_->get_match_12(*i1);
+  *i3 = match23_->get_match_12(*i2);
 
   return true;
 }
@@ -235,30 +234,30 @@ bool TripleMatchSet::get_3(int c, int* i1, int* i2, int* i3) const
 
 // -----------------------------------------------------------------------------
 
-// @ { DEVELOPER INFORMATION @}
+// == DEVELOPER INFORMATION ==
 
 // - An implementation detail.  If the underlying PairMatchSets
 // have been modified, there may be i2-i3 matches that have no corresponding
 // i1-i2. This routine clears them (noisily).
 void TripleMatchSet::clear_nontriplets()
 {
-  //mt_clear_affinity_nontriplets (_match12->get_table(), _match23->get_table());
-  vcl_vector<bool> accept(_match23->size());
+  //mt_clear_affinity_nontriplets (match12_->get_table(), match23_->get_table());
+  vcl_vector<bool> accept(match23_->size());
   for (vcl_vector<bool>::iterator i=accept.begin(); i!=accept.end(); ++i)
     *i = false;
 
   int cleared_count = 0;
-  for (int i1 = 0; i1 < _match12->size(); i1++) {
-    int i2 = _match12->get_match_12(i1);
+  for (int i1 = 0; i1 < match12_->size(); i1++) {
+    int i2 = match12_->get_match_12(i1);
     if (i2 != NoMatch) {
       int i3 = NoMatch;
-      if (i2 >= _match23->size() || i2 < 0)
+      if (i2 >= match23_->size() || i2 < 0)
         vcl_cerr << "TripleMatchSet::clear_nontriplets() -- bad i2 = " << i2 << vcl_endl;
       else
-        i3 = _match23->get_match_12(i2);
+        i3 = match23_->get_match_12(i2);
 
       if (i3 == NoMatch) {
-        _match12->add_match(i1, NoMatch);
+        match12_->add_match(i1, NoMatch);
         ++cleared_count;
       } else
         accept[i2] = true;
@@ -266,9 +265,9 @@ void TripleMatchSet::clear_nontriplets()
   }
   vcl_cerr << "TripleMatchSet::clear_nontriplets() -- Cleared i2 " << cleared_count << vcl_endl;
 
-  for (int i2 = 0; i2 < _match23->size(); i2++)
+  for (int i2 = 0; i2 < match23_->size(); i2++)
     if (!accept[i2]) {
-      _match23->add_match(i2, NoMatch);
+      match23_->add_match(i2, NoMatch);
       ++cleared_count;
     }
 
@@ -277,18 +276,18 @@ void TripleMatchSet::clear_nontriplets()
 
 bool TripleMatchSet::delete_match(int i1, int i2, int i3)
 {
-  int old_12 = _match12->get_match_12(i1);
+  int old_12 = match12_->get_match_12(i1);
   if (old_12 != i2) {
     vcl_cerr << "TripleMatchSet::delete_match - old/new i2 = " << old_12 << "/" << i2 << vcl_endl;
-    _match23->clear_match_1(old_12);
+    match23_->clear_match_1(old_12);
   }
-  int old_23 = _match23->get_match_12(i2);
+  int old_23 = match23_->get_match_12(i2);
   if (old_23 != i3) {
     vcl_cerr << "TripleMatchSet::delete_match - old/new i3 = " << old_23 << "/" << i3 << vcl_endl;
   }
 
-  _match12->clear_match_1(i1);
-  _match23->clear_match_1(i2);
+  match12_->clear_match_1(i1);
+  match23_->clear_match_1(i2);
 
   return true;
 }
@@ -296,20 +295,18 @@ bool TripleMatchSet::delete_match(int i1, int i2, int i3)
 // - Return the maximum allowed value of i1.
 int TripleMatchSet::size() const
 {
-  return _match12->size();
+  return match12_->size();
 }
 
 // - Call PairMatchSets update_feature_match_data
 void TripleMatchSet::update_feature_match_data()
 {
-  _match12->update_feature_match_data();
-  _match23->update_feature_match_data();
+  match12_->update_feature_match_data();
+  match23_->update_feature_match_data();
 }
 
 
 // -----------------------------------------------------------------------------
-
-// @{ \bigskip \large TripleMatchSet::iterator @}
 
 #if 0
 TripleMatchSet::iterator::iterator(bool)
@@ -321,30 +318,30 @@ TripleMatchSet::iterator::iterator(bool)
 //: Construct an iterator that points to the first triplet of "ccc".
 // The full_only flag is of interest only to developers.
 TripleMatchSet::iterator::iterator(const TripleMatchSet& ccc, bool full_only):
-  _c(&ccc),
-  _match_index(0),
-  _full_only(full_only)
+  c_(&ccc),
+  match_index_(0),
+  full_only_(full_only)
 {
-  _match_index = -1;
+  match_index_ = -1;
   next();
 }
 
 //: Advance to point to the next triplet.
 bool TripleMatchSet::iterator::next()
 {
-  if (_full_only) {
-    while (_c->get_match(++_match_index, &i1, &i2, &i3))
+  if (full_only_) {
+    while (c_->get_match(++match_index_, &i1, &i2, &i3))
       if (isfull())
         return true;
     return false;
   }
-  return _c->get_match(++_match_index, &i1, &i2, &i3);
+  return c_->get_match(++match_index_, &i1, &i2, &i3);
 }
 
 //: Return true if there are still unseen matches
 TripleMatchSet::iterator::operator bool () const
 {
-  return _match_index < _c->size();
+  return match_index_ < c_->size();
 }
 
 //: Return true if the current "pointed-to" match is a proper triplet.
@@ -358,24 +355,24 @@ bool TripleMatchSet::iterator::isfull() const
 #if 0
 MA_MATCH_TABLE_STR* TripleMatchSet::make_matchtable()
 {
-  return mt_3image_affinity_to_match (_match12->get_table(), _match23->get_table());
+  return mt_3image_affinity_to_match (match12_->get_table(), match23_->get_table());
 }
 
 MA_MATCH_TABLE_STR* TripleMatchSet::make_matchtable_12()
 {
-  //return mt_3image_affinity123_to_match23 (_match12->get_table(), _match23->get_table());
+  //return mt_3image_affinity123_to_match23 (match12_->get_table(), match23_->get_table());
   // In fact this is used instead in vi_3image_match_feature:
-  return mt_3image_affinity_to_match (_match12->get_table(), _match23->get_table());
+  return mt_3image_affinity_to_match (match12_->get_table(), match23_->get_table());
 }
 
 MA_MATCH_TABLE_STR* TripleMatchSet::make_matchtable_23()
 {
-  return mt_3image_affinity123_to_match23 (_match12->get_table(), _match23->get_table());
+  return mt_3image_affinity123_to_match23 (match12_->get_table(), match23_->get_table());
 }
 
 void TripleMatchSet::update_from(MA_MATCH_TABLE_STR* matchtable)
 {
-  mt_3image_match_to_affinity (matchtable, _match12->get_table(), _match23->get_table());
+  mt_3image_match_to_affinity (matchtable, match12_->get_table(), match23_->get_table());
 }
 #endif
 

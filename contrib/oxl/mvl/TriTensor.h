@@ -39,18 +39,28 @@ class FMatrix;
 class PMatrix;
 class FManifoldProject;
 
-class TriTensor {
+class TriTensor
+{
+  // Data Members------------------------------------------------------------
 
-  // PUBLIC INTERFACE--------------------------------------------------------
+  vbl_array_3d<double> T;
 
-public:
+  // Caches for various computed quantities
+  mutable const HomgPoint2D* e12_;
+  mutable const HomgPoint2D* e13_;
+
+  mutable const FManifoldProject* fmp12_;
+  mutable const FManifoldProject* fmp13_;
+  mutable const FManifoldProject* fmp23_;
+
+ public:
 
   // Constructors/Initializers/Destructors-----------------------------------
 
-  // Construct from 27-element vector
   TriTensor();
-  TriTensor(const double *tritensor_array);
   TriTensor(const TriTensor&);
+  // Construct from 27-element vector
+  TriTensor(const double *tritensor_array);
   TriTensor(const PMatrix& P1, const PMatrix& P2, const PMatrix& P3);
   TriTensor(const PMatrix& P2, const PMatrix& P3);
   TriTensor(const vnl_matrix<double>& T1, const vnl_matrix<double>& P2, const vnl_matrix<double>& P3);
@@ -60,7 +70,7 @@ public:
 
   TriTensor& operator=(const TriTensor&);
   bool operator==(TriTensor const& p) const {
-    for(int i=0;i<3;++i)for(int j=0;j<3;++j)for(int k=0;k<3;++k) if (p(i,j,k)!=T(i,j,k)) return false;
+    for (int i=0;i<3;++i) for (int j=0;j<3;++j) for (int k=0;k<3;++k) if (p(i,j,k)!=T(i,j,k)) return false;
     return true; }
   double& operator() (unsigned int i1, unsigned int i2, unsigned int i3) { return T(i1,i2,i3); }
   double operator() (unsigned int i1, unsigned int i2, unsigned int i3) const { return T(i1,i2,i3); }
@@ -177,20 +187,8 @@ public:
   TriTensor decondition(const vnl_matrix<double>& line_1_norm,
                         const vnl_matrix<double>& line_2_denorm,
                         const vnl_matrix<double>& line_3_denorm) const;
-
-  // Data Members------------------------------------------------------------
-private:
-  vbl_array_3d<double> T;
-
-  // Caches for various computed quantities
+ private:
   void delete_caches() const; // mutable const
-
-  mutable const HomgPoint2D* _e12;
-  mutable const HomgPoint2D* _e13;
-
-  mutable const FManifoldProject* _fmp12;
-  mutable const FManifoldProject* _fmp13;
-  mutable const FManifoldProject* _fmp23;
 };
 
 vcl_ostream& operator << (vcl_ostream&, const TriTensor& T);

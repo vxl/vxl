@@ -17,14 +17,14 @@
 
 // Default ctor
 LineSegSet::LineSegSet():
-  _hlines(0)
+  hlines_(0)
 {
-  _conditioner = 0;
+  conditioner_ = 0;
 }
 
 // Copy ctor
 LineSegSet::LineSegSet(const LineSegSet& that):
-  _hlines(0)
+  hlines_(0)
 {
   operator=(that);
 }
@@ -32,8 +32,8 @@ LineSegSet::LineSegSet(const LineSegSet& that):
 // Assignment
 LineSegSet& LineSegSet::operator=(const LineSegSet& that)
 {
-  _hlines = that._hlines;
-  _conditioner = that._conditioner;
+  hlines_ = that.hlines_;
+  conditioner_ = that.conditioner_;
   return *this;
 }
 
@@ -61,8 +61,8 @@ bool LineSegSet::load_ascii(vcl_istream& f, HomgMetric const& c)
     return false;
   }
 
-  _conditioner = c;
-  _hlines.resize(0);
+  conditioner_ = c;
+  hlines_.resize(0);
   for (unsigned i = 0; i < L.rows(); ++i) {
     double x1 = L(i,0);
     double y1 = L(i,1);
@@ -81,10 +81,10 @@ bool LineSegSet::load_ascii(vcl_istream& f, HomgMetric const& c)
     HomgPoint2D p1(x1, y1);
     HomgPoint2D p2(x2, y2);
     HomgLineSeg2D line(p1, p2);
-    _hlines.push_back(c.image_to_homg_line(line));
+    hlines_.push_back(c.image_to_homg_line(line));
   }
 
-  vcl_cerr << "Loaded " << _hlines.size() << " line segments\n";
+  vcl_cerr << "Loaded " << hlines_.size() << " line segments\n";
   return true;
 }
 
@@ -119,16 +119,16 @@ int LineSegSet::FindNearestLineIndex(double x, double y)
 //: Save lines to ASCII file
 bool LineSegSet::save_ascii(vcl_ostream& f) const
 {
-  for (unsigned i = 0; i < _hlines.size(); ++i) {
-    HomgLineSeg2D const& l = _hlines[i];
+  for (unsigned i = 0; i < hlines_.size(); ++i) {
+    HomgLineSeg2D const& l = hlines_[i];
 
-    vnl_double_2 p1 = _conditioner.homg_to_image(l.get_point1());
-    vnl_double_2 p2 = _conditioner.homg_to_image(l.get_point2());
+    vnl_double_2 p1 = conditioner_.homg_to_image(l.get_point1());
+    vnl_double_2 p2 = conditioner_.homg_to_image(l.get_point2());
 
     f << p1[0] << " " << p1[1] << "\t";
     f << p2[0] << " " << p2[1] << vcl_endl;
   }
-  vcl_cerr << "LineSegSet: Saved " << _hlines.size() << " line segments\n";
+  vcl_cerr << "LineSegSet: Saved " << hlines_.size() << " line segments\n";
   return true;
 }
 
@@ -136,13 +136,13 @@ bool LineSegSet::save_ascii(vcl_ostream& f) const
 int LineSegSet::pick_line_index(double x, double y)
 {
   HomgPoint2D p(x, y);
-  HomgMetric metric(_conditioner);
+  HomgMetric metric(conditioner_);
 
   double dmin = 1e20;
   int imin = -1;
-  int nlines = _hlines.size();
+  int nlines = hlines_.size();
   for (int i = 0; i < nlines; ++i) {
-    const HomgLineSeg2D& l = _hlines[i];
+    const HomgLineSeg2D& l = hlines_[i];
     HomgLineSeg2D l_decond = metric.homg_line_to_image(l);
 
     double d = l_decond.picking_distance(p);
@@ -161,7 +161,7 @@ HomgLineSeg2D* LineSegSet::pick_line(double x, double y)
 {
   int i = pick_line_index(x,y);
   if (i >= 0)
-    return &_hlines[i];
+    return &hlines_[i];
   else
     return 0;
 }

@@ -21,12 +21,14 @@
 // A class to hold a plane-to-plane projective transformation matrix
 // and to perform common operations using it e.g. transfer point.
 
-class HMatrix2D {
+class HMatrix2D
+{
+  // Data Members--------------------------------------------------------------
+  vnl_double_3x3 t12_matrix_;
 
-  // PUBLIC INTERFACE----------------------------------------------------------
-public:
+ public:
 
-//: Flags for reduced H matrices
+  //: Flags for reduced H matrices
   enum Type {
     Euclidean,
     Similarity,
@@ -66,14 +68,14 @@ public:
   // HomgLine2D transform_to_plane2(const HomgLine2D& l1) const;
 
   //: Composition
-  HMatrix2D operator*(const HMatrix2D& H2) { return HMatrix2D(_t12_matrix * H2._t12_matrix); }
+  HMatrix2D operator*(const HMatrix2D& H2) { return HMatrix2D(t12_matrix_ * H2.t12_matrix_); }
 
   // Data Access---------------------------------------------------------------
 
   double get (unsigned int row_index, unsigned int col_index) const;
   void get (double *t_matrix) const;
   void get (vnl_matrix<double>* t_matrix) const;
-  const vnl_double_3x3& get_matrix () const { return _t12_matrix; }
+  const vnl_double_3x3& get_matrix () const { return t12_matrix_; }
   HMatrix2D get_inverse() const;
 
   void set_identity();
@@ -82,11 +84,6 @@ public:
 
   bool read(vcl_istream& s);
   bool read(char const* filename);
-
-  // INTERNALS-----------------------------------------------------------------
-private:
-  // Data Members--------------------------------------------------------------
-  vnl_double_3x3 _t12_matrix;
 };
 
 vcl_ostream& operator << (vcl_ostream& s, const HMatrix2D& H);

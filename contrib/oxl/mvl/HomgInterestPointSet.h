@@ -36,7 +36,11 @@ class HomgInterestPoint;
 
 class HomgInterestPointSet
 {
-public:
+  // Data Members--------------------------------------------------------------
+  HomgInterestPointSetData* data_;
+  HomgMetric conditioner_;
+
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   HomgInterestPointSet();
@@ -66,7 +70,7 @@ public:
 
   vcl_vector<HomgPoint2D> const & get_homg_points() const;
 
-  const ImageMetric* get_conditioner() const { return (const ImageMetric*)_conditioner; }
+  const ImageMetric* get_conditioner() const { return (const ImageMetric*)conditioner_; }
   void set_conditioner(const HomgMetric& c);
 
   // Data Control--------------------------------------------------------------
@@ -85,11 +89,7 @@ public:
   bool read(vcl_istream& f, const ImageMetric* c);
   bool write(vcl_ostream& f, const ImageMetric* c) const;
 
-protected:
-  // Data Members--------------------------------------------------------------
-  HomgInterestPointSetData* _data;
-  HomgMetric _conditioner;
-
+ protected:
   void init_conditioner(const HomgMetric& c = 0);
   void delete_conditioner();
 };

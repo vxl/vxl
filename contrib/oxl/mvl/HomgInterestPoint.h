@@ -25,13 +25,13 @@ class HomgMetric;
 class HomgInterestPoint
 {
   // Data Members--------------------------------------------------------------
-public:
-  HomgPoint2D  _homg;
-  vnl_double_2 _double2;
-  vnl_int_2    _int2;
-  float        _mean_intensity;
+ public:
+  HomgPoint2D  homg_;
+  vnl_double_2 double2_;
+  vnl_int_2    int2_;
+  float        mean_intensity_;
 
-public:
+ public:
   HomgInterestPoint();
   HomgInterestPoint(double x, double y, float mean_intensity = 0.0F);
   HomgInterestPoint(double x, double y, const HomgMetric& c, float mean_intensity = 0.0F);

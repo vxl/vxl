@@ -22,8 +22,9 @@
 #include <mvl/PairMatchSetCorner.h>
 #include "TripleMatchSet.h"
 
-class TripleMatchSetCorner : public TripleMatchSet {
-public:
+class TripleMatchSetCorner : public TripleMatchSet
+{
+ public:
 
   TripleMatchSetCorner();
   TripleMatchSetCorner(HomgInterestPointSet const* corners1,
@@ -46,10 +47,10 @@ public:
                        vcl_vector <HomgPoint2D>& points2,
                        vcl_vector <HomgPoint2D>& points3) const;
 
-  PairMatchSetCorner* get_matches12() { return (PairMatchSetCorner*)_match12; }
-  PairMatchSetCorner* get_matches23() { return (PairMatchSetCorner*)_match23; }
-  PairMatchSetCorner const* get_matches12() const { return (PairMatchSetCorner const*)_match12; }
-  PairMatchSetCorner const* get_matches23() const { return (PairMatchSetCorner const*)_match23; }
+  PairMatchSetCorner* get_matches12() { return (PairMatchSetCorner*)match12_; }
+  PairMatchSetCorner* get_matches23() { return (PairMatchSetCorner*)match23_; }
+  PairMatchSetCorner const* get_matches12() const { return (PairMatchSetCorner const*)match12_; }
+  PairMatchSetCorner const* get_matches23() const { return (PairMatchSetCorner const*)match23_; }
 
   //HomgInterestPointSet* get_corners1() { return get_matches12()->get_corners1(); }
   //HomgInterestPointSet* get_corners2() { return get_matches12()->get_corners2(); }
