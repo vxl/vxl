@@ -4,14 +4,14 @@
 #include <vil/vil_rgb_byte.h>
 #include <vcl_string.h>
 
-DECLARE( test_erode_disk );
-DECLARE( test_threshold );
+DECLARE( vepl_test_erode_disk );
+DECLARE( vepl_test_threshold );
 
 void
 register_tests()
 {
-  REGISTER( test_erode_disk );
-  REGISTER( test_threshold );
+  REGISTER( vepl_test_erode_disk );
+  REGISTER( vepl_test_threshold );
 }
 
 // create an 8 bit test image

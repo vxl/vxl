@@ -4,16 +4,16 @@
 #include <vil/vil_rgb_byte.h>
 #include <vcl_cmath.h> // for vcl_fabs()
 
-DECLARE( test_erode_disk );
-DECLARE( test_threshold );
-DECLARE( test_gaussian_convolution );
+DECLARE( vipl_test_erode_disk );
+DECLARE( vipl_test_threshold );
+DECLARE( vipl_test_gaussian_convolution );
 
 void
 register_tests()
 {
-  REGISTER( test_erode_disk );
-  REGISTER( test_threshold );
-  REGISTER( test_gaussian_convolution );
+  REGISTER( vipl_test_erode_disk );
+  REGISTER( vipl_test_threshold );
+  REGISTER( vipl_test_gaussian_convolution );
 }
 
 // create an 8 bit test image
