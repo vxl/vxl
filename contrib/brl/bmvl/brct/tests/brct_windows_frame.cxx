@@ -129,7 +129,7 @@ void brct_windows_frame::clean_up()
   if (kalman_)
     delete kalman_;
 
-  if(e_)
+  if (e_)
     delete e_;
 }
 
@@ -331,26 +331,20 @@ void brct_windows_frame::load_image()
 
 void brct_windows_frame::show_epipole()
 {
-  vgl_point_2d<double> e = kalman_->get_cur_epipole();
   instance_->tab_2d_->set_foreground(1, 0, 0);
-
-  double x = 0, y = 0;
-  x = e.x();
-  y = e.y();
-  vgui_soview2D_point* p = instance_->tab_2d_->add_point(x, y);
-  vcl_cout<<"\n epipole ("<<x <<"\t"<<y<<")\n";
+  vgl_point_2d<double> e = kalman_->get_cur_epipole();
+  vcl_cout<<"\n epipole ("<<e.x() <<'\t'<<e.y()<<")\n";
+  instance_->tab_2d_->add_point(e.x(), e.y());
   instance_->post_redraw();
-
 }
 
 void brct_windows_frame::init_epipole()
 {
-  if(!e_){
+  if (!e_)
     e_ = new vgl_point_2d<double>;
-  }
-    
+
   assert(lines_.size() >= 2);
    vgl_homg_point_2d<double> epipole = vgl_homg_operators_2d<double>::lines_to_point(lines_);
- 
+
    e_ -> set(epipole.x() / epipole.w(), epipole.y()/ epipole.w());
 }
