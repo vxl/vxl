@@ -21,12 +21,6 @@
 #if !VCL_USE_NATIVE_COMPLEX
 # include "emulation/vcl_complex_fwd.h"
 
-// ---------- gcc
-#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
-// old gcc library
-  template <class T> class complex;
-# define vcl_complex complex
-
 // ---------- native WIN32
 #elif defined(VCL_WIN32)
 # include "win32/vcl_complex_fwd.h"
