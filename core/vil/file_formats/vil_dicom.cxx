@@ -85,7 +85,7 @@ void imageSwap(char *in_im, int num_bytes,
 {
   char swaps[2];
   int row_num;
-  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " <<"-------------- ::imageSwap - START ------------"<<vcl_endl<<vcl_endl;
+  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t-------------- ::imageSwap - START ------------\n\n";
   // Only swap if two bytes used and the endians of system and
   // file differ
   //Note may also need to swap to do some bit shift transforms in some OW modes when using Big Endian
@@ -105,8 +105,8 @@ void imageSwap(char *in_im, int num_bytes,
   bool bSystemReqSwap = dhi.file_endian_ != dhi.sys_endian_; //Need a swap for file to system
   //We may also need to do some shifting where the bit range is some sub-part of a two-byte word
   bool bShiftNeeded =  ((dhi.res_slope_ == VIL_DICOM_HEADER_DEFAULTSLOPE) &&
-                        ( (dhi.high_bit_ <dhi.allocated_bits_ - 1) || //some unused high-bits that may be set
-                          (dhi.high_bit_ > dhi.stored_bits_-1)));     //or the relevant sub-portion does not start at bit 0
+                        ( (dhi.high_bit_ < dhi.allocated_bits_-1) || //some unused high-bits that may be set
+                          (dhi.high_bit_ > dhi.stored_bits_-1)));    //or the relevant sub-portion does not start at bit 0
   //But the shifting needs to be done with a little-endian ordering
   bool bShiftReqSwap = bShiftNeeded && (dhi.file_endian_ == VIL_DICOM_HEADER_DEBIGENDIAN);
 
@@ -163,7 +163,7 @@ void imageSwap(char *in_im, int num_bytes,
       }
     }
   }
-  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " <<"-------------- ::imageSwap - END   ------------"<<vcl_endl<<vcl_endl;
+  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t-------------- ::imageSwap - END   ------------\n\n";
 }
 
 
@@ -256,9 +256,7 @@ bool checkReadableFormat(vil_dicom_header_image_type im_type)
   }
 
   if (!retval)
-  {
     vcl_cerr << "CW_DicomFormat - Image type is " << type.c_str() << ", but is not yet supported.\n";
-  }
 
   return retval;
 }
@@ -333,7 +331,7 @@ enum vil_pixel_format vil_dicom_image::pixel_format() const
 vil_image_view_base_sptr vil_dicom_image::get_copy_view(
   unsigned x0, unsigned nx, unsigned y0, unsigned ny) const
 {
-    vcl_cerr<< vcl_endl<<"!!! DICOM BIGENDIAN DEBUG>>> " <<"------------ vil_dicom_image::get_copy_view - START ------------"<<vcl_endl;
+  vcl_cerr<< "\n!!! DICOM BIGENDIAN DEBUG>>>\t------------ vil_dicom_image::get_copy_view - START ------------\n";
   if (x0+nx > ni() || y0+ny > nj()) return 0;
 
   void *void_im=0;
@@ -361,7 +359,7 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
   // Get the number of rows and columns to read
   int cols=header_.dimx_;
   int rows=header_.dimy_;
-  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << vcl_endl<<"vil_dicom_image::get_copy_view - cols= "<<cols<<"\trows = "<<rows<<vcl_endl;
+  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tvil_dicom_image::get_copy_view - cols= "<<cols<<"\trows = "<<rows<<vcl_endl;
   // The number of bytes to read at a time depends on the
   // allocated bits. If 16 or 12 are allocated, then two bytes
   // should be read (with a reduced number of reads for 12
@@ -380,7 +378,7 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
 
   unsigned mem_size = (cols*bytes_read)*rows;
   void_im = new char [mem_size];
-  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << "About to read image buffer - size = "<<mem_size<<vcl_endl;
+  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tAbout to read image buffer - size = "<<mem_size<<vcl_endl;
   vs_->read(void_im,mem_size);
 
   if (!vs_->ok())
@@ -408,14 +406,15 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
         for (unsigned i=y0; i<(y0+ny); ++i)
         {
           int next_row = header_.dimx_*i;
-          vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << "...Transfer next row - First col val="<<static_cast<vxl_uint_16 *>(void_im)[next_row+x0]<<vcl_endl;
+          vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t...Transfer next row - First col val="
+                  <<static_cast<vxl_uint_16 *>(void_im)[next_row+x0]<<vcl_endl;
           for (unsigned j=x0; j<(x0+nx); ++j)
           {
             view(j-x0,i-y0) = static_cast<vxl_uint_16 *>(void_im)[next_row+j]; ;
           }
         }
         delete [] (char *) void_im;
-        vcl_cerr<< vcl_endl<<"!!! DICOM BIGENDIAN DEBUG>>> " <<"------------ vil_dicom_image::get_copy_view - END ------------"<<vcl_endl;
+        vcl_cerr<< "\n!!! DICOM BIGENDIAN DEBUG>>>\t------------ vil_dicom_image::get_copy_view - END ------------\n";
         return new vil_image_view<vxl_uint_16>(view);
       }
       else // vxl_byte
@@ -480,8 +479,8 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
     }
     delete [] (char *) void_im;
 
-    vcl_cerr<< vcl_endl<<"!!! DICOM BIGENDIAN DEBUG>>> " <<"------------ vil_dicom_image::get_copy_view - LEAVE ------------"<<vcl_endl<<vcl_endl;
-    
+    vcl_cerr<< "\n!!! DICOM BIGENDIAN DEBUG>>>\t------------ vil_dicom_image::get_copy_view - LEAVE ------------\n\n";
+
     return new vil_image_view<float>(view);
   }
 }
@@ -494,7 +493,7 @@ bool vil_dicom_image::put_view(const vil_image_view_base& view,
 
   if (!view_fits(view, x0, y0))
   {
-    vcl_cerr << "ERROR: " << __FILE__ << ":\n view does not fit\n";
+    vcl_cerr << "ERROR: " << __FILE__ << ": view does not fit\n";
     return false;
   }
   return false;

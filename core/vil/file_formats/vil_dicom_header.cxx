@@ -22,7 +22,7 @@ image_type_(VIL_DICOM_HEADER_DITUNKNOWN)
 {
   // Work out the endianism of this architecture
   endian_ = calculateEndian();
-  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<"The system endian is calculated as "<<int(endian_)<<vcl_endl;
+  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tThe system endian is calculated as "<<int(endian_)<<vcl_endl;
 }
 
 //================================================================
@@ -47,21 +47,21 @@ bool vil_dicom_header_format::isDicomFormat(vil_stream &fs)
 
 vil_dicom_header_info vil_dicom_header_format::readHeader(vil_stream &fs)
 {
-    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<"--------------- Am now starting vil_dicom_header_format::readHeader------------"<<vcl_endl;
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t--------------- Am now starting vil_dicom_header_format::readHeader------------\n";
     vil_dicom_header_type dtype;
 
   // Clear the current header
   clearInfo();
 
   dtype = determineFileType(fs);
-  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<"\t File Type determined as "<<int(dtype)<<vcl_endl;
+  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tFile Type determined as "<<int(dtype)<<vcl_endl;
   // Check if the file is dicom first
   if (dtype != VIL_DICOM_HEADER_DTUNKNOWN)
   {
     last_read_.file_type_ = dtype;
     last_read_.sys_endian_ = systemEndian();
 
-      vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<"\t last_read file type=" <<int(last_read_.file_type_)<<vcl_endl;
+      vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tlast_read file type=" <<int(last_read_.file_type_)<<vcl_endl;
     if (dtype == VIL_DICOM_HEADER_DTPART10)
     {
       file_endian_ = determineMetaInfo(fs);
@@ -71,22 +71,18 @@ vil_dicom_header_info vil_dicom_header_format::readHeader(vil_stream &fs)
     last_read_.image_type_ = imageType();
 
     readHeaderElements(fs);
-    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<"After header read the image format is: "<<
-        "\tallocated_bits_= "<<last_read_.allocated_bits_<<
-        "\tstored_bit_= "<<last_read_.stored_bits_<<
-        "\thigh_bit_= "<<last_read_.high_bit_<<
-        "\tpix_rep_= "<<last_read_.pix_rep_<<vcl_endl;
-    
- 
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tAfter header read the image format is:"
+            <<"\tallocated_bits_= "<<last_read_.allocated_bits_
+            <<"\tstored_bit_= "<<last_read_.stored_bits_
+            <<"\thigh_bit_= "<<last_read_.high_bit_
+            <<"\tpix_rep_= "<<last_read_.pix_rep_<<vcl_endl;
+
     info_valid_ = true;
   } // End of if (dtype != VIL_DICOM_HEADER_DTUNKNOWN)
-  else
-  {
-    // It's not a dicom file, so can't read
-    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << "Unknown file type - not a DICOM file...\n"
-             << "File header not read\n";
-  } // End of else
-  vcl_cerr<<vcl_endl<<"!!! DICOM BIGENDIAN DEBUG>>> "<<"--------------- vil_dicom_header_format::readHeader - FINISH ------------"<<vcl_endl<<vcl_endl;
+  else // It's not a dicom file, so can't read
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tUnknown file type - not a DICOM file...\n"
+            <<"!!! DICOM BIGENDIAN DEBUG>>>\tFile header not read\n";
+  vcl_cerr<<"\n!!! DICOM BIGENDIAN DEBUG>>>\t--------------- vil_dicom_header_format::readHeader - FINISH ------------\n\n";
 
   return last_read_;
 }
@@ -191,8 +187,8 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
           fs.read(&data_block_size, sizeof(vxl_uint_32));
           data_block_size = intSwap(data_block_size);
           if (data_block_size > 0x1000000) {
-            vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << __FILE__ ": " << __LINE__ << " : WARNING: data_block_size="
-                     << data_block_size << " is most probably too large\n";
+            vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t" << __FILE__ << ": " << __LINE__ << " : WARNING:\n"
+                    <<"!!! DICOM BIGENDIAN DEBUG>>>\tdata_block_size=" << data_block_size << " is most probably too large\n";
             break;
           }
 
@@ -214,8 +210,8 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
             fs.read(&data_block_size, sizeof(vxl_uint_32));
             data_block_size = intSwap(data_block_size);
             if (data_block_size > 0x1000000) {
-              vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << __FILE__ ": " << __LINE__ << " : WARNING: data_block_size="
-                       << data_block_size << " is most probably too large\n";
+              vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t" << __FILE__ << ": " << __LINE__ << " : WARNING:\n"
+                      <<"!!! DICOM BIGENDIAN DEBUG>>>\tdata_block_size=" << data_block_size << " is most probably too large\n";
               break;
             }
 
@@ -278,7 +274,7 @@ void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
   vxl_uint_16 group, element;  // The groups and elements read from the header part of the dicom file
   vxl_uint_32 data_block_size; // The size of the information held for this group/element pair
 
-  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<vcl_endl<<"-------------------- vil_dicom_header_format::readHeaderElements - START ---------"<<vcl_endl;
+  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t-------------------- vil_dicom_header_format::readHeaderElements - START ---------\n";
   // Read the first group/element pair
   fs.read(&group, sizeof(vxl_uint_16));
   fs.read(&element, sizeof(vxl_uint_16));
@@ -295,8 +291,8 @@ void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
       break;
     data_block_size = intSwap(data_block_size);
     if (data_block_size > 0x1000000) {
-      vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << __FILE__ ": " << __LINE__ << " : WARNING: data_block_size="
-               << data_block_size << " is most probably too large\n";
+      vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t" << __FILE__ << ": " << __LINE__ << " : WARNING:\n"
+              <<"!!! DICOM BIGENDIAN DEBUG>>>\tdata_block_size=" << data_block_size << " is most probably too large\n";
       break;
     }
     convertValueRepresentation(data_block_size, fs);
@@ -350,11 +346,11 @@ void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
     return;
   data_block_size = intSwap(data_block_size);
   if (data_block_size > 0x1000000)
-    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << __FILE__ ": " << __LINE__ << " : WARNING from readHeaderElements: data_block_size="
-             << data_block_size << " is most probably too large\n";
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t" << __FILE__ << ": " << __LINE__ << " : WARNING from readHeaderElements:\n"
+            <<"!!! DICOM BIGENDIAN DEBUG>>>\tdata_block_size=" << data_block_size << " is most probably too large\n";
   else
     convertValueRepresentation(data_block_size, fs);
-  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<vcl_endl<<"-------------------- vil_dicom_header_format::readHeaderElements - END ---------"<<vcl_endl<<vcl_endl;
+  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t-------------------- vil_dicom_header_format::readHeaderElements - END ---------\n";
 }
 
 //================================================================
@@ -538,8 +534,8 @@ void vil_dicom_header_format::readImageElements(short element,
                                                 int dblock_size,
                                                 vil_stream &fs)
 {
-    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<vcl_endl<<"+++++++ vil_dicom_header_format::readImageElements - START +++++++++"<<vcl_endl;
-    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<"image element = "<<element<<vcl_endl;
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t+++++++ vil_dicom_header_format::readImageElements - START +++++++++\n"
+            <<"!!! DICOM BIGENDIAN DEBUG>>>\timage element = "<<element<<vcl_endl;
 
     // Pointer to any data read
   char *data_p = 0;
@@ -593,7 +589,7 @@ void vil_dicom_header_format::readImageElements(short element,
   } // End of switch
 
   delete[] data_p;
-  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<vcl_endl<<"+++++++ vil_dicom_header_format::readImageElements - END +++++++++"<<vcl_endl<<vcl_endl;
+  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t+++++++ vil_dicom_header_format::readImageElements - END +++++++++\n\n";
 }
 
 //================================================================
@@ -895,7 +891,7 @@ vil_dicom_header_endian vil_dicom_header_format::calculateEndian(void)
 
 vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &fs)
 {
-    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<" +++++++++ vil_dicom_header_format::determineMetaInfo - START ++++++++"<<vcl_endl;
+  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t+++++++++ vil_dicom_header_format::determineMetaInfo - START ++++++++\n";
   vil_dicom_header_endian ret_end = VIL_DICOM_HEADER_DELITTLEENDIAN; // Assume little if none found
   //vil_dicom_header_endian ret_end = VIL_DICOM_HEADER_DEBIGENDIAN;
 
@@ -923,14 +919,15 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
       break;
     data_block_size = intSwap(data_block_size);
     if (data_block_size > 0x1000000) {
-      vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << __FILE__ ": " << __LINE__ << " : WARNING: data_block_size="
-               << data_block_size << " is most probably too large\n";
+      vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t" << __FILE__ << ": " << __LINE__ << " : WARNING:\n"
+              <<"!!! DICOM BIGENDIAN DEBUG>>>\tdata_block_size=" << data_block_size << " is most probably too large\n";
       break;
     }
-    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<vcl_endl<<"Have read another DICOM meta group element - group= "<<group<<"  \t- about to convertValueRepresentation"<<vcl_endl;
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tHave read another DICOM meta group element - group= "<<group
+            <<"\t- about to convertValueRepresentation\n";
 
     convertValueRepresentation(data_block_size,fs);
-    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<"  Done convertValueRepresentation"<<vcl_endl;
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tDone convertValueRepresentation\n";
 
     if (group == VIL_DICOM_HEADER_METAFILEGROUP &&
         element == VIL_DICOM_HEADER_MFTRANSFERSYNTAX)
@@ -939,7 +936,8 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
       char * tfx_type = new char[data_block_size+1]; // Ensure room for 0
       if (tfx_type)
       {
-          vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<"Now about to read transfer syntax block - read block size ="<<data_block_size<<vcl_endl;
+          vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tNow about to read transfer syntax block - read block size ="
+                  <<data_block_size<<vcl_endl;
         fs.read(tfx_type, data_block_size);
         tfx_type[data_block_size]=0;
 
@@ -1022,7 +1020,8 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
           // RLE encapsulated
           image_type_ = VIL_DICOM_HEADER_DITRLE;
         }
-        vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<"read transfer syntax block - endian for file= "<<ret_end<<"\t image type= "<<image_type_<<vcl_endl;
+        vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tread transfer syntax block - endian for file= "<<ret_end
+                <<"\timage type= "<<image_type_<<vcl_endl;
 
       } // End of if (tfx_type)
     } // End of if (group...)
@@ -1036,7 +1035,7 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
     else
     {
         // Ignore the data that's there
-        vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<"Ignoring this element data block"<<vcl_endl;
+        vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tIgnoring this element data block\n";
         fs.seek(data_block_size + fs.tell());
     }
 
@@ -1049,8 +1048,8 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
 
   // Reset the pointer before the last read group
   fs.seek(ret_pos);
-  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<" +++++++++ vil_dicom_header_format::determineMetaInfo - FINISH ++++++++"<<vcl_endl;
-    
+  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t+++++++++ vil_dicom_header_format::determineMetaInfo - FINISH ++++++++\n";
+
   return ret_end;
 }
 
