@@ -1,6 +1,5 @@
 #ifndef bdgl_curve_tracker_h_
 #define bdgl_curve_tracker_h_
-
 //-----------------------------------------------------------------------------
 //:
 // \file
@@ -8,7 +7,7 @@
 // \brief tracking of extracted vdgl_edgel_chains on sequences
 //
 // \verbatim
-// Initial version February 12, 2003
+//  Initial version February 12, 2003
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -153,7 +152,5 @@ class bdgl_tracking_feature
 		vcl_vector<vdgl_digital_curve_sptr> parent_;
 	//	bdgl_curve_description desc;
 };
-
-
 
 #endif
