@@ -68,6 +68,8 @@ $saw_functional_h    = 0; # <functional>
 $saw_utility_h       = 0; # <utility>
 $saw_vector_h        = 0; # <vector>
 $saw_list_h          = 0; # <list>
+$saw_deque_h         = 0; # <deque>
+$saw_queue_h         = 0; # <queue>
 $saw_map_h           = 0; # <map>
 $saw_set_h           = 0; # <set>
 $saw_string_h        = 0; # <string>
@@ -78,6 +80,8 @@ $saw_less      = 0; # less<>
 $saw_pair      = 0; # pair<>
 $saw_vector    = 0; # vector<>
 $saw_list      = 0; # list<>
+$saw_deque     = 0; # deque<>
+$saw_queue     = 0; # queue<>
 $saw_map       = 0; # saw map<> or multimap<>
 $saw_set       = 0; # set<> or multiset<>
 $saw_string    = 0; # string
@@ -125,122 +129,122 @@ sub process_headers {
     $_ = $lines[$ii];
     
     #---------------------------------------- old <vcl/vcl_blah> -> new <vcl_blah>
-    s/include\s+<vcl\/(.*)>/include <$1>/;
+    s/include\s+<vcl\/([^>]*vcl_[^>]*)>/include <$1>/;
     
     #---------------------------------------- Config-IUE -> vcl
     if ($vcl) {
       #-------------------- begin
       
       # standard C headers <blah.h>
-      s/include\s+<assert\.h>/include <vcl_cassert.h>/;
-      s/include\s+<iso646\.h>/include <vcl_ciso646.h>/;
-      s/include\s+<setjmp\.h>/include <vcl_csetjmp.h>/;
-      s/include\s+<stdio\.h>/include <vcl_cstdio.h>/;
-      s/include\s+<time\.h>/include <vcl_ctime.h>/;
-      s/include\s+<ctype\.h>/include <vcl_cctype.h>/;
-      s/include\s+<limits\.h>/include <vcl_climits.h>/;
-      s/include\s+<signal\.h>/include <vcl_csignal.h>/;
-      s/include\s+<stdlib\.h>/include <vcl_cstdlib.h>/;
-      s/include\s+<wchar\.h>/include <vcl_cwchar.h>/;
-      s/include\s+<errno\.h>/include <vcl_cerrno.h>/;
-      s/include\s+<locale\.h>/include <vcl_clocale.h>/;
-      s/include\s+<stdarg\.h>/include <vcl_cstdarg.h>/;
-      s/include\s+<string\.h>/include <vcl_cstring.h>/;
-      s/include\s+<wctype\.h>/include <vcl_cwctype.h>/;
-      s/include\s+<float\.h>/include <vcl_cfloat.h>/;
-      s/include\s+<math\.h>/include <vcl_cmath.h>/;
-      s/include\s+<stddef\.h>/include <vcl_cstddef.h>/;
+      s/include\s*<assert\.h>/include <vcl_cassert.h>/;
+      s/include\s*<iso646\.h>/include <vcl_ciso646.h>/;
+      s/include\s*<setjmp\.h>/include <vcl_csetjmp.h>/;
+      s/include\s*<stdio\.h>/include <vcl_cstdio.h>/;
+      s/include\s*<time\.h>/include <vcl_ctime.h>/;
+      s/include\s*<ctype\.h>/include <vcl_cctype.h>/;
+      s/include\s*<limits\.h>/include <vcl_climits.h>/;
+      s/include\s*<signal\.h>/include <vcl_csignal.h>/;
+      s/include\s*<stdlib\.h>/include <vcl_cstdlib.h>/;
+      s/include\s*<wchar\.h>/include <vcl_cwchar.h>/;
+      s/include\s*<errno\.h>/include <vcl_cerrno.h>/;
+      s/include\s*<locale\.h>/include <vcl_clocale.h>/;
+      s/include\s*<stdarg\.h>/include <vcl_cstdarg.h>/;
+      s/include\s*<string\.h>/include <vcl_cstring.h>/;
+      s/include\s*<wctype\.h>/include <vcl_cwctype.h>/;
+      s/include\s*<float\.h>/include <vcl_cfloat.h>/;
+      s/include\s*<math\.h>/include <vcl_cmath.h>/;
+      s/include\s*<stddef\.h>/include <vcl_cstddef.h>/;
       
       # standard C headers <cblah>
-      s/include\s+<cassert>/include <vcl_cassert.h>/;
-      s/include\s+<ciso646>/include <vcl_ciso646.h>/;
-      s/include\s+<csetjmp>/include <vcl_csetjmp.h>/;
-      s/include\s+<cstdio>/include <vcl_cstdio.h>/;
-      s/include\s+<ctime>/include <vcl_ctime.h>/;
-      s/include\s+<cctype>/include <vcl_cctype.h>/;
-      s/include\s+<climits>/include <vcl_climits.h>/;
-      s/include\s+<csignal>/include <vcl_csignal.h>/;
-      s/include\s+<cstdlib>/include <vcl_cstdlib.h>/;
-      s/include\s+<cwchar>/include <vcl_cwchar.h>/;
-      s/include\s+<cerrno>/include <vcl_cerrno.h>/;
-      s/include\s+<clocale>/include <vcl_clocale.h>/;
-      s/include\s+<cstdarg>/include <vcl_cstdarg.h>/;
-      s/include\s+<cstring>/include <vcl_cstring.h>/;
-      s/include\s+<cwctype>/include <vcl_cwctype.h>/;
-      s/include\s+<cfloat>/include <vcl_cfloat.h>/;
-      s/include\s+<cmath>/include <vcl_cmath.h>/;
-      s/include\s+<cstddef>/include <vcl_cstddef.h>/;
+      s/include\s*<cassert>/include <vcl_cassert.h>/;
+      s/include\s*<ciso646>/include <vcl_ciso646.h>/;
+      s/include\s*<csetjmp>/include <vcl_csetjmp.h>/;
+      s/include\s*<cstdio>/include <vcl_cstdio.h>/;
+      s/include\s*<ctime>/include <vcl_ctime.h>/;
+      s/include\s*<cctype>/include <vcl_cctype.h>/;
+      s/include\s*<climits>/include <vcl_climits.h>/;
+      s/include\s*<csignal>/include <vcl_csignal.h>/;
+      s/include\s*<cstdlib>/include <vcl_cstdlib.h>/;
+      s/include\s*<cwchar>/include <vcl_cwchar.h>/;
+      s/include\s*<cerrno>/include <vcl_cerrno.h>/;
+      s/include\s*<clocale>/include <vcl_clocale.h>/;
+      s/include\s*<cstdarg>/include <vcl_cstdarg.h>/;
+      s/include\s*<cstring>/include <vcl_cstring.h>/;
+      s/include\s*<cwctype>/include <vcl_cwctype.h>/;
+      s/include\s*<cfloat>/include <vcl_cfloat.h>/;
+      s/include\s*<cmath>/include <vcl_cmath.h>/;
+      s/include\s*<cstddef>/include <vcl_cstddef.h>/;
       
       # standard C++ headers <blah.h>
-      s/include\s+<algorithm\.h>/include <vcl_algorithm.h>/;
-      s/include\s+<iomanip\.h>/include <vcl_iomanip.h>/;
-      s/include\s+<list\.h>/include <vcl_list.h>/;
-      s/include\s+<iostream\.h>/include <vcl_iostream.h>/;
-      s/include\s+<streambuf\.h>/include <vcl_streambuf.h>/;
-      s/include\s+<bitset\.h>/include <vcl_bitset.h>/;
-      s/include\s+<ios\.h>/include <vcl_ios.h>/;
-      s/include\s+<locale\.h>/include <vcl_locale.h>/;
-      s/include\s+<queue\.h>/include <vcl_queue.h>/;
-      s/include\s+<string\.h>/include <vcl_string.h>/;
-      s/include\s+<complex\.h>/include <vcl_complex.h>/;
-      s/include\s+<iosfwd\.h>/include <vcl_iosfwd.h>/;
-      s/include\s+<map\.h>/include <vcl_map.h>/;
-      s/include\s+<set\.h>/include <vcl_set.h>/;
-      s/include\s+<typeinfo\.h>/include <vcl_typeinfo.h>/;
-      s/include\s+<deque\.h>/include <vcl_deque.h>/;
-      s/include\s+<iostream\.h>/include <vcl_iostream.h>/;
-      s/include\s+<memory\.h>/include <vcl_memory.h>/;
-      s/include\s+<sstream\.h>/include <vcl_sstream.h>/;
-      s/include\s+<utility\.h>/include <vcl_utility.h>/;
-      s/include\s+<exception\.h>/include <vcl_exception.h>/;
-      s/include\s+<istream\.h>/include <vcl_istream.h>/;
-      s/include\s+<new\.h>/include <vcl_new.h>/;
-      s/include\s+<stack\.h>/include <vcl_stack.h>/;
-      s/include\s+<valarray\.h>/include <vcl_valarray.h>/;
-      s/include\s+<fstream\.h>/include <vcl_fstream.h>/;
-      s/include\s+<iterator\.h>/include <vcl_iterator.h>/;
-      s/include\s+<numeric\.h>/include <vcl_numeric.h>/;
-      s/include\s+<stdexcept\.h>/include <vcl_stdexcept.h>/;
-      s/include\s+<vector\.h>/include <vcl_vector.h>/;
-      s/include\s+<functional\.h>/include <vcl_functional.h>/;
-      #s/include\s+<limits\.h>/include <vcl_limits.h>/;
-      s/include\s+<strstream\.h>/include <vcl_strstream.h>/;
-      s/include\s+<strstrea\.h>/include <vcl_strstream.h>/;  # win32
+      s/include\s*<algorithm\.h>/include <vcl_algorithm.h>/;
+      s/include\s*<iomanip\.h>/include <vcl_iomanip.h>/;
+      s/include\s*<list\.h>/include <vcl_list.h>/;
+      s/include\s*<iostream\.h>/include <vcl_iostream.h>/;
+      s/include\s*<streambuf\.h>/include <vcl_streambuf.h>/;
+      s/include\s*<bitset\.h>/include <vcl_bitset.h>/;
+      s/include\s*<ios\.h>/include <vcl_ios.h>/;
+      s/include\s*<locale\.h>/include <vcl_locale.h>/;
+      s/include\s*<queue\.h>/include <vcl_queue.h>/;
+      #s/include\s*<string\.h>/include <vcl_string.h>/;
+      s/include\s*<complex\.h>/include <vcl_complex.h>/;
+      s/include\s*<iosfwd\.h>/include <vcl_iosfwd.h>/;
+      s/include\s*<map\.h>/include <vcl_map.h>/;
+      s/include\s*<set\.h>/include <vcl_set.h>/;
+      s/include\s*<typeinfo\.h>/include <vcl_typeinfo.h>/;
+      s/include\s*<deque\.h>/include <vcl_deque.h>/;
+      s/include\s*<iostream\.h>/include <vcl_iostream.h>/;
+      s/include\s*<memory\.h>/include <vcl_memory.h>/;
+      s/include\s*<sstream\.h>/include <vcl_sstream.h>/;
+      s/include\s*<utility\.h>/include <vcl_utility.h>/;
+      s/include\s*<exception\.h>/include <vcl_exception.h>/;
+      s/include\s*<istream\.h>/include <vcl_istream.h>/;
+      s/include\s*<new\.h>/include <vcl_new.h>/;
+      s/include\s*<stack\.h>/include <vcl_stack.h>/;
+      s/include\s*<valarray\.h>/include <vcl_valarray.h>/;
+      s/include\s*<fstream\.h>/include <vcl_fstream.h>/;
+      s/include\s*<iterator\.h>/include <vcl_iterator.h>/;
+      s/include\s*<numeric\.h>/include <vcl_numeric.h>/;
+      s/include\s*<stdexcept\.h>/include <vcl_stdexcept.h>/;
+      s/include\s*<vector\.h>/include <vcl_vector.h>/;
+      s/include\s*<functional\.h>/include <vcl_functional.h>/;
+      #s/include\s*<limits\.h>/include <vcl_limits.h>/;
+      s/include\s*<strstream\.h>/include <vcl_strstream.h>/;
+      s/include\s*<strstrea\.h>/include <vcl_strstream.h>/;  # win32
       
       # standard C++ headers <blah>
-      s/include\s+<algorithm>/include <vcl_algorithm.h>/;
-      s/include\s+<iomanip>/include <vcl_iomanip.h>/;
-      s/include\s+<list>/include <vcl_list.h>/;
-      s/include\s+<iostream>/include <vcl_iostream.h>/;
-      s/include\s+<streambuf>/include <vcl_streambuf.h>/;
-      s/include\s+<bitset>/include <vcl_bitset.h>/;
-      s/include\s+<ios>/include <vcl_ios.h>/;
-      s/include\s+<locale>/include <vcl_locale.h>/;
-      s/include\s+<queue>/include <vcl_queue.h>/;
-      s/include\s+<string>/include <vcl_string.h>/;
-      s/include\s+<complex>/include <vcl_complex.h>/;
-      s/include\s+<iosfwd>/include <vcl_iosfwd.h>/;
-      s/include\s+<map>/include <vcl_map.h>/;
-      s/include\s+<set>/include <vcl_set.h>/;
-      s/include\s+<typeinfo>/include <vcl_typeinfo.h>/;
-      s/include\s+<deque>/include <vcl_deque.h>/;
-      s/include\s+<iostream>/include <vcl_iostream.h>/;
-      s/include\s+<memory>/include <vcl_memory.h>/;
-      s/include\s+<sstream>/include <vcl_sstream.h>/;
-      s/include\s+<utility>/include <vcl_utility.h>/;
-      s/include\s+<exception>/include <vcl_exception.h>/;
-      s/include\s+<istream>/include <vcl_istream.h>/;
-      s/include\s+<new>/include <vcl_new.h>/;
-      s/include\s+<stack>/include <vcl_stack.h>/;
-      s/include\s+<valarray>/include <vcl_valarray.h>/;
-      s/include\s+<fstream>/include <vcl_fstream.h>/;
-      s/include\s+<iterator>/include <vcl_iterator.h>/;
-      s/include\s+<numeric>/include <vcl_numeric.h>/;
-      s/include\s+<stdexcept>/include <vcl_stdexcept.h>/;
-      s/include\s+<vector>/include <vcl_vector.h>/;
-      s/include\s+<functional>/include <vcl_functional.h>/;
-      s/include\s+<limits>/include <vcl_limits.h>/;
-      s/include\s+<strstream>/include <vcl_strstream.h>/;
+      s/include\s*<algorithm>/include <vcl_algorithm.h>/;
+      s/include\s*<iomanip>/include <vcl_iomanip.h>/;
+      s/include\s*<list>/include <vcl_list.h>/;
+      s/include\s*<iostream>/include <vcl_iostream.h>/;
+      s/include\s*<streambuf>/include <vcl_streambuf.h>/;
+      s/include\s*<bitset>/include <vcl_bitset.h>/;
+      s/include\s*<ios>/include <vcl_ios.h>/;
+      s/include\s*<locale>/include <vcl_locale.h>/;
+      s/include\s*<queue>/include <vcl_queue.h>/;
+      s/include\s*<string>/include <vcl_string.h>/;
+      s/include\s*<complex>/include <vcl_complex.h>/;
+      s/include\s*<iosfwd>/include <vcl_iosfwd.h>/;
+      s/include\s*<map>/include <vcl_map.h>/;
+      s/include\s*<set>/include <vcl_set.h>/;
+      s/include\s*<typeinfo>/include <vcl_typeinfo.h>/;
+      s/include\s*<deque>/include <vcl_deque.h>/;
+      s/include\s*<iostream>/include <vcl_iostream.h>/;
+      s/include\s*<memory>/include <vcl_memory.h>/;
+      s/include\s*<sstream>/include <vcl_sstream.h>/;
+      s/include\s*<utility>/include <vcl_utility.h>/;
+      s/include\s*<exception>/include <vcl_exception.h>/;
+      s/include\s*<istream>/include <vcl_istream.h>/;
+      s/include\s*<new>/include <vcl_new.h>/;
+      s/include\s*<stack>/include <vcl_stack.h>/;
+      s/include\s*<valarray>/include <vcl_valarray.h>/;
+      s/include\s*<fstream>/include <vcl_fstream.h>/;
+      s/include\s*<iterator>/include <vcl_iterator.h>/;
+      s/include\s*<numeric>/include <vcl_numeric.h>/;
+      s/include\s*<stdexcept>/include <vcl_stdexcept.h>/;
+      s/include\s*<vector>/include <vcl_vector.h>/;
+      s/include\s*<functional>/include <vcl_functional.h>/;
+      s/include\s*<limits>/include <vcl_limits.h>/;
+      s/include\s*<strstream>/include <vcl_strstream.h>/;
       
       #-------------------- end
       
@@ -255,24 +259,28 @@ sub process_headers {
       $saw_stlfwd = 1 if s!^\#include.*<IUE_stlfwd\.h>!//$&!;
       
       # non-standard STL headers which can be fixed.
-      s/include <algo>/include <vcl_algorithm.h>/;
-      s/include <algo.h>/include <vcl_algorithm.h>/;
-      s/include <algobase>/include <vcl_algorithm.h>/;
-      s/include <algobase.h>/include <vcl_algorithm.h>/;
-      s/include <function>/include <vcl_functional.h>/;
-      s/include <function\.h>/include <vcl_functional.h>/;
-      s/include <multimap>/include <vcl_map.h>/;
-      s/include <multimap\.h>/include <vcl_map.h>/;
-      s/include <multiset>/include <vcl_set.h>/;
-      s/include <multiset\.h>/include <vcl_set.h>/;
-      s/include <pair>/include <vcl_utility.h>/;
-      s/include <pair\.h>/include <vcl_utility.h>/;
-      s/include <alloc>/include <vcl_memory.h>/;
-      s/include <alloc\.h>/include <vcl_memory.h>/;
+      s/include\s*<algo>/include <vcl_algorithm.h>/;
+      s/include\s*<algo.h>/include <vcl_algorithm.h>/;
+      s/include\s*<algobase>/include <vcl_algorithm.h>/;
+      s/include\s*<algobase.h>/include <vcl_algorithm.h>/;
+      s/include\s*<function>/include <vcl_functional.h>\n\#include <vcl_rel_ops.h>/;
+      s/include\s*<function\.h>/include <vcl_functional.h>\n\#include <vcl_rel_ops.h>/;
+      s/include\s*<multimap>/include <vcl_map.h>/;
+      s/include\s*<multimap\.h>/include <vcl_map.h>/;
+      #s/include\s*<hash_map\.h>/include <vcl_map.h>/;
+      s/include\s*<multiset>/include <vcl_set.h>/;
+      s/include\s*<multiset\.h>/include <vcl_set.h>/;
+      #s/include\s*<hash_set\.h>/include <vcl_set.h>/;
+      s/include\s*<pair>/include <vcl_utility.h>/;
+      s/include\s*<pair\.h>/include <vcl_utility.h>/;
+      s/include\s*<alloc>/include <vcl_memory.h>/;
+      s/include\s*<alloc\.h>/include <vcl_memory.h>/;
       # non-standard STL headers which are to be commented out.
       s/^(\s*\#\s*include <defalloc.h>)/\/\/$1/;
       s/^(\s*\#\s*include <tree>)/\/\/$1/;
       s/^(\s*\#\s*include <tree.h>)/\/\/$1/;
+      # `global' stl algorithms to be replaced with their vcl_ conterpart.
+      s/(\s)::((sort|find|swap_ranges|copy|fill|find_if)\s*\()/$1vcl_$2/;
 
       # std::cout, std::cerr and std::endl
       s/\b(std::)?cout\b/vcl_cout/g;
@@ -286,12 +294,14 @@ sub process_headers {
       $saw_utility_h    = 1 if m/include <vcl_utility\.h>/;
       $saw_vector_h     = 1 if m/include <vcl_vector\.h>/;
       $saw_list_h       = 1 if m/include <vcl_list\.h>/;
+      $saw_deque_h      = 1 if m/include <vcl_deque\.h>/;
+      $saw_queue_h      = 1 if m/include <vcl_queue\.h>/;
       $saw_string_h     = 1 if m/include <vcl_string\.h>/;
       $saw_memory_h     = 1 if m/include <vcl_memory\.h>/;
 
       # warn about hash_map and hash_set
       if ( m/include\s+\<hash_(map|set)\.h\>/ ) {
-	print STDERR "[WARNING: saw hash_map/hash_set]";
+	print STDERR "[WARNING: saw hash_map/hash_set]\n";
       }
       
       # instantiation macros
@@ -509,7 +519,7 @@ sub scan_for_hints {
 	  $saw_string = 1;
 	  $string_is_typename = 1;
 	  $string_is_identifier = 0;
-	  #print STDERR "['string' being used as typename]";
+	  #print STDERR "['string' being used as typename]\n";
 	}
       }
       
@@ -542,7 +552,7 @@ sub scan_for_hints {
            0) {
          $string_is_typename = 0;
          $string_is_identifier = 1;
-         print STDERR "[WARNING: 'string' being used as identifier]";
+         print STDERR "[WARNING: 'string' being used as identifier]\n";
        }
       }
     }
@@ -560,41 +570,52 @@ sub process_lines {
     #---------------------------------------- Config-IUE -> vcl
     if ($vcl) {
       # IUE_compiler.h -> vcl_compiler.h
-      s/IUE_GCC/VCL_GCC/g;
-      s/IUE_EGCS/VCL_EGCS/g;
-      s/IUE_SGI_CC/VCL_SGI_CC/g;
-      s/IUE_SUNPRO_CC/VCL_SUNPRO_CC/g;
-      s/IUE_WIN32/VCL_WIN32/g;
-      s/IUE_VC50/VCL_VC50/g;
-      s/IUE_VC60/VCL_VC60/g;
+      s/\bIUE_GCC/VCL_GCC/g;
+      s/\bIUE_EGCS\b/VCL_EGCS/g;
+      s/\bIUE_SGI_CC/VCL_SGI_CC/g;
+      s/\bIUE_SUNPRO/VCL_SUNPRO/g;
+      s/\bIUE_WIN32\b/VCL_WIN32/g;
+      s/\bIUE_VC50\b/VCL_VC50/g;
+      s/\bIUE_VC60\b/VCL_VC60/g;
       
       # defines from IUE_compiler :
       s/\bIUE_COMMA\b/VCL_COMMA/g;
-      s/IUE_FOR_SCOPE_HACK/VCL_FOR_SCOPE_HACK/g;
-      s/IUE_HAS_MEMBER_TEMPLATES/VCL_HAS_MEMBER_TEMPLATES/g;
-      s/IUE_CAN_DO_PARTIAL_SPECIALIZATION/VCL_CAN_DO_PARTIAL_SPECIALIZATION/g;
-      s/IUE_HAS_DYNAMIC_CAST/VCL_HAS_DYNAMIC_CAST/g;
-      s/IUE_STATIC_CONST_INIT_FLOAT/VCL_STATIC_CONST_INIT_FLOAT/g;
-      s/IUE_STATIC_CONST_INIT_INT/VCL_STATIC_CONST_INIT_INT/g;
-      s/IUE_IMPLEMENT_STATIC_CONSTS/VCL_IMPLEMENT_STATIC_CONSTS/g;
-      s/IUE_INSTANTIATE_INLINE/VCL_INSTANTIATE_INLINE/g;
-      s/IUE_DO_NOT_INSTANTIATE/VCL_DO_NOT_INSTANTIATE/g;
-      s/IUE_UNINSTANTIATE_SPECIALIZATION/VCL_UNINSTANTIATE_SPECIALIZATION/g;
-      s/IUE_UNINSTANTIATE_UNSEEN_SPECIALIZATION/VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION/g;
-      s/IUE_INSTANTIATE_STATIC_TEMPLATE_MEMBER/VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER/g;
-      s/IUE_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER/VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER/g;
-      s/IUE_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD/VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD/g;
-      s/IUE_DECLARE_SPECIALIZATION/VCL_DECLARE_SPECIALIZATION/g;
-      s/IUE_STL_NULL_TMPL_ARGS/VCL_NULL_TMPL_ARGS/g;
-      s/IUE_DEFAULT_VALUE/VCL_DEFAULT_VALUE/g;
-      s/IUE_DFL_TYPE_PARAM_STLDECL/VCL_DFL_TYPE_PARAM_STLDECL/g;
-      s/IUE_DFL_TMPL_PARAM_STLDECL/VCL_DFL_TMPL_PARAM_STLDECL/g;
-      s/IUE_DFL_TMPL_ARG/VCL_DFL_TMPL_ARG/g;
-      s/IUE_SUNPRO_ALLOCATOR_HACK/VCL_SUNPRO_ALLOCATOR_HACK/g;
+      s/\bIUE_FOR_SCOPE_HACK\b/VCL_FOR_SCOPE_HACK/g;
+      s/\bIUE_HAS_MEMBER_TEMPLATES\b/VCL_HAS_MEMBER_TEMPLATES/g;
+      s/\bIUE_NO_TEMPLATE_SYMBOLS\b/!VCL_HAS_TEMPLATE_SYMBOLS/g;
+      s/\bIUE_CAN_DO_PARTIAL_SPECIALIZATION\b/VCL_CAN_DO_PARTIAL_SPECIALIZATION/g;
+      s/\bIUE_HAS_DYNAMIC_CAST\b/VCL_HAS_DYNAMIC_CAST/g;
+      s/\bIUE_STATIC_CONST_INIT_FLOAT\b/VCL_STATIC_CONST_INIT_FLOAT/g;
+      s/\bIUE_STATIC_CONST_INIT_INT\b/VCL_STATIC_CONST_INIT_INT/g;
+      s/\bIUE_IMPLEMENT_STATIC_CONSTS\b/\!VCL_CAN_STATIC_CONST_INIT_INT/g;
+      s/\bdefined\(IUE_NO_STATIC_DATA_MEMBERS\)/VCL_NO_STATIC_DATA_MEMBERS/g;
+      s/(\#\s*if)def\s+IUE_NO_STATIC_DATA_MEMBERS\b/$1 VCL_NO_STATIC_DATA_MEMBERS/g;
+      s/(\#\s*if)ndef\s+IUE_NO_STATIC_DATA_MEMBERS\b/$1 !VCL_NO_STATIC_DATA_MEMBERS/g;
+      s/\bIUE_INSTANTIATE_INLINE\b/VCL_INSTANTIATE_INLINE/g;
+      s/\bIUE_INSTANTIATE_NONINLINE\s*\((.*)\)/template $1/;
+      s/\bIUE_DO_NOT_INSTANTIATE\b/VCL_DO_NOT_INSTANTIATE/g;
+      s/\bIUE_UNINSTANTIATE_SPECIALIZATION\b/VCL_UNINSTANTIATE_SPECIALIZATION/g;
+      s/\bIUE_UNINSTANTIATE_UNSEEN_SPECIALIZATION\b/VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION/g;
+      s/\bIUE_INSTANTIATE_STATIC_TEMPLATE_MEMBER\b/VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER/g;
+      s/\bIUE_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER\b/VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER/g;
+      s/\bIUE_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD\b/VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD/g;
+      s/\bIUE_DECLARE_SPECIALIZATION\s*\(.*\)\s*;\b/VCL_DEFINE_SPECIALIZATION/g;
+      s/\bIUE_DECLARE_SPECIALIZATION\b/VCL_DECLARE_SPECIALIZATION/g;
+      s/\bIUE_STL_NULL_TMPL_ARGS\b/VCL_NULL_TMPL_ARGS/g;
+      s/\bIUE_DEFAULT_VALUE\b/VCL_DEFAULT_VALUE/g;
+      s/\bIUE_DFL_TYPE_PARAM_STLDECL\b/VCL_DFL_TYPE_PARAM_STLDECL/g;
+      s/\bIUE_DFL_TMPL_PARAM_STLDECL\b/VCL_DFL_TMPL_PARAM_STLDECL/g;
+      s/\bIUE_DFL_TMPL_ARG\b/VCL_DFL_TMPL_ARG/g;
+      s/\bIUE_SUNPRO_ALLOCATOR_HACK\b/VCL_SUNPRO_ALLOCATOR_HACK/g;
       
       s/\bIUE_STRING_IS_TYPEDEF\b/VCL_STRING_IS_TYPEDEF/g;
-      s/IUE_USE_NATIVE_STL/VCL_USE_NATIVE_STL/g;
-      s/IUE_USE_NATIVE_COMPLEX/VCL_USE_NATIVE_COMPLEX/g;
+      s/\bdefined\(IUE_USE_NATIVE_STL\)/VCL_USE_NATIVE_STL/g;
+      s/(\#\s*if)def\s+IUE_USE_NATIVE_STL\b/$1 VCL_USE_NATIVE_STL/g;
+      s/(\#\s*if)ndef\s+IUE_USE_NATIVE_STL\b/$1 !VCL_USE_NATIVE_STL/g;
+      s/\bdefined\(IUE_USE_NATIVE_COMPLEX\)/VCL_USE_NATIVE_COMPLEX/g;
+      s/(\#\s*if)def\s+IUE_USE_NATIVE_COMPLEX\b/$1 VCL_USE_NATIVE_COMPLEX/g;
+      s/(\#\s*if)ndef\s+IUE_USE_NATIVE_COMPLEX\b/$1 !VCL_USE_NATIVE_COMPLEX/g;
+      s/\bIUE_STL_USE_ABBREVS\b/__STL_USE_ABBREVS/g;
       
       # classes and functions
       s/\breverse_iterator\b/vcl_reverse_iterator/g;
@@ -605,6 +626,10 @@ sub process_lines {
       # stl
       s/\bvector\s*</vcl_vector</g;
       s/\blist\s*</vcl_list</g;
+      s/\bstack\s*</vcl_stack</g;
+      s/\bdeque\s*</vcl_deque</g;
+      s/\bqueue\s*</vcl_queue</g;
+      s/\bpriority_queue\s*</vcl_priority_queue</g;
       s/\bmap\s*</vcl_map</g;
       s/\bmultimap\s*</vcl_multimap</g;
       s/\bless\s*</vcl_less</g;
@@ -648,6 +673,9 @@ sub process_lines {
       
       $saw_vector    = 1 if m/\bvcl_vector\s*</;
       $saw_list      = 1 if m/\bvcl_list\s*</;
+      $saw_deque     = 1 if m/\bvcl_deque\s*</;
+      $saw_queue     = 1 if m/\bvcl_queue\s*</;
+      $saw_queue     = 1 if m/\bvcl_priority_queue\s*</;
       $saw_map       = 1 if m/\bvcl_map\s*</;
       $saw_map       = 1 if m/\bvcl_multimap\s*</;
       $saw_less      = 1 if m/\bvcl_less\s*</;
@@ -751,8 +779,8 @@ sub process_lines {
       s/vnl_math::cuberoot/vnl_math_cuberoot/g;
       s/vnl_math::cbrt/vnl_math_cuberoot/g;
       s/vnl_math::hypot/vnl_math_hypot/g;
-      s/\bfloat_complex\b/vnl_float_complex/g;
-      s/\bdouble_complex\b/vnl_double_complex/g;
+      s/\bfloat_complex\b/vnl_complex<float>/g;
+      s/\bdouble_complex\b/vnl_complex<double>/g;
       s/\bChiSquared::ChiSquaredCumulative\b/vnl_chi_squared_cumulative/g;
       s/\bSparseSymmetricEigensystem\b/vnl_sparse_symmetric_eigensystem/g;
       s/\bComplexEigensystem\b/vnl_complex_eigensystem/g;
@@ -893,8 +921,8 @@ sub process_lines {
     
     #---------------------------------------- misc
     if ($lint) {
-      print STDERR "use of 'NULL'\n" if m/\bNULL\b/;
-      print STDERR "use of 'nil'\n" if m/\bnil\b/;
+      #print STDERR "use of 'NULL'\n" if m/\bNULL\b/;
+      #print STDERR "use of 'nil'\n" if m/\bnil\b/;
       print STDERR "use of VCL_DECLARE_SPECIALIZATION\n" if m/\bVCL_DECLARE_SPECIALIZATION\b/;
     }
     
@@ -914,11 +942,13 @@ sub output_lines {
     if (!$seen_include && $lines[$ii] =~ m/^\s*\#\s*include/) {
       # if IUE_stlfwd.h was used, take appropriate action
       if ($saw_stlfwd) {
-	print "#include <vcl_utility.h>\t//vxl_filter\n" if ($saw_pair   && !$saw_utility_h);
-	print "#include <vcl_vector.h>\t//vxl_filter\n" if ($saw_vector && !$saw_vector_h);
-	print "#include <vcl_list.h>\t//vxl_filter\n" if ($saw_list   && !$saw_list_h);
-	print "#include <vcl_map.h>\t//vxl_filter\n" if ($saw_map    && !$saw_map_h);
-	print "#include <vcl_set.h>\t//vxl_filter\n" if ($saw_set    && !$saw_set_h);
+	print "#include <vcl_utility.h>\t//vxl_filter\n" if($saw_pair   && !$saw_utility_h);
+	print "#include <vcl_vector.h>\t//vxl_filter\n"	if ($saw_vector && !$saw_vector_h);
+	print "#include <vcl_list.h>\t//vxl_filter\n"	if ($saw_list   && !$saw_list_h);
+	print "#include <vcl_deque.h>\t//vxl_filter\n"	if ($saw_deque  && !$saw_deque_h);
+	print "#include <vcl_queue.h>\t//vxl_filter\n"	if ($saw_queue  && !$saw_queue_h);
+	print "#include <vcl_map.h>\t//vxl_filter\n"	if ($saw_map    && !$saw_map_h);
+	print "#include <vcl_set.h>\t//vxl_filter\n"	if ($saw_set    && !$saw_set_h);
       }
       
       # we need <memory> with allocator<> :

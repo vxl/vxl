@@ -21,7 +21,9 @@ exec perl -w -x $0 ${1+"$@"}
 
 # where we are
 my $IUELOCALROOT=$ENV{'VXLROOT'}; 
+$IUELOCALROOT =~ s+[/\\]vxl[/\\]?$++ if $IUELOCALROOT;
 $IUELOCALROOT = $ENV{'IUELOCALROOT'} unless $IUELOCALROOT;
+$IUELOCALROOT = $ENV{'IUEROOT'} unless $IUELOCALROOT;
 $IUELOCALROOT || die "Cannot find iuelocalroot";
 
 #
@@ -74,7 +76,7 @@ sub files_differ {
   die "no such file : '$b'\n" unless -f $b;
   die "no $diff\n" unless -f $diff;
 
-  system "$diff $a $b 2>&1 > /dev/null";
+  system "$diff -b $a $b 2>&1 > /dev/null";
   $error = $?;
 
   return $error ? 1 : 0;
