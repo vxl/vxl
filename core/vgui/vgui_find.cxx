@@ -31,3 +31,27 @@ vgui_tableau_sptr vgui_find_by_type_name(vgui_tableau_sptr const& start, vcl_str
   }
   return 0; // not found.
 }
+
+
+vgui_tableau_sptr
+vgui_find_by_name(vgui_tableau_sptr const& start, vcl_string const &name, bool direction_down)
+{
+  if (!start)
+    return 0;
+
+  if (start->name() == name)
+    return start;
+
+  vcl_vector<vgui_tableau_sptr> tt;
+  if (direction_down)
+    start->get_children(&tt); // get all children.
+  else
+    start->get_parents (&tt); // get all parents.
+
+  for (unsigned int i=0; i<tt.size(); ++i) {
+    vgui_tableau_sptr t = vgui_find_by_name(tt[i], name, direction_down);
+    if (t)
+      return t; // found one.
+  }
+  return 0; // not found.
+}
