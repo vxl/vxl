@@ -314,16 +314,72 @@ static void test_line_3d()
 
 static void test_plane_3d()
 {
+  // Define a horizontal plane in z=10 using 3 points
+  vgl_plane_3d<double> pl1(vgl_point_3d<double>( 0,  0, 10),
+                           vgl_point_3d<double>(10,  0, 10),
+                           vgl_point_3d<double>( 0, 10, 10));
+  vcl_cout << "plane1: " << pl1 << vcl_endl;
+
+  // Define the same plane using the point+normal representation
+  vgl_plane_3d<double> pl2(vgl_vector_3d<double>(0, 0, 1),
+                           vgl_point_3d<double>(0, 0, 10));
+  vcl_cout << "plane2: " << pl2 << vcl_endl;
+
+  // Define the same plane using other points
+  vgl_plane_3d<double> pl3(vgl_point_3d<double>( 0,  0, 10),
+                           vgl_point_3d<double>(10,  0, 10),
+                           vgl_point_3d<double>(10, 10, 10));
+  vcl_cout << "plane3: " << pl3 << vcl_endl;
+
+  // Are these planes considered equal?
+  TEST("plane1==plane2", pl1, pl2);
+  TEST("plane2==plane3", pl2, pl3);
+  TEST("plane3==plane1", pl3, pl1);
+
+  // Are certain points on all 3 planes?
+  vgl_point_3d<double> pt1( 0,  0, 10); // yes
+  vgl_point_3d<double> pt2( 1,  2, 10); // yes
+  vgl_point_3d<double> pt3(-3,  7, 10); // yes
+  vgl_point_3d<double> pt4( 5,  5,  5); // no
+
+  double eqn11 = pl1.a()*pt1.x() + pl1.b()*pt1.y() + pl1.c()*pt1.z() + pl1.d();
+  TEST("pt1 on pl1", eqn11==0, true);
+  double eqn12 = pl1.a()*pt2.x() + pl1.b()*pt2.y() + pl1.c()*pt2.z() + pl1.d();
+  TEST("pt2 on pl1", eqn12==0, true);
+  double eqn13 = pl1.a()*pt3.x() + pl1.b()*pt3.y() + pl1.c()*pt3.z() + pl1.d();
+  TEST("pt3 on pl1", eqn13==0, true);
+  double eqn14 = pl1.a()*pt4.x() + pl1.b()*pt4.y() + pl1.c()*pt4.z() + pl1.d();
+  TEST("pt4 NOT on pl1", eqn14==0, false);
+
+  double eqn21 = pl2.a()*pt1.x() + pl2.b()*pt1.y() + pl2.c()*pt1.z() + pl2.d();
+  TEST("pt1 on pl2", eqn21==0, true);
+  double eqn22 = pl2.a()*pt2.x() + pl2.b()*pt2.y() + pl2.c()*pt2.z() + pl2.d();
+  TEST("pt2 on pl2", eqn22==0, true);
+  double eqn23 = pl2.a()*pt3.x() + pl2.b()*pt3.y() + pl2.c()*pt3.z() + pl2.d();
+  TEST("pt3 on pl2", eqn23==0, true);
+  double eqn24 = pl2.a()*pt4.x() + pl2.b()*pt4.y() + pl2.c()*pt4.z() + pl2.d();
+  TEST("pt4 NOT on pl2", eqn24==0, false);
+
+  double eqn31 = pl3.a()*pt1.x() + pl3.b()*pt1.y() + pl3.c()*pt1.z() + pl3.d();
+  TEST("pt1 on pl3", eqn31==0, true);
+  double eqn32 = pl3.a()*pt2.x() + pl3.b()*pt2.y() + pl3.c()*pt2.z() + pl3.d();
+  TEST("pt2 on pl3", eqn32==0, true);
+  double eqn33 = pl3.a()*pt3.x() + pl3.b()*pt3.y() + pl3.c()*pt3.z() + pl3.d();
+  TEST("pt3 on pl3", eqn33==0, true);
+  double eqn34 = pl3.a()*pt4.x() + pl3.b()*pt4.y() + pl3.c()*pt4.z() + pl3.d();
+  TEST("pt4 NOT on pl3", eqn34==0, false);
+
+  // And some other planes:
   double d[] = {0,3,4,1};
-  vgl_plane_3d<double> pl1(3,7,-1,1), pl2(d), pl3(-1,-8,7,1);
-  vcl_cout << pl3 << vcl_endl;
+  vgl_plane_3d<double> plane1(3,7,-1,1), plane2(d), plane3(-1,-8,7,1);
+  vcl_cout << plane3 << vcl_endl;
 
-  TEST("inequality", (pl1 != pl3), true);
+  TEST("inequality", (plane1 != plane3), true);
 
-  pl3.set(3,7,-1,1);
-  TEST("equality", (pl1 == pl3), true);
+  plane3.set(3,7,-1,1);
+  TEST("equality", (plane1 == plane3), true);
 
-  vgl_vector_3d<double> d1 = pl2.normal();
+  vgl_vector_3d<double> d1 = plane2.normal();
   vgl_vector_3d<double> d2 = vgl_vector_3d<double>(0,0.6,0.8);
   vcl_cout << d1 << vcl_endl;
   TEST_NEAR("normal", (d1-d2).sqr_length(), 0.0, 1e-12);
@@ -334,8 +390,8 @@ static void test_plane_3d()
   vgl_plane_3d<double> pp(1,1,1,-1);
   TEST("join", pl, pp);
 
-  TEST_NEAR("vgl_distance(plane,point)", vgl_distance(pl2,p2), 0.8, 1e-9);
-  TEST("vgl_distance(point,plane)", vgl_distance(p3,pl2), 1);
+  TEST_NEAR("vgl_distance(plane,point)", vgl_distance(plane2,p2), 0.8, 1e-9);
+  TEST("vgl_distance(point,plane)", vgl_distance(p3,plane2), 1);
 }
 
 static void test_box_2d()
