@@ -278,7 +278,11 @@ projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& points)
 //-------------------------------------------------------------------
 template <class T>
 bool vgl_h_matrix_2d<T>::
-projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines)
+projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines
+#ifdef VCL_VC60
+    , int dummy // parameter to help useless compiler disambiguate different functions
+#endif
+)
 {
   if (lines.size()!=4)
     return false;
