@@ -1,45 +1,6 @@
 // This is gel/vifa/vifa_incr_var.cxx
 
-#include <vifa/vifa_incr_var.h>
-
-vifa_incr_var::
-vifa_incr_var(void) :
-  data_mean_(0.0),
-  data_var_(0.0),
-  n_(0)
-{
-  // No further explicit initialization needed
-}
-
-double vifa_incr_var::
-get_mean(void) const
-{
-  return data_mean_;
-}
-
-double vifa_incr_var::
-get_var(void) const
-{
-  return data_var_;
-}
-
-int vifa_incr_var::
-get_n(void) const
-{
-  return n_;
-}
-
-double vifa_incr_var::
-get_min(void) const
-{
-  return min_max_.min()[0];
-}
-
-double vifa_incr_var::
-get_max(void) const
-{
-  return min_max_.max()[0];
-}
+#include "vifa_incr_var.h"
 
 void vifa_incr_var::
 add_sample(double  data_point,

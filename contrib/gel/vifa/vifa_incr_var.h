@@ -46,22 +46,22 @@ class vifa_incr_var : public vul_timestamp, public vbl_ref_count
 
  public:
   //: Default constructor
-  vifa_incr_var(void);
+  vifa_incr_var() : data_mean_(0.0), data_var_(0.0), n_(0) {}
 
   //: Fetch the current mean
-  double  get_mean(void) const;
+  double  get_mean() const { return data_mean_; }
 
   //: Fetch the current variance
-  double  get_var(void) const;
+  double  get_var() const { return data_var_; }
 
   //: Fetch the number of samples received so far
-  int    get_n(void) const;
+  int     get_n() const { return n_; }
 
   //: Fetch the minimum-value sample of the data set
-  double  get_min(void) const;
+  double  get_min() const { return min_max_.min()[0]; }
 
   //: Fetch the maximum-value sample of the data set
-  double  get_max(void) const;
+  double  get_max() const { return min_max_.max()[0]; }
 
   //: Update the mean & variance measures with a new sample
   // This method is a convenience front-end for add_sample() (see below)
@@ -74,9 +74,7 @@ class vifa_incr_var : public vul_timestamp, public vbl_ref_count
                   );
 };
 
-typedef vbl_smart_ptr<vifa_incr_var>  vifa_incr_var_sptr;
-
-typedef vcl_vector<vifa_incr_var_sptr>  incr_var_list;
-
+typedef vbl_smart_ptr<vifa_incr_var>   vifa_incr_var_sptr;
+typedef vcl_vector<vifa_incr_var_sptr> incr_var_list;
 
 #endif  // _VIFA_INCR_VAR_H_
