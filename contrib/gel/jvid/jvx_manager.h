@@ -9,7 +9,7 @@
 // .SECTION Modifications:
 //   J.L. Mundy Apr 14, 2002    Initial version.
 //--------------------------------------------------------------------------------
-#include <vector>
+#include <vcl_vector.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_easy2D.h>
 #include <vidl/vidl_movie.h>
