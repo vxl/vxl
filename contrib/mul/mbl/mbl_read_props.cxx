@@ -67,8 +67,22 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
 
   mbl_read_props_type props;
 
-  if (label.empty())
-    afs >> vcl_ws >> label;
+  if (label.empty()) {
+    afs >> vcl_ws;
+
+    // Several tests with Borland 5.5.1 fail because this next
+    // statement 'afs >> label;' moves past the '\n' char when the
+    // next section of the stream looks like "//comment\n a: a".  With
+    // Borland 5.5.1, after this statement, afs.peek() returns 32
+    // (space), while other compilers it returns 10 ('\n').  Seems
+    // like a Borland standard library problem.  -Fred Wheeler
+
+    afs >> label;
+
+    // vcl_cout << "debug label " << label << vcl_endl;
+    // vcl_cout << "debug peek() " << afs.peek() << vcl_endl;
+
+  }
 
   vcl_string last_label( label );
 
