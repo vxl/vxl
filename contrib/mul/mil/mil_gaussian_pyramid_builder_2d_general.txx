@@ -213,10 +213,10 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
                 + filt_edge1_ * worka_row_top_4[x]
                 + filt_edge2_ * worka_row_top_3[x], (T)0);
 
-    workb_row_next_top[x] = l_round( filt_pen_edge2_ * worka_row_top_5[x]
-                  + filt_pen_edge1_ * worka_row_top_4[x]
-                  + filt_pen_edge0_ * worka_row_top_3[x]
-                  + filt_pen_edge_n1_ * worka_row_top_2[x], (T)0);
+    workb_row_next_top[x] = l_round( filt_pen_edge2_ * worka_row_top_2[x]
+                  + filt_pen_edge1_ * worka_row_top_3[x]
+                  + filt_pen_edge0_ * worka_row_top_4[x]
+                  + filt_pen_edge_n1_ * worka_row_top_5[x], (T)0);
 
     workb_row_next_bottom[x] = l_round(  filt_pen_edge2_ * worka_row_bottom_4[x]
                     + filt_pen_edge1_ * worka_row_bottom_3[x]
