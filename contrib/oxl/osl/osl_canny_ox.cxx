@@ -82,15 +82,15 @@ void osl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<osl_edge*> *
 
   if (verbose)
     vcl_cerr << "Doing Canny on image region "
-         << xsize_ << " by " << ysize_ << vcl_endl
-         << "Sigma               = " << sigma_ << vcl_endl
-         << "Gaussian tail       = " << gauss_tail_ << vcl_endl
-         << "Max kernel size     = " << max_width_OX_ << vcl_endl
-         << "Upper threshold     = " << high_ << vcl_endl
-         << "Lower threshold     = " << low_ << vcl_endl
-         << "Min edgel intensity = " << edge_min_OX_ << vcl_endl
-         << "Min edge length     = " << min_length_OX_ << vcl_endl
-         << "Image border size   = " << border_size_OX_ << vcl_endl << vcl_endl;
+             << xsize_ << " by " << ysize_ << vcl_endl
+             << "Sigma               = " << sigma_ << vcl_endl
+             << "Gaussian tail       = " << gauss_tail_ << vcl_endl
+             << "Max kernel size     = " << max_width_OX_ << vcl_endl
+             << "Upper threshold     = " << high_ << vcl_endl
+             << "Lower threshold     = " << low_ << vcl_endl
+             << "Min edgel intensity = " << edge_min_OX_ << vcl_endl
+             << "Min edge length     = " << min_length_OX_ << vcl_endl
+             << "Image border size   = " << border_size_OX_ << vcl_endl << vcl_endl;
 
   // Allocate internal bitmaps ..
   smooth_ = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)0);
@@ -268,14 +268,14 @@ int osl_canny_ox::HysteresisOX(osl_edgel_chain *&edgels_NMS,
 
 
   // Perform Hysteresis part of canny.
-  float low  = (32.0/vcl_log(2.0)) * vcl_log(low_/100+1.0);     // compute lower threshold
-  float high = (32.0/vcl_log(2.0)) * vcl_log(high_/100+1.0);    // compute upper threshold
+  double low  = (32.0/vcl_log(2.0)) * vcl_log(low_/100+1.0);     // compute lower threshold
+  double high = (32.0/vcl_log(2.0)) * vcl_log(high_/100+1.0);    // compute upper threshold
   //formerly "Do_hysteresisOX(edgels_NMS,links,status,low,high);"
   for (unsigned int i=0; i<n_edgels_NMS; ++i)
     if (!status[i] && edgels_NMS->GetGrad(i)>high) {
       status[i]=1;
       for (osl_LINK *lptr=links[i]; lptr; lptr=lptr->nextl)
-        Initial_followOX(lptr->to, i, edgels_NMS, &links[0], status, low); //vector<>::iterator
+        Initial_followOX(lptr->to, i, edgels_NMS, &links[0], status, (float)low); //vector<>::iterator
     }
 
 
@@ -626,9 +626,9 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges) {
           *(pg++) = val;
         }
         else {
-          *(px++) = tmpx + xstart_;
-          *(py++) = tmpy + ystart_;
-          *(pg++) = 0.0; // Mark the gradient as zero at a junction
+          *(px++) = float(tmpx + xstart_);
+          *(py++) = float(tmpy + ystart_);
+          *(pg++) = 0.0f; // Mark the gradient as zero at a junction
         }
         *(pt++) = theta_[tmpx][tmpy];
       }
@@ -639,7 +639,7 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges) {
       if ( (dc->size()==2) &&
            (dc->GetX(0)==dc->GetX(1)) &&
            (dc->GetY(0)==dc->GetY(1)) ) {
-        //vcl_cerr << "trivial edgechain" << vcl_endl;
+        //vcl_cerr << "trivial edgechain\n";
         delete dc;
         dc = 0;
         continue;
@@ -693,7 +693,7 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges) {
         //dc->SetStart(dc->GetX(0), dc->GetY(0));
         //dc->SetEnd(dc->GetX(dc->size()-1),dc->GetY(dc->size()-1));
 
-        //vcl_cerr << __FILE__ ": push" << vcl_endl;
+        //vcl_cerr << __FILE__ ": push\n";
         edges->push_front(new osl_edge(*dc, v1, v2));
         delete dc;
       }
@@ -1016,7 +1016,7 @@ void osl_canny_ox::Find_junction_clustersOX() {
   // Construct the list of junction cluster centres
   typedef vcl_list<int>::iterator it;
   for (it i=xvertices.begin(), j=yvertices.begin(); i!=xvertices.end() && j!=yvertices.end(); ++i, ++j) {
-    osl_Vertex *v = new osl_Vertex( (*i) + xstart_, (*j) + ystart_);
+    osl_Vertex *v = new osl_Vertex( float((*i)+xstart_), float((*j)+ystart_));
     vlist_->push_front(v);
     junction_[*i][*j] = 2;
   }

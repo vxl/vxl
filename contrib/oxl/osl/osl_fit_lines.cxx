@@ -13,7 +13,7 @@
 
 #define warn_if_empty(e) \
 if (true && e->size()==0) \
-  vcl_cerr << __FILE__ ":" << __LINE__ << "edge \'" #e "' has zero length" << vcl_endl;
+  vcl_cerr << __FILE__ ":" << __LINE__ << "edge \'" #e "' has zero length\n";
 
 #define WARN if (false) { } else (vcl_cerr << __FILE__ ":" << __LINE__ << " ")
 
@@ -266,8 +266,8 @@ void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
 // between this and SquareIncrementalFit is very small.
 void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_edge *edge)
 {
-  //vcl_cerr << "MeanIncrementalFit()" << vcl_endl;
-  float new_cost, new_est_cost;
+  //vcl_cerr << "MeanIncrementalFit()\n";
+  double new_cost, new_est_cost;
   // Get the digital curve
   osl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();
   assert(dc!=0);
@@ -434,7 +434,7 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_
 void osl_fit_lines::SquareIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_edge *edge)
 {
 #if 0
-  vcl_cerr << "SquareIncrementalFit()" << vcl_endl;
+  vcl_cerr << "SquareIncrementalFit()\n";
 #endif
   // Get the digital curve
   osl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();

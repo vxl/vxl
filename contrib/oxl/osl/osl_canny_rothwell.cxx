@@ -81,13 +81,13 @@ void osl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<osl_edge*
 
   if (verbose)
     vcl_cerr << "Doing Canny on image region "
-         << xsize_ << " by " << ysize_ << vcl_endl
-         << "Gaussian tail   = " << gauss_tail_ << vcl_endl
-         << "Sigma           = " << sigma_ << vcl_endl
-         << "Kernel size     = " << k_size_ << vcl_endl
-         << "Upper threshold = " << high_ << vcl_endl
-         << "Lower threshold = " << low_ << vcl_endl
-         << "Smoothing range = " << range_ << vcl_endl << vcl_endl;
+             << xsize_ << " by " << ysize_ << vcl_endl
+             << "Gaussian tail   = " << gauss_tail_ << vcl_endl
+             << "Sigma           = " << sigma_ << vcl_endl
+             << "Kernel size     = " << k_size_ << vcl_endl
+             << "Upper threshold = " << high_ << vcl_endl
+             << "Lower threshold = " << low_ << vcl_endl
+             << "Smoothing range = " << range_ << vcl_endl << vcl_endl;
 
   smooth_   = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)0);
   dx_       = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)0);
@@ -284,7 +284,7 @@ void osl_canny_rothwell::Non_maximal_supression() {
           thick_[x+1][y+1] = g1[y+1]; // Should this be interpolated height --
           dx[y+1] = newx + 1.5f;   // = g1[y+1] + frac*(h2-h1)/4 ?
           dy[y+1] = newy + 1.5f;
-          theta_[x+1][y+1] = theta;
+          theta_[x+1][y+1] = float(theta);
         }
       }
     }
@@ -326,8 +326,8 @@ void osl_canny_rothwell::Initial_hysteresis() {
         py = edgels->GetY();
         pg = edgels->GetGrad();
         while ( xcoords.size() ) {
-          *(px++) = xcoords.front(); xcoords.pop_front();
-          *(py++) = ycoords.front(); ycoords.pop_front();
+          *(px++) = float(xcoords.front()); xcoords.pop_front();
+          *(py++) = float(ycoords.front()); ycoords.pop_front();
           *(pg++) = grad.front(); grad.pop_front();
         }
         edges.push_front(edgels);
@@ -435,9 +435,9 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges) {
             *(pg++) = val;
           }
           else {
-            *(px++) = tmpx + xstart_;
-            *(py++) = tmpy + ystart_;
-            *(pg++) = 0.0;   // Mark the gradient as zero at a junction
+            *(px++) = float(tmpx + xstart_);
+            *(py++) = float(tmpy + ystart_);
+            *(pg++) = 0.0f;   // Mark the gradient as zero at a junction
           }
           if (theta_[tmpx][tmpy] == DUMMYTHETA) {
             const float k = 180.0f/float(vnl_math::pi);
@@ -921,8 +921,8 @@ void osl_canny_rothwell::Find_junction_clusters()
        ++i, ++j) {
     //for (xvertices.reset(),yvertices.reset(); xvertices.next(),yvertices.next(); )  {
 
-    osl_Vertex *v = new osl_Vertex( (*i)/*xvertices.value()*/+xstart_,
-                                    (*j)/*yvertices.value()*/+ystart_);
+    osl_Vertex *v = new osl_Vertex( float((*i)/*xvertices.value()*/+xstart_),
+                                    float((*j)/*yvertices.value()*/+ystart_));
     vlist_->push_front(v);
     junction_[(*i)/*xvertices.value()*/][(*j)/*yvertices.value()*/] = 2;
   }

@@ -7,7 +7,6 @@
 // \author fsm@robots.ox.ac.uk
 
 #include "vgl_clip.h"
-#include <vcl_cmath.h> // for vcl_abs(double) and vcl_sqrt()
 #include <vcl_cstdlib.h> // for vcl_malloc() and vcl_free()
 #include <vcl_cstdio.h> // for vcl_fprintf()
 #include <vcl_algorithm.h> // for swap
@@ -124,7 +123,8 @@ namespace {
     for ( int c=0; c < gpc_poly.num_contours; ++c ) {
       vgl_poly.new_sheet();
       for ( int p=0; p < gpc_poly.contour[c].num_vertices; ++p ) {
-        vgl_poly.push_back( gpc_poly.contour[c].vertex[p].x, gpc_poly.contour[c].vertex[p].y );
+        vgl_poly.push_back( float(gpc_poly.contour[c].vertex[p].x),
+                            float(gpc_poly.contour[c].vertex[p].y) );
       }
     }
   }

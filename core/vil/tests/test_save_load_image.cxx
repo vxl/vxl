@@ -76,7 +76,7 @@ bool test_image_equal(char const* type_name,
     return false;
   }
 
-  TEST ("Number of planes", planes == planes2, true);
+  TEST ("Number of planes", planes, planes2);
   if (planes != planes2)
   {
     vcl_cout << type_name << ": nplanes are " << planes2
@@ -393,7 +393,7 @@ vil2_image_view<float> CreateTestfloatImage(int wd, int ht)
   vil2_image_view<float> image(wd, ht);
   for (int i = 0; i < wd; i++)
     for (int j = 0; j < ht; j++)
-      image(i,j) = 0.01 * ((i-wd/2)*(j-ht/2)/16);
+      image(i,j) = 0.01f * ((i-wd/2)*(j-ht/2)/16);
   return image;
 }
 
@@ -436,12 +436,12 @@ MAIN( test_save_load_image )
     vcl_string out_path("test_save_load_jpeg.jpg");
     TEST("Saving JPEG",vil2_save(small_greyscale_image, out_path.c_str()),true);
 
-	vil2_image_view<vxl_byte> new_image = vil2_load(out_path.c_str());
-	TEST("JPEG Size correct",new_image.ni()==ni && new_image.nj()==nj, true);
-	double sum2 = 0;
-	for (unsigned i=0;i<ni;++i)
-	{ double d=double(small_greyscale_image(i,17))-new_image(i,17); sum2+=d*d; }
-	TEST("Loaded image close to original",sum2<2*ni,true);
+    vil2_image_view<vxl_byte> new_image = vil2_load(out_path.c_str());
+    TEST("JPEG Size correct",new_image.ni()==ni && new_image.nj()==nj, true);
+    double sum2 = 0;
+    for (unsigned i=0;i<ni;++i)
+    { double d=double(small_greyscale_image(i,17))-new_image(i,17); sum2+=d*d; }
+    TEST_NEAR("Loaded image close to original",sum2,0.0,2*ni);
   }
 #endif
 

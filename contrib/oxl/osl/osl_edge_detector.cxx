@@ -107,11 +107,11 @@ void osl_edge_detector::detect_edges(vil_image const &image,
 
   if (verbose_)
     vcl_cerr << "Doing canny on image region "
-         << xsize_ << " by " << ysize_ << vcl_endl
-         << "Gaussian tail = " << gauss_tail_ << vcl_endl
-         << "Sigma         = " << sigma_ << vcl_endl
-         << "Kernel size   = " << k_size_ << vcl_endl
-         << "Threshold     = " << low_ << vcl_endl;
+             << xsize_ << " by " << ysize_ << vcl_endl
+             << "Gaussian tail = " << gauss_tail_ << vcl_endl
+             << "Sigma         = " << sigma_ << vcl_endl
+             << "Kernel size   = " << k_size_ << vcl_endl
+             << "Threshold     = " << low_ << vcl_endl;
 
   if (verbose_)
     vcl_cerr << "setting convolution kernel and zeroing images\n";
@@ -689,9 +689,9 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
           //       ghist_->UpCount(val); //Added edgel histogram here -May 1997
         }
         else {
-          *(px++) = tmpx + xstart_;
-          *(py++) = tmpy + ystart_;
-          *(pg++) = 0.0;   // Mark the gradient as zero at a junction
+          *(px++) = float(tmpx + xstart_);
+          *(py++) = float(tmpy + ystart_);
+          *(pg++) = 0.0f;   // Mark the gradient as zero at a junction
         }
         if (theta_[tmpx][tmpy] == DUMMYTHETA) {
           const float k = 180.0f/float(vnl_math::pi);
@@ -923,8 +923,8 @@ void osl_edge_detector::Find_junction_clusters() {
        ++i, ++j) {
     //for (xvertices.reset(),yvertices.reset(); xvertices.next(),yvertices.next(); )  {
 
-    osl_Vertex *v = new osl_Vertex( (*i)/*xvertices.value()*/+xstart_,
-                                    (*j)/*yvertices.value()*/+ystart_);
+    osl_Vertex *v = new osl_Vertex( float((*i)/*xvertices.value()*/+xstart_),
+                                    float((*j)/*yvertices.value()*/+ystart_));
     vlist_->push_front(v);
     junction_[(*i)/*xvertices.value()*/][(*j)/*yvertices.value()*/] = 2;
   }

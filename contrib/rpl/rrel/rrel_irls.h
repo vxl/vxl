@@ -164,7 +164,7 @@ protected:
   //  Parameters
   int max_iterations_;
   bool test_converge_;
-  float convergence_tol_;
+  double convergence_tol_;
   bool est_scale_during_;
   bool use_weighted_scale_;
   int iterations_for_scale_est_;

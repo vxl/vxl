@@ -101,7 +101,7 @@ double HomgLineSeg2D::picking_distance(const HomgPoint2D& hp) const
 
   dir *= dot_product(diff, dir);
 
-  float projection_length = dir.magnitude();
+  double projection_length = dir.magnitude();
   diff = diff - dir;
   double d = diff.magnitude();
 

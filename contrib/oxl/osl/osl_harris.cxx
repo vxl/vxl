@@ -6,7 +6,6 @@
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-#include <vcl_iomanip.h>
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
@@ -134,7 +133,7 @@ void osl_harris::compute_cornerness()
   }
 
   if (params_.verbose)
-    vcl_cerr << "  done" << vcl_endl;
+    vcl_cerr << "  done\n";
 }
 
 void osl_harris::compute_corners()
@@ -158,8 +157,8 @@ void osl_harris::compute_corners()
       if (image_cornermax_buf[row][col] && image_cornerness_buf[row][col] > corner_min) {
         double x, y;
         if (droid::compute_subpixel_max (&image_cornerness_buf, row, col, x,y, params_.pab_emulate))
-          cc.push_back(vcl_pair<float, float>(params_.col_start_index+x,
-                                              params_.row_start_index+y));
+          cc.push_back(vcl_pair<float, float>(float(params_.col_start_index+x),
+                                              float(params_.row_start_index+y)));
       }
     }
   }
@@ -186,8 +185,8 @@ void osl_harris::do_non_adaptive(double *corner_min) {
       *corner_min = params_.relative_minimum * corner_max;
       if (params_.verbose)
         vcl_cerr << "Found " << maxima_count
-             << "... iterating with relmin = " << params_.relative_minimum
-             << vcl_endl;
+                 << "... iterating with relmin = " << params_.relative_minimum
+                 << vcl_endl;
       maxima_count = droid::find_corner_maxima (*corner_min,
                                                 &window_str,
                                                 &image_cornerness_buf,
@@ -205,11 +204,11 @@ void osl_harris::do_non_adaptive(double *corner_min) {
                                              &image_cornerness_buf,
                                              &image_cornermax_buf);
 
-    params_.relative_minimum = *corner_min / corner_max;
+    params_.relative_minimum = float(*corner_min / corner_max);
     if (params_.verbose)
       vcl_cerr << "osl_harris: Too many: " << maxima_count
-           << "... iterating with relmin = " << params_.relative_minimum
-           << vcl_endl;
+               << "... iterating with relmin = " << params_.relative_minimum
+               << vcl_endl;
   }
 }
 

@@ -20,9 +20,9 @@ int main(int argc,char **argv)
   vgui_image_tableau_new image2(argv[2]);
 
   vgui_poly_tableau_new poly;
-  //               x    y    w    h
-  poly->add(image1, 0.0, 0.0, 0.7, 0.7);
-  poly->add(image2, 0.5, 0.5, 0.5, 0.5);
+  //                 x     y     w     h
+  poly->add(image1, 0.0f, 0.0f, 0.7f, 0.7f);
+  poly->add(image2, 0.5f, 0.5f, 0.5f, 0.5f);
 
   vgui_viewer2D_tableau_new view(poly);
   vgui_shell_tableau_new shell(view);
