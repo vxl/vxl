@@ -37,7 +37,7 @@ class vgui_soview2D_ellipse;
 class vgui_soview2D_linestrip;
 class vgui_soview2D_polygon;
 
-//: Tableau to display two-dimensinal geometric objects.
+//: Tableau to display two-dimensional geometric objects.
 //
 //  Two dimensional geometric objects (see vgui_soview2D) such as lines,
 //  points, circles, etc can be added using add, or add_point, add_line,
