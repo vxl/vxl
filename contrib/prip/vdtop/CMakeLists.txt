@@ -23,12 +23,11 @@ SET(vdtop_sources
     vdtop_set_structure_from_digital_graph.h vdtop_set_structure_from_digital_graph.txx
     vdtop_well_composed_lower_leveling_kernel.h
     vil_canny_deriche_grad_filter.h
-    vil_clamp.h
 )
 
 ADD_LIBRARY(vdtop ${vdtop_sources})
 
-LINK_LIBRARIES(vdtop vbl vcl)
+LINK_LIBRARIES(vdtop vil)
 
 #IF (BUILD_TESTING)
   SUBDIRS(tests)
