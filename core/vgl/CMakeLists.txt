@@ -18,4 +18,7 @@ vgl_polygon_test
 AUX_SOURCE_DIRECTORY(Templates vgl_sources)
 
 SUBDIRS( algo )
-SUBDIRS( tests )
+
+IF( BUILD_TESTS )
+  SUBDIRS( tests )
+ENDIF( BUILD_TESTS )

@@ -11,8 +11,11 @@
 # Windows)
 #
 
+SET (HAS_OPENGL "NO")
+
 IF (WIN32)
-  SET (OPENGL_LIBRARY opengl32 CACHE)
+  LINK_LIBRARIES(opengl32 glu32)
+  SET (HAS_OPENGL "YES")
 ELSE (WIN32)
   
   FIND_PATH(OPENGL_INCLUDE_PATH GL/gl.h 
@@ -22,7 +25,6 @@ ELSE (WIN32)
   /opt/graphics/OpenGL/include 
   /usr/X11R6/include 
   )
-
 
   FIND_LIBRARY(OPENGL_LIB_PATH GL
   /usr/lib 
@@ -34,7 +36,12 @@ ELSE (WIN32)
 
   # right now we only look for -lgl maybe in future also mesa
   IF(OPENGL_INCLUDE_PATH)
-    SET (OPENGL_LIBRARY "-lGL -lGLU" CACHE)
+    IF(OPENGL_LIB_PATH)
+      LINK_LIBRARIES(GL GLU)
+      LINK_DIRECTORIES(${OPENGL_LIB_PATH})
+      INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
+      SET (HAS_OPENGL "YES")
+    ENDIF(OPENGL_LIB_PATH)
   ENDIF(OPENGL_INCLUDE_PATH)
 
 ENDIF (WIN32)
