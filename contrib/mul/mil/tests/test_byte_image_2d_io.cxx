@@ -13,8 +13,8 @@
 void test_byte_image_2d_io()
 {
   vcl_cout << "******************************" << vcl_endl;
-  vcl_cout << " Testing mil_byte_image_2d_io" << vcl_endl;
-  vcl_cout << "*******************************" << vcl_endl;
+  vcl_cout << " Testing mil_byte_image_2d_io"  << vcl_endl;
+  vcl_cout << "******************************" << vcl_endl;
 
   int nx=20;
   int ny=20;
@@ -23,7 +23,7 @@ void test_byte_image_2d_io()
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
       orig_image(x,y)=x*5+y*5;
-  
+
   //orig_image.print_all(vcl_cout);
 
 
@@ -32,13 +32,12 @@ void test_byte_image_2d_io()
   mil_byte_image_2d_io image_io;
   image_io.saveTheImage(saved_image,"./tmp.bmp","bmp");
   image_io.saveTheImage(saved_image,"./tmp.jpg","jpeg");
-  
-  
+
 
   //load the image
   image_io.loadTheImage(loaded_image,"./tmp.bmp","bmp");
   image_io.saveTheImage(loaded_image,"./tmp_loaded.bmp","bmp");
-  
+
 
   //nb have to use lossless image format ie bitmap, not JPEG!
 
@@ -46,7 +45,7 @@ void test_byte_image_2d_io()
   double diff1=0;
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
-      diff1+=vcl_fabs( saved_image(x,y)-loaded_image(x,y) );
+      diff1+=vcl_abs( saved_image(x,y)-loaded_image(x,y) );
 
 #if 0
   vcl_cout<<"saved_image= "<<vcl_endl;
