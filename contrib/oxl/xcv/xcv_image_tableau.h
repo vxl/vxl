@@ -39,9 +39,6 @@ class xcv_image_tableau : public vgui_image_tableau
   //: Return the vil1_image
   vil1_image get_image() const;
 
-  void set_image(vil1_image const &);
-  void set_image(char const *);          // <- convenience
-
   //: Width of the ROI, or if not defined then the width of the whole image.
   unsigned width() const;
   //: Height of the ROI, or if not defined then the height of the whole image.
