@@ -805,8 +805,10 @@ void vtol_cycle_processor::compute_cycles()
                  eit != edges_.end(); eit++)
               if (touched(*eit)&&used(*eit))
                 removed_edges.push_back(*eit);
-
-              removed_edges.clear();
+            for(vcl_vector<vtol_edge_2d_sptr>::iterator 
+                  eit = removed_edges.begin(); eit != removed_edges.end();
+                eit++)
+              edge_2d_erase(edges_,*eit);
 
             this->set_bridge_vars();
           }
