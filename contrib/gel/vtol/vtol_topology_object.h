@@ -132,6 +132,7 @@ public:
   // Replaces dynamic_cast<T>
   //***************************************************************************
   virtual vtol_topology_object *cast_to_topology_object(void) { return this; }
+  virtual const vtol_topology_object*cast_to_topology_object(void)const{return this;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
