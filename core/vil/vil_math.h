@@ -176,6 +176,31 @@ inline void vil2_math_mean_and_variance(sumT& mean, sumT& var, const vil2_image_
   var = sum_sq/(im.ni()*im.nj()) - mean*mean;
 }
 
+//: Truncate each pixel value so it fits into range [min_v,max_v]
+//  If value < min_v value=min_v
+//  If value > max_v value=max_v
+// \relates vil2_image_view
+template<class T>
+inline void vil2_math_truncate_range(vil2_image_view<T>& image, T min_v, T max_v)
+{
+  unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
+  vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
+  T* plane = image.top_left_ptr();
+  for (unsigned p=0;p<np;++p,plane += pstep)
+  {
+    T* row = plane;
+    for (unsigned j=0;j<nj;++j,row += jstep)
+    {
+      T* pixel = row;
+      for (unsigned i=0;i<ni;++i,pixel+=istep)
+      {
+        if (*pixel<min_v) *pixel=min_v;
+        else if (*pixel>max_v) *pixel=max_v;
+      }
+    }
+  }
+}
+
 //: Multiply values in-place in image view by scale
 // \relates vil2_image_view
 template<class T>
