@@ -1,24 +1,22 @@
-#ifndef VCSL_GEOGRAPHIC_H
-#define VCSL_GEOGRAPHIC_H
-
+#ifndef vcsl_geographic_h_
+#define vcsl_geographic_h_
 //:
 // \file
+// \brief Represent a location relative to the earth
 // \author François BERTEL
 //
 // \verbatim
-// Modifications
-// 2000/06/29 François BERTEL Creation. Adapted from IUE
-// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//  Modifications
+//   2000/06/29 François BERTEL Creation. Adapted from IUE
+//   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
+//   2004/09/17 Peter Vanroose  made spheroid() non-virtual - it just returns a member and should not be overloaded
+//   2004/09/17 Peter Vanroose  do not pass vcsl_spheroid objects; use vcsl_spheroid_sptr instead
 // \endverbatim
 
-
-#include <vcsl/vcsl_geographic_sptr.h>
-
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vcsl/vcsl_spatial.h>
+#include <vcsl/vcsl_geographic_sptr.h>
 #include <vcsl/vcsl_spheroid_sptr.h>
+
 //: Represent a location relative to the earth
 // 3D coordinate system that is intended to represent a location relative to
 // the earth, although its use is not restricted to earthbound coordinate
@@ -29,32 +27,33 @@
 class vcsl_geographic
   :public vcsl_spatial
 {
-public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
-  //: Default constructor
-  explicit vcsl_geographic(void);
+ protected:
+  // Default constructor
+  vcsl_geographic();
 
-  //: Destructor
-  virtual ~vcsl_geographic();
+ public:
+  // Destructor
+  virtual ~vcsl_geographic() {}
 
   //***************************************************************************
   // Status report
   //***************************************************************************
 
   //: Return the spheroid
-  virtual vcsl_spheroid_sptr spheroid(void) const;
+  vcsl_spheroid_sptr spheroid() const { return spheroid_; }
 
   //***************************************************************************
   // Status setting
   //***************************************************************************
 
   //: Set the spheroid
-  virtual void set_spheroid(vcsl_spheroid &new_spheroid);
+  void set_spheroid(vcsl_spheroid_sptr const& s) { spheroid_=s; }
 
-protected:
+ protected:
   //***************************************************************************
   // Implementation
   //***************************************************************************
@@ -63,4 +62,4 @@ protected:
   vcsl_spheroid_sptr spheroid_;
 };
 
-#endif // #ifndef VCSL_GEOGRAPHIC_H
+#endif // vcsl_geographic_h_
