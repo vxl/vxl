@@ -72,6 +72,8 @@ SET( vnl_sources
   vnl_numeric_limits.cxx       vnl_numeric_limits.h
   vnl_numeric_traits.cxx       vnl_numeric_traits.h
   vnl_complex_traits.cxx       vnl_complex_traits.h
+  vnl_bignum_traits.cxx        vnl_bignum_traits.h
+  vnl_rational_traits.cxx      vnl_rational_traits.h
 
   # matrix and vector specialisations
   vnl_int_matrix.cxx           vnl_int_matrix.h

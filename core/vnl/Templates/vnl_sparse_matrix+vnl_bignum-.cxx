@@ -1,4 +1,5 @@
 #include <vnl/vnl_bignum.h>
+#include <vnl/vnl_bignum_traits.h>
 #include <vnl/vnl_sparse_matrix.txx>
 
 template class vnl_sparse_matrix<vnl_bignum>;
