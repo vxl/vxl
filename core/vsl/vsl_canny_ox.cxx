@@ -346,7 +346,14 @@ void vsl_canny_ox::Add_linkOX(int edgel,
 //
 // -- Link edgels.  First try pixels at distance 1 (direct neighbours),
 // then at sqrt(2) (diagonal), then at 2 (horizontal or vertical), then
-// at sqrt(5) (chess horse).
+// at sqrt(5) (chess horse). I.e. in the following order:
+//		
+//	   4 3 4
+//	 4 2 1 2 4
+//       3 1 0 1 3
+//	 4 2 1 2 4
+//	   4 3 4  
+//
 void vsl_canny_ox::Link_edgelsOX(vcl_vector<unsigned> const &col,
 				 vcl_vector<unsigned> const &rows,
 				 vsl_LINK *links[])
