@@ -127,26 +127,35 @@ bool vnl_matlab_readhdr::type_chck(vnl_double_complex &) { return !is_single() &
 
 #define fsm_define_methods(T) \
 bool vnl_matlab_readhdr::read_data(T &v) { \
-  if (!type_chck(v)) return false; \
-  if (rows()!=1 || cols()!=1) return false; \
+  if (!type_chck(v)) { vcl_cerr << "type_check" << vcl_endl; return false; }\
+  if (rows()!=1 || cols()!=1) { vcl_cerr << "size0" << vcl_endl; return false; } \
   vnl_matlab_read_data(s, &v, 1); \
   data_read = true; return *this; \
 } \
 bool vnl_matlab_readhdr::read_data(T *p) { \
-  if (!type_chck(p[0])) return false; \
-  if (rows()!=1 && cols()!=1) return false; \
+  if (!type_chck(p[0])) { vcl_cerr << "type_check" << vcl_endl; return false; } \
+  if (rows()!=1 && cols()!=1) { vcl_cerr << "size1" << vcl_endl; return false; } \
   vnl_matlab_read_data(s, p, rows()*cols()); \
   data_read = true; return *this; \
 } \
 bool vnl_matlab_readhdr::read_data(T * const *m) { \
-  if (!type_chck(m[0][0])) return false; \
-  if (!is_rowwise()) return false; \
+  if (!type_chck(m[0][0])) { vcl_cerr << "type_check" << vcl_endl; return false; } \
   T *tmp = vnl_c_vector<T>::allocate_T(rows()*cols()); \
   /*vnl_c_vector<T >::fill(tmp, rows()*cols(), 3.14159);*/ \
   vnl_matlab_read_data(s, tmp, rows()*cols()); \
-  for (unsigned i=0; i<rows(); ++i) \
-    vnl_c_vector<T >::copy(tmp + i*cols(), m[i], cols()); \
-  delete [] tmp; \
+  int a, b; \
+  if (is_rowwise()) { \
+    a = cols(); \
+    b = 1; \
+  } \
+  else { \
+    a = 1; \
+    b = rows(); \
+  } \
+  for (int i=0; i<rows(); ++i) \
+    for (int j=0; j<cols(); ++j) \
+      m[i][j] = tmp[a*i + b*j]; \
+  vnl_c_vector<T>::deallocate(tmp, rows()*cols()); \
   data_read = true; return *this; \
 }
 fsm_define_methods(float);

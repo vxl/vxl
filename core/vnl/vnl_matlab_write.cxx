@@ -11,8 +11,9 @@
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_matlab_header.h>
 
-// Any wacky, Intel-style byte ordering must be detected here.
-#ifdef i386
+#include <vxl_config.h>
+
+#if VXL_LITTLE_ENDIAN // #ifdef i386
 # define native_BYTE_ORDER vnl_matlab_header::vnl_LITTLE_ENDIAN
 #else
 # define native_BYTE_ORDER vnl_matlab_header::vnl_BIG_ENDIAN

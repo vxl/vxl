@@ -43,10 +43,12 @@ public:
   void write(vnl_matrix<vnl_float_complex> const & M, char const* variable_name = 0);
   void write(vnl_matrix<vnl_double_complex> const & M, char const* variable_name = 0);
 
+  void write(double const * const *M, int rows, int cols, char const* variable_name = 0);
+
 protected:
   vcl_string basename_;
   int variable_int_;
-  ofstream out_;
+  vcl_fstream out_;
 
   vcl_string make_var_name(char const* variable_name);
 };
