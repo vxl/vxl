@@ -237,18 +237,19 @@ vil1_stream_url::vil1_stream_url(char const *url)
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0)
-#else
-  if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0)
-#endif
   {
     vcl_cerr << __FILE__ ": error sending HTTP request\n";
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
-#else
-    close(tcp_socket);
-#endif
     return;
   }
+#else
+  if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0)
+  {
+    vcl_cerr << __FILE__ ": error sending HTTP request\n";
+    close(tcp_socket);
+    return;
+  }
+#endif
 
   // force the data to be sent.
 #if 1

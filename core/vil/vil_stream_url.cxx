@@ -233,22 +233,23 @@ vil_stream_url::vil_stream_url(char const *url)
   vcl_sprintf(buffer, "GET /%s / HTTP/1.1\n", path.c_str());
   if (auth != "")
     vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  Basic %s\n", encode_base64(auth).c_str());
-//    vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  user  testuser:testuser\n");
+//  vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  user  testuser:testuser\n");
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0)
-#else
-  if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0)
-#endif
   {
     vcl_cerr << __FILE__ ": error sending HTTP request\n";
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
-#else
-    close(tcp_socket);
-#endif
     return;
   }
+#else
+  if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0)
+  {
+    vcl_cerr << __FILE__ ": error sending HTTP request\n";
+    close(tcp_socket);
+    return;
+  }
+#endif
 
   // force the data to be sent.
 #if 1
@@ -277,7 +278,7 @@ vil_stream_url::vil_stream_url(char const *url)
       if (entity_marker==4)
       {
         u_->write(buffer, n);
-//        test2.write(buffer, n);
+//      test2.write(buffer, n);
       }
       else
       {
