@@ -9,3 +9,8 @@ TESTS += test_mbl.cxx # includes test_mz_random.cxx test_matrix_products.cxx tes
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################
+
+ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
+# gcc 3.0 needs too much virtual memory with -O2
+FLAGS_test_mbl.cxx += -O0
+endif
