@@ -74,6 +74,14 @@ shortPixel(gevd_bufferxy& buf, int x, int y)
   return (*((short*) buf.GetElementAddr(x,y)));
 }
 
+//: Get reference to pixel as an unsigned short (16-bit) number, at indices (x, y) in buf.
+
+inline unsigned short&
+ushortPixel(gevd_bufferxy& buf, int x, int y)
+{
+  return (*((unsigned short*) buf.GetElementAddr(x,y)));
+}
+
 //: Get reference to pixel as a float number, at indexes (x, y) in buf.
 // float is generally used to avoid overflow and unnecessary conversion
 // between float/double for math computation and byte/short for storage.
@@ -115,6 +123,14 @@ inline const short&
 shortPixel(const gevd_bufferxy& buf, int x, int y)
 {
   return (*((const short*)buf.GetElementAddr(x,y)));
+}
+
+//: Get reference to pixel as an unsigned short, at indices (x, y).
+
+inline const short&
+ushortPixel(const gevd_bufferxy& buf, int x, int y)
+{
+  return (*((const unsigned short*)buf.GetElementAddr(x,y)));
 }
 
 //: Get reference to pixel as a float, at indexes (x, y).
