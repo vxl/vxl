@@ -117,4 +117,6 @@ int main()
   l2 = vgl_homg_line_2d<double>(0,0,1); // line at infinity
   lines = c.components();
   assert(lines.front() == l2); assert(lines.back() == l1); // or vice versa
+
+  return 0;
 }
