@@ -1,14 +1,12 @@
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \brief A class for writing videos
 // \author Franck Bettinger
 
-#include <mvl2/mvl2_video_to_avi_windows.h>
-
+#include "mvl2_video_to_avi_windows.h"
 
 mvl2_video_to_avi::mvl2_video_to_avi()
 {
@@ -28,7 +26,7 @@ void mvl2_video_to_avi::set_quality(int qual)
 }
  
 bool mvl2_video_to_avi::open( int width, int height, 
-      vcl_string format, vcl_string file_name)
+                              vcl_string format, vcl_string file_name)
 {
   return true;
 }
