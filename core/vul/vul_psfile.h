@@ -32,7 +32,7 @@ public:
 
   vul_psfile(char const* filename, bool debug_output=false);
   ~vul_psfile();
-  operator bool () { return ((void *)output_filestream==0); }
+  operator bool () { return ((void *)output_filestream!=0); }
 
   void set_min_max_xy(float x, float y);
   void set_min_max_xy(int x, int y);
