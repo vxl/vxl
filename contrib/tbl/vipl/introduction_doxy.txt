@@ -22,7 +22,7 @@
 *   right, top-bottom" iterator is being used: \c vipl_trivial_pixeliter .
 *
 * The common parent class of all filters is \c vipl_filter (through its derived
-* class \c vipl_filter_2d ).  There, all image iteration magick is taken care
+* class \c vipl_filter_2d ).  There, all image iteration magic is taken care
 * of.  You, as a writer of a new filter, only have to implement the filter on
 * a single "section", which is the part of the image that has been loaded in
 * memory.  Often, for relatively small images, this is just the whole image,
@@ -32,4 +32,5 @@
 *
 * For the most common case, viz. input and output image are of type
 * \c vil_image, have a look at the \c vepl library.
+* The new \c vil2 image representation is interfaced in \c vepl2.
 */
