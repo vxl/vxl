@@ -139,6 +139,10 @@ LIB32=xilink6.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\vgl_1d_basis.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vcl_vector+vcl_vector+vgl_point_2d+float---.cxx"
 # End Source File
 # Begin Source File
@@ -312,6 +316,93 @@ SOURCE=.\vgl_triangle_test.cxx
 # Begin Source File
 
 SOURCE=.\vgl_window_scan_iterator.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_vector_3d+int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_vector_3d+float-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_vector_3d+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_vector_2d+int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_vector_2d+float-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_vector_2d+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_point_3d+int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_homg_point_3d+int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_homg_point_1d+int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_homg_point_1d+float-.cxx"
+# End Source File
+# Begin Source File
+SOURCE=".\Templates\vgl_homg_point_1d+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_homg_plane_3d+int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_homg_line_3d_2_points+int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_homg_line_2d+int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_box_3d+int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vgl_point_3d+int--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vgl_point_3d+float--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vgl_point_3d+double--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vgl_point_2d+int--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vgl_homg_point_3d+int--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vgl_homg_point_2d+int--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vgl_homg_point_1d+float--.cxx"
 # End Source File
 # End Group
 # Begin Group "Header Files"
