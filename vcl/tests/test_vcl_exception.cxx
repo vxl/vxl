@@ -1,7 +1,7 @@
 #include <vcl_exception.h>
 #include <vcl_iostream.h>
 
-extern "C" void abort() { vcl_cout << "abort()\n"; }
+extern "C" void abort() { vcl_cout << "abort()\n"; exit(1); }
 
 int main()
 {
