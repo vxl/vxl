@@ -28,9 +28,9 @@ double method1(vil2_image_view<vxl_byte>& image, int n_loops)
 double method2(vil2_image_view<vxl_byte>& image, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
-  unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
   for (int n=0;n<n_loops;++n)
   {
+    unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
     for (unsigned p=0;p<np;++p)
       for (unsigned j=0;j<nj;++j)
         for (unsigned i=0;i<ni;++i)
@@ -43,15 +43,18 @@ double method2(vil2_image_view<vxl_byte>& image, int n_loops)
 double method3(vil2_image_view<vxl_byte>& image, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
-  vxl_byte* plane = image.top_left_ptr();
-  for (unsigned p=0;p<image.nplanes();++p,plane += image.planestep())
+  for (int n=0;n<n_loops;++n)
   {
-    vxl_byte* row = plane;
-    for (unsigned j=0;j<image.nj();++j,row += image.jstep())
-    {
-      vxl_byte* pixel = row;
-      for (unsigned i=0;i<image.ni();++i,pixel+=image.istep())
-        *pixel = vxl_byte(i+j+3*p);
+    vxl_byte* plane = image.top_left_ptr();
+    for (unsigned p=0;p<image.nplanes();++p,plane += image.planestep())
+     {
+      vxl_byte* row = plane;
+      for (unsigned j=0;j<image.nj();++j,row += image.jstep())
+      {
+        vxl_byte* pixel = row;
+        for (unsigned i=0;i<image.ni();++i,pixel+=image.istep())
+          *pixel = vxl_byte(i+j+3*p);
+      }
     }
   }
   vcl_time_t t1=vcl_clock();
@@ -61,11 +64,13 @@ double method3(vil2_image_view<vxl_byte>& image, int n_loops)
 double method4(vil2_image_view<vxl_byte>& image, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
-  unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
-  int istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
-  vxl_byte* plane = image.top_left_ptr();
-  for (unsigned p=0;p<np;++p,plane += pstep)
+  for (int n=0;n<n_loops;++n)
   {
+   unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
+   int istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
+   vxl_byte* plane = image.top_left_ptr();
+   for (unsigned p=0;p<np;++p,plane += pstep)
+   {
     vxl_byte* row = plane;
     for (unsigned j=0;j<nj;++j,row += jstep)
     {
@@ -73,6 +78,7 @@ double method4(vil2_image_view<vxl_byte>& image, int n_loops)
       for (unsigned i=0;i<ni;++i,pixel+=istep)
         *pixel = vxl_byte(i+j+3*p);
     }
+   }
   }
   vcl_time_t t1=vcl_clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
@@ -81,11 +87,13 @@ double method4(vil2_image_view<vxl_byte>& image, int n_loops)
 double method5(vil2_image_view<vxl_byte>& image, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
-  unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
-  int istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
-  vxl_byte* plane = image.top_left_ptr();
-  for (unsigned p=0;p<np;++p,plane += pstep)
+  for (int n=0;n<n_loops;++n)
   {
+    unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
+    int istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
+    vxl_byte* plane = image.top_left_ptr();
+   for (unsigned p=0;p<np;++p,plane += pstep)
+   {
     vxl_byte* row = plane;
     for (unsigned j=0;j<nj;++j,row += jstep)
     {
@@ -93,6 +101,7 @@ double method5(vil2_image_view<vxl_byte>& image, int n_loops)
       for (unsigned i=ni;i;--i,pixel-=istep)
         *pixel = vxl_byte(i-1+j+3*p);
     }
+   }
   }
   vcl_time_t t1=vcl_clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
@@ -126,7 +135,7 @@ int main(int argc, char** argv)
   vil2_image_view<vxl_byte> image(256,256,3);
 
   vcl_cout<<"Times to fill a 256 x 256 image of 3 planes (in microsecs) [Range= 0.5(max-min)]"<<vcl_endl;
-  int n_loops = 500;
+  int n_loops = 100;
   for (int i=1;i<=5;++i)
   {
     compute_stats(i,image,n_loops);
