@@ -55,12 +55,6 @@ AC_ARG_ENABLE(emulation-complex,
 [VCL_USE_NATIVE_COMPLEX=0],
 [VCL_USE_NATIVE_COMPLEX=1])
 
-# use double instead of long double? default is no.
-AC_ARG_ENABLE(long-double,
-[  --disable-long-double  use double instead of long double],
-[VCL_USE_LONG_DOUBLE=0],
-[VCL_USE_LONG_DOUBLE=1])
-
 #--------------------------------------------------------------------------------
 # COMPILER CHARACTERISTICS
 
@@ -225,7 +219,6 @@ AC_CXX_HAS_HEADER(strstream,VCL_CXX_HAS_HEADER_STRSTREAM)
 # manual
 AC_SUBST(VCL_USE_NATIVE_STL)
 AC_SUBST(VCL_USE_NATIVE_COMPLEX)
-AC_SUBST(VCL_USE_LONG_DOUBLE)
 
 # compiler
 AC_SUBST(VCL_HAS_BOOL)
