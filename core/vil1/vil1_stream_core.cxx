@@ -64,16 +64,16 @@ vil_streampos vil_stream_core::m_transfer(char *buf, vil_streampos pos, vil_stre
     vil_streampos tpos = pos;
     vil_streampos tn   = n;
     while (tn>0) {
-      vil_streampos bl = tpos/blocksize_;     // which block
-      vil_streampos s = tpos - blocksize_*bl; // start index in block_
-      vil_streampos z = ((tn > blocksize_-s) ? blocksize_-s : tn); // number of bytes to write
+      vil_streampos bl = tpos/(long)blocksize_;     // which block
+      vil_streampos s = tpos - (long)blocksize_*bl; // start index in block_
+      vil_streampos z = ((tn+s > (long)blocksize_) ? (long)blocksize_-s : tn); // number of bytes to write
       char *tmp = block_[bl];
       if (read)
         for (vil_streampos k=0; k<z; ++k)
           tbuf[k] = tmp[s+k]; // prefer memcpy ?
       else
       {
-        assert (s+z <= blocksize_);
+        assert (s+z <= (long)blocksize_);
         for (vil_streampos k=0; k<z; ++k)
           tmp[s+k] = tbuf[k]; // prefer memcpy ?
       }
