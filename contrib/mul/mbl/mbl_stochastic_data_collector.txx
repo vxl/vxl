@@ -11,19 +11,17 @@
 template <class T>
 mbl_stochastic_data_collector<T>::
 mbl_stochastic_data_collector()
+: samples_(1000), nPresented_(0)
 {
-  samples_.resize(1000);
-  nPresented_=0;
 }
 
 //=======================================================================
 
 template <class T>
 mbl_stochastic_data_collector<T>::
-mbl_stochastic_data_collector(unsigned n)
+mbl_stochastic_data_collector(unsigned n):
+samples_(n), nPresented_(0)
 {
-  samples_.resize(n);
-  nPresented_=0;
 }
 
 //=======================================================================
