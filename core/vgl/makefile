@@ -56,7 +56,7 @@ SUBDIRS += algo
 SUBDIRS += io
 
 ifndef NOTEST
-SUBDIRS += tests
+SUBDIRS += tests examples
 endif
 
 ######################################
