@@ -77,7 +77,7 @@ template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::set_filter_width(unsigned w)
 {
   assert(w==3 || w==5);
-	filter_width_ = w;
+  filter_width_ = w;
 }
 
 //=======================================================================
@@ -85,7 +85,7 @@ void mil_gaussian_pyramid_builder_2d<T>::set_filter_width(unsigned w)
 //  Applies 1-2-1 filter in x and y, then samples every other pixel.
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::gauss_reduce_121(mil_image_2d_of<T>& dest_im,
-                                                      const mil_image_2d_of<T>& src_im) const
+                                                          const mil_image_2d_of<T>& src_im) const
 {
   int nx = src_im.nx();
   int ny = src_im.ny();
@@ -119,7 +119,7 @@ void mil_gaussian_pyramid_builder_2d<T>::gauss_reduce_121(mil_image_2d_of<T>& de
 //  Applies filter in x and y, then samples every other pixel.
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::gauss_reduce_15851(mil_image_2d_of<T>& dest_im,
-                                                      const mil_image_2d_of<T>& src_im) const
+                                                            const mil_image_2d_of<T>& src_im) const
 {
   int nx = src_im.nx();
   int ny = src_im.ny();
@@ -165,17 +165,17 @@ void mil_gaussian_pyramid_builder_2d<T>::gauss_reduce(mil_image_2d_of<T>& dest_i
                                                       const mil_image_2d_of<T>& src_im) const
 {
   switch (filter_width_)
-	{
-	  case (3):
-		  gauss_reduce_121(dest_im,src_im);
-			break;
+  {
+    case (3):
+      gauss_reduce_121(dest_im,src_im);
+      break;
     case (5):
-		  gauss_reduce_15851(dest_im,src_im);
-			break;
+      gauss_reduce_15851(dest_im,src_im);
+      break;
     default:
-		  vcl_cerr<<"mil_gaussian_pyramid_builder_2d<T>::gauss_reduce() ";
-			vcl_cerr<<"Cannot cope with filter width of "<<filter_width_<<vcl_endl;
-			vcl_abort();
+      vcl_cerr<<"mil_gaussian_pyramid_builder_2d<T>::gauss_reduce() ";
+      vcl_cerr<<"Cannot cope with filter width of "<<filter_width_<<vcl_endl;
+      vcl_abort();
   }
 }
 
@@ -205,10 +205,10 @@ void mil_gaussian_pyramid_builder_2d<T>::checkPyr(mil_image_pyramid& im_pyr,  in
     im_pyr.data().resize(n_levels);
     return;
   }
-  
+
   im_pyr.data().resize(n_levels);
   emptyPyr(im_pyr);
-  
+
   for (int i=0;i<n_levels;++i)
     im_pyr.data()[i] = new mil_image_2d_of<T>;
 }
@@ -221,12 +221,12 @@ void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
 {
   //  Require image mil_image_2d_of<T>
   assert(im.is_a()==work_im_.is_a());
-  
+
   const mil_image_2d_of<T>& base_image = (const mil_image_2d_of<T>&) im;
-  
+
   int nx = base_image.nx();
   int ny = base_image.ny();
-  
+
   // Compute number of levels to pyramid so that top is no less
   // than minXSize_ x minYSize_
   int s = 1;
@@ -236,38 +236,38 @@ void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
     max_levels++;
     s*=2;
   }
-  
+
   if (max_levels>max_levels_)
     max_levels=max_levels_;
-  
+
   work_im_.resize(nx,ny);
-  
+
   // Set up image pyramid
   checkPyr(image_pyr,max_levels);
-  
+
   mil_image_2d_of<T>& im0 = (mil_image_2d_of<T>&) image_pyr(0);
-  
+
   // Shallow copy of part of base_image
   im0.setToWindow(base_image,0,nx-1,0,ny-1);
-  
+
   int i;
   for (i=1;i<max_levels;i++)
   {
     mil_image_2d_of<T>& im_i0 = (mil_image_2d_of<T>&) image_pyr(i);
     mil_image_2d_of<T>& im_i1 = (mil_image_2d_of<T>&) image_pyr(i-1);
-    
+
     gauss_reduce(im_i0,im_i1);
   }
-  
+
   // Estimate width of pixels in base image
   vgl_point_2d<double>  c0(0.5*(nx-1),0.5*(ny-1));
   vgl_point_2d<double>  c1 = c0 + vgl_vector_2d<double> (1,1);
   mil_transform_2d im2world = base_image.world2im().inverse();
   vgl_vector_2d<double>  dw = im2world(c1) - im2world(c0);
-  
+
   double base_pixel_width = dw.length()/vnl_math::sqrt2;
   double scale_step = 2.0;
-  
+
   image_pyr.setWidths(base_pixel_width,scale_step);
 }
 
@@ -279,12 +279,12 @@ void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr) co
 {
   //  Require image mil_image_2d_of<T>
   assert(image_pyr(0).is_a() == work_im_.is_a());
-  
+
   assert(image_pyr.scale_step() == scale_step());
-  
+
   int nx = image_pyr(0).nx();
   int ny = image_pyr(0).ny();
-  
+
   // Compute number of levels to pyramid so that top is no less
   // than 5 x 5
   double s = 1;
@@ -294,28 +294,27 @@ void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr) co
     max_levels++;
     s*=scale_step();
   }
-  
+
   if (max_levels>max_levels_)
     max_levels=max_levels_;
-  
+
   work_im_.resize(nx,ny);
-  
+
   // Set up image pyramid
   int oldsize = image_pyr.n_levels();
   if (oldsize<max_levels) // only extend, if it isn't already tall enough
   {
     image_pyr.data().resize(max_levels);
-    
-    
+
     int i;
     for (i=oldsize;i<max_levels;++i)
       image_pyr.data()[i] = new mil_image_2d_of<T>;
-    
+
     for (i=oldsize;i<max_levels;i++)
     {
       mil_image_2d_of<T>& im_i0 = (mil_image_2d_of<T>&) image_pyr(i);
       mil_image_2d_of<T>& im_i1 = (mil_image_2d_of<T>&) image_pyr(i-1);
-      
+
       gauss_reduce(im_i0,im_i1);
     }
   }
@@ -371,7 +370,7 @@ void mil_gaussian_pyramid_builder_2d<T>::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
   vsl_b_write(bfs,max_levels_);
-	vsl_b_write(bfs,filter_width_);
+  vsl_b_write(bfs,filter_width_);
 }
 
 //=======================================================================
@@ -380,14 +379,14 @@ template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
-  
+
   short version;
   vsl_b_read(bfs,version);
   switch (version)
   {
   case (1):
     vsl_b_read(bfs,max_levels_);
-		filter_width_=5;
+    filter_width_=5;
     break;
   case (2):
     vsl_b_read(bfs,max_levels_);

@@ -17,17 +17,14 @@ void test_gaussian_pyramid_builder_2d_build(mil_gaussian_pyramid_builder_2d<vil_
 {
   int nx = 20, ny = 20;
   vcl_cout<<"Filter Width: "<<builder.filter_width()<<vcl_endl;
-	vcl_cout<<"Image Size: "<<nx<<" x "<<ny<<vcl_endl;
+  vcl_cout<<"Image Size: "<<nx<<" x "<<ny<<vcl_endl;
 
   mil_image_2d_of<vil_byte> image0;
   image0.resize(nx,ny);
 
   for (int y=0;y<image0.ny();++y)
-     for (int x=0;x<image0.nx();++x)
-     {
-       image0(x,y) = x+y*10;
-     }
-
+    for (int x=0;x<image0.nx();++x)
+      image0(x,y) = x+y*10;
 
   int default_n_levels = builder.maxLevels();
   builder.setMaxLevels(2);
@@ -37,7 +34,6 @@ void test_gaussian_pyramid_builder_2d_build(mil_gaussian_pyramid_builder_2d<vil_
 
   vcl_cout<<"Result:"<<vcl_endl;
   image_pyr.print_all(vcl_cout);
-
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 2);
 
@@ -54,9 +50,9 @@ void test_gaussian_pyramid_builder_2d_build(mil_gaussian_pyramid_builder_2d<vil_
   vcl_cout<<"\n\n\nTesting builder.extend():"<<vcl_endl;
   image_pyr.print_all(vcl_cout);
 
-
   TEST("Found correct number of levels", image_pyr.n_levels(), 3);
 }
+
 void test_gaussian_pyramid_builder_2d()
 {
   vcl_cout << "\n\n*******************************************************" << vcl_endl;
@@ -64,10 +60,10 @@ void test_gaussian_pyramid_builder_2d()
   vcl_cout << "*******************************************************" << vcl_endl;
 
   mil_gaussian_pyramid_builder_2d<vil_byte> builder;
-	builder.set_filter_width(3);
-	test_gaussian_pyramid_builder_2d_build(builder);
-	builder.set_filter_width(5);
-	test_gaussian_pyramid_builder_2d_build(builder);
+  builder.set_filter_width(3);
+  test_gaussian_pyramid_builder_2d_build(builder);
+  builder.set_filter_width(5);
+  test_gaussian_pyramid_builder_2d_build(builder);
 
   vcl_cout<<"\n\n======== TESTING I/O ==========="<<vcl_endl;
 
@@ -99,8 +95,6 @@ void test_gaussian_pyramid_builder_2d()
   delete ptr_in;
 
   vsl_delete_all_loaders();
-
-  
 }
 
 
