@@ -49,7 +49,7 @@ vgui_macro             vgui_window
 vgui_matrix_state      vgui_wrapper_tableau
 )
 
-INCLUDE_DIRECTORIES(/tmp/vxl_opt/Mesa-3.3/include)
+INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
 
 AUX_SOURCE_DIRECTORY(Templates vgui_sources)
 

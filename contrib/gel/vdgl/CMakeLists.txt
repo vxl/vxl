@@ -8,10 +8,10 @@
 ADD_LIBRARY(vdgl vdgl_sources)
 
 SOURCE_FILES(vdgl_sources
-vdgl_OrthogRegress.cxx   vdgl_fit_line.cxx
-vdgl_digital_curve.cxx   vdgl_interpolator.cxx
-vdgl_digital_region.cxx  vdgl_interpolator_cubic.cxx
-vdgl_edgel.cxx           vdgl_interpolator_linear.cxx
-vdgl_edgel_chain.cxx     vdgl_ortho_regress.cxx
+vdgl_OrthogRegress   vdgl_fit_line
+vdgl_digital_curve   vdgl_interpolator
+vdgl_digital_region  vdgl_interpolator_cubic
+vdgl_edgel           vdgl_interpolator_linear
+vdgl_edgel_chain     vdgl_ortho_regress
 )
 

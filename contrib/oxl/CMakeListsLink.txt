@@ -14,3 +14,8 @@ ${allvxl_BINARY_DIR}/oxl/vgui/impl/mfc
 ${allvxl_BINARY_DIR}/oxl/vgui/internals
 )
 
+IF(vgui)
+  LINK_DIRECTORIES(${allvxl_BINARY_DIR}/oxl/vgui/impl/gtk)
+  LINK_LIBRARIES(vgui_gtk);
+ENDIF(vgui_gtk)
+

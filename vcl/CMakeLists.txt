@@ -19,5 +19,4 @@ AUX_SOURCE_DIRECTORY(Templates vcl_sources)
 
 ADD_LIBRARY(vcl vcl_sources)
 
-# SUBDIRS(tests)
 

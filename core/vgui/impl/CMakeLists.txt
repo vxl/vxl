@@ -7,6 +7,15 @@
 IF(WIN32)
   SUBDIRS(mfc)
 ELSE(WIN32)
-  SUBDIRS(gtk)
+
+  INCLUDE(${CMAKE_SOURCE_DIR}/CMake/Modules/FindGTK.cmake)
+
+  IF(GTK_INCLUDE_PATH)
+
+    SUBDIRS(gtk)
+
+  ENDIF(GTK_INCLUDE_PATH)
+
+
 ENDIF(WIN32)
 

@@ -12,3 +12,6 @@ vgui_gtk_adaptor      vgui_gtk_utils
 vgui_gtk_dialog_impl  vgui_gtk_window
 vgui_gtk_statusbar
 )
+
+INCLUDE_DIRECTORIES(${GTK_INCLUDE_PATH} ${GTK_GLIB_INCLUDE_PATH})
+
