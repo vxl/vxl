@@ -106,8 +106,8 @@ vcl_vector<xcv_image_tableau_sptr> get_image_list()
   vcl_vector<vgui_tableau_sptr> all_tabs = xcv_tab->get_tableau_list();
   for (unsigned i=0; i<all_tabs.size(); i++)
   {
-    xcv_image_tableau_sptr img 
-      = (xcv_image_tableau*)vgui_find_below_by_type_name(all_tabs[i], 
+    xcv_image_tableau_sptr img
+      = (xcv_image_tableau*)vgui_find_below_by_type_name(all_tabs[i],
       vcl_string("xcv_image_tableau")).operator->();
     img_tabs.push_back(img);
   }
@@ -166,7 +166,7 @@ bool get_twoviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
     two_dl.message("You must select exactly two views.");
     two_dl.message("");
     two_dl.ask();
-    vgui_macro_warning 
+    vgui_macro_warning
       << "You must select exactly two views, not the current "
       << nb_views << vcl_endl;
     return false;
@@ -200,7 +200,7 @@ bool get_threeviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
     dl.message("You need to select exactly three views.");
     dl.message("");
     dl.ask();
-    vgui_macro_warning 
+    vgui_macro_warning
       << "You need to selected exactly three views. Number selected = "
       << nb_views << vcl_endl;
     return false;
@@ -241,7 +241,7 @@ vgui_rubberbander_sptr get_rubberbander_at(unsigned col, unsigned row)
     if (tab)
       return tab;
   }
-  vgui_macro_warning << "Unable to get rubberbander tableau at (" << col 
+  vgui_macro_warning << "Unable to get rubberbander tableau at (" << col
     <<", "<<row<<")"<<vcl_endl;
   return vgui_rubberbander_sptr();
 }
@@ -261,7 +261,7 @@ vgui_easy2D_sptr get_easy2D_at(unsigned col, unsigned row)
     if (tab)
       return tab;
   }
-  vgui_macro_warning << "Unable to get easy2D at (" << col << ", " << row 
+  vgui_macro_warning << "Unable to get easy2D at (" << col << ", " << row
     << ")" << vcl_endl;
   return vgui_easy2D_sptr();
 }
@@ -281,7 +281,7 @@ vgui_composite_sptr get_composite_at(unsigned col, unsigned row)
     if (tab)
       return tab;
   }
-  vgui_macro_warning << "Unable to get composite at (" << col << ", " 
+  vgui_macro_warning << "Unable to get composite at (" << col << ", "
     << row << ")" << vcl_endl;
   return vgui_composite_sptr();
 }
@@ -296,12 +296,12 @@ vgui_viewer2D_sptr get_viewer2D_at(unsigned col, unsigned row)
   if (top_tab)
   {
     vgui_viewer2D_sptr view;
-    view.vertical_cast(vgui_find_below_by_type_name(top_tab, 
+    view.vertical_cast(vgui_find_below_by_type_name(top_tab,
       vcl_string("vgui_viewer2D")));
     if (view)
       return view;
   }
-  vgui_macro_warning << "Unable to get viewer2D tableau at (" << col 
+  vgui_macro_warning << "Unable to get viewer2D tableau at (" << col
     << ", " << row << ")" << vcl_endl;
   return vgui_viewer2D_sptr();
 }
@@ -326,7 +326,7 @@ xcv_image_tableau_sptr get_image_tableau_at(unsigned col, unsigned row)
   if (tab)
   {
     xcv_image_tableau_sptr tt;
-    tt.vertical_cast(vgui_find_below_by_type_name(tab, 
+    tt.vertical_cast(vgui_find_below_by_type_name(tab,
       vcl_string("xcv_image_tableau")));
     if (tt)
       return tt;
@@ -346,7 +346,7 @@ xcv_picker_tableau_sptr get_picker_tableau_at(unsigned col, unsigned row)
   if (top_tab)
   {
     xcv_picker_tableau_sptr tt;
-    tt.vertical_cast(vgui_find_below_by_type_name(top_tab, 
+    tt.vertical_cast(vgui_find_below_by_type_name(top_tab,
       vcl_string("xcv_picker_tableau")));
     if (tt)
       return tt;
@@ -357,9 +357,8 @@ xcv_picker_tableau_sptr get_picker_tableau_at(unsigned col, unsigned row)
 }
 
 //-----------------------------------------------------------------------------
-//: Gets the underlying image from the tableau at the given position and 
-//  returns it in the given image pointer.  Returns true if the image is OK, 
-//  otherwise returns false.
+//: Gets the underlying image from the tableau at the given position and returns it in the given image pointer.
+//  Returns true if the image is OK, otherwise returns false.
 //-----------------------------------------------------------------------------
 bool get_image_at(vil_image* img, unsigned col, unsigned row)
 {
@@ -452,10 +451,10 @@ void xcv_window_size_traditional(int rows, int cols,
   *viewer_scale = 1;
 
   // set width of window
-  for (int i=0; i<rows; ++i) 
+  for (int i=0; i<rows; ++i)
   {
     unsigned int winnie = 0;
-    for (int j=0; j<cols; ++j) 
+    for (int j=0; j<cols; ++j)
     {
       unsigned int d = i*cols + j;
       if (d < images.size())
@@ -466,10 +465,10 @@ void xcv_window_size_traditional(int rows, int cols,
   }
 
   // set height of window
-  for (int j=0; j<cols; ++j) 
+  for (int j=0; j<cols; ++j)
   {
     unsigned int winnie = 0;
-    for (int i=0; i<rows; ++i) 
+    for (int i=0; i<rows; ++i)
     {
       unsigned int d = i*cols + j;
       if (d < images.size())
@@ -491,7 +490,7 @@ void xcv_window_size_adaptive(int rows, int cols,
                               unsigned *window_w, unsigned *window_h,
                               double *viewer_scale)
 {
-  xcv_window_size_traditional(rows, cols, images, window_w, window_h, 
+  xcv_window_size_traditional(rows, cols, images, window_w, window_h,
     viewer_scale);
 
   // resize the window to occupy roughly 64% of a 1024x1280 display by area.
@@ -524,7 +523,7 @@ int main(int argc, char** argv)
 {
   // Select the toolkit: command line or environment variable
   // can override, but the default is 'gtk' or 'mfc'.
-  if (! vgui::select(argc, argv)) 
+  if (! vgui::select(argc, argv))
   {
     if      (vgui::exists("gtk"))
       vgui::select("gtk");
@@ -532,7 +531,7 @@ int main(int argc, char** argv)
       vgui::select("mfc");
     else if (vgui::exists("qt"))
       vgui::select("qt");
-    else 
+    else
     {
       // ??
     }
@@ -544,17 +543,17 @@ int main(int argc, char** argv)
   // arguments not used by vgui::init();
   vul_arg<bool> a_adaptive("-adaptive", "resize window adaptively");
   vul_arg<int>  a_rows("-rows", "desired number of rows in array of images", 0);
-  vul_arg<int>  a_cols("-cols", 
+  vul_arg<int>  a_cols("-cols",
     "desired number of col(umn)s in array of images", 0);
   vul_arg_parse(argc, argv);
 
   int rows, cols;
-  if (a_rows() && a_cols()) 
+  if (a_rows() && a_cols())
   {
     rows = a_rows();
     cols = a_cols();
   }
-  else 
+  else
   {
     rows = 1;
     if (argc-1 > 0)
@@ -572,7 +571,7 @@ int main(int argc, char** argv)
     vcl_vector<vil_image> images;
 
     xcv_tab->set_grid_size_changeable(false);
-    for (int argcount=1; argcount<argc && vcl_strcmp(argv[argcount], "-d"); 
+    for (int argcount=1; argcount<argc && vcl_strcmp(argv[argcount], "-d");
       ++argcount)
     {
       vil_image img = vil_load(argv[argcount]);
@@ -586,13 +585,13 @@ int main(int argc, char** argv)
 
     double viewer_scale;
     if (a_adaptive())
-      xcv_window_size_adaptive(rows, cols, images, &window_width, 
+      xcv_window_size_adaptive(rows, cols, images, &window_width,
       &window_height, &viewer_scale);
     else
-      xcv_window_size_traditional(rows, cols, images, &window_width, 
+      xcv_window_size_traditional(rows, cols, images, &window_width,
       &window_height, &viewer_scale);
 
-    for (unsigned int i=0; i<viewers.size(); ++i) 
+    for (unsigned int i=0; i<viewers.size(); ++i)
     {
       vgui_viewer2D_sptr v; v.vertical_cast(viewers[i]);
       v->token.scaleX *= viewer_scale;
@@ -611,7 +610,7 @@ int main(int argc, char** argv)
     window_width = 512;
   if (window_height <= MENUBAR_HEIGHT)
     window_height = 512;
-    
+
   vcl_cerr << "window_width  = " << window_width << vcl_endl;
   vcl_cerr << "window_height = " << window_height << vcl_endl;
 
