@@ -1,3 +1,4 @@
+#include <vimt3d/vimt3d_crop.h>
 #include <vimt3d/vimt3d_gaussian_pyramid_builder_3d.h>
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
