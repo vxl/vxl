@@ -89,7 +89,7 @@ typedef unsigned int VIPL_FILTER_STATE;
   vcl_clock_t ct2= clock();\
 } while (false)
 
-#define HORIZ_CONV_BOARDER(X1, Y1, X2, Y2, DELTA_X, DELTA_Y, SRC, DST, KERN)\ do {\
+#define HORIZ_CONV_BOARDER(X1, Y1, X2, Y2, DELTA_X, DELTA_Y, SRC, DST, KERN) do {\
   vcl_clock_t ct = clock();\
   KernType val;\
   for (int y = ((Y1) ); y < ((Y2) ); ++y) {\
@@ -117,7 +117,7 @@ typedef unsigned int VIPL_FILTER_STATE;
   vcl_clock_t ct2= clock();\
 } while (false)
 
-#define VERTI_CONV_BOARDER(X1, Y1, X2, Y2, DELTA_X, DELTA_Y, SRC, DST, KERN)\ do {\
+#define VERTI_CONV_BOARDER(X1, Y1, X2, Y2, DELTA_X, DELTA_Y, SRC, DST, KERN) do {\
   KernType val;\
   vcl_clock_t ct = clock();\
   for (int x = ((X1) ); x < ((X2) ); ++x) {\
@@ -211,7 +211,7 @@ typedef unsigned int VIPL_FILTER_STATE;
   const int ibs = image_border_size();\
   const int d0 = ibs;\
   const int bdr = ibs;\
-  const DataTypeOut fv = def_fill_value();\\
+  const DataTypeOut fv = def_fill_value();\
   int xcs[4], ycs[4], xce[4], yce[4];\
   int do_fill[4]; \
   const int XS = D.curr_sec_start(X_Axis()), YS = D.curr_sec_start(Y_Axis());\
@@ -234,23 +234,23 @@ typedef unsigned int VIPL_FILTER_STATE;
 // for use in both preop and postop
 
 #define CHECK_START_AND_END_FILL(CONTAINER) \
-    if((CONTAINER).image_start(Y_Axis()) > ycs[tmpi]){ ycs[tmpi] = (CONTAINER).image_start(Y_Axis()); }\
-    if((CONTAINER).image_start(X_Axis()) > xcs[tmpi]){ xcs[tmpi] = (CONTAINER).image_start(X_Axis()); }\
-    if((CONTAINER).image_start(Y_Axis()) > yce[tmpi]){ yce[tmpi] = (CONTAINER).image_start(Y_Axis()); }\
-    if((CONTAINER).image_start(X_Axis()) > xce[tmpi]){ xce[tmpi] = (CONTAINER).image_start(X_Axis()); }\
-    if((CONTAINER).image_end(Y_Axis()) < ycs[tmpi]){ ycs[tmpi] = (CONTAINER).image_end(Y_Axis()); }\
-    if((CONTAINER).image_end(X_Axis()) < xcs[tmpi]){ xcs[tmpi] = (CONTAINER).image_end(X_Axis()); }\
-    if((CONTAINER).image_end(Y_Axis()) < yce[tmpi]){ yce[tmpi] = (CONTAINER).image_end(Y_Axis()); }\
-    if((CONTAINER).image_end(X_Axis()) < xce[tmpi]){ xce[tmpi] = (CONTAINER).image_end(X_Axis()); }
+    if ((CONTAINER).image_start(Y_Axis()) > ycs[tmpi]){ ycs[tmpi] = (CONTAINER).image_start(Y_Axis()); }\
+    if ((CONTAINER).image_start(X_Axis()) > xcs[tmpi]){ xcs[tmpi] = (CONTAINER).image_start(X_Axis()); }\
+    if ((CONTAINER).image_start(Y_Axis()) > yce[tmpi]){ yce[tmpi] = (CONTAINER).image_start(Y_Axis()); }\
+    if ((CONTAINER).image_start(X_Axis()) > xce[tmpi]){ xce[tmpi] = (CONTAINER).image_start(X_Axis()); }\
+    if ((CONTAINER).image_end(Y_Axis()) < ycs[tmpi]){ ycs[tmpi] = (CONTAINER).image_end(Y_Axis()); }\
+    if ((CONTAINER).image_end(X_Axis()) < xcs[tmpi]){ xcs[tmpi] = (CONTAINER).image_end(X_Axis()); }\
+    if ((CONTAINER).image_end(Y_Axis()) < yce[tmpi]){ yce[tmpi] = (CONTAINER).image_end(Y_Axis()); }\
+    if ((CONTAINER).image_end(X_Axis()) < xce[tmpi]){ xce[tmpi] = (CONTAINER).image_end(X_Axis()); }
 #define CHECK_START_AND_END_OPERATION(CONTAINER) \
-    if((CONTAINER).image_start(Y_Axis()) + ibs > ycs[tmpi]){ ycs[tmpi] = (CONTAINER).image_start(Y_Axis()) +ibs; }\
-    if((CONTAINER).image_start(X_Axis()) +ibs> xcs[tmpi]){ xcs[tmpi] = (CONTAINER).image_start(X_Axis())+ibs; }\
-    if((CONTAINER).image_start(Y_Axis()) +ibs > yce[tmpi]){ yce[tmpi] = (CONTAINER).image_start(Y_Axis()) +ibs; }\
-    if((CONTAINER).image_start(X_Axis()) +ibs > xce[tmpi]){ xce[tmpi] = (CONTAINER).image_start(X_Axis()) +ibs; }\
-    if((CONTAINER).image_end(Y_Axis()) -ibs < ycs[tmpi]){ ycs[tmpi] = (CONTAINER).image_end(Y_Axis()) -ibs; }\
-    if((CONTAINER).image_end(X_Axis())-ibs < xcs[tmpi]){ xcs[tmpi] = (CONTAINER).image_end(X_Axis()) -ibs; }\
-    if((CONTAINER).image_end(Y_Axis())-ibs < yce[tmpi]){ yce[tmpi] = (CONTAINER).image_end(Y_Axis()) -ibs; }\
-    if((CONTAINER).image_end(X_Axis())-ibs < xce[tmpi]){ xce[tmpi] = (CONTAINER).image_end(X_Axis()) -ibs; }
+    if ((CONTAINER).image_start(Y_Axis()) + ibs > ycs[tmpi]){ ycs[tmpi] = (CONTAINER).image_start(Y_Axis()) +ibs; }\
+    if ((CONTAINER).image_start(X_Axis()) +ibs> xcs[tmpi]){ xcs[tmpi] = (CONTAINER).image_start(X_Axis())+ibs; }\
+    if ((CONTAINER).image_start(Y_Axis()) +ibs > yce[tmpi]){ yce[tmpi] = (CONTAINER).image_start(Y_Axis()) +ibs; }\
+    if ((CONTAINER).image_start(X_Axis()) +ibs > xce[tmpi]){ xce[tmpi] = (CONTAINER).image_start(X_Axis()) +ibs; }\
+    if ((CONTAINER).image_end(Y_Axis()) -ibs < ycs[tmpi]){ ycs[tmpi] = (CONTAINER).image_end(Y_Axis()) -ibs; }\
+    if ((CONTAINER).image_end(X_Axis())-ibs < xcs[tmpi]){ xcs[tmpi] = (CONTAINER).image_end(X_Axis()) -ibs; }\
+    if ((CONTAINER).image_end(Y_Axis())-ibs < yce[tmpi]){ yce[tmpi] = (CONTAINER).image_end(Y_Axis()) -ibs; }\
+    if ((CONTAINER).image_end(X_Axis())-ibs < xce[tmpi]){ xce[tmpi] = (CONTAINER).image_end(X_Axis()) -ibs; }
 
 // there is a striking similarity between the macros DO_PREOP and
 // DO_POSTOP. However, in order to reduce it to one macro, it will need to
@@ -267,7 +267,7 @@ typedef unsigned int VIPL_FILTER_STATE;
   } else {\
     xcs[0] = XS; ycs[0] = YS;\
     xce[0] = XS + bdr; yce[0] = YS + bdr;\
-  }\\
+  }\
   if (border & (IMB_B)) {\
     do_fill[1] = true; \
     xcs[1] = XS + ibs; ycs[1] = YS;\
@@ -283,7 +283,7 @@ typedef unsigned int VIPL_FILTER_STATE;
   } else {\
     xcs[2] = XE - bdr; ycs[2] = YS;\
     xce[2] = XE; yce[2] = YS + bdr;\
-  }\\
+  }\
   if (border & IMB_L) {\
     do_fill[3] = true;\
     xcs[3] = XS; ycs[3] = YS + ibs;\
