@@ -30,6 +30,9 @@
 //: This is the date of the release.
 // If you have downloaded the latest version from the CVS repository,
 // you may wish to locally modify this number to reflect the download date.
-#define VXL_VERSION_DATE "2003-10-09"
+#define VXL_VERSION_DATE "2003-11-03"
+
+//: This can either be "RELEASE" or "CVS"
+#define VXL_SOURCE "CVS"
 
 #endif // vxl_version_h_
