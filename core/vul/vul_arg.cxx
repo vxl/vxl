@@ -547,7 +547,7 @@ VDS void print_value(vcl_ostream &s, vul_arg<float> const &argmt)
 { s << argmt(); }
 VDS int parse(vul_arg<float>* argmt, char ** argv) {
   char* endptr = 0;
-  argmt->value_ = strtod(argv[0], &endptr);
+  argmt->value_ = (float)strtod(argv[0], &endptr);
   if (*endptr == '\0')
     return 1;
   // There is junk after the number, or no number was found
