@@ -118,6 +118,7 @@ class vil1_file_format_list_destroyer
 public:
   ~vil1_file_format_list_destroyer()
   {
+    if(storage==0) return;
     unsigned i=0;
     while (storage[i])
       delete storage[i++];
