@@ -86,6 +86,7 @@ class vsol_box_2d : public vbl_ref_count, public vul_timestamp
 };
 
 #include "vsol_box_2d_sptr.h"
+
 //: Stream operator
 vcl_ostream&  operator<<(vcl_ostream& s, vsol_box_2d const& p);
 
@@ -94,5 +95,12 @@ void vsl_b_write(vsl_b_ostream &os, vsol_box_2d_sptr const& p);
 
 //: Binary load vsol_box_2d* from stream.
 void vsl_b_read(vsl_b_istream &is, vsol_box_2d_sptr &p);
+
+//: Print human readable summary of box to a stream
+//  (This is needed for the instantiation of vsl_vector_io<vsol_box_2d_sptr>)
+inline void vsl_print_summary(vcl_ostream& os, vsol_box_2d_sptr const& b)
+{
+  os << *b;
+}
 
 #endif // vsol_box_2d_h_
