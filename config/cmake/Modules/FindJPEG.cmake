@@ -13,6 +13,7 @@
 # Additionally
 # VXL_USING_NATIVE_JPEG  - True if we are using a JPEG library provided outside vxl (or v3p)
 
+# If this FORCE variable is unset or is FALSE, try to find a native library.
 IF( VXL_FORCE_V3P_JPEG )
 ELSE( VXL_FORCE_V3P_JPEG )
   INCLUDE( ${MODULE_PATH}/NewCMake/FindJPEG.cmake )

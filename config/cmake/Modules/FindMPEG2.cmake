@@ -13,6 +13,7 @@
 # Additionally
 # VXL_USING_NATIVE_MPEG2  - True if we are using a MPEG2 library provided outside vxl (or v3p)
 
+# If this FORCE variable is unset or is FALSE, try to find a native library.
 IF( VXL_FORCE_V3P_MPEG2 )
 ELSE( VXL_FORCE_V3P_MPEG2 )
   INCLUDE( ${MODULE_PATH}/NewCMake/FindMPEG2.cmake )
