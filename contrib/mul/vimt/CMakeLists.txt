@@ -11,6 +11,7 @@ SET(vimt_sources
   vimt_gaussian_pyramid_builder_2d.cxx vimt_gaussian_pyramid_builder_2d.h
   vimt_gaussian_pyramid_builder_2d.txx
   vimt_gaussian_pyramid_builder_2d_general.cxx vimt_gaussian_pyramid_builder_2d_general.h
+  vimt_scale_pyramid_builder_2d.txx vimt_scale_pyramid_builder_2d.h
   vimt_gaussian_pyramid_builder_2d_general.txx
   vimt_sample_profile_bilin.txx vimt_sample_profile_bilin.h
   vimt_sample_grid_bilin.txx    vimt_sample_grid_bilin.h
