@@ -567,12 +567,18 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
     if ( bytes_per_sample==1 )
     {
       assert(ob!=0);
+
+      // capes_at_robots - Modified to write a scan-line at once. Writing single bytes
+      // to disk was extremely slow.
+      vcl_vector<vxl_byte> scanline( byte_width );
+
       for (unsigned y = 0; y < view.nj(); ++y)
       {
         vs_->seek(byte_start);
-        for (unsigned x = 0; x < view.ni(); ++x)
-          for (unsigned p = 0; p < ncomponents_; ++p)
-            vs_->write(&(*ob)(x,y,p), 1);
+        for (unsigned x = 0, c = 0; x < view.ni(); ++x)
+          for (unsigned p = 0; p < ncomponents_; ++p, ++c)
+            scanline[c] = (*ob)(x,y,p);
+        vs_->write(&scanline[0], byte_width);
         byte_start += byte_width;
       }
     } else if ( bytes_per_sample==2 )
