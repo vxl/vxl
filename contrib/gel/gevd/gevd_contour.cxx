@@ -567,7 +567,7 @@ BreakCycle(vtol_vertex_2d& junction, const int index,
   vdgl_interpolator *it= new vdgl_interpolator_linear( vdgl_edgel_chain_sptr( es));
   vdgl_digital_curve *ds = new vdgl_digital_curve( vdgl_interpolator_sptr( it));
 
-  split->set_curve(*( vsol_curve_2d *) ds);
+  split->set_curve(*ds->cast_to_curve());
 
   int i=0;
   for (int k = index; k < len; i++,k++) {
