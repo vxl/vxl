@@ -1,4 +1,4 @@
-//---*-c++-*- this tells emacs to use C++
+// This is brl/bseg/brip/brip_float_ops.h
 #ifndef brip_float_ops_h_
 #define brip_float_ops_h_
 
@@ -14,7 +14,7 @@
 // segmentation routines. They are not meant to be generic.
 //
 // \verbatim
-// Initial version February 15, 2003
+//   Initial version February 15, 2003
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -38,7 +38,7 @@ class brip_float_ops
   static vil_memory_image_of<float>
     gaussian(vil_memory_image_of<float> const & input, float sigma);
 
-  //:non-maximum suppression on a NxN neighborhood, with sub-pixel location
+  //: non-maximum suppression on a NxN neighborhood, with sub-pixel location
   static void non_maximum_suppression(vil_memory_image_of<float> const & input,
                                       const int n,
                                       const float thresh,
@@ -100,14 +100,14 @@ class brip_float_ops
 
   //: computes Lucas-Kanade optical flow on a 2n+1 neighborhood
   static void Lucas_KanadeMotion(vil_memory_image_of<float> & current_frame,
-                               vil_memory_image_of<float> & previous_frame,
-                               int n, double thresh,
-                               vil_memory_image_of<float>& vx,
-                               vil_memory_image_of<float>& vy);
+                                 vil_memory_image_of<float> & previous_frame,
+                                 int n, double thresh,
+                                 vil_memory_image_of<float>& vx,
+                                 vil_memory_image_of<float>& vy);
 
   //: fills a border of width w on left and right of image with value
   static void fill_x_border(vil_memory_image_of<float> & image,
-                          int w, float value);
+                            int w, float value);
 
   //: fills a border of width h on top and bottom of image with value
   static void fill_y_border(vil_memory_image_of<float> & image,
@@ -145,19 +145,18 @@ class brip_float_ops
  private:
 
   //:find if the center pixel of a neighborhood is the maximum value
-static bool local_maximum(vbl_array_2d<float> const & nighborhood,
+  static bool local_maximum(vbl_array_2d<float> const & nighborhood,
                      int n, float& value);
 
   //:find the sub-pixel offset to the maximum using a 3x3 quad interpolation
-static void interpolate_center(vbl_array_2d<float> const & neighborhood,
+  static void interpolate_center(vbl_array_2d<float> const & neighborhood,
                           float& dx, float& dy);
-
 
   //:sub-sample a 1-d array using the Bert-Adelson algorithm
   static void half_resolution_1d(const float* input, int n, 
                                  const float k0, const float k1,
                                  const float k2, float* output);
-  brip_float_ops(){};
+  brip_float_ops() {}
 };
 
-#endif
+#endif // brip_float_ops_h_

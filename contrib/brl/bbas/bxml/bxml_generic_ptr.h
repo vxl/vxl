@@ -1,4 +1,4 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/bbas/bxml/bxml_generic_ptr.h
 #ifndef bxml_generic_ptr_h_
 #define bxml_generic_ptr_h_
 //--------------------------------------------------------------------------------
@@ -23,7 +23,7 @@ class vsol_spatial_object_2d;
 class bxml_generic_ptr
 {
  public:
-  ~bxml_generic_ptr(){};
+  ~bxml_generic_ptr(){}
   //:type enumeration
   enum ptr_type{NO_TYPE=0, VECT, VSOL_SO}; 
   ptr_type type() const{return type_;}

@@ -40,7 +40,7 @@ class segv_vtol2D_tableau : public vgui_easy2D_tableau
   segv_vtol2D_tableau(vgui_tableau_sptr const& t,
                       const char* n="unnamed");
 
-  ~segv_vtol2D_tableau(){};
+  ~segv_vtol2D_tableau(){}
 
   //: the vtol display methods
   segv_vtol_soview2D_vertex* add_vertex(vtol_vertex_2d_sptr& v);
