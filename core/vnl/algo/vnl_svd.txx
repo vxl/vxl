@@ -2,7 +2,9 @@
 
 #include <vcl_fstream.h>
 #include <vcl_cstdlib.h> // abort()
-#include <vcl_rel_ops.h> // operator!=(complex)
+#ifdef VCL_SGI_CC_720
+# include <vcl_rel_ops.h> // operator!=(complex)
+#endif
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h>
