@@ -4,6 +4,7 @@
 #endif
 //:
 // \file
+#include "HMatrix3D.h"
 
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
@@ -15,7 +16,6 @@
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgOperator3D.h>
 #include <mvl/HomgPoint3D.h>
-#include <mvl/HMatrix3D.h>
 
 //--------------------------------------------------------------
 //
@@ -135,7 +135,7 @@ vcl_istream& operator>>(vcl_istream& s, HMatrix3D& H)
 //: Get matrix element at (row_index, col_index)
 double HMatrix3D::get (unsigned int row_index, unsigned int col_index) const
 {
-  return this -> get(row_index, col_index);
+  return vnl_double_4x4::get(row_index, col_index);
 }
 
 //-----------------------------------------------------------------------------
@@ -144,7 +144,7 @@ void HMatrix3D::get (double *t_matrix) const
 {
   for (int row_index = 0; row_index < 4; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
-      *t_matrix++ = this -> get(row_index, col_index);
+      *t_matrix++ = vnl_double_4x4::get(row_index, col_index);
 }
 
 //-----------------------------------------------------------------------------
