@@ -1,6 +1,6 @@
 USES += vxl
 USES += mul
-IULIBS := -lmbl -lvnl -lvbl -lvsl
+IULIBS := -lmbl -lvnl -lvbl -lvsl -lvnl-io
 
 TESTS += test_mbl.cxx # includes test_mz_random.cxx test_matrix_products.cxx test_matxvec.cxx
 

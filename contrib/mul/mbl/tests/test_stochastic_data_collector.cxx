@@ -61,10 +61,10 @@ void test_stochastic_data_collector()
   while(data.next());
   }
 
-  vcl_cout << "Histogram output " <<vcl_endl;
+  vcl_cout << "Histogram output, over " << n_expts << "experiments" <<vcl_endl;
   for (i = 0; i < 10; i++)
-    vul_printf(vcl_cout, "From %4d to %4d there were %4d items stored.\n",
-      i * 500, i*500 + 499, hist[i]/n_expts)  ;
+    vul_printf(vcl_cout, "From %4d to %4d there were on average %4f items stored.\n",
+      i * 500, i*500 + 499, ((double)hist[i])/((double)n_expts))  ;
   
   unsigned correct_hist[] = {501, 543, 499, 495, 461, 539, 490, 515, 460, 497};
 
@@ -109,8 +109,9 @@ void test_stochastic_data_collector()
   TEST( "Loaded collector = saved collector", test_res, true);
   
   vcl_cout << "Loaded by pointer: "<<collector3<<vcl_endl;
-  
-   
+  delete collector3;
+
+  vsl_delete_all_loaders();
   
 }
 
