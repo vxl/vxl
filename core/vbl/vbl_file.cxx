@@ -54,7 +54,7 @@ int vbl_file::size(char const* fn)
     return 0;
 }
 
-int vbl_file::exists(char const* fn)
+bool vbl_file::exists(char const* fn)
 {
   struct stat fs;
   return (stat(fn, &fs) == 0);

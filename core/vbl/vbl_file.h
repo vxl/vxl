@@ -45,7 +45,10 @@ struct vbl_file {
   }
 
   // -- Return true iff filename exists.  It may be any sort of file.
-  static int exists(char const* filename);
+  static bool exists(char const* filename);
+  static bool exists(vcl_string const& filename) {
+    return exists(filename.c_str());
+  }
 
   // -- Return size of vbl_file
   static int size(char const* filename);
