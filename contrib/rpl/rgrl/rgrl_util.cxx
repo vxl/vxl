@@ -650,7 +650,8 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
     for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
       rgrl_match_set_sptr match_set = match_sets[ms];
       if ( match_set && match_set->from_size() > 0) {
-        match_set->remap_from_features( *new_estimate );
+        // match_set->remap_from_features( *new_estimate );
+        match_set->update_geometric_error( estimate );
         weighters[ms]->compute_weights( *scales[ms], *match_set );
       }
     }
@@ -679,6 +680,16 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
                        "converged\n" : current_status->has_stagnated() ?
                                        "stagnated\n" : "reaches max iteration\n" ) );
 
+  // now, remap the from features
+  // geometric errors are already updated
+  //
+  for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
+    rgrl_match_set_sptr match_set = match_sets[ms];
+    if ( match_set && match_set->from_size() > 0) {
+      match_set->remap_from_features( *estimate );
+    }
+  }
+  
   // Compute the total alignment error as the sum of the weighted
   // residual squares
   //
