@@ -17,11 +17,10 @@ btol_edge_algs::~btol_edge_algs()
 {
 }
 
-//:
 //-----------------------------------------------------------------------------
-// Splits e at v and returns the two edges e1, e2, which are incident at v.
-// If v is not within etol of a point on edge e then false is returned, and
-// e is not split
+//: Splits e at v and returns the two edges e1, e2, which are incident at v.
+// If v is not within btol_edge_algs::tol (user-settable) of a point on edge e
+// then false is returned, and e is not split
 //-----------------------------------------------------------------------------
 bool btol_edge_algs::split_edge_2d(vtol_vertex_2d_sptr const& /*v*/,
                                    vtol_edge_2d_sptr const& /*e*/,
@@ -65,9 +64,8 @@ bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr const& e)
   return true;
 }
 
-//:
 //-----------------------------------------------------------------------------
-// Replaces va by vb on edge e.
+//: Replaces va by vb on edge e.
 //-----------------------------------------------------------------------------
 bool btol_edge_algs::subst_vertex_on_edge(vtol_vertex_sptr const& va,
                                           vtol_vertex_sptr const& vb,
@@ -92,9 +90,8 @@ bool btol_edge_algs::subst_vertex_on_edge(vtol_vertex_sptr const& va,
   return false;
 }
 
-//:
 //-----------------------------------------------------------------------------
-// Computes the bounding box for a set of edges
+//: Computes the bounding box for a set of edges
 //-----------------------------------------------------------------------------
 vsol_box_2d btol_edge_algs::bounding_box(vcl_vector<vtol_edge_2d_sptr>& edges)
 {
@@ -128,6 +125,7 @@ void btol_edge_algs::edge_2d_erase(vcl_vector<vtol_edge_2d_sptr>& edges,
     edges.erase(eit);
   return;
 }
+
 //: find the vertex closest to the given position and return it
 vtol_vertex_2d_sptr btol_edge_algs::closest_vertex(vtol_edge_2d_sptr const& e,
                                                    const double x,
