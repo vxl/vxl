@@ -200,6 +200,16 @@ SOURCE=.\mbl_mz_random.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\mbl_read_double.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_read_int.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\mbl_read_props.cxx
 
 # End Source File
