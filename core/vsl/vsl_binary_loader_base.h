@@ -26,16 +26,10 @@ class vsl_binary_loader_base
 };
 
 
-//: Allows other loader scheme to piggy back on the clearing of vsl loaders
-// This is useful for getting rid of spurious memory leaks.
-void vsl_register_new_loader_clear_func(void (*func)());
-
 //: Deletes all the loaders derived from this class
 //  Deletes every loader for which register_this() has been called
-//  This is automatically called on program exit to ensure memory
-//  leak detectors don't throw up false positives.  In that spirit,
-//  this also calls vsl_indent_clear_all_data() to remove another
-//  potential leak.
+//  This function is automatically called on program exit to ensure
+//  memory leak detectors don't throw up false positives.
 void vsl_delete_all_loaders();
 
 #endif // vsl_binary_loader_base_h_

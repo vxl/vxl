@@ -26,6 +26,8 @@ struct vsl_binary_loader_base_auto_clearup
   ~vsl_binary_loader_base_auto_clearup()
   {
     vsl_delete_all_loaders();
+    // Clear all indent data
+    vsl_indent_clear_all_data();
   }
 };
 
@@ -80,20 +82,4 @@ void vsl_delete_all_loaders()
     delete loader_list_;
     loader_list_=0;
   }
-
-  // Call any piggybacking clear functions
-  if (extra_loader_clear_list_!=0)
-  {
-    const unsigned n = extra_loader_clear_list_->size();
-    for (unsigned i=0;i<n;++i)
-      (extra_loader_clear_list_->operator[](i))();
-
-    // Clean up the list itself
-    extra_loader_clear_list_->clear();
-    delete extra_loader_clear_list_;
-    extra_loader_clear_list_=0;
-  }
-
-  // Clear all indent data
-  vsl_indent_clear_all_data();
 }
