@@ -1,4 +1,3 @@
-
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -283,8 +282,8 @@ void vgui_soview2D_ellipse::draw()
 
 float vgui_soview2D_ellipse::distance_squared(float x, float y)
 {
+  return (x - this->x)*(x - this->x) + (y - this->y)*(y - this->y);
   // not implemented - TODO
-  return -1;
 }
 
 void vgui_soview2D_ellipse::get_centroid(float* x, float* y)
