@@ -165,7 +165,7 @@ void bmvv_multiview_manager::quit()
 void bmvv_multiview_manager::load_image()
 {
   bool greyscale = false;
-  vgui_dialog load_image_dlg("Load image file");
+  vgui_dialog load_image_dlg("Load Image");
   static vcl_string image_filename = "";
   static vcl_string ext = "*.*";
   load_image_dlg.file("Image Filename:", ext, image_filename);
@@ -263,11 +263,11 @@ void bmvv_multiview_manager::vd_edges()
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
 
   //display the edges
-  if (btab)
+  if (btab&&edges)
     btab->add_edges(*edges, true);
   else
     {
-      vcl_cout << "In bmvv_multiview_manager::vd_edges() - null tableau\n";
+      vcl_cout << "In bmvv_multiview_manager::vd_edges() - null edges or null tableau\n";
       return;
     }
 }
