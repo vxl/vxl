@@ -11,6 +11,7 @@ SET(vpro_sources
     vpro_capture_process.cxx         vpro_capture_process.h
     vpro_curve_tracking_process.cxx  vpro_curve_tracking_process.h
     vpro_frame_diff_process.cxx      vpro_frame_diff_process.h
+    vpro_motion_params.cxx           vpro_motion_params.h
     vpro_motion_process.cxx          vpro_motion_process.h
     vpro_lucas_kanade_process.cxx    vpro_lucas_kanade_process.h
     vpro_epipolar_space_process.cxx  vpro_epipolar_space_process.h
@@ -19,11 +20,12 @@ SET(vpro_sources
     vpro_line_fit_process.cxx        vpro_line_fit_process.h
     vpro_edge_line_process.cxx       vpro_edge_line_process.h
     vpro_grid_finder_process.cxx     vpro_grid_finder_process.h
+    vpro_corr_tracker_process.cxx    vpro_corr_tracker_process.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpro_sources)
 
 ADD_LIBRARY(vpro ${vpro_sources})
 
-TARGET_LINK_LIBRARIES(vpro sdet brip bdgl vdgl vtol vsol vidl vil1 vul vbl)
+TARGET_LINK_LIBRARIES(vpro sdet brip bdgl vdgl gevd vtol vsol vidl vil1 vul vbl)
 

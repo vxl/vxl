@@ -34,7 +34,11 @@ class vpro_video_process : public vbl_ref_count
 
   void add_input_image(vil1_image const& im) { input_images_.push_back(im); }
 
+  void add_input_spatial_object(vsol_spatial_object_2d_sptr const& so);
+
   void add_input_spatial_objects(vcl_vector<vsol_spatial_object_2d_sptr> const& spat_objs);
+
+  void add_input_topology_object(vtol_topology_object_sptr const& to);
 
   void add_input_topology(vcl_vector<vtol_topology_object_sptr> const& topo_objes);
 
@@ -46,7 +50,7 @@ class vpro_video_process : public vbl_ref_count
   int get_N_input_spat_objs() { return input_spat_objs_.size(); }
   vcl_vector<vsol_spatial_object_2d_sptr> const&
       get_input_spatial_objects() { return input_spat_objs_; }
-
+  
   int get_N_input_topo_objs() { return input_topo_objs_.size(); }
   vcl_vector<vtol_topology_object_sptr> const &
       get_input_topology() { return input_topo_objs_; }

@@ -45,11 +45,22 @@ void vpro_video_process::clear_output()
   output_spat_objs_.clear();
   output_topo_objs_.clear();
 }
+void vpro_video_process::
+add_input_spatial_object(vsol_spatial_object_2d_sptr const& so)
+{
+  input_spat_objs_.push_back(so);
+}
 
 void vpro_video_process::add_input_spatial_objects(vcl_vector<vsol_spatial_object_2d_sptr> const& spat_objs)
 {
   for(vcl_vector<vsol_spatial_object_2d_sptr>::const_iterator sit = spat_objs.begin(); sit != spat_objs.end(); sit++)
     input_spat_objs_.push_back(*sit);
+}
+
+void vpro_video_process::
+add_input_topology_object(vtol_topology_object_sptr const& to)
+{
+  input_topo_objs_.push_back(to);
 }
 
 void vpro_video_process::add_input_topology(vcl_vector<vtol_topology_object_sptr> const& topo_objs)

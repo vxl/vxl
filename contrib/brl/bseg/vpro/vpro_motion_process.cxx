@@ -3,7 +3,7 @@
 #include <brip/brip_float_ops.h>
 #include <vpro/vpro_motion_process.h>
 
-vpro_motion_process::vpro_motion_process()
+vpro_motion_process::vpro_motion_process(vpro_motion_params& vmp) : vpro_motion_params(vmp)
 {
   state_ = NO_IMAGE;
 }
@@ -16,7 +16,6 @@ void vpro_motion_process::compute_motion(vil1_image ix, vil1_image iy)
 {
   //ix contains the current image not the gradient (maybe later)
   vil1_memory_image_of<float> fimg(ix);
-
   //Get sqrt (sigma0*sigma1) of the gradient matrix on a 3x3 neighborhood
   int n = 1;
   vil1_memory_image_of<float> sing =
@@ -31,7 +30,7 @@ void vpro_motion_process::compute_motion(vil1_image ix, vil1_image iy)
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
       out(x,y) = vcl_fabs(It(x,y))*sing(x,y);
-  output_image_ = brip_float_ops::convert_to_byte(out, 0, 10000.0);
+  output_image_ = brip_float_ops::convert_to_byte(out, low_range_, high_range_);
 }
 
 void vpro_motion_process::update_queue(vil1_image ix, vil1_image iy)
@@ -52,7 +51,7 @@ bool vpro_motion_process::execute()
     }
   vil1_image img = vpro_video_process::get_input_image(0);
   vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
-  vil1_memory_image_of<float> fsmooth = brip_float_ops::gaussian(fimg, 1.0);
+  vil1_memory_image_of<float> fsmooth = brip_float_ops::gaussian(fimg, smooth_sigma_);
  // vil1_memory_image_of<float> fx = brip_float_ops::dx(fsmooth);
  // vil1_memory_image_of<float> fy = brip_float_ops::dx(fsmooth);
   this->clear_input();
