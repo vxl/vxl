@@ -1,5 +1,6 @@
 ifneq (,$(wildcard ${IUEROOT}/v3p/xerces-c-src1_4_0/include/dom/DOM.hpp))
  HAS_XERCES:=1
+ INCDIRS += ${IUEROOT}/v3p/xerces-c-src1_4_0/include
  include ${IUEROOT}/config/top-params.mk
  IULIBS += -lbxml $(XERCES_LIBS)
  USES += contrib/gel
