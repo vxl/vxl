@@ -43,6 +43,7 @@ class test
     vsol_spatial_object_2d* p2 = new vsol_point_2d(2,2);
     vsol_spatial_object_2d* p3 = new vsol_point_2d(3,3);
     bxml_generic_ptr gp0(p0), gp1(p1), gp2(p2), gp3(p3);
+    vcl_cout << "p0: " << gp0 << "p1: " << gp1 << "p2: " << gp2 << "p3: " <<gp3;
     tab_[s0]=p0;   tab_[s1]=p1;   tab_[s2]=p2; tab_[s3]=p3;
   }
   static vcl_map<vcl_string,bxml_generic_ptr,vcl_less<vcl_string> >& get_map()
