@@ -709,20 +709,27 @@ VDS int parse(vul_arg<vcl_vector<double> >* argmt, char ** argv)
   int sucked = 0;
   // Defaults should be cleared when the user supplies a value
   argmt->value_.clear();
-  while (argv[0]) {
+  char *current = argv[0];
+  while (current) {
     char* endptr = 0;
-    double tmp = vcl_strtod(argv[0], &endptr);
+    double tmp = vcl_strtod(current, &endptr);
     //argmt->value_
     if (*endptr == '\0') {
       argmt->value_.push_back(tmp);
       ++ sucked;
       ++ argv;
+      current = argv[0];
     }
-    else if (endptr == argv[0])
+    else if (*endptr == ',')
+    {
+      argmt->value_.push_back(tmp);
+      current = endptr+1;
+    }
+    else if (endptr == current)
       break; // OK. end of list of doubles.
     else {
       // There is junk after the number, or no number was found
-      vcl_cerr << "vul_arg_parse: WARNING: Attempt to parse " << *argv << " as double\n";
+      vcl_cerr << "vul_arg_parse: WARNING: Attempt to parse " << current << " as double\n";
       return -1;
     }
   }

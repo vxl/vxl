@@ -21,17 +21,24 @@ char const * my_argv_1[] = {
   "-bool1",
   "-bool1",
   "-bool2",
-  "-list",
+  "-list1",
   "1:2,10,21:3:25,-1:-2:-7",
+  "-list2",
+  "1.5,-1.5,8.0",
   "h",
   "i",
   "j",
   0
 };
 
-int list_contents[] = {
+int list1_contents[] = {
   1,2,10,21,24,-1,-3,-5,-7
 };
+
+double list2_contents[] = {
+  1.5,-1.5,8.0
+};
+
 
 int count_my_args(char const * const * my_argv)
 {
@@ -50,8 +57,9 @@ void test_do_vul_arg()
   vul_arg<bool> bool1(arglist, "-bool1", "And another", false);
   vul_arg<bool> bool2(arglist, "-bool2", "And another", true);
   vul_arg<bool> bool3(arglist, "-bool3", "And a final help test just to finish off...", true);
-  vul_arg<vcl_list<int> > list1(arglist, "-list", "List...");
+  vul_arg<vcl_list<int> > list1(arglist, "-list1", "List...");
   vul_arg<char*> filename1(arglist);
+  vul_arg<vcl_vector<double> > list2(arglist, "-list2", "double List...");
 
   int my_argc = count_my_args(my_argv_1);
   vcl_cout << "vul_argc = " << my_argc
@@ -61,6 +69,7 @@ void test_do_vul_arg()
            << ", bool2 = " << bool2()
            << ", bool3 = " << bool3()
            << ", list1 size = " << list1().size()
+           << ", list2 size = " << list2().size()
            << vcl_endl;
   char **my_argv = (char**) my_argv_1;
 
@@ -70,18 +79,36 @@ void test_do_vul_arg()
   TEST("int2", int2(), 2);
   TEST("filename == f", vcl_strcmp(filename1(), "f"), 0);
 
-  unsigned true_list_length = sizeof list_contents / sizeof list_contents[0];
-  vcl_list<int> l = list1();
-  TEST("list length", l.size(), true_list_length);
-  bool ok = true;
-  for (unsigned int i = 0; i < true_list_length; ++i) {
-    if (vcl_find(l.begin(), l.end(), list_contents[i]) == l.end()) {
-      vcl_cout << "Integer [" << list_contents[i] << "] not found in list\n";
-      ok = false;
+  {
+    unsigned true_list_length = sizeof list1_contents / sizeof list1_contents[0];
+    vcl_list<int> l = list1();
+    TEST("list1 length", l.size(), true_list_length);
+    bool ok = true;
+    for (unsigned int i = 0; i < true_list_length; ++i) {
+      if (vcl_find(l.begin(), l.end(), list1_contents[i]) == l.end()) {
+        vcl_cout << "Integer [" << list1_contents[i] << "] not found in list\n";
+        ok = false;
+      }
     }
+    TEST("list1 contents", ok, true);
   }
-  TEST("list contents", ok, true);
+  {
+    unsigned true_list_length = sizeof list2_contents / sizeof list2_contents[0];
+    vcl_vector<double> l = list2();
+    TEST("list2 length", l.size(), true_list_length);
+    bool ok = true;
+    for (unsigned int i = 0; i < true_list_length; ++i) {
+      if (vcl_find(l.begin(), l.end(), list2_contents[i]) == l.end()) {
+        vcl_cout << "Value [" << list2_contents[i] << "] not found in list\n";
+        ok = false;
+      }
+    }
+    TEST("list2 contents", ok, true);
+  }
+
+  
 }
+
 
 void test_arg()
 {
