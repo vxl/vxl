@@ -1,3 +1,3 @@
 #include <vcl_list.txx>
 
-VCL_LIST_INSTANTIATE(unsigned);
+VCL_LIST_INSTANTIATE(unsigned int);
