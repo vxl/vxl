@@ -39,6 +39,7 @@ SET( rgrl_sources
   rgrl_matcher_sptr.h
   rgrl_matcher_fixed.h                 rgrl_matcher_fixed.cxx
   rgrl_matcher_k_nearest.h             rgrl_matcher_k_nearest.cxx
+  rgrl_matcher_k_nearest_pick_one.h    rgrl_matcher_k_nearest_pick_one.cxx
   rgrl_matcher_k_nearest_random.h      rgrl_matcher_k_nearest_random.cxx
   rgrl_matcher_k_nearest_boundary.h    rgrl_matcher_k_nearest_boundary.cxx
   rgrl_matcher_pseudo.h                rgrl_matcher_pseudo.txx
