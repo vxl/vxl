@@ -4,8 +4,11 @@ SUBDIRS += sdet
 # segmentation view library
 SUBDIRS += segv
 
-# segmentation test executables
+# segmentation application executables
 SUBDIRS += sbin
+
+# segmentation tests
+SUBDIRS += tests
 
 ################################
 include ${IUEROOT}/config/top.mk
