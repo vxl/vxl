@@ -38,14 +38,14 @@
 //                             |
 //                             |
 //                            grid
-//                            / \
-//                           /   \
-//                          /     \
+//                            / \                         .
+//                           /   \                        .
+//                          /     \                       .
 //                        zoom    zoom
 //                         |       |
 //                          \     /
 //              draw_on_both_children_tableau ("dob")
-//                          /     \
+//                          /     \                       .
 //                         |       |
 //                       image   image
 // \end verbatim
@@ -61,13 +61,13 @@
 //                             |
 //                             |
 //                      ---- grid ----
-//                     /              \
+//                     /              \                   .
 //                  zoom              zoom
 //                    |                |
 //                    |                |
 //                  dob1 - -> dob <- - dob2
-//                           /   \
-//                          /     \
+//                           /   \                        .
+//                          /     \                       .
 //            "handle(e,1)"+       +"handle(e,2)"
 //                         |       |
 //                         |       |
