@@ -63,6 +63,7 @@ compute_geometric_scale( rgrl_match_set const& match_set,
   }
 
   vcl_vector<double> error_distances;
+  error_distances.reserve( match_set.from_size() );
   DebugMacro(1, "\n");
 
   for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ) {
