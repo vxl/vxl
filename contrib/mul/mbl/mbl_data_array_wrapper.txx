@@ -70,7 +70,7 @@ int mbl_data_array_wrapper<T>::index() const
 
 //: Create copy on heap and return base pointer
 template<class T>
-mbl_data_array_wrapper< T >* mbl_data_array_wrapper<T>::clone() const
+mbl_data_wrapper< T >* mbl_data_array_wrapper<T>::clone() const
 {
 	return new mbl_data_array_wrapper<T>(*this);
 }

@@ -58,8 +58,7 @@ public:
 	virtual void set_index(int n);
 
 		//: Create copy on heap and return base pointer
-	virtual mbl_data_array_wrapper< T >* clone() const;
-
+	virtual mbl_data_wrapper< T >* clone() const;
 };
 
 #endif // mbl_data_array_wrapper_h
