@@ -45,24 +45,25 @@ public:
   rsdl_borgefors(int org_x, int org_y, int size_x, int size_y,
                  iterator_type begin, iterator_type end, bool release_dist_map = false);
   //: sets distance and index maps, with dimensions set by size_x and size_y
-  //  \param start_x x-coord of the top left corner
-  //  \param start_y y-coord of the top left corner
+  //  \param org_x  x-coord of the top left corner
+  //  \param org_y  y-coord of the top left corner
   //  \param size_x x dimension
   //  \param size_y y dimension
-  //  \param begin begin ptr of the data vector
-  //  \param end end ptr of the data vector
+  //  \param begin  begin ptr of the data vector
+  //  \param end    end ptr of the data vector
+  //  \param release_dist_map should the distance map be released?
   void set(int org_x, int org_y, int size_x, int size_y,
            iterator_type begin, iterator_type end, bool release_dist_map = false);
 
   //: sets all data members from the caller
-  //  \param start_x x-coord of the top left corner
-  //  \param start_y y-coord of the top left corner
+  //  \param org_x  x-coord of the top left corner
+  //  \param org_y  y-coord of the top left corner
   //  \param size_x x dimension
   //  \param size_y y dimension
-  //  \param begin begin ptr of the data vector
-  //  \param end end ptr of the data vector
+  //  \param begin  begin ptr of the data vector
+  //  \param end    end ptr of the data vector
+  //  \param index_map    index map
   //  \param distance_map distance map
-  //  \param index_map index map
   void set(int org_x, int org_y, int size_x, int size_y,
            iterator_type begin, iterator_type end,
            vbl_array_2d<int> index_map,
