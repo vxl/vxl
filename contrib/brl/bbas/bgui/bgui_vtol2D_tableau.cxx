@@ -26,6 +26,7 @@ bgui_vtol2D_tableau::~bgui_vtol2D_tableau()
 {
 }
 
+#ifdef DEBUG
 static void print_edgels(vtol_edge_2d_sptr const & e)
 {
   vsol_curve_2d_sptr c = e->curve();
@@ -41,6 +42,7 @@ static void print_edgels(vtol_edge_2d_sptr const & e)
   for (int i = 0; i<N; i++)
     vcl_cout << "egl(" << i << ")" << (*ec)[i] << "\n";
 }
+#endif
 
 void bgui_vtol2D_tableau::init()
 {
@@ -166,7 +168,9 @@ bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr const& v)
 bgui_vtol_soview2D_edge*
 bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr const& e)
 {
-  //  print_edgels(e);
+#ifdef DEBUG
+  print_edgels(e);
+#endif
   bgui_vtol_soview2D_edge* obj = new bgui_vtol_soview2D_edge(e);
   //set the default style
   bgui_style_sptr sty = style_map_[obj->type_name()];
