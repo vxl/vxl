@@ -108,49 +108,34 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\test_driver.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_include.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_arg.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_file_iterator.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_psfile.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_regexp.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_sprintf.cxx
-
 # End Source File
 # Begin Source File
-
+SOURCE=.\test_string.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_temp_filename.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_url.cxx
-
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
