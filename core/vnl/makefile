@@ -37,8 +37,6 @@ MANPAGE_SOURCES += vnl_complexify.h
 MANPAGE_SOURCES += vnl_imag.h
 MANPAGE_SOURCES += vnl_real.h
 
-MANPAGE_SOURCES += vnl_test.h # temporarily
-
 #
 SOURCES += vnl_alloc.cxx
 SOURCES += vnl_block.cxx
