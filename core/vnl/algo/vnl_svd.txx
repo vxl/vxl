@@ -1,32 +1,39 @@
 #include "vnl_svd.h"
 
-#include <vcl_fstream.h>
-#include <vcl_cstdlib.h> // abort()
+#include <vcl_cassert.h>
 #include <vcl_complex.h>
-#ifdef VCL_SGI_CC_720
-# include <vcl_rel_ops.h> // operator!=(complex)
-#endif
+#include <vcl_fstream.h>
+#include <vcl_algorithm.h> // min
+// is this still needed?
+//#ifdef VCL_SGI_CC_720
+//# include <vcl_rel_ops.h> // operator!=(complex)
+//#endif
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/algo/vnl_netlib.h>
 
+#define vnl_svd_fsm 0
+
+#if vnl_svd_fsm
+template <typename T> int fsm_svdc(vnl_netlib_svd_proto(T));
+# define vnl_linpack_svdc fsm_svdc
+#else
 // use C++ overloading to call the right linpack routine from the template code :
 #define macro(p, T) \
-static inline int vnl_linpack_svd(vnl_netlib_svd_proto(T)) \
+inline int vnl_linpack_svdc(vnl_netlib_svd_proto(T)) \
 { return p##svdc_(vnl_netlib_svd_params); }
-macro(s, vnl_netlib::real_t);
-macro(d, vnl_netlib::doublereal_t);
-macro(c, vnl_netlib::complex_t);
-macro(z, vnl_netlib::doublecomplex_t);
+macro(s, float);
+macro(d, double);
+macro(c, vcl_complex<float>);
+macro(z, vcl_complex<double>);
 #undef macro
+#endif
 
 //--------------------------------------------------------------------------------
 
 static bool test_heavily = false;
 
-// awf : REMEMBER TO CHANGE DOC COMMENT IN vnl_svd.h if you change anything
-// fsm : errh... which one of them ?
 template <class T>
 vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
   m_(M.rows()),
@@ -36,18 +43,13 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
   Winverse_(n_),
   V_(n_, n_)
 {
-  // fsm added this sanity check
-  if (m_==0 || n_==0) {
-    vcl_cerr << __FILE__ " : matrix M has size " << M.rows() << 'x' << M.columns() << vcl_endl
-         << "  That makes no sense!" << vcl_endl
-         << "  &M = " << (void*)&M << vcl_endl;
-    abort();
-  }
-
+  assert(m_ > 0);
+  assert(n_ > 0);
+  
   {
     int n = M.rows();
     int p = M.columns();
-    int mm = vnl_math_min(n+1,p);
+    int mm = vcl_min(n+1,p);
 
     // Copy source matrix into fortran storage
     // SVD is slow, don't worry about the cost of this transpose.
@@ -62,13 +64,13 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
 
     // Call Linpack SVD
     int info = 0;
-    vnl_linpack_svd((T*)X, n, n, p,
-                    wspace.data_block(),
-                    espace.data_block(),
-                    uspace.data_block(), n,
-                    vspace.data_block(), p,
-                    work.data_block(),
-                    21, &info);
+    vnl_linpack_svdc((T*)X, n, n, p,
+                     wspace.data_block(),
+                     espace.data_block(),
+                     uspace.data_block(), n,
+                     vspace.data_block(), p,
+                     work.data_block(),
+                     21, &info);
 
     // Error return?
     if (info != 0) {
@@ -113,8 +115,8 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
       vcl_cerr << "fro_norm(M) = " << n << vcl_endl;
       vcl_cerr << "eps*fro_norm(M) = " << thresh << vcl_endl;
       vcl_cerr << "Press return to continue\n";
-      char x[1];
-      vcl_cin.get(x, 1, '\n');
+      char x;
+      vcl_cin.get(&x, 1, '\n');
     }
   }
 
@@ -128,51 +130,17 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
 
 
 
-
-// Copy ctor
-template <class T>
-vnl_svd<T>::vnl_svd(vnl_svd<T> const& that)
-{
-  operator= (that);
-}
-
-
-
-
-// Assignment
-template <class T>
-vnl_svd<T>& vnl_svd<T>::operator=(vnl_svd<T> const& that)
-{
-  U_ = that.U_;
-  W_ = that.W_;
-  Winverse_ = that.Winverse_;
-  V_ = that.V_;
-  rank_ = that.rank_;
-  return *this;
-}
-
-
-
-
-#ifdef xWIN32
-#warning "I think I may have fixed this, remove if so -awf"
-
-// this is a cool hack for the microsoft compiler
-// if it does not see these things being cout'ed
-// there is an error in operator<<!  It claims that
-// there is no way to do that for matrix and diagmatrix
-static void foo()
-{
-  DiagMatrix<double> DD;
-  DiagMatrix<float> FF;
-  vcl_cout << DD  << FF;
-  vnl_matrix<float> U;//  =  svd.U_;
-  vnl_matrix<double> dU;//  = svd.U_;
-  vcl_cout << U << dU;
-}
-#endif
-
-
+// // Assignment
+// template <class T>
+// vnl_svd<T>& vnl_svd<T>::operator=(vnl_svd<T> const& that)
+// {
+//   U_ = that.U_;
+//   W_ = that.W_;
+//   Winverse_ = that.Winverse_;
+//   V_ = that.V_;
+//   rank_ = that.rank_;
+//   return *this;
+// }
 
 
 template <class T>
@@ -217,38 +185,17 @@ template <class T> void vnl_svd<T>::zero_out_relative(double tol) // sqrt(machin
 }
 
 
-/*
-//: return the largest singular value
-template <class T>
-vnl_svd<T>::singval_t vnl_svd<T>::sigma_max() const
-{
-  return W_(0,0);
-}
-
-
-
-//: return the smallest singular value
-template <class T>
-vnl_svd<T>::singval_t vnl_svd<T>::sigma_min() const
-{
-  return W_(n_-1,n_-1);
-}
-
-
-
-//: Return ratio of smallest/largest singular value
-template <class T>
-vnl_svd<T>::singval_t vnl_svd<T>::well_condition () const
-{
-  return sigma_min() / sigma_max();
-}
-
-*/
-
 //: Calculate determinant as product of diagonals in W.
 template <class T>
 vnl_svd<T>::singval_t vnl_svd<T>::determinant_magnitude() const
 {
+  {
+    static bool warned = false;
+    if (!warned && m_ != n_) {
+      vcl_cerr << __FILE__ ": called determinant_magnitude() on SVD of non-square matrix" << vcl_endl;
+      warned = true;
+    }
+  }
   singval_t product = W_(0, 0);
   for (unsigned long k = 1; k < W_.columns(); k++)
     product *= W_(k, k);
@@ -453,7 +400,7 @@ template <class T>
 vnl_vector <T> vnl_svd<T>::left_nullvector()  const
 {
   vnl_vector<T> ret(m_);
-  int col = vnl_math_min(m_, n_) - 1;
+  int col = vcl_min(m_, n_) - 1;
   for(int i = 0; i < m_; ++i)
     ret(i) = U_(i, col);
   return ret;
@@ -464,4 +411,4 @@ vnl_vector <T> vnl_svd<T>::left_nullvector()  const
 #undef VNL_SVD_INSTANTIATE
 #define VNL_SVD_INSTANTIATE(T) \
 template class vnl_svd<T >; \
-template vcl_ostream& operator<<(vcl_ostream &, vnl_svd<T > const &);
+template vcl_ostream& operator<<(vcl_ostream &, vnl_svd<T > const &)

@@ -13,22 +13,28 @@
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/algo/vnl_netlib.h>
 
+#define vnl_qr_fsm 0
+
+#if vnl_qr_fsm
+template <typename T> int fsm_qrdc(vnl_netlib_qrdc_proto(T));
+template <typename T> int fsm_qrsl(vnl_netlib_qrsl_proto(T));
+# define vnl_linpack_qrdc fsm_qrdc
+# define vnl_linpack_qrsl fsm_qrsl
+
+#else
 // use C++ overloading to call the right linpack routine from the template code :
 #define macro(p, T) \
-inline int vnl_qrdc(vnl_netlib_qrdc_proto(T)) \
+inline int vnl_linpack_qrdc(vnl_netlib_qrdc_proto(T)) \
 { return p##qrdc_(vnl_netlib_qrdc_params); } \
-inline int vnl_qrsl(vnl_netlib_qrsl_proto(T)) \
+inline int vnl_linpack_qrsl(vnl_netlib_qrsl_proto(T)) \
 { return p##qrsl_(vnl_netlib_qrsl_params); }
-macro(s, vnl_netlib::real_t);
-macro(d, vnl_netlib::doublereal_t);
-macro(c, vnl_netlib::complex_t);
-macro(z, vnl_netlib::doublecomplex_t);
+macro(s, float);
+macro(d, double);
+macro(c, vcl_complex<float>);
+macro(z, vcl_complex<double>);
 #undef macro
+#endif
 
-
-//: Extract the Q*R decomposition of matrix M.  The decomposition is stored in
-// a compact and time-efficient packed form, which is most easily used via the
-// "solve" and "determinant" methods.
 template <class T>
 vnl_qr<T>::vnl_qr(vnl_matrix<T> const& M):
   qrdc_out_(M.columns(), M.rows(), 999),
@@ -48,12 +54,12 @@ vnl_qr<T>::vnl_qr(vnl_matrix<T> const& M):
   jpvt_.fill(0); // Allow all columns to be pivoted if pivoting is enabled.
 
   vnl_vector<T> work(M.rows());
-  vnl_qrdc(qrdc_out_.data_block(), // On output, UT is R, below diag is mangled Q
-           r, r, c,
-           qraux_.data_block(), // Further information required to demangle Q
-           jpvt_.data_block(),
-           work.data_block(),
-           do_pivot);
+  vnl_linpack_qrdc(qrdc_out_.data_block(), // On output, UT is R, below diag is mangled Q
+                   r, r, c,
+                   qraux_.data_block(), // Further information required to demangle Q
+                   jpvt_.data_block(),
+                   work.data_block(),
+                   do_pivot);
 }
 
 template <class T>
@@ -185,16 +191,16 @@ vnl_vector<T> vnl_qr<T>::solve(const vnl_vector<T>& b) const
   int JOB = 100;
 
   int info = 0;
-  vnl_qrsl(qrdc_out_.data_block(),
-           n, n, p,
-           qraux_.data_block(),
-           b_data, 0, QtB.data_block(),
-           x.data_block(),
-           0/*residual*/,
-           0/*Ax*/,
-           JOB,
-           &info);
-
+  vnl_linpack_qrsl(qrdc_out_.data_block(),
+                   n, n, p,
+                   qraux_.data_block(),
+                   b_data, (T*)0, QtB.data_block(),
+                   x.data_block(),
+                   (T*)0/*residual*/,
+                   (T*)0/*Ax*/,
+                   JOB,
+                   &info);
+  
   if (info > 0)
     vcl_cerr << "vnl_qr<T>::solve() : matrix is rank-deficient by " << info << vcl_endl;
 
@@ -214,17 +220,17 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
   int JOB = 1000;
 
   int info = 0;
-  vnl_qrsl(qrdc_out_.data_block(),
-           n, n, p,
-           qraux_.data_block(),
-           b_data,
-           0,                   // A: Qb
-           QtB.data_block(),    // B: Q'b
-           0,                   // C: x
-           0,                   // D: residual
-           0,                   // E: Ax
-           JOB,
-           &info);
+  vnl_linpack_qrsl(qrdc_out_.data_block(),
+                   n, n, p,
+                   qraux_.data_block(),
+                   b_data,
+                   (T*)0,               // A: Qb
+                   QtB.data_block(),    // B: Q'b
+                   (T*)0,               // C: x
+                   (T*)0,               // D: residual
+                   (T*)0,               // E: Ax
+                   JOB,
+                   &info);
 
   if (info > 0)
     vcl_cerr << "vnl_qr<T>::QtB() -- matrix is rank-def by " << info << vcl_endl;

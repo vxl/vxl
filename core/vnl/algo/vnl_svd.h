@@ -56,12 +56,6 @@
 //  It extends readily to n-ary operations, such as generalized
 //  eigensystems, which cannot be members of just one matrix.
 
-
-template <class T> class vnl_svd;
-// templated friends must be declared to be templated :
-template <class T> vcl_ostream& operator<<(vcl_ostream&, 
-                                           vnl_svd<T> const& svd);
-
 export template <class T>
 class vnl_svd {
 public:
@@ -136,11 +130,7 @@ public:
   vnl_vector<T> nullvector() const;
   vnl_vector<T> left_nullvector() const;
 
-//  friend ostream& operator<<(ostream&, const vnl_svd<T>& svd);
-
 private:
-
-  // Data Members--------------------------------------------------------------
 
   int m_, n_;              // Size of M, local cache.
   vnl_matrix<T> U_;        // Columns Ui are basis for range of M for Wi != 0
@@ -154,13 +144,9 @@ private:
   singval_t min_;
   double last_tol_;
 
-protected:
-
-  // Constructors/Destructors--------------------------------------------------
-
-  // Disallow assignment until awf decides whether its a good idea
-  vnl_svd(vnl_svd<T> const & that);
-  vnl_svd<T>& operator=(vnl_svd<T> const & that);
+  // Disallow assignment.
+  vnl_svd(vnl_svd<T> const &) { }
+  void operator=(vnl_svd<T> const &) { }
 };
 
 template <class T>
@@ -169,5 +155,9 @@ vnl_matrix<T> vnl_svd_inverse(vnl_matrix<T> const& m)
 {
   return vnl_svd<T>(m).inverse();
 }
+
+// this aint no friend.
+export template <class T>
+vcl_ostream& operator<<(vcl_ostream&, vnl_svd<T> const& svd);
 
 #endif // vnl_svd_h_

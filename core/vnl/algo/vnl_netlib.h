@@ -11,8 +11,6 @@
 //
 //  Modifications
 //  dac (Manchester) 28/03/2001: tidied up documentation
-//
-
 
 //: Purpose: declare in a central place the list of symbols from netlib
 //  referenced from vnl-algo. This list was auto-generated, so it is
@@ -21,8 +19,6 @@
 //  Note: the declarations are initially entered as "int f()", which
 //  will conflict with the actual prototype. If you get a conflict,
 //  enter the correct prototype in here.
-//
-
 
 #include <vcl_complex.h>
 
@@ -69,23 +65,25 @@ int *info
 #define vnl_netlib_qrsl_params \
 x, ldx, n, k, qraux, y, qy, qty, b, rsd, xb, job, info
 
-class vnl_netlib {
-public:
-  // fsm : in the global namespace, 'real' conflicts with function ::real()
-  // and 'complex' conflicts with template complex<T>.
-  typedef int integer_t;
-  typedef float  real_t;
-  typedef double doublereal_t;
-  typedef vcl_complex<float>  complex_t;
-  typedef vcl_complex<double> doublecomplex_t;
+struct vnl_netlib
+{
+  // To see why we do this, consider what would happen with:
+  //  #define complex       vcl_complex<float>
+  //  #define doublecomplex vcl_complex<double>
+  // when vcl_complex is a #define for complex.
+  typedef int                 integer;
+  typedef float               real;
+  typedef double              doublereal;
+  typedef vcl_complex<float>  complex;
+  typedef vcl_complex<double> doublecomplex;
 };
 
 extern "C" {
-#define integer       vnl_netlib::integer_t
-#define real          vnl_netlib::real_t
-#define doublereal    vnl_netlib::doublereal_t
-#define complex       vnl_netlib::complex_t
-#define doublecomplex vnl_netlib::doublecomplex_t
+#define integer       vnl_netlib::integer
+#define real          vnl_netlib::real
+#define doublereal    vnl_netlib::doublereal
+#define complex       vnl_netlib::complex
+#define doublecomplex vnl_netlib::doublecomplex
   // complex eigensystem
   int zgeev_(char const *jobvl,
              char const *jobvr,

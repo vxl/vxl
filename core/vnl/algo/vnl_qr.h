@@ -21,9 +21,10 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
-//: Calculate QR decomposition of a matrix.
-//  More detailed description not available
-
+//: Extract the Q*R decomposition of matrix M.
+//  The decomposition is stored in a compact and time-efficient
+// packed form, which is most easily used via the "solve" and
+// "determinant" methods.
 export template <class T>
 class vnl_qr {
 public:
@@ -51,7 +52,7 @@ private:
   vnl_matrix<T>* Q_;
   vnl_matrix<T>* R_;
   
-  // Disallow assignment until I decide whether it's a good idea
+  // Disallow assignment.
   vnl_qr(const vnl_qr<T> &) { }
   void operator=(const vnl_qr<T> &) { }
 };
