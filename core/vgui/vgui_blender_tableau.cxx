@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_image_blender.cxx
+// This is oxl/vgui/vgui_blender_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,9 +6,9 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   27 Oct 99
-// \brief  See vgui_image_blender.h for a description of this file.
+// \brief  See vgui_blender_tableau.h for a description of this file.
 
-#include "vgui_image_blender.h"
+#include "vgui_blender_tableau.h"
 
 #include <vcl_iostream.h>
 
@@ -26,40 +26,61 @@
 # define debug vcl_cerr
 #endif
 
-vgui_image_blender::vgui_image_blender(char const* file, float a)
+//-----------------------------------------------------------------------------
+//: Constructor - don't use this, use vgui_blender_tableau_new.
+//  Creates a blender with the given image and alpha value.
+vgui_blender_tableau::vgui_blender_tableau(char const* file, float a)
   : alpha(a)
 {
   renderer = new vgui_image_renderer;
   renderer->set_image(vil_load(file));
+  filename = vcl_string(file);
 }
 
-vgui_image_blender::vgui_image_blender(vil_image const& img, float a)
+//-----------------------------------------------------------------------------
+//: Constructor - don't use this, use vgui_blender_tableau_new.
+//  Creates a blender with the given image and alpha value.
+vgui_blender_tableau::vgui_blender_tableau(vil_image const& img, float a)
   : alpha(a)
 {
   renderer = new vgui_image_renderer;
   renderer->set_image(img);
+  filename = vcl_string("unknown");
 }
 
-
-vgui_image_blender::~vgui_image_blender()
+//-----------------------------------------------------------------------------
+//: Destructor - called by vgui_blender_tableau_sptr.
+vgui_blender_tableau::~vgui_blender_tableau()
 {
 }
 
-
-vcl_string vgui_image_blender::file_name() const {
-  return "dunno";
+//-----------------------------------------------------------------------------
+//: Returns the filename of the loaded image (if it was loaded from file).
+vcl_string vgui_blender_tableau::file_name() const 
+{
+  return filename.c_str();
 }
 
-vcl_string vgui_image_blender::type_name() const {return "vgui_blender";}
+//-----------------------------------------------------------------------------
+// Returns the type of this tableau ('vgui_blender_tableau').
+vcl_string vgui_blender_tableau::type_name() const 
+{
+  return "vgui_blender_tableau";
+}
 
+//-----------------------------------------------------------------------------
 //: Tell the blender that the image pixels have been changed.
-void vgui_image_blender::reread_image()
+void vgui_blender_tableau::reread_image()
 {
   renderer->reread_image();
 }
 
-bool vgui_image_blender::handle(vgui_event const &e) {
-
+//-----------------------------------------------------------------------------
+//: Handle all events sent to this tableau.
+//  In particular, use draw events to draw the blended image.
+//  Use '_' and '+' key-press events to change alpha.
+bool vgui_blender_tableau::handle(vgui_event const &e) 
+{
   if (vgui_matrix_state::gl_matrices_are_cleared()) {
     GLint vp[4];
     glGetIntegerv(GL_VIEWPORT, vp);
