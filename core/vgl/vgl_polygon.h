@@ -6,6 +6,7 @@
 // awf@robots.ox.ac.uk
 // Created: 02 Apr 00
 
+#include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vgl/vgl_point_2d.h>
 
@@ -46,7 +47,10 @@ public:
   
   sheet_t & operator[](int i) { return sheets_[i]; }
   sheet_t const& operator[](int i) const { return sheets_[i]; }
-  
+
+  //: Pretty print
+  vcl_ostream& print(vcl_ostream&) const;
+
 protected:
   // Data Members--------------------------------------------------------------
   vcl_vector<sheet_t> sheets_;
@@ -64,4 +68,9 @@ struct vgl_polygon_sheet_as_array {
   ~vgl_polygon_sheet_as_array();
 };
 
+inline
+vcl_ostream& operator<< (vcl_ostream& os, vgl_polygon const& p) {
+  return p.print(os);
+}
+  
 #endif // vgl_polygon_h_
