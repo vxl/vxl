@@ -1,8 +1,8 @@
 #ifndef _TEST_IFA_FACTORY_H
 #define _TEST_IFA_FACTORY_H
 
-#include <vcl_vector.h>
 #include <vcl_utility.h>
+#include <vcl_vector.h>
 #include <sdet/sdet_fit_lines_params.h>
 #include <vifa/vifa_int_face_attr_factory.h>
 #include <vifa/vifa_group_pgram_params.h>

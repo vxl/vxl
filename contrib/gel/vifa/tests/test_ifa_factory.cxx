@@ -65,7 +65,7 @@ obtain_int_face_attr(vdgl_intensity_face_sptr	face,
 														 np);
 
 	// Add a face/attribute pair to the cache
-	table_->push_back(make_pair(face, ifa));
+	table_->push_back(vcl_make_pair(face, ifa));
 	return ifa;
 }
 

@@ -39,7 +39,7 @@ static void test_int_face_attr()
 						   np._ilow, np._ihigh);
 		np.recompute();
 
-		vcl_cout << "Normalization params: " << endl;
+		vcl_cout << "Normalization params: " << vcl_endl;
 		np.print_info();
 
 		// Set up the line fitting parameters
@@ -81,8 +81,8 @@ static void test_int_face_attr()
 			if (ifa.ComputeAttributes())
 			{
 				// Retrieve the attribute vector
-				vcl_vector<float>	attrs;
-				vcl_vector<string>	attr_names;
+				vcl_vector<float>		attrs;
+				vcl_vector<vcl_string>	attr_names;
 				ifa.GetAttributes(attrs);
 				ifa.GetAttributeNames(attr_names);
 
@@ -91,12 +91,12 @@ static void test_int_face_attr()
 					<< vcl_endl;
 
 				// Dump the attribute vector
-				vcl_vector<float>::iterator		ai = attrs.begin();
-				vcl_vector<string>::iterator	ani = attr_names.begin();
+				vcl_vector<float>::iterator			ai = attrs.begin();
+				vcl_vector<vcl_string>::iterator	ani = attr_names.begin();
 				for (; (ai != attrs.end()) && (ani != attr_names.end());
 						ai++, ani++)
 				{
-					vcl_cout << (*ani) << ": " << (*ai) << endl;
+					vcl_cout << (*ani) << ": " << (*ai) << vcl_endl;
 				}
 			}
 			else
