@@ -57,6 +57,7 @@ SOURCE_FILES( vil_sources
   file_formats/vil_bmp_info_header.cxx
   file_formats/vil_bmp.cxx
   file_formats/vil_gif.cxx
+  file_formats/vil_ras.cxx
 
   # Operations
   vil_image_as.cxx

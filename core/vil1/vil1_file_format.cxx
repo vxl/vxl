@@ -15,8 +15,11 @@ vil_file_format::~vil_file_format()
 #define HAS_MIT  1
 #define HAS_BMP  1
 #define HAS_GIF  1
-// This will be defined "outside" if there really is a JPEG library
-// #define HAS_JPEG 1
+// These will be defined "outside" if there really is a JPEG (PNG, TIFF) library
+// #define HAS_JPEG
+// #define HAS_PNG
+// #define HAS_TIFF
+#define HAS_RAS  1
 #define HAS_GEN  1
 
 #if HAS_PNM
@@ -53,6 +56,10 @@ vil_file_format::~vil_file_format()
 
 #if HAS_GIF
 #include <vil/file_formats/vil_gif.h>
+#endif
+
+#if HAS_RAS
+#include <vil/file_formats/vil_ras.h>
 #endif
 
 #if HAS_GEN
@@ -93,6 +100,9 @@ vil_file_format** vil_file_format::all()
 #endif
 #if HAS_GIF
     storage[c++] = new vil_gif_file_format;
+#endif
+#if HAS_RAS
+    storage[c++] = new vil_ras_file_format;
 #endif
 #if HAS_GEN
     storage[c++] = new vil_gen_file_format;
