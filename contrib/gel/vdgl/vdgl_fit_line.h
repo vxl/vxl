@@ -6,12 +6,10 @@
 #endif
 //:
 // \file
-// \brief Fits a line to a set of points defined in vdgl_edgel_chain
-//
-//  Fits a line to 2D edgel chain
+// \brief Fits a line to a set of 2D points given as a vdgl_edgel_chain
 
 #include <vdgl/vdgl_edgel_chain.h>
-#include  <vsol/vsol_line_2d_sptr.h>
+#include <vsol/vsol_line_2d_sptr.h>
 
 vsol_line_2d_sptr vdgl_fit_line(vdgl_edgel_chain &chain);
 
