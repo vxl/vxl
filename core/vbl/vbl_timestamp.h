@@ -12,7 +12,7 @@ public:
   unsigned long get_time_stamp() const { return timestamp_; };
 
   bool older(vbl_timestamp const& t) const;
-  inline bool older(vbl_timestamp* t) { return older(*t); }
+  inline bool older(vbl_timestamp const* t) const { return older(*t); }
 
 protected:
   unsigned long timestamp_;
