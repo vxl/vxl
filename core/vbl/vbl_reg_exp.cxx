@@ -116,8 +116,9 @@
 //      the line.  It would match "drepa qrepb" in "rep drepa qrepb".
 //
 
-#include <vbl/vbl_reg_exp.h> // Include class specification
+#include "vbl_reg_exp.h"
 #include <vcl_cstdio.h>
+#include <vcl_cstring.h>
 
 //: Copies the given regular expression.
 
@@ -396,7 +397,7 @@ void vbl_reg_exp::compile (char const* exp) {
     // Small enough for pointer-storage convention?
     if (regsize >= 32767L) { // Probably could be 65535L.
       //RAISE Error, SYM(vbl_reg_exp), SYM(Expr_Too_Big),
-      printf ("vbl_reg_exp::compile(): Expression too big.\n");
+      vcl_printf ("vbl_reg_exp::compile(): Expression too big.\n");
       return;
     }
 
@@ -409,7 +410,7 @@ void vbl_reg_exp::compile (char const* exp) {
 
     if (this->program == NULL) {
       //RAISE Error, SYM(vbl_reg_exp), SYM(Out_Of_Memory),
-      printf ("vbl_reg_exp::compile(): Out of memory.\n");
+      vcl_printf ("vbl_reg_exp::compile(): Out of memory.\n");
       return;
     }
 
@@ -447,9 +448,9 @@ void vbl_reg_exp::compile (char const* exp) {
             longest = NULL;
             len = 0;
             for (; scan != NULL; scan = regnext(scan))
-                if (OP(scan) == EXACTLY && strlen(OPERAND(scan)) >= len) {
+                if (OP(scan) == EXACTLY && vcl_strlen(OPERAND(scan)) >= len) {
                     longest = OPERAND(scan);
-                    len = strlen(OPERAND(scan));
+                    len = vcl_strlen(OPERAND(scan));
                 }
             this->regmust = longest;
             this->regmlen = len;
@@ -479,7 +480,7 @@ static char* reg (int paren, int *flagp) {
     if (paren) {
         if (regnpar >= NSUBEXP) {
           //RAISE Error, SYM(vbl_reg_exp), SYM(Too_Many_Parens),
-          printf ("vbl_reg_exp::compile(): Too many parentheses.\n");
+          vcl_printf ("vbl_reg_exp::compile(): Too many parentheses.\n");
           return 0;
         }
         parno = regnpar;
@@ -522,18 +523,18 @@ static char* reg (int paren, int *flagp) {
     // Check for proper termination.
     if (paren && *regparse++ != ')') {
         //RAISE Error, SYM(vbl_reg_exp), SYM(Unmatched_Parens),
-        printf ("vbl_reg_exp::compile(): Unmatched parentheses.\n");
+        vcl_printf ("vbl_reg_exp::compile(): Unmatched parentheses.\n");
         return 0;
     }
     else if (!paren && *regparse != '\0') {
         if (*regparse == ')') {
             //RAISE Error, SYM(vbl_reg_exp), SYM(Unmatched_Parens),
-            printf ("vbl_reg_exp::compile(): Unmatched parentheses.\n");
+            vcl_printf ("vbl_reg_exp::compile(): Unmatched parentheses.\n");
             return 0;
         }
         else {
             //RAISE Error, SYM(vbl_reg_exp), SYM(Internal_Error),
-            printf ("vbl_reg_exp::compile(): Internal error.\n");
+            vcl_printf ("vbl_reg_exp::compile(): Internal error.\n");
             return 0;
         }
         // NOTREACHED
@@ -601,7 +602,7 @@ static char* regpiece (int *flagp) {
 
     if (!(flags & HASWIDTH) && op != '?') {
         //RAISE Error, SYM(vbl_reg_exp), SYM(Empty_Operand),
-        printf ("vbl_reg_exp::compile() : *+ operand could be empty.\n");
+        vcl_printf ("vbl_reg_exp::compile() : *+ operand could be empty.\n");
         return 0;
     }
     *flagp = (op != '+') ? (WORST | SPSTART) : (WORST | HASWIDTH);
@@ -637,7 +638,7 @@ static char* regpiece (int *flagp) {
     regparse++;
     if (ISMULT(*regparse)) {
         //RAISE Error, SYM(vbl_reg_exp), SYM(Nested_Operand),
-        printf ("vbl_reg_exp::compile(): Nested *?+.\n");
+        vcl_printf ("vbl_reg_exp::compile(): Nested *?+.\n");
         return 0;
     }
     return (ret);
@@ -690,7 +691,7 @@ static char* regatom (int *flagp) {
                             rxpclassend = UCHARAT(regparse);
                             if (rxpclass > rxpclassend + 1) {
                                //RAISE Error, SYM(vbl_reg_exp), SYM(Invalid_Range),
-                               printf ("vbl_reg_exp::compile(): Invalid range in [].\n");
+                               vcl_printf ("vbl_reg_exp::compile(): Invalid range in [].\n");
                                return 0;
                             }
                             for (; rxpclass <= rxpclassend; rxpclass++)
@@ -704,7 +705,7 @@ static char* regatom (int *flagp) {
                 regc('\0');
                 if (*regparse != ']') {
                     //RAISE Error, SYM(vbl_reg_exp), SYM(Unmatched_Bracket),
-                    printf ("vbl_reg_exp::compile(): Unmatched [].\n");
+                    vcl_printf ("vbl_reg_exp::compile(): Unmatched [].\n");
                     return 0;
                 }
                 regparse++;
@@ -721,18 +722,18 @@ static char* regatom (int *flagp) {
         case '|':
         case ')':
             //RAISE Error, SYM(vbl_reg_exp), SYM(Internal_Error),
-            printf ("vbl_reg_exp::compile(): Internal error.\n"); // Never here
+            vcl_printf ("vbl_reg_exp::compile(): Internal error.\n"); // Never here
             return 0;
         case '?':
         case '+':
         case '*':
             //RAISE Error, SYM(vbl_reg_exp), SYM(No_Operand),
-            printf ("vbl_reg_exp::compile(): ?+* follows nothing.\n");
+            vcl_printf ("vbl_reg_exp::compile(): ?+* follows nothing.\n");
             return 0;
         case '\\':
             if (*regparse == '\0') {
                 //RAISE Error, SYM(vbl_reg_exp), SYM(Trailing_Backslash),
-                printf ("vbl_reg_exp::compile(): Trailing backslash.\n");
+                vcl_printf ("vbl_reg_exp::compile(): Trailing backslash.\n");
                 return 0;
             }
             ret = regnode(EXACTLY);
@@ -745,7 +746,7 @@ static char* regatom (int *flagp) {
                 register char   ender;
 
                 regparse--;
-                len = strcspn(regparse, META);
+                len = vcl_strcspn(regparse, META);
                 if (len <= 0) {
                     //RAISE Error, SYM(vbl_reg_exp), SYM(Internal_Error),
                     printf ("vbl_reg_exp::compile(): Internal error.\n");
@@ -913,15 +914,15 @@ bool vbl_reg_exp::find (char const* string) {
      // Check validity of program.
     if (!this->program || UCHARAT(this->program) != MAGIC) {
         //RAISE Error, SYM(vbl_reg_exp), SYM(Internal_Error),
-        printf ("vbl_reg_exp::find(): Compiled regular expression corrupted.\n");
+        vcl_printf ("vbl_reg_exp::find(): Compiled regular expression corrupted.\n");
         return 0;
     }
 
     // If there is a "must appear" string, look for it.
     if (this->regmust != NULL) {
         s = string;
-        while ((s = strchr(s, this->regmust[0])) != NULL) {
-            if (strncmp(s, this->regmust, this->regmlen) == 0)
+        while ((s = vcl_strchr(s, this->regmust[0])) != NULL) {
+            if (vcl_strncmp(s, this->regmust, this->regmlen) == 0)
                 break; // Found it.
             s++;
         }
@@ -940,7 +941,7 @@ bool vbl_reg_exp::find (char const* string) {
     s = string;
     if (this->regstart != '\0')
         // We know what char it must start with.
-        while ((s = strchr(s, this->regstart)) != NULL) {
+        while ((s = vcl_strchr(s, this->regstart)) != NULL) {
             if (regtry(s, this->startp, this->endp, this->program))
                 return (1);
             s++;
@@ -1028,19 +1029,19 @@ static int regmatch (const char* prog) {
                     // Inline the first character, for speed.
                     if (*opnd != *reginput)
                         return (0);
-                    len = strlen(opnd);
-                    if (len > 1 && strncmp(opnd, reginput, len) != 0)
+                    len = vcl_strlen(opnd);
+                    if (len > 1 && vcl_strncmp(opnd, reginput, len) != 0)
                         return (0);
                     reginput += len;
                 }
                 break;
             case ANYOF:
-                if (*reginput == '\0' || strchr(OPERAND(scan), *reginput) == NULL)
+                if (*reginput == '\0' || vcl_strchr(OPERAND(scan), *reginput) == NULL)
                     return (0);
                 reginput++;
                 break;
             case ANYBUT:
-                if (*reginput == '\0' || strchr(OPERAND(scan), *reginput) != NULL)
+                if (*reginput == '\0' || vcl_strchr(OPERAND(scan), *reginput) != NULL)
                     return (0);
                 reginput++;
                 break;
@@ -1156,7 +1157,7 @@ static int regmatch (const char* prog) {
 
             default:
                 //RAISE Error, SYM(vbl_reg_exp), SYM(Internal_Error),
-                printf ("vbl_reg_exp::find(): Internal error -- memory corrupted.\n");
+                vcl_printf ("vbl_reg_exp::find(): Internal error -- memory corrupted.\n");
                 return 0;
         }
         scan = next;
@@ -1167,7 +1168,7 @@ static int regmatch (const char* prog) {
     //  terminating point.
     //
     //RAISE Error, SYM(vbl_reg_exp), SYM(Internal_Error),
-    printf ("vbl_reg_exp::find(): Internal error -- corrupted pointers.\n");
+    vcl_printf ("vbl_reg_exp::find(): Internal error -- corrupted pointers.\n");
     return (0);
 }
 
@@ -1183,7 +1184,7 @@ static int regrepeat (const char* p) {
     opnd = OPERAND(p);
     switch (OP(p)) {
         case ANY:
-            count = strlen(scan);
+            count = vcl_strlen(scan);
             scan += count;
             break;
         case EXACTLY:
@@ -1193,20 +1194,20 @@ static int regrepeat (const char* p) {
             }
             break;
         case ANYOF:
-            while (*scan != '\0' && strchr(opnd, *scan) != NULL) {
+            while (*scan != '\0' && vcl_strchr(opnd, *scan) != NULL) {
                 count++;
                 scan++;
             }
             break;
         case ANYBUT:
-            while (*scan != '\0' && strchr(opnd, *scan) == NULL) {
+            while (*scan != '\0' && vcl_strchr(opnd, *scan) == NULL) {
                 count++;
                 scan++;
             }
             break;
         default: // Oh dear.  Called inappropriately.
             //RAISE Error, SYM(vbl_reg_exp), SYM(Internal_Error),
-            printf ("vbl_reg_exp::find(): Internal error.\n");
+            vcl_printf ("vbl_reg_exp::find(): Internal error.\n");
             return 0;
     }
     reginput = scan;
