@@ -1,11 +1,12 @@
 //:
-//  \file
-//  \brief Compute distance function
-//  \author Tim Cootes
+// \file
+// \brief Compute distance function
+// \author Tim Cootes
 
 #include <vil/algo/vil_distance_transform.h>
 #include <vil/vil_fill.h>
 #include <vcl_algorithm.h>
+#include <vcl_cassert.h>
 
 //: Compute distance function from zeros in original image
 //  Image is assumed to be filled with max_dist where there
@@ -21,9 +22,9 @@ void vil_distance_transform(vil_image_view<float>& image)
   // Don't use vil_flip* as they assume const images.
   unsigned ni = image.ni(), nj = image.nj();
   vil_image_view<float> flip_image(image.memory_chunk(),
-                                    &image(ni-1,nj-1), ni,nj,1,
-                                    -image.istep(), -image.jstep(),
-                                    image.nplanes());
+                                   &image(ni-1,nj-1), ni,nj,1,
+                                   -image.istep(), -image.jstep(),
+                                   image.nplanes());
   vil_distance_transform_one_way(flip_image);
 }
 
@@ -74,7 +75,6 @@ void vil_distance_transform_one_way(vil_image_view<float>& image)
     *p0 = vcl_min(p0[o1]+1.0f ,*p0); // (-1,0)
     *p0 = vcl_min(p0[o2]+sqrt2,*p0); // (-1,-1)
     *p0 = vcl_min(p0[o3]+1.0f ,*p0); // (0,-1)
-
   }
 }
 
