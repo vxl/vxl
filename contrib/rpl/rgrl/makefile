@@ -34,6 +34,7 @@ MANPAGE_SOURCES += rgrl_matcher_sptr.h
 SOURCES += rgrl_matcher_k_nearest.cxx
 SOURCES += rgrl_matcher_fixed.cxx
 SOURCES += rgrl_matcher_k_nearest_boundary.cxx
+SOURCES += rgrl_matcher_k_nearest_random.cxx
 
 SOURCES += rgrl_spline.cxx
 MANPAGE_SOURCES += rgrl_spline_sptr.h
