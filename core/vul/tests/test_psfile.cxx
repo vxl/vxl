@@ -19,7 +19,6 @@ const int wd = 171, ht = 323;
 static void write_greyscale(vul_psfile& f)
 {
   vcl_cout << "writing a greyscale image\n";
-  f.set_scale_x(150); f.set_scale_y(75); // default scale is 100
   unsigned char buf[wd*ht];
   for (int x=0; x<wd; ++x) for (int y=0; y<ht; ++y)
     buf[x+wd*y] = ((x-wd/2)*(y-ht/2)/16) & 0xff;
@@ -67,6 +66,7 @@ static void test_psfile_grey_portrait()
   f.set_bg_color(0.9f,0.1f,0.0f); // light red-ish
   f.set_fg_color(0.0f,0.0f,0.1f);   // dark blue-ish
   f.set_line_width(0.2f); // has no effect here: only for geometry objects
+  f.set_scale_x(150); f.set_scale_y(75); // default scale is 100
 
   write_greyscale(f);
   vcl_cout << "Writing PostScript file to " << filename << '\n';
@@ -89,7 +89,6 @@ static void test_psfile_colour_portrait()
 
   f.set_paper_type(vul_psfile::A3);
   f.set_paper_orientation(vul_psfile::PORTRAIT);
-  f.set_paper_layout(vul_psfile::MAX);
   f.set_bg_color(0.1f,0.9f,0.0f);
   f.set_fg_color(0.1f,0.0f,0.1f);
   f.set_reduction_factor(3);
@@ -140,10 +139,11 @@ static void test_psfile_grey_landscape()
 
   f.set_paper_type(vul_psfile::US_NORMAL);
   f.set_paper_orientation(vul_psfile::LANDSCAPE);
-  f.set_paper_layout(vul_psfile::MAX);
+  f.set_paper_layout(vul_psfile::MAX); // scale to US_NORMAL
   f.set_bg_color(0.5f,0.9f,0.9f);
   f.set_fg_color(0.5f,0.0f,0.0f);
   f.set_reduction_factor(2);
+  f.set_scale_x(120); f.set_scale_y(120); // default scale is 100
 
   write_greyscale(f);
   vcl_cout << "Writing PostScript file to " << filename << '\n';
@@ -166,6 +166,7 @@ static void test_psfile_colour_landscape()
 
   f.set_paper_type(vul_psfile::B5);
   f.set_paper_orientation(vul_psfile::LANDSCAPE);
+  f.set_paper_layout(vul_psfile::MAX); // scale to B5
   f.set_bg_color(0.9f,0.5f,0.9f);
   f.set_fg_color(0.0f,0.5f,0.0f);
 
@@ -190,7 +191,7 @@ static void test_psfile_geometry_landscape()
 
   f.set_paper_type(vul_psfile::US_LEGAL);
   f.set_paper_orientation(vul_psfile::LANDSCAPE);
-  f.set_paper_layout(vul_psfile::MAX);
+  f.set_paper_layout(vul_psfile::MAX); // scale to US_LEGAL
   f.set_bg_color(0.9f,0.9f,0.5f);
   f.set_fg_color(0.0f,0.0f,0.5f);
   f.set_line_width(0.8f);
