@@ -83,12 +83,6 @@ vil2_jpeg_image::vil2_jpeg_image(vil_stream *s)
 
 bool vil2_jpeg_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil2_property_top_row_first))
-    return prop ? (*(bool*)prop) = true : true;
-
-  if (0==vcl_strcmp(tag, vil2_property_left_first))
-    return prop ? (*(bool*)prop) = true : true;
-
   return false;
 }
 
