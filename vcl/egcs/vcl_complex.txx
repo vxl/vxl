@@ -38,6 +38,6 @@ VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT arg (complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT abs (complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT norm (complex<FLOAT >const&));\
 template complex<FLOAT>& __doadv (complex<FLOAT>* ths, const complex<FLOAT>& y);\
-template ostream& operator<<(ostream &, complex<FLOAT > const &)
+template vcl_ostream& operator<<(vcl_ostream &, complex<FLOAT > const &)
 
 #endif

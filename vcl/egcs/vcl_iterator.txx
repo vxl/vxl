@@ -31,7 +31,7 @@ VCL_INSTANTIATE_INLINE(void distance(RandomAccessIterator,RandomAccessIterator,D
 VCL_INSTANTIATE_INLINE(void __distance(RandomAccessIterator const&,RandomAccessIterator const&,Distance&,random_access_iterator_tag))
 
 #define INSTANTIATE_ITER_RA(RandomAccessIterator)\
-INSTANTIATE_ITER_RA_Distance(RandomAccessIterator, ptrdiff_t);\
+INSTANTIATE_ITER_RA_Distance(RandomAccessIterator, vcl_ptrdiff_t);\
 INSTANTIATE_OPERATOR_NE(RandomAccessIterator);\
 INSTANTIATE_TAGS(RandomAccessIterator, random_access_iterator_tag)
 

@@ -47,7 +47,7 @@ VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT arg (complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT abs (complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT norm (complex<FLOAT >const&)); \
 /* no doadv */ \
-template ostream& operator<<(ostream &, complex<FLOAT > const &); \
-template istream& operator>>(istream &, complex<FLOAT >&)
+template vcl_ostream& operator<<(vcl_ostream &, complex<FLOAT > const &); \
+template vcl_istream& operator>>(vcl_istream &, complex<FLOAT >&)
 
 #endif // vcl_gcc295_complex_txx_
