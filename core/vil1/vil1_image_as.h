@@ -31,12 +31,16 @@ vil_image vil_image_as(vil_image const &, vil_rgb<unsigned char>* dummy);
 // \code
 //   out = vil_image_as<int>( in );
 // \endcode
+// or, on compilers that require the arguments to specify the templates:
+// \code
+//   out = vil_image_as( in , (int*)0 );
+// \endcode
 // Converting a RGB buffer to greyscale will do a RGB->luminance
 // conversion. That is, different weights will be applied to each of
 // the R, G and B values to obtain the resulting grey value.
 
 template<class T>
-vil_image vil_image_as(vil_image const & i, T* dummy);
+vil_image vil_image_as(vil_image const & i, T* dummy /* = 0 */);
 
 //: \brief Converts to a greyscale image with integer (32bit) pixels. \sa{vil_image_as}
 vil_image vil_image_as_int(vil_image const & i);
