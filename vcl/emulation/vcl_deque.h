@@ -349,6 +349,7 @@ public:
 template <class T, class Alloc>
 class __deque_base : public __deque_data <T> {
   typedef __deque_base<T,Alloc> self;
+public:
   typedef T value_type;
   typedef value_type* pointer;
   typedef vcl_size_t size_type;
