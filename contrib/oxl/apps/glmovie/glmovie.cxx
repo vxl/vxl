@@ -14,6 +14,7 @@
 #include <vcl_vector.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>
+#include <vcl_algorithm.h> // vcl_min() & vcl_max()
 
 #include <vul/vul_file.h>
 #include <vul/vul_printf.h>
@@ -37,24 +38,16 @@
 
 #ifdef VCL_WIN32
 #include <vidl/vidl_avicodec.h>
+#include <oxp/oxp_vidl_mpeg_codec.h>
 #endif
 
 #include <GL/glut.h>
 
-#include <oxp/oxp_vidl_mpeg_codec.h>
 #include <oxp/ImageSequenceName.h>
 #include <oxp/GXFileVisitor.h>
 
-#ifndef min //gsgs
-#define min(a,b)            (((a) < (b)) ? (a) : (b))
-#endif
-
-#ifndef max //gsgs
-#define max(a,b)            (((a) > (b)) ? (a) : (b))
-#endif
-
 // extern void gl_draw_conic(double cx, double cy, double rx, double ry, double theta);
-  
+
 vul_arg<int>   a_start_frame("-s", "Start frame", 0);
 vul_arg<char*> a_save_fmt("-save", "Save files to fmt", 0);
 
@@ -139,13 +132,13 @@ void init()
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
-
-  } else {
+  }
+  else {
     vcl_cerr << "Fast\n";
     glDisable(GL_POINT_SMOOTH);
     glDisable(GL_LINE_SMOOTH);
     glDisable(GL_BLEND);
-  
+
     glPointSize(3);
     glLineWidth(0.1);
   }
@@ -157,48 +150,48 @@ void init()
 struct GXFileVisitor_OpenGL : public GXFileVisitor {
   virtual bool point(char const* type, float x, float y) {
     if (*type == 'p') {
-      
         glBegin(GL_POINTS);
         glVertex2f(x,y);
         glEnd();
-    } else if (*type == '+') {
+    }
+    else if (*type == '+') {
       glBegin(GL_LINES);
       glVertex2f(x,y-point_radius);
       glVertex2f(x,y+point_radius);
       glVertex2f(x-point_radius,y);
       glVertex2f(x+point_radius,y);
       glEnd();
-    }	
-	return true; //gsgs
+    }
+    return true; //gsgs
   }
-      
+
   virtual bool polyline(float const* x, float const* y, int n) {
     glBegin(GL_LINE_STRIP);
-    for(int i = 0; i < n; ++i)
+    for (int i = 0; i < n; ++i)
       glVertex2f(x[i], y[i]);
     glEnd();
-	return true; //gsgs
+    return true; //gsgs
   }
 
   virtual bool text(float x, float y, char const* text) {
     if (!gx_notext())
       output(GLUT_BITMAP_HELVETICA_10, x, y, text);
-	return true; //gsgs
+    return true; //gsgs
   }
 
   virtual bool set_color(float r, float g, float b) {
     glColor3f(r,g,b);
-	return true; //gsgs
+    return true; //gsgs
   }
 
   virtual bool set_point_radius(float r) {
     glPointSize(r);
-	return true; //gsgs
+    return true; //gsgs
   }
 
   virtual bool set_line_width(float w) {
     glLineWidth(w);
-	return true; //gsgs
+    return true; //gsgs
   }
 };
 
@@ -206,7 +199,7 @@ bool drawframe(int frame)
 {
   if (!moviefile->get_frame(frame))
     return false;
-  
+
   if (gx_basename)
     if (!vul_file::exists(gx_basename->name(frame).c_str())) {
       vcl_cerr << "glmovie: Graphics file " << gx_basename->name(frame) << " not there, bailing\n";
@@ -219,7 +212,7 @@ bool drawframe(int frame)
 
   // Draw image
   {
-    int image_w = moviefile->width(); 
+    int image_w = moviefile->width();
     int image_h = moviefile->height();
     glPixelZoom(pixel_zoom,-pixel_zoom);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -236,10 +229,11 @@ bool drawframe(int frame)
       int rasterpos_in_image_pixels = int(-rx / pixel_zoom + 1);
       rw = image_w - rasterpos_in_image_pixels;
       if (rw < 0) {
-	rw = 0;
-      } else {
-	glPixelStorei(GL_UNPACK_SKIP_PIXELS, rasterpos_in_image_pixels);
-	rx += rasterpos_in_image_pixels * pixel_zoom;
+        rw = 0;
+      }
+      else {
+        glPixelStorei(GL_UNPACK_SKIP_PIXELS, rasterpos_in_image_pixels);
+        rx += rasterpos_in_image_pixels * pixel_zoom;
       }
     }
 
@@ -247,10 +241,11 @@ bool drawframe(int frame)
       int rasterpos_in_image_pixels = int(-ry / pixel_zoom + 1);
       rh = image_h - rasterpos_in_image_pixels;
       if (rh < 0) {
-	rh = 0;
-      } else {
-	glPixelStorei(GL_UNPACK_SKIP_ROWS, rasterpos_in_image_pixels);
-	ry += rasterpos_in_image_pixels * pixel_zoom;
+        rh = 0;
+      }
+      else {
+        glPixelStorei(GL_UNPACK_SKIP_ROWS, rasterpos_in_image_pixels);
+        ry += rasterpos_in_image_pixels * pixel_zoom;
       }
     }
 
@@ -259,12 +254,13 @@ bool drawframe(int frame)
     if (vil_pixel_format(fimg) == VIL_BYTE) {
       vil_memory_image_of<vil_byte> img(fimg);
       glDrawPixels(rw, rh, GL_LUMINANCE, GL_UNSIGNED_BYTE, img.get_buffer());
-    } else {
+    }
+    else {
       vil_memory_image_of<vil_rgb_byte > img(fimg);
       glDrawPixels(rw, rh, GL_RGB,       GL_UNSIGNED_BYTE, img.get_buffer());
     }
   }
-    
+
   // Parse GX file
   if (gx_basename) {
     glMatrixMode(GL_MODELVIEW);
@@ -276,7 +272,8 @@ bool drawframe(int frame)
     int display_list = gx_list_base + frame;
     if (glIsList(display_list)) {
       glCallList(display_list);
-    } else {
+    }
+    else {
       glNewList(display_list, GL_COMPILE_AND_EXECUTE);
       GXFileVisitor_OpenGL gx;
       gx.set_color(0,1,0);
@@ -290,7 +287,7 @@ bool drawframe(int frame)
     static int first_frame_saved = -1;
     if (frame == first_frame_saved)
       // done
-      exit(0);
+      vcl_exit(0);
     if (first_frame_saved == -1)
       first_frame_saved = frame;
 
@@ -301,7 +298,8 @@ bool drawframe(int frame)
     if (buf[0] == '^') {
       // Flip
       vil_save(img, buf+1);
-    } else {
+    }
+    else {
       vil_save(vil_flipud(img), buf);
     }
     vcl_cerr << "[Saved " << buf << "]";
@@ -315,25 +313,25 @@ bool drawframe(int frame)
     // Build msg
     char msg[1024];
     float fps = 1000.0 / tic.real();
-    
+
     vcl_sprintf(msg, "Frame[%d] FPS %4.1f ", moviefile->get_frame(frame)->get_real_frame_index(), fps);
     vcl_sprintf(msg + strlen(msg), "Zoom %g ", pixel_zoom);
     vcl_sprintf(msg + strlen(msg), "(%7.2f, %7.2f)",
-	    (mouse_x - pixel_zoom_tx) / pixel_zoom,
-	    (mouse_y - pixel_zoom_ty) / pixel_zoom);
-    
+                (mouse_x - pixel_zoom_tx) / pixel_zoom,
+                (mouse_y - pixel_zoom_ty) / pixel_zoom);
+
     output(2,20,msg);
   }
-  
+
   glutSwapBuffers();
-  
+
   return true;
 }
 
 void reshape(int w, int h)
 {
   if (window_width > 0) {
-    double scale = min(double(w) / window_width, double(h) / window_height);
+    double scale = vcl_min(double(w) / window_width, double(h) / window_height);
     pixel_zoom_tx = pixel_zoom_tx * scale;
     pixel_zoom_ty = pixel_zoom_ty * scale;
     pixel_zoom = pixel_zoom * scale;
@@ -341,17 +339,17 @@ void reshape(int w, int h)
 
   window_width = w;
   window_height = h;
-  
-  /* Reshape both layers. */
-  for(int i = 0; i < nlayers; ++i) {
+
+  // Reshape both layers.
+  for (int i = 0; i < nlayers; ++i) {
     glutUseLayer(GLenum(layers[i]));
     glViewport(0, 0, w, h);
-    
-    glMatrixMode(GL_PROJECTION);  /* Start modifying the projection matrix. */
-    glLoadIdentity();             /* Reset project matrix. */
-    glOrtho(0, w, 0, h, -1, 1);   /* Map abstract coords directly to window coords. */
-    glScalef(1, -1, 1);           /* Invert Y axis so increasing Y goes down. */
-    glTranslatef(0, -h, 0);       /* Shift origin up to upper-left corner. */
+
+    glMatrixMode(GL_PROJECTION);  // Start modifying the projection matrix.
+    glLoadIdentity();             // Reset project matrix.
+    glOrtho(0, w, 0, h, -1, 1);   // Map abstract coords directly to window coords.
+    glScalef(1, -1, 1);           // Invert Y axis so increasing Y goes down.
+    glTranslatef(0, -h, 0);       // Shift origin up to upper-left corner.
   }
 }
 
@@ -365,13 +363,13 @@ void display()
   }
 
   bool ok = drawframe(frame);
-  
+
   if (!ok) {
     vul_printf(vcl_cerr, "Ran out of frames at %d\n", frame);
     num_frames = frame;
     frame = a_start_frame();
     if (!drawframe(frame))
-      abort();
+      vcl_abort();
   }
 }
 
@@ -381,7 +379,8 @@ void idle()
   frame += dir;
   if (dir > 0) {
     if (frame >= num_frames) frame = 0;
-  } else {
+  }
+  else {
     if (frame < 0) frame = num_frames - 1;
   }
 
@@ -399,8 +398,8 @@ void setidle(bool on) {
 
 struct CB {
   virtual ~CB () {}
-  
-  // -- Return true if this event is interesting.
+
+  //: Return true if this event is interesting.
   virtual bool want(int button, int modifiers, int x, int y) { return false; }
   virtual void down(int, int) { }
   virtual void motion(int, int) {}
@@ -417,7 +416,7 @@ int down_x, down_y;
 int down_button;
 bool down_modifiers;
 
-// -- Run through down_cbs until one that likes this mouse event is found,
+//: Run through down_cbs until one that likes this mouse event is found,
 // Then call it...
 void mouse_callback(int button, int state, int x, int y)
 {
@@ -428,24 +427,26 @@ void mouse_callback(int button, int state, int x, int y)
     down_modifiers = glutGetModifiers() != 0;
 
     int num_want = 0;
-    for(vcl_vector<CB*>::const_iterator p = down_cbs.begin(); p != down_cbs.end(); ++p)
+    for (vcl_vector<CB*>::const_iterator p = down_cbs.begin(); p != down_cbs.end(); ++p)
       if ((*p)->want(button, down_modifiers, x, y))
-	++num_want;
+        ++num_want;
     if (num_want > 1)
       vul_printf(vcl_cerr, "WARNING: Everybody (well %d) wants a button %d, mods %x\n", num_want, button, down_modifiers);
-    
-    for(vcl_vector<CB*>::const_iterator p = down_cbs.begin(); p != down_cbs.end(); ++p)
+
+    for (vcl_vector<CB*>::const_iterator p = down_cbs.begin(); p != down_cbs.end(); ++p)
       if ((*p)->want(button, down_modifiers, x, y)) {
-	down_cb = *p;
-	down_cb->down(x, y);
-	break;
+        down_cb = *p;
+        down_cb->down(x, y);
+        break;
       }
-  } else if (state == GLUT_UP) {
+  }
+  else if (state == GLUT_UP) {
     if (down_cb)
       down_cb->up(x, y);
     down_cb = 0;
-  } else
-    abort();
+  }
+  else
+    vcl_abort();
 }
 
 void motion_callback(int x, int y)
@@ -461,23 +462,23 @@ void motion_callback(int x, int y)
 
 struct ShuttleCB : public CB {
   int down_frame;
-  
+
   bool want(int button, int modifiers, int, int) {
     // Shuttle takes an unmodified left mouse button
     return (modifiers == 0 && button == GLUT_LEFT_BUTTON);
   }
-  
+
   void down(int, int) {
     down_frame = frame;
-    
+
     setidle(false);
-  } 
+  }
   void up(int, int) {
     if (playing)
       setidle(true);
   }
   void motion(int x, int y) {
-  //    double scale_factor = min(100, num_frames) / 800.0;
+  //    double scale_factor = vcl_min(100, num_frames) / 800.0;
     double scale_factor = (num_frames > 10000) ? 10 : 1;
     frame = down_frame + int((x - down_x) * scale_factor);
     vcl_cerr << "sc = " << scale_factor << vcl_endl;
@@ -497,21 +498,21 @@ struct ShuttleCB : public CB {
 
 // -----------------------------------------------------------------------------
 // Zoom event handler
-struct ZoomCB : public CB { 
+struct ZoomCB : public CB {
   double down_pixel_zoom;
   double down_pixel_zoom_tx;
   double down_pixel_zoom_ty;
-  
+
   bool want(int button, int modifiers, int, int) {
     // Take any shifted mouse event
     return (modifiers & GLUT_ACTIVE_SHIFT);
   }
-  
+
   void down(int x, int y) {
     down_pixel_zoom = pixel_zoom;
     down_pixel_zoom_tx = pixel_zoom_tx;
     down_pixel_zoom_ty = pixel_zoom_ty;
-    
+
     glNewList(ovl_display_list, GL_COMPILE);
     glIndexi(ovl_opaque);
     glBegin(GL_LINES);
@@ -528,10 +529,10 @@ struct ZoomCB : public CB {
     if (down_button == GLUT_LEFT_BUTTON) {
       int width = 100;
       double factor = double(y - down_y) / width;
-      factor = exp(factor);
-      factor = max(1e-2, factor);
-      factor = min(1e+2, factor);
-    
+      factor = vcl_exp(factor);
+      factor = vcl_max(1e-2, factor);
+      factor = vcl_min(1e+2, factor);
+
       double down_img_x = (down_x - down_pixel_zoom_tx) / down_pixel_zoom;
       double down_img_y = (down_y - down_pixel_zoom_ty) / down_pixel_zoom;
 
@@ -544,7 +545,7 @@ struct ZoomCB : public CB {
       pixel_zoom_tx = down_pixel_zoom_tx + (x - down_x);
       pixel_zoom_ty = down_pixel_zoom_ty + (y - down_y);
     }
-    
+
     glutPostRedisplay();
 
     if (have_overlay) {
@@ -640,23 +641,23 @@ struct DrawCB : public CB {
     }
     case box:
       glBegin(GL_LINE_LOOP);
-      glVertex2f(down_x, down_y); 
+      glVertex2f(down_x, down_y);
       glVertex2f(x, down_y);
       glVertex2f(x, y);
-      glVertex2f(down_x, y);      
+      glVertex2f(down_x, y);
       glEnd();
       break;
     case circle: {
       double dx = x - down_x;
       double dy = y - down_y;
-      double r= sqrt(dx*dx + dy*dy);
+      double r= vcl_sqrt(dx*dx + dy*dy);
       int n = 20;
       glBegin(GL_LINE_LOOP);
       double dt = vnl_math::pi / n * 2;
-      for(int i = 0; i < n; ++i) {
-	double ox = r * cos(i * dt);
-	double oy = r * sin(i * dt);
-	glVertex2f(down_x + ox, down_y + oy);
+      for (int i = 0; i < n; ++i) {
+        double ox = r * vcl_cos(i * dt);
+        double oy = r * vcl_sin(i * dt);
+        glVertex2f(down_x + ox, down_y + oy);
       }
       glEnd();
       break;
@@ -664,21 +665,20 @@ struct DrawCB : public CB {
     default:
       break;
     }
-      
+
     glEndList();
 
     glutPostOverlayRedisplay();
   }
-	    
-  void up(int x, int y) {
 
+  void up(int x, int y) {
     double s = 1.0 / pixel_zoom;
     double tx = -pixel_zoom_tx / pixel_zoom;
     double ty = -pixel_zoom_ty / pixel_zoom;
     vul_printf(vcl_cerr, "v = [%d %g %g %g %g];\n",
-	   moviefile->get_frame(frame)->get_real_frame_index(),
-	   s*down_x+tx, s*down_y+ty,
-	   s*x+tx, s*y+ty);
+               moviefile->get_frame(frame)->get_real_frame_index(),
+               s*down_x+tx, s*down_y+ty,
+               s*x+tx, s*y+ty);
     glutHideOverlay();
   }
 };
@@ -700,7 +700,7 @@ void keyboard(unsigned char key, int x, int y)
     break;
   }
   case 'q': {
-    exit(0);
+    vcl_exit(0);
   }
   }
   glutPostRedisplay();
@@ -714,7 +714,7 @@ void visible(int vis)
 
 static void convert(vidl_movie_sptr m, char const* out)
 {
-  int i = 0; 
+  int i = 0;
   for (vidl_movie::frame_iterator frame = m->begin(); frame != m->end(); ++frame) {
     char buf[1024];
     vcl_sprintf(buf, out, i);
@@ -735,24 +735,25 @@ int main(int argc, char ** argv)
   vul_arg<char*> a_gx_file("-g", "GX file");
   vul_arg<char*> a_out("-o", "Output frames");
   vul_arg_parse(argc,argv);
-  
+
   if (argc > 1) vul_arg_display_usage_and_exit("Too many arguments\n");
 
   // Register video codec
 #ifdef VCL_WIN32
   vidl_io::register_codec(new vidl_avicodec);
-#endif
   vidl_io::register_codec(new oxp_vidl_mpeg_codec);
+#endif
 
   // Register callbacks
   ShuttleCB shuttle_cb;
-  down_cbs.push_back(&shuttle_cb);  
-  
+  down_cbs.push_back(&shuttle_cb);
+
   ZoomCB zoom_cb;
-  down_cbs.push_back(&zoom_cb);  
-  
+  down_cbs.push_back(&zoom_cb);
+
   DrawCB draw_cb;
- // wait till wee know about overlays down_cbs.push_back(&draw_cb);  
+  // wait till we know about overlays
+  // down_cbs.push_back(&draw_cb);
 
   // Copy args to globals
   int step = a_step();
@@ -761,7 +762,8 @@ int main(int argc, char ** argv)
     dir = 1;
     num_frames = +num_frames + 1;
     frame = 0;
-  } else {
+  }
+  else {
     dir = -1;
     num_frames = -num_frames + 1;
     frame = num_frames - 1;
@@ -773,18 +775,20 @@ int main(int argc, char ** argv)
   if (vil_image img = vil_load(filename())) {
     vcl_vector<vcl_string> v(1, filename());
     moviefile = new vidl_movie(vidl_io::load_images(v));
-  } else { 
+  }
+  else {
     moviefile = vidl_io::load_movie(filename(), a_start_frame(), a_end_frame(), increment);
   }
   if (!moviefile || moviefile->width() < 1) {
-     vcl_cerr << "glmovie: Couldn't find any movie files. Stopping\n";
-     return -1;
+    vcl_cerr << "glmovie: Couldn't find any movie files. Stopping\n";
+    return -1;
   }
 
   if (a_gx_file()) {
     gx_basename = new ImageSequenceName(a_gx_file(), a_start_frame(), increment, "r", ".gx");
     vcl_cerr << "glmovie: Getting gx from " << *gx_basename << "\n";
-  } else {
+  }
+  else {
     gx_basename = 0;
   }
 
@@ -793,7 +797,7 @@ int main(int argc, char ** argv)
     convert(moviefile, a_out());
     return 0;
   }
- 
+
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
   // glutInitDisplayString("rgba double");
@@ -801,15 +805,16 @@ int main(int argc, char ** argv)
   vcl_cerr << "glmovie: movie size " << moviefile->width() << " x " << moviefile->height() << vcl_endl;
   glutReshapeWindow(moviefile->width(), moviefile->height() + TEXTHEIGHT);
   init();
-   if (glutLayerGet(GLenum(GLUT_OVERLAY_POSSIBLE)) == 0)  {
-      vcl_printf("glmovie: no overlays supported; ok.\n");
-      nlayers = 1;
-      have_overlay = false;
-      //exit(1);
-   } else {
-     have_overlay = true;
-     down_cbs.push_back(&draw_cb);
-   }
+  if (glutLayerGet(GLenum(GLUT_OVERLAY_POSSIBLE)) == 0)  {
+    vcl_printf("glmovie: no overlays supported; ok.\n");
+    nlayers = 1;
+    have_overlay = false;
+    //vcl_exit(1);
+  }
+  else {
+    have_overlay = true;
+    down_cbs.push_back(&draw_cb);
+  }
 
   glutReshapeFunc(reshape);
   glutDisplayFunc(display);
@@ -827,13 +832,13 @@ int main(int argc, char ** argv)
       glutHideOverlay();
       glutOverlayDisplayFunc(overlayDisplay);
 
-      /* Find transparent and opaque index. */
+      // Find transparent and opaque index.
       ovl_transparent = glutLayerGet(GLenum(GLUT_TRANSPARENT_INDEX));
       ovl_opaque = (ovl_transparent + 1) % glutGet(GLenum(GLUT_WINDOW_COLORMAP_SIZE));
 
       glutSetColor(ovl_opaque, 1.0, 0.0, 0.0);
 
-      /* Make sure overlay clears to transparent. */
+      // Make sure overlay clears to transparent.
       glClearIndex(ovl_transparent);
       glDisable(GL_POINT_SMOOTH);
       glDisable(GL_LINE_SMOOTH);
