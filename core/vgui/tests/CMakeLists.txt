@@ -31,13 +31,14 @@ IF( HAS_VGUI )
     test_displaybase.cxx
     test_pixels.cxx
     test_image_tableau.cxx
+    test_range_map.cxx
   )
   TARGET_LINK_LIBRARIES( vgui_test_all vgui vul testlib )
 
   ADD_TEST( vgui_test_displaybase         vgui_test_all test_displaybase )
   ADD_TEST( vgui_test_pixels              vgui_test_all test_pixels )
   ADD_TEST( vgui_test_image_tableau       vgui_test_all test_image_tableau ${CMAKE_CURRENT_SOURCE_DIR}/test_image.ppm )
-
+  ADD_TEST( vgui_test_range_map vgui_test_all test_range_map)
   ADD_EXECUTABLE( vgui_test_include test_include.cxx )
   TARGET_LINK_LIBRARIES( vgui_test_include vgui )
 
