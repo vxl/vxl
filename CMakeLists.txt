@@ -45,6 +45,11 @@ IF( BUILD_CONTRIB )
   SUBDIRS( contrib )
 ENDIF( BUILD_CONTRIB )
 
+OPTION(BUILD_TARGETJR "Should the TargetJr packages be built?" NO)
+
+IF(BUILD_TARGETJR)
+  SUBDIRS(Numerics COOL GeneralUtility Image SpatialObjects MultiView Segmentation)
+ENDIF(BUILD_TARGETJR)
 
 
 IF(RUN_CONFIGURE)
@@ -61,7 +66,6 @@ ENDIF( ${vxl_BINARY_DIR} MATCHES  \\+ )
 IF( ${vxl_SOURCE_DIR} MATCHES  \\+ )
   MESSAGE(SEND_ERROR "You cannot have a + in your source path")
 ENDIF( ${vxl_SOURCE_DIR} MATCHES  \\+ )
-
 
 
 # include CMakeListsLocal.txt from source directory if it exists
