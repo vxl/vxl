@@ -281,7 +281,15 @@ bool vtol_vertex_2d::operator==(const vsol_spatial_object_3d& obj) const
 
 
 //---------------------------------------------------------------------------
-//: Is `this' has the same coordinates for its point than `other' ?
+//: Does `this' have the same coordinates for its point than `other' ?
+//---------------------------------------------------------------------------
+bool vtol_vertex_2d::operator== (const vtol_vertex &other) const
+{
+  return other.cast_to_vertex_2d() && other.cast_to_vertex_2d()->operator==(*this);
+}
+
+//---------------------------------------------------------------------------
+//: Does `this' have the same coordinates for its point than `other' ?
 //---------------------------------------------------------------------------
 bool vtol_vertex_2d::operator== (const vtol_vertex_2d &other) const
 {
