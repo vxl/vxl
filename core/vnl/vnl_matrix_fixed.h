@@ -70,24 +70,6 @@ public:
   }
 };
 
-#if defined(VCL_GCC_27)
-template <class T,int m,int n>
-inline vcl_ostream & operator<<(vcl_ostream &os,const vnl_matrix_fixed<T,m,n> &M)
-{
-  return os << static_cast<vnl_matrix<T> const &>(M);
-}
-template <class T,int m,int n>
-inline vcl_istream & operator>>(vcl_istream &is,vnl_matrix_fixed<T,m,n> &M)
-{
-  return is >> static_cast<vnl_matrix<T>       &>(M);
-}
-template <class T,int m,int n>
-inline vnl_matrix<T> operator*(const T &s, const vnl_matrix_fixed<T,m,n> &M)
-{
-  return s * static_cast< const vnl_matrix<T> & >(M);
-}
-#endif
-
 #ifndef VCL_SUNPRO_CC
  // -- Multiply two conformant vnl_matrix_fixed (M x N) times (N x O)
  template <class T, int M, int N, int O>
