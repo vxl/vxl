@@ -248,7 +248,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // construct least square cost function
   rgrl_homo2d_func homo_func( matches, tot_num, with_grad_ );
   vnl_levenberg_marquardt lm( homo_func );
-  lm.set_trace( true );
+  // lm.set_trace( true );
   // lm.set_check_derivatives( 10 );
   bool ret;
   if( with_grad_ )
@@ -259,12 +259,14 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     WarningMacro( "Levenberg-Marquatt failed" );
     return 0;
   }
-  lm.diagnose_outcome(vcl_cout);
+  // lm.diagnose_outcome(vcl_cout);
   
+  // normalize H
+  initp /= initp.two_norm();
   // convert parameters back into matrix form
   h2H( initp, init_H );
   vnl_vector<double> center(2,0.0);
-  vnl_matrix<double> covar(9,9, vnl_matrix_identity);
+  vnl_matrix<double> covar ( lm.get_JtJ() );
   return new rgrl_trans_homography2d( init_H, covar, center, center );
   
 //    return new rgrl_trans_homography2d( H, covar, from_center, to_center );
