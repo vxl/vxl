@@ -182,6 +182,12 @@ SOURCE=.\Templates/vimt_sample_grid_bicub+byte.double-.cxx
 # Begin Source File
 SOURCE=.\Templates/vimt_sample_grid_bicub+float.double-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_sample_grid_bilin+byte.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_sample_grid_bilin+float.float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "txx;h"

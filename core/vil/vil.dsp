@@ -261,6 +261,9 @@ SOURCE=.\Templates/vil_resample_bilin+float.double-.cxx
 SOURCE=.\Templates/vil_sample_grid_bilin+float.float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil_sample_grid_bilin+byte.float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_image_view+vil_rgba+float--.cxx
 # End Source File
 # Begin Source File
