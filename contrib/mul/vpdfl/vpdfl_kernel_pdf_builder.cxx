@@ -208,6 +208,7 @@ void vpdfl_kernel_pdf_builder::build_width_from_separation(vpdfl_kernel_pdf& kpd
 {
   vnl_vector<double> width(n);
   double* w=width.data_block();
+  const double min_diff = 1e-6;
 
   unsigned int k = 2;  // Second nearest neighbour
   for (int i=0;i<n;++i)
@@ -215,6 +216,9 @@ void vpdfl_kernel_pdf_builder::build_width_from_separation(vpdfl_kernel_pdf& kpd
   // Can't get the following to compile:
 //    mbl_priority_bounded_queue<double,vcl_vector<double>,vcl_less<double> > d_sq(k);
 
+      // Number of repeats of the point
+    // If resampling used, some points will be present several times
+    int n_repeats=0;
     double min_d2= -1.0;
     for (int j=0;j<n;++j)
     {
@@ -222,7 +226,10 @@ void vpdfl_kernel_pdf_builder::build_width_from_separation(vpdfl_kernel_pdf& kpd
       {
         double d2 = vnl_vector_ssd(data[i],data[j]);
 
-        if (d2<min_d2 || min_d2<0) min_d2=d2;
+    if (d2<min_diff)
+      n_repeats++;
+        else
+          if (d2<min_d2 || min_d2<0) min_d2=d2;
 //        d_sq.push(d2);
       }
     }
@@ -230,9 +237,10 @@ void vpdfl_kernel_pdf_builder::build_width_from_separation(vpdfl_kernel_pdf& kpd
     // Width set to distance to k-th nearest neighbour
 //    w[i] = sqrt(d_sq[k-1]);
 
-     //: Width to nearest neighbour
+
+     //: Width to nearest neighbour, allowing for repeats
      if (min_d2<min_var_) min_d2=min_var_;
-     w[i] = vcl_sqrt(min_d2);
+     w[i] = vcl_sqrt(min_d2)/(n_repeats+1);
   }
 
   kpdf.set_centres(data,n,width);

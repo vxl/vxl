@@ -120,9 +120,9 @@ void vpdfl_gaussian_kernel_pdf_sampler::regular_samples(
   for (int i=0;i<n_samples;++i)
   {
     // Ensure sample at centre.  (This biases towards the centres somewhat)
-    if (i<n_k)
-      x[i]=kpdf.centre()[i];
-    else
+//     if (i<n_k)
+//       x[i]=kpdf.centre()[i];
+//     else
       sample_component(x[i],i%n_k);
   }
 }

@@ -27,6 +27,9 @@
 #include <vpdfl/vpdfl_gaussian_builder.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
+// Weights smaller than this are assumed to be zero
+const double min_wt = 1e-8;
+
 //=======================================================================
 // Dflt ctor
 //=======================================================================
@@ -222,7 +225,7 @@ void vpdfl_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
   for (int i=0;i<n_samples;i++)
   {
     double w = wts[i];
-    if (w != 0.0) actual_samples ++;
+    if (w >= min_wt) actual_samples ++;
     w_sum += w;
     sum += w*data.current();
     updateCovar(S,data.current(),w);
@@ -230,9 +233,35 @@ void vpdfl_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
     data.next();
   }
 
-  updateCovar(S, sum, -1.0/w_sum);
+  if (w_sum/n_samples<min_wt)  // ie near zero
+  {
+    vcl_cerr<<"vpdfl_gaussian_builder::weighted_build() ";
+  vcl_cerr<<"Weights too close to zero. Sum = "<<w_sum<<vcl_endl;
+  abort();
+  }
+
+
+  if (actual_samples==0)
+  {
+    vcl_cerr<<"vpdfl_gaussian_builder::weighted_build() All weights zero."<<vcl_endl;
+  abort();
+  }
+
+  if (actual_samples==1)
+  {
+//    vcl_cerr<<"vpdfl_gaussian_builder::weighted_build()";
+//  vcl_cerr<<" Warning: Only one sample has non-zero weight."<<vcl_endl;
+
+  // Build minimal model about the mean (the one non-zero sample)
+  sum/=w_sum;
+  build(g,sum);
+  return;
+  }
+
+
   S*=actual_samples/((actual_samples - 1) *w_sum);
   sum/=w_sum;
+  updateCovar(S, sum, -1.0);  // Remove mean.mean'
   // now sum = weighted mean
   // and S = weighted covariance corrected for unbiased rather than ML result.
 

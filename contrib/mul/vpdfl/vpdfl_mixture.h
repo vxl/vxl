@@ -31,6 +31,9 @@ private:
   vcl_vector<vpdfl_pdf_base*> component_;
   vcl_vector<double>          weight_;
 
+    //: Workspace so we don't have to keep creating vectors
+  mutable vnl_vector<double> ws_;
+
   void init();
   void delete_stuff();
 public:

@@ -270,18 +270,24 @@ double vpdfl_mixture::log_p(const vnl_vector<double>& x) const
 {
   int n = n_components();
 
-  vcl_vector<double> log_ps(n);
-  double max_log_p = log_ps[0] = component_[0]->log_p(x);
-  for (int i=1;i<n;++i)
+  vnl_vector<double>& log_ps = ws_;
+  log_ps.resize(n);
+
+  double max_log_p;
+  for (int i=0;i<n;++i)
   {
-    log_ps[i] = component_[i]->log_p(x);
-    if (log_ps[i]>max_log_p) max_log_p = log_ps[i];
+    if (weight_[i]>0.0)
+  {
+      log_ps[i] = component_[i]->log_p(x);
+      if (i==0 || log_ps[i]>max_log_p) max_log_p = log_ps[i];
+    }
   }
 
   double sum=0.0;
 
   for (int i=0;i<n;i++)
   {
+    if (weight_[i]>0.0)
     sum += weight_[i] * vcl_exp(log_ps[i]-max_log_p);
   }
 
@@ -294,7 +300,8 @@ void vpdfl_mixture::gradient(vnl_vector<double>& g,
                                      const vnl_vector<double>& x,
                                      double& p) const
 {
-  vnl_vector<double> g1;
+  vnl_vector<double>& g1 = ws_;
+
   double p1;
   component_[0]->gradient(g1,x,p1);
   g = g1*weight_[0];

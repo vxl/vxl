@@ -28,6 +28,9 @@
 #include <vnl/vnl_math.h>
 #include <vsl/vsl_binary_loader.h>
 
+// Weights smaller than this are assumed to be zero
+const double min_wt = 1e-8;
+
 //=======================================================================
 void vpdfl_mixture_builder::init()
 {
@@ -92,7 +95,6 @@ vpdfl_mixture_builder::~vpdfl_mixture_builder()
 void vpdfl_mixture_builder::init(const vpdfl_builder_base& builder, int n)
 {
   delete_stuff();
-  init();
   builder_.resize(n);
   for (int i=0;i<n;++i)
     builder_[i] = builder.clone();
@@ -235,7 +237,7 @@ static void UpdateRange(vnl_vector<double>& min_vec, vnl_vector<double>& max_vec
 //: Assumes means set up.  Estimates starting components.
 void vpdfl_mixture_builder::initialise_given_means(vpdfl_mixture& model,
                   const vnl_vector<double>* data,
-				  const vcl_vector<vnl_vector<double> >& mean,
+          const vcl_vector<vnl_vector<double> >& mean,
                   const vcl_vector<double>& wts) const
 {
   int n_comp = builder_.size();
@@ -247,7 +249,7 @@ void vpdfl_mixture_builder::initialise_given_means(vpdfl_mixture& model,
   for (int i=1;i<n_comp;++i)
     UpdateRange(min_v,max_v,mean[i]);
 
-  double mean_sep = vnl_vector_ssd(max_v,min_v)/n_comp;
+  double mean_sep = vnl_vector_ssd(max_v,min_v)/n_samples;
   if (mean_sep<=1e-6) mean_sep = 1e-6;
 
 
@@ -320,7 +322,7 @@ void vpdfl_mixture_builder::initialise_to_regular_samples(vpdfl_mixture& model,
   for (int i=0;i<n_comp;++i)
   {
     int j = vnl_math_rnd((i+0.5)*f);
-	if (j>=n_samples) j=n_samples-1;
+  if (j>=n_samples) j=n_samples-1;
     mean[i] = data[j];
   }
 
@@ -343,6 +345,7 @@ void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
 {
   int n_comp = builder_.size();
   int n_egs = wts.size();
+  const vcl_vector<double>& m_wts = model.weights();
 
   if (probs.size()!=n_comp) probs.resize(n_comp);
 
@@ -351,12 +354,19 @@ void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
   for (int i=0;i<n_comp;++i)
   {
     if (probs[i].size()!=n_egs) probs[i].resize(n_egs);
+
+  // Any components with zero weights are ignored.
+  // Eventually they should be pruned.
+    if (m_wts[i]<=0) continue;
+
     double *p_data = probs[i].begin();
 
-    double log_wt_i = vcl_log(model.weights()[i]);
+    double log_wt_i = vcl_log(m_wts[i]);
 
     for (int j=0;j<n_egs;++j)
+    {
       p_data[j] = log_wt_i+model.components()[i]->log_p(data[j]);
+    }
   }
 
   // Turn into probabilities and normalise.
@@ -364,16 +374,18 @@ void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
   for (int j=0;j<n_egs;++j)
   {
     // To minimise rounding errors, first find largest value
-    double max_log_p = probs[0](j);
-    for (int i=1;i<n_comp;++i)
+    double max_log_p=0;
+    for (int i=0;i<n_comp;++i)
     {
-      if (probs[i](j)>max_log_p) max_log_p = probs[i](j);
+      if (m_wts[i]<=0) continue;
+      if (i==0 || probs[i](j)>max_log_p) max_log_p = probs[i](j);
     }
 
     // Turn into probabilities and sum
     double sum = 0.0;
     for (int i=0;i<n_comp;++i)
     {
+      if (m_wts[i]<=0) continue;
       double p = vcl_exp(probs[i](j)-max_log_p);
       probs[i](j) = p;
       sum+=p;
@@ -383,6 +395,8 @@ void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
     if (sum>0.0)
       for (int i=0;i<n_comp;++i)
         probs[i](j)/=sum;
+
+    if (sum<=0) vcl_cerr<<"vpdfl_mixture_builder::e_step() Zero sum for probs!"<<vcl_endl;
   }
 }
 
@@ -401,12 +415,41 @@ double vpdfl_mixture_builder::m_step(vpdfl_mixture& model,
   double move = 0.0;
   vnl_vector<double> old_mean;
 
+  if (!weights_fixed_)
+  {
+    double w_sum = 0.0;
+    // update the model weights
+    for (int i=0;i<n_comp;++i)
+    {
+      model.weights()[i]=probs[i].mean();
+
+      // Elliminate tiny components
+      if (model.weights()[i]<min_wt) model.weights()[i]=0.0;
+
+      w_sum += model.weights()[i];
+    }
+
+    // Ensure they add up to one
+    for (int i=0;i<n_comp;++i)
+    model.weights()[i]/=w_sum;
+  }
+
   for (int i=0;i<n_comp;++i)
   {
+    // Any components with zero weights are ignored.
+  // Eventually they should be pruned.
+    if (model.weights()[i]<=0.0) continue;
+
     // Compute weights
     const double* p = probs[i].begin();
+    double w_sum = 0.0;
     for (int j=0;j<n_egs;++j)
+    {
       wts_i[j] = wts[j]*p[j];
+      w_sum += wts_i[j];
+    }
+
+    if (w_sum<=0.0) vcl_cerr<<"m_step: Dubious weights. sum="<<w_sum<<vcl_endl;
 
     old_mean = model.components()[i]->mean();
     builder_[i]->weighted_build(*(model.components()[i]), data_array, wts_i);
@@ -414,12 +457,6 @@ double vpdfl_mixture_builder::m_step(vpdfl_mixture& model,
     move += vnl_vector_ssd(old_mean, model.components()[i]->mean());
   }
 
-  if (!weights_fixed_)
-  {
-    // update the model weights
-    for (int i=0;i<n_comp;++i)
-      model.weights()[i]=probs[i].mean();
-  }
 
   return move;
 }
@@ -466,7 +503,7 @@ void vpdfl_mixture_builder::calc_mean_and_variance(vpdfl_mixture& model)
   {
     incXbyYv(&mean, model.component(i).mean(), model.weight(i));
     incXbyYplusXXv(&var, model.component(i).variance(),
-      model.component(i).mean(), model.weight(i));
+    model.component(i).mean(), model.weight(i));
   }
 
   for (i=0; i<n; ++i)
