@@ -10,7 +10,7 @@
 // \author Tim Cootes
 
 #include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 class mil_image;
 
 //: Pyramid of images of arbitrary type

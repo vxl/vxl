@@ -52,7 +52,7 @@ typedef vxl_uint_32 ulonglong;
 
 #include <vcl_functional.h>
 #include <vcl_map.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 
 template <class T>
 class vbl_big_sparse_array_3d
@@ -92,12 +92,10 @@ class vbl_big_sparse_array_3d
 };
 
 template <class T>
-inline vcl_ostream& operator<< (vcl_ostream& s, vbl_big_sparse_array_3d<T> const& a)
+inline vcl_ostream& operator<<(vcl_ostream&s,vbl_big_sparse_array_3d<T>const& a)
 {
   return a.print(s);
 }
-
-#include <vcl_compiler.h>
 
 #define VBL_BIG_SPARSE_ARRAY_3D_INSTANTIATE(T) \
 extern "Please #include <vbl/vbl_big_sparse_array_3d.txx> instead"

@@ -11,7 +11,7 @@
 //   only dependency is on 'tag' nodes, although tag nodes are in all other
 //   sense identical to other nodes.
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
 

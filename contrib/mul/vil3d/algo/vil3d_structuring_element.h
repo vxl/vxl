@@ -1,12 +1,12 @@
 #ifndef vil3d_structuring_element_h_
 #define vil3d_structuring_element_h_
 //:
-//  \file
-//  \brief Structuring element for 3D morphology represented as a list of non-zero pixels
-//  \author Tim Cootes
+// \file
+// \brief Structuring element for 3D morphology represented as a list of non-zero pixels
+// \author Tim Cootes
 
 #include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vcl_cstddef.h>
 
 //: Structuring element for morphology represented as a list of non-zero pixels
@@ -33,7 +33,7 @@ class vil3d_structuring_element
   //: k range of elements is [min_k_,max_k_]
   int max_k_;
 
-public:
+ public:
   vil3d_structuring_element()
     : min_i_(0),max_i_(-1),min_j_(0),max_j_(-1),min_k_(0),max_k_(-1) {}
 
@@ -82,7 +82,7 @@ public:
 };
 
 //: Write details to stream
-vcl_ostream& operator<<(vcl_ostream& os, const vil3d_structuring_element& element);
+vcl_ostream& operator<<(vcl_ostream&, const vil3d_structuring_element& element);
 
 //: Generate a list of offsets for use on image with istep,jstep
 //  On exit offset[a] = element.p_i()[a]*istep +  element.p_j()[a]*jstep
@@ -90,9 +90,9 @@ vcl_ostream& operator<<(vcl_ostream& os, const vil3d_structuring_element& elemen
 //
 //  Gives an efficient way of looping through all the pixels in the structuring element
 void vil3d_compute_offsets(vcl_vector<vcl_ptrdiff_t>& offset,
-                          const vil3d_structuring_element& element,
-                          vcl_ptrdiff_t istep, 
-                          vcl_ptrdiff_t jstep,
-                          vcl_ptrdiff_t kstep);
+                           const vil3d_structuring_element& element,
+                           vcl_ptrdiff_t istep,
+                           vcl_ptrdiff_t jstep,
+                           vcl_ptrdiff_t kstep);
 
 #endif // vil3d_structuring_element_h_

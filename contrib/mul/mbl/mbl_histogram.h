@@ -6,7 +6,7 @@
 // \brief Simple object to build histogram from supplied data.
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
 
@@ -30,7 +30,7 @@ class mbl_histogram
 
   //: Total number of examples supplied
   int n_obs_;
-public:
+ public:
   //: Construct with no bins
   mbl_histogram();
 
@@ -82,16 +82,16 @@ public:
   bool operator==(const mbl_histogram& s) const;
 };
 
-  //: Binary file stream output operator for class reference
+//: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mbl_histogram& histo);
 
-  //: Binary file stream input operator for class reference
+//: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mbl_histogram& histo);
 
-  //: Stream output operator for class reference
+//: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os, const mbl_histogram& histo);
 
-  //: Stream output operator for class reference
+//: Stream output operator for class reference
 void vsl_print_summary(vcl_ostream& os, const mbl_histogram& histo);
 
 #endif

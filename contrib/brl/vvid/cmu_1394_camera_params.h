@@ -17,13 +17,13 @@
 //   J.L. Mundy Aug 29, 2002    Initial version.
 // \endverbatim
 //--------------------------------------------------------------------------------
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vcl_string.h>
 class cmu_1394_camera_params
 {
  public:
   cmu_1394_camera_params(int video_format=1, int video_mode=3,
-                         int frame_rate=3, 
+                         int frame_rate=3,
                          bool auto_exposure = false, bool auto_gain= false,
                          bool manual_shutter_control = true,
                          bool auto_exposure_control = true,
@@ -33,19 +33,19 @@ class cmu_1394_camera_params
                          int min_gain = 2000, int max_gain = 2048,
                          int brightness=96,
                          int min_brightness=0, int max_brightness = 255,
-                         int sharpness=3, 
+                         int sharpness=3,
                          int min_sharpness=0, int max_sharpness = 128,
                          int exposure=128,
                          int min_exposure=0,int max_exposure = 255,
                          bool capture = true, bool rgb = true);
   cmu_1394_camera_params(const cmu_1394_camera_params& cp);
-  ~cmu_1394_camera_params();                         
+  ~cmu_1394_camera_params();
   void set_params(const cmu_1394_camera_params& cp);
-  void constrain();//make sure the parameters are consistent
+  void constrain();//!< make sure the parameters are consistent
   vcl_string video_configuration(const int video_format, const int video_mode) const;
   vcl_string frame_rate(const int rate_code) const;
-  friend 
-  vcl_ostream& operator << (vcl_ostream& os, const cmu_1394_camera_params& cpp);
+  friend
+    vcl_ostream& operator<<(vcl_ostream& os, const cmu_1394_camera_params& cpp);
 
   //: video configuration (resolution, frame rate, color sampling)
   int video_format_;
@@ -83,6 +83,5 @@ class cmu_1394_camera_params
   //:color image vs monochrome as a display mode (not collection)
   bool rgb_;
 };
- 
 
 #endif // cmu_1394_camera_params_h_

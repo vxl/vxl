@@ -6,7 +6,7 @@
 // \author Tim Cootes
 
 #include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vcl_cstddef.h>
 
 //: Structuring element for morphology represented as a list of non-zero pixels
@@ -63,7 +63,7 @@ class vil_structuring_element
 };
 
 //: Write details to stream
-vcl_ostream& operator<<(vcl_ostream& os, const vil_structuring_element& element);
+vcl_ostream& operator<<(vcl_ostream&, const vil_structuring_element& element);
 
 //: Generate a list of offsets for use on image with istep,jstep
 //  On exit offset[k] = element.p_i()[k]*istep +  element.p_j()[k]*jstep

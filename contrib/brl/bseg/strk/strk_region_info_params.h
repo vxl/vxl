@@ -1,4 +1,3 @@
-//--*-c++-*-
 // This is brl/bseg/strk/strk_region_info_params.h
 #ifndef strk_region_info_params_h_
 #define strk_region_info_params_h_
@@ -12,7 +11,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <gevd/gevd_param_mixin.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 
 class strk_region_info_params : public gevd_param_mixin
 {
@@ -23,24 +22,22 @@ class strk_region_info_params : public gevd_param_mixin
                           const float min_gradient = 0,
                           const float parzen_sigma = 0,
                           const bool verbose = false,
-                          const bool debug = false
-                          );
+                          const bool debug = false);
 
- strk_region_info_params(const strk_region_info_params& old_params);
+  strk_region_info_params(const strk_region_info_params& old_params);
  ~strk_region_info_params() {}
 
   bool SanityCheck();
- friend
-  vcl_ostream& operator<<(vcl_ostream& os, const strk_region_info_params& tp);
+  friend
+    vcl_ostream& operator<<(vcl_ostream& os, const strk_region_info_params& tp);
  protected:
- void InitParams(float sigma,
-                 bool gradient_info,
-                 bool color_info,
-                 float min_gradient,
-                 float parzen_sigma,
-                 bool verbose,
-                 bool debug
-                );
+  void InitParams(float sigma,
+                  bool gradient_info,
+                  bool color_info,
+                  float min_gradient,
+                  float parzen_sigma,
+                  bool verbose,
+                  bool debug);
  public:
   //
   // Parameter blocks and parameters

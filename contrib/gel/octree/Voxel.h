@@ -12,7 +12,7 @@
 //-----------------------------------------------------------------------------
 
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 
 struct Voxel
 {

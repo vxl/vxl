@@ -7,8 +7,7 @@
 // \author Tim Cootes
 
 #include <vcl_string.h>
-#include <vcl_iostream.h>
-
+#include <vcl_iosfwd.h>
 class vsl_b_ostream;
 class vsl_b_istream;
 

@@ -74,7 +74,7 @@
 class gevd_bufferxy;
 
 #include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vil1/vil1_image.h>
 
 #include <vtol/vtol_vertex_2d_sptr.h>
@@ -108,12 +108,11 @@ class gevd_detector : public gevd_detector_params
 
   // internal interfaces
   bool DoFoldContour();
-  bool DoCorner( float angle = 10,      // smallest angle at corner
-                 float separation = 1,  // |mean1-mean2|/sigma
-                 int length = 5,        // min length to find cornersxo
-                 int cycle = 2,         // number of corners in a cycle
-                 int ndimension = 2     // number of dimension
-                 );
+  bool DoCorner( float angle = 10,      //!< smallest angle at corner
+                 float separation = 1,  //!< |mean1-mean2|/sigma
+                 int length = 5,        //!< min length to find cornersxo
+                 int cycle = 2,         //!< number of corners in a cycle
+                 int ndimension = 2);   //!< number of dimension
   bool DoStep();
   bool DoFold();
 
@@ -127,21 +126,21 @@ class gevd_detector : public gevd_detector_params
 
  protected:
   void UnProtectLists();
-  void ClearData(); // clear buffer
+  void ClearData(); //!< clear buffer
 
  protected:
   vil1_image image;
 
-  float noise; // noise estimation/threshold
+  float noise; //!< noise estimation/threshold
 
-  gevd_bufferxy *edgel,                      // output from DoStep
-    *direction, *locationx, *locationy, *grad_mag, *angle; // detect step/fold
-  int *junctionx, *junctiony, njunction; // junctions found
-  vcl_vector<vtol_vertex_2d_sptr >* vertices; // network of linked edges/vertices
+  gevd_bufferxy *edgel,                      //!< output from DoStep
+    *direction, *locationx, *locationy, *grad_mag, *angle; //!< detect step/fold
+  int *junctionx, *junctiony, njunction; //!< junctions found
+  vcl_vector<vtol_vertex_2d_sptr >* vertices; //!< network of linked edges/vertices
   vcl_vector<vtol_edge_2d_sptr >* edges;
 
-  float filterFactor;     // factor in convolution filter
-  float hysteresisFactor; // hysteresis factor
+  float filterFactor;     //!< factor in convolution filter
+  float hysteresisFactor; //!< hysteresis factor
   float noiseThreshold;
 };
 

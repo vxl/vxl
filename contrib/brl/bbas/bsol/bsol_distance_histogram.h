@@ -16,7 +16,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 #include <vsol/vsol_line_2d_sptr.h>
 
@@ -25,7 +25,7 @@ class bsol_distance_histogram
  public:
   bsol_distance_histogram();
   bsol_distance_histogram(int nbins, double max_val);
-  bsol_distance_histogram(int nbins, 
+  bsol_distance_histogram(int nbins,
                           vcl_vector<vsol_line_2d_sptr> const& lines);
   ~bsol_distance_histogram();
   //:accessors
@@ -48,18 +48,18 @@ class bsol_distance_histogram
   double min_count() const;
   double max_count() const;
 
-  friend 
-  vcl_ostream& operator << (vcl_ostream& os, const bsol_distance_histogram& h);
+  friend
+    vcl_ostream& operator<<(vcl_ostream& os, const bsol_distance_histogram& h);
 
  private:
   //:normalize the distance values which were weighted by the line length
   void normalize_distance();
   //:perform a parabolic interpolation using adjacent bins.
   double interpolate_peak(int initial_peak);
-  double delta_; // bin value interval
-  vcl_vector<double> bin_counts_;//histogram counts
-  vcl_vector<double> bin_values_;//histogram values
-  vcl_vector<double> weights_;//value weights
+  double delta_; //!< bin value interval
+  vcl_vector<double> bin_counts_;//!< histogram counts
+  vcl_vector<double> bin_values_;//!< histogram values
+  vcl_vector<double> weights_;//!< value weights
 };
 
 #endif

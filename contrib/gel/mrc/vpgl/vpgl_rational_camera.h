@@ -46,8 +46,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_iostream.h>
-
+#include <vcl_iosfwd.h>
 #include <vbl/vbl_smart_ptr.h>
 
 #include <vnl/vnl_vector.h>
@@ -71,31 +70,25 @@ class vpgl_rational_camera : public vpgl_basic_camera
   vpgl_rational_camera(vnl_matrix<double> const & rational_matrix);
 
   // New constructor for use with pre and post offsets
-  vpgl_rational_camera(
-    vnl_matrix<double> const & rational_matrix,
-    vnl_vector<double> const & scalex,
-    vnl_vector<double> const & scaley,
-    vnl_vector<double> const & scalez,
-    vnl_vector<double> const & scaleu,
-    vnl_vector<double> const & scalev
-   );
+  vpgl_rational_camera(vnl_matrix<double> const & rational_matrix,
+                       vnl_vector<double> const & scalex,
+                       vnl_vector<double> const & scaley,
+                       vnl_vector<double> const & scalez,
+                       vnl_vector<double> const & scaleu,
+                       vnl_vector<double> const & scalev);
 
   vpgl_rational_camera();
 
   vpgl_rational_camera(double *Un, double *Ud, double *Vn, double *Vd);
 
-  virtual void SetTranslation (double u, double v);
+  virtual void SetTranslation(double u, double v);
 
-  virtual void SetWorldScale(
-    vnl_vector<double>& scalex,
-    vnl_vector<double>& scaley,
-    vnl_vector<double>& scalez
-   );
+  virtual void SetWorldScale(vnl_vector<double>& scalex,
+                             vnl_vector<double>& scaley,
+                             vnl_vector<double>& scalez);
 
-  virtual void SetImageScale(
-    vnl_vector<double>& scalex,
-    vnl_vector<double>& scaley
-   );
+  virtual void SetImageScale(vnl_vector<double>& scalex,
+                             vnl_vector<double>& scaley);
 
   virtual void SetGlobal(bool const& new_val) { global_ = new_val; }
 

@@ -9,7 +9,7 @@
 // \author crossge@crd.ge.com
 
 #include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vcl_utility.h>
 
 #include <gmvl/gmvl_node_sptr.h>

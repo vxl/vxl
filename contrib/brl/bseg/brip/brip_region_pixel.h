@@ -13,7 +13,7 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_point_2d.h>
 #include <brip/brip_region_pixel_sptr.h>
@@ -29,17 +29,19 @@ class brip_region_pixel : public vbl_ref_count
   int dist_;
 
   brip_region_pixel()
-    :location_(0,0), nearest_(0,0), cost_(0.0f), count_(0), label_(0), dist_(0)
-  {}
+    : location_(0,0), nearest_(0,0), cost_(0.0f),
+      count_(0), label_(0), dist_(0) {}
+  brip_region_pixel(brip_region_pixel const& p)
+    : location_(p.location_), nearest_(p.nearest_), cost_(p.cost_),
+      count_(p.count_), label_(p.label_), dist_(p.dist_) {}
   brip_region_pixel(vgl_point_2d<int> const& location,
-              vgl_point_2d<int> const& nearest,
-              float const& cost,
-              int const count,
-              unsigned int const& label)
+                    vgl_point_2d<int> const& nearest,
+                    float const& cost,
+                    int const count,
+                    unsigned int const& label)
     : location_(location), nearest_(nearest), cost_(cost),
       count_(count), label_(label)
   {
-    //    vcl_cout << "L " << location_ << "cost " << cost << '\n';
     int dx = location_.x() - nearest_.x();
     int dy = location_.y() - nearest_.y();
     dist_ = dx * dx + dy * dy;
@@ -93,6 +95,6 @@ class brip_region_pixel : public vbl_ref_count
   };
 };
 
-vcl_ostream&  operator<<(vcl_ostream& s, brip_region_pixel const& sd);
+vcl_ostream& operator<<(vcl_ostream& s, brip_region_pixel const& sd);
 
 #endif // brip_region_pixel_h_

@@ -5,12 +5,12 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief A base class for images of any dimension and type
-//  \author Tim Cootes
+// \file
+// \brief A base class for images of any dimension and type
+// \author Tim Cootes
 
 #include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vsl/vsl_binary_io.h>
 
 //: A base class for images of any dimension and type
@@ -69,27 +69,27 @@ class mil_image
     virtual void b_read(vsl_b_istream& bfs) = 0;
 };
 
- //: Allows derived class to be loaded by base-class pointer
- //  A loader object exists which is invoked by calls
- //  of the form "vsl_b_read(bfs,base_ptr);".  This loads derived class
- //  objects from the disk, places them on the heap and
- //  returns a base class pointer.
- //  In order to work the loader object requires
- //  an instance of each derived class that might be
- //  found.  This function gives the model class to
- //  the appropriate loader.
+//: Allows derived class to be loaded by base-class pointer
+//  A loader object exists which is invoked by calls
+//  of the form "vsl_b_read(bfs,base_ptr);".  This loads derived class
+//  objects from the disk, places them on the heap and
+//  returns a base class pointer.
+//  In order to work the loader object requires
+//  an instance of each derived class that might be
+//  found.  This function gives the model class to
+//  the appropriate loader.
 void vsl_add_to_binary_loader(const mil_image& b);
 
- //: Binary file stream output operator for class reference
+//: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mil_image& b);
 
- //: Binary file stream input operator for class reference
+//: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mil_image& b);
 
- //: Stream output operator for class reference
+//: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const mil_image& b);
 
- //: Stream output operator for class pointer
+//: Stream output operator for class pointer
 vcl_ostream& operator<<(vcl_ostream& os,const mil_image* b);
 
 //: Print class to os

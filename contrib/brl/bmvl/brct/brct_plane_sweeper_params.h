@@ -1,4 +1,3 @@
-//--*-c++-*---
 // This is brl/bmvl/brct/brct_plane_sweeper_params.h
 #ifndef brct_plane_sweeper_params_h_
 #define brct_plane_sweeper_params_h_
@@ -13,7 +12,7 @@
 //-----------------------------------------------------------------------------
 #include <sdet/sdet_harris_detector_params.h>
 #include <gevd/gevd_param_mixin.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 
 class brct_plane_sweeper_params : public gevd_param_mixin
 {
@@ -29,15 +28,14 @@ class brct_plane_sweeper_params : public gevd_param_mixin
                             const float corr_sigma = 1.0,
                             const float  intensity_thresh = 25.0,
                             const sdet_harris_detector_params& hdp =
-                            sdet_harris_detector_params()
-                            );
+                                       sdet_harris_detector_params());
 
- brct_plane_sweeper_params(const brct_plane_sweeper_params& old_params);
+  brct_plane_sweeper_params(const brct_plane_sweeper_params& old_params);
  ~brct_plane_sweeper_params(){}
 
   bool SanityCheck();
- friend
-  vcl_ostream& operator<<(vcl_ostream& os, const brct_plane_sweeper_params& sp);
+  friend
+    vcl_ostream& operator<<(vcl_ostream&, const brct_plane_sweeper_params& sp);
  protected:
   void InitParams(float zmin,
                   float zmax,
@@ -49,8 +47,7 @@ class brct_plane_sweeper_params : public gevd_param_mixin
                   float corr_thresh,
                   float corr_sigma,
                   float  intensity_thresh,
-                  const sdet_harris_detector_params& hdp
-                  );
+                  const sdet_harris_detector_params& hdp);
  public:
   //
   // Parameter blocks and parameters
@@ -66,6 +63,6 @@ class brct_plane_sweeper_params : public gevd_param_mixin
   float corr_sigma_;
   float  intensity_thresh_;
   sdet_harris_detector_params hdp_;
-  };
+};
 
 #endif // brct_plane_sweeper_params_h_

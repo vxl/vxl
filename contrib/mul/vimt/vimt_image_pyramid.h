@@ -5,12 +5,12 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Pyramid of images of arbitrary type
-//  \author Tim Cootes
+// \file
+// \brief Pyramid of images of arbitrary type
+// \author Tim Cootes
 
 #include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 class vimt_image;
 
 //: Pyramid of images of arbitrary type

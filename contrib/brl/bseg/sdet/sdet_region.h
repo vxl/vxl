@@ -13,7 +13,7 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <sdet/sdet_region_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vdgl/vdgl_digital_region.h>
@@ -25,7 +25,7 @@ class sdet_region : public vdgl_digital_region
   sdet_region(int npts, const float* xp, const float* yp,
               const unsigned short *pix);
   sdet_region(vdgl_digital_region const& reg);
-  ~sdet_region(){};
+  ~sdet_region() {}
   //:accessors
   void set_label(const unsigned int label){region_label_ = label;}
   unsigned int label(){return region_label_;}
@@ -54,6 +54,6 @@ class sdet_region : public vdgl_digital_region
   vsol_polygon_2d_sptr boundary_;
 };
 
-vcl_ostream&  operator<<(vcl_ostream& s, sdet_region const& sd);
+vcl_ostream& operator<<(vcl_ostream& s, sdet_region const& sd);
 
 #endif // sdet_region_h_

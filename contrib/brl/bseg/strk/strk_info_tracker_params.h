@@ -11,7 +11,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <gevd/gevd_param_mixin.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 
 class strk_info_tracker_params : public gevd_param_mixin
 {
@@ -28,47 +28,45 @@ class strk_info_tracker_params : public gevd_param_mixin
                            const bool use_background = false,
                            const bool renyi_joint_entropy = false,
                            const bool verbose = false,
-                           const bool debug = false
-                          );
+                           const bool debug = false);
 
- strk_info_tracker_params(const strk_info_tracker_params& old_params);
+  strk_info_tracker_params(const strk_info_tracker_params& old_params);
  ~strk_info_tracker_params() {}
 
   bool SanityCheck();
- friend
-  vcl_ostream& operator<<(vcl_ostream& os, const strk_info_tracker_params& tp);
+  friend
+    vcl_ostream& operator<<(vcl_ostream& os,const strk_info_tracker_params& tp);
  protected:
- void InitParams(int n_samples,
-                 float search_radius,
-                 float angle_range,
-                 float scale_range,
-                 float sigma,
-                 bool gradient_info,
-                 bool color_info,
-                 float min_gradient,
-                 float parzen_sigma,
-                 bool use_background,
-                 bool renyi_joint_entropy,
-                 bool verbose,
-                 bool debug
-                );
+  void InitParams(int n_samples,
+                  float search_radius,
+                  float angle_range,
+                  float scale_range,
+                  float sigma,
+                  bool gradient_info,
+                  bool color_info,
+                  float min_gradient,
+                  float parzen_sigma,
+                  bool use_background,
+                  bool renyi_joint_entropy,
+                  bool verbose,
+                  bool debug);
  public:
   //
   // Parameter blocks and parameters
   //
-  int n_samples_;          //!< number of samples generated per iteration
-  float search_radius_;    //!< window size for generating samples
-  float angle_range_;      //!< angle range for generating samples
-  float scale_range_;      //!< scale range for generating samples
-  float sigma_;            //!< smoothing kernel radius for estimating gradient
-  bool gradient_info_;     //!< Combine gradient and intensity info
-  bool color_info_;        //!< Combine color and intensity info
-  float min_gradient_;     //!< minimum gradient magnitude to be considered
-  float parzen_sigma_;     //!< smoothing for the histogram density
-  bool use_background_;    //!< employ a background model 
-  bool renyi_joint_entropy_; //!< use renyi entropy for joint distributions
-  bool verbose_;           //!< informative messages to cout
-  bool debug_;             //!< informative debug messages to cout
+  int n_samples_;           //!< number of samples generated per iteration
+  float search_radius_;     //!< window size for generating samples
+  float angle_range_;       //!< angle range for generating samples
+  float scale_range_;       //!< scale range for generating samples
+  float sigma_;             //!< smoothing kernel radius for estimating gradient
+  bool gradient_info_;      //!< Combine gradient and intensity info
+  bool color_info_;         //!< Combine color and intensity info
+  float min_gradient_;      //!< minimum gradient magnitude to be considered
+  float parzen_sigma_;      //!< smoothing for the histogram density
+  bool use_background_;     //!< employ a background model
+  bool renyi_joint_entropy_;//!< use renyi entropy for joint distributions
+  bool verbose_;            //!< informative messages to cout
+  bool debug_;              //!< informative debug messages to cout
 };
 
 #endif // strk_info_tracker_params_h_

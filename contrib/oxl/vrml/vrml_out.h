@@ -9,7 +9,6 @@
 // \author awf@robots.ox.ac.uk
 // \date   19 Mar 00
 
-#include <vcl_iostream.h>
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 

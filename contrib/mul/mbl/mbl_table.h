@@ -7,7 +7,7 @@
 // \brief Container for tabulated data suitable for reading/writing to delimited text files
 
 #include <vcl_map.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
@@ -25,51 +25,51 @@ class mbl_table
 {
  public:
 
-  //! Constructor
-  //! \param delim The delimiter character.
+  //: Constructor
+  // \param delim The delimiter character.
   mbl_table(const char delim);
 
-  //! Get the column of data corresponding to a particular heading.
-  //! \param header String identifying the desired column.
-  //! \return true if there is a column with the specified heading.
-  //! \retval column A vector containing the values of the requested column.
+  //: Get the column of data corresponding to a particular heading.
+  // \param header String identifying the desired column.
+  // \return true if there is a column with the specified heading.
+  // \retval column A vector containing the values of the requested column.
   bool get_column(const vcl_string& header,
                   vcl_vector<double>& column) const;
 
-  //! Load this table's data from specified text stream.
-  //! Any existing data is lost.
-  //! \return true if table was read successfully from the stream.
+  //: Load this table's data from specified text stream.
+  // Any existing data is lost.
+  // \return true if table was read successfully from the stream.
   bool read(vcl_istream& is);
 
   //! Save this table's data to specified text stream.
   void write(vcl_ostream& os) const;
 
-  //! Is another table identical to this one?
+  //: Is another table identical to this one?
   bool operator==(const mbl_table& rhs) const;
 
-protected:
+ protected:
 
-  //! Read a series of characters from the stream until a delimiter character or eol.
-  //! \param is The input stream.
-  //! \return true if a non-empty string was successfully read.
-  //! \retval str The string which was read.
-  //! \retval eol Whether the stream is at end-of-line after reading the string.
-  //! \retval eof Whether the stream is at end-of-file after reading the string.
+  //: Read a series of characters from the stream until a delimiter character or eol.
+  // \param is The input stream.
+  // \return true if a non-empty string was successfully read.
+  // \retval str The string which was read.
+  // \retval eol Whether the stream is at end-of-line after reading the string.
+  // \retval eof Whether the stream is at end-of-file after reading the string.
   bool read_delimited_string(vcl_istream& is,
                              vcl_string& str,
                              bool& eol,
                              bool& eof);
 
-  //! The character delimiting each column.
+  //: The character delimiting each column.
   char delimiter_;
 
-  //! The column headers (in order)
+  //: The column headers (in order)
   vcl_vector<vcl_string> column_headers_;
 
-  //! Map a column header string to column index
+  //: Map a column header string to column index
   vcl_map<vcl_string, unsigned> header_to_column_index_;
 
-  //! The table data, arranged as column vectors of double data.
+  //: The table data, arranged as column vectors of double data.
   vcl_vector<vcl_vector<double> > columns_;
 };
 

@@ -1,4 +1,4 @@
-//----*-c++-*----tells emacs to use C++ mode----------
+// This is brl/bseg/vpro/vpro_fourier_params.h
 #ifndef vpro_fourier_params_h_
 #define vpro_fourier_params_h_
 //:
@@ -11,32 +11,32 @@
 //
 //-----------------------------------------------------------------------------
 #include <gevd/gevd_param_mixin.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 
 class vpro_fourier_params : public gevd_param_mixin
 {
  public:
-  vpro_fourier_params(const float thresh = 50.0, 
-                      const float level = 0.0,
-                      const float range=0.05);
+  vpro_fourier_params(const float thresh = 50.0f,
+                      const float level  = 0.0f,
+                      const float range  = 0.05f);
 
- vpro_fourier_params(const vpro_fourier_params& old_params);
+  vpro_fourier_params(const vpro_fourier_params& old_params);
+
  ~vpro_fourier_params(){}
 
   bool SanityCheck();
- friend
-   vcl_ostream& operator<<(vcl_ostream& os, const vpro_fourier_params& vfp);
+  friend
+    vcl_ostream& operator<<(vcl_ostream& os, const vpro_fourier_params& vfp);
  protected:
- void InitParams(float thresh, float level, float range);
+  void InitParams(float thresh, float level, float range);
 
  public:
   //
   // Parameter blocks and parameters
   //
-  float thresh_;        // threshold on frame difference (not used)
-  float level_;       // clip level (not used)
-  float range_;       // dynamic range for conversion to byte pixels
+  float thresh_; //!< threshold on frame difference (not used)
+  float level_;  //!< clip level (not used)
+  float range_;  //!< dynamic range for conversion to byte pixels
 };
-
 
 #endif // vpro_fourier_params_h_

@@ -7,7 +7,7 @@
 // \brief Load properties from text files
 
 #include <vcl_map.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vcl_string.h>
 
 //: The type of the property dictionary

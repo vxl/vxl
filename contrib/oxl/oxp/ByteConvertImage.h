@@ -10,7 +10,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 
 #include <vil1/vil1_memory_image_of.h>
 #include <vxl_config.h>

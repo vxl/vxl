@@ -27,7 +27,7 @@
 //
 //-------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 #include <bmrf/bmrf_epi_point_sptr.h>
@@ -162,8 +162,8 @@ class bmrf_epi_seg : public vbl_ref_count
   void compute_limits();
   void compute_int_values();
 
-  bool limits_valid_;//up to date coordinate geometry
-  bool int_valid_;//up to date intensity values
+  bool limits_valid_;//!< up to date coordinate geometry
+  bool int_valid_;//!< up to date intensity values
   int min_index_;
   int max_index_;
 
@@ -176,11 +176,11 @@ class bmrf_epi_seg : public vbl_ref_count
   double max_tan_ang_;
   //:points are in original digital curve order but also monotonic in alpha
   vcl_vector<bmrf_epi_point_sptr> seg_;
-  vcl_vector<double> int_alpha_;//the alphas for intensity samples
+  vcl_vector<double> int_alpha_;//!< the alphas for intensity samples
   vcl_vector<double> left_ds_;
-  vcl_vector<double> left_int_; // left intensity average
+  vcl_vector<double> left_int_; //!< left intensity average
   vcl_vector<double> right_ds_;
-  vcl_vector<double> right_int_;// right intensity average
+  vcl_vector<double> right_int_;//!< right intensity average
   double avg_left_int_;
   double avg_right_int_;
   double left_int_sd_;

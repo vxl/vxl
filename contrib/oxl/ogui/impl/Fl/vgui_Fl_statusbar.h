@@ -18,7 +18,7 @@
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <FL/Fl_Output.H>
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>

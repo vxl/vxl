@@ -6,7 +6,7 @@
 // \brief Simple statistics on a 1D variable.
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vsl/vsl_binary_io.h>
 
 // windows thinks min and max are macros in this file, but they
@@ -16,25 +16,22 @@
 
 //: Simple statistics on a 1D variable
 // \code
-// // A rather trivial example
-// mbl_stats_1d stats,odd_stats,even_stats,sum_stats;
+//   // A rather trivial example
+//   mbl_stats_1d stats,odd_stats,even_stats,sum_stats;
 //
-// int n = 10;
-// for (int i=0;i<n;i++)
-// {
-//   stats.obs(i);
-//   if (i%2) even_stats.obs(i);
-//   else     odd_stats.obs(i);
-// }
+//   const int n = 10;
+//   for (int i=0;i<n;i++)
+//   {
+//     stats.obs(i);
+//     if (i%2) even_stats.obs(i);
+//     else     odd_stats.obs(i);
+//   }
 //
-// vcl_cout<<stats;
-// vcl_cout<<"Stats of odd numbers :"<<vcl_endl;
-// vcl_cout<<odd_stats;
+//   vcl_cout << stats << "\nStats of odd numbers :\n" << odd_stats;
 //
-// sum_stats = odd_stats + even_stats;
+//   sum_stats = odd_stats + even_stats;
 //
-// vcl_cout<<"Sum of odd and even stats"<<vcl_endl;
-// vcl_cout<<sum_stats;
+//   vcl_cout << "Sum of odd and even stats\n" << sum_stats;
 // \endcode
 class mbl_stats_1d
 {
@@ -43,7 +40,7 @@ class mbl_stats_1d
   double min_v_;
   double max_v_;
   int n_obs_;
-public:
+ public:
   mbl_stats_1d() ;
 
     //: Remove all data
@@ -89,16 +86,16 @@ public:
   mbl_stats_1d operator+(const mbl_stats_1d& s1, const mbl_stats_1d& s2);
 };
 
-  //: Binary file stream output operator for class reference
+//: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mbl_stats_1d& b);
 
-  //: Binary file stream input operator for class reference
+//: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mbl_stats_1d& b);
 
-  //: Stream output operator for class reference
+//: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const mbl_stats_1d& stats);
 
-  //: Stream output operator for class reference
+//: Stream output operator for class reference
 void vsl_print_summary(vcl_ostream& os,const mbl_stats_1d& stats);
 
 #endif

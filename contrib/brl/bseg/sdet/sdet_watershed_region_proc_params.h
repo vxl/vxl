@@ -6,12 +6,11 @@
 //
 // \author
 //    Joseph L. Mundy - July 11, 2004
-//    
 //
 //-----------------------------------------------------------------------------
 #include <gevd/gevd_param_mixin.h>
 #include <brip/brip_watershed_params.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 
 class sdet_watershed_region_proc_params : public gevd_param_mixin
 {
@@ -22,24 +21,21 @@ class sdet_watershed_region_proc_params : public gevd_param_mixin
                           bool debug = false,
                           int min_area = 5,
                           float merge_tol = 40,
-                          int merge_priority = 0
-                         );
+                          int merge_priority = 0);
 
- sdet_watershed_region_proc_params(const sdet_watershed_region_proc_params& old_params);
+  sdet_watershed_region_proc_params(const sdet_watershed_region_proc_params& old_params);
  ~sdet_watershed_region_proc_params(){}
 
   bool SanityCheck();
- friend
-   vcl_ostream& operator<<(vcl_ostream& os, const sdet_watershed_region_proc_params& rpp);
+  friend
+    vcl_ostream& operator<<(vcl_ostream& os, const sdet_watershed_region_proc_params& rpp);
  protected:
- void InitParams(
-                 const brip_watershed_params& wp,
-                 bool verbose,
-                 bool debug,
-                 int min_area,
-                 float merge_tol,
-                 int merge_priority
-                );
+  void InitParams(const brip_watershed_params& wp,
+                  bool verbose,
+                  bool debug,
+                  int min_area,
+                  float merge_tol,
+                  int merge_priority);
  public:
   //
   // Parameter blocks and parameters
@@ -51,6 +47,5 @@ class sdet_watershed_region_proc_params : public gevd_param_mixin
   bool verbose_;             //!< Print detailed output
   brip_watershed_params wp_;  //!< parameters associated with step and fold detection
 };
-
 
 #endif // sdet_watershed_region_proc_params_h_

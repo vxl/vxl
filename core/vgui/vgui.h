@@ -20,7 +20,7 @@
 
 #include "dll.h"
 #include <vcl_string.h>
-#include <vcl_iostream.h> // for the status bar vcl_ostream.
+#include <vcl_iosfwd.h> // for the status bar vcl_ostream.
 
 class vgui_window;
 class vgui_adaptor;

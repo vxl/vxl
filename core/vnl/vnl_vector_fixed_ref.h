@@ -20,7 +20,7 @@
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 
 
 template <class T, unsigned int n>
@@ -646,19 +646,19 @@ inline T vnl_vector_ssd( const vnl_vector<T>& a, const vnl_vector_fixed_ref_cons
 //: \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline
-vcl_ostream& operator<< ( vcl_ostream& ostr, const vnl_vector_fixed_ref_const<T,n>& v )
+vcl_ostream& operator<<(vcl_ostream& o,const vnl_vector_fixed_ref_const<T,n>& v)
 {
-  v.print( ostr );
-  return ostr;
+  v.print(o);
+  return o;
 }
 
 //: \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline
-vcl_istream& operator>> ( vcl_istream& ostr, const vnl_vector_fixed_ref<T,n>& v )
+vcl_istream& operator>>(vcl_istream& i, const vnl_vector_fixed_ref<T,n>& v)
 {
-  v.read_ascii( ostr );
-  return ostr;
+  v.read_ascii(i);
+  return i;
 }
 
 

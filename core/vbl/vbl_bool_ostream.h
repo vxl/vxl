@@ -8,11 +8,11 @@
 // \file
 //
 // \verbatim
-// Modifications
-// PDA (Manchester) 21/03/2001: Tidied up the documentation
+//  Modifications
+//   PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 
 class vbl_bool_ostream
 {

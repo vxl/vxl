@@ -15,7 +15,6 @@
 #include <vcl_cstdio.h>  // sprintf()
 #include <vcl_cstring.h>
 #include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
 #include <vcl_sstream.h>
 #include <vcl_cassert.h>
 #include <vcl_fstream.h>

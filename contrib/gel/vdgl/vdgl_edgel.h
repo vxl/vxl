@@ -11,7 +11,7 @@
 // \author
 //    Geoff Cross
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vgl/vgl_point_2d.h>
 
 class vdgl_edgel
@@ -55,7 +55,6 @@ class vdgl_edgel
   double grad_;
   double theta_;
 };
-
 
 bool operator==( const vdgl_edgel &e1, const vdgl_edgel &e2);
 vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel& p);

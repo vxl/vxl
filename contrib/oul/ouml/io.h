@@ -4,7 +4,7 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vcl_set.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_vector.h>
 #include <vil1/vil1_rgb.h>
 

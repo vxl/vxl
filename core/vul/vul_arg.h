@@ -11,15 +11,15 @@
 // \date   05 Feb 98
 //
 // \verbatim
-// Modifications
-// PDA (Manchester) 21/03/2001: Tidied up the documentation
+//  Modifications
+//   PDA (Manchester) 21/03/2001: Tidied up the documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_list.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 
 //: forward declare all classes and their helper functions.
 class vul_arg_info_list;

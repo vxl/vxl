@@ -33,7 +33,7 @@
 
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 class HomgPoint2D;
 class HomgLineSeg2D;
 class HomgLine2D;
@@ -107,7 +107,7 @@ class ImageMetric
   // Static functions to condition/decondition image relations
   static FMatrix decondition(const FMatrix& F, const ImageMetric* c1, const ImageMetric* c2);
 
-  inline friend vcl_ostream& operator <<(vcl_ostream& o, const ImageMetric& m) { return m.print(o); }
+  inline friend vcl_ostream& operator<<(vcl_ostream& o, const ImageMetric& m) { return m.print(o); }
 };
 
 #endif // ImageMetric_h_
