@@ -1,3 +1,4 @@
+#ifndef INSTANTIATE_TEMPLATES
 #include <vcl_vector.h>
 #include <vil/vil_image.h>
 #include <vipl/accessors/vipl_accessors_vil_image.txx>
@@ -8,3 +9,4 @@
 typedef vcl_vector<unsigned int> out_type;
 
 template class vipl_histogram<vil_image,out_type,unsigned short,unsigned, vipl_trivial_pixeliter>;
+#endif

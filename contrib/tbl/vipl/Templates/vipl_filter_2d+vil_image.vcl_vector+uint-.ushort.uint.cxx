@@ -1,3 +1,4 @@
+#ifndef INSTANTIATE_TEMPLATES
 #include <vil/vil_image.h>
 #include <vcl_vector.h>
 
@@ -10,3 +11,4 @@ template class vipl_filter<vil_image, vcl_vector<unsigned>, unsigned short, unsi
 
 #include <vipl/filter/vipl_filter_2d.txx>
 template class vipl_filter_2d<vil_image, vcl_vector<unsigned>, unsigned short, unsigned, vipl_trivial_pixeliter>;
+#endif

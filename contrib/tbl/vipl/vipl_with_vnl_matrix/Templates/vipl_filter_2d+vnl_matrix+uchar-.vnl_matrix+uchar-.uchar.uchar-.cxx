@@ -1,3 +1,4 @@
+#ifndef INSTANTIATE_TEMPLATES
 #include <vnl/vnl_matrix.h>
 typedef unsigned char ubyte;
 
@@ -9,3 +10,4 @@ template class vipl_filter<vnl_matrix<ubyte>, vnl_matrix<ubyte>, ubyte, ubyte, 2
 
 #include <vipl/filter/vipl_filter_2d.txx>
 template class vipl_filter_2d<vnl_matrix<ubyte>, vnl_matrix<ubyte>, ubyte, ubyte, vipl_trivial_pixeliter>;
+#endif

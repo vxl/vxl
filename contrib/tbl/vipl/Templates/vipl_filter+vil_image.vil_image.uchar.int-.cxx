@@ -1,3 +1,4 @@
+#ifndef INSTANTIATE_TEMPLATES
 #include <vil/vil_image.h>
 
 // this must be here for filter-2d to work
@@ -9,3 +10,4 @@ template class vipl_filter<vil_image, vil_image, unsigned char, int, 2, vipl_tri
 #include <vipl/filter/vipl_filter_2d.txx>
 template class vipl_filter_2d<vil_image, vil_image, unsigned char, int, vipl_trivial_pixeliter>;
 
+#endif

@@ -1,3 +1,4 @@
+#ifndef INSTANTIATE_TEMPLATES
 #include <mil/mil_image_2d_of.h>
 typedef unsigned char ubyte;
 
@@ -9,3 +10,4 @@ template class vipl_filter<mil_image_2d_of<ubyte>, mil_image_2d_of<ubyte>, ubyte
 
 #include <vipl/filter/vipl_filter_2d.txx>
 template class vipl_filter_2d<mil_image_2d_of<ubyte>, mil_image_2d_of<ubyte>, ubyte, ubyte, vipl_trivial_pixeliter>;
+#endif

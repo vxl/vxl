@@ -1,3 +1,4 @@
+#ifndef INSTANTIATE_TEMPLATES
 // for vipl_threshold<...> instantiation:
 #include <vcl_vector.h>
 #include <vil/vil_image.h>
@@ -9,3 +10,4 @@
 typedef vcl_vector<unsigned int> out_type;
 
 template class vipl_histogram<vil_image,out_type,unsigned char,unsigned, vipl_trivial_pixeliter>;
+#endif

@@ -1,3 +1,4 @@
+#ifndef INSTANTIATE_TEMPLATES
 #include <vbl/vbl_array_2d.h>
 typedef unsigned char ubyte;
 
@@ -9,3 +10,4 @@ template class vipl_filter<vbl_array_2d<ubyte>, vbl_array_2d<ubyte>, ubyte, ubyt
 
 #include <vipl/filter/vipl_filter_2d.txx>
 template class vipl_filter_2d<vbl_array_2d<ubyte>, vbl_array_2d<ubyte>, ubyte, ubyte, vipl_trivial_pixeliter>;
+#endif

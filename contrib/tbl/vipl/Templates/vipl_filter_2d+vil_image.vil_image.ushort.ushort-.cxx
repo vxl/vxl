@@ -1,3 +1,4 @@
+#ifndef INSTANTIATE_TEMPLATES
 #include <vil/vil_image.h>
 
 #define FILTER_IMPTR_DEC_REFCOUNT(v) {delete (v); (v)=0;}
@@ -13,3 +14,4 @@ template class vipl_filter<vil_image, vil_image, unsigned short, unsigned short,
 #include <vipl/filter/vipl_filter_2d.txx>
 template class vipl_filter_2d<vil_image, vil_image, unsigned short, unsigned short, vipl_trivial_pixeliter>;
 
+#endif

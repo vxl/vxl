@@ -1,3 +1,4 @@
+#ifndef INSTANTIATE_TEMPLATES
 #include <section/section.h>
 typedef unsigned char ubyte;
 
@@ -9,3 +10,4 @@ template class vipl_filter<section<ubyte,2>, section<int,2>, ubyte, int, 2, vipl
 
 #include <vipl/filter/vipl_filter_2d.txx>
 template class vipl_filter_2d<section<ubyte,2>, section<int,2>, ubyte, int, vipl_trivial_pixeliter>;
+#endif

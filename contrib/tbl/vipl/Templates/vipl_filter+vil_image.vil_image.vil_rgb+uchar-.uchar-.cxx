@@ -1,3 +1,4 @@
+#ifndef INSTANTIATE_TEMPLATES
 #include <vil/vil_image.h>
 #include <vil/vil_rgb.h>
 typedef vil_rgb<unsigned char> rgbcell;
@@ -11,3 +12,4 @@ template class vipl_filter<vil_image, vil_image, rgbcell, unsigned char, 2, vipl
 #include <vipl/filter/vipl_filter_2d.txx>
 template class vipl_filter_2d<vil_image, vil_image, rgbcell, unsigned char, vipl_trivial_pixeliter>;
 
+#endif
