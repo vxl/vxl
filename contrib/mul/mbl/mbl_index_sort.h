@@ -23,7 +23,6 @@ struct mbl_index_sort_cmp1
 template <class T>
 void mbl_index_sort(const T* data, int n, vcl_vector<int>& index)
 {
-
   mbl_index_sort_cmp1<T> c;
   c.data = data;
 
@@ -48,7 +47,6 @@ struct mbl_index_sort_cmp2
 template <class T>
 void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<int>& index)
 {
-
   mbl_index_sort_cmp2<T> c;
   c.data = &data;
 
@@ -58,4 +56,5 @@ void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<int>& index)
 
   vcl_sort(index.begin(), index.end(), c);
 }
+
 #endif // mbl_index_sort_h_
