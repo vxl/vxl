@@ -75,4 +75,9 @@ inline vcl_pair<T1, T2> make_pair(const T1& x, const T2& y) {
     return vcl_pair<T1, T2>(x, y);
 }
 
+#define VCL_PAIR_INSTANTIATE \
+extern "please include vcl/emulation/vcl_pair.txx instead"
+#define VCL_PAIR_const_INSTANTIATE \
+extern "please include vcl/emulation/vcl_pair.txx instead"
+
 #endif // vcl_emulation_pair_h

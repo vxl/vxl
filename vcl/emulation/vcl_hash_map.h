@@ -397,4 +397,7 @@ inline bool operator==(const vcl_hash_multimap<Key, T, HashFcn,EqualKey>& hm1,
 
 # endif /* VCL_STL_DEFAULT_TYPE_PARAM */
 
+#define VCL_HASH_MAP_INSTANTIATE \
+extern "please include vcl/emulation/vcl_hash_map.txx instead"
+
 #endif // vcl_emulation_hash_map_h

@@ -232,4 +232,7 @@ inline bool operator<(const vcl_multimap<Key, T, Compare>& x,
 #  endif
 # endif /*  __STL_DEFAULT_TYPE_PARAM */
 
+#define VCL_MULTIMAP_INSTANTIATE \
+extern "please include vcl/emulation/vcl_multimap.txx instead"
+
 #endif // vcl_emulation_multimap_h
