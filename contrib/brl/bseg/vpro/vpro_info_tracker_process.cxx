@@ -1,5 +1,6 @@
 // This is brl/bseg/vpro/vpro_info_tracker_process.cxx
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vtol/vtol_topology_object.h>

@@ -1,4 +1,4 @@
-// This is brl/vpro/vpro_info_tracker_process.h
+// This is brl/bseg/vpro/vpro_info_tracker_process.h
 #ifndef vpro_info_tracker_process_h_
 #define vpro_info_tracker_process_h_
 //----------------------------------------------------------------------------
@@ -13,7 +13,6 @@
 //   J.L. Mundy August 21, 2002    Initial version.
 // \endverbatim
 //---------------------------------------------------------------------------
-#include <vcl_fstream.h>
 #include <vtol/vtol_face_2d_sptr.h>
 #include <sdet/sdet_info_tracker_params.h>
 #include <sdet/sdet_info_tracker.h>
@@ -41,6 +40,5 @@ class vpro_info_tracker_process : public vpro_video_process
   int start_frame_;
   vcl_vector<vtol_face_2d_sptr> tracked_faces_;
 };
-
 
 #endif // vpro_info_tracker_process_h_
