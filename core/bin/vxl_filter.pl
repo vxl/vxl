@@ -365,9 +365,9 @@ sub process_headers {
       s/<Numerics\/MatrixInverse\.h>/<vnl\/algo\/vnl_matrix_inverse.h>/;
       s/<Numerics\/Eigensystem\.h>/<vnl\/algo\/vnl_real_eigensystem.h>/;
       s/<Numerics\/SparseMatrix\.h>/<vnl\/vnl_sparse_matrix.h>/;
-      s/<Numerics\/Int(.)\.h>/<vnl\/vnl_int_$1.h>;
-      s/<Numerics\/Float(.)\.h>/<vnl\/vnl_float_$1.h>;
-      s/<Numerics\/Double(.)\.h>/<vnl\/vnl_double_$1.h>;
+      s/<Numerics\/Int([0-9x]+)\.h>/<vnl\/vnl_int_$1.h>;
+      s/<Numerics\/Float([0-9x]+)\.h>/<vnl\/vnl_float_$1.h>;
+      s/<Numerics\/Double([0-9x]+)\.h>/<vnl\/vnl_double_$1.h>;
       s/<math\/resize\.h>/<vnl\/vnl_resize.h>/;
       s/^(\#include <math\/matlab\.h>)/\#define matlab(M) M \/\/$1/;
       s/<math\/BaseSVD\.h>/<vnl\/algo\/vnl_svd.h>/;
