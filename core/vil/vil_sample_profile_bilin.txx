@@ -1,6 +1,6 @@
+// This is mul/vil2/vil2_sample_profile_bilin.txx
 #ifndef vil2_sample_profile_bilin_txx_
 #define vil2_sample_profile_bilin_txx_
-
 //: \file
 //  \brief Profile sampling functions for 2D images
 //  \author Tim Cootes
@@ -31,9 +31,9 @@ inline bool vil2_profile_in_image(double x0, double y0,
 //  Points outside image return zero.
 template <class imType, class vecType>
 void vil2_sample_profile_bilin(vecType* v,
-                           const vil2_image_view<imType>& image,
-                           double x0, double y0, double dx, double dy,
-                           int n)
+                               const vil2_image_view<imType>& image,
+                               double x0, double y0, double dx, double dy,
+                               int n)
 {
   bool all_in_image = vil2_profile_in_image(x0,y0,x0+(n-1)*dx,y0+(n-1)*dy,image);
 
@@ -64,8 +64,8 @@ void vil2_sample_profile_bilin(vecType* v,
   else
   {
     // Use safe interpolation
-	int nx = image.ni();
-	int ny = image.nj();
+    int nx = image.ni();
+    int ny = image.nj();
     if (np==1)
     {
       for (int i=0;i<n;++i,x+=dx,y+=dy)
@@ -84,8 +84,9 @@ void vil2_sample_profile_bilin(vecType* v,
 
 #define VIL2_SAMPLE_PROFILE_BILIN_INSTANTIATE( imType, vecType ) \
 template void vil2_sample_profile_bilin(vecType* v, \
-                           const vil2_image_view<imType >& image, \
-                           double x0, double y0, double dx, double dy, \
-                           int n)
+                                        const vil2_image_view<imType >& image, \
+                                        double x0, double y0, \
+                                        double dx, double dy, \
+                                        int n)
 
 #endif // vil2_sample_profile_bilin
