@@ -1,3 +1,5 @@
+#include "vpro_curve_tracking_process.h"
+
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 #include <vcl_fstream.h>
@@ -7,7 +9,6 @@
 #include <bdgl/bdgl_curve_tracking.h>
 
 #include <brip/brip_float_ops.h>
-#include <vpro/vpro_curve_tracking_process.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
 #include <vtol/vtol_edge_2d_sptr.h>
@@ -23,7 +24,7 @@ vpro_curve_tracking_process::vpro_curve_tracking_process(bdgl_curve_tracking_par
 {
   detect_params_ = dp;
   tp_ = tp;
- }
+}
 
 vpro_curve_tracking_process::~vpro_curve_tracking_process()
 {
@@ -73,13 +74,12 @@ bool vpro_curve_tracking_process::execute()
   vcl_vector<vtol_edge_2d_sptr> ecl;
   ecl.clear();
 
-  for (unsigned int i=0;i<edges->size();i++){
+  for (unsigned int i=0; i<edges->size(); i++)
+  {
     c  = (*edges)[i]->curve();
     dc = c->cast_to_digital_curve();
     if (dc->length()>tp_.min_length_of_curves)
-    {
-        ecl.push_back((*edges)[i]);
-    }
+      ecl.push_back((*edges)[i]);
   }
 
   input_curves_.push_back(ecl);
@@ -87,12 +87,10 @@ bool vpro_curve_tracking_process::execute()
   int t = input_curves_.size()-1;
   track_frame(t);
 
-
-  for (unsigned int i=0;i<get_output_size_at(t);i++)
+  for (int i=0; i<get_output_size_at(t); ++i)
   {
     bdgl_tracker_curve_sptr test_curve1=get_output_curve(t,i);
     bdgl_tracker_curve_sptr new_curve,old_curve;
-    vcl_map<int,int>::iterator iter;
     vtol_edge_2d_sptr edc=test_curve1->get_curve_set();
 
     vdgl_digital_curve_sptr dc = bdgl_curve_algs::create_digital_curves(test_curve1->desc->points_);
@@ -107,7 +105,7 @@ bool vpro_curve_tracking_process::execute()
       output_spat_objs_.push_back( dc->cast_to_spatial_object_2d() );
       output_spat_objs_[output_spat_objs_.size()-1]->set_tag_id( test_curve1->match_id_ );
     }
- }
+  }
 
   vcl_cout<<"\n frame no :"<<t;
   output_image_ = 0;//no output image is produced
@@ -122,48 +120,37 @@ bool vpro_curve_tracking_process::write_to_file()
   //search for the biggest curve in output_curve_[0]
 
   // writing the code to write tracks and their point correspondences
-  for (int k=0;k<output_curves_[0].size();k++)
+  for (unsigned int k=0; k<output_curves_[0].size(); ++k)
   {
-    match_data_sptr bmn;
+    match_data_sptr bmn = output_curves_[0][k]->get_best_match_next();
     int cnt=1;
-    if (output_curves_[0][k]->get_best_match_next())
+    while (bmn)
     {
-      bmn=output_curves_[0][k]->get_best_match_next();
-      while (bmn)
-      {
-        cnt++;
-        if (bmn->match_curve_set[0]->get_best_match_next())
-          bmn=bmn->match_curve_set[0]->get_best_match_next();
-        else
-          bmn=NULL;
-      }
+      cnt++;
+      bmn=bmn->match_curve_set[0]->get_best_match_next();
     }
 
     if (cnt>7)
     {
-      vcl_ostringstream o;
-      o<<k;
+      vcl_ostringstream o; o<<k;
       vcl_string curve_num=o.str();
       vcl_string temp_name="c:\\temp_input\\curve" + curve_num+".txt";
-      vcl_ofstream f( temp_name.c_str());
-      vcl_map<int,int>::iterator iter;
-      double max_length=0;
-      int max_curve_no;
+      vcl_ofstream f(temp_name.c_str());
       f<<"# CONTOUR_EDGE_MAP : canny+van-ducks\n"
        <<"# .cem files\n"
        <<"# Format :\n"
        <<"# Each contour block will consist of the following\n"
        <<"# [BEGIN CONTOUR]\n"
        <<"# EDGE_COUNT=num_of_edges\n"
-       <<"# [Pixel_Pos]  Pixel_Dir Pixel_Conf  [Sub_Pixel_Pos] Sub_Pixel_Dir Sub_Pixel_Conf\n";
+       <<"# [Pixel_Pos]  Pixel_Dir Pixel_Conf  [Sub_Pixel_Pos] Sub_Pixel_Dir Sub_Pixel_Conf\n"
+       <<"CURVE\n";
       bool flag=true;
-      f<<"CURVE\n";
       bdgl_tracker_curve_sptr obj=output_curves_[0][k];
       while (flag)
       {
         f<<"[BEGIN CONTOUR]\n"
          <<"EDGE_COUNT="<<obj->desc->points_.size()<<"\n";
-        for (int i=0;i<obj->desc->points_.size();i++)
+        for (unsigned int i=0; i<obj->desc->points_.size(); ++i)
         {
           f<<" "<<"["<<obj->desc->points_[i].x()<<", "<<obj->desc->points_[i].y()
            <<"]"<<"   "<<obj->desc->angles_[i]<<" "<<obj->desc->grad_[i]<<"\n";
