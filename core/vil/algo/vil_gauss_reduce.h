@@ -27,6 +27,72 @@ template<class T>
 void vil2_gauss_reduce_121(const vil2_image_view<T>& src,
                                 vil2_image_view<T>& dest);
 
+
+class vil2_gauss_reduce_params
+{
+  double scale_step_;
+  double filt2_, filt1_, filt0_;
+  double filt_edge2_, filt_edge1_, filt_edge0_;
+  double filt_pen_edge2_, filt_pen_edge1_,
+    filt_pen_edge0_, filt_pen_edge_n1_;
+public:
+  explicit vil2_gauss_reduce_params(double scale_step);
+  //: the scale step between pyramid levels
+  double scale_step() const {return scale_step_;}
+
+  //: Filter tap value
+  // The value of the two outside elements of the 5 tap 1D FIR filter
+  double filt2() const { return filt2_;}
+  //: Filter tap value
+  // The value of elements 2 and 4 of the 5 tap 1D FIR filter
+  double filt1() const { return filt1_;}
+  //: Filter tap value
+  // The value of the central element of the 5 tap 1D FIR filter
+  double filt0() const { return filt0_;}
+
+  //: Filter tap value
+  // The value of the first element of the 3 tap 1D FIR filter for use at the edge of the window
+  // Corresponds to the filt2_ elements in a symmetrical filter
+  double filt_edge2() const { return filt_edge2_;}
+  //: Filter tap value
+  // The value of the second element of the 3 tap 1D FIR filter for use at the edge of the window
+  // Corresponds to the filt1_ elements in a symmetrical filter
+  double filt_edge1() const { return filt_edge1_;}
+  //: Filter tap value
+  // The value of the third element of the 3 tap 1D FIR filter for use at the edge of the window
+  // Corresponds to the filt0_ element in a symmetrical filter
+  double filt_edge0() const { return filt_edge0_;}
+
+  //: Filter tap value
+  // The value of the first element of the 4 tap 1D FIR filter for use 1 pixel away the edge of the window
+  // Corresponds to the filt2_ elements in a symmetrical filter
+  double filt_pen_edge2() const { return filt_pen_edge2_;}
+  //: Filter tap value
+  // The value of the second element of the 4 tap 1D FIR filter for use 1 pixel away the edge of the window
+  // Corresponds to the filt1_ elements in a symmetrical filter
+  double filt_pen_edge1() const { return filt_pen_edge1_;}
+  //: Filter tap value
+  // The value of the third element of the 4 tap 1D FIR filter for use 1 pixel away the edge of the window
+  // Corresponds to the filt0_ elements in a symmetrical filter
+  double filt_pen_edge0() const { return filt_pen_edge0_;}
+  //: Filter tap value
+  // The value of the fourth element of the 4 tap 1D FIR filter for use 1 pixel away the edge of the window
+  // Corresponds to the filt1_ elements in a symmetrical filter
+  double filt_pen_edge_n1() const { return filt_pen_edge_n1_;}
+};
+
+//: Smooth and subsample src_im by an arbitrary factor to produce dest_im
+// \param worka provide workspace to avoid repetitive memory alloc and free
+// \param workb provide workspace to avoid repetitive memory alloc and free
+// \relates vil2_image_view
+template <class T>
+void gauss_reduce_general(const vil2_image_view<T>& src_im,
+                          vil2_image_view<T>& dest_im,
+                          vil2_image_view<T>& worka,
+                          vil2_image_view<T>& workb,
+                          const vil2_gauss_reduce_params& params);
+
+
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
 //  every other pixel.  Fills [0,(nx+1)/2-1][0,ny-1] elements of dest
@@ -41,6 +107,10 @@ void vil2_gauss_reduce(const vxl_byte* src_im,
                             int s_x_step, int s_y_step,
                             vxl_byte* dest_im,
                             int d_x_step, int d_y_step);
+
+
+
+
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
