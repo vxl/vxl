@@ -9,7 +9,7 @@
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_bilin_interp_2d.h>
 #include <vil/vil_byte.h>
-
+#include <vcl_cmath.h> // for fabs()
 
 void test_bilin_interp_2d_byte()
 {
