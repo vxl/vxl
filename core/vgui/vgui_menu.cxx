@@ -57,7 +57,7 @@ void vgui_menu::operator=(vgui_menu const &that)
 #define im_here do { /* vcl_cerr << __FILE__ " : " << __LINE__ << vcl_endl; */ } while (false)
 
 void vgui_menu::add(vcl_string const &n,
-                    vgui_command *c,
+                    vgui_command_sptr c,
                     vgui_key key,
                     vgui_modifier modifiers)
 {

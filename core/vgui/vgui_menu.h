@@ -23,9 +23,9 @@
 #include <vbl/vbl_smart_ptr.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
+#include <vgui/vgui_command_sptr.h>
 
 class vgui_menu;
-struct vgui_command;
 
 typedef void (*vgui_menu_callback)(void const* client_data);
 typedef void (*vgui_menu_callback_no_client_data)();
@@ -65,7 +65,7 @@ struct vgui_menu_item
 
   //: Pointer to the command to be executed.
   //  Non-zero for command items only.
-  vbl_smart_ptr<vgui_command> cmnd;
+  vgui_command_sptr cmnd;
 
   //: Pointer to a submenu.
   //  The object pointed to is owned (ie managed) by
@@ -126,7 +126,7 @@ class vgui_menu
 
   //: Add given command to this menu.
   void add(vcl_string const &,
-           vgui_command *c,
+           vgui_command_sptr c,
            vgui_key key =vgui_KEY_NULL,
            vgui_modifier modifiers =vgui_MODIFIER_NULL);
 
