@@ -1059,67 +1059,86 @@ brip_vil_float_ops::convert_to_float(vil_image_view<vil_rgb<vxl_byte> > const& i
       output(x,y) = (float)rgb.grey();
     }
   return output;
+
 }
 
-static void rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
+void brip_vil_float_ops::rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
                        float& i, float& h, float& s)
 {
-  // Reference: figure 13.36, page 595 of Foley & van Dam
-  float r = rgb.R(), g = rgb.G(), b = rgb.B();
-  i = rgb.grey();
+  float r,g,b;
+  r=rgb.R();
+  g=rgb.G();
+  b=rgb.B();
 
-  float maxval = vnl_math_max(r, vnl_math_max(g, b));
-  float minval = vnl_math_min(r, vnl_math_min(g, b));
-
-  //lightness
-  float la = (maxval + minval) / 2.f;
-  // Achromatic case, intensity is grey or near black or white
-  if (maxval == minval||i<20||i>235)
-  {
-    s = -1.f;
-    h = 0.f;
-  }
-  else//the chromatic case
-  {
-    // Calculate the saturation.
-    if (la <= 127)
-    {
-      s = (255.f*(maxval - minval))/(maxval + minval);
-    }
-    else
-    {
-      s = (255.f*(maxval - minval)) / (512.f - maxval - minval);
-      if (s<0)
-        s = 0.f;
-      if (s>255)
-        s = 255.f;
-    }
-
-    // Calculate the hue.
-    float delta = maxval - minval;
-    if (r == maxval)
-    {
-      // The resulting color is between yellow and magenta.
-      h = (60*(g - b))/ delta;
-    }
-    else if (g == maxval)
-    {
-      // The resulting color is between cyan and yellow.
-      h = 120.f + (60*(b - r))/delta;
-    }
-    else
-    {
-      // The resulting color is between magenta and cyan.
-      h = 240.f + (60*(r - g))/delta;
-    }
-    // Be sure 0 <= hue <= 360
-    if (h < 0)
-      h += 360.f;
-    if (h > 360)
-      h -= 360.f;
-  }
+  float maxval = vnl_math_max(r,vnl_math_max(g,b));
+  float minval = vnl_math_min(r,vnl_math_min(g,b));
+  
+  float delta = maxval - minval;
+  i = maxval;
+  if(maxval == 0)  
+    s = 0;
+  else
+   s = delta / maxval;
+  
+  if (s== 0) 
+   h = 0;                 //:      (Hue is undefined)
+  
+  if (r== maxval) 
+    h = (g - b) / delta ;//:      (between yellow and magenta)
+  if (g == maxval) 
+    h = 2 + (b - r)/delta ;//:(between cyan and yellow)
+  if (b == maxval) 
+    h = 4 + (r - g) / delta; //:   (between magenta and cyan)
+  h = h * 60;//:                             (convert Hue to degrees)
+  if (h < 0) 
+    h = h + 360 ;  //:                (Hue must be positive)
+  if(h >= 360) 
+    h = h - 360; //:              (Hue must be less than 360)
+  
+  h = h * (255.0 / 360.0);
+  s = s * 255.0;
 }
+void brip_vil_float_ops::ihs_to_rgb(vil_rgb<vxl_byte> & rgb,
+                       float i, float h, float s)
+{
+  // Reference: page 593 of Foley & van Dam
+  h = h * (360.f / 255.f);
+  s = s * (1.f / 255.f);
 
+  float R=0.0;
+  float G=0.0;
+  float B=0.0;
+  
+  if (s == 0) {
+    R=i;
+    G=i;
+    B=i;
+  }
+
+  if (s > 0.0) {
+    h = h / 60;
+    float J = vcl_floor(h);
+
+    float F = h - J;
+
+    float P =( i * (1 - s));
+    float Q = (i * (1 - (s * F)));
+    float T = (i * (1 - (s * (1 - F))));
+
+     if (J == 0){R=i;G=T;B=P;}
+     if (J == 1){R=Q;G=i;B=P;} 
+     if (J == 2){R=P;G=i;B=T;} 
+     if (J == 3){R=P;G=Q;B=i;} 
+     if (J == 4){R=T;G=P;B=i;} 
+     if (J == 5){R=i;G=P;B=Q;}
+     
+  }
+
+  vil_rgb<vxl_byte> v((unsigned char)R,(unsigned char)G,(unsigned char)B);
+
+  rgb=v;
+
+}
 
 void brip_vil_float_ops::
 convert_to_IHS(vil_image_view<vil_rgb<vxl_byte> >const& image,
@@ -1128,6 +1147,9 @@ convert_to_IHS(vil_image_view<vil_rgb<vxl_byte> >const& image,
                vil_image_view<float>& S)
 {
   int w = image.ni(), h = image.nj();
+  vcl_cout<<"\n width in fucntion is "<<w;
+  vcl_cout<<"\n height in fucntion is "<<h;
+
   I.set_size(w,h);
   H.set_size(w,h);
   S.set_size(w,h);
@@ -1136,6 +1158,30 @@ convert_to_IHS(vil_image_view<vil_rgb<vxl_byte> >const& image,
     {
       float in, hue, sat;
       rgb_to_ihs(image(c,r), in, hue, sat);
+      I(c,r) = in;
+      H(c,r) = hue;
+      S(c,r) = sat;
+    }
+}
+void brip_vil_float_ops::
+convert_to_IHS(vil_image_view<unsigned char >const& image,
+               vil_image_view<float>& I,
+               vil_image_view<float>& H,
+               vil_image_view<float>& S)
+{
+  int w = image.ni(), h = image.nj();
+  vcl_cout<<"\n width in fucntion is "<<w;
+  vcl_cout<<"\n height in fucntion is "<<h;
+
+  I.set_size(w,h);
+  H.set_size(w,h);
+  S.set_size(w,h);
+  for (int r = 0; r < h; r++)
+    for (int c = 0; c < w; c++)
+    {
+      float in, hue, sat;
+      vil_rgb<vxl_byte> imint(image(c,r,0),image(c,r,1),image(c,r,2));
+      rgb_to_ihs(imint, in, hue, sat);
       I(c,r) = in;
       H(c,r) = hue;
       S(c,r) = sat;
