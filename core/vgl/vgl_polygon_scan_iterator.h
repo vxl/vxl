@@ -63,25 +63,14 @@
 //                from a list of IUPoints or a list of Vertex cannot handle 
 //                holes.  - RYF
 //
-class vgl_polygon_scan_iterator
+#include <vgl/vgl_region_scan_iterator.h>
+
+/*struct*/class vgl_polygon_scan_iterator : public vgl_region_scan_iterator
 {
 public:
   // Stores coordinates of a 2d point
   typedef vgl_polygon::point_t Point2;
   
-  // returns current scan line
-  int scany() { return (y-1); }
-
-  // returns start of current span
-  int startx() { return xl; }
-
-  // returns end of current span
-  int endx(){return xr;}
-
-  float fstartx() { return fxl; }
-  float fendx() { return fxr; }
-  float fscany() { return fy; }
-
   vgl_polygon_scan_iterator(vgl_polygon const& face, bool boundaryp = true);
   vgl_polygon_scan_iterator(vgl_polygon const& face, bool boundaryp, vgl_box_2d<float> const& window);
   ~vgl_polygon_scan_iterator();
@@ -92,17 +81,29 @@ public:
   // Moves iterator to next segment
   bool next();
 
+  // returns current scan line
+  int scany() const { return (y-1); }
+
+  // returns start of current span
+  int startx() const { return xl; }
+
+  // returns end of current span
+  int endx() const { return xr; }
+
+  // are these floating point versions ?
+  float fstartx() { return fxl; }
+  float fendx() { return fxr; }
+  float fscany() { return fy; }
+
   // Vertex index -- uniquely identifies a vertex in the array chains
-  class vertind {
-  public:
+  struct vertind {
     int chainnum;    // which chain the vertex is part of
     int vertnum;     // which vertex in the chain
     void display( char const * str );
   };
 
   // Describes an edge crossing the current scan line
-  class crossedge {
-  public:
+  struct crossedge {
     float x;	// x coord of edge's intersection with current scanline
     float dx;	// change in x with respect to y 
     vertind v;      // edge goes from vertex v.vertnum to v.vertnum + 1
