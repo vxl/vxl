@@ -142,44 +142,43 @@ next_initial( rgrl_view_sptr           & view,
     return false;
 
   rgrl_invariant_match_sptr best_match;
-  bool found_best_match = false;
-  if (!matches_[current_moving_image_ind_].empty()){
-    // Remove the best (last) match from the vector
-    do {
-      best_match = matches_[current_moving_image_ind_].back();
-      matches_[current_moving_image_ind_].pop_back();
-      ++num_matches_tried_;
-      found_best_match = best_match->estimate();
-    } while ( !found_best_match && !matches_[current_moving_image_ind_].empty());
+  if (matches_[current_moving_image_ind_].empty())
+    return false;
 
-    if ( !found_best_match ) return false;
+  bool found_best_match;
+  // Remove the best (last) match from the vector
+  do {
+    best_match = matches_[current_moving_image_ind_].back();
+    matches_[current_moving_image_ind_].pop_back();
+    ++num_matches_tried_;
+    found_best_match = best_match->estimate();
+  } while ( !found_best_match && !matches_[current_moving_image_ind_].empty());
 
-    // Determine the global region
-    //
-    rgrl_mask_box global_region = view_->from_image_roi();
-    if ( should_estimate_global_region_ )
-      global_region =
-        rgrl_util_estimate_global_region(view_->from_image_roi(),
-                                         view_->to_image_roi(),
-                                         view_->from_image_roi(),
-                                         *best_match->transform());
-    // Determine the initial region
-    //
-    rgrl_mask_box initial_region = view_->from_image_roi();
-    if ( best_match->has_initial_region() )
-      initial_region = best_match->initial_region();
+  if ( !found_best_match ) return false;
 
-    view = new rgrl_view( view_->from_image_roi(),
-                          view_->to_image_roi(),
-                          initial_region,
-                          global_region,
-                          view_->xform_estimator(),
-                          best_match->transform(),
-                          view_->resolution() );
-    prior_scale = best_match->scale();
+  // Determine the global region
+  //
+  rgrl_mask_box global_region = view_->from_image_roi();
+  if ( should_estimate_global_region_ )
+    global_region =
+      rgrl_util_estimate_global_region(view_->from_image_roi(),
+                                       view_->to_image_roi(),
+                                       view_->from_image_roi(),
+                                       *best_match->transform());
+  // Determine the initial region
+  //
+  rgrl_mask_box initial_region = view_->from_image_roi();
+  if ( best_match->has_initial_region() )
+    initial_region = best_match->initial_region();
 
-    return true;
-  }
+  view = new rgrl_view( view_->from_image_roi(),
+                        view_->to_image_roi(),
+                        initial_region,
+                        global_region,
+                        view_->xform_estimator(),
+                        best_match->transform(),
+                        view_->resolution() );
+  prior_scale = best_match->scale();
 
-  return false;
+  return true;
 }
