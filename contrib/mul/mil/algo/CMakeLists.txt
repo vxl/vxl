@@ -10,6 +10,7 @@ SET(mil_algo_sources
  mil_algo_grad_filter_2d.txx  mil_algo_grad_filter_2d.h
  mil_algo_gaussian_filter.txx mil_algo_gaussian_filter.h
  mil_algo_brighten_image_2d.txx mil_algo_brighten_image_2d.h
+ mil_algo_convolve_1d.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates mil_algo_sources)
