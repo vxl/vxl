@@ -19,7 +19,7 @@ int frurk(vcl_vector<int> const &a,
   return 2;
 }
 
-int test_vector_main()
+int test_vector_main(int /*argc*/,char* /*argv*/[])
 {
   {
     typedef vcl_vector<int> container;
@@ -41,7 +41,7 @@ int test_vector_main()
                << "begin : " << (void*) &* v.begin() << delim
                << "end : " << (void*) &* v.end() << vcl_endl;
 
-      v.push_back(3.1415926 * i);
+      v.push_back(13.141592653589793 * i);
     }
   }
 

@@ -10,7 +10,7 @@
 
 #include <vcl_iostream.h>
 
-int test_cmath_main()
+int test_cmath_main(int /*argc*/,char* /*argv*/[])
 {
   {
     int    xi = 314159265;
@@ -18,6 +18,7 @@ int test_cmath_main()
     float  xf = 13.14159265358979323846f;
     double xd = 23.14159265358979323846;
     long double ld = xd;
+    vcl_complex<double> xc(xd,0.0);
 
 #define macro(var, type) \
 do { \
@@ -31,6 +32,7 @@ do { \
     macro(xf, float);
     macro(xd, double);
     macro(ld, long double);
+    macro(xc, vcl_complex<double>);
 #undef macro
   }
 
@@ -55,13 +57,11 @@ do { \
     if (vcl_abs(x - y*y) < eps) \
       vcl_cout << "vcl_sqrt(" #T ") PASSED" << vcl_endl; \
     else \
-      vcl_cerr << "vcl_sqrt(" #T ") *** FAILED *** " << vcl_endl; \
+      vcl_cout << "vcl_sqrt(" #T ") *** FAILED *** " << vcl_endl; \
   } while (false)
-  macro(float, 1e-6);
+  macro(float, 1e-6);        // actually sqrtf()
   macro(double, 1e-14);
-#if 0 // no need for this, since vcl_cmath.h maps sqrt(long double) to sqrt(double)
-  macro(long double, 1e-16);
-#endif
+  macro(long double, 1e-14); // actually sqrtl()
 #undef macro
 
   return 0;

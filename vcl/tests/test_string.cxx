@@ -5,7 +5,7 @@
 
 #define AssertEq(x) {vcl_cout<<"TEST ["<<fred<<"] == ["<<x<<"] : ";vcl_cout<<(fred==(x)?"PASSED":"FAILED")<<vcl_endl;}
 
-int test_string_main()
+int test_string_main(int /*argc*/,char* /*argv*/[])
 {
   vcl_string fred;
   fred = "fred";

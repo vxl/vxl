@@ -52,4 +52,4 @@
 
 #include <vcl_complex_fwd.h>
 
-int test_headers_main(int, char **) { return 0; }
+int test_headers_main(int /*argc*/,char* /*argv*/[]) { return 0; }

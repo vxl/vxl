@@ -3,7 +3,7 @@
 // Test the functionality, and also cause a link to make sure the
 // function exists.
 
-int test_cctype_main()
+int test_cctype_main(int /*argc*/,char* /*argv*/[])
 {
   return ! ( vcl_isspace(' ') && vcl_isspace('\n') && !vcl_isspace('a') &&
              vcl_isalnum('1') && vcl_isalnum('z') && !vcl_isalnum('@') &&

@@ -2,7 +2,7 @@
 
 int close_stdin();
 
-int test_cstdio_main( const char* filename )
+int test_cstdio_main(int argc,char* argv[])
 {
   vcl_printf( "Hello. %d %f %03x.\n", 1, 2.0f, 3 );
 
@@ -13,44 +13,48 @@ int test_cstdio_main( const char* filename )
   // Close the standard input. All reads from
   // stdin should fail after this.
   rc = close_stdin();
-  if( rc != 0 ) {
+  if ( rc != 0 ) {
     vcl_printf( "FAIL: couldn't close standard input\n" );
     fail = true;
   }
 
 
   rc = vcl_getchar();
-  if( rc != EOF ) {
+  if ( rc != EOF ) {
     vcl_printf( "FAIL: get_char read a value from a closed stream\n" );
     fail = true;
   }
 
-  FILE* fh = vcl_fopen( filename, "rw" );
-  if( !fh ) {
-    vcl_printf( "FAIL: couldn't open %s\n", filename );
+  if ( argc < 2 ) {
+    vcl_printf( "FAIL: no file name given as the first command line argument\n" );
+    fail = true;
+  }
+  FILE* fh = vcl_fopen( argv[1], "rw" );
+  if ( !fh ) {
+    vcl_printf( "FAIL: couldn't open %s\n", argv[1] );
     vcl_printf( "      (skipping file tests)\n" );
     fail = true;
   } else {
     rc = vcl_getc( fh );
-    if( rc != 't' ) {
+    if ( rc != 't' ) {
       vcl_printf( "FAIL: first character read was not 't'\n" );
       fail = true;
     }
 
     rc = vcl_ungetc( 'x', fh );
-    if( rc != 'x' ) {
+    if ( rc != 'x' ) {
       vcl_printf( "FAIL: ungetc failed\n" );
       fail = true;
     } else {
       rc = vcl_getc( fh );
-      if( rc != 'x' ) {
+      if ( rc != 'x' ) {
         vcl_printf( "FAIL: getc returned %d, and not %d ('x') as expected\n", rc, 'x' );
         fail = true;
       }
     }
 
     rc = vcl_fclose( fh );
-    if( rc != 0 ) {
+    if ( rc != 0 ) {
       vcl_printf( "FAIL: failed to close file\n" );
       fail = true;
     }

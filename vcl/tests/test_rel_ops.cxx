@@ -23,7 +23,7 @@ int function()
   return 0;
 }
 
-int test_rel_ops_main()
+int test_rel_ops_main(int /*argc*/,char* /*argv*/[])
 {
   function();
   return 0;

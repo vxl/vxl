@@ -1,7 +1,7 @@
 #include <vcl_iostream.h>
 #include <vcl_deque.h>
 
-int test_deque_main()
+int test_deque_main(int /*argc*/,char* /*argv*/[])
 {
   typedef vcl_deque<int> mydeque;
   mydeque dq;

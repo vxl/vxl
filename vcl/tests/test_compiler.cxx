@@ -41,12 +41,12 @@ struct A
 void vcl_test_implicit_instantiation(int n);
 
 
-int test_compiler_main()
+int test_compiler_main(int /*argc*/,char* /*argv*/[])
 {
   int result = 0;
 
   vcl_cout << "Testing static template member..." << vcl_flush;
-  if( X<int>::pl == 0 ) {
+  if ( X<int>::pl == 0 ) {
     vcl_cout << "  PASSED" << vcl_endl;
   } else {
     vcl_cout << "**FAILED**" << vcl_endl;

@@ -2,7 +2,7 @@
 #include <vcl_iostream.h>
 #include <vcl_list.h>
 
-int test_list_main()
+int test_list_main(int /*argc*/,char* /*argv*/[])
 {
   typedef vcl_list<int> container;
   container m;

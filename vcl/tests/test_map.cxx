@@ -3,7 +3,7 @@
 #include <vcl_iostream.h>
 #include <vcl_map.h>
 
-int test_map_main()
+int test_map_main(int /*argc*/,char* /*argv*/[])
 {
   bool okay = true;
   typedef vcl_map<int, double, vcl_less<int> > mymap;

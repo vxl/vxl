@@ -2,7 +2,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 
-int test_exception_main()
+int test_exception_main(int /*argc*/,char* /*argv*/[])
 {
   const char *ex = "\"const char* exception\"";
   int result = 0;

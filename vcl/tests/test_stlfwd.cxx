@@ -28,12 +28,12 @@
 void f(vcl_map<int, vcl_string,vcl_less<int> >*,
        vcl_set<int,vcl_less<int> >*,
        vcl_list<int>*
-       )
+      )
 {
 }
 
 
-int test_stlfwd_main()
+int test_stlfwd_main(int /*argc*/,char* /*argv*/[])
 {
   return 0;
 }
