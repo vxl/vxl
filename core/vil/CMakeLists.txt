@@ -11,11 +11,11 @@ SET( vil2_sources
   vil2_file_format.cxx vil2_file_format.h
   vil2_load.cxx vil2_load.h
 
-
   # file format readers/writers (see below for conditional ones)
   file_formats/vil2_pnm.cxx file_formats/vil2_pnm.h
 
   # Operations
+  vil2_image_view_functions.txx vil2_image_view_functions.h
 
   # Stuff
   vil2_smart_ptr.txx vil2_smart_ptr.h
