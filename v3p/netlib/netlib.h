@@ -27,11 +27,11 @@ float sqrtf(float);
 # define sqrtf(f) ((float)sqrt((double)(f)))
 #endif
 
-  char * F77_aloc(int Len, char *whence);
-  void   sig_die(char *s, int kill);
+  char * F77_aloc(int Len, const char *whence);
+  void   sig_die(const char *s, int kill);
   void   exit_(int *rc);
   void   s_cat(char *lp, const char *rpp[], long rnp[], long *np, long ll);
-  int    s_cmp(char *a0, char *b0, long la, long lb);
+  int    s_cmp(const char *a0, const char *b0, long la, long lb);
   void   s_copy(char *a, const char *b, long la, long lb);
   double f__cabs(double, double);
 
@@ -53,7 +53,7 @@ float sqrtf(float);
   double d_sign(const double *a, const double *b);
   void   z_sqrt(dcmplx *ret_value, const dcmplx *z);
   double urand_(int *iy);
-  void   xerbla_(char *srname, int *info);
+  void   xerbla_(const char *srname, int *info);
 
   /*: Computes singular values and vectors of an mxn matrix (double version) */
   void dsvdc_(double *x, const int* ldx, /*!< (IN) matrix, m rows, n columns, stored row-wise */
@@ -354,7 +354,7 @@ double ddot_(const int *n, const double *dx, const int *incx, const double *dy, 
                double *lscale, double *rscale, double *work, int *info);
   void zgebal_(const char *job, const int *n, dcmplx *a, const int *lda, int *ilo, int *ihi, double *scale, int *info);
 
-  void dgges_(char *jobvsl, char *jobvsr, char *sort, logical (*delctg)(double*,double*,double*),
+  void dgges_(const char *jobvsl, const char *jobvsr, const char *sort, logical (*delctg)(double*,double*,double*),
               int *n, double *a, int *lda, double *b, int *ldb, int *sdim, double *alphar, double *alphai, double *beta,
               double *vsl, int *ldvsl, double *vsr, int *ldvsr, double *work, int *lwork, logical *bwork, int *info);
 
