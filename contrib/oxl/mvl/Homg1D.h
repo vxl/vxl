@@ -44,8 +44,12 @@ class Homg1D : public vnl_double_2 , public Homg
   // Operations----------------------------------------------------------------
 
 //: Data access
+  double x() const { return (*this)[0]; }
+  double& x() { return (*this)[0]; }
   double get_x() const { return (*this)[0]; }
 //: Data access
+  double w() const { return (*this)[1]; }
+  double& w() { return (*this)[1]; }
   double get_w() const { return (*this)[1]; }
 
   const vnl_double_2& get_vector() const { return *this; }
