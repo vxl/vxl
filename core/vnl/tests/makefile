@@ -36,6 +36,15 @@ TESTS += test_minimizers.cxx
 TESTS += test_rational.cxx
 TESTS += test_convolve.cxx
 
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifeq "$(TJ_GCC30)" "1"
+# gcc 3.0 needs too much virtual memory without optimisation or with -O2
+FLAGS_test_rational.cxx += -O1
+endif
+
 IULIBS += -lvnl-algo -lvnl -lvpl -lvul # vpl_unlink used in test_matlab; vul_timer used
 
 #########################################
