@@ -8,7 +8,7 @@
 integer idamax_(integer *n, doublereal *dx, integer *incx)
 {
     /* System generated locals */
-    integer ret_val;
+    integer ret_val = 1;
 
     /* Local variables */
     static doublereal dmax__;
