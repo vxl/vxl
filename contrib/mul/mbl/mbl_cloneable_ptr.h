@@ -70,6 +70,9 @@ public:
     //: Make object behave like pointer to BaseClass
   BaseClass* operator->() { return ptr_; }
 
+    //: Return actual pointer
+  const BaseClass* ptr() const { return ptr_; }
+
     //: Cast to allow object to look like thing pointed to
   operator BaseClass&() { assert(ptr_!=0); return *ptr_; }
 

@@ -4,7 +4,6 @@
 #pragma interface
 #endif
 
-
 //:
 // \file
 // \author Tim Cootes
