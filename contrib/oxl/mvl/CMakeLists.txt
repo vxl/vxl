@@ -109,7 +109,7 @@ SET(mvl_sources
 AUX_SOURCE_DIRECTORY(Templates mvl_sources)
 
 ADD_LIBRARY(mvl ${mvl_sources})
-TARGET_LINK_LIBRARIES(mvl vnl_algo vnl vbl vgl vul)
+TARGET_LINK_LIBRARIES(mvl vil vnl_algo vnl vbl vgl vul)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)
