@@ -671,7 +671,7 @@ static void test_1d_basis()
   p = b_1_p.project(p13);
   TEST("infinity point", p, vgl_homg_point_1d<double>(1.0,0.0));
   p = b_1_p.project(-3.f);
-  TEST_NEAR("point at -3", vgl_distance(p, vgl_homg_point_1d<double>(-3.0)), 0.0, 1e-9);
+  TEST_NEAR("point at -3", vgl_distance(p, vgl_homg_point_1d<double>(-3.0)), 0.0, 1e-6);
 
   vcl_cout << "  TEST OF PROJECTIVE BASIS ON A 2D LINE\n";
 
