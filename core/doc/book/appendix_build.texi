@@ -316,7 +316,25 @@ IF( VXL_VGUI_FOUND )
   TARGET_LINK_LIBRARIES( foo $@{VXL_VGUI_LIBRARIES@} )
 ENDIF( VXL_VGUI_FOUND )
 
+# If you want to directly use the mpeg2dec library that VXL chose to
+# use, do something like this.  You will link either to a system
+# mpeg2dec library that VXL used or the one VXL built for itself and
+# used.
+
+IF( VXL_MPEG2_FOUND )
+  INCLUDE_DIRECTORIES( $@{VXL_MPEG2_INCLUDE_DIR@} )
+  SET( foo_sources $@{foo_sources@}
+    foo_video.cxx foo_video.h
+  )
+  TARGET_LINK_LIBRARIES( foo $@{VXL_MPEG2_LIBRARIES@} )
+ENDIF( VXL_MPEG2_FOUND )
+
 @end example
+
+In projects external to VXL you should not use the
+@file{UseVGUI.cmake}, @file{FindMPEG2.cmake} or similar files in the
+VXL CMake Modules directory.  These files are for VXL internal use
+only.  Rely on the variable settings from @file{UseVXL.cmake}.
 
 @subsection CMake Pearls
 
