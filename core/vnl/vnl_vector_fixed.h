@@ -677,6 +677,21 @@ inline vnl_matrix<T> outer_product( const vnl_vector_fixed<T,n>& a, const vnl_ve
   return outer_product( a.as_ref(), b.as_ref());
 }
 
+template<class T,unsigned int n>
+  inline vnl_vector_fixed<T,n> cross_3d( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b ) {
+  return cross_3d( a.as_ref(), b.as_ref());
+}
+
+template<class T,unsigned int n>
+  inline vnl_vector_fixed<T,n> cross_3d( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b ) {
+  return cross_3d( a.as_ref(), b);
+}
+
+template<class T,unsigned int n>
+  inline vnl_vector_fixed<T,n> cross_3d( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b ) {
+  return cross_3d( a, b.as_ref());
+}
+
 template<class T, unsigned int n>
 inline vnl_matrix<T> outer_product( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b ) {
   return outer_product( a, b.as_ref());
