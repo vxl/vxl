@@ -1,9 +1,9 @@
-IF(BUILD_TESTS)
+IF(BUILD_TESTING)
   # test
   ADD_EXECUTABLE( lbfgs-example lbfgs-example.c )
   # test
   ADD_EXECUTABLE( lsqr-test lsqr-test.c )
-ENDIF(BUILD_TESTS)
+ENDIF(BUILD_TESTING)
 
 
 # Immediate dependencies

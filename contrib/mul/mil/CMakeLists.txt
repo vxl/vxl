@@ -23,9 +23,9 @@ mil_convert_image_2d.cxx
 
 AUX_SOURCE_DIRECTORY(Templates mil_sources )
 
-IF( BUILD_TESTS)
+IF( BUILD_TESTING)
   SUBDIRS(tests)
-ENDIF( BUILD_TESTS)
+ENDIF( BUILD_TESTING)
 
 IF (WIN32)
   IF (NOT CYGWIN)

@@ -39,6 +39,6 @@ SOURCE_FILES( vcsl_sources
 
 AUX_SOURCE_DIRECTORY( Templates vcsl_sources )
 
-IF( BUILD_TESTS)
+IF( BUILD_TESTING)
   SUBDIRS(tests examples)
-ENDIF( BUILD_TESTS)
+ENDIF( BUILD_TESTING)

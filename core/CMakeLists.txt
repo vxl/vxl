@@ -10,6 +10,6 @@ INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 SUBDIRS(vul vsl vbl vpl vil vnl vgl vidl)
 SUBDIRS( vcgl vcsl )
 
-IF( BUILD_TESTS)
+IF( BUILD_TESTING)
   SUBDIRS(test_allvxl examples)
-ENDIF( BUILD_TESTS)
+ENDIF( BUILD_TESTING)

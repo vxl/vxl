@@ -18,6 +18,6 @@ vil_io_memory_image_impl
 
 AUX_SOURCE_DIRECTORY(Templates vil_io_sources )
 
-IF( BUILD_TESTS)
+IF( BUILD_TESTING)
   SUBDIRS(tests)
-ENDIF( BUILD_TESTS)
+ENDIF( BUILD_TESTING)

@@ -1,6 +1,6 @@
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
 
-IF(BUILD_TESTS)
+IF(BUILD_TESTING)
   # test
   ADD_EXECUTABLE( test_vertex_2d test_vertex_2d.cxx )
   # test
@@ -15,7 +15,7 @@ IF(BUILD_TESTS)
   ADD_EXECUTABLE( test_two_chain test_two_chain.cxx )
   # test
   ADD_EXECUTABLE( test_block test_block.cxx )
-ENDIF(BUILD_TESTS)
+ENDIF(BUILD_TESTING)
 
 
 # Immediate dependencies

@@ -29,9 +29,9 @@ vpdfl_mixture_sampler.cxx
 
 AUX_SOURCE_DIRECTORY(Templates vpdfl_sources)
 
-IF( BUILD_TESTS)
+IF( BUILD_TESTING)
   SUBDIRS(tests)
-ENDIF( BUILD_TESTS)
+ENDIF( BUILD_TESTING)
 
 IF (WIN32)
   IF (NOT CYGWIN)

@@ -5,6 +5,6 @@ SUBDIRS(vpgl)
 SUBDIRS(carmen_interface)
 
 # tests
-IF(BUILD_TESTS)
+IF(BUILD_TESTING)
   SUBDIRS(vpgl_tests)
-ENDIF(BUILD_TESTS)
+ENDIF(BUILD_TESTING)

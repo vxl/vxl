@@ -15,6 +15,6 @@ vnl_io_rational
 
 AUX_SOURCE_DIRECTORY(Templates vnl_io_sources )
 
-IF( BUILD_TESTS)
+IF( BUILD_TESTING)
   SUBDIRS(tests)
-ENDIF( BUILD_TESTS)
+ENDIF( BUILD_TESTING)

@@ -15,6 +15,6 @@ vbl_bit_array_3d
 AUX_SOURCE_DIRECTORY(Templates vbl_sources)
 
 SUBDIRS(io)
-IF( BUILD_TESTS)
+IF( BUILD_TESTING)
   SUBDIRS(tests examples)
-ENDIF( BUILD_TESTS)
+ENDIF( BUILD_TESTING)

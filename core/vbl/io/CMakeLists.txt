@@ -8,6 +8,6 @@ ADD_LIBRARY(vbl_io vbl_io_sources)
 
 AUX_SOURCE_DIRECTORY(Templates vbl_io_sources)
 
-IF( BUILD_TESTS)
+IF( BUILD_TESTING)
   SUBDIRS(tests)
-ENDIF( BUILD_TESTS)
+ENDIF( BUILD_TESTING)
