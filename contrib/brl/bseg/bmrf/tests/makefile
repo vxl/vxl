@@ -1,6 +1,7 @@
 USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 include ../config.mk
 include ${IUEROOT}/core/vpl/config.mk
+include ${IUEROOT}/contrib/brl/bseg/brip/config.mk
 include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
