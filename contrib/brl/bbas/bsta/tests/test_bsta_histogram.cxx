@@ -8,7 +8,6 @@
 //: Test bsta histograms
 void test_bsta_histogram()
 {
-
   double range = 128;
   int bins = 16;
   double delta = range/bins;
@@ -24,20 +23,11 @@ void test_bsta_histogram()
   double value_below = h.value_with_area_below(0.25);
   double value_above = h.value_with_area_above(0.25);
 
-  vcl_cout << "area " << area 
-           << " should be "  << 16 << '\n';
-
-  vcl_cout << "fraction_below " << fraction_below 
-           << " should be "  << 0.25 << '\n';
-
-  vcl_cout << "fraction_above " << fraction_above 
-           << " should be "  << 0.25 << '\n';
-
-  vcl_cout << "value_below " << value_below 
-           << " should be "  << 32.0 << '\n';
-
-  vcl_cout << "value_above " << value_above 
-           << " should be "  << 96.0 << '\n';
+  vcl_cout << "area "          << area <<        " should be "  << 16 << '\n'
+           << "fraction_below "<<fraction_below<<" should be "  << 0.25 << '\n'
+           << "fraction_above "<<fraction_above<<" should be "  << 0.25 << '\n'
+           << "value_below "   << value_below << " should be "  << 32.0 << '\n'
+           << "value_above "   << value_above << " should be "  << 96.0 << '\n';
 
   TEST("test area and percentile methods", area==16&&
        fraction_below == 0.25&&
@@ -45,9 +35,9 @@ void test_bsta_histogram()
        value_below == 32 &&
        value_above == 96, true);
 
-  //Test data constuctor
+  //Test data constructor
   vcl_vector<double> data(16, 1.0);
-  bsta_histogram<double> hdata(0, 128, data);  
+  bsta_histogram<double> hdata(0, 128, data);
   hdata.upcount(32,1);
   vcl_cout << "Bins\n";
   hdata.print();
@@ -58,7 +48,6 @@ void test_bsta_histogram()
   double ent = h.entropy();
   vcl_cout << "Uniform Entropy for " << bins << " bins = " << ent  << " bits\n";
   TEST_NEAR("test histogram uniform distribution entropy", ent, 4, 1e-9);
-
 
   //Joint Histogram Tests
   bsta_joint_histogram<double> jh(range, bins);
