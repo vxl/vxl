@@ -8,12 +8,10 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vcl_cstring.h>
 #include <vil/vil_stream.h>
 #include <vil2/vil2_property.h>
 #include <vil2/vil2_memory_chunk.h>
 #include <vil2/vil2_image_view.h>
-#include <vcl_cassert.h>
 
 #define where (vcl_cerr << __FILE__ ":" << __LINE__ << " : ")
 
@@ -30,7 +28,6 @@ vil2_image_resource_sptr vil2_bmp_file_format::make_input_image(vil_stream* vs)
     return new vil2_bmp_image(vs);
   else
     return 0;
-
 }
 
 vil2_image_resource_sptr vil2_bmp_file_format::make_output_image(vil_stream* vs,
@@ -81,7 +78,6 @@ vil2_bmp_image::vil2_bmp_image(vil_stream* vs, unsigned nx, unsigned ny,
   assert(format == VIL2_PIXEL_FORMAT_BYTE);
   assert(nplanes == 1 || nplanes == 3);
 
-
   // core_hdr.header_size is set up for us.
   core_hdr.width = nx;
   core_hdr.height = ny;
@@ -96,14 +92,16 @@ vil2_bmp_image::~vil2_bmp_image()
 {
 #if 0
   // we must get rid of the local_color_map_;
-  if (local_color_map_){
+  if (local_color_map_)
+  {
     delete [] local_color_map_[0];
     delete [] local_color_map_[1];
     delete [] local_color_map_[2];
     delete local_color_map_;
   }
 
-  if (freds_colormap) {
+  if (freds_colormap)
+  {
     delete [] freds_colormap[0];
     delete [] freds_colormap[1];
     delete [] freds_colormap[2];
@@ -121,7 +119,8 @@ bool vil2_bmp_image::read_header()
   // seek to beginning and read file header.
   is_->seek(0L);
   file_hdr.read(is_);
-  if ( ! file_hdr.signature_valid() ) {
+  if ( ! file_hdr.signature_valid() )
+  {
     where <<  "File is not a valid BMP file\n";
     return false;
   }
@@ -136,30 +135,35 @@ bool vil2_bmp_image::read_header()
 #endif
   // allowed values for bitsperpixel are 1 4 8 16 24 32;
   // currently we only support 8 and 24 - FIXME
-  if ( core_hdr.bitsperpixel != 8 && core_hdr.bitsperpixel != 24 ) {
+  if ( core_hdr.bitsperpixel != 8 && core_hdr.bitsperpixel != 24 )
+  {
     where << "BMP file has a non-supported pixel size of " << core_hdr.bitsperpixel << " bits\n";
     return false;
   }
 
   // determine whether or not there is an info header from
   // the size field.
-  if (core_hdr.header_size == vil2_bmp_core_header::disk_size) {
+  if (core_hdr.header_size == vil2_bmp_core_header::disk_size)
+  {
     // no info header.
   }
-  else if (core_hdr.header_size == vil2_bmp_core_header::disk_size + vil2_bmp_info_header::disk_size) {
+  else if (core_hdr.header_size == vil2_bmp_core_header::disk_size + vil2_bmp_info_header::disk_size)
+  {
     // probably an info header. read it now.
     info_hdr.read(is_);
 #ifdef DEBUG
     info_hdr.print(vcl_cerr); // blather
 #endif
-    if (info_hdr.compression) {
+    if (info_hdr.compression)
+    {
       where << "cannot cope with compression at the moment\n";
       return false;
     }
   }
-  else {
+  else
+  {
     // urgh!
-    where << "dunno about header_size " << core_hdr.header_size << vcl_endl;
+    where << "dunno about header_size " << core_hdr.header_size << '\n';
     return false;
   }
 
@@ -167,10 +171,12 @@ bool vil2_bmp_image::read_header()
   is_->seek(file_hdr.bitmap_offset); // === seek(is_->tell()+info_hdr.colormapsize);
 #if 0
   // color map nonsense
-  if (info_hdr.colormapsize ==0 && info_hdr.colorcount == 0) {
+  if (info_hdr.colormapsize ==0 && info_hdr.colorcount == 0)
+  {
     // phew! no colour map.
   }
-  else if (info_hdr.colormapsize == 256 && core_hdr.bitsperpixel == 8) {
+  else if (info_hdr.colormapsize == 256 && core_hdr.bitsperpixel == 8)
+  {
     // In this case I know how to read the colormap because I have hexdumped an example.
     // But I ignore the color map in the get_section() routine because I don't care.
     // fsm
@@ -181,7 +187,8 @@ bool vil2_bmp_image::read_header()
     freds_colormap[2] = new uchar[256];
     freds_colormap[3] = new uchar[256];
     uchar bif[4];
-    for (int i=0; i<256; ++i) {
+    for (int i=0; i<256; ++i)
+    {
       is_->read(bif, sizeof(bif));
       freds_colormap[0][i] = bif[0];
       freds_colormap[1][i] = bif[1];
@@ -189,7 +196,8 @@ bool vil2_bmp_image::read_header()
       freds_colormap[3][i] = bif[3];
     }
   }
-  else {
+  else
+  {
     // dunno about this.
     assert(false); // FIXME
   }
@@ -204,10 +212,12 @@ bool vil2_bmp_image::read_header()
     ccount = header.biClrUsed;
   else if (header.biBitCount != 24)
     ccount = 1 << header.biBitCount;
-  else {
+  else
+  {
   }
 
-  if (ccount != 0) {
+  if (ccount != 0)
+  {
     unsigned cmap_size;
     if (header.biSize == sizeof(xBITMAPCOREHEADER))
       cmap_size = ccount*3;
@@ -215,7 +225,8 @@ bool vil2_bmp_image::read_header()
       cmap_size = ccount*4;
 
     vcl_vector<uchar> cmap(cmap_size, 0); // use vector<> to avoid coreleak
-    if (is_->read(/* xxx */&cmap[0], 1024L) != 1024L) {
+    if (is_->read(/* xxx */&cmap[0], 1024L) != 1024L)
+    {
       vcl_cerr << "Error reading image palette\n";
       return false;
     }
@@ -223,9 +234,11 @@ bool vil2_bmp_image::read_header()
     // SetColorNum(ccount);
     // int ncolors = get_color_num();
     int ncolors = ccount; // good guess
-    if (ncolors != 0) {
+    if (ncolors != 0)
+    {
       int **color_map = new int*[3];
-      for (int i=0; i<3; ++i) {
+      for (int i=0; i<3; ++i)
+      {
         color_map[i] = new int[ncolors];
         for (int j=0; j<ncolors; j++)
           color_map[i][j] = (int) cmap[2-i+4*j];
@@ -242,7 +255,7 @@ bool vil2_bmp_image::read_header()
   // remember the position of the start of the bitmap data
   bit_map_start = is_->tell();
 #ifdef DEBUG
-  where << "bit_map_start = " << bit_map_start << vcl_endl; // blather
+  where << "bit_map_start = " << bit_map_start << '\n'; // blather
 #endif
   assert(bit_map_start == (int)file_hdr.bitmap_offset); // I think they're supposed to be the same -- fsm.
 
@@ -260,7 +273,7 @@ bool vil2_bmp_image::write_header()
 
   int rowlen = ni() * nplanes() *
     vil2_pixel_format_sizeof_components(pixel_format());
-  rowlen += (3-(rowlen-1)%4); // round up to multiple of 4
+  rowlen += (3-(rowlen+3)%4); // round up to a multiple of 4
   int data_size = nj() * rowlen;
 
   if (nplanes() == 1)
@@ -315,8 +328,6 @@ vil2_image_view_base_sptr vil2_bmp_image::get_copy_view(
 
   vil2_memory_chunk_sptr buf = new vil2_memory_chunk(want_bytes_per_raster*ny, VIL2_PIXEL_FORMAT_BYTE);
 
-
-
   // read each raster in turn. if the client wants the whole image, it may
   // be faster to read() it all in one chunk, so long as the number of bytes
   // per image raster is divisible by four (because the file rasters are
@@ -328,7 +339,8 @@ vil2_image_view_base_sptr vil2_bmp_image::get_copy_view(
   }
   else
   {
-    for (unsigned i=0; i<ny; ++i) {
+    for (unsigned i=0; i<ny; ++i)
+    {
       is_->seek(bit_map_start + have_bytes_per_raster*(i+y0) + x0*bytes_per_pixel);
       is_->read((vxl_byte *)buf->data() + want_bytes_per_raster*i, want_bytes_per_raster);
     }
@@ -355,7 +367,7 @@ bool vil2_bmp_image::put_view(const vil2_image_view_base& view,
 
   int bypp = nplanes();
   int rowlen = ni() * bypp;
-  rowlen += (3-(rowlen-1)%4); // round up to a multiple of 4
+  rowlen += (3-(rowlen+3)%4); // round up to a multiple of 4
 
   if ((view2.planestep() == -1||nplanes()==1)&&
       view2.istep()==view2.nplanes())
