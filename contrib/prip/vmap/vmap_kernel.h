@@ -8,7 +8,8 @@
 // \date 06/05/2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -374,7 +375,7 @@ class vmap_kernel
   //: Inserts a new dart.
   bool add(vmap_dart_index arg)
   {
-    return add(dart_iterator_on(arg)) ;
+    return add(this->dart_iterator_on(arg)) ;
   }
 
   //:
@@ -438,6 +439,7 @@ class vmap_kernel
 
   //:
   dart_collection dart_;
+  dart_collection& dart() { return dart_; }
 };
 
 //: The base class for forests of vertices.
@@ -497,7 +499,7 @@ class vmap_permutation_kernel : public vmap_kernel<typename TPermutation::map_ty
   //:
   bool add(vmap_dart_index arg)
   {
-    return add(dart_iterator_on(arg)) ;
+    return this->add(this->dart_iterator_on(arg)) ;
   }
 
   //:
@@ -536,11 +538,11 @@ class vmap_permutation_kernel : public vmap_kernel<typename TPermutation::map_ty
   template <class TPp>
   vmap_permutation_kernel<TPermutation>& operator=(const vmap_permutation_kernel<TPp> & arg)
   {
-    dart_.resize(arg.size()) ;
+    this->dart().resize(arg.size()) ;
     dart_associated_elt_.resize(arg.size());
     for (unsigned int i=0; i<arg.size(); ++i)
     {
-      dart_[i]=p_.get_element_pointer(arg.get_dart_index(i)) ;
+      this->dart()[i]=p_.get_element_pointer(arg.get_dart_index(i)) ;
       dart_associated_elt_[i]=p_.get_cycle_pointer(arg.get_element_index(i)) ;
     }
     representatives_=arg.representatives() ;
@@ -560,7 +562,7 @@ class vmap_permutation_kernel : public vmap_kernel<typename TPermutation::map_ty
   //: The representative of "root" is the new representative of the set to which "j" is the representative.
   void union_of(element_pointer root, element_pointer j)
   {
-    father_[representative(j)->sequence_index()]= father_[representative(root)->sequence_index()] ;
+    this->father_index()[representative(j)->sequence_index()]= this->father_index()[representative(root)->sequence_index()] ;
   }
 
   //:
