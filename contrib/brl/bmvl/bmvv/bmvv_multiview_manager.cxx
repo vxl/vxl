@@ -544,12 +544,12 @@ void bmvv_multiview_manager::track_edges()
 
   //display the edges
   // frame 0
-  for (unsigned int i=0;i<tracker.get_output_size_at(0);i++){
+  for (int i=0;i<tracker.get_output_size_at(0);++i) {
     //vcl_cout<<".";
     draw_colored_edgel_chain(0,0, tracker.get_output_curve_at(0,i), tracker.get_output_id_at(0,i) );
   }
   // frame 1
-  for (unsigned int i=0;i<tracker.get_output_size_at(1);i++){
+  for (int i=0;i<tracker.get_output_size_at(1);++i) {
     //vcl_cout<<".";
     draw_colored_edgel_chain(1,0, tracker.get_output_curve_at(1,i), tracker.get_output_id_at(1,i) );
   }
