@@ -26,7 +26,7 @@ ret urgh_##name proto \
   static void *f = 0; \
   if (!f) { \
     f = dlsym(RTLD_DEFAULT, #name); \
-    if (debug) printf("dlsym(%s) => 0x%08X\n", #name, unsigned(f)); \
+    if (debug) vcl_printf("dlsym(%s) => 0x%08X\n", #name, unsigned(f)); \
     if (! f) { \
       assert(false); \
       return_##ret( ret() ); \
@@ -44,26 +44,4 @@ macro(void,      glPrioritizeTextures, (GLsizei a, GLuint const *b, GLclampf con
 
 #undef macro
 
-#endif
-
-
-
-
-
-
-#if 0
-#if defined(__sun__) && defined(__gl_h_)
-// fsm: I can see these symbols in /usr/openwin/lib/libGL.so, but
-// they're not in the header /usr/openwin/include/GL/gl.h
-//
-// This should eventually be autoconfed and inserted into vgui_gl.h
-extern "C" {
-  GLboolean glAreTexturesResident(GLsizei, GLuint const *, GLboolean *);
-  void      glBindTexture(GLenum, GLuint);
-  void      glDeleteTextures(GLsizei, GLuint const *);
-  void      glGenTextures(GLsizei, GLuint *);
-  GLboolean glIsTexture(GLuint );
-  void      glPrioritizeTextures(GLsizei, GLuint const *, GLclampf const *);
-}
-#endif
 #endif
