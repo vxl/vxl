@@ -9,25 +9,10 @@
 //-----------------------------------------------------------------------------
 
 
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_matrix_ref.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/algo/vnl_symmetric_eigensystem.h>
-
-#if 0
-void main()
-{
-  vnl_double_3x3 M, evecs;
-  vnl_double_3 evals;
-
-  vnl_symmetric_eigensystem_compute(M.as_ref(), evecs.as_ref(), evals.as_ref());
-}
-
-
-#endif
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
+#include <vnl/vnl_double_3x3.h>
+#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_random.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_c_vector.h>
