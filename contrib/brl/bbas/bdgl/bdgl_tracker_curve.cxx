@@ -18,8 +18,8 @@ match_data::match_data(bdgl_tracker_curve_sptr c,match_data_sptr m)
   mapping_=m->mapping_;
   tail1_=m->tail1_;
   tail2_=m->tail2_;
-
 }
+
 bdgl_tracker_curve  :: bdgl_tracker_curve()
 {
   id_=-1;
@@ -86,6 +86,7 @@ void bdgl_tracker_curve  ::init_set(vcl_vector<vgl_point_2d<double> > p,int id)
 
   desc= new bdgl_curve_description(ec);
 }
+
 void bdgl_tracker_curve  ::init_set(bdgl_tracker_curve_sptr c,vcl_vector<int> ks,int id)
 {
   c_=0;
@@ -101,17 +102,18 @@ void bdgl_tracker_curve  ::init_set(bdgl_tracker_curve_sptr c,vcl_vector<int> ks
   ismatchednext_=false;
   isreliable_=false;
   isreal_=false;
-  
+
   vdgl_edgel_chain_sptr  ec;
   vdgl_edgel_chain_sptr ec_sub=new vdgl_edgel_chain;
   vtol_edge_2d_sptr vc=c->get_curve();
   ec=vc->curve()->cast_to_digital_curve()->get_interpolator()->get_edgel_chain();
-  for (int i=0;i<ks.size();i++)
+  for (unsigned int i=0; i<ks.size(); ++i)
   {
     ec_sub->add_edgel(c->ec_->edgel(ks[i]));
   }
   desc= new bdgl_curve_description(ec_sub);
 }
+
 double bdgl_tracker_curve::compute_mean(vcl_vector<double> t)
 {
   double sum=0;
@@ -153,85 +155,79 @@ void bdgl_tracker_curve
 
 double bdgl_tracker_curve ::compute_euclidean_distance(vnl_matrix<double> R,vnl_matrix<double> T,double s)
 {
-	if(get_best_match_prev())
-	{
-	double cost=0;
-	vcl_map<int,int>::iterator iter;
-	vcl_vector<vgl_point_2d<double> > curve1;
-	vcl_vector<vgl_point_2d<double> > tcurve1;
-	vcl_vector<vgl_point_2d<double> > curve2;
-	for(iter=get_best_match_prev()->mapping_.begin();
-		iter!=get_best_match_prev()->mapping_.end();
-		iter++)
-	{
-		double tempx1=get_best_match_prev()->match_curve_set[0]->desc->points_[(*iter).first].x();
-		double tempy1=get_best_match_prev()->match_curve_set[0]->desc->points_[(*iter).first].y();
-		vgl_point_2d<double> point1(tempx1,tempy1);
-		curve1.push_back(point1);
+  if (get_best_match_prev())
+  {
+    double cost=0;
+    vcl_map<int,int>::iterator iter;
+    vcl_vector<vgl_point_2d<double> > curve1;
+    vcl_vector<vgl_point_2d<double> > tcurve1;
+    vcl_vector<vgl_point_2d<double> > curve2;
+    for (iter=get_best_match_prev()->mapping_.begin();
+         iter!=get_best_match_prev()->mapping_.end();
+         iter++)
+    {
+      double tempx1=get_best_match_prev()->match_curve_set[0]->desc->points_[(*iter).first].x();
+      double tempy1=get_best_match_prev()->match_curve_set[0]->desc->points_[(*iter).first].y();
+      vgl_point_2d<double> point1(tempx1,tempy1);
+      curve1.push_back(point1);
 
-		double tempx2=desc->points_[(*iter).second].x();
-		double tempy2=desc->points_[(*iter).second].y();
-		vgl_point_2d<double> point2(tempx2,tempy2);
-		curve2.push_back(point2);
-	}
-	compute_transformation(curve1,tcurve1,R,T);
-	int min_index=0;
-	for(int i=0;i<tcurve1.size();i++)
-	{
-		double min_dist=1e6;
-		for(int j=0;j<curve2.size();j++)
-		{
-			double dist=vcl_sqrt((tcurve1[i].x()-curve2[j].x())*(tcurve1[i].x()-curve2[j].x())
-								+(tcurve1[i].y()-curve2[j].y())*(tcurve1[i].y()-curve2[j].y()));
-			if(min_dist>dist)
-			{
-				min_dist=dist;
-				min_index=j;
-			}
-		}
-		if(min_dist<1e6)
-			cost+=min_dist;
-	}
-	cost/=get_best_match_prev()->mapping_.size();
-	return cost;
-	}
-	else 
-	{
-	  return -1;
-	}
-
-
+      double tempx2=desc->points_[(*iter).second].x();
+      double tempy2=desc->points_[(*iter).second].y();
+      vgl_point_2d<double> point2(tempx2,tempy2);
+      curve2.push_back(point2);
+    }
+    compute_transformation(curve1,tcurve1,R,T);
+    int min_index=0;
+    for (unsigned int i=0; i<tcurve1.size(); ++i)
+    {
+      double min_dist=1e6;
+      for (unsigned int j=0; j<curve2.size(); ++j)
+      {
+        double dist=vcl_sqrt((tcurve1[i].x()-curve2[j].x())*(tcurve1[i].x()-curve2[j].x())
+                  +(tcurve1[i].y()-curve2[j].y())*(tcurve1[i].y()-curve2[j].y()));
+        if (min_dist>dist)
+        {
+          min_dist=dist;
+          min_index=j;
+        }
+      }
+      if (min_dist<1e6)
+        cost+=min_dist;
+    }
+    cost/=get_best_match_prev()->mapping_.size();
+    return cost;
+  }
+  else
+    return -1;
 }
 
 double bdgl_tracker_curve ::compute_euclidean_distance_next(vnl_matrix<double> R,vnl_matrix<double> T,double s)
 {
   if (get_best_match_next())
   {
-   double x1,y1,x2,y2;
-   double dist=0;
-   vcl_map<int,int> alignment= get_best_match_next()->mapping_;
-   vcl_map<int,int>::iterator iter1;
-   double H[2]={0,0};
-   for (iter1 = alignment.begin(); iter1!=alignment.end(); iter1++)
-   {
-     
-	 H[0]=desc->points_[(*iter1).first].x();
-     H[1]=desc->points_[(*iter1).first].y();
-     vnl_matrix<double> X (H, 2, 1);
-     vnl_matrix<double> Xt=R*X+T;
-     
-	 x1=Xt(0,0);
-     y1=Xt(1,0);
-     
-	 x2=get_best_match_next()->match_curve_set[0]->desc->points_[(*iter1).second].x();
-     y2=get_best_match_next()->match_curve_set[0]->desc->points_[(*iter1).second].y();
+    double x1,y1,x2,y2;
+    double dist=0;
+    vcl_map<int,int> alignment= get_best_match_next()->mapping_;
+    vcl_map<int,int>::iterator iter1;
+    double H[2]={0,0};
+    for (iter1 = alignment.begin(); iter1!=alignment.end(); iter1++)
+    {
+      H[0]=desc->points_[(*iter1).first].x();
+      H[1]=desc->points_[(*iter1).first].y();
+      vnl_matrix<double> X (H, 2, 1);
+      vnl_matrix<double> Xt=R*X+T;
 
+      x1=Xt(0,0);
+      y1=Xt(1,0);
 
-      dist+=vcl_sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
-    }
+      x2=get_best_match_next()->match_curve_set[0]->desc->points_[(*iter1).second].x();
+      y2=get_best_match_next()->match_curve_set[0]->desc->points_[(*iter1).second].y();
 
-  dist/=alignment.size();
-  return dist;
+       dist+=vcl_sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+     }
+
+    dist/=alignment.size();
+    return dist;
   }
   else
     return -1.0;

@@ -30,16 +30,16 @@ void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
   end1=finalMap_[finalMap_.size()-1].first;
   end2=finalMap_[finalMap_.size()-1].second;
 
-  for (unsigned int i=0;i+1<finalMap_.size();++i)
+  for (unsigned int i=0; i+1<finalMap_.size(); ++i)
   {
-    int x1=finalMap_[i].first; 
+    int x1=finalMap_[i].first;
     int x2=finalMap_[i].second;
 
     if (x2==start2)
       tail_start.push_back(x1);
   }
 
-  for (int i=finalMap_.size()-1;i>0;--i)
+  for (unsigned int i=finalMap_.size()-1; i>0; --i)
   {
     int x1=finalMap_[i].first;
     int x2=finalMap_[i].second;
@@ -48,7 +48,7 @@ void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
   }
   double ratio1=(double)tail_start.size()/(double)curve1_.numPoints();
   double ratio2=(double)tail_end.size()/(double)curve1_.numPoints();
-  
+
   matched_len1=curve1_.length()-tail_start.size()-tail_end.size();
 
   if (ratio1>0 && ratio1>ratio2)
@@ -68,14 +68,14 @@ void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
   tail_start.clear();
   tail_end.clear();
 
-  for (unsigned int i=0;i+1<finalMap_.size();++i)
+  for (unsigned int i=0; i+1<finalMap_.size(); ++i)
   {
     int x1=finalMap_[i].first;
     int x2=finalMap_[i].second;
     if (x1==start1)
       tail_start1.push_back(x2);
   }
-  for (int i=finalMap_.size()-1;i>=0;i--)
+  for (int i=finalMap_.size()-1; i>=0; i--)
   {
     int x1=finalMap_[i].first;
     int x2=finalMap_[i].second;
@@ -98,55 +98,48 @@ void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
   else
     tail2.clear();
 }
+
 double DPMatch::normfinalCost()
-{   
-	double alpha =0;
-	double R=0;
-	if(curve1_.Tcurvature()>=curve2_.Tcurvature())
-			alpha=curve2_.Tcurvature();
-	if(curve1_.Tcurvature()<curve2_.Tcurvature())
-			alpha=curve1_.Tcurvature();
-	
-	return finalCost_/((1+R*alpha)*((double)matched_len1+(double)matched_len2))/2;
+{
+  double alpha =0;
+  double R=0;
+  if (curve1_.Tcurvature()>=curve2_.Tcurvature())
+      alpha=curve2_.Tcurvature();
+  if (curve1_.Tcurvature()<curve2_.Tcurvature())
+      alpha=curve1_.Tcurvature();
+
+  return finalCost_/((1+R*alpha)*((double)matched_len1+(double)matched_len2))/2;
 }
+
 vcl_map <int,int> DPMatch::refine_mapping()
 {
     vcl_map<int,int> one_to_one;
-	int hist1=0;
-	int hist2=0;
-	int x1;
-	int x2;
-	
-	for(int i=0;i<finalMap_.size();i++)
-	{
-	
-	  x1=finalMap_[i].first;
-	  x2=finalMap_[i].second;
-	  if(i>0)
-	    {
-	      if(x1== finalMap_[i-1].first)
-		hist1++;
-	      else
-		hist1=0;
-	      
-	      if(x2== finalMap_[i-1].second)
-		hist2++;
-	      else
-		hist2=0;
-	      
-	      if(hist1==0 && hist2==0)
-		{
-		  one_to_one[x1]=x2;
-		}
-	    }
-	}
-	return one_to_one;
+  int hist1=0;
+  int hist2=0;
 
+  for (unsigned int i=0; i<finalMap_.size(); ++i)
+  {
+    int x1=finalMap_[i].first;
+    int x2=finalMap_[i].second;
+    if (i>0)
+    {
+      if (x1== finalMap_[i-1].first)
+        hist1++;
+      else
+        hist1=0;
+      if (x2== finalMap_[i-1].second)
+        hist2++;
+      else
+        hist2=0;
+      if (hist1==0 && hist2==0)
+        one_to_one[x1]=x2;
+    }
+  }
+  return one_to_one;
 }
 
 double DPMatch::euclidean_distance(vnl_matrix<double> R,vnl_matrix<double> T,double scale)
 {
-
   vcl_map<int,int>:: iterator iter1;
   vcl_vector<double> x1,y1,x2,y2,x1t,y1t;
   double xcen1=0,xcen2=0,ycen1=0,ycen2=0;
@@ -171,15 +164,15 @@ double DPMatch::euclidean_distance(vnl_matrix<double> R,vnl_matrix<double> T,dou
   ycen2/=alignment.size();
 
   double dist=0;
-  double tx=T(0,0),ty=T(1,0);
+//double tx=T(0,0),ty=T(1,0);
 
   for (unsigned int i=0;i<x1.size();i++)
   {
     x1[i]-=xcen1;
     y1[i]-=ycen1;
 
-	x2[i]-=xcen2;
-	y2[i]-=ycen2;
+    x2[i]-=xcen2;
+    y2[i]-=ycen2;
 
     H[0]=x1[i];
     H[1]=y1[i];
@@ -233,11 +226,12 @@ DPMatch::DPMatch(Curve &c1, Curve &c2)
   finalMapCost_.clear();
   finalCost_ = DP_VERY_LARGE_COST;
 }
+
 DPMatch::DPMatch(Curve &c1, Curve &c2,vgl_point_2d<double> & e)
 {
   curve1_ = c1;
   curve2_ = c2;
-  
+
   R1_=10.0;
   curve1_.computeProperties();
   curve2_.computeProperties();
@@ -256,16 +250,15 @@ DPMatch::DPMatch(Curve &c1, Curve &c2,vgl_point_2d<double> & e)
   finalMapCost_.clear();
   finalCost_ = DP_VERY_LARGE_COST;
   ep_pt.set(e.x(),e.y());
-  
 }
 
 DPMatch::DPMatch(vcl_vector<vcl_pair<double,double> > v1,
-          vcl_vector<vcl_pair<double,double> > v2,
-		  vnl_double_2 & e)
+                 vcl_vector<vcl_pair<double,double> > v2,
+                 vnl_double_2 & e)
 {
-	curve1_.readDataFromVector(v1);
-	curve2_.readDataFromVector(v2);
-	R1_=10.0;
+  curve1_.readDataFromVector(v1);
+  curve2_.readDataFromVector(v2);
+  R1_=10.0;
     init();
   n_=curve1_.numPoints();
   m_=curve2_.numPoints();
@@ -281,8 +274,8 @@ DPMatch::DPMatch(vcl_vector<vcl_pair<double,double> > v1,
   finalMapCost_.clear();
   finalCost_ = DP_VERY_LARGE_COST;
   ep_pt.set(e[1],e[2]);
-
 }
+
 void DPMatch::printCost()
 {
   vcl_cout << "Cost Matrix\n";
@@ -304,6 +297,7 @@ void DPMatch::initializeDPCosts()
 
   cost_[0][0]=0.0;
 }
+
 double DPMatch::transformed_euclidean_distance()
 {
   vcl_vector<double> x1,y1,x2,y2;
@@ -324,7 +318,7 @@ double DPMatch::transformed_euclidean_distance()
     p1.push_back(point1);
     p2.push_back(point2);
   }
-  
+
   double x1_centroid=0,x2_centroid=0,y1_centroid=0,y2_centroid=0;
   unsigned int N=x1.size();
   //computing centroid
@@ -346,23 +340,22 @@ double DPMatch::transformed_euclidean_distance()
   p2.clear();
   for (unsigned int j=0;j<N;++j)
   {
-    
-	x1[j]-=x1_centroid;
+    x1[j]-=x1_centroid;
     x2[j]-=x2_centroid;
-	
+
     y1[j]-=y1_centroid;
     y2[j]-=y2_centroid;
-	vgl_homg_point_2d<double> point1(x1[j],y1[j]);
-	vgl_homg_point_2d<double> point2(x2[j],y2[j]);
-	p1.push_back(point1);
+    vgl_homg_point_2d<double> point1(x1[j],y1[j]);
+    vgl_homg_point_2d<double> point2(x2[j],y2[j]);
+    p1.push_back(point1);
     p2.push_back(point2);
-
   }
-  /*HMatrix2D Tfn=HMatrix2DAffineCompute::compute(p1,p2);
-  vcl_cout<<"\n"<<Tfn.get(0,0)<<"\t"<<Tfn.get(0,1)<<"\t"<<Tfn.get(0,2)
-		   <<"\n"<<Tfn.get(1,0)<<"\t"<<Tfn.get(1,1)<<"\t"<<Tfn.get(1,2)
-		   <<"\n"<<Tfn.get(2,0)<<"\t"<<Tfn.get(2,1)<<"\t"<<Tfn.get(2,2);
-  */
+#if 0
+  HMatrix2D Tfn=HMatrix2DAffineCompute::compute(p1,p2);
+  vcl_cout<<'\n'<<Tfn.get(0,0)<<'\t'<<Tfn.get(0,1)<<'\t'<<Tfn.get(0,2)
+          <<'\n'<<Tfn.get(1,0)<<'\t'<<Tfn.get(1,1)<<'\t'<<Tfn.get(1,2)
+          <<'\n'<<Tfn.get(2,0)<<'\t'<<Tfn.get(2,1)<<'\t'<<Tfn.get(2,2);
+#endif // 0
   double H[4]={0,0,0,0};
   //computing covariance matrix
   for (unsigned int j=0;j<N;++j)
@@ -395,7 +388,6 @@ double DPMatch::transformed_euclidean_distance()
   double numerator=0;
   double denominator=0;
 
-
   for (unsigned int i=0;i<N;++i)
   {
     double p[2];
@@ -427,21 +419,20 @@ double DPMatch::transformed_euclidean_distance()
   temp[0]=tx;
   temp[1]=ty;
   vnl_matrix<double> Tavg(temp,2,1);
+  Tbar=Tavg;
 #if 0
   Tbar=cen2-cen1;
   Tbar(0,0)=tx;
   Tbar(1,0)=ty;
-#endif
-  Tbar=Tavg;
 
-  //Tbar(0,0)=Tfn.get(0,2);
-  //Tbar(1,0)=Tfn.get(1,2);
+  Tbar(0,0)=Tfn.get(0,2);
+  Tbar(1,0)=Tfn.get(1,2);
 
-  //R(0,0)=Tfn.get(0,0);
-  //R(0,1)=Tfn.get(0,1);
-  //R(1,0)=Tfn.get(1,0);
-  //R(1,1)=Tfn.get(1,1);
-
+  R(0,0)=Tfn.get(0,0);
+  R(0,1)=Tfn.get(0,1);
+  R(1,0)=Tfn.get(1,0);
+  R(1,1)=Tfn.get(1,1);
+#endif // 0
   T=cen2-/*scale**/R*cen1;
   return euclidean_distance(R,Tbar,scale);
 }
@@ -476,18 +467,19 @@ void DPMatch::computeDPCosts()
     }
   }
 }
+
 void DPMatch::init()
 {
  vcl_vector<vgl_point_2d<double> > points1;
  vcl_vector<vgl_point_2d<double> > points2;
  vgl_point_2d<double> temp;
 
- for(int i=0;i<curve1_.numPoints();i++)
+ for (int i=0;i<curve1_.numPoints();i++)
  {
   temp.set(curve1_.x(i),curve1_.y(i));
   points1.push_back(temp);
  }
- for(int i=0;i<curve2_.numPoints();i++)
+ for (int i=0;i<curve2_.numPoints();i++)
  {
   temp.set(curve2_.x(i),curve2_.y(i));
   points2.push_back(temp);
@@ -495,68 +487,65 @@ void DPMatch::init()
 
  dc1=bdgl_curve_algs::create_digital_curves(points1);
  dc2=bdgl_curve_algs::create_digital_curves(points2);
-
 }
 
 double DPMatch::computeEpipolarCost(int i, int ip, int j, int jp)
 {
-  
   vgl_homg_point_2d<double> e(ep_pt);
   // assuming the variance of a point to be 0.5 pixel
   double sig_point=0.5;
 
-  if(curve1_.numPoints()>0 && curve2_.numPoints()>0)
+  if (curve1_.numPoints()>0 && curve2_.numPoints()>0)
   {
-	vgl_homg_point_2d<double> p1(curve1_.x(i),curve1_.y(i));
-	vgl_homg_point_2d<double> p2(curve2_.x(j),curve2_.y(j));
-	vgl_homg_point_2d<double> p1pos,p1neg,p2pos,p2neg;
-	// checking if thetwo points are same
-    if(p1.x()==p2.x() && p1.y()==p2.y())
-		return 0;
-	else
-	{
-	  	if(p1.y()-p2.y()==0)
-		{
-			p1pos.set(p1.x()+sig_point,p1.y());
-			p1neg.set(p1.x()-sig_point,p1.y());
+    vgl_homg_point_2d<double> p1(curve1_.x(i),curve1_.y(i));
+    vgl_homg_point_2d<double> p2(curve2_.x(j),curve2_.y(j));
+    vgl_homg_point_2d<double> p1pos,p1neg,p2pos,p2neg;
+    // checking if thetwo points are same
+    if (p1.x()==p2.x() && p1.y()==p2.y())
+      return 0;
+    else
+    {
+      if (p1.y()-p2.y()==0)
+      {
+        p1pos.set(p1.x()+sig_point,p1.y());
+        p1neg.set(p1.x()-sig_point,p1.y());
 
-			p2pos.set(p2.x()+sig_point,p2.y());
-			p2neg.set(p2.x()-sig_point,p2.y());
+        p2pos.set(p2.x()+sig_point,p2.y());
+        p2neg.set(p2.x()-sig_point,p2.y());
+      }
+      else
+      {
+        double m=(p1.x()-p2.x())/(p2.y()-p1.y());
+        p1pos.set(p1.x()+sig_point*m/vcl_sqrt(m*m+1),p1.y()+sig_point/vcl_sqrt(m*m+1));
+        p1neg.set(p1.x()-sig_point*m/vcl_sqrt(m*m+1),p1.y()+sig_point/vcl_sqrt(m*m+1));
 
-		}
-		else
-		{
-			double m=(p1.x()-p2.x())/(p2.y()-p1.y());
-			p1pos.set(p1.x()+sig_point*m/vcl_sqrt(m*m+1),p1.y()+sig_point/vcl_sqrt(m*m+1));
-			p1neg.set(p1.x()-sig_point*m/vcl_sqrt(m*m+1),p1.y()+sig_point/vcl_sqrt(m*m+1));
-
-			p2pos.set(p2.x()+sig_point*m/vcl_sqrt(m*m+1),p2.y()+sig_point/vcl_sqrt(m*m+1));
-			p2neg.set(p2.x()-sig_point*m/vcl_sqrt(m*m+1),p2.y()+sig_point/vcl_sqrt(m*m+1));
-		}
-	vgl_line_2d<double> l1(p1,p2);
-	double dist1,dist2;
-	if(l1.a()*p1pos.x()+l1.b()*p1pos.y()+l1.c()>0 && (l1.a()*p2pos.x()+l1.b()*p2pos.y()+l1.c()>0))
-	{
-		vgl_homg_line_2d<double> line1(p1pos,p2neg);
-		vgl_homg_line_2d<double> line2(p2pos,p1neg);
-		dist1=vgl_homg_operators_2d<double>::perp_dist_squared (e, line1);
-		dist2=vgl_homg_operators_2d<double>::perp_dist_squared (e, line2);
-	}
-	else
-	{
-		vgl_homg_line_2d<double> line1(p1pos,p2pos);
-		vgl_homg_line_2d<double> line2(p2neg,p1neg);
-		dist1=vgl_homg_operators_2d<double>::perp_dist_squared (e, line1);
-		dist2=vgl_homg_operators_2d<double>::perp_dist_squared (e, line2);
-	}
-	vgl_homg_line_2d<double> hl1(l1);
-	double dist=vgl_homg_operators_2d<double>::perp_dist_squared (e, hl1);
-	return dist/vcl_fabs(dist1-dist2);
-	}
+        p2pos.set(p2.x()+sig_point*m/vcl_sqrt(m*m+1),p2.y()+sig_point/vcl_sqrt(m*m+1));
+        p2neg.set(p2.x()-sig_point*m/vcl_sqrt(m*m+1),p2.y()+sig_point/vcl_sqrt(m*m+1));
+      }
+      vgl_line_2d<double> l1(p1,p2);
+      double dist1,dist2;
+      if (l1.a()*p1pos.x()+l1.b()*p1pos.y()+l1.c()>0 && (l1.a()*p2pos.x()+l1.b()*p2pos.y()+l1.c()>0))
+      {
+        vgl_homg_line_2d<double> line1(p1pos,p2neg);
+        vgl_homg_line_2d<double> line2(p2pos,p1neg);
+        dist1=vgl_homg_operators_2d<double>::perp_dist_squared (e, line1);
+        dist2=vgl_homg_operators_2d<double>::perp_dist_squared (e, line2);
+      }
+      else
+      {
+        vgl_homg_line_2d<double> line1(p1pos,p2pos);
+        vgl_homg_line_2d<double> line2(p2neg,p1neg);
+        dist1=vgl_homg_operators_2d<double>::perp_dist_squared (e, line1);
+        dist2=vgl_homg_operators_2d<double>::perp_dist_squared (e, line2);
+      }
+      vgl_homg_line_2d<double> hl1(l1);
+      double dist=vgl_homg_operators_2d<double>::perp_dist_squared (e, hl1);
+      return dist/vcl_fabs(dist1-dist2);
+    }
   }
   return -1;
-
 }
+
 double DPMatch::computeIntervalCost(int i, int ip, int j, int jp)
 {
   R1_=10;
@@ -565,18 +554,18 @@ double DPMatch::computeIntervalCost(int i, int ip, int j, int jp)
   curve1_.bendCost(i,ip,dt1_);
   curve2_.bendCost(j,jp,dt2_);
   double w=0.2;
-  double C=0.01;
+//double C=0.01;
   double delta=1;
   double dE=computeEpipolarCost(i,ip, j,  jp);
   double dF = vcl_fabs(ds1_ - ds2_);
   double dK = vcl_fabs(dt1_ - dt2_);
-  double cost = dF + R1_*dK +R1_*pow(vcl_sqrt(dE)/delta,5)/(1+pow(vcl_sqrt(dE)/delta,5));//C*vcl_
+  double cost = dF + R1_*dK +R1_*vcl_pow(vcl_sqrt(dE)/delta,5)/(1+vcl_pow(vcl_sqrt(dE)/delta,5));
   if (ip==0 || jp==0)
     cost*=w;
   if (i==n_-1|| j==m_-1)
     cost*=w;
-  if(cost<0)
-		vcl_cout<<"\t"<<cost<<"\t"<<dE;
+  if (cost<0)
+    vcl_cout<<'\t'<<cost<<'\t'<<dE;
   return cost;
 }
 
@@ -599,8 +588,11 @@ void DPMatch::findDPCorrespondence()
   {
     ip=map_[i][j].first;
     jp=map_[i][j].second;
-	//vcl_cout<<"\n"<<i<<"\t"<<ip<<"\t"<<j<<"\t"<<jp<<"\t"<<vcl_sqrt(computeEpipolarCost2(i,ip, j,  jp))<<"\t"
-	//			<<computeIntervalCost(i,ip,j,jp);
+#ifdef DEBUG
+    vcl_cout<< '\n' << i << '\t' << ip << '\t' << j << '\t' << jp << '\t'
+            << vcl_sqrt(computeEpipolarCost2(i,ip, j,  jp)) << '\t'
+            << computeIntervalCost(i,ip,j,jp);
+#endif
     vcl_pair<int,int> p(ip,jp);
     finalMap_.push_back(p);
     finalMapCost_.push_back(cost_[p.first][p.second]);
@@ -679,16 +671,3 @@ void DPMatch::endPointMatch()
   findEndPoint();
   //vcl_cout << "corresp done\n";
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -46,7 +46,6 @@ void bdgl_curve_matching :: match_prev_tail_curve(bdgl_tracker_curve_sptr parent
                                                   bdgl_tracker_curve_sptr &tail_curve,
                                                   vcl_vector<bdgl_tracker_curve_sptr> * new_curves)
 {
-
   for (unsigned int i=0;i<(*new_curves).size();++i)
   {
     match_data_sptr temp;
@@ -59,14 +58,14 @@ void bdgl_curve_matching :: match_prev_tail_curve(bdgl_tracker_curve_sptr parent
         tail_curve->next_.push_back(temp);
       }
   }
-  
+
   for (unsigned int i=0;i<tail_curve->next_.size();++i)
   {
     double euc,scale;
     vcl_map<int,int> mapping;
     vcl_vector<int> tail1,tail2;
     vnl_matrix<double> R1,T1,Tbar;
-	vgl_point_2d<double> e;
+    vgl_point_2d<double> e;
     double matching_cost=match_DP(tail_curve->desc,
                                   tail_curve->next_[i]->match_curve_set[0]->desc,
                                   mapping,euc,R1,T1,Tbar,scale,tail1,tail2,e);
@@ -77,13 +76,12 @@ void bdgl_curve_matching :: match_prev_tail_curve(bdgl_tracker_curve_sptr parent
     tail_curve->next_[i]->mapping_=mapping;
     tail_curve->next_[i]->R_=R1;
     tail_curve->next_[i]->T_=T1;
-	tail_curve->next_[i]->scale_=scale;
-	tail_curve->next_[i]->Tbar=Tbar;
+    tail_curve->next_[i]->scale_=scale;
+    tail_curve->next_[i]->Tbar=Tbar;
     tail_curve->next_[i]->tail1_=tail1;
     tail_curve->next_[i]->tail2_=tail2;
   }
   vcl_sort(tail_curve->next_.begin(),tail_curve->next_.end(),less_cost());
-
 }
 
 void bdgl_curve_matching :: match_next_tail_curve(bdgl_tracker_curve_sptr parent_curve,
@@ -108,10 +106,10 @@ void bdgl_curve_matching :: match_next_tail_curve(bdgl_tracker_curve_sptr parent
     vcl_vector<int> tail1,tail2;
     vnl_matrix<double> R1,T1,Tbar;
     double matching_cost;
-	if(tail_curve->prev_[i]->match_curve_set[0]->get_id()==124)
-		vcl_cout<<"\n hi ";
-	if(tail_curve->desc->points_.size()>0)
-	{
+    if (tail_curve->prev_[i]->match_curve_set[0]->get_id()==124)
+      vcl_cout<<"\n hi ";
+    if (tail_curve->desc->points_.size()>0)
+    {
     double euc=match_DP(tail_curve->prev_[i]->match_curve_set[0]->desc,
                         tail_curve->desc,mapping,matching_cost,R1,T1,Tbar,scale,tail1,tail2,epipole_);
 
@@ -119,22 +117,21 @@ void bdgl_curve_matching :: match_next_tail_curve(bdgl_tracker_curve_sptr parent
     tail_curve->prev_[i]->euc_=euc;
     tail_curve->prev_[i]->R_=R1;
     tail_curve->prev_[i]->T_=T1;
-	tail_curve->prev_[i]->scale_=scale;
-	tail_curve->prev_[i]->Tbar=Tbar;
+    tail_curve->prev_[i]->scale_=scale;
+    tail_curve->prev_[i]->Tbar=Tbar;
     tail_curve->prev_[i]->tail1_=tail1;
     tail_curve->prev_[i]->tail2_=tail2;
     tail_curve->prev_[i]->mapping_=mapping;
     tail_curve->prev_[i]->energy_=matching_cost;
-	}
+    }
   }
   vcl_sort(tail_curve->prev_.begin(),tail_curve->prev_.end(),less_cost());
 }
 
 double bdgl_curve_matching :: coarse_match_DP(bdgl_curve_description * desc1,
                                               bdgl_curve_description * desc2,
-											  vgl_point_2d<double> epi)
+                                              vgl_point_2d<double> epi)
 {
-
   vcl_vector<vcl_pair<double,double> > v1,v2;
 
   for (unsigned int i=0;i<desc1->points_.size(); i+=5)
@@ -162,7 +159,6 @@ double bdgl_curve_matching :: coarse_match_DP(bdgl_curve_description * desc1,
   double dist2=curveMatch(euc,v1,v2,alignment,R1,T1,Tbar1,tail_old,tail_new,scale,epipole_);
 
   return dist1<dist2 ? dist1 : dist2;
-
 }
 
 double bdgl_curve_matching :: match_DP(bdgl_curve_description * desc1,
@@ -172,7 +168,7 @@ double bdgl_curve_matching :: match_DP(bdgl_curve_description * desc1,
                                        vcl_vector<int> & tail2,vgl_point_2d<double> & e)
 {
   double dist = -1; // dummy initialisation, to avoid compiler warning
-  
+
   vcl_vector<vcl_pair<double,double> > v1,v2;
 
   // getting points from curves into vectors
@@ -221,23 +217,22 @@ double bdgl_curve_matching :: match_DP(bdgl_curve_description * desc1,
     if (sign11*sign21>0) // hence sign12*sign22>0
     {
       alignment.clear();
-		dist = curveMatch(cost,v1,v2,alignment,R,T,Tbar,tail1,tail2,scale,epipole_);
+      dist = curveMatch(cost,v1,v2,alignment,R,T,Tbar,tail1,tail2,scale,epipole_);
     }
     else // i.e., sign11*sign22>0 && sign12*sign21>0
     {
       vcl_reverse(v2.begin(),v2.end());
       vcl_map<int,int> alignment2;
-	  vcl_vector<int> tail_reversed;
+      vcl_vector<int> tail_reversed;
       dist = curveMatch(cost,v1,v2,alignment2,R,T,Tbar,tail1,tail_reversed,scale,epipole_);
       unsigned int sizeofv2=v2.size();
       vcl_map<int,int>::iterator iter;
-	  alignment.clear();
+      alignment.clear();
       for (iter=alignment2.begin();iter!=alignment2.end();iter++)
       {
         alignment[(*iter).first]=sizeofv2-(*iter).second-1;
-		
       }
-	  for (int i=0;i<tail_reversed.size();i++)
+      for (unsigned int i=0; i<tail_reversed.size(); ++i)
       {
         tail2.push_back(sizeofv2-tail_reversed[i]-1);
       }
@@ -258,7 +253,7 @@ double bdgl_curve_matching :: match_DP(bdgl_curve_description * desc1,
     if (dist1<dist2)
     {
       alignment.clear();
-	  alignment=alignment1;
+      alignment=alignment1;
       cost=euc1;
       dist=dist1;
       R=R1;
@@ -274,16 +269,12 @@ double bdgl_curve_matching :: match_DP(bdgl_curve_description * desc1,
       dist=dist2;
       unsigned int sizeofv2=v2.size();
       vcl_map<int,int>::iterator iter;
-	  alignment.clear();
-	  alignment.clear();
+      alignment.clear();
+      alignment.clear();
       for (iter=alignment2.begin();iter!=alignment2.end();iter++)
-      {
         alignment[(*iter).first]=sizeofv2-(*iter).second-1;
-      }
-	  for (int i=0;i<tail_new2.size();i++)
-      {
+      for (unsigned int i=0; i<tail_new2.size(); ++i)
         tail2.push_back(sizeofv2-tail_new2[i]-1);
-      }
       R=R2;
       T=T2;
       Tbar=Tbar2;
@@ -315,20 +306,21 @@ double bdgl_curve_matching :: match_stat(bdgl_curve_description * desc1,
 
   return dist;
 }
+
 // Minkowski sausage bounding region
 bool bdgl_curve_matching :: sausage_intersection(bdgl_tracker_curve_sptr c1,bdgl_tracker_curve_sptr c2)
 {
-  for(int i=0;i<c1->desc->coarser_points_.size();i++)
+  for (unsigned int i=0; i<c1->desc->coarser_points_.size(); ++i)
   {
-	for(int j=0;j<c2->desc->coarser_points_.size();j++)
-	{
-		double dist=vcl_sqrt((c1->desc->coarser_points_[i].x()-c2->desc->coarser_points_[j].x())*
-							(c1->desc->coarser_points_[i].x()-c2->desc->coarser_points_[j].x())+
-							(c1->desc->coarser_points_[i].y()-c2->desc->coarser_points_[j].y())*
-							(c1->desc->coarser_points_[i].y()-c2->desc->coarser_points_		[j].y()));
-		if(dist<motion_in_pixels_)
-			return true;
-	}
+    for (unsigned int j=0; j<c2->desc->coarser_points_.size(); ++j)
+    {
+      double dist=vcl_sqrt((c1->desc->coarser_points_[i].x()-c2->desc->coarser_points_[j].x())*
+                           (c1->desc->coarser_points_[i].x()-c2->desc->coarser_points_[j].x())+
+                           (c1->desc->coarser_points_[i].y()-c2->desc->coarser_points_[j].y())*
+                           (c1->desc->coarser_points_[i].y()-c2->desc->coarser_points_[j].y()));
+      if (dist<motion_in_pixels_)
+        return true;
+    }
   }
   return false;
 }
@@ -345,26 +337,23 @@ bool bdgl_curve_matching :: bounding_box_intersection(vsol_box_2d_sptr box1,
 void bdgl_curve_matching :: match(vcl_vector<bdgl_tracker_curve_sptr> * new_curves,
                                   vcl_vector<bdgl_tracker_curve_sptr> * old_curves)
 {
-  
   for (unsigned int i=0;i<(*new_curves).size();++i)
   {
-    
-	  for (unsigned int j=0;j<(*old_curves).size();++j)
+    for (unsigned int j=0;j<(*old_curves).size();++j)
     {
-      
-	  if (bounding_box_intersection((*new_curves)[i]->desc->box_,(*old_curves)[j]->desc->box_))
-	  //if(sausage_intersection((*new_curves)[i],(*old_curves)[j]))
+      if (bounding_box_intersection((*new_curves)[i]->desc->box_,(*old_curves)[j]->desc->box_))
+      //if (sausage_intersection((*new_curves)[i],(*old_curves)[j]))
       {
         double matching_cost=coarse_match_DP((*new_curves)[i]->desc,(*old_curves)[j]->desc,epipole_);
         match_data_sptr temp=new match_data;
         temp->cost_=matching_cost;
-		temp->energy_=matching_cost;
+        temp->energy_=matching_cost;
         temp->match_curve_set.push_back((*old_curves)[j]);
         (*new_curves)[i]->prev_.push_back(temp);
       }
       (*old_curves)[j]->next_.clear();
     }
-   
+
     // sorting the matches w.r.t elastic energy cost
     vcl_sort((*new_curves)[i]->prev_.begin(),(*new_curves)[i]->prev_.end(),less_cost());
     if (no_of_top_choices_>0)
@@ -377,7 +366,7 @@ void bdgl_curve_matching :: match(vcl_vector<bdgl_tracker_curve_sptr> * new_curv
       }
     }
   }
- 
+
   vnl_matrix<double> R1,T1,Tbar;
 
   for (unsigned int i=0;i<(*new_curves).size();++i)
@@ -389,13 +378,13 @@ void bdgl_curve_matching :: match(vcl_vector<bdgl_tracker_curve_sptr> * new_curv
 
     if ((*new_curves)[i]->prev_.size()> 0)
     {
-
       vcl_vector<match_data_sptr>::iterator piter=(*new_curves)[i]->prev_.begin();
       for (unsigned int j=0;j<(*new_curves)[i]->prev_.size(); ++j,++piter)
       {
- 		  double matching_cost=match_DP((*new_curves)[i]->prev_[j]->match_curve_set[0]->desc,
-                                      (*new_curves)[i]->desc,mapping,euc,R1,T1,Tbar,scale,tail_old,tail_new,epipole_);
-		   
+           double matching_cost=match_DP((*new_curves)[i]->prev_[j]->match_curve_set[0]->desc,
+                                         (*new_curves)[i]->desc,
+                                         mapping,euc,R1,T1,Tbar,scale,tail_old,tail_new,epipole_);
+
         (*new_curves)[i]->prev_[j]->energy_=matching_cost;
         (*new_curves)[i]->prev_[j]->cost_=matching_cost;
         (*new_curves)[i]->prev_[j]->euc_=euc;
@@ -475,13 +464,13 @@ void bdgl_curve_matching::best_matches(vcl_vector<bdgl_tracker_curve_sptr> * new
           // tail in the previous frame
 
           double s;
-		  
-	 	  if ((*minpiter)->tail1_.size()>4 && (*minpiter)->tail1_.size()>(*minpiter)->tail2_.size())
+
+          if ((*minpiter)->tail1_.size()>4 && (*minpiter)->tail1_.size()>(*minpiter)->tail2_.size())
           {
             match_data_sptr  best_match_for_tail;
             bdgl_tracker_curve_sptr  prev_tail_curve=new bdgl_tracker_curve;
             prev_tail_curve->init_set((*minpiter)->match_curve_set[0],(*minpiter)->tail1_,0);
-		    vnl_matrix<double> R1,T1;
+            vnl_matrix<double> R1,T1;
             // matching the tail
             match_prev_tail_curve((*minpiter)->match_curve_set[0], prev_tail_curve,new_curves);
             if (prev_tail_curve->next_[0]->match_curve_set[0]==(*min_iter_new))
@@ -494,8 +483,8 @@ void bdgl_curve_matching::best_matches(vcl_vector<bdgl_tracker_curve_sptr> * new
             else
             {
               best_match_for_tail=prev_tail_curve->next_[0];
-			  int id=prev_tail_curve->next_[0]->match_curve_set[0]->get_id();
-			}
+//            int id=prev_tail_curve->next_[0]->match_curve_set[0]->get_id();
+            }
             // check the best match of the tail
             if (best_match_for_tail)
               if (best_match_for_tail->match_curve_set[0]->prev_.size()>0 )
@@ -504,22 +493,19 @@ void bdgl_curve_matching::best_matches(vcl_vector<bdgl_tracker_curve_sptr> * new
                 {
                   R1=(*minpiter)->R_;
                   T1=(*minpiter)->Tbar;
-				  //vcl_cout<<"\n "<<T1(0,0)<<"\t"<<T1(1,0);
+                  //vcl_cout<<"\n "<<T1(0,0)<<'\t'<<T1(1,0);
                   s=(*minpiter)->scale_;
                   prev_tail_curve->set_best_match_next(best_match_for_tail);
-                  double tail_euc_dist=bdgl_curve_algs::compute_transformed_euclidean_distance(prev_tail_curve,
-															 best_match_for_tail->match_curve_set[0],
-															 R1,T1,s,best_match_for_tail->mapping_);
+                  double tail_euc_dist=bdgl_curve_algs::compute_transformed_euclidean_distance(
+                      prev_tail_curve,best_match_for_tail->match_curve_set[0],R1,T1,s,best_match_for_tail->mapping_);
                   // confirm it using transformation
                   R1=best_match_for_tail->R_;
                   T1=best_match_for_tail->T_;
-				  //vcl_cout<<"\n "<<T1(0,0)<<"\t"<<T1(1,0);
+                  //vcl_cout<<"\n "<<T1(0,0)<<'\t'<<T1(1,0);
                   s=best_match_for_tail->scale_;
                   // to compute the euc dist
-                  double parent_euc_dist=bdgl_curve_algs::
-					  compute_transformed_euclidean_distance
-					  ((*minpiter)->match_curve_set[0],(*min_iter_new),R1,T1,s,
-					  (*minpiter)->mapping_);
+                  double parent_euc_dist=bdgl_curve_algs::compute_transformed_euclidean_distance(
+                    (*minpiter)->match_curve_set[0],(*min_iter_new),R1,T1,s,(*minpiter)->mapping_);
                   // join the two curves and add it to the new curves;
                   if (vcl_fabs(2*(tail_euc_dist-parent_euc_dist)/(tail_euc_dist+parent_euc_dist))<1.0
                      && (tail_euc_dist+parent_euc_dist)/2<10)
@@ -528,23 +514,23 @@ void bdgl_curve_matching::best_matches(vcl_vector<bdgl_tracker_curve_sptr> * new
                     bdgl_tracker_curve_sptr c=new bdgl_tracker_curve;
                     merge_curves((*min_iter_new),best_match_for_tail->match_curve_set[0],c);
                     c->set_id((*new_curves).size());
-					// fill in the values of best_match_prev for each fragment
-					match_data_sptr temp1= new match_data;
+                    // fill in the values of best_match_prev for each fragment
+                    match_data_sptr temp1= new match_data;
                     temp1->match_curve_set.push_back( (*min_iter_new));
                     temp1->match_curve_set.push_back( best_match_for_tail->match_curve_set[0]);
 
                     temp1->curve_set=c;
-                    
-					match_data_sptr temp= new match_data;
+
+                    match_data_sptr temp= new match_data;
                     temp->match_curve_set.push_back((*minpiter)->match_curve_set[0]);
                     double cst=match_DP(c->desc,temp->match_curve_set[0]->desc,
                                         temp->mapping_, temp->euc_,temp->R_,temp->T_,
                                        temp->Tbar,temp->scale_,temp->tail1_,temp->tail2_,epipole_);
-					// filling the best next match
-					temp1->mapping_=temp->mapping_;
+                    // filling the best next match
+                    temp1->mapping_=temp->mapping_;
                     temp1->R_=temp->R_;
                     temp1->T_=temp->T_;
-					
+
                     temp1->Tbar=temp->Tbar;
                     temp1->cost_=temp->cost_;
                     temp1->energy_=temp->energy_;
@@ -556,26 +542,22 @@ void bdgl_curve_matching::best_matches(vcl_vector<bdgl_tracker_curve_sptr> * new
 
                     temp->energy_=cst;
                     temp->cost_=cst;
-					// keeping the original mapping for parent match
-					temp->mapping_=(*minpiter)->mapping_;
-					(*min_iter_new)->set_best_match_prev((*minpiter));
-					// obtaining the original mapping for tail
-					vcl_map<int,int>::iterator itermap;vcl_map<int,int> tailmap;
-					for(itermap=best_match_for_tail->mapping_.begin();
-						itermap!=best_match_for_tail->mapping_.end();
-						itermap++)
-						{
-							tailmap[(*minpiter)->tail1_[(*itermap).first]]=(*itermap).second;
-							
-						}
-						temp->mapping_=tailmap;
-						match_data_sptr temp3=new match_data((*minpiter)->match_curve_set[0], best_match_for_tail);
-						
-						temp3->mapping_=tailmap;
-                       best_match_for_tail->match_curve_set[0]->set_best_match_prev(temp3);
-                    
-				    
-                     // set the match_ids
+                    // keeping the original mapping for parent match
+                    temp->mapping_=(*minpiter)->mapping_;
+                    (*min_iter_new)->set_best_match_prev((*minpiter));
+                    // obtaining the original mapping for tail
+                    vcl_map<int,int>::iterator itermap;vcl_map<int,int> tailmap;
+                    for (itermap=best_match_for_tail->mapping_.begin();
+                        itermap!=best_match_for_tail->mapping_.end();
+                        itermap++)
+                      tailmap[(*minpiter)->tail1_[(*itermap).first]]=(*itermap).second;
+                    temp->mapping_=tailmap;
+                    match_data_sptr temp3=new match_data((*minpiter)->match_curve_set[0], best_match_for_tail);
+
+                    temp3->mapping_=tailmap;
+                    best_match_for_tail->match_curve_set[0]->set_best_match_prev(temp3);
+
+                    // set the match_ids
                     best_match_for_tail->match_curve_set[0]->match_id_=min_iter_old->match_id_;
                     (*min_iter_new)->match_id_=min_iter_old->match_id_;
 
@@ -593,13 +575,12 @@ void bdgl_curve_matching::best_matches(vcl_vector<bdgl_tracker_curve_sptr> * new
           }
 
           // tail in the current frame
-		 
-   
-		  else if ((*minpiter)->tail2_.size()>4
-                    && (*minpiter)->tail2_.size()>(*minpiter)->tail1_.size())
+
+          else if ((*minpiter)->tail2_.size()>4
+                   && (*minpiter)->tail2_.size()>(*minpiter)->tail1_.size())
           {
-	        bdgl_tracker_curve_sptr  next_tail_curve = new bdgl_tracker_curve;
-           	next_tail_curve->init_set((*min_iter_new),(*minpiter)->tail2_,0);
+            bdgl_tracker_curve_sptr  next_tail_curve = new bdgl_tracker_curve;
+            next_tail_curve->init_set((*min_iter_new),(*minpiter)->tail2_,0);
             vnl_matrix<double> R2,T2,Tbar2;
             // matching the tail
 
@@ -620,28 +601,27 @@ void bdgl_curve_matching::best_matches(vcl_vector<bdgl_tracker_curve_sptr> * new
                 if (best_match_for_tail->cost_   <
                     best_match_for_tail->match_curve_set[0]->next_[0]->cost_)
                 {
-                  
-				  R2=(*minpiter)->R_;
+                  R2=(*minpiter)->R_;
                   T2=(*minpiter)->Tbar;
-				  
+
                   s=(*minpiter)->scale_;
                   next_tail_curve->set_best_match_prev(best_match_for_tail);
-                  
-				  double tail_euc_dist=bdgl_curve_algs::compute_transformed_euclidean_distance
-									   (best_match_for_tail->match_curve_set[0],next_tail_curve,
-									   R2,T2,s,best_match_for_tail->mapping_);
+
+                  double tail_euc_dist=bdgl_curve_algs::compute_transformed_euclidean_distance
+                                       (best_match_for_tail->match_curve_set[0],next_tail_curve,
+                                        R2,T2,s,best_match_for_tail->mapping_);
 
                   //computing parent eulidean distance
                   R2=best_match_for_tail->R_;
                   T2=best_match_for_tail->Tbar;
-				  vcl_cout<<"\n"<<best_match_for_tail->Tbar(0,0)
-						  <<"\t"<<best_match_for_tail->Tbar(1,0);
-				  s=best_match_for_tail->scale_;
-		          double parent_euc_dist=bdgl_curve_algs::
-					  compute_transformed_euclidean_distance((*minpiter)->match_curve_set[0],(*min_iter_new),R2,T2,s,(*minpiter)->mapping_);
+                  vcl_cout<<'\n'<<best_match_for_tail->Tbar(0,0)
+                          <<'\t'<<best_match_for_tail->Tbar(1,0);
+                  s=best_match_for_tail->scale_;
+                  double parent_euc_dist=bdgl_curve_algs::compute_transformed_euclidean_distance(
+                    (*minpiter)->match_curve_set[0],(*min_iter_new),R2,T2,s,(*minpiter)->mapping_);
                   // join the two curves and add it to the new curves;
                   if (vcl_fabs(2*(tail_euc_dist-parent_euc_dist)/(tail_euc_dist+parent_euc_dist))<1.0
-                     && (tail_euc_dist+parent_euc_dist)/2<10)
+                      && (tail_euc_dist+parent_euc_dist)/2<10)
                   {
                     //merged two curves to form a virtual curve
                     bdgl_tracker_curve_sptr c=new bdgl_tracker_curve;
@@ -652,13 +632,13 @@ void bdgl_curve_matching::best_matches(vcl_vector<bdgl_tracker_curve_sptr> * new
 
                     match_data_sptr temp= new match_data;
                     temp->match_curve_set.push_back(*min_iter_new);
-					
+
                     double cst=match_DP(c->desc,temp->match_curve_set[0]->desc,
                                         temp->mapping_,temp->euc_,temp->R_,temp->T_,temp->Tbar,
                                         temp->scale_,temp->tail1_,temp->tail2_,epipole_);
                     temp->cost_=cst;
                     temp->energy_=cst;
-					
+
                     // fill in the values of best_match_next
                     (*minpiter)->match_curve_set[0]->set_best_match_next(temp);
                     best_match_for_tail->match_curve_set[0]->set_best_match_next(temp);
@@ -668,19 +648,18 @@ void bdgl_curve_matching::best_matches(vcl_vector<bdgl_tracker_curve_sptr> * new
                     temp1->match_curve_set.push_back((*minpiter)->match_curve_set[0]);
                     temp1->match_curve_set.push_back(best_match_for_tail->match_curve_set[0]);
                     temp1->curve_set=c;
-                    
-					temp1->mapping_=(*minpiter)->mapping_;
+
+                    temp1->mapping_=(*minpiter)->mapping_;
                     temp1->energy_=temp->energy_;
                     temp1->cost_=temp->cost_;
-					temp1->R_=((*minpiter)->R_+best_match_for_tail->R_)/2;
-					temp1->Tbar=((*minpiter)->Tbar+best_match_for_tail->Tbar)/2;
-					temp1->scale_=((*minpiter)->scale_+best_match_for_tail->scale_)/2;
-					temp1->euc_=((*minpiter)->euc_+best_match_for_tail->euc_)/2;
-					temp1->T_=temp->T_;
+                    temp1->R_=((*minpiter)->R_+best_match_for_tail->R_)/2;
+                    temp1->Tbar=((*minpiter)->Tbar+best_match_for_tail->Tbar)/2;
+                    temp1->scale_=((*minpiter)->scale_+best_match_for_tail->scale_)/2;
+                    temp1->euc_=((*minpiter)->euc_+best_match_for_tail->euc_)/2;
+                    temp1->T_=temp->T_;
                     temp1->tail1_=temp->tail1_;
                     temp1->tail2_=temp->tail2_;
-                    
-                    
+
                     (*min_iter_new)->set_best_match_prev(temp1);
 
                     //set_the_match_ids
@@ -690,7 +669,7 @@ void bdgl_curve_matching::best_matches(vcl_vector<bdgl_tracker_curve_sptr> * new
                     (*minpiter)->match_curve_set[0]->ismatchednext_=true;
                     best_match_for_tail->match_curve_set[0]->ismatchednext_=true;
                     (*min_iter_new)->match_id_=temp1->match_curve_set[1]->match_id_;
-					temp1->match_curve_set[0]->match_id_=temp1->match_curve_set[1]->match_id_;;
+                    temp1->match_curve_set[0]->match_id_=temp1->match_curve_set[1]->match_id_;;
                     selection=true;
                   }
                 }
@@ -815,19 +794,18 @@ void bdgl_curve_matching::merge_curves(bdgl_tracker_curve_sptr cs1,
   double e21=vcl_sqrt((x12-x21)*(x12-x21)+(y12-y21)*(y12-y21));
   dist[e21]=p;
 
-
   p=((*dist.begin()).second);
   if (p.first>0 )
   {
     if (p.second>0)
-      {
-        vcl_reverse(s.begin(),s.end());
-        f.insert(f.end(),s.begin(),s.end());
-      }
+    {
+      vcl_reverse(s.begin(),s.end());
+      f.insert(f.end(),s.begin(),s.end());
+    }
     else
-      {
-        f.insert(f.end(),s.begin(),s.end());
-      }
+    {
+      f.insert(f.end(),s.begin(),s.end());
+    }
   }
   else
   {
@@ -863,102 +841,98 @@ double bdgl_curve_matching::compute_std(vcl_vector<double> t)
 }
 
 void bdgl_curve_matching::best_matches_tc(vcl_vector<bdgl_tracker_curve_sptr> * current_curves,
-										  vcl_vector<bdgl_tracker_curve_sptr> * past_curves,
-										  vcl_vector<bdgl_tracker_curve_sptr> * future_curves)
+                                          vcl_vector<bdgl_tracker_curve_sptr> * past_curves,
+                                          vcl_vector<bdgl_tracker_curve_sptr> * future_curves)
 
 {
-	vcl_vector<bdgl_tracker_curve_sptr>::iterator iter,min_iter_current;
-	match_data_sptr min_i_data;
-	match_data_sptr min_k_data;
-	double dji,djk,dki;
-	bool selection=true;
-	while (selection)
-	{
-		double min_cost=1e6;
-		double mink=-1;
-		// iterating over j
-		for(iter=(*current_curves).begin();iter!=(*current_curves).end();iter++)
-		{
-			// iterating over i
-			dji=0;
-			if(!(*iter)->ismatchedprev_)
-			{
-				for(int i=0;i<(*iter)->prev_.size();i++)
-				{
-					if(!(*iter)->prev_[i]->match_curve_set[0]->ismatchednext_)
-					{
-					dji=(*iter)->prev_[i]->energy_;
-					djk=0;
-					dki=0;
-					// iterating over k
-					int minl=-1;
-					for(int k=0;k<(*future_curves).size();k++)
-					{
-						if(!(*future_curves)[k]->ismatchedprev_)
-						{
-							for(int l=0;l<(*iter)->next_.size();l++)
-							{
-								if((*iter)->next_[l]->match_curve_set[0]->get_id()==(*future_curves)[k]->get_id())
-								{
-									djk=(*iter)->next_[l]->energy_;
-									minl=l;
-								}
-							}
-							for(int m=0;m<(*future_curves)[k]->prev_.size();m++)
-							{
-								if((*iter)->prev_[i]->match_curve_set[0]->get_id()==(*future_curves)[k]->prev_[m]->match_curve_set[0]->get_id())
-								{
-									dki=(*future_curves)[k]->prev_[m]->energy_;
-								}
-							}
-						}
-						if(dji>0 && djk>0 && dki > 0)
-						{
-							double cost=maxof(dji,djk,dki);
-							if(min_cost>cost)
-							{
-								min_cost=cost;
-								min_iter_current=iter;
-								min_i_data=(*iter)->prev_[i];
-								min_k_data=(*iter)->next_[minl];
-								mink=k;
-							}
-						}
-					}
-				}
-			}
-		}
-		}
-	
-	if(min_cost==1e6)
-		selection=false;
-	else
-	{
-		// filling the next and before for j
-		(*min_iter_current)->set_best_match_prev(min_i_data);
-		(*min_iter_current)->ismatchedprev_=true;
-		(*min_iter_current)->match_id_=min_i_data->match_curve_set[0]->match_id_;
-		// filling the next for i
-		match_data_sptr temp1=new match_data((*min_iter_current),min_i_data);
-		min_i_data->match_curve_set[0]->set_best_match_next(temp1);
-		min_i_data->match_curve_set[0]->ismatchednext_=true;
-		//filling the info for virtual future curves
-		(*future_curves)[mink]->ismatchedprev_=true;
-	}
+  vcl_vector<bdgl_tracker_curve_sptr>::iterator iter,min_iter_current;
+  match_data_sptr min_i_data;
+  match_data_sptr min_k_data;
+  double dji,djk,dki;
+  bool selection=true;
+  while (selection)
+  {
+    double min_cost=1e6;
+    unsigned int mink=0;
+    // iterating over j
+    for (iter=(*current_curves).begin();iter!=(*current_curves).end();iter++)
+    {
+      // iterating over i
+      dji=0;
+      if (!(*iter)->ismatchedprev_)
+      {
+        for (unsigned int i=0; i<(*iter)->prev_.size(); ++i)
+        {
+          if (!(*iter)->prev_[i]->match_curve_set[0]->ismatchednext_)
+          {
+            dji=(*iter)->prev_[i]->energy_;
+            djk=0;
+            dki=0;
+            // iterating over k
+            int minl=-1;
+            for (unsigned int k=0; k<(*future_curves).size(); ++k)
+            {
+              if (!(*future_curves)[k]->ismatchedprev_)
+              {
+                for (unsigned int l=0; l<(*iter)->next_.size(); ++l)
+                {
+                  if ((*iter)->next_[l]->match_curve_set[0]->get_id()==(*future_curves)[k]->get_id())
+                  {
+                    djk=(*iter)->next_[l]->energy_;
+                    minl=l;
+                  }
+                }
+                for (unsigned int m=0; m<(*future_curves)[k]->prev_.size(); ++m)
+                {
+                  if ((*iter)->prev_[i]->match_curve_set[0]->get_id()==(*future_curves)[k]->prev_[m]->match_curve_set[0]->get_id())
+                    dki=(*future_curves)[k]->prev_[m]->energy_;
+                }
+              }
+              if (dji>0 && djk>0 && dki > 0)
+              {
+                double cost=maxof(dji,djk,dki);
+                if (min_cost>cost)
+                {
+                  min_cost=cost;
+                  min_iter_current=iter;
+                  min_i_data=(*iter)->prev_[i];
+                  min_k_data=(*iter)->next_[minl];
+                  mink=k;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
 
-	}
-
+    if (min_cost==1e6)
+      selection=false;
+    else
+    {
+      // filling the next and before for j
+      (*min_iter_current)->set_best_match_prev(min_i_data);
+      (*min_iter_current)->ismatchedprev_=true;
+      (*min_iter_current)->match_id_=min_i_data->match_curve_set[0]->match_id_;
+      // filling the next for i
+      match_data_sptr temp1=new match_data((*min_iter_current),min_i_data);
+      min_i_data->match_curve_set[0]->set_best_match_next(temp1);
+      min_i_data->match_curve_set[0]->ismatchednext_=true;
+      //filling the info for virtual future curves
+      (*future_curves)[mink]->ismatchedprev_=true;
+    }
+  }
 }
 
 double bdgl_curve_matching::maxof(double a,double b,double c)
 {
-	if(a>=b && a>=c)
-		return a;
+  if (a>=b && a>=c)
+    return a;
 
-	else if(b>=c && b>=a)
-		return b;
-	else if(c>=a && c>=b)
-		return c;
+  else if (b>=c && b>=a)
+    return b;
+  else if (c>=a && c>=b)
+    return c;
 
-	return a;
+  return a;
 }

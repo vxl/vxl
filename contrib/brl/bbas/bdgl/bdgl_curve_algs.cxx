@@ -217,8 +217,8 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
 {
   int di = (index2 - index1);
   if (di<1){
-    vcl_cout << "In bdgl_curve_algs::intersect_line_helper"
-             << " - invalid curve segment\n";
+    vcl_cout << "In bdgl_curve_algs::intersect_line_helper -"
+             << " invalid curve segment\n";
     return false;
   }
 
@@ -230,7 +230,7 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
       vdgl_edgel const& e2 = ec[index2];
       vnl_double_3 p1(e1.get_x(), e1.get_y(), 1.0);
       vnl_double_3 p2(e2.get_x(), e2.get_y(), 1.0);
-      
+
       vnl_double_3 inter;
       if (intersect_crossing(lv, p1, p2, inter)){
         vgl_point_2d<double> p(inter[0]/inter[2], inter[1]/inter[2]);
@@ -257,7 +257,7 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
 //: intersect an infinite line with the digital curve.
 //  If there is no intersection return false. Note that the line
 //  can intersect multiple times. All the intersections are returned.
-//  
+//
 //  This implementation uses a recursive helper function
 bool bdgl_curve_algs::intersect_line_fast(vdgl_digital_curve_sptr const& dc,
                                           vgl_line_2d<double> & line,
@@ -285,7 +285,7 @@ bool bdgl_curve_algs::intersect_line_fast(vdgl_digital_curve_sptr const& dc,
 
   double dist1 = dot_product(p1, lv);
   double dist2 = dot_product(p2, lv);
-  
+
   bool intersection = false;
   // This case (the first edgel is on the line)
   // is not covered by the recursion
@@ -379,7 +379,6 @@ static double interpolate_parameter(const double t0, const double t1,
 }
 
 
-
 //: Recursive helper function for intersect_line_fast
 static bool intersect_line_helper(vdgl_edgel_chain const& ec,
                                   vnl_double_3& lv,
@@ -389,8 +388,8 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
 {
   int di = (index2 - index1);
   if (di<1){
-    vcl_cout << "In bdgl_curve_algs::intersect_line_helper"
-             << " - invalid curve segment\n";
+    vcl_cout << "In bdgl_curve_algs::intersect_line_helper -"
+             << " invalid curve segment\n";
     return false;
   }
 
@@ -402,11 +401,11 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
       vdgl_edgel const& e2 = ec[index2];
       vnl_double_3 p1(e1.get_x(), e1.get_y(), 1.0);
       vnl_double_3 p2(e2.get_x(), e2.get_y(), 1.0);
-      
+
       vnl_double_3 inter;
       if (intersect_crossing(lv, p1, p2, inter)){
         double param_step = 1.0/(ec.size()-1);
-        double ti = interpolate_parameter(index1*param_step, index2*param_step, 
+        double ti = interpolate_parameter(index1*param_step, index2*param_step,
                                           p1, p2, inter);
         indices.push_back(ti);
         return true;
@@ -425,7 +424,7 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
 
   bool i1 = intersect_line_helper(ec, lv, dist1, mid_dist, index1, mid_index, indices);
   bool i2 = intersect_line_helper(ec, lv, mid_dist, dist2, mid_index, index2, indices);
-  return i1 || i2;    
+  return i1 || i2;
 }
 
 //-------------------------------------------------------------
@@ -433,7 +432,7 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
 //  If there is no intersection return false. Note that the line
 //  can intersect multiple times. The curve parameter indices at
 //  the intersection points are returned
-//  
+//
 //  This implementation uses a recursive helper function
 bool bdgl_curve_algs::intersect_line_fast(vdgl_digital_curve_sptr const& dc,
                                           vgl_line_2d<double> & line,
@@ -461,7 +460,7 @@ bool bdgl_curve_algs::intersect_line_fast(vdgl_digital_curve_sptr const& dc,
 
   double dist1 = dot_product(p1, lv);
   double dist2 = dot_product(p2, lv);
-  
+
   bool intersection = false;
   // This case (the first edgel is on the line)
   // is not covered by the recursion
@@ -539,10 +538,9 @@ bdgl_curve_algs::match_intersection(vdgl_digital_curve_sptr const& dc,
                                     double ref_gradient_angle,
                                     vgl_point_2d<double>& point)
 {
-
   double angle_thresh = 7.0;//epipolar angle threshold
   double angle_tol = 12.5;//gradient angle threshold
-  if(!dc)
+  if (!dc)
     return false;
   double la = line.slope_degrees();
   if (la<0)
@@ -640,7 +638,7 @@ bool bdgl_curve_algs::line_gen(const float xs, const float ys,
     //Check if we have advanced by more than .5 pixels
     x = (float)(xi/pix_edge);
     y = (float)(yi/pix_edge);
-    if (vcl_abs(int(x)-xp)>(.5*pix_edge)||vcl_abs(int(y)-yp)>(.5*pix_edge))
+    if (2*vcl_abs(int(x)-xp)>pix_edge || 2*vcl_abs(int(y)-yp)>pix_edge)
       return true;
   }
   vcl_cout << "in bdgl_curve_algs::line_gen - shouldn't happen\n";
@@ -752,76 +750,71 @@ create_digital_curves(vcl_vector<vgl_point_2d<double> > & curve)
   vec= new vdgl_edgel_chain;
   for (unsigned int j=0; j<curve.size(); ++j)
   {
-   vdgl_edgel el(curve[j].x(),curve[j].y(), 0,0 );
-   vec->add_edgel(el);
+    vdgl_edgel el(curve[j].x(),curve[j].y(), 0,0 );
+    vec->add_edgel(el);
   }
   vdgl_interpolator_sptr interp= new vdgl_interpolator_linear(vec);
   vdgl_digital_curve_sptr dc = new vdgl_digital_curve(interp);
   return dc;
 }
-double  bdgl_curve_algs::compute_transformed_euclidean_distance
-											(bdgl_tracker_curve_sptr c1,
-											 bdgl_tracker_curve_sptr c2,
-											 vnl_matrix<double> R,
-											 vnl_matrix<double> T,
-											 double s,vcl_map<int,int> alignment)
 
+double  bdgl_curve_algs::compute_transformed_euclidean_distance
+                                           (bdgl_tracker_curve_sptr c1,
+                                            bdgl_tracker_curve_sptr c2,
+                                            vnl_matrix<double> R,
+                                            vnl_matrix<double> T,
+                                            double s,vcl_map<int,int> alignment)
 {
-  if(!c1.ptr() && !c2.ptr())
-	  return -1;
+  if (!c1.ptr() && !c2.ptr())
+    return -1;
   vcl_vector<double> x1,y1,x2,y2,x1t,y1t;
   double xcen1=0,xcen2=0,ycen1=0,ycen2=0;
-	  double H[2]={0,0};
+  double H[2]={0,0};
   vcl_map<int,int>::iterator iter1;
-  vcl_cout<<"\n"<<c1->desc->points_.size()<<"\t"<<c2->desc->points_.size();
-  for(iter1 = alignment.begin(); iter1!=alignment.end(); ++iter1)
+  vcl_cout<<'\n'<<c1->desc->points_.size()<<'\t'<<c2->desc->points_.size();
+  for (iter1 = alignment.begin(); iter1!=alignment.end(); ++iter1)
   {
-	x1.push_back(c1->desc->points_[(*iter1).first].x());
-	y1.push_back(c1->desc->points_[(*iter1).first].y());
-	x2.push_back(c2->desc->points_[(*iter1).second].x());
-	y2.push_back(c2->desc->points_[(*iter1).second].y());
-	
+    x1.push_back(c1->desc->points_[(*iter1).first].x());
+    y1.push_back(c1->desc->points_[(*iter1).first].y());
+    x2.push_back(c2->desc->points_[(*iter1).second].x());
+    y2.push_back(c2->desc->points_[(*iter1).second].y());
   }
-  int t=x1.size();
-  for(int j=0;j<x1.size()-1;j++)
+  for (unsigned int j=0; j+1<x1.size(); ++j)
   {
-	vcl_cout<<"\n"<<x1[j]<<"\t"<<x2[j];
-	xcen1+=x1[j];
-	ycen1+=y1[j];
-	xcen2+=x2[j];
-	ycen2+=y2[j];
+    vcl_cout<<'\n'<<x1[j]<<'\t'<<x2[j];
+    xcen1+=x1[j];
+    ycen1+=y1[j];
+    xcen2+=x2[j];
+    ycen2+=y2[j];
   }
   xcen1/=alignment.size();
   ycen1/=alignment.size();
   xcen2/=alignment.size();
   ycen2/=alignment.size();
 
-  for(int i=0;i<x1.size();i++)
+  for (unsigned int i=0; i<x1.size(); ++i)
   {
-	x1[i]-=xcen1;
-	y1[i]-=ycen1;
-	//x2[i]-=xcen2;
-	//y2[i]-=ycen2;
+    x1[i]-=xcen1; // x2[i]-=xcen2;
+    y1[i]-=ycen1; // y2[i]-=ycen2;
   }
   double dist=0;
   double X2[2]={0,0};
   double X1cen[2]={xcen1,ycen1};
-  for (int i=0;i<x1.size();i++)
+  for (unsigned int i=0; i<x1.size(); ++i)
   {
     H[0]=x1[i];
     H[1]=y1[i];
-	X2[0]=x2[i];
-	X2[1]=y2[i];
+    X2[0]=x2[i];
+    X2[1]=y2[i];
 
-	vnl_matrix<double> X (H, 2, 1);
-	vnl_matrix<double> X2t (X2, 2, 1);
-   
-	vnl_matrix<double> X1center(X1cen,2,1);
-	vnl_matrix<double> Xt=R*X+T+X1center-X2t;
-    vcl_cout<<"\n"<<X2t(0,0)<<"\t"<<X2t(1,0)<<"\t"<<X(0,0)+X1center(0,0)<<"\t"<<X(1,0)+X1center(0,0);
+    vnl_matrix<double> X  (H, 2,1);
+    vnl_matrix<double> X2t(X2, 2,1);
+
+    vnl_matrix<double> X1center(X1cen, 2,1);
+    vnl_matrix<double> Xt=R*X+T+X1center-X2t;
+    vcl_cout<<'\n'<<X2t(0,0)<<'\t'<<X2t(1,0)<<'\t'<<X(0,0)+X1center(0,0)<<'\t'<<X(1,0)+X1center(0,0);
     dist+=vcl_sqrt(Xt(0,0)*Xt(0,0)+Xt(1,0)*Xt(1,0));
   }
   dist/=alignment.size();
   return dist;
-
-  }
+}

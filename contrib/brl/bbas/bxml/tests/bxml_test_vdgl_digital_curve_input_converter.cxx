@@ -27,7 +27,7 @@ void bxml_test_vdgl_digital_curve_input_converter(int argc, char * argv[])
       TEST("ec->size()==27", ec->size(), 27);
     }
   vcl_cout << "Edgels:\n";
-  for (int i = 0; i<ec->size(); i++)
+  for (unsigned int i = 0; i<ec->size(); ++i)
     vcl_cout << (*ec)[i] << vcl_endl;
 }
 

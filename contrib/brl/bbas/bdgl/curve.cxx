@@ -60,20 +60,20 @@ Curve::operator=(const Curve &rhs)
 {
   if (this != &rhs)
   {
-   //vcl_cout<<"\n the size is "<<rhs.ptArray_.size()<<"\n";
-	  ptArray_ = rhs.ptArray_;
-   arcLength_ = rhs.arcLength_;
-   normArcLength_ = rhs.normArcLength_;
-   dx_ = rhs.dx_;
-   dy_ = rhs.dy_;
-   curvature_ = rhs.curvature_;
-   angle_ = rhs.angle_;
+    //vcl_cout<<"\n the size is "<<rhs.ptArray_.size()<<'\n';
+    ptArray_ = rhs.ptArray_;
+    arcLength_ = rhs.arcLength_;
+    normArcLength_ = rhs.normArcLength_;
+    dx_ = rhs.dx_;
+    dy_ = rhs.dy_;
+    curvature_ = rhs.curvature_;
+    angle_ = rhs.angle_;
 
-   numPoints_ = rhs.numPoints_;
-   isOpen_ = rhs.isOpen_;
-   length_ = rhs.length_;
-   totalCurvature_=  rhs.totalCurvature_;
-   totalAngleChange_=rhs.totalAngleChange_;
+    numPoints_ = rhs.numPoints_;
+    isOpen_ = rhs.isOpen_;
+    length_ = rhs.length_;
+    totalCurvature_=  rhs.totalCurvature_;
+    totalAngleChange_=rhs.totalAngleChange_;
   }
   return *this;
 }
@@ -344,12 +344,12 @@ void Curve::readDataFromFile(vcl_string fileName)
     vcl_exit(1);
   }
 
-  int i,numOfPoints;
+  unsigned int numOfPoints;
   infp >> numOfPoints;
 
-  double x,y;
-  for (i=0;i<numOfPoints;i++)
+  for (unsigned int i=0; i<numOfPoints; ++i)
   {
+    double x,y;
     infp >> x >> y;
     append(x,y);
   }
@@ -360,27 +360,26 @@ void Curve::readDataFromFile(vcl_string fileName)
 
 void Curve::readDataFromVector(vcl_vector<vcl_pair<double,double> > v)
 {
-  int numOfPoints=v.size();
+  unsigned int numOfPoints=v.size();
   ptArray_.clear();
-  double x,y;
-  for (int i=0;i<numOfPoints;i++)
+  for (unsigned int i=0; i<numOfPoints; ++i)
   {
-    x=v[i].first;
-    y=v[i].second;
+    double x=v[i].first;
+    double y=v[i].second;
     append(x,y);
   }
-  
+
   computeProperties();
 }
+
 void Curve::readDataFromVector(vcl_vector<vgl_point_2d<double> > v)
 {
-  int numOfPoints=v.size();
+  unsigned int numOfPoints=v.size();
   ptArray_.clear();
-  double x,y;
-  for (int i=0;i<numOfPoints;i++)
+  for (unsigned int i=0; i<numOfPoints; ++i)
   {
-    x=v[i].x();
-    y=v[i].y();
+    double x=v[i].x();
+    double y=v[i].y();
     append(x,y);
   }
   computeProperties();
