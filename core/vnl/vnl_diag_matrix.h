@@ -15,6 +15,7 @@
 //   IMS (Manchester) 16/03/2001: Tidied up the documentation + added binary_io
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Sep.2002 - Peter Vanroose - Added operator+, operator-, operator*
+//   Mar.2004 - Peter Vanroose - removed deprecated resize()
 // \endverbatim
 
 #include <vcl_cassert.h>
@@ -119,10 +120,7 @@ class vnl_diag_matrix
   inline operator vnl_matrix<T> () const { return asMatrix(); }
 
   inline void set_size(int n) { diagonal_.set_size(n); }
- private:
-  // deprecated:
-  inline void resize(int n) { set_size(n); }
- public:
+
   inline void clear() { diagonal_.clear(); }
   inline void fill(T const &x) { diagonal_.fill(x); }
 

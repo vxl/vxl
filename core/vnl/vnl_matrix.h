@@ -509,15 +509,6 @@ class vnl_matrix
   //: Make the matrix as if it had been default-constructed.
   void clear();
 
- private:
-  //: Resize to r rows by c columns. Old data lost.
-  // \deprecated in favour of set_size()
-  bool resize(unsigned , unsigned ) { return false; }
-
-  //: Resize to r rows by c columns. Old data lost.
-  // \deprecated in favour of set_size()
-  bool make_size(unsigned , unsigned ) { return false; }
- public:
   //: Resize to r rows by c columns. Old data lost.
   // Returns true if size changed.
   bool set_size(unsigned r, unsigned c);
