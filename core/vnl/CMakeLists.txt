@@ -54,4 +54,4 @@ vnl_unary_function
 
 AUX_SOURCE_DIRECTORY(Templates)
 
-SUBDIRS(algo)
+SUBDIRS(algo tests)

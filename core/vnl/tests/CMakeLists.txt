@@ -1,11 +1,11 @@
 LINK_DIRECTORIES(
-${TARGET_BINARY_DIR}/vxl/vnl 
-${TARGET_BINARY_DIR}/vxl/vnl/algo 
-${TARGET_BINARY_DIR}/v3p/netlib
+${allvxl_BINARY_DIR}/vxl/vnl 
+${allvxl_BINARY_DIR}/vxl/vnl/algo 
+${allvxl_BINARY_DIR}/v3p/netlib
 )
 
 LINK_LIBRARIES( 
-vnl-algo 
+vnl_algo 
 netlib 
 vnl 
 vcl
@@ -26,7 +26,6 @@ test_functions
 test_numeric_limits 
 test_rpoly_roots 
 test_cpoly_roots 
-test_resize 
 test_complex 
 test_determinant 
 test_qr 

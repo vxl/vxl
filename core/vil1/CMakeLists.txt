@@ -46,6 +46,7 @@ vil_stream_url
 vil_warp
 )
 
+
 AUX_SOURCE_DIRECTORY(Templates)
 
-SUBDIRS(tests)
+SUBDIRS(tests file_formats)
