@@ -79,6 +79,7 @@ void mbl_data_wrapper_mixer<T>::reset()
 {
   index_=0;
   current_wrapper_=0;
+  if (wrapper_.size()>0) wrapper_[0]->reset();
 }
 
 //: Return current object
