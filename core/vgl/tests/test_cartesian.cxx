@@ -267,6 +267,110 @@ static void test_plane_3d()
   TEST("join", pl, pp);
 }
 
+static void test_box_2d()
+{
+  // Create empty box
+  vgl_box_2d<double> b;
+  vcl_cout << b << vcl_endl;
+  TEST("box is empty", b.is_empty(), true);
+  TEST("box has no volume", b.volume(), 0.0);
+
+  vgl_point_2d<double> p1(0,0), p2(0,1), p3(1,0);
+
+  TEST("!contains", b.contains(p1), false);
+  b.add(p1);
+  vcl_cout << b << vcl_endl;
+  TEST("contains", b.contains(p1), true);
+  TEST("box is not empty", b.is_empty(), false);
+  TEST("box has no volume", b.volume(), 0.0);
+  TEST("centroid", b.centroid(), p1);
+
+  TEST("!contains", b.contains(p2), false);
+  b.add(p2);
+  vcl_cout << b << vcl_endl;
+  TEST("contains", b.contains(p1), true);
+  TEST("contains", b.contains(p2), true);
+  TEST("box is not empty", b.is_empty(), false);
+  TEST("box has no volume", b.volume(), 0.0);
+  TEST("centroid", b.centroid(), p1 + 0.5*(p2-p1));
+
+  TEST("!contains", b.contains(p3), false);
+  b.add(p3);
+  vcl_cout << b << vcl_endl;
+  TEST("contains", b.contains(p1), true);
+  TEST("contains", b.contains(p2), true);
+  TEST("contains", b.contains(p3), true);
+  TEST("box is not empty", b.is_empty(), false);
+  TEST("box has volume 1", b.volume(), 1.0);
+  TEST("centroid", b.centroid(), p2 + 0.5*(p3-p2));
+
+  b.empty();
+  vcl_cout << b << vcl_endl;
+  TEST("!contains", b.contains(p1), false);
+  TEST("!contains", b.contains(p2), false);
+  TEST("!contains", b.contains(p3), false);
+  TEST("box is empty", b.is_empty(), true);
+  TEST("box has no volume", b.volume(), 0.0);
+}
+
+static void test_box_3d()
+{
+  // Create empty box
+  vgl_box_3d<double> b;
+  vcl_cout << b << vcl_endl;
+  TEST("box is empty", b.is_empty(), true);
+  TEST("box has no volume", b.volume(), 0.0);
+
+  vgl_point_3d<double> p0(0,0,0), p1(1,0,0), p2(0,1,0), p3(0,0,1);
+
+  TEST("!contains", b.contains(p0), false);
+  b.add(p0);
+  vcl_cout << b << vcl_endl;
+  TEST("contains", b.contains(p0), true);
+  TEST("box is not empty", b.is_empty(), false);
+  TEST("box has no volume", b.volume(), 0.0);
+  TEST("centroid", b.centroid(), p0);
+
+  TEST("!contains", b.contains(p1), false);
+  b.add(p1);
+  vcl_cout << b << vcl_endl;
+  TEST("contains", b.contains(p0), true);
+  TEST("contains", b.contains(p1), true);
+  TEST("box is not empty", b.is_empty(), false);
+  TEST("box has no volume", b.volume(), 0.0);
+  TEST("centroid", b.centroid(), p0 + 0.5*(p1-p0));
+
+  TEST("!contains", b.contains(p2), false);
+  b.add(p2);
+  vcl_cout << b << vcl_endl;
+  TEST("contains", b.contains(p0), true);
+  TEST("contains", b.contains(p1), true);
+  TEST("contains", b.contains(p2), true);
+  TEST("box is not empty", b.is_empty(), false);
+  TEST("box has no volume", b.volume(), 0.0);
+  TEST("centroid", b.centroid(), p1 + 0.5*(p2-p1));
+
+  TEST("!contains", b.contains(p3), false);
+  b.add(p3);
+  vcl_cout << b << vcl_endl;
+  TEST("contains", b.contains(p0), true);
+  TEST("contains", b.contains(p1), true);
+  TEST("contains", b.contains(p2), true);
+  TEST("contains", b.contains(p3), true);
+  TEST("box is not empty", b.is_empty(), false);
+  TEST("box has volume 1", b.volume(), 1.0);
+  TEST("centroid", b.centroid(), p1 + 0.5*(p2-p1) + 0.5*(p3-p0));
+
+  b.empty();
+  vcl_cout << b << vcl_endl;
+  TEST("!contains", b.contains(p0), false);
+  TEST("!contains", b.contains(p1), false);
+  TEST("!contains", b.contains(p2), false);
+  TEST("!contains", b.contains(p3), false);
+  TEST("box is empty", b.is_empty(), true);
+  TEST("box has no volume", b.volume(), 0.0);
+}
+
 void test_cartesian() {
   vcl_cout << "--- test_vector_2d ---\n";
   test_vector_2d();
@@ -280,6 +384,10 @@ void test_cartesian() {
   test_line_2d();
   vcl_cout << "--- test_plane_3d ---\n";
   test_plane_3d();
+  vcl_cout << "--- test_box_2d ---\n";
+  test_box_2d();
+  vcl_cout << "--- test_box_3d ---\n";
+  test_box_3d();
 }
 
 TESTMAIN(test_cartesian);
