@@ -19,10 +19,12 @@ SET( vcl_sources
   vcl_config_headers.h.in
   vcl_config_manual.h.in
 
-  vcl_cmath.cxx vcl_cmath.h
-  vcl_cassert.cxx vcl_cassert.h
-  vcl_cstdlib.cxx vcl_cstdlib.h
-  vcl_algorithm.txx vcl_algorithm.h
+  vcl_cmath.cxx          vcl_cmath.h
+  vcl_cassert.cxx        vcl_cassert.h
+  vcl_cstdlib.cxx        vcl_cstdlib.h
+  vcl_limits.cxx         vcl_limits.h
+
+  vcl_algorithm.txx      vcl_algorithm.h
   vcl_bitset.h
   vcl_cctype.h
   vcl_cerrno.h
@@ -30,7 +32,7 @@ SET( vcl_sources
   vcl_ciso646.h
   vcl_climits.h
   vcl_clocale.h
-  vcl_complex.txx vcl_complex.h
+  vcl_complex.txx        vcl_complex.h
   vcl_complex_fwd.h
   vcl_csetjmp.h
   vcl_csignal.h
@@ -42,17 +44,16 @@ SET( vcl_sources
   vcl_cwchar.h
   vcl_cwctype.h
   vcl_deprecated_header.h
-  vcl_deque.txx vcl_deque.h
+  vcl_deque.txx          vcl_deque.h
   vcl_exception.h
   vcl_fstream.h
-  vcl_functional.txx vcl_functional.h
+  vcl_functional.txx     vcl_functional.h
   vcl_iomanip.h
   vcl_ios.h
   vcl_iosfwd.h
   vcl_iostream.h
   vcl_istream.h
-  vcl_iterator.txx vcl_iterator.h
-  vcl_limits.h vcl_limits.cxx
+  vcl_iterator.txx       vcl_iterator.h
   vcl_list.txx vcl_list.h
   vcl_locale.h
   vcl_map.txx vcl_map.h
@@ -60,18 +61,18 @@ SET( vcl_sources
   vcl_new.h
   vcl_numeric.h
   vcl_ostream.h
-  vcl_queue.txx vcl_queue.h
-  vcl_set.txx vcl_set.h
+  vcl_queue.txx          vcl_queue.h
+  vcl_set.txx            vcl_set.h
   vcl_sstream.h
-  vcl_stack.txx vcl_stack.h
+  vcl_stack.txx          vcl_stack.h
   vcl_stdexcept.h
   vcl_stlfwd.h
   vcl_streambuf.h
-  vcl_string.txx vcl_string.h
+  vcl_string.txx         vcl_string.h
   vcl_typeinfo.h
-  vcl_utility.txx vcl_utility.h
+  vcl_utility.txx        vcl_utility.h
   vcl_valarray.h
-  vcl_vector.txx vcl_vector.h
+  vcl_vector.txx         vcl_vector.h
   vcl_sys/time.h
   vcl_sys/types.h
 
@@ -182,6 +183,7 @@ SET( vcl_sources
   emulation/vcl_rbtree_instances.cxx
   emulation/vcl_hashtable.cxx emulation/vcl_hashtable.h
   emulation/vcl_alloc.cxx emulation/vcl_alloc.h
+  emulation/vcl_limits.cxx emulation/vcl_limits.h
   emulation/vcl_algorithm.txx emulation/vcl_algorithm.h
   emulation/vcl_complex.txx emulation/vcl_complex.h
   emulation/vcl_deque.txx emulation/vcl_deque.h
