@@ -12,6 +12,8 @@
 
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
+#include <vcl_cstdio.h>
+#include <vcl_cstdlib.h>
 
 #include <vul/vul_file.h>
 #include <vul/vul_printf.h>
@@ -32,7 +34,10 @@
 #include <vidl/vidl_movie_sptr.h>
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_io.h>
+
+#ifdef VCL_WIN32
 #include <vidl/vidl_avicodec.h>
+#endif
 
 #include <GL/glut.h>
 
@@ -292,7 +297,7 @@ bool drawframe(int frame)
     vil_memory_image_of<vil_rgb_byte > img(window_width, window_height - TEXTHEIGHT);
     glReadPixels(0,0, window_width, window_height - TEXTHEIGHT, GL_RGB, GL_UNSIGNED_BYTE, img.get_buffer());
     char buf[1024];
-    sprintf(buf, a_save_fmt(), frame);
+    vcl_sprintf(buf, a_save_fmt(), frame);
     if (buf[0] == '^') {
       // Flip
       vil_save(img, buf+1);
@@ -311,9 +316,9 @@ bool drawframe(int frame)
     char msg[1024];
     float fps = 1000.0 / tic.real();
     
-    sprintf(msg, "Frame[%d] FPS %4.1f ", moviefile->get_frame(frame)->get_real_frame_index(), fps);
-    sprintf(msg + strlen(msg), "Zoom %g ", pixel_zoom);
-    sprintf(msg + strlen(msg), "(%7.2f, %7.2f)",
+    vcl_sprintf(msg, "Frame[%d] FPS %4.1f ", moviefile->get_frame(frame)->get_real_frame_index(), fps);
+    vcl_sprintf(msg + strlen(msg), "Zoom %g ", pixel_zoom);
+    vcl_sprintf(msg + strlen(msg), "(%7.2f, %7.2f)",
 	    (mouse_x - pixel_zoom_tx) / pixel_zoom,
 	    (mouse_y - pixel_zoom_ty) / pixel_zoom);
     
@@ -712,7 +717,7 @@ static void convert(vidl_movie_sptr m, char const* out)
   int i = 0; 
   for (vidl_movie::frame_iterator frame = m->begin(); frame != m->end(); ++frame) {
     char buf[1024];
-    sprintf(buf, out, i);
+    vcl_sprintf(buf, out, i);
     vil_save(frame->get_image(), buf);
     vul_printf(vcl_cerr, "glmovie: saved [%s]\n", buf);
     ++i;
@@ -734,7 +739,9 @@ int main(int argc, char ** argv)
   if (argc > 1) vul_arg_display_usage_and_exit("Too many arguments\n");
 
   // Register video codec
+#ifdef VCL_WIN32
   vidl_io::register_codec(new vidl_avicodec);
+#endif
   vidl_io::register_codec(new oxp_vidl_mpeg_codec);
 
   // Register callbacks
@@ -795,7 +802,7 @@ int main(int argc, char ** argv)
   glutReshapeWindow(moviefile->width(), moviefile->height() + TEXTHEIGHT);
   init();
    if (glutLayerGet(GLenum(GLUT_OVERLAY_POSSIBLE)) == 0)  {
-      printf("glmovie: no overlays supported; ok.\n");
+      vcl_printf("glmovie: no overlays supported; ok.\n");
       nlayers = 1;
       have_overlay = false;
       //exit(1);

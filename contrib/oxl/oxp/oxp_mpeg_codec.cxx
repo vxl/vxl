@@ -28,6 +28,7 @@ extern "C" {
 
 #include "oxp/oxp_vob_frame_index.cxx"
 
+static bool verbose = false;
 
 // predeclare mpeg callbacks
 static void my_draw(vo_frame_t *frame);
@@ -121,10 +122,11 @@ void oxp_mpeg_codec_data::seek_to_iframe_before(int frame)
   // --lba; // lba's start from 1?
   typedef oxp_bunch_of_files::offset_t index_t;
   index_t byte = index_t(lba) * 2048;
-  vcl_fprintf(stderr, "seek_to_iframe_before: Frame %d -> Start at closest frame %d, LBA 0x%x, byte %ul\n", 
-	      frame, start_frame_index, lba, (unsigned long) byte);
+  if (verbose)
+    vcl_fprintf(stderr, "seek_to_iframe_before: Frame %d -> Start at closest frame %d, LBA 0x%x, byte %ul\n", 
+		frame, start_frame_index, lba, (unsigned long) byte);
   if (lba < 0) {
-    vcl_fprintf(stderr, "ERROR!\n");
+    vcl_fprintf(stderr, "oxp_mpeg_codec: ERROR!\n");
     return;
   }
   fp.seek(byte);
@@ -182,7 +184,7 @@ bool oxp_mpeg_codec_data::decode_until_desired(int f,
   // Check the ring buffer to see if any in there...
   for(int i = 0; i < 8; ++i)
     if (ring_buffer[i] && ring_buffer[i]->frame == f) {
-      vcl_fprintf(stderr, "decode_until_desired: Found frame %d in ring buffer\n", f);
+      if (verbose) vcl_fprintf(stderr, "decode_until_desired: Found frame %d in ring buffer\n", f);
       convert_frame(ring_buffer[i], &r);
       r.done = true;
       return true;
@@ -190,7 +192,7 @@ bool oxp_mpeg_codec_data::decode_until_desired(int f,
   
   // Not in ring buffer, only possible if f < frame_number
   if (f <= frame_number) {
-    vcl_fprintf(stderr, "decode_until_desired: Need to seek for %d\n", f);
+    if (verbose) vcl_fprintf(stderr, "decode_until_desired: Need to seek for %d\n", f);
     return false;
   }
   
@@ -328,12 +330,14 @@ void my_draw(vo_frame_t *frame_p)
     p->done = true;
     
   } else {
-    if (impl->frame_number < p->frame)
-      vcl_fprintf(stderr, "Skipping %d waiting for %d\n", 
-		  impl->frame_number, p->frame);
-    else
-      vcl_fprintf(stderr, "Queuing %d having got %d\n", 
-		  impl->frame_number, p->frame);
+    if (verbose) {
+      if (impl->frame_number < p->frame)
+	vcl_fprintf(stderr, "Skipping %d waiting for %d\n", 
+		    impl->frame_number, p->frame);
+      else
+	vcl_fprintf(stderr, "Queuing %d having got %d\n", 
+		    impl->frame_number, p->frame);
+    }
   }
 }
 

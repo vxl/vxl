@@ -72,18 +72,12 @@ bool oxp_bunch_of_files::open(char const* fmt)
     filesizes.resize(n);
     for(int i = 0; i < n; ++i) {
       int s = vul_file::size(filenames[i].c_str());
-      if (s == 0) {
+      if (s <= 0) {
 	vcl_fprintf(stderr, "WARNING: Zero size file [%s]\n", filenames[i].c_str());
       }
       filesizes[i] = s;
     }
   }
-
-  // Summarize:
-  vcl_fprintf(stderr, "files:");
-  for(int i = 0; i < n; ++i)
-    vcl_fprintf(stderr, " %s", filenames[i].c_str());
-  vcl_fprintf(stderr, "\n"); 
 
   // Set up file ptr etc.
   current_file_index = 0;
@@ -92,7 +86,7 @@ bool oxp_bunch_of_files::open(char const* fmt)
   start_byte.resize(n);
   start_byte[0] = 0;
   for(int i = 1; i < filenames.size(); ++i)
-    start_byte[i] = start_byte[i-1] + filesizes[i-1];
+    start_byte[i] = (long long)start_byte[i-1] + (long long)filesizes[i-1];
 
   // Open them all
   fps.resize(n);
@@ -106,6 +100,12 @@ bool oxp_bunch_of_files::open(char const* fmt)
     }
   }
 
+  // Summarize:
+  vcl_fprintf(stderr, "files: sizeof offset_t = %d\n", sizeof (offset_t));
+  for(int i = 0; i < n; ++i)
+    vcl_fprintf(stderr, "   %s  %g\n", filenames[i].c_str(), (double)start_byte[i]);
+  vcl_fprintf(stderr, "\n"); 
+
   return true;
 }
 
@@ -117,15 +117,23 @@ void oxp_bunch_of_files::seek(offset_t to)
       newindex = i-1;
       break;
     }
+
+  if (newindex == -1) {
+    int i = filesizes.size() - 1;
+    // Know start_byte[i] <= to 
+    if (to < start_byte[i] + filesizes[i]) 
+      newindex = i;
+  }
   
   if (newindex == -1) {
-    vcl_fprintf(stderr, "ERROR: Could not seek to [%d]\n", to);
+    vcl_fprintf(stderr, "ERROR: Could not seek to [%ul]\n",(unsigned long)to);
     return;
   }
 
   current_file_index = newindex;
   
   offset_t file_ptr = to - start_byte[current_file_index];
+  vcl_fprintf(stderr, " si = %20g to = %20g\n", (double)start_byte[current_file_index], (double) to);
   assert(file_ptr >= 0);
   assert(file_ptr < filesizes[current_file_index]);
   

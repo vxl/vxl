@@ -11,8 +11,10 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
+#include <vxl_config.h>
+
 struct oxp_bunch_of_files {
-  typedef __int64 offset_t;
+  typedef vxl_int_64 offset_t;
 
   oxp_bunch_of_files();
   oxp_bunch_of_files(char const* fmt);
@@ -30,7 +32,7 @@ private:
   int current_file_index;
   vcl_vector<vcl_string> filenames;
   vcl_vector<FILE*> fps;
-  vcl_vector<int> filesizes;
+  vcl_vector<unsigned int> filesizes;
   vcl_vector<offset_t> start_byte;
 };
 

@@ -1,1 +1,1 @@
-SUBDIRS( vxl_vrml_viewer )
+SUBDIRS( vxl_vrml_viewer glmovie )
