@@ -106,7 +106,7 @@ vgl_homg_point_2d<double> HomgMetric::image_to_homg(vgl_point_2d<double> const& 
 HomgPoint2D HomgMetric::image_to_homg(const vnl_double_2& p) const
 {
   if (metric_) return metric_->image_to_homg(p);
-  else return HomgPoint2D(p.x(), p.y(), 1.0);
+  else return HomgPoint2D(p[0], p[1], 1.0);
 }
 
 HomgPoint2D HomgMetric::image_to_homg(double x, double y) const

@@ -17,6 +17,7 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
+
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLineSeg2D.h>
 #include <mvl/HomgOperator2D.h>
@@ -41,7 +42,7 @@ vgl_homg_point_2d<double> ImageMetric::image_to_homg(vgl_point_2d<double> const&
 HomgPoint2D ImageMetric::image_to_homg(const vnl_double_2& p) const
 {
   assert(!"ImageMetric::image_to_homg should be implemented for efficiency");
-  return HomgPoint2D(p.x(), p.y(), 1.0);
+  return HomgPoint2D(p[0], p[1], 1.0);
 }
 
 //: Condition 2D point (x,y)
