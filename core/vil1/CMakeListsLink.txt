@@ -6,6 +6,13 @@ IF (WIN32)
   LINK_LIBRARIES(ws2_32.lib)
 ENDIF (WIN32)
 
+# TODO - CMake currently has no such definition "SOLARIS"
+# Use the additional "-DSOLARIS:STRING=1" on the cmake command line,
+# or add the line  "SOLARIS:STRING=1" to your solaris CMakeCache.txt
+IF (SOLARIS)
+  LINK_LIBRARIES(socket)
+ENDIF (SOLARIS)
+
 IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
   LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vil )
 ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
