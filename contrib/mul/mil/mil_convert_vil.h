@@ -1,10 +1,9 @@
 #ifndef mil_convert_vil_h_
 #define mil_convert_vil_h_
 //:
-//  \file
-//  \brief Some functions to convert between mil and vil1 images
-//  \author dac
-
+// \file
+// \brief Some functions to convert between mil and vil1 images
+// \author dac
 
 #include <mil/mil_image_2d_of.h>
 #include <vil1/vil1_memory_image_of.h>
@@ -40,13 +39,13 @@ inline void mil_convert_vil_cm2cv(vil1_memory_image_of<vil1_rgb_byte>& vil1_imag
   vil1_image.resize(nx,ny);
 
   //inefficient copy
-  vil1_byte red,green,blue;
+  vxl_byte red,green,blue;
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
       {
-        red   = vil1_byte(mil_image(x,y,0));
-        green = vil1_byte(mil_image(x,y,1));
-        blue  = vil1_byte(mil_image(x,y,2));
+        red   = vxl_byte(mil_image(x,y,0));
+        green = vxl_byte(mil_image(x,y,1));
+        blue  = vxl_byte(mil_image(x,y,2));
         vil1_image(x,y)=vil1_rgb_byte(red,green,blue);
       }
 }

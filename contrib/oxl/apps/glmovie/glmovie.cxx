@@ -252,7 +252,7 @@ bool drawframe(int frame)
     glRasterPos2f(rx,ry);
     vil1_image fimg = moviefile->get_frame(frame)->get_image();
     if (vil1_pixel_format(fimg) == VIL1_BYTE) {
-      vil1_memory_image_of<vil1_byte> img(fimg);
+      vil1_memory_image_of<vxl_byte> img(fimg);
       glDrawPixels(rw, rh, GL_LUMINANCE, GL_UNSIGNED_BYTE, img.get_buffer());
     }
     else {
