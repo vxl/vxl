@@ -6,8 +6,11 @@
 // \file
 // \brief Infinite length integer numbers
 // \author Ian Scott
+// \deprecated in favour of vnl_big_num
 // The  mbl_arb_length_int class  provides infinite length integer numbers and
 // arithmetic, using a vcl_vector of unsigneds.
+
+#include <vcl_deprecated_header.h>
 
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
@@ -20,6 +23,7 @@ static const long mbl_arb_length_int_max_long = (unsigned char) (0xff);
 
 
 //: Arbitrary length integer numbers.
+// \deprecated in favour of vnl_big_num
 // Provides infinite length integer numbers and
 // arithmetic, using a vcl_vector of unsigned chars.
 class mbl_arb_length_int {
