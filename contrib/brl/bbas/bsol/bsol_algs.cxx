@@ -1,9 +1,5 @@
 //:
 // \file
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h> // for std::abs(int)
-#include <vcl_cassert.h>
-#include <vcl_iostream.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
@@ -15,7 +11,6 @@ bsol_algs::~bsol_algs()
 {
 }
 
-
 //-----------------------------------------------------------------------------
 // :Compute a bounding box for a set of vsol_line_2ds. 
 //-----------------------------------------------------------------------------
@@ -23,8 +18,8 @@ vbl_bounding_box<double,2>  bsol_algs::
 bounding_box(vcl_vector<vsol_line_2d_sptr> const & lines)
 {
   vbl_bounding_box<double, 2> b;
- for(vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
-      lit != lines.end(); lit++)
+  for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
+       lit != lines.end(); lit++)
     {
       vsol_point_2d_sptr p0 = (*lit)->p0();
       vsol_point_2d_sptr p1 = (*lit)->p1();
@@ -33,6 +28,4 @@ bounding_box(vcl_vector<vsol_line_2d_sptr> const & lines)
     }
  return b;
 }
-
-
 

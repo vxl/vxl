@@ -8,7 +8,6 @@
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
 #include <vil/vil_image.h>
-#include <vil/vil_rgb.h>
 #include <vil/vil_memory_image_of.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
@@ -197,7 +196,7 @@ void vvid_file_manager::set_changing_colors(int num, float *r, float *g, float *
 //
 void vvid_file_manager::display_topology()
 {
-  if(!easy0_)
+  if (!easy0_)
     return;
  vul_timer t;
   vcl_vector<vtol_topology_object_sptr> const & topos =
@@ -210,7 +209,7 @@ void vvid_file_manager::display_topology()
       vcl_vector<vtol_topology_object_sptr> temp;
       frame_trail_.get_topology_objects(temp);
       easy0_->add_topology_objects(temp);
-      }
+    }
   else
     easy0_->add_topology_objects(topos);
   vcl_cout << "display " << topos.size()
