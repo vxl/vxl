@@ -57,7 +57,7 @@ namespace
   //
   // This is a helper routine for vgui_section_buffer::apply()
   //
-  template<typename InT, typename OutT>
+  template <class InT, class OutT>
   bool
   convert_buffer( vil_image_view<InT> const& in,
                   unsigned x, unsigned y, unsigned w, unsigned h,
@@ -97,7 +97,7 @@ namespace
   //
   // Used in the vgui_section_buffer::apply().
   //
-  template<typename InT>
+  template <class InT>
   bool
   convert_image( vil_image_view<InT> const& in,
                  unsigned x, unsigned y, unsigned w, unsigned h,

@@ -38,13 +38,13 @@
 // non-member function since vxl (currently) forbits the use of member
 // templates. However, when declared as
 //
-//     template<typename T, unsigned m, unsigned n, unsigned o>
+//     template <class T, unsigned m, unsigned n, unsigned o>
 //     matrix<T,m,o> operator*( matrix<T,m,n>, matrix<T,n,o> );
 //
 // MSVC6 does not find it. A solution is to declare it as a member
 // template. However, the obvious
 //
-//     template<unsigned o>
+//     template <unsigned o>
 //     matrix<T,num_rows,o> operator*( matrix<T,num_cols,o> );
 //
 // causes an internal compiler error. It turns out that if the new
@@ -56,13 +56,13 @@
 // base class. The base class is empty, which means that there is no
 // loss in space or time efficiency. Finally, we have:
 //
-//   template<unsigned cols, unsigned rows, typename T>
+//   template <unsigned cols, unsigned rows, class T>
 //   class fake_base { };
 //
-//   template<typename T, unsigned rows, unsigned cols>
+//   template <class T, unsigned rows, unsigned cols>
 //   class matrix : public fake_base<cols,rows,T>
 //   {
-//      template<unsigned o>
+//      template <unsigned o>
 //      matrix<T,rows,o>  operator*( fake_base<o,cols,T> );
 //   };
 //
@@ -83,7 +83,7 @@ template <class T, unsigned M, unsigned N, unsigned O>
 inline
 vnl_matrix_fixed<T, M, O> vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b);
 #if VCL_VC60
-template<unsigned cols, unsigned rows, typename T>
+template <unsigned cols, unsigned rows, class T>
 class vnl_matrix_fixed_fake_base
 {
 };
@@ -330,7 +330,7 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
   }
 
 #if VCL_VC60
-  template<unsigned o>
+  template <unsigned o>
   vnl_matrix_fixed<T,num_rows,o> operator*( vnl_matrix_fixed_fake_base<o,num_cols,T> const& mat ) const
   {
     vnl_matrix_fixed<T,num_cols,o> const& b = static_cast<vnl_matrix_fixed<T,num_cols,o> const&>(mat);
@@ -620,7 +620,7 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
 
 // --- Matrix-scalar -------------------------------------------------------------
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline
 vnl_matrix_fixed<T,m,n> operator+( const vnl_matrix_fixed<T,m,n>& mat1, const vnl_matrix_fixed<T,m,n>& mat2 )
 {
@@ -629,7 +629,7 @@ vnl_matrix_fixed<T,m,n> operator+( const vnl_matrix_fixed<T,m,n>& mat1, const vn
   return r;
 }
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline
 vnl_matrix_fixed<T,m,n> operator+( const vnl_matrix_fixed<T,m,n>& mat, T s )
 {
@@ -638,7 +638,7 @@ vnl_matrix_fixed<T,m,n> operator+( const vnl_matrix_fixed<T,m,n>& mat, T s )
   return r;
 }
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline
 vnl_matrix_fixed<T,m,n> operator+( T s, const vnl_matrix_fixed<T,m,n>& mat )
 {
@@ -647,7 +647,7 @@ vnl_matrix_fixed<T,m,n> operator+( T s, const vnl_matrix_fixed<T,m,n>& mat )
   return r;
 }
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline
 vnl_matrix_fixed<T,m,n> operator-( const vnl_matrix_fixed<T,m,n>& mat1, const vnl_matrix_fixed<T,m,n>& mat2 )
 {
@@ -656,7 +656,7 @@ vnl_matrix_fixed<T,m,n> operator-( const vnl_matrix_fixed<T,m,n>& mat1, const vn
   return r;
 }
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline
 vnl_matrix_fixed<T,m,n> operator-( const vnl_matrix_fixed<T,m,n>& mat, T s )
 {
@@ -665,7 +665,7 @@ vnl_matrix_fixed<T,m,n> operator-( const vnl_matrix_fixed<T,m,n>& mat, T s )
   return r;
 }
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline
 vnl_matrix_fixed<T,m,n> operator-( T s, const vnl_matrix_fixed<T,m,n>& mat )
 {
@@ -674,7 +674,7 @@ vnl_matrix_fixed<T,m,n> operator-( T s, const vnl_matrix_fixed<T,m,n>& mat )
   return r;
 }
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline
 vnl_matrix_fixed<T,m,n> operator*( const vnl_matrix_fixed<T,m,n>& mat, T s )
 {
@@ -683,7 +683,7 @@ vnl_matrix_fixed<T,m,n> operator*( const vnl_matrix_fixed<T,m,n>& mat, T s )
   return r;
 }
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline
 vnl_matrix_fixed<T,m,n> operator*( T s, const vnl_matrix_fixed<T,m,n>& mat )
 {
@@ -692,7 +692,7 @@ vnl_matrix_fixed<T,m,n> operator*( T s, const vnl_matrix_fixed<T,m,n>& mat )
   return r;
 }
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline
 vnl_matrix_fixed<T,m,n> operator/( const vnl_matrix_fixed<T,m,n>& mat, T s )
 {
@@ -702,7 +702,7 @@ vnl_matrix_fixed<T,m,n> operator/( const vnl_matrix_fixed<T,m,n>& mat, T s )
 }
 
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline
 vnl_matrix_fixed<T,m,n> element_product( const vnl_matrix_fixed<T,m,n>& mat1,
                                          const vnl_matrix_fixed<T,m,n>& mat2 )
@@ -713,7 +713,7 @@ vnl_matrix_fixed<T,m,n> element_product( const vnl_matrix_fixed<T,m,n>& mat1,
 }
 
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline
 vnl_matrix_fixed<T,m,n> element_quotient( const vnl_matrix_fixed<T,m,n>& mat1,
                                           const vnl_matrix_fixed<T,m,n>& mat2)
@@ -791,49 +791,49 @@ vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vn
 // non-fixed. Because the operator* are templated, the fixed will not
 // be automatically converted to a non-fixed-ref. These do it for you.
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline vnl_matrix<T> operator+( const vnl_matrix_fixed<T,m,n>& a, const vnl_matrix<T>& b )
 {
   return a.as_ref() + b;
 }
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline vnl_matrix<T> operator+( const vnl_matrix<T>& a, const vnl_matrix_fixed<T,m,n>& b )
 {
   return a + b.as_ref();
 }
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline vnl_matrix<T> operator-( const vnl_matrix_fixed<T,m,n>& a, const vnl_matrix<T>& b )
 {
   return a.as_ref() - b;
 }
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline vnl_matrix<T> operator-( const vnl_matrix<T>& a, const vnl_matrix_fixed<T,m,n>& b )
 {
   return a - b.as_ref();
 }
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline vnl_matrix<T> operator*( const vnl_matrix_fixed<T,m,n>& a, const vnl_matrix<T>& b )
 {
   return a.as_ref() * b;
 }
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline vnl_matrix<T> operator*( const vnl_matrix<T>& a, const vnl_matrix_fixed<T,m,n>& b )
 {
   return a * b.as_ref();
 }
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline vnl_vector<T> operator*( const vnl_matrix_fixed<T,m,n>& a, const vnl_vector<T>& b )
 {
   return a.as_ref() * b;
 }
 
-template<class T, unsigned n>
+template <class T, unsigned n>
 inline vnl_vector<T> operator*( const vnl_matrix<T>& a, const vnl_vector_fixed<T,n>& b )
 {
   return a * b.as_ref();
@@ -842,7 +842,7 @@ inline vnl_vector<T> operator*( const vnl_matrix<T>& a, const vnl_vector_fixed<T
 
 // --- I/O operations ------------------------------------------------------------
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline
 vcl_ostream& operator<< (vcl_ostream& os, vnl_matrix_fixed<T,m,n> const& mat)
 {
@@ -850,7 +850,7 @@ vcl_ostream& operator<< (vcl_ostream& os, vnl_matrix_fixed<T,m,n> const& mat)
   return os;
 }
 
-template<class T, unsigned m, unsigned n>
+template <class T, unsigned m, unsigned n>
 inline
 vcl_istream& operator>> (vcl_istream& is, vnl_matrix_fixed<T,m,n>& mat)
 {

@@ -154,7 +154,7 @@ struct vgui_pixel_rgbfloat
 
 //: Clamps the given type into [0,255].
 //
-template<typename T>
+template <class T>
 inline
 vxl_byte vgui_pixel_clamp( T in )
 {
@@ -209,7 +209,7 @@ vxl_byte vgui_pixel_clamp( vxl_uint_32 in )
 
 
 //: Convert the given grey scale value to the appropriate OpenGL pixel type.
-template<class InT, class OutT>
+template <class InT, class OutT>
 inline void
 vgui_pixel_convert( InT const& in, OutT& out )
 {
@@ -218,7 +218,7 @@ vgui_pixel_convert( InT const& in, OutT& out )
 }
 
 //: Convert the given RGB value to the appropriate OpenGL pixel type.
-template<class InT, class OutT>
+template <class InT, class OutT>
 inline void
 vgui_pixel_convert( InT const& R, InT const& G, InT const& B,
                     OutT& out )
@@ -228,7 +228,7 @@ vgui_pixel_convert( InT const& R, InT const& G, InT const& B,
 }
 
 //: Convert the given RGBA value to the appropriate OpenGL pixel type.
-template<class InT, class OutT>
+template <class InT, class OutT>
 inline void
 vgui_pixel_convert( InT const& R, InT const& G, InT const& B, InT const& A,
                     OutT& out )

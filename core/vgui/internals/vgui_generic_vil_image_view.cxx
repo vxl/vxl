@@ -118,7 +118,7 @@ struct view_data
 
 // Cast if the pixel format is valid. See comment above.
 //
-template< typename T >
+template < class T >
 view_data
 cast_and_extract( vil_image_view_base const& base_view,
                   T* /*dummy*/ )
@@ -181,7 +181,7 @@ cast_and_extract( vil_image_view_base const& base_view,
 
 
 // This defines the normal, recucursively instantiating template
-template< vil_pixel_format fmt >
+template < vil_pixel_format fmt >
 ExtractDefinition( fmt, NoParameter /*no specialization*/, typename );
 
 // Terminating condition.
@@ -225,7 +225,7 @@ extract_data( vil_image_view_base const& other )
 
 // Create a view for C++ type T
 //
-template< typename T >
+template < class T >
 vil_image_view_base_sptr
 create_view_of( vgui_generic_vil_image_view const& generic,
                 T* /*dummy*/ )
@@ -288,7 +288,7 @@ struct try_view_of fmt_specialization                                           
                        NoParameter /*no typename*/ )
 
 // This defines the normal, recucursively instantiating template
-template< vil_pixel_format fmt >
+template < vil_pixel_format fmt >
 TryViewOfDefinition( fmt, NoParameter /*no specialization*/, typename );
 
 // Terminating condition. There are no pixel formats >=

@@ -30,7 +30,7 @@ class vgui_vil_image_renderer;
 //
 class vgui_vil_image_tableau_base : public vgui_tableau
 {
-public:
+ public:
   //: Returns the type of this tableau ('vgui_vil_image_tableau').
   virtual vcl_string type_name() const = 0;
 
@@ -60,7 +60,7 @@ public:
 };
 
 
-template<typename T>
+template <class T>
 struct vgui_vil_image_tableau_new;
 
 //: Tableau which renders the given image view using an image_renderer.
@@ -69,10 +69,10 @@ struct vgui_vil_image_tableau_new;
 // vil_image_view objects.
 //
 // Use vgui_vil_image_tableau_new to construct objects of this class.
-template<typename T>
+template <class T>
 class vgui_vil_image_tableau : public vgui_vil_image_tableau_base
 {
-public:
+ public:
   //: Returns the type of this tableau ('vgui_vil_image_tableau').
   //
   // The image type name is *not* encoded, because encoding it means
@@ -113,14 +113,14 @@ public:
   //: Destructor - called by vgui_vil_image_tableau_sptr.
   ~vgui_vil_image_tableau();
 
-private:
+ private:
   vgui_vil_image_tableau();
 
   vgui_vil_image_tableau( vil_image_view<T> const &img );
 
   friend struct vgui_vil_image_tableau_new<T>;
 
-private:
+ private:
   bool pixels_centered_;
   vgui_vil_image_renderer* renderer_;
 };
@@ -129,7 +129,7 @@ private:
 //
 // \deprecated Use vgui_image_tableau_new instead. It now supports
 // vil_image_view objects.
-template<typename T>
+template <class T>
 struct vgui_vil_image_tableau_new : public vgui_vil_image_tableau_sptr<T> {
 
   //: Constructor - creates an empty image tableau.

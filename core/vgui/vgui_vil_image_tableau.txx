@@ -19,12 +19,12 @@ namespace {
 // helper routines and classes
 
 // converts a typename to a string for pretty printing
-template<typename T>
+template <class T>
 struct to_string {
   static const char* name;
 };
 
-template<typename T>
+template <class T>
 const char* to_string<T>::name = "<(no name)>";
 // To be specialised for each templated type; see instantiation macro
 
@@ -32,14 +32,14 @@ const char* to_string<T>::name = "<(no name)>";
 
 
 //-----------------------------------------------------------------------------
-template<typename T>
+template <class T>
 vgui_vil_image_tableau<T>::vgui_vil_image_tableau()
   : pixels_centered_( true ),
     renderer_( new vgui_vil_image_renderer )
 { }
 
 //-----------------------------------------------------------------------------
-template<typename T>
+template <class T>
 vgui_vil_image_tableau<T>::vgui_vil_image_tableau(vil_image_view<T> const &I)
   : pixels_centered_( true ),
     renderer_( new vgui_vil_image_renderer )
@@ -50,7 +50,7 @@ vgui_vil_image_tableau<T>::vgui_vil_image_tableau(vil_image_view<T> const &I)
 
 //-----------------------------------------------------------------------------
 //: Destructor - called by vgui_vil_image_tableau_sptr.
-template<typename T>
+template <class T>
 vgui_vil_image_tableau<T>::~vgui_vil_image_tableau()
 {
   delete renderer_;
@@ -58,7 +58,7 @@ vgui_vil_image_tableau<T>::~vgui_vil_image_tableau()
 }
 
 //-----------------------------------------------------------------------------
-template<typename T>
+template <class T>
 vcl_string
 vgui_vil_image_tableau<T>::type_name() const
 {
@@ -67,18 +67,18 @@ vgui_vil_image_tableau<T>::type_name() const
 
 
 //-----------------------------------------------------------------------------
-template<typename T>
+template <class T>
 vcl_string
 vgui_vil_image_tableau<T>::pretty_name() const
 {
   vcl_ostringstream s;
-  s << type_name() << "<" << to_string<T>::name << ">" << "[" << *renderer_->get_image_view() << "]";
+  s << type_name() << '<' << to_string<T>::name << ">[" << *renderer_->get_image_view() << ']';
   return s.str();
 }
 
 //-----------------------------------------------------------------------------
 //: Return the image being rendered by this tableau.
-template<typename T>
+template <class T>
 vil_image_view<T>
 vgui_vil_image_tableau<T>::get_image() const
 {
@@ -87,7 +87,7 @@ vgui_vil_image_tableau<T>::get_image() const
 
 //-----------------------------------------------------------------------------
 //: Make the given image, the image rendered by this tableau.
-template<typename T>
+template <class T>
 void
 vgui_vil_image_tableau<T>::set_image( vil_image_view<T> const &I )
 {
@@ -96,7 +96,7 @@ vgui_vil_image_tableau<T>::set_image( vil_image_view<T> const &I )
 
 //-----------------------------------------------------------------------------
 //: Width of the image (0 if none).
-template<typename T>
+template <class T>
 unsigned
 vgui_vil_image_tableau<T>::width() const
 {
@@ -105,7 +105,7 @@ vgui_vil_image_tableau<T>::width() const
 
 //-----------------------------------------------------------------------------
 //: Height of the image (0 if none).
-template<typename T>
+template <class T>
 unsigned
 vgui_vil_image_tableau<T>::height() const
 {
@@ -114,7 +114,7 @@ vgui_vil_image_tableau<T>::height() const
 
 //-----------------------------------------------------------------------------
 //: Returns the bounding box of the rendered image.
-template<typename T>
+template <class T>
 bool
 vgui_vil_image_tableau<T>::get_bounding_box( float low[3], float high[3] ) const
 {
@@ -128,7 +128,7 @@ vgui_vil_image_tableau<T>::get_bounding_box( float low[3], float high[3] ) const
 //: Handle all events sent to this tableau.
 //  In particular, use draw events to render the image contained in 
 //  this tableau.
-template<typename T>
+template <class T>
 bool
 vgui_vil_image_tableau<T>::handle( vgui_event const &e )
 {

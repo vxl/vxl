@@ -9,12 +9,12 @@
 
 class vgui_vil_image_tableau_base;
 
-template<class T>
+template <class T>
 class vgui_vil_image_tableau;
 
 typedef vgui_tableau_sptr_t<vgui_vil_image_tableau_base> vgui_vil_image_tableau_base_sptr;
 
-template<typename T>
+template <class T>
 struct vgui_vil_image_tableau_sptr : public vgui_vil_image_tableau_base_sptr {
   typedef vgui_vil_image_tableau_base_sptr B; // base
   vgui_vil_image_tableau_sptr(): B() {}
