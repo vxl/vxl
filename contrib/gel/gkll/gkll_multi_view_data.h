@@ -4,20 +4,14 @@
 #pragma interface
 #endif
 //--------------------------------------------------------------------------------
-// .NAME        gkll_multi_view_data
-// .INCLUDE     gkll/gkll_multi_view_data
-// .FILE        gkll_multi_view_data.cxx
-// .SECTION     Description:
-//   Class to hold the matched points through mutli views
-// .SECTION Author
+//:
+// \file
+//   Class to hold the matched points through multi views
+// \author
 //   L. Guichard
-// .SECTION Modifications:
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vcl_list.h>
-#include <vtol/vtol_vertex_2d_sptr.h>
 #include <mvl/NViewMatches.h>
-#include <vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>
 
 template <class T>
@@ -43,18 +37,18 @@ public:
            vcl_vector<T> &);
 
   bool get_pred_match(int view_num,T obj,T & res);
-  int get_nb_views(){return _nbviews;};
+  int get_nb_views(){return nbviews_;};
 
   void remove(int view_num, T match);
 
   vcl_ostream& print(vcl_ostream& str);
 
 private:
-  int _nbviews;
-  int _nbfeatures; //number of features wishing to be detected
-  int _size_vect_ft;//the number of features in all images
-  int _matchnum; //the number of tracks
-  bool _closed_track;
+  int nbviews_;
+  int nbfeatures_; //number of features wishing to be detected
+  int size_vect_ft_;//the number of features in all images
+  int matchnum_; //the number of tracks
+  bool closed_track_;
 
   NViewMatches MVM;
   vcl_vector<T> all_pts;

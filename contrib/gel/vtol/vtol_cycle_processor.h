@@ -1,5 +1,5 @@
-#ifndef _cycle_processor_h
-#define _cycle_processor_h
+#ifndef vtol_cycle_processor_h_
+#define vtol_cycle_processor_h_
 
 //:
 // \file
@@ -17,19 +17,12 @@
 //          GE Corporate Research and Development
 //
 //-----------------------------------------------------------------------------
-#if 0
-#include <list>
-#include <cool/decls.h>
-#include <cool/ListP.h>
-#endif
 
-#include <vtol/vtol_edge_2d.h>
-#include <vtol/vtol_face_sptr.h>
-#include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
-#include <vtol/vtol_one_chain.h>
-#include <vtol/vtol_vertex.h>
+#include <vtol/vtol_edge_2d_sptr.h>
+#include <vtol/vtol_one_chain_sptr.h>
 #include <vtol/vtol_vertex_sptr.h>
+class vtol_edge;
 
 class vtol_cycle_processor
 {
@@ -52,20 +45,19 @@ class vtol_cycle_processor
   void sort_one_cycles();
   void process();
   //members
-  bool _valid;
-  float _tolerance;
-  bool _cycle;
-  bool _found_next_edge;
-  vtol_vertex_sptr _first;
-  vtol_vertex_sptr _last;
-  vtol_edge_2d_sptr _l;
-  vtol_edge_2d_sptr _next_edge;
-  vcl_vector<vtol_edge_2d_sptr> _edges;
-  vcl_vector<vtol_edge_2d_sptr> _e_stack;
-  vcl_vector<vtol_vertex_sptr> _v_stack;
-  vcl_vector<vtol_one_chain_sptr> _chains;
-  vcl_vector<vtol_one_chain_sptr> _nested_one_cycles;
+  bool valid_;
+  float tolerance_;
+  bool cycle_;
+  bool found_next_edge_;
+  vtol_vertex_sptr first_;
+  vtol_vertex_sptr last_;
+  vtol_edge_2d_sptr l_;
+  vtol_edge_2d_sptr next_edge_;
+  vcl_vector<vtol_edge_2d_sptr> edges_;
+  vcl_vector<vtol_edge_2d_sptr> e_stack_;
+  vcl_vector<vtol_vertex_sptr> v_stack_;
+  vcl_vector<vtol_one_chain_sptr> chains_;
+  vcl_vector<vtol_one_chain_sptr> nested_one_cycles_;
 };
 
-#endif
-// _vtol_cycle_processor_h
+#endif // vtol_cycle_processor_h_

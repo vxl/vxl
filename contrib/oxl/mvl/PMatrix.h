@@ -1,29 +1,24 @@
-#ifndef _PMatrix_h
-#define _PMatrix_h
+// This is oxl/mvl/PMatrix.h
+#ifndef PMatrix_h_
+#define PMatrix_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-//--*- c++ -*------------------------------------------------------------------
-//
-// .NAME PMatrix - General 3x4 perspective projection matrix
-// .LIBRARY MViewBasics
-// .HEADER  MultiView package
-// .INCLUDE mvl/PMatrix.h
-// .FILE PMatrix.cxx
-//
-// .SECTION Description:
+//:
+// \file
+// \brief General 3x4 perspective projection matrix
 //
 // A class to hold a perspective projection matrix and use it to
 // perform common operations e.g. projecting point in 3d space to
 // its image on the image plane
 //
-// .SECTION Modifications:
+// \verbatim
+//  Modifications
 //     010796 AWF Implemented get_focal_point() - awf, july 96
 //     011096 AWF Added caching vnl_svd<double>
 //     260297 AWF Converted to use vnl_double_3x4
 //     110397 PVR Added operator==
-//
+// \endverbatim
 
 #include <vcl_iosfwd.h>
 
@@ -91,7 +86,7 @@ public:
 
   PMatrix& operator=(const PMatrix&);
 
-  bool operator==(PMatrix const& p) const { return _p_matrix == p.get_matrix(); }
+  bool operator==(PMatrix const& p) const { return p_matrix_ == p.get_matrix(); }
 
   void get(vnl_matrix<double>* A, vnl_vector<double>* a) const;
   void set(const vnl_matrix<double>& A, const vnl_vector<double>& a);
@@ -107,17 +102,17 @@ public:
   void set (const double p_matrix [3][4]);
   void set (const vnl_matrix<double>& p_matrix);
 
-  const vnl_matrix<double>& get_matrix() const { return _p_matrix; }
+  const vnl_matrix<double>& get_matrix() const { return p_matrix_; }
   // Can't implement this as it will blow the svd cache.
-  // vnl_matrix<double>& get_matrix() { return _p_matrix; }
+  // vnl_matrix<double>& get_matrix() { return p_matrix_; }
 
   // Utility Methods-----------------------------------------------------------
   bool read_ascii(vcl_istream& f);
 
   // Data Members--------------------------------------------------------------
 protected:
-  vnl_double_3x4 _p_matrix;
-  mutable vnl_svd<double>* _svd;
+  vnl_double_3x4 p_matrix_;
+  mutable vnl_svd<double>* svd_;
 };
 
 vcl_ostream& operator<<(vcl_ostream& s, const PMatrix& p);
@@ -135,4 +130,4 @@ PMatrix operator*(const vnl_matrix<double>& C, const PMatrix& P)
   return PMatrix(C * P.get_matrix());
 }
 
-#endif // _PMatrix_h
+#endif // PMatrix_h_

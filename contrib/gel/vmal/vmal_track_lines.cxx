@@ -1,12 +1,9 @@
-#include <vmal/vmal_track_lines.h>
+#include "vmal_track_lines.h"
 
 #include <vnl/vnl_math.h> // for pi
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_2.h>
-#include <vnl/algo/vnl_svd.h>
 
 #include <vtol/vtol_edge_2d.h>
-#include <vtol/vtol_vertex_2d.h>
 
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h> // for vcl_min
@@ -32,12 +29,12 @@ void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr
                                    const vcl_vector<vnl_double_3x3> &homo,
                                    vmal_multi_view_data_edge_sptr matches)
 {
-  _theta=0.0873;//0.0873;
-  _radius=5.0;
+  theta_=0.0873;//0.0873;
+  radius_=5.0;
   vmal_multi_view_data_edge_sptr tmp_matches;
   tmp_matches=new vmal_multi_view_data<vtol_edge_2d_sptr>(matches->get_nb_views());
 
-  if(fit_lines->size()==(transformed_lines->size()+1))
+  if (fit_lines->size()==(transformed_lines->size()+1))
   {
     //int match_num=0;
     unsigned int min_line=0;
@@ -47,7 +44,7 @@ void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr
     vtol_edge_2d_sptr cur_fl;
     vtol_edge_2d_sptr cur_tl;
 
-    for(unsigned int i=0;i<(*transformed_lines)[0]->size();i++)
+    for (unsigned int i=0;i<(*transformed_lines)[0]->size();i++)
     {
       bool found=true;
       unsigned int match_line=i;
@@ -62,7 +59,7 @@ void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr
         //double tl1y=cur_tl->v1()->cast_to_vertex_2d()->y();
         //double tl2y=cur_tl->v2()->cast_to_vertex_2d()->y();
         vtol_edge_2d_sptr other_match;
-        for(unsigned int j=0;j<(*fit_lines)[view_num+1]->size();j++)
+        for (unsigned int j=0; j<(*fit_lines)[view_num+1]->size(); ++j)
         {
           cur_fl=(*(*fit_lines)[view_num+1])[j];
           //double fl1x=cur_fl->v1()->cast_to_vertex_2d()->x();
@@ -71,9 +68,9 @@ void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr
           //double fl2y=cur_fl->v2()->cast_to_vertex_2d()->y();
 
           double angle=seg_angle(cur_tl,cur_fl);
-          if(angle<_theta)
+          if (angle<theta_)
           {
-            if(belong(cur_tl,cur_fl))
+            if (belong(cur_tl,cur_fl))
             {
               double cur_dist;
               //int size=(*fit_lines)[view_num]->size();
@@ -84,15 +81,15 @@ void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr
                       images[view_num],
                       images[view_num+1],
                       homo[view_num], cur_dist);
-              if(min_dist==-1)//Initial value
+              if (min_dist==-1)//Initial value
                 min_dist=cur_dist;
-              if((cur_dist<=min_dist) && (cur_dist!=-1))
+              if ((cur_dist<=min_dist) && (cur_dist!=-1))
               {
                 //look if this line have already been matched.
                 //If so, perform a test between those two lines
                 //to see which one is the best. It can also decide
                 //that they both suit.
-                if(tmp_matches->get_pred_match(view_num,cur_fl,other_match))
+                if (tmp_matches->get_pred_match(view_num,cur_fl,other_match))
                 {
                   vtol_edge_2d_sptr t_other_match=find_transfo(other_match,*(*fit_lines)[view_num],*(*transformed_lines)[view_num]);
                   double other_dist;
@@ -113,7 +110,7 @@ void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr
                       choice=-1;
                     else
                       choice=1;
-                  if(choice==1) //the new is better
+                  if (choice==1) //the new is better
                   {
                     found=true;
                     min_dist=cur_dist;
@@ -160,7 +157,7 @@ void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr
         match_line=min_line;
         min_dist=-1 ;
       }
-      if(match)
+      if (match)
       {
         vtol_edge_2d_sptr p=(*(*fit_lines)[view_num])[match_line];
         tmp_matches->set(view_num,p);
@@ -210,24 +207,24 @@ bool vmal_track_lines::belong(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
   double fl2y=fit_line->v2()->cast_to_vertex_2d()->y();
 
   //defined the first bounding segment
-  double bound1_tl1x=tl1x+(-norma[1]*_radius);
-  double bound1_tl1y=tl1y+(norma[0]*_radius);
-  double bound1_tl2x=tl2x+(-norma[1]*_radius);
-  double bound1_tl2y=tl2y+(norma[0]*_radius);
+  double bound1_tl1x=tl1x+(-norma[1]*radius_);
+  double bound1_tl1y=tl1y+(norma[0]*radius_);
+  double bound1_tl2x=tl2x+(-norma[1]*radius_);
+  double bound1_tl2y=tl2y+(norma[0]*radius_);
 
   //defined the second bounding segment
-  double bound2_tl1x=tl1x+(norma[1]*_radius);
-  double bound2_tl1y=tl1y+(-norma[0]*_radius);
-  double bound2_tl2x=tl2x+(norma[1]*_radius);
-  double bound2_tl2y=tl2y+(-norma[0]*_radius);
+  double bound2_tl1x=tl1x+(norma[1]*radius_);
+  double bound2_tl1y=tl1y+(-norma[0]*radius_);
+  double bound2_tl2x=tl2x+(norma[1]*radius_);
+  double bound2_tl2y=tl2y+(-norma[0]*radius_);
 
 
-  if(vmal_operators::cross_seg(bound1_tl1x, bound1_tl1y, bound2_tl1x, bound2_tl1y,
-                               fl1x, fl1y, fl2x, fl2y))
+  if (vmal_operators::cross_seg(bound1_tl1x, bound1_tl1y, bound2_tl1x, bound2_tl1y,
+                                fl1x, fl1y, fl2x, fl2y))
 
     return true;
-  else if(vmal_operators::cross_seg(bound1_tl2x, bound1_tl2y, bound2_tl2x,bound2_tl2y,
-                                    fl1x, fl1y,fl2x, fl2y))
+  else if (vmal_operators::cross_seg(bound1_tl2x, bound1_tl2y, bound2_tl2x,bound2_tl2y,
+                                     fl1x, fl1y,fl2x, fl2y))
     return true;
   else //test if at least one of the extremities of the fit line
      //is inside the bounding rectanlge.
@@ -237,14 +234,14 @@ bool vmal_track_lines::belong(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
     vmal_operators::project_point(fl1x,fl1y,bound2_tl1x,bound2_tl1y,bound2_tl2x,bound2_tl2y,&x2,&y2);
     if ((x1!=-1)&&(x2!=-1))
     {
-      if(((x1-fl1x)*(x2-fl1x)+(y1-fl1y)*(y2-fl1y))<0)
+      if (((x1-fl1x)*(x2-fl1x)+(y1-fl1y)*(y2-fl1y))<0)
         return true;
     }
     vmal_operators::project_point(fl2x,fl2y,bound1_tl1x,bound1_tl1y,bound1_tl2x,bound1_tl2y,&x1,&y1);
     vmal_operators::project_point(fl2x,fl2y,bound2_tl1x,bound2_tl1y,bound2_tl2x,bound2_tl2y,&x2,&y2);
     if ((x1!=-1)&&(x2!=-1))
     {
-      if(((x1-fl2x)*(x2-fl2x)+(y1-fl2y)*(y2-fl2y))<0)
+      if (((x1-fl2x)*(x2-fl2x)+(y1-fl2y)*(y2-fl2y))<0)
         return true;
     }
   }
@@ -284,10 +281,10 @@ double vmal_track_lines::dist(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
   double dist3=vmal_operators::project_point(tl1x,tl1y,fl1x,fl1y,fl2x,fl2y,&x3,&y3);
   double dist4=vmal_operators::project_point(tl2x,tl2y,fl1x,fl1y,fl2x,fl2y,&x4,&y4);
 
-  if(dist1==-1)
+  if (dist1==-1)
     return -1;
 
-  if((x1!=-1)&&(x2!=-1)) //the first segment totally project on the second
+  if (x1!=-1 && x2!=-1) // the first segment totally project on the second
   {
     if (x3!=-1)
     {
@@ -316,11 +313,11 @@ double vmal_track_lines::dist(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
              vcl_sqrt((fl1x-fl2x)*(fl1x-fl2x)+(fl1y-fl2y)*(fl1y-fl2y));
     }
   }
-  else if(x1!=-1) //case 2
+  else if (x1!=-1) //case 2
   {
     dist=dist1;
 
-    if((x3!=-1)&&(x4!=-1))
+    if ((x3!=-1)&&(x4!=-1))
     {
       dist+=vcl_min(dist3,dist4);
       if (dist3<dist4)
@@ -330,13 +327,13 @@ double vmal_track_lines::dist(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
       distover=vcl_sqrt((x4-fl1x)*(x4-fl1x)+(y4-fl1y)*(y4-fl1y))+
              vcl_sqrt((x1-tl2x)*(x1-tl2x)+(y1-tl2y)*(y1-tl2y));
     }
-    else if(x3!=-1)
+    else if (x3!=-1)
     {
       dist+=dist3;
       distover=vcl_sqrt((x3-fl1x)*(x3-fl1x)+(y3-fl1y)*(y3-fl1y))+
              vcl_sqrt((x1-tl1x)*(x1-tl1x)+(y1-tl1y)*(y1-tl1y));
     }
-    else if(x4!=-1)
+    else if (x4!=-1)
     {
       dist+=dist4;
       distover=vcl_sqrt((x4-fl1x)*(x4-fl1x)+(y4-fl1y)*(y4-fl1y))+
@@ -355,7 +352,7 @@ double vmal_track_lines::dist(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
   {
     dist=dist2;
 
-    if((x3!=-1)&&(x4!=-1))
+    if ((x3!=-1)&&(x4!=-1))
     {
       dist+=vcl_min(dist3,dist4);
       if (dist3<dist4)
@@ -365,7 +362,7 @@ double vmal_track_lines::dist(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
       distover=vcl_sqrt((x4-fl2x)*(x4-fl2x)+(y4-fl2y)*(y4-fl2y))+
              vcl_sqrt((x2-tl2x)*(x2-tl2x)+(y2-tl2y)*(y2-tl2y));
     }
-    else if(x3!=-1)
+    else if (x3!=-1)
     {
       dist+=dist3;
       distover=vcl_sqrt((x3-fl2x)*(x3-fl2x)+(y3-fl2y)*(y3-fl2y))+
@@ -395,7 +392,7 @@ double vmal_track_lines::dist(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
               + vcl_sqrt((fl1x-fl2x)*(fl1x-fl2x)+(fl1y-fl2y)*(fl1y-fl2y));
 #endif
 
-  return (dist/distover);
+  return dist/distover;
 }
 
 int vmal_track_lines::is_cur_best(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit_line,vtol_edge_2d_sptr other_line)
@@ -426,7 +423,7 @@ int vmal_track_lines::is_cur_best(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr
   vmal_operators::project_point(ol2x,ol2y,tl1x,tl1y,tl2x,tl2y,&x4,&y4);
 
 #if 0
-  if((x1==-1)&&(x2==-1)&&(x3==-1)&&(x4==-1))
+  if ((x1==-1)&&(x2==-1)&&(x3==-1)&&(x4==-1))
     return 0;
   else
 #endif
@@ -447,7 +444,7 @@ vtol_edge_2d_sptr vmal_track_lines::find_transfo(vtol_edge_2d_sptr line,
 {
   vcl_vector<vtol_edge_2d_sptr>::iterator iter;
   int i=0;
-  for(iter=fit_lines.begin();iter!=fit_lines.end();iter++)
+  for (iter=fit_lines.begin(); iter!=fit_lines.end(); ++iter)
   {
     if (*(*iter)==*line)
       return transformed_lines[i];
@@ -462,13 +459,13 @@ void vmal_track_lines::sort_lines(vmal_multi_view_data_edge_sptr matches,
   bool still_track;
   vcl_map<int,vtol_edge_2d_sptr,vcl_less<int> > track;
   still_track=matches->get_first_track(track);
-  while(still_track)
+  while (still_track)
   {
     sorted_matches->new_track();
     vcl_map<int,vtol_edge_2d_sptr,vcl_less<int> >::iterator iter1;
     vcl_map<int,vtol_edge_2d_sptr,vcl_less<int> >::iterator iter2=track.begin();
     iter2++;
-    for(iter1=track.begin();iter2!=track.end();iter1++)
+    for (iter1=track.begin(); iter2!=track.end(); ++iter1)
     {
       int key1=(*iter1).first;
       vtol_edge_2d_sptr value0=(*iter1).second;

@@ -36,14 +36,14 @@
 //
 
 PMatrix::PMatrix ():
-  _svd(0)
+  svd_(0)
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
       if (row_index == col_index)
-        _p_matrix. put (row_index, col_index, 1);
+        p_matrix_. put (row_index, col_index, 1);
       else
-        _p_matrix. put (row_index, col_index, 0);
+        p_matrix_. put (row_index, col_index, 0);
 }
 
 //--------------------------------------------------------------
@@ -53,7 +53,7 @@ PMatrix::PMatrix ():
 //   PMatrix P(cin);
 // </pre>
 PMatrix::PMatrix (vcl_istream& i) :
-  _svd(0)
+  svd_(0)
 {
   read_ascii(i);
 }
@@ -63,8 +63,8 @@ PMatrix::PMatrix (vcl_istream& i) :
 //: Construct from 3x4 matrix
 
 PMatrix::PMatrix (const vnl_matrix<double>& pmatrix) :
-  _p_matrix (pmatrix),
-  _svd(0)
+  p_matrix_ (pmatrix),
+  svd_(0)
 {
 }
 
@@ -73,7 +73,7 @@ PMatrix::PMatrix (const vnl_matrix<double>& pmatrix) :
 //: Construct from 3x3 matrix A and vector a. P = [A a].
 
 PMatrix::PMatrix (const vnl_matrix<double>& A, const vnl_vector<double>& a) :
-  _svd(0)
+  svd_(0)
 {
   set(A,a);
 }
@@ -83,8 +83,8 @@ PMatrix::PMatrix (const vnl_matrix<double>& A, const vnl_vector<double>& a) :
 //: Construct from row-stored array of 12 doubles
 
 PMatrix::PMatrix (const double *c_matrix) :
-  _p_matrix (c_matrix),
-  _svd(0)
+  p_matrix_ (c_matrix),
+  svd_(0)
 {
 }
 
@@ -93,16 +93,16 @@ PMatrix::PMatrix (const double *c_matrix) :
 // - Copy ctor
 
 PMatrix::PMatrix (const PMatrix& that) :
-  _p_matrix (that._p_matrix),
-  _svd(0)
+  p_matrix_ (that.get_matrix()),
+  svd_(0)
 {
 }
 
 // - Assignment
 PMatrix& PMatrix::operator=(const PMatrix& that)
 {
-  _p_matrix = that._p_matrix;
-  _svd = 0;
+  p_matrix_ = that.get_matrix();
+  svd_ = 0;
   return *this;
 }
 
@@ -111,7 +111,7 @@ PMatrix& PMatrix::operator=(const PMatrix& that)
 // - Destructor
 PMatrix::~PMatrix()
 {
-  delete _svd; _svd = 0;
+  delete svd_; svd_ = 0;
 }
 
 // OPERATIONS
@@ -121,7 +121,7 @@ PMatrix::~PMatrix()
 //: Return the image point which is the projection of the specified 3D point X
 HomgPoint2D PMatrix::project (const HomgPoint3D& X) const
 {
-  vnl_double_3 x = _p_matrix * X.get_vector();
+  vnl_double_3 x = p_matrix_ * X.get_vector();
   return HomgPoint2D(x);
 }
 
@@ -168,7 +168,7 @@ HomgLine3D PMatrix::backproject (const HomgPoint2D& x) const
 //: Return the 3D plane which is the backprojection of the specified line l in the image
 HomgPlane3D PMatrix::backproject (const HomgLine2D& l) const
 {
-  return HomgPlane3D(_p_matrix.transpose() * l.get_vector());
+  return HomgPlane3D(p_matrix_.transpose() * l.get_vector());
 }
 
 //-----------------------------------------------------------------------------
@@ -197,11 +197,11 @@ static bool ok(vcl_istream& f) { return f.good() || f.eof(); }
 // </pre>
 bool PMatrix::read_ascii(vcl_istream& f)
 {
-  f >> (vnl_matrix<double>&)this->_p_matrix;
+  f >> (vnl_matrix<double>&)this->p_matrix_;
   clear_svd();
 
   if (!ok(f)) {
-    //    vcl_cerr << "PMatrix::read_ascii: Failed to load P matrix" << vcl_endl;
+    //    vcl_cerr << "PMatrix::read_ascii: Failed to load P matrix\n";
     return false;
   }
 
@@ -243,23 +243,18 @@ PMatrix PMatrix::read(vcl_istream& s)
 //: Compute the svd of this P and cache it, so that future operations that require it need not recompute it.
 vnl_svd<double>* PMatrix::svd() const
 {
-  if (_svd == 0) {
-    // Need to make _svd volatile for SGI g++ 2.7.2 optimizer bug.
-    vnl_svd<double>* svd = new vnl_svd<double>(_p_matrix);
-    ((PMatrix*)this)->_svd = svd; // const violation !
-    return svd;
+  if (svd_ == 0) {
+    // Need to make svd_ volatile for SGI g++ 2.7.2 optimizer bug.
+    svd_ = new vnl_svd<double>(p_matrix_); // mutable const
   }
-  return _svd;
+  return svd_;
 }
 
 //: Discredit the cached svd.
 //  This is necessary only in order to recover the space used by it if the PMatrix is not being deleted.
 void PMatrix::clear_svd()
 {
-  if (_svd) {
-    delete _svd;
-    _svd = 0;
-  }
+  delete svd_; svd_ = 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -271,8 +266,8 @@ HomgPoint3D PMatrix::get_focal_point() const
   // From st_compute_focal_point
   if (svd()->singularities() > 1) {
     vcl_cerr << "PMatrix::get_focal_point: "
-         << "  Nullspace dimension is " << svd()->singularities() << vcl_endl
-         << "  Returning a vector of zeros" << vcl_endl;
+             << "  Nullspace dimension is " << svd()->singularities() << vcl_endl
+             << "  Returning a vector of zeros\n";
     return HomgPoint3D(0,0,0,0);
   }
 
@@ -307,7 +302,7 @@ bool PMatrix::is_canonical(double tol) const
 {
   for (int r = 0; r < 3; ++r)
     for (int c = 0; c < 4; ++c) {
-      double d = (r == c) ? (_p_matrix(r,c) - 1) : _p_matrix(r,c);
+      double d = (r == c) ? (p_matrix_(r,c) - 1) : p_matrix_(r,c);
       if (vcl_fabs(d) > tol)
         return false;
     }
@@ -328,7 +323,7 @@ PMatrix operator*(const PMatrix& P, const HMatrix3D& H)
 double
 PMatrix::get (unsigned int row_index, unsigned int col_index) const
 {
-  return _p_matrix. get (row_index, col_index);
+  return p_matrix_. get (row_index, col_index);
 }
 
 //-----------------------------------------------------------------------------
@@ -339,7 +334,7 @@ PMatrix::get (double* c_matrix) const
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
-      *c_matrix++ = _p_matrix. get (row_index, col_index);
+      *c_matrix++ = p_matrix_. get (row_index, col_index);
 }
 
 //----------------------------------------------------------------
@@ -348,7 +343,7 @@ PMatrix::get (double* c_matrix) const
 void
 PMatrix::get (vnl_matrix<double>* p_matrix) const
 {
-  *p_matrix = _p_matrix;
+  *p_matrix = p_matrix_;
 }
 
 //----------------------------------------------------------------
@@ -357,21 +352,21 @@ PMatrix::get (vnl_matrix<double>* p_matrix) const
 void
 PMatrix::get (vnl_matrix<double>* A, vnl_vector<double>* a) const
 {
-  A->put(0,0, _p_matrix(0,0));
-  A->put(1,0, _p_matrix(1,0));
-  A->put(2,0, _p_matrix(2,0));
+  A->put(0,0, p_matrix_(0,0));
+  A->put(1,0, p_matrix_(1,0));
+  A->put(2,0, p_matrix_(2,0));
 
-  A->put(0,1, _p_matrix(0,1));
-  A->put(1,1, _p_matrix(1,1));
-  A->put(2,1, _p_matrix(2,1));
+  A->put(0,1, p_matrix_(0,1));
+  A->put(1,1, p_matrix_(1,1));
+  A->put(2,1, p_matrix_(2,1));
 
-  A->put(0,2, _p_matrix(0,2));
-  A->put(1,2, _p_matrix(1,2));
-  A->put(2,2, _p_matrix(2,2));
+  A->put(0,2, p_matrix_(0,2));
+  A->put(1,2, p_matrix_(1,2));
+  A->put(2,2, p_matrix_(2,2));
 
-  a->put(0, _p_matrix(0,3));
-  a->put(1, _p_matrix(1,3));
-  a->put(2, _p_matrix(2,3));
+  a->put(0, p_matrix_(0,3));
+  a->put(1, p_matrix_(1,3));
+  a->put(2, p_matrix_(2,3));
 }
 
 //----------------------------------------------------------------
@@ -380,20 +375,20 @@ PMatrix::get (vnl_matrix<double>* A, vnl_vector<double>* a) const
 void
 PMatrix::get (vnl_vector<double>* a, vnl_vector<double>* b, vnl_vector<double>* c) const
 {
-  a->put(0, _p_matrix(0, 0));
-  a->put(1, _p_matrix(0, 1));
-  a->put(2, _p_matrix(0, 2));
-  a->put(3, _p_matrix(0, 3));
+  a->put(0, p_matrix_(0, 0));
+  a->put(1, p_matrix_(0, 1));
+  a->put(2, p_matrix_(0, 2));
+  a->put(3, p_matrix_(0, 3));
 
-  b->put(0, _p_matrix(1, 0));
-  b->put(1, _p_matrix(1, 1));
-  b->put(2, _p_matrix(1, 2));
-  b->put(3, _p_matrix(1, 3));
+  b->put(0, p_matrix_(1, 0));
+  b->put(1, p_matrix_(1, 1));
+  b->put(2, p_matrix_(1, 2));
+  b->put(3, p_matrix_(1, 3));
 
-  c->put(0, _p_matrix(2, 0));
-  c->put(1, _p_matrix(2, 1));
-  c->put(2, _p_matrix(2, 2));
-  c->put(3, _p_matrix(2, 3));
+  c->put(0, p_matrix_(2, 0));
+  c->put(1, p_matrix_(2, 1));
+  c->put(2, p_matrix_(2, 2));
+  c->put(3, p_matrix_(2, 3));
 }
 
 //-----------------------------------------------------------------------------
@@ -404,7 +399,7 @@ PMatrix::set (const double p_matrix [3][4])
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
-      _p_matrix. put (row_index, col_index, p_matrix [row_index][col_index]);
+      p_matrix_. put (row_index, col_index, p_matrix [row_index][col_index]);
   clear_svd();
 }
 
@@ -416,7 +411,7 @@ PMatrix::set (const double *p)
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
-      _p_matrix. put (row_index, col_index, *p++);
+      p_matrix_. put (row_index, col_index, *p++);
   clear_svd();
 }
 
@@ -427,7 +422,7 @@ PMatrix::set (const double *p)
 void
 PMatrix::set (const vnl_matrix<double>& p_matrix)
 {
-  _p_matrix = p_matrix;
+  p_matrix_ = p_matrix;
   clear_svd();
 }
 
@@ -438,21 +433,21 @@ PMatrix::set (const vnl_matrix<double>& p_matrix)
 void
 PMatrix::set (const vnl_matrix<double>& A, const vnl_vector<double>& a)
 {
-  _p_matrix(0,0) = A(0,0);
-  _p_matrix(1,0) = A(1,0);
-  _p_matrix(2,0) = A(2,0);
+  p_matrix_(0,0) = A(0,0);
+  p_matrix_(1,0) = A(1,0);
+  p_matrix_(2,0) = A(2,0);
 
-  _p_matrix(0,1) = A(0,1);
-  _p_matrix(1,1) = A(1,1);
-  _p_matrix(2,1) = A(2,1);
+  p_matrix_(0,1) = A(0,1);
+  p_matrix_(1,1) = A(1,1);
+  p_matrix_(2,1) = A(2,1);
 
-  _p_matrix(0,2) = A(0,2);
-  _p_matrix(1,2) = A(1,2);
-  _p_matrix(2,2) = A(2,2);
+  p_matrix_(0,2) = A(0,2);
+  p_matrix_(1,2) = A(1,2);
+  p_matrix_(2,2) = A(2,2);
 
-  _p_matrix(0,3) = a[0];
-  _p_matrix(1,3) = a[1];
-  _p_matrix(2,3) = a[2];
+  p_matrix_(0,3) = a[0];
+  p_matrix_(1,3) = a[1];
+  p_matrix_(2,3) = a[2];
 }
 
 //: Scale P so determinant of first 3x3 is 1.
@@ -475,9 +470,9 @@ PMatrix::fix_cheirality()
       scale = -1;
   }
 
-  _p_matrix *= scale;
-  if (_svd)
-    _svd->W() *= scale;
+  p_matrix_ *= scale;
+  if (svd_)
+    svd_->W() *= scale;
 }
 
 //: Return true if the 3D point X is behind the camera represented by this P.
@@ -492,7 +487,7 @@ PMatrix::is_behind_camera(const HomgPoint3D& hX)
   if (X[3] < 0)
     sign = -1;
 
-  vnl_double_4 plane = _p_matrix.get_row(2);
+  vnl_double_4 plane = p_matrix_.get_row(2);
 
   return sign * dot_product(plane, X) < 0;
 }
@@ -501,9 +496,9 @@ PMatrix::is_behind_camera(const HomgPoint3D& hX)
 void
 PMatrix::flip_sign()
 {
-  _p_matrix *= -1;
-  if (_svd)
-    _svd->W() *= -1;
+  p_matrix_ *= -1;
+  if (svd_)
+    svd_->W() *= -1;
 }
 
 //: Splendid hack that tries to detect if the P is an image-coords P or a normalized P.
@@ -524,7 +519,7 @@ PMatrix PMatrix::postmultiply(const HMatrix3D& H) const
 //: Postmultiply by 4x4 matrix.
 PMatrix PMatrix::postmultiply(const vnl_matrix<double>& H) const
 {
-  return PMatrix(_p_matrix * H);
+  return PMatrix(p_matrix_ * H);
 }
 
 //: Apply 2-space homography to P.
@@ -536,6 +531,6 @@ PMatrix PMatrix::premultiply(const HMatrix2D& H) const
 //: Premultiply by 3x3 matrix.
 PMatrix PMatrix::premultiply(const vnl_matrix<double>& H) const
 {
-  return PMatrix(H * _p_matrix);
+  return PMatrix(H * p_matrix_);
 }
 

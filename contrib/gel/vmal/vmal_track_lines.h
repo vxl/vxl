@@ -25,11 +25,10 @@
 #include <vil/vil_byte.h>
 #include <vil/vil_memory_image_of.h>
 
-#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 
-class vmal_track_lines {
-
+class vmal_track_lines
+{
 public:
 
 //***************************************************************************
@@ -115,8 +114,8 @@ private:
              const vnl_double_3x3 homo,
              double &result);
 
-  double _theta;
-  double _radius;
+  double theta_;
+  double radius_;
 };
 
-#endif // vmal_track_lines
+#endif // vmal_track_lines_h_
