@@ -228,6 +228,14 @@ foreach $dir (@DIRS)
       else { printf "No source file $x.* found in $dir\n"; }
     }
   }
+  if ($cmakefile =~ s/\bQT_WRAP_CPP\s*\(\s*([^()]+)\)//) {
+    opendir(TMP,"$dir");
+    @tmp_list = readdir(TMP);
+    closedir(TMP);
+    foreach $x (@tmp_list) {
+      push @source_files,"$x" if ($x =~ m/_mocced\.cxx$/);
+    }
+  }
   while ($cmakefile =~ s/\bADD_EXECUTABLE\s*\(\s*(\S+)\s+(\S+)\s*\)//) {
     $name = "$1"; $x = "$2";
     if ($x =~ m/_sources$/) {
