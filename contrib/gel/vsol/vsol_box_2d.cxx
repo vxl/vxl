@@ -91,3 +91,11 @@ bool vsol_box_2d::near_equal(vsol_box_2d& b, float tolerance)
     near_same(this->get_max_x(), b.get_max_x(), tolerance) &&
     near_same(this->get_max_y(), b.get_max_y(), tolerance);
 }
+void vsol_box_2d::reset_bounds()
+{
+  for(int i =0; i<2; i++)
+    {
+      (box_.min())[i]=0;
+      (box_.max())[i]=0;
+    }
+}

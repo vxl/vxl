@@ -70,6 +70,8 @@ class vsol_box_3d : public vbl_ref_count , public vul_timestamp
   bool operator< (vsol_box_3d& box);  // a<b = a is inside b
 
   bool near_equal(vsol_box_3d& box, float tolerance); // is box about the same as this?
+  //: reset the bounds of the box 
+  void reset_bounds();
 
  protected:
 

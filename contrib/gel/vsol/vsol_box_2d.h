@@ -51,6 +51,8 @@ class vsol_box_2d
   // is box about the same as this?
   bool near_equal(vsol_box_2d& b, float tolerance);
 
+  //: reset the bounds of the box 
+  void reset_bounds();
  protected:
 
   vbl_bounding_box<double,2> box_;

@@ -133,3 +133,12 @@ bool vsol_box_3d::near_equal(vsol_box_3d& b, float tolerance)
     near_same(this->get_max_y(), b.get_max_y(), tolerance) &&
     near_same(this->get_max_z(), b.get_max_z(), tolerance);
 }
+
+void vsol_box_3d::reset_bounds()
+{
+  for(int i =0; i<3; i++)
+    {
+      (_box.min())[i]=0;
+      (_box.max())[i]=0;
+    }
+}
