@@ -113,8 +113,8 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double>&
   vcl_vector<double> temp_vals(n*4);
   vcl_vector<double> temp_vecs(n*dim);
 
-  // set nblock = vcl_max(10, dim/6) :
-  int nblock = (dim>60) ? dim/6 : 10;
+  // set nblock = vcl_min(10, dim/6) :
+  int nblock = (dim<60) ? dim/6 : 10;
 
   // isn't this rather a lot ? -- fsm  
   int maxop = dim*10;      // dim*20;
