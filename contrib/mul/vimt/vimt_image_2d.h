@@ -36,8 +36,7 @@ public:
   virtual const vil2_image_view_base& image_base() const = 0;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const
-    { return (s=="vimt_image_2d"); }
+  virtual bool is_class(vcl_string const& s) const{ return s=="vimt_image_2d"; }
 };
 
 #endif // vimt_image_2d_h_
