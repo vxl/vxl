@@ -125,14 +125,14 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
   void setup_adaptor(CWnd* this_cwnd, HDC OldDC, HGLRC oldContext);
 
 
-private:
+ private:
   void create_bitmap( int cx, int cy,
                       CDC*& out_pDC,
                       HBITMAP& out_old_hbmp );
 
   HGLRC setup_for_gl( CDC* pDC, DWORD dwFlags );
 
-  //: Device context for the auxillary buffer used for simulating overlays
+  //: Device context for the auxiliary buffer used for simulating overlays
   CDC* m_pDC_aux;
   //: True if the aux buffer is a copy of the main GL buffer
   bool aux_dc_valid_;
@@ -144,7 +144,7 @@ private:
   //: True while a overlay redraw event has been requested but not implemented.
   bool overlay_redraw_posted_;
 
-protected:
+ protected:
   //: The window associated with this adaptor if it is not the main window.
   CWnd* m_pCWnd;
 
