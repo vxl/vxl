@@ -12,13 +12,13 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES( ${OXL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 
-SOURCE_FILES(sbin_sources segv_menus.cxx segv_menus.h)
+#SOURCE_FILES(sbin_sources segv_menus.cxx segv_menus.h)
 
 IF(HAS_XERCES)
  ADD_DEFINITIONS(-DHAS_XERCES)
 ENDIF(HAS_XERCES)
 
-ADD_EXECUTABLE (seg seg.cxx sbin_sources)
+ADD_EXECUTABLE (seg seg.cxx)
 
 TARGET_LINK_LIBRARIES(seg segv bgui vgui)
 
