@@ -46,13 +46,18 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
   bool need_closing_brace = false;
 
   if (label[0] == '{')
+  {
     need_closing_brace = true;
+    label.erase(0,1);
+  }
 
   mbl_read_props_type props;
 
-  while (afs>>vcl_ws, !afs.eof())
+  if (label.empty())
+    afs >> vcl_ws >> label;
+
+  do 
   {
-    afs >> label;
     if (label.substr(0,2) =="//")
     {
       // Comment line, so read to end
@@ -63,7 +68,7 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
       // Strip rest of line
       return props;
     }
-    else
+    else if (!label.empty())
     {
       if (label.size() > 1 && label[label.size() -1] == ':')
         label.erase(label.size() -1, 1);
@@ -85,9 +90,46 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
       vcl_getline(afs, str1);
       props[label] = str1;
     }
+    afs >> vcl_ws >> label;
   }
+  while (!afs.eof());
   if (need_closing_brace)
     vcl_cerr << "ERROR: mbl_read_props. Unexpected end of file while "
              << "looking for '}'\n";
   return props;
+}
+
+
+//: merge two property sets.
+// \param first_overrides properties in "a" will override indentically
+// named properties in "b"
+mbl_read_props_type mbl_read_props_merge(const mbl_read_props_type& a,
+  const mbl_read_props_type& b, bool first_overrides/*=true*/)
+{
+  mbl_read_props_type output;
+
+  mbl_read_props_type::const_iterator a_it = a.begin();
+  mbl_read_props_type::const_iterator b_it = b.begin();
+
+
+  while (a_it != a.end() || b_it != b.end())
+  {
+    if (a_it == a.end())
+      output.insert(*(b_it++));
+    else if (b_it == b.end())
+      output.insert(*(a_it++));
+    else if (a_it->first < b_it->first)
+      output.insert(*(a_it++));
+    else if (a_it->first > b_it->first)
+      output.insert(*(b_it++));
+    else
+    {
+      if (first_overrides)
+        output.insert(*a_it);
+      else
+        output.insert(*b_it);
+      ++a_it; ++b_it;
+    }
+  }
+  return output;
 }
