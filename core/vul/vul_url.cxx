@@ -465,11 +465,10 @@ bool vul_url::is_url(const char * url)
 
 bool vul_url::is_file(const char * fn)
 {
-  return
-    (vul_url::is_url(fn) && vul_url::exists(fn)) ||
-    (! vul_url::is_url(fn) &&
-     vul_file::exists(fn) &&
-     ! vul_file::is_directory(fn) );
+  if (vul_url::is_url(fn))
+    return vul_url::exists(fn);
+  else
+    return vul_file::exists(fn) && ! vul_file::is_directory(fn) ;
 }
 
 //=======================================================================

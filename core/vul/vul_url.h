@@ -15,9 +15,13 @@ public:
   static vcl_istream * open(const char * url);
 
 //: Does that URL exist
+// If the URL does not begin with a recognised xcheme identifier, the function will
+// treat the parameter as a local filename
   static bool exists(const char * url);
 
 //: Is that a URL
+// If the URL does not begin with a recognised xcheme identifier, the function will
+// treat the parameter as a local filename
   static bool is_url(const char * url);
 
 //: Is that a file
