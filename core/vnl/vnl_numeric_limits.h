@@ -1,0 +1,229 @@
+// <begin copyright notice>
+// ---------------------------------------------------------------------------
+//
+//                   Copyright (c) 1997 TargetJr Consortium
+//               GE Corporate Research and Development (GE CRD)
+//                             1 Research Circle
+//                            Niskayuna, NY 12309
+//                            All Rights Reserved
+//              Reproduction rights limited as described below.
+//                               
+//      Permission to use, copy, modify, distribute, and sell this software
+//      and its documentation for any purpose is hereby granted without fee,
+//      provided that (i) the above copyright notice and this permission
+//      notice appear in all copies of the software and related documentation,
+//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
+//      used in any advertising or publicity relating to the software without
+//      the specific, prior written permission of GE CRD, and (iii) any
+//      modifications are clearly marked and summarized in a change history
+//      log.
+//       
+//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
+//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
+//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
+//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
+//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
+//      USE OR PERFORMANCE OF THIS SOFTWARE.
+//
+// ---------------------------------------------------------------------------
+// <end copyright notice>
+//-*- c++ -*-------------------------------------------------------------------
+#ifndef numeric_limits_h_
+#define numeric_limits_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
+//
+// Class : numeric_limits
+//
+// .SECTION Description
+//    Implementation of the May 96 ANSI Draft Working Paper (DWP)
+//    numeric_limits class.  Numbering in
+//    the documentation below refers to section 18.2 of the DWP.
+//
+// .NAME        numeric_limits - Standard limits for numeric datatypes
+// .LIBRARY     vnl
+// .HEADER	Numerics Package
+// .INCLUDE     vnl/numeric_limits.h
+// .FILE        vnl/numeric_limits.cxx
+// .SECTION Author
+//     Andrew W. Fitzgibbon, Oxford RRG, 28 Aug 96
+//
+// .SECTION Modifications:
+//     <none yet>
+//
+//-----------------------------------------------------------------------------
+
+#include <vcl/vcl_compiler.h>
+
+// -- 18.2.1.3  Type float_round_style                     [lib.round.style]
+
+enum vnl_float_round_style {
+  vnl_round_indeterminate       = -1,
+  vnl_round_toward_zero         =  0,
+  vnl_round_to_nearest          =  1,
+  vnl_round_toward_infinity     =  2,
+  vnl_round_toward_neg_infinity =  3
+};
+
+#ifdef infinity
+# error
+#endif
+
+template<class T>
+class vnl_numeric_limits {
+public:
+
+// --  The member is_specialized makes it possible to distinguish between
+// scalar types, which have specializations, and non-scalar types, which do
+// not.
+  static const bool is_specialized;
+
+// --  Minimum finite value. (Equivalent to CHAR_MIN, SHRT_MIN, FLT_MIN,
+// DBL_MIN, etc)
+// 
+//  For  floating types with denormalization, returns the minimum positive
+//   normalized value, denorm_min().
+// 
+//  Meaningful for all specializations in which  is_bounded  ==  true,  or
+//   is_bounded == false && is_signed == false.
+  static T min();
+
+// --  Maximum finite value. Equivalent to CHAR_MAX, SHRT_MAX, FLT_MAX, DBL_MAX, etc.
+//  Meaningful for all specializations in which is_bounded == true.
+  static T max();
+  
+//  Number of radix digits which can be represented without change.
+//  For built-in integer types, the number of non-sign bits in the
+//   representation.
+//  For floating point types, the number of radix digits in the mantissa.
+//   Equivalent to FLT_MANT_DIG, DBL_MANT_DIG, LDBL_MANT_DIG.
+  static const int  digits;
+
+// --  Number of base 10 digits which can be represented without change.
+//   Equivalent to FLT_DIG, DBL_DIG, LDBL_DIG.
+// Meaningful for all specializations in which is_bounded == true.
+  static const int  digits10;
+
+  static const bool is_signed;   // True if the type is signed.
+  static const bool is_integer;  // True if the type is integer
+
+// --  True if the type uses an exact representation.  All integer types are
+//    exact, but not vice versa.  For example, rational and fixed-exponent
+//    representations are exact but not integer.
+  static const bool is_exact;
+
+// --  For floating types, specifies the base or radix of the exponent
+//    representation (often 2).  Equivalent to FLT_RADIX.
+// 
+//  For integer types, specifies the base of the representation -
+//    distinguishes types with bases other than 2 (e.g. BCD).
+  static const int  radix;
+
+// --  Machine epsilon: The difference between 1 and the least value greater
+//    than 1 that is representable.  Equivalent to FLT_EPSILON, DBL_EPSILON,
+//    LDBL_EPSILON.
+//  Meaningful only for floating point types.
+  static T epsilon();
+  
+//  Measure of the maximum rounding error.  This has a precise definition in
+//    the Language Independent Arithmetic (LIA-1) standard.  Required by LIA-1.
+  static T round_error();
+
+
+// --  Minimum negative integer such that radix raised to that  power  is  in
+//    range.  Equivalent to FLT_MIN_EXP, DBL_MIN_EXP, LDBL_MIN_EXP.
+//  Meaningful only for floating point types.
+  static const int  min_exponent;
+
+// --  Minimum  negative  integer  such  that  10  raised to that power is in
+//    range. Equivalent to FLT_MIN_10_EXP, DBL_MIN_10_EXP, LDBL_MIN_10_EXP.
+//  Meaningful only for floating point types.
+  static const int  min_exponent10;
+  
+//  Maximum positive integer such that radix raised to that  power  is  in
+//    range. Equivalent to FLT_MAX_EXP, DBL_MAX_EXP, LDBL_MAX_EXP.
+//  Meaningful only for floating point types.
+  static const int  max_exponent;
+
+// --  Maximum  positive  integer  such  that  10  raised to that power is in
+//    range. Equivalent to FLT_MAX_10_EXP, DBL_MAX_10_EXP, LDBL_MAX_10_EXP.
+//  Meaningful only for floating point types.
+  static const int  max_exponent10;
+
+// --  True if the type has a representation for positive infinity.
+//  Meaningful only for floating point types.
+//  Shall be true for all specializations in which is_iec559 == true.
+  static const bool has_infinity;
+
+// --  True if the type has a representation for a quiet (non-signaling)
+//   ``Not a Number.''.  RLIA
+//  Meaningful only for floating point types.
+//  Shall be true for all specializations in which is_iec559 == true.
+  static const bool has_quiet_NaN;
+
+// --  True if the type has a representation for a signaling
+//    ``Not a Number.''.
+//  Meaningful only for floating point types.
+//  Shall be true for all specializations in which is_iec559 == true.
+  static const bool has_signaling_NaN;
+
+// --  True if the type allows denormalized values (variable number of exponent
+//    bits).
+//  Meaningful only for flotaing point types.
+  static const bool has_denorm;
+
+// --  Representation of positive infinity, if available. 
+  static T infinity();
+
+// --  Representation of a quiet ``Not a Number,'' if available.
+  static T quiet_NaN();
+
+// --  Representation of a signaling ``Not a Number,'' if available.
+  static T signaling_NaN();
+
+// --  Minimum positive denormalized value.
+//  Meaningful for all floating point types.
+//  In specializations for which has_denorm == false, returns the  minimum
+//    positive normalized value.
+//  For types with has_denorm == false, the member denorm_min() shall
+//    return the same value as the member min().
+  static T denorm_min();
+
+// --  True if and only if the type adheres to IEC 559 standard.
+//    International Electrotechnical Commission standard 559 is the same as
+//    IEEE 754.
+  static const bool is_iec559;
+
+// --  True if the set of values representable by the type is finite.
+//    All built-in types are bounded, this member would be false for arbitrary
+//    precision types.
+  static const bool is_bounded;
+
+// --  True if the type is modulo. A type is modulo if it is  possible  to
+//    add  two  positive  numbers  and have a result which wraps around to a
+//    third number which is less.
+//  Generally, this is false for floating types, true for unsigned integers,
+//    and true for signed integers on most machines.
+  static const bool is_modulo;
+
+// --  True if trapping is implemented for the type.
+  static const bool traps;
+
+// --  True if tinyness is detected before rounding. Refer to IEC 559.
+  static const bool tinyness_before;
+
+// --  The rounding style for the type. Equivalent to FLT_ROUNDS.
+//    Specializations for integer types shall return round_toward_zero.
+  static const vnl_float_round_style round_style;
+};
+
+// Include specializations
+#include <vnl/vnl_numeric_limits_int.h>
+#include <vnl/vnl_numeric_limits_float.h>
+#include <vnl/vnl_numeric_limits_double.h>
+
+#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS numeric_limits.

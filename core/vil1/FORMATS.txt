@@ -1,0 +1,14 @@
+
+Example: adding jpeg
+
+0.  cd vil/file_formats
+1.  cp vil_pnm.h vil_jpeg.h
+2.  replace pnm with jpeg
+3.  implement
+       read_header
+       do_get_section()
+       write_header
+       do_put_section()
+
+n-1. add file_formats/vil_jpeg.cxx to vil/makefile
+n.  add vil_jpeg to vil/vil_file_format.cxx

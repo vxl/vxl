@@ -1,0 +1,107 @@
+//-*- c++ -*-------------------------------------------------------------------
+#ifndef vil_mit_file_format_h_
+#define vil_mit_file_format_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
+
+// .NAME vil_mit -  Image in MIT format
+// .LIBRARY vil
+// .HEADER vil
+// .INCLUDE vil/vil_mit.h
+// .SECTION Description
+//   The MITImage is a simple image format consisting of a header
+//   of 4 shorts (type,bits_per_pixel,width,height) and the raw data.
+//   The full specification defines a number of image/edge types (see header
+//   for details). Currently only 8-bit images can be read.
+//
+// .SECTION Author
+//   Alison Noble, Oxford University.
+//   Joris Schouteden, vil version
+ 
+/*
+  TYPES:
+  1 unsigned (grayscale)
+  2 rgb
+  3 hsb
+  4 cap
+  5 signed (grayscale?)
+  6 float
+  7 edge
+*/
+
+#include <vil/vil_file_format.h>
+#include <vil/vil_generic_image.h>
+
+//: Loader for MIT files
+class vil_mit_file_format : public vil_file_format {
+public:
+  virtual char const* tag() const;
+  virtual vil_generic_image* make_input_image(vil_stream* vs);
+  virtual vil_generic_image* make_output_image(vil_stream* vs, vil_generic_image const* prototype);
+};
+
+//: Generic image implementation for PNM files
+class vil_mit_generic_image : public vil_generic_image {
+  vil_stream* is_;
+  int magic_;
+  int width_;
+  int height_;
+  int maxval_;
+
+  int start_of_data_;
+  int components_;
+  int bits_per_component_;
+
+  int type_;
+  int bits_per_pixel_;
+
+  bool read_header();
+  bool write_header();
+
+  friend class vil_mit_file_format;
+public:
+
+  vil_mit_generic_image(vil_stream* is);
+  vil_mit_generic_image(vil_stream* is, vil_generic_image const* prototype);
+
+  //: Dimensions.  Planes x W x H x Components
+  virtual int planes() const { return 1; }
+  virtual int width() const { return width_; }
+  virtual int height() const { return height_; }
+  virtual int components() const { return components_; }
+
+  virtual int bits_per_component() const 
+  { 
+    int bpc; 
+    if (type_ == 1) bpc = bits_per_pixel_;
+    if (type_ == 2) bpc = bits_per_pixel_ / 3;
+    if (type_ == 6) bpc = bits_per_pixel_;
+    return bpc; 
+  };
+
+  virtual int bytes_per_pixel() const
+  {
+    return bits_per_pixel_ / 8;
+  };
+
+  virtual enum vil_component_format component_format() const 
+  { 
+    if (type_ == 1 || type_ == 2) return VIL_COMPONENT_FORMAT_UNSIGNED_INT; 
+    else return VIL_COMPONENT_FORMAT_IEEE_FLOAT; 
+  }
+  
+  //: Copy this to BUF, 
+  virtual bool do_get_section(void* buf, int x0, int y0, int width, int height) const;
+  virtual bool do_put_section(void const* buf, int x0, int y0, int width, int height);
+  
+  //: Return the image interpreted as rgb bytes.
+  //virtual bool get_section_rgb_byte(void* buf, int x0, int y0, int width, int height) const;
+  //virtual bool get_section_float(void* buf, int x0, int y0, int width, int height) const;
+  //virtual bool get_section_byte(void* buf, int x0, int y0, int width, int height) const;
+
+  char const* file_format() const;
+  vil_generic_image* get_plane(int ) const;
+};
+
+#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_mit_file_format.
