@@ -6,6 +6,7 @@
 #include <vsl/vsl_indent.h>
 #include <vcl_sstream.h>
 #include <vcl_string.h>
+#include <vcl_cctype.h>
 
 #include <mbl/mbl_parse_block.h>
 
@@ -20,6 +21,13 @@ void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props)
   afs << vsl_indent() << "}\n";
 }
 
+
+static strip_tailing_ws(vcl_string &s)
+{
+  int p=s.length()-1;
+  while (p>0 && vcl_isspace(s[p])) --p;
+  s.erase(p+1);
+}
 
 //: Read properties from a text stream.
 // The function will terminate on an eof. If one of
@@ -88,6 +96,7 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
           afs.putback('\n');
           str1 = mbl_parse_block(afs, true);
         }
+        strip_tailing_ws(str1);
         props[label] = str1;
         last_label = label;
       }
