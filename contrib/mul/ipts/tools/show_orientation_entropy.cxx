@@ -11,18 +11,16 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_math.h>
-#include <vil/vil_fill.h>
 #include <vil/algo/vil_orientations.h>
 #include <ipts/ipts_local_entropy.h>
-#include <vil/algo/vil_suppress_non_max.h>
 #include <vimt/algo/vimt_find_peaks.h>
 #include <ipts/ipts_draw.h>
 
 void print_usage()
 {
-  vcl_cout<<"show_orientation_entropy -i in_image -e entropy_image -o out_image -h half_width -a angle_image"<<vcl_endl;
-  vcl_cout<<"Load in an image and generate entropy of orientatins in square regions."<<vcl_endl;
-  vcl_cout<<"Show peaks in entropy as crosses on original image."<<vcl_endl;
+  vcl_cout<<"show_orientation_entropy -i in_image -e entropy_image -o out_image -h half_width -a angle_image\n"
+          <<"Load in an image and generate entropy of orientatins in square regions.\n"
+          <<"Show peaks in entropy as crosses on original image.\n";
 }
 
 int main( int argc, char* argv[] )
@@ -35,7 +33,7 @@ int main( int argc, char* argv[] )
   vul_arg<float> threshold("-t","Threshold on edge magnitude",5.0f);
   vul_arg_parse(argc, argv);
 
-  if(in_path() == "")
+  if (in_path() == "")
   {
     print_usage();
     vul_arg_display_usage_and_exit();
@@ -59,7 +57,7 @@ int main( int argc, char* argv[] )
   vil_image_view<float> entropy_im,entropy_max_im;
   ipts_local_entropy(orient_im,entropy_im,half_width(),0,n_orientations);
 
-//  vil_suppress_non_max_3x3(entropy_im,entropy_max_im);
+//vil_suppress_non_max_3x3(entropy_im,entropy_max_im);
 
   vil_image_view<vxl_byte> dest_im;
   vil_convert_stretch_range(entropy_im,dest_im);

@@ -7,22 +7,20 @@
 // \author Tim Cootes, VP (Sept03)
 
 #include <vimt/vimt_image_2d_of.h>
-#include <vil/vil_print.h>
 
 //: True if pixel at *im is strictly above 8 neighbours
 template <class T>
 inline bool vimt_is_peak_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
 {
   T v = *im;
-  if (v<=im[i_step]) return false;
-  if (v<=im[-i_step]) return false;
-  if (v<=im[j_step]) return false;
-  if (v<=im[-j_step]) return false;
-  if (v<=im[i_step+j_step]) return false;
-  if (v<=im[i_step-j_step]) return false;
-  if (v<=im[j_step-i_step]) return false;
-  if (v<=im[-i_step-j_step]) return false;
-  return true;
+  return v>im[i_step] &&
+         v>im[-i_step] &&
+         v>im[j_step] &&
+         v>im[-j_step] &&
+         v>im[i_step+j_step] &&
+         v>im[i_step-j_step] &&
+         v>im[j_step-i_step] &&
+         v>im[-i_step-j_step];
 }
 
 //: True if pixel at *im is strictly above its neighbours in a 2*radius+1 neighbourhood
@@ -30,8 +28,8 @@ template <class T>
 inline bool vimt_is_peak(const T* im, int radius, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
 {
   T v = *im;
-  for(int i=-radius; i<radius+1; i++)
-    for(int j=-radius; j<radius+1; j++)
+  for (int i=-radius; i<radius+1; i++)
+    for (int j=-radius; j<radius+1; j++)
       if (i!=0 || j!=0)
         if (v<=im[i_step*i+j_step*j]) return false;      // One of the 
   return true;
@@ -83,7 +81,7 @@ inline void vimt_find_image_peaks_3x3(vcl_vector<vgl_point_2d<unsigned> >& peaks
 }
 
 //: Return image co-ordinates of all points in image strictly above their neighbours
-//  in a 2*radius+1 x 2*radius+1 neighbourhood of pixels (e.g.r=2 equivalent to 5x5)
+//  in a 2*radius+1 x 2*radius+1 neighbourhood of pixels (e.g. r=2 equivalent to 5x5)
 // \param peak_value: Value at peak
 // \param clear_list: If true (the default) then empty list before adding new examples
 template <class T>
@@ -110,8 +108,8 @@ inline void vimt_find_image_peaks(vcl_vector<vgl_point_2d<unsigned> >& peaks,
 }
 
 //: Return image co-ordinates of all points in image strictly above their neighbours
-//  in a 2*radius+1 x 2*radius+1 neighbourhood of pixels (e.g.r=2 equivalent to 5x5)
-//  Additionally, only peaks of the value higher than threshold (thresh) are returned
+//  in a 2*radius+1 x 2*radius+1 neighbourhood of pixels (e.g. r=2 equivalent to 5x5)
+//  Additionally, only peaks of the value higher than threshold (thresh) are returned.
 // \param peak_value: Value at peak
 // \param clear_list: If true (the default) then empty list before adding new examples
 template <class T>
