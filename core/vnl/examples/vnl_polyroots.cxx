@@ -1,3 +1,5 @@
+// This is vxl/vnl/examples/vnl_polyroots.cxx
+
 //:
 // \file
 // \brief Find all roots of a polynomial
@@ -22,7 +24,7 @@ int main(int argc, char* argv[])
   }
   else
     for (int i=0; i<argc; ++i)
-      pts[i] = atof(argv[i]);
+      pts[i] = vcl_atof(argv[i]);
 
   vcl_cout << "Coefficients = [ " << pts << " ]\n";
   vcl_cout << "Polynomial = ";
