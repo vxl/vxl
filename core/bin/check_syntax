@@ -194,7 +194,7 @@ foreach $f (@FILES)
          "$f-$j" !~ m!\bv3p/netlib/triangle\.c\-math\.h$! &&
           $j !~ m!^(stdlib|varargs|sys/types|stdio|windows|GL/glu?t?)\.h$!);
     $jj = $j; $i = $j;
-    next unless ($i =~ s/^(v[bginpsu]l|vil1|vtol|vsol|vdgl|vipl\/vipl_with_[a-z_]+|vipl|vepl2?|mbl|mil|gevd|bdgl)\/(algo\/|io\/|internals\/|filter\/|section\/|vrml\/|impl\/(X|glut|gtk|mfc)\/|)(.*)\.h/$4/ || $i =~ s/^(v[cx]l_[a-z]+)\.h$/$1/);
+    next unless ($i =~ s!^(v[bginpsu]l|vil1|vtol|vsol|vdgl|vipl/vipl_with_[a-z_]+|vipl|vepl2?|mbl|mil|gevd|bdgl)/(file_formats/|algo/|io/|internals/|filter/|section/|vrml/|impl/(X|glut|gtk|mfc)/|)(.*)\.h!$4! || $i =~ s/^(v[cx]l_[a-z]+)\.h$/$1/);
     next if ($j eq "vcl_compiler.h" || $j eq "vcl_new.h");
     next if ($j eq "vcl_cstdio.h" && $f =~ m!/StdAfx\.h$!);
     next if ($j eq "vcl_cmath.h" && $f =~ m!\bvcl/(vcl_cfloat|win32-vc60/vcl_complex)\.h$!);
@@ -301,12 +301,13 @@ foreach $f (@FILES)
     elsif ($j eq "vil/vil_copy.h") { $i="($i)(|_deep|_to_window|_reformat)"; }
     elsif ($j eq "vil/vil_fill.h") { $i="($i)_(line|row|col|mask)"; }
     elsif ($j eq "vil/vil_flip.h") { $i="($i)_(ud|lr)"; }
-    elsif ($j eq "vil/vil_load.h") { $i="$i(|_image_resource)"; }
     elsif ($j eq "vil1/vil1_image_as.h") { $i="$i(|(_rgb_|_)(byte|uint16|int|float|double))"; }
     elsif ($j eq "vil/vil_image_resource.h") { $i="$i(|_sptr)"; }
+    elsif ($j eq "vil/vil_image_resource_sptr.h") { $i="vil_image_resource(|_sptr)"; }
     elsif ($j eq "vil/vil_image_view.h") { $i="$i(|_deep_equality)"; }
     elsif ($j eq "vil/vil_image_view_base.h") { $i="$i(|_sptr)"; }
     elsif ($j eq "vil1/vil1_interpolate.h") { $i="($i)_(nearest|bilinear(|_grad)|bicubic)"; }
+    elsif ($j eq "vil/vil_load.h") { $i="$i(|_image_resource)"; }
     elsif ($j eq "vil/vil_math.h") { $i="($i)_([a-z_]+)"; }
     elsif ($j eq "vil/vil_memory_chunk.h") { $i="$i(|_sptr)"; }
     elsif ($j eq "vil1/vil1_memory_image.h") { $i="$i(|_format)"; }
@@ -369,6 +370,7 @@ foreach $f (@FILES)
     elsif ($j eq "vnl/vnl_tag.h") { $i="($i)_[a-z]+"; }
     elsif ($j eq "vnl/vnl_matrix_fixed_ref.h") { $i="$i(|_const)"; }
     elsif ($j eq "vnl/vnl_vector_fixed_ref.h") { $i="$i(|_const)"; }
+    elsif ($j eq "vnl/vnl_config.h") { $i="VNL_CONFIG_(CHECK_BOUNDS|LEGACY_METHODS|THREAD_SAFE)"; }
     # VGUI
     elsif ($j eq "vgui/vgui_adaptor.h") { $i="(vgui|get)_(adaptor|event)"; }
     elsif ($j eq "vgui/vgui_color_text.h") { $i="(text_to_color|(red|green|blue)_value)"; }
@@ -394,6 +396,7 @@ foreach $f (@FILES)
     elsif ($j eq "vdgl/vdgl_digital_curve.h") { $i="$i|cast_to_digital_curve\(\)"; }
     elsif ($j eq "vdgl/vdgl_edgel_chain.h") { $i="$i|get_edgel_chain\(\)|vbl_smart_ptr.txx"; }
     elsif ($j eq "vdgl/vdgl_interpolator.h") { $i="$i|get_interpolator\(\)|vbl_smart_ptr.txx"; }
+    elsif ($j eq "vdgl/vdgl_interpolator_sptr.h") { $i="vdgl_interpolator(|_sptr)"; }
     # VSOL
     elsif ($j eq "vsol/vsol_point_2d.h") { $i="$i|p[01]\(\)"; }
     elsif ($j eq "vsol/vsol_spatial_object_2d.h") { $i="$i|cast_to_spatial_object_2d\(\)"; }
