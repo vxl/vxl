@@ -33,12 +33,6 @@ Package=<4>
     Project_Dep_Name vnl_algo
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vgui
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui_mfc
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vvl
     End Project Dependency
     Begin Project Dependency
@@ -52,18 +46,6 @@ Package=<4>
 ###############################################################################
 
 Project: "doc"=.\doc\doc.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "example_mfc"=.\vgui\examples\vgui_example_mfc\vgui_example_mfc.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -207,54 +189,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vgui"=.\vgui\vgui.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vgui_glut"=.\vgui\impl\glut\vgui_glut.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vgui_mfc"=.\vgui\impl\mfc\vgui_mfc.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vgui_vrml"=.\vgui\vrml\vgui_vrml.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "vil"=.\vil\vil.dsp - Package Owner=<4>
 
 Package=<5>
@@ -315,18 +249,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vplayer"=.\vplayer\vplayer.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "vsl"=.\vsl\vsl.dsp - Package Owner=<4>
 
 Package=<5>
@@ -347,105 +269,6 @@ Package=<5>
 
 Package=<4>
 {{{
-}}}
-
-###############################################################################
-
-Project: "vxl_vrml_viewer"=.\apps\vxl_vrml_viewer\vxl_vrml_viewer.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name netlib
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vbl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui_mfc
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui_vrml
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vil
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl_algo
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vpl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vsl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name jpeg
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "xcv"=.\xcv\xcv.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name vgui_vrml
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name netlib
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vbl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vcgl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui_mfc
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vil
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl_algo
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vpl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vsl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name jpeg
-    End Project Dependency
 }}}
 
 ###############################################################################
