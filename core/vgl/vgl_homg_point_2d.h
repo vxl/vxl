@@ -13,18 +13,15 @@
 //
 // \verbatim
 // Modifications
+// Peter Vanroose -  1 July 2001 - Renamed data to x_ y_ w_, inlined constructors
 // Peter Vanroose - 27 June 2001 - Added operator==
 // \endverbatim
 
-#include <vcl_iostream.h>
 #include <vcl_cmath.h> // for vcl_abs(double) etc
 #include <vcl_cstdlib.h> // for vcl_abs(int) etc
-
-template <class Type>
-class vgl_point_2d;
-
-template <class Type>
-class vgl_homg_line_2d;
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_fwd.h> // forward declare vgl_homg_line_2d
+#include <vcl_iosfwd.h>
 
 //: Represents a homogeneous 2D point.
 template <class Type>
@@ -37,33 +34,26 @@ public:
   // Constructors/Initializers/Destructors-----------------------------------
 
   //: Default constructor
-  vgl_homg_point_2d () {}
+  vgl_homg_point_2d () : x_(0), y_(0), w_(Type(1)) {}
 
-#if 0
-  //: Default copy constructor
-  vgl_homg_point_2d (const vgl_homg_point_2d<Type>& that) {
-    set(that.x(),that.y(),that.w());
-  }
-#endif
+  explicit vgl_homg_point_2d<Type> (vgl_point_2d<Type> const& p)
+    : x_(p.x()), y_(p.y()), w_(Type(1)) {}
 
-#if 0 // unimp
-  vgl_homg_point_2d<Type> (vgl_point_2d<Type> const& p);
-#endif
-
-  //: Construct from two Types (nonhomogeneous interface)
-  vgl_homg_point_2d (Type px, Type py) { set(px,py); }
-
-  //: Construct from three Types.
-  vgl_homg_point_2d (Type px, Type py, Type pw) { set(px,py,pw); }
+  //: Construct from two (nonhomogeneous) or three (homogeneous) Types.
+  vgl_homg_point_2d (Type px, Type py, Type pw = Type(1)) : x_(px), y_(py), w_(pw) {}
 
   //: Construct from homogeneous 3-vector.
-  vgl_homg_point_2d (const Type v[3]) { set(v[0],v[1],v[2]); }
+  vgl_homg_point_2d (const Type v[3]) : x_(v[0]), y_(v[1]), w_(v[2]) {}
 
   //: Construct from 2 lines (intersection).
   vgl_homg_point_2d (vgl_homg_line_2d<Type> const& l1,
                      vgl_homg_line_2d<Type> const& l2);
 
 #if 0
+  //: Default copy constructor
+  vgl_homg_point_2d (const vgl_homg_point_2d<Type>& that)
+    : x_(that.x()), y_(that.y()), w_(that.w()) {}
+
   // Default destructor
   ~vgl_homg_point_2d () {}
 
@@ -80,18 +70,13 @@ public:
 
   // Data Access-------------------------------------------------------------
 
-  inline Type x() const {return data_[0];}
-  inline Type y() const {return data_[1];}
-  inline Type w() const {return data_[2];}
-  inline Type& x() {return data_[0];}
-  inline Type& y() {return data_[1];}
-  inline Type& w() {return data_[2];}
+  inline Type x() const {return x_;}
+  inline Type y() const {return y_;}
+  inline Type w() const {return w_;}
 
   //: Set x,y,w.
-  void set (Type px, Type py, Type pw = (Type)1) {
-    data_[0] = px,
-    data_[1] = py,
-    data_[2] = pw;
+  void set (Type px, Type py, Type pw = Type(1)) {
+    x_ = px, y_ = py, w_ = pw;
   }
 
   //: Return true iff the point is at infinity (an ideal point).
@@ -105,19 +90,17 @@ public:
 
 protected:
   // the data associated with this point
-  Type data_[3];
+  Type x_;
+  Type y_;
+  Type w_;
 };
 
 // stream operators
-template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_point_2d<Type>& p) {
-  return s << " <vgl_homg_point_2d ("
-           << p.x() << "," << p.y() << "," << p.w() << ") >";
-}
 
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_homg_point_2d<Type>& p) {
-  return is >> p.x() >> p.y() >> p.w() ;
-}
+vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_point_2d<Type>& p);
+
+template <class Type>
+vcl_istream&  operator>>(vcl_istream& is,  vgl_homg_point_2d<Type>& p);
 
 #endif // vgl_homg_point_2d_h
