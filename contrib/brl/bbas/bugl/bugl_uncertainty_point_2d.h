@@ -16,6 +16,7 @@ class bugl_uncertainty_point_2d : public vgl_point_2d<T>
 public:
   bugl_uncertainty_point_2d() : vgl_point_2d<T>(){}
   bugl_uncertainty_point_2d(T x, T y) : vgl_point_2d<T>(x,y){}
+  bugl_uncertainty_point_2d(vgl_point_2d<T> &p) : vgl_point_2d<T>(p){}
   ~bugl_uncertainty_point_2d(){}
 
 public:

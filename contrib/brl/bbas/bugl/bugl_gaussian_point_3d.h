@@ -19,11 +19,13 @@ private:
   
 public:
   bugl_gaussian_point_3d();
+  bugl_gaussian_point_3d(vgl_point_3d<T> &p, vnl_matrix_fixed<T, 3, 3> &s);
   bugl_gaussian_point_3d(T x, T y, T z, vnl_matrix_fixed<T, 3, 3> & s);
   ~bugl_gaussian_point_3d() {}
 
   vnl_matrix_fixed<T, 3, 3> get_covariant_matrix() { return sigma_;}
-  void set_covariant_matrix(vnl_matrix_fixed<T, 3, 3> & sigma) {sigma_ = sigma;}
+  void set_point(vgl_point_3d<T> &p) { this->set(p.x(), p.y(), p.z());}
+  void set_covariant_matrix(vnl_matrix_fixed<T, 3, 3> & sigma);
 };
 
 #define BUGL_GAUSSIAN_POINT_3D_INSTANTIATE(T) extern "please include bugl/gaussian_point_3d_.txx first"

@@ -15,6 +15,7 @@ class bugl_uncertainty_point_3d : public vgl_point_3d<T>
 {
 public:
   bugl_uncertainty_point_3d(T x, T y, T z) : vgl_point_3d<T>(x,y,z){}
+  bugl_uncertainty_point_3d(vgl_point_3d<T> &p) : vgl_point_3d<T>(p) {}
   bugl_uncertainty_point_3d() : vgl_point_3d<T>(){}
   ~bugl_uncertainty_point_3d(){}
 
