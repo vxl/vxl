@@ -60,42 +60,22 @@ vgl_point_2d<double> brct_algos::projection_3d_point(const vgl_point_3d<double> 
   return u;
 }
 
-vnl_double_3 brct_algos::bundle_reconstruct_3d_point(vcl_vector<vnl_double_2> &pts,
-                                                     vcl_vector<vnl_double_3x4> &Ps)
+vgl_point_3d<double> brct_algos::bundle_reconstruct_3d_point(vcl_vector<vnl_double_2> &pts, vcl_vector<vnl_double_3x4> &Ps)
 {
   int nviews = pts.size();
   assert(pts.size() == Ps.size());
 
-  vnl_double_3 X;
+  vnl_matrix<double> A(2*nviews, 4, 0.0);
 
-  vnl_matrix<double> A(3*nviews, 3+nviews, 0.0);
-  vnl_vector<double> b(3*nviews, 0.0);
-
-  for (int i=0; i<nviews; i++){
-    int pos = 3*i;
-    vnl_double_3x4 &P = Ps[i];
-    vnl_double_2 &pt = pts[i];
-    for (int j=0; j<3; j++){
-      A[pos][j] = P[0][j];
-      A[pos+1][j] = P[1][j];
-      A[pos+2][j] = P[2][j];
-
+  for(int v = 0; v<nviews; v++){
+    for (int i=0; i<4; i++){
+      A[2*v][i] = pts[v][0]*Ps[v][2][i] - Ps[v][0][i];
+      A[2*v+1][i] = pts[v][1]*Ps[v][2][i] - Ps[v][1][i];
     }
-
-    b[pos] = P[0][3];
-    b[pos+1] = P[1][3];
-    b[pos+2] = P[2][3];
-
-    A[pos][i+3] = -pt[0];
-    A[pos+1][i+3] = -pt[1];
-    A[pos+2][i+3] = -1.0;
   }
-
-  vnl_qr<double> QR(A);
-  vnl_vector<double> solution = QR.solve(b);
-
-  for (int i=0; i<3; i++)
-    X[i] = solution[i];
+  vnl_svd<double> svd_solver(A);
+  vnl_double_4 p = svd_solver.nullvector();
+  vgl_homg_point_3d<double> X(p[0], p[1], p[2], p[3]);
 
   return X;
 }

@@ -453,9 +453,9 @@ void kalman_filter::inc()
   vnl_double_3 xNew(Xpred[0], Xpred[1], Xpred[2]);
 
   motions_[cur_pos_] = xNew;
+  P = get_projective_matrix(motions_[cur_pos_] );
+  update_observes(P, cur_pos_);
 
-
-  
   // store the history
   X_ = Xpred;
 
@@ -467,27 +467,22 @@ void kalman_filter::inc()
   vcl_vector<vnl_double_2 > pts;
 
   double xc=0, yc=0, zc=0;
-  for (int i=0; i<num_points_; i++)
-  {
-    Ps.clear();
-    pts.clear();
-
-    for (int j=0; j<memory_size_; j++)
-    {
+  Ps.resize(memory_size_);
+  pts.resize(memory_size_);
+  for (int i=0; i<num_points_; i++){
+    for (int j=0; j<memory_size_; j++){
       vnl_double_2 pt;
       pt[0] = observes_[j][0][i];
       pt[1] = observes_[j][1][i];
-      pts.push_back(pt);
+      pts[j] = pt;
       vnl_double_3x4 P = get_projective_matrix(motions_[j]);
-      Ps.push_back(P);
+      Ps[j] = P;
     }
 
-    vnl_double_3 X3d = brct_algos::bundle_reconstruct_3d_point(pts, Ps);
-#if 0
-    curve_3d_[i][0] = X3d[0];
-    curve_3d_[i][1] = X3d[1];
-    curve_3d_[i][2] = X3d[2];
-#endif
+    vgl_point_3d<double> X3d = brct_algos::bundle_reconstruct_3d_point(pts, Ps);
+    curve_3d_[i][0] = X3d.x();
+    curve_3d_[i][1] = X3d.y();
+    curve_3d_[i][2] = X3d.z();
 
   }
 
