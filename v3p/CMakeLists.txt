@@ -1,9 +1,4 @@
-#
 # ./v3p/CMakeLists.txt
-#
-#   geoff.cross@crd.ge.com
-#
-
 
 SUBDIRS(netlib)
 SUBDIRS(Qv)
