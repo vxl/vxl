@@ -1,11 +1,11 @@
 #include <testlib/testlib_register.h>
 
-//DECLARE(  );
+DECLARE( test_histogram );
 
 void
 register_tests()
 {
-  //  REGISTER ( );
+  REGISTER ( test_histogram );
 }
 
 DEFINE_MAIN;
