@@ -27,19 +27,21 @@ MAIN_ARGS( test_trans_reader )
 
   TEST("Check validity of returned transformation", (!trans_sptr), false );
   
-  TEST("Affine tye", trans_sptr->is_type( rgrl_trans_affine::type_id() ), true );
-  
-  rgrl_trans_affine* affine = rgrl_cast<rgrl_trans_affine*>(trans_sptr);
-  TEST("Convert to affine type", affine!=0, true );
-  
-  vnl_vector<double> t = affine->t();
-  vnl_vector<double> true_t(2);
-  true_t[0] = 1.0;
-  true_t[1] = -2.0;
-  TEST_NEAR("Check parameters of affine transformation", (true_t-t).two_norm(), 0, 1e-12 );
+  if( trans_sptr ) {
+    TEST("Affine tye", trans_sptr->is_type( rgrl_trans_affine::type_id() ), true );
+    
+    rgrl_trans_affine* affine = rgrl_cast<rgrl_trans_affine*>(trans_sptr);
+    TEST("Convert to affine type", affine!=0, true );
+    
+    vnl_vector<double> t = affine->t();
+    vnl_vector<double> true_t(2);
+    true_t[0] = 1.0;
+    true_t[1] = -2.0;
+    TEST_NEAR("Check parameters of affine transformation", (true_t-t).two_norm(), 0, 1e-12 );
 
-  // test
-  affine->write( vcl_cout );
+    // test
+    affine->write( vcl_cout );
+  }
 
   SUMMARY();
 }
