@@ -7,7 +7,6 @@
   \catcode124=\active\def|#1|{{\tt#1}}
   \catcode60=\active\def<#1>{\hspace*{-3mm}{\bf#1}}
   \catcode42=\active\def*#1*{\hfil\penalty-8000\section{#1}}
-  \catcode168=\active\let¨\ldots
   \catcode95=\active\let_\_
   \begin{document}
 
@@ -75,17 +74,17 @@ disadvantage of any springclean is that bugs are reintroduced.
 -- Proposed libraries in the `cleanland' |v$x$l| suite:
 |vcl| (ISO compatibility level), |vbl| (basics layer), |vsl| (spatial objects),
 |vnl| (numerics), |vil| (imaging), |vgl| (GUI). \\
-An example application (xcv) should be included. 
+An example application (xcv) should be included.
 
 <Did the following experiment:>
 -- Can xcv be rewritten from scratch (but `cleanly') in 1 day by 4 people?
-Participants: Andrew Fitzgibbon, Karen McGaul, Fred Schaffalitzky, David Cooper. 
+Participants: Andrew Fitzgibbon, Karen McGaul, Fred Schaffalitzky, David Cooper.
 4 hours at the whiteboard, setting up guiderules and structure, then
 4 hours of programming (including grabbing existing \TargetJr{} code).
 At that point, numerics demos run, basics library contains 20 ``.h'' files
 
 -- In order to obtain such a result, @clean coding rules@ are needed.
-(Note that it will be difficult to decide on such rules, as tastes differ¨)
+(Note that it will be difficult to decide on such rules, as tastes differ\ldots)
 AWF: It may be difficult, but there will be agreement.
 Appendix 3 contains an initial list, as discussed at the Oxford/Manchester meeting.
 
@@ -99,12 +98,12 @@ per algorithm.
 change (from ``old but functional'' code to ``new, clean'' code)~? \\
 Examples: embedding dimension splitup (|IUPoint_2d| -- |IUPoint_3d|);
           |CoolList| node sharing vs.~STL;
-          
+
 -- To avoid that non-clean code enters `cleanland', some @people@ have to
 function as whatchdog, and perform the actual move.
 
 -- How can we assure that `smart, exotic' behaviour (like large image support,
-hacks needed for a specific platform, ¨) is not destroyed by this move?
+hacks needed for a specific platform, \ldots) is not destroyed by this move?
 
 -- Have to avoid code duplication!  I.e., move implementation, and leave a
 `pointer' to it in the old place.
@@ -113,7 +112,7 @@ design.
 
 <Summary:>
 
--- Rationalise the basic functionality in \TargetJr{}, forming a 
+-- Rationalise the basic functionality in \TargetJr{}, forming a
 ``reptilian brain'' area, around which `cleanland' can be built.
 
 -- Gradually re-implement existing algorithms and structures in `oldland',
@@ -195,9 +194,9 @@ Using smart pointers avoids memory leaks without any extra effort.
 
 However, the current implementation (in Fresco's CORBA) is {\bf bad}:
 not the smart pointer @constructor@ should increment the refcount,
-the @assignment@ to something of type |¨_ref| should do.
+the @assignment@ to something of type |\ldots_ref| should do.
 
-In the new implementation (|GeneralUtility/Basics/smart_ptr.h|), 
+In the new implementation (|GeneralUtility/Basics/smart_ptr.h|),
 every |RefCntTimeStampMixin| can be made into a smart pointer.
 (Actually, every class which has methods |Protect()| and |UnProtect()|.)
 
@@ -255,7 +254,7 @@ Should contain 5 ``killer demos'', which should be completely written in
 -- 3D geometry (boolean ops, BSPTree, Cameras, VRML I/O).
 
 -- geometry GUI interaction, in the style of |xfig|.
-E.g.: edit conic parameters, draw bitangent~¨\ 
+E.g.: edit conic parameters, draw bitangent~\ldots\
 Also: plane overlay + update (timestamp); RTree selection speed; extrusion.
 
 -- MultiView: find point correspondences, compute fundamental matrix, display
@@ -263,7 +262,7 @@ epipolar geometry.
 
 -- a 10 to 20 line code example, showing how easy it is to program \TargetJr.
 
--- other suggestions are welcome (e.g.: Video; splines/snakes; ¨)
+-- other suggestions are welcome (e.g.: Video; splines/snakes; \ldots)
 
 
 <Timing:>
@@ -280,7 +279,7 @@ June 1:       \> CD release, possibly including NT binaries.
 
 -- Several suggestions are made, but nothing really appealing came up.
 Acronyms versus full names (of, e.g., historical persons, from literature,
-opera, ¨)
+opera, \ldots)
 
 -- New suggestions are welcome.  The final decision is for June 1, 2000.
 
@@ -299,9 +298,9 @@ large GUIs; now prefer Qt (but: need to work out object display).
 
 -- @2 design choices:@
 
-- VGUI deals with geometry, not widgets/buttons¨
+- VGUI deals with geometry, not widgets/buttons\ldots
 ~(note: this was one of Parmesan's mistakes.)\\
-$\Rightarrow$ able to use MFC or Qt or GTK or glut or glX or Motif or ¨ \\
+$\Rightarrow$ able to use MFC or Qt or GTK or glut or glX or Motif or \ldots \\
 VGUI codes the geometry, the graphical package does the rendering and widgets.
 
 - Assume fast OpenGL is available (with Mesa as a fallback). \\
@@ -318,7 +317,7 @@ receives events and draws GL.  It has methods |draw()| and |handle(event e)|.
 
 An application consists of several tableaux.  Some have already been
 predefined, like an image drawer, an image zoomer, an `acetate' (which just
-draws its children one after another), a point overlay, an image raster ¨
+draws its children one after another), a point overlay, an image raster \ldots
 
 Example of an application: video with point overlay.  Consists of $2+3n$
 tableaux: a top ``image zoom'' tableau, an ``image deck'' with $n$
@@ -371,7 +370,7 @@ image can be rotated; corner detector $\Rightarrow$ point overlay.
 The @Visualisation ToolKit@ is open source, $ > 500 $ C++ classes.
 See |http://www.kitware.com|.
 
-Rendering primitives: point, line, polygon, triangular strip, volume, ¨
+Rendering primitives: point, line, polygon, triangular strip, volume, \ldots
 
 Easy to use (e.g.) \TargetJr{} Numerics within a vtk application.
 
@@ -400,7 +399,7 @@ design slightly?)
    because vtk is more general than vgui; e.g. it does not assume OpenGL).
 
 -- We have to make sure that the new GUI can do the current sophisticated things
-like displaying 16-bit images, colourmapped images, parts of very large images ¨
+like displaying 16-bit images, colourmapped images, parts of very large images \ldots
 
 -- We should not make the same errors as when we went from InterViews to Fresco.
 which are?
@@ -459,7 +458,7 @@ structured comments.
 
 -- Zurich proposes to set up a web ``HowTo'' server page, which will be kept
 up-to-date, containing code snippets and the possibility for anybody to add
-examples. 
+examples.
 
 -- The present example code should be kept up-to-date.  This could be made
 sure automatically, by also running these examples (just like the tests)
@@ -473,7 +472,7 @@ to submit questions.
 
 * ToDo list after this meeting * %%% PLEASE MAKE ADDITIONS !!
 
-Contact |iue-users\@aai.com| to find out if they want to continue with IUE 
+Contact |iue-users\@aai.com| to find out if they want to continue with IUE
 on their own (Joe)
 
 Organize VXL meeting in late Jan/early February (AWF)
@@ -562,7 +561,7 @@ Fresco shows that that way lies madness.
 All globally visible identifiers defined in |vxl_y.h| begin with |vxl_y|.
 
 {\em Rationale:} Make it easy to locate the definitions of
-identifiers. e.g.\ on seeing the symbol |vbl_rtree_iterator|, one must look 
+identifiers. e.g.\ on seeing the symbol |vbl_rtree_iterator|, one must look
 in library |vbl|, file |vbl_rtr|$\langle${\sc tab}$\rangle$
 
 {\em Rejected alternatives:}
@@ -571,13 +570,13 @@ identifier |vxl_y|.  These will not be obeyed, so it is better to propose
 rules that can be.
 
 
-\item Each library contains the file \vxl_dll.h|.  
+\item Each library contains the file \vxl_dll.h|.
 
 {\em Rationale:} standard practice, this formalizes the naming.
 
 
 \item Each library contains the file \vxl_fwd.h|, which forward-declares
-all global identifiers in the library.  
+all global identifiers in the library.
 
 {\em Rationale:} Naming is by analogy with the ISO C++ \verb|<iosfwd>|
 header.  One file per library means a larger recompilation burden whenever
