@@ -1,18 +1,9 @@
+// This is oxl/oxp/oxp_vob_frame_index.cxx
+#include "oxp_vob_frame_index.h"
 #include <vcl_cassert.h>
+#include <vcl_cstdio.h>
 #include <vcl_fstream.h>
 #include <vul/vul_awk.h>
-
-struct oxp_vob_frame_index_entry {
-  int lba;
-  int frame;
-};
- 
-struct oxp_vob_frame_index {
-  vcl_vector<oxp_vob_frame_index_entry> l;
-
-  bool load(char const* filename);
-  int frame_to_lba_of_prev_I_frame(int frame_number, int* f_actual = 0);
-};
 
 bool oxp_vob_frame_index::load(char const* filename)
 {
@@ -34,7 +25,7 @@ bool oxp_vob_frame_index::load(char const* filename)
   // assert that l is sorted by frame
   for (unsigned int i = 0; i+1 < l.size(); ++i)
     assert(l[i+1].frame > l[i].frame);
-  vcl_fprintf(stderr, "Loaded %d entries from [%s]\n", l.size(), filename);
+  vcl_fprintf(stderr, "Loaded %ld entries from [%s]\n", l.size(), filename);
   if (l.size() == 0) {
     vcl_fprintf(stderr, "WARNING: No index entries -- all seeks from start\n");
   }
