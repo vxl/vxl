@@ -29,7 +29,7 @@
 // Updated: MBN 02/22/90  Changed size arguments from int to unsigned int
 // Updated: MJF 06/30/90  Added base class name to constructor initializer
 // Updated: VDN 02/21/92  New lite version
-// Updated: VDN 05/05/92  Use envelope to avoid unecessary copying
+// Updated: VDN 05/05/92  Use envelope to avoid unnecessary copying
 // Updated: VDN 09/30/92  Matrix inversion with singular value decomposition
 // Updated: AWF 08/21/96  set_identity, normalize_rows, scale_row.
 // Updated: AWF 09/30/96  set_row/set_column methods.  Const-correct data_block().
@@ -56,7 +56,7 @@
 // takes the  same two  first arguments, but  also accepts  an additional third
 // argument that is  a reference to  an  object of  the appropriate  type whose
 // value is used as an initial fill value.  The third constructor is similar to
-// the third, except that it accpets a variable number of initialization values
+// the third, except that it accepts a variable number of initialization values
 // for the Matrix.  If there are  fewer values than elements,  the rest are set
 // to zero. Finally, the last constructor takes a single argument consisting of
 // a reference to a Matrix and duplicates its size and element values.
@@ -64,7 +64,7 @@
 // Methods   are  provided   for destructive   scalar   and Matrix    addition,
 // multiplication, check for equality  and inequality, fill, reduce, and access
 // and set individual elements.  Finally, both  the  input and output operators
-// are overloaded to allow for fomatted input and output of matrix elements.
+// are overloaded to allow for formatted input and output of matrix elements.
 //
 // Good matrix inversion is needed. We choose singular value decomposition,
 // since it is general and works great for nearly singular cases. Singular
@@ -513,7 +513,7 @@ vnl_matrix<T>& vnl_matrix<T>::operator+= (vnl_matrix<T> const& rhs) {
 }
 
 
-//: Substract lhs matrix with rhs matrix and store in place in lhs matrix.
+//: Subtract lhs matrix with rhs matrix and store in place in lhs matrix.
 // O(m*n).
 // The dimensions of the two matrices must be identical.
 
