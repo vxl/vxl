@@ -1,20 +1,16 @@
 #ifndef _section_h
 #define _section_h
 
-// .NAME section -- light-weight templated buffer of arbitrary dimensionality
-// .HEADER Image package
-// .LIBRARY ImageProcessingBasics
-// .INCLUDE ImageProcessingBasics/section.h
-// .FILE section.h
+//:
+// \file
+// \brief light-weight templated buffer of arbitrary dimensionality
 //
-// .SECTION description
-//   The ImageProcessingBasics library provides the core implementation for
-//   all ImageProcessing functionality.  To make this library really generic
-//   and completely independent from any other part of TargetJr, and hence
+//   The vipl library provides the core implementation for
+//   all image processing functionality.  To make this library really generic
+//   and completely independent from any other part of TargetJr/vxl, and hence
 //   usable by other software packages than just TargetJr, all reference to
-//   TargetJr-specific functionality is avoided.
+//   TargetJr-specific functionality is avoided or parametrised.
 //
-//   Image processing functions in this library work on in-memory buffers.
 //   The class `section' is created specifically for the purpose of serving
 //   as the in-memory buffer to be passed around between the low-level image
 //   processing functions.  Essentially, it is just a `bare bones' T* allocated
@@ -32,7 +28,7 @@
 //   This makes it impossible to pass variables of type section as return values
 //   because the destructor gets called at `unexpected' places.
 //   Therefore, the dimensionality has to be a templated parameter, so the whole
-//   size[] array is part of the section data structure.
+//   size[] array can be made part of the section data structure.
 //
 //   The only remaining allocated data member is buffer; but also there,
 //   explicit deallocation by the destructor can be avoided by passing the
@@ -44,12 +40,12 @@
 //   advantage:  function parameters can be of this more general, "collective"
 //   type.  But using this should be avoided whenever possible!
 //   Actually, two levels of collective parent classes is provided:
-//   section_<T> and section__.  
+//   section_<T> and section__.
 //
-// .SECTION Author
+// \author
 //   Peter Vanroose, ESAT/KULeuven, december 1996.
 
-#include <vcl_cstdlib.h>  // for size_t
+#include <vcl_cstddef.h>  // for size_t
 #include <vcl_cassert.h>
 
 #ifdef WIN32
@@ -83,7 +79,7 @@ public:
 private:
   uint   size[N];    // size[0] to size[N-1]. Dimension 0 is run through
                      // first; the `slowest' increasing dimension is N-1
-  size_t offset[N+1];// offset[i] gives the pointer difference between two
+  vcl_size_t offset[N+1];// offset[i] gives the pointer difference between two
                      // neighbour pixels that only differ in the i dimension.
                      // In addition, offset[N] gives the allocated size.
   bool   allocated;  // whether buffer is (to be) allocated by this class
@@ -94,8 +90,8 @@ public:
   static uint   Dimensionality() { return N; }
   uint   const* Size()    const { return size; }
   uint   Size(uint i)     const { assert(i<N); return size[i]; }
-  size_t Offset(uint i)   const { assert(i<=N); return offset[i]; }
-  size_t GetSize()        const { return offset[N]; }
+  vcl_size_t Offset(uint i)   const { assert(i<=N); return offset[i]; }
+  vcl_size_t GetSize()        const { return offset[N]; }
   T      Value(const uint pos[N]) const { return buffer[Position(pos)]; }
   T      Value(uint pos0) const { assert(N==1); return buffer[pos0*offset[0]]; }
   T      Value(uint pos0,uint pos1) const { assert(N==2); return buffer[pos0*offset[0]+pos1*offset[1]]; }
@@ -104,11 +100,11 @@ public:
   void   Set(T const& val,uint pos0) { assert(N==1); buffer[pos0*offset[0]]=val; }
   void   Set(T const& val,uint pos0,uint pos1) { assert(N==2); buffer[pos0*offset[0]+pos1*offset[1]]=val; }
   void   Set(T const& val,uint pos0,uint pos1,uint pos2) { assert(N==3); buffer[pos0*offset[0]+pos1*offset[1]+pos2*offset[2]]=val; }
-  size_t Position(const uint pos[N])  const { size_t p = 0; for (uint i=0; i<N; ++i) p += pos[i]*Offset(i); return p; }
-  void   Position(uint ret[N], const size_t pos)  const { for (uint i=0; i<N; ++i) ret[i] = Position(pos,i); }
-  uint   Position(const size_t pos, const uint i)  const { size_t p = pos % Offset(i+1); p /= Offset(i); return uint(p); }
-  size_t ROI_start_pos()  const { return Position(ROI_start); }
-  size_t ROI_end_pos()  const { return Position(ROI_end); }
+  vcl_size_t Position(const uint pos[N])  const { vcl_size_t p = 0; for (uint i=0; i<N; ++i) p += pos[i]*Offset(i); return p; }
+  void   Position(uint ret[N], const vcl_size_t pos)  const { for (uint i=0; i<N; ++i) ret[i] = Position(pos,i); }
+  uint   Position(const vcl_size_t pos, const uint i)  const { vcl_size_t p = pos % Offset(i+1); p /= Offset(i); return uint(p); }
+  vcl_size_t ROI_start_pos()  const { return Position(ROI_start); }
+  vcl_size_t ROI_end_pos()  const { return Position(ROI_end); }
 
 // CONSTRUCTORS / DESTRUCTORS:
 
@@ -153,7 +149,7 @@ public:
 // UTILITY FUNCTIONS:  (made members, just for the ease of instantiating)
 
 public:
-  // -- Returns a newly allocated copy of this section.
+  //: Returns a newly allocated copy of this section.
   section<T,N> Copy() const {
     T* buf = new T[GetSize()];
     memcpy(buf, buffer, GetSize()*sizeof(T));
@@ -168,7 +164,7 @@ bool section<T,N>::operator== (section<T,N> const& s) const {
   {for (uint i=0; i<N; ++i) if (ROI_start[i] != s.ROI_start[i]) return false;}
   {for (uint i=0; i<N; ++i) if (ROI_end[i] != s.ROI_end[i]) return false;}
   if (buffer == s.buffer) return true;
-  for (size_t i=0; i<GetSize(); ++i) if (!(buffer[i]==s.buffer[i])) return false;
+  for (vcl_size_t i=0; i<GetSize(); ++i) if (!(buffer[i]==s.buffer[i])) return false;
   return true;
 }
 
@@ -181,7 +177,7 @@ section<T,N>& section<T,N>::operator= (section<T,N> const& s) {
 }
 #ifndef __SUNPRO_CC
 
-// -- Returns part of this section, namely slice slice of dimension dim.
+//: Returns part of this section, namely slice slice of dimension dim.
 // When dim = the last dimension (the default), no new allocation is made;
 // instead, the relevant part of the original buffer is used.  Beware!
 // (To avoid this, use Copy() afterwards, or set the copy parameter to true.)
@@ -194,13 +190,13 @@ section<T,N-1> Project(section<T,N> const& s, uint slice=0, int d=-1, bool copy=
   uint i=0;
   for (; i<dim; ++i) size[i] = s.Size(i);
   for (; i<N-1; ++i) size[i] = s.Size(i+1);
-  size_t off = slice * s.Offset(dim);
+  vcl_size_t off = slice * s.Offset(dim);
   if (dim == N-1) { // this is the simplest (and preferred) situation
                     // because no copying needs to be done.
     section<T,N-1> t(size, s.buffer+off);
     if (!copy) return t; else return t.Copy();
   }
-  size_t len = s.Offset(dim);
+  vcl_size_t len = s.Offset(dim);
   T* buf = new T[s.GetSize()/s.Size(dim)]; T* nptr = buf;
   for (T* optr=s.buffer+off; optr<s.buffer+s.GetSize(); nptr+=len,optr+=s.Offset(dim+1))
     memcpy(nptr, optr, len*sizeof(T));
@@ -211,28 +207,28 @@ section<T,N-1> Project(section<T,N> const& s, uint slice=0, int d=-1, bool copy=
 }
 #endif
 
-// -- const iterator for a section<T,N>'s ROI, with optional additional ROI condition
+//: const iterator for a section<T,N>'s ROI, with optional additional ROI condition
 
 template <class T, uint N> class section_iterator {
   friend class section<T,N>;
 protected:
   section<T,N>* data;
-  size_t pos;
+  vcl_size_t pos;
 
 public:
   section_iterator(section<T,N>& s) : data(&s), pos(s.ROI_start_pos()) {}
   T operator*() const { return data->buffer[pos]; }
-  operator size_t() const { return pos; }
+  operator vcl_size_t() const { return pos; }
 
-  bool operator==(const section_iterator<T,N>& x) const { return pos == size_t(x); }
+  bool operator==(const section_iterator<T,N>& x) const { return pos == vcl_size_t(x); }
   bool operator==(const uint p[N]) const { return pos == data->Position(p); }
-  bool operator==(const size_t p) const { return pos == p; }
-  bool operator<(const section_iterator<T,N>& x) const { return pos < size_t(x); }
+  bool operator==(const vcl_size_t p) const { return pos == p; }
+  bool operator<(const section_iterator<T,N>& x) const { return pos < vcl_size_t(x); }
   bool operator<(const uint p[N]) const { return pos < data->Position(p); }
-  bool operator<(const size_t p) const { return pos < p; }
-  bool operator>(const section_iterator<T,N>& x) const { return pos > size_t(x); }
+  bool operator<(const vcl_size_t p) const { return pos < p; }
+  bool operator>(const section_iterator<T,N>& x) const { return pos > vcl_size_t(x); }
   bool operator>(const uint p[N]) const { return pos > data->Position(p); }
-  bool operator>(const size_t p) const { return pos > p; }
+  bool operator>(const vcl_size_t p) const { return pos > p; }
 
   section_iterator<T,N>& operator++() { ++pos;
     for (uint i=0; i<N; ++i) if (data->Position(pos,i) >= data->ROI_end[i])
@@ -249,18 +245,18 @@ public:
 };
 
 #define SECTION_INSTANTIATE_ONE(T,N) \
-template class section<T,N>; \
-template class section_iterator<T,N>;
+template class section<T,N >; \
+template class section_iterator<T,N >
 #define SECTION_INSTANTIATE_NO_PROJ(T) \
 template class section_<T >; \
-SECTION_INSTANTIATE_ONE(T,3) \
-SECTION_INSTANTIATE_ONE(T,2) \
+SECTION_INSTANTIATE_ONE(T,3); \
+SECTION_INSTANTIATE_ONE(T,2); \
 SECTION_INSTANTIATE_ONE(T,1)
 #ifdef __GNUG__
 #define SECTION_INSTANTIATE(T) \
-SECTION_INSTANTIATE_NO_PROJ(T) \
+SECTION_INSTANTIATE_NO_PROJ(T); \
 template section<T,2> Project(section<T,3> const&, uint, int, bool); \
-template section<T,1> Project(section<T,2> const&, uint, int, bool); // i.e., no Project() for dimension 1
+template section<T,1> Project(section<T,2> const&, uint, int, bool) // i.e., no Project() for dimension 1
 #else
 #define SECTION_INSTANTIATE(T) \
 SECTION_INSTANTIATE_NO_PROJ(T)
