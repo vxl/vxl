@@ -12,9 +12,9 @@ SUBDIRS(gbl gmvl gst vsol vtol vdgl vsrl vgel)
 
 INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
 
-IF(HAS_OPENGL)
- SUBDIRS(vace)
-ENDIF(HAS_OPENGL)
+#IF(HAS_OPENGL)
+# SUBDIRS(vace)
+#ENDIF(HAS_OPENGL)
 
 
 # S#UBDIRS(cmaketests)
