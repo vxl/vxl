@@ -143,6 +143,9 @@ SOURCE=.\Templates/vil2_median+byte-.cxx
 # Begin Source File
 SOURCE=.\Templates/vil2_median+float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sobel_3x3+double.double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""

@@ -720,7 +720,7 @@ SOURCE=.\Templates/vnl_vector_fixed+vnl_bignum.3-.cxx
 SOURCE=.\Templates/vnl_matlab_print+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vnl_matrix_fixed+double.3.2.cxx
+SOURCE=.\Templates/vnl_matrix_fixed+double.3.2-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_matrix_fixed+double.6.8-.cxx

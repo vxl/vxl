@@ -147,6 +147,9 @@ SOURCE=.\Templates/vimt_image_2d_of+byte-.cxx
 SOURCE=.\Templates/vimt_image_2d_of+float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vimt_image_2d_of+double-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vimt_sample_grid_bilin+float.double-.cxx
 # End Source File
 # Begin Source File

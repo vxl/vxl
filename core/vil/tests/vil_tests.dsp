@@ -23,6 +23,12 @@ SOURCE=.\test_greyscale_dilate.cxx
 SOURCE=.\test_greyscale_erode.cxx
 SOURCE=.\test_median.cxx
 SOURCE=.\test_algo_exp_grad_filter_1d.cxx
+SOURCE=.\vil2_mil_gauss_general_timings.cxx
+SOURCE=.\vil2_test_access_timings.cxx
+SOURCE=.\vil2_test_random_access_timings.cxx
+SOURCE=.\vil2_test_access_timings_noplanes.cxx
+SOURCE=.\vil2_test_pair_access_timings.cxx
+SOURCE=.\vil2_vil_compare_access_timings.cxx
 # End Group
 # Begin Group "Header Files"
 # End Group

@@ -105,9 +105,6 @@ SOURCE=.\vimt_dummy.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\vimt_convolve_1d.h
-# End Source File
-# Begin Source File
 SOURCE=.\vimt_convolve_2d.h
 # End Source File
 # Begin Source File
@@ -115,6 +112,9 @@ SOURCE=.\vimt_find_peaks.h
 # End Source File
 # Begin Source File
 SOURCE=.\vimt_find_troughs.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_normalised_correlation_2d.h
 # End Source File
 # End Group
 # End Target

@@ -81,8 +81,8 @@ LINK32=link.exe
 
 # Name "vnl_test_all - Win32 Release"
 # Name "vnl_test_all - Win32 Debug"
-# Begin Group "Source Files"
 
+# Begin Group "Source Files"
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 SOURCE=.\test_driver.cxx
@@ -219,9 +219,11 @@ SOURCE=.\test_gamma.cxx
 # Begin Source File
 SOURCE=.\test_arithmetic.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_cholesky.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
-
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 SOURCE=.\test_util.h
@@ -231,7 +233,6 @@ SOURCE=.\test_arithmetic_body.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
-
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
