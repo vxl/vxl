@@ -118,7 +118,7 @@ GetAttributes(vcl_vector<float>&	attrs)
 // Append the names of the attributes in the same order as in
 // GetNativeAttributes.  KEEP THEM IN SYNC!
 void vifa_int_face_attr::
-GetAttributeNames(vcl_vector<string>&	names)
+GetAttributeNames(vcl_vector<vcl_string>&	names)
 {
 	names.push_back("IntMax");
 	names.push_back("IntMin");

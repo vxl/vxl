@@ -2,6 +2,7 @@
 #include <vcl_algorithm.h>
 #include <vcl_map.h>
 #include <vcl_list.h>
+#include <vcl_utility.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_vertex.h>
 #include <vifa/vifa_incr_var.h>
@@ -359,7 +360,7 @@ GetNativeAttributes(vcl_vector<float>& attrs)
 // KEEP IN SYNC WITH GETNATIVEATTRIBUTES
 
 void vifa_int_faces_attr::
-GetAttributeNames(vcl_vector<string>& names)
+GetAttributeNames(vcl_vector<vcl_string>& names)
 {
 	names.push_back("gArea");
 	names.push_back("gPerimeterLength");
@@ -374,13 +375,13 @@ GetAttributeNames(vcl_vector<string>& names)
 
 	for (int i = 0; i < NUM_HIST_ATTRIBUTES; i++)
 	{
-		string	name(attr_names[i]);
+		vcl_string	name(attr_names[i]);
 		names.push_back("mean" + name);
 	}
 
 	for (int i = 0; i < NUM_HIST_ATTRIBUTES; i++)
 	{
-		string	name(attr_names[i]);
+		vcl_string	name(attr_names[i]);
 		names.push_back("sd" + name);
 	}
 }
@@ -400,7 +401,7 @@ MakeAttrHist(vcl_vector<float>& attr_vals)
 	this->ComputeSingleFaceAttributes(false);
 
 	// Set the number of bins as sqrt(n), with a minimum of 20
-	int		num_bins = max(20, (int)sqrt(attr_vals.size()));
+	int		num_bins = vcl_max(20, (int)sqrt(attr_vals.size()));
 
 	// Get value range
 	float	max_val = 0;
@@ -604,7 +605,7 @@ GetPerimeterEdges()
 				count = edge_count_pos->second + 1;
 			} 
 
-			edge_count.insert(pair<int, int>(e_id, count));
+			edge_count.insert(vcl_pair<int, int>(e_id, count));
 		}
 
 		// MPP 6/13/2002

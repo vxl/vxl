@@ -2,6 +2,7 @@
 
 #undef ROI_SUPPORTED	// No TargetJr-style ROI supported yet
 
+#include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 #include <vifa/vifa_norm_params.h>
 #include <vifa/vifa_image_histogram.h>
@@ -85,8 +86,8 @@ get_norm_bounds(vil_image_view_base*	img,
 		if (xsize * ysize > 4000000)
 		{
 			int	border_size = 1000;
-			int startx = max(roi->GetOrigX() - border_size, 0);
-			int starty = max(roi->GetOrigY() - border_size, 0);
+			int startx = vcl_max(roi->GetOrigX() - border_size, 0);
+			int starty = vcl_max(roi->GetOrigY() - border_size, 0);
 			int roi_sizex = min(roi->GetSizeX() + 2 * border_size, xsize);
 			int roi_sizey = min(roi->GetSizeY() + 2 * border_size, ysize);
 			temp_roi = new RectROI(startx, starty, roi_sizex, roi_sizey);

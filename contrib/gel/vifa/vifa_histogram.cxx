@@ -1,5 +1,6 @@
 // This is vifa/vifa_histogram.cxx
 #include <vifa/vifa_histogram.h>
+#include <vcl_algorithm.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
@@ -12,9 +13,10 @@ static int SD_FLAG = 2;
 // max & min inline functions
 // These functions return the max or min, respectively of the two arguments
 // passed in.  If they are equal, the return value will be the first agrument.
-
-static inline float max(float f1, float f2) {return (f1>f2) ? f1 : (f2>f1) ? f2 : f1 ;}
-static inline float min(float f1, float f2) {return (f1<f2) ? f1 : (f2<f1) ? f2 : f1 ;}
+// MPP 7/25/2003
+// Replaced w/ vcl_max & vcl_min template functions
+//static inline float max(float f1, float f2) {return (f1>f2) ? f1 : (f2>f1) ? f2 : f1 ;}
+//static inline float min(float f1, float f2) {return (f1<f2) ? f1 : (f2<f1) ? f2 : f1 ;}
 
 vifa_histogram::vifa_histogram()
 {
@@ -38,8 +40,12 @@ vifa_histogram::vifa_histogram(int xres, float val1, float val2)
   vals = new float [xres];
   counts = new float [xres];
   num = xres;
-  vmax = max(val1, val2);
-  vmin = min(val1, val2);
+
+  // MPP 7/25/2003
+  // Swapped argument order so val1 is selected if arguments are equal
+  vmax = vcl_max(val2, val1);
+  vmin = vcl_min(val2, val1);
+
   delta = (vmax - vmin) / xres;
   mean = (vmax + vmin) / 2.0;
   standard_dev = (vmax - vmin) / (2.0 * sqrt(3.0));

@@ -63,7 +63,7 @@ public:
 
 	bool		ComputeAttributes();
 	bool		GetAttributes(vcl_vector<float>&	attrs);
-	static void	GetAttributeNames(vcl_vector<string>&	names);
+	static void	GetAttributeNames(vcl_vector<vcl_string>&	names);
 	bool		GetNativeAttributes(vcl_vector<float>&	attrs);
 
 	// Data access for non-attributes

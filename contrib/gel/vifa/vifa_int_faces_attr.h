@@ -64,7 +64,7 @@ protected:
 	// Histogrammed attributes are grouped together into parallel
 	// vectors.  Histograms compute mean and standard deviation.
 	// Attributes defined by attr_get_funcs.
-	//vector<vifa_histogram_sptr> attr_hists_;
+	//vcl_vector<vifa_histogram_sptr> attr_hists_;
 	incr_var_list	attr_vec_;
 
 	float _cached_2_parallel;
@@ -97,7 +97,7 @@ public:
 
 	virtual bool	ComputeAttributes();
 	virtual bool	GetAttributes(vcl_vector<float>& attrs);
-	static void		GetAttributeNames(vcl_vector<string>& names);
+	static void		GetAttributeNames(vcl_vector<vcl_string>& names);
 	virtual bool	GetNativeAttributes(vcl_vector<float>& attrs);
 
 	// Data access for non-attributes

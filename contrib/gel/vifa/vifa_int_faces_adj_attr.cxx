@@ -154,7 +154,7 @@ NeighborhoodSize()
 
 // Populate a vector containing all attributes, including inherited ones.
 bool vifa_int_faces_adj_attr::
-GetAttributes(vector<float>& attrs)
+GetAttributes(vcl_vector<float>& attrs)
 {
 	if (vifa_int_faces_attr::GetAttributes(attrs))
 	{
@@ -167,19 +167,19 @@ GetAttributes(vector<float>& attrs)
 // Append the attribute names to a vector in the same order as
 // GetAttributes.  KEEP IN SYNC WITH GetAttributes!!!
 void vifa_int_faces_adj_attr::
-GetAttributeNames(vector<string>& names)
+GetAttributeNames(vcl_vector<vcl_string>& names)
 {
 	vifa_int_faces_attr::GetAttributeNames(names);
 
 	for (int i = 0; i < NUM_HIST_ATTRIBUTES; i++)
 	{
-		string name(attr_names[i]);
+		vcl_string	name(attr_names[i]);
 		names.push_back("ratio" + name);
 	}
 
 	for (int i = 0; i < NUM_HIST_ATTRIBUTES; i++)
 	{
-		string name(attr_names[i]);
+		vcl_string	name(attr_names[i]);
 		names.push_back("minRatio" + name);
 	}
 }
@@ -188,7 +188,7 @@ GetAttributeNames(vector<string>& names)
 // inherited).  KEEP IN SYNC WITH GETNAMES ABOVE!
 // Assumes that 
 bool vifa_int_faces_adj_attr::
-GetNativeAttributes(vector<float>& attrs)
+GetNativeAttributes(vcl_vector<float>& attrs)
 {
 	if (!this->ComputeAttributes())
 	{

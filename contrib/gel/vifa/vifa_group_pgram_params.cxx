@@ -30,19 +30,21 @@ SanityCheck()
 
 	if ((_angle_increment <= 0) || (_angle_increment > 45))
 	{
-		msg << "ERROR: Value of angle increment is out of range (0, 45]" << ends;
+		msg << "ERROR: Value of angle increment is out of range (0, 45]"
+			<< vcl_ends;
 		valid = false;
 	}
 
 	if (_max_suppress_radius <= 0)
 	{
-		msg << "ERROR: Maximum suppression radius must be greater than 0" << ends;
+		msg << "ERROR: Maximum suppression radius must be greater than 0"
+			<< vcl_ends;
 		valid = false;
 	}
 
 	if ((_length_ratio <= 0) || (_length_ratio > 1.0))
 	{
-		msg << "ERROR: length_ratio is out of range (0, 1.0]" << ends;
+		msg << "ERROR: length_ratio is out of range (0, 1.0]" << vcl_ends;
 		valid = false;
 	}
 

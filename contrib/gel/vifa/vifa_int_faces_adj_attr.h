@@ -89,7 +89,7 @@ public:
 
 	virtual bool	ComputeAttributes();
 	virtual bool	GetAttributes(vcl_vector<float>&	attrs);
-	static void		GetAttributeNames(vcl_vector<string>&	names);
+	static void		GetAttributeNames(vcl_vector<vcl_string>&	names);
 	virtual bool	GetNativeAttributes(vcl_vector<float>&	attrs);
 
 	vdgl_intensity_face_sptr	GetSeed() const

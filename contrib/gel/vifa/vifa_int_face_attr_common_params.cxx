@@ -58,8 +58,8 @@ bool vifa_int_face_attr_common_params::SanityCheck()
 		!_gpp_w.ptr() ||
 		!_cpp.ptr())
 	{
-		msg << "ERROR: {FitLines, GroupParallelogram, CollinearLines} params not set."
-			<< ends;
+		msg << "ERROR: {FitLines, GroupParallelogram, CollinearLines} "
+			<< "params not set." << vcl_ends;
 		valid = false;
 	}
 	else
