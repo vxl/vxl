@@ -18,6 +18,8 @@ ADD_EXECUTABLE( example_multiple_windows example_multiple_windows.cxx)
 ADD_EXECUTABLE( example_vgui_observer example_vgui_observer.cxx)
 ADD_EXECUTABLE( example_satellite_tableau example_satellite_tableau.cxx)
 ADD_EXECUTABLE( example_blender_tableau example_blender_tableau.cxx)
+ADD_EXECUTABLE( example_enhance_tableau example_enhance_tableau.cxx)
+ADD_EXECUTABLE( example_poly_tableau example_poly_tableau.cxx)
 
 # GTK examples
 #-------------

@@ -1,5 +1,3 @@
-// \author K.Y.McGaul
-// 
 // This example displays a line in an OpenGL area in the window:
 
 #include <vgui/vgui.h> 

@@ -1,7 +1,3 @@
-//:
-// \file
-// \author K.Y.McGaul
-//
 // This example displays a point with 3 lines radiating from it in different
 // non-coplanar directions (along the X, Y and Z axes).
 

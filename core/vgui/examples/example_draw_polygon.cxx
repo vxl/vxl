@@ -1,7 +1,3 @@
-//:
-// \file
-// \author  fsm@robots.ox.ac.uk
-//
 // This example draws a polygon on the display using OpenGl function calls
 // to draw the polygon.  Note, you could achieve the same effect using
 // a vgui_easy2D_tableau to draw the polygon and do all the calls to OpenGL

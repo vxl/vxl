@@ -1,5 +1,3 @@
-// \author  fsm@robots.ox.ac.uk
-//
 // GLUT example.
 
 #include <vgui/vgui_gl.h>

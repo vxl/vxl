@@ -1,5 +1,3 @@
-// \author K.Y.McGaul
-// 
 // This example displays text in a window.
 // Note1, a vgui_text_tableau can have another tableau as a child so you
 // could display text on top of an image, etc if you wished.

@@ -1,5 +1,3 @@
-// \author K.Y.McGaul
-//
 // This displays the mouse position when the left mouse button is pressed.
 
 #include <vcl_iostream.h>

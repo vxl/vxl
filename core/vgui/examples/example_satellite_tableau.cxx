@@ -1,5 +1,3 @@
-//:
-// \file
 // \author  fsm@robots.ox.ac.uk
 // \brief   Example using vgui_satellite_tableau.
 

@@ -1,10 +1,4 @@
-//-*- c++ -*-------------------------------------------------------------------
-//
-// Module: test_blend
-// Author: Philip C. Pritchett, Oxford RRG
-// Created: 26 Oct 99
-//
-//-----------------------------------------------------------------------------
+// Example of using a vgui_blender_tableau.
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_composite_tableau.h>

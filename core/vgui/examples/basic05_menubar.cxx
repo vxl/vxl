@@ -1,5 +1,3 @@
-// \author K.Y.McGaul
-// 
 // This example displays an image with a menu bar.
 
 #include <vcl_iostream.h>

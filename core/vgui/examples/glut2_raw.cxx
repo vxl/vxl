@@ -1,5 +1,3 @@
-// \author  fsm@robots.ox.ac.uk
-
 #include <vcl_cmath.h>
 
 #include <vgui/vgui_gl.h>

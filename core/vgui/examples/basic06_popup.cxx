@@ -1,5 +1,3 @@
-// \author K.Y.McGaul
-// 
 // This example displays an image with a popup-menu.
 
 #include <vcl_iostream.h>

@@ -1,7 +1,3 @@
-//:
-// \file
-// \author  fsm@robots.ox.ac.uk
-//
 // This example is given an image filename on the command line and displays
 // an image pyramid for that image.  The user can move through the list
 // of images by pressing PageUp and PageDown.

@@ -1,7 +1,3 @@
-//:
-// \file
-// \author K.Y.McGaul
-//
 // Example of getting highlighted objects.  vgui_easy2D_tableau highlights
 // objects when they are nearest to the mouse (so there is only ever
 // one highlighted object).

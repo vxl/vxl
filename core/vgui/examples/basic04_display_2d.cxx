@@ -1,5 +1,3 @@
-// \author K.Y.McGaul
-//
 // Display 2d geometric objects on top of an image.
 
 #include <vcl_iostream.h>

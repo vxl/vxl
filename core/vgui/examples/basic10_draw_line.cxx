@@ -1,5 +1,3 @@
-// \author K.Y.McGaul
-//
 // In this example a line is drawn by clicking on the end points.
 
 #include <vcl_iostream.h>

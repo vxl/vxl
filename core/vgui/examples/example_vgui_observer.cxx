@@ -1,10 +1,3 @@
-// This is oxl/vgui/examples/advanced_observer.cxx
-
-//:
-// \file
-// \author fsm@robots.ox.ac.uk
-// \brief  Example using vgui_observer.
-// 
 // This example displays some images in a window (the image filenames are
 // given as parameters on the command line).  An observer is attached to the
 // vgui_deck_tableau containing the images.  As the user flips through the

@@ -1,5 +1,3 @@
-//:
-// \file
 // This is an example using GTK instead of VGUI to make the user-interface.
 //
 // In this case we could do the same thing more simply using VGUI, but if

@@ -1,5 +1,3 @@
-// \author K.Y.McGaul
-//
 // This example displays an image in a window.  The image is loaded from
 // the filename given as the first command line parameter.
 

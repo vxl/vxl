@@ -1,5 +1,3 @@
-// \author K.Y.McGaul
-//
 // This example shows saving the OpenGL area to a PostScript file and to 
 // an image file.  In the PostScript file all the objects will be saved
 // seperately from the image (look inside the .ps file to see what I mean).
