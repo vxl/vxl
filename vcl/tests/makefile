@@ -15,11 +15,12 @@ TESTS += test_vcl_complex.cxx
 TESTS += test_vcl_algorithm.cxx
 TESTS += test_vcl_new.cxx
 TESTS += test_vcl_cmath.cxx
-TESTS += $(wildcard test_vcl_rtti.cxx)
+#TESTS += $(wildcard test_vcl_rtti.cxx)
 TESTS += test_vcl_stlfwd.cxx
 ifdef USE_EXCEPTIONS
 TESTS += test_vcl_exception.cxx
 endif
+TESTS += vcl_tests.cpp
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
