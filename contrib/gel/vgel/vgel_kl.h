@@ -20,6 +20,11 @@ extern "C" {
 
 class vgel_kl
 {
+ protected:
+    KLT_TrackingContext seq_tc_;
+
+    KLT_PixelType*      prev_frame_;
+
  public:
 
 //***************************************************************************
@@ -36,9 +41,16 @@ class vgel_kl
 //---------------------------------------------------------------------------
   virtual ~vgel_kl();
 
-  virtual void match_sequence(vcl_vector<vil1_image> &,vgel_multi_view_data_vertex_sptr);
+  virtual void reset_prev_frame();
 
-  virtual void match_sequence(vidl_vil1_movie_sptr,vgel_multi_view_data_vertex_sptr);
+  virtual void match_sequence(vil1_image&, vil1_image&,
+                              vgel_multi_view_data_vertex_sptr);
+
+  virtual void match_sequence(vcl_vector<vil1_image> &,
+                              vgel_multi_view_data_vertex_sptr);
+
+  virtual void match_sequence(vidl_vil1_movie_sptr,
+                              vgel_multi_view_data_vertex_sptr);
 
   virtual vcl_vector<vtol_vertex_2d_sptr> * extract_points(vil1_image &);
 
@@ -48,6 +60,9 @@ class vgel_kl
   virtual KLT_PixelType* convert_to_gs_image(vil1_image &);
 
   virtual void set_tracking_context( KLT_TrackingContext tc);
+
+  virtual void matches_from_feature_table(KLT_FeatureTable  ft,
+                          vgel_multi_view_data_vertex_sptr  matches);
 };
 
 #endif // vgel_kl_h_
