@@ -3,10 +3,10 @@
 SET( vil2_sources
 
   # basic things
-  vil2_memory_chunk.cxx vil2_memory_chunk.h
+  vil2_memory_chunk.cxx    vil2_memory_chunk.h
   vil2_image_view_base.cxx vil2_image_view_base.h
-  vil2_image_view.cxx vil2_image_view.h vil2_image_view.txx
-  vil2_image_data.cxx vil2_image_data.h
+  vil2_image_view.cxx      vil2_image_view.h      vil2_image_view.txx
+  vil2_image_data.cxx      vil2_image_data.h
 
   vil2_file_format.cxx vil2_file_format.h
   vil2_memory_image.cxx vil2_memory_image.h
@@ -18,9 +18,10 @@ SET( vil2_sources
   # image operations
   vil2_crop.cxx  vil2_crop.h
   vil2_math.h
-  vil2_load.cxx vil2_load.h
-  vil2_save.cxx vil2_save.h
-  vil2_new.cxx vil2_new.h
+  vil2_load.cxx  vil2_load.h
+  vil2_save.cxx  vil2_save.h
+  vil2_copy.txx  vil2_copy.h
+  vil2_new.cxx   vil2_new.h
   vil2_image_view_functions.cxx vil2_image_view_functions.h vil2_image_view_functions.txx
 
   # Sampling Operations
