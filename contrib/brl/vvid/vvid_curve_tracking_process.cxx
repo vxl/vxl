@@ -82,7 +82,7 @@ bool vvid_curve_tracking_process::execute()
   // pass the results
 
   // display
-  for (unsigned int i=0;i<get_output_size_at(t);i++){
+  for (int i=0;i<get_output_size_at(t);i++) {
     //vcl_cout<<".";
     vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( get_output_curve_at(t,i) );
     vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);

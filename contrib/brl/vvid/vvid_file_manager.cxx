@@ -134,13 +134,13 @@ void vvid_file_manager::display_spatial_objects()
         frame_trail_.add_spatial_objects(sos);
         vcl_vector<vsol_spatial_object_2d_sptr> temp;
         frame_trail_.get_spatial_objects(temp);
-        for (int i=0;i<temp.size();i++) {
+        for (unsigned int i=0;i<temp.size();i++) {
           set_changing_colors( temp[i]->get_tag_id() , &r, &g, &b );
           easy0_->set_vsol_spatial_object_2d_style(temp[i], r, g, b, 1.0, 2.0 );
           easy0_->add_spatial_object(temp[i]);
         }
       } else {
-        for (int i=0;i<sos.size();i++) {
+        for (unsigned int i=0;i<sos.size();i++) {
           set_changing_colors( sos[i]->get_tag_id() , &r, &g, &b );
           //vcl_cout<<"("<<sos[i]->get_tag_id()<<")\n";
           easy0_->set_vsol_spatial_object_2d_style(sos[i], r, g, b, 1.0, 2.0 );
