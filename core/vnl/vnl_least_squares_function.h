@@ -7,18 +7,18 @@
 
 
 //:
-//  \file
-//  \brief Abstract base for minimising functions
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   31 Aug 96
+// \file
+// \brief Abstract base for minimising functions
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   31 Aug 96
 //
 // \verbatim
-//     Modifications:
-//     280697 AWF Changed return type of f from double to void, as it wasn't used, and
-//                people were going to extra trouble to compute it.
-//     20 Apr 1999 FSM Added failure flag so that f() and grad() may signal failure to the caller.
-//     23/3/01 LSB (Manchester) Tidied documentation
-//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+// Modifications:
+//  280697 AWF Changed return type of f from double to void, as it wasn't used, and
+//             people were going to extra trouble to compute it.
+//  20 Apr 1999 FSM Added failure flag so that f() and grad() may signal failure to the caller.
+//  23/3/01 LSB (Manchester) Tidied documentation
+//  Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //
 #include <vcl_string.h>
@@ -65,14 +65,13 @@ public:
   virtual void gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian);
 
   //: Use this to compute a finite-difference gradient other than lmdif
-  void vnl_least_squares_function::fdgradf(vnl_vector<double> const& x,
-					   vnl_matrix<double>& jacobian,
-					   double stepsize);
-  
+  void fdgradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian,
+               double stepsize);
+
   //: Called after each LM iteration to print debugging etc.
-  virtual void trace(int iteration, 
-		     vnl_vector<double> const& x, 
-		     vnl_vector<double> const& fx);
+  virtual void trace(int iteration,
+                     vnl_vector<double> const& x,
+                     vnl_vector<double> const& fx);
 
   //: Compute the rms error at x by calling f and returning the norm of the residual vector.
   double rms(vnl_vector<double> const& x);
