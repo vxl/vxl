@@ -315,19 +315,19 @@ void vnl_amoeba::minimize(vnl_cost_function& f, vnl_vector<double>& x, double de
 
 
 
-class LSCF : public vnl_cost_function {
+class vnl_amoeba_LSCF : public vnl_cost_function {
   vnl_least_squares_function* ls_;
   vnl_vector<double> fx;
 public:
 
-  LSCF(vnl_least_squares_function& ls):
+  vnl_amoeba_LSCF(vnl_least_squares_function& ls):
     vnl_cost_function(ls.get_number_of_unknowns()),
     ls_(&ls),
     fx(ls.get_number_of_residuals())
   {
   }
 
-  ~LSCF() {}
+  ~vnl_amoeba_LSCF() {}
   
   double f(vnl_vector<double> const& x) {
     ls_->f(x, fx);
@@ -337,7 +337,7 @@ public:
 
 void vnl_amoeba::minimize(vnl_least_squares_function& f, vnl_vector<double>& x)
 {
-  LSCF lsf(f);
+  vnl_amoeba_LSCF lsf(f);
   minimize(lsf, x);
 }
 
