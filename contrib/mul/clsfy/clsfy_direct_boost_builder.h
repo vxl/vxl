@@ -1,26 +1,18 @@
+// Copyright: (C) 2000 British Telecommunications plc
 #ifndef clsfy_direct_boost_builder_h_
 #define clsfy_direct_boost_builder_h_
-
-// Copyright: (C) 2000 Britsh Telecommunications plc
-
-
 //:
 // \file
-// \brief Describe an concrete classifier
+// \brief Describe a concrete classifier
 // \author dac
 // \date 2000/05/10
 // \verbatim
 
-
-
-#include "clsfy/clsfy_builder_base.h"
+#include <clsfy/clsfy_builder_base.h> // parent class
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
-
-//#include "clsfy_builder_1d.h"
-//#include "clsfy_classifier_base.h"
 class clsfy_builder_1d;
 class clsfy_classifier_base;
 class clsfy_direct_boost;
@@ -33,8 +25,7 @@ class clsfy_direct_boost_builder : public clsfy_builder_base
   //: calc all threshold not just last one
   bool calc_all_thresholds_;
 
-  //: proportion of sum of square distance from mean
-  // used to say whether two classifiers are too similar
+  //: proportion of sum of square distance from mean used to say whether two classifiers are too similar.
   // typically = 0.1 ish.
   double prop_;
 
@@ -54,21 +45,16 @@ class clsfy_direct_boost_builder : public clsfy_builder_base
   //: pointer to 1d builder used to build each weak classifier
   clsfy_builder_1d* weak_builder_;
 
-
 //==============================private methods============================
 
-
   //: Calc threshold for current version of strong classifier
-  double calc_threshold(
-                   clsfy_direct_boost& strong_classifier,
-                   mbl_data_wrapper<vnl_vector<double> >& inputs,
-                   const vcl_vector<unsigned>& outputs) const;
+  double calc_threshold(clsfy_direct_boost& strong_classifier,
+                        mbl_data_wrapper<vnl_vector<double> >& inputs,
+                        const vcl_vector<unsigned>& outputs) const;
 
   //: Calc similarity between two 1d input vectors
-  double calc_prop_same(
-                   const vcl_vector<bool>& vec1,
-                   const vcl_vector<bool>& vec2) const;
-
+  double calc_prop_same(const vcl_vector<bool>& vec1,
+                        const vcl_vector<bool>& vec2) const;
 
 public:
 
@@ -81,13 +67,13 @@ public:
   //: Create empty model
   virtual clsfy_classifier_base* new_classifier() const;
 
-  //: set batch size 
+  //: set batch size
   void set_batch_size(int bs) { bs_ = bs; }
 
   //: set save data to disk bool
   void set_save_data_to_disk(bool x) { save_data_to_disk_ = x; }
 
-  //: set max_n_clfrs 
+  //: set max_n_clfrs
   void set_max_n_clfrs(int max_n_clfrs) { max_n_clfrs_ = max_n_clfrs; }
 
   //: set weak builder ( a pointer is retained )
@@ -107,8 +93,6 @@ public:
                        unsigned nClasses,
                        const vcl_vector<unsigned> &outputs) const;
 
-
-  
   //: Name of the class
   virtual vcl_string is_a() const;
 

@@ -1,6 +1,5 @@
 #ifndef mbl_combination_h
 #define mbl_combination_h
-
 //:
 // \file
 // \author Tim Cootes
@@ -19,7 +18,7 @@ vcl_vector<unsigned> mbl_combination_begin(const vcl_vector<unsigned>& n)
   return x;
 }
 
-//: Moves x to next combination of integers
+//: Moves x to next combination of integers.
 //  x[i] is a positive integer base n[i]
 //
 //  This allows stepping through all possible combinations of sets integers {x[i]}
@@ -57,4 +56,4 @@ void mbl_print_combination(vcl_ostream& os, const vcl_vector<unsigned>& x)
   vcl_cout<<x[0];
 }
 
-#endif
+#endif // mbl_combination_h
