@@ -25,6 +25,7 @@ SOURCES += rrel_shift2d_est.cxx
 MANPAGE_SOURCES += rrel_objective.h
 MANPAGE_SOURCES += rrel_util.txx
 MANPAGE_SOURCES += rrel_wls_obj.h
+SOURCES += rrel_homography2d_est_aff.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
