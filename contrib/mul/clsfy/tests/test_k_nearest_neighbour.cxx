@@ -33,7 +33,7 @@ template <class T>
 inline static vcl_ostream& operator<< (vcl_ostream& os, vcl_vector<T> const& v)
 {
   os << '[' << v.size() << ']';
-  vcl_vector<T>::const_iterator it = v.begin();
+  typename vcl_vector<T>::const_iterator it = v.begin();
   for (; it != v.end(); ++it) os << ' ' << (*it);
   return os;
 }

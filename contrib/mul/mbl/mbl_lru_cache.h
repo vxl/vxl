@@ -25,7 +25,7 @@ class mbl_lru_cache
   list_type l_;
 
   //: Allow value to be looked up quickly $O(\log(n))$ given index.
-  typedef vcl_map<I, vcl_pair<V, list_type::iterator> > map_type;
+  typedef vcl_map<I, vcl_pair<V, typename list_type::iterator> > map_type;
   map_type m_;
   //: Limit of cache size.
   unsigned long n_;
@@ -52,7 +52,7 @@ public:
   const V* lookup(const I& index)
   {
     assert (m_.size() == l_.size());
-    map_type::iterator it= m_.find(index);
+    typename map_type::iterator it= m_.find(index);
     if (it != m_.end())
     {
       l_.push_front(index);
