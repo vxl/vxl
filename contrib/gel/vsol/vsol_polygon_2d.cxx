@@ -76,8 +76,6 @@ vsol_point_2d_ref vsol_polygon_2d::vertex(const int i) const
 //---------------------------------------------------------------------------
 bool vsol_polygon_2d::operator==(const vsol_polygon_2d &other) const
 {
-  //vsol_point_2d_ref p;
-
   bool result = (this==&other);
 
   if(!result)
@@ -85,10 +83,11 @@ bool vsol_polygon_2d::operator==(const vsol_polygon_2d &other) const
       result = (storage_->size()==other.storage_->size());
       if(result)
         {
-          p=(*storage_)[0];
+          vsol_point_2d_ref p=(*storage_)[0];
           
           result=false;
-          for(unsigned int i=0;i<storage_->size()&&!result;++i)
+          unsigned int i=0;
+          for(;i<storage_->size()&&!result;++i)
             result = (*p==*(*other.storage_)[i]);
           if(result)
             {

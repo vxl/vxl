@@ -89,7 +89,8 @@ bool vsol_polygon_3d::operator==(const vsol_polygon_3d &other) const
           vsol_point_3d_ref p=(*storage_)[0];
           
           result=false;
-          for(unsigned int i=0;i<storage_->size()&&!result;++i)
+          unsigned int i=0;
+          for(;i<storage_->size()&&!result;++i)
             result = (*p==*(*other.storage_)[i]);
           if(result)
             {
