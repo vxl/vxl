@@ -160,7 +160,7 @@ void test_rbf_svm()
 	}
 
 
- 	vcl_cout << "\n*********Testing Support vector re-ordering*********" <<vcl_endl;
+ 	vcl_cout << "\n*********Testing Support Vector Training*********" <<vcl_endl;
 	vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios::floatfield);
 
 	clsfy_rbf_svm_smo_1_builder builder;
