@@ -136,13 +136,6 @@ endif
 
 DEFINES += -DBUILDING_VCL_DLL
 
-ifneq (,$(strip $(wildcard $(IUELOCALROOT)/config/fast.mk))) # fsm@robots.ox.ac.uk
-#VERYFAST := -O3 -ffast-math -fstrict-aliasing -fstrength-reduce -funroll-loops -fgcse  -march=pentiumpro
-include $(IUELOCALROOT)/config/fast.mk # put the above line (or its equivalent) in fast.mk !
-FLAGS_Templates/vcl_map+int.void~-.cxx += $(VERYFAST)
-FLAGS_Templates/vcl_map+vcl_pair+int.int-.void~-.cxx += $(VERYFAST)
-endif
-
 ifndef NOTEST
 SUBDIRS = tests
 endif
