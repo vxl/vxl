@@ -56,7 +56,6 @@ class vgl_homg_point_1d
 
   inline T x() const { return x_; }
   inline T w() const { return w_; }
-  inline bool get_nonhomogeneous(T& ret) const { if (w_!=0) ret=x_/w_; return w_!=0; }
 
   //: Set \a x,w
   // Note that it does not make sense to set \a x or \a w individually.
