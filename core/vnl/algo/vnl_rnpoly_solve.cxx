@@ -752,7 +752,7 @@ void vnl_rnpoly_solve::Read_Input(vcl_vector<unsigned int>& ideg,
       for (unsigned int j=0;j<dim_;j++)
       {
         int deg = ps_[i]->polyn_(k,j);
-        polyn[i*dim_*max_nterms_+k*dim_+j] = deg ? j*max_deg_+deg-1 : -1;
+        polyn[i*dim_*max_nterms_+k*dim_+j] = deg ? int(j*max_deg_)+deg-1 : -1;
       }
     }
   }
