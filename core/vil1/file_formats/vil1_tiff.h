@@ -55,7 +55,7 @@ public:
   ~vil_tiff_generic_image();
 
   //: TIFF specific fields relating to scanned images
-  void get_resolution(float& x_res, float& y_res, unsigned short& units);
+  void get_resolution(float& x_res, float& y_res, unsigned short& units) const;
   void set_resolution(float x_res, float y_res, unsigned short units);
 
   //: Dimensions.  Planes x W x H x Components

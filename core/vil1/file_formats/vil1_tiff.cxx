@@ -569,7 +569,7 @@ bool vil_tiff_generic_image::write_header()
   return true;
 }
 
-void vil_tiff_generic_image::get_resolution(float& x_res, float& y_res, unsigned short& units)
+void vil_tiff_generic_image::get_resolution(float& x_res, float& y_res, unsigned short& units) const
 {
   TIFFGetField(p->tif, TIFFTAG_XRESOLUTION, &x_res);
   TIFFGetField(p->tif, TIFFTAG_YRESOLUTION, &y_res);
