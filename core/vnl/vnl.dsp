@@ -1338,11 +1338,6 @@ SOURCE=.\vnl_complex.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_complex_ops.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vnl_complex_ops.txx
 
 # End Source File
