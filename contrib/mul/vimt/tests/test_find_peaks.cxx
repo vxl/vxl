@@ -14,7 +14,7 @@ void test_find_peaks_byte()
 
   vcl_vector<vgl_point_2d<unsigned> > im_peaks;
   vcl_vector<vxl_byte> peak_values;
-  vimt_find_image_peaks_3x3(im_peaks,image0.image());
+  vimt_find_image_peaks(im_peaks, peak_values, image0.image(), vxl_byte(12), 2);
 
   TEST("Number of peaks",im_peaks.size(),2);
   TEST_NEAR("Peak 0",(im_peaks[0]-vgl_point_2d<unsigned>(7,5)).sqr_length(),0,1e-6);
