@@ -16,12 +16,14 @@
 #include "gevd_xpixel.h"
 #include "gevd_bufferxy.h"
 //#include <ImageProcessing/xpixel.h>
-//#include <cool/Timer.h>
+#ifdef DEBUG
+# include <vul/vul_timer.h>
+#endif
 
 #ifdef VCL_WIN32
 inline static double rint(double v)
 {
-  return (((v - vcl_floor(v)) < 0.5) ? vcl_floor(v) : vcl_ceil(v));
+  return  v - vcl_floor(v) < 0.5  ?  vcl_floor(v)  :  vcl_ceil(v);
 }
 #endif
 
@@ -43,8 +45,10 @@ gevd_float_operators::Convolve(const gevd_bufferxy& from,
                                const gevd_bufferxy& kernel,
                                gevd_bufferxy*& to)
 {
-//   CoolTimer t;
-//   vcl_cout << "Convolve image";
+#ifdef DEBUG
+  vul_timer t;
+  vcl_cout << "Convolve image";
+#endif
   to = gevd_float_operators::Allocate(to, from);
   const int wx = kernel.GetSizeX(), wy = kernel.GetSizeY();
   const int rx = wx/2, ry = wy/2;
@@ -60,7 +64,9 @@ gevd_float_operators::Convolve(const gevd_bufferxy& from,
     }
   FillFrameX(*to, 0, rx);       // pad border with 0
   FillFrameY(*to, 0, ry);
-//   vcl_cout << " in " << t.real() << " msecs.\n";
+#ifdef DEBUG
+  vcl_cout << " in " << t.real() << " msecs.\n";
+#endif
   return 1;                     // extra scaling factor
 }
 
@@ -74,8 +80,10 @@ gevd_float_operators::Correlation(const gevd_bufferxy& from,
                                   const gevd_bufferxy& kernel,
                                   gevd_bufferxy*& to)
 {
-//   CoolTimer t;
-//   vcl_cout << "Correlate image";
+#ifdef DEBUG
+  vul_timer t;
+  vcl_cout << "Correlate image";
+#endif
   to = gevd_float_operators::Allocate(to, from);
   const int wx = kernel.GetSizeX(), wy = kernel.GetSizeY();
   const int rx = wx/2, ry = wy/2;
@@ -84,8 +92,7 @@ gevd_float_operators::Correlation(const gevd_bufferxy& from,
   const int sum1 = wx*wy;
   for (int y = 0; y < yhi; y++)
     for (int x = 0; x < xhi; x++) {
-      register double sumx = 0, sumy = 0, sumxx = 0, sumyy = 0, sumxy = 0,
-        xval, yval;
+      register double sumx=0, sumy=0, sumxx=0, sumyy=0, sumxy=0, xval, yval;
       for (int j = 0; j < wy; j++)
         for (int i = 0; i < wx; i++) {
           xval = floatPixel(from, x+i, y+j);
@@ -104,7 +111,9 @@ gevd_float_operators::Correlation(const gevd_bufferxy& from,
     }
   FillFrameX(*to, 0, rx);       // pad border with 0
   FillFrameY(*to, 0, ry);
-//   vcl_cout << " in " << t.real() << " msecs.\n";
+#ifdef DEBUG
+  vcl_cout << " in " << t.real() << " msecs.\n";
+#endif
   return 1;                     // extra scaling factor
 }
 
@@ -114,8 +123,10 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
                                            const gevd_bufferxy& kernel,
                                            gevd_bufferxy*& to)
 {
-//   CoolTimer t;
-//   vcl_cout << "Correlate image";
+#ifdef DEBUG
+  vul_timer t;
+  vcl_cout << "Correlate image";
+#endif
   to = gevd_float_operators::Allocate(to, from);
   to->Clear();
   const int wx = kernel.GetSizeX(), wy = kernel.GetSizeY();
@@ -123,10 +134,8 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
   const int xhi = from.GetSizeX() - wx + 1;
   const int yhi = from.GetSizeY() - wy + 1;
   const int sum1 = wx*wy;
-  int x, y;
-  for (x = 0, y = yhi/2; x < xhi; x++) {
-    register double sumx = 0, sumy = 0, sumxx = 0, sumyy = 0, sumxy = 0,
-      xval, yval;
+  for (int x = 0, y = yhi/2; x < xhi; ++x) {
+    register double sumx=0, sumy=0, sumxx=0, sumyy=0, sumxy=0, xval, yval;
     for (int j = 0; j < wy; j++)
       for (int i = 0; i < wx; i++) {
         xval = floatPixel(from, x+i, y+j);
@@ -143,9 +152,8 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
     if (varx!=0 && vary!=0) cvar /= vcl_sqrt(varx * vary);
     floatPixel(*to, x+rx, y+ry) = (float)cvar;
   }
-  for (x = xhi/2, y = 0; y < yhi; y++) {
-    register double sumx = 0, sumy = 0, sumxx = 0, sumyy = 0, sumxy = 0,
-      xval, yval;
+  for (int x = xhi/2, y = 0; y < yhi; ++y) {
+    register double sumx=0, sumy=0, sumxx=0, sumyy=0, sumxy=0, xval, yval;
     for (int j = 0; j < wy; j++)
       for (int i = 0; i < wx; i++) {
         xval = floatPixel(from, x+i, y+j);
@@ -162,7 +170,9 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
     if (varx!=0 && vary!=0) cvar /= vcl_sqrt(varx * vary);
     floatPixel(*to, x+rx, y+ry) = (float)cvar;
   }
-//   vcl_cout << " in " << t.real() << " msecs.\n";
+#ifdef DEBUG
+  vcl_cout << " in " << t.real() << " msecs.\n";
+#endif
   return 1;                     // extra scaling factor
 }
 
@@ -172,7 +182,7 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
 gevd_bufferxy*
 gevd_float_operators::Read2dKernel(const char* filename)
 {
-  vcl_ifstream infile (filename, vcl_ios_in); // open the file
+  vcl_ifstream infile(filename, vcl_ios_in); // open the file
   if (!infile)
     return NULL;
   int width, height;
@@ -199,8 +209,10 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
                                const bool yevenp,
                                const bool xwrap, const bool ywrap)
 {
-//   CoolTimer t;
-//   vcl_cout << "Convolve image";
+#ifdef DEBUG
+  vul_timer t;
+  vcl_cout << "Convolve image";
+#endif
   to = gevd_float_operators::Allocate(to, from);
   const int sizeX = to->GetSizeX(), sizeY = to->GetSizeY();
   const int ylo = yradius, yhi = sizeY - yradius;
@@ -210,8 +222,7 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
   float** cache = new float*[4*yradius+1];
   float** pipeline = cache+yradius;
   float* row;
-  int p;
-  for (p = 0; p <= kborder; p++) {
+  for (int p = 0; p <= kborder; ++p) {
     pipeline[p] = row = new float[sizeX];
     gevd_float_operators::Convolve(&floatPixel(from, 0, p), // row-major order
                                    row, sizeX,
@@ -230,7 +241,7 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
   else                          // reflection at 2 end rows
     for (int r = 1; r <= yradius; r++) {
       pipeline[-r] = row = new float[sizeX];
-      for (int i = 0; i < sizeX; i++) // copy previous convoled result
+      for (int i = 0; i < sizeX; i++) // copy previous convolved result
         row[i] = pipeline[r][i];
       pipeline[kborder+r] = row = new float[sizeX];
       gevd_float_operators::Convolve(&floatPixel(from, 0, sizeY-1-r), // row-major order
@@ -239,30 +250,31 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
     }
 
   // 2. Convolve along y-axis, shifting pipeline by 1 each time.
-  int x, y, k, yy;
-  float sum;
-  if (yevenp) {
-    for (y = 0, yy = 0; y < ylo; y++, yy++) { // reflect/wrap at ymin
+  if (yevenp)
+  {
+    int y=0;
+    for (int yy = 0; y < ylo; ++y, ++yy) { // reflect/wrap at ymin
       row = &floatPixel(*to, 0, y); // row-major order
-      for (x = 0; x < sizeX; x++) {
-        sum = ykernel[yradius] * pipeline[yy][x];
-        for (k = 1; k <= yradius; k++)
+      for (int x = 0; x < sizeX; x++) {
+        float sum = ykernel[yradius] * pipeline[yy][x];
+        for (int k = 1; k <= yradius; k++)
           sum += ykernel[yradius-k] * (pipeline[yy-k][x] + pipeline[yy+k][x]);
         row[x] = sum;
       }
     }
-    for ( ; y < yhi; y++) {     // convolution along y-axis
+    int p = kborder+1;
+    for ( ; y < yhi; ++y) {     // convolution along y-axis
       row = &floatPixel(*to, 0, y);
-      for (x = 0; x < sizeX; x++) {
-        sum = ykernel[yradius] * pipeline[yradius][x];
-        for (k = 1; k <= yradius; k++)
+      for (int x = 0; x < sizeX; x++) {
+        float sum = ykernel[yradius] * pipeline[yradius][x];
+        for (int k = 1; k <= yradius; k++)
           sum += ykernel[yradius-k] * (pipeline[yradius-k][x] + // even kernel
                                        pipeline[yradius+k][x]);
         row[x] = sum;
       }
       if (p < sizeY) {
         row = pipeline[0];      // next line
-        for (k = 0; k < kborder; k++) // shift the lines of
+        for (int k = 0; k < kborder; k++) // shift the lines of
           pipeline[k] = pipeline[k+1]; // the pipeline by 1
         gevd_float_operators::Convolve(&floatPixel(from, 0, p++), // row-major order
                                        row, sizeX,
@@ -270,36 +282,39 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
         pipeline[kborder] = row; // update pipeline
       }
     }
-    for (yy = yradius+1; y < sizeY; y++, yy++) {  // reflect/wrap at ymax
+    for (int yy = yradius+1; y < sizeY; y++, yy++) {  // reflect/wrap at ymax
       row = &floatPixel(*to, 0, y); // row-major order
-      for (x = 0; x < sizeX; x++) {
-        sum = ykernel[yradius] * pipeline[yy][x];
-        for (k = 1; k <= yradius; k++)  // convolution along y-axis
+      for (int x = 0; x < sizeX; x++) {
+        float sum = ykernel[yradius] * pipeline[yy][x];
+        for (int k = 1; k <= yradius; k++)  // convolution along y-axis
           sum += ykernel[yradius-k] * (pipeline[yy-k][x] + pipeline[yy+k][x]);
         row[x] = sum;
       }
     }
   } else {
-    for (y = 0, yy = 0; y < ylo; y++, yy++) // reflect at ymin
+    int y=0;
+    for (int yy = 0; y < ylo; y++, yy++) { // reflect at ymin
       row = &floatPixel(*to, 0, y); // row-major order
-      for (x = 0; x < sizeX; x++) {
-        sum = ykernel[yradius] * pipeline[yy][x];
-        for (k = 1; k <= yradius; k++)
+      for (int x = 0; x < sizeX; x++) {
+        float sum = ykernel[yradius] * pipeline[yy][x];
+        for (int k = 1; k <= yradius; k++)
           sum += ykernel[yradius-k] * (pipeline[yy-k][x] - pipeline[yy+k][x]);
         row[x] = sum;
       }
+    }
+    int p = kborder+1;
     for ( ; y < yhi; y++) {
       row = &floatPixel(*to, 0, y);
-      for (x = 0; x < sizeX; x++) {
-        sum = ykernel[yradius] * pipeline[yradius][x];
-        for (k = 1; k <= yradius; k++)  // convolution along y-axis
+      for (int x = 0; x < sizeX; x++) {
+        float sum = ykernel[yradius] * pipeline[yradius][x];
+        for (int k = 1; k <= yradius; k++)  // convolution along y-axis
           sum += ykernel[yradius-k] * (pipeline[yradius-k][x] - // odd kernel
                                        pipeline[yradius+k][x]);
         row[x] = sum;
       }
       if (p < sizeY) {
         row = pipeline[0];      // next line
-        for (k = 0; k < kborder; k++)   // shift the lines of
+        for (int k = 0; k < kborder; k++)   // shift the lines of
           pipeline[k] = pipeline[k+1];  // the pipeline by 1
         gevd_float_operators::Convolve(&floatPixel(from, 0, p++), // row-major order
                                        row, sizeX,
@@ -307,20 +322,22 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
         pipeline[kborder] = row; // update pipeline
       }
     }
-    for (yy = yradius+1; y < sizeY; y++, yy++) { // reflect/wrap at ymax
+    for (int yy = yradius+1; y < sizeY; y++, yy++) { // reflect/wrap at ymax
       row = &floatPixel(*to, 0, y); // row-major order
-      for (x = 0; x < sizeX; x++) {
-        sum = ykernel[yradius] * pipeline[yy][x];
-        for (k = 1; k <= yradius; k++)  // convolution along y-axis
+      for (int x = 0; x < sizeX; x++) {
+        float sum = ykernel[yradius] * pipeline[yy][x];
+        for (int k = 1; k <= yradius; k++)  // convolution along y-axis
           sum += ykernel[yradius-k] * (pipeline[yy-k][x] - pipeline[yy+k][x]);
         row[x] = sum;
       }
     }
   }
-  for (p = 0; p <= 4*yradius; p++)
-    delete [] cache[p];         // Free lines in pipeline cache
-  delete [] cache;
-//   vcl_cout << " in " << t.real() << " msecs.\n";
+  for (int p = 0; p <= 4*yradius; p++)
+    delete[] cache[p];         // Free lines in pipeline cache
+  delete[] cache;
+#ifdef DEBUG
+  vcl_cout << " in " << t.real() << " msecs.\n";
+#endif
   return 1;                     // assume normalized kernel
 }
 
@@ -343,14 +360,16 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
                                               xkernel, xradius, xevenp,
                                               ykernel, yradius, yevenp,
                                               xwrap, ywrap);
-  delete [] ykernel;
+  delete[] ykernel;
   return fact;
 }
 
 #if 0 // commented out
 {
-  CoolTimer t;
+#ifdef DEBUG
+  vul_timer t;
   vcl_cout << "Convolve image";
+#endif
   to = gevd_float_operators::Allocate(to, from);
   const int sizeX = to->GetSizeX(), sizeY = to->GetSizeY();
   const int ylo = yradius, yhi = sizeY - yradius;
@@ -381,7 +400,7 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
   else                          // reflection at 2 end rows
     for (int r = 1; r <= yradius; r++) {
       pipeline[-r] = row = new float[sizeX];
-      for (int i = 0; i < sizeX; i++) // copy previous convoled result
+      for (int i = 0; i < sizeX; i++) // copy previous convolved result
         row[i] = pipeline[r][i];
       pipeline[kborder+r] = row = new float[sizeX];
       gevd_float_operators::Convolve(&floatPixel(from, 0, sizeY-1-r), // row-major order
@@ -390,28 +409,28 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
     }
 
   // 2. Running sum along y-axis, shifting pipeline by 1 each time.
-  int y = 0, yy = 0; int x, k;
+  int y = 0, yy = 0;
   row = &floatPixel(*to, 0, y); // row-major order
-  for (x = 0; x < sizeX; x++) { // running sum at first row
+  for (int x = 0; x < sizeX; x++) { // running sum at first row
     double sum = pipeline[yy][x];
-    for (k = 1; k <= yradius; k++)
+    for (int k = 1; k <= yradius; k++)
       sum += (pipeline[yy-k][x] + pipeline[yy+k][x]);
     row[x] = float(rsum[x] = sum);
   }
   for (y++, yy++; y < ylo; y++, yy++) { // reflect/wrap at ymin
     row = &floatPixel(*to, 0, y); // row-major order
-    for (x = 0; x < sizeX; x++)
+    for (int x = 0; x < sizeX; x++)
       row[x] = float(rsum[x] = rsum[x] -
                      pipeline[yy-yradius-1][x] + pipeline[yy+yradius][x]);
   }
   for ( ; y < yhi; y++) {       // convolution along y-axis
     row = &floatPixel(*to, 0, y);
-    for (x = 0; x < sizeX; x++)
+    for (int x = 0; x < sizeX; x++)
       row[x] = float(rsum[x] = rsum[x] -
                      pipeline[-1][x] + pipeline[kborder][x]);
     if (p < sizeY) {
       row = pipeline[0];        // next line
-      for (k = 0; k < kborder; k++) // shift the lines of
+      for (int k = 0; k < kborder; k++) // shift the lines of
         pipeline[k] = pipeline[k+1]; // the pipeline by 1
       gevd_float_operators::Convolve(&floatPixel(from, 0, p++), // row-major order
                                      row, sizeX,
@@ -421,15 +440,17 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
   }
   for (yy = yradius+1; y < sizeY; y++, yy++) {  // reflect/wrap at ymax
     row = &floatPixel(*to, 0, y); // row-major order
-    for (x = 0; x < sizeX; x++)
+    for (int x = 0; x < sizeX; x++)
       row[x] = float(rsum[x] = rsum[x] -
                      pipeline[yy-yradius-1][x] + pipeline[yy+yradius][x]);
   }
-  for (p = 0; p <= 4*yradius; p++)
-    delete [] cache[p];         // Free lines in pipeline cache
-  delete [] cache;
-  delete [] rsum;
+  for (int p = 0; p <= 4*yradius; p++)
+    delete[] cache[p];         // Free lines in pipeline cache
+  delete[] cache;
+  delete[] rsum;
+#ifdef DEBUG
   vcl_cout << " in " << t.real() << " msecs.\n";
+#endif
   return 2*yradius+1;           // return multiplication factor
 }
 #endif
@@ -449,60 +470,61 @@ gevd_float_operators::Convolve(float* from, float*& to, const int len,
                                               cache, pipeline);
 
   // Convolution along x with above pipeline
-  int x, xx, k;
   float sum;
   if (evenp) {
-    for (x = 0, xx = 0; x < xlo; x++, xx++) {
+    int x=0;
+    for (int xx = 0; x < xlo; ++x, ++xx) {
       sum = kernel[kradius] * pipeline[xx];
-      for (k = 1; k <= kradius; k++)
+      for (int k = 1; k <= kradius; k++)
         sum += kernel[kradius-k] * (pipeline[xx-k] + pipeline[xx+k]);
       to[x] = sum;
     }
     for ( ; x < xhi; x++) {
       sum = kernel[kradius] * pipeline[kradius];
-      for (k = 1; k <= kradius; k++)
+      for (int k = 1; k <= kradius; k++)
         sum += kernel[kradius-k] * (pipeline[kradius-k] + // plus for
                                     pipeline[kradius+k]); // symmetric
       to[x] = sum;
       if (p < len) {
-        for (k = 0; k < kborder; k++)   // shift the floats of
+        for (int k = 0; k < kborder; k++)   // shift the floats of
           pipeline[k] = pipeline[k+1];  // the pipeline by 1
         pipeline[kborder] = from[p++];  // update pipeline
       }
     }
-    for (xx = kradius+1; x < len; x++, xx++) {
+    for (int xx = kradius+1; x < len; x++, xx++) {
       sum = kernel[kradius] * pipeline[xx];
-      for (k = 1; k <= kradius; k++)
+      for (int k = 1; k <= kradius; k++)
         sum += kernel[kradius-k] * (pipeline[xx-k] + pipeline[xx+k]);
       to[x] = sum;
     }
   } else {
-    for (x = 0, xx = 0; x < xlo; x++, xx++) {
+    int x=0;
+    for (int xx = 0; x < xlo; ++x, ++xx) {
       sum = kernel[kradius] * pipeline[xx];
-      for (k = 1; k <= kradius; k++)
+      for (int k = 1; k <= kradius; k++)
         sum += kernel[kradius-k] * (pipeline[xx-k] - pipeline[xx+k]);
       to[x] = sum;
     }
     for ( ; x < xhi; x++) {
       sum = kernel[kradius] * from[x];
-      for (k = 1; k <= kradius; k++)
+      for (int k = 1; k <= kradius; k++)
         sum += kernel[kradius-k] * (pipeline[kradius-k] - // minus for
                                     pipeline[kradius+k]); // antisymmetric
       to[x] = sum;
       if (p < len) {
-        for (k = 0; k < kborder; k++)   // shift the floats of
+        for (int k = 0; k < kborder; k++)   // shift the floats of
           pipeline[k] = pipeline[k+1];  // the pipeline by 1
         pipeline[kborder] = from[p++];  // update pipeline
       }
     }
-    for (xx = kradius+1; x < len; x++, xx++) {
+    for (int xx = kradius+1; x < len; x++, xx++) {
       sum = kernel[kradius] * pipeline[xx];
-      for (k = 1; k <= kradius; k++)
+      for (int k = 1; k <= kradius; k++)
         sum += kernel[kradius-k] * (pipeline[xx-k] - pipeline[xx+k]);
       to[x] = sum;
     }
   }
-  delete [] cache;
+  delete[] cache;
   return 1;                     // assume normalized kernel
 }
 
@@ -519,9 +541,9 @@ gevd_float_operators::RunningSum(float* from, float*& to, const int len,
   int p = gevd_float_operators::SetupPipeline(from, len, kradius, wrap,
                                               cache, pipeline);
   // Running sum along x with above pipeline
-  int x = 0, xx = 0, k;
+  int x = 0, xx = 0;
   float sum = pipeline[x];      // pre-compute running sum
-  for (k = 1; k <= kradius; k++)
+  for (int k = 1; k <= kradius; k++)
     sum += (pipeline[xx-k] + pipeline[xx+k]);
   to[x] = sum;
   for (x++, xx++; x < xlo; x++, xx++) {
@@ -532,7 +554,7 @@ gevd_float_operators::RunningSum(float* from, float*& to, const int len,
     sum += pipeline[kborder] - pipeline[-1];
     to[x] = sum;
     if (p < len) {
-      for (k = -1; k < kborder; k++)    // shift the floats of
+      for (int k = -1; k < kborder; k++)    // shift the floats of
         pipeline[k] = pipeline[k+1];    // the pipeline by 1
       pipeline[kborder] = from[p++];    // update pipeline
     }
@@ -541,7 +563,7 @@ gevd_float_operators::RunningSum(float* from, float*& to, const int len,
     sum += pipeline[xx+kradius] - pipeline[xx-kradius-1];
     to[x] = sum;
   }
-  delete [] cache;
+  delete[] cache;
   return float(2*kradius+1);            // magnification factor
 }
 
@@ -551,7 +573,7 @@ bool
 gevd_float_operators::Read1dKernel(const char* filename,
                                    float*& kernel, int& radius, bool& evenp)
 {
-  vcl_ifstream infile (filename, vcl_ios_in); // open the file
+  vcl_ifstream infile(filename, vcl_ios_in); // open the file
   if (!infile)
     return false;
   int width;
@@ -559,16 +581,14 @@ gevd_float_operators::Read1dKernel(const char* filename,
   if (width < 1) return false;
   radius = (width - 1)/2;
   width = 2*radius + 1;
-  delete [] kernel;
+  delete[] kernel;
   kernel = new float[width];
-  {for (int i = 0; i < width; i++)
+  for (int i = 0; i < width; i++)
     infile >> kernel[i];
   evenp = true;
-  }
-  {for (int i = 1; i <= radius; i++)
+  for (int i = 1; i <= radius; i++)
     if (kernel[radius-i] != kernel[radius+i])
       evenp = false;
-  }
   if (evenp)                    // double check that kernel is even
     return true;
   for (int i = 1; i <= radius; i++)
@@ -576,7 +596,7 @@ gevd_float_operators::Read1dKernel(const char* filename,
       evenp = true;
   if (!evenp)                   // double check that kernel is odd
     return true;
-  delete [] kernel; kernel = NULL;
+  delete[] kernel; kernel = NULL;
   return false;                 // invalid kernel
 }
 
@@ -606,7 +626,7 @@ gevd_float_operators::Gaussian(gevd_bufferxy& from, gevd_bufferxy*& to, const fl
                                    kernel, radius, evenp,
                                    xwrap, ywrap);
   }
-  delete [] kernel;
+  delete[] kernel;
   return 1;                     // return multiplication factor
 }
 
@@ -627,19 +647,16 @@ gevd_float_operators::Find1dGaussianKernel(const float sigma,
     return false;
 
   kernel = new float[2*radius + 1];             // create kernel
-  {for (int i=0; i<=radius; ++i)
+  for (int i=0; i<=radius; ++i)
     kernel[radius+i] = kernel[radius-i] = Gaussian(float(i), sigma);
-  }
   float sum = 0;
-  {for (int i= 0; i <= 2*radius; ++i)
+  for (int i= 0; i <= 2*radius; ++i)
     sum += kernel[i];                           // find integral of weights
-  }
-  {for (int i= 0; i <= 2*radius; ++i)
+  for (int i= 0; i <= 2*radius; ++i)
     kernel[i] /= sum;                           // normalize by integral
-  }
-#if 0
+#ifdef DEBUG
   vcl_cout << "Gaussian kernel = ";
-  for (i= 0; i <= 2*radius; ++i)
+  for (int i= 0; i <= 2*radius; ++i)
     vcl_cout << kernel[i] << ' ';
   vcl_cout << vcl_endl;
 #endif
@@ -741,8 +758,10 @@ gevd_float_operators::Gradient(const gevd_bufferxy& smooth,
                                gevd_bufferxy*& gradx, gevd_bufferxy*& grady,
                                const bool xwrap, const bool ywrap)
 {
-//   CoolTimer t;
-//   vcl_cout << "Compute local gradient magnitude/direction";
+#ifdef DEBUG
+  vul_timer t;
+  vcl_cout << "Compute local gradient magnitude/direction";
+#endif
   magnitude = gevd_float_operators::Allocate(magnitude, smooth);
   gradx = gevd_float_operators::Allocate(gradx, smooth);
   grady = gevd_float_operators::Allocate(grady, smooth);
@@ -751,9 +770,8 @@ gevd_float_operators::Gradient(const gevd_bufferxy& smooth,
   const int frame = 1;
   const int highx = smooth.GetSizeX() - frame; // exclusive bounds
   const int highy = smooth.GetSizeY() - frame;
-  int i, j;
-  for (j = frame; j < highy; ++j)
-    for (i = frame; i < highx; ++i)
+  for (int j = frame; j < highy; ++j)
+    for (int i = frame; i < highx; ++i)
       LocalGradient(smooth, i, j,
                     floatPixel(*magnitude, i, j),
                     floatPixel(*gradx, i, j),
@@ -763,7 +781,7 @@ gevd_float_operators::Gradient(const gevd_bufferxy& smooth,
   if (xwrap) {                  //  each row wrap at border
     const int lo = 2, hi = 1;
     gevd_bufferxy* pad = gevd_float_operators::WrapAlongX(smooth);
-    for (j = 1; j < highy; ++j) {
+    for (int j = 1; j < highy; ++j) {
       LocalGradient(*pad, lo, j,
                     floatPixel(*magnitude, 0, j),
                     floatPixel(*gradx, 0, j),
@@ -782,7 +800,7 @@ gevd_float_operators::Gradient(const gevd_bufferxy& smooth,
   if (ywrap) {                  // each column wrap at border
     const int lo = 2, hi = 1;
     gevd_bufferxy* pad = gevd_float_operators::WrapAlongY(smooth);
-    for (i = 1; i < highx; ++i) {
+    for (int i = 1; i < highx; ++i) {
       LocalGradient(*pad, i, lo,
                     floatPixel(*magnitude, i, 0),
                     floatPixel(*gradx, i, 0),
@@ -798,7 +816,9 @@ gevd_float_operators::Gradient(const gevd_bufferxy& smooth,
     gevd_float_operators::FillFrameY(*gradx, 0, frame);
     gevd_float_operators::FillFrameY(*grady, 0, frame);
   }
-//   vcl_cout << ", in " << t.real() << " msecs.\n";
+#ifdef DEBUG
+  vcl_cout << ", in " << t.real() << " msecs.\n";
+#endif
   return 2;                     // return multiplication factor
 }
 
@@ -823,7 +843,7 @@ gevd_float_operators::Slope(float* from, float*& to, const int len,
     }
   }
   to[xhi] = pipeline[3] - pipeline[1];
-  delete [] cache;
+  delete[] cache;
   return 2;                     // magnification factor
 }
 
@@ -836,10 +856,8 @@ LocalHessian(const gevd_bufferxy& smooth, const int i, const int j,
              float& mag, float& dirx, float& diry)
 {
   float two_pij = 2 * floatPixel(smooth, i, j);
-  float ddx = floatPixel(smooth, i+1, j) + floatPixel(smooth, i-1, j)
-    - two_pij;
-  float ddy = floatPixel(smooth, i, j+1) + floatPixel(smooth, i, j-1)
-    - two_pij;
+  float ddx = floatPixel(smooth, i+1, j) + floatPixel(smooth, i-1, j) - two_pij;
+  float ddy = floatPixel(smooth, i, j+1) + floatPixel(smooth, i, j-1) - two_pij;
   float two_dxdy = (floatPixel(smooth, i+1, j+1) +
                     floatPixel(smooth, i-1, j-1) -
                     floatPixel(smooth, i-1, j+1) -
@@ -849,12 +867,12 @@ LocalHessian(const gevd_bufferxy& smooth, const int i, const int j,
   float theta = (two_dxdy==0 && ddx_minus_ddy==0) ? 0 : // DOMAIN cond. on atan2
                 (float)vcl_atan2(two_dxdy, ddx_minus_ddy) / 2; // modulo PI
   if (ddx_plus_ddy < 0) {
-    mag = - ddx_plus_ddy +      // most negative eigenvalue
-      vcl_sqrt((ddx_minus_ddy * ddx_minus_ddy) + (two_dxdy * two_dxdy));
+    mag = - ddx_plus_ddy        // most negative eigenvalue
+          + vcl_sqrt((ddx_minus_ddy * ddx_minus_ddy) + (two_dxdy * two_dxdy));
     theta += (float)vnl_math::pi_over_2;// angle in range [0 pi]
   } else {
-    mag = ddx_plus_ddy +        // most positive eigenvalue
-          vcl_sqrt((ddx_minus_ddy * ddx_minus_ddy) + (two_dxdy * two_dxdy));
+    mag = + ddx_plus_ddy        // most positive eigenvalue
+          + vcl_sqrt((ddx_minus_ddy * ddx_minus_ddy) + (two_dxdy * two_dxdy));
     if (theta > 0)
       theta -= (float)vnl_math::pi;    // angle in range [-pi 0]
   }
@@ -877,19 +895,20 @@ gevd_float_operators::Hessian(const gevd_bufferxy& smooth,
                               gevd_bufferxy*& dirx, gevd_bufferxy*& diry,
                               const bool xwrap, const bool ywrap)
 {
-//   CoolTimer t;
-//   vcl_cout << "Compute local Hessian magnitude/direction";
+#ifdef DEBUG
+  vul_timer t;
+  vcl_cout << "Compute local Hessian magnitude/direction";
+#endif
   magnitude = gevd_float_operators::Allocate(magnitude, smooth);
   dirx = gevd_float_operators::Allocate(dirx, smooth);
   diry = gevd_float_operators::Allocate(diry, smooth);
 
- // 1. Inside image frame, compute values based on 3x3 window.
+  // 1. Inside image frame, compute values based on 3x3 window.
   const int frame = 1;
   const int highx = smooth.GetSizeX() - frame;  // exclusive bounds
   const int highy = smooth.GetSizeY() - frame;
-  int i, j;
-  for (j = frame; j < highy; ++j)
-    for (i = frame; i < highx; ++i)
+  for (int j = frame; j < highy; ++j)
+    for (int i = frame; i < highx; ++i)
       LocalHessian(smooth, i, j,
                    floatPixel(*magnitude, i, j),
                    floatPixel(*dirx, i, j),
@@ -899,7 +918,7 @@ gevd_float_operators::Hessian(const gevd_bufferxy& smooth,
   if (xwrap) {                  //  each row wrap at border
     const int lo = 2, hi = 1;
     gevd_bufferxy* pad = gevd_float_operators::WrapAlongX(smooth);
-    for (j = 1; j < highy; ++j) {
+    for (int j = 1; j < highy; ++j) {
       LocalHessian(*pad, lo, j,
                    floatPixel(*magnitude, 0, j),
                    floatPixel(*dirx, 0, j),
@@ -918,7 +937,7 @@ gevd_float_operators::Hessian(const gevd_bufferxy& smooth,
   if (ywrap) {                  // each column wrap at border
     const int lo = 2, hi = 1;
     gevd_bufferxy* pad = gevd_float_operators::WrapAlongY(smooth);
-    for (i = 1; i < highx; ++i) {
+    for (int i = 1; i < highx; ++i) {
       LocalHessian(*pad, i, lo,
                    floatPixel(*magnitude, i, 0),
                    floatPixel(*dirx, i, 0),
@@ -934,7 +953,9 @@ gevd_float_operators::Hessian(const gevd_bufferxy& smooth,
     gevd_float_operators::FillFrameY(*dirx, 0, frame);
     gevd_float_operators::FillFrameY(*diry, 0, frame);
   }
-//   vcl_cout << ", in " << t.real() << " msecs.\n";
+#ifdef DEBUG
+  vcl_cout << ", in " << t.real() << " msecs.\n";
+#endif
   return 2;                     // multiplication factor for magnitude
 }
 
@@ -946,19 +967,17 @@ LocalLaplacian(const gevd_bufferxy& smooth, const int i, const int j,
                float& mag, float& dirx, float& diry)
 {
   float two_pij = 2 * floatPixel(smooth, i, j);
-  float ddx = floatPixel(smooth, i+1, j) + floatPixel(smooth, i-1, j)
-    - two_pij;
-  float ddy = floatPixel(smooth, i, j+1) + floatPixel(smooth, i, j-1)
-    - two_pij;
+  float ddx = floatPixel(smooth, i+1, j) + floatPixel(smooth, i-1, j) - two_pij;
+  float ddy = floatPixel(smooth, i, j+1) + floatPixel(smooth, i, j-1) - two_pij;
   float diag1 = floatPixel(smooth, i+1, j+1) + floatPixel(smooth, i-1, j-1);
   float diag2 = floatPixel(smooth, i-1, j+1) + floatPixel(smooth, i+1, j-1);
   mag = 4*(ddx + ddy) - 2*two_pij + diag1 + diag2; // save division by 6
 #if 0 // commented out
-      mag = (floatPixel(smooth, i+1, j+1) + floatPixel(smooth, i-1, j-1) +
-             floatPixel(smooth, i-1, j+1) + floatPixel(smooth, i+1, j-1) +
-             4 * (floatPixel(smooth, i+1, j) + floatPixel(smooth, i-1, j) +
-                  floatPixel(smooth, i, j+1) + floatPixel(smooth, i, j-1)) +
-             -20 * floatPixel(smooth, i, j)) / 6;
+  mag = (floatPixel(smooth, i+1, j+1) + floatPixel(smooth, i-1, j-1) +
+         floatPixel(smooth, i-1, j+1) + floatPixel(smooth, i+1, j-1) +
+         4 * (floatPixel(smooth, i+1, j) + floatPixel(smooth, i-1, j) +
+              floatPixel(smooth, i, j+1) + floatPixel(smooth, i, j-1)) +
+         -20 * floatPixel(smooth, i, j)) / 6;
 #endif
   float theta = (diag1==diag2 && ddx==ddy) ? 0 : // DOMAIN condition on atan2
                 (float)vcl_atan2((diag1 - diag2) / 2, ddx - ddy) / 2; // modulo PI
@@ -986,8 +1005,10 @@ gevd_float_operators::Laplacian(const gevd_bufferxy& smooth,
                                 gevd_bufferxy*& dirx, gevd_bufferxy*& diry,
                                 const bool xwrap, const bool ywrap)
 {
-//   CoolTimer t;
-//   vcl_cout << "Compute local Laplacian magnitude/direction";
+#ifdef DEBUG
+  vul_timer t;
+  vcl_cout << "Compute local Laplacian magnitude/direction";
+#endif
   magnitude = gevd_float_operators::Allocate(magnitude, smooth);
   dirx = gevd_float_operators::Allocate(dirx, smooth);
   diry = gevd_float_operators::Allocate(diry, smooth);
@@ -996,9 +1017,8 @@ gevd_float_operators::Laplacian(const gevd_bufferxy& smooth,
   const int frame = 1;
   const int highx = smooth.GetSizeX() - frame;// exclusive bounds
   const int highy = smooth.GetSizeY() - frame;
-  int i, j;
-  for (j = frame; j < highy; ++j)
-    for (i = frame; i < highx; ++i)
+  for (int j = frame; j < highy; ++j)
+    for (int i = frame; i < highx; ++i)
       LocalLaplacian(smooth, i, j,
                      floatPixel(*magnitude, i, j),
                      floatPixel(*dirx, i, j),
@@ -1008,7 +1028,7 @@ gevd_float_operators::Laplacian(const gevd_bufferxy& smooth,
   if (xwrap) {                  //  each row wrap at border
     const int lo = 2, hi = 1;
     gevd_bufferxy* pad = gevd_float_operators::WrapAlongX(smooth);
-    for (j = 1; j < highy; ++j) {
+    for (int j = 1; j < highy; ++j) {
       LocalLaplacian(*pad, lo, j,
                      floatPixel(*magnitude, 0, j),
                      floatPixel(*dirx, 0, j),
@@ -1027,7 +1047,7 @@ gevd_float_operators::Laplacian(const gevd_bufferxy& smooth,
   if (ywrap) {                  // each column wrap at border
     const int lo = 2, hi = 1;
     gevd_bufferxy* pad = gevd_float_operators::WrapAlongY(smooth);
-    for (i = 1; i < highx; ++i) {
+    for (int i = 1; i < highx; ++i) {
       LocalLaplacian(*pad, i, lo,
                      floatPixel(*magnitude, i, 0),
                      floatPixel(*dirx, i, 0),
@@ -1043,7 +1063,9 @@ gevd_float_operators::Laplacian(const gevd_bufferxy& smooth,
     gevd_float_operators::FillFrameY(*dirx, 0, frame);
     gevd_float_operators::FillFrameY(*diry, 0, frame);
   }
-//   vcl_cout << ", in " << t.real() << " msecs.\n";
+#ifdef DEBUG
+  vcl_cout << ", in " << t.real() << " msecs.\n";
+#endif
   return 6;                     // multiplication factor for magnitude
 }
 
@@ -1068,7 +1090,7 @@ gevd_float_operators::Curvature(float* from, float*& to, const int len,
     }
   }
   to[xhi] = pipeline[3] + pipeline[1] - 2*pipeline[2];
-  delete [] cache;
+  delete[] cache;
   return 1;                     // magnification factor
 }
 
@@ -1089,11 +1111,10 @@ gevd_float_operators::Orientation(const gevd_bufferxy& smooth,
   gevd_bufferxy& coherenceI = *coherence;
   int highx = smooth.GetSizeX() - frame;        // exclusive bounds
   int highy = smooth.GetSizeY() - frame;
-  int i, j;
   float dx, dy;
   float p_ij, ox, oy;
-  for (j = frame; j < highy; ++j)
-    for (i = frame; i < highx; ++i) {
+  for (int j = frame; j < highy; ++j)
+    for (int i = frame; i < highx; ++i) {
       p_ij = floatPixel(smooth, i, j);
       dx = floatPixel(smooth, i+1, j) - p_ij;   // assume 2D gradient
       dy = floatPixel(smooth, i, j+1) - p_ij;   // onto x and y axes
@@ -1200,9 +1221,10 @@ gevd_float_operators::NonMaximumSuppression(const gevd_bufferxy& magnitude,
                                             const bool xwrap,
                                             const bool ywrap)
 {
-//   CoolTimer t;
-//   vcl_cout << "Non maximum suppression to find edge elements > "
-//        << threshold;
+#ifdef DEBUG
+  vul_timer t;
+  vcl_cout << "Non maximum suppression to find edge elements > " << threshold;
+#endif
   contour = gevd_float_operators::Allocate(contour, magnitude);
   direction = gevd_float_operators::Allocate(direction, magnitude, bits_per_byte);
   locationx = gevd_float_operators::Allocate(locationx, magnitude);
@@ -1213,9 +1235,8 @@ gevd_float_operators::NonMaximumSuppression(const gevd_bufferxy& magnitude,
   const int frame = 1;
   const int highx = magnitude.GetSizeX() - frame;// exclusive bounds
   const int highy = magnitude.GetSizeY() - frame;
-  int i, j;
-  for (j = frame; j < highy; ++j)
-    for (i = frame; i < highx; ++i)
+  for (int j = frame; j < highy; ++j)
+    for (int i = frame; i < highx; ++i)
       LocalMaximum(magnitude, directionx, directiony,
                    i, j, threshold,
                    floatPixel(*contour, i, j),
@@ -1229,7 +1250,7 @@ gevd_float_operators::NonMaximumSuppression(const gevd_bufferxy& magnitude,
     gevd_bufferxy* mag = gevd_float_operators::WrapAlongX(magnitude);
     gevd_bufferxy* dirx = gevd_float_operators::WrapAlongX(directionx);
     gevd_bufferxy* diry = gevd_float_operators::WrapAlongX(directiony);
-    for (j = 1; j < highy; ++j) {
+    for (int j = 1; j < highy; ++j) {
       LocalMaximum(*mag, *dirx, *diry,
                    lo, j, threshold,
                    floatPixel(*contour, 0, j),
@@ -1246,7 +1267,7 @@ gevd_float_operators::NonMaximumSuppression(const gevd_bufferxy& magnitude,
     delete mag; delete dirx; delete diry;
   } else {                      // zero by default
     gevd_float_operators::FillFrameX(*contour, 0, frame);
-    for (j = 1; j < highy; ++j) {
+    for (int j = 1; j < highy; ++j) {
       bytePixel(*direction, 0, j) = 0;
       bytePixel(*direction, highx, j) = 0;
     }
@@ -1256,7 +1277,7 @@ gevd_float_operators::NonMaximumSuppression(const gevd_bufferxy& magnitude,
     gevd_bufferxy* mag = gevd_float_operators::WrapAlongY(magnitude);
     gevd_bufferxy* dirx = gevd_float_operators::WrapAlongY(directionx);
     gevd_bufferxy* diry = gevd_float_operators::WrapAlongY(directiony);
-    for (i = 1; i < highx; ++i) {
+    for (int i = 1; i < highx; ++i) {
       LocalMaximum(*mag, *dirx, *diry,
                    i, lo, threshold,
                    floatPixel(*contour, i, 0),
@@ -1273,12 +1294,14 @@ gevd_float_operators::NonMaximumSuppression(const gevd_bufferxy& magnitude,
     delete mag; delete dirx; delete diry;
   } else {                      // zero by default
     gevd_float_operators::FillFrameY(*contour, 0, frame);
-    for (i = 1; i < highx; ++i) {
+    for (int i = 1; i < highx; ++i) {
       bytePixel(*direction, i, 0) = 0;
       bytePixel(*direction, i, highy) = 0;
     }
   }
-//   vcl_cout << ", in " << t.real() << " msecs.\n";
+#ifdef DEBUG
+  vcl_cout << ", in " << t.real() << " msecs.\n";
+#endif
 }
 
 //: Detect local maxima in linear/circular array.
@@ -1301,8 +1324,8 @@ gevd_float_operators::NonMaximumSuppression(const float* data, const int len,
       pipeline[0] > pipeline[+1] &&
       pipeline[0] > pipeline[-1]) {
     index[nmax] = 0;
-    loc[nmax] = gevd_float_operators::InterpolateParabola
-      (pipeline[-1], pipeline[0], pipeline[+1], mag[nmax]);
+    loc[nmax] = gevd_float_operators::InterpolateParabola(pipeline[-1], pipeline[0],
+                                                          pipeline[+1], mag[nmax]);
     nmax++;
   }
   for (int x = xlo; x < xhi; x++) {
@@ -1310,8 +1333,8 @@ gevd_float_operators::NonMaximumSuppression(const float* data, const int len,
         pipeline[1] > pipeline[2] &&
         pipeline[1] > pipeline[0]) {
       index[nmax] = x;
-      loc[nmax] = gevd_float_operators::InterpolateParabola
-        (pipeline[0], pipeline[1], pipeline[2], mag[nmax]);
+      loc[nmax] = gevd_float_operators::InterpolateParabola(pipeline[0], pipeline[1],
+                                                            pipeline[2], mag[nmax]);
       nmax++;
     }
     if (p < len) {
@@ -1324,11 +1347,11 @@ gevd_float_operators::NonMaximumSuppression(const float* data, const int len,
       pipeline[2] > pipeline[3] &&
       pipeline[2] > pipeline[1]) {
     index[nmax] = xhi;
-    loc[nmax] = gevd_float_operators::InterpolateParabola
-      (pipeline[1], pipeline[2], pipeline[3], mag[nmax]);
+    loc[nmax] = gevd_float_operators::InterpolateParabola(pipeline[1], pipeline[2],
+                                                          pipeline[3], mag[nmax]);
     nmax++;
   }
-  delete [] cache;
+  delete[] cache;
   return nmax;                  // number of maxima found
 }
 
@@ -1375,9 +1398,9 @@ gevd_float_operators::SupportAngle(const gevd_bufferxy& dirx, const gevd_bufferx
   angLe = gevd_float_operators::Allocate(angLe, magnitude);
   const int highx = magnitude.GetSizeX();       // exclusive bounds
   const int highy = magnitude.GetSizeY();
-  int i, j; float theta;
-  for (j = 0; j < highy; ++j)
-    for (i = 0; i < highx; ++i)
+  float theta;
+  for (int j = 0; j < highy; ++j)
+    for (int i = 0; i < highx; ++i)
       if (floatPixel(magnitude, i, j) > 0) {
         theta = (float)vcl_atan2(floatPixel(diry, i, j), floatPixel(dirx, i, j));
         if (theta < 0) theta += (float)vnl_math::pi;
@@ -1397,8 +1420,7 @@ gevd_float_operators::SurfaceNormal(const gevd_bufferxy& range, gevd_bufferxy*& 
   const int highx = range.GetSizeX()-frame, highy = range.GetSizeY()-frame;
   normal = gevd_float_operators::Allocate(normal, range, bits_per_ptr);
   normal->Clear();              // NULL vector on border
-//  vnl_vector<float> tx(3, 2.f,0.f,0.f), ty(3, 0.f,2.f,0.f); // tangents x-y axes
-  vnl_vector<float> tx(3, 0.0f), ty(3, 0.0f);
+  vnl_vector<float> tx(3, 0.0f), ty(3, 0.0f); // tangents x-y axes
   tx[0]=2.0f; ty[1]=2.0f;
   for (int j = frame; j < highy; j++)
     for (int i = frame; i < highx; i++) { // for all grid points
@@ -1461,38 +1483,41 @@ gevd_float_operators::SurfaceCurvature(const gevd_bufferxy& normal, gevd_bufferx
 //  either 1.0 or 2.0, so this must be scaled by sqrt(2) if the points
 //  are taken from along a diagonal.
 static bool
-_TangentComponents( const gevd_bufferxy& range,
-                    int low_x, int low_y,
-                    int x, int y,
-                    int high_x, int high_y,
-                    float no_value,          // value if there is no valid Z
-                    float & distance,
-                    float & delta_z )
+_TangentComponents(const gevd_bufferxy& range,
+                   int low_x, int low_y,
+                   int x, int y,
+                   int high_x, int high_y,
+                   float no_value,          // value if there is no valid Z
+                   float & distance,
+                   float & delta_z )
 {
   float low_z  = floatPixel( range, low_x, low_y );
   float z      = floatPixel( range, x, y );
   float high_z = floatPixel( range, high_x, high_y );
 
-  if ( (z == no_value) || ( low_z == no_value && high_z == no_value ) )
+  if ( z == no_value || ( low_z == no_value && high_z == no_value ) )
     return false;
 
   if ( low_z == no_value ) {
     distance = 1.0;
     delta_z = high_z - z;
-    // vcl_cout << "TC  low missing:  distance = " << distance << ", delta_z = "
-        //  << delta_z << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "TC  low missing:  distance = " << distance << ", delta_z = " << delta_z << vcl_endl;
+#endif
   }
   else if ( high_z == no_value ) {
     distance = 1.0;
     delta_z = z - low_z;
-    // vcl_cout << "TC  high missing:  distance = " << distance << ", delta_z = "
-        //  << delta_z << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "TC  high missing:  distance = " << distance << ", delta_z = " << delta_z << vcl_endl;
+#endif
   }
   else {
     distance = 2.0;
     delta_z = high_z - low_z;
-    // vcl_cout << "TC  neither missing:  distance = " << distance << ", delta_z = "
-        //  << delta_z << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "TC  neither missing:  distance = " << distance << ", delta_z = " << delta_z << vcl_endl;
+#endif
   }
   return true;
 }
@@ -1530,11 +1555,15 @@ gevd_float_operators::SurfaceNormalD(const gevd_bufferxy& range,
           ty[1]=d_y*pixel_distance; ty[2]=d_z_y;
           vnl_vector<float>* nz = new vnl_vector<float>(cross_3d(tx, ty));
 
-          // vcl_cout << "Tx = " << tx << ",  Ty = " << ty << vcl_endl;
+#ifdef DEBUG
+          vcl_cout << "Tx = " << tx << ",  Ty = " << ty << vcl_endl;
+#endif
           float mag = nz->magnitude();
           if (mag != 0) {
             *nz /= mag;   // make unit vector
-            // vcl_cout << "Normal = " << *nz << vcl_endl;
+#ifdef DEBUG
+            vcl_cout << "Normal = " << *nz << vcl_endl;
+#endif
             fvectorPixel(*normal, i, j) = nz;
           }
           else {
@@ -1566,13 +1595,13 @@ gevd_float_operators::SurfaceNormalD(const gevd_bufferxy& range,
 //  assigned to p when it *should* be assigned to some point
 //  between the two.
 static bool
-_CurvatureInDir( const gevd_bufferxy& normal,
-                 const gevd_bufferxy& surface,
-                 int low_x, int low_y,
-                 int x, int y,
-                 int high_x, int high_y,
-                 float & sq_dist,
-                 float & sq_curve )
+_CurvatureInDir(const gevd_bufferxy& normal,
+                const gevd_bufferxy& surface,
+                int low_x, int low_y,
+                int x, int y,
+                int high_x, int high_y,
+                float & sq_dist,
+                float & sq_curve )
 {
   vnl_vector<float> * low_norm  = fvectorPixel( normal, low_x, low_y );
   vnl_vector<float> * norm      = fvectorPixel( normal, x, y );
@@ -1581,7 +1610,7 @@ _CurvatureInDir( const gevd_bufferxy& normal,
   float zval1, zval2, dz;
   int dx, dy;
 
-  if ( (norm == NULL) || ( low_norm == NULL && high_norm == NULL ) )
+  if ( norm == NULL || ( low_norm == NULL && high_norm == NULL ) )
     return false;
 
   if ( low_norm == NULL ) {
@@ -1593,10 +1622,12 @@ _CurvatureInDir( const gevd_bufferxy& normal,
     dy = high_y - y;
     sq_dist = (dx*dx) + (dy*dy) + (dz*dz);
     sq_curve = cross_3d( *high_norm, *norm ).squared_magnitude();
-    // vcl_cout << "CinDir  low missing:  sq_dist = " << sq_dist
-        //  << ",  high = " << *high_norm
-        //  << ",  norm = " << *norm
-        //  << ",  sq_curve = " << sq_curve << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "CinDir  low missing:  sq_dist = " << sq_dist
+             << ",  high = " << *high_norm
+             << ",  norm = " << *norm
+             << ",  sq_curve = " << sq_curve << vcl_endl;
+#endif
   }
   else if ( high_norm == NULL ) {
     // -rgc-   sq_dist = 1.0;
@@ -1607,10 +1638,12 @@ _CurvatureInDir( const gevd_bufferxy& normal,
     dy = y - low_y;
     sq_dist = (dx*dx) + (dy*dy) + (dz*dz);
     sq_curve = cross_3d( *norm, *low_norm ).squared_magnitude();
-    // vcl_cout << "CinDir  high missing:  sq_dist = " << sq_dist
-        //  << ",  norm = " << *norm
-        //  << ",  low = " << *low_norm
-        //  << ",  sq_curve = " << sq_curve << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "CinDir  high missing:  sq_dist = " << sq_dist
+             << ",  norm = " << *norm
+             << ",  low = " << *low_norm
+             << ",  sq_curve = " << sq_curve << vcl_endl;
+#endif
   }
   else {
     // -rgc-   sq_dist = 4.0;
@@ -1621,10 +1654,12 @@ _CurvatureInDir( const gevd_bufferxy& normal,
     dy = high_y - low_y;
     sq_dist = (dx*dx) + (dy*dy) + (dz*dz);
     sq_curve = cross_3d( *high_norm, *low_norm ).squared_magnitude();
-    // vcl_cout << "CinDir  neither missing:  sq_dist = " << sq_dist
-        //  << ",  high = " << *high_norm
-        //  << ",  low = " << *low_norm
-        //  << ",  sq_curve = " << sq_curve << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "CinDir  neither missing:  sq_dist = " << sq_dist
+             << ",  high = " << *high_norm
+             << ",  low = " << *low_norm
+             << ",  sq_curve = " << sq_curve << vcl_endl;
+#endif
   }
   return true;
 }
@@ -1657,39 +1692,53 @@ gevd_float_operators::SurfaceCurvatureD(const gevd_bufferxy& normal,
         floatPixel(*curvature, i, j) = dflt;
         continue;
       }
-      // vcl_cout << "i,j:" << i << ' ' << j << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << "i,j:" << i << ' ' << j << vcl_endl;
+#endif
       float max_sq_curve = -1;
       float sq_dist, sq_curve;
       if ( _CurvatureInDir( normal, surface, i-1, j, i, j, i+1, j,  // horizontal
                             sq_dist, sq_curve ) ) {
         sq_curve *= sq_unit_normalize / sq_dist;
-        // vcl_cout << "  sq_curve(h) = " << sq_curve << vcl_endl;
+#ifdef DEBUG
+        vcl_cout << "  sq_curve(h) = " << sq_curve << vcl_endl;
+#endif
         if ( sq_curve > max_sq_curve ) max_sq_curve = sq_curve;
       }
       if ( _CurvatureInDir( normal, surface,i, j-1, i, j, i, j+1,  // vertical
                             sq_dist, sq_curve ) ) {
         sq_curve *= sq_unit_normalize / sq_dist;
-        // vcl_cout << "  sq_curve(v) = " << sq_curve << vcl_endl;
+#ifdef DEBUG
+        vcl_cout << "  sq_curve(v) = " << sq_curve << vcl_endl;
+#endif
        if ( sq_curve > max_sq_curve ) max_sq_curve = sq_curve;
       }
       if ( _CurvatureInDir( normal, surface, i-1, j-1, i, j, i+1, j+1, //  45 degrees
                             sq_dist, sq_curve ) ) {
         sq_curve *= sq_unit_normalize / sq_dist;
-        // vcl_cout << "  sq_curve(45) = " << sq_curve << vcl_endl;
+#ifdef DEBUG
+        vcl_cout << "  sq_curve(45) = " << sq_curve << vcl_endl;
+#endif
         if ( sq_curve > max_sq_curve ) max_sq_curve = sq_curve;
       }
       if ( _CurvatureInDir( normal, surface, i-1, j+1, i, j, i+1, j-1, // 135 degrees
                             sq_dist, sq_curve ) ) {
         sq_curve *= sq_unit_normalize / sq_dist;
-        // vcl_cout << "  sq_curve(135) = " << sq_curve << vcl_endl;
+#ifdef DEBUG
+        vcl_cout << "  sq_curve(135) = " << sq_curve << vcl_endl;
+#endif
         if ( sq_curve > max_sq_curve ) max_sq_curve = sq_curve;
       }
-      // vcl_cout << "  max_sq_curve = " << max_sq_curve << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << "  max_sq_curve = " << max_sq_curve << vcl_endl;
+#endif
       if ( max_sq_curve < 0 )
         floatPixel(*curvature, i, j) = dflt;
       else
         floatPixel(*curvature, i, j) = vcl_sqrt(max_sq_curve);
-      // vcl_cout << "curvature in 1/inches: " << i << ' ' << j << ' ' << floatPixel(*curvature, i, j) << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << "curvature in 1/inches: " << i << ' ' << j << ' ' << floatPixel(*curvature, i, j) << vcl_endl;
+#endif
     }
   gevd_float_operators::FillFrameX(*curvature, dflt, frame);    // default curvature
   gevd_float_operators::FillFrameY(*curvature, dflt, frame);    // around frame.
@@ -1706,8 +1755,8 @@ gevd_float_operators::SurfaceCurvatureD(const gevd_bufferxy& normal,
 // The image sizes are related by: to.size = (from.size+1)/2.
 
 float
-gevd_float_operators::ShrinkBy2 (const gevd_bufferxy& from, gevd_bufferxy*& to,
-                                 const float burt_ka)
+gevd_float_operators::ShrinkBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
+                                const float burt_ka)
 {
   const int sizeX = (from.GetSizeX() + 1) / 2;
   const int sizeY = (from.GetSizeY() + 1) / 2;
@@ -1722,18 +1771,18 @@ gevd_float_operators::ShrinkBy2 (const gevd_bufferxy& from, gevd_bufferxy*& to,
   float* yline2 = new float[sizeX];
   float* yline3 = new float[sizeX];
   float* yline4 = new float[sizeX];
-  gevd_float_operators::ShrinkBy2AlongX (from, p++, yline0, sizeX, ka, kb, kc);
-  gevd_float_operators::ShrinkBy2AlongX (from, p++, yline1, sizeX, ka, kb, kc);
-  gevd_float_operators::ShrinkBy2AlongX (from, p++, yline2, sizeX, ka, kb, kc);
-  gevd_float_operators::ShrinkBy2AlongX (from, p++, yline3, sizeX, ka, kb, kc);
-  gevd_float_operators::ShrinkBy2AlongX (from, p++, yline4, sizeX, ka, kb, kc);
+  gevd_float_operators::ShrinkBy2AlongX(from, p++, yline0, sizeX, ka, kb, kc);
+  gevd_float_operators::ShrinkBy2AlongX(from, p++, yline1, sizeX, ka, kb, kc);
+  gevd_float_operators::ShrinkBy2AlongX(from, p++, yline2, sizeX, ka, kb, kc);
+  gevd_float_operators::ShrinkBy2AlongX(from, p++, yline3, sizeX, ka, kb, kc);
+  gevd_float_operators::ShrinkBy2AlongX(from, p++, yline4, sizeX, ka, kb, kc);
 
-  int x, y;                             // shrink_by_2 along y-axis.
-  for (x = 0; x < sizeX; x++)
+  // shrink_by_2 along y-axis.
+  for (int x = 0; x < sizeX; x++)
     floatPixel(*to, x, 0) = (ka * yline0[x] + // reflect at image border
                              2 * (kb * yline1[x] + kc * yline2[x]));
-  for (y = 1; y < sizeY; y++) {
-    for (x = 0; x < sizeX; x++)
+  for (int y = 1; y < sizeY; y++) {
+    for (int x = 0; x < sizeX; x++)
       floatPixel(*to, x, y) = (ka * yline2[x] +
                                kb * (yline1[x] + yline3[x]) +
                                kc * (yline0[x] + yline4[x]));
@@ -1754,9 +1803,8 @@ gevd_float_operators::ShrinkBy2 (const gevd_bufferxy& from, gevd_bufferxy*& to,
       vcl_memcpy(next1, yline0, sizeX*sizeof(float));
     }
   }
-  delete [] yline0; delete [] yline1;
-  delete [] yline2;
-  delete [] yline3; delete [] yline4;
+  delete[] yline0; delete[] yline1; delete[] yline2;
+  delete[] yline3; delete[] yline4;
   return 1;
 }
 
@@ -1766,10 +1814,10 @@ gevd_float_operators::ShrinkBy2 (const gevd_bufferxy& from, gevd_bufferxy*& to,
 // [kc, kb, ka, kb, kc].
 
 float
-gevd_float_operators::ShrinkBy2AlongX (const gevd_bufferxy& from, const int y,
-                                       float* yline, const int sizeX,
-                                       const float ka, const float kb,
-                                       const float kc)
+gevd_float_operators::ShrinkBy2AlongX(const gevd_bufferxy& from, const int y,
+                                      float* yline, const int sizeX,
+                                      const float ka, const float kb,
+                                      const float kc)
 {
   int p = 0;                            // setup pipeline of 5 x values
   float x0 = floatPixel(from, p++, y);
@@ -1802,9 +1850,9 @@ PrintAllPipes( float * y_s[],
                float * w_s[],
                int length )
 {
-  for ( int i=0; i<5; i++ ) {
+  for (int i=0; i<5; i++ ) {
     vcl_cout << "\nPipe " << i << vcl_endl;
-    for ( int j=0; j<length; j++ ) {
+    for (int j=0; j<length; j++ ) {
       vcl_cout << j << ",  yline[j] = " << y_s[i][j] << ",  wline[j] = "
                << w_s[i][j] << vcl_endl;
     }
@@ -1822,10 +1870,10 @@ PrintAllPipes( float * y_s[],
 // application.
 
 void
-gevd_float_operators::ShrinkBy2_D (const gevd_bufferxy& from,
-                                   gevd_bufferxy*& to,
-                                   float no_value,
-                                   float burt_ka )
+gevd_float_operators::ShrinkBy2_D(const gevd_bufferxy& from,
+                                  gevd_bufferxy*& to,
+                                  float no_value,
+                                  float burt_ka )
 {
   const int sizeX = (from.GetSizeX() + 1) / 2;
   const int sizeY = (from.GetSizeY() + 1) / 2;
@@ -1836,7 +1884,6 @@ gevd_float_operators::ShrinkBy2_D (const gevd_bufferxy& from,
   kernel[2] = burt_ka;
   kernel[1] = kernel[3] = 0.25f;
   kernel[0] = kernel[4] = (0.5f - burt_ka) / 2;
-  int i;
 
   //  Smoothing and subsampling will occur first along each row and
   //  then between rows.  So, a pipeline of 5 smoothed and subsampled
@@ -1845,16 +1892,16 @@ gevd_float_operators::ShrinkBy2_D (const gevd_bufferxy& from,
   //  and fill space for an empty row.
   //
   float * yline[5];
-  for ( i=0; i<5; i++ ) yline[i] = new float[sizeX];
+  for (int i=0; i<5; i++ ) yline[i] = new float[sizeX];
   float * wline[5];
-  for ( i=0; i<5; i++ ) wline[i] = new float[sizeX];
+  for (int i=0; i<5; i++ ) wline[i] = new float[sizeX];
   float * y_empty = new float[sizeX];
   float * w_empty = new float[sizeX];
 
   //  Set the values for the empty rows.  These are used for the top
   //  and bottom of the image.
   //
-  for ( i=0; i<sizeX; i++ ) {
+  for (int i=0; i<sizeX; i++ ) {
     y_empty[i] = no_value;
     w_empty[i] = 0.0;
   }
@@ -1871,32 +1918,36 @@ gevd_float_operators::ShrinkBy2_D (const gevd_bufferxy& from,
   //  Fill the center and bottom half of the pipelines with the top
   //  three rows of the image.
   //
-  gevd_float_operators::ShrinkBy2AlongX_D (from, from.GetSizeX(), sizeX, 0, kernel, no_value,
-                                           yline[2], wline[2] );
-  gevd_float_operators::ShrinkBy2AlongX_D (from, from.GetSizeX(), sizeX, 1, kernel, no_value,
-                                           yline[3], wline[3] );
-  gevd_float_operators::ShrinkBy2AlongX_D (from, from.GetSizeX(), sizeX, 2, kernel, no_value,
-                                           yline[4], wline[4] );
+  gevd_float_operators::ShrinkBy2AlongX_D(from, from.GetSizeX(), sizeX, 0,
+                                          kernel, no_value, yline[2], wline[2]);
+  gevd_float_operators::ShrinkBy2AlongX_D(from, from.GetSizeX(), sizeX, 1,
+                                          kernel, no_value, yline[3], wline[3]);
+  gevd_float_operators::ShrinkBy2AlongX_D(from, from.GetSizeX(), sizeX, 2,
+                                          kernel, no_value, yline[4], wline[4]);
   int p = 3;
-  int x, y;
 
   //  Do the actual weighted smoothing and subsampling.  Only record a
   //  value at a pixel if the summed weights are above 0.5.  After all
   //  subsampled values are created in a row, shift the pipeline down.
   //
-  for ( y=0; y<sizeY; y++ ) {
-    // vcl_cout << "\nNew row:  y= " << y << "\nHere are the pipes.\n";
-    // PrintAllPipes( yline, wline, sizeX );
-    for (x=0; x<sizeX; x++) {
+  for (int y=0; y<sizeY; y++ ) {
+#ifdef DEBUG
+    vcl_cout << "\nNew row:  y= " << y << "\nHere are the pipes.\n";
+    PrintAllPipes( yline, wline, sizeX );
+#endif
+    for (int x=0; x<sizeX; x++) {
       float sum_w = 0, sum_z = 0;
-      for ( i=0; i<5; i++ ) {
+      for (int i=0; i<5; i++ ) {
         sum_w += kernel[i] * wline[i][x];
         sum_z += kernel[i] * yline[i][x];
       }
-      // vcl_cout << "Assigning:  x,y = " << x << ", " << y << "  ";
+#ifdef DEBUG
+      vcl_cout << "Assigning:  x,y = " << x << ", " << y << "  ";
+#endif
       floatPixel(*to, x, y) = sum_w < 0.5 ? no_value : sum_z / sum_w;
-      // vcl_cout << ",  sum_w = " << sum_w << ",  value = " << floatPixel(*to, x, y)
-      //  << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << ",  sum_w = " << sum_w << ",  value = " << floatPixel(*to, x, y) << vcl_endl;
+#endif
     }
 
     //  Shift the pipeline down by two rows.  Where it overlaps the
@@ -1906,7 +1957,7 @@ gevd_float_operators::ShrinkBy2_D (const gevd_bufferxy& from,
     float* prev_y1 = yline[1];
     float* prev_w0 = wline[0];
     float* prev_w1 = wline[1];
-    for ( i=0; i<3; i++ ) {
+    for (int i=0; i<3; i++ ) {
       yline[i] = yline[i+2];
       wline[i] = wline[i+2];
     }
@@ -1915,15 +1966,15 @@ gevd_float_operators::ShrinkBy2_D (const gevd_bufferxy& from,
     yline[4] = prev_y1;
     wline[4] = prev_w1;
     if ( p < from.GetSizeY() )
-      ShrinkBy2AlongX_D( from, from.GetSizeX(), sizeX, p++, kernel,
-                         no_value, yline[3], wline[3] );
+      ShrinkBy2AlongX_D(from, from.GetSizeX(), sizeX, p++, kernel,
+                        no_value, yline[3], wline[3] );
     else {
       vcl_memcpy(yline[3], y_empty, sizeX*sizeof(float));
       vcl_memcpy(wline[3], w_empty, sizeX*sizeof(float));
     }
     if ( p < from.GetSizeY() )
-      ShrinkBy2AlongX_D( from, from.GetSizeX(), sizeX, p++, kernel,
-                         no_value, yline[4], wline[4] );
+      ShrinkBy2AlongX_D(from, from.GetSizeX(), sizeX, p++, kernel,
+                        no_value, yline[4], wline[4] );
     else {
       vcl_memcpy(yline[4], y_empty, sizeX*sizeof(float));
       vcl_memcpy(wline[4], w_empty, sizeX*sizeof(float));
@@ -1931,18 +1982,18 @@ gevd_float_operators::ShrinkBy2_D (const gevd_bufferxy& from,
   }
 
   //  Delete the scratch memory.
-  for ( i=0; i<5; i++ ) {
-    delete [] yline[i];
-    delete [] wline[i];
+  for (int i=0; i<5; i++ ) {
+    delete[] yline[i];
+    delete[] wline[i];
   }
-  delete [] y_empty;
-  delete [] w_empty;
+  delete[] y_empty;
+  delete[] w_empty;
 }
 
 void
 PrintPipe( float values[] )
 {
-  for ( int i=0; i<4; i++ ) vcl_cout << values[i] << ", ";
+  for (int i=0; i<4; i++ ) vcl_cout << values[i] << ", ";
   vcl_cout << values[4];
 }
 
@@ -1952,20 +2003,22 @@ PrintPipe( float values[] )
 // yline) and the weights (wline).
 //
 void
-gevd_float_operators::ShrinkBy2AlongX_D( const gevd_bufferxy& from,
-                                         int from_sizeX,
-                                         int sizeX,
-                                         int y,
-                                         float kernel[],
-                                         float no_value,
-                                         float* yline,
-                                         float* wline )
+gevd_float_operators::ShrinkBy2AlongX_D(const gevd_bufferxy& from,
+                                        int from_sizeX,
+                                        int sizeX,
+                                        int y,
+                                        float kernel[],
+                                        float no_value,
+                                        float* yline,
+                                        float* wline )
 {
-  // vcl_cout << "\nIn gevd_float_operators::ShrinkBy2AlongX_D:\n";
+#ifdef DEBUG
+  vcl_cout << "\nIn gevd_float_operators::ShrinkBy2AlongX_D:\n";
 
-  // vcl_cout << "Here is the original data:\n";
-  // for ( int xx=0; xx<from.GetSizeX(); xx++ )
-  //  vcl_cout << xx << ":  " << floatPixel( from, xx, y ) << vcl_endl;
+  vcl_cout << "Here is the original data:\n";
+  for (int xx=0; xx<from.GetSizeX(); xx++ )
+    vcl_cout << xx << ":  " << floatPixel( from, xx, y ) << vcl_endl;
+#endif
 
   // setup pipeline of 5 x values
   float xs[5];
@@ -1976,19 +2029,22 @@ gevd_float_operators::ShrinkBy2AlongX_D( const gevd_bufferxy& from,
   xs[4] = floatPixel( from, 2, y );
   int p = 3;
 
-  for ( int x = 0; x < sizeX; x++ ) {
-    // vcl_cout << "Data pipe:  ";  PrintPipe( xs ); vcl_cout << vcl_endl;
+  for (int x = 0; x < sizeX; x++ ) {
+#ifdef DEBUG
+    vcl_cout << "Data pipe:  ";  PrintPipe( xs ); vcl_cout << vcl_endl;
+#endif
     wline[x] = yline[x] = 0.0;
-    int i;
-    for ( i = 0; i<5; i++ ) {
+    for (int i = 0; i<5; i++ ) {
       if ( xs[i] != no_value ) {
         wline[x] += kernel[i];
         yline[x] += kernel[i] * xs[i];
       }
     }
-    // vcl_cout << "x = " << x << ",  yline[x] = " << yline[x]
-    // << ", wline[x] = " << wline[x] << vcl_endl;
-    for ( i=0; i<3; i++ ) xs[i] = xs[i+2];
+#ifdef DEBUG
+    vcl_cout << "x = " << x << ",  yline[x] = " << yline[x]
+             << ", wline[x] = " << wline[x] << vcl_endl;
+#endif
+    for (int i=0; i<3; i++ ) xs[i] = xs[i+2];
     xs[3] = (p < from_sizeX) ? floatPixel(from, p++, y) : no_value;
     xs[4] = (p < from_sizeX) ? floatPixel(from, p++, y) : no_value;
   }
@@ -2018,8 +2074,8 @@ gevd_float_operators::ExpandBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
   float* yline0 = new float[sizeX];     // to cache ExpandBy2AlongX
   float* yline1 = new float[sizeX];
   float* yline2 = new float[sizeX];
-  gevd_float_operators::ExpandBy2AlongX (from, p++, yline1, sizeX, ka, kb, kc);
-  gevd_float_operators::ExpandBy2AlongX (from, p++, yline2, sizeX, ka, kb, kc);
+  gevd_float_operators::ExpandBy2AlongX(from, p++, yline1, sizeX, ka, kb, kc);
+  gevd_float_operators::ExpandBy2AlongX(from, p++, yline2, sizeX, ka, kb, kc);
   vcl_memcpy(yline0, yline2, sizeX*sizeof(float));// first line is wrapped
 
   // Convolve and expand along x-axis.
@@ -2035,13 +2091,13 @@ gevd_float_operators::ExpandBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
     yline1 = yline2;
     yline2 = next;
     if (y < sizeY-4)
-      gevd_float_operators::ExpandBy2AlongX (from, p++, next, sizeX, ka, kb, kc);
+      gevd_float_operators::ExpandBy2AlongX(from, p++, next, sizeX, ka, kb, kc);
     else                        // last line is wrapped
       vcl_memcpy(next, yline0, sizeX*sizeof(float));
   }
-  delete [] yline0;
-  delete [] yline1;
-  delete [] yline2;
+  delete[] yline0;
+  delete[] yline1;
+  delete[] yline2;
   return 1;
 }
 
@@ -2299,42 +2355,42 @@ static float dual_wavelet [20] = {0};
 // wavelet, and 9-15 odd numbers for symmetric Coifman wavelets.
 
 bool
-gevd_float_operators::FindWavelet (const int waveletno,
-                                   float*& lo_filter, float*& hi_filter, int& ncof)
+gevd_float_operators::FindWavelet(const int waveletno,
+                                  float*& lo_filter, float*& hi_filter, int& ncof)
 {
   ncof = waveletno;
   switch (waveletno) {
-  case 2:
+   case 2:
     lo_filter = haar2;
     break;
-  case 4:
+   case 4:
     lo_filter = daubechies4;
     break;
-  case 6:
+   case 6:
     lo_filter = daubechies6;
     break;
-  case 8:
+   case 8:
     lo_filter = daubechies8;
     break;
-  case 10:
+   case 10:
     lo_filter = daubechies10;
     break;
-  case 12:
+   case 12:
     lo_filter = daubechies12;
     break;
-  case 20:
+   case 20:
     lo_filter = daubechies20;
     break;
-  case 9:                                       // wavelets from epic
+   case 9:                                       // wavelets from epic
     lo_filter = coifman9;
     break;
-  case 11:
+   case 11:
     lo_filter = coifman11;
     break;
-  case 15:
+   case 15:
     lo_filter = coifman15;
     break;
-  default:
+   default:
     ncof = 0;
     lo_filter = hi_filter = NULL;
     vcl_cerr << "Unknown wavelet: " << waveletno << vcl_endl;
@@ -2369,15 +2425,15 @@ gevd_float_operators::FindWavelet (const int waveletno,
     lo_filter[ncof] = lo_area;
     hi_filter[ncof] = hi_area;
   }
-//   vcl_cout << "lo-filter wavelet " << waveletno << ": ";         // print wavelets
-//   for (int i = 0; i < ncof; i++)
-//       vcl_cout << lo_filter[i] << ' ';
-//   vcl_cout << vcl_endl;
-//   vcl_cout << "hi-filter wavelet " << waveletno << ": ";
-//     for (i = 0; i < ncof; i++)
-//       vcl_cout << hi_filter[i] << ' ';
-//   vcl_cout << vcl_endl;
-
+#ifdef DEBUG
+  vcl_cout << "lo-filter wavelet " << waveletno << ':'; // print wavelets
+  for (int i = 0; i < ncof; i++)
+    vcl_cout << ' ' << lo_filter[i];
+  vcl_cout << "\nhi-filter wavelet " << waveletno << ':';
+  for (int i = 0; i < ncof; i++)
+    vcl_cout << ' ' << hi_filter[i];
+  vcl_cout << vcl_endl;
+#endif
   return true;
 }
 
@@ -2397,15 +2453,12 @@ gevd_float_operators::WaveletTransformStep(float* array, const int n,
                                            const int ncof,
                                            float* wksp)
 {
-  {for (int j = 0; j < n; j++)
+  for (int j = 0; j < n; j++)
     wksp[j] = 0;                                // clear workspace
-  }
   int nmid = n / 2;                             // round off towards 0
   int nmod = nmid * 2;                          // even and <= n.
   if (forwardp) {                               // forward transform
-    for (int i =  0, ii = 0;
-         i < nmod;
-         i +=2, ii += 1)                        // every pair
+    for (int i=0, ii=0; i < nmod; i +=2, ++ii)  // every pair
       for (int k = 0; k < ncof; k++) {          // convolution with filters
         int j = (i + k) % nmod;                 // wrap around
         // int j = (i + k) & (nmod - 1);        // when n is power of 2
@@ -2413,13 +2466,10 @@ gevd_float_operators::WaveletTransformStep(float* array, const int n,
         wksp[ii+nmid] += hi_filter[k] * array[j]; // hi-filter results
       }
     float scale = vcl_max(lo_filter[ncof], hi_filter[ncof]);
-    {for (int j = 0; j < nmod; j++)             // normalize results.
+    for (int j = 0; j < nmod; j++)             // normalize results.
       wksp[j] /= scale;
-    }
   } else {                                      // inverse transform
-    for (int i =  0, ii = 0;
-         i < nmod;
-         i +=2, ii += 1) {                      // every pair
+    for (int i=0, ii=0; i < nmod; i+=2, ++ii) { // every pair
       float lo = array[ii];
       float hi = array[ii+nmid];
       for (int k = 0; k < ncof; k++) {          // multiplication with inverse
@@ -2452,10 +2502,12 @@ gevd_float_operators::WaveletTransform(float* array, const int n,
     float* hi_filter = NULL;
     int ncof = 0;
     FindWavelet(waveletno, lo_filter, hi_filter, ncof);
-//     vcl_cout << "Input: ";
-//     for (int i = 0; i < n; i++)
-//       vcl_cout << array[i] << ' ';
-//     vcl_cout << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "Input:";
+    for (int i = 0; i < n; i++)
+      vcl_cout << ' ' << array[i];
+    vcl_cout << vcl_endl;
+#endif
 
     float* wksp = new float[n];
     if (forwardp) {                             // forward transform
@@ -2473,13 +2525,15 @@ gevd_float_operators::WaveletTransform(float* array, const int n,
         WaveletTransformStep(array, sizes[s], forwardp,
                              lo_filter, hi_filter, ncof,
                              wksp);
-      delete [] sizes;
+      delete[] sizes;
     }
-    delete [] wksp;
-//     vcl_cout << "Output: ";
-//     for (i = 0; i < n; i++)
-//       vcl_cout << array[i] << ' ';
-//     vcl_cout << vcl_endl;
+    delete[] wksp;
+#ifdef DEBUG
+    vcl_cout << "Output:";
+    for (int i = 0; i < n; i++)
+      vcl_cout << ' ' << array[i];
+    vcl_cout << vcl_endl;
+#endif
   }
   return true;
 }
@@ -2529,10 +2583,10 @@ gevd_float_operators::LowHighPyramid(float* highPass, float* lowPass,
 // with lo-filters.
 
 bool
-gevd_float_operators::WaveletTransformByIndex (float* array,
-                                               const int* dims, const int ndim,
-                                               const bool forwardp, int nlevels,
-                                               const int waveletno)
+gevd_float_operators::WaveletTransformByIndex(float* array,
+                                              const int* dims, const int ndim,
+                                              const bool forwardp, int nlevels,
+                                              const int waveletno)
 {
   int ntot = 1, maxn = 0;
   {for (int d = 0; d < ndim; d++) {
@@ -2550,10 +2604,12 @@ gevd_float_operators::WaveletTransformByIndex (float* array,
   const int sz = int(vcl_log(double(maxn))/vcl_log(2.0));
   int* sizes = new int[sz];                     // cache sizes in pyramid
 
-//   vcl_cout << "Input: ";
-//   for (int i = 0; i < ntot; i++)
-//     vcl_cout << array[i] << ' ';
-//   vcl_cout << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "Input:";
+  for (int i = 0; i < ntot; i++)
+    vcl_cout << ' ' << array[i];
+  vcl_cout << vcl_endl;
+#endif
 
   int nprev = 1;
   for (int d = ndim-1; d >= 0; d--) {           // dimension varies most, first
@@ -2594,13 +2650,15 @@ gevd_float_operators::WaveletTransformByIndex (float* array,
     }
     nprev = nnew;
   }
-  delete [] buffer;                             // free working arrays
-  delete [] wksp;
-  delete [] sizes;
-//   vcl_cout << "Output: ";
-//   for (i = 0; i < ntot; i++)
-//     vcl_cout << array[i] << ' ';
-//   vcl_cout << vcl_endl;
+  delete[] buffer;                             // free working arrays
+  delete[] wksp;
+  delete[] sizes;
+#ifdef DEBUG
+  vcl_cout << "Output:";
+  for (int i = 0; i < ntot; i++)
+    vcl_cout << ' ' << array[i];
+  vcl_cout << vcl_endl;
+#endif
   return true;
 }
 
@@ -2632,10 +2690,10 @@ gevd_float_operators::WaveletTransformStep(float* array,
                                lo_filter, hi_filter, ncof,
                                wksp);
           i3 = i1 + i2;                         // copy back results
-          {for (int k = 0; k < n; k++) {
+          for (int k = 0; k < n; k++) {
             array[i3] = buffer[k];
             i3 += nprev;
-          }}
+          }
         }
     }
     nprev = nnew;
@@ -2666,9 +2724,9 @@ gevd_float_operators::CopyNdRecursive(const float* from_array,
     int to_nsize = to_size / to_n;
     int n = vcl_min(from_n, to_n);
     for (int i = 0; i < n; i++) {               // copy n common subarrays
-      CopyNdRecursive (from_array, from_nsize, from_dims+1,
-                       to_array, to_nsize, to_dims+1,
-                       ndim-1, fullp);
+      CopyNdRecursive(from_array, from_nsize, from_dims+1,
+                      to_array, to_nsize, to_dims+1,
+                      ndim-1, fullp);
       if (fullp) {
         from_array += from_nsize;
         to_array += to_nsize;
@@ -2712,11 +2770,10 @@ gevd_float_operators::WaveletTransformByBlock(float* array,
 
   int** level_dims = new int*[nlevels];
   level_dims[0] =  new int[ndim+1];
-  {for (int d = 0; d < ndim; d++)
+  for (int d = 0; d < ndim; d++)
     level_dims[0][d] = dims[d];
-  }
   level_dims[0][ndim] = ntot;
-  {for (int l = 1; l < nlevels; l++) {
+  for (int l = 1; l < nlevels; l++) {
     level_dims[l] = new int[ndim+1];
     int n = 1;
     for (int d = 0; d < ndim; d++) {
@@ -2727,7 +2784,7 @@ gevd_float_operators::WaveletTransformByBlock(float* array,
       n *= nd;
     }
     level_dims[l][ndim] = n;
-  }}
+  }
   if (!forwardp) {                              // reverse order of the
     int* swap = NULL;                           // dimensions of sub_array
     for (int l = 0; l < nlevels/2; l++) {
@@ -2745,24 +2802,24 @@ gevd_float_operators::WaveletTransformByBlock(float* array,
     CopyNdRecursive(array, ntot, dims,
                     sub_array, n, sub_dims,     // consecutive elmts.
                     ndim);
-    WaveletTransformStep (sub_array, sub_dims, ndim,
-                          forwardp,
-                          lo_filter, hi_filter, ncof,
-                          buffer, wksp);
+    WaveletTransformStep(sub_array, sub_dims, ndim,
+                         forwardp,
+                         lo_filter, hi_filter, ncof,
+                         buffer, wksp);
     CopyNdRecursive(sub_array, n, sub_dims,
                     array, ntot, dims,
                     ndim);
   }}
-  delete [] sub_array;                          // free working arrays
+  delete[] sub_array;                          // free working arrays
   for (int l = 0; l < nlevels; l++)
-    delete [] level_dims[l];
-  delete [] level_dims;
-  delete [] buffer;
-  delete [] wksp;
+    delete[] level_dims[l];
+  delete[] level_dims;
+  delete[] buffer;
+  delete[] wksp;
   return true;
 }
 
-#if 0
+#if 0 // unimplemented - TODO
 int
 gevd_float_operators::DeleteMixedComponents
 (float* wave, // delete wavelet coefts
@@ -2792,66 +2849,63 @@ gevd_float_operators::TruncateLowestFrequency
 
 
 void
-gevd_float_operators::TestWavelets ()
+gevd_float_operators::TestWavelets()
 {
-#if 0 // testing commented out
-  {
-    vcl_cout << "Testing wavelet transforms on 1d buffers\n";
-    for (int n = 2; n <= 16; n++) {
-      float* data = new float[n];
-      for (int k = 2; k <= 12; k+=2) {
-        for (int i = 0; i < n; i++)
-          data[i] = i+1;
-        wavelet_transform (data, n, true, k, 2);
-        wavelet_transform (data, n, false, k, 2);
-        float max_err = 0;
-        for (i = 0; i < n; i++) {
-          float err = vcl_fabs(data[i] - i-1);
-          if (err > max_err)
-            max_err = err;
-        }
-        vcl_cout << "  |data| = " << n
-                 << "  |wavelet| = " << k
-                 << "  |error| = " << max_err << vcl_endl;
+#if 0 // 1d testing commented out
+  vcl_cout << "Testing wavelet transforms on 1d buffers\n";
+  for (int n = 2; n <= 16; n++) {
+    float* data = new float[n];
+    for (int k = 2; k <= 12; k+=2) {
+      for (int i = 0; i < n; i++)
+        data[i] = i+1;
+      wavelet_transform(data, n, true, k, 2);
+      wavelet_transform(data, n, false, k, 2);
+      float max_err = 0;
+      for (int i = 0; i < n; i++) {
+        float err = vcl_fabs(data[i] - i-1);
+        if (err > max_err)
+          max_err = err;
       }
-      delete [] data;
+      vcl_cout << "  |data| = " << n
+               << "  |wavelet| = " << k
+               << "  |error| = " << max_err << vcl_endl;
     }
+    delete[] data;
   }
 #endif
 
-  {
-    vcl_cout << "Testing wavelet transforms on nd buffers\n";
-    for (int ndim = 1; ndim <= 4; ndim++) {
-      for (int s = 3; s <= 8; s++)
-        {
-          int* dims = new int[ndim+1];
-          int ntot = 1;
-          for (int d = 0; d < ndim; d++) {
-            dims[d] = s;
-            ntot *= s;
-          }
-          dims[ndim] = ntot;
-          float* data = new float[ntot];
-          for (int k = 2; k <= 12; k+=2) {
-            {for (int i = 0; i < ntot; i++) data[i] = float(i);}
-            int nlevels = 2;
-            WaveletTransformByBlock (data, dims, ndim, true, nlevels, k);
-            WaveletTransformByBlock (data, dims, ndim, false, nlevels, k);
-            float max_err = 0;
-            for (int i = 0; i < ntot; i++) {
-              float err = (float)vcl_fabs(data[i] - i);
-              if (err > max_err)
-                max_err = err;
-            }
-            vcl_cout << "  |dims| = " << ndim
-                     << "  |data| = " << ntot
-                     << "  |wavelet| = " << k
-                     << "  |error| = " << max_err << vcl_endl;
-          }
-          delete [] data;
+  vcl_cout << "Testing wavelet transforms on nd buffers\n";
+  for (int ndim = 1; ndim <= 4; ndim++)
+    for (int s = 3; s <= 8; s++)
+    {
+      int* dims = new int[ndim+1];
+      int ntot = 1;
+      for (int d = 0; d < ndim; d++) {
+        dims[d] = s;
+        ntot *= s;
+      }
+      dims[ndim] = ntot;
+      float* data = new float[ntot];
+      for (int k = 2; k <= 12; k+=2)
+      {
+        for (int i = 0; i < ntot; i++) data[i] = float(i);
+        int nlevels = 2;
+        WaveletTransformByBlock(data, dims, ndim, true, nlevels, k);
+        WaveletTransformByBlock(data, dims, ndim, false, nlevels, k);
+        float max_err = 0;
+        for (int i = 0; i < ntot; i++) {
+          float err = (float)vcl_fabs(data[i] - i);
+          if (err > max_err)
+            max_err = err;
         }
+        vcl_cout << "  |dims| = " << ndim
+                 << "  |data| = " << ntot
+                 << "  |wavelet| = " << k
+                 << "  |error| = " << max_err << vcl_endl;
+      }
+      delete[] data;
+      delete[] dims;
     }
-  }
 }
 
 
@@ -2921,10 +2975,9 @@ gevd_float_operators::DeleteMixedComponents(gevd_bufferxy& wave,
 {
   int sx = wave.GetSizeX(), sy = wave.GetSizeY(), count = 0;
   for (int l = 0; l < nlevels; l++) {
-    int ssx = sx / 2, ssy = sy / 2,
-      x, y;
-    for (y = ssy; y < sy; y++)
-      for (x = ssx; x < sx; x++)
+    int ssx = sx / 2, ssy = sy / 2;
+    for (int y = ssy; y < sy; y++)
+      for (int x = ssx; x < sx; x++)
         if (floatPixel(wave, x, y) != 0) {
           floatPixel(wave, x, y) = 0;
           count++;
@@ -2948,18 +3001,17 @@ gevd_float_operators::TruncateHighFrequencies(gevd_bufferxy& wave,
 {
   int sx = wave.GetSizeX(), sy = wave.GetSizeY(), count = 0;
   for (int l = 0; l < nlevels; l++) {
-    int ssx = sx / 2, ssy = sy / 2,
-      x, y;
+    int ssx = sx / 2, ssy = sy / 2;
     float low = gevd_float_operators::Maximum(wave, sx-ssx, ssy, ssx, 0) * threshold;
-    for (y = 0; y < ssy; y++)           // lowY x highX block
-      for (x = ssx; x < sx; x++)
+    for (int y = 0; y < ssy; y++)           // lowY x highX block
+      for (int x = ssx; x < sx; x++)
         if (floatPixel(wave, x, y) < low) {
           floatPixel(wave, x, y) = 0;
           count++;
         }
     low = gevd_float_operators::Maximum(wave, ssx, sy-ssy, 0, ssy) * threshold;
-    for (y = ssy; y < sy; y++)          // highY x lowX block
-      for (x = 0; x < ssx; x++)
+    for (int y = ssy; y < sy; y++)          // highY x lowX block
+      for (int x = 0; x < ssx; x++)
         if (floatPixel(wave, x, y) < low) {
           floatPixel(wave, x, y) = 0;
           count++;
@@ -3025,8 +3077,7 @@ gevd_float_operators::DeleteBoundaryArtifacts(gevd_bufferxy& wave, const int nle
   if (nlevels == 0)
     return 0;
   else {
-    int sx = wave.GetSizeX(), sy = wave.GetSizeY(),
-      count = 0;
+    int sx = wave.GetSizeX(), sy = wave.GetSizeY(), count = 0;
     for (int l = 0; l < nlevels; l++) {
       int ssx = sx / 2, ssy = sy / 2;   // integer division rounds to
       int xx = ssx * 2, yy = ssy * 2;   // smaller value
@@ -3147,8 +3198,7 @@ gevd_float_operators::Correlation(const float* data, const int length,
   if (sum1 < radius)
     return 0;
   else {
-    register double sumx = 0, sumy = 0, sumxx = 0, sumyy = 0, sumxy = 0,
-      xval, yval;
+    register double sumx=0, sumy=0, sumxx=0, sumyy=0, sumxy=0, xval, yval;
     for (register int x = xmin, y = ymin; x < xmax; x++, y++) {
       xval = data[x]; yval = pattern[y];
       sumxy += xval * yval;             // accumulate correlation value
@@ -3174,9 +3224,9 @@ gevd_float_operators::Correlation(const float* data, const int length,
 // result[search-1].
 
 float*
-gevd_float_operators::Correlations (const float* data, const int length,
-                                    const float* pattern, const int radius,
-                                    const int index, const int search)
+gevd_float_operators::Correlations(const float* data, const int length,
+                                   const float* pattern, const int radius,
+                                   const int index, const int search)
 {
   int ns = 2*search + 1;
   float* result = new float[ns];
@@ -3191,10 +3241,12 @@ gevd_float_operators::Correlations (const float* data, const int length,
                                                          pattern, radius, // negative direction
                                                          index-s);
   }
-//   vcl_cout << "correlations = ";
-//   for (s = 0; s < ns; s++)
-//     vcl_cout << result[s] << ' ';
-//   vcl_cout << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "correlations =";
+  for (int s = 0; s < ns; s++)
+    vcl_cout << ' ' << result[s];
+  vcl_cout << vcl_endl;
+#endif
   return result;
 }
 
@@ -3212,7 +3264,7 @@ gevd_float_operators::BestCorrelation(const float* data, const int length,
                                                    search);
   int index = 0; float peak = 0;
   bool found = gevd_float_operators::Maximum(cors, 2*search+1, index, peak);
-  delete [] cors;
+  delete[] cors;
   if (found) {
     shift += index - search;
     return peak;
@@ -3280,7 +3332,7 @@ gevd_float_operators::CoarseFineCorrelation(const float* dataPyr, const int dlen
            << "  match = " << match << vcl_endl;
 #endif
   }
-  delete [] cors;
+  delete[] cors;
 
   // 2. Track best correlation to finest level
   const int SEARCH = 1, RMAX = 3;// local search 3 times
@@ -3298,8 +3350,7 @@ gevd_float_operators::CoarseFineCorrelation(const float* dataPyr, const int dlen
 #ifdef DEBUG
       vcl_cout << left << ' ' << mid << ' ' << right << vcl_endl;
 #endif
-      if (left <= mid && mid >= right
-          && mid > NOISE) {
+      if (left <= mid && mid >= right && mid > NOISE) {
         local += InterpolateParabola(left, mid, right, match);
         if (matches) matches[k] += match;
         break;                  // radial search succeeds
@@ -3323,7 +3374,7 @@ gevd_float_operators::CoarseFineCorrelation(const float* dataPyr, const int dlen
         }
       }
     }
-    delete [] cors;
+    delete[] cors;
     if (r == RMAX)              // fail local search
       break;                    // early exit
     shift += local;             // shift further
@@ -3345,7 +3396,7 @@ gevd_float_operators::CoarseFineCorrelation(const float* dataPyr, const int dlen
 //: Apply function to all elements in buffer.
 
 void
-gevd_float_operators::Apply (gevd_bufferxy& buf, float (*func)(float))
+gevd_float_operators::Apply(gevd_bufferxy& buf, float (*func)(float))
 {
   int size = buf.GetSizeX() * buf.GetSizeY();
   float* data = (float*) buf.GetBuffer();
@@ -3399,9 +3450,9 @@ bool
 gevd_float_operators::IsSimilarBuffer(const gevd_bufferxy& buf1,
                                       const gevd_bufferxy& buf2)
 {
-  return ((buf1.GetSizeX() == buf2.GetSizeX()) &&
-          (buf1.GetSizeY() == buf2.GetSizeY()) &&
-          (buf1.GetBitsPixel() == buf2.GetBitsPixel()));
+  return buf1.GetSizeX() == buf2.GetSizeX() &&
+         buf1.GetSizeY() == buf2.GetSizeY() &&
+         buf1.GetBitsPixel() == buf2.GetBitsPixel();
 }
 
 
@@ -3411,8 +3462,8 @@ gevd_float_operators::IsSimilarBuffer(const gevd_bufferxy& buf1,
 // Faster copying can be done with read/write chunks of memory.
 
 gevd_bufferxy*
-gevd_float_operators::Extract (const gevd_bufferxy & buf,
-                               int sizeX, int sizeY, int origX, int origY)
+gevd_float_operators::Extract(const gevd_bufferxy & buf,
+                              int sizeX, int sizeY, int origX, int origY)
 {
   if (sizeX == 0)                               // find default size
     sizeX = buf.GetSizeX();
@@ -3429,8 +3480,8 @@ gevd_float_operators::Extract (const gevd_bufferxy & buf,
 // Faster copying can be done with read/write chunks of memory.
 
 void
-gevd_float_operators::Update (gevd_bufferxy& buf, const gevd_bufferxy& sub,
-                              int origX, int origY)
+gevd_float_operators::Update(gevd_bufferxy& buf, const gevd_bufferxy& sub,
+                             int origX, int origY)
 {
   int sizeX = sub.GetSizeX(), sizeY = sub.GetSizeY();
   for (int y = 0; y < sizeY; y++)
@@ -3464,12 +3515,11 @@ gevd_float_operators::FillFrameX(gevd_bufferxy& buf, const float value, const in
 {
   const int hix = buf.GetSizeX(), hiy = buf.GetSizeY();
   const int framelox = width, framehix = hix - width;
-  int x, y;
-  for (y = 0; y < hiy; y++)             // left
-    for (x = 0; x < framelox; x++)
+  for (int y = 0; y < hiy; ++y)             // left
+    for (int x = 0; x < framelox; ++x)
       floatPixel(buf, x, y) =  value;
-  for (y = 0; y < hiy; y++)             // right
-    for (x = framehix; x < hix; x++)
+  for (int y = 0; y < hiy; ++y)             // right
+    for (int x = framehix; x < hix; ++x)
       floatPixel(buf, x, y) =  value;
 }
 
@@ -3480,12 +3530,12 @@ gevd_float_operators::FillFrameY(gevd_bufferxy& buf, const float value, const in
 {
   int lox = 0, hix = buf.GetSizeX();
   int loy = 0, hiy = buf.GetSizeY();
-  int frameloy = width, framehiy = hiy - width, x, y;
-  for (y = loy; y < frameloy; y++)              // bottom
-    for (x = lox; x < hix; x++)
+  int frameloy = width, framehiy = hiy - width;
+  for (int y = loy; y < frameloy; y++)              // bottom
+    for (int x = lox; x < hix; x++)
       floatPixel(buf, x, y) =  value;
-  for (y = framehiy; y < hiy; y++)              // top
-    for (x = lox; x < hix; x++)
+  for (int y = framehiy; y < hiy; y++)              // top
+    for (int x = lox; x < hix; x++)
       floatPixel(buf, x, y) =  value;
 }
 
@@ -3510,8 +3560,8 @@ gevd_float_operators::DrawFrame(gevd_bufferxy& buf, const int loc, const float v
 //: Returns the maximum value in float buffer.
 
 float
-gevd_float_operators::Maximum (const gevd_bufferxy& buf,
-                               int sizeX, int sizeY, int origX, int origY)
+gevd_float_operators::Maximum(const gevd_bufferxy& buf,
+                              int sizeX, int sizeY, int origX, int origY)
 {
   if (sizeX == 0)                               // find default size
     sizeX = buf.GetSizeX();
@@ -3530,8 +3580,8 @@ gevd_float_operators::Maximum (const gevd_bufferxy& buf,
 //: Returns the minimum value in float buffer.
 
 float
-gevd_float_operators::Minimum (const gevd_bufferxy& buf,
-                               int sizeX, int sizeY, int origX, int origY)
+gevd_float_operators::Minimum(const gevd_bufferxy& buf,
+                              int sizeX, int sizeY, int origX, int origY)
 {
   if (sizeX == 0)                               // find default size
     sizeX = buf.GetSizeX();
@@ -3550,8 +3600,8 @@ gevd_float_operators::Minimum (const gevd_bufferxy& buf,
 //: Returns the sum of all values in float buffer.
 
 float
-gevd_float_operators::Sum (const gevd_bufferxy& buf,
-                           int sizeX, int sizeY, int origX, int origY)
+gevd_float_operators::Sum(const gevd_bufferxy& buf,
+                          int sizeX, int sizeY, int origX, int origY)
 {
   if (sizeX == 0)                               // find default size
     sizeX = buf.GetSizeX();
@@ -3581,8 +3631,7 @@ gevd_float_operators::Threshold(gevd_bufferxy& buf, float noise,
   int count = 0; float pix;
   for (int y = origY; y < maxy; y++)
     for (int x = origX; x < maxx; x++)
-      if ((pix = floatPixel(buf, x, y)) &&
-          pix < noise) {
+      if ((pix = floatPixel(buf, x, y)) && pix < noise) {
         floatPixel(buf, x, y) = 0;
         count++;
       }
@@ -3596,7 +3645,7 @@ gevd_float_operators::Threshold(gevd_bufferxy& buf, float noise,
 // the value is mapped to lo. O(n*m).
 
 void
-gevd_float_operators::Normalize (gevd_bufferxy& buf, const float lo, const float hi)
+gevd_float_operators::Normalize(gevd_bufferxy& buf, const float lo, const float hi)
 {
   int size = (buf.GetSizeX() * buf.GetSizeY());
   float* data = (float*) buf.GetBuffer();
@@ -3621,7 +3670,7 @@ gevd_float_operators::Normalize (gevd_bufferxy& buf, const float lo, const float
 //  O(n*m).
 
 void
-gevd_float_operators::ShiftToPositive (gevd_bufferxy& buf)
+gevd_float_operators::ShiftToPositive(gevd_bufferxy& buf)
 {
   const float zero = 30000, lo = 0, hi = 60000;
   int size = (buf.GetSizeX() * buf.GetSizeY());
@@ -3640,7 +3689,7 @@ gevd_float_operators::ShiftToPositive (gevd_bufferxy& buf)
 //: Zeros out all negative values.
 
 float
-gevd_float_operators::TruncateToPositive (gevd_bufferxy& buf)
+gevd_float_operators::TruncateToPositive(gevd_bufferxy& buf)
 {
   int size = (buf.GetSizeX() * buf.GetSizeY());
   float* data = (float*) buf.GetBuffer();
@@ -3659,7 +3708,7 @@ gevd_float_operators::TruncateToPositive (gevd_bufferxy& buf)
 //: Scale all values by factor.
 
 void
-gevd_float_operators::Scale (gevd_bufferxy& buf, float factor)
+gevd_float_operators::Scale(gevd_bufferxy& buf, float factor)
 {
   if (factor != 0) {
     int size = (buf.GetSizeX() * buf.GetSizeY());
@@ -3672,7 +3721,7 @@ gevd_float_operators::Scale (gevd_bufferxy& buf, float factor)
 //: Replace with absolute values.
 
 void
-gevd_float_operators::Absolute (gevd_bufferxy& buf)
+gevd_float_operators::Absolute(gevd_bufferxy& buf)
 {
   int size = (buf.GetSizeX() * buf.GetSizeY());
   float* data = (float*) buf.GetBuffer();
@@ -3684,7 +3733,7 @@ gevd_float_operators::Absolute (gevd_bufferxy& buf)
 //: Negate all values.
 
 void
-gevd_float_operators::Negate (gevd_bufferxy& buf)
+gevd_float_operators::Negate(gevd_bufferxy& buf)
 {
   int size = (buf.GetSizeX() * buf.GetSizeY());
   float* data = (float*) buf.GetBuffer();
@@ -3694,7 +3743,7 @@ gevd_float_operators::Negate (gevd_bufferxy& buf)
 
 
 float
-gevd_float_operators::TruncateToCeiling (gevd_bufferxy& buf, float ceilng)
+gevd_float_operators::TruncateToCeiling(gevd_bufferxy& buf, float ceilng)
 {
   int size = (buf.GetSizeX() * buf.GetSizeY());
   float* data = (float*) buf.GetBuffer();
@@ -3717,7 +3766,7 @@ gevd_float_operators::TruncateToCeiling (gevd_bufferxy& buf, float ceilng)
 // O(n*m).
 
 bool
-gevd_float_operators::BufferToFloat (const gevd_bufferxy& from, gevd_bufferxy& to)
+gevd_float_operators::BufferToFloat(const gevd_bufferxy& from, gevd_bufferxy& to)
 {
   if (from.GetSizeX() != to.GetSizeX() ||
       from.GetSizeY() != to.GetSizeY() ||
@@ -3725,7 +3774,7 @@ gevd_float_operators::BufferToFloat (const gevd_bufferxy& from, gevd_bufferxy& t
     return false;
   int size = (to.GetSizeX() * to.GetSizeY());
   switch (from.GetBytesPixel()) {
-  case sizeof(unsigned char):
+   case sizeof(unsigned char):
     {
       const unsigned char* frombuf = (const unsigned char*) from.GetBuffer();
       float* tobuf = (float*) to.GetBuffer();
@@ -3733,7 +3782,7 @@ gevd_float_operators::BufferToFloat (const gevd_bufferxy& from, gevd_bufferxy& t
         tobuf[i] = (float) frombuf[i];
     }
     break;
-  case sizeof(short):
+   case sizeof(short):
     {
       const short* frombuf = (const short*) from.GetBuffer();
       float* tobuf = (float*) to.GetBuffer();
@@ -3741,7 +3790,7 @@ gevd_float_operators::BufferToFloat (const gevd_bufferxy& from, gevd_bufferxy& t
         tobuf[i] = (float) frombuf[i];
     }
     break;
-  case 3*sizeof(unsigned char): // assume RGB, and take luminance
+   case 3*sizeof(unsigned char): // assume RGB, and take luminance
     {
       vcl_cerr << "gevd_float_operators::BufferToFloat: taking luminance of RGB buffer\n";
       const unsigned char* frombuf = (const unsigned char*) from.GetBuffer();
@@ -3750,7 +3799,7 @@ gevd_float_operators::BufferToFloat (const gevd_bufferxy& from, gevd_bufferxy& t
         tobuf[i] = 0.299f*frombuf[3*i]+0.587f*frombuf[3*i+1]+0.114f*frombuf[3*i+2];
     }
     break;
-  case sizeof(int):
+   case sizeof(int):
     {
       const unsigned int* frombuf = (const unsigned int*) from.GetBuffer();
       float* tobuf = (float*) to.GetBuffer();
@@ -3758,7 +3807,7 @@ gevd_float_operators::BufferToFloat (const gevd_bufferxy& from, gevd_bufferxy& t
         tobuf[i] = (float)frombuf[i];
     }
     break;
-  default:
+   default:
     vcl_cerr << "Can only convert unsigned char/short/int/RGB buffer to float\n";
     return false;
   }
@@ -3774,7 +3823,7 @@ gevd_float_operators::FloatToBuffer (const gevd_bufferxy& from, gevd_bufferxy& t
     return false;
   int size = (to.GetSizeX() * to.GetSizeY());
   switch (to.GetBytesPixel()) {
-  case sizeof(unsigned char):
+   case sizeof(unsigned char):
     {
       const float* frombuf = (const float*) from.GetBuffer();
       unsigned char* tobuf = (unsigned char*) to.GetBuffer();
@@ -3782,7 +3831,7 @@ gevd_float_operators::FloatToBuffer (const gevd_bufferxy& from, gevd_bufferxy& t
         tobuf[i] = (unsigned char) int(frombuf[i]);
     }
     return true;
-  case sizeof(short):
+   case sizeof(short):
     {
       const float* frombuf = (const float*) from.GetBuffer();
       short* tobuf = (short*) to.GetBuffer();
@@ -3790,7 +3839,7 @@ gevd_float_operators::FloatToBuffer (const gevd_bufferxy& from, gevd_bufferxy& t
         tobuf[i] = (short) int(frombuf[i]);
     }
     return true;
-  case 3*sizeof(unsigned char): // assume RGB ==> restore luminance
+   case 3*sizeof(unsigned char): // assume RGB ==> restore luminance
     {
       const float* frombuf = (const float*) from.GetBuffer();
       unsigned char* tobuf = (unsigned char*) to.GetBuffer();
@@ -3798,7 +3847,7 @@ gevd_float_operators::FloatToBuffer (const gevd_bufferxy& from, gevd_bufferxy& t
         tobuf[3*i] = tobuf[3*i+1] = tobuf[3*i+2] = (unsigned char) int(frombuf[i]);
     }
     return true;
-  default:
+   default:
     vcl_cerr << "Can only convert float to unsigned char/short/RGB buffer\n";
     return false;
   }
@@ -3808,8 +3857,8 @@ gevd_float_operators::FloatToBuffer (const gevd_bufferxy& from, gevd_bufferxy& t
 //: Detect maximum in 1d-array of values.
 
 bool
-gevd_float_operators::Maximum (const float* data, const int length,
-                               int& index, float& value)
+gevd_float_operators::Maximum(const float* data, const int length,
+                              int& index, float& value)
 {
   index = 0;
   float left, mid = data[0], right = data[1];
@@ -3817,7 +3866,7 @@ gevd_float_operators::Maximum (const float* data, const int length,
     left = mid;
     mid = right;
     right = data[r];
-    if ((mid > left) && (mid > right)) {
+    if (mid > left && mid > right) {
       if (index) {
         if (mid > value) {
           value = mid;
@@ -3853,7 +3902,7 @@ gevd_float_operators::PadToPowerOf2(gevd_bufferxy& buf)
     if (exptY < ceilY)
       newSizeY = 1 << int(ceilY);
   }
-  if ((newSizeX == sizeX) && (newSizeY == sizeY))
+  if (newSizeX == sizeX && newSizeY == sizeY)
     return &buf;
   int lpadX = (newSizeX - sizeX) / 2, lpadY = (newSizeY - sizeY) / 2;
   gevd_bufferxy& padded = *gevd_float_operators::SimilarBuffer(buf, bits_per_float,
@@ -3880,35 +3929,35 @@ gevd_float_operators::PadToPowerOf2(gevd_bufferxy& buf)
             floatPixel(buf, sizeX-1, sizeY-2)) / 4;
   gevd_float_operators::Fill(padded, corner,
                              hpadX, hpadY, newSizeX-hpadX, newSizeY-hpadY);
-  int x, y, x_1, x_2, y_1, y_2;
+  int x_1, x_2, y_1, y_2;
   x_1 = lpadX; x_2 = newSizeX-hpadX;
-  for (x = x_1; x < x_2; x++) {
+  for (int x = x_1; x < x_2; x++) {
     float top = (floatPixel(buf, x-lpadX, 0) +
                  2*floatPixel(buf, x-lpadX+1, 0) +
                  floatPixel(buf, x-lpadX+2, 0)) / 4;
     y_1 = 0; y_2 = lpadY-1;
-    for (y = y_1; y < y_2; y++)
+    for (int y = y_1; y < y_2; y++)
       floatPixel(padded, x, y) = top;
     float bottom = (floatPixel(buf, x-lpadX, sizeY-1) +
                     2*floatPixel(buf, x-lpadX+1, sizeY-1) +
                     floatPixel(buf, x-lpadX+2, sizeY-1)) / 4;
     y_1 = newSizeY-hpadY+1; y_2 = newSizeY;
-    for (y = y_1; y < y_2; y++)
+    for (int y = y_1; y < y_2; y++)
       floatPixel(padded, x, y) = bottom;
   }
   y_1 = lpadY; y_2 = newSizeY-hpadY;
-  for (y = y_1; y < y_2; y++) {
+  for (int y = y_1; y < y_2; y++) {
     float left = (floatPixel(buf, 0, y-lpadY) +
                   2*floatPixel(buf, 0, y-lpadY+1) +
                   floatPixel(buf, 0, y-lpadY+2)) / 4;
     x_1 = 0; x_2 = lpadX-1;
-    for (x = x_1; x < x_2; x++)
+    for (int x = x_1; x < x_2; x++)
       floatPixel(padded, x, y) = left;
     float right = (floatPixel(buf, sizeX-1, y-lpadY) +
                    2*floatPixel(buf, sizeX-1, y-lpadY+1) +
                    floatPixel(buf, sizeX-1, y-lpadY+2)) / 4;
     x_1 = newSizeX-hpadX+1; x_2 = newSizeX;
-    for (x = x_1; x < x_2; x++)
+    for (int x = x_1; x < x_2; x++)
       floatPixel(padded, x, y) = right;
   }
   return &padded;
@@ -3921,17 +3970,18 @@ gevd_float_operators::UnpadFromPowerOf2(gevd_bufferxy& padded, int sizeX, int si
 {
   int newSizeX = padded.GetSizeX();
   int newSizeY = padded.GetSizeY();
-  if ((newSizeX == sizeX) && (newSizeY == sizeY))
+  if (newSizeX == sizeX && newSizeY == sizeY)
     return &padded;
   else
     return gevd_float_operators::Extract(padded,
                                          sizeX, sizeY,
-                                         (newSizeX - sizeX)/2, (newSizeY - sizeY)/2);
+                                         (newSizeX - sizeX)/2,
+                                         (newSizeY - sizeY)/2);
 }
 
 gevd_bufferxy*
-gevd_float_operators::TransposeExtract (const gevd_bufferxy & buf,
-                                        int sizeX, int sizeY, int origX, int origY)
+gevd_float_operators::TransposeExtract(const gevd_bufferxy & buf,
+                                       int sizeX, int sizeY, int origX, int origY)
 {
   gevd_bufferxy& sub = *gevd_float_operators::SimilarBuffer(buf, 0, sizeY, sizeX);
   for (int y = 0; y < sizeY; y++)
@@ -3941,8 +3991,8 @@ gevd_float_operators::TransposeExtract (const gevd_bufferxy & buf,
 }
 
 void
-gevd_float_operators::TransposeUpdate (gevd_bufferxy & buf, const gevd_bufferxy& sub,
-                                       int origX, int origY)
+gevd_float_operators::TransposeUpdate(gevd_bufferxy& buf, const gevd_bufferxy& sub,
+                                      int origX, int origY)
 {
   int sizeX = sub.GetSizeY(), sizeY = sub.GetSizeX();
   for (int y = 0; y < sizeY; y++)
@@ -3952,7 +4002,8 @@ gevd_float_operators::TransposeUpdate (gevd_bufferxy & buf, const gevd_bufferxy&
 
 
 gevd_bufferxy*
-gevd_float_operators::AbsoluteDifference (const gevd_bufferxy& buf1, const gevd_bufferxy& buf2)
+gevd_float_operators::AbsoluteDifference(const gevd_bufferxy& buf1,
+                                         const gevd_bufferxy& buf2)
 {
   if (!IsSimilarBuffer(buf1, buf2))
     return NULL;
