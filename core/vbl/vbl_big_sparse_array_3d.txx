@@ -40,7 +40,7 @@ template <class T>
 T& vbl_big_sparse_array_3d<T>::operator() (unsigned i, unsigned j, unsigned k)
 {
 #ifdef DEBUG
-  vcl_cout << "{vbl_big_sparse_array_3d(" << i << "," << j << "," << k << ") - "
+  vcl_cout << "{vbl_big_sparse_array_3d(" << i << ',' << j << ',' << k << ") - "
            << "storage[" << bigencode(i,j,k) << "] - " << storage_[bigencode(i,j,k)] << "}\n";
 #endif
   return storage_[bigencode(i,j,k)];
@@ -51,7 +51,7 @@ T const& vbl_big_sparse_array_3d<T>::operator() (unsigned i, unsigned j, unsigne
 {
   typename Map::const_iterator p = storage_.find(bigencode(i,j,k));
 #ifdef DEBUG
-  vcl_cout << "{vbl_big_sparse_array_3d(" << i << "," << j << "," << k << ") - "
+  vcl_cout << "{vbl_big_sparse_array_3d(" << i << ',' << j << ',' << k << ") - "
            << "storage[" << bigencode(i,j,k) << "] - " << storage_[bigencode(i,j,k)] << "}\n";
 #endif
   assert(p != storage_.end());
@@ -62,7 +62,7 @@ template <class T>
 bool vbl_big_sparse_array_3d<T>::fullp(unsigned i, unsigned j, unsigned k) const
 {
 #ifdef DEBUG
-  vcl_cout << "{vbl_big_sparse_array_3d::fullp(" << i << "," << j << "," << k << ") - "
+  vcl_cout << "{vbl_big_sparse_array_3d::fullp(" << i << ',' << j << ',' << k << ") - "
            << (storage_.find(bigencode(i,j,k)) != storage_.end()) << "}\n";
 #endif
   return (storage_.find(bigencode(i,j,k)) != storage_.end());
@@ -73,9 +73,9 @@ bool vbl_big_sparse_array_3d<T>::put(unsigned i, unsigned j, unsigned k, T const
 {
   typedef typename Map::iterator iter;
   ulonglong v = bigencode(i,j,k);
-  vcl_pair<iter,bool> res = storage_.insert(Map::value_type(v,t));
+  vcl_pair<iter,bool> res = storage_.insert(typename Map::value_type(v,t));
 #ifdef DEBUG
-  vcl_cout << "{vbl_big_sparse_array_3d::put(" << i << "," << j << "," << k << ") - "
+  vcl_cout << "{vbl_big_sparse_array_3d::put(" << i << ',' << j << ',' << k << ") - "
            << res.second << "}\n";
 #endif
   return res.second;
@@ -87,7 +87,7 @@ vcl_ostream& vbl_big_sparse_array_3d<T>::print(vcl_ostream& out) const
   for (typename Map::const_iterator p = storage_.begin(); p != storage_.end(); ++p) {
     unsigned i,j,k;
     bigdecode((*p).first, i, j, k);
-    out << "(" << i << "," << j << "," << k << "): " << (*p).second << vcl_endl;
+    out << '(' << i << ',' << j << ',' << k << "): " << (*p).second << vcl_endl;
   }
   return out;
 }
