@@ -125,24 +125,24 @@ void computeedgemap( vil_memory_image_of<vil_byte> imbuf, vbl_array_2d<bool> &ed
 ///////////////////////////////////////////////////////////////////
 double computevoxelradius( VoxmapImagePoints const& voxmap, Voxel &voxel, int imageindex)
 {
-  vnl_double_2 *centre( voxmap.GetCentreImage( voxel.x, voxel.y, voxel.z, voxel.depth, imageindex));
-  vnl_double_2 *c1( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 0, 0, voxel.depth, imageindex));
-  vnl_double_2 *c2( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 0, 1, voxel.depth, imageindex));
-  vnl_double_2 *c3( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 1, 0, voxel.depth, imageindex));
-  vnl_double_2 *c4( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 1, 1, voxel.depth, imageindex));
-  vnl_double_2 *c5( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 0, 0, voxel.depth, imageindex));
-  vnl_double_2 *c6( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 0, 1, voxel.depth, imageindex));
-  vnl_double_2 *c7( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 1, 0, voxel.depth, imageindex));
-  vnl_double_2 *c8( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 1, 1, voxel.depth, imageindex));
+  vnl_double_2 centre = voxmap.GetCentreImage( voxel.x, voxel.y, voxel.z, voxel.depth, imageindex);
+  vnl_double_2 c1 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 0, 0, voxel.depth, imageindex);
+  vnl_double_2 c2 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 0, 1, voxel.depth, imageindex);
+  vnl_double_2 c3 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 1, 0, voxel.depth, imageindex);
+  vnl_double_2 c4 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 1, 1, voxel.depth, imageindex);
+  vnl_double_2 c5 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 0, 0, voxel.depth, imageindex);
+  vnl_double_2 c6 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 0, 1, voxel.depth, imageindex);
+  vnl_double_2 c7 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 1, 0, voxel.depth, imageindex);
+  vnl_double_2 c8 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 1, 1, voxel.depth, imageindex);
 
-  double dist= (*c1-*centre).squared_magnitude();
-  double d2  = (*c2-*centre).squared_magnitude(); if( d2> dist) dist= d2;
-  double d3  = (*c3-*centre).squared_magnitude(); if( d3> dist) dist= d3;
-  double d4  = (*c4-*centre).squared_magnitude(); if( d4> dist) dist= d4;
-  double d5  = (*c5-*centre).squared_magnitude(); if( d5> dist) dist= d5;
-  double d6  = (*c6-*centre).squared_magnitude(); if( d6> dist) dist= d6;
-  double d7  = (*c7-*centre).squared_magnitude(); if( d7> dist) dist= d7;
-  double d8  = (*c8-*centre).squared_magnitude(); if( d8> dist) dist= d8;
+  double dist= (c1-centre).squared_magnitude();
+  double d2  = (c2-centre).squared_magnitude(); if( d2> dist) dist= d2;
+  double d3  = (c3-centre).squared_magnitude(); if( d3> dist) dist= d3;
+  double d4  = (c4-centre).squared_magnitude(); if( d4> dist) dist= d4;
+  double d5  = (c5-centre).squared_magnitude(); if( d5> dist) dist= d5;
+  double d6  = (c6-centre).squared_magnitude(); if( d6> dist) dist= d6;
+  double d7  = (c7-centre).squared_magnitude(); if( d7> dist) dist= d7;
+  double d8  = (c8-centre).squared_magnitude(); if( d8> dist) dist= d8;
 
   return vcl_sqrt(dist);
 }
@@ -150,24 +150,24 @@ double computevoxelradius( VoxmapImagePoints const& voxmap, Voxel &voxel, int im
 ///////////////////////////////////////////////////////////////////
 cubetest_t DoScan( VoxmapImagePoints const& voxmap, Voxel &voxel, int imageindex)
 {
-  vnl_double_2 *c1( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 0, 0, voxel.depth, imageindex));
-  vnl_double_2 *c2( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 0, 1, voxel.depth, imageindex));
-  vnl_double_2 *c3( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 1, 0, voxel.depth, imageindex));
-  vnl_double_2 *c4( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 1, 1, voxel.depth, imageindex));
-  vnl_double_2 *c5( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 0, 0, voxel.depth, imageindex));
-  vnl_double_2 *c6( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 0, 1, voxel.depth, imageindex));
-  vnl_double_2 *c7( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 1, 0, voxel.depth, imageindex));
-  vnl_double_2 *c8( voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 1, 1, voxel.depth, imageindex));
+  vnl_double_2 c1 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 0, 0, voxel.depth, imageindex);
+  vnl_double_2 c2 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 0, 1, voxel.depth, imageindex);
+  vnl_double_2 c3 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 1, 0, voxel.depth, imageindex);
+  vnl_double_2 c4 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 0, 1, 1, voxel.depth, imageindex);
+  vnl_double_2 c5 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 0, 0, voxel.depth, imageindex);
+  vnl_double_2 c6 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 0, 1, voxel.depth, imageindex);
+  vnl_double_2 c7 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 1, 0, voxel.depth, imageindex);
+  vnl_double_2 c8 = voxmap.GetCornerImage( voxel.x, voxel.y, voxel.z, 1, 1, 1, voxel.depth, imageindex);
 
   ConvexHull cv( 8);
-  cv.set_point( 0, (*c1)[0], (*c1)[1]);
-  cv.set_point( 1, (*c2)[0], (*c2)[1]);
-  cv.set_point( 2, (*c3)[0], (*c3)[1]);
-  cv.set_point( 3, (*c4)[0], (*c4)[1]);
-  cv.set_point( 4, (*c5)[0], (*c5)[1]);
-  cv.set_point( 5, (*c6)[0], (*c6)[1]);
-  cv.set_point( 6, (*c7)[0], (*c7)[1]);
-  cv.set_point( 7, (*c8)[0], (*c8)[1]);
+  cv.set_point( 0, c1[0], c1[1]);
+  cv.set_point( 1, c2[0], c2[1]);
+  cv.set_point( 2, c3[0], c3[1]);
+  cv.set_point( 3, c4[0], c4[1]);
+  cv.set_point( 4, c5[0], c5[1]);
+  cv.set_point( 5, c6[0], c6[1]);
+  cv.set_point( 6, c7[0], c7[1]);
+  cv.set_point( 7, c8[0], c8[1]);
   cv.compute();
 
   vcl_vector<vgl_point_2d<float> > points;
@@ -337,9 +337,9 @@ int main(int argc, char ** argv)
         }
 
       ///////////////////////////////////////////////////////////////////
-      bool outsideobject[voxels.size()];
-      bool insideimage  [voxels.size()];
-      bool insideobject [voxels.size()];
+      bool* outsideobject = new bool [voxels.size()];
+      bool* insideimage   = new bool [voxels.size()];
+      bool* insideobject  = new bool [voxels.size()];
 
       vcl_cerr << "Setting up variables... ";
 
@@ -384,11 +384,11 @@ int main(int argc, char ** argv)
               if( !outsideobject[i] && insideimage[i])
                 {
                   //          double radius ( computevoxelradius( voxmap, voxels[i], *it));
-                  vnl_double_2 centre( *voxmap.GetCentreImage( voxels[i].x,
-                                                          voxels[i].y,
-                                                          voxels[i].z,
-                                                          voxels[i].depth,
-                                                          *it));
+                  vnl_double_2 centre = voxmap.GetCentreImage( voxels[i].x,
+                                                               voxels[i].y,
+                                                               voxels[i].z,
+                                                               voxels[i].depth,
+                                                               *it);
 
                   // centre is outside the image
                   if(( centre[0]< 0) || ( centre[1]< 0) || ( centre[0]>= xsize) || (centre[1]>= ysize))
@@ -506,6 +506,9 @@ int main(int argc, char ** argv)
 
       //      if( count!= (int(iterations)-1))
       voxels= newvoxels;
+      delete[] outsideobject;
+      delete[] insideimage;
+      delete[] insideobject;
     } // for( int i=0; i< int(iterators); i++)
 
   vcl_cerr << "Deleting images and pmatrices..." << vcl_endl;
@@ -637,11 +640,9 @@ int main(int argc, char ** argv)
 
   vcl_cerr << "Output VRML..." << vcl_endl;
 
-  vbl_sparse_array_1d<int>      indexlist;
-  vcl_vector<vnl_double_3 *> points;
+  vbl_sparse_array_1d<int> indexlist;
+  vcl_vector<vnl_double_3> points;
   vcl_vector<vnl_int_3> faces;
-  //  CoolArrayP<vnl_double_3 *> points;
-  //  CoolArray<vnl_int_3>       faces;
 
   vcl_cerr << "z - direction" << vcl_endl;
 
@@ -857,9 +858,9 @@ int main(int argc, char ** argv)
 
   for( int i=0; i< points.size(); i++)
     {
-      vfout << (*points[i])[0] << " "
-            << (*points[i])[1] << " "
-            << (*points[i])[2] << "," << vcl_endl;
+      vfout << points[i][0] << " "
+            << points[i][1] << " "
+            << points[i][2] << "," << vcl_endl;
     }
 
   vfout << "]}\nIndexedFaceSet { coordIndex [\n";
