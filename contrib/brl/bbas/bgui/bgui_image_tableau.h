@@ -1,6 +1,6 @@
-// This is oxl/xcv/xcv_image_tableau.h
-#ifndef xcv_image_tableau_h_
-#define xcv_image_tableau_h_
+// This is brl/bbas/bgui/bgui_image_tableau.h
+#ifndef bgui_image_tableau_h_
+#define bgui_image_tableau_h_
 //:
 // \file
 // \author  Marko Bacic (u97mb@robots.ox.ac.uk)
