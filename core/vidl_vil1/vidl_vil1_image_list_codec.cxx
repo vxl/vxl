@@ -226,11 +226,11 @@ bool vidl_vil1_image_list_codec::save(
     vil1_image image = pframe->get_image();
 
     // Create a name for the current image to be saved
-    const char* currentname = vul_sprintf("%s%05d.%s", fname,
-                                          pframe.current_frame_number(),
-                                          extension.c_str()).c_str();
+    vcl_string currentname = vul_sprintf("%s%05d.%s", fname,
+                                         pframe.current_frame_number(),
+                                         extension.c_str());
 
-    if (! vil1_save(image, currentname, type))
+    if (! vil1_save(image, currentname.c_str(), type))
       ret = false;
   }
 

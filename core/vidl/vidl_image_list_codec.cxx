@@ -112,8 +112,8 @@ vidl_codec_sptr vidl_image_list_codec::load(const char* fname, char mode)
 
   for ( int i=0; true; i++)
   {
-    const char *name = vul_sprintf( fname, i).c_str();
-    vil_image_resource_sptr img= vil_load_image_resource(name);
+    vcl_string name = vul_sprintf( fname, i);
+    vil_image_resource_sptr img= vil_load_image_resource(name.c_str());
 
     if (img)
       images_.push_back(img);
@@ -234,11 +234,11 @@ bool vidl_image_list_codec::save(
     vil_image_view_base_sptr image = pframe->get_view();
 
     // Create a name for the current image to be saved
-    const char *currentname = vul_sprintf("%s%05d.%s", fname,
-                                          pframe.current_frame_number(),
-                                          extension.c_str()).c_str();
+    vcl_string currentname = vul_sprintf("%s%05d.%s", fname,
+                                         pframe.current_frame_number(),
+                                         extension.c_str());
 
-    bool saved_image = vil_save(*image, currentname, type);
+    bool saved_image = vil_save(*image, currentname.c_str(), type);
 
     if (!saved_image)
       ret = false;
