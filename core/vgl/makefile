@@ -49,7 +49,7 @@ SOURCES += vgl_region_scan_iterator.cxx
 SOURCES += vgl_triangle_scan_iterator.cxx
 SOURCES += vgl_window_scan_iterator.cxx
 SOURCES += vgl_polygon_scan_iterator.cxx
-# coming soon: vgl_ellipse_scan_iterator.cxx
+SOURCES += vgl_ellipse_scan_iterator.cxx
 
 
 SUBDIRS += algo
