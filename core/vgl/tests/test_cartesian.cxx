@@ -423,10 +423,18 @@ static void test_box_2d()
   double d0[2] = {0.0,0.0}, d1[2] = {1.0,1.0}, d2[2] = {2.0,2.0};
   b = vgl_box_2d<double>(d0,d2); vcl_cout << b << vcl_endl;
   TEST("construct from two points", b, b2);
-  b = vgl_box_2d<double>(d1,2,2); vcl_cout << b << vcl_endl;
+  b = vgl_box_2d<double>(d1,2,2,vgl_box_2d<double>::centre); vcl_cout << b << vcl_endl;
   TEST("construct from centroid", b, b2);
+  b = vgl_box_2d<double>(p12,2,2,vgl_box_2d<double>::centre); vcl_cout << b << vcl_endl;
+  TEST("construct from centroid", b, b2);
+  p12 = b2.min_point();
+  b = vgl_box_2d<double>(p12,2,2,vgl_box_2d<double>::min_pos); vcl_cout << b << vcl_endl;
+  TEST("construct from min_pos", b, b2);
   b = vgl_box_2d<double>(p12,2,2); vcl_cout << b << vcl_endl;
-  TEST("construct from centroid", b, b2);
+  TEST("construct from min_pos (deprecated)", b, b2);
+  p12 = b2.max_point();
+  b = vgl_box_2d<double>(p12,2,2,vgl_box_2d<double>::max_pos); vcl_cout << b << vcl_endl;
+  TEST("construct from max_pos", b, b2);
 
   b.empty(); vcl_cout << b << vcl_endl;
   TEST("empty", b2==b, false);
@@ -551,10 +559,20 @@ static void test_box_3d()
   double d0[3] = {0.0,0.0,0.0}, d1[3] = {1.0,1.0,1.0}, d2[3] = {2.0,2.0,2.0};
   b = vgl_box_3d<double>(d0,d2); vcl_cout << b << vcl_endl;
   TEST("construct from two points", b, b2);
+  b = vgl_box_3d<double>(d1,2,2,2,vgl_box_3d<double>::centre); vcl_cout << b << vcl_endl;
+  TEST("construct from centroid", b, b2);
   b = vgl_box_3d<double>(d1,2,2,2); vcl_cout << b << vcl_endl;
+  TEST("construct from centroid (deprecated)", b, b2);
+  b = vgl_box_3d<double>(p123,2,2,2,vgl_box_3d<double>::centre); vcl_cout << b << vcl_endl;
   TEST("construct from centroid", b, b2);
   b = vgl_box_3d<double>(p123,2,2,2); vcl_cout << b << vcl_endl;
-  TEST("construct from centroid", b, b2);
+  TEST("construct from centroid (deprecated)", b, b2);
+  p123 = b2.min_point();
+  b = vgl_box_3d<double>(p123,2,2,2,vgl_box_3d<double>::min_pos); vcl_cout << b << vcl_endl;
+  TEST("construct from min_pos", b, b2);
+  p123 = b2.max_point();
+  b = vgl_box_3d<double>(p123,2,2,2,vgl_box_3d<double>::max_pos); vcl_cout << b << vcl_endl;
+  TEST("construct from max_pos", b, b2);
 
   b.empty(); vcl_cout << b << vcl_endl;
   TEST("empty", b2==b, false);

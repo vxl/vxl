@@ -19,8 +19,9 @@
 //   Peter Vanroose    6/10/2001: Added method add(vgl_point_2d<T>) to enlarge a box
 //   Peter Vanroose    7/10/2001: Removed deprecated get_*() functions
 //   Peter Vanroose     Feb.2002: brief doxygen comment placed on single line
-//   Peter Vanroose   12Sep.2002: Added method add(vgl_box_2d<T>) to enlarge a box
-//   Peter Vanroose   22Apr.2003: Interface change (centroid constructor): now in correspondence with vgl_box_3d<T>
+//   Peter Vanroose  12 Sep.2002: Added method add(vgl_box_2d<T>) to enlarge a box
+//   Peter Vanroose  22 Apr.2003: Interface change (centroid constructor): now in correspondence with vgl_box_3d<T>
+//   Peter Vanroose  13 May 2003: Constructor interface change (backward compat)
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -86,12 +87,33 @@ class vgl_box_2d
   //: Construct using ranges in \a x and \a y
   vgl_box_2d(Type xmin, Type xmax, Type ymin, Type ymax);
 
-  //: Construct width x height box centered at centroid
-  vgl_box_2d(const Type centroid[2],
-             Type width, Type height);
+  enum point_type { centre=0, min_pos, max_pos };
 
-  //: Construct width x height box centered at centroid
-  vgl_box_2d(const vgl_point_2d<Type>& centroid, Type width, Type height);
+  //: Construct a box sized width x height from a given reference point.
+  //  The box will either be centered at ref_point or will have ref_point
+  //  as its min-position or max-position.
+  //  The default is min_pos, in contrast to vgl_box_3d where it's centre.
+  //  Using the default is actually deprecated: use an explicit 4th
+  //  argument to avoid confusion.
+  vgl_box_2d(const Type ref_point[2],
+             Type width, Type height,
+             point_type);
+
+  //: \deprecated Deprecated; use the 4-argument constructor above.
+  vgl_box_2d(const Type min_point[2], Type width, Type height);
+
+  //: Construct a box sized width x height from a given reference point.
+  //  The box will either be centered at ref_point or will have ref_point
+  //  as its min-position or max-position.
+  //  The default is min_pos, in contrast to vgl_box_3d where it's centre.
+  //  Using the default is actually deprecated: use an explicit 4th
+  //  argument to avoid confusion.
+  vgl_box_2d(const vgl_point_2d<Type>& ref_point,
+             Type width, Type height,
+             point_type);
+
+  //: \deprecated Deprecated; use the 4-argument constructor above.
+  vgl_box_2d(const vgl_point_2d<Type>& min_point, Type width, Type height);
 
   //: Copy constructor
   inline vgl_box_2d(const vgl_box_2d& that) { *this = that; }

@@ -7,6 +7,8 @@
 #include "vgl_box_3d.h"
 #include <vgl/vgl_point_3d.h>
 #include <vcl_iostream.h>
+#include <vcl_deprecated.h>
+#include <vcl_cassert.h>
 
 // Constructors/Destructor---------------------------------------------------
 
@@ -57,29 +59,101 @@ vgl_box_3d<Type>::vgl_box_3d(Type xmin, Type ymin, Type zmin,
 }
 
 template <class Type>
-vgl_box_3d<Type>::vgl_box_3d(const Type centroid[3],
-                             Type width, Type height, Type depth)
+vgl_box_3d<Type>::vgl_box_3d(const Type ref_point[3],
+                             Type width, Type height, Type depth,
+                             vgl_box_3d<Type>::point_type t)
 {
-  min_pos_[0] = Type(centroid[0]-0.5*width);
-  min_pos_[1] = Type(centroid[1]-0.5*height);
-  min_pos_[2] = Type(centroid[2]-0.5*height);
-
-  max_pos_[0] = Type(centroid[0]+0.5*width);
-  max_pos_[1] = Type(centroid[1]+0.5*height);
-  max_pos_[2] = Type(centroid[2]+0.5*depth);
+  if (t == vgl_box_3d<Type>::centre)
+  {
+    min_pos_[0]=Type(ref_point[0]-0.5*width);
+    min_pos_[1]=Type(ref_point[1]-0.5*height);
+    min_pos_[2]=Type(ref_point[2]-0.5*depth);
+    max_pos_[0]=Type(ref_point[0]+0.5*width);
+    max_pos_[1]=Type(ref_point[1]+0.5*height);
+    max_pos_[2]=Type(ref_point[2]+0.5*depth);
+  }
+  else if (t == vgl_box_3d<Type>::min_pos)
+  {
+    min_pos_[0]=ref_point[0];
+    min_pos_[1]=ref_point[1];
+    min_pos_[2]=ref_point[2];
+    max_pos_[0]=ref_point[0]+width;
+    max_pos_[1]=ref_point[1]+height;
+    max_pos_[2]=ref_point[2]+depth;
+  }
+  else if (t == vgl_box_3d<Type>::max_pos)
+  {
+    min_pos_[0]=ref_point[0]-width;
+    min_pos_[1]=ref_point[1]-height;
+    min_pos_[2]=ref_point[2]-depth;
+    max_pos_[0]=ref_point[0];
+    max_pos_[1]=ref_point[1];
+    max_pos_[2]=ref_point[2];
+  }
+  else
+    assert(!"point_type should be one of: centre, min_pos, max_pos");
 }
 
 template <class Type>
-vgl_box_3d<Type>::vgl_box_3d(vgl_point_3d<Type> const& centroid,
+vgl_box_3d<Type>::vgl_box_3d(const Type centroid[3],
                              Type width, Type height, Type depth)
 {
-  min_pos_[0] = Type(centroid.x()-0.5*width);
-  min_pos_[1] = Type(centroid.y()-0.5*height);
-  min_pos_[2] = Type(centroid.z()-0.5*depth);
+  VXL_DEPRECATED("vgl_box_3d constructor from centroid; you should use an explicit 5th argument");
+  min_pos_[0]=Type(centroid[0]-0.5*width);
+  min_pos_[1]=Type(centroid[1]-0.5*height);
+  min_pos_[2]=Type(centroid[2]-0.5*depth);
+  max_pos_[0]=Type(centroid[0]+0.5*width);
+  max_pos_[1]=Type(centroid[1]+0.5*height);
+  max_pos_[2]=Type(centroid[2]+0.5*depth);
+}
 
-  max_pos_[0] = Type(centroid.x()+0.5*width);
-  max_pos_[1] = Type(centroid.y()+0.5*height);
-  max_pos_[2] = Type(centroid.z()+0.5*depth);
+template <class Type>
+vgl_box_3d<Type>::vgl_box_3d(const vgl_point_3d<Type>& ref_point,
+                             Type width, Type height, Type depth,
+                             vgl_box_3d<Type>::point_type t)
+{
+  if (t == vgl_box_3d<Type>::centre)
+  {
+    min_pos_[0]=Type(ref_point.x()-0.5*width);
+    min_pos_[1]=Type(ref_point.y()-0.5*height);
+    min_pos_[2]=Type(ref_point.z()-0.5*depth);
+    max_pos_[0]=Type(ref_point.x()+0.5*width);
+    max_pos_[1]=Type(ref_point.y()+0.5*height);
+    max_pos_[2]=Type(ref_point.z()+0.5*depth);
+  }
+  else if (t == vgl_box_3d<Type>::min_pos)
+  {
+    min_pos_[0]=ref_point.x();
+    min_pos_[1]=ref_point.y();
+    min_pos_[2]=ref_point.z();
+    max_pos_[0]=ref_point.x()+width;
+    max_pos_[1]=ref_point.y()+height;
+    max_pos_[2]=ref_point.z()+depth;
+  }
+  else if (t == vgl_box_3d<Type>::max_pos)
+  {
+    min_pos_[0]=ref_point.x()-width;
+    min_pos_[1]=ref_point.y()-height;
+    min_pos_[2]=ref_point.z()-depth;
+    max_pos_[0]=ref_point.x();
+    max_pos_[1]=ref_point.y();
+    max_pos_[2]=ref_point.z();
+  }
+  else
+    assert(!"point_type should be one of: centre, min_pos, max_pos");
+}
+
+template <class Type>
+vgl_box_3d<Type>::vgl_box_3d(const vgl_point_3d<Type>& centroid,
+                             Type width, Type height, Type depth)
+{
+  VXL_DEPRECATED("vgl_box_3d constructor from centroid; you should use an explicit 5th argument");
+  min_pos_[0]=Type(centroid.x()-0.5*width);
+  min_pos_[1]=Type(centroid.y()-0.5*height);
+  min_pos_[2]=Type(centroid.z()-0.5*depth);
+  max_pos_[0]=Type(centroid.x()+0.5*width);
+  max_pos_[1]=Type(centroid.y()+0.5*height);
+  max_pos_[2]=Type(centroid.z()+0.5*depth);
 }
 
 template <class Type>
@@ -198,11 +272,9 @@ vcl_ostream& vgl_box_3d<Type>::print(vcl_ostream& s) const
   if (is_empty())
     return s << "<vgl_box_3d (empty)>";
   else
-    return s << "<vgl_box_3d "
-             << min_pos_[0] << "," << min_pos_[1] << "," << min_pos_[2]
-             << " to "
-             << max_pos_[0] << "," << max_pos_[1] << "," << max_pos_[2]
-             << ">";
+    return s<< "<vgl_box_3d "
+            << min_pos_[0] << ',' << min_pos_[1] << ',' << min_pos_[2] << " to "
+            << max_pos_[0] << ',' << max_pos_[1] << ',' << max_pos_[2] << '>';
 }
 
 template <class Type>
@@ -220,8 +292,8 @@ vgl_point_3d<Type> vgl_box_3d<Type>::max_point() const
 template <class Type>
 vcl_ostream& vgl_box_3d<Type>::write(vcl_ostream& s) const
 {
-  return s << min_pos_[0] << " " << min_pos_[1] << " " << min_pos_[2] << " "
-       << max_pos_[0] << " " << max_pos_[1] << " " << max_pos_[2] << "\n";
+  return s << min_pos_[0] << ' ' << min_pos_[1] << ' ' << min_pos_[2] << ' '
+           << max_pos_[0] << ' ' << max_pos_[1] << ' ' << max_pos_[2] << '\n';
 }
 
 template <class Type>

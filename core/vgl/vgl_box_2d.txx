@@ -8,10 +8,11 @@
 // \date   Feb 15 2000
 
 #include "vgl_box_2d.h"
-
+#include <vgl/vgl_point_2d.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
-#include <vgl/vgl_point_2d.h>
+#include <vcl_deprecated.h>
+#include <vcl_cassert.h>
 
 // Constructors/Destructor---------------------------------------------------
 
@@ -24,7 +25,7 @@ vgl_box_2d<Type>::vgl_box_2d()
 
 template <class Type>
 vgl_box_2d<Type>::vgl_box_2d(const Type min_position[2],
-                             const Type max_position[2] )
+                             const Type max_position[2])
 {
   min_pos_[0]=min_position[0];
   min_pos_[1]=min_position[1];
@@ -52,23 +53,85 @@ vgl_box_2d<Type>::vgl_box_2d(Type xmin, Type xmax, Type ymin, Type ymax)
 }
 
 template <class Type>
-vgl_box_2d<Type>::vgl_box_2d(const Type centroid[2],
-                             Type width, Type height)
+vgl_box_2d<Type>::vgl_box_2d(const Type ref_point[2],
+                             Type width, Type height,
+                             vgl_box_2d<Type>::point_type t)
 {
-  min_pos_[0]=Type(centroid[0]-0.5*width);
-  min_pos_[1]=Type(centroid[1]-0.5*height);
-  max_pos_[0]=Type(centroid[0]+0.5*width);
-  max_pos_[1]=Type(centroid[1]+0.5*height);
+  if (t == vgl_box_2d<Type>::centre)
+  {
+    min_pos_[0]=Type(ref_point[0]-0.5*width);
+    min_pos_[1]=Type(ref_point[1]-0.5*height);
+    max_pos_[0]=Type(ref_point[0]+0.5*width);
+    max_pos_[1]=Type(ref_point[1]+0.5*height);
+  }
+  else if (t == vgl_box_2d<Type>::min_pos)
+  {
+    min_pos_[0]=ref_point[0];
+    min_pos_[1]=ref_point[1];
+    max_pos_[0]=ref_point[0]+width;
+    max_pos_[1]=ref_point[1]+height;
+  }
+  else if (t == vgl_box_2d<Type>::max_pos)
+  {
+    min_pos_[0]=ref_point[0]-width;
+    min_pos_[1]=ref_point[1]-height;
+    max_pos_[0]=ref_point[0];
+    max_pos_[1]=ref_point[1];
+  }
+  else
+    assert(!"point_type should be one of: centre, min_pos, max_pos");
 }
 
 template <class Type>
-vgl_box_2d<Type>::vgl_box_2d(const vgl_point_2d<Type>& centroid,
+vgl_box_2d<Type>::vgl_box_2d(const Type minpoint[2],
                              Type width, Type height)
 {
-  min_pos_[0]=Type(centroid.x()-0.5*width);
-  min_pos_[1]=Type(centroid.y()-0.5*height);
-  max_pos_[0]=Type(centroid.x()+0.5*width);
-  max_pos_[1]=Type(centroid.y()+0.5*height);
+  VXL_DEPRECATED("vgl_box_2d constructor from min_pos; you should use an explicit 4th argument");
+  min_pos_[0]=minpoint[0];
+  min_pos_[1]=minpoint[1];
+  max_pos_[0]=minpoint[0]+width;
+  max_pos_[1]=minpoint[1]+height;
+}
+
+template <class Type>
+vgl_box_2d<Type>::vgl_box_2d(const vgl_point_2d<Type>& ref_point,
+                             Type width, Type height,
+                             vgl_box_2d<Type>::point_type t)
+{
+  if (t == vgl_box_2d<Type>::centre)
+  {
+    min_pos_[0]=Type(ref_point.x()-0.5*width);
+    min_pos_[1]=Type(ref_point.y()-0.5*height);
+    max_pos_[0]=Type(ref_point.x()+0.5*width);
+    max_pos_[1]=Type(ref_point.y()+0.5*height);
+  }
+  else if (t == vgl_box_2d<Type>::min_pos)
+  {
+    min_pos_[0]=ref_point.x();
+    min_pos_[1]=ref_point.y();
+    max_pos_[0]=ref_point.x()+width;
+    max_pos_[1]=ref_point.y()+height;
+  }
+  else if (t == vgl_box_2d<Type>::max_pos)
+  {
+    min_pos_[0]=ref_point.x()-width;
+    min_pos_[1]=ref_point.y()-height;
+    max_pos_[0]=ref_point.x();
+    max_pos_[1]=ref_point.y();
+  }
+  else
+    assert(!"point_type should be one of: centre, min_pos, max_pos");
+}
+
+template <class Type>
+vgl_box_2d<Type>::vgl_box_2d(const vgl_point_2d<Type>& minpoint,
+                             Type width, Type height)
+{
+  VXL_DEPRECATED("vgl_box_2d constructor from min_pos; you should use an explicit 4th argument");
+  min_pos_[0]=minpoint.x();
+  min_pos_[1]=minpoint.y();
+  max_pos_[0]=minpoint.x()+width;
+  max_pos_[1]=minpoint.y()+height;
 }
 
 template <class Type>
@@ -163,39 +226,25 @@ void vgl_box_2d<Type>::setmax_position(Type const max_position[2])
 {
   max_pos_[0]=max_position[0];
   max_pos_[1]=max_position[1];
-  if (max_pos_[0] < min_pos_[0]){
+  if (max_pos_[0] < min_pos_[0])
     min_pos_[0]=max_pos_[0];
-  }
-  if (max_pos_[1] < min_pos_[1]){
+  if (max_pos_[1] < min_pos_[1])
     min_pos_[1]=max_pos_[1];
-  }
 }
 
 template <class Type>
 void vgl_box_2d<Type>::set_min_point(vgl_point_2d<Type> const& min_pt)
 {
-  min_pos_[0]=min_pt.x();
-  min_pos_[1]=min_pt.y();
-  if (max_pos_[0] < min_pos_[0]){
-    max_pos_[0]=min_pos_[0];
-  }
-  if (max_pos_[1] < min_pos_[1]){
-    max_pos_[1]=min_pos_[1];
-  }
+  min_pos_[0]=min_pt.x(); if (max_pos_[0]<min_pos_[0]) max_pos_[0]=min_pos_[0];
+  min_pos_[1]=min_pt.y(); if (max_pos_[1]<min_pos_[1]) max_pos_[1]=min_pos_[1];
 }
 
 
 template <class Type>
 void vgl_box_2d<Type>::set_max_point(vgl_point_2d<Type> const& max_pt)
 {
-  max_pos_[0]=max_pt.x();
-  max_pos_[1]=max_pt.y();
-  if (max_pos_[0] < min_pos_[0]){
-    min_pos_[0]=max_pos_[0];
-  }
-  if (max_pos_[1] < min_pos_[1]){
-    min_pos_[1]=max_pos_[1];
-  }
+  max_pos_[0]=max_pt.x(); if (max_pos_[0]<min_pos_[0]) min_pos_[0]=max_pos_[0];
+  max_pos_[1]=max_pt.y(); if (max_pos_[1]<min_pos_[1]) min_pos_[1]=max_pos_[1];
 }
 
 template <class Type>
@@ -219,24 +268,22 @@ vcl_ostream& vgl_box_2d<Type>::print(vcl_ostream& s) const
     return s << "<vgl_box_2d (empty)>";
   else
     return s << "<vgl_box_2d "
-             << min_pos_[0] << "," << min_pos_[1]
-             << " to "
-             << max_pos_[0] << "," << max_pos_[1]
-             << ">";
+             << min_pos_[0] << ',' << min_pos_[1] << " to "
+             << max_pos_[0] << ',' << max_pos_[1] << '>';
 }
 
 template <class Type>
 vcl_ostream& vgl_box_2d<Type>::write(vcl_ostream& s) const
 {
-  return s << min_pos_[0] << " " << min_pos_[1] << " "
-       << max_pos_[0] << " " << max_pos_[1] << "\n";
+  return s << min_pos_[0] << ' ' << min_pos_[1] << ' '
+           << max_pos_[0] << ' ' << max_pos_[1] << '\n';
 }
 
 template <class Type>
 vcl_istream& vgl_box_2d<Type>::read(vcl_istream& s)
 {
   return s >> min_pos_[0] >> min_pos_[1]
-       >> max_pos_[0] >> max_pos_[1];
+           >> max_pos_[0] >> max_pos_[1];
 }
 
 template <class Type>

@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_box_3d.h
+// This is core/vgl/vgl_box_3d.h
 #ifndef vgl_box_3d_h
 #define vgl_box_3d_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -10,15 +10,16 @@
 // \author Don Hamilton, Peter Tu
 //
 // \verbatim
-// Modifications
-//  Peter Vanroose  12 Sep.2002: Added method add(vgl_box_3d<T>) to enlarge a box
-//  Peter Vanroose     Feb.2002: brief doxygen comment placed on single line
-//  Peter Vanroose, Oct  7 2001: Removed deprecated get_*() functions
-//  Peter Vanroose, Oct  6 2001: Added method add(vgl_point_3d<T>) to enlarge a box
-//  Peter Vanroose, Oct  5 2001: Added operator==() and methods is_empty() and contains()
-//  Peter Vanroose, Jul 10 2001: Deprecated get_*() in favour of *(), and explicit casts
-//  NPC (Manchester) 14/03/2001: Tidied up the documentation + added binary_io
-//  Peter Vanroose, Feb 28 2000: lots of minor corrections
+//  Modifications
+//   Peter Vanroose, 28 Feb.2000: lots of minor corrections
+//   NPC (Manchester) 14/03/2001: Tidied up the documentation + added binary_io
+//   Peter Vanroose, 10 Jul.2001: Deprecated get_*() in favour of *(), and explicit casts
+//   Peter Vanroose,  5 Oct.2001: Added operator==() and methods is_empty() and contains()
+//   Peter Vanroose,  6 Oct.2001: Added method add(vgl_point_3d<T>) to enlarge a box
+//   Peter Vanroose,  7 Oct.2001: Removed deprecated get_*() functions
+//   Peter Vanroose,    Feb.2002: brief doxygen comment placed on single line
+//   Peter Vanroose, 12 Sep.2002: Added method add(vgl_box_3d<T>) to enlarge a box
+//   Peter Vanroose, 13 May 2003: Constructor interface change (compat with vgl_box_2d)
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -68,13 +69,33 @@ class vgl_box_3d
   vgl_box_3d(Type xmin, Type ymin, Type zmin,
              Type xmax, Type ymax, Type zmax);
 
-  //: Construct width x height x depth box centred at centroid
-  vgl_box_3d(const Type centroid[3],
-             Type width, Type height, Type depth);
+  enum point_type { centre=0, min_pos, max_pos };
 
-  //: Construct width x height x depth box centred at centroid
-  vgl_box_3d(vgl_point_3d<Type> const& centroid,
-             Type width, Type height, Type depth);
+  //: Construct a box sized width x height x depth from a given reference point.
+  //  The box will either be centered at ref_point or will have ref_point
+  //  as its min-position or max-position.
+  //  The default is centre, in contrast to vgl_box_2d where it's min_pos.
+  //  Using the default is actually deprecated: use an explicit 5th
+  //  argument to avoid confusion.
+  vgl_box_3d(const Type ref_point[3],
+             Type width, Type height, Type depth,
+             point_type);
+
+  //: \deprecated Deprecated; use the 5-argument constructor above.
+  vgl_box_3d(const Type centroid[3], Type wd, Type ht, Type dp);
+
+  //: Construct a box sized width x height x depth from a given reference point.
+  //  The box will either be centered at ref_point or will have ref_point
+  //  as its min-position or max-position.
+  //  The default is centre, in contrast to vgl_box_2d where it's min_pos.
+  //  Using the default is actually deprecated: use an explicit 5th
+  //  argument to avoid confusion.
+  vgl_box_3d(vgl_point_3d<Type> const& ref_point,
+             Type width, Type height, Type depth,
+             point_type);
+
+  //: \deprecated Deprecated; use the 5-argument constructor above.
+  vgl_box_3d(const vgl_point_3d<Type>& centroid, Type wd, Type ht, Type dp);
 
 #if 0
   // default copy constructor:
