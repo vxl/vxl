@@ -1,4 +1,4 @@
-// This is vxl/vgl/algo/vgl_homg_operators_2d.txx
+// This is core/vgl/algo/vgl_homg_operators_2d.txx
 #ifndef vgl_homg_operators_2d_txx_
 #define vgl_homg_operators_2d_txx_
 //:
@@ -348,15 +348,6 @@ vgl_homg_operators_2d<T>::lines_to_point(const vcl_list<vgl_homg_line_2d<T> >& l
 
 //  MISCELLANEOUS
 
-
-template <class T>
-double
-vgl_homg_operators_2d<T>::perp_distance_squared(const vgl_homg_line_2d<T>& line,
-                                                const vgl_homg_point_2d<T>& point)
-{
-  vcl_cerr << "vgl_homg_operators_2d<T>::perp_distance_squared should be replaced by perp_dist_squared\n";
-  return perp_dist_squared(point, line);
-}
 
 //-----------------------------------------------------------------------------
 //: Calculates the crossratio of four collinear points p1, p2, p3 and p4.
