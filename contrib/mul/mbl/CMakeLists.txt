@@ -50,6 +50,7 @@ SET(mbl_sources
     mbl_index_sort.h
     mbl_lru_cache.h
     mbl_stl.h
+    mbl_jarque_bera.h
 )
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
 
