@@ -20,6 +20,7 @@
 #include <vgui/vgui_color_text.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_soview2D.h>
+#include <vgui/vgui_style_sptr.h>
 #include <vgui/vgui_style.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_error_dialog.h>
@@ -461,7 +462,7 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
       }
       bool matched = (object_type == 0) || (sv->type_name() == object_type);
       vcl_string svtype = sv->type_name();
-      vgui_style* style = sv->get_style();
+      vgui_style_sptr style = sv->get_style();
       if (style)
         fs << "c " << style->rgba[0] << ' ' << style->rgba[1] <<  ' ' << style->rgba[2] << vcl_endl
            << "r " << style->point_size << vcl_endl
