@@ -10,6 +10,7 @@
 #include <vcl_sstream.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
+#include <vcl_cstddef.h> // for std::size_t
 
 #include <vul/vul_printf.h>
 #include <oxp/JPEG_Decompressor.h>
@@ -397,8 +398,8 @@ void SGIMV_Variables::read(vcl_istream& f) {
     f.read(var_buf, 16);
     var_buf[16] = 0;
 
-    vxl_uint_32 var_size = get_u32(f);
-    vcl_vector<char> val_buf(var_size+1,0);
+    vcl_size_t var_size = get_u32(f);
+    vcl_vector<char> val_buf(var_size+1,'\0');
     f.read(&val_buf[0], var_size);
 
     data[vcl_string(var_buf)] = vcl_string(&val_buf[0]);
