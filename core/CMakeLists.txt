@@ -37,6 +37,9 @@ SUBDIRS(vil1)
 # video
 SUBDIRS(vidl)
 
+# video (old implementation)
+SUBDIRS(vidl_vil1)
+
 # coordinate systems
 SUBDIRS(vcsl)
 
