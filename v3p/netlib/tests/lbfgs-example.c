@@ -98,7 +98,7 @@ L20:
     goto L20;
 L50:
     printf("f = %7g\n", f);
-    printf("iterations = %16d\n", &icall);
+    printf("iterations = %16d\n", icall);
 
     return 0;
 } /* main */
