@@ -58,6 +58,9 @@ do_inlines(double);
 
 // ---------- gcc 2.95
 #elif defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
+
+// explicit instantiations are not needed unless using -fguiding-decls (fsm)
+#if !VCL_HAS_TEMPLATE_SYMBOLS
 # define VCL_COMPLEX_INSTANTIATE_INLINE(x) template x
 # define do_inlines(FLOAT) \
 VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(complex<FLOAT >const&,complex<FLOAT >const&));\
@@ -94,6 +97,7 @@ implement_rsh(FLOAT);
 
 do_inlines(float);
 do_inlines(double);
+#endif
 
 // ---------- sunpro
 #elif defined(VCL_SUNPRO_CC)

@@ -14,7 +14,7 @@ dnl AC_OUTPUT([file...])
 AC_INIT(configure.in)
 
 ## we need to use the scripts in ./shell
-#AC_CONFIG_AUX_DIR(shell)
+#no_we_dont AC_CONFIG_AUX_DIR(shell)
 
 #--------------------------------------------------------------------------------
 # COMPILERS
