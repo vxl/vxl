@@ -112,7 +112,7 @@ of the @code{mbl_mz_random::normal()}, so I ran some tests.
 @itemize
 @item Sort the samples
 @item plot rank vs @math{P(x' < x)}
-@item i.e. plot i vs @math{0.5*(1+erf(x/sqrt(2))}
+@item i.e. plot i vs @math{0.5*(1+vcl_erf(x/vcl_sqrt(2.0))}
 @end itemize
 
 @image{mbl_mz_random_graph1,,}
