@@ -151,7 +151,7 @@ write_track_to_file(vcl_vector<vdgl_digital_curve_sptr> const& track,
 
 int main(int argc, char* argv[])
 {
-  vcl_string path = argc<2 ? "" : vcl_string(argv[1]) + "/";
+  vcl_string path = argc<2 ? vcl_string("") : vcl_string(argv[1]) + "/";
   int success=0, failures=0;
   brct_epi_reconstructor kf;
   vnl_double_3x4 P = generate_P(generate_K());
