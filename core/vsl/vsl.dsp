@@ -180,6 +180,9 @@ SOURCE=.\Templates/vsl_vector_io+vcl_vector+vcl_pair+uint.uint---.cxx
 SOURCE=.\Templates/vsl_vector_io+uchar-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+float--.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsl_binary_io.cxx
 # End Source File
 # Begin Source File

@@ -102,11 +102,18 @@ SOURCE=.\test_config.cxx
 # Begin Source File
 SOURCE=.\test_driver.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vxl_echo.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_build_info.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h"
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+SOURCE=.\test_build_info.h.in
+# End Source File
 # End Group
 # End Target
 # End Project

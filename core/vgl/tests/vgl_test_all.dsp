@@ -125,6 +125,9 @@ SOURCE=.\test_h_matrix_3d.cxx
 # Begin Source File
 SOURCE=.\test_triangle_scan_iterator.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_fit_lines_2d.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;hpp;hxx;hm;inl"

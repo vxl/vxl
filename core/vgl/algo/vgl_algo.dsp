@@ -128,6 +128,12 @@ SOURCE=.\Templates/vgl_h_matrix_3d+double-.cxx
 SOURCE=.\Templates/vgl_norm_trans_2d+double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_fit_lines_2d+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_line_2d_regression+double-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_h_matrix_1d_compute.cxx
 # End Source File
 # Begin Source File
@@ -222,6 +228,18 @@ SOURCE=.\vgl_norm_trans_2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_norm_trans_2d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_fit_lines_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_fit_lines_2d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_line_2d_regression.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_line_2d_regression.txx
 # End Source File
 # End Group
 # End Target
