@@ -14,12 +14,12 @@ inline bool vil2_profile_in_image(double x0, double y0,
 {
   if (x0<1) return false;
   if (y0<1) return false;
-  if (x0+2>image.nx()) return false;
-  if (y0+2>image.ny()) return false;
+  if (x0+2>image.ni()) return false;
+  if (y0+2>image.nj()) return false;
   if (x1<1) return false;
   if (y1<1) return false;
-  if (x1+2>image.nx()) return false;
-  if (y1+2>image.ny()) return false;
+  if (x1+2>image.ni()) return false;
+  if (y1+2>image.nj()) return false;
 
   return true;
 }
@@ -38,8 +38,8 @@ void vil2_sample_profile_bilin(vecType* v,
   bool all_in_image = vil2_profile_in_image(x0,y0,x0+(n-1)*dx,y0+(n-1)*dy,image);
 
   int np = image.nplanes();
-  int xstep = image.xstep();
-  int ystep = image.ystep();
+  int istep = image.istep();
+  int jstep = image.jstep();
   int pstep = image.planestep();
   double x=x0;
   double y=y0;
@@ -50,33 +50,33 @@ void vil2_sample_profile_bilin(vecType* v,
     if (np==1)
     {
       for (int i=0;i<n;++i,x+=dx,y+=dy)
-      v[i] = vil2_bilin_interp(x,y,plane0,xstep,ystep);
+      v[i] = vil2_bilin_interp(x,y,plane0,istep,jstep);
     }
     else
     {
       for (int i=0;i<n;++i,x+=dx,y+=dy)
       {
         for (int j=0;j<np;++j,++v)
-          *v = vil2_bilin_interp(x,y,plane0+j*pstep,xstep,ystep);
+          *v = vil2_bilin_interp(x,y,plane0+j*pstep,istep,jstep);
       }
     }
   }
   else
   {
     // Use safe interpolation
-	int nx = image.nx();
-	int ny = image.ny();
+	int nx = image.ni();
+	int ny = image.nj();
     if (np==1)
     {
       for (int i=0;i<n;++i,x+=dx,y+=dy)
-      v[i] = vil2_safe_bilin_interp(x,y,plane0,nx,ny,xstep,ystep);
+      v[i] = vil2_safe_bilin_interp(x,y,plane0,nx,ny,istep,jstep);
     }
     else
     {
       for (int i=0;i<n;++i,x+=dx,y+=dy)
       {
         for (int j=0;j<np;++j,++v)
-          *v = vil2_safe_bilin_interp(x,y,plane0+j*pstep,nx,ny,xstep,ystep);
+          *v = vil2_safe_bilin_interp(x,y,plane0+j*pstep,nx,ny,istep,jstep);
       }
     }
   }

@@ -32,6 +32,7 @@
 #include <vul/vul_temp_filename.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
+#include <vil/vil_byte.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_load.h>
 #include <vil2/vil2_save.h>

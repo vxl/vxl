@@ -62,7 +62,7 @@ public:
   //: Return a description of the concrete data pixel type.
   // For example if the value is VIL2_PIXEL_FORMAT_VIL_BYTE,
   // you can safely cast, or assign the base class reference to
-  // a vil2_image_view<vil_byte>.
+  // a vil2_image_view<vil2_byte>.
   virtual enum vil2_pixel_format pixel_format() const=0;
 
   //: True if this is (or is derived from) class s

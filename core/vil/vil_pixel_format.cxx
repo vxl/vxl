@@ -81,7 +81,7 @@ vcl_ostream & operator << (vcl_ostream &os, vil2_pixel_format f)
     case VIL2_PIXEL_FORMAT_SIGNED_INT:     os << "VIL2_PIXEL_FORMAT=signed int";  break;
     case VIL2_PIXEL_FORMAT_UNSIGNED_SHORT: os << "VIL2_PIXEL_FORMAT=unsigned short";  break;
     case VIL2_PIXEL_FORMAT_SIGNED_SHORT:   os << "VIL2_PIXEL_FORMAT=signed short";  break;
-    case VIL2_PIXEL_FORMAT_BYTE:           os << "VIL2_PIXEL_FORMAT=vil_byte";  break;
+    case VIL2_PIXEL_FORMAT_BYTE:           os << "VIL2_PIXEL_FORMAT=vil2_byte";  break;
     case VIL2_PIXEL_FORMAT_SIGNED_CHAR:    os << "VIL2_PIXEL_FORMAT=signed char";  break;
     case VIL2_PIXEL_FORMAT_FLOAT:          os << "VIL2_PIXEL_FORMAT=float";  break;
     case VIL2_PIXEL_FORMAT_DOUBLE:         os << "VIL2_PIXEL_FORMAT=double";  break;
@@ -91,7 +91,7 @@ vcl_ostream & operator << (vcl_ostream &os, vil2_pixel_format f)
     case VIL2_PIXEL_FORMAT_RGB_UNSIGNED_INT:   os << "VIL2_PIXEL_FORMAT=vil_rgb<unsigned int>";  break;
     case VIL2_PIXEL_FORMAT_RGB_SIGNED_SHORT:   os << "VIL2_PIXEL_FORMAT=vil_rgb<signed short>";  break;
     case VIL2_PIXEL_FORMAT_RGB_UNSIGNED_SHORT: os << "VIL2_PIXEL_FORMAT=vil_rgb<unsigned short>";  break;
-    case VIL2_PIXEL_FORMAT_RGB_BYTE:           os << "VIL2_PIXEL_FORMAT=vil_rgb<vil_byte>";  break;
+    case VIL2_PIXEL_FORMAT_RGB_BYTE:           os << "VIL2_PIXEL_FORMAT=vil_rgb<vil2_byte>";  break;
     case VIL2_PIXEL_FORMAT_RGB_SIGNED_CHAR:    os << "VIL2_PIXEL_FORMAT=vil_rgb<signed char>";  break;
     case VIL2_PIXEL_FORMAT_RGB_FLOAT:          os << "VIL2_PIXEL_FORMAT=vil_rgb<float>";  break;
     case VIL2_PIXEL_FORMAT_RGB_DOUBLE:         os << "VIL2_PIXEL_FORMAT=vil_rgb<double>";  break;

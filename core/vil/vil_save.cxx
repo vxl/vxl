@@ -35,7 +35,7 @@ bool vil2_save(const vil2_image_view_base &im, char const* filename, char const*
   switch (im.pixel_format())
   {
   case VIL2_PIXEL_FORMAT_RGB_BYTE:
-    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<vil_byte> >&>(im)),0,0);
+    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<vil2_byte> >&>(im)),0,0);
   case VIL2_PIXEL_FORMAT_RGB_UNSIGNED_SHORT:
     return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<unsigned short> >&>(im)),0,0);
 #ifdef VIL2_TO_BE_FIXED

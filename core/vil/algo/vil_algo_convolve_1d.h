@@ -78,7 +78,6 @@ inline void vil2_algo_convolve_edge_1d(destT* dest, int d_step,
 }
 
 //: Convolve kernel[x] x in [k_lo,k_hi] with srcT
-// Doesn't give options for boundary yet - just zeros it
 // Assumes dest and src same size (nx)
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_algo_convolve_1d(destT* dest0, int d_step,
@@ -88,6 +87,7 @@ inline void vil2_algo_convolve_1d(destT* dest0, int d_step,
 						  vil2_convolve_boundary_option start_option,
 						  vil2_convolve_boundary_option end_option)
 {
+  // Deal with start (fill elements 0..1-k_lo of dest)
   vil2_algo_convolve_edge_1d(dest0,d_step,src0,s_step,kernel,k_lo,k_hi,1,ac,start_option);
 
   const kernelT* k_begin = kernel+k_lo;

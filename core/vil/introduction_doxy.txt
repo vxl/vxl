@@ -30,17 +30,17 @@
 *
 *
 * Note that the same colour image can either be viewed as a one plane image
-* with RGB pixels (using vil2_image_view<vil_rgb<vil_byte> >) or as a 3 plane
-* byte image (using vil2_image_view<vil_byte> with nplanes() == 3).
+* with RGB pixels (using vil2_image_view<vil_rgb<vil2_byte> >) or as a 3 plane
+* byte image (using vil2_image_view<vil2_byte> with nplanes() == 3).
 * \verbatim
-vil2_image_view<vil_rgb<vil_byte> > rgb_image;
+vil2_image_view<vil_rgb<vil2_byte> > rgb_image;
 rgb_image = *vil2_load("my_image.jpg");
 
 // Create a 3 plane view of rgb
-vil2_image_view<vil_byte > three_plane_image =  vil2_view_as_planes(rgb_image);
+vil2_image_view<vil2_byte > three_plane_image =  vil2_view_as_planes(rgb_image);
 
  // Now create rgb view of 3 plane image (note: will abort if not possible)
-vil2_image_view<vil_rgb<vil_byte> > rgb_image2 = vil2_view_as_rgb(three_plane_image);
+vil2_image_view<vil_rgb<vil2_byte> > rgb_image2 = vil2_view_as_rgb(three_plane_image);
 \endverbatim
 *
 * \subsection copying Copying
@@ -56,9 +56,9 @@ vil2_image_view<vil_rgb<vil_byte> > rgb_image2 = vil2_view_as_rgb(three_plane_im
 *
 * Example of loading, copying then processing:
 * \verbatim
-vil2_image_view<vil_byte> image;
+vil2_image_view<vil2_byte> image;
 image = *vil2_load("test_image.jpg");
-vil2_image_view<vil_byte> image2 = image.deep_copy();
+vil2_image_view<vil2_byte> image2 = image.deep_copy();
 vil2_invert_image(image2);
 vil2_save(image2,"output_image.jpg");
 \endverbatim
@@ -81,16 +81,16 @@ for (int i=0;i<nplanes;++i)
   int nx=256;
   int ny=256;
   int nplanes=3;
-  vil2_image_view<vil_byte> image(nx,ny,nplanes);
-  vil_byte* plane = image.top_left_ptr();
+  vil2_image_view<vil2_byte> image(nx,ny,nplanes);
+  vil2_byte* plane = image.top_left_ptr();
   for (unsigned int p=0;p<nplanes;++p,plane += image.planestep())
   {
-    vil_byte* row = plane;
+    vil2_byte* row = plane;
     for (int y=0;y<ny;++y,row += image.ystep())
     {
-      vil_byte* pixel = row;
+      vil2_byte* pixel = row;
       for (int x=0;x<nx;++x,pixel+=image.xstep())
-        *pixel = vil_byte(x+10*y+100*p);
+        *pixel = vil2_byte(x+10*y+100*p);
     }
   }
 \endverbatim
@@ -112,12 +112,12 @@ for (int i=0;i<nplanes;++i)
 * one need only write it for one direction, then can apply it to the original image and
 * its transpose.
 * \verbatim
-vil2_image_view<vil_byte> ;
+vil2_image_view<vil2_byte> ;
 src_image = *vil2_load("image_file.jpg");
-vil2_image_view<vil_byte> tmp_image1,tmp_image2;
+vil2_image_view<vil2_byte> tmp_image1,tmp_image2;
 vil2_filter_rows(tmp_image1,src_image);  // Apply filter to rows of src_image
 vil2_filter_rows(tmp_image2,tmp_image1.tranpose());  // Apply filter to cols of tmp_image1
-vil2_image_view<vil_byte> filtered_image = vil2_transpose(tmp_image2);
+vil2_image_view<vil2_byte> filtered_image = vil2_transpose(tmp_image2);
 // Note that vil2_filter_rows(vil2_transpose(filtered_image),vil2_transpose(tmp_image1))
 // would only work correctly if filtered_image was already the correct size.
 // If it isn't, then the view created by vil2_transpose(filtered_image) would be resized,
@@ -163,8 +163,8 @@ vil2_image_view<vil_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_safe_extend_bilin_interp : Interpolate, returning nearest edge value if outside
 *
 * Other methods of sampling include:
-* - vil2_sample_profile_bilin : Sample values along a line (using bilin. interpoloation)
-* - vil2_sample_grid_bilin : Sample values over a grid (using bilin. interpoloation)
+* - vil2_sample_profile_bilin : Sample values along a line (using bilin. interpolation)
+* - vil2_sample_grid_bilin : Sample values over a grid (using bilin. interpolation)
 *
 * \section reg_im Registered images
 * These meet two needs, a common base class for 2D and 3D images, and a means of

@@ -8,7 +8,7 @@
 
 
 #include "vil2_memory_image.h"
-#include <vil/vil_byte.h>
+#include <vil2/vil2_byte.h>
 #include <vil/vil_rgb.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_pixel_format.h>
@@ -16,7 +16,7 @@
 class vil2_image_view_base;
 
 vil2_memory_image::vil2_memory_image():
-   view_(new vil2_image_view<vil_byte>()) {}
+   view_(new vil2_image_view<vil2_byte>()) {}
 
 vil2_memory_image::vil2_memory_image(unsigned ni,
   unsigned nj, unsigned nplanes, vil2_pixel_format format)
@@ -27,10 +27,10 @@ vil2_memory_image::vil2_memory_image(unsigned ni,
   switch (format)
   {
   case VIL2_PIXEL_FORMAT_BYTE:
-    view_ = new vil2_image_view<vil_byte>(ni, nj, nplanes);
+    view_ = new vil2_image_view<vil2_byte>(ni, nj, nplanes);
     break;
   case VIL2_PIXEL_FORMAT_RGB_BYTE:
-    view_ = new vil2_image_view<vil_rgb<vil_byte> >(ni, nj, nplanes);
+    view_ = new vil2_image_view<vil_rgb<vil2_byte> >(ni, nj, nplanes);
     break;
   case VIL2_PIXEL_FORMAT_UNSIGNED_INT:
     view_ = new vil2_image_view<unsigned int>(ni, nj, nplanes);
@@ -39,7 +39,7 @@ vil2_memory_image::vil2_memory_image(unsigned ni,
     view_ = new vil2_image_view<bool>(ni, nj, nplanes);
     break;
   default:
-    view_ = new vil2_image_view<vil_byte>();
+    view_ = new vil2_image_view<vil2_byte>();
   }
 }
 
@@ -60,9 +60,9 @@ vil2_image_view_base* vil2_memory_image::get_view(unsigned i0, unsigned j0,
 {
   if (view_->pixel_format() == VIL2_PIXEL_FORMAT_BYTE)
   {
-    const vil2_image_view<vil_byte> &v = static_cast<const vil2_image_view<vil_byte> &>(
+    const vil2_image_view<vil2_byte> &v = static_cast<const vil2_image_view<vil2_byte> &>(
       *view_);
-    return new vil2_image_view<vil_byte>(v.memory_chunk(), &v(i0,j0),
+    return new vil2_image_view<vil2_byte>(v.memory_chunk(), &v(i0,j0),
       ni, nj, v.nplanes(), v.istep(), v.jstep(), v.planestep());
   }
   return 0;

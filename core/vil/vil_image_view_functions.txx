@@ -8,11 +8,11 @@
 
 #include <vil2/vil2_image_view_functions.h>
 #include <vcl_cassert.h>
-#include <vil/vil_byte.h>
+#include <vil2/vil2_byte.h>
 #include <vil/vil_rgb.h>
 
 //: Return a 3-plane view of an RGB image
-// \return an empty view if it can't do the conversion 
+// \return an empty view if it can't do the conversion
 // (because it is already a multiplane image.)
 template<class T>
 vil2_image_view<T> vil2_view_as_planes(const vil2_image_view<vil_rgb<T> >& v)
@@ -26,7 +26,7 @@ vil2_image_view<T> vil2_view_as_planes(const vil2_image_view<vil_rgb<T> >& v)
 }
 
 //: Return an RGB component view of a 3-plane image
-// \return an empty view if it can't do the conversion 
+// \return an empty view if it can't do the conversion
 // (because the data isn't arranged with triples of consecutive components)
 template<class T>
 vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
@@ -34,8 +34,8 @@ vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
   if ((v.nplanes()!=3) || (v.planestep()!=1) || (v.istep()!=3 && v.jstep()!=3))
     return vil2_image_view<vil_rgb<T> >();
 
-  return vil2_image_view<vil_rgb<vil_byte> >(v.memory_chunk(),
-                                             (vil_rgb<vil_byte>*) v.top_left_ptr(),
+  return vil2_image_view<vil_rgb<vil2_byte> >(v.memory_chunk(),
+                                             (vil_rgb<vil2_byte>*) v.top_left_ptr(),
                                              v.ni(),v.nj(),1,
                                              v.istep()/3,v.jstep()/3,1);
 }

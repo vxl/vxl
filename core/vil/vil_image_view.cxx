@@ -4,7 +4,7 @@
 //  \brief Specialisations of is_a() function
 //  \author Ian Scott
 
-#include <vil/vil_byte.h>
+#include <vil2/vil2_byte.h>
 #include <vil/vil_rgb.h>
 #include <vcl_config_compiler.h>
 
@@ -21,7 +21,7 @@ macro(unsigned short)
 macro(int)
 macro(unsigned int)
 macro(float)
-macro(vil_rgb<vil_byte> )
+macro(vil_rgb<vil2_byte> )
 macro(vil_rgb<int> )
 macro(vil_rgb<unsigned int> )
 macro(vil_rgb<short> )

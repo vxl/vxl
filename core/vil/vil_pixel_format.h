@@ -6,7 +6,7 @@
 // \author Ian Scott.
 
 #include <vil/vil_rgb.h>
-#include <vil/vil_byte.h>
+#include <vil2/vil2_byte.h>
 
 //: Describes the type of the concrete data.
 enum vil2_pixel_format {
@@ -45,7 +45,7 @@ vil2_pixel_format_macro(unsigned int,   VIL2_PIXEL_FORMAT_UNSIGNED_INT)
 vil2_pixel_format_macro(signed int,     VIL2_PIXEL_FORMAT_SIGNED_INT)
 vil2_pixel_format_macro(unsigned short, VIL2_PIXEL_FORMAT_UNSIGNED_SHORT)
 vil2_pixel_format_macro(signed short,   VIL2_PIXEL_FORMAT_SIGNED_SHORT)
-vil2_pixel_format_macro(vil_byte,       VIL2_PIXEL_FORMAT_BYTE)
+vil2_pixel_format_macro(vil2_byte,      VIL2_PIXEL_FORMAT_BYTE)
 vil2_pixel_format_macro(signed char,    VIL2_PIXEL_FORMAT_SIGNED_CHAR)
 vil2_pixel_format_macro(float,          VIL2_PIXEL_FORMAT_DOUBLE)
 vil2_pixel_format_macro(double,         VIL2_PIXEL_FORMAT_FLOAT)
@@ -55,7 +55,7 @@ vil2_pixel_format_macro(vil_rgb<unsigned int>,   VIL2_PIXEL_FORMAT_RGB_UNSIGNED_
 vil2_pixel_format_macro(vil_rgb<signed int>,     VIL2_PIXEL_FORMAT_RGB_SIGNED_INT)
 vil2_pixel_format_macro(vil_rgb<unsigned short>, VIL2_PIXEL_FORMAT_RGB_UNSIGNED_SHORT)
 vil2_pixel_format_macro(vil_rgb<signed short>,   VIL2_PIXEL_FORMAT_RGB_SIGNED_SHORT)
-vil2_pixel_format_macro(vil_rgb<vil_byte>,       VIL2_PIXEL_FORMAT_RGB_BYTE)
+vil2_pixel_format_macro(vil_rgb<vil2_byte>,      VIL2_PIXEL_FORMAT_RGB_BYTE)
 vil2_pixel_format_macro(vil_rgb<signed char>,    VIL2_PIXEL_FORMAT_RGB_SIGNED_CHAR)
 vil2_pixel_format_macro(vil_rgb<float>,          VIL2_PIXEL_FORMAT_RGB_DOUBLE)
 vil2_pixel_format_macro(vil_rgb<double>,         VIL2_PIXEL_FORMAT_RGB_FLOAT)
