@@ -57,10 +57,6 @@ const double vnl_numeric_traits<double>::one = 1.0;
 
 //--------------------------------------------------------------------------------
 
-// declaring these const crashes 2.7.2
-#ifdef VCL_GCC_272
-#define const
-#endif
 const vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::zero = 0.0;
 const vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::one = 1.0;
 
