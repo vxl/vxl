@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_bounding_box.h
+// This is core/vbl/vbl_bounding_box.h
 #ifndef vbl_bounding_box_h_
 #define vbl_bounding_box_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -165,8 +165,9 @@ class vbl_bounding_box : public vbl_bounding_box_base<T, vbl_bounding_box_DIM<DI
 
 //------------------------------------------------------------
 
+//: this is "operator \subseteq"
 template <class T, class DIM_>
-inline // this is "operator \subseteq"
+inline
 bool nested(vbl_bounding_box_base<T,DIM_> const &a, vbl_bounding_box_base<T,DIM_> const &b)
 {
   for (int i=0; i<DIM_::value; ++i)
@@ -175,6 +176,7 @@ bool nested(vbl_bounding_box_base<T,DIM_> const &a, vbl_bounding_box_base<T,DIM_
   return true;
 }
 
+//: is the intersection empty?
 template <class T, class DIM_>
 inline
 bool disjoint(vbl_bounding_box_base<T,DIM_> const &a,
@@ -186,6 +188,7 @@ bool disjoint(vbl_bounding_box_base<T,DIM_> const &a,
   return false;
 }
 
+//: is the intersection nonempty?
 template <class T, class DIM_>
 inline
 bool meet(vbl_bounding_box_base<T,DIM_> const &a,
@@ -194,7 +197,6 @@ bool meet(vbl_bounding_box_base<T,DIM_> const &a,
 
 // VC50 has trouble with this
 template <class T, class DIM_>
-vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box_base<T,DIM_>& bbox)
- { return bbox.print(s); }
+vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box_base<T,DIM_>& bbox);
 
 #endif // vbl_bounding_box_h_
