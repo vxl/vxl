@@ -229,9 +229,6 @@ void rrel_util_intercept_adjust_stats_copy( RAN_ITER first, RAN_ITER last, \
 template VALUE_T \
 rrel_util_weighted_scale( const INP_ITER& residuals_first, const INP_ITER& residuals_end, \
                           const INP_ITER& weights_first, int dof, VALUE_T* ); \
-template double \
-rrel_util_weighted_scale( const INP_ITER& residuals_first, const INP_ITER& residuals_end, \
-                          const INP_ITER& weights_first, int dof ); \
 template \
 void rrel_util_median_and_scale_copy( INP_ITER first, INP_ITER last, \
                                       VALUE_T& median, VALUE_T& scale, \
