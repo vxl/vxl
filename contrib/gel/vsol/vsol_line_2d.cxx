@@ -11,6 +11,7 @@
 #include <vsol/vsol_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
+#include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_point_2d.h>
 
 //***************************************************************************
@@ -54,6 +55,15 @@ vsol_line_2d::vsol_line_2d(const vsol_point_2d_sptr &new_p0,
                            const vsol_point_2d_sptr &new_p1)
 : p0_(new_p0), p1_(new_p1)
 {
+}
+
+//---------------------------------------------------------------------------
+//: Constructor
+//---------------------------------------------------------------------------
+vsol_line_2d::vsol_line_2d(const vgl_line_segment_2d<double> &l)
+{
+  p0_ = new vsol_point_2d(l.point1());
+  p1_ = new vsol_point_2d(l.point2());
 }
 
 //---------------------------------------------------------------------------
