@@ -182,7 +182,7 @@ public:
   vil2_image_view<T> window(unsigned x0, unsigned nx, unsigned y0, unsigned ny) const;
 
   //: Return a view of plane p
-  vil2_image_view<T> plane(int p) const;
+  vil2_image_view<T> plane(unsigned p) const;
 
   //: Fill view with given value
   void fill(T value);

@@ -257,18 +257,17 @@ void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
 template<class T>
 vil2_image_view<T> vil2_image_view<T>::window(unsigned x0, unsigned nx, unsigned y0, unsigned ny) const
 {
-  vil2_image_view<T> win;
-  win.set_to_window(*this,x0,nx,y0,ny);
-  return win;
+  assert(x0<nx_); assert(x0+nx<=nx_);
+  assert(y0<ny_); assert(y0+ny<=ny_);
+  return vil2_image_view<T>(ptr_,top_left_+ x0*xstep_ + y0*ystep_,nx,ny,nplanes_,xstep_,ystep_,planestep_);
 }
 
 //: Return a view of plane p
 template<class T>
-vil2_image_view<T> vil2_image_view<T>::plane(int p) const
+vil2_image_view<T> vil2_image_view<T>::plane(unsigned p) const
 {
-  vil2_image_view<T> p_view;
-  p_view.set_to_window(*this,0,nx_,0,ny_,p,1);
-  return p_view;
+  assert(p<nplanes_);
+  return vil2_image_view<T>(ptr_,top_left_+p*planestep_,nx_,ny_,1,xstep_,ystep_,planestep_);
 }
 
 //: Fill view with given value
