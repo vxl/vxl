@@ -75,7 +75,7 @@ vnl_svd_economy<real_t>::vnl_svd_economy( vnl_matrix<real_t> const& M ) :
     // by adding and -fPIC option to the command line for v3p\netlib\dsvdc.c. If
     // that doesn't work try adding -ffloat-store, which should fix the problem
     // at the expense of being significantly slower for big problems. Note that
-    // if this is the cause, vxl/vnl/tests/test_svd should have failed.
+    // if this is the cause, core/vnl/tests/test_svd should have failed.
     //
     // You may be able to diagnose the problem here by printing a warning message.
     vcl_cerr << __FILE__ ": suspicious return value (" << info << ") from SVDC\n"
