@@ -46,8 +46,8 @@ vil2_memory_image::vil2_memory_image(unsigned ni,
 //: Create a read/write view of a copy of this data.
 // Currently not yet implemented.
 // \return 0 if unable to get view of correct size.
-vil2_image_view_base_sptr vil2_memory_image::get_copy_view(unsigned i0, unsigned j0,
-                                                           unsigned ni, unsigned nj) const
+vil2_image_view_base_sptr vil2_memory_image::get_copy_view(unsigned i0, unsigned ni,
+                                                           unsigned j0, unsigned nj) const
 {
   assert(!"vil2_memory_image::get_copy_view Not yet implemented");
   return 0;
@@ -55,8 +55,8 @@ vil2_image_view_base_sptr vil2_memory_image::get_copy_view(unsigned i0, unsigned
 
 //: Create a read/write view of a copy of this data.
 // \return 0 if unable to get view of correct size.
-vil2_image_view_base_sptr vil2_memory_image::get_view(unsigned i0, unsigned j0,
-                                                      unsigned ni, unsigned nj) const
+vil2_image_view_base_sptr vil2_memory_image::get_view(unsigned i0, unsigned ni,
+                                                      unsigned j0, unsigned nj) const
 {
   if (view_->pixel_format() == VIL2_PIXEL_FORMAT_BYTE)
   {

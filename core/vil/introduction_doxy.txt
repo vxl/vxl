@@ -181,6 +181,14 @@ vil2_image_view<vil2_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_sample_profile_bilin : Sample values along a line (using bilin. interpolation)
 * - vil2_sample_grid_bilin : Sample values over a grid (using bilin. interpolation)
 *
+* \subsection conventions Parameter Conventions
+* For your ease of usee, all vil2 functions and methods adhere to the following
+* parameter conventions
+*
+* - Index types - All pixel index and image size types are unsigned.
+* - Specifying a pixel - func(i,j) assumes plane 0 or func(i,j,p)
+* - Specifying a window - func(i0,ni,j0,nj) window includes all planes.
+*
 * \section Examples examples
 * There are plenty of working examples in the examples subdirectory - these can be
 * treated as a mini-tutorial

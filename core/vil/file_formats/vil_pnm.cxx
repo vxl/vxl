@@ -306,8 +306,7 @@ static bool operator>>(vil_stream& vs, int& a)
 }
 
 vil2_image_view_base_sptr vil2_pnm_image::get_copy_view(
-  unsigned x0, unsigned y0,
-  unsigned nx, unsigned ny) const
+  unsigned x0, unsigned nx, unsigned y0, unsigned ny) const
 {
   bool* bb = 0;
   unsigned char* ib = 0;

@@ -92,8 +92,8 @@ class vil2_pnm_image : public vil2_image_data
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.
-  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned j0,
-                                                  unsigned ni, unsigned nj) const;
+  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+                                                  unsigned j0, unsigned nj) const;
 
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil2_image_view_base& im, unsigned i0, unsigned j0);

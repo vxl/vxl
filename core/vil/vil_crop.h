@@ -12,14 +12,15 @@
 
 //: Crop to a region of src.
 vil2_image_data_sptr vil2_crop(const vil2_image_data_sptr &src, unsigned i0,
-                               unsigned j0, unsigned ni, unsigned nj);
+                               unsigned ni, unsigned j0, unsigned nj);
 
 
 //: A generic_image adaptor that behaves like a cropped version of its input
 class vil2_crop_image_data : public vil2_image_data
 {
  public:
-  vil2_crop_image_data(vil2_image_data_sptr const&, int i0, int j0, int ni, int nj);
+  vil2_crop_image_data(vil2_image_data_sptr const&, unsigned i0, unsigned ni,
+                       unsigned j0, unsigned nj);
   ~vil2_crop_image_data();
 
   virtual unsigned nplanes() const { return gi_->nplanes(); }
@@ -29,14 +30,14 @@ class vil2_crop_image_data : public vil2_image_data
   virtual enum vil2_pixel_format pixel_format() const { return gi_->pixel_format(); }
 
 
-  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned j0,
-                                                  unsigned ni, unsigned nj) const {
+  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, 
+                                                  unsigned j0, unsigned nj) const {
     return gi_->get_copy_view(i0+i0_, j0+j0_, ni, nj);
   }
 
-  virtual vil2_image_view_base_sptr get_view(unsigned i0, unsigned j0,
-                                             unsigned ni, unsigned nj) const {
-    return gi_->get_view(j0+j0_, j0+j0_, ni, nj);
+  virtual vil2_image_view_base_sptr get_view(unsigned i0, unsigned ni,
+                                             unsigned j0, unsigned nj) const {
+    return gi_->get_view(j0+j0_, ni, j0+j0_, nj);
   }
 
 
@@ -60,8 +61,8 @@ class vil2_crop_image_data : public vil2_image_data
  protected:
   vil2_image_data_sptr gi_;
   int i0_;
-  int j0_;
   int ni_;
+  int j0_;
   int nj_;
 };
 

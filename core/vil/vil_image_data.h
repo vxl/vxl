@@ -55,25 +55,25 @@ class vil2_image_data
   // it should work efficiently. This function will always return a
   // multi-plane scalar-pixel view of the data.
   // \return 0 if unable to get view of correct size.
-  virtual vil2_image_view_base_sptr get_view(unsigned x0, unsigned y0,
-                                             unsigned nx, unsigned ny) const
-  { return get_copy_view (x0, y0, nx, ny); }
+  virtual vil2_image_view_base_sptr get_view(unsigned i0, unsigned ni,
+                                             unsigned j0, unsigned nj) const
+  { return get_copy_view (i0, ni, j0, nj); }
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size. Caller is responsible for
   // deleting the view. This function will always return a
   // multi-plane scalar-pixel view of the data.
-  virtual vil2_image_view_base_sptr get_copy_view(unsigned x0, unsigned y0,
-                                                  unsigned nx, unsigned ny) const = 0;
+  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+                                                  unsigned j0, unsigned nj) const = 0;
 
   //: Put the data in this view back into the image source.
   // The view must be of scalar components. Assign your
   // view to a scalar-component view if this is not the case.
-  virtual bool put_view(const vil2_image_view_base& im, unsigned x0, unsigned y0) = 0;
+  virtual bool put_view(const vil2_image_view_base& im, unsigned i0, unsigned j0) = 0;
 
   //: Check that a view will fit into the data at the given offset.
   // This includes checking that the pixel type is scalar.
-  virtual bool view_fits(const vil2_image_view_base& im, unsigned x0, unsigned y0);
+  virtual bool view_fits(const vil2_image_view_base& im, unsigned i0, unsigned j0);
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0

@@ -11,18 +11,20 @@
 #include "vil2_crop.h"
 
 
-vil2_image_data_sptr vil2_crop(const vil2_image_data_sptr &src, unsigned x0,
-                               unsigned y0, unsigned nx, unsigned ny)
+vil2_image_data_sptr vil2_crop(const vil2_image_data_sptr &src, unsigned i0,
+                               unsigned ni, unsigned j0, unsigned nj)
 {
-  return new vil2_crop_image_data(src, x0, y0, nx, ny);
+  return new vil2_crop_image_data(src, i0, ni, j0, nj);
 }
 
 
-vil2_crop_image_data::vil2_crop_image_data(vil2_image_data_sptr const& gi, int i0, int j0, int ni, int nj):
+vil2_crop_image_data::vil2_crop_image_data(vil2_image_data_sptr const& gi,
+                                           unsigned i0, unsigned ni,
+                                           unsigned j0, unsigned nj):
   gi_(gi),
   i0_(i0),
-  j0_(j0),
   ni_(ni),
+  j0_(j0),
   nj_(nj)
 {
 }

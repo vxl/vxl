@@ -78,5 +78,5 @@ vil2_image_view_base_sptr vil2_load(const char *file)
 {
   vil2_image_data_sptr data = vil2_load_image_data(file);
   if (!data) return 0;
-  return data -> get_view(0, 0, data->ni(), data->nj());
+  return data -> get_view(0, data->ni(), 0, data->nj());
 }
