@@ -5,12 +5,16 @@
 # Version |Date      | Author                   |Comment
 # --------+----------+--------------------------+------------------------------
 # 1.0     |2000/06/16| François BERTEL          |Creation
+# 1.1     |2002/11/13| Peter Vanroose           |Now using TESTMAIN
 ###############################################################################
 
 USES := vxl
 include ${IUEROOT}/vxl/vcsl/config.mk
+include ${IUEROOT}/vxl/testlib/config.mk
 
-TESTS += vcsl_test_all.cxx
+TESTMAIN := test_driver.cxx
+
+SOURCES += vcsl_test_all.cxx
 
 TESTS += test_meter.cxx
 TESTS += test_radian.cxx
@@ -29,6 +33,6 @@ TESTS += test_translation.cxx
 TESTS += test_rotation.cxx
 TESTS += test_displacement.cxx
 
-###############################################################################
+#########################################
 include ${IUEROOT}/config/static-tests.mk
-###############################################################################
+#########################################
