@@ -90,4 +90,36 @@ VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<vcl_complex<long double> >
   static vcl_complex<long double> complexify(long double x) { return x; }
 };
 
+#include <vnl/vnl_bignum.h>
+
+VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<vnl_bignum>
+{
+  enum { isreal = true };
+  static vnl_bignum conjugate(vnl_bignum x) { return x; }
+  static vcl_complex<vnl_bignum> complexify(vnl_bignum x) { return vcl_complex<vnl_bignum>(x,vnl_bignum(0L)); }
+};
+
+VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<vcl_complex<vnl_bignum> >
+{
+  enum { isreal = false };
+  static vcl_complex<vnl_bignum> conjugate(vcl_complex<vnl_bignum> x) { return vcl_complex<vnl_bignum>(x.real(),-x.imag()); }
+  static vcl_complex<vnl_bignum> complexify(vcl_complex<vnl_bignum> x) { return x; }
+};
+
+#include <vnl/vnl_rational.h>
+
+VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<vnl_rational>
+{
+  enum { isreal = true };
+  static vnl_rational conjugate(vnl_rational x) { return x; }
+  static vcl_complex<vnl_rational> complexify(vnl_rational x) { return vcl_complex<vnl_rational>(x, vnl_rational(0,1)); }
+};
+
+VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<vcl_complex<vnl_rational> >
+{
+  enum { isreal = false };
+  static vcl_complex<vnl_rational> conjugate(vcl_complex<vnl_rational> x) {return vcl_complex<vnl_rational>(x.real(),-x.imag());}
+  static vcl_complex<vnl_rational> complexify(vcl_complex<vnl_rational> x) { return x; }
+};
+
 #endif // vnl_complex_traits_h_
