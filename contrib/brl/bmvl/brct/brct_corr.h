@@ -1,12 +1,10 @@
 #ifndef brct_corr_h_
 #define brct_corr_h_
-
 //:
 // \file
-
 // \brief A class to store image correspondences
 //
-// 
+//
 //
 // \author J.L. Mundy
 // \verbatim
@@ -17,6 +15,7 @@
 
 #include <vbl/vbl_ref_count.h>
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 #include <vgl/vgl_homg_point_2d.h>
 
 class brct_corr : public vbl_ref_count
@@ -30,7 +29,7 @@ class brct_corr : public vbl_ref_count
   int index(){return index_;}
   bool valid(const int cam){return matches_[cam].x()>=0;}
   vgl_homg_point_2d<double> match(const int cam){return matches_[cam];}
-  
+
   //:Mutators
   void set_match(const int cam, const double x, const double y);
   //: Utility functions
