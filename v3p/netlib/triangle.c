@@ -3935,6 +3935,15 @@ REAL permanent;
   INEXACT REAL _i, _j;
   REAL _0;
 
+  // Initialise memory that some later code tries to read and assumes is initialised to zero. IMS
+  memset(ayybc, 0, 16*sizeof(REAL));
+  memset(axxbc, 0, 16*sizeof(REAL));
+  memset(bxxca, 0, 16*sizeof(REAL));
+  memset(byyca, 0, 16*sizeof(REAL));
+  memset(cxxab, 0, 16*sizeof(REAL));
+  memset(cyyab, 0, 16*sizeof(REAL));
+
+
   adx = (REAL) (pa[0] - pd[0]);
   bdx = (REAL) (pb[0] - pd[0]);
   cdx = (REAL) (pc[0] - pd[0]);
