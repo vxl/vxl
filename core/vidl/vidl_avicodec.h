@@ -1,22 +1,19 @@
 #ifndef vidl_avicodec_h
 #define vidl_avicodec_h
-
 //:
 // \file 
 // \author Andy Molnar
 // \date October 1998
 //
 // \verbatim
-// Modifications
-// Nicolas Dano, september 1999
+//  Modifications
+//   Nicolas Dano, september 1999
 //     - Transformed the basic AVI image reading into AVI Video
 //     - Added the possibility to save video in AVI format
-// Julien ESTEVE, June 2000
+//   Julien ESTEVE, June 2000
 //     Ported from TargetJr
-// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
-
-
 
 #include <vcl_compiler.h>
 #include <vidl/vidl_codec.h>
@@ -28,9 +25,6 @@
 #undef max
 #include <vfw.h>
 #endif
-//#include <vidl/vidl_codec.h>
-//#include <vidl/vidl_frame_sptr.h>
-
 
 
 //: Allows user to load Microsoft AVI movie files as vxl video.
@@ -38,9 +32,9 @@
 // See also vidl_codec
 class vidl_avicodec : public vidl_codec
 {
-public:
+ public:
   vidl_avicodec();
-  ~vidl_avicodec();
+ ~vidl_avicodec();
 
   //-----------------------------------------------------
 
@@ -53,7 +47,7 @@ public:
   virtual bool save(vidl_movie* movie, const char* fname);
   virtual  const char* type() {return "AVI";}
 
-private:
+ private:
    PAVIFILE avi_file_;
    PAVISTREAM avi_stream_;
    PGETFRAME avi_get_frame_;
@@ -64,7 +58,7 @@ private:
   // Helpers
   HANDLE  make_dib(vidl_frame_sptr frame, UINT bits);
 
-protected:
+ protected:
    bool read_header();
    bool write_header();
 };
