@@ -159,6 +159,10 @@ SOURCE=.\mbl_gamma.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\mbl_matrix_products.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\mbl_matxvec.cxx
 # End Source File
 # Begin Source File
@@ -171,6 +175,10 @@ SOURCE=.\mbl_mz_random.cxx
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=.\mbl_cloneable_ptr.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\mbl_data_array_wrapper.h
 # End Source File
 # Begin Source File
@@ -180,6 +188,10 @@ SOURCE=.\mbl_data_wrapper.h
 # Begin Source File
 
 SOURCE=.\mbl_gamma.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_matrix_products.h
 # End Source File
 # Begin Source File
 

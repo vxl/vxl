@@ -271,6 +271,10 @@ SOURCE=.\vnl_io_sparse_matrix.txx
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vnl_io_vcl_vector+vnl_vector+double--.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vnl_io_vector+double-.cxx"
 # End Source File
 # Begin Source File

@@ -259,6 +259,10 @@ SOURCE=".\Templates\vsl_vector+int-.cxx"
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vsl_vector+uint-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=.\vsl_vector_io.txx
 # End Source File
 # End Group
