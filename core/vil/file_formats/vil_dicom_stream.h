@@ -1,6 +1,5 @@
-#ifndef vil_dicom2_stream_h_
-#define vil_dicom2_stream_h_
-
+#ifndef vil_dicom_stream_h_
+#define vil_dicom_stream_h_
 //:
 // \file
 // \author Amitha Perera
@@ -12,7 +11,7 @@ class vil_stream;
 class vil_dicom_stream_producer
   : public DcmProducer
 {
-public:
+ public:
   vil_dicom_stream_producer( vil_stream* vs );
 
   virtual ~vil_dicom_stream_producer();
@@ -25,7 +24,7 @@ public:
   virtual Uint32 skip(Uint32 skiplen);
   virtual void putback(Uint32 num);
 
-private:
+ private:
   vil_stream* vs_;
 };
 
@@ -33,7 +32,7 @@ private:
 class vil_dicom_stream_factory
   : public DcmInputStreamFactory
 {
-public:
+ public:
   vil_dicom_stream_factory( vil_stream* vs );
 
   virtual ~vil_dicom_stream_factory();
@@ -41,22 +40,21 @@ public:
   virtual DcmInputStream* create() const;
 
   virtual DcmInputStreamFactory* clone() const
-    {
-      return new vil_dicom_stream_factory(*this);
-    }
+  {
+    return new vil_dicom_stream_factory(*this);
+  }
 
-private:
+ private:
   vil_stream* vs_;
 };
 
 class vil_dicom_stream_input
   : public DcmInputStream
 {
-public:
+ public:
   vil_dicom_stream_input( vil_stream* vs );
   virtual ~vil_dicom_stream_input();
   virtual DcmInputStreamFactory* newFactory() const;
-
 };
 
 #endif // vil_dicom_stream_h_
