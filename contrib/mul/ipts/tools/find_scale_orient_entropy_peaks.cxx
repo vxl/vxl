@@ -12,10 +12,11 @@
 
 void print_usage()
 {
-  vcl_cout<<"find_scale_orient_entropy_peaks -i input_image -s scale_step -h half_width -t threshold -o out_image -e entropy_pyramid\n"
-          <<"Generates scale pyramid, computes orientations at each level then"<<vcl_endl
-          <<"computes local orientation entropy in squares with given half width"<<vcl_endl
-          <<"looks for local peaks in the entropy pyramid"<<vcl_endl;
+  vcl_cout<<"find_scale_orient_entropy_peaks "
+          <<"-i input_image -s scale_step -h half_width -t threshold -o out_image -e entropy_pyramid\n"
+          <<"Generates scale pyramid, computes orientations at each level then\n"
+          <<"computes local orientation entropy in squares with given half width\n"
+          <<"looks for local peaks in the entropy pyramid\n";
 }
 
 int main( int argc, char* argv[] )
