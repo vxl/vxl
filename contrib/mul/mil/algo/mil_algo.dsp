@@ -158,6 +158,11 @@ SOURCE=.\Templates/mil_algo_gaussian_filter+float.float-.cxx
 SOURCE=.\Templates/mil_algo_gaussian_filter+vil_byte.float-.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil_algo_brighten_image_2d+float.float.float-.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -214,6 +219,16 @@ SOURCE=.\mil_algo_gaussian_filter.h
 # Begin Source File
 
 SOURCE=.\mil_algo_gaussian_filter.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_algo_brighten_image_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_algo_brighten_image_2d.h
 
 # End Source File
 # End Group
