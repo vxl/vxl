@@ -4,6 +4,7 @@
 #include <vcl_vector.h>
 
 // --- Vector ---
+#undef VCL_VECTOR_INSTANTIATE
 #define VCL_VECTOR_INSTANTIATE(T) \
 template class vcl_vector<T >; \
 namespace std { template void std::fill(vcl_vector<T >::iterator, vcl_vector<T >::iterator, T const &); } \

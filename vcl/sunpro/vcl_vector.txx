@@ -4,6 +4,7 @@
 #include <vcl_vector.h>
 
 // --- Vector ---
+#undef VCL_VECTOR_INSTANTIATE
 #define VCL_VECTOR_INSTANTIATE(T) \
 template class std::vector<T, std::allocator<T > >; \
 /* member templates */ \
