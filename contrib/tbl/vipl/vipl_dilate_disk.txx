@@ -9,14 +9,14 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(
   // apply filter:
   for(int j = start(Y_Axis()), ej =  stop(Y_Axis()); j < ej  ; ++j)
     for(int i = start(X_Axis(),j), ei = stop(X_Axis(),j); i < ei ; ++i) {
-      register DataIn v;
-      v = fgetpixel(in, i, j, v); // set v to max of surrounding pixels:
+      register DataIn
+      v = fgetpixel(in, i, j, DataIn()); // set v to max of surrounding pixels:
       for (int x=0; x<=size; ++x) for (int y=0; y<=size; ++y) if (mask()[x][y]) {
-        register DataIn w;
-        w = getpixel(in, i+x, j+y, w); if (w > v) v = w;
-        w = getpixel(in, i-x, j+y, w); if (w > v) v = w;
-        w = getpixel(in, i+x, j-y, w); if (w > v) v = w;
-        w = getpixel(in, i-x, j-y, w); if (w > v) v = w;
+        register DataIn
+        w = getpixel(in, i+x, j+y, DataIn()); if (w > v) v = w;
+        w = getpixel(in, i-x, j+y, DataIn()); if (w > v) v = w;
+        w = getpixel(in, i+x, j-y, DataIn()); if (w > v) v = w;
+        w = getpixel(in, i-x, j-y, DataIn()); if (w > v) v = w;
       }
       fsetpixel(out, i, j, (DataOut)v);
     }
