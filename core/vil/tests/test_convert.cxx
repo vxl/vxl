@@ -35,7 +35,7 @@ MAIN( test_convert )
 {
   START( "vil2_convert" );
 
-  const char * golden_data_dir=0;
+  const char * golden_data_dir="";
   if (argc>=2) golden_data_dir = argv[1];
  
   test_convert1(golden_data_dir);

@@ -58,8 +58,12 @@ vcl_string image_base;
   vil2_image_view<vxl_byte> ppm_image = vil2_load( (image_base+"ff_rgb8bit_raw.ppm").c_str());
   TEST("vil2_load worked", ppm_image, true);
   
-  vil2_image_resource_sptr resource1 = vil2_vil1_to_image_resource(tiff_image);
-  image1 = resource1->get_view(0, resource1->ni(), 0, resource1->nj());
+  if (tiff_image && ppm_image)
+  {
+    vil2_image_resource_sptr resource1 = vil2_vil1_to_image_resource(tiff_image);
+    image1 = resource1->get_view(0, resource1->ni(), 0, resource1->nj());
+    TEST("Loaded images correctly via vil1", vil2_image_view_deep_equality(image1, ppm_image),true);
+  }
 //  vil2_print_all(vcl_cout, image1);
 //  vil2_print_all(vcl_cout, ppm_image);
   

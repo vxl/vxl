@@ -184,6 +184,8 @@ inline vil2_image_view<outP> vil2_convert_to_grey_using_average(
   // Check output is scalar component image.
   assert (vil2_pixel_format_num_components(vil2_pixel_format_of(outP())) == 1);
 
+  if (!src) return vil2_image_view<outP>();
+
   // try to do it quickly
   if (vil2_pixel_format_of(outP()) == src->pixel_format() && src->nplanes() == 1)
     return vil2_image_view<outP>(src);
@@ -235,6 +237,8 @@ inline vil2_image_view<outP> vil2_convert_to_grey_using_rgb_weighting(
 {
   // Check output is scalar component image.
   assert (vil2_pixel_format_num_components(vil2_pixel_format_of(outP())) == 1);
+
+  if (!src) return vil2_image_view<outP>();
 
   // try to do it quickly
   if (vil2_pixel_format_of(outP()) == src->pixel_format() && src->nplanes() == 1)

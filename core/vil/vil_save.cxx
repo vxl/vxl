@@ -85,16 +85,14 @@ char const *guess_file_format(char const* filename)
     // translate common extensions into known file formats.
     if (false) { }
 #define macro(ext, fmt) else if (!vcl_strcmp(dot, "." #ext)) file_format = #fmt
+    macro(tif, tiff);
+    macro(png, png);
     macro(bmp, bmp);
     macro(pbm, pnm);
     macro(pgm, pnm);
     macro(ppm, pnm);
     macro(pnm, pnm);
     macro(jpg, jpeg);
-    macro(tif, tiff);
-    macro(mit, mit);
-    macro(gif, gif);
-    macro(png, png);
 #undef macro
     else {
       //file_format = dot+1; // hope it works.

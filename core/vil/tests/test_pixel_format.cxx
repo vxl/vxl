@@ -26,5 +26,14 @@ int test_pixel_format_main( int /*argc*/, char* /*argv*/[] )
        vil2_pixel_format_component_format(vil2_pixel_format_of(vil_rgba<vxl_byte>())),
        VIL2_PIXEL_FORMAT_BYTE);
 
+  vcl_cout << VIL2_PIXEL_FORMAT_RGBA_DOUBLE << '\n' << 
+              VIL2_PIXEL_FORMAT_RGBA_INT_32 << '\n' <<
+              VIL2_PIXEL_FORMAT_RGBA_UINT_32 << '\n' <<
+              VIL2_PIXEL_FORMAT_RGBA_INT_16 << '\n' <<
+              VIL2_PIXEL_FORMAT_RGBA_UINT_16 << '\n' <<
+              VIL2_PIXEL_FORMAT_RGBA_BYTE << '\n' <<
+              VIL2_PIXEL_FORMAT_RGBA_SBYTE << '\n' <<
+              VIL2_PIXEL_FORMAT_RGBA_FLOAT << '\n' <<
+              VIL2_PIXEL_FORMAT_RGBA_DOUBLE << vcl_endl;
   return testlib_test_summary();
 }

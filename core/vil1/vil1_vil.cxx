@@ -11,6 +11,7 @@
 //: Create a vil2_image_resource from a vil1 vil_image.
 vil2_image_resource_sptr vil2_vil1_to_image_resource(const vil_image &vil1_im)
 {
+  if (!vil1_im) return 0;
   return new vil2_vil1_image_resource(vil1_im);
 }
 
