@@ -5,4 +5,4 @@
 #include <vpl/vpl_mutex.h>
 #endif
 
-int main() { return 0; }
+int test_include_main(int,char*[]) { return 0; }

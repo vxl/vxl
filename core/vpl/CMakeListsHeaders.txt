@@ -1,4 +1,0 @@
-SOURCE_FILES( vpl_sources
-  vpl.h
-  vpl_mutex.h
-)

@@ -1,12 +1,12 @@
 #include <vcl_fstream.h>
 
+#include <testlib/testlib_test.h>
+
 #include <vpl/vpl.h>
 #include <sys/types.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cstring.h>
 #include <vcl_string.h>
-
-#define Assert(x) do { if (x) vcl_cout << "test PASSED\n"; else vcl_cout << "test FAILED [" #x "]\n"; } while (0)
 
 #ifdef VCL_WIN32
 #define ROOT_PATH "C:/TEMP"
@@ -14,7 +14,7 @@
 #define ROOT_PATH "/tmp"
 #endif
 
-int main(int, char **)
+MAIN( test_unistd )
 {
   vpl_mkdir(ROOT_PATH "/vpltest", 0777);
   vpl_chdir(ROOT_PATH "/vpltest");
