@@ -40,15 +40,20 @@ foreach $f (@FILES)
   }
   $file=<FILE>;
   close FILE;
+  next unless (defined($file));
   $printed = $full;
 
 # 1. abnormal characters (tabs, ascii < 32, etc.)
-  if ($file =~ m/[\000-\010\013-\037\177-\277\320\327\336\360\367\376]/) {
-    print "$f\t\# has non-standard ascii characters\n";
-    $printed = 1;
-  }
   if ($file =~ m/\t/) {
     print "$f\t\# contains tabs\n";
+    $printed = 1;
+  }
+  if ($file =~ m/\r/ && $f !~ m/\.ds[pw]$/) {
+    print "$f\t\# contains carriage returns (ascii 13)\n";
+    $printed = 1;
+  }
+  if ($file =~ m/[\000-\010\013\014\016-\037\177-\277\320\327\336\360\367\376]/) {
+    print "$f\t\# contains non-standard ascii characters\n";
     $printed = 1;
   }
 
@@ -56,7 +61,7 @@ foreach $f (@FILES)
   $has_end_spaces = ($file =~ m/ +\n/);
 
 # 3. Lines longer than 132 characters
-  if ($file =~ m/[^\n]{133,}/) {
+  if ($file =~ m/[^\n]{133,}/ && $f !~ m/\.dsp$/) {
     print "$f\t\# has lines of more than 132 characters\n";
     $printed = 1;
   }
@@ -240,6 +245,7 @@ foreach $f (@FILES)
         $f !~ m/\bvnl\/vnl_complex_ops\.txx$/ &&
         "$f.$wd" !~ m/\bvul\/vul_timer\.(h|cxx)\.real$/ &&
         "$f.$wd" !~ m/\bvnl\/vnl_quaternion\.h\.real$/ &&
+        "$f.$wd" !~ m/\bvnl\/(vnl_rational\.h|tests\/test_rational\.cxx)\.(abs|ceil|floor)$/ &&
         "$f.$wd" !~ m/\bvnl\/vnl_numeric_limits\.h\.(min|max)$/ &&
         "$f.$wd" !~ m/\bvil\/vil_rgb\.(h|txx)\.(min|max)$/ &&
         "$f.$wd" !~ m/\bgel\/vgel\/kl\/base\.h\.(min|max)$/ &&
