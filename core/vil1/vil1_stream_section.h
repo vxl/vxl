@@ -20,7 +20,7 @@
 
 #include <vil/vil_stream.h>
 
-struct vil_stream_section : vil_stream
+struct vil_stream_section : public vil_stream
 {
   // skip to position 'begin' in underlying stream and translate seeks,
   // reads and writes relative to that position into seeks, reads and
