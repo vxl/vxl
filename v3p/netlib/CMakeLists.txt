@@ -205,4 +205,6 @@ SOURCE_FILES( netlib_sources
   zungqr
 )
 
-SUBDIRS( tests )
+IF( BUILD_TESTS)
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTS)
