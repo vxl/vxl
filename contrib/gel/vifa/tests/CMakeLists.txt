@@ -1,5 +1,6 @@
 # gel/vifa/tests/CMakeLists.txt
 
+INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
 
 LINK_LIBRARIES( vifa sdet vtol vdgl vil vil1 vgl testlib )
