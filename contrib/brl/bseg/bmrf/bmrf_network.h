@@ -22,16 +22,33 @@
 #include <vbl/vbl_ref_count.h>
 #include "bmrf_node_sptr.h"
 #include "bmrf_network_sptr.h"
+#include "bmrf_epi_seg_sptr.h"
 
 //: The MRF network
 class bmrf_network : public vbl_ref_count
 {
 public:
+  typedef vcl_map<bmrf_epi_seg*, bmrf_node_sptr> node_map;
   //: Constructor
   bmrf_network();
 
   //: Destructor
   ~bmrf_network(){}
+
+  //: Adds a new to the network
+  // \returns true if the node was added
+  // \returns false if the node could not be added
+  // \note every node in the network must have a unique epi_segment
+  bool add_node(const bmrf_node_sptr& node);
+
+  //: Deletes a node in the network
+  // \returns true if the node was deleted
+  // \returns false if the node was not found in the network
+  bool delete_node(const bmrf_node_sptr& node);
+    
+  //: Look up the node corresponding to an epi-segment
+  // Returns a null smart pointer if no node exists
+  bmrf_node_sptr seg_to_node(const bmrf_epi_seg_sptr& seg) const;
 
   //: Returns the number of nodes in the network;
   int size();
@@ -42,9 +59,23 @@ public:
   //: Returns all the nodes in frame \param frame
   vcl_vector<bmrf_node_sptr> nodes_in_frame(int frame) const;
 
+  //: Binary save self to stream.
+  void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  void b_read(vsl_b_istream &is);
+
+  //: Return IO version number;
+  short version() const;
+
+  //: Print an ascii summary to the stream
+  void print_summary(vcl_ostream &os) const;
+
 private:
-  //: The vector of nodes in the network
-  vcl_vector<bmrf_node_sptr> nodes_;
+  
+  //: The map of nodes in the network
+  // \note indexed by epi_seg pointers for quick reverse lookup
+  node_map nodes_;
 
 public:
   class iterator
