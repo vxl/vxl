@@ -86,7 +86,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
       const srcT* s = src;
       const kernelT* k = kernel+i*kstep;
       for (int j=i;j<=k_hi;++j,s+=s_step,k+=kstep) sum+= (*s)*(*k);
-			*dest=sum;
+      *dest=sum;
     }
   }
   else
@@ -94,73 +94,73 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
   {
     // Assume src[i]=src[0] for i<0
     int i_max = 1-k_lo;
-	for (int i=0;i<=i_max;++i)
-	{
-	  accumT sum=0;
-	  for (int j=k_lo;j<=k_hi;++j)
-	  {
-	    if ((i+j)<0) sum+=src[0]*kernel[j*kstep];
-		else         sum+=src[(i+j)*s_step]*kernel[j*kstep];
+    for (int i=0;i<=i_max;++i)
+    {
+      accumT sum=0;
+      for (int j=k_lo;j<=k_hi;++j)
+      {
+        if ((i+j)<0) sum+=src[0]*kernel[j*kstep];
+        else         sum+=src[(i+j)*s_step]*kernel[j*kstep];
       }
-	  dest[i]=sum;
-	}
+      dest[i]=sum;
+    }
   }
   else
   if (option==vil2_convolve_periodic_extend)
   {
     // Assume src[i]=src[0] for i<0
     int i_max = 1-k_lo;
-	for (int i=0;i<=i_max;++i)
-	{
-	  accumT sum=0;
-	  for (int j=k_lo;j<=k_hi;++j)
-	  {
-	    if ((i+j)<0) sum+=src[0]*kernel[j*kstep];
-		else         sum+=src[(i+j)*s_step]*kernel[j*kstep];
+    for (int i=0;i<=i_max;++i)
+    {
+      accumT sum=0;
+      for (int j=k_lo;j<=k_hi;++j)
+      {
+        if ((i+j)<0) sum+=src[0]*kernel[j*kstep];
+        else         sum+=src[(i+j)*s_step]*kernel[j*kstep];
       }
-	  dest[i]=sum;
-	}
+      dest[i]=sum;
+    }
   }
   else
   if (option==vil2_convolve_reflect_extend)
   {
     // Assume src[i]=src[n+i] for i<0
     int i_max = 1-k_lo;
-	for (int i=0;i<=i_max;++i)
-	{
-	  accumT sum=0;
-	  for (int j=k_lo;j<=k_hi;++j)
+    for (int i=0;i<=i_max;++i)
+    {
+      accumT sum=0;
+      for (int j=k_lo;j<=k_hi;++j)
         sum+=src[((i+j+n)%n)*s_step]*kernel[j*kstep];
-	  dest[i]=sum;
-	}
+      dest[i]=sum;
+    }
   }
   else
   if (option==vil2_convolve_trim)
   {
     // Truncate and reweight kernel
-	accumT k_sum_all=0;
+    accumT k_sum_all=0;
     for (int j=k_lo;j<=k_hi;++j) k_sum_all+=kernel[j*kstep];
 
     int i_max = 1-k_lo;
-	for (int i=0;i<=i_max;++i)
-	{
-	  accumT sum=0;
-	  accumT k_sum=0;
-	  // Sum elements which overlap src
-	  // ie i+j>=0  (so j starts at -i)
-	  for (int j=-i;j<=k_hi;++j)
-	  {
+    for (int i=0;i<=i_max;++i)
+    {
+      accumT sum=0;
+      accumT k_sum=0;
+      // Sum elements which overlap src
+      // ie i+j>=0  (so j starts at -i)
+      for (int j=-i;j<=k_hi;++j)
+      {
         sum+=src[(i+j)*s_step]*kernel[j*kstep];
-		k_sum += kernel[j*kstep];
+        k_sum += kernel[j*kstep];
       }
-	  dest[i]=sum*k_sum_all/k_sum;
-	}
+      dest[i]=sum*k_sum_all/k_sum;
+    }
   }
   else
   {
     vcl_cout<<"vil2_algo_convolve_edge_1d: ";
     vcl_cout<<"Sorry, can't deal with supplied edge option."<<vcl_endl;
-    abort();
+    vcl_abort();
   }
 }
 
@@ -218,9 +218,10 @@ inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
     const srcT*  src_row  = src_im.top_left_ptr()+p*src_im.pstep();
     const destT* dest_row = dest_im.top_left_ptr()+p*dest_im.pstep();
 
-	for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+    for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
       vil2_algo_convolve_1d(src_row,ni,s_istep,  dest_row,d_istep,
                             kernel,l_lo,k_hi,ac,start_option,end_option);
   }
 }
+
 #endif // vil2_algo_convolve_1d_h_
