@@ -102,7 +102,7 @@ LIB32=link.exe -lib
 SOURCE=.\file_formats/vil2_pnm.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_image_data.cxx
+SOURCE=.\vil2_image_resource.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_image_view.cxx
@@ -123,7 +123,7 @@ SOURCE=.\Templates/vil2_image_view+bool-.cxx
 SOURCE=.\Templates/vil2_image_view_functions+bool-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_smart_ptr+vil2_image_data-.cxx
+SOURCE=.\Templates/vil2_smart_ptr+vil2_image_resource-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil2_smart_ptr+vil2_memory_chunk-.cxx
@@ -275,6 +275,12 @@ SOURCE=.\vil2_pixel_format.cxx
 # Begin Source File
 SOURCE=.\vil2_save.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vil2_clamp.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_transpose.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -282,7 +288,7 @@ SOURCE=.\vil2_save.cxx
 SOURCE=.\file_formats/vil2_pnm.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_image_data.h
+SOURCE=.\vil2_image_resource.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_image_view.h
@@ -358,6 +364,12 @@ SOURCE=.\vil2_math.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_property.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_clamp.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_transpose.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
