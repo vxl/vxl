@@ -27,11 +27,11 @@ void macro(int a, int b, int c) // cunningly, this is no longer a macro.
   vgui_macro_report_errors;
 }
 
-void vgui_color_white() { macro(1, 1, 1); }
-void vgui_color_yellow(){ macro(1, 1, 0); }
-void vgui_color_purple(){ macro(1, 0, 1); }
-void vgui_color_red()   { macro(1, 0, 0); }
-void vgui_color_cyan()  { macro(0, 1, 1); }
-void vgui_color_green() { macro(0, 1, 0); }
-void vgui_color_blue()  { macro(0, 0, 1); }
-void vgui_color_black() { macro(0, 0, 0); }
+void vgui_color_white() { macro(vgui_color_WHITE); }
+void vgui_color_yellow(){ macro(vgui_color_YELLOW); }
+void vgui_color_purple(){ macro(vgui_color_PURPLE); }
+void vgui_color_red()   { macro(vgui_color_RED); }
+void vgui_color_cyan()  { macro(vgui_color_CYAN); }
+void vgui_color_green() { macro(vgui_color_GREEN); }
+void vgui_color_blue()  { macro(vgui_color_BLUE); }
+void vgui_color_black() { macro(vgui_color_BLACK); }
