@@ -19,7 +19,7 @@
 // \endverbatim
 //
 
-class PMatrix;
+#include <vnl/vnl_matrix_fixed.h>
 
 //: Projects 3D models into a GL context given a camera projection matrix.
 //
