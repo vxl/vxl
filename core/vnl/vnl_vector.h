@@ -133,14 +133,14 @@ public:
   void set (T const *ptr) { copy_in(ptr); }
 
   //: Return reference to the element at specified index.
-  // There are assert style boundary checks - use NDEBUG to turn them off.
+  // There are assert style boundary checks - #define NDEBUG to turn them off.
   T       & operator() (unsigned int i)
   {
     assert(i<size());   // Check the index is valid.
     return data[i];
   }
   //: Return reference to the element at specified index. No range checking.
-  // There are assert style boundary checks - use NDEBUG to turn them off.
+  // There are assert style boundary checks - #define NDEBUG to turn them off.
   T const & operator() (unsigned int i) const
   {
     assert(i<size());   // Check the index is valid

@@ -168,7 +168,7 @@ public:
   T const * operator[] (unsigned r) const { return data[r]; }
 
   //: Access an element for reading or writing
-  // There are assert style boundary checks - use NDEBUG to turn them off.
+  // There are assert style boundary checks - #define NDEBUG to turn them off.
   T       & operator() (unsigned r, unsigned c)
   {
     assert(r<rows());   // Check the row index is valid
@@ -177,7 +177,7 @@ public:
   }
 
   //: Access an element for reading
-  // There are assert style boundary checks - use NDEBUG to turn them off.
+  // There are assert style boundary checks - #define NDEBUG to turn them off.
   T const & operator() (unsigned r, unsigned c) const
   {
     assert(r<rows());   // Check the row index is valid
