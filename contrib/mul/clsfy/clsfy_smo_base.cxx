@@ -1,4 +1,3 @@
-
 //:
 // \file
 // \author Ian Scott
@@ -13,17 +12,12 @@
 // Minimal Optimisation. In Advances in Kernel Methods - Support Vector Learning.
 // B. Scholkopf, C. Burges and A. Smola, MIT Press: 185-208. and other papers.
 
-
-
-
-
 #include "clsfy_smo_base.h"
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
 #include <vcl_algorithm.h>
 #include <vnl/vnl_math.h>
 #include <vcl_iostream.h>
-
 
 
 // ----------------------------------------------------------------
@@ -34,6 +28,7 @@ double clsfy_smo_base::error()
 }
 
 // ----------------------------------------------------------------
+
 //: Access the data points
 const vnl_vector<double> & clsfy_smo_base::data_point(unsigned long l)
 {
@@ -55,6 +50,7 @@ double clsfy_smo_base::learned_func(int k)
 }
 
 // ----------------------------------------------------------------
+
 //: Get the optimised parameters
 const vnl_vector<double>& clsfy_smo_base::lagrange_mults() const
 {
@@ -62,6 +58,7 @@ const vnl_vector<double>& clsfy_smo_base::lagrange_mults() const
 }
 
 // ----------------------------------------------------------------
+
 //: Set the initial values of the parameters to be optimised.
 // The caller is responsible for ensuring that the inital values
 // fulfil the constraints;
@@ -78,6 +75,7 @@ double clsfy_smo_base::bias()
 }
 
 // ----------------------------------------------------------------
+
 //: Reseeds the internal random number generator
 // To achieve quasi-random initialisation use;
 // \verbatim
@@ -91,6 +89,7 @@ void clsfy_smo_base::reseed(unsigned long seed)
 }
 
 // ----------------------------------------------------------------
+
 //: amount by which a sample can violate the KKT conditions
 const double& clsfy_smo_base::tolerance() const
 {
@@ -98,6 +97,7 @@ const double& clsfy_smo_base::tolerance() const
 }
 
 // ----------------------------------------------------------------
+
 //: Set the amount by which a sample can violate the KKT conditions
 // Default value is 0.001;
 void clsfy_smo_base::set_tolerance(double tolerance)
@@ -107,6 +107,7 @@ void clsfy_smo_base::set_tolerance(double tolerance)
 }
 
 // ----------------------------------------------------------------
+
 //: tolerance on several equalities
 // including testing if a lagrange multiplier is at one of the bounds.
 double clsfy_smo_base::eps() const
@@ -115,6 +116,7 @@ double clsfy_smo_base::eps() const
 }
 
 // ----------------------------------------------------------------
+
 //: Set the tolerance on several equalities
 // including testing if a lagrange multiplier is at one of the bounds.
 // Default value is 0.001;
@@ -128,9 +130,7 @@ void clsfy_smo_base::set_eps(double eps)
 // ----------------------------------------------------------------
 
 clsfy_smo_base::clsfy_smo_base():
-  tolerance_((double)0.001), eps_((double)0.001),
-  b_(0.0), rng_(9667566), error_(0.0),
-  data_(0)
+  error_(0.0), data_(0), tolerance_(0.001), eps_(0.001), b_(0.0), rng_(9667566)
 {
 }
 
@@ -154,5 +154,3 @@ double clsfy_smo_base::error_rate()
     }
     return double(n_error)/double(n_total);
 }
-
-
