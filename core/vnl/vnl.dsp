@@ -371,10 +371,6 @@ SOURCE=.\vnl_matops.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_matrix+bool-.cxx"
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vnl_matrix+double-.cxx"
 # End Source File
 # Begin Source File
@@ -540,10 +536,6 @@ SOURCE=.\vnl_transpose.cxx
 # Begin Source File
 
 SOURCE=.\vnl_unary_function.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vnl_vector+bool-.cxx"
 # End Source File
 # Begin Source File
 
