@@ -20,7 +20,7 @@ int main()
   {
     osl_edge const *e = *i;
     vcl_cout << vcl_endl << e->size() << vcl_endl;
-    for (int j=0; j<e->size(); ++j)
+    for (unsigned int j=0; j<e->size(); ++j)
       vcl_cout << e->GetX(j) << ' ' << e->GetY(j) << vcl_endl;
   }
 
