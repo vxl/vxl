@@ -89,7 +89,7 @@ rgrl_trans_couple::
 jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const
 {
   assert( forward_xform_ );
-  return forward_xform_ -> jacobian_wrt_loc( jac, from_loc );
+  forward_xform_ -> jacobian_wrt_loc( jac, from_loc );
 }  
 
 rgrl_transformation_sptr 
