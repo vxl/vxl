@@ -22,6 +22,7 @@
 #include <vul/vul_sequence_filename_map.h>
 #include <vul/vul_file_iterator.h>
 
+#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_list.h>
 #include <vcl_vector.h>
@@ -173,8 +174,10 @@ vidl_clip_sptr  vidl_io::load_clip(
         //this calls the dialog box necessary for initialization
         //of the mpeg codec.
         vidl_mpegcodec * vmp = (*i)->castto_vidl_mpegcodec();
-        if (vmp)
+        if (vmp) {
+          assert (load_mpegcodec_callback);  
           load_mpegcodec_callback(vmp);
+        }
 #endif
 
         vidl_clip_sptr clip = new vidl_clip(codec, start, end, increment);
@@ -368,4 +371,3 @@ static vidl_clip_sptr load_from_file_list(char const* fname)
   // Call load_images and return the result
   return vidl_io::load_images(filenames, 'r');
 }
-
