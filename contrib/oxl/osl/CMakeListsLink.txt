@@ -1,3 +1,4 @@
+INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/oxl )
 LINK_LIBRARIES( osl )
 
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
