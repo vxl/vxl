@@ -38,6 +38,14 @@ SOURCES += vsl_conic_as_params.cxx
 SOURCES += vsl_conic_as_matrix.cxx
 SOURCES += vsl_conic_points.cxx
 
+SOURCES += oxp_bunch_of_files.cxx
+SOURCES += oxp_vidl_moviefile.cxx
+
+ifdef WIN32
+SOURCES += oxp_mpeg_codec.cxx
+SOURCES += oxp_vidl_mpeg_codec.cxx
+endif
+
 ######################################
 include $(IUEROOT)/config/top-rules.mk
 ######################################
