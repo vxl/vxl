@@ -830,7 +830,9 @@ refinement( vnl_vector< unsigned > const& m ) const
   else
     assert ( !"dim should be 1, 2 or 3" );
 
+#ifdef DEBUG
   vcl_cout << "rgrl_spline.cxx: refinement set_control_points: " << w << vcl_endl;
+#endif
   refined_spline->set_control_points( w );
   return refined_spline;
 }
