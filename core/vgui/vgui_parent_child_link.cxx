@@ -294,9 +294,9 @@ bool vgui_parent_child_link::handle(vgui_event const &e)
   return c->handle(e);
 }
 
-vgui_parent_child_link::operator bool() const
+vgui_parent_child_link::operator vgui_parent_child_link::safe_bool() const
 {
-  return pimpl && (pimpl->child() != 0);
+  return (pimpl && (pimpl->child() != 0))? &safe_bool_dummy::dummy : 0;
 }
 
 vgui_parent_child_link::operator vgui_tableau_sptr() const

@@ -27,6 +27,9 @@
 
 class vil1_image
 {
+  //: Helper types for safe boolean conversion.
+  struct safe_bool_dummy { void dummy() {} };
+  typedef void (safe_bool_dummy::* safe_bool)();
  public:
 // use this delegation macro for consistency, not convenience.
 #define vil1_image_delegate(m, args, default) { return ptr ? ptr->m args : default; }
@@ -138,9 +141,8 @@ class vil1_image
   }
 
   //: conversion to bool
-  operator bool () const {
-    return ptr != 0;
-  }
+  operator safe_bool () const
+    { return (ptr != 0)? &safe_bool_dummy::dummy : 0; }
 
   //: use "sptr.impl()" to get a pointer to the impl object.
   vil1_image_impl *impl() const {

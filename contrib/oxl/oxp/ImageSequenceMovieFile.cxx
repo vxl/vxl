@@ -73,7 +73,7 @@ int ImageSequenceMovieFile::GetSizeY(int frame_index)
 
 int ImageSequenceMovieFile::GetBitsPixel()
 {
-  vil1_image animage = (p->current_image != 0) ? vil1_image(p->current_image) : p->get_image(p->base_index);
+  vil1_image animage = p->current_image? vil1_image(p->current_image) : p->get_image(p->base_index);
   return animage.components() * animage.bits_per_component();
 }
 
@@ -85,7 +85,7 @@ bool ImageSequenceMovieFile::IsInterlaced()
 
 bool ImageSequenceMovieFile::HasFrame(int frame_index)
 {
-  return p->get_image(frame_index) != 0;
+  return p->get_image(frame_index);
 }
 
 bool ImageSequenceMovieFile::GetFrame(int frame_index, void* buffer)

@@ -58,6 +58,9 @@ class vbl_smart_ptr
   //: Pointer to object, or 0.
   T *ptr_;
 
+  //: Helper types for safe boolean conversion.
+  struct safe_bool_dummy { void dummy() {} };
+  typedef void (safe_bool_dummy::* safe_bool)();
  public:
   vbl_smart_ptr ()
     : protected_(true), ptr_(0) { }
@@ -112,7 +115,7 @@ class vbl_smart_ptr
   }
 
   //: Cast to bool
-  operator bool () const { return ptr_ != (T*)0; }
+   operator safe_bool () const { return ptr_? &safe_bool_dummy::dummy : 0; }
 
   //: Dereferencing the pointer
   T &operator * () const { return *ptr_; }

@@ -42,6 +42,9 @@ struct vul_file_iterator_data;
 
 class vul_file_iterator
 {
+  //: Helper types for safe boolean conversion.
+  struct safe_bool_dummy { void dummy() {} };
+  typedef void (safe_bool_dummy::* safe_bool)();
  public:
 
   vul_file_iterator();
@@ -56,7 +59,7 @@ class vul_file_iterator
 
   //: Ask if done.
   // Won't spin the disk
-  operator bool();
+  operator safe_bool();
 
   //: Return the currently pointed-to pathname.
   // Won't spin the disk

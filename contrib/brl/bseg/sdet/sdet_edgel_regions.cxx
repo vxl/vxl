@@ -1469,8 +1469,8 @@ void sdet_edgel_regions::AssignEdgeLabels(unsigned int x, unsigned int y)
    default:
      vcl_cout << "In sdet_edgel_regions::UpdateNeigborhood(..)"
               << " impossible pattern = " << (int)nhood << '\n'
-              << int(label_code(rul)) <<' '<< int(label_code(rur)) << '\n'
-              << int(label_code(rll)) <<' '<< int(label_code(rlr)) << "\n\n";
+              << int(label_code(ul)) <<' '<< int(label_code(ur)) << '\n'
+              << int(label_code(ll)) <<' '<< int(label_code(lr)) << "\n\n";
   }
 }
 

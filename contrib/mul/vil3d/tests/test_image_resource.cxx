@@ -16,7 +16,7 @@ inline void test_image_resource(vcl_string type, vil_pixel_format format, T /*du
 
   vil3d_image_resource_sptr mem = vil3d_new_image_resource(10,5,3,1,format);
 
-  TEST("vil3d_new_image_resource", mem, true);
+  TEST("vil3d_new_image_resource", mem?true:false, true);
 
   vil3d_image_view<T> view1 = mem->get_view(0, mem->ni(), 0, mem->nj(), 0, mem->nk());
   TEST("vil3d_memory_image::get_view()",

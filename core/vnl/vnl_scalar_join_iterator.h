@@ -68,6 +68,9 @@ class vnl_scalar_join_iterator_indexed_pair;
 template <class T>
 class vnl_scalar_join_iterator
 {
+  //: Helper types for safe boolean conversion.
+  struct safe_bool_dummy { void dummy() {} };
+  typedef void (safe_bool_dummy::* safe_bool)();
  protected:
   unsigned n1;
   unsigned n2;
@@ -91,12 +94,13 @@ class vnl_scalar_join_iterator
 
 
   //: Return true if all pairs have been seen.
-  operator bool () { return !done(); }
+  operator safe_bool () const
+    { return (!done())? &safe_bool_dummy::dummy : 0; }
 
   //: Advance to the next pair.  This is prefix ++.
   inline vnl_scalar_join_iterator<T>& operator ++ () { next(); return *this; }
 
-  bool done();
+  bool done() const;
   void next();
 
   //: Return the indices of the current rows in the first and second relations.

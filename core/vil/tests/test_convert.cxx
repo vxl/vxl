@@ -19,13 +19,13 @@ static void test_convert1(const char * golden_data_dir)
 
   vil_image_view<vxl_byte> image1 = vil_convert_to_grey_using_rgb_weighting(
     vil_load((datadir + "ff_grey8bit_raw.pgm").c_str()));
-  TEST("vil_convert_to_grey_using_rgb_weighting(vil_load(grey_image))", image1, true);
+  TEST("vil_convert_to_grey_using_rgb_weighting(vil_load(grey_image))", image1?true:false, true);
 
   vil_print_all(vcl_cout, image1);
 
   vil_image_view<vxl_byte> image2 = vil_convert_to_grey_using_average(
     vil_load((datadir + "ff_rgb8bit_ascii.ppm").c_str()));
-  TEST("vil_convert_to_grey_using_average(vil_load(rgb_image))", image2, true);
+  TEST("vil_convert_to_grey_using_average(vil_load(rgb_image))", image2?true:false, true);
 
   vil_print_all(vcl_cout, image2);
 }
@@ -168,10 +168,10 @@ static void test_convert_to_n_planes()
 
 
   TEST("Plane image cannot be directly converted to components",
-       vil_image_view<vil_rgb<float> >(f_image_dest_sptr), false);
+       vil_image_view<vil_rgb<float> >(f_image_dest_sptr)?true:false, false);
   vil_image_view<vil_rgb<float> > rgb_image =
     vil_convert_to_component_order(f_image_dest_sptr);
-  TEST("implict vil_convert_to_component_order API", rgb_image, true);
+  TEST("implict vil_convert_to_component_order API", rgb_image?true:false, true);
   TEST("implict vil_convert_to_component_order correct",
        vil_image_view_deep_equality(vil_image_view<float>(rgb_image), f_image_dest),
        true);

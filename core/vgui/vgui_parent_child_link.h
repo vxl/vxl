@@ -67,6 +67,11 @@ struct vgui_parent_child_link_impl;   // implementation class.
 // are the same tableau causes an abort().
 struct vgui_parent_child_link
 {
+ private:
+  //: Helper types for safe boolean conversion.
+  struct safe_bool_dummy { void dummy() {} };
+  typedef void (safe_bool_dummy::* safe_bool)();
+ public:
   //: Constructor - creates a default vgui_parent_child_link.
   vgui_parent_child_link();
 
@@ -108,7 +113,7 @@ struct vgui_parent_child_link
   vgui_tableau_sptr child () const;
 
   //: Return true if both parent and child tableaux exist.
-  operator bool () const;
+  operator safe_bool () const;
 
   //: Return a pointer to the child tableau.
   //  A parent_child_link behaves more like its child than its parent.

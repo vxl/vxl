@@ -24,6 +24,11 @@
 export template <class T>
 struct vnl_fft_prime_factors
 {
+private:
+  //: Helper types for safe boolean conversion.
+  struct safe_bool_dummy { void dummy() {} };
+  typedef void (safe_bool_dummy::* safe_bool)();
+public:
   vnl_fft_prime_factors();
 
   //: constructor takes the size of the signal.
@@ -40,7 +45,8 @@ struct vnl_fft_prime_factors
   //: exponents P, Q, R.
   int const *pqr () const { return pqr_; }
 
-  operator bool () const { return trigs_ && info_ >= 0; }
+  operator safe_bool () const
+    { return (trigs_ && info_ >= 0)? &safe_bool_dummy::dummy : 0; }
 
   void resize(int N) {
     destruct();

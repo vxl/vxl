@@ -30,7 +30,7 @@ void test_image_resource(vcl_string type, vil_pixel_format format, T /*dummy*/)
 
   vil_image_resource_sptr mem = vil_new_image_resource(10,8,1,format);
 
-  TEST("vil_new_image_resource", mem, true);
+  TEST("vil_new_image_resource", mem?true:false, true);
 
   vil_image_view<T> view1 = mem->get_view(0, mem->ni(), 0, mem->nj());
   TEST("vil_memory_image::get_view()",
@@ -38,7 +38,7 @@ void test_image_resource(vcl_string type, vil_pixel_format format, T /*dummy*/)
 
   vil_image_resource_sptr mem2 = vil_new_image_resource_of_view(view1);
 
-  TEST("vil_new_image_resource_of_view", mem2 && mem2->get_view()==view1, true);
+  TEST("vil_new_image_resource_of_view", mem2 && view1==(*mem2->get_view()), true);
 
 
   view1.fill(0);
@@ -47,7 +47,7 @@ void test_image_resource(vcl_string type, vil_pixel_format format, T /*dummy*/)
 
   vil_image_resource_sptr crop = vil_crop(mem, 2, 6, 2, 4);
 
-  TEST("vil_crop(image_resource)", crop, true);
+  TEST("vil_crop(image_resource)", crop?true:false, true);
 
   vil_image_view<T> view2 = crop->get_copy_view(0, crop->ni(), 0, crop->nj());
   TEST("vil_memory_image::get_copy_view()",
@@ -117,8 +117,8 @@ void test_image_resource(vcl_string type, vil_pixel_format format, T /*dummy*/)
 
   vil_image_resource_sptr dec = vil_decimate(flip4, 2, 3);
   view1 = dec->get_view(0,dec->ni(),0,dec->nj());
-  TEST("vil_decimate get_view", view1, true);
-  TEST("vil_decimate get_copy_view", dec->get_copy_view(0,dec->ni()/2,0,dec->nj()/2), true);
+  TEST("vil_decimate get_view", view1?true:false, true);
+  TEST("vil_decimate get_copy_view", dec->get_copy_view(0,dec->ni()/2,0,dec->nj()/2)?true:false, true);
   TEST("vil_decimate get_view sizes", view1.ni() == 5 && view1.nj() == 2, true);
   TEST("vil_decimate get_view pixels",
        view1(0,1) == T(20) && view1(1,1) == T(10) && view1(1,0) == T(0), true);

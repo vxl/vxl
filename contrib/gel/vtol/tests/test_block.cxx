@@ -65,7 +65,7 @@ static void test_block()
   TEST("vtol_block equality", *b3, *b1);
   b3->describe(vcl_cout,8);
 
-  TEST("vtol_block::get_boundary_cycle() is not null", b1->get_boundary_cycle(), true);
+  TEST("vtol_block::get_boundary_cycle() is not null", b1->get_boundary_cycle()?true:false, true);
   TEST("vtol_block::get_boundary_cycle()", b1->get_boundary_cycle(), tc1);
   TEST("vtol_block::get_boundary_cycle()", *(b1->get_boundary_cycle()), *(b3->get_boundary_cycle()));
 
@@ -73,8 +73,8 @@ static void test_block()
   TEST("vtol_block deep copy (pseudo copy constructor)", *b1, *b1_copy);
   b1_copy->describe(vcl_cout,8);
 
-  TEST("vtol_block::get_boundary_cycle() is not null", b1->get_boundary_cycle(), true);
-  TEST("vtol_block::get_boundary_cycle() is not null", b1_copy->get_boundary_cycle(), true);
+  TEST("vtol_block::get_boundary_cycle() is not null", b1->get_boundary_cycle()?true:false, true);
+  TEST("vtol_block::get_boundary_cycle() is not null", b1_copy->get_boundary_cycle()?true:false, true);
   TEST("vtol_block::get_boundary_cycle()", *(b1->get_boundary_cycle()), *(b1_copy->get_boundary_cycle()));
 
   two_chain_list tc_list;

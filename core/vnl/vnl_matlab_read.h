@@ -42,11 +42,14 @@ template <class T> void vnl_matlab_read_data(vcl_istream &s, T *ptr, unsigned n)
 
 class vnl_matlab_readhdr
 {
+  //: Helper types for safe boolean conversion.
+  struct safe_bool_dummy { void dummy() {} };
+  typedef void (safe_bool_dummy::* safe_bool)();
  public:
   vnl_matlab_readhdr(vcl_istream &);
   ~vnl_matlab_readhdr();
 
-  operator bool () const;
+  operator safe_bool () const;
   void read_next(); // skip to next header in file
 
   bool is_single() const;

@@ -53,7 +53,7 @@ bool vgui_wrapper_tableau::add_child(vgui_tableau_sptr const& c)
 
 bool vgui_wrapper_tableau::remove_child(vgui_tableau_sptr const& c)
 {
-  if (child != c) {
+  if (child.child() != c) {
     vcl_cerr << __FILE__ " no such child : " << c << vcl_endl;
     return false;
   }

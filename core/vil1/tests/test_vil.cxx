@@ -50,10 +50,10 @@ static void test_vil(int argc, char* argv[])
 
   vil1_image tiff_image = vil1_load( (image_base+"ff_rgb8bit_uncompressed.tif").c_str());
   // If this test fails check that you have passed the correct image_base directory as a program argument.
-  TEST("vil1_load worked", tiff_image, true);
+  TEST("vil1_load worked", tiff_image?true:false, true);
 
   vil_image_view<vxl_byte> ppm_image = vil_load( (image_base+"ff_rgb8bit_raw.ppm").c_str());
-  TEST("vil_load worked", ppm_image, true);
+  TEST("vil_load worked", ppm_image?true:false, true);
 
   if (tiff_image && ppm_image)
   {

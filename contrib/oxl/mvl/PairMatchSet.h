@@ -75,6 +75,10 @@ class PairMatchSet : public MatchSet
   // ******* ITERATOR
   class iterator
   {
+    //: Helper types for safe boolean conversion.
+    struct safe_bool_dummy { void dummy() {} };
+    typedef void (safe_bool_dummy::* safe_bool)();
+
     const PairMatchSet* c_;
     int match_index_;
     int i1, i2;
@@ -88,7 +92,7 @@ class PairMatchSet : public MatchSet
     bool next();
     iterator& operator ++ (/*prefix*/) { next(); return *this; }
     bool isfull() const;
-    operator bool () const;
+    operator safe_bool () const;
 
    private:
     iterator& operator ++ (int /*postfix*/);// { abort(); return *this; }

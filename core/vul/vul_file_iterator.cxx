@@ -282,9 +282,9 @@ char const* vul_file_iterator::filename()
   return p->value_filename();
 }
 
-vul_file_iterator::operator bool()
+vul_file_iterator::operator vul_file_iterator::safe_bool()
 {
-  return p->value() != 0;
+  return (p->value() != 0)? &safe_bool_dummy::dummy : 0;
 }
 
 vul_file_iterator& vul_file_iterator::operator++()

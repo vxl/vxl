@@ -31,6 +31,10 @@ class vcl_multimap_uint_uint : public vcl_multimap<unsigned,unsigned, vcl_less<u
 
 class PairMatchMultiIterator
 {
+  //: Helper types for safe boolean conversion.
+  struct safe_bool_dummy { void dummy() {} };
+  typedef void (safe_bool_dummy::* safe_bool)();
+
   vcl_multimap_uint_uint::const_iterator first_;
   vcl_multimap_uint_uint::const_iterator last_;
  public:
@@ -46,7 +50,8 @@ class PairMatchMultiIterator
   PairMatchMultiIterator(PairMatchMulti const& pmm);
 
 //: Return true if the iterator is still valid.
-  operator bool() { return first_ != last_; }
+  operator safe_bool () const
+    { return (first_ != last_)? &safe_bool_dummy::dummy : 0; }
 
 //: Advance to the next match.
   PairMatchMultiIterator& operator ++ (/*prefix*/) { ++first_; return *this; }

@@ -40,17 +40,17 @@ static void test_vertex_2d()
   // try to clone this vertex
 
   vsol_spatial_object_2d_sptr so = v1->clone();
-  TEST("vtol_vertex_2d::clone()", so, true);
+  TEST("vtol_vertex_2d::clone()", so?true:false, true);
   so->describe(vcl_cout,8);
 
   vtol_topology_object_sptr to = so->cast_to_topology_object();
-  TEST("vtol_vertex_2d::clone()", to, true);
+  TEST("vtol_vertex_2d::clone()", to?true:false, true);
   to->describe(vcl_cout,8);
   vtol_vertex_sptr ve = to->cast_to_vertex();
-  TEST("vtol_topology_object::cast_to_vertex()", ve, true);
+  TEST("vtol_topology_object::cast_to_vertex()", ve?true:false, true);
   ve->describe(vcl_cout,8);
   vtol_vertex_2d_sptr v2 = ve->cast_to_vertex_2d();
-  TEST("vtol_vertex::cast_to_vertex_2d()", v2, true);
+  TEST("vtol_vertex::cast_to_vertex_2d()", v2?true:false, true);
 
   TEST("vtol_vertex_2d::x()", v2->x(), 2.0);
   TEST("vtol_vertex_2d::y()", v2->y(), 3.0);
@@ -156,7 +156,7 @@ static void test_vertex_2d()
        sit !=sups->end(); sit++)
   {
     vtol_zero_chain_sptr zc = (*sit)->cast_to_zero_chain();
-    TEST("vtol_zero_chain::cast_to_zero_chain()", zc, true);
+    TEST("vtol_zero_chain::cast_to_zero_chain()", zc?true:false, true);
     vertex_list* verts = zc->vertices();
     bool found = false;
     for (vertex_list::iterator vit = verts->begin(); vit!=verts->end(); vit++)

@@ -34,6 +34,10 @@
 template <class T>
 class vil3d_image_view : public vil3d_image_view_base
 {
+ private:
+  //: Helper types for safe boolean conversion.
+  struct safe_bool_dummy { void dummy() {} };
+  typedef void (safe_bool_dummy::* safe_bool)();
  protected:
   //: Pointer to pixel at origin.
   T * top_left_;
@@ -154,7 +158,8 @@ class vil3d_image_view : public vil3d_image_view_base
   inline vcl_ptrdiff_t planestep() const { return planestep_; }
 
   //: Cast to bool is true if pointing at some data.
-  operator bool() const { return top_left_ != (T*)0; }
+  operator safe_bool () const
+    { return (top_left_ != (T*)0)? &safe_bool_dummy::dummy : 0; }
 
   //: The number of bytes in the data
   inline unsigned size_bytes() const { return size() * sizeof(T); }

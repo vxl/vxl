@@ -25,10 +25,10 @@ void test_image_view_rgba(vil_image_view<vxl_byte> &image2, vil_image_view<float
 {
   image2.set_size(10,10,2);
   vil_image_view<vil_rgba<vxl_byte> > image6 = image2;
-  TEST("Can't assign a 3 plane images to rgba view", image6, false);
+  TEST("Can't assign a 3 plane images to rgba view", image6?true:false, false);
 
   vil_convert_cast(image7, image6);
-  TEST("vil_convert_cast<float, rgba<byte> >", image6, true);
+  TEST("vil_convert_cast<float, rgba<byte> >", image6?true:false, true);
 
   image2 = vil_plane(vil_view_as_planes(image6),1);
   vil_transform(vil_plane(vil_view_as_planes(image6),1), image2,
@@ -37,7 +37,7 @@ void test_image_view_rgba(vil_image_view<vxl_byte> &image2, vil_image_view<float
   vil_print_all(vcl_cout, image6);
   image7.clear();
   vil_convert_rgb_to_grey(image6, image7);
-  TEST("vil_convert_rgb_to_grey(vil_rgba)", image7, true);
+  TEST("vil_convert_rgb_to_grey(vil_rgba)", image7?true:false, true);
 
   TEST_NEAR("Conversion rgba to grey", image7(0,0),  0.7154, 1e-5);
 
@@ -51,10 +51,10 @@ void test_image_view_rgba(vil_image_view<float> &image2, vil_image_view<double> 
 {
   image2.set_size(10,10,2);
   vil_image_view<vil_rgba<float> > image6 = image2;
-  TEST("Can't assign a 3 plane images to rgba view", image6, false);
+  TEST("Can't assign a 3 plane images to rgba view", image6?true:false, false);
 
   vil_convert_cast(image7, image6);
-  TEST("vil_convert_cast<double,rgba<float> >", image6, true);
+  TEST("vil_convert_cast<double,rgba<float> >", image6?true:false, true);
 
   image2 = vil_plane(vil_view_as_planes(image6),1);
   vil_transform(vil_plane(vil_view_as_planes(image6),1), image2,
@@ -64,7 +64,7 @@ void test_image_view_rgba(vil_image_view<float> &image2, vil_image_view<double> 
   image7.clear();
   vil_convert_rgb_to_grey(image6, image7);
   vil_print_all(vcl_cout, image7);
-  TEST("vil_convert_rgb_to_grey(vil_rgba)", image7, true);
+  TEST("vil_convert_rgb_to_grey(vil_rgba)", image7?true:false, true);
 
   TEST_NEAR("Conversion rgba to grey wibble", image7(0,0),  1.3154, 1e-5);
 
@@ -154,11 +154,11 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
   image5(2,2).b = 50;
 
   image2 = image5;
-  TEST("Can assign rgb images to 3 plane view", image2, true);
+  TEST("Can assign rgb images to 3 plane view", image2?true:false, true);
   TEST("Pixels are correct", image2(2,2,1) == 35 && image2(2,2,2) == 50, true);
 
   image5 = image2;
-  TEST("Can assign 3 planes suitable image to rgb view", image5, true);
+  TEST("Can assign 3 planes suitable image to rgb view", image5?true:false, true);
 
 
   TEST("Equality", image2, image2);
@@ -221,7 +221,7 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
   image7.clear();
   vil_convert_rgb_to_grey(vil_view_as_rgb(image2), image7);
   vil_print_all(vcl_cout, image7);
-  TEST("vil_convert_rgb_to_grey(vil_rgb)", image7, true);
+  TEST("vil_convert_rgb_to_grey(vil_rgb)", image7?true:false, true);
 
   if (format == VIL_PIXEL_FORMAT_FLOAT || format == VIL_PIXEL_FORMAT_DOUBLE)
   {
@@ -241,7 +241,7 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
   }
 
   vil_convert_cast(image7, image5);
-  TEST("vil_convert_cast<T,S>", image5, true);
+  TEST("vil_convert_cast<T,S>", image5?true:false, true);
   vil_print_all(vcl_cout, image5);
 
   // Only test rgba conversion for float and byte.
@@ -348,16 +348,16 @@ static void test_complex_image_view()
 
   vil_image_view<vcl_complex<double> > image_cd;
   vil_convert_cast(image_cf, image_cd);
-  TEST("vil_convert_cast<complex<float>, complex<double> >", image_cd, true);
+  TEST("vil_convert_cast<complex<float>, complex<double> >", image_cd?true:false, true);
 
   vil_image_view<double> image_rd;
   image_rd = vil_view_real_part (image_cd);
-  TEST("vil_view_real_part<double>", image_rd, true);
+  TEST("vil_view_real_part<double>", image_rd?true:false, true);
   TEST_NEAR("Real part correct value", image_rd(1,1,0), 1.1, 1e-5);
 
   vil_image_view<double> image_id;
   image_id = vil_view_imag_part (image_cd);
-  TEST("vil_view_imag_part<double>", image_id, true);
+  TEST("vil_view_imag_part<double>", image_id?true:false, true);
   TEST_NEAR("Imag part correct value", image_id(1,1,0), 2.2, 1e-5);
 
   image_rd (1,1,0) = 3.3;
@@ -365,11 +365,11 @@ static void test_complex_image_view()
 
   vil_image_view<float> image_pf;
   image_pf = vil_view_as_planes (image_cf);
-  TEST("vil_view_as_planes<float>", image_pf, true);
+  TEST("vil_view_as_planes<float>", image_pf?true:false, true);
 
   vil_image_view<vcl_complex<float> > image_cf2;
   image_cf2 = vil_view_as_complex (image_pf);
-  TEST("vil_view_as_complex<float>", image_cf2, true);
+  TEST("vil_view_as_complex<float>", image_cf2?true:false, true);
 
   TEST("Conversion from complex<float> to planes and back", image_cf2, image_cf);
 }

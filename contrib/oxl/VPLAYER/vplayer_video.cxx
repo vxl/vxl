@@ -86,7 +86,7 @@ void vplayer_video::go_to_frame()
   vgui_rubberband_tableau_sptr r= get_rubberbander_at(col,row);
   if (frame_num<my_movie->length())
   {
-    pframe = my_movie->get_frame(frame_num);
+    pframe = frame_num; //pframe = my_movie->get_frame(frame_num);
     //: Make sure we remove the previous client from memory. Otherwise we have MLK
     delete r->get_client();
     r->init(new vgui_rubberband_easy2D_client(tableaux_[frame_num]));

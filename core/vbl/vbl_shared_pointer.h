@@ -77,8 +77,14 @@ struct vbl_shared_pointer
     vbl_shared_pointer_zero(data);
   }
 
+ private:
+  //: Helper types for safe boolean conversion.
+  struct safe_bool_dummy { void dummy() {} };
+  typedef void (safe_bool_dummy::* safe_bool)();
+ public:
   // conversion to bool
-  operator bool() const { return data != 0; }
+  operator safe_bool () const
+    { return (data != 0)? &safe_bool_dummy::dummy : 0; }
 
   // conversion to pointer
 #if !defined VBL_SHARED_POINTER_OF_NON_COMPOUND // Get rid of warning with vbl_shared_pointer<int>
