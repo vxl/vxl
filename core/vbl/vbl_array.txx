@@ -1,12 +1,10 @@
 #ifndef vbl_array_txx_
 #define vbl_array_txx_
-/*
-  fsm@robots.ox.ac.uk
-*/
-#include "vbl_array.h"
+
+// deprecated
+#include <vbl/vbl_array_1d.txx>
 
 #undef VBL_ARRAY_INSTANTIATE
-#define VBL_ARRAY_INSTANTIATE(T) \
-template struct vbl_array<T >;
+#define VBL_ARRAY_INSTANTIATE(T) VBL_ARRAY_1D_INSTANTIATE(T)
 
 #endif

@@ -1,9 +1,8 @@
 #include <vbl/vbl_arg.h>
-#include <vbl/vbl_array.h>
+#include <vbl/vbl_array_1d.h>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_array_3d.h>
 #include <vbl/vbl_awk.h>
-#include <vbl/vbl_base_array_3d.h>
 //#include <vbl/vbl_basic_optional.h>
 //#include <vbl/vbl_basic_relation.h>
 //#include <vbl/vbl_basic_relation_type.h>
