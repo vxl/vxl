@@ -9,6 +9,9 @@
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bxml_test_map.cxx
 # End Source File
 # Begin Source File
