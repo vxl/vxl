@@ -9,9 +9,11 @@ ADD_EXECUTABLE( vul_test_driver
   test_url.cxx
   test_temp_filename.cxx
   test_regexp.cxx
+  test_string.cxx
 )
 TARGET_LINK_LIBRARIES( vul_test_driver vul vpl testlib vcl )
 
+ADD_TEST( vul_test_string         vul_test_driver test_string )
 ADD_TEST( vul_test_include        vul_test_driver test_include )
 ADD_TEST( vul_test_arg            vul_test_driver test_arg )
 ADD_TEST( vul_test_file_iterator  vul_test_driver test_file_iterator )

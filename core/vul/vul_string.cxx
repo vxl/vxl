@@ -5,7 +5,8 @@
 #include <vcl_cstdlib.h>
 #include <vcl_cstring.h>
 #include <vcl_cctype.h>
-#include <vcl_algorithm.h> // for vcl_transform
+#include <vcl_algorithm.h>
+#include <vcl_iterator.h>
 
 #define TO_LOWER vcl_tolower                    // use ANSI functions
 #define TO_UPPER vcl_toupper
@@ -192,4 +193,56 @@ vcl_string& vul_string_right_trim(vcl_string& sr, const char* rem)
 int vul_string_atoi(vcl_string const& s)
 {
   return vcl_atoi(s.c_str());
+}
+
+static bool NotSpace(char a)
+{
+  return !vcl_isspace(a);
+}
+
+template <class IT>
+static bool myequals(IT b1, IT e1,
+                     const char * b2, const char * e2)
+{
+  for (;b1 != e1 && b2 != e2; ++b1, ++b2)
+    if (vcl_toupper(*b1) != *b2) return false;
+  if (b1 == e1 && b2 == e2) return true;
+  return false;
+}
+
+bool vul_string_to_bool(const vcl_string &str)
+{
+  vcl_string::const_iterator begin = vcl_find_if(str.begin(), str.end(), NotSpace);
+  const vcl_string::const_reverse_iterator rend(begin); 
+  vcl_string::const_iterator end = vcl_find_if(str.rbegin(), rend, NotSpace).base();
+  const char syes[] = "YES";
+  const char strue[] = "TRUE";
+  const char s1[] = "1";
+  const char son[] = "ON";
+  if (myequals(begin, end, syes, syes+3)) return true;
+  if (myequals(begin, end, strue, strue+4)) return true;
+  if (myequals(begin, end, s1, s1+1)) return true;
+  if (myequals(begin, end, son, son+2)) return true;
+  return false;
+}
+
+bool vul_string_c_to_bool(const char *str)
+{
+  const char *begin = vcl_find_if(str, str + vcl_strlen(str), NotSpace);
+#ifdef VCL_VC60
+  const vcl_reverse_iterator<const char *, const char>
+#else
+  const vcl_reverse_iterator<const char *>
+#endif
+    rend(begin), rbegin(str+vcl_strlen(str)); 
+  const char * end = vcl_find_if(rbegin, rend, NotSpace).base();
+  const char syes[] = "YES";
+  const char strue[] = "TRUE";
+  const char s1[] = "1";
+  const char son[] = "ON";
+  if (myequals(begin, end, syes, syes+3)) return true;
+  if (myequals(begin, end, strue, strue+4)) return true;
+  if (myequals(begin, end, s1, s1+1)) return true;
+  if (myequals(begin, end, son, son+2)) return true;
+  return false;
 }
