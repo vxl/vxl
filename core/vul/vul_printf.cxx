@@ -12,7 +12,7 @@
 
 #include <vcl_cstdarg.h>
 #include <vcl_iostream.h>
-#include <vcl_stdio.h> // for vsprintf()
+#include <vcl_cstdio.h> // for vsprintf()
 
 vcl_ostream& vul_printf(vcl_ostream& s, char const * fmt, ...)
 {

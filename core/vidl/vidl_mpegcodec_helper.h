@@ -24,7 +24,7 @@
 #include <vcl_string.h>
 #include <vcl_map.h>
 #include <vcl_iostream.h>
-#include <vcl_stdio.h>
+#include <vcl_cstdio.h>
 
 #define BUFFER_SIZE 4096
 #define DEMUX_PAYLOAD_START 1
