@@ -9,9 +9,9 @@
 // \brief  See vgui_tableau.h for a description of this file.
 //
 // \verbatim
-//  Modifications:
-//    11-SEP-1999 P.Pritchett - Initial version.
-//    08-OCT-2002 K.Y.McGaul - Removed unused adopt and disown functions.
+//  Modifications
+//   11-SEP-1999 P.Pritchett - Initial version.
+//   08-OCT-2002 K.Y.McGaul - Removed unused adopt and disown functions.
 // \endverbatim
 
 #include "vgui_tableau.h"
@@ -82,7 +82,7 @@ void vgui_tableau::ref() const
 
 //-----------------------------------------------------------------------------
 //: Decrease the reference count by one (for smart-pointers).
-//  If the refernce count reaches zero then delete the object.
+//  If the reference count reaches zero then delete the object.
 void vgui_tableau::unref() const
 {
   assert(references > 0); // fatal if not
