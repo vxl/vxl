@@ -109,7 +109,6 @@ MANPAGE_SOURCES += vil1_ssd.txx
 # Stuff
 SOURCES += vil1_pyramid.cxx
 MANPAGE_SOURCES += vil1_property.h
-MANPAGE_SOURCES += vil1_byte.h
 MANPAGE_SOURCES += vil1_rgb.txx
 MANPAGE_SOURCES += vil1_rgba.txx
 SOURCES += vil1_rgb_byte.cxx
