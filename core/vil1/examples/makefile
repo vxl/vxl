@@ -14,6 +14,7 @@ MINI_PROG_SOURCES += vil_scale.cxx
 MINI_PROG_SOURCES += vil_flipud.cxx
 MINI_PROG_SOURCES += vil_clamp_example.cxx
 MINI_PROG_SOURCES += vil_scale_intensities_example.cxx
+MINI_PROG_SOURCES += vil_rgb_example.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
