@@ -1,33 +1,32 @@
 #ifndef rgrl_trans_translation_h_
 #define rgrl_trans_translation_h_
-
 //:
 // \file
-// \brief Derived class to represent an translation transformation in
-// arbitrary dimensions.
+// \brief Derived class to represent an translation transformation in arbitrary dimensions.
 // \author Charlene Tsai
 // \date Dec 2003
 
 #include "rgrl_transformation.h"
+#include <vcl_iosfwd.h>
 
 class rgrl_trans_translation
   : public rgrl_transformation
 {
-public:
+ public:
   //: Initialize to the identity transformation.
   //
   rgrl_trans_translation( unsigned int dimension );
 
   //: Construct translation standard transform
   //
-  //  The transform is q = p + \a trans. 
+  //  The transform is q = p + \a trans.
   //
   rgrl_trans_translation( vnl_vector<double> const& trans,
                           vnl_matrix<double> const& covar );
 
   //: Construct translation standard transform with unknown covariance matrix
   //
-  //  The transform is q = p + \a trans. 
+  //  The transform is q = p + \a trans.
   //  The covariance matrix is set to 0 vector.
   //
   rgrl_trans_translation( vnl_vector<double> const& trans );
@@ -51,14 +50,14 @@ public:
   vnl_vector<double> t() const;
 
   //:  Inverse map with an initial guess
-  void inv_map( const vnl_vector<double>& to, 
+  void inv_map( const vnl_vector<double>& to,
                 bool initialize_next,
                 const vnl_vector<double>& to_delta,
                 vnl_vector<double>& from,
-                vnl_vector<double>& from_next_est) const; 
-  
-  //:  Inverse map based on the transformation. 
-  void inv_map( const vnl_vector<double>& to, 
+                vnl_vector<double>& from_next_est) const;
+
+  //:  Inverse map based on the transformation.
+  void inv_map( const vnl_vector<double>& to,
                 vnl_vector<double>& from ) const;
 
   //: Return the jacobian of the transform
@@ -72,11 +71,11 @@ public:
 
   // for output
   void write(vcl_ostream& os ) const;
-   
+
   // for input
   void read(vcl_istream& is );
 
-protected:
+ protected:
   void map_loc( vnl_vector<double> const& from,
                 vnl_vector<double>      & to ) const;
 
@@ -84,7 +83,7 @@ protected:
                 vnl_vector<double> const& from_dir,
                 vnl_vector<double>      & to_dir    ) const;
 
-private:
+ private:
   vnl_vector<double> trans_;
   vnl_matrix<double> covar_;
   vnl_vector<double> from_centre_;

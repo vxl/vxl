@@ -1,15 +1,13 @@
 #ifndef rgrl_mask_h_
 #define rgrl_mask_h_
-
 //:
 // \file
-// \brief  hierarchy of mask of various shapes. 
+// \brief  hierarchy of mask of various shapes.
 // \author Charlene Tsai
 // \date   Oct 2003
 
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_math.h>
-
 #include <vil3d/vil3d_image_view.h>
 #include <vil/vil_image_view.h>
 
@@ -19,9 +17,10 @@
 // to outline region where operations are performed (e.g. registration).
 
 //: base class of roi which is a pure virtual class
-class rgrl_mask: public rgrl_object
+class rgrl_mask
+  : public rgrl_object
 {
-public:
+ public:
   rgrl_mask(){}
   virtual ~rgrl_mask(){}
 
@@ -34,9 +33,11 @@ public:
 
 
 //: this is a wrapper on the binary mask image. The image is define for the x-y plane.
-class rgrl_mask_2d_image: public rgrl_mask {
-public:
-  rgrl_mask_2d_image( const vil_image_view<vxl_byte>& in_mask, 
+class rgrl_mask_2d_image
+  : public rgrl_mask
+{
+ public:
+  rgrl_mask_2d_image( const vil_image_view<vxl_byte>& in_mask,
                       int org_x = 0, int org_y = 0);
 
   //: True if a point is inside the region
@@ -45,13 +46,16 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_mask_2d_image, rgrl_mask );
 
-private:
+ private:
   vil_image_view<vxl_byte> mask_image_;
   int org_x_, org_y_;
 };
 
-class rgrl_mask_3d_image: public rgrl_mask {
-public:
+
+class rgrl_mask_3d_image
+  : public rgrl_mask
+{
+ public:
   rgrl_mask_3d_image( const vil3d_image_view< vxl_byte > & in_mask,
                       int org_x = 0, int org_y = 0, int org_z = 0 );
 
@@ -61,15 +65,16 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_mask_3d_image, rgrl_mask );
 
-private:
+ private:
   vil3d_image_view< vxl_byte > mask_image_;
   int org_x_, org_y_, org_z_;
-
 };
 
 //: This is a wrapper on the circular region or sphere
-class rgrl_mask_sphere: public rgrl_mask{
-public:
+class rgrl_mask_sphere
+  : public rgrl_mask
+{
+ public:
   //: Null initialization
   //
   // Initializes the region to the sphere centered at (0,0,...) with
@@ -84,21 +89,23 @@ public:
   bool inside( vnl_vector<double> const& pt ) const;
 
   void set_center( vnl_vector<double> const& pt );
-  
+
   void set_radius( double radius );
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_mask_sphere, rgrl_mask );
 
-private:
+ private:
   vnl_vector<double> center_;
   double radius_sqr_;
 };
 
 
 //: this is a wrapper on the box
-class rgrl_mask_box:public rgrl_mask {
-public:
+class rgrl_mask_box
+  : public rgrl_mask
+{
+ public:
   //: Null initialization
   //
   // Initializes the region to the box from (0,0,...) to (0,0,...)
@@ -132,7 +139,7 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_mask_box, rgrl_mask );
 
-private:
+ private:
   vnl_vector<double> x0_;
   vnl_vector<double> x1_;
 };
@@ -140,6 +147,4 @@ private:
 //: An output operator for displaying a mask_box
 vcl_ostream& operator<<(vcl_ostream& os, const rgrl_mask_box& box);
 
-
 #endif
-

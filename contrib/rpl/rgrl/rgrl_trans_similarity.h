@@ -1,12 +1,12 @@
 #ifndef rgrl_trans_similarity_h_
 #define rgrl_trans_similarity_h_
-
 //:
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
 
 #include "rgrl_transformation.h"
+#include <vcl_iosfwd.h>
 
 //: Represents a similarity transformation.
 //
@@ -14,26 +14,26 @@
 //  is an n-dimensional rotation matrix, and t is an n-dimensional
 //  translation vector.
 //
-//  It only works for 2D now.   
+//  It only works for 2D now.
 //
 class rgrl_trans_similarity
   : public rgrl_transformation
 {
-public:
+ public:
   //: Initialize to the identity transformation.
   //
   rgrl_trans_similarity( unsigned int dimension );
 
   //: Constructor based on an initial transformation and covar estimate
   //
-  rgrl_trans_similarity( vnl_matrix<double> const& rot_and_scale, 
+  rgrl_trans_similarity( vnl_matrix<double> const& rot_and_scale,
                          vnl_vector<double> const& trans,
                          vnl_matrix<double> const& covar );
 
   //: Constructor based on an initial transformation and unknown covar
   //
   //  The  covariance matrix is a zero matrix.
-  rgrl_trans_similarity( vnl_matrix<double> const& rot_and_scale, 
+  rgrl_trans_similarity( vnl_matrix<double> const& rot_and_scale,
                          vnl_vector<double> const& trans );
 
   //: Construct a centered affine transform.
@@ -42,7 +42,7 @@ public:
   //
   //  See covar() for the ordering of the covariance matrix.
   //
-  rgrl_trans_similarity( vnl_matrix<double> const& A, 
+  rgrl_trans_similarity( vnl_matrix<double> const& A,
                          vnl_vector<double> const& trans,
                          vnl_matrix<double> const& covar,
                          vnl_vector<double> const& from_centre,
@@ -52,7 +52,7 @@ public:
 
   //:  Provide the covariance matrix of the estimate (scale is factored in)
   //
-  //   for 2D, the covar matrix is for the vector [a b tx ty], where 
+  //   for 2D, the covar matrix is for the vector [a b tx ty], where
   //   [a -b tx; b a ty] = [A_ trans]
   //
   vnl_matrix<double> covar() const;
@@ -64,17 +64,17 @@ public:
   vnl_vector<double> t() const;
 
   //:  Inverse map with an initial guess
-  void inv_map( const vnl_vector<double>& to, 
+  void inv_map( const vnl_vector<double>& to,
                 bool initialize_next,
                 const vnl_vector<double>& to_delta,
                 vnl_vector<double>& from,
-                vnl_vector<double>& from_next_est) const; 
-  
-  //:  Inverse map based on the transformation. 
+                vnl_vector<double>& from_next_est) const;
+
+  //:  Inverse map based on the transformation.
   //   The inverse mapping for A(p)+ t = q is p = A^-1(q-t)
-  void inv_map( const vnl_vector<double>& to, 
+  void inv_map( const vnl_vector<double>& to,
                 vnl_vector<double>& from ) const;
-  
+
   //: Return the jacobian of the transform
   vnl_matrix<double> jacobian( vnl_vector<double> const& from_loc ) const;
 
@@ -86,11 +86,11 @@ public:
 
   // for output
   void write(vcl_ostream& os ) const;
-   
+
   // for input
   void read(vcl_istream& is );
 
-protected:
+ protected:
   void map_loc( vnl_vector<double> const& from,
                 vnl_vector<double>      & to ) const;
 
@@ -98,7 +98,7 @@ protected:
                 vnl_vector<double> const& from_dir,
                 vnl_vector<double>      & to_dir    ) const;
 
-private:
+ private:
   vnl_matrix<double> A_;
   vnl_vector<double> trans_;
   vnl_matrix<double> covar_;

@@ -1,16 +1,14 @@
-
 #ifndef rgrl_transformation_h_
 #define rgrl_transformation_h_
-
 //:
 // \file
-// \brief Base class for transformation representation, estimations
-// and application in generalized registration library  
+// \brief Base class for transformation representation, estimations and application in generalized registration library
 // \author Chuck Stewart
 // \date 15 Nov 2002
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include <vcl_iosfwd.h>
 
 #include "rgrl_object.h"
 
@@ -18,7 +16,7 @@
 
 //: A base class that represents a transformation.
 //
-// Derived classes must implement 
+// Derived classes must implement
 // - map_loc() to map a location
 // - map_dir() to map a direction
 // - covar() to provide the parameter covariance matrix
@@ -30,8 +28,10 @@
 // convenience functions--are unavailable in the derived class
 // interface.
 //
-class rgrl_transformation : public rgrl_object {
-public:
+class rgrl_transformation
+  : public rgrl_object
+{
+ public:
   virtual ~rgrl_transformation();
 
   //:  Apply the transformation to create a new (mapped) location
@@ -70,9 +70,9 @@ public:
                            vnl_vector<double> const  & from_dir,
                            vnl_matrix< double > const& tangent_subspace,
                            vnl_vector<double>        & to_dir    ) const;
- 
 
-  //: Map an arbitary direction which is neither a tangent nor a normal
+
+  //: Map an arbitrary direction which is neither a tangent nor a normal
   //
   // The resulting direction \a to_dir is a unit vector.
   //
@@ -102,20 +102,20 @@ public:
   virtual
   vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p ) const = 0;
 
-  
+
   //:  Inverse map with an initial guess
-  virtual void inv_map( const vnl_vector<double>& to, 
+  virtual void inv_map( const vnl_vector<double>& to,
                         bool initialize_next,
                         const vnl_vector<double>& to_delta,
                         vnl_vector<double>& from,
-                        vnl_vector<double>& from_next_est) const ; 
-  
+                        vnl_vector<double>& from_next_est) const ;
+
   //:  Parameter covariance matrix
   virtual vnl_matrix<double> covar() const = 0;
 
-  //:  Inverse map based on the transformation. 
+  //:  Inverse map based on the transformation.
   //   This function only exist for certain transformations.
-  virtual void inv_map( const vnl_vector<double>& to, 
+  virtual void inv_map( const vnl_vector<double>& to,
                         vnl_vector<double>& from ) const;
 
   //: Return the jacobian of the transform
@@ -126,19 +126,19 @@ public:
 
   //: output transformation
   virtual void write( vcl_ostream& os ) const = 0;
-   
+
   //: input transformation
   virtual void read( vcl_istream& is ) = 0;
-  
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_transformation, rgrl_object );
 
 
-protected:
+ protected:
 
   //:  Apply the transformation to create a new (mapped) location
   //
-  virtual 
+  virtual
   void map_loc( vnl_vector<double> const& from,
                 vnl_vector<double>      & to    ) const = 0;
 
