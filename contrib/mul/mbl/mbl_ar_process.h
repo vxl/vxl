@@ -35,7 +35,7 @@ class mbl_ar_process
   vcl_string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  bool is_class(vcl_string const& s) const;
 
   //: Print class to os
   void print_summary(vcl_ostream& os) const;
