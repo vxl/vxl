@@ -135,6 +135,11 @@ SOURCE=.\Templates/mbl_data_wrapper+vnl_vector+double--.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\mbl_rbf_network.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/mbl_stochastic_data_collector+vnl_vector+double--.cxx
 
 # End Source File
