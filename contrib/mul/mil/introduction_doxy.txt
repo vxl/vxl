@@ -1,0 +1,19 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage mil : Manchester's Image Library
+* Provides a set of image classes, derived from mil_image, which can be used
+* as `views' on actual image data.
+*
+* The images use pointer arithmetic to get at the pixel values, so store pointers
+* to the start of each plane, and integers indicating how to get to neighbours in
+* the x, y (and z) directions.
+*
+* The most commonly used class is likely to be mil_image_2d_of<T>, a templated
+* multi-plane image.
+*
+* The advantages of this approach are
+* - It is actually faster than pointer indirection on most architectures
+* - It allows one to access non-contiguous data as if it is a single plane
+* - One can use it to wrap up other image classes transparently.
+* - It is simple to extend to 3D images, and avoids huge arrays of pointers
+* - It allows 2D views of 3D images easily.
+*/
