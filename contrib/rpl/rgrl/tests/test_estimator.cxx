@@ -18,7 +18,6 @@
 #include <rgrl/rgrl_trans_similarity.h>
 #include <rgrl/rgrl_estimator.h>
 #include <rgrl/rgrl_est_affine.h>
-#include <rgrl/rgrl_est_auto_affine.h>
 #include <rgrl/rgrl_spline.h>
 #include <rgrl/rgrl_trans_spline.h>
 #include <rgrl/rgrl_est_spline.h>
@@ -874,197 +873,6 @@ test_similarity_pt_to_pt()
 
 
 void
-test_est_auto_affine_pt_to_pt()
-{
-  rgrl_trans_affine null3d_trans( vnl_matrix<double>( 3, 3, 0.0 ),
-                                  vnl_vector<double>( 3, 0.0 ),
-                                  vnl_matrix<double>( 12, 12, 0.0 ) );
-
-  vcl_cout << "Estimate auto affine transformation with point-to-point correspondences\n";
-#if 0
-  // Test zero error case
-  {
-    vnl_matrix<double> A( 3, 3 );
-    vnl_vector<double> t( 3 );
-
-    A(0,0) = 2.0;  A(0,1) = 4.0;  A(0,2) = 1.0;
-    A(1,0) = 1.0;  A(1,1) =-1.0;  A(1,2) = 5.0;
-    A(2,0) = 3.0;  A(2,1) = 2.0;  A(2,2) = 2.0;
-
-    t[0] =  3.0;
-    t[1] = -4.0;
-    t[2] =  1.0;
-
-    vcl_vector< rgrl_feature_sptr > from_pts;
-    vcl_vector< rgrl_feature_sptr > to_pts;
-
-    {
-      vnl_vector<double> v = vec3d( 2.0, 3.0, 5.0 );
-      from_pts.   push_back( pf( v ) );
-      to_pts.     push_back( pf( A*v + t ) );
-    }
-
-    {
-      vnl_vector<double> v = vec3d( 1.0, 1.0, 2.0 );
-      from_pts.   push_back( pf( v ) );
-      to_pts.     push_back( pf( A*v + t ) );
-    }
-
-    {
-      vnl_vector<double> v = vec3d( 1.0, 2.0, 1.0 );
-      from_pts.   push_back( pf( v ) );
-      to_pts.     push_back( pf( A*v + t ) );
-    }
-
-    {
-      rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
-      for( unsigned i=0; i < from_pts.size(); ++i ) {
-        ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
-      }
-
-      rgrl_estimator_sptr est = new rgrl_est_auto_affine();
-      TEST( "Estimator type is correct", est->transformation_type(), rgrl_trans_affine::type_id() );
-      testlib_test_begin( "Underconstrained (not enough correspondences)" );
-      rgrl_transformation_sptr trans = est->estimate( ms, null3d_trans );
-      testlib_test_perform( !trans );
-      if( trans ) {
-        rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
-        vcl_cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<"\n";
-      }
-    }
-
-    {
-      rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
-      ms->add_feature_and_match( from_pts[0], 0, to_pts[0] );
-      for( unsigned i=0; i < from_pts.size(); ++i ) {
-        ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
-      }
-
-      testlib_test_begin( "Underconstrained (samples not independent)" );
-      rgrl_transformation_sptr trans = rgrl_est_auto_affine().estimate( ms, null3d_trans );
-      testlib_test_perform( !trans );
-      if( trans ) {
-        rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
-        vcl_cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<"\n";
-      }
-    }
-
-
-    {
-      vnl_vector<double> v = vec3d( 2.0, 1.0, 1.0 );
-      from_pts.   push_back( pf( v ) );
-      to_pts.     push_back( pf( A*v + t ) );
-    }
-
-    {
-      rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
-      for( unsigned i=0; i < from_pts.size(); ++i ) {
-        ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
-      }
-
-      testlib_test_begin( "Minimal set of correspondences" );
-      rgrl_transformation_sptr trans = rgrl_est_auto_affine().estimate( ms, null3d_trans );
-      testlib_test_perform( trans );
-      if( trans ) {
-        TEST( "Result is affine", trans->is_type(rgrl_trans_affine::type_id()), true );
-        testlib_test_begin( "Result is correct" );
-        rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
-        testlib_test_perform( aff_trans &&
-                              close( aff_trans->A(), A) &&
-                              close( aff_trans->t(), t) );
-      }
-    }
-  }
-#endif //0
-
-  // Test lower order model case
-  vcl_cout << "\n\nLOW ORDER MODEL\n\n";
-//   {
-//     vnl_matrix<double> A( 1, 1 );
-//     vnl_vector<double> t( 1 );
-
-//     A(0,0) = 0.0;
-//     t[0] =  50.0;
-
-//     vcl_vector< rgrl_feature_sptr > from_pts;
-//     vcl_vector< rgrl_feature_sptr > to_pts;
-
-//     for( unsigned i=0; i < 9; ++i ) {
-//       vnl_vector<double> v = random_1d_vector();
-//       from_pts.   push_back( pf( v ) );
-//       to_pts.     push_back( pf( A*v + t /*+ random_3d_normal_error()/1000.0*/ ) );
-//       vcl_cout << "Datum " << i << ":   " << from_pts.back()->location() << "    --->   " << to_pts.back()->location() << "\n";
-//     }
-
-//     {
-//       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
-//       for( unsigned i=0; i < from_pts.size(); ++i ) {
-//         ms->add_feature_and_match( from_pts[i], to_pts[i] );
-//       }
-
-//       testlib_test_begin( "Estimate" );
-//       rgrl_transformation_sptr trans = rgrl_est_auto_affine().estimate( ms, null3d_trans );
-//       testlib_test_perform( trans );
-//       if( trans ) {
-//         TEST( "Result is affine", trans->type(), rgrl_trans_affine::type_id() );
-//         testlib_test_begin( "Result is correct" );
-//         rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
-//         testlib_test_perform( aff_trans &&
-//                               close( aff_trans->A(), A ) &&
-//                               close( aff_trans->t(), t ) );
-//         vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<"\n";
-//       }
-      
-//     }
-//   }
-  {
-    vnl_matrix<double> A( 3, 3 );
-    vnl_vector<double> t( 3 );
-
-    A(0,0) = 1.0;  A(0,1) = 0.0;  A(0,2) = 0.0;
-    A(1,0) = 0.0;  A(1,1) = 1.0;  A(1,2) = 0.0;
-    A(2,0) = 0.0;  A(2,1) = 0.0;  A(2,2) = 1.0;
-
-    t[0] =  3.0;
-    t[1] = -4.0;
-    t[2] =  1.0;
-
-    vcl_vector< rgrl_feature_sptr > from_pts;
-    vcl_vector< rgrl_feature_sptr > to_pts;
-
-    for( unsigned i=0; i < 9; ++i ) {
-      vnl_vector<double> v = random_3d_vector();
-      //vnl_vector<double> v = vnl_double_3(1,0,1) * random_1d_vector()[0];
-      from_pts.   push_back( pf( v ) );
-      to_pts.     push_back( pf( A*v + t + random_3d_normal_error()/1000.0 ) );
-      vcl_cout << "Datum " << i << ":   " << from_pts.back()->location() << "    --->   " << to_pts.back()->location() << "\n";
-    }
-
-    {
-      rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
-      for( unsigned i=0; i < from_pts.size(); ++i ) {
-        ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
-      }
-
-      testlib_test_begin( "Estimate" );
-      rgrl_transformation_sptr trans = rgrl_est_auto_affine().estimate( ms, null3d_trans );
-      testlib_test_perform( trans );
-      if( trans ) {
-        TEST( "Result is affine", trans->is_type(rgrl_trans_affine::type_id()), true );
-        testlib_test_begin( "Result is correct" );
-        rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
-        testlib_test_perform( aff_trans &&
-                              close( aff_trans->A(), A, 1e-3 ) &&
-                              close( aff_trans->t(), t, 1e-3 ) );
-        vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<"\n";
-      }
-      
-    }
-  }
-}
-
-
-void
 test_est_spline()
 {
   for( unsigned dim=1; dim<=3; ++dim ) {
@@ -1651,10 +1459,9 @@ MAIN( test_estimator )
 {
   START( "various transformation objects" );
 
-//  test_est_affine_pt_to_pt();
-//  test_est_affine_pt_to_line();
+  test_est_affine_pt_to_pt();
+  test_est_affine_pt_to_line();
 //  test_similarity_pt_to_pt();
-  test_est_auto_affine_pt_to_pt();
 
   test_est_spline();
   test_est_spline_reduce_dof();

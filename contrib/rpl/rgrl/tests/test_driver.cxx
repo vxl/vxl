@@ -14,7 +14,6 @@ DECLARE( test_initializer );
 DECLARE( test_set_of );
 DECLARE( test_initializer_ran_sam );
 DECLARE( test_matcher );
-DECLARE( test_image_convert );
 
 void
 register_tests()
@@ -33,7 +32,6 @@ register_tests()
   REGISTER( test_set_of );
   REGISTER( test_initializer_ran_sam );
   REGISTER( test_matcher );
-  REGISTER( test_image_convert );
 }
 
 DEFINE_MAIN;

@@ -18,7 +18,6 @@
 #include <rgrl/rgrl_trans_similarity.h>
 #include <rgrl/rgrl_estimator.h>
 #include <rgrl/rgrl_est_affine.h>
-#include <rgrl/rgrl_est_auto_affine.h>
 #include <rgrl/rgrl_spline.h>
 #include <rgrl/rgrl_trans_spline.h>
 #include <rgrl/rgrl_est_spline.h>
