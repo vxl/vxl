@@ -27,15 +27,15 @@ typedef vxl_uint_32 TruePixelType;
 
 class CheckPixel
 {
-public:
+ public:
   virtual ~CheckPixel() { }
-  virtual bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const = 0;
+  virtual bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const = 0;
 };
 
 template<class T>
 class CheckRGB : public CheckPixel
 {
-public:
+ public:
   CheckRGB( const char* file )
   {
     vil2_image_view_base_sptr im = vil2_load( (image_base + file).c_str() );
@@ -48,50 +48,47 @@ public:
 #endif
   }
 
-  bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
+  bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const
   {
     assert( p == 0 );
-    return img_ && pixel.size() == 3 && pixel[0] == img_(x,y).r && pixel[1] == img_(x,y).g && pixel[2] == img_(x,y).b;
+    return img_ && pixel.size() == 3 && pixel[0] == img_(i,j).r && pixel[1] == img_(i,j).g && pixel[2] == img_(i,j).b;
   }
-protected:
+ protected:
   vil2_image_view< vil_rgb<T> > img_;
 };
 
 template<class T>
 class CheckRGBNear : public CheckRGB<T>
 {
-public:
+ public:
   CheckRGBNear( const char* file, TruePixelType tol):
     CheckRGB<T>(file), tol_sq_(tol*tol) {}
 
-  bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
+  bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const
   {
     assert( p == 0 );
-    if (!( img_
-      && pixel.size() == 3)) return false;
+    if (!( img_ && pixel.size() == 3)) return false;
     // Find difference in two values whilst avoiding unsigned underflow
     // Find difference in two values whilst avoiding unsigned underflow
     const TruePixelType diff_A = pixel[0]*pixel[0] +
-      (TruePixelType)img_(x,y).r * (TruePixelType)img_(x,y).r +
-      pixel[1]*pixel[1] +
-      (TruePixelType)img_(x,y).g * (TruePixelType)img_(x,y).g +
-      pixel[2]*pixel[2] +
-      (TruePixelType)img_(x,y).b * (TruePixelType)img_(x,y).b;
+      (TruePixelType)img_(i,j).r * (TruePixelType)img_(i,j).r + pixel[1]*pixel[1] +
+      (TruePixelType)img_(i,j).g * (TruePixelType)img_(i,j).g + pixel[2]*pixel[2] +
+      (TruePixelType)img_(i,j).b * (TruePixelType)img_(i,j).b;
 
     const TruePixelType diff_B =
-      2 * pixel[0] * (TruePixelType)img_(x,y).r + (TruePixelType)tol_sq_ +
-      2 * pixel[1] * (TruePixelType)img_(x,y).g + (TruePixelType)tol_sq_ +
-      2 * pixel[2] * (TruePixelType)img_(x,y).b + (TruePixelType)tol_sq_ ;
+      2 * pixel[0] * (TruePixelType)img_(i,j).r + (TruePixelType)tol_sq_ +
+      2 * pixel[1] * (TruePixelType)img_(i,j).g + (TruePixelType)tol_sq_ +
+      2 * pixel[2] * (TruePixelType)img_(i,j).b + (TruePixelType)tol_sq_ ;
     return diff_A < diff_B;
   }
-protected:
+ protected:
   TruePixelType tol_sq_;
 };
 
 template<class T>
 class CheckColourPlanes : public CheckPixel
 {
-public:
+ public:
   CheckColourPlanes( const char* file )
   {
     vil2_image_view_base_sptr im = vil2_load( (image_base + file).c_str() );
@@ -106,18 +103,18 @@ public:
     }
   }
 
-  bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
+  bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const
   {
-    return img_ && pixel.size() == 1 && pixel[0] == img_(x,y,p);
+    return img_ && pixel.size() == 1 && pixel[0] == img_(i,j,p);
   }
-protected:
+ protected:
   vil2_image_view< T > img_;
 };
 
 template<class T>
 class CheckGrey : public CheckPixel
 {
-public:
+ public:
   CheckGrey( const char* file )
   {
     vil2_image_view_base_sptr im = vil2_load( (image_base + file).c_str() );
@@ -132,36 +129,36 @@ public:
     }
   };
 
-  bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
+  bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const
   {
     assert( p == 0 );
     return img_
       && pixel.size() == 1 &&
-      pixel[0] == (TruePixelType)img_(x,y);
+      pixel[0] == (TruePixelType)img_(i,j);
   }
-protected:
+ protected:
   vil2_image_view< T > img_;
 };
 
 template<class T>
 class CheckGreyNear : public CheckGrey<T>
 {
-public:
+ public:
   CheckGreyNear( const char* file, TruePixelType Tol)
     : CheckGrey<T>(file), tol_sq_(Tol*Tol) {}
 
-  bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
+  bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const
   {
     assert( p == 0 );
     if (!( img_
       && pixel.size() == 1)) return false;
     // Find difference in two values whilst avoiding unsigned underflow
     const TruePixelType diff_A = pixel[0]*pixel[0] +
-      (TruePixelType)img_(x,y) * (TruePixelType)img_(x,y);
-    const TruePixelType diff_B = 2 * pixel[0] * (TruePixelType)img_(x,y) + (TruePixelType)tol_sq_ ;
+      (TruePixelType)img_(i,j) * (TruePixelType)img_(i,j);
+    const TruePixelType diff_B = 2 * pixel[0] * (TruePixelType)img_(i,j) + (TruePixelType)tol_sq_ ;
     return diff_A <= diff_B;
   }
-protected:
+ protected:
   TruePixelType tol_sq_;
 };
 
@@ -199,16 +196,16 @@ test( const char* true_data_file, const CheckPixel& check )
   vcl_vector<TruePixelType> pixel( num_comp );
 
   for ( int p=0; p < num_planes; ++p ) {
-    for ( int y=0; y < height; ++y ) {
-      for ( int x=0; x < width; ++x ) {
+    for ( int j=0; j < height; ++j ) {
+      for ( int i=0; i < width; ++i ) {
         for ( int c=0; c < num_comp; ++c ) {
           if ( !( fin >> pixel[c] ) ) {
-            vcl_cout << "[couldn't read value at " << p << "," << x << "," << y << "," << c
+            vcl_cout << "[couldn't read value at " << p << "," << i << "," << j << "," << c
                      << " from " << true_data_file << "]";
             return false;
           }
         }
-        if ( !check( p, x, y, pixel ) )
+        if ( !check( p, i, j, pixel ) )
           return false;
       }
     }
@@ -261,7 +258,7 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  8-bit grey, normal image to 4 quanta" );
   testlib_test_perform( test( "ff_grey8bit_true.txt",
     CheckGreyNear<vxl_byte>( "ff_grey8bit_compressed.jpg", 4 ) ) );
-  testlib_test_begin( "  8-bit RGB, easy image acurate to 3 quata" );
+  testlib_test_begin( "  8-bit RGB, easy image accurate to 3 quanta" );
   testlib_test_perform( test( "ff_rgb8biteasy_true.txt",
     CheckRGBNear<vxl_byte>( "ff_rgb8biteasy_compressed.jpg", 3 ) ) );
 
