@@ -20,9 +20,11 @@
 // \verbatim
 // Modifications
 // LSB Manchester 16/3/01 Binary I/O added
+// Paul Smyth     02/5/01 Inserted vnl_vector_fixed_ref as immediate base clase
 // \endverbatim
 
 #include <vcl_cstring.h> // memcpy()
+#include <vnl/vnl_vector_fixed_ref.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_c_vector.h>
 
@@ -34,15 +36,15 @@
 // \see vnl_matrix_ref
 //
 export template <class T, int n>
-class vnl_vector_fixed : public vnl_vector_ref<T> {
-  typedef vnl_vector_ref<T> Base;
+class vnl_vector_fixed : public vnl_vector_fixed_ref<T,n> {
+  typedef vnl_vector_fixed_ref<T,n> Base;
 public:
   //: Construct an uninitialized n-vector
-  vnl_vector_fixed():Base(n, space) {}
+  vnl_vector_fixed():Base(space) {}
 
   //: Construct an n-vector copy of rhs.  Does not check that rhs
   //  is the right size.
-  vnl_vector_fixed(vnl_vector<T> const& rhs):Base(n, space) {
+  vnl_vector_fixed(vnl_vector<T> const& rhs):Base(space) {
     if (rhs.size() != n)
       vnl_error_vector_dimension ("vnl_vector_fixed(const vnl_vector&) ", n, rhs.size());
     vcl_memcpy(space, rhs.data_block(), sizeof space);
@@ -50,18 +52,18 @@ public:
 
   //:
   // GCC generates (and calls) this even though above should do...
-  vnl_vector_fixed(vnl_vector_fixed<T,n> const& rhs):Base(n, space) {
+  vnl_vector_fixed(vnl_vector_fixed<T,n> const& rhs):Base(space) {
     vcl_memcpy(space, rhs.space, sizeof space);
   }
 
   //: Constructs n-vector with elements initialised to v
-  vnl_vector_fixed (T const& v): Base(n,space) {
+  vnl_vector_fixed (T const& v): Base(space) {
     for(int i = 0; i < n; ++i)
       data[i] = v;
   }
 
   //: Constructs 3D vector(px, py, pz )
-  vnl_vector_fixed (T const& px, T const& py, T const& pz): Base(n,space) {
+  vnl_vector_fixed (T const& px, T const& py, T const& pz): Base(space) {
     if (n != 3) vnl_error_vector_dimension ("constructor (x,y,z): n != 3", n, 3);
     data[0] = px;
     data[1] = py;
@@ -69,7 +71,7 @@ public:
   }
 
   //: Constructs 2D vector  (px, py)
-  vnl_vector_fixed (T const& px, T const& py): Base(n,space) {
+  vnl_vector_fixed (T const& px, T const& py): Base(space) {
     if (n != 2) vnl_error_vector_dimension ("constructor (x,y): n != 2", n, 2);
     data[0] = px;
     data[1] = py;
@@ -87,21 +89,17 @@ public:
     return *this;
   }
 
-  vnl_vector_fixed<T,n>& operator= (T const& t)
-    { vnl_vector<T>::operator=  (t); return *this; }
-  vnl_vector_fixed<T,n>& operator+= (T const t)
-    { vnl_vector<T>::operator+= (t); return *this; }
-  vnl_vector_fixed<T,n>& operator-= (T const t)
-    { vnl_vector<T>::operator-= (t); return *this; }
-  vnl_vector_fixed<T,n>& operator*= (T const t)
-    { vnl_vector<T>::operator*= (t); return *this; }
-  vnl_vector_fixed<T,n>& operator/= (T const t)
-    { vnl_vector<T>::operator/= (t); return *this; }
+  vnl_vector_fixed<T,n> apply(T (*f)(T)) {
+    vnl_vector_fixed<T,n> ret;
+    vnl_c_vector<T>::apply(this->data, num_elmts, f, ret.data);
+    return ret;
+  }
 
-  vnl_vector_fixed<T,n>& operator+= (vnl_vector<T> const& rhs)
-    { vnl_vector<T>::operator+= (rhs); return *this; }
-  vnl_vector_fixed<T,n>& operator-= (vnl_vector<T> const& rhs)
-    { vnl_vector<T>::operator-= (rhs); return *this; }
+  vnl_vector_fixed<T,n> apply(T (*f)(T const&)) {
+    vnl_vector_fixed<T,n> ret;
+    vnl_c_vector<T>::apply(this->data, num_elmts, f, ret.data);
+    return ret;
+  }
 
   vnl_vector_fixed<T,n> operator- () const
     { return  (vnl_vector_fixed<T,n> (*this) *= -1); }
@@ -119,45 +117,10 @@ public:
   vnl_vector_fixed<T,n> operator- (vnl_vector<T> const& rhs) const
     { return  (vnl_vector_fixed<T,n> (*this) -= rhs); }
 
-  vnl_vector_fixed<T,n> apply(T (*f)(T)) {
-    vnl_vector_fixed<T,n> ret;
-    vnl_c_vector<T>::apply(this->data, num_elmts, f, ret.data);
-    return ret;
-  }
-  vnl_vector_fixed<T,n> apply(T (*f)(T const&)) {
-    vnl_vector_fixed<T,n> ret;
-    vnl_c_vector<T>::apply(this->data, num_elmts, f, ret.data);
-    return ret;
-  }
-
-  // do not specialize operations with vnl_matrix, since the size of the result
-  // vector is not known at compile time
-  //  vnl_vector_fixed<T,n> operator* (vnl_matrix<T> const& m) const;
-  //friend vnl_vector_fixed<T,n> operator* (vnl_matrix<T> const& m, vnl_vector_fixed<T,n> const& v);
-  // do not specialize extract for the same reason as above
-  //  vnl_vector_fixed<T,n> extract (unsigned int len, unsigned int start=0) const; // subvector
-  vnl_vector_fixed<T,n>& update (vnl_vector<T> const& v, unsigned int start=0)
-    { return (vnl_vector_fixed<T,n>&) vnl_vector<T>::update (v, start); }
-
-  //: v /= sqrt(dot(v,v))
-  vnl_vector_fixed<T,n>& normalize()
-    { return (vnl_vector_fixed<T,n>&) vnl_vector<T>::normalize(); }
-
-  friend vnl_vector_fixed<T,n> element_product VCL_NULL_TMPL_ARGS (vnl_vector_fixed<T,n> const&,
-                                                                   vnl_vector_fixed<T,n> const&);
-  friend vnl_vector_fixed<T,n> element_quotient VCL_NULL_TMPL_ARGS (vnl_vector_fixed<T,n> const&,
-                                                                    vnl_vector_fixed<T,n> const&);
-
-public:
-  // void these methods on vnl_vector_fixed, since they deallocate the underlying
-  // storage
-
-  //: v = m * v
-  vnl_vector<T>& pre_multiply (vnl_matrix<T> const&);
-
-  //: v = v * m
-  vnl_vector<T>& post_multiply (vnl_matrix<T> const&);
-  vnl_vector<T>& operator*= (vnl_matrix<T> const&);
+  friend vnl_vector_fixed<T,n> element_product VCL_NULL_TMPL_ARGS (vnl_vector_fixed_ref<T,n> const&,
+                                                                   vnl_vector_fixed_ref<T,n> const&);
+  friend vnl_vector_fixed<T,n> element_quotient VCL_NULL_TMPL_ARGS (vnl_vector_fixed_ref<T,n> const&,
+                                                                    vnl_vector_fixed_ref<T,n> const&);
 
 private:
   T space[n];
@@ -178,8 +141,8 @@ inline vnl_vector_fixed<T,n> operator*(T const t, vnl_vector_fixed<T,n> const& r
 { return  (vnl_vector_fixed<T,n> (rhs) *= t); }
 
 template <class T, int n>
-inline vnl_vector_fixed<T,n> element_product (vnl_vector_fixed<T,n> const& a,
-                                       vnl_vector_fixed<T,n> const& b)
+inline vnl_vector_fixed<T,n> element_product (vnl_vector_fixed_ref<T,n> const& a,
+                                       vnl_vector_fixed_ref<T,n> const& b)
 {
   vnl_vector_fixed<T,n> ret (a);
   for (int i=0; i<n; i++) ret[i] *= b[i];
@@ -187,8 +150,8 @@ inline vnl_vector_fixed<T,n> element_product (vnl_vector_fixed<T,n> const& a,
 }
 
 template <class T, int n>
-inline vnl_vector_fixed<T,n> element_quotient (vnl_vector_fixed<T,n> const& a,
-                                        vnl_vector_fixed<T,n> const& b)
+inline vnl_vector_fixed<T,n> element_quotient (vnl_vector_fixed_ref<T,n> const& a,
+                                        vnl_vector_fixed_ref<T,n> const& b)
 {
   vnl_vector_fixed<T,n> ret (a);
   for (int i=0; i<n; i++) ret[i] /= b[i];
@@ -206,12 +169,12 @@ vcl_ostream &operator<<(vcl_ostream &os, vnl_vector_fixed<T, n> const &v) {
 
 //                                        what's this?
 #if !defined (VCL_SUNPRO_CC) || ! defined (_ODI_OSSG_)
-vnl_vector_fixed<double,3> cross_3d (vnl_vector_fixed<double,3> const& vect1,
-                                     vnl_vector_fixed<double,3> const& vect2);
-vnl_vector_fixed<float,3> cross_3d (vnl_vector_fixed<float,3> const& vect1,
-                                    vnl_vector_fixed<float,3> const& vect2);
-vnl_vector_fixed<int,3> cross_3d (vnl_vector_fixed<int,3> const& vect1,
-                                  vnl_vector_fixed<int,3> const& vect2);
+vnl_vector_fixed<double,3> cross_3d (vnl_vector_fixed_ref<double,3> const& vect1,
+                                     vnl_vector_fixed_ref<double,3> const& vect2);
+vnl_vector_fixed<float,3> cross_3d (vnl_vector_fixed_ref<float,3> const& vect1,
+                                    vnl_vector_fixed_ref<float,3> const& vect2);
+vnl_vector_fixed<int,3> cross_3d (vnl_vector_fixed_ref<int,3> const& vect1,
+                                  vnl_vector_fixed_ref<int,3> const& vect2);
 #endif
 
 
