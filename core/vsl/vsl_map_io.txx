@@ -6,7 +6,7 @@
 // \file
 // \brief Implementation binary IO functions for vcl_(multi)map<Key, T, Compare>
 // \author K.Y.McGaul
-// 
+//
 // Modifications
 // \verbatim
 // IMS - 22 June 2001 - Added IO for multimap
@@ -128,8 +128,6 @@ void vsl_b_read(vsl_b_istream& is, vcl_multimap<Key, T, Compare>& v)
     }
     break;
   default:
-  if (!is) return;
-
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_multimap<K, T>&) \n";
     vcl_cerr << "           Unknown version number "<< ver << "\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

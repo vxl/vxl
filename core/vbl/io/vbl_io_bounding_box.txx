@@ -46,8 +46,6 @@ void vsl_b_read(vsl_b_istream &is, vbl_bounding_box_base<T, DIM_> & p)
     break;
 
   default:
-  if (!is) return;
-
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_bounding_box_base<T, DIM_>&) \n";
     vcl_cerr << "           Unknown version number "<< v << "\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
