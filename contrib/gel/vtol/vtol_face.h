@@ -58,7 +58,7 @@ class vtol_face : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  vtol_face(void) {}
+  vtol_face() {}
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -67,15 +67,15 @@ class vtol_face : public vtol_topology_object
 
   // Accessors
 
-  //---------------------------------------------------------------------------
+ private: // has been superceeded by is_a()
   //: Return the topology type
-  //---------------------------------------------------------------------------
-  virtual vtol_topology_object_type topology_type(void) const { return FACE; }
+  virtual vtol_topology_object_type topology_type() const { return FACE; }
 
+ public:
   virtual vtol_one_chain_sptr get_one_chain(int which = 0);
-  virtual vtol_one_chain_sptr get_boundary_cycle(void);
+  virtual vtol_one_chain_sptr get_boundary_cycle();
   virtual bool add_hole_cycle(vtol_one_chain_sptr new_hole);
-  virtual one_chain_list *get_hole_cycles(void);
+  virtual one_chain_list *get_hole_cycles();
 
   // Methods that are here for now in transition.. :x
 
@@ -89,32 +89,32 @@ class vtol_face : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_face *cast_to_face(void) const { return this; }
+  virtual const vtol_face *cast_to_face() const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_face *cast_to_face(void) { return this; }
+  virtual vtol_face *cast_to_face() { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_face_2d *cast_to_face_2d(void) const {return 0;}
+  virtual const vtol_face_2d *cast_to_face_2d() const {return 0;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_face_2d *cast_to_face_2d(void) {return 0;}
+  virtual vtol_face_2d *cast_to_face_2d() {return 0;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an intensity face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_intensity_face *cast_to_intensity_face(void) const { return 0; }
+  virtual const vtol_intensity_face *cast_to_intensity_face() const { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an intensity face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_intensity_face *cast_to_intensity_face(void) { return 0; }
+  virtual vtol_intensity_face *cast_to_intensity_face() { return 0; }
 
   //***************************************************************************
   // Status report
@@ -132,26 +132,26 @@ class vtol_face : public vtol_topology_object
   bool valid_superior_type(vtol_two_chain_sptr const& ) const { return true; }
 
   //: accessors for boundary elements
-  virtual vertex_list *outside_boundary_vertices(void);
-  virtual zero_chain_list *outside_boundary_zero_chains(void);
-  virtual edge_list *outside_boundary_edges(void);
-  virtual one_chain_list *outside_boundary_one_chains(void);
+  virtual vertex_list *outside_boundary_vertices();
+  virtual zero_chain_list *outside_boundary_zero_chains();
+  virtual edge_list *outside_boundary_edges();
+  virtual one_chain_list *outside_boundary_one_chains();
  protected:
   // \warning these methods should not be used by clients
   // The returned pointers must be deleted after use.
 
-  virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
-  virtual vcl_vector<vtol_edge*> *compute_edges(void);
-  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains(void);
-  virtual vcl_vector<vtol_one_chain*> *compute_one_chains(void);
-  virtual vcl_vector<vtol_face*> *compute_faces(void);
-  virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
-  virtual vcl_vector<vtol_block*> *compute_blocks(void);
+  virtual vcl_vector<vtol_vertex*> *compute_vertices();
+  virtual vcl_vector<vtol_edge*> *compute_edges();
+  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains();
+  virtual vcl_vector<vtol_one_chain*> *compute_one_chains();
+  virtual vcl_vector<vtol_face*> *compute_faces();
+  virtual vcl_vector<vtol_two_chain*> *compute_two_chains();
+  virtual vcl_vector<vtol_block*> *compute_blocks();
 
-  virtual vcl_vector<vtol_vertex*> *outside_boundary_compute_vertices(void);
-  virtual vcl_vector<vtol_zero_chain*> *outside_boundary_compute_zero_chains(void);
-  virtual vcl_vector<vtol_edge*> *outside_boundary_compute_edges(void);
-  virtual vcl_vector<vtol_one_chain*> *outside_boundary_compute_one_chains(void);
+  virtual vcl_vector<vtol_vertex*> *outside_boundary_compute_vertices();
+  virtual vcl_vector<vtol_zero_chain*> *outside_boundary_compute_zero_chains();
+  virtual vcl_vector<vtol_edge*> *outside_boundary_compute_edges();
+  virtual vcl_vector<vtol_one_chain*> *outside_boundary_compute_one_chains();
  public:
 
   // Editing Functions
@@ -163,8 +163,8 @@ class vtol_face : public vtol_topology_object
  public:
   //: Utility Functions and overloaded operators
 
-  virtual void reverse_normal(void);
-  virtual int get_num_edges(void) const;
+  virtual void reverse_normal();
+  virtual int get_num_edges() const;
 
   //: This method determines if a vtol_face is a hole of another vtol_face.
   bool IsHoleP() const;
@@ -172,14 +172,14 @@ class vtol_face : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Copy with no links. Only copy the surface if it exists
   //---------------------------------------------------------------------------
-  virtual vtol_face *shallow_copy_with_no_links(void) const =0;
+  virtual vtol_face *shallow_copy_with_no_links() const =0;
 
   virtual bool operator==(const vtol_face &other)const;
   inline bool operator!=(const vtol_face &other)const{return !operator==(other);}
   bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
   //: determine bounding box from bounding boxes of underlying edges
-  virtual void compute_bounding_box(void) const;
+  virtual void compute_bounding_box() const;
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;
 
@@ -196,6 +196,12 @@ class vtol_face : public vtol_topology_object
 
   //: compare the geometry
   virtual bool compare_geometry(const vtol_face &other) const =0;
+
+  //: Return a platform independent string identifying the class
+  virtual vcl_string is_a() const { return vcl_string("vtol_face"); }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 };
 
 #endif // vtol_face_h_

@@ -57,7 +57,7 @@ class vtol_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  vtol_chain(void);
+  vtol_chain();
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -71,13 +71,13 @@ class vtol_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return a pointer to the inferiors (no copy)
   //---------------------------------------------------------------------------
-  virtual const chain_list *chain_inferiors(void) const;
+  virtual const chain_list *chain_inferiors() const;
 
   //---------------------------------------------------------------------------
   //: Return a copy of the chain_superiors list
   // The return value must be deleted by the caller
   //---------------------------------------------------------------------------
-  virtual const chain_list *chain_superiors(void) const;
+  virtual const chain_list *chain_superiors() const;
 
   //***************************************************************************
   // Replaces dynamic_cast<T>
@@ -86,12 +86,12 @@ class vtol_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_chain *cast_to_chain(void) const { return this; }
+  virtual const vtol_chain *cast_to_chain() const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_chain *cast_to_chain(void) { return this; }
+  virtual vtol_chain *cast_to_chain() { return this; }
 
   //***************************************************************************
   // Status report
@@ -115,22 +115,22 @@ class vtol_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return the number of superiors
   //---------------------------------------------------------------------------
-  int num_chain_superiors(void) const {return chain_superiors_.size();}
+  int num_chain_superiors() const {return chain_superiors_.size();}
 
   //---------------------------------------------------------------------------
   //: Return the number of inferiors
   //---------------------------------------------------------------------------
-  int num_chain_inferiors(void) const {return chain_inferiors_.size();}
+  int num_chain_inferiors() const {return chain_inferiors_.size();}
 
   //---------------------------------------------------------------------------
   //: Does `this' contain some sub chains ?
   //---------------------------------------------------------------------------
-  bool contains_sub_chains(void) const { return chain_inferiors_.size()>0; }
+  bool contains_sub_chains() const { return chain_inferiors_.size()>0; }
 
   //---------------------------------------------------------------------------
   //: Is `this' a sub chain ?
   //---------------------------------------------------------------------------
-  bool is_sub_chain(void) const { return chain_superiors_.size()>0; }
+  bool is_sub_chain() const { return chain_superiors_.size()>0; }
 
   //***************************************************************************
   // Basic operations
@@ -153,27 +153,27 @@ class vtol_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Unlink `this' with all its chain inferiors
   //---------------------------------------------------------------------------
-  void unlink_all_chain_inferiors(void);
+  void unlink_all_chain_inferiors();
 
   //---------------------------------------------------------------------------
   //: Unlink `this' of the network
   //---------------------------------------------------------------------------
-  void unlink(void);
+  void unlink();
 
   //---------------------------------------------------------------------------
   //: Is `this' a connected chain ?
   //---------------------------------------------------------------------------
-  bool is_cycle(void) const;
+  bool is_cycle() const;
 
   //---------------------------------------------------------------------------
   //: Return the directions
   //---------------------------------------------------------------------------
-  const vcl_vector<signed char> *directions(void) const { return &directions_; }
+  const vcl_vector<signed char> *directions() const { return &directions_; }
 
   //---------------------------------------------------------------------------
   //: Return the directions
   //---------------------------------------------------------------------------
-  vcl_vector<signed char> *directions(void) { return &directions_; }
+  vcl_vector<signed char> *directions() { return &directions_; }
 
   //---------------------------------------------------------------------------
   //: Return the direction `i'
@@ -188,7 +188,13 @@ class vtol_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   // Task: Reset the chain
   //---------------------------------------------------------------------------
-  virtual void clear(void);
+  virtual void clear();
+
+  //: Return a platform independent string identifying the class
+  virtual vcl_string is_a() const { return vcl_string("vtol_chain"); }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 };
 
 #endif // vtol_chain_h_

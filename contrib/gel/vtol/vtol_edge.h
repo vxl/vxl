@@ -70,32 +70,32 @@ class vtol_edge : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Default constructor. Empty edge. Not a valid edge.
   //---------------------------------------------------------------------------
-  vtol_edge(void) : v1_(0), v2_(0){ link_inferior(new vtol_zero_chain); }
+  vtol_edge() : v1_(0), v2_(0){ link_inferior(new vtol_zero_chain); }
 
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
   virtual ~vtol_edge();
 
-  //---------------------------------------------------------------------------
+ private: // has been superceeded by is_a()
   //: Return the topology type
-  //---------------------------------------------------------------------------
-  virtual vtol_topology_object_type topology_type(void) const { return EDGE; }
+  virtual vtol_topology_object_type topology_type() const { return EDGE; }
 
+ public:
   //---------------------------------------------------------------------------
   //: Return the first endpoint
   //---------------------------------------------------------------------------
-  vtol_vertex_sptr v1(void) const { return v1_; }
+  vtol_vertex_sptr v1() const { return v1_; }
 
   //---------------------------------------------------------------------------
   //: Return the second endpoint
   //---------------------------------------------------------------------------
-  vtol_vertex_sptr v2(void) const { return v2_; }
+  vtol_vertex_sptr v2() const { return v2_; }
 
   //---------------------------------------------------------------------------
   //: Return the first non-empty zero-chain of `this'
   //---------------------------------------------------------------------------
-  virtual vtol_zero_chain_sptr zero_chain(void) const;
+  virtual vtol_zero_chain_sptr zero_chain() const;
 
   //---------------------------------------------------------------------------
   //: Set the first endpoint.
@@ -110,7 +110,7 @@ class vtol_edge : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Determine the endpoints of an edge from its inferiors
   //---------------------------------------------------------------------------
-  virtual void set_vertices_from_zero_chains(void);
+  virtual void set_vertices_from_zero_chains();
 
   //---------------------------------------------------------------------------
   //: replace the current end point
@@ -136,22 +136,22 @@ class vtol_edge : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_edge *cast_to_edge(void) const { return this; }
+  virtual const vtol_edge *cast_to_edge() const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_edge *cast_to_edge(void) { return this; }
+  virtual vtol_edge *cast_to_edge() { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_edge_2d *cast_to_edge_2d(void) const {return 0;}
+  virtual const vtol_edge_2d *cast_to_edge_2d() const {return 0;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_edge_2d *cast_to_edge_2d(void) {return 0;}
+  virtual vtol_edge_2d *cast_to_edge_2d() {return 0;}
 
   //***************************************************************************
   // Status report
@@ -172,17 +172,17 @@ class vtol_edge : public vtol_topology_object
   // Inferior/Superior Accessor Methods
  protected:
   // \warning should not be used by clients
-  virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
-  virtual vcl_vector<vtol_edge*> *compute_edges(void);
-  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains(void);
-  virtual vcl_vector<vtol_one_chain*> *compute_one_chains(void);
-  virtual vcl_vector<vtol_face*> *compute_faces(void);
-  virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
-  virtual vcl_vector<vtol_block*> *compute_blocks(void);
+  virtual vcl_vector<vtol_vertex*> *compute_vertices();
+  virtual vcl_vector<vtol_edge*> *compute_edges();
+  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains();
+  virtual vcl_vector<vtol_one_chain*> *compute_one_chains();
+  virtual vcl_vector<vtol_face*> *compute_faces();
+  virtual vcl_vector<vtol_two_chain*> *compute_two_chains();
+  virtual vcl_vector<vtol_block*> *compute_blocks();
  public:
 
   //: get a list of endpoints
-  virtual vertex_list *endpoints(void);
+  virtual vertex_list *endpoints();
 
   // Utility Functions
 
@@ -210,6 +210,12 @@ class vtol_edge : public vtol_topology_object
 
   //: compare the geometry
   virtual bool compare_geometry(const vtol_edge &other) const =0;
+
+  //: Return a platform independent string identifying the class
+  virtual vcl_string is_a() const { return vcl_string("vtol_edge"); }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 };
 
 #endif // vtol_edge_h_
