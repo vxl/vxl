@@ -147,6 +147,7 @@ vnl_bignum::vnl_bignum (double d) {
 }
 
 
+#if 0 // original implementation - PVr
 static bool is_decimal(const char *s)
 {
   if (*s == '+' || *s == '-') ++s;
@@ -190,15 +191,89 @@ static bool is_octal(const char *s)
   if (*s == 'l' || *s == 'L') ++s;
   return (*s == '\0');
 }
+#else // new implementation, also to be used for operator>>
+
+static char rt[4096];
+static int rt_pos = 0;
+
+static char next(const char*& s, vcl_istream** is)
+{
+  if (!is || *s) { char c = *s; if (c) ++rt_pos, ++s; return c; }
+  if (rt_pos == 4096) return '\0';
+  (*is)->get(rt[rt_pos]); // read a single byte from istream
+  if (*s) ++s; // in case s == rt+rt_pos
+  rt[++rt_pos] = '\0'; return rt[rt_pos-1];
+}
+
+static bool is_decimal(const char* s, vcl_istream** is = 0)
+{
+  rt_pos = 0;
+  char c = next(s,is);
+  while (c == ' ' || c == '\t' || c == '\n' || c == '\r') c = next(s,is);
+  if (c == '+' || c == '-') c = next(s,is);
+  if (c < '1' || c > '9') return false;
+  while (c >= '0' && c <= '9') c = next(s,is);
+  if (c == 'l' || c == 'L') c = next(s,is);
+  if (rt_pos > 0) rt[++rt_pos] = '\0';
+  return is ? true : c == '\0';
+}
+static bool is_exponential(const char* s, vcl_istream** is = 0)
+{
+  rt_pos = 0;
+  char c = next(s,is);
+  while (c == ' ' || c == '\t' || c == '\n' || c == '\r') c = next(s,is);
+  if (c == '+' || c == '-') c = next(s,is);
+  if (c < '1' || c > '9') return false;
+  while (c >= '0' && c <= '9') c = next(s,is);
+  if (c != 'e' && c != 'E') return false;
+  c = next(s,is);
+  if (c < '1' || c > '9') return false;
+  while (c >= '0' && c <= '9') c = next(s,is);
+  if (rt_pos > 0) rt[++rt_pos] = '\0';
+  return is ? true : c == '\0';
+}
+static bool is_hexadecimal(const char* s, vcl_istream** is = 0)
+{
+  rt_pos = 0;
+  char c = next(s,is);
+  while (c == ' ' || c == '\t' || c == '\n' || c == '\r') c = next(s,is);
+  if (c == '+' || c == '-') c = next(s,is);
+  if (c != '0') return false;
+  c = next(s,is);
+  if (c != 'x' && c != 'X') return false;
+  c = next(s,is);
+  if ((c < '0' || c > '9') &&
+      (c < 'a' || c > 'f') &&
+      (c < 'A' || c > 'F')) return false;
+  while ((c >= '0' && c <= '9') ||
+         (c >= 'a' && c <= 'f') ||
+         (c >= 'A' && c <= 'F')) c = next(s,is);
+  if (c == 'l' || c == 'L') c = next(s,is);
+  if (rt_pos > 0) rt[++rt_pos] = '\0';
+  return is ? true : c == '\0';
+}
+static bool is_octal(const char* s, vcl_istream** is = 0)
+{
+  rt_pos = 0;
+  char c = next(s,is);
+  while (c == ' ' || c == '\t' || c == '\n' || c == '\r') c = next(s,is);
+  if (c == '+' || c == '-') c = next(s,is);
+  if (c != '0') return false;
+  while (c >= '0' && c <= '7') c = next(s,is);
+  if (c == 'l' || c == 'L') c = next(s,is);
+  if (rt_pos > 0) rt[++rt_pos] = '\0';
+  return is ? true : c == '\0';
+}
+#endif
 
 //: Creates a vnl_bignum from the character string representation.
 
 vnl_bignum::vnl_bignum (const char *s)
 : count(0), sign(1), data(0) {
-  // decimal:     "^[-+]?[1-9][0-9]*$"
-  // exponential: "^[-+]?[1-9][0-9]*[eE][1-9][0-9]*$"
-  // hexadecimal: "^[-+]?0[xX][0-9a-fA-F]+$"
-  // octal:       "^[-+]?0[0-7]*$"
+  // decimal:     "^ *[-+]?[1-9][0-9]*$"
+  // exponential: "^ *[-+]?[1-9][0-9]*[eE][1-9][0-9]*$"
+  // hexadecimal: "^ *[-+]?0[xX][0-9a-fA-F]+$"
+  // octal:       "^ *[-+]?0[0-7]*$"
 
   if (is_decimal(s))                    // If string is decimal
     this->dtoBigNum(s);                 // convert decimal to vnl_bignum
@@ -211,6 +286,32 @@ vnl_bignum::vnl_bignum (const char *s)
   else {                                // Otherwise
     vcl_cerr << "Cannot convert string " << s << " to vnl_bignum\n";
   }
+}
+
+//: Reads a vnl_bignum from a stream
+
+vcl_istream& operator>> (vcl_istream& is, vnl_bignum& x)
+{
+  // decimal:     "^ *[-+]?[1-9][0-9]*$"
+  // exponential: "^ *[-+]?[1-9][0-9]*[eE][1-9][0-9]*$"
+  // hexadecimal: "^ *[-+]?0[xX][0-9a-fA-F]+$"
+  // octal:       "^ *[-+]?0[0-7]*$"
+  vcl_istream* isp = &is;
+  rt[0] = '\0';
+
+  if (is_decimal(rt,&isp))              // If input stream string is decimal
+    x.dtoBigNum(rt);                    // convert decimal to vnl_bignum
+  else if (is_exponential(rt,&isp))     // If string is exponential
+    x.exptoBigNum(rt);                  // convert exp. to vnl_bignum
+  else if (is_hexadecimal(rt,&isp))     // If string is hex,
+    x.xtoBigNum(rt);                    // convert hex to vnl_bignum
+  else if (is_octal(rt,&isp))           // If string is octal
+    x.otoBigNum(rt);                    // convert octal to vnl_bignum
+  else {                                // Otherwise
+    vcl_cerr << "Cannot convert string " << rt << " to vnl_bignum\n";
+    x = 0L;
+  }
+  return is; // FIXME - should probably push back read characters to istream
 }
 
 //: Copies the contents of vnl_bignum b.
@@ -486,6 +587,7 @@ void vnl_bignum::dump (vcl_ostream& os) const {
 
 int vnl_bignum::dtoBigNum (const char *s) {
   Counter len = 0;                      // No chars converted yet
+  while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
   if (s[0] == '-' || s[0] == '+') len++;// Skip over leading +,-
   while (vcl_isdigit(s[len])) {         // If current char is digit
     (*this) = ((*this) * 10L) +         // Shift vnl_bignum left a decimal
@@ -498,6 +600,7 @@ int vnl_bignum::dtoBigNum (const char *s) {
 // exptoBigNum // convert exponential string to a vnl_bignum
 
 void vnl_bignum::exptoBigNum (const char *s) {
+  while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
   Counter pos = this->dtoBigNum(s) + 1; // Convert the base, skip [eE]
   long pow = atol(s + pos);             // Convert the exponent to long
   while (pow-- > 0)                     // Raise vnl_bignum to the given
@@ -520,6 +623,7 @@ unsigned int ctox (int c) {
 // xtoBigNum // convert hex string to vnl_bignum
 
 void vnl_bignum::xtoBigNum (const char *s) {
+  while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
   Counter size = vcl_strlen(s);
   Counter len = 2;                      // skip leading "0x"
   while (len < size) {                  // While there are more chars
@@ -532,6 +636,7 @@ void vnl_bignum::xtoBigNum (const char *s) {
 // otoBigNum // convert octal string to vnl_bignum
 
 void vnl_bignum::otoBigNum (const char *s) {
+  while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
   Counter size = vcl_strlen(s);
   Counter len = 0;                      // No chars converted yet
   while (len < size) {                  // While there are more chars

@@ -84,10 +84,8 @@ vnl_bignum right_shift(const vnl_bignum& b1, int l);
 //: formatted output
 vcl_ostream& operator<<(vcl_ostream& s, vnl_bignum const& r);
 
-#if 0 // not yet implemented
 //: simple input
 vcl_istream& operator>>(vcl_istream& s, vnl_bignum& r);
-#endif
 
 //: Infinite precision integers
 //
@@ -219,6 +217,7 @@ public:
   friend vnl_bignum left_shift(const vnl_bignum& b1, int l);
   friend vnl_bignum right_shift(const vnl_bignum& b1, int l);
   friend vcl_ostream& operator<< (vcl_ostream&, const vnl_bignum&);
+  friend vcl_istream& operator>> (vcl_istream&, vnl_bignum&);
 
 private:
   unsigned short count; // Number of data elements
@@ -372,11 +371,8 @@ inline vnl_bignum vnl_math_abs(vcl_complex<vnl_bignum> const& z) { return vcl_sq
 inline vcl_complex<vnl_bignum> vnl_math_sqr(vcl_complex<vnl_bignum> const& z) { return z*z; }
 inline vcl_ostream& operator<<(vcl_ostream& s, vcl_complex<vnl_bignum> const& z) {
   return s << '(' << z.real() << "," << z.imag() << ')'; }
-
-#if 0 // not yet implemented
 inline vcl_istream& operator>>(vcl_istream& s, vcl_complex<vnl_bignum>& z) {
   vnl_bignum r, i; s >> r >> i; z=vcl_complex<vnl_bignum>(r,i); return s; }
-#endif
 
 
 VCL_DEFINE_SPECIALIZATION
