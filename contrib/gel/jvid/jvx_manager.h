@@ -15,6 +15,7 @@
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vgui/vgui_grid_tableau.h>
+#include <vgui/vgui_viewer2D_sptr.h>
 #include <vidl/vidl_movie.h>
 
 class jvx_manager : public vgui_grid_tableau
