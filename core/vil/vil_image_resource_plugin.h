@@ -1,6 +1,6 @@
-// This is core/vil2/vil2_image_resource_plugin.h
-#ifndef vil2_image_resource_plugin_h_
-#define vil2_image_resource_plugin_h_
+// This is core/vil/vil_image_resource_plugin.h
+#ifndef vil_image_resource_plugin_h_
+#define vil_image_resource_plugin_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -13,58 +13,58 @@
 // \date        Sun Mar 17 22:57:00 2002
 
 #include <vcl_string.h>
-#include <vil2/vil2_image_view_base.h>
-#include <vil2/vil2_image_resource.h>
+#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource.h>
 
 //=======================================================================
 
-//: A base class for a plugin for vil2 images loading
+//: A base class for a plugin for vil images loading
 // This class provides an interface for loading images in new formats
 
-class vil2_image_resource_plugin : public vil2_image_resource
+class vil_image_resource_plugin : public vil_image_resource
 {
  public:
 
   //: Default constructor
-  vil2_image_resource_plugin();
+  vil_image_resource_plugin();
 
   //: Destructor
-  virtual ~vil2_image_resource_plugin();
+  virtual ~vil_image_resource_plugin();
 
   //: Name of the class
   virtual vcl_string is_a() const;
 
-  virtual vil2_pixel_format pixel_format() const { return VIL2_PIXEL_FORMAT_UNKNOWN; }
+  virtual vil_pixel_format pixel_format() const { return VIL_PIXEL_FORMAT_UNKNOWN; }
 
   virtual unsigned ni() const { return 0; }
   virtual unsigned nj() const { return 0; }
   virtual unsigned nplanes() const { return 0; }
 
   virtual bool get_property (char const * /*tag*/, void * /*property_value*/=0) const { return false; }
-  virtual vil2_image_view_base_sptr get_copy_view (unsigned /*i0*/, unsigned /*ni*/, unsigned /*j0*/, unsigned /*nj*/) const
-  { return vil2_image_view_base_sptr(0); }
+  virtual vil_image_view_base_sptr get_copy_view (unsigned /*i0*/, unsigned /*ni*/, unsigned /*j0*/, unsigned /*nj*/) const
+  { return vil_image_view_base_sptr(0); }
 
-  virtual bool put_view (vil2_image_view_base const& /*im*/, unsigned /*i0*/, unsigned /*j0*/) { return false; }
-
-  //: Attempt to load image from named file.
-  // \param filetype  String hinting at what image format is
-  // \param colour    define whether to load images as colour or grey-scale.
-  //        Options are '' (i.e. rely on image), 'Grey' or 'RGB'
-  // \ret   true if successful
-  virtual bool load_the_image (vil2_image_view_base_sptr& image, const vcl_string & path);
+  virtual bool put_view (vil_image_view_base const& /*im*/, unsigned /*i0*/, unsigned /*j0*/) { return false; }
 
   //: Attempt to load image from named file.
   // \param filetype  String hinting at what image format is
   // \param colour    define whether to load images as colour or grey-scale.
   //        Options are '' (i.e. rely on image), 'Grey' or 'RGB'
   // \ret   true if successful
-  virtual bool load_the_image (vil2_image_view_base_sptr& image,
+  virtual bool load_the_image (vil_image_view_base_sptr& image, const vcl_string & path);
+
+  //: Attempt to load image from named file.
+  // \param filetype  String hinting at what image format is
+  // \param colour    define whether to load images as colour or grey-scale.
+  //        Options are '' (i.e. rely on image), 'Grey' or 'RGB'
+  // \ret   true if successful
+  virtual bool load_the_image (vil_image_view_base_sptr& image,
                                const vcl_string & path,
                                const vcl_string & filetype,
                                const vcl_string & colour);
 
-  //: Register a vil2_image_resource_plugin to the list of plugins
-  static void register_plugin(vil2_image_resource_plugin* plugin);
+  //: Register a vil_image_resource_plugin to the list of plugins
+  static void register_plugin(vil_image_resource_plugin* plugin);
 
   //: Delete all registered plugins
   static void delete_all_plugins();
@@ -89,7 +89,7 @@ class vil2_image_resource_plugin : public vil2_image_resource
   //: colour
   vcl_string colour_;
 
-  vil2_pixel_format pixel_format_;
+  vil_pixel_format pixel_format_;
   unsigned int ni_;
   unsigned int nj_;
   unsigned int nplanes_;
@@ -97,4 +97,4 @@ class vil2_image_resource_plugin : public vil2_image_resource
   int height_;
 };
 
-#endif // vil2_image_resource_plugin_h_
+#endif // vil_image_resource_plugin_h_

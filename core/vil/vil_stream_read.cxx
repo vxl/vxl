@@ -3,9 +3,9 @@
 #endif
 //:
 // \file
-// \brief read numbers from vil2_stream
+// \brief read numbers from vil_stream
 //
-// Functions to read integers and floats from a vil2_stream.
+// Functions to read integers and floats from a vil_stream.
 // The endianness refers to the format in the stream, not the
 // native format of the compiler or execution environment.
 //
@@ -18,20 +18,20 @@
 // Ian Scott, May 2003: rearrange explicit io, to allow for easier expansion.
 // \endverbatim
 
-#include "vil2_stream_read.h"
+#include "vil_stream_read.h"
 #include <vcl_cassert.h>
 
-#include <vil2/vil2_stream.h>
+#include <vil/vil_stream.h>
 #include <vxl_config.h>
 
-vxl_uint_16 vil2_stream_read_big_endian_uint_16(vil2_stream *s)
+vxl_uint_16 vil_stream_read_big_endian_uint_16(vil_stream *s)
 {
   vxl_uint_8 bytes[2];
   s->read(bytes, sizeof bytes);
   return vxl_uint_16(bytes[1]) + (vxl_uint_16(bytes[0])<<8);
 }
 
-vxl_uint_16 vil2_stream_read_little_endian_uint_16(vil2_stream *s)
+vxl_uint_16 vil_stream_read_little_endian_uint_16(vil_stream *s)
 {
   vxl_uint_8 bytes[2];
   s->read(bytes, sizeof bytes);
@@ -39,14 +39,14 @@ vxl_uint_16 vil2_stream_read_little_endian_uint_16(vil2_stream *s)
 }
 
 
-vxl_uint_32 vil2_stream_read_big_endian_uint_32(vil2_stream *s)
+vxl_uint_32 vil_stream_read_big_endian_uint_32(vil_stream *s)
 {
   vxl_byte bytes[4];
   s->read(bytes, sizeof bytes);
   return (vxl_uint_32(bytes[0])<<24) + (vxl_uint_32(bytes[1])<<16) + (vxl_uint_32(bytes[2])<<8) + (vxl_uint_32(bytes[3]));
 }
 
-vxl_uint_32 vil2_stream_read_little_endian_uint_32(vil2_stream *s)
+vxl_uint_32 vil_stream_read_little_endian_uint_32(vil_stream *s)
 {
   vxl_byte bytes[4];
   s->read(bytes, sizeof bytes);
@@ -54,7 +54,7 @@ vxl_uint_32 vil2_stream_read_little_endian_uint_32(vil2_stream *s)
 }
 
 
-// The following function should be moved to relevant places in vil2 soon
+// The following function should be moved to relevant places in vil soon
 static void swap16(char *a, unsigned n)
 {
   char c;
@@ -64,7 +64,7 @@ static void swap16(char *a, unsigned n)
   }
 }
 
-// The following function should be moved to relevant places in vil2 soon
+// The following function should be moved to relevant places in vil soon
 static void swap32(char *a, unsigned n)
 {
   char c;
@@ -79,8 +79,8 @@ static void swap32(char *a, unsigned n)
   }
 }
 
-// The following function should be moved to relevant places in vil2 soon
-float vil2_stream_read_big_endian_float(vil2_stream* is)
+// The following function should be moved to relevant places in vil soon
+float vil_stream_read_big_endian_float(vil_stream* is)
 {
   float f;
   is->read((char*)&f,4);
@@ -90,9 +90,9 @@ float vil2_stream_read_big_endian_float(vil2_stream* is)
   return f;
 }
 
-// The following function should be moved to relevant places in vil2 soon
+// The following function should be moved to relevant places in vil soon
 // Reads in n shorts, assumed to be two bytes, into data[i]
-void vil2_stream_read_big_endian_int_16(vil2_stream* is,
+void vil_stream_read_big_endian_int_16(vil_stream* is,
                                         vxl_uint_16* data, unsigned n)
 {
   assert(sizeof(short)==2);

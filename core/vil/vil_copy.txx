@@ -1,6 +1,6 @@
-// This is core/vil2/vil2_copy.txx
-#ifndef vil2_copy_txx_
-#define vil2_copy_txx_
+// This is core/vil/vil_copy.txx
+#ifndef vil_copy_txx_
+#define vil_copy_txx_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -9,21 +9,21 @@
 // \author Ian Scott, ISBE, Manchester
 // \date   4 Oct 2002
 
-#include "vil2_copy.h"
+#include "vil_copy.h"
 #include <vcl_cassert.h>
 
 //: Create a copy of the data viewed by this, and return a view of copy.
 template<class T>
-void vil2_copy_deep(const vil2_image_view<T> &src, vil2_image_view<T> &dest)
+void vil_copy_deep(const vil_image_view<T> &src, vil_image_view<T> &dest)
 {
   dest.deep_copy(src);
 }
 
 //: Create a copy of the data viewed by this, and return a view of copy.
 template<class T>
-vil2_image_view<T> vil2_copy_deep(const vil2_image_view<T> &src)
+vil_image_view<T> vil_copy_deep(const vil_image_view<T> &src)
 {
-  vil2_image_view<T> cpy;
+  vil_image_view<T> cpy;
   cpy.deep_copy(src);
   return cpy;
 }
@@ -33,7 +33,7 @@ vil2_image_view<T> vil2_copy_deep(const vil2_image_view<T> &src)
 // This is useful if you want to copy an image into a window on another image.
 // src and dest must have identical sizes, and types.
 template<class T>
-void vil2_copy_reformat(const vil2_image_view<T> &src, vil2_image_view<T> &dest)
+void vil_copy_reformat(const vil_image_view<T> &src, vil_image_view<T> &dest)
 {
   assert (src.nplanes() == dest.nplanes() &&
     src.nj() == dest.nj() &&
@@ -49,7 +49,7 @@ void vil2_copy_reformat(const vil2_image_view<T> &src, vil2_image_view<T> &dest)
 // Size of window is defined by src.
 //  O(window.size).
 template<class T>
-void vil2_copy_to_window(const vil2_image_view<T> &src, vil2_image_view<T> &dest,
+void vil_copy_to_window(const vil_image_view<T> &src, vil_image_view<T> &dest,
                          unsigned i0, unsigned j0)
 {
   // check window is within dest's bounds
@@ -64,11 +64,11 @@ void vil2_copy_to_window(const vil2_image_view<T> &src, vil2_image_view<T> &dest
 
 
 // For everything else
-#define VIL2_COPY_INSTANTIATE(T) \
-template void vil2_copy_deep(const vil2_image_view<T > &src, vil2_image_view<T > &dest); \
-template void vil2_copy_to_window(const vil2_image_view<T > &src, vil2_image_view<T > &dest, \
+#define VIL_COPY_INSTANTIATE(T) \
+template void vil_copy_deep(const vil_image_view<T > &src, vil_image_view<T > &dest); \
+template void vil_copy_to_window(const vil_image_view<T > &src, vil_image_view<T > &dest, \
                                   unsigned i0, unsigned j0); \
-template void vil2_copy_reformat(const vil2_image_view<T > &src, vil2_image_view<T > &dest); \
-template vil2_image_view<T > vil2_copy_deep(const vil2_image_view<T > &rhs)
+template void vil_copy_reformat(const vil_image_view<T > &src, vil_image_view<T > &dest); \
+template vil_image_view<T > vil_copy_deep(const vil_image_view<T > &rhs)
 
-#endif // vil2_copy_txx_
+#endif // vil_copy_txx_

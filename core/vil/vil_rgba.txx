@@ -1,19 +1,19 @@
-// This is core/vil2/vil2_rgba.txx
-#ifndef vil2_rgba_txx_
-#define vil2_rgba_txx_
+// This is core/vil/vil_rgba.txx
+#ifndef vil_rgba_txx_
+#define vil_rgba_txx_
 
 //-*- c++ -*-------------------------------------------------------------------
 //
-// vil2_rgba
+// vil_rgba
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 12 Nov 99
 //
 //-----------------------------------------------------------------------------
 
-#include "vil2_rgba.h"
+#include "vil_rgba.h"
 
-#undef VIL2_RGBA_INSTANTIATE
-#define VIL2_RGBA_INSTANTIATE(T) \
-template struct vil2_rgba<T >
+#undef VIL_RGBA_INSTANTIATE
+#define VIL_RGBA_INSTANTIATE(T) \
+template struct vil_rgba<T >
 
-#endif // vil2_rgba_txx_
+#endif // vil_rgba_txx_

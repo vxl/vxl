@@ -1,30 +1,30 @@
-// core/vil2/vil2_bicub_interp.txx
-#ifndef vil2_bicub_interp_txx_
-#define vil2_bicub_interp_txx_
+// core/vil/vil_bicub_interp.txx
+#ifndef vil_bicub_interp_txx_
+#define vil_bicub_interp_txx_
 //:
 // \file
 // \brief Bicubic interpolation functions for 2D images
 //
-// The vil2 bicub source files were derived from the corresponding
-// vil2 bilin files, thus the vil2 bilin/bicub source files are very
+// The vil bicub source files were derived from the corresponding
+// vil bilin files, thus the vil bilin/bicub source files are very
 // similar.  If you modify something in this file, there is a
 // corresponding bilin file that would likely also benefit from
 // the same change.
 //
 // In this particular case, there is no corresponding
-// vil2_bilin_interp.txx file, see vil2_bilin_interp.h instead.
+// vil_bilin_interp.txx file, see vil_bilin_interp.h instead.
 
-#include "vil2_bicub_interp.h"
+#include "vil_bicub_interp.h"
 
-// vil2_bilin_interp.h defines only inline functions, but some of the
-// corresponding vil2_bicub_interp functions are a little big to be
+// vil_bilin_interp.h defines only inline functions, but some of the
+// corresponding vil_bicub_interp functions are a little big to be
 // inline.  Plus, on one platform, msvc 6.0 with /O2 optimization
-// compiled the vil2_bicub_interp functions without a peep but gave
+// compiled the vil_bicub_interp functions without a peep but gave
 // incorrect numerical results when these functions were inline and
-// defined in vil2_bicub_interp.h.
+// defined in vil_bicub_interp.h.
 
 template<class T>
-double vil2_bicub_interp_unsafe(double x, double y, const T* data,
+double vil_bicub_interp_unsafe(double x, double y, const T* data,
                                 vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     int p1x=int(x);
@@ -46,14 +46,14 @@ double vil2_bicub_interp_unsafe(double x, double y, const T* data,
     double t2 = ((4-3*normy)*normy+1)*normy;
     double t3 = (normy-1)*normy*normy;
 
-#define vil2_I(dx,dy) (pix1[(dx)*xstep+(dy)*ystep])
+#define vil_I(dx,dy) (pix1[(dx)*xstep+(dy)*ystep])
 
-    double xi0 = s0*vil2_I(-1,-1) + s1*vil2_I(+0,-1) + s2*vil2_I(+1,-1) + s3*vil2_I(+2,-1);
-    double xi1 = s0*vil2_I(-1,+0) + s1*vil2_I(+0,+0) + s2*vil2_I(+1,+0) + s3*vil2_I(+2,+0);
-    double xi2 = s0*vil2_I(-1,+1) + s1*vil2_I(+0,+1) + s2*vil2_I(+1,+1) + s3*vil2_I(+2,+1);
-    double xi3 = s0*vil2_I(-1,+2) + s1*vil2_I(+0,+2) + s2*vil2_I(+1,+2) + s3*vil2_I(+2,+2);
+    double xi0 = s0*vil_I(-1,-1) + s1*vil_I(+0,-1) + s2*vil_I(+1,-1) + s3*vil_I(+2,-1);
+    double xi1 = s0*vil_I(-1,+0) + s1*vil_I(+0,+0) + s2*vil_I(+1,+0) + s3*vil_I(+2,+0);
+    double xi2 = s0*vil_I(-1,+1) + s1*vil_I(+0,+1) + s2*vil_I(+1,+1) + s3*vil_I(+2,+1);
+    double xi3 = s0*vil_I(-1,+2) + s1*vil_I(+0,+2) + s2*vil_I(+1,+2) + s3*vil_I(+2,+2);
 
-#undef vil2_I
+#undef vil_I
 
     double val = 0.25 * ( xi0*t0 + xi1*t1 + xi2*t2 + xi3*t3 );
 
@@ -61,7 +61,7 @@ double vil2_bicub_interp_unsafe(double x, double y, const T* data,
 }
 
 template<class T>
-double vil2_bicub_interp_raw(double x, double y, const T* data,
+double vil_bicub_interp_raw(double x, double y, const T* data,
                              vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     int p1x=int(x);
@@ -95,38 +95,38 @@ double vil2_bicub_interp_raw(double x, double y, const T* data,
         t3 = (normy-1)*normy*normy;        // +2
     }
 
-#define vil2_I(dx,dy) (pix1[(dx)*xstep+(dy)*ystep])
+#define vil_I(dx,dy) (pix1[(dx)*xstep+(dy)*ystep])
 
     if (normy == 0.0) {
-        double val = s0*vil2_I(-1,+0) + s1*vil2_I(+0,+0) + s2*vil2_I(+1,+0) + s3*vil2_I(+2,+0);
+        double val = s0*vil_I(-1,+0) + s1*vil_I(+0,+0) + s2*vil_I(+1,+0) + s3*vil_I(+2,+0);
         val *= 0.5;
         return val;
     }
 
     if (normx == 0.0) {
-        double val = t0*vil2_I(+0,-1) + t1*vil2_I(+0,+0) + t2*vil2_I(+0,+1) + t3*vil2_I(+0,+2);
+        double val = t0*vil_I(+0,-1) + t1*vil_I(+0,+0) + t2*vil_I(+0,+1) + t3*vil_I(+0,+2);
         val *= 0.5;
         return val;
     }
 
-    double xi0 = s0*vil2_I(-1,-1) + s1*vil2_I(+0,-1) + s2*vil2_I(+1,-1) + s3*vil2_I(+2,-1);
-    double xi1 = s0*vil2_I(-1,+0) + s1*vil2_I(+0,+0) + s2*vil2_I(+1,+0) + s3*vil2_I(+2,+0);
-    double xi2 = s0*vil2_I(-1,+1) + s1*vil2_I(+0,+1) + s2*vil2_I(+1,+1) + s3*vil2_I(+2,+1);
-    double xi3 = s0*vil2_I(-1,+2) + s1*vil2_I(+0,+2) + s2*vil2_I(+1,+2) + s3*vil2_I(+2,+2);
+    double xi0 = s0*vil_I(-1,-1) + s1*vil_I(+0,-1) + s2*vil_I(+1,-1) + s3*vil_I(+2,-1);
+    double xi1 = s0*vil_I(-1,+0) + s1*vil_I(+0,+0) + s2*vil_I(+1,+0) + s3*vil_I(+2,+0);
+    double xi2 = s0*vil_I(-1,+1) + s1*vil_I(+0,+1) + s2*vil_I(+1,+1) + s3*vil_I(+2,+1);
+    double xi3 = s0*vil_I(-1,+2) + s1*vil_I(+0,+2) + s2*vil_I(+1,+2) + s3*vil_I(+2,+2);
 
-#undef vil2_I
+#undef vil_I
 
     double val = 0.25 * ( xi0*t0 + xi1*t1 + xi2*t2 + xi3*t3 );
 
     return val;
 }
 
-#define VIL2_BICUB_INTERP_INSTANTIATE(T) \
+#define VIL_BICUB_INTERP_INSTANTIATE(T) \
 template double \
-vil2_bicub_interp_unsafe (double x, double y, const T* data, \
+vil_bicub_interp_unsafe (double x, double y, const T* data, \
                           vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep); \
 template double \
-vil2_bicub_interp_raw (double x, double y, const T* data, \
+vil_bicub_interp_raw (double x, double y, const T* data, \
                        vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 
-#endif // vil2_bicub_interp_txx_
+#endif // vil_bicub_interp_txx_

@@ -1,36 +1,36 @@
-// This is core/vil2/vil2_image_view.txx
-#ifndef vil2_image_view_txx_
-#define vil2_image_view_txx_
+// This is core/vil/vil_image_view.txx
+#ifndef vil_image_view_txx_
+#define vil_image_view_txx_
 //:
 // \file
 // \brief Represent images of one or more planes of Ts.
 // \author Ian Scott
 //
-// Note: To keep down size of vil2_image_view
+// Note: To keep down size of vil_image_view
 // Please think carefully before adding any new methods.
-// In particular any methods that provide new views (e.g. vil2_plane)
+// In particular any methods that provide new views (e.g. vil_plane)
 // will be more usefully provided as external functions. - IMS.
 // In that case, use the "relates" keyword of Doxygen to link the documentation
-// of that function to the vil2_image_view class.
+// of that function to the vil_image_view class.
 
-#include "vil2_image_view.h"
+#include "vil_image_view.h"
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vcl_ostream.h>
-#include <vil2/vil2_smart_ptr.h>
-#include <vil2/vil2_pixel_format.h>
+#include <vil/vil_smart_ptr.h>
+#include <vil/vil_pixel_format.h>
 #include <vcl_cstring.h>
 
 //=======================================================================
 
 template<class T>
-vil2_image_view<T>::vil2_image_view()
+vil_image_view<T>::vil_image_view()
 : top_left_(0),istep_(0),jstep_(0),planestep_(0)
 {}
 
 template<class T>
-vil2_image_view<T>::vil2_image_view(unsigned n_i, unsigned n_j, unsigned n_planes)
+vil_image_view<T>::vil_image_view(unsigned n_i, unsigned n_j, unsigned n_planes)
 : top_left_(0),istep_(1),jstep_(0)
 {
   set_size(n_i,n_j,n_planes);
@@ -38,7 +38,7 @@ vil2_image_view<T>::vil2_image_view(unsigned n_i, unsigned n_j, unsigned n_plane
 
 //: Set this view to look at someone else's memory data.
 template<class T>
-vil2_image_view<T>::vil2_image_view(const T* top_left, unsigned n_i, unsigned n_j, unsigned n_planes,
+vil_image_view<T>::vil_image_view(const T* top_left, unsigned n_i, unsigned n_j, unsigned n_planes,
                                     vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step)
 {
   set_to_memory(top_left,n_i,n_j,n_planes,i_step,j_step,plane_step);
@@ -47,10 +47,10 @@ vil2_image_view<T>::vil2_image_view(const T* top_left, unsigned n_i, unsigned n_
 //: Set this view to look at another view's data
 //  Need to pass the memory chunk to set up the internal smart ptr appropriately
 template<class T>
-vil2_image_view<T>::vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem_chunk,
+vil_image_view<T>::vil_image_view(const vil_smart_ptr<vil_memory_chunk>& mem_chunk,
                                     const T* top_left, unsigned n_i, unsigned n_j, unsigned n_planes,
                                     vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step)
- : vil2_image_view_base(n_i, n_j, n_planes)
+ : vil_image_view_base(n_i, n_j, n_planes)
  , top_left_(const_cast<T*>(top_left))
  , istep_(i_step), jstep_(j_step)
  , planestep_(plane_step)
@@ -76,7 +76,7 @@ vil2_image_view<T>::vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem
 // If this view cannot set itself to view the other data (e.g. because the
 // types are incompatible) it will set itself to empty.
 template<class T>
-vil2_image_view<T>::vil2_image_view(const vil2_image_view_base& that):
+vil_image_view<T>::vil_image_view(const vil_image_view_base& that):
 top_left_(0), istep_(0), jstep_(0), planestep_(0), ptr_(0)
 {
   operator=(that);
@@ -86,14 +86,14 @@ top_left_(0), istep_(0), jstep_(0), planestep_(0), ptr_(0)
 // If this view cannot set itself to view the other data (e.g. because the
 // types are incompatible) it will set itself to empty.
 template <class T>
-vil2_image_view<T>::vil2_image_view(const vil2_image_view_base_sptr& that):
+vil_image_view<T>::vil_image_view(const vil_image_view_base_sptr& that):
 top_left_(0), istep_(0), jstep_(0), planestep_(0), ptr_(0)
 {
   operator=(that);
 }
 //: Perform deep copy of the src image, placing in this image
 template<class T>
-void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
+void vil_image_view<T>::deep_copy(const vil_image_view<T>& src)
 {
   set_size(src.ni(),src.nj(),src.nplanes());
 
@@ -105,9 +105,9 @@ void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
       vcl_memcpy(top_left_,src.top_left_ptr(),src.size()*sizeof(T));
       return;
     }
-    vil2_image_view<T>::const_iterator s_it = src.begin();
-    vil2_image_view<T>::iterator d_it = begin();
-    vil2_image_view<T>::const_iterator end_it = src.end();
+    vil_image_view<T>::const_iterator s_it = src.begin();
+    vil_image_view<T>::iterator d_it = begin();
+    vil_image_view<T>::const_iterator end_it = src.end();
     while (s_it!=end_it) {*d_it = *s_it; ++s_it; ++d_it; }
     return;
   }
@@ -147,23 +147,23 @@ void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
 
 //: Convert planes to components from planes, or do nothing if types are wrong.
 template <class T>
-inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_components_from_planes(vil_image_view<T> &lhs,
+                                           const vil_image_view_base &rhs_base)
 {
   typedef typename T::value_type comp_type;
 
   const int ncomp =
-    vil2_pixel_format_num_components(vil2_pixel_format_of(T()));
+    vil_pixel_format_num_components(vil_pixel_format_of(T()));
 
   if (// both sides have equal component types and rhs has scalar pixels and
-      rhs_base.pixel_format() == vil2_pixel_format_component_format(vil2_pixel_format_of(T()) ) &&
+      rhs_base.pixel_format() == vil_pixel_format_component_format(vil_pixel_format_of(T()) ) &&
       // lhs has number of components equal to rhs's number of planes.
       ncomp == (int)rhs_base.nplanes() )
   {
-    const vil2_image_view<comp_type> &rhs = static_cast<const vil2_image_view<comp_type>&>(rhs_base);
+    const vil_image_view<comp_type> &rhs = static_cast<const vil_image_view<comp_type>&>(rhs_base);
     // Check that the steps are suitable for viewing as components
     if (rhs.planestep() != 1 || vcl_abs((int)rhs.istep())<ncomp || vcl_abs((int)rhs.jstep())<ncomp ) return false;
-    lhs = vil2_image_view<T >(rhs.memory_chunk(),
+    lhs = vil_image_view<T >(rhs.memory_chunk(),
                               reinterpret_cast<T const*>(rhs.top_left_ptr()),
                               rhs.ni(),rhs.nj(),1,
                               rhs.istep()/ncomp,rhs.jstep()/ncomp,1);
@@ -175,73 +175,73 @@ inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
 
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<float> & /*lhs*/,
-                                           const vil2_image_view_base & /*rhs_base*/)
+inline bool convert_components_from_planes(vil_image_view<float> & /*lhs*/,
+                                           const vil_image_view_base & /*rhs_base*/)
 {return false;}  // when lhs has scalar pixels, don't attempt conversion
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<double> & /*lhs*/,
-                                           const vil2_image_view_base & /*rhs_base*/)
+inline bool convert_components_from_planes(vil_image_view<double> & /*lhs*/,
+                                           const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<bool> & /*lhs*/,
-                                           const vil2_image_view_base & /*rhs_base*/)
+inline bool convert_components_from_planes(vil_image_view<bool> & /*lhs*/,
+                                           const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<vxl_sbyte> & /*lhs*/,
-                                           const vil2_image_view_base & /*rhs_base*/)
+inline bool convert_components_from_planes(vil_image_view<vxl_sbyte> & /*lhs*/,
+                                           const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<vxl_byte> & /*lhs*/,
-                                           const vil2_image_view_base & /*rhs_base*/)
+inline bool convert_components_from_planes(vil_image_view<vxl_byte> & /*lhs*/,
+                                           const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<vxl_int_16> & /*lhs*/,
-                                           const vil2_image_view_base & /*rhs_base*/)
+inline bool convert_components_from_planes(vil_image_view<vxl_int_16> & /*lhs*/,
+                                           const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<vxl_uint_16> & /*lhs*/,
-                                           const vil2_image_view_base & /*rhs_base*/)
+inline bool convert_components_from_planes(vil_image_view<vxl_uint_16> & /*lhs*/,
+                                           const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<vxl_int_32> & /*lhs*/,
-                                           const vil2_image_view_base & /*rhs_base*/)
+inline bool convert_components_from_planes(vil_image_view<vxl_int_32> & /*lhs*/,
+                                           const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<vxl_uint_32> & /*lhs*/,
-                                           const vil2_image_view_base & /*rhs_base*/)
+inline bool convert_components_from_planes(vil_image_view<vxl_uint_32> & /*lhs*/,
+                                           const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
 
 //: Convert components to planes from planes, or do nothing if types are wrong.
 template <class T>
-inline bool convert_planes_from_components(vil2_image_view<T> & /*lhs*/,
-                                           const vil2_image_view_base & /*rhs_base*/)
+inline bool convert_planes_from_components(vil_image_view<T> & /*lhs*/,
+                                           const vil_image_view_base & /*rhs_base*/)
 { return false;} // when lhs has non-scalar pixels, don't attempt conversion
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_planes_from_components(vil2_image_view<vxl_byte> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_planes_from_components(vil_image_view<vxl_byte> &lhs,
+                                           const vil_image_view_base &rhs_base)
 {
   const unsigned ncomp =
-    vil2_pixel_format_num_components(rhs_base.pixel_format());
+    vil_pixel_format_num_components(rhs_base.pixel_format());
 
   if (// rhs has just 1 plane
       rhs_base.nplanes() == 1 &&
       // both sides have equal component types
-      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_BYTE)
+      vil_pixel_format_component_format(rhs_base.pixel_format()) == VIL_PIXEL_FORMAT_BYTE)
   {
     // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
-    const vil2_image_view<vxl_byte> &rhs = static_cast<const vil2_image_view<vxl_byte>&>(rhs_base);
+    const vil_image_view<vxl_byte> &rhs = static_cast<const vil_image_view<vxl_byte>&>(rhs_base);
 
-    lhs = vil2_image_view<vxl_byte>(rhs.memory_chunk(), rhs.top_left_ptr(),
+    lhs = vil_image_view<vxl_byte>(rhs.memory_chunk(), rhs.top_left_ptr(),
                                     rhs.ni(),rhs.nj(),ncomp,
                                     rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;
@@ -251,21 +251,21 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_byte> &lhs,
 }
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_planes_from_components(vil2_image_view<vxl_sbyte> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_planes_from_components(vil_image_view<vxl_sbyte> &lhs,
+                                           const vil_image_view_base &rhs_base)
 {
   const unsigned ncomp =
-    vil2_pixel_format_num_components(rhs_base.pixel_format());
+    vil_pixel_format_num_components(rhs_base.pixel_format());
 
   if (// rhs has just 1 plane
       rhs_base.nplanes() == 1 &&
       // both sides have equal component types
-      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_SBYTE)
+      vil_pixel_format_component_format(rhs_base.pixel_format()) == VIL_PIXEL_FORMAT_SBYTE)
   {
     // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
-    const vil2_image_view<vxl_sbyte> &rhs = static_cast<const vil2_image_view<vxl_sbyte>&>(rhs_base);
+    const vil_image_view<vxl_sbyte> &rhs = static_cast<const vil_image_view<vxl_sbyte>&>(rhs_base);
 
-    lhs = vil2_image_view<vxl_sbyte>(rhs.memory_chunk(), rhs.top_left_ptr(),
+    lhs = vil_image_view<vxl_sbyte>(rhs.memory_chunk(), rhs.top_left_ptr(),
                                      rhs.ni(),rhs.nj(),ncomp,
                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;
@@ -275,21 +275,21 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_sbyte> &lhs,
 }
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_planes_from_components(vil2_image_view<vxl_uint_16> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_planes_from_components(vil_image_view<vxl_uint_16> &lhs,
+                                           const vil_image_view_base &rhs_base)
 {
   const unsigned ncomp =
-    vil2_pixel_format_num_components(rhs_base.pixel_format());
+    vil_pixel_format_num_components(rhs_base.pixel_format());
 
   if (// rhs has just 1 plane
       rhs_base.nplanes() == 1 &&
       // both sides have equal component types
-      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_UINT_16)
+      vil_pixel_format_component_format(rhs_base.pixel_format()) == VIL_PIXEL_FORMAT_UINT_16)
   {
     // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
-    const vil2_image_view<vxl_uint_16> &rhs = static_cast<const vil2_image_view<vxl_uint_16>&>(rhs_base);
+    const vil_image_view<vxl_uint_16> &rhs = static_cast<const vil_image_view<vxl_uint_16>&>(rhs_base);
 
-    lhs = vil2_image_view<vxl_uint_16>(rhs.memory_chunk(), rhs.top_left_ptr(),
+    lhs = vil_image_view<vxl_uint_16>(rhs.memory_chunk(), rhs.top_left_ptr(),
                                        rhs.ni(),rhs.nj(),ncomp,
                                        rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;
@@ -299,21 +299,21 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_uint_16> &lhs,
 }
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_planes_from_components(vil2_image_view<vxl_int_16> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_planes_from_components(vil_image_view<vxl_int_16> &lhs,
+                                           const vil_image_view_base &rhs_base)
 {
   const unsigned ncomp =
-    vil2_pixel_format_num_components(rhs_base.pixel_format());
+    vil_pixel_format_num_components(rhs_base.pixel_format());
 
   if (// rhs has just 1 plane
       rhs_base.nplanes() == 1 &&
       // both sides have equal component types
-      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_INT_16)
+      vil_pixel_format_component_format(rhs_base.pixel_format()) == VIL_PIXEL_FORMAT_INT_16)
   {
     // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
-    const vil2_image_view<vxl_int_16> &rhs = static_cast<const vil2_image_view<vxl_int_16>&>(rhs_base);
+    const vil_image_view<vxl_int_16> &rhs = static_cast<const vil_image_view<vxl_int_16>&>(rhs_base);
 
-    lhs = vil2_image_view<vxl_int_16>(rhs.memory_chunk(), rhs.top_left_ptr(),
+    lhs = vil_image_view<vxl_int_16>(rhs.memory_chunk(), rhs.top_left_ptr(),
                                       rhs.ni(),rhs.nj(),ncomp,
                                       rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;
@@ -323,21 +323,21 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_int_16> &lhs,
 }
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_planes_from_components(vil2_image_view<vxl_uint_32> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_planes_from_components(vil_image_view<vxl_uint_32> &lhs,
+                                           const vil_image_view_base &rhs_base)
 {
   const unsigned ncomp =
-    vil2_pixel_format_num_components(rhs_base.pixel_format());
+    vil_pixel_format_num_components(rhs_base.pixel_format());
 
   if (// rhs has just 1 plane
       rhs_base.nplanes() == 1 &&
       // both sides have equal component types
-       vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_UINT_32)
+       vil_pixel_format_component_format(rhs_base.pixel_format()) == VIL_PIXEL_FORMAT_UINT_32)
   {
     // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
-    const vil2_image_view<vxl_uint_32> &rhs = static_cast<const vil2_image_view<vxl_uint_32>&>(rhs_base);
+    const vil_image_view<vxl_uint_32> &rhs = static_cast<const vil_image_view<vxl_uint_32>&>(rhs_base);
 
-    lhs = vil2_image_view<vxl_uint_32>(rhs.memory_chunk(), rhs.top_left_ptr(),
+    lhs = vil_image_view<vxl_uint_32>(rhs.memory_chunk(), rhs.top_left_ptr(),
                                        rhs.ni(),rhs.nj(),ncomp,
                                        rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;
@@ -347,21 +347,21 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_uint_32> &lhs,
 }
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_planes_from_components(vil2_image_view<vxl_int_32> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_planes_from_components(vil_image_view<vxl_int_32> &lhs,
+                                           const vil_image_view_base &rhs_base)
 {
   const unsigned ncomp =
-    vil2_pixel_format_num_components(rhs_base.pixel_format());
+    vil_pixel_format_num_components(rhs_base.pixel_format());
 
   if (// rhs has just 1 plane
       rhs_base.nplanes() == 1 &&
       // both sides have equal component types
-      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_INT_32)
+      vil_pixel_format_component_format(rhs_base.pixel_format()) == VIL_PIXEL_FORMAT_INT_32)
   {
     // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
-    const vil2_image_view<vxl_int_32> &rhs = static_cast<const vil2_image_view<vxl_int_32>&>(rhs_base);
+    const vil_image_view<vxl_int_32> &rhs = static_cast<const vil_image_view<vxl_int_32>&>(rhs_base);
 
-    lhs = vil2_image_view<vxl_int_32>(rhs.memory_chunk(), rhs.top_left_ptr(),
+    lhs = vil_image_view<vxl_int_32>(rhs.memory_chunk(), rhs.top_left_ptr(),
                                       rhs.ni(),rhs.nj(),ncomp,
                                       rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;
@@ -371,21 +371,21 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_int_32> &lhs,
 }
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_planes_from_components(vil2_image_view<float> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_planes_from_components(vil_image_view<float> &lhs,
+                                           const vil_image_view_base &rhs_base)
 {
   const unsigned ncomp =
-    vil2_pixel_format_num_components(rhs_base.pixel_format());
+    vil_pixel_format_num_components(rhs_base.pixel_format());
 
   if (// rhs has just 1 plane
       rhs_base.nplanes() == 1 &&
       // both sides have equal component types
-      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_FLOAT)
+      vil_pixel_format_component_format(rhs_base.pixel_format()) == VIL_PIXEL_FORMAT_FLOAT)
   {
     // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
-    const vil2_image_view<float> &rhs = static_cast<const vil2_image_view<float>&>(rhs_base);
+    const vil_image_view<float> &rhs = static_cast<const vil_image_view<float>&>(rhs_base);
 
-    lhs = vil2_image_view<float>(rhs.memory_chunk(), rhs.top_left_ptr(),
+    lhs = vil_image_view<float>(rhs.memory_chunk(), rhs.top_left_ptr(),
                                  rhs.ni(),rhs.nj(),ncomp,
                                  rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;
@@ -395,21 +395,21 @@ inline bool convert_planes_from_components(vil2_image_view<float> &lhs,
 }
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_planes_from_components(vil2_image_view<double> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_planes_from_components(vil_image_view<double> &lhs,
+                                           const vil_image_view_base &rhs_base)
 {
   const unsigned ncomp =
-    vil2_pixel_format_num_components(rhs_base.pixel_format());
+    vil_pixel_format_num_components(rhs_base.pixel_format());
 
   if (// rhs has just 1 plane
       rhs_base.nplanes() == 1 &&
       // both sides have equal component types
-      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_DOUBLE)
+      vil_pixel_format_component_format(rhs_base.pixel_format()) == VIL_PIXEL_FORMAT_DOUBLE)
   {
     // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
-    const vil2_image_view<double> &rhs = static_cast<const vil2_image_view<double>&>(rhs_base);
+    const vil_image_view<double> &rhs = static_cast<const vil_image_view<double>&>(rhs_base);
 
-    lhs = vil2_image_view<double>(rhs.memory_chunk(), rhs.top_left_ptr(),
+    lhs = vil_image_view<double>(rhs.memory_chunk(), rhs.top_left_ptr(),
                                   rhs.ni(),rhs.nj(),ncomp,
                                   rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;
@@ -422,14 +422,14 @@ inline bool convert_planes_from_components(vil2_image_view<double> &lhs,
 //: Create a copy of the data viewed by this, and return a view of copy.
 // This function can be made a lot more powerful - to automatically convert between pixel types.
 template<class T>
-const vil2_image_view<T> & vil2_image_view<T>::operator= (const vil2_image_view_base & rhs)
+const vil_image_view<T> & vil_image_view<T>::operator= (const vil_image_view_base & rhs)
 {
-  if (static_cast<const vil2_image_view_base*>(this) == &rhs)
+  if (static_cast<const vil_image_view_base*>(this) == &rhs)
     return *this;
 
   if (rhs.pixel_format() == pixel_format())
   {
-    const vil2_image_view<T> &that = static_cast<const vil2_image_view<T>&>(rhs);
+    const vil_image_view<T> &that = static_cast<const vil_image_view<T>&>(rhs);
     ni_=that.ni_;
     nj_=that.nj_;
     nplanes_=that.nplanes_;
@@ -454,7 +454,7 @@ const vil2_image_view<T> & vil2_image_view<T>::operator= (const vil2_image_view_
 
 //=======================================================================
 
-template<class T> vil2_image_view<T>::~vil2_image_view()
+template<class T> vil_image_view<T>::~vil_image_view()
 {
   // release_data();
 }
@@ -463,14 +463,14 @@ template<class T> vil2_image_view<T>::~vil2_image_view()
 
 
 template<class T>
-void vil2_image_view<T>::set_size(unsigned n_i, unsigned n_j)
+void vil_image_view<T>::set_size(unsigned n_i, unsigned n_j)
 {
   set_size(n_i,n_j, nplanes_);
 }
 
 //: True if data all in one unbroken block and top_left_ptr() is lowest data address
 template<class T>
-bool vil2_image_view<T>::is_contiguous() const
+bool vil_image_view<T>::is_contiguous() const
 {
   // For a contiguous image, the smallest step size should be 1, the
   // next step size should be the width of corresponding to the
@@ -525,14 +525,14 @@ bool vil2_image_view<T>::is_contiguous() const
 //=======================================================================
 
 template<class T>
-void vil2_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_planes)
+void vil_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_planes)
 {
   if (n_i==ni_ && n_j==nj_ && n_planes==nplanes_) return;
 
   release_memory();
 
-  ptr_ = new vil2_memory_chunk(sizeof(T)*n_planes*n_j*n_i,
-    vil2_pixel_format_component_format(vil2_pixel_format_of(T())));
+  ptr_ = new vil_memory_chunk(sizeof(T)*n_planes*n_j*n_i,
+    vil_pixel_format_component_format(vil_pixel_format_of(T())));
 
   ni_ = n_i;
   nj_ = n_j;
@@ -547,7 +547,7 @@ void vil2_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_planes)
 
 //: Set this view to look at someone else's memory.
 template<class T>
-void vil2_image_view<T>::set_to_memory(const T* top_left,
+void vil_image_view<T>::set_to_memory(const T* top_left,
                                        unsigned n_i, unsigned n_j, unsigned n_planes,
                                        vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step)
 {
@@ -566,14 +566,14 @@ void vil2_image_view<T>::set_to_memory(const T* top_left,
 //=======================================================================
 //: Fill view with given value
 template<class T>
-void vil2_image_view<T>::fill(T value)
+void vil_image_view<T>::fill(T value)
 {
   T* plane = top_left_;
 
   if (is_contiguous())
   {
-    vil2_image_view<T>::iterator it = begin();
-    vil2_image_view<T>::const_iterator end_it = end();
+    vil_image_view<T>::iterator it = begin();
+    vil_image_view<T>::const_iterator end_it = end();
     while (it!=end_it) {*it = value; ++it; }
     return;
   }
@@ -620,15 +620,15 @@ void vil2_image_view<T>::fill(T value)
 //=======================================================================
 
 template<class T>
-bool vil2_image_view<T>::is_class(vcl_string const& s) const
+bool vil_image_view<T>::is_class(vcl_string const& s) const
 {
-  return s==vil2_image_view<T>::is_a() || vil2_image_view_base::is_class(s);
+  return s==vil_image_view<T>::is_a() || vil_image_view_base::is_class(s);
 }
 
 //=======================================================================
 
 template<class T>
-void vil2_image_view<T>::print(vcl_ostream& os) const
+void vil_image_view<T>::print(vcl_ostream& os) const
 {
   os<<nplanes_<<" planes, each "<<ni_<<" x "<<nj_;
 }
@@ -639,11 +639,11 @@ void vil2_image_view<T>::print(vcl_ostream& os) const
 //  to different image data objects that contain identical images, then
 //  the result will still be false.
 template<class T>
-bool vil2_image_view<T>::operator==(const vil2_image_view_base &rhs) const
+bool vil_image_view<T>::operator==(const vil_image_view_base &rhs) const
 {
   if (rhs.pixel_format() != pixel_format()) return false;
 
-  const vil2_image_view<T> & other = static_cast<const vil2_image_view<T> &>(rhs);
+  const vil_image_view<T> & other = static_cast<const vil_image_view<T> &>(rhs);
 
   if (this == &other) return true;
 
@@ -664,11 +664,11 @@ bool vil2_image_view<T>::operator==(const vil2_image_view_base &rhs) const
 //  There is no guaranteed meaning to the less than operator, except that
 //  (a<b && b<a)  is false and  !(a<b) && !(b<a)  is equivalent to  a==b
 template<class T>
-bool vil2_image_view<T>::operator<(const vil2_image_view_base& rhs) const
+bool vil_image_view<T>::operator<(const vil_image_view_base& rhs) const
 {
   if (rhs.pixel_format() != pixel_format()) return pixel_format() < rhs.pixel_format();
 
-  const vil2_image_view<T> & other = static_cast<const vil2_image_view<T> &>(rhs);
+  const vil_image_view<T> & other = static_cast<const vil_image_view<T> &>(rhs);
   if (ptr_ != other.ptr_) return ptr_<other.ptr_;
   if (!(bool) *this && !(bool)other) return false;
   if (nplanes_ != other.nplanes_) return nplanes_ < other.nplanes_;
@@ -686,11 +686,11 @@ bool vil2_image_view<T>::operator<(const vil2_image_view_base& rhs) const
 //  There is no guaranteed meaning to the less than operator, except that
 //  (a>b) is equivalent to (b<a)
 template<class T>
-bool vil2_image_view<T>::operator>(const vil2_image_view_base& rhs) const
+bool vil_image_view<T>::operator>(const vil_image_view_base& rhs) const
 {
   if (rhs.pixel_format() != pixel_format()) return pixel_format() > rhs.pixel_format();
 
-  const vil2_image_view<T> & other = static_cast<const vil2_image_view<T> &>(rhs);
+  const vil_image_view<T> & other = static_cast<const vil_image_view<T> &>(rhs);
 
   if (this == &other) return false;
 
@@ -710,10 +710,10 @@ bool vil2_image_view<T>::operator>(const vil2_image_view_base& rhs) const
 // $\bigwedge_{i,j,p} {\textstyle src}(i,j,p) == {\textstyle dest}(i,j,p)$
 // The data may be formatted differently in each memory chunk.
 //  O(size).
-// \relates vil2_image_view
+// \relates vil_image_view
 template<class T>
-bool vil2_image_view_deep_equality(const vil2_image_view<T> &lhs,
-  const vil2_image_view<T> &rhs)
+bool vil_image_view_deep_equality(const vil_image_view<T> &lhs,
+  const vil_image_view<T> &rhs)
 {
   if (lhs.nplanes() != rhs.nplanes() ||
       lhs.nj() != rhs.nj() ||
@@ -728,11 +728,11 @@ bool vil2_image_view_deep_equality(const vil2_image_view<T> &lhs,
   return true;
 }
 
-#define VIL2_IMAGE_VIEW_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string vil2_image_view<T >::is_a() const \
-{  return vcl_string("vil2_image_view<" #T ">"); }\
-template class vil2_image_view<T >; \
-template bool vil2_image_view_deep_equality(const vil2_image_view<T >&, \
-                                            const vil2_image_view<T >&)
+#define VIL_IMAGE_VIEW_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string vil_image_view<T >::is_a() const \
+{  return vcl_string("vil_image_view<" #T ">"); }\
+template class vil_image_view<T >; \
+template bool vil_image_view_deep_equality(const vil_image_view<T >&, \
+                                            const vil_image_view<T >&)
 
-#endif // vil2_image_view_txx_
+#endif // vil_image_view_txx_

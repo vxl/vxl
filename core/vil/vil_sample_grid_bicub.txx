@@ -1,21 +1,21 @@
-// This is core/vil2/vil2_sample_grid_bicub.txx
-#ifndef vil2_sample_grid_bicub_txx_
-#define vil2_sample_grid_bicub_txx_
+// This is core/vil/vil_sample_grid_bicub.txx
+#ifndef vil_sample_grid_bicub_txx_
+#define vil_sample_grid_bicub_txx_
 //:
 // \file
 // \brief Bicubic profile sampling functions for 2D images
 //
-// The vil2 bicub source files were derived from the corresponding
-// vil2 bilin files, thus the vil2 bilin/bicub source files are very
+// The vil bicub source files were derived from the corresponding
+// vil bilin files, thus the vil bilin/bicub source files are very
 // similar.  If you modify something in this file, there is a
 // corresponding bilin file that would likely also benefit from
 // the same change.
 
-#include "vil2_sample_grid_bicub.h"
-#include <vil2/vil2_bicub_interp.h>
+#include "vil_sample_grid_bicub.h"
+#include <vil/vil_bicub_interp.h>
 
-inline bool vil2_grid_corner_in_image(double x0, double y0,
-                                      const vil2_image_view_base& image)
+inline bool vil_grid_corner_in_image(double x0, double y0,
+                                      const vil_image_view_base& image)
 {
   if (x0<2) return false;
   if (y0<2) return false;
@@ -30,15 +30,15 @@ inline bool vil2_grid_corner_in_image(double x0, double y0,
 //  v[0]..v[np-1] are the values from point p
 //  Points outside image return zero.
 template <class imType, class vecType>
-void vil2_sample_grid_bicub(vecType* v,
-                            const vil2_image_view<imType>& image,
+void vil_sample_grid_bicub(vecType* v,
+                            const vil_image_view<imType>& image,
                             double x0, double y0, double dx1, double dy1,
                             double dx2, double dy2, int n1, int n2)
 {
-  bool all_in_image =    vil2_grid_corner_in_image(x0,y0,image)
-                      && vil2_grid_corner_in_image(x0+(n1-1)*dx1,y0+(n1-1)*dy1,image)
-                      && vil2_grid_corner_in_image(x0+(n2-1)*dx2,y0+(n2-1)*dy2,image)
-                      && vil2_grid_corner_in_image(x0+(n1-1)*dx1+(n2-1)*dx2,
+  bool all_in_image =    vil_grid_corner_in_image(x0,y0,image)
+                      && vil_grid_corner_in_image(x0+(n1-1)*dx1,y0+(n1-1)*dy1,image)
+                      && vil_grid_corner_in_image(x0+(n2-1)*dx2,y0+(n2-1)*dy2,image)
+                      && vil_grid_corner_in_image(x0+(n1-1)*dx1+(n2-1)*dx2,
                                                    y0+(n1-1)*dy1+(n2-1)*dy2,image);
 
   const unsigned ni = image.ni();
@@ -59,7 +59,7 @@ void vil2_sample_grid_bicub(vecType* v,
       {
         double x=x1, y=y1;  // Start of j-th row
         for (int j=0;j<n2;++j,x+=dx2,y+=dy2,++v)
-          *v = (vecType) vil2_bicub_interp(x,y,plane0,ni,nj,istep,jstep);
+          *v = (vecType) vil_bicub_interp(x,y,plane0,ni,nj,istep,jstep);
       }
     }
     else
@@ -70,7 +70,7 @@ void vil2_sample_grid_bicub(vecType* v,
         for (int j=0;j<n2;++j,x+=dx2,y+=dy2)
         {
           for (unsigned p=0;p<np;++p,++v)
-            *v = (vecType) vil2_bicub_interp(x,y,plane0+p*pstep,ni,nj,istep,jstep);
+            *v = (vecType) vil_bicub_interp(x,y,plane0+p*pstep,ni,nj,istep,jstep);
         }
       }
     }
@@ -84,7 +84,7 @@ void vil2_sample_grid_bicub(vecType* v,
       {
         double x=x1, y=y1;  // Start of j-th row
         for (int j=0;j<n2;++j,x+=dx2,y+=dy2,++v)
-          *v = (vecType) vil2_bicub_interp_safe(x,y,plane0,ni,nj,istep,jstep);
+          *v = (vecType) vil_bicub_interp_safe(x,y,plane0,ni,nj,istep,jstep);
       }
     }
     else
@@ -95,17 +95,17 @@ void vil2_sample_grid_bicub(vecType* v,
         for (int j=0;j<n2;++j,x+=dx2,y+=dy2)
         {
           for (unsigned p=0;p<np;++p,++v)
-            *v = (vecType) vil2_bicub_interp_safe(x,y,plane0+p*pstep,ni,nj,istep,jstep);
+            *v = (vecType) vil_bicub_interp_safe(x,y,plane0+p*pstep,ni,nj,istep,jstep);
         }
       }
     }
   }
 }
 
-#define VIL2_SAMPLE_GRID_BICUB_INSTANTIATE( imType, vecType ) \
-template void vil2_sample_grid_bicub(vecType* v, \
-                           const vil2_image_view<imType >& image, \
+#define VIL_SAMPLE_GRID_BICUB_INSTANTIATE( imType, vecType ) \
+template void vil_sample_grid_bicub(vecType* v, \
+                           const vil_image_view<imType >& image, \
                            double x0, double y0, double dx1, double dy1, \
                            double dx2, double dy2, int n1, int n2)
 
-#endif // vil2_sample_grid_bicub_txx_
+#endif // vil_sample_grid_bicub_txx_

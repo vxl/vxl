@@ -1,5 +1,5 @@
-// This is core/vil2/vil2_print.cxx
-#include "vil2_print.h"
+// This is core/vil/vil_print.cxx
+#include "vil_print.h"
 //:
 // \file
 // \brief Various functions for manipulating image views
@@ -7,19 +7,19 @@
 
 #include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vcl_complex.h>
-#include <vil2/vil2_rgb.h>
-#include <vil2/vil2_rgba.h>
+#include <vil/vil_rgb.h>
+#include <vil/vil_rgba.h>
 
 //: Explicit overload for bool
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const bool& value)
+void vil_print_value(vcl_ostream& os, const bool& value)
 {
   os<<int(value);
 }
 
 //: Explicit overload for byte
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vxl_byte& value)
+void vil_print_value(vcl_ostream& os, const vxl_byte& value)
 {
   os.width(3);
   os<<int(value);
@@ -27,7 +27,7 @@ void vil2_print_value(vcl_ostream& os, const vxl_byte& value)
 
 //: Explicit overload for signed byte
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vxl_sbyte& value)
+void vil_print_value(vcl_ostream& os, const vxl_sbyte& value)
 {
   os.width(3);
   os<<int(value);
@@ -35,7 +35,7 @@ void vil2_print_value(vcl_ostream& os, const vxl_sbyte& value)
 
 //: Explicit overload for short
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vxl_int_16& value)
+void vil_print_value(vcl_ostream& os, const vxl_int_16& value)
 {
   int v=value;
   if (v<0) { v=-v; os<<'-'; } else os<<' ';
@@ -48,7 +48,7 @@ void vil2_print_value(vcl_ostream& os, const vxl_int_16& value)
 
 //: Explicit overload for unsigned short
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vxl_uint_16& value)
+void vil_print_value(vcl_ostream& os, const vxl_uint_16& value)
 {
   if (value<10)    os<<'0';
   if (value<100)   os<<'0';
@@ -59,7 +59,7 @@ void vil2_print_value(vcl_ostream& os, const vxl_uint_16& value)
 
 //: Explicit overload for int
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vxl_int_32& value)
+void vil_print_value(vcl_ostream& os, const vxl_int_32& value)
 {
   int v=value;
   if (v<0) { v=-v; os<<'-'; } else os<<' ';
@@ -75,7 +75,7 @@ void vil2_print_value(vcl_ostream& os, const vxl_int_32& value)
 
 //: Explicit overload for unsigned int
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vxl_uint_32& value)
+void vil_print_value(vcl_ostream& os, const vxl_uint_32& value)
 {
   if (value<10)       os<<'0';
   if (value<100)      os<<'0';
@@ -89,35 +89,35 @@ void vil2_print_value(vcl_ostream& os, const vxl_uint_32& value)
 
 //: Explicit overload for float
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const float& value)
+void vil_print_value(vcl_ostream& os, const float& value)
 {
   os<<value;
 }
 
 //: Explicit overload for double
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const double& value)
+void vil_print_value(vcl_ostream& os, const double& value)
 {
   os<<value;
 }
 
 //: Explicit overload for complex float
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vcl_complex<float>& value)
+void vil_print_value(vcl_ostream& os, const vcl_complex<float>& value)
 {
   os<<value;
 }
 
 //: Explicit overload for complex double
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vcl_complex<double>& value)
+void vil_print_value(vcl_ostream& os, const vcl_complex<double>& value)
 {
   os<<value;
 }
 
 //: Explicit overload of print for rgb<byte>
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vil2_rgb<vxl_byte>& value)
+void vil_print_value(vcl_ostream& os, const vil_rgb<vxl_byte>& value)
 {
   int r = int(value.r);
   if (r<10)  os<<'0';
@@ -135,52 +135,52 @@ void vil2_print_value(vcl_ostream& os, const vil2_rgb<vxl_byte>& value)
 
 //: Explicit overload of print for rgb<short>
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vil2_rgb<vxl_int_16>& value)
+void vil_print_value(vcl_ostream& os, const vil_rgb<vxl_int_16>& value)
 {
-  vil2_print_value(os, value.r);
+  vil_print_value(os, value.r);
   os<<'/';
-  vil2_print_value(os, value.g);
+  vil_print_value(os, value.g);
   os<<'/';
-  vil2_print_value(os, value.b);
+  vil_print_value(os, value.b);
 }
 
 //: Explicit overload of print for rgb<unsigned short>
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vil2_rgb<vxl_uint_16>& value)
+void vil_print_value(vcl_ostream& os, const vil_rgb<vxl_uint_16>& value)
 {
-  vil2_print_value(os, value.r);
+  vil_print_value(os, value.r);
   os<<'/';
-  vil2_print_value(os, value.g);
+  vil_print_value(os, value.g);
   os<<'/';
-  vil2_print_value(os, value.b);
+  vil_print_value(os, value.b);
 }
 
 //: Explicit overload of print for rgb<int>
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vil2_rgb<vxl_int_32>& value)
+void vil_print_value(vcl_ostream& os, const vil_rgb<vxl_int_32>& value)
 {
-  vil2_print_value(os, value.r);
+  vil_print_value(os, value.r);
   os<<'/';
-  vil2_print_value(os, value.g);
+  vil_print_value(os, value.g);
   os<<'/';
-  vil2_print_value(os, value.b);
+  vil_print_value(os, value.b);
 }
 
 //: Explicit overload of print for rgb<unsigned int>
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vil2_rgb<vxl_uint_32>& value)
+void vil_print_value(vcl_ostream& os, const vil_rgb<vxl_uint_32>& value)
 {
-  vil2_print_value(os, value.r);
+  vil_print_value(os, value.r);
   os<<'/';
-  vil2_print_value(os, value.g);
+  vil_print_value(os, value.g);
   os<<'/';
-  vil2_print_value(os, value.b);
+  vil_print_value(os, value.b);
 }
 
 
 //: Explicit overload of print for rgb<float>
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vil2_rgb<float>& value)
+void vil_print_value(vcl_ostream& os, const vil_rgb<float>& value)
 {
   os<<value.r<<'/'<<value.g<<'/'<<value.b;
 }
@@ -188,14 +188,14 @@ void vil2_print_value(vcl_ostream& os, const vil2_rgb<float>& value)
 
 //: Explicit overload of print for rgb<double>
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vil2_rgb<double>& value)
+void vil_print_value(vcl_ostream& os, const vil_rgb<double>& value)
 {
   os<<value.r<<'/'<<value.g<<'/'<<value.b;
 }
 
 //: Explicit overload of print for rgba<byte>
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vil2_rgba<vxl_byte>& value)
+void vil_print_value(vcl_ostream& os, const vil_rgba<vxl_byte>& value)
 {
   int r = int(value.r);
   if (r<10)  os<<'0';
@@ -217,7 +217,7 @@ void vil2_print_value(vcl_ostream& os, const vil2_rgba<vxl_byte>& value)
 
 //: Explicit overload of print for rgba<float>
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vil2_rgba<float>& value)
+void vil_print_value(vcl_ostream& os, const vil_rgba<float>& value)
 {
   os<<value.r<<'/'<<value.g<<'/'<<value.b<<'/'<<value.a;
 }

@@ -1,6 +1,6 @@
-// This is core/vil2/vil2_smart_ptr.h
-#ifndef vil2_smart_ptr_h_
-#define vil2_smart_ptr_h_
+// This is core/vil/vil_smart_ptr.h
+#ifndef vil_smart_ptr_h_
+#define vil_smart_ptr_h_
 //:
 // \file
 // \brief Contains a templated smart pointer class
@@ -15,7 +15,7 @@
 // PDA (Manchester) 23/03/2001: Tidied up the documentation
 // Peter Vanroose   27/05/2001: Corrected the documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
-// 2002.9.20  Ian Scott       Copied into vil, renamed and simplified.
+// 2002.9.20  Ian Scott       Copied into vil1, renamed and simplified.
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -31,19 +31,19 @@
 //
 // See also vbl_ref_count
 template <class T>
-class vil2_smart_ptr
+class vil_smart_ptr
 {
  public:
-  vil2_smart_ptr ()
+  vil_smart_ptr ()
     :  ptr_(0) { }
 
-  vil2_smart_ptr (vil2_smart_ptr<T> const &p)
+  vil_smart_ptr (vil_smart_ptr<T> const &p)
     :  ptr_(p.as_pointer()) { if (ptr_) ref(ptr_); }
 
-  vil2_smart_ptr (T *p)
+  vil_smart_ptr (T *p)
     :  ptr_(p) { if (ptr_) ref(ptr_); }
 
-  ~vil2_smart_ptr ()
+  ~vil_smart_ptr ()
   {
     // the strange order of events in this function is to avoid
     // heap corruption if unref() causes *this to be deleted.
@@ -54,12 +54,12 @@ class vil2_smart_ptr
   }
 
   //: Assignment
-  vil2_smart_ptr<T> &operator = (vil2_smart_ptr<T> const &r)
+  vil_smart_ptr<T> &operator = (vil_smart_ptr<T> const &r)
   {
     return operator=(r.as_pointer());
   }
 
-  vil2_smart_ptr<T> &operator = (T *r)
+  vil_smart_ptr<T> &operator = (T *r)
   {
     if (ptr_ != r)
     {
@@ -113,20 +113,20 @@ class vil2_smart_ptr
 
   //: Do a shallow equality
   // Do they point to the same object.
-  bool operator==(vil2_smart_ptr<T>const&p)const{return ptr_ == p.as_pointer();}
+  bool operator==(vil_smart_ptr<T>const&p)const{return ptr_ == p.as_pointer();}
 
   //: Do a shallow inequality
   // Do the smart pointers not point to the same object.
-  bool operator!=(vil2_smart_ptr<T>const&p)const{return ptr_ != p.as_pointer();}
-  bool operator< (vil2_smart_ptr<T>const&p)const{return ptr_ <  p.as_pointer();}
-  bool operator> (vil2_smart_ptr<T>const&p)const{return ptr_ >  p.as_pointer();}
-  bool operator<=(vil2_smart_ptr<T>const&p)const{return ptr_ <= p.as_pointer();}
-  bool operator>=(vil2_smart_ptr<T>const&p)const{return ptr_ >= p.as_pointer();}
+  bool operator!=(vil_smart_ptr<T>const&p)const{return ptr_ != p.as_pointer();}
+  bool operator< (vil_smart_ptr<T>const&p)const{return ptr_ <  p.as_pointer();}
+  bool operator> (vil_smart_ptr<T>const&p)const{return ptr_ >  p.as_pointer();}
+  bool operator<=(vil_smart_ptr<T>const&p)const{return ptr_ <= p.as_pointer();}
+  bool operator>=(vil_smart_ptr<T>const&p)const{return ptr_ >= p.as_pointer();}
 
  private:
   // These two methods should not be inlined as they call T's ref()
   // and unref() or are specializations. The big gain from that is
-  // that vil2_smart_ptr<T> can be forward declared even if T is still
+  // that vil_smart_ptr<T> can be forward declared even if T is still
   // an incomplete type.
   static void ref  (T *p);
   static void unref(T *p);
@@ -138,12 +138,12 @@ class vil2_smart_ptr
 
 //: Comparison of pointer with smart-pointer (cannot be a member function)
 template <class T>
-inline bool operator== (T const* p, vil2_smart_ptr<T> const& a)
+inline bool operator== (T const* p, vil_smart_ptr<T> const& a)
 {
   return a.as_pointer() == p;
 }
 template <class T>
-inline bool operator!= (T const* p, vil2_smart_ptr<T> const& a)
+inline bool operator!= (T const* p, vil_smart_ptr<T> const& a)
 {
   return a.as_pointer() != p;
 }
@@ -152,9 +152,9 @@ inline bool operator!= (T const* p, vil2_smart_ptr<T> const& a)
 // because if you're about to make a system call you can afford the
 // cost of a function call.
 template <class T>
-vcl_ostream& operator<< (vcl_ostream&, vil2_smart_ptr<T> const&);
+vcl_ostream& operator<< (vcl_ostream&, vil_smart_ptr<T> const&);
 
-#define VIL2_SMART_PTR_INSTANTIATE(T) \
-extern "please include vil2/vil2_smart_ptr.txx instead"
+#define VIL_SMART_PTR_INSTANTIATE(T) \
+extern "please include vil/vil_smart_ptr.txx instead"
 
-#endif // vil2_smart_ptr_h_
+#endif // vil_smart_ptr_h_

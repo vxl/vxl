@@ -1,33 +1,33 @@
-// This is core/vil2/vil2_stream_fstream.h
-#ifndef vil2_stream_fstream_h_
-#define vil2_stream_fstream_h_
+// This is core/vil/vil_stream_fstream.h
+#ifndef vil_stream_fstream_h_
+#define vil_stream_fstream_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
 // \file
-// \brief A vil2_stream implementation using vcl_fstream
+// \brief A vil_stream implementation using vcl_fstream
 // \author    awf@robots.ox.ac.uk
 // \date 16 Feb 00
 
 #include <vcl_fstream.h>
-#include <vil2/vil2_stream.h>
+#include <vil/vil_stream.h>
 
-//: A vil2_stream implementation using vcl_fstream
-class vil2_stream_fstream : public vil2_stream
+//: A vil_stream implementation using vcl_fstream
+class vil_stream_fstream : public vil_stream
 {
  public:
-  vil2_stream_fstream(char const* filename, char const* mode);
+  vil_stream_fstream(char const* filename, char const* mode);
 
-  // implement virtual vil2_stream interface:
+  // implement virtual vil_stream interface:
   bool ok() const { return f_.good(); }
-  vil2_streampos write(void const* buf, vil2_streampos n);
-  vil2_streampos read(void* buf, vil2_streampos n);
-  vil2_streampos tell();
-  void seek(vil2_streampos position);
+  vil_streampos write(void const* buf, vil_streampos n);
+  vil_streampos read(void* buf, vil_streampos n);
+  vil_streampos tell();
+  void seek(vil_streampos position);
 
  protected:
-  ~vil2_stream_fstream();
+  ~vil_stream_fstream();
 
  private:
   vcl_ios_openmode flags_;
@@ -35,4 +35,4 @@ class vil2_stream_fstream : public vil2_stream
   int id_;
 };
 
-#endif // vil2_stream_fstream_h_
+#endif // vil_stream_fstream_h_

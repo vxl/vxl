@@ -1,17 +1,17 @@
-// This is core/vil2/vil2_memory_chunk.h
-#ifndef vil2_memory_chunk_h_
-#define vil2_memory_chunk_h_
+// This is core/vil/vil_memory_chunk.h
+#ifndef vil_memory_chunk_h_
+#define vil_memory_chunk_h_
 //:
 //  \file
 //  \brief Ref. counted block of data on the heap
 //  \author Tim Cootes
 
-#include <vil2/vil2_smart_ptr.h>
-#include <vil2/vil2_pixel_format.h>
+#include <vil/vil_smart_ptr.h>
+#include <vil/vil_pixel_format.h>
 
 //: Ref. counted block of data on the heap.
-//  Image data block used by vil2_image_view<T>.
-class vil2_memory_chunk
+//  Image data block used by vil_image_view<T>.
+class vil_memory_chunk
 {
     //: Data
     void *data_;
@@ -21,28 +21,28 @@ class vil2_memory_chunk
 
     //: Indicate what format data is (used for binary IO)
     // Should always be a scalar type.
-    vil2_pixel_format pixel_format_;
+    vil_pixel_format pixel_format_;
 
     //: Reference count
     int ref_count_;
 
  public:
     //: Dflt ctor
-    vil2_memory_chunk();
+    vil_memory_chunk();
 
     //: Allocate n bytes of memory
     // \param pixel_format indicates what format to be used for binary IO,
     // and should always be a scalar type.
-    vil2_memory_chunk(unsigned long n, vil2_pixel_format pixel_format);
+    vil_memory_chunk(unsigned long n, vil_pixel_format pixel_format);
 
     //: Copy ctor
-    vil2_memory_chunk(const vil2_memory_chunk&);
+    vil_memory_chunk(const vil_memory_chunk&);
 
     //: Copy operator
-    vil2_memory_chunk& operator=(const vil2_memory_chunk&);
+    vil_memory_chunk& operator=(const vil_memory_chunk&);
 
     //: Destructor
-    virtual ~vil2_memory_chunk();
+    virtual ~vil_memory_chunk();
 
     //: Increment reference count
     void ref() { ref_count_++; }
@@ -60,16 +60,16 @@ class vil2_memory_chunk
     void* const_data() const { return data_;}
 
     //: Indicate what format data is to be saved as in binary IO
-    vil2_pixel_format pixel_format() const { return pixel_format_; }
+    vil_pixel_format pixel_format() const { return pixel_format_; }
 
     //: Number of bytes allocated
     unsigned long size() const { return size_; }
 
     //: Create space for n elements
     //  pixel_format indicates what format to be used for binary IO
-    void set_size(unsigned long n, vil2_pixel_format pixel_format);
+    void set_size(unsigned long n, vil_pixel_format pixel_format);
 };
 
-typedef vil2_smart_ptr<vil2_memory_chunk> vil2_memory_chunk_sptr;
+typedef vil_smart_ptr<vil_memory_chunk> vil_memory_chunk_sptr;
 
-#endif // vil2_memory_chunk_h_
+#endif // vil_memory_chunk_h_

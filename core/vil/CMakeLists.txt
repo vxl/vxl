@@ -1,11 +1,11 @@
-# core/vil2/CMakeLists.txt
+# core/vil/CMakeLists.txt
 
 INCLUDE(${MODULE_PATH}/FindPNG.cmake)
 IF(PNG_FOUND)
   INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})
   ADD_DEFINITIONS( ${PNG_DEFINITIONS}  -DHAS_PNG )
-  SET( vil2_sources ${vil2_sources}
-    file_formats/vil2_png.cxx file_formats/vil2_png.h
+  SET( vil_sources ${vil_sources}
+    file_formats/vil_png.cxx file_formats/vil_png.h
   )
 ENDIF(PNG_FOUND)
 
@@ -13,13 +13,13 @@ INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
 IF(JPEG_FOUND)
   INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_DIR} )
   ADD_DEFINITIONS( ${JPEG_DEFINITIONS} -DHAS_JPEG )
-  SET( vil2_sources ${vil2_sources}
-    file_formats/vil2_jpeglib.h
-    file_formats/vil2_jpeg.cxx file_formats/vil2_jpeg.h
-    file_formats/vil2_jpeg_source_mgr.cxx file_formats/vil2_jpeg_source_mgr.h
-    file_formats/vil2_jpeg_decompressor.cxx file_formats/vil2_jpeg_decompressor.h
-    file_formats/vil2_jpeg_destination_mgr.cxx file_formats/vil2_jpeg_destination_mgr.h
-    file_formats/vil2_jpeg_compressor.cxx file_formats/vil2_jpeg_compressor.h
+  SET( vil_sources ${vil_sources}
+    file_formats/vil_jpeglib.h
+    file_formats/vil_jpeg.cxx file_formats/vil_jpeg.h
+    file_formats/vil_jpeg_source_mgr.cxx file_formats/vil_jpeg_source_mgr.h
+    file_formats/vil_jpeg_decompressor.cxx file_formats/vil_jpeg_decompressor.h
+    file_formats/vil_jpeg_destination_mgr.cxx file_formats/vil_jpeg_destination_mgr.h
+    file_formats/vil_jpeg_compressor.cxx file_formats/vil_jpeg_compressor.h
   )
 ENDIF(JPEG_FOUND)
 
@@ -27,104 +27,140 @@ INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
 IF(TIFF_FOUND)
   INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
   ADD_DEFINITIONS( ${TIFF_DEFINITIONS} -DHAS_TIFF )
-  SET( vil2_sources ${vil2_sources}
-    file_formats/vil2_tiff.cxx file_formats/vil2_tiff.h
+  SET( vil_sources ${vil_sources}
+    file_formats/vil_tiff.cxx file_formats/vil_tiff.h
   )
 ENDIF(TIFF_FOUND)
 
-SET( vil2_sources ${vil2_sources}
+SET( vil_sources ${vil_sources}
 
   # basic things
-  vil2_memory_chunk.cxx     vil2_memory_chunk.h
-  vil2_image_view_base.cxx  vil2_image_view_base.h
-  vil2_image_view.h         vil2_image_view.txx
-  vil2_image_resource.cxx   vil2_image_resource.h
+  vil_memory_chunk.cxx     vil_memory_chunk.h
+  vil_image_view_base.cxx  vil_image_view_base.h
+  vil_image_view.h         vil_image_view.txx
+  vil_image_resource.cxx   vil_image_resource.h
 
-  vil2_file_format.cxx   vil2_file_format.h
-  vil2_memory_image.cxx  vil2_memory_image.h
+  vil_file_format.cxx   vil_file_format.h
+  vil_memory_image.cxx  vil_memory_image.h
 
   # file format readers/writers (see above for conditional ones)
-  file_formats/vil2_pnm.cxx  file_formats/vil2_pnm.h
+  file_formats/vil_pnm.cxx  file_formats/vil_pnm.h
 
-  file_formats/vil2_bmp_file_header.cxx file_formats/vil2_bmp_file_header.h
-  file_formats/vil2_bmp_core_header.cxx file_formats/vil2_bmp_core_header.h
-  file_formats/vil2_bmp_info_header.cxx file_formats/vil2_bmp_info_header.h
-  file_formats/vil2_bmp.cxx             file_formats/vil2_bmp.h
+  file_formats/vil_bmp_file_header.cxx file_formats/vil_bmp_file_header.h
+  file_formats/vil_bmp_core_header.cxx file_formats/vil_bmp_core_header.h
+  file_formats/vil_bmp_info_header.cxx file_formats/vil_bmp_info_header.h
+  file_formats/vil_bmp.cxx             file_formats/vil_bmp.h
 
-  file_formats/vil2_ras.cxx  file_formats/vil2_ras.h
+  file_formats/vil_ras.cxx  file_formats/vil_ras.h
 
-  file_formats/vil2_dicom.cxx         file_formats/vil2_dicom.h
-  file_formats/vil2_dicom_header.cxx  file_formats/vil2_dicom_header.h
+  file_formats/vil_dicom.cxx         file_formats/vil_dicom.h
+  file_formats/vil_dicom_header.cxx  file_formats/vil_dicom_header.h
 
   # image operations
-  vil2_crop.cxx  vil2_crop.h
-  vil2_clamp.cxx vil2_clamp.h
-  vil2_transpose.cxx  vil2_transpose.h
-  vil2_flip.cxx  vil2_flip.h
-  vil2_plane.cxx vil2_plane.h
-  vil2_math.h
-  vil2_view_as.h
-  vil2_fill.h
-  vil2_transform.h
-  vil2_decimate.h vil2_decimate.cxx
-  vil2_convert.h
-  vil2_load.cxx  vil2_load.h
-  vil2_save.cxx  vil2_save.h
-  vil2_copy.txx  vil2_copy.h
-  vil2_new.cxx   vil2_new.h
-  vil2_print.cxx vil2_print.h
+  vil_crop.cxx  vil_crop.h
+  vil_clamp.cxx vil_clamp.h
+  vil_transpose.cxx  vil_transpose.h
+  vil_flip.cxx  vil_flip.h
+  vil_plane.cxx vil_plane.h
+  vil_math.h
+  vil_view_as.h
+  vil_fill.h
+  vil_transform.h
+  vil_decimate.h vil_decimate.cxx
+  vil_convert.h
+  vil_load.cxx  vil_load.h
+  vil_save.cxx  vil_save.h
+  vil_copy.txx  vil_copy.h
+  vil_new.cxx   vil_new.h
+  vil_print.cxx vil_print.h
 
   # Bilinear Sampling Operations
-  vil2_bilin_interp.h
-  vil2_sample_profile_bilin.txx vil2_sample_profile_bilin.h
-  vil2_sample_grid_bilin.txx    vil2_sample_grid_bilin.h
-  vil2_resample_bilin.txx       vil2_resample_bilin.h
+  vil_bilin_interp.h
+  vil_sample_profile_bilin.txx vil_sample_profile_bilin.h
+  vil_sample_grid_bilin.txx    vil_sample_grid_bilin.h
+  vil_resample_bilin.txx       vil_resample_bilin.h
 
   # Bicubic Sampling Operations
-  vil2_bicub_interp.txx         vil2_bicub_interp.h
-  vil2_sample_profile_bicub.txx vil2_sample_profile_bicub.h
-  vil2_sample_grid_bicub.txx    vil2_sample_grid_bicub.h
-  vil2_resample_bicub.txx       vil2_resample_bicub.h
+  vil_bicub_interp.txx         vil_bicub_interp.h
+  vil_sample_profile_bicub.txx vil_sample_profile_bicub.h
+  vil_sample_grid_bicub.txx    vil_sample_grid_bicub.h
+  vil_resample_bicub.txx       vil_resample_bicub.h
 
   # Stuff
-  vil2_smart_ptr.txx vil2_smart_ptr.h
-  vil2_property.h
-  vil2_pixel_format.cxx vil2_pixel_format.h
-  vil2_pixel_traits.h
-  vil2_rgb.txx vil2_rgb.h
-  vil2_rgba.txx vil2_rgba.h
-  vil2_fwd.h
+  vil_smart_ptr.txx vil_smart_ptr.h
+  vil_property.h
+  vil_pixel_format.cxx vil_pixel_format.h
+  vil_pixel_traits.h
+  vil_rgb.txx vil_rgb.h
+  vil_rgba.txx vil_rgba.h
+  vil_fwd.h
 
   # Streams
-  vil2_stream.cxx vil2_stream.h
-  vil2_stream_fstream.cxx vil2_stream_fstream.h
-  vil2_stream_core.cxx vil2_stream_core.h
-  vil2_stream_section.cxx vil2_stream_section.h
-  vil2_stream_url.cxx vil2_stream_url.h
-  vil2_open.cxx vil2_open.h
+  vil_stream.cxx vil_stream.h
+  vil_stream_fstream.cxx vil_stream_fstream.h
+  vil_stream_core.cxx vil_stream_core.h
+  vil_stream_section.cxx vil_stream_section.h
+  vil_stream_url.cxx vil_stream_url.h
+  vil_open.cxx vil_open.h
 # The next two lines are deprecated in favour of the following two
-#  vil2_stream_16bit.cxx vil2_stream_16bit.h
-#  vil2_stream_32bit.cxx vil2_stream_32bit.h
-  vil2_stream_read.cxx vil2_stream_read.h
-  vil2_stream_write.cxx vil2_stream_write.h
-
-
-  # Conversion to from vil1 images
-  vil2_vil1.cxx vil2_vil1.h
+#  vil_stream_16bit.cxx vil_stream_16bit.h
+#  vil_stream_32bit.cxx vil_stream_32bit.h
+  vil_stream_read.cxx vil_stream_read.h
+  vil_stream_write.cxx vil_stream_write.h
 
   # Plugin for image loading
-  vil2_image_resource_plugin.cxx vil2_image_resource_plugin.h
+  vil_image_resource_plugin.cxx vil_image_resource_plugin.h
+)
+
+AUX_SOURCE_DIRECTORY(Templates vil_sources)
+
+# Some versions of Solaris (at least 5.8) has a brain-dead mechanism
+# for implementing DNS services, where the user of a library that uses
+# gethostbyname should link to -lnsl *before* linking to the
+# library. This creates a kind of "pre-dependency" that the CMake
+# dependency analysis is not equipped to handle. We cope by isolating
+# the offending code into its own library vil_network (under Solaris
+# only, of course). We can then control the dependencies of vil to
+# link nsl before this vil_network.
+#
+# This workaround also occurs in vul
+#
+SET( vil_network_sources
+  # load image from URL
+  vil_stream_url.cxx vil_stream_url.h
 )
 
 
-AUX_SOURCE_DIRECTORY(Templates vil2_sources)
+IF(NOT SOLARIS)
+  ADD_LIBRARY(vil ${vil_sources} ${vil_network_sources})
+ELSE(NOT SOLARIS)
+  ADD_LIBRARY(vil ${vil_sources})
+  ADD_LIBRARY(vil_network ${vil_network_sources})
+ENDIF(NOT SOLARIS)
 
-ADD_LIBRARY(vil2 ${vil2_sources})
+IF(JPEG_FOUND)
+  TARGET_LINK_LIBRARIES( vil ${JPEG_LIBRARIES} )
+ENDIF(JPEG_FOUND)
+IF(TIFF_FOUND)
+  TARGET_LINK_LIBRARIES( vil ${TIFF_LIBRARIES} )
+ENDIF(TIFF_FOUND)
+IF(PNG_FOUND)
+  TARGET_LINK_LIBRARIES( vil ${PNG_LIBRARIES} )
+ENDIF(PNG_FOUND)
 
-TARGET_LINK_LIBRARIES( vil2 vil vcl )
+TARGET_LINK_LIBRARIES( vil vcl )
+
+IF (NOT UNIX)
+  TARGET_LINK_LIBRARIES( vil ws2_32.lib )
+ENDIF (NOT UNIX)
+
+IF (SOLARIS)
+  TARGET_LINK_LIBRARIES( vil nsl vil_network socket )
+ENDIF (SOLARIS)
 
 
 SUBDIRS(algo io)
+
 
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )
@@ -132,3 +168,4 @@ ENDIF( BUILD_EXAMPLES )
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
+

@@ -1,73 +1,73 @@
-// This is core/vil2/vil2_save.cxx
+// This is core/vil/vil_save.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
 // \file
 
-#include "vil2_save.h"
+#include "vil_save.h"
 
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
 
-#include <vil2/vil2_open.h>
-#include <vil2/vil2_new.h>
-#include <vil2/vil2_pixel_format.h>
-#include <vil2/vil2_image_resource.h>
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_open.h>
+#include <vil/vil_new.h>
+#include <vil/vil_pixel_format.h>
+#include <vil/vil_image_resource.h>
+#include <vil/vil_image_view.h>
 
 
-//: Send vil2_image to disk.
-bool vil2_save(const vil2_image_view_base &im, char const* filename, char const* file_format)
+//: Send vil_image to disk.
+bool vil_save(const vil_image_view_base &im, char const* filename, char const* file_format)
 {
-  vil2_stream* os = vil2_open(filename, "w");
+  vil_stream* os = vil_open(filename, "w");
   if (!os || !os->ok()) {
     vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
     return false;
   }
-  vil2_image_resource_sptr out = vil2_new_image_resource(os, im.ni(), im.nj(),
-    im.nplanes() * vil2_pixel_format_num_components(im.pixel_format()),
+  vil_image_resource_sptr out = vil_new_image_resource(os, im.ni(), im.nj(),
+    im.nplanes() * vil_pixel_format_num_components(im.pixel_format()),
     im.pixel_format(), file_format);
   if (!out) {
-    vcl_cerr << __FILE__ ": (vil2_save) Cannot save to type [" << file_format << "]\n";
+    vcl_cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
     return false;
   }
 
   // Use smart copy constructor to convert multi-component images
   // into multi-plane ones.
-  switch (vil2_pixel_format_component_format(im.pixel_format()))
+  switch (vil_pixel_format_component_format(im.pixel_format()))
   {
-  case VIL2_PIXEL_FORMAT_BYTE:
-    return out->put_view(vil2_image_view<vxl_byte>(im),0,0);
-  case VIL2_PIXEL_FORMAT_UINT_16:
-    return out->put_view(vil2_image_view<vxl_uint_16>(im),0,0);
-  case VIL2_PIXEL_FORMAT_INT_16:
-    return out->put_view(vil2_image_view<vxl_int_16>(im),0,0);
-  case VIL2_PIXEL_FORMAT_UINT_32:
-    return out->put_view(vil2_image_view<vxl_uint_32>(im),0,0);
-  case VIL2_PIXEL_FORMAT_INT_32:
-    return out->put_view(vil2_image_view<vxl_int_32>(im),0,0);
-  case VIL2_PIXEL_FORMAT_FLOAT:
-    return out->put_view(vil2_image_view<float>(im),0,0);
-  case VIL2_PIXEL_FORMAT_BOOL:
-    return out->put_view(vil2_image_view<bool>(im),0,0);
-#ifdef VIL2_TO_BE_FIXED
-  case VIL2_PIXEL_FORMAT_SBYTE:
-    return out->put_view(vil2_image_view<vxl_sbyte>(im),0,0);
-  case VIL2_PIXEL_FORMAT_DOUBLE:
-    return out->put_view(vil2_image_view<double>(im),0,0);
+  case VIL_PIXEL_FORMAT_BYTE:
+    return out->put_view(vil_image_view<vxl_byte>(im),0,0);
+  case VIL_PIXEL_FORMAT_UINT_16:
+    return out->put_view(vil_image_view<vxl_uint_16>(im),0,0);
+  case VIL_PIXEL_FORMAT_INT_16:
+    return out->put_view(vil_image_view<vxl_int_16>(im),0,0);
+  case VIL_PIXEL_FORMAT_UINT_32:
+    return out->put_view(vil_image_view<vxl_uint_32>(im),0,0);
+  case VIL_PIXEL_FORMAT_INT_32:
+    return out->put_view(vil_image_view<vxl_int_32>(im),0,0);
+  case VIL_PIXEL_FORMAT_FLOAT:
+    return out->put_view(vil_image_view<float>(im),0,0);
+  case VIL_PIXEL_FORMAT_BOOL:
+    return out->put_view(vil_image_view<bool>(im),0,0);
+#ifdef VIL_TO_BE_FIXED
+  case VIL_PIXEL_FORMAT_SBYTE:
+    return out->put_view(vil_image_view<vxl_sbyte>(im),0,0);
+  case VIL_PIXEL_FORMAT_DOUBLE:
+    return out->put_view(vil_image_view<double>(im),0,0);
 #endif
   default:
     return out->put_view(im, 0, 0);
   }
 
-#ifdef VIL2_TO_BE_FIXED
+#ifdef VIL_TO_BE_FIXED
   bool top_first, bgr;
-  if (out.get_property(vil2_property_top_row_first, &top_first) && !top_first)
-    im = vil2_flipud(i);
-  if (i.components() == 3 && out.get_property(vil2_property_component_order_is_BGR, &bgr) && bgr)
-    im = vil2_flip_components(i);
+  if (out.get_property(vil_property_top_row_first, &top_first) && !top_first)
+    im = vil_flipud(i);
+  if (i.components() == 3 && out.get_property(vil_property_component_order_is_BGR, &bgr) && bgr)
+    im = vil_flip_components(i);
 #endif
 }
 
@@ -108,8 +108,8 @@ char const *guess_file_format(char const* filename)
 }
 
 //: save to file, deducing format from filename.
-bool vil2_save(const vil2_image_view_base & i, char const* filename)
+bool vil_save(const vil_image_view_base & i, char const* filename)
 {
-  return vil2_save(i, filename, guess_file_format(filename));
+  return vil_save(i, filename, guess_file_format(filename));
 }
 

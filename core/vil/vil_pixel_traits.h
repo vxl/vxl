@@ -1,6 +1,6 @@
-// This is core/vil2/vil2_pixel_traits.h
-#ifndef vil2_pixel_traits_h_
-#define vil2_pixel_traits_h_
+// This is core/vil/vil_pixel_traits.h
+#ifndef vil_pixel_traits_h_
+#define vil_pixel_traits_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -11,7 +11,7 @@
 // To allow templated image processing algorithms to determine appropriate types, and sizes
 // The basic framework was copied from AWF's vnl_numeric_traits class.
 //
-// In most cases it is probably better to use vil2_pixel_format.
+// In most cases it is probably better to use vil_pixel_format.
 // \author Ian Scott
 // \date   27 Nov 2002
 //
@@ -19,11 +19,11 @@
 
 //: Pixel properties for templates.
 template <class T>
-class vil2_pixel_traits;
+class vil_pixel_traits;
 
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<bool>
+class vil_pixel_traits<bool>
 {
  public:
   //: Type of individual components
@@ -31,10 +31,10 @@ class vil2_pixel_traits<bool>
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<bool const> : public vil2_pixel_traits<bool> {};
+class vil_pixel_traits<bool const> : public vil_pixel_traits<bool> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<char>
+class vil_pixel_traits<char>
 {
  public:
   //: Type of individual components
@@ -42,10 +42,10 @@ class vil2_pixel_traits<char>
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<char const> : public vil2_pixel_traits<char> {};
+class vil_pixel_traits<char const> : public vil_pixel_traits<char> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<unsigned char>
+class vil_pixel_traits<unsigned char>
 {
  public:
   //: Type of individual components
@@ -53,10 +53,10 @@ class vil2_pixel_traits<unsigned char>
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<unsigned char const> : public vil2_pixel_traits<unsigned char> {};
+class vil_pixel_traits<unsigned char const> : public vil_pixel_traits<unsigned char> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<signed char>
+class vil_pixel_traits<signed char>
 {
  public:
   //: Type of individual components
@@ -64,10 +64,10 @@ class vil2_pixel_traits<signed char>
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<signed char const> : public vil2_pixel_traits<signed char> {};
+class vil_pixel_traits<signed char const> : public vil_pixel_traits<signed char> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<short>
+class vil_pixel_traits<short>
 {
  public:
   //: Type of individual components
@@ -75,10 +75,10 @@ class vil2_pixel_traits<short>
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<short const> : public vil2_pixel_traits<short> {};
+class vil_pixel_traits<short const> : public vil_pixel_traits<short> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<unsigned short>
+class vil_pixel_traits<unsigned short>
 {
  public:
   //: Type of individual components
@@ -86,10 +86,10 @@ class vil2_pixel_traits<unsigned short>
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<unsigned short const> : public vil2_pixel_traits<unsigned short> {};
+class vil_pixel_traits<unsigned short const> : public vil_pixel_traits<unsigned short> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<int>
+class vil_pixel_traits<int>
 {
  public:
   //: Type of individual components
@@ -97,10 +97,10 @@ class vil2_pixel_traits<int>
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<int const> : public vil2_pixel_traits<int> {};
+class vil_pixel_traits<int const> : public vil_pixel_traits<int> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<unsigned int>
+class vil_pixel_traits<unsigned int>
 {
  public:
   //: Type of individual components
@@ -108,10 +108,10 @@ class vil2_pixel_traits<unsigned int>
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<unsigned int const> : public vil2_pixel_traits<unsigned int> {};
+class vil_pixel_traits<unsigned int const> : public vil_pixel_traits<unsigned int> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<long>
+class vil_pixel_traits<long>
 {
  public:
   //: Type of individual components
@@ -119,10 +119,10 @@ class vil2_pixel_traits<long>
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<long const> : public vil2_pixel_traits<long > {};
+class vil_pixel_traits<long const> : public vil_pixel_traits<long > {};
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<unsigned long>
+class vil_pixel_traits<unsigned long>
 {
  public:
   //: Type of individual components
@@ -130,10 +130,10 @@ class vil2_pixel_traits<unsigned long>
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<unsigned long const> : public vil2_pixel_traits<unsigned long> {};
+class vil_pixel_traits<unsigned long const> : public vil_pixel_traits<unsigned long> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<float>
+class vil_pixel_traits<float>
 {
  public:
   //: Type of individual components
@@ -141,10 +141,10 @@ class vil2_pixel_traits<float>
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<float const> : public vil2_pixel_traits<float> {};
+class vil_pixel_traits<float const> : public vil_pixel_traits<float> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<double>
+class vil_pixel_traits<double>
 {
  public:
   //: Type of individual components
@@ -152,10 +152,10 @@ class vil2_pixel_traits<double>
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<double const> : public vil2_pixel_traits<double> {};
+class vil_pixel_traits<double const> : public vil_pixel_traits<double> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<long double>
+class vil_pixel_traits<long double>
 {
  public:
   //: Type of individual components
@@ -163,20 +163,20 @@ class vil2_pixel_traits<long double>
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vil2_pixel_traits<long double const> : public vil2_pixel_traits<long double> {};
+class vil_pixel_traits<long double const> : public vil_pixel_traits<long double> {};
 
 // Define default implementation which assumes that T is compound type which
 // declares the STL-like value_type typedef.
 template <class T>
-class vil2_pixel_traits
+class vil_pixel_traits
 {
  public:
   //: Type of individual components
 #if defined VCL_VC60 || !VCL_HAS_TYPENAME
-  typedef vil2_pixel_traits<T::value_type>::component_type component_type;
+  typedef vil_pixel_traits<T::value_type>::component_type component_type;
 #else
-  typedef typename vil2_pixel_traits<typename T::value_type>::component_type component_type;
+  typedef typename vil_pixel_traits<typename T::value_type>::component_type component_type;
 #endif
 };
 
-#endif // vil2_pixel_traits_h_
+#endif // vil_pixel_traits_h_

@@ -1,4 +1,4 @@
-// This is core/vil2/vil2_stream_core.cxx
+// This is core/vil/vil_stream_core.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,10 +6,10 @@
 // \file
 // \author fsm
 
-#include "vil2_stream_core.h"
+#include "vil_stream_core.h"
 #include <vcl_cassert.h>
 
-vil2_stream_core::~vil2_stream_core()
+vil_stream_core::~vil_stream_core()
 {
   for (unsigned i=0; i<block_.size(); ++i)
     delete [] block_[i];
@@ -18,26 +18,26 @@ vil2_stream_core::~vil2_stream_core()
 
 //--------------------------------------------------------------------------------
 
-vil2_streampos vil2_stream_core::read (void *buf, vil2_streampos n)
+vil_streampos vil_stream_core::read (void *buf, vil_streampos n)
 {
   assert(n>=0);
 
-  vil2_streampos rv = m_transfer((char*)buf, curpos_, n, true );
+  vil_streampos rv = m_transfer((char*)buf, curpos_, n, true );
   curpos_ += rv;
   return rv;
 }
 
-vil2_streampos vil2_stream_core::write(void const *buf, vil2_streampos n)
+vil_streampos vil_stream_core::write(void const *buf, vil_streampos n)
 {
   assert(n>=0);
-  vil2_streampos rv = m_transfer(static_cast<char*>(const_cast<void *>(buf)), curpos_, n, false);
+  vil_streampos rv = m_transfer(static_cast<char*>(const_cast<void *>(buf)), curpos_, n, false);
   curpos_ += rv;
   return rv;
 }
 
 //--------------------------------------------------------------------------------
 
-vil2_streampos vil2_stream_core::m_transfer(char *buf, vil2_streampos pos, vil2_streampos n, bool read)
+vil_streampos vil_stream_core::m_transfer(char *buf, vil_streampos pos, vil_streampos n, bool read)
 {
   assert(n>=0);
   assert(pos>=0);
@@ -61,20 +61,20 @@ vil2_streampos vil2_stream_core::m_transfer(char *buf, vil2_streampos pos, vil2_
   // transfer data
   {
     char         *tbuf = buf;
-    vil2_streampos tpos = pos;
-    vil2_streampos tn   = n;
+    vil_streampos tpos = pos;
+    vil_streampos tn   = n;
     while (tn>0) {
-      vil2_streampos bl = tpos/(long)blocksize_;     // which block
-      vil2_streampos s = tpos - (long)blocksize_*bl; // start index in block_
-      vil2_streampos z = ((tn+s > (long)blocksize_) ? (long)blocksize_-s : tn); // number of bytes to write
+      vil_streampos bl = tpos/(long)blocksize_;     // which block
+      vil_streampos s = tpos - (long)blocksize_*bl; // start index in block_
+      vil_streampos z = ((tn+s > (long)blocksize_) ? (long)blocksize_-s : tn); // number of bytes to write
       char *tmp = block_[bl];
       if (read)
-        for (vil2_streampos k=0; k<z; ++k)
+        for (vil_streampos k=0; k<z; ++k)
           tbuf[k] = tmp[s+k]; // prefer memcpy ?
       else
       {
         assert (s+z <= (long)blocksize_);
-        for (vil2_streampos k=0; k<z; ++k)
+        for (vil_streampos k=0; k<z; ++k)
           tmp[s+k] = tbuf[k]; // prefer memcpy ?
       }
       tbuf += z;

@@ -1,6 +1,6 @@
-// This is core/vil2/vil2_transform.h
-#ifndef vil2_transform_h_
-#define vil2_transform_h_
+// This is core/vil/vil_transform.h
+#ifndef vil_transform_h_
+#define vil_transform_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -10,13 +10,13 @@
 // \author Ian Scott.
 
 #include <vcl_cassert.h>
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 
 
 //: Apply a unary operation to each pixel in src to get dest.
 // \param functor should take a value of type inP, and return a value of type outP
 template <class inP, class outP, class Op >
-inline void vil2_transform(const vil2_image_view<inP >&src, vil2_image_view<outP >&dest, Op functor)
+inline void vil_transform(const vil_image_view<inP >&src, vil_image_view<outP >&dest, Op functor)
 {
   const unsigned ni = src.ni(), nj= src.nj(), np = src.nplanes();
 
@@ -45,7 +45,7 @@ inline void vil2_transform(const vil2_image_view<inP >&src, vil2_image_view<outP
 //: Apply a binary function to each pixel in src and dest that modifies dest.
 // \param functor should take two parameters (inP src, outP &dest);
 template <class inP, class outP, class Op >
-inline void vil2_transform2(const vil2_image_view<inP >&src, vil2_image_view<outP >&dest, Op functor)
+inline void vil_transform2(const vil_image_view<inP >&src, vil_image_view<outP >&dest, Op functor)
 {
   const unsigned ni = src.ni(), nj= src.nj(), np = src.nplanes();
 
@@ -74,9 +74,9 @@ inline void vil2_transform2(const vil2_image_view<inP >&src, vil2_image_view<out
 
 //: Apply a binary operation to each pixel in srcA and srcB to get dest.
 template <class inA, class inB, class outP, class BinOp >
-inline void vil2_transform(const vil2_image_view<inA >&srcA,
-                           const vil2_image_view<inB >&srcB,
-                           vil2_image_view<outP >&dest,
+inline void vil_transform(const vil_image_view<inA >&srcA,
+                           const vil_image_view<inB >&srcB,
+                           vil_image_view<outP >&dest,
                            BinOp functor)
 {
   assert(srcB.ni() == srcA.ni() && srcA.nj() == srcB.nj()
@@ -91,16 +91,16 @@ inline void vil2_transform(const vil2_image_view<inA >&srcA,
 //: Apply a binary operation to each pixel in srcA and srcB to get dest.
 // non-const dest version, assumes dest is already correct size.
 template <class inA, class inB, class outP, class BinOp >
-inline void vil2_transform(const vil2_image_view<inA >&srcA,
-                           const vil2_image_view<inB >&srcB,
-                           const vil2_image_view<outP >&dest,
+inline void vil_transform(const vil_image_view<inA >&srcA,
+                           const vil_image_view<inB >&srcB,
+                           const vil_image_view<outP >&dest,
                            BinOp functor)
 {
   assert(dest.ni() == srcA.ni() && srcA.nj() == dest.nj()
     && srcA.nplanes() == dest.nplanes());
   assert(srcB.ni() == srcA.ni() && srcA.nj() == srcB.nj()
     && srcA.nplanes() == srcB.nplanes());
-  vil2_image_view<outP >& nc_dest = const_cast<vil2_image_view<outP >&>(dest);
+  vil_image_view<outP >& nc_dest = const_cast<vil_image_view<outP >&>(dest);
   for (unsigned p = 0; p < srcA.nplanes(); ++p)
     for (unsigned j = 0; j < srcA.nj(); ++j)
       for (unsigned i = 0; i < srcA.ni(); ++i)
@@ -108,4 +108,4 @@ inline void vil2_transform(const vil2_image_view<inA >&srcA,
 }
 
 
-#endif // vil2_transform_h_
+#endif // vil_transform_h_

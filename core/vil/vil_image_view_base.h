@@ -1,6 +1,6 @@
-// This is core/vil2/vil2_image_view_base.h
-#ifndef vil2_image_view_base_h_
-#define vil2_image_view_base_h_
+// This is core/vil/vil_image_view_base.h
+#ifndef vil_image_view_base_h_
+#define vil_image_view_base_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -12,13 +12,13 @@
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
-#include <vil2/vil2_pixel_format.h>
-#include <vil2/vil2_smart_ptr.h>
+#include <vil/vil_pixel_format.h>
+#include <vil/vil_smart_ptr.h>
 
 //: An abstract base class of smart pointers to actual image data in memory.
-// If you want an actual image, try instantiating vil2_image_view<T>.
+// If you want an actual image, try instantiating vil_image_view<T>.
 
-class vil2_image_view_base
+class vil_image_view_base
 {
  protected:
   //: Number of columns.
@@ -28,16 +28,16 @@ class vil2_image_view_base
   //: Number of planes.
   unsigned nplanes_;
 
-  vil2_image_view_base(unsigned ni, unsigned nj, unsigned nplanes):
+  vil_image_view_base(unsigned ni, unsigned nj, unsigned nplanes):
   ni_(ni), nj_(nj), nplanes_(nplanes), reference_count_(0) {}
 
   //: Default is an empty one-plane image
   //  Don't set nplanes_ to zero as it confuses set_size(nx,ny) later
-  vil2_image_view_base(): ni_(0), nj_(0), nplanes_(1), reference_count_(0) {}
+  vil_image_view_base(): ni_(0), nj_(0), nplanes_(1), reference_count_(0) {}
 
  public:
   // The destructor must be virtual so that the memory chunk is destroyed.
-  virtual ~vil2_image_view_base() {};
+  virtual ~vil_image_view_base() {};
 
   //: Width
   unsigned ni()  const {return ni_;}
@@ -64,18 +64,18 @@ class vil2_image_view_base
   virtual vcl_string is_a() const =0;
 
   //: Return a description of the concrete data pixel type.
-  // For example if the value is VIL2_PIXEL_FORMAT_BYTE,
+  // For example if the value is VIL_PIXEL_FORMAT_BYTE,
   // you can safely cast, or assign the base class reference to
-  // a vil2_image_view<vxl_byte>.
-  virtual enum vil2_pixel_format pixel_format() const=0;
+  // a vil_image_view<vxl_byte>.
+  virtual enum vil_pixel_format pixel_format() const=0;
 
   //: True if this is (or is derived from) class s
   virtual bool is_class(vcl_string const& s) const;
 
  private:
-  // You probably should not use a vil2_image_view in a vbl_smart_ptr, so the
+  // You probably should not use a vil_image_view in a vbl_smart_ptr, so the
   // ref functions are private
-  friend class vil2_smart_ptr<vil2_image_view_base>;
+  friend class vil_smart_ptr<vil_image_view_base>;
   void ref() { ++reference_count_; }
   void unref() {
     assert(reference_count_>0);
@@ -83,12 +83,12 @@ class vil2_image_view_base
   int reference_count_;
 };
 
-typedef vil2_smart_ptr<vil2_image_view_base> vil2_image_view_base_sptr;
+typedef vil_smart_ptr<vil_image_view_base> vil_image_view_base_sptr;
 
 //: Print a 1-line summary of contents
 inline
-vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view_base const& im) {
+vcl_ostream& operator<<(vcl_ostream& s, vil_image_view_base const& im) {
   im.print(s); return s;
 }
 
-#endif // vil2_image_view_base_h_
+#endif // vil_image_view_base_h_

@@ -1,19 +1,19 @@
-// This is core/vil2/vil2_fill.h
-#ifndef vil2_fill_h_
-#define vil2_fill_h_
+// This is core/vil/vil_fill.h
+#ifndef vil_fill_h_
+#define vil_fill_h_
 //:
 // \file
 // \brief Various functions for manipulating image views
 // \author Tim Cootes - Manchester
 
 #include <vcl_cassert.h>
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 
 //: Fill view with given value
 //  O(size).
-// \relates vil2_image_view
+// \relates vil_image_view
 template<class T>
-void vil2_fill(vil2_image_view<T>& view, T value)
+void vil_fill(vil_image_view<T>& view, T value)
 {
   unsigned ni = view.ni(), istep=view.istep();
   unsigned nj = view.nj(), jstep=view.jstep();
@@ -32,9 +32,9 @@ void vil2_fill(vil2_image_view<T>& view, T value)
 }
 
 //: Fill data[i*step] (i=0..n-1) with given value
-// \relates vil2_image_view
+// \relates vil_image_view
 template<class T>
-void vil2_fill_line(T* data, unsigned n, vcl_ptrdiff_t step, T value)
+void vil_fill_line(T* data, unsigned n, vcl_ptrdiff_t step, T value)
 {
   T* end_data = data + n*step;
   while (data!=end_data) { *data=value; data+=step; }
@@ -42,9 +42,9 @@ void vil2_fill_line(T* data, unsigned n, vcl_ptrdiff_t step, T value)
 
 //: Fill row j in view with given value
 //  O(ni).
-// \relates vil2_image_view
+// \relates vil_image_view
 template<class T>
-void vil2_fill_row(vil2_image_view<T>& view, unsigned j, T value)
+void vil_fill_row(vil_image_view<T>& view, unsigned j, T value)
 {
   unsigned ni = view.ni(); vcl_ptrdiff_t istep=view.istep();
   unsigned nj = view.nj(); vcl_ptrdiff_t jstep=view.jstep();
@@ -54,14 +54,14 @@ void vil2_fill_row(vil2_image_view<T>& view, unsigned j, T value)
 
   T* row = view.top_left_ptr() + j*jstep;
   for (unsigned p=0;p<np;++p,row += pstep)
-    vil2_fill_line(row,ni,istep,value);
+    vil_fill_line(row,ni,istep,value);
 }
 
 //: Fill column i in view with given value
 //  O(nj).
-// \relates vil2_image_view
+// \relates vil_image_view
 template<class T>
-void vil2_fill_col(vil2_image_view<T>& view, unsigned i, T value)
+void vil_fill_col(vil_image_view<T>& view, unsigned i, T value)
 {
   unsigned ni = view.ni(); vcl_ptrdiff_t istep=view.istep();
   unsigned nj = view.nj(); vcl_ptrdiff_t jstep=view.jstep();
@@ -70,7 +70,7 @@ void vil2_fill_col(vil2_image_view<T>& view, unsigned i, T value)
   assert(i<ni);
   T* col_top = view.top_left_ptr() + i*istep;
   for (unsigned p=0;p<np;++p,col_top += pstep)
-    vil2_fill_line(col_top,nj,jstep,value);
+    vil_fill_line(col_top,nj,jstep,value);
 }
 
 //: Writes given value into each pixel of image under the elements of the mask set to b
@@ -78,8 +78,8 @@ void vil2_fill_col(vil2_image_view<T>& view, unsigned i, T value)
 //  there must be the same number of mask planes as image planes.
 template<class srcT>
 inline
-void vil2_fill_mask(vil2_image_view<srcT>& image,
-                    const vil2_image_view<bool>& mask,
+void vil_fill_mask(vil_image_view<srcT>& image,
+                    const vil_image_view<bool>& mask,
                     srcT value, bool b=true)
 {
   unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
@@ -109,4 +109,4 @@ void vil2_fill_mask(vil2_image_view<srcT>& image,
   }
 }
 
-#endif // vil2_fill_h_
+#endif // vil_fill_h_

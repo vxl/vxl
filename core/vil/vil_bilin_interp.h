@@ -1,13 +1,13 @@
-// This is core/vil2/vil2_bilin_interp.h
-#ifndef vil2_bilin_interp_h_
-#define vil2_bilin_interp_h_
+// This is core/vil/vil_bilin_interp.h
+#ifndef vil_bilin_interp_h_
+#define vil_bilin_interp_h_
 //:
 // \file
 // \brief Bilinear interpolation functions for 2D images
 // \author Tim Cootes
 //
-// The vil2 bicub source files were derived from the corresponding
-// vil2 bilin files, thus the vil2 bilin/bicub source files are very
+// The vil bicub source files were derived from the corresponding
+// vil bilin files, thus the vil bilin/bicub source files are very
 // similar.  If you modify something in this file, there is a
 // corresponding bicub file that would likely also benefit from
 // the same change.
@@ -19,7 +19,7 @@
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
 //  No bound checks are done.
 template<class T>
-inline double vil2_bilin_interp_unsafe(double x, double y, const T* data,
+inline double vil_bilin_interp_unsafe(double x, double y, const T* data,
                                        vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     int p1x=int(x);
@@ -38,7 +38,7 @@ inline double vil2_bilin_interp_unsafe(double x, double y, const T* data,
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
 //  No bound checks are done.
 template<class T>
-inline double vil2_bilin_interp_raw(double x, double y, const T* data,
+inline double vil_bilin_interp_raw(double x, double y, const T* data,
                                     vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     int p1x=int(x);
@@ -65,7 +65,7 @@ inline double vil2_bilin_interp_raw(double x, double y, const T* data,
 //  If (x,y) is outside interpolatable image region, zero is returned.
 //  The safe interpolatable region is [0,nx-1]*[0,ny-1].
 template<class T>
-inline double vil2_bilin_interp_safe(double x, double y, const T* data,
+inline double vil_bilin_interp_safe(double x, double y, const T* data,
                                      int nx, int ny,
                                      vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
@@ -73,18 +73,18 @@ inline double vil2_bilin_interp_safe(double x, double y, const T* data,
     if (y<0) return 0.0;
     if (x>nx-1) return 0.0;
     if (y>ny-1) return 0.0;
-    return vil2_bilin_interp_raw(x,y,data,xstep,ystep);
+    return vil_bilin_interp_raw(x,y,data,xstep,ystep);
 }
 
 //: Compute bilinear interpolation at (x,y), with bound checks
 //  If (x,y) is outside interpolatable image region, zero is returned.
 //  The safe interpolatable region is [0,view.ni()-1]*[0,view.nj()-1].
-// \relates vil2_image_view
+// \relates vil_image_view
 template<class T>
-inline double vil2_bilin_interp_safe(const vil2_image_view<T> &view,
+inline double vil_bilin_interp_safe(const vil_image_view<T> &view,
                                      double x, double y, unsigned p=0)
 {
-    return vil2_bilin_interp_safe(x, y, &view(0,0,p),
+    return vil_bilin_interp_safe(x, y, &view(0,0,p),
                                   view.ni(), view.nj(),
                                   view.istep(), view.jstep());
 }
@@ -96,7 +96,7 @@ inline double vil2_bilin_interp_safe(const vil2_image_view<T> &view,
 //  the code will fail an ASSERT.
 //  The safe interpolatable region is [0,nx-1]*[0,ny-1].
 template<class T>
-inline double vil2_bilin_interp(double x, double y, const T* data,
+inline double vil_bilin_interp(double x, double y, const T* data,
                                 int nx, int ny,
                                 vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
@@ -104,19 +104,19 @@ inline double vil2_bilin_interp(double x, double y, const T* data,
     assert (y>=0);
     assert (x<=nx-1);
     assert (y<=ny-1);
-    return vil2_bilin_interp_raw(x,y,data,xstep,ystep);
+    return vil_bilin_interp_raw(x,y,data,xstep,ystep);
 }
 
 //: Compute bilinear interpolation at (x,y), with minimal bound checks
 //  If (x,y) is outside interpolatable image region and NDEBUG is not defined
 //  the code will fail an ASSERT.
 //  The safe interpolatable region is [0,view.ni()-1]*[0,view.nj()-1].
-// \relates vil2_image_view
+// \relates vil_image_view
 template<class T>
-inline double vil2_bilin_interp(const vil2_image_view<T> &view,
+inline double vil_bilin_interp(const vil_image_view<T> &view,
                                 double x, double y, unsigned p=0)
 {
-    return vil2_bilin_interp(x, y, &view(0,0,p),
+    return vil_bilin_interp(x, y, &view(0,0,p),
                              view.ni(), view.nj(),
                              view.istep(), view.jstep());
 }
@@ -127,7 +127,7 @@ inline double vil2_bilin_interp(const vil2_image_view<T> &view,
 //  If (x,y) is outside safe interpolatable image region, nearest pixel value is returned.
 //  The safe interpolatable region is [0,nx-1]*[0,ny-1].
 template<class T>
-inline double vil2_bilin_interp_safe_extend(double x, double y, const T* data,
+inline double vil_bilin_interp_safe_extend(double x, double y, const T* data,
                                             int nx, int ny,
                                             vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
@@ -135,20 +135,20 @@ inline double vil2_bilin_interp_safe_extend(double x, double y, const T* data,
     if (y<0) y= 0.0;
     if (x>nx-1) x=nx-1.0;
     if (y>ny-1) y=ny-1.0;
-    return vil2_bilin_interp_raw(x,y,data,xstep,ystep);
+    return vil_bilin_interp_raw(x,y,data,xstep,ystep);
 }
 
 //: Compute bilinear interpolation at (x,y), with bound checks
 //  If (x,y) is outside safe interpolatable image region, nearest pixel value is returned.
 //  The safe interpolatable region is [0,view.ni()-1]*[0,view.nj()-1].
-// \relates vil2_image_view
+// \relates vil_image_view
 template<class T>
-inline double vil2_bilin_interp_safe_extend(const vil2_image_view<T> &view,
+inline double vil_bilin_interp_safe_extend(const vil_image_view<T> &view,
                                             double x, double y, unsigned p=0)
 {
-    return vil2_bilin_interp_safe_extend(x, y, &view(0,0,p),
+    return vil_bilin_interp_safe_extend(x, y, &view(0,0,p),
                                          view.ni(), view.nj(),
                                          view.istep(), view.jstep());
 }
 
-#endif // vil2_bilin_interp_h_
+#endif // vil_bilin_interp_h_
