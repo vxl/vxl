@@ -46,7 +46,7 @@ public:
   void extract_regions();
   void clear();
 
-  void set_expand_scale(int scale){expand_scale_=scale;}
+  void set_expand_scale(float scale){expand_scale_=scale;}
 
   //Debug methods
   void set_debug(){debug_ = true;}
