@@ -11,7 +11,6 @@
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
-
 class mil_image;
 
 //: Pyramid of images of arbitrary type
@@ -89,7 +88,7 @@ class mil_image_pyramid
 // |11111111      |
 // |11111111      |
 // ----------------
-// \endverabtim
+// \endverbatim
 template <class T> void mil_image_pyramid_flatten(T& out, const mil_image_pyramid & in);
 
 vcl_ostream& operator<<(vcl_ostream& os, const mil_image_pyramid& im_pyr);

@@ -1,13 +1,10 @@
 // This is vxl/doc/vxl_doc_rules.h
 #ifndef vxl_doc_rules_h_
 #define vxl_doc_rules_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //            (This is an example of how to code document your    )
 //            ( file. Comments with brackets, like this one,      )
 //            ( should be read but not copied into your file.     )
-
+//
 //            (The style used here is specific to VXL             )
 //            ( It is based on doxygen, with modifications.       )
 //            ( So rather than use                                )
@@ -21,7 +18,7 @@
 //            (Apart from this, you can use full doxygen notation.)
 //            (A simple perl script converts this notation        )
 //            ( to full doxygen format on the fly.                )
-
+//
 //            (The top line indicates the file name               )
 //            ( the \file command below tells Doxygen which       )
 //            ( file the comments correspond to, so should        )
@@ -40,26 +37,26 @@
 //
 // Here you can write the long description of what's in this file
 // Doxygen will add this to the extended documentation of the file
-// Put the data and author tags immediately following the brief tag,
+// Put the date and author tags immediately following the brief tag,
 // as doxygen (poor thing) is easily confused otherwise.
 //
 // \verbatim
 //  Modifications
-//   IMS (Manchester) 14/03/2001: Tidied up the documentation
+//   Here goes a chronological list of file modifications (with author and date)
 // \endverbatim
 
-#include <vcl_cmath.h> // includes go here
+#include <vcl_iostream.h> // includes go here
 
 //: Brief description of the class
 // The long description starts here
 // \verbatim
 // // Everything between these tags is not formatted but kept "as is".
-// This is similar to the \verbatim command in LaTeX.
+// This is similar to the verbatim command in LaTeX.
 // \endverbatim
 // For a list of items, you do not need verbatim:
 // - first item
 // - second item
-// For code fragments, use the following instead of \verbatim:
+// For code fragments, use the following instead of verbatim:
 // \code
 //   // This is how to use my_class:
 //   my_class a;
@@ -69,11 +66,10 @@
 
 class my_class
 {
- public:
-
   //: Brief description of the member variable.
   double my_value;
 
+ public:
   //: Brief description of method. Don't forget the colon, and don't continue on next line.
   // Do not leave any blank lines without the //, or doxygen
   // will think you have ended the documentation comment, and

@@ -8,7 +8,7 @@
 // \verbatim
 //  Modifications:
 //    K.Y.McGaul 26-APR-2001   Initial version.
-// \end verbatim
+// \endverbatim
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>

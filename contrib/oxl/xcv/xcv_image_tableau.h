@@ -9,7 +9,7 @@
 // \verbatim
 //  Modifications:
 //    Marko Bacic   AUG-2000   Initial version.
-// \end verbatim
+// \endverbatim
 
 #include "xcv_image_tableau_sptr.h"
 #include <vgui/vgui_image_tableau.h>
@@ -17,6 +17,16 @@
 
 class xcv_image_tableau : public vgui_image_tableau
 {
+  struct ROI
+  {
+    float x;
+    float y;
+    float width;
+    float height;
+  };
+  ROI roi_;
+  bool defined_;
+
  public:
   typedef vgui_image_tableau base;
 
@@ -47,17 +57,6 @@ class xcv_image_tableau : public vgui_image_tableau
  protected:
   //: Handle all events for this tableau.
   bool handle(vgui_event const &e);
-
- private:
-  struct ROI
-  {
-    float x;
-    float y;
-    float width;
-    float height;
-  };
-  ROI roi_;
-  bool defined_;
 };
 
 struct xcv_image_tableau_new : public xcv_image_tableau_sptr

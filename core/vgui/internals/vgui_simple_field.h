@@ -13,7 +13,7 @@
 //  Modifications:
 //    23-OCT-1999  P.Pritchett - Initial version.
 //    13-SEP-2002  K.Y.McGaul - Converted to doxygen style comments
-// \verbatim
+// \endverbatim
 
 #include <vcl_string.h>
 #include "vgui_dialog_field.h"
@@ -28,7 +28,6 @@ template <class T>
 class vgui_simple_field : public vgui_dialog_field
 {
  public:
-
   vgui_simple_field(const char *text,T &variable_to_modify);
   ~vgui_simple_field();
 
@@ -38,10 +37,10 @@ class vgui_simple_field : public vgui_dialog_field
   T &var;
 };
 
-typedef vgui_simple_field<bool> vgui_bool_field;
-typedef vgui_simple_field<int> vgui_int_field;
-typedef vgui_simple_field<long> vgui_long_field;
-typedef vgui_simple_field<float> vgui_float_field;
+typedef vgui_simple_field<bool>   vgui_bool_field;
+typedef vgui_simple_field<int>    vgui_int_field;
+typedef vgui_simple_field<long>   vgui_long_field;
+typedef vgui_simple_field<float>  vgui_float_field;
 typedef vgui_simple_field<double> vgui_double_field;
 
 #endif // vgui_simple_field_h_
