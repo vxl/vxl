@@ -18,10 +18,6 @@ AUX_SOURCE_DIRECTORY(Templates vdgl_sources)
 ADD_LIBRARY(vdgl ${vdgl_sources})
 TARGET_LINK_LIBRARIES(vdgl vsol vnl_algo vnl vgl vbl vul vcl)
 
-IF (BUILD_EXAMPLES)
-  SUBDIRS(examples)
-ENDIF (BUILD_EXAMPLES)
-
 IF (BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF (BUILD_TESTING)
