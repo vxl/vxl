@@ -13,7 +13,7 @@
 
 #define PIX2INCH 72.0
 #define RANGE(a,b,c) { if (a < b) a = b;  if (a > c) a = c; }
-#define in_range(a) (a < (1 << 8) ? true : false)
+#define in_range(a) (a < (1 << 8))
 #define Bit4ToChar(a) ((char)((a<=9) ? (a+'0'): (a - 10 + 'a')))
 
 static bool debug = true;
