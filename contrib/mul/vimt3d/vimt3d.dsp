@@ -141,6 +141,9 @@ SOURCE=.\Templates/vimt3d_reconstruct_from_grid+int.double-.cxx
 SOURCE=.\Templates/vimt3d_reconstruct_from_grid+uchar.double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vimt3d_image_3d_of+double-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vimt3d_transform_3d.cxx
 # End Source File
 # Begin Source File
@@ -207,6 +210,9 @@ SOURCE=.\vimt3d_add_all_loaders.h
 # End Source File
 # Begin Source File
 SOURCE=.\vimt3d_vil3d_v3i.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt3d_from_image_2d.h
 # End Source File
 # End Group
 # End Target

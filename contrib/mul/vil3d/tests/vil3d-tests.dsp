@@ -295,6 +295,9 @@ SOURCE=.\test_algo_histogram.cxx
 # Begin Source File
 SOURCE=.\test_algo_histogram_equalise.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_from_image_2d.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
