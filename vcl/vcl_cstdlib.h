@@ -15,6 +15,10 @@
 // Include system stdlib.h
 #include <stdlib.h>
 
+// awf added as I can't see where vcl_abs(int) is defined.  Tell me if this is wrong for you.
+inline int vcl_abs(int x) { return x >= 0 ? x : -x; }
+
+
 #if !VCL_USE_NATIVE_STL
 # include <vcl/emulation/vcl_stlconf.h>
 #else

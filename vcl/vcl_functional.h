@@ -74,7 +74,7 @@ namespace std {
 // fsm: With SunPro5.0, these conflict with the partial specializations in
 // <iterator> and the result is that comparing vcl_set<unsigned>::reverse_iterators
 // yields an overloading ambiguity.
-#  if !defined(VCL_SUNPRO_CC_50)
+#  if !defined(VCL_SUNPRO_CC_50) && !defined(_WIN32)
 template <class T>
 inline bool operator!=(T const& x, T const& y) { return !(x == y); }
 
