@@ -11,8 +11,8 @@ template <class Type>
 class vgl_point_3d;
 
 #include <vcl_iostream.h>
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h> // for vcl_abs()
+#include <vcl_cmath.h> // for vcl_abs(double) etc
+#include <vcl_cstdlib.h> // for vcl_abs(int) etc
 
 
 //: Represents a homogenious 3D point
@@ -101,10 +101,11 @@ public:
   bool operator==(const vgl_homg_point_3d<Type> &other) const;
 
   //: Test for point at infinity
-  // Return true when |w| < tol * min(|x|, |y|, |z|)
-  bool ideal(Type tol)
-  {
-    return vcl_abs(w()) < tol * vcl_min(vcl_min(vcl_abs(x()),vcl_abs(y())),vcl_abs(z()));
+  // Return true when |w| < tol * max(|x|, |y|, |z|)
+  bool ideal(Type tol) {
+    return vcl_abs(w()) < tol * vcl_abs(x()) ||
+           vcl_abs(w()) < tol * vcl_abs(y()) ||
+           vcl_abs(w()) < tol * vcl_abs(z());
   }
 
   //***************************************************************************
