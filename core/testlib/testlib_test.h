@@ -72,4 +72,8 @@ do { \
 #define TESTMAIN( testname ) \
   MAIN( testname ) { START( #testname ); testname(); SUMMARY(); }
 
+#undef TESTLIB_DEFINE_MAIN
+#define TESTLIB_DEFINE_MAIN(x) \
+int main() { testlib_test_start(#x); x(); return testlib_test_summary(); }
+
 #endif // testlib_test_h_
