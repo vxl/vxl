@@ -3,7 +3,7 @@
 #include <testlib/testlib_test.h>
 #include <ipts/ipts_scale_space_peaks.h>
 
-void test_scale_space_peaks_float()
+static void test_scale_space_peaks_float()
 {
   // Just check it compiles cleanly first
   vimt_image_2d_of<float> image;
@@ -14,10 +14,9 @@ void test_scale_space_peaks_float()
   ipts_scale_space_peaks_2d(peak_pts,image,image,image,float(0),false);
 }
 
-MAIN( test_scale_space_peaks )
+static void test_scale_space_peaks()
 {
-  START( "ipts_scale_space_peaks" );
   test_scale_space_peaks_float();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_scale_space_peaks);

@@ -6,12 +6,8 @@
 
 #include <testlib/testlib_test.h>
 
-bool close(double,double);
-
-MAIN( test_lms_lts )
+static void test_lms_lts()
 {
-  START( "LMS and LTS objective functions" );
-
   //
   //  Testing the LMS objective functions
   //
@@ -37,16 +33,14 @@ MAIN( test_lms_lts )
   test_lms.push_back( -0.8 );
   test_lms.push_back( 0.6 );
   double corr_obj = 2.2*2.2;
-  testlib_test_begin( "LMS with 0.5 inlier fraction:" );
   double obj = lms1->fcn( test_lms.begin(), test_lms.end(), 0.0, 0 );
-  testlib_test_perform( close( obj, corr_obj) );
+  TEST_NEAR("LMS with 0.5 inlier fraction:", obj, corr_obj, 1e-6);
 
   frac = 0.7;
   rrel_objective * lms2 = new rrel_lms_obj( dof, frac );
   corr_obj = 4.0*4.0;
-  testlib_test_begin( "LMS with 0.7 inlier fraction:" );
   obj = lms2->fcn( test_lms.begin(), test_lms.end(), 0.0, 0 );
-  testlib_test_perform( close( obj, corr_obj) );
+  TEST_NEAR("LMS with 0.7 inlier fraction:", obj, corr_obj, 1e-6);
 
   //
   //  Testing the LTS objective function
@@ -75,16 +69,14 @@ MAIN( test_lms_lts )
     vnl_math_sqr(-1.0) + vnl_math_sqr(-2.0) + vnl_math_sqr(1.2) + vnl_math_sqr(-1.5) +
     vnl_math_sqr(2.2)  + vnl_math_sqr(1.1) + vnl_math_sqr(2.15) + vnl_math_sqr(-2.1) +
     vnl_math_sqr(-0.8) + vnl_math_sqr(0.6);
-  testlib_test_begin( "LTS with 0.5 inlier fraction:" );
   obj = lts1->fcn( test_lts.begin(), test_lts.end(), 0.0, 0 );
-  testlib_test_perform( close( obj, corr_obj) );
+  TEST_NEAR("LTS with 0.5 inlier fraction:", obj, corr_obj, 1e-6);
 
   frac = 0.7;
   rrel_objective * lts2 = new rrel_lts_obj( dof, frac );
   corr_obj +=  vnl_math_sqr(-4.0) + vnl_math_sqr(-2.4) + vnl_math_sqr(3.1) ;
-  testlib_test_begin( "LTS with 0.7 inlier fraction:" );
   obj = lts2->fcn( test_lts.begin(), test_lts.end(), 0.0, 0 );
-  testlib_test_perform( close( obj, corr_obj) );
-
-  SUMMARY();
+  TEST_NEAR("LTS with 0.7 inlier fraction:", obj, corr_obj, 1e-6);
 }
+
+TESTMAIN(test_lms_lts);

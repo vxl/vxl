@@ -8,7 +8,7 @@
 #define LEAVE_IMAGES_BEHIND 0
 #endif
 
-void test_image_3d_of_byte()
+static void test_image_3d_of_byte()
 {
   vcl_cout << "****************************\n"
            << " Testing vimt3d_image_3d_of\n"
@@ -50,11 +50,9 @@ void test_image_3d_of_byte()
 #endif
 }
 
-MAIN( test_image_3d_of )
+static void test_image_3d_of()
 {
-  START( "vimt3d_image_3d_of<T>" );
-
   test_image_3d_of_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_image_3d_of);

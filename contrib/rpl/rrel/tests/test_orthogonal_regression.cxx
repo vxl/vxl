@@ -9,9 +9,8 @@
 
 bool close(double,double);
 
-MAIN( test_orthogonal_regression )
+static void test_orthogonal_regression()
 {
-  START( "orthogonal regression" );
   //  z = 0.02 x - 0.1 y + 10.0
   double a0 = 0.02, a1 = -0.1, a2 = 10.0;
   vnl_vector<double> true_params(4, a0,a1,-1.0,a2);
@@ -150,6 +149,6 @@ MAIN( test_orthogonal_regression )
 #endif
 
   delete lr1;
-
-  SUMMARY();
 }
+
+TESTMAIN(test_orthogonal_regression);

@@ -4,14 +4,13 @@
 #include <vimt3d/vimt3d_load.h>
 #include <testlib/testlib_test.h>
 
-static void test_load_transform(char * golden_data_dir)
+static void test_load(int argc, char* argv[])
 {
   vcl_cout << "*********************\n"
            << " Testing vimt3d_load\n"
            << "*********************\n";
 
-  if (!golden_data_dir) return;
-  vcl_string imagename = golden_data_dir;
+  vcl_string imagename = argc<2 ? "." : argv[1];
   imagename = imagename+"/ff_rgb8bit_ascii.1.ppm;"+
               imagename+"/ff_rgb8bit_ascii.2.ppm";
   vil3d_image_resource_sptr im = vil3d_load_image_resource(imagename.c_str());
@@ -21,7 +20,7 @@ static void test_load_transform(char * golden_data_dir)
   vimt3d_transform_3d t1 = vimt3d_load_transform(im);
   TEST("No header information", t1.is_identity(), true);
 
-  imagename = golden_data_dir;
+  imagename = argv[1];
   imagename = imagename+"/ff_grey_cross.gipl";
   im = vil3d_load_image_resource(imagename.c_str());
 
@@ -42,9 +41,4 @@ static void test_load_transform(char * golden_data_dir)
             (t2(GP(0,0,0.001))-GP(4.5,4.5,5.5)).length(),0.0,1e-4);
 }
 
-MAIN_ARGS( test_load )
-{
-  START("vimt_load");
-  test_load_transform(argv[1]);
-  SUMMARY();
-}
+TESTMAIN_ARGS(test_load);

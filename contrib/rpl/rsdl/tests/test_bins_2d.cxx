@@ -11,10 +11,8 @@
 
 #include <rsdl/rsdl_bins_2d.h>
 
-MAIN( test_bins_2d )
+static void test_bins_2d()
 {
-  START( "rsdl_bins_2d" );
-
   vnl_vector_fixed< double, 2 > min_pt, max_pt, bin_sizes;
   min_pt[0] = 1.0;   min_pt[1] = -2.5;
   max_pt[0] = 75.0;  max_pt[1] = 32;
@@ -154,7 +152,6 @@ MAIN( test_bins_2d )
     testlib_test_begin( "Second bin test bin size 2,2" );
     testlib_test_perform( answer.size() >= 1 && (answer[0] == 1 ||  answer[0] == 2) );
   }
-
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bins_2d);

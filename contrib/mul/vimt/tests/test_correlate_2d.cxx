@@ -7,7 +7,7 @@
 #include <vimt/algo/vimt_correlate_2d.h>
 #include <vimt/vimt_resample_bilin.h>
 
-void test_correlate_2d_byte()
+static void test_correlate_2d_byte()
 {
   vimt_image_2d_of<vxl_byte> image0;
   vimt_image_2d_of<float> fit_image,sample_im;
@@ -31,7 +31,7 @@ void test_correlate_2d_byte()
   TEST("Number of peaks",w_peaks.size(),1);
   TEST_NEAR("Peak 0",(w_peaks[0]-vgl_point_2d<double>(3,7)).sqr_length(),0,1e-12);
 
-  vcl_cout<<"Sample a diagonal image and look for peaks in that."<<vcl_endl;
+  vcl_cout<<"Sample a diagonal image and look for peaks in that.\n";
 
   vimt_resample_bilin(image0,sample_im,vgl_point_2d<double>(3,0),
                       vgl_vector_2d<double>(0.7,0.7),vgl_vector_2d<double>(-0.7,0.7),8,8);
@@ -58,9 +58,9 @@ void test_correlate_2d_byte()
   }
 }
 
-MAIN( test_correlate_2d )
+static void test_correlate_2d()
 {
-  START( "vimt_correlate_2d" );
   test_correlate_2d_byte();
-  SUMMARY();
 }
+
+TESTMAIN(test_correlate_2d);

@@ -9,17 +9,15 @@
 #include <rsdl/rsdl_dist.h>
 #include <mbl/mbl_mz_random.h>
 
-static bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
-static bool less_first( const vcl_pair<double,int>& left,
-                        const vcl_pair<double,int>& right )
+static inline bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
+static inline bool less_first( const vcl_pair<double,int>& left,
+                               const vcl_pair<double,int>& right )
 {
   return left.first < right.first;
 }
 
-MAIN( test_kd_tree )
+static void test_kd_tree()
 {
-  START( "rsdl_kd_tree" );
-
   int Nc=2, Na=3;
   rsdl_point pt( Nc, Na );
   vcl_vector< rsdl_point > points;
@@ -113,7 +111,8 @@ MAIN( test_kd_tree )
   }
 
   rsdl_kd_tree tree2( points, 0, 4 );
-  for ( int t=0; t<num_tests; ++t ) {
+  for ( int t=0; t<num_tests; ++t )
+  {
 #ifdef DEBUG
     vcl_cout << "\n\n=============================\n  n_nearest test " << t
              <<   "\n=============================\n";
@@ -189,7 +188,7 @@ MAIN( test_kd_tree )
 #ifdef DEBUG
     //  Output to check everything:
     vcl_cout << "\n\nChecking rsdl_kd_tree::points_in_bounding_box\n"
-             << " inside_count from exhaustive test: " << inside_count << "\n"
+             << " inside_count from exhaustive test: " << inside_count << '\n'
              << " number in vector: " << box_indices.size() << vcl_endl;
 
     vcl_cout << "\nNow checking each:\n";
@@ -235,7 +234,7 @@ MAIN( test_kd_tree )
 #ifdef DEBUG
     //  Output to check everything:
     vcl_cout << "\n\nChecking rsdl_kd_tree::points_in_radius\n"
-             << " inside_count from exhaustive test: " << inside_count << "\n"
+             << " inside_count from exhaustive test: " << inside_count << '\n'
              << " number in vector: " << radius_indices.size() << vcl_endl;
 
     vcl_cout << "\nNow checking each:\n";
@@ -282,7 +281,7 @@ MAIN( test_kd_tree )
 #ifdef DEBUG
     //  Output to check everything:
     vcl_cout << "\n\nChecking rsdl_kd_tree::points_in_radius\n"
-             << " inside_count from exhaustive test: " << inside_count << "\n"
+             << " inside_count from exhaustive test: " << inside_count << '\n'
              << " number in vector: " << radius_indices.size() << vcl_endl;
 
     vcl_cout << "\nNow checking each:\n";
@@ -304,6 +303,6 @@ MAIN( test_kd_tree )
     testlib_test_perform( inside_count==radius_points.size() && disagree_pt==0
                           && disagree_index==0 );
   }
-
-  SUMMARY();
 }
+
+TESTMAIN(test_kd_tree);

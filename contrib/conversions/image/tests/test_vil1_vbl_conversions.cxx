@@ -16,7 +16,7 @@ static void create_image(const char* name)
   f.close();
 }
 
-void test_vil1_vbl_conversions()
+static void test_vil1_vbl_conversions()
 {
   vcl_string filename = vul_temp_filename();
   if (filename == "") filename = "vil1_vbl_test.pgm";
@@ -51,9 +51,4 @@ void test_vil1_vbl_conversions()
   delete[] buf1;
 }
 
-MAIN( test_vil1_vbl_conversions )
-{
-  START("vil1 to vbl conversions");
-  test_vil1_vbl_conversions();
-  SUMMARY();
-}
+TESTMAIN(test_vil1_vbl_conversions);

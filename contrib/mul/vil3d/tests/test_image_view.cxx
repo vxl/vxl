@@ -20,8 +20,7 @@ bool Equal(const vil3d_image_view<vxl_int_32>& im0,
       && im0(1,1,1,1) == im1(1,1,1,1);
 }
 
-
-void test_image_view_int()
+static void test_image_view_int()
 {
   vcl_cout << "*******************************\n"
            << " Testing vil3d_image_view<int>\n"
@@ -105,10 +104,10 @@ void test_image_view_int()
     // Test the deep copy
     vil3d_image_view<vxl_int_32> image4;
     image4.deep_copy(image0);
-    TEST("Deep copy (size)",image0.ni()==image4.ni()
-                         && image0.nj()==image4.nj()
-                         && image0.nk()==image4.nk()
-                         && image0.nplanes()==image4.nplanes(), true);
+    TEST("Deep copy (size)",image0.ni()==image4.ni() &&
+                            image0.nj()==image4.nj() &&
+                            image0.nk()==image4.nk() &&
+                            image0.nplanes()==image4.nplanes(), true);
     TEST("Deep copy (values)",image4(4,6,0),image0(4,6,0));
 
     vxl_int_32 v46 = image0(4,6,0);
@@ -239,7 +238,7 @@ void test_image_view_int()
 #endif // 0
 }
 
-void test_image_view_is_a()
+static void test_image_view_is_a()
 {
   vil3d_image_view<vxl_int_16> image0;
   TEST("is_a() specialisation for vxl_int_16",image0.is_a(),"vil3d_image_view<vxl_int_16>");
@@ -253,11 +252,10 @@ void test_image_view_is_a()
   TEST("is_a() specialisation for double",image4.is_a(),"vil3d_image_view<double>");
 }
 
-MAIN( test_image_view )
+static void test_image_view()
 {
-  START( "vil3d_image_view" );
   test_image_view_int();
   test_image_view_is_a();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_image_view);

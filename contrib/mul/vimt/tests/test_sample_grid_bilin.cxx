@@ -6,7 +6,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
-void test_sample_grid_bilin_byte_affine()
+static void test_sample_grid_bilin_byte_affine()
 {
   vcl_cout<<"Testing up to affine mappings\n";
   vimt_image_2d_of<vxl_byte> image0;
@@ -63,7 +63,7 @@ void test_sample_grid_bilin_byte_affine()
   TEST_NEAR("Last value",vec2[23],0,1e-6);
 }
 
-void test_sample_grid_bilin_byte_projective()
+static void test_sample_grid_bilin_byte_projective()
 {
   vcl_cout<<"Testing projective mappings\n";
   vimt_image_2d_of<vxl_byte> image0;
@@ -133,7 +133,7 @@ void test_sample_grid_bilin_byte_projective()
   TEST_NEAR("Last value",vec2[23],0,1e-6);
 }
 
-void test_sample_grid_bilin_byte()
+static void test_sample_grid_bilin_byte()
 {
   vcl_cout << "********************************\n"
            << " Testing vimt_sample_grid_bilin\n"
@@ -143,11 +143,9 @@ void test_sample_grid_bilin_byte()
   test_sample_grid_bilin_byte_projective();
 }
 
-MAIN( test_sample_grid_bilin )
+static void test_sample_grid_bilin()
 {
-  START( "Bilinear Grid Sampling" );
-
   test_sample_grid_bilin_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_sample_grid_bilin);

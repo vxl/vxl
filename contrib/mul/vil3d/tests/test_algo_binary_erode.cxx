@@ -1,11 +1,10 @@
-// This is mul/vil3d/tests/test_binary_erode.cxx
+// This is mul/vil3d/tests/test_algo_binary_erode.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vil3d/algo/vil3d_binary_erode.h>
 
 inline void print_binary_image(const vil3d_image_view<bool>& im)
 {
-
   for (unsigned j=0;j<im.nj();++j)
   {
     for (unsigned k=0;k<im.nk();++k)
@@ -20,7 +19,7 @@ inline void print_binary_image(const vil3d_image_view<bool>& im)
   }
 }
 
-void test_binary_erode()
+static void test_algo_binary_erode()
 {
   vcl_cout << "****************************\n"
            << " Testing vil3d_binary_erode\n"
@@ -83,11 +82,4 @@ void test_binary_erode()
   TEST("image1(5,0,1)",image1(5,0,1),false);
 }
 
-MAIN( test_algo_binary_erode )
-{
-  START( "Binary erode" );
-
-  test_binary_erode();
-
-  SUMMARY();
-}
+TESTMAIN(test_algo_binary_erode);

@@ -10,8 +10,8 @@
 #define LEAVE_FILES_BEHIND 0
 #endif
 
-bool Equal(const vimt_image_2d_of<vxl_byte>& im0,
-           const vimt_image_2d_of<vxl_byte>& im1)
+inline bool Equal(const vimt_image_2d_of<vxl_byte>& im0,
+                  const vimt_image_2d_of<vxl_byte>& im1)
 {
   return im0.image().nplanes()==im1.image().nplanes()
       && im0.image().ni() == im1.image().ni()
@@ -22,7 +22,7 @@ bool Equal(const vimt_image_2d_of<vxl_byte>& im0,
 }
 
 
-void test_image_2d_byte_io()
+static void test_image_2d_byte_io()
 {
   // -------- Test the binary I/O --------
   vimt_image_2d_of<vxl_byte> image_out0;
@@ -61,7 +61,7 @@ void test_image_2d_byte_io()
   TEST("Data connected correctly",image_in1.image()(3,4,1),17);
 }
 
-void test_image_2d_byte_functions()
+static void test_image_2d_byte_functions()
 {
   vimt_image_2d_of<vxl_byte> image0;
   image0.image().set_size(5,6,2);
@@ -86,14 +86,12 @@ void test_image_2d_byte_functions()
   vimt_image_2d_of<float> image3;
   TEST("Shallow equality", static_cast<vimt_image &>(image3) == image0, false);
   TEST("Shallow equality", static_cast<vimt_image &>(image2), image1);
-
 }
 
-MAIN( test_image_2d_of )
+static void test_image_2d_of()
 {
-  START( "vimt_image_2d_of" );
   test_image_2d_byte_functions();
   test_image_2d_byte_io();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_image_2d_of);

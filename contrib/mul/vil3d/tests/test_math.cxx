@@ -3,11 +3,11 @@
 #include <vcl_iostream.h>
 #include <vil3d/vil3d_math.h>
 
-void test_image_view_maths_float()
+static void test_image_view_maths_float()
 {
-  vcl_cout << "*******************************\n"
+  vcl_cout << "********************************\n"
            << " Testing vil3d_image_view_maths\n"
-           << "*******************************\n";
+           << "********************************\n";
 
   unsigned ni=5, nj=6, nk = 7;
 
@@ -35,11 +35,9 @@ void test_image_view_maths_float()
   TEST_NEAR("Sum of squares",sum_sq,sum_sq0,1e-8);
 }
 
-MAIN( test_math )
+static void test_math()
 {
-  START( "vil3d_math" );
-
   test_image_view_maths_float();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_math);

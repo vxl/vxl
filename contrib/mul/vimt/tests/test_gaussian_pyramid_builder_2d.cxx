@@ -12,11 +12,11 @@
 #define LEAVE_FILES_BEHIND 0
 #endif
 
-void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder_2d<vxl_byte>& builder)
+static void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder_2d<vxl_byte>& builder)
 {
   unsigned ni = 20, nj = 20;
-  vcl_cout<<"Filter Width: "<<builder.filter_width()<<'\n';
-  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<'\n';
+  vcl_cout<<"Filter Width: "<<builder.filter_width()<<'\n'
+          <<"Image Size: "<<ni<<" x "<<nj<<'\n';
 
   vimt_image_2d_of<vxl_byte> image0;
   image0.image().set_size(ni,nj);
@@ -57,7 +57,7 @@ void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder_2d<vxl
   TEST("Found correct number of levels", image_pyr.n_levels(), 3);
 }
 
-void test_gaussian_pyramid_builder_2d_a()
+static void test_gaussian_pyramid_builder_2d()
 {
   vcl_cout << "*************************************************\n"
            << " Testing vimt_gaussian_pyramid_builder_2d (byte)\n"
@@ -100,11 +100,4 @@ void test_gaussian_pyramid_builder_2d_a()
   vsl_delete_all_loaders();
 }
 
-MAIN( test_gaussian_pyramid_builder_2d )
-{
-  START( "vimt_gaussian_pyramid_builder_2d" );
-
-  test_gaussian_pyramid_builder_2d_a();
-
-  SUMMARY();
-}
+TESTMAIN(test_gaussian_pyramid_builder_2d);

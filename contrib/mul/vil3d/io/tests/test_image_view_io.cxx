@@ -44,10 +44,8 @@ inline void test_image_view_io_as(T value1, T value2)
   TEST_NEAR("Data(3,2,1)",image1(4,3,2,1),image2(4,3,2,1),1e-6);
 }
 
-MAIN( test_image_view_io )
+static void test_image_view_io()
 {
-  START( "vil3d_image_view" );
-
   vcl_cout << "*********************************\n"
            << " Testing IO for vil3d_image_view\n"
            << "*********************************\n";
@@ -57,6 +55,6 @@ MAIN( test_image_view_io )
   test_image_view_io_as(vxl_byte(3),vxl_byte(17));
   test_image_view_io_as(float(-0.6f),float(13.5f));
   test_image_view_io_as(double(12.1),double(123.456));
-
-  SUMMARY();
 }
+
+TESTMAIN(test_image_view_io);

@@ -1,30 +1,28 @@
-// This is mul/vil3d/tests/test_binary_dilate.cxx
+// This is mul/vil3d/tests/test_algo_binary_dilate.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vil3d/algo/vil3d_binary_dilate.h>
 
 inline void print_binary_image(const vil3d_image_view<bool>& im)
 {
-
   for (unsigned j=0;j<im.nj();++j)
   {
     for (unsigned k=0;k<im.nk();++k)
     {
       // Concatenate rows
       for (unsigned i=0;i<im.ni();++i)
-        if (im(i,j,k)) vcl_cout<<'X';
-        else           vcl_cout<<'.';
-      vcl_cout<<"     ";
+        vcl_cout << (im(i,j,k) ? 'X' : '.');
+      vcl_cout << "     ";
     }
     vcl_cout<<vcl_endl;
   }
 }
 
-void test_binary_dilate()
+static void test_algo_binary_dilate()
 {
-  vcl_cout << "****************************\n"
+  vcl_cout << "*****************************\n"
            << " Testing vil3d_binary_dilate\n"
-           << "****************************\n";
+           << "*****************************\n";
 
   vil3d_image_view<bool> image0;
   image0.set_size(10,10,3);
@@ -79,11 +77,4 @@ void test_binary_dilate()
   TEST("image1(3,0,0)",image1(3,0,0),true);
 }
 
-MAIN( test_algo_binary_dilate )
-{
-  START( "Binary Dilate" );
-
-  test_binary_dilate();
-
-  SUMMARY();
-}
+TESTMAIN(test_algo_binary_dilate);

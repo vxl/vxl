@@ -5,7 +5,7 @@
 #include <vil3d/vil3d_sample_profile_trilin.h>
 #include <vcl_vector.h>
 
-void test_sample_profile_trilin_float()
+static void test_sample_profile_trilin_float()
 {
   vcl_cout << "*************************************\n"
            << " Testing vil3d_sample_profile_trilin\n"
@@ -57,10 +57,9 @@ void test_sample_profile_trilin_float()
   TEST_NEAR("Last value (outside image)",vec[23],0,1e-6);
 }
 
-MAIN( test_sample_profile_trilin )
+static void test_sample_profile_trilin()
 {
-  START( "vil3d_sample_profile_trilin" );
   test_sample_profile_trilin_float();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_sample_profile_trilin);

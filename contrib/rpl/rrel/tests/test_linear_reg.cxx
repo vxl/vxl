@@ -10,9 +10,8 @@
 
 bool close(double,double);
 
-MAIN( test_linear_reg )
+static void test_linear_reg()
 {
-  START( "linear_regression" );
   vnl_vector<double> true_params(3, 10.0,0.02,-0.1);
   vnl_vector<double> a(true_params);
 
@@ -115,7 +114,7 @@ MAIN( test_linear_reg )
   point_indices[2] = 5;
   testlib_test_begin( "fit_from_minimal_sample (2) " );
   testlib_test_perform( lr3->fit_from_minimal_set(point_indices,par) &&
-                    close( (par - true_params).magnitude(), 0 ) );
+                        close( (par - true_params).magnitude(), 0 ) );
 
   //
   //  Test the residuals function.
@@ -156,6 +155,6 @@ MAIN( test_linear_reg )
   testlib_test_perform( ok && err <2.5 );
 
   delete lr3;
-
-  SUMMARY();
 }
+
+TESTMAIN(test_linear_reg);

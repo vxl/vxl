@@ -1,9 +1,9 @@
-// This is mul/vil3d/tests/test_structuring_element.cxx
+// This is mul/vil3d/tests/test_algo_structuring_element.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vil3d/algo/vil3d_structuring_element.h>
 
-void test_structuring_element_1()
+static void test_algo_structuring_element()
 {
   vcl_cout << "****************************\n"
            << " Testing vil3d_structuring_element\n"
@@ -30,7 +30,7 @@ void test_structuring_element_1()
   se.set_to_sphere(1.1);
   TEST("Number of elements in sphere",se.p_i().size(),7);
 
-  vcl_cout<<"set_to_line_i():"<<vcl_endl;
+  vcl_cout<<"set_to_line_i():\n";
   se.set_to_line_i(-2,7);
   TEST("Number of elements",se.p_i().size(),10);
   TEST("min_i()",se.min_i(),-2);
@@ -40,7 +40,7 @@ void test_structuring_element_1()
   TEST("min_k()",se.min_k(),0);
   TEST("max_k()",se.max_k(),0);
 
-  vcl_cout<<"set_to_line_j():"<<vcl_endl;
+  vcl_cout<<"set_to_line_j():\n";
   se.set_to_line_j(-1,6);
   TEST("Number of elements",se.p_i().size(),8);
   TEST("min_i()",se.min_i(),0);
@@ -50,7 +50,7 @@ void test_structuring_element_1()
   TEST("min_k()",se.min_k(),0);
   TEST("max_k()",se.max_k(),0);
 
-  vcl_cout<<"set_to_line_k():"<<vcl_endl;
+  vcl_cout<<"set_to_line_k():\n";
   se.set_to_line_k(-3,8);
   TEST("Number of elements",se.p_i().size(),12);
   TEST("min_i()",se.min_i(),0);
@@ -61,10 +61,4 @@ void test_structuring_element_1()
   TEST("max_k()",se.max_k(),8);
 }
 
-MAIN( test_algo_structuring_element )
-{
-  START( "vil3d_structuring_element" );
-  test_structuring_element_1();
-
-  SUMMARY();
-}
+TESTMAIN(test_algo_structuring_element);

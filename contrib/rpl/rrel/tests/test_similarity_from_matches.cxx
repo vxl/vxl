@@ -20,10 +20,8 @@ class null_m_est : public rrel_m_est_obj
   void wgt( vect_const_iter b, vect_const_iter e, double s, vect_iter w) const { rrel_m_est_obj::wgt(b,e,s,w); }
 };
 
-MAIN( test_similarity_from_matches )
+static void test_similarity_from_matches()
 {
-  START( "similarity from matches" );
-
   vnl_matrix_fixed<double,2,2> A(0.0);
   vnl_vector_fixed<double,2> t;
   vnl_vector_fixed<double,4> params;
@@ -113,12 +111,12 @@ MAIN( test_similarity_from_matches )
 
   testlib_test_begin( "compute_weights" );
   sim.compute_weights( temp_res, &obj, 1.0, weights );
-  testlib_test_perform(    close( weights[0], 1.0 * 1.0 / 1.1 )
-                        && close( weights[1], 0.1 * 0.1 / 1.1 )
-                        && close( weights[2], 0.02 * 0.02 / 1.14 )
-                        && close( weights[3], 1.0 * 1.0 / 1.14 )
-                        && close( weights[4], 0.12 * 0.12 / 1.14 )
-                        && close( weights[5], 0.9 ) );
-
-  SUMMARY();
+  testlib_test_perform( close( weights[0], 1.0 * 1.0 / 1.1 ) &&
+                        close( weights[1], 0.1 * 0.1 / 1.1 ) &&
+                        close( weights[2], 0.02 * 0.02 / 1.14 ) &&
+                        close( weights[3], 1.0 * 1.0 / 1.14 ) &&
+                        close( weights[4], 0.12 * 0.12 / 1.14 ) &&
+                        close( weights[5], 0.9 ) );
 }
+
+TESTMAIN(test_similarity_from_matches);

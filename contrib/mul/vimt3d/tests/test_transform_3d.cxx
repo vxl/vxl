@@ -11,7 +11,7 @@
 #define LEAVE_IMAGES_BEHIND 0
 #endif
 
-void test_product(const vimt3d_transform_3d& t0, const vimt3d_transform_3d& t1)
+static void test_product(const vimt3d_transform_3d& t0, const vimt3d_transform_3d& t1)
 {
   vimt3d_transform_3d t01 = t0*t1;
   vgl_point_3d<double> p0(1,2,0);
@@ -20,7 +20,7 @@ void test_product(const vimt3d_transform_3d& t0, const vimt3d_transform_3d& t1)
   TEST_NEAR("Testing product",vgl_distance(q1,q2),0.0,1e-6);
 }
 
-void test_products(const vimt3d_transform_3d& trans1)
+static void test_products(const vimt3d_transform_3d& trans1)
 {
   vimt3d_transform_3d trans0;
   trans0.set_identity();
@@ -48,7 +48,7 @@ void test_products(const vimt3d_transform_3d& trans1)
   test_product(trans0,trans1);
 }
 
-void test_the_transform(vimt3d_transform_3d& t)
+static void test_the_transform(vimt3d_transform_3d& t)
 {
    vimt3d_transform_3d t_inv = t.inverse();
    vgl_point_3d<double> p0(5,7,0);
@@ -65,7 +65,7 @@ void test_the_transform(vimt3d_transform_3d& t)
    test_products(t);
 }
 
-void test_transform_3d_a()
+static void test_transform_3d()
 {
   vcl_cout << "*****************************\n"
            << " Testing vimt3d_transform_3d\n"
@@ -129,9 +129,4 @@ void test_transform_3d_a()
   TEST_NEAR("Binary IO for params", (v0-v0_in).magnitude(),0.0,1e-6);
 }
 
-MAIN( test_transform_3d )
-{
-  START("3D Transformations");
-  test_transform_3d_a();
-  SUMMARY();
-}
+TESTMAIN(test_transform_3d);

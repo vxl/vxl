@@ -1,10 +1,10 @@
-// This is core/vil3d/tests/test_algo_normalised_correlation_3d.cxx
+// This is mul/vil3d/tests/test_algo_normalised_correlation_3d.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil3d/algo/vil3d_normalised_correlation_3d.h>
 
-void test_algo_normalised_correlation_3d_byte()
+static void test_algo_normalised_correlation_3d_byte()
 {
   vcl_cout << "*********************************************\n"
            << " Testing vil3d_algo_normalised_correlation_3d\n"
@@ -43,15 +43,11 @@ void test_algo_normalised_correlation_3d_byte()
   double mean=sum/(m*m*m);
   double var =sum2/(m*m*m)-mean*mean;
   TEST_NEAR("Test element (0,0,0)",dest_im(0,0,0),sum/vcl_sqrt(var),1e-6);
-
-
 }
 
-MAIN( test_algo_normalised_correlation_3d )
+static void test_algo_normalised_correlation_3d()
 {
-  START( "vil3d_algo_normalised_correlation_3d" );
-
   test_algo_normalised_correlation_3d_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_normalised_correlation_3d);

@@ -14,7 +14,7 @@
 #define LEAVE_FILES_BEHIND 0
 #endif
 
-void test_scale_pyramid_builder_2d1(unsigned int nx, unsigned int ny)
+static void test_scale_pyramid_builder_2d(unsigned int nx, unsigned int ny)
 {
   vcl_cout << "************************************************************\n"
            << " Testing vimt_scale_pyramid_builder_2d (byte)(nx="<<nx<<", ny="<<ny<<")\n"
@@ -124,10 +124,9 @@ void test_scale_pyramid_builder_2d1(unsigned int nx, unsigned int ny)
   vsl_delete_all_loaders();
 }
 
-MAIN( test_scale_pyramid_builder_2d )
+static void test_scale_pyramid_builder_2d()
 {
-  START( "test_scale_pyramid_builder_2d\n" );
-  test_scale_pyramid_builder_2d1(25,37);
-
-  SUMMARY();
+  test_scale_pyramid_builder_2d(25,37);
 }
+
+TESTMAIN(test_scale_pyramid_builder_2d);

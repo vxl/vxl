@@ -12,7 +12,7 @@
 #define LEAVE_FILES_BEHIND 0
 #endif
 
-void test_product(const vimt_transform_2d& t0, const vimt_transform_2d& t1)
+static void test_product(const vimt_transform_2d& t0, const vimt_transform_2d& t1)
 {
   vimt_transform_2d t01 = t0*t1;
   vgl_point_2d<double> p0(1,2);
@@ -21,7 +21,7 @@ void test_product(const vimt_transform_2d& t0, const vimt_transform_2d& t1)
   TEST_NEAR("Testing product",vgl_distance(q1,q2),0.0,1e-6);
 }
 
-void test_products(const vimt_transform_2d& trans1)
+static void test_products(const vimt_transform_2d& trans1)
 {
   vimt_transform_2d trans0;
   trans0.set_identity();
@@ -59,7 +59,8 @@ void test_products(const vimt_transform_2d& trans1)
    trans0.set_projective(P);
    test_product(trans0,trans1);
 }
-void test_the_transform(vimt_transform_2d& t)
+
+static void test_the_transform(vimt_transform_2d& t)
 {
    vimt_transform_2d t_inv = t.inverse();
 
@@ -77,7 +78,7 @@ void test_the_transform(vimt_transform_2d& t)
    test_products(t);
 }
 
-void test_transform_2d_a()
+static void test_transform_2d()
 {
   vcl_cout << "***************************\n"
            << " Testing vimt_transform_2d\n"
@@ -152,11 +153,4 @@ void test_transform_2d_a()
   TEST_NEAR("Binary IO for params", (v0-v0_in).magnitude(),0.0,1e-6);
 }
 
-MAIN( test_transform_2d )
-{
-  START( "2D Transformations" );
-
-  test_transform_2d_a();
-
-  SUMMARY();
-}
+TESTMAIN(test_transform_2d);

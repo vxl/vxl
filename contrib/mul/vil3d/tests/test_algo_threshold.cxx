@@ -5,7 +5,7 @@
 #include <vil3d/algo/vil3d_threshold.h>
 #include <vil3d/vil3d_crop.h>
 
-void test_threshold_byte(const vil3d_image_view<vxl_byte>& image)
+static void test_threshold_byte(const vil3d_image_view<vxl_byte>& image)
 {
   vcl_cout << "*************************\n"
            << " Testing vil3d_threshold\n"
@@ -35,7 +35,7 @@ void test_threshold_byte(const vil3d_image_view<vxl_byte>& image)
   TEST("vil3d_threshold_outside at (0,3,8)",bool_im(0,3,8),true);
 }
 
-void test_threshold_byte()
+static void test_threshold_byte()
 {
   vil3d_image_view<vxl_byte> image(15,15,15);
   for (unsigned k=0;k<image.nk();++k)
@@ -44,7 +44,7 @@ void test_threshold_byte()
 
   test_threshold_byte(image);
 
-  vcl_cout<<"Test non-contiguous image"<<vcl_endl;
+  vcl_cout<<"Test non-contiguous image\n";
   vil3d_image_view<vxl_byte> crop_image = vil3d_crop(image,2,10,3,10,4,10);
   for (unsigned k=0;k<crop_image.nk();++k)
     for (unsigned j=0;j<crop_image.nj();++j)
@@ -53,11 +53,9 @@ void test_threshold_byte()
   test_threshold_byte(crop_image);
 }
 
-MAIN( test_algo_threshold )
+static void test_algo_threshold()
 {
-  START( "vil3d_threshold_*" );
-
   test_threshold_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_threshold);

@@ -4,7 +4,7 @@
 #include <vxl_config.h> // for vxl_byte
 #include <vimt/algo/vimt_find_peaks.h>
 
-void test_find_peaks_byte()
+static void test_find_peaks_byte()
 {
   vimt_image_2d_of<vxl_byte> image0;
   image0.image().set_size(10,10);
@@ -45,11 +45,9 @@ void test_find_peaks_byte()
   TEST_NEAR("Global peak",(w_p1-vgl_point_2d<double>(5,2)).sqr_length(),0,1e-6);
 }
 
-MAIN( test_find_peaks )
+static void test_find_peaks()
 {
-  START( "vimt_find_peaks" );
-
   test_find_peaks_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_find_peaks);

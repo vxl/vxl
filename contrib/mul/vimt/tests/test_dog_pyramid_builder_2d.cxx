@@ -12,7 +12,7 @@
 #define LEAVE_FILES_BEHIND 0
 #endif
 
-void test_dog_pyramid_builder_2d_build(vimt_dog_pyramid_builder_2d<float>& builder)
+static void test_dog_pyramid_builder_2d_build(vimt_dog_pyramid_builder_2d<float>& builder)
 {
   unsigned ni = 57, nj = 63;
   vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<'\n';
@@ -57,7 +57,7 @@ void test_dog_pyramid_builder_2d_build(vimt_dog_pyramid_builder_2d<float>& build
   }
 }
 
-void test_dog_pyramid_builder_2d_a()
+static void test_dog_pyramid_builder_2d()
 {
   vcl_cout << "********************************************\n"
            << " Testing vimt_dog_pyramid_builder_2d (byte)\n"
@@ -97,11 +97,4 @@ void test_dog_pyramid_builder_2d_a()
   vsl_delete_all_loaders();
 }
 
-MAIN( test_dog_pyramid_builder_2d )
-{
-  START( "vimt_dog_pyramid_builder_2d" );
-
-  test_dog_pyramid_builder_2d_a();
-
-  SUMMARY();
-}
+TESTMAIN(test_dog_pyramid_builder_2d);

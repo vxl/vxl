@@ -5,7 +5,7 @@
 #include <vil3d/algo/vil3d_grad_1x3.h>
 #include <vil3d/vil3d_crop.h>
 
-void test_grad_1x3_1plane_byte(vil3d_image_view<vxl_byte>& image)
+static void test_grad_1x3_1plane_byte(vil3d_image_view<vxl_byte>& image)
 {
   vcl_cout << "*******************************\n"
            << " Testing vil3d_grad_1x3_1plane\n"
@@ -37,7 +37,7 @@ void test_grad_1x3_1plane_byte(vil3d_image_view<vxl_byte>& image)
   TEST_NEAR("gradk(5,5,4)", gradk(5,5,4), 50.0f, 0.0001f);
 }
 
-void test_grad_1x3_byte(vil3d_image_view<vxl_byte>& image)
+static void test_grad_1x3_byte(vil3d_image_view<vxl_byte>& image)
 {
   vcl_cout << "************************\n"
            << " Testing vil3d_grad_1x3\n"
@@ -66,7 +66,7 @@ void test_grad_1x3_byte(vil3d_image_view<vxl_byte>& image)
   TEST_NEAR("gradk(5,5,4)", gradk(5,5,4), 50.0f, 0.0001f);
 }
 
-void test_grad_1x3_mag_sq_byte(vil3d_image_view<vxl_byte>& image)
+static void test_grad_1x3_mag_sq_byte(vil3d_image_view<vxl_byte>& image)
 {
   vcl_cout << "*******************************\n"
            << " Testing vil3d_grad_1x3_mag_sq\n"
@@ -85,7 +85,7 @@ void test_grad_1x3_mag_sq_byte(vil3d_image_view<vxl_byte>& image)
   TEST_NEAR("grad_mag2(5,5,4)", grad_mag2(5,5,4), 2500.0f, 0.0001f);
 }
 
-void test_grad_1x3_byte()
+static void test_grad_1x3_byte()
 {
   vil3d_image_view<vxl_byte> image(15,15,15);
 
@@ -93,17 +93,15 @@ void test_grad_1x3_byte()
   test_grad_1x3_byte(image);
   test_grad_1x3_mag_sq_byte(image);
 
-  vcl_cout<<"Test non-contiguous image"<<vcl_endl;
+  vcl_cout<<"Test non-contiguous image\n";
   vil3d_image_view<vxl_byte> crop_image = vil3d_crop(image,2,10,3,10,4,10);
 
   test_grad_1x3_byte(crop_image);
 }
 
-MAIN( test_algo_grad_1x3 )
+static void test_algo_grad_1x3()
 {
-  START( "vil3d_grad_1x3" );
-
   test_grad_1x3_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_grad_1x3);

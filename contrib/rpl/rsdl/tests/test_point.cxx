@@ -5,12 +5,10 @@
 
 #include <rsdl/rsdl_point.h>
 
-static bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
+static inline bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
 
-MAIN( test_point )
+static void test_point()
 {
-  START( "rsdl_point" );
-
   const unsigned int Nc = 2;
   const unsigned int Na = 3;
 
@@ -66,6 +64,7 @@ MAIN( test_point )
   // Note that a.begin() - a.begin() is a null range.
   rsdl_point pt_no_cart( a.begin(), a.begin(), a.begin(), a.end() );
   testlib_test_perform( true );
+
   testlib_test_begin( "angular" );
   ok = true;
   for ( i=0; ok && i<6; ++i ) {
@@ -79,6 +78,7 @@ MAIN( test_point )
   c[0] = 15; c[1] = 13.1;
   rsdl_point pt_no_ang( c.begin(), c.end(), c.begin(), c.begin() );
   testlib_test_perform( true );
+
   testlib_test_begin( "cartesian" );
   ok = true;
   for ( i=0; ok && i<2; ++i ) {
@@ -86,7 +86,6 @@ MAIN( test_point )
     ok = ok && close( pt_no_ang.cartesian(i), c[i] + i * 5.0 );
   }
   testlib_test_perform( ok );
-
 
   testlib_test_begin( "ctor from single vnl_vector" );
   vnl_vector<double> from_v(5);
@@ -143,6 +142,6 @@ MAIN( test_point )
   for ( i=0; ok && i<Na; ++i )
     ok = close( q.angular(i), ang[i] );
   testlib_test_perform( ok );
-
-  SUMMARY();
 }
+
+TESTMAIN(test_point);

@@ -6,7 +6,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
-void test_sample_profile_bilin_byte_affine()
+static void test_sample_profile_bilin_byte_affine()
 {
   vcl_cout << "***********************************\n"
            << " Testing vimt_sample_profile_bilin\n"
@@ -60,7 +60,8 @@ void test_sample_profile_bilin_byte_affine()
   TEST_NEAR("First value",vec4[0],5.5f,1e-6);
   TEST_NEAR("Last value (outside image)",vec4[23],0.f,1e-6);
 }
-void test_sample_profile_bilin_byte_projective()
+
+static void test_sample_profile_bilin_byte_projective()
 {
   vcl_cout << "***********************************\n"
            << " Testing vimt_sample_profile_bilin\n"
@@ -127,12 +128,10 @@ void test_sample_profile_bilin_byte_projective()
   TEST_NEAR("Last value (outside image)",vec4[23],0.f,1e-6);
 }
 
-MAIN( test_sample_profile_bilin )
+static void test_sample_profile_bilin()
 {
-  START( "Bilinear Profile Sampling" );
-
   test_sample_profile_bilin_byte_affine();
   test_sample_profile_bilin_byte_projective();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_sample_profile_bilin);

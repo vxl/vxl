@@ -14,7 +14,7 @@
 
 double noise( double sigma );
 
-bool
+inline bool
 sample_ok( const vcl_vector<int>& indices, int num_pts )
 {
   bool ok=true;
@@ -38,9 +38,8 @@ struct null_problem : public rrel_estimation_problem
 };
 
 
-MAIN( test_ran_sam_search )
+static void test_ran_sam_search()
 {
-  START( "rrel_ran_sam_search" );
   double a[] = { 10.0, 0.02, -0.1 };
   vnl_vector<double> true_params(3, 3, a);
   const int num_pts=12;
@@ -209,6 +208,6 @@ MAIN( test_ran_sam_search )
   delete ransam;
   delete lms;
   delete match_prob;
-
-  SUMMARY();
 }
+
+TESTMAIN(test_ran_sam_search);

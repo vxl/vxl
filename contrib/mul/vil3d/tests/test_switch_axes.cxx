@@ -4,7 +4,7 @@
 #include <vxl_config.h>
 #include <vil3d/vil3d_switch_axes.h>
 
-void test_switch_axes_int()
+static void test_switch_axes_int()
 {
   vcl_cout << "***************************\n"
            << " Testing vil3d_switch_axes\n"
@@ -23,12 +23,9 @@ void test_switch_axes_int()
   TEST("vil3d_switch_axes_kji",vil3d_switch_axes_kji(image)(3,2,1),123);
 }
 
-
-MAIN( test_switch_axes )
+static void test_switch_axes()
 {
-  START( "vil3d_switch_axes_*" );
-
   test_switch_axes_int();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_switch_axes);

@@ -68,7 +68,6 @@ class CheckPixelT : public CheckPixel
 #ifdef DEBUG
     vcl_cout << '\n' << vcl_flush; vil3d_print_all(vcl_cout, far_oct_img_);
 #endif
-
   }
  protected:
   vil3d_image_view< T > img_;
@@ -167,7 +166,7 @@ bool test( const char* true_data_file, const CheckPixel& check )
   return true;
 }
 
-int test_file_format_read_main( int argc, char* argv[] )
+void test_file_format_read( int argc, char* argv[] )
 {
   const unsigned ndir = 4098;
   char cwd[ndir];
@@ -175,32 +174,21 @@ int test_file_format_read_main( int argc, char* argv[] )
   if ( argc >= 2 )
     vpl_chdir(argv[1]);
 
-
-  testlib_test_start(" file format read");
-
   vcl_cout << "List of slices)\n";
-  testlib_test_begin( "  List of ppm slices" );
-  testlib_test_perform( test( "ff_3planes8bit_true.txt",
-                              CheckColourPlanes<vxl_byte>( "ff_rgb8bit_ascii.1.ppm;ff_rgb8bit_ascii.2.ppm" ) ) );
+  TEST("List of ppm slices", test("ff_3planes8bit_true.txt",
+                                  CheckColourPlanes<vxl_byte>( "ff_rgb8bit_ascii.1.ppm;ff_rgb8bit_ascii.2.ppm" ) ), true);
 
-  testlib_test_begin( "  Implied List of ppm slices" );
-  testlib_test_perform( test( "ff_3planes8bit_true.txt",
-                              CheckColourPlanes<vxl_byte>( "ff_rgb8bit_ascii.#.ppm" ) ) );
+  TEST("Implied List of ppm slices", test("ff_3planes8bit_true.txt",
+                                          CheckColourPlanes<vxl_byte>( "ff_rgb8bit_ascii.#.ppm" ) ), true);
 
-  testlib_test_begin( "  Implied list of dicom slices" );
-  testlib_test_perform( test( "ff_grey16bit_true.txt",
-                              CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed_####.dcm" ) ) );
-
-
+  TEST("Implied list of dicom slices", test("ff_grey16bit_true.txt",
+                                            CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed_####.dcm" ) ), true);
 
   vcl_cout << "GIPL images)\n";
-  testlib_test_begin( "  GIPL image" );
-  testlib_test_perform( test( "ff_grey_cross16bit_true.txt",
-                              CheckGrey<vxl_uint_16>( "ff_grey_cross.gipl" ) ) );
-
-
-
+  TEST("GIPL image", test("ff_grey_cross16bit_true.txt",
+                          CheckGrey<vxl_uint_16>( "ff_grey_cross.gipl" ) ), true);
 
   if (res==cwd) vpl_chdir(cwd);
-  return testlib_test_summary();
 }
+
+TESTMAIN_ARGS(test_file_format_read);

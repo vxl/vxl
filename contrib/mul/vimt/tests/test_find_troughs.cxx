@@ -4,7 +4,7 @@
 #include <vxl_config.h> // for vxl_byte
 #include <vimt/algo/vimt_find_troughs.h>
 
-void test_find_troughs_byte()
+static void test_find_troughs_byte()
 {
   vimt_image_2d_of<vxl_byte> image0;
   image0.image().set_size(10,10);
@@ -30,11 +30,9 @@ void test_find_troughs_byte()
   TEST_NEAR("Peak 1",(w_troughs[1]-vgl_point_2d<double>(1,4)).sqr_length(),0,1e-12);
 }
 
-MAIN( test_find_troughs )
+static void test_find_troughs()
 {
-  START( "vimt_find_troughs" );
-
   test_find_troughs_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_find_troughs);

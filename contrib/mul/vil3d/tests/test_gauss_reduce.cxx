@@ -4,7 +4,7 @@
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/algo/vil3d_gauss_reduce.h>
 
-void test_gauss_reduce_float()
+static void test_gauss_reduce_float()
 {
   vcl_cout << "****************************\n"
            << " Testing vil3d_gauss_reduce\n"
@@ -37,7 +37,7 @@ void test_gauss_reduce_float()
 }
 
 // Check in-homogeneous smoothing option (ie onlj smooth in i,j but not k on some levels)
-void test_gauss_reduce_ij()
+static void test_gauss_reduce_ij()
 {
   vcl_cout<<"test_gauss_reduce_ij()\n";
   unsigned ni = 20, nj = 20, nk = 10;
@@ -67,7 +67,7 @@ void test_gauss_reduce_ij()
 }
 
 // Check in-homogeneous smoothing option (ie onlj smooth in i,k but not j on some levels)
-void test_gauss_reduce_ik()
+static void test_gauss_reduce_ik()
 {
   vcl_cout<<"test_gauss_reduce_ik()\n";
   int ni = 20, nj = 10, nk = 20;
@@ -96,7 +96,7 @@ void test_gauss_reduce_ik()
 }
 
 // Check in-homogeneous smoothing option (ie onlj smooth in j,k but not i on some levels)
-void test_gauss_reduce_jk()
+static void test_gauss_reduce_jk()
 {
   vcl_cout<<"test_gauss_reduce_jk()\n";
   unsigned ni = 10, nj = 20, nk = 20;
@@ -124,14 +124,12 @@ void test_gauss_reduce_jk()
   TEST_NEAR("Corner pixel",image0(ni2-1,nj2*2-2,nk2*2-2),image1(ni2-1,nj2-1,nk2-1),1e-5);
 }
 
-
-MAIN( test_gauss_reduce )
+static void test_gauss_reduce()
 {
-  START( "vil3d_gauss_reduce" );
   test_gauss_reduce_float();
   test_gauss_reduce_ij();
   test_gauss_reduce_ik();
   test_gauss_reduce_jk();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_gauss_reduce);

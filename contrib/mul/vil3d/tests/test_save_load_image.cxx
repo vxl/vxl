@@ -1,4 +1,4 @@
-// This is mul/vil/tests/test_save_load_image.cxx
+// This is mul/vil3d/tests/test_save_load_image.cxx
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -102,14 +102,14 @@ bool test_image_equal(char const* type_name,
     #ifndef NDEBUG
           if (++bad < 20)
           {
-            vcl_cout << "pixel (" << i << "," << j << "," << p <<  ") differs:\t";
+            vcl_cout << "pixel (" << i << ',' << j << ',' << p <<  ") differs:\t";
             vil_print_value(vcl_cout, image(i,j,p));
             vcl_cout << "---> ";
             vil_print_value(vcl_cout,image2(i,j,p));
             vcl_cout << '\n';
           }
     #else
-          ++bad; vcl_cout << "." << vcl_flush;
+          ++bad; vcl_cout << '.' << vcl_flush;
     #endif
         }
       }
@@ -227,7 +227,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
 
   // Write image to disk
   if (vcl_strcmp(type_name, "gif") == 0 &&
-    vil_pixel_format_num_components( image.pixel_format() ) == 3)
+      vil_pixel_format_num_components( image.pixel_format() ) == 3)
   {
     if (!create_colour_gif(fname.c_str()))
       return; // fatal error
@@ -263,7 +263,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
 
 
 // create a 1 bit test image
-vil_image_view<bool> CreateTest1bitImage(int wd, int ht)
+static vil_image_view<bool> CreateTest1bitImage(int wd, int ht)
 {
   vil_image_view<bool> image(wd, ht, 1);
   for (int j = 0; j < ht; ++j) {
@@ -275,7 +275,7 @@ vil_image_view<bool> CreateTest1bitImage(int wd, int ht)
 
 
 // create an 8 bit test image
-vil_image_view<vxl_byte> CreateTest8bitImage(int wd, int ht)
+static vil_image_view<vxl_byte> CreateTest8bitImage(int wd, int ht)
 {
   vil_image_view<vxl_byte> image(wd, ht);
   for (int j = 0; j < ht; j++)
@@ -286,7 +286,7 @@ vil_image_view<vxl_byte> CreateTest8bitImage(int wd, int ht)
 }
 
 // create a 16 bit test image
-vil_image_view<vxl_uint_16> CreateTest16bitImage(int wd, int ht)
+static vil_image_view<vxl_uint_16> CreateTest16bitImage(int wd, int ht)
 {
   vil_image_view<vxl_uint_16> image(wd, ht);
   for (int j = 0; j < ht; j++)
@@ -298,7 +298,7 @@ vil_image_view<vxl_uint_16> CreateTest16bitImage(int wd, int ht)
 
 
 // create a 32 bit test image
-vil_image_view<vxl_uint_32> CreateTest32bitImage(int wd, int ht)
+static vil_image_view<vxl_uint_32> CreateTest32bitImage(int wd, int ht)
 {
   vil_image_view<vxl_uint_32> image(wd, ht);
   for (int j = 0; j < ht; j++)
@@ -310,7 +310,7 @@ vil_image_view<vxl_uint_32> CreateTest32bitImage(int wd, int ht)
 #if 0 // read back pixel type will not match: ppm is always read in as 3-plane image
 
 // create a 24 bit color test image
-vil_image_view<vil_rgb<vxl_byte> > CreateTest24bitImage(int wd, int ht)
+static vil_image_view<vil_rgb<vxl_byte> > CreateTest24bitImage(int wd, int ht)
 {
   vil_image_view<vil_rgb<vxl_byte> > image(wd, ht);
   for (int i = 0; i < wd; i++)
@@ -322,7 +322,7 @@ vil_image_view<vil_rgb<vxl_byte> > CreateTest24bitImage(int wd, int ht)
 #endif // 0
 
 // create a 24 bit color test image, with 3 planes
-vil_image_view<vxl_byte> CreateTest3planeImage(int wd, int ht)
+static vil_image_view<vxl_byte> CreateTest3planeImage(int wd, int ht)
 {
   vil_image_view<vxl_byte> image( wd, ht, 3);
   for (int i = 0; i < wd; i++)
@@ -336,7 +336,7 @@ vil_image_view<vxl_byte> CreateTest3planeImage(int wd, int ht)
 
 
 // create a float-pixel test image
-vil_image_view<float> CreateTestfloatImage(int wd, int ht)
+static vil_image_view<float> CreateTestfloatImage(int wd, int ht)
 {
   vil_image_view<float> image(wd, ht);
   for (int i = 0; i < wd; i++)
@@ -345,9 +345,8 @@ vil_image_view<float> CreateTestfloatImage(int wd, int ht)
   return image;
 }
 
-MAIN( test_save_load_image )
+static void test_save_load_image()
 {
-  START( "save/load" );
   // create test images
   int sizex = 253;
   int sizey = 155;
@@ -466,6 +465,6 @@ MAIN( test_save_load_image )
   vil_test_image_type("mit", image16);
   vil_test_image_type("mit", image3p);
 #endif
-
-  SUMMARY();
 }
+
+TESTMAIN(test_save_load_image);

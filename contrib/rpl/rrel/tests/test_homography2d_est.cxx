@@ -7,9 +7,8 @@
 #include <vnl/vnl_math.h>
 #include <rrel/rrel_homography2d_est.h>
 
-MAIN( test_homography2d_est )
+static void test_homography2d_est()
 {
-  START ("homography2d estimation");
   vnl_double_3x3 H (0.0);
   vnl_matrix<double> cofact;
   vcl_vector <int> indices;
@@ -182,8 +181,8 @@ MAIN( test_homography2d_est )
     for (i=0;i<5;i++)
       wgts[i] = 1.0;
     ret = homo_est.weighted_least_squares_fit (param, cofact, &wgts);
-    TEST ("Degenracy of Projective Weighted Least Squares", ret, false);
+    TEST ("Degeneracy of Projective Weighted Least Squares", ret, false);
   }
-
-  SUMMARY();
 }
+
+TESTMAIN(test_homography2d_est);

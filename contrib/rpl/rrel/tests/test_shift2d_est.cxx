@@ -6,9 +6,8 @@
 #include <vnl/vnl_matrix.h>
 #include <rrel/rrel_shift2d_est.h>
 
-MAIN( test_shift2d_est )
+static void test_shift2d_est()
 {
-  START ("shift2d estimation");
   vnl_double_3x3 H (0.0);
   vnl_matrix<double> cofact;
   vcl_vector <int> indices;
@@ -97,6 +96,6 @@ MAIN( test_shift2d_est )
     param /= param.two_norm();
     TEST ("(Translation) Weighted Least Squares", (param-true_param).two_norm() < tol, true);
   }
-
-  SUMMARY();
 }
+
+TESTMAIN(test_shift2d_est);

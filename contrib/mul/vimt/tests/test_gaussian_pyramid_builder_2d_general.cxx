@@ -21,7 +21,7 @@ bool all_pixels_equal_to(const vil_image_view<T>& in, T v)
   return true;
 }
 
-void test_gaussian_pyramid_builder_2d_general_a()
+static void test_gaussian_pyramid_builder_2d_general()
 {
   unsigned ni = 20, nj = 20;
   vcl_cout << "****************************************************************\n"
@@ -140,12 +140,4 @@ void test_gaussian_pyramid_builder_2d_general_a()
   vsl_delete_all_loaders();
 }
 
-
-MAIN( test_gaussian_pyramid_builder_2d_general )
-{
-  START( "vimt_gaussian_pyramid_builder_2d_general" );
-
-  test_gaussian_pyramid_builder_2d_general_a();
-
-  SUMMARY();
-}
+TESTMAIN(test_gaussian_pyramid_builder_2d_general);

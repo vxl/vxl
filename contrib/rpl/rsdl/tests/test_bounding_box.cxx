@@ -2,13 +2,10 @@
 #include <rsdl/rsdl_bounding_box.h>
 #include <testlib/testlib_test.h>
 
-static bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
+static inline bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
 
-
-MAIN( test_bounding_box )
+static void test_bounding_box()
 {
-  START( "rsdl_bounding_box" );
-
   const int Nc = 2;
   const int Na = 3;
 
@@ -64,6 +61,6 @@ MAIN( test_bounding_box )
     ok = close( box1.min_angular(i), box2.min_angular(i) )
       && close( box1.max_angular(i), box2.max_angular(i) );
   testlib_test_perform( ok );
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bounding_box);

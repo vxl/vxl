@@ -13,9 +13,7 @@
 #include <rsdl/rsdl_bins.h>
 
 // Test 2D bins
-static
-void
-test_bins_2()
+static void test_bins_2D()
 {
   vcl_cout << "Testing 2D bins\n";
   typedef rsdl_bins< 2, double, int > bin_type;
@@ -158,9 +156,7 @@ test_bins_2()
 
 
 // Test 3D bins
-static
-void
-test_bins_3()
+static void test_bins_3D()
 {
   vcl_cout << "Testing 3D bins\n";
 
@@ -289,13 +285,10 @@ test_bins_3()
   }
 }
 
-
-MAIN( test_bins )
+static void test_bins()
 {
-  START( "rsdl_bins" );
-
-  test_bins_2();
-  test_bins_3();
-
-  SUMMARY();
+  test_bins_2D();
+  test_bins_3D();
 }
+
+TESTMAIN(test_bins);

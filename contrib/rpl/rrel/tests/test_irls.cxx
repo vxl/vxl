@@ -13,13 +13,11 @@
 
 #include "similarity_from_matches.h"
 
-bool close(double,double);
-
 double noise( double sigma );
 
 const double conv_tolerance=1.0e-5;
 
-void
+static void
 regression_points( const vnl_vector<double>& a,
                    double sigma,
                    vcl_vector< vnl_vector<double> >& pts )
@@ -95,7 +93,7 @@ regression_points( const vnl_vector<double>& a,
       pts[i].z() += noise( sigma );
 }
 
-bool
+inline bool
 check( const vnl_vector<double>& correct_params,
        rrel_irls* irls )
 {
@@ -122,10 +120,8 @@ check( const vnl_vector<double>& correct_params,
 }
 
 
-MAIN( test_irls )
+static void test_irls()
 {
-  START( "rrel_irls" );
-
   //  Set true parameter estimate.
   vnl_vector<double> true_params(3, 10.0, 0.02, -0.1);
 
@@ -236,8 +232,7 @@ MAIN( test_irls )
   testlib_test_begin( "non-unique matches -- params initialized correctly, fixed scale" );
   testlib_test_perform( irls_m.estimate( match_prob, m_est ) &&
                         check( params, &irls_m ) );
-  testlib_test_begin( "scale unchanged" );
-  testlib_test_perform( close( sigma, irls_m.scale() ) );
-
-  SUMMARY();
+  TEST_NEAR("scale unchanged", sigma, irls_m.scale() , 1e-6);
 }
+
+TESTMAIN(test_irls);

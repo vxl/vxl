@@ -4,7 +4,7 @@
 #include <vil3d/algo/vil3d_exp_filter.h>
 #include <vil3d/vil3d_crop.h>
 
-void test_exp_filter_float(vil3d_image_view<float>& image)
+static void test_exp_filter_float(vil3d_image_view<float>& image)
 {
   vcl_cout << "**************************\n"
            << " Testing vil3d_exp_filter\n"
@@ -32,21 +32,19 @@ void test_exp_filter_float(vil3d_image_view<float>& image)
   TEST_NEAR("exp_filter(5,5,6)",dest(5,5,6),1.5f,0.01f);
 }
 
-void test_exp_filter_float()
+static void test_exp_filter_float()
 {
   vil3d_image_view<float> image(15,16,17);
   test_exp_filter_float(image);
 
-  vcl_cout<<"Test non-contiguous image"<<vcl_endl;
+  vcl_cout<<"Test non-contiguous image\n";
   vil3d_image_view<float> crop_image = vil3d_crop(image,2,10,3,11,4,12);
   test_exp_filter_float(crop_image);
 }
 
-MAIN( test_algo_exp_filter )
+static void test_algo_exp_filter()
 {
-  START( "vil3d_exp_filter_*" );
-
   test_exp_filter_float();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_exp_filter);
