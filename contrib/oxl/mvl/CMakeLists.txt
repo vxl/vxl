@@ -100,4 +100,5 @@ AUX_SOURCE_DIRECTORY(Templates mvl_sources)
 
 IF( BUILD_TESTING)
   SUBDIRS(examples)
+# SUBDIRS(tests)
 ENDIF( BUILD_TESTING)
