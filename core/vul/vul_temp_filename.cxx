@@ -9,7 +9,7 @@
 #include <vcl_cstdlib.h> // for rand/srand
 
 #if defined(VCL_BORLAND)
-# include <stdio.h> // for _tempnam on borland.
+# include <vcl_cstdio.h> // for _tempnam on borland.
 #endif
 
 #if defined(VCL_VC) || defined(VCL_BORLAND)
