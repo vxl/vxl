@@ -84,7 +84,7 @@ static void test(char const* magic, int comps, int bits, int maxval)
 
 MAIN( test_load )
 {
-  START( "vil1_load" )
+  START( "vil1_load" );
   test("P1", 1,  1, 1);
   test("P2", 1,  8, 255);
   test("P2", 1, 16, 65535);

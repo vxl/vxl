@@ -69,7 +69,7 @@ static void test_gray(char const *name, int w, int h, unsigned v)
 
 MAIN( test_load_gen )
 {
-  START( "vil1_load_gen" )
+  START( "vil1_load_gen" );
   test_rgb("gen:10x20:rgb,30,40,50", 10, 20, 30, 40, 50);
   test_gray("gen:10x20:gray,30", 10, 20, 30);
   SUMMARY();
