@@ -26,10 +26,10 @@
  *----------------------------------------------------------------------
  */
 
-#ifndef _viff_h_
-#define _viff_h_
+#ifndef vil_viffheader_h_
+#define vil_viffheader_h_
 
- 
+#if 0 /* this is a C header file. you cannot use // comments in it */
 //:
 // \file
 // \brief  Khoros Visualization/Image File Format. 
@@ -54,7 +54,7 @@
 // \endverbatim
 //
 // \verbatim
-//******************************************************************
+// ******************************************************************
 //	Khoros Visualization/Image File Format		         
 //							         
 //	A Khoros data file is organized as a 1Kbyte header     
@@ -93,9 +93,9 @@
 //	The Khoros convention for the image orientarion is	 
 //	with the image origin in the upper left hand corner.     
 //							         
-//******************************************************************
+// ******************************************************************
 // \endverbatim
-
+#endif
 
 
 /*
@@ -394,4 +394,4 @@ examples of proper use.  */
 #define number_of_rows col_size
 #define number_of_cols row_size
 
-#endif /* _viff_h_ */
+#endif /* vil_viffheader_h_ */
