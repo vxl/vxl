@@ -46,7 +46,7 @@ void vsol_box_2d::grow_minmax_bounds(vsol_box_2d & comp_box)
 //-------------------------------------------------------------------
 //:   Determines if this box is inside the right hand side box.
 //    That is, all boundaries of *this must be on or inside the boundaries of b.
-bool vsol_box_2d::operator< (vsol_box_2d& b)
+bool vsol_box_2d::operator< (vsol_box_2d& b) const
 {
   if (box_.empty()) return true;
   if (b.box_.empty()) return false;

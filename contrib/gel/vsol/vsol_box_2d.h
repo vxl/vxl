@@ -20,7 +20,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_bounding_box.h>
 
-//: a bounding box for spatial objects
+//: A bounding box for 2d spatial objects
 
 class vsol_box_2d : public vbl_ref_count, public vul_timestamp
 {
@@ -46,9 +46,9 @@ class vsol_box_2d : public vbl_ref_count, public vul_timestamp
   double get_min_y() const;
   double get_max_y() const;
 
-  inline double width() const { return get_max_x() - get_min_x(); }
-  inline double height()const { return get_max_y() - get_min_y(); }
-  inline double area() const { return width() * height(); }
+  double width() const { return get_max_x() - get_min_x(); }
+  double height()const { return get_max_y() - get_min_y(); }
+  double area() const { return width() * height(); }
 
   //: enlarge the bounding box by adding the point (x,y) and taking convex hull
   void add_point(double x, double y);
@@ -57,10 +57,11 @@ class vsol_box_2d : public vbl_ref_count, public vul_timestamp
   //  I.e., take the convex union of this and comp_box
   void grow_minmax_bounds(vsol_box_2d & comp_box);
 
-  bool operator< (vsol_box_2d& b);  // a<b means a is inside b
+  //: a<b means a is inside b
+  bool operator< (vsol_box_2d& box) const;
 
-  // is box about the same as this?
-  bool near_equal(vsol_box_2d const& b, float tolerance) const;
+  //: is box about the same as this?
+  bool near_equal(vsol_box_2d const& box, float tolerance) const;
 
   //: reset the bounds of the box, i.e., make the box empty
   void reset_bounds();
