@@ -21,7 +21,6 @@ bmrf_network_builder_params(const bmrf_network_builder_params& tp)
              tp.elv_min_,
              tp.elv_max_,
              tp.Ns_,
-             tp.alpha_range_,
              tp.max_delta_recip_s_
              );
 }
@@ -33,7 +32,6 @@ bmrf_network_builder_params(const float eu,
                              const int elv_min,
                              const int elv_max,
                              const int Ns,
-                             const float alpha_range,
                              const float gamma_max)
 {
   InitParams(eu,
@@ -42,7 +40,6 @@ bmrf_network_builder_params(const float eu,
              elv_min,
              elv_max,
              Ns,
-             alpha_range,
              gamma_max);
 }
 
@@ -53,7 +50,6 @@ void bmrf_network_builder_params::InitParams(
                                      int elv_min,
                                      int elv_max,
                                      int Ns,
-                                     float alpha_range,
                                      float max_delta_recip_s)
 
 {
@@ -63,7 +59,6 @@ void bmrf_network_builder_params::InitParams(
   elv_min_ = elv_min;
   elv_max_ = elv_max;
   Ns_ = Ns;
-  alpha_range_ = alpha_range;
   max_delta_recip_s_ = max_delta_recip_s;
 }
 
@@ -93,7 +88,6 @@ vcl_ostream& operator << (vcl_ostream& os, const bmrf_network_builder_params& tp
   os << "min epi space row " << tp.elv_min_ << vcl_endl;
   os << "max epi space row " << tp.elv_max_ << vcl_endl;
   os << "Samples in s " << tp.Ns_ << vcl_endl;
-  os << "alpha_range " << tp.alpha_range_ << vcl_endl;
   os << "---]" << vcl_endl;
   return os;
 }
