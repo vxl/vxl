@@ -11,6 +11,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_view_as.h>
 #include <vil/vil_plane.h>
+#include <vil/vil_transform.h>
 
 //: Compute minimum and maximum values over view
 template<class T>
@@ -194,24 +195,23 @@ inline void vil_math_mean_and_variance(sumT& mean, sumT& var, const vil_image_vi
   var = sum_sq/(im.ni()*im.nj()) - mean*mean;
 }
 
+//: Functor class to compute square roots (returns zero if x<0)
+class vil_math_sqrt_functor {
+public:
+  vxl_byte operator()(vxl_byte x) { return vxl_byte(0.5+vcl_sqrt(float(x))); }
+  unsigned operator()(unsigned x) { return unsigned(0.5+vcl_sqrt(float(x))); }
+  int operator()(int x)           { return (x>0?int(0.5+vcl_sqrt(float(x))):0); }
+  short operator()(short x)       { return (x>0?short(0.5+vcl_sqrt(float(x))):0); }
+  float operator()(float x)       { return (x>0?vcl_sqrt(x):0.0f); }
+  double operator()(double x)     { return (x>0?vcl_sqrt(x):0.0); }
+};
+
 //: Compute square-root of each pixel element (or zero if negative)
 // \relates vil_image_view
 template<class T>
 inline void vil_math_sqrt(vil_image_view<T>& image)
 {
-  unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
-  vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
-  T* plane = image.top_left_ptr();
-  for (unsigned p=0;p<np;++p,plane += pstep)
-  {
-    T* row = plane;
-    for (unsigned j=0;j<nj;++j,row += jstep)
-    {
-      T* pixel = row;
-      for (unsigned i=0;i<ni;++i,pixel+=istep) 
-        *pixel = T(*pixel>0?vcl_sqrt(*pixel):0);
-    }
-  }
+  vil_transform(image,vil_math_sqrt_functor());
 }
 
 
@@ -240,23 +240,26 @@ inline void vil_math_truncate_range(vil_image_view<T>& image, T min_v, T max_v)
   }
 }
 
+//: Functor class to scale by s
+class vil_math_scale_functor {
+private:
+  double s_;
+public:
+  vil_math_scale_functor(double s) : s_(s) {}
+  vxl_byte operator()(vxl_byte x) { return vxl_byte(0.5+s_*x); }
+  unsigned operator()(unsigned x) { return unsigned(0.5+s_*x); }
+  short operator()(short x)   { double r=s_*x; return short(r<0?r-0.5:r+0.5); }
+  int operator()(int x)       { double r=s_*x; return int(r<0?r-0.5:r+0.5); }
+  float operator()(float x)       { return float(s_*x); }
+  double operator()(double x)     { return s_*x; }
+};
+
 //: Multiply values in-place in image view by scale
 // \relates vil_image_view
 template<class T>
 inline void vil_math_scale_values(vil_image_view<T>& image, double scale)
 {
-  unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
-  vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
-  T* plane = image.top_left_ptr();
-  for (unsigned p=0;p<np;++p,plane += pstep)
-  {
-    T* row = plane;
-    for (unsigned j=0;j<nj;++j,row += jstep)
-    {
-      T* pixel = row;
-      for (unsigned i=0;i<ni;++i,pixel+=istep) *pixel = T(scale*(*pixel));
-    }
-  }
+  vil_transform(image,vil_math_scale_functor(scale));
 }
 
 //: Multiply values in-place in image view by scale and add offset

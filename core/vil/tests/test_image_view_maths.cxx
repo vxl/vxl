@@ -151,16 +151,35 @@ void test_image_view_maths_byte()
 
   TEST_NEAR("test variance normalisation",diff2,0,1e-6);
 
-  // Testing square-root function
-  vil_image_view<float> im_sqrt(5,5);
-  im_sqrt.fill(4.0f);
-  im_sqrt(1,2)=-1.0f;
-  im_sqrt(3,4)=9.0f;
-  vil_math_sqrt(im_sqrt);
-  TEST_NEAR("vil_math_sqrt (a)",im_sqrt(1,1),2.0,1e-6);
-  TEST_NEAR("vil_math_sqrt (b)",im_sqrt(3,4),3.0,1e-6);
-  TEST_NEAR("vil_math_sqrt (-ives)",im_sqrt(1,2),0.0,1e-6);
+  // Testing square-root function (float)
+  vil_image_view<float> fim_sqrt(5,5);
+  fim_sqrt.fill(4.0f);
+  fim_sqrt(1,2)=-1.0f;
+  fim_sqrt(3,4)=9.0f;
+  vil_math_sqrt(fim_sqrt);
+  TEST_NEAR("vil_math_sqrt (a)",fim_sqrt(1,1),2.0,1e-6);
+  TEST_NEAR("vil_math_sqrt (b)",fim_sqrt(3,4),3.0,1e-6);
+  TEST_NEAR("vil_math_sqrt (-ives)",fim_sqrt(1,2),0.0,1e-6);
 
+  // Testing square-root function (int)
+  vil_image_view<int> iim_sqrt(5,5);
+  iim_sqrt.fill(4);
+  iim_sqrt(1,2)=-1;
+  iim_sqrt(3,4)=9;
+  vil_math_sqrt(iim_sqrt);
+  TEST_NEAR("vil_math_sqrt (a)",iim_sqrt(1,1),2,1e-6);
+  TEST_NEAR("vil_math_sqrt (b)",iim_sqrt(3,4),3,1e-6);
+  TEST_NEAR("vil_math_sqrt (-ives)",iim_sqrt(1,2),0,1e-6);
+
+  // Testing square-root function (vxl_byte)
+  vil_image_view<vxl_byte> bim_sqrt(5,5);
+  bim_sqrt.fill(vxl_byte(4));
+  bim_sqrt(1,2)=8;
+  bim_sqrt(3,4)=9;
+  vil_math_sqrt(bim_sqrt);
+  TEST_NEAR("vil_math_sqrt (4)",bim_sqrt(1,1),2,1e-6);
+  TEST_NEAR("vil_math_sqrt (9)",bim_sqrt(3,4),3,1e-6);
+  TEST_NEAR("vil_math_sqrt (8)",bim_sqrt(1,2),3,1e-6);
 }
 
 MAIN( test_image_view_maths )

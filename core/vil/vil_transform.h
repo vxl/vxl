@@ -12,6 +12,59 @@
 #include <vcl_cassert.h>
 #include <vil/vil_image_view.h>
 
+//: Apply a unary operation to each pixel in image.
+// \param functor should take a value of type T and return same type
+template <class T, class F >
+inline void vil_transform(vil_image_view<T >& image, F functor)
+{
+  const unsigned ni = image.ni(), nj= image.nj(), np = image.nplanes();
+
+  vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
+  T* plane = image.top_left_ptr();
+
+  if (istep==1)
+  {
+    // Optimise special case
+    for (unsigned p=0;p<np;++p,plane += pstep)
+    {
+      T* row = plane;
+      for (unsigned j=0;j<nj;++j,row += jstep)
+      {
+        T *pixel = row, *end_row = row+ni;
+        for (;pixel!=end_row;++pixel) *pixel = functor(*pixel);
+      }
+    }
+  }
+  else
+  if (jstep==1)
+  {
+    // Optimise special case
+    for (unsigned p=0;p<np;++p,plane += pstep)
+    {
+      T* col = plane;
+      for (unsigned i=0;i<ni;++i,col += istep)
+      {
+        T *pixel = col, *end_col=col+nj;
+        for (;pixel!=end_col;++pixel) *pixel = functor(*pixel);
+      }
+    }
+  }
+  else
+  {
+    // General case
+    for (unsigned p=0;p<np;++p,plane += pstep)
+    {
+      T* row = plane;
+      for (unsigned j=0;j<nj;++j,row += jstep)
+      {
+        T* pixel = row;
+        for (unsigned i=0;i<ni;++i,pixel+=istep)
+          *pixel = functor(*pixel);
+      }
+    }
+  }
+}
+
 
 //: Apply a unary operation to each pixel in src to get dest.
 // \param functor should take a value of type inP, and return a value of type outP
