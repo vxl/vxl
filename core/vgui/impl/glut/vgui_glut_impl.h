@@ -1,5 +1,5 @@
-#ifndef vgui_impl_glut_h_
-#define vgui_impl_glut_h_
+#ifndef vgui_glut_impl_h_
+#define vgui_glut_impl_h_
 // .NAME vgui_glut
 // .LIBRARY vgui-glut
 // .INCLUDE vgui/impl/glut/vgui_glut.h
@@ -8,10 +8,10 @@
 
 #include <vgui/vgui_toolkit.h>
 
-struct vgui_glut : vgui_toolkit
+struct vgui_glut_impl : vgui_toolkit
 {
-  vgui_glut();
-  ~vgui_glut();
+  vgui_glut_impl();
+  ~vgui_glut_impl();
 
   void init(int &, char **);
   vcl_string name() const;
@@ -36,6 +36,6 @@ private:
 // some time in the future.
 struct vgui_command;
 struct vgui_glut_adaptor;
-void vgui_glut_queue_command(vgui_glut_adaptor *, vgui_command *);
+void vgui_glut_impl_queue_command(vgui_glut_adaptor *, vgui_command *);
 
-#endif // vgui_impl_glut_h_
+#endif // vgui_glut_impl_h_

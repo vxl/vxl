@@ -13,7 +13,7 @@ SOURCE_FILES(vgui_glut_sources
   vgui_glut_tag.cxx
   vgui_glut_popup_impl.cxx
   vgui_glut_window.cxx
-  vgui_glut.cxx
+  vgui_glut_impl.cxx
   vgui_glut_slab.cxx
 )
 

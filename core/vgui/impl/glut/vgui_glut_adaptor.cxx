@@ -122,11 +122,11 @@ void vgui_glut_adaptor::post_overlay_redraw() {
   glutSetWindow( old );
 }
 
-extern void vgui_glut_quit();
+extern void vgui_glut_impl_quit();
 void vgui_glut_adaptor::post_destroy() {
   //vgui_macro_warning << "calling exit()\n";
   //exit(1);
-  vgui_glut_quit();
+  vgui_glut_impl_quit();
 }
 
 //--------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include "vgui_glut.h"
+#include "vgui_glut_impl.h"
 #include "vgui_glut_window.h"
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
@@ -9,15 +9,15 @@
 
 //--------------------------------------------------------------------------------
 
-int vgui_glut::count = 0;
+int vgui_glut_impl::count = 0;
 
-vgui_glut::vgui_glut()
+vgui_glut_impl::vgui_glut_impl()
 {
   ++count;
   assert(count == 1);
 }
 
-vgui_glut::~vgui_glut()
+vgui_glut_impl::~vgui_glut_impl()
 {
   --count;
   assert(count==0);
@@ -25,7 +25,7 @@ vgui_glut::~vgui_glut()
 
 //--------------------------------------------------------------------------------
 
-void vgui_glut::init(int &argc, char **argv)
+void vgui_glut_impl::init(int &argc, char **argv)
 {
 //   vcl_cerr << __FILE__ " init() :" << vcl_endl;
 //   for (unsigned i=0; i<argc; ++i)
@@ -33,12 +33,12 @@ void vgui_glut::init(int &argc, char **argv)
   glutInit(&argc, argv);
 }
 
-vcl_string vgui_glut::name() const
+vcl_string vgui_glut_impl::name() const
 {
   return "glut";
 }
 
-vgui_window *vgui_glut::produce_window(int width, int height,
+vgui_window *vgui_glut_impl::produce_window(int width, int height,
                                        vgui_menu const &menubar,
                                        char const *title)
 {
@@ -47,7 +47,7 @@ vgui_window *vgui_glut::produce_window(int width, int height,
   return win;
 }
 
-vgui_window *vgui_glut::produce_window(int width, int height,
+vgui_window *vgui_glut_impl::produce_window(int width, int height,
                                        char const *title)
 {
   return new vgui_glut_window(title, width, height);
@@ -70,7 +70,7 @@ vgui_window *vgui_glut::produce_window(int width, int height,
 //  ...
 //   vgui::run()
 //    ...
-//    vgui_glut::run()
+//    vgui_glut_impl::run()
 //    ...
 //     internal_run_till_idle();
 //     goto next_statement;// this is what setjmp() effectively does
@@ -141,21 +141,21 @@ void internal_run_till_idle()
 #include "vgui_glut_adaptor.h"
 
 static
-vcl_list<vcl_pair<void *, void *> > vgui_glut_command_queue;
+vcl_list<vcl_pair<void *, void *> > vgui_glut_impl_command_queue;
 
-void vgui_glut_queue_command(vgui_glut_adaptor *a, vgui_command *c)
+void vgui_glut_impl_queue_command(vgui_glut_adaptor *a, vgui_command *c)
 {
   c->ref(); // matched by unref() in process_command_queue();
-  vgui_glut_command_queue.push_back(vcl_pair<void *, void *>(a, c));
+  vgui_glut_impl_command_queue.push_back(vcl_pair<void *, void *>(a, c));
 }
 
 static
-void vgui_glut_process_command_queue()
+void vgui_glut_impl_process_command_queue()
 {
-  while (! vgui_glut_command_queue.empty()) {
+  while (! vgui_glut_impl_command_queue.empty()) {
     // remove from front of queue.
-    vcl_pair<void *, void *> p = vgui_glut_command_queue.front();
-    vgui_glut_command_queue.pop_front();
+    vcl_pair<void *, void *> p = vgui_glut_impl_command_queue.front();
+    vgui_glut_impl_command_queue.pop_front();
 
     // a bit of casting.
     vgui_glut_adaptor *a = static_cast<vgui_glut_adaptor *>(p.first );
@@ -167,11 +167,11 @@ void vgui_glut_process_command_queue()
       glutSetWindow(a->get_id());
 
     // execute the command.
-    //vcl_cerr << "cmnd = " << (void*)vgui_glut_adaptor_menu_command << vcl_endl;
+    //vcl_cerr << "cmnd = " << (void*)vgui_glut_impl_adaptor_menu_command << vcl_endl;
     c->execute();
     //vcl_cerr << "returned successfully" << vcl_endl;
 
-    // this matches ref() in vgui_glut_queue_command()
+    // this matches ref() in vgui_glut_impl_queue_command()
     c->unref();
 
     // switch back to the old GL context.
@@ -184,38 +184,38 @@ void vgui_glut_process_command_queue()
 // loop should be terminated in the near future.
 static bool internal_quit_flag = false;
 
-void vgui_glut::run()
+void vgui_glut_impl::run()
 {
   internal_quit_flag = false;
   while (! internal_quit_flag) {
     internal_run_till_idle();
-    vgui_glut_process_command_queue();
+    vgui_glut_impl_process_command_queue();
   }
-  vgui_macro_warning << "end of vgui_glut event loop" << vcl_endl;
+  vgui_macro_warning << "end of vgui_glut_impl event loop" << vcl_endl;
 }
 
-// This is (erroneously) called from vgui_glut_adaptor::post_destroy().
-void vgui_glut_quit()
+// This is (erroneously) called from vgui_glut_impl_adaptor::post_destroy().
+void vgui_glut_impl_quit()
 {
   internal_quit_flag = true;
 }
 
-void vgui_glut::quit()
+void vgui_glut_impl::quit()
 {
   internal_quit_flag = true;
 }
 
 // This is actually run-a-few-events, sorry...
-void vgui_glut::run_one_event()
+void vgui_glut_impl::run_one_event()
 {
   internal_run_till_idle();
-  vgui_glut_process_command_queue();
+  vgui_glut_impl_process_command_queue();
 }
 
-void vgui_glut::run_till_idle()
+void vgui_glut_impl::run_till_idle()
 {
   internal_run_till_idle();
-  vgui_glut_process_command_queue();
+  vgui_glut_impl_process_command_queue();
 }
 
 //--------------------------------------------------------------------------------

@@ -116,7 +116,7 @@ void vgui_glut_popup_impl::build_internal(vgui_menu const &m) {
 // To accomplish that, the action of selecting a menu item just
 // queues the command for later execution.
 
-#include "vgui_glut.h"
+#include "vgui_glut_impl.h"
 
 void vgui_glut_popup_impl::command_func(int value)
 {
@@ -128,6 +128,6 @@ void vgui_glut_popup_impl::command_func(int value)
     int win = glutGetWindow();
     vgui_glut_adaptor *a = vgui_glut_adaptor::get_adaptor(win);
     vgui_command      *c = reinterpret_cast<vgui_command *>(value);
-    vgui_glut_queue_command(a, c);
+    vgui_glut_impl_queue_command(a, c);
   }
 }
