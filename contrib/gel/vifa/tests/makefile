@@ -1,6 +1,7 @@
 USES += contrib/gel contrib/brl contrib/brl/bseg core
 include ../config.mk
 include ${IUEROOT}/core/testlib/config.mk
+include ${IUEROOT}/contrib/brl/bseg/sdet/config.mk
 
 TESTMAIN := test_driver.cxx
 SOURCES += test_ifa_factory.cxx
