@@ -37,10 +37,13 @@
 //:
 // \file
 // \brief give a brief description of the file.
-// \author Whoever, (erehwon) 01/01/01
+// \author Whoever, (erehwon)
+// \date 01/01/01
 // \author Someone else
 // Here you can write the long description of what's in this file
 // Doxygen will add this to the extended documentation of the file
+// Put the data and author tags immediatly following the brief tag,
+// as doxygen (poor thing) is easily confused otherwise.
 //
 // \verbatim
 // Modifications
