@@ -12,10 +12,10 @@
 
 #include <vcl_vector.h>
 #include <vcl_functional.h>
-#include <vcl_algorithm.h>
+#include <vcl_algorithm.h> 
 
 //: A bounded priority queue
-// This is identical a vcl_priority_queue, but
+// This is identical to a vcl_priority_queue, but
 // as more elements are added past the queue's bound size
 // the largest values are thrown out.
 // So this queue keeps the n smallest values that
@@ -39,7 +39,7 @@ public:
 
   explicit
   mbl_priority_bounded_queue(unsigned bound_size = 10, const O& comp = O()):
-    b_size_(bound_size), comp_(comp) {  }
+    b_size_(bound_size), comp_(comp) { }
 
 #if 0 // #if VCL_HAS_MEMBER_TEMPLATES
  template <class ITER>
@@ -52,7 +52,7 @@ public:
     size_type bound_size, ITER first, ITER last, const O& comp = O(),
     const allocator_type& alloc = allocator_type()):
       b_size_(0), c_(alloc), comp_(comp)
-  {for (; first != last; ++first) ++b_size_; push(*first);}
+    {for (; first != last; ++first) {++b_size_; push(*first);} }
 
   //: The largest size the queue can be before it starts throwing out data.
   size_type bound_size() const {return b_size_;}
