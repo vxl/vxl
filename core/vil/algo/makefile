@@ -46,6 +46,7 @@ MANPAGE_SOURCES += vil_find_peaks.h
 MANPAGE_SOURCES += vil_region_finder.txx
 MANPAGE_SOURCES += vil_cartesian_differential_invariants.txx
 MANPAGE_SOURCES += vil_dog_filter_5tap.h
+MANPAGE_SOURCES += vil_dog_pyramid.h
 
 ################################
 include ${IUEROOT}/config/top.mk
