@@ -35,7 +35,7 @@ $vcl  = 0; # convert Config-IUE and standard C/C++ code to vcl
 $vbl  = 0; # convert Basics code to vbl
 $vnl  = 0; # convert Numerics code to vnl
 $vil  = 0; # convert EasyImage to vil
-$vsl  = 0; #
+$osl  = 0; #
 $vgui = 0; # convert old vgui to new vgui
 $lint = 0; #
 $mvl  = 0;
@@ -48,7 +48,7 @@ sub parse_options {
     elsif ($arg eq "-vbl" ) { $vbl  = 1; }
     elsif ($arg eq "-vnl" ) { $vnl  = 1; }
     elsif ($arg eq "-vil" ) { $vil  = 1; }
-    elsif ($arg eq "-vsl" ) { $vsl  = 1; }
+    elsif ($arg eq "-osl" ) { $osl  = 1; }
     elsif ($arg eq "-vgl" ) { $vgl  = 1; }
     elsif ($arg eq "-vxl" ) { $vgl  = $vnl = $vil = $vbl = $vcl = 1; }
     elsif ($arg eq "-vgui") { $vgui = 1; }
@@ -461,9 +461,9 @@ sub process_headers {
       s!^(\#include +\<(Geometry|Topology)/)!//$1!;
     }
 
-    #---------------------------------------- vsl
-    if ($vsl) {
-      s!<vsl/fsm_ortho_regress.h>!<vsl/vsl_ortho_regress.h>!;
+    #---------------------------------------- osl
+    if ($osl) {
+      s!<osl/fsm_ortho_regress.h>!<osl/osl_ortho_regress.h>!;
     }
 
     #---------------------------------------- VGUI -> vgui
@@ -908,11 +908,11 @@ sub process_lines {
 
     }
 
-    #---------------------------------------- vsl
-    if ($vsl) {
-      s/\bvsl_EdgelChain\b/vsl_edgel_chain/g;
-      s/\bvsl_Edge\b/vsl_edge/g;
-      s/\bvsl_Vertex\b/vsl_vertex/g;
+    #---------------------------------------- osl
+    if ($osl) {
+      s/\bosl_EdgelChain\b/osl_edgel_chain/g;
+      s/\bosl_Edge\b/osl_edge/g;
+      s/\bosl_Vertex\b/osl_vertex/g;
     }
 
     #---------------------------------------- VGUI -> vgui
