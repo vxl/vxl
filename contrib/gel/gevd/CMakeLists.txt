@@ -6,7 +6,7 @@ SET(gevd_sources
     gevd_detector.cxx           gevd_detector.h
     gevd_detector_params.cxx    gevd_detector_params.h
     gevd_param_mixin.cxx        gevd_param_mixin.h
-    gevd_status_mixin.cxx       gevd_status_mixin.h
+                                gevd_status_mixin.h
     gevd_memory_mixin.cxx       gevd_memory_mixin.h
     gevd_bufferxy.cxx           gevd_bufferxy.h
     gevd_float_operators.cxx    gevd_float_operators.h
