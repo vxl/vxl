@@ -7,6 +7,7 @@
 //  \author Tim Cootes (based on work by fsm)
 
 #include <vcl_compiler.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vil2/vil2_image_view.h>
 
 //: Available options for boundary behavior
