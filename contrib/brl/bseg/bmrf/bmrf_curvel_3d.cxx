@@ -4,24 +4,28 @@
 
 #include "bmrf_curvel_3d.h"
 #include "bmrf_node.h"
+#include "bmrf_gamma_func.h"
 #include <vcl_algorithm.h>
 
 
 //: Constructor
 bmrf_curvel_3d::bmrf_curvel_3d()
- : bugl_gaussian_point_3d<double>()
+ : bugl_gaussian_point_3d<double>(), 
+   sum_gamma_(0.0), sum_sqr_gamma_(0.0), num_projections_(0)
 {
 }
 
 //: Constructor
 bmrf_curvel_3d::bmrf_curvel_3d(vgl_point_3d<double> &p, vnl_double_3x3 &s)
- : bugl_gaussian_point_3d<double>(p, s)
+ : bugl_gaussian_point_3d<double>(p, s), 
+   sum_gamma_(0.0), sum_sqr_gamma_(0.0), num_projections_(0)
 {
 }
 
 //: Constructor
 bmrf_curvel_3d::bmrf_curvel_3d(double x, double y, double z, vnl_double_3x3 & s)
- : bugl_gaussian_point_3d<double>(x, y, z, s)
+ : bugl_gaussian_point_3d<double>(x, y, z, s), 
+   sum_gamma_(0.0), sum_sqr_gamma_(0.0), num_projections_(0)
 {
 }
 
@@ -50,6 +54,7 @@ bmrf_curvel_3d::merge(const bmrf_curvel_3d_sptr& other)
       merged_projs_2d_[f] = other->projs_2d_[f];
   }
   this->projs_2d_ = merged_projs_2d_;
+  this->compute_statistics();
   return true;
 }
 
@@ -59,10 +64,34 @@ bmrf_curvel_3d::merge(const bmrf_curvel_3d_sptr& other)
 void
 bmrf_curvel_3d::set_proj_in_frame(unsigned int frame, double alpha, const bmrf_node_sptr& node)
 {
+  if (!node)
+    return;
+
   if (frame >= projs_2d_.size())
     projs_2d_.resize(frame+1);
 
-  projs_2d_[frame] = vcl_pair<double, bmrf_node_sptr>(alpha, node);
+
+  if(!projs_2d_[frame].second){
+    // recursive calculation
+    double s1 = node->epi_seg()->s(alpha);
+
+    for (unsigned int ind=0; ind<projs_2d_.size(); ++ind){
+      if(!projs_2d_[ind].second)
+        continue;
+      double s2 = projs_2d_[ind].second->epi_seg()->s(projs_2d_[ind].first);
+      double gamma = 1.0 / (((int(ind) - int(frame)) / (1.0 - s1/s2)) + double(frame));
+      sum_gamma_ += gamma;
+      sum_sqr_gamma_ += gamma*gamma;
+    }
+
+    ++num_projections_;
+    projs_2d_[frame] = vcl_pair<double, bmrf_node_sptr>(alpha, node);
+  }
+  else{
+    // recalculate from scratch 
+    projs_2d_[frame] = vcl_pair<double, bmrf_node_sptr>(alpha, node);
+    this->compute_statistics();
+  }
 }
 
 
@@ -128,15 +157,52 @@ bmrf_curvel_3d::is_projection(const bmrf_node_sptr& node) const
 int 
 bmrf_curvel_3d::num_projections(bool include_pseudo) const
 {
-  int count = 0;
-  for ( vcl_vector<vcl_pair<double,bmrf_node_sptr> >::const_iterator itr = projs_2d_.begin();
-        itr != projs_2d_.end();  ++itr )
-  {
-    if(itr->second)
-      ++count;
-  }
   if (include_pseudo)
-    count += pseudo_points_.size();
+    return num_projections_ + pseudo_points_.size();
 
-  return count;
+  return num_projections_;
+}
+
+
+//: Return the average gamma value relative to frame 0
+double 
+bmrf_curvel_3d::gamma_avg() const
+{
+  return sum_gamma_ / (num_projections_*(num_projections_-1)/2);
+}
+
+
+//: Return the standard deviation of the gamma values
+double 
+bmrf_curvel_3d::gamma_std() const
+{
+  int num_samples = (num_projections_*(num_projections_-1)/2);
+  double avg_sqr_gamma = sum_sqr_gamma_ / (num_samples-1);
+  double avg_gamma = sum_gamma_ / num_samples;
+  double var = avg_sqr_gamma - avg_gamma*sum_gamma_/(num_samples-1);
+  return vcl_sqrt(var);
+}
+
+
+//: Compute the gamma statistics on the current projections
+void 
+bmrf_curvel_3d::compute_statistics()
+{
+  num_projections_ = 0;
+  sum_gamma_ = 0.0;
+  sum_sqr_gamma_ = 0.0;
+  for (unsigned int ind1=0; ind1<projs_2d_.size(); ++ind1){
+    if(!projs_2d_[ind1].second)
+      continue;
+    ++num_projections_;
+    double s1 = projs_2d_[ind1].second->epi_seg()->s(projs_2d_[ind1].first);
+    for (unsigned int ind2=ind1+1; ind2<projs_2d_.size(); ++ind2){
+      if(!projs_2d_[ind2].second)
+        continue;
+      double s2 = projs_2d_[ind2].second->epi_seg()->s(projs_2d_[ind2].first);
+      double gamma = 1.0 / (((int(ind2) - int(ind1)) / (1.0 - s1/s2)) + double(ind1)); 
+      sum_gamma_ += gamma;
+      sum_sqr_gamma_ += gamma*gamma;
+    }
+  }
 }

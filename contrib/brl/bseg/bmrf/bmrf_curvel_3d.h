@@ -54,7 +54,7 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
   //: Returns the smart pointer to the node at the projection into \p frame
   bmrf_node_sptr node_at_frame(unsigned int frame) const;
 
-  //: Return true if \p a projection of this curvel lies on \p node
+  //: Return true if a projection of this curvel lies on \p node
   bool is_projection(const bmrf_node_sptr& node) const;
 
   //: Return the number of projections available
@@ -63,16 +63,33 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
   //: Return the projection error
   double proj_error() const { return proj_error_; }
 
+  //: Return the average gamma value relative to frame 0
+  double gamma_avg() const;
+
+  //: Return the standard deviation of the gamma values
+  double gamma_std() const;
+
   //: Set the projection error
   void set_proj_error(double error) { proj_error_ = error; }
 
  protected:
+  //: Compute the gamma statistics on the current projections
+  void compute_statistics();
 
   //: A vector of alpha/node pairs which represent the projection of this curvel into image i.
   vcl_vector<vcl_pair<double,bmrf_node_sptr> > projs_2d_;
 
   //: A map of projections that have been interpolated and do not belong to a node
   vcl_map<unsigned int, vnl_double_2> pseudo_points_;
+
+  //: The sum of gamma values of all projections relative to the frame 0
+  double sum_gamma_;
+  
+  //: The sum of the squared gamma values relative to frame 0;
+  double sum_sqr_gamma_;
+
+  //: The number of valid projections
+  unsigned int num_projections_;
 
   //: The error in the projection;
   double proj_error_;
