@@ -16,11 +16,7 @@
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_soview2D.h>
 #include <vsrl/vsrl_parameters.h>
-#include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_region.h>
-#include <vdgl/vdgl_digital_curve_sptr.h>
-#include <vdgl/vdgl_interpolator.h>
-#include <vdgl/vdgl_edgel_chain.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
