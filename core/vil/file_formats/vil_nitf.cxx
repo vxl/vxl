@@ -748,7 +748,10 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
 
     for (unsigned int block_row = start_block_y; block_row < max_block_y; ++block_row)
     {
-      unsigned int block_col = 0;  // DEFINE OUT HERE SO WE CAN DISPLAY AT END OF EACH BLOCK ROW
+      unsigned int block_col ;  // DEFINE OUT HERE SO WE CAN DISPLAY AT END OF EACH BLOCK ROW
+                                // DO NOT INITIALIZE BECAUSE VALUE IS REASSIGNED BEFORE
+                                // INITIAL VALUE IS EVER USED.  SOME COMPILERS COMPLAIN ABOUT THIS.
+
 #ifdef DEBUG
       unsigned long bytes_copied = 0;  // bytes copied for this row
 #endif
