@@ -18,8 +18,6 @@
 # include "sunpro/vcl_set.txx"
 #elif defined(VCL_SGI_CC)
 # include "sgi/vcl_set.txx"
-#elif defined(VCL_VC60)
-# include "win32-vc60/vcl_set.txx"
 #else
 # include "iso/vcl_set.txx"
 #endif

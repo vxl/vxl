@@ -285,25 +285,14 @@ SET( vcl_sources
   sunpro/vcl_utility.txx
   sunpro/vcl_vector.txx sunpro/vcl_vector.h
 
-  win32-vc60/vcl_algorithm.txx
   win32-vc60/vcl_cmath.h
-  win32-vc70/vcl_cmath.h
-  win32-vc60/vcl_complex.txx win32-vc60/vcl_complex.h
+  win32-vc60/vcl_complex.h
   win32-vc60/vcl_complex_fwd.h
-  win32-vc60/vcl_cstdio.h
   win32-vc60/vcl_cstdlib.h
+  win32-vc60/vcl_string.h
+
+  win32-vc70/vcl_cmath.h
   win32-vc70/vcl_cstdlib.h
-  win32-vc60/vcl_cstring.h
-  win32-vc60/vcl_ctime.h
-  win32-vc60/vcl_deque.txx
-  win32-vc60/vcl_functional.txx
-  win32-vc60/vcl_iterator.txx
-  win32-vc60/vcl_list.txx
-  win32-vc60/vcl_map.txx
-  win32-vc60/vcl_set.txx
-  win32-vc60/vcl_string.txx win32-vc60/vcl_string.h
-  win32-vc60/vcl_utility.txx
-  win32-vc60/vcl_vector.txx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vcl_sources)

@@ -25,11 +25,9 @@
 #if !VCL_USE_NATIVE_COMPLEX 
 # include "emulation/vcl_complex.h"
 
-// ---------- native WIN32
-#elif defined(VCL_VC60)
+// ---------- Visual Studio 6
+#elif VCL_VC60
 # include "win32-vc60/vcl_complex.h"
-#elif defined(VCL_VC70)
-# include "win32-vc70/vcl_complex.h"
 
 // ---------- SunPro compiler
 #elif defined(VCL_SUNPRO_CC)
