@@ -343,7 +343,10 @@ void vgui_section_buffer::apply(vil_image const& image_in) {
 
   // dunno.
   else
-    assert(false);
+    {
+      vcl_cerr << "pixel_format == " << pixel_format << " which is unknown..." << vcl_endl;
+      assert(false);
+    }
 
   if (debug || !section_ok)
     vcl_cerr << (section_ok ? "section ok" : "section bad") << vcl_endl;
