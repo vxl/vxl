@@ -301,8 +301,10 @@ class vnl_matrix_fixed_ref_const
   //: Return largest absolute value
   abs_t absolute_value_max() const { return array_inf_norm(); }
 
+  // $ || M ||_1 := \max_j \sum_i | M_{ij} | $
   abs_t operator_one_norm() const;
 
+  // $ || M ||_\inf := \max_i \sum_j | M_{ij} | $
   abs_t operator_inf_norm() const;
 
   //: Return Frobenius norm of matrix (sqrt of sum of squares of its elements)
