@@ -1409,13 +1409,13 @@ cat > check_vxl_words.cc <<EOF
 
 int main(int, char **) {
   // 8bit word
-  macro(VXL_INT8, 1, char);
+  macro(VXL_INT_8, 1, char);
   // 16bit word
-  macro(VXL_INT16, 2, short);
+  macro(VXL_INT_16, 2, short);
   // 32bit word
-  macro(VXL_INT32, 4, int);
+  macro(VXL_INT_32, 4, int);
   // 64bit word
-  macro(VXL_INT64, 8, long long);
+  macro(VXL_INT_64, 8, long long);
   return 0;
 }
 EOF
@@ -2028,10 +2028,10 @@ s%@VXL_TWO_ARG_GETTIME@%$VXL_TWO_ARG_GETTIME%g
 s%@VXL_HAS_IEEEFP_H@%$VXL_HAS_IEEEFP_H%g
 s%@VXL_BIG_ENDIAN@%$VXL_BIG_ENDIAN%g
 s%@VXL_LITTLE_ENDIAN@%$VXL_LITTLE_ENDIAN%g
-s%@VXL_INT8@%$VXL_INT8%g
-s%@VXL_INT16@%$VXL_INT16%g
-s%@VXL_INT32@%$VXL_INT32%g
-s%@VXL_INT64@%$VXL_INT64%g
+s%@VXL_INT_8@%$VXL_INT_8%g
+s%@VXL_INT_16@%$VXL_INT_16%g
+s%@VXL_INT_32@%$VXL_INT_32%g
+s%@VXL_INT_64@%$VXL_INT_64%g
 
 CEOF
 EOF
