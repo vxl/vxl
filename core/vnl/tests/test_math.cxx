@@ -38,10 +38,21 @@ void test_math() {
   vnl_test_assert("exp(d*i) == -1", vnl_math_abs(e_ipi+1.0) < 1e-10);
   vcl_cout << vcl_endl;
 
+#ifndef VCL_WIN32
   float a1 = 1.0f/0.0f; // compiler warning
   float a2 = 0.0f/0.0f; // compiler warning
   double a3 = 1.0/0.0; // compiler warning
   double a4 = 0.0/0.0; // compiler warning
+#else // construct IEEE floats NaN and Inf
+  unsigned int i1 = 0x7f800000;
+  float a1 = *((float*)(&i1));
+  unsigned int i2 = 0x7fc00000;
+  float a2 = *((float*)(&i2));
+  unsigned int i3[] = {0, 0x7ff00000 }; // little endian
+  double a3 = *((double*)i3);
+  unsigned int i4[] = {0, 0x7ff80000 }; // little endian
+  double a4 = *((double*)i4);
+#endif
 
   vnl_test_assert(" isfinite(f)  ",  vnl_math_isfinite(f));
   vnl_test_assert(" isfinite(d)  ",  vnl_math_isfinite(d));
