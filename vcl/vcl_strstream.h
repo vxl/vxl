@@ -4,11 +4,10 @@
   fsm@robots.ox.ac.uk
 */
 
-// <strstream> is deprecated, i.e. it is normative for the
-// current (1998) version of the standard, but may not be
-// in future standards.
-// But as it is used a lot in TargetJr, don't issue this warning - PVr
-//#include "vcl_deprecated_header.h"
+// <strstream> is deprecated in favour of <sstream>, i.e. it is normative
+// for the 1998 version of the C++ standard, but is not in the 2002 version.
+// E.g., gcc 3.1 issues a warning when using it.
+#include "vcl_deprecated_header.h"
 
 // this is to get the vcl_ios_* macros.
 #include "vcl_iostream.h"
