@@ -36,7 +36,7 @@ public:
   CheckRGB( const char* file )
   {
     vil_image i = vil_load( (image_base + file).c_str() );
-    if( !i )
+    if ( !i )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
       img_ = i;
@@ -45,7 +45,13 @@ public:
   bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
   {
     assert( p == 0 );
-    return img_ && pixel.size() == 3 && pixel[0] == img_(x,y).r && pixel[1] == img_(x,y).g && pixel[2] == img_(x,y).b;
+    if (!img_ || pixel.size() != 3) return false;
+    vil_rgb<T> imp = img_(x,y);
+    if (pixel[0] != imp.r || pixel[1] != imp.g || pixel[2] != imp.b)
+      vcl_cout << "(x,y)=(" << x << ',' << y << "): p="
+               << pixel[0] << ',' << pixel[1] << ',' << pixel[2]
+               << ", i=" << imp << '\n' << vcl_flush;
+    return pixel[0] == imp.r && pixel[1] == imp.g && pixel[2] == imp.b;
   }
 private:
   vil_memory_image_of< vil_rgb<T> > img_;
@@ -58,7 +64,7 @@ public:
   CheckColourPlanes( const char* file )
   {
     vil_image i = vil_load( (image_base + file).c_str() );
-    if( !i )
+    if ( !i )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
       img_ = i;
@@ -66,7 +72,12 @@ public:
 
   bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
   {
-    return img_ && pixel.size() == 1 && pixel[0] == img_(15*y+3*x+p,0);
+    assert( p == 0 || p==1 || p==2 );
+    if (!img_ || pixel.size() != 1) return false;
+    int imp = img_(15*y+3*x+p,0);
+    if (pixel[0] != imp)
+      vcl_cout << "(x,y)=(" << x << ',' << y << "): p=" << pixel[0] << ", i=" << imp << '\n' << vcl_flush;
+    return pixel[0] == imp;
   }
 private:
   vil_memory_image_of< T > img_;
@@ -79,7 +90,7 @@ public:
   CheckGrey( const char* file )
   {
     vil_image i = vil_load( (image_base + file).c_str() );
-    if( !i )
+    if ( !i )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
       img_ = i;
@@ -89,9 +100,35 @@ public:
   {
     assert( p == 0 );
     if (!img_ || pixel.size() != 1) return false;
-    int imp = img_.bits_per_component()==1 ? (img_(x/8,y)>>(7-x&7))&1 : img_(x,y);
+    int imp = img_(x,y);
     if (pixel[0] != imp)
-      vcl_cerr << "(x,y)=(" << x << ',' << y << "): p=" << pixel[0] << ", i=" << imp << '\n';
+      vcl_cout << "(x,y)=(" << x << ',' << y << "): p=" << pixel[0] << ", i=" << imp << '\n' << vcl_flush;
+    return pixel[0] == imp;
+  }
+private:
+  vil_memory_image_of< T > img_;
+};
+
+template<class T>
+class CheckBit : public CheckPixel
+{
+public:
+  CheckBit( const char* file )
+  {
+    vil_image i = vil_load( (image_base + file).c_str() );
+    if ( !i )
+      vcl_cout << "[ couldn't load " << file << "]\n";
+    else
+      img_ = i;
+  };
+
+  bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
+  {
+    assert( p == 0 );
+    if (!img_ || pixel.size() != 1) return false;
+    int imp = (img_(x/8,y)>>(7-x&7))&1;
+    if (pixel[0] != imp)
+      vcl_cout << "(x,y)=(" << x << ',' << y << "): p=" << pixel[0] << ", i=" << imp << '\n' << vcl_flush;
     return pixel[0] == imp;
   }
 private:
@@ -122,24 +159,24 @@ test( const char* true_data_file, const CheckPixel& check )
   int height;
 
   vcl_ifstream fin( (image_base+true_data_file).c_str() );
-  if( !( fin >> num_planes >> num_comp >> width >> height ) ) {
+  if ( !( fin >> num_planes >> num_comp >> width >> height ) ) {
     vcl_cout << "[couldn't read header from " << true_data_file << "]";
     return false;
   }
 
   vcl_vector<TruePixelType> pixel( num_comp );
 
-  for( int p=0; p < num_planes; ++p ) {
-    for( int y=0; y < height; ++y ) {
-      for( int x=0; x < width; ++x ) {
-        for( int c=0; c < num_comp; ++c ) {
-          if( !( fin >> pixel[c] ) ) {
+  for ( int p=0; p < num_planes; ++p ) {
+    for ( int y=0; y < height; ++y ) {
+      for ( int x=0; x < width; ++x ) {
+        for ( int c=0; c < num_comp; ++c ) {
+          if ( !( fin >> pixel[c] ) ) {
             vcl_cout << "[couldn't read value at " << p << "," << x << "," << y << "," << c
                      << " from " << true_data_file << "]";
             return false;
           }
         }
-        if( !check( p, x, y, pixel ) )
+        if ( !check( p, x, y, pixel ) )
           return false;
       }
     }
@@ -151,7 +188,7 @@ test( const char* true_data_file, const CheckPixel& check )
 int
 test_file_format_read_main( int argc, char* argv[] )
 {
-  if( argc >= 2 ) {
+  if ( argc >= 2 ) {
     image_base = argv[1];
 #ifdef VCL_WIN32
     image_base += "\\";
@@ -164,9 +201,9 @@ test_file_format_read_main( int argc, char* argv[] )
 
   vcl_cout << "Portable aNy Map [pnm]: pbm, pgm, ppm)\n";
   testlib_test_begin( "  1-bit pbm ascii" );
-  testlib_test_perform( test( "ff_grey1bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey1bit_ascii.pbm" ) ) );
+  testlib_test_perform( test( "ff_grey1bit_true.txt", CheckBit<vxl_uint_8>( "ff_grey1bit_ascii.pbm" ) ) );
   testlib_test_begin( "  1-bit pbm raw" );
-  testlib_test_perform( test( "ff_grey1bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey1bit_raw.pbm" ) ) );
+  testlib_test_perform( test( "ff_grey1bit_true.txt", CheckBit<vxl_uint_8>( "ff_grey1bit_raw.pbm" ) ) );
   testlib_test_begin( "  8-bit pgm ascii" );
   testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_ascii.pgm" ) ) );
   testlib_test_begin( "  8-bit pgm raw" );
@@ -197,6 +234,8 @@ test_file_format_read_main( int argc, char* argv[] )
    testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_xv.bmp" ) ) );
 
   vcl_cout << "TIFF [tiff]\n";
+  testlib_test_begin( "  1-bit grey uncompressed" );
+  testlib_test_perform( test( "ff_grey1bit_true.txt", CheckBit<vxl_uint_8>( "ff_grey1bit_uncompressed.tif" ) ) );
   testlib_test_begin( "  8-bit RGB uncompressed" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_uncompressed.tif" ) ) );
   testlib_test_begin( "  8-bit RGB packbits" );
