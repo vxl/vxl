@@ -51,10 +51,10 @@ static float _interpolate(
 
   assert (xt >= 0 && yt >= 0 && xt <= img->ncols - 2 && yt <= img->nrows - 2);
 
-  return ( (1-ax) * (1-ay) * *ptr +
+  return (1-ax) * (1-ay) * *ptr +
            ax   * (1-ay) * *(ptr+1) +
-           (1-ax) *   ay   * *(ptr+(img->ncols)) +
-           ax   *   ay   * *(ptr+(img->ncols)+1) );
+         (1-ax) *   ay   * *(ptr+(img->ncols)) +
+           ax   *   ay   * *(ptr+(img->ncols)+1);
 }
 
 
@@ -383,8 +383,8 @@ static KLT_BOOL _outOfBounds(
   int borderx,
   int bordery)
 {
-  return (x < borderx || x > ncols-1-borderx ||
-          y < bordery || y > nrows-1-bordery );
+  return x < borderx || x > ncols-1-borderx ||
+         y < bordery || y > nrows-1-bordery;
 }
 
 
@@ -431,12 +431,12 @@ void KLTTrackFeatures(
   }
   if (tc->window_width < 3) {
     tc->window_width = 3;
-    KLTWarning("Tracking context's window width must be at least three.  \n"
+    KLTWarning("Tracking context's window width must be at least three.\n"
                "Changing to %d.\n", tc->window_width);
   }
   if (tc->window_height < 3) {
     tc->window_height = 3;
-    KLTWarning("Tracking context's window height must be at least three.  \n"
+    KLTWarning("Tracking context's window height must be at least three.\n"
                "Changing to %d.\n", tc->window_height);
   }
 
@@ -571,8 +571,8 @@ void KLTTrackFeatures(
 
   if (tc->sequentialMode)
   {
-    // MPP 9/24/2003
-    // Free any existing previous pyramids -- plug memory leak!
+    /* MPP 9/24/2003 */
+    /* Free any existing previous pyramids -- plug memory leak! */
     if (tc->pyramid_last != NULL)
       _KLTFreePyramid(tc->pyramid_last);
     tc->pyramid_last = pyramid2;
