@@ -83,7 +83,7 @@ FMPlanarNonLinFun::FMPlanarNonLinFun(const ImageMetric* image_metric1,
 }
 
 //-----------------------------------------------------------------------------
-//: Compute the planar F matrix and returns true if succesful.
+//: Compute the planar F matrix and returns true if successful.
 //
 bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
 {
