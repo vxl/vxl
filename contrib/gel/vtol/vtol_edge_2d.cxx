@@ -1,7 +1,7 @@
 #include "vtol_edge_2d.h"
 
 //:
-//  \file
+// \file
 
 #include <vcl_cassert.h>
 #include <vtol/vtol_zero_chain.h>
@@ -20,9 +20,9 @@
 //---------------------------------------------------------------------------
 vtol_edge_2d::vtol_edge_2d(void)
 {
-  _curve=0;
-  _v1=0;
-  _v2=0;
+  curve_=0;
+  v1_=0;
+  v2_=0;
 }
 
 //---------------------------------------------------------------------------
@@ -36,11 +36,11 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
   vtol_topology_object *zc;
 
   if (!new_curve)
-    _curve=new vsol_line_2d(new_v1.point(),new_v2.point());
+    curve_=new vsol_line_2d(new_v1.point(),new_v2.point());
   else
-    _curve=new_curve;
-  _v1=&new_v1;
-  _v2=&new_v2;
+    curve_=new_curve;
+  v1_=&new_v1;
+  v2_=&new_v2;
 
   zc=new vtol_zero_chain(new_v1,new_v2);
 
@@ -58,34 +58,35 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
 
 vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
 {
-  _curve=0;
+  curve_=0;
   vsol_curve_2d_sptr tmp_curve;
 
   vcl_vector<vtol_topology_object_sptr>::const_iterator i;
 
-  for(i=other.inferiors()->begin();i!=other.inferiors()->end();++i){
+  for (i=other.inferiors()->begin();i!=other.inferiors()->end();++i)
+  {
     vtol_zero_chain_sptr zc = (*i)->clone()->cast_to_topology_object()->cast_to_zero_chain();
     link_inferior(*zc);
   }
 
   set_vertices_from_zero_chains();
-  if (other._curve)
+  if (other.curve())
     {
-      vsol_spatial_object_2d_sptr sr = other._curve->clone();
-      _curve=(vsol_curve_2d *)(sr.ptr());
+      curve_ = other.curve()->clone()->cast_to_curve();
       // make sure the geometry and Topology are in sync
-      if (_v1)
+      if (v1_)
         {
-          if(_v1->cast_to_vertex_2d()){
-            _curve->set_p0(_v1->cast_to_vertex_2d()->point());
-            _curve->touch();
+          if (v1_->cast_to_vertex_2d()){
+            curve_->set_p0(v1_->cast_to_vertex_2d()->point());
+            curve_->touch();
           }
         }
-      if (_v2)
+      if (v2_)
         {
-          if(_v1->cast_to_vertex_2d()){
-            _curve->set_p1(_v2->cast_to_vertex_2d()->point());
-            _curve->touch();
+          if (v1_->cast_to_vertex_2d())
+          {
+            curve_->set_p1(v2_->cast_to_vertex_2d()->point());
+            curve_->touch();
           }
         }
     }
@@ -99,32 +100,31 @@ vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
 // Constructor for an vtol_edge_2d. If the vtol_zero_chain has two vertices , then the
 // first and last vertices of the vtol_zero_chain are used for endpoints and
 // an ImplicitLine is assumed to be the curve.  Otherwise, the all data
-// (_v1, _v2, _curve) are set to NULL.  The vtol_zero_chain, newchain, becomes
+// (v1_, v2_, curve_) are set to NULL.  The vtol_zero_chain, newchain, becomes
 // the Inferior of the vtol_edge_2d.
 
 vtol_edge_2d::vtol_edge_2d(vtol_zero_chain &new_zero_chain)
 {
   link_inferior(new_zero_chain);
   set_vertices_from_zero_chains();
-  if(new_zero_chain.numinf()==2 && _v1->cast_to_vertex_2d()
-     && _v2->cast_to_vertex_2d())
-    // Safe to assume that it is an Implicit Line.
-    _curve=new vsol_line_2d(_v1->cast_to_vertex_2d()->point(),
-                            _v2->cast_to_vertex_2d()->point());
+  if (new_zero_chain.numinf()==2 && v1_->cast_to_vertex_2d() && v2_->cast_to_vertex_2d())
+    // Safe to assume that it is a vsol_line_2d.
+    curve_=new vsol_line_2d(v1_->cast_to_vertex_2d()->point(),
+                            v2_->cast_to_vertex_2d()->point());
   else
     // User must set the type of curve needed.
     // Since guessing could get confusing.
     // So NULL indicates an edge of unknown type.
-    _curve=0;
+    curve_=0;
   touch();
 }
 
 //:
 // Constructor for an vtol_edge_2d. The list of zero_chains, newchains, is
 // assumed to be ordered along an edge. This method assigns the first
-// vertex in the chain list to _v1, and assigns the last vertex in the
-// chain list to _v2. No assumptions are made as to the curve type. The
-// data member, _curve is left to be NULL.
+// vertex in the chain list to v1_, and assigns the last vertex in the
+// chain list to v2_. No assumptions are made as to the curve type. The
+// data member, curve_ is left to be NULL.
 
 vtol_edge_2d::vtol_edge_2d(zero_chain_list &newchains)
 {
@@ -134,15 +134,15 @@ vtol_edge_2d::vtol_edge_2d(zero_chain_list &newchains)
   for (i=newchains.begin();i!= newchains.end();++i )
     link_inferior(*(*i));
 
-  // 2) Set _v1 and _v2;
+  // 2) Set v1_ and v2_;
 
   set_vertices_from_zero_chains();
-  _curve=0;
+  curve_=0;
 }
 
 //:
 // Constructor for a Linear vtol_edge_2d.  The coordinates, (x1, y1, z1),
-// determine vtol_vertex_2d, _v1.  The coordinates, (x2, y2, z2), determine _v2.
+// determine vtol_vertex_2d, v1_.  The coordinates, (x2, y2, z2), determine v2_.
 // If curve is NULL, an ImplicitLine is generated for the vtol_edge_2d.
 
 vtol_edge_2d::vtol_edge_2d(double x1,
@@ -151,40 +151,39 @@ vtol_edge_2d::vtol_edge_2d(double x1,
                            double y2,
                            vsol_curve_2d_sptr curve)
 {
-  _v1=new vtol_vertex_2d(x1,y1);
-  _v2=new vtol_vertex_2d(x2,y2);
+  v1_=new vtol_vertex_2d(x1,y1);
+  v2_=new vtol_vertex_2d(x2,y2);
   if (!curve)
-    if(_v1->cast_to_vertex_2d() && _v2->cast_to_vertex_2d()){
-      _curve=new vsol_line_2d(_v1->cast_to_vertex_2d()->point(),
-                              _v2->cast_to_vertex_2d()->point());
-    }
+    if (v1_->cast_to_vertex_2d() && v2_->cast_to_vertex_2d())
+      curve_=new vsol_line_2d(v1_->cast_to_vertex_2d()->point(),
+                              v2_->cast_to_vertex_2d()->point());
   else
-    _curve=(vsol_curve_2d*)(curve->clone().ptr());
+    curve_=curve->clone()->cast_to_curve();
 
-  vtol_zero_chain *inf=new vtol_zero_chain(*_v1,*_v2);
+  vtol_zero_chain *inf=new vtol_zero_chain(*v1_,*v2_);
   link_inferior(*inf);
 }
 
 //:
 // Constructor for an vtol_edge_2d from a Curve. If edgecurve is of ImplicitLine
-// type, vertex locations for endpoints, _v1 and _v2, are computed from
-// the ImplicitLine parameters.  If edgecurve is of any other type, _v1
-// and _v2 are left as NULL.
+// type, vertex locations for endpoints, v1_ and v2_, are computed from
+// the ImplicitLine parameters.  If edgecurve is of any other type, v1_
+// and v2_ are left as NULL.
 // (Actually, this description is wrong. The endpoints are retreived
 // from the curve, regardless of its type. -JLM)
 
 vtol_edge_2d::vtol_edge_2d(vsol_curve_2d &edgecurve)
 {
   vtol_zero_chain *newzc;
-  if (_curve)
+  if (curve_)
     {
-      //  _v1 = new vtol_vertex_2d(&_curve->get_start_point());
-      // _v2 = new vtol_vertex_2d(&_curve->get_end_point());
-      newzc=new vtol_zero_chain(*_v1,*_v2);
+      // v1_ = new vtol_vertex_2d(&curve_->get_start_point());
+      // v2_ = new vtol_vertex_2d(&curve_->get_end_point());
+      newzc=new vtol_zero_chain(*v1_,*v2_);
     } else {
-      _v1=0;
-      _v2=0;
-      _curve=0;
+      v1_=0;
+      v2_=0;
+      curve_=0;
       newzc=new vtol_zero_chain();
     }
   link_inferior(*newzc);
@@ -200,20 +199,11 @@ vsol_spatial_object_3d_sptr vtol_edge_2d::clone(void) const
 }
 
 //---------------------------------------------------------------------------
-//: Return the curve associated to `this'
-//---------------------------------------------------------------------------
-vsol_curve_2d_sptr vtol_edge_2d::curve(void) const
-{
-  return _curve;
-}
-
-
-//---------------------------------------------------------------------------
 //: Set the curve with `new_curve'
 //---------------------------------------------------------------------------
 void vtol_edge_2d::set_curve(vsol_curve_2d &new_curve)
 {
-  _curve=&new_curve;
+  curve_=&new_curve;
   touch(); //Update timestamp
 }
 
@@ -225,41 +215,23 @@ vtol_edge_2d::~vtol_edge_2d()
 }
 
 
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is an edge, 0 otherwise
-//---------------------------------------------------------------------------
-const vtol_edge_2d * vtol_edge_2d::cast_to_edge_2d(void) const
-{
-  return this;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is an edge, 0 otherwise
-//---------------------------------------------------------------------------
-vtol_edge_2d * vtol_edge_2d::cast_to_edge_2d(void)
-{
-  return this;
-}
-
 // ******************************************************
 //
 //    Operators
 //
 
-// operators
-
 bool vtol_edge_2d::operator==(const vtol_edge_2d &other) const
 {
   if (this==&other) return true;
 
-  if ( (_curve && !other._curve) ||
-       (!_curve && other._curve) )
+  if ( (curve() && !other.curve()) ||
+       (!curve() && other.curve()) )
     return false;
 
-  if (_curve && (*_curve)!=(*other._curve))
+  if (curve() && (*curve())!=(*other.curve()))
     return false;
 
-  if (!(*_v1==*(other._v1)) || !(*_v2==*(other._v2))) // ((*_v1!=*(other._v1)) || (*_v2!=*(other._v2)))
+  if (!(*v1_==*(other.v1_)) || !(*v2_==*(other.v2_)))
     return false;
 
   vtol_zero_chain_sptr zc1=zero_chain();
@@ -279,7 +251,6 @@ bool vtol_edge_2d::operator==(const vtol_edge &other) const
 }
 
 //: spatial object equality
-
 bool vtol_edge_2d::operator==(const vsol_spatial_object_3d& obj) const
 {
   return
@@ -307,14 +278,14 @@ void vtol_edge_2d::describe(vcl_ostream &strm,
   for (int i1=0; i1<blanking; ++i1) strm << ' ';
   print(strm);
   for (int i2=0; i2<blanking; ++i2) strm << ' ';
-  if(_v1) {
-    _v1->print(strm);
+  if (v1_) {
+    v1_->print(strm);
   } else {
     strm << "Null vertex 1" << vcl_endl;
   }
   for (int i3=0; i3<blanking; ++i3) strm << ' ';
-  if(_v2) {
-    _v2->print(strm);
+  if (v2_) {
+    v2_->print(strm);
   } else {
     strm << "Null vertex 2" << vcl_endl;
   }
@@ -331,9 +302,8 @@ bool vtol_edge_2d::compare_geometry(const vtol_edge &other) const
 {
   // we want to compare geometry
 
-  if(other.cast_to_edge_2d()){
-    bool result = (*_curve)== *(other.cast_to_edge_2d()->curve());
-    return result;
-  }
-  return false;
+  if (other.cast_to_edge_2d())
+    return (*curve()) == *(other.cast_to_edge_2d()->curve());
+  else
+    return false;
 }

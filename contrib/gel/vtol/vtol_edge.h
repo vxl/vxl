@@ -9,11 +9,11 @@
 //  maintains a data pointer to the specific mathematical curve geometry
 //  which describes the point set that makes up the edge.  For convenience
 //  in working with linear edges, pointers to the two endpoint vertices
-//  are maintained. The direction of an edge is the vector from _v1 to _v2.
+//  are maintained. The direction of an edge is the vector from v1_ to v2_.
 //  A OneChain is the Superior of the edge in the topological
 //  hierarchy, and a ZeroChain is the Inferior of the edge in the
 //  topological hierarchy.  In rare cases, an edge will be used to represent
-//  a Ray.  In this case, only _v1 will be valid and _v2 will be NULL.
+//  a Ray.  In this case, only v1_ will be valid and v2_ will be NULL.
 //
 // \verbatim
 // Modifications:
@@ -58,8 +58,8 @@ protected:
   // Keeping vertex pointers inside of edge
   // for convenience...for now.
 
-  vtol_vertex_sptr _v1;
-  vtol_vertex_sptr _v2;
+  vtol_vertex_sptr v1_;
+  vtol_vertex_sptr v2_;
 
 public:
   //***************************************************************************
@@ -84,28 +84,26 @@ public:
   //---------------------------------------------------------------------------
   //: Return the first endpoint
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_sptr v1(void) const { return _v1; }
+  virtual vtol_vertex_sptr v1(void) const { return v1_; }
 
   //---------------------------------------------------------------------------
   //: Return the second endpoint
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_sptr v2(void) const { return _v2; }
+  virtual vtol_vertex_sptr v2(void) const { return v2_; }
 
   //---------------------------------------------------------------------------
-  //: Return the first zero-chain of `this'
+  //: Return the first non-empty zero-chain of `this'
   //---------------------------------------------------------------------------
   virtual vtol_zero_chain_sptr zero_chain(void) const;
 
   //---------------------------------------------------------------------------
   //: Set the first endpoint.
   //---------------------------------------------------------------------------
-  virtual void set_v1(vtol_vertex *new_v1);
   virtual void set_v1(vtol_vertex_sptr new_v1);
 
   //---------------------------------------------------------------------------
   //: Set the last endpoint
   //---------------------------------------------------------------------------
-  virtual void set_v2(vtol_vertex *new_v2);
   virtual void set_v2(vtol_vertex_sptr new_v2);
 
   //---------------------------------------------------------------------------
@@ -132,22 +130,22 @@ public:
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_edge *cast_to_edge(void) const;
+  virtual const vtol_edge *cast_to_edge(void) const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_edge *cast_to_edge(void);
+  virtual vtol_edge *cast_to_edge(void) { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_edge_2d *cast_to_edge_2d(void) const {return NULL;}
+  virtual const vtol_edge_2d *cast_to_edge_2d(void) const {return 0;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_edge_2d *cast_to_edge_2d(void) {return NULL;}
+  virtual vtol_edge_2d *cast_to_edge_2d(void) {return 0;}
 
 
   //***************************************************************************

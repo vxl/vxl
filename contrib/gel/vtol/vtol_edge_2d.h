@@ -8,11 +8,11 @@
 //  maintains a data pointer to the specific mathematical curve geometry
 //  which describes the point set that makes up the edge.  For convenience
 //  in working with linear edges, pointers to the two endpoint vertices
-//  are maintained. The direction of an edge is the vector from _v1 to _v2.
+//  are maintained. The direction of an edge is the vector from v1_ to v2_.
 //  A OneChain is the Superior of the edge in the topological
 //  hierarchy, and a ZeroChain is the Inferior of the edge in the
 //  topological hierarchy.  In rare cases, an edge will be used to represent
-//  a Ray.  In this case, only _v1 will be valid and _v2 will be NULL.
+//  a Ray.  In this case, only v1_ will be valid and v2_ will be NULL.
 //
 // \verbatim
 // Modifications:
@@ -53,7 +53,7 @@ class vtol_edge_2d
   : public vtol_edge
 {
 private:
-  vsol_curve_2d_sptr _curve;
+  vsol_curve_2d_sptr curve_;
 
 public:
   //***************************************************************************
@@ -111,7 +111,7 @@ public:
   //---------------------------------------------------------------------------
   //: Return the curve associated to `this'
   //---------------------------------------------------------------------------
-  virtual vsol_curve_2d_sptr curve(void) const; // { return _curve; }
+  virtual vsol_curve_2d_sptr curve(void) const { return curve_; }
 
   //---------------------------------------------------------------------------
   //: Set the curve with `new_curve'
@@ -132,12 +132,12 @@ public:
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_edge_2d *cast_to_edge_2d(void) const;
+  virtual const vtol_edge_2d *cast_to_edge_2d(void) const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_edge_2d *cast_to_edge_2d(void);
+  virtual vtol_edge_2d *cast_to_edge_2d(void) { return this; }
 
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;
