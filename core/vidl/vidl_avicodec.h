@@ -46,7 +46,7 @@ class vidl_avicodec : public vidl_codec
   virtual vidl_codec_sptr load(const char* fname, char mode = 'r' );
   virtual bool save(vidl_movie* movie, const char* fname);
   virtual  const char* type() {return "AVI";}
-
+  virtual vidl_avicodec* castto_vidl_avicodec(){return this;}
  private:
    PAVIFILE avi_file_;
    PAVISTREAM avi_stream_;
