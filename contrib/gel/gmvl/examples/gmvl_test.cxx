@@ -18,28 +18,29 @@
 
 int main( int argc, char **argv)
 {
-//   gbl_bit_array_2d ba(5,5, false);
-//   vcl_cerr << ba << vcl_endl;
-//   ba.put(0,0,true);
-//   ba.put(0,4,true);
-//   ba.put(1,1,true);
-//   ba.put(1,3,true);
-//   ba.put(2,0,true);
-//   ba.put(2,2,true);
-//   ba.put(2,4,true);
-//   ba.put(3,1,true);
-//   ba.put(3,3,true);
-//   ba.put(4,0,true);
-//   ba.put(4,2,true);
-//   ba.put(4,4,true);
+#if 0
+  vbl_bit_array_2d ba(5,5, false);
+  vcl_cerr << ba << vcl_endl;
+  ba.put(0,0,true);
+  ba.put(0,4,true);
+  ba.put(1,1,true);
+  ba.put(1,3,true);
+  ba.put(2,0,true);
+  ba.put(2,2,true);
+  ba.put(2,4,true);
+  ba.put(3,1,true);
+  ba.put(3,3,true);
+  ba.put(4,0,true);
+  ba.put(4,2,true);
+  ba.put(4,4,true);
 
-//   vcl_cerr << ba << vcl_endl;
-//   ba.enlarge(12,5);
-//   vcl_cerr << ba << vcl_endl;
-//   gbl_bit_array_2d cd( ba);
-//   vcl_cerr << cd << vcl_endl;
-//   exit(1);
-
+  vcl_cerr << ba << vcl_endl;
+  ba.enlarge(12,5);
+  vcl_cerr << ba << vcl_endl;
+  vbl_bit_array_2d cd( ba);
+  vcl_cerr << cd << vcl_endl;
+  vcl_exit(1);
+#endif
   gmvl_node_sptr image0= gmvl_load_image( "/home/crossge/images/basement/bt.000.pgm");
   gmvl_node_sptr image1= gmvl_load_image( "/home/crossge/images/basement/bt.001.pgm");
   gmvl_node_sptr image2= gmvl_load_image( "/home/crossge/images/basement/bt.002.pgm");
