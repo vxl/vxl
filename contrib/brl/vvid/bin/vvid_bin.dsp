@@ -311,6 +311,12 @@ SOURCE=.\videx.cxx
 # Begin Source File
 SOURCE=.\videx_menus.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vidster.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidster_menus.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -319,6 +325,9 @@ SOURCE=.\vidfpl_menus.h
 # End Source File
 # Begin Source File
 SOURCE=.\videx_menus.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidster_menus.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
