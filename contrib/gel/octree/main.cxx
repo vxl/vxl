@@ -283,15 +283,15 @@ int main(int argc, char ** argv)
       pmatrixstore[*it]= new PMatrix;
       pmatrixstore[*it]->read_ascii( pmatrixin);
 
-      vcl_cerr << "Computing borgefor transform...\n";
+      vcl_cerr << "Computing borgefors transform ...\n";
 
       // compute borgefors transform
       vbl_array_2d<bool> edges( imagestore[*it]->width(),
-                           imagestore[*it]->height());
+                                imagestore[*it]->height());
       computeedgemap( *imagestore[*it], edges);
       distancestore[*it]= new vbl_array_2d<short>( imagestore[*it]->width(),
                                                    imagestore[*it]->height());
-      computeborgefors(  edges,
+      computeborgefors( edges,
                         *distancestore[*it]);
 
       // setup voxmap projection cache
@@ -323,7 +323,7 @@ int main(int argc, char ** argv)
           (*fout) << "c\n";
 
           for (unsigned int i=0; i< voxels.size(); i++)
-            (*fout) << "a" << voxels[i] << vcl_endl;
+            (*fout) << 'a' << voxels[i] << vcl_endl;
         }
 
       ///////////////////////////////////////////////////////////////////
@@ -361,8 +361,7 @@ int main(int argc, char ** argv)
             {
               if (( char *) colorimagefilename())
                 {
-                  (*fout) << "i" << vul_sprintf( ( char *) colorimagefilename(), *it) << vcl_endl;
-                  (*fout) << "u\n";
+                  (*fout) << "i" << vul_sprintf( ( char *) colorimagefilename(), *it) << "\nu\n";
                 }
             }
 
@@ -458,8 +457,8 @@ int main(int argc, char ** argv)
       vcl_vector<Voxel> newvoxels;
       //      CoolArray<Voxel> newvoxels;
 
-      vcl_cerr << "No voxels = " << voxels.size() << vcl_endl;
-      vcl_cerr << "Making new level...\n";
+      vcl_cerr << "No voxels = " << voxels.size()
+               << "\nMaking new level...\n";
 
       for (unsigned int i=0; i< voxels.size(); i++)
         {
@@ -540,8 +539,8 @@ int main(int argc, char ** argv)
         }
 
       vcl_ofstream fout(( char *) voxmapfilename());
-      fout << double(ss()) << " " << double(sx()) << " " << double(sy()) << " " << double(sz()) << vcl_endl;
-      fout << size << vcl_endl;
+      fout << double(ss()) << " " << double(sx()) << " " << double(sy()) << " " << double(sz()) << vcl_endl
+           << size << vcl_endl;
 
       for (int x=0; x< size; x++)
         for (int y=0; y< size; y++)
