@@ -8,13 +8,43 @@
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/gel)
 
-SUBDIRS(gbl gmvl gst vsol vtol vdgl vsrl vgel)
+# basics
+SUBDIRS(gbl)
 
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
+# van-duc region finder (ported from TargetJr)
+ SUBDIRS(gevd)
 
-#IF(HAS_OPENGL)
-# SUBDIRS(vace)
-#ENDIF(HAS_OPENGL)
+# matcher
+ SUBDIRS(geml)
 
+# Multi-view database
+SUBDIRS(gmvl)
 
-# S#UBDIRS(cmaketests)
+# Dense matcher
+SUBDIRS(vsrl)
+
+# Triangulation code
+ SUBDIRS(gtrl)
+
+# spatial objects
+SUBDIRS(vsol)
+
+# topology
+SUBDIRS(gst vtol)
+
+# digital  geometry
+SUBDIRS(vdgl)
+
+# photogrammetry
+ SUBDIRS(mrc/vpgl)
+
+# coordinate systems addon
+ SUBDIRS(mrc/vcsl)
+
+# Kanade-Lucas-Tomasi feature tracker
+ SUBDIRS(vgel gkll)
+
+# Dense matcher
+ SUBDIRS(vmal)
+
+INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)

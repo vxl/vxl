@@ -15,7 +15,6 @@ LIBRARY := vsrl
 VERSION := 1.0
 
 ifndef NOTEST
-SUBDIRS += tests
 SUBDIRS += examples
 endif
 
