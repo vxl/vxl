@@ -132,7 +132,7 @@ do { \
   } \
 } while(false)
 
-// Matrix -- Creates a matrix with given number of rows and columns.
+//: Creates a matrix with given number of rows and columns.
 // Elements are not initialized. O(m*n).
 
 template<class T>
@@ -141,7 +141,7 @@ vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz)
   vnl_matrix_alloc_blah(rowz, colz);
 }
 
-// Matrix -- Creates a matrix with given number of rows and columns,
+//: Creates a matrix with given number of rows and columns,
 // and initialize all elements to value. O(m*n).
 
 template<class T>
@@ -167,7 +167,7 @@ vnl_matrix<T>::vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t)
 }
 
 #if 1 // fsm: who uses this?
-// Matrix -- Creates a matrix with given dimension (rows, cols) and initialize
+//: Creates a matrix with given dimension (rows, cols) and initialize
 // first n elements, row-wise, to values. O(m*n).
 
 template<class T>
@@ -182,7 +182,7 @@ vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, unsigned n, T const val
 }
 #endif
 
-// Matrix -- Creates a matrix from a block array of data, stored row-wise.
+//: Creates a matrix from a block array of data, stored row-wise.
 // O(m*n).
 
 template<class T>
@@ -196,7 +196,7 @@ vnl_matrix<T>::vnl_matrix (T const* datablck, unsigned rowz, unsigned colz)
 }
 
 
-// Matrix -- Creates a new matrix and copies all the elements.
+//: Creates a new matrix and copies all the elements.
 // O(m*n).
 
 template<class T>
@@ -329,7 +329,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_t
 
 //------------------------------------------------------------
 
-// ~vnl_matrix -- Frees up the dynamic storage used by matrix.
+//: Frees up the dynamic storage used by matrix.
 // O(m*n).
 
 template<class T>
@@ -377,7 +377,7 @@ bool vnl_matrix<T>::resize (unsigned rowz, unsigned colz)
 
 //------------------------------------------------------------
 
-// fill -- Sets all elements of matrix to specified value. O(m*n).
+//: Sets all elements of matrix to specified value. O(m*n).
 
 template<class T>
 void vnl_matrix<T>::fill (T const& value) {
@@ -386,7 +386,7 @@ void vnl_matrix<T>::fill (T const& value) {
       this->data[i][j] = value;                 // Assign fill value
 }
 
-// fill_diagonal -- Sets all diagonal elements of matrix to specified value. O(n).
+//: Sets all diagonal elements of matrix to specified value. O(n).
 
 template<class T>
 void vnl_matrix<T>::fill_diagonal (T const& value) {
@@ -394,7 +394,7 @@ void vnl_matrix<T>::fill_diagonal (T const& value) {
     this->data[i][i] = value;                   // Assign fill value
 }
 
-// operator= -- Assigns value to all elements of a matrix. O(m*n).
+//: Assigns value to all elements of a matrix. O(m*n).
 
 //template<class T>
 //vnl_matrix<T>& vnl_matrix<T>::operator= (T const& value) {
@@ -405,7 +405,7 @@ void vnl_matrix<T>::fill_diagonal (T const& value) {
 //}
 
 
-// operator= -- Copies all elements of rhs matrix into lhs matrix. O(m*n).
+//: Copies all elements of rhs matrix into lhs matrix. O(m*n).
 // If needed, the arrays in lhs matrix are freed up, and new arrays are
 // allocated to match the dimensions of the rhs matrix.
 
@@ -429,7 +429,7 @@ void vnl_matrix<T>::print(vcl_ostream& os) const {
   }
 }
 
-// operator<< -- Prints the 2D array of elements of a matrix out to a stream.
+//: Prints the 2D array of elements of a matrix out to a stream.
 // O(m*n).
 
 template<class T>
@@ -493,8 +493,8 @@ vnl_matrix<T>& vnl_matrix<T>::operator/= (T value) {
 }
 
 
-// operator+= -- Adds lhs matrix with rhs matrix, and stores in place in
-// lhs matrix. O(m*n). The dimensions of the two matrices must be identical.
+//: Adds lhs matrix with rhs matrix, and stores in place in lhs matrix.
+// O(m*n). The dimensions of the two matrices must be identical.
 
 template<class T>
 vnl_matrix<T>& vnl_matrix<T>::operator+= (vnl_matrix<T> const& rhs) {
@@ -510,8 +510,8 @@ vnl_matrix<T>& vnl_matrix<T>::operator+= (vnl_matrix<T> const& rhs) {
 }
 
 
-// operator-= -- Substract lhs matrix with rhs matrix and store in place
-// in lhs matrix. O(m*n).
+//: Substract lhs matrix with rhs matrix and store in place in lhs matrix.
+// O(m*n).
 // The dimensions of the two matrices must be identical.
 
 template<class T>
@@ -538,29 +538,32 @@ vnl_matrix<T> operator- (T const& value, vnl_matrix<T> const& m) {
 }
 
 
-// // operator* -- Returns new matrix which is the product of m1 with m2, m1 * m2.
-// // O(n^3). Number of columns of first matrix must match number of rows
-// // of second matrix.
-//
-// template<class T>
-// vnl_matrix<T> vnl_matrix<T>::operator* (vnl_matrix<T> const& rhs) const {
-//   if (this->num_cols != rhs.num_rows)           // dimensions do not match?
-//     vnl_error_matrix_dimension("operator*",
-//                                this->num_rows, this->num_cols,
-//                                rhs.num_rows, rhs.num_cols);
-//   vnl_matrix<T> result(this->num_rows, rhs.num_cols); // Temp to store product
-//   for (unsigned i = 0; i < this->num_rows; i++) {  // For each row
-//     for (unsigned j = 0; j < rhs.num_cols; j++) {  // For each element in column
-//       T sum = 0;
-//       for (unsigned k = 0; k < this->num_cols; k++) // Loop over column values
-//         sum += (this->data[i][k] * rhs.data[k][j]);     // Multiply
-//       result(i,j) = sum;
-//     }
-//   }
-//   return result;
-// }
+#if 0 // commented out
+//: Returns new matrix which is the product of m1 with m2, m1 * m2.
+// O(n^3). Number of columns of first matrix must match number of rows
+// of second matrix.
 
-// operator- -- Returns new matrix which is the negation of THIS matrix. O(m*n).
+template<class T>
+vnl_matrix<T> vnl_matrix<T>::operator* (vnl_matrix<T> const& rhs) const {
+  if (this->num_cols != rhs.num_rows)           // dimensions do not match?
+    vnl_error_matrix_dimension("operator*",
+                               this->num_rows, this->num_cols,
+                               rhs.num_rows, rhs.num_cols);
+  vnl_matrix<T> result(this->num_rows, rhs.num_cols); // Temp to store product
+  for (unsigned i = 0; i < this->num_rows; i++) {  // For each row
+    for (unsigned j = 0; j < rhs.num_cols; j++) {  // For each element in column
+      T sum = 0;
+      for (unsigned k = 0; k < this->num_cols; k++) // Loop over column values
+        sum += (this->data[i][k] * rhs.data[k][j]);     // Multiply
+      result(i,j) = sum;
+    }
+  }
+  return result;
+}
+#endif
+
+//: Returns new matrix which is the negation of THIS matrix.
+// O(m*n).
 
 template<class T>
 vnl_matrix<T> vnl_matrix<T>::operator- () const {
@@ -572,8 +575,8 @@ vnl_matrix<T> vnl_matrix<T>::operator- () const {
 }
 
 #if 0 // commented out
-// operator+ -- Returns new matrix with elements of lhs matrix added
-// with value. O(m*n).
+//: Returns new matrix with elements of lhs matrix added with value.
+// O(m*n).
 
 template<class T>
 vnl_matrix<T> vnl_matrix<T>::operator+ (T const& value) const {
@@ -585,8 +588,8 @@ vnl_matrix<T> vnl_matrix<T>::operator+ (T const& value) const {
 }
 
 
-// operator* -- Returns new matrix with elements of lhs matrix multiplied
-// with value. O(m*n).
+//: Returns new matrix with elements of lhs matrix multiplied with value.
+// O(m*n).
 
 template<class T>
 vnl_matrix<T> vnl_matrix<T>::operator* (T const& value) const {
@@ -629,7 +632,8 @@ vnl_matrix<T> vnl_matrix<T>::apply(T (*f)(T)) const {
 
 ////--------------------------- Additions------------------------------------
 
-// transpose -- Returns new matrix with rows and columns transposed. O(m*n).
+//: Returns new matrix with rows and columns transposed.
+// O(m*n).
 
 template<class T>
 vnl_matrix<T> vnl_matrix<T>::transpose() const {
@@ -651,9 +655,8 @@ vnl_matrix<T> vnl_matrix<T>::conjugate_transpose() const  {
   return result;
 }
 
-// update -- Replaces the submatrix of THIS matrix, starting at top left corner,
+//: Replaces the submatrix of THIS matrix, starting at top left corner,
 // by the elements of matrix m. O(m*n). This is the reverse of extract().
-
 
 template<class T>
 vnl_matrix<T>& vnl_matrix<T>::update (vnl_matrix<T> const& m,
@@ -670,7 +673,7 @@ vnl_matrix<T>& vnl_matrix<T>::update (vnl_matrix<T> const& m,
 }
 
 
-// extract -- Returns a copy of submatrix of THIS matrix,
+//: Returns a copy of submatrix of THIS matrix,
 // specified by the top-left corner and size in rows, cols. O(m*n).
 // Use update() to copy new values of this submatrix back into THIS matrix.
 
@@ -689,7 +692,7 @@ vnl_matrix<T> vnl_matrix<T>::extract (unsigned rowz, unsigned colz,
   return result;
 }
 
-// dot_product -- Returns the dot product of the two matrices, which is
+//: Returns the dot product of the two matrices, which is
 // the sum of all pairwise product of the elements m1[i,j]*m2[i,j]. O(m*n).
 
 template<class T>
@@ -701,7 +704,8 @@ T dot_product (vnl_matrix<T> const& m1, vnl_matrix<T> const& m2) {
   return vnl_c_vector<T>::dot_product(m1.begin(), m2.begin(), m1.rows()*m1.cols());
 }
 
-// inner_product -- Hermitian inner product. O(mn).
+//: Hermitian inner product.
+// O(mn).
 
 template<class T>
 T inner_product (vnl_matrix<T> const& m1, vnl_matrix<T> const& m2) {
@@ -727,8 +731,8 @@ T cos_angle (vnl_matrix<T> const& a, vnl_matrix<T> const& b) {
   return T( ab / a_b);
 }
 
-// element_product -- Returns new matrix whose elements are the products
-// m1[ij]*m2[ij]. O(m*n).
+//: Returns new matrix whose elements are the products m1[ij]*m2[ij].
+// O(m*n).
 
 template<class T>
 vnl_matrix<T> element_product (vnl_matrix<T> const& m1,
@@ -743,8 +747,8 @@ vnl_matrix<T> element_product (vnl_matrix<T> const& m1,
   return result;
 }
 
-// element_quotient -- Returns new matrix whose elements are the quotients
-// m1[ij]/m2[ij]. O(m*n).
+//: Returns new matrix whose elements are the quotients m1[ij]/m2[ij].
+// O(m*n).
 
 template<class T>
 vnl_matrix<T> element_quotient (vnl_matrix<T> const& m1,
@@ -977,8 +981,8 @@ void vnl_matrix<T>::set_columns(unsigned starting_column, vnl_matrix<T> const& m
 
 //--------------------------------------------------------------------------------
 
-// operator== -- Two matrices are equal if and only if they have the same
-// dimensions and the same values. O(m*n).
+//: Two matrices are equal if and only if they have the same dimensions and the same values.
+// O(m*n).
 // Elements are compared with operator== as default.
 // Change this default with set_compare() at run time or by specializing
 // vnl_matrix_compare at compile time.

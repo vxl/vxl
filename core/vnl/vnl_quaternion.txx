@@ -35,14 +35,14 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
-// Quaternion -- Creates a quaternion from its ordered components.
-//           x, y, z denote the imaginary part, which are the  coordinates
-//           of the rotation axis multiplied by the sine of half the
-//           angle of rotation. r denotes  the  real  part,  or  the
-//           cosine  of  half  the  angle of rotation. Default is to
-//           create a null quaternion, corresponding to a null rotation
-//           or  an  identity  transform,  which has undefined
-//           rotation axis.
+//: Creates a quaternion from its ordered components.
+// x, y, z denote the imaginary part, which are the  coordinates
+// of the rotation axis multiplied by the sine of half the
+// angle of rotation. r denotes  the  real  part,  or  the
+// cosine  of  half  the  angle of rotation. Default is to
+// create a null quaternion, corresponding to a null rotation
+// or  an  identity  transform,  which has undefined
+// rotation axis.
 
 template <class T>
 vnl_quaternion<T>::vnl_quaternion (T x, T y, T z, T r)
@@ -53,8 +53,8 @@ vnl_quaternion<T>::vnl_quaternion (T x, T y, T z, T r)
   this->operator()(3) = r;  // last element is real part
 }
 
-// Quaternion -- Creates a quaternion from the normalized axis direction
-//           and the angle of rotation in radians.
+//: Creates a quaternion from the normalized axis direction
+// and the angle of rotation in radians.
 
 template <class T>
 vnl_quaternion<T>::vnl_quaternion (const vnl_vector<T>& axis, T angle)
@@ -66,11 +66,10 @@ vnl_quaternion<T>::vnl_quaternion (const vnl_vector<T>& axis, T angle)
   this->operator()(3) = vcl_cos(a);     // real part is cosine of half angle
 }
 
-// Quaternion -- Creates a quaternion from a vector. 2D or 3D vector  is
-//           converted into an imaginary quaternion with same
-//           (x, y, z) components. 4D vector is assumed to be  a  4-element
-//           quaternion,  to  provide  casting  between Vector and
-//           Quaternion.
+//: Creates a quaternion from a vector.
+// 2D or 3D vector is converted into an imaginary quaternion with same
+// (x, y, z) components. 4D vector is assumed to be a 4-element
+// quaternion, to provide casting between vector and quaternion.
 
 template <class T>
 vnl_quaternion<T>::vnl_quaternion (const vnl_vector<T>& vec)
@@ -82,10 +81,10 @@ vnl_quaternion<T>::vnl_quaternion (const vnl_vector<T>& vec)
     this->operator()(i) = 0.0;
 }
 
-// Quaternion -- Creates a quaternion from a transform matrix,
-//           whose orthonormal basis  vectors  are row-wise in the
-//           top-left most block. The transform matrix may be any size,
-//           but the rotation matrix must be the upper left 3x3.
+//: Creates a quaternion from a transform matrix,
+// whose orthonormal basis  vectors  are row-wise in the
+// top-left most block. The transform matrix may be any size,
+// but the rotation matrix must be the upper left 3x3.
 
 template <class T>
 vnl_quaternion<T>::vnl_quaternion (const vnl_matrix<T>& transform)
@@ -129,7 +128,7 @@ vnl_quaternion<T>::vnl_quaternion (const vnl_matrix<T>& transform)
   }
 }
 
-// angle --
+//:
 
 template <class T>
 T vnl_quaternion<T>::angle () const {
@@ -138,9 +137,9 @@ T vnl_quaternion<T>::angle () const {
                     this->real());                // angle is always positive
 }
 
-// axis -- Queries the angle and the  direction  of  the  rotation
-//           axis  of the quaternion.  A null quaternion will return
-//           zero for angle and k direction for axis.
+//: Queries the angle and the  direction  of  the  rotation
+// axis  of the quaternion.  A null quaternion will return
+// zero for angle and k direction for axis.
 
 template <class T>
 vnl_vector<T> vnl_quaternion<T>::axis () const {
@@ -156,9 +155,9 @@ vnl_vector<T> vnl_quaternion<T>::axis () const {
 }
 
 
-// rotation_matrix -- Converts a normalized quaternion into a square rotation
-//           matrix with dimension dim.  This is the reverse counterpart of
-//           constructing a quaternion from a transformation matrix.
+//: Converts a normalized quaternion into a square rotation
+// matrix with dimension dim.  This is the reverse counterpart of
+// constructing a quaternion from a transformation matrix.
 
 template <class T>
 vnl_matrix_fixed<T,3,3> vnl_quaternion<T>::rotation_matrix () const {
@@ -188,17 +187,17 @@ vnl_matrix_fixed<T,3,3> vnl_quaternion<T>::rotation_matrix () const {
   return rot;
 }
 
-// conjugate -- Returns the conjugate of given quaternion, having  same
-//           real and opposite imaginary parts.
+//: Returns the conjugate of given quaternion, having same
+// real and opposite imaginary parts.
 
 template <class T>
 vnl_quaternion<T> vnl_quaternion<T>::conjugate () const {
   return vnl_quaternion<T> (-x(), -y(), -z(), r());
 }
 
-// inverse -- Returns the  inverse  of  given  quaternion.  For  unit
-//           quaternion  representing  rotation,  the inverse is the
-//           same as the conjugate.
+//: Returns the  inverse  of  given  quaternion.  For  unit
+// quaternion  representing  rotation,  the inverse is the
+// same as the conjugate.
 
 template <class T>
 vnl_quaternion<T> vnl_quaternion<T>::inverse () const {
@@ -207,15 +206,14 @@ vnl_quaternion<T> vnl_quaternion<T>::inverse () const {
   return inv;
 }
 
-// operator* -- Returns  the product of two quaternions.
-//           Multiplication of two quaternions is not symmetric and has
-//           fewer  operations  than  multiplication  of orthonormal
-//           matrices. If object is rotated by r1, then by r2,  then
-//           the  composed  rotation (r2 o r1) is represented by the
-//           quaternion (q2 * q1), or by the matrix (m1 * m2).  Note
-//           that  matrix  composition  is reversed because matrices
-//           and vectors are represented row-wise.
-
+//: Returns  the product of two quaternions.
+// Multiplication of two quaternions is not symmetric and has
+// fewer  operations  than  multiplication  of orthonormal
+// matrices. If object is rotated by r1, then by r2,  then
+// the  composed  rotation (r2 o r1) is represented by the
+// quaternion (q2 * q1), or by the matrix (m1 * m2).  Note
+// that  matrix  composition  is reversed because matrices
+// and vectors are represented row-wise.
 
 template <class T>
 vnl_quaternion<T> vnl_quaternion<T>::operator* (const vnl_quaternion<T>& rhs) const {
@@ -230,11 +228,11 @@ vnl_quaternion<T> vnl_quaternion<T>::operator* (const vnl_quaternion<T>& rhs) co
   return prod;
 }
 
-// rotate --  Rotates 3D vector v with source quaternion  and  stores
-//           the  rotated  vector back into v. For speed and greater
-//           accurary, first convert quaternion into an  orthonormal
-//           matrix,  then  use matrix multiplication to rotate many
-//           vectors.
+//: Rotates 3D vector v with source quaternion  and  stores
+// the  rotated  vector back into v. For speed and greater
+// accurary, first convert quaternion into an  orthonormal
+// matrix,  then  use matrix multiplication to rotate many
+// vectors.
 
 template <class T>
 vnl_vector<T> vnl_quaternion<T>::rotate (const vnl_vector<T>& v) const {
