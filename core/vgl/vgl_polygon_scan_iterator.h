@@ -6,8 +6,8 @@
 // \author Adapted from FillPolygon by J.L. Mundy
 //
 // \verbatim
-// Modifications:
-//  Binary IO added and documentation tidied up NPC, 20/03/01
+//  Modifications
+//   Binary IO added and documentation tidied up NPC, 20/03/01
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
@@ -16,9 +16,9 @@
 #include <vgl/vgl_box_2d.h>
 
 //: Fill a polygonal face with interior scan lines
-//  This class provides an interator-style interface to polygon scan
+//  This class provides an iterator-style interface to polygon scan
 //  conversion.  There are convenient constructors from vgl_polygon, and_
-//  lists of floats.  An auxillary clipping window can be specified by the
+//  lists of floats.  An auxiliary clipping window can be specified by the
 //  constructor argument, vgl_box_2d<float> win.
 //
 // Concave Polygon Scan Conversion
@@ -75,10 +75,10 @@ class vgl_polygon_scan_iterator : public vgl_region_scan_iterator
 
   // Constructors/Destructor---------------------------------------------------
 
-    //: Construct with a polygon and bool indicating whether bondary included
+  //: Construct with a polygon and bool indicating whether boundary included
   vgl_polygon_scan_iterator(vgl_polygon const& face, bool boundaryp = true);
 
-    //: Construct with a polygon, bool indicating whether bondary included and window (area visible)
+  //: Construct with a polygon, bool indicating whether boundary included and window (area visible)
   vgl_polygon_scan_iterator(vgl_polygon const& face, bool boundaryp,
                             vgl_box_2d<float> const& window);
 
