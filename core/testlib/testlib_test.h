@@ -6,9 +6,9 @@
 // \brief Testing software
 // \author Tim Cootes
 // \verbatim
-// Modifications:
+//  Modifications
 //   Apr 2002, Amitha Perera: Copied from vil_test and moved into testlib in an
-//     attempt to consolidate all the test repeated test functionality.
+//                  attempt to consolidate all the repeated test functionality.
 // \endverbatim
 
 #include <vcl_string.h>
@@ -52,14 +52,14 @@ do { \
   testlib_test_perform((p)==(v)); \
 } while (0)
 
-//: TEST function, s is message, test to see if p is close to v, tolerence t
+//: TEST function, s is message, test to see if p is close to v, tolerance t
 #define TEST_NEAR(s,p,v,t) \
 do { \
   testlib_test_begin(s); \
   testlib_test_assert_near("",p,v,t); \
 } while (0)
 
-//: TEST function, s is message, test to see if p is far from v, tolerence t
+//: TEST function, s is message, test to see if p is far from v, tolerance t
 #define TEST_FAR(s,p,v,t) \
 do { \
   testlib_test_begin(s); \
