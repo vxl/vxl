@@ -44,7 +44,7 @@ vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, unsigne
 // it as a scalar pixel image with multiple planes. (This doesn't affect the
 // underlying data storage.)
 // \relates vil_image_resource
-vil_image_resource_sptr vil_new_image_resource_of_view(vil_image_view_base & view);
+vil_image_resource_sptr vil_new_image_resource_of_view(vil_image_view_base const& view);
 
 
 //: Make a new image, similar format to the prototype.

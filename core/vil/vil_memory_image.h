@@ -35,7 +35,7 @@ class vil_memory_image : public vil_image_resource
                    vil_pixel_format format);
 
   //: Create a wrapper around the given image_view
-  vil_memory_image(vil_image_view_base &);
+  vil_memory_image(vil_image_view_base const &);
 
 
   friend vil_image_resource_sptr vil_new_image_resource(
@@ -43,7 +43,7 @@ class vil_memory_image : public vil_image_resource
     vil_pixel_format format);
 
   friend vil_image_resource_sptr vil_new_image_resource_of_view(
-    vil_image_view_base & view);
+    vil_image_view_base const & view);
 
  public:
 

@@ -47,7 +47,7 @@ macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 
 
 //: Create a wrapper around the given image_view
-vil_memory_image::vil_memory_image(vil_image_view_base &view)
+vil_memory_image::vil_memory_image(vil_image_view_base const &view)
 {
   switch (vil_pixel_format_component_format(view.pixel_format()))
   {
