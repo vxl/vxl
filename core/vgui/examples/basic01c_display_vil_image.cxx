@@ -3,7 +3,6 @@
 
 #include <vcl_iostream.h>
 
-#include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 
 #include <vgui/vgui.h>
@@ -30,12 +29,11 @@ int main(int argc, char **argv)
 
   vil_image_resource_sptr im = vil_load_image_resource(argv[1]);
 
-  if( !im )
+  if ( !im )
   {
-    vcl_cerr << "Could not load " << argv[1] << "\n";
+    vcl_cerr << "Could not load " << argv[1] << '\n';
     return 1;
   }
-    
 
   // Load image (given in the first command line param) into an image tableau.
   vgui_image_tableau_new image(im);
