@@ -3,11 +3,88 @@
 General utilities used by several mul libraries.
 @endchapsummary
 
+
+@section Data Collectors, and Data Wrappers.
+The STL iterators are great general purpose devices - however they force
+authors of new algorithms to write heavily templated code. This can prove
+difficult for the user, and impossible for some compilers in the case of extra-templated
+member functions. The mbl classes are templated, but on data-type, and this template parameter
+doesn't have the same potential to confuse.
+
+The purpose of the @code{mbl_data_collector} and @code{mbl_data_wrapper} are to provide similar
+purpose as STL iterators, but using polymorphism, instead of templating to handle different types
+of iterator. The descendants of @code{mbl_data_collector} provide something similar to an STL
+output iterator. The descendants of @code{mbl_data_wrapper} provide something similar to an
+STL input iterator.
+
+@subsection Data Wrappers.
+
+When reading data from an @codembl_data_wrapper}, you do not need to know which polymorphic
+concrete type is being used. This way a client can pass you data from any source.
+Reading data from an @code{mbl_data_wrapper} is straight forward.
+@example
+    vnl_vector<double> my_sum(mbl_data_wrapper<vnl_vector<double> >& data)
+    @{
+      data.reset();
+      vnl_vector<double> sum = data.current();
+      while (data.next())
+        sum += data.current();
+    @}
+@end example
+
+You can do random access, using the the @code{set_index(int n)} method, but there is no guarantee that
+the underlying iterator supports this efficiently, so you should use sequential access where possible.
+
+Currently there is only one concrete wrapper, @code{mbl_data_array_wrapper} which wraps C-style data
+arrays. This can be used to wrap @code{vcl_vector}s. Wrappers have in the past been written to
+read files of data directly from disk.
+
+@subsection Data Collectors.
+
+When writing data to an @code{mbl_data_collector}, you do not need to know which polymorphic
+concrete type is being used. This way you can pass a client data in any way they choose.
+Writing data to an @code{mbl_data_collector} is straight forward.
+@example
+    void my_random_data(mbl_data_collector<vnl_vector<double> >& data)
+    @{
+      // Create sampler
+      vpdfl_axis_gaussian gaussian;
+      gaussian.set(vnl_vector<double>(20,0.0),
+        vnl_vector<double>(20,1.0));
+      vpdfl_sampler_base *sampler = gaussian.new_sampler();
+
+      // set up stuff
+      data.clear();
+      vnl_vector<double> x;
+
+      // put random samples in collector
+      for (unsigned i=0 i<2000; ++i)
+      @{
+        sampler->sample(x);  // generate random sample
+        data.record(x);     // record sample
+      @}
+    @}
+@end example
+
+You can store a collector using @code{vsl}, although if you want to store a polymorphic collector variable,
+you will need to cast the pointer to a @code{mbl_data_collector_base}@footnote{Some Compilers
+cannot cope with a mixture of templated base classes, template binary loader, and
+explicit template instantiation.}.
+
+You can create a mbl_data_wrapper from an @code{mbl_data_collector} by calling
+@code{collector.data_wrapper()}.
+
+There are two concrete data collectors - @code{mbl_data_collector_list} and
+@code{mbl_stochastic_data_collector}. The former stores all the data given to it, whilst the
+latter stores a fixed size complete random subset of all the data given to it. This is useful
+if you do not know how much data an algorithm is going to produce, but for space or time reasons
+you can only store and use subset of it.
+
 @section Random Number Generator
 @cindex mbl_mz_random
 @cindex mz_random
 
-Rather than use vnl_sample, mbl_mz_rnadom, provides a superior
+Rather than use @code{vnl_sample()}, @code{mbl_mz_random}, provides a superior
 random number generator.
 
 @itemize
@@ -25,9 +102,9 @@ pseudo-random number generators. For a discussion on speed/randomness trade-off 
 @subsection The randomness of mbl_mz_random
 
 
-I was using a vpdfl_axis_gaussian_sampler to produce some test data, and
+I was using a @code{vpdfl_axis_gaussian_sampler} to produce some test data, and
 there seemed to be too many outliers. I was worried about the randomness
-of the mbl_mz_random::normal(), so I ran some tests.
+of the @code{mbl_mz_random::normal()}, so I ran some tests.
 
 @subsubsection Tim's rank diagram test
 @itemize
