@@ -59,6 +59,7 @@ IF(NETLIB_FOUND)
     test_vector.cxx
     test_gamma.cxx
     test_arithmetic.cxx  test_arithmetic_body.h
+    test_algo.cxx
   )
 
   IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -120,6 +121,7 @@ IF(NETLIB_FOUND)
   ADD_TEST( vnl_test_vector                   vnl_test_all test_vector                  )
   ADD_TEST( vnl_test_gamma                    vnl_test_all test_gamma                   )
   ADD_TEST( vnl_test_arithmetic               vnl_test_all test_arithmetic              )
+  ADD_TEST( vnl_test_algo                     vnl_test_all test_algo                    )
 
 ENDIF(NETLIB_FOUND)
 

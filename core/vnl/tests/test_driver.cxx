@@ -46,6 +46,7 @@ DECLARE( test_vector );
 DECLARE( test_vector_fixed_ref );
 DECLARE( test_gamma );
 DECLARE( test_arithmetic );
+DECLARE( test_algo );
 
 void
 register_tests()
@@ -96,6 +97,7 @@ register_tests()
   REGISTER( test_vector_fixed_ref );
   REGISTER( test_gamma );
   REGISTER( test_arithmetic );
+  REGISTER( test_algo );
 }
 
 DEFINE_MAIN;
