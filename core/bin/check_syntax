@@ -34,7 +34,7 @@ else
     print STDERR "IUEROOT is not defined, and no command line arguments were given\n";
     exit 0;
   }
-  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/core $IUEROOT/contrib -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/\.v.ol\\.new/`;
+  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/core $IUEROOT/contrib -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/\.v.ol\\.new/|grep -v v3p/xerces-c-src1_4_0/`;
   @FILES = split(' ', $FILES);
 }
 
@@ -145,7 +145,7 @@ foreach $f (@FILES)
     next if ($j eq "");
     $found_cassert = 1 if ($j eq "vcl_cassert.h" || $j eq "assert.h");
     print "$f\t\# invalid #include <$j>\n"
-      unless ($j =~ m/\.(h|H|txx)$/ || $f =~ m/\/vcl\// || $j eq "std/complext.cc");
+      unless ($j =~ m/\.(h|H|hxx|hpp|txx)$/ || $f =~ m/\/vcl\// || $j eq "std/complext.cc");
     next unless ($j =~ m/\.h$/i);
     next if ($f =~ m/(v.l)\/tests\/(\1_)?test_(includes?|all)\.cxx$/ && $j =~ m/^$1(\/algo)?\/$1_/);
     next if ($f =~ m/vnl\/algo\/Templates\/vcl_vector\+vnl_amoeba_SimplexCorner-\.cxx$/ && $j eq "vnl/algo/vnl_amoeba.h");
@@ -243,6 +243,8 @@ foreach $f (@FILES)
     elsif ($j eq "vgl/vgl_clip.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vgl/vgl_distance.h") { $i="$i(2)?(|[a-z_]+)"; }
     elsif ($j eq "vgl/vgl_triangle_test.h") { $i="$i(|_[a-z_]+)"; }
+    elsif ($j eq "vgl/algo/vgl_homg_operators_2d.h") { $i="$i|vnl_double_3x3[^\000]*vgl_homg_point_2d"; }
+    elsif ($j eq "vgl/algo/vgl_homg_operators_3d.h") { $i="$i|vnl_double_4x4[^\000]*vgl_homg_point_3d"; }
     elsif ($j eq "vgui/vgui_adaptor.h") { $i="(vgui|get)_(adaptor|event)"; }
     elsif ($j eq "vgui/vgui_color_text.h") { $i="(text_to_color|(red|green|blue)_value)"; }
     elsif ($j eq "vgui/vgui_command.h") { $i="($i(|_[a-z_]+)|VGUI_COMMAND_SIMPLE_INSTANTIATE)"; }
