@@ -41,7 +41,7 @@ class vbl_sparse_array_base
 protected:
     //: The type of the storage
   typedef vcl_map<Index, T, vcl_less<Index> > Map;
-    //: This tores an compact list of the values.
+    //: This stores a compact list of the values.
   Map storage_;
 
 public:
@@ -63,8 +63,8 @@ public:
   T* get_addr(Index);
 
 
-    //: The type of interators into the efficient storage
-  typedef typename Map::const_iterator const_iterator;
+    //: The type of iterators into the efficient storage
+  typedef Map::const_iterator const_iterator;
 
     //: Return number of locations that have been assigned a value using "put".
   unsigned count_nonempty() const { return storage_.size(); }
