@@ -158,17 +158,17 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
         vcl_cout << method_name << "PVTYPE string = <" << buffer << ">\n";
 
   // MAKE SURE FLOAT AND COMPLEX BELOW SHOULD NOT BE DOUBLE.  MAL 8oct2003
-        if (!strcasecmp(buffer, "B  ", 3))  // B = bit-mapped. TargetJr. used PVTYPE_INTEGER
+        if (!strcasecmp(buffer, "B  "))  // B = bit-mapped. TargetJr. used PVTYPE_INTEGER
           PVTYPE_ = VIL_PIXEL_FORMAT_UINT_16;
-        else if (!strcasecmp(buffer, "C  ", 3))  // C = complex (2 32 bit values)
+        else if (!strcasecmp(buffer, "C  "))  // C = complex (2 32 bit values)
           PVTYPE_ = VIL_PIXEL_FORMAT_COMPLEX_FLOAT;  // Should this be COMPLEX_DOUBLE ?
-        else if (!strcasecmp(buffer, "INT", 3))
+        else if (!strcasecmp(buffer, "INT"))
           PVTYPE_ = VIL_PIXEL_FORMAT_UINT_16;  // INT and SI are 16 bit values
-        else if (!strcasecmp(buffer, "R  ", 3))
+        else if (!strcasecmp(buffer, "R  "))
           PVTYPE_ = VIL_PIXEL_FORMAT_FLOAT;  // 32 bit IEEE floating point number.
-        else if (!strcasecmp(buffer, "SI ", 3))
+        else if (!strcasecmp(buffer, "SI "))
             PVTYPE_ = VIL_PIXEL_FORMAT_INT_16;  // INT and SI are 16 bit values
-        else if (!strcasecmp(buffer, "U  ", 3))
+        else if (!strcasecmp(buffer, "U  "))
             PVTYPE_ = VIL_PIXEL_FORMAT_UNKNOWN;
         else
         {
