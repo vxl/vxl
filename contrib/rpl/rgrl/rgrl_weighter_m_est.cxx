@@ -169,7 +169,7 @@ aux_sum_rho_values( rgrl_scale const&  scale,
   for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ){
       if ( fitr.size() == 0 )  continue;
       
-      rgrl_feature_sptr mapped_from = fitr.from_feature()->transform( xform );
+      rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
       for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
         //  for each match with a "to" image feature
         rgrl_feature_sptr to_feature = titr.to_feature();
