@@ -10,20 +10,9 @@
 
 #include <rsdl/rsdl_bins_2d.h>
 
-#if 0 // unused
-static bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
-static bool less_first( const vcl_pair<double,int>& l,
-                        const vcl_pair<double,int>& r )
+MAIN( test_bins_2d )
 {
-  return l.first < r.first;
-}
-#endif
-
-
-int
-main()
-{
-  testlib_test_start( "rsdl_bins_2d" );
+  START( "rsdl_bins_2d" );
 
   vnl_vector_fixed< double, 2 > min_pt, max_pt, bin_sizes;
   min_pt.x() = 1.0;   min_pt.y() = -2.5;
@@ -137,6 +126,5 @@ main()
     testlib_test_perform( correct );
   }
 
-  testlib_test_summary();
-  return 0;
+  SUMMARY();
 }

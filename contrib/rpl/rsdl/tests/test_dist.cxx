@@ -9,10 +9,9 @@
 
 static bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
 
-int
-main()
+MAIN( test_dist )
 {
-  testlib_test_start( "rsdl_dist" );
+  START( "rsdl_dist" );
 
   const unsigned int Nc = 2;
   const unsigned int Na = 3;
@@ -425,6 +424,5 @@ main()
   back_inside = rsdl_dist_point_in_box( pt, outer );
   testlib_test_perform( !inside && back_inside );
 
-  testlib_test_summary();
-  return 0;
+  SUMMARY();
 }

@@ -4,10 +4,10 @@
 
 static bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
 
-int
-main()
+
+MAIN( test_bounding_box )
 {
-  testlib_test_start( "rsdl_bounding_box" );
+  START( "rsdl_bounding_box" );
 
   const int Nc = 2;
   const int Na = 3;
@@ -65,6 +65,5 @@ main()
       && close( box1.max_angular(i), box2.max_angular(i) );
   testlib_test_perform( ok );
 
-  testlib_test_summary();
-  return 0;
+  SUMMARY();
 }

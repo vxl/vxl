@@ -15,18 +15,10 @@ static bool less_first( const vcl_pair<double,int>& left,
 {
   return left.first < right.first;
 }
-#if 0 // unused
-static bool less_second( const vcl_pair<double,int>& left,
-                         const vcl_pair<double,int>& right )
-{
-  return left.second < right.second;
-}
-#endif
 
-int
-main()
+MAIN( test_kd_tree )
 {
-  testlib_test_start( "rsdl_kd_tree" );
+  START( "rsdl_kd_tree" );
 
   int Nc=2, Na=3;
   rsdl_point pt( Nc, Na );
@@ -313,7 +305,5 @@ main()
                           && disagree_index==0 );
   }
 
-  testlib_test_summary();
-
-  return 0;
+  SUMMARY();
 }

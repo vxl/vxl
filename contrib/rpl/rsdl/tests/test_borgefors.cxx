@@ -14,9 +14,10 @@ void TEST_NEAR_vec(const char* msg,
   TEST_NEAR(msg, v1.y(), v2.y(), tol);
 }
 
-int
-main()
+MAIN( test_borgefors )
 {
+  START( "rsdl_borgefors" );
+
   //Create one vertical and one horizontal lines to be stored
   int range = 250;
   vcl_vector<vnl_vector_fixed<double,2> > data;
@@ -42,5 +43,6 @@ main()
   TEST("test operator== ", bg_map2, bg_map1);
   bg_map2.reset();
   bg_map1.reset();
-  return testlib_test_summary();
+
+  SUMMARY();
 }

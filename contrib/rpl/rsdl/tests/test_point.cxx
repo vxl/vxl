@@ -7,10 +7,9 @@
 
 static bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
 
-int
-main()
+MAIN( test_point )
 {
-  testlib_test_start( "rsdl_point" );
+  START( "rsdl_point" );
 
   const unsigned int Nc = 2;
   const unsigned int Na = 3;
@@ -146,7 +145,5 @@ main()
     ok = close( q.angular(i), ang[i] );
   testlib_test_perform( ok );
 
-  testlib_test_summary();
-
-  return 0;
+  SUMMARY();
 }
