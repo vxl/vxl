@@ -111,6 +111,12 @@ void segv_menus::compute_mutual_info_callback()
 segv_segmentation_manager::instance()->compute_mutual_info();
 }
 
+void segv_menus::compute_background_info_callback()
+{
+segv_segmentation_manager::instance()->compute_background_info();
+}
+
+
 void segv_menus::create_box_callback()
 {
   segv_segmentation_manager::instance()->create_box();
@@ -121,11 +127,35 @@ void segv_menus::create_polygon_callback()
   segv_segmentation_manager::instance()->create_polygon();
 }
 
+void segv_menus::set_foreground_face_callback()
+{
+  segv_segmentation_manager::instance()->set_foreground_face();
+}
+
+void segv_menus::set_background_face_callback()
+{
+  segv_segmentation_manager::instance()->set_background_face();
+}
+
 void segv_menus::display_epi_region_image_callback()
 {
 segv_segmentation_manager::instance()->display_epi_region_image();
 }
 
+void segv_menus::compute_parallel_coverage_callback()
+{
+segv_segmentation_manager::instance()->compute_parallel_coverage();
+}
+
+void segv_menus::compute_watershed_regions_callback()
+{
+  segv_segmentation_manager::instance()->compute_watershed_regions();
+}
+
+void segv_menus::find_vehicle_callback()
+{
+  segv_segmentation_manager::instance()->find_vehicle();
+}
 //segv_menus definition
 vgui_menu segv_menus::get_menu()
 {
@@ -155,14 +185,21 @@ vgui_menu segv_menus::get_menu()
   menuedit.add("Harris", harris_measure_callback);
   menuedit.add("Beaudet", beaudet_measure_callback);
   menuedit.add("VD Edges", vd_edges_callback);
-  menuedit.add("Regions", regions_callback);
+  menuedit.add("Edgel Regions", regions_callback);
+  menuedit.add("Watershed Regions", compute_watershed_regions_callback);
   menuedit.add("Line Segments", fit_lines_callback);
   menuedit.add("TestFace", test_face_callback);
   menuedit.add("TestDigitalCurves", test_digital_lines_callback);
   menuedit.add("Test Camera Parms",test_camera_parms_callback);
   menuedit.add("Create Box", create_box_callback);
-  menuedit.add("Create Polygon", create_polygon_callback);
+  menuedit.add("Create Polygon", create_polygon_callback,(vgui_key)'a', vgui_CTRL);
+  menuedit.add("Set Background Face", set_background_face_callback);
+  menuedit.add("Set Foreground Face", set_foreground_face_callback);
   menuedit.add("Compute Mutual Info",compute_mutual_info_callback);
+  menuedit.add("Compute Fore/Background entropy",compute_background_info_callback);
+  menuedit.add("Compute parallel coverage",compute_parallel_coverage_callback);
+  menuedit.add("Find Vehicle", find_vehicle_callback);
+
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);

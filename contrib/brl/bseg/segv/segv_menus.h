@@ -36,8 +36,15 @@ class segv_menus
   SEGV_DLL_DATA static void rotate_image_callback();
   SEGV_DLL_DATA static void display_epi_region_image_callback();
   SEGV_DLL_DATA static void compute_mutual_info_callback();
+  SEGV_DLL_DATA static void compute_background_info_callback();
   SEGV_DLL_DATA static void create_box_callback();
   SEGV_DLL_DATA static void create_polygon_callback();
+  SEGV_DLL_DATA static void set_foreground_face_callback();
+  SEGV_DLL_DATA static void set_background_face_callback();
+  SEGV_DLL_DATA static void compute_parallel_coverage_callback();
+  SEGV_DLL_DATA static void compute_watershed_regions_callback();
+  SEGV_DLL_DATA static void find_vehicle_callback();
+
 #if 0
 #ifdef HAS_XERCES
   SEGV_DLL_DATA static void read_xml_edges_callback();

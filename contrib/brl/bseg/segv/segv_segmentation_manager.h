@@ -57,9 +57,14 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   void rotate_image();
   void display_epi_region_image();
   void compute_mutual_info();
+  void compute_background_info();
   void create_box();
   void create_polygon();
-
+  void set_foreground_face();
+  void set_background_face();
+  void compute_parallel_coverage();
+  void compute_watershed_regions();
+  void find_vehicle();
 #if 0
 #ifdef HAS_XERCES
   void read_xml_edges();
@@ -98,6 +103,8 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   bool first_; //first image load
   vgui_window* win_;
   vgui_grid_tableau_sptr grid_;
+  vtol_face_2d_sptr foreground_face_;
+  vtol_face_2d_sptr background_face_;
   static segv_segmentation_manager *instance_;
 };
 
