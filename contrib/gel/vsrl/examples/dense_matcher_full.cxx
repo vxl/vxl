@@ -19,7 +19,15 @@ int main(int argc, char ** argv)
 
   // create the stereo dense matcher
   vil_image image1 = vil_load(argv[1]);
+  if (!image1) {
+    vcl_cerr << "Error loading " << argv[1] << ". Exiting.\n";
+    return 0;
+  }
   vil_image image2 = vil_load(argv[2]);
+  if (!image2) {
+    vcl_cerr << "Error loading " << argv[2] << ". Exiting.\n";
+    return 0;
+  }
 
   // set the parameters of the dense matcher
   vsrl_parameters *params = vsrl_parameters::instance();
