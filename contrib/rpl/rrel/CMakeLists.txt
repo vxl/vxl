@@ -28,8 +28,7 @@ INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/mul )
 
 AUX_SOURCE_DIRECTORY( Templates rrel_sources )
 
-#SUBDIRS(examples)
-
 IF( BUILD_TESTS)
   SUBDIRS(tests)
+  SUBDIRS(examples)
 ENDIF( BUILD_TESTS)
