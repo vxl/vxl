@@ -10,7 +10,6 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
-#include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_cross.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_2.h>
