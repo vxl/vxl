@@ -9,9 +9,6 @@
 // \author Aaron Kotcheff
 // \brief A superior random number generator
 
-#include<vcl_cassert.h>
-
-
 const int mbl_mz_array_size = 37;
 
 //: A superior random number generator.
@@ -142,6 +139,5 @@ class mbl_mz_random
     // value. The further the sample is from zero, the lower the number of bits to which it is random.
     double normal64();
 };
-
 
 #endif // mbl_mz_random_h
