@@ -34,7 +34,7 @@ else
     print STDERR "IUEROOT is not defined, and no command line arguments were given\n";
     exit 0;
   }
-  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/vxl $IUEROOT/mul $IUEROOT/oxl $IUEROOT/gel $IUEROOT/tbl $IUEROOT/conversions $IUEROOT/rpl $IUEROOT/oul -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/\.v.ol\\.new/`;
+  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/vxl $IUEROOT/mul $IUEROOT/oxl $IUEROOT/gel $IUEROOT/tbl $IUEROOT/conversions $IUEROOT/rpl $IUEROOT/oul $IUEROOT/brl -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/\.v.ol\\.new/`;
   @FILES = split(' ', $FILES);
 }
 
@@ -185,7 +185,7 @@ foreach $f (@FILES)
     elsif ($j eq "vcl_csetjmp.h") { $i="(setjmp|vcl_(jmp_buf|longjmp))"; }
     elsif ($j eq "vcl_csignal.h") { $i="vcl_(sig_atomic_t|raise|signal)"; }
     elsif ($j eq "vcl_cstdarg.h") { $i="(vcl_|)va_list"; }
-    elsif ($j eq "vcl_cstddef.h") { next if ($f =~ m/\bvxl\/vil\/vil_jpeglib\.h$/); $i="vcl_(ptrdiff_t|size_t)"; }
+    elsif ($j eq "vcl_cstddef.h") { next if ($f =~ m/\b(vxl\/vil|mul\/vil2)\/vil_jpeglib\.h$/); $i="vcl_(ptrdiff_t|size_t)"; }
     elsif ($j eq "vcl_cstdio.h") { next if ($f =~ m/\b(vcl\/vcl_cassert|vxl\/vil\/vil_jpeglib)\.h$/); $i="vcl_(FILE|fpos_t|fopen|fclose|feof|ferror|fflush|fgetc|fgetpos|fgets|fwrite|fread|fseek|ftell|perror|clearerr|rename|fputc|fputs|freopen|fsetpos|getc|getchar|gets|putc|putchar|puts|remove|rewind|setbuf|setvbuf|tmpfile|tmpnam|ungetc|printf|sprintf|fprintf|vprintf|vsprintf|vfprintf|scanf|sscanf|fscanf|vscanf|vsscanf|vfscanf)"; }
     elsif ($j eq "vcl_cstdlib.h") { next if ($f =~ m/\bvcl\/vcl_cassert\.h$/); $i="(vcl_(abs|div|labs|ldiv|srand|rand|atexit|getenv|system|exit|abort|qsort|calloc|malloc|free|realloc|atol|atof|atoi|mblen|mbstowcs|mbtowc|strtod|strtol|strtoul|wctomb|wcstombs)|[sd]rand48)"; }
     elsif ($j eq "vcl_cstring.h") { $i="vcl_(memchr|memcmp|memcpy|memmove|memset|strcat|strchr|strcmp|strcoll|strcpy|strcspn|strerror|strlen|strncat|strncmp|strncpy|strpbrk|strrchr|strspn|strstr|strtok|strxfrm)"; }
@@ -383,7 +383,8 @@ foreach $f (@FILES)
     print "$f\t\# contains old style // -- docs\n";
     $printed = 1;
   }
-  if ($cpp_file && $file =~ m/\001[^\001\002]{111,}/)
+  if ($cpp_file && $f !~ m/\bvidl\/vidl_mpegcodec\.cxx$/ &&
+      $file =~ m/\001[^\001\002]{111,}/)
   {
     print "$f\t\# contains long /*...*/ comments\n";
     $printed = 1;
@@ -522,7 +523,7 @@ foreach $f (@FILES)
     $class =~ s/\005/+-/g; $class =~ tr/<,*>/+.~-/; # \005 is ::
     $class_q = $class; $class_q =~ s/([.+~-])/\\$1/g;
     $class =~ s/unsigned/u/g; $class =~ s/signed/s/g; $class =~ s/longd/long_d/g;
-    $class =~ s/vil2_byte/byte/g; $class =~ s/vxl_(u?int)/$1/g;
+    $class =~ s/vxl_(s?byte|u?int)/$1/g;
     $class_r = $class; $class_r =~ s/([.+~-])/\\$1/g;
     $class_s = $class_q; $class_s =~ s/signed/signed_/g; $class_s =~ s/long/long_/g;
     if ($f !~ m/\/$class_q\.(cxx|cc|C)$/ &&
