@@ -65,9 +65,8 @@ SOURCES += vnl_real_npolynomial.cxx
 # alternative number representations
 SOURCES += vnl_rational.cxx
 SOURCES += vnl_bignum.cxx
-#MANPAGE_SOURCES += vnl_finite_field.txx
-#MANPAGE_SOURCES += vnl_finite_ring.txx
-#SOURCES += vnl_padic_field.cxx
+MANPAGE_SOURCES += vnl_finite_field_number.h
+#MANPAGE_SOURCES += vnl_padic_field_number.txx
 
 #misc header files
 MANPAGE_SOURCES += vnl_T_n.h
