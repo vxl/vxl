@@ -1,4 +1,5 @@
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_fstream.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vcl_vector.h>
@@ -14,11 +15,10 @@
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
-#include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <bdgl/bdgl_curve_algs.h>
 #include <vsol/vsol_curve_2d.h>
-#include <vsol/vsol_line_2d.h>
+
 vpro_curve_tracking_process::vpro_curve_tracking_process(bdgl_curve_tracking_params & tp, const sdet_detector_params & dp)
 {
   detect_params_ = dp;
@@ -33,23 +33,23 @@ bool vpro_curve_tracking_process::execute()
 {
   // init
   if (this->get_N_input_images()!=1)
-    {
-      vcl_cout << "In vpro_curve_tracking_process::execute() -"
-               << " not exactly one input image\n";
-      return false;
-    }
+  {
+    vcl_cout << "In vpro_curve_tracking_process::execute() -"
+             << " not exactly one input image\n";
+    return false;
+  }
   output_spat_objs_.clear();
 
   // input image
   vil1_image img = vpro_video_process::get_input_image(0);
   vil1_memory_image_of<unsigned char> cimg;
   if (img.components()==3)
-    {
-      vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
-      vpro_video_process::clear_input();//remove image from input
-      //convert a color image to grey
-      cimg = brip_float_ops::convert_to_byte(fimg);
-    }
+  {
+    vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
+    vpro_video_process::clear_input();//remove image from input
+    //convert a color image to grey
+    cimg = brip_float_ops::convert_to_byte(fimg);
+  }
   else
     cimg = vil1_memory_image_of<unsigned char>(img);
 
@@ -88,8 +88,8 @@ bool vpro_curve_tracking_process::execute()
   track_frame(t);
 
 
-      for (unsigned int i=0;i<get_output_size_at(t);i++){
-
+  for (unsigned int i=0;i<get_output_size_at(t);i++)
+  {
     bdgl_tracker_curve_sptr test_curve1=get_output_curve(t,i);
     bdgl_tracker_curve_sptr new_curve,old_curve;
     vcl_map<int,int>::iterator iter;
@@ -99,15 +99,14 @@ bool vpro_curve_tracking_process::execute()
 
     if (test_curve1->match_id_==-1 )
     {
-        output_spat_objs_.push_back( dc->cast_to_spatial_object_2d() );
-        output_spat_objs_[output_spat_objs_.size()-1]->set_tag_id(-1);
+      output_spat_objs_.push_back( dc->cast_to_spatial_object_2d() );
+      output_spat_objs_[output_spat_objs_.size()-1]->set_tag_id(-1);
     }
     else if (test_curve1->match_id_>0 )
     {
-        output_spat_objs_.push_back( dc->cast_to_spatial_object_2d() );
-        output_spat_objs_[output_spat_objs_.size()-1]->set_tag_id( test_curve1->match_id_ );
+      output_spat_objs_.push_back( dc->cast_to_spatial_object_2d() );
+      output_spat_objs_[output_spat_objs_.size()-1]->set_tag_id( test_curve1->match_id_ );
     }
-
  }
 
   vcl_cout<<"\n frame no :"<<t;
@@ -168,7 +167,6 @@ bool vpro_curve_tracking_process::write_to_file()
         {
           f<<" "<<"["<<obj->desc->points_[i].x()<<", "<<obj->desc->points_[i].y()
            <<"]"<<"   "<<obj->desc->angles_[i]<<" "<<obj->desc->grad_[i]<<"\n";
-
         }
         f<<"[END CONTOUR]\n";
 
