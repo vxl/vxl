@@ -35,6 +35,9 @@ TESTS += test_load_gen.cxx
 TESTS += test_resample.cxx
 PARAMS_test_resample := square.pgm
 
+#MINI_PROG_SOURCES += vil_vil1_compare_access_timings.cxx
+#MINI_PROG_SOURCES += vil_vil1_compare_function_timings.cxx
+
 MINI_PROG_SOURCES += test_include.cxx
 
 #########################################

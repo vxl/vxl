@@ -20,7 +20,7 @@ TESTS += test_file_format_read.cxx
 PARAMS_test_file_format_read := file_read_data
 TESTS += test_save_load_image.cxx
 TESTS += test_image_loader_robustness.cxx
-TESTS += test_stream.cxx 
+TESTS += test_stream.cxx
 PARAMS_test_stream := file_read_data
 
 # image operations
@@ -41,13 +41,10 @@ TESTS += test_sample_profile_bicub.cxx
 TESTS += test_sample_grid_bicub.cxx
 TESTS += test_resample_bicub.cxx
 
-#MINI_PROG_SOURCES += vil_mil_gauss_general_timings.cxx
-#MINI_PROG_SOURCES += vil_vil_compare_access_timings.cxx
 #MINI_PROG_SOURCES += vil_test_access_timings.cxx
 #MINI_PROG_SOURCES += vil_test_random_access_timings.cxx
 #MINI_PROG_SOURCES += vil_test_access_timings_noplanes.cxx
 #MINI_PROG_SOURCES += vil_test_pair_access_timings.cxx
-#MINI_PROG_SOURCES += vil_vil_compare_function_timings.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
