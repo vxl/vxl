@@ -281,29 +281,26 @@ static void test_homg_point_3d()
   q4 = vgl_homg_operators_3d<double>::conjugate(q1,q2,q3,3);
   TEST("vgl_homg_operators_3d<double>::conjugate", q4, vgl_homg_point_3d<double>(2,2,-18,-2));
 
-  vgl_homg_plane_3d<double> l1(0,0,0,1), l2(0,1,0,0), l3(0,0,1,0), l4(1,1,1,1); // l1 = plane at inf
+  vgl_homg_plane_3d<double> pl1(0,0,0,1), pl2(0,1,0,0), pl3(0,0,1,0), pl4(1,1,1,1); // pl1 = plane at inf
   {
-   vgl_homg_point_3d<double> pi(l1,l2,l3); // intersection
+   vgl_homg_point_3d<double> pi(pl1,pl2,pl3); // intersection
    TEST("intersection", pi, vgl_homg_point_3d<double>(1,0,0,0));
    TEST("ideal", pi.ideal(), true);
-   vgl_homg_point_3d<double> pj = vgl_homg_operators_3d<double>::intersection(l1,l2,l3);
+   vgl_homg_point_3d<double> pj = vgl_homg_operators_3d<double>::intersection(pl1,pl2,pl3);
    TEST("intersection", pj, pi);
   }
   {
-   vgl_homg_plane_3d<double> pl1(0,0,0,1), pl2(0,0,1,0), pl3(0,1,0,0);
-   vgl_homg_point_3d<double> pi(pl1,pl2,pl3); // intersection
-   vgl_homg_point_3d<double> pp(1,0,0,0); // point at infinity
-   TEST("intersection", pi, pp);
-   vgl_homg_point_3d<double> pj = vgl_homg_operators_3d<double>::intersection(pl1,pl2,pl3);
+   vgl_homg_point_3d<double> pi(pl2,pl3,pl4); // intersection
+   TEST("intersection", pi, vgl_homg_point_3d<double>(1,0,0,1));
+   TEST("is_ideal", is_ideal(pi), false);
+   vgl_homg_point_3d<double> pj = vgl_homg_operators_3d<double>::intersection(pl2,pl3,pl4);
    TEST("intersection", pj, pi);
-   TEST("ideal", pi.ideal(), true);
-   TEST("is_ideal", is_ideal(p2), false);
   }
 
-  r = vgl_homg_operators_3d<double>::perp_dist_squared(l3,q1);
+  r = vgl_homg_operators_3d<double>::perp_dist_squared(pl3,q1);
   TEST_NEAR("vgl_homg_operators_3d<double>::perp_dist_squared", r, 49, 1e-12);
 
-  r = vgl_homg_operators_3d<double>::perp_dist_squared(q1,l3);
+  r = vgl_homg_operators_3d<double>::perp_dist_squared(q1,pl3);
   TEST_NEAR("vgl_homg_operators_3d<double>::perp_dist_squared", r, 49, 1e-12);
 }
 
