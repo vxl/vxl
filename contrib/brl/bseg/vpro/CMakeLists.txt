@@ -26,6 +26,7 @@ SET(vpro_sources
     vpro_fourier_process.cxx         vpro_fourier_process.h	
     vpro_spatial_filter_params.cxx   vpro_spatial_filter_params.h	
     vpro_spatial_filter_process.cxx  vpro_spatial_filter_process.h	
+    vpro_ihs_process.cxx             vpro_ihs_process.h	
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpro_sources)
