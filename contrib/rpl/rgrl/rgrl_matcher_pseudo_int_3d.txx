@@ -847,71 +847,71 @@ sample_pixels_along_direction( vcl_vector<discrete_shift_node>& two_dir_shifts,
                               vnl_double_3 dir,
                               double max_length ) const
 {
-    // make sure any element in normal vector/basis is less than 1.
-    // Thus, divided by 2*mag, and double max_length;
-    // I try to avoid directions like [1, 0, 0], in which 1 gives arise to problems.
-    // The situation is different for 1 or 0.9999...
-    // Therefore, I would rather have [0.5, 0, 0]
-    dir /= 2.0 * dir.magnitude();
-    max_length *= 2.0;
+  // make sure any element in normal vector/basis is less than 1.
+  // Thus, divided by 2*mag, and double max_length;
+  // I try to avoid directions like [1, 0, 0], in which 1 gives arise to problems.
+  // The situation is different for 1 or 0.9999...
+  // Therefore, I would rather have [0.5, 0, 0]
+  dir /= 2.0 * dir.magnitude();
+  max_length *= 2.0;
 
-    DebugMacro(2, "normal basis :\n" << dir << vcl_endl );
+  DebugMacro(2, "normal basis :\n" << dir << vcl_endl );
 
-    // the idea is to find the smallest delta length added to the current one,
-    // in order to get to the nearest pixel location
-    vnl_int_3 prev, current;
-    double len;
-    double abs_ele;
-    vcl_vector<discrete_shift_node> locs;
-    locs.reserve( int(2*max_length) );
+  // the idea is to find the smallest delta length added to the current one,
+  // in order to get to the nearest pixel location
+  vnl_int_3 prev, current;
+  double len;
+  double abs_ele;
+  vcl_vector<discrete_shift_node> locs;
+  locs.reserve( int(2*max_length) );
 
-    // init
-    const double epsilon = 1.0/(100*max_length);  // 100 is arbitrary
-    const double min_step_size = 1.0/(2*max_length);
-    prev=vnl_int_3(0, 0, 0);
-    locs.push_back( discrete_shift_node(prev, 0) );
-    len = 1e-10; // has to be larger than zero, otherwise, vcl_ceil(0) = 0
-    while ( len < max_length )
-    {
-      double delta_len, min_delta_len = 1e10;
-      int min_index;
-      for (unsigned i=0; i<3; i++) {
-        abs_ele = vcl_abs( dir[i] );
-        // don't want to divide by too small a number
-        if ( abs_ele < min_step_size )
-          continue;
+  // init
+  const double epsilon = 1.0/(100*max_length);  // 100 is arbitrary
+  const double min_step_size = 1.0/(2*max_length);
+  prev=vnl_int_3(0, 0, 0);
+  locs.push_back( discrete_shift_node(prev, 0) );
+  len = 1e-10; // has to be larger than zero, otherwise, vcl_ceil(0) = 0
+  while ( len < max_length )
+  {
+    double delta_len, min_delta_len = 1e10;
+    int min_index = 0;
+    for (unsigned i=0; i<3; i++) {
+      abs_ele = vcl_abs( dir[i] );
+      // don't want to divide by too small a number
+      if ( abs_ele < min_step_size )
+        continue;
 
-        // find the smallest step to next integer location
-        delta_len = vcl_ceil( len * abs_ele ) / abs_ele - len;
-        if ( delta_len < min_delta_len && delta_len > 0 ) //prevent delta_len==0
-        {
-          min_index = i;
-          min_delta_len = delta_len;
-        }
+      // find the smallest step to next integer location
+      delta_len = vcl_ceil( len * abs_ele ) / abs_ele - len;
+      if ( delta_len < min_delta_len && delta_len > 0 ) //prevent delta_len==0
+      {
+        min_index = i;
+        min_delta_len = delta_len;
       }
-
-      assert( min_delta_len > 0.0 );
-      // keep it within max_length
-      if ( len+min_delta_len > max_length )
-        break;
-
-      // find out the pixel location
-      current = prev;
-      if ( dir[min_index] < 0 )
-        current[min_index] -= 1;
-      else
-        current[min_index] += 1;
-
-      // store the length, instead of delta_len
-      // It is required, as it is different case(left neighbor or right neighbor)
-      // for positive leng and negative len
-      locs.push_back( discrete_shift_node( current, (len+min_delta_len)/2 ) );
-      prev = current;
-      // update length
-      // to prevent numerical rounding, e.g., 1.999999 instead of 2
-      // add a small padding to make it larger
-      len += min_delta_len+epsilon;
     }
+
+    assert( min_delta_len > 0.0 );
+    // keep it within max_length
+    if ( len+min_delta_len > max_length )
+      break;
+
+    // find out the pixel location
+    current = prev;
+    if ( dir[min_index] < 0 )
+      current[min_index] -= 1;
+    else
+      current[min_index] += 1;
+
+    // store the length, instead of delta_len
+    // It is required, as it is different case(left neighbor or right neighbor)
+    // for positive leng and negative len
+    locs.push_back( discrete_shift_node( current, (len+min_delta_len)/2 ) );
+    prev = current;
+    // update length
+    // to prevent numerical rounding, e.g., 1.999999 instead of 2
+    // add a small padding to make it larger
+    len += min_delta_len+epsilon;
+  }
 
   // copy
   two_dir_shifts.clear();
