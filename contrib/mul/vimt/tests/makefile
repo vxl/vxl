@@ -11,7 +11,7 @@ TESTS += test_image_2d_of.cxx
 TESTS += test_sample_grid_bilin.cxx
 TESTS += test_sample_profile_bilin.cxx
 TESTS += test_transform_2d.cxx
-TESTS += test_convolve_2d.cxx
+TESTS += test_correlate_2d.cxx
 TESTS += test_find_troughs.cxx
 TESTS += test_find_peaks.cxx
 
