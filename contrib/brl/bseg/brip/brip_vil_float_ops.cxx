@@ -20,6 +20,7 @@
 #include <bsol/bsol_algs.h>
 
 
+
 //------------------------------------------------------------
 //:  Convolve with a kernel
 //   It's assumed that the kernel is square with odd dimensions
@@ -209,7 +210,36 @@ brip_vil_float_ops::gaussian(vil_image_view<float> const & input, float sigma)
   delete ker;
   return dest;
 }
+vil_image_view<float>
+brip_vil_float_ops::gaussian(vil_image_view<float> const & input, float sigma,vil_image_view<float>  mask)
+{
+  vil_image_view<float> dest(input.ni(), input.nj());
+  
+  int r;
+  double* ker;
+  brip_1d_gaussian_kernel(sigma, 0.02, r, ker);
+  vil_image_view<float> work(input.ni(), input.nj());
+  work.deep_copy(input);
+  // filter horizontal
+  int ksize = 2*r + 1 ;
+  float accum=0;
+  vil_convolve_1d(input, work,mask, ker + ksize/2,
+                  -ksize/2, r, accum,
+                  vil_convolve_trim,
+                  vil_convolve_trim);
 
+  // filter vertical
+  vil_image_view<float> work_t = vil_transpose(work);
+  vil_image_view<float> dest_t = vil_transpose(dest);
+  vil_convolve_1d(work_t, dest_t,vil_transpose(mask), ker+ ksize/2,
+                  -ksize/2, r, accum,
+                  vil_convolve_constant_extend,
+                  vil_convolve_constant_extend);
+  //dest=vil_transpose(dest_t);
+
+  delete ker;
+  return dest;
+}
 //-------------------------------------------------------------------
 // Determine if the center of a (2n+1)x(2n+1) neighborhood is a local maximum
 //
@@ -1732,12 +1762,12 @@ bool brip_vil_float_ops::chip(vil_image_view<float> const & input,
   if (x_max>w-1)
     x_max=w-1;
   if (y_max>h-1)
-    y_max=w-1;
+    y_max=h-1;
   int rw = x_max-x_min, rh = y_max-y_min;
   if (rw<=0||rh<=0)
     return false;
-  for (int y = y_min; y<y_max; y++)
-    for (int x =x_min; x<x_max; x++)
+  for (int y = y_min; y<=y_max; y++)        //: changed < to <= to include the boundary points too
+    for (int x =x_min; x<=x_max; x++)
       chip(x-x_min, y-y_min) = input(x, y);
   return true;
 }
