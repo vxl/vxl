@@ -14,10 +14,28 @@
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
+#include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vgui/vgui_soview2D.h>
+
+//: vdgl_digital_curve (maybe later move to a geometry tableau)
+class bgui_vtol_soview2D_digital_curve : public vgui_soview2D_group
+{
+ public:
+  //: Constructor - creates a default vdgl_digital_curve view
+  bgui_vtol_soview2D_digital_curve() {;}
+
+  //: Constructor - creates a view of a vdgl_digital_curve
+  bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr& e);
+
+  //: Print details about this vdgl_digital_curve to the given stream.
+  virtual vcl_ostream& print(vcl_ostream&) const;
+
+  //: Returns the type of this class ('bgui_vtol_soview2D_digital_curve').
+  vcl_string type_name() const { return "bgui_vtol_soview2D_digital_curve"; }
+};
 
 //: vtol_vertex_2d
 // This view is essentially the same as a point the only difference

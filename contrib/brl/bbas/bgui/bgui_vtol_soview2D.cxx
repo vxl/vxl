@@ -13,12 +13,48 @@
 #include <bgui/bgui_vtol_soview2D.h>
 
 //--------------------------------------------------------------------------
+//: vdgl_digital_curve view
+//--------------------------------------------------------------------------
+vcl_ostream& bgui_vtol_soview2D_digital_curve::print(vcl_ostream& s) const
+{
+  return s;
+}
+
+bgui_vtol_soview2D_digital_curve::
+bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr& dc)
+{
+  if (!dc)
+    {
+      vcl_cout << "In bgui_vtol_soview2D_digital_curve(..) - null input dc\n";
+      return;
+    }
+  
+  //get the edgel chain
+  vdgl_interpolator_sptr itrp = dc->get_interpolator();
+  vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
+
+  //n, x, and y are in the parent class vgui_soview2D_linestrip
+  int n = ech->size();
+ 
+  float x = 0, y=0;
+  for (unsigned int i=0; i<n;i++)
+    {
+      vdgl_edgel ed = (*ech)[i];
+      x=ed.get_x();
+      y=ed.get_y();
+      vgui_soview2D* p = new vgui_soview2D_point(x, y);
+      ls.push_back(p);
+    }
+  return;
+}
+
+//--------------------------------------------------------------------------
 //: vtol_vertex_2d view
 //--------------------------------------------------------------------------
 vcl_ostream& bgui_vtol_soview2D_vertex::print(vcl_ostream& s) const
 {
-  s << "[bgui_vtol_soview2D_vertex " << x << "," << y << " ";
-  s << " "; return vgui_soview2D::print(s) << "]";
+s << "[bgui_vtol_soview2D_vertex " << x << "," << y << " ";
+s << " "; return vgui_soview2D::print(s) << "]";
 }
 
 //--------------------------------------------------------------------------

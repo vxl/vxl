@@ -1,8 +1,6 @@
 #ifndef bgui_picker_tableau_sptr_h_
 #define bgui_picker_tableau_sptr_h_
 
-// this is a generated file.
-
 #include <vgui/vgui_tableau_sptr.h>
 
 class bgui_picker_tableau;

@@ -11,19 +11,23 @@
 // \verbatim
 //  Modifications:
 //   J.L. Mundy November 28, 2002    Initial version.
+//   J.L. Mundy December 16, 2002    Added map between soviews and vtol objects
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
+#include <vcl_map.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_face_2d_sptr.h>
+#include <vtol/vtol_topology_object_sptr.h>
 #include <vgui/vgui_tableau_sptr.h>
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 
+class bgui_vtol_soview2D_digital_curve;
 class bgui_vtol_soview2D_vertex;
 class bgui_vtol_soview2D_edge;
 class bgui_vtol_soview2D_edge_group;
@@ -42,6 +46,10 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
 
   ~bgui_vtol2D_tableau(){};
 
+  //: display for digital_curve (not vtol but often useful)
+  bgui_vtol_soview2D_digital_curve* 
+    add_digital_curve(vdgl_digital_curve_sptr& v);
+
   //: the vtol display methods for individual topology classes
   bgui_vtol_soview2D_vertex* add_vertex(vtol_vertex_2d_sptr& v);
   bgui_vtol_soview2D_edge* add_edge(vtol_edge_2d_sptr& e);
@@ -56,6 +64,10 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
 
   void add_faces(vcl_vector<vtol_face_2d_sptr>& faces, bool verts=false);
 
+  //: Methods for getting mapped objects
+  vtol_edge_2d_sptr get_mapped_edge(const int id);
+ protected:
+  vcl_map<int, vtol_topology_object_sptr> obj_map_;
 };
 
 //this stuff is needed to establish inheritance between tableau  smart pointers

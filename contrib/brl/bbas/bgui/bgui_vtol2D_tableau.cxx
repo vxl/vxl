@@ -13,12 +13,28 @@ bgui_vtol2D_tableau::bgui_vtol2D_tableau(vgui_tableau_sptr const& t,
                                          const char* n):
   vgui_easy2D_tableau(t, n){}
 
+bgui_vtol_soview2D_digital_curve* 
+bgui_vtol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr& dc)
+{
+  this->set_line_width(3.0);
+  this->set_foreground(0.0,0.0,1.0);
+  bgui_vtol_soview2D_digital_curve* obj = 
+    new bgui_vtol_soview2D_digital_curve(dc);
+  add(obj);
+  return obj;
+}
+
 bgui_vtol_soview2D_vertex* bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr& v)
 {
   bgui_vtol_soview2D_vertex* obj = new bgui_vtol_soview2D_vertex();
   obj->x = v->x();
   obj->y = v->y();
   add(obj);
+  if(obj)
+    {
+      int id = obj->get_id();
+      obj_map_[id]=v->cast_to_topology_object();
+    }
   return obj;
 }
 
@@ -26,6 +42,12 @@ bgui_vtol_soview2D_edge* bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr& e)
 {
   bgui_vtol_soview2D_edge* obj = new bgui_vtol_soview2D_edge(e);
   add(obj);
+  if(obj)
+    {
+      int id = obj->get_id();
+      obj_map_[id]=e->cast_to_topology_object();
+      vtol_topology_object_sptr to = obj_map_[id];
+    }
   return obj;
 }
 
@@ -42,6 +64,11 @@ bgui_vtol_soview2D_face* bgui_vtol2D_tableau::add_face(vtol_face_2d_sptr& f)
 {
   bgui_vtol_soview2D_face* obj = new bgui_vtol_soview2D_face(f);
   add(obj);
+  if(obj)
+    {
+      int id = obj->get_id();
+      obj_map_[id]=f->cast_to_topology_object();
+    }
   return obj;
 }
 
@@ -96,4 +123,15 @@ bgui_vtol2D_tableau::add_faces(vcl_vector<vtol_face_2d_sptr>& faces,
            delete vts;
          }
      }
+}
+vtol_edge_2d_sptr bgui_vtol2D_tableau::get_mapped_edge(const int id)
+{
+  vtol_topology_object_sptr to = obj_map_[id];
+  if(!to)
+    {
+      vcl_cout << "In bgui_vtol2D_tableau::get_mapped_edge(..) -"
+               << " null map entry\n";
+      return 0;
+    }
+  return to->cast_to_edge()->cast_to_edge_2d();
 }

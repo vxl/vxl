@@ -1,8 +1,6 @@
 #ifndef bgui_vtol2D_tableau_sptr_h_
 #define bgui_vtol2D_tableau_sptr_h_
 
-// this is a generated file.
-
 #include <vgui/vgui_tableau_sptr.h>
 
 class bgui_vtol2D_tableau;
