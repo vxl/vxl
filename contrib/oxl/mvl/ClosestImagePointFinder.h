@@ -27,9 +27,6 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matlab_print.h>
 
-#if defined(VCL_GCC_27)
-# include <mvl/HomgPoint2D.h>
-#endif
 #include <vgl/vgl_box_2d.h>
 
 class HomgInterestPointSet;
