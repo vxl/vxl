@@ -19,3 +19,6 @@ SUBDIRS(vvid)
 
 # multiview library
 SUBDIRS(bmvl)
+
+# standalone executables
+SUBDIRS(bexe)
