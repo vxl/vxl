@@ -18,7 +18,7 @@ classes, which provide the standard operations without excessive overhead.
 @item
 Specialized classes for matrices and vectors with particular properties.
 Class @code{vnl_diagonal_matrix} provides a fast and convenient diagonal
-matrix, while fixed size matrices and vectors allow ``fast-as-C''
+matrix, while fixed-size matrices and vectors allow ``fast-as-C''
 computations (see @code{vnl_matrix_fixed<T,n,m>} and example subclasses
 @code{vnl_double_3x3} and @code{vnl_double_3}).
 
@@ -57,7 +57,7 @@ at @url{http://gams.nist.gov}, both as a decision tree and a text search.
 
 @subsubheading Compliance with the ANSI standard C++ library
 @cindex valarray
-The current draft of the ANSI standard (as at May 1996) includes classes
+The ANSI standard includes classes
 for 1-dimensional vectors (@code{valarray<T>}) and complex numbers (@code{
 complex<T>}).  There is no standard for matrices.  The current vnl classes
 are not implemented in terms of @code{valarray}, as there is a potential
@@ -229,10 +229,109 @@ vnl_double_3 rx = R * x;       // Multiply R by x and place
                                // the result in rx
 @end example
 is expanded by many compilers into an open-coded sequence of 9 multiplies
-and 6 adds.  Note that as the fixed-size objects @code{vnl_*_fixed<T,n>}
-are subclasses of the generic objects @code{vnl_*<T>}, all the same
-operations apply to them.  Only those which have been specifically coded to
-do so enjoy the increase in speed.
+and 6 adds.
+
+@subsection Caveats when using the fixed-size classes
+
+@cindex converting vnl_vector_fixed to vnl_vector
+@cindex vnl_vector_fixed, converting to vnl_vector
+@cindex vnl_matrix_fixed, converting to vnl_matrix
+@cindex as_ref()
+@cindex non_const()
+The fixed-size classes are optimally space efficient;
+@code{sizeof(vnl_vector_fixed<double,4>)} and @code{sizeof(double[4])}
+are the same. To achieve this, it is necessary to decouple
+@code{vnl_vector} from @code{vnl_vector_fixed}, in the sense that
+neither inherits from the other. This means that you cannot pass a
+@code{vnl_vector_fixed} to a function that expects a @code{vnl_vector}
+without some conversion. Luckily, there is a cheap conversion operator
+from @code{vnl_vector_fixed} to @code{vnl_vector_ref}, which is a
+derived class of @code{vnl_vector}. This conversion operator will be
+applied behind the scenes in most cases, so you often don't have to
+worry about it.
+@example
+double norm( vnl_vector<double> const& v );
+...
+vnl_vector_fixed<double,6> fixed_v;
+double n = norm(fixed_v); // this will create a temporary
+                          // vnl_vector_ref<double> const
+                          // to pass to norm
+@end example
+The cost of the conversion is on the order of 1 pointer copy (data pointer) and 1
+integer copy (length) for a vector and 1 pointer and 2 integers for a
+matrix.
+
+Unfortunately, this is not the end of the story. According to the 1998
+ISO C++ standard, user defined conversion operators will not be
+applied when determining candidate template functions. Therefore, the
+following snippet fails to compile.
+@example
+template<typename T>
+T norm( vnl_vector<T> const& v );
+...
+vnl_vector_fixed<double,6> fixed_v;
+// no match for
+//    norm(vnl_vector_fixed<double,6>)
+// User defined conversion operators are not
+// tried since norm is a template.
+double n = norm(fixed_v);
+@end example
+For these cases, and other cases where the implicit conversion
+operator cannot be applied, you have to do the conversion explicitly
+using @code{as_ref()}.
+@example
+template<typename T>
+T norm( vnl_vector<T> const& v );
+...
+vnl_vector_fixed<double,6> fixed_v;
+double n = norm(fixed_v.as_ref()); // calls norm with
+                                   // a vnl_vector_ref<double> const
+@end example
+
+When writing general purpose templated functions that are equally useful for
+both the dynamically allocated @code{vnl_vector} and statically
+allocated @code{vnl_vector_fixed}, it is often useful to provide a
+simple forwarding wrapper so that the user is spared the inconvenience
+of doing the explicit conversion.
+@example
+template<typename T>
+T norm( vnl_vector<T> const& v );  // real function
+template<typename T, unsigned n>
+inline
+T norm( vnl_vector_fixed<T,n> const& v ) @{ // thin wrapper
+   return norm( v.as_ref() );
+@}
+...
+vnl_vector_fixed<double,6> fixed_v;
+double n = norm(fixed_v); // this calls the second norm
+@end example
+
+The final wrinkle with mixing @code{vnl_vector} and
+@code{vnl_vector_fixed} is that the conversion operators, both the
+implicit and explicit, create temporary @code{vnl_vector_ref} objects,
+which, according to the standard, cannot bind to non-const
+references. Therefore, you cannot pass these to a mutator function
+that modifies the values in your vector.
+@example
+void mutator( vnl_vector<double>& v );
+...
+vnl_vector_fixed<double,6> fixed_v;
+mutator(fixed_v); // the temporary object created by the
+                  // conversion is const => cannot be
+                  // passed to mutator.
+@end example
+The only solution to this is to explicitly force the temporary object
+to ``give away'' it's constness, using the @code{non_const()}
+method in @code{vnl_vector_ref}.
+@example
+void mutator( vnl_vector<double>& v );
+...
+vnl_vector_fixed<double,6> fixed_v;
+mutator(fixed_v.as_ref().non_const());
+@end example
+
+The discussion above applies equally well to @code{vnl_matrix} and
+@code{vnl_matrix_fixed}.
 
 @section Example: Matrix decomposition
 
