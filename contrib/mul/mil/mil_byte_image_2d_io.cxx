@@ -8,7 +8,7 @@
 
 #include "mil_byte_image_2d_io.h"
 
-#include <mil_byte_image_2d_io_plugin.h>
+#include <mil/mil_byte_image_2d_io_plugin.h>
 
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
