@@ -2,5 +2,5 @@
 LINK_LIBRARIES( vpdfl )
 LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/mul/vpdfl )
 
-INCLUDE( ${allvxl_SOURCE_DIR}/mul/vnl/io/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/io/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/mul/mbl/CMakeListsLink.txt )
