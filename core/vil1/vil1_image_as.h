@@ -35,7 +35,7 @@ vil_image vil_image_as(vil_image const &, vil_rgb<unsigned char>* dummy);
 // conversion. That is, different weights will be applied to each of
 // the R, G and B values to obtain the resulting grey value.
 
-template<typename T>
+template<class T>
 vil_image vil_image_as(vil_image const & i);
 
 //: \brief Converts to a greyscale image with integer (32bit) pixels. \sa{vil_image_as}

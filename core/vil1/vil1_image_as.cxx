@@ -60,7 +60,7 @@ struct vil_image_as_impl : vil_image_impl, vil_memory_image_of_format<T>
 
 //--------------------------------------------------------------------------------
 
-template<typename Inp, typename Out>
+template<class Inp, class Out>
 bool convert_grey_to_grey( const vil_image& image, void* buf, int x0, int y0, int width, int height )
 {
   vcl_vector<Inp> scan(width);
@@ -74,7 +74,7 @@ bool convert_grey_to_grey( const vil_image& image, void* buf, int x0, int y0, in
 }
 
 
-template<typename Inp, typename Out>
+template<class Inp, class Out>
 bool convert_rgb_to_grey( const vil_image& image, void* buf, int x0, int y0, int width, int height )
 {
   vcl_vector<Inp> scan(3*width);
@@ -97,7 +97,7 @@ bool convert_rgb_to_grey( const vil_image& image, void* buf, int x0, int y0, int
 }
 
 
-template<typename Inp, typename Out>
+template<class Inp, class Out>
 bool convert_grey_to_rgb( const vil_image& image, void* buf, int x0, int y0, int width, int height )
 {
   vcl_vector<Inp> scan(width);
@@ -114,7 +114,7 @@ bool convert_grey_to_rgb( const vil_image& image, void* buf, int x0, int y0, int
 }
 
 
-template<typename Inp, typename Out>
+template<class Inp, class Out>
 bool convert_rgb_to_rgb( const vil_image& image, void* buf, int x0, int y0, int width, int height )
 {
   vcl_vector<Inp> scan(3*width);
@@ -130,7 +130,7 @@ bool convert_rgb_to_rgb( const vil_image& image, void* buf, int x0, int y0, int 
   return true;
 }
 
-template<typename Inp, typename Out>
+template<class Inp, class Out>
 bool convert_rgba_to_rgb( const vil_image& image, void* buf, int x0, int y0, int width, int height )
 {
   vcl_vector<Inp> scan(4*width);
