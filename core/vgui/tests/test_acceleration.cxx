@@ -1,5 +1,5 @@
+// This is oxl/vgui/tests/test_acceleration.cxx
 #include <vcl_iostream.h>
-#include <vcl_iomanip.h>
 
 #include <vpl/vpl.h>
 
