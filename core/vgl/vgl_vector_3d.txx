@@ -6,6 +6,7 @@
 
 #include <vcl_cstdlib.h> // abort()
 #include <vcl_cmath.h> // sqrt() , acos()
+#include <vcl_ostream.h>
 
 template <class T>
 double vgl_vector_3d<T>::length() const {
@@ -26,6 +27,14 @@ bool parallel(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b, double eps)
   double dev = cross / a.length() / a.length();
   return (dev < eps && -dev < eps);
 }
+
+
+//: Write "<vgl_vector_3d x,y,z> " to stream
+template <class T>
+vcl_ostream&  operator<<(vcl_ostream& s, const vgl_vector_3d<T>& p) {
+  return s << "<"<< p.x() << "," << p.y() << "," << p.z() << "> ";
+}
+
 
 #undef VGL_VECTOR_3D_INSTANTIATE
 #define v vgl_vector_3d
@@ -48,6 +57,7 @@ VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      cross_product(vgl_vector_3d<T > co
 VCL_INSTANTIATE_INLINE(double cos_angle    (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
 template               double angle        (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&);\
 template               bool   parallel     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&, double);\
+template vcl_ostream& operator<<(vcl_ostream&, const vgl_vector_3d<T >&); \
 VCL_INSTANTIATE_INLINE(double operator/    (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
 VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >&     normalize    (vgl_vector_3d<T >&));\
 VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      normalized   (vgl_vector_3d<T > const&))

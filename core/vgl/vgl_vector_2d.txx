@@ -6,6 +6,7 @@
 
 #include <vcl_cstdlib.h> // abort()
 #include <vcl_cmath.h> // sqrt() , acos()
+#include <vcl_ostream.h>
 
 template <class T>
 double vgl_vector_2d<T>::length() const
@@ -28,6 +29,14 @@ bool parallel(vgl_vector_2d<T> const& a, vgl_vector_2d<T> const& b, double eps)
   double dev = cross / a.length() / a.length();
   return (dev < eps && -dev < eps);
 }
+
+//: Write "<vgl_vector_2d x,y,z> " to stream
+template <class T>
+vcl_ostream&  operator<<(vcl_ostream& s, const vgl_vector_2d<T>& p) {
+  return s << "<"<< p.x() << "," << p.y() <<  "> ";
+}
+
+
 
 #undef VGL_VECTOR_2D_INSTANTIATE
 #define v vgl_vector_2d<T >

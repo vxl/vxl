@@ -156,6 +156,27 @@ inline double ratio(vgl_point_2d<Type> const& p1,
   return (p3-p1)/(p2-p1);
 }
 
+
+//: Return the point at the mean of three given points.
+template <class Type>
+inline vgl_point_2d<Type> mean(vgl_point_2d<Type> const& p1,
+                               vgl_point_2d<Type> const& p2,
+                               vgl_point_2d<Type> const& p3) {
+  return vgl_point_2d<Type>((p1.x() + p2.x() + p3.x())/3.0 ,
+                            (p1.y() + p2.y() + p3.y())/3.0 );
+}
+
+//: Return the point at the mean of four given points.
+template <class Type>
+inline vgl_point_2d<Type> mean(vgl_point_2d<Type> const& p1,
+                               vgl_point_2d<Type> const& p2,
+                               vgl_point_2d<Type> const& p3,
+                               vgl_point_2d<Type> const& p4) {
+  return vgl_point_2d<Type>((p1.x() + p2.x() + p3.x() + p4.x())/4.0 ,
+                            (p1.y() + p2.y() + p3.y() + p4.y())/4.0 );
+}
+
+
 //: Return the point at a given ratio wrt two other points.
 //  By default, the mid point (ratio=0.5) is returned.
 //  Note that the third argument is Type, not double, so the midpoint of e.g.
