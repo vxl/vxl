@@ -99,25 +99,25 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "c;cxx"
 # Begin Source File
-SOURCE=.\zhang_camera_node.cpp
+SOURCE=.\zhang_camera_node.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\zhang_linear_calibrate.cpp
+SOURCE=.\zhang_linear_calibrate.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\camera.cpp
+SOURCE=.\camera.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\calibrate_plane.cpp
+SOURCE=.\calibrate_plane.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\calibrate_object.cpp
+SOURCE=.\calibrate_object.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\camera_node.cpp
+SOURCE=.\camera_node.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\euclidean_transformation.cpp
+SOURCE=.\euclidean_transformation.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
