@@ -85,11 +85,11 @@ inline const char* GetVersion20Date()
     // be smart and interpret the percents in the string.
     //
     vcl_time_t clock = vcl_time(NULL);
-    struct tm *tm_ = vcl_localtime(&clock);
+    vcl_tm *t_m = vcl_localtime(&clock);
     // char* format = "%d%H%M%SZ%h%y";
 
     vcl_strncpy(rval, "              ", 15);
-    vcl_strftime(rval, 15, date_format, tm_);
+    vcl_strftime(rval, 15, date_format, t_m);
 
     return rval;
 }

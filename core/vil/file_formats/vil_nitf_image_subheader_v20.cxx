@@ -26,9 +26,8 @@
 static
 inline float nitf_atoff( const char* s )
 {
-  return static_cast<float>( vcl_atof( s ) );
+  return static_cast<float>( vcl_atof(s) );
 }
-
 
 static const vcl_string VALID_ICORDS_CODES = "CGNUcgnu";
 
@@ -161,10 +160,10 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
         vcl_cout << method_name << "PVTYPE string = <" << buffer << ">\n";
 
   // MAKE SURE FLOAT AND COMPLEX BELOW SHOULD NOT BE DOUBLE.  MAL 8oct2003
-        if (!nitf_strcasecmp(buffer, "B  "))  // B = bit-mapped. TargetJr. used PVTYPE_INTEGER
-          PVTYPE_ = VIL_PIXEL_FORMAT_UINT_16;
+        if (!nitf_strcasecmp(buffer, "B  "))  // B = bit-mapped. TargetJr used PVTYPE_INTEGER
+          PVTYPE_ = VIL_PIXEL_FORMAT_BOOL;
         else if (!nitf_strcasecmp(buffer, "C  "))  // C = complex (2 32 bit values)
-          PVTYPE_ = VIL_PIXEL_FORMAT_COMPLEX_FLOAT;  // Should this be COMPLEX_DOUBLE ?
+          PVTYPE_ = VIL_PIXEL_FORMAT_COMPLEX_FLOAT;  // not COMPLEX_DOUBLE !
         else if (!nitf_strcasecmp(buffer, "INT"))
           PVTYPE_ = VIL_PIXEL_FORMAT_UINT_16;  // INT and SI are 16 bit values
         else if (!nitf_strcasecmp(buffer, "R  "))
@@ -271,7 +270,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
           }
         }
 
-        unsigned int NICOM, n;
+        unsigned int NICOM;
         if (!get_unsigned(buffer, &NICOM, 1, file))
         {
             error = true;
@@ -289,7 +288,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
 
         vcl_cout << method_name << "clear ICOM_ OK.\n";
 
-        for (n = 0; n < NICOM; n++)
+        for (unsigned int n = 0; n < NICOM; n++)
         {
             if (file->read(tmpc, 80) < 80)
             {
@@ -314,7 +313,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
             break;
         }
 
-        for (n = 0; n < NBANDS; n++) delete bands[n];
+        for (unsigned int n = 0; n < NBANDS; n++) delete bands[n];
         delete bands;
         bands = 0;
         NBANDS = 0;
@@ -325,11 +324,11 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
         }
         if (NBANDS > 0) {
           bands = new vil_nitf_image_subheader_band*[NBANDS];
-          for (n = 0; n < NBANDS; n++) bands[n] = 0;
+          for (unsigned int n = 0; n < NBANDS; n++) bands[n] = 0;
         }
         vcl_cout << method_name << "NBANDS = " << NBANDS
                  << vcl_endl;
-        for (n = 0; n < NBANDS; n++)
+        for (unsigned int n = 0; n < NBANDS; n++)
         {
             vcl_cout << method_name << "read data for band[" << n << "]\n";
 
@@ -991,23 +990,20 @@ StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
             break;
         }
 
-        unsigned int n;
         unsigned int NICOM = ICOM_.size();
         if (!PutInt(buffer, NICOM, 1, file))
         {
             error = true;
             break;
         }
-        char str_ptr[80];
-        for (n = 0; n < NICOM; n++)
+        for (unsigned int n = 0; n < NICOM; n++)
         {
-          //  JUST TO GET COMPILED FOR NOW.  MAL 28oct2003
-          //      str_ptr = ICOM_[n];
-          if (file->write((void *) str_ptr, 80) < 80)
-            {
-                error = true;
-                break;
-            }
+          const char *str_ptr = ICOM_[n].c_str();
+          if (file->write((void*)str_ptr, 80) < 80)
+          {
+            error = true;
+            break;
+          }
         }
 
         if ((file->write(IC, 2) < 2)    ||
@@ -1026,7 +1022,7 @@ StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
             error = true;
             break;
         }
-        for (n = 0; n < NBANDS; n++)
+        for (unsigned int n = 0; n < NBANDS; n++)
         {
             if ((file->write(bands[n]->ITYPE, 8) < 8) ||
                 (file->write(bands[n]->IFC,   1) < 1) ||
@@ -1132,11 +1128,11 @@ vil_nitf_image_subheader_v20::GetHeaderLength() const
     if (ICORDS == GEOCENTRIC || ICORDS == GEOGRAPHIC || ICORDS == UTM) length += 60;
     if (vcl_strcmp(COMRAT, "NC")) length += 4;
     for (unsigned int n = 0; n < NBANDS; n++)
-        if (bands[n]->NLUTS > 0) {
-            length += 5;
-            if (bands[n]->NELUT > 0)
-                length += bands[n]->NLUTS * bands[n]->NELUT;
-        }
+      if (bands[n]->NLUTS > 0) {
+        length += 5;
+        if (bands[n]->NELUT > 0)
+          length += bands[n]->NLUTS * bands[n]->NELUT;
+      }
     return length;
 }
 
@@ -1163,11 +1159,11 @@ void vil_nitf_image_subheader_v20::init()
     // We don't use SCCS, so don't try to write to a read
     // only string!
     vcl_time_t clock = vcl_time(NULL);
-    struct tm *tm = vcl_localtime(&clock);
+    vcl_tm *t_m = vcl_localtime(&clock);
     // char* format = "%d%H%M%SZ%h%y";
 
     STRNCPY(IDATIM_, initstr, 14);
-    vcl_strftime(IDATIM_, 15, date_format, tm);
+    vcl_strftime(IDATIM_, 15, date_format, t_m);
 
     STRNCPY(TGTID,  initstr, 17);
     STRNCPY(ITITLE, initstr, 80);
@@ -1191,8 +1187,7 @@ void vil_nitf_image_subheader_v20::init()
     STRNCPY (IC,     "NC",     2);
     STRNCPY (COMRAT, initstr,  4);
 
-    unsigned int n;
-    for (n = 0; n < NBANDS; n++)
+    for (unsigned int n = 0; n < NBANDS; n++)
     {
         if (bands[n] != NULL)
         {
@@ -1458,7 +1453,6 @@ StatusCode vil_nitf_image_subheader_v20::extract_ichipb_extension()
   vcl_strncpy(work,&XSHD->XHD[offset],5); // grab length of CEDATA field
   work[5] = 0;                        // ensure NULL terminator
   offset += 5;                        // advance over length of CEDATA field
-
 
   // If the length of the data is incorrect or the reject/success flag
   //  is set to 'reject',the ICHIPB data is suspect and should not be used.
@@ -2135,7 +2129,6 @@ void vil_nitf_image_subheader_v20::encode_ichipb_extension(vcl_ostringstream& ic
 
         // Write OP_COL_22
         ichipb_buf << vcl_setw(12) << OP_COL_22;
-
 
         // Write FI_ROW_11
         ichipb_buf << vcl_setw(12) << FI_ROW_11;
