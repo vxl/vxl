@@ -46,7 +46,7 @@ struct vgui_tableau_sptr;
 //    so creating a vgui_toolkit amounts to registration. Sometimes this can be
 //    done at library initialization time but sometimes it can't, e.g. for
 //    static builds. In that case, a {\em tag function} must be called
-//    explicitly. See vgui_tag.*
+//    explicitly. See vgui_tag.* and vgui_register_all.cxx.
 //
 // 2. Choice of toolkit to use. Several toolkits may be available, and so
 //    a choice must be made as to which to use. The choice of toolkit is

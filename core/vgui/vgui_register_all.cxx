@@ -37,9 +37,6 @@
 // linked in and initialised. However, you're on your own if you
 // attempt this. -- Amitha Perera.
 
-#include <vcl_compiler.h>
-#include <vgui/vgui_gl.h>
-
 extern int vgui_gtk_tag_function();
 extern int vgui_glut_tag_function();
 extern int vgui_mfc_tag_function();
@@ -51,7 +48,9 @@ extern int vgui_SDL_tag_function();
 extern int vgui_accelerate_x11_tag_function();
 extern int vgui_accelerate_mfc_tag_function();
 
-inline int vgui_link_all_implementations()
+//: Registers all the available toolkit implementations.
+// This function is called from vgui.cxx.
+int vgui_register_all_implementations()
 {
 #ifdef VGUI_USE_GTK
   vgui_gtk_tag_function();
@@ -84,8 +83,6 @@ inline int vgui_link_all_implementations()
 
   return 0;
 }
-
-static int vgui_link_all_implementations_init = vgui_link_all_implementations();
 
 #ifdef VGUI_USE_MFC
 # include <vgui/impl/mfc/vgui_mfc_app_init.h>
