@@ -154,57 +154,6 @@ LIB32=link.exe -lib
 # Name "vcl - Win32 RelWithDebInfo"
 
 
-# Begin Source File
-
-SOURCE=".\CMakeLists.txt"
-
-!IF  "$(CFG)" == "vcl - Win32 Release"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/vcl/CMakeLists.txt"
-# Begin Custom Build
-
-"vcl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/vcl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vcl" -O"$(IUEROOT)/vcl" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vcl - Win32 Debug"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/vcl/CMakeLists.txt"
-# Begin Custom Build
-
-"vcl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/vcl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vcl" -O"$(IUEROOT)/vcl" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vcl - Win32 MinSizeRel"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/vcl/CMakeLists.txt"
-# Begin Custom Build
-
-"vcl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/vcl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vcl" -O"$(IUEROOT)/vcl" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vcl - Win32 RelWithDebInfo"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/vcl/CMakeLists.txt"
-# Begin Custom Build
-
-"vcl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/vcl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vcl" -O"$(IUEROOT)/vcl" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ENDIF
-
-# End Source File
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File

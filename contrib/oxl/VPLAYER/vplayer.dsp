@@ -198,65 +198,6 @@ LINK32=link.exe
 # Name "VPLAYER - Win32 MinSizeRel"
 # Name "VPLAYER - Win32 RelWithDebInfo"
 
-# Begin Source File
-
-SOURCE=".\CMakeLists.txt"
-
-!IF  "$(CFG)" == "VPLAYER - Win32 Release"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/oxl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/VPLAYER/CMakeLists.txt"
-# Begin Custom Build
-
-"VPLAYER.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/oxl/VPLAYER/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/VPLAYER" -O"$(IUEROOT)/oxl/VPLAYER" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "VPLAYER - Win32 Debug"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/oxl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/VPLAYER/CMakeLists.txt"
-# Begin Custom Build
-
-"VPLAYER.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/oxl/VPLAYER/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/VPLAYER" -O"$(IUEROOT)/oxl/VPLAYER" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "VPLAYER - Win32 MinSizeRel"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/oxl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/VPLAYER/CMakeLists.txt"
-# Begin Custom Build
-
-"VPLAYER.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/oxl/VPLAYER/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/VPLAYER" -O"$(IUEROOT)/oxl/VPLAYER" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "VPLAYER - Win32 RelWithDebInfo"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/oxl/CMakeLists.txt"\
-	"$(IUEROOT)/oxl/VPLAYER/CMakeLists.txt"
-# Begin Custom Build
-
-"VPLAYER.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/oxl/VPLAYER/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/VPLAYER" -O"$(IUEROOT)/oxl/VPLAYER" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ENDIF
-
-# End Source File
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File

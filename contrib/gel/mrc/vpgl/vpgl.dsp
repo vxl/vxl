@@ -154,69 +154,6 @@ LIB32=link.exe -lib
 # Name "vpgl - Win32 RelWithDebInfo"
 
 
-# Begin Source File
-
-SOURCE=".\CMakeLists.txt"
-
-!IF  "$(CFG)" == "vpgl - Win32 Release"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	"$(IUEROOT)/gel/mrc/CMakeLists.txt"\
-	"$(IUEROOT)/gel/mrc/vpgl/CMakeLists.txt"
-# Begin Custom Build
-
-"vpgl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/gel/mrc/vpgl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/mrc/vpgl" -O"$(IUEROOT)/gel/mrc/vpgl" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vpgl - Win32 Debug"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	"$(IUEROOT)/gel/mrc/CMakeLists.txt"\
-	"$(IUEROOT)/gel/mrc/vpgl/CMakeLists.txt"
-# Begin Custom Build
-
-"vpgl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/gel/mrc/vpgl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/mrc/vpgl" -O"$(IUEROOT)/gel/mrc/vpgl" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vpgl - Win32 MinSizeRel"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	"$(IUEROOT)/gel/mrc/CMakeLists.txt"\
-	"$(IUEROOT)/gel/mrc/vpgl/CMakeLists.txt"
-# Begin Custom Build
-
-"vpgl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/gel/mrc/vpgl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/mrc/vpgl" -O"$(IUEROOT)/gel/mrc/vpgl" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vpgl - Win32 RelWithDebInfo"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	"$(IUEROOT)/gel/mrc/CMakeLists.txt"\
-	"$(IUEROOT)/gel/mrc/vpgl/CMakeLists.txt"
-# Begin Custom Build
-
-"vpgl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/gel/mrc/vpgl/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/mrc/vpgl" -O"$(IUEROOT)/gel/mrc/vpgl" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ENDIF
-
-# End Source File
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File

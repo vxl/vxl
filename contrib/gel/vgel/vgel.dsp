@@ -154,65 +154,6 @@ LIB32=link.exe -lib
 # Name "vgel - Win32 RelWithDebInfo"
 
 
-# Begin Source File
-
-SOURCE=".\CMakeLists.txt"
-
-!IF  "$(CFG)" == "vgel - Win32 Release"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	".\CMakeLists.txt"
-# Begin Custom Build
-
-"vgel.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"T:/CMake/CMake-WIN32-VC60/CMake/bin/cmake.exe" ".\CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vgel" -O"$(IUEROOT)/WIN32-VC60/gel/vgel" -B"$(IUEROOT)/WIN32-VC60"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vgel - Win32 Debug"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	".\CMakeLists.txt"
-# Begin Custom Build
-
-"vgel.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"T:/CMake/CMake-WIN32-VC60/CMake/bin/cmake.exe" ".\CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vgel" -O"$(IUEROOT)/WIN32-VC60/gel/vgel" -B"$(IUEROOT)/WIN32-VC60"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vgel - Win32 MinSizeRel"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	".\CMakeLists.txt"
-# Begin Custom Build
-
-"vgel.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"T:/CMake/CMake-WIN32-VC60/CMake/bin/cmake.exe" ".\CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vgel" -O"$(IUEROOT)/WIN32-VC60/gel/vgel" -B"$(IUEROOT)/WIN32-VC60"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vgel - Win32 RelWithDebInfo"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
-	"$(IUEROOT)/gel/CMakeLists.txt"\
-	".\CMakeLists.txt"
-# Begin Custom Build
-
-"vgel.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"T:/CMake/CMake-WIN32-VC60/CMake/bin/cmake.exe" ".\CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/gel/vgel" -O"$(IUEROOT)/WIN32-VC60/gel/vgel" -B"$(IUEROOT)/WIN32-VC60"
-
-# End Custom Build
-
-!ENDIF
-
-# End Source File
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File

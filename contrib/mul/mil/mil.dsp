@@ -154,61 +154,6 @@ LIB32=link.exe -lib
 # Name "mil - Win32 RelWithDebInfo"
 
 
-# Begin Source File
-
-SOURCE=".\CMakeLists.txt"
-
-!IF  "$(CFG)" == "mil - Win32 Release"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/mul/CMakeLists.txt"\
-	".\CMakeLists.txt"
-# Begin Custom Build
-
-"mil.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"T:/CMake/CMake-WIN32-VC60/CMake/bin/cmake.exe" ".\CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/mul/mil" -O"$(IUEROOT)/WIN32-VC60/mul/mil" -B"$(IUEROOT)/WIN32-VC60"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "mil - Win32 Debug"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/mul/CMakeLists.txt"\
-	".\CMakeLists.txt"
-# Begin Custom Build
-
-"mil.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"T:/CMake/CMake-WIN32-VC60/CMake/bin/cmake.exe" ".\CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/mul/mil" -O"$(IUEROOT)/WIN32-VC60/mul/mil" -B"$(IUEROOT)/WIN32-VC60"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "mil - Win32 MinSizeRel"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/mul/CMakeLists.txt"\
-	".\CMakeLists.txt"
-# Begin Custom Build
-
-"mil.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"T:/CMake/CMake-WIN32-VC60/CMake/bin/cmake.exe" ".\CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/mul/mil" -O"$(IUEROOT)/WIN32-VC60/mul/mil" -B"$(IUEROOT)/WIN32-VC60"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "mil - Win32 RelWithDebInfo"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/mul/CMakeLists.txt"\
-	".\CMakeLists.txt"
-# Begin Custom Build
-
-"mil.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"T:/CMake/CMake-WIN32-VC60/CMake/bin/cmake.exe" ".\CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/mul/mil" -O"$(IUEROOT)/WIN32-VC60/mul/mil" -B"$(IUEROOT)/WIN32-VC60"
-
-# End Custom Build
-
-!ENDIF
-
-# End Source File
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
