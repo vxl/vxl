@@ -99,52 +99,52 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "c;cxx"
 # Begin Source File
-SOURCE=.\zhang_camera_node.cxx
+SOURCE=.\bcal_zhang_camera_node.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\zhang_linear_calibrate.cxx
+SOURCE=.\bcal_zhang_linear_calibrate.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\camera.cxx
+SOURCE=.\bcal_camera.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\calibrate_plane.cxx
+SOURCE=.\bcal_calibrate_plane.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\calibrate_object.cxx
+SOURCE=.\bcal_calibrate_object.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\camera_node.cxx
+SOURCE=.\bcal_camera_node.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\euclidean_transformation.cxx
+SOURCE=.\bcal_euclidean_transformation.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\calibrate_plane.h
+SOURCE=.\bcal_calibrate_plane.h
 # End Source File
 # Begin Source File
-SOURCE=.\calibrate_object.h
+SOURCE=.\bcal_calibrate_object.h
 # End Source File
 # Begin Source File
-SOURCE=.\camera_node.h
+SOURCE=.\bcal_camera_node.h
 # End Source File
 # Begin Source File
-SOURCE=.\camera.h
+SOURCE=.\bcal_camera.h
 # End Source File
 # Begin Source File
-SOURCE=.\camera_graph.h
+SOURCE=.\bcal_camera_graph.h
 # End Source File
 # Begin Source File
-SOURCE=.\zhang_camera_node.h
+SOURCE=.\bcal_zhang_camera_node.h
 # End Source File
 # Begin Source File
-SOURCE=.\zhang_linear_calibrate.h
+SOURCE=.\bcal_zhang_linear_calibrate.h
 # End Source File
 # Begin Source File
-SOURCE=.\euclidean_transformation.h
+SOURCE=.\bcal_euclidean_transformation.h
 # End Source File
 # End Group
 # End Target
