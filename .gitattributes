@@ -1,6 +1,7 @@
 .git*            export-ignore
 
 *.dsp           -crlf
+*.dsptemplate   -crlf
 *.dsw           -crlf
 *.pl             crlf=input
 *.png           -crlf
