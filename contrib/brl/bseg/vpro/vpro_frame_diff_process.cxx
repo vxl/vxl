@@ -20,9 +20,9 @@ bool vpro_frame_diff_process::execute()
       return false;
     }
   vil1_image img = vpro_video_process::get_input_image(0);
-  vil1_memory_image_of<unsigned char> temp(img);
-  vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(temp);
   this->clear_input();
+
+  vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
 
   //if first frame, just cache
   if (first_frame_)

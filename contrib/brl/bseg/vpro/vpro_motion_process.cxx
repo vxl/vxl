@@ -51,8 +51,7 @@ bool vpro_motion_process::execute()
       return false;
     }
   vil1_image img = vpro_video_process::get_input_image(0);
-  vil1_memory_image_of<unsigned char> temp(img);
-  vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(temp);
+  vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
   vil1_memory_image_of<float> fsmooth = brip_float_ops::gaussian(fimg, 1.0);
  // vil1_memory_image_of<float> fx = brip_float_ops::dx(fsmooth);
  // vil1_memory_image_of<float> fy = brip_float_ops::dx(fsmooth);
