@@ -80,7 +80,6 @@ vcl_istream * vul_http_open(char const *url)
     }
 
 
-
   // so far so good.
 #ifdef DEBUG
   vcl_cerr << "auth = \'" << auth << "\'" << vcl_endl
@@ -134,7 +133,7 @@ vcl_istream * vul_http_open(char const *url)
   sockaddr_in my_addr;
   my_addr.sin_family = AF_INET;
   // convert port number to network byte order..
-  my_addr.sin_port = htons(port);  
+  my_addr.sin_port = htons(port);
   vcl_memcpy(&my_addr.sin_addr, hp->h_addr_list[0], hp->h_length);
 
   // connect to server.
@@ -489,7 +488,6 @@ static char out_buf[4];
 
 static const char * encode_triplet(char data[3], unsigned n)
 {
-
   assert (n>0 && n <4);
   out_buf[0] = base64_encoding[(data[0] & 0xFC) >> 2];
 
@@ -519,43 +517,42 @@ static const char * encode_triplet(char data[3], unsigned n)
 vcl_string vul_url::encode_base64(const vcl_string& in)
 {
   vcl_string out;
-	unsigned i = 0, line_octets = 0;
+  unsigned i = 0, line_octets = 0;
   const unsigned l = in.size();
   char data[3];
-	while(i < l)
-	{
+  while(i < l)
+  {
     data[0] = in[i++];
     data[1] = data[2] = 0;
 
-		if(i == l)
-		{
+    if(i == l)
+    {
       out.append(encode_triplet(data,1),4);
       return out;
     }
 
     data[1] = in[i++];
 
-		if(i == l)
-		{
+    if(i == l)
+    {
       out.append(encode_triplet(data,2),4);
       return out;
-		}
+    }
 
-		data[2] = in[i++];
+    data[2] = in[i++];
 
     out.append(encode_triplet(data,3),4);
 
-		if(line_octets >= 68/4) // print carriage return
-		{
-			out.append("\r\n",2);
-  		line_octets = 0;
-		}
-		else
-			++line_octets;
-	}
+    if(line_octets >= 68/4) // print carriage return
+    {
+      out.append("\r\n",2);
+      line_octets = 0;
+    }
+    else
+      ++line_octets;
+  }
 
-	return out;
-
+  return out;
 }
 
 //=======================================================================
@@ -569,22 +566,22 @@ static int get_next_char(const vcl_string &in, unsigned int *i)
     c = in[(*i)++];
 
     if(c == '+')
-			return 62;
+      return 62;
 
-		if(c == '/')
-			return 63;
+    if(c == '/')
+      return 63;
 
-		if(c >= 'A' && c <= 'Z')
+    if(c >= 'A' && c <= 'Z')
       return 0 + (int)c - (int)'A';
 
-		if(c >= 'a' && c <= 'z')
+    if(c >= 'a' && c <= 'z')
       return 26 + (int)c - (int)'a';
 
-		if(c >= '0' && c <= '9')
+    if(c >= '0' && c <= '9')
       return 52 + (int)c - (int)'0';
 
-		if(c == '=')
-			return 64;
+    if(c == '=')
+      return 64;
   }
   return -1;
 }
@@ -592,50 +589,49 @@ static int get_next_char(const vcl_string &in, unsigned int *i)
 //=======================================================================
 
 vcl_string vul_url::decode_base64(const vcl_string& in)
-
 {
-	int c;
+  int c;
   char data[3];
 
   unsigned i=0;
   const unsigned l = in.size();
   vcl_string out;
-	while(i < l)
-	{
+  while(i < l)
+  {
     data[0] = data[1] = data[2] = 0;
 
-		// -- 0 --
-		// Search next valid char... 
+    // -=- 0 -=-
+    // Search next valid char...
     c = get_next_char(in , &i);
 
     // treat '=' as end of message
     if(c == 64)
-      return out;  
+      return out;
     if(c==-1)
       return "";
 
     data[0] = ((c & 0x3f) << 2) | (0x3 & data[0]);
 
-		// -- 1 --
-		// Search next valid char... 
+    // -=- 1 -=-
+    // Search next valid char...
     c = get_next_char(in , &i);
 
-			// Error! Second character in octet can't be '='
-		if(c == 64 || c==-1)
+      // Error! Second character in octet can't be '='
+    if(c == 64 || c==-1)
       return "";
 
-		data[0] = ((c & 0x30) >> 4) | (0xfc & data[0]);
-		data[1] = ((c & 0xf) << 4) | (0xf & data[1]);
+    data[0] = ((c & 0x30) >> 4) | (0xfc & data[0]);
+    data[1] = ((c & 0xf) << 4) | (0xf & data[1]);
 
 
-		// -- 2 --
-		// Search next valid char... 
+    // -=- 2 -=-
+    // Search next valid char...
 
     c = get_next_char(in , &i);
 
-		if(c==-1)
+    if(c==-1)
       return "";
-		if(c == 64)
+    if(c == 64)
     {
       // should really read next char and check it is '='
       out.append(data,1);  // write 1 byte to output
@@ -643,29 +639,26 @@ vcl_string vul_url::decode_base64(const vcl_string& in)
     }
 
     data[1] = ((c & 0x3C) >> 2) | (0xf0 & data[1]);
-		data[2] = ((c & 0x3) << 6) | (0x3f & data[2]);
+    data[2] = ((c & 0x3) << 6) | (0x3f & data[2]);
 
 
-		// -- 3 --
-		// Search next valid char... 
+    // -=- 3 -=-
+    // Search next valid char...
     c = get_next_char(in , &i);
 
-		if(c==-1)
+    if(c==-1)
       return "";
 
-		if(c == 64)
-		{
+    if(c == 64)
+    {
       out.append(data,2);  // write 2 bytes to output
       return out;
-		}
+    }
 
-		data[2] = (c & 0x3f) | (0xc0 & data[2]);
+    data[2] = (c & 0x3f) | (0xc0 & data[2]);
 
     out.append(data,3);  // write 3 bytes to output
+  }
 
-	}
-
-	return out;
+  return out;
 }
-
-
